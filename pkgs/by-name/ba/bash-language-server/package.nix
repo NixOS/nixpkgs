@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pnpm_8
-, nodejs
-, npmHooks
-, makeBinaryWrapper
-, shellcheck
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pnpm_8,
+  nodejs,
+  npmHooks,
+  makeBinaryWrapper,
+  shellcheck,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

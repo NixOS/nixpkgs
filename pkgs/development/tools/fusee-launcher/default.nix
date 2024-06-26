@@ -1,10 +1,12 @@
-{ lib, stdenv
-, python3Packages
-, python3
-, fetchFromGitHub
-, pkgsCross
-, makeWrapper
-} :
+{
+  lib,
+  stdenv,
+  python3Packages,
+  python3,
+  fetchFromGitHub,
+  pkgsCross,
+  makeWrapper,
+}:
 
 let
   arm-embedded-cc = pkgsCross.arm-embedded.buildPackages.gcc;
@@ -21,9 +23,7 @@ stdenv.mkDerivation {
     sha256 = "1pqkgw5bk0xcz9x7pc1f0r0b9nsc8jnnvcs1315d8ml8mx23fshm";
   };
 
-  makeFlags = [
-    "CROSS_COMPILE=${arm-embedded-cc.targetPrefix}"
-  ];
+  makeFlags = [ "CROSS_COMPILE=${arm-embedded-cc.targetPrefix}" ];
 
   installPhase = ''
     mkdir -p $out/bin $out/share
@@ -36,8 +36,15 @@ stdenv.mkDerivation {
       --prefix PYTHONPATH : "$PYTHONPATH:$(toPythonPath $out)"
   '';
 
-  nativeBuildInputs = [ arm-embedded-cc makeWrapper python3Packages.wrapPython ];
-  buildInputs = [ python3 python3Packages.pyusb ];
+  nativeBuildInputs = [
+    arm-embedded-cc
+    makeWrapper
+    python3Packages.wrapPython
+  ];
+  buildInputs = [
+    python3
+    python3Packages.pyusb
+  ];
   pythonPath = with python3Packages; [ pyusb ];
 
   meta = with lib; {

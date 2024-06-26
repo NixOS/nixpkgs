@@ -1,18 +1,36 @@
-{ lib
-, stdenv
-, buildGoModule
-, fetchFromGitHub
-, installShellFiles
-, externalPlugins ? []
-, vendorHash ? "sha256-tp22jj6DNnYFQhtAFW2uLo10ty//dyNqIDH2egDgbOw="
+{
+  lib,
+  stdenv,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  externalPlugins ? [ ],
+  vendorHash ? "sha256-tp22jj6DNnYFQhtAFW2uLo10ty//dyNqIDH2egDgbOw=",
 }:
 
 let
-  attrsToPlugins = attrs:
-    builtins.map ({name, repo, version}: "${name}:${repo}") attrs;
-  attrsToSources = attrs:
-    builtins.map ({name, repo, version}: "${repo}@${version}") attrs;
-in buildGoModule rec {
+  attrsToPlugins =
+    attrs:
+    builtins.map (
+      {
+        name,
+        repo,
+        version,
+      }:
+      "${name}:${repo}"
+    ) attrs;
+  attrsToSources =
+    attrs:
+    builtins.map (
+      {
+        name,
+        repo,
+        version,
+      }:
+      "${repo}@${version}"
+    ) attrs;
+in
+buildGoModule rec {
   pname = "coredns";
   version = "1.11.1";
 
@@ -27,7 +45,10 @@ in buildGoModule rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
   # Override the go-modules fetcher derivation to fetch plugins
   modBuildPhase = ''
@@ -49,22 +70,24 @@ in buildGoModule rec {
     GOOS= GOARCH= go generate
   '';
 
-  postPatch = ''
-    substituteInPlace test/file_cname_proxy_test.go \
-      --replace "TestZoneExternalCNAMELookupWithProxy" \
-                "SkipZoneExternalCNAMELookupWithProxy"
+  postPatch =
+    ''
+      substituteInPlace test/file_cname_proxy_test.go \
+        --replace "TestZoneExternalCNAMELookupWithProxy" \
+                  "SkipZoneExternalCNAMELookupWithProxy"
 
-    substituteInPlace test/readme_test.go \
-      --replace "TestReadme" "SkipReadme"
+      substituteInPlace test/readme_test.go \
+        --replace "TestReadme" "SkipReadme"
 
-    # this test fails if any external plugins were imported.
-    # it's a lint rather than a test of functionality, so it's safe to disable.
-    substituteInPlace test/presubmit_test.go \
-      --replace "TestImportOrdering" "SkipImportOrdering"
-  '' + lib.optionalString stdenv.isDarwin ''
-    # loopback interface is lo0 on macos
-    sed -E -i 's/\blo\b/lo0/' plugin/bind/setup_test.go
-  '';
+      # this test fails if any external plugins were imported.
+      # it's a lint rather than a test of functionality, so it's safe to disable.
+      substituteInPlace test/presubmit_test.go \
+        --replace "TestImportOrdering" "SkipImportOrdering"
+    ''
+    + lib.optionalString stdenv.isDarwin ''
+      # loopback interface is lo0 on macos
+      sed -E -i 's/\blo\b/lo0/' plugin/bind/setup_test.go
+    '';
 
   postInstall = ''
     installManPage man/*
@@ -75,6 +98,10 @@ in buildGoModule rec {
     description = "DNS server that runs middleware";
     mainProgram = "coredns";
     license = licenses.asl20;
-    maintainers = with maintainers; [ rushmorem rtreffer deltaevo ];
+    maintainers = with maintainers; [
+      rushmorem
+      rtreffer
+      deltaevo
+    ];
   };
 }

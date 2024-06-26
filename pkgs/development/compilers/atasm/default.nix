@@ -1,7 +1,8 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, zlib
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  zlib,
 }:
 
 stdenv.mkDerivation rec {
@@ -26,9 +27,7 @@ stdenv.mkDerivation rec {
 
   dontConfigure = true;
 
-  buildInputs = [
-    zlib
-  ];
+  buildInputs = [ zlib ];
 
   preBuild = ''
     makeFlagsArray+=(

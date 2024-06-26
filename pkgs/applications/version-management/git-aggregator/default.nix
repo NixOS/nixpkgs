@@ -1,4 +1,9 @@
-{ lib, python3Packages, fetchPypi, git }:
+{
+  lib,
+  python3Packages,
+  fetchPypi,
+  git,
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "git-aggregator";
@@ -9,9 +14,7 @@ python3Packages.buildPythonApplication rec {
     sha256 = "sha256-79xNPzYP1j71sU5wZM5e2xTqQExqQEdxXPxbk4T/Scw=";
   };
 
-  nativeBuildInputs = with python3Packages; [
-    setuptools-scm
-  ];
+  nativeBuildInputs = with python3Packages; [ setuptools-scm ];
 
   propagatedBuildInputs = with python3Packages; [
     argcomplete
@@ -21,9 +24,7 @@ python3Packages.buildPythonApplication rec {
     requests
   ];
 
-  nativeCheckInputs = [
-    git
-  ];
+  nativeCheckInputs = [ git ];
 
   preCheck = ''
     export HOME="$(mktemp -d)"

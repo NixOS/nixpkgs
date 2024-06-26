@@ -1,4 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, openssl, libevent, libpcap, libnet, zlib }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  openssl,
+  libevent,
+  libpcap,
+  libnet,
+  zlib,
+}:
 
 stdenv.mkDerivation rec {
   pname = "sslsplit";
@@ -19,7 +29,13 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  buildInputs = [ openssl libevent libpcap libnet zlib ];
+  buildInputs = [
+    openssl
+    libevent
+    libpcap
+    libnet
+    zlib
+  ];
 
   makeFlags = [
     "PREFIX=$(out)"
@@ -34,7 +50,12 @@ stdenv.mkDerivation rec {
     homepage = "https://www.roe.ch/SSLsplit";
     platforms = platforms.all;
     maintainers = with maintainers; [ contrun ];
-    license = with licenses; [ bsd2 mit unlicense free ];
+    license = with licenses; [
+      bsd2
+      mit
+      unlicense
+      free
+    ];
     mainProgram = "sslsplit";
   };
 }

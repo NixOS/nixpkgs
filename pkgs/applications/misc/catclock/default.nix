@@ -1,5 +1,13 @@
-{ stdenv, lib, fetchFromGitHub, motif, xorg
-, withAudioTracking ? false, libpulseaudio, aubio }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  motif,
+  xorg,
+  withAudioTracking ? false,
+  libpulseaudio,
+  aubio,
+}:
 
 stdenv.mkDerivation {
   pname = "catclock";
@@ -18,11 +26,19 @@ stdenv.mkDerivation {
     cp xclock.man $out/share/man/man1/xclock.1
   '';
 
-  makeFlags = [ "DESTINATION=$(out)/bin/" ]
-    ++ lib.optional withAudioTracking "WITH_TEMPO_TRACKER=1";
+  makeFlags = [ "DESTINATION=$(out)/bin/" ] ++ lib.optional withAudioTracking "WITH_TEMPO_TRACKER=1";
 
-  buildInputs = [ motif xorg.libX11 xorg.libXext xorg.libXt ]
-    ++ lib.optionals withAudioTracking [ libpulseaudio aubio ];
+  buildInputs =
+    [
+      motif
+      xorg.libX11
+      xorg.libXext
+      xorg.libXt
+    ]
+    ++ lib.optionals withAudioTracking [
+      libpulseaudio
+      aubio
+    ];
 
   meta = with lib; {
     homepage = "http://codefromabove.com/2014/05/catclock/";

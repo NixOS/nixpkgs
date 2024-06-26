@@ -1,4 +1,9 @@
-{ lib, fetchFromGitHub, fetchpatch, python3Packages }:
+{
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  python3Packages,
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "grin";
@@ -21,9 +26,7 @@ python3Packages.buildPythonApplication rec {
     })
   ];
 
-  nativeCheckInputs = with python3Packages; [
-    nose3
-  ];
+  nativeCheckInputs = with python3Packages; [ nose3 ];
 
   meta = {
     homepage = "https://github.com/matthew-brett/grin";

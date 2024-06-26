@@ -1,12 +1,13 @@
-{ stdenv
-, lib
-, fetchpatch
-, fetchFromGitHub
-, python3
-, qtbase
-, qttools
-, git-lfs
-, wrapQtAppsHook
+{
+  stdenv,
+  lib,
+  fetchpatch,
+  fetchFromGitHub,
+  python3,
+  qtbase,
+  qttools,
+  git-lfs,
+  wrapQtAppsHook,
 }:
 
 let
@@ -89,9 +90,7 @@ stdenv.mkDerivation rec {
     qtbase
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
-    pydeps
-  ];
+  propagatedBuildInputs = with python3.pkgs; [ pydeps ];
 
   finalSource = "${pname}-final";
 
@@ -133,7 +132,10 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Software to create realistic humans";
     homepage = "http://www.makehumancommunity.org/";
-    license = with lib.licenses; [ agpl3Plus cc0 ];
+    license = with lib.licenses; [
+      agpl3Plus
+      cc0
+    ];
     longDescription = ''
       MakeHuman is a GUI program for procedurally generating
       realistic-looking humans.

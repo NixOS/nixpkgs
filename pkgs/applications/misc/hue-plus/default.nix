@@ -1,8 +1,10 @@
-{ python3Packages
-, fetchFromGitHub
-, lib
-, wrapQtAppsHook
-, qtbase }:
+{
+  python3Packages,
+  fetchFromGitHub,
+  lib,
+  wrapQtAppsHook,
+  qtbase,
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "hue-plus";
@@ -20,15 +22,17 @@ python3Packages.buildPythonApplication rec {
   nativeBuildInputs = [ wrapQtAppsHook ];
 
   propagatedBuildInputs = with python3Packages; [
-    pyserial pyqt5 pyaudio appdirs setuptools
+    pyserial
+    pyqt5
+    pyaudio
+    appdirs
+    setuptools
   ];
 
   doCheck = false;
   dontWrapQtApps = true;
 
-  makeWrapperArgs = [
-    "\${qtWrapperArgs[@]}"
-  ];
+  makeWrapperArgs = [ "\${qtWrapperArgs[@]}" ];
 
   meta = with lib; {
     homepage = "https://github.com/kusti8/hue-plus";

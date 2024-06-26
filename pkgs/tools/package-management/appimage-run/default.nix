@@ -1,9 +1,10 @@
-{ lib
-, appimageTools
-, buildFHSEnv
-, makeDesktopItem
-, extraPkgs ? pkgs: []
-, appimage-run-tests ? null
+{
+  lib,
+  appimageTools,
+  buildFHSEnv,
+  makeDesktopItem,
+  extraPkgs ? pkgs: [ ],
+  appimage-run-tests ? null,
 }:
 
 let
@@ -17,21 +18,29 @@ let
     desktopName = name;
     genericName = "AppImage runner";
     noDisplay = true;
-    mimeTypes = ["application/vnd.appimage" "application/x-iso9660-appimage"];
-    categories = ["PackageManager" "Utility"];
+    mimeTypes = [
+      "application/vnd.appimage"
+      "application/x-iso9660-appimage"
+    ];
+    categories = [
+      "PackageManager"
+      "Utility"
+    ];
   };
-in buildFHSEnv (lib.recursiveUpdate fhsArgs {
-  inherit name;
+in
+buildFHSEnv (
+  lib.recursiveUpdate fhsArgs {
+    inherit name;
 
-  targetPkgs = pkgs: [ appimageTools.appimage-exec ]
-    ++ fhsArgs.targetPkgs pkgs ++ extraPkgs pkgs;
-  runScript = "appimage-exec.sh";
+    targetPkgs = pkgs: [ appimageTools.appimage-exec ] ++ fhsArgs.targetPkgs pkgs ++ extraPkgs pkgs;
+    runScript = "appimage-exec.sh";
 
-  extraInstallCommands = ''
-    cp --recursive "${desktopItem}/share" "$out/"
-  '';
+    extraInstallCommands = ''
+      cp --recursive "${desktopItem}/share" "$out/"
+    '';
 
-  passthru.tests.appimage-run = appimage-run-tests;
+    passthru.tests.appimage-run = appimage-run-tests;
 
-  meta.mainProgram = "appimage-run";
-})
+    meta.mainProgram = "appimage-run";
+  }
+)

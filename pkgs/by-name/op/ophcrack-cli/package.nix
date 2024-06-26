@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, fetchurl
-, fetchpatch
-, autoreconfHook
-, libtool
-, zlib
-, pkg-config
-, openssl
-, freetype
-, expat
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  autoreconfHook,
+  libtool,
+  zlib,
+  pkg-config,
+  openssl,
+  freetype,
+  expat,
 }:
 
 stdenv.mkDerivation rec {
@@ -70,4 +71,3 @@ stdenv.mkDerivation rec {
     platforms = platforms.all;
   };
 }
-

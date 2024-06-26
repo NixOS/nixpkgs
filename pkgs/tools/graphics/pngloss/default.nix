@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, libpng, zlib }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  libpng,
+  zlib,
+}:
 
 stdenv.mkDerivation rec {
   pname = "pngloss";

@@ -1,5 +1,13 @@
-{ stdenv, lib, fetchFromGitHub
-, cmake, pkg-config, protobuf, icu, csdr, codecserver
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  protobuf,
+  icu,
+  csdr,
+  codecserver,
 }:
 
 stdenv.mkDerivation rec {
@@ -13,9 +21,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-nKNA5xAhM/lyyvFJnajWwY0hwVZhLApbDkXoUYFjlt0=";
   };
 
-  nativeBuildInputs = [
-    cmake
-  ];
+  nativeBuildInputs = [ cmake ];
 
   buildInputs = [
     codecserver

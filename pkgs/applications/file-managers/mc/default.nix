@@ -1,25 +1,28 @@
-{ lib, stdenv
-, fetchurl
-, buildPackages
-, pkg-config
-, glib
-, gpm
-, file
-, e2fsprogs
-, libICE
-, perl
-, zip
-, unzip
-, gettext
-, slang
-, libssh2
-, openssl
-, coreutils
-, autoSignDarwinBinariesHook
-, x11Support ? true, libX11
+{
+  lib,
+  stdenv,
+  fetchurl,
+  buildPackages,
+  pkg-config,
+  glib,
+  gpm,
+  file,
+  e2fsprogs,
+  libICE,
+  perl,
+  zip,
+  unzip,
+  gettext,
+  slang,
+  libssh2,
+  openssl,
+  coreutils,
+  autoSignDarwinBinariesHook,
+  x11Support ? true,
+  libX11,
 
-# updater only
-, writeScript
+  # updater only
+  writeScript,
 }:
 
 stdenv.mkDerivation rec {
@@ -31,24 +34,33 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-JBkc+GZ2dbjjH8Sp0YoKZb3AWYwsXE6gkklM0Tq0qxo=";
   };
 
-  nativeBuildInputs = [ pkg-config unzip ]
+  nativeBuildInputs =
+    [
+      pkg-config
+      unzip
+    ]
     # The preFixup hook rewrites the binary, which invaliates the code
     # signature. Add the fixup hook to sign the output.
     ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
       autoSignDarwinBinariesHook
     ];
 
-  buildInputs = [
-    file
-    gettext
-    glib
-    libICE
-    libssh2
-    openssl
-    slang
-    zip
-  ] ++ lib.optionals x11Support [ libX11 ]
-    ++ lib.optionals (!stdenv.isDarwin) [ e2fsprogs gpm ];
+  buildInputs =
+    [
+      file
+      gettext
+      glib
+      libICE
+      libssh2
+      openssl
+      slang
+      zip
+    ]
+    ++ lib.optionals x11Support [ libX11 ]
+    ++ lib.optionals (!stdenv.isDarwin) [
+      e2fsprogs
+      gpm
+    ];
 
   enableParallelBuilding = true;
 
@@ -76,15 +88,15 @@ stdenv.mkDerivation rec {
   '';
 
   passthru.updateScript = writeScript "update-mc" ''
-   #!/usr/bin/env nix-shell
-   #!nix-shell -i bash -p curl pcre common-updater-scripts
+    #!/usr/bin/env nix-shell
+    #!nix-shell -i bash -p curl pcre common-updater-scripts
 
-   set -eu -o pipefail
+    set -eu -o pipefail
 
-   # Expect the text in format of "Current version is: 4.8.27; ...".
-   new_version="$(curl -s https://midnight-commander.org/ | pcregrep -o1 'Current version is: (([0-9]+\.?)+);')"
-   update-source-version mc "$new_version"
- '';
+    # Expect the text in format of "Current version is: 4.8.27; ...".
+    new_version="$(curl -s https://midnight-commander.org/ | pcregrep -o1 'Current version is: (([0-9]+\.?)+);')"
+    update-source-version mc "$new_version"
+  '';
 
   meta = with lib; {
     description = "File Manager and User Shell for the GNU Project, known as Midnight Commander";

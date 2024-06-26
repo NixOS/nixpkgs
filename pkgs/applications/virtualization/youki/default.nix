@@ -1,11 +1,12 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, installShellFiles
-, dbus
-, libseccomp
-, systemd
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  installShellFiles,
+  dbus,
+  libseccomp,
+  systemd,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -19,13 +20,18 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-/cc+gHnakxC446MxErvgCDvc1gMWNi45h6fZ1Cd1Pj0=";
   };
 
-  cargoPatches = [
-    ./fix-cargo-lock.patch
+  cargoPatches = [ ./fix-cargo-lock.patch ];
+
+  nativeBuildInputs = [
+    pkg-config
+    installShellFiles
   ];
 
-  nativeBuildInputs = [ pkg-config installShellFiles ];
-
-  buildInputs = [ dbus libseccomp systemd ];
+  buildInputs = [
+    dbus
+    libseccomp
+    systemd
+  ];
 
   postInstall = ''
     installShellCompletion --cmd youki \
@@ -34,8 +40,14 @@ rustPlatform.buildRustPackage rec {
       --zsh <($out/bin/youki completion -s zsh)
   '';
 
-  cargoBuildFlags = [ "-p" "youki" ];
-  cargoTestFlags = [ "-p" "youki" ];
+  cargoBuildFlags = [
+    "-p"
+    "youki"
+  ];
+  cargoTestFlags = [
+    "-p"
+    "youki"
+  ];
 
   cargoHash = "sha256-PKn448fOCnyMC42NtQnLt8kvZIBautsq4Fw/bRvwmpw=";
 
@@ -44,7 +56,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://containers.github.io/youki/";
     changelog = "https://github.com/containers/youki/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = [];
+    maintainers = [ ];
     platforms = platforms.linux;
     mainProgram = "youki";
   };

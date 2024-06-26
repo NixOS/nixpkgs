@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchurl
-, jre
-, makeBinaryWrapper
-, copyDesktopItems
-, makeDesktopItem
-, desktopToDarwinBundle
-, unzip
+{
+  lib,
+  stdenv,
+  fetchurl,
+  jre,
+  makeBinaryWrapper,
+  copyDesktopItems,
+  makeDesktopItem,
+  desktopToDarwinBundle,
+  unzip,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -23,9 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
     makeBinaryWrapper
     copyDesktopItems
     unzip
-  ] ++ lib.optionals stdenv.isDarwin [
-    desktopToDarwinBundle
-  ];
+  ] ++ lib.optionals stdenv.isDarwin [ desktopToDarwinBundle ];
 
   desktopItems = [
     (makeDesktopItem {

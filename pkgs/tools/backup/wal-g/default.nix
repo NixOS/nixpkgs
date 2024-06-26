@@ -1,4 +1,11 @@
-{ lib, buildGoModule, fetchFromGitHub, brotli, libsodium, installShellFiles }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  brotli,
+  libsodium,
+  installShellFiles,
+}:
 
 buildGoModule rec {
   pname = "wal-g";
@@ -15,13 +22,24 @@ buildGoModule rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  buildInputs = [ brotli libsodium ];
+  buildInputs = [
+    brotli
+    libsodium
+  ];
 
   subPackages = [ "main/pg" ];
 
-  tags = [ "brotli" "libsodium" ];
+  tags = [
+    "brotli"
+    "libsodium"
+  ];
 
-  ldflags = [ "-s" "-w" "-X github.com/wal-g/wal-g/cmd/pg.walgVersion=${version}" "-X github.com/wal-g/wal-g/cmd/pg.gitRevision=${src.rev}" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X github.com/wal-g/wal-g/cmd/pg.walgVersion=${version}"
+    "-X github.com/wal-g/wal-g/cmd/pg.gitRevision=${src.rev}"
+  ];
 
   postInstall = ''
     mv $out/bin/pg $out/bin/wal-g

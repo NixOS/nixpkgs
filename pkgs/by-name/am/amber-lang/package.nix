@@ -1,10 +1,11 @@
-{ lib,
+{
+  lib,
   fetchFromGitHub,
   rustPlatform,
   bc,
   makeWrapper,
   runCommand,
-  amber-lang
+  amber-lang,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -30,7 +31,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   postInstall = ''
-    wrapProgram "$out/bin/amber" --prefix PATH : "${lib.makeBinPath [bc]}"
+    wrapProgram "$out/bin/amber" --prefix PATH : "${lib.makeBinPath [ bc ]}"
   '';
 
   passthru.tests.run = runCommand "amber-lang-eval-test" { nativeBuildInputs = [ amber-lang ]; } ''
@@ -43,7 +44,10 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://amber-lang.com";
     license = licenses.gpl3Plus;
     mainProgram = "amber";
-    maintainers = with maintainers; [ cafkafk uncenter ];
+    maintainers = with maintainers; [
+      cafkafk
+      uncenter
+    ];
     platforms = platforms.unix;
   };
 }

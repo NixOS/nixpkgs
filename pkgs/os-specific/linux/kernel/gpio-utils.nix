@@ -1,4 +1,8 @@
-{ lib, stdenv, linux }:
+{
+  lib,
+  stdenv,
+  linux,
+}:
 
 with lib;
 
@@ -13,7 +17,11 @@ stdenv.mkDerivation {
   '';
 
   separateDebugInfo = true;
-  installFlags = [ "install" "DESTDIR=$(out)" "bindir=/bin" ];
+  installFlags = [
+    "install"
+    "DESTDIR=$(out)"
+    "bindir=/bin"
+  ];
 
   meta = {
     description = "Linux tools to inspect the gpiochip interface";

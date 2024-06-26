@@ -1,9 +1,10 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, autoreconfHook
-, systemd
-, pkg-config
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  autoreconfHook,
+  systemd,
+  pkg-config,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -22,9 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
     autoreconfHook
   ];
 
-  buildInputs = [
-    systemd
-  ];
+  buildInputs = [ systemd ];
 
   doCheck = true;
 

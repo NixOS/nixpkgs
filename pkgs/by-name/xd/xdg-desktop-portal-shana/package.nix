@@ -1,9 +1,10 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, meson
-, ninja
-, xdg-desktop-portal
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  xdg-desktop-portal,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -22,9 +23,7 @@ rustPlatform.buildRustPackage rec {
     ninja
   ];
 
-  buildInputs = [
-    xdg-desktop-portal
-  ];
+  buildInputs = [ xdg-desktop-portal ];
 
   # Needed for letting meson run. rustPackage will overwrite it otherwise.
   configurePhase = "";
@@ -38,7 +37,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/Decodetalkers/xdg-desktop-portal-shana";
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = [  maintainers.samuelefacenda ];
+    maintainers = [ maintainers.samuelefacenda ];
   };
 
 }

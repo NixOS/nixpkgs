@@ -1,17 +1,18 @@
-{ lib
-, stdenv
-, trivialBuild
-, fetchFromGitHub
-, emacs
-, hydra
-, ivy
-, pkg-config
-, tclap
-, xapian
+{
+  lib,
+  stdenv,
+  trivialBuild,
+  fetchFromGitHub,
+  emacs,
+  hydra,
+  ivy,
+  pkg-config,
+  tclap,
+  xapian,
   # Include pre-configured hydras
-, withHydra ? false
+  withHydra ? false,
   # Include Ivy integration
-, withIvy ? false
+  withIvy ? false,
 }:
 
 let
@@ -32,7 +33,11 @@ let
 
     sourceRoot = "${src.name}/xapian";
 
-    nativeBuildInputs = [ pkg-config tclap xapian ];
+    nativeBuildInputs = [
+      pkg-config
+      tclap
+      xapian
+    ];
 
     installPhase = ''
       runHook preInstall
@@ -46,8 +51,7 @@ let
 in
 trivialBuild {
   inherit pname version src;
-  packageRequires = lib.optional withHydra hydra
-    ++ lib.optional withIvy ivy;
+  packageRequires = lib.optional withHydra hydra ++ lib.optional withIvy ivy;
   buildInputs = [ xapian ];
 
   postPatch = ''
@@ -57,14 +61,16 @@ trivialBuild {
   '';
 
   # Extra modules are contained in the extras/ directory
-  preBuild = lib.optionalString withHydra ''
-    mv extras/notdeft-{mode-hydra,global-hydra}.el ./
-  '' +
-  lib.optionalString withIvy ''
-    mv extras/notdeft-ivy.el ./
-  '' + ''
-    rm -r extras/
-  '';
+  preBuild =
+    lib.optionalString withHydra ''
+      mv extras/notdeft-{mode-hydra,global-hydra}.el ./
+    ''
+    + lib.optionalString withIvy ''
+      mv extras/notdeft-ivy.el ./
+    ''
+    + ''
+      rm -r extras/
+    '';
 
   meta = with lib; {
     homepage = "https://tero.hasu.is/notdeft/";

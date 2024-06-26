@@ -3,12 +3,14 @@
   lib,
   pkgs,
   ...
-}: let
+}:
+let
   cfg = config.services.invidious-router;
-  settingsFormat = pkgs.formats.yaml {};
+  settingsFormat = pkgs.formats.yaml { };
   configFile = settingsFormat.generate "config.yaml" cfg.settings;
-in {
-  meta.maintainers = [lib.maintainers.sils];
+in
+{
+  meta.maintainers = [ lib.maintainers.sils ];
 
   options.services.invidious-router = {
     enable = lib.mkEnableOption "the invidious-router service";
@@ -27,9 +29,7 @@ in {
       '';
     };
     settings = lib.mkOption {
-      type = lib.types.submodule {
-        freeformType = settingsFormat.type;
-      };
+      type = lib.types.submodule { freeformType = settingsFormat.type; };
       default = {
         app = {
           listen = "127.0.0.1:8050";
@@ -48,9 +48,7 @@ in {
         };
         healthcheck = {
           path = "/";
-          allowed_status_codes = [
-            200
-          ];
+          allowed_status_codes = [ 200 ];
           timeout = "1s";
           interval = "10s";
           filter_by_response_time = {
@@ -89,7 +87,7 @@ in {
       };
       extraDomains = lib.mkOption {
         type = lib.types.listOf lib.types.str;
-        default = [];
+        default = [ ];
         description = ''
           Additional domains to serve invidious-router on.
         '';
@@ -98,7 +96,7 @@ in {
   };
   config = lib.mkIf cfg.enable {
     systemd.services.invidious-router = {
-      wantedBy = ["multi-user.target"];
+      wantedBy = [ "multi-user.target" ];
       serviceConfig = {
         Restart = "on-failure";
         ExecStart = "${lib.getExe cfg.package} --configfile ${configFile}";

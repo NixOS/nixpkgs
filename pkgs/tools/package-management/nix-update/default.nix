@@ -1,10 +1,11 @@
-{ lib
-, python3
-, fetchFromGitHub
-, nix
-, nix-prefetch-git
-, nixpkgs-fmt
-, nixpkgs-review
+{
+  lib,
+  python3,
+  fetchFromGitHub,
+  nix,
+  nix-prefetch-git,
+  nixpkgs-fmt,
+  nixpkgs-review,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -19,12 +20,18 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-QWfW8tI4tk8hk9eNN6/3i2E4rwfIWgqjxj+htSZVdrc=";
   };
 
-  nativeBuildInputs = [
-    python3.pkgs.setuptools
-  ];
+  nativeBuildInputs = [ python3.pkgs.setuptools ];
 
   makeWrapperArgs = [
-    "--prefix" "PATH" ":" (lib.makeBinPath [ nix nix-prefetch-git nixpkgs-fmt nixpkgs-review ])
+    "--prefix"
+    "PATH"
+    ":"
+    (lib.makeBinPath [
+      nix
+      nix-prefetch-git
+      nixpkgs-fmt
+      nixpkgs-review
+    ])
   ];
 
   checkPhase = ''
@@ -36,7 +43,11 @@ python3.pkgs.buildPythonApplication rec {
     inherit (src.meta) homepage;
     changelog = "https://github.com/Mic92/nix-update/releases/tag/${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ figsoda mic92 zowoq ];
+    maintainers = with maintainers; [
+      figsoda
+      mic92
+      zowoq
+    ];
     mainProgram = "nix-update";
     platforms = platforms.all;
   };

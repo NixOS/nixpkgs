@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, iproute2
-, runtimeShell
-, systemd
-, coreutils
-, util-linux
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  iproute2,
+  runtimeShell,
+  systemd,
+  coreutils,
+  util-linux,
 }:
 
 stdenv.mkDerivation rec {
@@ -21,15 +22,21 @@ stdenv.mkDerivation rec {
   };
 
   # set SCRIPT_NAME in case we are wrapped and inject PATH
-  patches = [
-    ./update-systemd-resolved.patch
-  ];
+  patches = [ ./update-systemd-resolved.patch ];
 
   PREFIX = "${placeholder "out"}/libexec/openvpn";
 
   postInstall = ''
     substituteInPlace ${PREFIX}/update-systemd-resolved \
-      --subst-var-by PATH ${lib.makeBinPath [ coreutils iproute2 runtimeShell systemd util-linux ]}
+      --subst-var-by PATH ${
+        lib.makeBinPath [
+          coreutils
+          iproute2
+          runtimeShell
+          systemd
+          util-linux
+        ]
+      }
   '';
 
   meta = with lib; {

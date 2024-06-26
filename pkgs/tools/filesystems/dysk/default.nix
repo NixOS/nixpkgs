@@ -1,7 +1,8 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, installShellFiles
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  installShellFiles,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -17,9 +18,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-N51M9uEMfcoNyR8r76bd0PW2jSQTpU/0V+cEl82gFqk=";
 
-  nativeBuildInputs = [
-    installShellFiles
-  ];
+  nativeBuildInputs = [ installShellFiles ];
 
   postInstall = ''
     installManPage $releaseDir/build/*/out/dysk.1
@@ -31,7 +30,10 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/Canop/dysk";
     changelog = "https://github.com/Canop/dysk/blob/${src.rev}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ figsoda koral ];
+    maintainers = with maintainers; [
+      figsoda
+      koral
+    ];
     mainProgram = "dysk";
   };
 }

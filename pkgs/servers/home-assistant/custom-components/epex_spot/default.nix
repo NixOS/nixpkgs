@@ -1,7 +1,8 @@
-{ lib
-, fetchFromGitHub
-, buildHomeAssistantComponent
-, beautifulsoup4
+{
+  lib,
+  fetchFromGitHub,
+  buildHomeAssistantComponent,
+  beautifulsoup4,
 }:
 
 buildHomeAssistantComponent rec {
@@ -16,9 +17,7 @@ buildHomeAssistantComponent rec {
     hash = "sha256-8cxEOCzlQbS3HbQMBo7/rZb/GfpJvOWayLttEaEENYs=";
   };
 
-  propagatedBuildInputs = [
-    beautifulsoup4
-  ];
+  propagatedBuildInputs = [ beautifulsoup4 ];
 
   #skip phases without activity
   dontConfigure = true;

@@ -1,6 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, makeWrapper
-, perl, pandoc, python3, git
-, par2cmdline ? null, par2Support ? true
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  makeWrapper,
+  perl,
+  pandoc,
+  python3,
+  git,
+  par2cmdline ? null,
+  par2Support ? true,
 }:
 
 assert par2Support -> par2cmdline != null;
@@ -8,8 +16,17 @@ assert par2Support -> par2cmdline != null;
 let
   version = "0.33.3";
 
-  pythonDeps = with python3.pkgs; [ setuptools tornado ]
-    ++ lib.optionals (!stdenv.isDarwin) [ pyxattr pylibacl fuse ];
+  pythonDeps =
+    with python3.pkgs;
+    [
+      setuptools
+      tornado
+    ]
+    ++ lib.optionals (!stdenv.isDarwin) [
+      pyxattr
+      pylibacl
+      fuse
+    ];
 in
 
 stdenv.mkDerivation {
@@ -23,8 +40,15 @@ stdenv.mkDerivation {
     hash = "sha256-w7yPs7hG4v0Kd9i2tYhWH7vW95MAMfI/8g61MB6bfps=";
   };
 
-  buildInputs = [ git python3 ];
-  nativeBuildInputs = [ pandoc perl makeWrapper ];
+  buildInputs = [
+    git
+    python3
+  ];
+  nativeBuildInputs = [
+    pandoc
+    perl
+    makeWrapper
+  ];
 
   postPatch = "patchShebangs .";
 
@@ -41,7 +65,12 @@ stdenv.mkDerivation {
 
   postInstall = ''
     wrapProgram $out/bin/bup \
-      --prefix PATH : ${lib.makeBinPath [ git par2cmdline ]} \
+      --prefix PATH : ${
+        lib.makeBinPath [
+          git
+          par2cmdline
+        ]
+      } \
       --prefix NIX_PYTHONPATH : ${lib.makeSearchPathOutput "lib" python3.sitePackages pythonDeps}
   '';
 

@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, autoreconfHook
-, guile
-, pkg-config
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  autoreconfHook,
+  guile,
+  pkg-config,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -25,9 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs = [
-    guile
-  ];
+  buildInputs = [ guile ];
 
   meta = with lib; {
     description = "S-expression based json reader/writer for Guile";

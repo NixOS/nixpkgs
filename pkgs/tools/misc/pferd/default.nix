@@ -1,6 +1,7 @@
-{ lib
-, python3Packages
-, fetchFromGitHub
+{
+  lib,
+  python3Packages,
+  fetchFromGitHub,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -15,9 +16,7 @@ python3Packages.buildPythonApplication rec {
     sha256 = "sha256-qN4GtQhiQpXZIagtphcn+oSYXroA9kk7E34IKoKMu7c=";
   };
 
-  nativeBuildInputs = with python3Packages; [
-    setuptools
-  ];
+  nativeBuildInputs = with python3Packages; [ setuptools ];
 
   propagatedBuildInputs = with python3Packages; [
     aiohttp

@@ -1,49 +1,50 @@
-{ lib
-, fetchFromGitHub
-, fetchpatch
-, callPackage
-, pkg-config
-, cmake
-, ninja
-, python3
-, gobject-introspection
-, wrapGAppsHook3
-, wrapQtAppsHook
-, extra-cmake-modules
-, qtbase
-, qtwayland
-, qtsvg
-, qtimageformats
-, gtk3
-, glib-networking
-, boost
-, fmt
-, libdbusmenu
-, lz4
-, xxHash
-, ffmpeg
-, openalSoft
-, minizip
-, libopus
-, alsa-lib
-, libpulseaudio
-, pipewire
-, range-v3
-, tl-expected
-, hunspell
-, webkitgtk_6_0
-, jemalloc
-, rnnoise
-, protobuf
-, abseil-cpp
-, xdg-utils
-, microsoft-gsl
-, rlottie
-, stdenv
-, darwin
-, lld
-, libicns
-, nix-update-script
+{
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  callPackage,
+  pkg-config,
+  cmake,
+  ninja,
+  python3,
+  gobject-introspection,
+  wrapGAppsHook3,
+  wrapQtAppsHook,
+  extra-cmake-modules,
+  qtbase,
+  qtwayland,
+  qtsvg,
+  qtimageformats,
+  gtk3,
+  glib-networking,
+  boost,
+  fmt,
+  libdbusmenu,
+  lz4,
+  xxHash,
+  ffmpeg,
+  openalSoft,
+  minizip,
+  libopus,
+  alsa-lib,
+  libpulseaudio,
+  pipewire,
+  range-v3,
+  tl-expected,
+  hunspell,
+  webkitgtk_6_0,
+  jemalloc,
+  rnnoise,
+  protobuf,
+  abseil-cpp,
+  xdg-utils,
+  microsoft-gsl,
+  rlottie,
+  stdenv,
+  darwin,
+  lld,
+  libicns,
+  nix-update-script,
 }:
 
 # Main reference:
@@ -56,9 +57,7 @@
 let
   tg_owt = callPackage ./tg_owt.nix {
     inherit stdenv;
-    abseil-cpp = abseil-cpp.override {
-      cxxStandard = "20";
-    };
+    abseil-cpp = abseil-cpp.override { cxxStandard = "20"; };
   };
   mainProgram = if stdenv.isLinux then "telegram-desktop" else "Telegram";
 in
@@ -85,106 +84,113 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  postPatch = lib.optionalString stdenv.isLinux ''
-    substituteInPlace Telegram/ThirdParty/libtgvoip/os/linux/AudioInputALSA.cpp \
-      --replace-fail '"libasound.so.2"' '"${alsa-lib}/lib/libasound.so.2"'
-    substituteInPlace Telegram/ThirdParty/libtgvoip/os/linux/AudioOutputALSA.cpp \
-      --replace-fail '"libasound.so.2"' '"${alsa-lib}/lib/libasound.so.2"'
-    substituteInPlace Telegram/ThirdParty/libtgvoip/os/linux/AudioPulse.cpp \
-      --replace-fail '"libpulse.so.0"' '"${libpulseaudio}/lib/libpulse.so.0"'
-    substituteInPlace Telegram/lib_webview/webview/platform/linux/webview_linux_webkitgtk_library.cpp \
-      --replace-fail '"libwebkitgtk-6.0.so.4"' '"${webkitgtk_6_0}/lib/libwebkitgtk-6.0.so.4"'
-  '' + lib.optionalString stdenv.isDarwin ''
-    substituteInPlace Telegram/lib_webrtc/webrtc/platform/mac/webrtc_environment_mac.mm \
-      --replace-fail kAudioObjectPropertyElementMain kAudioObjectPropertyElementMaster
-  '';
+  postPatch =
+    lib.optionalString stdenv.isLinux ''
+      substituteInPlace Telegram/ThirdParty/libtgvoip/os/linux/AudioInputALSA.cpp \
+        --replace-fail '"libasound.so.2"' '"${alsa-lib}/lib/libasound.so.2"'
+      substituteInPlace Telegram/ThirdParty/libtgvoip/os/linux/AudioOutputALSA.cpp \
+        --replace-fail '"libasound.so.2"' '"${alsa-lib}/lib/libasound.so.2"'
+      substituteInPlace Telegram/ThirdParty/libtgvoip/os/linux/AudioPulse.cpp \
+        --replace-fail '"libpulse.so.0"' '"${libpulseaudio}/lib/libpulse.so.0"'
+      substituteInPlace Telegram/lib_webview/webview/platform/linux/webview_linux_webkitgtk_library.cpp \
+        --replace-fail '"libwebkitgtk-6.0.so.4"' '"${webkitgtk_6_0}/lib/libwebkitgtk-6.0.so.4"'
+    ''
+    + lib.optionalString stdenv.isDarwin ''
+      substituteInPlace Telegram/lib_webrtc/webrtc/platform/mac/webrtc_environment_mac.mm \
+        --replace-fail kAudioObjectPropertyElementMain kAudioObjectPropertyElementMaster
+    '';
 
   # We want to run wrapProgram manually (with additional parameters)
   dontWrapGApps = true;
   dontWrapQtApps = true;
 
-  nativeBuildInputs = [
-    pkg-config
-    cmake
-    ninja
-    python3
-    wrapQtAppsHook
-  ] ++ lib.optionals stdenv.isLinux [
-    gobject-introspection
-    wrapGAppsHook3
-    extra-cmake-modules
-  ] ++ lib.optionals stdenv.isDarwin [
-    lld
-  ];
+  nativeBuildInputs =
+    [
+      pkg-config
+      cmake
+      ninja
+      python3
+      wrapQtAppsHook
+    ]
+    ++ lib.optionals stdenv.isLinux [
+      gobject-introspection
+      wrapGAppsHook3
+      extra-cmake-modules
+    ]
+    ++ lib.optionals stdenv.isDarwin [ lld ];
 
-  buildInputs = [
-    qtbase
-    qtsvg
-    qtimageformats
-    boost
-    lz4
-    xxHash
-    ffmpeg
-    openalSoft
-    minizip
-    libopus
-    range-v3
-    tl-expected
-    rnnoise
-    protobuf
-    tg_owt
-    microsoft-gsl
-    rlottie
-  ] ++ lib.optionals stdenv.isLinux [
-    qtwayland
-    gtk3
-    glib-networking
-    fmt
-    libdbusmenu
-    alsa-lib
-    libpulseaudio
-    pipewire
-    hunspell
-    webkitgtk_6_0
-    jemalloc
-  ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk_11_0.frameworks; [
-    Cocoa
-    CoreFoundation
-    CoreServices
-    CoreText
-    CoreGraphics
-    CoreMedia
-    OpenGL
-    AudioUnit
-    ApplicationServices
-    Foundation
-    AGL
-    Security
-    SystemConfiguration
-    Carbon
-    AudioToolbox
-    VideoToolbox
-    VideoDecodeAcceleration
-    AVFoundation
-    CoreAudio
-    CoreVideo
-    CoreMediaIO
-    QuartzCore
-    AppKit
-    CoreWLAN
-    WebKit
-    IOKit
-    GSS
-    MediaPlayer
-    IOSurface
-    Metal
-    NaturalLanguage
-    libicns
-  ]);
+  buildInputs =
+    [
+      qtbase
+      qtsvg
+      qtimageformats
+      boost
+      lz4
+      xxHash
+      ffmpeg
+      openalSoft
+      minizip
+      libopus
+      range-v3
+      tl-expected
+      rnnoise
+      protobuf
+      tg_owt
+      microsoft-gsl
+      rlottie
+    ]
+    ++ lib.optionals stdenv.isLinux [
+      qtwayland
+      gtk3
+      glib-networking
+      fmt
+      libdbusmenu
+      alsa-lib
+      libpulseaudio
+      pipewire
+      hunspell
+      webkitgtk_6_0
+      jemalloc
+    ]
+    ++ lib.optionals stdenv.isDarwin (
+      with darwin.apple_sdk_11_0.frameworks;
+      [
+        Cocoa
+        CoreFoundation
+        CoreServices
+        CoreText
+        CoreGraphics
+        CoreMedia
+        OpenGL
+        AudioUnit
+        ApplicationServices
+        Foundation
+        AGL
+        Security
+        SystemConfiguration
+        Carbon
+        AudioToolbox
+        VideoToolbox
+        VideoDecodeAcceleration
+        AVFoundation
+        CoreAudio
+        CoreVideo
+        CoreMediaIO
+        QuartzCore
+        AppKit
+        CoreWLAN
+        WebKit
+        IOKit
+        GSS
+        MediaPlayer
+        IOSurface
+        Metal
+        NaturalLanguage
+        libicns
+      ]
+    );
 
-  env = lib.optionalAttrs stdenv.isDarwin {
-    NIX_CFLAGS_LINK = "-fuse-ld=lld";
-  };
+  env = lib.optionalAttrs stdenv.isDarwin { NIX_CFLAGS_LINK = "-fuse-ld=lld"; };
 
   cmakeFlags = [
     "-Ddisable_autoupdate=ON"
@@ -207,16 +213,18 @@ stdenv.mkDerivation rec {
     ln -s $out/{Applications/${mainProgram}.app/Contents/MacOS,bin}
   '';
 
-  postFixup = lib.optionalString stdenv.isLinux ''
-    # This is necessary to run Telegram in a pure environment.
-    # We also use gappsWrapperArgs from wrapGAppsHook.
-    wrapProgram $out/bin/${mainProgram} \
-      "''${gappsWrapperArgs[@]}" \
-      "''${qtWrapperArgs[@]}" \
-      --suffix PATH : ${lib.makeBinPath [ xdg-utils ]}
-  '' + lib.optionalString stdenv.isDarwin ''
-    wrapQtApp $out/Applications/${mainProgram}.app/Contents/MacOS/${mainProgram}
-  '';
+  postFixup =
+    lib.optionalString stdenv.isLinux ''
+      # This is necessary to run Telegram in a pure environment.
+      # We also use gappsWrapperArgs from wrapGAppsHook.
+      wrapProgram $out/bin/${mainProgram} \
+        "''${gappsWrapperArgs[@]}" \
+        "''${qtWrapperArgs[@]}" \
+        --suffix PATH : ${lib.makeBinPath [ xdg-utils ]}
+    ''
+    + lib.optionalString stdenv.isDarwin ''
+      wrapQtApp $out/Applications/${mainProgram}.app/Contents/MacOS/${mainProgram}
+    '';
 
   passthru = {
     inherit tg_owt;

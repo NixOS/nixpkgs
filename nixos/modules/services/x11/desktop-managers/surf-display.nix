@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -42,7 +47,8 @@ let
     ${cfg.extraConfig}
   '';
 
-in {
+in
+{
   options = {
     services.xserver.desktopManager.surf-display = {
       enable = mkEnableOption "surf-display as a kiosk browser session";
@@ -119,9 +125,7 @@ in {
   };
 
   config = mkIf cfg.enable {
-    services.displayManager.sessionPackages = [
-      pkgs.surf-display
-    ];
+    services.displayManager.sessionPackages = [ pkgs.surf-display ];
 
     environment.etc."default/surf-display".text = surfDisplayConf;
   };

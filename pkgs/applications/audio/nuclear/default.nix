@@ -1,6 +1,7 @@
-{ appimageTools
-, lib
-, fetchurl
+{
+  appimageTools,
+  lib,
+  fetchurl,
 }:
 let
   pname = "nuclear";

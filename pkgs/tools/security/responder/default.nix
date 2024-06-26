@@ -1,7 +1,8 @@
-{ lib
-, fetchFromGitHub
-, makeWrapper
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  makeWrapper,
+  python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -16,13 +17,9 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-BVSA/ZhpGz6UGyDRJUc4nlRJZ1/Y7er1vVOI+IbIqGk=";
   };
 
-  nativeBuildInputs = [
-    makeWrapper
-  ];
+  nativeBuildInputs = [ makeWrapper ];
 
-  propagatedBuildInputs = with python3.pkgs; [
-    netifaces
-  ];
+  propagatedBuildInputs = with python3.pkgs; [ netifaces ];
 
   installPhase = ''
     runHook preInstall

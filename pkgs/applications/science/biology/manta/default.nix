@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, cmake, zlib, python2 }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  zlib,
+  python2,
+}:
 
 stdenv.mkDerivation rec {
   pname = "manta";
@@ -12,7 +19,10 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ zlib python2 ];
+  buildInputs = [
+    zlib
+    python2
+  ];
   postFixup = ''
     sed -i 's|/usr/bin/env python2|${python2.interpreter}|' $out/lib/python/makeRunScript.py
     sed -i 's|/usr/bin/env python|${python2.interpreter}|' $out/lib/python/pyflow/pyflow.py
@@ -30,6 +40,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3;
     homepage = "https://github.com/Illumina/manta";
     maintainers = with maintainers; [ jbedo ];
-    platforms =  platforms.x86_64;
+    platforms = platforms.x86_64;
   };
 }

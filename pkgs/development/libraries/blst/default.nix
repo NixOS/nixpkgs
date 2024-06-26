@@ -1,6 +1,11 @@
-{ stdenv, lib, fetchFromGitHub, autoreconfHook }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  autoreconfHook,
+}:
 
-stdenv.mkDerivation ( finalAttrs: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "blst";
   version = "0.3.12";
 
@@ -40,17 +45,17 @@ stdenv.mkDerivation ( finalAttrs: {
     mkdir -p $out/lib/pkgconfig
     cat <<EOF > $out/lib/pkgconfig/libblst.pc
     prefix=$out
-    exec_prefix=''\\''${prefix}
-    libdir=''\\''${exec_prefix}/lib
-    includedir=''\\''${prefix}/include
+    exec_prefix=\''${prefix}
+    libdir=\''${exec_prefix}/lib
+    includedir=\''${prefix}/include
 
     Name: libblst
     Description: ${finalAttrs.meta.description}
     URL: ${finalAttrs.meta.homepage}
     Version: ${finalAttrs.version}
 
-    Cflags: -I''\\''${includedir}
-    Libs: -L''\\''${libdir} -lblst
+    Cflags: -I\''${includedir}
+    Libs: -L\''${libdir} -lblst
     Libs.private:
     EOF
 
@@ -71,7 +76,10 @@ stdenv.mkDerivation ( finalAttrs: {
     description = "Multilingual BLS12-381 signature library";
     homepage = "https://github.com/supranational/blst";
     license = licenses.isc;
-    maintainers = with maintainers; [ iquerejeta yvan-sraka ];
+    maintainers = with maintainers; [
+      iquerejeta
+      yvan-sraka
+    ];
     platforms = platforms.all;
   };
 })

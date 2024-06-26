@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, curl
-, breakpad
-, pkg-config
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  curl,
+  breakpad,
+  pkg-config,
 }:
 
 stdenv.mkDerivation rec {
@@ -41,6 +42,9 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/getsentry/sentry-native/blob/${version}/CHANGELOG.md";
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ wheelsandmetal daniel-fahey ];
+    maintainers = with maintainers; [
+      wheelsandmetal
+      daniel-fahey
+    ];
   };
 }

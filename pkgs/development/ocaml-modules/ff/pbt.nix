@@ -1,4 +1,10 @@
-{ lib, buildDunePackage, zarith, ff-sig, alcotest }:
+{
+  lib,
+  buildDunePackage,
+  zarith,
+  ff-sig,
+  alcotest,
+}:
 
 buildDunePackage {
   pname = "ff-pbt";
@@ -7,9 +13,7 @@ buildDunePackage {
   minimalOCamlVersion = "4.08";
   duneVersion = "3";
 
-  checkInputs = [
-    alcotest
-  ];
+  checkInputs = [ alcotest ];
 
   doCheck = true;
 

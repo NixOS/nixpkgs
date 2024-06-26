@@ -1,24 +1,25 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, meson
-, ninja
-, pkg-config
-, python3
-, vala
-, accountsservice
-, dbus
-, desktop-file-utils
-, fwupd
-, geoclue2
-, glib
-, gobject-introspection
-, gtk3
-, granite
-, libgee
-, systemd
-, wrapGAppsHook3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  meson,
+  ninja,
+  pkg-config,
+  python3,
+  vala,
+  accountsservice,
+  dbus,
+  desktop-file-utils,
+  fwupd,
+  geoclue2,
+  glib,
+  gobject-introspection,
+  gtk3,
+  granite,
+  libgee,
+  systemd,
+  wrapGAppsHook3,
 }:
 
 stdenv.mkDerivation rec {

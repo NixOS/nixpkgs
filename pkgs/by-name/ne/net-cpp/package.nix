@@ -1,28 +1,27 @@
-{ stdenv
-, lib
-, fetchFromGitLab
-, fetchpatch
-, gitUpdater
-, testers
-, boost
-, cmake
-, curl
-, doxygen
-, graphviz
-, gtest
-, jsoncpp
-, lomiri
-, pkg-config
-, process-cpp
-, properties-cpp
-, python3
-, validatePkgConfig
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  fetchpatch,
+  gitUpdater,
+  testers,
+  boost,
+  cmake,
+  curl,
+  doxygen,
+  graphviz,
+  gtest,
+  jsoncpp,
+  lomiri,
+  pkg-config,
+  process-cpp,
+  properties-cpp,
+  python3,
+  validatePkgConfig,
 }:
 
 let
-  pythonEnv = python3.withPackages (ps: with ps; [
-    httpbin
-  ]);
+  pythonEnv = python3.withPackages (ps: with ps; [ httpbin ]);
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "net-cpp";
@@ -109,8 +108,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.lgpl3Only;
     maintainers = teams.lomiri.members;
     platforms = platforms.linux;
-    pkgConfigModules = [
-      "net-cpp"
-    ];
+    pkgConfigModules = [ "net-cpp" ];
   };
 })

@@ -1,7 +1,8 @@
-{ config
-, pkgs
-, lib
-, ...
+{
+  config,
+  pkgs,
+  lib,
+  ...
 }:
 
 let
@@ -73,12 +74,26 @@ in
         example = [
           {
             Developer = [
-              { Github = [{ abbr = "GH"; href = "https://github.com/"; }]; }
+              {
+                Github = [
+                  {
+                    abbr = "GH";
+                    href = "https://github.com/";
+                  }
+                ];
+              }
             ];
           }
           {
             Entertainment = [
-              { YouTube = [{ abbr = "YT"; href = "https://youtube.com/"; }]; }
+              {
+                YouTube = [
+                  {
+                    abbr = "YT";
+                    href = "https://youtube.com/";
+                  }
+                ];
+              }
             ];
           }
         ];
@@ -183,20 +198,22 @@ in
       # then default to "unmanaged" configuration which is manually updated in
       # var/lib/homepage-dashboard. This is to maintain backwards compatibility, and should be
       # deprecated in a future release.
-      managedConfig = !(
-        cfg.bookmarks == [ ] &&
-        cfg.customCSS == "" &&
-        cfg.customJS == "" &&
-        cfg.docker == { } &&
-        cfg.kubernetes == { } &&
-        cfg.services == [ ] &&
-        cfg.settings == { } &&
-        cfg.widgets == [ ]
-      );
+      managedConfig =
+        !(
+          cfg.bookmarks == [ ]
+          && cfg.customCSS == ""
+          && cfg.customJS == ""
+          && cfg.docker == { }
+          && cfg.kubernetes == { }
+          && cfg.services == [ ]
+          && cfg.settings == { }
+          && cfg.widgets == [ ]
+        );
 
       configDir = if managedConfig then "/etc/homepage-dashboard" else "/var/lib/homepage-dashboard";
 
-      msg = "using unmanaged configuration for homepage-dashboard is deprecated and will be removed"
+      msg =
+        "using unmanaged configuration for homepage-dashboard is deprecated and will be removed"
         + " in 24.05. please see the NixOS documentation for `services.homepage-dashboard' and add"
         + " your bookmarks, services, widgets, and other configuration using the options provided.";
     in
@@ -236,8 +253,6 @@ in
         };
       };
 
-      networking.firewall = lib.mkIf cfg.openFirewall {
-        allowedTCPPorts = [ cfg.listenPort ];
-      };
+      networking.firewall = lib.mkIf cfg.openFirewall { allowedTCPPorts = [ cfg.listenPort ]; };
     };
 }

@@ -1,4 +1,9 @@
-{ appimageTools, makeWrapper, fetchurl, lib }:
+{
+  appimageTools,
+  makeWrapper,
+  fetchurl,
+  lib,
+}:
 
 let
   pname = "notable";
@@ -10,9 +15,7 @@ let
     inherit sha256;
   };
 
-  appimageContents = appimageTools.extract {
-    inherit pname version src;
-  };
+  appimageContents = appimageTools.extract { inherit pname version src; };
 in
 appimageTools.wrapType2 rec {
 
@@ -22,7 +25,10 @@ appimageTools.wrapType2 rec {
     export LC_ALL=C.UTF-8
   '';
 
-  extraPkgs = pkgs: [ pkgs.at-spi2-atk pkgs.at-spi2-core ];
+  extraPkgs = pkgs: [
+    pkgs.at-spi2-atk
+    pkgs.at-spi2-core
+  ];
 
   extraInstallCommands = ''
     install -m 444 -D ${appimageContents}/notable.desktop $out/share/applications/notable.desktop

@@ -1,20 +1,21 @@
-{ lib
-, stdenv
-, fetchFromGitHub
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
 
-# build time
-, cmake
-, pkg-config
+  # build time
+  cmake,
+  pkg-config,
 
-# runtime
-, fmt
-, onnxruntime
-, pcaudiolib
-, piper-phonemize
-, spdlog
+  # runtime
+  fmt,
+  onnxruntime,
+  pcaudiolib,
+  piper-phonemize,
+  spdlog,
 
-# tests
-, piper-train
+  # tests
+  piper-train,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

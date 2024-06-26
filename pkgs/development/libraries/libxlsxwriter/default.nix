@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, minizip
-, python3
-, zlib
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  minizip,
+  python3,
+  zlib,
 }:
 
 stdenv.mkDerivation rec {
@@ -32,9 +33,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  nativeCheckInputs = [
-    python3.pkgs.pytest
-  ];
+  nativeCheckInputs = [ python3.pkgs.pytest ];
 
   checkTarget = "test";
 

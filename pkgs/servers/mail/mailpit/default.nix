@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, buildGoModule
-, nodejs
-, python3
-, libtool
-, npmHooks
-, fetchFromGitHub
-, fetchNpmDeps
-, testers
-, mailpit
+{
+  lib,
+  stdenv,
+  buildGoModule,
+  nodejs,
+  python3,
+  libtool,
+  npmHooks,
+  fetchFromGitHub,
+  fetchNpmDeps,
+  testers,
+  mailpit,
 }:
 
 let
@@ -39,7 +40,12 @@ let
       NIX_CFLAGS_COMPILE = "-D__ENVIRONMENT_MAC_OS_X_VERSION_MIN_REQUIRED__=101300";
     };
 
-    nativeBuildInputs = [ nodejs python3 libtool npmHooks.npmConfigHook ];
+    nativeBuildInputs = [
+      nodejs
+      python3
+      libtool
+      npmHooks.npmConfigHook
+    ];
 
     buildPhase = ''
       npm run package
@@ -60,7 +66,11 @@ buildGoModule {
 
   CGO_ENABLED = 0;
 
-  ldflags = [ "-s" "-w" "-X github.com/axllent/mailpit/config.Version=${version}" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X github.com/axllent/mailpit/config.Version=${version}"
+  ];
 
   preBuild = ''
     cp -r ${ui} server/ui/dist

@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, cmake
-, qtbase
-, qttools
-, spdlog
-, ffmpeg
-, taglib
-, wrapQtAppsHook
-, makeDesktopItem
-, copyDesktopItems
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  cmake,
+  qtbase,
+  qttools,
+  spdlog,
+  ffmpeg,
+  taglib,
+  wrapQtAppsHook,
+  makeDesktopItem,
+  copyDesktopItems,
 }:
 
 stdenv.mkDerivation rec {
@@ -48,11 +49,13 @@ stdenv.mkDerivation rec {
   installPhase =
     ''
       runHook preInstall
-    '' + lib.optionalString stdenv.isDarwin ''
+    ''
+    + lib.optionalString stdenv.isDarwin ''
       mkdir -p $out/Applications
       mv "easyaudiosync.app" "Easy Audio Sync.app"
       cp -r "Easy Audio Sync.app" $out/Applications
-    '' + lib.optionalString stdenv.isLinux ''
+    ''
+    + lib.optionalString stdenv.isLinux ''
       install -Dm755 easyaudiosync $out/bin/easyaudiosync
 
       for RES in 48 64 128 256; do
@@ -60,7 +63,8 @@ stdenv.mkDerivation rec {
       done
 
       install -Dm755 "$src/assets/icons/easyaudiosync.svg" "$out/share/icons/hicolor/scalable/apps/easyaudiosync.svg"
-    '' + ''
+    ''
+    + ''
       runHook postInstall
     '';
 

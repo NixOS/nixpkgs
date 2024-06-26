@@ -1,37 +1,35 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, doxygen
-, graphviz
-, boost
-, cgal_5
-, gdal
-, glew
-, gmp
-, libGL
-, libGLU
-, libSM
-, mpfr
-, proj
-, python3
-, qtxmlpatterns
-, qwt
-, wrapQtAppsHook
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  doxygen,
+  graphviz,
+  boost,
+  cgal_5,
+  gdal,
+  glew,
+  gmp,
+  libGL,
+  libGLU,
+  libSM,
+  mpfr,
+  proj,
+  python3,
+  qtxmlpatterns,
+  qwt,
+  wrapQtAppsHook,
 }:
 
 let
-  python = python3.withPackages (ps: with ps; [
-    numpy
-  ]);
+  python = python3.withPackages (ps: with ps; [ numpy ]);
   boost' = boost.override {
     enablePython = true;
     inherit python;
   };
-  cgal = cgal_5.override {
-    boost = boost';
-  };
-in stdenv.mkDerivation (finalAttrs: {
+  cgal = cgal_5.override { boost = boost'; };
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "gplates";
   version = "2.5";
 

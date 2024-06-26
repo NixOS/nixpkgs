@@ -1,6 +1,7 @@
-{ lib
-, fetchFromGitHub
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -23,9 +24,7 @@ python3.pkgs.buildPythonApplication rec {
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "wafw00f"
-  ];
+  pythonImportsCheck = [ "wafw00f" ];
 
   meta = with lib; {
     description = "Tool to identify and fingerprint Web Application Firewalls (WAF)";

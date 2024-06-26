@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, python3Packages }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  python3Packages,
+}:
 
 stdenv.mkDerivation {
   pname = "yaml-merge";
@@ -12,7 +17,7 @@ stdenv.mkDerivation {
   };
 
   pythonPath = with python3Packages; [ pyyaml ];
-  nativeBuildInputs = with python3Packages;  [ wrapPython ];
+  nativeBuildInputs = with python3Packages; [ wrapPython ];
 
   installPhase = ''
     install -Dm755 yaml-merge.py $out/bin/yaml-merge

@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchFromGitLab, cmake }:
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  cmake,
+}:
 
 stdenv.mkDerivation rec {
   pname = "olm";
@@ -26,6 +31,9 @@ stdenv.mkDerivation rec {
     description = "Implements double cryptographic ratchet and Megolm ratchet";
     homepage = "https://gitlab.matrix.org/matrix-org/olm";
     license = licenses.asl20;
-    maintainers = with maintainers; [ tilpner oxzi ];
+    maintainers = with maintainers; [
+      tilpner
+      oxzi
+    ];
   };
 }

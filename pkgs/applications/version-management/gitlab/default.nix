@@ -1,10 +1,33 @@
-{ stdenv, lib, fetchFromGitLab, bundlerEnv
-, ruby_3_1, tzdata, git, nettools, nixosTests, nodejs, openssl
-, defaultGemConfig, buildRubyGem
-, gitlabEnterprise ? false, callPackage, yarn
-, fixup-yarn-lock, replace, file, cacert, fetchYarnDeps, makeWrapper, pkg-config
-, cargo, rustc, rustPlatform
-, icu, zlib, which
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  bundlerEnv,
+  ruby_3_1,
+  tzdata,
+  git,
+  nettools,
+  nixosTests,
+  nodejs,
+  openssl,
+  defaultGemConfig,
+  buildRubyGem,
+  gitlabEnterprise ? false,
+  callPackage,
+  yarn,
+  fixup-yarn-lock,
+  replace,
+  file,
+  cacert,
+  fetchYarnDeps,
+  makeWrapper,
+  pkg-config,
+  cargo,
+  rustc,
+  rustPlatform,
+  icu,
+  zlib,
+  which,
 }:
 
 let
@@ -24,69 +47,77 @@ let
     gemdir = ./rubyEnv;
     gemset = import (gemdir + "/gemset.nix") src;
     gemConfig = defaultGemConfig // {
-        gpgme = attrs: {
-          nativeBuildInputs = [ pkg-config ];
-        };
-        # the openssl needs the openssl include files
-        openssl = attrs: {
-          buildInputs = [ openssl ];
-        };
-        ruby-magic = attrs: {
-          buildInputs = [ file ];
-          buildFlags = [ "--enable-system-libraries" ];
-        };
-        gitlab-glfm-markdown = attrs: {
-          cargoDeps = rustPlatform.fetchCargoTarball {
-            src = stdenv.mkDerivation {
-              inherit (buildRubyGem { inherit (attrs) gemName version source; })
-                name
-                src
-                unpackPhase
-                nativeBuildInputs
-              ;
-              dontBuilt = true;
-              installPhase = ''
-                cp -R ext/glfm_markdown $out
-                cp Cargo.lock $out
-              '';
-            };
-            hash = "sha256-SncgYYnoSaWA4kQWonoXXbSMu1mnwTyhdLXFagqgH+o=";
-          };
-
-          dontBuild = false;
-
-          nativeBuildInputs = [
-            cargo
-            rustc
-            rustPlatform.cargoSetupHook
-            rustPlatform.bindgenHook
-          ];
-
-          disallowedReferences = [
-            rustc.unwrapped
-          ];
-
-          preInstall = ''
-            export CARGO_HOME="$PWD/../.cargo/"
-          '';
-
-          postInstall = ''
-            mv -v $GEM_HOME/gems/${attrs.gemName}-${attrs.version}/lib/{glfm_markdown/glfm_markdown.so,}
-            find $out -type f -name .rustc_info.json -delete
-          '';
-        };
-        static_holmes = attrs: {
-          buildInputs = [ which icu zlib ];
-        };
+      gpgme = attrs: { nativeBuildInputs = [ pkg-config ]; };
+      # the openssl needs the openssl include files
+      openssl = attrs: { buildInputs = [ openssl ]; };
+      ruby-magic = attrs: {
+        buildInputs = [ file ];
+        buildFlags = [ "--enable-system-libraries" ];
       };
+      gitlab-glfm-markdown = attrs: {
+        cargoDeps = rustPlatform.fetchCargoTarball {
+          src = stdenv.mkDerivation {
+            inherit (buildRubyGem { inherit (attrs) gemName version source; })
+              name
+              src
+              unpackPhase
+              nativeBuildInputs
+              ;
+            dontBuilt = true;
+            installPhase = ''
+              cp -R ext/glfm_markdown $out
+              cp Cargo.lock $out
+            '';
+          };
+          hash = "sha256-SncgYYnoSaWA4kQWonoXXbSMu1mnwTyhdLXFagqgH+o=";
+        };
+
+        dontBuild = false;
+
+        nativeBuildInputs = [
+          cargo
+          rustc
+          rustPlatform.cargoSetupHook
+          rustPlatform.bindgenHook
+        ];
+
+        disallowedReferences = [ rustc.unwrapped ];
+
+        preInstall = ''
+          export CARGO_HOME="$PWD/../.cargo/"
+        '';
+
+        postInstall = ''
+          mv -v $GEM_HOME/gems/${attrs.gemName}-${attrs.version}/lib/{glfm_markdown/glfm_markdown.so,}
+          find $out -type f -name .rustc_info.json -delete
+        '';
+      };
+      static_holmes = attrs: {
+        buildInputs = [
+          which
+          icu
+          zlib
+        ];
+      };
+    };
     groups = [
-      "default" "unicorn" "ed25519" "metrics" "development" "puma" "test" "kerberos"
+      "default"
+      "unicorn"
+      "ed25519"
+      "metrics"
+      "development"
+      "puma"
+      "test"
+      "kerberos"
     ];
     # N.B. omniauth_oauth2_generic and apollo_upload_server both provide a
     # `console` executable.
     ignoreCollisions = true;
 
-    extraConfigPaths = [ "${src}/vendor" "${src}/gems" ];
+    extraConfigPaths = [
+      "${src}/vendor"
+      "${src}/gems"
+    ];
   };
 
   assets = stdenv.mkDerivation {
@@ -98,7 +129,15 @@ let
       sha256 = data.yarn_hash;
     };
 
-    nativeBuildInputs = [ rubyEnv.wrappedRuby rubyEnv.bundler nodejs yarn git cacert fixup-yarn-lock ];
+    nativeBuildInputs = [
+      rubyEnv.wrappedRuby
+      rubyEnv.bundler
+      nodejs
+      yarn
+      git
+      cacert
+      fixup-yarn-lock
+    ];
 
     patches = [
       # Since version 12.6.0, the rake tasks need the location of git,
@@ -169,7 +208,12 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [
-    rubyEnv rubyEnv.wrappedRuby rubyEnv.bundler tzdata git nettools
+    rubyEnv
+    rubyEnv.wrappedRuby
+    rubyEnv.bundler
+    tzdata
+    git
+    nettools
   ];
 
   patches = [
@@ -243,19 +287,24 @@ stdenv.mkDerivation {
     };
   };
 
-  meta = with lib; {
-    homepage = "http://www.gitlab.com/";
-    platforms = platforms.linux;
-    maintainers = teams.gitlab.members;
-  } // (if gitlabEnterprise then
+  meta =
+    with lib;
     {
-      license = licenses.unfreeRedistributable; # https://gitlab.com/gitlab-org/gitlab-ee/raw/master/LICENSE
-      description = "GitLab Enterprise Edition";
+      homepage = "http://www.gitlab.com/";
+      platforms = platforms.linux;
+      maintainers = teams.gitlab.members;
     }
-  else
-    {
-      license = licenses.mit;
-      description = "GitLab Community Edition";
-      longDescription = "GitLab Community Edition (CE) is an open source end-to-end software development platform with built-in version control, issue tracking, code review, CI/CD, and more. Self-host GitLab CE on your own servers, in a container, or on a cloud provider.";
-    });
+    // (
+      if gitlabEnterprise then
+        {
+          license = licenses.unfreeRedistributable; # https://gitlab.com/gitlab-org/gitlab-ee/raw/master/LICENSE
+          description = "GitLab Enterprise Edition";
+        }
+      else
+        {
+          license = licenses.mit;
+          description = "GitLab Community Edition";
+          longDescription = "GitLab Community Edition (CE) is an open source end-to-end software development platform with built-in version control, issue tracking, code review, CI/CD, and more. Self-host GitLab CE on your own servers, in a container, or on a cloud provider.";
+        }
+    );
 }

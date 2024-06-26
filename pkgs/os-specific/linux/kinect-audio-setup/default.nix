@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchgit
-, requireFile
-, pkg-config
-, libusb1
-, p7zip
+{
+  lib,
+  stdenv,
+  fetchgit,
+  requireFile,
+  pkg-config,
+  libusb1,
+  p7zip,
 }:
 
 let
@@ -50,7 +51,11 @@ stdenv.mkDerivation rec {
     ./udev-rules-extra-devices.patch
   ];
 
-  nativeBuildInputs = [ p7zip libusb1 pkg-config ];
+  nativeBuildInputs = [
+    p7zip
+    libusb1
+    pkg-config
+  ];
 
   makeFlags = [
     "PREFIX=$(out)"

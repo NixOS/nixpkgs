@@ -1,12 +1,13 @@
-{ lib
-, fetchFromGitLab
-, buildDunePackage
-, gmp
-, dune-configurator
-, cstruct
-, bigstring
-, alcotest
-, hex
+{
+  lib,
+  fetchFromGitLab,
+  buildDunePackage,
+  gmp,
+  dune-configurator,
+  cstruct,
+  bigstring,
+  alcotest,
+  hex,
 }:
 
 buildDunePackage rec {
@@ -28,9 +29,7 @@ buildDunePackage rec {
     bigstring
   ];
 
-  buildInputs = [
-    dune-configurator
-  ];
+  buildInputs = [ dune-configurator ];
 
   checkInputs = [
     alcotest

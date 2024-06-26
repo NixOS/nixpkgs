@@ -1,17 +1,18 @@
-{ autoconf
-, automake
-, bison
-, fetchFromGitHub
-, fetchpatch
-, flex
-, git
-, lib
-, libtool
-, libunwind
-, pkg-config
-, postgresql
-, ripgrep
-, stdenv
+{
+  autoconf,
+  automake,
+  bison,
+  fetchFromGitHub,
+  fetchpatch,
+  flex,
+  git,
+  lib,
+  libtool,
+  libunwind,
+  pkg-config,
+  postgresql,
+  ripgrep,
+  stdenv,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -52,9 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
     ripgrep
   ];
 
-  buildInputs = [
-    libunwind
-  ];
+  buildInputs = [ libunwind ];
 
   propagatedBuildInputs = [
     bison

@@ -1,30 +1,32 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, gettext
-, m4
-, intltool
-, libxmlxx
-, keybinder
-, keybinder3
-, gtk2
-, gtk3
-, libX11
-, libfm
-, libwnck
-, libwnck2
-, libXmu
-, libXpm
-, cairo
-, gdk-pixbuf
-, gdk-pixbuf-xlib
-, menu-cache
-, lxmenu-data
-, wirelesstools
-, curl
-, supportAlsa ? false, alsa-lib
-, withGtk3 ? true
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  gettext,
+  m4,
+  intltool,
+  libxmlxx,
+  keybinder,
+  keybinder3,
+  gtk2,
+  gtk3,
+  libX11,
+  libfm,
+  libwnck,
+  libwnck2,
+  libXmu,
+  libXpm,
+  cairo,
+  gdk-pixbuf,
+  gdk-pixbuf-xlib,
+  menu-cache,
+  lxmenu-data,
+  wirelesstools,
+  curl,
+  supportAlsa ? false,
+  alsa-lib,
+  withGtk3 ? true,
 }:
 
 stdenv.mkDerivation rec {
@@ -36,7 +38,13 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-HjGPV9fja2HCOlBNA9JDDHja0ULBgERRBh8bPqVEHug=";
   };
 
-  nativeBuildInputs = [ pkg-config gettext m4 intltool libxmlxx ];
+  nativeBuildInputs = [
+    pkg-config
+    gettext
+    m4
+    intltool
+    libxmlxx
+  ];
   buildInputs = [
     (if withGtk3 then keybinder3 else keybinder)
     (if withGtk3 then gtk3 else gtk2)

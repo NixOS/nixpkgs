@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, libtool
-, libuuid
-, zlib
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  libtool,
+  libuuid,
+  zlib,
 }:
 
 stdenv.mkDerivation {
@@ -23,9 +24,7 @@ stdenv.mkDerivation {
 
   strictDeps = true;
 
-  nativeBuildInputs = [
-    autoreconfHook
-  ];
+  nativeBuildInputs = [ autoreconfHook ];
 
   buildInputs = [
     libtool

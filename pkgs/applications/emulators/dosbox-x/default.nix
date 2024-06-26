@@ -1,30 +1,31 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, alsa-lib
-, AudioUnit
-, autoreconfHook
-, Carbon
-, Cocoa
-, ffmpeg
-, fluidsynth
-, freetype
-, glib
-, libicns
-, libpcap
-, libpng
-, libslirp
-, libxkbfile
-, libXrandr
-, makeWrapper
-, ncurses
-, pkg-config
-, python3
-, SDL2
-, SDL2_net
-, testers
-, yad
-, zlib
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  alsa-lib,
+  AudioUnit,
+  autoreconfHook,
+  Carbon,
+  Cocoa,
+  ffmpeg,
+  fluidsynth,
+  freetype,
+  glib,
+  libicns,
+  libpcap,
+  libpng,
+  libslirp,
+  libxkbfile,
+  libXrandr,
+  makeWrapper,
+  ncurses,
+  pkg-config,
+  python3,
+  SDL2,
+  SDL2_net,
+  testers,
+  yad,
+  zlib,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -42,48 +43,55 @@ stdenv.mkDerivation (finalAttrs: {
   # iconutil is unavailable, replace with png2icns from libicns
   # Patch bad hardcoded compiler
   # Don't mess with codesign, doesn't seem to work?
-  postPatch = ''
-    substituteInPlace Makefile.am \
-      --replace-fail 'sips' '## sips' \
-      --replace-fail 'iconutil -c icns -o contrib/macos/dosbox.icns src/dosbox.iconset' 'png2icns contrib/macos/dosbox.icns contrib/macos/dosbox-x.png' \
-      --replace-fail 'g++' "$CXX" \
-      --replace-fail 'codesign' '## codesign'
-  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
-    patchShebangs appbundledeps.py
-  '';
+  postPatch =
+    ''
+      substituteInPlace Makefile.am \
+        --replace-fail 'sips' '## sips' \
+        --replace-fail 'iconutil -c icns -o contrib/macos/dosbox.icns src/dosbox.iconset' 'png2icns contrib/macos/dosbox.icns contrib/macos/dosbox-x.png' \
+        --replace-fail 'g++' "$CXX" \
+        --replace-fail 'codesign' '## codesign'
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      patchShebangs appbundledeps.py
+    '';
 
   strictDeps = true;
 
-  nativeBuildInputs = [
-    autoreconfHook
-    makeWrapper
-    pkg-config
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    libicns
-    python3
-  ];
+  nativeBuildInputs =
+    [
+      autoreconfHook
+      makeWrapper
+      pkg-config
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      libicns
+      python3
+    ];
 
-  buildInputs = [
-    ffmpeg
-    fluidsynth
-    freetype
-    glib
-    libpcap
-    libpng
-    libslirp
-    ncurses
-    SDL2
-    SDL2_net
-    zlib
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
-    alsa-lib
-    libxkbfile
-    libXrandr
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    AudioUnit
-    Carbon
-    Cocoa
-  ];
+  buildInputs =
+    [
+      ffmpeg
+      fluidsynth
+      freetype
+      glib
+      libpcap
+      libpng
+      libslirp
+      ncurses
+      SDL2
+      SDL2_net
+      zlib
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      alsa-lib
+      libxkbfile
+      libXrandr
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      AudioUnit
+      Carbon
+      Cocoa
+    ];
 
   # Tests for SDL_net.h for modem & IPX support, not automatically picked up due to being in SDL2 subdirectory
   env.NIX_CFLAGS_COMPILE = "-I${lib.getDev SDL2_net}/include/SDL2";
@@ -100,17 +108,18 @@ stdenv.mkDerivation (finalAttrs: {
     make dosbox-x.app
   '';
 
-  postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
-    wrapProgram $out/bin/dosbox-x \
-      --prefix PATH : ${lib.makeBinPath [ yad ]}
-  ''
-  # Install App Bundle, wrap regular binary into bundle's binary to get the icon working
-  + lib.optionalString stdenv.hostPlatform.isDarwin ''
-    mkdir $out/Applications
-    mv dosbox-x.app $out/Applications/
-    mv $out/bin/dosbox-x $out/Applications/dosbox-x.app/Contents/MacOS/dosbox-x
-    makeWrapper $out/Applications/dosbox-x.app/Contents/MacOS/dosbox-x $out/bin/dosbox-x
-  '';
+  postInstall =
+    lib.optionalString stdenv.hostPlatform.isLinux ''
+      wrapProgram $out/bin/dosbox-x \
+        --prefix PATH : ${lib.makeBinPath [ yad ]}
+    ''
+    # Install App Bundle, wrap regular binary into bundle's binary to get the icon working
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      mkdir $out/Applications
+      mv dosbox-x.app $out/Applications/
+      mv $out/bin/dosbox-x $out/Applications/dosbox-x.app/Contents/MacOS/dosbox-x
+      makeWrapper $out/Applications/dosbox-x.app/Contents/MacOS/dosbox-x $out/bin/dosbox-x
+    '';
 
   passthru.tests.version = testers.testVersion {
     package = finalAttrs.finalPackage;
@@ -129,7 +138,10 @@ stdenv.mkDerivation (finalAttrs: {
       https://dosbox-x.com/wiki/DOSBox%E2%80%90X%E2%80%99s-Feature-Highlights
     '';
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ hughobrien OPNA2608 ];
+    maintainers = with lib.maintainers; [
+      hughobrien
+      OPNA2608
+    ];
     platforms = lib.platforms.unix;
     mainProgram = "dosbox-x";
   };

@@ -1,17 +1,24 @@
-{ lib, stdenv, buildPackages
-, autoreconfHook, bison, binutils-unwrapped_2_38
-, libiberty, libbfd_2_38
+{
+  lib,
+  stdenv,
+  buildPackages,
+  autoreconfHook,
+  bison,
+  binutils-unwrapped_2_38,
+  libiberty,
+  libbfd_2_38,
 }:
 
 stdenv.mkDerivation {
   pname = "libopcodes";
   inherit (binutils-unwrapped_2_38) version src;
 
-  outputs = [ "out" "dev" ];
-
-  patches = binutils-unwrapped_2_38.patches ++ [
-    ./build-components-separately.patch
+  outputs = [
+    "out"
+    "dev"
   ];
+
+  patches = binutils-unwrapped_2_38.patches ++ [ ./build-components-separately.patch ];
 
   # We just want to build libopcodes
   postPatch = ''
@@ -20,14 +27,21 @@ stdenv.mkDerivation {
   '';
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
-  nativeBuildInputs = [ autoreconfHook bison ];
+  nativeBuildInputs = [
+    autoreconfHook
+    bison
+  ];
   buildInputs = [ libiberty ];
   # dis-asm.h includes bfd.h
   propagatedBuildInputs = [ libbfd_2_38 ];
 
-  configurePlatforms = [ "build" "host" ];
+  configurePlatforms = [
+    "build"
+    "host"
+  ];
   configureFlags = [
-    "--enable-targets=all" "--enable-64-bit-bfd"
+    "--enable-targets=all"
+    "--enable-64-bit-bfd"
     "--enable-install-libbfd"
     "--enable-shared"
   ];

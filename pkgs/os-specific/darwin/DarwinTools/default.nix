@@ -1,4 +1,8 @@
-{ lib, stdenv, fetchurl }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 
 stdenv.mkDerivation rec {
   pname = "DarwinTools";
@@ -9,9 +13,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-Fzo5QhLd3kZHVFKhJe7xzV6bmRz5nAsG2mNLkAqVBEI=";
   };
 
-  patches = [
-    ./sw_vers-CFPriv.patch
-  ];
+  patches = [ ./sw_vers-CFPriv.patch ];
 
   configurePhase = ''
     export SRCROOT=.

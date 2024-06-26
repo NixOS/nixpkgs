@@ -1,15 +1,19 @@
-{ lib, stdenv, fetchFromGitHub
-, autoPatchelfHook
-, fuse3
-, maven, jdk, makeShellWrapper, glib, wrapGAppsHook3
-, libayatana-appindicator
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoPatchelfHook,
+  fuse3,
+  maven,
+  jdk,
+  makeShellWrapper,
+  glib,
+  wrapGAppsHook3,
+  libayatana-appindicator,
 }:
 
-
 let
-  mavenJdk = maven.override {
-    jdk = jdk;
-  };
+  mavenJdk = maven.override { jdk = jdk; };
 in
 assert stdenv.isLinux; # better than `called with unexpected argument 'enableJavaFX'`
 mavenJdk.buildMavenPackage rec {
@@ -61,8 +65,18 @@ mavenJdk.buildMavenPackage rec {
       --add-flags "-Dcryptomator.disableUpdateCheck=true" \
       --add-flags "-Dcryptomator.integrationsLinux.trayIconsDir='$out/share/icons/hicolor/symbolic/apps'" \
       --add-flags "--module org.cryptomator.desktop/org.cryptomator.launcher.Cryptomator" \
-      --prefix PATH : "$out/share/cryptomator/libs/:${lib.makeBinPath [ jdk glib ]}" \
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ fuse3 libayatana-appindicator ]}" \
+      --prefix PATH : "$out/share/cryptomator/libs/:${
+        lib.makeBinPath [
+          jdk
+          glib
+        ]
+      }" \
+      --prefix LD_LIBRARY_PATH : "${
+        lib.makeLibraryPath [
+          fuse3
+          libayatana-appindicator
+        ]
+      }" \
       --set JAVA_HOME "${jdk.home}"
 
     # install desktop entry and icons
@@ -89,7 +103,12 @@ mavenJdk.buildMavenPackage rec {
     wrapGAppsHook3
     jdk
   ];
-  buildInputs = [ fuse3 jdk glib libayatana-appindicator ];
+  buildInputs = [
+    fuse3
+    jdk
+    glib
+    libayatana-appindicator
+  ];
 
   meta = with lib; {
     description = "Free client-side encryption for your cloud files";
@@ -97,7 +116,7 @@ mavenJdk.buildMavenPackage rec {
     homepage = "https://cryptomator.org";
     sourceProvenance = with sourceTypes; [
       fromSource
-      binaryBytecode  # deps
+      binaryBytecode # deps
     ];
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ bachp ];

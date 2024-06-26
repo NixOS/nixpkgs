@@ -1,6 +1,24 @@
-{ lib, stdenv, fetchurl, vala, pkg-config, gtk3, gnome, gdk-pixbuf, librsvg, wrapGAppsHook3
-, gettext, itstool, clutter, clutter-gtk, libxml2, appstream-glib
-, meson, ninja, python3 }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  vala,
+  pkg-config,
+  gtk3,
+  gnome,
+  gdk-pixbuf,
+  librsvg,
+  wrapGAppsHook3,
+  gettext,
+  itstool,
+  clutter,
+  clutter-gtk,
+  libxml2,
+  appstream-glib,
+  meson,
+  ninja,
+  python3,
+}:
 
 stdenv.mkDerivation rec {
   pname = "lightsoff";
@@ -12,10 +30,25 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    vala pkg-config wrapGAppsHook3 itstool gettext appstream-glib libxml2
-    meson ninja python3
+    vala
+    pkg-config
+    wrapGAppsHook3
+    itstool
+    gettext
+    appstream-glib
+    libxml2
+    meson
+    ninja
+    python3
   ];
-  buildInputs = [ gtk3 gnome.adwaita-icon-theme gdk-pixbuf librsvg clutter clutter-gtk ];
+  buildInputs = [
+    gtk3
+    gnome.adwaita-icon-theme
+    gdk-pixbuf
+    librsvg
+    clutter
+    clutter-gtk
+  ];
 
   postPatch = ''
     chmod +x build-aux/meson_post_install.py

@@ -1,19 +1,20 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, autoconf-archive
-, cppunit
-, curl
-, libsigcxx
-, libtool
-, libtorrent
-, ncurses
-, openssl
-, pkg-config
-, xmlrpc_c
-, zlib
-, nixosTests
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  autoconf-archive,
+  cppunit,
+  curl,
+  libsigcxx,
+  libtool,
+  libtorrent,
+  ncurses,
+  openssl,
+  pkg-config,
+  xmlrpc_c,
+  zlib,
+  nixosTests,
 }:
 
 stdenv.mkDerivation {
@@ -70,7 +71,10 @@ stdenv.mkDerivation {
     homepage = "https://rakshasa.github.io/rtorrent/";
     description = "Ncurses client for libtorrent, ideal for use with screen, tmux, or dtach";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ ebzzry codyopel ];
+    maintainers = with maintainers; [
+      ebzzry
+      codyopel
+    ];
     platforms = platforms.unix;
     mainProgram = "rtorrent";
   };

@@ -1,4 +1,10 @@
-{ stdenv, lib, fetchFromGitHub, pkg-config, gtk2 }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  pkg-config,
+  gtk2,
+}:
 
 stdenv.mkDerivation rec {
   pname = "spnavcfg";

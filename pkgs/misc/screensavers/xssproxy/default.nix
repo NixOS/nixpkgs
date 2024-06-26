@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, glib, pkg-config, xorg, dbus }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  glib,
+  pkg-config,
+  xorg,
+  dbus,
+}:
 
 stdenv.mkDerivation rec {
   pname = "xssproxy";
@@ -12,7 +20,12 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ glib xorg.libX11 xorg.libXScrnSaver dbus ];
+  buildInputs = [
+    glib
+    xorg.libX11
+    xorg.libXScrnSaver
+    dbus
+  ];
 
   makeFlags = [
     "bindir=$(out)/bin"

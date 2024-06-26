@@ -45,7 +45,7 @@ in
 
     nixos.tags = mkOption {
       type = types.listOf types.str;
-      default = [];
+      default = [ ];
       example = [ "with-xen" ];
       description = ''
         Strings to prefix to the default
@@ -68,9 +68,13 @@ in
   config = {
     # This is set here rather than up there so that changing it would
     # not rebuild the manual
-    system.nixos.label = mkDefault (maybeEnv "NIXOS_LABEL"
-                                             (concatStringsSep "-" ((sort (x: y: x < y) cfg.tags)
-                                              ++ [ (maybeEnv "NIXOS_LABEL_VERSION" cfg.version) ])));
+    system.nixos.label = mkDefault (
+      maybeEnv "NIXOS_LABEL" (
+        concatStringsSep "-" (
+          (sort (x: y: x < y) cfg.tags) ++ [ (maybeEnv "NIXOS_LABEL_VERSION" cfg.version) ]
+        )
+      )
+    );
   };
 
 }

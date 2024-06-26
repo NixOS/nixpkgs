@@ -1,30 +1,31 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, desktopToDarwinBundle
-, curl
-, freexl
-, geos
-, librasterlite2
-, librttopo
-, libspatialite
-, libwebp
-, libxlsxwriter
-, libxml2
-, lz4
-, minizip
-, openjpeg
-, postgresql
-, proj
-, sqlite
-, virtualpg
-, wxGTK
-, xz
-, zstd
-, Carbon
-, Cocoa
-, IOKit
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  desktopToDarwinBundle,
+  curl,
+  freexl,
+  geos,
+  librasterlite2,
+  librttopo,
+  libspatialite,
+  libwebp,
+  libxlsxwriter,
+  libxml2,
+  lz4,
+  minizip,
+  openjpeg,
+  postgresql,
+  proj,
+  sqlite,
+  virtualpg,
+  wxGTK,
+  xz,
+  zstd,
+  Carbon,
+  Cocoa,
+  IOKit,
 }:
 
 stdenv.mkDerivation rec {
@@ -36,30 +37,35 @@ stdenv.mkDerivation rec {
     hash = "sha256-ukjZbfGM68P/I/aXlyB64VgszmL0WWtpuuMAyjwj2zM=";
   };
 
-  nativeBuildInputs = [ pkg-config ]
-    ++ lib.optional stdenv.isDarwin desktopToDarwinBundle;
+  nativeBuildInputs = [ pkg-config ] ++ lib.optional stdenv.isDarwin desktopToDarwinBundle;
 
-  buildInputs = [
-    curl
-    freexl
-    geos
-    librasterlite2
-    librttopo
-    libspatialite
-    libwebp
-    libxlsxwriter
-    libxml2
-    lz4
-    minizip
-    openjpeg
-    postgresql
-    proj
-    sqlite
-    virtualpg
-    wxGTK
-    xz
-    zstd
-  ] ++ lib.optionals stdenv.isDarwin [ Carbon Cocoa IOKit ];
+  buildInputs =
+    [
+      curl
+      freexl
+      geos
+      librasterlite2
+      librttopo
+      libspatialite
+      libwebp
+      libxlsxwriter
+      libxml2
+      lz4
+      minizip
+      openjpeg
+      postgresql
+      proj
+      sqlite
+      virtualpg
+      wxGTK
+      xz
+      zstd
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      Carbon
+      Cocoa
+      IOKit
+    ];
 
   enableParallelBuilding = true;
 

@@ -1,4 +1,9 @@
-{lib, stdenv, fetchurl, unzip}:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  unzip,
+}:
 
 stdenv.mkDerivation {
   pname = "amrnb";
@@ -15,7 +20,10 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ unzip ];
 
-  configureFlags = [ "--cache-file=config.cache" "--with-downloader=true" ];
+  configureFlags = [
+    "--cache-file=config.cache"
+    "--with-downloader=true"
+  ];
 
   postConfigure = ''
     cp $srcAmr 26104-b00.zip

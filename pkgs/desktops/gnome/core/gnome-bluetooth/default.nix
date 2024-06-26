@@ -1,28 +1,29 @@
-{ lib
-, stdenv
-, fetchurl
-, gnome
-, meson
-, mesonEmulatorHook
-, ninja
-, pkg-config
-, gtk4
-, libadwaita
-, gettext
-, glib
-, udev
-, upower
-, itstool
-, libxml2
-, wrapGAppsHook4
-, libnotify
-, gsound
-, gobject-introspection
-, gtk-doc
-, docbook-xsl-nons
-, docbook_xml_dtd_43
-, python3
-, gsettings-desktop-schemas
+{
+  lib,
+  stdenv,
+  fetchurl,
+  gnome,
+  meson,
+  mesonEmulatorHook,
+  ninja,
+  pkg-config,
+  gtk4,
+  libadwaita,
+  gettext,
+  glib,
+  udev,
+  upower,
+  itstool,
+  libxml2,
+  wrapGAppsHook4,
+  libnotify,
+  gsound,
+  gobject-introspection,
+  gtk-doc,
+  docbook-xsl-nons,
+  docbook_xml_dtd_43,
+  python3,
+  gsettings-desktop-schemas,
 }:
 
 stdenv.mkDerivation rec {
@@ -30,7 +31,12 @@ stdenv.mkDerivation rec {
   version = "46.0";
 
   # TODO: split out "lib"
-  outputs = [ "out" "dev" "devdoc" "man" ];
+  outputs = [
+    "out"
+    "dev"
+    "devdoc"
+    "man"
+  ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
@@ -50,9 +56,7 @@ stdenv.mkDerivation rec {
     docbook-xsl-nons
     docbook_xml_dtd_43
     python3
-  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-    mesonEmulatorHook
-  ];
+  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [ mesonEmulatorHook ];
 
   buildInputs = [
     glib
@@ -65,9 +69,7 @@ stdenv.mkDerivation rec {
     gsettings-desktop-schemas
   ];
 
-  mesonFlags = [
-    "-Dgtk_doc=true"
-  ];
+  mesonFlags = [ "-Dgtk_doc=true" ];
 
   passthru = {
     updateScript = gnome.updateScript {

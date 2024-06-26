@@ -1,27 +1,28 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, nix-update-script
-, cmake
-, ninja
-, vala
-, pkg-config
-, pantheon
-, gtk3
-, glib
-, glib-networking
-, libxml2
-, webkitgtk
-, clutter-gtk
-, clutter-gst
-, libunity
-, libnotify
-, sqlite
-, gst_all_1
-, json-glib
-, libgee
-, wrapGAppsHook3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  nix-update-script,
+  cmake,
+  ninja,
+  vala,
+  pkg-config,
+  pantheon,
+  gtk3,
+  glib,
+  glib-networking,
+  libxml2,
+  webkitgtk,
+  clutter-gtk,
+  clutter-gst,
+  libunity,
+  libnotify,
+  sqlite,
+  gst_all_1,
+  json-glib,
+  libgee,
+  wrapGAppsHook3,
 }:
 
 stdenv.mkDerivation rec {

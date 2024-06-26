@@ -1,12 +1,11 @@
-{ system ? builtins.currentSystem
-, config ? { }
-, pkgs ? import ../../.. { inherit system config; }
+{
+  system ? builtins.currentSystem,
+  config ? { },
+  pkgs ? import ../../.. { inherit system config; },
 }:
 
 {
-  "basic" = import ./common.nix {
-    name = "basic";
-  };
+  "basic" = import ./common.nix { name = "basic"; };
 
   "v2ray-plugin" = import ./common.nix {
     name = "v2ray-plugin";

@@ -1,4 +1,11 @@
-{ lib, buildDunePackage, ocaml, fetchFromGitLab, extlib, ounit2 }:
+{
+  lib,
+  buildDunePackage,
+  ocaml,
+  fetchFromGitLab,
+  extlib,
+  ounit2,
+}:
 
 buildDunePackage rec {
   pname = "cudf";
@@ -13,13 +20,9 @@ buildDunePackage rec {
     hash = "sha256-E4KXKnso/Q3ZwcYpKPgvswNR9qd/lafKljPMxfStedM=";
   };
 
-  propagatedBuildInputs = [
-    extlib
-  ];
+  propagatedBuildInputs = [ extlib ];
 
-  checkInputs = [
-    ounit2
-  ];
+  checkInputs = [ ounit2 ];
   doCheck = lib.versionAtLeast ocaml.version "4.08";
 
   meta = with lib; {

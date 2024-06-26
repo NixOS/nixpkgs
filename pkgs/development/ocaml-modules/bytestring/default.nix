@@ -1,12 +1,13 @@
-{ lib
-, buildDunePackage
-, fetchurl
-, ppxlib
-, rio
-, sedlex
-, spices
-, uutf
-, qcheck
+{
+  lib,
+  buildDunePackage,
+  fetchurl,
+  ppxlib,
+  rio,
+  sedlex,
+  spices,
+  uutf,
+  qcheck,
 }:
 
 buildDunePackage rec {
@@ -28,9 +29,7 @@ buildDunePackage rec {
     uutf
   ];
 
-  checkInputs = [
-    qcheck
-  ];
+  checkInputs = [ qcheck ];
 
   # Checks fail with OCaml 5.2
   doCheck = false;
@@ -42,4 +41,3 @@ buildDunePackage rec {
     maintainers = with lib.maintainers; [ ];
   };
 }
-

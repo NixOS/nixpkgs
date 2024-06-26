@@ -24,7 +24,10 @@ rustPlatform.buildRustPackage rec {
     RUSTFLAGS = "-L ${xen-light}/lib";
   };
 
-  nativeBuildInputs = [llvmPackages.clang xen-light];
+  nativeBuildInputs = [
+    llvmPackages.clang
+    xen-light
+  ];
 
   postFixup = ''
     patchelf $out/bin/xen-guest-agent --add-rpath ${xen-light}/lib
@@ -35,6 +38,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://gitlab.com/xen-project/xen-guest-agent";
     license = licenses.agpl3Only;
     platforms = platforms.unix;
-    maintainers = with maintainers; [matdibu];
+    maintainers = with maintainers; [ matdibu ];
   };
 }

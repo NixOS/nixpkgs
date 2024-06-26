@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, unstableGitUpdater
-, poetry-core
-, nixops
-, python-digitalocean
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  unstableGitUpdater,
+  poetry-core,
+  nixops,
+  python-digitalocean,
+  pythonOlder,
 }:
 
 buildPythonPackage {
@@ -28,21 +29,15 @@ buildPythonPackage {
     --replace "poetry>=" "poetry-core>="
   '';
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
-  buildInputs = [
-    nixops
-  ];
+  buildInputs = [ nixops ];
 
-  propagatedBuildInputs = [
-    python-digitalocean
-  ];
+  propagatedBuildInputs = [ python-digitalocean ];
 
   pythonImportsCheck = [ "nixops_digitalocean" ];
 
-  passthru.updateScript = unstableGitUpdater {};
+  passthru.updateScript = unstableGitUpdater { };
 
   meta = with lib; {
     description = "NixOps Digitalocean plugin";

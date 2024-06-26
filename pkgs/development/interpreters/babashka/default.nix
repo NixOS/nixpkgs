@@ -1,9 +1,10 @@
-{ lib
-, buildGraalvmNativeImage
-, graalvmCEPackages
-, fetchurl
-, writeScript
-, installShellFiles
+{
+  lib,
+  buildGraalvmNativeImage,
+  graalvmCEPackages,
+  fetchurl,
+  writeScript,
+  installShellFiles,
 }:
 
 let

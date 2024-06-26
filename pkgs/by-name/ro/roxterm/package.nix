@@ -1,32 +1,32 @@
 {
-  at-spi2-core
-, cmake
-, dbus
-, dbus-glib
-, docbook_xsl
-, fetchFromGitHub
-, glib
-, gtk3
-, harfbuzz
-, lib
-, libXdmcp
-, libXtst
-, libepoxy
-, libpthreadstubs
-, libselinux
-, libsepol
-, libtasn1
-, libxkbcommon
-, libxslt
-, nixosTests
-, p11-kit
-, pcre2
-, pkg-config
-, stdenv
-, util-linuxMinimal
-, vte
-, wrapGAppsHook3
-, xmlto
+  at-spi2-core,
+  cmake,
+  dbus,
+  dbus-glib,
+  docbook_xsl,
+  fetchFromGitHub,
+  glib,
+  gtk3,
+  harfbuzz,
+  lib,
+  libXdmcp,
+  libXtst,
+  libepoxy,
+  libpthreadstubs,
+  libselinux,
+  libsepol,
+  libtasn1,
+  libxkbcommon,
+  libxslt,
+  nixosTests,
+  p11-kit,
+  pcre2,
+  pkg-config,
+  stdenv,
+  util-linuxMinimal,
+  vte,
+  wrapGAppsHook3,
+  xmlto,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -90,7 +90,11 @@ stdenv.mkDerivation (finalAttrs: {
       desktop environments.
     '';
     changelog = "https://github.com/realh/roxterm/blob/${finalAttrs.src.rev}/debian/changelog";
-    license = with lib.licenses; [ gpl2Plus gpl3Plus lgpl3Plus ];
+    license = with lib.licenses; [
+      gpl2Plus
+      gpl3Plus
+      lgpl3Plus
+    ];
     mainProgram = "roxterm";
     maintainers = with lib.maintainers; [ AndersonTorres ];
     platforms = lib.platforms.linux;

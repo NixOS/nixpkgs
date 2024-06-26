@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.programs.bash;
@@ -13,7 +18,19 @@ in
   };
 
   imports = [
-    (lib.mkRenamedOptionModule [ "programs" "bash" "enableCompletion" ] [ "programs" "bash" "completion" "enable" ])
+    (lib.mkRenamedOptionModule
+      [
+        "programs"
+        "bash"
+        "enableCompletion"
+      ]
+      [
+        "programs"
+        "bash"
+        "completion"
+        "enable"
+      ]
+    )
   ];
 
   config = lib.mkIf cfg.completion.enable {

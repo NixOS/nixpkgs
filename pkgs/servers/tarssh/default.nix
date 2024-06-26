@@ -1,4 +1,8 @@
-{ fetchFromGitHub, rustPlatform, lib }:
+{
+  fetchFromGitHub,
+  rustPlatform,
+  lib,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "tarssh";
@@ -18,7 +22,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/Freaky/tarssh";
     license = [ licenses.mit ];
     maintainers = with maintainers; [ sohalt ];
-    platforms = platforms.unix ;
+    platforms = platforms.unix;
     mainProgram = "tarssh";
   };
 }

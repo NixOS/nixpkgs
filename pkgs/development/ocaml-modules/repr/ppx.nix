@@ -1,4 +1,12 @@
-{ lib, buildDunePackage, ppx_deriving, ppxlib, repr, alcotest, hex }:
+{
+  lib,
+  buildDunePackage,
+  ppx_deriving,
+  ppxlib,
+  repr,
+  alcotest,
+  hex,
+}:
 
 buildDunePackage {
   pname = "ppx_repr";

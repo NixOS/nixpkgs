@@ -1,9 +1,21 @@
-{ lib, stdenv, fetchFromGitHub
-, bash-completion, perl, ncurses, zlib, sqlite, libffi
-, mcpp, cmake, bison, flex, doxygen, graphviz
-, makeWrapper
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  bash-completion,
+  perl,
+  ncurses,
+  zlib,
+  sqlite,
+  libffi,
+  mcpp,
+  cmake,
+  bison,
+  flex,
+  doxygen,
+  graphviz,
+  makeWrapper,
 }:
-
 
 let
   toolsPath = lib.makeBinPath [ mcpp ];
@@ -13,24 +25,42 @@ stdenv.mkDerivation rec {
   version = "2.4.1";
 
   src = fetchFromGitHub {
-    owner  = "souffle-lang";
-    repo   = "souffle";
-    rev    = version;
+    owner = "souffle-lang";
+    repo = "souffle";
+    rev = version;
     sha256 = "sha256-U3/1iNOLFzuXiBsVDAc5AXnK4F982Uifp18jjFNUv2o=";
   };
 
-  patches = [
-    ./threads.patch
-  ];
+  patches = [ ./threads.patch ];
 
   hardeningDisable = lib.optionals stdenv.isDarwin [ "strictoverflow" ];
 
-  nativeBuildInputs = [ bison cmake flex mcpp doxygen graphviz makeWrapper perl ];
-  buildInputs = [ bash-completion ncurses zlib sqlite libffi ];
+  nativeBuildInputs = [
+    bison
+    cmake
+    flex
+    mcpp
+    doxygen
+    graphviz
+    makeWrapper
+    perl
+  ];
+  buildInputs = [
+    bash-completion
+    ncurses
+    zlib
+    sqlite
+    libffi
+  ];
   # these propagated inputs are needed for the compiled Souffle mode to work,
   # since generated compiler code uses them. TODO: maybe write a g++ wrapper
   # that adds these so we can keep the propagated inputs clean?
-  propagatedBuildInputs = [ ncurses zlib sqlite libffi ];
+  propagatedBuildInputs = [
+    ncurses
+    zlib
+    sqlite
+    libffi
+  ];
 
   cmakeFlags = [ "-DSOUFFLE_GIT=OFF" ];
 
@@ -46,9 +76,13 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Translator of declarative Datalog programs into the C++ language";
-    homepage    = "https://souffle-lang.github.io/";
-    platforms   = platforms.unix;
-    maintainers = with maintainers; [ thoughtpolice copumpkin wchresta ];
-    license     = licenses.upl;
+    homepage = "https://souffle-lang.github.io/";
+    platforms = platforms.unix;
+    maintainers = with maintainers; [
+      thoughtpolice
+      copumpkin
+      wchresta
+    ];
+    license = licenses.upl;
   };
 }

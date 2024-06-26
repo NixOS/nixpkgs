@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, fetchurl
-, ghostscript
-, libpng
-, makeWrapper
-, coreutils
-, bc
-, gnugrep
-, gawk
-, gnused
+{
+  lib,
+  stdenv,
+  fetchurl,
+  ghostscript,
+  libpng,
+  makeWrapper,
+  coreutils,
+  bc,
+  gnugrep,
+  gawk,
+  gnused,
 }:
 
 stdenv.mkDerivation rec {
@@ -23,13 +24,20 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ libpng ];
 
-  GSEXE="${ghostscript}/bin/gs";
+  GSEXE = "${ghostscript}/bin/gs";
 
   configureFlags = [ "--enable-transfig" ];
 
   postInstall = ''
     wrapProgram $out/bin/fig2ps2tex \
-        --set PATH ${lib.makeBinPath [ coreutils bc gnugrep gawk ]}
+        --set PATH ${
+          lib.makeBinPath [
+            coreutils
+            bc
+            gnugrep
+            gawk
+          ]
+        }
     wrapProgram $out/bin/pic2tpic \
         --set PATH ${lib.makeBinPath [ gnused ]}
   '';

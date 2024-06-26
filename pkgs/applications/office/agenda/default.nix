@@ -1,17 +1,19 @@
-{ lib, stdenv
-, fetchFromGitHub
-, nix-update-script
-, pantheon
-, meson
-, ninja
-, python3
-, pkg-config
-, vala
-, gettext
-, glib
-, gtk3
-, libgee
-, wrapGAppsHook3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  pantheon,
+  meson,
+  ninja,
+  python3,
+  pkg-config,
+  vala,
+  gettext,
+  glib,
+  gtk3,
+  libgee,
+  wrapGAppsHook3,
 }:
 
 stdenv.mkDerivation rec {
@@ -63,4 +65,3 @@ stdenv.mkDerivation rec {
     mainProgram = "com.github.dahenson.agenda";
   };
 }
-

@@ -18,9 +18,7 @@
       "lib/mes/globals.c"
       "lib/linux/x86-mes-mescc/syscall-internal.c"
     ];
-    libtcc1_SOURCES = [
-      "lib/libtcc1.c"
-    ];
+    libtcc1_SOURCES = [ "lib/libtcc1.c" ];
     libc_SOURCES = [
       "lib/mes/__init_io.c"
       "lib/mes/eputs.c"
@@ -546,9 +544,7 @@
       "lib/mes/globals.c"
       "lib/linux/x86-mes-gcc/syscall-internal.c"
     ];
-    libtcc1_SOURCES = [
-      "lib/libtcc1.c"
-    ];
+    libtcc1_SOURCES = [ "lib/libtcc1.c" ];
     libc_SOURCES = [
       "lib/mes/__init_io.c"
       "lib/mes/eputs.c"

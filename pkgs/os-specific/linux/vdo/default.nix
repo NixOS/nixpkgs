@@ -1,15 +1,17 @@
-{ lib, stdenv
-, fetchFromGitHub
-, installShellFiles
-, libuuid
-, lvm2_dmeventd  # <libdevmapper-event.h>
-, zlib
-, python3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  installShellFiles,
+  libuuid,
+  lvm2_dmeventd, # <libdevmapper-event.h>
+  zlib,
+  python3,
 }:
 
 stdenv.mkDerivation rec {
   pname = "vdo";
-  version = "8.2.2.2";  # bump this version with kvdo
+  version = "8.2.2.2"; # bump this version with kvdo
 
   src = fetchFromGitHub {
     owner = "dm-vdo";
@@ -18,9 +20,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-+2w9jzJemI2xr+i/Jd5TIBZ/o8Zv+Ett0fbJbkOD7KI=";
   };
 
-  nativeBuildInputs = [
-    installShellFiles
-  ];
+  nativeBuildInputs = [ installShellFiles ];
 
   buildInputs = [
     libuuid
@@ -29,9 +29,7 @@ stdenv.mkDerivation rec {
     python3.pkgs.wrapPython
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
-    pyyaml
-  ];
+  propagatedBuildInputs = with python3.pkgs; [ pyyaml ];
 
   pythonPath = propagatedBuildInputs;
 
@@ -58,7 +56,13 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/dm-vdo/vdo";
     description = "Set of userspace tools for managing pools of deduplicated and/or compressed block storage";
     # platforms are defined in https://github.com/dm-vdo/vdo/blob/master/utils/uds/atomicDefs.h
-    platforms = [ "x86_64-linux" "aarch64-linux" "s390-linux" "powerpc64-linux" "powerpc64le-linux" ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+      "s390-linux"
+      "powerpc64-linux"
+      "powerpc64le-linux"
+    ];
     license = with licenses; [ gpl2Plus ];
     maintainers = teams.helsinki-systems.members;
   };

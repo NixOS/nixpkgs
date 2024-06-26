@@ -1,25 +1,26 @@
-{ resholve
-, stdenv
-, symlinkJoin
-, lib
-, fetchFromGitHub
-, autoreconfHook
-, pkg-config
-, bash
-, coreutils
-, gnugrep
-, gnutls
-, gsasl
-, libidn2
-, netcat-gnu
-, texinfo
-, which
-, Security
-, withKeyring ? true
-, libsecret
-, withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
-, systemd
-, withScripts ? true
+{
+  resholve,
+  stdenv,
+  symlinkJoin,
+  lib,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  bash,
+  coreutils,
+  gnugrep,
+  gnutls,
+  gsasl,
+  libidn2,
+  netcat-gnu,
+  texinfo,
+  which,
+  Security,
+  withKeyring ? true,
+  libsecret,
+  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
+  systemd,
+  withScripts ? true,
 }:
 
 let
@@ -47,14 +48,22 @@ let
     pname = "msmtp-binaries";
     inherit version src meta;
 
-    configureFlags = [ "--sysconfdir=/etc" "--with-libgsasl" ]
-      ++ optionals stdenv.isDarwin [ "--with-macosx-keyring" ];
+    configureFlags = [
+      "--sysconfdir=/etc"
+      "--with-libgsasl"
+    ] ++ optionals stdenv.isDarwin [ "--with-macosx-keyring" ];
 
-    buildInputs = [ gnutls gsasl libidn2 ]
-      ++ optionals stdenv.isDarwin [ Security ]
-      ++ optionals withKeyring [ libsecret ];
+    buildInputs = [
+      gnutls
+      gsasl
+      libidn2
+    ] ++ optionals stdenv.isDarwin [ Security ] ++ optionals withKeyring [ libsecret ];
 
-    nativeBuildInputs = [ autoreconfHook pkg-config texinfo ];
+    nativeBuildInputs = [
+      autoreconfHook
+      pkg-config
+      texinfo
+    ];
 
     enableParallelBuilding = true;
 
@@ -108,12 +117,9 @@ let
         execer = [
           "cannot:${getBin binaries}/bin/msmtp"
           "cannot:${getBin netcat-gnu}/bin/nc"
-        ] ++ optionals withSystemd [
-          "cannot:${getBin systemd}/bin/systemd-cat"
-        ];
+        ] ++ optionals withSystemd [ "cannot:${getBin systemd}/bin/systemd-cat" ];
         fix."$MSMTP" = [ "msmtp" ];
-        fake.external = [ "ping" ]
-          ++ optionals (!withSystemd) [ "systemd-cat" ];
+        fake.external = [ "ping" ] ++ optionals (!withSystemd) [ "systemd-cat" ];
       };
 
       msmtp-queue = {
@@ -127,10 +133,16 @@ let
 
 in
 if withScripts then
-  symlinkJoin
-  {
+  symlinkJoin {
     name = "msmtp-${version}";
     inherit version meta;
-    paths = [ binaries scripts ];
-    passthru = { inherit binaries scripts; };
-  } else binaries
+    paths = [
+      binaries
+      scripts
+    ];
+    passthru = {
+      inherit binaries scripts;
+    };
+  }
+else
+  binaries

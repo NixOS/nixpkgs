@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchurl
-, makeBinaryWrapper
-, copyDesktopItems
-, makeDesktopItem
-, desktopToDarwinBundle
-, unzip
-, imagemagick
-, jre
+{
+  lib,
+  stdenv,
+  fetchurl,
+  makeBinaryWrapper,
+  copyDesktopItems,
+  makeDesktopItem,
+  desktopToDarwinBundle,
+  unzip,
+  imagemagick,
+  jre,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -15,7 +16,9 @@ stdenv.mkDerivation (finalAttrs: {
   version = "4.5";
 
   src = fetchurl {
-    url = "https://courses.missouristate.edu/KenVollmar/MARS/MARS_${lib.replaceStrings ["."] ["_"] finalAttrs.version}_Aug2014/Mars${lib.replaceStrings ["."] ["_"] finalAttrs.version}.jar";
+    url = "https://courses.missouristate.edu/KenVollmar/MARS/MARS_${
+      lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version
+    }_Aug2014/Mars${lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version}.jar";
     hash = "sha256-rDQLZ2uitiJGud935i+BrURHvP0ymrU5cWvNCZULcJY=";
   };
 
@@ -26,9 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
     copyDesktopItems
     unzip
     imagemagick
-  ] ++ lib.optionals stdenv.isDarwin [
-    desktopToDarwinBundle
-  ];
+  ] ++ lib.optionals stdenv.isDarwin [ desktopToDarwinBundle ];
 
   desktopItems = [
     (makeDesktopItem {
@@ -37,7 +38,10 @@ stdenv.mkDerivation (finalAttrs: {
       exec = "Mars";
       icon = "mars";
       comment = finalAttrs.meta.description;
-      categories = [ "Development" "IDE" ];
+      categories = [
+        "Development"
+        "IDE"
+      ];
     })
   ];
 

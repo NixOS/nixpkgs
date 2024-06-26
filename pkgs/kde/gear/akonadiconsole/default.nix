@@ -1,10 +1,7 @@
-{
-  mkKdeDerivation,
-  xapian,
-}:
+{ mkKdeDerivation, xapian }:
 mkKdeDerivation {
   pname = "akonadiconsole";
 
-  extraBuildInputs = [xapian];
+  extraBuildInputs = [ xapian ];
   meta.mainProgram = "akonadiconsole";
 }

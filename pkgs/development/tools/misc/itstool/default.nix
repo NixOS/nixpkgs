@@ -1,7 +1,8 @@
-{ stdenv
-, lib
-, fetchurl
-, python3
+{
+  stdenv,
+  lib,
+  fetchurl,
+  python3,
 }:
 
 stdenv.mkDerivation rec {
@@ -25,9 +26,7 @@ stdenv.mkDerivation rec {
     python3.pkgs.libxml2
   ];
 
-  pythonPath = [
-    python3.pkgs.libxml2
-  ];
+  pythonPath = [ python3.pkgs.libxml2 ];
 
   postFixup = ''
     wrapPythonPrograms

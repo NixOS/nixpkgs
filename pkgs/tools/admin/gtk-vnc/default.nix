@@ -1,32 +1,38 @@
-{ lib
-, stdenv
-, fetchurl
-, meson
-, ninja
-, gobject-introspection
-, gnutls
-, cairo
-, glib
-, pkg-config
-, cyrus_sasl
-, pulseaudioSupport ? stdenv.isLinux
-, libpulseaudio
-, libgcrypt
-, gtk3
-, vala
-, gettext
-, perl
-, python3
-, gnome
-, gdk-pixbuf
-, zlib
+{
+  lib,
+  stdenv,
+  fetchurl,
+  meson,
+  ninja,
+  gobject-introspection,
+  gnutls,
+  cairo,
+  glib,
+  pkg-config,
+  cyrus_sasl,
+  pulseaudioSupport ? stdenv.isLinux,
+  libpulseaudio,
+  libgcrypt,
+  gtk3,
+  vala,
+  gettext,
+  perl,
+  python3,
+  gnome,
+  gdk-pixbuf,
+  zlib,
 }:
 
 stdenv.mkDerivation rec {
   pname = "gtk-vnc";
   version = "1.3.1";
 
-  outputs = [ "out" "bin" "man" "dev" ];
+  outputs = [
+    "out"
+    "bin"
+    "man"
+    "dev"
+  ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
@@ -53,13 +59,9 @@ stdenv.mkDerivation rec {
     libgcrypt
     cyrus_sasl
     gtk3
-  ] ++ lib.optionals pulseaudioSupport [
-    libpulseaudio
-  ];
+  ] ++ lib.optionals pulseaudioSupport [ libpulseaudio ];
 
-  mesonFlags = lib.optionals (!pulseaudioSupport) [
-    "-Dpulseaudio=disabled"
-  ];
+  mesonFlags = lib.optionals (!pulseaudioSupport) [ "-Dpulseaudio=disabled" ];
 
   passthru = {
     updateScript = gnome.updateScript {
@@ -72,7 +74,10 @@ stdenv.mkDerivation rec {
     description = "GTK VNC widget";
     homepage = "https://gitlab.gnome.org/GNOME/gtk-vnc";
     license = licenses.lgpl2Plus;
-    maintainers = with maintainers; [ raskin offline ];
+    maintainers = with maintainers; [
+      raskin
+      offline
+    ];
     platforms = platforms.unix;
     mainProgram = "gvnccapture";
   };

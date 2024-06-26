@@ -1,17 +1,18 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rustPlatform
-, cmake
-, just
-, pkg-config
-, expat
-, libxkbcommon
-, fontconfig
-, freetype
-, wayland
-, makeBinaryWrapper
-, cosmic-icons
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  cmake,
+  just,
+  pkg-config,
+  expat,
+  libxkbcommon,
+  fontconfig,
+  freetype,
+  wayland,
+  makeBinaryWrapper,
+  cosmic-icons,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -44,8 +45,19 @@ rustPlatform.buildRustPackage rec {
     };
   };
 
-  nativeBuildInputs = [ cmake just pkg-config makeBinaryWrapper ];
-  buildInputs = [ libxkbcommon expat fontconfig freetype wayland ];
+  nativeBuildInputs = [
+    cmake
+    just
+    pkg-config
+    makeBinaryWrapper
+  ];
+  buildInputs = [
+    libxkbcommon
+    expat
+    fontconfig
+    freetype
+    wayland
+  ];
 
   dontUseJustBuild = true;
 
@@ -61,7 +73,7 @@ rustPlatform.buildRustPackage rec {
 
   postInstall = ''
     wrapProgram "$out/bin/cosmic-design-demo" \
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [wayland]}" \
+      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ wayland ]}" \
       --suffix XDG_DATA_DIRS : "${cosmic-icons}/share"
   '';
 

@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, pkg-config, zlib }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  pkg-config,
+  zlib,
+}:
 
 stdenv.mkDerivation rec {
   version = "2.2.1";
@@ -58,7 +65,10 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://gpac.wp.imt.fr";
     license = licenses.lgpl21;
-    maintainers = with maintainers; [ bluescreen303 mgdelacroix ];
+    maintainers = with maintainers; [
+      bluescreen303
+      mgdelacroix
+    ];
     platforms = platforms.linux;
     knownVulnerabilities = [
       "CVE-2023-48958"

@@ -1,11 +1,7 @@
 { lib, ... }:
 let
-  inherit (builtins)
-    storeDir;
-  inherit (lib)
-    types
-    mkOption
-    ;
+  inherit (builtins) storeDir;
+  inherit (lib) types mkOption;
 in
 {
   options = {

@@ -1,6 +1,24 @@
-{ stdenv, lib, qtbase, wrapQtAppsHook, fetchFromGitHub,
-  addOpenGLRunpath, poppler_utils, qtxmlpatterns, qtsvg, mesa, gcc, xvfb-run,
-  fontconfig, freetype, xorg, ccache, qmake, python3, qttools, git
+{
+  stdenv,
+  lib,
+  qtbase,
+  wrapQtAppsHook,
+  fetchFromGitHub,
+  addOpenGLRunpath,
+  poppler_utils,
+  qtxmlpatterns,
+  qtsvg,
+  mesa,
+  gcc,
+  xvfb-run,
+  fontconfig,
+  freetype,
+  xorg,
+  ccache,
+  qmake,
+  python3,
+  qttools,
+  git,
 }:
 let
   qtPython = python3.withPackages (pkgs: with pkgs; [ pyqt5 ]);

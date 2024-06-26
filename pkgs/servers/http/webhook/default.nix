@@ -1,7 +1,8 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, nixosTests
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  nixosTests,
 }:
 
 buildGoModule rec {
@@ -21,7 +22,9 @@ buildGoModule rec {
 
   doCheck = false;
 
-  passthru.tests = { inherit (nixosTests) webhook; };
+  passthru.tests = {
+    inherit (nixosTests) webhook;
+  };
 
   meta = with lib; {
     description = "Incoming webhook server that executes shell commands";

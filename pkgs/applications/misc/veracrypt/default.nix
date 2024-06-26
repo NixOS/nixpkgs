@@ -1,19 +1,20 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, makeself
-, yasm
-, fuse
-, wxGTK
-, lvm2
-, substituteAll
-, e2fsprogs
-, exfat
-, ntfs3g
-, btrfs-progs
-, pcsclite
-, wrapGAppsHook3
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  makeself,
+  yasm,
+  fuse,
+  wxGTK,
+  lvm2,
+  substituteAll,
+  e2fsprogs,
+  exfat,
+  ntfs3g,
+  btrfs-progs,
+  pcsclite,
+  wrapGAppsHook3,
 }:
 
 stdenv.mkDerivation rec {
@@ -39,8 +40,18 @@ stdenv.mkDerivation rec {
 
   sourceRoot = "src";
 
-  nativeBuildInputs = [ makeself pkg-config yasm wrapGAppsHook3 ];
-  buildInputs = [ fuse lvm2 wxGTK pcsclite ];
+  nativeBuildInputs = [
+    makeself
+    pkg-config
+    yasm
+    wrapGAppsHook3
+  ];
+  buildInputs = [
+    fuse
+    lvm2
+    wxGTK
+    pcsclite
+  ];
 
   enableParallelBuilding = true;
 
@@ -57,7 +68,10 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Free Open-Source filesystem on-the-fly encryption";
     homepage = "https://www.veracrypt.fr/";
-    license = with licenses; [ asl20 /* and */ unfree /* TrueCrypt License version 3.0 */ ];
+    license = with licenses; [
+      asl20 # and
+      unfree # TrueCrypt License version 3.0
+    ];
     maintainers = with maintainers; [ dsferruzza ];
     platforms = platforms.linux;
   };

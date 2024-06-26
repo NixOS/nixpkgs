@@ -1,12 +1,13 @@
-{ gccStdenv
-, lib
-, fetchFromGitHub
-, fetchpatch
-, unstableGitUpdater
-, libpng
-, perl
-, SDL2
-, zlib
+{
+  gccStdenv,
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  unstableGitUpdater,
+  libpng,
+  perl,
+  SDL2,
+  zlib,
 }:
 
 gccStdenv.mkDerivation (finalAttrs: {
@@ -51,16 +52,12 @@ gccStdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  nativeBuildInputs = [
-    perl
-  ];
+  nativeBuildInputs = [ perl ];
 
   buildInputs = [
     libpng
     zlib
-  ] ++ lib.optionals (!gccStdenv.hostPlatform.isDarwin) [
-    SDL2
-  ];
+  ] ++ lib.optionals (!gccStdenv.hostPlatform.isDarwin) [ SDL2 ];
 
   enableParallelBuilding = true;
 

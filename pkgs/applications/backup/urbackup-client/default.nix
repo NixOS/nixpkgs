@@ -1,9 +1,10 @@
-{ stdenv
-, lib
-, fetchzip
-, wxGTK32
-, zlib
-, zstd
+{
+  stdenv,
+  lib,
+  fetchzip,
+  wxGTK32,
+  zlib,
+  zstd,
 }:
 
 stdenv.mkDerivation rec {
@@ -28,9 +29,7 @@ stdenv.mkDerivation rec {
     zstd
   ];
 
-  configureFlags = [
-    "--enable-embedded-cryptopp"
-  ];
+  configureFlags = [ "--enable-embedded-cryptopp" ];
 
   enableParallelBuilding = true;
 

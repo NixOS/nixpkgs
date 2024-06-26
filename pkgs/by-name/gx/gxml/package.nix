@@ -1,22 +1,27 @@
-{ stdenv
-, lib
-, fetchFromGitLab
-, gobject-introspection
-, meson
-, ninja
-, pkg-config
-, vala
-, glib
-, libgee
-, libxml2
-, gitUpdater
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  gobject-introspection,
+  meson,
+  ninja,
+  pkg-config,
+  vala,
+  glib,
+  libgee,
+  libxml2,
+  gitUpdater,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gxml";
   version = "0.20.3";
 
-  outputs = [ "out" "dev" "devdoc" ];
+  outputs = [
+    "out"
+    "dev"
+    "devdoc"
+  ];
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";

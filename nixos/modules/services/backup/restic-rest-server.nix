@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -51,7 +56,7 @@ in
 
     extraFlags = mkOption {
       type = types.listOf types.str;
-      default = [];
+      default = [ ];
       description = ''
         Extra commandline options to pass to Restic REST server.
       '';
@@ -61,14 +66,21 @@ in
   };
 
   config = mkIf cfg.enable {
-    assertions = [{
-      assertion = lib.substring 0 1 cfg.listenAddress != ":";
-      message = "The restic-rest-server now uses systemd socket activation, which expects only the Port number: services.restic.server.listenAddress = \"${lib.substring 1 6 cfg.listenAddress}\";";
-    }];
+    assertions = [
+      {
+        assertion = lib.substring 0 1 cfg.listenAddress != ":";
+        message = "The restic-rest-server now uses systemd socket activation, which expects only the Port number: services.restic.server.listenAddress = \"${
+          lib.substring 1 6 cfg.listenAddress
+        }\";";
+      }
+    ];
 
     systemd.services.restic-rest-server = {
       description = "Restic REST Server";
-      after = [ "network.target" "restic-rest-server.socket" ];
+      after = [
+        "network.target"
+        "restic-rest-server.socket"
+      ];
       requires = [ "restic-rest-server.socket" ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
@@ -110,7 +122,7 @@ in
         RestrictSUIDSGID = true;
         SystemCallArchitectures = "native";
         SystemCallFilter = "@system-service";
-        UMask = 027;
+        UMask = 27;
       };
     };
 
@@ -120,7 +132,7 @@ in
     };
 
     systemd.tmpfiles.rules = mkIf cfg.privateRepos [
-        "f ${cfg.dataDir}/.htpasswd 0700 restic restic -"
+      "f ${cfg.dataDir}/.htpasswd 0700 restic restic -"
     ];
 
     users.users.restic = {

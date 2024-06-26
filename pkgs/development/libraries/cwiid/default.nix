@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, bison
-, flex
-, bluez
-, pkg-config
-, gtk2
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  bison,
+  flex,
+  bluez,
+  pkg-config,
+  gtk2,
 }:
 
 stdenv.mkDerivation rec {
@@ -28,9 +29,7 @@ stdenv.mkDerivation rec {
     sed -i -e '/$(LDCONFIG)/d' common/include/lib.mak.in
   '';
 
-  patches = [
-    ./fix-ar.diff
-  ];
+  patches = [ ./fix-ar.diff ];
 
   buildInputs = [
     bluez

@@ -1,9 +1,22 @@
-{ lib, appleDerivation, xcbuildHook, stdenv
-, Librpcsvc, xnu, libpcap, developer_cmds }:
+{
+  lib,
+  appleDerivation,
+  xcbuildHook,
+  stdenv,
+  Librpcsvc,
+  xnu,
+  libpcap,
+  developer_cmds,
+}:
 
 appleDerivation {
   nativeBuildInputs = [ xcbuildHook ];
-  buildInputs = [ xnu Librpcsvc libpcap developer_cmds ];
+  buildInputs = [
+    xnu
+    Librpcsvc
+    libpcap
+    developer_cmds
+  ];
 
   # Work around error from <stdio.h> on aarch64-darwin:
   #     error: 'TARGET_OS_IPHONE' is not defined, evaluates to 0 [-Werror,-Wundef-prefix=TARGET_OS_]
@@ -45,7 +58,7 @@ appleDerivation {
 
     # mkdir -p $out/System/Library/LaunchDaemons
     # install kdumpd.tproj/com.apple.kdumpd.plist $out/System/Library/LaunchDaemons
- '';
+  '';
 
   meta = {
     platforms = lib.platforms.darwin;

@@ -1,8 +1,9 @@
-{ lib
-, rustPlatform
-, fetchCrate
-, stdenv
-, darwin
+{
+  lib,
+  rustPlatform,
+  fetchCrate,
+  stdenv,
+  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -16,9 +17,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-WU3lgGJH6qVDI1Un3HBqg0edqiP5sobTsAIXdnjeNTU=";
 
-  buildInputs = lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.Security
-  ];
+  buildInputs = lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ];
 
   # some examples fail to compile
   cargoTestFlags = [ "--tests" ];

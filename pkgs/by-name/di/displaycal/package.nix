@@ -1,11 +1,12 @@
-{ lib
-, python3
-, fetchPypi
-, wrapGAppsHook3
-, gtk3
-, librsvg
-, xorg
-, argyllcms
+{
+  lib,
+  python3,
+  fetchPypi,
+  wrapGAppsHook3,
+  gtk3,
+  librsvg,
+  xorg,
+  argyllcms,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -37,16 +38,18 @@ python3.pkgs.buildPythonApplication rec {
     zeroconf
   ];
 
-  buildInputs = [
-    gtk3
-    librsvg
-  ] ++ (with xorg; [
-    libX11
-    libXxf86vm
-    libXext
-    libXinerama
-    libXrandr
-  ]);
+  buildInputs =
+    [
+      gtk3
+      librsvg
+    ]
+    ++ (with xorg; [
+      libX11
+      libXxf86vm
+      libXext
+      libXinerama
+      libXrandr
+    ]);
 
   # Workaround for eoyilmaz/displaycal-py3#261
   setupPyGlobalFlags = [ "appdata" ];

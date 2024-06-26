@@ -58,31 +58,37 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     wrapProgram $out/bin/sparkleshare \
-        --set PATH ${symlinkJoin {
-          name = "mono-path";
-          paths = [
-            bash
-            coreutils
-            git
-            git-lfs
-            glib
-            mono
-            openssh
-            openssl
-            xdg-utils
-          ];
-        }}/bin \
-        --set MONO_GAC_PREFIX ${lib.concatStringsSep ":" [
-          appindicator-sharp
-          gtk-sharp-3_0
-          webkit2-sharp
-        ]} \
-        --set LD_LIBRARY_PATH ${lib.makeLibraryPath [
-          appindicator-sharp
-          gtk-sharp-3_0.gtk3
-          webkit2-sharp
-          webkit2-sharp.webkitgtk
-        ]}
+        --set PATH ${
+          symlinkJoin {
+            name = "mono-path";
+            paths = [
+              bash
+              coreutils
+              git
+              git-lfs
+              glib
+              mono
+              openssh
+              openssl
+              xdg-utils
+            ];
+          }
+        }/bin \
+        --set MONO_GAC_PREFIX ${
+          lib.concatStringsSep ":" [
+            appindicator-sharp
+            gtk-sharp-3_0
+            webkit2-sharp
+          ]
+        } \
+        --set LD_LIBRARY_PATH ${
+          lib.makeLibraryPath [
+            appindicator-sharp
+            gtk-sharp-3_0.gtk3
+            webkit2-sharp
+            webkit2-sharp.webkitgtk
+          ]
+        }
   '';
 
   meta = {

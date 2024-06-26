@@ -1,7 +1,8 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, installShellFiles
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
 }:
 
 buildGoModule rec {
@@ -22,9 +23,7 @@ buildGoModule rec {
     "-X github.com/open-policy-agent/conftest/internal/commands.version=${version}"
   ];
 
-  nativeBuildInputs = [
-    installShellFiles
-  ];
+  nativeBuildInputs = [ installShellFiles ];
 
   preCheck = ''
     export HOME="$(mktemp -d)"
@@ -60,6 +59,9 @@ buildGoModule rec {
       assertions. You can read more about Rego in 'How do I write policies' in
       the Open Policy Agent documentation.
     '';
-    maintainers = with maintainers; [ jk yurrriq ];
+    maintainers = with maintainers; [
+      jk
+      yurrriq
+    ];
   };
 }

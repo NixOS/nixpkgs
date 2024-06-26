@@ -1,12 +1,13 @@
-{ stdenv
-, lib
-, callPackage
-, pkgsBuildHost
+{
+  stdenv,
+  lib,
+  callPackage,
+  pkgsBuildHost,
 
-, releaseManifestFile
-, tarballHash
-, depsFile
-, bootstrapSdk
+  releaseManifestFile,
+  tarballHash,
+  depsFile,
+  bootstrapSdk,
 }@args:
 
 let
@@ -15,13 +16,16 @@ let
 
   stage0 = pkgsBuildHost.callPackage ./stage0.nix args;
 
-  vmr = (mkVMR {
-    inherit releaseManifestFile tarballHash;
-    dotnetSdk = stage0.sdk;
-  }).overrideAttrs (old: {
-    passthru = old.passthru or {} // {
-      inherit (stage0.vmr) fetch-deps;
-    };
-  });
+  vmr =
+    (mkVMR {
+      inherit releaseManifestFile tarballHash;
+      dotnetSdk = stage0.sdk;
+    }).overrideAttrs
+      (old: {
+        passthru = old.passthru or { } // {
+          inherit (stage0.vmr) fetch-deps;
+        };
+      });
 
-in mkPackages { inherit vmr; }
+in
+mkPackages { inherit vmr; }

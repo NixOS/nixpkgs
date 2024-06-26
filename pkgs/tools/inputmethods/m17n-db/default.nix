@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchurl, gettext, gawk, bash }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  gettext,
+  gawk,
+  bash,
+}:
 
 stdenv.mkDerivation rec {
   pname = "m17n-db";
@@ -10,18 +17,23 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ gettext ];
-  buildInputs = [ gettext gawk bash ];
+  buildInputs = [
+    gettext
+    gawk
+    bash
+  ];
 
   strictDeps = true;
 
-  configureFlags = [ "--with-charmaps=${stdenv.cc.libc}/share/i18n/charmaps" ]
-  ;
+  configureFlags = [ "--with-charmaps=${stdenv.cc.libc}/share/i18n/charmaps" ];
 
   meta = {
     homepage = "https://www.nongnu.org/m17n/";
     description = "Multilingual text processing library (database)";
     mainProgram = "m17n-db";
-    changelog = "https://git.savannah.nongnu.org/cgit/m17n/m17n-db.git/plain/NEWS?h=REL-${lib.replaceStrings [ "." ] [ "-" ] version}";
+    changelog = "https://git.savannah.nongnu.org/cgit/m17n/m17n-db.git/plain/NEWS?h=REL-${
+      lib.replaceStrings [ "." ] [ "-" ] version
+    }";
     license = lib.licenses.lgpl21Plus;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ astsmtl ];

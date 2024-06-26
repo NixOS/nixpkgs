@@ -1,8 +1,20 @@
-{ lib, stdenv, fetchurl, pkg-config, libmtp, libid3tag, flac, libvorbis, gtk3
-, gsettings-desktop-schemas, wrapGAppsHook3
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  libmtp,
+  libid3tag,
+  flac,
+  libvorbis,
+  gtk3,
+  gsettings-desktop-schemas,
+  wrapGAppsHook3,
 }:
 
-let version = "1.3.11"; in
+let
+  version = "1.3.11";
+in
 
 stdenv.mkDerivation {
   pname = "gmtp";
@@ -13,8 +25,18 @@ stdenv.mkDerivation {
     sha256 = "04q6byyq002fhzkc2rkkahwh5b6272xakaj4m3vwm8la8jf0r0ss";
   };
 
-  nativeBuildInputs = [ pkg-config wrapGAppsHook3 ];
-  buildInputs = [ libmtp libid3tag flac libvorbis gtk3 gsettings-desktop-schemas ];
+  nativeBuildInputs = [
+    pkg-config
+    wrapGAppsHook3
+  ];
+  buildInputs = [
+    libmtp
+    libid3tag
+    flac
+    libvorbis
+    gtk3
+    gsettings-desktop-schemas
+  ];
 
   enableParallelBuilding = true;
 

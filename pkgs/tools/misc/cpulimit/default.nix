@@ -1,4 +1,8 @@
-{ lib, stdenv, fetchFromGitHub }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 
 stdenv.mkDerivation rec {
   pname = "cpulimit";
@@ -11,8 +15,10 @@ stdenv.mkDerivation rec {
     sha256 = "1dz045yhcsw1rdamzpz4bk8mw888in7fyqk1q1b3m1yk4pd1ahkh";
   };
 
-  patches = [ ./remove-sys-sysctl.h.patch ./get-missing-basename.patch ];
-
+  patches = [
+    ./remove-sys-sysctl.h.patch
+    ./get-missing-basename.patch
+  ];
 
   installPhase = ''
     mkdir -p $out/bin

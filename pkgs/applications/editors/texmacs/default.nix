@@ -1,5 +1,12 @@
-{ lib, stdenv, callPackage, fetchurl,
-  guile_1_8, xmodmap, which, freetype,
+{
+  lib,
+  stdenv,
+  callPackage,
+  fetchurl,
+  guile_1_8,
+  xmodmap,
+  which,
+  freetype,
   libjpeg,
   sqlite,
   texliveSmall ? null,
@@ -17,13 +24,19 @@
   extraFonts ? false,
   chineseFonts ? false,
   japaneseFonts ? false,
-  koreanFonts ? false }:
+  koreanFonts ? false,
+}:
 
 let
   pname = "texmacs";
   version = "2.1.2";
   common = callPackage ./common.nix {
-    inherit extraFonts chineseFonts japaneseFonts koreanFonts;
+    inherit
+      extraFonts
+      chineseFonts
+      japaneseFonts
+      koreanFonts
+      ;
     tex = texliveSmall;
   };
 in
@@ -35,10 +48,12 @@ stdenv.mkDerivation {
     hash = "sha256-Ds9gxOwMYSttEWrawgxLHGxHyMBvt8WmyPIwBP2g/CM=";
   };
 
-  postPatch = common.postPatch + ''
-    substituteInPlace configure \
-      --replace "-mfpmath=sse -msse2" ""
-  '';
+  postPatch =
+    common.postPatch
+    + ''
+      substituteInPlace configure \
+        --replace "-mfpmath=sse -msse2" ""
+    '';
 
   nativeBuildInputs = [
     guile_1_8
@@ -58,9 +73,7 @@ stdenv.mkDerivation {
     sqlite
     git
     python3
-  ] ++ lib.optionals stdenv.isDarwin [
-    qtmacextras
-  ];
+  ] ++ lib.optionals stdenv.isDarwin [ qtmacextras ];
 
   cmakeFlags = lib.optionals stdenv.isDarwin [
     (lib.cmakeFeature "TEXMACS_GUI" "Qt")
@@ -76,7 +89,10 @@ stdenv.mkDerivation {
   '';
 
   qtWrapperArgs = [
-    "--suffix" "PATH" ":" (lib.makeBinPath [
+    "--suffix"
+    "PATH"
+    ":"
+    (lib.makeBinPath [
       xmodmap
       which
       ghostscriptX

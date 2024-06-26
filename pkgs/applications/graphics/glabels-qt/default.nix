@@ -1,8 +1,9 @@
-{ lib
-, fetchFromGitHub
-, cmake
-, mkDerivation
-, qttools
+{
+  lib,
+  fetchFromGitHub,
+  cmake,
+  mkDerivation,
+  qttools,
 }:
 
 mkDerivation {

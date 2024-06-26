@@ -1,14 +1,18 @@
-{ lib, stdenv
-, fetchurl
-, pkg-config
-, glib
-, gobject-introspection
-, buildPackages
-, withIntrospection ? lib.meta.availableOn stdenv.hostPlatform gobject-introspection && stdenv.hostPlatform.emulatorAvailable buildPackages
-, meson
-, ninja
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  glib,
+  gobject-introspection,
+  buildPackages,
+  withIntrospection ?
+    lib.meta.availableOn stdenv.hostPlatform gobject-introspection
+    && stdenv.hostPlatform.emulatorAvailable buildPackages,
+  meson,
+  ninja,
   # just for passthru
-, gnome
+  gnome,
 }:
 
 stdenv.mkDerivation rec {
@@ -27,13 +31,9 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
-  ] ++ lib.optionals withIntrospection [
-    gobject-introspection
-  ];
+  ] ++ lib.optionals withIntrospection [ gobject-introspection ];
 
-  mesonFlags = [
-    (lib.mesonBool "introspection" withIntrospection)
-  ];
+  mesonFlags = [ (lib.mesonBool "introspection" withIntrospection) ];
 
   preInstall = ''
     # Meson installs the schemas to share/glib-2.0/schemas
@@ -56,9 +56,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = gnome.updateScript {
-      packageName = pname;
-    };
+    updateScript = gnome.updateScript { packageName = pname; };
   };
 
   meta = with lib; {

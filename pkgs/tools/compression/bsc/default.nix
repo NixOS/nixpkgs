@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, openmp }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  openmp,
+}:
 
 stdenv.mkDerivation rec {
   pname = "bsc";

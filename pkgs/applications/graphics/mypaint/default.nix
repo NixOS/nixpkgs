@@ -1,26 +1,33 @@
-{ lib
-, fetchFromGitHub
-, fetchpatch
-, gtk3
-, gettext
-, json_c
-, lcms2
-, libpng
-, librsvg
-, gobject-introspection
-, libmypaint
-, hicolor-icon-theme
-, mypaint-brushes
-, gdk-pixbuf
-, pkg-config
-, python3
-, swig
-, wrapGAppsHook3
+{
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  gtk3,
+  gettext,
+  json_c,
+  lcms2,
+  libpng,
+  librsvg,
+  gobject-introspection,
+  libmypaint,
+  hicolor-icon-theme,
+  mypaint-brushes,
+  gdk-pixbuf,
+  pkg-config,
+  python3,
+  swig,
+  wrapGAppsHook3,
 }:
 
 let
-  inherit (python3.pkgs) pycairo pygobject3 numpy buildPythonApplication;
-in buildPythonApplication rec {
+  inherit (python3.pkgs)
+    pycairo
+    pygobject3
+    numpy
+    buildPythonApplication
+    ;
+in
+buildPythonApplication rec {
   pname = "mypaint";
   version = "2.0.1";
   format = "other";
@@ -60,9 +67,7 @@ in buildPythonApplication rec {
     (fetchpatch {
       url = "https://github.com/mypaint/mypaint/commit/d7d2496401a112a178d5fa2e491f0cc7537d24cd.patch";
       hash = "sha256-dIW6qWqY96+bsUDQQtGtjENvypnh//Ep3xW+wooCJ14=";
-      includes = [
-        "gui/colors/hcywheel.py"
-      ];
+      includes = [ "gui/colors/hcywheel.py" ];
     })
     # Fix crash with hcy wheel masking
     (fetchpatch {
@@ -103,9 +108,7 @@ in buildPythonApplication rec {
     pygobject3
   ];
 
-  nativeCheckInputs = [
-    gtk3
-  ];
+  nativeCheckInputs = [ gtk3 ];
 
   buildPhase = ''
     runHook preBuild
@@ -136,6 +139,9 @@ in buildPythonApplication rec {
     homepage = "http://mypaint.org/";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ goibhniu jtojnar ];
+    maintainers = with maintainers; [
+      goibhniu
+      jtojnar
+    ];
   };
 }

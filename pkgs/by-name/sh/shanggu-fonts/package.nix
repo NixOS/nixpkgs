@@ -32,15 +32,18 @@ stdenvNoCC.mkDerivation {
 
   nativeBuildInputs = [ p7zip ];
 
-  unpackPhase = ''
-    runHook preUnpack
-  '' + lib.strings.concatLines (
-    lib.attrsets.mapAttrsToList (name: value: ''
-      7z x ${value} -o${name}
-    '') source
-  ) + ''
-    runHook postUnpack
-  '';
+  unpackPhase =
+    ''
+      runHook preUnpack
+    ''
+    + lib.strings.concatLines (
+      lib.attrsets.mapAttrsToList (name: value: ''
+        7z x ${value} -o${name}
+      '') source
+    )
+    + ''
+      runHook postUnpack
+    '';
 
   installPhase =
     ''
@@ -50,13 +53,21 @@ stdenvNoCC.mkDerivation {
     ''
     + lib.strings.concatLines (
       lib.lists.forEach (builtins.attrNames source) (
-        name: (''
-          install -Dm444 ${name}/*.ttc -t $'' + name + ''/share/fonts/truetype
-          ln -s $'' + name + ''/share/fonts/truetype/*.ttc $out/share/fonts/truetype
+        name:
+        (
+          ''install -Dm444 ${name}/*.ttc -t $''
+          + name
+          + ''
+            /share/fonts/truetype
+                      ln -s $''
+          + name
+          + ''
+            /share/fonts/truetype/*.ttc $out/share/fonts/truetype
           ''
         )
       )
-    ) + ''
+    )
+    + ''
       runHook postInstall
     '';
 

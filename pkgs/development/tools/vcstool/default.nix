@@ -1,5 +1,11 @@
-{ lib, python3Packages, fetchPypi
-, git, breezy, subversion }:
+{
+  lib,
+  python3Packages,
+  fetchPypi,
+  git,
+  breezy,
+  subversion,
+}:
 
 with python3Packages;
 
@@ -12,9 +18,21 @@ buildPythonApplication rec {
     sha256 = "04b3a963e15386660f139e5b95d293e43e3cb414e3b13e14ee36f5223032ee2c";
   };
 
-  propagatedBuildInputs = [ pyyaml setuptools ];
+  propagatedBuildInputs = [
+    pyyaml
+    setuptools
+  ];
 
-  makeWrapperArgs = ["--prefix" "PATH" ":" (lib.makeBinPath [ git breezy subversion ])];
+  makeWrapperArgs = [
+    "--prefix"
+    "PATH"
+    ":"
+    (lib.makeBinPath [
+      git
+      breezy
+      subversion
+    ])
+  ];
 
   doCheck = false; # requires network
 

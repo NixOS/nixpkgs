@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, cmake, octave ? null, libiconv }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  octave ? null,
+  libiconv,
+}:
 
 stdenv.mkDerivation rec {
   pname = "nlopt";
@@ -14,18 +21,20 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ] ++ lib.optionals stdenv.isDarwin [ libiconv ];
   buildInputs = [ octave ];
 
-  configureFlags = [
-    "--with-cxx"
-    "--enable-shared"
-    "--with-pic"
-    "--without-guile"
-    "--without-python"
-    "--without-matlab"
-  ] ++ lib.optionals (octave != null) [
-    "--with-octave"
-    "M_INSTALL_DIR=$(out)/${octave.sitePath}/m"
-    "OCT_INSTALL_DIR=$(out)/${octave.sitePath}/oct"
-  ];
+  configureFlags =
+    [
+      "--with-cxx"
+      "--enable-shared"
+      "--with-pic"
+      "--without-guile"
+      "--without-python"
+      "--without-matlab"
+    ]
+    ++ lib.optionals (octave != null) [
+      "--with-octave"
+      "M_INSTALL_DIR=$(out)/${octave.sitePath}/m"
+      "OCT_INSTALL_DIR=$(out)/${octave.sitePath}/oct"
+    ];
 
   postFixup = ''
     substituteInPlace $out/lib/cmake/nlopt/NLoptLibraryDepends.cmake --replace \

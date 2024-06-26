@@ -1,27 +1,28 @@
-{ fetchFromGitHub
-, lib
-, stdenv
-, pkg-config
-, autoreconfHook
-, wrapQtAppsHook
-, openssl
-, db48
-, boost
-, zlib
-, miniupnpc
-, gmp
-, qrencode
-, glib
-, protobuf
-, yasm
-, libevent
-, util-linux
-, qtbase
-, qttools
-, enableUpnp ? false
-, disableWallet ? false
-, disableDaemon ? false
-, withGui ? false
+{
+  fetchFromGitHub,
+  lib,
+  stdenv,
+  pkg-config,
+  autoreconfHook,
+  wrapQtAppsHook,
+  openssl,
+  db48,
+  boost,
+  zlib,
+  miniupnpc,
+  gmp,
+  qrencode,
+  glib,
+  protobuf,
+  yasm,
+  libevent,
+  util-linux,
+  qtbase,
+  qttools,
+  enableUpnp ? false,
+  disableWallet ? false,
+  disableDaemon ? false,
+  withGui ? false,
 }:
 
 stdenv.mkDerivation rec {
@@ -35,20 +36,40 @@ stdenv.mkDerivation rec {
     sha256 = "03ndk46h6093v8s18d5iffz48zhlshq7jrk6vgpjfs6z2iqgd2sy";
   };
 
-  nativeBuildInputs = [ pkg-config autoreconfHook ]
-    ++ lib.optionals withGui [ wrapQtAppsHook ];
+  nativeBuildInputs = [
+    pkg-config
+    autoreconfHook
+  ] ++ lib.optionals withGui [ wrapQtAppsHook ];
 
-  buildInputs = [ glib gmp openssl db48 yasm boost zlib libevent miniupnpc protobuf util-linux ]
-    ++ lib.optionals withGui [ qtbase qttools qrencode ];
+  buildInputs =
+    [
+      glib
+      gmp
+      openssl
+      db48
+      yasm
+      boost
+      zlib
+      libevent
+      miniupnpc
+      protobuf
+      util-linux
+    ]
+    ++ lib.optionals withGui [
+      qtbase
+      qttools
+      qrencode
+    ];
 
-  configureFlags = [ "--with-boost-libdir=${boost.out}/lib" ]
+  configureFlags =
+    [ "--with-boost-libdir=${boost.out}/lib" ]
     ++ lib.optional enableUpnp "--enable-upnp-default"
     ++ lib.optional disableWallet "--disable-wallet"
     ++ lib.optional disableDaemon "--disable-daemon"
     ++ lib.optionals withGui [
-    "--with-gui=yes"
-    "--with-qt-bindir=${lib.getDev qtbase}/bin:${lib.getDev qttools}/bin"
-  ];
+      "--with-gui=yes"
+      "--with-qt-bindir=${lib.getDev qtbase}/bin:${lib.getDev qttools}/bin"
+    ];
 
   enableParallelBuilding = true;
   doCheck = true;

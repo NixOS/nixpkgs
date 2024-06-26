@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rustPlatform
-, Security
-, SystemConfiguration
-, installShellFiles
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  Security,
+  SystemConfiguration,
+  installShellFiles,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -18,7 +19,10 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-jj3BdaxH7ofhHNF2eu+burn6+/0bPQQZ8JfjXAFyN4A=";
   };
 
-  buildInputs = lib.optionals stdenv.isDarwin [ Security SystemConfiguration ];
+  buildInputs = lib.optionals stdenv.isDarwin [
+    Security
+    SystemConfiguration
+  ];
 
   cargoHash = "sha256-dysKHi6CqPrF/q7LPn1+TwOP3p2KwauhTuqLCda3OSs=";
 
@@ -42,6 +46,9 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "ferium";
     homepage = "https://github.com/gorilla-devs/ferium";
     license = licenses.mpl20;
-    maintainers = with maintainers; [ leo60228 soupglasses ];
+    maintainers = with maintainers; [
+      leo60228
+      soupglasses
+    ];
   };
 }

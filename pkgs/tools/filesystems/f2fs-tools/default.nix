@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchzip, fetchpatch
-, autoreconfHook, libselinux, libuuid, pkg-config
+{
+  lib,
+  stdenv,
+  fetchzip,
+  fetchpatch,
+  autoreconfHook,
+  libselinux,
+  libuuid,
+  pkg-config,
 }:
 
 stdenv.mkDerivation rec {
@@ -11,8 +18,14 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-zNG1F//+BTBzlEc6qNVixyuCB6PMZD5Kf8pVK0ePYiA=";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
-  buildInputs = [ libselinux libuuid ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ];
+  buildInputs = [
+    libselinux
+    libuuid
+  ];
 
   patches = [
     ./f2fs-tools-cross-fix.patch
@@ -29,6 +42,9 @@ stdenv.mkDerivation rec {
     description = "Userland tools for the f2fs filesystem";
     license = licenses.gpl2Only;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ehmry jagajaga ];
+    maintainers = with maintainers; [
+      ehmry
+      jagajaga
+    ];
   };
 }

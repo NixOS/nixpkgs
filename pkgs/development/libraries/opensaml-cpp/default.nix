@@ -1,5 +1,17 @@
-{ lib, stdenv, fetchgit, autoreconfHook, pkg-config
-, darwin, boost, openssl, log4shib, xercesc, xml-security-c, xml-tooling-c, zlib
+{
+  lib,
+  stdenv,
+  fetchgit,
+  autoreconfHook,
+  pkg-config,
+  darwin,
+  boost,
+  openssl,
+  log4shib,
+  xercesc,
+  xml-security-c,
+  xml-tooling-c,
+  zlib,
 }:
 
 stdenv.mkDerivation rec {
@@ -12,13 +24,27 @@ stdenv.mkDerivation rec {
     sha256 = "0ms3sqmwqkrqb92d7jy2hqwnz5yd7cbrz73n321jik0jilrwl5w8";
   };
 
-  buildInputs = [
-    boost openssl log4shib xercesc xml-security-c xml-tooling-c zlib
-  ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
-    CoreServices
-    SystemConfiguration
-  ]);
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
+  buildInputs =
+    [
+      boost
+      openssl
+      log4shib
+      xercesc
+      xml-security-c
+      xml-tooling-c
+      zlib
+    ]
+    ++ lib.optionals stdenv.isDarwin (
+      with darwin.apple_sdk.frameworks;
+      [
+        CoreServices
+        SystemConfiguration
+      ]
+    );
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ];
 
   configureFlags = [ "--with-xmltooling=${xml-tooling-c}" ];
 
@@ -27,11 +53,11 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with lib; {
-    homepage    = "https://shibboleth.net/products/opensaml-cpp.html";
+    homepage = "https://shibboleth.net/products/opensaml-cpp.html";
     description = "Low-level library written in C++ that provides support for producing and consuming SAML messages";
     mainProgram = "samlsign";
-    platforms   = platforms.unix;
-    license     = licenses.asl20;
+    platforms = platforms.unix;
+    license = licenses.asl20;
     maintainers = [ ];
   };
 }

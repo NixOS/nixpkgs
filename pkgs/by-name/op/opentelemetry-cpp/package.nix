@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, gtest
-, protobuf
-, curl
-, grpc
-, prometheus-cpp
-, nlohmann_json
-, nix-update-script
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  gtest,
+  protobuf,
+  curl,
+  grpc,
+  prometheus-cpp,
+  nlohmann_json,
+  nix-update-script,
 }:
 
 let
@@ -46,9 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
-  checkInputs = [
-    gtest
-  ];
+  checkInputs = [ gtest ];
 
   strictDeps = true;
 
@@ -64,7 +63,10 @@ stdenv.mkDerivation (finalAttrs: {
     "-DOTELCPP_PROTO_PATH=${opentelemetry-proto}"
   ];
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   passthru.updateScript = nix-update-script { };
 

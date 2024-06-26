@@ -1,36 +1,37 @@
-{ stdenv
-, lib
-, fetchurl
+{
+  stdenv,
+  lib,
+  fetchurl,
   # Alphabetic ordering below
-, alsa-lib
-, at-spi2-atk
-, atk
-, autoPatchelfHook
-, cairo
-, curl
-, dbus
-, dconf
-, dpkg
-, fontconfig
-, gcc-unwrapped
-, gdk-pixbuf
-, glib
-, glibc
-, gsettings-desktop-schemas
-, gst_all_1
-, gtk2
-, gtk3
-, libpulseaudio
-, libudev0-shim
-, libdrm
-, makeWrapper
-, nspr
-, nss
-, pulseaudio
-, qt5
-, wrapGAppsHook3
-, xkeyboard_config
-, xorg
+  alsa-lib,
+  at-spi2-atk,
+  atk,
+  autoPatchelfHook,
+  cairo,
+  curl,
+  dbus,
+  dconf,
+  dpkg,
+  fontconfig,
+  gcc-unwrapped,
+  gdk-pixbuf,
+  glib,
+  glibc,
+  gsettings-desktop-schemas,
+  gst_all_1,
+  gtk2,
+  gtk3,
+  libpulseaudio,
+  libudev0-shim,
+  libdrm,
+  makeWrapper,
+  nspr,
+  nss,
+  pulseaudio,
+  qt5,
+  wrapGAppsHook3,
+  xkeyboard_config,
+  xorg,
 }:
 let
 
@@ -187,6 +188,9 @@ stdenv.mkDerivation rec {
     platforms = [ "x86_64-linux" ];
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ nh2 gtrunsec ];
+    maintainers = with maintainers; [
+      nh2
+      gtrunsec
+    ];
   };
 }

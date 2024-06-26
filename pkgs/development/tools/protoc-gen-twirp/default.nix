@@ -1,4 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 
 buildGoModule rec {
   pname = "protoc-gen-twirp";
@@ -17,9 +21,7 @@ buildGoModule rec {
 
   vendorHash = null;
 
-  subPackages = [
-    "protoc-gen-twirp"
-  ];
+  subPackages = [ "protoc-gen-twirp" ];
 
   meta = with lib; {
     description = "Simple RPC framework with protobuf service definitions";

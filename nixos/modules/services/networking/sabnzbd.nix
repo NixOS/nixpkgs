@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -47,7 +52,6 @@ in
     };
   };
 
-
   ###### implementation
 
   config = mkIf cfg.enable {
@@ -59,26 +63,22 @@ in
       };
     };
 
-    users.groups = mkIf (cfg.group == "sabnzbd") {
-      sabnzbd.gid = config.ids.gids.sabnzbd;
-    };
+    users.groups = mkIf (cfg.group == "sabnzbd") { sabnzbd.gid = config.ids.gids.sabnzbd; };
 
     systemd.services.sabnzbd = {
-        description = "sabnzbd server";
-        wantedBy    = [ "multi-user.target" ];
-        after = [ "network.target" ];
-        serviceConfig = {
-          Type = "forking";
-          GuessMainPID = "no";
-          User = cfg.user;
-          Group = cfg.group;
-          StateDirectory = "sabnzbd";
-          ExecStart = "${lib.getBin cfg.package}/bin/sabnzbd -d -f ${cfg.configFile}";
-        };
+      description = "sabnzbd server";
+      wantedBy = [ "multi-user.target" ];
+      after = [ "network.target" ];
+      serviceConfig = {
+        Type = "forking";
+        GuessMainPID = "no";
+        User = cfg.user;
+        Group = cfg.group;
+        StateDirectory = "sabnzbd";
+        ExecStart = "${lib.getBin cfg.package}/bin/sabnzbd -d -f ${cfg.configFile}";
+      };
     };
 
-    networking.firewall = mkIf cfg.openFirewall {
-      allowedTCPPorts = [ 8080 ];
-    };
+    networking.firewall = mkIf cfg.openFirewall { allowedTCPPorts = [ 8080 ]; };
   };
 }

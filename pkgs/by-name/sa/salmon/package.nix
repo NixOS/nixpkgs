@@ -1,21 +1,22 @@
-{ lib
-, stdenv
-, autoreconfHook
-, bash
-, boost
-, bzip2
-, cereal_1_3_2
-, cmake
-, curl
-, fetchFromGitHub
-, jemalloc
-, libgff
-, libiconv
-, libstaden-read
-, pkg-config
-, tbb_2021_11
-, xz
-, zlib
+{
+  lib,
+  stdenv,
+  autoreconfHook,
+  bash,
+  boost,
+  bzip2,
+  cereal_1_3_2,
+  cmake,
+  curl,
+  fetchFromGitHub,
+  jemalloc,
+  libgff,
+  libiconv,
+  libstaden-read,
+  pkg-config,
+  tbb_2021_11,
+  xz,
+  zlib,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -44,7 +45,10 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = "patchShebangs .";
 
   buildInputs = [
-    (boost.override { enableShared = false; enabledStatic = true; })
+    (boost.override {
+      enableShared = false;
+      enabledStatic = true;
+    })
     bzip2
     cereal_1_3_2
     curl
@@ -56,13 +60,15 @@ stdenv.mkDerivation (finalAttrs: {
     zlib
   ] ++ lib.optionals stdenv.isDarwin [ libiconv ];
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
 
   strictDeps = true;
 
   meta = {
-    description =
-      "Tool for quantifying the expression of transcripts using RNA-seq data";
+    description = "Tool for quantifying the expression of transcripts using RNA-seq data";
     mainProgram = "salmon";
     longDescription = ''
       Salmon is a tool for quantifying the expression of transcripts
@@ -76,8 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://combine-lab.github.io/salmon";
     downloadPage = "https://github.com/COMBINE-lab/salmon/releases";
-    changelog = "https://github.com/COMBINE-lab/salmon/releases/tag/" +
-                "v${finalAttrs.version}";
+    changelog = "https://github.com/COMBINE-lab/salmon/releases/tag/" + "v${finalAttrs.version}";
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.all;
     maintainers = [ lib.maintainers.kupac ];

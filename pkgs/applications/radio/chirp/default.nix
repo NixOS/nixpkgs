@@ -1,11 +1,12 @@
-{ lib
-, fetchFromGitHub
-, writeShellScript
-, glib
-, gsettings-desktop-schemas
-, python3
-, unstableGitUpdater
-, wrapGAppsHook3
+{
+  lib,
+  fetchFromGitHub,
+  writeShellScript,
+  glib,
+  gsettings-desktop-schemas,
+  python3,
+  unstableGitUpdater,
+  wrapGAppsHook3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -22,9 +23,7 @@ python3.pkgs.buildPythonApplication rec {
     glib
     gsettings-desktop-schemas
   ];
-  nativeBuildInputs = [
-    wrapGAppsHook3
-  ];
+  nativeBuildInputs = [ wrapGAppsHook3 ];
   propagatedBuildInputs = with python3.pkgs; [
     future
     pyserial

@@ -1,8 +1,16 @@
-{ lib, stdenv, fetchFromGitHub
-, cmake, pkg-config, sphinx
-, glib , pcre
-, libmysqlclient, libressl
-, zlib, zstd
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  sphinx,
+  glib,
+  pcre,
+  libmysqlclient,
+  libressl,
+  zlib,
+  zstd,
 }:
 
 stdenv.mkDerivation rec {
@@ -10,20 +18,31 @@ stdenv.mkDerivation rec {
   version = "0.14.3-1";
 
   src = fetchFromGitHub {
-    owner  = "mydumper";
+    owner = "mydumper";
     repo = "mydumper";
     rev = "refs/tags/v${version}";
     hash = "sha256-qyJGnrBOElQ3s2VoOWfW1luacd33haanmzKidMBgCpc=";
   };
 
-  outputs = [ "out" "doc" "man" ];
+  outputs = [
+    "out"
+    "doc"
+    "man"
+  ];
 
-  nativeBuildInputs = [ cmake pkg-config sphinx ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    sphinx
+  ];
 
   buildInputs = [
-    glib pcre
-    libmysqlclient libressl
-    zlib zstd
+    glib
+    pcre
+    libmysqlclient
+    libressl
+    zlib
+    zstd
   ];
 
   cmakeFlags = [

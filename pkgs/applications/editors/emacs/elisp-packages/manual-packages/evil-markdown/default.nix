@@ -1,9 +1,10 @@
-{ lib
-, trivialBuild
-, fetchFromGitHub
-, emacs
-, evil
-, markdown-mode
+{
+  lib,
+  trivialBuild,
+  fetchFromGitHub,
+  emacs,
+  evil,
+  markdown-mode,
 }:
 
 trivialBuild rec {

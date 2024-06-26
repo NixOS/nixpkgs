@@ -1,7 +1,8 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -15,14 +16,16 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-acaTUI+SWKSgmyJ+J4PzR5U7UtunbRiVuf5OsTf1Hko=";
   };
 
-  nativeBuildInputs = [
-    cmake
-  ];
+  nativeBuildInputs = [ cmake ];
 
   meta = {
     description = "Fast and exact implementation of the C++ from_chars functions for number types";
     homepage = "https://github.com/fastfloat/fast_float";
-    license = with lib.licenses; [ asl20 boost mit ];
+    license = with lib.licenses; [
+      asl20
+      boost
+      mit
+    ];
     maintainers = with lib.maintainers; [ wegank ];
     platforms = lib.platforms.all;
   };

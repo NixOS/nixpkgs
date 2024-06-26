@@ -1,4 +1,10 @@
-{ config, lib, options, pkgs, ... }:
+{
+  config,
+  lib,
+  options,
+  pkgs,
+  ...
+}:
 with lib;
 let
   cfg = config.networking.openconnect;
@@ -24,8 +30,15 @@ let
       protocol = mkOption {
         description = "Protocol to use.";
         example = "anyconnect";
-        type =
-          types.enum [ "anyconnect" "array" "nc" "pulse" "gp" "f5" "fortinet" ];
+        type = types.enum [
+          "anyconnect"
+          "array"
+          "nc"
+          "pulse"
+          "gp"
+          "f5"
+          "fortinet"
+        ];
       };
 
       user = mkOption {
@@ -83,18 +96,21 @@ let
       };
     };
   };
-  generateExtraConfig = extra_cfg:
-    strings.concatStringsSep "\n" (attrsets.mapAttrsToList
-      (name: value: if (value == true) then name else "${name}=${value}")
-      (attrsets.filterAttrs (_: value: value != false) extra_cfg));
-  generateConfig = name: icfg:
+  generateExtraConfig =
+    extra_cfg:
+    strings.concatStringsSep "\n" (
+      attrsets.mapAttrsToList (name: value: if (value == true) then name else "${name}=${value}") (
+        attrsets.filterAttrs (_: value: value != false) extra_cfg
+      )
+    );
+  generateConfig =
+    name: icfg:
     pkgs.writeText "config" ''
       interface=${name}
       ${optionalString (icfg.protocol != null) "protocol=${icfg.protocol}"}
       ${optionalString (icfg.user != null) "user=${icfg.user}"}
       ${optionalString (icfg.passwordFile != null) "passwd-on-stdin"}
-      ${optionalString (icfg.certificate != null)
-      "certificate=${icfg.certificate}"}
+      ${optionalString (icfg.certificate != null) "certificate=${icfg.certificate}"}
       ${optionalString (icfg.privateKey != null) "sslkey=${icfg.privateKey}"}
 
       ${generateExtraConfig icfg.extraOptions}
@@ -102,20 +118,22 @@ let
   generateUnit = name: icfg: {
     description = "OpenConnect Interface - ${name}";
     requires = [ "network-online.target" ];
-    after = [ "network.target" "network-online.target" ];
+    after = [
+      "network.target"
+      "network-online.target"
+    ];
     wantedBy = optional icfg.autoStart "multi-user.target";
 
     serviceConfig = {
       Type = "simple";
-      ExecStart = "${openconnect}/bin/openconnect --config=${
-          generateConfig name icfg
-        } ${icfg.gateway}";
+      ExecStart = "${openconnect}/bin/openconnect --config=${generateConfig name icfg} ${icfg.gateway}";
       StandardInput = lib.mkIf (icfg.passwordFile != null) "file:${icfg.passwordFile}";
 
       ProtectHome = true;
     };
   };
-in {
+in
+{
   options.networking.openconnect = {
     package = mkPackageOption pkgs "openconnect" { };
 

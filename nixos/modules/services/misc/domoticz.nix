@@ -1,4 +1,9 @@
-{ lib, pkgs, config, ... }:
+{
+  lib,
+  pkgs,
+  config,
+  ...
+}:
 
 with lib;
 
@@ -7,7 +12,8 @@ let
   cfg = config.services.domoticz;
   pkgDesc = "Domoticz home automation";
 
-in {
+in
+{
 
   options = {
 

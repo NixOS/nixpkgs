@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 with lib;
 let
   cfg = config.services.diod;
@@ -10,8 +15,8 @@ let
     auth_required = ${diodBool cfg.authRequired}
     exportall = ${diodBool cfg.exportall}
     exportopts = "${concatStringsSep "," cfg.exportopts}"
-    exports = { ${concatStringsSep ", " (map (s: ''"${s}"'' ) cfg.exports)} }
-    listen = { ${concatStringsSep ", " (map (s: ''"${s}"'' ) cfg.listen)} }
+    exports = { ${concatStringsSep ", " (map (s: ''"${s}"'') cfg.exports)} }
+    listen = { ${concatStringsSep ", " (map (s: ''"${s}"'') cfg.listen)} }
     logdest = "${cfg.logdest}"
     nwthreads = ${toString cfg.nwthreads}
     squashuser = "${cfg.squashuser}"
@@ -40,7 +45,7 @@ in
 
       exports = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         description = ''
           List the file systems that clients will be allowed to mount. All paths should
           be fully qualified. The exports table can include two types of element:
@@ -67,7 +72,7 @@ in
 
       exportopts = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         description = ''
           Establish a default set of export options. These are overridden, not appended
           to, by opts attributes in an "exports" entry.
@@ -125,7 +130,6 @@ in
           The value has the form of "syslog:facility:level" or "filename".
         '';
       };
-
 
       statfsPassthru = mkOption {
         type = types.bool;

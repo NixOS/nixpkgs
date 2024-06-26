@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.services.journald.upload;
@@ -105,7 +110,6 @@ in
       };
     };
 
-    environment.etc."systemd/journal-upload.conf".source =
-      format.generate "journal-upload.conf" cfg.settings;
+    environment.etc."systemd/journal-upload.conf".source = format.generate "journal-upload.conf" cfg.settings;
   };
 }

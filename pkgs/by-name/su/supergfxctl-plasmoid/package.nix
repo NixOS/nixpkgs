@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, cmake
-, kdePackages
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  cmake,
+  kdePackages,
 }:
 
 stdenv.mkDerivation rec {
@@ -21,9 +22,7 @@ stdenv.mkDerivation rec {
     kdePackages.wrapQtAppsHook
   ];
 
-  buildInputs = [
-    kdePackages.libplasma
-  ];
+  buildInputs = [ kdePackages.libplasma ];
 
   meta = {
     description = "KDE Plasma plasmoid for supergfxctl";

@@ -1,48 +1,55 @@
-{ lib, stdenv
-, fetchurl
-, ostree
-, rpm
-, which
-, autoconf
-, automake
-, libtool
-, pkg-config
-, cargo
-, rustc
-, gobject-introspection
-, gtk-doc
-, libxml2
-, libxslt
-, docbook_xsl
-, docbook_xml_dtd_42
-, docbook_xml_dtd_43
-, gperf
-, cmake
-, libcap
-, glib
-, systemd
-, json-glib
-, libarchive
-, libsolv
-, librepo
-, polkit
-, bubblewrap
-, pcre
-, check
-, python3
-, json_c
-, zchunk
-, libmodulemd
-, util-linux
-, sqlite
-, cppunit
+{
+  lib,
+  stdenv,
+  fetchurl,
+  ostree,
+  rpm,
+  which,
+  autoconf,
+  automake,
+  libtool,
+  pkg-config,
+  cargo,
+  rustc,
+  gobject-introspection,
+  gtk-doc,
+  libxml2,
+  libxslt,
+  docbook_xsl,
+  docbook_xml_dtd_42,
+  docbook_xml_dtd_43,
+  gperf,
+  cmake,
+  libcap,
+  glib,
+  systemd,
+  json-glib,
+  libarchive,
+  libsolv,
+  librepo,
+  polkit,
+  bubblewrap,
+  pcre,
+  check,
+  python3,
+  json_c,
+  zchunk,
+  libmodulemd,
+  util-linux,
+  sqlite,
+  cppunit,
 }:
 
 stdenv.mkDerivation rec {
   pname = "rpm-ostree";
   version = "2024.6";
 
-  outputs = [ "out" "dev" "man" "devdoc" ];
+  outputs = [
+    "out"
+    "dev"
+    "man"
+    "devdoc"
+  ];
 
   src = fetchurl {
     url = "https://github.com/coreos/${pname}/releases/download/v${version}/${pname}-${version}.tar.xz";

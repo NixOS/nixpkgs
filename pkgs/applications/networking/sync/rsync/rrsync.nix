@@ -1,4 +1,8 @@
-{ stdenv, python3, rsync }:
+{
+  stdenv,
+  python3,
+  rsync,
+}:
 
 stdenv.mkDerivation {
   pname = "rrsync";

@@ -1,4 +1,11 @@
-{ lib, stdenv, libressl, fetchzip, pkg-config, libxcrypt }:
+{
+  lib,
+  stdenv,
+  libressl,
+  fetchzip,
+  pkg-config,
+  libxcrypt,
+}:
 
 stdenv.mkDerivation rec {
   pname = "pounce";
@@ -9,15 +16,16 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-6PGiaU5sOwqO4V2PKJgIi3kI2jXsBOldEH51D7Sx9tg=";
   };
 
-  buildInputs = [ libressl libxcrypt ];
+  buildInputs = [
+    libressl
+    libxcrypt
+  ];
 
   nativeBuildInputs = [ pkg-config ];
 
   buildFlags = [ "all" ];
 
-  makeFlags = [
-    "PREFIX=$(out)"
-  ];
+  makeFlags = [ "PREFIX=$(out)" ];
 
   meta = with lib; {
     homepage = "https://code.causal.agency/june/pounce";

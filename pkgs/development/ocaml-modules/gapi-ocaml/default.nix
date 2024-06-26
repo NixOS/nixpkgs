@@ -1,6 +1,14 @@
-{ lib, fetchFromGitHub, buildDunePackage, ocaml
-, camlp-streams, cppo, cryptokit, ocurl, yojson
-, ounit2
+{
+  lib,
+  fetchFromGitHub,
+  buildDunePackage,
+  ocaml,
+  camlp-streams,
+  cppo,
+  cryptokit,
+  ocurl,
+  yojson,
+  ounit2,
 }:
 
 buildDunePackage rec {
@@ -18,7 +26,12 @@ buildDunePackage rec {
 
   nativeBuildInputs = [ cppo ];
 
-  propagatedBuildInputs = [ camlp-streams cryptokit ocurl yojson ];
+  propagatedBuildInputs = [
+    camlp-streams
+    cryptokit
+    ocurl
+    yojson
+  ];
 
   doCheck = true;
   checkInputs = [ ounit2 ];

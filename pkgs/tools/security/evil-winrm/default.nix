@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, makeWrapper
-, bundlerEnv
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  makeWrapper,
+  bundlerEnv,
 }:
 
 stdenv.mkDerivation rec {
@@ -23,13 +24,9 @@ stdenv.mkDerivation rec {
     gemset = ./gemset.nix;
   };
 
-  nativeBuildInputs = [
-    makeWrapper
-  ];
+  nativeBuildInputs = [ makeWrapper ];
 
-  buildInputs = [
-    env.wrappedRuby
-  ];
+  buildInputs = [ env.wrappedRuby ];
 
   installPhase = ''
     mkdir -p $out/bin

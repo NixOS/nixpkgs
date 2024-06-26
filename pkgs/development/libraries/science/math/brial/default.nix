@@ -1,10 +1,12 @@
-{ lib, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, pkg-config
-, boost
-, m4ri
-, gd
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  boost,
+  m4ri,
+  gd,
 }:
 
 stdenv.mkDerivation rec {
@@ -21,9 +23,7 @@ stdenv.mkDerivation rec {
   # FIXME package boost-test and enable checks
   doCheck = false;
 
-  configureFlags = [
-    "--with-boost-unit-test-framework=no"
-  ];
+  configureFlags = [ "--with-boost-unit-test-framework=no" ];
 
   buildInputs = [
     boost

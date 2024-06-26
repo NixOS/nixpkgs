@@ -1,4 +1,9 @@
-{ lib, buildGoModule, fetchFromGitHub, nixosTests }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  nixosTests,
+}:
 
 buildGoModule rec {
   pname = "process-exporter";
@@ -19,7 +24,9 @@ buildGoModule rec {
 
   doCheck = true;
 
-  passthru.tests = { inherit (nixosTests.prometheus-exporters) process; };
+  passthru.tests = {
+    inherit (nixosTests.prometheus-exporters) process;
+  };
 
   meta = with lib; {
     description = "Prometheus exporter that mines /proc to report on selected processes";

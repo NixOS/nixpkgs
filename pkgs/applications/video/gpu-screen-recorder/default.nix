@@ -1,17 +1,18 @@
-{ stdenv
-, lib
-, fetchurl
-, makeWrapper
-, pkg-config
-, libXcomposite
-, libpulseaudio
-, ffmpeg
-, wayland
-, libdrm
-, libva
-, libglvnd
-, libXrandr
-, libXfixes
+{
+  stdenv,
+  lib,
+  fetchurl,
+  makeWrapper,
+  pkg-config,
+  libXcomposite,
+  libpulseaudio,
+  ffmpeg,
+  wayland,
+  libdrm,
+  libva,
+  libglvnd,
+  libXrandr,
+  libXfixes,
 }:
 
 stdenv.mkDerivation {

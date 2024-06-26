@@ -1,7 +1,8 @@
-{ lib
-, buildDunePackage
-, fetchurl
-, alcotest
+{
+  lib,
+  buildDunePackage,
+  fetchurl,
+  alcotest,
 }:
 
 buildDunePackage rec {
@@ -15,9 +16,7 @@ buildDunePackage rec {
     hash = "sha256-zhLEGvyZiKrdBKWcEbB4PHvYzBlkrp1Ldnon0mP2Ypg=";
   };
 
-  checkInputs = [
-    alcotest
-  ];
+  checkInputs = [ alcotest ];
 
   doCheck = true;
 
@@ -29,4 +28,3 @@ buildDunePackage rec {
     maintainers = with lib.maintainers; [ sixstring982 ];
   };
 }
-

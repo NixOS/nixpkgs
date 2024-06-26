@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, fetchurl
-, cmake
-, enableWX ? false
-, wxGTK32
-, Cocoa
-, enableXWin ? false
-, xorg
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cmake,
+  enableWX ? false,
+  wxGTK32,
+  Cocoa,
+  enableXWin ? false,
+  xorg,
 }:
 
 stdenv.mkDerivation rec {
-  pname   = "plplot";
+  pname = "plplot";
   version = "5.15.0";
 
   src = fetchurl {
@@ -20,30 +21,26 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = lib.optional enableWX wxGTK32
+  buildInputs =
+    lib.optional enableWX wxGTK32
     ++ lib.optional (enableWX && stdenv.isDarwin) Cocoa
     ++ lib.optional enableXWin xorg.libX11;
 
   passthru = {
     inherit (xorg) libX11;
-    inherit
-      enableWX
-      enableXWin
-    ;
+    inherit enableWX enableXWin;
   };
 
-  cmakeFlags = [
-    "-DBUILD_TEST=ON"
-  ];
+  cmakeFlags = [ "-DBUILD_TEST=ON" ];
 
   doCheck = true;
 
   meta = with lib; {
     description = "Cross-platform scientific graphics plotting library";
     mainProgram = "pltek";
-    homepage    = "https://plplot.org";
+    homepage = "https://plplot.org";
     maintainers = with maintainers; [ bcdarwin ];
-    platforms   = platforms.unix;
-    license     = licenses.lgpl2;
+    platforms = platforms.unix;
+    license = licenses.lgpl2;
   };
 }

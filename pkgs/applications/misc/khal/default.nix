@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, glibcLocales
-, installShellFiles
-, python3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  glibcLocales,
+  installShellFiles,
+  python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -18,16 +19,18 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-YP2kQ/qXPDwvFvlHf+A2Ymvk49dmt5tAnTaOhrOV92M=";
   };
 
-  nativeBuildInputs = [
-    glibcLocales
-    installShellFiles
-  ] ++ (with python3.pkgs; [
-    setuptools-scm
-    sphinx
-    sphinxcontrib-newsfeed
-  ]);
+  nativeBuildInputs =
+    [
+      glibcLocales
+      installShellFiles
+    ]
+    ++ (with python3.pkgs; [
+      setuptools-scm
+      sphinx
+      sphinxcontrib-newsfeed
+    ]);
 
-  propagatedBuildInputs = with python3.pkgs;[
+  propagatedBuildInputs = with python3.pkgs; [
     atomicwrites
     click
     click-log
@@ -45,7 +48,7 @@ python3.pkgs.buildPythonApplication rec {
     urwid
   ];
 
-  nativeCheckInputs = with python3.pkgs;[
+  nativeCheckInputs = with python3.pkgs; [
     freezegun
     hypothesis
     packaging
@@ -61,7 +64,14 @@ python3.pkgs.buildPythonApplication rec {
       --fish <(_KHAL_COMPLETE=fish_source $out/bin/khal)
 
     # man page
-    PATH="${python3.withPackages (ps: with ps; [ sphinx sphinxcontrib-newsfeed ])}/bin:$PATH" \
+    PATH="${
+      python3.withPackages (
+        ps: with ps; [
+          sphinx
+          sphinxcontrib-newsfeed
+        ]
+      )
+    }/bin:$PATH" \
     make -C doc man
     installManPage doc/build/man/khal.1
 

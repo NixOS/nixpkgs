@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, cmake
-, fetchFromGitHub
-, fetchpatch
+{
+  lib,
+  stdenv,
+  cmake,
+  fetchFromGitHub,
+  fetchpatch,
 }:
 
 stdenv.mkDerivation rec {
@@ -26,9 +27,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [
-    cmake
-  ];
+  nativeBuildInputs = [ cmake ];
 
   doCheck = true;
 

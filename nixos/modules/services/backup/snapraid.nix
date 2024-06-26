@@ -1,13 +1,22 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
-let cfg = config.services.snapraid;
+let
+  cfg = config.services.snapraid;
 in
 {
   imports = [
     # Should have never been on the top-level.
-    (mkRenamedOptionModule [ "snapraid" ] [ "services" "snapraid" ])
+    (mkRenamedOptionModule [ "snapraid" ] [
+      "services"
+      "snapraid"
+    ])
   ];
 
   options.services.snapraid = with types; {
@@ -47,15 +56,18 @@ in
     };
     exclude = mkOption {
       default = [ ];
-      example = [ "*.unrecoverable" "/tmp/" "/lost+found/" ];
+      example = [
+        "*.unrecoverable"
+        "/tmp/"
+        "/lost+found/"
+      ];
       description = "SnapRAID exclude directives.";
       type = listOf str;
     };
     touchBeforeSync = mkOption {
       default = true;
       example = false;
-      description =
-        "Whether {command}`snapraid touch` should be run before {command}`snapraid sync`.";
+      description = "Whether {command}`snapraid touch` should be run before {command}`snapraid sync`.";
       type = bool;
     };
     sync.interval = mkOption {
@@ -74,15 +86,13 @@ in
       plan = mkOption {
         default = 8;
         example = 5;
-        description =
-          "Percent of the array that should be checked by {command}`snapraid scrub`.";
+        description = "Percent of the array that should be checked by {command}`snapraid scrub`.";
         type = int;
       };
       olderThan = mkOption {
         default = 10;
         example = 20;
-        description =
-          "Number of days since data was last scrubbed before it can be scrubbed again.";
+        description = "Number of days since data was last scrubbed before it can be scrubbed again.";
         type = int;
       };
     };
@@ -113,8 +123,7 @@ in
         }
         {
           assertion = builtins.length cfg.contentFiles >= nParity + 1;
-          message =
-            "There must be at least one SnapRAID content file for each SnapRAID parity file plus one.";
+          message = "There must be at least one SnapRAID content file for each SnapRAID parity file plus one.";
         }
       ];
 
@@ -122,19 +131,23 @@ in
         systemPackages = with pkgs; [ snapraid ];
 
         etc."snapraid.conf" = {
-          text = with cfg;
+          text =
+            with cfg;
             let
               prependData = mkPrepend "data ";
               prependContent = mkPrepend "content ";
               prependExclude = mkPrepend "exclude ";
             in
-            concatStringsSep "\n"
-              (map prependData
-                ((mapAttrsToList (name: value: name + " " + value)) dataDisks)
-              ++ zipListsWith (a: b: a + b)
-                ([ "parity " ] ++ map (i: toString i + "-parity ") (range 2 6))
-                parityFiles ++ map prependContent contentFiles
-              ++ map prependExclude exclude) + "\n" + extraConfig;
+            concatStringsSep "\n" (
+              map prependData ((mapAttrsToList (name: value: name + " " + value)) dataDisks)
+              ++ zipListsWith (a: b: a + b) (
+                [ "parity " ] ++ map (i: toString i + "-parity ") (range 2 6)
+              ) parityFiles
+              ++ map prependContent contentFiles
+              ++ map prependExclude exclude
+            )
+            + "\n"
+            + extraConfig;
         };
       };
 
@@ -144,9 +157,7 @@ in
           startAt = scrub.interval;
           serviceConfig = {
             Type = "oneshot";
-            ExecStart = "${pkgs.snapraid}/bin/snapraid scrub -p ${
-              toString scrub.plan
-            } -o ${toString scrub.olderThan}";
+            ExecStart = "${pkgs.snapraid}/bin/snapraid scrub -p ${toString scrub.plan} -o ${toString scrub.olderThan}";
             Nice = 19;
             IOSchedulingPriority = 7;
             CPUSchedulingPolicy = "batch";
@@ -179,9 +190,7 @@ in
               let
                 contentDirs = map dirOf contentFiles;
               in
-              unique (
-                attrValues dataDisks ++ contentDirs
-              );
+              unique (attrValues dataDisks ++ contentDirs);
           };
           unitConfig.After = "snapraid-sync.service";
         };
@@ -212,8 +221,7 @@ in
             SystemCallArchitectures = "native";
             SystemCallFilter = "@system-service";
             SystemCallErrorNumber = "EPERM";
-            CapabilityBoundingSet = "CAP_DAC_OVERRIDE" +
-              lib.optionalString cfg.touchBeforeSync " CAP_FOWNER";
+            CapabilityBoundingSet = "CAP_DAC_OVERRIDE" + lib.optionalString cfg.touchBeforeSync " CAP_FOWNER";
 
             ProtectSystem = "strict";
             ProtectHome = "read-only";
@@ -227,12 +235,8 @@ in
                 # https://www.snapraid.it/manual#7.1
                 splitParityFiles = map (s: splitString "," s) parityFiles;
               in
-              unique (
-                attrValues dataDisks ++ splitParityFiles ++ contentDirs
-              );
-          } // optionalAttrs touchBeforeSync {
-            ExecStartPre = "${pkgs.snapraid}/bin/snapraid touch";
-          };
+              unique (attrValues dataDisks ++ splitParityFiles ++ contentDirs);
+          } // optionalAttrs touchBeforeSync { ExecStartPre = "${pkgs.snapraid}/bin/snapraid touch"; };
         };
       };
     };

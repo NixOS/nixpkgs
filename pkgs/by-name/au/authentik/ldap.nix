@@ -1,4 +1,8 @@
-{ lib, buildGoModule, authentik }:
+{
+  lib,
+  buildGoModule,
+  authentik,
+}:
 
 buildGoModule {
   pname = "authentik-ldap-outpost";

@@ -1,5 +1,5 @@
 # Env to update Gemfile.lock / gemset.nix
-with import <nixpkgs> {};
+with import <nixpkgs> { };
 stdenv.mkDerivation {
   name = "env";
   nativeBuildInputs = [ pkg-config ];

@@ -1,19 +1,20 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, fontconfig
-, freetype
-, libX11
-, libXft
-, ncurses
-, writeText
-, conf ? null
-, patches ? [ ]
-, extraLibs ? [ ]
-, nixosTests
-# update script dependencies
-, gitUpdater
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  fontconfig,
+  freetype,
+  libX11,
+  libXft,
+  ncurses,
+  writeText,
+  conf ? null,
+  patches ? [ ],
+  extraLibs ? [ ],
+  nixosTests,
+  # update script dependencies
+  gitUpdater,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -25,23 +26,24 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-ayFdT0crIdYjLzDyIRF6d34kvP7miVXd77dCZGf5SUs=";
   };
 
-  outputs = [ "out" "terminfo" ];
+  outputs = [
+    "out"
+    "terminfo"
+  ];
 
   inherit patches;
 
-  configFile = lib.optionalString (conf != null)
-    (writeText "config.def.h" conf);
+  configFile = lib.optionalString (conf != null) (writeText "config.def.h" conf);
 
-  postPatch = lib.optionalString (conf != null) "cp ${finalAttrs.configFile} config.def.h"
+  postPatch =
+    lib.optionalString (conf != null) "cp ${finalAttrs.configFile} config.def.h"
     + lib.optionalString stdenv.isDarwin ''
-    substituteInPlace config.mk --replace "-lrt" ""
-  '';
+      substituteInPlace config.mk --replace "-lrt" ""
+    '';
 
   strictDeps = true;
 
-  makeFlags = [
-    "PKG_CONFIG=${stdenv.cc.targetPrefix}pkg-config"
-  ];
+  makeFlags = [ "PKG_CONFIG=${stdenv.cc.targetPrefix}pkg-config" ];
 
   nativeBuildInputs = [
     pkg-config
@@ -64,9 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     tests.test = nixosTests.terminal-emulators.st;
-    updateScript = gitUpdater {
-      url = "git://git.suckless.org/st";
-    };
+    updateScript = gitUpdater { url = "git://git.suckless.org/st"; };
   };
 
   meta = with lib; {

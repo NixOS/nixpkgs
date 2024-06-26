@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, autoreconfHook, libpcap, pcre }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  autoreconfHook,
+  libpcap,
+  pcre,
+}:
 
 stdenv.mkDerivation rec {
   pname = "ngrep";
@@ -7,7 +15,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "jpr5";
     repo = "ngrep";
-    rev = "V${lib.replaceStrings ["."] ["_"] version}";
+    rev = "V${lib.replaceStrings [ "." ] [ "_" ] version}";
     sha256 = "1x2fyd7wdqlj1r76ilal06cl2wmbz0ws6i3ys204sbjh1cj6dcl7";
   };
 
@@ -19,7 +27,10 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [ libpcap pcre ];
+  buildInputs = [
+    libpcap
+    pcre
+  ];
 
   configureFlags = [
     "--enable-ipv6"
@@ -45,7 +56,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/jpr5/ngrep/";
     license = {
-      shortName = "ngrep";  # BSD-style, see README.md and LICENSE
+      shortName = "ngrep"; # BSD-style, see README.md and LICENSE
       url = "https://github.com/jpr5/ngrep/blob/master/LICENSE";
       free = true;
       redistributable = true;

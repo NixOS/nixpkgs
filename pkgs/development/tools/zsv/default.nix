@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, perl, jq }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  perl,
+  jq,
+}:
 
 stdenv.mkDerivation rec {
   pname = "zsv";
@@ -15,9 +21,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ jq ];
 
-  configureFlags = [
-    "--jq-prefix=${jq.lib}"
-  ];
+  configureFlags = [ "--jq-prefix=${jq.lib}" ];
 
   meta = with lib; {
     description = "World's fastest (simd) CSV parser, with an extensible CLI";

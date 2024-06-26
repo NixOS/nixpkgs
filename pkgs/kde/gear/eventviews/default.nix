@@ -1,4 +1,1 @@
-{mkKdeDerivation}:
-mkKdeDerivation {
-  pname = "eventviews";
-}
+{ mkKdeDerivation }: mkKdeDerivation { pname = "eventviews"; }

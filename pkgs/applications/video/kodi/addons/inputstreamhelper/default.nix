@@ -1,4 +1,10 @@
-{ lib, rel, buildKodiAddon, fetchzip, addonUpdateScript }:
+{
+  lib,
+  rel,
+  buildKodiAddon,
+  fetchzip,
+  addonUpdateScript,
+}:
 buildKodiAddon rec {
   pname = "inputstreamhelper";
   namespace = "script.module.inputstreamhelper";
@@ -11,9 +17,7 @@ buildKodiAddon rec {
 
   passthru = {
     pythonPath = "lib";
-    updateScript = addonUpdateScript {
-      attrPath = "kodi.packages.inputstreamhelper";
-    };
+    updateScript = addonUpdateScript { attrPath = "kodi.packages.inputstreamhelper"; };
   };
 
   meta = with lib; {

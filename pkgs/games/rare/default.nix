@@ -1,16 +1,17 @@
-{ lib
-, fetchFromGitHub
-, buildPythonApplication
-, qt5
-, legendary-gl
-, orjson
-, pypresence
-, pyqt5
-, python
-, qtawesome
-, requests
-, setuptools
-, typing-extensions
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonApplication,
+  qt5,
+  legendary-gl,
+  orjson,
+  pypresence,
+  pyqt5,
+  python,
+  qtawesome,
+  requests,
+  setuptools,
+  typing-extensions,
 }:
 
 buildPythonApplication rec {

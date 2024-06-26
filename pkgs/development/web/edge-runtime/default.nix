@@ -1,12 +1,13 @@
-{ stdenv
-, lib
-, callPackage
-, fetchFromGitHub
-, rustPlatform
-, nix-update-script
-, darwin
-, openssl
-, pkg-config
+{
+  stdenv,
+  lib,
+  callPackage,
+  fetchFromGitHub,
+  rustPlatform,
+  nix-update-script,
+  darwin,
+  openssl,
+  pkg-config,
 }:
 
 let
@@ -31,10 +32,21 @@ rustPlatform.buildRustPackage {
     };
   };
 
-  nativeBuildInputs = [ pkg-config rustPlatform.bindgenHook ];
+  nativeBuildInputs = [
+    pkg-config
+    rustPlatform.bindgenHook
+  ];
 
-  buildInputs = lib.optionals stdenv.isLinux [ openssl ]
-    ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ Security CoreFoundation SystemConfiguration ]);
+  buildInputs =
+    lib.optionals stdenv.isLinux [ openssl ]
+    ++ lib.optionals stdenv.isDarwin (
+      with darwin.apple_sdk.frameworks;
+      [
+        Security
+        CoreFoundation
+        SystemConfiguration
+      ]
+    );
 
   # The v8 package will try to download a `librusty_v8.a` release at build time to our read-only filesystem
   # To avoid this we pre-download the file and export it via RUSTY_V8_ARCHIVE

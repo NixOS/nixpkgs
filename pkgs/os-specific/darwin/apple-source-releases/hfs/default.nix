@@ -1,4 +1,10 @@
-{ appleDerivation', stdenv, stdenvNoCC, lib, headersOnly ? true }:
+{
+  appleDerivation',
+  stdenv,
+  stdenvNoCC,
+  lib,
+  headersOnly ? true,
+}:
 
 appleDerivation' (if headersOnly then stdenvNoCC else stdenv) {
   installPhase = lib.optionalString headersOnly ''

@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, gfortran
-, pkg-config
-, blas
-, bzip2
-, cbc
-, clp
-, ipopt
-, lapack
-, libamplsolver
-, zlib
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  gfortran,
+  pkg-config,
+  blas,
+  bzip2,
+  cbc,
+  clp,
+  ipopt,
+  lapack,
+  libamplsolver,
+  zlib,
 }:
 
 assert (!blas.isILP64) && (!lapack.isILP64);

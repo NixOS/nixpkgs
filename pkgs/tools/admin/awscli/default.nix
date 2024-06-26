@@ -1,11 +1,12 @@
-{ lib
-, python3
-, fetchPypi
-, groff
-, less
-, nix-update-script
-, testers
-, awscli
+{
+  lib,
+  python3,
+  fetchPypi,
+  groff,
+  less,
+  nix-update-script,
+  testers,
+  awscli,
 }:
 
 let
@@ -23,9 +24,7 @@ let
       hash = "sha256-96hFvXs3Fcvad+PBEpS9RFMJkcD1qHqfQ+8gtVfEbnc=";
     };
 
-    nativeBuildInputs = [
-      python3.pkgs.pythonRelaxDepsHook
-    ];
+    nativeBuildInputs = [ python3.pkgs.pythonRelaxDepsHook ];
 
     pythonRelaxDeps = [
       # botocore must not be relaxed
@@ -34,9 +33,7 @@ let
       "rsa"
     ];
 
-    build-system = [
-      python3.pkgs.setuptools
-    ];
+    build-system = [ python3.pkgs.setuptools ];
 
     propagatedBuildInputs = with python3.pkgs; [
       botocore
@@ -72,9 +69,7 @@ let
 
     passthru = {
       python = python3; # for aws_shell
-      updateScript = nix-update-script {
-        extraArgs = [ "--version=skip" ];
-      };
+      updateScript = nix-update-script { extraArgs = [ "--version=skip" ]; };
       tests.version = testers.testVersion {
         package = awscli;
         command = "aws --version";

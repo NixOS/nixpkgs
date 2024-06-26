@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, openssl
-, Security
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  openssl,
+  Security,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -20,18 +21,14 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-96eUCg0mzgUFLOKxpwRfzj1jH2Z+aDohBTztvRVWln0=";
 
-  nativeBuildInputs = lib.optionals stdenv.isLinux [
-    pkg-config
-  ];
+  nativeBuildInputs = lib.optionals stdenv.isLinux [ pkg-config ];
 
   OPENSSL_LIB_DIR = "${lib.getLib openssl}/lib";
-  OPENSSL_DIR="${lib.getDev openssl}";
+  OPENSSL_DIR = "${lib.getDev openssl}";
 
-  buildInputs = lib.optionals stdenv.isLinux [
-    openssl
-  ] ++ lib.optionals stdenv.isDarwin [
-    Security
-  ];
+  buildInputs =
+    lib.optionals stdenv.isLinux [ openssl ]
+    ++ lib.optionals stdenv.isDarwin [ Security ];
 
   meta = with lib; {
     description = "HTTP load testing application inspired by Ansible syntax";

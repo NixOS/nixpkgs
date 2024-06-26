@@ -1,4 +1,12 @@
-{ stdenv, fetchurl, libwmf, libpng12, pkg-config, lib }: stdenv.mkDerivation {
+{
+  stdenv,
+  fetchurl,
+  libwmf,
+  libpng12,
+  pkg-config,
+  lib,
+}:
+stdenv.mkDerivation {
   pname = "winhelpcgi";
   version = "1.0-rc3";
 
@@ -10,7 +18,10 @@
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ libwmf libpng12 ];
+  buildInputs = [
+    libwmf
+    libpng12
+  ];
 
   meta = {
     description = "CGI module for Linux, Solaris, MacOS X and AIX to read Windows Help Files";

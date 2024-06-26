@@ -1,7 +1,9 @@
-{ lib, buildDunePackage
-, httpaf
-, faraday-lwt-unix
-, lwt
+{
+  lib,
+  buildDunePackage,
+  httpaf,
+  faraday-lwt-unix,
+  lwt,
 }:
 
 buildDunePackage {

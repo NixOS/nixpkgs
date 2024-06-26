@@ -1,13 +1,25 @@
-{ symlinkJoin, lib, rofi-unwrapped, makeWrapper, wrapGAppsHook3, gdk-pixbuf, hicolor-icon-theme, theme ? null, plugins ? [], symlink-dmenu ? false }:
+{
+  symlinkJoin,
+  lib,
+  rofi-unwrapped,
+  makeWrapper,
+  wrapGAppsHook3,
+  gdk-pixbuf,
+  hicolor-icon-theme,
+  theme ? null,
+  plugins ? [ ],
+  symlink-dmenu ? false,
+}:
 
 symlinkJoin {
   name = "rofi-${rofi-unwrapped.version}";
 
-  paths = [
-    rofi-unwrapped.out
-  ] ++ (lib.forEach plugins (p: p.out));
+  paths = [ rofi-unwrapped.out ] ++ (lib.forEach plugins (p: p.out));
 
-  nativeBuildInputs = [ makeWrapper wrapGAppsHook3 ];
+  nativeBuildInputs = [
+    makeWrapper
+    wrapGAppsHook3
+  ];
   buildInputs = [ gdk-pixbuf ];
 
   preferLocalBuild = true;
@@ -25,9 +37,12 @@ symlinkJoin {
     makeWrapper ${rofi-unwrapped}/bin/rofi $out/bin/rofi \
       ''${gappsWrapperArgs[@]} \
       --prefix XDG_DATA_DIRS : ${hicolor-icon-theme}/share \
-      ${lib.optionalString (plugins != []) ''--prefix XDG_DATA_DIRS : ${lib.concatStringsSep ":" (lib.forEach plugins (p: "${p.out}/share"))}''} \
+      ${
+        lib.optionalString (plugins != [ ])
+          ''--prefix XDG_DATA_DIRS : ${lib.concatStringsSep ":" (lib.forEach plugins (p: "${p.out}/share"))}''
+      } \
       ${lib.optionalString (theme != null) ''--add-flags "-theme ${theme}"''} \
-      ${lib.optionalString (plugins != []) ''--add-flags "-plugin-path $out/lib/rofi"''}
+      ${lib.optionalString (plugins != [ ]) ''--add-flags "-plugin-path $out/lib/rofi"''}
 
     ${lib.optionalString symlink-dmenu "ln -s ${rofi-unwrapped}/bin/rofi $out/bin/dmenu"}
 

@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, pkg-config
-, imagemagick
-, gtk3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  imagemagick,
+  gtk3,
 }:
 
 stdenv.mkDerivation rec {
@@ -24,15 +25,16 @@ stdenv.mkDerivation rec {
     imagemagick
   ];
 
-  buildInputs = [
-    gtk3
-  ];
+  buildInputs = [ gtk3 ];
 
   meta = with lib; {
     description = "USB viewer for Linux";
     license = licenses.gpl2Only;
     homepage = "http://www.kroah.com/linux-usb/";
-    maintainers = with maintainers; [ shamilton h7x4 ];
+    maintainers = with maintainers; [
+      shamilton
+      h7x4
+    ];
     platforms = platforms.linux;
     mainProgram = "usbview";
   };

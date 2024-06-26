@@ -1,3 +1,1 @@
-{
-  example-config = import ./example-config.nix;
-}
+{ example-config = import ./example-config.nix; }

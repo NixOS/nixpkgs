@@ -1,8 +1,18 @@
-{ lib, stdenv, fetchurl, libusb-compat-0_1, libraw1394, dcraw, intltool, perl, v4l-utils }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libusb-compat-0_1,
+  libraw1394,
+  dcraw,
+  intltool,
+  perl,
+  v4l-utils,
+}:
 
 stdenv.mkDerivation rec {
   pname = "libunicap";
-  version="0.9.12";
+  version = "0.9.12";
 
   src = fetchurl {
     url = "https://www.unicap-imaging.org/downloads/${pname}-${version}.tar.gz";
@@ -10,7 +20,13 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ intltool ];
-  buildInputs = [ libusb-compat-0_1 libraw1394 dcraw perl v4l-utils ];
+  buildInputs = [
+    libusb-compat-0_1
+    libraw1394
+    dcraw
+    perl
+    v4l-utils
+  ];
 
   patches = [
     # Debian has a patch that fixes the build.

@@ -1,4 +1,11 @@
-{ stdenv, lib, fetchFromGitHub, rustPlatform, AppKit, installShellFiles }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  AppKit,
+  installShellFiles,
+}:
 
 rustPlatform.buildRustPackage rec {
   # Originally, this package was under the attribute `du-dust`, since `dust` was taken.

@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform
-, libiconv, Security
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  libiconv,
+  Security,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -15,7 +20,10 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-nBSgP30Izskq9RbhVIyqWzZgG5ZWHVdiukldw+Q0rco=";
 
-  buildInputs = lib.optionals stdenv.isDarwin [ libiconv Security ];
+  buildInputs = lib.optionals stdenv.isDarwin [
+    libiconv
+    Security
+  ];
 
   meta = with lib; {
     description = "Code search-and-replace tool";

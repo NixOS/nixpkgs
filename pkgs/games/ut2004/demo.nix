@@ -1,12 +1,20 @@
-{ lib, stdenv, fetchurl }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 
 let
   arch =
-    if stdenv.hostPlatform.system == "x86_64-linux" then "amd64"
-    else if stdenv.hostPlatform.system == "i686-linux" then "x86"
-    else throw "Unsupported architecture";
+    if stdenv.hostPlatform.system == "x86_64-linux" then
+      "amd64"
+    else if stdenv.hostPlatform.system == "i686-linux" then
+      "x86"
+    else
+      throw "Unsupported architecture";
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "ut2004-demo";
   version = "3334";
 
@@ -35,6 +43,9 @@ in stdenv.mkDerivation rec {
     homepage = "http://www.unrealtournament2004.com";
     license = licenses.unfree;
     maintainers = with maintainers; [ abbradar ];
-    platforms = [ "x86_64-linux" "i686-linux" ];
+    platforms = [
+      "x86_64-linux"
+      "i686-linux"
+    ];
   };
 }

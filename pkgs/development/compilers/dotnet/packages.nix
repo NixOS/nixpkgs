@@ -1,13 +1,15 @@
-{ stdenv
-, callPackage
-, vmr
+{
+  stdenv,
+  callPackage,
+  vmr,
 }:
 
 let
-  mkCommon = callPackage ./common.nix {};
+  mkCommon = callPackage ./common.nix { };
   inherit (vmr) targetRid releaseManifest;
 
-in {
+in
+{
   inherit vmr;
   sdk = mkCommon "sdk" rec {
     pname = "dotnet-sdk";
@@ -16,7 +18,11 @@ in {
     src = vmr;
     dontUnpack = true;
 
-    outputs = [ "out" "packages" "artifacts" ];
+    outputs = [
+      "out"
+      "packages"
+      "artifacts"
+    ];
 
     installPhase = ''
       runHook preInstall

@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -25,7 +30,12 @@ let
     ${cfg.extraConfig}
   '';
 
-  ntpFlags = [ "-c" "${configFile}" "-u" "ntp:ntp" ] ++ cfg.extraFlags;
+  ntpFlags = [
+    "-c"
+    "${configFile}"
+    "-u"
+    "ntp:ntp"
+  ] ++ cfg.extraFlags;
 
 in
 
@@ -58,7 +68,14 @@ in
           recommended in section 6.5.1.1.3, answer "No" of
           https://support.ntp.org/Support/AccessRestrictions
         '';
-        default = [ "limited" "kod" "nomodify" "notrap" "noquery" "nopeer" ];
+        default = [
+          "limited"
+          "kod"
+          "nomodify"
+          "notrap"
+          "noquery"
+          "nopeer"
+        ];
       };
 
       restrictSource = mkOption {
@@ -69,7 +86,13 @@ in
           The default flags allow peers to be added by ntpd from configured
           pool(s), but not by other means.
         '';
-        default = [ "limited" "kod" "nomodify" "notrap" "noquery" ];
+        default = [
+          "limited"
+          "kod"
+          "nomodify"
+          "notrap"
+          "noquery"
+        ];
       };
 
       servers = mkOption {
@@ -96,13 +119,12 @@ in
         type = types.listOf types.str;
         description = "Extra flags passed to the ntpd command.";
         example = literalExpression ''[ "--interface=eth0" ]'';
-        default = [];
+        default = [ ];
       };
 
     };
 
   };
-
 
   ###### implementation
 
@@ -113,34 +135,35 @@ in
     environment.systemPackages = [ pkgs.ntp ];
     services.timesyncd.enable = mkForce false;
 
-    systemd.services.systemd-timedated.environment = { SYSTEMD_TIMEDATED_NTP_SERVICES = "ntpd.service"; };
+    systemd.services.systemd-timedated.environment = {
+      SYSTEMD_TIMEDATED_NTP_SERVICES = "ntpd.service";
+    };
 
-    users.users.ntp =
-      { isSystemUser = true;
-        group = "ntp";
-        description = "NTP daemon user";
-        home = stateDir;
+    users.users.ntp = {
+      isSystemUser = true;
+      group = "ntp";
+      description = "NTP daemon user";
+      home = stateDir;
+    };
+    users.groups.ntp = { };
+
+    systemd.services.ntpd = {
+      description = "NTP Daemon";
+
+      wantedBy = [ "multi-user.target" ];
+      wants = [ "time-sync.target" ];
+      before = [ "time-sync.target" ];
+
+      preStart = ''
+        mkdir -m 0755 -p ${stateDir}
+        chown ntp ${stateDir}
+      '';
+
+      serviceConfig = {
+        ExecStart = "@${ntp}/bin/ntpd ntpd -g ${builtins.toString ntpFlags}";
+        Type = "forking";
       };
-    users.groups.ntp = {};
-
-    systemd.services.ntpd =
-      { description = "NTP Daemon";
-
-        wantedBy = [ "multi-user.target" ];
-        wants = [ "time-sync.target" ];
-        before = [ "time-sync.target" ];
-
-        preStart =
-          ''
-            mkdir -m 0755 -p ${stateDir}
-            chown ntp ${stateDir}
-          '';
-
-        serviceConfig = {
-          ExecStart = "@${ntp}/bin/ntpd ntpd -g ${builtins.toString ntpFlags}";
-          Type = "forking";
-        };
-      };
+    };
 
   };
 

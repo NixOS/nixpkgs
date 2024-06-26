@@ -1,14 +1,16 @@
-{ lib
-, clangStdenv
-, fetchFromGitHub
-, autoreconfHook
-, pkg-config
-, libimobiledevice
-, libusb1
-, avahi
-, clang
-, git
-}: let
+{
+  lib,
+  clangStdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  libimobiledevice,
+  libusb1,
+  avahi,
+  clang,
+  git,
+}:
+let
 
   libgeneral = clangStdenv.mkDerivation rec {
     pname = "libgeneral";
@@ -72,9 +74,7 @@ clangStdenv.mkDerivation rec {
     "--with-systemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
   ];
 
-  makeFlags = [
-    "sbindir=${placeholder "out"}/bin"
-  ];
+  makeFlags = [ "sbindir=${placeholder "out"}/bin" ];
 
   meta = with lib; {
     homepage = "https://github.com/tihmstar/usbmuxd2";

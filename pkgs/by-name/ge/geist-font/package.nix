@@ -1,6 +1,7 @@
-{ lib
-, stdenvNoCC
-, fetchzip
+{
+  lib,
+  stdenvNoCC,
+  fetchzip,
 }:
 
 stdenvNoCC.mkDerivation rec {
@@ -36,7 +37,10 @@ stdenvNoCC.mkDerivation rec {
     description = "Font family created by Vercel in collaboration with Basement Studio";
     homepage = "https://vercel.com/font";
     license = lib.licenses.ofl;
-    maintainers = with lib.maintainers; [ eclairevoyant x0ba ];
+    maintainers = with lib.maintainers; [
+      eclairevoyant
+      x0ba
+    ];
     platforms = lib.platforms.all;
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
   };

@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, bash }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  bash,
+}:
 
 # To make use of this derivation, use
 # `programs.zsh.interactiveShellInit = "source ${pkgs.zsh-nix-shell}/share/zsh-nix-shell/nix-shell.plugin.zsh";`

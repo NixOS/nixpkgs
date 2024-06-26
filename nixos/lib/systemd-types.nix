@@ -1,4 +1,8 @@
-{ lib, systemdUtils, pkgs }:
+{
+  lib,
+  systemdUtils,
+  pkgs,
+}:
 
 let
   inherit (systemdUtils.lib)
@@ -54,67 +58,150 @@ let
 in
 
 {
-  units = attrsOf (submodule ({ name, config, ... }: {
-    options = concreteUnitOptions;
-    config = {
-      name = mkDefault name;
-      unit = mkDefault (makeUnit name config);
-    };
-  }));
+  units = attrsOf (
+    submodule (
+      { name, config, ... }:
+      {
+        options = concreteUnitOptions;
+        config = {
+          name = mkDefault name;
+          unit = mkDefault (makeUnit name config);
+        };
+      }
+    )
+  );
 
-  services = attrsOf (submodule [ stage2ServiceOptions unitConfig stage2ServiceConfig ]);
-  initrdServices = attrsOf (submodule [ stage1ServiceOptions unitConfig stage1ServiceConfig ]);
+  services = attrsOf (submodule [
+    stage2ServiceOptions
+    unitConfig
+    stage2ServiceConfig
+  ]);
+  initrdServices = attrsOf (submodule [
+    stage1ServiceOptions
+    unitConfig
+    stage1ServiceConfig
+  ]);
 
-  targets = attrsOf (submodule [ stage2CommonUnitOptions unitConfig targetConfig ]);
-  initrdTargets = attrsOf (submodule [ stage1CommonUnitOptions unitConfig targetConfig ]);
+  targets = attrsOf (submodule [
+    stage2CommonUnitOptions
+    unitConfig
+    targetConfig
+  ]);
+  initrdTargets = attrsOf (submodule [
+    stage1CommonUnitOptions
+    unitConfig
+    targetConfig
+  ]);
 
-  sockets = attrsOf (submodule [ stage2SocketOptions unitConfig socketConfig]);
-  initrdSockets = attrsOf (submodule [ stage1SocketOptions unitConfig socketConfig ]);
+  sockets = attrsOf (submodule [
+    stage2SocketOptions
+    unitConfig
+    socketConfig
+  ]);
+  initrdSockets = attrsOf (submodule [
+    stage1SocketOptions
+    unitConfig
+    socketConfig
+  ]);
 
-  timers = attrsOf (submodule [ stage2TimerOptions unitConfig timerConfig ]);
-  initrdTimers = attrsOf (submodule [ stage1TimerOptions unitConfig timerConfig ]);
+  timers = attrsOf (submodule [
+    stage2TimerOptions
+    unitConfig
+    timerConfig
+  ]);
+  initrdTimers = attrsOf (submodule [
+    stage1TimerOptions
+    unitConfig
+    timerConfig
+  ]);
 
-  paths = attrsOf (submodule [ stage2PathOptions unitConfig pathConfig ]);
-  initrdPaths = attrsOf (submodule [ stage1PathOptions unitConfig pathConfig ]);
+  paths = attrsOf (submodule [
+    stage2PathOptions
+    unitConfig
+    pathConfig
+  ]);
+  initrdPaths = attrsOf (submodule [
+    stage1PathOptions
+    unitConfig
+    pathConfig
+  ]);
 
-  slices = attrsOf (submodule [ stage2SliceOptions unitConfig sliceConfig ]);
-  initrdSlices = attrsOf (submodule [ stage1SliceOptions unitConfig sliceConfig ]);
+  slices = attrsOf (submodule [
+    stage2SliceOptions
+    unitConfig
+    sliceConfig
+  ]);
+  initrdSlices = attrsOf (submodule [
+    stage1SliceOptions
+    unitConfig
+    sliceConfig
+  ]);
 
-  mounts = listOf (submodule [ stage2MountOptions unitConfig mountConfig ]);
-  initrdMounts = listOf (submodule [ stage1MountOptions unitConfig mountConfig ]);
+  mounts = listOf (submodule [
+    stage2MountOptions
+    unitConfig
+    mountConfig
+  ]);
+  initrdMounts = listOf (submodule [
+    stage1MountOptions
+    unitConfig
+    mountConfig
+  ]);
 
-  automounts = listOf (submodule [ stage2AutomountOptions unitConfig automountConfig ]);
-  initrdAutomounts = attrsOf (submodule [ stage1AutomountOptions unitConfig automountConfig ]);
+  automounts = listOf (submodule [
+    stage2AutomountOptions
+    unitConfig
+    automountConfig
+  ]);
+  initrdAutomounts = attrsOf (submodule [
+    stage1AutomountOptions
+    unitConfig
+    automountConfig
+  ]);
 
-  initrdContents = attrsOf (submodule ({ config, options, name, ... }: {
-    options = {
-      enable = (mkEnableOption "copying of this file and symlinking it") // { default = true; };
+  initrdContents = attrsOf (
+    submodule (
+      {
+        config,
+        options,
+        name,
+        ...
+      }:
+      {
+        options = {
+          enable = (mkEnableOption "copying of this file and symlinking it") // {
+            default = true;
+          };
 
-      target = mkOption {
-        type = path;
-        description = ''
-          Path of the symlink.
-        '';
-        default = name;
-      };
+          target = mkOption {
+            type = path;
+            description = ''
+              Path of the symlink.
+            '';
+            default = name;
+          };
 
-      text = mkOption {
-        default = null;
-        type = nullOr lines;
-        description = "Text of the file.";
-      };
+          text = mkOption {
+            default = null;
+            type = nullOr lines;
+            description = "Text of the file.";
+          };
 
-      source = mkOption {
-        type = path;
-        description = "Path of the source file.";
-      };
-    };
+          source = mkOption {
+            type = path;
+            description = "Path of the source file.";
+          };
+        };
 
-    config = {
-      source = mkIf (config.text != null) (
-        let name' = "initrd-" + baseNameOf name;
-        in mkDerivedConfig options.text (pkgs.writeText name')
-      );
-    };
-  }));
+        config = {
+          source = mkIf (config.text != null) (
+            let
+              name' = "initrd-" + baseNameOf name;
+            in
+            mkDerivedConfig options.text (pkgs.writeText name')
+          );
+        };
+      }
+    )
+  );
 }

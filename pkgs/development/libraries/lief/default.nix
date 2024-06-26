@@ -1,13 +1,19 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, python
-, cmake
-, ninja
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  python,
+  cmake,
+  ninja,
 }:
 
 let
-  pyEnv = python.withPackages (ps: [ ps.setuptools ps.tomli ps.pip ps.setuptools ]);
+  pyEnv = python.withPackages (ps: [
+    ps.setuptools
+    ps.tomli
+    ps.pip
+    ps.setuptools
+  ]);
 in
 stdenv.mkDerivation rec {
   pname = "lief";
@@ -20,7 +26,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-lH4SqwPB2Jp/wUI2Cll67PQbHbwMqpNuLy/ei8roiHg=";
   };
 
-  outputs = [ "out" "py" ];
+  outputs = [
+    "out"
+    "py"
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -29,11 +38,15 @@ stdenv.mkDerivation rec {
 
   # Not a propagatedBuildInput because only the $py output needs it; $out is
   # just the library itself (e.g. C/C++ headers).
-  buildInputs = [
-    python
-  ];
+  buildInputs = [ python ];
 
-  env.CXXFLAGS = toString (lib.optional stdenv.isDarwin [ "-faligned-allocation" "-fno-aligned-new" "-fvisibility=hidden" ]);
+  env.CXXFLAGS = toString (
+    lib.optional stdenv.isDarwin [
+      "-faligned-allocation"
+      "-fno-aligned-new"
+      "-fvisibility=hidden"
+    ]
+  );
 
   postBuild = ''
     pushd ../api/python
@@ -52,6 +65,9 @@ stdenv.mkDerivation rec {
     homepage = "https://lief.quarkslab.com/";
     license = [ licenses.asl20 ];
     platforms = with platforms; linux ++ darwin;
-    maintainers = with maintainers; [ lassulus genericnerdyusername ];
+    maintainers = with maintainers; [
+      lassulus
+      genericnerdyusername
+    ];
   };
 }

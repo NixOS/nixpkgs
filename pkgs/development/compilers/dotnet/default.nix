@@ -1,13 +1,18 @@
 /*
-How to combine packages for use in development:
-dotnetCombined = with dotnetCorePackages; combinePackages [ sdk_6_0 aspnetcore_7_0 ];
+  How to combine packages for use in development:
+  dotnetCombined = with dotnetCorePackages; combinePackages [ sdk_6_0 aspnetcore_7_0 ];
 
-Hashes and urls are retrieved from:
-https://dotnet.microsoft.com/download/dotnet
+  Hashes and urls are retrieved from:
+  https://dotnet.microsoft.com/download/dotnet
 */
-{ lib, config, callPackage, recurseIntoAttrs }:
+{
+  lib,
+  config,
+  callPackage,
+  recurseIntoAttrs,
+}:
 let
-  buildDotnet = attrs: callPackage (import ./build-dotnet.nix attrs) {};
+  buildDotnet = attrs: callPackage (import ./build-dotnet.nix attrs) { };
   buildAttrs = {
     buildAspNetCore = attrs: buildDotnet (attrs // { type = "aspnetcore"; });
     buildNetRuntime = attrs: buildDotnet (attrs // { type = "runtime"; });
@@ -30,20 +35,26 @@ let
   };
 
   # Convert a "stdenv.hostPlatform.system" to a dotnet RID
-  systemToDotnetRid = system: runtimeIdentifierMap.${system} or (throw "unsupported platform ${system}");
+  systemToDotnetRid =
+    system: runtimeIdentifierMap.${system} or (throw "unsupported platform ${system}");
 in
 {
   inherit systemToDotnetRid;
 
-  combinePackages = attrs: callPackage (import ./combine-packages.nix attrs) {};
+  combinePackages = attrs: callPackage (import ./combine-packages.nix attrs) { };
 
   dotnet_8 = recurseIntoAttrs (callPackage ./8 { bootstrapSdk = dotnet_8_0.sdk_8_0_1xx; });
-  dotnet_9 = recurseIntoAttrs (callPackage ./9 {});
-} // lib.optionalAttrs config.allowAliases {
+  dotnet_9 = recurseIntoAttrs (callPackage ./9 { });
+}
+// lib.optionalAttrs config.allowAliases {
   # EOL
   sdk_2_1 = throw "Dotnet SDK 2.1 is EOL, please use 6.0 (LTS) or 7.0 (Current)";
   sdk_2_2 = throw "Dotnet SDK 2.2 is EOL, please use 6.0 (LTS) or 7.0 (Current)";
   sdk_3_0 = throw "Dotnet SDK 3.0 is EOL, please use 6.0 (LTS) or 7.0 (Current)";
   sdk_3_1 = throw "Dotnet SDK 3.1 is EOL, please use 6.0 (LTS) or 7.0 (Current)";
   sdk_5_0 = throw "Dotnet SDK 5.0 is EOL, please use 6.0 (LTS) or 7.0 (Current)";
-} // dotnet_6_0 // dotnet_7_0 // dotnet_8_0 // dotnet_9_0
+}
+// dotnet_6_0
+// dotnet_7_0
+// dotnet_8_0
+// dotnet_9_0

@@ -1,4 +1,11 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles, testers, rhoas }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  testers,
+  rhoas,
+}:
 
 buildGoModule rec {
   pname = "rhoas";
@@ -19,7 +26,7 @@ buildGoModule rec {
     "-X github.com/redhat-developer/app-services-cli/internal/build.Version=${version}"
   ];
 
-  nativeBuildInputs = [installShellFiles];
+  nativeBuildInputs = [ installShellFiles ];
 
   # Networking tests fail.
   doCheck = false;
@@ -41,7 +48,7 @@ buildGoModule rec {
     license = licenses.asl20;
     homepage = "https://github.com/redhat-developer/app-services-cli";
     changelog = "https://github.com/redhat-developer/app-services-cli/releases/v${version}";
-    maintainers = with maintainers; [stehessel];
+    maintainers = with maintainers; [ stehessel ];
     mainProgram = "rhoas";
   };
 }

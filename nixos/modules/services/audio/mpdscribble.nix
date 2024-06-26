@@ -1,4 +1,10 @@
-{ config, lib, options, pkgs, ... }:
+{
+  config,
+  lib,
+  options,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -58,21 +64,26 @@ let
 
   cfgFile = "/run/mpdscribble/mpdscribble.conf";
 
-  replaceSecret = secretFile: placeholder: targetFile:
-    optionalString (secretFile != null) ''
-      ${pkgs.replace-secret}/bin/replace-secret '${placeholder}' '${secretFile}' '${targetFile}' '';
+  replaceSecret =
+    secretFile: placeholder: targetFile:
+    optionalString (
+      secretFile != null
+    ) ''${pkgs.replace-secret}/bin/replace-secret '${placeholder}' '${secretFile}' '${targetFile}' '';
 
   preStart = pkgs.writeShellScript "mpdscribble-pre-start" ''
     cp -f "${cfgTemplate}" "${cfgFile}"
     ${replaceSecret cfg.passwordFile "{{MPD_PASSWORD}}" cfgFile}
-    ${concatStringsSep "\n" (mapAttrsToList (secname: cfg:
-      replaceSecret cfg.passwordFile "{{${secname}_PASSWORD}}" cfgFile)
-      cfg.endpoints)}
+    ${concatStringsSep "\n" (
+      mapAttrsToList (
+        secname: cfg: replaceSecret cfg.passwordFile "{{${secname}_PASSWORD}}" cfgFile
+      ) cfg.endpoints
+    )}
   '';
 
   localMpd = (cfg.host == "localhost" || cfg.host == "127.0.0.1");
 
-in {
+in
+{
   ###### interface
 
   options.services.mpdscribble = {
@@ -105,10 +116,9 @@ in {
     };
 
     host = mkOption {
-      default = (if mpdCfg.network.listenAddress != "any" then
-        mpdCfg.network.listenAddress
-      else
-        "localhost");
+      default = (
+        if mpdCfg.network.listenAddress != "any" then mpdCfg.network.listenAddress else "localhost"
+      );
       defaultText = literalExpression ''
         if config.${mpdOpt.network.listenAddress} != "any"
         then config.${mpdOpt.network.listenAddress}
@@ -121,13 +131,12 @@ in {
     };
 
     passwordFile = mkOption {
-      default = if localMpd then
-        (findFirst
-          (c: any (x: x == "read") c.permissions)
-          { passwordFile = null; }
-          mpdCfg.credentials).passwordFile
-      else
-        null;
+      default =
+        if localMpd then
+          (findFirst (c: any (x: x == "read") c.permissions) { passwordFile = null; } mpdCfg.credentials)
+          .passwordFile
+        else
+          null;
       defaultText = literalMD ''
         The first password file with read access configured for MPD when using a local instance,
         otherwise `null`.
@@ -150,27 +159,32 @@ in {
     };
 
     endpoints = mkOption {
-      type = (let
-        endpoint = { name, ... }: {
-          options = {
-            url = mkOption {
-              type = types.str;
-              default = endpointUrls.${name} or "";
-              description = "The url endpoint where the scrobble API is listening.";
+      type = (
+        let
+          endpoint =
+            { name, ... }:
+            {
+              options = {
+                url = mkOption {
+                  type = types.str;
+                  default = endpointUrls.${name} or "";
+                  description = "The url endpoint where the scrobble API is listening.";
+                };
+                username = mkOption {
+                  type = types.str;
+                  description = ''
+                    Username for the scrobble service.
+                  '';
+                };
+                passwordFile = mkOption {
+                  type = types.nullOr types.str;
+                  description = "File containing the password, either as MD5SUM or cleartext.";
+                };
+              };
             };
-            username = mkOption {
-              type = types.str;
-              description = ''
-                Username for the scrobble service.
-              '';
-            };
-            passwordFile = mkOption {
-              type = types.nullOr types.str;
-              description = "File containing the password, either as MD5SUM or cleartext.";
-            };
-          };
-        };
-      in types.attrsOf (types.submodule endpoint));
+        in
+        types.attrsOf (types.submodule endpoint)
+      );
       default = { };
       example = {
         "last.fm" = {
@@ -180,9 +194,7 @@ in {
       };
       description = ''
         Endpoints to scrobble to.
-        If the endpoint is one of "${
-          concatStringsSep "\", \"" (attrNames endpointUrls)
-        }" the url is set automatically.
+        If the endpoint is one of "${concatStringsSep "\", \"" (attrNames endpointUrls)}" the url is set automatically.
       '';
     };
 
@@ -202,8 +214,7 @@ in {
         RuntimeDirectoryMode = "700";
         # TODO use LoadCredential= instead of running preStart with full privileges?
         ExecStartPre = "+${preStart}";
-        ExecStart =
-          "${pkgs.mpdscribble}/bin/mpdscribble --no-daemon --conf ${cfgFile}";
+        ExecStart = "${pkgs.mpdscribble}/bin/mpdscribble --no-daemon --conf ${cfgFile}";
       };
     };
   };

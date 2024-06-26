@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, mlton, futhark }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  mlton,
+  futhark,
+}:
 
 stdenv.mkDerivation rec {
   pname = "smlfut";
@@ -17,7 +23,7 @@ stdenv.mkDerivation rec {
 
   env.MLCOMP = "mlton";
 
-  installFlags = ["PREFIX=$(out)"];
+  installFlags = [ "PREFIX=$(out)" ];
 
   doCheck = true;
 

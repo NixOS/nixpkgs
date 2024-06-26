@@ -1,7 +1,8 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, unstableGitUpdater
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  unstableGitUpdater,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -15,12 +16,13 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-AQuZ0BOl1iP5Nub+tVwctlE2tfJe4Sq/KDGkjwBbsV4=";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
   outputDoc = "dev"; # single tiny man3 page
 
-  passthru.updateScript = unstableGitUpdater {
-    tagPrefix = "libz-";
-  };
+  passthru.updateScript = unstableGitUpdater { tagPrefix = "libz-"; };
 
   meta = {
     homepage = "https://sortix.org/libz/";

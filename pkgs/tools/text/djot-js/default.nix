@@ -1,7 +1,8 @@
-{ lib
-, buildNpmPackage
-, fetchFromGitHub
-, installShellFiles
+{
+  lib,
+  buildNpmPackage,
+  fetchFromGitHub,
+  installShellFiles,
 }:
 
 buildNpmPackage rec {
@@ -17,9 +18,7 @@ buildNpmPackage rec {
 
   npmDepsHash = "sha256-FjrjwhVv2WRjbEga9w37lwz7KYgTTHGsoqt496Uq/0c=";
 
-  nativeBuildInputs = [
-    installShellFiles
-  ];
+  nativeBuildInputs = [ installShellFiles ];
 
   postInstall = ''
     installManPage doc/djot.1

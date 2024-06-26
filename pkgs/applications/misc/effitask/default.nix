@@ -1,10 +1,11 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, openssl
-, gtk3
-, stdenv
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  openssl,
+  gtk3,
+  stdenv,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -22,7 +23,10 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ openssl gtk3 ];
+  buildInputs = [
+    openssl
+    gtk3
+  ];
 
   # default installPhase don't install assets
   installPhase = ''

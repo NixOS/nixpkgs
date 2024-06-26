@@ -1,9 +1,10 @@
-{ lib
-, python3
-, fetchFromGitHub
-, fetchpatch
-, which
-, acpica-tools
+{
+  lib,
+  python3,
+  fetchFromGitHub,
+  fetchpatch,
+  which,
+  acpica-tools,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -38,18 +39,20 @@ python3.pkgs.buildPythonApplication rec {
 
   nativeBuildInputs = [ acpica-tools ];
 
-  propagatedBuildInputs = (with python3.pkgs; [
-    setuptools
-    ecdsa
-    cstruct
-    pyelftools
-    pytest
-    cached-property
-    frozendict
-  ]) ++ [
-    acpica-tools
-    which
-  ];
+  propagatedBuildInputs =
+    (with python3.pkgs; [
+      setuptools
+      ecdsa
+      cstruct
+      pyelftools
+      pytest
+      cached-property
+      frozendict
+    ])
+    ++ [
+      acpica-tools
+      which
+    ];
 
   postInstall = ''
     mkdir -p $out/share/igvm-tooling/acpi/acpi-clh
@@ -62,7 +65,10 @@ python3.pkgs.buildPythonApplication rec {
     description = "IGVM Image Generator";
     homepage = "https://github.com/microsoft/igvm-tooling";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ malt3 katexochen ];
+    maintainers = with lib.maintainers; [
+      malt3
+      katexochen
+    ];
     changelog = "https://github.com/microsoft/igvm-tooling/releases/tag/igvm-${version}";
     mainProgram = "igvmgen";
     platforms = lib.platforms.all;

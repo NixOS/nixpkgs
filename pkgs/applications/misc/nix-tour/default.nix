@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, electron
-, runtimeShell
-, makeWrapper
-, copyDesktopItems
-, makeDesktopItem
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  electron,
+  runtimeShell,
+  makeWrapper,
+  copyDesktopItems,
+  makeDesktopItem,
 }:
 
 stdenv.mkDerivation rec {
@@ -19,7 +20,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-BhQz59wkwwY0ShXzqUD6MQl4NE/jUik5RbLzseEc5Bc=";
   };
 
-  nativeBuildInputs = [ makeWrapper copyDesktopItems ];
+  nativeBuildInputs = [
+    makeWrapper
+    copyDesktopItems
+  ];
   buildInputs = [ electron ];
 
   installPhase = ''
@@ -34,9 +38,11 @@ stdenv.mkDerivation rec {
       name = pname;
       desktopName = "Tour of Nix";
       genericName = "Tour of Nix";
-      comment =
-        "Interactive programming guide dedicated to the nix programming language";
-      categories = [ "Development" "Documentation" ];
+      comment = "Interactive programming guide dedicated to the nix programming language";
+      categories = [
+        "Development"
+        "Documentation"
+      ];
       exec = "nix-tour";
     })
   ];
@@ -45,7 +51,10 @@ stdenv.mkDerivation rec {
     description = "'the tour of nix' from nixcloud.io/tour as offline version";
     homepage = "https://nixcloud.io/tour";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ qknight yuu ];
+    maintainers = with maintainers; [
+      qknight
+      yuu
+    ];
     mainProgram = "nix-tour";
   };
 }

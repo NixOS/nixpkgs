@@ -1,7 +1,9 @@
 { stdenv, lib }:
-{ version ? "11.1"
-, allowHigher ? false
-, xcodeBaseDir ? "/Applications/Xcode.app" }:
+{
+  version ? "11.1",
+  allowHigher ? false,
+  xcodeBaseDir ? "/Applications/Xcode.app",
+}:
 
 assert stdenv.isDarwin;
 
@@ -30,11 +32,16 @@ stdenv.mkDerivation {
 
     # Check if we have the xcodebuild version that we want
     currVer=$($out/bin/xcodebuild -version | head -n1)
-    ${if allowHigher then ''
-    if [ -z "$(printf '%s\n' "${version}" "$currVer" | sort -V | head -n1)""" != "${version}" ]
-    '' else ''
-    if [ -z "$(echo $currVer | grep -x 'Xcode ${version}')" ]
-    ''}
+    ${
+      if allowHigher then
+        ''
+          if [ -z "$(printf '%s\n' "${version}" "$currVer" | sort -V | head -n1)""" != "${version}" ]
+        ''
+      else
+        ''
+          if [ -z "$(echo $currVer | grep -x 'Xcode ${version}')" ]
+        ''
+    }
     then
         echo "We require xcodebuild version${if allowHigher then " or higher" else ""}: ${version}"
         echo "Instead what was found: $currVer"

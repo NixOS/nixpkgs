@@ -1,4 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, makeWrapper, ffmpeg, imagemagick, dzen2, xorg }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  makeWrapper,
+  ffmpeg,
+  imagemagick,
+  dzen2,
+  xorg,
+}:
 
 stdenv.mkDerivation {
   pname = "xscast-unstable";
@@ -21,7 +30,16 @@ stdenv.mkDerivation {
     patchShebangs $out/bin
 
     wrapProgram "$out/bin/xscast" \
-      --prefix PATH : ${lib.makeBinPath [ ffmpeg dzen2 xorg.xwininfo xorg.xinput xorg.xmodmap imagemagick ]}
+      --prefix PATH : ${
+        lib.makeBinPath [
+          ffmpeg
+          dzen2
+          xorg.xwininfo
+          xorg.xinput
+          xorg.xmodmap
+          imagemagick
+        ]
+      }
 
     runHook postInstall
   '';

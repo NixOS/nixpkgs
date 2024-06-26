@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchurl, xorg }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  xorg,
+}:
 
 stdenv.mkDerivation rec {
   pname = "x2vnc";
@@ -10,8 +15,11 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = with xorg; [
-      libX11 xorgproto libXext libXrandr
-    ];
+    libX11
+    xorgproto
+    libXext
+    libXrandr
+  ];
 
   hardeningDisable = [ "format" ];
 

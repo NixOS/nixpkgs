@@ -3,8 +3,7 @@
   globalTimeout = 5;
 
   nodes = {
-    machine = ({ pkgs, ... }: {
-    });
+    machine = ({ pkgs, ... }: { });
   };
 
   testScript = ''

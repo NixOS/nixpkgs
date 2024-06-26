@@ -6,6 +6,6 @@
 mkKdeDerivation {
   pname = "powerdevil";
 
-  extraNativeBuildInputs = [pkg-config];
-  extraBuildInputs = [libcap];
+  extraNativeBuildInputs = [ pkg-config ];
+  extraBuildInputs = [ libcap ];
 }

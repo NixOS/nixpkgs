@@ -1,4 +1,11 @@
-{ stdenv, lib, fetchFromGitHub, autoreconfHook, pam, qrencode }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  autoreconfHook,
+  pam,
+  qrencode,
+}:
 
 stdenv.mkDerivation rec {
   pname = "google-authenticator-libpam";

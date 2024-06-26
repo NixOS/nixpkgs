@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -23,7 +28,5 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
-    services.udev.packages = [ cfg.package ];
-  };
+  config = mkIf cfg.enable { services.udev.packages = [ cfg.package ]; };
 }

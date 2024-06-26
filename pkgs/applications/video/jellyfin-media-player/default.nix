@@ -1,27 +1,28 @@
-{ lib
-, fetchFromGitHub
-, mkDerivation
-, stdenv
-, Cocoa
-, CoreAudio
-, CoreFoundation
-, MediaPlayer
-, SDL2
-, cmake
-, libGL
-, libX11
-, libXrandr
-, libvdpau
-, mpv
-, ninja
-, pkg-config
-, python3
-, qtbase
-, qtwayland
-, qtwebchannel
-, qtwebengine
-, qtx11extras
-, withDbus ? stdenv.isLinux
+{
+  lib,
+  fetchFromGitHub,
+  mkDerivation,
+  stdenv,
+  Cocoa,
+  CoreAudio,
+  CoreFoundation,
+  MediaPlayer,
+  SDL2,
+  cmake,
+  libGL,
+  libX11,
+  libXrandr,
+  libvdpau,
+  mpv,
+  ninja,
+  pkg-config,
+  python3,
+  qtbase,
+  qtwayland,
+  qtwebchannel,
+  qtwebengine,
+  qtx11extras,
+  withDbus ? stdenv.isLinux,
 }:
 
 mkDerivation rec {
@@ -40,25 +41,26 @@ mkDerivation rec {
     ./disable-update-notifications.patch
   ];
 
-  buildInputs = [
-    SDL2
-    libGL
-    libX11
-    libXrandr
-    libvdpau
-    mpv
-    qtbase
-    qtwebchannel
-    qtwebengine
-    qtx11extras
-  ] ++ lib.optionals stdenv.isLinux [
-    qtwayland
-  ] ++ lib.optionals stdenv.isDarwin [
-    Cocoa
-    CoreAudio
-    CoreFoundation
-    MediaPlayer
-  ];
+  buildInputs =
+    [
+      SDL2
+      libGL
+      libX11
+      libXrandr
+      libvdpau
+      mpv
+      qtbase
+      qtwebchannel
+      qtwebengine
+      qtx11extras
+    ]
+    ++ lib.optionals stdenv.isLinux [ qtwayland ]
+    ++ lib.optionals stdenv.isDarwin [
+      Cocoa
+      CoreAudio
+      CoreFoundation
+      MediaPlayer
+    ];
 
   nativeBuildInputs = [
     cmake
@@ -70,9 +72,7 @@ mkDerivation rec {
   cmakeFlags = [
     "-DQTROOT=${qtbase}"
     "-GNinja"
-  ] ++ lib.optionals (!withDbus) [
-    "-DLINUX_X11POWER=ON"
-  ];
+  ] ++ lib.optionals (!withDbus) [ "-DLINUX_X11POWER=ON" ];
 
   postInstall = lib.optionalString stdenv.isDarwin ''
     mkdir -p $out/bin $out/Applications
@@ -88,9 +88,19 @@ mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/jellyfin/jellyfin-media-player";
     description = "Jellyfin Desktop Client based on Plex Media Player";
-    license = with licenses; [ gpl2Only mit ];
-    platforms = [ "aarch64-linux" "x86_64-linux" "x86_64-darwin" ];
-    maintainers = with maintainers; [ jojosch kranzes ];
+    license = with licenses; [
+      gpl2Only
+      mit
+    ];
+    platforms = [
+      "aarch64-linux"
+      "x86_64-linux"
+      "x86_64-darwin"
+    ];
+    maintainers = with maintainers; [
+      jojosch
+      kranzes
+    ];
     mainProgram = "jellyfinmediaplayer";
   };
 }

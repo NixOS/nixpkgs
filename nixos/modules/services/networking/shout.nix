@@ -1,4 +1,9 @@
-{ pkgs, lib, config, ... }:
+{
+  pkgs,
+  lib,
+  config,
+  ...
+}:
 
 with lib;
 
@@ -11,17 +16,22 @@ let
     mv config.js $out
   '';
 
-  finalConfigFile = if (cfg.configFile != null) then cfg.configFile else ''
-    var _ = require('${pkgs.shout}/lib/node_modules/shout/node_modules/lodash')
+  finalConfigFile =
+    if (cfg.configFile != null) then
+      cfg.configFile
+    else
+      ''
+        var _ = require('${pkgs.shout}/lib/node_modules/shout/node_modules/lodash')
 
-    module.exports = _.merge(
-      {},
-      require('${defaultConfig}'),
-      ${builtins.toJSON cfg.config}
-    )
-  '';
+        module.exports = _.merge(
+          {},
+          require('${defaultConfig}'),
+          ${builtins.toJSON cfg.config}
+        )
+      '';
 
-in {
+in
+{
   options.services.shout = {
     enable = mkEnableOption "Shout web IRC client";
 
@@ -60,7 +70,7 @@ in {
     };
 
     config = mkOption {
-      default = {};
+      default = { };
       type = types.attrs;
       example = {
         displayNetwork = false;
@@ -89,7 +99,7 @@ in {
       home = shoutHome;
       createHome = true;
     };
-    users.groups.shout = {};
+    users.groups.shout = { };
 
     systemd.services.shout = {
       description = "Shout web IRC client";
@@ -100,9 +110,12 @@ in {
       script = concatStringsSep " " [
         "${pkgs.shout}/bin/shout"
         (if cfg.private then "--private" else "--public")
-        "--port" (toString cfg.port)
-        "--host" (toString cfg.listenAddress)
-        "--home" shoutHome
+        "--port"
+        (toString cfg.port)
+        "--host"
+        (toString cfg.listenAddress)
+        "--home"
+        shoutHome
       ];
       serviceConfig = {
         User = "shout";

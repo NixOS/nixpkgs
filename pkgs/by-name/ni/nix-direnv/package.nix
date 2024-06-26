@@ -1,4 +1,11 @@
-{ resholve, lib, coreutils, direnv, nix, fetchFromGitHub }:
+{
+  resholve,
+  lib,
+  coreutils,
+  direnv,
+  nix,
+  fetchFromGitHub,
+}:
 
 # resholve does not yet support `finalAttrs` call pattern hence `rec`
 # https://github.com/abathur/resholve/issues/107
@@ -28,7 +35,10 @@ resholve.mkDerivation rec {
     default = {
       scripts = [ "share/nix-direnv/direnvrc" ];
       interpreter = "none";
-      inputs = [ coreutils nix ];
+      inputs = [
+        coreutils
+        nix
+      ];
       fake = {
         builtin = [
           "PATH_add"
@@ -57,9 +67,12 @@ resholve.mkDerivation rec {
 
   meta = {
     description = "Fast, persistent use_nix implementation for direnv";
-    homepage    = "https://github.com/nix-community/nix-direnv";
-    license     = lib.licenses.mit;
-    platforms   = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ mic92 bbenne10 ];
+    homepage = "https://github.com/nix-community/nix-direnv";
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
+      mic92
+      bbenne10
+    ];
   };
 }

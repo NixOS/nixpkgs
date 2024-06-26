@@ -1,4 +1,8 @@
-{ lib, python3, fetchPypi }:
+{
+  lib,
+  python3,
+  fetchPypi,
+}:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "kerbrute";
@@ -12,9 +16,7 @@ python3.pkgs.buildPythonApplication rec {
   # This package does not have any tests
   doCheck = false;
 
-  propagatedBuildInputs = with python3.pkgs; [
-    impacket
-  ];
+  propagatedBuildInputs = with python3.pkgs; [ impacket ];
 
   installChechPhase = ''
     $out/bin/kerbrute --version

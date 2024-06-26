@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, poppler
-, fetchpatch
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  poppler,
+  fetchpatch,
 }:
 
 stdenv.mkDerivation rec {

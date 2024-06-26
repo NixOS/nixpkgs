@@ -1,4 +1,10 @@
-{ config, lib, pkgs, ... }: with lib;
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib;
 
 let
   cfg = config.services.dnscrypt-proxy2;
@@ -24,7 +30,7 @@ in
         }
       '';
       type = types.attrs;
-      default = {};
+      default = { };
     };
 
     upstreamDefaults = mkOption {
@@ -44,18 +50,26 @@ in
       '';
       example = "/etc/dnscrypt-proxy/dnscrypt-proxy.toml";
       type = types.path;
-      default = pkgs.runCommand "dnscrypt-proxy.toml" {
-        json = builtins.toJSON cfg.settings;
-        passAsFile = [ "json" ];
-      } ''
-        ${if cfg.upstreamDefaults then ''
-          ${pkgs.buildPackages.remarshal}/bin/toml2json ${pkgs.dnscrypt-proxy.src}/dnscrypt-proxy/example-dnscrypt-proxy.toml > example.json
-          ${pkgs.buildPackages.jq}/bin/jq --slurp add example.json $jsonPath > config.json # merges the two
-        '' else ''
-          cp $jsonPath config.json
-        ''}
-        ${pkgs.buildPackages.remarshal}/bin/json2toml < config.json > $out
-      '';
+      default =
+        pkgs.runCommand "dnscrypt-proxy.toml"
+          {
+            json = builtins.toJSON cfg.settings;
+            passAsFile = [ "json" ];
+          }
+          ''
+            ${
+              if cfg.upstreamDefaults then
+                ''
+                  ${pkgs.buildPackages.remarshal}/bin/toml2json ${pkgs.dnscrypt-proxy.src}/dnscrypt-proxy/example-dnscrypt-proxy.toml > example.json
+                  ${pkgs.buildPackages.jq}/bin/jq --slurp add example.json $jsonPath > config.json # merges the two
+                ''
+              else
+                ''
+                  cp $jsonPath config.json
+                ''
+            }
+            ${pkgs.buildPackages.remarshal}/bin/json2toml < config.json > $out
+          '';
       defaultText = literalMD "TOML file generated from {option}`services.dnscrypt-proxy2.settings`";
     };
   };
@@ -70,12 +84,8 @@ in
         "network-online.target"
         "nss-lookup.target"
       ];
-      before = [
-        "nss-lookup.target"
-      ];
-      wantedBy = [
-        "multi-user.target"
-      ];
+      before = [ "nss-lookup.target" ];
+      wantedBy = [ "multi-user.target" ];
       serviceConfig = {
         AmbientCapabilities = "CAP_NET_BIND_SERVICE";
         CacheDirectory = "dnscrypt-proxy";

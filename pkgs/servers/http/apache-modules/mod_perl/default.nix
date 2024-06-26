@@ -38,9 +38,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = directoryListingUpdater {
-      url = "https://archive.apache.org/dist/perl/";
-    };
+    updateScript = directoryListingUpdater { url = "https://archive.apache.org/dist/perl/"; };
     tests = nixosTests.mod_perl;
   };
 

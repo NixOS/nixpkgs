@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchurl
-, tk
-, tcllib
-, tcl
-, tkremind ? true
+{
+  lib,
+  stdenv,
+  fetchurl,
+  tk,
+  tcllib,
+  tcl,
+  tkremind ? true,
 }:
 
 tcl.mkTclDerivation rec {
@@ -16,7 +17,10 @@ tcl.mkTclDerivation rec {
     hash = "sha256-tj36/lLn67/hkNMrRVGXRLqQ9Sx6oDKZHeajiSYn97c=";
   };
 
-  propagatedBuildInputs = lib.optionals tkremind [ tcllib tk ];
+  propagatedBuildInputs = lib.optionals tkremind [
+    tcllib
+    tk
+  ];
 
   postPatch = lib.optionalString tkremind ''
     # NOTA BENE: The path to rem2pdf is replaced in tkremind for future use
@@ -42,7 +46,10 @@ tcl.mkTclDerivation rec {
     homepage = "https://dianne.skoll.ca/projects/remind/";
     description = "Sophisticated calendar and alarm program for the console";
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ raskin kovirobi ];
+    maintainers = with maintainers; [
+      raskin
+      kovirobi
+    ];
     mainProgram = "remind";
     platforms = platforms.unix;
   };

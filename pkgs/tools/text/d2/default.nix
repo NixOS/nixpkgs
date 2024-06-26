@@ -1,10 +1,11 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, installShellFiles
-, git
-, testers
-, d2
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  git,
+  testers,
+  d2,
 }:
 
 buildGoModule rec {
@@ -50,6 +51,9 @@ buildGoModule rec {
     description = "Modern diagram scripting language that turns text to diagrams";
     homepage = "https://d2lang.com";
     license = licenses.mpl20;
-    maintainers = with maintainers; [ dit7ya kashw2 ];
+    maintainers = with maintainers; [
+      dit7ya
+      kashw2
+    ];
   };
 }

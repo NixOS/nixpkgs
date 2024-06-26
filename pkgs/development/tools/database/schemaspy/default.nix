@@ -1,11 +1,12 @@
-{ lib
-, maven
-, jre
-, makeWrapper
-, git
-, fetchFromGitHub
-, graphviz
-, ensureNewerSourcesHook
+{
+  lib,
+  maven,
+  jre,
+  makeWrapper,
+  git,
+  fetchFromGitHub,
+  graphviz,
+  ensureNewerSourcesHook,
 }:
 
 maven.buildMavenPackage rec {
@@ -39,9 +40,7 @@ maven.buildMavenPackage rec {
     (ensureNewerSourcesHook { year = "1980"; })
   ];
 
-  wrappedPath = lib.makeBinPath [
-    graphviz
-  ];
+  wrappedPath = lib.makeBinPath [ graphviz ];
 
   preBuild = ''
     VERSION=${version}
@@ -64,4 +63,3 @@ maven.buildMavenPackage rec {
     maintainers = with maintainers; [ jraygauthier ];
   };
 }
-

@@ -1,4 +1,8 @@
-{ lib, stdenv, fetchFromGitHub }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "kakoune-unwrapped";
@@ -9,7 +13,10 @@ stdenv.mkDerivation (finalAttrs: {
     rev = "v${finalAttrs.version}";
     hash = "sha256-1nYSVbvQ4tz1r8p7zCD6w/79haqpelb15qva9r3Fwew=";
   };
-  makeFlags = [ "debug=no" "PREFIX=${placeholder "out"}" ];
+  makeFlags = [
+    "debug=no"
+    "PREFIX=${placeholder "out"}"
+  ];
 
   postPatch = ''
     echo "v${finalAttrs.version}" >.version

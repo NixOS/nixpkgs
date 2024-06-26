@@ -1,6 +1,7 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -24,6 +25,10 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/mitsuhiko/insta";
     changelog = "https://github.com/mitsuhiko/insta/blob/${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ figsoda oxalica matthiasbeyer ];
+    maintainers = with maintainers; [
+      figsoda
+      oxalica
+      matthiasbeyer
+    ];
   };
 }

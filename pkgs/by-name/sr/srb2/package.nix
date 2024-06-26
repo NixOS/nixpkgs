@@ -1,19 +1,20 @@
-{ lib
-, stdenv
-, fetchgit
-, fetchFromGitHub
-, cmake
-, curl
-, nasm
-, libopenmpt
-, game-music-emu
-, libpng
-, SDL2
-, SDL2_mixer
-, zlib
-, makeWrapper
-, makeDesktopItem
-, copyDesktopItems
+{
+  lib,
+  stdenv,
+  fetchgit,
+  fetchFromGitHub,
+  cmake,
+  curl,
+  nasm,
+  libopenmpt,
+  game-music-emu,
+  libpng,
+  SDL2,
+  SDL2_mixer,
+  zlib,
+  makeWrapper,
+  makeDesktopItem,
+  copyDesktopItems,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -114,7 +115,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.srb2.org/";
     platforms = platforms.linux;
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ zeratax donovanglover ];
+    maintainers = with maintainers; [
+      zeratax
+      donovanglover
+    ];
     mainProgram = "srb2";
   };
 })

@@ -10,7 +10,7 @@
   pytestCheckHook,
   pythonOlder,
   setuptools,
-  syrupy
+  syrupy,
 }:
 
 buildPythonPackage rec {

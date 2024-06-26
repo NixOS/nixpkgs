@@ -1,17 +1,18 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, gitUpdater
-, testers
-, cmake
-, glib
-, gobject-introspection
-, gtest
-, intltool
-, lomiri
-, pkg-config
-, systemd
-, vala
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  gitUpdater,
+  testers,
+  cmake,
+  glib,
+  gobject-introspection,
+  gtest,
+  intltool,
+  lomiri,
+  pkg-config,
+  systemd,
+  vala,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -48,9 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
     systemd
   ];
 
-  checkInputs = [
-    gtest
-  ];
+  checkInputs = [ gtest ];
 
   cmakeFlags = [
     "-DENABLE_TESTS=${lib.boolToString finalAttrs.finalPackage.doCheck}"
@@ -72,8 +71,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ OPNA2608 ];
     platforms = platforms.linux;
-    pkgConfigModules = [
-      "libayatana-common"
-    ];
+    pkgConfigModules = [ "libayatana-common" ];
   };
 })

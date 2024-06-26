@@ -1,28 +1,29 @@
-{ stdenv
-, lib
-, fetchFromGitLab
-, fetchpatch
-, gitUpdater
-, testers
-, boost
-, cmake
-, cmake-extras
-, dbus
-, dbus-test-runner
-# Needs qdoc, https://github.com/NixOS/nixpkgs/pull/245379
-, withDocumentation ? false
-, doxygen
-, glog
-, graphviz
-, gtest
-, lomiri-api
-, pkg-config
-, python3
-, qtbase
-, qtdeclarative
-, validatePkgConfig
-, wrapQtAppsHook
-, xvfb-run
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  fetchpatch,
+  gitUpdater,
+  testers,
+  boost,
+  cmake,
+  cmake-extras,
+  dbus,
+  dbus-test-runner,
+  # Needs qdoc, https://github.com/NixOS/nixpkgs/pull/245379
+  withDocumentation ? false,
+  doxygen,
+  glog,
+  graphviz,
+  gtest,
+  lomiri-api,
+  pkg-config,
+  python3,
+  qtbase,
+  qtdeclarative,
+  validatePkgConfig,
+  wrapQtAppsHook,
+  xvfb-run,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -39,9 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
   outputs = [
     "out"
     "dev"
-  ] ++ lib.optionals withDocumentation [
-    "doc"
-  ];
+  ] ++ lib.optionals withDocumentation [ "doc" ];
 
   patches = [
     # This change seems incomplete, potentially breaks things on systems that don't use AppArmor mediation
@@ -69,15 +68,17 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  nativeBuildInputs = [
-    cmake
-    pkg-config
-    validatePkgConfig
-    wrapQtAppsHook
-  ] ++ lib.optionals withDocumentation [
-    doxygen
-    graphviz
-  ];
+  nativeBuildInputs =
+    [
+      cmake
+      pkg-config
+      validatePkgConfig
+      wrapQtAppsHook
+    ]
+    ++ lib.optionals withDocumentation [
+      doxygen
+      graphviz
+    ];
 
   buildInputs = [
     boost
@@ -95,9 +96,7 @@ stdenv.mkDerivation (finalAttrs: {
     xvfb-run
   ];
 
-  checkInputs = [
-    gtest
-  ];
+  checkInputs = [ gtest ];
 
   cmakeFlags = [
     (lib.cmakeBool "ENABLE_DOC" withDocumentation)
@@ -106,11 +105,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "ENABLE_WERROR" false)
   ];
 
-  makeTargets = [
-    "all"
-  ] ++ lib.optionals withDocumentation [
-    "doc"
-  ];
+  makeTargets = [ "all" ] ++ lib.optionals withDocumentation [ "doc" ];
 
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 

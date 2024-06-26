@@ -1,7 +1,10 @@
-{ lib, buildDunePackage, fetchurl
-, ppx_cstruct
-, cstruct
-, ounit
+{
+  lib,
+  buildDunePackage,
+  fetchurl,
+  ppx_cstruct,
+  cstruct,
+  ounit,
 }:
 
 buildDunePackage rec {
@@ -16,18 +19,12 @@ buildDunePackage rec {
     hash = "sha256-LUjy8Xm6VsnMq1FHKzmJg7uorkTv7cOTsoLwmtNHkaY=";
   };
 
-  buildInputs = [
-    ppx_cstruct
-  ];
+  buildInputs = [ ppx_cstruct ];
 
-  propagatedBuildInputs = [
-    cstruct
-  ];
+  propagatedBuildInputs = [ cstruct ];
 
   doCheck = true;
-  checkInputs = [
-    ounit
-  ];
+  checkInputs = [ ounit ];
 
   meta = with lib; {
     description = "Decode and encode PCAP (packet capture) files";

@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, jre
-, git
-, gradle_7
-, perl
-, makeWrapper
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  jre,
+  git,
+  gradle_7,
+  perl,
+  makeWrapper,
 }:
 
 let
@@ -34,7 +35,11 @@ let
   deps = stdenv.mkDerivation {
     pname = "${pname}-deps";
     inherit src version patches;
-    nativeBuildInputs = [ gradle perl git ];
+    nativeBuildInputs = [
+      gradle
+      perl
+      git
+    ];
 
     buildPhase = ''
       export MA1SD_BUILD_VERSION=${version}
@@ -58,8 +63,17 @@ let
 
 in
 stdenv.mkDerivation {
-  inherit pname src version patches;
-  nativeBuildInputs = [ gradle perl makeWrapper ];
+  inherit
+    pname
+    src
+    version
+    patches
+    ;
+  nativeBuildInputs = [
+    gradle
+    perl
+    makeWrapper
+  ];
   buildInputs = [ jre ];
 
   postPatch = ''
@@ -90,7 +104,7 @@ stdenv.mkDerivation {
     changelog = "https://github.com/ma1uta/ma1sd/releases/tag/${version}";
     sourceProvenance = with sourceTypes; [
       fromSource
-      binaryBytecode  # deps
+      binaryBytecode # deps
     ];
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ mguentner ];

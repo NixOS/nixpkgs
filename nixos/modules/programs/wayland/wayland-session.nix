@@ -8,7 +8,7 @@
 {
   security = {
     polkit.enable = true;
-    pam.services.swaylock = {};
+    pam.services.swaylock = { };
   };
 
   hardware.graphics.enable = lib.mkDefault true;

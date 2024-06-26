@@ -1,9 +1,10 @@
-{ lib
-, stdenvNoCC
-, fetchurl
-, makeWrapper
-, jdk17_headless
-, nixosTests
+{
+  lib,
+  stdenvNoCC,
+  fetchurl,
+  makeWrapper,
+  jdk17_headless,
+  nixosTests,
 }:
 
 let
@@ -20,9 +21,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     hash = "sha256-CskVYc+byfn3mNzbOX1fCXPpjihtWpoRGBpXDY378c0=";
   };
 
-  nativeBuildInputs = [
-    makeWrapper
-  ];
+  nativeBuildInputs = [ makeWrapper ];
 
   dontUnpack = true;
 

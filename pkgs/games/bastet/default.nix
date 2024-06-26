@@ -1,9 +1,19 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, ncurses, boost }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  ncurses,
+  boost,
+}:
 
 stdenv.mkDerivation rec {
   pname = "bastet";
   version = "0.43.2";
-  buildInputs = [ ncurses boost ];
+  buildInputs = [
+    ncurses
+    boost
+  ];
 
   src = fetchFromGitHub {
     owner = "fph";

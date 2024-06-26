@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, mongoc
-, openssl
-, cyrus_sasl
-, cmake
-, validatePkgConfig
-, testers
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  mongoc,
+  openssl,
+  cyrus_sasl,
+  cmake,
+  validatePkgConfig,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -50,7 +51,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "http://mongocxx.org";
     license = licenses.asl20;
     maintainers = with maintainers; [ adriandole ];
-    pkgConfigModules = [ "libmongocxx" "libbsoncxx" ];
+    pkgConfigModules = [
+      "libmongocxx"
+      "libbsoncxx"
+    ];
     platforms = platforms.all;
     badPlatforms = [ "x86_64-darwin" ]; # needs sdk >= 10.14
   };

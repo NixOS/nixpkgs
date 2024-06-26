@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchurl, datefmt, testers }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  datefmt,
+  testers,
+}:
 
 stdenv.mkDerivation rec {
   pname = "datefmt";

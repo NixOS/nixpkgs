@@ -1,4 +1,11 @@
-{ lib, fetchFromSourcehut, rustPlatform, makeWrapper, withPulseaudio ? false, pulseaudio }:
+{
+  lib,
+  fetchFromSourcehut,
+  rustPlatform,
+  makeWrapper,
+  withPulseaudio ? false,
+  pulseaudio,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "swayrbar";

@@ -1,4 +1,8 @@
-{ lib, stdenvNoCC, fetchzip }:
+{
+  lib,
+  stdenvNoCC,
+  fetchzip,
+}:
 
 stdenvNoCC.mkDerivation rec {
   pname = "amiri";
@@ -28,4 +32,3 @@ stdenvNoCC.mkDerivation rec {
     platforms = platforms.all;
   };
 }
-

@@ -1,4 +1,9 @@
-{ lib, config, pkgs, ... }:
+{
+  lib,
+  config,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.services.ntpd-rs;
@@ -21,9 +26,7 @@ in
     };
 
     settings = lib.mkOption {
-      type = lib.types.submodule {
-        freeformType = format.type;
-      };
+      type = lib.types.submodule { freeformType = format.type; };
       default = { };
       description = ''
         Settings to write to {file}`ntp.toml`
@@ -56,12 +59,12 @@ in
       observability = {
         observation-path = lib.mkDefault "/var/run/ntpd-rs/observe";
       };
-      source = lib.mkIf cfg.useNetworkingTimeServers (map
-        (ts: {
+      source = lib.mkIf cfg.useNetworkingTimeServers (
+        map (ts: {
           mode = "server";
           address = ts;
-        })
-        config.networking.timeServers);
+        }) config.networking.timeServers
+      );
     };
 
     systemd.services.ntpd-rs = {
@@ -70,7 +73,10 @@ in
         User = "";
         Group = "";
         DynamicUser = true;
-        ExecStart = [ "" "${lib.makeBinPath [ cfg.package ]}/ntp-daemon --config=${configFile}" ];
+        ExecStart = [
+          ""
+          "${lib.makeBinPath [ cfg.package ]}/ntp-daemon --config=${configFile}"
+        ];
       };
     };
 
@@ -80,7 +86,10 @@ in
         User = "";
         Group = "";
         DynamicUser = true;
-        ExecStart = [ "" "${lib.makeBinPath [ cfg.package ]}/ntp-metrics-exporter --config=${configFile}" ];
+        ExecStart = [
+          ""
+          "${lib.makeBinPath [ cfg.package ]}/ntp-metrics-exporter --config=${configFile}"
+        ];
       };
     };
   };

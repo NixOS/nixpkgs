@@ -1,7 +1,19 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
-  inherit (lib) mkRemovedOptionModule mkOption mkPackageOption types mkIf optionalString;
+  inherit (lib)
+    mkRemovedOptionModule
+    mkOption
+    mkPackageOption
+    types
+    mkIf
+    optionalString
+    ;
 
   cfg = config.programs.gnupg;
 
@@ -11,7 +23,12 @@ let
 in
 {
   imports = [
-    (mkRemovedOptionModule [ "programs" "gnupg" "agent" "pinentryFlavor" ] "Use programs.gnupg.agent.pinentryPackage instead")
+    (mkRemovedOptionModule [
+      "programs"
+      "gnupg"
+      "agent"
+      "pinentryFlavor"
+    ] "Use programs.gnupg.agent.pinentryPackage instead")
   ];
 
   options.programs.gnupg = {
@@ -91,8 +108,7 @@ in
       pinentry-program = lib.getExe cfg.agent.pinentryPackage;
     };
 
-    environment.etc."gnupg/gpg-agent.conf".source =
-      agentSettingsFormat.generate "gpg-agent.conf" cfg.agent.settings;
+    environment.etc."gnupg/gpg-agent.conf".source = agentSettingsFormat.generate "gpg-agent.conf" cfg.agent.settings;
 
     # This overrides the systemd user unit shipped with the gnupg package
     systemd.user.services.gpg-agent = {
@@ -191,7 +207,9 @@ in
       wantedBy = [ "sockets.target" ];
     };
 
-    services.dbus.packages = mkIf (lib.elem "gnome3" (cfg.agent.pinentryPackage.flavors or [])) [ pkgs.gcr ];
+    services.dbus.packages = mkIf (lib.elem "gnome3" (cfg.agent.pinentryPackage.flavors or [ ])) [
+      pkgs.gcr
+    ];
 
     environment.systemPackages = [ cfg.package ];
 

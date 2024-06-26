@@ -1,23 +1,24 @@
-{ lib
-, stdenv
-, buildDunePackage
-, fetchurl
-, cstruct
-, duration
-, ethernet
-, ipaddr
-, logs
-, lwt
-, macaddr
-, mirage-time
-, alcotest
-, mirage-clock-unix
-, mirage-flow
-, mirage-random
-, mirage-random-test
-, mirage-time-unix
-, mirage-vnetif
-, bisect_ppx
+{
+  lib,
+  stdenv,
+  buildDunePackage,
+  fetchurl,
+  cstruct,
+  duration,
+  ethernet,
+  ipaddr,
+  logs,
+  lwt,
+  macaddr,
+  mirage-time,
+  alcotest,
+  mirage-clock-unix,
+  mirage-flow,
+  mirage-random,
+  mirage-random-test,
+  mirage-time-unix,
+  mirage-vnetif,
+  bisect_ppx,
 }:
 
 buildDunePackage rec {
@@ -31,9 +32,7 @@ buildDunePackage rec {
 
   minimalOCamlVersion = "4.08";
 
-  nativeBuildInputs = [
-    bisect_ppx
-  ];
+  nativeBuildInputs = [ bisect_ppx ];
 
   propagatedBuildInputs = [
     cstruct
@@ -47,7 +46,7 @@ buildDunePackage rec {
   ];
 
   ## NOTE: As of 18 april 2023 and ARP version 3.0.0, tests fail on Darwin.
-  doCheck = ! stdenv.isDarwin;
+  doCheck = !stdenv.isDarwin;
   checkInputs = [
     alcotest
     mirage-clock-unix

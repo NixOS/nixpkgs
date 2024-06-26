@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, meson
-, ninja
-, pkg-config
-, sassc
-, gdk-pixbuf
-, librsvg
-, gtk-engine-murrine
-, gitUpdater
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  pkg-config,
+  sassc,
+  gdk-pixbuf,
+  librsvg,
+  gtk-engine-murrine,
+  gitUpdater,
 }:
 
 stdenv.mkDerivation rec {
@@ -34,9 +35,7 @@ stdenv.mkDerivation rec {
     librsvg
   ];
 
-  propagatedUserEnvPkgs = [
-    gtk-engine-murrine
-  ];
+  propagatedUserEnvPkgs = [ gtk-engine-murrine ];
 
   passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 

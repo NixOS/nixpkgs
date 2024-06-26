@@ -1,15 +1,17 @@
-{ lib
-, fetchFromGitLab
-, meson
-, ninja
-, pkg-config
-, python3
-, docbook_xml_dtd_43
-, docbook-xsl-nons
-, libxslt
-, gettext
-, gnome
-, withDblatex ? false, dblatex
+{
+  lib,
+  fetchFromGitLab,
+  meson,
+  ninja,
+  pkg-config,
+  python3,
+  docbook_xml_dtd_43,
+  docbook-xsl-nons,
+  libxslt,
+  gettext,
+  gnome,
+  withDblatex ? false,
+  dblatex,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -28,9 +30,7 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-Jt6d5wbhAoSQ2sWyYWW68Y81duc3+QOJK/5JR/lCmnQ=";
   };
 
-  patches = [
-    passthru.respect_xml_catalog_files_var_patch
-  ];
+  patches = [ passthru.respect_xml_catalog_files_var_patch ];
 
   postPatch = ''
     substituteInPlace meson.build \
@@ -56,9 +56,7 @@ python3.pkgs.buildPythonApplication rec {
     docbook_xml_dtd_43
     docbook-xsl-nons
     libxslt
-  ] ++ lib.optionals withDblatex [
-    dblatex
-  ];
+  ] ++ lib.optionals withDblatex [ dblatex ];
 
   pythonPath = with python3.pkgs; [
     pygments # Needed for https://gitlab.gnome.org/GNOME/gtk-doc/blob/GTK_DOC_1_32/meson.build#L42

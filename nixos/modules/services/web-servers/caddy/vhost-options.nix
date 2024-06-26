@@ -1,5 +1,10 @@
 { cfg }:
-{ config, lib, name, ... }:
+{
+  config,
+  lib,
+  name,
+  ...
+}:
 let
   inherit (lib) literalExpression mkOption types;
 in
@@ -15,7 +20,10 @@ in
     serverAliases = mkOption {
       type = with types; listOf str;
       default = [ ];
-      example = [ "www.example.org" "example.org" ];
+      example = [
+        "www.example.org"
+        "example.org"
+      ];
       description = ''
         Additional names of virtual hosts served by this virtual host configuration.
       '';
@@ -27,7 +35,10 @@ in
         A list of host interfaces to bind to for this virtual host.
       '';
       default = [ ];
-      example = [ "127.0.0.1" "::1" ];
+      example = [
+        "127.0.0.1"
+        "::1"
+      ];
     };
 
     useACMEHost = mkOption {

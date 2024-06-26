@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, cmake, testers, python3 }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  testers,
+  python3,
+}:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "llhttp";
@@ -11,15 +18,14 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-cnEp7Ds32bqu3jeUU/rqJOr/VW3KNmJU4pmNNaTpXRs=";
   };
 
-  outputs = [ "out" "dev" ];
-
-  nativeBuildInputs = [
-    cmake
+  outputs = [
+    "out"
+    "dev"
   ];
 
-  cmakeFlags = [
-    "-DBUILD_STATIC_LIBS=ON"
-  ];
+  nativeBuildInputs = [ cmake ];
+
+  cmakeFlags = [ "-DBUILD_STATIC_LIBS=ON" ];
 
   passthru.tests = {
     inherit (python3.pkgs) aiohttp;

@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, curl, fuse, libxml2, pkg-config }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  curl,
+  fuse,
+  libxml2,
+  pkg-config,
+}:
 
 let
   srcs = {
@@ -21,7 +29,8 @@ let
       owner = "vincenthz";
     };
   };
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "boxfs";
   version = "2-20150109";
 
@@ -37,7 +46,11 @@ in stdenv.mkDerivation {
     ./libapp-include-ctype.diff
   ];
 
-  buildInputs = [ curl fuse libxml2 ];
+  buildInputs = [
+    curl
+    fuse
+    libxml2
+  ];
   nativeBuildInputs = [ pkg-config ];
 
   buildFlags = [

@@ -1,8 +1,9 @@
-{ lib
-, buildGoModule
-, fetchFromSourcehut
-, libxkbcommon
-, pkg-config
+{
+  lib,
+  buildGoModule,
+  fetchFromSourcehut,
+  libxkbcommon,
+  pkg-config,
 }:
 
 buildGoModule rec {
@@ -29,7 +30,11 @@ buildGoModule rec {
   buildInputs = [ libxkbcommon ];
   nativeBuildInputs = [ pkg-config ];
 
-  ldflags = [ "-s" "-w" "-X main.Version=${version}" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X main.Version=${version}"
+  ];
 
   postInstall = ''
     mkdir -p $out/bin

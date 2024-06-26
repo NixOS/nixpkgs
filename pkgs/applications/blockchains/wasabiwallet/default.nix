@@ -1,13 +1,15 @@
-{ lib, stdenv
-, autoPatchelfHook
-, makeWrapper
-, fetchurl
-, makeDesktopItem
-, lttng-ust_2_12
-, fontconfig
-, openssl
-, xorg
-, zlib
+{
+  lib,
+  stdenv,
+  autoPatchelfHook,
+  makeWrapper,
+  fetchurl,
+  makeDesktopItem,
+  lttng-ust_2_12,
+  fontconfig,
+  openssl,
+  xorg,
+  zlib,
 }:
 
 let
@@ -40,13 +42,17 @@ stdenv.mkDerivation rec {
     desktopName = "Wasabi";
     genericName = "Bitcoin wallet";
     comment = meta.description;
-    categories = [ "Network" "Utility" ];
+    categories = [
+      "Network"
+      "Utility"
+    ];
   };
 
-  nativeBuildInputs = [ autoPatchelfHook makeWrapper ];
-  buildInputs = runtimeLibs ++ [
-    lttng-ust_2_12
+  nativeBuildInputs = [
+    autoPatchelfHook
+    makeWrapper
   ];
+  buildInputs = runtimeLibs ++ [ lttng-ust_2_12 ];
 
   installPhase = ''
     mkdir -p $out/opt/${pname} $out/bin $out/share/applications

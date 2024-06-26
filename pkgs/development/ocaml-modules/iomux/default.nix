@@ -1,8 +1,9 @@
-{ lib
-, fetchurl
-, buildDunePackage
-, dune-configurator
-, alcotest
+{
+  lib,
+  fetchurl,
+  buildDunePackage,
+  dune-configurator,
+  alcotest,
 }:
 
 buildDunePackage rec {
@@ -17,13 +18,9 @@ buildDunePackage rec {
     sha256 = "zNJ3vVOv0BEpHLiC8Y610F87uiMlfYNo28ej0H+EU+c=";
   };
 
-  buildInputs = [
-    dune-configurator
-  ];
+  buildInputs = [ dune-configurator ];
 
-  checkInputs = [
-    alcotest
-  ];
+  checkInputs = [ alcotest ];
 
   meta = {
     homepage = "https://github.com/haesbaert/ocaml-${pname}";

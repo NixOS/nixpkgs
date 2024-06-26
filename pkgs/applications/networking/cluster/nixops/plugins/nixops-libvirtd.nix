@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, unstableGitUpdater
-, poetry-core
-, libvirt
-, nixops
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  unstableGitUpdater,
+  poetry-core,
+  libvirt,
+  nixops,
 }:
 
 buildPythonPackage {
@@ -25,23 +26,15 @@ buildPythonPackage {
     --replace "poetry>=" "poetry-core>="
   '';
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
-  buildInputs = [
-    nixops
-  ];
+  buildInputs = [ nixops ];
 
-  propagatedBuildInputs = [
-    libvirt
-  ];
+  propagatedBuildInputs = [ libvirt ];
 
   pythonImportsCheck = [ "nixops_virtd" ];
 
-  passthru.updateScript = unstableGitUpdater {
-    tagPrefix = "v";
-  };
+  passthru.updateScript = unstableGitUpdater { tagPrefix = "v"; };
 
   meta = with lib; {
     description = "NixOps libvirtd backend plugin";

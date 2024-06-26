@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, boost
-, nsplist
-, pugixml
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  boost,
+  nsplist,
+  pugixml,
 }:
 
 stdenv.mkDerivation {
@@ -22,9 +23,7 @@ stdenv.mkDerivation {
     sed -i "1i #include <algorithm>" src/Plist.cpp
   '';
 
-  nativeBuildInputs = [
-    cmake
-  ];
+  nativeBuildInputs = [ cmake ];
 
   buildInputs = [
     boost

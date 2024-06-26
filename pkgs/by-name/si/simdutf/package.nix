@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, libiconv
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  libiconv,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -21,18 +22,17 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace tools/CMakeLists.txt --replace "-Wl,--gc-sections" ""
   '';
 
-  nativeBuildInputs = [
-    cmake
-  ];
+  nativeBuildInputs = [ cmake ];
 
-  buildInputs = [
-    libiconv
-  ];
+  buildInputs = [ libiconv ];
 
   meta = with lib; {
     description = "Unicode routines validation and transcoding at billions of characters per second";
     homepage = "https://github.com/simdutf/simdutf";
-    license = with licenses; [ asl20 mit ];
+    license = with licenses; [
+      asl20
+      mit
+    ];
     maintainers = with maintainers; [ rewine ];
     mainProgram = "simdutf";
     platforms = platforms.all;

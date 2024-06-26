@@ -1,17 +1,22 @@
-{ lib
-, stdenv
-, fetchFromGitHub
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
 
-, python3
-, ghostscript
-, pdftk
-, poppler_utils
-, makeBinaryWrapper
+  python3,
+  ghostscript,
+  pdftk,
+  poppler_utils,
+  makeBinaryWrapper,
 }:
 
 let
   python = python3.withPackages (ps: with ps; [ tkinter ]);
-  binPath = lib.makeBinPath [ ghostscript pdftk poppler_utils ];
+  binPath = lib.makeBinPath [
+    ghostscript
+    pdftk
+    poppler_utils
+  ];
 in
 stdenv.mkDerivation {
   pname = "pdf-sign";
@@ -47,4 +52,3 @@ stdenv.mkDerivation {
     platforms = lib.platforms.unix;
   };
 }
-

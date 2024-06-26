@@ -1,9 +1,6 @@
-{
-  mkKdeDerivation,
-  libical,
-}:
+{ mkKdeDerivation, libical }:
 mkKdeDerivation {
   pname = "kcalendarcore";
 
-  extraBuildInputs = [libical];
+  extraBuildInputs = [ libical ];
 }

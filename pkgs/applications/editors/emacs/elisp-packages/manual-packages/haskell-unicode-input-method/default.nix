@@ -1,12 +1,14 @@
-{ lib
-, melpaBuild
-, fetchFromGitHub
-, writeText
+{
+  lib,
+  melpaBuild,
+  fetchFromGitHub,
+  writeText,
 }:
 
 let
   rev = "d8d168148c187ed19350bb7a1a190217c2915a63";
-in melpaBuild {
+in
+melpaBuild {
   pname = "haskell-unicode-input-method";
   version = "20110905.2307";
 
@@ -20,12 +22,12 @@ in melpaBuild {
   };
 
   recipe = writeText "recipe" ''
-      (haskell-unicode-input-method
-       :repo "roelvandijk/emacs-haskell-unicode-input-method"
-       :fetcher github)
-    '';
+    (haskell-unicode-input-method
+     :repo "roelvandijk/emacs-haskell-unicode-input-method"
+     :fetcher github)
+  '';
 
-  packageRequires = [];
+  packageRequires = [ ];
 
   meta = {
     homepage = "https://melpa.org/#haskell-unicode-input-method/";

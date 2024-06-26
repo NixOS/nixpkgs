@@ -1,4 +1,9 @@
-{ lib, fetchurl, buildDunePackage, liquidsoap }:
+{
+  lib,
+  fetchurl,
+  buildDunePackage,
+  liquidsoap,
+}:
 
 buildDunePackage rec {
   pname = "csexp";

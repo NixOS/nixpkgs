@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchFromSourcehut
-, wayland
-, wayland-scanner
-, unstableGitUpdater
+{
+  lib,
+  stdenv,
+  fetchFromSourcehut,
+  wayland,
+  wayland-scanner,
+  unstableGitUpdater,
 }:
 
 stdenv.mkDerivation rec {
@@ -17,13 +18,9 @@ stdenv.mkDerivation rec {
     hash = "sha256-rm9Nt3WLgq9QOXzrkYBGp45EALNYFTQGInxfYIN0XcU=";
   };
 
-  nativeBuildInputs = [
-    wayland-scanner
-  ];
+  nativeBuildInputs = [ wayland-scanner ];
 
-  buildInputs = [
-    wayland.dev
-  ];
+  buildInputs = [ wayland.dev ];
 
   postPatch = ''
     substituteInPlace Makefile --replace '/usr/local' $out

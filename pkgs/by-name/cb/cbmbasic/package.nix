@@ -1,7 +1,8 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, runCommand
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  runCommand,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -16,20 +17,18 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   installPhase = ''
-  runHook preInstall
+    runHook preInstall
 
-  mkdir -p $out/bin/
-  mv cbmbasic $out/bin/
+    mkdir -p $out/bin/
+    mv cbmbasic $out/bin/
 
-  runHook postInstall
+    runHook postInstall
   '';
 
   # NOTE: cbmbasic uses microsoft style linebreaks `\r\n`, and testing has to
   # accommodate that, else you get very cryptic diffs
   passthru = {
-    tests.run = runCommand "cbmbasic-test-run" {
-      nativeBuildInputs = [finalAttrs.finalPackage];
-    } ''
+    tests.run = runCommand "cbmbasic-test-run" { nativeBuildInputs = [ finalAttrs.finalPackage ]; } ''
       echo '#!${lib.getExe finalAttrs.finalPackage}' > helloI.bas;
       echo 'PRINT"Hello, World!"' >> helloI.bas;
       chmod +x helloI.bas
@@ -56,7 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
       This source does not emulate 6502 code; all code is completely native. On
       a 1 GHz CPU you get about 1000x speed compared to a 1 MHz 6502.
     '';
-    homepage =  "https://github.com/mist64/cbmbasic";
+    homepage = "https://github.com/mist64/cbmbasic";
     license = licenses.bsd2;
     maintainers = [ maintainers.cafkafk ];
     mainProgram = "cbmbasic";

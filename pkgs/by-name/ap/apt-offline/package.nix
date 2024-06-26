@@ -1,8 +1,9 @@
-{ lib
-, fetchFromGitHub
-, python3Packages
-, gnupg
-, installShellFiles
+{
+  lib,
+  fetchFromGitHub,
+  python3Packages,
+  gnupg,
+  installShellFiles,
 }:
 
 let
@@ -41,7 +42,10 @@ python3Packages.buildPythonApplication {
 
   pythonImportsCheck = [ "apt_offline_core" ];
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
   meta = {
     homepage = "https://github.com/rickysarraf/apt-offline";

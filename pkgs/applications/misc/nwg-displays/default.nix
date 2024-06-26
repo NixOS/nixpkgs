@@ -1,15 +1,16 @@
-{ lib
-, fetchFromGitHub
-, atk
-, gdk-pixbuf
-, gobject-introspection
-, gtk-layer-shell
-, gtk3
-, pango
-, python310Packages
-, wrapGAppsHook3
-, hyprlandSupport ? true
-, wlr-randr
+{
+  lib,
+  fetchFromGitHub,
+  atk,
+  gdk-pixbuf,
+  gobject-introspection,
+  gtk-layer-shell,
+  gtk3,
+  pango,
+  python310Packages,
+  wrapGAppsHook3,
+  hyprlandSupport ? true,
+  wlr-randr,
 }:
 
 python310Packages.buildPythonApplication rec {
@@ -28,9 +29,7 @@ python310Packages.buildPythonApplication rec {
     wrapGAppsHook3
   ];
 
-  buildInputs = [
-    gtk3
-  ];
+  buildInputs = [ gtk3 ];
 
   propagatedBuildInputs = [
     atk
@@ -40,9 +39,7 @@ python310Packages.buildPythonApplication rec {
     python310Packages.gst-python
     python310Packages.i3ipc
     python310Packages.pygobject3
-  ] ++ lib.optionals hyprlandSupport [
-    wlr-randr
-  ];
+  ] ++ lib.optionals hyprlandSupport [ wlr-randr ];
 
   dontWrapGApps = true;
 

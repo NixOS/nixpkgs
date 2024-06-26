@@ -1,4 +1,9 @@
-{ config, lib, options, ... }:
+{
+  config,
+  lib,
+  options,
+  ...
+}:
 
 let
   keysDirectory = "/var/keys";
@@ -23,7 +28,10 @@ in
       ];
       # swraid's default depends on stateVersion
       config.boot.swraid.enable = false;
-      options.boot.isContainer = lib.mkOption { default = false; internal = true; };
+      options.boot.isContainer = lib.mkOption {
+        default = false;
+        internal = true;
+      };
     }
   ];
 
@@ -59,13 +67,13 @@ in
       '';
     };
     workingDirectory = mkOption {
-       default = ".";
-       type = types.str;
-       example = "/var/lib/darwin-builder";
-       description = ''
-         The working directory to use to run the script. When running
-         as part of a flake will need to be set to a non read-only filesystem.
-       '';
+      default = ".";
+      type = types.str;
+      example = "/var/lib/darwin-builder";
+      description = ''
+        The working directory to use to run the script. When running
+        as part of a flake will need to be set to a non read-only filesystem.
+      '';
     };
     hostPort = mkOption {
       default = 31022;
@@ -123,7 +131,10 @@ in
 
       max-free = cfg.max-free;
 
-      trusted-users = [ "root" user ];
+      trusted-users = [
+        "root"
+        user
+      ];
     };
 
     services = {
@@ -158,26 +169,34 @@ in
         script = hostPkgs.writeShellScriptBin "create-builder" (
           ''
             set -euo pipefail
-          '' +
-          # When running as non-interactively as part of a DarwinConfiguration the working directory
-          # must be set to a writeable directory.
-        (if cfg.workingDirectory != "." then ''
-          ${hostPkgs.coreutils}/bin/mkdir --parent "${cfg.workingDirectory}"
-          cd "${cfg.workingDirectory}"
-        '' else "") + ''
-          KEYS="''${KEYS:-./keys}"
-          ${hostPkgs.coreutils}/bin/mkdir --parent "''${KEYS}"
-          PRIVATE_KEY="''${KEYS}/${user}_${keyType}"
-          PUBLIC_KEY="''${PRIVATE_KEY}.pub"
-          if [ ! -e "''${PRIVATE_KEY}" ] || [ ! -e "''${PUBLIC_KEY}" ]; then
-              ${hostPkgs.coreutils}/bin/rm --force -- "''${PRIVATE_KEY}" "''${PUBLIC_KEY}"
-              ${hostPkgs.openssh}/bin/ssh-keygen -q -f "''${PRIVATE_KEY}" -t ${keyType} -N "" -C 'builder@localhost'
-          fi
-          if ! ${hostPkgs.diffutils}/bin/cmp "''${PUBLIC_KEY}" ${publicKey}; then
-            (set -x; sudo --reset-timestamp ${installCredentials} "''${KEYS}")
-          fi
-          KEYS="$(${hostPkgs.nix}/bin/nix-store --add "$KEYS")" ${lib.getExe config.system.build.vm}
-        '');
+          ''
+          +
+            # When running as non-interactively as part of a DarwinConfiguration the working directory
+            # must be set to a writeable directory.
+            (
+              if cfg.workingDirectory != "." then
+                ''
+                  ${hostPkgs.coreutils}/bin/mkdir --parent "${cfg.workingDirectory}"
+                  cd "${cfg.workingDirectory}"
+                ''
+              else
+                ""
+            )
+          + ''
+            KEYS="''${KEYS:-./keys}"
+            ${hostPkgs.coreutils}/bin/mkdir --parent "''${KEYS}"
+            PRIVATE_KEY="''${KEYS}/${user}_${keyType}"
+            PUBLIC_KEY="''${PRIVATE_KEY}.pub"
+            if [ ! -e "''${PRIVATE_KEY}" ] || [ ! -e "''${PUBLIC_KEY}" ]; then
+                ${hostPkgs.coreutils}/bin/rm --force -- "''${PRIVATE_KEY}" "''${PUBLIC_KEY}"
+                ${hostPkgs.openssh}/bin/ssh-keygen -q -f "''${PRIVATE_KEY}" -t ${keyType} -N "" -C 'builder@localhost'
+            fi
+            if ! ${hostPkgs.diffutils}/bin/cmp "''${PUBLIC_KEY}" ${publicKey}; then
+              (set -x; sudo --reset-timestamp ${installCredentials} "''${KEYS}")
+            fi
+            KEYS="$(${hostPkgs.nix}/bin/nix-store --add "$KEYS")" ${lib.getExe config.system.build.vm}
+          ''
+        );
 
       in
       script.overrideAttrs (old: {
@@ -228,7 +247,11 @@ in
       memorySize = cfg.memorySize;
 
       forwardPorts = [
-        { from = "host"; guest.port = 22; host.port = cfg.hostPort; }
+        {
+          from = "host";
+          guest.port = 22;
+          host.port = cfg.hostPort;
+        }
       ];
 
       # Disable graphics for the builder since users will likely want to run it

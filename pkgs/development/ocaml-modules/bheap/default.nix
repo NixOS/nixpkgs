@@ -1,4 +1,9 @@
-{ lib, buildDunePackage, fetchurl, stdlib-shims }:
+{
+  lib,
+  buildDunePackage,
+  fetchurl,
+  stdlib-shims,
+}:
 
 buildDunePackage rec {
   pname = "bheap";
@@ -12,9 +17,7 @@ buildDunePackage rec {
   useDune2 = true;
 
   doCheck = true;
-  checkInputs = [
-    stdlib-shims
-  ];
+  checkInputs = [ stdlib-shims ];
 
   meta = with lib; {
     description = "OCaml binary heap implementation by Jean-Christophe Filliatre";

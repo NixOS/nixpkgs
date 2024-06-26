@@ -1,7 +1,12 @@
 # This module defines the software packages included in the "minimal"
 # installation CD. It might be useful elsewhere.
 
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 {
   # Include some utilities that are useful for installing or repairing
@@ -49,9 +54,16 @@
   ];
 
   # Include support for various filesystems and tools to create / manipulate them.
-  boot.supportedFilesystems =
-    [ "btrfs" "cifs" "f2fs" "jfs" "ntfs" "reiserfs" "vfat" "xfs" ] ++
-    lib.optional (lib.meta.availableOn pkgs.stdenv.hostPlatform config.boot.zfs.package) "zfs";
+  boot.supportedFilesystems = [
+    "btrfs"
+    "cifs"
+    "f2fs"
+    "jfs"
+    "ntfs"
+    "reiserfs"
+    "vfat"
+    "xfs"
+  ] ++ lib.optional (lib.meta.availableOn pkgs.stdenv.hostPlatform config.boot.zfs.package) "zfs";
 
   # Configure host id for ZFS to work
   networking.hostId = lib.mkDefault "8425e349";

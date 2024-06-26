@@ -1,5 +1,9 @@
-{ config, pkgs, lib, ... }:
-
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 let
   cfg = config.services.xmrig;
@@ -15,9 +19,7 @@ with lib;
     services.xmrig = {
       enable = mkEnableOption "XMRig Mining Software";
 
-      package = mkPackageOption pkgs "xmrig" {
-        example = "xmrig-mo";
-      };
+      package = mkPackageOption pkgs "xmrig" { example = "xmrig-mo"; };
 
       settings = mkOption {
         default = { };

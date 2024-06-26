@@ -1,4 +1,11 @@
-{ rustPlatform, fetchFromGitLab, lib, makeWrapper, gst_all_1, libsixel }:
+{
+  rustPlatform,
+  fetchFromGitLab,
+  lib,
+  makeWrapper,
+  gst_all_1,
+  libsixel,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "termplay";

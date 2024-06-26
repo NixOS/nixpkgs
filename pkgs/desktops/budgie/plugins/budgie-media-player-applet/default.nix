@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, glib
-, meson
-, ninja
-, python3Packages
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  glib,
+  meson,
+  ninja,
+  python3Packages,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

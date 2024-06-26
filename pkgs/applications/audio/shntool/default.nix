@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchurl, flac }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  flac,
+}:
 
 stdenv.mkDerivation {
   version = "3.0.10";

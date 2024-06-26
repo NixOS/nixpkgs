@@ -1,4 +1,1 @@
-{mkKdeDerivation}:
-mkKdeDerivation {
-  pname = "plasma5support";
-}
+{ mkKdeDerivation }: mkKdeDerivation { pname = "plasma5support"; }

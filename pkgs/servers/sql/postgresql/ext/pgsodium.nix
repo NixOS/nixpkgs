@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, libsodium
-, postgresql
-, postgresqlTestHook
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  libsodium,
+  postgresql,
+  postgresqlTestHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -39,7 +40,10 @@ stdenv.mkDerivation (finalAttrs: {
     name = "pgsodium-test";
     dontUnpack = true;
     doCheck = true;
-    nativeCheckInputs = [ postgresqlTestHook (postgresql.withPackages (_: [ finalAttrs.finalPackage ])) ];
+    nativeCheckInputs = [
+      postgresqlTestHook
+      (postgresql.withPackages (_: [ finalAttrs.finalPackage ]))
+    ];
     failureHook = "postgresqlStop";
     postgresqlTestUserOptions = "LOGIN SUPERUSER";
     postgresqlExtraSettings = ''

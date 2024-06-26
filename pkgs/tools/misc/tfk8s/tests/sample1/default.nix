@@ -1,9 +1,8 @@
 { runCommandCC, tfk8s }:
 
-runCommandCC "tfk8s-test-sample1" {
-    buildInputs = [
-      tfk8s
-    ];
+runCommandCC "tfk8s-test-sample1"
+  {
+    buildInputs = [ tfk8s ];
     meta.timeout = 60;
   }
   ''

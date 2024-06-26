@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-6EY2cyFWfMy1hPDdDGwIzSE92VkAPo0p5ZCG+B1wVYY=";
   };
 
-  buildFlags = ["INOTIFYINFO_VERSION=v${finalAttrs.version}"];
+  buildFlags = [ "INOTIFYINFO_VERSION=v${finalAttrs.version}" ];
 
   installPhase = ''
     runHook preInstall

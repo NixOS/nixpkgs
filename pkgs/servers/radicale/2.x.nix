@@ -1,4 +1,8 @@
-{ lib, fetchFromGitHub, python3 }:
+{
+  lib,
+  fetchFromGitHub,
+  python3,
+}:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "Radicale";
@@ -25,9 +29,7 @@ python3.pkgs.buildPythonApplication rec {
     setuptools
   ];
 
-  nativeCheckInputs = with python3.pkgs; [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = with python3.pkgs; [ pytestCheckHook ];
 
   disabledTests = [
     # uses unsupported crypt method
@@ -46,6 +48,9 @@ python3.pkgs.buildPythonApplication rec {
       on mobile phones or computers.
     '';
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ edwtjo pSub ];
+    maintainers = with maintainers; [
+      edwtjo
+      pSub
+    ];
   };
 }

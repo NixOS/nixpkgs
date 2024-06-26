@@ -1,25 +1,28 @@
-{ lib
-, fetchFromGitHub
-, stdenvNoCC
-, makeWrapper
-, gh
-, gnugrep
-, fzf
-, python3
-, withDelta ? false
-, delta
-, withBat ? false
-, bat
+{
+  lib,
+  fetchFromGitHub,
+  stdenvNoCC,
+  makeWrapper,
+  gh,
+  gnugrep,
+  fzf,
+  python3,
+  withDelta ? false,
+  delta,
+  withBat ? false,
+  bat,
 }:
 let
-  binPath = lib.makeBinPath ([
-    gh
-    gnugrep
-    fzf
-    python3
-  ]
-  ++ lib.optional withBat bat
-  ++ lib.optional withDelta delta);
+  binPath = lib.makeBinPath (
+    [
+      gh
+      gnugrep
+      fzf
+      python3
+    ]
+    ++ lib.optional withBat bat
+    ++ lib.optional withDelta delta
+  );
 in
 stdenvNoCC.mkDerivation {
   pname = "gh-notify";
@@ -32,9 +35,7 @@ stdenvNoCC.mkDerivation {
     hash = "sha256-AgpNjeRz0RHf8D3ib7x1zixBxh32UUZJleub5W/suuM=";
   };
 
-  nativeBuildInputs = [
-    makeWrapper
-  ];
+  nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
     install -D -m755 "gh-notify" "$out/bin/gh-notify"

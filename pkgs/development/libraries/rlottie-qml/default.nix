@@ -1,13 +1,14 @@
-{ stdenv
-, lib
-, fetchFromGitLab
-, fetchpatch
-, cmake
-, qtbase
-, qtdeclarative
-, qtmultimedia
-, quazip
-, rlottie
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  fetchpatch,
+  cmake,
+  qtbase,
+  qtdeclarative,
+  qtmultimedia,
+  quazip,
+  rlottie,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -44,9 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  nativeBuildInputs = [
-    cmake
-  ];
+  nativeBuildInputs = [ cmake ];
 
   buildInputs = [
     rlottie

@@ -1,4 +1,13 @@
-{ lib, buildPythonApplication, fetchurl, flit-core, pyspf, dnspython, authres, pymilter }:
+{
+  lib,
+  buildPythonApplication,
+  fetchurl,
+  flit-core,
+  pyspf,
+  dnspython,
+  authres,
+  pymilter,
+}:
 
 buildPythonApplication rec {
   pname = "spf-engine";
@@ -12,7 +21,12 @@ buildPythonApplication rec {
 
   nativeBuildInputs = [ flit-core ];
 
-  propagatedBuildInputs = [ pyspf dnspython authres pymilter ];
+  propagatedBuildInputs = [
+    pyspf
+    dnspython
+    authres
+    pymilter
+  ];
 
   pythonImportsCheck = [
     "spf_engine"

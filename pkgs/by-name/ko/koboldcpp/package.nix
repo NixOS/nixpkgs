@@ -106,7 +106,8 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   env.NIX_LDFLAGS = lib.concatStringsSep " " (finalAttrs.darwinLdFlags ++ finalAttrs.metalLdFlags);
 
   env.NIX_CFLAGS_COMPILE =
-    lib.optionalString (march != "") "-march=${march}" + lib.optionalString (mtune != "") "-mtune=${mtune}";
+    lib.optionalString (march != "") "-march=${march}"
+    + lib.optionalString (mtune != "") "-mtune=${mtune}";
 
   makeFlags = [
     (makeBool "LLAMA_OPENBLAS" openblasSupport)

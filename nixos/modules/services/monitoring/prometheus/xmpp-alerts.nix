@@ -1,17 +1,33 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
 let
   cfg = config.services.prometheus.xmpp-alerts;
-  settingsFormat = pkgs.formats.yaml {};
+  settingsFormat = pkgs.formats.yaml { };
   configFile = settingsFormat.generate "prometheus-xmpp-alerts.yml" cfg.settings;
 in
 {
   imports = [
     (mkRenamedOptionModule
-      [ "services" "prometheus" "xmpp-alerts" "configuration" ]
-      [ "services" "prometheus" "xmpp-alerts" "settings" ])
+      [
+        "services"
+        "prometheus"
+        "xmpp-alerts"
+        "configuration"
+      ]
+      [
+        "services"
+        "prometheus"
+        "xmpp-alerts"
+        "settings"
+      ]
+    )
   ];
 
   options.services.prometheus.xmpp-alerts = {
@@ -19,7 +35,7 @@ in
 
     settings = mkOption {
       type = settingsFormat.type;
-      default = {};
+      default = { };
 
       description = ''
         Configuration for prometheus xmpp-alerts, see
@@ -47,7 +63,10 @@ in
         ProtectControlGroups = true;
         NoNewPrivileges = true;
         SystemCallArchitectures = "native";
-        RestrictAddressFamilies = [ "AF_INET" "AF_INET6" ];
+        RestrictAddressFamilies = [
+          "AF_INET"
+          "AF_INET6"
+        ];
         SystemCallFilter = [ "@system-service" ];
       };
     };

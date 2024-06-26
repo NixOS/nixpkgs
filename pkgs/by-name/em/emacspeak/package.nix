@@ -1,11 +1,12 @@
-{ lib
-, emacs
-, espeak-ng
-, fetchFromGitHub
-, makeWrapper
-, stdenv
-, tcl
-, tclx
+{
+  lib,
+  emacs,
+  espeak-ng,
+  fetchFromGitHub,
+  makeWrapper,
+  stdenv,
+  tcl,
+  tclx,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

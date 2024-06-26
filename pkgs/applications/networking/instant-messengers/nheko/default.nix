@@ -1,32 +1,33 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, asciidoc
-, pkg-config
-, boost179
-, cmark
-, coeurl
-, curl
-, kdsingleapplication
-, libevent
-, libsecret
-, lmdb
-, lmdbxx
-, mtxclient
-, nlohmann_json
-, olm
-, qtbase
-, qtimageformats
-, qtkeychain
-, qtmultimedia
-, qttools
-, qtwayland
-, re2
-, spdlog
-, wrapQtAppsHook
-, gst_all_1
-, libnice
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  asciidoc,
+  pkg-config,
+  boost179,
+  cmark,
+  coeurl,
+  curl,
+  kdsingleapplication,
+  libevent,
+  libsecret,
+  lmdb,
+  lmdbxx,
+  mtxclient,
+  nlohmann_json,
+  olm,
+  qtbase,
+  qtimageformats,
+  qtkeychain,
+  qtmultimedia,
+  qttools,
+  qtwayland,
+  re2,
+  spdlog,
+  wrapQtAppsHook,
+  gst_all_1,
+  libnice,
 }:
 
 stdenv.mkDerivation rec {
@@ -48,34 +49,35 @@ stdenv.mkDerivation rec {
     wrapQtAppsHook
   ];
 
-  buildInputs = [
-    boost179
-    cmark
-    coeurl
-    curl
-    kdsingleapplication
-    libevent
-    libsecret
-    lmdb
-    mtxclient
-    nlohmann_json
-    olm
-    qtbase
-    qtimageformats
-    qtkeychain
-    qtmultimedia
-    qttools
-    qtwayland
-    re2
-    spdlog
-  ]
-  ++ (with gst_all_1; [
-    gstreamer
-    gst-plugins-base
-    (gst-plugins-good.override { qt6Support = true; })
-    gst-plugins-bad
-    libnice
-  ]);
+  buildInputs =
+    [
+      boost179
+      cmark
+      coeurl
+      curl
+      kdsingleapplication
+      libevent
+      libsecret
+      lmdb
+      mtxclient
+      nlohmann_json
+      olm
+      qtbase
+      qtimageformats
+      qtkeychain
+      qtmultimedia
+      qttools
+      qtwayland
+      re2
+      spdlog
+    ]
+    ++ (with gst_all_1; [
+      gstreamer
+      gst-plugins-base
+      (gst-plugins-good.override { qt6Support = true; })
+      gst-plugins-bad
+      libnice
+    ]);
 
   cmakeFlags = [
     "-DCOMPILE_QML=ON" # see https://github.com/Nheko-Reborn/nheko/issues/389
@@ -91,7 +93,10 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/Nheko-Reborn/nheko";
     license = licenses.gpl3Plus;
     mainProgram = "nheko";
-    maintainers = with maintainers; [ ekleog fpletz ];
+    maintainers = with maintainers; [
+      ekleog
+      fpletz
+    ];
     platforms = platforms.all;
     # Should be fixable if a higher clang version is used, see:
     # https://github.com/NixOS/nixpkgs/pull/85922#issuecomment-619287177

@@ -1,8 +1,9 @@
-{ lib
-, fetchFromGitHub
-, rustPlatform
-, stdenv
-, installShellFiles
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  stdenv,
+  installShellFiles,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -18,9 +19,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-7yNr6Zc5A7rj6sUnplo2gB2xNUgZ3TLwUuBEfVKZfIQ=";
 
-  nativeBuildInputs = [
-    installShellFiles
-  ];
+  nativeBuildInputs = [ installShellFiles ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd lutgen \
@@ -32,7 +31,10 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "Blazingly fast interpolated LUT generator and applicator for arbitrary and popular color palettes";
     homepage = "https://github.com/ozwaldorf/lutgen-rs";
-    maintainers = with maintainers; [ zzzsy donovanglover ];
+    maintainers = with maintainers; [
+      zzzsy
+      donovanglover
+    ];
     mainProgram = "lutgen";
     license = licenses.mit;
   };

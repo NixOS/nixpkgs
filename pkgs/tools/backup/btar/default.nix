@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchurl, fetchpatch, librsync }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  librsync,
+}:
 
 stdenv.mkDerivation rec {
   pname = "btar";

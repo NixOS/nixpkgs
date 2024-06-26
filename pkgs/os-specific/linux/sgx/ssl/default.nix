@@ -1,12 +1,13 @@
-{ stdenv
-, callPackage
-, fetchFromGitHub
-, fetchurl
-, lib
-, perl
-, sgx-sdk
-, which
-, debug ? false
+{
+  stdenv,
+  callPackage,
+  fetchFromGitHub,
+  fetchurl,
+  lib,
+  perl,
+  sgx-sdk,
+  which,
+  debug ? false,
 }:
 let
   sgxVersion = sgx-sdk.versionTag;
@@ -49,15 +50,9 @@ stdenv.mkDerivation {
     which
   ];
 
-  makeFlags = [
-    "-C Linux"
-  ] ++ lib.optionals debug [
-    "DEBUG=1"
-  ];
+  makeFlags = [ "-C Linux" ] ++ lib.optionals debug [ "DEBUG=1" ];
 
-  installFlags = [
-    "DESTDIR=$(out)"
-  ];
+  installFlags = [ "DESTDIR=$(out)" ];
 
   # These tests build on any x86_64-linux but BOTH SIM and HW will only _run_ on
   # real Intel hardware. Split these out so OfBorg doesn't choke on this pkg.
@@ -67,15 +62,28 @@ stdenv.mkDerivation {
   # nix run .#sgx-ssl.tests.SIM
   # ```
   passthru.tests = {
-    HW = callPackage ./tests.nix { sgxMode = "HW"; inherit opensslVersion; };
-    SIM = callPackage ./tests.nix { sgxMode = "SIM"; inherit opensslVersion; };
+    HW = callPackage ./tests.nix {
+      sgxMode = "HW";
+      inherit opensslVersion;
+    };
+    SIM = callPackage ./tests.nix {
+      sgxMode = "SIM";
+      inherit opensslVersion;
+    };
   };
 
   meta = {
     description = "Cryptographic library for Intel SGX enclave applications based on OpenSSL";
     homepage = "https://github.com/intel/intel-sgx-ssl";
-    maintainers = with lib.maintainers; [ phlip9 trundle veehaitch ];
+    maintainers = with lib.maintainers; [
+      phlip9
+      trundle
+      veehaitch
+    ];
     platforms = [ "x86_64-linux" ];
-    license = with lib.licenses; [ bsd3 openssl ];
+    license = with lib.licenses; [
+      bsd3
+      openssl
+    ];
   };
 }

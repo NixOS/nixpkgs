@@ -1,4 +1,11 @@
-{ stdenv, lib, nixos-container, openssh, glibcLocales, fetchFromGitHub }:
+{
+  stdenv,
+  lib,
+  nixos-container,
+  openssh,
+  glibcLocales,
+  fetchFromGitHub,
+}:
 
 stdenv.mkDerivation rec {
   pname = "extra-container";

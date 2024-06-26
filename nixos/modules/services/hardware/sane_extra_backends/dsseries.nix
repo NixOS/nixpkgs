@@ -1,12 +1,16 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
 {
   options = {
 
-    hardware.sane.dsseries.enable =
-      mkEnableOption "Brother DSSeries scan backend" // {
+    hardware.sane.dsseries.enable = mkEnableOption "Brother DSSeries scan backend" // {
       description = ''
         When enabled, will automatically register the "dsseries" SANE backend.
 

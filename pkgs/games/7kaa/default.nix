@@ -1,18 +1,19 @@
-{ lib
-, stdenv
-, gccStdenv
-, autoreconfHook
-, autoconf-archive
-, pkg-config
-, fetchurl
-, fetchFromGitHub
-, openal
-, libtool
-, enet
-, SDL2
-, curl
-, gettext
-, libiconv
+{
+  lib,
+  stdenv,
+  gccStdenv,
+  autoreconfHook,
+  autoconf-archive,
+  pkg-config,
+  fetchurl,
+  fetchFromGitHub,
+  openal,
+  libtool,
+  enet,
+  SDL2,
+  curl,
+  gettext,
+  libiconv,
 }:
 
 let
@@ -47,9 +48,20 @@ gccStdenv.mkDerivation rec {
     hash = "sha256-Z6TsR6L6vwpzoKTj6xJ6HKy4DxcUBWmYBFi/a9pQBD8=";
   };
 
-  nativeBuildInputs = [ autoreconfHook autoconf-archive pkg-config ];
+  nativeBuildInputs = [
+    autoreconfHook
+    autoconf-archive
+    pkg-config
+  ];
 
-  buildInputs = [ openal enet SDL2 curl gettext libiconv ];
+  buildInputs = [
+    openal
+    enet
+    SDL2
+    curl
+    gettext
+    libiconv
+  ];
 
   preAutoreconf = ''
     autoupdate

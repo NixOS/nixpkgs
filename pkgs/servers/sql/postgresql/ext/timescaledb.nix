@@ -1,11 +1,24 @@
-{ lib, stdenv, fetchFromGitHub, cmake, postgresql, openssl, libkrb5, enableUnfree ? true }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  postgresql,
+  openssl,
+  libkrb5,
+  enableUnfree ? true,
+}:
 
 stdenv.mkDerivation rec {
   pname = "timescaledb${lib.optionalString (!enableUnfree) "-apache"}";
   version = "2.14.2";
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ postgresql openssl libkrb5 ];
+  buildInputs = [
+    postgresql
+    openssl
+    libkrb5
+  ];
 
   src = fetchFromGitHub {
     owner = "timescale";
@@ -14,7 +27,12 @@ stdenv.mkDerivation rec {
     hash = "sha256-gJViEWHtIczvIiQKuvvuwCfWJMxAYoBhCHhD75no6r0=";
   };
 
-  cmakeFlags = [ "-DSEND_TELEMETRY_DEFAULT=OFF" "-DREGRESS_CHECKS=OFF" "-DTAP_CHECKS=OFF" ]
+  cmakeFlags =
+    [
+      "-DSEND_TELEMETRY_DEFAULT=OFF"
+      "-DREGRESS_CHECKS=OFF"
+      "-DTAP_CHECKS=OFF"
+    ]
     ++ lib.optionals (!enableUnfree) [ "-DAPACHE_ONLY=ON" ]
     ++ lib.optionals stdenv.isDarwin [ "-DLINTER=OFF" ];
 

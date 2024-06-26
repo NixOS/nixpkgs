@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, deadbeef
-, gtk3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  deadbeef,
+  gtk3,
 }:
 
 stdenv.mkDerivation {
@@ -17,9 +18,7 @@ stdenv.mkDerivation {
     sha256 = "sha256-dsKthlQ0EuX4VhO8K9VTyX3zN8ytzDUbSi/xSMB4xRw=";
   };
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
     deadbeef

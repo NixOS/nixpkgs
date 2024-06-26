@@ -1,15 +1,16 @@
-{ lib
-, stdenvNoCC
-, fetchFromGitHub
-, makeWrapper
-, bash
-, coreutils
-, diffutils
-, gawk
-, gnugrep
-, gnused
-, host
-, netcat-openbsd
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  makeWrapper,
+  bash,
+  coreutils,
+  diffutils,
+  gawk,
+  gnugrep,
+  gnused,
+  host,
+  netcat-openbsd,
 }:
 
 stdenvNoCC.mkDerivation {
@@ -23,16 +24,24 @@ stdenvNoCC.mkDerivation {
     hash = "sha256-NHY3NoPigsmfRjOx9Lt3/fGsyeq1/bzKHIXMDBJiI6c=";
   };
 
-  nativeBuildInputs = [
-    makeWrapper
-  ];
+  nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
     runHook preInstall
     mkdir -p $out/{bin,share/lbd}
     cp lbd $out/share/lbd/
     makeWrapper ${lib.getExe bash} $out/bin/lbd \
-      --prefix PATH : "${lib.makeBinPath [ coreutils diffutils gawk gnugrep gnused host netcat-openbsd ]}" \
+      --prefix PATH : "${
+        lib.makeBinPath [
+          coreutils
+          diffutils
+          gawk
+          gnugrep
+          gnused
+          host
+          netcat-openbsd
+        ]
+      }" \
       --add-flags "$out/share/lbd/lbd"
     runHook postInstall
   '';

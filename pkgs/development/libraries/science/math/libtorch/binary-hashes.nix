@@ -1,6 +1,7 @@
-version: builtins.getAttr version {
- "2.3.0" = {
-     aarch64-darwin-cpu = {
+version:
+builtins.getAttr version {
+  "2.3.0" = {
+    aarch64-darwin-cpu = {
       name = "libtorch-macos-arm64-2.3.0.zip";
       url = "https://download.pytorch.org/libtorch/cpu/libtorch-macos-arm64-2.3.0.zip";
       hash = "sha256-l4qY1jbsECN5qm7dWJ2jSvKuQwQ/HI6G6Vq1Kh2rxkM=";

@@ -1,59 +1,60 @@
-{ config
-, lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, addOpenGLRunpath
-, cmake
-, fdk_aac
-, ffmpeg
-, jansson
-, libjack2
-, libxkbcommon
-, libpthreadstubs
-, libXdmcp
-, qtbase
-, qtsvg
-, speex
-, libv4l
-, x264
-, curl
-, wayland
-, xorg
-, pkg-config
-, libvlc
-, libGL
-, mbedtls
-, wrapGAppsHook3
-, scriptingSupport ? true
-, luajit
-, swig4
-, python3
-, alsaSupport ? stdenv.isLinux
-, alsa-lib
-, pulseaudioSupport ? config.pulseaudio or stdenv.isLinux
-, libpulseaudio
-, libcef
-, pciutils
-, pipewireSupport ? stdenv.isLinux
-, withFdk ? true
-, pipewire
-, libdrm
-, libajantv2
-, librist
-, libva
-, srt
-, qtwayland
-, wrapQtAppsHook
-, nlohmann_json
-, websocketpp
-, asio
-, decklinkSupport ? false
-, blackmagic-desktop-video
-, libdatachannel
-, libvpl
-, qrcodegencpp
-, nix-update-script
+{
+  config,
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  addOpenGLRunpath,
+  cmake,
+  fdk_aac,
+  ffmpeg,
+  jansson,
+  libjack2,
+  libxkbcommon,
+  libpthreadstubs,
+  libXdmcp,
+  qtbase,
+  qtsvg,
+  speex,
+  libv4l,
+  x264,
+  curl,
+  wayland,
+  xorg,
+  pkg-config,
+  libvlc,
+  libGL,
+  mbedtls,
+  wrapGAppsHook3,
+  scriptingSupport ? true,
+  luajit,
+  swig4,
+  python3,
+  alsaSupport ? stdenv.isLinux,
+  alsa-lib,
+  pulseaudioSupport ? config.pulseaudio or stdenv.isLinux,
+  libpulseaudio,
+  libcef,
+  pciutils,
+  pipewireSupport ? stdenv.isLinux,
+  withFdk ? true,
+  pipewire,
+  libdrm,
+  libajantv2,
+  librist,
+  libva,
+  srt,
+  qtwayland,
+  wrapQtAppsHook,
+  nlohmann_json,
+  websocketpp,
+  asio,
+  decklinkSupport ? false,
+  blackmagic-desktop-video,
+  libdatachannel,
+  libvpl,
+  qrcodegencpp,
+  nix-update-script,
 }:
 
 let
@@ -92,44 +93,50 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     wrapGAppsHook3
     wrapQtAppsHook
-  ]
-  ++ optional scriptingSupport swig4;
+  ] ++ optional scriptingSupport swig4;
 
-  buildInputs = [
-    curl
-    ffmpeg
-    jansson
-    libcef
-    libjack2
-    libv4l
-    libxkbcommon
-    libpthreadstubs
-    libXdmcp
-    qtbase
-    qtsvg
-    speex
-    wayland
-    x264
-    libvlc
-    mbedtls
-    pciutils
-    libajantv2
-    librist
-    libva
-    srt
-    qtwayland
-    nlohmann_json
-    websocketpp
-    asio
-    libdatachannel
-    libvpl
-    qrcodegencpp
-  ]
-  ++ optionals scriptingSupport [ luajit python3 ]
-  ++ optional alsaSupport alsa-lib
-  ++ optional pulseaudioSupport libpulseaudio
-  ++ optionals pipewireSupport [ pipewire libdrm ]
-  ++ optional withFdk fdk_aac;
+  buildInputs =
+    [
+      curl
+      ffmpeg
+      jansson
+      libcef
+      libjack2
+      libv4l
+      libxkbcommon
+      libpthreadstubs
+      libXdmcp
+      qtbase
+      qtsvg
+      speex
+      wayland
+      x264
+      libvlc
+      mbedtls
+      pciutils
+      libajantv2
+      librist
+      libva
+      srt
+      qtwayland
+      nlohmann_json
+      websocketpp
+      asio
+      libdatachannel
+      libvpl
+      qrcodegencpp
+    ]
+    ++ optionals scriptingSupport [
+      luajit
+      python3
+    ]
+    ++ optional alsaSupport alsa-lib
+    ++ optional pulseaudioSupport libpulseaudio
+    ++ optionals pipewireSupport [
+      pipewire
+      libdrm
+    ]
+    ++ optional withFdk fdk_aac;
 
   # Copied from the obs-linuxbrowser
   postUnpack = ''
@@ -162,23 +169,23 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   dontWrapGApps = true;
-  preFixup = let
-    wrapperLibraries = [
-      xorg.libX11
-      libvlc
-      libGL
-    ] ++ optionals decklinkSupport [
-      blackmagic-desktop-video
-    ];
-  in ''
-    # Remove libcef before patchelf, otherwise it will fail
-    rm $out/lib/obs-plugins/libcef.so
+  preFixup =
+    let
+      wrapperLibraries = [
+        xorg.libX11
+        libvlc
+        libGL
+      ] ++ optionals decklinkSupport [ blackmagic-desktop-video ];
+    in
+    ''
+      # Remove libcef before patchelf, otherwise it will fail
+      rm $out/lib/obs-plugins/libcef.so
 
-    qtWrapperArgs+=(
-      --prefix LD_LIBRARY_PATH : "$out/lib:${lib.makeLibraryPath wrapperLibraries}"
-      ''${gappsWrapperArgs[@]}
-    )
-  '';
+      qtWrapperArgs+=(
+        --prefix LD_LIBRARY_PATH : "$out/lib:${lib.makeLibraryPath wrapperLibraries}"
+        ''${gappsWrapperArgs[@]}
+      )
+    '';
 
   postFixup = lib.optionalString stdenv.isLinux ''
     addOpenGLRunpath $out/lib/lib*.so
@@ -198,9 +205,18 @@ stdenv.mkDerivation (finalAttrs: {
       video content, efficiently
     '';
     homepage = "https://obsproject.com";
-    maintainers = with maintainers; [ eclairevoyant jb55 materus fpletz ];
+    maintainers = with maintainers; [
+      eclairevoyant
+      jb55
+      materus
+      fpletz
+    ];
     license = with licenses; [ gpl2Plus ] ++ optional withFdk fraunhofer-fdk;
-    platforms = [ "x86_64-linux" "i686-linux" "aarch64-linux" ];
+    platforms = [
+      "x86_64-linux"
+      "i686-linux"
+      "aarch64-linux"
+    ];
     mainProgram = "obs";
   };
 })

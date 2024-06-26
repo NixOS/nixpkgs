@@ -1,13 +1,22 @@
-{ lib, stdenv, fetchurl, zlib, readline, ncurses
-, updateAutotoolsGnuConfigScriptsHook
+{
+  lib,
+  stdenv,
+  fetchurl,
+  zlib,
+  readline,
+  ncurses,
+  updateAutotoolsGnuConfigScriptsHook,
 
-# for tests
-, python3Packages, sqldiff, sqlite-analyzer, tracker
+  # for tests
+  python3Packages,
+  sqldiff,
+  sqlite-analyzer,
+  tracker,
 
-# uses readline & ncurses for a better interactive experience if set to true
-, interactive ? false
+  # uses readline & ncurses for a better interactive experience if set to true
+  interactive ? false,
 
-, gitUpdater
+  gitUpdater,
 }:
 
 let
@@ -25,11 +34,20 @@ stdenv.mkDerivation rec {
     hash = "sha256-soCcpTEkwZxg9Cv2J3NurgEa/cwgW7SCcKXumjgZFTE=";
   };
 
-  outputs = [ "bin" "dev" "out" ];
+  outputs = [
+    "bin"
+    "dev"
+    "out"
+  ];
   separateDebugInfo = stdenv.isLinux;
 
   nativeBuildInputs = [ updateAutotoolsGnuConfigScriptsHook ];
-  buildInputs = [ zlib ] ++ lib.optionals interactive [ readline ncurses ];
+  buildInputs =
+    [ zlib ]
+    ++ lib.optionals interactive [
+      readline
+      ncurses
+    ];
 
   # required for aarch64 but applied for all arches for simplicity
   preConfigure = ''
@@ -107,7 +125,10 @@ stdenv.mkDerivation rec {
     homepage = "https://www.sqlite.org/";
     license = licenses.publicDomain;
     mainProgram = "sqlite3";
-    maintainers = with maintainers; [ eelco np ];
+    maintainers = with maintainers; [
+      eelco
+      np
+    ];
     platforms = platforms.unix ++ platforms.windows;
     pkgConfigModules = [ "sqlite3" ];
   };

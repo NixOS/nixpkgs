@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchurl, libGL, libX11 }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libGL,
+  libX11,
+}:
 
 stdenv.mkDerivation rec {
   pname = "glxinfo";
@@ -9,7 +15,10 @@ stdenv.mkDerivation rec {
     sha256 = "0zgzbz55a14hz83gbmm0n9gpjnf5zadzi2kjjvkn6khql2a9rs81";
   };
 
-  buildInputs = [ libX11 libGL ];
+  buildInputs = [
+    libX11
+    libGL
+  ];
 
   dontConfigure = true;
 

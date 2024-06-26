@@ -1,25 +1,32 @@
-{ lib
-, buildPackages
-, fetchFromGitHub
-, buildNpmPackage
-, fetchFromGitea
-, nix-update-script
+{
+  lib,
+  buildPackages,
+  fetchFromGitHub,
+  buildNpmPackage,
+  fetchFromGitea,
+  nix-update-script,
 }:
 
 let
   esbuild' = buildPackages.esbuild.override {
-    buildGoModule = args: buildPackages.buildGoModule (args // rec {
-      version = "0.19.11";
-      src = fetchFromGitHub {
-        owner = "evanw";
-        repo = "esbuild";
-        rev = "v${version}";
-        hash = "sha256-NUwjzOpHA0Ijuh0E69KXx8YVS5GTnKmob9HepqugbIU=";
-      };
-      vendorHash = "sha256-+BfxCyg0KkDQpHt/wycy/8CTG6YBA/VJvJFhhzUnSiQ=";
-    });
+    buildGoModule =
+      args:
+      buildPackages.buildGoModule (
+        args
+        // rec {
+          version = "0.19.11";
+          src = fetchFromGitHub {
+            owner = "evanw";
+            repo = "esbuild";
+            rev = "v${version}";
+            hash = "sha256-NUwjzOpHA0Ijuh0E69KXx8YVS5GTnKmob9HepqugbIU=";
+          };
+          vendorHash = "sha256-+BfxCyg0KkDQpHt/wycy/8CTG6YBA/VJvJFhhzUnSiQ=";
+        }
+      );
   };
-in buildNpmPackage rec {
+in
+buildNpmPackage rec {
   pname = "kaufkauflist";
   version = "4.0.0";
 

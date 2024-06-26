@@ -22,9 +22,7 @@ rustPlatform.buildRustPackage {
 
   cargoHash = "sha256-rioZfUJD4ZOpXGCWsBDQkYwW9XtTjFnGgMKl0mPF5XM=";
 
-  nativeBuildInputs = [
-    cargo-about
-  ];
+  nativeBuildInputs = [ cargo-about ];
 
   # Remove RiscV64 specialisation when this is fixed:
   # * https://github.com/NixOS/nixpkgs/pull/310158#pullrequestreview-2046944158
@@ -62,7 +60,10 @@ rustPlatform.buildRustPackage {
     homepage = "https://github.com/kxxt/tracexec";
     license = lib.licenses.gpl2Plus;
     mainProgram = "tracexec";
-    maintainers = with lib.maintainers; [ fpletz nh2 ];
+    maintainers = with lib.maintainers; [
+      fpletz
+      nh2
+    ];
     platforms = lib.platforms.linux;
   };
 }

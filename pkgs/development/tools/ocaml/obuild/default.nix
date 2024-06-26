@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, ocamlPackages }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  ocamlPackages,
+}:
 
 stdenv.mkDerivation rec {
   pname = "obuild";
@@ -13,7 +18,10 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  nativeBuildInputs = with ocamlPackages; [ ocaml findlib ];
+  nativeBuildInputs = with ocamlPackages; [
+    ocaml
+    findlib
+  ];
 
   buildPhase = ''
     patchShebangs ./bootstrap

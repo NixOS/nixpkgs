@@ -1,4 +1,8 @@
-{ lib, stdenv, fetchurl }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 
 stdenv.mkDerivation rec {
   pname = "unifdef";
@@ -19,6 +23,9 @@ stdenv.mkDerivation rec {
     description = "Selectively remove C preprocessor conditionals";
     license = licenses.bsd2;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ orivej vrthra ];
+    maintainers = with maintainers; [
+      orivej
+      vrthra
+    ];
   };
 }

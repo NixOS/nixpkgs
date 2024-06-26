@@ -1,15 +1,16 @@
-{ lib
-, buildPythonApplication
-, fetchFromGitHub
-, fleep
-, ifaddr
-, libarchive-c
-, pillow
-, requests-toolbelt
-, setuptools
-, zeroconf
-, pytestCheckHook
-, openssl
+{
+  lib,
+  buildPythonApplication,
+  fetchFromGitHub,
+  fleep,
+  ifaddr,
+  libarchive-c,
+  pillow,
+  requests-toolbelt,
+  setuptools,
+  zeroconf,
+  pytestCheckHook,
+  openssl,
 }:
 
 buildPythonApplication rec {
@@ -39,13 +40,9 @@ buildPythonApplication rec {
     zeroconf
   ];
 
-  makeWrapperArgs = [
-    "--prefix PATH : ${lib.makeBinPath nativeBuildInputs}"
-  ];
+  makeWrapperArgs = [ "--prefix PATH : ${lib.makeBinPath nativeBuildInputs}" ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
   preCheck = ''
     # Solves PermissionError: [Errno 13] Permission denied: '/homeless-shelter'

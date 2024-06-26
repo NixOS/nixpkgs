@@ -1,4 +1,8 @@
-{ lib, fetchurl, callPackage }:
+{
+  lib,
+  fetchurl,
+  callPackage,
+}:
 
 callPackage (import ./common.nix rec {
   pname = "cgit-pink";
@@ -13,11 +17,11 @@ callPackage (import ./common.nix rec {
   # IMPORTANT: Remember to check which git version cgit-pink needs on every
   # version bump (look for "GIT_VER" in the top-level Makefile).
   gitSrc = fetchurl {
-    url    = "mirror://kernel/software/scm/git/git-2.36.1.tar.xz";
+    url = "mirror://kernel/software/scm/git/git-2.36.1.tar.xz";
     sha256 = "0w43a35mhc2qf2gjkxjlnkf2lq8g0snf34iy5gqx2678yq7llpa0";
   };
 
   homepage = "https://git.causal.agency/cgit-pink/about/";
   description = "cgit fork aiming for better maintenance";
   maintainers = with lib.maintainers; [ sternenseemann ];
-}) {}
+}) { }

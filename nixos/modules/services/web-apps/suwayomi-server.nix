@@ -1,8 +1,18 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 let
   cfg = config.services.suwayomi-server;
-  inherit (lib) mkOption mkEnableOption mkIf types;
+  inherit (lib)
+    mkOption
+    mkEnableOption
+    mkIf
+    types
+    ;
 
   format = pkgs.formats.hocon { };
 in
@@ -104,10 +114,8 @@ in
 
               extensionRepos = mkOption {
                 type = types.listOf types.str;
-                default = [];
-                example = [
-                  "https://raw.githubusercontent.com/MY_ACCOUNT/MY_REPO/repo/index.min.json"
-                ];
+                default = [ ];
+                example = [ "https://raw.githubusercontent.com/MY_ACCOUNT/MY_REPO/repo/index.min.json" ];
                 description = ''
                   URL of repositories from which the extensions can be installed.
                 '';
@@ -149,18 +157,20 @@ in
 
   config = mkIf cfg.enable {
 
-    assertions = [{
-      assertion = with cfg.settings.server; basicAuthEnabled -> (basicAuthUsername != null && basicAuthPasswordFile != null);
-      message = ''
-        [suwayomi-server]: the username and the password file cannot be null when the basic auth is enabled
-      '';
-    }];
+    assertions = [
+      {
+        assertion =
+          with cfg.settings.server;
+          basicAuthEnabled -> (basicAuthUsername != null && basicAuthPasswordFile != null);
+        message = ''
+          [suwayomi-server]: the username and the password file cannot be null when the basic auth is enabled
+        '';
+      }
+    ];
 
     networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall [ cfg.settings.server.port ];
 
-    users.groups = mkIf (cfg.group == "suwayomi") {
-      suwayomi = { };
-    };
+    users.groups = mkIf (cfg.group == "suwayomi") { suwayomi = { }; };
 
     users.users = mkIf (cfg.user == "suwayomi") {
       suwayomi = {
@@ -181,16 +191,19 @@ in
 
     systemd.services.suwayomi-server =
       let
-        configFile = format.generate "server.conf" (lib.pipe cfg.settings [
-          (settings: lib.recursiveUpdate settings {
-            server.basicAuthPasswordFile = null;
-            server.basicAuthPassword =
-              if settings.server.basicAuthEnabled
-              then "$TACHIDESK_SERVER_BASIC_AUTH_PASSWORD"
-              else null;
-          })
-          (lib.filterAttrsRecursive (_: x: x != null))
-        ]);
+        configFile = format.generate "server.conf" (
+          lib.pipe cfg.settings [
+            (
+              settings:
+              lib.recursiveUpdate settings {
+                server.basicAuthPasswordFile = null;
+                server.basicAuthPassword =
+                  if settings.server.basicAuthEnabled then "$TACHIDESK_SERVER_BASIC_AUTH_PASSWORD" else null;
+              }
+            )
+            (lib.filterAttrsRecursive (_: x: x != null))
+          ]
+        );
       in
       {
         description = "A free and open source manga reader server that runs extensions built for Tachiyomi.";

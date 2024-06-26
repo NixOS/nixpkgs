@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchurl
-, libtool
-, ncurses
-, enableShared ? !stdenv.isDarwin && !stdenv.hostPlatform.isStatic
-, unicodeSupport ? true
-, withLibrary ? true
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libtool,
+  ncurses,
+  enableShared ? !stdenv.isDarwin && !stdenv.hostPlatform.isStatic,
+  unicodeSupport ? true,
+  withLibrary ? true,
 }:
 
 assert unicodeSupport -> ncurses.unicodeSupport;
@@ -18,13 +19,9 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-MVZAqwcZIl1cvKsTBYXAXweR/PBzBypf6UeZaaorgzs=";
   };
 
-  nativeBuildInputs = lib.optionals withLibrary [
-    libtool
-  ];
+  nativeBuildInputs = lib.optionals withLibrary [ libtool ];
 
-  buildInputs = [
-    ncurses
-  ];
+  buildInputs = [ ncurses ];
 
   strictDeps = true;
 
@@ -35,16 +32,17 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-ncurses${lib.optionalString unicodeSupport "w"}"
   ];
 
-  installTargets = [
-    "install${lib.optionalString withLibrary "-full"}"
-  ];
+  installTargets = [ "install${lib.optionalString withLibrary "-full"}" ];
 
   meta = {
     homepage = "https://invisible-island.net/dialog/dialog.html";
     description = "Display dialog boxes from shell";
     license = lib.licenses.lgpl21Plus;
     mainProgram = "dialog";
-    maintainers = with lib.maintainers; [ AndersonTorres spacefrogg ];
+    maintainers = with lib.maintainers; [
+      AndersonTorres
+      spacefrogg
+    ];
     inherit (ncurses.meta) platforms;
   };
 })

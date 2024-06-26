@@ -1,9 +1,15 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.programs.msmtp;
 
-in {
+in
+{
   meta.maintainers = with lib.maintainers; [ pacien ];
 
   options = {
@@ -20,7 +26,7 @@ in {
 
       defaults = lib.mkOption {
         type = lib.types.attrs;
-        default = {};
+        default = { };
         example = {
           aliases = "/etc/aliases";
           port = 587;
@@ -34,7 +40,7 @@ in {
 
       accounts = lib.mkOption {
         type = with lib.types; attrsOf attrs;
-        default = {};
+        default = { };
         example = {
           "default" = {
             host = "smtp.example";
@@ -80,25 +86,31 @@ in {
       group = "root";
     };
 
-    environment.etc."msmtprc".text = let
-      mkValueString = v:
-        if v == true then "on"
-        else if v == false then "off"
-        else lib.generators.mkValueStringDefault {} v;
-      mkKeyValueString = k: v: "${k} ${mkValueString v}";
-      mkInnerSectionString =
-        attrs: builtins.concatStringsSep "\n" (lib.mapAttrsToList mkKeyValueString attrs);
-      mkAccountString = name: attrs: ''
-        account ${name}
-        ${mkInnerSectionString attrs}
+    environment.etc."msmtprc".text =
+      let
+        mkValueString =
+          v:
+          if v == true then
+            "on"
+          else if v == false then
+            "off"
+          else
+            lib.generators.mkValueStringDefault { } v;
+        mkKeyValueString = k: v: "${k} ${mkValueString v}";
+        mkInnerSectionString =
+          attrs: builtins.concatStringsSep "\n" (lib.mapAttrsToList mkKeyValueString attrs);
+        mkAccountString = name: attrs: ''
+          account ${name}
+          ${mkInnerSectionString attrs}
+        '';
+      in
+      ''
+        defaults
+        ${mkInnerSectionString cfg.defaults}
+
+        ${builtins.concatStringsSep "\n" (lib.mapAttrsToList mkAccountString cfg.accounts)}
+
+        ${cfg.extraConfig}
       '';
-    in ''
-      defaults
-      ${mkInnerSectionString cfg.defaults}
-
-      ${builtins.concatStringsSep "\n" (lib.mapAttrsToList mkAccountString cfg.accounts)}
-
-      ${cfg.extraConfig}
-    '';
   };
 }

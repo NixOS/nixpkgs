@@ -1,11 +1,12 @@
-{ lib
-, rustPlatform
-, steamcmd
-, fetchFromGitHub
-, steam-run
-, runtimeShell
-, withWine ? false
-, wine
+{
+  lib,
+  rustPlatform,
+  steamcmd,
+  fetchFromGitHub,
+  steam-run,
+  runtimeShell,
+  withWine ? false,
+  wine,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -21,8 +22,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-VYBzwDLSV4N4qt2dNgIS399T2HIbPTdQ2rDIeheLlfo=";
 
-  buildInputs = [ steamcmd ]
-    ++ lib.optional withWine wine;
+  buildInputs = [ steamcmd ] ++ lib.optional withWine wine;
 
   preFixup = ''
     mv $out/bin/steam-tui $out/bin/.steam-tui-unwrapped

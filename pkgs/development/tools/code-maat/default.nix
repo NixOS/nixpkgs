@@ -1,8 +1,9 @@
-{ lib
-, stdenvNoCC
-, fetchurl
-, makeBinaryWrapper
-, jre
+{
+  lib,
+  stdenvNoCC,
+  fetchurl,
+  makeBinaryWrapper,
+  jre,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -16,9 +17,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   dontUnpack = true;
 
-  nativeBuildInputs = [
-    makeBinaryWrapper
-  ];
+  nativeBuildInputs = [ makeBinaryWrapper ];
 
   installPhase =
     let

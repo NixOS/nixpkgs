@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, meson
-, ninja
-, pkg-config
-, qt6
-, wayland
-, glib
-, wrapGAppsHook3
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  meson,
+  ninja,
+  pkg-config,
+  qt6,
+  wayland,
+  glib,
+  wrapGAppsHook3,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

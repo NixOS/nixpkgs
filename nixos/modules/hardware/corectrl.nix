@@ -1,4 +1,9 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 with lib;
 
@@ -34,33 +39,35 @@ in
     };
   };
 
-  config = mkIf cfg.enable (lib.mkMerge [
-    {
-      environment.systemPackages = [ cfg.package ];
+  config = mkIf cfg.enable (
+    lib.mkMerge [
+      {
+        environment.systemPackages = [ cfg.package ];
 
-      services.dbus.packages = [ cfg.package ];
+        services.dbus.packages = [ cfg.package ];
 
-      users.groups.corectrl = { };
+        users.groups.corectrl = { };
 
-      security.polkit.extraConfig = ''
-        polkit.addRule(function(action, subject) {
-            if ((action.id == "org.corectrl.helper.init" ||
-                 action.id == "org.corectrl.helperkiller.init") &&
-                subject.local == true &&
-                subject.active == true &&
-                subject.isInGroup("corectrl")) {
-                    return polkit.Result.YES;
-            }
-        });
-      '';
-    }
+        security.polkit.extraConfig = ''
+          polkit.addRule(function(action, subject) {
+              if ((action.id == "org.corectrl.helper.init" ||
+                   action.id == "org.corectrl.helperkiller.init") &&
+                  subject.local == true &&
+                  subject.active == true &&
+                  subject.isInGroup("corectrl")) {
+                      return polkit.Result.YES;
+              }
+          });
+        '';
+      }
 
-    (lib.mkIf cfg.gpuOverclock.enable {
-      # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/gpu/drm/amd/include/amd_shared.h#n169
-      # The overdrive bit
-      boot.kernelParams = [ "amdgpu.ppfeaturemask=${cfg.gpuOverclock.ppfeaturemask}" ];
-    })
-  ]);
+      (lib.mkIf cfg.gpuOverclock.enable {
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/gpu/drm/amd/include/amd_shared.h#n169
+        # The overdrive bit
+        boot.kernelParams = [ "amdgpu.ppfeaturemask=${cfg.gpuOverclock.ppfeaturemask}" ];
+      })
+    ]
+  );
 
   meta.maintainers = with lib.maintainers; [ artturin ];
 }

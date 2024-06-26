@@ -1,13 +1,14 @@
-{ stdenv
-, callPackage
-, rocmUpdateScript
-, clr
-, vulkan-headers
-, vulkan-loader
-, glslang
-, shaderc
-, lit
-, fetchpatch
+{
+  stdenv,
+  callPackage,
+  rocmUpdateScript,
+  clr,
+  vulkan-headers,
+  vulkan-loader,
+  glslang,
+  shaderc,
+  lit,
+  fetchpatch,
 }:
 
 callPackage ../base.nix rec {

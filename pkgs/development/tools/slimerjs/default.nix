@@ -1,11 +1,12 @@
-{ lib
-, bash
-, fetchFromGitHub
-, firefox
-, strip-nondeterminism
-, stdenv
-, unzip
-, zip
+{
+  lib,
+  bash,
+  fetchFromGitHub,
+  firefox,
+  strip-nondeterminism,
+  stdenv,
+  unzip,
+  zip,
 }:
 
 stdenv.mkDerivation rec {

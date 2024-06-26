@@ -1,18 +1,19 @@
-{ lib
-, buildDunePackage
-, fetchurl
-, ppx_deriving
-, bppsuite
-, alcotest
-, angstrom-unix
-, biotk
-, core
-, gsl
-, lacaml
-, menhir
-, menhirLib
-, printbox-text
-, yojson
+{
+  lib,
+  buildDunePackage,
+  fetchurl,
+  ppx_deriving,
+  bppsuite,
+  alcotest,
+  angstrom-unix,
+  biotk,
+  core,
+  gsl,
+  lacaml,
+  menhir,
+  menhirLib,
+  printbox-text,
+  yojson,
 }:
 
 buildDunePackage rec {

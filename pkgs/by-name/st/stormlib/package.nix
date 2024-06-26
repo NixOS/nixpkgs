@@ -20,18 +20,13 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-8JDMqZ5BWslH4+Mfo5lnWTmD2QDaColwBOLzcuGZciY=";
   };
 
-  nativeBuildInputs = [
-    cmake
-  ];
+  nativeBuildInputs = [ cmake ];
 
   buildInputs = [
     bzip2
     libtomcrypt
     zlib
-  ]
-  ++ lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.Carbon
-  ];
+  ] ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Carbon ];
 
   cmakeFlags = [
     (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
@@ -40,10 +35,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.cc.isClang [
-    "-Wno-implicit-function-declaration"
-    "-Wno-int-conversion"
-  ]);
+  env.NIX_CFLAGS_COMPILE = toString (
+    lib.optionals stdenv.cc.isClang [
+      "-Wno-implicit-function-declaration"
+      "-Wno-int-conversion"
+    ]
+  );
 
   postPatch = ''
     substituteInPlace CMakeLists.txt \
@@ -54,7 +51,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/ladislav-zezula/StormLib";
     description = "Open-source project that can work with Blizzard MPQ archives";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ aanderse karolchmist ];
+    maintainers = with lib.maintainers; [
+      aanderse
+      karolchmist
+    ];
     platforms = lib.platforms.all;
     broken = stdenv.isDarwin; # installation directory mismatch
   };

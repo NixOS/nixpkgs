@@ -1,9 +1,10 @@
-{ bash
-, coreutils
-, fetchFromGitHub
-, lib
-, python39
-, substituteAll
+{
+  bash,
+  coreutils,
+  fetchFromGitHub,
+  lib,
+  python39,
+  substituteAll,
 }:
 
 let

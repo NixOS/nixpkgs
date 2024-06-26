@@ -1,16 +1,23 @@
-{ fetchFromGitHub
-, gradle_7
-, jdk19
-, lib
-, stdenv
-, rsync
-, runCommand
-, testers
+{
+  fetchFromGitHub,
+  gradle_7,
+  jdk19,
+  lib,
+  stdenv,
+  rsync,
+  runCommand,
+  testers,
 }:
 
 let
   corretto = import ./mk-corretto.nix rec {
-    inherit lib stdenv rsync runCommand testers;
+    inherit
+      lib
+      stdenv
+      rsync
+      runCommand
+      testers
+      ;
     jdk = jdk19;
     gradle = gradle_7;
     version = "19.0.2.7.1";

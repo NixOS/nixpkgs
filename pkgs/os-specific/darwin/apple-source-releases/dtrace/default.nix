@@ -1,14 +1,37 @@
-{ appleDerivation, xcbuildHook, CoreSymbolication, apple_sdk
-, xnu, bison, flex, stdenv, fixDarwinDylibNames }:
+{
+  appleDerivation,
+  xcbuildHook,
+  CoreSymbolication,
+  apple_sdk,
+  xnu,
+  bison,
+  flex,
+  stdenv,
+  fixDarwinDylibNames,
+}:
 
 appleDerivation {
-  nativeBuildInputs = [ xcbuildHook flex bison fixDarwinDylibNames ];
-  buildInputs = [ CoreSymbolication apple_sdk.frameworks.CoreSymbolication xnu ];
+  nativeBuildInputs = [
+    xcbuildHook
+    flex
+    bison
+    fixDarwinDylibNames
+  ];
+  buildInputs = [
+    CoreSymbolication
+    apple_sdk.frameworks.CoreSymbolication
+    xnu
+  ];
   # -fcommon: workaround build failure on -fno-common toolchains:
   #   duplicate symbol '_kCSRegionMachHeaderName' in: libproc.o dt_module_apple.o
   env.NIX_CFLAGS_COMPILE = "-DCTF_OLD_VERSIONS -DPRIVATE -DYYDEBUG=1 -I${xnu}/Library/Frameworks/System.framework/Headers -Wno-error=implicit-function-declaration -fcommon";
   NIX_LDFLAGS = "-L./Products/Release";
-  xcbuildFlags = [ "-target" "dtrace_frameworks" "-target" "dtrace" ];
+  xcbuildFlags = [
+    "-target"
+    "dtrace_frameworks"
+    "-target"
+    "dtrace"
+  ];
 
   doCheck = false;
   checkPhase = "xcodebuild -target dtrace_tests";

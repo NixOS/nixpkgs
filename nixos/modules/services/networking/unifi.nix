@@ -1,8 +1,19 @@
-{ config, options, lib, pkgs, utils, ... }:
+{
+  config,
+  options,
+  lib,
+  pkgs,
+  utils,
+  ...
+}:
 let
   cfg = config.services.unifi;
   stateDir = "/var/lib/unifi";
-  cmd = lib.escapeShellArgs ([ "@${cfg.jrePackage}/bin/java" "java" ]
+  cmd = lib.escapeShellArgs (
+    [
+      "@${cfg.jrePackage}/bin/java"
+      "java"
+    ]
     ++ lib.optionals (lib.versionAtLeast (lib.getVersion cfg.jrePackage) "16") [
       "--add-opens=java.base/java.lang=ALL-UNNAMED"
       "--add-opens=java.base/java.time=ALL-UNNAMED"
@@ -13,7 +24,11 @@ let
     ++ (lib.optional (cfg.initialJavaHeapSize != null) "-Xms${(toString cfg.initialJavaHeapSize)}m")
     ++ (lib.optional (cfg.maximumJavaHeapSize != null) "-Xmx${(toString cfg.maximumJavaHeapSize)}m")
     ++ cfg.extraJvmOptions
-    ++ [ "-jar" "${stateDir}/lib/ace.jar" ]);
+    ++ [
+      "-jar"
+      "${stateDir}/lib/ace.jar"
+    ]
+  );
 in
 {
 
@@ -29,7 +44,13 @@ in
 
     services.unifi.jrePackage = lib.mkOption {
       type = lib.types.package;
-      default = if (lib.versionAtLeast (lib.getVersion cfg.unifiPackage) "7.5") then pkgs.jdk17_headless else if (lib.versionAtLeast (lib.getVersion cfg.unifiPackage) "7.3") then pkgs.jdk11 else pkgs.jre8;
+      default =
+        if (lib.versionAtLeast (lib.getVersion cfg.unifiPackage) "7.5") then
+          pkgs.jdk17_headless
+        else if (lib.versionAtLeast (lib.getVersion cfg.unifiPackage) "7.3") then
+          pkgs.jdk11
+        else
+          pkgs.jre8;
       defaultText = lib.literalExpression ''if (lib.versionAtLeast (lib.getVersion cfg.unifiPackage) "7.5") then pkgs.jdk17_headless else if (lib.versionAtLeast (lib.getVersion cfg.unifiPackage) "7.3" then pkgs.jdk11 else pkgs.jre8'';
       description = ''
         The JRE package to use. Check the release notes to ensure it is supported.
@@ -98,18 +119,18 @@ in
       description = "UniFi controller daemon user";
       home = "${stateDir}";
     };
-    users.groups.unifi = {};
+    users.groups.unifi = { };
 
     networking.firewall = lib.mkIf cfg.openFirewall {
       # https://help.ubnt.com/hc/en-us/articles/218506997
       allowedTCPPorts = [
-        8080  # Port for UAP to inform controller.
-        8880  # Port for HTTP portal redirect, if guest portal is enabled.
-        8843  # Port for HTTPS portal redirect, ditto.
-        6789  # Port for UniFi mobile speed test.
+        8080 # Port for UAP to inform controller.
+        8880 # Port for HTTP portal redirect, if guest portal is enabled.
+        8843 # Port for HTTPS portal redirect, ditto.
+        6789 # Port for UniFi mobile speed test.
       ];
       allowedUDPPorts = [
-        3478  # UDP port used for STUN.
+        3478 # UDP port used for STUN.
         10001 # UDP port used for device discovery.
       ];
     };
@@ -122,7 +143,10 @@ in
       # This a HACK to fix missing dependencies of dynamic libs extracted from jars
       environment.LD_LIBRARY_PATH = with pkgs.stdenv; "${cc.cc.lib}/lib";
       # Make sure package upgrades trigger a service restart
-      restartTriggers = [ cfg.unifiPackage cfg.mongodbPackage ];
+      restartTriggers = [
+        cfg.unifiPackage
+        cfg.mongodbPackage
+      ];
 
       serviceConfig = {
         Type = "simple";
@@ -197,7 +221,22 @@ in
 
   };
   imports = [
-    (lib.mkRemovedOptionModule [ "services" "unifi" "dataDir" ] "You should move contents of dataDir to /var/lib/unifi/data")
-    (lib.mkRenamedOptionModule [ "services" "unifi" "openPorts" ] [ "services" "unifi" "openFirewall" ])
+    (lib.mkRemovedOptionModule [
+      "services"
+      "unifi"
+      "dataDir"
+    ] "You should move contents of dataDir to /var/lib/unifi/data")
+    (lib.mkRenamedOptionModule
+      [
+        "services"
+        "unifi"
+        "openPorts"
+      ]
+      [
+        "services"
+        "unifi"
+        "openFirewall"
+      ]
+    )
   ];
 }

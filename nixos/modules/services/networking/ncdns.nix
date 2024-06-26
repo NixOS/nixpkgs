@@ -1,42 +1,57 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
 let
   cfgs = config.services;
-  cfg  = cfgs.ncdns;
+  cfg = cfgs.ncdns;
 
-  dataDir  = "/var/lib/ncdns";
+  dataDir = "/var/lib/ncdns";
   username = "ncdns";
 
-  valueType = with types; oneOf [ int str bool path ]
-    // { description = "setting type (integer, string, bool or path)"; };
+  valueType =
+    with types;
+    oneOf [
+      int
+      str
+      bool
+      path
+    ]
+    // {
+      description = "setting type (integer, string, bool or path)";
+    };
 
-  configType = with types; attrsOf (nullOr (either valueType configType))
-    // { description = ''
-          ncdns.conf configuration type. The format consists of an
-          attribute set of settings. Each setting can be either `null`,
-          a value or an attribute set. The allowed values are integers,
-          strings, booleans or paths.
-         '';
-       };
+  configType =
+    with types;
+    attrsOf (nullOr (either valueType configType))
+    // {
+      description = ''
+        ncdns.conf configuration type. The format consists of an
+        attribute set of settings. Each setting can be either `null`,
+        a value or an attribute set. The allowed values are integers,
+        strings, booleans or paths.
+      '';
+    };
 
-  configFile = pkgs.runCommand "ncdns.conf"
-    { json = builtins.toJSON cfg.settings;
-      passAsFile = [ "json" ];
-    }
-    "${pkgs.remarshal}/bin/json2toml < $jsonPath > $out";
+  configFile = pkgs.runCommand "ncdns.conf" {
+    json = builtins.toJSON cfg.settings;
+    passAsFile = [ "json" ];
+  } "${pkgs.remarshal}/bin/json2toml < $jsonPath > $out";
 
   defaultFiles = {
-    public  = "${dataDir}/bit.key";
+    public = "${dataDir}/bit.key";
     private = "${dataDir}/bit.private";
-    zonePublic  = "${dataDir}/bit-zone.key";
+    zonePublic = "${dataDir}/bit-zone.key";
     zonePrivate = "${dataDir}/bit-zone.private";
   };
 
   # if all keys are the default value
-  needsKeygen = all id (flip mapAttrsToList cfg.dnssec.keys
-    (n: v: v == getAttr n defaultFiles));
+  needsKeygen = all id (flip mapAttrsToList cfg.dnssec.keys (n: v: v == getAttr n defaultFiles));
 
   mkDefaultAttrs = mapAttrs (n: v: mkDefault v);
 
@@ -196,7 +211,6 @@ in
 
   };
 
-
   ###### implementation
 
   config = mkIf cfg.enable {
@@ -204,9 +218,10 @@ in
     services.pdns-recursor = mkIf cfgs.pdns-recursor.resolveNamecoin {
       forwardZonesRecurse.bit = "${cfg.address}:${toString cfg.port}";
       luaConfig =
-        if cfg.dnssec.enable
-          then ''readTrustAnchorsFromFile("${cfg.dnssec.keys.public}")''
-          else ''addNTA("bit", "namecoin DNSSEC disabled")'';
+        if cfg.dnssec.enable then
+          ''readTrustAnchorsFromFile("${cfg.dnssec.keys.public}")''
+        else
+          ''addNTA("bit", "namecoin DNSSEC disabled")'';
     };
 
     # Avoid pdns-recursor not finding the DNSSEC keys
@@ -217,9 +232,9 @@ in
 
     services.ncdns.settings = mkDefaultAttrs {
       ncdns =
-        { # Namecoin RPC
-          namecoinrpcaddress =
-            "${cfgs.namecoind.rpc.address}:${toString cfgs.namecoind.rpc.port}";
+        {
+          # Namecoin RPC
+          namecoinrpcaddress = "${cfgs.namecoind.rpc.address}:${toString cfgs.namecoind.rpc.port}";
           namecoinrpcusername = cfgs.namecoind.rpc.user;
           namecoinrpcpassword = cfgs.namecoind.rpc.password;
 
@@ -231,17 +246,17 @@ in
           # Other
           bind = "${cfg.address}:${toString cfg.port}";
         }
-        // optionalAttrs cfg.dnssec.enable
-        { # DNSSEC
-          publickey  = "../.." + cfg.dnssec.keys.public;
+        // optionalAttrs cfg.dnssec.enable {
+          # DNSSEC
+          publickey = "../.." + cfg.dnssec.keys.public;
           privatekey = "../.." + cfg.dnssec.keys.private;
-          zonepublickey  = "../.." + cfg.dnssec.keys.zonePublic;
+          zonepublickey = "../.." + cfg.dnssec.keys.zonePublic;
           zoneprivatekey = "../.." + cfg.dnssec.keys.zonePrivate;
         };
 
-        # Daemon
-        service.daemon = true;
-        xlog.journal = true;
+      # Daemon
+      service.daemon = true;
+      xlog.journal = true;
     };
 
     users.users.ncdns = {
@@ -249,11 +264,11 @@ in
       group = "ncdns";
       description = "ncdns daemon user";
     };
-    users.groups.ncdns = {};
+    users.groups.ncdns = { };
 
     systemd.services.ncdns = {
       description = "ncdns daemon";
-      after    = [ "namecoind.service" ];
+      after = [ "namecoind.service" ];
       wantedBy = [ "multi-user.target" ];
 
       serviceConfig = {

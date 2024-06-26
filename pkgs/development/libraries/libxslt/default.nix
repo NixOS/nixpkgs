@@ -1,25 +1,32 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, autoreconfHook
-, libxml2
-, findXMLCatalogs
-, gettext
-, python
-, ncurses
-, libxcrypt
-, libgcrypt
-, cryptoSupport ? false
-, pythonSupport ? libxml2.pythonSupport
-, gnome
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  autoreconfHook,
+  libxml2,
+  findXMLCatalogs,
+  gettext,
+  python,
+  ncurses,
+  libxcrypt,
+  libgcrypt,
+  cryptoSupport ? false,
+  pythonSupport ? libxml2.pythonSupport,
+  gnome,
 }:
 
 stdenv.mkDerivation rec {
   pname = "libxslt";
   version = "1.1.39";
 
-  outputs = [ "bin" "dev" "out" "doc" "devdoc" ] ++ lib.optional pythonSupport "py";
+  outputs = [
+    "bin"
+    "dev"
+    "out"
+    "doc"
+    "devdoc"
+  ] ++ lib.optional pythonSupport "py";
   outputMan = "bin";
 
   src = fetchurl {
@@ -34,21 +41,20 @@ stdenv.mkDerivation rec {
     autoreconfHook
   ];
 
-  buildInputs = [
-    libxml2.dev libxcrypt
-  ] ++ lib.optionals stdenv.isDarwin [
-    gettext
-  ] ++ lib.optionals pythonSupport [
-    libxml2.py
-    python
-    ncurses
-  ] ++ lib.optionals cryptoSupport [
-    libgcrypt
-  ];
+  buildInputs =
+    [
+      libxml2.dev
+      libxcrypt
+    ]
+    ++ lib.optionals stdenv.isDarwin [ gettext ]
+    ++ lib.optionals pythonSupport [
+      libxml2.py
+      python
+      ncurses
+    ]
+    ++ lib.optionals cryptoSupport [ libgcrypt ];
 
-  propagatedBuildInputs = [
-    findXMLCatalogs
-  ];
+  propagatedBuildInputs = [ findXMLCatalogs ];
 
   configureFlags = [
     "--without-debug"
@@ -56,20 +62,20 @@ stdenv.mkDerivation rec {
     "--without-debugger"
     (lib.withFeature pythonSupport "python")
     (lib.optionalString pythonSupport "PYTHON=${python.pythonOnBuildForHost.interpreter}")
-  ] ++ lib.optionals (!cryptoSupport) [
-    "--without-crypto"
-  ];
+  ] ++ lib.optionals (!cryptoSupport) [ "--without-crypto" ];
 
   enableParallelBuilding = true;
 
-  postFixup = ''
-    moveToOutput bin/xslt-config "$dev"
-    moveToOutput lib/xsltConf.sh "$dev"
-  '' + lib.optionalString pythonSupport ''
-    mkdir -p $py/nix-support
-    echo ${libxml2.py} >> $py/nix-support/propagated-build-inputs
-    moveToOutput ${python.sitePackages} "$py"
-  '';
+  postFixup =
+    ''
+      moveToOutput bin/xslt-config "$dev"
+      moveToOutput lib/xsltConf.sh "$dev"
+    ''
+    + lib.optionalString pythonSupport ''
+      mkdir -p $py/nix-support
+      echo ${libxml2.py} >> $py/nix-support/propagated-build-inputs
+      moveToOutput ${python.sitePackages} "$py"
+    '';
 
   passthru = {
     inherit pythonSupport;
@@ -85,7 +91,10 @@ stdenv.mkDerivation rec {
     description = "C library and tools to do XSL transformations";
     license = licenses.mit;
     platforms = platforms.all;
-    maintainers = with maintainers; [ eelco jtojnar ];
+    maintainers = with maintainers; [
+      eelco
+      jtojnar
+    ];
     broken = pythonSupport && !libxml2.pythonSupport; # see #73102 for why this is not an assert
   };
 }

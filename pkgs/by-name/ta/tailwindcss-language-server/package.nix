@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, buildNpmPackage
-, fetchFromGitHub
-, python3
-, darwin
-, libsecret
-, pkg-config
+{
+  lib,
+  stdenv,
+  buildNpmPackage,
+  fetchFromGitHub,
+  python3,
+  darwin,
+  libsecret,
+  pkg-config,
 }:
 
 let
@@ -26,15 +27,26 @@ buildNpmPackage {
   npmDepsHash = "sha256-z2fLtGnYgI8ocWTBrqpdElgjNghoE42LFJRWyVt/U7M=";
   npmWorkspace = "packages/tailwindcss-language-server";
 
-  buildInputs = [ libsecret ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ Security AppKit ]);
+  buildInputs =
+    [ libsecret ]
+    ++ lib.optionals stdenv.isDarwin (
+      with darwin.apple_sdk.frameworks;
+      [
+        Security
+        AppKit
+      ]
+    );
 
-  nativeBuildInputs = [ python3 pkg-config ];
+  nativeBuildInputs = [
+    python3
+    pkg-config
+  ];
 
   meta = with lib; {
     description = "Intelligent Tailwind CSS tooling for Visual Studio Code";
     homepage = "https://github.com/tailwindlabs/tailwindcss-intellisense";
     license = licenses.mit;
-    maintainers = with maintainers; [ happysalada];
+    maintainers = with maintainers; [ happysalada ];
     mainProgram = "tailwindcss-language-server";
     platforms = platforms.all;
   };

@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, darwin
-, testers
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  darwin,
+  testers,
 }:
 
 let
@@ -19,9 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-TVGC+f+1ow3b93CK3PhIL70le5SZxxb2ug5OkIg8XCA=";
   };
 
-  buildInputs = [
-    darwin.apple_sdk.frameworks.Foundation
-  ];
+  buildInputs = [ darwin.apple_sdk.frameworks.Foundation ];
 
   buildPhase = ''
     runHook preBuild
@@ -43,13 +42,9 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  __impureHostDeps = [
-    privateFrameworks
-  ];
+  __impureHostDeps = [ privateFrameworks ];
 
-  passthru.tests.version = testers.testVersion {
-    package = finalAttrs.finalPackage;
-  };
+  passthru.tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
 
   meta = {
     description = "Install and debug iPhone apps from the command line, without using Xcode";

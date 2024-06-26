@@ -1,10 +1,18 @@
-{ lib, stdenv, fetchurl, curl, hdf5, netcdf, eccodes, python3
-, # build, install and link to a CDI library [default=no]
-  enable_cdi_lib ? false
-, # build a completely statically linked CDO binary
-  enable_all_static ? stdenv.hostPlatform.isStatic
-, # Use CXX as default compiler [default=no]
-  enable_cxx ? false
+{
+  lib,
+  stdenv,
+  fetchurl,
+  curl,
+  hdf5,
+  netcdf,
+  eccodes,
+  python3,
+  # build, install and link to a CDI library [default=no]
+  enable_cdi_lib ? false,
+  # build a completely statically linked CDO binary
+  enable_all_static ? stdenv.hostPlatform.isStatic,
+  # Use CXX as default compiler [default=no]
+  enable_cxx ? false,
 }:
 
 stdenv.mkDerivation rec {
@@ -12,21 +20,27 @@ stdenv.mkDerivation rec {
   version = "2.2.2";
 
   # Dependencies
-  buildInputs = [ curl netcdf hdf5 python3 ];
+  buildInputs = [
+    curl
+    netcdf
+    hdf5
+    python3
+  ];
 
   src = fetchurl {
     url = "https://code.mpimet.mpg.de/attachments/download/28882/${pname}-${version}.tar.gz";
     sha256 = "sha256-QZx3MVJEAZr0GilsBQZvR0zMv5Tev6rp4hBtpRvHyTc=";
   };
 
- configureFlags = [
-    "--with-netcdf=${netcdf}"
-    "--with-hdf5=${hdf5}"
-    "--with-eccodes=${eccodes}"
-  ]
-   ++ lib.optional enable_cdi_lib "--enable-cdi-lib"
-   ++ lib.optional enable_all_static "--enable-all-static"
-   ++ lib.optional enable_cxx "--enable-cxx";
+  configureFlags =
+    [
+      "--with-netcdf=${netcdf}"
+      "--with-hdf5=${hdf5}"
+      "--with-eccodes=${eccodes}"
+    ]
+    ++ lib.optional enable_cdi_lib "--enable-cdi-lib"
+    ++ lib.optional enable_all_static "--enable-all-static"
+    ++ lib.optional enable_cxx "--enable-cxx";
 
   meta = with lib; {
     description = "Collection of command line Operators to manipulate and analyse Climate and NWP model Data";

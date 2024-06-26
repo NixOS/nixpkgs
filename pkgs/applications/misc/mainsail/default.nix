@@ -1,17 +1,18 @@
-{ lib
-, buildNpmPackage
-, fetchFromGitHub
+{
+  lib,
+  buildNpmPackage,
+  fetchFromGitHub,
 }:
 
- buildNpmPackage rec {
+buildNpmPackage rec {
   pname = "mainsail";
   version = "2.11.2";
 
   src = fetchFromGitHub {
-      owner = "mainsail-crew";
-      repo = "mainsail";
-      rev = "v${version}";
-      hash = "sha256-N0tm36YMRRrkyuIwzcYbDo1DHesAnJ2s2g0KCms3h5I=";
+    owner = "mainsail-crew";
+    repo = "mainsail";
+    rev = "v${version}";
+    hash = "sha256-N0tm36YMRRrkyuIwzcYbDo1DHesAnJ2s2g0KCms3h5I=";
   };
 
   npmDepsHash = "sha256-z6Fo0XAds/F0Ig+nUE3O16gmH0EVcpML3K8cdKhkJzg=";
@@ -39,6 +40,10 @@
     changelog = "https://github.com/mainsail-crew/mainsail/releases/tag/v${version}";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ shhht lovesegfault wulfsta ];
+    maintainers = with maintainers; [
+      shhht
+      lovesegfault
+      wulfsta
+    ];
   };
 }

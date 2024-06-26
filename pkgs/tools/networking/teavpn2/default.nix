@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, substituteAll
-, iproute2
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  substituteAll,
+  iproute2,
 }:
 stdenv.mkDerivation {
   pname = "teavpn2";

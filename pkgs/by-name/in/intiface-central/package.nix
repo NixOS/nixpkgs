@@ -1,13 +1,14 @@
-{ lib
-, fetchFromGitHub
-, flutterPackages
-, corrosion
-, rustPlatform
-, cargo
-, rustc
-, udev
-, copyDesktopItems
-, makeDesktopItem
+{
+  lib,
+  fetchFromGitHub,
+  flutterPackages,
+  corrosion,
+  rustPlatform,
+  cargo,
+  rustc,
+  udev,
+  copyDesktopItems,
+  makeDesktopItem,
 }:
 flutterPackages.v3_19.buildFlutterApplication rec {
   pname = "intiface-central";
@@ -18,9 +19,7 @@ flutterPackages.v3_19.buildFlutterApplication rec {
     rev = "v${version}";
     hash = "sha256-7+rw0cD8MJPFOkgmfHD6y+EojTGQhb15o1mn2p14eoE=";
   };
-  patches = [
-    ./corrosion.patch
-  ];
+  patches = [ ./corrosion.patch ];
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
 
@@ -44,9 +43,7 @@ flutterPackages.v3_19.buildFlutterApplication rec {
     copyDesktopItems
   ];
 
-  buildInputs = [
-    udev
-  ];
+  buildInputs = [ udev ];
 
   # without this, only the splash screen will be shown and the logs will contain the
   # line `Failed to load dynamic library 'lib/libintiface_engine_flutter_bridge.so'`

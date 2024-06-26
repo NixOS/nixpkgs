@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, darwin
-, gpgme
-, libgpg-error
-, pkg-config
-, rustPlatform
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  darwin,
+  gpgme,
+  libgpg-error,
+  pkg-config,
+  rustPlatform,
 }:
 
 let
@@ -26,8 +27,10 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ libgpg-error gpgme ]
-    ++ lib.optionals stdenv.isDarwin [ Security ];
+  buildInputs = [
+    libgpg-error
+    gpgme
+  ] ++ lib.optionals stdenv.isDarwin [ Security ];
 
   # Remove postPatch when updating to the next envio release
   # For details see https://github.com/envio-cli/envio/pull/31
@@ -37,8 +40,8 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    homepage    = "https://envio-cli.github.io/home";
-    changelog   = "https://github.com/envio-cli/envio/blob/${version}/CHANGELOG.md";
+    homepage = "https://envio-cli.github.io/home";
+    changelog = "https://github.com/envio-cli/envio/blob/${version}/CHANGELOG.md";
     description = "Modern and secure CLI tool for managing environment variables";
     mainProgram = "envio";
     longDescription = ''
@@ -47,8 +50,11 @@ rustPlatform.buildRustPackage rec {
       switch between different configurations and apply them to their current
       environment.
     '';
-    license     = with licenses; [ mit asl20 ];
-    platforms   = platforms.unix;
+    license = with licenses; [
+      mit
+      asl20
+    ];
+    platforms = platforms.unix;
     maintainers = with maintainers; [ afh ];
   };
 }

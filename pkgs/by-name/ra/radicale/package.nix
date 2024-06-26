@@ -1,7 +1,8 @@
-{ lib
-, python3
-, fetchFromGitHub
-, nixosTests
+{
+  lib,
+  python3,
+  fetchFromGitHub,
+  nixosTests,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -20,18 +21,19 @@ python3.pkgs.buildPythonApplication rec {
     sed -i '/addopts/d' setup.cfg
   '';
 
-  build-system = with python3.pkgs; [
-    setuptools
-  ];
+  build-system = with python3.pkgs; [ setuptools ];
 
-  dependencies = with python3.pkgs; [
-    defusedxml
-    passlib
-    vobject
-    pika
-    python-dateutil
-    pytz # https://github.com/Kozea/Radicale/issues/816
-  ] ++ passlib.optional-dependencies.bcrypt;
+  dependencies =
+    with python3.pkgs;
+    [
+      defusedxml
+      passlib
+      vobject
+      pika
+      python-dateutil
+      pytz # https://github.com/Kozea/Radicale/issues/816
+    ]
+    ++ passlib.optional-dependencies.bcrypt;
 
   __darwinAllowLocalNetworking = true;
 
@@ -49,6 +51,9 @@ python3.pkgs.buildPythonApplication rec {
     changelog = "https://github.com/Kozea/Radicale/blob/${src.rev}/CHANGELOG.md";
     description = "CalDAV and CardDAV server";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ dotlambda erictapen ];
+    maintainers = with maintainers; [
+      dotlambda
+      erictapen
+    ];
   };
 }

@@ -1,9 +1,10 @@
-{ fetchFromGitHub
-, fixDarwinDylibNames
-, lib
-, meson
-, ninja
-, stdenv
+{
+  fetchFromGitHub,
+  fixDarwinDylibNames,
+  lib,
+  meson,
+  ninja,
+  stdenv,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -20,9 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     meson
     ninja
-  ] ++ lib.optionals stdenv.isDarwin [
-    fixDarwinDylibNames
-  ];
+  ] ++ lib.optionals stdenv.isDarwin [ fixDarwinDylibNames ];
 
   meta = {
     description = "Client library for MPD (music player daemon)";

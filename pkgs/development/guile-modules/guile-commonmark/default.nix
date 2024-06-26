@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, guile
-, pkg-config
-, texinfo
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  guile,
+  pkg-config,
+  texinfo,
 }:
 
 stdenv.mkDerivation {
@@ -23,16 +24,12 @@ stdenv.mkDerivation {
     pkg-config
     texinfo # for makeinfo
   ];
-  buildInputs = [
-    guile
-  ];
+  buildInputs = [ guile ];
 
   # https://github.com/OrangeShark/guile-commonmark/issues/20
   doCheck = false;
 
-  makeFlags = [
-    "GUILE_AUTO_COMPILE=0"
-  ];
+  makeFlags = [ "GUILE_AUTO_COMPILE=0" ];
 
   meta = with lib; {
     homepage = "https://github.com/OrangeShark/guile-commonmark";

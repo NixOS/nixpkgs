@@ -1,15 +1,16 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, folly
-, boost
-, gflags
-, glog
-, openssl
-, double-conversion
-, fmt
-, unstableGitUpdater
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  folly,
+  boost,
+  gflags,
+  glog,
+  openssl,
+  double-conversion,
+  fmt,
+  unstableGitUpdater,
 }:
 
 stdenv.mkDerivation {
@@ -24,7 +25,15 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ folly boost gflags glog openssl double-conversion fmt ];
+  buildInputs = [
+    folly
+    boost
+    gflags
+    glog
+    openssl
+    double-conversion
+    fmt
+  ];
 
   # source is expected to be named wdt
   # https://github.com/facebook/wdt/blob/43319e59d0c77092468367cdadab37d12d7a2383/CMakeLists.txt#L238
@@ -32,14 +41,10 @@ stdenv.mkDerivation {
     ln -s $sourceRoot wdt
   '';
 
-  cmakeFlags = [
-    "-DWDT_USE_SYSTEM_FOLLY=ON"
-  ];
+  cmakeFlags = [ "-DWDT_USE_SYSTEM_FOLLY=ON" ];
 
   passthru = {
-    updateScript = unstableGitUpdater {
-      tagPrefix = "v";
-    };
+    updateScript = unstableGitUpdater { tagPrefix = "v"; };
   };
 
   meta = with lib; {

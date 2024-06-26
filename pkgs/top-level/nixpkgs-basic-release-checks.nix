@@ -1,4 +1,8 @@
-{ supportedSystems, nixpkgs, pkgs }:
+{
+  supportedSystems,
+  nixpkgs,
+  pkgs,
+}:
 
 pkgs.runCommand "nixpkgs-release-checks"
   {
@@ -95,4 +99,4 @@ pkgs.runCommand "nixpkgs-release-checks"
     done
 
     touch $out
-''
+  ''

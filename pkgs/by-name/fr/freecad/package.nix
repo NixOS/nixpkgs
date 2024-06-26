@@ -1,35 +1,36 @@
-{ lib
-, cmake
-, coin3d
-, doxygen
-, eigen
-, fetchFromGitHub
-, fmt
-, freecad  # for passthru.tests
-, gfortran
-, gts
-, hdf5
-, libGLU
-, libXmu
-, libf2c
-, libredwg
-, libsForQt5
-, libspnav
-, medfile
-, mpi
-, ninja
-, ode
-, opencascade-occt_7_6
-, pkg-config
-, python3Packages
-, runCommand  # for passthru.tests
-, spaceNavSupport ? stdenv.isLinux
-, stdenv
-, swig
-, vtk
-, wrapGAppsHook3
-, xercesc
-, zlib
+{
+  lib,
+  cmake,
+  coin3d,
+  doxygen,
+  eigen,
+  fetchFromGitHub,
+  fmt,
+  freecad, # for passthru.tests
+  gfortran,
+  gts,
+  hdf5,
+  libGLU,
+  libXmu,
+  libf2c,
+  libredwg,
+  libsForQt5,
+  libspnav,
+  medfile,
+  mpi,
+  ninja,
+  ode,
+  opencascade-occt_7_6,
+  pkg-config,
+  python3Packages,
+  runCommand, # for passthru.tests
+  spaceNavSupport ? stdenv.isLinux,
+  stdenv,
+  swig,
+  vtk,
+  wrapGAppsHook3,
+  xercesc,
+  zlib,
 }:
 
 let
@@ -42,7 +43,8 @@ let
     qtx11extras
     qtxmlpatterns
     soqt
-    wrapQtAppsHook;
+    wrapQtAppsHook
+    ;
   inherit (python3Packages)
     gitpython
     matplotlib
@@ -54,7 +56,8 @@ let
     python
     pyyaml
     scipy
-    shiboken2;
+    shiboken2
+    ;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "freecad";
@@ -77,49 +80,49 @@ stdenv.mkDerivation (finalAttrs: {
     wrapGAppsHook3
   ];
 
-  buildInputs = [
-    gitpython # for addon manager
-    boost
-    coin3d
-    doxygen
-    eigen
-    fmt
-    gts
-    hdf5
-    libGLU
-    libXmu
-    libf2c
-    matplotlib
-    medfile
-    mpi
-    ode
-    opencascade-occt
-    pivy
-    ply # for openSCAD file support
-    pycollada
-    pyside2
-    pyside2-tools
-    python
-    pyyaml # (at least for) PyrateWorkbench
-    qtbase
-    qttools
-    qtwebengine
-    qtxmlpatterns
-    scipy
-    shiboken2
-    soqt
-    swig
-    vtk
-    xercesc
-    zlib
-  ] ++ lib.optionals spaceNavSupport [
-    libspnav
-    qtx11extras
-  ];
+  buildInputs =
+    [
+      gitpython # for addon manager
+      boost
+      coin3d
+      doxygen
+      eigen
+      fmt
+      gts
+      hdf5
+      libGLU
+      libXmu
+      libf2c
+      matplotlib
+      medfile
+      mpi
+      ode
+      opencascade-occt
+      pivy
+      ply # for openSCAD file support
+      pycollada
+      pyside2
+      pyside2-tools
+      python
+      pyyaml # (at least for) PyrateWorkbench
+      qtbase
+      qttools
+      qtwebengine
+      qtxmlpatterns
+      scipy
+      shiboken2
+      soqt
+      swig
+      vtk
+      xercesc
+      zlib
+    ]
+    ++ lib.optionals spaceNavSupport [
+      libspnav
+      qtx11extras
+    ];
 
-  patches = [
-    ./0001-NIXOS-don-t-ignore-PYTHONPATH.patch
-  ];
+  patches = [ ./0001-NIXOS-don-t-ignore-PYTHONPATH.patch ];
 
   cmakeFlags = [
     "-Wno-dev" # turns off warnings which otherwise makes it hard to see what is going on
@@ -127,7 +130,8 @@ stdenv.mkDerivation (finalAttrs: {
     "-DBUILD_QT5=ON"
     "-DSHIBOKEN_INCLUDE_DIR=${shiboken2}/include"
     "-DSHIBOKEN_LIBRARY=Shiboken2::libshiboken"
-    ("-DPYSIDE_INCLUDE_DIR=${pyside2}/include"
+    (
+      "-DPYSIDE_INCLUDE_DIR=${pyside2}/include"
       + ";${pyside2}/include/PySide2/QtCore"
       + ";${pyside2}/include/PySide2/QtWidgets"
       + ";${pyside2}/include/PySide2/QtGui"
@@ -164,9 +168,7 @@ stdenv.mkDerivation (finalAttrs: {
     # parse argv. This should catch if that ever regresses and also ensures
     # that PYTHONPATH is still respected enough for the FreeCAD console to
     # successfully run and check that it was included in `sys.path`.
-    python-path = runCommand "freecad-test-console" {
-      nativeBuildInputs = [ freecad ];
-    } ''
+    python-path = runCommand "freecad-test-console" { nativeBuildInputs = [ freecad ]; } ''
       HOME="$(mktemp -d)" PYTHONPATH="$(pwd)/test" FreeCADCmd --log-file $out -c "if not '$(pwd)/test' in sys.path: sys.exit(1)" </dev/null
     '';
   };
@@ -191,7 +193,11 @@ stdenv.mkDerivation (finalAttrs: {
       right at home with FreeCAD.
     '';
     license = lib.licenses.lgpl2Plus;
-    maintainers = with lib.maintainers; [ viric gebner AndersonTorres ];
+    maintainers = with lib.maintainers; [
+      viric
+      gebner
+      AndersonTorres
+    ];
     platforms = lib.platforms.linux;
   };
 })

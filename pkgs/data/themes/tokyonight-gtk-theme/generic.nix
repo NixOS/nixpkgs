@@ -1,13 +1,14 @@
-{ lib
-, stdenvNoCC
-, fetchFromGitHub
-, writeScript
-, gtk-engine-murrine
-, gnome-themes-extra
-, prefix ? ""
-, type ? ""
-, variantName ? ""
-, variant ? ""
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  writeScript,
+  gtk-engine-murrine,
+  gnome-themes-extra,
+  prefix ? "",
+  type ? "",
+  variantName ? "",
+  variant ? "",
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -72,6 +73,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     homepage = "https://www.pling.com/p/1681315";
     license = licenses.gpl3Only;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ garaiza-93 Madouura ];
+    maintainers = with maintainers; [
+      garaiza-93
+      Madouura
+    ];
   };
 })

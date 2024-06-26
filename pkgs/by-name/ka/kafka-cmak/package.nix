@@ -21,9 +21,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     jdk
   ];
 
-  nativeBuildInputs = [
-    makeBinaryWrapper
-  ];
+  nativeBuildInputs = [ makeBinaryWrapper ];
 
   installPhase = ''
     runHook preInstall
@@ -42,7 +40,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   meta = with lib; {
     description = "Cluster Manager for Apache Kafka, previously known as Kafka Manager";
     license = licenses.apsl20;
-    maintainers = with maintainers; [cafkafk];
+    maintainers = with maintainers; [ cafkafk ];
     platforms = lib.platforms.unix;
     mainProgram = "cmak";
   };

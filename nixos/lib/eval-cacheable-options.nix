@@ -1,9 +1,10 @@
-{ libPath
-, pkgsLibPath
-, nixosPath
-, modules
-, stateVersion
-, release
+{
+  libPath,
+  pkgsLibPath,
+  nixosPath,
+  modules,
+  stateVersion,
+  release,
 }:
 
 let
@@ -24,13 +25,11 @@ let
   # unusable. this causes documentation attributes depending on `config` to fail.
   config = {
     _module.check = false;
-    _module.args = {};
+    _module.args = { };
     system.stateVersion = stateVersion;
   };
   eval = lib.evalModules {
-    modules = (map (m: "${modulesPath}/${m}") modules) ++ [
-      config
-    ];
+    modules = (map (m: "${modulesPath}/${m}") modules) ++ [ config ];
     specialArgs = {
       inherit config pkgs utils;
       class = "nixos";
@@ -40,9 +39,8 @@ let
     pkgs = pkgs // {
       inherit lib;
       # duplicate of the declaration in all-packages.nix
-      buildPackages.nixosOptionsDoc = attrs:
-        (import "${nixosPath}/lib/make-options-doc")
-          ({ inherit pkgs lib; } // attrs);
+      buildPackages.nixosOptionsDoc =
+        attrs: (import "${nixosPath}/lib/make-options-doc") ({ inherit pkgs lib; } // attrs);
     };
     config = config.config;
     options = eval.options;
@@ -51,4 +49,4 @@ let
     prefix = modulesPath;
   };
 in
-  docs.optionsNix
+docs.optionsNix

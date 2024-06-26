@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, libcap }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  libcap,
+}:
 
 stdenv.mkDerivation rec {
   pname = "n2n";
@@ -11,11 +18,12 @@ stdenv.mkDerivation rec {
     hash = "sha256-OXmcc6r+fTHs/tDNF3akSsynB/bVRKB6Fl5oYxmu+E0=";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
-
-  buildInputs = [
-    libcap
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
   ];
+
+  buildInputs = [ libcap ];
 
   postPatch = ''
     patchShebangs autogen.sh

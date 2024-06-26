@@ -1,10 +1,20 @@
-{ lib, stdenv, fetchurl, autoconf, automake, allegro }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoconf,
+  automake,
+  allegro,
+}:
 
 stdenv.mkDerivation rec {
   pname = "garden-of-coloured-lights";
   version = "1.0.9";
 
-  nativeBuildInputs = [ autoconf automake ];
+  nativeBuildInputs = [
+    autoconf
+    automake
+  ];
   buildInputs = [ allegro ];
 
   prePatch = ''

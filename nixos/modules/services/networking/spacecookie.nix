@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -11,14 +16,39 @@ let
     };
   } // cfg.settings;
 
-  format = pkgs.formats.json {};
+  format = pkgs.formats.json { };
 
   configFile = format.generate "spacecookie.json" spacecookieConfig;
 
-in {
+in
+{
   imports = [
-    (mkRenamedOptionModule [ "services" "spacecookie" "root" ] [ "services" "spacecookie" "settings" "root" ])
-    (mkRenamedOptionModule [ "services" "spacecookie" "hostname" ] [ "services" "spacecookie" "settings" "hostname" ])
+    (mkRenamedOptionModule
+      [
+        "services"
+        "spacecookie"
+        "root"
+      ]
+      [
+        "services"
+        "spacecookie"
+        "settings"
+        "root"
+      ]
+    )
+    (mkRenamedOptionModule
+      [
+        "services"
+        "spacecookie"
+        "hostname"
+      ]
+      [
+        "services"
+        "spacecookie"
+        "settings"
+        "hostname"
+      ]
+    )
   ];
 
   options = {
@@ -27,9 +57,7 @@ in {
 
       enable = mkEnableOption "spacecookie";
 
-      package = mkPackageOption pkgs "spacecookie" {
-        example = "haskellPackages.spacecookie";
-      };
+      package = mkPackageOption pkgs "spacecookie" { example = "haskellPackages.spacecookie"; };
 
       openFirewall = mkOption {
         type = types.bool;
@@ -83,8 +111,10 @@ in {
           };
 
           options.log = {
-            enable = mkEnableOption "logging for spacecookie"
-              // { default = true; example = false; };
+            enable = mkEnableOption "logging for spacecookie" // {
+              default = true;
+              example = false;
+            };
 
             hide-ips = mkOption {
               type = types.bool;
@@ -202,8 +232,6 @@ in {
       };
     };
 
-    networking.firewall = mkIf cfg.openFirewall {
-      allowedTCPPorts = [ cfg.port ];
-    };
+    networking.firewall = mkIf cfg.openFirewall { allowedTCPPorts = [ cfg.port ]; };
   };
 }

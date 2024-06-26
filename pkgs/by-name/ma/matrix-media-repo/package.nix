@@ -1,9 +1,10 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, pkg-config
-, libde265
-, libheif
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  pkg-config,
+  libde265,
+  libheif,
 }:
 let
   pname = "matrix-media-repo";
@@ -22,18 +23,19 @@ let
     pname = "${pname}-compile_assets";
     inherit version src vendorHash;
 
-    subPackages = [
-      "cmd/utilities/compile_assets"
-    ];
+    subPackages = [ "cmd/utilities/compile_assets" ];
   };
 in
 
 buildGoModule {
-  inherit pname version src vendorHash;
+  inherit
+    pname
+    version
+    src
+    vendorHash
+    ;
 
-  patches = [
-    ./synapse-import-u+x.patch
-  ];
+  patches = [ ./synapse-import-u+x.patch ];
 
   nativeBuildInputs = [
     pkg-config
@@ -52,7 +54,8 @@ buildGoModule {
   ldflags = [
     "-s"
     "-w"
-    "-X" "github.com/t2bot/matrix-media-repo/common/version.Version=${version}"
+    "-X"
+    "github.com/t2bot/matrix-media-repo/common/version.Version=${version}"
   ];
 
   doCheck = false; # requires docker

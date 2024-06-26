@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -30,7 +35,7 @@ in
 
   config = mkIf cfg.enable {
     users = {
-      groups.weechat = {};
+      groups.weechat = { };
       users.weechat = {
         createHome = true;
         group = "weechat";
@@ -51,12 +56,12 @@ in
       wants = [ "network.target" ];
     };
 
-    security.wrappers.screen =
-      { setuid = true;
-        owner = "root";
-        group = "root";
-        source = "${pkgs.screen}/bin/screen";
-      };
+    security.wrappers.screen = {
+      setuid = true;
+      owner = "root";
+      group = "root";
+      source = "${pkgs.screen}/bin/screen";
+    };
   };
 
   meta.doc = ./weechat.md;

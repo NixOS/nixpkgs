@@ -1,9 +1,10 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, installShellFiles
-, testers
-, opentelemetry-collector
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  testers,
+  opentelemetry-collector,
 }:
 
 buildGoModule rec {
@@ -32,7 +33,10 @@ buildGoModule rec {
     sed -i -E 's/Version:(\s*)".*"/Version:\1"${version}"/' main.go
   '';
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   postInstall = ''
     installShellCompletion --cmd otelcorecol \
@@ -59,7 +63,10 @@ buildGoModule rec {
       sending to multiple open-source or commercial back-ends.
     '';
     license = licenses.asl20;
-    maintainers = with maintainers; [ uri-canva jk ];
+    maintainers = with maintainers; [
+      uri-canva
+      jk
+    ];
     mainProgram = "otelcorecol";
   };
 }

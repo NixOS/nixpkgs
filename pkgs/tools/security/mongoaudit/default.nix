@@ -1,6 +1,7 @@
-{ lib
-, fetchFromGitHub
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -22,13 +23,9 @@ python3.pkgs.buildPythonApplication rec {
     urwid
   ];
 
-  nativeCheckInputs = with python3.pkgs; [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = with python3.pkgs; [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "mongoaudit"
-  ];
+  pythonImportsCheck = [ "mongoaudit" ];
 
   meta = with lib; {
     description = "MongoDB auditing and pentesting tool";

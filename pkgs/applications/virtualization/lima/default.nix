@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, buildGoModule
-, fetchFromGitHub
-, installShellFiles
-, qemu
-, xcbuild
-, sigtool
-, makeWrapper
+{
+  lib,
+  stdenv,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  qemu,
+  xcbuild,
+  sigtool,
+  makeWrapper,
 }:
 
 buildGoModule rec {
@@ -22,8 +23,15 @@ buildGoModule rec {
 
   vendorHash = "sha256-P0Qnfu/cqLveAwz9jf/wTXxkoh0jvazlE5C/PcUrWsA=";
 
-  nativeBuildInputs = [ makeWrapper installShellFiles ]
-    ++ lib.optionals stdenv.isDarwin [ xcbuild.xcrun sigtool ];
+  nativeBuildInputs =
+    [
+      makeWrapper
+      installShellFiles
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      xcbuild.xcrun
+      sigtool
+    ];
 
   # clean fails with read only vendor dir
   postPatch = ''

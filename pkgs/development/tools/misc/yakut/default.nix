@@ -1,16 +1,17 @@
-{ lib
-, buildPythonApplication
-, fetchPypi
-, stdenv
-, click
-, coloredlogs
-, psutil
-, pycyphal
-, pyserial
-, ruamel-yaml
-, requests
-, scipy
-, simplejson
+{
+  lib,
+  buildPythonApplication,
+  fetchPypi,
+  stdenv,
+  click,
+  coloredlogs,
+  psutil,
+  pycyphal,
+  pyserial,
+  ruamel-yaml,
+  requests,
+  scipy,
+  simplejson,
 }:
 
 buildPythonApplication rec {

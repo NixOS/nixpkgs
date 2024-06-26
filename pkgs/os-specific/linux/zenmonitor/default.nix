@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, gtk3, wrapGAppsHook3 }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  gtk3,
+  wrapGAppsHook3,
+}:
 
 stdenv.mkDerivation rec {
   pname = "zenmonitor";
@@ -12,7 +19,10 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ gtk3 ];
-  nativeBuildInputs = [ pkg-config wrapGAppsHook3 ];
+  nativeBuildInputs = [
+    pkg-config
+    wrapGAppsHook3
+  ];
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
@@ -21,7 +31,13 @@ stdenv.mkDerivation rec {
     mainProgram = "zenmonitor";
     homepage = "https://github.com/Ta180m/zenmonitor3";
     license = licenses.mit;
-    platforms = [ "i686-linux" "x86_64-linux" ];
-    maintainers = with maintainers; [ alexbakker artturin ];
+    platforms = [
+      "i686-linux"
+      "x86_64-linux"
+    ];
+    maintainers = with maintainers; [
+      alexbakker
+      artturin
+    ];
   };
 }

@@ -20,10 +20,15 @@ let
       pyproject = true;
       disabled = pythonOlder "3.7";
 
-      oldStylePackages = [ "gamesparks" "iot-roborunner" "macie" ];
+      oldStylePackages = [
+        "gamesparks"
+        "iot-roborunner"
+        "macie"
+      ];
 
       src = fetchPypi {
-        pname = if builtins.elem serviceName oldStylePackages then
+        pname =
+          if builtins.elem serviceName oldStylePackages then
             "types-aiobotocore-${serviceName}"
           else
             "types_aiobotocore_${toUnderscore serviceName}";

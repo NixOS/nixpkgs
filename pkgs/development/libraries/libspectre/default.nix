@@ -1,4 +1,11 @@
-{ fetchurl, lib, stdenv, pkg-config, ghostscript, cairo }:
+{
+  fetchurl,
+  lib,
+  stdenv,
+  pkg-config,
+  ghostscript,
+  cairo,
+}:
 
 stdenv.mkDerivation rec {
   pname = "libspectre";
@@ -18,9 +25,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  checkInputs = [
-    cairo
-  ];
+  checkInputs = [ cairo ];
 
   meta = {
     homepage = "http://libspectre.freedesktop.org/";

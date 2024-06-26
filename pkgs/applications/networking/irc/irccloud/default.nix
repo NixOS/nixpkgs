@@ -1,4 +1,8 @@
-{ appimageTools, fetchurl, lib }:
+{
+  appimageTools,
+  fetchurl,
+  lib,
+}:
 
 let
   pname = "irccloud";
@@ -9,11 +13,10 @@ let
     sha256 = "sha256-/hMPvYdnVB1XjKgU2v47HnVvW4+uC3rhRjbucqin4iI=";
   };
 
-  appimageContents = appimageTools.extractType2 {
-    inherit pname version src;
-  };
+  appimageContents = appimageTools.extractType2 { inherit pname version src; };
 
-in appimageTools.wrapType2 {
+in
+appimageTools.wrapType2 {
   inherit pname version src;
 
   extraPkgs = pkgs: [ pkgs.at-spi2-core ];

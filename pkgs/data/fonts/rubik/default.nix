@@ -1,4 +1,8 @@
-{ stdenv, lib, fetchurl }:
+{
+  stdenv,
+  lib,
+  fetchurl,
+}:
 let
   # Latest commit touching the rubik tree
   commit = "054aa9d546cd6308f8ff7139b332490e0967aebe";

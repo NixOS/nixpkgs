@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, makeWrapper, bash }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  makeWrapper,
+  bash,
+}:
 
 stdenv.mkDerivation rec {
   pname = "any-nix-shell";

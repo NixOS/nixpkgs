@@ -1,11 +1,26 @@
-{ stdenv, callPackage, lib, fetchpatch
-, sasl, boost, Security, CoreFoundation, cctools
-, avxSupport ? stdenv.hostPlatform.avxSupport
+{
+  stdenv,
+  callPackage,
+  lib,
+  fetchpatch,
+  sasl,
+  boost,
+  Security,
+  CoreFoundation,
+  cctools,
+  avxSupport ? stdenv.hostPlatform.avxSupport,
 }:
 
 let
   buildMongoDB = callPackage ./mongodb.nix {
-    inherit sasl boost Security CoreFoundation cctools stdenv;
+    inherit
+      sasl
+      boost
+      Security
+      CoreFoundation
+      cctools
+      stdenv
+      ;
   };
 in
 buildMongoDB {

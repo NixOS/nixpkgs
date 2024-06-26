@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, makeWrapper
-, babashka
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  makeWrapper,
+  babashka,
 }:
 
 stdenv.mkDerivation rec {

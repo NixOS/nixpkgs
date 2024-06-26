@@ -1,6 +1,7 @@
-{ lib
-, fetchFromGitHub
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -14,9 +15,7 @@ python3.pkgs.buildPythonApplication rec {
     sha256 = "sha256-+M8P/VSF9SKPvq+yNPjokyhggY7hzQ9qLLhkiTNbJls=";
   };
 
-  nativeBuildInputs = with python3.pkgs; [
-    setuptools-scm
-  ];
+  nativeBuildInputs = with python3.pkgs; [ setuptools-scm ];
 
   propagatedBuildInputs = with python3.pkgs; [
     netaddr
@@ -43,9 +42,7 @@ python3.pkgs.buildPythonApplication rec {
       --replace "--cov=kube_hunter" ""
   '';
 
-  pythonImportsCheck = [
-    "kube_hunter"
-  ];
+  pythonImportsCheck = [ "kube_hunter" ];
 
   disabledTests = [
     # Test is out-dated

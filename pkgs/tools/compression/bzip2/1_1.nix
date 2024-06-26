@@ -1,9 +1,11 @@
-{ lib, stdenv
-, fetchFromGitLab
-, meson
-, python3
-, ninja
-, testers
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  meson,
+  python3,
+  ninja,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -27,11 +29,14 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
   ];
 
-  outputs = [ "bin" "dev" "out" "man" ];
-
-  mesonFlags = [
-    "-Ddocs=disabled"
+  outputs = [
+    "bin"
+    "dev"
+    "out"
+    "man"
   ];
+
+  mesonFlags = [ "-Ddocs=disabled" ];
 
   strictDeps = true;
 
@@ -42,6 +47,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.bsdOriginal;
     pkgConfigModules = [ "bz2" ];
     platforms = platforms.all;
-    maintainers = [];
+    maintainers = [ ];
   };
 })

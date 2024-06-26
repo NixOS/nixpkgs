@@ -1,11 +1,36 @@
-{ lib, stdenv, fetchFromGitLab, gitUpdater, meson, mesonEmulatorHook, ninja, glib, check, python3, vala, gtk-doc, glibcLocales
-, libxml2, libxslt, pkg-config, sqlite, docbook_xsl, docbook_xml_dtd_43, gobject-introspection }:
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  gitUpdater,
+  meson,
+  mesonEmulatorHook,
+  ninja,
+  glib,
+  check,
+  python3,
+  vala,
+  gtk-doc,
+  glibcLocales,
+  libxml2,
+  libxslt,
+  pkg-config,
+  sqlite,
+  docbook_xsl,
+  docbook_xml_dtd_43,
+  gobject-introspection,
+}:
 
 stdenv.mkDerivation rec {
   pname = "libaccounts-glib";
   version = "1.27";
 
-  outputs = [ "out" "dev" "devdoc" "py" ];
+  outputs = [
+    "out"
+    "dev"
+    "devdoc"
+    "py"
+  ];
 
   src = fetchFromGitLab {
     owner = "accounts-sso";
@@ -25,9 +50,7 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     vala
-  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-    mesonEmulatorHook
-  ];
+  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [ mesonEmulatorHook ];
 
   buildInputs = [
     glib
@@ -50,9 +73,7 @@ stdenv.mkDerivation rec {
     "-Dpy-overrides-dir=${placeholder "py"}/${python3.sitePackages}/gi/overrides"
   ];
 
-  passthru.updateScript = gitUpdater {
-    rev-prefix = "VERSION_";
-  };
+  passthru.updateScript = gitUpdater { rev-prefix = "VERSION_"; };
 
   meta = with lib; {
     description = "Library for managing accounts which can be used from GLib applications";

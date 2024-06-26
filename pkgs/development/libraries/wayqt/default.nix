@@ -1,14 +1,15 @@
-{ stdenv
-, lib
-, fetchFromGitLab
-, substituteAll
-, meson
-, pkg-config
-, qttools
-, ninja
-, qtbase
-, qtwayland
-, wayland
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  substituteAll,
+  meson,
+  pkg-config,
+  qttools,
+  ninja,
+  qtbase,
+  qtwayland,
+  wayland,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -43,13 +44,14 @@ stdenv.mkDerivation (finalAttrs: {
     wayland
   ];
 
-  mesonFlags = [
-    "-Duse_qt_version=qt6"
-  ];
+  mesonFlags = [ "-Duse_qt_version=qt6" ];
 
   dontWrapQtApps = true;
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   meta = {
     homepage = "https://gitlab.com/desktop-frameworks/wayqt";

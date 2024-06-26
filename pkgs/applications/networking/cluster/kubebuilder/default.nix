@@ -1,13 +1,14 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, makeWrapper
-, git
-, go
-, gnumake
-, installShellFiles
-, testers
-, kubebuilder
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  makeWrapper,
+  git,
+  go,
+  gnumake,
+  installShellFiles,
+  testers,
+  kubebuilder,
 }:
 
 buildGoModule rec {
@@ -23,7 +24,7 @@ buildGoModule rec {
 
   vendorHash = "sha256-g9QjalRLc2NUsyd7Do1PWw9oD9ATuJGMRaqSaC6AcD0=";
 
-  subPackages = ["cmd"];
+  subPackages = [ "cmd" ];
 
   allowGoReference = true;
 
@@ -44,7 +45,12 @@ buildGoModule rec {
   postInstall = ''
     mv $out/bin/cmd $out/bin/kubebuilder
     wrapProgram $out/bin/kubebuilder \
-      --prefix PATH : ${lib.makeBinPath [ go gnumake ]}
+      --prefix PATH : ${
+        lib.makeBinPath [
+          go
+          gnumake
+        ]
+      }
 
     installShellCompletion --cmd kubebuilder \
       --bash <($out/bin/kubebuilder completion bash) \

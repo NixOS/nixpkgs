@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchurl, kernel, kmod, mstflint }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  kernel,
+  kmod,
+  mstflint,
+}:
 
 stdenv.mkDerivation rec {
   pname = "mstflint_access";

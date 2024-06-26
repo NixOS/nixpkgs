@@ -1,4 +1,1 @@
-{mkKdeDerivation}:
-mkKdeDerivation {
-  pname = "lightdm-greeter-kde";
-}
+{ mkKdeDerivation }: mkKdeDerivation { pname = "lightdm-greeter-kde"; }

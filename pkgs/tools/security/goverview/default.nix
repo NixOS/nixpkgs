@@ -1,7 +1,8 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, installShellFiles
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
 }:
 
 buildGoModule rec {
@@ -21,9 +22,7 @@ buildGoModule rec {
     "-w"
     "-s"
   ];
-  nativeBuildInputs = [
-    installShellFiles
-  ];
+  nativeBuildInputs = [ installShellFiles ];
   postInstall = ''
     installShellCompletion --cmd goverview \
       --bash <($out/bin/goverview completion bash) \

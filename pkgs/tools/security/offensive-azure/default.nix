@@ -1,6 +1,7 @@
-{ lib
-, fetchFromGitHub
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -15,9 +16,7 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-5JHix+/uGGhXM89VLimI81g4evci5ZUtNV1c1xopjuI=";
   };
 
-  nativeBuildInputs = with python3.pkgs; [
-    poetry-core
-  ];
+  nativeBuildInputs = with python3.pkgs; [ poetry-core ];
 
   propagatedBuildInputs = with python3.pkgs; [
     certifi
@@ -31,9 +30,7 @@ python3.pkgs.buildPythonApplication rec {
     requests
   ];
 
-  nativeCheckInputs = with python3.pkgs; [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = with python3.pkgs; [ pytestCheckHook ];
 
   postPatch = ''
     # Use default Python module
@@ -42,9 +39,7 @@ python3.pkgs.buildPythonApplication rec {
       --replace 'python-whois = "^0.7.3"' 'python-whois = "*"'
   '';
 
-  pythonImportsCheck = [
-    "offensive_azure"
-  ];
+  pythonImportsCheck = [ "offensive_azure" ];
 
   meta = with lib; {
     description = "Collection of offensive tools targeting Microsoft Azure";

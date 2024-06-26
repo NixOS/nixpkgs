@@ -1,22 +1,23 @@
-{ lib
-, stdenv
-, asciidoc
-, coreutils
-, cryptsetup
-, curl
-, fetchFromGitHub
-, gnugrep
-, gnused
-, jansson
-, jose
-, libpwquality
-, luksmeta
-, makeWrapper
-, meson
-, ninja
-, pkg-config
-, tpm2-tools
-, nixosTests
+{
+  lib,
+  stdenv,
+  asciidoc,
+  coreutils,
+  cryptsetup,
+  curl,
+  fetchFromGitHub,
+  gnugrep,
+  gnused,
+  jansson,
+  jose,
+  libpwquality,
+  luksmeta,
+  makeWrapper,
+  meson,
+  ninja,
+  pkg-config,
+  tpm2-tools,
+  nixosTests,
 }:
 
 stdenv.mkDerivation rec {
@@ -46,7 +47,18 @@ stdenv.mkDerivation rec {
   postInstall = ''
     # We wrap the main clevis binary entrypoint but not the sub-binaries.
     wrapProgram $out/bin/clevis \
-      --prefix PATH ':' "${lib.makeBinPath [tpm2-tools jose cryptsetup libpwquality luksmeta gnugrep gnused coreutils]}:${placeholder "out"}/bin"
+      --prefix PATH ':' "${
+        lib.makeBinPath [
+          tpm2-tools
+          jose
+          cryptsetup
+          libpwquality
+          luksmeta
+          gnugrep
+          gnused
+          coreutils
+        ]
+      }:${placeholder "out"}/bin"
   '';
 
   nativeBuildInputs = [
@@ -73,7 +85,14 @@ stdenv.mkDerivation rec {
   ];
 
   passthru.tests = {
-    inherit (nixosTests.installer) clevisBcachefs clevisBcachefsFallback clevisLuks clevisLuksFallback clevisZfs clevisZfsFallback;
+    inherit (nixosTests.installer)
+      clevisBcachefs
+      clevisBcachefsFallback
+      clevisLuks
+      clevisLuksFallback
+      clevisZfs
+      clevisZfsFallback
+      ;
     clevisLuksSystemdStage1 = nixosTests.installer-systemd-stage-1.clevisLuks;
     clevisLuksFallbackSystemdStage1 = nixosTests.installer-systemd-stage-1.clevisLuksFallback;
     clevisZfsSystemdStage1 = nixosTests.installer-systemd-stage-1.clevisZfs;

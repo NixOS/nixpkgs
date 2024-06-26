@@ -1,8 +1,9 @@
-{ lib
-, stdenvNoCC
-, fetchurl
-, unzip
-, makeWrapper
+{
+  lib,
+  stdenvNoCC,
+  fetchurl,
+  unzip,
+  makeWrapper,
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "keka";
@@ -14,7 +15,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   };
   dontUnpack = true;
 
-  nativeBuildInputs = [ unzip makeWrapper ];
+  nativeBuildInputs = [
+    unzip
+    makeWrapper
+  ];
 
   installPhase = ''
     runHook preInstall
@@ -32,7 +36,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     homepage = "https://www.keka.io";
     license = licenses.unfree;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    maintainers = with maintainers; [ emilytrau Enzime ];
+    maintainers = with maintainers; [
+      emilytrau
+      Enzime
+    ];
     platforms = platforms.darwin;
   };
 })

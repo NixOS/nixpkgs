@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchFromGitHub
-, testers
-, Security
-, surrealdb-migrations
-, nix-update-script
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  testers,
+  Security,
+  surrealdb-migrations,
+  nix-update-script,
 }:
 
 let
@@ -26,28 +27,27 @@ rustPlatform.buildRustPackage rec {
     lockFile = ./Cargo.lock;
   };
 
-  buildInputs = [ ]
-    ++ lib.optionals stdenv.isDarwin [ Security ];
+  buildInputs = [ ] ++ lib.optionals stdenv.isDarwin [ Security ];
 
-   # Error: No such file or directory (os error 2)
-   # failures:
-   #   cli::apply::apply_initial_migrations
-   #   cli::apply::apply_initial_schema_changes
-   #   cli::apply::apply_new_migrations
-   #   cli::apply::apply_new_schema_changes
-   #   cli::apply::apply_should_skip_events_if_no_events_folder
-   #   cli::apply::apply_with_db_configuration
-   #   cli::apply::apply_with_skipped_migrations
-   #   cli::list::list_blog_migrations
-   #   cli::list::list_empty_migrations
-   #   library::list::list_blog_migrations
-   #   library::list::list_empty_migrations
-   #   library::up::apply_initial_migrations
-   #   library::up::apply_initial_schema_changes
-   #   library::up::apply_new_migrations
-   #   library::up::apply_new_schema_changes
-   #   library::up::apply_should_skip_events_if_no_events_folder
-   #   library::up_to::apply_with_skipped_migrations
+  # Error: No such file or directory (os error 2)
+  # failures:
+  #   cli::apply::apply_initial_migrations
+  #   cli::apply::apply_initial_schema_changes
+  #   cli::apply::apply_new_migrations
+  #   cli::apply::apply_new_schema_changes
+  #   cli::apply::apply_should_skip_events_if_no_events_folder
+  #   cli::apply::apply_with_db_configuration
+  #   cli::apply::apply_with_skipped_migrations
+  #   cli::list::list_blog_migrations
+  #   cli::list::list_empty_migrations
+  #   library::list::list_blog_migrations
+  #   library::list::list_empty_migrations
+  #   library::up::apply_initial_migrations
+  #   library::up::apply_initial_schema_changes
+  #   library::up::apply_new_migrations
+  #   library::up::apply_new_schema_changes
+  #   library::up::apply_should_skip_events_if_no_events_folder
+  #   library::up_to::apply_with_skipped_migrations
   doCheck = false;
 
   passthru = {

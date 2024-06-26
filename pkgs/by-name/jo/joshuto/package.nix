@@ -1,9 +1,10 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, installShellFiles
-, stdenv
-, darwin
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  installShellFiles,
+  stdenv,
+  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -21,9 +22,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.Foundation
-  ];
+  buildInputs = lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Foundation ];
 
   postInstall = ''
     installShellCompletion --cmd joshuto \
@@ -37,7 +36,11 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/kamiyaa/joshuto";
     changelog = "https://github.com/kamiyaa/joshuto/releases/tag/${src.rev}";
     license = licenses.lgpl3Only;
-    maintainers = with maintainers; [ figsoda totoroot xrelkd ];
+    maintainers = with maintainers; [
+      figsoda
+      totoroot
+      xrelkd
+    ];
     mainProgram = "joshuto";
   };
 }

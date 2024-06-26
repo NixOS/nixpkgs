@@ -1,12 +1,13 @@
-{ fetchFromGitHub
-, lib
-, stdenvNoCC
-, gnome
-, gnome-icon-theme
-, hicolor-icon-theme
-, gtk3
-, humanity-icon-theme
-, ubuntu-themes
+{
+  fetchFromGitHub,
+  lib,
+  stdenvNoCC,
+  gnome,
+  gnome-icon-theme,
+  hicolor-icon-theme,
+  gtk3,
+  humanity-icon-theme,
+  ubuntu-themes,
 }:
 
 stdenvNoCC.mkDerivation rec {
@@ -28,9 +29,7 @@ stdenvNoCC.mkDerivation rec {
     ubuntu-themes # provides ubuntu-mono-dark
   ];
 
-  nativeBuildInputs = [
-    gtk3
-  ];
+  nativeBuildInputs = [ gtk3 ];
 
   dontDropIconThemeCache = true;
 

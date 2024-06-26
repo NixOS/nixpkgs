@@ -1,4 +1,9 @@
-{ lib, mkDerivation, fetchFromGitHub, standard-library }:
+{
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+  standard-library,
+}:
 
 mkDerivation rec {
   pname = "generic";
@@ -11,9 +16,7 @@ mkDerivation rec {
     sha256 = "05igsd2gaj6h9bkqwp8llhvn4qvc5gmi03x4fnz096ba8m6x8s3n";
   };
 
-  buildInputs = [
-    standard-library
-  ];
+  buildInputs = [ standard-library ];
 
   preBuild = ''
     echo "module Everything where" > Everything.agda
@@ -23,11 +26,13 @@ mkDerivation rec {
   meta = with lib; {
     # Remove if a version compatible with agda 2.6.2 is made
     broken = true;
-    description =
-      "A library for doing generic programming in Agda";
+    description = "A library for doing generic programming in Agda";
     homepage = src.meta.homepage;
     license = licenses.mit;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ alexarice turion ];
+    maintainers = with maintainers; [
+      alexarice
+      turion
+    ];
   };
 }

@@ -1,9 +1,12 @@
-{ lib, fetchurl, buildDunePackage
-, fmt
-, lwt
-, optint
-, ptime
-, alcotest
+{
+  lib,
+  fetchurl,
+  buildDunePackage,
+  fmt,
+  lwt,
+  optint,
+  ptime,
+  alcotest,
 }:
 
 buildDunePackage rec {
@@ -17,7 +20,12 @@ buildDunePackage rec {
     hash = "sha256-fNXNlaDpb5zUA2rTwi5h1j4v4LQmovxG+Am6u+1guPQ=";
   };
 
-  propagatedBuildInputs = [ fmt lwt optint ptime ];
+  propagatedBuildInputs = [
+    fmt
+    lwt
+    optint
+    ptime
+  ];
 
   doCheck = true;
   checkInputs = [ alcotest ];

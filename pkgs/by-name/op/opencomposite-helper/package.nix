@@ -1,7 +1,8 @@
-{ writeShellApplication
+{
+  writeShellApplication,
 
-, monado
-, opencomposite
+  monado,
+  opencomposite,
 }:
 writeShellApplication {
   name = "opencomposite-helper";
@@ -15,4 +16,3 @@ writeShellApplication {
     exec "$@"
   '';
 }
-

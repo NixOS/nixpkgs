@@ -1,21 +1,22 @@
-{ fetchFromGitHub
-, stdenv
-, makeDesktopItem
-, lib
-, openssl
-, boost
-, curl
-, libevent
-, libzip
-, qrencode
-, qtbase
-, qttools
-, wrapQtAppsHook
-, autoreconfHook
-, pkg-config
-, libtool
-, miniupnpc
-, hexdump
+{
+  fetchFromGitHub,
+  stdenv,
+  makeDesktopItem,
+  lib,
+  openssl,
+  boost,
+  curl,
+  libevent,
+  libzip,
+  qrencode,
+  qtbase,
+  qttools,
+  wrapQtAppsHook,
+  autoreconfHook,
+  pkg-config,
+  libtool,
+  miniupnpc,
+  hexdump,
 }:
 
 stdenv.mkDerivation rec {

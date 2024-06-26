@@ -1,23 +1,24 @@
-{ lib
-, stdenv
-, appstream-glib
-, curl
-, desktop-file-utils
-, fetchFromGitHub
-, geoip
-, gettext
-, glib
-, glib-networking
-, gtk3
-, json-glib
-, libappindicator
-, libmrss
-, libproxy
-, libsoup_3
-, meson
-, ninja
-, pkg-config
-, wrapGAppsHook3
+{
+  lib,
+  stdenv,
+  appstream-glib,
+  curl,
+  desktop-file-utils,
+  fetchFromGitHub,
+  geoip,
+  gettext,
+  glib,
+  glib-networking,
+  gtk3,
+  json-glib,
+  libappindicator,
+  libmrss,
+  libproxy,
+  libsoup_3,
+  meson,
+  ninja,
+  pkg-config,
+  wrapGAppsHook3,
 }:
 
 stdenv.mkDerivation rec {

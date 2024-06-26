@@ -1,6 +1,18 @@
-{ lib, stdenv,  fetchFromGitHub, cmake, gperf
-, file, ncurses, openssl, readline, sqlite, zlib
-, AppKit, Cocoa, Foundation
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  gperf,
+  file,
+  ncurses,
+  openssl,
+  readline,
+  sqlite,
+  zlib,
+  AppKit,
+  Cocoa,
+  Foundation,
 }:
 
 stdenv.mkDerivation rec {
@@ -19,16 +31,25 @@ stdenv.mkDerivation rec {
       --replace "get_git_head_revision" "#get_git_head_revision"
   '';
 
-  nativeBuildInputs = [ cmake gperf ];
+  nativeBuildInputs = [
+    cmake
+    gperf
+  ];
 
-  buildInputs = [
-    file # for libmagic
-    ncurses
-    openssl
-    readline
-    sqlite
-    zlib
-  ] ++ lib.optionals stdenv.isDarwin [ AppKit Cocoa Foundation ];
+  buildInputs =
+    [
+      file # for libmagic
+      ncurses
+      openssl
+      readline
+      sqlite
+      zlib
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      AppKit
+      Cocoa
+      Foundation
+    ];
 
   cmakeFlags = [
     "-DHAS_WHATSAPP=OFF" # go module build required

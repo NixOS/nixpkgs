@@ -1,4 +1,17 @@
-{ lib, stdenv, fetchFromGitHub, openssl, boost, libevent, autoreconfHook, db4, miniupnpc, eject, pkg-config, hexdump }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  openssl,
+  boost,
+  libevent,
+  autoreconfHook,
+  db4,
+  miniupnpc,
+  eject,
+  pkg-config,
+  hexdump,
+}:
 
 stdenv.mkDerivation rec {
   pname = "namecoind";
@@ -28,9 +41,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  configureFlags = [
-    "--with-boost-libdir=${boost.out}/lib"
-  ];
+  configureFlags = [ "--with-boost-libdir=${boost.out}/lib" ];
 
   meta = with lib; {
     description = "Decentralized open source information registration and transfer system based on the Bitcoin cryptocurrency";

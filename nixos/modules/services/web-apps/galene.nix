@@ -1,4 +1,10 @@
-{ config, lib, options, pkgs, ... }:
+{
+  config,
+  lib,
+  options,
+  pkgs,
+  ...
+}:
 
 with lib;
 let
@@ -132,8 +138,8 @@ in
 
       preStart = ''
         ${optionalString (cfg.insecure != true) ''
-           install -m 700 -o '${cfg.user}' -g '${cfg.group}' ${cfg.certFile} ${cfg.dataDir}/cert.pem
-           install -m 700 -o '${cfg.user}' -g '${cfg.group}' ${cfg.keyFile} ${cfg.dataDir}/key.pem
+          install -m 700 -o '${cfg.user}' -g '${cfg.group}' ${cfg.certFile} ${cfg.dataDir}/cert.pem
+          install -m 700 -o '${cfg.user}' -g '${cfg.group}' ${cfg.keyFile} ${cfg.dataDir}/key.pem
         ''}
       '';
 
@@ -143,20 +149,22 @@ in
           User = cfg.user;
           Group = cfg.group;
           WorkingDirectory = cfg.stateDir;
-          ExecStart = ''${cfg.package}/bin/galene \
-          ${optionalString (cfg.insecure) "-insecure"} \
-          -data ${cfg.dataDir} \
-          -groups ${cfg.groupsDir} \
-          -recordings ${cfg.recordingsDir} \
-          -static ${cfg.staticDir}'';
+          ExecStart = ''
+            ${cfg.package}/bin/galene \
+                      ${optionalString (cfg.insecure) "-insecure"} \
+                      -data ${cfg.dataDir} \
+                      -groups ${cfg.groupsDir} \
+                      -recordings ${cfg.recordingsDir} \
+                      -static ${cfg.staticDir}'';
           Restart = "always";
           # Upstream Requirements
           LimitNOFILE = 65536;
-          StateDirectory = [ ] ++
-            optional (cfg.stateDir == defaultstateDir) "galene" ++
-            optional (cfg.dataDir == defaultdataDir) "galene/data" ++
-            optional (cfg.groupsDir == defaultgroupsDir) "galene/groups" ++
-            optional (cfg.recordingsDir == defaultrecordingsDir) "galene/recordings";
+          StateDirectory =
+            [ ]
+            ++ optional (cfg.stateDir == defaultstateDir) "galene"
+            ++ optional (cfg.dataDir == defaultdataDir) "galene/data"
+            ++ optional (cfg.groupsDir == defaultgroupsDir) "galene/groups"
+            ++ optional (cfg.recordingsDir == defaultrecordingsDir) "galene/recordings";
 
           # Hardening
           CapabilityBoundingSet = [ "" ];
@@ -179,29 +187,33 @@ in
           ProtectSystem = "strict";
           ReadWritePaths = cfg.recordingsDir;
           RemoveIPC = true;
-          RestrictAddressFamilies = [ "AF_INET" "AF_INET6" "AF_NETLINK" ];
+          RestrictAddressFamilies = [
+            "AF_INET"
+            "AF_INET6"
+            "AF_NETLINK"
+          ];
           RestrictNamespaces = true;
           RestrictRealtime = true;
           RestrictSUIDSGID = true;
           SystemCallArchitectures = "native";
-          SystemCallFilter = [ "@system-service" "~@privileged" ];
+          SystemCallFilter = [
+            "@system-service"
+            "~@privileged"
+          ];
           UMask = "0077";
         }
       ];
     };
 
-    users.users = mkIf (cfg.user == "galene")
-      {
-        galene = {
-          description = "galene Service";
-          group = cfg.group;
-          isSystemUser = true;
-        };
+    users.users = mkIf (cfg.user == "galene") {
+      galene = {
+        description = "galene Service";
+        group = cfg.group;
+        isSystemUser = true;
       };
-
-    users.groups = mkIf (cfg.group == "galene") {
-      galene = { };
     };
+
+    users.groups = mkIf (cfg.group == "galene") { galene = { }; };
   };
   meta.maintainers = with lib.maintainers; [ rgrunbla ];
 }

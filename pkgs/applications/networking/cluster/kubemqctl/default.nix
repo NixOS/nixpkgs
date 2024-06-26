@@ -1,4 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 
 buildGoModule rec {
   pname = "kubemqctl";
@@ -18,7 +22,11 @@ buildGoModule rec {
     cp ${./go.sum} go.sum
   '';
 
-  ldflags = [ "-w" "-s" "-X main.version=${version}" ];
+  ldflags = [
+    "-w"
+    "-s"
+    "-X main.version=${version}"
+  ];
 
   doCheck = false; # TODO tests are failing
 

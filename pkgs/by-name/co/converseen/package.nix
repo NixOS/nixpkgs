@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, imagemagick
-, pkg-config
-, qt5
-, nix-update-script
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  imagemagick,
+  pkg-config,
+  qt5,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

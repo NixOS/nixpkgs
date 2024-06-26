@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, dotnetCorePackages
-, dotnet-runtime_8
-, buildDotnetModule
-, fetchFromGitHub
-, fontconfig
-, xorg
-, libglvnd
-, makeDesktopItem
-, copyDesktopItems
+{
+  lib,
+  stdenv,
+  dotnetCorePackages,
+  dotnet-runtime_8,
+  buildDotnetModule,
+  fetchFromGitHub,
+  fontconfig,
+  xorg,
+  libglvnd,
+  makeDesktopItem,
+  copyDesktopItems,
 }:
 
 buildDotnetModule rec {
@@ -30,11 +31,12 @@ buildDotnetModule rec {
   dotnet-runtime = dotnet-runtime_8;
   executables = [ "mqttMultimeter" ];
 
-  nativeBuildInputs = [
-    copyDesktopItems
-  ];
+  nativeBuildInputs = [ copyDesktopItems ];
 
-  buildInputs = [ stdenv.cc.cc.lib fontconfig ];
+  buildInputs = [
+    stdenv.cc.cc.lib
+    fontconfig
+  ];
 
   postInstall = ''
     rm -rf $out/lib/${lib.toLower pname}/runtimes/{*musl*,win*}

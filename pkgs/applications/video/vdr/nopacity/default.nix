@@ -1,4 +1,10 @@
-{ stdenv, lib, fetchFromGitLab, vdr, graphicsmagick }:
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  vdr,
+  graphicsmagick,
+}:
 stdenv.mkDerivation rec {
   pname = "vdr-skin-nopacity";
   version = "1.1.17";
@@ -10,7 +16,10 @@ stdenv.mkDerivation rec {
     rev = version;
   };
 
-  buildInputs = [ vdr graphicsmagick ];
+  buildInputs = [
+    vdr
+    graphicsmagick
+  ];
 
   installFlags = [ "DESTDIR=$(out)" ];
 

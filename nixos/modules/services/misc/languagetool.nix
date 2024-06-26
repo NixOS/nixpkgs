@@ -1,11 +1,18 @@
-{ config, lib, options, pkgs, ... }:
+{
+  config,
+  lib,
+  options,
+  pkgs,
+  ...
+}:
 
 with lib;
 
 let
   cfg = config.services.languagetool;
-  settingsFormat = pkgs.formats.javaProperties {};
-in {
+  settingsFormat = pkgs.formats.javaProperties { };
+in
+{
   options.services.languagetool = {
     enable = mkEnableOption "the LanguageTool server, a multilingual spelling, style, and grammar checker that helps correct or paraphrase texts";
 
@@ -42,7 +49,7 @@ in {
           description = "Number of sentences cached.";
         };
       };
-      default = {};
+      default = { };
       description = ''
         Configuration file options for LanguageTool, see
         'languagetool-http-server --help'
@@ -53,7 +60,7 @@ in {
 
   config = mkIf cfg.enable {
 
-    systemd.services.languagetool =  {
+    systemd.services.languagetool = {
       description = "LanguageTool HTTP server";
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
@@ -63,7 +70,10 @@ in {
         Group = "languagetool";
         CapabilityBoundingSet = [ "" ];
         RestrictNamespaces = [ "" ];
-        SystemCallFilter = [ "@system-service" "~ @privileged" ];
+        SystemCallFilter = [
+          "@system-service"
+          "~ @privileged"
+        ];
         ProtectHome = "yes";
         ExecStart = ''
           ${pkgs.languagetool}/bin/languagetool-http-server \
@@ -71,7 +81,7 @@ in {
             ${optionalString cfg.public "--public"} \
             ${optionalString (cfg.allowOrigin != null) "--allow-origin ${cfg.allowOrigin}"} \
             "--config" ${settingsFormat.generate "languagetool.conf" cfg.settings}
-          '';
+        '';
       };
     };
   };

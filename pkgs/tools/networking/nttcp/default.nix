@@ -1,4 +1,8 @@
-{ lib, stdenv, fetchurl }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 
 stdenv.mkDerivation rec {
   pname = "nttcp";
@@ -14,9 +18,7 @@ stdenv.mkDerivation rec {
     ./format-security.patch
   ];
 
-  makeFlags = [
-    "prefix=${placeholder "out"}"
-  ];
+  makeFlags = [ "prefix=${placeholder "out"}" ];
 
   meta = with lib; {
     description = "New test TCP program";

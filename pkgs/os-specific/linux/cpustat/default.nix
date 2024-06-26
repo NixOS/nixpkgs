@@ -1,7 +1,8 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, ncurses
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  ncurses,
 }:
 
 stdenv.mkDerivation rec {
@@ -10,14 +11,12 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "ColinIanKing";
-    repo ="cpustat";
+    repo = "cpustat";
     rev = "refs/tags/V${version}";
     hash = "sha256-cdHoo2esm772q782kb7mwRwlPXGDNNLHJRbd2si5g7k=";
   };
 
-  buildInputs = [
-    ncurses
-  ];
+  buildInputs = [ ncurses ];
 
   installFlags = [
     "BINDIR=${placeholder "out"}/bin"

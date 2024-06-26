@@ -1,6 +1,7 @@
-{ lib
-, fetchFromGitHub
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -20,16 +21,12 @@ python3.pkgs.buildPythonApplication rec {
       --replace "version=version()," "version='${version}',"
   '';
 
-  propagatedBuildInputs = with python3.pkgs; [
-    stickytape
-  ];
+  propagatedBuildInputs = with python3.pkgs; [ stickytape ];
 
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "inql"
-  ];
+  pythonImportsCheck = [ "inql" ];
 
   meta = with lib; {
     description = "Security testing tool for GraphQL";

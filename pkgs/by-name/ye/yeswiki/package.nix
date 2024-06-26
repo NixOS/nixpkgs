@@ -6,7 +6,8 @@
 }:
 let
   version = "4.4.2";
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "yeswiki";
   inherit version;
 
@@ -15,9 +16,7 @@ in stdenv.mkDerivation {
     hash = "sha256-TNiVBragEnLkMTu/Op6sCFsk9wWXUQ2GUPqmWgPV/vk=";
   };
 
-  nativeBuildInputs = [
-    unzip
-  ];
+  nativeBuildInputs = [ unzip ];
 
   installPhase = ''
     runHook preInstall

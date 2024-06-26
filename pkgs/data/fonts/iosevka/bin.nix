@@ -1,19 +1,19 @@
-{ stdenv
-, lib
-, fetchurl
-, iosevka
-, unzip
-, variant ? ""
+{
+  stdenv,
+  lib,
+  fetchurl,
+  iosevka,
+  unzip,
+  variant ? "",
 }:
 
 let
-  name =
-    if lib.hasPrefix "SGr-" variant then variant
-    else "Iosevka" + variant;
+  name = if lib.hasPrefix "SGr-" variant then variant else "Iosevka" + variant;
 
   variantHashes = import ./variants.nix;
-  validVariants = map (lib.removePrefix "Iosevka")
-    (builtins.attrNames (builtins.removeAttrs variantHashes [ "Iosevka" ]));
+  validVariants = map (lib.removePrefix "Iosevka") (
+    builtins.attrNames (builtins.removeAttrs variantHashes [ "Iosevka" ])
+  );
 in
 stdenv.mkDerivation rec {
   pname = "${name}-bin";
@@ -21,10 +21,11 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/be5invis/Iosevka/releases/download/v${version}/PkgTTC-${name}-${version}.zip";
-    sha256 = variantHashes.${name} or (throw ''
-      No such variant "${variant}" for package iosevka-bin.
-      Valid variants are: ${lib.concatStringsSep ", " validVariants}.
-    '');
+    sha256 =
+      variantHashes.${name} or (throw ''
+        No such variant "${variant}" for package iosevka-bin.
+        Valid variants are: ${lib.concatStringsSep ", " validVariants}.
+      '');
   };
 
   nativeBuildInputs = [ unzip ];
@@ -37,10 +38,14 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    inherit (iosevka.meta) homepage downloadPage description license platforms;
-    maintainers = with lib.maintainers; [
-      montchr
-    ];
+    inherit (iosevka.meta)
+      homepage
+      downloadPage
+      description
+      license
+      platforms
+      ;
+    maintainers = with lib.maintainers; [ montchr ];
   };
 
   passthru.updateScript = ./update-bin.sh;

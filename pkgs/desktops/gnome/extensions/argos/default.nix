@@ -1,4 +1,9 @@
-{ fetchFromGitHub, lib, stdenv, unstableGitUpdater }:
+{
+  fetchFromGitHub,
+  lib,
+  stdenv,
+  unstableGitUpdater,
+}:
 
 stdenv.mkDerivation rec {
   pname = "argos";

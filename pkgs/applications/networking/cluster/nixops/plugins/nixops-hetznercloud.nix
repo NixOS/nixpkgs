@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, unstableGitUpdater
-, poetry-core
-, hcloud
-, nixops
-, typing-extensions
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  unstableGitUpdater,
+  poetry-core,
+  hcloud,
+  nixops,
+  typing-extensions,
 }:
 
 buildPythonPackage {
@@ -26,13 +27,9 @@ buildPythonPackage {
     --replace "poetry>=" "poetry-core>="
   '';
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
-  buildInputs = [
-    nixops
-  ];
+  buildInputs = [ nixops ];
 
   propagatedBuildInputs = [
     hcloud
@@ -41,7 +38,7 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "nixops_hetznercloud" ];
 
-  passthru.updateScript = unstableGitUpdater {};
+  passthru.updateScript = unstableGitUpdater { };
 
   meta = with lib; {
     description = "NixOps plugin supporting Hetzner Cloud deployments";

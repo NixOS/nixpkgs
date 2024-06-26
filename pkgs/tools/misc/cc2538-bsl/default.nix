@@ -1,7 +1,8 @@
-{ lib
-, fetchFromGitHub
-, fetchpatch
-, python3Packages
+{
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  python3Packages,
 }:
 
 python3Packages.buildPythonPackage rec {
@@ -26,9 +27,7 @@ python3Packages.buildPythonPackage rec {
 
   env.SETUPTOOLS_SCM_PRETEND_VERSION = "0.1.dev0+g${lib.substring 0 7 src.rev}";
 
-  nativeBuildInputs = with python3Packages; [
-    setuptools-scm
-  ];
+  nativeBuildInputs = with python3Packages; [ setuptools-scm ];
 
   propagatedBuildInputs = with python3Packages; [
     intelhex
@@ -54,4 +53,3 @@ python3Packages.buildPythonPackage rec {
     mainProgram = "cc2538-bsl";
   };
 }
-

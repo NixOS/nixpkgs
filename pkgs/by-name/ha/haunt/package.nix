@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, fetchurl
-, fetchpatch
-, autoreconfHook
-, callPackage
-, guile
-, guile-commonmark
-, guile-reader
-, makeWrapper
-, pkg-config
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  autoreconfHook,
+  callPackage,
+  guile,
+  guile-commonmark,
+  guile-reader,
+  makeWrapper,
+  pkg-config,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -84,7 +85,10 @@ stdenv.mkDerivation (finalAttrs: {
       to do things that aren't provided out-of-the-box.
     '';
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ AndersonTorres AluisioASG ];
+    maintainers = with lib.maintainers; [
+      AndersonTorres
+      AluisioASG
+    ];
     inherit (guile.meta) platforms;
   };
 })

@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, makeWrapper, gmp, gcc }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  makeWrapper,
+  gmp,
+  gcc,
+}:
 
 stdenv.mkDerivation rec {
   pname = "mkcl";
@@ -39,14 +47,15 @@ stdenv.mkDerivation rec {
   ];
 
   # tinycc configure flags copied from the tinycc derivation.
-  postConfigure = ''(
-    cd contrib/tinycc
-    ./configure --cc=cc \
-      --elfinterp=$(< $NIX_CC/nix-support/dynamic-linker) \
-      --crtprefix=${lib.getLib stdenv.cc.libc}/lib \
-      --sysincludepaths=${lib.getDev stdenv.cc.libc}/include:{B}/include \
-      --libpaths=${lib.getLib stdenv.cc.libc}/lib
-  )'';
+  postConfigure = ''
+    (
+        cd contrib/tinycc
+        ./configure --cc=cc \
+          --elfinterp=$(< $NIX_CC/nix-support/dynamic-linker) \
+          --crtprefix=${lib.getLib stdenv.cc.libc}/lib \
+          --sysincludepaths=${lib.getDev stdenv.cc.libc}/include:{B}/include \
+          --libpaths=${lib.getLib stdenv.cc.libc}/lib
+      )'';
 
   postInstall = ''
     wrapProgram $out/bin/mkcl --prefix PATH : "${gcc}/bin"

@@ -1,17 +1,18 @@
-{ stdenv
-, lib
-, fetchzip
-, fetchpatch
-, meson
-, ninja
-, flex
-, bison
-, pkg-config
-, which
-, pythonSupport ? false
-, python ? null
-, swig
-, libyaml
+{
+  stdenv,
+  lib,
+  fetchzip,
+  fetchpatch,
+  meson,
+  ninja,
+  flex,
+  bison,
+  pkg-config,
+  which,
+  pythonSupport ? false,
+  python ? null,
+  swig,
+  libyaml,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -57,18 +58,20 @@ stdenv.mkDerivation (finalAttrs: {
 
   env.SETUPTOOLS_SCM_PRETEND_VERSION = finalAttrs.version;
 
-  nativeBuildInputs = [
-    meson
-    ninja
-    flex
-    bison
-    pkg-config
-    which
-  ] ++ lib.optionals pythonSupport [
-    python
-    python.pkgs.setuptools-scm
-    swig
-  ];
+  nativeBuildInputs =
+    [
+      meson
+      ninja
+      flex
+      bison
+      pkg-config
+      which
+    ]
+    ++ lib.optionals pythonSupport [
+      python
+      python.pkgs.setuptools-scm
+      swig
+    ];
 
   buildInputs = [ libyaml ];
 
@@ -94,12 +97,13 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck =
     # Checks are broken on aarch64 darwin
     # https://github.com/NixOS/nixpkgs/pull/118700#issuecomment-885892436
-    !stdenv.isDarwin &&
+    !stdenv.isDarwin
+    &&
 
-    # we must explicitly disable this here so that mesonFlags receives
-    # `-Dtests=disabled`; without it meson will attempt to run
-    # hostPlatform binaries during the configurePhase.
-    (with stdenv; buildPlatform.canExecute hostPlatform);
+      # we must explicitly disable this here so that mesonFlags receives
+      # `-Dtests=disabled`; without it meson will attempt to run
+      # hostPlatform binaries during the configurePhase.
+      (with stdenv; buildPlatform.canExecute hostPlatform);
 
   meta = with lib; {
     description = "Device Tree Compiler";

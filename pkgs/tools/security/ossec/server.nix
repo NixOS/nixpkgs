@@ -1,4 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, which, pcre2, zlib, ncurses, openssl }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  which,
+  pcre2,
+  zlib,
+  ncurses,
+  openssl,
+}:
 let
   version = "unstable-2023-08-09";
 in
@@ -16,7 +25,12 @@ stdenv.mkDerivation {
   # clear is used during the build process
   nativeBuildInputs = [ ncurses ];
 
-  buildInputs = [ which pcre2 zlib openssl ];
+  buildInputs = [
+    which
+    pcre2
+    zlib
+    openssl
+  ];
 
   # patch to remove root manipulation, install phase which tries to add users to the system, and init phase which tries to modify the system to launch files
   patches = [ ./no-root.patch ];
@@ -28,35 +42,35 @@ stdenv.mkDerivation {
   env.NIX_CFLAGS_COMPILE = "-fcommon";
 
   buildPhase = ''
-    mkdir -p $out/logs
-    export USER_DIR="$out" # just to satisy the script
-    ./install.sh <<EOF
-en
+        mkdir -p $out/logs
+        export USER_DIR="$out" # just to satisy the script
+        ./install.sh <<EOF
+    en
 
-server
-n
-n
-EOF
+    server
+    n
+    n
+    EOF
   '';
 
   installPhase = ''
-      runHook preInstall
+    runHook preInstall
 
-      mkdir -p $out/share
-      mv $out/active-response/bin/* $out/bin
-      mv $out/etc $out/share
-      mv $out/queue $out/share
-      mv $out/var $out/share
-      mv $out/agentless $out/share
-      mv $out/.ssh $out/share
-      mv $out/logs $out/share
-      mv $out/rules $out/share
-      mv $out/stats $out/share
-      rm -r $out/active-response
-      rm -r $out/tmp
-      ls -lah $out
+    mkdir -p $out/share
+    mv $out/active-response/bin/* $out/bin
+    mv $out/etc $out/share
+    mv $out/queue $out/share
+    mv $out/var $out/share
+    mv $out/agentless $out/share
+    mv $out/.ssh $out/share
+    mv $out/logs $out/share
+    mv $out/rules $out/share
+    mv $out/stats $out/share
+    rm -r $out/active-response
+    rm -r $out/tmp
+    ls -lah $out
 
-      runHook postInstall
+    runHook postInstall
   '';
 
   meta = with lib; {
@@ -67,4 +81,3 @@ EOF
     platforms = platforms.all;
   };
 }
-

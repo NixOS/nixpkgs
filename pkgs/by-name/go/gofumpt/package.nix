@@ -1,9 +1,10 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, nix-update-script
-, testers
-, gofumpt
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  nix-update-script,
+  testers,
+  gofumpt,
 }:
 
 buildGoModule rec {
@@ -45,7 +46,10 @@ buildGoModule rec {
     homepage = "https://github.com/mvdan/gofumpt";
     changelog = "https://github.com/mvdan/gofumpt/releases/tag/v${version}";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ rvolosatovs katexochen ];
+    maintainers = with maintainers; [
+      rvolosatovs
+      katexochen
+    ];
     mainProgram = "gofumpt";
   };
 }

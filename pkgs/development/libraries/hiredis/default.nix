@@ -1,9 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, openssl }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  openssl,
+}:
 
 stdenv.mkDerivation rec {
   pname = "hiredis";
   version = "1.2.0";
-  nativeBuildInputs = [openssl];
+  nativeBuildInputs = [ openssl ];
 
   src = fetchFromGitHub {
     owner = "redis";

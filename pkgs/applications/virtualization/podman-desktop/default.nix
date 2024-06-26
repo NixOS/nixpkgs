@@ -1,15 +1,16 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchYarnDeps
-, yarn
-, fixup-yarn-lock
-, nodejs
-, makeWrapper
-, copyDesktopItems
-, desktopToDarwinBundle
-, electron
-, makeDesktopItem
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchYarnDeps,
+  yarn,
+  fixup-yarn-lock,
+  nodejs,
+  makeWrapper,
+  copyDesktopItems,
+  desktopToDarwinBundle,
+  electron,
+  makeDesktopItem,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -50,10 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
     nodejs
     makeWrapper
     copyDesktopItems
-  ]
-  ++ lib.optionals stdenv.isDarwin [
-    desktopToDarwinBundle
-  ];
+  ] ++ lib.optionals stdenv.isDarwin [ desktopToDarwinBundle ];
 
   configurePhase = ''
     runHook preConfigure

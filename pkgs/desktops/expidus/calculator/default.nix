@@ -1,4 +1,8 @@
-{ lib, flutter, fetchFromGitHub }:
+{
+  lib,
+  flutter,
+  fetchFromGitHub,
+}:
 flutter.buildFlutterApplication rec {
   pname = "expidus-calculator";
   version = "0.1.1-alpha";
@@ -10,9 +14,7 @@ flutter.buildFlutterApplication rec {
     hash = "sha256-O3LHp10Fo3PW3zoN7mFSQEKh+AAaR+IqkRtc6nQrIZE=";
   };
 
-  flutterBuildFlags = [
-    "--dart-define=COMMIT_HASH=a5d8f54404b9994f83beb367a1cd11e04a6420cb"
-  ];
+  flutterBuildFlags = [ "--dart-define=COMMIT_HASH=a5d8f54404b9994f83beb367a1cd11e04a6420cb" ];
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
 
@@ -44,7 +46,10 @@ flutter.buildFlutterApplication rec {
     homepage = "https://expidusos.com";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ RossComputerGuy ];
-    platforms = [ "x86_64-linux" "aarch64-linux" ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
     mainProgram = "expidus-calculator";
   };
 }

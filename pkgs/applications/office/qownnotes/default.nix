@@ -1,21 +1,22 @@
-{ lib
-, stdenv
-, fetchurl
-, qmake
-, qttools
-, qtbase
-, qtdeclarative
-, qtsvg
-, qtwayland
-, qtwebsockets
-, qt5compat
-, makeWrapper
-, wrapQtAppsHook
-, botan2
-, pkg-config
-, nixosTests
-, installShellFiles
-, xvfb-run
+{
+  lib,
+  stdenv,
+  fetchurl,
+  qmake,
+  qttools,
+  qtbase,
+  qtdeclarative,
+  qtsvg,
+  qtwayland,
+  qtwebsockets,
+  qt5compat,
+  makeWrapper,
+  wrapQtAppsHook,
+  botan2,
+  pkg-config,
+  nixosTests,
+  installShellFiles,
+  xvfb-run,
 }:
 
 let
@@ -49,28 +50,27 @@ stdenv.mkDerivation {
     botan2
   ] ++ lib.optionals stdenv.isLinux [ qtwayland ];
 
-  qmakeFlags = [
-    "USE_SYSTEM_BOTAN=1"
-  ];
+  qmakeFlags = [ "USE_SYSTEM_BOTAN=1" ];
 
-  postInstall = ''
-    installShellCompletion --cmd ${appname} \
-      --bash <(xvfb-run $out/bin/${appname} --completion bash) \
-      --fish <(xvfb-run $out/bin/${appname} --completion fish)
-    installShellCompletion --cmd ${pname} \
-      --bash <(xvfb-run $out/bin/${appname} --completion bash) \
-      --fish <(xvfb-run $out/bin/${appname} --completion fish)
-  ''
-  # Create a lowercase symlink for Linux
-  + lib.optionalString stdenv.isLinux ''
-    ln -s $out/bin/${appname} $out/bin/${pname}
-  ''
-  # Wrap application for macOS as lowercase binary
-  + lib.optionalString stdenv.isDarwin ''
-    mkdir -p $out/Applications
-    mv $out/bin/${appname}.app $out/Applications
-    makeWrapper $out/Applications/${appname}.app/Contents/MacOS/${appname} $out/bin/${pname}
-  '';
+  postInstall =
+    ''
+      installShellCompletion --cmd ${appname} \
+        --bash <(xvfb-run $out/bin/${appname} --completion bash) \
+        --fish <(xvfb-run $out/bin/${appname} --completion fish)
+      installShellCompletion --cmd ${pname} \
+        --bash <(xvfb-run $out/bin/${appname} --completion bash) \
+        --fish <(xvfb-run $out/bin/${appname} --completion fish)
+    ''
+    # Create a lowercase symlink for Linux
+    + lib.optionalString stdenv.isLinux ''
+      ln -s $out/bin/${appname} $out/bin/${pname}
+    ''
+    # Wrap application for macOS as lowercase binary
+    + lib.optionalString stdenv.isDarwin ''
+      mkdir -p $out/Applications
+      mv $out/bin/${appname}.app $out/Applications
+      makeWrapper $out/Applications/${appname}.app/Contents/MacOS/${appname} $out/bin/${pname}
+    '';
 
   # Tests QOwnNotes using the NixOS module by launching xterm:
   passthru.tests.basic-nixos-module-functionality = nixosTests.qownnotes;
@@ -81,7 +81,10 @@ stdenv.mkDerivation {
     changelog = "https://www.qownnotes.org/changelog.html";
     downloadPage = "https://github.com/pbek/QOwnNotes/releases/tag/v${version}";
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ pbek totoroot ];
+    maintainers = with maintainers; [
+      pbek
+      totoroot
+    ];
     platforms = platforms.unix;
   };
 }

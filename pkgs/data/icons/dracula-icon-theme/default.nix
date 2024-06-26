@@ -1,4 +1,9 @@
-{ lib, stdenvNoCC, fetchFromGitHub, jdupes }:
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  jdupes,
+}:
 
 stdenvNoCC.mkDerivation {
   pname = "dracula-icon-theme";
@@ -11,9 +16,7 @@ stdenvNoCC.mkDerivation {
     hash = "sha256-GY+XxTM22jyNq8kaB81zNfHRhfXujArFcyzDa8kjxCQ=";
   };
 
-  nativeBuildInputs = [
-    jdupes
-  ];
+  nativeBuildInputs = [ jdupes ];
 
   dontDropIconThemeCache = true;
 

@@ -1,7 +1,8 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -38,6 +39,12 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/oriansj/m2libc";
     license = licenses.gpl3Only;
     maintainers = teams.minimal-bootstrap.members;
-    platforms = [ "i686-linux" "x86_64-linux" "aarch64-linux" "riscv32-linux" "riscv64-linux" ];
+    platforms = [
+      "i686-linux"
+      "x86_64-linux"
+      "aarch64-linux"
+      "riscv32-linux"
+      "riscv64-linux"
+    ];
   };
 })

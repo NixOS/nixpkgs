@@ -1,6 +1,7 @@
-{ buildNpmPackage
-, src
-, version
+{
+  buildNpmPackage,
+  src,
+  version,
 }:
 
 buildNpmPackage {

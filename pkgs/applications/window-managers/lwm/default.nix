@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchurl
-, imake, libX11, libSM, libXext, libICE }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  imake,
+  libX11,
+  libSM,
+  libXext,
+  libICE,
+}:
 
 stdenv.mkDerivation rec {
   pname = "lwm";
@@ -12,7 +20,12 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ imake ];
 
-  buildInputs = [ libX11 libSM libXext libICE ];
+  buildInputs = [
+    libX11
+    libSM
+    libXext
+    libICE
+  ];
 
   dontConfigure = true;
 

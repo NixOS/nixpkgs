@@ -1,13 +1,13 @@
-{ buildDunePackage
-, dune-configurator
-, alcotest
-, ctypes
-, stdio
-, openblasCompat
-, owl-base
-, npy
+{
+  buildDunePackage,
+  dune-configurator,
+  alcotest,
+  ctypes,
+  stdio,
+  openblasCompat,
+  owl-base,
+  npy,
 }:
-
 
 buildDunePackage rec {
   pname = "owl";
@@ -15,7 +15,10 @@ buildDunePackage rec {
   inherit (owl-base) version src meta;
 
   checkInputs = [ alcotest ];
-  buildInputs = [ dune-configurator stdio ];
+  buildInputs = [
+    dune-configurator
+    stdio
+  ];
   propagatedBuildInputs = [
     ctypes
     openblasCompat

@@ -27,14 +27,15 @@ let
     exec = "status-desktop";
     icon = "status";
     comment = "Desktop client for the Status Network";
-    categories = ["Network"];
+    categories = [ "Network" ];
   };
   icon = fetchurl {
     url = "https://github.com/status-im/status-desktop/raw/afde83651724a555626b5d9a3d582918de6c3d59/status.png";
     sha256 = "sha256-ViGuOr9LskGs/P7pjPO9zYgosWaZlZZYVuPpliOA5dY=";
   };
   pname = "status-desktop";
-in appimageTools.wrapType2 {
+in
+appimageTools.wrapType2 {
   inherit pname version src;
   extraInstallCommands = ''
     install -m 444 -D ${desktopEntry}/share/applications/status.desktop $out/share/applications/status.desktop
@@ -43,7 +44,7 @@ in appimageTools.wrapType2 {
   meta = with lib; {
     description = "Desktop client for the Status Network";
     license = licenses.mpl20;
-    maintainers = with maintainers; [ a-kenji  ];
+    maintainers = with maintainers; [ a-kenji ];
     platforms = platforms.linux;
   };
 }

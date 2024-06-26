@@ -1,10 +1,11 @@
-{ lib
-, fetchFromGitHub
-, makeWrapper
-, jre_headless
-, maven
-, writeScript
-, lemminx
+{
+  lib,
+  fetchFromGitHub,
+  makeWrapper,
+  jre_headless,
+  maven,
+  writeScript,
+  lemminx,
 }:
 
 maven.buildMavenPackage rec {

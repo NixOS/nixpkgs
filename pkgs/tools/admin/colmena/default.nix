@@ -1,5 +1,13 @@
-{ stdenv, lib, rustPlatform, fetchFromGitHub, installShellFiles, nix-eval-jobs
-, colmena, testers }:
+{
+  stdenv,
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  installShellFiles,
+  nix-eval-jobs,
+  colmena,
+  testers,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "colmena";

@@ -1,6 +1,15 @@
-{ lib, stdenv, fetchurl, alsa-lib, libX11, makeWrapper, tcl, tk }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  alsa-lib,
+  libX11,
+  makeWrapper,
+  tcl,
+  tk,
+}:
 
-stdenv.mkDerivation  rec {
+stdenv.mkDerivation rec {
   pname = "vkeybd";
   version = "0.1.18d";
 
@@ -10,14 +19,22 @@ stdenv.mkDerivation  rec {
   };
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ alsa-lib libX11 tcl tk ];
+  buildInputs = [
+    alsa-lib
+    libX11
+    tcl
+    tk
+  ];
 
   configurePhase = ''
     mkdir -p $out/bin
     sed -e "s@/usr/local@$out@" -i Makefile
   '';
 
-  makeFlags = [ "TKLIB=-l${tk.libPrefix}" "TCLLIB=-l${tcl.libPrefix}" ];
+  makeFlags = [
+    "TKLIB=-l${tk.libPrefix}"
+    "TCLLIB=-l${tcl.libPrefix}"
+  ];
 
   meta = with lib; {
     description = "Virtual MIDI keyboard";

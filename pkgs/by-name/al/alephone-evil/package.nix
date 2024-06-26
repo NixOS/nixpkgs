@@ -1,4 +1,8 @@
-{ alephone, fetchurl, unrar }:
+{
+  alephone,
+  fetchurl,
+  unrar,
+}:
 
 alephone.makeWrapper rec {
   pname = "marathon-evil";

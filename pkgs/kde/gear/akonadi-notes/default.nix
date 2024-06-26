@@ -1,4 +1,1 @@
-{mkKdeDerivation}:
-mkKdeDerivation {
-  pname = "akonadi-notes";
-}
+{ mkKdeDerivation }: mkKdeDerivation { pname = "akonadi-notes"; }

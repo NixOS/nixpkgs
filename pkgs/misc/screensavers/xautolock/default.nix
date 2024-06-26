@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchFromGitHub
-, imake, gccmakedep, libX11, libXext, libXScrnSaver, xorgproto
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  imake,
+  gccmakedep,
+  libX11,
+  libXext,
+  libXScrnSaver,
+  xorgproto,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -15,15 +23,26 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-T2zAbRqSTxRp9u6EdZmIZfVxaGveeZkJgjp1DWgORoI=";
   };
 
-  nativeBuildInputs = [ imake gccmakedep ];
-  buildInputs = [ libX11 libXext libXScrnSaver xorgproto ];
+  nativeBuildInputs = [
+    imake
+    gccmakedep
+  ];
+  buildInputs = [
+    libX11
+    libXext
+    libXScrnSaver
+    xorgproto
+  ];
 
   makeFlags = [
     "BINDIR=$(out)/bin"
     "MANPATH=$(out)/share/man"
   ];
 
-  installTargets = [ "install" "install.man" ];
+  installTargets = [
+    "install"
+    "install.man"
+  ];
 
   meta = with lib; {
     description = "Launch a given program when your X session has been idle for a given time";

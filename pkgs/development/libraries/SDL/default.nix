@@ -1,21 +1,56 @@
-{ lib, stdenv, config, fetchurl, fetchpatch, pkg-config, audiofile, libcap, libiconv
-, libGLSupported ? lib.meta.availableOn stdenv.hostPlatform libGL
-, openglSupport ? libGLSupported, libGL, libGLU
-, alsaSupport ? stdenv.isLinux && !stdenv.hostPlatform.isAndroid, alsa-lib
-, x11Support ? !stdenv.isCygwin && !stdenv.hostPlatform.isAndroid
-, libXext, libICE, libXrandr
-, pulseaudioSupport ? config.pulseaudio or stdenv.isLinux && !stdenv.hostPlatform.isAndroid && lib.meta.availableOn stdenv.hostPlatform libpulseaudio, libpulseaudio
-, OpenGL, GLUT, CoreAudio, CoreServices, AudioUnit, Kernel, Cocoa
+{
+  lib,
+  stdenv,
+  config,
+  fetchurl,
+  fetchpatch,
+  pkg-config,
+  audiofile,
+  libcap,
+  libiconv,
+  libGLSupported ? lib.meta.availableOn stdenv.hostPlatform libGL,
+  openglSupport ? libGLSupported,
+  libGL,
+  libGLU,
+  alsaSupport ? stdenv.isLinux && !stdenv.hostPlatform.isAndroid,
+  alsa-lib,
+  x11Support ? !stdenv.isCygwin && !stdenv.hostPlatform.isAndroid,
+  libXext,
+  libICE,
+  libXrandr,
+  pulseaudioSupport ?
+    config.pulseaudio or stdenv.isLinux
+    && !stdenv.hostPlatform.isAndroid
+    && lib.meta.availableOn stdenv.hostPlatform libpulseaudio,
+  libpulseaudio,
+  OpenGL,
+  GLUT,
+  CoreAudio,
+  CoreServices,
+  AudioUnit,
+  Kernel,
+  Cocoa,
 }:
 
 # NOTE: When editing this expression see if the same change applies to
 # SDL2 expression too
 
 let
-  extraPropagatedBuildInputs = [ ]
-    ++ lib.optionals x11Support [ libXext libICE libXrandr ]
-    ++ lib.optionals (openglSupport && stdenv.isLinux) [ libGL libGLU ]
-    ++ lib.optionals (openglSupport && stdenv.isDarwin) [ OpenGL GLUT ]
+  extraPropagatedBuildInputs =
+    [ ]
+    ++ lib.optionals x11Support [
+      libXext
+      libICE
+      libXrandr
+    ]
+    ++ lib.optionals (openglSupport && stdenv.isLinux) [
+      libGL
+      libGLU
+    ]
+    ++ lib.optionals (openglSupport && stdenv.isDarwin) [
+      OpenGL
+      GLUT
+    ]
     ++ lib.optional alsaSupport alsa-lib
     ++ lib.optional pulseaudioSupport libpulseaudio
     ++ lib.optional stdenv.isDarwin Cocoa;
@@ -27,33 +62,44 @@ stdenv.mkDerivation rec {
   version = "1.2.15";
 
   src = fetchurl {
-    url    = "https://www.libsdl.org/release/${pname}-${version}.tar.gz";
+    url = "https://www.libsdl.org/release/${pname}-${version}.tar.gz";
     sha256 = "005d993xcac8236fpvd1iawkz4wqjybkpn8dbwaliqz5jfkidlyn";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
   outputBin = "dev"; # sdl-config
 
-  nativeBuildInputs = [ pkg-config ]
-    ++ lib.optional stdenv.isLinux libcap;
+  nativeBuildInputs = [ pkg-config ] ++ lib.optional stdenv.isLinux libcap;
 
   propagatedBuildInputs = [ libiconv ] ++ extraPropagatedBuildInputs;
 
-  buildInputs = [ ]
+  buildInputs =
+    [ ]
     ++ lib.optional (!stdenv.hostPlatform.isMinGW && alsaSupport) audiofile
-    ++ lib.optionals stdenv.isDarwin [ AudioUnit CoreAudio CoreServices Kernel OpenGL ];
+    ++ lib.optionals stdenv.isDarwin [
+      AudioUnit
+      CoreAudio
+      CoreServices
+      Kernel
+      OpenGL
+    ];
 
-  configureFlags = [
-    "--disable-oss"
-    "--disable-video-x11-xme"
-    "--enable-rpath"
-  # Building without this fails on Darwin with
-  #
-  #   ./src/video/x11/SDL_x11sym.h:168:17: error: conflicting types for '_XData32'
-  #   SDL_X11_SYM(int,_XData32,(Display *dpy,register long *data,unsigned len),(dpy,data,len),return)
-  #
-  # Please try revert the change that introduced this comment when updating SDL.
-  ] ++ lib.optional stdenv.isDarwin "--disable-x11-shared"
+  configureFlags =
+    [
+      "--disable-oss"
+      "--disable-video-x11-xme"
+      "--enable-rpath"
+      # Building without this fails on Darwin with
+      #
+      #   ./src/video/x11/SDL_x11sym.h:168:17: error: conflicting types for '_XData32'
+      #   SDL_X11_SYM(int,_XData32,(Display *dpy,register long *data,unsigned len),(dpy,data,len),return)
+      #
+      # Please try revert the change that introduced this comment when updating SDL.
+    ]
+    ++ lib.optional stdenv.isDarwin "--disable-x11-shared"
     ++ lib.optional (!x11Support) "--without-x"
     ++ lib.optional alsaSupport "--with-alsa-prefix=${alsa-lib.out}/lib";
 
@@ -121,16 +167,18 @@ stdenv.mkDerivation rec {
 
   setupHook = ./setup-hook.sh;
 
-  passthru = { inherit openglSupport; };
+  passthru = {
+    inherit openglSupport;
+  };
 
   enableParallelBuilding = true;
 
   meta = with lib; {
     description = "Cross-platform multimedia library";
     mainProgram = "sdl-config";
-    homepage    = "http://www.libsdl.org/";
+    homepage = "http://www.libsdl.org/";
     maintainers = with maintainers; [ lovek323 ];
-    platforms   = platforms.unix;
-    license     = licenses.lgpl21;
+    platforms = platforms.unix;
+    license = licenses.lgpl21;
   };
 }

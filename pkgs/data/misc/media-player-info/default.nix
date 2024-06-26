@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchurl, pkg-config, python3, udev, systemd }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  python3,
+  udev,
+  systemd,
+}:
 
 stdenv.mkDerivation rec {
   pname = "media-player-info";
@@ -9,8 +17,14 @@ stdenv.mkDerivation rec {
     sha256 = "0d0i7av8v369hzvlynwlrbickv1brlzsmiky80lrjgjh1gdldkz6";
   };
 
-  buildInputs = [ udev systemd ];
-  nativeBuildInputs = [ pkg-config python3 ];
+  buildInputs = [
+    udev
+    systemd
+  ];
+  nativeBuildInputs = [
+    pkg-config
+    python3
+  ];
 
   postPatch = ''
     patchShebangs ./tools

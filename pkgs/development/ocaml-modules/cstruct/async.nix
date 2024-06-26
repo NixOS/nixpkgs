@@ -1,4 +1,11 @@
-{ lib, buildDunePackage, cstruct, async_unix, async, core }:
+{
+  lib,
+  buildDunePackage,
+  cstruct,
+  async_unix,
+  async,
+  core,
+}:
 
 buildDunePackage rec {
   pname = "cstruct-async";

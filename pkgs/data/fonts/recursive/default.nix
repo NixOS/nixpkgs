@@ -1,4 +1,8 @@
-{ lib, fetchzip, stdenvNoCC }:
+{
+  lib,
+  fetchzip,
+  stdenvNoCC,
+}:
 
 stdenvNoCC.mkDerivation rec {
   pname = "recursive";
@@ -13,7 +17,6 @@ stdenvNoCC.mkDerivation rec {
     install -D -t $out/share/fonts/opentype/ $(find $src -type f -name '*.otf')
     install -D -t $out/share/fonts/truetype/ $(find $src -type f -name '*.ttf')
   '';
-
 
   meta = with lib; {
     homepage = "https://recursive.design/";

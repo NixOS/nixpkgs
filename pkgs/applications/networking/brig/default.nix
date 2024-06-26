@@ -1,7 +1,8 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, installShellFiles
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
 }:
 
 buildGoModule rec {
@@ -21,16 +22,25 @@ buildGoModule rec {
 
   subPackages = [ "." ];
 
-  ldflags = [ "-s" "-w" ] ++ (with lib;
-    mapAttrsToList (n: v: "-X github.com/sahib/brig/version.${n}=${v}")
-      (with versions; {
-        Major = major version;
-        Minor = minor version;
-        Patch = patch version;
-        ReleaseType = "";
-        BuildTime = "1970-01-01T00:00:00+0000";
-        GitRev = src.rev;
-      }));
+  ldflags =
+    [
+      "-s"
+      "-w"
+    ]
+    ++ (
+      with lib;
+      mapAttrsToList (n: v: "-X github.com/sahib/brig/version.${n}=${v}") (
+        with versions;
+        {
+          Major = major version;
+          Minor = minor version;
+          Patch = patch version;
+          ReleaseType = "";
+          BuildTime = "1970-01-01T00:00:00+0000";
+          GitRev = src.rev;
+        }
+      )
+    );
 
   postInstall = ''
     installShellCompletion --cmd brig \

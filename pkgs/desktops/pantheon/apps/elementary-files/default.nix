@@ -1,33 +1,37 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, pkg-config
-, meson
-, ninja
-, vala
-, desktop-file-utils
-, libcanberra
-, gtk3
-, glib
-, libgee
-, libhandy
-, granite
-, pango
-, bamf
-, sqlite
-, zeitgeist
-, libcloudproviders
-, libgit2-glib
-, wrapGAppsHook3
-, systemd
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  pkg-config,
+  meson,
+  ninja,
+  vala,
+  desktop-file-utils,
+  libcanberra,
+  gtk3,
+  glib,
+  libgee,
+  libhandy,
+  granite,
+  pango,
+  bamf,
+  sqlite,
+  zeitgeist,
+  libcloudproviders,
+  libgit2-glib,
+  wrapGAppsHook3,
+  systemd,
 }:
 
 stdenv.mkDerivation rec {
   pname = "elementary-files";
   version = "6.5.3";
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   src = fetchFromGitHub {
     owner = "elementary";

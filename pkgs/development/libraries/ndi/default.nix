@@ -1,13 +1,24 @@
-{ lib, stdenv, fetchurl, avahi, obs-studio-plugins }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  avahi,
+  obs-studio-plugins,
+}:
 
 let
   versionJSON = lib.importJSON ./version.json;
   ndiPlatform =
-    if stdenv.isAarch64 then "aarch64-rpi4-linux-gnueabi"
-    else if stdenv.isAarch32 then "arm-rpi2-linux-gnueabihf"
-    else if stdenv.isx86_64 then "x86_64-linux-gnu"
-    else if stdenv.isi686 then "i686-linux-gnu"
-    else throw "unsupported platform for NDI SDK";
+    if stdenv.isAarch64 then
+      "aarch64-rpi4-linux-gnueabi"
+    else if stdenv.isAarch32 then
+      "arm-rpi2-linux-gnueabihf"
+    else if stdenv.isx86_64 then
+      "x86_64-linux-gnu"
+    else if stdenv.isi686 then
+      "i686-linux-gnu"
+    else
+      throw "unsupported platform for NDI SDK";
 in
 stdenv.mkDerivation rec {
   pname = "ndi";
@@ -61,8 +72,13 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://ndi.video/ndi-sdk/";
     description = "NDI Software Developer Kit";
-    platforms = ["x86_64-linux" "i686-linux" "aarch64-linux" "armv7l-linux"];
-    hydraPlatforms = [];
+    platforms = [
+      "x86_64-linux"
+      "i686-linux"
+      "aarch64-linux"
+      "armv7l-linux"
+    ];
+    hydraPlatforms = [ ];
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
   };

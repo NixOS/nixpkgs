@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchurl, pkg-config, gtk2 }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  gtk2,
+}:
 
 stdenv.mkDerivation {
   pname = "scite";

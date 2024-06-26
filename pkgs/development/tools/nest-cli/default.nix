@@ -1,9 +1,10 @@
-{ buildNpmPackage
-, darwin
-, fetchFromGitHub
-, lib
-, python3
-, stdenv
+{
+  buildNpmPackage,
+  darwin,
+  fetchFromGitHub,
+  lib,
+  python3,
+  stdenv,
 }:
 
 buildNpmPackage rec {
@@ -23,13 +24,9 @@ buildNpmPackage rec {
     npm_config_build_from_source = true;
   };
 
-  nativeBuildInputs = [
-    python3
-  ];
+  nativeBuildInputs = [ python3 ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.CoreServices
-  ];
+  buildInputs = lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.CoreServices ];
 
   meta = with lib; {
     description = "CLI tool for Nest applications";

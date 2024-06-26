@@ -1,10 +1,12 @@
 import ../make-test-python.nix {
   name = "lorri";
 
-  nodes.machine = { pkgs, ... }: {
-    imports = [ ../../modules/profiles/minimal.nix ];
-    environment.systemPackages = [ pkgs.lorri ];
-  };
+  nodes.machine =
+    { pkgs, ... }:
+    {
+      imports = [ ../../modules/profiles/minimal.nix ];
+      environment.systemPackages = [ pkgs.lorri ];
+    };
 
   testScript = ''
     # Copy files over

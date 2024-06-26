@@ -1,22 +1,23 @@
-{ lib
-, fetchFromGitHub
-, gtk4
-, wrapGAppsHook3
-, libadwaita
-, tdlib
-, rlottie
-, stdenv
-, rustPlatform
-, meson
-, ninja
-, pkg-config
-, rustc
-, cargo
-, desktop-file-utils
-, blueprint-compiler
-, libxml2
-, libshumate
-, darwin
+{
+  lib,
+  fetchFromGitHub,
+  gtk4,
+  wrapGAppsHook3,
+  libadwaita,
+  tdlib,
+  rlottie,
+  stdenv,
+  rustPlatform,
+  meson,
+  ninja,
+  pkg-config,
+  rustc,
+  cargo,
+  desktop-file-utils,
+  blueprint-compiler,
+  libxml2,
+  libshumate,
+  darwin,
 }:
 
 let
@@ -33,16 +34,12 @@ let
   # Paper Plane requires a patch to the gtk4, but may be removed later
   # https://github.com/paper-plane-developers/paper-plane/tree/main?tab=readme-ov-file#prerequisites
   gtk4-paperplane = gtk4.overrideAttrs (prev: {
-    patches = (prev.patches or []) ++ [ "${src}/build-aux/gtk-reversed-list.patch" ];
+    patches = (prev.patches or [ ]) ++ [ "${src}/build-aux/gtk-reversed-list.patch" ];
   });
-  wrapPaperPlaneHook = wrapGAppsHook3.override {
-    gtk3 = gtk4-paperplane;
-  };
+  wrapPaperPlaneHook = wrapGAppsHook3.override { gtk3 = gtk4-paperplane; };
   # libadwaita has gtk4 in propagatedBuildInputs so it must be overrided
   # to avoid linking two libraries, while libshumate doesn't
-  libadwaita-paperplane = libadwaita.override {
-    gtk4 = gtk4-paperplane;
-  };
+  libadwaita-paperplane = libadwaita.override { gtk4 = gtk4-paperplane; };
   tdlib-paperplane = tdlib.overrideAttrs (prev: {
     pname = "tdlib-paperplane";
     version = "1.8.19";
@@ -96,9 +93,7 @@ stdenv.mkDerivation {
     libadwaita-paperplane
     tdlib-paperplane
     rlottie-paperplane
-  ] ++ lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.Foundation
-  ];
+  ] ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Foundation ];
 
   mesonFlags = [
     # The API ID and hash provided here are for use with Paper Plane only.
@@ -110,12 +105,9 @@ stdenv.mkDerivation {
 
   # Workaround for the gettext-sys issue
   # https://github.com/Koka/gettext-rs/issues/114
-  env.NIX_CFLAGS_COMPILE = lib.optionalString
-    (
-      stdenv.cc.isClang &&
-      lib.versionAtLeast stdenv.cc.version "16"
-    )
-    "-Wno-error=incompatible-function-pointer-types";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString (
+    stdenv.cc.isClang && lib.versionAtLeast stdenv.cc.version "16"
+  ) "-Wno-error=incompatible-function-pointer-types";
 
   meta = with lib; {
     homepage = "https://github.com/paper-plane-developers/paper-plane";

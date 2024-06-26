@@ -1,10 +1,11 @@
-{ lib
-, fetchFromGitLab
-, nettle
-, nix-update-script
-, installShellFiles
-, rustPlatform
-, pkg-config
+{
+  lib,
+  fetchFromGitLab,
+  nettle,
+  nix-update-script,
+  installShellFiles,
+  rustPlatform,
+  pkg-config,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -28,9 +29,7 @@ rustPlatform.buildRustPackage rec {
     installShellFiles
   ];
 
-  buildInputs = [
-    nettle
-  ];
+  buildInputs = [ nettle ];
   buildFeatures = [ "cli" ];
 
   # Install manual pages

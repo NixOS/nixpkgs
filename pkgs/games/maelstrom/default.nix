@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchurl, makeDesktopItem, SDL2, SDL2_net }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  makeDesktopItem,
+  SDL2,
+  SDL2_net,
+}:
 
 stdenv.mkDerivation rec {
   pname = "maelstrom";
@@ -12,7 +19,10 @@ stdenv.mkDerivation rec {
   # this fixes a typedef compilation error with gcc-3.x
   patches = [ ./fix-compilation.patch ];
 
-  buildInputs = [ SDL2 SDL2_net ];
+  buildInputs = [
+    SDL2
+    SDL2_net
+  ];
 
   postInstall = ''
     mkdir -p $out/bin

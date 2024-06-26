@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, makeWrapper, perlPackages, beancount }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  makeWrapper,
+  perlPackages,
+  beancount,
+}:
 
 let
   perlDeps = with perlPackages; [
@@ -13,7 +20,8 @@ let
     YAMLLibYAML
   ];
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "ledger2beancount";
   version = "2.7";
 
@@ -27,7 +35,10 @@ in stdenv.mkDerivation rec {
   dontBuild = true;
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ perlPackages.perl beancount ] ++ perlDeps;
+  buildInputs = [
+    perlPackages.perl
+    beancount
+  ] ++ perlDeps;
 
   makeFlags = [ "prefix=$(out)" ];
   installFlags = [ "INSTALL=install" ];

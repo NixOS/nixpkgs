@@ -1,13 +1,14 @@
-{ lib
-, coreutils
-, stdenv
-, fetchurl
-, fetchpatch
-, getopt
-, libcap
-, gnused
-, nixosTests
-, testers
+{
+  lib,
+  coreutils,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  getopt,
+  libcap,
+  gnused,
+  nixosTests,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -55,9 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     tests = {
-      version = testers.testVersion {
-        package = finalAttrs.finalPackage;
-      };
+      version = testers.testVersion { package = finalAttrs.finalPackage; };
       # A lightweight *unit* test that exercises fakeroot and fakechroot together:
       nixos-etc = nixosTests.etc.test-etc-fakeroot;
     };
@@ -67,7 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://salsa.debian.org/clint/fakeroot";
     description = "Give a fake root environment through LD_PRELOAD";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [viric];
+    maintainers = with lib.maintainers; [ viric ];
     platforms = lib.platforms.unix;
   };
 })

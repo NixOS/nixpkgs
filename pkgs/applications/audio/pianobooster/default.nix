@@ -1,19 +1,20 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, pkg-config
-, qttools
-, alsa-lib
-, ftgl
-, libGLU
-, qtbase
-, rtmidi
-, libjack2
-, fluidsynth
-, soundfont-fluid
-, unzip
-, wrapQtAppsHook
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  qttools,
+  alsa-lib,
+  ftgl,
+  libGLU,
+  qtbase,
+  rtmidi,
+  libjack2,
+  fluidsynth,
+  soundfont-fluid,
+  unzip,
+  wrapQtAppsHook,
 }:
 
 stdenv.mkDerivation rec {
@@ -67,6 +68,9 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/pianobooster/PianoBooster";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ goibhniu orivej ];
+    maintainers = with maintainers; [
+      goibhniu
+      orivej
+    ];
   };
 }

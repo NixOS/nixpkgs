@@ -1,51 +1,53 @@
-{ stdenv
-, lib
-, fetchurl
-, at-spi2-core
-, babl
-, dbus
-, desktop-file-utils
-, dleyna-renderer
-, gdk-pixbuf
-, gegl
-, geocode-glib_2
-, gettext
-, gexiv2
-, glib
-, gnome-online-accounts
-, gnome
-, gobject-introspection
-, gsettings-desktop-schemas
-, gtk3
-, itstool
-, libdazzle
-, libportal-gtk3
-, libhandy
-, libxml2
-, meson
-, ninja
-, nixosTests
-, pkg-config
-, python3
-, tracker
-, tracker-miners
-, wrapGAppsHook3
+{
+  stdenv,
+  lib,
+  fetchurl,
+  at-spi2-core,
+  babl,
+  dbus,
+  desktop-file-utils,
+  dleyna-renderer,
+  gdk-pixbuf,
+  gegl,
+  geocode-glib_2,
+  gettext,
+  gexiv2,
+  glib,
+  gnome-online-accounts,
+  gnome,
+  gobject-introspection,
+  gsettings-desktop-schemas,
+  gtk3,
+  itstool,
+  libdazzle,
+  libportal-gtk3,
+  libhandy,
+  libxml2,
+  meson,
+  ninja,
+  nixosTests,
+  pkg-config,
+  python3,
+  tracker,
+  tracker-miners,
+  wrapGAppsHook3,
 }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-photos";
   version = "44.0";
 
-  outputs = [ "out" "installedTests" ];
+  outputs = [
+    "out"
+    "installedTests"
+  ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
     sha256 = "544hA5fTxigJxs1VIdpuzLShHd6lvyr4YypH9Npcgp4=";
   };
 
-  patches = [
-    ./installed-tests-path.patch
-  ];
+  patches = [ ./installed-tests-path.patch ];
 
   nativeBuildInputs = [
     desktop-file-utils
@@ -57,11 +59,13 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
-    (python3.withPackages (pkgs: with pkgs; [
-      dogtail
-      pygobject3
-      pyatspi
-    ]))
+    (python3.withPackages (
+      pkgs: with pkgs; [
+        dogtail
+        pygobject3
+        pyatspi
+      ]
+    ))
     wrapGAppsHook3
   ];
 
@@ -102,9 +106,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = gnome.updateScript {
-      packageName = pname;
-    };
+    updateScript = gnome.updateScript { packageName = pname; };
 
     tests = {
       installed-tests = nixosTests.installed-tests.gnome-photos;

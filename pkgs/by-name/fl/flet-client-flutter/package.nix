@@ -1,19 +1,20 @@
-{ lib
-, fetchFromGitHub
-, pkg-config
-, flutter319
-, gst_all_1
-, libunwind
-, makeWrapper
-, mimalloc
-, orc
-, yq
-, runCommand
-, gitUpdater
-, mpv-unwrapped
-, libplacebo
-, _experimental-update-script-combinators
-, flet-client-flutter
+{
+  lib,
+  fetchFromGitHub,
+  pkg-config,
+  flutter319,
+  gst_all_1,
+  libunwind,
+  makeWrapper,
+  mimalloc,
+  orc,
+  yq,
+  runCommand,
+  gitUpdater,
+  mpv-unwrapped,
+  libplacebo,
+  _experimental-update-script-combinators,
+  flet-client-flutter,
 }:
 
 flutter319.buildFlutterApplication rec {
@@ -29,9 +30,7 @@ flutter319.buildFlutterApplication rec {
 
   sourceRoot = "${src.name}/client";
 
-  cmakeFlags = [
-    "-DMIMALLOC_LIB=${mimalloc}/lib/mimalloc.o"
-  ];
+  cmakeFlags = [ "-DMIMALLOC_LIB=${mimalloc}/lib/mimalloc.o" ];
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
 
@@ -50,18 +49,18 @@ flutter319.buildFlutterApplication rec {
     libunwind
     orc
     mimalloc
-  ]
-    ++ mpv-unwrapped.buildInputs
-    ++ libplacebo.buildInputs
-  ;
+  ] ++ mpv-unwrapped.buildInputs ++ libplacebo.buildInputs;
 
   passthru = {
-    pubspecSource = runCommand "pubspec.lock.json" {
-        buildInputs = [ yq ];
-        inherit (flet-client-flutter) src;
-      } ''
-      cat $src/client/pubspec.lock | yq > $out
-    '';
+    pubspecSource =
+      runCommand "pubspec.lock.json"
+        {
+          buildInputs = [ yq ];
+          inherit (flet-client-flutter) src;
+        }
+        ''
+          cat $src/client/pubspec.lock | yq > $out
+        '';
 
     updateScript = _experimental-update-script-combinators.sequence [
       (gitUpdater { rev-prefix = "v"; })
@@ -74,7 +73,10 @@ flutter319.buildFlutterApplication rec {
     homepage = "https://flet.dev/";
     changelog = "https://github.com/flet-dev/flet/releases/tag/v${version}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ heyimnova lucasew ];
+    maintainers = with lib.maintainers; [
+      heyimnova
+      lucasew
+    ];
     mainProgram = "flet";
   };
 }

@@ -1,15 +1,12 @@
-{ lib
-, writeText
-, fetchFromGitHub
-, nixosTests
-, python3
+{
+  lib,
+  writeText,
+  fetchFromGitHub,
+  nixosTests,
+  python3,
 }:
 let
-  py = python3.override {
-    packageOverrides = final: prev: {
-      django = prev.django_5;
-    };
-  };
+  py = python3.override { packageOverrides = final: prev: { django = prev.django_5; }; };
 in
 py.pkgs.buildPythonApplication rec {
   pname = "healthchecks";
@@ -64,14 +61,14 @@ py.pkgs.buildPythonApplication rec {
 
     STATIC_ROOT = os.getenv("STATIC_ROOT")
 
-    ${lib.concatLines (map
-      (secret: ''
+    ${lib.concatLines (
+      map (secret: ''
         ${secret}_FILE = os.getenv("${secret}_FILE")
         if ${secret}_FILE:
             with open(${secret}_FILE, "r") as file:
                 ${secret} = file.readline()
-      '')
-      secrets)}
+      '') secrets
+    )}
   '';
 
   installPhase = ''

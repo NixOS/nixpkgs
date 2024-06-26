@@ -1,39 +1,40 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, fetchFromGitHub
-, fetchurl
-, substituteAll
-, coreutils
-, curl
-, glxinfo
-, gnugrep
-, gnused
-, xdg-utils
-, dbus
-, hwdata
-, mangohud32
-, addOpenGLRunpath
-, appstream
-, git
-, glslang
-, mako
-, meson
-, ninja
-, pkg-config
-, unzip
-, libXNVCtrl
-, wayland
-, libX11
-, nlohmann_json
-, spdlog
-, glew
-, glfw
-, xorg
-, gamescopeSupport ? true # build mangoapp and mangohudctl
-, lowerBitnessSupport ? stdenv.hostPlatform.isx86_64 # Support 32 bit on 64bit
-, nix-update-script
-, libxkbcommon
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  fetchFromGitHub,
+  fetchurl,
+  substituteAll,
+  coreutils,
+  curl,
+  glxinfo,
+  gnugrep,
+  gnused,
+  xdg-utils,
+  dbus,
+  hwdata,
+  mangohud32,
+  addOpenGLRunpath,
+  appstream,
+  git,
+  glslang,
+  mako,
+  meson,
+  ninja,
+  pkg-config,
+  unzip,
+  libXNVCtrl,
+  wayland,
+  libX11,
+  nlohmann_json,
+  spdlog,
+  glew,
+  glfw,
+  xorg,
+  gamescopeSupport ? true, # build mangoapp and mangohudctl
+  lowerBitnessSupport ? stdenv.hostPlatform.isx86_64, # Support 32 bit on 64bit
+  nix-update-script,
+  libxkbcommon,
 }:
 
 let
@@ -104,18 +105,23 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-cj/F/DWUDm2AHTJvHgkKa+KdIrfxPWLzI570Dp4VFhs=";
   };
 
-  outputs = [ "out" "doc" "man" ];
+  outputs = [
+    "out"
+    "doc"
+    "man"
+  ];
 
   # Unpack subproject sources
-  postUnpack = ''(
-    cd "$sourceRoot/subprojects"
-    ${lib.optionalString finalAttrs.finalPackage.doCheck ''
-      cp -R --no-preserve=mode,ownership ${cmocka.src} cmocka
-    ''}
-    cp -R --no-preserve=mode,ownership ${implot.src} implot-${implot.version}
-    cp -R --no-preserve=mode,ownership ${imgui.src} imgui-${imgui.version}
-    cp -R --no-preserve=mode,ownership ${vulkan-headers.src} Vulkan-Headers-${vulkan-headers.version}
-  )'';
+  postUnpack = ''
+    (
+        cd "$sourceRoot/subprojects"
+        ${lib.optionalString finalAttrs.finalPackage.doCheck ''
+          cp -R --no-preserve=mode,ownership ${cmocka.src} cmocka
+        ''}
+        cp -R --no-preserve=mode,ownership ${implot.src} implot-${implot.version}
+        cp -R --no-preserve=mode,ownership ${imgui.src} imgui-${imgui.version}
+        cp -R --no-preserve=mode,ownership ${vulkan-headers.src} Vulkan-Headers-${vulkan-headers.version}
+      )'';
 
   patches = [
     # Add @libraryPath@ template variable to fix loading the preload
@@ -144,11 +150,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace bin/mangohud.in \
-      --subst-var-by libraryPath ${lib.makeSearchPath "lib/mangohud" ([
-        (placeholder "out")
-      ] ++ lib.optionals lowerBitnessSupport [
-        mangohud32
-      ])} \
+      --subst-var-by libraryPath ${
+        lib.makeSearchPath "lib/mangohud" (
+          [ (placeholder "out") ] ++ lib.optionals lowerBitnessSupport [ mangohud32 ]
+        )
+      } \
       --subst-var-by version "${finalAttrs.version}" \
       --subst-var-by dataDir ${placeholder "out"}/share
 
@@ -160,15 +166,17 @@ stdenv.mkDerivation (finalAttrs: {
     )
   '';
 
-  mesonFlags = [
-    "-Dwith_wayland=enabled"
-    "-Duse_system_spdlog=enabled"
-    "-Dtests=${if finalAttrs.finalPackage.doCheck then "enabled" else "disabled"}"
-  ] ++ lib.optionals gamescopeSupport [
-    "-Dmangoapp=true"
-    "-Dmangoapp_layer=true"
-    "-Dmangohudctl=true"
-  ];
+  mesonFlags =
+    [
+      "-Dwith_wayland=enabled"
+      "-Duse_system_spdlog=enabled"
+      "-Dtests=${if finalAttrs.finalPackage.doCheck then "enabled" else "disabled"}"
+    ]
+    ++ lib.optionals gamescopeSupport [
+      "-Dmangoapp=true"
+      "-Dmangoapp_layer=true"
+      "-Dmangohudctl=true"
+    ];
 
   nativeBuildInputs = [
     addOpenGLRunpath
@@ -187,22 +195,22 @@ stdenv.mkDerivation (finalAttrs: {
     libX11
   ];
 
-  buildInputs = [
-    dbus
-    nlohmann_json
-    spdlog
-  ] ++ lib.optionals gamescopeSupport [
-    glew
-    glfw
-    xorg.libXrandr
-    libxkbcommon
-  ];
+  buildInputs =
+    [
+      dbus
+      nlohmann_json
+      spdlog
+    ]
+    ++ lib.optionals gamescopeSupport [
+      glew
+      glfw
+      xorg.libXrandr
+      libxkbcommon
+    ];
 
   doCheck = true;
 
-  nativeCheckInputs = [
-    appstream
-  ];
+  nativeCheckInputs = [ appstream ];
 
   # Support 32bit Vulkan applications by linking in 32bit Vulkan layers
   # This is needed for the same reason the 32bit preload workaround is needed.
@@ -223,20 +231,23 @@ stdenv.mkDerivation (finalAttrs: {
         "i686-linux" = "x86";
       };
       layerPlatform = archMap."${stdenv.hostPlatform.system}" or null;
-      # We need to give the different layers separate names or else the loader
-      # might try the 32-bit one first, fail and not attempt to load the 64-bit
-      # layer under the same name.
     in
+    # We need to give the different layers separate names or else the loader
+    # might try the 32-bit one first, fail and not attempt to load the 64-bit
+    # layer under the same name.
     lib.optionalString (layerPlatform != null) ''
       substituteInPlace $out/share/vulkan/implicit_layer.d/MangoHud.${layerPlatform}.json \
         --replace "VK_LAYER_MANGOHUD_overlay" "VK_LAYER_MANGOHUD_overlay_${toString stdenv.hostPlatform.parsed.cpu.bits}"
-    '' + ''
+    ''
+    + ''
       # Add OpenGL driver and libXNVCtrl paths to RUNPATH to support NVIDIA cards
       addOpenGLRunpath "$out/lib/mangohud/libMangoHud.so"
       patchelf --add-rpath ${libXNVCtrl}/lib "$out/lib/mangohud/libMangoHud.so"
-    '' + lib.optionalString gamescopeSupport ''
+    ''
+    + lib.optionalString gamescopeSupport ''
       addOpenGLRunpath "$out/bin/mangoapp"
-    '' + lib.optionalString finalAttrs.finalPackage.doCheck ''
+    ''
+    + lib.optionalString finalAttrs.finalPackage.doCheck ''
       # libcmocka.so is only used for tests
       rm "$out/lib/libcmocka.so"
     '';
@@ -249,6 +260,9 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/flightlessmango/MangoHud/releases/tag/v${finalAttrs.version}";
     platforms = platforms.linux;
     license = licenses.mit;
-    maintainers = with maintainers; [ kira-bruneau zeratax ];
+    maintainers = with maintainers; [
+      kira-bruneau
+      zeratax
+    ];
   };
 })

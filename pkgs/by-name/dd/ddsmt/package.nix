@@ -1,6 +1,7 @@
-{ lib
-, python3Packages
-, fetchPypi
+{
+  lib,
+  python3Packages,
+  fetchPypi,
 }:
 
 let
@@ -17,9 +18,7 @@ python3Packages.buildPythonApplication {
     hash = "sha256-nmhEG4sUmgpgRUduVTtwDLGPJVKx+dEaPb+KjFRwV2Q=";
   };
 
-  nativeBuildInputs = with python3Packages; [
-    setuptools
-  ];
+  nativeBuildInputs = with python3Packages; [ setuptools ];
 
   propagatedBuildInputs = with python3Packages; [
     gprof2dot

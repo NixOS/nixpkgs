@@ -1,19 +1,20 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, meson
-, ninja
-, pkg-config
-, jsoncpp
-, taglib
-, curl
-, curlpp
-, glib
-, gtk4
-, libadwaita
-, wrapGAppsHook4
-, desktop-file-utils
-, chromaprint # fpcalc
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  pkg-config,
+  jsoncpp,
+  taglib,
+  curl,
+  curlpp,
+  glib,
+  gtk4,
+  libadwaita,
+  wrapGAppsHook4,
+  desktop-file-utils,
+  chromaprint, # fpcalc
 }:
 
 stdenv.mkDerivation rec {

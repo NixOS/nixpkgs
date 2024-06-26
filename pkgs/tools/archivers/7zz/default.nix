@@ -1,27 +1,30 @@
-{ stdenv
-, lib
-, fetchurl
+{
+  stdenv,
+  lib,
+  fetchurl,
 
   # Only used for Linux's x86/x86_64
-, uasm
-, useUasm ? (stdenv.isLinux && stdenv.hostPlatform.isx86)
+  uasm,
+  useUasm ? (stdenv.isLinux && stdenv.hostPlatform.isx86),
 
   # RAR code is under non-free unRAR license
   # see the meta.license section below for more details
-, enableUnfree ? false
+  enableUnfree ? false,
 
   # For tests
-, testers
+  testers,
 }:
 
 let
-  makefile = {
-    aarch64-darwin = "../../cmpl_mac_arm64.mak";
-    x86_64-darwin = "../../cmpl_mac_x64.mak";
-    aarch64-linux = "../../cmpl_gcc_arm64.mak";
-    i686-linux = "../../cmpl_gcc_x86.mak";
-    x86_64-linux = "../../cmpl_gcc_x64.mak";
-  }.${stdenv.hostPlatform.system} or "../../cmpl_gcc.mak"; # generic build
+  makefile =
+    {
+      aarch64-darwin = "../../cmpl_mac_arm64.mak";
+      x86_64-darwin = "../../cmpl_mac_x64.mak";
+      aarch64-linux = "../../cmpl_gcc_arm64.mak";
+      i686-linux = "../../cmpl_gcc_x86.mak";
+      x86_64-linux = "../../cmpl_gcc_x64.mak";
+    }
+    .${stdenv.hostPlatform.system} or "../../cmpl_gcc.mak"; # generic build
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "7zz";
@@ -29,10 +32,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://7-zip.org/a/7z${lib.replaceStrings [ "." ] [ "" ] finalAttrs.version}-src.tar.xz";
-    hash = {
-      free = "sha256-X3uqGnJGQpW5MOaTtgWYwwrhS84e+piX7Gc+e8Pll00=";
-      unfree = "sha256-KqFmDHc1JbLthNbNf/BoDHhuwIk7h+TbRGVNy39ayLU=";
-    }.${if enableUnfree then "unfree" else "free"};
+    hash =
+      {
+        free = "sha256-X3uqGnJGQpW5MOaTtgWYwwrhS84e+piX7Gc+e8Pll00=";
+        unfree = "sha256-KqFmDHc1JbLthNbNf/BoDHhuwIk7h+TbRGVNy39ayLU=";
+      }
+      .${if enableUnfree then "unfree" else "free"};
     downloadToTemp = (!enableUnfree);
     # remove the unRAR related code from the src drv
     # > the license requires that you agree to these use restrictions,
@@ -52,31 +57,31 @@ stdenv.mkDerivation (finalAttrs: {
 
   sourceRoot = ".";
 
-  patches = [
-    ./fix-cross-mingw-build.patch
-  ];
+  patches = [ ./fix-cross-mingw-build.patch ];
 
   postPatch = lib.optionalString stdenv.hostPlatform.isMinGW ''
     substituteInPlace CPP/7zip/7zip_gcc.mak C/7zip_gcc_c.mak \
       --replace windres.exe ${stdenv.cc.targetPrefix}windres
   '';
 
-  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.isDarwin [
-    "-Wno-deprecated-copy-dtor"
-  ] ++ lib.optionals stdenv.hostPlatform.isMinGW [
-    "-Wno-conversion"
-    "-Wno-unused-macros"
-  ] ++ lib.optionals stdenv.cc.isClang [
-    "-Wno-declaration-after-statement"
-    (lib.optionals (lib.versionAtLeast (lib.getVersion stdenv.cc.cc) "13") [
-      "-Wno-reserved-identifier"
-      "-Wno-unused-but-set-variable"
-    ])
-    (lib.optionals (lib.versionAtLeast (lib.getVersion stdenv.cc.cc) "16") [
-      "-Wno-unsafe-buffer-usage"
-      "-Wno-cast-function-type-strict"
-    ])
-  ]);
+  env.NIX_CFLAGS_COMPILE = toString (
+    lib.optionals stdenv.isDarwin [ "-Wno-deprecated-copy-dtor" ]
+    ++ lib.optionals stdenv.hostPlatform.isMinGW [
+      "-Wno-conversion"
+      "-Wno-unused-macros"
+    ]
+    ++ lib.optionals stdenv.cc.isClang [
+      "-Wno-declaration-after-statement"
+      (lib.optionals (lib.versionAtLeast (lib.getVersion stdenv.cc.cc) "13") [
+        "-Wno-reserved-identifier"
+        "-Wno-unused-but-set-variable"
+      ])
+      (lib.optionals (lib.versionAtLeast (lib.getVersion stdenv.cc.cc) "16") [
+        "-Wno-unsafe-buffer-usage"
+        "-Wno-cast-function-type-strict"
+      ])
+    ]
+  );
 
   inherit makefile;
 
@@ -92,7 +97,10 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals stdenv.isDarwin [ "MACOSX_DEPLOYMENT_TARGET=10.16" ]
     # it's the compression code with the restriction, see DOC/License.txt
     ++ lib.optionals (!enableUnfree) [ "DISABLE_RAR_COMPRESS=true" ]
-    ++ lib.optionals (stdenv.hostPlatform.isMinGW) [ "IS_MINGW=1" "MSYSTEM=1" ];
+    ++ lib.optionals (stdenv.hostPlatform.isMinGW) [
+      "IS_MINGW=1"
+      "MSYSTEM=1"
+    ];
 
   nativeBuildInputs = lib.optionals useUasm [ uasm ];
 
@@ -122,14 +130,24 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Command line archiver utility";
     homepage = "https://7-zip.org";
-    license = with lib.licenses;
+    license =
+      with lib.licenses;
       # 7zip code is largely lgpl2Plus
       # CPP/7zip/Compress/LzfseDecoder.cpp is bsd3
-      [ lgpl2Plus /* and */ bsd3 ] ++
-      # and CPP/7zip/Compress/Rar* are unfree with the unRAR license restriction
-      # the unRAR compression code is disabled by default
-      lib.optionals enableUnfree [ unfree ];
-    maintainers = with lib.maintainers; [ anna328p eclairevoyant jk peterhoeg ];
+      [
+        lgpl2Plus # and
+        bsd3
+      ]
+      ++
+        # and CPP/7zip/Compress/Rar* are unfree with the unRAR license restriction
+        # the unRAR compression code is disabled by default
+        lib.optionals enableUnfree [ unfree ];
+    maintainers = with lib.maintainers; [
+      anna328p
+      eclairevoyant
+      jk
+      peterhoeg
+    ];
     platforms = with lib.platforms; unix ++ windows;
     mainProgram = "7zz";
   };

@@ -1,4 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, makeWrapper, metasploit, curl, inetutils, openssl }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  makeWrapper,
+  metasploit,
+  curl,
+  inetutils,
+  openssl,
+}:
 
 stdenv.mkDerivation rec {
   pname = "msfpc";
@@ -11,9 +20,7 @@ stdenv.mkDerivation rec {
     sha256 = "UIdE0oSaNu16pf+M96x8AnNju88hdzokv86wm8uBYDQ=";
   };
 
-  nativeBuildInputs = [
-    makeWrapper
-  ];
+  nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
     runHook preInstall
@@ -25,7 +32,14 @@ stdenv.mkDerivation rec {
 
   postFixup = ''
     wrapProgram $out/bin/msfpc \
-      --prefix PATH : "${lib.makeBinPath [ metasploit curl inetutils openssl ]}"
+      --prefix PATH : "${
+        lib.makeBinPath [
+          metasploit
+          curl
+          inetutils
+          openssl
+        ]
+      }"
   '';
 
   meta = with lib; {

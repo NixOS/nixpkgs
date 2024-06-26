@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, cairo }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cairo,
+}:
 
 stdenv.mkDerivation rec {
   version = "0.4";

@@ -1,4 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, pkg-config, openssl, Security, CoreServices }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  pkg-config,
+  openssl,
+  Security,
+  CoreServices,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "shadowsocks-rust";
@@ -15,8 +24,12 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = lib.optionals stdenv.isLinux [ pkg-config ];
 
-  buildInputs = lib.optionals stdenv.isLinux [ openssl ]
-    ++ lib.optionals stdenv.isDarwin [ Security CoreServices ];
+  buildInputs =
+    lib.optionals stdenv.isLinux [ openssl ]
+    ++ lib.optionals stdenv.isDarwin [
+      Security
+      CoreServices
+    ];
 
   buildFeatures = [
     "trust-dns"

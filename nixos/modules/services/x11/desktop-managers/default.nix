@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   inherit (lib) mkOption types;
@@ -8,7 +13,7 @@ let
 
   # If desktop manager `d' isn't capable of setting a background and
   # the xserver is enabled, `feh' or `xsetroot' are used as a fallback.
-  needBGCond = d: ! (d ? bgSupport && d.bgSupport) && xcfg.enable;
+  needBGCond = d: !(d ? bgSupport && d.bgSupport) && xcfg.enable;
 
 in
 
@@ -17,10 +22,26 @@ in
   # determines the default: later modules (if enabled) are preferred.
   # E.g., if Plasma 5 is enabled, it supersedes xterm.
   imports = [
-    ./none.nix ./xterm.nix ./phosh.nix ./xfce.nix ./plasma5.nix ../../desktop-managers/plasma6.nix ./lumina.nix
-    ./lxqt.nix ./enlightenment.nix ./gnome.nix ./retroarch.nix ./kodi.nix
-    ./mate.nix ./pantheon.nix ./surf-display.nix ./cde.nix
-    ./cinnamon.nix ./budgie.nix ./deepin.nix ../../desktop-managers/lomiri.nix
+    ./none.nix
+    ./xterm.nix
+    ./phosh.nix
+    ./xfce.nix
+    ./plasma5.nix
+    ../../desktop-managers/plasma6.nix
+    ./lumina.nix
+    ./lxqt.nix
+    ./enlightenment.nix
+    ./gnome.nix
+    ./retroarch.nix
+    ./kodi.nix
+    ./mate.nix
+    ./pantheon.nix
+    ./surf-display.nix
+    ./cde.nix
+    ./cinnamon.nix
+    ./budgie.nix
+    ./deepin.nix
+    ../../desktop-managers/lomiri.nix
   ];
 
   options = {
@@ -29,7 +50,13 @@ in
 
       wallpaper = {
         mode = mkOption {
-          type = types.enum [ "center" "fill" "max" "scale" "tile" ];
+          type = types.enum [
+            "center"
+            "fill"
+            "max"
+            "scale"
+            "tile"
+          ];
           default = "scale";
           example = "fill";
           description = ''
@@ -57,28 +84,33 @@ in
 
       session = mkOption {
         internal = true;
-        default = [];
-        example = lib.singleton
-          { name = "kde";
-            bgSupport = true;
-            start = "...";
-          };
+        default = [ ];
+        example = lib.singleton {
+          name = "kde";
+          bgSupport = true;
+          start = "...";
+        };
         description = ''
           Internal option used to add some common line to desktop manager
           scripts before forwarding the value to the
           `displayManager`.
         '';
-        apply = map (d: d // {
-          manage = "desktop";
-          start = d.start
-          # literal newline to ensure d.start's last line is not appended to
-          + lib.optionalString (needBGCond d) ''
+        apply = map (
+          d:
+          d
+          // {
+            manage = "desktop";
+            start =
+              d.start
+              # literal newline to ensure d.start's last line is not appended to
+              + lib.optionalString (needBGCond d) ''
 
-            if [ -e $HOME/.background-image ]; then
-              ${pkgs.feh}/bin/feh --bg-${cfg.wallpaper.mode} ${lib.optionalString cfg.wallpaper.combineScreens "--no-xinerama"} $HOME/.background-image
-            fi
-          '';
-        });
+                if [ -e $HOME/.background-image ]; then
+                  ${pkgs.feh}/bin/feh --bg-${cfg.wallpaper.mode} ${lib.optionalString cfg.wallpaper.combineScreens "--no-xinerama"} $HOME/.background-image
+                fi
+              '';
+          }
+        );
       };
 
     };

@@ -1,66 +1,116 @@
-{ stdenv, lib, fetchurl, makeDesktopItem, unzip, writeText
-, scummvm, runtimeShell }:
+{
+  stdenv,
+  lib,
+  fetchurl,
+  makeDesktopItem,
+  unzip,
+  writeText,
+  scummvm,
+  runtimeShell,
+}:
 
 let
-  desktopItem = name: short: long: description: makeDesktopItem {
-    categories  = [ "Game" "AdventureGame" ];
-    comment     = description;
-    desktopName = long;
-    exec        = "@out@/bin/${short}";
-    genericName = description;
-    icon        = "scummvm";
-    name        = name;
-  };
+  desktopItem =
+    name: short: long: description:
+    makeDesktopItem {
+      categories = [
+        "Game"
+        "AdventureGame"
+      ];
+      comment = description;
+      desktopName = long;
+      exec = "@out@/bin/${short}";
+      genericName = description;
+      icon = "scummvm";
+      name = name;
+    };
 
-  run = name: short: code: writeText "${short}.sh" ''
-    #!${runtimeShell} -eu
+  run =
+    name: short: code:
+    writeText "${short}.sh" ''
+      #!${runtimeShell} -eu
 
-    exec ${scummvm}/bin/scummvm \
-      --path=@out@/share/${name} \
-      --fullscreen \
-      ${code}
-  '';
+      exec ${scummvm}/bin/scummvm \
+        --path=@out@/share/${name} \
+        --fullscreen \
+        ${code}
+    '';
 
-  generic = { plong, pshort, pcode, description, version, files, docs ? [ "readme.txt" ], ... } @attrs:
+  generic =
+    {
+      plong,
+      pshort,
+      pcode,
+      description,
+      version,
+      files,
+      docs ? [ "readme.txt" ],
+      ...
+    }@attrs:
     let
-      attrs' = builtins.removeAttrs attrs [ "plong" "pshort" "pcode" "description" "docs" "files" "version" ];
-      pname = lib.replaceStrings [ " " ":" ] [ "-" "" ] (lib.toLower plong);
-    in stdenv.mkDerivation ({
-      name = "${pname}-${version}";
+      attrs' = builtins.removeAttrs attrs [
+        "plong"
+        "pshort"
+        "pcode"
+        "description"
+        "docs"
+        "files"
+        "version"
+      ];
+      pname =
+        lib.replaceStrings
+          [
+            " "
+            ":"
+          ]
+          [
+            "-"
+            ""
+          ]
+          (lib.toLower plong);
+    in
+    stdenv.mkDerivation (
+      {
+        name = "${pname}-${version}";
 
-      nativeBuildInputs = [ unzip ];
+        nativeBuildInputs = [ unzip ];
 
-      dontBuild = true;
-      dontFixup = true;
+        dontBuild = true;
+        dontFixup = true;
 
-      installPhase = ''
-        runHook preInstall
+        installPhase = ''
+          runHook preInstall
 
-        mkdir -p $out/bin $out/share/{applications,${pname},doc/${pname}}
+          mkdir -p $out/bin $out/share/{applications,${pname},doc/${pname}}
 
-        ${lib.concatStringsSep "\n" (map (f: "mv ${f} $out/share/doc/${pname}") docs)}
-        ${lib.concatStringsSep "\n" (map (f: "mv ${f} $out/share/${pname}") files)}
+          ${lib.concatStringsSep "\n" (map (f: "mv ${f} $out/share/doc/${pname}") docs)}
+          ${lib.concatStringsSep "\n" (map (f: "mv ${f} $out/share/${pname}") files)}
 
-        substitute ${run pname pshort pcode} $out/bin/${pshort} \
-          --subst-var out
-        substitute ${desktopItem pname pshort plong description}/share/applications/${pname}.desktop $out/share/applications/${pname}.desktop \
-          --subst-var out
+          substitute ${run pname pshort pcode} $out/bin/${pshort} \
+            --subst-var out
+          substitute ${
+            desktopItem pname pshort plong description
+          }/share/applications/${pname}.desktop $out/share/applications/${pname}.desktop \
+            --subst-var out
 
-        chmod 0755 $out/bin/${pshort}
+          chmod 0755 $out/bin/${pshort}
 
-        runHook postInstall
-      '';
+          runHook postInstall
+        '';
 
-      meta = with lib; {
-        homepage = "https://www.scummvm.org";
-        license = licenses.free; # refer to the readme for exact wording
-        maintainers = with maintainers; [ peterhoeg ];
-        inherit description;
-        inherit (scummvm.meta) platforms;
-      };
-    } // attrs');
+        meta = with lib; {
+          homepage = "https://www.scummvm.org";
+          license = licenses.free; # refer to the readme for exact wording
+          maintainers = with maintainers; [ peterhoeg ];
+          inherit description;
+          inherit (scummvm.meta) platforms;
+        };
+      }
+      // attrs'
+    );
 
-in {
+in
+{
   beneath-a-steel-sky = generic rec {
     plong = "Beneath a Steel Sky";
     pshort = "bass";
@@ -85,7 +135,10 @@ in {
       sha256 = "0ivj1vflfpih5bs5a902mab88s4d77fwm3ya3fk7pammzc8gjqzz";
     };
     sourceRoot = ".";
-    docs = [ "README" "license-original.txt" ];
+    docs = [
+      "README"
+      "license-original.txt"
+    ];
     files = [ "data.b25c" ];
   };
 
@@ -96,17 +149,20 @@ in {
     description = "Spanish 2D classic point & click style adventure with tons of humor and an easy interface";
     version = "1.0";
     # srcs = {
-      src = fetchurl {
-        url = "mirror://sourceforge/scummvm/${pshort}-${version}.zip";
-        sha256 = "1pj29rpb754sn6a56f8brfv6f2m1p5qgaqik7d68pfi2bb5zccdp";
-      };
-      # audio = fetchurl {
-        # url = "mirror://sourceforge/scummvm/${pshort}-audio-flac-2.0.zip";
-        # sha256 = "1zmqhrby8f5sj1qy6xjdgkvk9wyhr3nw8ljrrl58fmxb83x1rryw";
-      # };
+    src = fetchurl {
+      url = "mirror://sourceforge/scummvm/${pshort}-${version}.zip";
+      sha256 = "1pj29rpb754sn6a56f8brfv6f2m1p5qgaqik7d68pfi2bb5zccdp";
+    };
+    # audio = fetchurl {
+    # url = "mirror://sourceforge/scummvm/${pshort}-audio-flac-2.0.zip";
+    # sha256 = "1zmqhrby8f5sj1qy6xjdgkvk9wyhr3nw8ljrrl58fmxb83x1rryw";
+    # };
     # };
     sourceRoot = ".";
-    docs = [ "readme.txt" "drascula.doc" ];
+    docs = [
+      "readme.txt"
+      "drascula.doc"
+    ];
     files = [ "Packet.001" ];
   };
 
@@ -122,7 +178,11 @@ in {
     };
     sourceRoot = ".";
     docs = [ "license.txt" ];
-    files = [ "DREAMWEB.*" "SPEECH" "track01.flac" ];
+    files = [
+      "DREAMWEB.*"
+      "SPEECH"
+      "track01.flac"
+    ];
   };
 
   flight-of-the-amazon-queen = generic rec {
@@ -149,7 +209,12 @@ in {
       url = "mirror://sourceforge/scummvm/lure-${version}.zip";
       sha256 = "0201i70qcs1m797kvxjx3ygkhg6kcl5yf49sihba2ga8l52q45zk";
     };
-    docs = [ "README" "*.txt" "*.pdf" "*.PDF" ];
+    docs = [
+      "README"
+      "*.txt"
+      "*.pdf"
+      "*.PDF"
+    ];
     files = [ "*.vga" ];
   };
 }

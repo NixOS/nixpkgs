@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, dbus
-, fltk13
-, gtk2
-, libICE
-, libSM
-, libtiff
-, pkg-config
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  dbus,
+  fltk13,
+  gtk2,
+  libICE,
+  libSM,
+  libtiff,
+  pkg-config,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -45,9 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
     done
   '';
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
     dbus
@@ -58,7 +57,10 @@ stdenv.mkDerivation (finalAttrs: {
     libtiff
   ];
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
   strictDeps = true;
 

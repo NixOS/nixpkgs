@@ -1,13 +1,14 @@
-{ lib
-, appimageTools
-, fetchurl
-, makeWrapper
-, gtk3
-, gsettings-desktop-schemas
-, pname
-, version
-, hash
-, metaCommon ? { }
+{
+  lib,
+  appimageTools,
+  fetchurl,
+  makeWrapper,
+  gtk3,
+  gsettings-desktop-schemas,
+  pname,
+  version,
+  hash,
+  metaCommon ? { },
 }:
 
 let
@@ -18,9 +19,7 @@ let
     inherit hash;
   };
 
-  extracted = appimageTools.extractType2 {
-    inherit pname version src;
-  };
+  extracted = appimageTools.extractType2 { inherit pname version src; };
 in
 appimageTools.wrapType2 {
   inherit pname version src;

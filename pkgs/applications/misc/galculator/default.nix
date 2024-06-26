@@ -1,6 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch
-, autoreconfHook, intltool
-, gtk, pkg-config, flex }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  autoreconfHook,
+  intltool,
+  gtk,
+  pkg-config,
+  flex,
+}:
 
 stdenv.mkDerivation rec {
   pname = "galculator";
@@ -23,8 +31,15 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ autoreconfHook intltool pkg-config ];
-  buildInputs = [ gtk flex ];
+  nativeBuildInputs = [
+    autoreconfHook
+    intltool
+    pkg-config
+  ];
+  buildInputs = [
+    gtk
+    flex
+  ];
 
   meta = with lib; {
     description = "GTK 2/3 algebraic and RPN calculator";

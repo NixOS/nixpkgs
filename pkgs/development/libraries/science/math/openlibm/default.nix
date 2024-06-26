@@ -1,4 +1,8 @@
-{ lib, stdenv, fetchFromGitHub }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 
 stdenv.mkDerivation rec {
   pname = "openlibm";
@@ -11,7 +15,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-WSf4mcZXiEL3nKTLQh3Oi1MxeH9MOFRe7DU5zFT2aQE=";
   };
 
-  makeFlags = [ "prefix=$(out)" "CC=${stdenv.cc.targetPrefix}cc" ];
+  makeFlags = [
+    "prefix=$(out)"
+    "CC=${stdenv.cc.targetPrefix}cc"
+  ];
 
   meta = {
     description = "High quality system independent, portable, open source libm implementation";

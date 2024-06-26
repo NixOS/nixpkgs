@@ -1,4 +1,14 @@
-{ mkDerivation, lib, fetchurl, pkg-config, ffmpeg_4, glew, libass, openal, qtbase }:
+{
+  mkDerivation,
+  lib,
+  fetchurl,
+  pkg-config,
+  ffmpeg_4,
+  glew,
+  libass,
+  openal,
+  qtbase,
+}:
 
 mkDerivation rec {
   pname = "bino";
@@ -11,7 +21,13 @@ mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ ffmpeg_4 glew libass openal qtbase ];
+  buildInputs = [
+    ffmpeg_4
+    glew
+    libass
+    openal
+    qtbase
+  ];
 
   enableParallelBuilding = true;
 

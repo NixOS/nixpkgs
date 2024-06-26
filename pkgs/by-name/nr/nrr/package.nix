@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rustPlatform
-, darwin
-, pkg-config
-, libiconv
-, nrxAlias ? true
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  darwin,
+  pkg-config,
+  libiconv,
+  nrxAlias ? true,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -28,9 +29,7 @@ rustPlatform.buildRustPackage rec {
     libiconv
   ];
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
   postInstall = lib.optionalString nrxAlias "ln -s $out/bin/nr{r,x}";
 

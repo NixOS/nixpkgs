@@ -1,20 +1,25 @@
-{ lib
-, stdenv
-, fetchpatch
-, fetchurl
-, gmp
-, mpfr
-, ntl
-, autoconf
-, automake
-, gettext
-, libtool
-, openblas ? null, blas, lapack
-, withBlas ? true
-, withNtl ? true
+{
+  lib,
+  stdenv,
+  fetchpatch,
+  fetchurl,
+  gmp,
+  mpfr,
+  ntl,
+  autoconf,
+  automake,
+  gettext,
+  libtool,
+  openblas ? null,
+  blas,
+  lapack,
+  withBlas ? true,
+  withNtl ? true,
 }:
 
-assert withBlas -> openblas != null && blas.implementation == "openblas" && lapack.implementation == "openblas";
+assert
+  withBlas
+  -> openblas != null && blas.implementation == "openblas" && lapack.implementation == "openblas";
 
 stdenv.mkDerivation rec {
   pname = "flint3";
@@ -39,17 +44,9 @@ stdenv.mkDerivation rec {
     libtool
   ];
 
-  propagatedBuildInputs = [
-    mpfr
-  ];
+  propagatedBuildInputs = [ mpfr ];
 
-  buildInputs = [
-    gmp
-  ] ++ lib.optionals withBlas [
-    openblas
-  ] ++ lib.optionals withNtl [
-    ntl
-  ];
+  buildInputs = [ gmp ] ++ lib.optionals withBlas [ openblas ] ++ lib.optionals withNtl [ ntl ];
 
   # We're not using autoreconfHook because flint's bootstrap
   # script calls autoreconf, among other things.
@@ -58,14 +55,13 @@ stdenv.mkDerivation rec {
     ./bootstrap.sh
   '';
 
-  configureFlags = [
-    "--with-gmp=${gmp}"
-    "--with-mpfr=${mpfr}"
-  ] ++ lib.optionals withBlas [
-    "--with-blas=${openblas}"
-  ] ++ lib.optionals withNtl [
-    "--with-ntl=${ntl}"
-  ];
+  configureFlags =
+    [
+      "--with-gmp=${gmp}"
+      "--with-mpfr=${mpfr}"
+    ]
+    ++ lib.optionals withBlas [ "--with-blas=${openblas}" ]
+    ++ lib.optionals withNtl [ "--with-ntl=${ntl}" ];
 
   enableParallelBuilding = true;
 

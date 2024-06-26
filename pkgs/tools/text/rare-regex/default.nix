@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, buildGoModule
-, fetchFromGitHub
-, withPcre2 ? stdenv.isLinux
-, pcre2
-, testers
-, rare-regex
+{
+  lib,
+  stdenv,
+  buildGoModule,
+  fetchFromGitHub,
+  withPcre2 ? stdenv.isLinux,
+  pcre2,
+  testers,
+  rare-regex,
 }:
 
 buildGoModule rec {
@@ -21,9 +22,7 @@ buildGoModule rec {
 
   vendorHash = "sha256-wUOtxNjL/4MosACCzPTWKWrnMZhxINfN1ppkRsqDh9M=";
 
-  buildInputs = lib.optionals withPcre2 [
-    pcre2
-  ];
+  buildInputs = lib.optionals withPcre2 [ pcre2 ];
 
   ldflags = [
     "-s"
@@ -32,14 +31,10 @@ buildGoModule rec {
     "-X=main.buildSha=${src.rev}"
   ];
 
-  tags = lib.optionals withPcre2 [
-    "pcre2"
-  ];
+  tags = lib.optionals withPcre2 [ "pcre2" ];
 
   passthru.tests = {
-    version = testers.testVersion {
-      package = rare-regex;
-    };
+    version = testers.testVersion { package = rare-regex; };
   };
 
   meta = with lib; {

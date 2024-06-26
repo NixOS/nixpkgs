@@ -1,14 +1,15 @@
-{ stdenv
-, lib
-, fetchurl
-, guile
-, autoreconfHook
-, guile-gcrypt
-, guile-lzma
-, guile-quickcheck
-, makeWrapper
-, pkg-config
-, zlib
+{
+  stdenv,
+  lib,
+  fetchurl,
+  guile,
+  autoreconfHook,
+  guile-gcrypt,
+  guile-lzma,
+  guile-quickcheck,
+  makeWrapper,
+  pkg-config,
+  zlib,
 }:
 
 stdenv.mkDerivation rec {
@@ -43,9 +44,7 @@ stdenv.mkDerivation rec {
 
   doCheck = !stdenv.isDarwin;
 
-  nativeCheckInputs = [
-    guile-quickcheck
-  ];
+  nativeCheckInputs = [ guile-quickcheck ];
 
   postInstall = ''
     wrapProgram $out/bin/disarchive \

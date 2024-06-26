@@ -1,6 +1,7 @@
-{ lib
-, python3
-, fetchFromGitHub
+{
+  lib,
+  python3,
+  fetchFromGitHub,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -15,9 +16,7 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-0MwhdT9GYLcrdZSqszx1DC9lyz8K61lJZZCzeFfWB0E=";
   };
 
-  nativeBuildInputs = with python3.pkgs; [
-    hatchling
-  ];
+  nativeBuildInputs = with python3.pkgs; [ hatchling ];
 
   propagatedBuildInputs = with python3.pkgs; [
     bloodyad
@@ -27,13 +26,9 @@ python3.pkgs.buildPythonApplication rec {
   # Tests require a test file which is not available in the current release
   doCheck = false;
 
-  nativeCheckInputs = with python3.pkgs; [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = with python3.pkgs; [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "autobloody"
-  ];
+  pythonImportsCheck = [ "autobloody" ];
 
   meta = with lib; {
     description = "Tool to automatically exploit Active Directory privilege escalation paths";

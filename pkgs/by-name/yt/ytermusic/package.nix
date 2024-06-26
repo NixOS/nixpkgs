@@ -1,12 +1,12 @@
-{ alsa-lib
-, dbus
-, fetchFromGitHub
-, lib
-, openssl
-, pkg-config
-, rustPlatform
-, stdenv
-,
+{
+  alsa-lib,
+  dbus,
+  fetchFromGitHub,
+  lib,
+  openssl,
+  pkg-config,
+  rustPlatform,
+  stdenv,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -33,9 +33,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoBuildType = "release";
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
     openssl

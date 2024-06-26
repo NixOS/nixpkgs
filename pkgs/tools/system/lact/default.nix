@@ -1,15 +1,16 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, blueprint-compiler
-, pkg-config
-, wrapGAppsHook4
-, gdk-pixbuf
-, gtk4
-, libdrm
-, vulkan-loader
-, coreutils
-, hwdata
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  blueprint-compiler,
+  pkg-config,
+  wrapGAppsHook4,
+  gdk-pixbuf,
+  gtk4,
+  libdrm,
+  vulkan-loader,
+  coreutils,
+  hwdata,
 }:
 
 rustPlatform.buildRustPackage rec {

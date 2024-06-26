@@ -1,8 +1,12 @@
-{ lib
-, stdenvNoCC
-, version, src
-, fetchYarnDeps
-, fixup-yarn-lock, yarn, nodejs
+{
+  lib,
+  stdenvNoCC,
+  version,
+  src,
+  fetchYarnDeps,
+  fixup-yarn-lock,
+  yarn,
+  nodejs,
 }:
 
 stdenvNoCC.mkDerivation rec {
@@ -10,7 +14,11 @@ stdenvNoCC.mkDerivation rec {
 
   inherit src version;
 
-  nativeBuildInputs = [ fixup-yarn-lock yarn nodejs ];
+  nativeBuildInputs = [
+    fixup-yarn-lock
+    yarn
+    nodejs
+  ];
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = "${src}/web/yarn.lock";

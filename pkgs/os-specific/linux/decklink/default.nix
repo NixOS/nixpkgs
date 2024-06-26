@@ -1,8 +1,9 @@
-{ stdenv
-, lib
-, fetchpatch
-, blackmagic-desktop-video
-, kernel
+{
+  stdenv,
+  lib,
+  fetchpatch,
+  blackmagic-desktop-video,
+  kernel,
 }:
 
 stdenv.mkDerivation rec {
@@ -16,7 +17,7 @@ stdenv.mkDerivation rec {
   KERNELDIR = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
   INSTALL_MOD_PATH = placeholder "out";
 
-  nativeBuildInputs =  kernel.moduleBuildDependencies;
+  nativeBuildInputs = kernel.moduleBuildDependencies;
 
   patches = lib.optionals (lib.versionAtLeast kernel.version "6.8") [
     (fetchpatch {
@@ -31,15 +32,15 @@ stdenv.mkDerivation rec {
     })
   ];
 
-
-  postUnpack = let
-    arch = stdenv.hostPlatform.uname.processor;
-  in ''
-    tar xf Blackmagic_Desktop_Video_Linux_${lib.head (lib.splitString "a" version)}/other/${arch}/desktopvideo-${version}-${arch}.tar.gz
-    moduleRoot=$NIX_BUILD_TOP/desktopvideo-${version}-${stdenv.hostPlatform.uname.processor}/usr/src
-    sourceRoot=$moduleRoot
-  '';
-
+  postUnpack =
+    let
+      arch = stdenv.hostPlatform.uname.processor;
+    in
+    ''
+      tar xf Blackmagic_Desktop_Video_Linux_${lib.head (lib.splitString "a" version)}/other/${arch}/desktopvideo-${version}-${arch}.tar.gz
+      moduleRoot=$NIX_BUILD_TOP/desktopvideo-${version}-${stdenv.hostPlatform.uname.processor}/usr/src
+      sourceRoot=$moduleRoot
+    '';
 
   buildPhase = ''
     runHook preBuild

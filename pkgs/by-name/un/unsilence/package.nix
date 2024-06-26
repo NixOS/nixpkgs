@@ -1,8 +1,8 @@
-{ lib
-, fetchFromGitHub
-, python3Packages
-, ffmpeg
-,
+{
+  lib,
+  fetchFromGitHub,
+  python3Packages,
+  ffmpeg,
 }:
 python3Packages.buildPythonPackage rec {
   pname = "unsilence";
@@ -25,9 +25,7 @@ python3Packages.buildPythonPackage rec {
     python3Packages.setuptools # imports pkg_resources.parse_version
   ];
 
-  makeWrapperArgs = [
-    "--suffix PATH : ${lib.makeBinPath [ ffmpeg ]}"
-  ];
+  makeWrapperArgs = [ "--suffix PATH : ${lib.makeBinPath [ ffmpeg ]}" ];
 
   doCheck = false;
   pythonImportsCheck = [ "unsilence" ];

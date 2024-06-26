@@ -1,22 +1,23 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, wxGTK32
-, ffmpeg_4
-, lua5_1
-, curl
-, libpng
-, xorg
-, pkg-config
-, flam3
-, libgtop
-, boost179
-, tinyxml
-, freeglut
-, libGLU
-, libGL
-, glee
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  wxGTK32,
+  ffmpeg_4,
+  lua5_1,
+  curl,
+  libpng,
+  xorg,
+  pkg-config,
+  flam3,
+  libgtop,
+  boost179,
+  tinyxml,
+  freeglut,
+  libGLU,
+  libGL,
+  glee,
 }:
 
 stdenv.mkDerivation rec {
@@ -30,7 +31,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-v/+2dxOY/p6wNAywcFHUAfsZEJw31Syu2MacN/KeyWg=";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ];
 
   buildInputs = [
     wxGTK32
@@ -54,13 +58,9 @@ stdenv.mkDerivation rec {
     sed -i '/ACX_PTHREAD/d' configure.ac
   '';
 
-  configureFlags = [
-    "CPPFLAGS=-I${glee}/include/GL"
-  ];
+  configureFlags = [ "CPPFLAGS=-I${glee}/include/GL" ];
 
-  makeFlags = [
-    ''CXXFLAGS+="-DGL_GLEXT_PROTOTYPES"''
-  ];
+  makeFlags = [ ''CXXFLAGS+="-DGL_GLEXT_PROTOTYPES"'' ];
 
   preBuild = ''
     sed -i "s|/usr|$out|" Makefile

@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchurl, libpng
-, docSupport ? true, doxygen ? null
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libpng,
+  docSupport ? true,
+  doxygen ? null,
 }:
 assert docSupport -> doxygen != null;
 
@@ -25,11 +30,13 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ libpng ];
 
-  preConfigure = lib.optionalString stdenv.isDarwin ''
-    substituteInPlace error.hpp --replace "#if (_POSIX_C_SOURCE >= 200112L || _XOPEN_SOURCE >= 600) && !_GNU_SOURCE" "#if (__clang__ || _POSIX_C_SOURCE >= 200112L || _XOPEN_SOURCE >= 600) && !_GNU_SOURCE"
-  '' + ''
-    sed "s|\(PNGPP := .\)|PREFIX := ''${out}\n\\1|" -i Makefile
-  '';
+  preConfigure =
+    lib.optionalString stdenv.isDarwin ''
+      substituteInPlace error.hpp --replace "#if (_POSIX_C_SOURCE >= 200112L || _XOPEN_SOURCE >= 600) && !_GNU_SOURCE" "#if (__clang__ || _POSIX_C_SOURCE >= 200112L || _XOPEN_SOURCE >= 600) && !_GNU_SOURCE"
+    ''
+    + ''
+      sed "s|\(PNGPP := .\)|PREFIX := ''${out}\n\\1|" -i Makefile
+    '';
 
   makeFlags = lib.optional docSupport "docs";
 

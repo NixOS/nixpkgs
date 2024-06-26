@@ -1,27 +1,28 @@
-{ lib
-, stdenv
-, stdenvNoCC
-, fetchurl
-, meson
-, ninja
-, pkg-config
-, python3
-, wrapGAppsHook3
-, libinput
-, gobject-introspection
-, gnome
-, gnome-desktop
-, glib
-, gtk3
-, json-glib
-, wayland
-, libdrm
-, libxkbcommon
-, wlroots
-, xorg
-, directoryListingUpdater
-, nixosTests
-, testers
+{
+  lib,
+  stdenv,
+  stdenvNoCC,
+  fetchurl,
+  meson,
+  ninja,
+  pkg-config,
+  python3,
+  wrapGAppsHook3,
+  libinput,
+  gobject-introspection,
+  gnome,
+  gnome-desktop,
+  glib,
+  gtk3,
+  json-glib,
+  wayland,
+  libdrm,
+  libxkbcommon,
+  wlroots,
+  xorg,
+  directoryListingUpdater,
+  nixosTests,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -58,12 +59,12 @@ stdenv.mkDerivation (finalAttrs: {
     xorg.xcbutilwm
   ];
 
-  mesonFlags = ["-Dembed-wlroots=disabled"];
+  mesonFlags = [ "-Dembed-wlroots=disabled" ];
 
   # Patch wlroots to remove a check which crashes Phosh.
   # This patch can be found within the phoc source tree.
   wlroots = wlroots.overrideAttrs (old: {
-    patches = (old.patches or []) ++ [
+    patches = (old.patches or [ ]) ++ [
       (stdenvNoCC.mkDerivation {
         name = "0001-Revert-layer-shell-error-on-0-dimension-without-anch.patch";
         inherit (finalAttrs) src;
@@ -76,9 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     tests.phosh = nixosTests.phosh;
-    tests.version = testers.testVersion {
-      package = finalAttrs.finalPackage;
-    };
+    tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
     updateScript = directoryListingUpdater { };
   };
 
@@ -87,7 +86,10 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "phoc";
     homepage = "https://gitlab.gnome.org/World/Phosh/phoc";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ masipcat zhaofengli ];
+    maintainers = with maintainers; [
+      masipcat
+      zhaofengli
+    ];
     platforms = platforms.linux;
   };
 })

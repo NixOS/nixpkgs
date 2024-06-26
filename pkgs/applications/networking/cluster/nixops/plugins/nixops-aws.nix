@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, unstableGitUpdater
-, poetry-core
-, boto
-, boto3
-, nixops
-, nixos-modules-contrib
-, typing-extensions
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  unstableGitUpdater,
+  poetry-core,
+  boto,
+  boto3,
+  nixops,
+  nixos-modules-contrib,
+  typing-extensions,
 }:
 
 buildPythonPackage {
@@ -28,13 +29,9 @@ buildPythonPackage {
     --replace "poetry>=" "poetry-core>="
   '';
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
-  buildInputs = [
-    nixops
-  ];
+  buildInputs = [ nixops ];
 
   propagatedBuildInputs = [
     boto
@@ -45,9 +42,7 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "nixops_aws" ];
 
-  passthru.updateScript = unstableGitUpdater {
-    tagPrefix = "v";
-  };
+  passthru.updateScript = unstableGitUpdater { tagPrefix = "v"; };
 
   meta = with lib; {
     description = "AWS plugin for NixOps";

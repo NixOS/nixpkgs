@@ -1,28 +1,29 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cinnamon-desktop
-, docbook_xsl
-, exempi
-, gdk-pixbuf
-, glib
-, gobject-introspection
-, gtk3
-, gtk-doc
-, itstool
-, lcms2
-, libexif
-, libjpeg
-, libpeas
-, librsvg
-, libxml2
-, meson
-, ninja
-, pkg-config
-, python3
-, wrapGAppsHook3
-, xapp
-, yelp-tools
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cinnamon-desktop,
+  docbook_xsl,
+  exempi,
+  gdk-pixbuf,
+  glib,
+  gobject-introspection,
+  gtk3,
+  gtk-doc,
+  itstool,
+  lcms2,
+  libexif,
+  libjpeg,
+  libpeas,
+  librsvg,
+  libxml2,
+  meson,
+  ninja,
+  pkg-config,
+  python3,
+  wrapGAppsHook3,
+  xapp,
+  yelp-tools,
 }:
 
 stdenv.mkDerivation rec {

@@ -8,37 +8,45 @@
   to 'fetch-deps', 'nuget-to-nix', or other changes to the dotnet build
   infrastructure. Regular updates should be done through the individual packages
   update scripts.
- */
+*/
 let
-  pkgs = import ../.. {};
+  pkgs = import ../.. { };
 
   inherit (pkgs) lib;
 
-  packagesWith = cond: pkgs:
+  packagesWith =
+    cond: pkgs:
     let
-      packagesWithInner = attrs:
+      packagesWithInner =
+        attrs:
         lib.unique (
           lib.concatLists (
-            lib.mapAttrsToList (name: elem:
+            lib.mapAttrsToList (
+              name: elem:
               let
                 result = builtins.tryEval elem;
               in
-                if result.success then
-                  let
-                    value = result.value;
-                  in
-                    if lib.isDerivation value then
-                      lib.optional (cond value) value
-                    else
-                      if lib.isAttrs value && (value.recurseForDerivations or false || value.recurseForRelease or false) then
-                        packagesWithInner value
-                      else []
-                else []) attrs));
+              if result.success then
+                let
+                  value = result.value;
+                in
+                if lib.isDerivation value then
+                  lib.optional (cond value) value
+                else if
+                  lib.isAttrs value && (value.recurseForDerivations or false || value.recurseForRelease or false)
+                then
+                  packagesWithInner value
+                else
+                  [ ]
+              else
+                [ ]
+            ) attrs
+          )
+        );
     in
-      packagesWithInner pkgs;
+    packagesWithInner pkgs;
 
-  packages =
-    packagesWith (pkgs: pkgs ? fetch-deps) pkgs;
+  packages = packagesWith (pkgs: pkgs ? fetch-deps) pkgs;
 
   helpText = ''
     Please run:
@@ -48,7 +56,8 @@ let
 
   fetchScripts = map (p: p.fetch-deps) packages;
 
-in pkgs.stdenv.mkDerivation {
+in
+pkgs.stdenv.mkDerivation {
   name = "nixpkgs-update-dotnet-lockfiles";
   buildCommand = ''
     echo ""

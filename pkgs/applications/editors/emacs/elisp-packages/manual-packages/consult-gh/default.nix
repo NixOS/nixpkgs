@@ -1,13 +1,14 @@
-{ lib
-, melpaBuild
-, fetchFromGitHub
-, consult
-, embark
-, forge
-, gh
-, markdown-mode
-, writeText
-, unstableGitUpdater
+{
+  lib,
+  melpaBuild,
+  fetchFromGitHub,
+  consult,
+  embark,
+  forge,
+  gh,
+  markdown-mode,
+  writeText,
+  unstableGitUpdater,
 }:
 
 let

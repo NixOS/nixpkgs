@@ -1,7 +1,12 @@
-{ lib, stdenv, fetchFromGitHub
-, makeWrapper, installShellFiles
-, python3, sqlite
-, nixosTests
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  makeWrapper,
+  installShellFiles,
+  python3,
+  sqlite,
+  nixosTests,
 }:
 
 stdenv.mkDerivation rec {
@@ -15,11 +20,17 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-kR+Pi7/nsRzmmvibp95wjj8/B/Q6FCDSn2A7vJ3sM94=";
   };
 
-  nativeBuildInputs = [ makeWrapper installShellFiles ];
+  nativeBuildInputs = [
+    makeWrapper
+    installShellFiles
+  ];
 
   buildInputs = [ python3 ];
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
   installPhase = ''
     mkdir -p $out/bin

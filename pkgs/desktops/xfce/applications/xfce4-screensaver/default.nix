@@ -1,21 +1,22 @@
-{ mkXfceDerivation
-, gobject-introspection
-, dbus-glib
-, garcon
-, glib
-, gtk3
-, libX11
-, libXScrnSaver
-, libXrandr
-, libwnck
-, libxfce4ui
-, libxfce4util
-, libxklavier
-, pam
-, python3
-, systemd
-, xfconf
-, lib
+{
+  mkXfceDerivation,
+  gobject-introspection,
+  dbus-glib,
+  garcon,
+  glib,
+  gtk3,
+  libX11,
+  libXScrnSaver,
+  libXrandr,
+  libwnck,
+  libxfce4ui,
+  libxfce4util,
+  libxklavier,
+  pam,
+  python3,
+  systemd,
+  xfconf,
+  lib,
 }:
 
 let
@@ -29,9 +30,7 @@ mkXfceDerivation {
 
   sha256 = "sha256-hOhWJoiKoeRgkhXaR8rnDpcJpStMD4BBdll4nwSA+EQ=";
 
-  nativeBuildInputs = [
-    gobject-introspection
-  ];
+  nativeBuildInputs = [ gobject-introspection ];
 
   buildInputs = [
     dbus-glib

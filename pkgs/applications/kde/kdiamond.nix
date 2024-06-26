@@ -1,4 +1,14 @@
-{ mkDerivation, lib, extra-cmake-modules, kdoctools, ki18n, kio, libkdegames, kconfig, knotifyconfig }:
+{
+  mkDerivation,
+  lib,
+  extra-cmake-modules,
+  kdoctools,
+  ki18n,
+  kio,
+  libkdegames,
+  kconfig,
+  knotifyconfig,
+}:
 
 mkDerivation {
   pname = "kdiamond";
@@ -10,9 +20,7 @@ mkDerivation {
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
   };
-  nativeBuildInputs = [
-    extra-cmake-modules
-  ];
+  nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [
     libkdegames
     knotifyconfig

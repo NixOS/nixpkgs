@@ -1,7 +1,8 @@
-{ lib
-, python3
-, fetchFromGitHub
-, ffmpeg
+{
+  lib,
+  python3,
+  fetchFromGitHub,
+  ffmpeg,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -16,9 +17,7 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-RF606Aeskqbx94H5ivd+RJ+Hk0iYsds/PUY8TZqirs4=";
   };
 
-  nativeBuildInputs = [
-    python3.pkgs.flit-core
-  ];
+  nativeBuildInputs = [ python3.pkgs.flit-core ];
 
   propagatedBuildInputs = with python3.pkgs; [
     pyaudio
@@ -58,7 +57,10 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/woodruffw/shaq";
     changelog = "https://github.com/woodruffw/shaq/releases/tag/${src.rev}";
     license = licenses.mit;
-    maintainers = with maintainers; [ figsoda mig4ng ];
+    maintainers = with maintainers; [
+      figsoda
+      mig4ng
+    ];
     mainProgram = "shaq";
   };
 }

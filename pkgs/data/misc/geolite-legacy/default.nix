@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchurl, zstd }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  zstd,
+}:
 
 stdenv.mkDerivation rec {
   pname = "geolite-legacy";

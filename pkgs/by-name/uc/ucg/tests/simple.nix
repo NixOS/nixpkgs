@@ -1,6 +1,7 @@
-{ lib
-, stdenv
-, ucg
+{
+  lib,
+  stdenv,
+  ucg,
 }:
 
 stdenv.mkDerivation {

@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -6,7 +11,8 @@ let
 
   cfg = config.services.bloop;
 
-in {
+in
+{
 
   options.services.bloop = {
     extraOptions = mkOption {
@@ -43,9 +49,9 @@ in {
         PATH = mkForce "${makeBinPath [ config.programs.java.package ]}";
       };
       serviceConfig = {
-        Type        = "simple";
-        ExecStart   = "${pkgs.bloop}/bin/bloop server";
-        Restart     = "always";
+        Type = "simple";
+        ExecStart = "${pkgs.bloop}/bin/bloop server";
+        Restart = "always";
       };
     };
 

@@ -1,6 +1,7 @@
-{ lib
-, fetchFromGitHub
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -20,9 +21,7 @@ python3.pkgs.buildPythonApplication rec {
     pythonRelaxDepsHook
   ];
 
-  pythonRelaxDeps = [
-    "ruamel.yaml"
-  ];
+  pythonRelaxDeps = [ "ruamel.yaml" ];
 
   propagatedBuildInputs = with python3.pkgs; [
     json-stream
@@ -33,9 +32,7 @@ python3.pkgs.buildPythonApplication rec {
   # No tests available
   doCheck = false;
 
-  pythonImportsCheck = [
-    "mitmproxy2swagger"
-  ];
+  pythonImportsCheck = [ "mitmproxy2swagger" ];
 
   meta = with lib; {
     description = "Tool to automagically reverse-engineer REST APIs";

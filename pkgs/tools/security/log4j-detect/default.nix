@@ -1,6 +1,7 @@
-{ lib
-, fetchFromGitHub
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -15,9 +16,7 @@ python3.pkgs.buildPythonApplication rec {
     sha256 = "sha256-fFKW7uPBfrnze0UoPL3Mfwd4sFOuHYuDP7kv6VtdM3o=";
   };
 
-  propagatedBuildInputs = with python3.pkgs; [
-    requests
-  ];
+  propagatedBuildInputs = with python3.pkgs; [ requests ];
 
   postPatch = ''
     sed -i "1 i #!/usr/bin/python" ${pname}.py

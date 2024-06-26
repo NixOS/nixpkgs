@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, SDL2
-, SDL2_image
-, SDL2_mixer
-, SDL2_ttf
-, gettext
-, libpng
-, pkg-config
-, zlib
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  SDL2,
+  SDL2_image,
+  SDL2_mixer,
+  SDL2_ttf,
+  gettext,
+  libpng,
+  pkg-config,
+  zlib,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -45,9 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
     "BIN_DIR=${placeholder "out"}/bin/"
   ];
 
-  hardeningDisable = [
-    "fortify"
-  ];
+  hardeningDisable = [ "fortify" ];
 
   meta = {
     homepage = "https://www.parallelrealities.co.uk/games/edgar";

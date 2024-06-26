@@ -1,15 +1,16 @@
-{ lib
-, pkg-config
-, buildGoModule
-, fetchFromGitHub
-, makeWrapper
-, coreutils
-, gnupg
-, gnutar
-, squashfsTools
-, debootstrap
-, callPackage
-, nixosTests
+{
+  lib,
+  pkg-config,
+  buildGoModule,
+  fetchFromGitHub,
+  makeWrapper,
+  coreutils,
+  gnupg,
+  gnutar,
+  squashfsTools,
+  debootstrap,
+  callPackage,
+  nixosTests,
 }:
 
 let
@@ -36,7 +37,6 @@ buildGoModule rec {
   };
 
   buildInputs = bins;
-
 
   # tests require a local keyserver (mkg20001/nixpkgs branch distrobuilder-with-tests) but gpg is currently broken in tests
   doCheck = false;

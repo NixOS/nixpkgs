@@ -1,6 +1,7 @@
-{ lib
-, python3Packages
-, fetchFromGitHub
+{
+  lib,
+  python3Packages,
+  fetchFromGitHub,
 }:
 
 python3Packages.buildPythonApplication {
@@ -16,9 +17,7 @@ python3Packages.buildPythonApplication {
 
   format = "other";
 
-  nativeBuildInputs = [
-    python3Packages.wrapPython
-  ];
+  nativeBuildInputs = [ python3Packages.wrapPython ];
 
   pythonPath = with python3Packages; [
     pycryptodome

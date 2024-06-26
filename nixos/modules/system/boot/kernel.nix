@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -8,10 +13,9 @@ let
   inherit (config.boot.kernel) features randstructSeed;
   inherit (config.boot.kernelPackages) kernel;
 
-  kernelModulesConf = pkgs.writeText "nixos.conf"
-    ''
-      ${concatStringsSep "\n" config.boot.kernelModules}
-    '';
+  kernelModulesConf = pkgs.writeText "nixos.conf" ''
+    ${concatStringsSep "\n" config.boot.kernelModules}
+  '';
 
 in
 
@@ -20,12 +24,14 @@ in
   ###### interface
 
   options = {
-    boot.kernel.enable = mkEnableOption "the Linux kernel. This is useful for systemd-like containers which do not require a kernel" // {
-      default = true;
-    };
+    boot.kernel.enable =
+      mkEnableOption "the Linux kernel. This is useful for systemd-like containers which do not require a kernel"
+      // {
+        default = true;
+      };
 
     boot.kernel.features = mkOption {
-      default = {};
+      default = { };
       example = literalExpression "{ debug = true; }";
       internal = true;
       description = ''
@@ -40,13 +46,17 @@ in
     boot.kernelPackages = mkOption {
       default = pkgs.linuxPackages;
       type = types.raw;
-      apply = kernelPackages: kernelPackages.extend (self: super: {
-        kernel = super.kernel.override (originalArgs: {
-          inherit randstructSeed;
-          kernelPatches = (originalArgs.kernelPatches or []) ++ kernelPatches;
-          features = lib.recursiveUpdate super.kernel.features features;
-        });
-      });
+      apply =
+        kernelPackages:
+        kernelPackages.extend (
+          self: super: {
+            kernel = super.kernel.override (originalArgs: {
+              inherit randstructSeed;
+              kernelPatches = (originalArgs.kernelPatches or [ ]) ++ kernelPatches;
+              features = lib.recursiveUpdate super.kernel.features features;
+            });
+          }
+        );
       # We don't want to evaluate all of linuxPackages for the manual
       # - some of it might not even evaluate correctly.
       defaultText = literalExpression "pkgs.linuxPackages";
@@ -72,7 +82,7 @@ in
 
     boot.kernelPatches = mkOption {
       type = types.listOf types.attrs;
-      default = [];
+      default = [ ];
       example = literalExpression ''
         [
           {
@@ -137,10 +147,13 @@ in
     };
 
     boot.kernelParams = mkOption {
-      type = types.listOf (types.strMatching ''([^"[:space:]]|"[^"]*")+'' // {
-        name = "kernelParam";
-        description = "string, with spaces inside double quotes";
-      });
+      type = types.listOf (
+        types.strMatching ''([^"[:space:]]|"[^"]*")+''
+        // {
+          name = "kernelParam";
+          description = "string, with spaces inside double quotes";
+        }
+      );
       default = [ ];
       description = "Parameters added to the kernel command line.";
     };
@@ -169,14 +182,14 @@ in
 
     boot.extraModulePackages = mkOption {
       type = types.listOf types.package;
-      default = [];
+      default = [ ];
       example = literalExpression "[ config.boot.kernelPackages.nvidia_x11 ]";
       description = "A list of additional packages supplying kernel modules.";
     };
 
     boot.kernelModules = mkOption {
       type = types.listOf types.str;
-      default = [];
+      default = [ ];
       description = ''
         The set of kernel modules to be loaded in the second stage of
         the boot process.  Note that modules that are needed to
@@ -188,8 +201,11 @@ in
 
     boot.initrd.availableKernelModules = mkOption {
       type = types.listOf types.str;
-      default = [];
-      example = [ "sata_nv" "ext3" ];
+      default = [ ];
+      example = [
+        "sata_nv"
+        "ext3"
+      ];
       description = ''
         The set of kernel modules in the initial ramdisk used during the
         boot process.  This set must include all modules necessary for
@@ -209,7 +225,7 @@ in
 
     boot.initrd.kernelModules = mkOption {
       type = types.listOf types.str;
-      default = [];
+      default = [ ];
       description = "List of modules that are always loaded by the initrd.";
     };
 
@@ -226,20 +242,22 @@ in
     system.modulesTree = mkOption {
       type = types.listOf types.path;
       internal = true;
-      default = [];
+      default = [ ];
       description = ''
         Tree of kernel modules.  This includes the kernel, plus modules
         built outside of the kernel.  Combine these into a single tree of
         symlinks because modprobe only supports one directory.
       '';
       # Convert the list of path to only one path.
-      apply = let
-        kernel-name = config.boot.kernelPackages.kernel.name or "kernel";
-      in modules: (pkgs.aggregateModules modules).override { name = kernel-name + "-modules"; };
+      apply =
+        let
+          kernel-name = config.boot.kernelPackages.kernel.name or "kernel";
+        in
+        modules: (pkgs.aggregateModules modules).override { name = kernel-name + "-modules"; };
     };
 
     system.requiredKernelConfig = mkOption {
-      default = [];
+      default = [ ];
       example = literalExpression ''
         with config.lib.kernelConfig; [
           (isYes "MODULES")
@@ -258,182 +276,205 @@ in
 
   };
 
-
   ###### implementation
 
-  config = mkMerge
-    [ (mkIf config.boot.initrd.enable {
-        boot.initrd.availableKernelModules =
-          optionals config.boot.initrd.includeDefaultModules ([
-            # Note: most of these (especially the SATA/PATA modules)
-            # shouldn't be included by default since nixos-generate-config
-            # detects them, but I'm keeping them for now for backwards
-            # compatibility.
+  config = mkMerge [
+    (mkIf config.boot.initrd.enable {
+      boot.initrd.availableKernelModules = optionals config.boot.initrd.includeDefaultModules (
+        [
+          # Note: most of these (especially the SATA/PATA modules)
+          # shouldn't be included by default since nixos-generate-config
+          # detects them, but I'm keeping them for now for backwards
+          # compatibility.
 
-            # Some SATA/PATA stuff.
-            "ahci"
-            "sata_nv"
-            "sata_via"
-            "sata_sis"
-            "sata_uli"
-            "ata_piix"
-            "pata_marvell"
+          # Some SATA/PATA stuff.
+          "ahci"
+          "sata_nv"
+          "sata_via"
+          "sata_sis"
+          "sata_uli"
+          "ata_piix"
+          "pata_marvell"
 
-            # NVMe
-            "nvme"
+          # NVMe
+          "nvme"
 
-            # Standard SCSI stuff.
-            "sd_mod"
-            "sr_mod"
+          # Standard SCSI stuff.
+          "sd_mod"
+          "sr_mod"
 
-            # SD cards and internal eMMC drives.
-            "mmc_block"
+          # SD cards and internal eMMC drives.
+          "mmc_block"
 
-            # Support USB keyboards, in case the boot fails and we only have
-            # a USB keyboard, or for LUKS passphrase prompt.
-            "uhci_hcd"
-            "ehci_hcd"
-            "ehci_pci"
-            "ohci_hcd"
-            "ohci_pci"
-            "xhci_hcd"
-            "xhci_pci"
-            "usbhid"
-            "hid_generic" "hid_lenovo" "hid_apple" "hid_roccat"
-            "hid_logitech_hidpp" "hid_logitech_dj" "hid_microsoft" "hid_cherry"
-            "hid_corsair"
+          # Support USB keyboards, in case the boot fails and we only have
+          # a USB keyboard, or for LUKS passphrase prompt.
+          "uhci_hcd"
+          "ehci_hcd"
+          "ehci_pci"
+          "ohci_hcd"
+          "ohci_pci"
+          "xhci_hcd"
+          "xhci_pci"
+          "usbhid"
+          "hid_generic"
+          "hid_lenovo"
+          "hid_apple"
+          "hid_roccat"
+          "hid_logitech_hidpp"
+          "hid_logitech_dj"
+          "hid_microsoft"
+          "hid_cherry"
+          "hid_corsair"
 
-          ] ++ optionals pkgs.stdenv.hostPlatform.isx86 [
-            # Misc. x86 keyboard stuff.
-            "pcips2" "atkbd" "i8042"
+        ]
+        ++ optionals pkgs.stdenv.hostPlatform.isx86 [
+          # Misc. x86 keyboard stuff.
+          "pcips2"
+          "atkbd"
+          "i8042"
 
-            # x86 RTC needed by the stage 2 init script.
-            "rtc_cmos"
-          ]);
+          # x86 RTC needed by the stage 2 init script.
+          "rtc_cmos"
+        ]
+      );
 
-        boot.initrd.kernelModules =
-          optionals config.boot.initrd.includeDefaultModules [
-            # For LVM.
-            "dm_mod"
-          ];
-      })
+      boot.initrd.kernelModules = optionals config.boot.initrd.includeDefaultModules [
+        # For LVM.
+        "dm_mod"
+      ];
+    })
 
-      (mkIf config.boot.kernel.enable {
-        system.build = { inherit kernel; };
+    (mkIf config.boot.kernel.enable {
+      system.build = {
+        inherit kernel;
+      };
 
-        system.modulesTree = [ kernel ] ++ config.boot.extraModulePackages;
+      system.modulesTree = [ kernel ] ++ config.boot.extraModulePackages;
 
-        # Not required for, e.g., containers as they don't have their own kernel or initrd.
-        # They boot directly into stage 2.
-        system.systemBuilderArgs.kernelParams = config.boot.kernelParams;
-        system.systemBuilderCommands =
-          let
-            kernelPath = "${config.boot.kernelPackages.kernel}/" +
-              "${config.system.boot.loader.kernelFile}";
-            initrdPath = "${config.system.build.initialRamdisk}/" +
-              "${config.system.boot.loader.initrdFile}";
-          in
-          ''
-            if [ ! -f ${kernelPath} ]; then
-              echo "The bootloader cannot find the proper kernel image."
-              echo "(Expecting ${kernelPath})"
-              false
-            fi
+      # Not required for, e.g., containers as they don't have their own kernel or initrd.
+      # They boot directly into stage 2.
+      system.systemBuilderArgs.kernelParams = config.boot.kernelParams;
+      system.systemBuilderCommands =
+        let
+          kernelPath = "${config.boot.kernelPackages.kernel}/" + "${config.system.boot.loader.kernelFile}";
+          initrdPath = "${config.system.build.initialRamdisk}/" + "${config.system.boot.loader.initrdFile}";
+        in
+        ''
+          if [ ! -f ${kernelPath} ]; then
+            echo "The bootloader cannot find the proper kernel image."
+            echo "(Expecting ${kernelPath})"
+            false
+          fi
 
-            ln -s ${kernelPath} $out/kernel
-            ln -s ${config.system.modulesTree} $out/kernel-modules
-            ${optionalString (config.hardware.deviceTree.package != null) ''
-              ln -s ${config.hardware.deviceTree.package} $out/dtbs
-            ''}
+          ln -s ${kernelPath} $out/kernel
+          ln -s ${config.system.modulesTree} $out/kernel-modules
+          ${optionalString (config.hardware.deviceTree.package != null) ''
+            ln -s ${config.hardware.deviceTree.package} $out/dtbs
+          ''}
 
-            echo -n "$kernelParams" > $out/kernel-params
+          echo -n "$kernelParams" > $out/kernel-params
 
-            ln -s ${initrdPath} $out/initrd
+          ln -s ${initrdPath} $out/initrd
 
-            ln -s ${config.system.build.initialRamdiskSecretAppender}/bin/append-initrd-secrets $out
+          ln -s ${config.system.build.initialRamdiskSecretAppender}/bin/append-initrd-secrets $out
 
-            ln -s ${config.hardware.firmware}/lib/firmware $out/firmware
-          '';
+          ln -s ${config.hardware.firmware}/lib/firmware $out/firmware
+        '';
 
-        # Implement consoleLogLevel both in early boot and using sysctl
-        # (so you don't need to reboot to have changes take effect).
-        boot.kernelParams =
-          [ "loglevel=${toString config.boot.consoleLogLevel}" ] ++
-          optionals config.boot.vesa [ "vga=0x317" "nomodeset" ];
+      # Implement consoleLogLevel both in early boot and using sysctl
+      # (so you don't need to reboot to have changes take effect).
+      boot.kernelParams =
+        [ "loglevel=${toString config.boot.consoleLogLevel}" ]
+        ++ optionals config.boot.vesa [
+          "vga=0x317"
+          "nomodeset"
+        ];
 
-        boot.kernel.sysctl."kernel.printk" = mkDefault config.boot.consoleLogLevel;
+      boot.kernel.sysctl."kernel.printk" = mkDefault config.boot.consoleLogLevel;
 
-        boot.kernelModules = [ "loop" "atkbd" ];
+      boot.kernelModules = [
+        "loop"
+        "atkbd"
+      ];
 
-        # Create /etc/modules-load.d/nixos.conf, which is read by
-        # systemd-modules-load.service to load required kernel modules.
-        environment.etc =
-          { "modules-load.d/nixos.conf".source = kernelModulesConf;
-          };
+      # Create /etc/modules-load.d/nixos.conf, which is read by
+      # systemd-modules-load.service to load required kernel modules.
+      environment.etc = {
+        "modules-load.d/nixos.conf".source = kernelModulesConf;
+      };
 
-        systemd.services.systemd-modules-load =
-          { wantedBy = [ "multi-user.target" ];
-            restartTriggers = [ kernelModulesConf ];
-            serviceConfig =
-              { # Ignore failed module loads.  Typically some of the
-                # modules in ‘boot.kernelModules’ are "nice to have but
-                # not required" (e.g. acpi-cpufreq), so we don't want to
-                # barf on those.
-                SuccessExitStatus = "0 1";
-              };
-          };
+      systemd.services.systemd-modules-load = {
+        wantedBy = [ "multi-user.target" ];
+        restartTriggers = [ kernelModulesConf ];
+        serviceConfig = {
+          # Ignore failed module loads.  Typically some of the
+          # modules in ‘boot.kernelModules’ are "nice to have but
+          # not required" (e.g. acpi-cpufreq), so we don't want to
+          # barf on those.
+          SuccessExitStatus = "0 1";
+        };
+      };
 
-        lib.kernelConfig = {
-          isYes = option: {
-            assertion = config: config.isYes option;
-            message = "CONFIG_${option} is not yes!";
-            configLine = "CONFIG_${option}=y";
-          };
-
-          isNo = option: {
-            assertion = config: config.isNo option;
-            message = "CONFIG_${option} is not no!";
-            configLine = "CONFIG_${option}=n";
-          };
-
-          isModule = option: {
-            assertion = config: config.isModule option;
-            message = "CONFIG_${option} is not built as a module!";
-            configLine = "CONFIG_${option}=m";
-          };
-
-          ### Usually you will just want to use these two
-          # True if yes or module
-          isEnabled = option: {
-            assertion = config: config.isEnabled option;
-            message = "CONFIG_${option} is not enabled!";
-            configLine = "CONFIG_${option}=y";
-          };
-
-          # True if no or omitted
-          isDisabled = option: {
-            assertion = config: config.isDisabled option;
-            message = "CONFIG_${option} is not disabled!";
-            configLine = "CONFIG_${option}=n";
-          };
+      lib.kernelConfig = {
+        isYes = option: {
+          assertion = config: config.isYes option;
+          message = "CONFIG_${option} is not yes!";
+          configLine = "CONFIG_${option}=y";
         };
 
-        # The config options that all modules can depend upon
-        system.requiredKernelConfig = with config.lib.kernelConfig;
-          [
-            # !!! Should this really be needed?
-            (isYes "MODULES")
-            (isYes "BINFMT_ELF")
-          ] ++ (optional (randstructSeed != "") (isYes "GCC_PLUGIN_RANDSTRUCT"));
+        isNo = option: {
+          assertion = config: config.isNo option;
+          message = "CONFIG_${option} is not no!";
+          configLine = "CONFIG_${option}=n";
+        };
 
-        # nixpkgs kernels are assumed to have all required features
-        assertions = if config.boot.kernelPackages.kernel ? features then [] else
-          let cfg = config.boot.kernelPackages.kernel.config; in map (attrs:
-            { assertion = attrs.assertion cfg; inherit (attrs) message; }
-          ) config.system.requiredKernelConfig;
+        isModule = option: {
+          assertion = config: config.isModule option;
+          message = "CONFIG_${option} is not built as a module!";
+          configLine = "CONFIG_${option}=m";
+        };
 
-      })
+        ### Usually you will just want to use these two
+        # True if yes or module
+        isEnabled = option: {
+          assertion = config: config.isEnabled option;
+          message = "CONFIG_${option} is not enabled!";
+          configLine = "CONFIG_${option}=y";
+        };
 
-    ];
+        # True if no or omitted
+        isDisabled = option: {
+          assertion = config: config.isDisabled option;
+          message = "CONFIG_${option} is not disabled!";
+          configLine = "CONFIG_${option}=n";
+        };
+      };
+
+      # The config options that all modules can depend upon
+      system.requiredKernelConfig =
+        with config.lib.kernelConfig;
+        [
+          # !!! Should this really be needed?
+          (isYes "MODULES")
+          (isYes "BINFMT_ELF")
+        ]
+        ++ (optional (randstructSeed != "") (isYes "GCC_PLUGIN_RANDSTRUCT"));
+
+      # nixpkgs kernels are assumed to have all required features
+      assertions =
+        if config.boot.kernelPackages.kernel ? features then
+          [ ]
+        else
+          let
+            cfg = config.boot.kernelPackages.kernel.config;
+          in
+          map (attrs: {
+            assertion = attrs.assertion cfg;
+            inherit (attrs) message;
+          }) config.system.requiredKernelConfig;
+
+    })
+
+  ];
 
 }

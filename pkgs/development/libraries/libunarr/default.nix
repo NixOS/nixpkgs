@@ -1,7 +1,8 @@
-{ lib
-, stdenv
-, fetchurl
-, cmake
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cmake,
 }:
 
 stdenv.mkDerivation rec {
@@ -19,9 +20,7 @@ stdenv.mkDerivation rec {
       --replace "AppleClang" "Clang"
   '';
 
-  nativeBuildInputs = [
-    cmake
-  ];
+  nativeBuildInputs = [ cmake ];
 
   meta = with lib; {
     homepage = "https://github.com/selmf/unarr";

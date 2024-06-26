@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchurl
-, # this also disables building tests.
+{
+  lib,
+  stdenv,
+  fetchurl,
+  # this also disables building tests.
   # on static windows cross-compile they fail to build
-  doCheck ? with stdenv.hostPlatform; !(isWindows && isStatic)
+  doCheck ? with stdenv.hostPlatform; !(isWindows && isStatic),
 }:
 
 stdenv.mkDerivation rec {
@@ -17,7 +18,8 @@ stdenv.mkDerivation rec {
 
   inherit doCheck;
 
-  configureFlags = lib.optional (stdenv.hostPlatform.isWindows || stdenv.hostPlatform.isStatic) "--disable-examples"
+  configureFlags =
+    lib.optional (stdenv.hostPlatform.isWindows || stdenv.hostPlatform.isStatic) "--disable-examples"
     ++ lib.optional (!doCheck) "--disable-tests";
 
   cmakeFlags = lib.optionals (!doCheck) [ "-DBUILD_TESTS:BOOL=OFF" ];

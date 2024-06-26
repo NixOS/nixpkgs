@@ -1,12 +1,13 @@
-{ lib
-, fetchFromGitHub
-, gitUpdater
-, icu
-, libkiwix
-, meson
-, ninja
-, pkg-config
-, stdenv
+{
+  lib,
+  fetchFromGitHub,
+  gitUpdater,
+  icu,
+  libkiwix,
+  meson,
+  ninja,
+  pkg-config,
+  stdenv,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,12 +1,13 @@
-{ lib
-, fetchFromGitHub
-, rustPlatform
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
 
-, darwin
-, libX11
-, openssl
-, pkg-config
-, stdenv
+  darwin,
+  libX11,
+  openssl,
+  pkg-config,
+  stdenv,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -22,19 +23,18 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-qNl2bI5VqpMfoFc+gZC4XHrNT9pnWseduYSOi5Dzr9M=";
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [
-    openssl
-    libX11
-  ]
-  ++ lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.AppKit
-    darwin.apple_sdk.frameworks.Security
-    darwin.apple_sdk.frameworks.SystemConfiguration
-  ];
+  buildInputs =
+    [
+      openssl
+      libX11
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      darwin.apple_sdk.frameworks.AppKit
+      darwin.apple_sdk.frameworks.Security
+      darwin.apple_sdk.frameworks.SystemConfiguration
+    ];
 
   meta = {
     description = "Integrate large language models into the command line";

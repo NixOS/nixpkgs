@@ -1,18 +1,26 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, docutils
-, meson
-, ninja
-, pkg-config
-, dbus
-, linuxHeaders
-, systemd
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  docutils,
+  meson,
+  ninja,
+  pkg-config,
+  dbus,
+  linuxHeaders,
+  systemd,
 }:
 
 let
 
-  dep = { pname, version, hash, rev ? "v${version}", buildInputs ? [ ] }:
+  dep =
+    {
+      pname,
+      version,
+      hash,
+      rev ? "v${version}",
+      buildInputs ? [ ],
+    }:
     stdenv.mkDerivation {
       inherit pname version;
       src = fetchFromGitHub {
@@ -20,7 +28,11 @@ let
         repo = pname;
         inherit hash rev;
       };
-      nativeBuildInputs = [ meson ninja pkg-config ];
+      nativeBuildInputs = [
+        meson
+        ninja
+        pkg-config
+      ];
       inherit buildInputs;
     };
 
@@ -28,13 +40,54 @@ let
   #
   # If that changes, we can always break them out, but they are essentially
   # part of the dbus-broker project, just in separate repositories.
-  c-dvar = dep { pname = "c-dvar"; version = "1.1.0"; hash = "sha256-p/C+BktclVseCtZJ1Q/YK03vP2ClnYRLB1Vmj2OQJD4="; buildInputs = [ c-stdaux c-utf8 ]; };
-  c-ini = dep { pname = "c-ini"; version = "1.1.0"; hash = "sha256-wa7aNl20hkb/83c4AkQ/0YFDdmBs4XGW+WLUtBWIC98="; buildInputs = [ c-list c-rbtree c-stdaux c-utf8 ]; };
-  c-list = dep { pname = "c-list"; version = "3.1.0"; hash = "sha256-fp3EAqcbFCLaT2EstLSzwP2X13pi2EFpFAullhoCtpw="; };
-  c-rbtree = dep { pname = "c-rbtree"; version = "3.2.0"; hash = "sha256-dTMeawhPLRtHvMXfXCrT5iCdoh7qS3v+raC6c+t+X38="; buildInputs = [ c-stdaux ]; };
-  c-shquote = dep { pname = "c-shquote"; version = "1.1.0"; hash = "sha256-z6hpQ/kpCYAngMNfxLkfsxaGtvP4yBMigX1lGpIIzMQ="; buildInputs = [ c-stdaux ]; };
-  c-stdaux = dep { pname = "c-stdaux"; version = "1.5.0"; hash = "sha256-MsnuEyVCmOIr/q6I1qyPsNXp48jxIEcXoYLHbOAZtW0="; };
-  c-utf8 = dep { pname = "c-utf8"; version = "1.1.0"; hash = "sha256-9vBYylbt1ypJwIAQJd/oiAueh+4VYcn/KzofQuhUea0="; buildInputs = [ c-stdaux ]; };
+  c-dvar = dep {
+    pname = "c-dvar";
+    version = "1.1.0";
+    hash = "sha256-p/C+BktclVseCtZJ1Q/YK03vP2ClnYRLB1Vmj2OQJD4=";
+    buildInputs = [
+      c-stdaux
+      c-utf8
+    ];
+  };
+  c-ini = dep {
+    pname = "c-ini";
+    version = "1.1.0";
+    hash = "sha256-wa7aNl20hkb/83c4AkQ/0YFDdmBs4XGW+WLUtBWIC98=";
+    buildInputs = [
+      c-list
+      c-rbtree
+      c-stdaux
+      c-utf8
+    ];
+  };
+  c-list = dep {
+    pname = "c-list";
+    version = "3.1.0";
+    hash = "sha256-fp3EAqcbFCLaT2EstLSzwP2X13pi2EFpFAullhoCtpw=";
+  };
+  c-rbtree = dep {
+    pname = "c-rbtree";
+    version = "3.2.0";
+    hash = "sha256-dTMeawhPLRtHvMXfXCrT5iCdoh7qS3v+raC6c+t+X38=";
+    buildInputs = [ c-stdaux ];
+  };
+  c-shquote = dep {
+    pname = "c-shquote";
+    version = "1.1.0";
+    hash = "sha256-z6hpQ/kpCYAngMNfxLkfsxaGtvP4yBMigX1lGpIIzMQ=";
+    buildInputs = [ c-stdaux ];
+  };
+  c-stdaux = dep {
+    pname = "c-stdaux";
+    version = "1.5.0";
+    hash = "sha256-MsnuEyVCmOIr/q6I1qyPsNXp48jxIEcXoYLHbOAZtW0=";
+  };
+  c-utf8 = dep {
+    pname = "c-utf8";
+    version = "1.1.0";
+    hash = "sha256-9vBYylbt1ypJwIAQJd/oiAueh+4VYcn/KzofQuhUea0=";
+    buildInputs = [ c-stdaux ];
+  };
 
 in
 
@@ -54,7 +107,12 @@ stdenv.mkDerivation (finalAttrs: {
     ./disable-test.patch
   ];
 
-  nativeBuildInputs = [ docutils meson ninja pkg-config ];
+  nativeBuildInputs = [
+    docutils
+    meson
+    ninja
+    pkg-config
+  ];
 
   buildInputs = [
     c-dvar

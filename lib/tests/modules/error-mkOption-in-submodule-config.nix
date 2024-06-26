@@ -4,9 +4,7 @@ let
 in
 {
   options.sub = lib.mkOption {
-    type = lib.types.submodule {
-      wrong2 = mkOption {};
-    };
-    default = {};
+    type = lib.types.submodule { wrong2 = mkOption { }; };
+    default = { };
   };
 }

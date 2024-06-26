@@ -1,6 +1,10 @@
-{ mkDerivation, lib
-, libkdegames, extra-cmake-modules
-, kdeclarative, knewstuff
+{
+  mkDerivation,
+  lib,
+  libkdegames,
+  extra-cmake-modules,
+  kdeclarative,
+  knewstuff,
 }:
 
 mkDerivation {
@@ -9,17 +13,16 @@ mkDerivation {
     homepage = "https://apps.kde.org/picmi/";
     description = "Nonogram game";
     mainProgram = "picmi";
-    longDescription = ''The goal is to reveal the hidden pattern in the board by coloring or
-      leaving blank the cells in a grid according to numbers given at the side of the grid.
-      '';
+    longDescription = ''
+      The goal is to reveal the hidden pattern in the board by coloring or
+            leaving blank the cells in a grid according to numbers given at the side of the grid.
+    '';
     maintainers = with maintainers; [ freezeboy ];
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
   };
 
-  nativeBuildInputs = [
-    extra-cmake-modules
-  ];
+  nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [
     kdeclarative
     knewstuff

@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, btrfs-progs }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  btrfs-progs,
+}:
 
 stdenv.mkDerivation rec {
   pname = "compsize";
@@ -13,9 +18,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ btrfs-progs ];
 
-  installFlags = [
-    "PREFIX=${placeholder "out"}"
-  ];
+  installFlags = [ "PREFIX=${placeholder "out"}" ];
 
   preInstall = ''
     mkdir -p $out/share/man/man8

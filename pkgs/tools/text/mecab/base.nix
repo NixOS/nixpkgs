@@ -11,9 +11,7 @@ finalAttrs: {
 
   buildInputs = [ libiconv ];
 
-  configureFlags = [
-    "--with-charset=utf8"
-  ];
+  configureFlags = [ "--with-charset=utf8" ];
 
   # mecab uses several features that have been removed in C++17.
   # Force the language mode to C++14, so that it can compile with clang 16.

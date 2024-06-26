@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, makeWrapper, ncurses, readline, ronn }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  makeWrapper,
+  ncurses,
+  readline,
+  ronn,
+}:
 
 stdenv.mkDerivation rec {
 
@@ -14,7 +22,12 @@ stdenv.mkDerivation rec {
 
   sourceRoot = "${src.name}/src";
 
-  nativeBuildInputs = [ makeWrapper ncurses readline ronn ];
+  nativeBuildInputs = [
+    makeWrapper
+    ncurses
+    readline
+    ronn
+  ];
 
   env.NIX_CFLAGS_COMPILE = "-std=gnu89";
 
@@ -36,7 +49,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Manipulating CPC dsk images and files";
     mainProgram = "cpcfs";
-    homepage = "https://github.com/derikz/cpcfs/" ;
+    homepage = "https://github.com/derikz/cpcfs/";
     license = licenses.bsd2;
     maintainers = [ ];
     platforms = platforms.all;

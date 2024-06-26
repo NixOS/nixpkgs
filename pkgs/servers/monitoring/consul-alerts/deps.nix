@@ -22,7 +22,8 @@ in
       rev = "v0.3.5";
       sha256 = "1mvgn89vp39gcpvhiq4n7nw5ipj7fk6h03jgc6fjwgvwvss213pb";
     };
-  }{
+  }
+  {
     goPackagePath = "github.com/mitchellh/hashstructure";
     fetch = {
       type = "git";

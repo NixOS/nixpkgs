@@ -1,13 +1,23 @@
-{ stdenv, lib, fetchFromGitHub, buildPerlPackage, shortenPerlShebang, LWP, LWPProtocolHttps, DataDump, JSON }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  buildPerlPackage,
+  shortenPerlShebang,
+  LWP,
+  LWPProtocolHttps,
+  DataDump,
+  JSON,
+}:
 
 buildPerlPackage rec {
   pname = "WWW-YoutubeViewer";
   version = "3.7.9";
 
   src = fetchFromGitHub {
-    owner  = "trizen";
-    repo   = "youtube-viewer";
-    rev    = version;
+    owner = "trizen";
+    repo = "youtube-viewer";
+    rev = version;
     sha256 = "16p0sa91h0zpqdpqmy348g6b9qj5f6qrbzrljn157vk00cg6mx18";
   };
 

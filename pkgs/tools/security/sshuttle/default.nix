@@ -1,15 +1,16 @@
-{ lib
-, stdenv
-, python3Packages
-, fetchFromGitHub
-, installShellFiles
-, makeWrapper
-, sphinx
-, coreutils
-, iptables
-, nettools
-, openssh
-, procps
+{
+  lib,
+  stdenv,
+  python3Packages,
+  fetchFromGitHub,
+  installShellFiles,
+  makeWrapper,
+  sphinx,
+  coreutils,
+  iptables,
+  nettools,
+  openssh,
+  procps,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -47,7 +48,19 @@ python3Packages.buildPythonApplication rec {
     installManPage docs/_build/man/*
 
     wrapProgram $out/bin/sshuttle \
-      --prefix PATH : "${lib.makeBinPath ([ coreutils openssh procps ] ++ lib.optionals stdenv.isLinux [ iptables nettools ])}" \
+      --prefix PATH : "${
+        lib.makeBinPath (
+          [
+            coreutils
+            openssh
+            procps
+          ]
+          ++ lib.optionals stdenv.isLinux [
+            iptables
+            nettools
+          ]
+        )
+      }" \
   '';
 
   meta = with lib; {
@@ -61,6 +74,9 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://github.com/sshuttle/sshuttle";
     changelog = "https://github.com/sshuttle/sshuttle/blob/v${version}/CHANGES.rst";
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ domenkozar carlosdagos ];
+    maintainers = with maintainers; [
+      domenkozar
+      carlosdagos
+    ];
   };
 }

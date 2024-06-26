@@ -1,10 +1,23 @@
-{ lib, stdenv, callPackage, rustPlatform, fetchFromGitHub, nixosTests
-, pkg-config, openssl
-, libiconv, Security, CoreServices, SystemConfiguration
-, dbBackend ? "sqlite", libmysqlclient, postgresql }:
+{
+  lib,
+  stdenv,
+  callPackage,
+  rustPlatform,
+  fetchFromGitHub,
+  nixosTests,
+  pkg-config,
+  openssl,
+  libiconv,
+  Security,
+  CoreServices,
+  SystemConfiguration,
+  dbBackend ? "sqlite",
+  libmysqlclient,
+  postgresql,
+}:
 
 let
-  webvault = callPackage ./webvault.nix {};
+  webvault = callPackage ./webvault.nix { };
 in
 
 rustPlatform.buildRustPackage rec {
@@ -24,8 +37,15 @@ rustPlatform.buildRustPackage rec {
   env.VW_VERSION = version;
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = with lib; [ openssl ]
-    ++ optionals stdenv.isDarwin [ libiconv Security CoreServices SystemConfiguration ]
+  buildInputs =
+    with lib;
+    [ openssl ]
+    ++ optionals stdenv.isDarwin [
+      libiconv
+      Security
+      CoreServices
+      SystemConfiguration
+    ]
     ++ optional (dbBackend == "mysql") libmysqlclient
     ++ optional (dbBackend == "postgresql") postgresql;
 
@@ -34,7 +54,7 @@ rustPlatform.buildRustPackage rec {
   passthru = {
     inherit webvault;
     tests = nixosTests.vaultwarden;
-    updateScript = callPackage ./update.nix {};
+    updateScript = callPackage ./update.nix { };
   };
 
   meta = with lib; {
@@ -42,7 +62,10 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/dani-garcia/vaultwarden";
     changelog = "https://github.com/dani-garcia/vaultwarden/releases/tag/${version}";
     license = licenses.agpl3Only;
-    maintainers = with maintainers; [ dotlambda SuperSandro2000 ];
+    maintainers = with maintainers; [
+      dotlambda
+      SuperSandro2000
+    ];
     mainProgram = "vaultwarden";
   };
 }

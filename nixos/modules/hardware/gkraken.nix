@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -10,9 +15,5 @@ in
     enable = mkEnableOption "gkraken's udev rules for NZXT AIO liquid coolers";
   };
 
-  config = mkIf cfg.enable {
-    services.udev.packages = with pkgs; [
-      gkraken
-    ];
-  };
+  config = mkIf cfg.enable { services.udev.packages = with pkgs; [ gkraken ]; };
 }

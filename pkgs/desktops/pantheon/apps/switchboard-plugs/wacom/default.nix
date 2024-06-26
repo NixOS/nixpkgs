@@ -1,19 +1,20 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, meson
-, ninja
-, pkg-config
-, vala
-, glib
-, granite
-, gtk3
-, libgee
-, libgudev
-, libwacom
-, switchboard
-, xorg
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  meson,
+  ninja,
+  pkg-config,
+  vala,
+  glib,
+  granite,
+  gtk3,
+  libgee,
+  libgudev,
+  libwacom,
+  switchboard,
+  xorg,
 }:
 
 stdenv.mkDerivation rec {

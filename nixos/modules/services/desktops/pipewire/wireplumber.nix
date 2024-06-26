@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   inherit (builtins) concatMap;
@@ -8,7 +13,13 @@ let
   inherit (lib.modules) mkIf;
   inherit (lib.options) literalExpression mkOption;
   inherit (lib.strings) concatStringsSep makeSearchPath;
-  inherit (lib.types) bool listOf attrsOf package lines;
+  inherit (lib.types)
+    bool
+    listOf
+    attrsOf
+    package
+    lines
+    ;
   inherit (lib.path) subpath;
 
   pwCfg = config.services.pipewire;
@@ -17,24 +28,29 @@ let
 
   json = pkgs.formats.json { };
 
-  configSectionsToConfFile = path: value:
-    pkgs.writeTextDir
-      path
-      (concatStringsSep "\n" (
-        mapAttrsToList
-          (section: content: "${section} = " + (builtins.toJSON content))
-          value
-      ));
+  configSectionsToConfFile =
+    path: value:
+    pkgs.writeTextDir path (
+      concatStringsSep "\n" (
+        mapAttrsToList (section: content: "${section} = " + (builtins.toJSON content)) value
+      )
+    );
 
-  mapConfigToFiles = config:
-    mapAttrsToList
-      (name: value: configSectionsToConfFile "share/wireplumber/wireplumber.conf.d/${name}.conf" value)
-      config;
+  mapConfigToFiles =
+    config:
+    mapAttrsToList (
+      name: value: configSectionsToConfFile "share/wireplumber/wireplumber.conf.d/${name}.conf" value
+    ) config;
 
-  mapScriptsToFiles = scripts:
-    mapAttrsToList
-      (relativePath: value: pkgs.writeTextDir (subpath.join ["share/wireplumber/scripts" relativePath]) value)
-      scripts;
+  mapScriptsToFiles =
+    scripts:
+    mapAttrsToList (
+      relativePath: value:
+      pkgs.writeTextDir (subpath.join [
+        "share/wireplumber/scripts"
+        relativePath
+      ]) value
+    ) scripts;
 in
 {
   meta.maintainers = [ maintainers.k900 ];
@@ -61,34 +77,35 @@ in
         # in sections.
         type = attrsOf (attrsOf json.type);
         default = { };
-        example = literalExpression ''{
-          "log-level-debug" = {
-            "context.properties" = {
-              # Output Debug log messages as opposed to only the default level (Notice)
-              "log.level" = "D";
-            };
-          };
-          "wh-1000xm3-ldac-hq" = {
-            "monitor.bluez.rules" = [
-              {
-                matches = [
-                  {
-                    # Match any bluetooth device with ids equal to that of a WH-1000XM3
-                    "device.name" = "~bluez_card.*";
-                    "device.product.id" = "0x0cd3";
-                    "device.vendor.id" = "usb:054c";
-                  }
-                ];
-                actions = {
-                  update-props = {
-                    # Set quality to high quality instead of the default of auto
-                    "bluez5.a2dp.ldac.quality" = "hq";
-                  };
-                };
-              }
-            ];
-          };
-        }'';
+        example = literalExpression ''
+          {
+                    "log-level-debug" = {
+                      "context.properties" = {
+                        # Output Debug log messages as opposed to only the default level (Notice)
+                        "log.level" = "D";
+                      };
+                    };
+                    "wh-1000xm3-ldac-hq" = {
+                      "monitor.bluez.rules" = [
+                        {
+                          matches = [
+                            {
+                              # Match any bluetooth device with ids equal to that of a WH-1000XM3
+                              "device.name" = "~bluez_card.*";
+                              "device.product.id" = "0x0cd3";
+                              "device.vendor.id" = "usb:054c";
+                            }
+                          ];
+                          actions = {
+                            update-props = {
+                              # Set quality to high quality instead of the default of auto
+                              "bluez5.a2dp.ldac.quality" = "hq";
+                            };
+                          };
+                        }
+                      ];
+                    };
+                  }'';
         description = ''
           Additional configuration for the WirePlumber daemon when run in
           single-instance mode (the default in nixpkgs and currently the only
@@ -166,16 +183,17 @@ in
       configPackages = mkOption {
         type = listOf package;
         default = [ ];
-        example = literalExpression ''[
-          (pkgs.writeTextDir "share/wireplumber/wireplumber.conf.d/10-bluez.conf" '''
-            monitor.bluez.properties = {
-              bluez5.roles = [ a2dp_sink a2dp_source bap_sink bap_source hsp_hs hsp_ag hfp_hf hfp_ag ]
-              bluez5.codecs = [ sbc sbc_xq aac ]
-              bluez5.enable-sbc-xq = true
-              bluez5.hfphsp-backend = "native"
-            }
-          ''')
-        ]'';
+        example = literalExpression ''
+          [
+                    (pkgs.writeTextDir "share/wireplumber/wireplumber.conf.d/10-bluez.conf" '''
+                      monitor.bluez.properties = {
+                        bluez5.roles = [ a2dp_sink a2dp_source bap_sink bap_source hsp_hs hsp_ag hfp_hf hfp_ag ]
+                        bluez5.codecs = [ sbc sbc_xq aac ]
+                        bluez5.enable-sbc-xq = true
+                        bluez5.hfphsp-backend = "native"
+                      }
+                    ''')
+                  ]'';
         description = ''
           List of packages that provide WirePlumber configuration, in the form of
           `share/wireplumber/*/*.conf` files.
@@ -238,8 +256,12 @@ in
         pathsToLink = [ "/share/wireplumber/scripts" ];
       };
 
-      configPackages = cfg.configPackages
-        ++ [ extraConfigPkg extraScriptsPkg ]
+      configPackages =
+        cfg.configPackages
+        ++ [
+          extraConfigPkg
+          extraScriptsPkg
+        ]
         ++ optional (!pwUsedForAudio) pwNotForAudioConfigPkg
         ++ optional pwCfg.systemWide systemwideConfigPkg;
 
@@ -249,14 +271,15 @@ in
         pathsToLink = [ "/share/wireplumber" ];
       };
 
-      requiredLv2Packages = flatten
-        (
-          concatMap
-            (p:
-              attrByPath [ "passthru" "requiredLv2Packages" ] [ ] p
-            )
-            configPackages
-        );
+      requiredLv2Packages = flatten (
+        concatMap (
+          p:
+          attrByPath [
+            "passthru"
+            "requiredLv2Packages"
+          ] [ ] p
+        ) configPackages
+      );
 
       lv2Plugins = pkgs.buildEnv {
         name = "wireplumber-lv2-plugins";
@@ -288,12 +311,18 @@ in
 
         # Make WirePlumber find our config/script files and lv2 plugins required by those
         # (but also the configs/scripts shipped with WirePlumber)
-        XDG_DATA_DIRS = makeSearchPath "share" [ configs cfg.package ];
+        XDG_DATA_DIRS = makeSearchPath "share" [
+          configs
+          cfg.package
+        ];
         LV2_PATH = "${lv2Plugins}/lib/lv2";
       };
 
       systemd.user.services.wireplumber.environment = mkIf (!pwCfg.systemWide) {
-        XDG_DATA_DIRS = makeSearchPath "share" [ configs cfg.package ];
+        XDG_DATA_DIRS = makeSearchPath "share" [
+          configs
+          cfg.package
+        ];
         LV2_PATH = "${lv2Plugins}/lib/lv2";
       };
     };

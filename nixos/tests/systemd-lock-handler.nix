@@ -1,11 +1,18 @@
-{ lib, ... }: {
+{ lib, ... }:
+{
   name = "systemd-lock-handler";
 
   meta.maintainers = with lib.maintainers; [ liff ];
 
   enableOCR = true;
 
-  nodes.machine = { config, pkgs, lib, ... }:
+  nodes.machine =
+    {
+      config,
+      pkgs,
+      lib,
+      ...
+    }:
     let
       touch = "${lib.getBin pkgs.coreutils}/bin/touch";
     in

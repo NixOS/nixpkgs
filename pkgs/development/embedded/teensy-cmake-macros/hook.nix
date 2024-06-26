@@ -1,6 +1,7 @@
-{ lib
-, makeSetupHook
-, teensy-cmake-macros
+{
+  lib,
+  makeSetupHook,
+  teensy-cmake-macros,
 }:
 
 makeSetupHook {
@@ -8,7 +9,9 @@ makeSetupHook {
 
   propagatedBuildInputs = [ teensy-cmake-macros ];
 
-  passthru = { inherit teensy-cmake-macros; };
+  passthru = {
+    inherit teensy-cmake-macros;
+  };
 
   meta = {
     description = "Setup hook for teensy-cmake-macros";

@@ -1,10 +1,26 @@
-{ lib, stdenv, fetchurl
-, gpm, openssl, pkg-config, libev # Misc.
-, libpng, libjpeg, libtiff, librsvg, libavif # graphic formats
-, bzip2, zlib, xz # Transfer encodings
-, enableFB ? (!stdenv.isDarwin)
-, enableDirectFB ? false, directfb
-, enableX11 ? (!stdenv.isDarwin), libX11, libXt, libXau # GUI support
+{
+  lib,
+  stdenv,
+  fetchurl,
+  gpm,
+  openssl,
+  pkg-config,
+  libev, # Misc.
+  libpng,
+  libjpeg,
+  libtiff,
+  librsvg,
+  libavif, # graphic formats
+  bzip2,
+  zlib,
+  xz, # Transfer encodings
+  enableFB ? (!stdenv.isDarwin),
+  enableDirectFB ? false,
+  directfb,
+  enableX11 ? (!stdenv.isDarwin),
+  libX11,
+  libXt,
+  libXau, # GUI support
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -16,23 +32,41 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-IqqWwLOOGm+PftnXpBZ6R/w3JGCXdZ72BZ7Pj56teZg=";
   };
 
-  buildInputs = with lib;
-    [ libev librsvg libpng libjpeg libtiff libavif openssl xz bzip2 zlib ]
+  buildInputs =
+    with lib;
+    [
+      libev
+      librsvg
+      libpng
+      libjpeg
+      libtiff
+      libavif
+      openssl
+      xz
+      bzip2
+      zlib
+    ]
     ++ optionals stdenv.isLinux [ gpm ]
-    ++ optionals enableX11 [ libX11 libXau libXt ]
+    ++ optionals enableX11 [
+      libX11
+      libXau
+      libXt
+    ]
     ++ optionals enableDirectFB [ directfb ];
 
-  nativeBuildInputs = [ pkg-config bzip2 ];
+  nativeBuildInputs = [
+    pkg-config
+    bzip2
+  ];
 
-  configureFlags = [ "--with-ssl" ]
+  configureFlags =
+    [ "--with-ssl" ]
     ++ lib.optional (enableX11 || enableFB || enableDirectFB) "--enable-graphics"
     ++ lib.optional enableX11 "--with-x"
     ++ lib.optional enableFB "--with-fb"
     ++ lib.optional enableDirectFB "--with-directfb";
 
-  env = lib.optionalAttrs stdenv.cc.isClang {
-    NIX_CFLAGS_COMPILE = "-Wno-error=implicit-int";
-  };
+  env = lib.optionalAttrs stdenv.cc.isClang { NIX_CFLAGS_COMPILE = "-Wno-error=implicit-int"; };
 
   meta = with lib; {
     homepage = "http://links.twibright.com/";

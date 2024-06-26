@@ -59,7 +59,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       cc-by-nc-nd-30
     ];
     mainProgram = "katawa-shoujo-re-engineered";
-    maintainers = with lib.maintainers; [ quantenzitrone rapiteanu ];
+    maintainers = with lib.maintainers; [
+      quantenzitrone
+      rapiteanu
+    ];
     platforms = renpy.meta.platforms;
   };
 })

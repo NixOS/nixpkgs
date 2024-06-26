@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, buildExamples ? false
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  buildExamples ? false,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -18,9 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ cmake ];
 
-  cmakeFlags = [
-    (lib.cmakeBool "BUILD_EXAMPLES" buildExamples)
-  ];
+  cmakeFlags = [ (lib.cmakeBool "BUILD_EXAMPLES" buildExamples) ];
 
   doCheck = true;
   checkTarget = "test";

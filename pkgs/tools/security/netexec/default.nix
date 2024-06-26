@@ -1,7 +1,8 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, python3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  python3,
 }:
 let
   python = python3.override {
@@ -83,9 +84,7 @@ python.pkgs.buildPythonApplication rec {
     xmltodict
   ];
 
-  nativeCheckInputs = with python.pkgs; [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = with python.pkgs; [ pytestCheckHook ];
 
   preCheck = ''
     export HOME=$(mktemp -d)

@@ -21,12 +21,19 @@ with lib;
   };
 
   config = mkIf config.security.lockKernelModules {
-    boot.kernelModules = concatMap (x:
+    boot.kernelModules = concatMap (
+      x:
       optionals (x.device != null) (
-        if x.fsType == "vfat"
-        then [ "vfat" "nls-cp437" "nls-iso8859-1" ]
-        else [ x.fsType ])
-      ) config.system.build.fileSystems;
+        if x.fsType == "vfat" then
+          [
+            "vfat"
+            "nls-cp437"
+            "nls-iso8859-1"
+          ]
+        else
+          [ x.fsType ]
+      )
+    ) config.system.build.fileSystems;
 
     systemd.services.disable-kernel-module-loading = {
       description = "Disable kernel module loading";
@@ -34,19 +41,19 @@ with lib;
       wants = [ "systemd-udevd.service" ];
       wantedBy = [ config.systemd.defaultUnit ];
 
-      after =
-        [ "firewall.service"
-          "systemd-modules-load.service"
-           config.systemd.defaultUnit
-        ];
+      after = [
+        "firewall.service"
+        "systemd-modules-load.service"
+        config.systemd.defaultUnit
+      ];
 
       unitConfig.ConditionPathIsReadWrite = "/proc/sys/kernel";
 
-      serviceConfig =
-        { Type = "oneshot";
-          RemainAfterExit = true;
-          TimeoutSec = 180;
-        };
+      serviceConfig = {
+        Type = "oneshot";
+        RemainAfterExit = true;
+        TimeoutSec = 180;
+      };
 
       script = ''
         ${config.systemd.package}/bin/udevadm settle

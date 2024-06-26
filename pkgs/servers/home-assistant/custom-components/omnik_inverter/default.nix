@@ -1,7 +1,8 @@
-{ lib
-, fetchFromGitHub
-, buildHomeAssistantComponent
-, omnikinverter
+{
+  lib,
+  fetchFromGitHub,
+  buildHomeAssistantComponent,
+  omnikinverter,
 }:
 
 buildHomeAssistantComponent rec {
@@ -16,9 +17,7 @@ buildHomeAssistantComponent rec {
     hash = "sha256-O1NxT7u27xLydPqEqH72laU0tlYVrMPo0TwWIVNJ+0Q=";
   };
 
-  propagatedBuildInputs = [
-    omnikinverter
-  ];
+  propagatedBuildInputs = [ omnikinverter ];
 
   doCheck = false; # no tests
 

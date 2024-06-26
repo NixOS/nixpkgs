@@ -1,6 +1,7 @@
-{ lib
-, python3
-, fetchFromGitHub
+{
+  lib,
+  python3,
+  fetchFromGitHub,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -15,9 +16,7 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-7mRzWxMhDNUc+eY9uEszt/qQUUJhlgJqadCL+Z7QzWo=";
   };
 
-  nativeBuildInputs = [
-    python3.pkgs.poetry-core
-  ];
+  nativeBuildInputs = [ python3.pkgs.poetry-core ];
 
   propagatedBuildInputs = with python3.pkgs; [
     pastel
@@ -25,9 +24,7 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   passthru.optional-dependencies = with python3.pkgs; {
-    poetry_plugin = [
-      poetry
-    ];
+    poetry_plugin = [ poetry ];
   };
 
   pythonImportsCheck = [ "poethepoet" ];

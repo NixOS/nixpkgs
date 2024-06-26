@@ -1,8 +1,9 @@
-{ dbus
-, fetchFromGitHub
-, lib
-, pkg-config
-, rustPlatform
+{
+  dbus,
+  fetchFromGitHub,
+  lib,
+  pkg-config,
+  rustPlatform,
 }:
 let
   version = "0.1.1";

@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, makeWrapper, wget, jq, curl }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  makeWrapper,
+  wget,
+  jq,
+  curl,
+}:
 
 let
   version = "1.0";
@@ -14,16 +22,20 @@ stdenv.mkDerivation {
     sha256 = "uz+lkRRUTRr8WR295esNEbgjlZ/Em7mBk6Nx0BWLfg4=";
   };
 
-  nativeBuildInputs = [
-    makeWrapper
-  ];
+  nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
     runHook preInstall
     mkdir -p $out/bin
     cp $src/bin/codimd $out/bin
     wrapProgram $out/bin/codimd \
-      --prefix PATH : ${lib.makeBinPath [ jq wget curl ]}
+      --prefix PATH : ${
+        lib.makeBinPath [
+          jq
+          wget
+          curl
+        ]
+      }
     ln -s $out/bin/codimd $out/bin/hedgedoc-cli
     runHook postInstall
   '';

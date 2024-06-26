@@ -1,4 +1,12 @@
-{ lib, stdenv, udev, ncurses, pkg-config, fetchurl, bluez }:
+{
+  lib,
+  stdenv,
+  udev,
+  ncurses,
+  pkg-config,
+  fetchurl,
+  bluez,
+}:
 
 stdenv.mkDerivation rec {
   pname = "xwiimote";
@@ -10,7 +18,11 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ udev ncurses bluez ];
+  buildInputs = [
+    udev
+    ncurses
+    bluez
+  ];
 
   configureFlags = [ "--with-doxygen=no" ];
 

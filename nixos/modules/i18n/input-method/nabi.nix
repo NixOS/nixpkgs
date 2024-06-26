@@ -1,4 +1,9 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 with lib;
 {
@@ -7,8 +12,8 @@ with lib;
 
     environment.variables = {
       GTK_IM_MODULE = "nabi";
-      QT_IM_MODULE  = "nabi";
-      XMODIFIERS    = "@im=nabi";
+      QT_IM_MODULE = "nabi";
+      XMODIFIERS = "@im=nabi";
     };
 
     services.xserver.displayManager.sessionCommands = "${pkgs.nabi}/bin/nabi &";

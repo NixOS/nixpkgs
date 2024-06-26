@@ -1,9 +1,10 @@
-{ lib
-, python3Packages
-, fetchFromGitHub
-, python3
-, nix-update-script
-, dasel
+{
+  lib,
+  python3Packages,
+  fetchFromGitHub,
+  python3,
+  nix-update-script,
+  dasel,
 }:
 
 python3Packages.buildPythonApplication {
@@ -35,9 +36,7 @@ python3Packages.buildPythonApplication {
     ${dasel}/bin/dasel put -t string -f pyproject.toml -v '.well-known/*' '.tool.poetry.include.[]'
   '';
 
-  nativeBuildInputs = with python3Packages; [
-    poetry-core
-  ];
+  nativeBuildInputs = with python3Packages; [ poetry-core ];
 
   propagatedBuildInputs = with python3.pkgs; [
     fastapi

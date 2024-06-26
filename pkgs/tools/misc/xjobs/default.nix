@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchurl
-, flex, installShellFiles, ncurses, which
+{
+  lib,
+  stdenv,
+  fetchurl,
+  flex,
+  installShellFiles,
+  ncurses,
+  which,
 }:
 
 stdenv.mkDerivation rec {
@@ -16,9 +22,7 @@ stdenv.mkDerivation rec {
     installShellFiles
     which
   ];
-  buildInputs = [
-    ncurses
-  ];
+  buildInputs = [ ncurses ];
 
   checkPhase = ''
     runHook preCheck

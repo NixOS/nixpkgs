@@ -1,10 +1,15 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
 let
   cfg = config.services.litestream;
-  settingsFormat = pkgs.formats.yaml {};
+  settingsFormat = pkgs.formats.yaml { };
 in
 {
   options.services.litestream = {
@@ -21,11 +26,7 @@ in
         dbs = [
           {
             path = "/var/lib/db1";
-            replicas = [
-              {
-                url = "s3://mybkt.litestream.io/db1";
-              }
-            ];
+            replicas = [ { url = "s3://mybkt.litestream.io/db1"; } ];
           }
         ];
       };
@@ -87,7 +88,7 @@ in
       group = "litestream";
       isSystemUser = true;
     };
-    users.groups.litestream = {};
+    users.groups.litestream = { };
   };
 
   meta.doc = ./default.md;

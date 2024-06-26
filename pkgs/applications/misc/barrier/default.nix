@@ -1,7 +1,16 @@
-{ lib, fetchFromGitHub, cmake, curl, xorg, avahi, qtbase, mkDerivation,
-  openssl, wrapGAppsHook3,
+{
+  lib,
+  fetchFromGitHub,
+  cmake,
+  curl,
+  xorg,
+  avahi,
+  qtbase,
+  mkDerivation,
+  openssl,
+  wrapGAppsHook3,
   avahiWithLibdnssdCompat ? avahi.override { withLibdnssdCompat = true; },
-  fetchpatch
+  fetchpatch,
 }:
 
 mkDerivation rec {
@@ -31,16 +40,24 @@ mkDerivation rec {
     "-include cstdint"
   ];
 
-  buildInputs = [ curl xorg.libX11 xorg.libXext xorg.libXtst avahiWithLibdnssdCompat qtbase ];
-  nativeBuildInputs = [ cmake wrapGAppsHook3 ];
+  buildInputs = [
+    curl
+    xorg.libX11
+    xorg.libXext
+    xorg.libXtst
+    avahiWithLibdnssdCompat
+    qtbase
+  ];
+  nativeBuildInputs = [
+    cmake
+    wrapGAppsHook3
+  ];
 
   postFixup = ''
     substituteInPlace "$out/share/applications/barrier.desktop" --replace "Exec=barrier" "Exec=$out/bin/barrier"
   '';
 
-  qtWrapperArgs = [
-    ''--prefix PATH : ${lib.makeBinPath [ openssl ]}''
-  ];
+  qtWrapperArgs = [ ''--prefix PATH : ${lib.makeBinPath [ openssl ]}'' ];
 
   meta = {
     description = "Open-source KVM software";

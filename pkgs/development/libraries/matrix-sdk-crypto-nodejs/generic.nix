@@ -1,7 +1,21 @@
-{ version, hash, outputHashes, cargoLock, patches }:
+{
+  version,
+  hash,
+  outputHashes,
+  cargoLock,
+  patches,
+}:
 
-{ lib, stdenv, fetchFromGitHub
-, cargo, rustPlatform, rustc, napi-rs-cli, nodejs, libiconv
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cargo,
+  rustPlatform,
+  rustc,
+  napi-rs-cli,
+  nodejs,
+  libiconv,
 }:
 
 stdenv.mkDerivation rec {
@@ -14,7 +28,6 @@ stdenv.mkDerivation rec {
     rev = "${pname}-v${version}";
     inherit hash;
   };
-
 
   cargoDeps = rustPlatform.importCargoLock {
     lockFile = cargoLock;

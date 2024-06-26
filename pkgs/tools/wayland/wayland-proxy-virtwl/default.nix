@@ -1,9 +1,10 @@
-{ lib
-, fetchFromGitHub
-, ocamlPackages
-, pkg-config
-, libdrm
-, unstableGitUpdater
+{
+  lib,
+  fetchFromGitHub,
+  ocamlPackages,
+  pkg-config,
+  libdrm,
+  unstableGitUpdater,
 }:
 
 ocamlPackages.buildDunePackage rec {
@@ -19,19 +20,19 @@ ocamlPackages.buildDunePackage rec {
 
   minimalOCamlVersion = "5.0";
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ libdrm ] ++ (with ocamlPackages; [
-    dune-configurator
-    eio_main
-    ppx_cstruct
-    wayland
-    cmdliner
-    logs
-    ppx_cstruct
-  ]);
+  buildInputs =
+    [ libdrm ]
+    ++ (with ocamlPackages; [
+      dune-configurator
+      eio_main
+      ppx_cstruct
+      wayland
+      cmdliner
+      logs
+      ppx_cstruct
+    ]);
 
   doCheck = true;
 
@@ -42,7 +43,10 @@ ocamlPackages.buildDunePackage rec {
     description = "Proxy Wayland connections across a VM boundary";
     license = licenses.asl20;
     mainProgram = "wayland-proxy-virtwl";
-    maintainers = [ maintainers.qyliss maintainers.sternenseemann ];
+    maintainers = [
+      maintainers.qyliss
+      maintainers.sternenseemann
+    ];
     platforms = platforms.linux;
   };
 }

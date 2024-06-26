@@ -1,4 +1,13 @@
-{ lib, stdenv, fetchurl, dysnomia, disnix, socat, pkg-config, getopt }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  dysnomia,
+  disnix,
+  socat,
+  pkg-config,
+  getopt,
+}:
 
 stdenv.mkDerivation rec {
   pname = "disnixos";
@@ -10,7 +19,12 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ socat dysnomia disnix getopt ];
+  buildInputs = [
+    socat
+    dysnomia
+    disnix
+    getopt
+  ];
 
   meta = {
     description = "Provides complementary NixOS infrastructure deployment to Disnix";

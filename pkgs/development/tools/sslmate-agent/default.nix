@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchurl, dpkg, autoPatchelfHook }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  dpkg,
+  autoPatchelfHook,
+}:
 
 stdenv.mkDerivation rec {
   pname = "sslmate-agent";

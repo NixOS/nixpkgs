@@ -1,22 +1,23 @@
-{ lib
-, fetchurl
-, pkg-config
-, gettext
-, itstool
-, python3
-, wrapGAppsHook3
-, gst_all_1
-, gtk3
-, gobject-introspection
-, libpeas
-, librsvg
-, gnome
-, libnotify
-, gsound
-, meson
-, ninja
-, gsettings-desktop-schemas
-, hicolor-icon-theme
+{
+  lib,
+  fetchurl,
+  pkg-config,
+  gettext,
+  itstool,
+  python3,
+  wrapGAppsHook3,
+  gst_all_1,
+  gtk3,
+  gobject-introspection,
+  libpeas,
+  librsvg,
+  gnome,
+  libnotify,
+  gsound,
+  meson,
+  ninja,
+  gsettings-desktop-schemas,
+  hicolor-icon-theme,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -48,23 +49,25 @@ python3.pkgs.buildPythonApplication rec {
     gobject-introspection
   ];
 
-  buildInputs = [
-    gtk3
-    libpeas
-    librsvg
-    gsound
-    gsettings-desktop-schemas
-    libnotify
-  ] ++ (with gst_all_1; [
-    gstreamer
-    gst-editing-services
-    gst-plugins-base
-    (gst-plugins-good.override { gtkSupport = true; })
-    gst-plugins-bad
-    gst-plugins-ugly
-    gst-libav
-    gst-devtools
-  ]);
+  buildInputs =
+    [
+      gtk3
+      libpeas
+      librsvg
+      gsound
+      gsettings-desktop-schemas
+      libnotify
+    ]
+    ++ (with gst_all_1; [
+      gstreamer
+      gst-editing-services
+      gst-plugins-base
+      (gst-plugins-good.override { gtkSupport = true; })
+      gst-plugins-bad
+      gst-plugins-ugly
+      gst-libav
+      gst-devtools
+    ]);
 
   pythonPath = with python3.pkgs; [
     pygobject3

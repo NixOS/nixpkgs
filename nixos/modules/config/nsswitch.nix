@@ -1,6 +1,11 @@
 # Configuration for the Name Service Switch (/etc/nsswitch.conf).
 
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -18,11 +23,10 @@ with lib;
         several DNS resolution methods to be specified via
         {file}`/etc/nsswitch.conf`.
       '';
-      apply = list:
-        {
-          inherit list;
-          path = makeLibraryPath list;
-        };
+      apply = list: {
+        inherit list;
+        path = makeLibraryPath list;
+      };
     };
 
     system.nssDatabases = {
@@ -101,7 +105,17 @@ with lib;
   };
 
   imports = [
-    (mkRenamedOptionModule [ "system" "nssHosts" ] [ "system" "nssDatabases" "hosts" ])
+    (mkRenamedOptionModule
+      [
+        "system"
+        "nssHosts"
+      ]
+      [
+        "system"
+        "nssDatabases"
+        "hosts"
+      ]
+    )
   ];
 
   config = {

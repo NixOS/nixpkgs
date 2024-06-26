@@ -1,6 +1,4 @@
-{ lib
-, mkPulumiPackage
-}:
+{ lib, mkPulumiPackage }:
 mkPulumiPackage rec {
   owner = "pulumi";
   repo = "pulumi-command";
@@ -10,9 +8,7 @@ mkPulumiPackage rec {
   vendorHash = "sha256-MBWDEVA29uzHD3B/iPe68ntGjMM1SCTDq/TL+NgMc6c=";
   cmdGen = "pulumi-gen-command";
   cmdRes = "pulumi-resource-command";
-  extraLdflags = [
-    "-X github.com/pulumi/${repo}/provider/pkg/version.Version=v${version}"
-  ];
+  extraLdflags = [ "-X github.com/pulumi/${repo}/provider/pkg/version.Version=v${version}" ];
 
   postConfigure = ''
     pushd ..
@@ -29,6 +25,9 @@ mkPulumiPackage rec {
     mainProgram = "pulumi-resource-command";
     homepage = "https://github.com/pulumi/pulumi-command";
     license = licenses.asl20;
-    maintainers = with maintainers; [ veehaitch trundle ];
+    maintainers = with maintainers; [
+      veehaitch
+      trundle
+    ];
   };
 }

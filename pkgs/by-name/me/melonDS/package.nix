@@ -1,25 +1,23 @@
-{ lib
-, SDL2
-, cmake
-, extra-cmake-modules
-, fetchFromGitHub
-, libGL
-, libarchive
-, libpcap
-, libsForQt5
-, libslirp
-, pkg-config
-, stdenv
-, unstableGitUpdater
-, wayland
-, zstd
+{
+  lib,
+  SDL2,
+  cmake,
+  extra-cmake-modules,
+  fetchFromGitHub,
+  libGL,
+  libarchive,
+  libpcap,
+  libsForQt5,
+  libslirp,
+  pkg-config,
+  stdenv,
+  unstableGitUpdater,
+  wayland,
+  zstd,
 }:
 
 let
-  inherit (libsForQt5)
-    qtbase
-    qtmultimedia
-    wrapQtAppsHook;
+  inherit (libsForQt5) qtbase qtmultimedia wrapQtAppsHook;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "melonDS";
@@ -52,9 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  qtWrapperArgs = [
-    "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libpcap ]}"
-  ];
+  qtWrapperArgs = [ "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libpcap ]}" ];
 
   passthru = {
     updateScript = unstableGitUpdater { };

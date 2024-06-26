@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, qmake
-, vulkan-loader
-, wayland
-, wrapQtAppsHook
-, x11Support ? true
-, qtx11extras
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  qmake,
+  vulkan-loader,
+  wayland,
+  wrapQtAppsHook,
+  x11Support ? true,
+  qtx11extras,
 }:
 
 stdenv.mkDerivation rec {
@@ -39,9 +40,7 @@ stdenv.mkDerivation rec {
       --replace '/usr/' "/"
   '';
 
-  qmakeFlags = [
-    "CONFIG+=release"
-  ];
+  qmakeFlags = [ "CONFIG+=release" ];
 
   installFlags = [ "INSTALL_ROOT=$(out)" ];
 

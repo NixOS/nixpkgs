@@ -1,7 +1,16 @@
-{ lib, python3, fetchFromGitHub }:
+{
+  lib,
+  python3,
+  fetchFromGitHub,
+}:
 
 let
-  inherit (python3.pkgs) buildPythonApplication pytest mock pexpect;
+  inherit (python3.pkgs)
+    buildPythonApplication
+    pytest
+    mock
+    pexpect
+    ;
   repo = "lesspass";
 in
 buildPythonApplication rec {
@@ -24,7 +33,11 @@ buildPythonApplication rec {
     done
   '';
 
-  nativeCheckInputs = [ pytest mock pexpect ];
+  nativeCheckInputs = [
+    pytest
+    mock
+    pexpect
+  ];
   checkPhase = ''
     mv lesspass lesspass.hidden  # ensure we're testing against *installed* package
     pytest tests

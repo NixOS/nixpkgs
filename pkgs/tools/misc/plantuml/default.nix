@@ -1,9 +1,10 @@
-{ lib
-, stdenvNoCC
-, fetchurl
-, makeBinaryWrapper
-, jre
-, graphviz
+{
+  lib,
+  stdenvNoCC,
+  fetchurl,
+  makeBinaryWrapper,
+  jre,
+  graphviz,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -15,9 +16,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     hash = "sha256-YayIedHIIpecVF7BZSvBTp66Eb7He+l+1RCir5KuL28=";
   };
 
-  nativeBuildInputs = [
-    makeBinaryWrapper
-  ];
+  nativeBuildInputs = [ makeBinaryWrapper ];
 
   buildCommand = ''
     install -Dm644 $src $out/lib/plantuml.jar
@@ -41,7 +40,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     # "plantuml -license" says GPLv3 or later
     license = lib.licenses.gpl3Plus;
     mainProgram = "plantuml";
-    maintainers = with lib.maintainers; [ bjornfor Mogria ];
+    maintainers = with lib.maintainers; [
+      bjornfor
+      Mogria
+    ];
     platforms = lib.platforms.unix;
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
   };

@@ -35,9 +35,7 @@ buildPythonPackage rec {
     hash = "sha256-P/TRczWi/prv5D0/I6yLChIDfc6QdGcRSaF4Dd1Iowk=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     absl-py

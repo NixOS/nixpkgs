@@ -1,26 +1,28 @@
-{ lib, stdenv
-, fetchurl
-, meson
-, ninja
-, pkg-config
-, gettext
-, itstool
-, python3
-, wrapGAppsHook4
-, cairo
-, gdk-pixbuf
-, colord
-, glib
-, libadwaita
-, gtk4
-, gusb
-, packagekit
-, libwebp
-, libxml2
-, sane-backends
-, vala
-, gnome
-, gobject-introspection
+{
+  lib,
+  stdenv,
+  fetchurl,
+  meson,
+  ninja,
+  pkg-config,
+  gettext,
+  itstool,
+  python3,
+  wrapGAppsHook4,
+  cairo,
+  gdk-pixbuf,
+  colord,
+  glib,
+  libadwaita,
+  gtk4,
+  gusb,
+  packagekit,
+  libwebp,
+  libxml2,
+  sane-backends,
+  vala,
+  gnome,
+  gobject-introspection,
 }:
 
 stdenv.mkDerivation rec {
@@ -65,9 +67,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   passthru = {
-    updateScript = gnome.updateScript {
-      packageName = "simple-scan";
-    };
+    updateScript = gnome.updateScript { packageName = "simple-scan"; };
   };
 
   meta = with lib; {

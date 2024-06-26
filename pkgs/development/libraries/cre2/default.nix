@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook,
-  libtool, pkg-config, re2, texinfo }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  libtool,
+  pkg-config,
+  re2,
+  texinfo,
+}:
 
 stdenv.mkDerivation rec {
   pname = "cre2";
@@ -17,13 +25,14 @@ stdenv.mkDerivation rec {
     libtool
     pkg-config
   ];
-  buildInputs = [ re2 texinfo ];
-
-  NIX_LDFLAGS="-lre2 -lpthread";
-
-  configureFlags = [
-    "--enable-maintainer-mode"
+  buildInputs = [
+    re2
+    texinfo
   ];
+
+  NIX_LDFLAGS = "-lre2 -lpthread";
+
+  configureFlags = [ "--enable-maintainer-mode" ];
 
   meta = with lib; {
     homepage = "http://marcomaggi.github.io/docs/cre2.html";

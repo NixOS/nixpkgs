@@ -49,9 +49,7 @@ buildPythonPackage rec {
     matplotlib
     seaborn
   ];
-  pytestFlagsArray = [
-    "hyppo"
-  ];
+  pytestFlagsArray = [ "hyppo" ];
 
   meta = with lib; {
     homepage = "https://github.com/neurodata/hyppo";

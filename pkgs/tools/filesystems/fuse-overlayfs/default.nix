@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, fuse3, nixosTests }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  fuse3,
+  nixosTests,
+}:
 
 stdenv.mkDerivation rec {
   pname = "fuse-overlayfs";
@@ -11,14 +19,19 @@ stdenv.mkDerivation rec {
     hash = "sha256-ngpC1KtUsIJOfpJ9dSqZn9XhKkJSpp2/6RBz/RlZ+A0=";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ];
 
   buildInputs = [ fuse3 ];
 
   enableParallelBuilding = true;
   strictDeps = true;
 
-  passthru.tests = { inherit (nixosTests) podman; };
+  passthru.tests = {
+    inherit (nixosTests) podman;
+  };
 
   meta = with lib; {
     description = "FUSE implementation for overlayfs";

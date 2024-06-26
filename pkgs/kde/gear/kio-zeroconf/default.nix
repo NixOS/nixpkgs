@@ -1,4 +1,1 @@
-{mkKdeDerivation}:
-mkKdeDerivation {
-  pname = "kio-zeroconf";
-}
+{ mkKdeDerivation }: mkKdeDerivation { pname = "kio-zeroconf"; }

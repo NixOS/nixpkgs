@@ -1,50 +1,56 @@
-{ stdenv
-, lib
-, fetchurl
-, glib
-, meson
-, ninja
-, pkg-config
-, gnome
-, libsysprof-capture
-, sqlite
-, buildPackages
-, gobject-introspection
-, withIntrospection ? lib.meta.availableOn stdenv.hostPlatform gobject-introspection && stdenv.hostPlatform.emulatorAvailable buildPackages
-, vala
-, libpsl
-, python3
-, gi-docgen
-, brotli
-, libnghttp2
+{
+  stdenv,
+  lib,
+  fetchurl,
+  glib,
+  meson,
+  ninja,
+  pkg-config,
+  gnome,
+  libsysprof-capture,
+  sqlite,
+  buildPackages,
+  gobject-introspection,
+  withIntrospection ?
+    lib.meta.availableOn stdenv.hostPlatform gobject-introspection
+    && stdenv.hostPlatform.emulatorAvailable buildPackages,
+  vala,
+  libpsl,
+  python3,
+  gi-docgen,
+  brotli,
+  libnghttp2,
 }:
 
 stdenv.mkDerivation rec {
   pname = "libsoup";
   version = "3.4.4";
 
-  outputs = [ "out" "dev" ] ++ lib.optional withIntrospection "devdoc";
+  outputs = [
+    "out"
+    "dev"
+  ] ++ lib.optional withIntrospection "devdoc";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "sha256-KRxncl827ZDqQ+//JQZLacWi0ZgUiEd8BcSBo7Swxao=";
   };
 
-  depsBuildBuild = [
-    pkg-config
-  ];
+  depsBuildBuild = [ pkg-config ];
 
-  nativeBuildInputs = [
-    meson
-    ninja
-    pkg-config
-    glib
-    python3
-  ] ++ lib.optionals withIntrospection [
-    gi-docgen
-    gobject-introspection
-    vala
-  ];
+  nativeBuildInputs =
+    [
+      meson
+      ninja
+      pkg-config
+      glib
+      python3
+    ]
+    ++ lib.optionals withIntrospection [
+      gi-docgen
+      gobject-introspection
+      vala
+    ];
 
   buildInputs = [
     sqlite
@@ -52,13 +58,9 @@ stdenv.mkDerivation rec {
     glib.out
     brotli
     libnghttp2
-  ] ++ lib.optionals stdenv.isLinux [
-    libsysprof-capture
-  ];
+  ] ++ lib.optionals stdenv.isLinux [ libsysprof-capture ];
 
-  propagatedBuildInputs = [
-    glib
-  ];
+  propagatedBuildInputs = [ glib ];
 
   mesonFlags = [
     "-Dtls_check=false" # glib-networking is a runtime dependency, not a compile-time dependency

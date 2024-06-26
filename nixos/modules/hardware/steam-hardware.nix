@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -18,9 +23,7 @@ in
   };
 
   config = mkIf cfg.enable {
-    services.udev.packages = [
-      pkgs.steamPackages.steam
-    ];
+    services.udev.packages = [ pkgs.steamPackages.steam ];
 
     # The uinput module needs to be loaded in order to trigger the udev rules
     # defined in the steam package for setting permissions on /dev/uinput.

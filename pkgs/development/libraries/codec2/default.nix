@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, freedvSupport ? false
-, lpcnetfreedv
-, codec2
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  freedvSupport ? false,
+  lpcnetfreedv,
+  codec2,
 }:
 
 stdenv.mkDerivation rec {
@@ -20,9 +21,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = lib.optionals freedvSupport [
-    lpcnetfreedv
-  ];
+  buildInputs = lib.optionals freedvSupport [ lpcnetfreedv ];
 
   postInstall = ''
     install -Dm0755 src/{c2enc,c2sim,freedv_rx,freedv_tx,cohpsk_*,fdmdv_*,fsk_*,ldpc_*,ofdm_*} -t $out/bin/
@@ -36,9 +35,7 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     # RPATH of binary /nix/store/.../bin/freedv_rx contains a forbidden reference to /build/
     "-DCMAKE_SKIP_BUILD_RPATH=ON"
-  ] ++ lib.optionals freedvSupport [
-    "-DLPCNET=ON"
-  ];
+  ] ++ lib.optionals freedvSupport [ "-DLPCNET=ON" ];
 
   meta = with lib; {
     description = "Speech codec designed for communications quality speech at low data rates";

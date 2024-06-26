@@ -1,18 +1,19 @@
-{ lib
-, SDL2
-, alsa-lib
-, boost
-, cmake
-, curl
-, fetchFromGitHub
-, freeimage
-, freetype
-, libGL
-, libGLU
-, libvlc
-, pkg-config
-, rapidjson
-, stdenv
+{
+  lib,
+  SDL2,
+  alsa-lib,
+  boost,
+  cmake,
+  curl,
+  fetchFromGitHub,
+  freeimage,
+  freetype,
+  libGL,
+  libGLU,
+  libvlc,
+  pkg-config,
+  rapidjson,
+  stdenv,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -48,9 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  cmakeFlags = [
-    (lib.cmakeBool "GL" true)
-  ];
+  cmakeFlags = [ (lib.cmakeBool "GL" true) ];
 
   installPhase = ''
     runHook preInstall
@@ -75,7 +74,10 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Flexible emulator front-end supporting keyboardless navigation and custom system themes (forked by RetroPie)";
     license = with lib.licenses; [ mit ];
     mainProgram = "emulationstation";
-    maintainers = with lib.maintainers; [ AndersonTorres edwtjo ];
+    maintainers = with lib.maintainers; [
+      AndersonTorres
+      edwtjo
+    ];
     platforms = lib.platforms.linux;
   };
 })

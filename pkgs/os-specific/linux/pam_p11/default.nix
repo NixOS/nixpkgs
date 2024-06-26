@@ -1,4 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, libp11, pam, libintl, fetchpatch }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  libp11,
+  pam,
+  libintl,
+  fetchpatch,
+}:
 
 stdenv.mkDerivation rec {
   pname = "pam_p11";
@@ -22,9 +32,15 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
-  buildInputs = [ pam libp11.passthru.openssl libp11 ]
-    ++ lib.optionals stdenv.isDarwin [ libintl ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ];
+  buildInputs = [
+    pam
+    libp11.passthru.openssl
+    libp11
+  ] ++ lib.optionals stdenv.isDarwin [ libintl ];
 
   meta = with lib; {
     homepage = "https://github.com/OpenSC/pam_p11";

@@ -1,8 +1,9 @@
-{ lib
-, stdenvNoCC
-, fetchFromGitHub
-, gnome-themes-extra
-, gtk-engine-murrine
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  gnome-themes-extra,
+  gtk-engine-murrine,
 }:
 
 stdenvNoCC.mkDerivation {
@@ -16,13 +17,9 @@ stdenvNoCC.mkDerivation {
     hash = "sha256-GrlKYCqO9vgRbPdPhugPBg2rYtDxzbQwRPtTBIyIyx4=";
   };
 
-  propagatedUserEnvPkgs = [
-    gtk-engine-murrine
-  ];
+  propagatedUserEnvPkgs = [ gtk-engine-murrine ];
 
-  buildInputs = [
-    gnome-themes-extra
-  ];
+  buildInputs = [ gnome-themes-extra ];
 
   dontBuild = true;
 

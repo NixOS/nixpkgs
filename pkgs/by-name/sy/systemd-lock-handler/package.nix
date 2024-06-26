@@ -1,8 +1,9 @@
-{ lib
-, fetchFromSourcehut
-, buildGoModule
-, nix-update-script
-, nixosTests
+{
+  lib,
+  fetchFromSourcehut,
+  buildGoModule,
+  nix-update-script,
+  nixosTests,
 }:
 
 buildGoModule rec {

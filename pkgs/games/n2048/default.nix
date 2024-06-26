@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchurl, ncurses }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  ncurses,
+}:
 
 stdenv.mkDerivation rec {
   pname = "n2048";
@@ -7,12 +12,8 @@ stdenv.mkDerivation rec {
     url = "http://www.dettus.net/n2048/n2048_v${version}.tar.gz";
     sha256 = "184z2rr0rnj4p740qb4mzqr6kgd76ynb5gw9bj8hrfshcxdcg1kk";
   };
-  buildInputs = [
-    ncurses
-  ];
-  makeFlags = [
-    "DESTDIR=$(out)"
-  ];
+  buildInputs = [ ncurses ];
+  makeFlags = [ "DESTDIR=$(out)" ];
   preInstall = ''
     mkdir -p "$out"/{share/man,bin}
   '';

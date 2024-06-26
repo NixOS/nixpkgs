@@ -1,20 +1,21 @@
-{ cmake
-, fetchFromGitHub
-, ffmpeg
-, graphicsmagick
-, lib
-, libdeflate
-, libexif
-, libjpeg
-, libsixel
-, openslide
-, poppler
-, librsvg
-, cairo
-, pkg-config
-, stb
-, qoi
-, stdenv
+{
+  cmake,
+  fetchFromGitHub,
+  ffmpeg,
+  graphicsmagick,
+  lib,
+  libdeflate,
+  libexif,
+  libjpeg,
+  libsixel,
+  openslide,
+  poppler,
+  librsvg,
+  cairo,
+  pkg-config,
+  stb,
+  qoi,
+  stdenv,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -43,7 +44,10 @@ stdenv.mkDerivation (finalAttrs: {
     stb
   ];
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
 
   cmakeFlags = [
     "-DTIMG_VERSION_FROM_GIT=Off"

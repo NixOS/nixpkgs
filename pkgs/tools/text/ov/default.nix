@@ -1,11 +1,12 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, installShellFiles
-, pandoc
-, makeWrapper
-, testers
-, ov
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  pandoc,
+  makeWrapper,
+  testers,
+  ov,
 }:
 
 buildGoModule rec {
@@ -36,7 +37,10 @@ buildGoModule rec {
     makeWrapper
   ];
 
-  outputs = [ "out" "doc" ];
+  outputs = [
+    "out"
+    "doc"
+  ];
 
   postInstall = ''
     installShellCompletion --cmd ov \
@@ -66,6 +70,9 @@ buildGoModule rec {
     homepage = "https://noborus.github.io/ov";
     changelog = "https://github.com/noborus/ov/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ farcaller figsoda ];
+    maintainers = with maintainers; [
+      farcaller
+      figsoda
+    ];
   };
 }

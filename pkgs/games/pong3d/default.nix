@@ -1,4 +1,9 @@
-{lib, stdenv, fetchurl, libX11}:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libX11,
+}:
 
 stdenv.mkDerivation rec {
   pname = "3dpong";

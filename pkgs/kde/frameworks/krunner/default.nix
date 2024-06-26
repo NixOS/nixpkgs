@@ -1,9 +1,6 @@
-{
-  mkKdeDerivation,
-  plasma-activities,
-}:
+{ mkKdeDerivation, plasma-activities }:
 mkKdeDerivation {
   pname = "krunner";
 
-  extraBuildInputs = [plasma-activities];
+  extraBuildInputs = [ plasma-activities ];
 }

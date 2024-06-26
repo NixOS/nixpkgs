@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchurl, autoreconfHook, pkg-config, libzen, zlib }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoreconfHook,
+  pkg-config,
+  libzen,
+  zlib,
+}:
 
 stdenv.mkDerivation rec {
   pname = "libmediainfo";
@@ -9,7 +17,10 @@ stdenv.mkDerivation rec {
     hash = "sha256-sU95EEsdDXjen7QoBfKdVP3wHD5Ckcw2OOBNCdFFuNY=";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ];
   buildInputs = [ zlib ];
   propagatedBuildInputs = [ libzen ];
 

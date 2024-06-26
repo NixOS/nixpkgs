@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchurl
-, deno
-, makeWrapper
+{
+  lib,
+  stdenv,
+  fetchurl,
+  deno,
+  makeWrapper,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "silverbullet";

@@ -1,4 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 
 buildGoModule rec {
   pname = "kubectl-evict-pod";
@@ -16,8 +20,8 @@ buildGoModule rec {
   meta = with lib; {
     description = "This plugin evicts the given pod and is useful for testing pod disruption budget rules";
     mainProgram = "kubectl-evict-pod";
-    homepage    = "https://github.com/rajatjindal/kubectl-evict-pod";
-    license     = licenses.asl20;
+    homepage = "https://github.com/rajatjindal/kubectl-evict-pod";
+    license = licenses.asl20;
     maintainers = [ maintainers.j4m3s ];
   };
 }

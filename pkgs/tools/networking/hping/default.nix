@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, libpcap, withTcl ? true, tcl }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  libpcap,
+  withTcl ? true,
+  tcl,
+}:
 
 stdenv.mkDerivation rec {
   pname = "hping";
@@ -22,20 +30,25 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libpcap ] ++ lib.optional withTcl tcl;
 
-  postPatch = ''
-    substituteInPlace Makefile.in --replace "gcc" "$CC"
-    substituteInPlace version.c --replace "RELEASE_DATE" "\"$version\""
-  '' + lib.optionalString stdenv.isLinux ''
-    sed -i -e 's|#include <net/bpf.h>|#include <pcap/bpf.h>|' \
-      libpcap_stuff.c script.c
-  '' + lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
-    substituteInPlace configure --replace 'BYTEORDER=`./byteorder -m`' BYTEORDER=${
-      {
-        littleEndian = "__LITTLE_ENDIAN_BITFIELD";
-        bigEndian = "__BIG_ENDIAN_BITFIELD";
-      }.${stdenv.hostPlatform.parsed.cpu.significantByte.name}}
-    substituteInPlace Makefile.in --replace './hping3 -v' ""
-  '';
+  postPatch =
+    ''
+      substituteInPlace Makefile.in --replace "gcc" "$CC"
+      substituteInPlace version.c --replace "RELEASE_DATE" "\"$version\""
+    ''
+    + lib.optionalString stdenv.isLinux ''
+      sed -i -e 's|#include <net/bpf.h>|#include <pcap/bpf.h>|' \
+        libpcap_stuff.c script.c
+    ''
+    + lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
+      substituteInPlace configure --replace 'BYTEORDER=`./byteorder -m`' BYTEORDER=${
+        {
+          littleEndian = "__LITTLE_ENDIAN_BITFIELD";
+          bigEndian = "__BIG_ENDIAN_BITFIELD";
+        }
+        .${stdenv.hostPlatform.parsed.cpu.significantByte.name}
+      }
+      substituteInPlace Makefile.in --replace './hping3 -v' ""
+    '';
 
   configureFlags = [ (if withTcl then "TCLSH=${tcl}/bin/tclsh" else "--no-tcl") ];
 

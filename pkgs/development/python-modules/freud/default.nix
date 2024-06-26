@@ -1,20 +1,21 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, cmake
-, cython
-, oldest-supported-numpy
-, scikit-build
-, setuptools
-, tbb
-, numpy
-, rowan
-, scipy
-, pytest
-, gsd
-, matplotlib
-, sympy
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  cmake,
+  cython,
+  oldest-supported-numpy,
+  scikit-build,
+  setuptools,
+  tbb,
+  numpy,
+  rowan,
+  scipy,
+  pytest,
+  gsd,
+  matplotlib,
+  sympy,
 }:
 
 buildPythonPackage rec {
@@ -47,9 +48,7 @@ buildPythonPackage rec {
     setuptools
   ];
   dontUseCmakeConfigure = true;
-  buildInputs = [
-    tbb
-  ];
+  buildInputs = [ tbb ];
 
   propagatedBuildInputs = [
     numpy

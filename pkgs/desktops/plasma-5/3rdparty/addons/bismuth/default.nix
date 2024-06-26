@@ -1,13 +1,14 @@
-{ lib
-, mkDerivation
-, fetchFromGitHub
-, kcoreaddons
-, kwindowsystem
-, plasma-framework
-, systemsettings
-, cmake
-, extra-cmake-modules
-, esbuild
+{
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+  kcoreaddons,
+  kwindowsystem,
+  plasma-framework,
+  systemsettings,
+  cmake,
+  extra-cmake-modules,
+  esbuild,
 }:
 
 mkDerivation rec {
@@ -21,9 +22,7 @@ mkDerivation rec {
     sha256 = "sha256-c13OFEw6E/I8j/mqeLnuc9Chi6pc3+AgwAMPpCzh974=";
   };
 
-  patches = [
-    ./0001-esbuild-config.patch
-  ];
+  patches = [ ./0001-esbuild-config.patch ];
 
   cmakeFlags = [
     "-DUSE_TSC=OFF"

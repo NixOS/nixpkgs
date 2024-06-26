@@ -1,12 +1,13 @@
-{ lib
-, fetchFromGitHub
-, stdenv
-, rustPlatform
-, openssl
-, pkg-config
-, Security
-, nix-update-script
-, installShellFiles
+{
+  lib,
+  fetchFromGitHub,
+  stdenv,
+  rustPlatform,
+  openssl,
+  pkg-config,
+  Security,
+  nix-update-script,
+  installShellFiles,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -22,7 +23,10 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-gJ5go9V8c97pQZICUD1ksLJhOyJXyVXAWssH3fhrRVQ=";
 
-  nativeBuildInputs = [ pkg-config installShellFiles ];
+  nativeBuildInputs = [
+    pkg-config
+    installShellFiles
+  ];
   buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [ Security ];
 
   postInstall = ''
@@ -42,7 +46,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/vinnymeller/twm";
     changelog = "https://github.com/vinnymeller/twm/releases/tag/${src.rev}";
     license = lib.licenses.mit;
-    maintainers =  [ lib.maintainers.vinnymeller ];
+    maintainers = [ lib.maintainers.vinnymeller ];
     mainProgram = "twm";
   };
 }

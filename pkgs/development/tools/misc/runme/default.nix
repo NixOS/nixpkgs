@@ -1,13 +1,14 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, installShellFiles
-, nodejs
-, python3
-, runtimeShell
-, stdenv
-, testers
-, runme
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  nodejs,
+  python3,
+  runtimeShell,
+  stdenv,
+  testers,
+  runme,
 }:
 
 buildGoModule rec {
@@ -23,18 +24,14 @@ buildGoModule rec {
 
   vendorHash = "sha256-QoZzEq1aC7cjY/RVp5Z5HhSuTFf2BSYQnfg0jSaeTJU=";
 
-  nativeBuildInputs = [
-    installShellFiles
-  ];
+  nativeBuildInputs = [ installShellFiles ];
 
   nativeCheckInputs = [
     nodejs
     python3
   ];
 
-  subPackages = [
-    "."
-  ];
+  subPackages = [ "." ];
 
   ldflags = [
     "-s"
@@ -60,9 +57,7 @@ buildGoModule rec {
   '';
 
   passthru.tests = {
-    version = testers.testVersion {
-      package = runme;
-    };
+    version = testers.testVersion { package = runme; };
   };
 
   meta = with lib; {

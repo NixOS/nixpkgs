@@ -1,4 +1,1 @@
-{mkKdeDerivation}:
-mkKdeDerivation {
-  pname = "calendarsupport";
-}
+{ mkKdeDerivation }: mkKdeDerivation { pname = "calendarsupport"; }

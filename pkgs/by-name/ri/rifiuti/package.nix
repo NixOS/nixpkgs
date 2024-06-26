@@ -1,7 +1,8 @@
-{ lib
-, stdenv
-, fetchzip
-, fetchurl
+{
+  lib,
+  stdenv,
+  fetchzip,
+  fetchurl,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -41,9 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail gcc cc
   '';
 
-  makeFlags = [
-    "-C src"
-  ];
+  makeFlags = [ "-C src" ];
 
   enableParallelBuilding = true;
 

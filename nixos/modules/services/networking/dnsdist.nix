@@ -1,11 +1,16 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
 let
   cfg = config.services.dnsdist;
 
-  toLua = lib.generators.toLua {};
+  toLua = lib.generators.toLua { };
 
   mkBind = cfg: toLua "${cfg.listenAddress}:${toString cfg.listenPort}";
 
@@ -77,7 +82,8 @@ let
     dnscrypt_setup()
   '';
 
-in {
+in
+{
   options = {
     services.dnsdist = {
       enable = mkEnableOption "dnsdist domain name server";
@@ -164,7 +170,7 @@ in {
       group = "dnsdist";
     };
 
-    users.groups.dnsdist = {};
+    users.groups.dnsdist = { };
 
     systemd.packages = [ pkgs.dnsdist ];
 
@@ -178,8 +184,14 @@ in {
         RuntimeDirectory = "dnsdist";
         StateDirectory = "dnsdist";
         # upstream overrides for better nixos compatibility
-        ExecStartPre = [ "" "${pkgs.dnsdist}/bin/dnsdist --check-config --config ${configFile}" ];
-        ExecStart = [ "" "${pkgs.dnsdist}/bin/dnsdist --supervised --disable-syslog --config ${configFile}" ];
+        ExecStartPre = [
+          ""
+          "${pkgs.dnsdist}/bin/dnsdist --check-config --config ${configFile}"
+        ];
+        ExecStart = [
+          ""
+          "${pkgs.dnsdist}/bin/dnsdist --supervised --disable-syslog --config ${configFile}"
+        ];
       };
     };
   };

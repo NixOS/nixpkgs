@@ -1,4 +1,9 @@
-{ fetchurl, lib, stdenv, zlib }:
+{
+  fetchurl,
+  lib,
+  stdenv,
+  zlib,
+}:
 
 stdenv.mkDerivation rec {
   pname = "fastjar";

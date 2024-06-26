@@ -1,24 +1,25 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, nixosTests
-, boost
-, yaml-cpp
-, libsodium
-, sqlite
-, protobuf
-, openssl
-, systemd
-, mariadb-connector-c
-, postgresql
-, lua
-, openldap
-, geoip
-, curl
-, unixODBC
-, lmdb
-, tinycdb
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  nixosTests,
+  boost,
+  yaml-cpp,
+  libsodium,
+  sqlite,
+  protobuf,
+  openssl,
+  systemd,
+  mariadb-connector-c,
+  postgresql,
+  lua,
+  openldap,
+  geoip,
+  curl,
+  unixODBC,
+  lmdb,
+  tinycdb,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -53,10 +54,12 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   # Configure phase requires 64-bit time_t even on 32-bit platforms.
-  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.hostPlatform.is32bit [
-    "-D_TIME_BITS=64"
-    "-D_FILE_OFFSET_BITS=64"
-  ]);
+  env.NIX_CFLAGS_COMPILE = toString (
+    lib.optionals stdenv.hostPlatform.is32bit [
+      "-D_TIME_BITS=64"
+      "-D_FILE_OFFSET_BITS=64"
+    ]
+  );
 
   configureFlags = [
     "--disable-silent-rules"
@@ -98,6 +101,10 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = platforms.unix;
     broken = stdenv.isDarwin;
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ mic92 disassembler nickcao ];
+    maintainers = with maintainers; [
+      mic92
+      disassembler
+      nickcao
+    ];
   };
 })

@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, testers
-, endlessh
-, nixosTests
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  testers,
+  endlessh,
+  nixosTests,
 }:
 
 stdenv.mkDerivation rec {

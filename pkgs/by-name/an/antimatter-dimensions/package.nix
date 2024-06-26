@@ -1,12 +1,13 @@
-{ buildNpmPackage
-, copyDesktopItems
-, electron
-, fetchFromGitHub
-, lib
-, makeDesktopItem
-, unstableGitUpdater
-, writeScriptBin
-, electronAppName ? "Antimatter Dimensions"
+{
+  buildNpmPackage,
+  copyDesktopItems,
+  electron,
+  fetchFromGitHub,
+  lib,
+  makeDesktopItem,
+  unstableGitUpdater,
+  writeScriptBin,
+  electronAppName ? "Antimatter Dimensions",
 }:
 
 let
@@ -67,9 +68,7 @@ buildNpmPackage rec {
     })
   ];
 
-  passthru.updateScript = unstableGitUpdater {
-    hardcodeZeroVersion = true;
-  };
+  passthru.updateScript = unstableGitUpdater { hardcodeZeroVersion = true; };
 
   meta = {
     homepage = "https://github.com/IvarK/AntimatterDimensionsSourceCode";

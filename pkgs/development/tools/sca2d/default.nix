@@ -1,7 +1,8 @@
-{ lib
-, python3
-, fetchFromGitLab
-, fetchFromGitHub
+{
+  lib,
+  python3,
+  fetchFromGitLab,
+  fetchFromGitHub,
 }:
 let
   python = python3.override {
@@ -36,7 +37,10 @@ python.pkgs.buildPythonApplication rec {
     hash = "sha256-P+7g57AH8H7q0hBE2I9w8A+bN5M6MPbc9gA0b889aoQ=";
   };
 
-  propagatedBuildInputs = with python.pkgs; [ lark010 colorama ];
+  propagatedBuildInputs = with python.pkgs; [
+    lark010
+    colorama
+  ];
 
   pythonImportsCheck = [ "sca2d" ];
 

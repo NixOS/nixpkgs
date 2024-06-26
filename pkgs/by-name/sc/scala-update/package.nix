@@ -1,4 +1,9 @@
-{ lib, stdenv, coursier, buildGraalvmNativeImage }:
+{
+  lib,
+  stdenv,
+  coursier,
+  buildGraalvmNativeImage,
+}:
 
 let
   baseName = "scala-update";
@@ -15,7 +20,8 @@ let
     outputHashAlgo = "sha256";
     outputHash = "kNnFzzHn+rFq4taqRYjBYaDax0MHW+vIoSFVN3wxA8M=";
   };
-in buildGraalvmNativeImage {
+in
+buildGraalvmNativeImage {
   pname = baseName;
   inherit version;
 
@@ -23,8 +29,11 @@ in buildGraalvmNativeImage {
 
   src = "${deps}/share/java/${baseName}_2.13-${version}.jar";
 
-  extraNativeImageBuildArgs =
-    [ "--no-fallback" "--enable-url-protocols=https" "update.Main" ];
+  extraNativeImageBuildArgs = [
+    "--no-fallback"
+    "--enable-url-protocols=https"
+    "update.Main"
+  ];
 
   buildPhase = ''
     runHook preBuild

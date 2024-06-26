@@ -1,10 +1,25 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
-  inherit (lib) mkEnableOption mkIf mkOption optionalString types;
+  inherit (lib)
+    mkEnableOption
+    mkIf
+    mkOption
+    optionalString
+    types
+    ;
 
   cfg = config.services.bird2;
-  caps = [ "CAP_NET_ADMIN" "CAP_NET_BIND_SERVICE" "CAP_NET_RAW" ];
+  caps = [
+    "CAP_NET_ADMIN"
+    "CAP_NET_BIND_SERVICE"
+    "CAP_NET_RAW"
+  ];
 in
 {
   ###### interface
@@ -52,10 +67,15 @@ in
     };
   };
 
-
   imports = [
-    (lib.mkRemovedOptionModule [ "services" "bird" ] "Use services.bird2 instead")
-    (lib.mkRemovedOptionModule [ "services" "bird6" ] "Use services.bird2 instead")
+    (lib.mkRemovedOptionModule [
+      "services"
+      "bird"
+    ] "Use services.bird2 instead")
+    (lib.mkRemovedOptionModule [
+      "services"
+      "bird6"
+    ] "Use services.bird2 instead")
   ];
 
   ###### implementation

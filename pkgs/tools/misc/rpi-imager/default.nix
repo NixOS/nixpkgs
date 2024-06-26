@@ -1,22 +1,23 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, wrapQtAppsHook
-, cmake
-, pkg-config
-, util-linux
-, curl
-, libarchive
-, qtbase
-, qtdeclarative
-, qtsvg
-, qttools
-, qtquickcontrols2
-, qtgraphicaleffects
-, xz
-, testers
-, nix-update-script
-, enableTelemetry ? false
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  wrapQtAppsHook,
+  cmake,
+  pkg-config,
+  util-linux,
+  curl,
+  libarchive,
+  qtbase,
+  qtdeclarative,
+  qtsvg,
+  qttools,
+  qtquickcontrols2,
+  qtgraphicaleffects,
+  xz,
+  testers,
+  nix-update-script,
+  enableTelemetry ? false,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -57,9 +58,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   sourceRoot = "${finalAttrs.src.name}/src";
 
-  /* By default, the builder checks for JSON support in lsblk by running "lsblk --json",
+  /*
+    By default, the builder checks for JSON support in lsblk by running "lsblk --json",
     but that throws an error, as /sys/dev doesn't exist in the sandbox.
-    This patch removes the check. */
+    This patch removes the check.
+  */
   patches = [ ./lsblkCheckFix.patch ];
 
   passthru = {
@@ -76,7 +79,10 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/raspberrypi/rpi-imager/releases/tag/v${finalAttrs.version}";
     license = licenses.asl20;
     mainProgram = "rpi-imager";
-    maintainers = with maintainers; [ ymarkus anthonyroussel ];
+    maintainers = with maintainers; [
+      ymarkus
+      anthonyroussel
+    ];
     platforms = platforms.all;
     # does not build on darwin
     broken = stdenv.isDarwin;

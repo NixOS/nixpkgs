@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchurl, libjack2, pkg-config }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libjack2,
+  pkg-config,
+}:
 
 stdenv.mkDerivation rec {
   pname = "jackmeter";

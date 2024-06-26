@@ -1,4 +1,15 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, zlib, lzo, bzip2, lz4, nasm, perl }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  zlib,
+  lzo,
+  bzip2,
+  lz4,
+  nasm,
+  perl,
+}:
 
 let
   inherit (stdenv.hostPlatform) isx86;
@@ -23,13 +34,19 @@ stdenv.mkDerivation rec {
     substituteInPlace configure.ac --replace "-f elf64" "-f macho64"
   '';
 
-  nativeBuildInputs = [ autoreconfHook perl ] ++ lib.optionals isx86 [ nasm ];
+  nativeBuildInputs = [
+    autoreconfHook
+    perl
+  ] ++ lib.optionals isx86 [ nasm ];
 
-  buildInputs = [ zlib lzo bzip2 lz4 ];
-
-  configureFlags = lib.optionals (!isx86) [
-    "--disable-asm"
+  buildInputs = [
+    zlib
+    lzo
+    bzip2
+    lz4
   ];
+
+  configureFlags = lib.optionals (!isx86) [ "--disable-asm" ];
 
   meta = with lib; {
     homepage = "http://ck.kolivas.org/apps/lrzip/";

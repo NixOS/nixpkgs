@@ -1,9 +1,10 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, openssl
-, vulkan-loader
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  openssl,
+  vulkan-loader,
 }:
 
 rustPlatform.buildRustPackage {
@@ -21,9 +22,7 @@ rustPlatform.buildRustPackage {
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
     openssl

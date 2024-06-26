@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchYarnDeps
-, makeWrapper
-, nodejs
-, fixup-yarn-lock
-, yarn
-, testers
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchYarnDeps,
+  makeWrapper,
+  nodejs,
+  fixup-yarn-lock,
+  yarn,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -67,9 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru.tests = {
-    version = testers.testVersion {
-      package = finalAttrs.finalPackage;
-    };
+    version = testers.testVersion { package = finalAttrs.finalPackage; };
   };
 
   meta = {

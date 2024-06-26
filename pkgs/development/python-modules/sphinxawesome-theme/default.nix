@@ -5,7 +5,7 @@
   poetry-core,
   sphinx,
   beautifulsoup4,
-  pythonRelaxDepsHook
+  pythonRelaxDepsHook,
 }:
 
 buildPythonPackage rec {
@@ -19,7 +19,10 @@ buildPythonPackage rec {
     hash = "sha256-wk8eXAueR1OA0W/F8fO/2ElVgX2gkF2V9+IICdfNPF0=";
   };
 
-  build-system = [ poetry-core pythonRelaxDepsHook ];
+  build-system = [
+    poetry-core
+    pythonRelaxDepsHook
+  ];
   dependencies = [
     sphinx
     beautifulsoup4
@@ -31,6 +34,6 @@ buildPythonPackage rec {
     description = "Awesome Sphinx Theme";
     homepage = "https://sphinxawesome.xyz/";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [sigmanificient];
+    maintainers = with lib.maintainers; [ sigmanificient ];
   };
 }

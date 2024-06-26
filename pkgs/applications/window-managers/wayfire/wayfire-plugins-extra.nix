@@ -1,18 +1,19 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, meson
-, ninja
-, pkg-config
-, wayfire
-, wf-config
-, libevdev
-, libinput
-, libxkbcommon
-, nlohmann_json
-, xcbutilwm
-, gtkmm3
-, gtk-layer-shell
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  pkg-config,
+  wayfire,
+  wf-config,
+  libevdev,
+  libinput,
+  libxkbcommon,
+  nlohmann_json,
+  xcbutilwm,
+  gtkmm3,
+  gtk-layer-shell,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

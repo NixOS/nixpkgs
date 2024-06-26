@@ -1,10 +1,16 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
 let
   cfg = config.services.infnoise;
-in {
+in
+{
   options = {
     services.infnoise = {
       enable = mkEnableOption "the Infinite Noise TRNG driver";

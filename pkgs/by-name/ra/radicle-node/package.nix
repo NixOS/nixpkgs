@@ -1,20 +1,22 @@
-{ asciidoctor
-, darwin
-, fetchgit
-, git
-, installShellFiles
-, jq
-, lib
-, makeWrapper
-, man-db
-, openssh
-, radicle-node
-, runCommand
-, rustPlatform
-, stdenv
-, testers
-, xdg-utils
-}: rustPlatform.buildRustPackage rec {
+{
+  asciidoctor,
+  darwin,
+  fetchgit,
+  git,
+  installShellFiles,
+  jq,
+  lib,
+  makeWrapper,
+  man-db,
+  openssh,
+  radicle-node,
+  runCommand,
+  rustPlatform,
+  stdenv,
+  testers,
+  xdg-utils,
+}:
+rustPlatform.buildRustPackage rec {
   pname = "radicle-node";
   version = "1.0.0-rc.11";
   env.RADICLE_VERSION = version;
@@ -26,11 +28,13 @@
   };
   cargoHash = "sha256-M01NjqvMSaa3+YPb4vDtIucBeF5BYx3cpmMoLJOwRsI=";
 
-  nativeBuildInputs = [ asciidoctor installShellFiles makeWrapper ];
-  nativeCheckInputs = [ git ];
-  buildInputs = lib.optionals stdenv.buildPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.Security
+  nativeBuildInputs = [
+    asciidoctor
+    installShellFiles
+    makeWrapper
   ];
+  nativeCheckInputs = [ git ];
+  buildInputs = lib.optionals stdenv.buildPlatform.isDarwin [ darwin.apple_sdk.frameworks.Security ];
 
   doCheck = stdenv.hostPlatform.isLinux;
 
@@ -57,7 +61,14 @@
     for program in $out/bin/* ;
     do
       wrapProgram "$program" \
-        --prefix PATH : "${lib.makeBinPath [ git man-db openssh xdg-utils ]}"
+        --prefix PATH : "${
+          lib.makeBinPath [
+            git
+            man-db
+            openssh
+            xdg-utils
+          ]
+        }"
     done
   '';
 
@@ -67,25 +78,31 @@
     in
     {
       version = testers.testVersion { inherit package; };
-      basic = runCommand "${package.name}-basic-test"
-        {
-          nativeBuildInputs = [ jq openssh radicle-node ];
-        } ''
-        set -e
-        export RAD_HOME="$PWD/.radicle"
-        mkdir -p "$RAD_HOME/keys"
-        ssh-keygen -t ed25519 -N "" -f "$RAD_HOME/keys/radicle" > /dev/null
-        jq -n '.node.alias |= "nix"' > "$RAD_HOME/config.json"
+      basic =
+        runCommand "${package.name}-basic-test"
+          {
+            nativeBuildInputs = [
+              jq
+              openssh
+              radicle-node
+            ];
+          }
+          ''
+            set -e
+            export RAD_HOME="$PWD/.radicle"
+            mkdir -p "$RAD_HOME/keys"
+            ssh-keygen -t ed25519 -N "" -f "$RAD_HOME/keys/radicle" > /dev/null
+            jq -n '.node.alias |= "nix"' > "$RAD_HOME/config.json"
 
-        rad config > /dev/null
-        rad debug | jq -e '
-            (.sshVersion | contains("${openssh.version}"))
-          and
-            (.gitVersion | contains("${git.version}"))
-        '
+            rad config > /dev/null
+            rad debug | jq -e '
+                (.sshVersion | contains("${openssh.version}"))
+              and
+                (.gitVersion | contains("${git.version}"))
+            '
 
-        touch $out
-      '';
+            touch $out
+          '';
     };
 
   meta = {
@@ -96,9 +113,15 @@
       Repositories are replicated across peers in a decentralized manner, and users are in full control of their data and workflow.
     '';
     homepage = "https://radicle.xyz";
-    license = with lib.licenses; [ asl20 mit ];
+    license = with lib.licenses; [
+      asl20
+      mit
+    ];
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ amesgen lorenzleutgeb ];
+    maintainers = with lib.maintainers; [
+      amesgen
+      lorenzleutgeb
+    ];
     mainProgram = "rad";
   };
 }

@@ -1,12 +1,13 @@
-{ lib
-, stdenvNoCC
-, fetchFromGitHub
-, gtk3
-, adwaita-icon-theme
-, breeze-icons
-, gnome-icon-theme
-, hicolor-icon-theme
-, gitUpdater
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  gtk3,
+  adwaita-icon-theme,
+  breeze-icons,
+  gnome-icon-theme,
+  hicolor-icon-theme,
+  gitUpdater,
 }:
 
 stdenvNoCC.mkDerivation rec {
@@ -20,9 +21,7 @@ stdenvNoCC.mkDerivation rec {
     sha256 = "sha256-hFUsj0nODUVbzKyN6ud3HsaoTZBLGW+jjwc6kFFH02c=";
   };
 
-  nativeBuildInputs = [
-    gtk3
-  ];
+  nativeBuildInputs = [ gtk3 ];
 
   propagatedBuildInputs = [
     adwaita-icon-theme

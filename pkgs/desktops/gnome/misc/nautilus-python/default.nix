@@ -1,23 +1,29 @@
-{ stdenv
-, lib
-, substituteAll
-, fetchurl
-, meson
-, ninja
-, pkg-config
-, gtk-doc
-, docbook-xsl-nons
-, docbook_xml_dtd_412
-, python3
-, nautilus
-, gnome
+{
+  stdenv,
+  lib,
+  substituteAll,
+  fetchurl,
+  meson,
+  ninja,
+  pkg-config,
+  gtk-doc,
+  docbook-xsl-nons,
+  docbook_xml_dtd_412,
+  python3,
+  nautilus,
+  gnome,
 }:
 
 stdenv.mkDerivation rec {
   pname = "nautilus-python";
   version = "4.0.1";
 
-  outputs = [ "out" "dev" "doc" "devdoc" ];
+  outputs = [
+    "out"
+    "dev"
+    "doc"
+    "devdoc"
+  ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/nautilus-python/${lib.versions.majorMinor version}/nautilus-python-${version}.tar.xz";

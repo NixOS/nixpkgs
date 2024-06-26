@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, libgit2
-, openssl
-, installShellFiles
-, darwin
-, testers
-, pixi
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  libgit2,
+  openssl,
+  installShellFiles,
+  darwin,
+  testers,
+  pixi,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -36,12 +37,20 @@ rustPlatform.buildRustPackage rec {
     installShellFiles
   ];
 
-  buildInputs = [
-    libgit2
-    openssl
-  ] ++ lib.optionals stdenv.isDarwin (
-    with darwin.apple_sdk_11_0.frameworks; [ CoreFoundation IOKit SystemConfiguration Security ]
-  );
+  buildInputs =
+    [
+      libgit2
+      openssl
+    ]
+    ++ lib.optionals stdenv.isDarwin (
+      with darwin.apple_sdk_11_0.frameworks;
+      [
+        CoreFoundation
+        IOKit
+        SystemConfiguration
+        Security
+      ]
+    );
 
   env = {
     LIBGIT2_NO_VENDOR = 1;
@@ -87,15 +96,16 @@ rustPlatform.buildRustPackage rec {
       --zsh <($out/bin/pixi completion --shell zsh)
   '';
 
-  passthru.tests.version = testers.testVersion {
-    package = pixi;
-  };
+  passthru.tests.version = testers.testVersion { package = pixi; };
 
   meta = with lib; {
     description = "Package management made easy";
     homepage = "https://pixi.sh/";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ aaronjheng edmundmiller ];
+    maintainers = with maintainers; [
+      aaronjheng
+      edmundmiller
+    ];
     mainProgram = "pixi";
   };
 }

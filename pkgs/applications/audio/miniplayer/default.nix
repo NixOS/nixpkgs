@@ -1,6 +1,7 @@
-{ lib
-, python3Packages
-, fetchPypi
+{
+  lib,
+  python3Packages,
+  fetchPypi,
 }:
 
 with python3Packages;
@@ -15,9 +16,7 @@ buildPythonApplication rec {
     hash = "sha256-iUUsVIDLQAiaMomfA2LvvJZ2ePhgADtC6GCwIpRC1MA=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     colorthief

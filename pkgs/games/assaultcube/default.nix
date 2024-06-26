@@ -1,18 +1,20 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, makeDesktopItem
-, copyDesktopItems
-, openal
-, pkg-config
-, libogg
-, libvorbis
-, SDL2
-, SDL2_image
-, makeWrapper
-, zlib
-, file
-, client ? true, server ? true
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  makeDesktopItem,
+  copyDesktopItems,
+  openal,
+  pkg-config,
+  libogg,
+  libvorbis,
+  SDL2,
+  SDL2_image,
+  makeWrapper,
+  zlib,
+  file,
+  client ? true,
+  server ? true,
 }:
 
 stdenv.mkDerivation rec {
@@ -21,7 +23,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "assaultcube";
-    repo  = "AC";
+    repo = "AC";
     rev = "v${version}";
     sha256 = "0qv339zw9q5q1y7bghca03gw7z4v89sl4lbr6h3b7siy08mcwiz9";
   };
@@ -32,19 +34,25 @@ stdenv.mkDerivation rec {
     copyDesktopItems
   ];
 
-  buildInputs = [
-    file
-    zlib
-  ] ++ lib.optionals client [
-    openal
-    SDL2
-    SDL2_image
-    libogg
-    libvorbis
-  ];
+  buildInputs =
+    [
+      file
+      zlib
+    ]
+    ++ lib.optionals client [
+      openal
+      SDL2
+      SDL2_image
+      libogg
+      libvorbis
+    ];
 
   targets = (lib.optionalString server "server") + (lib.optionalString client " client");
-  makeFlags = [ "-C source/src" "CXX=${stdenv.cc.targetPrefix}c++" targets ];
+  makeFlags = [
+    "-C source/src"
+    "CXX=${stdenv.cc.targetPrefix}c++"
+    targets
+  ];
 
   desktopItems = [
     (makeDesktopItem {
@@ -52,7 +60,11 @@ stdenv.mkDerivation rec {
       desktopName = "AssaultCube";
       comment = "A multiplayer, first-person shooter game, based on the CUBE engine. Fast, arcade gameplay.";
       genericName = "First-person shooter";
-      categories = [ "Game" "ActionGame" "Shooter" ];
+      categories = [
+        "Game"
+        "ActionGame"
+        "Shooter"
+      ];
       icon = "assaultcube";
       exec = pname;
     })

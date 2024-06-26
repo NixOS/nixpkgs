@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, ninja
-, useFloat ? false
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  ninja,
+  useFloat ? false,
 }:
 
 stdenv.mkDerivation rec {
@@ -18,7 +19,10 @@ stdenv.mkDerivation rec {
   };
   sourceRoot = "${src.name}/fuzzylite";
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   postPatch = ''
     substituteInPlace CMakeLists.txt \

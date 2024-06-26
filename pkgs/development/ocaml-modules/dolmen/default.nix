@@ -1,7 +1,11 @@
-{ lib, fetchurl, buildDunePackage
-, menhir, menhirLib
-, fmt
-, qcheck
+{
+  lib,
+  fetchurl,
+  buildDunePackage,
+  menhir,
+  menhirLib,
+  fmt,
+  qcheck,
 }:
 
 buildDunePackage rec {
@@ -16,7 +20,10 @@ buildDunePackage rec {
   };
 
   nativeBuildInputs = [ menhir ];
-  propagatedBuildInputs = [ menhirLib fmt ];
+  propagatedBuildInputs = [
+    menhirLib
+    fmt
+  ];
 
   doCheck = true;
 

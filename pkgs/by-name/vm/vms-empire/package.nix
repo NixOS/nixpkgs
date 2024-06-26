@@ -1,18 +1,19 @@
-{ lib
-, stdenv
-, fetchurl
-, ncurses
-, xmlto
-, docbook_xml_dtd_44
-, docbook_xsl
-, installShellFiles
+{
+  lib,
+  stdenv,
+  fetchurl,
+  ncurses,
+  xmlto,
+  docbook_xml_dtd_44,
+  docbook_xsl,
+  installShellFiles,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vms-empire";
   version = "1.17";
 
-  src = fetchurl{
+  src = fetchurl {
     url = "http://www.catb.org/~esr/vms-empire/vms-empire-${finalAttrs.version}.tar.gz";
     hash = "sha256-AmHs6ojVcfglvvFvC9JzNWVS2t4Coqg8WwyNCM+sEno=";
   };
@@ -24,9 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
     docbook_xsl
   ];
 
-  buildInputs = [
-    ncurses
-  ];
+  buildInputs = [ ncurses ];
 
   outputs = [
     "out"

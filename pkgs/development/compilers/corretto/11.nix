@@ -1,16 +1,23 @@
-{ fetchFromGitHub
-, gradle_7
-, jdk11
-, lib
-, stdenv
-, rsync
-, runCommand
-, testers
+{
+  fetchFromGitHub,
+  gradle_7,
+  jdk11,
+  lib,
+  stdenv,
+  rsync,
+  runCommand,
+  testers,
 }:
 
 let
   corretto = import ./mk-corretto.nix rec {
-    inherit lib stdenv rsync runCommand testers;
+    inherit
+      lib
+      stdenv
+      rsync
+      runCommand
+      testers
+      ;
     jdk = jdk11;
     gradle = gradle_7;
     extraConfig = [

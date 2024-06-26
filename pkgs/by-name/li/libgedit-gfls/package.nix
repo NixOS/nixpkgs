@@ -1,22 +1,27 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, docbook-xsl-nons
-, gobject-introspection
-, gtk-doc
-, meson
-, ninja
-, pkg-config
-, mesonEmulatorHook
-, gtk3
-, glib
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  docbook-xsl-nons,
+  gobject-introspection,
+  gtk-doc,
+  meson,
+  ninja,
+  pkg-config,
+  mesonEmulatorHook,
+  gtk3,
+  glib,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libgedit-gfls";
   version = "0.1.0";
 
-  outputs = [ "out" "dev" "devdoc" ];
+  outputs = [
+    "out"
+    "dev"
+    "devdoc"
+  ];
 
   src = fetchFromGitHub {
     owner = "gedit-technology";
@@ -32,13 +37,9 @@ stdenv.mkDerivation (finalAttrs: {
     meson
     ninja
     pkg-config
-  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-    mesonEmulatorHook
-  ];
+  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [ mesonEmulatorHook ];
 
-  buildInputs = [
-    gtk3
-  ];
+  buildInputs = [ gtk3 ];
 
   propagatedBuildInputs = [
     # Required by libgedit-gfls-1.pc

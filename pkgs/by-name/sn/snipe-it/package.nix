@@ -1,9 +1,10 @@
-{ lib
-, dataDir ? "/var/lib/snipe-it"
-, fetchFromGitHub
-, mariadb
-, nixosTests
-, php
+{
+  lib,
+  dataDir ? "/var/lib/snipe-it",
+  fetchFromGitHub,
+  mariadb,
+  nixosTests,
+  php,
 }:
 
 php.buildComposerProject (finalAttrs: {

@@ -1,10 +1,11 @@
-{ lib
-, addOpenGLRunpath
-, cmake
-, fetchFromGitHub
-, intel-compute-runtime
-, openvino
-, stdenv
+{
+  lib,
+  addOpenGLRunpath,
+  cmake,
+  fetchFromGitHub,
+  intel-compute-runtime,
+  openvino,
+  stdenv,
 }:
 
 stdenv.mkDerivation rec {
@@ -18,7 +19,10 @@ stdenv.mkDerivation rec {
     hash = "sha256-vtijha0nXHEp5oLnmdtbD80Qa2dgMykZXhQ2yfbk+mY=";
   };
 
-  nativeBuildInputs = [ cmake addOpenGLRunpath ];
+  nativeBuildInputs = [
+    cmake
+    addOpenGLRunpath
+  ];
 
   postFixup = ''
     addOpenGLRunpath $out/lib/libze_loader.so
@@ -36,4 +40,3 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.ziguana ];
   };
 }
-

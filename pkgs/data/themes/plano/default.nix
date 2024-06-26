@@ -1,12 +1,14 @@
-{ lib, stdenv
-, fetchFromGitHub
-, meson
-, ninja
-, gdk-pixbuf
-, gtk_engines
-, gtk-engine-murrine
-, librsvg
-, sassc
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  gdk-pixbuf,
+  gtk_engines,
+  gtk-engine-murrine,
+  librsvg,
+  sassc,
 }:
 
 stdenv.mkDerivation rec {
@@ -32,9 +34,7 @@ stdenv.mkDerivation rec {
     librsvg
   ];
 
-  propagatedUserEnvPkgs = [
-    gtk-engine-murrine
-  ];
+  propagatedUserEnvPkgs = [ gtk-engine-murrine ];
 
   meta = with lib; {
     description = "Flat theme for GNOME and Xfce";

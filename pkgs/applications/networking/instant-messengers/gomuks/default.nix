@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, substituteAll
-, buildGoModule
-, fetchFromGitHub
-, makeDesktopItem
-, makeWrapper
-, libnotify
-, olm
-, pulseaudio
-, sound-theme-freedesktop
+{
+  lib,
+  stdenv,
+  substituteAll,
+  buildGoModule,
+  fetchFromGitHub,
+  makeDesktopItem,
+  makeWrapper,
+  libnotify,
+  olm,
+  pulseaudio,
+  sound-theme-freedesktop,
 }:
 
 buildGoModule rec {
@@ -37,13 +38,23 @@ buildGoModule rec {
         terminal = true;
         desktopName = "Gomuks";
         genericName = "Matrix client";
-        categories = [ "Network" "Chat" ];
+        categories = [
+          "Network"
+          "Chat"
+        ];
         comment = meta.description;
       }
     }/* $out/
     substituteAllInPlace $out/share/applications/*
     wrapProgram $out/bin/gomuks \
-      --prefix PATH : "${lib.makeBinPath (lib.optionals stdenv.isLinux [ libnotify pulseaudio ])}" \
+      --prefix PATH : "${
+        lib.makeBinPath (
+          lib.optionals stdenv.isLinux [
+            libnotify
+            pulseaudio
+          ]
+        )
+      }" \
       --set-default GOMUKS_SOUND_NORMAL "${sound-theme-freedesktop}/share/sounds/freedesktop/stereo/message-new-instant.oga" \
       --set-default GOMUKS_SOUND_CRITICAL "${sound-theme-freedesktop}/share/sounds/freedesktop/stereo/complete.oga"
   '';

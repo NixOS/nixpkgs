@@ -1,4 +1,10 @@
-{ lib, buildGoModule, fetchFromSourcehut, fetchpatch, nixosTests }:
+{
+  lib,
+  buildGoModule,
+  fetchFromSourcehut,
+  fetchpatch,
+  nixosTests,
+}:
 
 buildGoModule rec {
   pname = "alps";
@@ -39,13 +45,19 @@ buildGoModule rec {
 
   proxyVendor = true;
 
-  passthru.tests = { inherit(nixosTests) alps; };
+  passthru.tests = {
+    inherit (nixosTests) alps;
+  };
 
   meta = with lib; {
     description = "Simple and extensible webmail";
     homepage = "https://git.sr.ht/~migadu/alps";
     license = licenses.mit;
-    maintainers = with maintainers; [ booklearner madonius hmenke ];
+    maintainers = with maintainers; [
+      booklearner
+      madonius
+      hmenke
+    ];
     mainProgram = "alps";
   };
 }

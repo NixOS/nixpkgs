@@ -1,16 +1,17 @@
-{ buildPythonPackage
-, fetchPypi
-, lib
-, verilog
-, verilator
-, gnumake
-, edalize
-, fastjsonschema
-, pyparsing
-, pyyaml
-, simplesat
-, ipyxact
-, setuptools-scm
+{
+  buildPythonPackage,
+  fetchPypi,
+  lib,
+  verilog,
+  verilator,
+  gnumake,
+  edalize,
+  fastjsonschema,
+  pyparsing,
+  pyyaml,
+  simplesat,
+  ipyxact,
+  setuptools-scm,
 }:
 buildPythonPackage rec {
   pname = "fusesoc";
@@ -23,11 +24,26 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ setuptools-scm ];
 
-  propagatedBuildInputs = [ edalize fastjsonschema pyparsing pyyaml simplesat ipyxact ];
+  propagatedBuildInputs = [
+    edalize
+    fastjsonschema
+    pyparsing
+    pyyaml
+    simplesat
+    ipyxact
+  ];
 
   pythonImportsCheck = [ "fusesoc" ];
 
-  makeWrapperArgs = [ "--suffix PATH : ${lib.makeBinPath [ verilog verilator gnumake ]}"];
+  makeWrapperArgs = [
+    "--suffix PATH : ${
+      lib.makeBinPath [
+        verilog
+        verilator
+        gnumake
+      ]
+    }"
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/olofk/fusesoc";

@@ -1,4 +1,8 @@
-{ appimageTools, fetchurl, lib }:
+{
+  appimageTools,
+  fetchurl,
+  lib,
+}:
 
 let
   pname = "station";
@@ -9,10 +13,9 @@ let
     sha256 = "0lhiwvnf94is9klvzrqv2wri53gj8nms9lg2678bs4y58pvjxwid";
   };
 
-  appimageContents = appimageTools.extractType2 {
-    inherit pname version src;
-  };
-in appimageTools.wrapType2 rec {
+  appimageContents = appimageTools.extractType2 { inherit pname version src; };
+in
+appimageTools.wrapType2 rec {
   inherit pname version src;
 
   profile = ''

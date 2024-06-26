@@ -1,8 +1,9 @@
-{ bctoolbox
-, cmake
-, fetchFromGitLab
-, lib
-, stdenv
+{
+  bctoolbox,
+  cmake,
+  fetchFromGitLab,
+  lib,
+  stdenv,
 }:
 
 stdenv.mkDerivation rec {

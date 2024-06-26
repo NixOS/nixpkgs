@@ -5,8 +5,6 @@ makeInstalledTest {
   withX11 = true;
 
   testConfig = {
-    environment.systemPackages = [
-      pkgs.gjs
-    ];
+    environment.systemPackages = [ pkgs.gjs ];
   };
 }

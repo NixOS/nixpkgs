@@ -1,4 +1,10 @@
-{ lib, rustPlatform, fetchFromGitHub, pkg-config, oniguruma }:
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  oniguruma,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "pomsky";
@@ -23,9 +29,7 @@ rustPlatform.buildRustPackage rec {
     rustPlatform.bindgenHook
   ];
 
-  buildInputs = [
-    oniguruma
-  ];
+  buildInputs = [ oniguruma ];
 
   env = {
     RUSTONIG_SYSTEM_LIBONIG = true;
@@ -39,7 +43,10 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "pomsky";
     homepage = "https://pomsky-lang.org";
     changelog = "https://github.com/pomsky-lang/pomsky/blob/v${version}/CHANGELOG.md";
-    license = with licenses; [ mit /* or */ asl20 ];
+    license = with licenses; [
+      mit # or
+      asl20
+    ];
     maintainers = with maintainers; [ figsoda ];
   };
 }

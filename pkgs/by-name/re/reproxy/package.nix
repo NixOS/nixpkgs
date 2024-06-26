@@ -1,4 +1,9 @@
-{ lib, stdenv, buildGoModule, fetchFromGitHub }:
+{
+  lib,
+  stdenv,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 
 buildGoModule rec {
   pname = "reproxy";
@@ -14,7 +19,9 @@ buildGoModule rec {
   vendorHash = null;
 
   ldflags = [
-    "-s" "-w" "-X main.revision=${version}"
+    "-s"
+    "-w"
+    "-X main.revision=${version}"
   ];
 
   checkFlags = [

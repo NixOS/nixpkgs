@@ -1,20 +1,26 @@
-{ lib, stdenv
-, fetchFromGitLab
-, meson
-, ninja
-, pkg-config
-, docbook-xsl-nons
-, docbook_xml_dtd_43
-, gtk-doc
-, gdk-pixbuf
-, libX11
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  meson,
+  ninja,
+  pkg-config,
+  docbook-xsl-nons,
+  docbook_xml_dtd_43,
+  gtk-doc,
+  gdk-pixbuf,
+  libX11,
 }:
 
 stdenv.mkDerivation rec {
   pname = "gdk-pixbuf-xlib";
   version = "2.40.2";
 
-  outputs = [ "out" "dev" "devdoc" ];
+  outputs = [
+    "out"
+    "dev"
+    "devdoc"
+  ];
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
@@ -38,9 +44,7 @@ stdenv.mkDerivation rec {
     libX11
   ];
 
-  mesonFlags = [
-    "-Dgtk_doc=true"
-  ];
+  mesonFlags = [ "-Dgtk_doc=true" ];
 
   meta = with lib; {
     description = "Deprecated API for integrating GdkPixbuf with Xlib data types";

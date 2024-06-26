@@ -1,9 +1,19 @@
-{ lib, stdenv, fetchFromGitHub
-, cmake, pkg-config, python3
-, boost, curl, fuse, openssl, range-v3, spdlog
-# cryptopp and gtest on standby - using the vendored ones for now
-# see https://github.com/cryfs/cryfs/issues/369
-, llvmPackages
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  python3,
+  boost,
+  curl,
+  fuse,
+  openssl,
+  range-v3,
+  spdlog,
+  # cryptopp and gtest on standby - using the vendored ones for now
+  # see https://github.com/cryfs/cryfs/issues/369
+  llvmPackages,
 }:
 
 stdenv.mkDerivation rec {
@@ -37,12 +47,22 @@ stdenv.mkDerivation rec {
       --replace "(4.5L*1024*1024*1024)" "(0.5L*1024*1024*1024)"
   '';
 
-  nativeBuildInputs = [ cmake pkg-config python3 ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    python3
+  ];
 
   strictDeps = true;
 
-  buildInputs = [ boost curl fuse openssl range-v3 spdlog ]
-    ++ lib.optional stdenv.cc.isClang llvmPackages.openmp;
+  buildInputs = [
+    boost
+    curl
+    fuse
+    openssl
+    range-v3
+    spdlog
+  ] ++ lib.optional stdenv.cc.isClang llvmPackages.openmp;
 
   #nativeCheckInputs = [ gtest ];
 
@@ -72,10 +92,13 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Cryptographic filesystem for the cloud";
-    homepage    = "https://www.cryfs.org/";
-    changelog   = "https://github.com/cryfs/cryfs/raw/${version}/ChangeLog.txt";
-    license     = licenses.lgpl3Only;
-    maintainers = with maintainers; [ peterhoeg c0bw3b ];
-    platforms   = platforms.unix;
+    homepage = "https://www.cryfs.org/";
+    changelog = "https://github.com/cryfs/cryfs/raw/${version}/ChangeLog.txt";
+    license = licenses.lgpl3Only;
+    maintainers = with maintainers; [
+      peterhoeg
+      c0bw3b
+    ];
+    platforms = platforms.unix;
   };
 }

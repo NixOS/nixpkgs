@@ -1,7 +1,8 @@
-{ lib
-, fetchFromGitHub
-, python3
-, ffmpeg
+{
+  lib,
+  fetchFromGitHub,
+  python3,
+  ffmpeg,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -26,9 +27,7 @@ python3.pkgs.buildPythonApplication rec {
   # Project has no tests
   doCheck = false;
 
-  makeWrapperArgs = [
-    ''--prefix PATH : "${lib.makeBinPath [ ffmpeg ]}"''
-  ];
+  makeWrapperArgs = [ ''--prefix PATH : "${lib.makeBinPath [ ffmpeg ]}"'' ];
 
   meta = with lib; {
     description = "Simple GUI for ByteDance's Piano Transcription with Pedals";

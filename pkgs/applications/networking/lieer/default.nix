@@ -1,6 +1,7 @@
-{ lib
-, fetchFromGitHub
-, python3Packages
+{
+  lib,
+  fetchFromGitHub,
+  python3Packages,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -26,9 +27,7 @@ python3Packages.buildPythonApplication rec {
   # no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "lieer"
-  ];
+  pythonImportsCheck = [ "lieer" ];
 
   meta = with lib; {
     description = "Fast email-fetching and two-way tag synchronization between notmuch and GMail";
@@ -41,7 +40,10 @@ python3Packages.buildPythonApplication rec {
     '';
     homepage = "https://lieer.gaute.vetsj.com/";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ archer-65 flokli ];
+    maintainers = with maintainers; [
+      archer-65
+      flokli
+    ];
     mainProgram = "gmi";
   };
 }

@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.zram-generator;
   settingsFormat = pkgs.formats.ini { };
@@ -14,9 +19,7 @@ in
     package = lib.mkPackageOption pkgs "zram-generator" { };
 
     settings = lib.mkOption {
-      type = lib.types.submodule {
-        freeformType = settingsFormat.type;
-      };
+      type = lib.types.submodule { freeformType = settingsFormat.type; };
       default = { };
       description = ''
         Configuration for zram-generator,
@@ -26,9 +29,7 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    system.requiredKernelConfig = with config.lib.kernelConfig; [
-      (isEnabled "ZRAM")
-    ];
+    system.requiredKernelConfig = with config.lib.kernelConfig; [ (isEnabled "ZRAM") ];
 
     systemd.packages = [ cfg.package ];
     systemd.services."systemd-zram-setup@".path = [ pkgs.util-linux ]; # for mkswap

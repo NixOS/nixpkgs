@@ -1,28 +1,29 @@
-{ stdenv
-, lib
-, fetchurl
-, fetchpatch
-, atk
-, cairo
-, desktop-file-utils
-, evolution-data-server-gtk4
-, evolution
-, gcr_4
-, gettext
-, glib
-, gnome
-, gpgme
-, gtk3
-, gtksourceview4
-, gtkspell3
-, libcryptui
-, libxml2
-, meson
-, ninja
-, pkg-config
-, python3
-, sqlite
-, wrapGAppsHook3
+{
+  stdenv,
+  lib,
+  fetchurl,
+  fetchpatch,
+  atk,
+  cairo,
+  desktop-file-utils,
+  evolution-data-server-gtk4,
+  evolution,
+  gcr_4,
+  gettext,
+  glib,
+  gnome,
+  gpgme,
+  gtk3,
+  gtksourceview4,
+  gtkspell3,
+  libcryptui,
+  libxml2,
+  meson,
+  ninja,
+  pkg-config,
+  python3,
+  sqlite,
+  wrapGAppsHook3,
 }:
 
 stdenv.mkDerivation rec {

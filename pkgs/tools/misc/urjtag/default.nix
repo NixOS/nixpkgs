@@ -1,18 +1,19 @@
-{ lib
-, stdenv
-, fetchurl
-, autoreconfHook
-, gettext
-, libftdi1
-, libtool
-, libusb-compat-0_1
-, pkg-config
-, readline
-, which
-, bsdlSupport ? true
-, jedecSupport ? true
-, staplSupport ? true
-, svfSupport ? true
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoreconfHook,
+  gettext,
+  libftdi1,
+  libtool,
+  libusb-compat-0_1,
+  pkg-config,
+  readline,
+  which,
+  bsdlSupport ? true,
+  jedecSupport ? true,
+  staplSupport ? true,
+  svfSupport ? true,
 }:
 
 stdenv.mkDerivation rec {
@@ -38,16 +39,19 @@ stdenv.mkDerivation rec {
   ];
 
   configureFlags = [
-    (lib.enableFeature bsdlSupport  "bsdl")
+    (lib.enableFeature bsdlSupport "bsdl")
     (lib.enableFeature jedecSupport "jedec-exp")
     (lib.enableFeature staplSupport "stapl")
-    (lib.enableFeature svfSupport   "svf")
+    (lib.enableFeature svfSupport "svf")
   ];
 
   meta = with lib; {
     homepage = "http://urjtag.org/";
     description = "Universal JTAG library, server and tools";
-    license = with licenses; [ gpl2Plus lgpl21Plus ];
+    license = with licenses; [
+      gpl2Plus
+      lgpl21Plus
+    ];
     maintainers = with maintainers; [ AndersonTorres ];
     platforms = platforms.linux;
   };

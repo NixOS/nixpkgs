@@ -1,4 +1,9 @@
-{ lib, buildGoModule, fetchFromGitHub, bash }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  bash,
+}:
 
 buildGoModule rec {
   pname = "kubectl-neat";

@@ -1,24 +1,25 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, appstream-glib
-, desktop-file-utils
-, meson
-, ninja
-, pantheon
-, pkg-config
-, python3
-, vala
-, wrapGAppsHook3
-, cairo
-, glib
-, goocanvas3
-, gtk3
-, gtksourceview3
-, json-glib
-, libarchive
-, libgee
-, libxml2
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  appstream-glib,
+  desktop-file-utils,
+  meson,
+  ninja,
+  pantheon,
+  pkg-config,
+  python3,
+  vala,
+  wrapGAppsHook3,
+  cairo,
+  glib,
+  goocanvas3,
+  gtk3,
+  gtksourceview3,
+  json-glib,
+  libarchive,
+  libgee,
+  libxml2,
 }:
 
 stdenv.mkDerivation rec {
@@ -67,7 +68,13 @@ stdenv.mkDerivation rec {
     description = "Native Linux Design application built in Vala and GTK";
     homepage = "https://github.com/akiraux/Akira";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ Br1ght0ne neonfuz ] ++ teams.pantheon.members;
+    maintainers =
+      with maintainers;
+      [
+        Br1ght0ne
+        neonfuz
+      ]
+      ++ teams.pantheon.members;
     platforms = platforms.linux;
     mainProgram = "com.github.akiraux.akira";
   };

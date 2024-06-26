@@ -1,9 +1,16 @@
-{ lib, stdenv, fetchurl, fetchpatch, cmake, makeWrapper
-, llvm, libclang
-, flex
-, zlib
-, perlPackages
-, util-linux
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  cmake,
+  makeWrapper,
+  llvm,
+  libclang,
+  flex,
+  zlib,
+  perlPackages,
+  util-linux,
 }:
 
 stdenv.mkDerivation rec {
@@ -32,26 +39,42 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  postPatch = ''
-    substituteInPlace CMakeLists.txt \
-      --replace "-std=c++11" "-std=c++17"
-  ''
-  # On Linux, c-reduce's preferred way to reason about
-  # the cpu architecture/topology is to use 'lscpu',
-  # so let's make sure it knows where to find it:
-  + lib.optionalString stdenv.isLinux ''
-    substituteInPlace creduce/creduce_utils.pm --replace \
-      lscpu ${util-linux}/bin/lscpu
-  '';
+  postPatch =
+    ''
+      substituteInPlace CMakeLists.txt \
+        --replace "-std=c++11" "-std=c++17"
+    ''
+    # On Linux, c-reduce's preferred way to reason about
+    # the cpu architecture/topology is to use 'lscpu',
+    # so let's make sure it knows where to find it:
+    + lib.optionalString stdenv.isLinux ''
+      substituteInPlace creduce/creduce_utils.pm --replace \
+        lscpu ${util-linux}/bin/lscpu
+    '';
 
-  nativeBuildInputs = [ cmake makeWrapper llvm.dev ];
-  buildInputs = [
-    # Ensure stdenv's CC is on PATH before clang-unwrapped
-    stdenv.cc
-    # Actual deps:
-    llvm libclang
-    flex zlib
-  ] ++ (with perlPackages; [ perl ExporterLite FileWhich GetoptTabular RegexpCommon TermReadKey ]);
+  nativeBuildInputs = [
+    cmake
+    makeWrapper
+    llvm.dev
+  ];
+  buildInputs =
+    [
+      # Ensure stdenv's CC is on PATH before clang-unwrapped
+      stdenv.cc
+      # Actual deps:
+      llvm
+      libclang
+      flex
+      zlib
+    ]
+    ++ (with perlPackages; [
+      perl
+      ExporterLite
+      FileWhich
+      GetoptTabular
+      RegexpCommon
+      TermReadKey
+    ]);
 
   postInstall = ''
     wrapProgram $out/bin/creduce --prefix PERL5LIB : "$PERL5LIB"

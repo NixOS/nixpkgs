@@ -1,8 +1,9 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, unstableGitUpdater
-, zlib
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  unstableGitUpdater,
+  zlib,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -20,13 +21,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  buildInputs = [
-    zlib
-  ];
+  buildInputs = [ zlib ];
 
-  buildFlags = [
-    "CC=${stdenv.cc.targetPrefix}cc"
-  ];
+  buildFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
 
   installPhase = ''
     runHook preInstall

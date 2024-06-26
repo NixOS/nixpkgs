@@ -1,8 +1,9 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, testers
-, gopatch
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  testers,
+  gopatch,
 }:
 
 buildGoModule rec {
@@ -18,9 +19,7 @@ buildGoModule rec {
 
   vendorHash = "sha256-ZHXzaR8pd6kApY3PBl9GV1iRc2jdDHMfewDn1j9npjc=";
 
-  subPackages = [
-    "."
-  ];
+  subPackages = [ "." ];
 
   ldflags = [
     "-s"
@@ -29,9 +28,7 @@ buildGoModule rec {
   ];
 
   passthru.tests = {
-    version = testers.testVersion {
-      package = gopatch;
-    };
+    version = testers.testVersion { package = gopatch; };
   };
 
   meta = with lib; {

@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, autoreconfHook
-, boost, libbitcoin, libbitcoin-protocol }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  autoreconfHook,
+  boost,
+  libbitcoin,
+  libbitcoin-protocol,
+}:
 
 stdenv.mkDerivation rec {
   pname = "libbitcoin-client";
@@ -12,8 +20,14 @@ stdenv.mkDerivation rec {
     hash = "sha256-5qbxixaozHFsOcBxnuGEfNJyGL8UaYCOPwPakfc0bAg=";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
-  propagatedBuildInputs = [ libbitcoin libbitcoin-protocol ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ];
+  propagatedBuildInputs = [
+    libbitcoin
+    libbitcoin-protocol
+  ];
 
   enableParallelBuilding = true;
 

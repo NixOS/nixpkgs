@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, cmake
-, fetchFromGitHub
-, llvmPackages
-, enableSse4_1 ? stdenv.hostPlatform.sse4_1Support
-, enableAvx ? stdenv.hostPlatform.avxSupport
-, enableAvx2 ? stdenv.hostPlatform.avx2Support
+{
+  lib,
+  stdenv,
+  cmake,
+  fetchFromGitHub,
+  llvmPackages,
+  enableSse4_1 ? stdenv.hostPlatform.sse4_1Support,
+  enableAvx ? stdenv.hostPlatform.avxSupport,
+  enableAvx2 ? stdenv.hostPlatform.avx2Support,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -19,13 +20,9 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-QcFNaCTqj6CFiOzQ6ezfBL0mu8PDU11hyNdkcsLOPzA=";
   };
 
-  nativeBuildInputs = [
-    cmake
-  ];
+  nativeBuildInputs = [ cmake ];
 
-  buildInputs = lib.optionals stdenv.cc.isClang [
-    llvmPackages.openmp
-  ];
+  buildInputs = lib.optionals stdenv.cc.isClang [ llvmPackages.openmp ];
 
   cmakeFlags =
     # these flags are ON by default

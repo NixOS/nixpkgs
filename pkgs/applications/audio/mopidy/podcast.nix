@@ -1,4 +1,9 @@
-{ lib, python3Packages, fetchPypi, mopidy }:
+{
+  lib,
+  python3Packages,
+  fetchPypi,
+  mopidy,
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "mopidy-podcast";
@@ -16,16 +21,12 @@ python3Packages.buildPythonApplication rec {
     python3Packages.uritools
   ];
 
-  nativeCheckInputs = with python3Packages; [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = with python3Packages; [ pytestCheckHook ];
 
   meta = with lib; {
     homepage = "https://github.com/tkem/mopidy-podcast";
     description = "Mopidy extension for browsing and playing podcasts";
     license = licenses.asl20;
-    maintainers = [
-      maintainers.daneads
-    ];
+    maintainers = [ maintainers.daneads ];
   };
 }

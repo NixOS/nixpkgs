@@ -1,25 +1,27 @@
-{ lib, stdenv
-, fetchFromGitLab
-, fetchpatch
-, pkg-config
-, cmake
-, gettext
-, cairo
-, pango
-, glib
-, imlib2
-, gtk3
-, libXinerama
-, libXrender
-, libXcomposite
-, libXdamage
-, libX11
-, libXrandr
-, librsvg
-, libpthreadstubs
-, libXdmcp
-, libstartup_notification
-, wrapGAppsHook3
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  fetchpatch,
+  pkg-config,
+  cmake,
+  gettext,
+  cairo,
+  pango,
+  glib,
+  imlib2,
+  gtk3,
+  libXinerama,
+  libXrender,
+  libXcomposite,
+  libXdamage,
+  libX11,
+  libXrandr,
+  librsvg,
+  libpthreadstubs,
+  libXdmcp,
+  libstartup_notification,
+  wrapGAppsHook3,
 }:
 
 stdenv.mkDerivation rec {
@@ -68,9 +70,7 @@ stdenv.mkDerivation rec {
     libstartup_notification
   ];
 
-  cmakeFlags = [
-    "-Ddocdir=share/doc/${pname}"
-  ];
+  cmakeFlags = [ "-Ddocdir=share/doc/${pname}" ];
 
   postPatch = ''
     for f in ./src/launcher/apps-common.c \

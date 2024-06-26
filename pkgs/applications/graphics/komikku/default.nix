@@ -1,20 +1,21 @@
-{ lib
-, fetchFromGitea
-, desktop-file-utils
-, gettext
-, glib
-, gobject-introspection
-, blueprint-compiler
-, gtk4
-, libadwaita
-, libnotify
-, webkitgtk_6_0
-, meson
-, ninja
-, pkg-config
-, python3
-, wrapGAppsHook4
-, nix-update-script
+{
+  lib,
+  fetchFromGitea,
+  desktop-file-utils,
+  gettext,
+  glib,
+  gobject-introspection,
+  blueprint-compiler,
+  gtk4,
+  libadwaita,
+  libnotify,
+  webkitgtk_6_0,
+  meson,
+  ninja,
+  pkg-config,
+  python3,
+  wrapGAppsHook4,
+  nix-update-script,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -93,6 +94,9 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://apps.gnome.org/Komikku/";
     license = licenses.gpl3Plus;
     changelog = "https://codeberg.org/valos/Komikku/releases/tag/v${version}";
-    maintainers = with maintainers; [ chuangzhu infinitivewitch ];
+    maintainers = with maintainers; [
+      chuangzhu
+      infinitivewitch
+    ];
   };
 }

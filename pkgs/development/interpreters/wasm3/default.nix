@@ -1,4 +1,9 @@
-{ lib, stdenv, cmake, fetchFromGitHub }:
+{
+  lib,
+  stdenv,
+  cmake,
+  fetchFromGitHub,
+}:
 
 stdenv.mkDerivation rec {
   pname = "wasm3";
@@ -13,9 +18,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  cmakeFlags = [
-    "-DBUILD_WASI=simple"
-  ];
+  cmakeFlags = [ "-DBUILD_WASI=simple" ];
 
   installPhase = ''
     runHook preInstall

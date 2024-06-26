@@ -1,19 +1,21 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, sfml
-, libGLU
-, libGL
-, bullet
-, glm
-, libmad
-, openal
-, SDL2
-, boost
-, ffmpeg_4
-, Cocoa
-, OpenAL }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  sfml,
+  libGLU,
+  libGL,
+  bullet,
+  glm,
+  libmad,
+  openal,
+  SDL2,
+  boost,
+  ffmpeg_4,
+  Cocoa,
+  OpenAL,
+}:
 
 stdenv.mkDerivation {
   version = "unstable-2021-10-14";
@@ -27,16 +29,30 @@ stdenv.mkDerivation {
     fetchSubmodules = true;
   };
 
-  postPatch = lib.optional (stdenv.cc.isClang && (lib.versionAtLeast stdenv.cc.version "9"))''
+  postPatch = lib.optional (stdenv.cc.isClang && (lib.versionAtLeast stdenv.cc.version "9")) ''
     substituteInPlace cmake_configure.cmake \
       --replace 'target_link_libraries(rw_interface INTERFACE "stdc++fs")' ""
   '';
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = [
-    sfml libGLU libGL bullet glm libmad openal SDL2 boost ffmpeg_4
-  ] ++ lib.optionals stdenv.isDarwin [ OpenAL Cocoa ];
+  buildInputs =
+    [
+      sfml
+      libGLU
+      libGL
+      bullet
+      glm
+      libmad
+      openal
+      SDL2
+      boost
+      ffmpeg_4
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      OpenAL
+      Cocoa
+    ];
 
   meta = with lib; {
     description = "Unofficial open source recreation of the classic Grand Theft Auto III game executable";

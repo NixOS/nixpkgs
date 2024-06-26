@@ -1,12 +1,14 @@
-{ fetchFromSourcehut
-, lib
-, meson
-, ninja
-, pkg-config
-, scdoc
-, stdenv
-, systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd, systemd
-, nixosTests
+{
+  fetchFromSourcehut,
+  lib,
+  meson,
+  ninja,
+  pkg-config,
+  scdoc,
+  stdenv,
+  systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd,
+  systemd,
+  nixosTests,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -20,11 +22,14 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-YaR4VuY+wrzbnhER4bkwdm0rTY1OVMtixdDEhu7Lnws=";
   };
 
-  outputs = [ "bin" "out" "dev" "man" ];
-
-  depsBuildBuild = [
-    pkg-config
+  outputs = [
+    "bin"
+    "out"
+    "dev"
+    "man"
   ];
+
+  depsBuildBuild = [ pkg-config ];
 
   nativeBuildInputs = [
     meson

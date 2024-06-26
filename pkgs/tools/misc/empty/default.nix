@@ -1,4 +1,9 @@
-{ fetchzip, lib, stdenv, which }:
+{
+  fetchzip,
+  lib,
+  stdenv,
+  which,
+}:
 
 stdenv.mkDerivation rec {
   pname = "empty";
@@ -10,9 +15,7 @@ stdenv.mkDerivation rec {
     stripRoot = false;
   };
 
-  patches = [
-    ./0.6-Makefile.patch
-  ];
+  patches = [ ./0.6-Makefile.patch ];
 
   nativeBuildInputs = [ which ];
 

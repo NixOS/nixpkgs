@@ -1,15 +1,16 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, meson
-, ninja
-, pkg-config
-, wrapQtAppsHook
-, qtbase
-, libpng
-, giflib
-, libjpeg
-, impy
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  pkg-config,
+  wrapQtAppsHook,
+  qtbase,
+  libpng,
+  giflib,
+  libjpeg,
+  impy,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -48,8 +49,10 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = platforms.all;
     # Undefined symbols for architecture x86_64:
     # "_bundle_path", referenced from: App::SetupPaths() in src_app.cpp.o
-    broken = stdenv.isDarwin ||
-    # https://github.com/bcampbell/evilpixie/issues/28
-      stdenv.isAarch64;
+    broken =
+      stdenv.isDarwin
+      ||
+        # https://github.com/bcampbell/evilpixie/issues/28
+        stdenv.isAarch64;
   };
 })

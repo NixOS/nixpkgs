@@ -1,15 +1,16 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cargo
-, pkg-config
-, rustPlatform
-, rustc
-, wrapGAppsHook3
-, gdk-pixbuf
-, gtk3
-, libsoup_3
-, webkitgtk_4_1
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cargo,
+  pkg-config,
+  rustPlatform,
+  rustc,
+  wrapGAppsHook3,
+  gdk-pixbuf,
+  gtk3,
+  libsoup_3,
+  webkitgtk_4_1,
 }:
 
 stdenv.mkDerivation rec {
@@ -44,9 +45,7 @@ stdenv.mkDerivation rec {
     webkitgtk_4_1
   ];
 
-  makeFlags = [
-    "prefix=$(out)"
-  ];
+  makeFlags = [ "prefix=$(out)" ];
 
   meta = with lib; {
     description = "GTK application for browsing and installing fonts from Google's font archive";

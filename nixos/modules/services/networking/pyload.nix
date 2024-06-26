@@ -1,4 +1,10 @@
-{ config, lib, pkgs, utils, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  utils,
+  ...
+}:
 let
   cfg = config.services.pyload;
 
@@ -64,7 +70,9 @@ in
 
   config = lib.mkIf cfg.enable {
     systemd.tmpfiles.settings.pyload = {
-      ${cfg.downloadDirectory}.d = { inherit (cfg) user group; };
+      ${cfg.downloadDirectory}.d = {
+        inherit (cfg) user group;
+      };
     };
 
     systemd.services.pyload = {
@@ -105,9 +113,7 @@ in
         BindReadOnlyPaths = [
           builtins.storeDir # Needed to run the python interpreter
         ];
-        BindPaths = [
-          cfg.downloadDirectory
-        ];
+        BindPaths = [ cfg.downloadDirectory ];
 
         # Hardening options
         LockPersonality = true;
@@ -132,7 +138,11 @@ in
         RestrictRealtime = true;
         RestrictSUIDSGID = true;
         SystemCallArchitectures = "native";
-        SystemCallFilter = [ "@system-service" "~@resources" "~@privileged" ];
+        SystemCallFilter = [
+          "@system-service"
+          "~@resources"
+          "~@privileged"
+        ];
         UMask = "0002";
         CapabilityBoundingSet = [
           "~CAP_BLOCK_SUSPEND"

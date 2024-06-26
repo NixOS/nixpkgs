@@ -1,4 +1,10 @@
-{ lib, fetchFromGitHub, jre, makeWrapper, maven }:
+{
+  lib,
+  fetchFromGitHub,
+  jre,
+  makeWrapper,
+  maven,
+}:
 
 maven.buildMavenPackage rec {
   pname = "jd-cli";

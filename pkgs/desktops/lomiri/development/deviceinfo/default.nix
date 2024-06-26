@@ -1,13 +1,14 @@
-{ stdenv
-, lib
-, fetchFromGitLab
-, gitUpdater
-, testers
-, cmake
-, pkg-config
-, cmake-extras
-, gtest
-, yaml-cpp
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  gitUpdater,
+  testers,
+  cmake,
+  pkg-config,
+  cmake-extras,
+  gtest,
+  yaml-cpp,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -45,13 +46,9 @@ stdenv.mkDerivation (finalAttrs: {
     yaml-cpp
   ];
 
-  checkInputs = [
-    gtest
-  ];
+  checkInputs = [ gtest ];
 
-  cmakeFlags = [
-    "-DDISABLE_TESTS=${lib.boolToString (!finalAttrs.finalPackage.doCheck)}"
-  ];
+  cmakeFlags = [ "-DDISABLE_TESTS=${lib.boolToString (!finalAttrs.finalPackage.doCheck)}" ];
 
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
@@ -68,8 +65,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = teams.lomiri.members;
     platforms = platforms.linux;
     mainProgram = "device-info";
-    pkgConfigModules = [
-      "deviceinfo"
-    ];
+    pkgConfigModules = [ "deviceinfo" ];
   };
 })

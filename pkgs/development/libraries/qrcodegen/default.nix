@@ -1,6 +1,7 @@
-{ lib
-, stdenv
-, fetchFromGitHub
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -16,9 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   sourceRoot = "${finalAttrs.src.name}/c";
 
-  nativeBuildInputs = lib.optionals stdenv.cc.isClang [
-    stdenv.cc.cc.libllvm.out
-  ];
+  nativeBuildInputs = lib.optionals stdenv.cc.isClang [ stdenv.cc.cc.libllvm.out ];
 
   makeFlags = lib.optionals stdenv.cc.isClang [ "AR=llvm-ar" ];
 

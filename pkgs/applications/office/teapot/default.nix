@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, libtirpc
-, ncurses
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  libtirpc,
+  ncurses,
 }:
 
 stdenv.mkDerivation rec {
@@ -29,9 +30,7 @@ stdenv.mkDerivation rec {
     ./002-remove-help.patch
   ];
 
-  nativeBuildInputs = [
-    cmake
-  ];
+  nativeBuildInputs = [ cmake ];
 
   buildInputs = [
     libtirpc
@@ -42,9 +41,7 @@ stdenv.mkDerivation rec {
   env.NIX_CFLAGS_COMPILE = toString [ "-I${libtirpc.dev}/include/tirpc" ];
   NIX_LDFLAGS = [ "-ltirpc" ];
 
-  cmakeConfigureFlags = [
-    "-DENABLE_HELP=OFF"
-  ];
+  cmakeConfigureFlags = [ "-DENABLE_HELP=OFF" ];
 
   meta = with lib; {
     inherit (src.meta) homepage;

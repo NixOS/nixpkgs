@@ -1,11 +1,13 @@
-{ lib, stdenv
-, fetchFromGitHub
-, pkg-config
-, autoreconfHook
-, curl
-, lua
-, openssl
-, features ? {
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  autoreconfHook,
+  curl,
+  lua,
+  openssl,
+  features ? {
     urls = false;
     # Upstream enables regex by default
     regex = true;
@@ -13,7 +15,7 @@
     signatures = false;
     lua = false;
     utils = false;
-  }
+  },
 }:
 
 let
@@ -34,18 +36,21 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-esNEVBa660rl3Oo2SLaLrFThFkjbqtZ1r0tjMq3h6cM=";
   };
 
-  nativeBuildInputs = [ pkg-config autoreconfHook ];
+  nativeBuildInputs = [
+    pkg-config
+    autoreconfHook
+  ];
 
-  buildInputs = with lib;
+  buildInputs =
+    with lib;
     concatLists (
-      mapAttrsToList (feat: enabled:
-        optionals enabled (featureDeps."${feat}" or [])
-      ) features
+      mapAttrsToList (feat: enabled: optionals enabled (featureDeps."${feat}" or [ ])) features
     );
 
   enableParallelBuilding = true;
 
-  configureFlags = with lib;
+  configureFlags =
+    with lib;
     mapAttrsToList (feat: enabled: strings.enableFeature enabled feat) features;
 
   meta = with lib; {

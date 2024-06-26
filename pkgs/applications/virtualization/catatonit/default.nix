@@ -1,9 +1,10 @@
-{ stdenv
-, lib
-, autoreconfHook
-, fetchFromGitHub
-, glibc
-, nixosTests
+{
+  stdenv,
+  lib,
+  autoreconfHook,
+  fetchFromGitHub,
+  glibc,
+  nixosTests,
 }:
 
 stdenv.mkDerivation rec {
@@ -18,7 +19,10 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = lib.optionals (!stdenv.hostPlatform.isMusl) [ glibc glibc.static ];
+  buildInputs = lib.optionals (!stdenv.hostPlatform.isMusl) [
+    glibc
+    glibc.static
+  ];
 
   enableParallelBuilding = true;
   strictDeps = true;
@@ -28,7 +32,9 @@ stdenv.mkDerivation rec {
     readelf -d $out/bin/catatonit | grep 'There is no dynamic section in this file.'
   '';
 
-  passthru.tests = { inherit (nixosTests) podman; };
+  passthru.tests = {
+    inherit (nixosTests) podman;
+  };
 
   meta = with lib; {
     description = "Container init that is so simple it's effectively brain-dead";

@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchurl, fetchpatch, yasm }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  yasm,
+}:
 
 stdenv.mkDerivation rec {
   pname = "mac";

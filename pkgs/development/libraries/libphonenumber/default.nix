@@ -1,15 +1,16 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, buildPackages
-, cmake
-, gtest
-, jre
-, pkg-config
-, boost
-, icu
-, protobuf
-, Foundation
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  buildPackages,
+  cmake,
+  gtest,
+  jre,
+  pkg-config,
+  boost,
+  icu,
+  protobuf,
+  Foundation,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -40,9 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
     boost
     icu
     protobuf
-  ] ++ lib.optionals stdenv.isDarwin [
-    Foundation
-  ];
+  ] ++ lib.optionals stdenv.isDarwin [ Foundation ];
 
   cmakeDir = "../cpp";
 

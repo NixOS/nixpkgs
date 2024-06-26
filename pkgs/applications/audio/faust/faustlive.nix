@@ -1,28 +1,29 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, cmake
-, pkg-config
-, which
-, alsa-lib
-, curl
-, faust
-, flac
-, gnutls
-, libjack2
-, libmicrohttpd
-, libmpg123
-, libogg
-, libopus
-, libsndfile
-, libtasn1
-, libvorbis
-, libxcb
-, llvm
-, p11-kit
-, qrencode
-, qt5
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  pkg-config,
+  which,
+  alsa-lib,
+  curl,
+  faust,
+  flac,
+  gnutls,
+  libjack2,
+  libmicrohttpd,
+  libmpg123,
+  libogg,
+  libopus,
+  libsndfile,
+  libtasn1,
+  libvorbis,
+  libxcb,
+  llvm,
+  p11-kit,
+  qrencode,
+  qt5,
 }:
 
 stdenv.mkDerivation rec {
@@ -78,9 +79,7 @@ stdenv.mkDerivation rec {
     qt5.qtbase
   ];
 
-  cmakeFlags = [
-    "-DCMAKE_BUILD_WITH_INSTALL_RPATH=ON"
-  ];
+  cmakeFlags = [ "-DCMAKE_BUILD_WITH_INSTALL_RPATH=ON" ];
 
   postPatch = "cd Build";
 

@@ -1,8 +1,10 @@
-{ lib
-, buildDotnetModule
-, fetchFromGitHub
-, dotnetCorePackages
-, altcoinSupport ? false }:
+{
+  lib,
+  buildDotnetModule,
+  fetchFromGitHub,
+  dotnetCorePackages,
+  altcoinSupport ? false,
+}:
 
 buildDotnetModule rec {
   pname = "btcpayserver";
@@ -31,7 +33,10 @@ buildDotnetModule rec {
   meta = with lib; {
     description = "Self-hosted, open-source cryptocurrency payment processor";
     homepage = "https://btcpayserver.org";
-    maintainers = with maintainers; [ kcalvinalvin erikarvstedt ];
+    maintainers = with maintainers; [
+      kcalvinalvin
+      erikarvstedt
+    ];
     license = licenses.mit;
     platforms = platforms.linux ++ platforms.darwin;
   };

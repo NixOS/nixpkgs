@@ -1,4 +1,10 @@
-{ lib, fetchFromGitHub, crystal, makeWrapper, openssl }:
+{
+  lib,
+  fetchFromGitHub,
+  crystal,
+  makeWrapper,
+  openssl,
+}:
 
 crystal.buildCrystalPackage rec {
   pname = "lucky-cli";

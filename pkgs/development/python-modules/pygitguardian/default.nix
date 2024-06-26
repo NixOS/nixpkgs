@@ -34,13 +34,9 @@ buildPythonPackage rec {
     "setuptools"
   ];
 
-  build-system = [
-    pdm-backend
-  ];
+  build-system = [ pdm-backend ];
 
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
-  ];
+  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   dependencies = [
     marshmallow

@@ -1,8 +1,9 @@
-{ lib
-, cmake
-, fetchFromGitHub
-, stdenv
-, primecount
+{
+  lib,
+  cmake,
+  fetchFromGitHub,
+  stdenv,
+  primecount,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -16,7 +17,12 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-jULYLJK3iwPKgWpdTEetmSz1Nv2md1XUfR9A9mTQu9M=";
   };
 
-  outputs = [ "out" "dev" "lib" "man" ];
+  outputs = [
+    "out"
+    "dev"
+    "lib"
+    "man"
+  ];
 
   nativeBuildInputs = [ cmake ];
 
@@ -42,8 +48,12 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/kimwalisch/primesieve/blob/${finalAttrs.src.rev}/ChangeLog";
     license = lib.licenses.bsd2;
     mainProgram = "primesieve";
-    maintainers = lib.teams.sage.members ++
-      (with lib.maintainers; [ abbradar AndersonTorres ]);
+    maintainers =
+      lib.teams.sage.members
+      ++ (with lib.maintainers; [
+        abbradar
+        AndersonTorres
+      ]);
     platforms = lib.platforms.unix;
   };
 })

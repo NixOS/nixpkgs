@@ -1,4 +1,10 @@
-{ lib, stdenv, cmake, fetchFromGitHub, fetchpatch }:
+{
+  lib,
+  stdenv,
+  cmake,
+  fetchFromGitHub,
+  fetchpatch,
+}:
 
 stdenv.mkDerivation rec {
   version = "1.1.5";
@@ -28,7 +34,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description= "Socket library that provides several common communication patterns";
+    description = "Socket library that provides several common communication patterns";
     homepage = "https://nanomsg.org/";
     license = licenses.mit;
     mainProgram = "nanocat";

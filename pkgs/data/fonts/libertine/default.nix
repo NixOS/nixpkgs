@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchurl, fontforge }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fontforge,
+}:
 
 stdenv.mkDerivation {
   pname = "linux-libertine";

@@ -1,4 +1,8 @@
-{ lib, rustPlatform, fetchFromGitHub }:
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "typos";
@@ -18,7 +22,13 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "typos";
     homepage = "https://github.com/crate-ci/typos";
     changelog = "https://github.com/crate-ci/typos/blob/${src.rev}/CHANGELOG.md";
-    license = with licenses; [ asl20 /* or */ mit ];
-    maintainers = with maintainers; [ figsoda mgttlinger ];
+    license = with licenses; [
+      asl20 # or
+      mit
+    ];
+    maintainers = with maintainers; [
+      figsoda
+      mgttlinger
+    ];
   };
 }

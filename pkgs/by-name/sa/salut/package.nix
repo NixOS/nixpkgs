@@ -1,10 +1,11 @@
-{ lib
-, rustPlatform
-, fetchFromGitLab
-, pkg-config
-, fontconfig
-, libxkbcommon
-, wayland
+{
+  lib,
+  rustPlatform,
+  fetchFromGitLab,
+  pkg-config,
+  fontconfig,
+  libxkbcommon,
+  wayland,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -28,9 +29,7 @@ rustPlatform.buildRustPackage rec {
     };
   };
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
     fontconfig

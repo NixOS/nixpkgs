@@ -1,4 +1,9 @@
-{ lib, git, python3, fetchFromGitHub }:
+{
+  lib,
+  git,
+  python3,
+  fetchFromGitHub,
+}:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "copier";
@@ -44,9 +49,7 @@ python3.pkgs.buildPythonApplication rec {
     questionary
   ];
 
-  makeWrapperArgs = [
-    "--suffix PATH : ${lib.makeBinPath [ git ] }"
-  ];
+  makeWrapperArgs = [ "--suffix PATH : ${lib.makeBinPath [ git ]}" ];
 
   meta = with lib; {
     description = "Library and command-line utility for rendering projects templates";

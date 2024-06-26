@@ -1,11 +1,18 @@
-{ lib, stdenv, fetchFromGitHub, cmake, libusb1, ncurses5 }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  libusb1,
+  ncurses5,
+}:
 
 stdenv.mkDerivation rec {
   pname = "lguf-brightness";
 
   version = "unstable-2018-02-11";
 
-  src = fetchFromGitHub  {
+  src = fetchFromGitHub {
     owner = "periklis";
     repo = pname;
     rev = "fcb2bc1738d55c83b6395c24edc27267a520a725";
@@ -14,7 +21,10 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = [ libusb1 ncurses5 ];
+  buildInputs = [
+    libusb1
+    ncurses5
+  ];
 
   installPhase = ''
     install -D lguf_brightness $out/bin/lguf_brightness

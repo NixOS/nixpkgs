@@ -1,6 +1,7 @@
-{ lib
-, python3
-, fetchFromGitHub
+{
+  lib,
+  python3,
+  fetchFromGitHub,
 }:
 
 let
@@ -17,25 +18,21 @@ let
           hash = "sha256-eRRlG3GJX3WeKTNJVWgNTTHY56qiUGOlxtvEZ2xObLA=";
         };
 
-        nativeBuildInputs = with self; [
-          flit-core
-        ];
+        nativeBuildInputs = with self; [ flit-core ];
 
-        propagatedBuildInputs = with self; [
-          requests
-        ];
+        propagatedBuildInputs = with self; [ requests ];
 
         nativeCheckInputs = with self; [
           pytestCheckHook
           responses
         ];
 
-        disabledTestPaths = [
-          "tests/integration"
-        ];
+        disabledTestPaths = [ "tests/integration" ];
 
         pythonImportsCheck = [ "msgraph.core" ];
       });
     };
   };
-in with python.pkgs; toPythonApplication parsedmarc
+in
+with python.pkgs;
+toPythonApplication parsedmarc

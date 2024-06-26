@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, wxGTK32
-, texinfo
-, tetex
-, wrapGAppsHook3
-, autoconf-archive
-, autoreconfHook
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  wxGTK32,
+  texinfo,
+  tetex,
+  wrapGAppsHook3,
+  autoconf-archive,
+  autoreconfHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -28,9 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
     wrapGAppsHook3
   ];
 
-  buildInputs = [
-    wxGTK32
-  ];
+  buildInputs = [ wxGTK32 ];
 
   meta = with lib; {
     description = "Berkeley Logo interpreter";

@@ -1,9 +1,10 @@
-{ buildOctavePackage
-, stdenv
-, lib
-, fetchurl
-, pkg-config
-, ffmpeg_4
+{
+  buildOctavePackage,
+  stdenv,
+  lib,
+  fetchurl,
+  pkg-config,
+  ffmpeg_4,
 }:
 
 buildOctavePackage rec {
@@ -15,17 +16,16 @@ buildOctavePackage rec {
     sha256 = "sha256-bZNaRnmJl5UF0bQMNoEWvoIXJaB0E6/V9eChE725OHY=";
   };
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
-  propagatedBuildInputs = [
-    ffmpeg_4
-  ];
+  propagatedBuildInputs = [ ffmpeg_4 ];
 
   meta = with lib; {
     homepage = "https://octave.sourceforge.io/video/index.html";
-    license = with licenses; [ gpl3Plus bsd3 ];
+    license = with licenses; [
+      gpl3Plus
+      bsd3
+    ];
     maintainers = with maintainers; [ KarlJoad ];
     description = "Wrapper for OpenCV's CvCapture_FFMPEG and CvVideoWriter_FFMPEG";
     # error: declaration of 'panic' has a different language linkage

@@ -1,7 +1,8 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, kernel
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  kernel,
 }:
 
 let
@@ -22,17 +23,15 @@ let
     pname = "monitor-cpu";
     inherit version src;
 
-    makeFlags = [
-      "-C userspace"
-    ];
+    makeFlags = [ "-C userspace" ];
 
     installPhase = ''
-    runHook preInstall
+      runHook preInstall
 
-    install userspace/monitor_cpu -Dm755 -t $out/bin
+      install userspace/monitor_cpu -Dm755 -t $out/bin
 
-    runHook postInstall
-  '';
+      runHook postInstall
+    '';
   };
 
 in
@@ -62,7 +61,10 @@ stdenv.mkDerivation {
     description = "Linux kernel driver that exposes access to the SMU (System Management Unit) for certain AMD Ryzen Processors";
     homepage = "https://gitlab.com/leogx9r/ryzen_smu";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ Cryolitia phdyellow ];
+    maintainers = with maintainers; [
+      Cryolitia
+      phdyellow
+    ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "monitor_cpu";
   };

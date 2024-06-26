@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, guile
-, autoreconfHook
-, pkg-config
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  guile,
+  autoreconfHook,
+  pkg-config,
 }:
 
 stdenv.mkDerivation rec {
@@ -19,11 +20,11 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
   nativeBuildInputs = [
-    autoreconfHook guile pkg-config
-  ];
-  buildInputs = [
+    autoreconfHook
     guile
+    pkg-config
   ];
+  buildInputs = [ guile ];
 
   doCheck = true;
   makeFlags = [ "GUILE_AUTO_COMPILE=0" ];

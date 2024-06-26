@@ -8,8 +8,7 @@ alephone.makeWrapper rec {
 
   # nixpkgs-update: no auto update
   zip = fetchurl {
-    url =
-      "https://github.com/Aleph-One-Marathon/alephone/releases/download/release-${version}/Marathon-${version}-Data.zip";
+    url = "https://github.com/Aleph-One-Marathon/alephone/releases/download/release-${version}/Marathon-${version}-Data.zip";
     sha256 = "sha256-shZ82e7veaaT/petxDQ8Fd7YtJPmTgxSCStf0kGfrFs=";
   };
 

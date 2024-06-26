@@ -1,4 +1,12 @@
-{ stdenv, lib, fetchFromGitHub, libtool, pkg-config, perl, ncurses }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  libtool,
+  pkg-config,
+  perl,
+  ncurses,
+}:
 
 stdenv.mkDerivation rec {
   pname = "unibilium";
@@ -11,11 +19,18 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-A/WECvma7u/Mmecvzi0cP168dt4v+zwC8CiFBkqWezA=";
   };
 
-  makeFlags = [ "PREFIX=$(out)" "LIBTOOL=${libtool}/bin/libtool" ];
+  makeFlags = [
+    "PREFIX=$(out)"
+    "LIBTOOL=${libtool}/bin/libtool"
+  ];
 
   strictDeps = true;
 
-  nativeBuildInputs = [ pkg-config perl libtool ];
+  nativeBuildInputs = [
+    pkg-config
+    perl
+    libtool
+  ];
   buildInputs = [ ncurses ];
 
   meta = with lib; {

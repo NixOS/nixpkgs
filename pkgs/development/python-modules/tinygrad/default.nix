@@ -159,14 +159,12 @@ buildPythonPackage rec {
       "test_casts_to"
     ];
 
-  disabledTestPaths =
-    [
-      # Require internet access
-      "test/models/test_mnist.py"
-      "test/models/test_real_world.py"
-      "test/testextra/test_lr_scheduler.py"
-    ]
-    ++ lib.optionals (!rocmSupport) [ "extra/hip_gpu_driver/" ];
+  disabledTestPaths = [
+    # Require internet access
+    "test/models/test_mnist.py"
+    "test/models/test_real_world.py"
+    "test/testextra/test_lr_scheduler.py"
+  ] ++ lib.optionals (!rocmSupport) [ "extra/hip_gpu_driver/" ];
 
   meta = with lib; {
     description = "Simple and powerful neural network framework";

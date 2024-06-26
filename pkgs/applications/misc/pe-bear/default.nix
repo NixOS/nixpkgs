@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, qtbase
-, wrapQtAppsHook
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  qtbase,
+  wrapQtAppsHook,
 }:
 
 stdenv.mkDerivation rec {
@@ -23,9 +24,7 @@ stdenv.mkDerivation rec {
     wrapQtAppsHook
   ];
 
-  buildInputs = [
-    qtbase
-  ];
+  buildInputs = [ qtbase ];
 
   meta = with lib; {
     description = "Portable Executable reversing tool with a friendly GUI";

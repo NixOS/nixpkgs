@@ -1,4 +1,10 @@
-{ lib, buildGoModule, fetchFromGitHub, net-snmp, nixosTests }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  net-snmp,
+  nixosTests,
+}:
 
 buildGoModule rec {
   pname = "snmp_exporter";
@@ -17,12 +23,17 @@ buildGoModule rec {
 
   doCheck = true;
 
-  passthru.tests = { inherit (nixosTests.prometheus-exporters) snmp; };
+  passthru.tests = {
+    inherit (nixosTests.prometheus-exporters) snmp;
+  };
 
   meta = with lib; {
     description = "SNMP Exporter for Prometheus";
     homepage = "https://github.com/prometheus/snmp_exporter";
     license = licenses.asl20;
-    maintainers = with maintainers; [ oida Frostman ];
+    maintainers = with maintainers; [
+      oida
+      Frostman
+    ];
   };
 }

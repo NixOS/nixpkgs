@@ -1,6 +1,16 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 let
-  inherit (lib) mkEnableOption mkPackageOption mkOption types;
+  inherit (lib)
+    mkEnableOption
+    mkPackageOption
+    mkOption
+    types
+    ;
 
   cfg = config.services.wg-access-server;
 
@@ -60,20 +70,33 @@ in
   config = lib.mkIf cfg.enable {
     assertions =
       map
-        (attrPath:
-          {
-            assertion = !lib.hasAttrByPath attrPath config.services.wg-access-server.settings;
-            message = ''
-              {option}`services.wg-access-server.settings.${lib.concatStringsSep "." attrPath}` must definded
-              in {option}`services.wg-access-server.secretsFile`.
-            '';
-          })
+        (attrPath: {
+          assertion = !lib.hasAttrByPath attrPath config.services.wg-access-server.settings;
+          message = ''
+            {option}`services.wg-access-server.settings.${lib.concatStringsSep "." attrPath}` must definded
+            in {option}`services.wg-access-server.secretsFile`.
+          '';
+        })
         [
           [ "adminPassword" ]
-          [ "wireguard" "privateKey" ]
-          [ "auth" "sessionStore" ]
-          [ "auth" "oidc" "clientSecret" ]
-          [ "auth" "gitlab" "clientSecret" ]
+          [
+            "wireguard"
+            "privateKey"
+          ]
+          [
+            "auth"
+            "sessionStore"
+          ]
+          [
+            "auth"
+            "oidc"
+            "clientSecret"
+          ]
+          [
+            "auth"
+            "gitlab"
+            "clientSecret"
+          ]
         ];
 
     boot.kernel.sysctl = {
@@ -102,17 +125,13 @@ in
 
       serviceConfig =
         let
-          capabilities = [
-            "CAP_NET_ADMIN"
-          ] ++ lib.optional cfg.settings.dns.enabled "CAP_NET_BIND_SERVICE";
+          capabilities = [ "CAP_NET_ADMIN" ] ++ lib.optional cfg.settings.dns.enabled "CAP_NET_BIND_SERVICE";
         in
         {
           WorkingDirectory = "/var/lib/wg-access-server";
           StateDirectory = "wg-access-server";
 
-          LoadCredential = [
-            "SECRETS_FILE:${cfg.secretsFile}"
-          ];
+          LoadCredential = [ "SECRETS_FILE:${cfg.secretsFile}" ];
 
           # Hardening
           DynamicUser = true;

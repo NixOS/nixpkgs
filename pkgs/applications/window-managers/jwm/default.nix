@@ -1,29 +1,30 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoconf
-, automake
-, expat
-, fontconfig
-, freetype
-, gettext
-, libX11
-, libXau
-, libXdmcp
-, libXext
-, libXft
-, libXinerama
-, libXmu
-, libXpm
-, libjpeg
-, libpng
-, librsvg
-, pango
-, pkg-config
-, which
-, xorg
-, xorgproto
-, gitUpdater
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoconf,
+  automake,
+  expat,
+  fontconfig,
+  freetype,
+  gettext,
+  libX11,
+  libXau,
+  libXdmcp,
+  libXext,
+  libXft,
+  libXinerama,
+  libXmu,
+  libXpm,
+  libjpeg,
+  libpng,
+  librsvg,
+  pango,
+  pkg-config,
+  which,
+  xorg,
+  xorgproto,
+  gitUpdater,
 }:
 
 stdenv.mkDerivation rec {
@@ -69,9 +70,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  passthru.updateScript = gitUpdater {
-    rev-prefix = "v";
-  };
+  passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
   meta = {
     homepage = "http://joewing.net/projects/jwm/";

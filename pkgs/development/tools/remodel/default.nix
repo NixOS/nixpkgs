@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rustPlatform
-, pkg-config
-, openssl
-, Security
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  pkg-config,
+  openssl,
+  Security,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -20,15 +21,9 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-YCYs+MMTxnJEKhzjddBp7lnSYPrpf3G+ktr1ez/ZKkg=";
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [
-    openssl
-  ] ++ lib.optionals stdenv.isDarwin [
-    Security
-  ];
+  buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [ Security ];
 
   meta = with lib; {
     description = "Roblox file manipulation tool";

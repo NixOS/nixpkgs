@@ -8,7 +8,18 @@ with lib;
   };
 
   imports = [
-    (lib.mkRenamedOptionModule [ "security" "virtualization" "flushL1DataCache" ] [ "security" "virtualisation" "flushL1DataCache" ])
+    (lib.mkRenamedOptionModule
+      [
+        "security"
+        "virtualization"
+        "flushL1DataCache"
+      ]
+      [
+        "security"
+        "virtualisation"
+        "flushL1DataCache"
+      ]
+    )
   ];
 
   options = {
@@ -81,7 +92,13 @@ with lib;
     };
 
     security.virtualisation.flushL1DataCache = mkOption {
-      type = types.nullOr (types.enum [ "never" "cond" "always" ]);
+      type = types.nullOr (
+        types.enum [
+          "never"
+          "cond"
+          "always"
+        ]
+      );
       default = null;
       description = ''
         Whether the hypervisor should flush the L1 data cache before
@@ -108,7 +125,8 @@ with lib;
       boot.kernel.sysctl."user.max_user_namespaces" = 0;
 
       assertions = [
-        { assertion = config.nix.settings.sandbox -> config.security.allowUserNamespaces;
+        {
+          assertion = config.nix.settings.sandbox -> config.security.allowUserNamespaces;
           message = "`nix.settings.sandbox = true` conflicts with `!security.allowUserNamespaces`.";
         }
       ];
@@ -125,16 +143,14 @@ with lib;
       boot.kernel.sysctl."kernel.kexec_load_disabled" = mkDefault true;
     })
 
-    (mkIf (!config.security.allowSimultaneousMultithreading) {
-      boot.kernelParams = [ "nosmt" ];
-    })
+    (mkIf (!config.security.allowSimultaneousMultithreading) { boot.kernelParams = [ "nosmt" ]; })
 
-    (mkIf config.security.forcePageTableIsolation {
-      boot.kernelParams = [ "pti=on" ];
-    })
+    (mkIf config.security.forcePageTableIsolation { boot.kernelParams = [ "pti=on" ]; })
 
     (mkIf (config.security.virtualisation.flushL1DataCache != null) {
-      boot.kernelParams = [ "kvm-intel.vmentry_l1d_flush=${config.security.virtualisation.flushL1DataCache}" ];
+      boot.kernelParams = [
+        "kvm-intel.vmentry_l1d_flush=${config.security.virtualisation.flushL1DataCache}"
+      ];
     })
   ];
 }

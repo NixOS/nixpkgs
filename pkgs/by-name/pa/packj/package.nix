@@ -1,6 +1,7 @@
-{ lib
-, python3
-, fetchFromGitHub
+{
+  lib,
+  python3,
+  fetchFromGitHub,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -47,9 +48,7 @@ python3.pkgs.buildPythonApplication rec {
     tldextract
   ];
 
-  pythonImportsCheck = [
-    "packj"
-  ];
+  pythonImportsCheck = [ "packj" ];
 
   meta = with lib; {
     description = "Tool to detect malicious/vulnerable open-source dependencies";

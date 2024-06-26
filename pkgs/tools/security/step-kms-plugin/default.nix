@@ -1,12 +1,13 @@
-{ stdenv
-, lib
-, buildGoModule
-, fetchFromGitHub
-, pkg-config
-, pcsclite
-, softhsm
-, opensc
-, yubihsm-shell
+{
+  stdenv,
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  pkg-config,
+  pcsclite,
+  softhsm,
+  opensc,
+  yubihsm-shell,
 }:
 
 buildGoModule rec {
@@ -24,9 +25,7 @@ buildGoModule rec {
 
   proxyVendor = true;
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
     opensc

@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchzip
-, ant
-, jdk8
-, sharutils
-, stripJavaArchivesHook
+{
+  lib,
+  stdenv,
+  fetchzip,
+  ant,
+  jdk8,
+  sharutils,
+  stripJavaArchivesHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

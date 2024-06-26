@@ -1,16 +1,17 @@
-{ lib
-, buildDunePackage
-, lsp
-, xdg
-, re
-, fiber
-, makeWrapper
-, dot-merlin-reader
-, spawn
-, ocamlc-loc
-, merlin-lib
-, astring
-, camlp-streams
+{
+  lib,
+  buildDunePackage,
+  lsp,
+  xdg,
+  re,
+  fiber,
+  makeWrapper,
+  dot-merlin-reader,
+  spawn,
+  ocamlc-loc,
+  merlin-lib,
+  astring,
+  camlp-streams,
 }:
 
 buildDunePackage rec {
@@ -18,11 +19,23 @@ buildDunePackage rec {
   inherit (lsp) version src preBuild;
   duneVersion = "3";
 
-  buildInputs = lsp.buildInputs ++ [ lsp re ]
-  ++ lib.optional (lib.versionAtLeast version "1.9") spawn
-  ++ lib.optionals (lib.versionAtLeast version "1.10") [ fiber xdg ]
-  ++ lib.optional (lib.versionAtLeast version "1.14.2") ocamlc-loc
-  ++ lib.optionals (lib.versionAtLeast version "1.17.0") [ astring camlp-streams merlin-lib ];
+  buildInputs =
+    lsp.buildInputs
+    ++ [
+      lsp
+      re
+    ]
+    ++ lib.optional (lib.versionAtLeast version "1.9") spawn
+    ++ lib.optionals (lib.versionAtLeast version "1.10") [
+      fiber
+      xdg
+    ]
+    ++ lib.optional (lib.versionAtLeast version "1.14.2") ocamlc-loc
+    ++ lib.optionals (lib.versionAtLeast version "1.17.0") [
+      astring
+      camlp-streams
+      merlin-lib
+    ];
 
   nativeBuildInputs = [ makeWrapper ];
 

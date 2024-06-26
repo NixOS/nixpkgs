@@ -1,4 +1,11 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles, testers, func }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  testers,
+  func,
+}:
 
 buildGoModule rec {
   pname = "func";
@@ -22,7 +29,6 @@ buildGoModule rec {
   ];
 
   nativeBuildInputs = [ installShellFiles ];
-
 
   postInstall = ''
     installShellCompletion --cmd func \

@@ -1,18 +1,19 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, meson
-, ninja
-, pkg-config
-, python3Packages
-, vulkan-headers
-, vulkan-loader
-, shaderc
-, lcms2
-, libGL
-, libX11
-, libunwind
-, libdovi
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  meson,
+  ninja,
+  pkg-config,
+  python3Packages,
+  vulkan-headers,
+  vulkan-loader,
+  shaderc,
+  lcms2,
+  libGL,
+  libX11,
+  libunwind,
+  libdovi,
 }:
 
 stdenv.mkDerivation rec {
@@ -46,14 +47,17 @@ stdenv.mkDerivation rec {
     libdovi
   ];
 
-  mesonFlags = with lib; [
-    (mesonOption "vulkan-registry" "${vulkan-headers}/share/vulkan/registry/vk.xml")
-    (mesonBool "demos" false) # Don't build and install the demo programs
-    (mesonEnable "d3d11" false) # Disable the Direct3D 11 based renderer
-    (mesonEnable "glslang" false) # rely on shaderc for GLSL compilation instead
-  ] ++ optionals stdenv.isDarwin [
-    (mesonEnable "unwind" false) # libplacebo doesn’t build with `darwin.libunwind`
-  ];
+  mesonFlags =
+    with lib;
+    [
+      (mesonOption "vulkan-registry" "${vulkan-headers}/share/vulkan/registry/vk.xml")
+      (mesonBool "demos" false) # Don't build and install the demo programs
+      (mesonEnable "d3d11" false) # Disable the Direct3D 11 based renderer
+      (mesonEnable "glslang" false) # rely on shaderc for GLSL compilation instead
+    ]
+    ++ optionals stdenv.isDarwin [
+      (mesonEnable "unwind" false) # libplacebo doesn’t build with `darwin.libunwind`
+    ];
 
   postPatch = ''
     substituteInPlace meson.build \
@@ -71,7 +75,10 @@ stdenv.mkDerivation rec {
     homepage = "https://code.videolan.org/videolan/libplacebo";
     changelog = "https://code.videolan.org/videolan/libplacebo/-/tags/v${version}";
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ primeos tadeokondrak ];
+    maintainers = with maintainers; [
+      primeos
+      tadeokondrak
+    ];
     platforms = platforms.all;
   };
 }

@@ -32,14 +32,16 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   postInstall = ''
-    wrapProgram $out/bin/styli.sh --prefix PATH : ${lib.makeBinPath [
-      curl
-      feh
-      file
-      jq
-      util-linux
-      wget
-    ]}
+    wrapProgram $out/bin/styli.sh --prefix PATH : ${
+      lib.makeBinPath [
+        curl
+        feh
+        file
+        jq
+        util-linux
+        wget
+      ]
+    }
   '';
 
   meta = with lib; {

@@ -1,8 +1,6 @@
 { xunit-viewer, runCommand, ... }:
 
-runCommand "test-xunit-viewer" {
-  nativeBuildInputs = [ xunit-viewer ];
-} ''
+runCommand "test-xunit-viewer" { nativeBuildInputs = [ xunit-viewer ]; } ''
   mkdir $out
   xunit-viewer -r ${./example.junit.xml} -o $out/index.html
   ( set -x

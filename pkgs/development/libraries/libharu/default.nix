@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, cmake, zlib, libpng }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  zlib,
+  libpng,
+}:
 
 stdenv.mkDerivation rec {
   pname = "libharu";
@@ -12,7 +19,10 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ zlib libpng ];
+  buildInputs = [
+    zlib
+    libpng
+  ];
 
   meta = {
     description = "Cross platform, open source library for generating PDF files";

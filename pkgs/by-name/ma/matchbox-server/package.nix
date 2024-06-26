@@ -1,6 +1,7 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
 
 buildGoModule rec {
@@ -16,15 +17,11 @@ buildGoModule rec {
 
   vendorHash = "sha256-sVC4xeQIcqAbKU4MOAtNicHcioYjdsleQwKWLstnjfk=";
 
-  subPackages = [
-    "cmd/matchbox"
-  ];
+  subPackages = [ "cmd/matchbox" ];
 
   # Go linker flags (go tool link)
   # Omit symbol tables and debug info
-  ldflags = [
-    "-w -s -X github.com/poseidon/matchbox/matchbox/version.Version=${version}"
-  ];
+  ldflags = [ "-w -s -X github.com/poseidon/matchbox/matchbox/version.Version=${version}" ];
 
   # Disable cgo to produce a static binary
   CGO_ENABLED = 0;

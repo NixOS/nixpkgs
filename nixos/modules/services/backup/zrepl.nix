@@ -1,4 +1,9 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 with lib;
 let
@@ -21,9 +26,7 @@ in
           Configuration for zrepl. See <https://zrepl.github.io/configuration.html>
           for more information.
         '';
-        type = types.submodule {
-          freeformType = format.type;
-        };
+        type = types.submodule { freeformType = format.type; };
       };
     };
   };

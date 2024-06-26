@@ -1,4 +1,11 @@
-{ lib, buildPythonApplication, fetchPypi, psutil, matplotlib, pytest }:
+{
+  lib,
+  buildPythonApplication,
+  fetchPypi,
+  psutil,
+  matplotlib,
+  pytest,
+}:
 buildPythonApplication rec {
   pname = "psrecord";
   version = "1.2";
@@ -9,12 +16,11 @@ buildPythonApplication rec {
   };
 
   propagatedBuildInputs = [
-    psutil matplotlib
+    psutil
+    matplotlib
   ];
 
-  nativeCheckInputs = [
-    pytest
-  ];
+  nativeCheckInputs = [ pytest ];
 
   checkPhase = ''
     runHook preCheck

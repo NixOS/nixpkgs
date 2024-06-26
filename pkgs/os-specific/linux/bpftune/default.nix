@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, clang
-, bpftools
-, docutils
-, libbpf
-, libcap
-, libnl
-, nixosTests
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  clang,
+  bpftools,
+  docutils,
+  libbpf,
+  libcap,
+  libnl,
+  nixosTests,
 }:
 
 stdenv.mkDerivation rec {
@@ -56,9 +57,7 @@ stdenv.mkDerivation rec {
     "BPF_INCLUDE=${lib.getDev libbpf}/include"
   ];
 
-  hardeningDisable = [
-    "stackprotector"
-  ];
+  hardeningDisable = [ "stackprotector" ];
 
   passthru.tests = {
     inherit (nixosTests) bpftune;

@@ -1,6 +1,7 @@
-{ lib
-, stdenv
-, fetchurl
+{
+  lib,
+  stdenv,
+  fetchurl,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -12,13 +13,9 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-o7jue+lgVxQQvFZOzJMGd1WihlD7Nb+1WaSutq9vaGg=";
   };
 
-  patches = [
-    ./include-string.h.patch
-  ];
+  patches = [ ./include-string.h.patch ];
 
-  makeFlags = [
-    "-C src"
-  ];
+  makeFlags = [ "-C src" ];
 
   postPatch = ''
     substituteInPlace src/Makefile \

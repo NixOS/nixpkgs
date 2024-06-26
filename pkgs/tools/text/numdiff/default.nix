@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchurl, libintl }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libintl,
+}:
 
 stdenv.mkDerivation rec {
   pname = "numdiff";
@@ -20,7 +24,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://www.nongnu.org/numdiff/";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [];
+    maintainers = with maintainers; [ ];
     platforms = platforms.unix;
   };
 }

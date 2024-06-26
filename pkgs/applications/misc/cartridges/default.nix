@@ -1,15 +1,16 @@
-{ blueprint-compiler
-, desktop-file-utils
-, fetchFromGitHub
-, gobject-introspection
-, lib
-, libadwaita
-, meson
-, ninja
-, python3Packages
-, stdenv
-, wrapGAppsHook4
-, nix-update-script
+{
+  blueprint-compiler,
+  desktop-file-utils,
+  fetchFromGitHub,
+  gobject-introspection,
+  lib,
+  libadwaita,
+  meson,
+  ninja,
+  python3Packages,
+  stdenv,
+  wrapGAppsHook4,
+  nix-update-script,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "cartridges";

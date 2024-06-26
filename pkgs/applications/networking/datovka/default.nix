@@ -1,13 +1,14 @@
-{ lib
-, mkDerivation
-, fetchurl
-, libxml2
-, libdatovka
-, qmake
-, qtbase
-, qtwebsockets
-, qtsvg
-, pkg-config
+{
+  lib,
+  mkDerivation,
+  fetchurl,
+  libxml2,
+  libdatovka,
+  qmake,
+  qtbase,
+  qtwebsockets,
+  qtsvg,
+  pkg-config,
 }:
 
 mkDerivation rec {
@@ -19,7 +20,14 @@ mkDerivation rec {
     sha256 = "sha256-6Bd6IeuCXVnK8ZPgU9FOSNqoYf3ZNpkSBC+cR5JU9AQ=";
   };
 
-  buildInputs = [ libdatovka qmake qtbase qtsvg libxml2 qtwebsockets ];
+  buildInputs = [
+    libdatovka
+    qmake
+    qtbase
+    qtsvg
+    libxml2
+    qtwebsockets
+  ];
 
   nativeBuildInputs = [ pkg-config ];
 

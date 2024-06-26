@@ -1,7 +1,8 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
 }:
 
 stdenv.mkDerivation rec {
@@ -15,16 +16,12 @@ stdenv.mkDerivation rec {
     hash = "sha256-kofPs01jb189LUjYHHt+KxDifZQWl0Hm779711mvWtI=";
   };
 
-  nativeBuildInputs = [
-    cmake
-  ];
+  nativeBuildInputs = [ cmake ];
 
   # Using unofficial CMake build script to install CMake module files.
   cmakeDir = "../cmake_unofficial";
 
-  cmakeFlags = [
-    "-DBUILD_SHARED_LIBS=${if stdenv.hostPlatform.isStatic then "OFF" else "ON"}"
-  ];
+  cmakeFlags = [ "-DBUILD_SHARED_LIBS=${if stdenv.hostPlatform.isStatic then "OFF" else "ON"}" ];
 
   meta = with lib; {
     description = "Extremely fast hash algorithm";
@@ -36,7 +33,10 @@ stdenv.mkDerivation rec {
       endian).
     '';
     homepage = "https://github.com/Cyan4973/xxHash";
-    license = with licenses; [ bsd2 gpl2 ];
+    license = with licenses; [
+      bsd2
+      gpl2
+    ];
     mainProgram = "xxhsum";
     maintainers = with maintainers; [ orivej ];
     platforms = platforms.all;

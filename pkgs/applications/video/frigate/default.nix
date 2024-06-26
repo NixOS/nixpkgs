@@ -1,11 +1,12 @@
-{ lib
-, callPackage
-, python3
-, fetchFromGitHub
-, fetchurl
-, fetchpatch2
-, frigate
-, nixosTests
+{
+  lib,
+  callPackage,
+  python3,
+  fetchFromGitHub,
+  fetchurl,
+  fetchpatch2,
+  frigate,
+  nixosTests,
 }:
 
 let
@@ -19,9 +20,7 @@ let
     hash = "sha256-NVT7yaJkVA7b7GL0S0fHjNneBzhjCru56qY1Q4sTVcE=";
   };
 
-  frigate-web = callPackage ./web.nix {
-    inherit version src;
-  };
+  frigate-web = callPackage ./web.nix { inherit version src; };
 
   python = python3.override {
     packageOverrides = self: super: {
@@ -152,9 +151,7 @@ python.pkgs.buildPythonApplication rec {
     runHook postInstall
   '';
 
-  nativeCheckInputs = with python.pkgs; [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = with python.pkgs; [ pytestCheckHook ];
 
   disabledTests = [
     # Test needs network access
@@ -164,7 +161,8 @@ python.pkgs.buildPythonApplication rec {
   passthru = {
     web = frigate-web;
     inherit python;
-    pythonPath =(python.pkgs.makePythonPath propagatedBuildInputs) + ":${frigate}/${python.sitePackages}";
+    pythonPath =
+      (python.pkgs.makePythonPath propagatedBuildInputs) + ":${frigate}/${python.sitePackages}";
     tests = {
       inherit (nixosTests) frigate;
     };

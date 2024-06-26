@@ -1,17 +1,17 @@
-{ lib
-, buildNpmPackage
-, fetchFromGitHub
-, makeWrapper
-, perl
-# Needed if you want to use it for a perl script with dependencies.
-, extraPerlPackages ? []
+{
+  lib,
+  buildNpmPackage,
+  fetchFromGitHub,
+  makeWrapper,
+  perl,
+  # Needed if you want to use it for a perl script with dependencies.
+  extraPerlPackages ? [ ],
 }:
 
 let
-  perlInterpreter = perl.withPackages(ps: [
-    ps.PadWalker
-  ] ++ extraPerlPackages);
-in buildNpmPackage rec {
+  perlInterpreter = perl.withPackages (ps: [ ps.PadWalker ] ++ extraPerlPackages);
+in
+buildNpmPackage rec {
   pname = "perl-debug-adapter";
   version = "1.0.6";
 
@@ -27,7 +27,10 @@ in buildNpmPackage rec {
   npmBuildScript = "compile";
 
   makeWrapperArgs = [
-    "--prefix" "PATH" ":" (lib.makeBinPath [ perlInterpreter ])
+    "--prefix"
+    "PATH"
+    ":"
+    (lib.makeBinPath [ perlInterpreter ])
   ];
   passthru = {
     inherit perlInterpreter;

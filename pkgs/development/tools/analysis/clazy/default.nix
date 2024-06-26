@@ -1,10 +1,10 @@
 {
-    lib
-  , stdenv
-  , fetchFromGitHub
-  , llvmPackages
-  , cmake
-  , makeWrapper
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  llvmPackages,
+  cmake,
+  makeWrapper,
 }:
 
 stdenv.mkDerivation rec {
@@ -12,9 +12,9 @@ stdenv.mkDerivation rec {
   version = "1.11";
 
   src = fetchFromGitHub {
-    owner  = "KDE";
-    repo   = "clazy";
-    rev    = "v${version}";
+    owner = "KDE";
+    repo = "clazy";
+    rev = "v${version}";
     sha256 = "sha256-kcl4dUg84fNdizKUS4kpvIKFfajtTRdz+MYUbKcMFvg=";
   };
 

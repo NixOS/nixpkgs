@@ -1,4 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, cmake, libpulseaudio, libX11, makeWrapper, sox }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  libpulseaudio,
+  libX11,
+  makeWrapper,
+  sox,
+}:
 
 stdenv.mkDerivation rec {
   pname = "multimon-ng";
@@ -11,12 +20,18 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-IJnvOVajkcjaa0DDo8hbkkVvBnDqPKQUN8wJHlafo70=";
   };
 
-  buildInputs = lib.optionals stdenv.isLinux [ libpulseaudio libX11 ];
+  buildInputs = lib.optionals stdenv.isLinux [
+    libpulseaudio
+    libX11
+  ];
 
-  nativeBuildInputs = [ cmake makeWrapper ];
+  nativeBuildInputs = [
+    cmake
+    makeWrapper
+  ];
 
   postInstall = ''
-    wrapProgram $out/bin/multimon-ng --prefix PATH : "${lib.makeBinPath [sox]}"
+    wrapProgram $out/bin/multimon-ng --prefix PATH : "${lib.makeBinPath [ sox ]}"
   '';
 
   meta = with lib; {

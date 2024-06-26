@@ -33,9 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs = [
-    dbus
-  ];
+  buildInputs = [ dbus ];
 
   meta = with lib; {
     description = "C++ abstraction layer for BlueZ over DBus";

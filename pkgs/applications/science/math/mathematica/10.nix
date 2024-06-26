@@ -1,30 +1,31 @@
-{ lib
-, patchelf
-, requireFile
-, stdenv
-# arguments from default.nix
-, lang
-, meta
-, name
-, src
-, version
-# dependencies
-, alsa-lib
-, coreutils
-, cudaPackages
-, fontconfig
-, freetype
-, gcc
-, glib
-, libuuid
-, libxml2
-, ncurses
-, opencv2
-, openssl
-, unixODBC
-, xorg
-# options
-, cudaSupport
+{
+  lib,
+  patchelf,
+  requireFile,
+  stdenv,
+  # arguments from default.nix
+  lang,
+  meta,
+  name,
+  src,
+  version,
+  # dependencies
+  alsa-lib,
+  coreutils,
+  cudaPackages,
+  fontconfig,
+  freetype,
+  gcc,
+  glib,
+  libuuid,
+  libxml2,
+  ncurses,
+  opencv2,
+  openssl,
+  unixODBC,
+  xorg,
+  # options
+  cudaSupport,
 }:
 
 let
@@ -39,40 +40,44 @@ stdenv.mkDerivation rec {
 
   pname = "mathematica";
 
-  buildInputs = [
-    coreutils
-    patchelf
-    alsa-lib
-    coreutils
-    fontconfig
-    freetype
-    gcc.cc
-    gcc.libc
-    glib
-    ncurses
-    opencv2
-    openssl
-    unixODBC
-    libxml2
-    libuuid
-  ] ++ (with xorg; [
-    libX11
-    libXext
-    libXtst
-    libXi
-    libXmu
-    libXrender
-    libxcb
-    libXcursor
-    libXfixes
-    libXrandr
-    libICE
-    libSM
-  ]);
+  buildInputs =
+    [
+      coreutils
+      patchelf
+      alsa-lib
+      coreutils
+      fontconfig
+      freetype
+      gcc.cc
+      gcc.libc
+      glib
+      ncurses
+      opencv2
+      openssl
+      unixODBC
+      libxml2
+      libuuid
+    ]
+    ++ (with xorg; [
+      libX11
+      libXext
+      libXtst
+      libXi
+      libXmu
+      libXrender
+      libxcb
+      libXcursor
+      libXfixes
+      libXrandr
+      libICE
+      libSM
+    ]);
 
-  ldpath = lib.makeLibraryPath buildInputs
-    + lib.optionalString (stdenv.hostPlatform.system == "x86_64-linux")
-      (":" + lib.makeSearchPathOutput "lib" "lib64" buildInputs);
+  ldpath =
+    lib.makeLibraryPath buildInputs
+    + lib.optionalString (stdenv.hostPlatform.system == "x86_64-linux") (
+      ":" + lib.makeSearchPathOutput "lib" "lib64" buildInputs
+    );
 
   dontConfigure = true;
   dontBuild = true;

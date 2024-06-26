@@ -1,4 +1,12 @@
-{ lib, fetchFromGitHub, buildDunePackage, ocaml, alcotest, bigarray-compat, pkg-config }:
+{
+  lib,
+  fetchFromGitHub,
+  buildDunePackage,
+  ocaml,
+  alcotest,
+  bigarray-compat,
+  pkg-config,
+}:
 
 buildDunePackage rec {
   pname = "bigstringaf";

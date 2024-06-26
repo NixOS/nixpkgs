@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchurl
-, autoPatchelfHook
-, nixosTests
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoPatchelfHook,
+  nixosTests,
 }:
 let
   inherit (stdenv.hostPlatform) system;
@@ -21,9 +22,7 @@ stdenv.mkDerivation {
     inherit hash;
   };
 
-  nativeBuildInputs = lib.optionals stdenv.isLinux [
-    autoPatchelfHook
-  ];
+  nativeBuildInputs = lib.optionals stdenv.isLinux [ autoPatchelfHook ];
 
   # The tar.gz contains no subdirectory
   sourceRoot = ".";
@@ -34,7 +33,9 @@ stdenv.mkDerivation {
   '';
 
   passthru = {
-    tests = { inherit (nixosTests) typesense; };
+    tests = {
+      inherit (nixosTests) typesense;
+    };
     updateScript = ./update.sh;
   };
 

@@ -1,17 +1,18 @@
-{ lib
-, mkXfceDerivation
-, wayland-scanner
-, glib
-, gtk3
-, libX11
-, libXtst
-, libxfce4ui
-, libxfce4util
-, qrencode
-, xfce4-panel
-, xfconf
-, wayland
-, wlr-protocols
+{
+  lib,
+  mkXfceDerivation,
+  wayland-scanner,
+  glib,
+  gtk3,
+  libX11,
+  libXtst,
+  libxfce4ui,
+  libxfce4util,
+  qrencode,
+  xfce4-panel,
+  xfconf,
+  wayland,
+  wlr-protocols,
 }:
 
 mkXfceDerivation {
@@ -20,9 +21,7 @@ mkXfceDerivation {
   version = "1.6.6";
   sha256 = "sha256-wdEoM4etco+s0+dULkBvWJZ3WBCW3Ph2bdY0E/l5VRc=";
 
-  nativeBuildInputs = [
-    wayland-scanner
-  ];
+  nativeBuildInputs = [ wayland-scanner ];
 
   buildInputs = [
     glib

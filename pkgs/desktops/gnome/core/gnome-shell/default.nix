@@ -1,64 +1,66 @@
-{ fetchurl
-, fetchpatch
-, substituteAll
-, lib, stdenv
-, meson
-, ninja
-, pkg-config
-, gnome
-, json-glib
-, gettext
-, libsecret
-, python3
-, polkit
-, networkmanager
-, gi-docgen
-, at-spi2-core
-, libstartup_notification
-, unzip
-, shared-mime-info
-, libgweather
-, libjxl
-, librsvg
-, webp-pixbuf-loader
-, geoclue2
-, perl
-, desktop-file-utils
-, libpulseaudio
-, libical
-, gobject-introspection
-, wrapGAppsHook4
-, libxslt
-, gcr_4
-, accountsservice
-, gdk-pixbuf
-, gdm
-, upower
-, ibus
-, libnma-gtk4
-, gnome-desktop
-, gsettings-desktop-schemas
-, gnome-keyring
-, glib
-, gjs
-, mutter
-, evolution-data-server-gtk4
-, gtk3
-, gtk4
-, libadwaita
-, sassc
-, systemd
-, pipewire
-, gst_all_1
-, adwaita-icon-theme
-, gnome-bluetooth
-, gnome-clocks
-, gnome-settings-daemon
-, gnome-autoar
-, gnome-tecla
-, asciidoc
-, bash-completion
-, mesa
+{
+  fetchurl,
+  fetchpatch,
+  substituteAll,
+  lib,
+  stdenv,
+  meson,
+  ninja,
+  pkg-config,
+  gnome,
+  json-glib,
+  gettext,
+  libsecret,
+  python3,
+  polkit,
+  networkmanager,
+  gi-docgen,
+  at-spi2-core,
+  libstartup_notification,
+  unzip,
+  shared-mime-info,
+  libgweather,
+  libjxl,
+  librsvg,
+  webp-pixbuf-loader,
+  geoclue2,
+  perl,
+  desktop-file-utils,
+  libpulseaudio,
+  libical,
+  gobject-introspection,
+  wrapGAppsHook4,
+  libxslt,
+  gcr_4,
+  accountsservice,
+  gdk-pixbuf,
+  gdm,
+  upower,
+  ibus,
+  libnma-gtk4,
+  gnome-desktop,
+  gsettings-desktop-schemas,
+  gnome-keyring,
+  glib,
+  gjs,
+  mutter,
+  evolution-data-server-gtk4,
+  gtk3,
+  gtk4,
+  libadwaita,
+  sassc,
+  systemd,
+  pipewire,
+  gst_all_1,
+  adwaita-icon-theme,
+  gnome-bluetooth,
+  gnome-clocks,
+  gnome-settings-daemon,
+  gnome-autoar,
+  gnome-tecla,
+  asciidoc,
+  bash-completion,
+  mesa,
 }:
 
 let
@@ -68,7 +70,10 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-shell";
   version = "46.2";
 
-  outputs = [ "out" "devdoc" ];
+  outputs = [
+    "out"
+    "devdoc"
+  ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-shell/${lib.versions.major finalAttrs.version}/gnome-shell-${finalAttrs.version}.tar.xz";
@@ -187,13 +192,15 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall = ''
     # Pull in WebP and JXL support for gnome-backgrounds.
     # In postInstall to run before gappsWrapperArgsHook.
-    export GDK_PIXBUF_MODULE_FILE="${gnome._gdkPixbufCacheBuilder_DO_NOT_USE {
-      extraLoaders = [
-        libjxl
-        librsvg
-        webp-pixbuf-loader
-      ];
-    }}"
+    export GDK_PIXBUF_MODULE_FILE="${
+      gnome._gdkPixbufCacheBuilder_DO_NOT_USE {
+        extraLoaders = [
+          libjxl
+          librsvg
+          webp-pixbuf-loader
+        ];
+      }
+    }"
   '';
 
   preFixup = ''

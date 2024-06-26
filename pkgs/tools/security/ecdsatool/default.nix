@@ -1,4 +1,8 @@
-{ lib, stdenv, pkgs }:
+{
+  lib,
+  stdenv,
+  pkgs,
+}:
 
 stdenv.mkDerivation {
   version = "0.0.1";
@@ -21,14 +25,18 @@ stdenv.mkDerivation {
     ./openssl-header-c99-implicit-function-declaration.patch
   ];
 
-  nativeBuildInputs = with pkgs; [openssl autoconf automake];
-  buildInputs = with pkgs; [libuecc];
+  nativeBuildInputs = with pkgs; [
+    openssl
+    autoconf
+    automake
+  ];
+  buildInputs = with pkgs; [ libuecc ];
 
   meta = with lib; {
     description = "Create and manipulate ECC NISTP256 keypairs";
     mainProgram = "ecdsatool";
     homepage = "https://github.com/kaniini/ecdsatool/";
-    license = with licenses; [free];
+    license = with licenses; [ free ];
     platforms = platforms.unix;
   };
 }

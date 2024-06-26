@@ -1,4 +1,12 @@
-{ lib, mkFranzDerivation, fetchurl, xorg, xdg-utils, buildEnv, writeShellScriptBin }:
+{
+  lib,
+  mkFranzDerivation,
+  fetchurl,
+  xorg,
+  xdg-utils,
+  buildEnv,
+  writeShellScriptBin,
+}:
 
 let
   mkFranzDerivation' = mkFranzDerivation.override {
@@ -6,10 +14,12 @@ let
       name = "xdg-utils-for-ferdi";
       paths = [
         xdg-utils
-        (lib.hiPrio (writeShellScriptBin "xdg-open" ''
-          unset GDK_BACKEND
-          exec ${xdg-utils}/bin/xdg-open "$@"
-        ''))
+        (lib.hiPrio (
+          writeShellScriptBin "xdg-open" ''
+            unset GDK_BACKEND
+            exec ${xdg-utils}/bin/xdg-open "$@"
+          ''
+        ))
       ];
     };
   };
@@ -31,8 +41,6 @@ mkFranzDerivation' rec {
     maintainers = with maintainers; [ davidtwco ];
     platforms = [ "x86_64-linux" ];
     hydraPlatforms = [ ];
-    knownVulnerabilities = [
-      "CVE-2022-32320"
-    ];
+    knownVulnerabilities = [ "CVE-2022-32320" ];
   };
 }

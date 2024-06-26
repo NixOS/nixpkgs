@@ -1,4 +1,9 @@
-{ lib, buildGoModule, fetchFromGitHub, callPackage }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  callPackage,
+}:
 
 buildGoModule rec {
   pname = "tfk8s";

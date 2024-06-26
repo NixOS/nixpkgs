@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, autoconf
-, automake
-, libtool
-, libsndfile
-, libpulseaudio
-, espeak-ng
-, sonic
-, utf8cpp
-, AudioUnit
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  autoconf,
+  automake,
+  libtool,
+  libsndfile,
+  libpulseaudio,
+  espeak-ng,
+  sonic,
+  utf8cpp,
+  AudioUnit,
 }:
 
 stdenv.mkDerivation rec {
@@ -33,10 +34,20 @@ stdenv.mkDerivation rec {
     "-I${lib.getDev utf8cpp}/include/utf8cpp"
   ];
 
-  nativeBuildInputs = [ pkg-config autoconf automake libtool ];
+  nativeBuildInputs = [
+    pkg-config
+    autoconf
+    automake
+    libtool
+  ];
 
-  buildInputs = [ libsndfile libpulseaudio espeak-ng sonic utf8cpp ]
-    ++ lib.optionals stdenv.isDarwin [ AudioUnit ];
+  buildInputs = [
+    libsndfile
+    libpulseaudio
+    espeak-ng
+    sonic
+    utf8cpp
+  ] ++ lib.optionals stdenv.isDarwin [ AudioUnit ];
 
   meta = with lib; {
     description = "Chinese text-to-speech software";

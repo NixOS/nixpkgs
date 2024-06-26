@@ -1,14 +1,20 @@
-{ lib
-, buildPythonPackage
-, autodock-vina
-, boost
-, swig
-, setuptools
-, numpy
+{
+  lib,
+  buildPythonPackage,
+  autodock-vina,
+  boost,
+  swig,
+  setuptools,
+  numpy,
 }:
 
 buildPythonPackage {
-  inherit (autodock-vina) pname version src meta;
+  inherit (autodock-vina)
+    pname
+    version
+    src
+    meta
+    ;
 
   format = "pyproject";
 
@@ -39,18 +45,12 @@ buildPythonPackage {
     swig
   ];
 
-  buildInputs = [
-    boost
-  ];
+  buildInputs = [ boost ];
 
-  propagatedBuildInputs = [
-    numpy
-  ];
+  propagatedBuildInputs = [ numpy ];
 
   # upstrem has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "vina"
-  ];
+  pythonImportsCheck = [ "vina" ];
 }

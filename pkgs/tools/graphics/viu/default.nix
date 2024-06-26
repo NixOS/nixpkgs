@@ -1,8 +1,9 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, libsixel
-, withSixel ? false
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  libsixel,
+  withSixel ? false,
 }:
 
 rustPlatform.buildRustPackage rec {

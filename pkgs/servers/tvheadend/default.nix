@@ -1,32 +1,34 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
 
-# buildtime
-, makeWrapper
-, pkg-config
-, python3
-, which
+  # buildtime
+  makeWrapper,
+  pkg-config,
+  python3,
+  which,
 
-# runtime
-, avahi
-, bzip2
-, dbus
-, dtv-scan-tables
-, ffmpeg_4
-, gettext
-, gnutar
-, gzip
-, libiconv
-, openssl
-, uriparser
-, zlib
+  # runtime
+  avahi,
+  bzip2,
+  dbus,
+  dtv-scan-tables,
+  ffmpeg_4,
+  gettext,
+  gnutar,
+  gzip,
+  libiconv,
+  openssl,
+  uriparser,
+  zlib,
 }:
 
 let
   version = "4.2.8";
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "tvheadend";
   inherit version;
 
@@ -75,13 +77,16 @@ in stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  env.NIX_CFLAGS_COMPILE = toString ([
-    "-Wno-error=format-truncation"
-    "-Wno-error=stringop-truncation"
-  ] ++ lib.optionals (stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.version "12") [
-    # Needed with GCC 12 but unrecognized with GCC 9
-    "-Wno-error=use-after-free"
-  ]);
+  env.NIX_CFLAGS_COMPILE = toString (
+    [
+      "-Wno-error=format-truncation"
+      "-Wno-error=stringop-truncation"
+    ]
+    ++ lib.optionals (stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.version "12") [
+      # Needed with GCC 12 but unrecognized with GCC 9
+      "-Wno-error=use-after-free"
+    ]
+  );
 
   configureFlags = [
     # disable dvbscan, as having it enabled causes a network download which

@@ -1,18 +1,19 @@
-{ lib
-, stdenv
-, boost
-, fetchFromGitHub
-, git
-, makeWrapper
-, meson
-, ninja
-, pkg-config
-, python3
-, qtbase
-, qtcharts
-, tuxclocker-plugins
-, tuxclocker-without-unfree
-, wrapQtAppsHook
+{
+  lib,
+  stdenv,
+  boost,
+  fetchFromGitHub,
+  git,
+  makeWrapper,
+  meson,
+  ninja,
+  pkg-config,
+  python3,
+  qtbase,
+  qtcharts,
+  tuxclocker-plugins,
+  tuxclocker-without-unfree,
+  wrapQtAppsHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -53,9 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
       --prefix "PYTHONPATH" : "${python3.pkgs.hwdata}/${python3.sitePackages}"
   '';
 
-  mesonFlags = [
-    "-Dplugins=false"
-  ];
+  mesonFlags = [ "-Dplugins=false" ];
 
   passthru.tests = {
     inherit tuxclocker-without-unfree;

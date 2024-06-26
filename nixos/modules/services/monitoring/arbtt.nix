@@ -1,15 +1,24 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
 let
   cfg = config.services.arbtt;
-in {
+in
+{
   options = {
     services.arbtt = {
       enable = mkEnableOption "Arbtt statistics capture service";
 
-      package = mkPackageOption pkgs [ "haskellPackages" "arbtt" ] { };
+      package = mkPackageOption pkgs [
+        "haskellPackages"
+        "arbtt"
+      ] { };
 
       logFile = mkOption {
         type = types.str;

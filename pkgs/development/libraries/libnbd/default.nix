@@ -1,14 +1,16 @@
-{ lib
-, stdenv
-, fetchurl
-, bash-completion
-, pkg-config
-, perl
-, buildPythonBindings ? false, python3
-, libxml2
-, fuse
-, fuse3
-, gnutls
+{
+  lib,
+  stdenv,
+  fetchurl,
+  bash-completion,
+  pkg-config,
+  perl,
+  buildPythonBindings ? false,
+  python3,
+  libxml2,
+  fuse,
+  fuse3,
+  gnutls,
 }:
 
 stdenv.mkDerivation rec {
@@ -24,8 +26,7 @@ stdenv.mkDerivation rec {
     bash-completion
     pkg-config
     perl
-  ]
-    ++ lib.optionals buildPythonBindings [ python3 ];
+  ] ++ lib.optionals buildPythonBindings [ python3 ];
 
   buildInputs = [
     fuse
@@ -34,7 +35,9 @@ stdenv.mkDerivation rec {
     libxml2
   ];
 
-  configureFlags = lib.optionals buildPythonBindings [ "--with-python-installdir=${placeholder "out"}/${python3.sitePackages}" ];
+  configureFlags = lib.optionals buildPythonBindings [
+    "--with-python-installdir=${placeholder "out"}/${python3.sitePackages}"
+  ];
 
   installFlags = [ "bashcompdir=$(out)/share/bash-completion/completions" ];
 
@@ -63,7 +66,10 @@ stdenv.mkDerivation rec {
       - Shell (nbdsh) for command line and scripting.
     '';
     license = with licenses; lgpl21Plus;
-    maintainers = with maintainers; [ AndersonTorres humancalico ];
+    maintainers = with maintainers; [
+      AndersonTorres
+      humancalico
+    ];
     platforms = with platforms; linux;
   };
 }

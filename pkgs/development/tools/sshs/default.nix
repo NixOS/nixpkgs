@@ -1,8 +1,9 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, testers
-, sshs
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  testers,
+  sshs,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -26,9 +27,7 @@ rustPlatform.buildRustPackage rec {
     ln -sf ${./Cargo.lock} Cargo.lock
   '';
 
-  passthru.tests.version = testers.testVersion {
-    package = sshs;
-  };
+  passthru.tests.version = testers.testVersion { package = sshs; };
 
   meta = with lib; {
     description = "Terminal user interface for SSH";

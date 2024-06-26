@@ -1,6 +1,7 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
 
 buildGoModule rec {
@@ -16,12 +17,18 @@ buildGoModule rec {
 
   vendorHash = "sha256-kAPw5M9o99NijCC9BzYhIpzHK/8fSAJxvckaj8iRby0=";
 
-  ldflags = [ "-s" "-w" "-X main.appVersion=${version}" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X main.appVersion=${version}"
+  ];
 
   meta = with lib; {
-    changelog = let
-      versionWithoutDots = concatStrings (splitString "." version);
-    in "https://github.com/axllent/wireguard-vanity-keygen/blob/develop/CHANGELOG.md#${versionWithoutDots}";
+    changelog =
+      let
+        versionWithoutDots = concatStrings (splitString "." version);
+      in
+      "https://github.com/axllent/wireguard-vanity-keygen/blob/develop/CHANGELOG.md#${versionWithoutDots}";
     description = "WireGuard vanity key generator";
     homepage = "https://github.com/axllent/wireguard-vanity-keygen";
     license = licenses.mit;

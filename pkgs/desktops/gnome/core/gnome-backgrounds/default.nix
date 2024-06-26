@@ -1,9 +1,10 @@
-{ stdenv
-, lib
-, fetchurl
-, meson
-, ninja
-, gnome
+{
+  stdenv,
+  lib,
+  fetchurl,
+  meson,
+  ninja,
+  gnome,
 }:
 
 stdenv.mkDerivation rec {

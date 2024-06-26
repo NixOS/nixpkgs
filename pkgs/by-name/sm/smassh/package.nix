@@ -1,8 +1,9 @@
-{ lib
-, fetchFromGitHub
-, smassh
-, python3
-, testers
+{
+  lib,
+  fetchFromGitHub,
+  smassh,
+  python3,
+  testers,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -22,9 +23,7 @@ python3.pkgs.buildPythonApplication rec {
     pythonRelaxDepsHook
   ];
 
-  pythonRelaxDeps = [
-    "textual"
-  ];
+  pythonRelaxDeps = [ "textual" ];
 
   propagatedBuildInputs = with python3.pkgs; [
     textual

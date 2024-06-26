@@ -5,16 +5,40 @@
   gtk3,
   papirus-icon-theme,
   flavor ? "mocha",
-  accent ? "blue"
-}: let
-  validAccents = ["blue" "flamingo" "green" "lavender" "maroon" "mauve" "peach" "pink" "red" "rosewater" "sapphire" "sky" "teal" "yellow"];
-  validFlavors = ["latte" "frappe" "macchiato" "mocha"];
+  accent ? "blue",
+}:
+let
+  validAccents = [
+    "blue"
+    "flamingo"
+    "green"
+    "lavender"
+    "maroon"
+    "mauve"
+    "peach"
+    "pink"
+    "red"
+    "rosewater"
+    "sapphire"
+    "sky"
+    "teal"
+    "yellow"
+  ];
+  validFlavors = [
+    "latte"
+    "frappe"
+    "macchiato"
+    "mocha"
+  ];
   pname = "catppuccin-papirus-folders";
 in
-  lib.checkListOfEnum "${pname}: accent colors" validAccents [ accent ]
-  lib.checkListOfEnum "${pname}: flavors" validFlavors [ flavor ]
+lib.checkListOfEnum "${pname}: accent colors" validAccents [ accent ] lib.checkListOfEnum
+  "${pname}: flavors"
+  validFlavors
+  [ flavor ]
 
-  stdenvNoCC.mkDerivation {
+  stdenvNoCC.mkDerivation
+  {
     inherit pname;
     version = "unstable-2023-08-02";
 

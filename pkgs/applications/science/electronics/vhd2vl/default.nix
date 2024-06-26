@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, bison
-, flex
-, verilog
-, which
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  bison,
+  flex,
+  verilog,
+  which,
 }:
 
 stdenv.mkDerivation rec {
@@ -24,9 +25,7 @@ stdenv.mkDerivation rec {
     which
   ];
 
-  buildInputs = [
-    verilog
-  ];
+  buildInputs = [ verilog ];
 
   # the "translate" target both (a) builds the software and (b) runs
   # the tests (without validating the results)

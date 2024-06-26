@@ -1,25 +1,26 @@
-{ mkDerivation
-, lib
-, fetchFromGitHub
-, fetchpatch
+{
+  mkDerivation,
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
 
-, at-spi2-atk
-, at-spi2-core
-, libepoxy
-, gtk3
-, libdatrie
-, libselinux
-, libsepol
-, libthai
-, pcre
-, util-linux
-, wayland
-, xorg
+  at-spi2-atk,
+  at-spi2-core,
+  libepoxy,
+  gtk3,
+  libdatrie,
+  libselinux,
+  libsepol,
+  libthai,
+  pcre,
+  util-linux,
+  wayland,
+  xorg,
 
-, cmake
-, doxygen
-, pkg-config
-, wayland-protocols
+  cmake,
+  doxygen,
+  pkg-config,
+  wayland-protocols,
 }:
 
 mkDerivation rec {

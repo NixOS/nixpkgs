@@ -1,9 +1,10 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, installShellFiles
-, pkg-config
-, oniguruma
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  installShellFiles,
+  pkg-config,
+  oniguruma,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -24,9 +25,7 @@ rustPlatform.buildRustPackage rec {
     pkg-config
   ];
 
-  buildInputs = [
-    oniguruma
-  ];
+  buildInputs = [ oniguruma ];
 
   env = {
     GEN_ARTIFACTS = "artifacts";

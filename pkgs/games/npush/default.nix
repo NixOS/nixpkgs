@@ -1,7 +1,8 @@
-{ lib
-, stdenv
-, fetchurl
-, ncurses
+{
+  lib,
+  stdenv,
+  fetchurl,
+  ncurses,
 }:
 
 stdenv.mkDerivation rec {
@@ -13,17 +14,16 @@ stdenv.mkDerivation rec {
     hash = "sha256-8hbSsyeehzd4T3fUhDyebyI/oTHOHr3a8ArYAquivNk=";
   };
 
-  outputs = [ "out" "doc" ];
-
-  buildInputs = [
-    ncurses
+  outputs = [
+    "out"
+    "doc"
   ];
+
+  buildInputs = [ ncurses ];
 
   dontConfigure = true;
 
-  makeFlags = [
-    "CC=${stdenv.cc.targetPrefix}c++"
-  ];
+  makeFlags = [ "CC=${stdenv.cc.targetPrefix}c++" ];
   env.NIX_CFLAGS_COMPILE = "-Wno-error=format-security";
 
   installPhase = ''

@@ -1,19 +1,20 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, meson
-, ninja
-, pkg-config
-, substituteAll
-, vala
-, libgee
-, granite
-, gtk3
-, networkmanager
-, networkmanagerapplet
-, libnma
-, switchboard
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  meson,
+  ninja,
+  pkg-config,
+  substituteAll,
+  vala,
+  libgee,
+  granite,
+  gtk3,
+  networkmanager,
+  networkmanagerapplet,
+  libnma,
+  switchboard,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,4 +1,9 @@
-{ lib, fetchPypi, pythonPackages, mopidy }:
+{
+  lib,
+  fetchPypi,
+  pythonPackages,
+  mopidy,
+}:
 
 pythonPackages.buildPythonApplication rec {
   pname = "Mopidy-Notify";
@@ -14,9 +19,7 @@ pythonPackages.buildPythonApplication rec {
     pythonPackages.pydbus
   ];
 
-  nativeBuildInputs = [
-    pythonPackages.pytestCheckHook
-  ];
+  nativeBuildInputs = [ pythonPackages.pytestCheckHook ];
 
   pythonImportsCheck = [ "mopidy_notify" ];
 

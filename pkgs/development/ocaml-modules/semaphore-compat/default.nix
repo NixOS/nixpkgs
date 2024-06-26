@@ -1,4 +1,8 @@
-{ lib, buildDunePackage, fetchurl }:
+{
+  lib,
+  buildDunePackage,
+  fetchurl,
+}:
 
 buildDunePackage rec {
   pname = "semaphore-compat";

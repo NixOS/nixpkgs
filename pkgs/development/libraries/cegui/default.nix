@@ -1,15 +1,16 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, writeShellScript
-, cmake
-, ogre
-, freetype
-, boost
-, expat
-, darwin
-, libiconv
-, unstableGitUpdater
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  writeShellScript,
+  cmake,
+  ogre,
+  freetype,
+  boost,
+  expat,
+  darwin,
+  libiconv,
+  unstableGitUpdater,
 }:
 
 stdenv.mkDerivation {
@@ -25,26 +26,26 @@ stdenv.mkDerivation {
 
   strictDeps = true;
 
-  nativeBuildInputs = [
-    cmake
-  ];
+  nativeBuildInputs = [ cmake ];
 
-  buildInputs = [
-    ogre
-    freetype
-    boost
-    expat
-  ] ++ lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.Cocoa
-    darwin.apple_sdk.frameworks.Foundation
-    libiconv
-  ];
+  buildInputs =
+    [
+      ogre
+      freetype
+      boost
+      expat
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      darwin.apple_sdk.frameworks.Cocoa
+      darwin.apple_sdk.frameworks.Foundation
+      libiconv
+    ];
 
-  cmakeFlags = [
-    "-DCEGUI_OPTION_DEFAULT_IMAGECODEC=OgreRenderer-0"
-  ] ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
-    "-DCMAKE_OSX_ARCHITECTURES=${stdenv.hostPlatform.darwinArch}"
-  ];
+  cmakeFlags =
+    [ "-DCEGUI_OPTION_DEFAULT_IMAGECODEC=OgreRenderer-0" ]
+    ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
+      "-DCMAKE_OSX_ARCHITECTURES=${stdenv.hostPlatform.darwinArch}"
+    ];
 
   passthru.updateScript = unstableGitUpdater {
     branch = "v0";

@@ -1,11 +1,12 @@
-{ lib
-, fetchFromGitHub
-, rustPlatform
-, pkg-config
-, libX11
-, libXi
-, libXtst
-, libevdev
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  pkg-config,
+  libX11,
+  libXi,
+  libXtst,
+  libevdev,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -28,9 +29,7 @@ rustPlatform.buildRustPackage rec {
     libevdev
   ];
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
   postInstall = ''
     mkdir -p $out/etc/udev/rules.d/

@@ -1,6 +1,7 @@
-{ lib
-, fetchFromGitHub
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  python3,
 }:
 
 let
@@ -55,19 +56,14 @@ python3.pkgs.buildPythonApplication rec {
     vulture
   ];
 
-  nativeCheckInputs = with python3.pkgs; [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = with python3.pkgs; [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "prospector"
-  ];
+  pythonImportsCheck = [ "prospector" ];
 
   disabledTestPaths = [
     # distutils.errors.DistutilsArgError: no commands supplied
     "tests/tools/pyroma/test_pyroma_tool.py"
   ];
-
 
   meta = with lib; {
     description = "Tool to analyse Python code and output information about errors, potential problems, convention violations and complexity";

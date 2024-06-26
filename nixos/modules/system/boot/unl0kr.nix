@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.boot.initrd.unl0kr;
@@ -42,9 +47,7 @@ in
             "systemd-vconsole-setup.service"
             "udev.service"
           ];
-          before = [
-            "shutdown.target"
-          ];
+          before = [ "shutdown.target" ];
           script = ''
             # This script acts as a Password Agent: https://systemd.io/PASSWORD_AGENTS/
 

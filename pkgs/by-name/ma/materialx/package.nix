@@ -10,7 +10,7 @@
   openimageio,
   imath,
   python3Packages,
-  python3
+  python3,
 }:
 
 python3Packages.buildPythonPackage rec {

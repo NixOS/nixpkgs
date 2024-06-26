@@ -1,6 +1,7 @@
-{ buildGoModule
-, pulumi
-, python3
+{
+  buildGoModule,
+  pulumi,
+  python3,
 }:
 buildGoModule rec {
   inherit (pulumi) version src;
@@ -23,9 +24,7 @@ buildGoModule rec {
     "-X github.com/pulumi/pulumi/sdk/v3/go/common/version.Version=${version}"
   ];
 
-  nativeCheckInputs = [
-    python3
-  ];
+  nativeCheckInputs = [ python3 ];
 
   postInstall = ''
     cp ../pulumi-language-python-exec           $out/bin

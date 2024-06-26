@@ -1,5 +1,15 @@
-{ stdenv, lib, fetchurl, makeWrapper, getconf,
-  ocaml, unzip, ncurses, curl, bubblewrap, Foundation
+{
+  stdenv,
+  lib,
+  fetchurl,
+  makeWrapper,
+  getconf,
+  ocaml,
+  unzip,
+  ncurses,
+  curl,
+  bubblewrap,
+  Foundation,
 }:
 
 assert lib.versionAtLeast ocaml.version "4.02.3";
@@ -75,16 +85,23 @@ let
       sha256 = "0s8r5gfs2zsyfn3jzqnvns3g0rkik3pw628n0dik55fwq3zjgg4a";
     };
   };
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "opam";
   version = "2.1.5";
 
   strictDeps = true;
 
-  nativeBuildInputs = [ makeWrapper unzip ocaml curl ];
-  buildInputs = [ ncurses getconf ]
-    ++ lib.optionals stdenv.isLinux [ bubblewrap ]
-    ++ lib.optionals stdenv.isDarwin [ Foundation ];
+  nativeBuildInputs = [
+    makeWrapper
+    unzip
+    ocaml
+    curl
+  ];
+  buildInputs = [
+    ncurses
+    getconf
+  ] ++ lib.optionals stdenv.isLinux [ bubblewrap ] ++ lib.optionals stdenv.isDarwin [ Foundation ];
 
   src = srcs.opam;
 
@@ -117,9 +134,12 @@ in stdenv.mkDerivation {
   postConfigure = "make lib-ext";
 
   # Dirty, but apparently ocp-build requires a TERM
-  makeFlags = ["TERM=screen"];
+  makeFlags = [ "TERM=screen" ];
 
-  outputs = [ "out" "installer" ];
+  outputs = [
+    "out"
+    "installer"
+  ];
   setOutputFlags = false;
 
   # change argv0 to "opam" as a workaround for

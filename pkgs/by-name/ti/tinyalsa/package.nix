@@ -1,7 +1,8 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
 }:
 
 stdenv.mkDerivation rec {
@@ -15,17 +16,11 @@ stdenv.mkDerivation rec {
     hash = "sha256-RHeF3VShy+LYFtJK+AEU7swIr5/rnpg2fdllnH9cFCk=";
   };
 
-  nativeBuildInputs = [
-    cmake
-  ];
+  nativeBuildInputs = [ cmake ];
 
-  cmakeFlags = [
-    "-DTINYALSA_USES_PLUGINS=ON"
-  ];
+  cmakeFlags = [ "-DTINYALSA_USES_PLUGINS=ON" ];
 
-  env.NIX_CFLAGS_COMPILE = toString [
-    "-Wno-error=sign-compare"
-  ];
+  env.NIX_CFLAGS_COMPILE = toString [ "-Wno-error=sign-compare" ];
 
   meta = with lib; {
     homepage = "https://github.com/tinyalsa/tinyalsa";

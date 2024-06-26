@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, installShellFiles
-, libX11
-, libXext
-, unstableGitUpdater
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  installShellFiles,
+  libX11,
+  libXext,
+  unstableGitUpdater,
 }:
 
 stdenv.mkDerivation {
@@ -18,11 +19,13 @@ stdenv.mkDerivation {
     hash = "sha256-aRYMpaPC7dC6EHmmXugvwcQnaizRCQZKFcQX0K2MLM4=";
   };
 
-  outputs = [ "out" "dev" "man" ];
-
-  nativeBuildInputs = [
-    installShellFiles
+  outputs = [
+    "out"
+    "dev"
+    "man"
   ];
+
+  nativeBuildInputs = [ installShellFiles ];
 
   buildInputs = [
     libX11
@@ -33,9 +36,7 @@ stdenv.mkDerivation {
 
   makefile = "Makefile.mk";
 
-  makeFlags = [
-    "CC=${stdenv.cc.targetPrefix}cc"
-  ];
+  makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
 
   installPhase = ''
     runHook preInstall

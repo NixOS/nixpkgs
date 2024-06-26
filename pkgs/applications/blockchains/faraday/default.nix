@@ -1,8 +1,9 @@
-{ buildGoModule
-, fetchFromGitHub
-, lib
-, testers
-, faraday
+{
+  buildGoModule,
+  fetchFromGitHub,
+  lib,
+  testers,
+  faraday,
 }:
 
 buildGoModule rec {
@@ -18,18 +19,25 @@ buildGoModule rec {
 
   vendorHash = "sha256-ku/4VE1Gj62vuJLh9J6vKlxpyI7S0RsMDozV7U5YDe4=";
 
-  subPackages = [ "cmd/frcli" "cmd/faraday" ];
+  subPackages = [
+    "cmd/frcli"
+    "cmd/faraday"
+  ];
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
-  passthru.tests.version = testers.testVersion {
-    package = faraday;
-  };
+  passthru.tests.version = testers.testVersion { package = faraday; };
 
   meta = with lib; {
     description = "LND Channel Management Tools";
     homepage = "https://github.com/lightninglabs/faraday";
     license = licenses.mit;
-    maintainers = with maintainers; [ proofofkeags prusnak ];
+    maintainers = with maintainers; [
+      proofofkeags
+      prusnak
+    ];
   };
 }

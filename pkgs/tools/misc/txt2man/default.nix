@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, coreutils, gawk }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  coreutils,
+  gawk,
+}:
 
 stdenv.mkDerivation rec {
   pname = "txt2man";
@@ -11,9 +17,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-Aqi5PNNaaM/tr9A/7vKeafYKYIs/kHbwHzE7+R/9r9s=";
   };
 
-  makeFlags = [
-    "prefix=${placeholder "out"}"
-  ];
+  makeFlags = [ "prefix=${placeholder "out"}" ];
 
   postPatch = ''
     for f in bookman src2man txt2man; do

@@ -1,4 +1,12 @@
-{ stdenv, lib, callPackage, fetchurl, fetchpatch, nixosTests, buildMozillaMach }:
+{
+  stdenv,
+  lib,
+  callPackage,
+  fetchurl,
+  fetchpatch,
+  nixosTests,
+  buildMozillaMach,
+}:
 
 {
   firefox = buildMozillaMach rec {
@@ -9,26 +17,27 @@
       sha512 = "d5a959a032309b8a42690b7f5afd5110c2e6ca7de426e1529d50f59cf065e67623ed98bf3aab39ce4d345ccfad2a273b24ce4f87c7ba7e6eccf2e9dfe3008d8b";
     };
 
-    extraPatches = [
-    ];
+    extraPatches = [ ];
 
     meta = {
       changelog = "https://www.mozilla.org/en-US/firefox/${version}/releasenotes/";
       description = "Web browser built from Firefox source tree";
       homepage = "http://www.mozilla.com/en-US/firefox/";
-      maintainers = with lib.maintainers; [ lovesegfault hexa ];
+      maintainers = with lib.maintainers; [
+        lovesegfault
+        hexa
+      ];
       platforms = lib.platforms.unix;
       badPlatforms = lib.platforms.darwin;
-      broken = stdenv.buildPlatform.is32bit; # since Firefox 60, build on 32-bit platforms fails with "out of memory".
-                                             # not in `badPlatforms` because cross-compilation on 64-bit machine might work.
+      broken = stdenv.buildPlatform.is32bit;
+      # since Firefox 60, build on 32-bit platforms fails with "out of memory".
+      # not in `badPlatforms` because cross-compilation on 64-bit machine might work.
       maxSilent = 14400; # 4h, double the default of 7200s (c.f. #129212, #129115)
       license = lib.licenses.mpl20;
       mainProgram = "firefox";
     };
     tests = [ nixosTests.firefox ];
-    updateScript = callPackage ./update.nix {
-      attrPath = "firefox-unwrapped";
-    };
+    updateScript = callPackage ./update.nix { attrPath = "firefox-unwrapped"; };
   };
 
   firefox-beta = buildMozillaMach rec {
@@ -47,8 +56,9 @@
       maintainers = with lib.maintainers; [ jopejoe1 ];
       platforms = lib.platforms.unix;
       badPlatforms = lib.platforms.darwin;
-      broken = stdenv.buildPlatform.is32bit; # since Firefox 60, build on 32-bit platforms fails with "out of memory".
-                                             # not in `badPlatforms` because cross-compilation on 64-bit machine might work.
+      broken = stdenv.buildPlatform.is32bit;
+      # since Firefox 60, build on 32-bit platforms fails with "out of memory".
+      # not in `badPlatforms` because cross-compilation on 64-bit machine might work.
       maxSilent = 14400; # 4h, double the default of 7200s (c.f. #129212, #129115)
       license = lib.licenses.mpl20;
       mainProgram = "firefox";
@@ -78,8 +88,9 @@
       maintainers = with lib.maintainers; [ jopejoe1 ];
       platforms = lib.platforms.unix;
       badPlatforms = lib.platforms.darwin;
-      broken = stdenv.buildPlatform.is32bit; # since Firefox 60, build on 32-bit platforms fails with "out of memory".
-                                             # not in `badPlatforms` because cross-compilation on 64-bit machine might work.
+      broken = stdenv.buildPlatform.is32bit;
+      # since Firefox 60, build on 32-bit platforms fails with "out of memory".
+      # not in `badPlatforms` because cross-compilation on 64-bit machine might work.
       maxSilent = 14400; # 4h, double the default of 7200s (c.f. #129212, #129115)
       license = lib.licenses.mpl20;
       mainProgram = "firefox";
@@ -108,8 +119,9 @@
       maintainers = with lib.maintainers; [ hexa ];
       platforms = lib.platforms.unix;
       badPlatforms = lib.platforms.darwin;
-      broken = stdenv.buildPlatform.is32bit; # since Firefox 60, build on 32-bit platforms fails with "out of memory".
-                                             # not in `badPlatforms` because cross-compilation on 64-bit machine might work.
+      broken = stdenv.buildPlatform.is32bit;
+      # since Firefox 60, build on 32-bit platforms fails with "out of memory".
+      # not in `badPlatforms` because cross-compilation on 64-bit machine might work.
       license = lib.licenses.mpl20;
       mainProgram = "firefox";
     };

@@ -1,4 +1,10 @@
-{lib, stdenv, fetchurl, perl, bash}:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  perl,
+  bash,
+}:
 
 stdenv.mkDerivation rec {
   pname = "atool";

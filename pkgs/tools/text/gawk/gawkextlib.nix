@@ -1,64 +1,96 @@
-{ lib, stdenv, recurseIntoAttrs, fetchgit, pkg-config, autoreconfHook
-, autoconf, automake, libiconv, libtool, texinfo, gettext, gawk, rapidjson, gd
-, libharu, lmdb, gmp, glibcLocales, mpfr, more, postgresql, hiredis
-, expat, tre }:
+{
+  lib,
+  stdenv,
+  recurseIntoAttrs,
+  fetchgit,
+  pkg-config,
+  autoreconfHook,
+  autoconf,
+  automake,
+  libiconv,
+  libtool,
+  texinfo,
+  gettext,
+  gawk,
+  rapidjson,
+  gd,
+  libharu,
+  lmdb,
+  gmp,
+  glibcLocales,
+  mpfr,
+  more,
+  postgresql,
+  hiredis,
+  expat,
+  tre,
+}:
 
 let
-  buildExtension = lib.makeOverridable
-    ({ name, gawkextlib, extraBuildInputs ? [ ], doCheck ? true, patches ? [ ] }:
-      let is_extension = gawkextlib != null;
-      in stdenv.mkDerivation rec {
-        pname = "gawkextlib-${name}";
-        version = "unstable-2022-10-20";
+  buildExtension = lib.makeOverridable (
+    {
+      name,
+      gawkextlib,
+      extraBuildInputs ? [ ],
+      doCheck ? true,
+      patches ? [ ],
+    }:
+    let
+      is_extension = gawkextlib != null;
+    in
+    stdenv.mkDerivation rec {
+      pname = "gawkextlib-${name}";
+      version = "unstable-2022-10-20";
 
-        src = fetchgit {
-          url = "git://git.code.sf.net/p/gawkextlib/code";
-          rev = "f6c75b4ac1e0cd8d70c2f6c7a8d58b4d94cfde97";
-          sha256 = "sha256-0p3CrQ3TBl7UcveZytK/9rkAzn69RRM2GwY2eCeqlkg=";
-        };
+      src = fetchgit {
+        url = "git://git.code.sf.net/p/gawkextlib/code";
+        rev = "f6c75b4ac1e0cd8d70c2f6c7a8d58b4d94cfde97";
+        sha256 = "sha256-0p3CrQ3TBl7UcveZytK/9rkAzn69RRM2GwY2eCeqlkg=";
+      };
 
-        inherit patches;
+      inherit patches;
 
-        postPatch = ''
-          cd ${name}
+      postPatch = ''
+        cd ${name}
+      '';
+
+      nativeBuildInputs = [
+        autoconf
+        automake
+        libtool
+        autoreconfHook
+        pkg-config
+        texinfo
+        gettext
+      ];
+
+      buildInputs = [ gawk ] ++ extraBuildInputs;
+      propagatedBuildInputs = lib.optional is_extension gawkextlib;
+
+      setupHook = if is_extension then ./setup-hook.sh else null;
+      inherit gawk;
+
+      inherit doCheck;
+      nativeCheckInputs = [ more ];
+
+      meta = with lib; {
+        homepage = "https://sourceforge.net/projects/gawkextlib/";
+        description = "Dynamically loaded extension libraries for GNU AWK";
+        mainProgram = "xmlgawk";
+        longDescription = ''
+          The gawkextlib project provides several extension libraries for
+          gawk (GNU AWK), as well as libgawkextlib containing some APIs that
+          are useful for building gawk extension libraries. These libraries
+          enable gawk to process XML data, interact with a PostgreSQL
+          database, use the GD graphics library, and perform unlimited
+          precision MPFR calculations.
         '';
-
-        nativeBuildInputs = [
-          autoconf
-          automake
-          libtool
-          autoreconfHook
-          pkg-config
-          texinfo
-          gettext
-        ];
-
-        buildInputs = [ gawk ] ++ extraBuildInputs;
-        propagatedBuildInputs = lib.optional is_extension gawkextlib;
-
-        setupHook = if is_extension then ./setup-hook.sh else null;
-        inherit gawk;
-
-        inherit doCheck;
-        nativeCheckInputs = [ more ];
-
-        meta = with lib; {
-          homepage = "https://sourceforge.net/projects/gawkextlib/";
-          description = "Dynamically loaded extension libraries for GNU AWK";
-          mainProgram = "xmlgawk";
-          longDescription = ''
-            The gawkextlib project provides several extension libraries for
-            gawk (GNU AWK), as well as libgawkextlib containing some APIs that
-            are useful for building gawk extension libraries. These libraries
-            enable gawk to process XML data, interact with a PostgreSQL
-            database, use the GD graphics library, and perform unlimited
-            precision MPFR calculations.
-          '';
-          license = licenses.gpl3Plus;
-          platforms = platforms.unix;
-          maintainers = with maintainers; [ tomberek ];
-        };
-      });
+        license = licenses.gpl3Plus;
+        platforms = platforms.unix;
+        maintainers = with maintainers; [ tomberek ];
+      };
+    }
+  );
   gawkextlib = buildExtension {
     gawkextlib = null;
     name = "lib";
@@ -121,7 +153,10 @@ let
     mpfr = buildExtension {
       inherit gawkextlib;
       name = "mpfr";
-      extraBuildInputs = [ gmp mpfr ];
+      extraBuildInputs = [
+        gmp
+        mpfr
+      ];
     };
     nl_langinfo = buildExtension {
       inherit gawkextlib;
@@ -148,10 +183,17 @@ let
     xml = buildExtension {
       inherit gawkextlib;
       name = "xml";
-      extraBuildInputs = [ expat libiconv ];
+      extraBuildInputs = [
+        expat
+        libiconv
+      ];
     };
   };
-in recurseIntoAttrs (libs // {
-  inherit gawkextlib buildExtension;
-  full = builtins.attrValues libs;
-})
+in
+recurseIntoAttrs (
+  libs
+  // {
+    inherit gawkextlib buildExtension;
+    full = builtins.attrValues libs;
+  }
+)

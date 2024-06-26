@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchurl, gtk2, pkg-config, libintl }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  gtk2,
+  pkg-config,
+  libintl,
+}:
 
 stdenv.mkDerivation rec {
   pname = "gtkperf";
@@ -11,7 +18,10 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "format" ];
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ gtk2 libintl ];
+  buildInputs = [
+    gtk2
+    libintl
+  ];
 
   # https://openbenchmarking.org/innhold/7e9780c11550d09aa67bdba71248facbe2d781db
   patches = [ ./bench.patch ];

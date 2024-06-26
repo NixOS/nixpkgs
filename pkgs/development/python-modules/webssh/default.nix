@@ -18,9 +18,7 @@ buildPythonPackage rec {
     hash = "sha256-mRestRJukaf7ti3vIs/MM/R+zpGmK551j5HAM2chBsE=";
   };
 
-  patches = [
-    ./remove-typo-in-test-case.patch
-  ];
+  patches = [ ./remove-typo-in-test-case.patch ];
 
   propagatedBuildInputs = [
     paramiko

@@ -1,16 +1,17 @@
-{ lib
-, blueprint-compiler
-, cargo
-, desktop-file-utils
-, fetchFromGitLab
-, libadwaita
-, meson
-, ninja
-, pkg-config
-, rustPlatform
-, rustc
-, stdenv
-, wrapGAppsHook4
+{
+  lib,
+  blueprint-compiler,
+  cargo,
+  desktop-file-utils,
+  fetchFromGitLab,
+  libadwaita,
+  meson,
+  ninja,
+  pkg-config,
+  rustPlatform,
+  rustc,
+  stdenv,
+  wrapGAppsHook4,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -45,9 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
     wrapGAppsHook4
   ];
 
-  buildInputs = [
-    libadwaita
-  ];
+  buildInputs = [ libadwaita ];
 
   meta = {
     description = "Test your regular expressions";

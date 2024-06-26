@@ -1,9 +1,10 @@
-{ buildGoModule
-, fetchFromGitHub
-, installShellFiles
-, lib
-, sqlcmd
-, testers
+{
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  lib,
+  sqlcmd,
+  testers,
 }:
 
 buildGoModule rec {
@@ -20,7 +21,11 @@ buildGoModule rec {
   vendorHash = "sha256-boMvZf8+o1JDaxiyttbW/7hcuTN9wAeTUWT89N0FsSU=";
   proxyVendor = true;
 
-  ldflags = [ "-s" "-w" "-X main.version=${version}" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X main.version=${version}"
+  ];
 
   subPackages = [ "cmd/modern" ];
 

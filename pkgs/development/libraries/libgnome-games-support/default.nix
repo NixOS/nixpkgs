@@ -1,15 +1,17 @@
-{ lib, stdenv
-, fetchurl
-, pkg-config
-, glib
-, gtk3
-, libgee
-, gettext
-, vala
-, gnome
-, libintl
-, meson
-, ninja
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  glib,
+  gtk3,
+  libgee,
+  gettext,
+  vala,
+  gnome,
+  libintl,
+  meson,
+  ninja,
 }:
 
 stdenv.mkDerivation rec {
@@ -29,9 +31,7 @@ stdenv.mkDerivation rec {
     vala
   ];
 
-  buildInputs = [
-    libintl
-  ];
+  buildInputs = [ libintl ];
 
   propagatedBuildInputs = [
     # Required by libgnome-games-support-1.pc

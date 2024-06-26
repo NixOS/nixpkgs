@@ -1,4 +1,8 @@
-{ lib, stdenv, fetchurl }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 
 stdenv.mkDerivation rec {
   pname = "vlan";
@@ -11,20 +15,18 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  preBuild =
-    ''
-      # Ouch, the tarball contains pre-compiled binaries.
-      make clean
-    '';
+  preBuild = ''
+    # Ouch, the tarball contains pre-compiled binaries.
+    make clean
+  '';
 
-  installPhase =
-    ''
-      mkdir -p $out/sbin
-      cp vconfig $out/sbin/
+  installPhase = ''
+    mkdir -p $out/sbin
+    cp vconfig $out/sbin/
 
-      mkdir -p $out/share/man/man8
-      cp vconfig.8 $out/share/man/man8/
-    '';
+    mkdir -p $out/share/man/man8
+    cp vconfig.8 $out/share/man/man8/
+  '';
 
   meta = with lib; {
     description = "User mode programs to enable VLANs on Ethernet devices";

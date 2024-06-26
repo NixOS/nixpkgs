@@ -1,4 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 
 buildGoModule rec {
   pname = "gauge";
@@ -19,13 +23,19 @@ buildGoModule rec {
 
   vendorHash = "sha256-VVHsldLfLrdufSBLbgSlniYK1+64651DL8gzw5VHans=";
 
-  excludedPackages = [ "build" "man" ];
+  excludedPackages = [
+    "build"
+    "man"
+  ];
 
   meta = with lib; {
     description = "Light weight cross-platform test automation";
     mainProgram = "gauge";
     homepage = "https://gauge.org";
     license = licenses.asl20;
-    maintainers = with maintainers; [ vdemeester marie ];
+    maintainers = with maintainers; [
+      vdemeester
+      marie
+    ];
   };
 }

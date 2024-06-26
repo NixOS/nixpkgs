@@ -1,6 +1,12 @@
-{ lib, stdenv, fetchurl, writeText }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  writeText,
+}:
 
-import ./versions.nix ({ version, hash, ... }:
+import ./versions.nix (
+  { version, hash, ... }:
   stdenv.mkDerivation rec {
     pname = "zabbix-web";
     inherit version;
@@ -11,9 +17,9 @@ import ./versions.nix ({ version, hash, ... }:
     };
 
     phpConfig = writeText "zabbix.conf.php" ''
-    <?php
-      return require(getenv('ZABBIX_CONFIG'));
-    ?>
+      <?php
+        return require(getenv('ZABBIX_CONFIG'));
+      ?>
     '';
 
     installPhase = ''
@@ -29,4 +35,5 @@ import ./versions.nix ({ version, hash, ... }:
       maintainers = [ maintainers.mmahut ];
       platforms = platforms.linux;
     };
-  })
+  }
+)

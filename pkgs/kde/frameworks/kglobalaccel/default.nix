@@ -1,9 +1,6 @@
-{
-  mkKdeDerivation,
-  qttools,
-}:
+{ mkKdeDerivation, qttools }:
 mkKdeDerivation {
   pname = "kglobalaccel";
 
-  extraNativeBuildInputs = [qttools];
+  extraNativeBuildInputs = [ qttools ];
 }

@@ -1,17 +1,18 @@
-{ stdenv
-, lib
-, fetchbzr
-, testers
-, autoreconfHook
-, bash
-, coreutils
-, dbus
-, dbus-glib
-, glib
-, intltool
-, pkg-config
-, python3
-, xvfb-run
+{
+  stdenv,
+  lib,
+  fetchbzr,
+  testers,
+  autoreconfHook,
+  bash,
+  coreutils,
+  dbus,
+  dbus-glib,
+  glib,
+  intltool,
+  pkg-config,
+  python3,
+  xvfb-run,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -51,9 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeCheckInputs = [
     bash
     dbus
-    (python3.withPackages (ps: with ps; [
-      python-dbusmock
-    ]))
+    (python3.withPackages (ps: with ps; [ python-dbusmock ]))
     xvfb-run
   ];
 
@@ -61,9 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
-  checkFlags = [
-    "XVFB_RUN=${lib.getExe xvfb-run}"
-  ];
+  checkFlags = [ "XVFB_RUN=${lib.getExe xvfb-run}" ];
 
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
@@ -74,8 +71,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.gpl3Only;
     platforms = platforms.unix;
     maintainers = teams.lomiri.members;
-    pkgConfigModules = [
-      "dbustest-1"
-    ];
+    pkgConfigModules = [ "dbustest-1" ];
   };
 })

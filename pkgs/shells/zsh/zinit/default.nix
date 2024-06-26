@@ -1,4 +1,9 @@
-{ stdenvNoCC, lib, fetchFromGitHub, installShellFiles }:
+{
+  stdenvNoCC,
+  lib,
+  fetchFromGitHub,
+  installShellFiles,
+}:
 
 stdenvNoCC.mkDerivation rec {
   pname = "zinit";
@@ -38,6 +43,9 @@ stdenvNoCC.mkDerivation rec {
     homepage = "https://github.com/zdharma-continuum/zinit";
     description = "Flexible zsh plugin manager";
     license = licenses.mit;
-    maintainers = with maintainers; [ pasqui23 sei40kr ];
+    maintainers = with maintainers; [
+      pasqui23
+      sei40kr
+    ];
   };
 }

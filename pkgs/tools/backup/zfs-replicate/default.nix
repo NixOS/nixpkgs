@@ -1,12 +1,13 @@
-{ buildPythonApplication
-, click
-, fetchPypi
-, hypothesis
-, lib
-, poetry-core
-, pytest
-, pytestCheckHook
-, stringcase
+{
+  buildPythonApplication,
+  click,
+  fetchPypi,
+  hypothesis,
+  lib,
+  poetry-core,
+  pytest,
+  pytestCheckHook,
+  stringcase,
 }:
 
 buildPythonApplication rec {
@@ -23,9 +24,7 @@ buildPythonApplication rec {
     sed -i pyproject.toml -e '/--cov[^"]*/d'
   '';
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   nativeCheckInputs = [
     pytestCheckHook

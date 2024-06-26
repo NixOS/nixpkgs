@@ -1,12 +1,13 @@
-{ lib
-, rustPlatform
-, fetchCrate
-, pkg-config
-, openssl
-, zlib
-, stdenv
-, Security
-, SystemConfiguration
+{
+  lib,
+  rustPlatform,
+  fetchCrate,
+  pkg-config,
+  openssl,
+  zlib,
+  stdenv,
+  Security,
+  SystemConfiguration,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -20,17 +21,17 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-OOkJGdqEHNVbgZZIjQupGaSs4tB52b7kPGLKELUocn4=";
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [
-    openssl
-    zlib
-  ] ++ lib.optionals stdenv.isDarwin [
-    Security
-    SystemConfiguration
-  ];
+  buildInputs =
+    [
+      openssl
+      zlib
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      Security
+      SystemConfiguration
+    ];
 
   buildFeatures = [ "fix" ];
 
@@ -42,7 +43,14 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "cargo-audit";
     homepage = "https://rustsec.org";
     changelog = "https://github.com/rustsec/rustsec/blob/cargo-audit/v${version}/cargo-audit/CHANGELOG.md";
-    license = with licenses; [ mit /* or */ asl20 ];
-    maintainers = with maintainers; [ basvandijk figsoda jk ];
+    license = with licenses; [
+      mit # or
+      asl20
+    ];
+    maintainers = with maintainers; [
+      basvandijk
+      figsoda
+      jk
+    ];
   };
 }

@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, git, makeWrapper, which, installShellFiles }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  git,
+  makeWrapper,
+  which,
+  installShellFiles,
+}:
 
 stdenv.mkDerivation rec {
   pname = "git-subrepo";
@@ -17,9 +25,7 @@ stdenv.mkDerivation rec {
     installShellFiles
   ];
 
-  buildInputs = [
-    git
-  ];
+  buildInputs = [ git ];
 
   makeFlags = [
     "PREFIX=${placeholder "out"}"

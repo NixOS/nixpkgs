@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchurl, pcre2 }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pcre2,
+}:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "leafnode";
@@ -9,9 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "sha256-tGfOcyH2F6IeglfY00u199eKusnn6HeqD7or3Oz3ed4=";
   };
 
-  configureFlags = [
-    "--with-ipv6"
-  ];
+  configureFlags = [ "--with-ipv6" ];
 
   buildInputs = [ pcre2 ];
 

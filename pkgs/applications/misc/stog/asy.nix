@@ -1,4 +1,8 @@
-{ buildDunePackage, stog, ocf_ppx }:
+{
+  buildDunePackage,
+  stog,
+  ocf_ppx,
+}:
 
 buildDunePackage {
   pname = "stog_asy";

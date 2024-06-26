@@ -1,4 +1,10 @@
-{ lib, stdenv, rustPlatform, fetchurl, Security }:
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchurl,
+  Security,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "trinsic-cli";

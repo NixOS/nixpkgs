@@ -1,13 +1,14 @@
-{ stdenv
-, lib
-, makeWrapper
-, bundix
-, common-updater-scripts
-, xidel
-, jq
-, nix-prefetch-github
-, yarn
-, yarn2nix
+{
+  stdenv,
+  lib,
+  makeWrapper,
+  bundix,
+  common-updater-scripts,
+  xidel,
+  jq,
+  nix-prefetch-github,
+  yarn,
+  yarn2nix,
 }:
 
 stdenv.mkDerivation rec {

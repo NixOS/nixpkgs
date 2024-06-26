@@ -1,32 +1,39 @@
-{ lib
-, stdenv
-, fetchurl
-, fetchFromGitLab
-, cairo
-, cmake
-, boost
-, cups-filters
-, curl
-, fontconfig
-, freetype
-, inkscape
-, lcms
-, libiconv
-, libintl
-, libjpeg
-, ninja
-, openjpeg
-, pkg-config
-, python3
-, scribus
-, zlib
-, withData ? true, poppler_data
-, qt5Support ? false, qt6Support ? false, qtbase ? null
-, introspectionSupport ? false, gobject-introspection ? null
-, gpgmeSupport ? false, gpgme ? null
-, utils ? false, nss ? null
-, minimal ? false
-, suffix ? "glib"
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchFromGitLab,
+  cairo,
+  cmake,
+  boost,
+  cups-filters,
+  curl,
+  fontconfig,
+  freetype,
+  inkscape,
+  lcms,
+  libiconv,
+  libintl,
+  libjpeg,
+  ninja,
+  openjpeg,
+  pkg-config,
+  python3,
+  scribus,
+  zlib,
+  withData ? true,
+  poppler_data,
+  qt5Support ? false,
+  qt6Support ? false,
+  qtbase ? null,
+  introspectionSupport ? false,
+  gobject-introspection ? null,
+  gpgmeSupport ? false,
+  gpgme ? null,
+  utils ? false,
+  nss ? null,
+  minimal ? false,
+  suffix ? "glib",
 }:
 
 let
@@ -48,7 +55,10 @@ stdenv.mkDerivation (finalAttrs: rec {
   pname = "poppler-${suffix}";
   version = "24.02.0"; # beware: updates often break cups-filters build, check scribus too!
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   src = fetchurl {
     url = "https://poppler.freedesktop.org/poppler-${version}.tar.xz";
@@ -66,29 +76,26 @@ stdenv.mkDerivation (finalAttrs: rec {
     boost
     libiconv
     libintl
-  ] ++ lib.optionals withData [
-    poppler_data
-  ];
+  ] ++ lib.optionals withData [ poppler_data ];
 
   # TODO: reduce propagation to necessary libs
-  propagatedBuildInputs = [
-    zlib
-    freetype
-    fontconfig
-    libjpeg
-    openjpeg
-  ] ++ lib.optionals (!minimal) [
-    cairo
-    lcms
-    curl
-    nss
-  ] ++ lib.optionals (qt5Support || qt6Support) [
-    qtbase
-  ] ++ lib.optionals introspectionSupport [
-    gobject-introspection
-  ] ++ lib.optionals gpgmeSupport [
-    gpgme
-  ];
+  propagatedBuildInputs =
+    [
+      zlib
+      freetype
+      fontconfig
+      libjpeg
+      openjpeg
+    ]
+    ++ lib.optionals (!minimal) [
+      cairo
+      lcms
+      curl
+      nss
+    ]
+    ++ lib.optionals (qt5Support || qt6Support) [ qtbase ]
+    ++ lib.optionals introspectionSupport [ gobject-introspection ]
+    ++ lib.optionals gpgmeSupport [ gpgme ];
 
   cmakeFlags = [
     (mkFlag true "UNSTABLE_API_ABI_HEADERS") # previously "XPDF_HEADERS"
@@ -102,9 +109,7 @@ stdenv.mkDerivation (finalAttrs: rec {
     (mkFlag qt5Support "QT5")
     (mkFlag qt6Support "QT6")
     (mkFlag gpgmeSupport "GPGME")
-  ] ++ lib.optionals finalAttrs.finalPackage.doCheck [
-    "-DTESTDATADIR=${testData}"
-  ];
+  ] ++ lib.optionals finalAttrs.finalPackage.doCheck [ "-DTESTDATADIR=${testData}" ];
   disallowedReferences = lib.optional finalAttrs.finalPackage.doCheck testData;
 
   dontWrapQtApps = true;

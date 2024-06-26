@@ -1,4 +1,14 @@
-{ stdenv, lib, fetchurl, makeWrapper, unzip, python3, unar, ffmpeg, nixosTests }:
+{
+  stdenv,
+  lib,
+  fetchurl,
+  makeWrapper,
+  unzip,
+  python3,
+  unar,
+  ffmpeg,
+  nixosTests,
+}:
 
 let
   runtimeProgDeps = [
@@ -17,7 +27,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-tmTdmUfRBRlB14juNxUo65Re+9agUBX0BBSuNu3pSC0=";
   };
 
-  nativeBuildInputs = [ unzip makeWrapper ];
+  nativeBuildInputs = [
+    unzip
+    makeWrapper
+  ];
 
   buildInputs = [
     (python3.withPackages (ps: [

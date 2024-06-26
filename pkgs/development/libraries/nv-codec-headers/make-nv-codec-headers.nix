@@ -1,11 +1,13 @@
-{ lib
-, stdenvNoCC
-, fetchgit
+{
+  lib,
+  stdenvNoCC,
+  fetchgit,
 }:
 
-{ pname ? "nv-codec-headers"
-, version
-, hash
+{
+  pname ? "nv-codec-headers",
+  version,
+  hash,
 }:
 
 stdenvNoCC.mkDerivation {
@@ -17,9 +19,7 @@ stdenvNoCC.mkDerivation {
     inherit hash;
   };
 
-  makeFlags = [
-    "PREFIX=$(out)"
-  ];
+  makeFlags = [ "PREFIX=$(out)" ];
 
   meta = {
     description = "FFmpeg version of headers for NVENC";

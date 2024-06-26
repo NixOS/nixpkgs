@@ -1,4 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 
 buildGoModule rec {
   pname = "kubeconform";
@@ -16,8 +20,8 @@ buildGoModule rec {
   meta = with lib; {
     description = "FAST Kubernetes manifests validator, with support for Custom Resources!";
     mainProgram = "kubeconform";
-    homepage    = "https://github.com/yannh/kubeconform/";
-    license     = licenses.asl20;
+    homepage = "https://github.com/yannh/kubeconform/";
+    license = licenses.asl20;
     maintainers = [ maintainers.j4m3s ];
   };
 }

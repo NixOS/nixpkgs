@@ -1,11 +1,17 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
 let
   cfg = config.services.sslmate-agent;
 
-in {
+in
+{
   meta.maintainers = [ ];
 
   options = {

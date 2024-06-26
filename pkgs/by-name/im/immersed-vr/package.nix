@@ -1,8 +1,9 @@
-{ lib
-, appimageTools
-, callPackage
-, fetchurl
-, stdenv
+{
+  lib,
+  appimageTools,
+  callPackage,
+  fetchurl,
+  stdenv,
 }:
 let
   pname = "immersed-vr";
@@ -31,6 +32,22 @@ let
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
   };
 
-in if stdenv.isDarwin
-then callPackage ./darwin.nix { inherit pname version src meta; }
-else callPackage ./linux.nix { inherit pname version src meta; }
+in
+if stdenv.isDarwin then
+  callPackage ./darwin.nix {
+    inherit
+      pname
+      version
+      src
+      meta
+      ;
+  }
+else
+  callPackage ./linux.nix {
+    inherit
+      pname
+      version
+      src
+      meta
+      ;
+  }

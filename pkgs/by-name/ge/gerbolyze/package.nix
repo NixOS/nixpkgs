@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, python3Packages
-, fetchFromGitHub
-, resvg
+{
+  lib,
+  stdenv,
+  python3Packages,
+  fetchFromGitHub,
+  resvg,
 }:
 
 let
@@ -52,22 +53,23 @@ let
       rev = "v${version}";
       hash = "sha256-plZiyEiBWeV2mwTsNK5Je8Axs/hcHH8aV2VpOix6QCY=";
     };
-    cargoDeps = old.cargoDeps.overrideAttrs (lib.const {
-      name = "${old.pname}-${version}-vendor.tar.gz";
-      inherit src;
-      outputHash = "sha256-U7xzb9e9wh9XbLvlYQ0ofIjH8FuSzVcrXnrehQmZgww=";
-    });
+    cargoDeps = old.cargoDeps.overrideAttrs (
+      lib.const {
+        name = "${old.pname}-${version}-vendor.tar.gz";
+        inherit src;
+        outputHash = "sha256-U7xzb9e9wh9XbLvlYQ0ofIjH8FuSzVcrXnrehQmZgww=";
+      }
+    );
   });
 
-in python3Packages.buildPythonApplication rec {
+in
+python3Packages.buildPythonApplication rec {
   inherit version src;
   pname = "gerbolyze";
 
   format = "setuptools";
 
-  nativeBuildInputs = [
-    python3Packages.setuptools
-  ];
+  nativeBuildInputs = [ python3Packages.setuptools ];
 
   propagatedBuildInputs = [
     python3Packages.beautifulsoup4
@@ -95,7 +97,11 @@ in python3Packages.buildPythonApplication rec {
 
   pythonImportsCheck = [ "gerbolyze" ];
 
-  nativeCheckInputs = [ python3Packages.pytestCheckHook resvg' svg-flatten ];
+  nativeCheckInputs = [
+    python3Packages.pytestCheckHook
+    resvg'
+    svg-flatten
+  ];
 
   meta = with lib; {
     description = "Directly render SVG overlays into Gerber and Excellon files";

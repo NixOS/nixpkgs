@@ -1,4 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, cmake, aws-c-cal, aws-c-common, nix, s2n-tls, Security }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  aws-c-cal,
+  aws-c-common,
+  nix,
+  s2n-tls,
+  Security,
+}:
 
 stdenv.mkDerivation rec {
   pname = "aws-c-io";
@@ -13,12 +23,14 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = [ aws-c-cal aws-c-common s2n-tls ];
+  buildInputs = [
+    aws-c-cal
+    aws-c-common
+    s2n-tls
+  ];
   propagatedBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
 
-  cmakeFlags = [
-    "-DBUILD_SHARED_LIBS=ON"
-  ];
+  cmakeFlags = [ "-DBUILD_SHARED_LIBS=ON" ];
 
   passthru.tests = {
     inherit nix;

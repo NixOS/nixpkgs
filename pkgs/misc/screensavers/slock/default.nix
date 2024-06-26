@@ -1,10 +1,18 @@
-{ lib, stdenv, fetchurl, writeText
-, xorgproto, libX11, libXext, libXrandr, libxcrypt
-# default header can be obtained from
-# https://git.suckless.org/slock/tree/config.def.h
-, conf ? null
-# update script dependencies
-, gitUpdater
+{
+  lib,
+  stdenv,
+  fetchurl,
+  writeText,
+  xorgproto,
+  libX11,
+  libXext,
+  libXrandr,
+  libxcrypt,
+  # default header can be obtained from
+  # https://git.suckless.org/slock/tree/config.def.h
+  conf ? null,
+  # update script dependencies
+  gitUpdater,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -16,7 +24,13 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-ruHj+/aid/tiWjg4BzuXm2SD57rKTOgvVt4f8ZLbDk0=";
   };
 
-  buildInputs = [ xorgproto libX11 libXext libXrandr libxcrypt ];
+  buildInputs = [
+    xorgproto
+    libX11
+    libXext
+    libXrandr
+    libxcrypt
+  ];
 
   installFlags = [ "PREFIX=$(out)" ];
 
@@ -28,9 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   makeFlags = [ "CC:=$(CC)" ];
 
-  passthru.updateScript = gitUpdater {
-    url = "git://git.suckless.org/slock";
-  };
+  passthru.updateScript = gitUpdater { url = "git://git.suckless.org/slock"; };
 
   meta = with lib; {
     homepage = "https://tools.suckless.org/slock";
@@ -40,7 +52,10 @@ stdenv.mkDerivation (finalAttrs: {
       Simple X display locker. This is the simplest X screen locker.
     '';
     license = licenses.mit;
-    maintainers = with maintainers; [ astsmtl qusic ];
+    maintainers = with maintainers; [
+      astsmtl
+      qusic
+    ];
     platforms = platforms.linux;
   };
 })

@@ -1,10 +1,11 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, sudachidict
-, runCommand
-, sudachi-rs
-, writeScript
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  sudachidict,
+  runCommand,
+  sudachi-rs,
+  writeScript,
 }:
 
 rustPlatform.buildRustPackage rec {

@@ -1,12 +1,13 @@
-{ mkDerivation
-, lib
-, fetchFromGitHub
-, fetchpatch
-, cmake
-, extra-cmake-modules
-, kauth
-, krunner
-, pass
+{
+  mkDerivation,
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  extra-cmake-modules,
+  kauth,
+  krunner,
+  pass,
 }:
 
 mkDerivation rec {
@@ -27,7 +28,10 @@ mkDerivation rec {
     (pass.withExtensions (p: with p; [ pass-otp ]))
   ];
 
-  nativeBuildInputs = [ cmake extra-cmake-modules ];
+  nativeBuildInputs = [
+    cmake
+    extra-cmake-modules
+  ];
 
   patches = [
     (fetchpatch {
@@ -38,9 +42,7 @@ mkDerivation rec {
     ./pass-path.patch
   ];
 
-  CXXFLAGS = [
-    ''-DNIXPKGS_PASS=\"${lib.getBin pass}/bin/pass\"''
-  ];
+  CXXFLAGS = [ ''-DNIXPKGS_PASS=\"${lib.getBin pass}/bin/pass\"'' ];
 
   cmakeFlags = [
     # there are *lots* of pointless warnings in v1.3.0

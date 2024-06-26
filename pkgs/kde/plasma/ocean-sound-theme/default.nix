@@ -1,4 +1,1 @@
-{mkKdeDerivation}:
-mkKdeDerivation {
-  pname = "ocean-sound-theme";
-}
+{ mkKdeDerivation }: mkKdeDerivation { pname = "ocean-sound-theme"; }

@@ -1,14 +1,15 @@
-{ lib
-, mkXfceDerivation
-, autoreconfHook
-, libxslt
-, docbook_xsl
-, autoconf
-, automake
-, glib
-, gtk-doc
-, intltool
-, libtool
+{
+  lib,
+  mkXfceDerivation,
+  autoreconfHook,
+  libxslt,
+  docbook_xsl,
+  autoconf,
+  automake,
+  glib,
+  gtk-doc,
+  intltool,
+  libtool,
 }:
 
 mkXfceDerivation {

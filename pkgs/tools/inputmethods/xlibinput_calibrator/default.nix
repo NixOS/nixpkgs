@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, libX11
-, libXi
-, libXrandr
-, txt2man
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  libX11,
+  libXi,
+  libXrandr,
+  txt2man,
 }:
 
 stdenv.mkDerivation rec {
@@ -18,9 +19,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-MvlamN8WSER0zN9Ru3Kr2MFARD9s7PYKkRtyD8s6ZPI=";
   };
 
-  nativeBuildInputs = [
-    txt2man
-  ];
+  nativeBuildInputs = [ txt2man ];
 
   buildInputs = [
     libX11

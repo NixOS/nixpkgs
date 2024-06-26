@@ -1,7 +1,8 @@
-{ lib
-, python3
-, fetchPypi
-, ansible
+{
+  lib,
+  python3,
+  fetchPypi,
+  ansible,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -26,9 +27,7 @@ python3.pkgs.buildPythonApplication rec {
     pythonRelaxDepsHook
   ];
 
-  pythonRelaxDeps = [
-    "ruamel.yaml"
-  ];
+  pythonRelaxDeps = [ "ruamel.yaml" ];
 
   propagatedBuildInputs = with python3.pkgs; [
     # https://github.com/ansible/ansible-lint/blob/master/.config/requirements.in

@@ -1,28 +1,29 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, nix-update-script
-, pkg-config
-, meson
-, python3
-, ninja
-, vala
-, desktop-file-utils
-, gettext
-, libxml2
-, gtk3
-, granite
-, libgee
-, bamf
-, libcanberra-gtk3
-, gnome-desktop
-, mesa
-, mutter
-, gnome-settings-daemon
-, wrapGAppsHook3
-, gexiv2
-, systemd
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  nix-update-script,
+  pkg-config,
+  meson,
+  python3,
+  ninja,
+  vala,
+  desktop-file-utils,
+  gettext,
+  libxml2,
+  gtk3,
+  granite,
+  libgee,
+  bamf,
+  libcanberra-gtk3,
+  gnome-desktop,
+  mesa,
+  mutter,
+  gnome-settings-daemon,
+  wrapGAppsHook3,
+  gexiv2,
+  systemd,
 }:
 
 stdenv.mkDerivation rec {

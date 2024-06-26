@@ -1,6 +1,7 @@
-{ lib
-, makeGaugePlugin
-, gauge-unwrapped
+{
+  lib,
+  makeGaugePlugin,
+  gauge-unwrapped,
 }:
 
 makeGaugePlugin {

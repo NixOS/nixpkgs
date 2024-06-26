@@ -1,4 +1,12 @@
-{ lib, buildDunePackage, fetchFromGitHub, dune-configurator, pkg-config, ogg, flac }:
+{
+  lib,
+  buildDunePackage,
+  fetchFromGitHub,
+  dune-configurator,
+  pkg-config,
+  ogg,
+  flac,
+}:
 
 buildDunePackage rec {
   pname = "flac";
@@ -13,7 +21,10 @@ buildDunePackage rec {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ dune-configurator ];
-  propagatedBuildInputs = [ ogg flac.dev ];
+  propagatedBuildInputs = [
+    ogg
+    flac.dev
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/savonet/ocaml-flac";

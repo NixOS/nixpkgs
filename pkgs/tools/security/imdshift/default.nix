@@ -1,6 +1,7 @@
-{ lib
-, fetchFromGitHub
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -25,9 +26,7 @@ python3.pkgs.buildPythonApplication rec {
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "IMDShift"
-  ];
+  pythonImportsCheck = [ "IMDShift" ];
 
   meta = with lib; {
     description = "Tool to migrate workloads to IMDSv2";

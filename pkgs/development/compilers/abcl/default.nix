@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, writeShellScriptBin
-, fetchurl
-, ant
-, jdk
-, makeWrapper
-, stripJavaArchivesHook
+{
+  lib,
+  stdenv,
+  writeShellScriptBin,
+  fetchurl,
+  ant,
+  jdk,
+  makeWrapper,
+  stripJavaArchivesHook,
 }:
 
 let

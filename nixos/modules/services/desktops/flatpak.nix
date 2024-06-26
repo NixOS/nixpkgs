@@ -1,11 +1,17 @@
 # flatpak service.
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
 let
   cfg = config.services.flatpak;
-in {
+in
+{
   meta = {
     doc = ./flatpak.md;
     maintainers = pkgs.flatpak.meta.maintainers;
@@ -18,12 +24,12 @@ in {
     };
   };
 
-
   ###### implementation
   config = mkIf cfg.enable {
 
     assertions = [
-      { assertion = (config.xdg.portal.enable == true);
+      {
+        assertion = (config.xdg.portal.enable == true);
         message = "To use Flatpak you must enable XDG Desktop Portals with xdg.portal.enable.";
       }
     ];

@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, python3, substituteAll }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  python3,
+  substituteAll,
+}:
 
 stdenv.mkDerivation rec {
   pname = "libelfin";

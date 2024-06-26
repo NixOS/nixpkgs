@@ -1,7 +1,8 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, nix-update-script
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  nix-update-script,
 }:
 
 buildGoModule rec {
@@ -18,9 +19,7 @@ buildGoModule rec {
   vendorHash = "sha256-/FJECY1x9nMqOIzqdN6T+vdi9qjjY0YAoqvVNf0kN3s=";
 
   modRoot = ".";
-  subPackages = [
-    "cmd/notify/"
-  ];
+  subPackages = [ "cmd/notify/" ];
 
   # Test files are not part of the release tarball
   doCheck = false;

@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, autoreconfHook
-, cups
-, fetchurl
-, gettext
-, glib
-, gtk2
-, libtool
-, openssl
-, pkg-config
+{
+  lib,
+  stdenv,
+  autoreconfHook,
+  cups,
+  fetchurl,
+  gettext,
+  glib,
+  gtk2,
+  libtool,
+  openssl,
+  pkg-config,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -35,7 +36,11 @@ stdenv.mkDerivation (finalAttrs: {
     openssl
   ];
 
-  outputs = [ "out" "doc" "man" ];
+  outputs = [
+    "out"
+    "doc"
+    "man"
+  ];
 
   strictDeps = true;
 

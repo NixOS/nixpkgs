@@ -1,29 +1,30 @@
-{ lib
-, stdenv
-, python3Packages
-, fetchFromGitHub
-, fetchurl
-, sd
-, cargo
-, curl
-, pkg-config
-, openssl
-, rustPlatform
-, rustc
-, fetchYarnDeps
-, yarn
-, nodejs
-, fixup-yarn-lock
-, glibcLocales
-, libiconv
-, Cocoa
-, CoreFoundation
-, CoreGraphics
-, CoreServices
-, Security
-, WebKit
+{
+  lib,
+  stdenv,
+  python3Packages,
+  fetchFromGitHub,
+  fetchurl,
+  sd,
+  cargo,
+  curl,
+  pkg-config,
+  openssl,
+  rustPlatform,
+  rustc,
+  fetchYarnDeps,
+  yarn,
+  nodejs,
+  fixup-yarn-lock,
+  glibcLocales,
+  libiconv,
+  Cocoa,
+  CoreFoundation,
+  CoreGraphics,
+  CoreServices,
+  Security,
+  WebKit,
 
-, enableMinimal ? false
+  enableMinimal ? false,
 }:
 
 let
@@ -119,22 +120,26 @@ python3Packages.buildPythonApplication {
       "serde_bser-0.3.1" = "sha256-vvMCa6mlcr+xazxZVl2bcF8/r+ufzZmiQ79KofZGWrA=";
     };
   };
-  postPatch = ''
-    cp ${./Cargo.lock} Cargo.lock
-  '' + lib.optionalString (!enableMinimal) ''
-    # If asked, we optionally patch in a hardcoded path to the
-    # 'nodejs' package, so that 'sl web' always works. Without the
-    # patch, 'sl web' will still work if 'nodejs' is in $PATH.
-    substituteInPlace lib/config/loader/src/builtin_static/core.rs \
-      --replace '"#);' $'[web]\nnode-path=${nodejs}/bin/node\n"#);'
-  '';
+  postPatch =
+    ''
+      cp ${./Cargo.lock} Cargo.lock
+    ''
+    + lib.optionalString (!enableMinimal) ''
+      # If asked, we optionally patch in a hardcoded path to the
+      # 'nodejs' package, so that 'sl web' always works. Without the
+      # patch, 'sl web' will still work if 'nodejs' is in $PATH.
+      substituteInPlace lib/config/loader/src/builtin_static/core.rs \
+        --replace '"#);' $'[web]\nnode-path=${nodejs}/bin/node\n"#);'
+    '';
 
   # Since the derivation builder doesn't have network access to remain pure,
   # fetch the artifacts manually and link them. Then replace the hardcoded URLs
   # with filesystem paths for the curl calls.
   postUnpack = ''
     mkdir $sourceRoot/hack_pydeps
-    ${lib.concatStrings (map (li: "ln -s ${fetchurl li} $sourceRoot/hack_pydeps/${baseNameOf li.url}\n") links)}
+    ${lib.concatStrings (
+      map (li: "ln -s ${fetchurl li} $sourceRoot/hack_pydeps/${baseNameOf li.url}\n") links
+    )}
     sed -i "s|https://files.pythonhosted.org/packages/[[:alnum:]]*/[[:alnum:]]*/[[:alnum:]]*/|file://$NIX_BUILD_TOP/$sourceRoot/hack_pydeps/|g" $sourceRoot/setup.py
   '';
 
@@ -155,18 +160,18 @@ python3Packages.buildPythonApplication {
     rustc
   ];
 
-  buildInputs = [
-    openssl
-  ] ++ lib.optionals stdenv.isDarwin [
-    curl
-    libiconv
-    Cocoa
-    CoreFoundation
-    CoreGraphics
-    CoreServices
-    Security
-    WebKit
-  ];
+  buildInputs =
+    [ openssl ]
+    ++ lib.optionals stdenv.isDarwin [
+      curl
+      libiconv
+      Cocoa
+      CoreFoundation
+      CoreGraphics
+      CoreServices
+      Security
+      WebKit
+    ];
 
   HGNAME = "sl";
   SAPLING_OSS_BUILD = "true";
@@ -194,7 +199,10 @@ python3Packages.buildPythonApplication {
     description = "Scalable, User-Friendly Source Control System";
     homepage = "https://sapling-scm.com";
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ pbar thoughtpolice ];
+    maintainers = with maintainers; [
+      pbar
+      thoughtpolice
+    ];
     platforms = platforms.unix;
     mainProgram = "sl";
   };

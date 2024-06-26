@@ -1,15 +1,16 @@
-{ lib
-, stdenv
-, cmake
-, fetchFromGitHub
-, pkg-config
-, qtbase
-, qtscript
-, qtsvg
-, substituteAll
-, unzip
-, wrapQtAppsHook
-, zip
+{
+  lib,
+  stdenv,
+  cmake,
+  fetchFromGitHub,
+  pkg-config,
+  qtbase,
+  qtscript,
+  qtsvg,
+  substituteAll,
+  unzip,
+  wrapQtAppsHook,
+  zip,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -23,7 +24,10 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-5cHhv9GDjJvSqGJ+7fI0xaWCiXw/0WP0Bem/ZRV8Y7M=";
   };
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
   patches = [
     (substituteAll {
@@ -48,7 +52,12 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   qtWrapperArgs = [
-    "--prefix PATH : ${lib.makeBinPath [ unzip zip ]}"
+    "--prefix PATH : ${
+      lib.makeBinPath [
+        unzip
+        zip
+      ]
+    }"
   ];
 
   meta = {

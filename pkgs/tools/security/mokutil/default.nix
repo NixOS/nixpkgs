@@ -1,12 +1,13 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, autoreconfHook
-, pkg-config
-, openssl
-, efivar
-, keyutils
-, libxcrypt
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  openssl,
+  efivar,
+  keyutils,
+  libxcrypt,
 }:
 
 stdenv.mkDerivation rec {

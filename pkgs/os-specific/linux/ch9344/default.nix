@@ -1,4 +1,9 @@
-{ stdenv, lib, fetchzip, kernel }:
+{
+  stdenv,
+  lib,
+  fetchzip,
+  kernel,
+}:
 
 stdenv.mkDerivation rec {
   pname = "ch9344";
@@ -10,9 +15,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-YKNMYpap7CjhgTIpd/M9+nB11NtpwGYT/P14J6q3XZg=";
   };
 
-  patches = [
-    ./fix-incompatible-pointer-types.patch
-  ];
+  patches = [ ./fix-incompatible-pointer-types.patch ];
 
   sourceRoot = "${src.name}/driver";
   hardeningDisable = [ "pic" ];
@@ -22,9 +25,7 @@ stdenv.mkDerivation rec {
     substituteInPlace Makefile --replace "KERNELDIR :=" "KERNELDIR ?="
   '';
 
-  makeFlags = [
-    "KERNELDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
-  ];
+  makeFlags = [ "KERNELDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build" ];
 
   installPhase = ''
     runHook preInstall

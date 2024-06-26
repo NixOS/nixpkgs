@@ -22,9 +22,7 @@ mkDerivation rec {
   };
 
   buildInputs =
-    [
-      marble.dev
-    ]
+    [ marble.dev ]
     ++ (with libsForQt5; [
       qtbase
       qtcharts
@@ -42,20 +40,16 @@ mkDerivation rec {
     export LANG=en_US.UTF-8
   '';
 
-  cmakeFlags = [
-    "-DLDUTILS_ROOT=${libsForQt5.ldutils}"
-  ];
+  cmakeFlags = [ "-DLDUTILS_ROOT=${libsForQt5.ldutils}" ];
 
-  passthru.updateScript = gitUpdater {
-    rev-prefix = "v_";
-  };
+  passthru.updateScript = gitUpdater { rev-prefix = "v_"; };
 
   meta = with lib; {
     description = "GPS track manager for Qt using KDE Marble maps";
     homepage = "https://www.zombietrackergps.net/ztgps/";
     changelog = "https://www.zombietrackergps.net/ztgps/history.html";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [sohalt];
+    maintainers = with maintainers; [ sohalt ];
     platforms = platforms.linux;
   };
 }

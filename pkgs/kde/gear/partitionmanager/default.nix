@@ -1,11 +1,8 @@
-{
-  mkKdeDerivation,
-  kpmcore,
-}:
+{ mkKdeDerivation, kpmcore }:
 mkKdeDerivation {
   pname = "partitionmanager";
 
-  propagatedUserEnvPkgs = [kpmcore];
+  propagatedUserEnvPkgs = [ kpmcore ];
 
   passthru = {
     inherit kpmcore;

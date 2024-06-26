@@ -1,62 +1,72 @@
-{ lib, stdenv, echo_colored, noisily, mkRustcDepArgs, mkRustcFeatureArgs }:
 {
-  build
-, buildDependencies
-, codegenUnits
-, colors
-, completeBuildDeps
-, completeDeps
-, crateAuthors
-, crateDescription
-, crateFeatures
-, crateHomepage
-, crateLicense
-, crateLicenseFile
-, crateLinks
-, crateName
-, crateReadme
-, crateRenames
-, crateRepository
-, crateRustVersion
-, crateVersion
-, extraLinkFlags
-, extraRustcOptsForBuildRs
-, libName
-, libPath
-, release
-, verbose
-, workspace_member }:
-let version_ = lib.splitString "-" crateVersion;
-    versionPre = lib.optionalString (lib.tail version_ != []) (lib.elemAt version_ 1);
-    version = lib.splitVersion (lib.head version_);
-    rustcOpts = lib.foldl' (opts: opt: opts + " " + opt)
-        (if release then "-C opt-level=3" else "-C debuginfo=2")
-        (["-C codegen-units=${toString codegenUnits}"] ++ extraRustcOptsForBuildRs);
-    buildDeps = mkRustcDepArgs buildDependencies crateRenames;
-    authors = lib.concatStringsSep ":" crateAuthors;
-    optLevel = if release then 3 else 0;
-    completeDepsDir = lib.concatStringsSep " " completeDeps;
-    completeBuildDepsDir = lib.concatStringsSep " " completeBuildDeps;
-    envFeatures = lib.concatStringsSep " " (
-      map (f: lib.replaceStrings ["-"] ["_"] (lib.toUpper f)) crateFeatures
-    );
-in ''
+  lib,
+  stdenv,
+  echo_colored,
+  noisily,
+  mkRustcDepArgs,
+  mkRustcFeatureArgs,
+}:
+{
+  build,
+  buildDependencies,
+  codegenUnits,
+  colors,
+  completeBuildDeps,
+  completeDeps,
+  crateAuthors,
+  crateDescription,
+  crateFeatures,
+  crateHomepage,
+  crateLicense,
+  crateLicenseFile,
+  crateLinks,
+  crateName,
+  crateReadme,
+  crateRenames,
+  crateRepository,
+  crateRustVersion,
+  crateVersion,
+  extraLinkFlags,
+  extraRustcOptsForBuildRs,
+  libName,
+  libPath,
+  release,
+  verbose,
+  workspace_member,
+}:
+let
+  version_ = lib.splitString "-" crateVersion;
+  versionPre = lib.optionalString (lib.tail version_ != [ ]) (lib.elemAt version_ 1);
+  version = lib.splitVersion (lib.head version_);
+  rustcOpts = lib.foldl' (opts: opt: opts + " " + opt) (
+    if release then "-C opt-level=3" else "-C debuginfo=2"
+  ) ([ "-C codegen-units=${toString codegenUnits}" ] ++ extraRustcOptsForBuildRs);
+  buildDeps = mkRustcDepArgs buildDependencies crateRenames;
+  authors = lib.concatStringsSep ":" crateAuthors;
+  optLevel = if release then 3 else 0;
+  completeDepsDir = lib.concatStringsSep " " completeDeps;
+  completeBuildDepsDir = lib.concatStringsSep " " completeBuildDeps;
+  envFeatures = lib.concatStringsSep " " (
+    map (f: lib.replaceStrings [ "-" ] [ "_" ] (lib.toUpper f)) crateFeatures
+  );
+in
+''
   ${echo_colored colors}
   ${noisily colors verbose}
   source ${./lib.sh}
 
   ${lib.optionalString (workspace_member != null) ''
-  noisily cd "${workspace_member}"
-''}
+    noisily cd "${workspace_member}"
+  ''}
   ${lib.optionalString (workspace_member == null) ''
-  echo_colored "Searching for matching Cargo.toml (${crateName})"
-  local cargo_toml_dir=$(matching_cargo_toml_dir "${crateName}")
-  if [ -z "$cargo_toml_dir" ]; then
-    echo_error "ERROR configuring ${crateName}: No matching Cargo.toml in $(pwd) found." >&2
-    exit 23
-  fi
-  noisily cd "$cargo_toml_dir"
-''}
+    echo_colored "Searching for matching Cargo.toml (${crateName})"
+    local cargo_toml_dir=$(matching_cargo_toml_dir "${crateName}")
+    if [ -z "$cargo_toml_dir" ]; then
+      echo_error "ERROR configuring ${crateName}: No matching Cargo.toml in $(pwd) found." >&2
+      exit 23
+    fi
+    noisily cd "$cargo_toml_dir"
+  ''}
 
   runHook preConfigure
 
@@ -137,8 +147,12 @@ in ''
   export CARGO_CFG_TARGET_FAMILY="unix"
   export CARGO_CFG_UNIX=1
   export CARGO_CFG_TARGET_ENV="gnu"
-  export CARGO_CFG_TARGET_ENDIAN=${if stdenv.hostPlatform.parsed.cpu.significantByte.name == "littleEndian" then "little" else "big"}
-  export CARGO_CFG_TARGET_POINTER_WIDTH=${with stdenv.hostPlatform; toString (if isILP32 then 32 else parsed.cpu.bits)}
+  export CARGO_CFG_TARGET_ENDIAN=${
+    if stdenv.hostPlatform.parsed.cpu.significantByte.name == "littleEndian" then "little" else "big"
+  }
+  export CARGO_CFG_TARGET_POINTER_WIDTH=${
+    with stdenv.hostPlatform; toString (if isILP32 then 32 else parsed.cpu.bits)
+  }
   export CARGO_CFG_TARGET_VENDOR=${stdenv.hostPlatform.parsed.vendor.name}
 
   export CARGO_MANIFEST_DIR=$(pwd)

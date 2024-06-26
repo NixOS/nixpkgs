@@ -1,7 +1,10 @@
-{ lib, fetchFromGitHub, buildDunePackage
-, iter
-, containers
-, mdx
+{
+  lib,
+  fetchFromGitHub,
+  buildDunePackage,
+  iter,
+  containers,
+  mdx,
 }:
 
 buildDunePackage rec {
@@ -15,9 +18,7 @@ buildDunePackage rec {
     hash = "sha256-ER7ZUejW+Zy3l2HIoFDYbR8iaKMvLZWaeWrOAAYXjG4=";
   };
 
-  propagatedBuildInputs = [
-    iter
-  ];
+  propagatedBuildInputs = [ iter ];
 
   postPatch = ''
     substituteInPlace dune --replace mdx ocaml-mdx

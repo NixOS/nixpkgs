@@ -5,7 +5,11 @@
       nix-build -A tests.trivial-builders.writeCBin
 */
 
-{ lib, writeCBin, runCommand }:
+{
+  lib,
+  writeCBin,
+  runCommand,
+}:
 let
   output = "hello";
   pkg = writeCBin "test-script" ''
@@ -16,28 +20,27 @@ let
     }
   '';
 in
-  assert pkg.meta.mainProgram == "test-script";
-  runCommand "test-writeCBin" { } ''
+assert pkg.meta.mainProgram == "test-script";
+runCommand "test-writeCBin" { } ''
 
-    echo Testing with getExe...
+  echo Testing with getExe...
 
-    target=${lib.getExe pkg}
-    expected=${lib.escapeShellArg output}
-    got=$("$target")
-    if [[ "$got" != "$expected" ]]; then
-      echo "wrong output: expected $expected, got $got"
-      exit 1
-    fi
+  target=${lib.getExe pkg}
+  expected=${lib.escapeShellArg output}
+  got=$("$target")
+  if [[ "$got" != "$expected" ]]; then
+    echo "wrong output: expected $expected, got $got"
+    exit 1
+  fi
 
-    echo Testing with makeBinPath...
+  echo Testing with makeBinPath...
 
-    PATH="${lib.makeBinPath [ pkg ]}:$PATH"
-    got=$(test-script)
-    if [[ "$got" != "$expected" ]]; then
-      echo "wrong output: expected $expected, got $got"
-      exit 1
-    fi
+  PATH="${lib.makeBinPath [ pkg ]}:$PATH"
+  got=$(test-script)
+  if [[ "$got" != "$expected" ]]; then
+    echo "wrong output: expected $expected, got $got"
+    exit 1
+  fi
 
-    touch $out
-  ''
-
+  touch $out
+''

@@ -1,4 +1,10 @@
-{ stdenv, lib, fetchFromGitHub, buildGoModule, alsa-lib }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
+  alsa-lib,
+}:
 
 buildGoModule rec {
   pname = "jellycli";

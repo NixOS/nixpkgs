@@ -1,9 +1,10 @@
-{ lib
-, dotnet-sdk
-, buildPackages # buildDotnetModule, dotnet-runtime
-, testers
-, runCommand
-, removeReferencesTo
+{
+  lib,
+  dotnet-sdk,
+  buildPackages, # buildDotnetModule, dotnet-runtime
+  testers,
+  runCommand,
+  removeReferencesTo,
 }:
 let
   inherit (buildPackages) buildDotnetModule dotnet-runtime;
@@ -17,12 +18,12 @@ let
   };
 
   appWithoutFallback = app.overrideAttrs (oldAttrs: {
-    nativeBuildInputs = (oldAttrs.nativeBuildInputs or [ ]) ++ [
-      removeReferencesTo
-    ];
-    postFixup = (oldAttrs.postFixup or "") + ''
-      remove-references-to -t ${dotnet-runtime} "$out/bin/Application"
-    '';
+    nativeBuildInputs = (oldAttrs.nativeBuildInputs or [ ]) ++ [ removeReferencesTo ];
+    postFixup =
+      (oldAttrs.postFixup or "")
+      + ''
+        remove-references-to -t ${dotnet-runtime} "$out/bin/Application"
+      '';
   });
 
   runtimeVersion = lib.getVersion dotnet-runtime;
@@ -38,9 +39,11 @@ in
   };
 
   # Check that appWithoutFallback does not use fallback .NET runtime.
-  without-fallback = testers.testBuildFailure (runCommand "use-dotnet-from-env-without-fallback-test" { } ''
-    ${appWithoutFallback}/bin/Application >"$out"
-  '');
+  without-fallback = testers.testBuildFailure (
+    runCommand "use-dotnet-from-env-without-fallback-test" { } ''
+      ${appWithoutFallback}/bin/Application >"$out"
+    ''
+  );
 
   # NB assumes that without-fallback above to passes.
   use-dotnet-root-env = testers.testEqualContents {

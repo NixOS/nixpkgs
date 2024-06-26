@@ -1,4 +1,10 @@
-{ lib, rustPlatform, fetchFromGitHub, withJson ? true, stdenv }:
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  withJson ? true,
+  stdenv,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "statix";
@@ -26,6 +32,9 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/nerdypepper/statix";
     license = licenses.mit;
     mainProgram = "statix";
-    maintainers = with maintainers; [ figsoda nerdypepper ];
+    maintainers = with maintainers; [
+      figsoda
+      nerdypepper
+    ];
   };
 }

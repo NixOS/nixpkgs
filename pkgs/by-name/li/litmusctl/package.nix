@@ -1,21 +1,18 @@
-{ buildGoModule
-, fetchFromGitHub
-, installShellFiles
-, kubectl
-, lib
+{
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  kubectl,
+  lib,
 }:
 
 buildGoModule rec {
   pname = "litmusctl";
   version = "1.7.0";
 
-  nativeBuildInputs = [
-    installShellFiles
-  ];
+  nativeBuildInputs = [ installShellFiles ];
 
-  buildInputs = [
-    kubectl
-  ];
+  buildInputs = [ kubectl ];
 
   src = fetchFromGitHub {
     owner = "litmuschaos";
@@ -38,6 +35,9 @@ buildGoModule rec {
     homepage = "https://github.com/litmuschaos/litmusctl";
     license = lib.licenses.asl20;
     mainProgram = "litmusctl";
-    maintainers = with lib.maintainers; [ vinetos sailord ];
+    maintainers = with lib.maintainers; [
+      vinetos
+      sailord
+    ];
   };
 }

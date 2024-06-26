@@ -1,8 +1,9 @@
-{ fetchFromGitLab
-, installShellFiles
-, lib
-, python3
-, stdenv
+{
+  fetchFromGitLab,
+  installShellFiles,
+  lib,
+  python3,
+  stdenv,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -16,13 +17,9 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-TmaXsyJLRkmIN9D77jOXd8fLj7kYPCBLg0AHIImAtgA=";
   };
 
-  buildInputs = [
-    python3
-  ];
+  buildInputs = [ python3 ];
 
-  nativeBuildInputs = [
-    installShellFiles
-  ];
+  nativeBuildInputs = [ installShellFiles ];
 
   installPhase = ''
     runHook preInstall

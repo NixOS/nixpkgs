@@ -1,12 +1,13 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, alsa-lib
-, stdenv
-, darwin
-, testers
-, porsmo
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  alsa-lib,
+  stdenv,
+  darwin,
+  testers,
+  porsmo,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -27,16 +28,14 @@ rustPlatform.buildRustPackage rec {
     rustPlatform.bindgenHook
   ];
 
-  buildInputs = [
-    alsa-lib
-  ] ++ lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.CoreAudio
-    darwin.apple_sdk.frameworks.CoreFoundation
-  ];
+  buildInputs =
+    [ alsa-lib ]
+    ++ lib.optionals stdenv.isDarwin [
+      darwin.apple_sdk.frameworks.CoreAudio
+      darwin.apple_sdk.frameworks.CoreFoundation
+    ];
 
-  passthru.tests.version = testers.testVersion {
-    package = porsmo;
-  };
+  passthru.tests.version = testers.testVersion { package = porsmo; };
 
   meta = with lib; {
     description = "Pomodoro cli app in rust with timer and countdown";

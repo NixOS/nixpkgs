@@ -1,11 +1,12 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, go
-, nix-update-script
-, nixosTests
-, testers
-, thanos
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  go,
+  nix-update-script,
+  nixosTests,
+  testers,
+  thanos,
 }:
 
 buildGoModule rec {
@@ -25,14 +26,18 @@ buildGoModule rec {
 
   subPackages = "cmd/thanos";
 
-  ldflags = let t = "github.com/prometheus/common/version"; in [
-    "-X ${t}.Version=${version}"
-    "-X ${t}.Revision=unknown"
-    "-X ${t}.Branch=unknown"
-    "-X ${t}.BuildUser=nix@nixpkgs"
-    "-X ${t}.BuildDate=unknown"
-    "-X ${t}.GoVersion=${lib.getVersion go}"
-  ];
+  ldflags =
+    let
+      t = "github.com/prometheus/common/version";
+    in
+    [
+      "-X ${t}.Version=${version}"
+      "-X ${t}.Revision=unknown"
+      "-X ${t}.Branch=unknown"
+      "-X ${t}.BuildUser=nix@nixpkgs"
+      "-X ${t}.BuildDate=unknown"
+      "-X ${t}.GoVersion=${lib.getVersion go}"
+    ];
 
   passthru = {
     updateScript = nix-update-script { };
@@ -51,6 +56,9 @@ buildGoModule rec {
     changelog = "https://github.com/thanos-io/thanos/releases/tag/v${version}";
     license = licenses.asl20;
     mainProgram = "thanos";
-    maintainers = with maintainers; [ basvandijk anthonyroussel ];
+    maintainers = with maintainers; [
+      basvandijk
+      anthonyroussel
+    ];
   };
 }

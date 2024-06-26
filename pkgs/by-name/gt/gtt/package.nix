@@ -1,10 +1,11 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, pkg-config
-, alsa-lib
-, wl-clipboard
-, xclip
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  pkg-config,
+  alsa-lib,
+  wl-clipboard,
+  xclip,
 }:
 
 buildGoModule rec {
@@ -20,9 +21,7 @@ buildGoModule rec {
 
   vendorHash = "sha256-5Uwi1apowHoUtvkSgmUV9WbfpVQFTqJ9GA2sRnC5nFw=";
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
     alsa-lib
@@ -30,7 +29,10 @@ buildGoModule rec {
     wl-clipboard
   ];
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   meta = with lib; {
     description = "Google Translate TUI (Originally). Now support Apertium, Argos, Bing, ChatGPT, DeepL, Google, Reverso";

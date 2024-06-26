@@ -1,9 +1,10 @@
-{ lib
-, python3
-, fetchPypi
-, copyDesktopItems
-, libsForQt5
-, makeDesktopItem
+{
+  lib,
+  python3,
+  fetchPypi,
+  copyDesktopItems,
+  libsForQt5,
+  makeDesktopItem,
 }:
 
 let
@@ -14,9 +15,7 @@ let
     inherit pname version;
     hash = "sha256-oNMDDXpl6Y0N7j+qgboSTJA9SR5KzKxhoMh/44ngjdA=";
   };
-  inherit (libsForQt5)
-    qtsvg
-    wrapQtAppsHook;
+  inherit (libsForQt5) qtsvg wrapQtAppsHook;
 in
 python3.pkgs.buildPythonApplication {
   inherit pname version src;
@@ -26,9 +25,7 @@ python3.pkgs.buildPythonApplication {
     wrapQtAppsHook
   ];
 
-  buildInputs = [
-    qtsvg
-  ];
+  buildInputs = [ qtsvg ];
 
   propagatedBuildInputs = with python3.pkgs; [
     python-dateutil
@@ -54,7 +51,11 @@ python3.pkgs.buildPythonApplication {
       desktopName = "Pyspread";
       genericName = "Spreadsheet";
       comment = "A Python-oriented spreadsheet application";
-      categories = [ "Office" "Development" "Spreadsheet" ];
+      categories = [
+        "Office"
+        "Development"
+        "Spreadsheet"
+      ];
     })
   ];
 

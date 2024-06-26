@@ -1,16 +1,15 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, ninja
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  ninja,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "ut";
   version = "2.0.1";
 
-  cmakeFlags = [
-    "-DBOOST_UT_ALLOW_CPM_USE=OFF"
-  ];
+  cmakeFlags = [ "-DBOOST_UT_ALLOW_CPM_USE=OFF" ];
 
   src = fetchFromGitHub {
     owner = "boost-ext";
@@ -32,4 +31,3 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = platforms.all;
   };
 })
-

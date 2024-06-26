@@ -66,14 +66,18 @@ in
   llvm-mode = callPackage ./manual-packages/llvm-mode { };
 
   lsp-bridge = callPackage ./manual-packages/lsp-bridge {
-    inherit (pkgs) python3 git go gopls pyright;
+    inherit (pkgs)
+      python3
+      git
+      go
+      gopls
+      pyright
+      ;
   };
 
   lspce = callPackage ./manual-packages/lspce { };
 
-  matrix-client = callPackage ./manual-packages/matrix-client {
-    _map = self.map;
-  };
+  matrix-client = callPackage ./manual-packages/matrix-client { _map = self.map; };
 
   mu4e = callPackage ./manual-packages/mu4e { };
 

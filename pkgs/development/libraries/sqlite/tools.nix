@@ -1,32 +1,50 @@
-{ lib, stdenv, fetchurl, unzip, sqlite, tcl, Foundation }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  unzip,
+  sqlite,
+  tcl,
+  Foundation,
+}:
 
 let
   archiveVersion = import ./archive-version.nix lib;
-  mkTool = { pname, makeTarget, description, homepage, mainProgram }: stdenv.mkDerivation rec {
-    inherit pname;
-    version = "3.45.3";
+  mkTool =
+    {
+      pname,
+      makeTarget,
+      description,
+      homepage,
+      mainProgram,
+    }:
+    stdenv.mkDerivation rec {
+      inherit pname;
+      version = "3.45.3";
 
-    # nixpkgs-update: no auto update
-    src = assert version == sqlite.version; fetchurl {
-      url = "https://sqlite.org/2024/sqlite-src-${archiveVersion version}.zip";
-      hash = "sha256-7AyVnkLLXxgEE10FVfjqMr5v8gSOsYG8zTZ8j1PxhdE=";
+      # nixpkgs-update: no auto update
+      src =
+        assert version == sqlite.version;
+        fetchurl {
+          url = "https://sqlite.org/2024/sqlite-src-${archiveVersion version}.zip";
+          hash = "sha256-7AyVnkLLXxgEE10FVfjqMr5v8gSOsYG8zTZ8j1PxhdE=";
+        };
+
+      nativeBuildInputs = [ unzip ];
+      buildInputs = [ tcl ] ++ lib.optional stdenv.isDarwin Foundation;
+
+      makeFlags = [ makeTarget ];
+
+      installPhase = "install -Dt $out/bin ${makeTarget}";
+
+      meta = with lib; {
+        inherit description homepage mainProgram;
+        downloadPage = "http://sqlite.org/download.html";
+        license = licenses.publicDomain;
+        maintainers = with maintainers; [ johnazoidberg ];
+        platforms = platforms.unix;
+      };
     };
-
-    nativeBuildInputs = [ unzip ];
-    buildInputs = [ tcl ] ++ lib.optional stdenv.isDarwin Foundation;
-
-    makeFlags = [ makeTarget ];
-
-    installPhase = "install -Dt $out/bin ${makeTarget}";
-
-    meta = with lib; {
-      inherit description homepage mainProgram;
-      downloadPage = "http://sqlite.org/download.html";
-      license = licenses.publicDomain;
-      maintainers = with maintainers; [ johnazoidberg ];
-      platforms = platforms.unix;
-    };
-  };
 in
 {
   sqldiff = mkTool {

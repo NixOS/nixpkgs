@@ -1,7 +1,16 @@
-{ lib, fetchFromGitHub, fetchpatch, buildDunePackage, yojson, logs, lsp, ppx_yojson_conv_lib, trace }:
+{
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  buildDunePackage,
+  yojson,
+  logs,
+  lsp,
+  ppx_yojson_conv_lib,
+  trace,
+}:
 
-buildDunePackage
-rec {
+buildDunePackage rec {
   pname = "linol";
   version = "0.5";
 
@@ -19,7 +28,13 @@ rec {
     hash = "sha256-JHR0P0X3ep5HvDWW43dMb452/WsFKS4e+5Qhk4MzaxQ=";
   };
 
-  propagatedBuildInputs = [ yojson logs lsp ppx_yojson_conv_lib trace ];
+  propagatedBuildInputs = [
+    yojson
+    logs
+    lsp
+    ppx_yojson_conv_lib
+    trace
+  ];
 
   meta = with lib; {
     description = "LSP server library";

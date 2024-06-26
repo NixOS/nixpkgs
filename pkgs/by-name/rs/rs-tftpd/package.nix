@@ -1,7 +1,8 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, nix-update-script
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -17,7 +18,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-8QVgdQnis0ihkU5ZYtxbPIM+9arfO4do1ToRHoi94A8=";
 
-  passthru.updateScript = nix-update-script {};
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "TFTP Server Daemon implemented in Rust";

@@ -1,7 +1,8 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, buildGoModule
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  buildGoModule,
 }:
 
 buildGoModule rec {
@@ -18,7 +19,10 @@ buildGoModule rec {
 
   vendorHash = null;
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   # Tests require a socket connection to be created.
   doCheck = false;

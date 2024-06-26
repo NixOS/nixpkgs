@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchurl, pkg-config, postgresql, msgpack-c, groonga }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  postgresql,
+  msgpack-c,
+  groonga,
+}:
 
 stdenv.mkDerivation rec {
   pname = "pgroonga";
@@ -10,7 +18,11 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ postgresql msgpack-c groonga ];
+  buildInputs = [
+    postgresql
+    msgpack-c
+    groonga
+  ];
 
   makeFlags = [
     "HAVE_MSGPACK=1"

@@ -1,4 +1,1 @@
-{mkKdeDerivation}:
-mkKdeDerivation {
-  pname = "libkeduvocdocument";
-}
+{ mkKdeDerivation }: mkKdeDerivation { pname = "libkeduvocdocument"; }

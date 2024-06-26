@@ -1,4 +1,9 @@
-{ lib, fetchFromGitLab, buildDunePackage, zarith }:
+{
+  lib,
+  fetchFromGitLab,
+  buildDunePackage,
+  zarith,
+}:
 
 buildDunePackage rec {
   pname = "ff-sig";
@@ -12,9 +17,7 @@ buildDunePackage rec {
 
   duneVersion = "3";
 
-  propagatedBuildInputs = [
-    zarith
-  ];
+  propagatedBuildInputs = [ zarith ];
 
   doCheck = true;
 

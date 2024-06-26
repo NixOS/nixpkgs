@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, meson
-, cmake
-, ninja
-, fetchFromGitHub
+{
+  lib,
+  stdenv,
+  meson,
+  cmake,
+  ninja,
+  fetchFromGitHub,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -17,7 +18,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-h5tbO0Rv2tZezY58yUbyRVpsfRjY3i+5TPkkxr6La8M=";
   };
 
-  nativeBuildInputs = [ meson cmake ninja ];
+  nativeBuildInputs = [
+    meson
+    cmake
+    ninja
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/marzer/tomlplusplus";

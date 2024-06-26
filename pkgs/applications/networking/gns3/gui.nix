@@ -1,15 +1,17 @@
-{ channel
-, version
-, hash
+{
+  channel,
+  version,
+  hash,
 }:
 
-{ lib
-, python3
-, fetchFromGitHub
-, qt5
-, wrapQtAppsHook
-, testers
-, gns3-gui
+{
+  lib,
+  python3,
+  fetchFromGitHub,
+  qt5,
+  wrapQtAppsHook,
+  testers,
+  gns3-gui,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -23,22 +25,22 @@ python3.pkgs.buildPythonApplication rec {
     rev = "refs/tags/v${version}";
   };
 
-  nativeBuildInputs = with python3.pkgs; [
-    wrapQtAppsHook
-  ];
+  nativeBuildInputs = with python3.pkgs; [ wrapQtAppsHook ];
 
-  propagatedBuildInputs = with python3.pkgs; [
-    distro
-    jsonschema
-    psutil
-    sentry-sdk
-    setuptools
-    sip4 (pyqt5.override { withWebSockets = true; })
-    truststore
-    qt5.qtwayland
-  ] ++ lib.optionals (pythonOlder "3.9") [
-    importlib-resources
-  ];
+  propagatedBuildInputs =
+    with python3.pkgs;
+    [
+      distro
+      jsonschema
+      psutil
+      sentry-sdk
+      setuptools
+      sip4
+      (pyqt5.override { withWebSockets = true; })
+      truststore
+      qt5.qtwayland
+    ]
+    ++ lib.optionals (pythonOlder "3.9") [ importlib-resources ];
 
   dontWrapQtApps = true;
 
@@ -48,9 +50,7 @@ python3.pkgs.buildPythonApplication rec {
 
   doCheck = true;
 
-  checkInputs = with python3.pkgs; [
-    pytestCheckHook
-  ];
+  checkInputs = with python3.pkgs; [ pytestCheckHook ];
 
   preCheck = ''
     export HOME=$(mktemp -d)

@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, makeWrapper, curl, recode, spidermonkey_102 }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  makeWrapper,
+  curl,
+  recode,
+  spidermonkey_102,
+}:
 
 stdenv.mkDerivation rec {
 
@@ -20,7 +28,13 @@ stdenv.mkDerivation rec {
     make PREFIX="$out" install
 
     for fn in plow{del,down,list,mod,probe,up}; do
-      wrapProgram "$out/bin/$fn" --prefix PATH : "${lib.makeBinPath [ curl recode spidermonkey_102 ]}"
+      wrapProgram "$out/bin/$fn" --prefix PATH : "${
+        lib.makeBinPath [
+          curl
+          recode
+          spidermonkey_102
+        ]
+      }"
     done
   '';
 

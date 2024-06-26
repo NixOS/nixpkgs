@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitLab, autoreconfHook, libiconv }:
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  autoreconfHook,
+  libiconv,
+}:
 
 stdenv.mkDerivation rec {
   pname = "html2text";

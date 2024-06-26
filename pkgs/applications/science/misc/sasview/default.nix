@@ -1,7 +1,8 @@
-{ lib
-, python3
-, fetchFromGitHub
-, wrapQtAppsHook
+{
+  lib,
+  python3,
+  fetchFromGitHub,
+  wrapQtAppsHook,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -49,18 +50,14 @@ python3.pkgs.buildPythonApplication rec {
 
   dontWrapQtApps = true;
 
-  makeWrapperArgs = [
-    "\${qtWrapperArgs[@]}"
-  ];
+  makeWrapperArgs = [ "\${qtWrapperArgs[@]}" ];
 
   nativeCheckInputs = with python3.pkgs; [
     pytestCheckHook
     unittest-xml-reporting
   ];
 
-  pytestFlagsArray = [
-    "test"
-  ];
+  pytestFlagsArray = [ "test" ];
 
   disabledTests = [
     # NoKnownLoaderException

@@ -1,28 +1,44 @@
-{ dpkg
-, stdenv
-, lib
-, fetchurl
-, jre8
-, jsvc
-, lsb-release
-, libcap
-, util-linux
-, makeWrapper
-, autoPatchelfHook
-, glibc
-, gcc-unwrapped
+{
+  dpkg,
+  stdenv,
+  lib,
+  fetchurl,
+  jre8,
+  jsvc,
+  lsb-release,
+  libcap,
+  util-linux,
+  makeWrapper,
+  autoPatchelfHook,
+  glibc,
+  gcc-unwrapped,
 }:
 
 stdenv.mkDerivation rec {
   pname = "unifi-video";
   version = "3.10.13";
   src = fetchurl {
-    urls = [ "https://dl.ui.com/firmwares/ufv/v${version}/unifi-video.Debian9_amd64.v${version}.deb" "https://archive.org/download/unifi-video.Debian9_amd64.v${version}/unifi-video.Debian9_amd64.v${version}.deb" ];
+    urls = [
+      "https://dl.ui.com/firmwares/ufv/v${version}/unifi-video.Debian9_amd64.v${version}.deb"
+      "https://archive.org/download/unifi-video.Debian9_amd64.v${version}/unifi-video.Debian9_amd64.v${version}.deb"
+    ];
     sha256 = "06mxjdizs4mhm1by8kj4pg5hhdi8ns6x75ggwyp1k6zb26jvvdny";
   };
 
-  buildInputs = [ jre8 jsvc lsb-release libcap util-linux ];
-  nativeBuildInputs = [ dpkg makeWrapper autoPatchelfHook glibc gcc-unwrapped ];
+  buildInputs = [
+    jre8
+    jsvc
+    lsb-release
+    libcap
+    util-linux
+  ];
+  nativeBuildInputs = [
+    dpkg
+    makeWrapper
+    autoPatchelfHook
+    glibc
+    gcc-unwrapped
+  ];
 
   unpackCmd = ''
     runHook preUnpack
@@ -40,7 +56,14 @@ stdenv.mkDerivation rec {
     cp -ar sbin $out/bin
     cp -ar lib share $out
     chmod +x $out/bin/*
-    wrapProgram $out/bin/unifi-video --set JAVA_HOME "${jre8}" --prefix PATH : ${lib.makeBinPath [ jre8 lsb-release libcap util-linux]}
+    wrapProgram $out/bin/unifi-video --set JAVA_HOME "${jre8}" --prefix PATH : ${
+      lib.makeBinPath [
+        jre8
+        lsb-release
+        libcap
+        util-linux
+      ]
+    }
 
     runHook postInstall
   '';

@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, buildFHSEnv
-, corefonts
-, dejavu_fonts
-, dpkg
-, fetchurl
-, gcc-unwrapped
-, liberation_ttf_v1
-, writeScript
-, xorg
+{
+  lib,
+  stdenv,
+  buildFHSEnv,
+  corefonts,
+  dejavu_fonts,
+  dpkg,
+  fetchurl,
+  gcc-unwrapped,
+  liberation_ttf_v1,
+  writeScript,
+  xorg,
 }:
 
 let
@@ -18,7 +19,9 @@ let
     version = "7.5.1";
 
     src = fetchurl {
-      url = "https://github.com/ONLYOFFICE/DocumentServer/releases/download/v${lib.concatStringsSep "." (lib.take 3 (lib.splitVersion version))}/onlyoffice-documentserver_amd64.deb";
+      url = "https://github.com/ONLYOFFICE/DocumentServer/releases/download/v${
+        lib.concatStringsSep "." (lib.take 3 (lib.splitVersion version))
+      }/onlyoffice-documentserver_amd64.deb";
       sha256 = "sha256-191PYpxs/TbVXoBPHvuyTp81ZMtw1YaFznY1hUSbh+0=";
     };
 
@@ -26,9 +29,7 @@ let
 
     unpackCmd = "dpkg -x $curSrc source";
 
-    nativeBuildInputs = [
-      dpkg
-    ];
+    nativeBuildInputs = [ dpkg ];
 
     installPhase = ''
       # replace dangling symlinks which are not copied into fhs with actually files

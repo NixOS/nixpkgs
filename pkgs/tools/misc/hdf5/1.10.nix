@@ -1,15 +1,18 @@
-{ lib
-, stdenv
-, fetchurl
-, removeReferencesTo
-, zlibSupport ? true
-, zlib
-, enableShared ? !stdenv.hostPlatform.isStatic
-, javaSupport ? false
-, jdk
+{
+  lib,
+  stdenv,
+  fetchurl,
+  removeReferencesTo,
+  zlibSupport ? true,
+  zlib,
+  enableShared ? !stdenv.hostPlatform.isStatic,
+  javaSupport ? false,
+  jdk,
 }:
 
-let inherit (lib) optional; in
+let
+  inherit (lib) optional;
+in
 
 stdenv.mkDerivation rec {
   version = "1.10.11";
@@ -19,7 +22,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-Cvx32lxGIXcJR1u++8qRwMtvHqYozNjDYZbPbFpN4wQ=";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   buildInputs = optional javaSupport jdk;
 
@@ -27,8 +33,7 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = optional zlibSupport zlib;
 
-  configureFlags = optional enableShared "--enable-shared"
-    ++ optional javaSupport "--enable-java";
+  configureFlags = optional enableShared "--enable-shared" ++ optional javaSupport "--enable-java";
 
   patches = [ ];
 

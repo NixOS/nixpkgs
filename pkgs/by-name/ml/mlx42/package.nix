@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, glfw
-, darwin
-, enableShared ? !stdenv.hostPlatform.isStatic
-, enableDebug ? false
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  glfw,
+  darwin,
+  enableShared ? !stdenv.hostPlatform.isStatic,
+  enableDebug ? false,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -19,18 +20,27 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-c4LoTePHhQeZTx33V1K3ZyXmT7vjB6NdkGVAiSuJKfI=";
   };
 
-  postPatch = ''
-    patchShebangs ./tools
-  ''
-  + lib.optionalString enableShared ''
-    substituteInPlace CMakeLists.txt \
-        --replace "mlx42 STATIC" "mlx42 SHARED"
-  '';
+  postPatch =
+    ''
+      patchShebangs ./tools
+    ''
+    + lib.optionalString enableShared ''
+      substituteInPlace CMakeLists.txt \
+          --replace "mlx42 STATIC" "mlx42 SHARED"
+    '';
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = [ glfw ]
-    ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ OpenGL Cocoa IOKit ]);
+  buildInputs =
+    [ glfw ]
+    ++ lib.optionals stdenv.isDarwin (
+      with darwin.apple_sdk.frameworks;
+      [
+        OpenGL
+        Cocoa
+        IOKit
+      ]
+    );
 
   cmakeFlags = [ "-DDEBUG=${toString enableDebug}" ];
 

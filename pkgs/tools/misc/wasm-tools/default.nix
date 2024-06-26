@@ -1,6 +1,7 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -18,7 +19,10 @@ rustPlatform.buildRustPackage rec {
   # Disable cargo-auditable until https://github.com/rust-secure-code/cargo-auditable/issues/124 is solved.
   auditable = false;
   cargoHash = "sha256-H3eEwVZB6xzZwW5Bvgs7yPV58QUNvLSWSDigLzs2uG0=";
-  cargoBuildFlags = [ "--package" "wasm-tools" ];
+  cargoBuildFlags = [
+    "--package"
+    "wasm-tools"
+  ];
   cargoTestFlags = [ "--all" ];
 
   meta = with lib; {

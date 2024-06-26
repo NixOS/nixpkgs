@@ -1,4 +1,13 @@
-{ lib, stdenv, fetchurl, pkg-config, libxml2, gtk3-x11, libXt, libXpm }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  libxml2,
+  gtk3-x11,
+  libXt,
+  libXpm,
+}:
 
 stdenv.mkDerivation rec {
   pname = "xsnow";
@@ -10,7 +19,12 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ gtk3-x11 libxml2 libXt libXpm ];
+  buildInputs = [
+    gtk3-x11
+    libxml2
+    libXt
+    libXpm
+  ];
 
   makeFlags = [ "gamesdir=$(out)/bin" ];
 

@@ -1,10 +1,11 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, fetchpatch
-, gitUpdater
-, cmake
-, SDL2
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  gitUpdater,
+  cmake,
+  SDL2,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -45,13 +46,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  nativeBuildInputs = [
-    cmake
-  ];
+  nativeBuildInputs = [ cmake ];
 
-  buildInputs = [
-    SDL2
-  ];
+  buildInputs = [ SDL2 ];
 
   installPhase = ''
     runHook preInstall
@@ -62,9 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    updateScript = gitUpdater {
-      rev-prefix = "v";
-    };
+    updateScript = gitUpdater { rev-prefix = "v"; };
   };
 
   meta = with lib; {

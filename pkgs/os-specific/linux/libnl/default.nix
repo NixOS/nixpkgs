@@ -1,19 +1,20 @@
-{ stdenv
-, file
-, lib
-, fetchFromGitHub
-, autoreconfHook
-, bison
-, flex
-, pkg-config
-, doxygen
-, graphviz
-, mscgen
-, asciidoc
-, sourceHighlight
-, pythonSupport ? false
-, swig ? null
-, python ? null
+{
+  stdenv,
+  file,
+  lib,
+  fetchFromGitHub,
+  autoreconfHook,
+  bison,
+  flex,
+  pkg-config,
+  doxygen,
+  graphviz,
+  mscgen,
+  asciidoc,
+  sourceHighlight,
+  pythonSupport ? false,
+  swig ? null,
+  python ? null,
 }:
 
 stdenv.mkDerivation rec {
@@ -23,11 +24,16 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     repo = "libnl";
     owner = "thom311";
-    rev = "libnl${lib.replaceStrings ["."] ["_"] version}";
+    rev = "libnl${lib.replaceStrings [ "." ] [ "_" ] version}";
     hash = "sha256-zVpoRlB5xDfo6wJkCJGGptuCXkNkriudtZF2Job9YD4=";
   };
 
-  outputs = [ "bin" "dev" "out" "man" ] ++ lib.optional pythonSupport "py";
+  outputs = [
+    "bin"
+    "dev"
+    "out"
+    "man"
+  ] ++ lib.optional pythonSupport "py";
 
   enableParallelBuilding = true;
 
@@ -45,9 +51,9 @@ stdenv.mkDerivation rec {
   ] ++ lib.optional pythonSupport swig;
 
   postBuild = lib.optionalString (pythonSupport) ''
-      cd python
-      ${python.pythonOnBuildForHost.interpreter} setup.py install --prefix=../pythonlib
-      cd -
+    cd python
+    ${python.pythonOnBuildForHost.interpreter} setup.py install --prefix=../pythonlib
+    cd -
   '';
 
   postFixup = lib.optionalString pythonSupport ''

@@ -1,12 +1,13 @@
-{ stdenv
-, lib
-, fetchurl
-, meson
-, pkg-config
-, libxkbcommon
-, libGL
-, ninja
-, libX11
+{
+  stdenv,
+  lib,
+  fetchurl,
+  meson,
+  pkg-config,
+  libxkbcommon,
+  libGL,
+  ninja,
+  libX11,
 }:
 
 stdenv.mkDerivation rec {

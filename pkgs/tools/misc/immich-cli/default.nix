@@ -1,7 +1,8 @@
-{ lib
-, buildNpmPackage
-, fetchFromGitHub
-, testers
+{
+  lib,
+  buildNpmPackage,
+  fetchFromGitHub,
+  testers,
 }:
 
 let
@@ -17,7 +18,10 @@ let
     description = "CLI utilities for Immich to help upload images and videos";
     homepage = "https://github.com/immich-app/immich";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ felschr pineapplehunter ];
+    maintainers = with lib.maintainers; [
+      felschr
+      pineapplehunter
+    ];
     mainProgram = "immich";
   };
 
@@ -36,7 +40,8 @@ let
         description
         homepage
         license
-        maintainers;
+        maintainers
+        ;
     };
   };
 
@@ -63,7 +68,8 @@ let
         homepage
         license
         maintainers
-        mainProgram;
+        mainProgram
+        ;
     };
   };
 in

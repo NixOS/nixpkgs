@@ -1,8 +1,9 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, makeWrapper
-, plan9port
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  makeWrapper,
+  plan9port,
 }:
 
 buildGoModule rec {
@@ -18,9 +19,7 @@ buildGoModule rec {
 
   vendorHash = "sha256-M7fa46BERNRHbCsAiGqt4GHVVTyrW6iIb6gRc4UuZxA=";
 
-  nativeBuildInputs = [
-    makeWrapper
-  ];
+  nativeBuildInputs = [ makeWrapper ];
 
   ldflags = [
     "-s"
@@ -41,7 +40,10 @@ buildGoModule rec {
   meta = with lib; {
     description = "Go version of Plan9 Acme Editor";
     homepage = "https://github.com/rjkroege/edwood";
-    license = with licenses; [ mit bsd3 ];
+    license = with licenses; [
+      mit
+      bsd3
+    ];
     maintainers = with maintainers; [ kranzes ];
     mainProgram = "edwood";
   };

@@ -1,6 +1,4 @@
-{ callPackage
-, fetchFromGitHub
-}:
+{ callPackage, fetchFromGitHub }:
 
 callPackage ./generic.nix rec {
   pname = "experienced-pixel-dungeon";

@@ -1,11 +1,12 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, qtbase
-, wrapQtAppsHook
-, makeDesktopItem
-, copyDesktopItems
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  qtbase,
+  wrapQtAppsHook,
+  makeDesktopItem,
+  copyDesktopItems,
 }:
 
 let
@@ -35,7 +36,11 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ qtbase ];
-  nativeBuildInputs = [ cmake wrapQtAppsHook copyDesktopItems ];
+  nativeBuildInputs = [
+    cmake
+    wrapQtAppsHook
+    copyDesktopItems
+  ];
 
   cmakeFlags = [
     "-DIconPath=${placeholder "out"}/share/icons/hicolor/512x512/apps/qnvsm.png"

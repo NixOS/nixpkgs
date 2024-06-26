@@ -1,17 +1,18 @@
-{ lib
-, stdenv
-, alsa-lib
-, fetchurl
-, libjack2
-, libX11
-, libXcursor
-, libXext
-, libXinerama
-, libXrandr
-, libXtst
-, mpg123
-, pipewire
-, releasePath ? null
+{
+  lib,
+  stdenv,
+  alsa-lib,
+  fetchurl,
+  libjack2,
+  libX11,
+  libXcursor,
+  libXext,
+  libXinerama,
+  libXrandr,
+  libXtst,
+  mpg123,
+  pipewire,
+  releasePath ? null,
 }:
 
 # To use the full release version:
@@ -31,21 +32,23 @@ let
     };
   };
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "renoise";
   version = "3.4.3";
 
-  src = if releasePath != null then
-    releasePath
-  else
-    let
-      platform = platforms.${stdenv.system} or (throw "unsupported system ${stdenv.hostPlatform.system}");
-      urlVersion = lib.replaceStrings [ "." ] [ "_" ] version;
-    in fetchurl {
-      url =
-        "https://files.renoise.com/demo/Renoise_${urlVersion}_Demo_Linux_${platform.archSuffix}.tar.gz";
-      hash = platform.hash;
-    };
+  src =
+    if releasePath != null then
+      releasePath
+    else
+      let
+        platform = platforms.${stdenv.system} or (throw "unsupported system ${stdenv.hostPlatform.system}");
+        urlVersion = lib.replaceStrings [ "." ] [ "_" ] version;
+      in
+      fetchurl {
+        url = "https://files.renoise.com/demo/Renoise_${urlVersion}_Demo_Linux_${platform.archSuffix}.tar.gz";
+        hash = platform.hash;
+      };
 
   buildInputs = [
     alsa-lib

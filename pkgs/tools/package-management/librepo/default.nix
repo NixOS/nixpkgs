@@ -1,22 +1,28 @@
-{ lib, stdenv
-, fetchFromGitHub
-, cmake
-, python
-, pkg-config
-, libxml2
-, glib
-, openssl
-, zchunk
-, curl
-, check
-, gpgme
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  python,
+  pkg-config,
+  libxml2,
+  glib,
+  openssl,
+  zchunk,
+  curl,
+  check,
+  gpgme,
 }:
 
 stdenv.mkDerivation rec {
   version = "1.15.1";
   pname = "librepo";
 
-  outputs = [ "out" "dev" "py" ];
+  outputs = [
+    "out"
+    "dev"
+    "py"
+  ];
 
   src = fetchFromGitHub {
     owner = "rpm-software-management";

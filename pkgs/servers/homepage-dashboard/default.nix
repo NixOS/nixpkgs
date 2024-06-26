@@ -1,14 +1,15 @@
-{ buildNpmPackage
-, fetchFromGitHub
-, nodePackages
-, python3
-, stdenv
-, cctools
-, IOKit
-, lib
-, nixosTests
-, enableLocalIcons ? false
-, nix-update-script
+{
+  buildNpmPackage,
+  fetchFromGitHub,
+  nodePackages,
+  python3,
+  stdenv,
+  cctools,
+  IOKit,
+  lib,
+  nixosTests,
+  enableLocalIcons ? false,
+  nix-update-script,
 }:
 let
   dashboardIcons = fetchFromGitHub {
@@ -48,15 +49,9 @@ buildNpmPackage rec {
     patchShebangs .next/standalone/server.js
   '';
 
-  nativeBuildInputs = lib.optionals stdenv.isDarwin [
-    cctools
-  ];
+  nativeBuildInputs = lib.optionals stdenv.isDarwin [ cctools ];
 
-  buildInputs = [
-    nodePackages.node-gyp-build
-  ] ++ lib.optionals stdenv.isDarwin [
-    IOKit
-  ];
+  buildInputs = [ nodePackages.node-gyp-build ] ++ lib.optionals stdenv.isDarwin [ IOKit ];
 
   env.PYTHON = "${python3}/bin/python";
 

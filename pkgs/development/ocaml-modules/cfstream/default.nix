@@ -1,4 +1,13 @@
-{ lib, buildDunePackage, fetchFromGitHub, ocaml, m4, camlp-streams, core_kernel, ounit }:
+{
+  lib,
+  buildDunePackage,
+  fetchFromGitHub,
+  ocaml,
+  m4,
+  camlp-streams,
+  core_kernel,
+  ounit,
+}:
 
 buildDunePackage rec {
   pname = "cfstream";
@@ -8,18 +17,24 @@ buildDunePackage rec {
 
   src = fetchFromGitHub {
     owner = "biocaml";
-    repo   = pname;
-    rev    = version;
+    repo = pname;
+    rev = version;
     hash = "sha256-iSg0QsTcU0MT/Cletl+hW6bKyH0jkp7Jixqu8H59UmQ=";
   };
 
-  patches = [ ./git_commit.patch ./janestreet-0.16.patch ];
+  patches = [
+    ./git_commit.patch
+    ./janestreet-0.16.patch
+  ];
 
   strictDeps = true;
 
   nativeBuildInputs = [ m4 ];
   checkInputs = [ ounit ];
-  propagatedBuildInputs = [ camlp-streams core_kernel ];
+  propagatedBuildInputs = [
+    camlp-streams
+    core_kernel
+  ];
 
   doCheck = lib.versionAtLeast ocaml.version "4.08";
 

@@ -33,17 +33,11 @@ buildPythonPackage rec {
       --replace "opencv-python" "opencv"
   '';
 
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
-  ];
+  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
-  pythonRelaxDeps = [
-    "torchvision"
-  ];
+  pythonRelaxDeps = [ "torchvision" ];
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     matplotlib

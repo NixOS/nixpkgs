@@ -1,59 +1,65 @@
-{ fetchurl
-, runCommand
-, lib
-, fetchpatch
-, stdenv
-, pkg-config
-, gnome
-, gettext
-, gobject-introspection
-, cairo
-, colord
-, lcms2
-, pango
-, json-glib
-, libstartup_notification
-, libcanberra
-, ninja
-, xvfb-run
-, xkeyboard_config
-, libxcvt
-, libxkbfile
-, libXdamage
-, libxkbcommon
-, libXtst
-, libinput
-, libdrm
-, gsettings-desktop-schemas
-, glib
-, gtk3
-, gnome-desktop
-, pipewire
-, libgudev
-, libwacom
-, xwayland
-, mesa
-, meson
-, gnome-settings-daemon
-, xorgserver
-, python3
-, wrapGAppsHook3
-, gi-docgen
-, sysprof
-, libsysprof-capture
-, desktop-file-utils
-, libcap_ng
-, egl-wayland
-, graphene
-, wayland
-, wayland-protocols
+{
+  fetchurl,
+  runCommand,
+  lib,
+  fetchpatch,
+  stdenv,
+  pkg-config,
+  gnome,
+  gettext,
+  gobject-introspection,
+  cairo,
+  colord,
+  lcms2,
+  pango,
+  json-glib,
+  libstartup_notification,
+  libcanberra,
+  ninja,
+  xvfb-run,
+  xkeyboard_config,
+  libxcvt,
+  libxkbfile,
+  libXdamage,
+  libxkbcommon,
+  libXtst,
+  libinput,
+  libdrm,
+  gsettings-desktop-schemas,
+  glib,
+  gtk3,
+  gnome-desktop,
+  pipewire,
+  libgudev,
+  libwacom,
+  xwayland,
+  mesa,
+  meson,
+  gnome-settings-daemon,
+  xorgserver,
+  python3,
+  wrapGAppsHook3,
+  gi-docgen,
+  sysprof,
+  libsysprof-capture,
+  desktop-file-utils,
+  libcap_ng,
+  egl-wayland,
+  graphene,
+  wayland,
+  wayland-protocols,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mutter";
   version = "43.8";
 
-  outputs = [ "out" "dev" "man" "devdoc" ];
+  outputs = [
+    "out"
+    "dev"
+    "man"
+    "devdoc"
+  ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/mutter/${lib.versions.major finalAttrs.version}/mutter-${finalAttrs.version}.tar.xz";
@@ -173,7 +179,7 @@ stdenv.mkDerivation (finalAttrs: {
     libdir = "${finalAttrs.finalPackage}/lib/mutter-11";
 
     tests = {
-      libdirExists = runCommand "mutter-libdir-exists" {} ''
+      libdirExists = runCommand "mutter-libdir-exists" { } ''
         if [[ ! -d ${finalAttrs.finalPackage.libdir} ]]; then
           echo "passthru.libdir should contain a directory, “${finalAttrs.finalPackage.libdir}” is not one."
           exit 1

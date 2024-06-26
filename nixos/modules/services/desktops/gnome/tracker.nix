@@ -1,6 +1,11 @@
 # Tracker daemon.
 
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 let
   cfg = config.services.gnome.tracker;
@@ -38,7 +43,6 @@ in
     };
 
   };
-
 
   ###### implementation
 

@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchurl, zlib, apngSupport ? true
-, testers
+{
+  lib,
+  stdenv,
+  fetchurl,
+  zlib,
+  apngSupport ? true,
+  testers,
 }:
 
 assert zlib != null;
@@ -12,7 +17,8 @@ let
   };
   whenPatched = lib.optionalString apngSupport;
 
-in stdenv.mkDerivation (finalAttrs: {
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "libpng" + whenPatched "-apng";
   version = "1.6.43";
 
@@ -20,13 +26,18 @@ in stdenv.mkDerivation (finalAttrs: {
     url = "mirror://sourceforge/libpng/libpng-${finalAttrs.version}.tar.xz";
     hash = "sha256-alygZSOSotfJ2yrltAIQhDwLvAgcvUEIJasAzFnxSmw=";
   };
-  postPatch = whenPatched "gunzip < ${patch_src} | patch -Np1"
-  + lib.optionalString stdenv.isFreeBSD ''
+  postPatch =
+    whenPatched "gunzip < ${patch_src} | patch -Np1"
+    + lib.optionalString stdenv.isFreeBSD ''
 
-    sed -i 1i'int feenableexcept(int __mask);' contrib/libtests/pngvalid.c
-  '';
+      sed -i 1i'int feenableexcept(int __mask);' contrib/libtests/pngvalid.c
+    '';
 
-  outputs = [ "out" "dev" "man" ];
+  outputs = [
+    "out"
+    "dev"
+    "man"
+  ];
   outputBin = "dev";
 
   propagatedBuildInputs = [ zlib ];
@@ -40,11 +51,15 @@ in stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = with lib; {
-    description = "Official reference implementation for the PNG file format" + whenPatched " with animation patch";
+    description =
+      "Official reference implementation for the PNG file format" + whenPatched " with animation patch";
     homepage = "http://www.libpng.org/pub/png/libpng.html";
     changelog = "https://github.com/pnggroup/libpng/blob/v${finalAttrs.version}/CHANGES";
     license = licenses.libpng2;
-    pkgConfigModules = [ "libpng" "libpng16" ];
+    pkgConfigModules = [
+      "libpng"
+      "libpng16"
+    ];
     platforms = platforms.all;
     maintainers = with maintainers; [ vcunat ];
   };

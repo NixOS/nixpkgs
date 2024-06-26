@@ -1,7 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
 }:
 
 buildPythonPackage rec {
@@ -20,12 +21,10 @@ buildPythonPackage rec {
     sed -i '/poetry =/d' pyproject.toml
   '';
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   doCheck = false;
-  pythonImportsCheck = ["poeblix"];
+  pythonImportsCheck = [ "poeblix" ];
 
   meta = with lib; {
     changelog = "https://github.com/spoorn/poeblix/releases/tag/${src.rev}";

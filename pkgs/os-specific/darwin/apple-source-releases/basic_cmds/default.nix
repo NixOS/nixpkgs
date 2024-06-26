@@ -1,4 +1,8 @@
-{ lib, appleDerivation, xcbuildHook }:
+{
+  lib,
+  appleDerivation,
+  xcbuildHook,
+}:
 
 appleDerivation {
   nativeBuildInputs = [ xcbuildHook ];

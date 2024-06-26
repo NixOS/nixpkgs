@@ -1,20 +1,23 @@
-{ lib, stdenv
-, cairo
-, cmake
-, fetchFromGitHub
-, ffmpeg
-, gettext
-, wxGTK32
-, gtk3
-, libGLU, libGL
-, openal
-, pkg-config
-, SDL2
-, sfml
-, zip
-, zlib
-, wrapGAppsHook3
-, gsettings-desktop-schemas
+{
+  lib,
+  stdenv,
+  cairo,
+  cmake,
+  fetchFromGitHub,
+  ffmpeg,
+  gettext,
+  wxGTK32,
+  gtk3,
+  libGLU,
+  libGL,
+  openal,
+  pkg-config,
+  SDL2,
+  sfml,
+  zip,
+  zlib,
+  wrapGAppsHook3,
+  gsettings-desktop-schemas,
 }:
 
 stdenv.mkDerivation rec {
@@ -27,7 +30,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-t5/CM5KXDG0OCByu7mUyuC5NkYmB3BFmEHHgnMY05nE=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config wrapGAppsHook3 ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    wrapGAppsHook3
+  ];
 
   buildInputs = [
     cairo
@@ -52,10 +59,13 @@ stdenv.mkDerivation rec {
     "-DENABLE_SDL='true'"
   ];
 
-  meta =  with lib; {
+  meta = with lib; {
     description = "Merge of the original Visual Boy Advance forks";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ lassulus netali ];
+    maintainers = with maintainers; [
+      lassulus
+      netali
+    ];
     homepage = "https://vba-m.com/";
     platforms = lib.platforms.linux;
     mainProgram = "visualboyadvance-m";

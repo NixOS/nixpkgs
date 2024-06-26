@@ -19,7 +19,6 @@
   # and this will update your env vars to have 'make' and 'gcc' finding the SDL
   # headers and libs.
 
-
   ##### Another example, more complicated but achieving more: #######
   # Make an environment to build nix from source and create ctags (tagfiles can
   # be extracted from TAG_FILES) from every source package. Here would be a
@@ -57,96 +56,112 @@
   and show you a shell with a prefixed prompt.
 */
 
-{ mkDerivation, substituteAll, pkgs }:
-    { stdenv ? pkgs.stdenv, name, buildInputs ? []
-    , propagatedBuildInputs ? [], gcc ? stdenv.cc, extraCmds ? ""
-    , cleanupCmds ? "", shell ? "${pkgs.bashInteractive}/bin/bash --norc"}:
+{
+  mkDerivation,
+  substituteAll,
+  pkgs,
+}:
+{
+  stdenv ? pkgs.stdenv,
+  name,
+  buildInputs ? [ ],
+  propagatedBuildInputs ? [ ],
+  gcc ? stdenv.cc,
+  extraCmds ? "",
+  cleanupCmds ? "",
+  shell ? "${pkgs.bashInteractive}/bin/bash --norc",
+}:
 
 mkDerivation {
   inherit buildInputs propagatedBuildInputs;
 
   name = "env-${name}";
-  phases = [ "buildPhase" "fixupPhase" ];
+  phases = [
+    "buildPhase"
+    "fixupPhase"
+  ];
   setupNew = substituteAll {
     src = ../../stdenv/generic/setup.sh;
     inherit gcc;
   };
 
-  buildPhase = let
-    initialPath = import ../../stdenv/generic/common-path.nix { inherit pkgs; };
-  in ''
-    set -x
-    mkdir -p "$out/dev-envs" "$out/nix-support" "$out/bin"
-    s="$out/nix-support/setup-new-modified"
-    # shut some warning up.., do not use set -e
-    sed -e 's@set -eu@@' \
-        -e 's@assertEnvExists\s\+NIX_STORE@:@' \
-        -e 's@trap.*@@' \
-        -e '1i initialPath="${toString initialPath}"' \
-        "$setupNew" > "$s"
-    cat >> "$out/dev-envs/''${name/env-/}" << EOF
-      defaultNativeBuildInputs="$defaultNativeBuildInputs"
-      buildInputs="$buildInputs"
-      propagatedBuildInputs="$propagatedBuildInputs"
-      # the setup-new script wants to write some data to a temp file.. so just let it do that and tidy up afterwards
-      tmp="\$("${pkgs.coreutils}/bin/mktemp" -d)"
-      NIX_BUILD_TOP="\$tmp"
-      phases=
-      # only do all the setup stuff in nix-support/*
-      set +e
-      # This prevents having -rpath /lib in NIX_LDFLAGS
-      export NIX_NO_SELF_RPATH=1
-      if [[ -z "\$ZSH_VERSION" ]]; then
-        source "$s"
-      else
-        setopt interactivecomments
-        # fix bash indirection
-        # let's hope the bash arrays aren't used
-        # substitute is using bash array, so skip it
-        echo '
-            setopt NO_BAD_PATTERN
-            setopt NO_BANG_HIST
-            setopt NO_BG_NICE
-            setopt NO_EQUALS
-            setopt NO_FUNCTION_ARGZERO
-            setopt GLOB_SUBST
-            setopt NO_HUP
-            setopt INTERACTIVE_COMMENTS
-            setopt KSH_ARRAYS
-            setopt NO_MULTIOS
-            setopt NO_NOMATCH
-            setopt RM_STAR_SILENT
-            setopt POSIX_BUILTINS
-            setopt SH_FILE_EXPANSION
-            setopt SH_GLOB
-            setopt SH_OPTION_LETTERS
-            setopt SH_WORD_SPLIT
-          ' >> "\$tmp/script"
-        sed -e 's/\''${!\([^}]*\)}/\''${(P)\1}/g' \
-            -e 's/[[]\*\]//' \
-            -e 's/substitute() {/ substitute() { return; /' \
-            -e 's@PATH=\$@PATH=${pkgs.coreutils}/bin@' \
-            "$s" >> "\$tmp/script"
-        echo "\$tmp/script";
-        source "\$tmp/script";
-      fi
-      ${pkgs.coreutils}/bin/rm -fr "\$tmp"
-      ${extraCmds}
+  buildPhase =
+    let
+      initialPath = import ../../stdenv/generic/common-path.nix { inherit pkgs; };
+    in
+    ''
+      set -x
+      mkdir -p "$out/dev-envs" "$out/nix-support" "$out/bin"
+      s="$out/nix-support/setup-new-modified"
+      # shut some warning up.., do not use set -e
+      sed -e 's@set -eu@@' \
+          -e 's@assertEnvExists\s\+NIX_STORE@:@' \
+          -e 's@trap.*@@' \
+          -e '1i initialPath="${toString initialPath}"' \
+          "$setupNew" > "$s"
+      cat >> "$out/dev-envs/''${name/env-/}" << EOF
+        defaultNativeBuildInputs="$defaultNativeBuildInputs"
+        buildInputs="$buildInputs"
+        propagatedBuildInputs="$propagatedBuildInputs"
+        # the setup-new script wants to write some data to a temp file.. so just let it do that and tidy up afterwards
+        tmp="\$("${pkgs.coreutils}/bin/mktemp" -d)"
+        NIX_BUILD_TOP="\$tmp"
+        phases=
+        # only do all the setup stuff in nix-support/*
+        set +e
+        # This prevents having -rpath /lib in NIX_LDFLAGS
+        export NIX_NO_SELF_RPATH=1
+        if [[ -z "\$ZSH_VERSION" ]]; then
+          source "$s"
+        else
+          setopt interactivecomments
+          # fix bash indirection
+          # let's hope the bash arrays aren't used
+          # substitute is using bash array, so skip it
+          echo '
+              setopt NO_BAD_PATTERN
+              setopt NO_BANG_HIST
+              setopt NO_BG_NICE
+              setopt NO_EQUALS
+              setopt NO_FUNCTION_ARGZERO
+              setopt GLOB_SUBST
+              setopt NO_HUP
+              setopt INTERACTIVE_COMMENTS
+              setopt KSH_ARRAYS
+              setopt NO_MULTIOS
+              setopt NO_NOMATCH
+              setopt RM_STAR_SILENT
+              setopt POSIX_BUILTINS
+              setopt SH_FILE_EXPANSION
+              setopt SH_GLOB
+              setopt SH_OPTION_LETTERS
+              setopt SH_WORD_SPLIT
+            ' >> "\$tmp/script"
+          sed -e 's/\''${!\([^}]*\)}/\''${(P)\1}/g' \
+              -e 's/[[]\*\]//' \
+              -e 's/substitute() {/ substitute() { return; /' \
+              -e 's@PATH=\$@PATH=${pkgs.coreutils}/bin@' \
+              "$s" >> "\$tmp/script"
+          echo "\$tmp/script";
+          source "\$tmp/script";
+        fi
+        ${pkgs.coreutils}/bin/rm -fr "\$tmp"
+        ${extraCmds}
 
-      nix_cleanup() {
-        :
-        ${cleanupCmds}
-      }
+        nix_cleanup() {
+          :
+          ${cleanupCmds}
+        }
 
-      export PATH
-      echo $name loaded >&2
+        export PATH
+        echo $name loaded >&2
 
-      trap nix_cleanup EXIT
-    EOF
+        trap nix_cleanup EXIT
+      EOF
 
-    mkdir -p $out/bin
-    sed -e 's,@shell@,${shell},' -e s,@myenvpath@,$out/dev-envs/${name}, \
-      -e 's,@name@,${name},' ${./loadenv.sh} > $out/bin/load-env-${name}
-    chmod +x $out/bin/load-env-${name}
-  '';
+      mkdir -p $out/bin
+      sed -e 's,@shell@,${shell},' -e s,@myenvpath@,$out/dev-envs/${name}, \
+        -e 's,@name@,${name},' ${./loadenv.sh} > $out/bin/load-env-${name}
+      chmod +x $out/bin/load-env-${name}
+    '';
 }

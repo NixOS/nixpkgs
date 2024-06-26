@@ -1,18 +1,19 @@
-{ lib
-, perlPackages
-, fetchFromGitHub
-, withCupsAccess ? false  # needed to access local cups server
-, cups
-, cups-filters
-, curl
-, withSocketAccess ? false  # needed to access network printers
-, netcat-gnu
-, withSMBAccess ? false  # needed to access SMB-connected printers
-, samba
-, autoconf
-, automake
-, file
-, makeWrapper
+{
+  lib,
+  perlPackages,
+  fetchFromGitHub,
+  withCupsAccess ? false, # needed to access local cups server
+  cups,
+  cups-filters,
+  curl,
+  withSocketAccess ? false, # needed to access network printers
+  netcat-gnu,
+  withSMBAccess ? false, # needed to access SMB-connected printers
+  samba,
+  autoconf,
+  automake,
+  file,
+  makeWrapper,
 }:
 
 perlPackages.buildPerlPackage rec {
@@ -37,20 +38,27 @@ perlPackages.buildPerlPackage rec {
   ];
 
   buildInputs =
-       [ curl ]
-       # provide some "cups-*" commands to `foomatic-{configure,printjob}`
-       # so that they can manage a local cups server (add queues, add jobs...)
-    ++ lib.optionals withCupsAccess [ cups cups-filters ]
-       # the commands `foomatic-{configure,getpjloptions}` need
-       # netcat if they are used to query or alter a network
-       # printer via AppSocket/HP JetDirect protocol
+    [ curl ]
+    # provide some "cups-*" commands to `foomatic-{configure,printjob}`
+    # so that they can manage a local cups server (add queues, add jobs...)
+    ++ lib.optionals withCupsAccess [
+      cups
+      cups-filters
+    ]
+    # the commands `foomatic-{configure,getpjloptions}` need
+    # netcat if they are used to query or alter a network
+    # printer via AppSocket/HP JetDirect protocol
     ++ lib.optional withSocketAccess netcat-gnu
-       # `foomatic-configure` can be used to access printers that are
-       # shared via the SMB protocol, but it needs the `smbclient` binary
-    ++ lib.optional withSMBAccess samba
-  ;
+    # `foomatic-configure` can be used to access printers that are
+    # shared via the SMB protocol, but it needs the `smbclient` binary
+    ++ lib.optional withSMBAccess samba;
 
-  nativeBuildInputs = [ autoconf automake file makeWrapper ];
+  nativeBuildInputs = [
+    autoconf
+    automake
+    file
+    makeWrapper
+  ];
 
   # sed-substitute indirection is more robust against
   # characters in paths that might need escaping
@@ -77,7 +85,7 @@ perlPackages.buildPerlPackage rec {
     done
   '';
 
-  doCheck = false;  # no tests, would fail
+  doCheck = false; # no tests, would fail
 
   meta = {
     changelog = "https://github.com/OpenPrinting/foomatic-db-engine/blob/${src.rev}/ChangeLog";

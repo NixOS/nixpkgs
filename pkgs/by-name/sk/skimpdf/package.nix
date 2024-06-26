@@ -1,7 +1,8 @@
-{ stdenv
-, lib
-, undmg
-, fetchurl
+{
+  stdenv,
+  lib,
+  undmg,
+  fetchurl,
 }:
 stdenv.mkDerivation rec {
   pname = "Skim";

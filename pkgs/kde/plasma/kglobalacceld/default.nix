@@ -1,4 +1,1 @@
-{mkKdeDerivation}:
-mkKdeDerivation {
-  pname = "kglobalacceld";
-}
+{ mkKdeDerivation }: mkKdeDerivation { pname = "kglobalacceld"; }

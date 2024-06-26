@@ -1,4 +1,9 @@
-{ lib, rustPlatform, fetchFromGitHub, git }:
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  git,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "glitter";
@@ -13,9 +18,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-7JQcY3HCG3UQ0Mfz/+ZZ0axGEpQoH410FT72tjHW7EE=";
 
-  nativeCheckInputs = [
-    git
-  ];
+  nativeCheckInputs = [ git ];
 
   # tests require it to be in a git repository
   preCheck = ''
@@ -23,7 +26,10 @@ rustPlatform.buildRustPackage rec {
   '';
 
   # error: Found argument '--test-threads' which wasn't expected, or isn't valid in this context
-  checkFlags = [ "--skip" "runs_correctly" ];
+  checkFlags = [
+    "--skip"
+    "runs_correctly"
+  ];
 
   meta = with lib; {
     description = "Git wrapper that allows you to compress multiple commands into one";

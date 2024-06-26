@@ -1,13 +1,15 @@
-{ lib, stdenv
-, fetchurl
-, autoreconfHook
-, gettext
-, gnutls
-, nettle
-, pkg-config
-, libiconv
-, libxcrypt
-, ApplicationServices
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoreconfHook,
+  gettext,
+  gnutls,
+  nettle,
+  pkg-config,
+  libiconv,
+  libxcrypt,
+  ApplicationServices,
 }:
 
 stdenv.mkDerivation rec {
@@ -19,10 +21,22 @@ stdenv.mkDerivation rec {
     hash = "sha256-YYpYa2E773EKYzxCv92mFmbLsPyKkq1JA2HQvJHFg0E=";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ];
 
-  buildInputs = [ gettext gnutls nettle libxcrypt ]
-    ++ lib.optionals stdenv.isDarwin [ libiconv ApplicationServices ];
+  buildInputs =
+    [
+      gettext
+      gnutls
+      nettle
+      libxcrypt
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      libiconv
+      ApplicationServices
+    ];
 
   preBuild = lib.optionalString (stdenv.isDarwin) ''
     export MACOSX_DEPLOYMENT_TARGET=11.0

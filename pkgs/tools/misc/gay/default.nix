@@ -1,4 +1,5 @@
-{ lib,
+{
+  lib,
   python3,
   fetchPypi,
 }:
@@ -16,7 +17,10 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/ms-jpq/gay";
     description = "Colour your text / terminal to be more gay";
     license = licenses.mit;
-    maintainers = with maintainers; [ AndersonTorres CodeLongAndProsper90 ];
+    maintainers = with maintainers; [
+      AndersonTorres
+      CodeLongAndProsper90
+    ];
     mainProgram = "gay";
   };
 }

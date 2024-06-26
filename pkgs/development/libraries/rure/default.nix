@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchCrate
-, fixDarwinDylibNames
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchCrate,
+  fixDarwinDylibNames,
 }:
 
 let
@@ -21,16 +22,17 @@ rustPlatform.buildRustPackage {
 
   cargoLock.lockFile = ./Cargo.lock;
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   # Headers are not handled by cargo nor buildRustPackage
   postInstall = ''
     install -Dm644 include/rure.h -t "$dev/include"
   '';
 
-  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    fixDarwinDylibNames
-  ];
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ fixDarwinDylibNames ];
 
   passthru.updateScript = ./update.sh;
 

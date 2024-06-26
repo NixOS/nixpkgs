@@ -2,13 +2,27 @@
 # This allows an instance to be created with a bigger root filesystem
 # than provided by the machine image.
 
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
 {
   imports = [
-    (mkRenamedOptionModule [ "virtualisation" "growPartition" ] [ "boot" "growPartition" ])
+    (mkRenamedOptionModule
+      [
+        "virtualisation"
+        "growPartition"
+      ]
+      [
+        "boot"
+        "growPartition"
+      ]
+    )
   ];
 
   options = {
@@ -25,7 +39,10 @@ with lib;
     systemd.services.growpart = {
       wantedBy = [ "-.mount" ];
       after = [ "-.mount" ];
-      before = [ "systemd-growfs-root.service" "shutdown.target" ];
+      before = [
+        "systemd-growfs-root.service"
+        "shutdown.target"
+      ];
       conflicts = [ "shutdown.target" ];
       unitConfig.DefaultDependencies = false;
       serviceConfig = {

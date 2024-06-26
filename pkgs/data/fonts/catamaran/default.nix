@@ -37,7 +37,6 @@ stdenvNoCC.mkDerivation rec {
     '';
     license = licenses.ofl;
     platforms = platforms.all;
-    maintainers = with maintainers; [wyred50];
+    maintainers = with maintainers; [ wyred50 ];
   };
 }
-

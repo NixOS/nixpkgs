@@ -1,20 +1,21 @@
-{ lib
-, buildDunePackage
-, fetchurl
-, ppx_sexp_conv
-, ppx_cstruct
-, lwt
-, mirage-net
-, io-page
-, mirage-xen
-, ipaddr
-, mirage-profile
-, shared-memory-ring
-, sexplib
-, logs
-, macaddr
-, lwt-dllist
-, result
+{
+  lib,
+  buildDunePackage,
+  fetchurl,
+  ppx_sexp_conv,
+  ppx_cstruct,
+  lwt,
+  mirage-net,
+  io-page,
+  mirage-xen,
+  ipaddr,
+  mirage-profile,
+  shared-memory-ring,
+  sexplib,
+  logs,
+  macaddr,
+  lwt-dllist,
+  result,
 }:
 
 buildDunePackage rec {
@@ -29,9 +30,7 @@ buildDunePackage rec {
     hash = "sha256-lTmwcNKiaq5EdJdM4UaaAVdZ+hTCX5U9MPKY/r3i7fw=";
   };
 
-  buildInputs = [
-    ppx_cstruct
-  ];
+  buildInputs = [ ppx_cstruct ];
 
   propagatedBuildInputs = [
     ppx_sexp_conv

@@ -1,22 +1,25 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, gnat
-, gnatcoll-core
-, gprbuild
-, python3
-, ocamlPackages
-, makeWrapper
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  gnat,
+  gnatcoll-core,
+  gprbuild,
+  python3,
+  ocamlPackages,
+  makeWrapper,
 }:
 let
   gnat_version = lib.versions.major gnat.version;
 
-  fetchSpark2014 = { rev, sha256 } : fetchFromGitHub {
-    owner = "AdaCore";
-    repo = "spark2014";
-    fetchSubmodules = true;
-    inherit rev sha256;
-  };
+  fetchSpark2014 =
+    { rev, sha256 }:
+    fetchFromGitHub {
+      owner = "AdaCore";
+      repo = "spark2014";
+      fetchSubmodules = true;
+      inherit rev sha256;
+    };
 
   spark2014 = {
     "12" = {
@@ -35,8 +38,9 @@ let
     };
   };
 
-  thisSpark = spark2014.${gnat_version} or
-    (builtins.throw "GNATprove depend on a specific GNAT version and can't be built using GNAT ${gnat_version}.");
+  thisSpark =
+    spark2014.${gnat_version}
+      or (builtins.throw "GNATprove depend on a specific GNAT version and can't be built using GNAT ${gnat_version}.");
 
 in
 stdenv.mkDerivation rec {
@@ -64,9 +68,7 @@ stdenv.mkDerivation rec {
     ocamlPackages.zarith
   ];
 
-  propagatedBuildInputs = [
-    gprbuild
-  ];
+  propagatedBuildInputs = [ gprbuild ];
 
   postPatch = ''
     # gnat2why/gnat_src points to the GNAT sources
@@ -93,4 +95,3 @@ stdenv.mkDerivation rec {
     platforms = platforms.all;
   };
 }
-

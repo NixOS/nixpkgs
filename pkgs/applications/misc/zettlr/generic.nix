@@ -1,9 +1,10 @@
-{ pname
-, version
-, hash
-, appimageTools
-, lib
-, fetchurl
+{
+  pname,
+  version,
+  hash,
+  appimageTools,
+  lib,
+  fetchurl,
 }:
 
 # Based on https://gist.github.com/msteen/96cb7df66a359b827497c5269ccbbf94 and joplin-desktop nixpkgs.
@@ -12,14 +13,15 @@ let
     url = "https://github.com/Zettlr/Zettlr/releases/download/v${version}/Zettlr-${version}-x86_64.appimage";
     inherit hash;
   };
-  appimageContents = appimageTools.extractType2 {
-    inherit pname version src;
-  };
+  appimageContents = appimageTools.extractType2 { inherit pname version src; };
 in
 appimageTools.wrapType2 rec {
   inherit pname version src;
 
-  extraPkgs = pkgs: [ pkgs.texliveMedium pkgs.pandoc ];
+  extraPkgs = pkgs: [
+    pkgs.texliveMedium
+    pkgs.pandoc
+  ];
 
   extraInstallCommands = ''
     install -m 444 -D ${appimageContents}/Zettlr.desktop $out/share/applications/Zettlr.desktop

@@ -1,11 +1,12 @@
-{ stdenv
-, lib
-, fetchurl
-, pkg-config
-, autoreconfHook
-, glib
-, libarchive
-, libticonv
+{
+  stdenv,
+  lib,
+  fetchurl,
+  pkg-config,
+  autoreconfHook,
+  glib,
+  libarchive,
+  libticonv,
 }:
 
 stdenv.mkDerivation rec {
@@ -32,7 +33,10 @@ stdenv.mkDerivation rec {
     description = "This library is part of the TiLP framework";
     homepage = "http://lpg.ticalc.org/prj_tilp/";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ siraben luc65r ];
+    maintainers = with maintainers; [
+      siraben
+      luc65r
+    ];
     platforms = with platforms; linux ++ darwin;
   };
 }

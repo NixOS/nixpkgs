@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, cairo }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  cairo,
+}:
 
 stdenv.mkDerivation rec {
   pname = "inav-blackbox-tools";

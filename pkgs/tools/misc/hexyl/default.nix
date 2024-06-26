@@ -1,4 +1,8 @@
-{ lib, rustPlatform, fetchFromGitHub }:
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "hexyl";
@@ -23,8 +27,15 @@ rustPlatform.buildRustPackage rec {
     '';
     homepage = "https://github.com/sharkdp/hexyl";
     changelog = "https://github.com/sharkdp/hexyl/blob/v${version}/CHANGELOG.md";
-    license = with licenses; [ asl20 /* or */ mit ];
-    maintainers = with maintainers; [ dywedir figsoda SuperSandro2000 ];
+    license = with licenses; [
+      asl20 # or
+      mit
+    ];
+    maintainers = with maintainers; [
+      dywedir
+      figsoda
+      SuperSandro2000
+    ];
     mainProgram = "hexyl";
   };
 }

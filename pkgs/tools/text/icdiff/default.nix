@@ -1,4 +1,11 @@
-{ lib, fetchFromGitHub, python3Packages, bash, git, less }:
+{
+  lib,
+  fetchFromGitHub,
+  python3Packages,
+  bash,
+  git,
+  less,
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "icdiff";

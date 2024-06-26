@@ -1,8 +1,9 @@
-{ buildOctavePackage
-, lib
-, fetchurl
-, instrument-control
-, arduino-core-unwrapped
+{
+  buildOctavePackage,
+  lib,
+  fetchurl,
+  instrument-control,
+  arduino-core-unwrapped,
 }:
 
 buildOctavePackage rec {
@@ -14,13 +15,9 @@ buildOctavePackage rec {
     sha256 = "sha256-p9SDTXkIwnrkNXeVhzAHks7EL4NdwBokrH2j9hqAJqQ=";
   };
 
-  requiredOctavePackages = [
-    instrument-control
-  ];
+  requiredOctavePackages = [ instrument-control ];
 
-  propagatedBuildInputs = [
-    arduino-core-unwrapped
-  ];
+  propagatedBuildInputs = [ arduino-core-unwrapped ];
 
   meta = with lib; {
     name = "Octave Arduino Toolkit";

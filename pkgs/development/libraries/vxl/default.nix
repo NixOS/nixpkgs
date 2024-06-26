@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, unzip
-, cmake
-, libtiff
-, expat
-, zlib
-, libpng
-, libjpeg
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  unzip,
+  cmake,
+  libtiff,
+  expat,
+  zlib,
+  libpng,
+  libjpeg,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

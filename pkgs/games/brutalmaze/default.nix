@@ -1,4 +1,8 @@
-{ lib, fetchFromSourcehut, python3Packages }:
+{
+  lib,
+  fetchFromSourcehut,
+  python3Packages,
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "brutalmaze";
@@ -13,9 +17,7 @@ python3Packages.buildPythonApplication rec {
     sha256 = "1m105iq378mypj64syw59aldbm6bj4ma4ynhc50gafl656fabg4y";
   };
 
-  nativeBuildInputs = with python3Packages; [
-    flit-core
-  ];
+  nativeBuildInputs = with python3Packages; [ flit-core ];
 
   propagatedBuildInputs = with python3Packages; [
     loca

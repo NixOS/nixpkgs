@@ -1,4 +1,10 @@
-{ lib, buildNimPackage, fetchFromGitHub, pcre, testers }:
+{
+  lib,
+  buildNimPackage,
+  fetchFromGitHub,
+  pcre,
+  testers,
+}:
 
 buildNimPackage (finalAttrs: {
   pname = "mosdepth";
@@ -18,9 +24,7 @@ buildNimPackage (finalAttrs: {
   buildInputs = [ pcre ];
 
   passthru.tests = {
-    version = testers.testVersion {
-      package = finalAttrs.finalPackage;
-    };
+    version = testers.testVersion { package = finalAttrs.finalPackage; };
   };
 
   meta = with lib; {

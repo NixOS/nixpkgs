@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchurl, autoreconfHook, autoconf-archive, pkg-config
-, enable-tools ? true }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoreconfHook,
+  autoconf-archive,
+  pkg-config,
+  enable-tools ? true,
+}:
 
 stdenv.mkDerivation rec {
   pname = "libgpiod";
@@ -29,10 +36,13 @@ stdenv.mkDerivation rec {
       data structures behind a straightforward API.
     '';
     homepage = "https://git.kernel.org/pub/scm/libs/libgpiod/libgpiod.git/about/";
-    license = with licenses; [
-      lgpl21Plus # libgpiod
-      lgpl3Plus # C++ bindings
-    ] ++ lib.optional enable-tools gpl2Plus;
+    license =
+      with licenses;
+      [
+        lgpl21Plus # libgpiod
+        lgpl3Plus # C++ bindings
+      ]
+      ++ lib.optional enable-tools gpl2Plus;
     maintainers = [ maintainers.expipiplus1 ];
     platforms = platforms.linux;
   };

@@ -1,6 +1,27 @@
-{ mkDerivation, lib, extra-cmake-modules, kdoctools, qtmultimedia, kcompletion, kconfig
-, kcrash, kiconthemes, kio, audiofile, libsamplerate, alsa-lib, libpulseaudio, flac, id3lib
-, libogg, libmad, libopus, libvorbis, fftw, librsvg }:
+{
+  mkDerivation,
+  lib,
+  extra-cmake-modules,
+  kdoctools,
+  qtmultimedia,
+  kcompletion,
+  kconfig,
+  kcrash,
+  kiconthemes,
+  kio,
+  audiofile,
+  libsamplerate,
+  alsa-lib,
+  libpulseaudio,
+  flac,
+  id3lib,
+  libogg,
+  libmad,
+  libopus,
+  libvorbis,
+  fftw,
+  librsvg,
+}:
 
 mkDerivation {
   pname = "kwave";
@@ -13,9 +34,7 @@ mkDerivation {
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
   };
-  nativeBuildInputs = [
-    extra-cmake-modules
-  ];
+  nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [
     alsa-lib
     audiofile

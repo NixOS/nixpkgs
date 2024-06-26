@@ -1,19 +1,20 @@
-{ lib
-, fetchFromGitHub
-, gettext
-, gtk3
-, python3Packages
-, gdk-pixbuf
-, libnotify
-, glib
-, gobject-introspection
-, wrapGAppsHook3
-# BTW libappindicator is also supported, but upstream recommends their
-# implementation, see:
-# https://github.com/AyatanaIndicators/ayatana-webmail/issues/24#issuecomment-1050352862
-, libayatana-appindicator
-, gsettings-desktop-schemas
-, libcanberra-gtk3
+{
+  lib,
+  fetchFromGitHub,
+  gettext,
+  gtk3,
+  python3Packages,
+  gdk-pixbuf,
+  libnotify,
+  glib,
+  gobject-introspection,
+  wrapGAppsHook3,
+  # BTW libappindicator is also supported, but upstream recommends their
+  # implementation, see:
+  # https://github.com/AyatanaIndicators/ayatana-webmail/issues/24#issuecomment-1050352862
+  libayatana-appindicator,
+  gsettings-desktop-schemas,
+  libcanberra-gtk3,
 }:
 
 python3Packages.buildPythonApplication rec {

@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, bison
-, pam
-, libxcrypt
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  bison,
+  pam,
+  libxcrypt,
 
-, withPAM ? true
-, withTimestamp ? true
+  withPAM ? true,
+  withTimestamp ? true,
 }:
 
 stdenv.mkDerivation rec {
@@ -37,16 +38,16 @@ stdenv.mkDerivation rec {
   # ./configure script does not understand `--disable-shared`
   dontAddStaticConfigureFlags = true;
 
-  postPatch = ''
-    sed -i '/\(chown\|chmod\)/d' GNUmakefile
-  '' + lib.optionalString (withPAM && stdenv.hostPlatform.isStatic) ''
-    sed -i 's/-lpam/-lpam -laudit/' configure
-  '';
+  postPatch =
+    ''
+      sed -i '/\(chown\|chmod\)/d' GNUmakefile
+    ''
+    + lib.optionalString (withPAM && stdenv.hostPlatform.isStatic) ''
+      sed -i 's/-lpam/-lpam -laudit/' configure
+    '';
 
   nativeBuildInputs = [ bison ];
-  buildInputs = [ ]
-    ++ lib.optional withPAM pam
-    ++ lib.optional (!withPAM) libxcrypt;
+  buildInputs = [ ] ++ lib.optional withPAM pam ++ lib.optional (!withPAM) libxcrypt;
 
   meta = with lib; {
     description = "Executes the given command as another user";

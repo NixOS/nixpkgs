@@ -1,4 +1,9 @@
-{ lib, pkgs, runCommand, prisma }:
+{
+  lib,
+  pkgs,
+  runCommand,
+  prisma,
+}:
 
 let
   inherit (prisma) packageName;
@@ -6,10 +11,14 @@ let
   enginesMajorVersion = lib.versions.majorMinor pkgs.prisma-engines.version;
 in
 
-runCommand "${packageName}-tests" {
-  nativeBuildInputs = with pkgs; [ prisma sqlite-interactive ];
-  meta.timeout = 60;
-}
+runCommand "${packageName}-tests"
+  {
+    nativeBuildInputs = with pkgs; [
+      prisma
+      sqlite-interactive
+    ];
+    meta.timeout = 60;
+  }
   ''
     mkdir $out
     cd $out

@@ -1,7 +1,8 @@
-{ lib
-, rustPlatform
-, fetchCrate
-, perl
+{
+  lib,
+  rustPlatform,
+  fetchCrate,
+  perl,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -16,9 +17,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-CQnM7pFnk4LcstKllhbeohbrggKV6MBQy03oq7DEkP4=";
 
-  nativeCheckInputs = [
-    perl
-  ];
+  nativeCheckInputs = [ perl ];
   # FIXME: remove patch when upstream version of rustc-serialize is updated
   # https://github.com/NixOS/nixpkgs/pull/310673
   cargoPatches = [ ./rustc-serialize-fix.patch ];

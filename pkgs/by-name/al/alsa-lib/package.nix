@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchurl
-, alsa-topology-conf
-, alsa-ucm-conf
-, testers
+{
+  lib,
+  stdenv,
+  fetchurl,
+  alsa-topology-conf,
+  alsa-ucm-conf,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -30,7 +31,10 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s ${alsa-topology-conf}/share/alsa/topology $out/share/alsa
   '';
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
@@ -45,7 +49,10 @@ stdenv.mkDerivation (finalAttrs: {
     '';
 
     license = licenses.lgpl21Plus;
-    pkgConfigModules = [ "alsa" "alsa-topology" ];
+    pkgConfigModules = [
+      "alsa"
+      "alsa-topology"
+    ];
     platforms = platforms.linux;
     maintainers = with maintainers; [ l-as ];
   };

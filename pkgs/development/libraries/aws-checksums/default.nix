@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, cmake, aws-c-common, nix }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  aws-c-common,
+  nix,
+}:
 
 stdenv.mkDerivation rec {
   pname = "aws-checksums";
@@ -15,9 +22,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ aws-c-common ];
 
-  cmakeFlags = [
-    "-DBUILD_SHARED_LIBS=ON"
-  ];
+  cmakeFlags = [ "-DBUILD_SHARED_LIBS=ON" ];
 
   passthru.tests = {
     inherit nix;
@@ -28,6 +33,9 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/awslabs/aws-checksums";
     license = licenses.asl20;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ orivej eelco ];
+    maintainers = with maintainers; [
+      orivej
+      eelco
+    ];
   };
 }

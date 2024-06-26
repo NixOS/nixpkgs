@@ -1,4 +1,10 @@
-{ config, lib, pkgs, options, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  options,
+  ...
+}:
 
 let
   cfg = config.services.prometheus.exporters.knot;
@@ -8,7 +14,8 @@ let
     literalExpression
     concatStringsSep
     ;
-in {
+in
+{
   port = 9433;
   extraOpts = {
     knotLibraryPath = mkOption {
@@ -37,9 +44,7 @@ in {
     };
   };
   serviceOpts = {
-    path = with pkgs; [
-      procps
-    ];
+    path = with pkgs; [ procps ];
     serviceConfig = {
       ExecStart = ''
         ${pkgs.prometheus-knot-exporter}/bin/knot-exporter \
@@ -50,9 +55,7 @@ in {
           ${lib.optionalString (cfg.knotLibraryPath != null) "--knot-library-path ${cfg.knotLibraryPath}"} \
           ${concatStringsSep " \\\n  " cfg.extraFlags}
       '';
-      SupplementaryGroups = [
-        "knot"
-      ];
+      SupplementaryGroups = [ "knot" ];
       RestrictAddressFamilies = [
         # Need AF_UNIX to collect data
         "AF_UNIX"

@@ -1,4 +1,1 @@
-{mkKdeDerivation}:
-mkKdeDerivation {
-  pname = "syndication";
-}
+{ mkKdeDerivation }: mkKdeDerivation { pname = "syndication"; }

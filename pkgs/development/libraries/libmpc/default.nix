@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchurl
-, gmp, mpfr
+{
+  lib,
+  stdenv,
+  fetchurl,
+  gmp,
+  mpfr,
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus
@@ -19,18 +23,21 @@ stdenv.mkDerivation rec {
   strictDeps = true;
   enableParallelBuilding = true;
 
-  buildInputs = [ gmp mpfr ];
+  buildInputs = [
+    gmp
+    mpfr
+  ];
 
   doCheck = true; # not cross;
 
   meta = {
     description = "Library for multiprecision complex arithmetic with exact rounding";
 
-    longDescription =
-      '' GNU MPC is a C library for the arithmetic of complex numbers with
-         arbitrarily high precision and correct rounding of the result.  It is
-         built upon and follows the same principles as GNU MPFR.
-      '';
+    longDescription = ''
+      GNU MPC is a C library for the arithmetic of complex numbers with
+              arbitrarily high precision and correct rounding of the result.  It is
+              built upon and follows the same principles as GNU MPFR.
+    '';
 
     homepage = "https://www.multiprecision.org/mpc/";
     license = lib.licenses.lgpl2Plus;

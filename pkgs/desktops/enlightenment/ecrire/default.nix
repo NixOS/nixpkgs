@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchurl
-, meson
-, ninja
-, pkg-config
-, efl
-, directoryListingUpdater
+{
+  lib,
+  stdenv,
+  fetchurl,
+  meson,
+  ninja,
+  pkg-config,
+  efl,
+  directoryListingUpdater,
 }:
 
 stdenv.mkDerivation rec {
@@ -23,9 +24,7 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  buildInputs = [
-    efl
-  ];
+  buildInputs = [ efl ];
 
   passthru.updateScript = directoryListingUpdater { };
 

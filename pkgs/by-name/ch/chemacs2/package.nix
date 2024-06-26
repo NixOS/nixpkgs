@@ -16,7 +16,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     hash = "sha256-/WtacZPr45lurS0hv+W8UGzsXY3RujkU5oGGGqjqG0Q=";
   };
 
-  outputs = [ "out" "doc" ];
+  outputs = [
+    "out"
+    "doc"
+  ];
 
   dontConfigure = true;
   dontBuild = true;

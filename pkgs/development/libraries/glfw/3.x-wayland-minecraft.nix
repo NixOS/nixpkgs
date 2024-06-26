@@ -1,5 +1,15 @@
-{ stdenv, lib, fetchFromGitHub, fetchpatch2, cmake, extra-cmake-modules
-, libGL, wayland, wayland-protocols, libxkbcommon, libdecor
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  fetchpatch2,
+  cmake,
+  extra-cmake-modules,
+  libGL,
+  wayland,
+  wayland-protocols,
+  libxkbcommon,
+  libdecor,
 }:
 
 stdenv.mkDerivation {
@@ -26,9 +36,16 @@ stdenv.mkDerivation {
 
   propagatedBuildInputs = [ libGL ];
 
-  nativeBuildInputs = [ cmake extra-cmake-modules ];
+  nativeBuildInputs = [
+    cmake
+    extra-cmake-modules
+  ];
 
-  buildInputs = [ wayland wayland-protocols libxkbcommon ];
+  buildInputs = [
+    wayland
+    wayland-protocols
+    libxkbcommon
+  ];
 
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS=ON"

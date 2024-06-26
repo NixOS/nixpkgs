@@ -54,15 +54,17 @@ buildDotnetModule rec {
     install -D Lumafly_1_32x32x32.png $out/share/icons/hicolor/32x32/apps/lumafly.png
   '';
 
-  desktopItems = [(makeDesktopItem {
-    desktopName = "Lumafly";
-    name = "lumafly";
-    exec = "Lumafly";
-    icon = "lumafly";
-    comment = meta.description;
-    type = "Application";
-    categories = [ "Game" ];
-  })];
+  desktopItems = [
+    (makeDesktopItem {
+      desktopName = "Lumafly";
+      name = "lumafly";
+      exec = "Lumafly";
+      icon = "lumafly";
+      comment = meta.description;
+      type = "Application";
+      categories = [ "Game" ];
+    })
+  ];
 
   meta = {
     description = "A cross platform mod manager for Hollow Knight written in Avalonia";

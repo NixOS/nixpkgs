@@ -1,13 +1,14 @@
-{ lib
-, mkXfceDerivation
-, cairo
-, glib
-, gtk3
-, libX11
-, libxfce4ui
-, libxfce4util
-, xfce4-panel
-, libwnck
+{
+  lib,
+  mkXfceDerivation,
+  cairo,
+  glib,
+  gtk3,
+  libX11,
+  libxfce4ui,
+  libxfce4util,
+  xfce4-panel,
+  libwnck,
 }:
 
 mkXfceDerivation {

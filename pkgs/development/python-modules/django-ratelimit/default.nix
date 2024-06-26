@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, django
-, django-redis
-, fetchFromGitHub
-, pymemcache
-, pythonOlder
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  django,
+  django-redis,
+  fetchFromGitHub,
+  pymemcache,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -22,9 +23,7 @@ buildPythonPackage rec {
     hash = "sha256-ZMtZSKOIIRSqH6eyC7bBeua7YLKyWW6NOXN/MDv9fy4=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     django
@@ -32,9 +31,7 @@ buildPythonPackage rec {
     pymemcache
   ];
 
-  pythonImportsCheck = [
-    "django_ratelimit"
-  ];
+  pythonImportsCheck = [ "django_ratelimit" ];
 
   checkPhase = ''
     runHook preCheck
@@ -44,7 +41,6 @@ buildPythonPackage rec {
 
     runHook postCheck
   '';
-
 
   meta = with lib; {
     description = "Cache-based rate-limiting for Django";

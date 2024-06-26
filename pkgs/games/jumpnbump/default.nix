@@ -1,16 +1,23 @@
-{ lib, stdenv
-, fetchFromGitLab
-, fetchzip
-, SDL2, SDL2_mixer, SDL2_net
-, gtk3, gobject-introspection
-, python3Packages
-, wrapGAppsHook3
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  fetchzip,
+  SDL2,
+  SDL2_mixer,
+  SDL2_net,
+  gtk3,
+  gobject-introspection,
+  python3Packages,
+  wrapGAppsHook3,
 }:
 
-let data = fetchzip {
-  url = "https://mirandir.pagesperso-orange.fr/files/additional-levels.tar.xz";
-  sha256 = "167hisscsbldrwrs54gq6446shl8h26qdqigmfg0lq3daynqycg2";
-}; in
+let
+  data = fetchzip {
+    url = "https://mirandir.pagesperso-orange.fr/files/additional-levels.tar.xz";
+    sha256 = "167hisscsbldrwrs54gq6446shl8h26qdqigmfg0lq3daynqycg2";
+  };
+in
 
 stdenv.mkDerivation rec {
   pname = "jumpnbump";
@@ -27,8 +34,17 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=$(out)" ];
 
-  nativeBuildInputs = [ python3Packages.wrapPython wrapGAppsHook3 gobject-introspection ];
-  buildInputs = [ SDL2 SDL2_mixer SDL2_net gtk3 ];
+  nativeBuildInputs = [
+    python3Packages.wrapPython
+    wrapGAppsHook3
+    gobject-introspection
+  ];
+  buildInputs = [
+    SDL2
+    SDL2_mixer
+    SDL2_net
+    gtk3
+  ];
 
   postInstall = ''
     make -C menu PREFIX=$out all install
@@ -37,7 +53,10 @@ stdenv.mkDerivation rec {
     sed -ie 's+Exec=jumpnbump+Exec=jumpnbump-menu+' $out/share/applications/jumpnbump.desktop
   '';
 
-  pythonPath = with python3Packages; [ pygobject3 pillow ];
+  pythonPath = with python3Packages; [
+    pygobject3
+    pillow
+  ];
   preFixup = ''
     buildPythonPath "$out $pythonPath"
   '';
@@ -47,9 +66,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "cute, true multiplayer platform game with bunnies";
-    homepage    = "https://libregames.gitlab.io/jumpnbump/";
-    license     = licenses.gpl2Plus;
+    homepage = "https://libregames.gitlab.io/jumpnbump/";
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ iblech ];
-    platforms   = platforms.unix;
+    platforms = platforms.unix;
   };
 }

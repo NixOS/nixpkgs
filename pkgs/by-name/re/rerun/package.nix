@@ -34,7 +34,6 @@ rustPlatform.buildRustPackage rec {
     # Disables a doctest that depends on a nightly feature
     ./0001-re_space_view_time_series-utils-patch-out-doctests-w.patch
 
-
     # "Fix cell size test now that the overhead has shrunk"
     # https://github.com/rerun-io/rerun/pull/5917
     (fetchpatch {
@@ -127,7 +126,12 @@ rustPlatform.buildRustPackage rec {
     maintainers = with maintainers; [ SomeoneSerge ];
     mainProgram = "rerun";
     # See comment about wasm32-unknown-unknown in rustc.nix.
-    broken = lib.any (a: lib.hasAttr a stdenv.hostPlatform.gcc) [ "cpu" "float-abi" "fpu" ] ||
-      !stdenv.hostPlatform.gcc.thumb or true;
+    broken =
+      lib.any (a: lib.hasAttr a stdenv.hostPlatform.gcc) [
+        "cpu"
+        "float-abi"
+        "fpu"
+      ]
+      || !stdenv.hostPlatform.gcc.thumb or true;
   };
 }

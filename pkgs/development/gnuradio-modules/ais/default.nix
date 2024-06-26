@@ -1,20 +1,21 @@
-{ lib
-, mkDerivation
-, fetchFromGitHub
-, cmake
-, pkg-config
-, python
-, boost
-, cppunit
-, logLib
-, osmosdr
-, gmp
-, mpir
-, fftwFloat
-, icu
-, gnuradio
-, thrift
-, gnuradioAtLeast
+{
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  python,
+  boost,
+  cppunit,
+  logLib,
+  osmosdr,
+  gmp,
+  mpir,
+  fftwFloat,
+  icu,
+  gnuradio,
+  thrift,
+  gnuradioAtLeast,
 }:
 
 mkDerivation rec {
@@ -34,9 +35,7 @@ mkDerivation rec {
     python
   ];
 
-  cmakeFlags = [
-    "-DCMAKE_EXE_LINKER_FLAGS=-pthread"
-  ];
+  cmakeFlags = [ "-DCMAKE_EXE_LINKER_FLAGS=-pthread" ];
 
   buildInputs = [
     cppunit

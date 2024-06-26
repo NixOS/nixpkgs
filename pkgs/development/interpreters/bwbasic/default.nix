@@ -1,4 +1,10 @@
-{ lib, stdenv, dos2unix, fetchurl, unzip }:
+{
+  lib,
+  stdenv,
+  dos2unix,
+  fetchurl,
+  unzip,
+}:
 
 stdenv.mkDerivation rec {
   pname = "bwbasic";
@@ -9,7 +15,10 @@ stdenv.mkDerivation rec {
     sha256 = "1w9r4cl7z1lh52c1jpjragbspi1qn0zb7jhcsldav4gdnzxfw67f";
   };
 
-  nativeBuildInputs = [ dos2unix unzip ];
+  nativeBuildInputs = [
+    dos2unix
+    unzip
+  ];
 
   unpackPhase = ''
     unzip $src

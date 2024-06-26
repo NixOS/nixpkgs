@@ -12,7 +12,10 @@ buildDotnetGlobalTool {
     changelog = "https://cmd.petabridge.com/articles/RELEASE_NOTES.html";
     license = licenses.unfree;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ anpin mdarocha ];
+    maintainers = with maintainers; [
+      anpin
+      mdarocha
+    ];
     mainProgram = "pbm";
   };
 }

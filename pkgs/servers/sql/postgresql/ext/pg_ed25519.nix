@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchFromGitLab, postgresql }:
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  postgresql,
+}:
 
 stdenv.mkDerivation rec {
   pname = "pg_ed25519";
@@ -29,4 +34,3 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
   };
 }
-

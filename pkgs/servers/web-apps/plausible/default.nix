@@ -1,10 +1,11 @@
-{ lib
-, beamPackages
-, buildNpmPackage
-, fetchFromGitHub
-, nodejs
-, nixosTests
-, ...
+{
+  lib,
+  beamPackages,
+  buildNpmPackage,
+  fetchFromGitHub,
+  nodejs,
+  nixosTests,
+  ...
 }:
 
 let
@@ -52,14 +53,19 @@ let
   };
 in
 beamPackages.mixRelease {
-  inherit pname version src mixFodDeps;
+  inherit
+    pname
+    version
+    src
+    mixFodDeps
+    ;
 
-  nativeBuildInputs = [
-    nodejs
-  ];
+  nativeBuildInputs = [ nodejs ];
 
   passthru = {
-    tests = { inherit (nixosTests) plausible; };
+    tests = {
+      inherit (nixosTests) plausible;
+    };
     updateScript = ./update.sh;
   };
 

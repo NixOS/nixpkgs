@@ -1,7 +1,8 @@
-{ lib
-, stdenv
-, fetchurl
-, darwin
+{
+  lib,
+  stdenv,
+  fetchurl,
+  darwin,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -27,7 +28,12 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Open Dynamics Engine";
     mainProgram = "ode-config";
     homepage = "https://www.ode.org";
-    license = with licenses; [ bsd3 lgpl21Only lgpl3Only zlib ];
+    license = with licenses; [
+      bsd3
+      lgpl21Only
+      lgpl3Only
+      zlib
+    ];
     maintainers = with maintainers; [ wegank ];
     platforms = platforms.unix;
   };

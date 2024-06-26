@@ -3,11 +3,12 @@
 # packages such as lambda-lisp-blc, lambda-lisp-lazyk,
 # lambda-lisp-clamb, etc.
 
-{ lib
-, gccStdenv
-, fetchFromGitHub
-, fetchurl
-, runtimeShell
+{
+  lib,
+  gccStdenv,
+  fetchFromGitHub,
+  fetchurl,
+  runtimeShell,
 }:
 
 let
@@ -53,12 +54,12 @@ stdenv.mkDerivation rec {
   doInstallCheck = true;
 
   installCheckPhase = ''
-  runHook preInstallCheck
+    runHook preInstallCheck
 
-  a=$(echo "(* (+ 1 2 3 4 5 6 7 8 9 10) 12020569 (- 2 5))" | $out/bin/lambda-lisp-blc | tr -d "> ");
-  test $a == -1983393885
+    a=$(echo "(* (+ 1 2 3 4 5 6 7 8 9 10) 12020569 (- 2 5))" | $out/bin/lambda-lisp-blc | tr -d "> ");
+    test $a == -1983393885
 
-  runHook postInstallCheck
+    runHook postInstallCheck
   '';
 
   meta = with lib; {

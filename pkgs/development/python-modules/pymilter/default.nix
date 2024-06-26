@@ -23,9 +23,7 @@ buildPythonPackage rec {
     hash = "sha256-plaWXwDAIsVzEtrabZuZj7T4WNfz2ntQHgcMCVf5S70=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
   buildInputs = [ libmilter ];
   nativeCheckInputs = [ pyasyncore ];
   dependencies = [

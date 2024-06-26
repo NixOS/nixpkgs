@@ -1,4 +1,14 @@
-{ mkDerivation, lib, extra-cmake-modules, kdoctools, ki18n, kconfig, kcrash, kiconthemes, knotifyconfig }:
+{
+  mkDerivation,
+  lib,
+  extra-cmake-modules,
+  kdoctools,
+  ki18n,
+  kconfig,
+  kcrash,
+  kiconthemes,
+  knotifyconfig,
+}:
 
 mkDerivation {
   pname = "kteatime";
@@ -10,9 +20,7 @@ mkDerivation {
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
   };
-  nativeBuildInputs = [
-    extra-cmake-modules
-  ];
+  nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [
     kdoctools
     ki18n

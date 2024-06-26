@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchurl, libiconv, vanilla ? false }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libiconv,
+  vanilla ? false,
+}:
 
 stdenv.mkDerivation rec {
   pname = "pkg-config";
@@ -9,13 +15,18 @@ stdenv.mkDerivation rec {
     sha256 = "14fmwzki1rlz8bs2p810lk6jqdxsk966d8drgsjmi54cd00rrikg";
   };
 
-  outputs = [ "out" "man" "doc" ];
+  outputs = [
+    "out"
+    "man"
+    "doc"
+  ];
   strictDeps = true;
 
   # Process Requires.private properly, see
   # http://bugs.freedesktop.org/show_bug.cgi?id=4738, migrated to
   # https://gitlab.freedesktop.org/pkg-config/pkg-config/issues/28
-  patches = lib.optional (!vanilla) ./requires-private.patch
+  patches =
+    lib.optional (!vanilla) ./requires-private.patch
     ++ lib.optional stdenv.isCygwin ./2.36.3-not-win32.patch;
 
   # These three tests fail due to a (desired) behavior change from our ./requires-private.patch
@@ -24,27 +35,34 @@ stdenv.mkDerivation rec {
     # necessary for FreeBSD code path in configure
     ''
       substituteInPlace ./config.guess ./glib/config.guess --replace-fail /usr/bin/uname uname
-    '' + lib.optionalString (!vanilla) ''
+    ''
+    + lib.optionalString (!vanilla) ''
       rm -f check/check-requires-private check/check-gtk check/missing
     '';
 
   buildInputs = [ libiconv ];
 
-  configureFlags = [ "--with-internal-glib" ]
-    ++ lib.optionals (stdenv.isSunOS) [ "--with-libiconv=gnu" "--with-system-library-path" "--with-system-include-path" "CFLAGS=-DENABLE_NLS" ]
-       # Can't run these tests while cross-compiling
-    ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform)
-       [ "glib_cv_stack_grows=no"
-         "glib_cv_uscore=no"
-         "ac_cv_func_posix_getpwuid_r=yes"
-         "ac_cv_func_posix_getgrgid_r=yes"
-       ];
+  configureFlags =
+    [ "--with-internal-glib" ]
+    ++ lib.optionals (stdenv.isSunOS) [
+      "--with-libiconv=gnu"
+      "--with-system-library-path"
+      "--with-system-include-path"
+      "CFLAGS=-DENABLE_NLS"
+    ]
+    # Can't run these tests while cross-compiling
+    ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+      "glib_cv_stack_grows=no"
+      "glib_cv_uscore=no"
+      "ac_cv_func_posix_getpwuid_r=yes"
+      "ac_cv_func_posix_getgrgid_r=yes"
+    ];
 
   env.NIX_CFLAGS_COMPILE = toString (
     # Silence "incompatible integer to pointer conversion passing 'gsize'" when building with Clang.
-    lib.optionals stdenv.cc.isClang ["-Wno-int-conversion"]
+    lib.optionals stdenv.cc.isClang [ "-Wno-int-conversion" ]
     # Silence fprintf format errors when building for Windows.
-    ++ lib.optionals stdenv.hostPlatform.isWindows ["-Wno-error=format"]
+    ++ lib.optionals stdenv.hostPlatform.isWindows [ "-Wno-error=format" ]
   );
 
   enableParallelBuilding = true;

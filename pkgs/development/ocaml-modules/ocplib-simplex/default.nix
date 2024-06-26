@@ -1,4 +1,10 @@
-{ lib, fetchFromGitHub, buildDunePackage, logs, num }:
+{
+  lib,
+  fetchFromGitHub,
+  buildDunePackage,
+  logs,
+  num,
+}:
 
 buildDunePackage rec {
   pname = "ocplib-simplex";
@@ -11,7 +17,10 @@ buildDunePackage rec {
     hash = "sha256-sy5QUmghG28tXlwbKWx3PpBGTtzXarTSzd1WLSYyvbc=";
   };
 
-  propagatedBuildInputs = [ logs num ];
+  propagatedBuildInputs = [
+    logs
+    num
+  ];
 
   doCheck = true;
 

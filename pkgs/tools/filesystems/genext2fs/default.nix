@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, libarchive }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  libarchive,
+}:
 
 stdenv.mkDerivation rec {
   pname = "genext2fs";
@@ -12,13 +18,9 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [
-    libarchive
-  ];
+  buildInputs = [ libarchive ];
 
-  configureFlags = [
-    "--enable-libarchive"
-  ];
+  configureFlags = [ "--enable-libarchive" ];
 
   doCheck = true;
   checkPhase = ''

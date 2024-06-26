@@ -1,14 +1,20 @@
-{ lib
-, fetchzip
-, stdenv
+{
+  lib,
+  fetchzip,
+  stdenv,
 }:
 
 let
-  _src = variant: suffix: hash: fetchzip ({
-    name = variant;
-    url = "https://github.com/ful1e5/apple_cursor/releases/download/v${version}/${variant}.${suffix}";
-    hash = hash;
-  } // (lib.optionalAttrs (suffix == "zip") { stripRoot = false; }));
+  _src =
+    variant: suffix: hash:
+    fetchzip (
+      {
+        name = variant;
+        url = "https://github.com/ful1e5/apple_cursor/releases/download/v${version}/${variant}.${suffix}";
+        hash = hash;
+      }
+      // (lib.optionalAttrs (suffix == "zip") { stripRoot = false; })
+    );
 
   version = "2.0.0";
   srcs = [
@@ -21,7 +27,8 @@ let
     (_src "macOS-Monterey" "tar.gz" "sha256-MHmaZs56Q1NbjkecvfcG1zAW85BCZDn5kXmxqVzPc7M=")
     (_src "macOS-Monterey-Windows" "zip" "sha256-ajxEgq7besaRajLn0gTPpp4euOWVqbzc78u720PWlyE=")
   ];
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "apple_cursor";
   inherit version;
   inherit srcs;

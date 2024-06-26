@@ -1,9 +1,10 @@
-{ lib
-, fetchFromGitHub
-, fetchYarnDeps
-, mkYarnPackage
-, baseUrl ? null
-, writeShellScriptBin
+{
+  lib,
+  fetchFromGitHub,
+  fetchYarnDeps,
+  mkYarnPackage,
+  baseUrl ? null,
+  writeShellScriptBin,
 }:
 
 mkYarnPackage rec {
@@ -24,9 +25,7 @@ mkYarnPackage rec {
     hash = "sha256-vpCwPL1B+hbIaVSHtlkGjPAteu9BFNNmCTE66CSyFkg=";
   };
 
-  nativeBuildInputs = [
-    (writeShellScriptBin "git" "echo ${version}")
-  ];
+  nativeBuildInputs = [ (writeShellScriptBin "git" "echo ${version}") ];
 
   NODE_ENV = "production";
   ${if baseUrl != null then "REACT_APP_SERVER" else null} = baseUrl;
@@ -59,6 +58,9 @@ mkYarnPackage rec {
     homepage = "https://github.com/Awesome-Technologies/synapse-admin";
     license = licenses.asl20;
     platforms = platforms.all;
-    maintainers = with maintainers; [ mkg20001 ma27 ];
+    maintainers = with maintainers; [
+      mkg20001
+      ma27
+    ];
   };
 }

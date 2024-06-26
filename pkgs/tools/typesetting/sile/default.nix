@@ -1,47 +1,50 @@
-{ lib
-, stdenv
-, darwin
-, fetchurl
-, makeWrapper
-, pkg-config
-, poppler_utils
-, gitMinimal
-, harfbuzz
-, icu
-, fontconfig
-, lua
-, libiconv
-, makeFontsConf
-, gentium
-, runCommand
-, sile
+{
+  lib,
+  stdenv,
+  darwin,
+  fetchurl,
+  makeWrapper,
+  pkg-config,
+  poppler_utils,
+  gitMinimal,
+  harfbuzz,
+  icu,
+  fontconfig,
+  lua,
+  libiconv,
+  makeFontsConf,
+  gentium,
+  runCommand,
+  sile,
 }:
 
 let
-  luaEnv = lua.withPackages(ps: with ps; [
-    cassowary
-    cldr
-    cosmo
-    fluent
-    linenoise
-    loadkit
-    lpeg
-    lua-zlib
-    lua_cliargs
-    luaepnf
-    luaexpat
-    luafilesystem
-    luarepl
-    luasec
-    luasocket
-    luautf8
-    penlight
-    vstruct
-  ] ++ lib.optionals (lib.versionOlder lua.luaversion "5.2") [
-    bit32
-  ] ++ lib.optionals (lib.versionOlder lua.luaversion "5.3") [
-    compat53
-  ]);
+  luaEnv = lua.withPackages (
+    ps:
+    with ps;
+    [
+      cassowary
+      cldr
+      cosmo
+      fluent
+      linenoise
+      loadkit
+      lpeg
+      lua-zlib
+      lua_cliargs
+      luaepnf
+      luaexpat
+      luafilesystem
+      luarepl
+      luasec
+      luasocket
+      luautf8
+      penlight
+      vstruct
+    ]
+    ++ lib.optionals (lib.versionOlder lua.luaversion "5.2") [ bit32 ]
+    ++ lib.optionals (lib.versionOlder lua.luaversion "5.3") [ compat53 ]
+  );
 in
 
 stdenv.mkDerivation (finalAttrs: {
@@ -69,9 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
     icu
     fontconfig
     libiconv
-  ]
-  ++ lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.AppKit
-  ;
+  ] ++ lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.AppKit;
   passthru = {
     # So it will be easier to inspect this environment, in comparison to others
     inherit luaEnv;
@@ -79,28 +80,31 @@ stdenv.mkDerivation (finalAttrs: {
     tests.test = lib.optionalAttrs (!(stdenv.isDarwin && stdenv.isAarch64)) (
       runCommand "sile-test"
         {
-          nativeBuildInputs = [ poppler_utils sile ];
+          nativeBuildInputs = [
+            poppler_utils
+            sile
+          ];
           inherit (finalAttrs) FONTCONFIG_FILE;
-        } ''
-        output=$(mktemp -t selfcheck-XXXXXX.pdf)
-        echo "<sile>foo</sile>" | sile -o $output -
-        pdfinfo $output | grep "SILE v${finalAttrs.version}" > $out
-      '');
+        }
+        ''
+          output=$(mktemp -t selfcheck-XXXXXX.pdf)
+          echo "<sile>foo</sile>" | sile -o $output -
+          pdfinfo $output | grep "SILE v${finalAttrs.version}" > $out
+        ''
+    );
   };
 
-  postPatch = ''
-    patchShebangs build-aux/*.sh
-  '' + lib.optionalString stdenv.isDarwin ''
-    sed -i -e 's|@import AppKit;|#import <AppKit/AppKit.h>|' src/macfonts.m
-  '';
+  postPatch =
+    ''
+      patchShebangs build-aux/*.sh
+    ''
+    + lib.optionalString stdenv.isDarwin ''
+      sed -i -e 's|@import AppKit;|#import <AppKit/AppKit.h>|' src/macfonts.m
+    '';
 
   NIX_LDFLAGS = lib.optionalString stdenv.isDarwin "-framework AppKit";
 
-  FONTCONFIG_FILE = makeFontsConf {
-    fontDirectories = [
-      gentium
-    ];
-  };
+  FONTCONFIG_FILE = makeFontsConf { fontDirectories = [ gentium ]; };
 
   enableParallelBuilding = true;
 
@@ -118,7 +122,12 @@ stdenv.mkDerivation (finalAttrs: {
     done
   '';
 
-  outputs = [ "out" "doc" "man" "dev" ];
+  outputs = [
+    "out"
+    "doc"
+    "man"
+    "dev"
+  ];
 
   meta = with lib; {
     description = "Typesetting system";
@@ -135,7 +144,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://sile-typesetter.org";
     changelog = "https://github.com/sile-typesetter/sile/raw/v${finalAttrs.version}/CHANGELOG.md";
     platforms = platforms.unix;
-    maintainers = with maintainers; [ doronbehar alerque ];
+    maintainers = with maintainers; [
+      doronbehar
+      alerque
+    ];
     license = licenses.mit;
     mainProgram = "sile";
   };

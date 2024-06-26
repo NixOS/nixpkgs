@@ -1,4 +1,9 @@
-{ lib, buildNimPackage, fetchFromGitHub, testers }:
+{
+  lib,
+  buildNimPackage,
+  fetchFromGitHub,
+  testers,
+}:
 
 buildNimPackage (finalAttrs: {
   pname = "ttop";
@@ -13,14 +18,10 @@ buildNimPackage (finalAttrs: {
 
   lockFile = ./lock.json;
 
-  nimFlags = [
-    "-d:NimblePkgVersion=${finalAttrs.version}"
-  ];
+  nimFlags = [ "-d:NimblePkgVersion=${finalAttrs.version}" ];
 
   passthru.tests = {
-    version = testers.testVersion {
-      package = finalAttrs.finalPackage;
-    };
+    version = testers.testVersion { package = finalAttrs.finalPackage; };
   };
 
   meta = with lib; {
@@ -29,7 +30,10 @@ buildNimPackage (finalAttrs: {
     changelog = "https://github.com/inv2004/ttop/releases/tag/${finalAttrs.src.rev}";
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ figsoda sikmir ];
+    maintainers = with maintainers; [
+      figsoda
+      sikmir
+    ];
     mainProgram = "ttop";
   };
 })

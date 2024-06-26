@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, raylib, darwin }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  raylib,
+  darwin,
+}:
 
 let
   inherit (darwin.apple_sdk.frameworks) Cocoa;
@@ -14,8 +20,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-N9ip8yFUqXmNMKcvQuOyxDI4yF/w1YaoIh0prvS4Xr4=";
   };
 
-  buildInputs = [ raylib ]
-    ++ lib.optionals stdenv.isDarwin [ Cocoa ];
+  buildInputs = [ raylib ] ++ lib.optionals stdenv.isDarwin [ Cocoa ];
 
   configurePhase = ''
     runHook preConfigure

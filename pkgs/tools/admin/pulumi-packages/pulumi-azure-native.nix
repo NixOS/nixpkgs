@@ -1,6 +1,4 @@
-{ lib
-, mkPulumiPackage
-}:
+{ lib, mkPulumiPackage }:
 mkPulumiPackage rec {
   owner = "pulumi";
   repo = "pulumi-azure-native";
@@ -10,9 +8,7 @@ mkPulumiPackage rec {
   vendorHash = "sha256-20wHbNE/fenxP9wgTSzAnx6b1UYlw4i1fi6SesTs0sc=";
   cmdGen = "pulumi-gen-azure-native";
   cmdRes = "pulumi-resource-azure-native";
-  extraLdflags = [
-    "-X github.com/pulumi/${repo}/v2/provider/pkg/version.Version=${version}"
-  ];
+  extraLdflags = [ "-X github.com/pulumi/${repo}/v2/provider/pkg/version.Version=${version}" ];
   postConfigure = ''
     pushd ..
 
@@ -35,6 +31,9 @@ mkPulumiPackage rec {
     mainProgram = "pulumi-resource-azure-native";
     homepage = "https://github.com/pulumi/pulumi-azure-native";
     license = licenses.asl20;
-    maintainers = with maintainers; [ veehaitch trundle ];
+    maintainers = with maintainers; [
+      veehaitch
+      trundle
+    ];
   };
 }

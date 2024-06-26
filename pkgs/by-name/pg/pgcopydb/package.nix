@@ -1,15 +1,16 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, libkrb5
-, openssl
-, pam
-, pkg-config
-, postgresql
-, readline
-, sqlite
-, testers
-, zlib
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  libkrb5,
+  openssl,
+  pam,
+  pkg-config,
+  postgresql,
+  readline,
+  sqlite,
+  testers,
+  zlib,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -23,9 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-m9iIF8h6V3wWLUQuPntXtRAh16RrmR3uqZZIljGCY08=";
   };
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
     libkrb5
@@ -34,9 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
     readline
     sqlite
     zlib
-  ] ++ lib.optionals stdenv.isLinux [
-    pam
-  ];
+  ] ++ lib.optionals stdenv.isLinux [ pam ];
 
   hardeningDisable = [ "format" ];
 
@@ -49,9 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru.tests = {
-    version = testers.testVersion {
-      package = finalAttrs.finalPackage;
-    };
+    version = testers.testVersion { package = finalAttrs.finalPackage; };
   };
 
   meta = with lib; {

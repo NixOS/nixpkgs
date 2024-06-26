@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchurl
-, makeWrapper
-, erlang
-, python3
-, python3Packages
-, perlPackages
-, gnuplot
+{
+  lib,
+  stdenv,
+  fetchurl,
+  makeWrapper,
+  erlang,
+  python3,
+  python3Packages,
+  perlPackages,
+  gnuplot,
 }:
 
 stdenv.mkDerivation rec {
@@ -18,9 +19,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-kehkMCYBfj0AiKZxD7EcT2F0d+gm6+TF/lhqpjFH/JI=";
   };
 
-  nativeBuildInputs = [
-    makeWrapper
-  ];
+  nativeBuildInputs = [ makeWrapper ];
 
   propagatedBuildInputs = [
     erlang
@@ -30,7 +29,6 @@ stdenv.mkDerivation rec {
     python3
     python3Packages.matplotlib
   ];
-
 
   postFixup = ''
     # Make tsung_stats.pl accessible

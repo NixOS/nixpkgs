@@ -1,22 +1,23 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchFromGitHub
-, nodejs
-, pnpm
-, wrapGAppsHook3
-, cargo
-, rustc
-, cargo-tauri
-, pkg-config
-, esbuild
-, buildGoModule
-, libayatana-appindicator
-, gtk3
-, webkitgtk
-, libsoup
-, openssl
-, xdotool
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  nodejs,
+  pnpm,
+  wrapGAppsHook3,
+  cargo,
+  rustc,
+  cargo-tauri,
+  pkg-config,
+  esbuild,
+  buildGoModule,
+  libayatana-appindicator,
+  gtk3,
+  webkitgtk,
+  libsoup,
+  openssl,
+  xdotool,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -72,18 +73,25 @@ stdenv.mkDerivation (finalAttrs: {
     xdotool
   ];
 
-  ESBUILD_BINARY_PATH = "${lib.getExe (esbuild.override {
-    buildGoModule = args: buildGoModule (args // rec {
-      version = "0.18.20";
-      src = fetchFromGitHub {
-        owner = "evanw";
-        repo = "esbuild";
-        rev = "v${version}";
-        hash = "sha256-mED3h+mY+4H465m02ewFK/BgA1i/PQ+ksUNxBlgpUoI=";
-      };
-      vendorHash = "sha256-+BfxCyg0KkDQpHt/wycy/8CTG6YBA/VJvJFhhzUnSiQ=";
-    });
-  })}";
+  ESBUILD_BINARY_PATH = "${lib.getExe (
+    esbuild.override {
+      buildGoModule =
+        args:
+        buildGoModule (
+          args
+          // rec {
+            version = "0.18.20";
+            src = fetchFromGitHub {
+              owner = "evanw";
+              repo = "esbuild";
+              rev = "v${version}";
+              hash = "sha256-mED3h+mY+4H465m02ewFK/BgA1i/PQ+ksUNxBlgpUoI=";
+            };
+            vendorHash = "sha256-+BfxCyg0KkDQpHt/wycy/8CTG6YBA/VJvJFhhzUnSiQ=";
+          }
+        );
+    }
+  )}";
 
   preConfigure = ''
     # pnpm.configHook has to write to .., as our sourceRoot is set to src-tauri

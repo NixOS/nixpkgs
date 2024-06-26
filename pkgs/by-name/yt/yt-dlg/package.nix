@@ -2,7 +2,7 @@
   lib,
   python3,
   fetchFromGitHub,
-  fetchPypi
+  fetchPypi,
 }:
 let
   python3Packages =

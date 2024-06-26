@@ -1,26 +1,27 @@
-{ lib
-, stdenv
-, fetchurl
-, gettext
-, gperf
-, imagemagick
-, makeWrapper
-, pkg-config
-, SDL2
-, cairo
-, freetype
-, fribidi
-, libimagequant
-, libpaper
-, libpng
-, librsvg
-, pango
-, SDL2_gfx
-, SDL2_image
-, SDL2_mixer
-, SDL2_Pango
-, SDL2_ttf
-, netpbm
+{
+  lib,
+  stdenv,
+  fetchurl,
+  gettext,
+  gperf,
+  imagemagick,
+  makeWrapper,
+  pkg-config,
+  SDL2,
+  cairo,
+  freetype,
+  fribidi,
+  libimagequant,
+  libpaper,
+  libpng,
+  librsvg,
+  pango,
+  SDL2_gfx,
+  SDL2_image,
+  SDL2_mixer,
+  SDL2_Pango,
+  SDL2_ttf,
+  netpbm,
 }:
 
 let
@@ -38,9 +39,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-GoXAT6XJrms//Syo+oaoTAyLRitQWfofwsRFtc+oV+4=";
   };
 
-  patches = [
-    ./tuxpaint-completion.diff
-  ];
+  patches = [ ./tuxpaint-completion.diff ];
 
   postPatch = ''
     grep -Zlr include.*SDL . | xargs -0 \

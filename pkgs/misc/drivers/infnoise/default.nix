@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, libftdi
-, infnoise, testers }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  libftdi,
+  infnoise,
+  testers,
+}:
 
 stdenv.mkDerivation rec {
   pname = "infnoise";
@@ -54,7 +61,10 @@ stdenv.mkDerivation rec {
       It can either provide rng for userland applications, or provide rng for the OS entropy.
     '';
     license = licenses.cc0;
-    maintainers = with maintainers; [ StijnDW zhaofengli ];
+    maintainers = with maintainers; [
+      StijnDW
+      zhaofengli
+    ];
     platforms = platforms.linux;
   };
 }

@@ -1,4 +1,9 @@
-{ lib, python3Packages, fetchPypi, mopidy }:
+{
+  lib,
+  python3Packages,
+  fetchPypi,
+  mopidy,
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "mopidy-tunein";
@@ -10,9 +15,7 @@ python3Packages.buildPythonApplication rec {
     sha256 = "01y1asylscr73yqx071imhrzfzlg07wmqqzkdvpgm6r35marc2li";
   };
 
-  propagatedBuildInputs = [
-    mopidy
-  ];
+  propagatedBuildInputs = [ mopidy ];
 
   pythonImportsCheck = [ "mopidy_tunein.tunein" ];
 

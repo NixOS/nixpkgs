@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -8,11 +13,11 @@ let
 
   package = cfg.package;
 
-  kernels = (pkgs.jupyter-kernel.create  {
-    definitions = if cfg.kernels != null
-      then cfg.kernels
-      else  pkgs.jupyter-kernel.default;
-  });
+  kernels = (
+    pkgs.jupyter-kernel.create {
+      definitions = if cfg.kernels != null then cfg.kernels else pkgs.jupyter-kernel.default;
+    }
+  );
 
   notebookConfig = pkgs.writeText "jupyter_config.py" ''
     ${cfg.notebookConfig}
@@ -20,7 +25,8 @@ let
     c.NotebookApp.password = ${cfg.password}
   '';
 
-in {
+in
+{
   meta.maintainers = with maintainers; [ aborsu ];
 
   options.services.jupyter = {
@@ -37,7 +43,11 @@ in {
     # NOTE: We don't use top-level jupyter because we don't
     # want to pass in JUPYTER_PATH but use .environment instead,
     # saving a rebuild.
-    package = mkPackageOption pkgs [ "python3" "pkgs" "notebook" ] { };
+    package = mkPackageOption pkgs [
+      "python3"
+      "pkgs"
+      "notebook"
+    ] { };
 
     command = mkOption {
       type = types.str;
@@ -46,7 +56,7 @@ in {
       description = ''
         Which command the service runs. Note that not all jupyter packages
         have all commands, e.g. jupyter-lab isn't present in the default package.
-       '';
+      '';
     };
 
     port = mkOption {
@@ -111,9 +121,9 @@ in {
     };
 
     kernels = mkOption {
-      type = types.nullOr (types.attrsOf(types.submodule (import ./kernel-options.nix {
-        inherit lib pkgs;
-      })));
+      type = types.nullOr (
+        types.attrsOf (types.submodule (import ./kernel-options.nix { inherit lib pkgs; }))
+      );
 
       default = null;
       example = literalExpression ''
@@ -154,7 +164,7 @@ in {
   };
 
   config = mkMerge [
-    (mkIf cfg.enable  {
+    (mkIf cfg.enable {
       systemd.services.jupyter = {
         description = "Jupyter development server";
 
@@ -170,12 +180,13 @@ in {
 
         serviceConfig = {
           Restart = "always";
-          ExecStart = ''${package}/bin/${cfg.command} \
-            --no-browser \
-            --ip=${cfg.ip} \
-            --port=${toString cfg.port} --port-retries 0 \
-            --notebook-dir=${cfg.notebookDir} \
-            --NotebookApp.config_file=${notebookConfig}
+          ExecStart = ''
+            ${package}/bin/${cfg.command} \
+                        --no-browser \
+                        --ip=${cfg.ip} \
+                        --port=${toString cfg.port} --port-retries 0 \
+                        --notebook-dir=${cfg.notebookDir} \
+                        --NotebookApp.config_file=${notebookConfig}
           '';
           User = cfg.user;
           Group = cfg.group;
@@ -183,9 +194,7 @@ in {
         };
       };
     })
-    (mkIf (cfg.enable && (cfg.group == "jupyter")) {
-      users.groups.jupyter = {};
-    })
+    (mkIf (cfg.enable && (cfg.group == "jupyter")) { users.groups.jupyter = { }; })
     (mkIf (cfg.enable && (cfg.user == "jupyter")) {
       users.extraUsers.jupyter = {
         extraGroups = [ cfg.group ];

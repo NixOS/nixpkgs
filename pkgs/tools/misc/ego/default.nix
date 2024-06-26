@@ -1,9 +1,10 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, makeBinaryWrapper
-, acl
-, xorg
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  makeBinaryWrapper,
+  acl,
+  xorg,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -24,9 +25,7 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-3leKejQ8kxamjwQPH1vg2I1CYc3r8k3pYfTWpOkqq8I=";
 
   # requires access to /root
-  checkFlags = [
-    "--skip tests::test_check_user_homedir"
-  ];
+  checkFlags = [ "--skip tests::test_check_user_homedir" ];
 
   postInstall = ''
     wrapProgram $out/bin/ego --prefix PATH : ${lib.makeBinPath [ xorg.xhost ]}

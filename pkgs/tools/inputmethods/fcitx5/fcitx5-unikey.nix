@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, extra-cmake-modules
-, fcitx5
-, fcitx5-qt
-, gettext
-, qtbase
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  extra-cmake-modules,
+  fcitx5,
+  fcitx5-qt,
+  gettext,
+  qtbase,
 }:
 
 stdenv.mkDerivation rec {
@@ -32,9 +33,7 @@ stdenv.mkDerivation rec {
     gettext
   ];
 
-  cmakeFlags = [
-    (lib.cmakeBool "USE_QT6" (lib.versions.major qtbase.version == "6"))
-  ];
+  cmakeFlags = [ (lib.cmakeBool "USE_QT6" (lib.versions.major qtbase.version == "6")) ];
 
   dontWrapQtApps = true;
 

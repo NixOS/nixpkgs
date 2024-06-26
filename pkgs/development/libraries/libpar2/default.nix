@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchurl, pkg-config, libsigcxx }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  libsigcxx,
+}:
 
 stdenv.mkDerivation rec {
   pname = "libpar2";

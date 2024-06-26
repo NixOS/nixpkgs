@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, pkg-config
-, SDL2
-, libiconv
-, Cocoa
-, autoSignDarwinBinariesHook
-, libGLSupported ? lib.elem stdenv.hostPlatform.system lib.platforms.mesaPlatforms
-, openglSupport ? libGLSupported
-, libGL
-, libGLU
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  SDL2,
+  libiconv,
+  Cocoa,
+  autoSignDarwinBinariesHook,
+  libGLSupported ? lib.elem stdenv.hostPlatform.system lib.platforms.mesaPlatforms,
+  openglSupport ? libGLSupported,
+  libGL,
+  libGLU,
 }:
 
 let
@@ -28,12 +29,21 @@ stdenv.mkDerivation rec {
     hash = "sha256-f2dl3L7/qoYNl4sjik1npcW/W09zsEumiV9jHuKnUmM=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config ]
-    ++ optionals (stdenv.isDarwin && stdenv.isAarch64) [ autoSignDarwinBinariesHook ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ] ++ optionals (stdenv.isDarwin && stdenv.isAarch64) [ autoSignDarwinBinariesHook ];
 
-  propagatedBuildInputs = [ SDL2 ]
-    ++ optionals stdenv.hostPlatform.isDarwin [ libiconv Cocoa ]
-    ++ optionals openglSupport [ libGL libGLU ];
+  propagatedBuildInputs =
+    [ SDL2 ]
+    ++ optionals stdenv.hostPlatform.isDarwin [
+      libiconv
+      Cocoa
+    ]
+    ++ optionals openglSupport [
+      libGL
+      libGLU
+    ];
 
   enableParallelBuilding = true;
 
@@ -42,11 +52,18 @@ stdenv.mkDerivation rec {
   postFixup = ''
     for lib in $out/lib/*${stdenv.hostPlatform.extensions.sharedLibrary}* ; do
       if [[ -L "$lib" ]]; then
-        ${if stdenv.hostPlatform.isDarwin then ''
-          install_name_tool ${lib.strings.concatMapStrings (x: " -add_rpath ${makeLibraryPath [x]} ") propagatedBuildInputs} "$lib"
-        '' else ''
-          patchelf --set-rpath "$(patchelf --print-rpath $lib):${makeLibraryPath propagatedBuildInputs}" "$lib"
-        ''}
+        ${
+          if stdenv.hostPlatform.isDarwin then
+            ''
+              install_name_tool ${
+                lib.strings.concatMapStrings (x: " -add_rpath ${makeLibraryPath [ x ]} ") propagatedBuildInputs
+              } "$lib"
+            ''
+          else
+            ''
+              patchelf --set-rpath "$(patchelf --print-rpath $lib):${makeLibraryPath propagatedBuildInputs}" "$lib"
+            ''
+        }
       fi
     done
   '';

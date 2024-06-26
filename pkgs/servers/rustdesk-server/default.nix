@@ -1,14 +1,15 @@
-{ stdenv
-, lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, libsodium
-, Security
-, sqlite
-, nix-update-script
-, testers
-, rustdesk-server
+{
+  stdenv,
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  libsodium,
+  Security,
+  sqlite,
+  nix-update-script,
+  testers,
+  rustdesk-server,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -31,16 +32,12 @@ rustPlatform.buildRustPackage rec {
     };
   };
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
     libsodium
     sqlite
-  ] ++ lib.optionals stdenv.isDarwin [
-    Security
-  ];
+  ] ++ lib.optionals stdenv.isDarwin [ Security ];
 
   passthru = {
     updateScript = nix-update-script { };
@@ -57,6 +54,9 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/rustdesk/rustdesk-server/releases/tag/${version}";
     license = licenses.agpl3Only;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ gaelreyrol tjni ];
+    maintainers = with maintainers; [
+      gaelreyrol
+      tjni
+    ];
   };
 }

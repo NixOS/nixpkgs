@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -11,16 +16,23 @@ let
     eula=true
   '';
 
-  whitelistFile = pkgs.writeText "whitelist.json"
-    (builtins.toJSON
-      (mapAttrsToList (n: v: { name = n; uuid = v; }) cfg.whitelist));
+  whitelistFile = pkgs.writeText "whitelist.json" (
+    builtins.toJSON (
+      mapAttrsToList (n: v: {
+        name = n;
+        uuid = v;
+      }) cfg.whitelist
+    )
+  );
 
   cfgToString = v: if builtins.isBool v then boolToString v else toString v;
 
-  serverPropertiesFile = pkgs.writeText "server.properties" (''
-    # server.properties managed by NixOS configuration
-  '' + concatStringsSep "\n" (mapAttrsToList
-    (n: v: "${n}=${cfgToString v}") cfg.serverProperties));
+  serverPropertiesFile = pkgs.writeText "server.properties" (
+    ''
+      # server.properties managed by NixOS configuration
+    ''
+    + concatStringsSep "\n" (mapAttrsToList (n: v: "${n}=${cfgToString v}") cfg.serverProperties)
+  );
 
   stopScript = pkgs.writeShellScript "minecraft-server-stop" ''
     echo stop > ${config.systemd.sockets.minecraft-server.socketConfig.ListenFIFO}
@@ -39,15 +51,20 @@ let
 
   serverPort = cfg.serverProperties.server-port or defaultServerPort;
 
-  rconPort = if cfg.serverProperties.enable-rcon or false
-    then cfg.serverProperties."rcon.port" or 25575
-    else null;
+  rconPort =
+    if cfg.serverProperties.enable-rcon or false then
+      cfg.serverProperties."rcon.port" or 25575
+    else
+      null;
 
-  queryPort = if cfg.serverProperties.enable-query or false
-    then cfg.serverProperties."query.port" or 25565
-    else null;
+  queryPort =
+    if cfg.serverProperties.enable-query or false then
+      cfg.serverProperties."query.port" or 25565
+    else
+      null;
 
-in {
+in
+{
   options = {
     services.minecraft-server = {
 
@@ -101,13 +118,16 @@ in {
       };
 
       whitelist = mkOption {
-        type = let
-          minecraftUUID = types.strMatching
-            "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}" // {
-              description = "Minecraft UUID";
-            };
-          in types.attrsOf minecraftUUID;
-        default = {};
+        type =
+          let
+            minecraftUUID =
+              types.strMatching "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"
+              // {
+                description = "Minecraft UUID";
+              };
+          in
+          types.attrsOf minecraftUUID;
+        default = { };
         description = ''
           Whitelisted players, only has an effect when
           {option}`services.minecraft-server.declarative` is
@@ -127,8 +147,14 @@ in {
       };
 
       serverProperties = mkOption {
-        type = with types; attrsOf (oneOf [ bool int str ]);
-        default = {};
+        type =
+          with types;
+          attrsOf (oneOf [
+            bool
+            int
+            str
+          ]);
+        default = { };
         example = literalExpression ''
           {
             server-port = 43000;
@@ -150,15 +176,14 @@ in {
         '';
       };
 
-      package = mkPackageOption pkgs "minecraft-server" {
-        example = "minecraft-server_1_12_2";
-      };
+      package = mkPackageOption pkgs "minecraft-server" { example = "minecraft-server_1_12_2"; };
 
       jvmOpts = mkOption {
         type = types.separatedString " ";
         default = "-Xmx2048M -Xms2048M";
         # Example options from https://minecraft.gamepedia.com/Tutorials/Server_startup_script
-        example = "-Xms4092M -Xmx4092M -XX:+UseG1GC -XX:+CMSIncrementalPacing "
+        example =
+          "-Xms4092M -Xmx4092M -XX:+UseG1GC -XX:+CMSIncrementalPacing "
           + "-XX:+CMSClassUnloadingEnabled -XX:ParallelGCThreads=2 "
           + "-XX:MinHeapFreeRatio=5 -XX:MaxHeapFreeRatio=10";
         description = "JVM options for the Minecraft server.";
@@ -169,13 +194,13 @@ in {
   config = mkIf cfg.enable {
 
     users.users.minecraft = {
-      description     = "Minecraft server service user";
-      home            = cfg.dataDir;
-      createHome      = true;
-      isSystemUser    = true;
-      group           = "minecraft";
+      description = "Minecraft server service user";
+      home = cfg.dataDir;
+      createHome = true;
+      isSystemUser = true;
+      group = "minecraft";
     };
-    users.groups.minecraft = {};
+    users.groups.minecraft = { };
 
     systemd.sockets.minecraft-server = {
       bindsTo = [ "minecraft-server.service" ];
@@ -190,10 +215,13 @@ in {
     };
 
     systemd.services.minecraft-server = {
-      description   = "Minecraft Server Service";
-      wantedBy      = [ "multi-user.target" ];
-      requires      = [ "minecraft-server.socket" ];
-      after         = [ "network.target" "minecraft-server.socket" ];
+      description = "Minecraft Server Service";
+      wantedBy = [ "multi-user.target" ];
+      requires = [ "minecraft-server.socket" ];
+      after = [
+        "network.target"
+        "minecraft-server.socket"
+      ];
 
       serviceConfig = {
         ExecStart = "${cfg.package}/bin/minecraft-server ${cfg.jvmOpts}";
@@ -221,7 +249,10 @@ in {
         ProtectKernelModules = true;
         ProtectKernelTunables = true;
         ProtectProc = "invisible";
-        RestrictAddressFamilies = [ "AF_INET" "AF_INET6" ];
+        RestrictAddressFamilies = [
+          "AF_INET"
+          "AF_INET6"
+        ];
         RestrictNamespaces = true;
         RestrictRealtime = true;
         RestrictSUIDSGID = true;
@@ -229,49 +260,63 @@ in {
         UMask = "0077";
       };
 
-      preStart = ''
-        ln -sf ${eulaFile} eula.txt
-      '' + (if cfg.declarative then ''
+      preStart =
+        ''
+          ln -sf ${eulaFile} eula.txt
+        ''
+        + (
+          if cfg.declarative then
+            ''
 
-        if [ -e .declarative ]; then
+              if [ -e .declarative ]; then
 
-          # Was declarative before, no need to back up anything
-          ln -sf ${whitelistFile} whitelist.json
-          cp -f ${serverPropertiesFile} server.properties
+                # Was declarative before, no need to back up anything
+                ln -sf ${whitelistFile} whitelist.json
+                cp -f ${serverPropertiesFile} server.properties
 
-        else
+              else
 
-          # Declarative for the first time, backup stateful files
-          ln -sb --suffix=.stateful ${whitelistFile} whitelist.json
-          cp -b --suffix=.stateful ${serverPropertiesFile} server.properties
+                # Declarative for the first time, backup stateful files
+                ln -sb --suffix=.stateful ${whitelistFile} whitelist.json
+                cp -b --suffix=.stateful ${serverPropertiesFile} server.properties
 
-          # server.properties must have write permissions, because every time
-          # the server starts it first parses the file and then regenerates it..
-          chmod +w server.properties
-          echo "Autogenerated file that signifies that this server configuration is managed declaratively by NixOS" \
-            > .declarative
+                # server.properties must have write permissions, because every time
+                # the server starts it first parses the file and then regenerates it..
+                chmod +w server.properties
+                echo "Autogenerated file that signifies that this server configuration is managed declaratively by NixOS" \
+                  > .declarative
 
-        fi
-      '' else ''
-        if [ -e .declarative ]; then
-          rm .declarative
-        fi
-      '');
+              fi
+            ''
+          else
+            ''
+              if [ -e .declarative ]; then
+                rm .declarative
+              fi
+            ''
+        );
     };
 
-    networking.firewall = mkIf cfg.openFirewall (if cfg.declarative then {
-      allowedUDPPorts = [ serverPort ];
-      allowedTCPPorts = [ serverPort ]
-        ++ optional (queryPort != null) queryPort
-        ++ optional (rconPort != null) rconPort;
-    } else {
-      allowedUDPPorts = [ defaultServerPort ];
-      allowedTCPPorts = [ defaultServerPort ];
-    });
+    networking.firewall = mkIf cfg.openFirewall (
+      if cfg.declarative then
+        {
+          allowedUDPPorts = [ serverPort ];
+          allowedTCPPorts = [
+            serverPort
+          ] ++ optional (queryPort != null) queryPort ++ optional (rconPort != null) rconPort;
+        }
+      else
+        {
+          allowedUDPPorts = [ defaultServerPort ];
+          allowedTCPPorts = [ defaultServerPort ];
+        }
+    );
 
     assertions = [
-      { assertion = cfg.eula;
-        message = "You must agree to Mojangs EULA to run minecraft-server."
+      {
+        assertion = cfg.eula;
+        message =
+          "You must agree to Mojangs EULA to run minecraft-server."
           + " Read https://account.mojang.com/documents/minecraft_eula and"
           + " set `services.minecraft-server.eula` to `true` if you agree.";
       }

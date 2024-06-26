@@ -19,9 +19,7 @@ let
 
     vendorHash = "sha256-3nufF280WuDNvhKn9xP9dnxNX2VC59nifuJp+ebUSvk=";
 
-    nativeBuildInputs = [
-      installShellFiles
-    ];
+    nativeBuildInputs = [ installShellFiles ];
 
     ldflags = [
       "-s"

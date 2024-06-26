@@ -1,7 +1,8 @@
-{ lib
-, stdenv
-, fetchurl
-, libffi
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libffi,
 }:
 stdenv.mkDerivation rec {
   pname = "copper";
@@ -10,9 +11,7 @@ stdenv.mkDerivation rec {
     url = "https://tibleiz.net/download/copper-${version}-src.tar.gz";
     sha256 = "sha256-tyxAMJp4H50eBz8gjt2O3zj5fq6nOIXKX47wql8aUUg=";
   };
-  buildInputs = [
-    libffi
-  ];
+  buildInputs = [ libffi ];
   postPatch = ''
     patchShebangs .
   '';

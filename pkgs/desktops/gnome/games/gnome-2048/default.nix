@@ -1,18 +1,19 @@
-{ lib
-, stdenv
-, fetchurl
-, fetchpatch
-, wrapGAppsHook3
-, meson
-, vala
-, pkg-config
-, ninja
-, itstool
-, clutter-gtk
-, libgee
-, libgnome-games-support
-, gnome
-, gtk3
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  wrapGAppsHook3,
+  meson,
+  vala,
+  pkg-config,
+  ninja,
+  itstool,
+  clutter-gtk,
+  libgee,
+  libgnome-games-support,
+  gnome,
+  gtk3,
 }:
 
 stdenv.mkDerivation rec {
@@ -50,9 +51,7 @@ stdenv.mkDerivation rec {
   ];
 
   passthru = {
-    updateScript = gnome.updateScript {
-      packageName = "gnome-2048";
-    };
+    updateScript = gnome.updateScript { packageName = "gnome-2048"; };
   };
 
   meta = with lib; {

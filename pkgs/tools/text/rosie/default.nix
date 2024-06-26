@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchgit
-, libbsd
-, readline
+{
+  lib,
+  stdenv,
+  fetchgit,
+  libbsd,
+  readline,
 }:
 
 stdenv.mkDerivation rec {
@@ -50,7 +51,10 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "DESTDIR=${placeholder "out"}" ];
 
-  buildInputs = [ libbsd readline ];
+  buildInputs = [
+    libbsd
+    readline
+  ];
 
   meta = with lib; {
     homepage = "https://rosie-lang.org";

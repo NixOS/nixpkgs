@@ -1,9 +1,10 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, ninja
-, pkg-config
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  ninja,
+  pkg-config,
 }:
 
 # Warning: We are aware that the upstream changed and there are new releases,
@@ -20,7 +21,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-h5PKWMwqTeI5/EaTWkjYojuvDU0FyMpzIjWB98UOJwc=";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -47,7 +51,7 @@ stdenv.mkDerivation rec {
     description = "AJA NTV2 Open Source Static Libs and Headers for building applications that only wish to statically link against";
     homepage = "https://github.com/aja-video/ntv2";
     license = with licenses; [ mit ];
-    maintainers = with maintainers; [];
+    maintainers = with maintainers; [ ];
     platforms = platforms.linux;
   };
 }

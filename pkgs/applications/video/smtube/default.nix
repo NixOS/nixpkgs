@@ -1,4 +1,11 @@
-{ lib, mkDerivation, fetchurl, qmake, qtscript, qtwebkit }:
+{
+  lib,
+  mkDerivation,
+  fetchurl,
+  qmake,
+  qtscript,
+  qtwebkit,
+}:
 
 mkDerivation rec {
   version = "21.10.0";
@@ -9,14 +16,15 @@ mkDerivation rec {
     sha256 = "sha256-ZQIUAi/YC+zsYHVhlprZ5K6NGvT6LojmdQ1Z+WCg1lU=";
   };
 
-  makeFlags = [
-    "PREFIX=$(out)"
-  ];
+  makeFlags = [ "PREFIX=$(out)" ];
 
   dontUseQmakeConfigure = true;
 
   nativeBuildInputs = [ qmake ];
-  buildInputs = [ qtscript qtwebkit ];
+  buildInputs = [
+    qtscript
+    qtwebkit
+  ];
 
   meta = with lib; {
     description = "Play and download Youtube videos";

@@ -1,4 +1,14 @@
-{ lib, stdenvNoCC, fetchFromGitHub, autoreconfHook, gtk3, gnome, moka-icon-theme, gnome-icon-theme, hicolor-icon-theme }:
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  autoreconfHook,
+  gtk3,
+  gnome,
+  moka-icon-theme,
+  gnome-icon-theme,
+  hicolor-icon-theme,
+}:
 
 stdenvNoCC.mkDerivation rec {
   pname = "arc-icon-theme";
