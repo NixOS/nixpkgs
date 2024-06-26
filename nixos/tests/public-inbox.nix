@@ -8,6 +8,15 @@ let
       -subj '/CN=machine.${domain}'
     install -D -t $out key.pem cert.pem
   '';
+
+  ssh-keys = import ./ssh-keys.nix pkgs;
+
+  # Git repositories paths in Gitolite.
+  # Here only their baseNameOf is used for configuring public-inbox inboxes.
+  gitoliteRepositories = [
+    "user/repo1"
+    "user/repo2"
+  ];
 in
 {
   name = "public-inbox";
@@ -16,12 +25,6 @@ in
 
   nodes.machine = { config, pkgs, nodes, ... }: let
     inherit (config.services) gitolite public-inbox;
-    # Git repositories paths in Gitolite.
-    # Only their baseNameOf is used for configuring public-inbox.
-    repositories = [
-      "user/repo1"
-      "user/repo2"
-    ];
   in
   {
     virtualisation.diskSize = 1 * 1024;
@@ -70,7 +73,7 @@ in
         cert = "${tls-cert}/cert.pem";
         key = "${tls-cert}/key.pem";
       };
-      inboxes = lib.recursiveUpdate (lib.genAttrs (map baseNameOf repositories) (repo: {
+      inboxes = lib.recursiveUpdate (lib.genAttrs (map baseNameOf gitoliteRepositories) (repo: {
         address = [
           # Routed to the "public-inbox:" transport in services.postfix.transport
           "${repo}@${domain}"
@@ -92,16 +95,16 @@ in
           ];
         };
       };
-      settings.coderepo = lib.listToAttrs (map (path: lib.nameValuePair (baseNameOf path) {
-        dir = "/var/lib/gitolite/repositories/${path}.git";
-        cgitUrl = "https://git.${domain}/${path}.git";
-      }) repositories);
+      settings.coderepo = lib.listToAttrs (map (repositoryName: lib.nameValuePair (baseNameOf repositoryName) {
+        dir = "/var/lib/gitolite/repositories/${repositoryName}.git";
+        cgitUrl = "https://git.${domain}/${repositoryName}.git";
+      }) gitoliteRepositories);
     };
 
     # Use gitolite to store Git repositories listed in coderepo entries
     services.gitolite = {
       enable = true;
-      adminPubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJmoTOQnGqX+//us5oye8UuE+tQBx9QEM7PN13jrwgqY root@localhost";
+      adminPubkey = ssh-keys.snakeOilPublicKey;
     };
     systemd.services.public-inbox-httpd = {
       serviceConfig.SupplementaryGroups = [ gitolite.group ];
@@ -157,6 +160,14 @@ in
       };
     };
 
+    services.openssh.enable = true;
+    programs.ssh.extraConfig = ''
+      Host machine.${domain}
+        UserKnownHostsFile /dev/null
+        StrictHostKeyChecking no
+        PreferredAuthentications publickey
+    '';
+
     services.postfix = {
       enable = true;
       setSendmail = true;
@@ -170,61 +181,96 @@ in
       pkgs.openssl
     ];
 
+    specialisation."confinement".configuration = {
+      systemd.services = {
+        public-inbox-httpd.confinement.enable = true;
+        public-inbox-imapd.confinement.enable = true;
+        public-inbox-init.confinement.enable = true;
+        public-inbox-nntpd.confinement.enable = true;
+      };
+    };
+
   };
 
-  testScript = ''
-    start_all()
-    machine.wait_for_unit("multi-user.target")
-    machine.wait_for_unit("public-inbox-init.service")
+  testScript =
+    let
+      switchToSpecialisation = specialisationName: ''
+        with machine.nested("switch to specialisation ${specialisationName}"):
+          machine.succeed("/run/booted-system/specialisation/${specialisationName}/bin/switch-to-configuration test")
+      '';
+      specialisationTests = specialisationName: ''
+        ${lib.optionalString (specialisationName != "") (switchToSpecialisation specialisationName)}
+        machine.wait_for_unit("multi-user.target")
+        machine.wait_for_unit("public-inbox-init.service")
 
-    # Very basic check that Gitolite can work;
-    # Gitolite is not needed for the rest of this testScript
-    machine.wait_for_unit("gitolite-init.service")
+        # List inboxes through public-inbox-httpd
+        machine.wait_for_unit("nginx.service")
+        machine.succeed("curl -L https://machine.${domain} | grep repo1@${domain}")
+        # The repo2 inbox is hidden
+        machine.fail("curl -L https://machine.${domain} | grep repo2@${domain}")
+        machine.wait_for_unit("public-inbox-httpd.service")
 
-    # List inboxes through public-inbox-httpd
-    machine.wait_for_unit("nginx.service")
-    machine.succeed("curl -L https://machine.${domain} | grep repo1@${domain}")
-    # The repo2 inbox is hidden
-    machine.fail("curl -L https://machine.${domain} | grep repo2@${domain}")
-    machine.wait_for_unit("public-inbox-httpd.service")
+        # Send a mail and read it through public-inbox-httpd
+        # Must work too when using a recipientDelimiter.
+        machine.wait_for_unit("postfix.service")
+        machine.succeed("mail -t <${pkgs.writeText "mail" ''
+          Subject: Testing mail
+          From: root@localhost
+          To: repo1+extension${specialisationName}@${domain}
+          Message-ID: <repo1@root-1-${specialisationName}>
+          Content-Type: text/plain; charset=utf-8
+          Content-Disposition: inline
 
-    # Send a mail and read it through public-inbox-httpd
-    # Must work too when using a recipientDelimiter.
-    machine.wait_for_unit("postfix.service")
-    machine.succeed("mail -t <${pkgs.writeText "mail" ''
-      Subject: Testing mail
-      From: root@localhost
-      To: repo1+extension@${domain}
-      Message-ID: <repo1@root-1>
-      Content-Type: text/plain; charset=utf-8
-      Content-Disposition: inline
+          This is a testing mail for specialisation: ${specialisationName}.
+        ''}")
+        machine.sleep(10)
+        machine.succeed("curl -L 'https://machine.${domain}/inbox/repo1/repo1@root-1-${specialisationName}/T/#u' | grep 'This is a testing mail for specialisation: ${specialisationName}.'")
 
-      This is a testing mail.
-    ''}")
-    machine.sleep(10)
-    machine.succeed("curl -L 'https://machine.${domain}/inbox/repo1/repo1@root-1/T/#u' | grep 'This is a testing mail.'")
+        # Read a mail through public-inbox-imapd
+        machine.wait_for_open_port(993)
+        machine.wait_for_unit("public-inbox-imapd.service")
+        machine.succeed("openssl s_client -ign_eof -crlf -connect machine.${domain}:993 <${pkgs.writeText "imap-commands" ''
+          tag login anonymous@${domain} anonymous
+          tag SELECT INBOX.comp.${orga}.repo1.0
+          tag FETCH 1 (BODY[HEADER])
+          tag LOGOUT
+        ''} | grep '^Message-ID: <repo1@root-1-${specialisationName}>'")
 
-    # Read a mail through public-inbox-imapd
-    machine.wait_for_open_port(993)
-    machine.wait_for_unit("public-inbox-imapd.service")
-    machine.succeed("openssl s_client -ign_eof -crlf -connect machine.${domain}:993 <${pkgs.writeText "imap-commands" ''
-      tag login anonymous@${domain} anonymous
-      tag SELECT INBOX.comp.${orga}.repo1.0
-      tag FETCH 1 (BODY[HEADER])
-      tag LOGOUT
-    ''} | grep '^Message-ID: <repo1@root-1>'")
+        # TODO: Read a mail through public-inbox-nntpd
+        #machine.wait_for_open_port(563)
+        #machine.wait_for_unit("public-inbox-nntpd.service")
 
-    # TODO: Read a mail through public-inbox-nntpd
-    #machine.wait_for_open_port(563)
-    #machine.wait_for_unit("public-inbox-nntpd.service")
+        # Delete a mail.
+        # Note that the use of an extension not listed in the addresses
+        # require to use --all
+        machine.succeed("curl -L https://machine.${domain}/inbox/repo1/repo1@root-1-${specialisationName}/raw | sudo -u public-inbox public-inbox-learn rm --all")
+        machine.fail("curl -L https://machine.${domain}/inbox/repo1/repo1@root-1-${specialisationName}/T/#u | grep 'This is a testing mail.'")
 
-    # Delete a mail.
-    # Note that the use of an extension not listed in the addresses
-    # require to use --all
-    machine.succeed("curl -L https://machine.${domain}/inbox/repo1/repo1@root-1/raw | sudo -u public-inbox public-inbox-learn rm --all")
-    machine.fail("curl -L https://machine.${domain}/inbox/repo1/repo1@root-1/T/#u | grep 'This is a testing mail.'")
+        # Compact the database
+        machine.succeed("sudo -u public-inbox public-inbox-compact --all")
+      '';
+    in ''
+      start_all()
 
-    # Compact the database
-    machine.succeed("sudo -u public-inbox public-inbox-compact --all")
-  '';
+      with subtest("can setup ssh keys on system"):
+          machine.succeed("install -D -m 600 ${ssh-keys.snakeOilPrivateKey} ~root/.ssh/id_ed25519")
+      machine.wait_for_unit("sshd.service")
+      machine.wait_for_open_port(22)
+
+      machine.wait_for_unit("gitolite-init.service")
+      with subtest("create gitolite repositories"):
+          machine.succeed(
+              "git config --global user.name 'System Administrator'",
+              "git config --global user.email root\@machine.${domain}",
+              "git clone gitolite@machine.${domain}:gitolite-admin.git",
+              "cat >>gitolite-admin/conf/gitolite.conf ${pkgs.writeText "gitolite-admin-conf-snippet"
+                (lib.concatMapStringsSep "\n" (repositoryName: ''
+                  repo ${repositoryName}
+                    RW+ = @all
+                '') gitoliteRepositories)}",
+              "(cd gitolite-admin && git add . && git commit -m 'Add repositories' && git push)",
+          )
+      ${specialisationTests ""}
+      ${specialisationTests "confinement"}
+    '';
 })
