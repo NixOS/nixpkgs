@@ -57,6 +57,7 @@ mapAliases {
   alloy = pkgs.titanium-alloy; # added 2023-08-17
   antennas = pkgs.antennas; # added 2023-07-30
   inherit (pkgs) asar; # added 2023-08-26
+  inherit (pkgs) auto-changelog; # added 2024-06-25
   inherit (pkgs) aws-azure-login; # added 2023-09-30
   balanceofsatoshis = pkgs.balanceofsatoshis; # added 2023-07-31
   inherit (pkgs) bash-language-server; # added 2024-06-07
