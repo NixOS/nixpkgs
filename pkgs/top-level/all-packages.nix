@@ -643,6 +643,8 @@ with pkgs;
 
   flaca = callPackage ../applications/graphics/flaca { };
 
+  flaci = callPackage ../applications/science/computer-architecture/flaci { };
+
   frece = callPackage ../development/tools/frece { };
 
   frida-tools = callPackage ../tools/security/frida-tools { };
