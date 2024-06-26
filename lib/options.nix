@@ -397,8 +397,6 @@ rec {
     if ! isString text then throw "literalExpression expects a string."
     else { _type = "literalExpression"; inherit text; };
 
-  literalExample = lib.warn "lib.literalExample is deprecated, use lib.literalExpression instead, or use lib.literalMD for a non-Nix description." literalExpression;
-
   /* Transition marker for documentation that's already migrated to markdown
      syntax. Has been a no-op for some while and been removed from nixpkgs.
      Kept here to alert downstream users who may not be aware of the migration's

@@ -2027,10 +2027,6 @@ rec {
       (x // y) // mask;
 
   # DEPRECATED
-  zipWithNames = warn
-    "lib.zipWithNames is a deprecated alias of lib.zipAttrsWithNames." zipAttrsWithNames;
-
-  # DEPRECATED
   zip = warn
     "lib.zip is a deprecated alias of lib.zipAttrsWith." zipAttrsWith;
 

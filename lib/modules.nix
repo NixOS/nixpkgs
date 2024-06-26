@@ -82,29 +82,9 @@ let
                   # A nominal type for modules. When set and non-null, this adds a check to
                   # make sure that only compatible modules are imported.
                   class ? null
-                , # This would be remove in the future, Prefer _module.args option instead.
-                  args ? {}
-                , # This would be remove in the future, Prefer _module.check option instead.
-                  check ? true
                 }:
     let
-      withWarnings = x:
-        lib.warnIf (evalModulesArgs?args) "The args argument to evalModules is deprecated. Please set config._module.args instead."
-        lib.warnIf (evalModulesArgs?check) "The check argument to evalModules is deprecated. Please set config._module.check instead."
-        x;
-
-      legacyModules =
-        optional (evalModulesArgs?args) {
-          config = {
-            _module.args = args;
-          };
-        }
-        ++ optional (evalModulesArgs?check) {
-          config = {
-            _module.check = mkDefault check;
-          };
-        };
-      regularModules = modules ++ legacyModules;
+      regularModules = modules;
 
       # This internal module declare internal options under the `_module'
       # attribute.  These options are fragile, as they are used by the
@@ -316,7 +296,8 @@ let
         inherit modules specialArgs class;
       };
 
-      result = withWarnings {
+    in
+      {
         _type = "configuration";
         options = checked options;
         config = checked (removeAttrs config [ "_module" ]);
@@ -324,7 +305,6 @@ let
         inherit extendModules type;
         class = class;
       };
-    in result;
 
   # collectModules :: (class: String) -> (modulesPath: String) -> (modules: [ Module ]) -> (args: Attrs) -> [ Module ]
   #
@@ -1023,8 +1003,6 @@ let
   mkForce = mkOverride 50;
   mkVMOverride = mkOverride 10; # used by ‘nixos-rebuild build-vm’
 
-  defaultPriority = lib.warnIf (lib.isInOldestRelease 2305) "lib.modules.defaultPriority is deprecated, please use lib.modules.defaultOverridePriority instead." defaultOverridePriority;
-
   mkFixStrictness = lib.warn "lib.mkFixStrictness has no effect and will be removed. It returns its argument unmodified, so you can just remove any calls." id;
 
   mkOrder = priority: content:
@@ -1372,22 +1350,7 @@ let
     config = lib.importTOML file;
   };
 
-  private = lib.mapAttrs
-    (k: lib.warn "External use of `lib.modules.${k}` is deprecated. If your use case isn't covered by non-deprecated functions, we'd like to know more and perhaps support your use case well, instead of providing access to these low level functions. In this case please open an issue in https://github.com/nixos/nixpkgs/issues/.")
-    {
-      inherit
-        applyModuleArgsIfFunction
-        dischargeProperties
-        mergeModules
-        mergeModules'
-        pushDownProperties
-        unifyModuleSyntax
-        ;
-      collectModules = collectModules null;
-    };
-
 in
-private //
 {
   # NOTE: not all of these functions are necessarily public interfaces; some
   #       are just needed by types.nix, but are not meant to be consumed
@@ -1395,7 +1358,6 @@ private //
   inherit
     defaultOrderPriority
     defaultOverridePriority
-    defaultPriority
     doRename
     evalModules
     evalOptionValue  # for use by lib.types

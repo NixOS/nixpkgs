@@ -84,14 +84,14 @@ let
       mapAttrsRecursiveCond genAttrs isDerivation toDerivation optionalAttrs
       zipAttrsWithNames zipAttrsWith zipAttrs recursiveUpdateUntil
       recursiveUpdate matchAttrs mergeAttrsList overrideExisting showAttrPath getOutput
-      getBin getLib getDev getMan chooseDevOutputs zipWithNames zip
+      getBin getLib getDev getMan chooseDevOutputs zip
       recurseIntoAttrs dontRecurseIntoAttrs cartesianProduct cartesianProductOfSets
       mapCartesianProduct updateManyAttrsByPath listToAttrs hasAttr getAttr isAttrs intersectAttrs removeAttrs;
     inherit (self.lists) singleton forEach map foldr fold foldl foldl' imap0 imap1
       filter ifilter0 concatMap flatten remove findSingle findFirst any all count
       optional optionals toList range replicate partition zipListsWith zipLists
       reverseList listDfs toposort sort sortOn naturalSort compareLists take
-      drop sublist last init crossLists unique allUnique intersectLists
+      drop sublist last init unique allUnique intersectLists
       subtractLists mutuallyExclusive groupBy groupBy' concatLists genList
       length head tail elem elemAt isList;
     inherit (self.strings) concatStrings concatMapStrings concatImapStrings
@@ -103,7 +103,7 @@ let
       escapeShellArg escapeShellArgs
       isStorePath isStringLike
       isValidPosixName toShellVar toShellVars
-      escapeRegex escapeURL escapeXML replaceChars lowerChars
+      escapeRegex escapeURL escapeXML lowerChars
       upperChars toLower toUpper addContextFrom splitString
       removePrefix removeSuffix versionOlder versionAtLeast
       getName getVersion match split
@@ -111,7 +111,7 @@ let
       mesonOption mesonBool mesonEnable
       nameFromURL enableFeature enableFeatureAs withFeature
       withFeatureAs fixedWidthString fixedWidthNumber
-      toInt toIntBase10 readPathsFromFile fileContents;
+      toInt toIntBase10 fileContents;
     inherit (self.stringsWithDeps) textClosureList textClosureMap
       noDepEntry fullDepEntry packEntry stringAfter;
     inherit (self.customisation) overrideDerivation makeOverridable
@@ -144,7 +144,7 @@ let
       mergeDefaultOption mergeOneOption mergeEqualOption mergeUniqueOption
       getValues getFiles
       optionAttrSetToDocList optionAttrSetToDocList'
-      scrubOptionValue literalExpression literalExample
+      scrubOptionValue literalExpression
       showOption showOptionWithDefLocs showFiles
       unknownModule mkOption mkPackageOption mkPackageOptionMD
       mdDoc literalMD;
@@ -162,7 +162,7 @@ let
       innerModifySumArgs modifySumArgs innerClosePropagation
       closePropagation mapAttrsFlatten nvs setAttr setAttrMerge
       mergeAttrsWithFunc mergeAttrsConcatenateValues
-      mergeAttrsNoOverride mergeAttrByFunc mergeAttrsByFuncDefaults
+      mergeAttrByFunc mergeAttrsByFuncDefaults
       mergeAttrsByFuncDefaultsClean mergeAttrBy
       fakeHash fakeSha256 fakeSha512
       nixType imap;
