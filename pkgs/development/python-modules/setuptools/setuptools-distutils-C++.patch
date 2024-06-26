@@ -1,0 +1,171 @@
+diff --git a/setuptools/_distutils/cygwinccompiler.py b/setuptools/_distutils/cygwinccompiler.py
+index 539f09d8f..a3d3020cb 100644
+--- a/setuptools/_distutils/cygwinccompiler.py
++++ b/setuptools/_distutils/cygwinccompiler.py
+@@ -99,14 +99,19 @@ class CygwinCCompiler(UnixCCompiler):
+         self.cxx = os.environ.get('CXX', 'g++')
+ 
+         self.linker_dll = self.cc
++        self.linker_dll_cxx = self.cxx
+         shared_option = "-shared"
+ 
+         self.set_executables(
+             compiler='%s -mcygwin -O -Wall' % self.cc,
+             compiler_so='%s -mcygwin -mdll -O -Wall' % self.cc,
++            compiler_so_cxx='%s -mcygwin -mdll -O -Wall' % self.cxx,
+             compiler_cxx='%s -mcygwin -O -Wall' % self.cxx,
+             linker_exe='%s -mcygwin' % self.cc,
+             linker_so=(f'{self.linker_dll} -mcygwin {shared_option}'),
++            linker_exe_cxx='%s -mcygwin' % self.cxx,
++            linker_so_cxx=('%s -mcygwin %s' %
++                (self.linker_dll_cxx, shared_option)),
+         )
+ 
+         # Include the appropriate MSVC runtime library if Python was built
+@@ -138,9 +143,12 @@ class CygwinCCompiler(UnixCCompiler):
+                 raise CompileError(msg)
+         else:  # for other files use the C-compiler
+             try:
+-                self.spawn(
+-                    self.compiler_so + cc_args + [src, '-o', obj] + extra_postargs
+-                )
++                if self.detect_language(src) == 'c++':
++                    self.spawn(self.compiler_so_cxx + cc_args + [src, '-o', obj] +
++                                   extra_postargs)
++                else:
++                    self.spawn(
++                        self.compiler_so + cc_args + [src, '-o', obj] + extra_postargs)
+             except DistutilsExecError as msg:
+                 raise CompileError(msg)
+ 
+@@ -276,9 +284,12 @@ class Mingw32CCompiler(CygwinCCompiler):
+         self.set_executables(
+             compiler='%s -O -Wall' % self.cc,
+             compiler_so='%s -mdll -O -Wall' % self.cc,
++            compiler_so_cxx='%s -mdll -O -Wall' % self.cxx,
+             compiler_cxx='%s -O -Wall' % self.cxx,
+             linker_exe='%s' % self.cc,
+             linker_so=f'{self.linker_dll} {shared_option}',
++            linker_exe_cxx='%s' % self.cxx,
++            linker_so_cxx='%s %s' % (self.linker_dll_cxx, shared_option)
+         )
+ 
+     def runtime_library_dir_option(self, dir):
+diff --git a/setuptools/_distutils/sysconfig.py b/setuptools/_distutils/sysconfig.py
+index 1a38e9fa7..034ed6566 100644
+--- a/setuptools/_distutils/sysconfig.py
++++ b/setuptools/_distutils/sysconfig.py
+@@ -300,6 +300,7 @@ def customize_compiler(compiler):  # noqa: C901
+             cflags,
+             ccshared,
+             ldshared,
++            ldcxxshared,
+             shlib_suffix,
+             ar,
+             ar_flags,
+@@ -309,11 +310,14 @@ def customize_compiler(compiler):  # noqa: C901
+             'CFLAGS',
+             'CCSHARED',
+             'LDSHARED',
++            'LDCXXSHARED',
+             'SHLIB_SUFFIX',
+             'AR',
+             'ARFLAGS',
+         )
+ 
++        cxxflags = cflags
++
+         if 'CC' in os.environ:
+             newcc = os.environ['CC']
+             if 'LDSHARED' not in os.environ and ldshared.startswith(cc):
+@@ -325,19 +329,27 @@ def customize_compiler(compiler):  # noqa: C901
+             cxx = os.environ['CXX']
+         if 'LDSHARED' in os.environ:
+             ldshared = os.environ['LDSHARED']
++        if 'LDCXXSHARED' in os.environ:
++            ldcxxshared = os.environ['LDCXXSHARED']
+         if 'CPP' in os.environ:
+             cpp = os.environ['CPP']
+         else:
+             cpp = cc + " -E"  # not always
+         if 'LDFLAGS' in os.environ:
+             ldshared = ldshared + ' ' + os.environ['LDFLAGS']
++            ldcxxshared = ldcxxshared + ' ' + os.environ['LDFLAGS']
+         if 'CFLAGS' in os.environ:
+-            cflags = cflags + ' ' + os.environ['CFLAGS']
++            cflags = os.environ['CFLAGS']
+             ldshared = ldshared + ' ' + os.environ['CFLAGS']
++        if 'CXXFLAGS' in os.environ:
++            cxxflags = os.environ['CXXFLAGS']
++            ldcxxshared = ldcxxshared + ' ' + os.environ['CXXFLAGS']
+         if 'CPPFLAGS' in os.environ:
+             cpp = cpp + ' ' + os.environ['CPPFLAGS']
+             cflags = cflags + ' ' + os.environ['CPPFLAGS']
++            cxxflags = cxxflags + ' ' + os.environ['CPPFLAGS']
+             ldshared = ldshared + ' ' + os.environ['CPPFLAGS']
++            ldcxxshared = ldcxxshared + ' ' + os.environ['CPPFLAGS']
+         if 'AR' in os.environ:
+             ar = os.environ['AR']
+         if 'ARFLAGS' in os.environ:
+@@ -346,13 +358,17 @@ def customize_compiler(compiler):  # noqa: C901
+             archiver = ar + ' ' + ar_flags
+ 
+         cc_cmd = cc + ' ' + cflags
++        cxx_cmd = cxx + ' ' + cxxflags
+         compiler.set_executables(
+             preprocessor=cpp,
+             compiler=cc_cmd,
+             compiler_so=cc_cmd + ' ' + ccshared,
+-            compiler_cxx=cxx,
++            compiler_cxx=cxx_cmd,
++            compiler_so_cxx=cxx_cmd + ' ' + ccshared,
+             linker_so=ldshared,
++            linker_so_cxx=ldcxxshared,
+             linker_exe=cc,
++            linker_exe_cxx=cxx,
+             archiver=archiver,
+         )
+ 
+diff --git a/setuptools/_distutils/unixccompiler.py b/setuptools/_distutils/unixccompiler.py
+index 0248bde87..9508e6cff 100644
+--- a/setuptools/_distutils/unixccompiler.py
++++ b/setuptools/_distutils/unixccompiler.py
+@@ -118,9 +118,12 @@ class UnixCCompiler(CCompiler):
+         'preprocessor': None,
+         'compiler': ["cc"],
+         'compiler_so': ["cc"],
+-        'compiler_cxx': ["cc"],
++        'compiler_cxx': ["c++"],
++        'compiler_so_cxx': ["c++"],
+         'linker_so': ["cc", "-shared"],
++        'linker_so_cxx': ["c++", "-shared"],
+         'linker_exe': ["cc"],
++        'linker_exe_cxx': ["c++", "-shared"],
+         'archiver': ["ar", "-cr"],
+         'ranlib': None,
+     }
+@@ -184,8 +187,13 @@ class UnixCCompiler(CCompiler):
+ 
+     def _compile(self, obj, src, ext, cc_args, extra_postargs, pp_opts):
+         compiler_so = compiler_fixup(self.compiler_so, cc_args + extra_postargs)
++        compiler_so_cxx = compiler_fixup(self.compiler_so_cxx, cc_args + extra_postargs)
+         try:
+-            self.spawn(compiler_so + cc_args + [src, '-o', obj] + extra_postargs)
++            if self.detect_language(src) == 'c++':
++                self.spawn(compiler_so_cxx + cc_args + [ src, '-o', obj] +
++                               extra_postargs)
++            else:
++                self.spawn(compiler_so + cc_args + [src, '-o', obj] + extra_postargs)
+         except DistutilsExecError as msg:
+             raise CompileError(msg)
+ 
+@@ -253,7 +261,8 @@ class UnixCCompiler(CCompiler):
+                 # building an executable or linker_so (with shared options)
+                 # when building a shared library.
+                 building_exe = target_desc == CCompiler.EXECUTABLE
+-                linker = (self.linker_exe if building_exe else self.linker_so)[:]
++                linker = (self.linker_exe if building_exe else (self.linker_so_cxx if
++                              target_lang == "c++" else self.linker_so))[:]
+ 
+                 if target_lang == "c++" and self.compiler_cxx:
+                     env, linker_ne = _split_env(linker)

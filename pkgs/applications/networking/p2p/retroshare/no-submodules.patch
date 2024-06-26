@@ -1,0 +1,62 @@
+diff --git a/libretroshare/src/libretroshare.pro b/libretroshare/src/libretroshare.pro
+index 84d18944e..71aeb67d2 100644
+--- a/libretroshare/src/libretroshare.pro
++++ b/libretroshare/src/libretroshare.pro
+@@ -870,20 +870,14 @@ rs_jsonapi {
+         genrestbedlib.variable_out = PRE_TARGETDEPS
+         win32-g++:isEmpty(QMAKE_SH) {
+             genrestbedlib.commands = \
+-                cd /D $$shell_path($${RS_SRC_PATH}) && git submodule update --init supportlibs/restbed || cd . $$escape_expand(\\n\\t) \
+-                cd /D $$shell_path($${RESTBED_SRC_PATH}) && git submodule update --init dependency/asio || cd . $$escape_expand(\\n\\t) \
+-                cd /D $$shell_path($${RESTBED_SRC_PATH}) && git submodule update --init dependency/catch || cd . $$escape_expand(\\n\\t )\
+-                cd /D $$shell_path($${RESTBED_SRC_PATH}) && git submodule update --init dependency/kashmir || cd . $$escape_expand(\\n\\t) \
++                cd /D $$shell_path($${RS_SRC_PATH}) && cd . $$escape_expand(\\n\\t) \
++                cd /D $$shell_path($${RESTBED_SRC_PATH}) && cd . $$escape_expand(\\n\\t) \
++                cd /D $$shell_path($${RESTBED_SRC_PATH}) && cd . $$escape_expand(\\n\\t )\
++                cd /D $$shell_path($${RESTBED_SRC_PATH}) && cd . $$escape_expand(\\n\\t) \
+                 $(CHK_DIR_EXISTS) $$shell_path($$UDP_DISCOVERY_BUILD_PATH) $(MKDIR) $$shell_path($${UDP_DISCOVERY_BUILD_PATH}) $$escape_expand(\\n\\t)
+         } else {
+             genrestbedlib.commands = \
+-                cd $${RS_SRC_PATH} && ( \
+-                git submodule update --init supportlibs/restbed ; \
+-                cd $${RESTBED_SRC_PATH} ; \
+-                git submodule update --init dependency/asio ; \
+-                git submodule update --init dependency/catch ; \
+-                git submodule update --init dependency/kashmir ; \
+-                true ) && \
++                cd $${RS_SRC_PATH} && \
+                 mkdir -p $${RESTBED_BUILD_PATH} &&
+         }
+         genrestbedlib.commands += \
+@@ -991,14 +985,9 @@ rs_broadcast_discovery {
+         udpdiscoverycpplib.variable_out = PRE_TARGETDEPS
+         win32-g++:isEmpty(QMAKE_SH) {
+             udpdiscoverycpplib.commands = \
+-                cd /D $$shell_path($${RS_SRC_PATH}) && git submodule update --init supportlibs/udp-discovery-cpp || cd . $$escape_expand(\\n\\t) \
+                 $(CHK_DIR_EXISTS) $$shell_path($$UDP_DISCOVERY_BUILD_PATH) $(MKDIR) $$shell_path($${UDP_DISCOVERY_BUILD_PATH}) $$escape_expand(\\n\\t)
+         } else {
+-            udpdiscoverycpplib.commands = \
+-                cd $${RS_SRC_PATH} && ( \
+-                git submodule update --init supportlibs/udp-discovery-cpp || \
+-                true ) && \
+-                mkdir -p $${UDP_DISCOVERY_BUILD_PATH} &&
++            udpdiscoverycpplib.commands = mkdir -p $${UDP_DISCOVERY_BUILD_PATH} &&
+         }
+         udpdiscoverycpplib.commands += \
+             cd $$shell_path($${UDP_DISCOVERY_BUILD_PATH}) && \
+diff --git a/retroshare-gui/src/retroshare-gui.pro b/retroshare-gui/src/retroshare-gui.pro
+index 654efd170..06cba9ba3 100644
+--- a/retroshare-gui/src/retroshare-gui.pro
++++ b/retroshare-gui/src/retroshare-gui.pro
+@@ -66,10 +66,7 @@ rs_gui_cmark {
+ 		gencmarklib.CONFIG += target_predeps combine
+ 		gencmarklib.variable_out = PRE_TARGETDEPS
+ 		gencmarklib.commands = \
+-		    cd $${RS_SRC_PATH} && ( \
+-		    git submodule update --init supportlibs/cmark ; \
+-		    cd $${CMARK_SRC_PATH} ; \
+-		    true ) && \
++		    cd $${RS_SRC_PATH} && \
+ 		    mkdir -p $${CMARK_BUILD_PATH} && cd $${CMARK_BUILD_PATH} && \
+ 		    cmake \
+ 		        -DCMAKE_CXX_COMPILER=$$QMAKE_CXX \

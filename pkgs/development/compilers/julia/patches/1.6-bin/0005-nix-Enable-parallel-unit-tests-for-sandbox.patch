@@ -1,0 +1,30 @@
+From 44c2c979c4f2222567ce65f506cf47fb87482348 Mon Sep 17 00:00:00 2001
+From: Pontus Stenetorp <pontus@stenetorp.se>
+Date: Thu, 8 Apr 2021 04:37:44 +0000
+Subject: [PATCH 5/6] nix: Enable parallel unit tests for sandbox
+
+Disabled by default due to lack of networking in the Nix sandbox. This
+greatly speeds up the build process on a multi-core system.
+---
+ test/runtests.jl | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/test/runtests.jl b/test/runtests.jl
+index 2f9cd058bb..2f8c19fa32 100644
+--- a/test/runtests.jl
++++ b/test/runtests.jl
+@@ -83,8 +83,9 @@ prepend!(tests, linalg_tests)
+ import LinearAlgebra
+ cd(@__DIR__) do
+     n = 1
+-    if net_on
+-        n = min(Sys.CPU_THREADS, length(tests))
++    if net_on || haskey(ENV, "NIX_BUILD_CORES")
++        x = haskey(ENV, "NIX_BUILD_CORES") ? parse(Int, ENV["NIX_BUILD_CORES"]) : Sys.CPU_THREADS
++        n = min(x, Sys.CPU_THREADS, length(tests))
+         n > 1 && addprocs_with_testenv(n)
+         LinearAlgebra.BLAS.set_num_threads(1)
+     end
+-- 
+2.29.3
+

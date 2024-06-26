@@ -1,0 +1,15 @@
+diff --git a/setup.py b/setup.py
+index 7a09b2f..94c5aa6 100644
+--- a/setup.py
++++ b/setup.py
+@@ -137,8 +137,5 @@ setup(
+     long_description_content_type='text/markdown',
+     keywords='tensorflow metadata tfx',
+     download_url='https://github.com/tensorflow/metadata/tags',
+-    requires=[],
+-    cmdclass={
+-        'build': _BuildCommand,
+-        'bazel_build': _BazelBuildCommand,
+-    })
++    requires=[]
++    )

@@ -1,0 +1,12 @@
+diff -Naur a/tinydns-conf.c b/tinydns-conf.c
+--- a/tinydns-conf.c	2001-02-11 21:11:45.000000000 +0000
++++ b/tinydns-conf.c	2021-11-08 17:23:06.181385437 +0000
+@@ -46,7 +46,7 @@
+
+   start("run");
+   outs("#!/bin/sh\nexec 2>&1\nexec envuidgid "); outs(user);
+-  outs(" envdir ./env softlimit -d300000 ");
++  outs(" envdir ./env softlimit -d4500000 ");
+   outs(auto_home); outs("/bin/tinydns\n");
+   finish();
+   perm(0755);

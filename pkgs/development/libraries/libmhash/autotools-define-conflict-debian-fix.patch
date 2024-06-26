@@ -1,0 +1,78 @@
+Patch fixing #DEFINE redefinitions for generic PACKAGE_* attributes which
+cause collisions when using libmhash in another package also using autotools.
+
+Debian Bug report #473204
+
+diff -x configure -x config.guess -x config.sub -x 'Makefile.*' -Nru
+mhash-0.9.9.orig/configure.in mhash-0.9.9/configure.in
+--- mhash-0.9.9.orig/configure.in       2007-04-04 19:22:28.000000000 -0700
++++ mhash-0.9.9/configure.in    2008-03-29 00:21:24.000000000 -0800
+@@ -6,6 +6,7 @@
+ AM_INIT_AUTOMAKE
+
+ AC_DEFINE([MHASH_VERSION], PROGRAM_VERSION, "MHash Version")
++AC_CONFIG_HEADER([include/mutils/config.h])
+ AC_CONFIG_HEADER([include/mutils/mhash_config.h])
+
+
+diff -x configure -x config.guess -x config.sub -x 'Makefile.*' -Nru
+mhash-0.9.9.orig/include/mutils/config.h.in
+mhash-0.9.9/include/mutils/config.h.in
+--- mhash-0.9.9.orig/include/mutils/config.h.in 1969-12-31 16:00:00.000000000
+-0800
++++ mhash-0.9.9/include/mutils/config.h.in      2008-03-29 00:48:22.000000000
+-0800
+@@ -0,0 +1,22 @@
++/* Name of package */
++#undef PACKAGE
++
++/* Define to the address where bug reports for this package should be sent. */
++#undef PACKAGE_BUGREPORT
++
++/* Define to the full name of this package. */
++#undef PACKAGE_NAME
++
++/* Define to the full name and version of this package. */
++#undef PACKAGE_STRING
++
++/* Define to the one symbol short name of this package. */
++#undef PACKAGE_TARNAME
++
++/* Define to the version of this package. */
++#undef PACKAGE_VERSION
++
++/* Version number of package */
++#undef VERSION
++
++
+diff -x configure -x config.guess -x config.sub -x 'Makefile.*' -Nru
+mhash-0.9.9.orig/include/mutils/mhash_config.h.in
+mhash-0.9.9/include/mutils/mhash_config.h.in
+--- mhash-0.9.9.orig/include/mutils/mhash_config.h.in   2008-03-29
+00:23:29.000000000 -0800
++++ mhash-0.9.9/include/mutils/mhash_config.h.in        2008-03-29
+00:06:41.000000000 -0800
+@@ -181,24 +181,6 @@
+ /* Define to 1 if your C compiler doesn't accept -c and -o together. */
+ #undef NO_MINUS_C_MINUS_O
+
+-/* Name of package */
+-#undef PACKAGE
+-
+-/* Define to the address where bug reports for this package should be sent. */
+-#undef PACKAGE_BUGREPORT
+-
+-/* Define to the full name of this package. */
+-#undef PACKAGE_NAME
+-
+-/* Define to the full name and version of this package. */
+-#undef PACKAGE_STRING
+-
+-/* Define to the one symbol short name of this package. */
+-#undef PACKAGE_TARNAME
+-
+-/* Define to the version of this package. */
+-#undef PACKAGE_VERSION
+-
+ /* Define to 1 if the C compiler supports function prototypes. */
+ #undef PROTOTYPES

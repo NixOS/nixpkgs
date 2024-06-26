@@ -1,0 +1,14 @@
+diff --git a/COLLADABaseUtils/include/COLLADABUPcreCompiledPattern.h b/COLLADABaseUtils/include/COLLADABUPcreCompiledPattern.h
+index 22f2598b..269c50ca 100644
+--- a/COLLADABaseUtils/include/COLLADABUPcreCompiledPattern.h
++++ b/COLLADABaseUtils/include/COLLADABUPcreCompiledPattern.h
+@@ -13,8 +13,7 @@
+ 
+ #include "COLLADABUPrerequisites.h"
+ 
+-struct real_pcre;
+-typedef struct real_pcre pcre;
++#include "pcre.h"
+ 
+ 
+ namespace COLLADABU

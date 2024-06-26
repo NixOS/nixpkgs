@@ -1,0 +1,26 @@
+{
+  "depends": [
+    {
+      "method": "fetchzip",
+      "packages": [
+        "checksums"
+      ],
+      "path": "/nix/store/z6799507gzbw46lzbi1i8mwm0nbvrvnx-source",
+      "rev": "7ff0b762332d2591bbeb65df9bb86d52ea44ec01",
+      "sha256": "11612prr2wwbx414ip0zjh1fv638dgfvzxfd6v2f432n0wfwhjhj",
+      "srcDir": "src",
+      "url": "https://github.com/nim-lang/checksums/archive/7ff0b762332d2591bbeb65df9bb86d52ea44ec01.tar.gz"
+    },
+    {
+      "method": "fetchzip",
+      "packages": [
+        "sat"
+      ],
+      "path": "/nix/store/lwg9fm34h5xv0dvxij9r5m2y6pn1zsvx-source",
+      "rev": "a53d9d6e0470f78f8ba14652d981e7bcdbcd579f",
+      "sha256": "1dxbc41wbvkpdp6q3qz1r38lpn32447qkkgyh2s12ym6bx4ynni4",
+      "srcDir": "src",
+      "url": "https://github.com/nim-lang/sat/archive/a53d9d6e0470f78f8ba14652d981e7bcdbcd579f.tar.gz"
+    }
+  ]
+}

@@ -1,0 +1,376 @@
+diff --git a/common/xrdp_client_info.h b/common/xrdp_client_info.h
+index f45195e8..b87ae64e 100644
+--- a/common/xrdp_client_info.h
++++ b/common/xrdp_client_info.h
+@@ -148,6 +148,9 @@ struct xrdp_client_info
+ 
+     char certificate[1024];
+     char key_file[1024];
++    char rsakeys_ini_file[256];
++    char xrdp_keyboard_ini_file[256];
++    char keymaps_path[256];
+ 
+     /* X11 keyboard layout - inferred from keyboard type/subtype */
+     char model[16];
+diff --git a/libxrdp/xrdp_rdp.c b/libxrdp/xrdp_rdp.c
+index d08f068a..cc7a173d 100644
+--- a/libxrdp/xrdp_rdp.c
++++ b/libxrdp/xrdp_rdp.c
+@@ -27,6 +27,7 @@
+ #include "log.h"
+ #include "ssl_calls.h"
+ #include "string_calls.h"
++#include <string.h>
+ 
+ #if defined(XRDP_NEUTRINORDP)
+ #include <freerdp/codec/rfx.h>
+@@ -46,10 +47,21 @@ xrdp_rdp_read_config(const char *xrdp_ini, struct xrdp_client_info *client_info)
+     struct list *values = (struct list *)NULL;
+     char *item = NULL;
+     char *value = NULL;
++    char cfg_dir[256];
+     int pos;
+     char *tmp = NULL;
+     int tmp_length = 0;
+ 
++    g_strncpy(cfg_dir, xrdp_ini, 255);
++    *(strrchr(cfg_dir, '/')) = 0;
++
++    /* default location is next to xrdp.ini */
++    g_snprintf(client_info->certificate, 1023, "%s/cert.pem", cfg_dir);
++    g_snprintf(client_info->key_file, 1023, "%s/key.pem", cfg_dir);
++    g_snprintf(client_info->xrdp_keyboard_ini_file, 255, "%s/xrdp_keyboard.ini", cfg_dir);
++    g_snprintf(client_info->rsakeys_ini_file, 255, "%s/rsakeys.ini", cfg_dir);
++    g_snprintf(client_info->keymaps_path, 255, "%s", cfg_dir);
++
+     client_info->xrdp_keyboard_overrides.type = -1;
+     client_info->xrdp_keyboard_overrides.subtype = -1;
+     client_info->xrdp_keyboard_overrides.layout = -1;
+@@ -253,14 +265,14 @@ xrdp_rdp_read_config(const char *xrdp_ini, struct xrdp_client_info *client_info)
+             if (g_strlen(value) == 0)
+             {
+                 /* default key_file path */
+-                g_snprintf(client_info->key_file, 1023, "%s/key.pem", XRDP_CFG_PATH);
++                g_snprintf(client_info->key_file, 1023, "%s/key.pem", cfg_dir);
+                 LOG(LOG_LEVEL_INFO, "Using default X.509 key file: %s",
+                     client_info->key_file);
+             }
+             else if (value[0] != '/')
+             {
+                 /* default key_file path */
+-                g_snprintf(client_info->key_file, 1023, "%s/key.pem", XRDP_CFG_PATH);
++                g_snprintf(client_info->key_file, 1023, "%s/key.pem", cfg_dir);
+                 LOG(LOG_LEVEL_WARNING,
+                     "X.509 key file should use absolute path, using "
+                     "default instead: %s", client_info->key_file);
+@@ -277,6 +289,51 @@ xrdp_rdp_read_config(const char *xrdp_ini, struct xrdp_client_info *client_info)
+                     client_info->key_file, g_get_strerror());
+             }
+         }
++        else if (g_strcasecmp(item, "rsakeys_ini") == 0)
++        {
++            if (value[0] != '/')
++            {
++                g_snprintf(client_info->rsakeys_ini_file, 255, "%s/rsakeys.ini", cfg_dir);
++                log_message(LOG_LEVEL_WARNING,
++                            "rsakeys.ini file should use absolute path, using "
++                            "default instead: %s", client_info->rsakeys_ini_file);
++            }
++            else
++            {
++                /* use user defined rsakeys.ini */
++                g_strncpy(client_info->rsakeys_ini_file, value, 255);
++            }
++        }
++        else if (g_strcasecmp(item, "xrdp_keyboard_ini") == 0)
++        {
++            if (value[0] != '/')
++            {
++                g_snprintf(client_info->xrdp_keyboard_ini_file, 255, "%s/xrdp_keyboard.ini", cfg_dir);
++                log_message(LOG_LEVEL_WARNING,
++                            "xrdp_keyboard.ini file should use absolute path, using "
++                            "default instead: %s", client_info->xrdp_keyboard_ini_file);
++            }
++            else
++            {
++                /* use user defined xrdp_keyboard.ini */
++                g_strncpy(client_info->xrdp_keyboard_ini_file, value, 255);
++            }
++        }
++        else if (g_strcasecmp(item, "keymaps_path") == 0)
++        {
++            if (value[0] != '/')
++            {
++                g_snprintf(client_info->keymaps_path, 255, "%s", cfg_dir);
++                log_message(LOG_LEVEL_WARNING,
++                            "keymaps_path should use absolute path, using "
++                            "default instead: %s", client_info->keymaps_path);
++            }
++            else
++            {
++                /* use user defined xrdp_keyboard.ini */
++                g_strncpy(client_info->keymaps_path, value, 255);
++            }
++        }
+         else if (g_strcasecmp(item, "domain_user_separator") == 0
+                  && g_strlen(value) > 0)
+         {
+diff --git a/libxrdp/xrdp_sec.c b/libxrdp/xrdp_sec.c
+index 8fa34aea..da94cf95 100644
+--- a/libxrdp/xrdp_sec.c
++++ b/libxrdp/xrdp_sec.c
+@@ -371,7 +371,6 @@ xrdp_load_keyboard_layout(struct xrdp_client_info *client_info)
+     char *item = (char *)NULL;
+     char *value = (char *)NULL;
+     char *q = (char *)NULL;
+-    char keyboard_cfg_file[256] = { 0 };
+     char rdp_layout[256] = { 0 };
+ 
+     const struct xrdp_keyboard_overrides *ko =
+@@ -419,10 +418,9 @@ xrdp_load_keyboard_layout(struct xrdp_client_info *client_info)
+         client_info->keyboard_subtype = 1;
+     }
+ 
+-    g_snprintf(keyboard_cfg_file, 255, "%s/xrdp_keyboard.ini", XRDP_CFG_PATH);
+-    LOG(LOG_LEVEL_DEBUG, "keyboard_cfg_file %s", keyboard_cfg_file);
++    LOG(LOG_LEVEL_DEBUG, "keyboard_cfg_file %s", client_info->xrdp_keyboard_ini_file);
+ 
+-    fd = g_file_open(keyboard_cfg_file);
++    fd = g_file_open(client_info->xrdp_keyboard_ini_file);
+ 
+     if (fd >= 0)
+     {
+@@ -594,7 +592,7 @@ xrdp_load_keyboard_layout(struct xrdp_client_info *client_info)
+     else
+     {
+         LOG(LOG_LEVEL_ERROR, "xrdp_load_keyboard_layout: error opening %s",
+-            keyboard_cfg_file);
++            client_info->xrdp_keyboard_ini_file);
+     }
+ }
+ 
+@@ -2759,7 +2757,6 @@ xrdp_sec_incoming(struct xrdp_sec *self)
+     int index = 0;
+     char *item = NULL;
+     char *value = NULL;
+-    char key_file[256];
+ 
+     iso = self->mcs_layer->iso_layer;
+ 
+@@ -2805,19 +2802,17 @@ xrdp_sec_incoming(struct xrdp_sec *self)
+             LOG(LOG_LEVEL_DEBUG, "Using RDP security, and "
+                 "reading the server configuration");
+ 
+-            g_memset(key_file, 0, sizeof(char) * 256);
+             g_random(self->server_random, 32);
+             items = list_create();
+             items->auto_free = 1;
+             values = list_create();
+             values->auto_free = 1;
+-            g_snprintf(key_file, 255, "%s/rsakeys.ini", XRDP_CFG_PATH);
+ 
+-            if (file_by_name_read_section(key_file, "keys", items, values) != 0)
++            if (file_by_name_read_section(self->rdp_layer->client_info.rsakeys_ini_file, "keys", items, values) != 0)
+             {
+                 /* this is a show stopper */
+                 LOG(LOG_LEVEL_ERROR, "XRDP cannot read file: %s "
+-                    "(check permissions)", key_file);
++                    "(check permissions)", self->rdp_layer->client_info.rsakeys_ini_file);
+                 list_delete(items);
+                 list_delete(values);
+                 return 1;
+diff --git a/sesman/config.c b/sesman/config.c
+index 61e9e403..0466f61a 100644
+--- a/sesman/config.c
++++ b/sesman/config.c
+@@ -34,6 +34,7 @@
+ #include "sesman.h"
+ #include "log.h"
+ #include "string_calls.h"
++#include <string.h>
+ #include "chansrv/chansrv_common.h"
+ 
+ /***************************************************************************//**
+@@ -47,11 +48,10 @@
+  *
+  */
+ static int
+-config_read_globals(int file, struct config_sesman *cf, struct list *param_n,
++config_read_globals(const char *base_dir, int file, struct config_sesman *cf, struct list *param_n,
+                     struct list *param_v)
+ {
+     int i;
+-    int length;
+     char *buf;
+ 
+     list_clear(param_v);
+@@ -127,13 +127,12 @@ config_read_globals(int file, struct config_sesman *cf, struct list *param_n,
+         g_free(cf->default_wm);
+         cf->default_wm = g_strdup("startwm.sh");
+     }
+-    /* if default_wm doesn't begin with '/', it's a relative path to XRDP_CFG_PATH */
++    /* if default_wm doesn't begin with '/', it's a relative path to base_dir */
+     if (cf->default_wm[0] != '/')
+     {
+         /* sizeof operator returns string length including null terminator  */
+-        length = sizeof(XRDP_CFG_PATH) + g_strlen(cf->default_wm) + 1; /* '/' */
+-        buf = (char *)g_malloc(length, 0);
+-        g_sprintf(buf, "%s/%s", XRDP_CFG_PATH, cf->default_wm);
++        buf = (char *)g_malloc(g_strlen(base_dir) + 1 + g_strlen(cf->default_wm) + 1, 0);
++        g_sprintf(buf, "%s/%s", base_dir, cf->default_wm);
+         g_free(cf->default_wm);
+         cf->default_wm = g_strdup(buf);
+         g_free(buf);
+@@ -151,10 +150,8 @@ config_read_globals(int file, struct config_sesman *cf, struct list *param_n,
+     /* if reconnect_sh doesn't begin with '/', it's a relative path to XRDP_CFG_PATH */
+     if (cf->reconnect_sh[0] != '/')
+     {
+-        /* sizeof operator returns string length including null terminator  */
+-        length = sizeof(XRDP_CFG_PATH) + g_strlen(cf->reconnect_sh) + 1; /* '/' */
+-        buf = (char *)g_malloc(length, 0);
+-        g_sprintf(buf, "%s/%s", XRDP_CFG_PATH, cf->reconnect_sh);
++        buf = (char *)g_malloc(g_strlen(base_dir) + 1 + g_strlen(cf->reconnect_sh) + 1, 0);
++        g_sprintf(buf, "%s/%s", base_dir, cf->reconnect_sh);     
+         g_free(cf->reconnect_sh);
+         cf->reconnect_sh = g_strdup(buf);
+         g_free(buf);
+@@ -511,6 +508,7 @@ struct config_sesman *
+ config_read(const char *sesman_ini)
+ {
+     struct config_sesman *cfg;
++    char cfg_dir[256];
+     int all_ok = 0;
+ 
+     if ((cfg = g_new0(struct config_sesman, 1)) != NULL)
+@@ -532,8 +530,10 @@ config_read(const char *sesman_ini)
+                 param_v->auto_free = 1;
+ 
+                 /* read global config */
+-                config_read_globals(fd, cfg, param_n, param_v);
+-
++                g_strcpy(cfg_dir, sesman_ini);
++                *(strrchr(cfg_dir, '/')) = 0;  // cfg_file validated to contain '/'
++            
++                config_read_globals(cfg_dir, fd, cfg, param_n, param_v);
+                 /* read Xvnc/X11rdp/Xorg parameter list */
+                 config_read_vnc_params(fd, cfg, param_n, param_v);
+                 config_read_rdp_params(fd, cfg, param_n, param_v);
+diff --git a/xrdp/lang.c b/xrdp/lang.c
+index e4c18077..06f92997 100644
+--- a/xrdp/lang.c
++++ b/xrdp/lang.c
+@@ -229,7 +229,7 @@ km_read_section(int fd, const char *section_name, struct xrdp_key_info *keymap)
+ 
+ /*****************************************************************************/
+ int
+-get_keymaps(int keylayout, struct xrdp_keymap *keymap)
++get_keymaps(const char* keymaps_path, int keylayout, struct xrdp_keymap *keymap)
+ {
+     int fd;
+     int basic_key_layout = keylayout & 0x0000ffff;
+@@ -239,21 +239,21 @@ get_keymaps(int keylayout, struct xrdp_keymap *keymap)
+     filename = (char *)g_malloc(256, 0);
+ 
+     /* check if there is a keymap file e.g. km-e00100411.ini */
+-    g_snprintf(filename, 255, "%s/km-%08x.ini", XRDP_CFG_PATH, keylayout);
++    g_snprintf(filename, 255, "%s/km-%08x.ini", keymaps_path, keylayout);
+ 
+     /* if the file does not exist, use only lower 16 bits instead */
+     if (!g_file_exist(filename))
+     {
+         LOG(LOG_LEVEL_WARNING, "Cannot find keymap file %s", filename);
+         /* e.g. km-00000411.ini */
+-        g_snprintf(filename, 255, "%s/km-%08x.ini", XRDP_CFG_PATH, basic_key_layout);
++        g_snprintf(filename, 255, "%s/km-%08x.ini", keymaps_path, basic_key_layout);
+     }
+ 
+     /* finally, use 'en-us' */
+     if (!g_file_exist(filename))
+     {
+         LOG(LOG_LEVEL_WARNING, "Cannot find keymap file %s", filename);
+-        g_snprintf(filename, 255, "%s/km-00000409.ini", XRDP_CFG_PATH);
++        g_snprintf(filename, 255, "%s/km-00000409.ini", keymaps_path);
+     }
+ 
+     if (g_file_exist(filename))
+diff --git a/xrdp/xrdp.c b/xrdp/xrdp.c
+index e91672fb..37cef0c0 100644
+--- a/xrdp/xrdp.c
++++ b/xrdp/xrdp.c
+@@ -384,7 +384,6 @@ xrdp_sanity_check(void)
+ {
+     int intval = 1;
+     int host_be;
+-    const char *key_file = XRDP_CFG_PATH "/rsakeys.ini";
+ 
+     /* check compiled endian with actual endian */
+     host_be = !((int)(*(unsigned char *)(&intval)));
+@@ -429,12 +428,6 @@ xrdp_sanity_check(void)
+         return 1;
+     }
+ 
+-    if (!g_file_exist(key_file))
+-    {
+-        g_writeln("File %s is missing, create it using xrdp-keygen", key_file);
+-        return 1;
+-    }
+-
+     return 0;
+ }
+ 
+diff --git a/xrdp/xrdp.h b/xrdp/xrdp.h
+index 36d8f87a..687b9dd5 100644
+--- a/xrdp/xrdp.h
++++ b/xrdp/xrdp.h
+@@ -380,7 +380,7 @@ get_char_from_scan_code(int device_flags, int scan_code, int *keys,
+                         int caps_lock, int num_lock, int scroll_lock,
+                         struct xrdp_keymap *keymap);
+ int
+-get_keymaps(int keylayout, struct xrdp_keymap *keymap);
++get_keymaps(const char* keymaps_path, int keylayout, struct xrdp_keymap *keymap);
+ 
+ /* xrdp_login_wnd.c */
+ int
+diff --git a/xrdp/xrdp.ini.in b/xrdp/xrdp.ini.in
+index 3b6340f8..c05e2930 100644
+--- a/xrdp/xrdp.ini.in
++++ b/xrdp/xrdp.ini.in
+@@ -52,6 +52,12 @@ crypt_level=high
+ ; openssl req -x509 -newkey rsa:2048 -nodes -keyout key.pem -out cert.pem -days 365
+ certificate=
+ key_file=
++;directory with km-*.ini files; default is the directory of xrdp.ini
++#keymaps_path=
++;location of xrdp_keyboard_ini; default next to xrdp.ini
++#xrdp_keyboard_ini=
++;location of rsakeys.ini; default next to xrdp.ini
++#rsakeys_ini=
+ 
+ ; set SSL protocols
+ ; can be comma separated list of 'SSLv3', 'TLSv1', 'TLSv1.1', 'TLSv1.2', 'TLSv1.3'
+diff --git a/xrdp/xrdp_wm.c b/xrdp/xrdp_wm.c
+index 94691582..602b3ca6 100644
+--- a/xrdp/xrdp_wm.c
++++ b/xrdp/xrdp_wm.c
+@@ -64,7 +64,7 @@ xrdp_wm_create(struct xrdp_process *owner,
+     self->mm = xrdp_mm_create(self);
+     self->default_font = xrdp_font_create(self);
+     /* this will use built in keymap or load from file */
+-    get_keymaps(self->session->client_info->keylayout, &(self->keymap));
++    get_keymaps(client_info->keymaps_path, self->session->client_info->keylayout, &(self->keymap));
+     xrdp_wm_set_login_state(self, WMLS_RESET);
+     self->target_surface = self->screen;
+     self->current_surface_index = 0xffff; /* screen */
+diff --git a/xup/xup.c b/xup/xup.c
+index e67d9477..8bc718a0 100644
+--- a/xup/xup.c
++++ b/xup/xup.c
+@@ -318,7 +318,7 @@ lib_mod_event(struct mod *mod, int msg, tbus param1, tbus param2,
+                     msg param1 param2 param3 param4
+                     15  0      65507  29     0
+                     16  0      65507  29     49152 */
+-                    init_stream(s, 8192);
++                    init_stream(s, (int)sizeof(mod->client_info) < 8192 ? 8192 : (int)sizeof(mod->client_info));
+                     s_push_layer(s, iso_hdr, 4);
+                     out_uint16_le(s, 103);
+                     out_uint32_le(s, 16); /* key up */

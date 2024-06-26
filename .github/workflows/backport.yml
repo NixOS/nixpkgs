@@ -1,0 +1,35 @@
+name: Backport
+on:
+  pull_request_target:
+    types: [closed, labeled]
+
+# WARNING:
+# When extending this action, be aware that $GITHUB_TOKEN allows write access to
+# the GitHub repository. This means that it should not evaluate user input in a
+# way that allows code injection.
+
+permissions:
+  contents: read
+
+jobs:
+  backport:
+    permissions:
+      contents: write # for korthout/backport-action to create branch
+      pull-requests: write # for korthout/backport-action to create PR to backport
+    name: Backport Pull Request
+    if: github.repository_owner == 'NixOS' && github.event.pull_request.merged == true && (github.event_name != 'labeled' || startsWith('backport', github.event.label.name))
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@44c2b7a8a4ea60a981eaca3cf939b5f4305c123b # v4.1.5
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - name: Create backport PRs
+        uses: korthout/backport-action@ef20d86abccbac3ee3a73cb2efbdc06344c390e5 # v2.5.0
+        with:
+          # Config README: https://github.com/korthout/backport-action#backport-action
+          copy_labels_pattern: 'severity:\ssecurity'
+          pull_description: |-
+            Bot-based backport to `${target_branch}`, triggered by a label in #${pull_number}.
+
+            * [ ] Before merging, ensure that this backport is [acceptable for the release](https://github.com/NixOS/nixpkgs/blob/master/CONTRIBUTING.md#changes-acceptable-for-releases).
+              * Even as a non-commiter, if you find that it is not acceptable, leave a comment.

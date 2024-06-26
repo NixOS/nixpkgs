@@ -1,0 +1,15 @@
+diff --git a/src/gui/Qt5GuiConfigExtras.cmake.in b/src/gui/Qt5GuiConfigExtras.cmake.in
+index 84dbbfebd4..615bfed124 100644
+--- a/src/gui/Qt5GuiConfigExtras.cmake.in
++++ b/src/gui/Qt5GuiConfigExtras.cmake.in
+@@ -119,6 +119,10 @@ macro(_qt5gui_find_extra_libs Name Libs LibDir IncDirs)
+             if (NOT EXISTS "${Qt5Gui_${_cmake_lib_name}_LIBRARY}")
+                 set(Qt5Gui_${_cmake_lib_name}_LIBRARY)
+             endif()
++            set(Qt5Gui_${_cmake_lib_name}_LIBRARY "${Qt5Gui_${_cmake_lib_name}_LIBRARY}/${_lib}.tbd")
++            if (NOT EXISTS "${Qt5Gui_${_cmake_lib_name}_LIBRARY}")
++                set(Qt5Gui_${_cmake_lib_name}_LIBRARY)
++            endif()
+ !!ENDIF
+             if (NOT Qt5Gui_${_cmake_lib_name}_LIBRARY)
+                 # The above find_library call doesn\'t work for finding

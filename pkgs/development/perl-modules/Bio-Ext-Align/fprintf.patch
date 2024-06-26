@@ -1,0 +1,13 @@
+diff --git a/libs/dpalign.c b/libs/dpalign.c
+index 0e07b67..0eab932 100644
+--- a/Bio/Ext/Align/libs/dpalign.c
++++ b/Bio/Ext/Align/libs/dpalign.c
+@@ -40,7 +40,7 @@ int blosum62[24][24] = {
+ void
+ dpAlign_fatal(char * s)
+ {
+-    fprintf(stderr, s);
++    fputs(stderr, s);
+     exit(-1);
+ }
+ 

@@ -1,0 +1,25 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    forwardable (1.3.3)
+    iostruct (0.0.5)
+    prime (0.1.2)
+      forwardable
+      singleton
+    rainbow (3.1.1)
+    singleton (0.2.0)
+    zpng (0.4.5)
+      rainbow (~> 3.1.1)
+    zsteg (0.2.13)
+      iostruct (>= 0.0.5)
+      prime
+      zpng (>= 0.4.5)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  zsteg
+
+BUNDLED WITH
+   2.4.13

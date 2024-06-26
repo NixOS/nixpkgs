@@ -1,0 +1,12 @@
+diff --git a/mkcramfs.c b/mkcramfs.c
+index a2ef018959d..bec83c112d1 100644
+--- a/mkcramfs.c
++++ b/mkcramfs.c
+@@ -22,6 +22,7 @@
+  * If you change the disk format of cramfs, please update fs/cramfs/README.
+  */
+ 
++#include <sys/sysmacros.h>
+ #include <sys/types.h>
+ #include <stdio.h>
+ #include <sys/stat.h>

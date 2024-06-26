@@ -1,0 +1,13 @@
+diff -urN a/src/wl/sys/wl_linux.c b/src/wl/sys/wl_linux.c
+--- a/src/wl/sys/wl_linux.c	2015-01-06 12:33:42.981659618 +0100
++++ b/src/wl/sys/wl_linux.c	2015-01-06 12:34:05.647395418 +0100
+@@ -2157,8 +2157,8 @@
+ 	wlif = WL_DEV_IF(dev);
+ 	wl = WL_INFO(dev);
+ 
++	skb->prev = NULL;
+ 	if (WL_ALL_PASSIVE_ENAB(wl) || (WL_RTR() && WL_CONFIG_SMP())) {
+-		skb->prev = NULL;
+ 
+ 		TXQ_LOCK(wl);
+ 

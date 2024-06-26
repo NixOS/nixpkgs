@@ -1,0 +1,18 @@
+**/deps.nix linguist-generated
+**/deps.json linguist-generated
+**/deps.toml linguist-generated
+**/node-packages.nix linguist-generated
+
+pkgs/applications/editors/emacs-modes/*-generated.nix linguist-generated
+pkgs/development/r-modules/*-packages.nix linguist-generated
+pkgs/development/haskell-modules/hackage-packages.nix linguist-generated
+pkgs/development/beam-modules/hex-packages.nix linguist-generated
+
+doc/** linguist-documentation
+doc/default.nix linguist-documentation=false
+
+nixos/doc/** linguist-documentation
+nixos/doc/default.nix linguist-documentation=false
+
+nixos/modules/module-list.nix merge=union
+# pkgs/top-level/all-packages.nix merge=union

@@ -1,0 +1,11 @@
+--- a/src/python/CMakeLists.txt
++++ b/src/python/CMakeLists.txt
+@@ -14,7 +14,7 @@ if (NOT SKBUILD)
+     FIND_PACKAGE(PythonLibs 3 REQUIRED)
+ endif (NOT SKBUILD)
+
+-EXECUTE_PROCESS(COMMAND ${PYTHON_EXECUTABLE} -c "from sys import stdout; from distutils import sysconfig; stdout.write(sysconfig.get_python_lib(True))" OUTPUT_VARIABLE PYTHON_INSTALL_DIR)
++SET(PYTHON_INSTALL_DIR "@PYTHON_INSTALL_DIR@")
+ INCLUDE_DIRECTORIES (${PYTHON_INCLUDE_PATH})
+
+ MESSAGE(STATUS "Python install dir is ${PYTHON_INSTALL_DIR}")

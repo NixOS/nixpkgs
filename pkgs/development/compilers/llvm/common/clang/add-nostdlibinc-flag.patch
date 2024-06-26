@@ -1,0 +1,18 @@
+diff --git a/lib/Driver/Driver.cpp b/lib/Driver/Driver.cpp
+index 3f29afd35971..223d2769cdfc 100644
+--- a/lib/Driver/Driver.cpp
++++ b/lib/Driver/Driver.cpp
+@@ -491,6 +491,13 @@ DerivedArgList *Driver::TranslateInputArgs(const InputArgList &Args) const {
+   }
+ #endif
+ 
++  {
++    Arg *A = DAL->MakeFlagArg(/*BaseArg=*/nullptr,
++                              Opts.getOption(options::OPT_nostdlibinc));
++    A->claim();
++    DAL->append(A);
++  }
++
+   return DAL;
+ }
+ 

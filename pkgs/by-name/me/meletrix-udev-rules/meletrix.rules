@@ -1,0 +1,26 @@
+# Download VIA jsons from https://drive.google.com/drive/folders/1ky4kmGxZo1i0WyRZiY9V6FQlGzjegcPk for USB vendor and product ids
+
+# Zoom 65 Olivia Wired
+SUBSYSTEM=="hidraw", ATTRS{idVendor}=="806c", ATTRS{idProduct}=="0005", MODE:="0660", GROUP="input"
+
+# Zoom 65 EE
+SUBSYSTEM=="hidraw", ATTRS{idVendor}=="1ea7", ATTRS{idProduct}=="7777", MODE:="0660", GROUP="input"
+SUBSYSTEM=="hidraw", ATTRS{idVendor}=="1ea7", ATTRS{idProduct}=="cc65", MODE:="0660", GROUP="input"
+
+# Zoom 65 V2
+# also 1ea7:7777
+SUBSYSTEM=="hidraw", ATTRS{idVendor}=="1ea7", ATTRS{idProduct}=="ccbb", MODE:="0660", GROUP="input"
+
+# Zoom 65 V2.5
+SUBSYSTEM=="hidraw", ATTRS{idVendor}=="1ea7", ATTRS{idProduct}=="ccc3", MODE:="0660", GROUP="input"
+
+# Zoom 75 (production unit)
+SUBSYSTEM=="hidraw", ATTRS{idVendor}=="1ea7", ATTRS{idProduct}=="ced3", MODE:="0660", GROUP="input"
+
+# Zoom 75 (prototype)
+SUBSYSTEM=="hidraw", ATTRS{idVendor}=="1ea7", ATTRS{idProduct}=="ce81", MODE:="0660", GROUP="input"
+
+# ZoomTKL
+# also 1ea7:7777
+SUBSYSTEM=="hidraw", ATTRS{idVendor}=="1ea7", ATTRS{idProduct}=="cd87", MODE:="0660", GROUP="input"
+

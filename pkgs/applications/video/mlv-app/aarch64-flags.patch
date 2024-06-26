@@ -1,0 +1,13 @@
+diff --git a/platform/qt/MLVApp.pro b/platform/qt/MLVApp.pro
+index ebdc552..3e37573 100644
+--- a/platform/qt/MLVApp.pro
++++ b/platform/qt/MLVApp.pro
+@@ -84,7 +84,7 @@ win32{
+
+ # Linux
+ linux-g++*{
+-    QMAKE_CFLAGS += -O3 -fopenmp -msse4.1 -mssse3 -msse3 -msse2 -msse -std=c99
++    QMAKE_CFLAGS += -O3 -fopenmp -std=c99
+     QMAKE_CXXFLAGS += -fopenmp
+     LIBS += -lgomp
+ }

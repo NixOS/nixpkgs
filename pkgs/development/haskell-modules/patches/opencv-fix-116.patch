@@ -1,0 +1,11 @@
+diff -ur opencv-0.0.2.1.bak/Setup.hs opencv-0.0.2.1/Setup.hs
+--- opencv-0.0.2.1.bak/Setup.hs	2018-11-10 17:18:41.355731189 +0100
++++ opencv-0.0.2.1/Setup.hs	2018-11-10 17:18:56.901681162 +0100
+@@ -3,6 +3,6 @@
+ 
+ main = do
+     args <- getArgs
+-    let args' | "configure" `elem` args = args ++ ["--with-gcc","c++", "--with-ld","c++"]
++    let args' | "configure" `elem` args = args ++ ["--with-gcc","c++"]
+               | otherwise               = args
+     defaultMainArgs args'
