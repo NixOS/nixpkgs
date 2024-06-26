@@ -1,8 +1,9 @@
 { majorVersion, minorVersion, sourceSha256, patchesToFetch ? [] }:
-{ stdenv, lib, fetchurl, cmake, libGLU, libGL, libX11, xorgproto, libXt, libpng, libtiff
-, fetchpatch
+{ stdenv, lib, fetchurl, cmake, libGLU, libGL, libX11, xorgproto, libXt, libpng, libtiff, gdcm
+, fetchFromGitHub, fetchpatch
 , enableQt ? false, qtx11extras, qttools, qtdeclarative, qtEnv
 , enablePython ? false, python ? throw "vtk: Python support requested, but no python interpreter was given."
+, enableVtkDicom ? true
 # Darwin support
 , AGL, Cocoa, CoreServices, DiskArbitration, IOKit, CFNetwork, Security, GLUT, OpenGL
 , ApplicationServices, CoreText, IOSurface, ImageIO, xpc, libobjc
@@ -22,6 +23,18 @@ in stdenv.mkDerivation {
     url = "https://www.vtk.org/files/release/${majorVersion}/VTK-${version}.tar.gz";
     sha256 = sourceSha256;
   };
+
+  preConfigure = let
+    vtk-dicom = fetchFromGitHub {
+      owner = "dgobbi";
+      repo = "vtk-dicom";
+      rev = "v0.8.15";
+      sha256 = "sha256-1q9d95wrmAfVXsdvtdMb8CPsPgvnarQWFrxqiE+QxnE=";
+    };
+  in ''
+    cp -r ${vtk-dicom} ./Remote/vtkDICOM
+    chmod -R +w ./Remote/vtkDICOM
+  '';
 
   nativeBuildInputs = [ cmake ];
 
@@ -48,6 +61,8 @@ in stdenv.mkDerivation {
       GLUT
     ] ++ optionals enablePython [
       python
+    ] ++ optionals enableVtkDicom [
+      (gdcm.override { enableVTK = false; })
     ];
   propagatedBuildInputs = optionals stdenv.isDarwin [ libobjc ]
     ++ optionals stdenv.isLinux [ libX11 libGL ];
@@ -95,6 +110,12 @@ in stdenv.mkDerivation {
     ++ optionals enablePython [
       "-DVTK_WRAP_PYTHON:BOOL=ON"
       "-DVTK_PYTHON_VERSION:STRING=${pythonMajor}"
+    ]
+    ++ optionals enableVtkDicom [
+      "-DVTK_ENABLE_REMOTE_MODULES=YES"
+      # Allows to read compressed dicom files:
+      # https://dgobbi.github.io/vtk-dicom/doc/api/installation.html
+      "-DUSE_GDCM=ON"
     ];
 
   env = lib.optionalAttrs stdenv.cc.isClang {
