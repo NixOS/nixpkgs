@@ -12,7 +12,9 @@ let
   # We post-process the result to add support for YAML functions, like secrets or includes, see e.g.
   # https://www.home-assistant.io/docs/configuration/secrets/
   filteredConfig = lib.converge (lib.filterAttrsRecursive (_: v: ! elem v [ null ])) (lib.recursiveUpdate customLovelaceModulesResources (cfg.config or {}));
-  configFile = pkgs.runCommandLocal "configuration.yaml" { } ''
+  configFile = pkgs.runCommand "configuration.yaml" {
+    preferLocalBuild = true;
+  } ''
     cp ${format.generate "configuration.yaml" filteredConfig} $out
     sed -i -e "s/'\!\([a-z_]\+\) \(.*\)'/\!\1 \2/;s/^\!\!/\!/;" $out
   '';

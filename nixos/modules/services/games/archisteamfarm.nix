@@ -234,7 +234,9 @@ in
 
         preStart =
           let
-            createBotsScript = pkgs.runCommandLocal "ASF-bots" { } ''
+            createBotsScript = pkgs.runCommand "ASF-bots" {
+              preferLocalBuild = true;
+            } ''
               mkdir -p $out
               # clean potential removed bots
               rm -rf $out/*.json
