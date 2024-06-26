@@ -4035,6 +4035,10 @@ self: super: with self; {
 
   exifread = callPackage ../development/python-modules/exifread { };
 
+  exiv2 = callPackage ../development/python-modules/exiv2 {
+    inherit (pkgs) exiv2;
+  };
+
   expandvars = callPackage ../development/python-modules/expandvars { };
 
   expects = callPackage ../development/python-modules/expects { };
@@ -10707,7 +10711,9 @@ self: super: with self; {
 
   py3buddy = toPythonModule (callPackage ../development/python-modules/py3buddy { });
 
-  py3exiv2 = callPackage ../development/python-modules/py3exiv2 { };
+  py3exiv2 = callPackage ../development/python-modules/py3exiv2 {
+    inherit (pkgs) exiv2;
+  };
 
   py3langid = callPackage ../development/python-modules/py3langid { };
 
