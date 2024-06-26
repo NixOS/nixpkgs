@@ -999,6 +999,7 @@ let
           "BootServerAddress"
           "BootServerName"
           "BootFilename"
+          "IPv6OnlyPreferredSec"
         ])
         (assertInt "PoolOffset")
         (assertMinimum "PoolOffset" 0)
