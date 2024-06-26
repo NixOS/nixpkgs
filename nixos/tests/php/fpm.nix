@@ -10,7 +10,15 @@ import ../make-test-python.nix ({ pkgs, lib, php, ... }: {
 
       virtualHosts."phpfpm" =
         let
-          testdir = pkgs.writeTextDir "web/index.php" "<?php phpinfo();";
+          testdir = pkgs.writeTextDir "web/index.php" ''
+            <?php
+              phpinfo();
+              $envNames = [ 'keyword', 'characters', 'quoted' ];
+              foreach ($envNames as $env) {
+                echo "<!-- $env=''${_SERVER[$env]} -->";
+              }
+            ?>
+          '';
         in
         {
           root = "${testdir}/web";
@@ -41,6 +49,12 @@ import ../make-test-python.nix ({ pkgs, lib, php, ... }: {
         "pm.min_spare_servers" = 1;
         "pm.start_servers" = 2;
       };
+      phpEnv = {
+        # check that keywords and special characters are escaped properly
+        keyword = "false";
+        characters = "^ \${hi} \\";
+        quoted = "\"'";
+      };
     };
   };
   testScript = { ... }: ''
@@ -50,6 +64,9 @@ import ../make-test-python.nix ({ pkgs, lib, php, ... }: {
     # Check so we get an evaluated PHP back
     response = machine.succeed("curl -fvvv -s http://127.0.0.1:80/")
     assert "PHP Version ${php.version}" in response, "PHP version not detected"
+    assert "keyword=false --" in response, "phpEnv.keyword not detected"
+    assert "characters=^ ''${hi} \\ --" in response, "phpEnv.characters not detected"
+    assert "quoted=\"' --" in response, "phpEnv.quoted not detected"
 
     # Check so we have database and some other extensions loaded
     for ext in ["json", "opcache", "pdo_mysql", "pdo_pgsql", "pdo_sqlite", "apcu"]:
