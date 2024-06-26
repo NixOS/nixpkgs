@@ -439,6 +439,55 @@ WRAPPER(int, rmdir)(const char *path)
 }
 WRAPPER_DEF(rmdir)
 
+WRAPPER(int, chmod)(const char *path, mode_t mode)
+{
+    int (*chmod_real) (const char *path, mode_t mode) = LOOKUP_REAL(chmod);
+    char buf[PATH_MAX];
+    return chmod_real(rewrite(path, buf), mode);
+}
+WRAPPER_DEF(chmod)
+
+WRAPPER(int, fchmodat)(int dirfd, const char *path, mode_t mode, int flags)
+{
+    int (*fchmodat_real) (int dirfd, const char *path, mode_t mode, int flags) = LOOKUP_REAL(fchmodat);
+    char buf[PATH_MAX];
+    return fchmodat_real(dirfd, rewrite(path, buf), mode, flags);
+}
+WRAPPER_DEF(fchmodat)
+
+WRAPPER(int, chown)(const char *path, uid_t owner, gid_t group)
+{
+    int (*chown_real) (const char *path, uid_t owner, gid_t group) = LOOKUP_REAL(chown);
+    char buf[PATH_MAX];
+    return chown_real(rewrite(path, buf), owner, group);
+}
+WRAPPER_DEF(chown)
+
+WRAPPER(int, lchown)(const char *path, uid_t owner, gid_t group)
+{
+    int (*lchown_real) (const char *path, uid_t owner, gid_t group) = LOOKUP_REAL(lchown);
+    char buf[PATH_MAX];
+    return lchown_real(rewrite(path, buf), owner, group);
+}
+WRAPPER_DEF(lchown)
+
+WRAPPER(int, fchownat)(int dirfd, const char *path, uid_t owner, gid_t group, int flags)
+{
+    int (*fchownat_real) (int dirfd, const char *path, uid_t owner, gid_t group, int flags) = LOOKUP_REAL(fchownat);
+    char buf[PATH_MAX];
+    return fchownat_real(dirfd, rewrite(path, buf), owner, group, flags);
+}
+WRAPPER_DEF(fchownat)
+
+WRAPPER(int, rename)(const char *oldpath, const char *newpath)
+{
+    int (*rename_real) (const char *oldpath, const char *newpath) = LOOKUP_REAL(rename);
+    char oldbuf[PATH_MAX];
+    char newbuf[PATH_MAX];
+    return rename_real(rewrite(oldpath, oldbuf), rewrite(newpath, newbuf));
+}
+WRAPPER_DEF(rename)
+
 static void copy_temp_wildcard(char * dest, char * src, int suffixlen) {
     int dest_len = strnlen(dest, PATH_MAX);
     int src_len = strnlen(src, PATH_MAX);
