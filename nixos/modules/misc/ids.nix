@@ -107,6 +107,7 @@ in
       #libvirtd = 67; # unused
       graphite = 68;
       #statsd = 69; # removed 2018-11-14
+      iSponsorBlockTV = 69;
       transmission = 70;
       postgres = 71;
       #vboxusers = 72; # unused
@@ -432,6 +433,7 @@ in
       libvirtd = 67;
       graphite = 68;
       #statsd = 69; # removed 2018-11-14
+      iSponsorBlockTV = 69;
       transmission = 70;
       postgres = 71;
       vboxusers = 72;
