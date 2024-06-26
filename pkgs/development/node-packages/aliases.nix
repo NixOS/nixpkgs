@@ -162,6 +162,7 @@ mapAliases {
   inherit (pkgs) ungit; # added 2023-08-20
   inherit (pkgs) vsc-leetcode-cli; # Added 2023-08-30
   vscode-css-languageserver-bin = throw "vscode-css-languageserver-bin has been removed since the upstream repository is archived; consider using vscode-langservers-extracted instead."; # added 2024-06-26
+  vscode-html-languageserver-bin = throw "vscode-html-languageserver-bin has been removed since the upstream repository is archived; consider using vscode-langservers-extracted instead."; # added 2024-06-26
   vscode-langservers-extracted = pkgs.vscode-langservers-extracted; # Added 2023-05-27
   vue-cli = self."@vue/cli"; # added 2023-08-18
   vue-language-server = self.vls; # added 2023-08-20
