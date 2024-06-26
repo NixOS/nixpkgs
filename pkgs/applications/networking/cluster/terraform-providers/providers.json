@@ -299,13 +299,13 @@
     "vendorHash": "sha256-vIdM7SEWYnBw30wGl7wM/sMl4xtRPTUQvhqGoJxfKBg="
   },
   "dexidp": {
-    "hash": "sha256-3UgiOeAGpGG2mkImPDvb24WjV2mavhY0E12j7W+SJs8=",
+    "hash": "sha256-XR8OI+Nf3PKNzZzM+jvylF8Itnapb9Xdztxq4OyXPVQ=",
     "homepage": "https://registry.terraform.io/providers/marcofranssen/dexidp",
     "owner": "marcofranssen",
     "repo": "terraform-provider-dexidp",
-    "rev": "v0.3.4",
+    "rev": "v0.5.0",
     "spdx": "MIT",
-    "vendorHash": "sha256-ejM1RmVBW3v0OStYzJTCym2ByWHJ1zzz/yWVbUiQWN0="
+    "vendorHash": "sha256-xW0sPt2TGmoQXc5a2lp6471amBbDDPZbyc9YIIHP+M0="
   },
   "dhall": {
     "hash": "sha256-QjY5ZazQn4HiLQtdmw9X7o5tFw+27B2IISzmzMMHjHE=",
