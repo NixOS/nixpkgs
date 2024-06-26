@@ -3,40 +3,47 @@
   fetchPypi,
   buildPythonPackage,
   persistent,
+  setuptools,
   zope-interface,
   transaction,
-  zope-testrunner,
-  python,
+  pytestCheckHook,
   pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "btrees";
-  version = "5.2";
-  format = "setuptools";
+  version = "6.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "BTrees";
     inherit version;
-    hash = "sha256-bkoK8BpLvslan5Mbr1xUWXn0NBoTp2Yf+KSXr089g4E=";
+    hash = "sha256-9puM3TNDThPhgCFruCrgt80x+t+3zFWWlcs3MZyjX/A=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    persistent
+    setuptools
+  ];
+
+  dependencies = [
     persistent
     zope-interface
   ];
 
   nativeCheckInputs = [
     transaction
-    zope-testrunner
+    pytestCheckHook
   ];
 
-  checkPhase = ''
-    runHook preCheck
-    ${python.interpreter} -m zope.testrunner --test-path=src --auto-color --auto-progress
-    runHook postCheck
+  preCheck = ''
+    pushd $out
+  '';
+
+  postCheck = ''
+    popd
   '';
 
   pythonImportsCheck = [
