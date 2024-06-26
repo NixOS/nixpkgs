@@ -321,6 +321,22 @@ in
         session   include       login
       '';
 
+      login.fprintAuth = mkIf config.services.fprintd.enable false;
+      gdm-fingerprint.text = mkIf config.services.fprintd.enable ''
+        auth       required                    pam_shells.so
+        auth       requisite                   pam_nologin.so
+        auth       requisite                   pam_faillock.so      preauth
+        auth       required                    ${pkgs.fprintd}/lib/security/pam_fprintd.so
+        auth       optional                    pam_permit.so
+        auth       required                    pam_env.so
+        auth       [success=ok default=1]      ${pkgs.gnome.gdm}/lib/security/pam_gdm.so
+
+        account    include                     login
+
+        password   required                    pam_deny.so
+
+        session    include                     login
+      '';
     };
 
   };
