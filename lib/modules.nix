@@ -807,7 +807,7 @@ let
 
     in warnDeprecation opt //
       { value = builtins.addErrorContext "while evaluating the option `${showOption loc}':" value;
-        inherit (res.defsFinal') highestPrio;
+        inherit (res) highestPrio;
         definitions = map (def: def.value) res.defsFinal;
         files = map (def: def.file) res.defsFinal;
         definitionsWithLocations = res.defsFinal;
@@ -817,28 +817,25 @@ let
       };
 
   # Merge definitions of a value of a given type.
-  mergeDefinitions = loc: type: defs: rec {
-    defsFinal' =
-      let
-        # Process mkMerge and mkIf properties.
-        defs' = concatMap (m:
-          map (value: { inherit (m) file; inherit value; }) (builtins.addErrorContext "while evaluating definitions from `${m.file}':" (dischargeProperties m.value))
-        ) defs;
+  mergeDefinitions = loc: type: defs: let
+    # Process mkMerge and mkIf properties.
+    defs' = (
+      concatMap (m:
+        map (value: { inherit (m) file; inherit value; }) (builtins.addErrorContext "while evaluating definitions from `${m.file}':" (dischargeProperties m.value))
+      ) defs
+    );
 
-        # Process mkOverride properties.
-        defs'' = filterOverrides' defs';
+    highestPrio = getHighestPrio defs';
 
-        # Sort mkOrder properties.
-        defs''' =
-          # Avoid sorting if we don't have to.
-          if any (def: def.value._type or "" == "order") defs''.values
-          then sortProperties defs''.values
-          else defs''.values;
-      in {
-        values = defs''';
-        inherit (defs'') highestPrio;
-      };
-    defsFinal = defsFinal'.values;
+    # Process mkOverride properties.
+    defs'' = filterOverrides' highestPrio defs';
+
+    # Sort mkOrder properties.
+    defsFinal =
+      # Avoid sorting if we don't have to.
+      if any (def: def.value._type or "" == "order") defs''
+      then sortProperties defs''
+      else defs'';
 
     # Type-check the remaining definitions, and merge them. Or throw if no definitions.
     mergedValue =
@@ -856,6 +853,9 @@ let
     optionalValue =
       if isDefined then { value = mergedValue; }
       else {};
+
+  in {
+    inherit defsFinal mergedValue isDefined optionalValue highestPrio;
   };
 
   /* Given a config set, expand mkMerge properties, and push down the
@@ -926,30 +926,29 @@ let
 
      Note that "z" has the default priority 100.
   */
-  filterOverrides = defs: (filterOverrides' defs).values;
+  filterOverrides = defs: filterOverrides' (getHighestPrio defs) defs;
 
-  filterOverrides' = defs:
+  getPrio = def: if def.value._type or "" == "override" then def.value.priority else defaultOverridePriority;
+  getHighestPrio = defs: foldl' (prio: def: min (getPrio def) prio) 9999 defs;
+
+  filterOverrides' =
     let
-      getPrio = def: if def.value._type or "" == "override" then def.value.priority else defaultOverridePriority;
-      highestPrio = foldl' (prio: def: min (getPrio def) prio) 9999 defs;
       strip = def: if def.value._type or "" == "override" then def // { value = def.value.content; } else def;
-    in {
-      values = concatMap (def: if getPrio def == highestPrio then [(strip def)] else []) defs;
-      inherit highestPrio;
-    };
+    in
+    highestPrio: defs: concatMap (def: if getPrio def == highestPrio then [(strip def)] else []) defs;
 
   /* Sort a list of properties.  The sort priority of a property is
      defaultOrderPriority by default, but can be overridden by wrapping the property
      using mkOrder. */
-  sortProperties = defs:
+  sortProperties =
     let
       strip = def:
         if def.value._type or "" == "order"
         then def // { value = def.value.content; inherit (def.value) priority; }
         else def;
-      defs' = map strip defs;
       compare = a: b: (a.priority or defaultOrderPriority) < (b.priority or defaultOrderPriority);
-    in sort compare defs';
+    in
+    defs: sort compare (map strip defs);
 
   # This calls substSubModules, whose entire purpose is only to ensure that
   # option declarations in submodules have accurate position information.
@@ -990,7 +989,7 @@ let
                   let merging = lib.mergeDefinitions (opt.loc ++ [k]) opt.type.nestedTypes.elemType v;
                   in {
                     value = merging.mergedValue;
-                    inherit (merging.defsFinal') highestPrio;
+                    inherit (merging) highestPrio;
                   })
                 defsByAttr;
 
@@ -1400,7 +1399,6 @@ private //
     evalModules
     evalOptionValue  # for use by lib.types
     filterOverrides
-    filterOverrides'
     fixMergeModules
     fixupOptionType  # should be private?
     importJSON

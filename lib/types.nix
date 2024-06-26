@@ -21,6 +21,7 @@ let
     ;
   inherit (lib.lists)
     all
+    concatMap
     concatLists
     count
     elemAt
@@ -37,8 +38,10 @@ let
     filterAttrs
     hasAttr
     mapAttrs
+    listToAttrs
     optionalAttrs
     zipAttrsWith
+    nameValuePair
     ;
   inherit (lib.options)
     getFiles
@@ -581,11 +584,16 @@ rec {
       descriptionClass = "composite";
       check = isAttrs;
       merge = loc: defs:
-        mapAttrs (n: v: v.value) (filterAttrs (n: v: v ? value) (zipAttrsWith (name: defs:
-            (mergeDefinitions (loc ++ [name]) elemType defs).optionalValue
-          )
-          # Push down position info.
-          (map (def: mapAttrs (n: v: { inherit (def) file; value = v; }) def.value) defs)));
+        let
+          defs' = (
+            zipAttrsWith
+            (name: defs: (mergeDefinitions (loc ++ [name]) elemType defs).optionalValue)
+            # Push down position info.
+            (map (def: mapAttrs (n: v: { inherit (def) file; value = v; }) def.value) defs));
+        in
+        listToAttrs (concatMap (name: let
+          v = defs'.${name};
+        in if v ? value then [ (nameValuePair name v.value) ] else [ ]) (attrNames defs'));
       emptyValue = { value = {}; };
       getSubOptions = prefix: elemType.getSubOptions (prefix ++ ["<name>"]);
       getSubModules = elemType.getSubModules;
