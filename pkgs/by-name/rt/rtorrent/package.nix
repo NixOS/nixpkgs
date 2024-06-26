@@ -1,10 +1,11 @@
 { lib
 , stdenv
-, fetchFromGitHub
-, autoreconfHook
 , autoconf-archive
+, autoreconfHook
 , cppunit
 , curl
+, fetchFromGitHub
+, installShellFiles
 , libsigcxx
 , libtool
 , libtorrent
@@ -28,6 +29,8 @@ stdenv.mkDerivation {
     hash = "sha256-OXOZSMuNAU+VGwNyyfzcmkTRjDJq9HsKUNxZDYpSvFQ=";
   };
 
+  outputs = [ "out" "man" ];
+
   passthru = {
     inherit libtorrent;
   };
@@ -35,6 +38,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [
     autoconf-archive
     autoreconfHook
+    installShellFiles
     pkg-config
   ];
 
@@ -65,9 +69,8 @@ stdenv.mkDerivation {
   enableParallelBuilding = true;
 
   postInstall = ''
-    mkdir -p $out/share/man/man1 $out/share/doc/rtorrent
-    mv doc/old/rtorrent.1 $out/share/man/man1/rtorrent.1
-    mv doc/rtorrent.rc $out/share/doc/rtorrent/rtorrent.rc
+    installManPage doc/old/rtorrent.1
+    install -Dm644 doc/rtorrent.rc-example -t $out/share/doc/rtorrent/rtorrent.rc
   '';
 
   meta = {
