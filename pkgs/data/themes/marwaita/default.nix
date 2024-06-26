@@ -1,5 +1,5 @@
 { lib
-, stdenv
+, stdenvNoCC
 , fetchFromGitHub
 , gdk-pixbuf
 , gtk-engine-murrine
@@ -8,15 +8,15 @@
 , gitUpdater
 }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "marwaita";
-  version = "17";
+  version = "20.1";
 
   src = fetchFromGitHub {
     owner = "darkomarko42";
     repo = pname;
     rev = version;
-    sha256 = "sha256-9yPgcWtk8w2AyOav1sfQFuH8wnX37ho836NgUnQbFRE=";
+    hash = "sha256-3kVfZnqRJs0CPl+EICDjg2+NSwuz18QccHx63cVLpFY=";
   };
 
   buildInputs = [
