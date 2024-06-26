@@ -946,10 +946,6 @@ with pkgs;
 
   fet-sh = callPackage ../tools/misc/fet-sh { };
 
-  fetchbower = callPackage ../build-support/fetchbower {
-    inherit (nodePackages) bower2nix;
-  };
-
   fetchbzr = callPackage ../build-support/fetchbzr { };
 
   fetchcvs = if stdenv.buildPlatform != stdenv.hostPlatform
@@ -25022,10 +25018,6 @@ with pkgs;
   nodehun = callPackage ../development/tools/nodehun { };
 
   yuicompressor = callPackage ../development/tools/yuicompressor { };
-
-  ### DEVELOPMENT / BOWER MODULES (JAVASCRIPT)
-
-  buildBowerComponents = callPackage ../development/bower-modules/generic { };
 
   ### DEVELOPMENT / GO
 

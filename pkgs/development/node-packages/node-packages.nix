@@ -63976,24 +63976,6 @@ in
     bypassCache = true;
     reconstructLock = true;
   };
-  bower = nodeEnv.buildNodePackage {
-    name = "bower";
-    packageName = "bower";
-    version = "1.8.14";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/bower/-/bower-1.8.14.tgz";
-      sha512 = "8Rq058FD91q9Nwthyhw0la9fzpBz0iwZTrt51LWl+w+PnJgZk9J+5wp3nibsJcIUPglMYXr4NRBaR+TUj0OkBQ==";
-    };
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "The browser package manager";
-      homepage = "http://bower.io";
-      license = "MIT";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
   bower2nix = nodeEnv.buildNodePackage {
     name = "bower2nix";
     packageName = "bower2nix";

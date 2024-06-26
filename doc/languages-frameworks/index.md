@@ -6,7 +6,6 @@ The [standard build environment](#chap-stdenv) makes it easy to build typical Au
 agda.section.md
 android.section.md
 beam.section.md
-bower.section.md
 chicken.section.md
 coq.section.md
 crystal.section.md
