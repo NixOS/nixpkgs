@@ -8,7 +8,9 @@
 , libjack2
 , ncurses
 , alsa-lib
+, alsa-plugins
 , buildPackages
+, makeWrapper
 }:
 
 stdenv.mkDerivation rec {
@@ -28,7 +30,10 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [ pkg-config ]
+    ++ lib.optionals stdenv.isLinux [ makeWrapper ]
     ++ lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [ memstreamHook ];
+
+
   buildInputs = [
     libjack2
     ncurses
@@ -83,6 +88,12 @@ stdenv.mkDerivation rec {
     substituteAllInPlace $out/share/timidity/timidity.cfg
     tar --strip-components=1 -xf $instruments -C $out/share/timidity/
   '';
+
+  postFixup = lib.optionalString stdenv.isLinux ''
+    wrapProgram $out/bin/timidity \
+      --set-default ALSA_PLUGIN_DIR ${alsa-plugins}/lib/alsa-lib
+  '';
+
   # This fixup step is unnecessary and fails on Darwin
   dontRewriteSymlinks = stdenv.isDarwin;
 
