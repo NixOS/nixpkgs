@@ -89,7 +89,6 @@
 , "cspell"
 , "csslint"
 , "dhcp"
-, "diagnostic-languageserver"
 , "diff2html-cli"
 , "dotenv-cli"
 , "dotenv-vault"
