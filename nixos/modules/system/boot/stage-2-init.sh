@@ -130,7 +130,9 @@ ln -sfn "$systemConfig" /run/booted-system
 # and systemd will immediately fill in the file when it starts, so just
 # creating it is enough. This `: >>` pattern avoids forking and avoids changing
 # the mtime if the file already exists.
-: >> /etc/machine-id
+if ! [ -e "/etc/machine-id" ]; then
+    : >> /etc/machine-id
+fi
 
 
 # No need to restore the stdout/stderr streams we never redirected and
