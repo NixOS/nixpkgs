@@ -68820,35 +68820,6 @@ in
     bypassCache = true;
     reconstructLock = true;
   };
-  dotenv-cli = nodeEnv.buildNodePackage {
-    name = "dotenv-cli";
-    packageName = "dotenv-cli";
-    version = "7.4.2";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/dotenv-cli/-/dotenv-cli-7.4.2.tgz";
-      sha512 = "SbUj8l61zIbzyhIbg0FwPJq6+wjbzdn9oEtozQpZ6kW2ihCcapKVZj49oCT3oPM+mgQm+itgvUQcG5szxVrZTA==";
-    };
-    dependencies = [
-      sources."cross-spawn-7.0.3"
-      sources."dotenv-16.4.5"
-      sources."dotenv-expand-10.0.0"
-      sources."isexe-2.0.0"
-      sources."minimist-1.2.8"
-      sources."path-key-3.1.1"
-      sources."shebang-command-2.0.0"
-      sources."shebang-regex-3.0.0"
-      sources."which-2.0.2"
-    ];
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "A global executable to run applications with the ENV variables loaded by dotenv";
-      homepage = "https://github.com/entropitor/dotenv-cli#readme";
-      license = "MIT";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
   dotenv-vault = nodeEnv.buildNodePackage {
     name = "dotenv-vault";
     packageName = "dotenv-vault";
