@@ -11097,12 +11097,6 @@
     githubId = 621759;
     name = "Lassulus";
   };
-  laurailway = {
-    email = "laurailway.git@posteo.net";
-    github = "LAURAilway";
-    githubId = 118690640;
-    name = "Laura";
-  };
   laurent-f1z1 = {
     email = "laurent.nixpkgs@fainsin.bzh";
     github = "Laurent2916";
