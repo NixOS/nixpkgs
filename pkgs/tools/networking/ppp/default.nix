@@ -4,6 +4,8 @@
 , libpcap
 , libxcrypt
 , pkg-config
+, withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
+, systemd ? null
 , autoreconfHook
 , openssl
 , bash
@@ -25,6 +27,7 @@ stdenv.mkDerivation rec {
     "--localstatedir=/var"
     "--sysconfdir=/etc"
     "--with-openssl=${openssl.dev}"
+    (lib.enableFeature withSystemd "systemd")
   ];
 
   nativeBuildInputs = [
@@ -37,7 +40,7 @@ stdenv.mkDerivation rec {
     libxcrypt
     openssl
     bash
-  ];
+  ] ++ lib.optional withSystemd systemd;
 
   postPatch = ''
     for file in $(find -name Makefile.linux); do
