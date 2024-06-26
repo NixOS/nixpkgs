@@ -3,6 +3,7 @@ import ./make-test-python.nix (
 
   let
     remoteRepository = "/root/restic-backup";
+    userRepository = "/home/alice/restic-backup";
     remoteFromFileRepository = "/root/restic-backup-from-file";
     remoteNoInitRepository = "/root/restic-backup-no-init";
     rcloneRepository = "rclone:local:/root/restic-rclone-backup";
@@ -26,6 +27,7 @@ import ./make-test-python.nix (
         echo some_other_file > $out/some_other_file
         mkdir $out/a_dir
         echo a_file > $out/a_dir/a_file
+        echo someone_elses_file > $out/someone_elses_file
       '';
     };
 
@@ -101,9 +103,21 @@ import ./make-test-python.nix (
               pruneOpts = [ "--keep-last 1" ];
               checkOpts = [ "--some-check-option" ];
             };
+            elevated-backup = {
+              inherit passwordFile exclude pruneOpts;
+              initialize = true;
+              user = "alice";
+              paths = [ "/opt/a_dir" "/opt/someone_elses_file" ];
+              repository = userRepository;
+              elevatedReadPermission = true;
+            };
           };
 
           environment.sessionVariables.RCLONE_CONFIG_LOCAL_TYPE = "local";
+
+          users.users.alice = {
+            isNormalUser = true;
+          };
         };
     };
 
@@ -114,6 +128,7 @@ import ./make-test-python.nix (
           "restic-remotebackup snapshots",
           'restic-remote-from-file-backup snapshots"',
           "restic-rclonebackup snapshots",
+          "restic-elevated-backup snapshots",
           "grep 'backup.* /opt' /root/fake-restic.log",
       )
       server.succeed(
@@ -122,6 +137,8 @@ import ./make-test-python.nix (
           "touch /opt/excluded_file_1 /opt/excluded_file_2",
           "mkdir -p /root/restic-rclone-backup",
           "restic-remote-noinit-backup init",
+          "chown root:root /opt/someone_elses_file",
+          "chmod 0600 /opt/someone_elses_file",
 
           # test that remotebackup runs custom commands and produces a snapshot
           "timedatectl set-time '2016-12-13 13:45'",
@@ -150,6 +167,10 @@ import ./make-test-python.nix (
           # test that rclonebackup produces a snapshot
           "systemctl start restic-backups-rclonebackup.service",
           'restic-rclonebackup snapshots --json | ${pkgs.jq}/bin/jq "length | . == 1"',
+
+          # test that remote-elevated-backup produces a snapshot
+          "systemctl start restic-backups-elevated-backup.service",
+          'restic-elevated-backup snapshots --json | ${pkgs.jq}/bin/jq "length | . == 1"',
 
           # test that custompackage runs both `restic backup` and `restic check` with reasonable commandlines
           "systemctl start restic-backups-custompackage.service",
