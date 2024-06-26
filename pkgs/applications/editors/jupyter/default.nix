@@ -3,6 +3,7 @@
 { python3
 , jupyter-kernel
 , definitions ? jupyter-kernel.default
+, callPackage
 }:
 
 let
@@ -12,6 +13,8 @@ let
     makeWrapperArgs = ["--set JUPYTER_PATH ${jupyterPath}"];
   }).overrideAttrs(oldAttrs: {
     meta = oldAttrs.meta // { mainProgram = "jupyter-notebook"; };
+
+    passthru.tests = callPackage ./tests {};
   });
 in
 
