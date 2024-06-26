@@ -30,6 +30,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/svenstaro/glsl-language-server";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ declan ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.all;
   };
 })
