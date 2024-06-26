@@ -1,4 +1,11 @@
-{ pkgs, nixpkgs ? { }, libsets }:
+{ pkgs,
+  nixpkgs ? { },
+  # Metadata about the structure of the library in the form of a list of sub-libraries
+  libsets,
+  # An instance of the library, as one may use it. This is used for retrieving the locations with `builtins.unsafeGetAttrPos`.
+  library,
+  prefix,
+}:
 let
   revision = pkgs.lib.trivial.revisionWithDefault (nixpkgs.rev or "master");
 
@@ -22,10 +29,12 @@ let
 
   nixpkgsLib = pkgs.lib;
 
+  prefixDot = if prefix == "" then "" else prefix + ".";
+
   flattenedLibSubset = { subsetname, functions }:
   builtins.map
     (fn: {
-      name = "lib.${subsetname}.${fn.name}";
+      name = "${prefixDot}${subsetname}.${fn.name}";
       value = fn.location;
     })
     functions;
@@ -44,7 +53,7 @@ let
     builtins.filter
       (elem: elem.value != null)
       (nixpkgsLib.lists.flatten
-        (locatedlibsets nixpkgsLib));
+        (locatedlibsets library));
 
   fnLocationRelative = { name, value }:
     {
