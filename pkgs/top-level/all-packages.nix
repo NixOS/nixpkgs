@@ -37280,6 +37280,7 @@ with pkgs;
     };
   };
 
+  wesnoth-server = wesnoth.override { headless = true; };
   wesnoth-dev = wesnoth;
 
   widelands = callPackage ../games/widelands { };
