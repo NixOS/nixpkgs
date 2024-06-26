@@ -111,5 +111,9 @@ stdenv.mkDerivation (rec {
     license = licenses.bsd2;
     maintainers = with maintainers; [ kamilchm patternspandemic redvers ];
     platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" "aarch64-darwin" ];
+    # Broken for Musl at 2024-01-17. Tracking issue:
+    # https://github.com/NixOS/nixpkgs/issues/281592
+    # Error: pop_var_context: head of shell_variables not a function context
+    broken = stdenv.hostPlatform.isMusl;
   };
 })
