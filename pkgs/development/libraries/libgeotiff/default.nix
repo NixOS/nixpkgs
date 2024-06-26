@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  buildInputs = [ libtiff proj ];
+  buildInputs = [ libtiff proj zlib ];
 
   #hardeningDisable = [ "format" ];
 

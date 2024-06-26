@@ -78,7 +78,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   # TODO: opengl support (bogus configure detection)
-  propagatedBuildInputs = [
+  buildInputs = [
     libdeflate
     libjpeg
     # libwebp depends on us; this will cause infinite
