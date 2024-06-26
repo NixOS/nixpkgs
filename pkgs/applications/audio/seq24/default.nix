@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, alsa-lib, gtkmm2, libjack2, pkg-config }:
+{ lib, stdenv, fetchurl, alsa-lib, gtkmm2, libjack2, pkg-config, autoreconfHook }:
 
 stdenv.mkDerivation  rec {
   pname = "seq24";
@@ -9,10 +9,16 @@ stdenv.mkDerivation  rec {
     sha256 = "1qpyb7355s21sgy6gibkybxpzx4ikha57a8w644lca6qy9mhcwi3";
   };
 
-  patches = [ ./mutex_no_nameclash.patch ];
+  patches = [ ./mutex_replaced_by_native.patch ];
 
   buildInputs = [ alsa-lib gtkmm2 libjack2 ];
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
+
+  autoreconfPhase = ''
+    autoupdate
+    autoreconf
+    automake
+  '';
 
   meta = with lib; {
     description = "Minimal loop based midi sequencer";
