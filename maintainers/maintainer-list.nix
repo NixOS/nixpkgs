@@ -15165,6 +15165,12 @@
     githubId = 1449319;
     name = "Pacien Tran-Girard";
   };
+  pacificviking = {
+    email = "johnhaoallwood@gmail.com";
+    github = "PacificViking";
+    githubId = 32098177;
+    name = "John Hao";
+  };
   pacman99 = {
     email = "pachum99@gmail.com";
     matrix = "@pachumicchu:myrdd.info";
