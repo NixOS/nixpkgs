@@ -88,6 +88,7 @@ mapAliases {
   inherit (pkgs) gitmoji-cli; # added 2023-09-23
   glob = pkgs.node-glob; # added 2023-08-18
   inherit (pkgs) gqlint; # added 2023-08-19
+  inherit (pkgs) gramma; # added 2024-06-26
   inherit (pkgs) graphite-cli; # added 2024-01-25
   inherit (pkgs) graphqurl; # added 2023-08-19
   gtop = pkgs.gtop; # added 2023-07-31

@@ -115,7 +115,6 @@
 , "get-graphql-schema"
 , "git-run"
 , "@gitbeaker/cli"
-, "gramma"
 , "grammarly-languageserver"
 , "graphql"
 , "graphql-cli"

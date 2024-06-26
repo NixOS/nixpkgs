@@ -31039,15 +31039,6 @@ let
         sha512 = "v7cSY1J8ydZ0GyjUHqF+1bshJ6cnEVLo9EnjB8p+4HDRPZc9N5jjmvUV7NvEsqQOKyH0pmIBFWXVQbiS0+OBbA==";
       };
     };
-    "intercept-stdout-0.1.2" = {
-      name = "intercept-stdout";
-      packageName = "intercept-stdout";
-      version = "0.1.2";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/intercept-stdout/-/intercept-stdout-0.1.2.tgz";
-        sha512 = "Umb41Ryp5FzLurfCRAWx+jjNAk8jsw2RTk2XPIwus+86h/Y2Eb4DfOWof/mZ6FBww8SoO45rJSlg25054/Di9w==";
-      };
-    };
     "internal-ip-1.2.0" = {
       name = "internal-ip";
       packageName = "internal-ip";
@@ -32855,15 +32846,6 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/isobject/-/isobject-3.0.1.tgz";
         sha512 = "WhB9zCku7EGTj/HQQRz5aUQEUeoQZH2bWcltRErOpymJ4boYE6wL9Tbr23krRPSZ+C5zqNSrSw+Cc7sZZ4b7vg==";
-      };
-    };
-    "isomorphic-fetch-3.0.0" = {
-      name = "isomorphic-fetch";
-      packageName = "isomorphic-fetch";
-      version = "3.0.0";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/isomorphic-fetch/-/isomorphic-fetch-3.0.0.tgz";
-        sha512 = "qvUtwJ3j6qwsF3jLxkZ72qCgjMysPzDfeV240JHiGZsANBYd+EEuu35v7dfrJ9Up0Ak07D7GGSkGhCHTqg/5wA==";
       };
     };
     "isomorphic-textencoder-1.0.1" = {
@@ -35170,15 +35152,6 @@ let
         sha512 = "mKnC+QJ9pWVzv+C4/U3rRsHapFfHvQFoFB92e52xeyGMcX6/OlIl78je1u8vePzYZSkkogMPJ2yjxxsb89cxyw==";
       };
     };
-    "lodash._arraycopy-3.0.0" = {
-      name = "lodash._arraycopy";
-      packageName = "lodash._arraycopy";
-      version = "3.0.0";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/lodash._arraycopy/-/lodash._arraycopy-3.0.0.tgz";
-        sha512 = "RHShTDnPKP7aWxlvXKiDT6IX2jCs6YZLCtNhOru/OX2Q/tzX295vVBK5oX1ECtN+2r86S0Ogy8ykP1sgCZAN0A==";
-      };
-    };
     "lodash._arrayeach-3.0.0" = {
       name = "lodash._arrayeach";
       packageName = "lodash._arrayeach";
@@ -35897,15 +35870,6 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/lodash.throttle/-/lodash.throttle-4.1.1.tgz";
         sha512 = "wIkUCfVKpVsWo3JSZlc+8MB5it+2AN5W8J7YVMST30UrvcQNZ1Okbj+rbVniijTWE6FGYy4XJq/rHkas8qJMLQ==";
-      };
-    };
-    "lodash.toarray-3.0.2" = {
-      name = "lodash.toarray";
-      packageName = "lodash.toarray";
-      version = "3.0.2";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/lodash.toarray/-/lodash.toarray-3.0.2.tgz";
-        sha512 = "ptkjUqvuHjTuMJJxiktJpZhxM5l60bEkfntJx+NFzdQd1bZVxfpTF1bhFYFqBrT4F0wZ1qx9KbVmHJV3Rfc7Tw==";
       };
     };
     "lodash.toarray-4.4.0" = {
@@ -44640,15 +44604,6 @@ let
         sha512 = "7PiHtLll5LdnKIMw100I+8xJXR5gW2QwWYkT6iJva0bXitZKa/XMrSbdmg3r2Xnaidz9Qumd0VPaMrZlF9V9sA==";
       };
     };
-    "progress-stream-2.0.0" = {
-      name = "progress-stream";
-      packageName = "progress-stream";
-      version = "2.0.0";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/progress-stream/-/progress-stream-2.0.0.tgz";
-        sha512 = "xJwOWR46jcXUq6EH9yYyqp+I52skPySOeHfkxOZ2IY1AiBi/sFJhbhAKHoV3OTw/omQ45KTio9215dRJ2Yxd3Q==";
-      };
-    };
     "prom-client-11.5.3" = {
       name = "prom-client";
       packageName = "prom-client";
@@ -50200,15 +50155,6 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/speedometer/-/speedometer-0.1.4.tgz";
         sha512 = "phdEoDlA6EUIVtzwq1UiNMXDUogczp204aYF/yfOhjNePWFfIpBJ1k5wLMuXQhEOOMjuTJEcc4vdZa+vuP+n/Q==";
-      };
-    };
-    "speedometer-1.0.0" = {
-      name = "speedometer";
-      packageName = "speedometer";
-      version = "1.0.0";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/speedometer/-/speedometer-1.0.0.tgz";
-        sha512 = "lgxErLl/7A5+vgIIXsh9MbeukOaCb2axgQ+bKCdIE+ibNT4XNYGNCR1qFEGq6F+YDASXK3Fh/c5FgtZchFolxw==";
       };
     };
     "speedtest-net-1.6.2" = {
@@ -57194,15 +57140,6 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/whatwg-encoding/-/whatwg-encoding-2.0.0.tgz";
         sha512 = "p41ogyeMUrw3jWclHWTQg1k05DSVXPLcVxRTYsXUk+ZooOCZLcoYgPZ/HL/D/N+uQPOtcp1me1WhBEaX02mhWg==";
-      };
-    };
-    "whatwg-fetch-3.6.20" = {
-      name = "whatwg-fetch";
-      packageName = "whatwg-fetch";
-      version = "3.6.20";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/whatwg-fetch/-/whatwg-fetch-3.6.20.tgz";
-        sha512 = "EqhiFU6daOA8kpjOWTL0olhVOF3i7OrFzSYiGsEMB8GcXS+RrzauAERX65xMeNWVqxA6HXH2m69Z9LaKKdisfg==";
       };
     };
     "whatwg-mimetype-2.3.0" = {
@@ -74342,168 +74279,6 @@ in
       description = "CLI implementation of the GitLab API.";
       homepage = "https://github.com/jdalrymple/gitbeaker#readme";
       license = "MIT";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
-  gramma = nodeEnv.buildNodePackage {
-    name = "gramma";
-    packageName = "gramma";
-    version = "1.6.0";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/gramma/-/gramma-1.6.0.tgz";
-      sha512 = "5I4yc0miSXU2jvD17zpleKufSggU8etr5uxxLX0nkFLJRfB4Fp2yg1s1SuietfaripT9H2lVhftFYrj2wl56uw==";
-    };
-    dependencies = [
-      sources."ansi-regex-5.0.1"
-      sources."ansi-styles-4.3.0"
-      sources."async-2.6.4"
-      sources."balanced-match-1.0.2"
-      sources."base64-js-1.5.1"
-      sources."bl-1.2.3"
-      sources."brace-expansion-1.1.11"
-      sources."buffer-5.7.1"
-      sources."buffer-alloc-1.2.0"
-      sources."buffer-alloc-unsafe-1.1.0"
-      sources."buffer-crc32-0.2.13"
-      sources."buffer-fill-1.0.0"
-      sources."cli-progress-3.12.0"
-      sources."cliui-8.0.1"
-      sources."color-convert-2.0.1"
-      sources."color-name-1.1.4"
-      sources."commander-2.20.3"
-      sources."concat-map-0.0.1"
-      sources."core-util-is-1.0.3"
-      sources."debug-3.2.7"
-      sources."decode-uri-component-0.2.2"
-      sources."decompress-4.2.1"
-      sources."decompress-tar-4.1.1"
-      (sources."decompress-tarbz2-4.1.1" // {
-        dependencies = [
-          sources."file-type-6.2.0"
-        ];
-      })
-      sources."decompress-targz-4.1.1"
-      (sources."decompress-unzip-4.0.1" // {
-        dependencies = [
-          sources."file-type-3.9.0"
-        ];
-      })
-      sources."deep-is-0.1.4"
-      sources."dotenv-10.0.0"
-      sources."emoji-regex-8.0.0"
-      sources."encoding-0.1.13"
-      sources."end-of-stream-1.4.4"
-      sources."escalade-3.1.2"
-      sources."fd-slicer-1.1.0"
-      sources."file-type-5.2.0"
-      sources."filter-obj-1.1.0"
-      sources."fs-constants-1.0.0"
-      sources."fs.realpath-1.0.0"
-      sources."get-caller-file-2.0.5"
-      sources."get-stream-2.3.1"
-      sources."glob-7.2.3"
-      sources."graceful-fs-4.2.11"
-      sources."iconv-lite-0.6.3"
-      sources."ieee754-1.2.1"
-      sources."inflight-1.0.6"
-      sources."inherits-2.0.4"
-      sources."intercept-stdout-0.1.2"
-      sources."ip-regex-4.3.0"
-      sources."is-fullwidth-code-point-3.0.0"
-      sources."is-natural-number-4.0.1"
-      sources."is-stream-1.1.0"
-      sources."is-url-1.2.4"
-      sources."is2-2.0.9"
-      sources."isarray-1.0.0"
-      sources."isomorphic-fetch-3.0.0"
-      sources."kleur-4.1.5"
-      sources."lodash-4.17.21"
-      sources."lodash._arraycopy-3.0.0"
-      sources."lodash._basevalues-3.0.0"
-      sources."lodash._getnative-3.9.1"
-      sources."lodash.isarguments-3.1.0"
-      sources."lodash.isarray-3.0.4"
-      sources."lodash.keys-3.1.2"
-      sources."lodash.toarray-3.0.2"
-      (sources."make-dir-1.3.0" // {
-        dependencies = [
-          sources."pify-3.0.0"
-        ];
-      })
-      sources."minimatch-3.1.2"
-      sources."minimist-1.2.8"
-      sources."mkdirp-0.5.6"
-      sources."ms-2.1.3"
-      sources."node-fetch-2.7.0"
-      sources."object-assign-4.1.1"
-      sources."once-1.4.0"
-      sources."path-is-absolute-1.0.1"
-      sources."pend-1.2.0"
-      sources."pify-2.3.0"
-      sources."pinkie-2.0.4"
-      sources."pinkie-promise-2.0.1"
-      sources."portfinder-1.0.32"
-      sources."process-nextick-args-2.0.1"
-      sources."progress-stream-2.0.0"
-      (sources."prompts-2.4.2" // {
-        dependencies = [
-          sources."kleur-3.0.3"
-        ];
-      })
-      sources."query-string-7.1.3"
-      (sources."readable-stream-2.3.8" // {
-        dependencies = [
-          sources."safe-buffer-5.1.2"
-        ];
-      })
-      sources."require-directory-2.1.1"
-      sources."rimraf-3.0.2"
-      sources."safe-buffer-5.2.1"
-      sources."safer-buffer-2.1.2"
-      sources."seek-bzip-1.0.6"
-      sources."sisteransi-1.0.5"
-      sources."speedometer-1.0.0"
-      sources."split-on-first-1.1.0"
-      sources."strict-uri-encode-2.0.0"
-      sources."string-width-4.2.3"
-      (sources."string_decoder-1.1.1" // {
-        dependencies = [
-          sources."safe-buffer-5.1.2"
-        ];
-      })
-      sources."strip-ansi-6.0.1"
-      sources."strip-dirs-2.1.0"
-      sources."tar-stream-1.6.2"
-      (sources."tcp-port-used-1.0.2" // {
-        dependencies = [
-          sources."debug-4.3.1"
-          sources."ms-2.1.2"
-        ];
-      })
-      sources."through-2.3.8"
-      sources."through2-2.0.5"
-      sources."to-buffer-1.1.1"
-      sources."tr46-0.0.3"
-      sources."unbzip2-stream-1.4.3"
-      sources."util-deprecate-1.0.2"
-      sources."webidl-conversions-3.0.1"
-      sources."whatwg-fetch-3.6.20"
-      sources."whatwg-url-5.0.0"
-      sources."wrap-ansi-7.0.0"
-      sources."wrappy-1.0.2"
-      sources."xtend-4.0.2"
-      sources."y18n-5.0.8"
-      sources."yargs-17.7.2"
-      sources."yargs-parser-21.1.1"
-      sources."yauzl-2.10.0"
-    ];
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "Command line grammar checker";
-      homepage = "https://caderek.github.io/gramma/";
-      license = "ISC";
     };
     production = true;
     bypassCache = true;
