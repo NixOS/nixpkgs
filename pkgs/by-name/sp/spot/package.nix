@@ -6,6 +6,7 @@
   cargo,
   rustc,
   alsa-lib,
+  appstream-glib,
   blueprint-compiler,
   desktop-file-utils,
   gettext,
@@ -43,6 +44,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cargo
     rustc
+    appstream-glib
     blueprint-compiler
     desktop-file-utils
     gettext
