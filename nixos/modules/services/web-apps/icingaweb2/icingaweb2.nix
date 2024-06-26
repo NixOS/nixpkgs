@@ -181,9 +181,7 @@ in {
           ICINGAWEB_LIBDIR = toString (pkgs.linkFarm "icingaweb2-libdir" (mapAttrsToList (name: path: { inherit name path; }) cfg.libraryPaths));
         };
         phpPackage = pkgs.php.withExtensions ({ enabled, all }: [ all.imagick ] ++ enabled);
-        phpOptions = ''
-          date.timezone = "${cfg.timezone}"
-        '';
+        phpOptions."date.timezone" = cfg.timezone;
         settings = mapAttrs (name: mkDefault) {
           "listen.owner" = "nginx";
           "listen.group" = "nginx";

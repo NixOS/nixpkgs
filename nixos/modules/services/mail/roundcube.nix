@@ -215,12 +215,12 @@ in
 
     services.phpfpm.pools.roundcube = {
       user = if localDB then user else "nginx";
-      phpOptions = ''
-        error_log = 'stderr'
-        log_errors = on
-        post_max_size = ${cfg.maxAttachmentSize}
-        upload_max_filesize = ${cfg.maxAttachmentSize}
-      '';
+      phpOptions = {
+        "error_log" = "stderr";
+        "log_errors" = "on";
+        "post_max_size" = cfg.maxAttachmentSize;
+        "upload_max_filesize" = cfg.maxAttachmentSize;
+      };
       settings = mapAttrs (name: mkDefault) {
         "listen.owner" = "nginx";
         "listen.group" = "nginx";

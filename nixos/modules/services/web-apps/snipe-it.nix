@@ -347,10 +347,10 @@ in {
 
     services.phpfpm.pools.snipe-it = {
       inherit user group phpPackage;
-      phpOptions = ''
-        post_max_size = ${cfg.maxUploadSize}
-        upload_max_filesize = ${cfg.maxUploadSize}
-      '';
+      phpOptions = {
+        post_max_size = cfg.maxUploadSize;
+        upload_max_filesize = cfg.maxUploadSize;
+      };
       settings = {
         "listen.mode" = "0660";
         "listen.owner" = user;

@@ -168,15 +168,15 @@ in
       inherit user;
       group = config.services.nginx.group;
       inherit phpPackage;
-      phpOptions = ''
+      phpOptions = {
         # https://code.castopod.org/adaures/castopod/-/blob/develop/docker/production/common/uploads.template.ini
-        file_uploads = On
-        memory_limit = 512M
-        upload_max_filesize = ${cfg.maxUploadSize}
-        post_max_size = ${cfg.maxUploadSize}
-        max_execution_time = 300
-        max_input_time = 300
-      '';
+        file_uploads = "On";
+        memory_limit = "512M";
+        upload_max_filesize = cfg.maxUploadSize;
+        post_max_size = cfg.maxUploadSize;
+        max_execution_time = 300;
+        max_input_time = 300;
+      };
       settings = {
         "listen.owner" = config.services.nginx.user;
         "listen.group" = config.services.nginx.group;

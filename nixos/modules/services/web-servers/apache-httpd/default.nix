@@ -559,14 +559,16 @@ in
       };
 
       phpOptions = mkOption {
-        type = types.lines;
-        default = "";
-        example =
-          ''
-            date.timezone = "CET"
-          '';
+        type = with types; attrsOf (oneOf [ str int null float ]);
+        default = { };
+        example = literalExpression ''
+          {
+            "date.timezone" = "CET";
+          }
+        '';
         description = ''
-          Options appended to the PHP configuration file {file}`php.ini`.
+          Structured options appended to the PHP configuration file
+          {file}`php.ini`.
         '';
       };
 
@@ -715,15 +717,13 @@ in
       };
     };
 
-    services.httpd.phpOptions =
-      ''
-        ; Don't advertise PHP
-        expose_php = off
-      '' + optionalString (config.time.timeZone != null) ''
-
-        ; Apparently PHP doesn't use $TZ.
-        date.timezone = "${config.time.timeZone}"
-      '';
+    services.httpd.phpOptions = {
+      # Don't advertise PHP
+      expose_php = "off";
+    } // optionalAttrs (config.time.timeZone != null) {
+      # Apparently PHP doesn't use $TZ.
+      "date.timezone" = config.time.timeZone;
+    };
 
     services.httpd.extraModules = mkBefore [
       # HTTP authentication mechanisms: basic and digest.

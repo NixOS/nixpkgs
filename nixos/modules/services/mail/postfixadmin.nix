@@ -182,10 +182,10 @@ in
     services.phpfpm.pools.postfixadmin = {
       user = user;
       phpPackage = pkgs.php81;
-      phpOptions = ''
-        error_log = 'stderr'
-        log_errors = on
-      '';
+      phpOptions = {
+        "error_log" = "stderr";
+        "log_errors" = "on";
+      };
       settings = mapAttrs (name: mkDefault) {
         "listen.owner" = "nginx";
         "listen.group" = "nginx";

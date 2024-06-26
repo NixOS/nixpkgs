@@ -224,11 +224,11 @@ in
       inherit user group;
       phpPackage = phpExt;
       phpEnv.MOODLE_CONFIG = "${moodleConfig}";
-      phpOptions = ''
-        zend_extension = opcache.so
-        opcache.enable = 1
-        max_input_vars = 5000
-      '';
+      phpOptions = {
+        zend_extension = "opcache.so";
+        "opcache.enable" = 1;
+        max_input_vars = 5000;
+      };
       settings = {
         "listen.owner" = config.services.httpd.user;
         "listen.group" = config.services.httpd.group;

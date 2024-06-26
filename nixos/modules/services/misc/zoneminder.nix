@@ -285,9 +285,7 @@ in {
           inherit user group;
           phpPackage = pkgs.php.withExtensions (
             { enabled, all }: enabled ++ [ all.apcu all.sysvsem ]);
-          phpOptions = ''
-            date.timezone = "${config.time.timeZone}"
-          '';
+          phpOptions."date.timezone" = config.time.timeZone;
           settings = lib.mapAttrs (name: lib.mkDefault) {
             "listen.owner" = user;
             "listen.group" = group;

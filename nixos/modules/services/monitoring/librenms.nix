@@ -10,12 +10,12 @@ let
     dataDir = cfg.dataDir;
   };
 
-  phpOptions = ''
-    log_errors = on
-    post_max_size = 100M
-    upload_max_filesize = 100M
-    date.timezone = "${config.time.timeZone}"
-  '';
+  phpOptions = {
+    log_errors = "on";
+    post_max_size = "100M";
+    upload_max_filesize = "100M";
+    "date.timezone" = config.time.timeZone;
+  };
   phpIni = pkgs.runCommand "php.ini" {
     inherit (package) phpPackage;
     inherit phpOptions;
