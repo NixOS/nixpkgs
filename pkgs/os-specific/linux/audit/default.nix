@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchurl
+, fetchpatch
 , autoreconfHook
 , bash
 , buildPackages
@@ -22,6 +23,19 @@ stdenv.mkDerivation (finalAttrs: {
     url = "https://people.redhat.com/sgrubb/audit/audit-${finalAttrs.version}.tar.gz";
     hash = "sha256-v0ItQSard6kqTDrDneVHPyeNw941ck0lGKSMe+FdVNg=";
   };
+
+  patches = lib.optionals (!stdenv.hostPlatform.isGnu) [
+    (fetchpatch {
+      name = "musl.patch";
+      url = "https://github.com/linux-audit/audit-userspace/commit/64cb48e1e5137b8a389c7528e611617a98389bc7.patch";
+      hash = "sha256-DN2F5w+2Llm80FZntH9dvdyT00pVBSgRu8DDFILyrlU=";
+    })
+    (fetchpatch {
+      name = "musl.patch";
+      url = "https://github.com/linux-audit/audit-userspace/commit/4192eb960388458c85d76e5e385cfeef48f02c79.patch";
+      hash = "sha256-G6CJ9nBJSsTyJ0qq14PVo+YdInAvLLQtXcR25Q8V5/4=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace bindings/swig/src/auditswig.i \
