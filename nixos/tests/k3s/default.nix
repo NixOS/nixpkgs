@@ -19,4 +19,6 @@ in
   single-node = lib.mapAttrs (_: k3s: import ./single-node.nix { inherit system pkgs k3s; }) allK3s;
   # Run a multi-node k3s cluster and verify pod networking works across nodes
   multi-node = lib.mapAttrs (_: k3s: import ./multi-node.nix { inherit system pkgs k3s; }) allK3s;
+  # Test wether container images are imported and auto deploying manifests work
+  auto-deploy = lib.mapAttrs (_: k3s: import ./auto-deploy.nix { inherit system pkgs k3s; }) allK3s;
 }
