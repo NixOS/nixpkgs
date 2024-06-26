@@ -188,6 +188,9 @@ let
                               nixpkgsFun { inherit crossSystem; })
                               lib.systems.examples;
 
+    # Like pkgsCross but allows caller to specify custom crossSystem.
+    pkgsForCross = crossSystem: nixpkgsFun { inherit crossSystem; };
+
     pkgsLLVM = nixpkgsFun {
       overlays = [
         (self': super': {
