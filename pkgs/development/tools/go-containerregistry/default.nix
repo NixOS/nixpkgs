@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
 
 let bins = [ "crane" "gcrane" ]; in
 
@@ -13,6 +13,8 @@ buildGoModule rec {
     sha256 = "sha256-YxUw30gjpBO/dXSTcNa4F91u3F9pg/IQuVWjKDV5mLs=";
   };
   vendorHash = null;
+
+  nativeBuildInputs = [ installShellFiles ];
 
   subPackages = [ "cmd/crane" "cmd/gcrane" ];
 
@@ -29,7 +31,14 @@ buildGoModule rec {
         mv $out/bin/${bin} ''$${bin}/bin/ &&
         ln -s ''$${bin}/bin/${bin} $out/bin/
       '') bins
-    );
+    ) + ''
+      for cmd in crane gcrane; do
+        installShellCompletion --cmd "$cmd" \
+          --bash <($GOPATH/bin/$cmd completion bash) \
+          --fish <($GOPATH/bin/$cmd completion fish) \
+          --zsh <($GOPATH/bin/$cmd completion zsh)
+      done
+    '';
 
   # NOTE: no tests
   doCheck = false;
