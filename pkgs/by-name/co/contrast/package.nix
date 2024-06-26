@@ -62,9 +62,7 @@ stdenv.mkDerivation rec {
     homepage = "https://gitlab.gnome.org/World/design/contrast";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ getchoo ];
-    platforms = lib.platforms.unix;
-    # never built on aarch64-darwin, x86_64-darwin since first introduction in nixpkgs
-    broken = stdenv.isDarwin;
     mainProgram = "contrast";
+    platforms = lib.platforms.linux;
   };
 }
