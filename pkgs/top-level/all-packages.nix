@@ -19290,6 +19290,7 @@ with pkgs;
   reshape = callPackage ../development/tools/reshape { } ;
 
   retdec = callPackage ../development/tools/analysis/retdec { };
+  retdec-full = retdec.full;
 
   reviewdog = callPackage ../development/tools/misc/reviewdog { };
 

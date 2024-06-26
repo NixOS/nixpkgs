@@ -1172,7 +1172,6 @@ mapAliases ({
   redpanda = redpanda-client; # Added 2023-10-14
   redpanda-server = throw "'redpanda-server' has been removed because it was broken for a long time"; # Added 2024-06-10
   restya-board = throw "'restya-board' has been removed from nixpkgs, as it was broken and unmaintained"; # Added 2024-01-22
-  retdec-full = throw "'retdec-full' is no longer needed, please use 'retdec'"; # Added 2024-02-05
   retroshare06 = retroshare;
   ricochet = throw "ricochet has been deprecated in favor of ricochet-refresh"; # Added 2024-02-26
   rigsofrods = rigsofrods-bin; # Added 2023-03-22
