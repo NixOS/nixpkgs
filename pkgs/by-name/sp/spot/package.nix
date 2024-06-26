@@ -41,30 +41,30 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
+    cargo
+    rustc
+    blueprint-compiler
+    desktop-file-utils
     gettext
+    gtk4 # for gtk-update-icon-cache
+    glib # for glib-compile-schemas
     meson
     ninja
     pkg-config
-    gtk4 # for gtk-update-icon-cache
-    glib # for glib-compile-schemas
-    desktop-file-utils
-    cargo
     rustPlatform.cargoSetupHook
-    rustc
     wrapGAppsHook4
-    blueprint-compiler
   ];
 
   buildInputs = [
+    alsa-lib
     glib
+    gst_all_1.gst-plugins-base
+    gst_all_1.gstreamer
     gtk4
     libadwaita
     libhandy
-    openssl
-    alsa-lib
     libpulseaudio
-    gst_all_1.gst-plugins-base
-    gst_all_1.gstreamer
+    openssl
   ];
 
   # https://github.com/xou816/spot/issues/313
