@@ -11687,6 +11687,11 @@
     githubId = 639066;
     name = "Luke Rewega";
   };
+  lriesebos = {
+    name = "Leon Riesebos";
+    github = "lriesebos";
+    githubId = 28567817;
+  };
   lromor = {
     email = "leonardo.romor@gmail.com";
     github = "lromor";
