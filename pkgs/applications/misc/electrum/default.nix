@@ -1,15 +1,16 @@
-{ lib
-, stdenv
-, fetchurl
-, fetchFromGitHub
-, wrapQtAppsHook
-, python3
-, zbar
-, secp256k1
-, enableQt ? true
-, callPackage
-, qtwayland
-, fetchPypi
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchFromGitHub,
+  wrapQtAppsHook,
+  python3,
+  zbar,
+  secp256k1,
+  enableQt ? true,
+  callPackage,
+  qtwayland,
+  fetchPypi,
 }:
 
 let
@@ -32,14 +33,20 @@ let
   };
 
   libsecp256k1_name =
-    if stdenv.isLinux then "libsecp256k1.so.{v}"
-    else if stdenv.isDarwin then "libsecp256k1.{v}.dylib"
-    else "libsecp256k1${stdenv.hostPlatform.extensions.sharedLibrary}";
+    if stdenv.isLinux then
+      "libsecp256k1.so.{v}"
+    else if stdenv.isDarwin then
+      "libsecp256k1.{v}.dylib"
+    else
+      "libsecp256k1${stdenv.hostPlatform.extensions.sharedLibrary}";
 
   libzbar_name =
-    if stdenv.isLinux then "libzbar.so.0"
-    else if stdenv.isDarwin then "libzbar.0.dylib"
-    else "libzbar${stdenv.hostPlatform.extensions.sharedLibrary}";
+    if stdenv.isLinux then
+      "libzbar.so.0"
+    else if stdenv.isDarwin then
+      "libzbar.0.dylib"
+    else
+      "libzbar${stdenv.hostPlatform.extensions.sharedLibrary}";
 
   # Not provided in official source releases, which are what upstream signs.
   tests = fetchFromGitHub {
@@ -73,57 +80,65 @@ python.pkgs.buildPythonApplication {
   nativeBuildInputs = lib.optionals enableQt [ wrapQtAppsHook ];
   buildInputs = lib.optional (stdenv.isLinux && enableQt) qtwayland;
 
-  propagatedBuildInputs = with python.pkgs; [
-    aiohttp
-    aiohttp-socks
-    aiorpcx
-    attrs
-    bitstring
-    cryptography
-    dnspython
-    jsonrpclib-pelix
-    matplotlib
-    pbkdf2
-    protobuf
-    pysocks
-    qrcode
-    requests
-    tlslite-ng
-    certifi
-    jsonpatch
-    # plugins
-    btchip-python
-    ledger-bitcoin
-    ckcc-protocol
-    keepkey
-    trezor
-    bitbox02
-    cbor2
-    pyserial
-  ] ++ lib.optionals enableQt [
-    pyqt5
-    qdarkstyle
-  ];
+  propagatedBuildInputs =
+    with python.pkgs;
+    [
+      aiohttp
+      aiohttp-socks
+      aiorpcx
+      attrs
+      bitstring
+      cryptography
+      dnspython
+      jsonrpclib-pelix
+      matplotlib
+      pbkdf2
+      protobuf
+      pysocks
+      qrcode
+      requests
+      tlslite-ng
+      certifi
+      jsonpatch
+      # plugins
+      btchip-python
+      ledger-bitcoin
+      ckcc-protocol
+      keepkey
+      trezor
+      bitbox02
+      cbor2
+      pyserial
+    ]
+    ++ lib.optionals enableQt [
+      pyqt5
+      qdarkstyle
+    ];
 
-  checkInputs = with python.pkgs; lib.optionals enableQt [
-    pyqt6
-  ];
+  checkInputs = with python.pkgs; lib.optionals enableQt [ pyqt6 ];
 
-  postPatch = ''
-    # make compatible with protobuf4 by easing dependencies ...
-    substituteInPlace ./contrib/requirements/requirements.txt \
-      --replace "protobuf>=3.20,<4" "protobuf>=3.20"
-    # ... and regenerating the paymentrequest_pb2.py file
-    protoc --python_out=. electrum/paymentrequest.proto
+  postPatch =
+    ''
+      # make compatible with protobuf4 by easing dependencies ...
+      substituteInPlace ./contrib/requirements/requirements.txt \
+        --replace "protobuf>=3.20,<4" "protobuf>=3.20"
+      # ... and regenerating the paymentrequest_pb2.py file
+      protoc --python_out=. electrum/paymentrequest.proto
 
-    substituteInPlace ./electrum/ecc_fast.py \
-      --replace ${libsecp256k1_name} ${secp256k1}/lib/libsecp256k1${stdenv.hostPlatform.extensions.sharedLibrary}
-  '' + (if enableQt then ''
-    substituteInPlace ./electrum/qrscanner.py \
-      --replace ${libzbar_name} ${zbar.lib}/lib/libzbar${stdenv.hostPlatform.extensions.sharedLibrary}
-  '' else ''
-    sed -i '/qdarkstyle/d' contrib/requirements/requirements.txt
-  '');
+      substituteInPlace ./electrum/ecc_fast.py \
+        --replace ${libsecp256k1_name} ${secp256k1}/lib/libsecp256k1${stdenv.hostPlatform.extensions.sharedLibrary}
+    ''
+    + (
+      if enableQt then
+        ''
+          substituteInPlace ./electrum/qrscanner.py \
+            --replace ${libzbar_name} ${zbar.lib}/lib/libzbar${stdenv.hostPlatform.extensions.sharedLibrary}
+        ''
+      else
+        ''
+          sed -i '/qdarkstyle/d' contrib/requirements/requirements.txt
+        ''
+    );
 
   postInstall = lib.optionalString stdenv.isLinux ''
     substituteInPlace $out/share/applications/electrum.desktop \
@@ -137,7 +152,11 @@ python.pkgs.buildPythonApplication {
     wrapQtApp $out/bin/electrum
   '';
 
-  nativeCheckInputs = with python.pkgs; [ pytestCheckHook pyaes pycryptodomex ];
+  nativeCheckInputs = with python.pkgs; [
+    pytestCheckHook
+    pyaes
+    pycryptodomex
+  ];
 
   pytestFlagsArray = [ "tests" ];
 
@@ -160,7 +179,12 @@ python.pkgs.buildPythonApplication {
     changelog = "https://github.com/spesmilo/electrum/blob/master/RELEASE-NOTES";
     license = licenses.mit;
     platforms = platforms.all;
-    maintainers = with maintainers; [ joachifm np prusnak chewblacka ];
+    maintainers = with maintainers; [
+      joachifm
+      np
+      prusnak
+      chewblacka
+    ];
     mainProgram = "electrum";
   };
 }

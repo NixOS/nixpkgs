@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, rustPlatform
-, CoreServices
-, which
-, installShellFiles
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  rustPlatform,
+  CoreServices,
+  which,
+  installShellFiles,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -23,7 +24,10 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = lib.optionals stdenv.isDarwin [ CoreServices ];
 
-  nativeCheckInputs = [ which installShellFiles ];
+  nativeCheckInputs = [
+    which
+    installShellFiles
+  ];
 
   postInstall = ''
     installShellCompletion --cmd dotter \
@@ -35,7 +39,6 @@ rustPlatform.buildRustPackage rec {
   passthru = {
     updateScript = nix-update-script { };
   };
-
 
   meta = with lib; {
     description = "Dotfile manager and templater written in rust 🦀";

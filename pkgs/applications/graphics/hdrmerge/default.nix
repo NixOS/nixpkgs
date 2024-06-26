@@ -1,17 +1,18 @@
-{ lib
-, mkDerivation
-, fetchpatch
-, fetchFromGitHub
-, cmake
-, qtbase
-, wrapQtAppsHook
-, libraw
-, exiv2
-, zlib
-, alglib
-, pkg-config
-, makeDesktopItem
-, copyDesktopItems
+{
+  lib,
+  mkDerivation,
+  fetchpatch,
+  fetchFromGitHub,
+  cmake,
+  qtbase,
+  wrapQtAppsHook,
+  libraw,
+  exiv2,
+  zlib,
+  alglib,
+  pkg-config,
+  makeDesktopItem,
+  copyDesktopItems,
 }:
 
 mkDerivation rec {
@@ -31,11 +32,15 @@ mkDerivation rec {
     copyDesktopItems
   ];
 
-  buildInputs = [ qtbase libraw exiv2 zlib alglib ];
-
-  cmakeFlags = [
-    "-DALGLIB_DIR:PATH=${alglib}"
+  buildInputs = [
+    qtbase
+    libraw
+    exiv2
+    zlib
+    alglib
   ];
+
+  cmakeFlags = [ "-DALGLIB_DIR:PATH=${alglib}" ];
 
   CXXFLAGS = [
     # GCC 13: error: 'uint32_t' does not name a type
@@ -60,7 +65,10 @@ mkDerivation rec {
       icon = "hdrmerge";
       exec = "hdrmerge %F";
       categories = [ "Graphics" ];
-      mimeTypes = [ "image/x-dcraw" "image/x-adobe-dng" ];
+      mimeTypes = [
+        "image/x-dcraw"
+        "image/x-adobe-dng"
+      ];
       terminal = false;
     })
   ];

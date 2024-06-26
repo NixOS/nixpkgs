@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, pkg-config
-, protobuf
-, zlib
-, buildPackages
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  protobuf,
+  zlib,
+  buildPackages,
 }:
 
 stdenv.mkDerivation rec {
@@ -19,11 +20,21 @@ stdenv.mkDerivation rec {
     hash = "sha256-Dkpcc7ZfvAIVY91trRiHuiRFcUGUbQxbheYKTBcq80I=";
   };
 
-  outputs = [ "out" "dev" "lib" ];
+  outputs = [
+    "out"
+    "dev"
+    "lib"
+  ];
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ];
 
-  buildInputs = [ protobuf zlib ];
+  buildInputs = [
+    protobuf
+    zlib
+  ];
 
   env.PROTOC = lib.getExe buildPackages.protobuf;
 

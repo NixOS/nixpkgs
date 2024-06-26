@@ -1,4 +1,9 @@
-{ lib, buildRubyGem, ruby, installShellFiles }:
+{
+  lib,
+  buildRubyGem,
+  ruby,
+  installShellFiles,
+}:
 
 # Cannot use bundleEnv because bundleEnv create stub with
 # BUNDLE_FROZEN='1' environment variable set, which broke everything
@@ -35,7 +40,11 @@ buildRubyGem rec {
     source.sha256 = "04xr4cavnzxlk926pkji7b5yiqy4qsd3gdvv8mg6jliq6sczg9gk";
   };
 
-  propagatedBuildInputs = [ erubis thor xdg ];
+  propagatedBuildInputs = [
+    erubis
+    thor
+    xdg
+  ];
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -45,10 +54,13 @@ buildRubyGem rec {
 
   meta = with lib; {
     description = "Manage complex tmux sessions easily";
-    homepage    = "https://github.com/tmuxinator/tmuxinator";
-    license     = licenses.mit;
-    maintainers = with maintainers; [ auntie ericsagnes ];
-    platforms   = platforms.unix;
+    homepage = "https://github.com/tmuxinator/tmuxinator";
+    license = licenses.mit;
+    maintainers = with maintainers; [
+      auntie
+      ericsagnes
+    ];
+    platforms = platforms.unix;
     mainProgram = "tmuxinator";
   };
 }

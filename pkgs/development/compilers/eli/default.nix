@@ -1,13 +1,15 @@
-{ lib, stdenv
-, fetchurl
-, symlinkJoin
-, makeWrapper
-, tcl
-, fontconfig
-, tk
-, ncurses
-, xorg
-, file
+{
+  lib,
+  stdenv,
+  fetchurl,
+  symlinkJoin,
+  makeWrapper,
+  tcl,
+  fontconfig,
+  tk,
+  ncurses,
+  xorg,
+  file,
 }:
 
 let
@@ -33,18 +35,20 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://sourceforge/project/eli-project/Eli/Eli%20${version}/${pname}-${version}.tar.bz2";
-    sha256="1vran8583hbwrr5dciji4zkhz3f88w4mn8n9sdpr6zw0plpf1whj";
+    sha256 = "1vran8583hbwrr5dciji4zkhz3f88w4mn8n9sdpr6zw0plpf1whj";
   };
 
-  buildInputs = [
-    ncurses
-    fontconfig
-  ] ++ (with xorg; [
-    libX11.dev
-    libXt.dev
-    libXaw.dev
-    libXext.dev
-  ]);
+  buildInputs =
+    [
+      ncurses
+      fontconfig
+    ]
+    ++ (with xorg; [
+      libX11.dev
+      libXt.dev
+      libXaw.dev
+      libXext.dev
+    ]);
 
   nativeBuildInputs = [
     file
@@ -58,7 +62,7 @@ stdenv.mkDerivation rec {
   #   ld: cexp.o:(.bss+0x40): multiple definition of `obstck'; cccp.o:(.bss+0x0): first defined here
   env.NIX_CFLAGS_COMPILE = "-fcommon";
 
-  preConfigure=''
+  preConfigure = ''
     configureFlagsArray=(
       --with-tcltk="${tcl} ${tk_combined}"
       --with-curses="${curses_combined}"

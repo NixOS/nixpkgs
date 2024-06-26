@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, pkg-config
-, fetchFromGitHub
-, file
-, iniparser
-, ffmpeg
-, libnotify
-, libmpdclient
-, discount
+{
+  lib,
+  stdenv,
+  pkg-config,
+  fetchFromGitHub,
+  file,
+  iniparser,
+  ffmpeg,
+  libnotify,
+  libmpdclient,
+  discount,
 }:
 
 stdenv.mkDerivation rec {
@@ -21,9 +22,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-1DG8pemlF5bURbdJwGTZqp3WVfLOwGEpfqq9q1NtwaE=";
   };
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
     iniparser

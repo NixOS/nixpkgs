@@ -30,7 +30,7 @@ in
     # mkAliasOptionModule sets warnings, so this has to be defined.
     warnings = mkOption {
       internal = true;
-      default = [];
+      default = [ ];
       type = types.listOf types.str;
       example = [ "The `foo' service is deprecated and will go away soon!" ];
       description = ''
@@ -46,14 +46,16 @@ in
 
     # Disable the aliased option with a high priority so it
     # should override the next import.
-    ( { config, lib, ... }:
+    (
+      { config, lib, ... }:
       {
         enableAlias = mkForce false;
       }
     )
 
     # Enable the normal (non-aliased) option.
-    ( { config, lib, ... }:
+    (
+      { config, lib, ... }:
       {
         enable = true;
       }

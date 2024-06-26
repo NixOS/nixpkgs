@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, makeWrapper
-, python3
-, bison
-, flex
-, zlib
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  makeWrapper,
+  python3,
+  bison,
+  flex,
+  zlib,
 }:
 
 stdenv.mkDerivation rec {
@@ -39,13 +40,16 @@ stdenv.mkDerivation rec {
     patchShebangs scripts tests/scripts
   '';
 
-  cmakeFlags = [
-    "-DHILTI_DEV_PRECOMPILE_HEADERS=OFF"
-  ];
+  cmakeFlags = [ "-DHILTI_DEV_PRECOMPILE_HEADERS=OFF" ];
 
   preFixup = ''
     for b in $out/bin/*
-      do wrapProgram "$b" --prefix PATH : "${lib.makeBinPath [ bison flex ]}"
+      do wrapProgram "$b" --prefix PATH : "${
+        lib.makeBinPath [
+          bison
+          flex
+        ]
+      }"
     done
   '';
 

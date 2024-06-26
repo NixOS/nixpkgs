@@ -1,39 +1,40 @@
-{ alsa-lib
-, at-spi2-core
-, atk
-, autoPatchelfHook
-, buildEnv
-, cairo
-, cups
-, dbus
-, expat
-, fetchurl
-, ffmpeg
-, fontconfig
-, freetype
-, gdk-pixbuf
-, glib
-, gtk3
-, lib
-, libcap
-, libdrm
-, libGL
-, libnotify
-, libuuid
-, libxcb
-, libxkbcommon
-, makeWrapper
-, mesa
-, nspr
-, nss
-, pango
-, sdk ? false
-, sqlite
-, stdenv
-, systemd
-, udev
-, wrapGAppsHook3
-, xorg
+{
+  alsa-lib,
+  at-spi2-core,
+  atk,
+  autoPatchelfHook,
+  buildEnv,
+  cairo,
+  cups,
+  dbus,
+  expat,
+  fetchurl,
+  ffmpeg,
+  fontconfig,
+  freetype,
+  gdk-pixbuf,
+  glib,
+  gtk3,
+  lib,
+  libcap,
+  libdrm,
+  libGL,
+  libnotify,
+  libuuid,
+  libxcb,
+  libxkbcommon,
+  makeWrapper,
+  mesa,
+  nspr,
+  nss,
+  pango,
+  sdk ? false,
+  sqlite,
+  stdenv,
+  systemd,
+  udev,
+  wrapGAppsHook3,
+  xorg,
 }:
 
 let
@@ -84,7 +85,10 @@ let
       udev
     ];
 
-    extraOutputsToInstall = [ "lib" "out" ];
+    extraOutputsToInstall = [
+      "lib"
+      "out"
+    ];
   };
 
   version = "0.88.0";
@@ -94,15 +98,19 @@ stdenv.mkDerivation {
   inherit version;
 
   src =
-    let flavor = if sdk then "sdk-" else "";
-    in fetchurl {
+    let
+      flavor = if sdk then "sdk-" else "";
+    in
+    fetchurl {
       url = "https://dl.nwjs.io/v${version}/nwjs-${flavor}v${version}-linux-${bits}.tar.gz";
-      hash = {
-        "sdk-ia32" = "sha256-pk8Fdzw8zBBF4xeU5BlmkF1gbf7HIn8jheSjbdV4hI0=";
-        "sdk-x64" = "sha256-51alZRf/+bpKfVLUQuy1VtLHCgkVuptQaJgupt7zxcU=";
-        "ia32" = "sha256-OLkOJo3xDZ6WKbf6zPeY+KcgzoEjYWMIV7YWWbESjPo=";
-        "x64" = "sha256-KSsaTs0W8m2dI+0ByLqU4H4ai/PXUt6LtroZIBeymgs=";
-      }."${flavor + bits}";
+      hash =
+        {
+          "sdk-ia32" = "sha256-pk8Fdzw8zBBF4xeU5BlmkF1gbf7HIn8jheSjbdV4hI0=";
+          "sdk-x64" = "sha256-51alZRf/+bpKfVLUQuy1VtLHCgkVuptQaJgupt7zxcU=";
+          "ia32" = "sha256-OLkOJo3xDZ6WKbf6zPeY+KcgzoEjYWMIV7YWWbESjPo=";
+          "x64" = "sha256-KSsaTs0W8m2dI+0ByLqU4H4ai/PXUt6LtroZIBeymgs=";
+        }
+        ."${flavor + bits}";
     };
 
   nativeBuildInputs = [
@@ -111,7 +119,11 @@ stdenv.mkDerivation {
   ];
 
   buildInputs = [ nwEnv ];
-  appendRunpaths = map (pkg: (lib.getLib pkg) + "/lib") [ nwEnv stdenv.cc.libc stdenv.cc.cc ];
+  appendRunpaths = map (pkg: (lib.getLib pkg) + "/lib") [
+    nwEnv
+    stdenv.cc.libc
+    stdenv.cc.cc
+  ];
 
   preFixup = ''
     gappsWrapperArgs+=(
@@ -120,27 +132,30 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
-      runHook preInstall
+    runHook preInstall
 
-      mkdir -p $out/share/nwjs
-      cp -R * $out/share/nwjs
-      find $out/share/nwjs
+    mkdir -p $out/share/nwjs
+    cp -R * $out/share/nwjs
+    find $out/share/nwjs
 
-      ln -s ${lib.getLib systemd}/lib/libudev.so $out/share/nwjs/libudev.so.0
+    ln -s ${lib.getLib systemd}/lib/libudev.so $out/share/nwjs/libudev.so.0
 
-      mkdir -p $out/bin
-      ln -s $out/share/nwjs/nw $out/bin
+    mkdir -p $out/bin
+    ln -s $out/share/nwjs/nw $out/bin
 
-      mkdir $out/lib
-      ln -s $out/share/nwjs/lib/libnw.so $out/lib/libnw.so
+    mkdir $out/lib
+    ln -s $out/share/nwjs/lib/libnw.so $out/lib/libnw.so
 
-      runHook postInstall
-    '';
+    runHook postInstall
+  '';
 
   meta = with lib; {
     description = "App runtime based on Chromium and node.js";
     homepage = "https://nwjs.io/";
-    platforms = [ "i686-linux" "x86_64-linux" ];
+    platforms = [
+      "i686-linux"
+      "x86_64-linux"
+    ];
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     maintainers = [ maintainers.mikaelfangel ];
     mainProgram = "nw";

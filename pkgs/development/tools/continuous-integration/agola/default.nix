@@ -1,6 +1,7 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
 
 let
@@ -26,9 +27,7 @@ buildGoModule {
     "-X agola.io/agola/cmd.Version=${version}"
   ];
 
-  tags = [
-    "sqlite_unlock_notify"
-  ];
+  tags = [ "sqlite_unlock_notify" ];
 
   # somehow the tests get stuck
   doCheck = false;

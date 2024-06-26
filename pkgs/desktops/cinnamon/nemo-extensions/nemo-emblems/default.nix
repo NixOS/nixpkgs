@@ -1,7 +1,8 @@
-{ python3
-, lib
-, fetchFromGitHub
-, cinnamon-translations
+{
+  python3,
+  lib,
+  fetchFromGitHub,
+  cinnamon-translations,
 }:
 
 let

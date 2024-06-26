@@ -1,15 +1,19 @@
-{ lib
-, stdenv
-, writers
-, adoptopenjdk-jre-bin
-, fetchurl
-, makeWrapper
+{
+  lib,
+  stdenv,
+  writers,
+  adoptopenjdk-jre-bin,
+  fetchurl,
+  makeWrapper,
 }:
 stdenv.mkDerivation rec {
   pname = "cgoban";
   version = "3.5.144";
 
-  nativeBuildInputs = [ adoptopenjdk-jre-bin makeWrapper ];
+  nativeBuildInputs = [
+    adoptopenjdk-jre-bin
+    makeWrapper
+  ];
 
   src = fetchurl {
     url = "https://web.archive.org/web/20240314222506/https://files.gokgs.com/javaBin/cgoban.jar";

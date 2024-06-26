@@ -1,8 +1,9 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, testers
-, yaegi
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  testers,
+  yaegi,
 }:
 
 buildGoModule rec {
@@ -18,9 +19,7 @@ buildGoModule rec {
 
   vendorHash = null;
 
-  subPackages = [
-    "cmd/yaegi"
-  ];
+  subPackages = [ "cmd/yaegi" ];
 
   ldflags = [
     "-s"

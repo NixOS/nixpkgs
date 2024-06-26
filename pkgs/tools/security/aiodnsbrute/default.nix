@@ -1,6 +1,7 @@
-{ lib
-, fetchFromGitHub
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -25,9 +26,7 @@ python3.pkgs.buildPythonApplication rec {
   # Project no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "aiodnsbrute.cli"
-  ];
+  pythonImportsCheck = [ "aiodnsbrute.cli" ];
 
   meta = with lib; {
     description = "DNS brute force utility";

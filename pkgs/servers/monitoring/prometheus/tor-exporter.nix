@@ -1,4 +1,9 @@
-{ lib, fetchFromGitHub, python3Packages, nixosTests }:
+{
+  lib,
+  fetchFromGitHub,
+  python3Packages,
+  nixosTests,
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "tor-exporter";
@@ -14,7 +19,11 @@ python3Packages.buildPythonApplication rec {
     sha256 = "1gzf42z0cgdqijbi9cwpjkqzkvnabaxkkfa5ac5h27r3pxx3q4n0";
   };
 
-  propagatedBuildInputs = with python3Packages; [ prometheus-client stem retrying ];
+  propagatedBuildInputs = with python3Packages; [
+    prometheus-client
+    stem
+    retrying
+  ];
 
   installPhase = ''
     mkdir -p $out/share/
@@ -27,7 +36,9 @@ python3Packages.buildPythonApplication rec {
           --add-flags "$out/share/prometheus-tor-exporter.py"
   '';
 
-  passthru.tests = { inherit (nixosTests.prometheus-exporters) tor; };
+  passthru.tests = {
+    inherit (nixosTests.prometheus-exporters) tor;
+  };
 
   meta = with lib; {
     description = "Prometheus exporter that exposes metrics from a Tor daemon";

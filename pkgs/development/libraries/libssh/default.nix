@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, cmake
-, zlib
-, openssl
-, libsodium
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  cmake,
+  zlib,
+  openssl,
+  libsodium,
 
-# for passthru.tests
-, ffmpeg
-, sshping
-, wireshark
+  # for passthru.tests
+  ffmpeg,
+  sshping,
+  wireshark,
 }:
 
 stdenv.mkDerivation rec {
@@ -40,9 +41,16 @@ stdenv.mkDerivation rec {
   # single output, otherwise cmake and .pc files point to the wrong directory
   # outputs = [ "out" "dev" ];
 
-  buildInputs = [ zlib openssl libsodium ];
+  buildInputs = [
+    zlib
+    openssl
+    libsodium
+  ];
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
 
   passthru.tests = {
     inherit ffmpeg sshping wireshark;

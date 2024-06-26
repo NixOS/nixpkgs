@@ -1,6 +1,7 @@
-{ lib
-, python3
-, fetchFromGitHub
+{
+  lib,
+  python3,
+  fetchFromGitHub,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -15,9 +16,7 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-SPXVFeysVF/6RqjhXmlPc+3m5vnVndJb7LQshQZBeg8=";
   };
 
-  nativeBuildInputs = [
-    python3.pkgs.hatchling
-  ];
+  nativeBuildInputs = [ python3.pkgs.hatchling ];
 
   propagatedBuildInputs = with python3.pkgs; [
     click

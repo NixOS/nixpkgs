@@ -1,4 +1,9 @@
-{ stdenv, fetchFromGitHub, lib, ncurses }:
+{
+  stdenv,
+  fetchFromGitHub,
+  lib,
+  ncurses,
+}:
 
 stdenv.mkDerivation rec {
   pname = "nsnake";

@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, guile
-, libssh
-, autoreconfHook
-, pkg-config
-, texinfo
-, which
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  guile,
+  libssh,
+  autoreconfHook,
+  pkg-config,
+  texinfo,
+  which,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -38,13 +39,9 @@ stdenv.mkDerivation (finalAttrs: {
     which
   ];
 
-  buildInputs = [
-    guile
-  ];
+  buildInputs = [ guile ];
 
-  propagatedBuildInputs = [
-    libssh
-  ];
+  propagatedBuildInputs = [ libssh ];
 
   enableParallelBuilding = true;
 
@@ -60,7 +57,10 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Bindings to Libssh for GNU Guile";
     homepage = "https://github.com/artyom-poptsov/guile-ssh";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ ethancedwards8 foo-dogsquared ];
+    maintainers = with maintainers; [
+      ethancedwards8
+      foo-dogsquared
+    ];
     platforms = guile.meta.platforms;
   };
 })

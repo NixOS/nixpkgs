@@ -1,8 +1,19 @@
-{ stdenv, lib, config, fetchFromGitHub, cmake, pkg-config
-, alsaSupport ? stdenv.isLinux, alsa-lib
-, pulseSupport ? config.pulseaudio or stdenv.isLinux, libpulseaudio
-, jackSupport ? false, libjack2, soxr
-, pcapSupport ? false, libpcap
+{
+  stdenv,
+  lib,
+  config,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  alsaSupport ? stdenv.isLinux,
+  alsa-lib,
+  pulseSupport ? config.pulseaudio or stdenv.isLinux,
+  libpulseaudio,
+  jackSupport ? false,
+  libjack2,
+  soxr,
+  pcapSupport ? false,
+  libpcap,
 }:
 
 stdenv.mkDerivation rec {
@@ -16,11 +27,18 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-lP5mdNhZjkEVjgQUEsisPy+KXUqsE6xj6dFWcgD+VGM=";
   };
 
-  buildInputs = lib.optional pulseSupport libpulseaudio
-    ++ lib.optionals jackSupport [ libjack2 soxr ]
+  buildInputs =
+    lib.optional pulseSupport libpulseaudio
+    ++ lib.optionals jackSupport [
+      libjack2
+      soxr
+    ]
     ++ lib.optional alsaSupport alsa-lib
     ++ lib.optional pcapSupport libpcap;
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
 
   cmakeFlags = [
     "-DPULSEAUDIO_ENABLE=${if pulseSupport then "ON" else "OFF"}"

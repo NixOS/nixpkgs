@@ -1,10 +1,7 @@
-{
-  mkKdeDerivation,
-  qtdeclarative,
-}:
+{ mkKdeDerivation, qtdeclarative }:
 mkKdeDerivation {
   pname = "kcmutils";
 
-  extraPropagatedBuildInputs = [qtdeclarative];
+  extraPropagatedBuildInputs = [ qtdeclarative ];
   meta.mainProgram = "kcmshell6";
 }

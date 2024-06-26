@@ -1,4 +1,9 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 with lib;
 let
@@ -14,7 +19,8 @@ let
     # Remove socket files
     rm -f $out/S.*
   '';
-in {
+in
+{
   options.services.zeyple = {
     enable = mkEnableOption "Zeyple, an utility program to automatically encrypt outgoing emails with GPG";
 

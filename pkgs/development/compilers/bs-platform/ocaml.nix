@@ -1,4 +1,9 @@
-{ lib, stdenv, src, version }:
+{
+  lib,
+  stdenv,
+  src,
+  version,
+}:
 stdenv.mkDerivation rec {
   inherit src version;
   pname = "ocaml-bs";

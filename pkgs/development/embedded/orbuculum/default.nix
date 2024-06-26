@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, meson
-, ninja
-, pkg-config
-, czmq
-, libusb1
-, ncurses
-, SDL2
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  pkg-config,
+  czmq,
+  libusb1,
+  ncurses,
+  SDL2,
 }:
 
 stdenv.mkDerivation rec {
@@ -39,9 +40,7 @@ stdenv.mkDerivation rec {
     SDL2
   ];
 
-  installFlags = [
-    "INSTALL_ROOT=$(out)/"
-  ];
+  installFlags = [ "INSTALL_ROOT=$(out)/" ];
 
   postInstall = ''
     mkdir -p $out/etc/udev/rules.d/

@@ -1,17 +1,18 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchYarnDeps
-, nodejs
-, yarn
-, fixup-yarn-lock
-, python3
-, npmHooks
-, darwin
-, sqlite
-, srcOnly
-, buildPackages
-, nixosTests
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchYarnDeps,
+  nodejs,
+  yarn,
+  fixup-yarn-lock,
+  python3,
+  npmHooks,
+  darwin,
+  sqlite,
+  srcOnly,
+  buildPackages,
+  nixosTests,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -38,7 +39,13 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-MM6SgVT7Pjdu96A4eWRucEzT7uNPxBqUDgHKl8mH2C0=";
   };
 
-  nativeBuildInputs = [ nodejs yarn fixup-yarn-lock python3 npmHooks.npmInstallHook ] ++ lib.optional stdenv.isDarwin darwin.cctools;
+  nativeBuildInputs = [
+    nodejs
+    yarn
+    fixup-yarn-lock
+    python3
+    npmHooks.npmInstallHook
+  ] ++ lib.optional stdenv.isDarwin darwin.cctools;
   buildInputs = [ sqlite ];
 
   configurePhase = ''
@@ -85,7 +92,10 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Modern, responsive, cross-platform, self-hosted web IRC client";
     homepage = "https://thelounge.chat";
     changelog = "https://github.com/thelounge/thelounge/releases/tag/v${finalAttrs.version}";
-    maintainers = with maintainers; [ winter raitobezarius ];
+    maintainers = with maintainers; [
+      winter
+      raitobezarius
+    ];
     license = licenses.mit;
     inherit (nodejs.meta) platforms;
     mainProgram = "thelounge";

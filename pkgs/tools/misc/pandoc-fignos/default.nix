@@ -1,8 +1,9 @@
-{ buildPythonApplication
-, fetchFromGitHub
-, lib
-, pandoc-xnos
-, setuptools
+{
+  buildPythonApplication,
+  fetchFromGitHub,
+  lib,
+  pandoc-xnos,
+  setuptools,
 }:
 
 buildPythonApplication rec {
@@ -17,9 +18,7 @@ buildPythonApplication rec {
     sha256 = "sha256-eDwAW0nLB4YqrWT3Ajt9bmX1A43wl+tOPm2St5VpCLk=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [ pandoc-xnos ];
 

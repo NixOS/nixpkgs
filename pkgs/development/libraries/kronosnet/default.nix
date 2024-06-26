@@ -1,8 +1,22 @@
-{ lib, stdenv, fetchFromGitHub
-, autoreconfHook, pkg-config
-, libqb, libxml2, libnl, lksctp-tools
-, nss, openssl, bzip2, lzo, lz4, xz, zlib, zstd
-, doxygen
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  libqb,
+  libxml2,
+  libnl,
+  lksctp-tools,
+  nss,
+  openssl,
+  bzip2,
+  lzo,
+  lz4,
+  xz,
+  zlib,
+  zstd,
+  doxygen,
 }:
 
 stdenv.mkDerivation rec {
@@ -16,18 +30,34 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-HxdZy2TiQT7pWyhaSq4YJAcqjykzWy1aI3gEZrlbghQ=";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config doxygen ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+    doxygen
+  ];
 
   buildInputs = [
-    libqb libxml2 libnl lksctp-tools
-    nss openssl
-    bzip2 lzo lz4 xz zlib zstd
+    libqb
+    libxml2
+    libnl
+    lksctp-tools
+    nss
+    openssl
+    bzip2
+    lzo
+    lz4
+    xz
+    zlib
+    zstd
   ];
 
   meta = with lib; {
     description = "VPN on steroids";
     homepage = "https://kronosnet.org/";
-    license = with licenses; [ lgpl21Plus gpl2Plus ];
+    license = with licenses; [
+      lgpl21Plus
+      gpl2Plus
+    ];
     maintainers = with maintainers; [ ryantm ];
   };
 }

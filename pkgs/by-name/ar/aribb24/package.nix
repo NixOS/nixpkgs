@@ -23,9 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-hq3LnLACZfV+E76ZDEHGlN51fS6AqFnNReE3JlWcv9M=";
   };
 
-  buildInputs = [
-    libpng
-  ];
+  buildInputs = [ libpng ];
 
   nativeBuildInputs = [
     autoconf

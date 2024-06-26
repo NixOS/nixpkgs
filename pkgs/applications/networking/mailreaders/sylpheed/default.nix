@@ -1,5 +1,16 @@
-{ lib, stdenv, fetchurl, pkg-config, gtk2, openssl ? null, gpgme ? null
-, gpgSupport ? true, sslSupport ? true, fetchpatch, Foundation }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  gtk2,
+  openssl ? null,
+  gpgme ? null,
+  gpgSupport ? true,
+  sslSupport ? true,
+  fetchpatch,
+  Foundation,
+}:
 
 assert gpgSupport -> gpgme != null;
 assert sslSupport -> openssl != null;
@@ -30,13 +41,13 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ gtk2 ]
+  buildInputs =
+    [ gtk2 ]
     ++ lib.optionals gpgSupport [ gpgme ]
     ++ lib.optionals sslSupport [ openssl ]
     ++ lib.optionals stdenv.isDarwin [ Foundation ];
 
-  configureFlags = lib.optional gpgSupport "--enable-gpgme"
-    ++ lib.optional sslSupport "--enable-ssl";
+  configureFlags = lib.optional gpgSupport "--enable-gpgme" ++ lib.optional sslSupport "--enable-ssl";
 
   # Undefined symbols for architecture arm64: "_OBJC_CLASS_$_NSAutoreleasePool"
   NIX_LDFLAGS = lib.optionalString stdenv.isDarwin "-framework Foundation";

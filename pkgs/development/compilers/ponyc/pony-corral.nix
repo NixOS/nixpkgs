@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, ponyc
-, nix-update-script
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  ponyc,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -20,7 +21,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ ponyc ];
 
-  installFlags = [ "prefix=${placeholder "out"}" "install" ];
+  installFlags = [
+    "prefix=${placeholder "out"}"
+    "install"
+  ];
 
   passthru.updateScript = nix-update-script { };
 

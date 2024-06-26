@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchurl
-, cmake
-, pkg-config
-, qttools
-, wrapQtAppsHook
-, hicolor-icon-theme
-, openbabel
-, desktop-file-utils
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cmake,
+  pkg-config,
+  qttools,
+  wrapQtAppsHook,
+  hicolor-icon-theme,
+  openbabel,
+  desktop-file-utils,
 }:
 
 stdenv.mkDerivation rec {
@@ -19,9 +20,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-6wFvl3Aktv8RgEdI2ENsKallKlYy/f8Tsm5C0FB/igI=";
   };
 
-  patches = [
-    ./openbabel.patch
-  ];
+  patches = [ ./openbabel.patch ];
 
   # uses C++17 APIs like std::transform_reduce
   postPatch = ''
@@ -41,7 +40,12 @@ stdenv.mkDerivation rec {
     ln -s $out/lib/molsketch/* $out/lib/.
   '';
 
-  nativeBuildInputs = [ cmake pkg-config qttools wrapQtAppsHook ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    qttools
+    wrapQtAppsHook
+  ];
   buildInputs = [
     hicolor-icon-theme
     openbabel

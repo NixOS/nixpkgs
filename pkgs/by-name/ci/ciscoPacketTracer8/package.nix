@@ -1,17 +1,18 @@
-{ stdenvNoCC
-, lib
-, alsa-lib
-, autoPatchelfHook
-, copyDesktopItems
-, dbus
-, dpkg
-, expat
-, fontconfig
-, glib
-, makeDesktopItem
-, makeWrapper
-, qt5
-, requireFile
+{
+  stdenvNoCC,
+  lib,
+  alsa-lib,
+  autoPatchelfHook,
+  copyDesktopItems,
+  dbus,
+  dpkg,
+  expat,
+  fontconfig,
+  glib,
+  makeDesktopItem,
+  makeWrapper,
+  qt5,
+  requireFile,
 }:
 
 let
@@ -91,7 +92,11 @@ stdenvNoCC.mkDerivation (args: {
       desktopName = "Cisco Packet Tracer 8";
       icon = "ciscoPacketTracer8";
       exec = "packettracer8 %f";
-      mimeTypes = [ "application/x-pkt" "application/x-pka" "application/x-pkz" ];
+      mimeTypes = [
+        "application/x-pkt"
+        "application/x-pka"
+        "application/x-pkz"
+      ];
     })
   ];
 

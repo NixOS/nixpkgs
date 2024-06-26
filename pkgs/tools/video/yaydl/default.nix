@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, makeWrapper
-, openssl
-, ffmpeg
-, Security
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  makeWrapper,
+  openssl,
+  ffmpeg,
+  Security,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -27,8 +28,7 @@ rustPlatform.buildRustPackage rec {
     makeWrapper
   ];
 
-  buildInputs = [ openssl ]
-    ++ lib.optional stdenv.isDarwin Security;
+  buildInputs = [ openssl ] ++ lib.optional stdenv.isDarwin Security;
 
   postInstall = ''
     wrapProgram $out/bin/yaydl \
@@ -39,7 +39,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://code.rosaelefanten.org/yaydl";
     description = "Yet another youtube down loader";
     license = licenses.cddl;
-    maintainers = with maintainers; [];
+    maintainers = with maintainers; [ ];
     mainProgram = "yaydl";
   };
 }

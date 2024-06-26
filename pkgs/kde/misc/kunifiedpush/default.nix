@@ -18,8 +18,17 @@ mkKdeDerivation {
     hash = "sha256-bhlsEP7cLuA6Rj6nrpp5iC3uolc02twNMLsWl+d/BXo=";
   };
 
-  extraBuildInputs = [qtwebsockets kdeclarative kpackage];
+  extraBuildInputs = [
+    qtwebsockets
+    kdeclarative
+    kpackage
+  ];
 
-  meta.license = with lib.licenses; [bsd2 bsd3 cc0 lgpl2Plus];
+  meta.license = with lib.licenses; [
+    bsd2
+    bsd3
+    cc0
+    lgpl2Plus
+  ];
   meta.mainProgram = "kunifiedpush-distributor";
 }

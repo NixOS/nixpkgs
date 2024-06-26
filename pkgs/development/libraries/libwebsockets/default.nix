@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, openssl
-, zlib
-, libuv
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  openssl,
+  zlib,
+  libuv,
   # External poll is required for e.g. mosquitto, but discouraged by the maintainer.
-, withExternalPoll ? false
+  withExternalPoll ? false,
 }:
 
 stdenv.mkDerivation rec {
@@ -20,26 +21,38 @@ stdenv.mkDerivation rec {
     hash = "sha256-IXA9NUh55GtZmn4BhCXntVdHcKZ34iZIJ/0wlySj0/M=";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
-  buildInputs = [ openssl zlib libuv ];
+  buildInputs = [
+    openssl
+    zlib
+    libuv
+  ];
 
   nativeBuildInputs = [ cmake ];
 
-  cmakeFlags = [
-    "-DLWS_WITH_PLUGINS=ON"
-    "-DLWS_WITH_IPV6=ON"
-    "-DLWS_WITH_SOCKS5=ON"
-    "-DDISABLE_WERROR=ON"
-    "-DLWS_BUILD_HASH=no_hash"
-  ] ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) "-DLWS_WITHOUT_TESTAPPS=ON"
-  ++ lib.optional withExternalPoll "-DLWS_WITH_EXTERNAL_POLL=ON"
-  ++ (
-    if stdenv.hostPlatform.isStatic then
-      [ "-DLWS_WITH_SHARED=OFF" ]
-    else
-      [ "-DLWS_WITH_STATIC=OFF" "-DLWS_LINK_TESTAPPS_DYNAMIC=ON" ]
-  );
+  cmakeFlags =
+    [
+      "-DLWS_WITH_PLUGINS=ON"
+      "-DLWS_WITH_IPV6=ON"
+      "-DLWS_WITH_SOCKS5=ON"
+      "-DDISABLE_WERROR=ON"
+      "-DLWS_BUILD_HASH=no_hash"
+    ]
+    ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) "-DLWS_WITHOUT_TESTAPPS=ON"
+    ++ lib.optional withExternalPoll "-DLWS_WITH_EXTERNAL_POLL=ON"
+    ++ (
+      if stdenv.hostPlatform.isStatic then
+        [ "-DLWS_WITH_SHARED=OFF" ]
+      else
+        [
+          "-DLWS_WITH_STATIC=OFF"
+          "-DLWS_LINK_TESTAPPS_DYNAMIC=ON"
+        ]
+    );
 
   postInstall = ''
     # Fix path that will be incorrect on move to "dev" output.
@@ -65,9 +78,13 @@ stdenv.mkDerivation rec {
     homepage = "https://libwebsockets.org/";
     # Relicensed from LGPLv2.1+ to MIT with 4.0. Licensing situation
     # is tricky, see https://github.com/warmcat/libwebsockets/blob/main/LICENSE
-    license = with licenses; [ mit publicDomain bsd3 asl20 ];
+    license = with licenses; [
+      mit
+      publicDomain
+      bsd3
+      asl20
+    ];
     maintainers = with maintainers; [ mindavi ];
     platforms = platforms.all;
   };
 }
-

@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, pkg-config
-, python3
-, gitUpdater
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  python3,
+  gitUpdater,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -32,9 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
     tests = {
       inherit (python3.pkgs) zxing-cpp;
     };
-    updateScript = gitUpdater {
-      rev-prefix = "v";
-    };
+    updateScript = gitUpdater { rev-prefix = "v"; };
   };
 
   meta = {
@@ -50,7 +49,10 @@ stdenv.mkDerivation (finalAttrs: {
       formats.
     '';
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ AndersonTorres lukegb ];
+    maintainers = with lib.maintainers; [
+      AndersonTorres
+      lukegb
+    ];
     platforms = lib.platforms.unix;
   };
 })

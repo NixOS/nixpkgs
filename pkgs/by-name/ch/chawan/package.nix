@@ -1,15 +1,16 @@
-{ lib
-, stdenv
-, fetchFromSourcehut
-, makeBinaryWrapper
-, curlMinimal
-, mandoc
-, ncurses
-, nim
-, pandoc
-, perl
-, pkg-config
-, zlib
+{
+  lib,
+  stdenv,
+  fetchFromSourcehut,
+  makeBinaryWrapper,
+  curlMinimal,
+  mandoc,
+  ncurses,
+  nim,
+  pandoc,
+  perl,
+  pkg-config,
+  zlib,
 }:
 
 stdenv.mkDerivation {
@@ -33,7 +34,12 @@ stdenv.mkDerivation {
     lib.optional stdenv.cc.isClang "-Wno-error=implicit-function-declaration"
   );
 
-  buildInputs = [ curlMinimal ncurses perl zlib ];
+  buildInputs = [
+    curlMinimal
+    ncurses
+    perl
+    zlib
+  ];
   nativeBuildInputs = [
     makeBinaryWrapper
     nim
@@ -46,23 +52,26 @@ stdenv.mkDerivation {
       --replace-fail "OUT" $out
   '';
 
-  buildFlags = [ "all" "manpage" ];
+  buildFlags = [
+    "all"
+    "manpage"
+  ];
   installFlags = [
     "DESTDIR=$(out)"
     "PREFIX=/"
   ];
 
   postInstall =
-  let
-    makeWrapperArgs = ''
-      --set MANCHA_CHA $out/bin/cha \
-      --set MANCHA_MAN ${mandoc}/bin/man
+    let
+      makeWrapperArgs = ''
+        --set MANCHA_CHA $out/bin/cha \
+        --set MANCHA_MAN ${mandoc}/bin/man
+      '';
+    in
+    ''
+      wrapProgram $out/bin/cha ${makeWrapperArgs}
+      wrapProgram $out/bin/mancha ${makeWrapperArgs}
     '';
-  in
-  ''
-    wrapProgram $out/bin/cha ${makeWrapperArgs}
-    wrapProgram $out/bin/mancha ${makeWrapperArgs}
-  '';
 
   meta = {
     description = "Lightweight and featureful terminal web browser";

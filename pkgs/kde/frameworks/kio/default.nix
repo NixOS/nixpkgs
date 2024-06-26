@@ -16,5 +16,10 @@ mkKdeDerivation {
     # FIXME(later): discuss with upstream?
   ];
 
-  extraBuildInputs = [qt5compat qttools acl attr];
+  extraBuildInputs = [
+    qt5compat
+    qttools
+    acl
+    attr
+  ];
 }

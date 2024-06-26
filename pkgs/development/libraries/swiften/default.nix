@@ -1,15 +1,16 @@
-{ stdenv
-, lib
-, libidn
-, lua
-, miniupnpc
-, expat
-, zlib
-, fetchurl
-, fetchpatch
-, openssl
-, boost
-, scons
+{
+  stdenv,
+  lib,
+  libidn,
+  lua,
+  miniupnpc,
+  expat,
+  zlib,
+  fetchurl,
+  fetchpatch,
+  openssl,
+  boost,
+  scons,
 }:
 
 stdenv.mkDerivation rec {
@@ -34,9 +35,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [
-    scons
-  ];
+  nativeBuildInputs = [ scons ];
 
   buildInputs = [
     libidn
@@ -73,9 +72,7 @@ stdenv.mkDerivation rec {
 
   installTargets = "${placeholder "out"}";
 
-  installFlags = [
-    "SWIFTEN_INSTALLDIR=${placeholder "out"}"
-  ];
+  installFlags = [ "SWIFTEN_INSTALLDIR=${placeholder "out"}" ];
 
   enableParallelBuilding = true;
 

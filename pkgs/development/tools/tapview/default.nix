@@ -1,7 +1,8 @@
-{ asciidoctor
-, fetchFromGitLab
-, lib
-, stdenv
+{
+  asciidoctor,
+  fetchFromGitLab,
+  lib,
+  stdenv,
 }:
 
 stdenv.mkDerivation rec {

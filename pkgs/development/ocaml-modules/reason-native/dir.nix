@@ -3,13 +3,9 @@
 {
   pname = "dir";
 
-  nativeBuildInputs = [
-    reason
-  ];
+  nativeBuildInputs = [ reason ];
 
-  propagatedBuildInputs = [
-    fp
-  ];
+  propagatedBuildInputs = [ fp ];
 
   meta = {
     description = "Library that provides a consistent API for common system, user and application directories consistently on all platforms";

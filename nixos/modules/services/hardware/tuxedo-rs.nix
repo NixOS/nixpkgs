@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -40,9 +45,7 @@ in
 
       environment.systemPackages = [ pkgs.tuxedo-rs ];
     }
-    (mkIf cfg.tailor-gui.enable {
-      environment.systemPackages = [ pkgs.tailor-gui ];
-    })
+    (mkIf cfg.tailor-gui.enable { environment.systemPackages = [ pkgs.tailor-gui ]; })
   ]);
 
   meta.maintainers = with maintainers; [ mrcjkb ];

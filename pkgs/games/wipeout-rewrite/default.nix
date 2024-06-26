@@ -1,11 +1,12 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, makeWrapper
-, Foundation
-, glew
-, SDL2
-, writeShellScript
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  makeWrapper,
+  Foundation,
+  glew,
+  SDL2,
+  writeShellScript,
 }:
 
 let
@@ -35,16 +36,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [
-    makeWrapper
-  ];
+  nativeBuildInputs = [ makeWrapper ];
 
   buildInputs = [
     glew
     SDL2
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    Foundation
-  ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Foundation ];
 
   installPhase = ''
     runHook preInstall

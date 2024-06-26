@@ -1,15 +1,16 @@
-{ lib
-, buildPythonApplication
-, fetchFromGitLab
-, requests
-, lxml
-, cssselect
-, curlify
-, poetry-core
-, pytest-mock
-, responses
-, pytestCheckHook
-, pythonRelaxDepsHook
+{
+  lib,
+  buildPythonApplication,
+  fetchFromGitLab,
+  requests,
+  lxml,
+  cssselect,
+  curlify,
+  poetry-core,
+  pytest-mock,
+  responses,
+  pytestCheckHook,
+  pythonRelaxDepsHook,
 }:
 
 buildPythonApplication rec {
@@ -32,9 +33,7 @@ buildPythonApplication rec {
     poetry-core
   ];
 
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
-  ];
+  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   nativeCheckInputs = [
     responses

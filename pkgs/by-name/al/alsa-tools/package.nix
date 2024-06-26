@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchurl
-, alsa-lib
-, fltk13
-, gtk2
-, gtk3
-, makeWrapper
-, pkg-config
-, psmisc
+{
+  lib,
+  stdenv,
+  fetchurl,
+  alsa-lib,
+  fltk13,
+  gtk2,
+  gtk3,
+  makeWrapper,
+  pkg-config,
+  psmisc,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

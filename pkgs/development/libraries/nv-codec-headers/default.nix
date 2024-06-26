@@ -1,12 +1,11 @@
-{ lib
-, fetchgit
-, stdenvNoCC
+{
+  lib,
+  fetchgit,
+  stdenvNoCC,
 }:
 
 let
-  make-nv-codec-headers = (import ./make-nv-codec-headers.nix) {
-    inherit lib fetchgit stdenvNoCC;
-  };
+  make-nv-codec-headers = (import ./make-nv-codec-headers.nix) { inherit lib fetchgit stdenvNoCC; };
 in
 {
   nv-codec-headers-8 = make-nv-codec-headers {

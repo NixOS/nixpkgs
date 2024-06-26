@@ -1,4 +1,12 @@
-{ lib, stdenv, unzip, fetchurl, electron, makeWrapper, geogebra }:
+{
+  lib,
+  stdenv,
+  unzip,
+  fetchurl,
+  electron,
+  makeWrapper,
+  geogebra,
+}:
 let
   pname = "geogebra";
   version = "6-0-794-0";
@@ -14,14 +22,17 @@ let
       calculus in one easy-to-use package.
     '';
     homepage = "https://www.geogebra.org/";
-    maintainers = with maintainers; [ voidless sikmir ];
+    maintainers = with maintainers; [
+      voidless
+      sikmir
+    ];
     license = licenses.geogebra;
     sourceProvenance = with sourceTypes; [
       binaryBytecode
-      binaryNativeCode  # some jars include native binaries
+      binaryNativeCode # some jars include native binaries
     ];
     platforms = with platforms; linux ++ darwin;
-    hydraPlatforms = [];
+    hydraPlatforms = [ ];
   };
 
   linuxPkg = stdenv.mkDerivation {
@@ -84,6 +95,4 @@ let
     };
   };
 in
-if stdenv.isDarwin
-then darwinPkg
-else linuxPkg
+if stdenv.isDarwin then darwinPkg else linuxPkg

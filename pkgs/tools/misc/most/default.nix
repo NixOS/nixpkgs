@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchurl, slang, ncurses }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  slang,
+  ncurses,
+}:
 
 stdenv.mkDerivation rec {
   pname = "most";
@@ -9,11 +15,12 @@ stdenv.mkDerivation rec {
     hash = "sha256-lFWuuPgm+oOFyFDcIr8PIs+QabPDQj+6S/LG9iJtmQM=";
   };
 
-  outputs = [ "out" "doc" ];
-
-  makeFlags = [
-    "DOC_DIR=${placeholder "doc"}/share/doc/most"
+  outputs = [
+    "out"
+    "doc"
   ];
+
+  makeFlags = [ "DOC_DIR=${placeholder "doc"}/share/doc/most" ];
 
   preConfigure = ''
     sed -i -e "s|-ltermcap|-lncurses|" configure
@@ -24,7 +31,10 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--with-slang=${slang.dev}" ];
 
-  buildInputs = [ slang ncurses ];
+  buildInputs = [
+    slang
+    ncurses
+  ];
 
   enableParallelBuilding = true;
 

@@ -5,7 +5,7 @@
   pkg-config,
   stdenv,
   # Boolean flags
-  enableSdltest ? (!stdenv.isDarwin)
+  enableSdltest ? (!stdenv.isDarwin),
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -22,13 +22,9 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  propagatedBuildInputs = [
-    SDL
-  ];
+  propagatedBuildInputs = [ SDL ];
 
-  configureFlags = [
-    (lib.enableFeature enableSdltest "sdltest")
-  ];
+  configureFlags = [ (lib.enableFeature enableSdltest "sdltest") ];
 
   strictDeps = true;
 
@@ -36,8 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/libsdl-org/SDL_net";
     description = "SDL networking library";
     license = lib.licenses.zlib;
-    maintainers =  lib.teams.sdl.members
-                   ++ (with lib.maintainers; [ ]);
+    maintainers = lib.teams.sdl.members ++ (with lib.maintainers; [ ]);
     inherit (SDL.meta) platforms;
   };
 })

@@ -57,9 +57,7 @@ stdenv'.mkDerivation (finalAttrs: {
     libspnav
     (if stdenv.isLinux then libuuid else libossp_uuid)
     opencascade-occt
-    (python3.withPackages (pp: [
-      pp.pygobject3
-    ]))
+    (python3.withPackages (pp: [ pp.pygobject3 ]))
   ];
 
   env.CASROOT = opencascade-occt;
@@ -68,7 +66,10 @@ stdenv'.mkDerivation (finalAttrs: {
     description = "3D CAD application";
     homepage = "https://dune3d.org";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ _0x4A6F jue89 ];
+    maintainers = with lib.maintainers; [
+      _0x4A6F
+      jue89
+    ];
     mainProgram = "dune3d";
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };

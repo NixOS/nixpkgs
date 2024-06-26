@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, docutils
-, pkg-config
-, freetype
-, pango
-, testers
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  docutils,
+  pkg-config,
+  freetype,
+  pango,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -19,13 +20,17 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-0ZSMKARX16/33sIWR8LOVOFblI/Q+iZgnfVq/xqRMnI=";
   };
 
-  configureFlags = [
-    "--INSTALL=install"
+  configureFlags = [ "--INSTALL=install" ];
+
+  nativeBuildInputs = [
+    docutils
+    pkg-config
   ];
 
-  nativeBuildInputs = [ docutils pkg-config ];
-
-  buildInputs = [ freetype pango ];
+  buildInputs = [
+    freetype
+    pango
+  ];
 
   passthru.tests = {
     version = testers.testVersion {

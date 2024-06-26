@@ -1,11 +1,12 @@
-{ buildGoModule
-, fetchFromGitHub
-, lib
-, nix-update-script
-, testers
-, symfony-cli
-, nssTools
-, makeBinaryWrapper
+{
+  buildGoModule,
+  fetchFromGitHub,
+  lib,
+  nix-update-script,
+  testers,
+  symfony-cli,
+  nssTools,
+  makeBinaryWrapper,
 }:
 
 buildGoModule rec {

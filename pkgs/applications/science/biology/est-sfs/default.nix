@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchurl, gsl }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  gsl,
+}:
 
 stdenv.mkDerivation rec {
   pname = "est-sfs";
@@ -11,9 +16,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ gsl ];
 
-  makeFlags = [
-    "CC=${stdenv.cc.targetPrefix}cc"
-  ];
+  makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
 
   installPhase = ''
     mkdir -p $out/bin

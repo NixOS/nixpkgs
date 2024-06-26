@@ -1,23 +1,24 @@
-{ config
-, lib
-, stdenv
-, fetchFromGitHub
-, gobject-introspection
-, pkg-config
-, ninja
-, desktop-file-utils
-, makeWrapper
-, shared-mime-info
-, wrapGAppsHook4
-, meson
-, gtk4
-, gst_all_1
-, libGL
-, libadwaita
-, libsoup_3
-, vala
-, cmake
-, libmicrodns
+{
+  config,
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  gobject-introspection,
+  pkg-config,
+  ninja,
+  desktop-file-utils,
+  makeWrapper,
+  shared-mime-info,
+  wrapGAppsHook4,
+  meson,
+  gtk4,
+  gst_all_1,
+  libGL,
+  libadwaita,
+  libsoup_3,
+  vala,
+  cmake,
+  libmicrodns,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -25,9 +26,9 @@ stdenv.mkDerivation (finalAttrs: {
   version = "0.6.0";
 
   src = fetchFromGitHub {
-    owner  = "Rafostar";
-    repo   = "clapper";
-    rev    = finalAttrs.version;
+    owner = "Rafostar";
+    repo = "clapper";
+    rev = finalAttrs.version;
     hash = "sha256-5fD1OnVcY3ZC+QfoFqe2jV43/J36r85SpLUYF2ti7dY=";
   };
 

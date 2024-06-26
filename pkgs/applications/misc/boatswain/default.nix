@@ -1,23 +1,24 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, meson
-, ninja
-, pkg-config
-, gtk4
-, libgee
-, libadwaita
-, wrapGAppsHook4
-, appstream-glib
-, desktop-file-utils
-, libpeas
-, libportal-gtk4
-, gusb
-, hidapi
-, json-glib
-, libsecret
-, libsoup_3
-, libpeas2
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  meson,
+  ninja,
+  pkg-config,
+  gtk4,
+  libgee,
+  libadwaita,
+  wrapGAppsHook4,
+  appstream-glib,
+  desktop-file-utils,
+  libpeas,
+  libportal-gtk4,
+  gusb,
+  hidapi,
+  json-glib,
+  libsecret,
+  libsoup_3,
+  libpeas2,
 }:
 
 stdenv.mkDerivation rec {

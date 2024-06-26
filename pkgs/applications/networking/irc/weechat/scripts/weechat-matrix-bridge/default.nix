@@ -1,4 +1,12 @@
-{ lib, stdenv, curl, fetchFromGitHub, cjson, olm, luaffi }:
+{
+  lib,
+  stdenv,
+  curl,
+  fetchFromGitHub,
+  cjson,
+  olm,
+  luaffi,
+}:
 
 stdenv.mkDerivation {
   pname = "weechat-matrix-bridge";
@@ -10,11 +18,14 @@ stdenv.mkDerivation {
     sha256 = "0qqd6qmkrdc0r3rnl53c3yp93fbcz7d3mdw3vq5gmdqxyym4s9lj";
   };
 
-  patches = [
-    ./library-path.patch
-  ];
+  patches = [ ./library-path.patch ];
 
-  buildInputs = [ curl cjson olm luaffi ];
+  buildInputs = [
+    curl
+    cjson
+    olm
+    luaffi
+  ];
 
   postPatch = ''
     substituteInPlace matrix.lua \

@@ -1,8 +1,9 @@
-{ lib
-, melpaBuild
-, fetchFromGitLab
-, writeText
-, unstableGitUpdater
+{
+  lib,
+  melpaBuild,
+  fetchFromGitLab,
+  writeText,
+  unstableGitUpdater,
 }:
 
 let

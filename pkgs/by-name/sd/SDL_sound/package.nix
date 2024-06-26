@@ -7,7 +7,7 @@
   libvorbis,
   stdenv,
   # Boolean flags
-  enableSdltest ? (!stdenv.isDarwin)
+  enableSdltest ? (!stdenv.isDarwin),
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -19,9 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-OZn9C7tIUomlK+FLL2i1ccuE44DMQzh+rfd49kx55t8=";
   };
 
-  nativeBuildInputs = [
-    SDL
-  ];
+  nativeBuildInputs = [ SDL ];
 
   buildInputs = [
     SDL
@@ -30,9 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
     libvorbis
   ];
 
-  configureFlags = [
-    (lib.enableFeature enableSdltest "--disable-sdltest")
-  ];
+  configureFlags = [ (lib.enableFeature enableSdltest "--disable-sdltest") ];
 
   strictDeps = true;
 
@@ -40,8 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.icculus.org/SDL_sound/";
     description = "SDL sound library";
     license = lib.licenses.lgpl21Plus;
-    maintainers = lib.teams.sdl.members
-                  ++ (with lib.maintainers; [ ]);
+    maintainers = lib.teams.sdl.members ++ (with lib.maintainers; [ ]);
     mainProgram = "playsound";
     inherit (SDL.meta) platforms;
   };

@@ -1,26 +1,27 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, SDL2
-, agg
-, alsa-lib
-, desktop-file-utils
-, wrapGAppsHook3
-, gtk3
-, intltool
-, libGLU
-, libXmu
-, libpcap
-, libtool
-, lua
-, meson
-, ninja
-, openal
-, pkg-config
-, soundtouch
-, tinyxml
-, zlib
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  SDL2,
+  agg,
+  alsa-lib,
+  desktop-file-utils,
+  wrapGAppsHook3,
+  gtk3,
+  intltool,
+  libGLU,
+  libXmu,
+  libpcap,
+  libtool,
+  lua,
+  meson,
+  ninja,
+  openal,
+  pkg-config,
+  soundtouch,
+  tinyxml,
+  zlib,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -30,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "TASVideos";
     repo = "desmume";
-    rev = "release_${lib.replaceStrings ["."] ["_"] finalAttrs.version}";
+    rev = "release_${lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
     hash = "sha256-vmjKXa/iXLTwtqnG+ZUvOnOQPZROeMpfM5J3Jh/Ynfo=";
   };
 

@@ -1,31 +1,36 @@
-{ stdenv
-, lib
-, fetchurl
-, fetchpatch
-, meson
-, mesonEmulatorHook
-, ninja
-, pkg-config
-, gtk-doc
-, docbook_xsl
-, docbook_xml_dtd_412
-, libX11
-, glib
-, gtk3
-, pango
-, cairo
-, libXres
-, libstartup_notification
-, gettext
-, gobject-introspection
-, gnome
+{
+  stdenv,
+  lib,
+  fetchurl,
+  fetchpatch,
+  meson,
+  mesonEmulatorHook,
+  ninja,
+  pkg-config,
+  gtk-doc,
+  docbook_xsl,
+  docbook_xml_dtd_412,
+  libX11,
+  glib,
+  gtk3,
+  pango,
+  cairo,
+  libXres,
+  libstartup_notification,
+  gettext,
+  gobject-introspection,
+  gnome,
 }:
 
 stdenv.mkDerivation rec {
   pname = "libwnck";
   version = "43.0";
 
-  outputs = [ "out" "dev" "devdoc" ];
+  outputs = [
+    "out"
+    "dev"
+    "devdoc"
+  ];
   outputBin = "dev";
 
   src = fetchurl {
@@ -51,9 +56,7 @@ stdenv.mkDerivation rec {
     gtk-doc
     docbook_xsl
     docbook_xml_dtd_412
-  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-    mesonEmulatorHook
-  ];
+  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [ mesonEmulatorHook ];
 
   buildInputs = [
     libX11
@@ -68,14 +71,10 @@ stdenv.mkDerivation rec {
     gtk3
   ];
 
-  mesonFlags = [
-    "-Dgtk_doc=true"
-  ];
+  mesonFlags = [ "-Dgtk_doc=true" ];
 
   passthru = {
-    updateScript = gnome.updateScript {
-      packageName = pname;
-    };
+    updateScript = gnome.updateScript { packageName = pname; };
   };
 
   meta = with lib; {

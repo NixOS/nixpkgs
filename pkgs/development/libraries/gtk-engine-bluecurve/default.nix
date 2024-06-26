@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchurl, pkg-config, intltool, gtk2 }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  intltool,
+  gtk2,
+}:
 
 stdenv.mkDerivation rec {
   pname = "gtk-engine-bluecurve";
@@ -9,7 +16,10 @@ stdenv.mkDerivation rec {
     sha256 = "1nim3lhmbs5mw1hh76d9258c1p923854x2j6i30gmny812c7qjnm";
   };
 
-  nativeBuildInputs = [ pkg-config intltool ];
+  nativeBuildInputs = [
+    pkg-config
+    intltool
+  ];
 
   buildInputs = [ gtk2 ];
 

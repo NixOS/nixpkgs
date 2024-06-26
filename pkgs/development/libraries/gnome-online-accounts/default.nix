@@ -1,39 +1,48 @@
-{ stdenv
-, lib
-, fetchurl
-, pkg-config
-, vala
-, glib
-, meson
-, ninja
-, libxslt
-, gtk4
-, enableBackend ? stdenv.isLinux
-, json-glib
-, libadwaita
-, librest_1_0
-, libxml2
-, libsecret
-, gtk-doc
-, gobject-introspection
-, gettext
-, glib-networking
-, libsoup_3
-, docbook-xsl-nons
-, docbook_xml_dtd_412
-, gnome
-, gcr_4
-, libkrb5
-, gvfs
-, dbus
-, wrapGAppsHook4
+{
+  stdenv,
+  lib,
+  fetchurl,
+  pkg-config,
+  vala,
+  glib,
+  meson,
+  ninja,
+  libxslt,
+  gtk4,
+  enableBackend ? stdenv.isLinux,
+  json-glib,
+  libadwaita,
+  librest_1_0,
+  libxml2,
+  libsecret,
+  gtk-doc,
+  gobject-introspection,
+  gettext,
+  glib-networking,
+  libsoup_3,
+  docbook-xsl-nons,
+  docbook_xml_dtd_412,
+  gnome,
+  gcr_4,
+  libkrb5,
+  gvfs,
+  dbus,
+  wrapGAppsHook4,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-online-accounts";
   version = "3.50.2";
 
-  outputs = [ "out" "dev" ] ++ lib.optionals enableBackend [ "man" "devdoc" ];
+  outputs =
+    [
+      "out"
+      "dev"
+    ]
+    ++ lib.optionals enableBackend [
+      "man"
+      "devdoc"
+    ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-online-accounts/${lib.versions.majorMinor finalAttrs.version}/gnome-online-accounts-${finalAttrs.version}.tar.xz";

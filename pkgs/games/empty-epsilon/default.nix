@@ -1,4 +1,17 @@
-{ lib, stdenv, fetchFromGitHub, cmake, sfml, libX11, glew, python3, glm, meshoptimizer, SDL2, ninja}:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  sfml,
+  libX11,
+  glew,
+  python3,
+  glm,
+  meshoptimizer,
+  SDL2,
+  ninja,
+}:
 
 let
 
@@ -30,11 +43,14 @@ let
     };
 
     nativeBuildInputs = [ cmake ];
-    buildInputs = [ sfml libX11 glm SDL2 ];
-
-    cmakeFlags = [
-      "-DFETCHCONTENT_SOURCE_DIR_BASIS=${basis-universal}"
+    buildInputs = [
+      sfml
+      libX11
+      glm
+      SDL2
     ];
+
+    cmakeFlags = [ "-DFETCHCONTENT_SOURCE_DIR_BASIS=${basis-universal}" ];
 
     meta = with lib; {
       description = "C++ game engine coded on top of SFML used for EmptyEpsilon";
@@ -46,7 +62,6 @@ let
   };
 
 in
-
 
 stdenv.mkDerivation {
   pname = "empty-epsilon";
@@ -60,7 +75,16 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ serious-proton sfml glew libX11 python3 glm SDL2 ninja ];
+  buildInputs = [
+    serious-proton
+    sfml
+    glew
+    libX11
+    python3
+    glm
+    SDL2
+    ninja
+  ];
 
   cmakeFlags = [
     "-DSERIOUS_PROTON_DIR=${serious-proton.src}"
@@ -80,7 +104,10 @@ stdenv.mkDerivation {
     mainProgram = "EmptyEpsilon";
     homepage = "https://daid.github.io/EmptyEpsilon/";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ fpletz ma27 ];
+    maintainers = with maintainers; [
+      fpletz
+      ma27
+    ];
     platforms = platforms.linux;
   };
 }

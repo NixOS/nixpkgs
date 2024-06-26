@@ -1,18 +1,19 @@
-{ lib
-, stdenv
-, fetchurl
-, fetchFromGitHub
-, cmake
-, pkg-config
-, cairo
-, fontconfig
-, freetype
-, glib
-, libXdmcp
-, makeWrapper
-, pango
-, pcre
-, perlPackages
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  cairo,
+  fontconfig,
+  freetype,
+  glib,
+  libXdmcp,
+  makeWrapper,
+  pango,
+  pcre,
+  perlPackages,
 }:
 
 let
@@ -32,11 +33,12 @@ stdenv.mkDerivation rec {
     hash = "sha256-O5RT68wPWwzCb51JZWWNcIubWoM7NZw/MRiaHXPDmF0=";
   };
 
-  cmakeFlags = [
-    "-DUNICODE_BLOCKS=${ucd-blocks.outPath}"
-  ];
+  cmakeFlags = [ "-DUNICODE_BLOCKS=${ucd-blocks.outPath}" ];
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -57,17 +59,20 @@ stdenv.mkDerivation rec {
 
   postFixup =
     let
-      perlPath = with perlPackages; makePerlPath [
-        ExporterTiny
-        ListMoreUtils
-        PDFAPI2
-        libintl-perl
-      ];
-    in ''
-    for cmd in pdfoutline pdf-extract-outline; do
-      wrapProgram "$out/bin/$cmd" --prefix PERL5LIB : "${perlPath}"
-    done
-  '';
+      perlPath =
+        with perlPackages;
+        makePerlPath [
+          ExporterTiny
+          ListMoreUtils
+          PDFAPI2
+          libintl-perl
+        ];
+    in
+    ''
+      for cmd in pdfoutline pdf-extract-outline; do
+        wrapProgram "$out/bin/$cmd" --prefix PERL5LIB : "${perlPath}"
+      done
+    '';
 
   meta = with lib; {
     homepage = "https://github.com/eugmes/fntsample";

@@ -1,13 +1,14 @@
-{ stdenvNoCC
-, lib
-, nixosTests
-, glib
-, lndir
-, lomiri-system-settings-unwrapped
-, lomiri-system-settings-security-privacy
-, wrapGAppsHook3
-, wrapQtAppsHook
-, plugins ? [ lomiri-system-settings-security-privacy ]
+{
+  stdenvNoCC,
+  lib,
+  nixosTests,
+  glib,
+  lndir,
+  lomiri-system-settings-unwrapped,
+  lomiri-system-settings-security-privacy,
+  wrapGAppsHook3,
+  wrapQtAppsHook,
+  plugins ? [ lomiri-system-settings-security-privacy ],
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {

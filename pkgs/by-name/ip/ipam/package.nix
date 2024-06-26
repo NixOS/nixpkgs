@@ -1,7 +1,8 @@
-{ lib
-, buildGoModule
-, fetchFromGitea
-, installShellFiles
+{
+  lib,
+  buildGoModule,
+  fetchFromGitea,
+  installShellFiles,
 }:
 
 buildGoModule rec {
@@ -16,13 +17,14 @@ buildGoModule rec {
     hash = "sha256-6gOkBjXgaMMWFRXFTSBY9YaNPdMRyLl8wy7BT/5vHio=";
   };
 
-  nativeBuildInputs = [
-    installShellFiles
-  ];
+  nativeBuildInputs = [ installShellFiles ];
 
   vendorHash = "sha256-l8eeeYv41yUPQ1dyJY4Jo3uvULrc1B/buGlMxYSdhCA=";
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   postInstall = ''
     installShellCompletion --cmd ipam \

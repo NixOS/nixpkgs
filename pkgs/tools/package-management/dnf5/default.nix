@@ -1,38 +1,42 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, createrepo_c
-, doxygen
-, gettext
-, help2man
-, pkg-config
-, python3Packages
-, cppunit
-, fmt
-, json_c
-, libmodulemd
-, librepo
-, libsmartcols
-, libsolv
-, libxml2
-, libyaml
-, pcre2
-, rpm
-, sdbus-cpp
-, sphinx
-, sqlite
-, systemd
-, testers
-, toml11
-, zchunk
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  createrepo_c,
+  doxygen,
+  gettext,
+  help2man,
+  pkg-config,
+  python3Packages,
+  cppunit,
+  fmt,
+  json_c,
+  libmodulemd,
+  librepo,
+  libsmartcols,
+  libsolv,
+  libxml2,
+  libyaml,
+  pcre2,
+  rpm,
+  sdbus-cpp,
+  sphinx,
+  sqlite,
+  systemd,
+  testers,
+  toml11,
+  zchunk,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dnf5";
   version = "5.1.15";
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
   src = fetchFromGitHub {
     owner = "rpm-software-management";
@@ -41,19 +45,21 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-IDF/jRnPpGbHk5bY7plkCO1x/i10H+HCcU88JI4EHvs=";
   };
 
-  nativeBuildInputs = [
-    cmake
-    createrepo_c
-    doxygen
-    gettext
-    help2man
-    pkg-config
-    sphinx
-  ] ++ (with python3Packages; [
-    breathe
-    sphinx-autoapi
-    sphinx-rtd-theme
-  ]);
+  nativeBuildInputs =
+    [
+      cmake
+      createrepo_c
+      doxygen
+      gettext
+      help2man
+      pkg-config
+      sphinx
+    ]
+    ++ (with python3Packages; [
+      breathe
+      sphinx-autoapi
+      sphinx-rtd-theme
+    ]);
 
   buildInputs = [
     cppunit
@@ -114,7 +120,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/rpm-software-management/dnf5";
     changelog = "https://github.com/rpm-software-management/dnf5/releases/tag/${finalAttrs.version}";
     license = licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ malt3 katexochen ];
+    maintainers = with lib.maintainers; [
+      malt3
+      katexochen
+    ];
     mainProgram = "dnf5";
     platforms = platforms.linux ++ platforms.darwin;
   };

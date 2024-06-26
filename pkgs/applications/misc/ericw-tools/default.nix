@@ -1,6 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch
-, gtest, fmt
-, cmake, ninja, installShellFiles
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  gtest,
+  fmt,
+  cmake,
+  ninja,
+  installShellFiles,
 }:
 
 stdenv.mkDerivation rec {
@@ -27,9 +34,17 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ cmake ninja installShellFiles ];
+  nativeBuildInputs = [
+    cmake
+    ninja
+    installShellFiles
+  ];
 
-  outputs = [ "out" "doc" "man" ];
+  outputs = [
+    "out"
+    "doc"
+    "man"
+  ];
   installPhase = ''
     runHook preInstall
 

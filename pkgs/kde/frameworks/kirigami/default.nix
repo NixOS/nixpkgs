@@ -8,7 +8,10 @@
 mkKdeDerivation {
   pname = "kirigami";
 
-  extraNativeBuildInputs = [qtsvg qttools];
-  extraBuildInputs = [qtdeclarative];
-  extraPropagatedBuildInputs = [qt5compat];
+  extraNativeBuildInputs = [
+    qtsvg
+    qttools
+  ];
+  extraBuildInputs = [ qtdeclarative ];
+  extraPropagatedBuildInputs = [ qt5compat ];
 }

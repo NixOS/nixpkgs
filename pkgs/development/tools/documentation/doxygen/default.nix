@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, cmake
-, fetchFromGitHub
-, fetchpatch
-, python3
-, flex
-, bison
-, qt5
-, CoreServices
-, libiconv
-, spdlog
-, sqlite
+{
+  lib,
+  stdenv,
+  cmake,
+  fetchFromGitHub,
+  fetchpatch,
+  python3,
+  flex,
+  bison,
+  qt5,
+  CoreServices,
+  libiconv,
+  spdlog,
+  sqlite,
 }:
 
 stdenv.mkDerivation rec {
@@ -39,8 +40,19 @@ stdenv.mkDerivation rec {
     bison
   ];
 
-  buildInputs = [ libiconv spdlog sqlite ]
-    ++ lib.optionals (qt5 != null) (with qt5; [ qtbase wrapQtAppsHook ])
+  buildInputs =
+    [
+      libiconv
+      spdlog
+      sqlite
+    ]
+    ++ lib.optionals (qt5 != null) (
+      with qt5;
+      [
+        qtbase
+        wrapQtAppsHook
+      ]
+    )
     ++ lib.optionals stdenv.isDarwin [ CoreServices ];
 
   cmakeFlags = [
@@ -49,11 +61,13 @@ stdenv.mkDerivation rec {
     "-Duse_sys_sqlite3=ON"
   ] ++ lib.optional (qt5 != null) "-Dbuild_wizard=YES";
 
-  env.NIX_CFLAGS_COMPILE =
-    lib.optionalString stdenv.isDarwin "-mmacosx-version-min=10.9";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-mmacosx-version-min=10.9";
 
   # put examples in an output so people/tools can test against them
-  outputs = [ "out" "examples" ];
+  outputs = [
+    "out"
+    "examples"
+  ];
   postInstall = ''
     cp -r ../examples $examples
   '';

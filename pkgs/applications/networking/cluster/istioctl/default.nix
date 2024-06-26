@@ -1,4 +1,9 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+}:
 
 buildGoModule rec {
   pname = "istioctl";
@@ -15,14 +20,20 @@ buildGoModule rec {
   nativeBuildInputs = [ installShellFiles ];
 
   # Bundle release metadata
-  ldflags = let
-    attrs = [
-      "istio.io/istio/pkg/version.buildVersion=${version}"
-      "istio.io/istio/pkg/version.buildStatus=Nix"
-      "istio.io/istio/pkg/version.buildTag=${version}"
-      "istio.io/istio/pkg/version.buildHub=docker.io/istio"
+  ldflags =
+    let
+      attrs = [
+        "istio.io/istio/pkg/version.buildVersion=${version}"
+        "istio.io/istio/pkg/version.buildStatus=Nix"
+        "istio.io/istio/pkg/version.buildTag=${version}"
+        "istio.io/istio/pkg/version.buildHub=docker.io/istio"
+      ];
+    in
+    [
+      "-s"
+      "-w"
+      "${lib.concatMapStringsSep " " (attr: "-X ${attr}") attrs}"
     ];
-  in ["-s" "-w" "${lib.concatMapStringsSep " " (attr: "-X ${attr}") attrs}"];
 
   subPackages = [ "istioctl/cmd/istioctl" ];
 
@@ -43,6 +54,9 @@ buildGoModule rec {
     mainProgram = "istioctl";
     homepage = "https://istio.io/latest/docs/reference/commands/istioctl";
     license = licenses.asl20;
-    maintainers = with maintainers; [ bryanasdev000 veehaitch ];
+    maintainers = with maintainers; [
+      bryanasdev000
+      veehaitch
+    ];
   };
 }

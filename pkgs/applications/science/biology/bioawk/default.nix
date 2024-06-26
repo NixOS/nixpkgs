@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, installShellFiles
-, bison
-, zlib
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  installShellFiles,
+  bison,
+  zlib,
 }:
 
 stdenv.mkDerivation {
@@ -22,13 +23,9 @@ stdenv.mkDerivation {
     installShellFiles
   ];
 
-  buildInputs = [
-    zlib
-  ];
+  buildInputs = [ zlib ];
 
-  buildFlags = [
-    "CC=${stdenv.cc.targetPrefix}cc"
-  ];
+  buildFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
 
   installPhase = ''
     runHook preInstall

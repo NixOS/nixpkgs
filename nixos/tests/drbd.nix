@@ -45,43 +45,49 @@ import ./make-test-python.nix (
   {
     name = "drbd";
     meta = with pkgs.lib.maintainers; {
-      maintainers = [ ryantm astro birkb ];
+      maintainers = [
+        ryantm
+        astro
+        birkb
+      ];
     };
 
     nodes.drbd1 = drbdConfig;
     nodes.drbd2 = drbdConfig;
 
-    testScript = { nodes }: ''
-      drbd1.start()
-      drbd2.start()
+    testScript =
+      { nodes }:
+      ''
+        drbd1.start()
+        drbd2.start()
 
-      drbd1.wait_for_unit("network.target")
-      drbd2.wait_for_unit("network.target")
+        drbd1.wait_for_unit("network.target")
+        drbd2.wait_for_unit("network.target")
 
-      drbd1.succeed(
-          "drbdadm create-md r0",
-          "drbdadm up r0",
-          "drbdadm primary r0 --force",
-      )
+        drbd1.succeed(
+            "drbdadm create-md r0",
+            "drbdadm up r0",
+            "drbdadm primary r0 --force",
+        )
 
-      drbd2.succeed("drbdadm create-md r0", "drbdadm up r0")
+        drbd2.succeed("drbdadm create-md r0", "drbdadm up r0")
 
-      drbd1.succeed(
-          "mkfs.ext4 /dev/drbd0",
-          "mkdir -p /mnt/drbd",
-          "mount /dev/drbd0 /mnt/drbd",
-          "touch /mnt/drbd/hello",
-          "umount /mnt/drbd",
-          "drbdadm secondary r0",
-      )
-      drbd1.sleep(1)
+        drbd1.succeed(
+            "mkfs.ext4 /dev/drbd0",
+            "mkdir -p /mnt/drbd",
+            "mount /dev/drbd0 /mnt/drbd",
+            "touch /mnt/drbd/hello",
+            "umount /mnt/drbd",
+            "drbdadm secondary r0",
+        )
+        drbd1.sleep(1)
 
-      drbd2.succeed(
-          "drbdadm primary r0",
-          "mkdir -p /mnt/drbd",
-          "mount /dev/drbd0 /mnt/drbd",
-          "ls /mnt/drbd/hello",
-      )
-    '';
+        drbd2.succeed(
+            "drbdadm primary r0",
+            "mkdir -p /mnt/drbd",
+            "mount /dev/drbd0 /mnt/drbd",
+            "ls /mnt/drbd/hello",
+        )
+      '';
   }
 )

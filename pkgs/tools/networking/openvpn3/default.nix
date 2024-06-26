@@ -1,24 +1,25 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, asio
-, autoconf-archive
-, autoreconfHook
-, glib
-, gtest
-, jsoncpp
-, libcap_ng
-, libnl
-, libuuid
-, lz4
-, openssl
-, pkg-config
-, protobuf
-, python3
-, systemd
-, enableSystemdResolved ? false
-, tinyxml-2
-, wrapGAppsHook3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  asio,
+  autoconf-archive,
+  autoreconfHook,
+  glib,
+  gtest,
+  jsoncpp,
+  libcap_ng,
+  libnl,
+  libuuid,
+  lz4,
+  openssl,
+  pkg-config,
+  protobuf,
+  python3,
+  systemd,
+  enableSystemdResolved ? false,
+  tinyxml-2,
+  wrapGAppsHook3,
 }:
 
 let
@@ -82,9 +83,7 @@ stdenv.mkDerivation rec {
     openssl
     protobuf
     tinyxml-2
-  ] ++ lib.optionals enableSystemdResolved [
-    systemd
-  ];
+  ] ++ lib.optionals enableSystemdResolved [ systemd ];
 
   # runtime deps
   pythonPath = with python3.pkgs; [
@@ -100,16 +99,18 @@ stdenv.mkDerivation rec {
     wrapPythonPrograms
   '';
 
-  configureFlags = [
-    "--enable-bash-completion"
-    "--enable-addons-aws"
-    "--disable-selinux-build"
-    "--disable-build-test-progs"
-  ] ++ lib.optionals enableSystemdResolved [
-    # This defaults to --resolv-conf /etc/resolv.conf. See
-    # https://github.com/OpenVPN/openvpn3-linux/blob/v20/configure.ac#L434
-    "DEFAULT_DNS_RESOLVER=--systemd-resolved"
-  ];
+  configureFlags =
+    [
+      "--enable-bash-completion"
+      "--enable-addons-aws"
+      "--disable-selinux-build"
+      "--disable-build-test-progs"
+    ]
+    ++ lib.optionals enableSystemdResolved [
+      # This defaults to --resolv-conf /etc/resolv.conf. See
+      # https://github.com/OpenVPN/openvpn3-linux/blob/v20/configure.ac#L434
+      "DEFAULT_DNS_RESOLVER=--systemd-resolved"
+    ];
 
   NIX_LDFLAGS = "-lpthread";
 
@@ -117,7 +118,10 @@ stdenv.mkDerivation rec {
     description = "OpenVPN 3 Linux client";
     license = licenses.agpl3Plus;
     homepage = "https://github.com/OpenVPN/openvpn3-linux/";
-    maintainers = with maintainers; [ shamilton kfears ];
+    maintainers = with maintainers; [
+      shamilton
+      kfears
+    ];
     platforms = platforms.linux;
   };
 }

@@ -1,6 +1,4 @@
-{ lib
-, makeGaugePlugin
-}:
+{ lib, makeGaugePlugin }:
 makeGaugePlugin {
   pname = "xml-report";
   data = lib.importJSON ./data.json;
@@ -14,6 +12,11 @@ makeGaugePlugin {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ marie ];
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
-    platforms = [ "x86_64-darwin" "aarch64-darwin" "aarch64-linux" "x86_64-linux" ];
+    platforms = [
+      "x86_64-darwin"
+      "aarch64-darwin"
+      "aarch64-linux"
+      "x86_64-linux"
+    ];
   };
 }

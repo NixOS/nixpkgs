@@ -1,16 +1,23 @@
-{ stdenv
-, lib
-, fetchurl
-, gnuplot
-, sox
-, flac
-, id3v2
-, vorbis-tools
-, makeWrapper
+{
+  stdenv,
+  lib,
+  fetchurl,
+  gnuplot,
+  sox,
+  flac,
+  id3v2,
+  vorbis-tools,
+  makeWrapper,
 }:
 
 let
-  path = lib.makeBinPath [ gnuplot sox flac id3v2 vorbis-tools ];
+  path = lib.makeBinPath [
+    gnuplot
+    sox
+    flac
+    id3v2
+    vorbis-tools
+  ];
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "bpm-tools";
@@ -21,13 +28,9 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "151vfbs8h3cibs7kbdps5pqrsxhpjv16y2iyfqbxzsclylgfivrp";
   };
 
-  nativeBuildInputs = [
-    makeWrapper
-  ];
+  nativeBuildInputs = [ makeWrapper ];
 
-  installFlags = [
-    "PREFIX=${placeholder "out"}"
-  ];
+  installFlags = [ "PREFIX=${placeholder "out"}" ];
 
   postFixup = ''
     wrapProgram $out/bin/bpm-tag --prefix PATH : "${path}"
@@ -42,4 +45,3 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with maintainers; [ doronbehar ];
   };
 })
-

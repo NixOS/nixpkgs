@@ -1,4 +1,9 @@
-{ lib, pkgs, config, ... } :
+{
+  lib,
+  pkgs,
+  config,
+  ...
+}:
 
 with lib;
 
@@ -7,22 +12,25 @@ let
 
   confFile = pkgs.writeTextFile {
     name = "pgbouncer.ini";
-    text =  ''
+    text = ''
       [databases]
-      ${concatStringsSep "\n"
-      (mapAttrsToList (dbname : settings : "${dbname} = ${settings}") cfg.databases)}
+      ${concatStringsSep "\n" (
+        mapAttrsToList (dbname: settings: "${dbname} = ${settings}") cfg.databases
+      )}
 
       [users]
-      ${concatStringsSep "\n"
-      (mapAttrsToList (username : settings : "${username} = ${settings}") cfg.users)}
+      ${concatStringsSep "\n" (
+        mapAttrsToList (username: settings: "${username} = ${settings}") cfg.users
+      )}
 
       [peers]
-      ${concatStringsSep "\n"
-      (mapAttrsToList (peerid : settings : "${peerid} = ${settings}") cfg.peers)}
+      ${concatStringsSep "\n" (mapAttrsToList (peerid: settings: "${peerid} = ${settings}") cfg.peers)}
 
       [pgbouncer]
       # general
-      ${optionalString (cfg.ignoreStartupParameters != null) "ignore_startup_parameters = ${cfg.ignoreStartupParameters}"}
+      ${optionalString (
+        cfg.ignoreStartupParameters != null
+      ) "ignore_startup_parameters = ${cfg.ignoreStartupParameters}"}
       listen_port = ${toString cfg.listenPort}
       ${optionalString (cfg.listenAddress != null) "listen_addr = ${cfg.listenAddress}"}
       pool_mode = ${cfg.poolMode}
@@ -41,24 +49,24 @@ let
 
       # TLS
       ${optionalString (cfg.tls.client != null) ''
-      client_tls_sslmode = ${cfg.tls.client.sslmode}
-      client_tls_key_file = ${cfg.tls.client.keyFile}
-      client_tls_cert_file = ${cfg.tls.client.certFile}
-      client_tls_ca_file = ${cfg.tls.client.caFile}
+        client_tls_sslmode = ${cfg.tls.client.sslmode}
+        client_tls_key_file = ${cfg.tls.client.keyFile}
+        client_tls_cert_file = ${cfg.tls.client.certFile}
+        client_tls_ca_file = ${cfg.tls.client.caFile}
       ''}
       ${optionalString (cfg.tls.server != null) ''
-      server_tls_sslmode = ${cfg.tls.server.sslmode}
-      server_tls_key_file = ${cfg.tls.server.keyFile}
-      server_tls_cert_file = ${cfg.tls.server.certFile}
-      server_tls_ca_file = ${cfg.tls.server.caFile}
+        server_tls_sslmode = ${cfg.tls.server.sslmode}
+        server_tls_key_file = ${cfg.tls.server.keyFile}
+        server_tls_cert_file = ${cfg.tls.server.certFile}
+        server_tls_ca_file = ${cfg.tls.server.caFile}
       ''}
 
       # log
       ${optionalString (cfg.logFile != null) "logfile = ${cfg.homeDir}/${cfg.logFile}"}
       ${optionalString (cfg.syslog != null) ''
-      syslog = ${if cfg.syslog.enable then "1" else "0"}
-      syslog_ident = ${cfg.syslog.syslogIdent}
-      syslog_facility = ${cfg.syslog.syslogFacility}
+        syslog = ${if cfg.syslog.enable then "1" else "0"}
+        syslog_ident = ${cfg.syslog.syslogIdent}
+        syslog_facility = ${cfg.syslog.syslogFacility}
       ''}
       ${optionalString (cfg.verbose != null) "verbose = ${toString cfg.verbose}"}
 
@@ -71,7 +79,8 @@ let
     '';
   };
 
-in {
+in
+{
 
   options.services.pgbouncer = {
 
@@ -121,7 +130,11 @@ in {
     };
 
     poolMode = mkOption {
-      type = types.enum [ "session" "transaction" "statement" ];
+      type = types.enum [
+        "session"
+        "transaction"
+        "statement"
+      ];
       default = "session";
       description = ''
         Specifies when a server connection can be reused by other clients.
@@ -230,11 +243,11 @@ in {
     # Section [databases]
     databases = mkOption {
       type = types.attrsOf types.str;
-      default = {};
+      default = { };
       example = {
         exampledb = "host=/run/postgresql/ port=5432 auth_user=exampleuser dbname=exampledb sslmode=require";
         bardb = "host=localhost dbname=bazdb";
-        foodb  = "host=host1.example.com port=5432";
+        foodb = "host=host1.example.com port=5432";
       };
       description = ''
         Detailed information about PostgreSQL database definitions:
@@ -245,7 +258,7 @@ in {
     # Section [users]
     users = mkOption {
       type = types.attrsOf types.str;
-      default = {};
+      default = { };
       example = {
         user1 = "pool_mode=session";
       };
@@ -260,7 +273,7 @@ in {
     # Section [peers]
     peers = mkOption {
       type = types.attrsOf types.str;
-      default = {};
+      default = { };
       example = {
         "1" = "host=host1.example.com";
         "2" = "host=/tmp/pgbouncer-2 port=5555";
@@ -275,7 +288,16 @@ in {
 
     # Authentication settings
     authType = mkOption {
-      type = types.enum [ "cert" "md5" "scram-sha-256" "plain" "trust" "any" "hba" "pam" ];
+      type = types.enum [
+        "cert"
+        "md5"
+        "scram-sha-256"
+        "plain"
+        "trust"
+        "any"
+        "hba"
+        "pam"
+      ];
       default = "md5";
       description = ''
         How to authenticate users.
@@ -377,52 +399,61 @@ in {
 
     # TLS settings
     tls.client = mkOption {
-      type = types.nullOr (types.submodule {
-        options = {
-          sslmode = mkOption {
-            type = types.enum [ "disable" "allow" "prefer" "require" "verify-ca" "verify-full" ];
-            default = "disable";
-            description = ''
-              TLS mode to use for connections from clients.
-              TLS connections are disabled by default.
+      type = types.nullOr (
+        types.submodule {
+          options = {
+            sslmode = mkOption {
+              type = types.enum [
+                "disable"
+                "allow"
+                "prefer"
+                "require"
+                "verify-ca"
+                "verify-full"
+              ];
+              default = "disable";
+              description = ''
+                TLS mode to use for connections from clients.
+                TLS connections are disabled by default.
 
-              When enabled, tls.client.keyFile and tls.client.certFile
-              must be also configured to set up the key and certificate
-              PgBouncer uses to accept client connections.
+                When enabled, tls.client.keyFile and tls.client.certFile
+                must be also configured to set up the key and certificate
+                PgBouncer uses to accept client connections.
 
-              disable
-                  Plain TCP. If client requests TLS, it's ignored. Default.
-              allow
-                  If client requests TLS, it is used. If not, plain TCP is used.
-                  If the client presents a client certificate, it is not validated.
-              prefer
-                  Same as allow.
-              require
-                  Client must use TLS. If not, the client connection is rejected.
-                  If the client presents a client certificate, it is not validated.
-              verify-ca
-                  Client must use TLS with valid client certificate.
-              verify-full
-                  Same as verify-ca
-            '';
+                disable
+                    Plain TCP. If client requests TLS, it's ignored. Default.
+                allow
+                    If client requests TLS, it is used. If not, plain TCP is used.
+                    If the client presents a client certificate, it is not validated.
+                prefer
+                    Same as allow.
+                require
+                    Client must use TLS. If not, the client connection is rejected.
+                    If the client presents a client certificate, it is not validated.
+                verify-ca
+                    Client must use TLS with valid client certificate.
+                verify-full
+                    Same as verify-ca
+              '';
+            };
+            certFile = mkOption {
+              type = types.path;
+              example = "/secrets/pgbouncer.key";
+              description = "Path to certificate for private key. Clients can validate it";
+            };
+            keyFile = mkOption {
+              type = types.path;
+              example = "/secrets/pgbouncer.crt";
+              description = "Path to private key for PgBouncer to accept client connections";
+            };
+            caFile = mkOption {
+              type = types.path;
+              example = "/secrets/pgbouncer.crt";
+              description = "Path to root certificate file to validate client certificates";
+            };
           };
-          certFile = mkOption {
-            type = types.path;
-            example = "/secrets/pgbouncer.key";
-            description = "Path to certificate for private key. Clients can validate it";
-          };
-          keyFile = mkOption {
-            type = types.path;
-            example = "/secrets/pgbouncer.crt";
-            description = "Path to private key for PgBouncer to accept client connections";
-          };
-          caFile = mkOption {
-            type = types.path;
-            example = "/secrets/pgbouncer.crt";
-            description = "Path to root certificate file to validate client certificates";
-          };
-        };
-      });
+        }
+      );
       default = null;
       description = ''
         <https://www.pgbouncer.org/config.html#tls-settings>
@@ -430,51 +461,60 @@ in {
     };
 
     tls.server = mkOption {
-      type = types.nullOr (types.submodule {
-        options = {
-          sslmode = mkOption {
-            type = types.enum [ "disable" "allow" "prefer" "require" "verify-ca" "verify-full" ];
-            default = "disable";
-            description = ''
-              TLS mode to use for connections to PostgreSQL servers.
-              TLS connections are disabled by default.
+      type = types.nullOr (
+        types.submodule {
+          options = {
+            sslmode = mkOption {
+              type = types.enum [
+                "disable"
+                "allow"
+                "prefer"
+                "require"
+                "verify-ca"
+                "verify-full"
+              ];
+              default = "disable";
+              description = ''
+                TLS mode to use for connections to PostgreSQL servers.
+                TLS connections are disabled by default.
 
-              disable
-                  Plain TCP. TLS is not even requested from the server. Default.
-              allow
-                  FIXME: if server rejects plain, try TLS?
-              prefer
-                  TLS connection is always requested first from PostgreSQL.
-                  If refused, the connection will be established over plain TCP.
-                  Server certificate is not validated.
-              require
-                  Connection must go over TLS. If server rejects it, plain TCP is not attempted.
-                  Server certificate is not validated.
-              verify-ca
-                  Connection must go over TLS and server certificate must be valid according to tls.server.caFile.
-                  Server host name is not checked against certificate.
-              verify-full
-                  Connection must go over TLS and server certificate must be valid according to tls.server.caFile.
-                  Server host name must match certificate information.
-            '';
+                disable
+                    Plain TCP. TLS is not even requested from the server. Default.
+                allow
+                    FIXME: if server rejects plain, try TLS?
+                prefer
+                    TLS connection is always requested first from PostgreSQL.
+                    If refused, the connection will be established over plain TCP.
+                    Server certificate is not validated.
+                require
+                    Connection must go over TLS. If server rejects it, plain TCP is not attempted.
+                    Server certificate is not validated.
+                verify-ca
+                    Connection must go over TLS and server certificate must be valid according to tls.server.caFile.
+                    Server host name is not checked against certificate.
+                verify-full
+                    Connection must go over TLS and server certificate must be valid according to tls.server.caFile.
+                    Server host name must match certificate information.
+              '';
+            };
+            certFile = mkOption {
+              type = types.path;
+              example = "/secrets/pgbouncer_server.key";
+              description = "Certificate for private key. PostgreSQL server can validate it.";
+            };
+            keyFile = mkOption {
+              type = types.path;
+              example = "/secrets/pgbouncer_server.crt";
+              description = "Private key for PgBouncer to authenticate against PostgreSQL server.";
+            };
+            caFile = mkOption {
+              type = types.path;
+              example = "/secrets/pgbouncer_server.crt";
+              description = "Root certificate file to validate PostgreSQL server certificates.";
+            };
           };
-          certFile = mkOption {
-            type = types.path;
-            example = "/secrets/pgbouncer_server.key";
-            description = "Certificate for private key. PostgreSQL server can validate it.";
-          };
-          keyFile = mkOption {
-            type = types.path;
-            example = "/secrets/pgbouncer_server.crt";
-            description = "Private key for PgBouncer to authenticate against PostgreSQL server.";
-          };
-          caFile = mkOption {
-            type = types.path;
-            example = "/secrets/pgbouncer_server.crt";
-            description = "Root certificate file to validate PostgreSQL server certificates.";
-          };
-        };
-      });
+        }
+      );
       default = null;
       description = ''
         <https://www.pgbouncer.org/config.html#tls-settings>
@@ -483,31 +523,46 @@ in {
 
     # Log settings
     syslog = mkOption {
-      type = types.nullOr (types.submodule {
-        options = {
-          enable = mkOption {
-            type = types.bool;
-            default = false;
-            description = ''
-              Toggles syslog on/off.
-            '';
+      type = types.nullOr (
+        types.submodule {
+          options = {
+            enable = mkOption {
+              type = types.bool;
+              default = false;
+              description = ''
+                Toggles syslog on/off.
+              '';
+            };
+            syslogIdent = mkOption {
+              type = types.str;
+              default = "pgbouncer";
+              description = ''
+                Under what name to send logs to syslog.
+              '';
+            };
+            syslogFacility = mkOption {
+              type = types.enum [
+                "auth"
+                "authpriv"
+                "daemon"
+                "user"
+                "local0"
+                "local1"
+                "local2"
+                "local3"
+                "local4"
+                "local5"
+                "local6"
+                "local7"
+              ];
+              default = "daemon";
+              description = ''
+                Under what facility to send logs to syslog.
+              '';
+            };
           };
-          syslogIdent = mkOption {
-            type = types.str;
-            default = "pgbouncer";
-            description = ''
-              Under what name to send logs to syslog.
-            '';
-          };
-          syslogFacility = mkOption {
-            type = types.enum [ "auth" "authpriv" "daemon" "user" "local0" "local1" "local2" "local3" "local4" "local5" "local6" "local7" ];
-            default = "daemon";
-            description = ''
-              Under what facility to send logs to syslog.
-            '';
-          };
-        };
-      });
+        }
+      );
       default = null;
       description = ''
         <https://www.pgbouncer.org/config.html#log-settings>
@@ -597,8 +652,12 @@ in {
 
     systemd.services.pgbouncer = {
       description = "PgBouncer - PostgreSQL connection pooler";
-      wants    = [ "network-online.target" ] ++ lib.optional config.services.postgresql.enable "postgresql.service";
-      after    = [ "network-online.target" ] ++ lib.optional config.services.postgresql.enable "postgresql.service";
+      wants = [
+        "network-online.target"
+      ] ++ lib.optional config.services.postgresql.enable "postgresql.service";
+      after = [
+        "network-online.target"
+      ] ++ lib.optional config.services.postgresql.enable "postgresql.service";
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
         Type = "notify";
@@ -615,6 +674,6 @@ in {
 
   };
 
-    meta.maintainers = [ maintainers._1000101 ];
+  meta.maintainers = [ maintainers._1000101 ];
 
 }

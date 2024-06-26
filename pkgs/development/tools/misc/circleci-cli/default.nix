@@ -1,4 +1,9 @@
-{ lib, fetchFromGitHub, buildGoModule, installShellFiles }:
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
+  installShellFiles,
+}:
 
 buildGoModule rec {
   pname = "circleci-cli";
@@ -17,7 +22,13 @@ buildGoModule rec {
 
   doCheck = false;
 
-  ldflags = [ "-s" "-w" "-X github.com/CircleCI-Public/circleci-cli/version.Version=${version}" "-X github.com/CircleCI-Public/circleci-cli/version.Commit=${src.rev}" "-X github.com/CircleCI-Public/circleci-cli/version.packageManager=nix" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X github.com/CircleCI-Public/circleci-cli/version.Version=${version}"
+    "-X github.com/CircleCI-Public/circleci-cli/version.Commit=${src.rev}"
+    "-X github.com/CircleCI-Public/circleci-cli/version.packageManager=nix"
+  ];
 
   postInstall = ''
     mv $out/bin/circleci-cli $out/bin/circleci

@@ -1,23 +1,24 @@
-{ stdenvNoCC
-, lib
-, fetchurl
-, autoPatchelfHook
-, wrapGAppsHook3
-, makeWrapper
-, gnome
-, libsecret
-, git
-, curl
-, nss
-, nspr
-, xorg
-, libdrm
-, alsa-lib
-, cups
-, mesa
-, systemd
-, openssl
-, libglvnd
+{
+  stdenvNoCC,
+  lib,
+  fetchurl,
+  autoPatchelfHook,
+  wrapGAppsHook3,
+  makeWrapper,
+  gnome,
+  libsecret,
+  git,
+  curl,
+  nss,
+  nspr,
+  xorg,
+  libdrm,
+  alsa-lib,
+  cups,
+  mesa,
+  systemd,
+  openssl,
+  libglvnd,
 }:
 
 let
@@ -40,7 +41,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
         };
       };
     in
-    fetchurl urls."${stdenvNoCC.hostPlatform.system}" or (throw "Unsupported system: ${stdenvNoCC.hostPlatform.system}");
+    fetchurl
+      urls."${stdenvNoCC.hostPlatform.system}"
+        or (throw "Unsupported system: ${stdenvNoCC.hostPlatform.system}");
 
   nativeBuildInputs = [
     autoPatchelfHook
@@ -87,9 +90,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     )
   '';
 
-  runtimeDependencies = [
-    (lib.getLib systemd)
-  ];
+  runtimeDependencies = [ (lib.getLib systemd) ];
 
   meta = {
     description = "GUI for managing Git and GitHub";

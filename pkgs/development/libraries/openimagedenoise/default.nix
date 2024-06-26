@@ -28,18 +28,18 @@ stdenv'.mkDerivation (finalAttrs: {
 
   patches = lib.optional cudaSupport ./cuda.patch;
 
-  postPatch =
-    ''
-      substituteInPlace devices/metal/CMakeLists.txt \
-        --replace-fail "AppleClang" "Clang"
-    '';
+  postPatch = ''
+    substituteInPlace devices/metal/CMakeLists.txt \
+      --replace-fail "AppleClang" "Clang"
+  '';
 
-  nativeBuildInputs = [
-    cmake
-    python3
-    ispc
-  ] ++ lib.optional cudaSupport cudaPackages.cuda_nvcc
-    ++ lib.optionals stdenv.isDarwin [ xcodebuild ];
+  nativeBuildInputs =
+    [
+      cmake
+      python3
+      ispc
+    ]
+    ++ lib.optional cudaSupport cudaPackages.cuda_nvcc ++ lib.optionals stdenv.isDarwin [ xcodebuild ];
 
   buildInputs =
     [ tbb ]

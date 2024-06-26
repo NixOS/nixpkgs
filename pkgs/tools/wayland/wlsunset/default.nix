@@ -1,6 +1,14 @@
-{ lib, stdenv, fetchFromSourcehut
-, meson, pkg-config, ninja, wayland-scanner, scdoc
-, wayland, wayland-protocols
+{
+  lib,
+  stdenv,
+  fetchFromSourcehut,
+  meson,
+  pkg-config,
+  ninja,
+  wayland-scanner,
+  scdoc,
+  wayland,
+  wayland-protocols,
 }:
 
 stdenv.mkDerivation rec {
@@ -15,11 +23,18 @@ stdenv.mkDerivation rec {
   };
 
   strictDeps = true;
-  depsBuildBuild = [
+  depsBuildBuild = [ pkg-config ];
+  nativeBuildInputs = [
+    meson
     pkg-config
+    ninja
+    wayland-scanner
+    scdoc
   ];
-  nativeBuildInputs = [ meson pkg-config ninja wayland-scanner scdoc ];
-  buildInputs = [ wayland wayland-protocols ];
+  buildInputs = [
+    wayland
+    wayland-protocols
+  ];
 
   meta = with lib; {
     description = "Day/night gamma adjustments for Wayland";

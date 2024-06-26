@@ -1,7 +1,8 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
 }:
 
 stdenv.mkDerivation {
@@ -15,25 +16,27 @@ stdenv.mkDerivation {
     hash = "sha256-BYNm8CxPQbfmnnzNmOQ2Dc8HSyO8mkqzYsBZ5T80398=";
   };
 
-  postPatch = ''
-    # Make a recently added pure virtual function just virtual,
-    # to keep compatibility.
-    sed -i 's/virtual void endImage() = 0;/virtual void endImage() {}/' src/nvtt/nvtt.h
-  '' + lib.optionalString stdenv.isAarch64 ''
-    # remove x86_64-only libraries
-    sed -i '/bc1enc/d' src/nvtt/tests/CMakeLists.txt
-    sed -i '/libsquish/d;/CMP_Core/d' extern/CMakeLists.txt
-  '';
+  postPatch =
+    ''
+      # Make a recently added pure virtual function just virtual,
+      # to keep compatibility.
+      sed -i 's/virtual void endImage() = 0;/virtual void endImage() {}/' src/nvtt/nvtt.h
+    ''
+    + lib.optionalString stdenv.isAarch64 ''
+      # remove x86_64-only libraries
+      sed -i '/bc1enc/d' src/nvtt/tests/CMakeLists.txt
+      sed -i '/libsquish/d;/CMP_Core/d' extern/CMakeLists.txt
+    '';
 
-  outputs = [ "out" "dev" "lib" ];
-
-  nativeBuildInputs = [
-    cmake
+  outputs = [
+    "out"
+    "dev"
+    "lib"
   ];
 
-  cmakeFlags = [
-    (lib.cmakeBool "NVTT_SHARED" true)
-  ];
+  nativeBuildInputs = [ cmake ];
+
+  cmakeFlags = [ (lib.cmakeBool "NVTT_SHARED" true) ];
 
   postInstall = ''
     moveToOutput include "$dev"

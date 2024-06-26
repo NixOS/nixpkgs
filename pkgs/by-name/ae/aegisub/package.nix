@@ -54,7 +54,8 @@ let
     CoreFoundation
     CoreText
     IOKit
-    OpenAL;
+    OpenAL
+    ;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "aegisub";
@@ -78,43 +79,42 @@ stdenv.mkDerivation (finalAttrs: {
     wxGTK
   ];
 
-  buildInputs = [
-    boost
-    expat
-    ffmpeg
-    ffms
-    fftw
-    fontconfig
-    freetype
-    fribidi
-    glib
-    harfbuzz
-    icu
-    libGL
-    libGLU
-    libX11
-    libass
-    libiconv
-    libuchardet
-    pcre
-    wxGTK
-    zlib
-  ]
-  ++ lib.optionals alsaSupport [ alsa-lib ]
-  ++ lib.optionals openalSupport [
-    (if stdenv.isDarwin then OpenAL else openal)
-  ]
-  ++ lib.optionals portaudioSupport [ portaudio ]
-  ++ lib.optionals pulseaudioSupport [ libpulseaudio ]
-  ++ lib.optionals spellcheckSupport [ hunspell ]
-  ++ lib.optionals stdenv.isDarwin [
-    AppKit
-    Carbon
-    Cocoa
-    CoreFoundation
-    CoreText
-    IOKit
-  ];
+  buildInputs =
+    [
+      boost
+      expat
+      ffmpeg
+      ffms
+      fftw
+      fontconfig
+      freetype
+      fribidi
+      glib
+      harfbuzz
+      icu
+      libGL
+      libGLU
+      libX11
+      libass
+      libiconv
+      libuchardet
+      pcre
+      wxGTK
+      zlib
+    ]
+    ++ lib.optionals alsaSupport [ alsa-lib ]
+    ++ lib.optionals openalSupport [ (if stdenv.isDarwin then OpenAL else openal) ]
+    ++ lib.optionals portaudioSupport [ portaudio ]
+    ++ lib.optionals pulseaudioSupport [ libpulseaudio ]
+    ++ lib.optionals spellcheckSupport [ hunspell ]
+    ++ lib.optionals stdenv.isDarwin [
+      AppKit
+      Carbon
+      Cocoa
+      CoreFoundation
+      CoreText
+      IOKit
+    ];
 
   hardeningDisable = [
     "bindnow"
@@ -127,9 +127,7 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/arch1t3cht/Aegisub/commit/b8f4c98c4cbc698e4adbba302c2dc328fe193435.patch";
       hash = "sha256-dCm/VG+8yK7qWKWF4Ew/M2hbbAC/d3hiuRglR9BvWtw=";
     })
-  ] ++ lib.optionals (!useBundledLuaJIT) [
-    ./000-remove-bundled-luajit.patch
-  ];
+  ] ++ lib.optionals (!useBundledLuaJIT) [ ./000-remove-bundled-luajit.patch ];
 
   # error: unknown type name 'NSUInteger'
   postPatch = ''
@@ -161,11 +159,12 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     # The Aegisub sources are itself BSD/ISC, but they are linked against GPL'd
     # softwares - so the resulting program will be GPL
-    license = with lib.licenses; [
-      bsd3
-    ];
+    license = with lib.licenses; [ bsd3 ];
     mainProgram = "aegisub";
-    maintainers = with lib.maintainers; [ AndersonTorres wegank ];
+    maintainers = with lib.maintainers; [
+      AndersonTorres
+      wegank
+    ];
     platforms = lib.platforms.unix;
   };
 })

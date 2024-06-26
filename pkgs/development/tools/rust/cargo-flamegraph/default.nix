@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, makeWrapper, perf, nix-update-script
-, Security
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  makeWrapper,
+  perf,
+  nix-update-script,
+  Security,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -16,9 +23,7 @@ rustPlatform.buildRustPackage rec {
   cargoSha256 = "sha256-KwpveTiViY+C4A+fE5yeGuT9PXbDyi+YsOc75mX2KdU=";
 
   nativeBuildInputs = lib.optionals stdenv.isLinux [ makeWrapper ];
-  buildInputs = lib.optionals stdenv.isDarwin [
-    Security
-  ];
+  buildInputs = lib.optionals stdenv.isDarwin [ Security ];
 
   postFixup = lib.optionalString stdenv.isLinux ''
     wrapProgram $out/bin/cargo-flamegraph \
@@ -32,7 +37,13 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "Easy flamegraphs for Rust projects and everything else, without Perl or pipes <3";
     homepage = "https://github.com/flamegraph-rs/flamegraph";
-    license = with licenses; [ asl20 /* or */ mit ];
-    maintainers = with maintainers; [ killercup matthiasbeyer ];
+    license = with licenses; [
+      asl20 # or
+      mit
+    ];
+    maintainers = with maintainers; [
+      killercup
+      matthiasbeyer
+    ];
   };
 }

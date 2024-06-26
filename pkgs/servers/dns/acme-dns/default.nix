@@ -1,7 +1,8 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, nixosTests
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  nixosTests,
 }:
 
 buildGoModule rec {
@@ -22,7 +23,9 @@ buildGoModule rec {
     substituteInPlace $out/lib/systemd/system/acme-dns.service --replace "/usr/local/bin/acme-dns" "$out/bin/acme-dns"
   '';
 
-  passthru.tests = { inherit (nixosTests) acme-dns; };
+  passthru.tests = {
+    inherit (nixosTests) acme-dns;
+  };
 
   meta = {
     description = "Limited DNS server to handle ACME DNS challenges easily and securely";

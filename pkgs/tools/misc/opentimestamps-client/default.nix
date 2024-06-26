@@ -1,6 +1,7 @@
-{ lib
-, fetchFromGitHub
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -22,13 +23,9 @@ python3.pkgs.buildPythonApplication rec {
     pysocks
   ];
 
-  nativeCheckInputs = with python3.pkgs; [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = with python3.pkgs; [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "otsclient"
-  ];
+  pythonImportsCheck = [ "otsclient" ];
 
   meta = with lib; {
     description = "Command-line tool to create and verify OpenTimestamps proofs";

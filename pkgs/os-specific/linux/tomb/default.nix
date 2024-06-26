@@ -1,23 +1,24 @@
-{ stdenvNoCC
-, lib
-, fetchFromGitHub
-, substituteAll
-, makeWrapper
-, zsh
-, coreutils
-, cryptsetup
-, e2fsprogs
-, file
-, gawk
-, getent
-, gettext
-, gnugrep
-, gnupg
-, libargon2
-, lsof
-, pinentry
-, util-linux
-, nix-update-script
+{
+  stdenvNoCC,
+  lib,
+  fetchFromGitHub,
+  substituteAll,
+  makeWrapper,
+  zsh,
+  coreutils,
+  cryptsetup,
+  e2fsprogs,
+  file,
+  gawk,
+  getent,
+  gettext,
+  gnugrep,
+  gnupg,
+  libargon2,
+  lsof,
+  pinentry,
+  util-linux,
+  nix-update-script,
 }:
 
 stdenvNoCC.mkDerivation rec {
@@ -31,7 +32,10 @@ stdenvNoCC.mkDerivation rec {
     hash = "sha256-lLxQJX0P6b6lbXEcrq45EsX9iKiayZ9XkhqgMfpN3/w=";
   };
 
-  buildInputs = [ zsh pinentry ];
+  buildInputs = [
+    zsh
+    pinentry
+  ];
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -46,7 +50,8 @@ stdenvNoCC.mkDerivation rec {
     install -Dm644 doc/tomb.1 $out/share/man/man1/tomb.1
 
     wrapProgram $out/bin/tomb \
-      --prefix PATH : $out/bin:${lib.makeBinPath [
+      --prefix PATH : $out/bin:${
+        lib.makeBinPath [
           coreutils
           cryptsetup
           e2fsprogs
@@ -60,7 +65,8 @@ stdenvNoCC.mkDerivation rec {
           lsof
           pinentry
           util-linux
-        ]}
+        ]
+      }
   '';
 
   passthru = {
@@ -73,7 +79,10 @@ stdenvNoCC.mkDerivation rec {
     changelog = "https://github.com/dyne/Tomb/blob/v${version}/ChangeLog.md";
     license = licenses.gpl3Only;
     mainProgram = "tomb";
-    maintainers = with maintainers; [ peterhoeg anthonyroussel ];
+    maintainers = with maintainers; [
+      peterhoeg
+      anthonyroussel
+    ];
     platforms = platforms.linux;
   };
 }

@@ -1,20 +1,21 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, rustPlatform
-, rustc
-, wasm-pack
-, wasm-bindgen-cli
-, binaryen
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  rustPlatform,
+  rustc,
+  wasm-pack,
+  wasm-bindgen-cli,
+  binaryen,
 
-, fetchYarnDeps
-, yarn
-, fixup_yarn_lock
-, nodejs
-, asar
+  fetchYarnDeps,
+  yarn,
+  fixup_yarn_lock,
+  nodejs,
+  asar,
 
-, tetrio-src
-, tetrio-version
+  tetrio-src,
+  tetrio-version,
 }:
 
 let
@@ -76,11 +77,19 @@ let
       description = "Self contained toolkit for creating, editing, and previewing TPSE files";
       homepage = "https://gitlab.com/UniQMG/tpsecore";
       license = lib.licenses.mit;
-      maintainers = with lib.maintainers; [ huantian wackbyte ];
+      maintainers = with lib.maintainers; [
+        huantian
+        wackbyte
+      ];
       platforms = lib.platforms.linux;
       # See comment about wasm32-unknown-unknown in rustc.nix.
-      broken = lib.any (a: lib.hasAttr a stdenv.hostPlatform.gcc) [ "cpu" "float-abi" "fpu" ] ||
-        !stdenv.hostPlatform.gcc.thumb or true;
+      broken =
+        lib.any (a: lib.hasAttr a stdenv.hostPlatform.gcc) [
+          "cpu"
+          "float-abi"
+          "fpu"
+        ]
+        || !stdenv.hostPlatform.gcc.thumb or true;
     };
   };
 
@@ -163,7 +172,10 @@ stdenv.mkDerivation (finalAttrs: {
       # is a modified version of tetrio-desktop, which is unfree.
       lib.licenses.unfree
     ];
-    maintainers = with lib.maintainers; [ huantian wackbyte ];
+    maintainers = with lib.maintainers; [
+      huantian
+      wackbyte
+    ];
     platforms = lib.platforms.linux;
   };
 })

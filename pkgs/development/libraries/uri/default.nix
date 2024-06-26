@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, cmake, doxygen }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  doxygen,
+}:
 
 stdenv.mkDerivation rec {
   pname = "uri";
@@ -11,20 +17,28 @@ stdenv.mkDerivation rec {
     sha256 = "148361pixrm94q6v04k13s1msa04bx9yc3djb0lxpa7dlw19vhcd";
   };
 
-  env.NIX_CFLAGS_COMPILE = toString ([
-    "-Wno-error=parentheses"
-    # Needed with GCC 12
-    "-Wno-error=deprecated-declarations"
-    "-Wno-error=nonnull"
-  ] ++ lib.optionals stdenv.cc.isClang [
-    # Needed with Clang 16
-    "-Wno-error=deprecated-builtins"
-  ]);
+  env.NIX_CFLAGS_COMPILE = toString (
+    [
+      "-Wno-error=parentheses"
+      # Needed with GCC 12
+      "-Wno-error=deprecated-declarations"
+      "-Wno-error=nonnull"
+    ]
+    ++ lib.optionals stdenv.cc.isClang [
+      # Needed with Clang 16
+      "-Wno-error=deprecated-builtins"
+    ]
+  );
 
-  nativeBuildInputs = [ cmake doxygen ];
+  nativeBuildInputs = [
+    cmake
+    doxygen
+  ];
 
   cmakeFlags = [
-    "-DUri_BUILD_TESTS=OFF" "-DUri_BUILD_DOCS=ON" "-DBUILD_SHARED_LIBS=ON"
+    "-DUri_BUILD_TESTS=OFF"
+    "-DUri_BUILD_DOCS=ON"
+    "-DBUILD_SHARED_LIBS=ON"
   ];
 
   postBuild = "make doc";

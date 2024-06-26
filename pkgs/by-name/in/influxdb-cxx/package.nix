@@ -1,4 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake, boost, catch2_3, libcpr, trompeloeil }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  boost,
+  catch2_3,
+  libcpr,
+  trompeloeil,
+}:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "influxdb-cxx";
@@ -25,8 +35,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = [ boost libcpr ]
-    ++ lib.optionals finalAttrs.doCheck [ catch2_3 trompeloeil ];
+  buildInputs =
+    [
+      boost
+      libcpr
+    ]
+    ++ lib.optionals finalAttrs.doCheck [
+      catch2_3
+      trompeloeil
+    ];
 
   cmakeFlags = [
     (lib.cmakeBool "INFLUXCXX_TESTING" finalAttrs.doCheck)

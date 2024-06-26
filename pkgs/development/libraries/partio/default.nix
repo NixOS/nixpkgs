@@ -1,17 +1,18 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, unzip
-, cmake
-, freeglut
-, libGLU
-, libGL
-, zlib
-, swig
-, doxygen
-, xorg
-, python3
-, darwin
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  unzip,
+  cmake,
+  freeglut,
+  libGLU,
+  libGL,
+  zlib,
+  swig,
+  doxygen,
+  xorg,
+  python3,
+  darwin,
 }:
 
 stdenv.mkDerivation rec {
@@ -25,7 +26,11 @@ stdenv.mkDerivation rec {
     hash = "sha256-wV9byR85qwOkoTyLjG0gOLC3Gc19ykwiLpDy4T/MENQ=";
   };
 
-  outputs = [ "dev" "out" "lib" ];
+  outputs = [
+    "dev"
+    "out"
+    "lib"
+  ];
 
   nativeBuildInputs = [
     unzip
@@ -33,20 +38,23 @@ stdenv.mkDerivation rec {
     doxygen
   ];
 
-  buildInputs = [
-    zlib
-    swig
-    xorg.libXi
-    xorg.libXmu
-    python3
-  ] ++ lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.Cocoa
-    darwin.apple_sdk.frameworks.GLUT
-  ] ++ lib.optionals (!stdenv.isDarwin) [
-    freeglut
-    libGLU
-    libGL
-  ];
+  buildInputs =
+    [
+      zlib
+      swig
+      xorg.libXi
+      xorg.libXmu
+      python3
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      darwin.apple_sdk.frameworks.Cocoa
+      darwin.apple_sdk.frameworks.GLUT
+    ]
+    ++ lib.optionals (!stdenv.isDarwin) [
+      freeglut
+      libGLU
+      libGL
+    ];
 
   # TODO:
   # Sexpr support

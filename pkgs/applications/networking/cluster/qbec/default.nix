@@ -1,4 +1,9 @@
-{ lib, go, buildGoModule, fetchFromGitHub }:
+{
+  lib,
+  go,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 
 buildGoModule rec {
   pname = "qbec";
@@ -16,7 +21,8 @@ buildGoModule rec {
   doCheck = false;
 
   ldflags = [
-    "-s" "-w"
+    "-s"
+    "-w"
     "-X github.com/splunk/qbec/internal/commands.version=${version}"
     "-X github.com/splunk/qbec/internal/commands.commit=${src.rev}"
     "-X github.com/splunk/qbec/internal/commands.goVersion=${lib.getVersion go}"

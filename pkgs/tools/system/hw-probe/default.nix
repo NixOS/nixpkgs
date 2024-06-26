@@ -1,59 +1,60 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, makeWrapper
-, makePerlPath
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  makeWrapper,
+  makePerlPath,
 
-# Perl libraries
-, LWP
-, LWPProtocolHttps
-, HTTPMessage
-, HTTPDate
-, URI
-, TryTiny
+  # Perl libraries
+  LWP,
+  LWPProtocolHttps,
+  HTTPMessage,
+  HTTPDate,
+  URI,
+  TryTiny,
 
-# Required
-, coreutils
-, curl # Preferred to using the Perl HTTP libs - according to hw-probe.
-, dmidecode
-, edid-decode
-, gnugrep
-, gnutar
-, hwinfo
-, iproute2
-, kmod
-, pciutils
-, perl
-, smartmontools
-, usbutils
-, xz
+  # Required
+  coreutils,
+  curl, # Preferred to using the Perl HTTP libs - according to hw-probe.
+  dmidecode,
+  edid-decode,
+  gnugrep,
+  gnutar,
+  hwinfo,
+  iproute2,
+  kmod,
+  pciutils,
+  perl,
+  smartmontools,
+  usbutils,
+  xz,
 
-# Conditionally recommended
-, systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd
-, systemd
+  # Conditionally recommended
+  systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd,
+  systemd,
 
-# Recommended
-, withRecommended ? true # Install recommended tools
-, mcelog
-, hdparm
-, acpica-tools
-, drm_info
-, mesa-demos
-, memtester
-, sysstat
-, cpuid
-, util-linuxMinimal
-, xinput
-, libva-utils
-, inxi
-, vulkan-tools
-, i2c-tools
-, opensc
+  # Recommended
+  withRecommended ? true, # Install recommended tools
+  mcelog,
+  hdparm,
+  acpica-tools,
+  drm_info,
+  mesa-demos,
+  memtester,
+  sysstat,
+  cpuid,
+  util-linuxMinimal,
+  xinput,
+  libva-utils,
+  inxi,
+  vulkan-tools,
+  i2c-tools,
+  opensc,
 
-# Suggested
-, withSuggested ? false # Install (most) suggested tools
-, hplip
-, sane-backends
+  # Suggested
+  withSuggested ? false, # Install (most) suggested tools
+  hplip,
+  sane-backends,
 # , pnputils # pnputils (lspnp) isn't currently in nixpkgs and appears to be poorly maintained
 }:
 
@@ -91,24 +92,25 @@ stdenv.mkDerivation rec {
         xz
         kmod # (lsmod)
       ];
-      recommendedPrograms = [
-        mcelog
-        hdparm
-        acpica-tools
-        drm_info
-        mesa-demos
-        memtester
-        sysstat # (iostat)
-        util-linuxMinimal # (rfkill)
-        xinput
-        libva-utils # (vainfo)
-        inxi
-        vulkan-tools
-        i2c-tools
-        opensc
-      ]
-      # cpuid is only compatible with i686 and x86_64
-      ++ lib.optional (lib.elem stdenv.hostPlatform.system cpuid.meta.platforms) cpuid;
+      recommendedPrograms =
+        [
+          mcelog
+          hdparm
+          acpica-tools
+          drm_info
+          mesa-demos
+          memtester
+          sysstat # (iostat)
+          util-linuxMinimal # (rfkill)
+          xinput
+          libva-utils # (vainfo)
+          inxi
+          vulkan-tools
+          i2c-tools
+          opensc
+        ]
+        # cpuid is only compatible with i686 and x86_64
+        ++ lib.optional (lib.elem stdenv.hostPlatform.system cpuid.meta.platforms) cpuid;
       conditionallyRecommendedPrograms = lib.optional systemdSupport systemd; # (systemd-analyze)
       suggestedPrograms = [
         hplip # (hp-probe)
@@ -120,9 +122,22 @@ stdenv.mkDerivation rec {
         ++ conditionallyRecommendedPrograms
         ++ lib.optionals withRecommended recommendedPrograms
         ++ lib.optionals withSuggested suggestedPrograms;
-    in [
-      "--set" "PERL5LIB" "${makePerlPath [ LWP LWPProtocolHttps HTTPMessage URI HTTPDate TryTiny ]}"
-      "--prefix" "PATH" ":" "${lib.makeBinPath programs}"
+    in
+    [
+      "--set"
+      "PERL5LIB"
+      "${makePerlPath [
+        LWP
+        LWPProtocolHttps
+        HTTPMessage
+        URI
+        HTTPDate
+        TryTiny
+      ]}"
+      "--prefix"
+      "PATH"
+      ":"
+      "${lib.makeBinPath programs}"
     ];
 
   postInstall = ''
@@ -134,8 +149,11 @@ stdenv.mkDerivation rec {
     description = "Probe for hardware, check operability and find drivers";
     homepage = "https://github.com/linuxhw/hw-probe";
     platforms = with platforms; (linux ++ freebsd ++ netbsd ++ openbsd);
-    license = with licenses; [ lgpl21 bsdOriginal ];
-    maintainers = with maintainers; [ rehno-lindeque  ];
+    license = with licenses; [
+      lgpl21
+      bsdOriginal
+    ];
+    maintainers = with maintainers; [ rehno-lindeque ];
     mainProgram = "hw-probe";
   };
 }

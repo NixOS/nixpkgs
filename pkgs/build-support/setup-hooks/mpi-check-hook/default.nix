@@ -1,5 +1,3 @@
 { callPackage, makeSetupHook }:
 
-makeSetupHook {
-  name = "mpi-checkPhase-hook";
-} ./mpi-check-hook.sh
+makeSetupHook { name = "mpi-checkPhase-hook"; } ./mpi-check-hook.sh

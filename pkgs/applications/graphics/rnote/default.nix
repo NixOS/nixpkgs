@@ -1,28 +1,29 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, alsa-lib
-, appstream
-, appstream-glib
-, cargo
-, cmake
-, desktop-file-utils
-, dos2unix
-, glib
-, gstreamer
-, gtk4
-, libadwaita
-, libxml2
-, meson
-, ninja
-, pkg-config
-, poppler
-, python3
-, rustPlatform
-, rustc
-, shared-mime-info
-, wrapGAppsHook4
-, AudioUnit
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  alsa-lib,
+  appstream,
+  appstream-glib,
+  cargo,
+  cmake,
+  desktop-file-utils,
+  dos2unix,
+  glib,
+  gstreamer,
+  gtk4,
+  libadwaita,
+  libxml2,
+  meson,
+  ninja,
+  pkg-config,
+  poppler,
+  python3,
+  rustPlatform,
+  rustc,
+  shared-mime-info,
+  wrapGAppsHook4,
+  AudioUnit,
 }:
 
 stdenv.mkDerivation rec {
@@ -63,9 +64,7 @@ stdenv.mkDerivation rec {
 
   dontUseCmakeConfigure = true;
 
-  mesonFlags = [
-    (lib.mesonBool "cli" true)
-  ];
+  mesonFlags = [ (lib.mesonBool "cli" true) ];
 
   buildInputs = [
     appstream
@@ -75,11 +74,7 @@ stdenv.mkDerivation rec {
     libadwaita
     libxml2
     poppler
-  ] ++ lib.optionals stdenv.isLinux [
-    alsa-lib
-  ] ++ lib.optionals stdenv.isDarwin [
-    AudioUnit
-  ];
+  ] ++ lib.optionals stdenv.isLinux [ alsa-lib ] ++ lib.optionals stdenv.isDarwin [ AudioUnit ];
 
   postPatch = ''
     chmod +x build-aux/*.py
@@ -91,7 +86,11 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/flxzt/rnote/releases/tag/${src.rev}";
     description = "Simple drawing application to create handwritten notes";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ dotlambda gepbird yrd ];
+    maintainers = with maintainers; [
+      dotlambda
+      gepbird
+      yrd
+    ];
     platforms = platforms.unix;
     # compiler error since 2023-11-17
     broken = stdenv.isDarwin;

@@ -1,12 +1,13 @@
-{ lib
-, buildBazelPackage
-, fetchFromGitHub
-, qt6
-, pkg-config
-, bazel
-, ibus
-, unzip
-, xdg-utils
+{
+  lib,
+  buildBazelPackage,
+  fetchFromGitHub,
+  qt6,
+  pkg-config,
+  bazel,
+  ibus,
+  unzip,
+  xdg-utils,
 }:
 let
   zip-codes = fetchFromGitHub {
@@ -28,9 +29,16 @@ buildBazelPackage rec {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ qt6.wrapQtAppsHook pkg-config unzip ];
+  nativeBuildInputs = [
+    qt6.wrapQtAppsHook
+    pkg-config
+    unzip
+  ];
 
-  buildInputs = [ ibus qt6.qtbase ];
+  buildInputs = [
+    ibus
+    qt6.qtbase
+  ];
 
   dontAddBazelOpts = true;
   removeRulesCC = false;
@@ -46,7 +54,12 @@ buildBazelPackage rec {
     '';
   };
 
-  bazelFlags = [ "--config" "oss_linux" "--compilation_mode" "opt" ];
+  bazelFlags = [
+    "--config"
+    "oss_linux"
+    "--compilation_mode"
+    "opt"
+  ];
 
   bazelTargets = [ "package" ];
 
@@ -89,6 +102,10 @@ buildBazelPackage rec {
     homepage = "https://github.com/google/mozc";
     license = licenses.free;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ gebner ericsagnes pineapplehunter ];
+    maintainers = with maintainers; [
+      gebner
+      ericsagnes
+      pineapplehunter
+    ];
   };
 }

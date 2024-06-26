@@ -1,6 +1,22 @@
-{ lib, buildGoModule, fetchurl, autoreconfHook, pkg-config, libiconv, openssl, pcre, zlib }:
+{
+  lib,
+  buildGoModule,
+  fetchurl,
+  autoreconfHook,
+  pkg-config,
+  libiconv,
+  openssl,
+  pcre,
+  zlib,
+}:
 
-import ./versions.nix ({ version, hash, vendorHash ? throw "unsupported version ${version} for zabbix-agent2", ... }:
+import ./versions.nix (
+  {
+    version,
+    hash,
+    vendorHash ? throw "unsupported version ${version} for zabbix-agent2",
+    ...
+  }:
   buildGoModule {
     pname = "zabbix-agent2";
     inherit version;
@@ -14,8 +30,16 @@ import ./versions.nix ({ version, hash, vendorHash ? throw "unsupported version 
 
     inherit vendorHash;
 
-    nativeBuildInputs = [ autoreconfHook pkg-config ];
-    buildInputs = [ libiconv openssl pcre zlib ];
+    nativeBuildInputs = [
+      autoreconfHook
+      pkg-config
+    ];
+    buildInputs = [
+      libiconv
+      openssl
+      pcre
+      zlib
+    ];
 
     inherit (buildGoModule.go) GOOS GOARCH;
 
@@ -63,4 +87,5 @@ import ./versions.nix ({ version, hash, vendorHash ? throw "unsupported version 
       maintainers = [ maintainers.aanderse ];
       platforms = platforms.linux;
     };
-  })
+  }
+)

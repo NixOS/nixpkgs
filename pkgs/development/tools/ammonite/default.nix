@@ -1,29 +1,43 @@
-{ lib, stdenv, fetchurl, jre, writeScript, common-updater-scripts, git, nixfmt-classic
-, nix, coreutils, gnused, disableRemoteLogging ? true }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  jre,
+  writeScript,
+  common-updater-scripts,
+  git,
+  nixfmt-classic,
+  nix,
+  coreutils,
+  gnused,
+  disableRemoteLogging ? true,
+}:
 
 let
   repo = "git@github.com:lihaoyi/Ammonite.git";
 
-  common = { scalaVersion, sha256 }:
+  common =
+    { scalaVersion, sha256 }:
     stdenv.mkDerivation rec {
       pname = "ammonite";
       version = "3.0.0-M1";
 
       src = fetchurl {
-        url =
-          "https://github.com/lihaoyi/Ammonite/releases/download/${version}/${scalaVersion}-${version}";
+        url = "https://github.com/lihaoyi/Ammonite/releases/download/${version}/${scalaVersion}-${version}";
         inherit sha256;
       };
 
       dontUnpack = true;
 
-      installPhase = ''
-        install -Dm755 $src $out/bin/amm
-        sed -i '0,/java/{s|java|${jre}/bin/java|}' $out/bin/amm
-      '' + lib.optionalString (disableRemoteLogging) ''
-        sed -i "0,/ammonite.Main/{s|ammonite.Main'|ammonite.Main' --no-remote-logging|}" $out/bin/amm
-        sed -i '1i #!/bin/sh' $out/bin/amm
-      '';
+      installPhase =
+        ''
+          install -Dm755 $src $out/bin/amm
+          sed -i '0,/java/{s|java|${jre}/bin/java|}' $out/bin/amm
+        ''
+        + lib.optionalString (disableRemoteLogging) ''
+          sed -i "0,/ammonite.Main/{s|ammonite.Main'|ammonite.Main' --no-remote-logging|}" $out/bin/amm
+          sed -i '1i #!/bin/sh' $out/bin/amm
+        '';
 
       passthru = {
 
@@ -79,7 +93,8 @@ let
         platforms = platforms.all;
       };
     };
-in {
+in
+{
   ammonite_2_12 = common {
     scalaVersion = "2.12";
     sha256 = "sha256-SlweOVHudknbInM4rfEPJ9bLd3Z/EImLhVLzeKfjfMQ=";

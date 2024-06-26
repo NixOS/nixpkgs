@@ -1,4 +1,15 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake, boost, eigen, rapidjson, spdlog, zlib }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  boost,
+  eigen,
+  rapidjson,
+  spdlog,
+  zlib,
+}:
 
 stdenv.mkDerivation rec {
   pname = "vowpal-wabbit";

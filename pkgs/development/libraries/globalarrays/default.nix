@@ -1,6 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook
-, blas, gfortran, openssh, mpi
-} :
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  blas,
+  gfortran,
+  openssh,
+  mpi,
+}:
 
 stdenv.mkDerivation rec {
   pname = "globalarrays";
@@ -13,8 +20,15 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-2ffQIg9topqKX7ygnWaa/UunL9d0Lj9qr9xucsjLuoY=";
   };
 
-  nativeBuildInputs = [ autoreconfHook gfortran ];
-  buildInputs = [ mpi blas openssh ];
+  nativeBuildInputs = [
+    autoreconfHook
+    gfortran
+  ];
+  buildInputs = [
+    mpi
+    blas
+    openssh
+  ];
 
   preConfigure = ''
     configureFlagsArray+=( "--enable-i8" \

@@ -1,6 +1,11 @@
-{ lib, stdenv, fetchFromGitHub
-, cmake, pkg-config, gtest
-, withZlibCompat ? false
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  gtest,
+  withZlibCompat ? false,
 }:
 
 stdenv.mkDerivation rec {
@@ -14,11 +19,18 @@ stdenv.mkDerivation rec {
     hash = "sha256-Auu7DS4qNm9/8t/nCjEJBaXfPPxA18oZr2qqybVY4Es=";
   };
 
-  outputs = [ "out" "dev" "bin" ];
+  outputs = [
+    "out"
+    "dev"
+    "bin"
+  ];
 
   strictDeps = true;
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
 
   buildInputs = [ gtest ];
 
@@ -30,9 +42,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "zlib data compression library for the next generation systems";
-    homepage    = "https://github.com/zlib-ng/zlib-ng";
-    license     = licenses.zlib;
-    platforms   = platforms.all;
+    homepage = "https://github.com/zlib-ng/zlib-ng";
+    license = licenses.zlib;
+    platforms = platforms.all;
     maintainers = with maintainers; [ izorkin ];
   };
 }

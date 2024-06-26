@@ -1,5 +1,20 @@
-{ stdenv, lib, fetchFromGitHub, zlib, openssl, ncurses, libidn, pcre, libssh, libmysqlclient, postgresql
-, withGUI ? false, makeWrapper, pkg-config, gtk2 }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  zlib,
+  openssl,
+  ncurses,
+  libidn,
+  pcre,
+  libssh,
+  libmysqlclient,
+  postgresql,
+  withGUI ? false,
+  makeWrapper,
+  pkg-config,
+  gtk2,
+}:
 
 stdenv.mkDerivation rec {
   pname = "thc-hydra";
@@ -12,23 +27,37 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-gdMxdFrBGVHA1ZBNFW89PBXwACnXTGJ/e/Z5+xVV5F0=";
   };
 
-  postPatch = let
-    makeDirs = output: subDir: lib.concatStringsSep " " (map (path: lib.getOutput output path + "/" + subDir) buildInputs);
-  in ''
-    substituteInPlace configure \
-      --replace '$LIBDIRS' "${makeDirs "lib" "lib"}" \
-      --replace '$INCDIRS' "${makeDirs "dev" "include"}" \
-      --replace "/usr/include/math.h" "${lib.getDev stdenv.cc.libc}/include/math.h" \
-      --replace "libcurses.so" "libncurses.so" \
-      --replace "-lcurses" "-lncurses"
-  '';
+  postPatch =
+    let
+      makeDirs =
+        output: subDir:
+        lib.concatStringsSep " " (map (path: lib.getOutput output path + "/" + subDir) buildInputs);
+    in
+    ''
+      substituteInPlace configure \
+        --replace '$LIBDIRS' "${makeDirs "lib" "lib"}" \
+        --replace '$INCDIRS' "${makeDirs "dev" "include"}" \
+        --replace "/usr/include/math.h" "${lib.getDev stdenv.cc.libc}/include/math.h" \
+        --replace "libcurses.so" "libncurses.so" \
+        --replace "-lcurses" "-lncurses"
+    '';
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-Wno-undef-prefix";
 
-  nativeBuildInputs = lib.optionals withGUI [ pkg-config makeWrapper ];
+  nativeBuildInputs = lib.optionals withGUI [
+    pkg-config
+    makeWrapper
+  ];
 
   buildInputs = [
-    zlib openssl ncurses libidn pcre libssh libmysqlclient postgresql
+    zlib
+    openssl
+    ncurses
+    libidn
+    pcre
+    libssh
+    libmysqlclient
+    postgresql
   ] ++ lib.optional withGUI gtk2;
 
   enableParallelBuilding = true;

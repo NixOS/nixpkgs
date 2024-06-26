@@ -1,11 +1,19 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
 let
   cfg = config.boot.loader.raspberryPi;
 
-  builderUboot = import ./uboot-builder.nix { inherit pkgs configTxt; inherit (cfg) version; };
+  builderUboot = import ./uboot-builder.nix {
+    inherit pkgs configTxt;
+    inherit (cfg) version;
+  };
   builderGeneric = import ./raspberrypi-builder.nix { inherit pkgs configTxt; };
 
   builder =
@@ -20,8 +28,8 @@ let
   isAarch64 = pkgs.stdenv.hostPlatform.isAarch64;
   optional = pkgs.lib.optionalString;
 
-  configTxt =
-    pkgs.writeText "config.txt" (''
+  configTxt = pkgs.writeText "config.txt" (
+    ''
       # U-Boot used to need this to work, regardless of whether UART is actually used or not.
       # TODO: check when/if this can be removed.
       enable_uart=1
@@ -29,15 +37,24 @@ let
       # Prevent the firmware from smashing the framebuffer setup done by the mainline kernel
       # when attempting to show low-voltage or overtemperature warnings.
       avoid_warnings=1
-    '' + optional isAarch64 ''
+    ''
+    + optional isAarch64 ''
       # Boot in 64-bit mode.
       arm_64bit=1
-    '' + (if cfg.uboot.enable then ''
-      kernel=u-boot-rpi.bin
-    '' else ''
-      kernel=kernel.img
-      initramfs initrd followkernel
-    '') + optional (cfg.firmwareConfig != null) cfg.firmwareConfig);
+    ''
+    + (
+      if cfg.uboot.enable then
+        ''
+          kernel=u-boot-rpi.bin
+        ''
+      else
+        ''
+          kernel=kernel.img
+          initramfs initrd followkernel
+        ''
+    )
+    + optional (cfg.firmwareConfig != null) cfg.firmwareConfig
+  );
 
 in
 
@@ -61,7 +78,13 @@ in
 
       version = mkOption {
         default = 2;
-        type = types.enum [ 0 1 2 3 4 ];
+        type = types.enum [
+          0
+          1
+          2
+          3
+          4
+        ];
         description = "";
       };
 
@@ -108,7 +131,7 @@ in
     };
   };
 
-  config = mkMerge[
+  config = mkMerge [
     (mkIf cfg.uboot.enable {
       warnings = [
         ''

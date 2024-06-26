@@ -1,20 +1,21 @@
-{ lib
-, stdenv
-, fetchurl
-, curl
-, fftw
-, gmp
-, gnuplot
-, gtk3
-, gtksourceview3
-, json-glib
-, lapack
-, libxml2
-, mpfr
-, openblas
-, readline
-, Accelerate
-, pkg-config
+{
+  lib,
+  stdenv,
+  fetchurl,
+  curl,
+  fftw,
+  gmp,
+  gnuplot,
+  gtk3,
+  gtksourceview3,
+  json-glib,
+  lapack,
+  libxml2,
+  mpfr,
+  openblas,
+  readline,
+  Accelerate,
+  pkg-config,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -39,13 +40,9 @@ stdenv.mkDerivation (finalAttrs: {
     mpfr
     openblas
     readline
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    Accelerate
-  ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Accelerate ];
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
   enableParallelBuilding = true;
   # Missing install depends:

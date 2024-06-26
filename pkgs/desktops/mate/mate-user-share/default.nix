@@ -1,20 +1,21 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, gettext
-, itstool
-, gtk3
-, caja
-, dbus-glib
-, libnotify
-, libxml2
-, libcanberra-gtk3
-, apacheHttpdPackages
-, hicolor-icon-theme
-, mate
-, wrapGAppsHook3
-, mateUpdateScript
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  gettext,
+  itstool,
+  gtk3,
+  caja,
+  dbus-glib,
+  libnotify,
+  libxml2,
+  libcanberra-gtk3,
+  apacheHttpdPackages,
+  hicolor-icon-theme,
+  mate,
+  wrapGAppsHook3,
+  mateUpdateScript,
 }:
 
 let

@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, gflags
-, libsodium
-, openssl
-, protobuf
-, zlib
-, catch2
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  gflags,
+  libsodium,
+  openssl,
+  protobuf,
+  zlib,
+  catch2,
 }:
 
 stdenv.mkDerivation rec {
@@ -21,9 +22,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-vukh3a6SxHaVCT4hmoVt4hEGB8Sqylu53Nz8fgBWkTM";
   };
 
-  nativeBuildInputs = [
-    cmake
-  ];
+  nativeBuildInputs = [ cmake ];
 
   buildInputs = [
     gflags
@@ -44,9 +43,7 @@ stdenv.mkDerivation rec {
     "-DDISABLE_CRASH_LOG=TRUE"
   ];
 
-  CXXFLAGS = lib.optionals stdenv.cc.isClang [
-    "-std=c++17"
-  ];
+  CXXFLAGS = lib.optionals stdenv.cc.isClang [ "-std=c++17" ];
 
   doCheck = true;
 
@@ -55,7 +52,10 @@ stdenv.mkDerivation rec {
     homepage = "https://eternalterminal.dev/";
     changelog = "https://github.com/MisterTea/EternalTerminal/releases/tag/et-v${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ dezgeg jshort ];
+    maintainers = with maintainers; [
+      dezgeg
+      jshort
+    ];
     platforms = platforms.linux ++ platforms.darwin;
   };
 }

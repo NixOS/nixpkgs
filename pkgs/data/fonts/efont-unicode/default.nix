@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchurl, libfaketime, xorg }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libfaketime,
+  xorg,
+}:
 
 stdenv.mkDerivation rec {
   pname = "efont-unicode";
@@ -9,8 +15,12 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-fT7SsYlV3dCQrf0IZfiNI1grj3ngDgr8IkWdg+f9m3M=";
   };
 
-  nativeBuildInputs = with xorg;
-    [ libfaketime bdftopcf fonttosfnt mkfontscale ];
+  nativeBuildInputs = with xorg; [
+    libfaketime
+    bdftopcf
+    fonttosfnt
+    mkfontscale
+  ];
 
   buildPhase = ''
     runHook preBuild
@@ -42,7 +52,10 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  outputs = [ "out" "bdf" ];
+  outputs = [
+    "out"
+    "bdf"
+  ];
 
   meta = with lib; {
     description = "/efont/ Unicode bitmap font";

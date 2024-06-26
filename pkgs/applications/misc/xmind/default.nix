@@ -1,4 +1,15 @@
-{ stdenv, lib, fetchzip, fetchurl, gtk3, jre8, libXtst, makeWrapper, makeDesktopItem, runtimeShell }:
+{
+  stdenv,
+  lib,
+  fetchzip,
+  fetchurl,
+  gtk3,
+  jre8,
+  libXtst,
+  makeWrapper,
+  makeDesktopItem,
+  runtimeShell,
+}:
 
 stdenv.mkDerivation rec {
   pname = "xmind";
@@ -25,7 +36,10 @@ stdenv.mkDerivation rec {
   dontPatchELF = true;
   dontStrip = true;
 
-  libPath = lib.makeLibraryPath [ gtk3 libXtst ];
+  libPath = lib.makeLibraryPath [
+    gtk3
+    libXtst
+  ];
 
   desktopItem = makeDesktopItem {
     name = "XMind";
@@ -34,41 +48,44 @@ stdenv.mkDerivation rec {
     desktopName = "XMind";
     comment = meta.description;
     categories = [ "Office" ];
-    mimeTypes = [ "application/xmind" "x-scheme-handler/xmind" ];
+    mimeTypes = [
+      "application/xmind"
+      "x-scheme-handler/xmind"
+    ];
   };
 
-  installPhase = let
-    targetDir = if stdenv.hostPlatform.system == "i686-linux"
-      then "XMind_i386"
-      else "XMind_amd64";
-  in ''
-    mkdir -p $out/{bin,libexec/configuration/,share/{applications/,fonts/,icons/hicolor/scalable/apps/}}
-    cp -r ${targetDir}/{configuration,p2,XMind{,.ini}} $out/libexec
-    cp -r {plugins,features} $out/libexec/
-    cp -r fonts $out/share/fonts/
-    cp "${desktopItem}/share/applications/XMind.desktop" $out/share/applications/XMind.desktop
-    cp ${srcIcon} $out/share/icons/hicolor/scalable/apps/xmind.png
+  installPhase =
+    let
+      targetDir = if stdenv.hostPlatform.system == "i686-linux" then "XMind_i386" else "XMind_amd64";
+    in
+    ''
+      mkdir -p $out/{bin,libexec/configuration/,share/{applications/,fonts/,icons/hicolor/scalable/apps/}}
+      cp -r ${targetDir}/{configuration,p2,XMind{,.ini}} $out/libexec
+      cp -r {plugins,features} $out/libexec/
+      cp -r fonts $out/share/fonts/
+      cp "${desktopItem}/share/applications/XMind.desktop" $out/share/applications/XMind.desktop
+      cp ${srcIcon} $out/share/icons/hicolor/scalable/apps/xmind.png
 
-    patchelf --set-interpreter $(cat ${stdenv.cc}/nix-support/dynamic-linker) \
-      $out/libexec/XMind
+      patchelf --set-interpreter $(cat ${stdenv.cc}/nix-support/dynamic-linker) \
+        $out/libexec/XMind
 
-    wrapProgram $out/libexec/XMind \
-      --prefix LD_LIBRARY_PATH : "${libPath}"
+      wrapProgram $out/libexec/XMind \
+        --prefix LD_LIBRARY_PATH : "${libPath}"
 
-    # Inspired by https://aur.archlinux.org/cgit/aur.git/tree/?h=xmind
-    cat >$out/bin/XMind <<EOF
-      #! ${runtimeShell}
-      if [ ! -d "\$HOME/.xmind" ]; then
-        mkdir -p "\$HOME/.xmind/configuration-cathy/"
-        cp -r $out/libexec/configuration/ \$HOME/.xmind/configuration-cathy/
-      fi
+      # Inspired by https://aur.archlinux.org/cgit/aur.git/tree/?h=xmind
+      cat >$out/bin/XMind <<EOF
+        #! ${runtimeShell}
+        if [ ! -d "\$HOME/.xmind" ]; then
+          mkdir -p "\$HOME/.xmind/configuration-cathy/"
+          cp -r $out/libexec/configuration/ \$HOME/.xmind/configuration-cathy/
+        fi
 
-      exec "$out/libexec/XMind" "\$@"
-    EOF
-    chmod +x $out/bin/XMind
+        exec "$out/libexec/XMind" "\$@"
+      EOF
+      chmod +x $out/bin/XMind
 
-    ln -s ${jre8} $out/libexec/jre
-  '';
+      ln -s ${jre8} $out/libexec/jre
+    '';
 
   meta = with lib; {
     description = "Mind-mapping software";

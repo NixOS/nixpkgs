@@ -1,4 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, freetype, libX11, libXi, libXt, libXft }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  freetype,
+  libX11,
+  libXi,
+  libXt,
+  libXft,
+}:
 
 stdenv.mkDerivation rec {
   pname = "deadpixi-sam-unstable";
@@ -20,7 +29,12 @@ stdenv.mkDerivation rec {
 
   CFLAGS = "-D_DARWIN_C_SOURCE";
   makeFlags = [ "DESTDIR=$(out)" ];
-  buildInputs = [ libX11 libXi libXt libXft ];
+  buildInputs = [
+    libX11
+    libXi
+    libXt
+    libXft
+  ];
   # build fails when run in parallel
   enableParallelBuilding = false;
 

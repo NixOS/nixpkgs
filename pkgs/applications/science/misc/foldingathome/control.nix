@@ -1,22 +1,21 @@
-{ lib, stdenv
-, dpkg
-, fahviewer
-, fetchurl
-, makeWrapper
-, python2
+{
+  lib,
+  stdenv,
+  dpkg,
+  fahviewer,
+  fetchurl,
+  makeWrapper,
+  python2,
 }:
 let
   majMin = lib.versions.majorMinor version;
   version = "7.6.21";
 
-  python = python2.withPackages
-    (
-      ps: [
-        ps.pycairo
-        ps.pygobject2
-        ps.pygtk
-      ]
-    );
+  python = python2.withPackages (ps: [
+    ps.pycairo
+    ps.pygobject2
+    ps.pygtk
+  ]);
 in
 stdenv.mkDerivation rec {
   inherit version;
@@ -32,7 +31,10 @@ stdenv.mkDerivation rec {
     makeWrapper
   ];
 
-  buildInputs = [ fahviewer python ];
+  buildInputs = [
+    fahviewer
+    python
+  ];
 
   unpackPhase = ''
     dpkg-deb -x ${src} ./

@@ -1,8 +1,14 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.programs.wavemon;
-in {
+in
+{
   options = {
     programs.wavemon = {
       enable = lib.mkOption {

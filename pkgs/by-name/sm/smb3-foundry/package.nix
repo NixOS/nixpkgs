@@ -1,15 +1,20 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, python3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  python3,
 }:
 
 let
-  python = (python3.withPackages (ps: with ps; [
-    pyside6
-    py65
-    qdarkstyle
-  ]));
+  python = (
+    python3.withPackages (
+      ps: with ps; [
+        pyside6
+        py65
+        qdarkstyle
+      ]
+    )
+  );
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "smb3-foundry";

@@ -1,4 +1,9 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 with lib;
 
@@ -69,7 +74,10 @@ in
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
 
-      path = [ config.nix.package.out pkgs.bzip2.bin ];
+      path = [
+        config.nix.package.out
+        pkgs.bzip2.bin
+      ];
       environment.NIX_REMOTE = "daemon";
 
       script = ''
@@ -85,13 +93,12 @@ in
         User = "nix-serve";
         Group = "nix-serve";
         DynamicUser = true;
-        LoadCredential = lib.optionalString (cfg.secretKeyFile != null)
-          "NIX_SECRET_KEY_FILE:${cfg.secretKeyFile}";
+        LoadCredential = lib.optionalString (
+          cfg.secretKeyFile != null
+        ) "NIX_SECRET_KEY_FILE:${cfg.secretKeyFile}";
       };
     };
 
-    networking.firewall = mkIf cfg.openFirewall {
-      allowedTCPPorts = [ cfg.port ];
-    };
+    networking.firewall = mkIf cfg.openFirewall { allowedTCPPorts = [ cfg.port ]; };
   };
 }

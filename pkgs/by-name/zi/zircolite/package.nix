@@ -1,7 +1,8 @@
-{ lib
-, fetchFromGitHub
-, makeWrapper
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  makeWrapper,
+  python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -18,24 +19,25 @@ python3.pkgs.buildPythonApplication rec {
 
   __darwinAllowLocalNetworking = true;
 
-  build-system = [
-    makeWrapper
-  ];
+  build-system = [ makeWrapper ];
 
-  dependencies = with python3.pkgs; [
-    aiohttp
-    colorama
-    elastic-transport
-    elasticsearch
-    evtx
-    jinja2
-    lxml
-    orjson
-    requests
-    tqdm
-    urllib3
-    xxhash
-  ] ++ elasticsearch.optional-dependencies.async;
+  dependencies =
+    with python3.pkgs;
+    [
+      aiohttp
+      colorama
+      elastic-transport
+      elasticsearch
+      evtx
+      jinja2
+      lxml
+      orjson
+      requests
+      tqdm
+      urllib3
+      xxhash
+    ]
+    ++ elasticsearch.optional-dependencies.async;
 
   installPhase = ''
     runHook preInstall

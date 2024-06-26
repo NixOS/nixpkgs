@@ -1,4 +1,10 @@
-{ lib, buildGoModule, fetchFromGitHub, nix-update-script, nixosTests }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  nix-update-script,
+  nixosTests,
+}:
 
 buildGoModule rec {
   pname = "rootlesskit";

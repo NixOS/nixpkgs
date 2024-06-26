@@ -1,7 +1,8 @@
-{ lib
-, fetchFromGitHub
-, nix-update-script
-, php
+{
+  lib,
+  fetchFromGitHub,
+  nix-update-script,
+  php,
 }:
 
 php.buildComposerProject (finalAttrs: {
@@ -25,6 +26,12 @@ php.buildComposerProject (finalAttrs: {
     homepage = "https://phpunit.de";
     license = lib.licenses.bsd3;
     mainProgram = "phpunit";
-    maintainers = with lib.maintainers; [ onny patka ] ++ lib.teams.php.members;
+    maintainers =
+      with lib.maintainers;
+      [
+        onny
+        patka
+      ]
+      ++ lib.teams.php.members;
   };
 })

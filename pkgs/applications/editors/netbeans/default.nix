@@ -1,5 +1,15 @@
-{ lib, stdenv, fetchurl, makeWrapper, makeDesktopItem, which, unzip, libicns, imagemagick
-, jdk, perl
+{
+  lib,
+  stdenv,
+  fetchurl,
+  makeWrapper,
+  makeDesktopItem,
+  which,
+  unzip,
+  libicns,
+  imagemagick,
+  jdk,
+  perl,
 }:
 
 let
@@ -34,7 +44,12 @@ stdenv.mkDerivation {
     mkdir -pv $out/bin
     cp -a netbeans $out
     makeWrapper $out/netbeans/bin/netbeans $out/bin/netbeans \
-      --prefix PATH : ${lib.makeBinPath [ jdk which ]} \
+      --prefix PATH : ${
+        lib.makeBinPath [
+          jdk
+          which
+        ]
+      } \
       --prefix JAVA_HOME : ${jdk.home} \
       --add-flags "--jdkhome ${jdk.home} \
       -J-Dawt.useSystemAAFontSettings=on -J-Dswing.aatext=true"
@@ -57,8 +72,15 @@ stdenv.mkDerivation {
     ln -s ${desktopItem}/share/applications/* $out/share/applications
   '';
 
-  nativeBuildInputs = [ makeWrapper unzip ];
-  buildInputs = [ perl libicns imagemagick ];
+  nativeBuildInputs = [
+    makeWrapper
+    unzip
+  ];
+  buildInputs = [
+    perl
+    libicns
+    imagemagick
+  ];
 
   meta = {
     description = "Integrated development environment for Java, C, C++ and PHP";
@@ -68,7 +90,11 @@ stdenv.mkDerivation {
       binaryBytecode
       binaryNativeCode
     ];
-    maintainers = with lib.maintainers; [ sander rszibele kashw2 ];
+    maintainers = with lib.maintainers; [
+      sander
+      rszibele
+      kashw2
+    ];
     platforms = lib.platforms.unix;
     mainProgram = "netbeans";
   };

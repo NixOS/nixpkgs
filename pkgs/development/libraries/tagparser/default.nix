@@ -1,10 +1,11 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, cpp-utilities
-, zlib
-, isocodes
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  cpp-utilities,
+  zlib,
+  isocodes,
 }:
 
 stdenv.mkDerivation rec {
@@ -21,12 +22,11 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
 
   buildInputs = [
-    cpp-utilities zlib
+    cpp-utilities
+    zlib
   ];
 
-  cmakeFlags = [
-    "-DLANGUAGE_FILE_ISO_639_2=${isocodes}/share/iso-codes/json/iso_639-2.json"
-  ];
+  cmakeFlags = [ "-DLANGUAGE_FILE_ISO_639_2=${isocodes}/share/iso-codes/json/iso_639-2.json" ];
 
   meta = with lib; {
     homepage = "https://github.com/Martchus/tagparser";
@@ -35,4 +35,3 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.matthiasbeyer ];
   };
 }
-

@@ -1,4 +1,9 @@
-{ lib, buildDunePackage, fetchFromGitLab, ocaml }:
+{
+  lib,
+  buildDunePackage,
+  fetchFromGitLab,
+  ocaml,
+}:
 
 if !(lib.versionOlder ocaml.version "5.0.0") then
   throw "memprof-limits is not available for OCaml ${ocaml.version}"
@@ -18,8 +23,7 @@ else
 
     meta = with lib; {
       homepage = "https://ocaml.org/p/memprof-limits/latest";
-      description =
-        "Memory limits, allocation limits, and thread cancellation for OCaml";
+      description = "Memory limits, allocation limits, and thread cancellation for OCaml";
       license = licenses.lgpl3;
       maintainers = with maintainers; [ alizter ];
     };

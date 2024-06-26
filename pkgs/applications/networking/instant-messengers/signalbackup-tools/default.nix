@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, openssl, sqlite }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  openssl,
+  sqlite,
+}:
 
 stdenv.mkDerivation rec {
   pname = "signalbackup-tools";
@@ -15,7 +21,10 @@ stdenv.mkDerivation rec {
     patchShebangs BUILDSCRIPT_MULTIPROC.bash44
   '';
 
-  buildInputs = [ openssl sqlite ];
+  buildInputs = [
+    openssl
+    sqlite
+  ];
 
   buildPhase = ''
     runHook preBuild

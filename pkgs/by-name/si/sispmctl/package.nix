@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, libusb-compat-0_1
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  libusb-compat-0_1,
 }:
 
 stdenv.mkDerivation rec {
@@ -14,13 +15,9 @@ stdenv.mkDerivation rec {
     hash = "sha256-51eGOkg42m4cpypXrcWspvxH/73ccqaQUtir10PVcII=";
   };
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [
-    libusb-compat-0_1
-  ];
+  buildInputs = [ libusb-compat-0_1 ];
 
   meta = with lib; {
     homepage = "https://sispmctl.sourceforge.net/";

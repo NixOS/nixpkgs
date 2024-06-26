@@ -1,4 +1,13 @@
-{ pkgs, nodejs, lib, python3Packages, fetchFromGitHub, nixosTests, fetchNpmDeps, npmHooks }:
+{
+  pkgs,
+  nodejs,
+  lib,
+  python3Packages,
+  fetchFromGitHub,
+  nixosTests,
+  fetchNpmDeps,
+  npmHooks,
+}:
 
 with python3Packages;
 
@@ -65,7 +74,9 @@ buildPythonApplication rec {
     pytest
   '';
 
-  passthru.tests = { inherit (nixosTests) isso; };
+  passthru.tests = {
+    inherit (nixosTests) isso;
+  };
 
   meta = with lib; {
     description = "Commenting server similar to Disqus";

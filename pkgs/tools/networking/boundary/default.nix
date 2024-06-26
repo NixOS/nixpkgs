@@ -1,4 +1,8 @@
-{ stdenv, lib, fetchzip }:
+{
+  stdenv,
+  lib,
+  fetchzip,
+}:
 
 stdenv.mkDerivation rec {
   pname = "boundary";
@@ -64,7 +68,10 @@ stdenv.mkDerivation rec {
     '';
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.bsl11;
-    maintainers = with maintainers; [ jk techknowlogick ];
+    maintainers = with maintainers; [
+      jk
+      techknowlogick
+    ];
     platforms = platforms.unix;
     mainProgram = "boundary";
   };

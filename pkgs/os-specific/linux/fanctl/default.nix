@@ -1,4 +1,8 @@
-{ lib, fetchFromGitLab, rustPlatform }:
+{
+  lib,
+  fetchFromGitLab,
+  rustPlatform,
+}:
 
 rustPlatform.buildRustPackage rec {
   version = "0.6.4";

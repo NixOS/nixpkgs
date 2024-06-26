@@ -1,4 +1,9 @@
-{ config, hostPkgs, lib, ... }:
+{
+  config,
+  hostPkgs,
+  lib,
+  ...
+}:
 let
   inherit (lib) types mkOption;
 in
@@ -41,7 +46,8 @@ in
     rawTestDerivation = hostPkgs.stdenv.mkDerivation {
       name = "vm-test-run-${config.name}";
 
-      requiredSystemFeatures = [ "nixos-test" ]
+      requiredSystemFeatures =
+        [ "nixos-test" ]
         ++ lib.optionals hostPkgs.stdenv.hostPlatform.isLinux [ "kvm" ]
         ++ lib.optionals hostPkgs.stdenv.hostPlatform.isDarwin [ "apple-virt" ];
 
@@ -58,7 +64,8 @@ in
 
       meta = config.meta;
     };
-    test = lib.lazyDerivation { # lazyDerivation improves performance when only passthru items and/or meta are used.
+    test = lib.lazyDerivation {
+      # lazyDerivation improves performance when only passthru items and/or meta are used.
       derivation = config.rawTestDerivation;
       inherit (config) passthru meta;
     };

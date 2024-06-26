@@ -1,4 +1,10 @@
-{ lib, stdenv, buildGoModule, fetchFromGitHub, AppKit }:
+{
+  lib,
+  stdenv,
+  buildGoModule,
+  fetchFromGitHub,
+  AppKit,
+}:
 
 buildGoModule rec {
   pname = "saml2aws";
@@ -15,17 +21,18 @@ buildGoModule rec {
 
   buildInputs = lib.optionals stdenv.isDarwin [ AppKit ];
 
-  subPackages = [ "." "cmd/saml2aws" ];
-
-  ldflags = [
-    "-X main.Version=${version}"
+  subPackages = [
+    "."
+    "cmd/saml2aws"
   ];
+
+  ldflags = [ "-X main.Version=${version}" ];
 
   meta = with lib; {
     description = "CLI tool which enables you to login and retrieve AWS temporary credentials using a SAML IDP";
     mainProgram = "saml2aws";
-    homepage    = "https://github.com/Versent/saml2aws";
-    license     = licenses.mit;
+    homepage = "https://github.com/Versent/saml2aws";
+    license = licenses.mit;
     maintainers = [ lib.maintainers.pmyjavec ];
   };
 }

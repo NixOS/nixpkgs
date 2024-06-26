@@ -1,26 +1,27 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, meson
-, ninja
-, pkg-config
-, vala
-, glib
-, libgee
-, libhandy
-, granite
-, gexiv2
-, gnome-settings-daemon
-, elementary-settings-daemon
-, gtk3
-, gnome-desktop
-, gala
-, wingpanel
-, elementary-dock
-, switchboard
-, gettext
-, bamf
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  meson,
+  ninja,
+  pkg-config,
+  vala,
+  glib,
+  libgee,
+  libhandy,
+  granite,
+  gexiv2,
+  gnome-settings-daemon,
+  elementary-settings-daemon,
+  gtk3,
+  gnome-desktop,
+  gala,
+  wingpanel,
+  elementary-dock,
+  switchboard,
+  gettext,
+  bamf,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,6 +1,7 @@
-{ lib
-, makeSetupHook
-, zig
+{
+  lib,
+  makeSetupHook,
+  zig,
 }:
 
 makeSetupHook {
@@ -39,10 +40,15 @@ makeSetupHook {
           else
             "-Drelease-safe=true";
       in
-      [ "-Dcpu=baseline" releaseType ];
+      [
+        "-Dcpu=baseline"
+        releaseType
+      ];
   };
 
-  passthru = { inherit zig; };
+  passthru = {
+    inherit zig;
+  };
 
   meta = {
     description = "Setup hook for using the Zig compiler in Nixpkgs";

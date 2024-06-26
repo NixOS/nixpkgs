@@ -1,4 +1,12 @@
-{ lib, rel, buildKodiAddon, fetchzip, addonUpdateScript, dateutil, typing_extensions }:
+{
+  lib,
+  rel,
+  buildKodiAddon,
+  fetchzip,
+  addonUpdateScript,
+  dateutil,
+  typing_extensions,
+}:
 buildKodiAddon rec {
   pname = "arrow";
   namespace = "script.module.arrow";
@@ -16,9 +24,7 @@ buildKodiAddon rec {
 
   passthru = {
     pythonPath = "lib";
-    updateScript = addonUpdateScript {
-      attrPath = "kodi.packages.arrow";
-    };
+    updateScript = addonUpdateScript { attrPath = "kodi.packages.arrow"; };
   };
 
   meta = with lib; {

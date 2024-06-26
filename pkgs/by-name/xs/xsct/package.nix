@@ -1,9 +1,10 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, gitUpdater
-, libX11
-, libXrandr
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  gitUpdater,
+  libX11,
+  libXrandr,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -22,9 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
     libXrandr
   ];
 
-  makeFlags = [
-    "PREFIX=${placeholder "out"}"
-  ];
+  makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
   passthru.updateScript = gitUpdater { };
 

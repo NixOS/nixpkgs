@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-qkYDzsl2Y4WEDDXs9cE/jIXm01jclkYUQbDGe1S0wYs=";
   };
 
-    postPatch = lib.optionalString stdenv.isDarwin ''
+  postPatch = lib.optionalString stdenv.isDarwin ''
     # Replace hardcoded g++ with c++ so clang can be used
     # on darwin
     #

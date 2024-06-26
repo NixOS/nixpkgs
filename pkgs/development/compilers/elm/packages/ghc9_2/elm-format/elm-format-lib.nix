@@ -1,7 +1,26 @@
-{ mkDerivation, aeson, avh4-lib, base, bimap, binary, bytestring
-, containers, elm-format-markdown, elm-format-test-lib, fetchgit
-, hspec, lib, mtl, optparse-applicative, relude, split, tasty
-, tasty-discover, tasty-hspec, tasty-hunit, text
+{
+  mkDerivation,
+  aeson,
+  avh4-lib,
+  base,
+  bimap,
+  binary,
+  bytestring,
+  containers,
+  elm-format-markdown,
+  elm-format-test-lib,
+  fetchgit,
+  hspec,
+  lib,
+  mtl,
+  optparse-applicative,
+  relude,
+  split,
+  tasty,
+  tasty-discover,
+  tasty-hspec,
+  tasty-hunit,
+  text,
 }:
 mkDerivation {
   pname = "elm-format-lib";
@@ -14,13 +33,37 @@ mkDerivation {
   };
   postUnpack = "sourceRoot+=/elm-format-lib; echo source root reset to $sourceRoot";
   libraryHaskellDepends = [
-    aeson avh4-lib base bimap binary bytestring containers
-    elm-format-markdown mtl optparse-applicative relude text
+    aeson
+    avh4-lib
+    base
+    bimap
+    binary
+    bytestring
+    containers
+    elm-format-markdown
+    mtl
+    optparse-applicative
+    relude
+    text
   ];
   testHaskellDepends = [
-    aeson avh4-lib base bimap binary bytestring containers
-    elm-format-markdown elm-format-test-lib hspec mtl
-    optparse-applicative relude split tasty tasty-hspec tasty-hunit
+    aeson
+    avh4-lib
+    base
+    bimap
+    binary
+    bytestring
+    containers
+    elm-format-markdown
+    elm-format-test-lib
+    hspec
+    mtl
+    optparse-applicative
+    relude
+    split
+    tasty
+    tasty-hspec
+    tasty-hunit
     text
   ];
   testToolDepends = [ tasty-discover ];

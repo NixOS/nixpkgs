@@ -1,4 +1,11 @@
-{ lib, stdenv, buildPackages, kernel, pciutils, gettext }:
+{
+  lib,
+  stdenv,
+  buildPackages,
+  kernel,
+  pciutils,
+  gettext,
+}:
 
 stdenv.mkDerivation {
   pname = "cpupower";
@@ -20,8 +27,7 @@ stdenv.mkDerivation {
     "LD=${stdenv.cc.targetPrefix}cc"
   ];
 
-  installFlags = lib.mapAttrsToList
-    (n: v: "${n}dir=${placeholder "out"}/${v}") {
+  installFlags = lib.mapAttrsToList (n: v: "${n}dir=${placeholder "out"}/${v}") {
     bin = "bin";
     sbin = "sbin";
     man = "share/man";

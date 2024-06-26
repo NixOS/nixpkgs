@@ -1,8 +1,9 @@
-{ lib
-, buildNpmPackage
-, fetchurl
-, testers
-, mongosh
+{
+  lib,
+  buildNpmPackage,
+  fetchurl,
+  testers,
+  mongosh,
 }:
 
 let
@@ -28,9 +29,7 @@ buildNpmPackage {
   npmFlags = [ "--omit=optional" ];
 
   passthru = {
-    tests.version = testers.testVersion {
-      package = mongosh;
-    };
+    tests.version = testers.testVersion { package = mongosh; };
     updateScript = ./update.sh;
   };
 

@@ -1,6 +1,7 @@
-{ lib
-, fetchFromGitHub
-, trivialBuild
+{
+  lib,
+  fetchFromGitHub,
+  trivialBuild,
 }:
 
 trivialBuild {

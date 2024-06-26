@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rust
-, rustPlatform
-, cmake
-, just
-, pkg-config
-, libxkbcommon
-, linux-pam
-, wayland
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rust,
+  rustPlatform,
+  cmake,
+  just,
+  pkg-config,
+  libxkbcommon,
+  linux-pam,
+  wayland,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -34,8 +35,17 @@ rustPlatform.buildRustPackage rec {
     };
   };
 
-  nativeBuildInputs = [ rustPlatform.bindgenHook cmake just pkg-config ];
-  buildInputs = [ libxkbcommon wayland linux-pam ];
+  nativeBuildInputs = [
+    rustPlatform.bindgenHook
+    cmake
+    just
+    pkg-config
+  ];
+  buildInputs = [
+    libxkbcommon
+    wayland
+    linux-pam
+  ];
 
   dontUseJustBuild = true;
 

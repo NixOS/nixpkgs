@@ -1,4 +1,10 @@
-{ config, options, pkgs, lib, ... }:
+{
+  config,
+  options,
+  pkgs,
+  lib,
+  ...
+}:
 
 with lib;
 
@@ -10,7 +16,8 @@ let
     health = 10054;
     metrics = 10055;
   };
-in {
+in
+{
   options.services.kubernetes.addons.dns = {
     enable = mkEnableOption "kubernetes dns addon";
 
@@ -18,11 +25,11 @@ in {
       description = "Dns addon clusterIP";
 
       # this default is also what kubernetes users
-      default = (
-        concatStringsSep "." (
-          take 3 (splitString "." config.services.kubernetes.apiserver.serviceClusterIpRange
+      default =
+        (concatStringsSep "." (
+          take 3 (splitString "." config.services.kubernetes.apiserver.serviceClusterIpRange)
         ))
-      ) + ".254";
+        + ".254";
       defaultText = literalMD ''
         The `x.y.z.254` IP of
         `config.${options.services.kubernetes.apiserver.serviceClusterIpRange}`.
@@ -51,7 +58,10 @@ in {
         See: <https://github.com/kubernetes/kubernetes/blob/master/cluster/addons/addon-manager/README.md>.
       '';
       default = "Reconcile";
-      type = types.enum [ "Reconcile" "EnsureExists" ];
+      type = types.enum [
+        "Reconcile"
+        "EnsureExists"
+      ];
     };
 
     coredns = mkOption {
@@ -109,8 +119,7 @@ in {
   };
 
   config = mkIf cfg.enable {
-    services.kubernetes.kubelet.seedDockerImages =
-      singleton (pkgs.dockerTools.pullImage cfg.coredns);
+    services.kubernetes.kubelet.seedDockerImages = singleton (pkgs.dockerTools.pullImage cfg.coredns);
 
     services.kubernetes.addonManager.bootstrapAddons = {
       coredns-cr = {
@@ -128,8 +137,16 @@ in {
         rules = [
           {
             apiGroups = [ "" ];
-            resources = [ "endpoints" "services" "pods" "namespaces" ];
-            verbs = [ "list" "watch" ];
+            resources = [
+              "endpoints"
+              "services"
+              "pods"
+              "namespaces"
+            ];
+            verbs = [
+              "list"
+              "watch"
+            ];
           }
           {
             apiGroups = [ "" ];
@@ -139,7 +156,10 @@ in {
           {
             apiGroups = [ "discovery.k8s.io" ];
             resources = [ "endpointslices" ];
-            verbs = [ "list" "watch" ];
+            verbs = [
+              "list"
+              "watch"
+            ];
           }
         ];
       };
@@ -222,10 +242,14 @@ in {
         spec = {
           replicas = cfg.replicas;
           selector = {
-            matchLabels = { k8s-app = "kube-dns"; };
+            matchLabels = {
+              k8s-app = "kube-dns";
+            };
           };
           strategy = {
-            rollingUpdate = { maxUnavailable = 1; };
+            rollingUpdate = {
+              maxUnavailable = 1;
+            };
             type = "RollingUpdate";
           };
           template = {
@@ -237,7 +261,10 @@ in {
             spec = {
               containers = [
                 {
-                  args = [ "-conf" "/etc/coredns/Corefile" ];
+                  args = [
+                    "-conf"
+                    "/etc/coredns/Corefile"
+                  ];
                   image = with cfg.coredns; "${imageName}:${finalImageTag}";
                   imagePullPolicy = "Never";
                   livenessProbe = {
@@ -361,7 +388,9 @@ in {
               protocol = "TCP";
             }
           ];
-          selector = { k8s-app = "kube-dns"; };
+          selector = {
+            k8s-app = "kube-dns";
+          };
         };
       };
     };

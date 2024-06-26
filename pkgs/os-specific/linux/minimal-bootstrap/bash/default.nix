@@ -1,20 +1,21 @@
-{ lib
-, buildPlatform
-, hostPlatform
-, fetchurl
-, bootBash
-, gnumake
-, gnupatch
-, gnused
-, gnugrep
-, gnutar
-, gawk
-, gzip
-, diffutils
-, tinycc
-, derivationWithMeta
-, bash
-, coreutils
+{
+  lib,
+  buildPlatform,
+  hostPlatform,
+  fetchurl,
+  bootBash,
+  gnumake,
+  gnupatch,
+  gnused,
+  gnugrep,
+  gnutar,
+  gawk,
+  gzip,
+  diffutils,
+  tinycc,
+  derivationWithMeta,
+  bash,
+  coreutils,
 }:
 let
   pname = "bash";
@@ -30,88 +31,98 @@ let
     ./mksignames-flush.patch
   ];
 in
-bootBash.runCommand "${pname}-${version}" {
-  inherit pname version;
+bootBash.runCommand "${pname}-${version}"
+  {
+    inherit pname version;
 
-  nativeBuildInputs = [
-    coreutils
-    tinycc.compiler
-    gnumake
-    gnupatch
-    gnused
-    gnugrep
-    gnutar
-    gawk
-    gzip
-    diffutils
-  ];
+    nativeBuildInputs = [
+      coreutils
+      tinycc.compiler
+      gnumake
+      gnupatch
+      gnused
+      gnugrep
+      gnutar
+      gawk
+      gzip
+      diffutils
+    ];
 
-  passthru.runCommand = name: env: buildCommand:
-    derivationWithMeta ({
-      inherit name buildCommand;
-      builder = "${bash}/bin/bash";
-      args = [
-        "-e"
-        (builtins.toFile "bash-builder.sh" ''
-          export CONFIG_SHELL=$SHELL
+    passthru.runCommand =
+      name: env: buildCommand:
+      derivationWithMeta (
+        {
+          inherit name buildCommand;
+          builder = "${bash}/bin/bash";
+          args = [
+            "-e"
+            (builtins.toFile "bash-builder.sh" ''
+              export CONFIG_SHELL=$SHELL
 
-          # Normalize the NIX_BUILD_CORES variable. The value might be 0, which
-          # means that we're supposed to try and auto-detect the number of
-          # available CPU cores at run-time.
-          NIX_BUILD_CORES="''${NIX_BUILD_CORES:-1}"
-          if ((NIX_BUILD_CORES <= 0)); then
-            guess=$(nproc 2>/dev/null || true)
-            ((NIX_BUILD_CORES = guess <= 0 ? 1 : guess))
-          fi
-          export NIX_BUILD_CORES
+              # Normalize the NIX_BUILD_CORES variable. The value might be 0, which
+              # means that we're supposed to try and auto-detect the number of
+              # available CPU cores at run-time.
+              NIX_BUILD_CORES="''${NIX_BUILD_CORES:-1}"
+              if ((NIX_BUILD_CORES <= 0)); then
+                guess=$(nproc 2>/dev/null || true)
+                ((NIX_BUILD_CORES = guess <= 0 ? 1 : guess))
+              fi
+              export NIX_BUILD_CORES
 
-          bash -eux $buildCommandPath
-        '')
-      ];
-      passAsFile = [ "buildCommand" ];
+              bash -eux $buildCommandPath
+            '')
+          ];
+          passAsFile = [ "buildCommand" ];
 
-      SHELL = "${bash}/bin/bash";
-      PATH = lib.makeBinPath ((env.nativeBuildInputs or []) ++ [
-        bash
-        coreutils
-      ]);
-    } // (builtins.removeAttrs env [ "nativeBuildInputs" ]));
+          SHELL = "${bash}/bin/bash";
+          PATH = lib.makeBinPath (
+            (env.nativeBuildInputs or [ ])
+            ++ [
+              bash
+              coreutils
+            ]
+          );
+        }
+        // (builtins.removeAttrs env [ "nativeBuildInputs" ])
+      );
 
-  passthru.tests.get-version = result:
-    bootBash.runCommand "${pname}-get-version-${version}" {} ''
-      ${result}/bin/bash --version
-      mkdir $out
-    '';
+    passthru.tests.get-version =
+      result:
+      bootBash.runCommand "${pname}-get-version-${version}" { } ''
+        ${result}/bin/bash --version
+        mkdir $out
+      '';
 
-  meta = with lib; {
-    description = "GNU Bourne-Again Shell, the de facto standard shell on Linux";
-    homepage = "https://www.gnu.org/software/bash";
-    license = licenses.gpl3Plus;
-    maintainers = teams.minimal-bootstrap.members;
-    platforms = platforms.unix;
-  };
-} ''
-  # Unpack
-  tar xzf ${src}
-  cd bash-${version}
+    meta = with lib; {
+      description = "GNU Bourne-Again Shell, the de facto standard shell on Linux";
+      homepage = "https://www.gnu.org/software/bash";
+      license = licenses.gpl3Plus;
+      maintainers = teams.minimal-bootstrap.members;
+      platforms = platforms.unix;
+    };
+  }
+  ''
+    # Unpack
+    tar xzf ${src}
+    cd bash-${version}
 
-  # Patch
-  ${lib.concatMapStringsSep "\n" (f: "patch -Np1 -i ${f}") patches}
+    # Patch
+    ${lib.concatMapStringsSep "\n" (f: "patch -Np1 -i ${f}") patches}
 
-  # Configure
-  export CC="tcc -B ${tinycc.libs}/lib"
-  export AR="tcc -ar"
-  export LD=tcc
-  bash ./configure \
-    --prefix=$out \
-    --build=${buildPlatform.config} \
-    --host=${hostPlatform.config} \
-    --without-bash-malloc
+    # Configure
+    export CC="tcc -B ${tinycc.libs}/lib"
+    export AR="tcc -ar"
+    export LD=tcc
+    bash ./configure \
+      --prefix=$out \
+      --build=${buildPlatform.config} \
+      --host=${hostPlatform.config} \
+      --without-bash-malloc
 
-  # Build
-  make -j $NIX_BUILD_CORES SHELL=bash
+    # Build
+    make -j $NIX_BUILD_CORES SHELL=bash
 
-  # Install
-  make -j $NIX_BUILD_CORES install
-  ln -s bash $out/bin/sh
-''
+    # Install
+    make -j $NIX_BUILD_CORES install
+    ln -s bash $out/bin/sh
+  ''

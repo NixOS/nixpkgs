@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchgit, fetchpatch, lame, libvorbis, gettext }:
+{
+  lib,
+  stdenv,
+  fetchgit,
+  fetchpatch,
+  lame,
+  libvorbis,
+  gettext,
+}:
 
 stdenv.mkDerivation rec {
   pname = "ebook2cw";
@@ -18,7 +26,11 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  buildInputs = [ lame libvorbis gettext ];
+  buildInputs = [
+    lame
+    libvorbis
+    gettext
+  ];
 
   makeFlags = [ "DESTDIR=$(out)" ];
 

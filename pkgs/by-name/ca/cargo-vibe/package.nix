@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, dbus
-, udev
-, openssl
-, darwin
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  dbus,
+  udev,
+  openssl,
+  darwin,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "cargo-vibe";
@@ -20,16 +21,22 @@ rustPlatform.buildRustPackage rec {
   };
   cargoHash = "sha256-mvFp1yPHl+2K2K44G3KAmvPYsalN25kkE3V/2eq2iqs=";
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [
-    dbus
-    openssl
-  ]
-  ++ lib.optional stdenv.isLinux udev
-  ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ AppKit IOKit CoreBluetooth ]);
+  buildInputs =
+    [
+      dbus
+      openssl
+    ]
+    ++ lib.optional stdenv.isLinux udev
+    ++ lib.optionals stdenv.isDarwin (
+      with darwin.apple_sdk.frameworks;
+      [
+        AppKit
+        IOKit
+        CoreBluetooth
+      ]
+    );
 
   meta = with lib; {
     description = "Cargo x Buttplug.io";

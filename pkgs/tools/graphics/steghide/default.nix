@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, libjpeg
-, libmcrypt
-, libmhash
-, zlib
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  libjpeg,
+  libmcrypt,
+  libmhash,
+  zlib,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -19,15 +20,13 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-uUXEipIUfu9AbG7Ekz+25JkWSEGzqA7sJHZqezLzUto=";
   };
 
-  nativeBuildInputs = [
-    autoreconfHook
-  ];
+  nativeBuildInputs = [ autoreconfHook ];
 
   buildInputs = [
-     libjpeg
-     libmcrypt
-     libmhash
-     zlib
+    libjpeg
+    libmcrypt
+    libmhash
+    zlib
   ];
 
   postPatch = ''

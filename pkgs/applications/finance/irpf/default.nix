@@ -1,12 +1,13 @@
-{ lib
-, stdenvNoCC
-, fetchzip
-, copyDesktopItems
-, jdk11
-, makeDesktopItem
-, makeWrapper
-, unzip
-, xdg-utils
+{
+  lib,
+  stdenvNoCC,
+  fetchzip,
+  copyDesktopItems,
+  jdk11,
+  makeDesktopItem,
+  makeWrapper,
+  unzip,
+  xdg-utils,
 }:
 
 stdenvNoCC.mkDerivation rec {
@@ -15,14 +16,20 @@ stdenvNoCC.mkDerivation rec {
 
   # https://www.gov.br/receitafederal/pt-br/centrais-de-conteudo/download/pgd/dirpf
   # Para outros sistemas operacionais -> Multi
-  src = let
-    year = lib.head (lib.splitVersion version);
-  in fetchzip {
-    url = "https://downloadirpf.receita.fazenda.gov.br/irpf/${year}/irpf/arquivos/IRPF${version}.zip";
-    hash = "sha256-7Eh5XhZKs2DAQC33ICUG+mgjEU7H3jdYZSeiHNJ6I6Q=";
-  };
+  src =
+    let
+      year = lib.head (lib.splitVersion version);
+    in
+    fetchzip {
+      url = "https://downloadirpf.receita.fazenda.gov.br/irpf/${year}/irpf/arquivos/IRPF${version}.zip";
+      hash = "sha256-7Eh5XhZKs2DAQC33ICUG+mgjEU7H3jdYZSeiHNJ6I6Q=";
+    };
 
-  nativeBuildInputs = [ unzip makeWrapper copyDesktopItems ];
+  nativeBuildInputs = [
+    unzip
+    makeWrapper
+    copyDesktopItems
+  ];
 
   desktopItems = [
     (makeDesktopItem {
@@ -71,7 +78,10 @@ stdenvNoCC.mkDerivation rec {
     license = licenses.unfree;
     platforms = platforms.all;
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    maintainers = with maintainers; [ atila bryanasdev000 ];
+    maintainers = with maintainers; [
+      atila
+      bryanasdev000
+    ];
     mainProgram = "irpf";
   };
 }

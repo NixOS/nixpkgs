@@ -1,4 +1,9 @@
-{ lib, buildGoModule, fetchFromSourcehut, nixosTests }:
+{
+  lib,
+  buildGoModule,
+  fetchFromSourcehut,
+  nixosTests,
+}:
 
 buildGoModule rec {
   pname = "phylactery";
@@ -17,7 +22,10 @@ buildGoModule rec {
     cp ${./go.mod} go.mod
   '';
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   passthru.tests.phylactery = nixosTests.phylactery;
 

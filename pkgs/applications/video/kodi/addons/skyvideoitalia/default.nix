@@ -1,4 +1,13 @@
-{ lib, rel, buildKodiAddon, fetchzip, addonUpdateScript, requests, inputstreamhelper, simplecache }:
+{
+  lib,
+  rel,
+  buildKodiAddon,
+  fetchzip,
+  addonUpdateScript,
+  requests,
+  inputstreamhelper,
+  simplecache,
+}:
 
 buildKodiAddon rec {
   pname = "skyvideoitalia";
@@ -17,9 +26,7 @@ buildKodiAddon rec {
   ];
 
   passthru = {
-    updateScript = addonUpdateScript {
-      attrPath = "kodi.packages.skyvideoitalia";
-    };
+    updateScript = addonUpdateScript { attrPath = "kodi.packages.skyvideoitalia"; };
   };
 
   meta = with lib; {

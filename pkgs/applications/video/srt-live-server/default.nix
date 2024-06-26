@@ -1,8 +1,9 @@
-{ lib
-, fetchFromGitHub
-, stdenv
-, srt
-, zlib
+{
+  lib,
+  fetchFromGitHub,
+  stdenv,
+  srt,
+  zlib,
 }:
 
 stdenv.mkDerivation rec {
@@ -24,11 +25,12 @@ stdenv.mkDerivation rec {
     ./add-ctime-include.patch
   ];
 
-  buildInputs = [ srt zlib ];
-
-  makeFlags = [
-    "PREFIX=$(out)"
+  buildInputs = [
+    srt
+    zlib
   ];
+
+  makeFlags = [ "PREFIX=$(out)" ];
 
   meta = with lib; {
     description = "srt live server for low latency";

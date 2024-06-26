@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, ncurses }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  ncurses,
+}:
 
 stdenv.mkDerivation rec {
   pname = "cmatrix";

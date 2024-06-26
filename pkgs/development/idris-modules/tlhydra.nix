@@ -1,15 +1,20 @@
-{ build-idris-package
-, fetchFromGitHub
-, effects
-, contrib
-, lightyear
-, lib
+{
+  build-idris-package,
+  fetchFromGitHub,
+  effects,
+  contrib,
+  lightyear,
+  lib,
 }:
-build-idris-package  {
+build-idris-package {
   pname = "tlhydra";
   version = "2017-13-26";
 
-  idrisDeps = [ effects contrib lightyear ];
+  idrisDeps = [
+    effects
+    contrib
+    lightyear
+  ];
 
   src = fetchFromGitHub {
     owner = "Termina1";

@@ -1,4 +1,15 @@
-{ lib, stdenv, fetchurl, autoconf, gfortran, hepmc2, fastjet, lhapdf, rivet, sqlite }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoconf,
+  gfortran,
+  hepmc2,
+  fastjet,
+  lhapdf,
+  rivet,
+  sqlite,
+}:
 
 stdenv.mkDerivation rec {
   pname = "sherpa";
@@ -13,9 +24,16 @@ stdenv.mkDerivation rec {
     sed -ie '/sys\/sysctl.h/d' ATOOLS/Org/Run_Parameter.C
   '';
 
-  nativeBuildInputs = [ autoconf gfortran ];
+  nativeBuildInputs = [
+    autoconf
+    gfortran
+  ];
 
-  buildInputs = [ sqlite lhapdf rivet ];
+  buildInputs = [
+    sqlite
+    lhapdf
+    rivet
+  ];
 
   enableParallelBuilding = true;
 

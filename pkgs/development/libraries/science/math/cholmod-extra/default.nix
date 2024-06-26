@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, gfortran, suitesparse, blas, lapack }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  gfortran,
+  suitesparse,
+  blas,
+  lapack,
+}:
 stdenv.mkDerivation rec {
   pname = "cholmod-extra";
   version = "1.2.0";
@@ -11,11 +19,13 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ gfortran ];
-  buildInputs = [ suitesparse blas lapack ];
-
-  makeFlags = [
-    "BLAS=-lcblas"
+  buildInputs = [
+    suitesparse
+    blas
+    lapack
   ];
+
+  makeFlags = [ "BLAS=-lcblas" ];
 
   installFlags = [
     "INSTALL_LIB=$(out)/lib"

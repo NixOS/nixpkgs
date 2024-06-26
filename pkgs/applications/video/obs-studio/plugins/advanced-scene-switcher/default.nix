@@ -1,24 +1,25 @@
-{ lib
-, fetchFromGitHub
+{
+  lib,
+  fetchFromGitHub,
 
-, cmake
-, ninja
+  cmake,
+  ninja,
 
-, alsa-lib
-, asio
-, curl
-, nlohmann_json
-, obs-studio
-, opencv
-, procps
-, qtbase
-, stdenv
-, tesseract
-, websocketpp
-, xorg
+  alsa-lib,
+  asio,
+  curl,
+  nlohmann_json,
+  obs-studio,
+  opencv,
+  procps,
+  qtbase,
+  stdenv,
+  tesseract,
+  websocketpp,
+  xorg,
 
-, httplib
-, libremidi
+  httplib,
+  libremidi,
 }:
 
 stdenv.mkDerivation rec {

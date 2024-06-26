@@ -29,18 +29,19 @@ stdenv.mkDerivation (finalAttrs: {
     pandoc
   ];
 
-  makeFlags = [
-    "VERSION=${finalAttrs.version}"
-  ];
+  makeFlags = [ "VERSION=${finalAttrs.version}" ];
 
-  installPhase = ''
-    runHook preInstall
-    install -D earlyoom $out/bin/earlyoom
-  '' + lib.optionalString withManpage ''
-    installManPage earlyoom.1
-  '' + ''
-    runHook postInstall
-  '';
+  installPhase =
+    ''
+      runHook preInstall
+      install -D earlyoom $out/bin/earlyoom
+    ''
+    + lib.optionalString withManpage ''
+      installManPage earlyoom.1
+    ''
+    + ''
+      runHook postInstall
+    '';
 
   passthru.tests = {
     inherit (nixosTests) earlyoom;

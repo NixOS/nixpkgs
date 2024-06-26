@@ -1,34 +1,35 @@
-{ stdenv
-, lib
-, fetchurl
-, copyDesktopItems
-, makeDesktopItem
-, makeWrapper
-, alsa-lib
-, at-spi2-atk
-, at-spi2-core
-, cairo
-, cups
-, curl
-, dbus
-, expat
-, gdk-pixbuf
-, glib
-, gnutar
-, gtk3
-, icu
-, libdrm
-, libunwind
-, libuuid
-, libxkbcommon
-, mesa
-, nspr
-, nss
-, openssl
-, pango
-, systemd
-, xorg
-, zlib
+{
+  stdenv,
+  lib,
+  fetchurl,
+  copyDesktopItems,
+  makeDesktopItem,
+  makeWrapper,
+  alsa-lib,
+  at-spi2-atk,
+  at-spi2-core,
+  cairo,
+  cups,
+  curl,
+  dbus,
+  expat,
+  gdk-pixbuf,
+  glib,
+  gnutar,
+  gtk3,
+  icu,
+  libdrm,
+  libunwind,
+  libuuid,
+  libxkbcommon,
+  mesa,
+  nspr,
+  nss,
+  openssl,
+  pango,
+  systemd,
+  xorg,
+  zlib,
 }:
 
 # from justinwoo/azuredatastudio-nix
@@ -44,8 +45,17 @@ let
     icon = "azuredatastudio";
     startupNotify = true;
     startupWMClass = "azuredatastudio";
-    categories = [ "Utility" "TextEditor" "Development" "IDE" ];
-    mimeTypes = [ "text/plain" "inode/directory" "application/x-azuredatastudio-workspace" ];
+    categories = [
+      "Utility"
+      "TextEditor"
+      "Development"
+      "IDE"
+    ];
+    mimeTypes = [
+      "text/plain"
+      "inode/directory"
+      "application/x-azuredatastudio-workspace"
+    ];
     keywords = [ "azuredatastudio" ];
     actions.new-empty-window = {
       name = "New Empty Window";
@@ -63,7 +73,12 @@ let
     icon = "azuredatastudio";
     startupNotify = true;
     startupWMClass = "azuredatastudio";
-    categories = [ "Utility" "TextEditor" "Development" "IDE" ];
+    categories = [
+      "Utility"
+      "TextEditor"
+      "Development"
+      "IDE"
+    ];
     mimeTypes = [ "x-scheme-handler/azuredatastudio" ];
     keywords = [ "azuredatastudio" ];
     noDisplay = true;
@@ -74,7 +89,10 @@ stdenv.mkDerivation rec {
   pname = "azuredatastudio";
   version = "1.44.1";
 
-  desktopItems = [ desktopItem urlHandlerDesktopItem ];
+  desktopItems = [
+    desktopItem
+    urlHandlerDesktopItem
+  ];
 
   src = fetchurl {
     name = "${pname}-${version}.tar.gz";

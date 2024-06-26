@@ -1,4 +1,9 @@
-{ lib, fetchFromGitHub, tcl, tclx }:
+{
+  lib,
+  fetchFromGitHub,
+  tcl,
+  tclx,
+}:
 
 tcl.mkTclDerivation rec {
   pname = "tcl-fcgi";
@@ -11,9 +16,7 @@ tcl.mkTclDerivation rec {
     sha256 = "sha256-RLuV4ARmGWCJTmhs7DbMWENQGj3d5ZXWb821WrgG0qA=";
   };
 
-  buildInputs = [
-    tclx
-  ];
+  buildInputs = [ tclx ];
 
   unpackPhase = ''
     mkdir -p $out/lib/tcl-fcgi
@@ -28,4 +31,3 @@ tcl.mkTclDerivation rec {
     maintainers = with maintainers; [ nat-418 ];
   };
 }
-

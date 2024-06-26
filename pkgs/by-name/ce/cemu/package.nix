@@ -46,7 +46,8 @@ let
       sha256 = "sha256-gf47uLeNiXQic43buB5ZnMqiotlUfIyAsP+3H7yJuFg=";
     };
   };
-in stdenv.mkDerivation (finalAttrs: {
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "cemu";
   version = "2.0-86";
 
@@ -110,15 +111,17 @@ in stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  preConfigure = let
-    tag = lib.last (lib.splitString "-" finalAttrs.version);
-  in ''
-    rm -rf dependencies/imgui
-    # cemu expects imgui source code, not just header files
-    ln -s ${imgui'.src} dependencies/imgui
-    substituteInPlace src/Common/version.h --replace-fail " (experimental)" "-${tag} (experimental)"
-    substituteInPlace dependencies/gamemode/lib/gamemode_client.h --replace-fail "libgamemode.so.0" "${gamemode.lib}/lib/libgamemode.so.0"
-  '';
+  preConfigure =
+    let
+      tag = lib.last (lib.splitString "-" finalAttrs.version);
+    in
+    ''
+      rm -rf dependencies/imgui
+      # cemu expects imgui source code, not just header files
+      ln -s ${imgui'.src} dependencies/imgui
+      substituteInPlace src/Common/version.h --replace-fail " (experimental)" "-${tag} (experimental)"
+      substituteInPlace dependencies/gamemode/lib/gamemode_client.h --replace-fail "libgamemode.so.0" "${gamemode.lib}/lib/libgamemode.so.0"
+    '';
 
   installPhase = ''
     runHook preInstall
@@ -136,20 +139,20 @@ in stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  preFixup = let
-    libs = [ vulkan-loader ] ++ cubeb.passthru.backendLibs;
-  in ''
-    gappsWrapperArgs+=(
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath libs}"
-    )
-  '';
+  preFixup =
+    let
+      libs = [ vulkan-loader ] ++ cubeb.passthru.backendLibs;
+    in
+    ''
+      gappsWrapperArgs+=(
+        --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath libs}"
+      )
+    '';
 
   passthru = {
     updateScript = nix-update-script { };
     tests = {
-      version = testers.testVersion {
-        package = finalAttrs.finalPackage;
-      };
+      version = testers.testVersion { package = finalAttrs.finalPackage; };
     };
   };
 
@@ -158,7 +161,11 @@ in stdenv.mkDerivation (finalAttrs: {
     homepage = "https://cemu.info";
     license = lib.licenses.mpl20;
     mainProgram = "cemu";
-    maintainers = with lib.maintainers; [ zhaofengli baduhai AndersonTorres ];
+    maintainers = with lib.maintainers; [
+      zhaofengli
+      baduhai
+      AndersonTorres
+    ];
     platforms = [ "x86_64-linux" ];
   };
 })

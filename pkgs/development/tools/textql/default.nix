@@ -1,14 +1,20 @@
-{ lib, buildGoModule, fetchFromGitHub, fetchpatch, sqlite }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  fetchpatch,
+  sqlite,
+}:
 
 buildGoModule rec {
   pname = "textql";
   version = "unstable-2021-07-06";
 
   src = fetchFromGitHub {
-    owner  = "dinedal";
-    repo   = "textql";
-    rev    = "fca00ecc76c8d9891b195ad2c1359d39f0213604";
-    hash   = "sha256-NccRo5YdhwTo2eez5UE5nI3TEqzTL1rjPO1kKfDBNuw=";
+    owner = "dinedal";
+    repo = "textql";
+    rev = "fca00ecc76c8d9891b195ad2c1359d39f0213604";
+    hash = "sha256-NccRo5YdhwTo2eez5UE5nI3TEqzTL1rjPO1kKfDBNuw=";
   };
 
   patches = [

@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchFromGitHub
-, SystemConfiguration
-, python3
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  SystemConfiguration,
+  python3,
 }:
 
 rustPlatform.buildRustPackage rec {

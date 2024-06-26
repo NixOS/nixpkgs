@@ -1,10 +1,11 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, python3
-, osi
-, cplex
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  python3,
+  osi,
+  cplex,
 }:
 
 stdenv.mkDerivation rec {
@@ -18,8 +19,14 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-yNaMyS47yxc/p5Rs/kHwD/pgjGXnHBdybYdo1GIEmA4=";
   };
 
-  nativeBuildInputs = [ cmake python3.pkgs.wrapPython ];
-  buildInputs = [ python3 osi ];
+  nativeBuildInputs = [
+    cmake
+    python3.pkgs.wrapPython
+  ];
+  buildInputs = [
+    python3
+    osi
+  ];
 
   cmakeFlags = lib.optionals osi.withCplex [ "-DDOWNWARD_CPLEX_ROOT=${cplex}/cplex" ];
 

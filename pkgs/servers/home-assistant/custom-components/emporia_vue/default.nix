@@ -1,7 +1,8 @@
-{ lib
-, fetchFromGitHub
-, buildHomeAssistantComponent
-, pyemvue
+{
+  lib,
+  fetchFromGitHub,
+  buildHomeAssistantComponent,
+  pyemvue,
 }:
 
 buildHomeAssistantComponent rec {
@@ -16,9 +17,7 @@ buildHomeAssistantComponent rec {
     hash = "sha256-6NrRuBjpulT66pVUfW9ujULL5HSzfgyic1pKEBRupNA=";
   };
 
-  propagatedBuildInputs = [
-    pyemvue
-  ];
+  propagatedBuildInputs = [ pyemvue ];
 
   postPatch = ''
     substituteInPlace custom_components/emporia_vue/manifest.json --replace-fail 'pyemvue==0.17.1' 'pyemvue>=0.17.1'

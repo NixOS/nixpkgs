@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchurl, libkrb5 }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libkrb5,
+}:
 
 stdenv.mkDerivation rec {
   pname = "libgssglue";

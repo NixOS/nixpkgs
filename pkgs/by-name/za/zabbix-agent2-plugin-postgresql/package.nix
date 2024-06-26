@@ -1,4 +1,9 @@
-{ lib, buildGoModule, fetchurl, pkg-config }:
+{
+  lib,
+  buildGoModule,
+  fetchurl,
+  pkg-config,
+}:
 
 buildGoModule rec {
   pname = "zabbix-agent2-plugin-postgresql";

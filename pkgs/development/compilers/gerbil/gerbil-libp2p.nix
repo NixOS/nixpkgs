@@ -7,7 +7,7 @@
   softwareName = "Gerbil-libp2p";
   gerbil-package = "vyzo";
 
-  buildInputs = []; # Note: at *runtime*, this depends on go-libp2p-daemon running
+  buildInputs = [ ]; # Note: at *runtime*, this depends on go-libp2p-daemon running
 
   pre-src = {
     fun = fetchFromGitHub;
@@ -19,9 +19,9 @@
 
   meta = with lib; {
     description = "Gerbil libp2p: use libp2p from Gerbil";
-    homepage    = "https://github.com/vyzo/gerbil-libp2p";
-    license     = licenses.mit;
-    platforms   = platforms.unix;
+    homepage = "https://github.com/vyzo/gerbil-libp2p";
+    license = licenses.mit;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ fare ];
   };
 }

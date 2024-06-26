@@ -1,4 +1,18 @@
-{ lib, stdenv, cmake, zlib, fetchFromGitHub, re2, abseil-cpp, protobuf, capstone, gtest, pkg-config, lit, llvmPackages_16 }:
+{
+  lib,
+  stdenv,
+  cmake,
+  zlib,
+  fetchFromGitHub,
+  re2,
+  abseil-cpp,
+  protobuf,
+  capstone,
+  gtest,
+  pkg-config,
+  lit,
+  llvmPackages_16,
+}:
 
 stdenv.mkDerivation rec {
   pname = "bloaty";
@@ -34,14 +48,26 @@ stdenv.mkDerivation rec {
     substituteInPlace CMakeLists.txt \
       --replace "find_package(Python COMPONENTS Interpreter)" "" \
       --replace "if(Python_FOUND AND LIT_EXECUTABLE" "if(LIT_EXECUTABLE" \
-      --replace "COMMAND \''\${Python_EXECUTABLE} \''\${LIT_EXECUTABLE}" "COMMAND \''\${LIT_EXECUTABLE}"
+      --replace "COMMAND \${Python_EXECUTABLE} \${LIT_EXECUTABLE}" "COMMAND \${LIT_EXECUTABLE}"
     # wasm test fail. Possibly due to LLVM version < 17. See https://github.com/google/bloaty/pull/354
     rm -rf tests/wasm
   '';
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
 
-  buildInputs = [ zlib re2 abseil-cpp protobuf capstone gtest lit llvmPackages_16.libllvm ];
+  buildInputs = [
+    zlib
+    re2
+    abseil-cpp
+    protobuf
+    capstone
+    gtest
+    lit
+    llvmPackages_16.libllvm
+  ];
 
   doCheck = true;
 

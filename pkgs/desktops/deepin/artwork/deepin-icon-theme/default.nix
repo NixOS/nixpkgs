@@ -1,9 +1,10 @@
-{ stdenvNoCC
-, lib
-, fetchFromGitHub
-, gtk3
-, xcursorgen
-, papirus-icon-theme
+{
+  stdenvNoCC,
+  lib,
+  fetchFromGitHub,
+  gtk3,
+  xcursorgen,
+  papirus-icon-theme,
 }:
 
 stdenvNoCC.mkDerivation rec {
@@ -24,9 +25,7 @@ stdenvNoCC.mkDerivation rec {
     xcursorgen
   ];
 
-  propagatedBuildInputs = [
-    papirus-icon-theme
-  ];
+  propagatedBuildInputs = [ papirus-icon-theme ];
 
   dontDropIconThemeCache = true;
 

@@ -1,4 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 
 buildGoModule rec {
   pname = "tile38";
@@ -13,9 +17,16 @@ buildGoModule rec {
 
   vendorHash = "sha256-nnamNwowRPWQBKUMg800bFgijv8iHbdh/wUwTfX0NcY=";
 
-  subPackages = [ "cmd/tile38-cli" "cmd/tile38-server" ];
+  subPackages = [
+    "cmd/tile38-cli"
+    "cmd/tile38-server"
+  ];
 
-  ldflags = [ "-s" "-w" "-X github.com/tidwall/tile38/core.Version=${version}" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X github.com/tidwall/tile38/core.Version=${version}"
+  ];
 
   meta = with lib; {
     description = "Real-time Geospatial and Geofencing";

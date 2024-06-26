@@ -1,9 +1,10 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, nix-update-script
-, testers
-, kickstart
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  nix-update-script,
+  testers,
+  kickstart,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -27,9 +28,7 @@ rustPlatform.buildRustPackage rec {
 
   passthru = {
     updateScript = nix-update-script { };
-    tests.version = testers.testVersion {
-      package = kickstart;
-    };
+    tests.version = testers.testVersion { package = kickstart; };
   };
 
   meta = with lib; {

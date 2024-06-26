@@ -1,21 +1,22 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, which
-, zip
-, libicns
-, botan2
-, capstone
-, jansson
-, libunistring
-, wxGTK32
-, lua53Packages
-, perlPackages
-, gtk3
-, Carbon
-, Cocoa
-, IOKit
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  which,
+  zip,
+  libicns,
+  botan2,
+  capstone,
+  jansson,
+  libunistring,
+  wxGTK32,
+  lua53Packages,
+  perlPackages,
+  gtk3,
+  Carbon,
+  Cocoa,
+  IOKit,
 }:
 
 stdenv.mkDerivation rec {
@@ -29,17 +30,38 @@ stdenv.mkDerivation rec {
     hash = "sha256-/m4s5BW33I9g9hi5j3Vtui271w8Jv91+rQrI3qpO5Og=";
   };
 
-  nativeBuildInputs = [ pkg-config which zip ]
-    ++ lib.optionals stdenv.isDarwin [ libicns ];
+  nativeBuildInputs = [
+    pkg-config
+    which
+    zip
+  ] ++ lib.optionals stdenv.isDarwin [ libicns ];
 
-  buildInputs = [ botan2 capstone jansson libunistring wxGTK32 ]
-    ++ (with lua53Packages; [ lua busted ])
-    ++ (with perlPackages; [ perl TemplateToolkit ])
+  buildInputs =
+    [
+      botan2
+      capstone
+      jansson
+      libunistring
+      wxGTK32
+    ]
+    ++ (with lua53Packages; [
+      lua
+      busted
+    ])
+    ++ (with perlPackages; [
+      perl
+      TemplateToolkit
+    ])
     ++ lib.optionals stdenv.isLinux [ gtk3 ]
-    ++ lib.optionals stdenv.isDarwin [ Carbon Cocoa IOKit ];
+    ++ lib.optionals stdenv.isDarwin [
+      Carbon
+      Cocoa
+      IOKit
+    ];
 
-  makeFlags = [ "prefix=${placeholder "out"}" ]
-    ++ lib.optionals stdenv.isDarwin [ "-f Makefile.osx" ];
+  makeFlags = [
+    "prefix=${placeholder "out"}"
+  ] ++ lib.optionals stdenv.isDarwin [ "-f Makefile.osx" ];
 
   enableParallelBuilding = true;
 
@@ -52,7 +74,10 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/solemnwarning/rehex";
     changelog = "https://github.com/solemnwarning/rehex/raw/${version}/CHANGES.txt";
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ markus1189 wegank ];
+    maintainers = with maintainers; [
+      markus1189
+      wegank
+    ];
     platforms = platforms.all;
     mainProgram = "rehex";
   };

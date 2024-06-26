@@ -17,9 +17,9 @@
 
   meta = with lib; {
     description = "Super Monadic Über Go-into : Parsers and Gerbil Scheme";
-    homepage    = "https://github.com/drewc/smug-gerbil";
-    license     = licenses.mit;
-    platforms   = platforms.unix;
+    homepage = "https://github.com/drewc/smug-gerbil";
+    license = licenses.mit;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ fare ];
   };
 }

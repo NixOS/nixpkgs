@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, qtbase
-, zlib
-, freetype
-, libjpeg
-, libtiff
-, libpng
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  qtbase,
+  zlib,
+  freetype,
+  libjpeg,
+  libtiff,
+  libpng,
 }:
 
 stdenv.mkDerivation rec {
@@ -21,13 +22,9 @@ stdenv.mkDerivation rec {
     hash = "sha256-7VltECiXQY+6M5EE17SKj0KwLk0+gOJfbLqprafIgLQ=";
   };
 
-  nativeBuildInputs = [
-    cmake
-  ];
+  nativeBuildInputs = [ cmake ];
 
-  buildInputs = [
-    qtbase
-  ];
+  buildInputs = [ qtbase ];
 
   propagatedBuildInputs = [
     zlib
@@ -53,4 +50,3 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ rewine ];
   };
 }
-

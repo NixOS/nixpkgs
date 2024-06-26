@@ -1,11 +1,12 @@
-{ lib
-, fetchFromGitHub
-, pkg-config
-, pkgs
-, overrideSDK
-, darwin
-, testers
-, nix-update-script
+{
+  lib,
+  fetchFromGitHub,
+  pkg-config,
+  pkgs,
+  overrideSDK,
+  darwin,
+  testers,
+  nix-update-script,
 }:
 let
   stdenv = overrideSDK pkgs.stdenv "11.0";
@@ -21,9 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-DX1d228UCOI+JU+RxenhiGyn3AiqpsGe0aCtr091szs=";
   };
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = with darwin.apple_sdk.frameworks; [
     AppKit

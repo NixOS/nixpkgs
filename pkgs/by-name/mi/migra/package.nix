@@ -1,9 +1,9 @@
-{ lib
-, python3
-, fetchFromGitHub
-, postgresql
-, postgresqlTestHook
-,
+{
+  lib,
+  python3,
+  fetchFromGitHub,
+  postgresql,
+  postgresqlTestHook,
 }:
 python3.pkgs.buildPythonApplication rec {
   pname = "migra";
@@ -17,9 +17,7 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-LSCJA5Ym1LuV3EZl6gnl9jTHGc8A1LXmR1fj0ZZc+po=";
   };
 
-  nativeBuildInputs = [
-    python3.pkgs.poetry-core
-  ];
+  nativeBuildInputs = [ python3.pkgs.poetry-core ];
 
   propagatedBuildInputs = with python3.pkgs; [
     schemainspect

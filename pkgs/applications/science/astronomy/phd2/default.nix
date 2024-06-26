@@ -1,5 +1,18 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, cmake, gtk3, wxGTK32
-, curl, gettext, glib, indi-full, libnova, wrapGAppsHook3 }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  cmake,
+  gtk3,
+  wxGTK32,
+  curl,
+  gettext,
+  glib,
+  indi-full,
+  libnova,
+  wrapGAppsHook3,
+}:
 
 stdenv.mkDerivation rec {
   pname = "phd2";
@@ -28,9 +41,7 @@ stdenv.mkDerivation rec {
     libnova
   ];
 
-  cmakeFlags = [
-    "-DOPENSOURCE_ONLY=1"
-  ];
+  cmakeFlags = [ "-DOPENSOURCE_ONLY=1" ];
 
   # Fix broken wrapped name scheme by moving wrapped binary to where wrapper expects it
   postFixup = ''

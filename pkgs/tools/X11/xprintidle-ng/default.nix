@@ -1,19 +1,20 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, libX11
-, libXScrnSaver
-, libXext
-, gnulib
-, autoconf
-, automake
-, libtool
-, gettext
-, pkg-config
-, git
-, perl
-, texinfo
-, help2man
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  libX11,
+  libXScrnSaver,
+  libXext,
+  gnulib,
+  autoconf,
+  automake,
+  libtool,
+  gettext,
+  pkg-config,
+  git,
+  perl,
+  texinfo,
+  help2man,
 }:
 
 stdenv.mkDerivation rec {
@@ -27,9 +28,7 @@ stdenv.mkDerivation rec {
     sha256 = "0a5024vimpfrpj6w60j1ad8qvjkrmxiy8w1yijxfwk917ag9rkpq";
   };
 
-  patches = [
-    ./fix-config_h-includes-should-be-first.patch
-  ];
+  patches = [ ./fix-config_h-includes-should-be-first.patch ];
 
   postPatch = ''
     substituteInPlace configure.ac \

@@ -1,7 +1,8 @@
-{ lib
-, mkAzExtension
-, mycli
-, python3Packages
+{
+  lib,
+  mkAzExtension,
+  mycli,
+  python3Packages,
 }:
 
 {
@@ -20,14 +21,14 @@
     url = "https://azcliprod.blob.core.windows.net/cli-extensions/rdbms_connect-${version}-py2.py3-none-any.whl";
     sha256 = "49cbe8d9b7ea07a8974a29ad90247e864ed798bed5f28d0e3a57a4b37f5939e7";
     description = "Support for testing connection to Azure Database for MySQL & PostgreSQL servers";
-    propagatedBuildInputs = (with python3Packages; [
-      pgcli
-      psycopg2
-      pymysql
-      setproctitle
-    ]) ++ [
-      mycli
-    ];
+    propagatedBuildInputs =
+      (with python3Packages; [
+        pgcli
+        psycopg2
+        pymysql
+        setproctitle
+      ])
+      ++ [ mycli ];
     meta.maintainers = with lib.maintainers; [ obreitwi ];
   };
 

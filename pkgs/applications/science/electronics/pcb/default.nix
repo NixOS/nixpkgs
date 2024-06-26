@@ -1,23 +1,25 @@
-{ lib, stdenv
-, fetchurl
-, pkg-config
-, gtk2
-, bison
-, intltool
-, flex
-, netpbm
-, imagemagick
-, dbus
-, freetype
-, fontconfig
-, libGLU
-, libGL
-, shared-mime-info
-, tcl
-, tk
-, gnome2
-, gd
-, xorg
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  gtk2,
+  bison,
+  intltool,
+  flex,
+  netpbm,
+  imagemagick,
+  dbus,
+  freetype,
+  fontconfig,
+  libGLU,
+  libGL,
+  shared-mime-info,
+  tcl,
+  tk,
+  gnome2,
+  gd,
+  xorg,
 }:
 
 stdenv.mkDerivation rec {
@@ -54,9 +56,7 @@ stdenv.mkDerivation rec {
     xorg.libXmu
   ];
 
-  configureFlags = [
-    "--disable-update-desktop-database"
-  ];
+  configureFlags = [ "--disable-update-desktop-database" ];
 
   meta = with lib; {
     description = "Printed Circuit Board editor";

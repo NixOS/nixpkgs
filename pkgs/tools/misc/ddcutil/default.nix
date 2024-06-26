@@ -1,15 +1,16 @@
-{ lib
-, stdenv
-, fetchurl
-, autoreconfHook
-, pkg-config
-, glib
-, jansson
-, udev
-, libgudev
-, libusb1
-, libdrm
-, xorg
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoreconfHook,
+  pkg-config,
+  glib,
+  jansson,
+  udev,
+  libgudev,
+  libusb1,
+  libdrm,
+  xorg,
 }:
 
 stdenv.mkDerivation rec {
@@ -21,7 +22,10 @@ stdenv.mkDerivation rec {
     hash = "sha256-4U/igqtgw2rwyuhEkV1pWYPIyNZEt2N6hlXJ9bDUyRw=";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ];
 
   buildInputs = [
     glib
@@ -46,4 +50,3 @@ stdenv.mkDerivation rec {
     mainProgram = "ddcutil";
   };
 }
-

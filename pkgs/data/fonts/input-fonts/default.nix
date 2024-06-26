@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchzip
-, python3
-, config
-, acceptLicense ? config.input-fonts.acceptLicense or false
+{
+  lib,
+  stdenv,
+  fetchzip,
+  python3,
+  config,
+  acceptLicense ? config.input-fonts.acceptLicense or false,
 }:
 
 let

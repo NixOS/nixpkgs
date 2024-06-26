@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, mkDerivation
-, fetchzip
-, installShellFiles
-, pkg-config
-, qmake
-, qtbase
-, kcoreaddons
-, kwidgetsaddons
+{
+  lib,
+  stdenv,
+  mkDerivation,
+  fetchzip,
+  installShellFiles,
+  pkg-config,
+  qmake,
+  qtbase,
+  kcoreaddons,
+  kwidgetsaddons,
 }:
 
 mkDerivation rec {
@@ -41,9 +42,7 @@ mkDerivation rec {
     qtbase
   ];
 
-  qmakeFlags = [
-    "INSTALLROOT=$(out)"
-  ];
+  qmakeFlags = [ "INSTALLROOT=$(out)" ];
 
   installPhase = ''
     runHook preInstall

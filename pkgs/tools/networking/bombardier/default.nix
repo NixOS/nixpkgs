@@ -1,8 +1,9 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, testers
-, bombardier
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  testers,
+  bombardier,
 }:
 
 buildGoModule rec {
@@ -18,9 +19,7 @@ buildGoModule rec {
 
   vendorHash = "sha256-SxW/87l1w86H5cxEhiF/Fj8SxJ/uAfhtc7I1DVvIilk=";
 
-  subPackages = [
-    "."
-  ];
+  subPackages = [ "." ];
 
   ldflags = [
     "-s"
@@ -31,9 +30,7 @@ buildGoModule rec {
   __darwinAllowLocalNetworking = true;
 
   passthru.tests = {
-    version = testers.testVersion {
-      package = bombardier;
-    };
+    version = testers.testVersion { package = bombardier; };
   };
 
   meta = with lib; {

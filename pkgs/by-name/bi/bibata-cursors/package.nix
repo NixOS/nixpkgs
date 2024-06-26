@@ -1,8 +1,9 @@
-{ lib
-, stdenvNoCC
-, fetchFromGitHub
-, fetchzip
-, clickgen
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  fetchzip,
+  clickgen,
 }:
 
 stdenvNoCC.mkDerivation rec {
@@ -21,9 +22,7 @@ stdenvNoCC.mkDerivation rec {
     hash = "sha256-8ujkyqby5sPcnscIPkay1gvd/1CH4R9yMJs1nH/mx8M=";
   };
 
-  nativeBuildInputs = [
-    clickgen
-  ];
+  nativeBuildInputs = [ clickgen ];
 
   buildPhase = ''
     runHook preBuild
@@ -53,6 +52,9 @@ stdenvNoCC.mkDerivation rec {
     homepage = "https://github.com/ful1e5/Bibata_Cursor";
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ rawkode AdsonCicilioti ];
+    maintainers = with lib.maintainers; [
+      rawkode
+      AdsonCicilioti
+    ];
   };
 }

@@ -1,13 +1,14 @@
-{ lib
-, fetchFromGitHub
-, rustPlatform
-, wayland
-, libxkbcommon
-, libGL
-, stdenv
-, testers
-, aphorme
-, autoPatchelfHook
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  wayland,
+  libxkbcommon,
+  libGL,
+  stdenv,
+  testers,
+  aphorme,
+  autoPatchelfHook,
 }:
 
 rustPlatform.buildRustPackage rec {

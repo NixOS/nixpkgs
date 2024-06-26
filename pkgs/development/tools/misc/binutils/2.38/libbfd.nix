@@ -1,13 +1,24 @@
-{ lib, stdenv
-, fetchpatch, gnu-config, autoreconfHook, bison, binutils-unwrapped_2_38
-, libiberty, libintl, zlib
+{
+  lib,
+  stdenv,
+  fetchpatch,
+  gnu-config,
+  autoreconfHook,
+  bison,
+  binutils-unwrapped_2_38,
+  libiberty,
+  libintl,
+  zlib,
 }:
 
 stdenv.mkDerivation {
   pname = "libbfd";
   inherit (binutils-unwrapped_2_38) version src;
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   patches = binutils-unwrapped_2_38.patches ++ [
     ./build-components-separately.patch
@@ -31,12 +42,22 @@ stdenv.mkDerivation {
   dontUpdateAutotoolsGnuConfigScripts = true;
 
   strictDeps = true;
-  nativeBuildInputs = [ autoreconfHook bison ];
-  buildInputs = [ libiberty zlib ] ++ lib.optionals stdenv.isDarwin [ libintl ];
+  nativeBuildInputs = [
+    autoreconfHook
+    bison
+  ];
+  buildInputs = [
+    libiberty
+    zlib
+  ] ++ lib.optionals stdenv.isDarwin [ libintl ];
 
-  configurePlatforms = [ "build" "host" ];
+  configurePlatforms = [
+    "build"
+    "host"
+  ];
   configureFlags = [
-    "--enable-targets=all" "--enable-64-bit-bfd"
+    "--enable-targets=all"
+    "--enable-64-bit-bfd"
     "--enable-install-libbfd"
     "--with-system-zlib"
   ] ++ lib.optional (!stdenv.hostPlatform.isStatic) "--enable-shared";

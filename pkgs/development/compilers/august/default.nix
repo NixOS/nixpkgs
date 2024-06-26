@@ -1,6 +1,7 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
 }:
 
 rustPlatform.buildRustPackage {
@@ -23,7 +24,10 @@ rustPlatform.buildRustPackage {
   meta = with lib; {
     description = "Emmet-like language that produces JSON, TOML, or YAML";
     homepage = "https://github.com/yoav-lavi/august";
-    license = with licenses; [ asl20 mit ];
+    license = with licenses; [
+      asl20
+      mit
+    ];
     maintainers = with maintainers; [ figsoda ];
     mainProgram = "ag";
   };

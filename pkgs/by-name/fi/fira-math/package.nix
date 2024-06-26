@@ -1,10 +1,17 @@
-{ lib, fetchFromGitHub, fira-math, python3, stdenvNoCC }:
+{
+  lib,
+  fetchFromGitHub,
+  fira-math,
+  python3,
+  stdenvNoCC,
+}:
 
 let
   pname = "fira-math";
   date = "2023-10-09";
   version = "0.3.4-unstable-${date}";
-in stdenvNoCC.mkDerivation {
+in
+stdenvNoCC.mkDerivation {
   inherit pname version;
 
   src = fetchFromGitHub {
@@ -15,12 +22,14 @@ in stdenvNoCC.mkDerivation {
   };
 
   nativeBuildInputs = [
-    (python3.withPackages (ps: with ps; [
-      fontmake
-      fonttools
-      glyphslib
-      toml
-    ]))
+    (python3.withPackages (
+      ps: with ps; [
+        fontmake
+        fonttools
+        glyphslib
+        toml
+      ]
+    ))
   ];
 
   buildPhase = ''

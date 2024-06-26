@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, pkg-config
-, mbelib
-, serialdv
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  mbelib,
+  serialdv,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -28,9 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
     serialdv
   ];
 
-  cmakeFlags = [
-    "-DUSE_MBELIB=ON"
-  ];
+  cmakeFlags = [ "-DUSE_MBELIB=ON" ];
 
   postFixup = ''
     substituteInPlace "$out"/lib/pkgconfig/libdsdcc.pc \

@@ -1,20 +1,23 @@
-{ wrapGAppsHook3
-, glib
-, lib
-, stdenv
-, xorg
-, switchboard
-, switchboardPlugs
-, plugs
+{
+  wrapGAppsHook3,
+  glib,
+  lib,
+  stdenv,
+  xorg,
+  switchboard,
+  switchboardPlugs,
+  plugs,
   # Only useful to disable for development testing.
-, useDefaultPlugs ? true
-, testName ? null
+  useDefaultPlugs ? true,
+  testName ? null,
 }:
 
 let
   selectedPlugs =
-    if plugs == null then switchboardPlugs
-    else plugs ++ (lib.optionals useDefaultPlugs switchboardPlugs);
+    if plugs == null then
+      switchboardPlugs
+    else
+      plugs ++ (lib.optionals useDefaultPlugs switchboardPlugs);
 
   testingName = lib.optionalString (testName != null) "${testName}-";
 in
@@ -24,9 +27,7 @@ stdenv.mkDerivation rec {
 
   src = null;
 
-  paths = [
-    switchboard
-  ] ++ selectedPlugs;
+  paths = [ switchboard ] ++ selectedPlugs;
 
   passAsFile = [ "paths" ];
 
@@ -35,8 +36,7 @@ stdenv.mkDerivation rec {
     wrapGAppsHook3
   ];
 
-  buildInputs = lib.forEach selectedPlugs (x: x.buildInputs)
-    ++ selectedPlugs;
+  buildInputs = lib.forEach selectedPlugs (x: x.buildInputs) ++ selectedPlugs;
 
   dontUnpack = true;
   dontConfigure = true;
@@ -60,4 +60,3 @@ stdenv.mkDerivation rec {
 
   inherit (switchboard) meta;
 }
-

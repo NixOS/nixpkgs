@@ -1,13 +1,14 @@
-{ lib
-, rustPlatform
-, buildNpmPackage
-, fetchFromGitHub
-, copyDesktopItems
-, makeDesktopItem
-, pkg-config
-, gtk3
-, libsoup
-, webkitgtk
+{
+  lib,
+  rustPlatform,
+  buildNpmPackage,
+  fetchFromGitHub,
+  copyDesktopItems,
+  makeDesktopItem,
+  pkg-config,
+  gtk3,
+  libsoup,
+  webkitgtk,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -86,4 +87,3 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ tomasajt ];
   };
 }
-

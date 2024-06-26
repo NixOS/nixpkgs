@@ -1,14 +1,15 @@
-{ dbus
-, docbook-xsl-nons
-, docbook_xml_dtd_43
-, fetchurl
-, glib
-, lib
-, libxslt
-, meson
-, ninja
-, pkg-config
-, stdenv
+{
+  dbus,
+  docbook-xsl-nons,
+  docbook_xml_dtd_43,
+  fetchurl,
+  glib,
+  lib,
+  libxslt,
+  meson,
+  ninja,
+  pkg-config,
+  stdenv,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -29,13 +30,9 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs = [
-    glib
-  ];
+  buildInputs = [ glib ];
 
-  nativeCheckInputs = [
-    dbus
-  ];
+  nativeCheckInputs = [ dbus ];
 
   # dbus[2345]: Failed to start message bus: Failed to open "/etc/dbus-1/session.conf": No such file or directory
   doCheck = false;

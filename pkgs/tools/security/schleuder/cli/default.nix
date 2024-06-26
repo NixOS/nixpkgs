@@ -1,7 +1,8 @@
-{ lib
-, bundlerApp
-, ruby
-, bundlerUpdateScript
+{
+  lib,
+  bundlerApp,
+  ruby,
+  bundlerUpdateScript,
 }:
 
 bundlerApp {
@@ -13,9 +14,7 @@ bundlerApp {
 
   installManpages = false;
 
-  exes = [
-    "schleuder-cli"
-  ];
+  exes = [ "schleuder-cli" ];
 
   passthru.updateScript = bundlerUpdateScript "schleuder-cli";
 

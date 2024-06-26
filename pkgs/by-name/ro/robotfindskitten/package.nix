@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, ncurses
-, pkg-config
-, texinfo
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  ncurses,
+  pkg-config,
+  texinfo,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -18,7 +19,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-z6//Yfp3BtJAtUdY05m1eKVrTdH19MvK7LZOwX5S1CM=";
   };
 
-  outputs = [ "out" "man" "info" ];
+  outputs = [
+    "out"
+    "man"
+    "info"
+  ];
 
   nativeBuildInputs = [
     autoreconfHook
@@ -26,13 +31,9 @@ stdenv.mkDerivation (finalAttrs: {
     texinfo
   ];
 
-  buildInputs = [
-    ncurses
-  ];
+  buildInputs = [ ncurses ];
 
-  makeFlags = [
-    "execgamesdir=$(out)/bin"
-  ];
+  makeFlags = [ "execgamesdir=$(out)/bin" ];
 
   postInstall = ''
     install -Dm644 nki/vanilla.nki -t $out/share/games/robotfindskitten/

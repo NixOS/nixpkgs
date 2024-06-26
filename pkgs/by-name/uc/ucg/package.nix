@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, callPackage
-, pkg-config
-, pcre
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  callPackage,
+  pkg-config,
+  pcre,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -18,24 +19,23 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-Osdyxp8DoEjcr2wQLCPqOQ2zQf/0JWYxaDpZB02ACWo=";
   };
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
   ];
 
-  buildInputs = [
-    pcre
-  ];
+  buildInputs = [ pcre ];
 
   passthru.tests = {
-    simple = callPackage ./tests/simple.nix {
-      ucg = finalAttrs.finalPackage;
-    };
+    simple = callPackage ./tests/simple.nix { ucg = finalAttrs.finalPackage; };
   };
 
-  meta =  {
+  meta = {
     homepage = "https://gvansickle.github.io/ucg/";
     description = "Grep-like tool for searching large bodies of source code";
     longDescription = ''

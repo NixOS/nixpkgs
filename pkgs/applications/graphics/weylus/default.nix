@@ -1,27 +1,28 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchFromGitHub
-, makeWrapper
-, dbus
-, ffmpeg
-, x264
-, libva
-, gst_all_1
-, xorg
-, libdrm
-, pkg-config
-, pango
-, pipewire
-, cmake
-, git
-, autoconf
-, libtool
-, typescript
-, ApplicationServices
-, Carbon
-, Cocoa
-, VideoToolbox
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  makeWrapper,
+  dbus,
+  ffmpeg,
+  x264,
+  libva,
+  gst_all_1,
+  xorg,
+  libdrm,
+  pkg-config,
+  pango,
+  pipewire,
+  cmake,
+  git,
+  autoconf,
+  libtool,
+  typescript,
+  ApplicationServices,
+  Carbon,
+  Cocoa,
+  VideoToolbox,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -35,43 +36,48 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-J9eVFIfmyBviVuT1MYKb5yoacbPqOAT3A8jahWv5qw8=";
   };
 
-  buildInputs = [
-    ffmpeg
-    x264
-  ] ++ lib.optionals stdenv.isDarwin [
-    ApplicationServices
-    Carbon
-    Cocoa
-    VideoToolbox
-  ] ++ lib.optionals stdenv.isLinux [
-    dbus
-    libva
-    gst_all_1.gst-plugins-base
-    xorg.libXext
-    xorg.libXft
-    xorg.libXinerama
-    xorg.libXcursor
-    xorg.libXrender
-    xorg.libXfixes
-    xorg.libXtst
-    xorg.libXrandr
-    xorg.libXcomposite
-    xorg.libXi
-    xorg.libXv
-    pango
-    libdrm
-  ];
+  buildInputs =
+    [
+      ffmpeg
+      x264
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      ApplicationServices
+      Carbon
+      Cocoa
+      VideoToolbox
+    ]
+    ++ lib.optionals stdenv.isLinux [
+      dbus
+      libva
+      gst_all_1.gst-plugins-base
+      xorg.libXext
+      xorg.libXft
+      xorg.libXinerama
+      xorg.libXcursor
+      xorg.libXrender
+      xorg.libXfixes
+      xorg.libXtst
+      xorg.libXrandr
+      xorg.libXcomposite
+      xorg.libXi
+      xorg.libXv
+      pango
+      libdrm
+    ];
 
-  nativeBuildInputs = [
-    cmake
-    git
-    typescript
-    makeWrapper
-  ] ++ lib.optionals stdenv.isLinux [
-    pkg-config
-    autoconf
-    libtool
-  ];
+  nativeBuildInputs =
+    [
+      cmake
+      git
+      typescript
+      makeWrapper
+    ]
+    ++ lib.optionals stdenv.isLinux [
+      pkg-config
+      autoconf
+      libtool
+    ];
 
   cargoLock = {
     lockFile = ./Cargo.lock;
@@ -83,14 +89,16 @@ rustPlatform.buildRustPackage rec {
   cargoBuildFlags = [ "--features=ffmpeg-system" ];
   cargoTestFlags = [ "--features=ffmpeg-system" ];
 
-  postFixup = let
-    GST_PLUGIN_PATH = lib.makeSearchPathOutput  "lib" "lib/gstreamer-1.0" [
-      gst_all_1.gst-plugins-base
-      pipewire
-    ];
-  in lib.optionalString stdenv.isLinux ''
-    wrapProgram $out/bin/weylus --prefix GST_PLUGIN_PATH : ${GST_PLUGIN_PATH}
-  '';
+  postFixup =
+    let
+      GST_PLUGIN_PATH = lib.makeSearchPathOutput "lib" "lib/gstreamer-1.0" [
+        gst_all_1.gst-plugins-base
+        pipewire
+      ];
+    in
+    lib.optionalString stdenv.isLinux ''
+      wrapProgram $out/bin/weylus --prefix GST_PLUGIN_PATH : ${GST_PLUGIN_PATH}
+    '';
 
   postInstall = ''
     install -vDm755 weylus.desktop $out/share/applications/weylus.desktop

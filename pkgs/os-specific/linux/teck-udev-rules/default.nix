@@ -1,4 +1,8 @@
-{ lib, stdenv, teck-programmer }:
+{
+  lib,
+  stdenv,
+  teck-programmer,
+}:
 
 stdenv.mkDerivation {
   pname = "teck-udev-rules";

@@ -1,4 +1,9 @@
-{ lib, stdenvNoCC, fetchFromGitHub, gtk-engine-murrine }:
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  gtk-engine-murrine,
+}:
 
 stdenvNoCC.mkDerivation {
   pname = "andromeda-gtk-theme";
@@ -24,9 +29,7 @@ stdenvNoCC.mkDerivation {
 
   sourceRoot = ".";
 
-  propagatedUserEnvPkgs = [
-    gtk-engine-murrine
-  ];
+  propagatedUserEnvPkgs = [ gtk-engine-murrine ];
 
   installPhase = ''
     runHook preInstall

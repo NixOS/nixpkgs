@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, cmake
-, pythonSupport ? false
-, python3Packages
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  pythonSupport ? false,
+  python3Packages,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -31,32 +32,27 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  nativeBuildInputs = [
-    cmake
-  ];
+  nativeBuildInputs = [ cmake ];
 
-  buildInputs = lib.optionals pythonSupport [
-    python3Packages.pinocchio
-  ];
+  buildInputs = lib.optionals pythonSupport [ python3Packages.pinocchio ];
 
-  cmakeFlags = lib.optionals (!pythonSupport) [
-    "-DBUILD_PYTHON_INTERFACE=OFF"
-  ];
+  cmakeFlags = lib.optionals (!pythonSupport) [ "-DBUILD_PYTHON_INTERFACE=OFF" ];
 
   doCheck = true;
   # The package expect to find an `example-robot-data/robots` folder somewhere
   # either in install prefix or in the sources
   # where it can find the meshes for unit tests
   preCheck = "ln -s source ../../${finalAttrs.pname}";
-  pythonImportsCheck = [
-    "example_robot_data"
-  ];
+  pythonImportsCheck = [ "example_robot_data" ];
 
   meta = with lib; {
     description = "Set of robot URDFs for benchmarking and developed examples";
     homepage = "https://github.com/Gepetto/example-robot-data";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ nim65s wegank ];
+    maintainers = with maintainers; [
+      nim65s
+      wegank
+    ];
     platforms = platforms.unix;
   };
 })

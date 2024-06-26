@@ -1,24 +1,25 @@
-{ lib
-, stdenv
-, fetchgit
-, fetchFromGitHub
-, nix-update-script
-, runCommand
-, which
-, rustPlatform
-, emscripten
-, Security
-, callPackage
-, linkFarm
-, substitute
-, CoreServices
-, enableShared ? !stdenv.hostPlatform.isStatic
-, enableStatic ? stdenv.hostPlatform.isStatic
-, webUISupport ? false
-, extraGrammars ? { }
+{
+  lib,
+  stdenv,
+  fetchgit,
+  fetchFromGitHub,
+  nix-update-script,
+  runCommand,
+  which,
+  rustPlatform,
+  emscripten,
+  Security,
+  callPackage,
+  linkFarm,
+  substitute,
+  CoreServices,
+  enableShared ? !stdenv.hostPlatform.isStatic,
+  enableStatic ? stdenv.hostPlatform.isStatic,
+  webUISupport ? false,
+  extraGrammars ? { },
 
-# tests
-, lunarvim
+  # tests
+  lunarvim,
 }:
 
 let
@@ -40,20 +41,35 @@ let
 
   update-all-grammars = callPackage ./update.nix { };
 
-  fetchGrammar = (v: fetchgit { inherit (v) url rev sha256 fetchSubmodules; });
+  fetchGrammar = (
+    v:
+    fetchgit {
+      inherit (v)
+        url
+        rev
+        sha256
+        fetchSubmodules
+        ;
+    }
+  );
 
-  grammars =
-    runCommand "grammars" { } (''
+  grammars = runCommand "grammars" { } (
+    ''
       mkdir $out
-    '' + (lib.concatStrings (lib.mapAttrsToList
-      (name: grammar: "ln -s ${if grammar ? src then grammar.src else fetchGrammar grammar} $out/${name}\n")
-      (import ./grammars { inherit lib; }))));
+    ''
+    + (lib.concatStrings (
+      lib.mapAttrsToList (
+        name: grammar: "ln -s ${if grammar ? src then grammar.src else fetchGrammar grammar} $out/${name}\n"
+      ) (import ./grammars { inherit lib; })
+    ))
+  );
 
   buildGrammar = callPackage ./grammar.nix { };
 
   builtGrammars =
     let
-      build = name: grammar:
+      build =
+        name: grammar:
         buildGrammar {
           language = grammar.language or name;
           inherit version;
@@ -62,18 +78,65 @@ let
           generate = grammar.generate or false;
         };
       grammars' = import ./grammars { inherit lib; } // extraGrammars;
-      grammars = grammars' //
-        { tree-sitter-latex = grammars'.tree-sitter-latex // { generate = true; }; } //
-        { tree-sitter-ocaml = grammars'.tree-sitter-ocaml // { location = "grammars/ocaml"; }; } //
-        { tree-sitter-ocaml-interface = grammars'.tree-sitter-ocaml // { location = "grammars/interface"; }; } //
-        { tree-sitter-org-nvim = grammars'.tree-sitter-org-nvim // { language = "org"; }; } //
-        { tree-sitter-typescript = grammars'.tree-sitter-typescript // { location = "typescript"; }; } //
-        { tree-sitter-tsx = grammars'.tree-sitter-typescript // { location = "tsx"; }; } //
-        { tree-sitter-markdown = grammars'.tree-sitter-markdown // { location = "tree-sitter-markdown"; }; } //
-        { tree-sitter-markdown-inline = grammars'.tree-sitter-markdown // { language = "markdown_inline"; location = "tree-sitter-markdown-inline"; }; } //
-        { tree-sitter-php = grammars'.tree-sitter-php // { location = "php"; }; } //
-        { tree-sitter-sql = grammars'.tree-sitter-sql // { generate = true; }; } //
-        { tree-sitter-wing = grammars'.tree-sitter-wing // { location = "libs/tree-sitter-wing"; generate = true; }; };
+      grammars =
+        grammars'
+        // {
+          tree-sitter-latex = grammars'.tree-sitter-latex // {
+            generate = true;
+          };
+        }
+        // {
+          tree-sitter-ocaml = grammars'.tree-sitter-ocaml // {
+            location = "grammars/ocaml";
+          };
+        }
+        // {
+          tree-sitter-ocaml-interface = grammars'.tree-sitter-ocaml // {
+            location = "grammars/interface";
+          };
+        }
+        // {
+          tree-sitter-org-nvim = grammars'.tree-sitter-org-nvim // {
+            language = "org";
+          };
+        }
+        // {
+          tree-sitter-typescript = grammars'.tree-sitter-typescript // {
+            location = "typescript";
+          };
+        }
+        // {
+          tree-sitter-tsx = grammars'.tree-sitter-typescript // {
+            location = "tsx";
+          };
+        }
+        // {
+          tree-sitter-markdown = grammars'.tree-sitter-markdown // {
+            location = "tree-sitter-markdown";
+          };
+        }
+        // {
+          tree-sitter-markdown-inline = grammars'.tree-sitter-markdown // {
+            language = "markdown_inline";
+            location = "tree-sitter-markdown-inline";
+          };
+        }
+        // {
+          tree-sitter-php = grammars'.tree-sitter-php // {
+            location = "php";
+          };
+        }
+        // {
+          tree-sitter-sql = grammars'.tree-sitter-sql // {
+            generate = true;
+          };
+        }
+        // {
+          tree-sitter-wing = grammars'.tree-sitter-wing // {
+            location = "libs/tree-sitter-wing";
+            generate = true;
+          };
+        };
     in
     lib.mapAttrs build (grammars);
 
@@ -84,26 +147,27 @@ let
   # pkgs.tree-sitter.withPlugins (_: allGrammars)
   # which is equivalent to
   # pkgs.tree-sitter.withPlugins (p: builtins.attrValues p)
-  withPlugins = grammarFn:
+  withPlugins =
+    grammarFn:
     let
       grammars = grammarFn builtGrammars;
     in
-    linkFarm "grammars"
-      (map
-        (drv:
-          let
-            name = lib.strings.getName drv;
-          in
-          {
-            name =
-              (lib.strings.replaceStrings [ "-" ] [ "_" ]
-                (lib.strings.removePrefix "tree-sitter-"
-                  (lib.strings.removeSuffix "-grammar" name)))
-              + ".so";
-            path = "${drv}/parser";
-          }
-        )
-        grammars);
+    linkFarm "grammars" (
+      map (
+        drv:
+        let
+          name = lib.strings.getName drv;
+        in
+        {
+          name =
+            (lib.strings.replaceStrings [ "-" ] [ "_" ] (
+              lib.strings.removePrefix "tree-sitter-" (lib.strings.removeSuffix "-grammar" name)
+            ))
+            + ".so";
+          path = "${drv}/parser";
+        }
+      ) grammars
+    );
 
   allGrammars = builtins.attrValues builtGrammars;
 
@@ -114,16 +178,20 @@ rustPlatform.buildRustPackage {
 
   cargoHash = "sha256-Fk6V/kPKc/GL/q6QsaCUrq+ZG0R+N5FLOpIm77Y+n2A=";
 
-  buildInputs =
-    lib.optionals stdenv.isDarwin [ Security CoreServices ];
-  nativeBuildInputs =
-    [ which ]
-    ++ lib.optionals webUISupport [ emscripten ];
+  buildInputs = lib.optionals stdenv.isDarwin [
+    Security
+    CoreServices
+  ];
+  nativeBuildInputs = [ which ] ++ lib.optionals webUISupport [ emscripten ];
 
   patches = lib.optionals webUISupport [
     (substitute {
       src = ./fix-paths.patch;
-      substitutions = [ "--subst-var-by" "emcc" "${emscripten}/bin/emcc" ];
+      substitutions = [
+        "--subst-var-by"
+        "emcc"
+        "${emscripten}/bin/emcc"
+      ];
     })
   ];
 
@@ -158,7 +226,13 @@ rustPlatform.buildRustPackage {
     updater = {
       inherit update-all-grammars;
     };
-    inherit grammars buildGrammar builtGrammars withPlugins allGrammars;
+    inherit
+      grammars
+      buildGrammar
+      builtGrammars
+      withPlugins
+      allGrammars
+      ;
 
     updateScript = nix-update-script { };
 

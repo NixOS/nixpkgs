@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchgit
-, autoreconfHook
-, pkg-config
-, openssl
-, keyutils
-, asciidoc
-, libxslt
-, docbook_xsl
+{
+  lib,
+  stdenv,
+  fetchgit,
+  autoreconfHook,
+  pkg-config,
+  openssl,
+  keyutils,
+  asciidoc,
+  libxslt,
+  docbook_xsl,
 }:
 
 stdenv.mkDerivation rec {

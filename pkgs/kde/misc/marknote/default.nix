@@ -5,7 +5,7 @@
   qtdeclarative,
   qtsvg,
   qtwayland,
-  qqc2-desktop-style
+  qqc2-desktop-style,
 }:
 mkKdeDerivation rec {
   pname = "marknote";

@@ -1,23 +1,33 @@
-{ lib
-, mkDerivation
-, extra-cmake-modules
-, kdoctools
-, kconfig
-, kcoreaddons
-, kcrash
-, kdbusaddons
-, kguiaddons
-, kxmlgui
-, kwidgetsaddons
-, libkdegames
-, qtquickcontrols
+{
+  lib,
+  mkDerivation,
+  extra-cmake-modules,
+  kdoctools,
+  kconfig,
+  kcoreaddons,
+  kcrash,
+  kdbusaddons,
+  kguiaddons,
+  kxmlgui,
+  kwidgetsaddons,
+  libkdegames,
+  qtquickcontrols,
 }:
 
 mkDerivation {
   pname = "konquest";
-  nativeBuildInputs = [ extra-cmake-modules kdoctools ];
+  nativeBuildInputs = [
+    extra-cmake-modules
+    kdoctools
+  ];
   buildInputs = [
-    kconfig kcoreaddons kcrash kdbusaddons kguiaddons kxmlgui kwidgetsaddons
+    kconfig
+    kcoreaddons
+    kcrash
+    kdbusaddons
+    kguiaddons
+    kxmlgui
+    kwidgetsaddons
     libkdegames
     qtquickcontrols
   ];

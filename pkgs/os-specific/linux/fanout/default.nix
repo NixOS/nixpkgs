@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, kernel, kmod }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  kernel,
+  kmod,
+}:
 
 stdenv.mkDerivation rec {
   pname = "fanout";
@@ -15,11 +21,12 @@ stdenv.mkDerivation rec {
     substituteInPlace Makefile --replace "modules_install" "INSTALL_MOD_PATH=$out modules_install"
   '';
 
-  patches = [
-    ./remove_auto_mknod.patch
-  ];
+  patches = [ ./remove_auto_mknod.patch ];
 
-  hardeningDisable = [ "format" "pic" ];
+  hardeningDisable = [
+    "format"
+    "pic"
+  ];
 
   nativeBuildInputs = [ kmod ] ++ kernel.moduleBuildDependencies;
 

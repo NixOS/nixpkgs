@@ -1,22 +1,27 @@
-{ stdenv
-, lib
-, fetchurl
-, meson
-, ninja
-, glib
-, json-glib
-, pkg-config
-, gobject-introspection
-, vala
-, gi-docgen
-, gnome
+{
+  stdenv,
+  lib,
+  fetchurl,
+  meson,
+  ninja,
+  glib,
+  json-glib,
+  pkg-config,
+  gobject-introspection,
+  vala,
+  gi-docgen,
+  gnome,
 }:
 
 stdenv.mkDerivation rec {
   pname = "jsonrpc-glib";
   version = "3.44.0";
 
-  outputs = [ "out" "dev" "devdoc" ];
+  outputs = [
+    "out"
+    "dev"
+    "devdoc"
+  ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
@@ -37,9 +42,7 @@ stdenv.mkDerivation rec {
     json-glib
   ];
 
-  mesonFlags = [
-    "-Denable_gtk_doc=true"
-  ];
+  mesonFlags = [ "-Denable_gtk_doc=true" ];
 
   # Tests fail non-deterministically
   # https://gitlab.gnome.org/GNOME/jsonrpc-glib/issues/2

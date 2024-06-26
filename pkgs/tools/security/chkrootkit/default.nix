@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchurl, makeWrapper, binutils-unwrapped }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  makeWrapper,
+  binutils-unwrapped,
+}:
 
 stdenv.mkDerivation rec {
   pname = "chkrootkit";

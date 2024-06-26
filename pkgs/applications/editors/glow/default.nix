@@ -1,9 +1,10 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, installShellFiles
-, stdenv
-, fetchpatch
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  stdenv,
+  fetchpatch,
 }:
 
 buildGoModule rec {
@@ -20,15 +21,21 @@ buildGoModule rec {
   vendorHash = "sha256-xxFC87t12bZKea9Snscul+xx8IGFAcoIr9Z8wxHL7nM=";
 
   # Remove whenever a release with it is available
-  patches = [(fetchpatch {
-    url = "https://github.com/charmbracelet/glow/commit/f0734709f0be19a34e648caaf63340938a50caa2.patch";
-    name = "go-1-17-patch";
-    hash = "sha256-vpMiVb/7SFT9xcSpVGQriEjkexh1F/ljpfpIswdBx2Y=";
-  })];
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/charmbracelet/glow/commit/f0734709f0be19a34e648caaf63340938a50caa2.patch";
+      name = "go-1-17-patch";
+      hash = "sha256-vpMiVb/7SFT9xcSpVGQriEjkexh1F/ljpfpIswdBx2Y=";
+    })
+  ];
 
   doCheck = false;
 
-  ldflags = [ "-s" "-w" "-X=main.Version=${version}" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X=main.Version=${version}"
+  ];
 
   nativeBuildInputs = [ installShellFiles ];
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
@@ -43,7 +50,10 @@ buildGoModule rec {
     homepage = "https://github.com/charmbracelet/glow";
     changelog = "https://github.com/charmbracelet/glow/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ Br1ght0ne penguwin ];
+    maintainers = with maintainers; [
+      Br1ght0ne
+      penguwin
+    ];
     mainProgram = "glow";
   };
 }

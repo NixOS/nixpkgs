@@ -1,7 +1,8 @@
-{ lib
-, pythonPackages
-, fetchPypi
-, git
+{
+  lib,
+  pythonPackages,
+  fetchPypi,
+  git,
 }:
 
 pythonPackages.buildPythonApplication rec {
@@ -15,18 +16,16 @@ pythonPackages.buildPythonApplication rec {
     hash = "sha256-GTX2IWLQ48yWfPnmtEa9HJ5umQLttqgTlgZQlaWgeE4=";
   };
 
-  nativeBuildInputs = with pythonPackages; [
-    poetry-core
-  ];
+  nativeBuildInputs = with pythonPackages; [ poetry-core ];
 
   # git should be on path for tool to work correctly
-  propagatedBuildInputs = [
-    git
-  ] ++ (with pythonPackages; [
-    colorama
-    gitpython
-    termcolor
-  ]);
+  propagatedBuildInputs =
+    [ git ]
+    ++ (with pythonPackages; [
+      colorama
+      gitpython
+      termcolor
+    ]);
 
   nativeCheckInputs = [
     git

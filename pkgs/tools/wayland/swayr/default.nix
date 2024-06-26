@@ -1,4 +1,8 @@
-{ lib, fetchFromSourcehut, rustPlatform }:
+{
+  lib,
+  fetchFromSourcehut,
+  rustPlatform,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "swayr";
@@ -13,9 +17,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-cjrt2jkcNbTabnhlu0P8mBIKbIpCE6L6BYlxi/fIwrg=";
 
-  patches = [
-    ./icon-paths.patch
-  ];
+  patches = [ ./icon-paths.patch ];
 
   # don't build swayrbar
   buildAndTestSubdir = pname;

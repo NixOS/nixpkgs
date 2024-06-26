@@ -1,5 +1,9 @@
-{ lib, fetchFromGitHub, ocaml, buildDunePackage
-, stdlib-shims
+{
+  lib,
+  fetchFromGitHub,
+  ocaml,
+  buildDunePackage,
+  stdlib-shims,
 }:
 
 buildDunePackage rec {

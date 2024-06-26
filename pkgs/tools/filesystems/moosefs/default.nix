@@ -1,10 +1,12 @@
-{ lib, stdenv
-, fetchFromGitHub
-, python3
-, fuse
-, pkg-config
-, libpcap
-, zlib
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  python3,
+  fuse,
+  pkg-config,
+  libpcap,
+  zlib,
 }:
 
 stdenv.mkDerivation rec {
@@ -18,12 +20,14 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-6zBMAi9ruPPlcnpdgqwl35QZ5u4MyFPUa70yvGTkHpo=";
   };
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
-  buildInputs =
-    [ fuse libpcap zlib python3 ];
+  buildInputs = [
+    fuse
+    libpcap
+    zlib
+    python3
+  ];
 
   strictDeps = true;
 

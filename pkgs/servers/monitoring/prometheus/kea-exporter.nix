@@ -1,7 +1,8 @@
-{ lib
-, python3Packages
-, fetchPypi
-, nixosTests
+{
+  lib,
+  python3Packages,
+  fetchPypi,
+  nixosTests,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -15,9 +16,7 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-kn2iwYWcyW90tgfWmzLF7rU06fJyLRzqYKNLOgu/Yqk=";
   };
 
-  nativeBuildInputs = with python3Packages; [
-    pdm-backend
-  ];
+  nativeBuildInputs = with python3Packages; [ pdm-backend ];
 
   propagatedBuildInputs = with python3Packages; [
     click

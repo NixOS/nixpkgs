@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -46,14 +51,21 @@ in
       };
       wantedBy = [ "sysinit.target" ];
       after = [ "systemd-tmpfiles-setup-dev.service" ];
-      before = [ "sysinit.target" "shutdown.target" "systemd-journald.service" ];
+      before = [
+        "sysinit.target"
+        "shutdown.target"
+        "systemd-journald.service"
+      ];
 
       serviceConfig = {
         ExecStart = "${pkgs.haveged}/bin/haveged -w ${toString cfg.refill_threshold} --Foreground -v 1";
         Restart = "always";
         SuccessExitStatus = "137 143";
         SecureBits = "noroot-locked";
-        CapabilityBoundingSet = [ "CAP_SYS_ADMIN" "CAP_SYS_CHROOT" ];
+        CapabilityBoundingSet = [
+          "CAP_SYS_ADMIN"
+          "CAP_SYS_CHROOT"
+        ];
         # We can *not* set PrivateTmp=true as it can cause an ordering cycle.
         PrivateTmp = false;
         PrivateDevices = true;
@@ -67,7 +79,11 @@ in
         LockPersonality = true;
         MemoryDenyWriteExecute = true;
         SystemCallArchitectures = "native";
-        SystemCallFilter = [ "@system-service" "newuname" "~@mount" ];
+        SystemCallFilter = [
+          "@system-service"
+          "newuname"
+          "~@mount"
+        ];
         SystemCallErrorNumber = "EPERM";
       };
 

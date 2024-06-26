@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -10,86 +15,114 @@ let
 
   interfaces = attrValues config.networking.interfaces;
 
-  enableDHCP = config.networking.dhcpcd.enable &&
-        (config.networking.useDHCP || any (i: i.useDHCP == true) interfaces);
+  enableDHCP =
+    config.networking.dhcpcd.enable
+    && (config.networking.useDHCP || any (i: i.useDHCP == true) interfaces);
 
-  enableNTPService = (config.services.ntp.enable || config.services.ntpd-rs.enable || config.services.openntpd.enable || config.services.chrony.enable);
+  enableNTPService = (
+    config.services.ntp.enable
+    || config.services.ntpd-rs.enable
+    || config.services.openntpd.enable
+    || config.services.chrony.enable
+  );
 
   # Don't start dhcpcd on explicitly configured interfaces or on
   # interfaces that are part of a bridge, bond or sit device.
   ignoredInterfaces =
-    map (i: i.name) (filter (i: if i.useDHCP != null then !i.useDHCP else i.ipv4.addresses != [ ]) interfaces)
+    map (i: i.name) (
+      filter (i: if i.useDHCP != null then !i.useDHCP else i.ipv4.addresses != [ ]) interfaces
+    )
     ++ mapAttrsToList (i: _: i) config.networking.sits
     ++ concatLists (attrValues (mapAttrs (n: v: v.interfaces) config.networking.bridges))
-    ++ flatten (concatMap (i: attrNames (filterAttrs (_: config: config.type != "internal") i.interfaces)) (attrValues config.networking.vswitches))
+    ++ flatten (
+      concatMap (i: attrNames (filterAttrs (_: config: config.type != "internal") i.interfaces)) (
+        attrValues config.networking.vswitches
+      )
+    )
     ++ concatLists (attrValues (mapAttrs (n: v: v.interfaces) config.networking.bonds))
     ++ config.networking.dhcpcd.denyInterfaces;
 
-  arrayAppendOrNull = a1: a2: if a1 == null && a2 == null then null
-    else if a1 == null then a2 else if a2 == null then a1
-      else a1 ++ a2;
+  arrayAppendOrNull =
+    a1: a2:
+    if a1 == null && a2 == null then
+      null
+    else if a1 == null then
+      a2
+    else if a2 == null then
+      a1
+    else
+      a1 ++ a2;
 
   # If dhcp is disabled but explicit interfaces are enabled,
   # we need to provide dhcp just for those interfaces.
-  allowInterfaces = arrayAppendOrNull cfg.allowInterfaces
-    (if !config.networking.useDHCP && enableDHCP then
-      map (i: i.name) (filter (i: i.useDHCP == true) interfaces) else null);
+  allowInterfaces = arrayAppendOrNull cfg.allowInterfaces (
+    if !config.networking.useDHCP && enableDHCP then
+      map (i: i.name) (filter (i: i.useDHCP == true) interfaces)
+    else
+      null
+  );
 
   staticIPv6Addresses = map (i: i.name) (filter (i: i.ipv6.addresses != [ ]) interfaces);
 
-  noIPv6rs = concatStringsSep "\n" (map (name: ''
-    interface ${name}
-    noipv6rs
-  '') staticIPv6Addresses);
+  noIPv6rs = concatStringsSep "\n" (
+    map (name: ''
+      interface ${name}
+      noipv6rs
+    '') staticIPv6Addresses
+  );
 
   # Config file adapted from the one that ships with dhcpcd.
-  dhcpcdConf = pkgs.writeText "dhcpcd.conf"
-    ''
-      # Inform the DHCP server of our hostname for DDNS.
-      hostname
+  dhcpcdConf = pkgs.writeText "dhcpcd.conf" ''
+    # Inform the DHCP server of our hostname for DDNS.
+    hostname
 
-      # A list of options to request from the DHCP server.
-      option domain_name_servers, domain_name, domain_search, host_name
-      option classless_static_routes, ntp_servers, interface_mtu
+    # A list of options to request from the DHCP server.
+    option domain_name_servers, domain_name, domain_search, host_name
+    option classless_static_routes, ntp_servers, interface_mtu
 
-      # A ServerID is required by RFC2131.
-      # Commented out because of many non-compliant DHCP servers in the wild :(
-      #require dhcp_server_identifier
+    # A ServerID is required by RFC2131.
+    # Commented out because of many non-compliant DHCP servers in the wild :(
+    #require dhcp_server_identifier
 
-      # A hook script is provided to lookup the hostname if not set by
-      # the DHCP server, but it should not be run by default.
-      nohook lookup-hostname
+    # A hook script is provided to lookup the hostname if not set by
+    # the DHCP server, but it should not be run by default.
+    nohook lookup-hostname
 
-      # Ignore peth* devices; on Xen, they're renamed physical
-      # Ethernet cards used for bridging.  Likewise for vif* and tap*
-      # (Xen) and virbr* and vnet* (libvirt).
-      denyinterfaces ${toString ignoredInterfaces} lo peth* vif* tap* tun* virbr* vnet* vboxnet* sit*
+    # Ignore peth* devices; on Xen, they're renamed physical
+    # Ethernet cards used for bridging.  Likewise for vif* and tap*
+    # (Xen) and virbr* and vnet* (libvirt).
+    denyinterfaces ${toString ignoredInterfaces} lo peth* vif* tap* tun* virbr* vnet* vboxnet* sit*
 
-      # Use the list of allowed interfaces if specified
-      ${optionalString (allowInterfaces != null) "allowinterfaces ${toString allowInterfaces}"}
+    # Use the list of allowed interfaces if specified
+    ${optionalString (allowInterfaces != null) "allowinterfaces ${toString allowInterfaces}"}
 
-      # Immediately fork to background if specified, otherwise wait for IP address to be assigned
-      ${{
+    # Immediately fork to background if specified, otherwise wait for IP address to be assigned
+    ${
+      {
         background = "background";
         any = "waitip";
         ipv4 = "waitip 4";
         ipv6 = "waitip 6";
         both = "waitip 4\nwaitip 6";
         if-carrier-up = "";
-      }.${cfg.wait}}
+      }
+      .${cfg.wait}
+    }
 
-      ${optionalString (config.networking.enableIPv6 == false) ''
-        # Don't solicit or accept IPv6 Router Advertisements and DHCPv6 if disabled IPv6
-        noipv6
-      ''}
+    ${optionalString (config.networking.enableIPv6 == false) ''
+      # Don't solicit or accept IPv6 Router Advertisements and DHCPv6 if disabled IPv6
+      noipv6
+    ''}
 
-      ${optionalString (config.networking.enableIPv6 && cfg.IPv6rs == null && staticIPv6Addresses != [ ]) noIPv6rs}
-      ${optionalString (config.networking.enableIPv6 && cfg.IPv6rs == false) ''
-        noipv6rs
-      ''}
+    ${optionalString (
+      config.networking.enableIPv6 && cfg.IPv6rs == null && staticIPv6Addresses != [ ]
+    ) noIPv6rs}
+    ${optionalString (config.networking.enableIPv6 && cfg.IPv6rs == false) ''
+      noipv6rs
+    ''}
 
-      ${cfg.extraConfig}
-    '';
+    ${cfg.extraConfig}
+  '';
 
   exitHook = pkgs.writeText "dhcpcd.exit-hook" ''
     ${optionalString enableNTPService ''
@@ -129,22 +162,22 @@ in
       type = types.bool;
       default = false;
       description = ''
-          Whenever to leave interfaces configured on dhcpcd daemon
-          shutdown. Set to true if you have your root or store mounted
-          over the network or this machine accepts SSH connections
-          through DHCP interfaces and clients should be notified when
-          it shuts down.
+        Whenever to leave interfaces configured on dhcpcd daemon
+        shutdown. Set to true if you have your root or store mounted
+        over the network or this machine accepts SSH connections
+        through DHCP interfaces and clients should be notified when
+        it shuts down.
       '';
     };
 
     networking.dhcpcd.denyInterfaces = mkOption {
       type = types.listOf types.str;
-      default = [];
+      default = [ ];
       description = ''
-         Disable the DHCP client for any interface whose name matches
-         any of the shell glob patterns in this list. The purpose of
-         this option is to blacklist virtual interfaces such as those
-         created by Xen, libvirt, LXC, etc.
+        Disable the DHCP client for any interface whose name matches
+        any of the shell glob patterns in this list. The purpose of
+        this option is to blacklist virtual interfaces such as those
+        created by Xen, libvirt, LXC, etc.
       '';
     };
 
@@ -152,10 +185,10 @@ in
       type = types.nullOr (types.listOf types.str);
       default = null;
       description = ''
-         Enable the DHCP client for any interface whose name matches
-         any of the shell glob patterns in this list. Any interface not
-         explicitly matched by this pattern will be denied. This pattern only
-         applies when non-null.
+        Enable the DHCP client for any interface whose name matches
+        any of the shell glob patterns in this list. Any interface not
+        explicitly matched by this pattern will be denied. This pattern only
+        applies when non-null.
       '';
     };
 
@@ -163,7 +196,7 @@ in
       type = types.lines;
       default = "";
       description = ''
-         Literal string to append to the config file generated for dhcpcd.
+        Literal string to append to the config file generated for dhcpcd.
       '';
     };
 
@@ -182,13 +215,20 @@ in
       default = "";
       example = "if [[ $reason =~ BOUND ]]; then echo $interface: Routers are $new_routers - were $old_routers; fi";
       description = ''
-         Shell code that will be run after all other hooks. See
-         `man dhcpcd-run-hooks` for details on what is possible.
+        Shell code that will be run after all other hooks. See
+        `man dhcpcd-run-hooks` for details on what is possible.
       '';
     };
 
     networking.dhcpcd.wait = mkOption {
-      type = types.enum [ "background" "any" "ipv4" "ipv6" "both" "if-carrier-up" ];
+      type = types.enum [
+        "background"
+        "any"
+        "ipv4"
+        "ipv6"
+        "both"
+        "if-carrier-up"
+      ];
       default = "any";
       description = ''
         This option specifies when the dhcpcd service will fork to background.
@@ -204,33 +244,40 @@ in
 
   };
 
-
   ###### implementation
 
   config = mkIf enableDHCP {
 
-    assertions = [ {
-      # dhcpcd doesn't start properly with malloc ∉ [ libc scudo ]
-      # see https://github.com/NixOS/nixpkgs/issues/151696
-      assertion =
-        dhcpcd.enablePrivSep
-          -> elem config.environment.memoryAllocator.provider [ "libc" "scudo" ];
-      message = ''
-        dhcpcd with privilege separation is incompatible with chosen system malloc.
-          Currently only the `libc` and `scudo` allocators are known to work.
-          To disable dhcpcd's privilege separation, overlay Nixpkgs and override dhcpcd
-          to set `enablePrivSep = false`.
-      '';
-    } ];
+    assertions = [
+      {
+        # dhcpcd doesn't start properly with malloc ∉ [ libc scudo ]
+        # see https://github.com/NixOS/nixpkgs/issues/151696
+        assertion =
+          dhcpcd.enablePrivSep
+          -> elem config.environment.memoryAllocator.provider [
+            "libc"
+            "scudo"
+          ];
+        message = ''
+          dhcpcd with privilege separation is incompatible with chosen system malloc.
+            Currently only the `libc` and `scudo` allocators are known to work.
+            To disable dhcpcd's privilege separation, overlay Nixpkgs and override dhcpcd
+            to set `enablePrivSep = false`.
+        '';
+      }
+    ];
 
     environment.etc."dhcpcd.conf".source = dhcpcdConf;
 
-    systemd.services.dhcpcd = let
-      cfgN = config.networking;
-      hasDefaultGatewaySet = (cfgN.defaultGateway != null && cfgN.defaultGateway.address != "")
-                          && (!cfgN.enableIPv6 || (cfgN.defaultGateway6 != null && cfgN.defaultGateway6.address != ""));
-    in
-      { description = "DHCP Client";
+    systemd.services.dhcpcd =
+      let
+        cfgN = config.networking;
+        hasDefaultGatewaySet =
+          (cfgN.defaultGateway != null && cfgN.defaultGateway.address != "")
+          && (!cfgN.enableIPv6 || (cfgN.defaultGateway6 != null && cfgN.defaultGateway6.address != ""));
+      in
+      {
+        description = "DHCP Client";
 
         wantedBy = [ "multi-user.target" ] ++ optional (!hasDefaultGatewaySet) "network-online.target";
         wants = [ "network.target" ];
@@ -243,25 +290,29 @@ in
         # dhcpcd.  So do a "systemctl restart" instead.
         stopIfChanged = false;
 
-        path = [ dhcpcd pkgs.nettools config.networking.resolvconf.package ];
+        path = [
+          dhcpcd
+          pkgs.nettools
+          config.networking.resolvconf.package
+        ];
 
         unitConfig.ConditionCapability = "CAP_NET_ADMIN";
 
-        serviceConfig =
-          { Type = "forking";
-            PIDFile = "/run/dhcpcd/pid";
-            RuntimeDirectory = "dhcpcd";
-            ExecStart = "@${dhcpcd}/sbin/dhcpcd dhcpcd --quiet ${optionalString cfg.persistent "--persistent"} --config ${dhcpcdConf}";
-            ExecReload = "${dhcpcd}/sbin/dhcpcd --rebind";
-            Restart = "always";
-          };
+        serviceConfig = {
+          Type = "forking";
+          PIDFile = "/run/dhcpcd/pid";
+          RuntimeDirectory = "dhcpcd";
+          ExecStart = "@${dhcpcd}/sbin/dhcpcd dhcpcd --quiet ${optionalString cfg.persistent "--persistent"} --config ${dhcpcdConf}";
+          ExecReload = "${dhcpcd}/sbin/dhcpcd --rebind";
+          Restart = "always";
+        };
       };
 
     users.users.dhcpcd = {
       isSystemUser = true;
       group = "dhcpcd";
     };
-    users.groups.dhcpcd = {};
+    users.groups.dhcpcd = { };
 
     environment.systemPackages = [ dhcpcd ];
 
@@ -269,11 +320,10 @@ in
       source = exitHook;
     };
 
-    powerManagement.resumeCommands = mkIf config.systemd.services.dhcpcd.enable
-      ''
-        # Tell dhcpcd to rebind its interfaces if it's running.
-        /run/current-system/systemd/bin/systemctl reload dhcpcd.service
-      '';
+    powerManagement.resumeCommands = mkIf config.systemd.services.dhcpcd.enable ''
+      # Tell dhcpcd to rebind its interfaces if it's running.
+      /run/current-system/systemd/bin/systemctl reload dhcpcd.service
+    '';
 
   };
 

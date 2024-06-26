@@ -1,14 +1,15 @@
-{ lib
-, stdenvNoCC
-, fetchFromGitHub
-, gtk3
-, breeze-icons
-, gnome-icon-theme
-, numix-icon-theme
-, numix-icon-theme-circle
-, hicolor-icon-theme
-, jdupes
-, gitUpdater
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  gtk3,
+  breeze-icons,
+  gnome-icon-theme,
+  numix-icon-theme,
+  numix-icon-theme-circle,
+  hicolor-icon-theme,
+  jdupes,
+  gitUpdater,
 }:
 
 stdenvNoCC.mkDerivation rec {

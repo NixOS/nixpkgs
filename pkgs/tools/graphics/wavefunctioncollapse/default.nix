@@ -1,4 +1,9 @@
-{lib, stdenv, fetchFromGitHub, mono}:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  mono,
+}:
 stdenv.mkDerivation rec {
   pname = "wavefunctioncollapse";
   version = "0.0pre20170130";
@@ -23,11 +28,11 @@ stdenv.mkDerivation rec {
     echo "'${mono}/bin/mono' '$out/bin/wavefunctioncollapse.exe' \"\$@\"" >>  "$out/bin/wavefunctioncollapse"
     chmod a+x "$out/bin/wavefunctioncollapse"
   '';
-  buildInputs = [mono];
+  buildInputs = [ mono ];
   meta = {
     description = "Generator of bitmaps that are locally similar to the input bitmap";
     license = lib.licenses.mit;
-    maintainers = [lib.maintainers.raskin];
+    maintainers = [ lib.maintainers.raskin ];
     platforms = lib.platforms.linux;
   };
 }

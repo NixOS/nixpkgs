@@ -1,4 +1,9 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+}:
 
 buildGoModule rec {
   pname = "Subtitlr";
@@ -13,11 +18,12 @@ buildGoModule rec {
 
   vendorHash = "sha256-ZgJCk9vbbQ0dcYSdKm0Cbw2AmwjpMvGb5zJkgbD+xig=";
 
-  ldflags = [ "-s" "-w" ];
-
-  nativeBuildInputs = [
-    installShellFiles
+  ldflags = [
+    "-s"
+    "-w"
   ];
+
+  nativeBuildInputs = [ installShellFiles ];
 
   postInstall = ''
     installShellCompletion --cmd Subtitlr \

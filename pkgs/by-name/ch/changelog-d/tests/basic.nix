@@ -1,8 +1,6 @@
 { runCommand, changelog-d }:
 
-runCommand "changelog-d-basic-test" {
-  nativeBuildInputs = [ changelog-d ];
-} ''
+runCommand "changelog-d-basic-test" { nativeBuildInputs = [ changelog-d ]; } ''
   mkdir changelogs
   cat > changelogs/config <<EOF
   organization: NixOS

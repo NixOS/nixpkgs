@@ -1,8 +1,9 @@
-{ lib
-, stdenvNoCC
-, fetchzip
-, rpmextract
-, testers
+{
+  lib,
+  stdenvNoCC,
+  fetchzip,
+  rpmextract,
+  testers,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -17,16 +18,18 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ rpmextract ];
 
-  unpackPhase = let
-    inherit (stdenvNoCC.hostPlatform) system;
-    platforms = {
-      x86_64-linux = "Linux";
-      aarch64-linux = "ARM/Linux";
-    };
-    platform = platforms.${system} or (throw "unsupported system: ${system}");
-  in ''
-    rpmextract $src/univ_viva_cli_rel/Unified_storcli_all_os/${platform}/storcli-00${finalAttrs.version}00.0000-1.*.rpm
-  '';
+  unpackPhase =
+    let
+      inherit (stdenvNoCC.hostPlatform) system;
+      platforms = {
+        x86_64-linux = "Linux";
+        aarch64-linux = "ARM/Linux";
+      };
+      platform = platforms.${system} or (throw "unsupported system: ${system}");
+    in
+    ''
+      rpmextract $src/univ_viva_cli_rel/Unified_storcli_all_os/${platform}/storcli-00${finalAttrs.version}00.0000-1.*.rpm
+    '';
 
   dontPatch = true;
   dontConfigure = true;
@@ -56,6 +59,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     license = licenses.unfree;
     maintainers = with maintainers; [ panicgh ];
     mainProgram = "storcli";
-    platforms = [ "x86_64-linux" "aarch64-linux" ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
   };
 })

@@ -1,17 +1,37 @@
-{ lib, stdenv, runtimeShell, pkg-config, gettext, ncurses, CoreFoundation
-, tiles, SDL2, SDL2_image, SDL2_mixer, SDL2_ttf, freetype, Cocoa
-, debug
-, useXdgDir
+{
+  lib,
+  stdenv,
+  runtimeShell,
+  pkg-config,
+  gettext,
+  ncurses,
+  CoreFoundation,
+  tiles,
+  SDL2,
+  SDL2_image,
+  SDL2_mixer,
+  SDL2_ttf,
+  freetype,
+  Cocoa,
+  debug,
+  useXdgDir,
 }:
 
 let
   inherit (lib) optionals optionalString;
 
-  cursesDeps = [ gettext ncurses ]
-    ++ optionals stdenv.isDarwin [ CoreFoundation ];
+  cursesDeps = [
+    gettext
+    ncurses
+  ] ++ optionals stdenv.isDarwin [ CoreFoundation ];
 
-  tilesDeps = [ SDL2 SDL2_image SDL2_mixer SDL2_ttf freetype ]
-    ++ optionals stdenv.isDarwin [ Cocoa ];
+  tilesDeps = [
+    SDL2
+    SDL2_image
+    SDL2_mixer
+    SDL2_ttf
+    freetype
+  ] ++ optionals stdenv.isDarwin [ Cocoa ];
 
   patchDesktopFile = ''
     substituteInPlace $out/share/applications/org.cataclysmdda.CataclysmDDA.desktop \
@@ -43,23 +63,25 @@ stdenv.mkDerivation {
     patchShebangs lang/compile_mo.sh
   '';
 
-  makeFlags = [
-    "PREFIX=$(out)" "LANGUAGES=all"
-    (if useXdgDir then "USE_XDG_DIR=1" else "USE_HOME_DIR=1")
-  ] ++ optionals (!debug) [
-    "RELEASE=1"
-  ] ++ optionals tiles [
-    "TILES=1" "SOUND=1"
-  ] ++ optionals stdenv.isDarwin [
-    "NATIVE=osx"
-    "CLANG=1"
-    "OSX_MIN=${stdenv.hostPlatform.darwinMinVersion}"
-  ];
+  makeFlags =
+    [
+      "PREFIX=$(out)"
+      "LANGUAGES=all"
+      (if useXdgDir then "USE_XDG_DIR=1" else "USE_HOME_DIR=1")
+    ]
+    ++ optionals (!debug) [ "RELEASE=1" ]
+    ++ optionals tiles [
+      "TILES=1"
+      "SOUND=1"
+    ]
+    ++ optionals stdenv.isDarwin [
+      "NATIVE=osx"
+      "CLANG=1"
+      "OSX_MIN=${stdenv.hostPlatform.darwinMinVersion}"
+    ];
 
-  postInstall = optionalString tiles
-  ( if !stdenv.isDarwin
-    then patchDesktopFile
-    else installMacOSAppLauncher
+  postInstall = optionalString tiles (
+    if !stdenv.isDarwin then patchDesktopFile else installMacOSAppLauncher
   );
 
   dontStrip = debug;
@@ -98,7 +120,10 @@ stdenv.mkDerivation {
     '';
     homepage = "https://cataclysmdda.org/";
     license = licenses.cc-by-sa-30;
-    maintainers = with maintainers; [ mnacamura DeeUnderscore ];
+    maintainers = with maintainers; [
+      mnacamura
+      DeeUnderscore
+    ];
     platforms = platforms.unix;
   };
 }

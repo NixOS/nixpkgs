@@ -1,15 +1,16 @@
-{ lib
-, stdenv
-, fetchurl
-, fetchpatch
-, pkg-config
-, glib
-, which
-, bison
-, nixosTests
-, libnl
-, linuxHeaders
-, gnutls
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  pkg-config,
+  glib,
+  which,
+  bison,
+  nixosTests,
+  libnl,
+  linuxHeaders,
+  gnutls,
 }:
 
 stdenv.mkDerivation rec {
@@ -36,17 +37,17 @@ stdenv.mkDerivation rec {
     bison
   ];
 
-  buildInputs = [
-    glib
-    gnutls
-  ] ++ lib.optionals stdenv.isLinux [
-    libnl
-    linuxHeaders
-  ];
+  buildInputs =
+    [
+      glib
+      gnutls
+    ]
+    ++ lib.optionals stdenv.isLinux [
+      libnl
+      linuxHeaders
+    ];
 
-  configureFlags = [
-    "--sysconfdir=/etc"
-  ];
+  configureFlags = [ "--sysconfdir=/etc" ];
 
   # ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-error=implicit-function-declaration";

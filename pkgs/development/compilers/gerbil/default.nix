@@ -1,4 +1,11 @@
-{ callPackage, fetchFromGitHub, gambit-unstable, gambit-support, pkgs, gccStdenv }:
+{
+  callPackage,
+  fetchFromGitHub,
+  gambit-unstable,
+  gambit-support,
+  pkgs,
+  gccStdenv,
+}:
 
 callPackage ./build.nix rec {
   version = "0.18.1";

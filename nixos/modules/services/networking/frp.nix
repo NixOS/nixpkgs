@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -17,7 +22,10 @@ in
       package = mkPackageOption pkgs "frp" { };
 
       role = mkOption {
-        type = types.enum [ "server" "client" ];
+        type = types.enum [
+          "server"
+          "client"
+        ];
         description = ''
           The frp consists of `client` and `server`. The server is usually
           deployed on the machine with a public IP address, and
@@ -35,9 +43,9 @@ in
           or [server](https://github.com/fatedier/frp/blob/dev/conf/frps_full_example.toml) on github.
         '';
         example = {
-            serverAddr = "x.x.x.x";
-            serverPort = 7000;
-          };
+          serverAddr = "x.x.x.x";
+          serverPort = 7000;
+        };
       };
     };
   };
@@ -72,7 +80,10 @@ in
             ProtectKernelModules = true;
             ProtectKernelLogs = true;
             ProtectControlGroups = true;
-            RestrictAddressFamilies = [ "AF_INET" "AF_INET6" ] ++ optionals isClient [ "AF_UNIX" ];
+            RestrictAddressFamilies = [
+              "AF_INET"
+              "AF_INET6"
+            ] ++ optionals isClient [ "AF_UNIX" ];
             LockPersonality = true;
             MemoryDenyWriteExecute = true;
             RestrictRealtime = true;

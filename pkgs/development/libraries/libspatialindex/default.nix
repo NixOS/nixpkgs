@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+}:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libspatialindex";
@@ -22,9 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ cmake ];
 
-  cmakeFlags = [
-    "-DSIDX_BUILD_TESTS=${if finalAttrs.finalPackage.doCheck then "ON" else "OFF"}"
-  ];
+  cmakeFlags = [ "-DSIDX_BUILD_TESTS=${if finalAttrs.finalPackage.doCheck then "ON" else "OFF"}" ];
 
   doCheck = true;
 

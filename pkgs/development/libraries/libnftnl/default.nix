@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchurl, pkg-config, libmnl }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  libmnl,
+}:
 
 stdenv.mkDerivation rec {
   version = "1.2.6";
@@ -9,7 +15,9 @@ stdenv.mkDerivation rec {
     hash = "sha256-zurqLNkhR9oZ8To1p/GkvCdn/4l+g45LR5z1S1nHd/Q=";
   };
 
-  configureFlags = lib.optional (stdenv.cc.bintools.isLLVM && lib.versionAtLeast stdenv.cc.bintools.version "17") "LDFLAGS=-Wl,--undefined-version";
+  configureFlags = lib.optional (
+    stdenv.cc.bintools.isLLVM && lib.versionAtLeast stdenv.cc.bintools.version "17"
+  ) "LDFLAGS=-Wl,--undefined-version";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libmnl ];

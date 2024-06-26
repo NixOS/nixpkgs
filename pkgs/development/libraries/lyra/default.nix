@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, installShellFiles, meson, ninja }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  installShellFiles,
+  meson,
+  ninja,
+}:
 
 stdenv.mkDerivation rec {
   pname = "lyra";
@@ -11,7 +18,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-tS2SPLiKaL8C35AmOXyJPstFUfynkE/A53rurqiySbI=";
   };
 
-  nativeBuildInputs = [ meson ninja ];
+  nativeBuildInputs = [
+    meson
+    ninja
+  ];
 
   postPatch = "sed -i s#/usr#$out#g meson.build";
 

@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -34,8 +39,9 @@ in
 
     boot.extraModulePackages = [ kernelPackages.facetimehd ];
 
-    hardware.firmware = [ pkgs.facetimehd-firmware ]
-      ++ optional cfg.withCalibration pkgs.facetimehd-calibration;
+    hardware.firmware = [
+      pkgs.facetimehd-firmware
+    ] ++ optional cfg.withCalibration pkgs.facetimehd-calibration;
 
     # unload module during suspend/hibernate as it crashes the whole system
     powerManagement.powerDownCommands = ''

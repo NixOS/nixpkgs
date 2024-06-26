@@ -1,10 +1,19 @@
-{ lib, buildDunePackage, caqti, ocaml_sqlite3, alcotest }:
+{
+  lib,
+  buildDunePackage,
+  caqti,
+  ocaml_sqlite3,
+  alcotest,
+}:
 
 buildDunePackage {
   pname = "caqti-driver-sqlite3";
   inherit (caqti) version src;
 
-  propagatedBuildInputs = [ caqti ocaml_sqlite3 ];
+  propagatedBuildInputs = [
+    caqti
+    ocaml_sqlite3
+  ];
 
   checkInputs = [ alcotest ];
 

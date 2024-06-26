@@ -1,12 +1,13 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, installShellFiles
-, pkg-config
-, oniguruma
-, stdenv
-, darwin
-, git
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  installShellFiles,
+  pkg-config,
+  oniguruma,
+  stdenv,
+  darwin,
+  git,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -29,9 +30,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [
     oniguruma
-  ] ++ lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk_11_0.frameworks.Foundation
-  ];
+  ] ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk_11_0.frameworks.Foundation ];
 
   nativeCheckInputs = [ git ];
 
@@ -49,16 +48,18 @@ rustPlatform.buildRustPackage rec {
   # https://github.com/dandavison/delta/issues/1660
   dontUseCargoParallelTests = true;
 
-  checkFlags = lib.optionals stdenv.isDarwin [
-    "--skip=test_diff_same_non_empty_file"
-  ];
+  checkFlags = lib.optionals stdenv.isDarwin [ "--skip=test_diff_same_non_empty_file" ];
 
   meta = with lib; {
     homepage = "https://github.com/dandavison/delta";
     description = "Syntax-highlighting pager for git";
     changelog = "https://github.com/dandavison/delta/releases/tag/${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ zowoq SuperSandro2000 figsoda ];
+    maintainers = with maintainers; [
+      zowoq
+      SuperSandro2000
+      figsoda
+    ];
     mainProgram = "delta";
   };
 }

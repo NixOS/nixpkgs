@@ -1,7 +1,8 @@
-{ lib
-, python3
-, git
-, fetchFromGitHub
+{
+  lib,
+  python3,
+  git,
+  fetchFromGitHub,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -39,9 +40,7 @@ python3.pkgs.buildPythonApplication rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "gato"
-  ];
+  pythonImportsCheck = [ "gato" ];
 
   meta = with lib; {
     description = "GitHub Self-Hosted Runner Enumeration and Attack Tool";

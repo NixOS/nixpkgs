@@ -1,10 +1,13 @@
-{ options, config, lib, pkgs, ... }:
+{
+  options,
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
-  inherit (lib)
-    mkOption
-    types
-    ;
+  inherit (lib) mkOption types;
 
   systemBuilderArgs = {
     activationScript = config.system.activationScripts.script;
@@ -56,21 +59,20 @@ in
       unset activationScript dryActivationScript
     '';
 
-    system.systemBuilderCommands = lib.mkIf
-      config.system.activatable
-      config.system.activatableSystemBuilderCommands;
-    system.systemBuilderArgs = lib.mkIf config.system.activatable
-      (systemBuilderArgs // {
-        toplevelVar = "out";
-      });
+    system.systemBuilderCommands = lib.mkIf config.system.activatable config.system.activatableSystemBuilderCommands;
+    system.systemBuilderArgs = lib.mkIf config.system.activatable (
+      systemBuilderArgs // { toplevelVar = "out"; }
+    );
 
     system.build.separateActivationScript =
-      pkgs.runCommand
-        "separate-activation-script"
-        (systemBuilderArgs // {
-          toplevelVar = "toplevel";
-          toplevel = config.system.build.toplevel;
-        })
+      pkgs.runCommand "separate-activation-script"
+        (
+          systemBuilderArgs
+          // {
+            toplevelVar = "toplevel";
+            toplevel = config.system.build.toplevel;
+          }
+        )
         ''
           mkdir $out
           ${config.system.activatableSystemBuilderCommands}

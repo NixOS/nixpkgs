@@ -1,4 +1,8 @@
-{ lib, rustPlatform, fetchCrate }:
+{
+  lib,
+  rustPlatform,
+  fetchCrate,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "preserves-tools";
@@ -12,8 +16,7 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-09uxXD9EZzzk42tBYbuqaLRFyGmOUuvC7G0XMDjsK6E=";
 
   meta = {
-    description =
-      "Command-line utilities for working with Preserves documents";
+    description = "Command-line utilities for working with Preserves documents";
     homepage = "https://preserves.dev/doc/preserves-tool.html";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ ehmry ];

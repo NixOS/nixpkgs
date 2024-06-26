@@ -1,6 +1,7 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
 
 buildGoModule rec {
@@ -13,9 +14,7 @@ buildGoModule rec {
     hash = "sha256-slU3n7YCV5VfvXArzlcITb9epdu/gyXlAWq9KLjGdJA=";
   };
   vendorHash = "sha256-Xv8Tfq9Kb1xGFCWZQwBFDX9xZW9j99td/DUb7jBtkpE=";
-  ldflags = [
-    "-X=kcl-lang.io/cli/pkg/version.version=${version}"
-  ];
+  ldflags = [ "-X=kcl-lang.io/cli/pkg/version.version=${version}" ];
   subPackages = [ "cmd/kcl" ];
   meta = with lib; {
     description = "Command line interface for KCL programming language";

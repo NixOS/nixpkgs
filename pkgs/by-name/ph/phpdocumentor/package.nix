@@ -1,7 +1,8 @@
-{ lib
-, php
-, fetchFromGitHub
-, makeBinaryWrapper
+{
+  lib,
+  php,
+  fetchFromGitHub,
+  makeBinaryWrapper,
 }:
 
 php.buildComposerProject (finalAttrs: {

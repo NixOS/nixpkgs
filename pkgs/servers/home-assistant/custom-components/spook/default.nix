@@ -19,7 +19,7 @@ buildHomeAssistantComponent rec {
     hash = "sha256-ChHsevryWuim8BEFqXVkCOW9fGMrt5vol+B2SreMUws=";
   };
 
-  patches = [./remove-sub-integration-symlink-hack.patch];
+  patches = [ ./remove-sub-integration-symlink-hack.patch ];
 
   dependencies = [
     pillow
@@ -33,6 +33,6 @@ buildHomeAssistantComponent rec {
     description = "Toolbox for Home Assistant";
     homepage = "https://spook.boo/";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [kkoniuszy];
+    maintainers = with lib.maintainers; [ kkoniuszy ];
   };
 }

@@ -1,4 +1,11 @@
-{ buildGoModule, fetchFromGitHub, fetchpatch, lib, testers, github-release }:
+{
+  buildGoModule,
+  fetchFromGitHub,
+  fetchpatch,
+  lib,
+  testers,
+  github-release,
+}:
 
 buildGoModule rec {
   pname = "github-release";
@@ -28,7 +35,10 @@ buildGoModule rec {
     })
   ];
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   passthru.tests.version = testers.testVersion {
     package = github-release;
@@ -46,7 +56,10 @@ buildGoModule rec {
 
     license = licenses.mit;
     homepage = "https://github.com/github-release/github-release";
-    maintainers = with maintainers; [ ardumont j03 ];
+    maintainers = with maintainers; [
+      ardumont
+      j03
+    ];
     platforms = with platforms; unix;
   };
 }

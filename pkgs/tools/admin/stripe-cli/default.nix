@@ -1,4 +1,10 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles, stdenv }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  stdenv,
+}:
 
 buildGoModule rec {
   pname = "stripe-cli";
@@ -20,28 +26,34 @@ buildGoModule rec {
     "-X github.com/stripe/stripe-cli/pkg/version.Version=${version}"
   ];
 
-  preCheck = ''
-    # the tests expect the Version ldflag not to be set
-    unset ldflags
+  preCheck =
+    ''
+      # the tests expect the Version ldflag not to be set
+      unset ldflags
 
-    # requires internet access
-    rm pkg/cmd/plugin_cmds_test.go
-    rm pkg/cmd/resources_test.go
-    rm pkg/cmd/root_test.go
+      # requires internet access
+      rm pkg/cmd/plugin_cmds_test.go
+      rm pkg/cmd/resources_test.go
+      rm pkg/cmd/root_test.go
 
-    # TODO: no clue why it's broken (1.17.1), remove for now.
-    rm pkg/login/client_login_test.go
-    rm pkg/git/editor_test.go
-    rm pkg/rpcservice/sample_create_test.go
-  '' + lib.optionalString (
-      # delete plugin tests on all platforms but exact matches
-      # https://github.com/stripe/stripe-cli/issues/850
-      ! lib.lists.any
-        (platform: lib.meta.platformMatch stdenv.hostPlatform platform)
-        [ "x86_64-linux" "x86_64-darwin" ]
-  ) ''
-    rm pkg/plugins/plugin_test.go
-  '';
+      # TODO: no clue why it's broken (1.17.1), remove for now.
+      rm pkg/login/client_login_test.go
+      rm pkg/git/editor_test.go
+      rm pkg/rpcservice/sample_create_test.go
+    ''
+    +
+      lib.optionalString
+        (
+          # delete plugin tests on all platforms but exact matches
+          # https://github.com/stripe/stripe-cli/issues/850
+          !lib.lists.any (platform: lib.meta.platformMatch stdenv.hostPlatform platform) [
+            "x86_64-linux"
+            "x86_64-darwin"
+          ]
+        )
+        ''
+          rm pkg/plugins/plugin_test.go
+        '';
 
   postInstall = ''
     installShellCompletion --cmd stripe \
@@ -72,7 +84,11 @@ buildGoModule rec {
       Create, retrieve, update, or delete API objects.
     '';
     license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ RaghavSood jk kashw2 ];
+    maintainers = with maintainers; [
+      RaghavSood
+      jk
+      kashw2
+    ];
     mainProgram = "stripe";
   };
 }

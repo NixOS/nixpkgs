@@ -1,5 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, libsoup, webkitgtk, gtk3, glib-networking
-, gsettings-desktop-schemas, wrapGAppsHook3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  libsoup,
+  webkitgtk,
+  gtk3,
+  glib-networking,
+  gsettings-desktop-schemas,
+  wrapGAppsHook3,
 }:
 
 stdenv.mkDerivation rec {
@@ -13,8 +22,17 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-Eq4riJSznKpkW9JJDnTCLxZ9oMJTmWkIoGphOiCcSAg=";
   };
 
-  nativeBuildInputs = [ wrapGAppsHook3 pkg-config ];
-  buildInputs = [ gtk3 libsoup webkitgtk glib-networking gsettings-desktop-schemas ];
+  nativeBuildInputs = [
+    wrapGAppsHook3
+    pkg-config
+  ];
+  buildInputs = [
+    gtk3
+    libsoup
+    webkitgtk
+    glib-networking
+    gsettings-desktop-schemas
+  ];
 
   passthru = {
     inherit gtk3;
@@ -33,7 +51,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://fanglingsu.github.io/vimb/";
     license = lib.licenses.gpl3;
-    maintainers = [];
+    maintainers = [ ];
     platforms = with lib.platforms; linux;
   };
 }

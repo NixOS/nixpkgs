@@ -1,14 +1,15 @@
-{ stdenv
-, lib
-, fetchurl
-, autoPatchelfHook
-, dpkg
-, qt5
-, libjack2
-, alsa-lib
-, bzip2
-, libpulseaudio
-, xz
+{
+  stdenv,
+  lib,
+  fetchurl,
+  autoPatchelfHook,
+  dpkg,
+  qt5,
+  libjack2,
+  alsa-lib,
+  bzip2,
+  libpulseaudio,
+  xz,
 }:
 
 stdenv.mkDerivation rec {

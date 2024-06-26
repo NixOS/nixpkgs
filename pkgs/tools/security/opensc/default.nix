@@ -1,8 +1,23 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, zlib, readline, openssl
-, libiconv, pcsclite, libassuan, libXt
-, docbook_xsl, libxslt, docbook_xml_dtd_412
-, Carbon, PCSC, buildPackages
-, withApplePCSC ? stdenv.isDarwin
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  zlib,
+  readline,
+  openssl,
+  libiconv,
+  pcsclite,
+  libassuan,
+  libXt,
+  docbook_xsl,
+  libxslt,
+  docbook_xml_dtd_412,
+  Carbon,
+  PCSC,
+  buildPackages,
+  withApplePCSC ? stdenv.isDarwin,
 }:
 
 stdenv.mkDerivation rec {
@@ -16,13 +31,20 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-Ktvp/9Hca87qWmDlQhFzvWsr7TvNpIAvOFS+4zTZbB8=";
   };
 
-  nativeBuildInputs = [ pkg-config autoreconfHook ];
+  nativeBuildInputs = [
+    pkg-config
+    autoreconfHook
+  ];
   buildInputs = [
-    zlib readline openssl libassuan
-    libXt libxslt libiconv docbook_xml_dtd_412
-  ]
-  ++ lib.optional stdenv.isDarwin Carbon
-  ++ (if withApplePCSC then [ PCSC ] else [ pcsclite ]);
+    zlib
+    readline
+    openssl
+    libassuan
+    libXt
+    libxslt
+    libiconv
+    docbook_xml_dtd_412
+  ] ++ lib.optional stdenv.isDarwin Carbon ++ (if withApplePCSC then [ PCSC ] else [ pcsclite ]);
 
   env.NIX_CFLAGS_COMPILE = "-Wno-error";
 
@@ -42,13 +64,13 @@ stdenv.mkDerivation rec {
         "${PCSC}/Library/Frameworks/PCSC.framework/PCSC"
       else
         "${lib.getLib pcsclite}/lib/libpcsclite${stdenv.hostPlatform.extensions.sharedLibrary}"
-      }"
-    (lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform)
-      "XSLTPROC=${buildPackages.libxslt}/bin/xsltproc")
+    }"
+    (lib.optionalString (
+      stdenv.hostPlatform != stdenv.buildPlatform
+    ) "XSLTPROC=${buildPackages.libxslt}/bin/xsltproc")
   ];
 
-  PCSC_CFLAGS = lib.optionalString withApplePCSC
-    "-I${PCSC}/Library/Frameworks/PCSC.framework/Headers";
+  PCSC_CFLAGS = lib.optionalString withApplePCSC "-I${PCSC}/Library/Frameworks/PCSC.framework/Headers";
 
   installFlags = [
     "sysconfdir=$(out)/etc"

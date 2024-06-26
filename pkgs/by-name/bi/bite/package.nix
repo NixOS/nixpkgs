@@ -67,18 +67,12 @@ rustPlatform.buildRustPackage rec {
       darwin.apple_sdk.frameworks.Metal
       darwin.apple_sdk.frameworks.QuartzCore
     ]
-    ++ lib.optionals stdenv.isLinux [
-      wayland
-    ];
+    ++ lib.optionals stdenv.isLinux [ wayland ];
 
-  runtimeDependencies =
-    [
-      libxkbcommon
-      vulkan-loader
-    ]
-    ++ lib.optionals stdenv.isLinux [
-      wayland
-    ];
+  runtimeDependencies = [
+    libxkbcommon
+    vulkan-loader
+  ] ++ lib.optionals stdenv.isLinux [ wayland ];
 
   postInstall = ''
     wrapProgram $out/bin/bite \
@@ -95,7 +89,10 @@ rustPlatform.buildRustPackage rec {
       icon = "bite";
       desktopName = "BiTE";
       comment = meta.description;
-      categories = ["Development" "Utility"];
+      categories = [
+        "Development"
+        "Utility"
+      ];
     })
   ];
 
@@ -103,7 +100,7 @@ rustPlatform.buildRustPackage rec {
     description = "Disassembler focused on comprehensive rust support";
     homepage = "https://github.com/WINSDK/bite";
     license = licenses.mit;
-    maintainers = with maintainers; [vinnymeller];
+    maintainers = with maintainers; [ vinnymeller ];
     mainProgram = "bite";
     broken = stdenv.isDarwin && stdenv.isx86_64;
   };

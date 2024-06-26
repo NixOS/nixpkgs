@@ -12,7 +12,7 @@ rec {
     };
 
     buildInputs = [
-      
+
     ];
   };
 
@@ -26,7 +26,7 @@ rec {
     };
 
     buildInputs = [
-      
+
     ];
   };
 
@@ -73,7 +73,7 @@ rec {
     };
 
     buildInputs = [
-      
+
     ];
   };
 
@@ -87,7 +87,7 @@ rec {
     };
 
     buildInputs = [
-      
+
     ];
   };
 
@@ -101,7 +101,7 @@ rec {
     };
 
     buildInputs = [
-      
+
     ];
   };
 
@@ -130,9 +130,6 @@ rec {
       sha256 = "10ivf4xlmr6jcm00l2phq1y73hjv6g3qgr38ycc8rw56wv6sbm4g";
     };
 
-    buildInputs = [
-      matchable
-    ];
+    buildInputs = [ matchable ];
   };
 }
-

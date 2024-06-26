@@ -1,17 +1,18 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, pkg-config
-# fails on older Boost due to https://github.com/boostorg/phoenix/issues/111
-, boost184
-, cppunit
-, glm
-, gperf
-, liblangtag
-, librevenge
-, libxml2
-, mdds
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  # fails on older Boost due to https://github.com/boostorg/phoenix/issues/111
+  boost184,
+  cppunit,
+  glm,
+  gperf,
+  liblangtag,
+  librevenge,
+  libxml2,
+  mdds,
 }:
 
 stdenv.mkDerivation rec {
@@ -41,7 +42,7 @@ stdenv.mkDerivation rec {
     mdds
   ];
 
-  configureFlags = ["--with-mdds=2.1"];
+  configureFlags = [ "--with-mdds=2.1" ];
 
   meta = with lib; {
     description = "Library and a set of tools for reading and converting Apple iWork documents (Keynote, Pages and Numbers)";

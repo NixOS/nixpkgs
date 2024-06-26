@@ -1,4 +1,14 @@
-{ fetchgit, gawk, jq, lib, makeWrapper, slurp, stdenv, sway, bash }:
+{
+  fetchgit,
+  gawk,
+  jq,
+  lib,
+  makeWrapper,
+  slurp,
+  stdenv,
+  sway,
+  bash,
+}:
 
 stdenv.mkDerivation rec {
   pname = "wlprop";
@@ -20,7 +30,14 @@ stdenv.mkDerivation rec {
 
     install -Dm755 wlprop.sh $out/bin/wlprop
     wrapProgram "$out/bin/wlprop" \
-      --prefix PATH : "$out/bin:${lib.makeBinPath [ gawk jq slurp sway ]}"
+      --prefix PATH : "$out/bin:${
+        lib.makeBinPath [
+          gawk
+          jq
+          slurp
+          sway
+        ]
+      }"
 
     runHook postInstall
   '';

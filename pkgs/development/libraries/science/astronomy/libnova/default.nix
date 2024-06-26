@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchgit, autoreconfHook }:
+{
+  lib,
+  stdenv,
+  fetchgit,
+  autoreconfHook,
+}:
 
 stdenv.mkDerivation rec {
   pname = "libnova";
@@ -11,9 +16,7 @@ stdenv.mkDerivation rec {
     sha256 = "0icwylwkixihzni0kgl0j8dx3qhqvym6zv2hkw2dy6v9zvysrb1b";
   };
 
-  nativeBuildInputs = [
-    autoreconfHook
-  ];
+  nativeBuildInputs = [ autoreconfHook ];
 
   meta = with lib; {
     description = "Celestial Mechanics, Astrometry and Astrodynamics Library";

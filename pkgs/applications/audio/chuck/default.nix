@@ -1,5 +1,21 @@
-{ stdenv, lib, fetchurl, alsa-lib, bison, flex, libsndfile, which, DarwinTools, xcbuild
-, AppKit, Carbon, CoreAudio, CoreMIDI, CoreServices, Kernel, MultitouchSupport
+{
+  stdenv,
+  lib,
+  fetchurl,
+  alsa-lib,
+  bison,
+  flex,
+  libsndfile,
+  which,
+  DarwinTools,
+  xcbuild,
+  AppKit,
+  Carbon,
+  CoreAudio,
+  CoreMIDI,
+  CoreServices,
+  Kernel,
+  MultitouchSupport,
 }:
 
 stdenv.mkDerivation rec {
@@ -11,16 +27,36 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-hIwsC9rYgXWSTFqUufKGqoT0Gnsf4nR4KQ0iSVbj8xg=";
   };
 
-  nativeBuildInputs = [ flex bison which ]
-    ++ lib.optionals stdenv.isDarwin [ DarwinTools xcbuild ];
+  nativeBuildInputs =
+    [
+      flex
+      bison
+      which
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      DarwinTools
+      xcbuild
+    ];
 
-  buildInputs = [ libsndfile ]
+  buildInputs =
+    [ libsndfile ]
     ++ lib.optional (!stdenv.isDarwin) alsa-lib
-    ++ lib.optionals stdenv.isDarwin [ AppKit Carbon CoreAudio CoreMIDI CoreServices Kernel MultitouchSupport ];
+    ++ lib.optionals stdenv.isDarwin [
+      AppKit
+      Carbon
+      CoreAudio
+      CoreMIDI
+      CoreServices
+      Kernel
+      MultitouchSupport
+    ];
 
   patches = [ ./darwin-limits.patch ];
 
-  makeFlags = [ "-C src" "DESTDIR=$(out)/bin" ];
+  makeFlags = [
+    "-C src"
+    "DESTDIR=$(out)/bin"
+  ];
   buildFlags = [ (if stdenv.isDarwin then "mac" else "linux-alsa") ];
 
   meta = with lib; {

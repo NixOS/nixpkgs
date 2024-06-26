@@ -1,18 +1,25 @@
-{ lib, stdenv, fetchurl
-, runtimeShellPackage
-# TODO: links -lsigsegv but loses the reference for some reason
-, withSigsegv ? (false && stdenv.hostPlatform.system != "x86_64-cygwin"), libsigsegv
-, interactive ? false, readline
-, autoreconfHook # no-pma fix
+{
+  lib,
+  stdenv,
+  fetchurl,
+  runtimeShellPackage,
+  # TODO: links -lsigsegv but loses the reference for some reason
+  withSigsegv ? (false && stdenv.hostPlatform.system != "x86_64-cygwin"),
+  libsigsegv,
+  interactive ? false,
+  readline,
+  autoreconfHook, # no-pma fix
 
-/* Test suite broke on:
-       stdenv.isCygwin # XXX: `test-dup2' segfaults on Cygwin 6.1
-    || stdenv.isDarwin # XXX: `locale' segfaults
-    || stdenv.isSunOS  # XXX: `_backsmalls1' fails, locale stuff?
-    || stdenv.isFreeBSD
-*/
-, doCheck ? (interactive && stdenv.isLinux), glibcLocales ? null
-, locale ? null
+  /*
+    Test suite broke on:
+        stdenv.isCygwin # XXX: `test-dup2' segfaults on Cygwin 6.1
+     || stdenv.isDarwin # XXX: `locale' segfaults
+     || stdenv.isSunOS  # XXX: `_backsmalls1' fails, locale stuff?
+     || stdenv.isFreeBSD
+  */
+  doCheck ? (interactive && stdenv.isLinux),
+  glibcLocales ? null,
+  locale ? null,
 }:
 
 assert (doCheck && stdenv.isLinux) -> glibcLocales != null;
@@ -33,16 +40,17 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "pie" ];
 
   # When we do build separate interactive version, it makes sense to always include man.
-  outputs = [ "out" "info" ]
-    ++ lib.optional (!interactive) "man";
+  outputs = [
+    "out"
+    "info"
+  ] ++ lib.optional (!interactive) "man";
 
   # no-pma fix
-  nativeBuildInputs = [ autoreconfHook ]
-    ++ lib.optional (doCheck && stdenv.isLinux) glibcLocales;
+  nativeBuildInputs = [ autoreconfHook ] ++ lib.optional (doCheck && stdenv.isLinux) glibcLocales;
 
-  buildInputs = [
-    runtimeShellPackage
-  ] ++ lib.optional withSigsegv libsigsegv
+  buildInputs =
+    [ runtimeShellPackage ]
+    ++ lib.optional withSigsegv libsigsegv
     ++ lib.optional interactive readline
     ++ lib.optional stdenv.isDarwin locale;
 
@@ -51,9 +59,7 @@ stdenv.mkDerivation rec {
     (if interactive then "--with-readline=${readline.dev}" else "--without-readline")
   ];
 
-  makeFlags = [
-    "AR=${stdenv.cc.targetPrefix}ar"
-  ];
+  makeFlags = [ "AR=${stdenv.cc.targetPrefix}ar" ];
 
   inherit doCheck;
 

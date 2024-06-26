@@ -1,7 +1,8 @@
-{ config
-, lib
-, pkgs
-, ...
+{
+  config,
+  lib,
+  pkgs,
+  ...
 }:
 
 let
@@ -12,47 +13,54 @@ let
     mkPackageOption
     mkIf
     mkOption
-    types;
+    types
+    ;
 
   cfg = config.services.frigate;
 
   format = pkgs.formats.yaml { };
 
-  filteredConfig = lib.converge (lib.filterAttrsRecursive (_: v: ! lib.elem v [ null ])) cfg.settings;
+  filteredConfig = lib.converge (lib.filterAttrsRecursive (_: v: !lib.elem v [ null ])) cfg.settings;
 
-  cameraFormat = with types; submodule {
-    freeformType = format.type;
-    options = {
-      ffmpeg = {
-        inputs = mkOption {
-          description = ''
-            List of inputs for this camera.
-          '';
-          type = listOf (submodule {
-            freeformType = format.type;
-            options = {
-              path = mkOption {
-                type = str;
-                example = "rtsp://192.0.2.1:554/rtsp";
-                description = ''
-                  Stream URL
-                '';
+  cameraFormat =
+    with types;
+    submodule {
+      freeformType = format.type;
+      options = {
+        ffmpeg = {
+          inputs = mkOption {
+            description = ''
+              List of inputs for this camera.
+            '';
+            type = listOf (submodule {
+              freeformType = format.type;
+              options = {
+                path = mkOption {
+                  type = str;
+                  example = "rtsp://192.0.2.1:554/rtsp";
+                  description = ''
+                    Stream URL
+                  '';
+                };
+                roles = mkOption {
+                  type = listOf (enum [
+                    "detect"
+                    "record"
+                    "rtmp"
+                  ]);
+                  example = literalExpression ''
+                    [ "detect" "rtmp" ]
+                  '';
+                  description = ''
+                    List of roles for this stream
+                  '';
+                };
               };
-              roles = mkOption {
-                type = listOf (enum [ "detect" "record" "rtmp" ]);
-                example = literalExpression ''
-                  [ "detect" "rtmp" ]
-                '';
-                description = ''
-                  List of roles for this stream
-                '';
-              };
-            };
-          });
+            });
+          };
         };
       };
     };
-  };
 
 in
 
@@ -377,9 +385,7 @@ in
       '';
     };
 
-    systemd.services.nginx.serviceConfig.SupplementaryGroups = [
-      "frigate"
-    ];
+    systemd.services.nginx.serviceConfig.SupplementaryGroups = [ "frigate" ];
 
     users.users.frigate = {
       isSystemUser = true;
@@ -392,25 +398,26 @@ in
         "go2rtc.service"
         "network.target"
       ];
-      wantedBy = [
-        "multi-user.target"
-      ];
+      wantedBy = [ "multi-user.target" ];
       environment = {
         CONFIG_FILE = format.generate "frigate.yml" filteredConfig;
         HOME = "/var/lib/frigate";
         PYTHONPATH = cfg.package.pythonPath;
       };
-      path = with pkgs; [
-        # unfree:
-        # config.boot.kernelPackages.nvidiaPackages.latest.bin
-        ffmpeg_5-headless
-        libva-utils
-        procps
-        radeontop
-      ] ++ lib.optionals (!stdenv.isAarch64) [
-        # not available on aarch64-linux
-        intel-gpu-tools
-      ];
+      path =
+        with pkgs;
+        [
+          # unfree:
+          # config.boot.kernelPackages.nvidiaPackages.latest.bin
+          ffmpeg_5-headless
+          libva-utils
+          procps
+          radeontop
+        ]
+        ++ lib.optionals (!stdenv.isAarch64) [
+          # not available on aarch64-linux
+          intel-gpu-tools
+        ];
       serviceConfig = {
         ExecStart = "${cfg.package.python.interpreter} -m frigate";
         Restart = "on-failure";

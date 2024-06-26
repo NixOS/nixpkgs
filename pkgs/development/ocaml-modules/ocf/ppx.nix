@@ -1,4 +1,8 @@
-{ buildDunePackage, ocf, ppxlib }:
+{
+  buildDunePackage,
+  ocf,
+  ppxlib,
+}:
 
 buildDunePackage {
   pname = "ocf_ppx";
@@ -8,7 +12,10 @@ buildDunePackage {
 
   duneVersion = "3";
 
-  buildInputs = [ ppxlib ocf ];
+  buildInputs = [
+    ppxlib
+    ocf
+  ];
 
   meta = ocf.meta // {
     description = "Preprocessor for Ocf library";

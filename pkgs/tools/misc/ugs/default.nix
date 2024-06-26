@@ -1,10 +1,11 @@
-{ stdenv
-, lib
-, copyDesktopItems
-, makeDesktopItem
-, makeWrapper
-, jre
-, fetchzip
+{
+  stdenv,
+  lib,
+  copyDesktopItems,
+  makeDesktopItem,
+  makeWrapper,
+  jre,
+  fetchzip,
 }:
 let
   desktopItem = makeDesktopItem {
@@ -27,7 +28,10 @@ stdenv.mkDerivation rec {
 
   dontUnpack = true;
 
-  nativeBuildInputs = [ copyDesktopItems makeWrapper ];
+  nativeBuildInputs = [
+    copyDesktopItems
+    makeWrapper
+  ];
 
   installPhase = ''
     runHook preInstall

@@ -1,4 +1,17 @@
-{ lib, stdenv, fetchFromGitHub, automake, autoconf, pkg-config, gettext, libtool, pandoc, which, attr, libiconv }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  automake,
+  autoconf,
+  pkg-config,
+  gettext,
+  libtool,
+  pandoc,
+  which,
+  attr,
+  libiconv,
+}:
 
 stdenv.mkDerivation rec {
   pname = "mergerfs";
@@ -12,18 +25,32 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    automake autoconf pkg-config gettext libtool pandoc which
+    automake
+    autoconf
+    pkg-config
+    gettext
+    libtool
+    pandoc
+    which
   ];
   prePatch = ''
     sed -i -e '/chown/d' -e '/chmod/d' libfuse/Makefile
   '';
-  buildInputs = [ attr libiconv ];
+  buildInputs = [
+    attr
+    libiconv
+  ];
 
   preConfigure = ''
     echo "${version}" > VERSION
   '';
 
-  makeFlags = [ "DESTDIR=${placeholder "out"}" "XATTR_AVAILABLE=1" "PREFIX=/" "SBINDIR=/bin" ];
+  makeFlags = [
+    "DESTDIR=${placeholder "out"}"
+    "XATTR_AVAILABLE=1"
+    "PREFIX=/"
+    "SBINDIR=/bin"
+  ];
   enableParallelBuilding = true;
 
   postFixup = ''

@@ -1,23 +1,24 @@
-{ lib
-, stdenv
-, rustPlatform
-, gettext
-, meson
-, ninja
-, fetchurl
-, pkg-config
-, gtk4
-, glib
-, gdk-pixbuf
-, desktop-file-utils
-, appstream-glib
-, wrapGAppsHook4
-, python3
-, gnome
-, libadwaita
-, librsvg
-, rustc
-, cargo
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  gettext,
+  meson,
+  ninja,
+  fetchurl,
+  pkg-config,
+  gtk4,
+  glib,
+  gdk-pixbuf,
+  desktop-file-utils,
+  appstream-glib,
+  wrapGAppsHook4,
+  python3,
+  gnome,
+  libadwaita,
+  librsvg,
+  rustc,
+  cargo,
 }:
 
 stdenv.mkDerivation rec {
@@ -31,9 +32,7 @@ stdenv.mkDerivation rec {
 
   cargoVendorDir = "vendor";
 
-  depsBuildBuild = [
-    pkg-config
-  ];
+  depsBuildBuild = [ pkg-config ];
 
   nativeBuildInputs = [
     appstream-glib
@@ -59,9 +58,7 @@ stdenv.mkDerivation rec {
   ];
 
   passthru = {
-    updateScript = gnome.updateScript {
-      packageName = pname;
-    };
+    updateScript = gnome.updateScript { packageName = pname; };
   };
 
   meta = with lib; {

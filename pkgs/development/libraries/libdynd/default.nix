@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, cmake }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+}:
 
 stdenv.mkDerivation rec {
   pname = "libdynd";
@@ -11,9 +16,7 @@ stdenv.mkDerivation rec {
     sha256 = "0fkd5rawqni1cq51fmr76iw7ll4fmbahfwv4rglnsabbkylf73pr";
   };
 
-  cmakeFlags = [
-    "-DDYND_BUILD_BENCHMARKS=OFF"
-  ];
+  cmakeFlags = [ "-DDYND_BUILD_BENCHMARKS=OFF" ];
 
   env.NIX_CFLAGS_COMPILE = builtins.toString [
     # added to fix build with gcc7+
@@ -30,7 +33,10 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
   outputDoc = "dev";
 
   meta = with lib; {

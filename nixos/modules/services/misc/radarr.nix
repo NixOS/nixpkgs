@@ -1,4 +1,9 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 with lib;
 
@@ -59,9 +64,7 @@ in
       };
     };
 
-    networking.firewall = mkIf cfg.openFirewall {
-      allowedTCPPorts = [ 7878 ];
-    };
+    networking.firewall = mkIf cfg.openFirewall { allowedTCPPorts = [ 7878 ]; };
 
     users.users = mkIf (cfg.user == "radarr") {
       radarr = {
@@ -71,8 +74,6 @@ in
       };
     };
 
-    users.groups = mkIf (cfg.group == "radarr") {
-      radarr.gid = config.ids.gids.radarr;
-    };
+    users.groups = mkIf (cfg.group == "radarr") { radarr.gid = config.ids.gids.radarr; };
   };
 }

@@ -1,6 +1,7 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
 
 buildGoModule rec {
@@ -25,5 +26,3 @@ buildGoModule rec {
     maintainers = with maintainers; [ hexa ];
   };
 }
-
-

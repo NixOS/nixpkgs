@@ -1,4 +1,8 @@
-{ python3Packages, lib, fetchzip }:
+{
+  python3Packages,
+  lib,
+  fetchzip,
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "nerd-font-patcher";

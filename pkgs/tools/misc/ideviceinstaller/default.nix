@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, pkg-config
-, usbmuxd
-, libimobiledevice
-, libzip
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  usbmuxd,
+  libimobiledevice,
+  libzip,
 }:
 
 stdenv.mkDerivation rec {
@@ -31,9 +32,7 @@ stdenv.mkDerivation rec {
   ];
 
   # the package uses zip_get_num_entries, which is deprecated
-  env.NIX_CFLAGS_COMPILE = toString [
-    "-Wno-error=deprecated-declarations"
-  ];
+  env.NIX_CFLAGS_COMPILE = toString [ "-Wno-error=deprecated-declarations" ];
 
   preAutoreconf = ''
     export RELEASE_VERSION=${version}

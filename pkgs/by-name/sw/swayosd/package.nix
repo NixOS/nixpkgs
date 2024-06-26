@@ -1,21 +1,22 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, wrapGAppsHook3
-, brightnessctl
-, cargo
-, coreutils
-, gtk-layer-shell
-, libevdev
-, libinput
-, libpulseaudio
-, meson
-, ninja
-, rustc
-, sassc
-, stdenv
-, udev
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  wrapGAppsHook3,
+  brightnessctl,
+  cargo,
+  coreutils,
+  gtk-layer-shell,
+  libevdev,
+  libinput,
+  libpulseaudio,
+  meson,
+  ninja,
+  rustc,
+  sassc,
+  stdenv,
+  udev,
 }:
 
 stdenv.mkDerivation rec {
@@ -54,9 +55,7 @@ stdenv.mkDerivation rec {
     sassc
   ];
 
-  patches = [
-    ./swayosd_systemd_paths.patch
-  ];
+  patches = [ ./swayosd_systemd_paths.patch ];
 
   preFixup = ''
     gappsWrapperArgs+=(
@@ -74,7 +73,11 @@ stdenv.mkDerivation rec {
     description = "GTK based on screen display for keyboard shortcuts";
     homepage = "https://github.com/ErikReider/SwayOSD";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ aleksana barab-i sergioribera ];
+    maintainers = with maintainers; [
+      aleksana
+      barab-i
+      sergioribera
+    ];
     platforms = platforms.linux;
   };
 }

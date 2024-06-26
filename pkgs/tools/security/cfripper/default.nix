@@ -1,6 +1,7 @@
-{ lib
-, fetchFromGitHub
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -15,18 +16,14 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-ymuxZwW3Pwx/CyG2iPoY7LP9e+1K6EUBi/TApg0YvkE=";
   };
 
-  pythonRelaxDeps = [
-    "pluggy"
-  ];
+  pythonRelaxDeps = [ "pluggy" ];
 
   build-system = with python3.pkgs; [
     setuptools
     setuptools-scm
   ];
 
-  nativeBuildInputs = with python3.pkgs; [
-    pythonRelaxDepsHook
-  ];
+  nativeBuildInputs = with python3.pkgs; [ pythonRelaxDepsHook ];
 
   dependencies = with python3.pkgs; [
     boto3
@@ -55,9 +52,7 @@ python3.pkgs.buildPythonApplication rec {
     "test_multiple_resources_with_wildcard_resources_are_detected"
   ];
 
-  pythonImportsCheck = [
-    "cfripper"
-  ];
+  pythonImportsCheck = [ "cfripper" ];
 
   meta = with lib; {
     description = "Tool for analysing CloudFormation templates";

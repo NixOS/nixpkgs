@@ -1,15 +1,16 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, fetchNpmDeps
-, npmHooks
-, nodejs
-, pkg-config
-, sqlite
-, zstd
-, stdenv
-, darwin
-, open-policy-agent
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  fetchNpmDeps,
+  npmHooks,
+  nodejs,
+  pkg-config,
+  sqlite,
+  zstd,
+  stdenv,
+  darwin,
+  open-policy-agent,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -45,14 +46,16 @@ rustPlatform.buildRustPackage rec {
     nodejs
   ];
 
-  buildInputs = [
-    sqlite
-    zstd
-  ] ++ lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk_11_0.frameworks.CoreFoundation
-    darwin.apple_sdk_11_0.frameworks.Security
-    darwin.apple_sdk_11_0.frameworks.SystemConfiguration
-  ];
+  buildInputs =
+    [
+      sqlite
+      zstd
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      darwin.apple_sdk_11_0.frameworks.CoreFoundation
+      darwin.apple_sdk_11_0.frameworks.Security
+      darwin.apple_sdk_11_0.frameworks.SystemConfiguration
+    ];
 
   env = {
     ZSTD_SYS_USE_PKG_CONFIG = true;

@@ -1,4 +1,15 @@
-{ lib, clangStdenv, stdenv, cmake, autoPatchelfHook, fetchFromGitHub, dotnetCorePackages, buildDotnetModule, netcoredbg, testers }:
+{
+  lib,
+  clangStdenv,
+  stdenv,
+  cmake,
+  autoPatchelfHook,
+  fetchFromGitHub,
+  dotnetCorePackages,
+  buildDotnetModule,
+  netcoredbg,
+  testers,
+}:
 let
   pname = "netcoredbg";
   build = "1018";
@@ -26,7 +37,10 @@ let
   unmanaged = clangStdenv.mkDerivation {
     inherit src pname version;
 
-    nativeBuildInputs = [ cmake dotnet-sdk ];
+    nativeBuildInputs = [
+      cmake
+      dotnet-sdk
+    ];
 
     hardeningDisable = [ "strictoverflow" ];
 
@@ -42,7 +56,12 @@ let
   };
 
   managed = buildDotnetModule {
-    inherit pname version src dotnet-sdk;
+    inherit
+      pname
+      version
+      src
+      dotnet-sdk
+      ;
 
     projectFile = "src/managed/ManagedPart.csproj";
     nugetDeps = ./deps.nix;
@@ -87,6 +106,9 @@ stdenv.mkDerivation {
     license = licenses.mit;
     platforms = platforms.unix;
     mainProgram = "netcoredbg";
-    maintainers = with maintainers; [ leo60228 konradmalik ];
+    maintainers = with maintainers; [
+      leo60228
+      konradmalik
+    ];
   };
 }

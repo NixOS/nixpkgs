@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, zig_0_11
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  zig_0_11,
 }:
 
 stdenv.mkDerivation rec {
@@ -32,9 +33,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [
-    zig_0_11.hook
-  ];
+  nativeBuildInputs = [ zig_0_11.hook ];
 
   meta = with lib; {
     description = "Compare the performance of multiple commands with a colorful terminal user interface";

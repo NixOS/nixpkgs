@@ -1,4 +1,11 @@
-{ stdenv, fetchFromGitHub, lib, cmake, pkg-config, libftdi1 }:
+{
+  stdenv,
+  fetchFromGitHub,
+  lib,
+  cmake,
+  pkg-config,
+  libftdi1,
+}:
 
 stdenv.mkDerivation rec {
   pname = "jtag-remote-server";
@@ -11,7 +18,10 @@ stdenv.mkDerivation rec {
     hash = "sha256-qtgO0BO2hvWi/E2RzGTTuQynKbh7/OLeoLcm60dqro8=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
   buildInputs = [ libftdi1 ];
 
   meta = with lib; {

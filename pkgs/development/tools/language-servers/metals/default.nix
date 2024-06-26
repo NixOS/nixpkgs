@@ -1,4 +1,11 @@
-{ stdenv, lib, coursier, jre, makeWrapper, setJavaClassPath }:
+{
+  stdenv,
+  lib,
+  coursier,
+  jre,
+  makeWrapper,
+  setJavaClassPath,
+}:
 
 stdenv.mkDerivation rec {
   pname = "metals";
@@ -19,7 +26,10 @@ stdenv.mkDerivation rec {
     outputHash = "sha256-hRESY7TFxUjEkNf0vhCG30mIHZHXoAyZl3nTQ3OvQ0E=";
   };
 
-  nativeBuildInputs = [ makeWrapper setJavaClassPath ];
+  nativeBuildInputs = [
+    makeWrapper
+    setJavaClassPath
+  ];
   buildInputs = [ deps ];
 
   dontUnpack = true;
@@ -38,6 +48,10 @@ stdenv.mkDerivation rec {
     license = licenses.asl20;
     description = "Language server for Scala";
     mainProgram = "metals";
-    maintainers = with maintainers; [ fabianhjr jpaju tomahna ];
+    maintainers = with maintainers; [
+      fabianhjr
+      jpaju
+      tomahna
+    ];
   };
 }

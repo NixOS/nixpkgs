@@ -1,10 +1,16 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
 let
   cfg = config.services.duckling;
-in {
+in
+{
   options = {
     services.duckling = {
       enable = mkEnableOption "duckling";
@@ -22,8 +28,8 @@ in {
   config = mkIf cfg.enable {
     systemd.services.duckling = {
       description = "Duckling server service";
-      wantedBy    = [ "multi-user.target" ];
-      after       = [ "network.target" ];
+      wantedBy = [ "multi-user.target" ];
+      after = [ "network.target" ];
 
       environment = {
         PORT = builtins.toString cfg.port;

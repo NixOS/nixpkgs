@@ -1,5 +1,13 @@
-{ stdenv, lib, fetchFromGitHub, libX11, libXft, freetype, patches ? [ ],
-  extraLibs ? [ ] }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  libX11,
+  libXft,
+  freetype,
+  patches ? [ ],
+  extraLibs ? [ ],
+}:
 
 stdenv.mkDerivation rec {
   pname = "herbe";
@@ -18,7 +26,11 @@ stdenv.mkDerivation rec {
     sed -i 's_/usr/include/freetype2_${freetype.dev}/include/freetype2_' Makefile
   '';
 
-  buildInputs = [ libX11 libXft freetype ] ++ extraLibs;
+  buildInputs = [
+    libX11
+    libXft
+    freetype
+  ] ++ extraLibs;
 
   makeFlags = [ "PREFIX=$(out)" ];
 

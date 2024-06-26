@@ -21,9 +21,7 @@ buildPythonPackage rec {
     hash = "sha256-PAzUUhKtWiWzVEWWTiUX76AAoRihv8NDfa6CiJLq8eE=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   optional-dependencies = {
     yaml = [

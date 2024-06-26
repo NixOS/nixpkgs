@@ -1,7 +1,8 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, rustfmt
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  rustfmt,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -17,9 +18,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-T21GuGQaX/VD907MEGp68bQPXrRK0it4o1nLEdHwTsE=";
 
-  nativeCheckInputs = [
-    rustfmt
-  ];
+  nativeCheckInputs = [ rustfmt ];
 
   checkFlags = [
     # Requires a mythical rustfmt 2.0 or a nightly compiler

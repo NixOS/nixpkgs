@@ -1,6 +1,7 @@
-{ lib
-, python3
-, fetchFromGitHub
+{
+  lib,
+  python3,
+  fetchFromGitHub,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -25,15 +26,17 @@ python3.pkgs.buildPythonApplication rec {
     pythonRelaxDepsHook
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
-    bite-parser
-    dataclasses-serialization
-    prometheus-client
-    structlog
-    uvicorn
-    xsdata
-  ]
-  ++ uvicorn.optional-dependencies.standard;
+  propagatedBuildInputs =
+    with python3.pkgs;
+    [
+      bite-parser
+      dataclasses-serialization
+      prometheus-client
+      structlog
+      uvicorn
+      xsdata
+    ]
+    ++ uvicorn.optional-dependencies.standard;
 
   nativeCheckInputs = with python3.pkgs; [
     aiohttp

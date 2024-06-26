@@ -1,7 +1,8 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, libaio
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  libaio,
 }:
 
 stdenv.mkDerivation rec {
@@ -15,9 +16,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-lZpF7PdUwKnV0ha6xkLvi7XYFZQ4Avy0ltlXxukuWjM=";
   };
 
-  buildInputs = [
-    libaio
-  ];
+  buildInputs = [ libaio ];
 
   meta = with lib; {
     description = "Userspace memory and IO stress test tool";

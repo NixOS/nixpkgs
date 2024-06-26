@@ -1,11 +1,12 @@
-{ lib
-, installShellFiles
-, python3
-, fetchPypi
-, fetchFromGitHub
-, nix-update-script
-, testers
-, gimme-aws-creds
+{
+  lib,
+  installShellFiles,
+  python3,
+  fetchPypi,
+  fetchFromGitHub,
+  nix-update-script,
+  testers,
+  gimme-aws-creds,
 }:
 
 let
@@ -40,9 +41,7 @@ python.pkgs.buildPythonApplication rec {
     pythonRelaxDepsHook
   ];
 
-  pythonRemoveDeps = [
-    "configparser"
-  ];
+  pythonRemoveDeps = [ "configparser" ];
 
   propagatedBuildInputs = with python.pkgs; [
     boto3
@@ -66,13 +65,9 @@ python.pkgs.buildPythonApplication rec {
     responses
   ];
 
-  disabledTests = [
-    "test_build_factor_name_webauthn_registered"
-  ];
+  disabledTests = [ "test_build_factor_name_webauthn_registered" ];
 
-  pythonImportsCheck = [
-    "gimme_aws_creds"
-  ];
+  pythonImportsCheck = [ "gimme_aws_creds" ];
 
   postInstall = ''
     rm $out/bin/gimme-aws-creds.cmd

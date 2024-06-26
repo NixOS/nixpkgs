@@ -1,9 +1,10 @@
-{ lib
-, buildNpmPackage
-, fetchFromGitHub
-, pkg-config
-, python3
-, vips
+{
+  lib,
+  buildNpmPackage,
+  fetchFromGitHub,
+  pkg-config,
+  python3,
+  vips,
 }:
 
 buildNpmPackage rec {
@@ -30,9 +31,7 @@ buildNpmPackage rec {
     python3
   ];
 
-  buildInputs = [
-    vips
-  ];
+  buildInputs = [ vips ];
 
   dontNpmBuild = true;
 

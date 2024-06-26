@@ -1,7 +1,8 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, go
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  go,
 }:
 
 buildGoModule rec {
@@ -20,9 +21,14 @@ buildGoModule rec {
 
   subPackages = [ "cmd/trickster" ];
 
-  ldflags = with lib;
-    [ "-extldflags '-static'" "-s" "-w" ] ++
-    (mapAttrsToList (n: v: "-X main.application${n}=${v}") {
+  ldflags =
+    with lib;
+    [
+      "-extldflags '-static'"
+      "-s"
+      "-w"
+    ]
+    ++ (mapAttrsToList (n: v: "-X main.application${n}=${v}") {
       BuildTime = "1970-01-01T00:00:00+0000";
       GitCommitID = rev;
       GoVersion = "go${go.version}}";

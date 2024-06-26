@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, tzdata
-, autoreconfHook
-, openssl
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  tzdata,
+  autoreconfHook,
+  openssl,
 }:
 
 stdenv.mkDerivation rec {
@@ -34,13 +35,9 @@ stdenv.mkDerivation rec {
       --replace '::getenv("TZDIR")' '"${tzdata}/share/zoneinfo"'
   '';
 
-  nativeBuildInputs = [
-    autoreconfHook
-  ];
+  nativeBuildInputs = [ autoreconfHook ];
 
-  buildInputs = [
-    openssl
-  ];
+  buildInputs = [ openssl ];
 
   enableParallelBuilding = true;
 

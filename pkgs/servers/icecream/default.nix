@@ -1,4 +1,16 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, docbook2x, libarchive, libcap_ng, lzo, pkg-config, zstd, docbook_xml_dtd_45 }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  docbook2x,
+  libarchive,
+  libcap_ng,
+  lzo,
+  pkg-config,
+  zstd,
+  docbook_xml_dtd_45,
+}:
 
 stdenv.mkDerivation rec {
   pname = "icecream";
@@ -12,8 +24,18 @@ stdenv.mkDerivation rec {
   };
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ autoreconfHook docbook2x pkg-config ];
-  buildInputs = [ libarchive libcap_ng lzo zstd docbook_xml_dtd_45 ];
+  nativeBuildInputs = [
+    autoreconfHook
+    docbook2x
+    pkg-config
+  ];
+  buildInputs = [
+    libarchive
+    libcap_ng
+    lzo
+    zstd
+    docbook_xml_dtd_45
+  ];
 
   meta = with lib; {
     description = "Distributed compiler with a central scheduler to share build load";

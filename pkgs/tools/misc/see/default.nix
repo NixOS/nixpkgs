@@ -1,4 +1,8 @@
-{ lib, python3, fetchFromGitHub }:
+{
+  lib,
+  python3,
+  fetchFromGitHub,
+}:
 
 python3.pkgs.buildPythonApplication {
   pname = "see";
@@ -12,9 +16,7 @@ python3.pkgs.buildPythonApplication {
     hash = "sha256-SqjDHcFKWbk4ouWkhGohDl5kGjM/9fzqFDexVcaY1gw=";
   };
 
-  nativeBuildInputs = with python3.pkgs; [
-    poetry-core
-  ];
+  nativeBuildInputs = with python3.pkgs; [ poetry-core ];
 
   propagatedBuildInputs = with python3.pkgs; [
     click

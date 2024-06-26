@@ -1,29 +1,30 @@
-{ lib
-, stdenv
-, fetchurl
-, fetchpatch
-, pkg-config
-, intltool
-, meson
-, ninja
-, itstool
-, libxml2
-, python3
-, gtk3
-, json-glib
-, isocodes
-, openssl
-, gnome
-, gobject-introspection
-, vala
-, libgee
-, sqlite
-, gtk-doc
-, yelp-tools
-, mysqlSupport ? false
-, libmysqlclient ? null
-, postgresSupport ? false
-, postgresql ? null
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  pkg-config,
+  intltool,
+  meson,
+  ninja,
+  itstool,
+  libxml2,
+  python3,
+  gtk3,
+  json-glib,
+  isocodes,
+  openssl,
+  gnome,
+  gobject-introspection,
+  vala,
+  libgee,
+  sqlite,
+  gtk-doc,
+  yelp-tools,
+  mysqlSupport ? false,
+  libmysqlclient ? null,
+  postgresSupport ? false,
+  postgresql ? null,
 }:
 
 assert mysqlSupport -> libmysqlclient != null;
@@ -79,11 +80,7 @@ stdenv.mkDerivation rec {
     openssl
     libgee
     sqlite
-  ] ++ lib.optionals mysqlSupport [
-    libmysqlclient
-  ] ++ lib.optionals postgresSupport [
-    postgresql
-  ];
+  ] ++ lib.optionals mysqlSupport [ libmysqlclient ] ++ lib.optionals postgresSupport [ postgresql ];
 
   postPatch = ''
     patchShebangs \

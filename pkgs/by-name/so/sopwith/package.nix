@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, glib
-, SDL2
-, libGL
-, pkg-config
-, autoreconfHook
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  glib,
+  SDL2,
+  libGL,
+  pkg-config,
+  autoreconfHook,
 }:
 
 stdenv.mkDerivation rec {

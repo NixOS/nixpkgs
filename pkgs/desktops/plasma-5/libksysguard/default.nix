@@ -1,31 +1,30 @@
-{ mkDerivation
-, extra-cmake-modules
-, kauth
-, kcompletion
-, kconfig
-, kconfigwidgets
-, kcoreaddons
-, ki18n
-, kiconthemes
-, knewstuff
-, kservice
-, kwidgetsaddons
-, kwindowsystem
-, plasma-framework
-, qtscript
-, qtwebengine
-, qtx11extras
-, libnl
-, libpcap
-, qtsensors
-, lm_sensors
+{
+  mkDerivation,
+  extra-cmake-modules,
+  kauth,
+  kcompletion,
+  kconfig,
+  kconfigwidgets,
+  kcoreaddons,
+  ki18n,
+  kiconthemes,
+  knewstuff,
+  kservice,
+  kwidgetsaddons,
+  kwindowsystem,
+  plasma-framework,
+  qtscript,
+  qtwebengine,
+  qtx11extras,
+  libnl,
+  libpcap,
+  qtsensors,
+  lm_sensors,
 }:
 
 mkDerivation {
   pname = "libksysguard";
-  patches = [
-    ./0001-qdiriterator-follow-symlinks.patch
-  ];
+  patches = [ ./0001-qdiriterator-follow-symlinks.patch ];
   nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [
     kauth
@@ -48,5 +47,9 @@ mkDerivation {
     qtsensors
     lm_sensors
   ];
-  outputs = [ "bin" "dev" "out" ];
+  outputs = [
+    "bin"
+    "dev"
+    "out"
+  ];
 }

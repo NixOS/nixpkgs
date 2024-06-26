@@ -1,4 +1,10 @@
-{ stdenv, lib, fetchFromGitHub, vdo, kernel }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  vdo,
+  kernel,
+}:
 
 stdenv.mkDerivation rec {
   inherit (vdo);

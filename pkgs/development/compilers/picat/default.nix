@@ -1,13 +1,20 @@
-{ lib, stdenv, fetchurl, zlib }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  zlib,
+}:
 
 let
-  ARCH = {
-    x86_64-linux = "linux64";
-    aarch64-linux = "linux64";
-    x86_64-cygwin = "cygwin64";
-    x86_64-darwin = "mac64";
-    aarch64-darwin = "mac64";
-  }."${stdenv.hostPlatform.system}" or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+  ARCH =
+    {
+      x86_64-linux = "linux64";
+      aarch64-linux = "linux64";
+      x86_64-cygwin = "cygwin64";
+      x86_64-darwin = "mac64";
+      aarch64-darwin = "mac64";
+    }
+    ."${stdenv.hostPlatform.system}" or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 in
 stdenv.mkDerivation {
   pname = "picat";
@@ -39,16 +46,18 @@ stdenv.mkDerivation {
   meta = with lib; {
     description = "Logic-based programming langage";
     mainProgram = "picat";
-    homepage    = "http://picat-lang.org/";
-    license     = licenses.mpl20;
-    platforms   = [
+    homepage = "http://picat-lang.org/";
+    license = licenses.mpl20;
+    platforms = [
       "x86_64-linux"
       "aarch64-linux"
       "x86_64-cygwin"
       "x86_64-darwin"
       "aarch64-darwin"
     ];
-    maintainers = with maintainers; [ earldouglas thoughtpolice ];
+    maintainers = with maintainers; [
+      earldouglas
+      thoughtpolice
+    ];
   };
 }
-

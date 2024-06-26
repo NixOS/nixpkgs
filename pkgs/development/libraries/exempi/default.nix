@@ -1,4 +1,13 @@
-{ lib, stdenv, fetchurl, expat, zlib, boost, libiconv, darwin }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  expat,
+  zlib,
+  boost,
+  libiconv,
+  darwin,
+}:
 
 stdenv.mkDerivation rec {
   pname = "exempi";
@@ -11,12 +20,18 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--with-boost=${boost.dev}"
-  ] ++ lib.optionals (!doCheck) [
-    "--enable-unittest=no"
-  ];
+  ] ++ lib.optionals (!doCheck) [ "--enable-unittest=no" ];
 
-  buildInputs = [ expat zlib boost ]
-    ++ lib.optionals stdenv.isDarwin [ libiconv darwin.apple_sdk.frameworks.CoreServices ];
+  buildInputs =
+    [
+      expat
+      zlib
+      boost
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      libiconv
+      darwin.apple_sdk.frameworks.CoreServices
+    ];
 
   doCheck = stdenv.isLinux && stdenv.is64bit;
   dontDisableStatic = doCheck;

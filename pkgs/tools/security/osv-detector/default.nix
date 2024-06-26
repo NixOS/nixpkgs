@@ -1,8 +1,9 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, osv-detector
-, testers
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  osv-detector,
+  testers,
 }:
 
 buildGoModule rec {
@@ -38,7 +39,10 @@ buildGoModule rec {
         "TestRun_Configs"
       ];
     in
-    [ "-skip" "${builtins.concatStringsSep "|" skippedTests}" ];
+    [
+      "-skip"
+      "${builtins.concatStringsSep "|" skippedTests}"
+    ];
 
   passthru.tests.version = testers.testVersion {
     package = osv-detector;

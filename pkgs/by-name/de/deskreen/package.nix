@@ -1,7 +1,8 @@
-{ lib
-, stdenvNoCC
-, fetchurl
-, appimageTools
+{
+  lib,
+  stdenvNoCC,
+  fetchurl,
+  appimageTools,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -17,9 +18,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     src = finalAttrs.src;
   };
 
-  buildInputs = [
-    finalAttrs.deskreenUnwrapped
-  ];
+  buildInputs = [ finalAttrs.deskreenUnwrapped ];
 
   dontUnpack = true;
   dontBuild = true;
@@ -38,7 +37,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     homepage = "https://deskreen.com";
     license = lib.licenses.agpl3Only;
     mainProgram = "deskreen";
-    maintainers = with lib.maintainers; [ leo248 drupol ];
+    maintainers = with lib.maintainers; [
+      leo248
+      drupol
+    ];
     platforms = lib.platforms.linux;
   };
 })

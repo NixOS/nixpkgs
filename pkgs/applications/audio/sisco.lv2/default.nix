@@ -1,4 +1,15 @@
-{ lib, stdenv, fetchFromGitHub, lv2, pkg-config, libGLU, libGL, cairo, pango, libjack2 }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  lv2,
+  pkg-config,
+  libGLU,
+  libGL,
+  cairo,
+  pango,
+  libjack2,
+}:
 
 let
   version = "0.7.0";
@@ -24,11 +35,21 @@ stdenv.mkDerivation rec {
   pname = "sisco.lv2";
   inherit version;
 
-  srcs = [ src robtkSrc ];
+  srcs = [
+    src
+    robtkSrc
+  ];
   sourceRoot = src.name;
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ lv2 pango cairo libjack2 libGLU libGL ];
+  buildInputs = [
+    lv2
+    pango
+    cairo
+    libjack2
+    libGLU
+    libGL
+  ];
 
   postUnpack = "chmod u+w -R ${robtkName}-src; mv ${robtkName}-src/* ${sourceRoot}/robtk";
   sisco_VERSION = version;

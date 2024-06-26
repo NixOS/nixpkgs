@@ -1,7 +1,8 @@
-{ cmake
-, fetchFromGitHub
-, lib
-, stdenv
+{
+  cmake,
+  fetchFromGitHub,
+  lib,
+  stdenv,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -15,9 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-QiZeIYeIWA3C7wYi2G2EItdW+jLjVrCbIYllur/RtY8=";
   };
 
-  nativeBuildInputs = [
-    cmake
-  ];
+  nativeBuildInputs = [ cmake ];
 
   meta = {
     description = "Tools for logs with ANSI color";

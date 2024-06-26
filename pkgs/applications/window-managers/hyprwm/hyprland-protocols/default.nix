@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, meson
-, ninja
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  meson,
+  ninja,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "hyprland-protocols";

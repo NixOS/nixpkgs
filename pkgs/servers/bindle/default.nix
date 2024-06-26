@@ -1,4 +1,12 @@
-{ lib, rustPlatform, fetchFromGitHub, stdenv, Security, pkg-config, openssl }:
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  stdenv,
+  Security,
+  pkg-config,
+  openssl,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "bindle";
@@ -23,8 +31,10 @@ rustPlatform.buildRustPackage rec {
   cargoSha256 = "sha256-RECEeo0uoGO5bBe+r++zpTjYYX3BIkT58uht2MLYkN0=";
 
   cargoBuildFlags = [
-    "--bin" "bindle"
-    "--bin" "bindle-server"
+    "--bin"
+    "bindle"
+    "--bin"
+    "bindle-server"
     "--all-features"
   ];
 
@@ -36,4 +46,3 @@ rustPlatform.buildRustPackage rec {
     platforms = platforms.unix;
   };
 }
-

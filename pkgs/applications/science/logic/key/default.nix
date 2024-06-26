@@ -1,14 +1,16 @@
-{ lib, stdenv
-, fetchurl
-, jdk
-, gradle_7
-, perl
-, jre
-, makeWrapper
-, makeDesktopItem
-, copyDesktopItems
-, testers
-, key
+{
+  lib,
+  stdenv,
+  fetchurl,
+  jdk,
+  gradle_7,
+  perl,
+  jre,
+  makeWrapper,
+  makeDesktopItem,
+  copyDesktopItems,
+  testers,
+  key,
 }:
 
 let
@@ -24,7 +26,10 @@ let
   deps = stdenv.mkDerivation {
     pname = "${pname}-deps";
     inherit version src sourceRoot;
-    nativeBuildInputs = [ gradle_7 perl ];
+    nativeBuildInputs = [
+      gradle_7
+      perl
+    ];
     buildPhase = ''
       export GRADLE_USER_HOME=$(mktemp -d)
       # https://github.com/gradle/gradle/issues/4426
@@ -41,8 +46,14 @@ let
     outputHashAlgo = "sha256";
     outputHash = "sha256-GjBUwJxeyJA6vGrPQVtNpcHb4CJlNlY4kHt1PT21xjo=";
   };
-in stdenv.mkDerivation rec {
-  inherit pname version src sourceRoot;
+in
+stdenv.mkDerivation rec {
+  inherit
+    pname
+    version
+    src
+    sourceRoot
+    ;
 
   nativeBuildInputs = [
     jdk
@@ -97,11 +108,10 @@ in stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  passthru.tests.version =
-    testers.testVersion {
-      package = key;
-      command = "KeY --help";
-    };
+  passthru.tests.version = testers.testVersion {
+    package = key;
+    command = "KeY --help";
+  };
 
   meta = with lib; {
     description = "Java formal verification tool";

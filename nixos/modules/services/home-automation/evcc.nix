@@ -1,7 +1,8 @@
-{ lib
-, pkgs
-, config
-, ...
+{
+  lib,
+  pkgs,
+  config,
+  ...
 }:
 
 with lib;
@@ -9,7 +10,7 @@ with lib;
 let
   cfg = config.services.evcc;
 
-  format = pkgs.formats.yaml {};
+  format = pkgs.formats.yaml { };
   configFile = format.generate "evcc.yml" cfg.settings;
 
   package = pkgs.evcc;
@@ -23,7 +24,7 @@ in
 
     extraArgs = mkOption {
       type = listOf str;
-      default = [];
+      default = [ ];
       description = ''
         Extra arguments to pass to the evcc executable.
       '';
@@ -46,19 +47,13 @@ in
         "network-online.target"
         "mosquitto.target"
       ];
-      wantedBy = [
-        "multi-user.target"
-      ];
+      wantedBy = [ "multi-user.target" ];
       environment.HOME = "/var/lib/evcc";
-      path = with pkgs; [
-        getent
-      ];
+      path = with pkgs; [ getent ];
       serviceConfig = {
         ExecStart = "${package}/bin/evcc --config ${configFile} ${escapeShellArgs cfg.extraArgs}";
         CapabilityBoundingSet = [ "" ];
-        DeviceAllow = [
-          "char-ttyUSB"
-        ];
+        DeviceAllow = [ "char-ttyUSB" ];
         DevicePolicy = "closed";
         DynamicUser = true;
         LockPersonality = true;
@@ -75,7 +70,7 @@ in
         PrivateUsers = true;
         ProcSubset = "pid";
         ProtectClock = true;
-        ProtectControlGroups= true;
+        ProtectControlGroups = true;
         ProtectHome = true;
         ProtectHostname = true;
         ProtectKernelLogs = true;

@@ -1,7 +1,8 @@
-{ lib
-, stdenv
-, fetchurl
-, zlib
+{
+  lib,
+  stdenv,
+  fetchurl,
+  zlib,
 }:
 
 stdenv.mkDerivation rec {
@@ -13,9 +14,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-8P3aa5hjTSlGAolIwiAlPhCg8nx/pfJJE7ZbOsbLsEU=";
   };
 
-  buildInputs = [
-    zlib
-  ];
+  buildInputs = [ zlib ];
 
   configurePhase = ''
     cd src
@@ -34,7 +33,10 @@ stdenv.mkDerivation rec {
     description = "High-performance read alignment, quantification and mutation discovery";
     license = licenses.gpl3;
     maintainers = with maintainers; [ jbedo ];
-    platforms = [ "x86_64-darwin" "x86_64-linux" ];
+    platforms = [
+      "x86_64-darwin"
+      "x86_64-linux"
+    ];
     homepage = "https://subread.sourceforge.net/";
   };
 

@@ -1,22 +1,23 @@
-{ lib
-, stdenv
-, fetchurl
-, meson
-, ninja
-, pkg-config
-, gettext
-, gnome
-, glib
-, gtk4
-, pango
-, wrapGAppsHook4
-, desktop-file-utils
-, gobject-introspection
-, gjs
-, libunistring
-, libadwaita
-, gsettings-desktop-schemas
-, gnome-desktop
+{
+  lib,
+  stdenv,
+  fetchurl,
+  meson,
+  ninja,
+  pkg-config,
+  gettext,
+  gnome,
+  glib,
+  gtk4,
+  pango,
+  wrapGAppsHook4,
+  desktop-file-utils,
+  gobject-introspection,
+  gjs,
+  libunistring,
+  libadwaita,
+  gsettings-desktop-schemas,
+  gnome-desktop,
 }:
 
 stdenv.mkDerivation rec {
@@ -37,7 +38,6 @@ stdenv.mkDerivation rec {
     desktop-file-utils
     wrapGAppsHook4
   ];
-
 
   buildInputs = [
     gjs

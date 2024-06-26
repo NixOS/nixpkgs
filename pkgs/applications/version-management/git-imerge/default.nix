@@ -1,4 +1,9 @@
-{ lib, buildPythonApplication, fetchPypi, installShellFiles }:
+{
+  lib,
+  buildPythonApplication,
+  fetchPypi,
+  installShellFiles,
+}:
 
 buildPythonApplication rec {
   pname = "git-imerge";

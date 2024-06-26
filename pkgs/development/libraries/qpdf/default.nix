@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, libjpeg
-, perl
-, zlib
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  libjpeg,
+  perl,
+  zlib,
 
-# for passthru.tests
-, cups-filters
-, pdfmixtool
-, pdfslicer
-, python3
+  # for passthru.tests
+  cups-filters,
+  pdfmixtool,
+  pdfslicer,
+  python3,
 }:
 
 stdenv.mkDerivation rec {
@@ -24,9 +25,15 @@ stdenv.mkDerivation rec {
     hash = "sha256-HD7+2TBDLBIt+VaPO5WgnDjNZOj8naltFmYdYzOIn+4=";
   };
 
-  nativeBuildInputs = [ cmake perl ];
+  nativeBuildInputs = [
+    cmake
+    perl
+  ];
 
-  buildInputs = [ zlib libjpeg ];
+  buildInputs = [
+    zlib
+    libjpeg
+  ];
 
   preConfigure = ''
     patchShebangs qtest/bin/qtest-driver
@@ -39,11 +46,7 @@ stdenv.mkDerivation rec {
 
   passthru.tests = {
     inherit (python3.pkgs) pikepdf;
-    inherit
-      cups-filters
-      pdfmixtool
-      pdfslicer
-    ;
+    inherit cups-filters pdfmixtool pdfslicer;
   };
 
   meta = with lib; {

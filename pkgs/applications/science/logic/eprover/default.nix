@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchurl, which, enableHO ? false }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  which,
+  enableHO ? false,
+}:
 
 stdenv.mkDerivation rec {
   pname = "eprover";
@@ -17,15 +23,16 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--exec-prefix=$(out)"
     "--man-prefix=$(out)/share/man"
-  ] ++ lib.optionals enableHO [
-    "--enable-ho"
-  ];
+  ] ++ lib.optionals enableHO [ "--enable-ho" ];
 
   meta = with lib; {
     description = "Automated theorem prover for full first-order logic with equality";
     homepage = "http://www.eprover.org/";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ raskin gebner ];
+    maintainers = with maintainers; [
+      raskin
+      gebner
+    ];
     platforms = platforms.all;
   };
 }

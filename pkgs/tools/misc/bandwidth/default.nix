@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchurl, nasm }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  nasm,
+}:
 
 let
   inherit (stdenv.hostPlatform.parsed.cpu) bits;

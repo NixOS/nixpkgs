@@ -1,12 +1,13 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, orcania
-, systemd
-, check
-, subunit
-, withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  orcania,
+  systemd,
+  check,
+  subunit,
+  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
 }:
 
 stdenv.mkDerivation rec {
@@ -28,14 +29,14 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = [ orcania ]
-    ++ lib.optional withSystemd systemd;
+  buildInputs = [ orcania ] ++ lib.optional withSystemd systemd;
 
-  nativeCheckInputs = [ check subunit ];
+  nativeCheckInputs = [
+    check
+    subunit
+  ];
 
-  cmakeFlags = [
-    "-DBUILD_YDER_TESTING=on"
-  ] ++ lib.optional (!withSystemd) "-DWITH_JOURNALD=off";
+  cmakeFlags = [ "-DBUILD_YDER_TESTING=on" ] ++ lib.optional (!withSystemd) "-DWITH_JOURNALD=off";
 
   doCheck = true;
 

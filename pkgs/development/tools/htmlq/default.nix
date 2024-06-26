@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, Security }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  Security,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "htmlq";
@@ -21,7 +27,10 @@ rustPlatform.buildRustPackage rec {
     description = "Like jq, but for HTML";
     homepage = "https://github.com/mgdm/htmlq";
     license = licenses.mit;
-    maintainers = with maintainers; [ siraben nerdypepper ];
+    maintainers = with maintainers; [
+      siraben
+      nerdypepper
+    ];
     mainProgram = "htmlq";
   };
 }

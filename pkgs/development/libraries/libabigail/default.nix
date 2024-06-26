@@ -1,18 +1,24 @@
-{ lib, stdenv
-, fetchurl
-, autoreconfHook
-, elfutils
-, libxml2
-, pkg-config
-, strace
-, python3
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoreconfHook,
+  elfutils,
+  libxml2,
+  pkg-config,
+  strace,
+  python3,
 }:
 
 stdenv.mkDerivation rec {
   pname = "libabigail";
   version = "2.1";
 
-  outputs = [ "bin" "out" "dev" ];
+  outputs = [
+    "bin"
+    "out"
+    "dev"
+  ];
 
   src = fetchurl {
     url = "https://mirrors.kernel.org/sourceware/${pname}/${pname}-${version}.tar.gz";
@@ -30,9 +36,7 @@ stdenv.mkDerivation rec {
     libxml2
   ];
 
-  nativeCheckInputs = [
-    python3
-  ];
+  nativeCheckInputs = [ python3 ];
 
   configureFlags = [
     "--enable-bash-completion=yes"

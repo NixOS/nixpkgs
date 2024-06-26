@@ -1,21 +1,22 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchFromGitHub
-, makeBinaryWrapper
-, pkg-config
-, libinput
-, libglvnd
-, libxkbcommon
-, mesa
-, seatd
-, udev
-, xwayland
-, wayland
-, xorg
-, useXWayland ? true
-, systemd
-, useSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  makeBinaryWrapper,
+  pkg-config,
+  libinput,
+  libglvnd,
+  libxkbcommon,
+  mesa,
+  seatd,
+  udev,
+  xwayland,
+  wayland,
+  xorg,
+  useXWayland ? true,
+  systemd,
+  useSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
 }:
 
 rustPlatform.buildRustPackage {
@@ -44,16 +45,19 @@ rustPlatform.buildRustPackage {
 
   separateDebugInfo = true;
 
-  nativeBuildInputs = [ makeBinaryWrapper pkg-config ];
+  nativeBuildInputs = [
+    makeBinaryWrapper
+    pkg-config
+  ];
   buildInputs = [
-      libglvnd
-      libinput
-      libxkbcommon
-      mesa
-      seatd
-      udev
-      wayland
-    ] ++ lib.optional useSystemd systemd;
+    libglvnd
+    libinput
+    libxkbcommon
+    mesa
+    seatd
+    udev
+    wayland
+  ] ++ lib.optional useSystemd systemd;
 
   # Only default feature is systemd
   buildNoDefaultFeatures = !useSystemd;
@@ -70,22 +74,33 @@ rustPlatform.buildRustPackage {
 
   # These libraries are only used by the X11 backend, which will not
   # be the common case, so just make them available, don't link them.
-  postInstall = ''
-    wrapProgramArgs=(--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [
-        xorg.libX11 xorg.libXcursor xorg.libXi xorg.libXrandr
-    ]})
-  '' + lib.optionalString useXWayland ''
-    wrapProgramArgs+=(--prefix PATH : ${lib.makeBinPath [ xwayland ]})
-  '' + ''
-    wrapProgram $out/bin/cosmic-comp "''${wrapProgramArgs[@]}"
-  '';
+  postInstall =
+    ''
+      wrapProgramArgs=(--prefix LD_LIBRARY_PATH : ${
+        lib.makeLibraryPath [
+          xorg.libX11
+          xorg.libXcursor
+          xorg.libXi
+          xorg.libXrandr
+        ]
+      })
+    ''
+    + lib.optionalString useXWayland ''
+      wrapProgramArgs+=(--prefix PATH : ${lib.makeBinPath [ xwayland ]})
+    ''
+    + ''
+      wrapProgram $out/bin/cosmic-comp "''${wrapProgramArgs[@]}"
+    '';
 
   meta = with lib; {
     homepage = "https://github.com/pop-os/cosmic-comp";
     description = "Compositor for the COSMIC Desktop Environment";
     mainProgram = "cosmic-comp";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ qyliss nyanbinary ];
+    maintainers = with maintainers; [
+      qyliss
+      nyanbinary
+    ];
     platforms = platforms.linux;
   };
 }

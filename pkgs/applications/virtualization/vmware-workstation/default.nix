@@ -1,35 +1,40 @@
-{ stdenv
-, buildFHSEnv
-, fetchurl
-, fetchzip
-, lib
-, zlib
-, gdbm
-, libxslt
-, libxml2
-, libuuid
-, readline
-, readline70
-, xz
-, cups
-, glibc
-, libaio
-, vulkan-loader
-, alsa-lib
-, libpulseaudio
-, libxcrypt-legacy
-, libGL
-, numactl
-, libX11
-, libXi
-, kmod
-, python3
-, autoPatchelfHook
-, makeWrapper
-, symlinkJoin
-, enableInstaller ? false, bzip2, sqlite
-, enableMacOSGuests ? false, fetchFromGitHub, unzip
-, enableGuestTools ? true,
+{
+  stdenv,
+  buildFHSEnv,
+  fetchurl,
+  fetchzip,
+  lib,
+  zlib,
+  gdbm,
+  libxslt,
+  libxml2,
+  libuuid,
+  readline,
+  readline70,
+  xz,
+  cups,
+  glibc,
+  libaio,
+  vulkan-loader,
+  alsa-lib,
+  libpulseaudio,
+  libxcrypt-legacy,
+  libGL,
+  numactl,
+  libX11,
+  libXi,
+  kmod,
+  python3,
+  autoPatchelfHook,
+  makeWrapper,
+  symlinkJoin,
+  enableInstaller ? false,
+  bzip2,
+  sqlite,
+  enableMacOSGuests ? false,
+  fetchFromGitHub,
+  unzip,
+  enableGuestTools ? true,
 }:
 
 let
@@ -48,13 +53,18 @@ let
   unlockerVersion = "3.0.5";
 
   guestToolsSrc =
-  let
-    fetchComponent = (system: hash: fetchzip {
-      inherit hash;
-      url = "${baseUrl}/packages/vmware-tools-${system}-${toolsVersion}-${toolsBuild}.x86_64.component.tar";
-      stripRoot = false;
-    } + "/vmware-tools-${system}-${toolsVersion}-${toolsBuild}.x86_64.component");
-  in lib.mapAttrsToList fetchComponent {
+    let
+      fetchComponent = (
+        system: hash:
+        fetchzip {
+          inherit hash;
+          url = "${baseUrl}/packages/vmware-tools-${system}-${toolsVersion}-${toolsBuild}.x86_64.component.tar";
+          stripRoot = false;
+        }
+        + "/vmware-tools-${system}-${toolsVersion}-${toolsBuild}.x86_64.component"
+      );
+    in
+    lib.mapAttrsToList fetchComponent {
       linux = "sha256-vT08mR6cCXZjiQgb9jy+MaqYzS0hFbNUM7xGAHIJ8Ao=";
       linuxPreGlibc25 = "sha256-BodN1lxuhxyLlxIQSlVhGKItJ10VPlti/sEyxcRF2SA=";
       netware = "sha256-o/S4wAYLR782Fn20fTQ871+rzsa1twnAxb9laV16XIk=";
@@ -62,14 +72,16 @@ let
       winPre2k = "sha256-+QcvWfY3aCDxUwAfSuj7Wf9sxIO+ztWBrRolMim8Dfw=";
       winPreVista = "sha256-3NgO/GdRFTpKNo45TMet0msjzxduuoF4nVLtnOUTHUA=";
       windows = "sha256-2F7UPjNvtibmWAJxpB8IOnol12aMOGMy+403WeCTXw8=";
-  };
+    };
 
   # macOS - ISOs
-  darwinIsoSrc = fetchzip {
-    url = "https://softwareupdate.vmware.com/cds/vmw-desktop/fusion/${fusionVersion}/${fusionBuild}/universal/core/com.vmware.fusion.zip.tar";
-    sha256 = "sha256-DDLRWAVRI3ZeXV5bUXWwput9mEC1qsJUsjojI0CJYMI=";
-    stripRoot = false;
-  } + "/com.vmware.fusion.zip";
+  darwinIsoSrc =
+    fetchzip {
+      url = "https://softwareupdate.vmware.com/cds/vmw-desktop/fusion/${fusionVersion}/${fusionBuild}/universal/core/com.vmware.fusion.zip.tar";
+      sha256 = "sha256-DDLRWAVRI3ZeXV5bUXWwput9mEC1qsJUsjojI0CJYMI=";
+      stripRoot = false;
+    }
+    + "/com.vmware.fusion.zip";
 
   # macOS - Unlocker
   unlockerSrc = fetchFromGitHub {
@@ -131,30 +143,45 @@ stdenv.mkDerivation rec {
     kmod
   ];
 
-  nativeBuildInputs = [ python3 vmware-unpack-env autoPatchelfHook makeWrapper ]
-    ++ lib.optionals enableInstaller [ bzip2 sqlite readline70_compat63 ]
+  nativeBuildInputs =
+    [
+      python3
+      vmware-unpack-env
+      autoPatchelfHook
+      makeWrapper
+    ]
+    ++ lib.optionals enableInstaller [
+      bzip2
+      sqlite
+      readline70_compat63
+    ]
     ++ lib.optionals enableMacOSGuests [ unzip ];
 
-  src = fetchzip {
-    url = "${baseUrl}/core/VMware-Workstation-${version}-${build}.x86_64.bundle.tar";
-    sha256 = "sha256-5PZZpXN/V687TXjqeTm8MEays4/QTf02jVfdpi9C7GI=";
-    stripRoot = false;
-  } + "/VMware-Workstation-${version}-${build}.x86_64.bundle";
+  src =
+    fetchzip {
+      url = "${baseUrl}/core/VMware-Workstation-${version}-${build}.x86_64.bundle.tar";
+      sha256 = "sha256-5PZZpXN/V687TXjqeTm8MEays4/QTf02jVfdpi9C7GI=";
+      stripRoot = false;
+    }
+    + "/VMware-Workstation-${version}-${build}.x86_64.bundle";
 
-  unpackPhase = let
-    guestTools = lib.optionalString enableGuestTools (lib.concatMapStringsSep " " (src: "--install-component ${src}") guestToolsSrc);
-  in
-  ''
-    ${vmware-unpack-env}/bin/vmware-unpack-env -c "sh ${src} ${guestTools} --extract unpacked"
+  unpackPhase =
+    let
+      guestTools = lib.optionalString enableGuestTools (
+        lib.concatMapStringsSep " " (src: "--install-component ${src}") guestToolsSrc
+      );
+    in
+    ''
+      ${vmware-unpack-env}/bin/vmware-unpack-env -c "sh ${src} ${guestTools} --extract unpacked"
 
-    ${lib.optionalString enableMacOSGuests ''
-      mkdir -p fusion/
-      unzip "${darwinIsoSrc}" \
-        "payload/VMware Fusion.app/Contents/Library/isoimages/x86_x64/darwin.iso" \
-        "payload/VMware Fusion.app/Contents/Library/isoimages/x86_x64/darwinPre15.iso" \
-        -d fusion/
-    ''}
-  '';
+      ${lib.optionalString enableMacOSGuests ''
+        mkdir -p fusion/
+        unzip "${darwinIsoSrc}" \
+          "payload/VMware Fusion.app/Contents/Library/isoimages/x86_x64/darwin.iso" \
+          "payload/VMware Fusion.app/Contents/Library/isoimages/x86_x64/darwinPre15.iso" \
+          -d fusion/
+      ''}
+    '';
 
   patchPhase = lib.optionalString enableMacOSGuests ''
     cp -R "${unlockerSrc}" unlocker/
@@ -297,15 +324,15 @@ stdenv.mkDerivation rec {
     mkdir -p $out/lib/vmware/isoimages/
 
     ${lib.optionalString enableGuestTools ''
-    echo "Installing VMware Tools"
-    cp unpacked/vmware-tools-linux/linux.iso \
-       unpacked/vmware-tools-linuxPreGlibc25/linuxPreGlibc25.iso \
-       unpacked/vmware-tools-netware/netware.iso \
-       unpacked/vmware-tools-solaris/solaris.iso \
-       unpacked/vmware-tools-winPre2k/winPre2k.iso \
-       unpacked/vmware-tools-winPreVista/winPreVista.iso \
-       unpacked/vmware-tools-windows/windows.iso \
-       $out/lib/vmware/isoimages/
+      echo "Installing VMware Tools"
+      cp unpacked/vmware-tools-linux/linux.iso \
+         unpacked/vmware-tools-linuxPreGlibc25/linuxPreGlibc25.iso \
+         unpacked/vmware-tools-netware/netware.iso \
+         unpacked/vmware-tools-solaris/solaris.iso \
+         unpacked/vmware-tools-winPre2k/winPre2k.iso \
+         unpacked/vmware-tools-winPreVista/winPreVista.iso \
+         unpacked/vmware-tools-windows/windows.iso \
+         $out/lib/vmware/isoimages/
     ''}
 
     ${lib.optionalString enableMacOSGuests ''
@@ -427,6 +454,10 @@ stdenv.mkDerivation rec {
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ cawilliamson deinferno vifino ];
+    maintainers = with maintainers; [
+      cawilliamson
+      deinferno
+      vifino
+    ];
   };
 }

@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, Foundation }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  Foundation,
+}:
 
 stdenv.mkDerivation rec {
   pname = "cctz";
@@ -15,7 +20,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = lib.optional stdenv.isDarwin Foundation;
 
-  installTargets = [ "install_hdrs" ]
+  installTargets =
+    [ "install_hdrs" ]
     ++ lib.optional (!stdenv.hostPlatform.isStatic) "install_shared_lib"
     ++ lib.optional stdenv.hostPlatform.isStatic "install_lib";
 

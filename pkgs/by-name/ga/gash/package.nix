@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchurl
-, guile
-, pkg-config
+{
+  lib,
+  stdenv,
+  fetchurl,
+  guile,
+  pkg-config,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -21,9 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs = [
-    guile
-  ];
+  buildInputs = [ guile ];
 
   meta = with lib; {
     description = "POSIX-compatible shell written in Guile Scheme";

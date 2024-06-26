@@ -1,22 +1,23 @@
-{ stdenv
-, lib
-, meson
-, ninja
-, pkg-config
-, fetchFromGitLab
-, fetchpatch
-, python3
-, umockdev
-, gobject-introspection
-, dbus
-, asciidoc
-, libxml2
-, libxslt
-, docbook_xml_dtd_45
-, docbook-xsl-nons
-, glib
-, systemd
-, polkit
+{
+  stdenv,
+  lib,
+  meson,
+  ninja,
+  pkg-config,
+  fetchFromGitLab,
+  fetchpatch,
+  python3,
+  umockdev,
+  gobject-introspection,
+  dbus,
+  asciidoc,
+  libxml2,
+  libxslt,
+  docbook_xml_dtd_45,
+  docbook-xsl-nons,
+  glib,
+  systemd,
+  polkit,
 }:
 
 stdenv.mkDerivation rec {
@@ -44,9 +45,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  depsBuildBuild = [
-    pkg-config
-  ];
+  depsBuildBuild = [ pkg-config ];
 
   nativeBuildInputs = [
     asciidoc
@@ -76,17 +75,18 @@ stdenv.mkDerivation rec {
     dbus
     gobject-introspection
     umockdev
-    (python3.pythonOnBuildForHost.withPackages
-      (p: [ p.pygobject3 p.dbus-python p.python-dbusmock ]))
+    (python3.pythonOnBuildForHost.withPackages (p: [
+      p.pygobject3
+      p.dbus-python
+      p.python-dbusmock
+    ]))
   ];
 
   postPatch = ''
     patchShebangs scripts tests
   '';
 
-  mesonFlags = [
-    "-Dlocalstatedir=/var"
-  ];
+  mesonFlags = [ "-Dlocalstatedir=/var" ];
 
   PKG_CONFIG_SYSTEMD_SYSTEMDSYSTEMUNITDIR = "${placeholder "out"}/lib/systemd/system";
   PKG_CONFIG_UDEV_UDEVDIR = "${placeholder "out"}/lib/udev";

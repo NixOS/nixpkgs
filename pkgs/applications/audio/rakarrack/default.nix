@@ -1,7 +1,21 @@
-{ lib, stdenv, fetchurl, alsa-lib, alsa-utils, fltk, libjack2, libXft,
-libXpm, libjpeg, libpng, libsamplerate, libsndfile, zlib }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  alsa-lib,
+  alsa-utils,
+  fltk,
+  libjack2,
+  libXft,
+  libXpm,
+  libjpeg,
+  libpng,
+  libsamplerate,
+  libsndfile,
+  zlib,
+}:
 
-stdenv.mkDerivation  rec {
+stdenv.mkDerivation rec {
   pname = "rakarrack";
   version = "0.6.1";
 
@@ -18,8 +32,19 @@ stdenv.mkDerivation  rec {
     ./looper-preset.patch
   ];
 
-  buildInputs = [ alsa-lib alsa-utils fltk libjack2 libXft libXpm libjpeg
-    libpng libsamplerate libsndfile zlib ];
+  buildInputs = [
+    alsa-lib
+    alsa-utils
+    fltk
+    libjack2
+    libXft
+    libXpm
+    libjpeg
+    libpng
+    libsamplerate
+    libsndfile
+    zlib
+  ];
 
   meta = with lib; {
     description = "Multi-effects processor emulating a guitar effects pedalboard";

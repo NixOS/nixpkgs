@@ -1,4 +1,10 @@
-{ stdenv, lib, bundlerEnv, bundlerUpdateScript, makeWrapper }:
+{
+  stdenv,
+  lib,
+  bundlerEnv,
+  bundlerUpdateScript,
+  makeWrapper,
+}:
 
 stdenv.mkDerivation rec {
   pname = "reckon";
@@ -8,18 +14,20 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ makeWrapper ];
 
-  installPhase = let
-    env = bundlerEnv {
-      name = "${pname}-${version}-gems";
+  installPhase =
+    let
+      env = bundlerEnv {
+        name = "${pname}-${version}-gems";
 
-      gemdir = ./.;
-    };
-  in ''
-    runHook preInstall
-    mkdir -p $out/bin
-    makeWrapper ${env}/bin/reckon $out/bin/reckon
-    runHook postInstall
-  '';
+        gemdir = ./.;
+      };
+    in
+    ''
+      runHook preInstall
+      mkdir -p $out/bin
+      makeWrapper ${env}/bin/reckon $out/bin/reckon
+      runHook postInstall
+    '';
 
   passthru.updateScript = bundlerUpdateScript "reckon";
 

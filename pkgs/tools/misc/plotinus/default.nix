@@ -1,13 +1,16 @@
-{ lib, stdenv
-, fetchFromGitHub
-, gettext
-, libxml2
-, pkg-config
-, gtk3
-, cmake
-, ninja
-, vala
-, wrapGAppsHook3 }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  gettext,
+  libxml2,
+  pkg-config,
+  gtk3,
+  cmake,
+  ninja,
+  vala,
+  wrapGAppsHook3,
+}:
 
 stdenv.mkDerivation rec {
   pname = "plotinus";
@@ -29,9 +32,7 @@ stdenv.mkDerivation rec {
     gettext
     libxml2
   ];
-  buildInputs = [
-    gtk3
-  ];
+  buildInputs = [ gtk3 ];
 
   meta = with lib; {
     description = "Searchable command palette in every modern GTK application";

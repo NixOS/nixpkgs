@@ -1,24 +1,26 @@
-{ lib, stdenv
-, fetchFromGitHub
-, cmake
-, expat
-, fmt
-, proj
-, bzip2
-, cli11
-, zlib
-, boost
-, postgresql
-, python3
-, withLuaJIT ? false
-, lua
-, luajit
-, libosmium
-, nlohmann_json
-, opencv
-, potrace
-, protozero
-, testers
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  expat,
+  fmt,
+  proj,
+  bzip2,
+  cli11,
+  zlib,
+  boost,
+  postgresql,
+  python3,
+  withLuaJIT ? false,
+  lua,
+  luajit,
+  libosmium,
+  nlohmann_json,
+  opencv,
+  potrace,
+  protozero,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -52,10 +54,14 @@ stdenv.mkDerivation (finalAttrs: {
     potrace
     proj
     protozero
-    (python3.withPackages (p: with p; [ psycopg2 pyosmium ]))
+    (python3.withPackages (
+      p: with p; [
+        psycopg2
+        pyosmium
+      ]
+    ))
     zlib
-  ] ++ lib.optional withLuaJIT luajit
-    ++ lib.optional (!withLuaJIT) lua;
+  ] ++ lib.optional withLuaJIT luajit ++ lib.optional (!withLuaJIT) lua;
 
   cmakeFlags = [
     (lib.cmakeBool "EXTERNAL_LIBOSMIUM" true)
@@ -66,15 +72,19 @@ stdenv.mkDerivation (finalAttrs: {
 
   installFlags = [ "install-gen" ];
 
-  passthru.tests.version = testers.testVersion {
-    package = finalAttrs.finalPackage;
-  };
+  passthru.tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
 
   meta = with lib; {
     description = "OpenStreetMap data to PostgreSQL converter";
     homepage = "https://osm2pgsql.org";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; teams.geospatial.members ++ [ jglukasik das-g ];
+    maintainers =
+      with maintainers;
+      teams.geospatial.members
+      ++ [
+        jglukasik
+        das-g
+      ];
   };
 })

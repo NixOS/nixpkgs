@@ -1,15 +1,16 @@
-{ stdenv
-, lib
-, fetchFromGitLab
-, gitUpdater
-, testers
-, cmake
-, dbus
-, dbus-test-runner
-, pkg-config
-, qtbase
-, qtdeclarative
-, validatePkgConfig
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  gitUpdater,
+  testers,
+  cmake,
+  dbus,
+  dbus-test-runner,
+  pkg-config,
+  qtbase,
+  qtdeclarative,
+  validatePkgConfig,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -81,8 +82,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.lgpl3Only;
     maintainers = teams.lomiri.members;
     platforms = platforms.linux;
-    pkgConfigModules = [
-      "lomiri-action-qt-1"
-    ];
+    pkgConfigModules = [ "lomiri-action-qt-1" ];
   };
 })

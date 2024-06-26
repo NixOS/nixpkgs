@@ -1,11 +1,12 @@
-{ lib
-, bash
-, coreutils
-, fetchFromGitHub
-, gawk
-, makeWrapper
-, pulseaudio
-, stdenv
+{
+  lib,
+  bash,
+  coreutils,
+  fetchFromGitHub,
+  gawk,
+  makeWrapper,
+  pulseaudio,
+  stdenv,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -28,7 +29,14 @@ stdenv.mkDerivation (finalAttrs: {
 
     install -Dm755 pulseaudio-control.bash $out/bin/pulseaudio-control
     wrapProgram "$out/bin/pulseaudio-control" \
-      --prefix PATH : "${lib.makeBinPath [ bash coreutils gawk pulseaudio ]}"
+      --prefix PATH : "${
+        lib.makeBinPath [
+          bash
+          coreutils
+          gawk
+          pulseaudio
+        ]
+      }"
 
     runHook postInstall
   '';

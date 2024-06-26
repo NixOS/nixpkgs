@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, buildGoModule
-, fetchFromGitHub
-, nixosTests
+{
+  lib,
+  stdenv,
+  buildGoModule,
+  fetchFromGitHub,
+  nixosTests,
 }:
 
 buildGoModule rec {
@@ -21,7 +22,9 @@ buildGoModule rec {
 
   doCheck = true;
 
-  passthru.tests = { inherit (nixosTests.prometheus) alertmanager; };
+  passthru.tests = {
+    inherit (nixosTests.prometheus) alertmanager;
+  };
 
   meta = with lib; {
     description = "Generates (structured) log messages from Prometheus AlertManager webhook notifier";

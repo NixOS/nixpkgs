@@ -1,9 +1,10 @@
-{ lib
-, python3
-, fetchPypi
-, nix-update-script
-, testers
-, aws-encryption-sdk-cli
+{
+  lib,
+  python3,
+  fetchPypi,
+  nix-update-script,
+  testers,
+  aws-encryption-sdk-cli,
 }:
 
 let
@@ -33,9 +34,7 @@ localPython.pkgs.buildPythonApplication rec {
     hash = "sha256-OCbt0OkDVfpzUIogbsKzaPAle2L6l6N3cmZoS2hEaSM=";
   };
 
-  build-system = with localPython.pkgs; [
-    setuptools
-  ];
+  build-system = with localPython.pkgs; [ setuptools ];
 
   dependencies = with localPython.pkgs; [
     attrs
@@ -59,7 +58,10 @@ localPython.pkgs.buildPythonApplication rec {
   ];
 
   # Upstream did not adapt to pytest 8 yet.
-  pytestFlagsArray = [ "-W" "ignore::pytest.PytestRemovedIn8Warning" ];
+  pytestFlagsArray = [
+    "-W"
+    "ignore::pytest.PytestRemovedIn8Warning"
+  ];
 
   passthru = {
     updateScript = nix-update-script { };

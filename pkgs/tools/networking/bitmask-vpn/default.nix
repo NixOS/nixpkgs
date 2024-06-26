@@ -1,29 +1,30 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, mkDerivation
-, buildGoModule
-, wrapQtAppsHook
-, python3Packages
-, pkg-config
-, openvpn
-, cmake
-, qmake
-, which
-, iproute2
-, iptables
-, procps
-, qmltermwidget
-, qtbase
-, qtdeclarative
-, qtgraphicaleffects
-, qtinstaller
-, qtquickcontrols
-, qtquickcontrols2
-, qttools
-, CoreFoundation
-, Security
-, provider ? "riseup"
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  mkDerivation,
+  buildGoModule,
+  wrapQtAppsHook,
+  python3Packages,
+  pkg-config,
+  openvpn,
+  cmake,
+  qmake,
+  which,
+  iproute2,
+  iptables,
+  procps,
+  qmltermwidget,
+  qtbase,
+  qtdeclarative,
+  qtgraphicaleffects,
+  qtinstaller,
+  qtquickcontrols,
+  qtquickcontrols2,
+  qttools,
+  CoreFoundation,
+  Security,
+  provider ? "riseup",
 }:
 let
   version = "0.21.11";
@@ -70,29 +71,31 @@ buildGoModule rec {
   pname = "${provider}-vpn";
   vendorHash = null;
 
-  postPatch = ''
-    substituteInPlace pkg/pickle/helpers.go \
-      --replace /usr/share $out/share
+  postPatch =
+    ''
+      substituteInPlace pkg/pickle/helpers.go \
+        --replace /usr/share $out/share
 
-    # Using $PROVIDER is not working,
-    # thus replacing directly into the vendor.conf
-    substituteInPlace providers/vendor.conf \
-      --replace "provider = riseup" "provider = ${provider}"
+      # Using $PROVIDER is not working,
+      # thus replacing directly into the vendor.conf
+      substituteInPlace providers/vendor.conf \
+        --replace "provider = riseup" "provider = ${provider}"
 
-    substituteInPlace branding/templates/debian/app.desktop-template \
-      --replace "Icon=icon" "Icon=${pname}"
+      substituteInPlace branding/templates/debian/app.desktop-template \
+        --replace "Icon=icon" "Icon=${pname}"
 
-    patchShebangs gui/build.sh
-    wrapPythonProgramsIn branding/scripts
-  '' + lib.optionalString stdenv.isLinux ''
-    substituteInPlace pkg/helper/linux.go \
-      --replace /usr/sbin/openvpn ${openvpn}/bin/openvpn
-    substituteInPlace pkg/vpn/launcher_linux.go \
-      --replace /usr/sbin/openvpn ${openvpn}/bin/openvpn \
-      --replace /usr/sbin/bitmask-root ${bitmask-root}/bin/bitmask-root \
-      --replace /usr/bin/lxpolkit /run/wrappers/bin/polkit-agent-helper-1 \
-      --replace '"polkit-gnome-authentication-agent-1",' '"polkit-gnome-authentication-agent-1","polkitd",'
-  '';
+      patchShebangs gui/build.sh
+      wrapPythonProgramsIn branding/scripts
+    ''
+    + lib.optionalString stdenv.isLinux ''
+      substituteInPlace pkg/helper/linux.go \
+        --replace /usr/sbin/openvpn ${openvpn}/bin/openvpn
+      substituteInPlace pkg/vpn/launcher_linux.go \
+        --replace /usr/sbin/openvpn ${openvpn}/bin/openvpn \
+        --replace /usr/sbin/bitmask-root ${bitmask-root}/bin/bitmask-root \
+        --replace /usr/bin/lxpolkit /run/wrappers/bin/polkit-agent-helper-1 \
+        --replace '"polkit-gnome-authentication-agent-1",' '"polkit-gnome-authentication-agent-1","polkitd",'
+    '';
 
   nativeBuildInputs = [
     cmake
@@ -105,14 +108,19 @@ buildGoModule rec {
     wrapQtAppsHook
   ] ++ lib.optional (!stdenv.isLinux) qtinstaller;
 
-  buildInputs = [
-    qtbase
-    qmltermwidget
-    qtdeclarative
-    qtgraphicaleffects
-    qtquickcontrols
-    qtquickcontrols2
-  ] ++ lib.optionals stdenv.isDarwin [ CoreFoundation Security ];
+  buildInputs =
+    [
+      qtbase
+      qmltermwidget
+      qtdeclarative
+      qtgraphicaleffects
+      qtquickcontrols
+      qtquickcontrols2
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      CoreFoundation
+      Security
+    ];
   # FIXME: building on Darwin currently fails
   # due to missing debug symbols for Qt,
   # this should be fixable once darwin.apple_sdk >= 10.13
@@ -135,22 +143,26 @@ buildGoModule rec {
     runHook postBuild
   '';
 
-  postInstall = ''
-    install -m 755 -D -t $out/bin build/qt/release/${pname}
+  postInstall =
+    ''
+      install -m 755 -D -t $out/bin build/qt/release/${pname}
 
-    VERSION=${version} VENDOR_PATH=providers branding/scripts/generate-debian branding/templates/debian/data.json
-    (cd branding/templates/debian && ${python3Packages.python}/bin/python3 generate.py)
-    install -m 444 -D branding/templates/debian/app.desktop $out/share/applications/${pname}.desktop
-    install -m 444 -D providers/${provider}/assets/icon.svg $out/share/icons/hicolor/scalable/apps/${pname}.svg
-  '' + lib.optionalString stdenv.isLinux ''
-    install -m 444 -D -t $out/share/polkit-1/actions ${bitmask-root}/share/polkit-1/actions/se.leap.bitmask.policy
-  '';
+      VERSION=${version} VENDOR_PATH=providers branding/scripts/generate-debian branding/templates/debian/data.json
+      (cd branding/templates/debian && ${python3Packages.python}/bin/python3 generate.py)
+      install -m 444 -D branding/templates/debian/app.desktop $out/share/applications/${pname}.desktop
+      install -m 444 -D providers/${provider}/assets/icon.svg $out/share/icons/hicolor/scalable/apps/${pname}.svg
+    ''
+    + lib.optionalString stdenv.isLinux ''
+      install -m 444 -D -t $out/share/polkit-1/actions ${bitmask-root}/share/polkit-1/actions/se.leap.bitmask.policy
+    '';
 
   # Some tests need access to the Internet:
   # Post "https://api.black.riseup.net/3/cert": dial tcp: lookup api.black.riseup.net on [::1]:53: read udp [::1]:56553->[::1]:53: read: connection refused
   doCheck = false;
 
-  passthru = { inherit bitmask-root; };
+  passthru = {
+    inherit bitmask-root;
+  };
 
   meta = {
     description = "Generic VPN client by LEAP";

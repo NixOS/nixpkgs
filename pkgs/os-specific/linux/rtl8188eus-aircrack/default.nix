@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, kernel, bc, fetchpatch }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  kernel,
+  bc,
+  fetchpatch,
+}:
 
 stdenv.mkDerivation {
   pname = "rtl8188eus-aircrack";
@@ -29,7 +36,6 @@ stdenv.mkDerivation {
     })
   ];
 
-
   hardeningDisable = [ "pic" ];
 
   enableParallelBuilding = true;
@@ -45,6 +51,8 @@ stdenv.mkDerivation {
     homepage = "https://github.com/aircrack-ng/rtl8188eus";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ moni ];
-    broken = (lib.versionAtLeast kernel.version "6.8") || ((lib.versions.majorMinor kernel.version) == "5.4" && kernel.isHardened);
+    broken =
+      (lib.versionAtLeast kernel.version "6.8")
+      || ((lib.versions.majorMinor kernel.version) == "5.4" && kernel.isHardened);
   };
 }

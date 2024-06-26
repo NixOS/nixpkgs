@@ -1,6 +1,7 @@
-{ lib
-, stdenv
-, spigot
+{
+  lib,
+  stdenv,
+  spigot,
 }:
 
 stdenv.mkDerivation {

@@ -1,8 +1,9 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, testers
-, relic
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  testers,
+  relic,
 }:
 
 buildGoModule rec {
@@ -26,9 +27,7 @@ buildGoModule rec {
   ];
 
   passthru.tests = {
-    version = testers.testVersion {
-      package = relic;
-    };
+    version = testers.testVersion { package = relic; };
   };
 
   meta = with lib; {

@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, obs-studio
-, cmake
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  obs-studio,
+  cmake,
 }:
 
 stdenv.mkDerivation rec {
@@ -16,13 +17,9 @@ stdenv.mkDerivation rec {
     hash = "sha256-icn0X+c7Uf0nTFaVDVTPi26sfWTSeoAj7+guEn9gi9Y=";
   };
 
-  buildInputs = [
-    obs-studio
-  ];
+  buildInputs = [ obs-studio ];
 
-  nativeBuildInputs = [
-    cmake
-  ];
+  nativeBuildInputs = [ cmake ];
 
   postInstall = ''
     rm -rf "$out/share"

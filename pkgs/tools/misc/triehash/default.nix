@@ -1,7 +1,8 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, perlPackages
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  perlPackages,
 }:
 
 stdenv.mkDerivation rec {
@@ -15,9 +16,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-LxVcYj2WKHbhNu5x/DFkxQPOYrVkNvwiE/qcODq52Lc=";
   };
 
-  nativeBuildInputs = [
-    perlPackages.perl
-  ];
+  nativeBuildInputs = [ perlPackages.perl ];
 
   postPatch = ''
     patchShebangs triehash.pl

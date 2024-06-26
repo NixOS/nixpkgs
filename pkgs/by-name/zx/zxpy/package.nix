@@ -1,8 +1,9 @@
-{ lib
-, python3
-, fetchFromGitHub
-, fetchpatch
-, deterministic-uname
+{
+  lib,
+  python3,
+  fetchFromGitHub,
+  fetchpatch,
+  deterministic-uname,
 }:
 
 python3.pkgs.buildPythonApplication rec {

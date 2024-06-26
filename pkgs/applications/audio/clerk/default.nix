@@ -1,15 +1,16 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, makeWrapper
-, rofi
-, tmux
-, fzf
-, mpc-cli
-, perl
-, util-linux
-, libnotify
-, perlPackages
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  makeWrapper,
+  rofi,
+  tmux,
+  fzf,
+  mpc-cli,
+  perl,
+  util-linux,
+  libnotify,
+  perlPackages,
 }:
 
 stdenv.mkDerivation {
@@ -56,26 +57,30 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  postFixup = let
-    binPath = lib.makeBinPath [
-      libnotify
-      mpc-cli
-      rofi
-      tmux
-      fzf
-      util-linux
-    ];
-  in
-  ''
-    wrapProgram $out/bin/clerk --set PERL5LIB $PERL5LIB --prefix PATH : "${binPath}"
-    wrapProgram $out/bin/clerk_rating_client --set PERL5LIB $PERL5LIB --prefix PATH : "${binPath}"
-  '';
+  postFixup =
+    let
+      binPath = lib.makeBinPath [
+        libnotify
+        mpc-cli
+        rofi
+        tmux
+        fzf
+        util-linux
+      ];
+    in
+    ''
+      wrapProgram $out/bin/clerk --set PERL5LIB $PERL5LIB --prefix PATH : "${binPath}"
+      wrapProgram $out/bin/clerk_rating_client --set PERL5LIB $PERL5LIB --prefix PATH : "${binPath}"
+    '';
 
   meta = with lib; {
     description = "MPD client based on rofi/fzf";
     homepage = "https://github.com/carnager/clerk";
     license = licenses.mit;
-    maintainers = with maintainers; [ anderspapitto rewine ];
+    maintainers = with maintainers; [
+      anderspapitto
+      rewine
+    ];
     mainProgram = "clerk";
     platforms = platforms.linux;
   };

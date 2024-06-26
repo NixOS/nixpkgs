@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, igraph
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  igraph,
 }:
 
 stdenv.mkDerivation rec {
@@ -16,13 +17,9 @@ stdenv.mkDerivation rec {
     hash = "sha256-hEES/OHvgN0yRDp5ZBZTCQfWr1j7s8NqE+Sp9WMHEEY=";
   };
 
-  nativeBuildInputs = [
-    cmake
-  ];
+  nativeBuildInputs = [ cmake ];
 
-  buildInputs = [
-    igraph
-  ];
+  buildInputs = [ igraph ];
 
   meta = {
     changelog = "https://github.com/vtraag/libleidenalg/blob/${version}/CHANGELOG";

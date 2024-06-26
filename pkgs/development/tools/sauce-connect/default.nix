@@ -1,4 +1,10 @@
-{ stdenv, lib, fetchurl, zlib, unzip }:
+{
+  stdenv,
+  lib,
+  fetchurl,
+  zlib,
+  unzip,
+}:
 
 stdenv.mkDerivation rec {
   pname = "sauce-connect";
@@ -18,15 +24,16 @@ stdenv.mkDerivation rec {
     };
   };
 
-  src = passthru.sources.${stdenv.hostPlatform.system}
-    or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+  src =
+    passthru.sources.${stdenv.hostPlatform.system}
+      or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
   nativeBuildInputs = [ unzip ];
 
   patchPhase = lib.optionalString stdenv.isLinux ''
     patchelf \
       --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-      --set-rpath "$out/lib:${lib.makeLibraryPath [zlib]}" \
+      --set-rpath "$out/lib:${lib.makeLibraryPath [ zlib ]}" \
       bin/sc
   '';
 

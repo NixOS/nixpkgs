@@ -1,15 +1,16 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, gradle
-, jdk
-, quark-engine
-, makeWrapper
-, perl
-, imagemagick
-, makeDesktopItem
-, copyDesktopItems
-, desktopToDarwinBundle
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  gradle,
+  jdk,
+  quark-engine,
+  makeWrapper,
+  perl,
+  imagemagick,
+  makeDesktopItem,
+  copyDesktopItems,
+  desktopToDarwinBundle,
 }:
 
 let
@@ -27,7 +28,11 @@ let
     name = "${pname}-deps";
     inherit src;
 
-    nativeBuildInputs = [ gradle jdk perl ];
+    nativeBuildInputs = [
+      gradle
+      jdk
+      perl
+    ];
 
     buildPhase = ''
       export GRADLE_USER_HOME=$(mktemp -d)
@@ -58,11 +63,17 @@ let
     outputHashMode = "recursive";
     outputHash = "sha256-QebPRmfLtXy4ZlyKeGC5XNzhMTsYI0X36My+nTFvQpM=";
   };
-in stdenv.mkDerivation (finalAttrs: {
+in
+stdenv.mkDerivation (finalAttrs: {
   inherit pname version src;
 
-  nativeBuildInputs = [ gradle jdk imagemagick makeWrapper copyDesktopItems ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ desktopToDarwinBundle ];
+  nativeBuildInputs = [
+    gradle
+    jdk
+    imagemagick
+    makeWrapper
+    copyDesktopItems
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ desktopToDarwinBundle ];
 
   # Otherwise, Gradle fails with `java.net.SocketException: Operation not permitted`
   __darwinAllowLocalNetworking = true;
@@ -140,7 +151,10 @@ in stdenv.mkDerivation (finalAttrs: {
       exec = "jadx-gui";
       icon = "jadx";
       comment = finalAttrs.meta.description;
-      categories = [ "Development" "Utility" ];
+      categories = [
+        "Development"
+        "Utility"
+      ];
     })
   ];
 
@@ -152,7 +166,7 @@ in stdenv.mkDerivation (finalAttrs: {
     '';
     sourceProvenance = with sourceTypes; [
       fromSource
-      binaryBytecode  # deps
+      binaryBytecode # deps
     ];
     license = licenses.asl20;
     platforms = platforms.unix;

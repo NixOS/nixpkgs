@@ -1,4 +1,10 @@
-{ lib, fetchurl, makeWrapper, runCommand, callPackage }:
+{
+  lib,
+  fetchurl,
+  makeWrapper,
+  runCommand,
+  callPackage,
+}:
 
 let
   version = "1.3.7";

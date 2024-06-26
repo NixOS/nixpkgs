@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, libusb1
-, sfml
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  libusb1,
+  sfml,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -17,9 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-V8BlZykh9zOTcEypu96Ft9/6CtjsybtD8lBsg9sF5sQ=";
   };
 
-  nativeBuildInputs = [
-    autoreconfHook
-  ];
+  nativeBuildInputs = [ autoreconfHook ];
 
   buildInputs = [
     libusb1

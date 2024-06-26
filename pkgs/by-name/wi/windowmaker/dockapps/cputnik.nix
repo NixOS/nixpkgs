@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, dockapps-sources
-, libX11
-, libXext
-, libXpm
+{
+  lib,
+  stdenv,
+  dockapps-sources,
+  libX11,
+  libXext,
+  libXpm,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

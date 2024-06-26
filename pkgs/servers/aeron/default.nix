@@ -3,7 +3,7 @@
   stdenv,
   fetchMavenArtifact,
   jdk11,
-  makeWrapper
+  makeWrapper,
 }:
 
 let
@@ -70,7 +70,8 @@ let
   aeronAll = aeronAll_1_44_1;
   aeronSamples = aeronSamples_1_44_1;
 
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
 
   inherit pname version;
 
@@ -79,9 +80,7 @@ in stdenv.mkDerivation {
     aeronSamples
   ];
 
-  nativeBuildInputs = [
-    makeWrapper
-  ];
+  nativeBuildInputs = [ makeWrapper ];
 
   dontUnpack = true;
   dontConfigure = true;
@@ -124,8 +123,6 @@ in stdenv.mkDerivation {
     license = licenses.asl20;
     mainProgram = "${pname}-media-driver";
     maintainers = [ maintainers.vaci ];
-    sourceProvenance = [
-      sourceTypes.binaryBytecode
-    ];
+    sourceProvenance = [ sourceTypes.binaryBytecode ];
   };
 }

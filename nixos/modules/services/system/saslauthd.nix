@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -18,7 +23,10 @@ in
 
       enable = mkEnableOption "saslauthd, the Cyrus SASL authentication daemon";
 
-      package = mkPackageOption pkgs [ "cyrus_sasl" "bin" ] { };
+      package = mkPackageOption pkgs [
+        "cyrus_sasl"
+        "bin"
+      ] { };
 
       mechanism = mkOption {
         type = types.str;
@@ -35,7 +43,6 @@ in
     };
 
   };
-
 
   ###### implementation
 

@@ -1,4 +1,8 @@
-{ lib, stdenv, fetchurl }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 
 stdenv.mkDerivation rec {
   pname = "libcap-ng";
@@ -9,11 +13,13 @@ stdenv.mkDerivation rec {
     hash = "sha256-O6UpTRy9+pivqs+8ALavntK4PoohgXGF39hEzIx6xv8=";
   };
 
-  outputs = [ "out" "dev" "man" ];
-
-  configureFlags = [
-    "--without-python"
+  outputs = [
+    "out"
+    "dev"
+    "man"
   ];
+
+  configureFlags = [ "--without-python" ];
 
   meta = with lib; {
     description = "Library for working with POSIX capabilities";

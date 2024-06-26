@@ -1,8 +1,38 @@
-{ lib, stdenv, fetchurl, bison, cmake, pkg-config
-, boost, icu, libedit, libevent, lz4, ncurses, openssl, perl, protobuf, re2, readline, zlib, zstd, libfido2
-, numactl, cctools, CoreServices, developer_cmds, libtirpc, rpcsvc-proto, curl, DarwinTools, nixosTests
-# Percona-specific deps
-, coreutils, cyrus_sasl, gnumake, openldap
+{
+  lib,
+  stdenv,
+  fetchurl,
+  bison,
+  cmake,
+  pkg-config,
+  boost,
+  icu,
+  libedit,
+  libevent,
+  lz4,
+  ncurses,
+  openssl,
+  perl,
+  protobuf,
+  re2,
+  readline,
+  zlib,
+  zstd,
+  libfido2,
+  numactl,
+  cctools,
+  CoreServices,
+  developer_cmds,
+  libtirpc,
+  rpcsvc-proto,
+  curl,
+  DarwinTools,
+  nixosTests,
+  # Percona-specific deps
+  coreutils,
+  cyrus_sasl,
+  gnumake,
+  openldap,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -14,8 +44,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-iktEvZz3mjjmJ16PX51OjSwwiFS3H9W/XRco//Q6aEQ=";
   };
 
-  nativeBuildInputs = [ bison cmake pkg-config ]
-    ++ lib.optionals (!stdenv.isDarwin) [ rpcsvc-proto ];
+  nativeBuildInputs = [
+    bison
+    cmake
+    pkg-config
+  ] ++ lib.optionals (!stdenv.isDarwin) [ rpcsvc-proto ];
 
   patches = [
     ./no-force-outline-atomics.patch # Do not force compilers to turn on -moutline-atomics switch
@@ -32,16 +65,41 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace storage/rocksdb/get_rocksdb_files.sh --replace "make --" "${gnumake}/bin/make --"
   '';
 
-  buildInputs = [
-    boost (curl.override { inherit openssl; }) icu libedit libevent lz4 ncurses openssl protobuf re2 readline zlib
-    zstd libfido2 openldap perl cyrus_sasl
-  ] ++ lib.optionals stdenv.isLinux [
-    numactl libtirpc
-  ] ++ lib.optionals stdenv.isDarwin [
-    cctools CoreServices developer_cmds DarwinTools
-  ];
+  buildInputs =
+    [
+      boost
+      (curl.override { inherit openssl; })
+      icu
+      libedit
+      libevent
+      lz4
+      ncurses
+      openssl
+      protobuf
+      re2
+      readline
+      zlib
+      zstd
+      libfido2
+      openldap
+      perl
+      cyrus_sasl
+    ]
+    ++ lib.optionals stdenv.isLinux [
+      numactl
+      libtirpc
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      cctools
+      CoreServices
+      developer_cmds
+      DarwinTools
+    ];
 
-  outputs = [ "out" "static" ];
+  outputs = [
+    "out"
+    "static"
+  ];
 
   cmakeFlags = [
     # Percona-specific flags.

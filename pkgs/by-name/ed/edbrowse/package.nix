@@ -1,18 +1,19 @@
-{ lib
-, curl
-, duktape
-, fetchFromGitHub
-, html-tidy
-, openssl
-, pcre
-, perl
-, pkg-config
-, quickjs
-, readline
-, stdenv
-, unixODBC
-, which
-, withODBC ? true
+{
+  lib,
+  curl,
+  duktape,
+  fetchFromGitHub,
+  html-tidy,
+  openssl,
+  pcre,
+  perl,
+  pkg-config,
+  quickjs,
+  readline,
+  stdenv,
+  unixODBC,
+  which,
+  withODBC ? true,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -30,12 +31,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     # Fixes some small annoyances on src/makefile
-     ./0001-small-fixes.patch
+    ./0001-small-fixes.patch
   ];
 
-  patchFlags =  [
-    "-p2"
-  ];
+  patchFlags = [ "-p2" ];
 
   postPatch = ''
     for file in $(find ./tools/ -type f ! -name '*.c'); do
@@ -57,13 +56,9 @@ stdenv.mkDerivation (finalAttrs: {
     perl
     quickjs
     readline
-  ] ++ lib.optionals withODBC [
-    unixODBC
-  ];
+  ] ++ lib.optionals withODBC [ unixODBC ];
 
-  makeFlags = [
-    "PREFIX=${placeholder "out"}"
-  ];
+  makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
   preBuild = ''
     buildFlagsArray+=(

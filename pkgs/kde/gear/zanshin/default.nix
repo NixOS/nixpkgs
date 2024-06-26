@@ -1,9 +1,6 @@
-{
-  mkKdeDerivation,
-  boost,
-}:
+{ mkKdeDerivation, boost }:
 mkKdeDerivation {
   pname = "zanshin";
 
-  extraBuildInputs = [boost];
+  extraBuildInputs = [ boost ];
 }

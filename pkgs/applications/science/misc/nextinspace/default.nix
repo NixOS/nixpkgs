@@ -1,6 +1,7 @@
-{ lib
-, fetchFromGitHub
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -15,9 +16,7 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-CrhzCvIA3YAFsWvdemvK1RLMacsM5RtgMjLeiqz5MwY=";
   };
 
-  nativeBuildInputs = with python3.pkgs; [
-    poetry-core
-  ];
+  nativeBuildInputs = with python3.pkgs; [ poetry-core ];
 
   pythonPath = with python3.pkgs; [
     requests
@@ -31,9 +30,7 @@ python3.pkgs.buildPythonApplication rec {
     requests-mock
   ];
 
-  pythonImportsCheck = [
-    "nextinspace"
-  ];
+  pythonImportsCheck = [ "nextinspace" ];
 
   meta = with lib; {
     description = "Print upcoming space-related events in your terminal";

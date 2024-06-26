@@ -1,4 +1,9 @@
-{ lib, buildGoModule, fetchFromGitHub, nixosTests }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  nixosTests,
+}:
 
 buildGoModule rec {
   pname = "redis_exporter";
@@ -22,13 +27,19 @@ buildGoModule rec {
   # needs a redis server
   doCheck = false;
 
-  passthru.tests = { inherit (nixosTests.prometheus-exporters) redis; };
+  passthru.tests = {
+    inherit (nixosTests.prometheus-exporters) redis;
+  };
 
   meta = with lib; {
     description = "Prometheus exporter for Redis metrics";
     mainProgram = "redis_exporter";
     homepage = "https://github.com/oliver006/redis_exporter";
     license = licenses.mit;
-    maintainers = with maintainers; [ eskytthe srhb ma27 ];
+    maintainers = with maintainers; [
+      eskytthe
+      srhb
+      ma27
+    ];
   };
 }

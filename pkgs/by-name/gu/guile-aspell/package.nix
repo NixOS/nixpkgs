@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, guile
-, autoreconfHook
-, pkg-config
-, aspell
-, texinfo
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  guile,
+  autoreconfHook,
+  pkg-config,
+  aspell,
+  texinfo,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -28,13 +29,9 @@ stdenv.mkDerivation (finalAttrs: {
     texinfo
   ];
 
-  buildInputs = [
-    guile
-  ];
+  buildInputs = [ guile ];
 
-  propagatedBuildInputs = [
-    aspell
-  ];
+  propagatedBuildInputs = [ aspell ];
 
   meta = with lib; {
     description = "Guile bindings for the aspell library";

@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoconf
-, automake
-, libtool
-, gettext
-, flex
-, perl
-, pkg-config
-, pcsclite
-, libusb1
-, libiconv
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoconf,
+  automake,
+  libtool,
+  gettext,
+  flex,
+  perl,
+  pkg-config,
+  pcsclite,
+  libusb1,
+  libiconv,
 }:
 
 stdenv.mkDerivation rec {
@@ -37,13 +38,9 @@ stdenv.mkDerivation rec {
   buildInputs = [
     pcsclite
     libusb1
-  ] ++ lib.optionals stdenv.isDarwin [
-    libiconv
-  ];
+  ] ++ lib.optionals stdenv.isDarwin [ libiconv ];
 
-  configureFlags = [
-    "--enable-usbdropdir=${placeholder "out"}/pcsc/drivers"
-  ];
+  configureFlags = [ "--enable-usbdropdir=${placeholder "out"}/pcsc/drivers" ];
 
   doCheck = true;
 

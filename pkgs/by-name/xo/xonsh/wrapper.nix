@@ -9,13 +9,16 @@
 let
   inherit (xonsh.passthru) python;
 
-  pythonEnv = python.withPackages
-    (ps: [ (ps.toPythonModule xonsh) ] ++ extraPackages ps);
+  pythonEnv = python.withPackages (ps: [ (ps.toPythonModule xonsh) ] ++ extraPackages ps);
 in
-runCommand
-  "xonsh-wrapped-${xonsh.version}"
+runCommand "xonsh-wrapped-${xonsh.version}"
   {
-    inherit (xonsh) pname version meta passthru;
+    inherit (xonsh)
+      pname
+      version
+      meta
+      passthru
+      ;
   }
   ''
     mkdir -p $out/bin

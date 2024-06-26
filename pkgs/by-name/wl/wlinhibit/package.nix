@@ -19,7 +19,6 @@ stdenv.mkDerivation rec {
     hash = "sha256-YQHJ9sLHSV8GJP7IpRzmtDbeB86y/a48mLcYy4iDciw=";
   };
 
-
   buildInputs = [
     wayland
     wayland-protocols

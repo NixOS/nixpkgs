@@ -1,7 +1,8 @@
-{ lib
-, stdenv
-, fetchurl
-, zlib
+{
+  lib,
+  stdenv,
+  fetchurl,
+  zlib,
 }:
 
 stdenv.mkDerivation rec {
@@ -24,11 +25,12 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "DESTDIR=$(out)" ];
 
-  buildInputs = [
-    zlib
-  ];
+  buildInputs = [ zlib ];
 
-  installTargets = [ "install" "install-dev" ];
+  installTargets = [
+    "install"
+    "install-dev"
+  ];
 
   doCheck = true;
 
@@ -46,4 +48,3 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ mausch ];
   };
 }
-

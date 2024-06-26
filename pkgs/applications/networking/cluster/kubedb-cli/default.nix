@@ -1,4 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 
 buildGoModule rec {
   pname = "kubedb-cli";
@@ -18,8 +22,8 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "kubectl plugin for KubeDB by AppsCode";
-    homepage    = "https://github.com/kubedb/cli";
-    license     = licenses.unfree;
+    homepage = "https://github.com/kubedb/cli";
+    license = licenses.unfree;
     maintainers = [ maintainers.starcraft66 ];
   };
 }

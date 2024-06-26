@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, premake4, bootil }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  premake4,
+  bootil,
+}:
 
 stdenv.mkDerivation rec {
   pname = "gmad";
@@ -16,17 +22,26 @@ stdenv.mkDerivation rec {
     owner = "Facepunch";
     repo = "gmad";
     rev = "5236973a2fcbb3043bdd3d4529ce68b6d938ad93";
-    sha256="04an17nvnj38mpi0w005v41ib8ynb5qhgrdkmsda4hq7l1gn276s";
+    sha256 = "04an17nvnj38mpi0w005v41ib8ynb5qhgrdkmsda4hq7l1gn276s";
   };
 
-  buildInputs = [ premake4 bootil ];
+  buildInputs = [
+    premake4
+    bootil
+  ];
 
   targetName =
-    if stdenv.isLinux then "gmad_linux"
-    else if stdenv.isDarwin then "gmad_osx"
-    else "gmad";
+    if stdenv.isLinux then
+      "gmad_linux"
+    else if stdenv.isDarwin then
+      "gmad_osx"
+    else
+      "gmad";
 
-  premakeFlags = [ "--bootil_lib=${bootil}/lib" "--bootil_inc=${bootil}/include" ];
+  premakeFlags = [
+    "--bootil_lib=${bootil}/lib"
+    "--bootil_inc=${bootil}/include"
+  ];
 
   installPhase = ''
     mkdir -p $out/bin

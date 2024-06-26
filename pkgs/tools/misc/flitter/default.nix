@@ -1,8 +1,9 @@
-{ lib
-, ocamlPackages
-, fetchFromGitHub
-, makeWrapper
-, python3
+{
+  lib,
+  ocamlPackages,
+  fetchFromGitHub,
+  makeWrapper,
+  python3,
 }:
 
 ocamlPackages.buildDunePackage {
@@ -33,9 +34,7 @@ ocamlPackages.buildDunePackage {
     done
   '';
 
-  nativeBuildInputs = [
-    makeWrapper
-  ];
+  nativeBuildInputs = [ makeWrapper ];
 
   buildInputs = with ocamlPackages; [
     core_unix

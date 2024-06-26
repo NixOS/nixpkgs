@@ -13,7 +13,7 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.9";
 
- src = fetchPypi {
+  src = fetchPypi {
     pname = "piccolo_theme";
     inherit version;
     hash = "sha256-jlnKZK2wuEM+n+3Y59U6+LyQJRBUwQAn0NarAGlNdx0=";

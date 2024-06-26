@@ -1,4 +1,8 @@
-{ lib, appleDerivation', stdenvNoCC }:
+{
+  lib,
+  appleDerivation',
+  stdenvNoCC,
+}:
 
 appleDerivation' stdenvNoCC {
   dontBuild = true;
@@ -14,7 +18,7 @@ appleDerivation' stdenvNoCC {
 
   meta = with lib; {
     maintainers = with maintainers; [ copumpkin ];
-    platforms   = platforms.darwin;
-    license     = licenses.apple-psl20;
+    platforms = platforms.darwin;
+    license = licenses.apple-psl20;
   };
 }

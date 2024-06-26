@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, ninja
-, curl
-, json_c
-, libbsd
-, argp-standalone
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  ninja,
+  curl,
+  json_c,
+  libbsd,
+  argp-standalone,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -29,13 +30,9 @@ stdenv.mkDerivation (finalAttrs: {
     curl
     json_c
     libbsd
-  ] ++ lib.optionals (!stdenv.hostPlatform.isGnu) [
-    argp-standalone
-  ];
+  ] ++ lib.optionals (!stdenv.hostPlatform.isGnu) [ argp-standalone ];
 
-  patches = [
-    ./argp.patch
-  ];
+  patches = [ ./argp.patch ];
 
   installPhase = ''
     runHook preInstall

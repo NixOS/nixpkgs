@@ -1,4 +1,8 @@
-{ lib, stdenvNoCC, fetchzip }:
+{
+  lib,
+  stdenvNoCC,
+  fetchzip,
+}:
 
 stdenvNoCC.mkDerivation rec {
   pname = "3270font";
@@ -29,7 +33,10 @@ stdenvNoCC.mkDerivation rec {
     description = "Monospaced font based on IBM 3270 terminals";
     homepage = "https://github.com/rbanffy/3270font";
     changelog = "https://github.com/rbanffy/3270font/blob/v${version}/CHANGELOG.md";
-    license = [ licenses.bsd3 licenses.ofl ];
+    license = [
+      licenses.bsd3
+      licenses.ofl
+    ];
     maintainers = [ ];
     platforms = platforms.all;
   };

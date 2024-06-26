@@ -1,27 +1,28 @@
-{ lib
-, stdenv
-, autoreconfHook
-, curl
-, expat
-, fetchFromGitHub
-, git
-, json_c
-, libcap
-, libmaxminddb
-, libmysqlclient
-, libpcap
-, libsodium
-, ndpi
-, net-snmp
-, openssl
-, pkg-config
-, rdkafka
-, gtest
-, rrdtool
-, hiredis
-, sqlite
-, which
-, zeromq
+{
+  lib,
+  stdenv,
+  autoreconfHook,
+  curl,
+  expat,
+  fetchFromGitHub,
+  git,
+  json_c,
+  libcap,
+  libmaxminddb,
+  libmysqlclient,
+  libpcap,
+  libsodium,
+  ndpi,
+  net-snmp,
+  openssl,
+  pkg-config,
+  rdkafka,
+  gtest,
+  rrdtool,
+  hiredis,
+  sqlite,
+  which,
+  zeromq,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,10 +1,11 @@
-{ stdenv
-, fetchFromGitHub
-, cmake
-, pkg-config
-, wrapQtAppsHook
-, qtbase
-, lib
+{
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  wrapQtAppsHook,
+  qtbase,
+  lib,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -23,9 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     wrapQtAppsHook
   ];
-  buildInputs = [
-    qtbase
-  ];
+  buildInputs = [ qtbase ];
 
   postInstall = ''
     install -Dm555 cutechess{,-cli} -t $out/bin/

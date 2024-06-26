@@ -1,4 +1,16 @@
-{ lib, stdenv, fetchFromGitHub, cmake, gettext, libdnf, pkg-config, glib, libpeas, libsmartcols, help2man }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  gettext,
+  libdnf,
+  pkg-config,
+  glib,
+  libpeas,
+  libsmartcols,
+  help2man,
+}:
 
 stdenv.mkDerivation rec {
   pname = "microdnf";
@@ -11,8 +23,18 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-R7jOeH6pw/THLXxLezp2AmE8lUBagKMRJ0XfXgdLi2E=";
   };
 
-  nativeBuildInputs = [ pkg-config cmake gettext help2man ];
-  buildInputs = [ libdnf glib libpeas libsmartcols ];
+  nativeBuildInputs = [
+    pkg-config
+    cmake
+    gettext
+    help2man
+  ];
+  buildInputs = [
+    libdnf
+    glib
+    libpeas
+    libsmartcols
+  ];
 
   meta = with lib; {
     description = "Lightweight implementation of dnf in C";

@@ -1,8 +1,9 @@
-{ stdenv
-, lib
-, python3
-, fetchPypi
-, git
+{
+  stdenv,
+  lib,
+  python3,
+  fetchPypi,
+  git,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -31,13 +32,13 @@ python3.pkgs.buildPythonApplication rec {
     stripe
   ];
 
-  nativeCheckInputs = [
-    git
-  ] ++ (with python3.pkgs; [
-    httpretty
-    pytestCheckHook
-    sure
-  ]);
+  nativeCheckInputs =
+    [ git ]
+    ++ (with python3.pkgs; [
+      httpretty
+      pytestCheckHook
+      sure
+    ]);
 
   disabledTests = [
     # Test requires network access
@@ -50,9 +51,7 @@ python3.pkgs.buildPythonApplication rec {
     "test_get_free_databases"
   ];
 
-  pythonImportsCheck = [
-    "gigalixir"
-  ];
+  pythonImportsCheck = [ "gigalixir" ];
 
   meta = with lib; {
     broken = stdenv.isDarwin;

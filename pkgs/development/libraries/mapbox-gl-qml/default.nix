@@ -1,12 +1,13 @@
-{ lib
-, mkDerivation
-, fetchFromGitHub
-, cmake
-, pkg-config
-, curl
-, qtbase
-, qtlocation
-, maplibre-gl-native
+{
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  curl,
+  qtbase,
+  qtlocation,
+  maplibre-gl-native,
 }:
 
 mkDerivation rec {
@@ -20,8 +21,15 @@ mkDerivation rec {
     hash = "sha256-zZcD85nOZZ067FRvSuzE8lr2gyuVxpcZGp44D4ayc3Q=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config ];
-  buildInputs = [ curl qtlocation maplibre-gl-native ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
+  buildInputs = [
+    curl
+    qtlocation
+    maplibre-gl-native
+  ];
 
   postPatch = ''
     substituteInPlace src/CMakeLists.txt \
@@ -32,7 +40,10 @@ mkDerivation rec {
     description = "Unofficial Mapbox GL Native bindings for Qt QML";
     homepage = "https://github.com/rinigus/mapbox-gl-qml";
     license = licenses.lgpl3Only;
-    maintainers = with maintainers; [ Thra11 dotlambda ];
+    maintainers = with maintainers; [
+      Thra11
+      dotlambda
+    ];
     platforms = platforms.linux;
   };
 }

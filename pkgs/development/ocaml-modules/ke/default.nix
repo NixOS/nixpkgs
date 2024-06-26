@@ -1,6 +1,11 @@
-{ lib, buildDunePackage, fetchurl
-, bigarray-compat, fmt
-, alcotest, bigstringaf
+{
+  lib,
+  buildDunePackage,
+  fetchurl,
+  bigarray-compat,
+  fmt,
+  alcotest,
+  bigstringaf,
 }:
 
 buildDunePackage rec {
@@ -14,7 +19,10 @@ buildDunePackage rec {
 
   propagatedBuildInputs = [ fmt ];
 
-  checkInputs = [ alcotest bigstringaf ];
+  checkInputs = [
+    alcotest
+    bigstringaf
+  ];
   doCheck = true;
 
   minimalOCamlVersion = "4.08";

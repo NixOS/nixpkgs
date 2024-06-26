@@ -53,8 +53,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/adrienverge/yamllint";
     changelog = "https://github.com/adrienverge/yamllint/blob/v${version}/CHANGELOG.rst";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
-      mikefaille
-    ];
+    maintainers = with maintainers; [ mikefaille ];
   };
 }

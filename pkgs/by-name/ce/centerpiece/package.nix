@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, pkg-config
-, dbus
-, vulkan-loader
-, libGL
-, fetchFromGitHub
-, rustPlatform
-, libxkbcommon
-, wayland
+{
+  lib,
+  stdenv,
+  pkg-config,
+  dbus,
+  vulkan-loader,
+  libGL,
+  fetchFromGitHub,
+  rustPlatform,
+  libxkbcommon,
+  wayland,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -48,7 +49,10 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/friedow/centerpiece";
     description = "Your trusty omnibox search";
     license = licenses.mit;
-    maintainers = with maintainers; [ a-kenji friedow ];
+    maintainers = with maintainers; [
+      a-kenji
+      friedow
+    ];
     platforms = platforms.linux;
     mainProgram = "centerpiece";
   };

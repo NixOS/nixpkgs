@@ -1,14 +1,15 @@
-{ stdenv
-, lib
-, gitUpdater
-, fetchFromGitHub
-, testers
-, cmake
-, pkg-config
-, boost
-, gtest
-, wayland
-, wayland-scanner
+{
+  stdenv,
+  lib,
+  gitUpdater,
+  fetchFromGitHub,
+  testers,
+  cmake,
+  pkg-config,
+  boost,
+  gtest,
+  wayland,
+  wayland-scanner,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -38,9 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-    updateScript = gitUpdater {
-      rev-prefix = "v";
-    };
+    updateScript = gitUpdater { rev-prefix = "v"; };
   };
 
   meta = with lib; {
@@ -65,8 +64,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ OPNA2608 ];
     platforms = platforms.linux;
-    pkgConfigModules = [
-      "wlcs"
-    ];
+    pkgConfigModules = [ "wlcs" ];
   };
 })

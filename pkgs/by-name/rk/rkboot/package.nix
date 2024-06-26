@@ -1,7 +1,8 @@
-{ stdenv
-, lib
-, rkbin
-, box64
+{
+  stdenv,
+  lib,
+  rkbin,
+  box64,
 }:
 
 stdenv.mkDerivation {
@@ -38,6 +39,9 @@ stdenv.mkDerivation {
     homepage = "https://github.com/rockchip-linux/rkbin";
     license = licenses.unfreeRedistributable;
     maintainers = with maintainers; [ matthewcroughan ];
-    platforms = [ "x86_64-linux" "aarch64-linux" ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
   };
 }

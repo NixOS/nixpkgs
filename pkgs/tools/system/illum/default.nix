@@ -1,4 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, pkg-config, ninja, libevdev, libev, udev }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  pkg-config,
+  ninja,
+  libevdev,
+  libev,
+  udev,
+}:
 
 stdenv.mkDerivation rec {
   pname = "illum";
@@ -21,7 +31,12 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ ninja libevdev libev udev ];
+  buildInputs = [
+    ninja
+    libevdev
+    libev
+    udev
+  ];
 
   configurePhase = ''
     bash ./configure

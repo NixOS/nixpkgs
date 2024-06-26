@@ -1,8 +1,9 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, libpulseaudio
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  libpulseaudio,
 }:
 rustPlatform.buildRustPackage {
   pname = "scope-tui";

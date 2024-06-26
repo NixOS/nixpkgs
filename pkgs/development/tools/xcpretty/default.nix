@@ -1,4 +1,8 @@
-{ lib, bundlerApp, bundlerUpdateScript }:
+{
+  lib,
+  bundlerApp,
+  bundlerUpdateScript,
+}:
 
 bundlerApp {
   pname = "xcpretty";
@@ -11,11 +15,9 @@ bundlerApp {
   };
 
   meta = with lib; {
-    description     = "Flexible and fast xcodebuild formatter";
-    homepage        = "https://github.com/supermarin/xcpretty";
-    license         = licenses.mit;
-    maintainers     = with maintainers; [
-      nicknovitski
-    ];
+    description = "Flexible and fast xcodebuild formatter";
+    homepage = "https://github.com/supermarin/xcpretty";
+    license = licenses.mit;
+    maintainers = with maintainers; [ nicknovitski ];
   };
 }

@@ -1,7 +1,8 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, buildPackages
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  buildPackages,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -43,7 +44,10 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "pforth";
     changelog = "https://github.com/philburk/pforth/blob/v${finalAttrs.version}/RELEASES.md";
     license = lib.licenses.bsd0;
-    maintainers = with lib.maintainers; [ AndersonTorres yrashk ];
+    maintainers = with lib.maintainers; [
+      AndersonTorres
+      yrashk
+    ];
     platforms = lib.platforms.unix;
   };
 })

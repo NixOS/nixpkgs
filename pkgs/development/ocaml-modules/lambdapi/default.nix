@@ -1,18 +1,19 @@
-{ lib
-, fetchurl
-, buildDunePackage
-, alcotest
-, dedukti
-, bindlib
-, camlp-streams
-, cmdliner
-, menhir
-, pratter
-, sedlex
-, stdlib-shims
-, timed
-, why3
-, yojson
+{
+  lib,
+  fetchurl,
+  buildDunePackage,
+  alcotest,
+  dedukti,
+  bindlib,
+  camlp-streams,
+  cmdliner,
+  menhir,
+  pratter,
+  sedlex,
+  stdlib-shims,
+  timed,
+  why3,
+  yojson,
 }:
 
 buildDunePackage rec {
@@ -28,10 +29,21 @@ buildDunePackage rec {
 
   nativeBuildInputs = [ menhir ];
   propagatedBuildInputs = [
-    bindlib camlp-streams cmdliner pratter sedlex stdlib-shims timed why3 yojson
+    bindlib
+    camlp-streams
+    cmdliner
+    pratter
+    sedlex
+    stdlib-shims
+    timed
+    why3
+    yojson
   ];
 
-  checkInputs = [ alcotest dedukti ];
+  checkInputs = [
+    alcotest
+    dedukti
+  ];
   doCheck = false; # anomaly: Sys_error("/homeless-shelter/.why3.conf: No such file or directory")
 
   meta = with lib; {

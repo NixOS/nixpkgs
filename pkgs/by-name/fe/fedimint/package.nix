@@ -1,17 +1,18 @@
-{ lib
-, fetchFromGitHub
-, openssl
-, pkg-config
-, protobuf
-, rustPlatform
-, buildPackages
-, git
-, stdenv
-, libiconv
-, clang
-, libclang
-, Security
-, SystemConfiguration
+{
+  lib,
+  fetchFromGitHub,
+  openssl,
+  pkg-config,
+  protobuf,
+  rustPlatform,
+  buildPackages,
+  git,
+  stdenv,
+  libiconv,
+  clang,
+  libclang,
+  Security,
+  SystemConfiguration,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "fedimint";
@@ -33,16 +34,23 @@ rustPlatform.buildRustPackage rec {
     libclang.lib
   ];
 
-  buildInputs = [
-    openssl
-  ] ++ lib.optionals stdenv.isDarwin [
-    Security
-    libiconv
-    Security
-    SystemConfiguration
-  ];
+  buildInputs =
+    [ openssl ]
+    ++ lib.optionals stdenv.isDarwin [
+      Security
+      libiconv
+      Security
+      SystemConfiguration
+    ];
 
-  outputs = [ "out" "fedimintCli" "fedimint" "gateway" "gatewayCli" "devimint" ];
+  outputs = [
+    "out"
+    "fedimintCli"
+    "fedimint"
+    "gateway"
+    "gatewayCli"
+    "devimint"
+  ];
 
   postInstall = ''
     mkdir -p $fedimint/bin $fedimintCli/bin $gateway/bin $gatewayCli/bin $devimint/bin

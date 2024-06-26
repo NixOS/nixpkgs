@@ -1,22 +1,23 @@
-{ lib
-, stdenvNoCC
-, rustPlatform
-, fetchFromGitHub
-, buildGoModule
-, makeWrapper
-, nodejs
-, pnpm
-, cacert
-, esbuild
-, jq
-, moreutils
-, perl
-, pkg-config
-, glib
-, webkitgtk
-, libayatana-appindicator
-, cairo
-, openssl
+{
+  lib,
+  stdenvNoCC,
+  rustPlatform,
+  fetchFromGitHub,
+  buildGoModule,
+  makeWrapper,
+  nodejs,
+  pnpm,
+  cacert,
+  esbuild,
+  jq,
+  moreutils,
+  perl,
+  pkg-config,
+  glib,
+  webkitgtk,
+  libayatana-appindicator,
+  cairo,
+  openssl,
 }:
 
 let
@@ -96,18 +97,25 @@ in
         openssl
       ];
 
-      ESBUILD_BINARY_PATH = "${lib.getExe (esbuild.override {
-        buildGoModule = args: buildGoModule (args // rec {
-          version = "0.15.10";
-          src = fetchFromGitHub {
-            owner = "evanw";
-            repo = "esbuild";
-            rev = "v${version}";
-            hash = "sha256-DebmLtgPrla+1UcvOHMnWmxa/ZqrugeRRKXIiJ9LYDk=";
-          };
-          vendorHash = "sha256-+BfxCyg0KkDQpHt/wycy/8CTG6YBA/VJvJFhhzUnSiQ=";
-        });
-      })}";
+      ESBUILD_BINARY_PATH = "${lib.getExe (
+        esbuild.override {
+          buildGoModule =
+            args:
+            buildGoModule (
+              args
+              // rec {
+                version = "0.15.10";
+                src = fetchFromGitHub {
+                  owner = "evanw";
+                  repo = "esbuild";
+                  rev = "v${version}";
+                  hash = "sha256-DebmLtgPrla+1UcvOHMnWmxa/ZqrugeRRKXIiJ9LYDk=";
+                };
+                vendorHash = "sha256-+BfxCyg0KkDQpHt/wycy/8CTG6YBA/VJvJFhhzUnSiQ=";
+              }
+            );
+        }
+      )}";
 
       pnpmRoot = "gephgui";
 

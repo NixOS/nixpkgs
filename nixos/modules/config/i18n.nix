@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -42,8 +47,11 @@ with lib;
 
       extraLocaleSettings = mkOption {
         type = types.attrsOf types.str;
-        default = {};
-        example = { LC_MESSAGES = "en_US.UTF-8"; LC_TIME = "de_DE.UTF-8"; };
+        default = { };
+        example = {
+          LC_MESSAGES = "en_US.UTF-8";
+          LC_TIME = "de_DE.UTF-8";
+        };
         description = ''
           A set of additional system-wide locale settings other than
           `LANG` which can be configured with
@@ -53,14 +61,34 @@ with lib;
 
       supportedLocales = mkOption {
         type = types.listOf types.str;
-        default = unique
-          (builtins.map (l: (replaceStrings [ "utf8" "utf-8" "UTF8" ] [ "UTF-8" "UTF-8" "UTF-8" ] l) + "/UTF-8") (
-            [
-              "C.UTF-8"
-              "en_US.UTF-8"
-              config.i18n.defaultLocale
-            ] ++ (attrValues (filterAttrs (n: v: n != "LANGUAGE") config.i18n.extraLocaleSettings))
-          ));
+        default = unique (
+          builtins.map
+            (
+              l:
+              (replaceStrings
+                [
+                  "utf8"
+                  "utf-8"
+                  "UTF8"
+                ]
+                [
+                  "UTF-8"
+                  "UTF-8"
+                  "UTF-8"
+                ]
+                l
+              )
+              + "/UTF-8"
+            )
+            (
+              [
+                "C.UTF-8"
+                "en_US.UTF-8"
+                config.i18n.defaultLocale
+              ]
+              ++ (attrValues (filterAttrs (n: v: n != "LANGUAGE") config.i18n.extraLocaleSettings))
+            )
+        );
         defaultText = literalExpression ''
           unique
             (builtins.map (l: (replaceStrings [ "utf8" "utf-8" "UTF8" ] [ "UTF-8" "UTF-8" "UTF-8" ] l) + "/UTF-8") (
@@ -71,7 +99,11 @@ with lib;
               ] ++ (attrValues (filterAttrs (n: v: n != "LANGUAGE") config.i18n.extraLocaleSettings))
             ))
         '';
-        example = ["en_US.UTF-8/UTF-8" "nl_NL.UTF-8/UTF-8" "nl_NL/ISO-8859-1"];
+        example = [
+          "en_US.UTF-8/UTF-8"
+          "nl_NL.UTF-8/UTF-8"
+          "nl_NL/ISO-8859-1"
+        ];
         description = ''
           List of locales that the system should support.  The value
           `"all"` means that all locales supported by
@@ -84,30 +116,28 @@ with lib;
 
   };
 
-
   ###### implementation
 
   config = {
 
     environment.systemPackages =
       # We increase the priority a little, so that plain glibc in systemPackages can't win.
-      optional (config.i18n.supportedLocales != []) (lib.setPrio (-1) config.i18n.glibcLocales);
+      optional (config.i18n.supportedLocales != [ ]) (lib.setPrio (-1) config.i18n.glibcLocales);
 
-    environment.sessionVariables =
-      { LANG = config.i18n.defaultLocale;
-        LOCALE_ARCHIVE = "/run/current-system/sw/lib/locale/locale-archive";
-      } // config.i18n.extraLocaleSettings;
+    environment.sessionVariables = {
+      LANG = config.i18n.defaultLocale;
+      LOCALE_ARCHIVE = "/run/current-system/sw/lib/locale/locale-archive";
+    } // config.i18n.extraLocaleSettings;
 
-    systemd.globalEnvironment = mkIf (config.i18n.supportedLocales != []) {
+    systemd.globalEnvironment = mkIf (config.i18n.supportedLocales != [ ]) {
       LOCALE_ARCHIVE = "${config.i18n.glibcLocales}/lib/locale/locale-archive";
     };
 
     # ‘/etc/locale.conf’ is used by systemd.
-    environment.etc."locale.conf".source = pkgs.writeText "locale.conf"
-      ''
-        LANG=${config.i18n.defaultLocale}
-        ${concatStringsSep "\n" (mapAttrsToList (n: v: "${n}=${v}") config.i18n.extraLocaleSettings)}
-      '';
+    environment.etc."locale.conf".source = pkgs.writeText "locale.conf" ''
+      LANG=${config.i18n.defaultLocale}
+      ${concatStringsSep "\n" (mapAttrsToList (n: v: "${n}=${v}") config.i18n.extraLocaleSettings)}
+    '';
 
   };
 }

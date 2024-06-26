@@ -1,4 +1,9 @@
-{ lib, fetchFromGitLab, buildDunePackage, uri }:
+{
+  lib,
+  fetchFromGitLab,
+  buildDunePackage,
+  uri,
+}:
 
 buildDunePackage rec {
   pname = "resto";
@@ -11,9 +16,7 @@ buildDunePackage rec {
     sha256 = "sha256-DIm7fmISsCgRDi4p3NsUk7Cvs/dHpIKMdAOVdYLX2mc=";
   };
 
-  propagatedBuildInputs = [
-    uri
-  ];
+  propagatedBuildInputs = [ uri ];
 
   # resto has infinite recursion in their tests
   doCheck = false;

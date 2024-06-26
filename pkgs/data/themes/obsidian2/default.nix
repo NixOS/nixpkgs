@@ -1,9 +1,10 @@
-{ lib
-, stdenvNoCC
-, fetchurl
-, gtk-engine-murrine
-, jdupes
-, gitUpdater
+{
+  lib,
+  stdenvNoCC,
+  fetchurl,
+  gtk-engine-murrine,
+  jdupes,
+  gitUpdater,
 }:
 
 stdenvNoCC.mkDerivation rec {
@@ -17,13 +18,9 @@ stdenvNoCC.mkDerivation rec {
 
   sourceRoot = ".";
 
-  nativeBuildInputs = [
-    jdupes
-  ];
+  nativeBuildInputs = [ jdupes ];
 
-  propagatedUserEnvPkgs = [
-    gtk-engine-murrine
-  ];
+  propagatedUserEnvPkgs = [ gtk-engine-murrine ];
 
   installPhase = ''
     runHook preInstall

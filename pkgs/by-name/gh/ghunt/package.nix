@@ -1,6 +1,7 @@
-{ lib
-, fetchFromGitHub
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -22,31 +23,32 @@ python3.pkgs.buildPythonApplication rec {
     setuptools
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
-    alive-progress
-    autoslot
-    beautifulsoup4
-    beautifultable
-    geopy
-    httpx
-    humanize
-    imagehash
-    inflection
-    jsonpickle
-    pillow
-    protobuf
-    python-dateutil
-    rich
-    trio
-    packaging
-  ] ++ httpx.optional-dependencies.http2;
+  propagatedBuildInputs =
+    with python3.pkgs;
+    [
+      alive-progress
+      autoslot
+      beautifulsoup4
+      beautifultable
+      geopy
+      httpx
+      humanize
+      imagehash
+      inflection
+      jsonpickle
+      pillow
+      protobuf
+      python-dateutil
+      rich
+      trio
+      packaging
+    ]
+    ++ httpx.optional-dependencies.http2;
 
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "ghunt"
-  ];
+  pythonImportsCheck = [ "ghunt" ];
 
   meta = with lib; {
     description = "Offensive Google framework";

@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, cmake, freeimage }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  freeimage,
+}:
 
 stdenv.mkDerivation rec {
   pname = "perceptualdiff";

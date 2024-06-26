@@ -1,46 +1,53 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, pkg-config
-, fmt
-, liblo
-, alsa-lib
-, freetype
-, libX11
-, libXrandr
-, libXinerama
-, libXext
-, libXcursor
-, Foundation
-, Cocoa
-, Carbon
-, CoreServices
-, ApplicationServices
-, CoreAudio
-, CoreMIDI
-, AudioToolbox
-, Accelerate
-, CoreImage
-, IOKit
-, AudioUnit
-, QuartzCore
-, WebKit
-, DiscRecording
-, CoreAudioKit
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  fmt,
+  liblo,
+  alsa-lib,
+  freetype,
+  libX11,
+  libXrandr,
+  libXinerama,
+  libXext,
+  libXcursor,
+  Foundation,
+  Cocoa,
+  Carbon,
+  CoreServices,
+  ApplicationServices,
+  CoreAudio,
+  CoreMIDI,
+  AudioToolbox,
+  Accelerate,
+  CoreImage,
+  IOKit,
+  AudioUnit,
+  QuartzCore,
+  WebKit,
+  DiscRecording,
+  CoreAudioKit,
 
   # Enabling JACK requires a JACK server at runtime, no fallback mechanism
-, withJack ? false, jack
+  withJack ? false,
+  jack,
 
-, type ? "ADL"
+  type ? "ADL",
 }:
 
-assert lib.assertOneOf "type" type [ "ADL" "OPN" ];
+assert lib.assertOneOf "type" type [
+  "ADL"
+  "OPN"
+];
 let
-  chip = {
-    ADL = "OPL3";
-    OPN = "OPN2";
-  }.${type};
+  chip =
+    {
+      ADL = "OPL3";
+      OPN = "OPN2";
+    }
+    .${type};
   mainProgram = "${type}plug";
 in
 stdenv.mkDerivation rec {
@@ -66,54 +73,61 @@ stdenv.mkDerivation rec {
     "-isystem ${CoreServices}/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/CarbonCore.framework/Versions/A/Headers"
   ]);
 
-  NIX_LDFLAGS = toString (lib.optionals stdenv.hostPlatform.isDarwin [
-    # Framework that JUCE needs which don't get linked properly
-    "-framework CoreAudioKit"
-    "-framework QuartzCore"
-    "-framework AudioToolbox"
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
-    # JUCE dlopen's these at runtime
-    "-lX11"
-    "-lXext"
-    "-lXcursor"
-    "-lXinerama"
-    "-lXrandr"
-  ]);
+  NIX_LDFLAGS = toString (
+    lib.optionals stdenv.hostPlatform.isDarwin [
+      # Framework that JUCE needs which don't get linked properly
+      "-framework CoreAudioKit"
+      "-framework QuartzCore"
+      "-framework AudioToolbox"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      # JUCE dlopen's these at runtime
+      "-lX11"
+      "-lXext"
+      "-lXcursor"
+      "-lXinerama"
+      "-lXrandr"
+    ]
+  );
 
   nativeBuildInputs = [
     cmake
     pkg-config
   ];
 
-  buildInputs = [
-    fmt
-    liblo
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
-    alsa-lib
-    freetype
-    libX11
-    libXrandr
-    libXinerama
-    libXext
-    libXcursor
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    Foundation
-    Cocoa
-    Carbon
-    CoreServices
-    ApplicationServices
-    CoreAudio
-    CoreMIDI
-    AudioToolbox
-    Accelerate
-    CoreImage
-    IOKit
-    AudioUnit
-    QuartzCore
-    WebKit
-    DiscRecording
-    CoreAudioKit
-  ] ++ lib.optional withJack jack;
+  buildInputs =
+    [
+      fmt
+      liblo
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      alsa-lib
+      freetype
+      libX11
+      libXrandr
+      libXinerama
+      libXext
+      libXcursor
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      Foundation
+      Cocoa
+      Carbon
+      CoreServices
+      ApplicationServices
+      CoreAudio
+      CoreMIDI
+      AudioToolbox
+      Accelerate
+      CoreImage
+      IOKit
+      AudioUnit
+      QuartzCore
+      WebKit
+      DiscRecording
+      CoreAudioKit
+    ]
+    ++ lib.optional withJack jack;
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p $out/{Applications,Library/Audio/Plug-Ins/{VST,Components}}

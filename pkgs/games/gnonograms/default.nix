@@ -1,19 +1,20 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, vala
-, meson
-, ninja
-, pkg-config
-, desktop-file-utils
-, appstream
-, python3
-, shared-mime-info
-, wrapGAppsHook3
-, gtk3
-, pantheon
-, libgee
-, libhandy
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  vala,
+  meson,
+  ninja,
+  pkg-config,
+  desktop-file-utils,
+  appstream,
+  python3,
+  shared-mime-info,
+  wrapGAppsHook3,
+  gtk3,
+  pantheon,
+  libgee,
+  libhandy,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

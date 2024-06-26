@@ -1,9 +1,10 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, pkg-config
-, gtk3
-, xsettingsd
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  pkg-config,
+  gtk3,
+  xsettingsd,
 }:
 
 stdenv.mkDerivation rec {
@@ -17,9 +18,7 @@ stdenv.mkDerivation rec {
     sha256 = "14z7hg9c7q8wliyqv68kp080mmk2rh6kpww6pn87hy7lwq20l2b7";
   };
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
     gtk3

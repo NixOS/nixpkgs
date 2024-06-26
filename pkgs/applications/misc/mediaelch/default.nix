@@ -1,22 +1,23 @@
-{ lib
-, stdenv
-, fetchFromGitHub
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
 
-, cmake
-, qttools
-, wrapQtAppsHook
+  cmake,
+  qttools,
+  wrapQtAppsHook,
 
-, curl
-, ffmpeg
-, libmediainfo
-, libzen
-, qt5compat ? null # qt6 only
-, qtbase
-, qtdeclarative
-, qtmultimedia
-, qtsvg
-, qtwayland
-, quazip
+  curl,
+  ffmpeg,
+  libmediainfo,
+  libzen,
+  qt5compat ? null, # qt6 only
+  qtbase,
+  qtdeclarative,
+  qtmultimedia,
+  qtsvg,
+  qtwayland,
+  quazip,
 }:
 let
   qtVersion = lib.versions.major qtbase.version;
@@ -50,10 +51,7 @@ stdenv.mkDerivation rec {
     qtsvg
     qtwayland
     quazip
-  ] ++ lib.optionals (qtVersion == "6") [
-    qt5compat
-  ];
-
+  ] ++ lib.optionals (qtVersion == "6") [ qt5compat ];
 
   cmakeFlags = [
     "-DDISABLE_UPDATER=ON"
@@ -62,9 +60,7 @@ stdenv.mkDerivation rec {
   ];
 
   # libmediainfo.so.0 is loaded dynamically
-  qtWrapperArgs = [
-    "--prefix LD_LIBRARY_PATH : ${libmediainfo}/lib"
-  ];
+  qtWrapperArgs = [ "--prefix LD_LIBRARY_PATH : ${libmediainfo}/lib" ];
 
   meta = with lib; {
     homepage = "https://mediaelch.de/mediaelch/";

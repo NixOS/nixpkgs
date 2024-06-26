@@ -1,4 +1,15 @@
-{ lib, stdenv, fetchFromGitHub, boost, libseccomp, flex, swig4, bison, cmake, python3 }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  boost,
+  libseccomp,
+  flex,
+  swig4,
+  bison,
+  cmake,
+  python3,
+}:
 
 stdenv.mkDerivation rec {
   pname = "grap";

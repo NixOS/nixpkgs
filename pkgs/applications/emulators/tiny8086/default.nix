@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, localBios ? true
-, nasm
-, sdlSupport ? true
-, SDL
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  localBios ? true,
+  nasm,
+  sdlSupport ? true,
+  SDL,
 }:
 
 stdenv.mkDerivation rec {
@@ -18,8 +19,7 @@ stdenv.mkDerivation rec {
     sha256 = "00aydg8f28sgy8l3rd2a7jvp56lx3b63hhak43p7g7vjdikv495w";
   };
 
-  buildInputs = lib.optional localBios nasm
-    ++ lib.optional sdlSupport SDL;
+  buildInputs = lib.optional localBios nasm ++ lib.optional sdlSupport SDL;
 
   makeFlags = [ "8086tiny" ];
 

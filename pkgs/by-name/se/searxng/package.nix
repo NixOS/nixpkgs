@@ -2,7 +2,7 @@
   lib,
   python3,
   fetchFromGitHub,
-  nixosTests
+  nixosTests,
 }:
 
 python3.pkgs.toPythonModule (

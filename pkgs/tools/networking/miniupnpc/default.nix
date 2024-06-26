@@ -1,7 +1,8 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
 }:
 
 stdenv.mkDerivation rec {
@@ -11,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "miniupnp";
     repo = "miniupnp";
-    rev = "miniupnpc_${lib.replaceStrings ["."] ["_"] version}";
+    rev = "miniupnpc_${lib.replaceStrings [ "." ] [ "_" ] version}";
     hash = "sha256-cIijY1NcdF169tibfB13845UT9ZoJ/CZ+XLES9ctWTY=";
   };
 

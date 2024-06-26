@@ -1,11 +1,12 @@
-{ lib
-, fetchFromGitHub
-, rustPlatform
-, stdenv
-, Security
-, SystemConfiguration
-, installShellFiles
-, nix-update-script
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  stdenv,
+  Security,
+  SystemConfiguration,
+  installShellFiles,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -24,13 +25,14 @@ rustPlatform.buildRustPackage rec {
   # At the time of writing, upstream defaults to "self-update" and "webdav".
   # "self-update" is a self-updater, which we don't want in nixpkgs.
   buildNoDefaultFeatures = true;
-  buildFeatures = [
-    "webdav"
-  ];
+  buildFeatures = [ "webdav" ];
 
   nativeBuildInputs = [ installShellFiles ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [ Security SystemConfiguration ];
+  buildInputs = lib.optionals stdenv.isDarwin [
+    Security
+    SystemConfiguration
+  ];
 
   postInstall = ''
     for shell in {ba,fi,z}sh; do
@@ -48,7 +50,10 @@ rustPlatform.buildRustPackage rec {
     description = "fast, encrypted, deduplicated backups powered by pure Rust";
     mainProgram = "rustic";
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
-    license = [ lib.licenses.mit lib.licenses.asl20 ];
+    license = [
+      lib.licenses.mit
+      lib.licenses.asl20
+    ];
     maintainers = [ lib.maintainers.nobbz ];
   };
 }

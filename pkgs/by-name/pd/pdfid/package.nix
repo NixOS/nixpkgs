@@ -1,8 +1,9 @@
-{ lib
-, fetchzip
-, python3
-, python3Packages
-, makeBinaryWrapper
+{
+  lib,
+  fetchzip,
+  python3,
+  python3Packages,
+  makeBinaryWrapper,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -16,9 +17,7 @@ python3Packages.buildPythonApplication rec {
     stripRoot = false;
   };
 
-  nativeBuildInputs = [
-    makeBinaryWrapper
-  ];
+  nativeBuildInputs = [ makeBinaryWrapper ];
 
   installPhase = ''
     runHook preInstall

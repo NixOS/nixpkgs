@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, ncurses
-, enableSdl2 ? true
-, SDL2
-, SDL2_image
-, SDL2_sound
-, SDL2_mixer
-, SDL2_ttf
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  ncurses,
+  enableSdl2 ? true,
+  SDL2,
+  SDL2_image,
+  SDL2_sound,
+  SDL2_mixer,
+  SDL2_ttf,
 }:
 
 stdenv.mkDerivation rec {
@@ -23,14 +24,15 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [ ncurses ]
+  buildInputs =
+    [ ncurses ]
     ++ lib.optionals enableSdl2 [
-    SDL2
-    SDL2_image
-    SDL2_sound
-    SDL2_mixer
-    SDL2_ttf
-  ];
+      SDL2
+      SDL2_image
+      SDL2_sound
+      SDL2_mixer
+      SDL2_ttf
+    ];
 
   enableParallelBuilding = true;
 

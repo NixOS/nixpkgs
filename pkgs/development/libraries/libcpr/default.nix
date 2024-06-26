@@ -1,11 +1,22 @@
-{ lib, stdenv, fetchFromGitHub, cmake, curl }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  curl,
+}:
 
-let version = "1.10.5"; in
+let
+  version = "1.10.5";
+in
 stdenv.mkDerivation {
   pname = "libcpr";
   inherit version;
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   src = fetchFromGitHub {
     owner = "libcpr";
@@ -18,9 +29,7 @@ stdenv.mkDerivation {
 
   propagatedBuildInputs = [ curl ];
 
-  cmakeFlags = [
-    "-DCPR_USE_SYSTEM_CURL=ON"
-  ];
+  cmakeFlags = [ "-DCPR_USE_SYSTEM_CURL=ON" ];
 
   postPatch = ''
     # Linking with stdc++fs is no longer necessary.

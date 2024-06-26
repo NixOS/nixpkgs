@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchbzr, xorg }:
+{
+  lib,
+  stdenv,
+  fetchbzr,
+  xorg,
+}:
 
 stdenv.mkDerivation rec {
   pname = "xwinwrap";
@@ -16,11 +21,17 @@ stdenv.mkDerivation rec {
     xorg.libXrender
   ];
 
-  buildPhase = if stdenv.hostPlatform.system == "x86_64-linux" then ''
-    make all64
-  '' else if stdenv.hostPlatform.system == "i686-linux" then ''
-    make all32
-  '' else throw "xwinwrap is not supported on ${stdenv.hostPlatform.system}";
+  buildPhase =
+    if stdenv.hostPlatform.system == "x86_64-linux" then
+      ''
+        make all64
+      ''
+    else if stdenv.hostPlatform.system == "i686-linux" then
+      ''
+        make all32
+      ''
+    else
+      throw "xwinwrap is not supported on ${stdenv.hostPlatform.system}";
 
   installPhase = ''
     mkdir -p $out/bin

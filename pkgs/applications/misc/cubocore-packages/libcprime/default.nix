@@ -1,11 +1,12 @@
-{ mkDerivation
-, lib
-, fetchFromGitLab
-, libnotify
-, cmake
-, ninja
-, qtbase
-, qtconnectivity
+{
+  mkDerivation,
+  lib,
+  fetchFromGitLab,
+  libnotify,
+  cmake,
+  ninja,
+  qtbase,
+  qtconnectivity,
 }:
 
 mkDerivation rec {
@@ -19,9 +20,7 @@ mkDerivation rec {
     hash = "sha256-j6WFLcjDMkYl+9HCmhMRttwtjNX05oP5mfdOsoLC7og=";
   };
 
-  patches = [
-    ./0001-fix-application-dirs.patch
-  ];
+  patches = [ ./0001-fix-application-dirs.patch ];
 
   nativeBuildInputs = [
     cmake

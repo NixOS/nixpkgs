@@ -1,18 +1,19 @@
-{ appstream
-, blueprint-compiler
-, desktop-file-utils
-, fetchFromGitHub
-, gettext
-, glib
-, gtk4
-, lib
-, libadwaita
-, meson
-, mesonEmulatorHook
-, ninja
-, pkg-config
-, stdenv
-, wrapGAppsHook4
+{
+  appstream,
+  blueprint-compiler,
+  desktop-file-utils,
+  fetchFromGitHub,
+  gettext,
+  glib,
+  gtk4,
+  lib,
+  libadwaita,
+  meson,
+  mesonEmulatorHook,
+  ninja,
+  pkg-config,
+  stdenv,
+  wrapGAppsHook4,
 }:
 
 stdenv.mkDerivation rec {
@@ -34,9 +35,7 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     wrapGAppsHook4
-  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-    mesonEmulatorHook
-  ];
+  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [ mesonEmulatorHook ];
 
   buildInputs = [
     gtk4
@@ -59,7 +58,10 @@ stdenv.mkDerivation rec {
     homepage = "https://apps.gnome.org/Raider";
     license = licenses.gpl3Plus;
     mainProgram = "raider";
-    maintainers = with maintainers; [ benediktbroich aleksana ];
+    maintainers = with maintainers; [
+      benediktbroich
+      aleksana
+    ];
     platforms = platforms.unix;
   };
 }

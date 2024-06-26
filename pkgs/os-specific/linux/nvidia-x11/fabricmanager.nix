@@ -1,10 +1,15 @@
 nvidia_x11: sha256:
 
-{ stdenv, lib, fetchurl, patchelf }:
+{
+  stdenv,
+  lib,
+  fetchurl,
+  patchelf,
+}:
 
 let
   sys = with lib; concatStringsSep "-" (reverseList (splitString "-" stdenv.system));
-  bsys = builtins.replaceStrings ["_"] ["-"] sys;
+  bsys = builtins.replaceStrings [ "_" ] [ "-" ] sys;
   fmver = nvidia_x11.version;
 in
 
@@ -12,8 +17,9 @@ stdenv.mkDerivation rec {
   pname = "fabricmanager";
   version = fmver;
   src = fetchurl {
-    url = "https://developer.download.nvidia.com/compute/nvidia-driver/redist/fabricmanager/" +
-          "${sys}/${pname}-${sys}-${fmver}-archive.tar.xz";
+    url =
+      "https://developer.download.nvidia.com/compute/nvidia-driver/redist/fabricmanager/"
+      + "${sys}/${pname}-${sys}-${fmver}-archive.tar.xz";
     inherit sha256;
   };
 

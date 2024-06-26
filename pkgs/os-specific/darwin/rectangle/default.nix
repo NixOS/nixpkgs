@@ -1,8 +1,9 @@
-{ lib
-, stdenvNoCC
-, fetchurl
-, undmg
-, gitUpdater
+{
+  lib,
+  stdenvNoCC,
+  fetchurl,
+  undmg,
+  gitUpdater,
 }:
 
 stdenvNoCC.mkDerivation rec {
@@ -37,8 +38,11 @@ stdenvNoCC.mkDerivation rec {
     homepage = "https://rectangleapp.com/";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     platforms = platforms.darwin;
-    maintainers = with maintainers; [ Enzime Intuinewin wegank ];
+    maintainers = with maintainers; [
+      Enzime
+      Intuinewin
+      wegank
+    ];
     license = licenses.mit;
   };
 }
-

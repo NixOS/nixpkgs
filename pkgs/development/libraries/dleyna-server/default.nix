@@ -1,18 +1,19 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, fetchpatch
-, meson
-, ninja
-, makeWrapper
-, pkg-config
-, dleyna-core
-, dleyna-connector-dbus
-, gssdp
-, gupnp
-, gupnp-av
-, gupnp-dlna
-, libsoup
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  meson,
+  ninja,
+  makeWrapper,
+  pkg-config,
+  dleyna-core,
+  dleyna-connector-dbus,
+  gssdp,
+  gupnp,
+  gupnp-av,
+  gupnp-dlna,
+  libsoup,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,15 +1,33 @@
-{ lib, stdenv, fetchFromSavannah, flex, bison, python3, autoconf, automake, libtool, bash
-, gettext, ncurses, libusb-compat-0_1, freetype, qemu, lvm2, unifont, pkg-config
-, fetchzip
-, buildPackages
-, nixosTests
-, fuse # only needed for grub-mount
-, runtimeShell
-, zfs ? null
-, efiSupport ? false
-, zfsSupport ? false
-, xenSupport ? false
-, kbdcompSupport ? false, ckbcomp
+{
+  lib,
+  stdenv,
+  fetchFromSavannah,
+  flex,
+  bison,
+  python3,
+  autoconf,
+  automake,
+  libtool,
+  bash,
+  gettext,
+  ncurses,
+  libusb-compat-0_1,
+  freetype,
+  qemu,
+  lvm2,
+  unifont,
+  pkg-config,
+  fetchzip,
+  buildPackages,
+  nixosTests,
+  fuse, # only needed for grub-mount
+  runtimeShell,
+  zfs ? null,
+  efiSupport ? false,
+  zfsSupport ? false,
+  xenSupport ? false,
+  kbdcompSupport ? false,
+  ckbcomp,
 }:
 
 let
@@ -38,8 +56,12 @@ let
     riscv64-linux.target = "riscv64";
   };
 
-  canEfi = lib.any (system: stdenv.hostPlatform.system == system) (lib.mapAttrsToList (name: _: name) efiSystemsBuild);
-  inPCSystems = lib.any (system: stdenv.hostPlatform.system == system) (lib.mapAttrsToList (name: _: name) pcSystems);
+  canEfi = lib.any (system: stdenv.hostPlatform.system == system) (
+    lib.mapAttrsToList (name: _: name) efiSystemsBuild
+  );
+  inPCSystems = lib.any (system: stdenv.hostPlatform.system == system) (
+    lib.mapAttrsToList (name: _: name) pcSystems
+  );
 
   gnulib = fetchFromSavannah {
     repo = "gnulib";
@@ -61,146 +83,186 @@ let
     url = "https://ftp.gnu.org/gnu/grub/grub-2.12.tar.gz";
     hash = "sha256-IoRiJHNQ58y0UhCAD0CrpFiI8Mz1upzAtyh5K4Njh/w=";
   };
-in (
+in
+(
 
-assert efiSupport -> canEfi;
-assert zfsSupport -> zfs != null;
-assert !(efiSupport && xenSupport);
+  assert efiSupport -> canEfi;
+  assert zfsSupport -> zfs != null;
+  assert !(efiSupport && xenSupport);
 
-stdenv.mkDerivation rec {
-  pname = "grub";
-  version = "2.12";
-  inherit src;
+  stdenv.mkDerivation rec {
+    pname = "grub";
+    version = "2.12";
+    inherit src;
 
-  patches = [
-    ./fix-bash-completion.patch
-    ./add-hidden-menu-entries.patch
-  ];
+    patches = [
+      ./fix-bash-completion.patch
+      ./add-hidden-menu-entries.patch
+    ];
 
-  postPatch = if kbdcompSupport then ''
-    sed -i util/grub-kbdcomp.in -e 's@\bckbcomp\b@${ckbcomp}/bin/ckbcomp@'
-  '' else ''
-    echo '#! ${runtimeShell}' > util/grub-kbdcomp.in
-    echo 'echo "Compile grub2 with { kbdcompSupport = true; } to enable support for this command."' >> util/grub-kbdcomp.in
-  '';
+    postPatch =
+      if kbdcompSupport then
+        ''
+          sed -i util/grub-kbdcomp.in -e 's@\bckbcomp\b@${ckbcomp}/bin/ckbcomp@'
+        ''
+      else
+        ''
+          echo '#! ${runtimeShell}' > util/grub-kbdcomp.in
+          echo 'echo "Compile grub2 with { kbdcompSupport = true; } to enable support for this command."' >> util/grub-kbdcomp.in
+        '';
 
-  depsBuildBuild = [ buildPackages.stdenv.cc ];
-  nativeBuildInputs = [ bison flex python3 pkg-config gettext freetype autoconf automake ];
-  buildInputs = [ ncurses libusb-compat-0_1 freetype lvm2 fuse libtool bash ]
-    ++ lib.optional doCheck qemu
-    ++ lib.optional zfsSupport zfs;
+    depsBuildBuild = [ buildPackages.stdenv.cc ];
+    nativeBuildInputs = [
+      bison
+      flex
+      python3
+      pkg-config
+      gettext
+      freetype
+      autoconf
+      automake
+    ];
+    buildInputs = [
+      ncurses
+      libusb-compat-0_1
+      freetype
+      lvm2
+      fuse
+      libtool
+      bash
+    ] ++ lib.optional doCheck qemu ++ lib.optional zfsSupport zfs;
 
-  strictDeps = true;
+    strictDeps = true;
 
-  hardeningDisable = [ "all" ];
+    hardeningDisable = [ "all" ];
 
-  separateDebugInfo = !xenSupport;
+    separateDebugInfo = !xenSupport;
 
-  preConfigure =
-    '' for i in "tests/util/"*.in
-       do
-         sed -i "$i" -e's|/bin/bash|${stdenv.shell}|g'
-       done
+    preConfigure = ''
+      for i in "tests/util/"*.in
+            do
+              sed -i "$i" -e's|/bin/bash|${stdenv.shell}|g'
+            done
 
-       # Apparently, the QEMU executable is no longer called
-       # `qemu-system-i386', even on i386.
-       #
-       # In addition, use `-nodefaults' to avoid errors like:
-       #
-       #  chardev: opening backend "stdio" failed
-       #  qemu: could not open serial device 'stdio': Invalid argument
-       #
-       # See <http://www.mail-archive.com/qemu-devel@nongnu.org/msg22775.html>.
-       sed -i "tests/util/grub-shell.in" \
-           -e's/qemu-system-i386/qemu-system-x86_64 -nodefaults/g'
+            # Apparently, the QEMU executable is no longer called
+            # `qemu-system-i386', even on i386.
+            #
+            # In addition, use `-nodefaults' to avoid errors like:
+            #
+            #  chardev: opening backend "stdio" failed
+            #  qemu: could not open serial device 'stdio': Invalid argument
+            #
+            # See <http://www.mail-archive.com/qemu-devel@nongnu.org/msg22775.html>.
+            sed -i "tests/util/grub-shell.in" \
+                -e's/qemu-system-i386/qemu-system-x86_64 -nodefaults/g'
 
-      unset CPP # setting CPP intereferes with dependency calculation
+           unset CPP # setting CPP intereferes with dependency calculation
 
-      patchShebangs .
+           patchShebangs .
 
-      GNULIB_REVISION=$(. bootstrap.conf; echo $GNULIB_REVISION)
-      if [ "$GNULIB_REVISION" != ${gnulib.rev} ]; then
-        echo "This version of GRUB requires a different gnulib revision!"
-        echo "We have: ${gnulib.rev}"
-        echo "GRUB needs: $GNULIB_REVISION"
-        exit 1
-      fi
+           GNULIB_REVISION=$(. bootstrap.conf; echo $GNULIB_REVISION)
+           if [ "$GNULIB_REVISION" != ${gnulib.rev} ]; then
+             echo "This version of GRUB requires a different gnulib revision!"
+             echo "We have: ${gnulib.rev}"
+             echo "GRUB needs: $GNULIB_REVISION"
+             exit 1
+           fi
 
-      cp -f --no-preserve=mode ${locales}/po/LINGUAS ${locales}/po/*.po po
+           cp -f --no-preserve=mode ${locales}/po/LINGUAS ${locales}/po/*.po po
 
-      ./bootstrap --no-git --gnulib-srcdir=${gnulib}
+           ./bootstrap --no-git --gnulib-srcdir=${gnulib}
 
-      substituteInPlace ./configure --replace '/usr/share/fonts/unifont' '${unifont}/share/fonts'
+           substituteInPlace ./configure --replace '/usr/share/fonts/unifont' '${unifont}/share/fonts'
     '';
 
-  postConfigure = ''
-    # make sure .po files are up to date to workaround
-    # parallel `msgmerge --update` on autogenerated .po files:
-    #   https://github.com/NixOS/nixpkgs/pull/248747#issuecomment-1676301670
-    make dist
-  '';
+    postConfigure = ''
+      # make sure .po files are up to date to workaround
+      # parallel `msgmerge --update` on autogenerated .po files:
+      #   https://github.com/NixOS/nixpkgs/pull/248747#issuecomment-1676301670
+      make dist
+    '';
 
-  configureFlags = [
-    "--enable-grub-mount" # dep of os-prober
-  ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-    # grub doesn't do cross-compilation as usual and tries to use unprefixed
-    # tools to target the host. Provide toolchain information explicitly for
-    # cross builds.
-    #
-    # Ref: # https://github.com/buildroot/buildroot/blob/master/boot/grub2/grub2.mk#L108
-    "TARGET_CC=${stdenv.cc.targetPrefix}cc"
-    "TARGET_NM=${stdenv.cc.targetPrefix}nm"
-    "TARGET_OBJCOPY=${stdenv.cc.targetPrefix}objcopy"
-    "TARGET_RANLIB=${stdenv.cc.targetPrefix}ranlib"
-    "TARGET_STRIP=${stdenv.cc.targetPrefix}strip"
-  ] ++ lib.optional zfsSupport "--enable-libzfs"
-    ++ lib.optionals efiSupport [ "--with-platform=efi" "--target=${efiSystemsBuild.${stdenv.hostPlatform.system}.target}" "--program-prefix=" ]
-    ++ lib.optionals xenSupport [ "--with-platform=xen" "--target=${efiSystemsBuild.${stdenv.hostPlatform.system}.target}"];
+    configureFlags =
+      [
+        "--enable-grub-mount" # dep of os-prober
+      ]
+      ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+        # grub doesn't do cross-compilation as usual and tries to use unprefixed
+        # tools to target the host. Provide toolchain information explicitly for
+        # cross builds.
+        #
+        # Ref: # https://github.com/buildroot/buildroot/blob/master/boot/grub2/grub2.mk#L108
+        "TARGET_CC=${stdenv.cc.targetPrefix}cc"
+        "TARGET_NM=${stdenv.cc.targetPrefix}nm"
+        "TARGET_OBJCOPY=${stdenv.cc.targetPrefix}objcopy"
+        "TARGET_RANLIB=${stdenv.cc.targetPrefix}ranlib"
+        "TARGET_STRIP=${stdenv.cc.targetPrefix}strip"
+      ]
+      ++ lib.optional zfsSupport "--enable-libzfs"
+      ++ lib.optionals efiSupport [
+        "--with-platform=efi"
+        "--target=${efiSystemsBuild.${stdenv.hostPlatform.system}.target}"
+        "--program-prefix="
+      ]
+      ++ lib.optionals xenSupport [
+        "--with-platform=xen"
+        "--target=${efiSystemsBuild.${stdenv.hostPlatform.system}.target}"
+      ];
 
-  # save target that grub is compiled for
-  grubTarget = if efiSupport
-               then "${efiSystemsInstall.${stdenv.hostPlatform.system}.target}-efi"
-               else lib.optionalString inPCSystems "${pcSystems.${stdenv.hostPlatform.system}.target}-pc";
+    # save target that grub is compiled for
+    grubTarget =
+      if efiSupport then
+        "${efiSystemsInstall.${stdenv.hostPlatform.system}.target}-efi"
+      else
+        lib.optionalString inPCSystems "${pcSystems.${stdenv.hostPlatform.system}.target}-pc";
 
-  doCheck = false;
-  enableParallelBuilding = true;
+    doCheck = false;
+    enableParallelBuilding = true;
 
-  postInstall = ''
-    # Avoid a runtime reference to gcc
-    sed -i $out/lib/grub/*/modinfo.sh -e "/grub_target_cppflags=/ s|'.*'|' '|"
-    # just adding bash to buildInputs wasn't enough to fix the shebang
-    substituteInPlace $out/lib/grub/*/modinfo.sh \
-      --replace ${buildPackages.bash} "/usr/bin/bash"
-  '';
+    postInstall = ''
+      # Avoid a runtime reference to gcc
+      sed -i $out/lib/grub/*/modinfo.sh -e "/grub_target_cppflags=/ s|'.*'|' '|"
+      # just adding bash to buildInputs wasn't enough to fix the shebang
+      substituteInPlace $out/lib/grub/*/modinfo.sh \
+        --replace ${buildPackages.bash} "/usr/bin/bash"
+    '';
 
-  passthru.tests = {
-    nixos-grub = nixosTests.grub;
-    nixos-install-simple = nixosTests.installer.simple;
-    nixos-install-grub-uefi = nixosTests.installer.simpleUefiGrub;
-    nixos-install-grub-uefi-spec = nixosTests.installer.simpleUefiGrubSpecialisation;
-  };
+    passthru.tests = {
+      nixos-grub = nixosTests.grub;
+      nixos-install-simple = nixosTests.installer.simple;
+      nixos-install-grub-uefi = nixosTests.installer.simpleUefiGrub;
+      nixos-install-grub-uefi-spec = nixosTests.installer.simpleUefiGrubSpecialisation;
+    };
 
-  meta = with lib; {
-    description = "GNU GRUB, the Grand Unified Boot Loader";
+    meta = with lib; {
+      description = "GNU GRUB, the Grand Unified Boot Loader";
 
-    longDescription =
-      '' GNU GRUB is a Multiboot boot loader. It was derived from GRUB, GRand
-         Unified Bootloader, which was originally designed and implemented by
-         Erich Stefan Boleyn.
+      longDescription = ''
+        GNU GRUB is a Multiboot boot loader. It was derived from GRUB, GRand
+                Unified Bootloader, which was originally designed and implemented by
+                Erich Stefan Boleyn.
 
-         Briefly, the boot loader is the first software program that runs when a
-         computer starts.  It is responsible for loading and transferring
-         control to the operating system kernel software (such as the Hurd or
-         the Linux).  The kernel, in turn, initializes the rest of the
-         operating system (e.g., GNU).
+                Briefly, the boot loader is the first software program that runs when a
+                computer starts.  It is responsible for loading and transferring
+                control to the operating system kernel software (such as the Hurd or
+                the Linux).  The kernel, in turn, initializes the rest of the
+                operating system (e.g., GNU).
       '';
 
-    homepage = "https://www.gnu.org/software/grub/";
+      homepage = "https://www.gnu.org/software/grub/";
 
-    license = licenses.gpl3Plus;
+      license = licenses.gpl3Plus;
 
-    platforms = if xenSupport then [ "x86_64-linux" "i686-linux" ] else platforms.gnu ++ platforms.linux;
+      platforms =
+        if xenSupport then
+          [
+            "x86_64-linux"
+            "i686-linux"
+          ]
+        else
+          platforms.gnu ++ platforms.linux;
 
-    maintainers = [ ];
-  };
-})
+      maintainers = [ ];
+    };
+  }
+)

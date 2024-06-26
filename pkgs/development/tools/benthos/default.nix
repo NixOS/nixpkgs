@@ -1,6 +1,7 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
 
 buildGoModule rec {
@@ -20,9 +21,7 @@ buildGoModule rec {
 
   doCheck = false;
 
-  subPackages = [
-    "cmd/benthos"
-  ];
+  subPackages = [ "cmd/benthos" ];
 
   ldflags = [
     "-s"

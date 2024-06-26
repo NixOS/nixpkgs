@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, meson
-, ninja
-, gdk-pixbuf
-, gd
-, libjpeg
-, pkg-config
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  gdk-pixbuf,
+  gd,
+  libjpeg,
+  pkg-config,
 }:
 stdenv.mkDerivation rec {
   pname = "libsixel";
@@ -20,11 +21,14 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    gdk-pixbuf gd
+    gdk-pixbuf
+    gd
   ];
 
   nativeBuildInputs = [
-    meson ninja pkg-config
+    meson
+    ninja
+    pkg-config
   ];
 
   doCheck = true;

@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -6,7 +11,8 @@ let
 
   cfg = config.services.slimserver;
 
-in {
+in
+{
   options = {
 
     services.slimserver = {
@@ -32,14 +38,11 @@ in {
     };
   };
 
-
   ###### implementation
 
   config = mkIf cfg.enable {
 
-    systemd.tmpfiles.rules = [
-      "d '${cfg.dataDir}' - slimserver slimserver - -"
-    ];
+    systemd.tmpfiles.rules = [ "d '${cfg.dataDir}' - slimserver slimserver - -" ];
 
     systemd.services.slimserver = {
       after = [ "network.target" ];
@@ -60,9 +63,8 @@ in {
         group = "slimserver";
         isSystemUser = true;
       };
-      groups.slimserver = {};
+      groups.slimserver = { };
     };
   };
 
 }
-

@@ -1,19 +1,28 @@
-{ lib, config, pkgs, ... }:
+{
+  lib,
+  config,
+  pkgs,
+  ...
+}:
 let
   cfg = config.programs.goldwarden;
 in
 {
   options.programs.goldwarden = {
     enable = lib.mkEnableOption "Goldwarden";
-    package = lib.mkPackageOption pkgs "goldwarden" {};
-    useSshAgent = lib.mkEnableOption "Goldwarden's SSH Agent" // { default = true; };
+    package = lib.mkPackageOption pkgs "goldwarden" { };
+    useSshAgent = lib.mkEnableOption "Goldwarden's SSH Agent" // {
+      default = true;
+    };
   };
 
   config = lib.mkIf cfg.enable {
-    assertions = [{
-       assertion = cfg.useSshAgent -> !config.programs.ssh.startAgent;
-       message = "Only one ssh-agent can be used at a time.";
-    }];
+    assertions = [
+      {
+        assertion = cfg.useSshAgent -> !config.programs.ssh.startAgent;
+        message = "Only one ssh-agent can be used at a time.";
+      }
+    ];
 
     environment = {
       etc = lib.mkIf config.programs.chromium.enable {

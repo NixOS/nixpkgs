@@ -1,4 +1,13 @@
-{ lib, stdenv, fetchurl, getopt, util-linuxMinimal, which, gperf, nix-update-script }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  getopt,
+  util-linuxMinimal,
+  which,
+  gperf,
+  nix-update-script,
+}:
 
 stdenv.mkDerivation rec {
   pname = "libseccomp";
@@ -9,7 +18,13 @@ stdenv.mkDerivation rec {
     hash = "sha256-JIosik2bmFiqa69ScSw0r+/PnJ6Ut23OAsHJqiX7M3U=";
   };
 
-  outputs = [ "out" "lib" "dev" "man" "pythonsrc" ];
+  outputs = [
+    "out"
+    "lib"
+    "dev"
+    "man"
+    "pythonsrc"
+  ];
 
   nativeBuildInputs = [ gperf ];
   buildInputs = [ getopt ];
@@ -18,7 +33,10 @@ stdenv.mkDerivation rec {
     patchShebangs .
   '';
 
-  nativeCheckInputs = [ util-linuxMinimal which ];
+  nativeCheckInputs = [
+    util-linuxMinimal
+    which
+  ];
   doCheck = true;
 
   # Hack to ensure that patchelf --shrink-rpath get rids of a $TMPDIR reference.

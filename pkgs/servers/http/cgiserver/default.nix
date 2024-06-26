@@ -1,4 +1,9 @@
-{ lib, buildGoModule, fetchzip, zstd }:
+{
+  lib,
+  buildGoModule,
+  fetchzip,
+  zstd,
+}:
 
 buildGoModule rec {
   pname = "cgiserver";

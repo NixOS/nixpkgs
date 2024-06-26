@@ -1,12 +1,13 @@
-{ fetchurl
-, lib
-, stdenv
-, ocaml
-, isabelle
-, cvc3
-, perl
-, wget
-, which
+{
+  fetchurl,
+  lib,
+  stdenv,
+  ocaml,
+  isabelle,
+  cvc3,
+  perl,
+  wget,
+  which,
 }:
 
 stdenv.mkDerivation rec {
@@ -19,7 +20,14 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  nativeBuildInputs = [ ocaml isabelle cvc3 perl wget which ];
+  nativeBuildInputs = [
+    ocaml
+    isabelle
+    cvc3
+    perl
+    wget
+    which
+  ];
 
   installPhase = ''
     mkdir -pv "$out"

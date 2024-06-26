@@ -1,6 +1,16 @@
-{ lib, stdenv, fetchurl, autoreconfHook, autoconf-archive, pkg-config, kmod
-, enable-tools ? true
-, enablePython ? false, python3, ncurses }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoreconfHook,
+  autoconf-archive,
+  pkg-config,
+  kmod,
+  enable-tools ? true,
+  enablePython ? false,
+  python3,
+  ncurses,
+}:
 
 stdenv.mkDerivation rec {
   pname = "libgpiod";
@@ -17,7 +27,12 @@ stdenv.mkDerivation rec {
     ./0001-Drop-AC_FUNC_MALLOC-and-_REALLOC-and-check-for-them-.patch
   ];
 
-  buildInputs = [ kmod ] ++ lib.optionals enablePython [ python3 ncurses ];
+  buildInputs =
+    [ kmod ]
+    ++ lib.optionals enablePython [
+      python3
+      ncurses
+    ];
   nativeBuildInputs = [
     autoconf-archive
     pkg-config

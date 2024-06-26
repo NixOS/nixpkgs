@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchurl, groff }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  groff,
+}:
 
 stdenv.mkDerivation rec {
   pname = "setserial";

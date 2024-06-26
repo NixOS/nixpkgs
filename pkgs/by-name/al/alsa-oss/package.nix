@@ -1,4 +1,12 @@
-{lib, stdenv, fetchurl, alsa-lib, gettext, ncurses, libsamplerate}:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  alsa-lib,
+  gettext,
+  ncurses,
+  libsamplerate,
+}:
 
 stdenv.mkDerivation rec {
   pname = "alsa-oss";
@@ -9,7 +17,11 @@ stdenv.mkDerivation rec {
     sha256 = "13nn6n6wpr2sj1hyqx4r9nb9bwxnhnzw8r2f08p8v13yjbswxbb4";
   };
 
-  buildInputs = [ alsa-lib ncurses libsamplerate ];
+  buildInputs = [
+    alsa-lib
+    ncurses
+    libsamplerate
+  ];
   nativeBuildInputs = [ gettext ];
 
   configureFlags = [ "--disable-xmlto" ];

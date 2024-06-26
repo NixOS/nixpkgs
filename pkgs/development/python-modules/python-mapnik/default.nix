@@ -110,21 +110,23 @@ buildPythonPackage rec {
     '';
 
   # https://github.com/mapnik/python-mapnik/issues/255
-  disabledTests = [
-    "test_geometry_type"
-    "test_passing_pycairo_context_pdf"
-    "test_pdf_printing"
-    "test_render_with_scale_factor"
-  ] ++ lib.optionals stdenv.isDarwin [
-    "test_passing_pycairo_context_png"
-    "test_passing_pycairo_context_svg"
-    "test_pycairo_pdf_surface1"
-    "test_pycairo_pdf_surface2"
-    "test_pycairo_pdf_surface3"
-    "test_pycairo_svg_surface1"
-    "test_pycairo_svg_surface2"
-    "test_pycairo_svg_surface3"
-  ];
+  disabledTests =
+    [
+      "test_geometry_type"
+      "test_passing_pycairo_context_pdf"
+      "test_pdf_printing"
+      "test_render_with_scale_factor"
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      "test_passing_pycairo_context_png"
+      "test_passing_pycairo_context_svg"
+      "test_pycairo_pdf_surface1"
+      "test_pycairo_pdf_surface2"
+      "test_pycairo_pdf_surface3"
+      "test_pycairo_svg_surface1"
+      "test_pycairo_svg_surface2"
+      "test_pycairo_svg_surface3"
+    ];
 
   pythonImportsCheck = [ "mapnik" ];
 

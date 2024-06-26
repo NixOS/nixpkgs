@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchurl
-, updateAutotoolsGnuConfigScriptsHook
-, withJitSealloc ? true
+{
+  lib,
+  stdenv,
+  fetchurl,
+  updateAutotoolsGnuConfigScriptsHook,
+  withJitSealloc ? true,
 }:
 
 stdenv.mkDerivation rec {
@@ -26,16 +27,26 @@ stdenv.mkDerivation rec {
       '#include "src/sljit/sljitConfigCPU.h"'
   '';
 
-  configureFlags = [
-    "--enable-pcre2-16"
-    "--enable-pcre2-32"
-    # only enable jit on supported platforms which excludes Apple Silicon, see https://github.com/zherczeg/sljit/issues/51
-    "--enable-jit=${if stdenv.hostPlatform.isS390x || stdenv.hostPlatform.isLoongArch64 then "no" else "auto"}"
-  ]
-  # fix pcre jit in systemd units that set MemoryDenyWriteExecute=true like gitea
-  ++ lib.optional withJitSealloc "--enable-jit-sealloc";
+  configureFlags =
+    [
+      "--enable-pcre2-16"
+      "--enable-pcre2-32"
+      # only enable jit on supported platforms which excludes Apple Silicon, see https://github.com/zherczeg/sljit/issues/51
+      "--enable-jit=${
+        if stdenv.hostPlatform.isS390x || stdenv.hostPlatform.isLoongArch64 then "no" else "auto"
+      }"
+    ]
+    # fix pcre jit in systemd units that set MemoryDenyWriteExecute=true like gitea
+    ++ lib.optional withJitSealloc "--enable-jit-sealloc";
 
-  outputs = [ "bin" "dev" "out" "doc" "man" "devdoc" ];
+  outputs = [
+    "bin"
+    "dev"
+    "out"
+    "doc"
+    "man"
+    "devdoc"
+  ];
 
   postFixup = ''
     moveToOutput bin/pcre2-config "$dev"

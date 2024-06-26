@@ -1,9 +1,7 @@
 {
 
   # Content-addressable Nix mirrors
-  hashedMirrors = [
-    "https://tarballs.nixos.org"
-  ];
+  hashedMirrors = [ "https://tarballs.nixos.org" ];
 
   # Mirrors for mirror://site/filename URIs, where "site" is
   # "sourceforge", "gnu", etc.
@@ -44,9 +42,7 @@
   ];
 
   # CRAN mirrors
-  cran = [
-    "https://cran.r-project.org/src/contrib/"
-  ];
+  cran = [ "https://cran.r-project.org/src/contrib/" ];
 
   # BitlBee mirrors, see https://www.bitlbee.org/main.php/mirrors.html
   bitlbee = [
@@ -142,14 +138,10 @@
   ];
 
   # MySQL
-  mysql = [
-    "https://cdn.mysql.com/Downloads/"
-  ];
+  mysql = [ "https://cdn.mysql.com/Downloads/" ];
 
   # Maven Central
-  maven = [
-    "https://repo1.maven.org/maven2/"
-  ];
+  maven = [ "https://repo1.maven.org/maven2/" ];
 
   # Mozilla projects
   mozilla = [
@@ -167,14 +159,10 @@
   ];
 
   # PostgreSQL
-  postgresql = [
-    "https://ftp.postgresql.org/pub/"
-  ];
+  postgresql = [ "https://ftp.postgresql.org/pub/" ];
 
   # Qt
-  qt = [
-    "https://download.qt.io/"
-  ];
+  qt = [ "https://download.qt.io/" ];
 
   # Sage mirrors (https://www.sagemath.org/mirrors.html)
   sageupstream = [
@@ -309,7 +297,7 @@
     "https://cpan.metacpan.org/"
     "https://cpan.perl.org/"
     "https://mirrors.kernel.org/CPAN/"
-    "https://backpan.perl.org/"  # for old releases
+    "https://backpan.perl.org/" # for old releases
   ];
 
   # D DUB
@@ -319,9 +307,7 @@
   ];
 
   # Haskell Hackage
-  hackage = [
-    "https://hackage.haskell.org/package/"
-  ];
+  hackage = [ "https://hackage.haskell.org/package/" ];
 
   # Lua Rocks
   luarocks = [
@@ -339,9 +325,7 @@
   ];
 
   # Python Test-PyPI
-  testpypi = [
-    "https://test.pypi.io/packages/source/"
-  ];
+  testpypi = [ "https://test.pypi.io/packages/source/" ];
 
   ### Linux distros
 

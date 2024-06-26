@@ -1,7 +1,14 @@
-{ stdenv, lib, fetchFromGitHub
-, pkg-config, cmake, libyaml
-, jansson, libvorbis, taglib
-, zlib
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  pkg-config,
+  cmake,
+  libyaml,
+  jansson,
+  libvorbis,
+  taglib,
+  zlib,
 }:
 
 stdenv.mkDerivation rec {

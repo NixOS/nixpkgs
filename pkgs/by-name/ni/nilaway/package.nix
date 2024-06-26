@@ -1,6 +1,7 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
 
 buildGoModule rec {
@@ -18,13 +19,19 @@ buildGoModule rec {
 
   excludedPackages = [ "tools" ];
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   meta = with lib; {
     description = "Static Analysis tool to detect potential Nil panics in Go code";
     homepage = "https://github.com/uber-go/nilaway";
     license = licenses.asl20;
-    maintainers = with maintainers; [ prit342 jk ];
+    maintainers = with maintainers; [
+      prit342
+      jk
+    ];
     mainProgram = "nilaway";
   };
 }

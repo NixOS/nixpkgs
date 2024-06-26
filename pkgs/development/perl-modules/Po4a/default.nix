@@ -1,26 +1,27 @@
-{ stdenv
-, lib
-, fetchurl
-, docbook_xsl
-, docbook_xsl_ns
-, gettext
-, libxslt
-, glibcLocales
-, docbook_xml_dtd_45
-, docbook_sgml_dtd_41
-, opensp
-, bash
-, perl
-, buildPerlPackage
-, ModuleBuild
-, TextWrapI18N
-, LocaleGettext
-, SGMLSpm
-, UnicodeLineBreak
-, PodParser
-, YAMLTiny
-, SyntaxKeywordTry
-, writeShellScriptBin
+{
+  stdenv,
+  lib,
+  fetchurl,
+  docbook_xsl,
+  docbook_xsl_ns,
+  gettext,
+  libxslt,
+  glibcLocales,
+  docbook_xml_dtd_45,
+  docbook_sgml_dtd_41,
+  opensp,
+  bash,
+  perl,
+  buildPerlPackage,
+  ModuleBuild,
+  TextWrapI18N,
+  LocaleGettext,
+  SGMLSpm,
+  UnicodeLineBreak,
+  PodParser,
+  YAMLTiny,
+  SyntaxKeywordTry,
+  writeShellScriptBin,
 }:
 
 buildPerlPackage rec {
@@ -40,8 +41,7 @@ buildPerlPackage rec {
     # shellscript that suffices for the tests in t/fmt/tex/, i.e. it looks up
     # article.cls to an existing file, but doesn't find article-wrong.cls.
     let
-      kpsewhich-stub = writeShellScriptBin "kpsewhich"
-        ''[[ $1 = "article.cls" ]] && echo /dev/null'';
+      kpsewhich-stub = writeShellScriptBin "kpsewhich" ''[[ $1 = "article.cls" ]] && echo /dev/null'';
     in
     [
       gettext
@@ -57,9 +57,7 @@ buildPerlPackage rec {
     ];
 
   # TODO: TermReadKey was temporarily removed from propagatedBuildInputs to unfreeze the build
-  propagatedBuildInputs = lib.optionals (!stdenv.hostPlatform.isMusl) [
-    TextWrapI18N
-  ] ++ [
+  propagatedBuildInputs = lib.optionals (!stdenv.hostPlatform.isMusl) [ TextWrapI18N ] ++ [
     LocaleGettext
     SGMLSpm
     UnicodeLineBreak

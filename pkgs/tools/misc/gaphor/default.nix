@@ -1,22 +1,23 @@
-{ lib
-, buildPythonApplication
-, fetchPypi
-, copyDesktopItems
-, gobject-introspection
-, poetry-core
-, wrapGAppsHook3
-, gtksourceview4
-, pango
-, gaphas
-, generic
-, jedi
-, pycairo
-, pygobject3
-, tinycss2
-, gtk3
-, librsvg
-, makeDesktopItem
-, python
+{
+  lib,
+  buildPythonApplication,
+  fetchPypi,
+  copyDesktopItems,
+  gobject-introspection,
+  poetry-core,
+  wrapGAppsHook3,
+  gtksourceview4,
+  pango,
+  gaphas,
+  generic,
+  jedi,
+  pycairo,
+  pygobject3,
+  tinycss2,
+  gtk3,
+  librsvg,
+  makeDesktopItem,
+  python,
 }:
 
 buildPythonApplication rec {

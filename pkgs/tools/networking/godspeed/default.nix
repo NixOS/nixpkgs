@@ -1,8 +1,9 @@
-{ stdenv
-, lib
-, buildGoModule
-, fetchFromGitHub
-, libpcap
+{
+  stdenv,
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  libpcap,
 }:
 
 buildGoModule rec {
@@ -18,9 +19,7 @@ buildGoModule rec {
 
   vendorHash = "sha256-DCDAuKvov4tkf77nJNo9mQU/bAeQasp4VBQRtLX+U6c=";
 
-  buildInputs = [
-    libpcap
-  ];
+  buildInputs = [ libpcap ];
 
   postFixup = ''
     mv $out/bin/GodSpeed $out/bin/${pname}

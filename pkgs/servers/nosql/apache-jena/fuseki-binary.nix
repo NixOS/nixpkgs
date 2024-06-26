@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchurl
-, java
-, coreutils
-, which
-, makeWrapper
+{
+  lib,
+  stdenv,
+  fetchurl,
+  java,
+  coreutils,
+  which,
+  makeWrapper,
   # For the test
-, pkgs
+  pkgs,
 }:
 
 stdenv.mkDerivation rec {
@@ -16,9 +17,7 @@ stdenv.mkDerivation rec {
     url = "mirror://apache/jena/binaries/apache-jena-fuseki-${version}.tar.gz";
     hash = "sha256-t25Q0lb+ecR12cDD1p6eZnzLxW0kZpPOFGvo5YK7AlI=";
   };
-  nativeBuildInputs = [
-    makeWrapper
-  ];
+  nativeBuildInputs = [ makeWrapper ];
   installPhase = ''
     cp -r . "$out"
     chmod +x $out/fuseki
@@ -43,7 +42,10 @@ stdenv.mkDerivation rec {
     license = licenses.asl20;
     maintainers = with maintainers; [ raskin ];
     platforms = platforms.all;
-    sourceProvenance = with sourceTypes; [ binaryBytecode binaryNativeCode ];
+    sourceProvenance = with sourceTypes; [
+      binaryBytecode
+      binaryNativeCode
+    ];
     homepage = "https://jena.apache.org";
     downloadPage = "https://archive.apache.org/dist/jena/binaries/";
     mainProgram = "fuseki";

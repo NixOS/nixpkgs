@@ -1,7 +1,19 @@
-{ stdenv, lib, fetchFromGitHub, cmake, pkg-config, gtk3
-, audacious, mpg123, ffmpeg, libvorbis, libao, jansson, speex
-, nix-update-script
-, buildAudaciousPlugin ? false  # only build cli by default, pkgs.audacious-plugins sets this to enable plugin support
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  gtk3,
+  audacious,
+  mpg123,
+  ffmpeg,
+  libvorbis,
+  libao,
+  jansson,
+  speex,
+  nix-update-script,
+  buildAudaciousPlugin ? false, # only build cli by default, pkgs.audacious-plugins sets this to enable plugin support
 }:
 
 stdenv.mkDerivation rec {
@@ -17,7 +29,10 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = nix-update-script {
     attrPath = "vgmstream";
-    extraArgs = [ "--version-regex" "r(.*)" ];
+    extraArgs = [
+      "--version-regex"
+      "r(.*)"
+    ];
   };
 
   nativeBuildInputs = [
@@ -42,13 +57,13 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     # It always tries to download it, no option to use the system one
     "-DUSE_CELT=OFF"
-  ] ++ lib.optional (! buildAudaciousPlugin) "-DBUILD_AUDACIOUS=OFF";
+  ] ++ lib.optional (!buildAudaciousPlugin) "-DBUILD_AUDACIOUS=OFF";
 
   meta = with lib; {
     description = "Library for playback of various streamed audio formats used in video games";
-    homepage    = "https://vgmstream.org";
+    homepage = "https://vgmstream.org";
     maintainers = with maintainers; [ zane ];
-    license     = with licenses; isc;
-    platforms   = with platforms; unix;
+    license = with licenses; isc;
+    platforms = with platforms; unix;
   };
 }

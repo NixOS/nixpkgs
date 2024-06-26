@@ -1,7 +1,12 @@
 {
-  mkDerivation, lib,
-  extra-cmake-modules, kdoctools,
-  dolphin, ki18n, kio, kxmlgui
+  mkDerivation,
+  lib,
+  extra-cmake-modules,
+  kdoctools,
+  dolphin,
+  ki18n,
+  kio,
+  kxmlgui,
 }:
 
 mkDerivation {
@@ -10,9 +15,18 @@ mkDerivation {
     license = [ lib.licenses.gpl2 ];
     maintainers = [ lib.maintainers.ttuegel ];
   };
-  nativeBuildInputs = [ extra-cmake-modules kdoctools ];
-  propagatedBuildInputs = [
-    dolphin ki18n kio kxmlgui
+  nativeBuildInputs = [
+    extra-cmake-modules
+    kdoctools
   ];
-  outputs = [ "out" "dev" ];
+  propagatedBuildInputs = [
+    dolphin
+    ki18n
+    kio
+    kxmlgui
+  ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 }

@@ -1,4 +1,9 @@
-{ lib, stdenvNoCC, fetchurl, cabextract }:
+{
+  lib,
+  stdenvNoCC,
+  fetchurl,
+  cabextract,
+}:
 
 stdenvNoCC.mkDerivation {
   pname = "vista-fonts-chs";

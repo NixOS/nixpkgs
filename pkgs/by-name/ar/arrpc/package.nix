@@ -1,7 +1,9 @@
-{ lib
-, buildNpmPackage
-, fetchFromGitHub
-}: buildNpmPackage rec {
+{
+  lib,
+  buildNpmPackage,
+  fetchFromGitHub,
+}:
+buildNpmPackage rec {
   pname = "arrpc";
   version = "3.4.0";
 
@@ -25,7 +27,10 @@
     description = "Open Discord RPC server for atypical setups";
     homepage = "https://arrpc.openasar.dev/";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ anomalocaris NotAShelf ];
+    maintainers = with lib.maintainers; [
+      anomalocaris
+      NotAShelf
+    ];
     mainProgram = "arrpc";
   };
 }

@@ -1,4 +1,8 @@
-{ lib, buildDunePackage, fetchurl }:
+{
+  lib,
+  buildDunePackage,
+  fetchurl,
+}:
 
 buildDunePackage rec {
   pname = "mirage-clock";
@@ -18,5 +22,3 @@ buildDunePackage rec {
     maintainers = [ lib.maintainers.vbgl ];
   };
 }
-
-

@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, openssl
-, libevent
-, pkg-config
-, libprom
-, libpromhttp
-, libmicrohttpd
-, sqlite
-, nixosTests
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  openssl,
+  libevent,
+  pkg-config,
+  libprom,
+  libpromhttp,
+  libmicrohttpd,
+  sqlite,
+  nixosTests,
 }:
 
 stdenv.mkDerivation rec {
@@ -22,9 +23,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-BKIto762W7UkKjzIm3eVU18oiHpYUMQYJihebYxBOZs=";
   };
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
     openssl
@@ -35,9 +34,7 @@ stdenv.mkDerivation rec {
     sqlite.dev
   ];
 
-  patches = [
-    ./pure-configure.patch
-  ];
+  patches = [ ./pure-configure.patch ];
 
   # Workaround build failure on -fno-common toolchains like upstream
   # gcc-10. Otherwise build fails as:
@@ -54,7 +51,10 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/coturn/coturn/blob/${version}/ChangeLog";
     license = with licenses; [ bsd3 ];
     platforms = platforms.all;
-    maintainers = with maintainers; [ ralith _0x4A6F ];
+    maintainers = with maintainers; [
+      ralith
+      _0x4A6F
+    ];
     broken = stdenv.isDarwin; # 2018-10-21
   };
 }

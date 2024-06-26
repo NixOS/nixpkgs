@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, python3 }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  python3,
+}:
 
 stdenv.mkDerivation rec {
   pname = "git-when-merged";
@@ -18,8 +23,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description =
-      "Helps you figure out when and why a commit was merged into a branch";
+    description = "Helps you figure out when and why a commit was merged into a branch";
     longDescription = ''
       If you use standard Git workflows, then you create a feature
       branch for each feature that you are working on. When the feature

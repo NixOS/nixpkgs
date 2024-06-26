@@ -1,4 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, autoconf, automake, libtool, bison, flex, rdma-core }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoconf,
+  automake,
+  libtool,
+  bison,
+  flex,
+  rdma-core,
+}:
 
 stdenv.mkDerivation rec {
   pname = "opensm";
@@ -11,7 +21,13 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-/bqo5r9pVt7vg29xaRRO/9k21AMlmoe2327Ot5gVIwc=";
   };
 
-  nativeBuildInputs = [ autoconf automake libtool bison flex ];
+  nativeBuildInputs = [
+    autoconf
+    automake
+    libtool
+    bison
+    flex
+  ];
 
   buildInputs = [ rdma-core ];
 

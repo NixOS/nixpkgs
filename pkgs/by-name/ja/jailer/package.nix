@@ -22,7 +22,6 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "sha256-nXxTKbhvrBlorNqiF3wZDEgf1VrBamWw8ZSQSUqpGT8=";
   };
 
-
   buildPhase = ''
     runHook preBuild
     rm jailer.jar
@@ -30,7 +29,14 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postBuild
   '';
 
-  nativeBuildInputs = [ ant jdk stripJavaArchivesHook makeWrapper wrapGAppsHook4 copyDesktopItems ];
+  nativeBuildInputs = [
+    ant
+    jdk
+    stripJavaArchivesHook
+    makeWrapper
+    wrapGAppsHook4
+    copyDesktopItems
+  ];
 
   installPhase = ''
     runHook preInstall

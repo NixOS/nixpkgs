@@ -1,11 +1,19 @@
-{ lib, pkgs, config, ... }:
+{
+  lib,
+  pkgs,
+  config,
+  ...
+}:
 with lib;
 let
   cfg = config.services.alloy;
 in
 {
   meta = {
-    maintainers = with maintainers; [ flokli hbjydev ];
+    maintainers = with maintainers; [
+      flokli
+      hbjydev
+    ];
   };
 
   options.services.alloy = {
@@ -46,7 +54,10 @@ in
     extraFlags = mkOption {
       type = with lib.types; listOf str;
       default = [ ];
-      example = [ "--server.http.listen-addr=127.0.0.1:12346" "--disable-reporting" ];
+      example = [
+        "--server.http.listen-addr=127.0.0.1:12346"
+        "--disable-reporting"
+      ];
       description = ''
         Extra command-line flags passed to {command}`alloy run`.
 
@@ -54,7 +65,6 @@ in
       '';
     };
   };
-
 
   config = mkIf cfg.enable {
     systemd.services.alloy = {

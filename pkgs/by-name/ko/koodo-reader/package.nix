@@ -38,9 +38,7 @@ mkYarnPackage rec {
   };
 
   nativeBuildInputs =
-    [
-      makeWrapper
-    ]
+    [ makeWrapper ]
     ++ lib.optionals (!stdenv.isDarwin) [
       copyDesktopItems
       wrapGAppsHook3

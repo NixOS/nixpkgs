@@ -1,14 +1,16 @@
-{ stdenv
-, pkg-config
-, mkl
+{
+  stdenv,
+  pkg-config,
+  mkl,
 
-, enableStatic ? false
-, execution ? "seq"
+  enableStatic ? false,
+  execution ? "seq",
 }:
 
 let
   linkType = if enableStatic then "static" else "dynamic";
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "mkl-test";
   version = mkl.version;
 

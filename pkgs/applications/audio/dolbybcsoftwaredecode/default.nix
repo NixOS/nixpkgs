@@ -1,4 +1,10 @@
-{ lib, fetchurl, stdenv, unzip, fpc }:
+{
+  lib,
+  fetchurl,
+  stdenv,
+  unzip,
+  fpc,
+}:
 
 stdenv.mkDerivation rec {
   pname = "dolbybcsoftwaredecode";
@@ -9,7 +15,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-uLcsRIpwmJlstlGV8I4+/30+D9GDpUt7DOIP/GkXWp4=";
   };
 
-  nativeBuildInputs = [ unzip fpc ];
+  nativeBuildInputs = [
+    unzip
+    fpc
+  ];
   buildPhase = ''
     fpc DolbyBi64.PP
   '';

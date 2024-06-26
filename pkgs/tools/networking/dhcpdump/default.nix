@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, perl
-, installShellFiles
-, libpcap
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  perl,
+  installShellFiles,
+  libpcap,
 }:
 
 stdenv.mkDerivation rec {
@@ -24,9 +25,7 @@ stdenv.mkDerivation rec {
     installShellFiles
   ];
 
-  buildInputs = [
-    libpcap
-  ];
+  buildInputs = [ libpcap ];
 
   installPhase = ''
     runHook preBuild

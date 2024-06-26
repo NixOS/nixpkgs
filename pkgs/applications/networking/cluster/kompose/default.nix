@@ -1,4 +1,12 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles, testers, kompose, git }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  testers,
+  kompose,
+  git,
+}:
 
 buildGoModule rec {
   pname = "kompose";
@@ -13,9 +21,15 @@ buildGoModule rec {
 
   vendorHash = "sha256-SakezUp2Gj1PxY1Gwf8tH2yShtB/MPIqGjM/scrGG4I=";
 
-  nativeBuildInputs = [ installShellFiles git ];
+  nativeBuildInputs = [
+    installShellFiles
+    git
+  ];
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   checkFlags = [ "-short" ];
 
@@ -36,6 +50,9 @@ buildGoModule rec {
     mainProgram = "kompose";
     homepage = "https://kompose.io";
     license = licenses.asl20;
-    maintainers = with maintainers; [ thpham vdemeester ];
+    maintainers = with maintainers; [
+      thpham
+      vdemeester
+    ];
   };
 }

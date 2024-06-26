@@ -1,4 +1,8 @@
-{ lib, python3Packages, fetchPypi }:
+{
+  lib,
+  python3Packages,
+  fetchPypi,
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "eliot-tree";
@@ -12,7 +16,7 @@ python3Packages.buildPythonApplication rec {
   nativeCheckInputs = with python3Packages; [
     testtools
     pytest
-   ];
+  ];
 
   propagatedBuildInputs = with python3Packages; [
     colored

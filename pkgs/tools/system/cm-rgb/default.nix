@@ -1,13 +1,14 @@
-{ lib
-, buildPythonApplication
-, fetchFromGitHub
-, atk
-, gobject-introspection
-, wrapGAppsHook3
-, click
-, hidapi
-, psutil
-, pygobject3
+{
+  lib,
+  buildPythonApplication,
+  fetchFromGitHub,
+  atk,
+  gobject-introspection,
+  wrapGAppsHook3,
+  click,
+  hidapi,
+  psutil,
+  pygobject3,
 }:
 
 buildPythonApplication rec {

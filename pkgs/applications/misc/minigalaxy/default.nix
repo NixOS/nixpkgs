@@ -1,17 +1,18 @@
-{ lib
-, fetchFromGitHub
-, docutils
-, gettext
-, glibcLocales
-, glib-networking
-, gobject-introspection
-, gtk3
-, python3
-, python3Packages
-, steam-run
-, unzip
-, webkitgtk
-, wrapGAppsHook3
+{
+  lib,
+  fetchFromGitHub,
+  docutils,
+  gettext,
+  glibcLocales,
+  glib-networking,
+  gobject-introspection,
+  gtk3,
+  python3,
+  python3Packages,
+  steam-run,
+  unzip,
+  webkitgtk,
+  wrapGAppsHook3,
 }:
 
 python3Packages.buildPythonApplication rec {

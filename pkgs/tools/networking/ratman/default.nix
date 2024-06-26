@@ -1,15 +1,16 @@
-{ lib
-, fetchFromGitLab
-, installShellFiles
-, libsodium
-, pkg-config
-, protobuf
-, rustPlatform
-, fetchYarnDeps
-, fixup-yarn-lock
-, stdenv
-, yarn
-, nodejs
+{
+  lib,
+  fetchFromGitLab,
+  installShellFiles,
+  libsodium,
+  pkg-config,
+  protobuf,
+  rustPlatform,
+  fetchYarnDeps,
+  fixup-yarn-lock,
+  stdenv,
+  yarn,
+  nodejs,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -26,9 +27,17 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "Nsux0QblBtzlhLEgfKYvkQrOz8+oVd2pqT3CL8TnQEc=";
 
-  nativeBuildInputs = [ protobuf pkg-config installShellFiles ];
+  nativeBuildInputs = [
+    protobuf
+    pkg-config
+    installShellFiles
+  ];
 
-  cargoBuildFlags = [ "--all-features" "-p" "ratman" ];
+  cargoBuildFlags = [
+    "--all-features"
+    "-p"
+    "ratman"
+  ];
   cargoTestFlags = cargoBuildFlags;
 
   buildInputs = [ libsodium ];
@@ -49,9 +58,16 @@ rustPlatform.buildRustPackage rec {
       sha256 = "sha256-pWjKL41r/bTvWv+5qCgCFVL9+o64BiV2/ISdLeKEOqE=";
     };
 
-    nativeBuildInputs = [ yarn nodejs fixup-yarn-lock ];
+    nativeBuildInputs = [
+      yarn
+      nodejs
+      fixup-yarn-lock
+    ];
 
-    outputs = [ "out" "dist" ];
+    outputs = [
+      "out"
+      "dist"
+    ];
 
     buildPhase = ''
       # Yarn writes temporary files to $HOME. Copied from mkYarnModules.

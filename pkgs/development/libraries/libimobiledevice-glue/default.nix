@@ -1,16 +1,20 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, pkg-config
-, libplist
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  libplist,
 }:
 
 stdenv.mkDerivation rec {
   pname = "libimobiledevice-glue";
   version = "1.2.0";
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   src = fetchFromGitHub {
     owner = "libimobiledevice";
@@ -24,9 +28,7 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  propagatedBuildInputs = [
-    libplist
-  ];
+  propagatedBuildInputs = [ libplist ];
 
   preAutoreconf = ''
     export RELEASE_VERSION=${version}

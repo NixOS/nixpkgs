@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, ncurses, pkg-config }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  ncurses,
+  pkg-config,
+}:
 
 stdenv.mkDerivation rec {
   pname = "ttyplot";
@@ -11,13 +17,9 @@ stdenv.mkDerivation rec {
     hash = "sha256-DLFEnEo+EQuq4ziqo9qfyHGD1Zosk9Kb/80QjnI2aXk=";
   };
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [
-    ncurses
-  ];
+  buildInputs = [ ncurses ];
 
   makeFlags = [ "PREFIX=$(out)" ];
 

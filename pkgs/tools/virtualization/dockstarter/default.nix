@@ -1,11 +1,12 @@
-{ bash
-, coreutils
-, fetchFromGitHub
-, git
-, lib
-, makeWrapper
-, ncurses
-, stdenv
+{
+  bash,
+  coreutils,
+  fetchFromGitHub,
+  git,
+  lib,
+  makeWrapper,
+  ncurses,
+  stdenv,
 }:
 
 stdenv.mkDerivation rec {
@@ -25,12 +26,14 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     install -Dm755 main.sh $out/bin/ds
-    wrapProgram $out/bin/ds --prefix PATH : ${lib.makeBinPath [
-      bash
-      coreutils
-      git
-      ncurses
-    ]}
+    wrapProgram $out/bin/ds --prefix PATH : ${
+      lib.makeBinPath [
+        bash
+        coreutils
+        git
+        ncurses
+      ]
+    }
   '';
 
   meta = with lib; {

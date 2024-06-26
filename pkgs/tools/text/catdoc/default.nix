@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchurl, fetchpatch }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+}:
 
 stdenv.mkDerivation rec {
   pname = "catdoc";
@@ -28,6 +33,6 @@ stdenv.mkDerivation rec {
     description = "MS-Word/Excel/PowerPoint to text converter";
     platforms = platforms.all;
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [];
+    maintainers = with maintainers; [ ];
   };
 }

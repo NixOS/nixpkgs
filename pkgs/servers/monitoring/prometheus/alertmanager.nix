@@ -1,9 +1,10 @@
-{ lib
-, go
-, buildGoModule
-, fetchFromGitHub
-, installShellFiles
-, nixosTests
+{
+  lib,
+  go,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  nixosTests,
 }:
 
 buildGoModule rec {
@@ -20,16 +21,23 @@ buildGoModule rec {
 
   vendorHash = "sha256-zkHIdEdAy44iV2F929NB3ISuUbxdecaeZcsNQQGd06E=";
 
-  subPackages = [ "cmd/alertmanager" "cmd/amtool" ];
-
-  ldflags = let t = "github.com/prometheus/common/version"; in [
-    "-X ${t}.Version=${version}"
-    "-X ${t}.Revision=${src.rev}"
-    "-X ${t}.Branch=unknown"
-    "-X ${t}.BuildUser=nix@nixpkgs"
-    "-X ${t}.BuildDate=unknown"
-    "-X ${t}.GoVersion=${lib.getVersion go}"
+  subPackages = [
+    "cmd/alertmanager"
+    "cmd/amtool"
   ];
+
+  ldflags =
+    let
+      t = "github.com/prometheus/common/version";
+    in
+    [
+      "-X ${t}.Version=${version}"
+      "-X ${t}.Revision=${src.rev}"
+      "-X ${t}.Branch=unknown"
+      "-X ${t}.BuildUser=nix@nixpkgs"
+      "-X ${t}.BuildDate=unknown"
+      "-X ${t}.GoVersion=${lib.getVersion go}"
+    ];
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -40,13 +48,20 @@ buildGoModule rec {
     installShellCompletion amtool.zsh
   '';
 
-  passthru.tests = { inherit (nixosTests.prometheus) alertmanager; };
+  passthru.tests = {
+    inherit (nixosTests.prometheus) alertmanager;
+  };
 
   meta = with lib; {
     description = "Alert dispatcher for the Prometheus monitoring system";
     homepage = "https://github.com/prometheus/alertmanager";
     changelog = "https://github.com/prometheus/alertmanager/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ benley fpletz globin Frostman ];
+    maintainers = with maintainers; [
+      benley
+      fpletz
+      globin
+      Frostman
+    ];
   };
 }

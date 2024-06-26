@@ -1,6 +1,7 @@
 let
   source = import ./source.nix;
-in {
+in
+{
   stdenvNoCC,
   fetchzip,
   lib,

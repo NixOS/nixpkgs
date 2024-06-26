@@ -1,19 +1,20 @@
-{ stdenv
-, lib
-, fetchFromGitLab
-, fetchpatch
-, gitUpdater
-, nixosTests
-, cmake
-, gsettings-qt
-, lomiri-ui-extras
-, lomiri-ui-toolkit
-, pkg-config
-, qmltermwidget
-, qtbase
-, qtdeclarative
-, qtsystems
-, wrapQtAppsHook
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  fetchpatch,
+  gitUpdater,
+  nixosTests,
+  cmake,
+  gsettings-qt,
+  lomiri-ui-extras,
+  lomiri-ui-toolkit,
+  pkg-config,
+  qmltermwidget,
+  qtbase,
+  qtdeclarative,
+  qtsystems,
+  wrapQtAppsHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -88,9 +89,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     tests.vm-test = nixosTests.terminal-emulators.lomiri-terminal-app;
-    updateScript = gitUpdater {
-      rev-prefix = "v";
-    };
+    updateScript = gitUpdater { rev-prefix = "v"; };
   };
 
   meta = with lib; {

@@ -1,8 +1,15 @@
-{ stdenv, lib, fetchurl, unzip, autoPatchelfHook }:
+{
+  stdenv,
+  lib,
+  fetchurl,
+  unzip,
+  autoPatchelfHook,
+}:
 
 let
   archPostfix = lib.optionalString (stdenv.is64bit && !stdenv.isDarwin) "_64";
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "msp-debug-stack-bin";
   version = "3.15.1.1";
   src = fetchurl {
@@ -12,11 +19,12 @@ in stdenv.mkDerivation rec {
   sourceRoot = ".";
 
   libname =
-    if stdenv.hostPlatform.isWindows then "MSP430${archPostfix}.dll"
-    else "libmsp430${archPostfix}${stdenv.hostPlatform.extensions.sharedLibrary}";
+    if stdenv.hostPlatform.isWindows then
+      "MSP430${archPostfix}.dll"
+    else
+      "libmsp430${archPostfix}${stdenv.hostPlatform.extensions.sharedLibrary}";
 
-  nativeBuildInputs = [ unzip ]
-    ++ lib.optional stdenv.isLinux autoPatchelfHook;
+  nativeBuildInputs = [ unzip ] ++ lib.optional stdenv.isLinux autoPatchelfHook;
   buildInputs = [ stdenv.cc.cc ];
 
   installPhase = ''

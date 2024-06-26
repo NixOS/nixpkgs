@@ -1,13 +1,17 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, gettext
-, installShellFiles
-, ncurses
-, ui ? "terminal"
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  gettext,
+  installShellFiles,
+  ncurses,
+  ui ? "terminal",
 }:
 
-assert lib.elem ui [ "terminal" "curses" ];
+assert lib.elem ui [
+  "terminal"
+  "curses"
+];
 stdenv.mkDerivation (finalAttrs: {
   pname = "2048-cli";
   version = "unstable-2019-12-10";
@@ -24,14 +28,9 @@ stdenv.mkDerivation (finalAttrs: {
       --replace "-lcurses" "-lncurses"
   '';
 
-  nativeBuildInputs = [
-    installShellFiles
-  ];
+  nativeBuildInputs = [ installShellFiles ];
 
-  buildInputs = [
-    gettext
-  ]
-  ++ (lib.optional (ui == "curses") ncurses);
+  buildInputs = [ gettext ] ++ (lib.optional (ui == "curses") ncurses);
 
   dontConfigure = true;
 

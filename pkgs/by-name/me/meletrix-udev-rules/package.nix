@@ -1,12 +1,9 @@
-{
-  lib,
-  stdenvNoCC,
-}:
+{ lib, stdenvNoCC }:
 stdenvNoCC.mkDerivation {
   pname = "meletrix-udev-rules";
   version = "0-unstable-2023-10-20";
 
-  src = [./meletrix.rules];
+  src = [ ./meletrix.rules ];
 
   dontUnpack = true;
   dontBuild = true;
@@ -18,7 +15,7 @@ stdenvNoCC.mkDerivation {
   meta = with lib; {
     description = "udev rules to configure Meletrix keyboards";
     license = licenses.cc0;
-    maintainers = with maintainers; [Scrumplex];
+    maintainers = with maintainers; [ Scrumplex ];
     platforms = platforms.linux;
   };
 }

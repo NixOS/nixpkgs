@@ -1,7 +1,28 @@
-{ lib, stdenv, fetchurl, dpkg, makeWrapper, buildFHSEnv
-, gtk3, gdk-pixbuf, cairo, libjpeg_original, glib, pango, libGLU
-, libGL, nvidia_cg_toolkit, zlib, openssl, libuuid
-, alsa-lib, udev, libjack2, freetype, libva, libvdpau
+{
+  lib,
+  stdenv,
+  fetchurl,
+  dpkg,
+  makeWrapper,
+  buildFHSEnv,
+  gtk3,
+  gdk-pixbuf,
+  cairo,
+  libjpeg_original,
+  glib,
+  pango,
+  libGLU,
+  libGL,
+  nvidia_cg_toolkit,
+  zlib,
+  openssl,
+  libuuid,
+  alsa-lib,
+  udev,
+  libjack2,
+  freetype,
+  libva,
+  libvdpau,
 }:
 let
   fullPath = lib.makeLibraryPath [
@@ -37,7 +58,8 @@ let
           url = "https://cdn.lwks.com/releases/${version}/lightworks_${version}_r${rev}.deb";
           sha256 = "sha256-sVEDCZZsY5OwuWebrhatzZiws89/tEKIdgY54PN0Ddo=";
         }
-      else throw "${pname}-${version} is not supported on ${stdenv.hostPlatform.system}";
+      else
+        throw "${pname}-${version} is not supported on ${stdenv.hostPlatform.system}";
 
     nativeBuildInputs = [ makeWrapper ];
     buildInputs = [ dpkg ];
@@ -76,13 +98,12 @@ let
     dontPatchELF = true;
   };
 
+in
 # Lightworks expects some files in /usr/share/lightworks
-in buildFHSEnv {
+buildFHSEnv {
   name = lightworks.name;
 
-  targetPkgs = pkgs: [
-      lightworks
-  ];
+  targetPkgs = pkgs: [ lightworks ];
 
   runScript = "lightworks";
 
@@ -91,7 +112,11 @@ in buildFHSEnv {
     homepage = "https://www.lwks.com/";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
-    maintainers = with lib.maintainers; [ antonxy vojta001 kashw2 ];
+    maintainers = with lib.maintainers; [
+      antonxy
+      vojta001
+      kashw2
+    ];
     platforms = [ "x86_64-linux" ];
   };
 }

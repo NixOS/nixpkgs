@@ -1,7 +1,5 @@
-{ nixpkgs ? import ../../../.. { } }:
+{
+  nixpkgs ? import ../../../.. { },
+}:
 with nixpkgs;
-mkShell {
-  packages = [
-    pkgs.gh
-  ];
-}
+mkShell { packages = [ pkgs.gh ]; }

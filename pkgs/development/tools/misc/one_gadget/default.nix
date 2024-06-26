@@ -1,4 +1,10 @@
-{ lib, binutils, bundlerApp, bundlerUpdateScript, makeWrapper }:
+{
+  lib,
+  binutils,
+  bundlerApp,
+  bundlerUpdateScript,
+  makeWrapper,
+}:
 
 bundlerApp {
   pname = "one_gadget";
@@ -15,10 +21,13 @@ bundlerApp {
 
   meta = with lib; {
     description = "Best tool for finding one gadget RCE in libc.so.6";
-    homepage    = "https://github.com/david942j/one_gadget";
-    license     = licenses.mit;
-    maintainers = with maintainers; [ artemist nicknovitski ];
+    homepage = "https://github.com/david942j/one_gadget";
+    license = licenses.mit;
+    maintainers = with maintainers; [
+      artemist
+      nicknovitski
+    ];
     mainProgram = "one_gadget";
-    platforms   = platforms.unix;
+    platforms = platforms.unix;
   };
 }

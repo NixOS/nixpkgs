@@ -1,12 +1,18 @@
-{ lib, stdenv, fetchFromGitHub, fetchzip
-, meson, ninja, pkg-config
-, python3
-, icu
-, libuuid
-, xapian
-, xz
-, zstd
-, gtest
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchzip,
+  meson,
+  ninja,
+  pkg-config,
+  python3,
+  icu,
+  libuuid,
+  xapian,
+  xz,
+  zstd,
+  gtest,
 }:
 
 stdenv.mkDerivation rec {
@@ -45,23 +51,19 @@ stdenv.mkDerivation rec {
     patchShebangs scripts
   '';
 
-  mesonFlags = [  "-Dtest_data_dir=${testData}" ];
+  mesonFlags = [ "-Dtest_data_dir=${testData}" ];
 
   env.NIX_CFLAGS_COMPILE = toString (
-    lib.optionals (stdenv.cc.isGNU) [
-      "-Wno-error=mismatched-new-delete"
-    ]
+    lib.optionals (stdenv.cc.isGNU) [ "-Wno-error=mismatched-new-delete" ]
   );
 
-  nativeCheckInputs = [
-    gtest
-  ];
+  nativeCheckInputs = [ gtest ];
 
   doCheck = true;
 
   meta = with lib; {
     description = "Library for reading and writing ZIM files";
-    homepage =  "https://www.openzim.org/wiki/Zimlib";
+    homepage = "https://www.openzim.org/wiki/Zimlib";
     license = licenses.gpl2;
     maintainers = with maintainers; [ greg ];
     platforms = platforms.linux;

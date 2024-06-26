@@ -1,16 +1,25 @@
-{ lib, stdenv, fetchurl, automake, autoconf }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  automake,
+  autoconf,
+}:
 
 stdenv.mkDerivation rec {
   pname = "avr-libc";
   version = "2.2.0";
 
-  tag_version = builtins.replaceStrings ["."] ["_"] version;
+  tag_version = builtins.replaceStrings [ "." ] [ "_" ] version;
   src = fetchurl {
     url = "https://github.com/avrdudes/avr-libc/releases/download/avr-libc-${tag_version}-release/avr-libc-${version}.tar.bz2";
     hash = "sha256-Bxjv1PVCeId9ploLIDtAIHOzDgTf6piObyqINa0HHTU=";
   };
 
-  nativeBuildInputs = [ automake autoconf ];
+  nativeBuildInputs = [
+    automake
+    autoconf
+  ];
 
   # Make sure we don't strip the libraries in lib/gcc/avr.
   stripDebugList = [ "bin" ];
@@ -27,6 +36,9 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/avrdudes/avr-libc";
     license = licenses.bsd3;
     platforms = [ "avr-none" ];
-    maintainers = with maintainers; [ mguentner emilytrau ];
+    maintainers = with maintainers; [
+      mguentner
+      emilytrau
+    ];
   };
 }

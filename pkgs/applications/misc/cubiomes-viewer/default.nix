@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, qtbase
-, qmake
-, qttools
-, wrapQtAppsHook
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  qtbase,
+  qmake,
+  qttools,
+  wrapQtAppsHook,
 }:
 
 stdenv.mkDerivation rec {
@@ -25,9 +26,7 @@ stdenv.mkDerivation rec {
       --replace '$$[QT_INSTALL_BINS]/lrelease' lrelease
   '';
 
-  buildInputs = [
-    qtbase
-  ];
+  buildInputs = [ qtbase ];
 
   nativeBuildInputs = [
     qmake

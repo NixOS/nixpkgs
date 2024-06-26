@@ -1,18 +1,19 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, libressl
-, libbsd
-, libevent
-, libuuid
-, libossp_uuid
-, libmd
-, zlib
-, ncurses
-, bison
-, autoPatchelfHook
-, testers
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  libressl,
+  libbsd,
+  libevent,
+  libuuid,
+  libossp_uuid,
+  libmd,
+  zlib,
+  ncurses,
+  bison,
+  autoPatchelfHook,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -24,11 +25,20 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-/DqKIGf/aZ09aL/rB7te+AauHmJ+mOTrVEbkqT9WUBI=";
   };
 
-  nativeBuildInputs = [ pkg-config bison ]
-    ++ lib.optionals stdenv.isLinux [ autoPatchelfHook ];
+  nativeBuildInputs = [
+    pkg-config
+    bison
+  ] ++ lib.optionals stdenv.isLinux [ autoPatchelfHook ];
 
-  buildInputs = [ libressl libbsd libevent libuuid libmd zlib ncurses ]
-    ++ lib.optionals stdenv.isDarwin [ libossp_uuid ];
+  buildInputs = [
+    libressl
+    libbsd
+    libevent
+    libuuid
+    libmd
+    zlib
+    ncurses
+  ] ++ lib.optionals stdenv.isDarwin [ libossp_uuid ];
 
   preConfigure = lib.optionalString stdenv.isDarwin ''
     # The configure script assumes dependencies on Darwin are installed via
@@ -37,16 +47,16 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace configure --replace-fail 'xdarwin' 'xhomebrew'
   '';
 
-  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.isDarwin [
-    # error: conflicting types for 'strmode'
-    "-DHAVE_STRMODE=1"
-    # Undefined symbols for architecture arm64: "_bsd_getopt"
-    "-include getopt.h"
-  ]);
+  env.NIX_CFLAGS_COMPILE = toString (
+    lib.optionals stdenv.isDarwin [
+      # error: conflicting types for 'strmode'
+      "-DHAVE_STRMODE=1"
+      # Undefined symbols for architecture arm64: "_bsd_getopt"
+      "-include getopt.h"
+    ]
+  );
 
-  passthru.tests.version = testers.testVersion {
-    package = finalAttrs.finalPackage;
-  };
+  passthru.tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
 
   meta = {
     changelog = "https://gameoftrees.org/releases/CHANGES";
@@ -62,7 +72,10 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://gameoftrees.org";
     license = lib.licenses.isc;
-    maintainers = with lib.maintainers; [ abbe afh ];
+    maintainers = with lib.maintainers; [
+      abbe
+      afh
+    ];
     mainProgram = "got";
     platforms = with lib.platforms; darwin ++ linux;
   };

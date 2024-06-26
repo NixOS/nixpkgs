@@ -1,27 +1,26 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, bzip2
-, cli11
-, cmake
-, curl
-, ghc_filesystem
-, libarchive
-, libsolv
-, yaml-cpp
-, nlohmann_json
-, python3
-, reproc
-, spdlog
-, tl-expected
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  bzip2,
+  cli11,
+  cmake,
+  curl,
+  ghc_filesystem,
+  libarchive,
+  libsolv,
+  yaml-cpp,
+  nlohmann_json,
+  python3,
+  reproc,
+  spdlog,
+  tl-expected,
 }:
 
 let
   libsolv' = libsolv.overrideAttrs (oldAttrs: {
-    cmakeFlags = oldAttrs.cmakeFlags ++ [
-      "-DENABLE_CONDA=true"
-    ];
+    cmakeFlags = oldAttrs.cmakeFlags ++ [ "-DENABLE_CONDA=true" ];
 
     patches = [
       # Apply the same patch as in the "official" boa-forge build:

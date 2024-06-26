@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, installShellFiles
-, pkg-config
-, libplist
-, openssl
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  installShellFiles,
+  pkg-config,
+  libplist,
+  openssl,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -18,8 +19,14 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-QnSmWY9zCOPYAn2VHc5H+VQXjTCyr0EuosxvKGGpDtQ=";
   };
 
-  nativeBuildInputs = [ pkg-config installShellFiles ];
-  buildInputs = [ libplist openssl ];
+  nativeBuildInputs = [
+    pkg-config
+    installShellFiles
+  ];
+  buildInputs = [
+    libplist
+    openssl
+  ];
 
   stripDebugFlags = [ "--strip-unneeded" ];
   makeFlags = [ "PREFIX=${placeholder "out"}" ];

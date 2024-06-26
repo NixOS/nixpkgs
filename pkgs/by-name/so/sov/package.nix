@@ -1,17 +1,18 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch2
-, meson
-, ninja
-, pkg-config
-, wayland-scanner
-, freetype
-, libglvnd
-, libxkbcommon
-, wayland
-, wayland-protocols
-, gitUpdater
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch2,
+  meson,
+  ninja,
+  pkg-config,
+  wayland-scanner,
+  freetype,
+  libglvnd,
+  libxkbcommon,
+  wayland,
+  wayland-protocols,
+  gitUpdater,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -36,9 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  depsBuildBuild = [
-    pkg-config
-  ];
+  depsBuildBuild = [ pkg-config ];
 
   nativeBuildInputs = [
     meson

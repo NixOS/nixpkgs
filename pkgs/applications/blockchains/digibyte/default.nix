@@ -1,18 +1,20 @@
-{ lib, stdenv
-, fetchFromGitHub
-, openssl
-, boost
-, libevent
-, autoreconfHook
-, db4
-, pkg-config
-, protobuf
-, hexdump
-, zeromq
-, withGui
-, qtbase ? null
-, qttools ? null
-, wrapQtAppsHook ? null
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  openssl,
+  boost,
+  libevent,
+  autoreconfHook,
+  db4,
+  pkg-config,
+  protobuf,
+  hexdump,
+  zeromq,
+  withGui,
+  qtbase ? null,
+  qttools ? null,
+  wrapQtAppsHook ? null,
 }:
 
 stdenv.mkDerivation rec {
@@ -32,30 +34,30 @@ stdenv.mkDerivation rec {
     autoreconfHook
     pkg-config
     hexdump
-  ] ++ lib.optionals withGui [
-    wrapQtAppsHook
-  ];
+  ] ++ lib.optionals withGui [ wrapQtAppsHook ];
 
-  buildInputs = [
-    openssl
-    boost
-    libevent
-    db4
-    zeromq
-  ] ++ lib.optionals withGui [
-    qtbase
-    qttools
-    protobuf
-  ];
+  buildInputs =
+    [
+      openssl
+      boost
+      libevent
+      db4
+      zeromq
+    ]
+    ++ lib.optionals withGui [
+      qtbase
+      qttools
+      protobuf
+    ];
 
   enableParallelBuilding = true;
 
-  configureFlags = [
-      "--with-boost-libdir=${boost.out}/lib"
-  ] ++ lib.optionals withGui [
+  configureFlags =
+    [ "--with-boost-libdir=${boost.out}/lib" ]
+    ++ lib.optionals withGui [
       "--with-gui=qt5"
       "--with-qt-bindir=${qtbase.dev}/bin:${qttools.dev}/bin"
-  ];
+    ];
 
   meta = with lib; {
     description = "DigiByte (DGB) is a rapidly growing decentralized, global blockchain";

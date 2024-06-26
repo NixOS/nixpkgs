@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, Libsystem
-, SystemConfiguration
-, installShellFiles
-, libiconv
-, rustPlatform
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  Libsystem,
+  SystemConfiguration,
+  installShellFiles,
+  libiconv,
+  rustPlatform,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -23,9 +24,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [
     installShellFiles
-  ] ++ lib.optionals stdenv.isDarwin [
-    rustPlatform.bindgenHook
-  ];
+  ] ++ lib.optionals stdenv.isDarwin [ rustPlatform.bindgenHook ];
 
   buildInputs = lib.optionals stdenv.isDarwin [
     Libsystem

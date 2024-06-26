@@ -1,4 +1,12 @@
-{ lib, rustPlatform, fetchFromGitHub, installShellFiles, rust-jemalloc-sys, testers, fd }:
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  installShellFiles,
+  rust-jemalloc-sys,
+  testers,
+  fd,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "fd";
@@ -34,9 +42,7 @@ rustPlatform.buildRustPackage rec {
     installShellCompletion --zsh contrib/completion/_fd
   '';
 
-  passthru.tests.version = testers.testVersion {
-    package = fd;
-  };
+  passthru.tests.version = testers.testVersion { package = fd; };
 
   meta = with lib; {
     description = "Simple, fast and user-friendly alternative to find";
@@ -48,8 +54,17 @@ rustPlatform.buildRustPackage rec {
     '';
     homepage = "https://github.com/sharkdp/fd";
     changelog = "https://github.com/sharkdp/fd/blob/v${version}/CHANGELOG.md";
-    license = with licenses; [ asl20 /* or */ mit ];
-    maintainers = with maintainers; [ dywedir figsoda globin ma27 zowoq ];
+    license = with licenses; [
+      asl20 # or
+      mit
+    ];
+    maintainers = with maintainers; [
+      dywedir
+      figsoda
+      globin
+      ma27
+      zowoq
+    ];
     mainProgram = "fd";
   };
 }

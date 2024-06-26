@@ -1,21 +1,22 @@
-{ lib
-, stdenv
-, vdr
-, fetchFromGitHub
-, graphicsmagick
-, pcre
-, xorgserver
-, ffmpeg
-, libiconv
-, boost
-, libgcrypt
-, perl
-, util-linux
-, groff
-, libva
-, xorg
-, ncurses
-, callPackage
+{
+  lib,
+  stdenv,
+  vdr,
+  fetchFromGitHub,
+  graphicsmagick,
+  pcre,
+  xorgserver,
+  ffmpeg,
+  libiconv,
+  boost,
+  libgcrypt,
+  perl,
+  util-linux,
+  groff,
+  libva,
+  xorg,
+  ncurses,
+  callPackage,
 }:
 stdenv.mkDerivation rec {
   pname = "vdr-markad";
@@ -28,7 +29,10 @@ stdenv.mkDerivation rec {
     rev = "V${version}";
   };
 
-  buildInputs = [ vdr ffmpeg ];
+  buildInputs = [
+    vdr
+    ffmpeg
+  ];
 
   postPatch = ''
     substituteInPlace command/Makefile --replace '/usr' ""

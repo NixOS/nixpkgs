@@ -1,7 +1,8 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, libndtypes
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  libndtypes,
 }:
 
 stdenv.mkDerivation {
@@ -20,12 +21,12 @@ stdenv.mkDerivation {
   # Override linker with cc (symlink to either gcc or clang)
   # Library expects to use cc for linking
   configureFlags = [
-      # Override linker with cc (symlink to either gcc or clang)
-      # Library expects to use cc for linking
-      "LD=${stdenv.cc.targetPrefix}cc"
-      # needed for tests
-      "--with-includes=${libndtypes}/include"
-      "--with-libs=${libndtypes}/lib"
+    # Override linker with cc (symlink to either gcc or clang)
+    # Library expects to use cc for linking
+    "LD=${stdenv.cc.targetPrefix}cc"
+    # needed for tests
+    "--with-includes=${libndtypes}/include"
+    "--with-libs=${libndtypes}/lib"
   ];
 
   # other packages which depend on libxnd seem to expect overflow.h, but

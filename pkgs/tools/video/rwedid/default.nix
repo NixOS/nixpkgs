@@ -1,8 +1,9 @@
-{ lib
-, rustPlatform
-, fetchFromGitea
-, pkg-config
-, xz
+{
+  lib,
+  rustPlatform,
+  fetchFromGitea,
+  pkg-config,
+  xz,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -19,13 +20,9 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-eY12p8pyUjSaoP4QKfVFwKQGdvFNG7GMAbFkFa8i05I=";
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [
-    xz
-  ];
+  buildInputs = [ xz ];
 
   postInstall = ''
     mkdir -p $out/etc/udev/rules.d

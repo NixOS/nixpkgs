@@ -1,19 +1,20 @@
-{ lib
-, stdenv
-, fetchurl
-, zlib
-, libjpeg
-, imake
-, gccmakedep
-, libXaw
-, libXext
-, libXmu
-, libXp
-, libXpm
-, perl
-, xauth
-, fontDirectories
-, openssh
+{
+  lib,
+  stdenv,
+  fetchurl,
+  zlib,
+  libjpeg,
+  imake,
+  gccmakedep,
+  libXaw,
+  libXext,
+  libXmu,
+  libXp,
+  libXpm,
+  perl,
+  xauth,
+  fontDirectories,
+  openssh,
 }:
 
 stdenv.mkDerivation rec {
@@ -106,7 +107,7 @@ stdenv.mkDerivation rec {
       GUI, many bugfixes, and more.
     '';
 
-    maintainers = [];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
 
     knownVulnerabilities = [ "CVE-2021-42785" ];

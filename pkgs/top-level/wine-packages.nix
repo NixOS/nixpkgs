@@ -1,7 +1,12 @@
-{ stdenv, config, callPackage, wineBuild }:
+{
+  stdenv,
+  config,
+  callPackage,
+  wineBuild,
+}:
 
 rec {
-  fonts = callPackage ../applications/emulators/wine/fonts.nix {};
+  fonts = callPackage ../applications/emulators/wine/fonts.nix { };
   minimal = callPackage ../applications/emulators/wine {
     wineRelease = config.wine.release or "stable";
     inherit wineBuild;
@@ -52,6 +57,12 @@ rec {
   staging = base.override { wineRelease = "staging"; };
   stagingFull = full.override { wineRelease = "staging"; };
 
-  wayland = base.override { wineRelease = "wayland"; waylandSupport = true; };
-  waylandFull = full.override { wineRelease = "wayland"; waylandSupport = true; };
+  wayland = base.override {
+    wineRelease = "wayland";
+    waylandSupport = true;
+  };
+  waylandFull = full.override {
+    wineRelease = "wayland";
+    waylandSupport = true;
+  };
 }

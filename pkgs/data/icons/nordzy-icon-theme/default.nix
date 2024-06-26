@@ -1,9 +1,10 @@
-{ stdenvNoCC
-, fetchFromGitHub
-, lib
-, gtk3
-, jdupes
-, nordzy-themes ? [ "all" ] # Override this to only install selected themes
+{
+  stdenvNoCC,
+  fetchFromGitHub,
+  lib,
+  gtk3,
+  jdupes,
+  nordzy-themes ? [ "all" ], # Override this to only install selected themes
 }:
 
 stdenvNoCC.mkDerivation rec {
@@ -33,7 +34,11 @@ stdenvNoCC.mkDerivation rec {
     runHook preInstall
 
     name= ./install.sh --dest $out/share/icons \
-      ${lib.optionalString (nordzy-themes != []) (lib.strings.concatMapStrings (theme: "-t ${theme} ") nordzy-themes)}
+      ${
+        lib.optionalString (nordzy-themes != [ ]) (
+          lib.strings.concatMapStrings (theme: "-t ${theme} ") nordzy-themes
+        )
+      }
 
     # Replace duplicate files with hardlinks to the first file in each
     # set of duplicates, reducing the installed size in about 87%

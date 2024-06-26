@@ -1,12 +1,14 @@
-{ lib, stdenv
-, fetchurl
-, intltool
-, pkg-config
-, libX11
-, gtk2
-, gtk3
-, wrapGAppsHook3
-, withGtk3 ? true
+{
+  lib,
+  stdenv,
+  fetchurl,
+  intltool,
+  pkg-config,
+  libX11,
+  gtk2,
+  gtk3,
+  wrapGAppsHook3,
+  withGtk3 ? true,
 }:
 
 stdenv.mkDerivation rec {
@@ -29,9 +31,7 @@ stdenv.mkDerivation rec {
     (if withGtk3 then gtk3 else gtk2)
   ];
 
-  patches = [
-    ./lxappearance-0.6.3-xdg.system.data.dirs.patch
-  ];
+  patches = [ ./lxappearance-0.6.3-xdg.system.data.dirs.patch ];
 
   configureFlags = lib.optional withGtk3 "--enable-gtk3";
 

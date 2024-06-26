@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, asciidoc
-, fetchFromGitLab
-, git
-, makeWrapper
-, python3
-, rcs
+{
+  lib,
+  stdenv,
+  asciidoc,
+  fetchFromGitLab,
+  git,
+  makeWrapper,
+  python3,
+  rcs,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -36,9 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs .
   '';
 
-  makeFlags = [
-    "prefix=${placeholder "out"}"
-  ];
+  makeFlags = [ "prefix=${placeholder "out"}" ];
 
   postInstall = ''
     wrapProgram $out/bin/src \

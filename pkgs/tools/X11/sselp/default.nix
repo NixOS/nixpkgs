@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchurl, libX11 }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libX11,
+}:
 
 stdenv.mkDerivation rec {
   version = "0.2";
@@ -21,7 +26,7 @@ stdenv.mkDerivation rec {
     homepage = "https://tools.suckless.org/sselp";
     description = "Prints the X selection to stdout, useful in scripts";
     license = lib.licenses.mit;
-    maintainers = [lib.maintainers.magnetophon ];
+    maintainers = [ lib.maintainers.magnetophon ];
     platforms = lib.platforms.linux;
     mainProgram = "sselp";
   };

@@ -1,23 +1,24 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, ninja
-, pkg-config
-, which
-, python3
-, rsync
-, wrapQtAppsHook
-, qtbase
-, qtpositioning
-, qtsvg
-, libGLU
-, libGL
-, zlib
-, icu
-, freetype
-, pugixml
-, nix-update-script
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  ninja,
+  pkg-config,
+  which,
+  python3,
+  rsync,
+  wrapQtAppsHook,
+  qtbase,
+  qtpositioning,
+  qtsvg,
+  libGLU,
+  libGL,
+  zlib,
+  icu,
+  freetype,
+  pugixml,
+  nix-update-script,
 }:
 
 let
@@ -27,7 +28,8 @@ let
     rev = "3b66e59eaae85ebc583ce20baa3bdf27811349c4";
     hash = "sha256-wOZKqwYxJLllyxCr44rAcropKhohLUIVCtsR5tz9TRw=";
   };
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "organicmaps";
   version = "2024.06.19-3";
 
@@ -44,7 +46,18 @@ in stdenv.mkDerivation rec {
     echo "exit 0" > tools/unix/check_cert.sh
 
     # crude fix for https://github.com/organicmaps/organicmaps/issues/1862
-    echo "echo ${lib.replaceStrings ["." "-"] ["" ""] version}" > tools/unix/version.sh
+    echo "echo ${
+      lib.replaceStrings
+        [
+          "."
+          "-"
+        ]
+        [
+          ""
+          ""
+        ]
+        version
+    }" > tools/unix/version.sh
 
     # TODO use system boost instead, see https://github.com/organicmaps/organicmaps/issues/5345
     patchShebangs 3party/boost/tools/build/src/engine/build.sh
@@ -83,7 +96,10 @@ in stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = nix-update-script {
-      extraArgs = [ "-vr" "(.*)-android" ];
+      extraArgs = [
+        "-vr"
+        "(.*)-android"
+      ];
     };
   };
 

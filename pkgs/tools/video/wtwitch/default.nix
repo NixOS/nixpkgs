@@ -1,20 +1,21 @@
-{ bash
-, coreutils-prefixed
-, curl
-, fetchFromGitHub
-, gnused
-, gnugrep
-, installShellFiles
-, jq
-, lib
-, makeWrapper
-, mplayer
-, mpv
-, procps
-, scdoc
-, stdenv
-, streamlink
-, vlc
+{
+  bash,
+  coreutils-prefixed,
+  curl,
+  fetchFromGitHub,
+  gnused,
+  gnugrep,
+  installShellFiles,
+  jq,
+  lib,
+  makeWrapper,
+  mplayer,
+  mpv,
+  procps,
+  scdoc,
+  stdenv,
+  streamlink,
+  vlc,
 }:
 
 stdenv.mkDerivation rec {
@@ -37,7 +38,11 @@ stdenv.mkDerivation rec {
     scdoc < src/wtwitch.1.scd > wtwitch.1
   '';
 
-  nativeBuildInputs = [ scdoc installShellFiles makeWrapper ];
+  nativeBuildInputs = [
+    scdoc
+    installShellFiles
+    makeWrapper
+  ];
 
   installPhase = ''
     installManPage wtwitch.1
@@ -47,18 +52,23 @@ stdenv.mkDerivation rec {
     install -Dm755 src/wtwitch $out/bin/wtwitch
     wrapProgram $out/bin/wtwitch \
       --set-default LANG en_US.UTF-8 \
-      --prefix PATH : ${lib.makeBinPath (lib.optionals stdenv.isLinux [ vlc ] ++ [
-        bash
-        coreutils-prefixed
-        curl
-        gnused
-        gnugrep
-        jq
-        mplayer
-        mpv
-        procps
-        streamlink
-      ])}
+      --prefix PATH : ${
+        lib.makeBinPath (
+          lib.optionals stdenv.isLinux [ vlc ]
+          ++ [
+            bash
+            coreutils-prefixed
+            curl
+            gnused
+            gnugrep
+            jq
+            mplayer
+            mpv
+            procps
+            streamlink
+          ]
+        )
+      }
   '';
 
   meta = with lib; {

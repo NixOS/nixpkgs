@@ -1,4 +1,10 @@
-{ lib, stdenv, perlPackages, fetchFromGitHub, shortenPerlShebang }:
+{
+  lib,
+  stdenv,
+  perlPackages,
+  fetchFromGitHub,
+  shortenPerlShebang,
+}:
 
 perlPackages.buildPerlPackage rec {
   pname = "pgtop";
@@ -13,7 +19,13 @@ perlPackages.buildPerlPackage rec {
 
   outputs = [ "out" ];
 
-  buildInputs = with perlPackages; [ DBI DBDPg TermReadKey JSON LWP ];
+  buildInputs = with perlPackages; [
+    DBI
+    DBDPg
+    TermReadKey
+    JSON
+    LWP
+  ];
 
   nativeBuildInputs = lib.optional stdenv.isDarwin shortenPerlShebang;
   postInstall = lib.optionalString stdenv.isDarwin ''

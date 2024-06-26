@@ -1,7 +1,8 @@
-{ lib
-, stdenv
-, fetchzip
-, libpng
+{
+  lib,
+  stdenv,
+  fetchzip,
+  libpng,
 }:
 
 stdenv.mkDerivation rec {
@@ -19,9 +20,7 @@ stdenv.mkDerivation rec {
     rm -r libpng zlib
   '';
 
-  buildInputs = [
-    libpng
-  ];
+  buildInputs = [ libpng ];
 
   makeFlags = [ "CC=${stdenv.cc.targetPrefix}c++" ];
 

@@ -1,10 +1,11 @@
-{ stdenv
-, lib
-, cmake
-, fetchFromGitHub
-, rustPlatform
-, testers
-, Security
+{
+  stdenv,
+  lib,
+  cmake,
+  fetchFromGitHub,
+  rustPlatform,
+  testers,
+  Security,
 }:
 
 let
@@ -20,7 +21,10 @@ let
       sha256 = "sha256-aXScqJ1LijMSAy9YkS5QyXtTqxd19lLt3BbyVXlbw8o=";
     };
 
-    nativeBuildInputs = [ cmake rustPlatform.bindgenHook ];
+    nativeBuildInputs = [
+      cmake
+      rustPlatform.bindgenHook
+    ];
     buildInputs = lib.optional stdenv.isDarwin Security;
 
     cargoLock = {

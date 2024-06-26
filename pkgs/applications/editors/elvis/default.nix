@@ -1,4 +1,10 @@
-{ fetchurl, fetchpatch, lib, stdenv, ncurses }:
+{
+  fetchurl,
+  fetchpatch,
+  lib,
+  stdenv,
+  ncurses,
+}:
 
 stdenv.mkDerivation rec {
   pname = "elvis";

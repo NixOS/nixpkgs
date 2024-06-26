@@ -1,10 +1,11 @@
-{ lib
-, darwin
-, fetchzip
-, ocamlPackages
-, soupault
-, stdenv
-, testers
+{
+  lib,
+  darwin,
+  fetchzip,
+  ocamlPackages,
+  soupault,
+  stdenv,
+  testers,
 }:
 
 ocamlPackages.buildDunePackage rec {

@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, testers
-, zig_0_10
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  testers,
+  zig_0_10,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

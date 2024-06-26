@@ -1,10 +1,11 @@
-{ lib
-, python3Packages
-, fetchFromGitHub
-, ledger
-, hledger
-, useLedger ? true
-, useHledger ? true
+{
+  lib,
+  python3Packages,
+  fetchFromGitHub,
+  ledger,
+  hledger,
+  useLedger ? true,
+  useHledger ? true,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -20,36 +21,43 @@ python3Packages.buildPythonApplication rec {
     sha256 = "0n3y4qxsv1cyvyap95h3rj4bj1sinyfgsajygm7s8di3j5aabqr2";
   };
 
-  nativeBuildInputs = with python3Packages; [
-    poetry-core
-  ];
+  nativeBuildInputs = with python3Packages; [ poetry-core ];
 
-  propagatedBuildInputs = with python3Packages; [
-    asn1crypto
-    beautifulsoup4
-    cffi
-    cryptography
-    entrypoints
-    fuzzywuzzy
-    idna
-    jeepney
-    keyring
-    lxml
-    mock
-    nose
-    ofxclient
-    ofxhome
-    ofxparse
-    pbr
-    pycparser
-    secretstorage
-    six
-  ] ++ lib.optional useLedger ledger
+  propagatedBuildInputs =
+    with python3Packages;
+    [
+      asn1crypto
+      beautifulsoup4
+      cffi
+      cryptography
+      entrypoints
+      fuzzywuzzy
+      idna
+      jeepney
+      keyring
+      lxml
+      mock
+      nose
+      ofxclient
+      ofxhome
+      ofxparse
+      pbr
+      pycparser
+      secretstorage
+      six
+    ]
+    ++ lib.optional useLedger ledger
     ++ lib.optional useHledger hledger;
 
   # Checks require ledger as a python package,
   # ledger does not support python3 while ledger-autosync requires it.
-  nativeCheckInputs = with python3Packages; [ ledger hledger nose mock pytestCheckHook ];
+  nativeCheckInputs = with python3Packages; [
+    ledger
+    hledger
+    nose
+    mock
+    pytestCheckHook
+  ];
 
   # Disable some non-passing tests:
   # https://github.com/egh/ledger-autosync/issues/127

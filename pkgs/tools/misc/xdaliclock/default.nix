@@ -1,7 +1,11 @@
-{ lib, stdenv, fetchurl
-, gtk3
-, wrapGAppsHook3
-, pkg-config }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  gtk3,
+  wrapGAppsHook3,
+  pkg-config,
+}:
 
 stdenv.mkDerivation rec {
   pname = "xdaliclock";
@@ -20,9 +24,7 @@ stdenv.mkDerivation rec {
     pkg-config
     wrapGAppsHook3
   ];
-  buildInputs = [
-    gtk3
-  ];
+  buildInputs = [ gtk3 ];
 
   preInstall = ''
     mkdir -vp $out/bin $out/share/man/man1 $out/share/gsettings-schemas/$name/glib-2.0/schemas $out/share/pixmaps $out/share/applications
@@ -40,7 +42,7 @@ stdenv.mkDerivation rec {
     description = "Clock application that morphs digits when they are changed";
     maintainers = with maintainers; [ raskin ];
     platforms = with platforms; linux ++ freebsd;
-    license = licenses.free; #TODO BSD on Gentoo, looks like MIT
+    license = licenses.free; # TODO BSD on Gentoo, looks like MIT
     downloadPage = "http://www.jwz.org/xdaliclock/";
     mainProgram = "xdaliclock";
   };

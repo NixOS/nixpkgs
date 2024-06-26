@@ -1,4 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 
 buildGoModule rec {
   name = "sigtop";
@@ -13,9 +17,7 @@ buildGoModule rec {
 
   vendorHash = "sha256-IFF7zTrHHoEmPoHGOkTHrb7o+9D5PC8Q+MWHSR2EXog=";
 
-  makeFlags = [
-    "PREFIX=\${out}"
-  ];
+  makeFlags = [ "PREFIX=\${out}" ];
 
   meta = with lib; {
     description = "Utility to export messages, attachments and other data from Signal Desktop";

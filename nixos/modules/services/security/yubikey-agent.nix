@@ -1,6 +1,11 @@
 # Global configuration for yubikey-agent.
 
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -10,7 +15,11 @@ in
 {
   ###### interface
 
-  meta.maintainers = with maintainers; [ philandstuff rawkode jwoudenberg ];
+  meta.maintainers = with maintainers; [
+    philandstuff
+    rawkode
+    jwoudenberg
+  ];
 
   options = {
 

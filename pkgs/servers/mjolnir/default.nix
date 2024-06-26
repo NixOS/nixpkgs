@@ -1,11 +1,12 @@
-{ lib
-, mkYarnPackage
-, fetchFromGitHub
-, fetchYarnDeps
-, matrix-sdk-crypto-nodejs
-, makeWrapper
-, nodejs
-, nixosTests
+{
+  lib,
+  mkYarnPackage,
+  fetchFromGitHub,
+  fetchYarnDeps,
+  matrix-sdk-crypto-nodejs,
+  makeWrapper,
+  nodejs,
+  nixosTests,
 }:
 
 mkYarnPackage rec {

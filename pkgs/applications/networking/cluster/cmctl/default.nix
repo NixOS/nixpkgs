@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, buildGoModule
-, fetchFromGitHub
-, installShellFiles
-, nix-update-script
+{
+  lib,
+  stdenv,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  nix-update-script,
 }:
 
 buildGoModule rec {
@@ -30,21 +31,21 @@ buildGoModule rec {
     "-X github.com/cert-manager/cert-manager/pkg/util.AppGitCommit=${src.rev}"
   ];
 
-  nativeBuildInputs = [
-    installShellFiles
-  ];
+  nativeBuildInputs = [ installShellFiles ];
 
   # Trusted by this computer: no: x509: “cert-manager” certificate is not trusted
   doCheck = !stdenv.isDarwin;
 
-  postInstall = ''
-    mv $out/bin/ctl $out/bin/cmctl
-  '' + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-    installShellCompletion --cmd cmctl \
-      --bash <($out/bin/cmctl completion bash) \
-      --fish <($out/bin/cmctl completion fish) \
-      --zsh <($out/bin/cmctl completion zsh)
-  '';
+  postInstall =
+    ''
+      mv $out/bin/ctl $out/bin/cmctl
+    ''
+    + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+      installShellCompletion --cmd cmctl \
+        --bash <($out/bin/cmctl completion bash) \
+        --fish <($out/bin/cmctl completion fish) \
+        --zsh <($out/bin/cmctl completion zsh)
+    '';
 
   passthru.updateScript = nix-update-script { };
 

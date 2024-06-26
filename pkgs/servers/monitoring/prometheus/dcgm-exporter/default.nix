@@ -1,9 +1,10 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, autoAddDriverRunpath
-, dcgm
-, linuxPackages
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  autoAddDriverRunpath,
+  dcgm,
+  linuxPackages,
 }:
 buildGoModule rec {
   pname = "dcgm-exporter";
@@ -32,9 +33,7 @@ buildGoModule rec {
 
   CGO_LDFLAGS = "-ldcgm";
 
-  buildInputs = [
-    dcgm
-  ];
+  buildInputs = [ dcgm ];
 
   # gonvml and go-dcgm do not work with ELF BIND_NOW hardening because not all
   # symbols are available on startup.
@@ -47,9 +46,7 @@ buildGoModule rec {
 
   vendorHash = "sha256-Fjvx15e/psxoqoS6c6GhiQfe7g2aI40EmPR26xLhrzg=";
 
-  nativeBuildInputs = [
-    autoAddDriverRunpath
-  ];
+  nativeBuildInputs = [ autoAddDriverRunpath ];
 
   # Tests try to interact with running DCGM service.
   doCheck = false;

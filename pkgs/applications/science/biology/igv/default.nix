@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchzip, jdk17, testers, wrapGAppsHook3, igv }:
+{
+  lib,
+  stdenv,
+  fetchzip,
+  jdk17,
+  testers,
+  wrapGAppsHook3,
+  igv,
+}:
 
 stdenv.mkDerivation rec {
   pname = "igv";
@@ -26,10 +34,7 @@ stdenv.mkDerivation rec {
   '';
   nativeBuildInputs = [ wrapGAppsHook3 ];
 
-  passthru.tests.version = testers.testVersion {
-    package = igv;
-  };
-
+  passthru.tests.version = testers.testVersion { package = igv; };
 
   meta = with lib; {
     homepage = "https://www.broadinstitute.org/igv/";

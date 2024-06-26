@@ -1,18 +1,43 @@
-{ stdenv, lib, pkgs, pkgsHostHost, makeWrapper, autoPatchelfHook
-, deployAndroidPackage, package, os, platform-tools
+{
+  stdenv,
+  lib,
+  pkgs,
+  pkgsHostHost,
+  makeWrapper,
+  autoPatchelfHook,
+  deployAndroidPackage,
+  package,
+  os,
+  platform-tools,
 }:
 
 let
-  runtime_paths = lib.makeBinPath (with pkgsHostHost; [
-    coreutils file findutils gawk gnugrep gnused jdk python3 which
-  ]) + ":${platform-tools}/platform-tools";
+  runtime_paths =
+    lib.makeBinPath (
+      with pkgsHostHost;
+      [
+        coreutils
+        file
+        findutils
+        gawk
+        gnugrep
+        gnused
+        jdk
+        python3
+        which
+      ]
+    )
+    + ":${platform-tools}/platform-tools";
 in
 deployAndroidPackage rec {
   inherit package os;
-  nativeBuildInputs = [ makeWrapper ]
-    ++ lib.optionals stdenv.isLinux [ autoPatchelfHook ];
+  nativeBuildInputs = [ makeWrapper ] ++ lib.optionals stdenv.isLinux [ autoPatchelfHook ];
   autoPatchelfIgnoreMissingDeps = [ "*" ];
-  buildInputs = lib.optionals (os == "linux") [ pkgs.zlib pkgs.libcxx stdenv.cc.cc.lib ];
+  buildInputs = lib.optionals (os == "linux") [
+    pkgs.zlib
+    pkgs.libcxx
+    stdenv.cc.cc.lib
+  ];
 
   patchElfBnaries = ''
     # Patch the executables of the toolchains, but not the libraries -- they are needed for crosscompiling
@@ -70,8 +95,7 @@ deployAndroidPackage rec {
     done
   '';
 
-  patchInstructions = patchOsAgnostic
-    + lib.optionalString stdenv.isLinux patchElfBnaries;
+  patchInstructions = patchOsAgnostic + lib.optionalString stdenv.isLinux patchElfBnaries;
 
   noAuditTmpdir = true; # Audit script gets invoked by the build/ component in the path for the make standalone script
 }

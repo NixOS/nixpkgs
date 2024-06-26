@@ -1,14 +1,15 @@
-{ autoPatchelfHook
-, curl
-, dpkg
-, dbus
-, fetchurl
-, lib
-, libnl
-, udev
-, cryptsetup
-, stdenv
-, nixosTests
+{
+  autoPatchelfHook,
+  curl,
+  dpkg,
+  dbus,
+  fetchurl,
+  lib,
+  libnl,
+  udev,
+  cryptsetup,
+  stdenv,
+  nixosTests,
 }:
 
 stdenv.mkDerivation rec {
@@ -50,7 +51,9 @@ stdenv.mkDerivation rec {
     mv usr/share $out/share
   '';
 
-  passthru.tests = { inherit (nixosTests) twingate; };
+  passthru.tests = {
+    inherit (nixosTests) twingate;
+  };
 
   meta = with lib; {
     description = "Twingate Client";

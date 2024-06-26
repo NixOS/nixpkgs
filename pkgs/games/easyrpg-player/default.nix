@@ -1,40 +1,41 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, cmake
-, doxygen
-, pkg-config
-, freetype
-, fmt
-, glib
-, harfbuzz
-, liblcf
-, libpng
-, libsndfile
-, libvorbis
-, libxmp
-, libXcursor
-, libXext
-, libXi
-, libXinerama
-, libXrandr
-, libXScrnSaver
-, libXxf86vm
-, mpg123
-, opusfile
-, pcre
-, pixman
-, SDL2
-, speexdsp
-, wildmidi
-, zlib
-, libdecor
-, alsa-lib
-, asciidoctor
-, Foundation
-, AudioUnit
-, AudioToolbox
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  doxygen,
+  pkg-config,
+  freetype,
+  fmt,
+  glib,
+  harfbuzz,
+  liblcf,
+  libpng,
+  libsndfile,
+  libvorbis,
+  libxmp,
+  libXcursor,
+  libXext,
+  libXi,
+  libXinerama,
+  libXrandr,
+  libXScrnSaver,
+  libXxf86vm,
+  mpg123,
+  opusfile,
+  pcre,
+  pixman,
+  SDL2,
+  speexdsp,
+  wildmidi,
+  zlib,
+  libdecor,
+  alsa-lib,
+  asciidoctor,
+  Foundation,
+  AudioUnit,
+  AudioToolbox,
 }:
 
 stdenv.mkDerivation rec {
@@ -67,52 +68,51 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  buildInputs = [
-    fmt
-    freetype
-    glib
-    harfbuzz
-    liblcf
-    libpng
-    libsndfile
-    libvorbis
-    libxmp
-    mpg123
-    opusfile
-    pcre
-    pixman
-    SDL2
-    speexdsp
-    zlib
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
-    alsa-lib
-    libXcursor
-    libXext
-    libXi
-    libXinerama
-    libXrandr
-    libXScrnSaver
-    libXxf86vm
-    libdecor
-    wildmidi # until packaged on Darwin
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    Foundation
-    AudioUnit
-    AudioToolbox
-  ];
+  buildInputs =
+    [
+      fmt
+      freetype
+      glib
+      harfbuzz
+      liblcf
+      libpng
+      libsndfile
+      libvorbis
+      libxmp
+      mpg123
+      opusfile
+      pcre
+      pixman
+      SDL2
+      speexdsp
+      zlib
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      alsa-lib
+      libXcursor
+      libXext
+      libXi
+      libXinerama
+      libXrandr
+      libXScrnSaver
+      libXxf86vm
+      libdecor
+      wildmidi # until packaged on Darwin
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      Foundation
+      AudioUnit
+      AudioToolbox
+    ];
 
-  cmakeFlags = [
-    "-DPLAYER_ENABLE_TESTS=${lib.boolToString doCheck}"
-  ];
+  cmakeFlags = [ "-DPLAYER_ENABLE_TESTS=${lib.boolToString doCheck}" ];
 
   makeFlags = [
     "all"
     "man"
   ];
 
-  buildFlags = lib.optionals doCheck [
-    "test_runner_player"
-  ];
+  buildFlags = lib.optionals doCheck [ "test_runner_player" ];
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir $out/bin

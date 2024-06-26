@@ -1,16 +1,17 @@
-{ lib
-, fetchFromGitHub
-, llvmPackages_15
-, lld_15
-, python3
-, cmake
-, boost
-, libxml2
-, libffi
-, makeWrapper
-, config
-, rocmPackages_5
-, rocmSupport ? config.rocmSupport
+{
+  lib,
+  fetchFromGitHub,
+  llvmPackages_15,
+  lld_15,
+  python3,
+  cmake,
+  boost,
+  libxml2,
+  libffi,
+  makeWrapper,
+  config,
+  rocmPackages_5,
+  rocmSupport ? config.rocmSupport,
 }:
 let
   inherit (llvmPackages_15) stdenv;
@@ -33,31 +34,38 @@ stdenv.mkDerivation rec {
     makeWrapper
   ];
 
-  buildInputs = [
-    libxml2
-    libffi
-    boost
-    llvmPackages_15.openmp
-    llvmPackages_15.libclang.dev
-    llvmPackages_15.llvm
-  ] ++ lib.optionals rocmSupport [
-    rocmPackages.clr
-    rocmPackages.rocm-runtime
-  ];
+  buildInputs =
+    [
+      libxml2
+      libffi
+      boost
+      llvmPackages_15.openmp
+      llvmPackages_15.libclang.dev
+      llvmPackages_15.llvm
+    ]
+    ++ lib.optionals rocmSupport [
+      rocmPackages.clr
+      rocmPackages.rocm-runtime
+    ];
 
   # opensycl makes use of clangs internal headers. Its cmake does not successfully discover them automatically on nixos, so we supply the path manually
-  cmakeFlags = [
-    "-DCLANG_INCLUDE_PATH=${llvmPackages_15.libclang.dev}/include"
-  ];
+  cmakeFlags = [ "-DCLANG_INCLUDE_PATH=${llvmPackages_15.libclang.dev}/include" ];
 
-  postFixup = ''
-    wrapProgram $out/bin/syclcc-clang \
-      --prefix PATH : ${lib.makeBinPath [ python3 lld_15 ]} \
-      --add-flags "-L${llvmPackages_15.openmp}/lib" \
-      --add-flags "-I${llvmPackages_15.openmp.dev}/include" \
-  '' + lib.optionalString rocmSupport ''
-    --add-flags "--rocm-device-lib-path=${rocmPackages.rocm-device-libs}/amdgcn/bitcode"
-  '';
+  postFixup =
+    ''
+      wrapProgram $out/bin/syclcc-clang \
+        --prefix PATH : ${
+          lib.makeBinPath [
+            python3
+            lld_15
+          ]
+        } \
+        --add-flags "-L${llvmPackages_15.openmp}/lib" \
+        --add-flags "-I${llvmPackages_15.openmp.dev}/include" \
+    ''
+    + lib.optionalString rocmSupport ''
+      --add-flags "--rocm-device-lib-path=${rocmPackages.rocm-device-libs}/amdgcn/bitcode"
+    '';
 
   meta = with lib; {
     homepage = "https://github.com/OpenSYCL/OpenSYCL";

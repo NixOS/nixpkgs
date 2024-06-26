@@ -1,7 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, gfortran
-, python3, util-linux, which
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  gfortran,
+  python3,
+  util-linux,
+  which,
 
-, enableStatic ? stdenv.hostPlatform.isStatic
+  enableStatic ? stdenv.hostPlatform.isStatic,
 }:
 
 stdenv.mkDerivation rec {
@@ -15,7 +21,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-PpMiD/PeQ0pe5hqFG6VFHWpR8y3wnO2z1dJfHHeItlQ=";
   };
 
-  outputs = [ "out" "dev" "doc" ];
+  outputs = [
+    "out"
+    "dev"
+    "doc"
+  ];
   nativeBuildInputs = [
     gfortran
     python3
@@ -27,13 +37,15 @@ stdenv.mkDerivation rec {
 
   dontConfigure = true;
 
-  makeFlags = let
-    static = if enableStatic then "1" else "0";
-  in [
-    "OMP=1"
-    "PREFIX=$(out)"
-    "STATIC=${static}"
-  ];
+  makeFlags =
+    let
+      static = if enableStatic then "1" else "0";
+    in
+    [
+      "OMP=1"
+      "PREFIX=$(out)"
+      "STATIC=${static}"
+    ];
 
   postInstall = ''
     mkdir -p $dev/lib/pkgconfig

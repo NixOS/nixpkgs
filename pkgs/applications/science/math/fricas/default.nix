@@ -1,4 +1,16 @@
-{ lib, stdenv, fetchFromGitHub, sbcl, libX11, libXpm, libICE, libSM, libXt, libXau, libXdmcp }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  sbcl,
+  libX11,
+  libXpm,
+  libICE,
+  libSM,
+  libXt,
+  libXau,
+  libXdmcp,
+}:
 
 stdenv.mkDerivation rec {
   pname = "fricas";
@@ -11,7 +23,16 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-T1xDndDnHq/hmhTWWO3Eu0733u8+C8sJMCF6pbLU2GI=";
   };
 
-  buildInputs = [ sbcl libX11 libXpm libICE libSM libXt libXau libXdmcp ];
+  buildInputs = [
+    sbcl
+    libX11
+    libXpm
+    libICE
+    libSM
+    libXt
+    libXau
+    libXdmcp
+  ];
 
   # Remove when updating to next version
   configurePhase = ''

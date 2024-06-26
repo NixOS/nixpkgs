@@ -1,13 +1,14 @@
-{ lib
-, buildNpmPackage
-, fetchFromGitHub
-, buildPackages
-, libsecret
-, pkg-config
-, nodePackages
-, runCommand
-, vscode-js-debug
-, nix-update-script
+{
+  lib,
+  buildNpmPackage,
+  fetchFromGitHub,
+  buildPackages,
+  libsecret,
+  pkg-config,
+  nodePackages,
+  runCommand,
+  vscode-js-debug,
+  nix-update-script,
 }:
 
 buildNpmPackage rec {
@@ -23,7 +24,10 @@ buildNpmPackage rec {
 
   npmDepsHash = "sha256-DfeaiqKadTnGzOObK01ctlavwqTMa0tqn59sLZMPvUM=";
 
-  nativeBuildInputs = [ pkg-config nodePackages.node-gyp ];
+  nativeBuildInputs = [
+    pkg-config
+    nodePackages.node-gyp
+  ];
 
   buildInputs = [ libsecret ];
 
@@ -44,24 +48,29 @@ buildNpmPackage rec {
   '';
 
   passthru.updateScript = nix-update-script {
-    extraArgs = [ "--version-regex" "v((?!\d{4}\.\d\.\d{3}).*)" ];
+    extraArgs = [
+      "--version-regex"
+      "v((?!\d{4}\.\d\.\d{3}).*)"
+    ];
   };
 
-  passthru.tests.test = runCommand "${pname}-test"
-    {
-      nativeBuildInputs = [ vscode-js-debug ];
-      meta.timeout = 60;
-    } ''
-    output=$(js-debug --help 2>&1)
-    if grep -Fw -- "Usage: dapDebugServer.js [port|socket path=8123] [host=localhost]" - <<< "$output"; then
-      touch $out
-    else
-      echo "Expected help output was not found!" >&2
-      echo "The output was:" >&2
-      echo "$output" >&2
-      exit 1
-    fi
-  '';
+  passthru.tests.test =
+    runCommand "${pname}-test"
+      {
+        nativeBuildInputs = [ vscode-js-debug ];
+        meta.timeout = 60;
+      }
+      ''
+        output=$(js-debug --help 2>&1)
+        if grep -Fw -- "Usage: dapDebugServer.js [port|socket path=8123] [host=localhost]" - <<< "$output"; then
+          touch $out
+        else
+          echo "Expected help output was not found!" >&2
+          echo "The output was:" >&2
+          echo "$output" >&2
+          exit 1
+        fi
+      '';
 
   meta = with lib; {
     description = "A DAP-compatible JavaScript debugger";
@@ -73,8 +82,7 @@ buildNpmPackage rec {
       Studio proper.
     '';
     homepage = "https://github.com/microsoft/vscode-js-debug";
-    changelog =
-      "https://github.com/microsoft/vscode-js-debug/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/microsoft/vscode-js-debug/blob/v${version}/CHANGELOG.md";
     mainProgram = "js-debug";
     license = licenses.mit;
     maintainers = with maintainers; [ zeorin ];

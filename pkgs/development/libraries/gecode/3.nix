@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchurl
-, fetchpatch
-, perl
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  perl,
 }:
 
 stdenv.mkDerivation rec {
@@ -14,9 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "0k45jas6p3cyldgyir1314ja3174sayn2h2ly3z9b4dl3368pk77";
   };
 
-  patches = [
-    (import ./fix-const-weights-clang-patch.nix fetchpatch)
-  ];
+  patches = [ (import ./fix-const-weights-clang-patch.nix fetchpatch) ];
 
   postPatch = ''
     substituteInPlace gecode/flatzinc/lexer.yy.cpp \

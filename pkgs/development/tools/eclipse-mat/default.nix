@@ -1,21 +1,22 @@
-{ fetchurl
-, fontconfig
-, freetype
-, glib
-, gsettings-desktop-schemas
-, gtk3
-, jdk17
-, lib
-, libX11
-, libXrender
-, libXtst
-, makeDesktopItem
-, makeWrapper
-, shared-mime-info
-, stdenv
-, unzip
-, webkitgtk
-, zlib
+{
+  fetchurl,
+  fontconfig,
+  freetype,
+  glib,
+  gsettings-desktop-schemas,
+  gtk3,
+  jdk17,
+  lib,
+  libX11,
+  libXrender,
+  libXtst,
+  makeDesktopItem,
+  makeWrapper,
+  shared-mime-info,
+  stdenv,
+  unzip,
+  webkitgtk,
+  zlib,
 }:
 
 let
@@ -60,13 +61,26 @@ stdenv.mkDerivation rec {
     libCairo=$out/eclipse/libcairo-swt.so
     patchelf --set-interpreter $interpreter $out/mat/MemoryAnalyzer
     [ -f $libCairo ] && patchelf --set-rpath ${
-      lib.makeLibraryPath [ freetype fontconfig libX11 libXrender zlib ]
+      lib.makeLibraryPath [
+        freetype
+        fontconfig
+        libX11
+        libXrender
+        zlib
+      ]
     } $libCairo
 
     # Create wrapper script.  Pass -configuration to store settings in ~/.eclipse-mat/<version>
     makeWrapper $out/mat/MemoryAnalyzer $out/bin/eclipse-mat \
       --prefix PATH : ${jdk}/bin \
-      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath ([ glib gtk3 libXtst webkitgtk ])} \
+      --prefix LD_LIBRARY_PATH : ${
+        lib.makeLibraryPath ([
+          glib
+          gtk3
+          libXtst
+          webkitgtk
+        ])
+      } \
       --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH" \
       --add-flags "-configuration \$HOME/.eclipse-mat/''${version}/configuration"
 
@@ -78,7 +92,10 @@ stdenv.mkDerivation rec {
     mv $out/share/pixmaps/eclipse64.png $out/share/pixmaps/eclipse.png
   '';
 
-  nativeBuildInputs = [ unzip makeWrapper ];
+  nativeBuildInputs = [
+    unzip
+    makeWrapper
+  ];
   buildInputs = [
     fontconfig
     freetype

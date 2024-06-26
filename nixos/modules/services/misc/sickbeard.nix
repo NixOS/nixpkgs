@@ -1,4 +1,10 @@
-{ config, lib, options, pkgs, ... }:
+{
+  config,
+  lib,
+  options,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -58,7 +64,6 @@ in
     };
   };
 
-
   ###### implementation
 
   config = mkIf cfg.enable {
@@ -73,13 +78,11 @@ in
       };
     };
 
-    users.groups = optionalAttrs (cfg.group == name) {
-      ${name}.gid = config.ids.gids.sickbeard;
-    };
+    users.groups = optionalAttrs (cfg.group == name) { ${name}.gid = config.ids.gids.sickbeard; };
 
     systemd.services.sickbeard = {
       description = "Sickbeard Server";
-      wantedBy    = [ "multi-user.target" ];
+      wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
 
       serviceConfig = {

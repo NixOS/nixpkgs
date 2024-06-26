@@ -1,29 +1,31 @@
-{ lib
-, melpaBuild
-, fetchFromGitHub
-, fetchpatch
-, writeText
-# Emacs packages
-, _map
-, a
-, anaphora
-, cl-lib
-, dash
-, dash-functional
-, esxml
-, f
-, frame-purpose
-, ht
-, ov
-, rainbow-identifiers
-, request
-, s
-, tracking
+{
+  lib,
+  melpaBuild,
+  fetchFromGitHub,
+  fetchpatch,
+  writeText,
+  # Emacs packages
+  _map,
+  a,
+  anaphora,
+  cl-lib,
+  dash,
+  dash-functional,
+  esxml,
+  f,
+  frame-purpose,
+  ht,
+  ov,
+  rainbow-identifiers,
+  request,
+  s,
+  tracking,
 }:
 
 let
   rev = "d2ac55293c96d4c95971ed8e2a3f6f354565c5ed";
-in melpaBuild {
+in
+melpaBuild {
   pname = "matrix-client";
   version = "0.3.0";
 

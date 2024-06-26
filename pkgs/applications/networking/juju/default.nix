@@ -1,4 +1,11 @@
-{ lib, fetchFromGitHub, buildGoModule, installShellFiles, testers, juju }:
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
+  installShellFiles,
+  testers,
+  juju,
+}:
 
 buildGoModule rec {
   pname = "juju";
@@ -13,9 +20,7 @@ buildGoModule rec {
 
   vendorHash = "sha256-2JNEN8fmxflEyP5lHAv75Bjt9sbKoWL5O+87hxK89vU=";
 
-  subPackages = [
-    "cmd/juju"
-  ];
+  subPackages = [ "cmd/juju" ];
 
   nativeBuildInputs = [ installShellFiles ];
 

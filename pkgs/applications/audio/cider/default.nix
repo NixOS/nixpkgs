@@ -1,4 +1,9 @@
-{ appimageTools, lib, fetchurl, makeWrapper}:
+{
+  appimageTools,
+  lib,
+  fetchurl,
+  makeWrapper,
+}:
 
 appimageTools.wrapType2 rec {
   pname = "cider";
@@ -10,8 +15,10 @@ appimageTools.wrapType2 rec {
   };
 
   extraInstallCommands =
-    let contents = appimageTools.extract { inherit pname version src; };
-    in ''
+    let
+      contents = appimageTools.extract { inherit pname version src; };
+    in
+    ''
       source "${makeWrapper}/nix-support/setup-hook"
       wrapProgram $out/bin/${pname} \
         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"

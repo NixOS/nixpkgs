@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, perl
-, python3
-, tbb
-, zlib
-, runCommand
-, bowtie2
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  perl,
+  python3,
+  tbb,
+  zlib,
+  runCommand,
+  bowtie2,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -32,9 +33,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = [ tbb zlib python3 perl ];
+  buildInputs = [
+    tbb
+    zlib
+    python3
+    perl
+  ];
 
-  cmakeFlags = lib.optional (!stdenv.hostPlatform.isx86) ["-DCMAKE_CXX_FLAGS=-I${finalAttrs.src}/third_party"];
+  cmakeFlags = lib.optional (!stdenv.hostPlatform.isx86) [
+    "-DCMAKE_CXX_FLAGS=-I${finalAttrs.src}/third_party"
+  ];
 
   # ctest fails because of missing dependencies between tests
   doCheck = false;

@@ -1,19 +1,20 @@
-{ lib
-, stdenv
-, gettext
-, fetchurl
-, webkitgtk_4_1
-, pkg-config
-, gtk3
-, libhandy
-, glib
-, gnome
-, sqlite
-, itstool
-, libxml2
-, libxslt
-, gst_all_1
-, wrapGAppsHook3
+{
+  lib,
+  stdenv,
+  gettext,
+  fetchurl,
+  webkitgtk_4_1,
+  pkg-config,
+  gtk3,
+  libhandy,
+  glib,
+  gnome,
+  sqlite,
+  itstool,
+  libxml2,
+  libxslt,
+  gst_all_1,
+  wrapGAppsHook3,
 }:
 
 stdenv.mkDerivation rec {
@@ -47,9 +48,7 @@ stdenv.mkDerivation rec {
   ];
 
   passthru = {
-    updateScript = gnome.updateScript {
-      packageName = "yelp";
-    };
+    updateScript = gnome.updateScript { packageName = "yelp"; };
   };
 
   meta = with lib; {

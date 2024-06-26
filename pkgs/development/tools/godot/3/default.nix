@@ -1,28 +1,29 @@
-{ lib
-, stdenv
-, alsa-lib
-, alsa-plugins
-, autoPatchelfHook
-, fetchFromGitHub
-, freetype
-, installShellFiles
-, libGLU
-, libpulseaudio
-, libX11
-, libXcursor
-, libXext
-, libXfixes
-, libXi
-, libXinerama
-, libXrandr
-, libXrender
-, makeWrapper
-, openssl
-, pkg-config
-, scons
-, udev
-, yasm
-, zlib
+{
+  lib,
+  stdenv,
+  alsa-lib,
+  alsa-plugins,
+  autoPatchelfHook,
+  fetchFromGitHub,
+  freetype,
+  installShellFiles,
+  libGLU,
+  libpulseaudio,
+  libX11,
+  libXcursor,
+  libXext,
+  libXfixes,
+  libXi,
+  libXinerama,
+  libXrandr,
+  libXrender,
+  makeWrapper,
+  openssl,
+  pkg-config,
+  scons,
+  udev,
+  yasm,
+  zlib,
 }:
 
 stdenv.mkDerivation (self: {
@@ -100,9 +101,12 @@ stdenv.mkDerivation (self: {
   shouldInstallHeaders = self.shouldBuildTools;
   shouldInstallShortcut = self.shouldBuildTools && self.godotBuildPlatform != "server";
 
-  outputs = ["out"] ++ lib.optional self.shouldInstallManual "man" ++ lib.optional self.shouldBuildTools "dev";
+  outputs = [
+    "out"
+  ] ++ lib.optional self.shouldInstallManual "man" ++ lib.optional self.shouldBuildTools "dev";
 
-  builtGodotBinNamePattern = if self.godotBuildPlatform == "server" then "godot_server.*" else "godot.*";
+  builtGodotBinNamePattern =
+    if self.godotBuildPlatform == "server" then "godot_server.*" else "godot.*";
 
   godotBinInstallPath = "bin";
   installedGodotBinName = self.pname;
@@ -150,17 +154,26 @@ stdenv.mkDerivation (self: {
     runHook postInstall
   '';
 
-  runtimeDependencies = lib.optionals self.shouldPatchBinary (map lib.getLib [
-    alsa-lib
-    libpulseaudio
-    udev
-  ]);
+  runtimeDependencies = lib.optionals self.shouldPatchBinary (
+    map lib.getLib [
+      alsa-lib
+      libpulseaudio
+      udev
+    ]
+  );
 
   meta = with lib; {
     homepage = "https://godotengine.org";
     description = "Free and Open Source 2D and 3D game engine (" + self.godotBuildDescription + ")";
     license = licenses.mit;
-    platforms = [ "i686-linux" "x86_64-linux" "aarch64-linux" ];
-    maintainers = with maintainers; [ rotaerk twey ];
+    platforms = [
+      "i686-linux"
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
+    maintainers = with maintainers; [
+      rotaerk
+      twey
+    ];
   };
 })

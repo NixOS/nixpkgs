@@ -1,12 +1,13 @@
-{ fdupes
-, buildFHSEnv
-, fetchzip
-, icoutils
-, imagemagick
-, jdk17
-, lib
-, makeDesktopItem
-, stdenvNoCC
+{
+  fdupes,
+  buildFHSEnv,
+  fetchzip,
+  icoutils,
+  imagemagick,
+  jdk17,
+  lib,
+  makeDesktopItem,
+  stdenvNoCC,
 }:
 
 let
@@ -16,12 +17,18 @@ let
     version = "6.11.1";
 
     src = fetchzip {
-      url = "https://sw-center.st.com/packs/resource/library/stm32cube_mx_v${builtins.replaceStrings ["."] [""] version}-lin.zip";
+      url = "https://sw-center.st.com/packs/resource/library/stm32cube_mx_v${
+        builtins.replaceStrings [ "." ] [ "" ] version
+      }-lin.zip";
       hash = "sha256-By9T43GLM1J63TkRi3kl05h1RflBorU1QHgYOrXQ9N0=";
       stripRoot = false;
     };
 
-    nativeBuildInputs = [ fdupes icoutils imagemagick ];
+    nativeBuildInputs = [
+      fdupes
+      icoutils
+      imagemagick
+    ];
     desktopItem = makeDesktopItem {
       name = "STM32CubeMX";
       exec = "stm32cubemx";
@@ -78,38 +85,41 @@ let
       homepage = "https://www.st.com/en/development-tools/stm32cubemx.html";
       sourceProvenance = with sourceTypes; [ binaryBytecode ];
       license = licenses.unfree;
-      maintainers = with maintainers; [ angaz wucke13 ];
+      maintainers = with maintainers; [
+        angaz
+        wucke13
+      ];
       platforms = [ "x86_64-linux" ];
     };
   };
-  in
-  buildFHSEnv {
-    inherit (package) pname version meta;
-    runScript = "${package.outPath}/bin/stm32cubemx";
-    targetPkgs = pkgs:
-      with pkgs; [
-        alsa-lib
-        at-spi2-atk
-        cairo
-        cups
-        dbus
-        expat
-        glib
-        gtk3
-        libdrm
-        libGL
-        libudev0-shim
-        libxkbcommon
-        mesa
-        nspr
-        nss
-        pango
-        xorg.libX11
-        xorg.libxcb
-        xorg.libXcomposite
-        xorg.libXdamage
-        xorg.libXext
-        xorg.libXfixes
-        xorg.libXrandr
-      ];
+in
+buildFHSEnv {
+  inherit (package) pname version meta;
+  runScript = "${package.outPath}/bin/stm32cubemx";
+  targetPkgs =
+    pkgs: with pkgs; [
+      alsa-lib
+      at-spi2-atk
+      cairo
+      cups
+      dbus
+      expat
+      glib
+      gtk3
+      libdrm
+      libGL
+      libudev0-shim
+      libxkbcommon
+      mesa
+      nspr
+      nss
+      pango
+      xorg.libX11
+      xorg.libxcb
+      xorg.libXcomposite
+      xorg.libXdamage
+      xorg.libXext
+      xorg.libXfixes
+      xorg.libXrandr
+    ];
 }

@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, slurp
-, grim
-, gnome
-, wl-clipboard
-, imagemagick
-, makeWrapper
-, bash
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  slurp,
+  grim,
+  gnome,
+  wl-clipboard,
+  imagemagick,
+  makeWrapper,
+  bash,
 }:
 
 stdenv.mkDerivation rec {
@@ -35,19 +36,19 @@ stdenv.mkDerivation rec {
       --replace 'wl-copy' "${wl-clipboard}/bin/wl-copy"
   '';
 
-  installFlags = [
-    "DESTDIR=${placeholder "out"}"
-  ];
+  installFlags = [ "DESTDIR=${placeholder "out"}" ];
 
   postInstall = ''
     wrapProgram $out/usr/bin/wl-color-picker \
-      --prefix PATH : ${lib.makeBinPath [
-         grim
-         slurp
-         imagemagick
-         gnome.zenity
-         wl-clipboard
-       ]}
+      --prefix PATH : ${
+        lib.makeBinPath [
+          grim
+          slurp
+          imagemagick
+          gnome.zenity
+          wl-clipboard
+        ]
+      }
     mkdir -p $out/bin
     ln -s $out/usr/bin/wl-color-picker $out/bin/wl-color-picker
   '';

@@ -1,9 +1,13 @@
-{ lib, fetchFromGitHub, jdk11, maven, jogl }:
+{
+  lib,
+  fetchFromGitHub,
+  jdk11,
+  maven,
+  jogl,
+}:
 
 let
-  mavenJdk11 = maven.override {
-    jdk = jdk11;
-  };
+  mavenJdk11 = maven.override { jdk = jdk11; };
 in
 mavenJdk11.buildMavenPackage rec {
   pname = "gephi";
@@ -41,7 +45,7 @@ mavenJdk11.buildMavenPackage rec {
     homepage = "https://gephi.org";
     sourceProvenance = with sourceTypes; [
       fromSource
-      binaryBytecode  # deps
+      binaryBytecode # deps
     ];
     license = licenses.gpl3;
     maintainers = [ maintainers.taeer ];

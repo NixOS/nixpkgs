@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, nixosTests
-, autoreconfHook, pkg-config, libnl, iptables
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nixosTests,
+  autoreconfHook,
+  pkg-config,
+  libnl,
+  iptables,
 }:
 
 let
@@ -12,25 +19,34 @@ stdenv.mkDerivation {
 
   src = sourceAttrs.src;
 
-  patches = [
-    ./validate-config.patch
-  ];
+  patches = [ ./validate-config.patch ];
 
   outputs = [
     "out"
     "man"
   ];
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
-  buildInputs = [ libnl iptables ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ];
+  buildInputs = [
+    libnl
+    iptables
+  ];
 
-  makeFlags = [ "-C" "src/usr" ];
+  makeFlags = [
+    "-C"
+    "src/usr"
+  ];
 
   prePatch = ''
     sed -e 's%^XTABLES_SO_DIR = .*%XTABLES_SO_DIR = '"$out"'/lib/xtables%g' -i src/usr/iptables/Makefile
   '';
 
-  passthru.tests = { inherit (nixosTests) jool; };
+  passthru.tests = {
+    inherit (nixosTests) jool;
+  };
 
   meta = with lib; {
     homepage = "https://www.jool.mx/";

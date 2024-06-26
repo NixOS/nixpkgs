@@ -3,7 +3,7 @@
   buildGoModule,
   fetchFromGitHub,
   testers,
-  gomarkdoc
+  gomarkdoc,
 }:
 
 buildGoModule rec {
@@ -29,9 +29,7 @@ buildGoModule rec {
   ];
 
   passthru.tests = {
-    version = testers.testVersion {
-      package = gomarkdoc;
-    };
+    version = testers.testVersion { package = gomarkdoc; };
   };
 
   meta = with lib; {

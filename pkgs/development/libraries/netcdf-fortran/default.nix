@@ -1,4 +1,15 @@
-{ lib, stdenv, fetchFromGitHub, netcdf, hdf5, curl, gfortran, CoreFoundation, CoreServices, SystemConfiguration }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  netcdf,
+  hdf5,
+  curl,
+  gfortran,
+  CoreFoundation,
+  CoreServices,
+  SystemConfiguration,
+}:
 stdenv.mkDerivation rec {
   pname = "netcdf-fortran";
   version = "4.4.5";
@@ -11,16 +22,23 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ gfortran ];
-  buildInputs = [ netcdf hdf5 curl ]
+  buildInputs =
+    [
+      netcdf
+      hdf5
+      curl
+    ]
     ++ lib.optionals stdenv.isDarwin [
       CoreFoundation
       CoreServices
       SystemConfiguration
     ];
-  env.NIX_LDFLAGS = toString (lib.optionals stdenv.isDarwin [
-    "-F${CoreServices}/Library/Frameworks"
-    "-F${SystemConfiguration}/Library/Frameworks"
-  ]);
+  env.NIX_LDFLAGS = toString (
+    lib.optionals stdenv.isDarwin [
+      "-F${CoreServices}/Library/Frameworks"
+      "-F${SystemConfiguration}/Library/Frameworks"
+    ]
+  );
   doCheck = true;
 
   FFLAGS = [ "-std=legacy" ];

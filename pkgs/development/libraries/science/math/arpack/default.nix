@@ -1,9 +1,16 @@
-{ lib, stdenv, fetchFromGitHub, cmake
-, gfortran, blas, lapack, eigen
-, useMpi ? false
-, mpi
-, openssh
-, igraph
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  gfortran,
+  blas,
+  lapack,
+  eigen,
+  useMpi ? false,
+  mpi,
+  openssh,
+  igraph,
 }:
 
 # MPI version can only be built with LP64 interface.
@@ -21,12 +28,18 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-HCvapLba8oLqx9I5+KDAU0s/dTmdWOEilS75i4gyfC0=";
   };
 
-  nativeBuildInputs = [ cmake gfortran ];
-  buildInputs = assert (blas.isILP64 == lapack.isILP64); [
-    blas
-    lapack
-    eigen
-  ] ++ lib.optional useMpi mpi;
+  nativeBuildInputs = [
+    cmake
+    gfortran
+  ];
+  buildInputs =
+    assert (blas.isILP64 == lapack.isILP64);
+    [
+      blas
+      lapack
+      eigen
+    ]
+    ++ lib.optional useMpi mpi;
 
   nativeCheckInputs = lib.optional useMpi openssh;
 
@@ -62,7 +75,10 @@ stdenv.mkDerivation rec {
       problems.
     '';
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ ttuegel dotlambda ];
+    maintainers = with lib.maintainers; [
+      ttuegel
+      dotlambda
+    ];
     platforms = lib.platforms.unix;
   };
 }

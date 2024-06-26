@@ -1,11 +1,17 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
 let
   cfg = config.services.coredns;
   configFile = pkgs.writeText "Corefile" cfg.config;
-in {
+in
+{
   options.services.coredns = {
     enable = mkEnableOption "Coredns dns server";
 
@@ -26,7 +32,7 @@ in {
     package = mkPackageOption pkgs "coredns" { };
 
     extraArgs = mkOption {
-      default = [];
+      default = [ ];
       example = [ "-dns.port=53" ];
       type = types.listOf types.str;
       description = "Extra arguments to pass to coredns.";

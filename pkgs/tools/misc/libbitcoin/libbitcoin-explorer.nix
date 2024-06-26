@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, autoreconfHook
-, boost, libbitcoin-client, libbitcoin-network }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  autoreconfHook,
+  boost,
+  libbitcoin-client,
+  libbitcoin-network,
+}:
 
 stdenv.mkDerivation rec {
   pname = "libbitcoin-explorer";
@@ -12,8 +20,14 @@ stdenv.mkDerivation rec {
     hash = "sha256-NUAtjrfRbZg5ewQo4PZ1HEoG8GRrsPcNb78UYMHqdyo=";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
-  buildInputs = [ libbitcoin-client libbitcoin-network ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ];
+  buildInputs = [
+    libbitcoin-client
+    libbitcoin-network
+  ];
 
   enableParallelBuilding = true;
 

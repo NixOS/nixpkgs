@@ -1,17 +1,18 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, gettext
-, itstool
-, libxml2
-, mate-desktop
-, dconf
-, vte
-, pcre2
-, wrapGAppsHook3
-, mateUpdateScript
-, nixosTests
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  gettext,
+  itstool,
+  libxml2,
+  mate-desktop,
+  dconf,
+  vte,
+  pcre2,
+  wrapGAppsHook3,
+  mateUpdateScript,
+  nixosTests,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,9 +1,10 @@
-{ lib
-, fetchFromGitHub
-, rustPlatform
-, fetchurl
-, stdenv
-, darwin
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  fetchurl,
+  stdenv,
+  darwin,
 }:
 
 let
@@ -53,7 +54,10 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "Solidity test generator based on the Branching Tree Technique";
     homepage = "https://github.com/alexfertel/bulloak";
-    license = with licenses; [ mit asl20 ];
+    license = with licenses; [
+      mit
+      asl20
+    ];
     mainProgram = "bulloak";
     maintainers = with maintainers; [ beeb ];
   };

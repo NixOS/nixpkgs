@@ -1,9 +1,22 @@
-{ lib, stdenv, fetchFromGitHub, openjdk, openjfx, gradle_7, makeDesktopItem, perl, writeText, makeWrapper }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  openjdk,
+  openjfx,
+  gradle_7,
+  makeDesktopItem,
+  perl,
+  writeText,
+  makeWrapper,
+}:
 let
-  jdk = openjdk.override (lib.optionalAttrs stdenv.isLinux {
-    enableJavaFX = true;
-    openjfx = openjfx.override { withWebKit = true; };
-  });
+  jdk = openjdk.override (
+    lib.optionalAttrs stdenv.isLinux {
+      enableJavaFX = true;
+      openjfx = openjfx.override { withWebKit = true; };
+    }
+  );
 
   pname = "scenic-view";
   version = "11.0.2";
@@ -21,7 +34,11 @@ let
     name = "${pname}-deps";
     inherit src;
 
-    nativeBuildInputs = [ jdk perl gradle ];
+    nativeBuildInputs = [
+      jdk
+      perl
+      gradle
+    ];
 
     buildPhase = ''
       export GRADLE_USER_HOME=$(mktemp -d);
@@ -36,7 +53,7 @@ let
         | sh
     '';
 
-    outputHashAlgo =  "sha256";
+    outputHashAlgo = "sha256";
     outputHashMode = "recursive";
     outputHash = "0d6qs0wg2nfxyq85q46a8dcdqknz9pypb2qmvc8k2w8vcdac1y7n";
   };
@@ -73,13 +90,22 @@ let
     desktopName = pname;
     exec = pname;
     comment = "JavaFx application to visualize and modify the scenegraph of running JavaFx applications.";
-    mimeTypes = [ "application/java" "application/java-vm" "application/java-archive" ];
+    mimeTypes = [
+      "application/java"
+      "application/java-vm"
+      "application/java-archive"
+    ];
     categories = [ "Development" ];
   };
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   inherit pname version src;
-  nativeBuildInputs = [ jdk gradle makeWrapper ];
+  nativeBuildInputs = [
+    jdk
+    gradle
+    makeWrapper
+  ];
 
   buildPhase = ''
     runHook preBuild
@@ -88,7 +114,7 @@ in stdenv.mkDerivation rec {
     gradle --offline --no-daemon --info --init-script ${gradleInit} build
 
     runHook postBuild
-    '';
+  '';
 
   installPhase = ''
     runHook preInstall
@@ -114,7 +140,7 @@ in stdenv.mkDerivation rec {
     homepage = "https://github.com/JonathanGiles/scenic-view/";
     sourceProvenance = with sourceTypes; [
       fromSource
-      binaryBytecode  # deps
+      binaryBytecode # deps
     ];
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ wirew0rm ];

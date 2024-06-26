@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchurl
-, callPackage
-, makeWrapper
-, makeDesktopItem
-, love
-, luajit
-, libcoldclear ? callPackage ./libcoldclear.nix { }
-, ccloader ? callPackage ./ccloader.nix { inherit libcoldclear luajit; }
+{
+  lib,
+  stdenv,
+  fetchurl,
+  callPackage,
+  makeWrapper,
+  makeDesktopItem,
+  love,
+  luajit,
+  libcoldclear ? callPackage ./libcoldclear.nix { },
+  ccloader ? callPackage ./ccloader.nix { inherit libcoldclear luajit; },
 }:
 
 let
@@ -39,7 +40,10 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ love ccloader ];
+  buildInputs = [
+    love
+    ccloader
+  ];
 
   dontUnpack = true;
 

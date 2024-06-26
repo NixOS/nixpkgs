@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, buildDotnetModule
-, fetchFromGitHub
-, dotnetCorePackages
-, openssl
-, mono
+{
+  lib,
+  stdenv,
+  buildDotnetModule,
+  fetchFromGitHub,
+  dotnetCorePackages,
+  openssl,
+  mono,
 }:
 
 buildDotnetModule rec {
@@ -43,6 +44,10 @@ buildDotnetModule rec {
     homepage = "https://github.com/Jackett/Jackett/";
     changelog = "https://github.com/Jackett/Jackett/releases/tag/v${version}";
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ edwtjo nyanloutre purcell ];
+    maintainers = with maintainers; [
+      edwtjo
+      nyanloutre
+      purcell
+    ];
   };
 }

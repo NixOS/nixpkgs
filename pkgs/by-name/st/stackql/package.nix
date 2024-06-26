@@ -22,9 +22,15 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/stackql/stackql/internal/stackql/cmd.BuildMajorVersion=${builtins.elemAt (lib.splitVersion version) 0}"
-    "-X github.com/stackql/stackql/internal/stackql/cmd.BuildMinorVersion=${builtins.elemAt (lib.splitVersion version) 1}"
-    "-X github.com/stackql/stackql/internal/stackql/cmd.BuildPatchVersion=${builtins.elemAt (lib.splitVersion version) 2}"
+    "-X github.com/stackql/stackql/internal/stackql/cmd.BuildMajorVersion=${
+      builtins.elemAt (lib.splitVersion version) 0
+    }"
+    "-X github.com/stackql/stackql/internal/stackql/cmd.BuildMinorVersion=${
+      builtins.elemAt (lib.splitVersion version) 1
+    }"
+    "-X github.com/stackql/stackql/internal/stackql/cmd.BuildPatchVersion=${
+      builtins.elemAt (lib.splitVersion version) 2
+    }"
     "-X github.com/stackql/stackql/internal/stackql/cmd.BuildDate=2024-05-15T07:51:52Z" # date of commit hash
     "-X stackql/internal/stackql/planbuilder.PlanCacheEnabled=true"
   ];

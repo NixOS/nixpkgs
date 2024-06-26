@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, just
-, pkg-config
-, rust
-, rustPlatform
-, libglvnd
-, libxkbcommon
-, wayland
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  just,
+  pkg-config,
+  rust,
+  rustPlatform,
+  libglvnd,
+  libxkbcommon,
+  wayland,
 }:
 
 rustPlatform.buildRustPackage {
@@ -34,30 +35,45 @@ rustPlatform.buildRustPackage {
     };
   };
 
-  nativeBuildInputs = [ just pkg-config ];
-  buildInputs = [ libglvnd libxkbcommon wayland ];
+  nativeBuildInputs = [
+    just
+    pkg-config
+  ];
+  buildInputs = [
+    libglvnd
+    libxkbcommon
+    wayland
+  ];
 
   dontUseJustBuild = true;
 
   justFlags = [
-    "--set" "prefix" (placeholder "out")
-    "--set" "bin-src" "target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/cosmic-panel"
+    "--set"
+    "prefix"
+    (placeholder "out")
+    "--set"
+    "bin-src"
+    "target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/cosmic-panel"
   ];
 
   # Force linking to libEGL, which is always dlopen()ed.
   "CARGO_TARGET_${stdenv.hostPlatform.rust.cargoEnvVarTarget}_RUSTFLAGS" =
-    map (a: "-C link-arg=${a}") [
-      "-Wl,--push-state,--no-as-needed"
-      "-lEGL"
-      "-Wl,--pop-state"
-    ];
+    map (a: "-C link-arg=${a}")
+      [
+        "-Wl,--push-state,--no-as-needed"
+        "-lEGL"
+        "-Wl,--pop-state"
+      ];
 
   meta = with lib; {
     homepage = "https://github.com/pop-os/cosmic-panel";
     description = "Panel for the COSMIC Desktop Environment";
     mainProgram = "cosmic-panel";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ qyliss nyanbinary ];
+    maintainers = with maintainers; [
+      qyliss
+      nyanbinary
+    ];
     platforms = platforms.linux;
   };
 }

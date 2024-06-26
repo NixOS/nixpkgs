@@ -1,15 +1,16 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, substituteAll
-, cinnamon
-, circle-flags
-, gettext
-, gobject-introspection
-, mpv
-, python3
-, wrapGAppsHook3
-, yt-dlp
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  substituteAll,
+  cinnamon,
+  circle-flags,
+  gettext,
+  gobject-introspection,
+  mpv,
+  python3,
+  wrapGAppsHook3,
+  yt-dlp,
 }:
 
 stdenv.mkDerivation rec {
@@ -90,7 +91,10 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/linuxmint/hypnotix";
     changelog = "https://github.com/linuxmint/hypnotix/blob/${src.rev}/debian/changelog";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ dotlambda bobby285271 ];
+    maintainers = with lib.maintainers; [
+      dotlambda
+      bobby285271
+    ];
     platforms = lib.platforms.linux;
     mainProgram = "hypnotix";
   };

@@ -1,21 +1,22 @@
-{ alsa-lib
-, autoPatchelfHook
-, fetchurl
-, gtk3
-, gtk4
-, libnotify
-, copyDesktopItems
-, makeDesktopItem
-, makeWrapper
-, mesa
-, nss
-, lib
-, libdrm
-, qt5
-, stdenv
-, udev
-, xdg-utils
-, xorg
+{
+  alsa-lib,
+  autoPatchelfHook,
+  fetchurl,
+  gtk3,
+  gtk4,
+  libnotify,
+  copyDesktopItems,
+  makeDesktopItem,
+  makeWrapper,
+  mesa,
+  nss,
+  lib,
+  libdrm,
+  qt5,
+  stdenv,
+  udev,
+  xdg-utils,
+  xorg,
 }:
 
 stdenv.mkDerivation rec {
@@ -30,27 +31,43 @@ stdenv.mkDerivation rec {
   # don't remove runtime deps
   dontPatchELF = true;
   # ignore optional Qt 6 shim
-  autoPatchelfIgnoreMissingDeps = [ "libQt6Widgets.so.6" "libQt6Gui.so.6" "libQt6Core.so.6" ];
-
-  nativeBuildInputs = [ autoPatchelfHook makeWrapper qt5.wrapQtAppsHook copyDesktopItems ];
-
-  buildInputs = with xorg; [
-    libXdmcp
-    libXScrnSaver
-    libXtst
-    libxshmfence
-    libXdamage
-  ] ++ [
-    alsa-lib
-    gtk3
-    nss
-    libdrm
-    mesa
-    gtk4
-    qt5.qtbase
+  autoPatchelfIgnoreMissingDeps = [
+    "libQt6Widgets.so.6"
+    "libQt6Gui.so.6"
+    "libQt6Core.so.6"
   ];
 
-  runtimeDependencies = [ (lib.getLib udev) libnotify gtk4 ];
+  nativeBuildInputs = [
+    autoPatchelfHook
+    makeWrapper
+    qt5.wrapQtAppsHook
+    copyDesktopItems
+  ];
+
+  buildInputs =
+    with xorg;
+    [
+      libXdmcp
+      libXScrnSaver
+      libXtst
+      libxshmfence
+      libXdamage
+    ]
+    ++ [
+      alsa-lib
+      gtk3
+      nss
+      libdrm
+      mesa
+      gtk4
+      qt5.qtbase
+    ];
+
+  runtimeDependencies = [
+    (lib.getLib udev)
+    libnotify
+    gtk4
+  ];
 
   desktopItems = [
     (makeDesktopItem rec {
@@ -59,7 +76,10 @@ stdenv.mkDerivation rec {
       icon = "wavebox";
       desktopName = name;
       genericName = name;
-      categories = [ "Network" "WebBrowser" ];
+      categories = [
+        "Network"
+        "WebBrowser"
+      ];
     })
   ];
 

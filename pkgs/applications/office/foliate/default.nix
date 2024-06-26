@@ -1,20 +1,21 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, meson
-, gettext
-, glib
-, gjs
-, ninja
-, gtk4
-, webkitgtk_6_0
-, gsettings-desktop-schemas
-, wrapGAppsHook4
-, desktop-file-utils
-, gobject-introspection
-, glib-networking
-, pkg-config
-, libadwaita
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  meson,
+  gettext,
+  glib,
+  gjs,
+  ninja,
+  gtk4,
+  webkitgtk_6_0,
+  gsettings-desktop-schemas,
+  wrapGAppsHook4,
+  desktop-file-utils,
+  gobject-introspection,
+  glib-networking,
+  pkg-config,
+  libadwaita,
 }:
 
 stdenv.mkDerivation rec {

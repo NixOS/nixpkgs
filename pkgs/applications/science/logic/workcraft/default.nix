@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchurl, jre, makeWrapper }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  jre,
+  makeWrapper,
+}:
 
 stdenv.mkDerivation rec {
   pname = "workcraft";
@@ -14,12 +20,12 @@ stdenv.mkDerivation rec {
   dontConfigure = true;
 
   installPhase = ''
-  mkdir -p $out/share
-  cp -r * $out/share
-  mkdir $out/bin
-  makeWrapper $out/share/workcraft $out/bin/workcraft \
-    --set JAVA_HOME "${jre}" \
-    --set _JAVA_OPTIONS '-Dawt.useSystemAAFontSettings=gasp';
+    mkdir -p $out/share
+    cp -r * $out/share
+    mkdir $out/bin
+    makeWrapper $out/share/workcraft $out/bin/workcraft \
+      --set JAVA_HOME "${jre}" \
+      --set _JAVA_OPTIONS '-Dawt.useSystemAAFontSettings=gasp';
   '';
 
   meta = {

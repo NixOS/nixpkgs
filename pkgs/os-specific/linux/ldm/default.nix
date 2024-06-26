@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchgit, udev, util-linux, mountPath ? "/media/" }:
+{
+  lib,
+  stdenv,
+  fetchgit,
+  udev,
+  util-linux,
+  mountPath ? "/media/",
+}:
 
 assert mountPath != "";
 
@@ -17,7 +24,10 @@ stdenv.mkDerivation rec {
     sha256 = "0lxfypnbamfx6p9ar5k9wra20gvwn665l4pp2j4vsx4yi5q7rw2n";
   };
 
-  buildInputs = [ udev util-linux ];
+  buildInputs = [
+    udev
+    util-linux
+  ];
 
   postPatch = ''
     substituteInPlace ldm.c \

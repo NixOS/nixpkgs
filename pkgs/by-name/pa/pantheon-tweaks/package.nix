@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, meson
-, ninja
-, pkg-config
-, python3
-, vala
-, wrapGAppsHook3
-, gtk3
-, libgee
-, pantheon
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  meson,
+  ninja,
+  pkg-config,
+  python3,
+  vala,
+  wrapGAppsHook3,
+  gtk3,
+  libgee,
+  pantheon,
 }:
 
 stdenv.mkDerivation rec {
@@ -33,14 +34,16 @@ stdenv.mkDerivation rec {
     wrapGAppsHook3
   ];
 
-  buildInputs = [
-    gtk3
-    libgee
-  ] ++ (with pantheon; [
-    elementary-files # settings schemas
-    elementary-terminal # settings schemas
-    granite
-  ]);
+  buildInputs =
+    [
+      gtk3
+      libgee
+    ]
+    ++ (with pantheon; [
+      elementary-files # settings schemas
+      elementary-terminal # settings schemas
+      granite
+    ]);
 
   postPatch = ''
     chmod +x meson/post_install.py

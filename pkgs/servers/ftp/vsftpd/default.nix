@@ -1,4 +1,14 @@
-{ lib, stdenv, fetchurl, libcap, libseccomp, openssl, pam, libxcrypt, nixosTests }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libcap,
+  libseccomp,
+  openssl,
+  pam,
+  libxcrypt,
+  nixosTests,
+}:
 
 stdenv.mkDerivation rec {
   pname = "vsftpd";
@@ -9,7 +19,13 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-JrYCrkVLC6bZnvRKCba54N+n9nIoEGc23x8njHC8kdM=";
   };
 
-  buildInputs = [ libcap openssl libseccomp pam libxcrypt ];
+  buildInputs = [
+    libcap
+    openssl
+    libseccomp
+    pam
+    libxcrypt
+  ];
 
   patches = [ ./CVE-2015-1419.patch ];
 
@@ -26,16 +42,16 @@ stdenv.mkDerivation rec {
     mkdir -p $out/sbin $out/man/man{5,8}
   '';
 
-  makeFlags = [
-    "CC=${stdenv.cc.targetPrefix}cc"
-  ];
+  makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
 
   NIX_LDFLAGS = "-lcrypt -lssl -lcrypto -lpam -lcap -lseccomp";
 
   enableParallelBuilding = true;
 
   passthru = {
-    tests = { inherit (nixosTests) vsftpd; };
+    tests = {
+      inherit (nixosTests) vsftpd;
+    };
   };
 
   meta = with lib; {

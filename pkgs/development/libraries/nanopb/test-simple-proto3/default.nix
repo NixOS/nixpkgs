@@ -1,4 +1,9 @@
-{ lib, stdenv, protobuf, nanopb }:
+{
+  lib,
+  stdenv,
+  protobuf,
+  nanopb,
+}:
 
 stdenv.mkDerivation {
   name = "nanopb-test-simple-proto3";

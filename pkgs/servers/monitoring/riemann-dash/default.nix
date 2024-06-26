@@ -1,4 +1,8 @@
-{ bundlerApp, lib, bundlerUpdateScript }:
+{
+  bundlerApp,
+  lib,
+  bundlerUpdateScript,
+}:
 
 bundlerApp {
   pname = "riemann-dash";
@@ -11,7 +15,10 @@ bundlerApp {
     description = "Javascript, websockets-powered dashboard for Riemann";
     homepage = "https://github.com/riemann/riemann-dash";
     license = licenses.mit;
-    maintainers = with maintainers; [ manveru nicknovitski ];
+    maintainers = with maintainers; [
+      manveru
+      nicknovitski
+    ];
     platforms = platforms.unix;
   };
 }

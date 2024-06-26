@@ -30,9 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
     readline
   ];
 
-  nativeBuildInputs = [
-    bison
-  ];
+  nativeBuildInputs = [ bison ];
 
   preConfigure = ''
     export HOME="$PWD"

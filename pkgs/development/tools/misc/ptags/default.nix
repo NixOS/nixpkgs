@@ -1,9 +1,10 @@
-{ fetchFromGitHub
-, cargo
-, ctags
-, lib
-, makeWrapper
-, rustPlatform
+{
+  fetchFromGitHub,
+  cargo,
+  ctags,
+  lib,
+  makeWrapper,
+  rustPlatform,
 }:
 
 rustPlatform.buildRustPackage rec {

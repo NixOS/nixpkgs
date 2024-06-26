@@ -1,4 +1,12 @@
-{ lib, fetchurl, ocaml, buildDunePackage, seq, stdlib-shims, ounit2 }:
+{
+  lib,
+  fetchurl,
+  ocaml,
+  buildDunePackage,
+  seq,
+  stdlib-shims,
+  ounit2,
+}:
 
 buildDunePackage rec {
   pname = "fileutils";
@@ -16,9 +24,7 @@ buildDunePackage rec {
     stdlib-shims
   ];
 
-  checkInputs = [
-    ounit2
-  ];
+  checkInputs = [ ounit2 ];
   doCheck = lib.versionAtLeast ocaml.version "4.08";
 
   meta = with lib; {

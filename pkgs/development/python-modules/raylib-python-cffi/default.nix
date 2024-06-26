@@ -9,7 +9,7 @@
   raylib,
   physac,
   raygui,
-  lib
+  lib,
 }:
 
 buildPythonPackage rec {

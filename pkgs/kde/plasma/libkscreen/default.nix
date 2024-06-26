@@ -7,7 +7,11 @@
 mkKdeDerivation {
   pname = "libkscreen";
 
-  extraNativeBuildInputs = [qttools qtwayland jq];
-  extraBuildInputs = [qtwayland];
+  extraNativeBuildInputs = [
+    qttools
+    qtwayland
+    jq
+  ];
+  extraBuildInputs = [ qtwayland ];
   meta.mainProgram = "kscreen-doctor";
 }

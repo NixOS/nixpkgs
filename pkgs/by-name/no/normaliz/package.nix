@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, gmpxx
-, flint
-, arb
-, nauty
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  gmpxx,
+  flint,
+  arb,
+  nauty,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -26,11 +27,13 @@ stdenv.mkDerivation (finalAttrs: {
     nauty
   ];
 
-  outputs = [ "out" "lib" "dev" ];
-
-  nativeBuildInputs = [
-    autoreconfHook
+  outputs = [
+    "out"
+    "lib"
+    "dev"
   ];
+
+  nativeBuildInputs = [ autoreconfHook ];
 
   meta = with lib; {
     homepage = "https://www.normaliz.uni-osnabrueck.de/";

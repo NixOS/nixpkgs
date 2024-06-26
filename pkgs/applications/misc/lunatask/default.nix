@@ -1,4 +1,8 @@
-{ lib, appimageTools, fetchurl }:
+{
+  lib,
+  appimageTools,
+  fetchurl,
+}:
 
 let
   version = "2.0.0";
@@ -9,9 +13,7 @@ let
     sha256 = "sha256-rRE7VE6Fugqbbv/fTIZGuWDQmTP1tRDiKrb6VcpsBjk=";
   };
 
-  appimageContents = appimageTools.extractType2 {
-    inherit pname version src;
-  };
+  appimageContents = appimageTools.extractType2 { inherit pname version src; };
 
 in
 appimageTools.wrapType2 rec {

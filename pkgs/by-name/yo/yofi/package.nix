@@ -1,12 +1,13 @@
-{ lib
-, fetchFromGitHub
-, rustPlatform
-, autoPatchelfHook
-, fontconfig
-, libxkbcommon
-, pkg-config
-, libgcc
-, wayland
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  autoPatchelfHook,
+  fontconfig,
+  libxkbcommon,
+  pkg-config,
+  libgcc,
+  wayland,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "yofi";
@@ -31,7 +32,10 @@ rustPlatform.buildRustPackage rec {
   ];
 
   appendRunpaths = [
-    (lib.makeLibraryPath [ fontconfig wayland ])
+    (lib.makeLibraryPath [
+      fontconfig
+      wayland
+    ])
   ];
 
   checkFlags = [

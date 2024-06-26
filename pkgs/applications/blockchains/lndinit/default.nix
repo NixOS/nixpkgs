@@ -16,13 +16,13 @@ buildGoModule rec {
 
   vendorHash = "sha256-2AHU5/XSDJAEvAg7LmGxCmrJ/oS84fNF3mXigKFDsb4=";
 
-  subPackages = ["."];
+  subPackages = [ "." ];
 
   meta = with lib; {
     description = "Wallet initializer utility for lnd";
     homepage = "https://github.com/lightninglabs/lndinit";
     mainProgram = "lndinit";
     license = licenses.mit;
-    maintainers = with maintainers; [aldoborrero];
+    maintainers = with maintainers; [ aldoborrero ];
   };
 }

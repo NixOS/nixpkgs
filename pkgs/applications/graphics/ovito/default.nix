@@ -1,22 +1,23 @@
-{ mkDerivation
-, lib
-, stdenv
-, fetchFromGitLab
-, cmake
-, boost
-, bzip2
-, ffmpeg
-, fftwSinglePrec
-, hdf5
-, muparser
-, netcdf
-, openssl
-, python3
-, qscintilla
-, qtbase
-, qtsvg
-, qttools
-, VideoDecodeAcceleration
+{
+  mkDerivation,
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  cmake,
+  boost,
+  bzip2,
+  ffmpeg,
+  fftwSinglePrec,
+  hdf5,
+  muparser,
+  netcdf,
+  openssl,
+  python3,
+  qscintilla,
+  qtbase,
+  qtsvg,
+  qttools,
+  VideoDecodeAcceleration,
 }:
 
 mkDerivation rec {
@@ -30,9 +31,7 @@ mkDerivation rec {
     sha256 = "sha256-Z3uwjOYJ7di/LLllbzdKjzUE7m119i03bA8dJPqhxWA=";
   };
 
-  nativeBuildInputs = [
-    cmake
-  ];
+  nativeBuildInputs = [ cmake ];
 
   buildInputs = [
     boost
@@ -48,15 +47,16 @@ mkDerivation rec {
     qtbase
     qtsvg
     qttools
-  ] ++ lib.optionals stdenv.isDarwin [
-    VideoDecodeAcceleration
-  ];
+  ] ++ lib.optionals stdenv.isDarwin [ VideoDecodeAcceleration ];
 
   meta = with lib; {
     description = "Scientific visualization and analysis software for atomistic and particle simulation data";
     mainProgram = "ovito";
     homepage = "https://ovito.org";
-    license = with licenses;  [ gpl3Only mit ];
+    license = with licenses; [
+      gpl3Only
+      mit
+    ];
     maintainers = with maintainers; [ twhitehead ];
     broken = stdenv.isDarwin; # clang-11: error: no such file or directory: '$-DOVITO_COPYRIGHT_NOTICE=...
   };

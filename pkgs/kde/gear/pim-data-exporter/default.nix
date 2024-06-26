@@ -1,4 +1,1 @@
-{mkKdeDerivation}:
-mkKdeDerivation {
-  pname = "pim-data-exporter";
-}
+{ mkKdeDerivation }: mkKdeDerivation { pname = "pim-data-exporter"; }

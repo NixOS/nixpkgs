@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, pkg-config
-, qt6
-, curl
-, ffmpeg
-, cubeb
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  qt6,
+  curl,
+  ffmpeg,
+  cubeb,
 }:
 
 stdenv.mkDerivation rec {
@@ -38,9 +39,7 @@ stdenv.mkDerivation rec {
     cubeb
   ] ++ cubeb.passthru.backendLibs;
 
-  qtWrapperArgs = [
-    "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath cubeb.passthru.backendLibs}"
-  ];
+  qtWrapperArgs = [ "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath cubeb.passthru.backendLibs}" ];
 
   postInstall = ''
     rm -r $out/{include,lib/cmake}

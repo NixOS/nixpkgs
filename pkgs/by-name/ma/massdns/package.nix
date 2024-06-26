@@ -1,7 +1,8 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, nix-update-script
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  nix-update-script,
 }:
 stdenv.mkDerivation rec {
   pname = "massdns";

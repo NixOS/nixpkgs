@@ -1,4 +1,3 @@
-
 # DO NOT IMPORT. Use nixpkgsFlake.lib.nixos, or import (nixpkgs + "/nixos/lib")
 { lib }: # read -^
 
@@ -25,24 +24,24 @@ let
 
       An attribute set containing `config.system.build.toplevel` among other
       attributes. See `lib.evalModules` in the Nixpkgs library.
-
-   */
-  evalModules = {
-    prefix ? [],
-    modules ? [],
-    specialArgs ? {},
-  }:
-  # NOTE: Regular NixOS currently does use this function! Don't break it!
-  #       Ideally we don't diverge, unless we learn that we should.
-  #       In other words, only the public interface of nixos.evalModules
-  #       is experimental.
-  lib.evalModules {
-    inherit prefix modules;
-    class = "nixos";
-    specialArgs = {
-      modulesPath = builtins.toString ../modules;
-    } // specialArgs;
-  };
+  */
+  evalModules =
+    {
+      prefix ? [ ],
+      modules ? [ ],
+      specialArgs ? { },
+    }:
+    # NOTE: Regular NixOS currently does use this function! Don't break it!
+    #       Ideally we don't diverge, unless we learn that we should.
+    #       In other words, only the public interface of nixos.evalModules
+    #       is experimental.
+    lib.evalModules {
+      inherit prefix modules;
+      class = "nixos";
+      specialArgs = {
+        modulesPath = builtins.toString ../modules;
+      } // specialArgs;
+    };
 
 in
 {

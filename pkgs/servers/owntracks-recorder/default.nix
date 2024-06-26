@@ -1,17 +1,18 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, mosquitto
-, curl
-, openssl
-, lmdb
-, lua
-, libsodium
-, libuuid
-, libconfig
-, testers
-, owntracks-recorder
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  mosquitto,
+  curl,
+  openssl,
+  lmdb,
+  lua,
+  libsodium,
+  libuuid,
+  libconfig,
+  testers,
+  owntracks-recorder,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -25,9 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-KDImoIUAkjCa4O++F9LdDN+i8VoC78g8644Rhbpy+mc=";
   };
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
     (lib.getDev curl)

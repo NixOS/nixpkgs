@@ -1,6 +1,23 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config
-, zlib, libpng, libjpeg, libwebp, libGLU, libGL, glm
-, libX11, libXext, libXfixes, libXrandr, libXcomposite, slop, icu
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  zlib,
+  libpng,
+  libjpeg,
+  libwebp,
+  libGLU,
+  libGL,
+  glm,
+  libX11,
+  libXext,
+  libXfixes,
+  libXrandr,
+  libXcomposite,
+  slop,
+  icu,
 }:
 
 stdenv.mkDerivation rec {
@@ -14,9 +31,26 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-/tZqSJnKe8GiffSz9VIFKuxMktRld+hA4ZWP4TZQrlg=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config ];
-  buildInputs = [ zlib libpng libjpeg libwebp libGLU libGL glm
-      libX11 libXext libXfixes libXrandr libXcomposite slop icu ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
+  buildInputs = [
+    zlib
+    libpng
+    libjpeg
+    libwebp
+    libGLU
+    libGL
+    glm
+    libX11
+    libXext
+    libXfixes
+    libXrandr
+    libXcomposite
+    slop
+    icu
+  ];
 
   doCheck = false;
 

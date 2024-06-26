@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, autoconf, automake, libtool, libpcap }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoconf,
+  automake,
+  libtool,
+  libpcap,
+}:
 
 stdenv.mkDerivation rec {
   pname = "libcrafter";
@@ -17,7 +25,10 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--with-libpcap=yes" ];
 
-  nativeBuildInputs = [ autoconf automake ];
+  nativeBuildInputs = [
+    autoconf
+    automake
+  ];
   buildInputs = [ libtool ];
 
   propagatedBuildInputs = [ libpcap ];

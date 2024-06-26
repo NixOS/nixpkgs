@@ -1,4 +1,13 @@
-{ fetchFromGitHub, lib, stdenv, autoreconfHook, libiconv, ncurses, SDL2, SDL2_mixer }:
+{
+  fetchFromGitHub,
+  lib,
+  stdenv,
+  autoreconfHook,
+  libiconv,
+  ncurses,
+  SDL2,
+  SDL2_mixer,
+}:
 
 stdenv.mkDerivation {
   version = "2016-07-06";
@@ -12,7 +21,12 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [ libiconv ncurses SDL2 SDL2_mixer ];
+  buildInputs = [
+    libiconv
+    ncurses
+    SDL2
+    SDL2_mixer
+  ];
 
   enableParallelBuilding = true;
 

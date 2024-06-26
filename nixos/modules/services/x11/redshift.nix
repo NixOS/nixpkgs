@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -7,22 +12,71 @@ let
   cfg = config.services.redshift;
   lcfg = config.location;
 
-in {
+in
+{
 
   imports = [
-    (mkChangedOptionModule [ "services" "redshift" "latitude" ] [ "location" "latitude" ]
-      (config:
-        let value = getAttrFromPath [ "services" "redshift" "latitude" ] config;
-        in if value == null then
+    (mkChangedOptionModule
+      [
+        "services"
+        "redshift"
+        "latitude"
+      ]
+      [
+        "location"
+        "latitude"
+      ]
+      (
+        config:
+        let
+          value = getAttrFromPath [
+            "services"
+            "redshift"
+            "latitude"
+          ] config;
+        in
+        if value == null then
           throw "services.redshift.latitude is set to null, you can remove this"
-          else builtins.fromJSON value))
-    (mkChangedOptionModule [ "services" "redshift" "longitude" ] [ "location" "longitude" ]
-      (config:
-        let value = getAttrFromPath [ "services" "redshift" "longitude" ] config;
-        in if value == null then
+        else
+          builtins.fromJSON value
+      )
+    )
+    (mkChangedOptionModule
+      [
+        "services"
+        "redshift"
+        "longitude"
+      ]
+      [
+        "location"
+        "longitude"
+      ]
+      (
+        config:
+        let
+          value = getAttrFromPath [
+            "services"
+            "redshift"
+            "longitude"
+          ] config;
+        in
+        if value == null then
           throw "services.redshift.longitude is set to null, you can remove this"
-          else builtins.fromJSON value))
-    (mkRenamedOptionModule [ "services" "redshift" "provider" ] [ "location" "provider" ])
+        else
+          builtins.fromJSON value
+      )
+    )
+    (mkRenamedOptionModule
+      [
+        "services"
+        "redshift"
+        "provider"
+      ]
+      [
+        "location"
+        "provider"
+      ]
+    )
   ];
 
   options.services.redshift = {
@@ -86,8 +140,11 @@ in {
 
     extraOptions = mkOption {
       type = types.listOf types.str;
-      default = [];
-      example = [ "-v" "-m randr" ];
+      default = [ ];
+      example = [
+        "-v"
+        "-m randr"
+      ];
       description = ''
         Additional command-line arguments to pass to
         {command}`redshift`.
@@ -105,27 +162,29 @@ in {
     };
 
     systemd.user.services.redshift =
-    let
-      providerString = if lcfg.provider == "manual"
-        then "${toString lcfg.latitude}:${toString lcfg.longitude}"
-        else lcfg.provider;
-    in
-    {
-      description = "Redshift colour temperature adjuster";
-      wantedBy = [ "graphical-session.target" ];
-      partOf = [ "graphical-session.target" ];
-      serviceConfig = {
-        ExecStart = ''
-          ${cfg.package}${cfg.executable} \
-            -l ${providerString} \
-            -t ${toString cfg.temperature.day}:${toString cfg.temperature.night} \
-            -b ${toString cfg.brightness.day}:${toString cfg.brightness.night} \
-            ${lib.strings.concatStringsSep " " cfg.extraOptions}
-        '';
-        RestartSec = 3;
-        Restart = "always";
+      let
+        providerString =
+          if lcfg.provider == "manual" then
+            "${toString lcfg.latitude}:${toString lcfg.longitude}"
+          else
+            lcfg.provider;
+      in
+      {
+        description = "Redshift colour temperature adjuster";
+        wantedBy = [ "graphical-session.target" ];
+        partOf = [ "graphical-session.target" ];
+        serviceConfig = {
+          ExecStart = ''
+            ${cfg.package}${cfg.executable} \
+              -l ${providerString} \
+              -t ${toString cfg.temperature.day}:${toString cfg.temperature.night} \
+              -b ${toString cfg.brightness.day}:${toString cfg.brightness.night} \
+              ${lib.strings.concatStringsSep " " cfg.extraOptions}
+          '';
+          RestartSec = 3;
+          Restart = "always";
+        };
       };
-    };
   };
 
 }

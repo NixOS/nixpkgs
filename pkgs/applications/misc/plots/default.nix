@@ -1,10 +1,11 @@
-{ lib
-, fetchFromGitHub
-, python3Packages
-, gobject-introspection
-, libadwaita
-, wrapGAppsHook4
-, lmmath
+{
+  lib,
+  fetchFromGitHub,
+  python3Packages,
+  gobject-introspection,
+  libadwaita,
+  wrapGAppsHook4,
+  lmmath,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -18,7 +19,10 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-GjNpaorxkkhZsqrKq4kO5nqF5+4I4tmSc023AZpY8Sw=";
   };
 
-  nativeBuildInputs = [ gobject-introspection wrapGAppsHook4 ];
+  nativeBuildInputs = [
+    gobject-introspection
+    wrapGAppsHook4
+  ];
   buildInputs = [ libadwaita ];
 
   propagatedBuildInputs = with python3Packages; [

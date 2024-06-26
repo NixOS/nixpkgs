@@ -1,4 +1,11 @@
-{ lib, stdenv, python, perl, fetchFromGitHub, installShellFiles }:
+{
+  lib,
+  stdenv,
+  python,
+  perl,
+  fetchFromGitHub,
+  installShellFiles,
+}:
 stdenv.mkDerivation rec {
   pname = "git-publish";
   version = "1.8.2";
@@ -10,7 +17,10 @@ stdenv.mkDerivation rec {
     hash = "sha256-jjpbr+ZqG4U8/z0PurnXR+IUKQkG3QB8YqhDkH8uu2Y=";
   };
 
-  nativeBuildInputs = [ perl installShellFiles ];
+  nativeBuildInputs = [
+    perl
+    installShellFiles
+  ];
   buildInputs = [ python ];
 
   installPhase = ''

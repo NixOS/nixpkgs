@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, autoreconfHook
-, fetchFromGitHub
-, pkg-config
-, talloc
+{
+  lib,
+  stdenv,
+  autoreconfHook,
+  fetchFromGitHub,
+  pkg-config,
+  talloc,
 }:
 
 stdenv.mkDerivation rec {
@@ -26,9 +27,7 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  buildInputs = [
-    talloc
-  ];
+  buildInputs = [ talloc ];
 
   enableParallelBuilding = true;
 

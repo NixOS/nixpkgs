@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, dbus-glib, autoreconfHook, xorg }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  dbus-glib,
+  autoreconfHook,
+  xorg,
+}:
 
 stdenv.mkDerivation {
   pname = "kbdd";
@@ -11,8 +19,14 @@ stdenv.mkDerivation {
     sha256 = "1gzcjnflgdqnjgphiqpzwbcx60hm0h2cprncm7i8xca3ln5q6ba1";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
-  buildInputs = [ xorg.libX11 dbus-glib ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ];
+  buildInputs = [
+    xorg.libX11
+    dbus-glib
+  ];
 
   meta = {
     description = "Simple daemon and library to make per window layout using XKB";

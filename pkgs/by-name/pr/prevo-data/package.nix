@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, prevo-tools }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  prevo-tools,
+}:
 
 stdenv.mkDerivation {
   pname = "prevo-data";
@@ -25,8 +30,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    description =
-      "data for offline version of the Esperanto dictionary Reta Vortaro";
+    description = "data for offline version of the Esperanto dictionary Reta Vortaro";
     longDescription = ''
       PReVo is the "portable" ReVo, i.e., the offline version
       of the Esperanto dictionary Reta Vortaro.
@@ -35,6 +39,9 @@ stdenv.mkDerivation {
     '';
     homepage = "https://github.com/bpeel/revo";
     license = lib.licenses.gpl2Only;
-    maintainers = with lib.maintainers; [ das-g ehmry ];
+    maintainers = with lib.maintainers; [
+      das-g
+      ehmry
+    ];
   };
 }

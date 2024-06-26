@@ -1,28 +1,29 @@
-{ stdenv
-, lib
-, meson
-, ninja
-, gettext
-, fetchurl
-, fetchpatch
-, pkg-config
-, wrapGAppsHook3
-, itstool
-, desktop-file-utils
-, python3
-, glib
-, gtk3
-, evolution-data-server
-, gnome-online-accounts
-, json-glib
-, libuuid
-, curl
-, libhandy
-, webkitgtk
-, gnome
-, libxml2
-, gsettings-desktop-schemas
-, tracker
+{
+  stdenv,
+  lib,
+  meson,
+  ninja,
+  gettext,
+  fetchurl,
+  fetchpatch,
+  pkg-config,
+  wrapGAppsHook3,
+  itstool,
+  desktop-file-utils,
+  python3,
+  glib,
+  gtk3,
+  evolution-data-server,
+  gnome-online-accounts,
+  json-glib,
+  libuuid,
+  curl,
+  libhandy,
+  webkitgtk,
+  gnome,
+  libxml2,
+  gsettings-desktop-schemas,
+  tracker,
 }:
 
 stdenv.mkDerivation rec {
@@ -77,9 +78,7 @@ stdenv.mkDerivation rec {
     gnome.adwaita-icon-theme
   ];
 
-  mesonFlags = [
-    "-Dupdate_mimedb=false"
-  ];
+  mesonFlags = [ "-Dupdate_mimedb=false" ];
 
   passthru = {
     updateScript = gnome.updateScript {

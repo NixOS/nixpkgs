@@ -1,5 +1,18 @@
-{ lib, stdenv, fetchFromGitHub, cmake, lua, pkg-config, rsync,
-  asciidoc, libxml2, docbook_xml_dtd_45, docbook_xsl, libxslt, xnu }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  lua,
+  pkg-config,
+  rsync,
+  asciidoc,
+  libxml2,
+  docbook_xml_dtd_45,
+  docbook_xsl,
+  libxslt,
+  xnu,
+}:
 
 stdenv.mkDerivation rec {
   pname = "lsyncd";
@@ -19,15 +32,26 @@ stdenv.mkDerivation rec {
 
   # Special flags needed on Darwin:
   # https://github.com/axkibe/lsyncd/blob/42413cabbedca429d55a5378f6e830f191f3cc86/INSTALL#L51
-  cmakeFlags = lib.optionals stdenv.isDarwin [ "-DWITH_INOTIFY=OFF" "-DWITH_FSEVENTS=ON" "-DXNU_DIR=${xnu}/include" ];
+  cmakeFlags = lib.optionals stdenv.isDarwin [
+    "-DWITH_INOTIFY=OFF"
+    "-DWITH_FSEVENTS=ON"
+    "-DXNU_DIR=${xnu}/include"
+  ];
 
   dontUseCmakeBuildDir = true;
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
   buildInputs = [
     rsync
     lua
-    asciidoc libxml2 docbook_xml_dtd_45 docbook_xsl libxslt
+    asciidoc
+    libxml2
+    docbook_xml_dtd_45
+    docbook_xsl
+    libxslt
   ];
 
   meta = with lib; {

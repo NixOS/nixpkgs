@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchurl
-, cmake
-, libjpeg
-, libpng
-, libtiff
-, perl
-, darwin
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cmake,
+  libjpeg,
+  libpng,
+  libtiff,
+  perl,
+  darwin,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -20,18 +21,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  nativeBuildInputs = [
-    cmake
-  ];
+  nativeBuildInputs = [ cmake ];
 
   buildInputs = [
     libjpeg
     libpng
     libtiff
     perl
-  ] ++ lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.Carbon
-  ];
+  ] ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Carbon ];
 
   meta = {
     description = "Free software suite for authoring and displaying virtual reality panoramas";

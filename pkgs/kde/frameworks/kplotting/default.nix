@@ -1,9 +1,6 @@
-{
-  mkKdeDerivation,
-  qttools,
-}:
+{ mkKdeDerivation, qttools }:
 mkKdeDerivation {
   pname = "kplotting";
 
-  extraBuildInputs = [qttools];
+  extraBuildInputs = [ qttools ];
 }

@@ -1,11 +1,39 @@
-{ lib, stdenv, fetchurl
-, libX11, bison, ksh, perl
-, libXinerama, libXt, libXext, libtirpc, motif, libXft, xbitmaps
-, libjpeg, libXmu, libXdmcp, libXScrnSaver, bdftopcf
-, ncompress, mkfontdir, tcl, libXaw, libxcrypt, glibcLocales
-, autoPatchelfHook, makeWrapper, xset, xrdb
-, autoreconfHook, opensp, flex, libXpm
-, rpcsvc-proto }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libX11,
+  bison,
+  ksh,
+  perl,
+  libXinerama,
+  libXt,
+  libXext,
+  libtirpc,
+  motif,
+  libXft,
+  xbitmaps,
+  libjpeg,
+  libXmu,
+  libXdmcp,
+  libXScrnSaver,
+  bdftopcf,
+  ncompress,
+  mkfontdir,
+  tcl,
+  libXaw,
+  libxcrypt,
+  glibcLocales,
+  autoPatchelfHook,
+  makeWrapper,
+  xset,
+  xrdb,
+  autoreconfHook,
+  opensp,
+  flex,
+  libXpm,
+  rpcsvc-proto,
+}:
 
 stdenv.mkDerivation rec {
   pname = "cde";
@@ -40,13 +68,37 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [
-    libX11 libXinerama libXt libXext libtirpc motif libXft xbitmaps
-    libjpeg libXmu libXdmcp libXScrnSaver tcl libXaw ksh libxcrypt
+    libX11
+    libXinerama
+    libXt
+    libXext
+    libtirpc
+    motif
+    libXft
+    xbitmaps
+    libjpeg
+    libXmu
+    libXdmcp
+    libXScrnSaver
+    tcl
+    libXaw
+    ksh
+    libxcrypt
     libXpm
   ];
   nativeBuildInputs = [
-    bison ncompress autoPatchelfHook makeWrapper
-    autoreconfHook bdftopcf mkfontdir xset xrdb opensp perl flex
+    bison
+    ncompress
+    autoPatchelfHook
+    makeWrapper
+    autoreconfHook
+    bdftopcf
+    mkfontdir
+    xset
+    xrdb
+    opensp
+    perl
+    flex
     rpcsvc-proto
   ];
 
@@ -56,9 +108,7 @@ stdenv.mkDerivation rec {
     export LOCALE_ARCHIVE="${glibcLocales}/lib/locale/locale-archive"
   '';
 
-  configureFlags = [
-    "--with-tcl=${tcl}/lib"
-  ];
+  configureFlags = [ "--with-tcl=${tcl}/lib" ];
 
   preInstall = ''
     mkdir -p $out/opt/dt/bin

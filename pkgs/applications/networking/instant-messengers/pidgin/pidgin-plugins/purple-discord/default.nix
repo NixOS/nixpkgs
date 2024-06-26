@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, imagemagick, gettext, pidgin, json-glib }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  imagemagick,
+  gettext,
+  pidgin,
+  json-glib,
+}:
 
 stdenv.mkDerivation {
   pname = "purple-discord";
@@ -11,8 +19,14 @@ stdenv.mkDerivation {
     sha256 = "0xvj9rdvgsvcr55sk9m40y07rchg699l1yr98xqwx7sc2sba3814";
   };
 
-  nativeBuildInputs = [ imagemagick gettext ];
-  buildInputs = [ pidgin json-glib ];
+  nativeBuildInputs = [
+    imagemagick
+    gettext
+  ];
+  buildInputs = [
+    pidgin
+    json-glib
+  ];
 
   PKG_CONFIG_PURPLE_PLUGINDIR = "${placeholder "out"}/lib/purple-2";
   PKG_CONFIG_PURPLE_DATADIR = "${placeholder "out"}/share";

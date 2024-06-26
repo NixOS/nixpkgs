@@ -1,13 +1,14 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, installShellFiles
-, stdenv
-, darwin
-, unixtools
-, pkg-config
-, alsa-lib
-, xorg
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  installShellFiles,
+  stdenv,
+  darwin,
+  unixtools,
+  pkg-config,
+  alsa-lib,
+  xorg,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -33,13 +34,9 @@ rustPlatform.buildRustPackage rec {
     xorg.libX11
     xorg.libXi
     xorg.libXtst
-  ] ++ lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.Security
-  ];
+  ] ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ];
 
-  nativeCheckInputs = [
-    unixtools.script
-  ];
+  nativeCheckInputs = [ unixtools.script ];
 
   postInstall = ''
     mkdir -p man completions
@@ -59,7 +56,10 @@ rustPlatform.buildRustPackage rec {
     description = "Turn your keyboard into a typewriter";
     homepage = "https://github.com/orhun/daktilo";
     changelog = "https://github.com/orhun/daktilo/blob/${src.rev}/CHANGELOG.md";
-    license = with licenses; [ asl20 mit ];
+    license = with licenses; [
+      asl20
+      mit
+    ];
     maintainers = with maintainers; [ orhun ];
     mainProgram = "daktilo";
   };

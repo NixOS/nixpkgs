@@ -1,20 +1,25 @@
-{ lib, stdenv
-, autoconf
-, automake
-, fetchFromGitHub
-, glib
-, intltool
-, json_c
-, libtool
-, pkg-config
-, python3
+{
+  lib,
+  stdenv,
+  autoconf,
+  automake,
+  fetchFromGitHub,
+  glib,
+  intltool,
+  json_c,
+  libtool,
+  pkg-config,
+  python3,
 }:
 
 stdenv.mkDerivation rec {
   pname = "libmypaint";
   version = "1.6.1";
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   src = fetchFromGitHub {
     owner = "mypaint";
@@ -32,14 +37,10 @@ stdenv.mkDerivation rec {
     python3
   ];
 
-  buildInputs = [
-    glib
-  ];
+  buildInputs = [ glib ];
 
   # for libmypaint.pc
-  propagatedBuildInputs = [
-    json_c
-  ];
+  propagatedBuildInputs = [ json_c ];
 
   doCheck = true;
 
@@ -49,7 +50,10 @@ stdenv.mkDerivation rec {
     homepage = "http://mypaint.org/";
     description = "Library for making brushstrokes which is used by MyPaint and other projects";
     license = licenses.isc;
-    maintainers = with maintainers; [ goibhniu jtojnar ];
+    maintainers = with maintainers; [
+      goibhniu
+      jtojnar
+    ];
     platforms = platforms.unix;
   };
 }

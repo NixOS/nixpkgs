@@ -1,4 +1,1 @@
-{mkKdeDerivation}:
-mkKdeDerivation {
-  pname = "kdesdk-thumbnailers";
-}
+{ mkKdeDerivation }: mkKdeDerivation { pname = "kdesdk-thumbnailers"; }

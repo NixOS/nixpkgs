@@ -1,17 +1,18 @@
-{ lib
-, buildDotnetModule
-, fetchFromGitHub
-, dotnetCorePackages
-, gtk4
-, libadwaita
-, pkg-config
-, wrapGAppsHook4
-, glib
-, shared-mime-info
-, gdk-pixbuf
-, blueprint-compiler
-, python3
-, ffmpeg
+{
+  lib,
+  buildDotnetModule,
+  fetchFromGitHub,
+  dotnetCorePackages,
+  gtk4,
+  libadwaita,
+  pkg-config,
+  wrapGAppsHook4,
+  glib,
+  shared-mime-info,
+  gdk-pixbuf,
+  blueprint-compiler,
+  python3,
+  ffmpeg,
 }:
 
 buildDotnetModule rec {
@@ -28,13 +29,13 @@ buildDotnetModule rec {
 
   dotnet-sdk = dotnetCorePackages.sdk_8_0;
   dotnet-runtime = dotnetCorePackages.runtime_8_0;
-  pythonEnv = python3.withPackages(ps: with ps; [ yt-dlp ]);
+  pythonEnv = python3.withPackages (ps: with ps; [ yt-dlp ]);
 
   projectFile = "NickvisionTubeConverter.GNOME/NickvisionTubeConverter.GNOME.csproj";
   nugetDeps = ./deps.nix;
   executables = "NickvisionTubeConverter.GNOME";
 
-   nativeBuildInputs = [
+  nativeBuildInputs = [
     pkg-config
     wrapGAppsHook4
     glib
@@ -43,7 +44,10 @@ buildDotnetModule rec {
     blueprint-compiler
   ];
 
-  buildInputs = [ gtk4 libadwaita ];
+  buildInputs = [
+    gtk4
+    libadwaita
+  ];
 
   runtimeDeps = [
     gtk4
@@ -62,7 +66,14 @@ buildDotnetModule rec {
     install -Dm444 NickvisionTubeConverter.Shared/Linux/org.nickvision.tubeconverter.desktop.in -T $out/share/applications/org.nickvision.tubeconverter.desktop
   '';
 
-  makeWrapperArgs = [ "--prefix PATH : ${lib.makeBinPath [ pythonEnv ffmpeg ]}" ];
+  makeWrapperArgs = [
+    "--prefix PATH : ${
+      lib.makeBinPath [
+        pythonEnv
+        ffmpeg
+      ]
+    }"
+  ];
 
   passthru.updateScript = ./update.sh;
 

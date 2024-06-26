@@ -1,29 +1,30 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, buildPackages
-, cmake
-, pkg-config
-, substituteAll
-, boost
-, cairo
-, freetype
-, gdal
-, harfbuzz
-, icu
-, libjpeg
-, libpng
-, libtiff
-, libwebp
-, libxml2
-, proj
-, python3
-, sqlite
-, zlib
-, catch2
-, postgresql
-, protozero
-, sparsehash
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  buildPackages,
+  cmake,
+  pkg-config,
+  substituteAll,
+  boost,
+  cairo,
+  freetype,
+  gdal,
+  harfbuzz,
+  icu,
+  libjpeg,
+  libpng,
+  libtiff,
+  libwebp,
+  libxml2,
+  proj,
+  python3,
+  sqlite,
+  zlib,
+  catch2,
+  postgresql,
+  protozero,
+  sparsehash,
 }:
 
 stdenv.mkDerivation rec {
@@ -67,7 +68,10 @@ stdenv.mkDerivation rec {
     ./use-sparsehash-package.patch
   ];
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
 
   buildInputs = [
     boost
@@ -122,7 +126,10 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Open source toolkit for developing mapping applications";
     homepage = "https://mapnik.org";
-    maintainers = with maintainers; [ hrdinka hummeltech ];
+    maintainers = with maintainers; [
+      hrdinka
+      hummeltech
+    ];
     license = licenses.lgpl21Plus;
     platforms = platforms.all;
   };

@@ -1,4 +1,10 @@
-{ fetchurl, lib, stdenv, bash, perl }:
+{
+  fetchurl,
+  lib,
+  stdenv,
+  bash,
+  perl,
+}:
 
 stdenv.mkDerivation rec {
   pname = "rush";
@@ -23,19 +29,19 @@ stdenv.mkDerivation rec {
     broken = stdenv.isDarwin;
     description = "Restricted User Shell";
 
-    longDescription =
-      '' GNU Rush is a Restricted User Shell, designed for sites
-         providing limited remote access to their resources, such as
-         svn or git repositories, scp, or the like.  Using a
-         sophisticated configuration file, Rush gives you complete
-         control over the command lines that users execute, as well as
-         over the usage of system resources, such as virtual memory,
-         CPU time, etc.
+    longDescription = ''
+      GNU Rush is a Restricted User Shell, designed for sites
+              providing limited remote access to their resources, such as
+              svn or git repositories, scp, or the like.  Using a
+              sophisticated configuration file, Rush gives you complete
+              control over the command lines that users execute, as well as
+              over the usage of system resources, such as virtual memory,
+              CPU time, etc.
 
-         In particular, it allows remote programs to be run in a chrooted
-         environment, which is important with such programs as
-         sftp-server or scp, that lack this ability.
-      '';
+              In particular, it allows remote programs to be run in a chrooted
+              environment, which is important with such programs as
+              sftp-server or scp, that lack this ability.
+    '';
 
     homepage = "https://www.gnu.org/software/rush/";
     license = lib.licenses.gpl3Plus;

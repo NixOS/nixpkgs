@@ -40,9 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
     pango
   ];
 
-  configureFlags = [
-    (lib.enableFeature enableSdltest "sdltest")
-  ];
+  configureFlags = [ (lib.enableFeature enableSdltest "sdltest") ];
 
   strictDeps = true;
 
@@ -50,8 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://sdlpango.sourceforge.net/";
     description = "Connects the Pango rendering engine to SDL";
     license = lib.licenses.lgpl21Plus;
-    maintainers = lib.teams.sdl.members
-                  ++ (with lib.maintainers; [ puckipedia ]);
+    maintainers = lib.teams.sdl.members ++ (with lib.maintainers; [ puckipedia ]);
     inherit (SDL.meta) platforms;
   };
 })

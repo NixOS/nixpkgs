@@ -11,12 +11,13 @@
 # Like python-packages.nix, packages from top-level.nix are not in the scope
 # of the `callPackage` used for packages here. So, when we do need packages
 # from outside, we can `inherit` them from `pkgs`.
-{ pkgs
-, lib
-, stdenv
-, fetchurl
-, newScope
-, octave
+{
+  pkgs,
+  lib,
+  stdenv,
+  fetchurl,
+  newScope,
+  octave,
 }:
 
 let
@@ -29,7 +30,8 @@ let
     ;
 in
 
-makeScope newScope (self:
+makeScope newScope (
+  self:
   let
     callPackage = self.callPackage;
 
@@ -41,18 +43,21 @@ makeScope newScope (self:
 
     # Given a list of required Octave package derivations, get a list of
     # ALL required Octave packages needed for the ones specified to run.
-    computeRequiredOctavePackages = drvs: let
-      # Check whether a derivation is an octave package
-      hasOctavePackage = drv: drv?isOctavePackage;
-      packages = filter hasOctavePackage drvs;
-    in unique (packages ++ concatLists (catAttrs "requiredOctavePackages" packages));
+    computeRequiredOctavePackages =
+      drvs:
+      let
+        # Check whether a derivation is an octave package
+        hasOctavePackage = drv: drv ? isOctavePackage;
+        packages = filter hasOctavePackage drvs;
+      in
+      unique (packages ++ concatLists (catAttrs "requiredOctavePackages" packages));
 
-  in {
+  in
+  {
 
     inherit callPackage buildOctavePackage computeRequiredOctavePackages;
 
-    inherit (callPackage ../development/interpreters/octave/hooks { })
-      writeRequiredOctavePackagesHook;
+    inherit (callPackage ../development/interpreters/octave/hooks { }) writeRequiredOctavePackagesHook;
 
     arduino = callPackage ../development/octave-modules/arduino {
       inherit (pkgs) arduino-core-unwrapped;
@@ -100,17 +105,13 @@ makeScope newScope (self:
 
     ga = callPackage ../development/octave-modules/ga { };
 
-    general = callPackage ../development/octave-modules/general {
-      nettle = pkgs.nettle;
-    };
+    general = callPackage ../development/octave-modules/general { nettle = pkgs.nettle; };
 
     generate_html = callPackage ../development/octave-modules/generate_html { };
 
     geometry = callPackage ../development/octave-modules/geometry { };
 
-    gsl = callPackage ../development/octave-modules/gsl {
-      inherit (pkgs) gsl;
-    };
+    gsl = callPackage ../development/octave-modules/gsl { inherit (pkgs) gsl; };
 
     image = callPackage ../development/octave-modules/image { };
 
@@ -118,9 +119,7 @@ makeScope newScope (self:
 
     instrument-control = callPackage ../development/octave-modules/instrument-control { };
 
-    io = callPackage ../development/octave-modules/io {
-      inherit (octave) enableJava;
-    };
+    io = callPackage ../development/octave-modules/io { inherit (octave) enableJava; };
 
     interval = callPackage ../development/octave-modules/interval { };
 
@@ -131,7 +130,12 @@ makeScope newScope (self:
     lssa = callPackage ../development/octave-modules/lssa { };
 
     ltfat = callPackage ../development/octave-modules/ltfat {
-      inherit (octave) fftw fftwSinglePrec portaudio jdk;
+      inherit (octave)
+        fftw
+        fftwSinglePrec
+        portaudio
+        jdk
+        ;
       inherit (pkgs) fftwFloat fftwLongDouble;
     };
 
@@ -152,9 +156,7 @@ makeScope newScope (self:
 
     ncarray = callPackage ../development/octave-modules/ncarray { };
 
-    netcdf = callPackage ../development/octave-modules/netcdf {
-      inherit (pkgs) netcdf;
-    };
+    netcdf = callPackage ../development/octave-modules/netcdf { inherit (pkgs) netcdf; };
 
     nurbs = callPackage ../development/octave-modules/nurbs { };
 
@@ -192,9 +194,7 @@ makeScope newScope (self:
 
     struct = callPackage ../development/octave-modules/struct { };
 
-    symbolic = callPackage ../development/octave-modules/symbolic {
-      inherit (octave) python;
-    };
+    symbolic = callPackage ../development/octave-modules/symbolic { inherit (octave) python; };
 
     tisean = callPackage ../development/octave-modules/tisean { };
 
@@ -208,14 +208,11 @@ makeScope newScope (self:
 
     video = callPackage ../development/octave-modules/video { };
 
-    vrml = callPackage ../development/octave-modules/vrml {
-      freewrl = null;
-    };
+    vrml = callPackage ../development/octave-modules/vrml { freewrl = null; };
 
     windows = callPackage ../development/octave-modules/windows { };
 
-    zeromq = callPackage ../development/octave-modules/zeromq {
-      inherit (pkgs) zeromq autoreconfHook;
-    };
+    zeromq = callPackage ../development/octave-modules/zeromq { inherit (pkgs) zeromq autoreconfHook; };
 
-  })
+  }
+)

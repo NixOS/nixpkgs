@@ -1,4 +1,8 @@
-{lib, stdenv, fetchurl}:
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 
 stdenv.mkDerivation rec {
   pname = "netkit-tftp";
@@ -21,7 +25,7 @@ stdenv.mkDerivation rec {
     description = "Netkit TFTP client and server";
     homepage = "ftp://ftp.uk.linux.org/pub/linux/Networking/netkit/";
     license = lib.licenses.bsdOriginal;
-    maintainers = with lib.maintainers; [viric];
+    maintainers = with lib.maintainers; [ viric ];
     platforms = with lib.platforms; linux;
   };
 }

@@ -1,6 +1,20 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 let
-  inherit (lib) mkOption types mkIf mkMerge mkDefault mkEnableOption mkPackageOption maintainers;
+  inherit (lib)
+    mkOption
+    types
+    mkIf
+    mkMerge
+    mkDefault
+    mkEnableOption
+    mkPackageOption
+    maintainers
+    ;
   cfg = config.services.db-rest;
 in
 {
@@ -84,7 +98,9 @@ in
   config = mkIf cfg.enable {
     assertions = [
       {
-        assertion = (cfg.redis.enable && !cfg.redis.createLocally) -> (cfg.redis.host != null && cfg.redis.port != null);
+        assertion =
+          (cfg.redis.enable && !cfg.redis.createLocally)
+          -> (cfg.redis.host != null && cfg.redis.port != null);
         message = ''
           {option}`services.db-rest.redis.createLocally` and redis network connection ({option}`services.db-rest.redis.host` or {option}`services.db-rest.redis.port`) enabled. Disable either of them.
         '';
@@ -100,8 +116,7 @@ in
     systemd.services.db-rest = mkMerge [
       {
         description = "db-rest service";
-        after = [ "network.target" ]
-          ++ lib.optional cfg.redis.createLocally "redis-db-rest.service";
+        after = [ "network.target" ] ++ lib.optional cfg.redis.createLocally "redis-db-rest.service";
         requires = lib.optional cfg.redis.createLocally "redis-db-rest.service";
         wantedBy = [ "multi-user.target" ];
         serviceConfig = {
@@ -111,9 +126,15 @@ in
           WorkingDirectory = cfg.package;
           User = cfg.user;
           Group = cfg.group;
-          RestrictAddressFamilies = [ "AF_UNIX" "AF_INET" "AF_INET6" ];
+          RestrictAddressFamilies = [
+            "AF_UNIX"
+            "AF_INET"
+            "AF_INET6"
+          ];
           MemoryDenyWriteExecute = false;
-          LoadCredential = lib.optional (cfg.redis.enable && cfg.redis.passwordFile != null) "REDIS_PASSWORD:${cfg.redis.passwordFile}";
+          LoadCredential = lib.optional (
+            cfg.redis.enable && cfg.redis.passwordFile != null
+          ) "REDIS_PASSWORD:${cfg.redis.passwordFile}";
           ExecStart = mkDefault "${cfg.package}/bin/db-rest";
 
           RemoveIPC = true;
@@ -146,22 +167,24 @@ in
           PORT = toString cfg.port;
         };
       }
-      (mkIf cfg.redis.enable (if cfg.redis.createLocally then
-        { environment.REDIS_URL = config.services.redis.servers.db-rest.unixSocket; }
-      else
-        {
-          script =
-            let
-              username = lib.optionalString (cfg.redis.user != null) (cfg.redis.user);
-              host = cfg.redis.host;
-              port = toString cfg.redis.port;
-              protocol = if cfg.redis.useSSL then "rediss" else "redis";
-            in
-            ''
-              export REDIS_URL="${protocol}://${username}:$(${config.systemd.package}/bin/systemd-creds cat REDIS_PASSWORD)@${host}:${port}"
-              exec ${cfg.package}/bin/db-rest
-            '';
-        }))
+      (mkIf cfg.redis.enable (
+        if cfg.redis.createLocally then
+          { environment.REDIS_URL = config.services.redis.servers.db-rest.unixSocket; }
+        else
+          {
+            script =
+              let
+                username = lib.optionalString (cfg.redis.user != null) (cfg.redis.user);
+                host = cfg.redis.host;
+                port = toString cfg.redis.port;
+                protocol = if cfg.redis.useSSL then "rediss" else "redis";
+              in
+              ''
+                export REDIS_URL="${protocol}://${username}:$(${config.systemd.package}/bin/systemd-creds cat REDIS_PASSWORD)@${host}:${port}"
+                exec ${cfg.package}/bin/db-rest
+              '';
+          }
+      ))
     ];
 
     users.users = lib.mkMerge [

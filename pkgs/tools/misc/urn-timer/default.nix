@@ -1,13 +1,15 @@
-{ lib, stdenv
-, fetchFromGitHub
-, unstableGitUpdater
-, xxd
-, pkg-config
-, imagemagick
-, wrapGAppsHook3
-, gtk3
-, jansson
-, nixosTests
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  unstableGitUpdater,
+  xxd,
+  pkg-config,
+  imagemagick,
+  wrapGAppsHook3,
+  gtk3,
+  jansson,
+  nixosTests,
 }:
 
 stdenv.mkDerivation {
@@ -35,9 +37,7 @@ stdenv.mkDerivation {
 
   makeFlags = [ "PREFIX=$(out)" ];
 
-  passthru.updateScript = unstableGitUpdater {
-    url = "https://github.com/paoloose/urn.git";
-  };
+  passthru.updateScript = unstableGitUpdater { url = "https://github.com/paoloose/urn.git"; };
 
   passthru.tests.nixosTest = nixosTests.urn-timer;
 

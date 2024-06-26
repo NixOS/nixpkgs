@@ -1,4 +1,8 @@
-{ lib, stdenv, fetchzip }:
+{
+  lib,
+  stdenv,
+  fetchzip,
+}:
 
 stdenv.mkDerivation rec {
   pname = "autotalent";
@@ -9,9 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "19srnkghsdrxxlv2c7qimvyslxz63r97mkxfq78vbg654l3qz1a6";
   };
 
-  makeFlags = [
-    "INSTALL_PLUGINS_DIR=$(out)/lib/ladspa"
-  ];
+  makeFlags = [ "INSTALL_PLUGINS_DIR=$(out)/lib/ladspa" ];
 
   # To avoid name clashes, plugins should be compiled with symbols hidden, except for `ladspa_descriptor`:
   preConfigure = ''

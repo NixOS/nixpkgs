@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -9,7 +14,7 @@ let
   failureModes = {
     silent = 0;
     printk = 1;
-    panic  = 2;
+    panic = 2;
   };
 
   disableScript = pkgs.writeScript "audit-disable" ''
@@ -50,12 +55,17 @@ let
     # Disable auditing
     auditctl -e 0
   '';
-in {
+in
+{
   options = {
     security.audit = {
       enable = mkOption {
-        type        = types.enum [ false true "lock" ];
-        default     = false;
+        type = types.enum [
+          false
+          true
+          "lock"
+        ];
+        default = false;
         description = ''
           Whether to enable the Linux audit system. The special `lock` value can be used to
           enable auditing and prevent disabling it until a restart. Be careful about locking
@@ -65,14 +75,18 @@ in {
       };
 
       failureMode = mkOption {
-        type        = types.enum [ "silent" "printk" "panic" ];
-        default     = "printk";
+        type = types.enum [
+          "silent"
+          "printk"
+          "panic"
+        ];
+        default = "printk";
         description = "How to handle critical errors in the auditing system";
       };
 
       backlogLimit = mkOption {
-        type        = types.int;
-        default     = 64; # Apparently the kernel default
+        type = types.int;
+        default = 64; # Apparently the kernel default
         description = ''
           The maximum number of outstanding audit buffers allowed; exceeding this is
           considered a failure and handled in a manner specified by failureMode.
@@ -80,8 +94,8 @@ in {
       };
 
       rateLimit = mkOption {
-        type        = types.int;
-        default     = 0;
+        type = types.int;
+        default = 0;
         description = ''
           The maximum messages per second permitted before triggering a failure as
           specified by failureMode. Setting it to zero disables the limit.
@@ -89,9 +103,9 @@ in {
       };
 
       rules = mkOption {
-        type        = types.listOf types.str; # (types.either types.str (types.submodule rule));
-        default     = [];
-        example     = [ "-a exit,always -F arch=b64 -S execve" ];
+        type = types.listOf types.str; # (types.either types.str (types.submodule rule));
+        default = [ ];
+        example = [ "-a exit,always -F arch=b64 -S execve" ];
         description = ''
           The ordered audit rules, with each string appearing as one line of the audit.rules file.
         '';
@@ -109,14 +123,13 @@ in {
         ConditionSecurity = [ "audit" ];
       };
 
-
       path = [ pkgs.audit ];
 
       serviceConfig = {
         Type = "oneshot";
         RemainAfterExit = true;
         ExecStart = "@${if enabled then startScript else disableScript} audit-start";
-        ExecStop  = "@${stopScript} audit-stop";
+        ExecStop = "@${stopScript} audit-stop";
       };
     };
   };

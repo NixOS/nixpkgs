@@ -1,6 +1,7 @@
-{ lib
-, python3
-, fetchFromGitHub
+{
+  lib,
+  python3,
+  fetchFromGitHub,
 }:
 
 let
@@ -36,6 +37,9 @@ python3.pkgs.buildPythonApplication {
       readable diffs in those situations.
     '';
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ AndersonTorres anpryl ];
+    maintainers = with lib.maintainers; [
+      AndersonTorres
+      anpryl
+    ];
   };
 }

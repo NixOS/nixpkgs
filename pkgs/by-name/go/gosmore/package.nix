@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, libxml2, gtk2, curl, pkg-config }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  libxml2,
+  gtk2,
+  curl,
+  pkg-config,
+}:
 
 stdenv.mkDerivation rec {
   pname = "gosmore";
@@ -14,7 +22,11 @@ stdenv.mkDerivation rec {
 
   sourceRoot = "${src.name}/applications/rendering/gosmore";
 
-  buildInputs = [ libxml2 gtk2 curl ];
+  buildInputs = [
+    libxml2
+    gtk2
+    curl
+  ];
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -24,15 +36,16 @@ stdenv.mkDerivation rec {
   '';
 
   patches = [ ./pointer_int_comparison.patch ];
-  patchFlags = [ "-p1" "--binary" ]; # patch has dos style eol
+  patchFlags = [
+    "-p1"
+    "--binary"
+  ]; # patch has dos style eol
 
   meta = with lib; {
     description = "Open Street Map viewer";
     mainProgram = "gosmore";
     homepage = "https://sourceforge.net/projects/gosmore/";
-    maintainers = with maintainers; [
-      raskin
-    ];
+    maintainers = with maintainers; [ raskin ];
     platforms = platforms.linux;
     license = licenses.bsd2;
   };

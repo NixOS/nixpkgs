@@ -1,5 +1,10 @@
-{ lib, rustPlatform, fetchCrate
-, testers, nix-update-script, diffedit3
+{
+  lib,
+  rustPlatform,
+  fetchCrate,
+  testers,
+  nix-update-script,
+  diffedit3,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -15,9 +20,7 @@ rustPlatform.buildRustPackage rec {
 
   passthru = {
     updateScript = nix-update-script { };
-    tests = testers.testVersion {
-      package = diffedit3;
-    };
+    tests = testers.testVersion { package = diffedit3; };
   };
 
   meta = with lib; {

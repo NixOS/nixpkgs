@@ -1,4 +1,8 @@
-{ lib, fetchFromGitea, buildGoModule }:
+{
+  lib,
+  fetchFromGitea,
+  buildGoModule,
+}:
 
 buildGoModule rec {
   pname = "codeberg-pages";
@@ -19,9 +23,16 @@ buildGoModule rec {
     rm server/handler/handler_test.go
   '';
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
-  tags = [ "sqlite" "sqlite_unlock_notify" "netgo" ];
+  tags = [
+    "sqlite"
+    "sqlite_unlock_notify"
+    "netgo"
+  ];
 
   meta = with lib; {
     mainProgram = "codeberg-pages";

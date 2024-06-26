@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -7,7 +12,8 @@ let
   cfg = config.services.rspamd-trainer;
   format = pkgs.formats.toml { };
 
-in {
+in
+{
   options.services.rspamd-trainer = {
 
     enable = mkEnableOption "Spam/ham trainer for rspamd";
@@ -18,9 +24,7 @@ in {
         IMAP authentication configuration for rspamd-trainer. For supplying
         the IMAP password, use the `secrets` option.
       '';
-      type = types.submodule {
-        freeformType = format.type;
-      };
+      type = types.submodule { freeformType = format.type; };
       example = literalExpression ''
         {
           HOST = "localhost";
@@ -54,7 +58,7 @@ in {
           Type = "oneshot";
           DynamicUser = true;
           EnvironmentFile = [
-            ( format.generate "rspamd-trainer-env" cfg.settings )
+            (format.generate "rspamd-trainer-env" cfg.settings)
             cfg.secrets
           ];
         };

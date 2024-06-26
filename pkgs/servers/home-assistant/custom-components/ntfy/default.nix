@@ -1,7 +1,8 @@
-{ lib
-, fetchFromGitHub
-, buildHomeAssistantComponent
-, requests
+{
+  lib,
+  fetchFromGitHub,
+  buildHomeAssistantComponent,
+  requests,
 }:
 
 buildHomeAssistantComponent rec {
@@ -16,9 +17,7 @@ buildHomeAssistantComponent rec {
     hash = "sha256-OGCAJsAsnUjwaLR8lCBdU+ghVOGFF0mT73t5JtcngUA=";
   };
 
-  propagatedBuildInputs = [
-    requests
-  ];
+  propagatedBuildInputs = [ requests ];
 
   meta = with lib; {
     description = "Send notifications with ntfy.sh and selfhosted ntfy-servers";
@@ -27,4 +26,3 @@ buildHomeAssistantComponent rec {
     license = licenses.gpl3;
   };
 }
-

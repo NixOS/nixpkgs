@@ -1,15 +1,16 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, meson
-, ninja
-, pkg-config
-, python3
-, vala
-, wrapGAppsHook3
-, desktop-file-utils
-, glib
-, gtk3
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  pkg-config,
+  python3,
+  vala,
+  wrapGAppsHook3,
+  desktop-file-utils,
+  glib,
+  gtk3,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, mlton }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  mlton,
+}:
 
 stdenv.mkDerivation rec {
   pname = "mlkit";
@@ -11,9 +17,15 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-awjinXegc8jLd6OAB8QLDoXnotZhKbyfMWckp2U3MjA=";
   };
 
-  nativeBuildInputs = [ autoreconfHook mlton ];
+  nativeBuildInputs = [
+    autoreconfHook
+    mlton
+  ];
 
-  buildFlags = [ "mlkit" "mlkit_libs" ];
+  buildFlags = [
+    "mlkit"
+    "mlkit_libs"
+  ];
 
   meta = with lib; {
     description = "Standard ML Compiler and Toolkit";

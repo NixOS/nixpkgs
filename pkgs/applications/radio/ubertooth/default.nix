@@ -1,5 +1,14 @@
-{ stdenv, lib, fetchFromGitHub, cmake, pkg-config, libbtbb, libpcap , libusb1, bluez
-, udevGroup ? "ubertooth"
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  libbtbb,
+  libpcap,
+  libusb1,
+  bluez,
+  udevGroup ? "ubertooth",
 }:
 
 stdenv.mkDerivation rec {
@@ -15,8 +24,16 @@ stdenv.mkDerivation rec {
 
   sourceRoot = "${src.name}/host";
 
-  nativeBuildInputs = [ cmake pkg-config ];
-  buildInputs = [ libbtbb libpcap libusb1 bluez ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
+  buildInputs = [
+    libbtbb
+    libpcap
+    libusb1
+    bluez
+  ];
 
   cmakeFlags = lib.optionals stdenv.isLinux [
     "-DINSTALL_UDEV_RULES=TRUE"

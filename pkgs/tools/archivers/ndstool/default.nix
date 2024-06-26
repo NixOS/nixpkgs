@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, autoconf, automake }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoconf,
+  automake,
+}:
 
 stdenv.mkDerivation rec {
   pname = "ndstool";
@@ -11,7 +17,10 @@ stdenv.mkDerivation rec {
     sha256 = "0isnm0is5k6dgi2n2c3mysyr5hpwikp5g0s3ix7ms928z04l8ccm";
   };
 
-  nativeBuildInputs = [ autoconf automake ];
+  nativeBuildInputs = [
+    autoconf
+    automake
+  ];
 
   preConfigure = "./autogen.sh";
 

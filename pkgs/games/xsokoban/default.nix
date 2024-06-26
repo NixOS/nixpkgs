@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchurl, libX11, xorgproto, libXpm, libXt }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libX11,
+  xorgproto,
+  libXpm,
+  libXt,
+}:
 
 stdenv.mkDerivation rec {
   pname = "xsokoban";
@@ -9,7 +17,12 @@ stdenv.mkDerivation rec {
     sha256 = "006lp8y22b9pi81x1a9ldfgkl1fbmkdzfw0lqw5y9svmisbafbr9";
   };
 
-  buildInputs = [ libX11 xorgproto libXpm libXt ];
+  buildInputs = [
+    libX11
+    xorgproto
+    libXpm
+    libXt
+  ];
 
   env.NIX_CFLAGS_COMPILE = "-I${libXpm.dev}/include/X11";
 

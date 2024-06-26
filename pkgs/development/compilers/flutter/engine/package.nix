@@ -96,7 +96,8 @@ stdenv.mkDerivation (finalAttrs: {
     dartSdkVersion
     src
     outName
-    swiftshader;
+    swiftshader
+    ;
 
   toolchain = symlinkJoin {
     name = "flutter-engine-toolchain-${version}";
@@ -148,7 +149,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   NIX_CFLAGS_COMPILE = "-I${finalAttrs.toolchain}/include";
 
-  nativeCheckInputs = lib.optionals stdenv.isLinux [ xorg.xorgserver openbox ];
+  nativeCheckInputs = lib.optionals stdenv.isLinux [
+    xorg.xorgserver
+    openbox
+  ];
 
   nativeBuildInputs =
     [

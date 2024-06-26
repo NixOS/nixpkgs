@@ -1,10 +1,27 @@
-{ lib, callPackage, stdenv, fetchFromGitHub, cmake, bison, flex, libusb1, elfutils
-, libftdi1, readline, hidapi, libserialport
-# Documentation building doesn't work on Darwin. It fails with:
-#   Undefined subroutine &Locale::Messages::dgettext called in ... texi2html
-#
-# https://github.com/NixOS/nixpkgs/issues/224761
-, docSupport ? (!stdenv.hostPlatform.isDarwin), texliveMedium, texinfo, texi2html, unixtools }:
+{
+  lib,
+  callPackage,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  bison,
+  flex,
+  libusb1,
+  elfutils,
+  libftdi1,
+  readline,
+  hidapi,
+  libserialport,
+  # Documentation building doesn't work on Darwin. It fails with:
+  #   Undefined subroutine &Locale::Messages::dgettext called in ... texi2html
+  #
+  # https://github.com/NixOS/nixpkgs/issues/224761
+  docSupport ? (!stdenv.hostPlatform.isDarwin),
+  texliveMedium,
+  texinfo,
+  texi2html,
+  unixtools,
+}:
 
 let
   useElfutils = lib.meta.availableOn stdenv.hostPlatform elfutils;
@@ -21,12 +38,18 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "sha256-JqW3AOMmAfcy+PQRcqviWlxA6GoMSEfzIFt1pRYY7Dw=";
   };
 
-  nativeBuildInputs = [ cmake bison flex ] ++ lib.optionals docSupport [
-    unixtools.more
-    texliveMedium
-    texinfo
-    texi2html
-  ];
+  nativeBuildInputs =
+    [
+      cmake
+      bison
+      flex
+    ]
+    ++ lib.optionals docSupport [
+      unixtools.more
+      texliveMedium
+      texinfo
+      texi2html
+    ];
 
   buildInputs = [
     (if useElfutils then elfutils else finalAttrs.finalPackage.passthru.libelf)
@@ -44,8 +67,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   # Not used:
   #   -DHAVE_LINUXGPIO=ON    because it's incompatible with libgpiod 2.x
-  cmakeFlags = lib.optionals docSupport [ "-DBUILD_DOC=ON" ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ "-DHAVE_LINUXSPI=ON" "-DHAVE_PARPORT=ON" ];
+  cmakeFlags =
+    lib.optionals docSupport [ "-DBUILD_DOC=ON" ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      "-DHAVE_LINUXSPI=ON"
+      "-DHAVE_PARPORT=ON"
+    ];
 
   # dvips output references texlive in comments, resulting in a huge closure
   postInstall = lib.optionalString docSupport ''

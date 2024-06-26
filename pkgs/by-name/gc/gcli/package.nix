@@ -1,11 +1,12 @@
-{ lib
-, fetchFromGitHub
-, stdenv
-, curl
-, autoreconfHook
-, pkg-config
-, byacc
-, flex
+{
+  lib,
+  fetchFromGitHub,
+  stdenv,
+  curl,
+  autoreconfHook,
+  pkg-config,
+  byacc,
+  flex,
 }:
 
 stdenv.mkDerivation rec {
@@ -19,7 +20,12 @@ stdenv.mkDerivation rec {
     hash = "sha256-extVTaTWVFXSTiXlZ/MtiiFdc/KZEDkc+A7xxylJaM4=";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config byacc flex ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+    byacc
+    flex
+  ];
   buildInputs = [ curl ];
 
   meta = with lib; {

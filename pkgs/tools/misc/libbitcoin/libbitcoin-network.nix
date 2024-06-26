@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, autoreconfHook
-, boost, libbitcoin, zeromq }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  autoreconfHook,
+  boost,
+  libbitcoin,
+  zeromq,
+}:
 
 stdenv.mkDerivation rec {
   pname = "libbitcoin-network";
@@ -12,8 +20,14 @@ stdenv.mkDerivation rec {
     hash = "sha256-zDT92bvA779mzTodpKugCoxapB6vY2jCMSGZEkJLTXQ=";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
-  buildInputs = [ libbitcoin zeromq ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ];
+  buildInputs = [
+    libbitcoin
+    zeromq
+  ];
 
   enableParallelBuilding = true;
 

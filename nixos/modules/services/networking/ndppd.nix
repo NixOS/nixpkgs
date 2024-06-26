@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -8,19 +13,27 @@ let
   render = s: f: concatStringsSep "\n" (mapAttrsToList f s);
   prefer = a: b: if a != null then a else b;
 
-  ndppdConf = prefer cfg.configFile (pkgs.writeText "ndppd.conf" ''
-    route-ttl ${toString cfg.routeTTL}
-    ${render cfg.proxies (proxyInterfaceName: proxy: ''
-    proxy ${prefer proxy.interface proxyInterfaceName} {
-      router ${boolToString proxy.router}
-      timeout ${toString proxy.timeout}
-      ttl ${toString proxy.ttl}
-      ${render proxy.rules (ruleNetworkName: rule: ''
-      rule ${prefer rule.network ruleNetworkName} {
-        ${rule.method}${optionalString (rule.method == "iface") " ${rule.interface}"}
-      }'')}
-    }'')}
-  '');
+  ndppdConf = prefer cfg.configFile (
+    pkgs.writeText "ndppd.conf" ''
+      route-ttl ${toString cfg.routeTTL}
+      ${render cfg.proxies (
+        proxyInterfaceName: proxy: ''
+          proxy ${prefer proxy.interface proxyInterfaceName} {
+            router ${boolToString proxy.router}
+            timeout ${toString proxy.timeout}
+            ttl ${toString proxy.ttl}
+            ${
+              render proxy.rules (
+                ruleNetworkName: rule: ''
+                  rule ${prefer rule.network ruleNetworkName} {
+                    ${rule.method}${optionalString (rule.method == "iface") " ${rule.interface}"}
+                  }''
+              )
+            }
+          }''
+      )}
+    ''
+  );
 
   proxy = types.submodule {
     options = {
@@ -63,7 +76,7 @@ let
           is provided, /128 is assumed. You may have several rule sections, and the
           addresses may or may not overlap.
         '';
-        default = {};
+        default = { };
       };
     };
   };
@@ -81,7 +94,11 @@ let
         default = null;
       };
       method = mkOption {
-        type = types.enum [ "static" "iface" "auto" ];
+        type = types.enum [
+          "static"
+          "iface"
+          "auto"
+        ];
         description = ''
           static: Immediately answer any Neighbor Solicitation Messages
             (if they match the IP rule).
@@ -101,7 +118,8 @@ let
     };
   };
 
-in {
+in
+{
   options.services.ndppd = {
     enable = mkEnableOption "daemon that proxies NDP (Neighbor Discovery Protocol) messages between interfaces";
     interface = mkOption {
@@ -141,7 +159,7 @@ in {
         This sets up a listener, that will listen for any Neighbor Solicitation
         messages, and respond to them according to a set of rules.
       '';
-      default = {};
+      default = { };
       example = literalExpression ''
         {
           eth0.rules."1111::/64" = {};
@@ -151,18 +169,23 @@ in {
   };
 
   config = mkIf cfg.enable {
-    warnings = mkIf (cfg.interface != null && cfg.network != null) [ ''
-      The options services.ndppd.interface and services.ndppd.network will probably be removed soon,
-      please use services.ndppd.proxies.<interface>.rules.<network> instead.
-    '' ];
+    warnings = mkIf (cfg.interface != null && cfg.network != null) [
+      ''
+        The options services.ndppd.interface and services.ndppd.network will probably be removed soon,
+        please use services.ndppd.proxies.<interface>.rules.<network> instead.
+      ''
+    ];
 
     services.ndppd.proxies = mkIf (cfg.interface != null && cfg.network != null) {
-      ${cfg.interface}.rules.${cfg.network} = {};
+      ${cfg.interface}.rules.${cfg.network} = { };
     };
 
     systemd.services.ndppd = {
       description = "NDP Proxy Daemon";
-      documentation = [ "man:ndppd(1)" "man:ndppd.conf(5)" ];
+      documentation = [
+        "man:ndppd(1)"
+        "man:ndppd.conf(5)"
+      ];
       after = [ "network-pre.target" ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {

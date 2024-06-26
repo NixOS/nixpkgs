@@ -1,17 +1,18 @@
-{ stdenv
-, lib
-, fetchFromGitLab
-, gitUpdater
-, accountsservice
-, cmake
-, cmake-extras
-, deviceinfo
-, libgbinder
-, libglibutil
-, pkg-config
-, qtbase
-, qtdeclarative
-, qtfeedback
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  gitUpdater,
+  accountsservice,
+  cmake,
+  cmake-extras,
+  deviceinfo,
+  libgbinder,
+  libglibutil,
+  pkg-config,
+  qtbase,
+  qtdeclarative,
+  qtfeedback,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -58,9 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
     qtfeedback
   ];
 
-  cmakeFlags = [
-    (lib.cmakeBool "ENABLE_LIBHYBRIS" false)
-  ];
+  cmakeFlags = [ (lib.cmakeBool "ENABLE_LIBHYBRIS" false) ];
 
   dontWrapQtApps = true;
 

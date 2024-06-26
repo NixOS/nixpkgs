@@ -1,16 +1,25 @@
-{ lib, buildGoModule, fetchFromGitHub, testers, sonobuoy }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  testers,
+  sonobuoy,
+}:
 
 # SHA of ${version} for the tool's help output. Unfortunately this is needed in build flags.
 # The update script can update this automatically, the comment is used to find the line.
-let rev = "6f9e27f1795f10475c9f6f5decdff692e1e228da"; # update-commit-sha
+let
+  rev = "6f9e27f1795f10475c9f6f5decdff692e1e228da"; # update-commit-sha
 in
 buildGoModule rec {
   pname = "sonobuoy";
   version = "0.57.1"; # Do not forget to update `rev` above
 
   ldflags =
-    let t = "github.com/vmware-tanzu/sonobuoy";
-    in [
+    let
+      t = "github.com/vmware-tanzu/sonobuoy";
+    in
+    [
       "-s"
       "-X ${t}/pkg/buildinfo.Version=v${version}"
       "-X ${t}/pkg/buildinfo.GitSHA=${rev}"
@@ -49,6 +58,10 @@ buildGoModule rec {
     changelog = "https://github.com/vmware-tanzu/sonobuoy/releases/tag/v${version}";
     license = licenses.asl20;
     mainProgram = "sonobuoy";
-    maintainers = with maintainers; [ carlosdagos saschagrunert wilsonehusin ];
+    maintainers = with maintainers; [
+      carlosdagos
+      saschagrunert
+      wilsonehusin
+    ];
   };
 }

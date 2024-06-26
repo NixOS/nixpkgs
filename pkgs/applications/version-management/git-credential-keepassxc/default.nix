@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchFromGitHub
-, DiskArbitration
-, Foundation
-, withNotification ? false
-, withYubikey ? false
-, withStrictCaller ? false
-, withAll ? false
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  DiskArbitration,
+  Foundation,
+  withNotification ? false,
+  withYubikey ? false,
+  withStrictCaller ? false,
+  withAll ? false,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -23,9 +24,13 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-c2YucWs0UzyWDKWS5KebT3ps+XvWzlI0+ziJ8JX6oiQ=";
 
-  buildInputs = lib.optionals stdenv.isDarwin [ DiskArbitration Foundation ];
+  buildInputs = lib.optionals stdenv.isDarwin [
+    DiskArbitration
+    Foundation
+  ];
 
-  buildFeatures = []
+  buildFeatures =
+    [ ]
     ++ lib.optional withNotification "notification"
     ++ lib.optional withYubikey "yubikey"
     ++ lib.optional withStrictCaller "strict-caller"

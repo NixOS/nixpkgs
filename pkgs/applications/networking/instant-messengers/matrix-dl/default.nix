@@ -1,6 +1,7 @@
-{ lib
-, python3Packages
-, fetchFromGitHub
+{
+  lib,
+  python3Packages,
+  fetchFromGitHub,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -15,13 +16,9 @@ python3Packages.buildPythonApplication rec {
     sha256 = "1l8nh8z7kz24v0wcy3ll3w6in2yxwa1yz8lyc3x0blz37d8ss4ql";
   };
 
-  nativeBuildInputs = with python3Packages; [
-    setuptools
-  ];
+  nativeBuildInputs = with python3Packages; [ setuptools ];
 
-  propagatedBuildInputs = with python3Packages; [
-    matrix-client
-  ];
+  propagatedBuildInputs = with python3Packages; [ matrix-client ];
 
   meta = with lib; {
     description = "Download backlogs from Matrix as raw text";

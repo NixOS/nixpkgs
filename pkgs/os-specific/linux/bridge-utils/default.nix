@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchurl, autoreconfHook, fetchpatch }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoreconfHook,
+  fetchpatch,
+}:
 
 stdenv.mkDerivation rec {
   pname = "bridge-utils";

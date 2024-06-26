@@ -1,24 +1,29 @@
-{ stdenv
-, lib
-, fetchurl
-, autoreconfHook
-, pkg-config
-, intltool
-, gtk-doc
-, glib
-, avahi
-, gnutls
-, libuuid
-, libsoup
-, gtk3
-, gnome
+{
+  stdenv,
+  lib,
+  fetchurl,
+  autoreconfHook,
+  pkg-config,
+  intltool,
+  gtk-doc,
+  glib,
+  avahi,
+  gnutls,
+  libuuid,
+  libsoup,
+  gtk3,
+  gnome,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libepc";
   version = "0.4.6";
 
-  outputs = [ "out" "dev" "devdoc" ];
+  outputs = [
+    "out"
+    "dev"
+    "devdoc"
+  ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/libepc/${lib.versions.majorMinor finalAttrs.version}/libepc-${finalAttrs.version}.tar.xz";

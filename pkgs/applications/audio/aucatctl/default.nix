@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchurl, sndio, libbsd }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  sndio,
+  libbsd,
+}:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "aucatctl";
@@ -9,16 +15,18 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "524f2fae47db785234f166551520d9605b9a27551ca438bd807e3509ce246cf0";
   };
 
-  buildInputs = [ sndio ]
-    ++ lib.optional (!stdenv.isDarwin && !stdenv.hostPlatform.isBSD)
-    libbsd;
+  buildInputs = [ sndio ] ++ lib.optional (!stdenv.isDarwin && !stdenv.hostPlatform.isBSD) libbsd;
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
-  preBuild = ''
-    makeFlagsArray+=("PREFIX=$out")
-  '' + lib.optionalString
-    (!stdenv.isDarwin && !stdenv.hostPlatform.isBSD) ''
+  preBuild =
+    ''
+      makeFlagsArray+=("PREFIX=$out")
+    ''
+    + lib.optionalString (!stdenv.isDarwin && !stdenv.hostPlatform.isBSD) ''
       makeFlagsArray+=(LDADD="-lsndio -lbsd")
 
       # Fix warning about implicit declaration of function 'strlcpy'

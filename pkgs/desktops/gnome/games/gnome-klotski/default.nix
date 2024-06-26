@@ -1,6 +1,24 @@
-{ lib, stdenv, fetchurl, pkg-config, vala, gnome, gtk3, wrapGAppsHook3, appstream-glib, desktop-file-utils
-, glib, librsvg, libxml2, gettext, itstool, libgee, libgnome-games-support
-, meson, ninja, python3
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  vala,
+  gnome,
+  gtk3,
+  wrapGAppsHook3,
+  appstream-glib,
+  desktop-file-utils,
+  glib,
+  librsvg,
+  libxml2,
+  gettext,
+  itstool,
+  libgee,
+  libgnome-games-support,
+  meson,
+  ninja,
+  python3,
 }:
 
 stdenv.mkDerivation rec {
@@ -13,11 +31,26 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    pkg-config vala meson ninja python3 wrapGAppsHook3
-    gettext itstool libxml2 appstream-glib desktop-file-utils
+    pkg-config
+    vala
+    meson
+    ninja
+    python3
+    wrapGAppsHook3
+    gettext
+    itstool
+    libxml2
+    appstream-glib
+    desktop-file-utils
     gnome.adwaita-icon-theme
   ];
-  buildInputs = [ glib gtk3 librsvg libgee libgnome-games-support ];
+  buildInputs = [
+    glib
+    gtk3
+    librsvg
+    libgee
+    libgnome-games-support
+  ];
 
   postPatch = ''
     chmod +x build-aux/meson_post_install.py

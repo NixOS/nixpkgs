@@ -1,7 +1,8 @@
-{ lib
-, fetchFromGitHub
-, python3
-, x509-limbo
+{
+  lib,
+  fetchFromGitHub,
+  python3,
+  x509-limbo,
 }:
 
 python3.pkgs.buildPythonPackage {

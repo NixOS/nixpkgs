@@ -31,7 +31,6 @@ let
 in
 with py.pkgs;
 
-
 buildPythonApplication rec {
   pname = "ssh-mitm";
   version = "4.1.1";

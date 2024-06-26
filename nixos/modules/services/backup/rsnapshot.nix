@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -50,8 +55,11 @@ in
       };
 
       cronIntervals = mkOption {
-        default = {};
-        example = { hourly = "0 * * * *"; daily = "50 21 * * *"; };
+        default = { };
+        example = {
+          hourly = "0 * * * *";
+          daily = "50 21 * * *";
+        };
         type = types.attrsOf types.str;
         description = ''
           Periodicity at which intervals should be run by cron.
@@ -64,8 +72,9 @@ in
 
   config = mkIf cfg.enable (mkMerge [
     {
-      services.cron.systemCronJobs =
-        mapAttrsToList (interval: time: "${time} root ${pkgs.rsnapshot}/bin/rsnapshot -c ${cfgfile} ${interval}") cfg.cronIntervals;
+      services.cron.systemCronJobs = mapAttrsToList (
+        interval: time: "${time} root ${pkgs.rsnapshot}/bin/rsnapshot -c ${cfgfile} ${interval}"
+      ) cfg.cronIntervals;
     }
     (mkIf cfg.enableManualRsnapshot {
       environment.systemPackages = [ pkgs.rsnapshot ];

@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, inih
-, ninja
-, pkg-config
-, qtbase
-, wrapQtAppsHook
-, makeDesktopItem
-, copyDesktopItems
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  inih,
+  ninja,
+  pkg-config,
+  qtbase,
+  wrapQtAppsHook,
+  makeDesktopItem,
+  copyDesktopItems,
 }:
 
 stdenv.mkDerivation rec {
@@ -22,9 +23,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-K/mJQb7uO2H94krWJIJtFRYd6BAe2TX1xBt6fGBb1tA=";
   };
 
-  patches = [
-    ./non-bundled-inih.patch
-  ];
+  patches = [ ./non-bundled-inih.patch ];
 
   nativeBuildInputs = [
     cmake

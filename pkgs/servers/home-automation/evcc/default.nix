@@ -1,17 +1,18 @@
-{ lib
-, stdenv
-, buildGo122Module
-, fetchFromGitHub
-, fetchNpmDeps
-, cacert
-, go_1_22
-, git
-, enumer
-, mockgen
-, nodejs
-, npmHooks
-, nix-update-script
-, nixosTests
+{
+  lib,
+  stdenv,
+  buildGo122Module,
+  fetchFromGitHub,
+  fetchNpmDeps,
+  cacert,
+  go_1_22,
+  git,
+  enumer,
+  mockgen,
+  nodejs,
+  npmHooks,
+  nix-update-script,
+  nixosTests,
 }:
 
 let
@@ -74,31 +75,32 @@ buildGoModule rec {
 
   doCheck = !stdenv.isDarwin; # darwin sandbox limitations around network access, access to /etc/protocols and likely more
 
-  checkFlags = let
-    skippedTests = [
-      # network access
-      "TestOctopusConfigParse"
-      "TestTemplates/allinpower"
-      "TestTemplates/electricitymaps"
-      "TestTemplates/elering"
-      "TestTemplates/energinet"
-      "TestTemplates/grünstromindex"
-      "TestTemplates/pun"
-      "TestTemplates/entsoe"
-      "TestTemplates/ngeso"
-      "TestTemplates/tibber"
-      "TestTemplates/groupe-e"
-      "TestTemplates/awattar"
-      "TestTemplates/energy-charts-api"
-      "TestTemplates/polestar"
-      "TestTemplates/sma-inverter-speedwire/battery"
-      "TestTemplates/sma-inverter-speedwire/pv"
-      "TestTemplates/smartenergy"
-      "TestTemplates/tibber-pulse/grid"
+  checkFlags =
+    let
+      skippedTests = [
+        # network access
+        "TestOctopusConfigParse"
+        "TestTemplates/allinpower"
+        "TestTemplates/electricitymaps"
+        "TestTemplates/elering"
+        "TestTemplates/energinet"
+        "TestTemplates/grünstromindex"
+        "TestTemplates/pun"
+        "TestTemplates/entsoe"
+        "TestTemplates/ngeso"
+        "TestTemplates/tibber"
+        "TestTemplates/groupe-e"
+        "TestTemplates/awattar"
+        "TestTemplates/energy-charts-api"
+        "TestTemplates/polestar"
+        "TestTemplates/sma-inverter-speedwire/battery"
+        "TestTemplates/sma-inverter-speedwire/pv"
+        "TestTemplates/smartenergy"
+        "TestTemplates/tibber-pulse/grid"
 
-    ];
-  in
-  [ "-skip=^${lib.concatStringsSep "$|^" skippedTests}$" ];
+      ];
+    in
+    [ "-skip=^${lib.concatStringsSep "$|^" skippedTests}$" ];
 
   passthru = {
     tests = {

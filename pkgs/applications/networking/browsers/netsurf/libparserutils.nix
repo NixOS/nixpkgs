@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchurl
-, perl
-, buildsystem
-, libiconv
+{
+  lib,
+  stdenv,
+  fetchurl,
+  perl,
+  buildsystem,
+  libiconv,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -18,9 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     perl
     buildsystem
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    libiconv
-  ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
   makeFlags = [
     "PREFIX=$(out)"

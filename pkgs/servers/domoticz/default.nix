@@ -1,4 +1,6 @@
-{ lib, stdenv,
+{
+  lib,
+  stdenv,
   fetchFromGitHub,
   makeWrapper,
   cmake,
@@ -14,7 +16,7 @@
   curl,
   git,
   libusb-compat-0_1,
-  cereal
+  cereal,
 }:
 
 stdenv.mkDerivation rec {

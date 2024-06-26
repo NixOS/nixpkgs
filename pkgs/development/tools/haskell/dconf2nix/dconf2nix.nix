@@ -1,5 +1,15 @@
-{ mkDerivation, base, containers, emojis, fetchgit, hedgehog, lib
-, optparse-applicative, parsec, template-haskell, text
+{
+  mkDerivation,
+  base,
+  containers,
+  emojis,
+  fetchgit,
+  hedgehog,
+  lib,
+  optparse-applicative,
+  parsec,
+  template-haskell,
+  text,
 }:
 mkDerivation {
   pname = "dconf2nix";
@@ -13,11 +23,21 @@ mkDerivation {
   isLibrary = true;
   isExecutable = true;
   libraryHaskellDepends = [
-    base containers emojis optparse-applicative parsec text
+    base
+    containers
+    emojis
+    optparse-applicative
+    parsec
+    text
   ];
   executableHaskellDepends = [ base ];
   testHaskellDepends = [
-    base containers hedgehog parsec template-haskell text
+    base
+    containers
+    hedgehog
+    parsec
+    template-haskell
+    text
   ];
   description = "Convert dconf files to Nix, as expected by Home Manager";
   license = lib.licenses.asl20;

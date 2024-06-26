@@ -1,9 +1,10 @@
-{ lib
-, mkDerivation
-, fetchFromGitHub
-, qmake
-, qtwebengine
-, gitUpdater
+{
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+  qmake,
+  qtwebengine,
+  gitUpdater,
 }:
 
 mkDerivation rec {
@@ -18,21 +19,13 @@ mkDerivation rec {
     hash = "sha256-fHrsDEHEUgQYkZdnSzJ/+gTsV0eX8tOqSlr7vNH6LVs=";
   };
 
-  nativeBuildInputs = [
-    qmake
-  ];
+  nativeBuildInputs = [ qmake ];
 
-  buildInputs = [
-    qtwebengine
-  ];
+  buildInputs = [ qtwebengine ];
 
-  qmakeFlags = [
-    "GitQlient.pro"
-  ];
+  qmakeFlags = [ "GitQlient.pro" ];
 
-  passthru.updateScript = gitUpdater {
-    rev-prefix = "v";
-  };
+  passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
   meta = with lib; {
     homepage = "https://github.com/francescmm/GitQlient";

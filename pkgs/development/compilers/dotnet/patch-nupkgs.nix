@@ -1,30 +1,35 @@
-{ stdenv
-, lib
-, dotnetCorePackages
-, zlib
-, curl
-, icu
-, libunwind
-, libuuid
-, openssl
-, lttng-ust_2_12
-, writeShellScriptBin
+{
+  stdenv,
+  lib,
+  dotnetCorePackages,
+  zlib,
+  curl,
+  icu,
+  libunwind,
+  libuuid,
+  openssl,
+  lttng-ust_2_12,
+  writeShellScriptBin,
 }:
 
 let
   buildRid = dotnetCorePackages.systemToDotnetRid stdenv.buildPlatform.system;
 
-  binaryRPath = lib.makeLibraryPath ([
-    stdenv.cc.cc
-    zlib
-    curl
-    icu
-    libunwind
-    libuuid
-    openssl
-  ] ++ lib.optional stdenv.isLinux lttng-ust_2_12);
+  binaryRPath = lib.makeLibraryPath (
+    [
+      stdenv.cc.cc
+      zlib
+      curl
+      icu
+      libunwind
+      libuuid
+      openssl
+    ]
+    ++ lib.optional stdenv.isLinux lttng-ust_2_12
+  );
 
-in writeShellScriptBin "patch-nupkgs" ''
+in
+writeShellScriptBin "patch-nupkgs" ''
   set -euo pipefail
   shopt -s nullglob
   isELF() {

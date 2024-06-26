@@ -1,10 +1,11 @@
-{ callPackage
-, kernel ? null
-, stdenv
-, linuxKernel
-, nixosTests
-, ...
-} @ args:
+{
+  callPackage,
+  kernel ? null,
+  stdenv,
+  linuxKernel,
+  nixosTests,
+  ...
+}@args:
 
 let
   stdenv' = if kernel == null then stdenv else kernel.stdenv;
@@ -26,9 +27,7 @@ callPackage ./generic.nix args {
   rev = "2eab4f7b396a1abb9adf7cab82d6ff47f9d78e9b";
 
   isUnstable = true;
-  tests = [
-    nixosTests.zfs.unstable
-  ];
+  tests = [ nixosTests.zfs.unstable ];
 
   hash = "sha256-xcEiZRHsFtIWvjy47kaLai/No/XYfhkJ5+zi/1KWqUE=";
 }

@@ -1,31 +1,36 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, gi-docgen
-, meson
-, ninja
-, pkg-config
-, sassc
-, vala
-, gobject-introspection
-, appstream
-, fribidi
-, glib
-, gtk4
-, gnome
-, gsettings-desktop-schemas
-, desktop-file-utils
-, xvfb-run
-, AppKit
-, Foundation
-, testers
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  gi-docgen,
+  meson,
+  ninja,
+  pkg-config,
+  sassc,
+  vala,
+  gobject-introspection,
+  appstream,
+  fribidi,
+  glib,
+  gtk4,
+  gnome,
+  gsettings-desktop-schemas,
+  desktop-file-utils,
+  xvfb-run,
+  AppKit,
+  Foundation,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libadwaita";
   version = "1.5.1";
 
-  outputs = [ "out" "dev" "devdoc" ];
+  outputs = [
+    "out"
+    "dev"
+    "devdoc"
+  ];
   outputBin = "devdoc"; # demo app
 
   src = fetchFromGitLab {
@@ -36,9 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-dH0VPIt6SGTDcb1I72cKnNlyqZ3dptvKmMDjOd17BfA=";
   };
 
-  depsBuildBuild = [
-    pkg-config
-  ];
+  depsBuildBuild = [ pkg-config ];
 
   nativeBuildInputs = [
     gi-docgen
@@ -48,32 +51,24 @@ stdenv.mkDerivation (finalAttrs: {
     sassc
     vala
     gobject-introspection
-    desktop-file-utils  # for validate-desktop-file
+    desktop-file-utils # for validate-desktop-file
   ];
 
-  mesonFlags = [
-    "-Dgtk_doc=true"
-  ] ++ lib.optionals (!finalAttrs.doCheck) [
-    "-Dtests=false"
-  ];
+  mesonFlags = [ "-Dgtk_doc=true" ] ++ lib.optionals (!finalAttrs.doCheck) [ "-Dtests=false" ];
 
-  buildInputs = [
-    appstream
-    fribidi
-  ] ++ lib.optionals stdenv.isDarwin [
-    AppKit
-    Foundation
-  ];
+  buildInputs =
+    [
+      appstream
+      fribidi
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      AppKit
+      Foundation
+    ];
 
-  propagatedBuildInputs = [
-    gtk4
-  ];
+  propagatedBuildInputs = [ gtk4 ];
 
-  nativeCheckInputs = [
-    gnome.adwaita-icon-theme
-  ] ++ lib.optionals (!stdenv.isDarwin) [
-    xvfb-run
-  ];
+  nativeCheckInputs = [ gnome.adwaita-icon-theme ] ++ lib.optionals (!stdenv.isDarwin) [ xvfb-run ];
 
   # Tests had to be disabled on Darwin because test-button-content fails
   #
@@ -114,12 +109,8 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    updateScript = gnome.updateScript {
-      packageName = finalAttrs.pname;
-    };
-    tests.pkg-config = testers.hasPkgConfigModules {
-      package = finalAttrs.finalPackage;
-    };
+    updateScript = gnome.updateScript { packageName = finalAttrs.pname; };
+    tests.pkg-config = testers.hasPkgConfigModules { package = finalAttrs.finalPackage; };
   };
 
   meta = with lib; {

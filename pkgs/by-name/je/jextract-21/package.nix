@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, emptyDirectory
-, writeText
-, makeBinaryWrapper
-, gradle
-, jdk21
-, llvmPackages
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  emptyDirectory,
+  writeText,
+  makeBinaryWrapper,
+  gradle,
+  jdk21,
+  llvmPackages,
 }:
 
 let

@@ -64,9 +64,7 @@ stdenv.mkDerivation {
   '';
 
   passthru = {
-    updateScript = unstableGitUpdater {
-      tagPrefix = "v";
-    };
+    updateScript = unstableGitUpdater { tagPrefix = "v"; };
 
     networkManagerPlugin = "VPN/nm-iodine-service.name";
   };

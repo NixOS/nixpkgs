@@ -1,22 +1,23 @@
-{ lib
-, stdenv
-, buildGoModule
-, fetchFromGitHub
-, makeWrapper
-, git
-, bash
-, coreutils
-, gitea
-, gzip
-, openssh
-, pam
-, sqliteSupport ? true
-, pamSupport ? true
-, runCommand
-, brotli
-, xorg
-, nixosTests
-, buildNpmPackage
+{
+  lib,
+  stdenv,
+  buildGoModule,
+  fetchFromGitHub,
+  makeWrapper,
+  git,
+  bash,
+  coreutils,
+  gitea,
+  gzip,
+  openssh,
+  pam,
+  sqliteSupport ? true,
+  pamSupport ? true,
+  runCommand,
+  brotli,
+  xorg,
+  nixosTests,
+  buildNpmPackage,
 }:
 
 let
@@ -36,7 +37,8 @@ let
       cp -R public $out/
     '';
   };
-in buildGoModule rec {
+in
+buildGoModule rec {
   pname = "gitea";
   version = "1.22.0";
 
@@ -49,7 +51,10 @@ in buildGoModule rec {
 
   vendorHash = "sha256-8VoJR4p2WnhG6nTFMzBlcrd/B6UwaOU3Q/rnDx9MtWc=";
 
-  outputs = [ "out" "data" ];
+  outputs = [
+    "out"
+    "data"
+  ];
 
   patches = [ ./static-root-path.patch ];
 
@@ -68,8 +73,12 @@ in buildGoModule rec {
 
   buildInputs = lib.optional pamSupport pam;
 
-  tags = lib.optional pamSupport "pam"
-    ++ lib.optionals sqliteSupport [ "sqlite" "sqlite_unlock_notify" ];
+  tags =
+    lib.optional pamSupport "pam"
+    ++ lib.optionals sqliteSupport [
+      "sqlite"
+      "sqlite_unlock_notify"
+    ];
 
   ldflags = [
     "-s"
@@ -86,21 +95,35 @@ in buildGoModule rec {
     cp -R ./options/locale $out/locale
 
     wrapProgram $out/bin/gitea \
-      --prefix PATH : ${lib.makeBinPath [ bash coreutils git gzip openssh ]}
+      --prefix PATH : ${
+        lib.makeBinPath [
+          bash
+          coreutils
+          git
+          gzip
+          openssh
+        ]
+      }
   '';
 
   passthru = {
-    data-compressed = runCommand "gitea-data-compressed" {
-      nativeBuildInputs = [ brotli xorg.lndir ];
-    } ''
-      mkdir $out
-      lndir ${gitea.data}/ $out/
+    data-compressed =
+      runCommand "gitea-data-compressed"
+        {
+          nativeBuildInputs = [
+            brotli
+            xorg.lndir
+          ];
+        }
+        ''
+          mkdir $out
+          lndir ${gitea.data}/ $out/
 
-      # Create static gzip and brotli files
-      find -L $out -type f -regextype posix-extended -iregex '.*\.(css|html|js|svg|ttf|txt)' \
-        -exec gzip --best --keep --force {} ';' \
-        -exec brotli --best --keep --no-copy-stat {} ';'
-    '';
+          # Create static gzip and brotli files
+          find -L $out -type f -regextype posix-extended -iregex '.*\.(css|html|js|svg|ttf|txt)' \
+            -exec gzip --best --keep --force {} ';' \
+            -exec brotli --best --keep --no-copy-stat {} ';'
+        '';
 
     tests = nixosTests.gitea;
   };
@@ -109,7 +132,11 @@ in buildGoModule rec {
     description = "Git with a cup of tea";
     homepage = "https://about.gitea.com";
     license = licenses.mit;
-    maintainers = with maintainers; [ ma27 techknowlogick SuperSandro2000 ];
+    maintainers = with maintainers; [
+      ma27
+      techknowlogick
+      SuperSandro2000
+    ];
     broken = stdenv.isDarwin;
     mainProgram = "gitea";
   };

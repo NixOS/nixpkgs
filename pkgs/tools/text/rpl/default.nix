@@ -1,4 +1,8 @@
-{ lib, fetchPypi, python3Packages }:
+{
+  lib,
+  fetchPypi,
+  python3Packages,
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "rpl";
@@ -11,9 +15,7 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-4vUnFfxiPvyg9gtwiQE3nHZBnqBtBVwhM3KQzkjzw/I=";
   };
 
-  nativeBuildInputs = [
-    python3Packages.setuptools
-  ];
+  nativeBuildInputs = [ python3Packages.setuptools ];
 
   nativeCheckInputs = [
     python3Packages.pytest-datafiles

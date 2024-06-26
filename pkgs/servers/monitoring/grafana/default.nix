@@ -1,9 +1,21 @@
-{ lib, stdenv, buildGoModule, fetchFromGitHub, removeReferencesTo
-, tzdata, wire
-, yarn, nodejs, python3, cacert
-, jq, moreutils
-, nix-update-script, nixosTests, xcbuild
-, util-linux
+{
+  lib,
+  stdenv,
+  buildGoModule,
+  fetchFromGitHub,
+  removeReferencesTo,
+  tzdata,
+  wire,
+  yarn,
+  nodejs,
+  python3,
+  cacert,
+  jq,
+  moreutils,
+  nix-update-script,
+  nixosTests,
+  xcbuild,
+  util-linux,
 }:
 
 let
@@ -24,7 +36,11 @@ buildGoModule rec {
   pname = "grafana";
   version = "11.0.0";
 
-  subPackages = [ "pkg/cmd/grafana" "pkg/cmd/grafana-server" "pkg/cmd/grafana-cli" ];
+  subPackages = [
+    "pkg/cmd/grafana"
+    "pkg/cmd/grafana-server"
+    "pkg/cmd/grafana-cli"
+  ];
 
   src = fetchFromGitHub {
     owner = "grafana";
@@ -44,9 +60,13 @@ buildGoModule rec {
     name = "${pname}-${version}-yarn-offline-cache";
     inherit src env;
     nativeBuildInputs = [
-      yarn nodejs cacert
-      jq moreutils python3
-    # @esfx/equatable@npm:1.0.2 fails to build on darwin as it requires `xcbuild`
+      yarn
+      nodejs
+      cacert
+      jq
+      moreutils
+      python3
+      # @esfx/equatable@npm:1.0.2 fails to build on darwin as it requires `xcbuild`
     ] ++ lib.optionals stdenv.isDarwin [ xcbuild.xcbuild ];
     postPatch = ''
       ${patchAwayGrafanaE2E}
@@ -65,12 +85,14 @@ buildGoModule rec {
     dontInstall = true;
     dontFixup = true;
     outputHashMode = "recursive";
-    outputHash = rec {
-      x86_64-linux = "sha256-+Udq8oQSIAHku55VKnrfgHHevzBels0QiOZwnwuts8k=";
-      aarch64-linux = x86_64-linux;
-      aarch64-darwin = "sha256-m3jtZNz0J2nZwFHXVp3ApgDfnGBOJvFeUpqOPQqv200=";
-      x86_64-darwin = aarch64-darwin;
-    }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+    outputHash =
+      rec {
+        x86_64-linux = "sha256-+Udq8oQSIAHku55VKnrfgHHevzBels0QiOZwnwuts8k=";
+        aarch64-linux = x86_64-linux;
+        aarch64-darwin = "sha256-m3jtZNz0J2nZwFHXVp3ApgDfnGBOJvFeUpqOPQqv200=";
+        x86_64-darwin = aarch64-darwin;
+      }
+      .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   };
 
   disallowedRequisites = [ offlineCache ];
@@ -79,7 +101,14 @@ buildGoModule rec {
 
   proxyVendor = true;
 
-  nativeBuildInputs = [ wire yarn jq moreutils removeReferencesTo python3 ] ++ lib.optionals stdenv.isDarwin [ xcbuild.xcbuild ];
+  nativeBuildInputs = [
+    wire
+    yarn
+    jq
+    moreutils
+    removeReferencesTo
+    python3
+  ] ++ lib.optionals stdenv.isDarwin [ xcbuild.xcbuild ];
 
   postPatch = ''
     ${patchAwayGrafanaE2E}
@@ -120,7 +149,9 @@ buildGoModule rec {
   '';
 
   ldflags = [
-    "-s" "-w" "-X main.version=${version}"
+    "-s"
+    "-w"
+    "-X main.version=${version}"
   ];
 
   # Tests start http servers which need to bind to local addresses:
@@ -145,7 +176,9 @@ buildGoModule rec {
   '';
 
   passthru = {
-    tests = { inherit (nixosTests) grafana; };
+    tests = {
+      inherit (nixosTests) grafana;
+    };
     updateScript = nix-update-script { };
   };
 
@@ -153,8 +186,20 @@ buildGoModule rec {
     description = "Gorgeous metric viz, dashboards & editors for Graphite, InfluxDB & OpenTSDB";
     license = licenses.agpl3Only;
     homepage = "https://grafana.com";
-    maintainers = with maintainers; [ offline fpletz willibutz globin ma27 Frostman ];
-    platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" "aarch64-darwin" ];
+    maintainers = with maintainers; [
+      offline
+      fpletz
+      willibutz
+      globin
+      ma27
+      Frostman
+    ];
+    platforms = [
+      "x86_64-linux"
+      "x86_64-darwin"
+      "aarch64-linux"
+      "aarch64-darwin"
+    ];
     mainProgram = "grafana-server";
     # requires util-linux to work around https://github.com/nrwl/nx/issues/22445
     # `script` doesn't seem to be part of util-linux on Darwin though.

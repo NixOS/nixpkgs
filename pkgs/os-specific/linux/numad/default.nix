@@ -1,4 +1,8 @@
-{ lib, stdenv, fetchgit }:
+{
+  lib,
+  stdenv,
+  fetchgit,
+}:
 
 stdenv.mkDerivation rec {
   pname = "numad";
@@ -12,9 +16,7 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  patches = [
-    ./numad-linker-flags.patch
-  ];
+  patches = [ ./numad-linker-flags.patch ];
   postPatch = ''
     substituteInPlace Makefile --replace "install -m" "install -Dm"
   '';

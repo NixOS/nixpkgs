@@ -1,9 +1,10 @@
-{ lib
-, buildNpmPackage
-, fetchFromGitHub
-, installShellFiles
-, testers
-, triton
+{
+  lib,
+  buildNpmPackage,
+  fetchFromGitHub,
+  installShellFiles,
+  testers,
+  triton,
 }:
 
 buildNpmPackage rec {
@@ -30,9 +31,7 @@ buildNpmPackage rec {
   '';
 
   passthru = {
-    tests.version = testers.testVersion {
-      package = triton;
-    };
+    tests.version = testers.testVersion { package = triton; };
   };
 
   meta = with lib; {

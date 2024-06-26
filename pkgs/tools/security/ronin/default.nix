@@ -1,4 +1,10 @@
-{ lib, bundlerEnv, bundlerUpdateScript, defaultGemConfig, yasm }:
+{
+  lib,
+  bundlerEnv,
+  bundlerUpdateScript,
+  defaultGemConfig,
+  yasm,
+}:
 
 bundlerEnv {
   name = "ronin";
@@ -24,8 +30,8 @@ bundlerEnv {
 
   meta = with lib; {
     description = "Free and Open Source Ruby toolkit for security research and development";
-    homepage    = "https://ronin-rb.dev";
-    license     = licenses.gpl3Plus;
+    homepage = "https://ronin-rb.dev";
+    license = licenses.gpl3Plus;
     maintainers = with maintainers; [ Ch1keen ];
   };
 }

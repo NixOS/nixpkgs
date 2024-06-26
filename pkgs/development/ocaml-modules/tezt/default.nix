@@ -1,10 +1,11 @@
-{ lib
-, fetchFromGitLab
-, buildDunePackage
-, clap
-, ezjsonm
-, lwt
-, re
+{
+  lib,
+  fetchFromGitLab,
+  buildDunePackage,
+  clap,
+  ezjsonm,
+  lwt,
+  re,
 }:
 
 buildDunePackage rec {

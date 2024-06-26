@@ -1,15 +1,16 @@
-{ lib
-, fetchFromGitHub
-, python3
-, asciidoc
-, cacert
-, docbook_xsl
-, installShellFiles
-, libxml2
-, libxslt
-, testers
-, offlineimap
-, fetchpatch
+{
+  lib,
+  fetchFromGitHub,
+  python3,
+  asciidoc,
+  cacert,
+  docbook_xsl,
+  installShellFiles,
+  libxml2,
+  libxslt,
+  testers,
+  offlineimap,
+  fetchpatch,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -65,9 +66,7 @@ python3.pkgs.buildPythonApplication rec {
   # Test requires credentials
   doCheck = false;
 
-  pythonImportsCheck = [
-    "offlineimap"
-  ];
+  pythonImportsCheck = [ "offlineimap" ];
 
   passthru.tests.version = testers.testVersion { package = offlineimap; };
 

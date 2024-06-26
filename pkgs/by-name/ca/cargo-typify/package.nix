@@ -1,4 +1,10 @@
-{ lib, rustfmt, rustPlatform, fetchFromGitHub, gitUpdater }:
+{
+  lib,
+  rustfmt,
+  rustPlatform,
+  fetchFromGitHub,
+  gitUpdater,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-typify";
@@ -13,7 +19,10 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-balx5xOtrWwMOFeGQkYQ2f+lcGMCJvdPqE8rH9adkfU=";
 
-  cargoBuildFlags = [ "-p" "cargo-typify" ];
+  cargoBuildFlags = [
+    "-p"
+    "cargo-typify"
+  ];
 
   nativeCheckInputs = [ rustfmt ];
 

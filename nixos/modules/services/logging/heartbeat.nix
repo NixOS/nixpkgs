@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -20,9 +25,7 @@ in
 
       enable = mkEnableOption "heartbeat, uptime monitoring";
 
-      package = mkPackageOption pkgs "heartbeat" {
-        example = "heartbeat7";
-      };
+      package = mkPackageOption pkgs "heartbeat" { example = "heartbeat7"; };
 
       name = mkOption {
         type = types.str;
@@ -32,7 +35,7 @@ in
 
       tags = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         description = "Tags to place on the shipped log messages";
       };
 
@@ -58,9 +61,7 @@ in
 
   config = mkIf cfg.enable {
 
-    systemd.tmpfiles.rules = [
-      "d '${cfg.stateDir}' - nobody nogroup - -"
-    ];
+    systemd.tmpfiles.rules = [ "d '${cfg.stateDir}' - nobody nogroup - -" ];
 
     systemd.services.heartbeat = with pkgs; {
       description = "heartbeat log shipper";

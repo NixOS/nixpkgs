@@ -1,19 +1,20 @@
-{ lib
-, stdenv
-, installShellFiles
-, fetchFromGitHub
-, fetchurl
-, freetype
-, gumbo
-, harfbuzz
-, jbig2dec
-, mujs
-, mupdf
-, openjpeg
-, qt3d
-, qtbase
-, qmake
-, wrapQtAppsHook
+{
+  lib,
+  stdenv,
+  installShellFiles,
+  fetchFromGitHub,
+  fetchurl,
+  freetype,
+  gumbo,
+  harfbuzz,
+  jbig2dec,
+  mujs,
+  mupdf,
+  openjpeg,
+  qt3d,
+  qtbase,
+  qmake,
+  wrapQtAppsHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -45,8 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
     openjpeg
     qt3d
     qtbase
-  ]
-  ++ lib.optionals stdenv.isDarwin [ freetype ];
+  ] ++ lib.optionals stdenv.isDarwin [ freetype ];
 
   nativeBuildInputs = [
     installShellFiles
@@ -65,23 +65,27 @@ stdenv.mkDerivation (finalAttrs: {
       --replace "/etc/sioyek" "$out/etc"
   '';
 
-  postInstall = if stdenv.isDarwin then ''
-    cp -r pdf_viewer/shaders sioyek.app/Contents/MacOS/shaders
-    cp pdf_viewer/prefs.config sioyek.app/Contents/MacOS/
-    cp pdf_viewer/prefs_user.config sioyek.app/Contents/MacOS/
-    cp pdf_viewer/keys.config sioyek.app/Contents/MacOS/
-    cp pdf_viewer/keys_user.config sioyek.app/Contents/MacOS/
-    cp tutorial.pdf sioyek.app/Contents/MacOS/
+  postInstall =
+    if stdenv.isDarwin then
+      ''
+        cp -r pdf_viewer/shaders sioyek.app/Contents/MacOS/shaders
+        cp pdf_viewer/prefs.config sioyek.app/Contents/MacOS/
+        cp pdf_viewer/prefs_user.config sioyek.app/Contents/MacOS/
+        cp pdf_viewer/keys.config sioyek.app/Contents/MacOS/
+        cp pdf_viewer/keys_user.config sioyek.app/Contents/MacOS/
+        cp tutorial.pdf sioyek.app/Contents/MacOS/
 
-    mkdir -p $out/Applications $out/bin
-    cp -r sioyek.app $out/Applications
-    ln -s $out/Applications/sioyek.app/Contents/MacOS/sioyek $out/bin/sioyek
-  '' else ''
-    install -Dm644 tutorial.pdf $out/share/tutorial.pdf
-    cp -r pdf_viewer/shaders $out/share/
-    install -Dm644 -t $out/etc/ pdf_viewer/{keys,prefs}.config
-    installManPage resources/sioyek.1
-  '';
+        mkdir -p $out/Applications $out/bin
+        cp -r sioyek.app $out/Applications
+        ln -s $out/Applications/sioyek.app/Contents/MacOS/sioyek $out/bin/sioyek
+      ''
+    else
+      ''
+        install -Dm644 tutorial.pdf $out/share/tutorial.pdf
+        cp -r pdf_viewer/shaders $out/share/
+        install -Dm644 -t $out/etc/ pdf_viewer/{keys,prefs}.config
+        installManPage resources/sioyek.1
+      '';
 
   meta = with lib; {
     homepage = "https://sioyek.info/";

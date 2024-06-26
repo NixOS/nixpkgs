@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.services.deconz;
@@ -113,7 +118,8 @@ in
           + " --ws-port=${toString cfg.wsPort}"
           + " --auto-connect=1"
           + (lib.optionalString (cfg.device != null) " --dev=${cfg.device}")
-          + " " + (lib.escapeShellArgs cfg.extraArgs);
+          + " "
+          + (lib.escapeShellArgs cfg.extraArgs);
         Restart = "on-failure";
         AmbientCapabilities = capabilities;
         CapabilityBoundingSet = capabilities;

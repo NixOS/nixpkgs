@@ -1,4 +1,9 @@
-{ stdenv, lib, fetchFromGitHub, kernel }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  kernel,
+}:
 
 stdenv.mkDerivation {
   pname = "hid-tmff2";
@@ -16,13 +21,9 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
-  makeFlags = kernel.makeFlags ++ [
-    "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
-  ];
+  makeFlags = kernel.makeFlags ++ [ "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build" ];
 
-  installFlags = [
-    "INSTALL_MOD_PATH=${placeholder "out"}"
-  ];
+  installFlags = [ "INSTALL_MOD_PATH=${placeholder "out"}" ];
 
   postPatch = "sed -i '/depmod -A/d' Makefile";
 

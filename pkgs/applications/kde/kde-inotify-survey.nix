@@ -1,11 +1,12 @@
-{ mkDerivation
-, lib
-, extra-cmake-modules
-, kauth
-, kcoreaddons
-, kdbusaddons
-, ki18n
-, knotifications
+{
+  mkDerivation,
+  lib,
+  extra-cmake-modules,
+  kauth,
+  kcoreaddons,
+  kdbusaddons,
+  ki18n,
+  knotifications,
 }:
 
 mkDerivation {
@@ -26,6 +27,6 @@ mkDerivation {
     mainProgram = "kde-inotify-survey";
     homepage = "https://invent.kde.org/system/kde-inotify-survey";
     license = lib.licenses.gpl2Plus;
-    maintainers = [];
+    maintainers = [ ];
   };
 }

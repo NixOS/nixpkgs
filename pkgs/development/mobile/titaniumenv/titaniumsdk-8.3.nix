@@ -1,4 +1,10 @@
-{ stdenv, lib, fetchurl, unzip, makeWrapper }:
+{
+  stdenv,
+  lib,
+  fetchurl,
+  unzip,
+  makeWrapper,
+}:
 
 let
   # Gradle is a build system that bootstraps itself. This is what it actually
@@ -67,9 +73,13 @@ stdenv.mkDerivation {
         url = "https://builds.appcelerator.com/mobile/8_3_X/mobilesdk-8.3.2.v20200117111803-osx.zip";
         sha256 = "1zflq5hc96lrriw71ya623kkskkisi9yayg8qs03zimi0gksizxw";
       }
-    else throw "Platform: ${stdenv.system} not supported!";
+    else
+      throw "Platform: ${stdenv.system} not supported!";
 
-  nativeBuildInputs = [ makeWrapper unzip ];
+  nativeBuildInputs = [
+    makeWrapper
+    unzip
+  ];
 
   buildCommand = ''
     mkdir -p $out

@@ -1,18 +1,23 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rustPlatform
-, libgit2
-, openssl
-, pkg-config
-, makeWrapper
-, git
-, darwin
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  libgit2,
+  openssl,
+  pkg-config,
+  makeWrapper,
+  git,
+  darwin,
 }:
 
 let
   # josh-ui requires javascript dependencies, haven't tried to figure it out yet
-  cargoFlags = [ "--workspace" "--exclude" "josh-ui" ];
+  cargoFlags = [
+    "--workspace"
+    "--exclude"
+    "josh-ui"
+  ];
 in
 
 rustPlatform.buildRustPackage rec {
@@ -37,9 +42,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [
     libgit2
     openssl
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.Security
-  ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.Security ];
 
   cargoBuildFlags = cargoFlags;
   cargoTestFlags = cargoFlags;

@@ -1,10 +1,10 @@
-{ lib
-, mkYarnPackage
-, fetchFromGitHub
-, makeWrapper
-, nodejs
-, fetchYarnDeps
-,
+{
+  lib,
+  mkYarnPackage,
+  fetchFromGitHub,
+  makeWrapper,
+  nodejs,
+  fetchYarnDeps,
 }:
 mkYarnPackage rec {
   pname = "prettierd";
@@ -47,6 +47,9 @@ mkYarnPackage rec {
     license = licenses.isc;
     changelog = "https://github.com/fsouza/prettierd/blob/${src.rev}/CHANGELOG.md";
     platforms = with platforms; linux ++ darwin;
-    maintainers = with maintainers; [ NotAShelf n3oney ];
+    maintainers = with maintainers; [
+      NotAShelf
+      n3oney
+    ];
   };
 }

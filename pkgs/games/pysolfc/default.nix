@@ -1,9 +1,10 @@
-{ lib
-, fetchzip
-, buildPythonApplication
-, python3Packages
-, desktop-file-utils
-, freecell-solver
+{
+  lib,
+  fetchzip,
+  buildPythonApplication,
+  python3Packages,
+  desktop-file-utils,
+  freecell-solver,
 }:
 
 buildPythonApplication rec {
@@ -39,9 +40,7 @@ buildPythonApplication rec {
     pillow
   ];
 
-  patches = [
-    ./pysolfc-datadir.patch
-  ];
+  patches = [ ./pysolfc-datadir.patch ];
 
   nativeBuildInputs = [ desktop-file-utils ];
   postPatch = ''

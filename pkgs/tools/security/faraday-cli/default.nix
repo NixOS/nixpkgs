@@ -1,6 +1,7 @@
-{ lib
-, fetchFromGitHub
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -15,9 +16,7 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-bCiiX5dYodnWkKeNo2j3PGMz17F5y2X4ECZiStDdK5U=";
   };
 
-  nativeBuildInputs = with python3.pkgs; [
-    setuptools
-  ];
+  nativeBuildInputs = with python3.pkgs; [ setuptools ];
 
   propagatedBuildInputs = with python3.pkgs; [
     arrow
@@ -41,9 +40,7 @@ python3.pkgs.buildPythonApplication rec {
   # Tests requires credentials
   doCheck = false;
 
-  pythonImportsCheck = [
-    "faraday_cli"
-  ];
+  pythonImportsCheck = [ "faraday_cli" ];
 
   meta = with lib; {
     description = "Command Line Interface for Faraday";

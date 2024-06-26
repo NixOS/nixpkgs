@@ -1,4 +1,10 @@
-{ lib, fetchurl, buildDunePackage, dune-configurator, libX11 }:
+{
+  lib,
+  fetchurl,
+  buildDunePackage,
+  dune-configurator,
+  libX11,
+}:
 
 buildDunePackage rec {
 

@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, makeWrapper
-, imagemagick
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  makeWrapper,
+  imagemagick,
 }:
 
 stdenv.mkDerivation rec {

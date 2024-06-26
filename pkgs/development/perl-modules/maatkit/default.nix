@@ -1,4 +1,9 @@
-{buildPerlPackage, lib, fetchurl, DBDmysql}:
+{
+  buildPerlPackage,
+  lib,
+  fetchurl,
+  DBDmysql,
+}:
 
 buildPerlPackage {
   pname = "maatkit";
@@ -11,7 +16,7 @@ buildPerlPackage {
 
   outputs = [ "out" ];
 
-  buildInputs = [ DBDmysql ] ;
+  buildInputs = [ DBDmysql ];
 
   preConfigure = ''
     find . | while read fn; do
@@ -25,7 +30,7 @@ buildPerlPackage {
             fi
         fi
     done
-  '' ;
+  '';
 
   meta = with lib; {
     description = "Database toolkit";

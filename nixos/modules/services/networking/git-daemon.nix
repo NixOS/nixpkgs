@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 with lib;
 let
 
@@ -57,8 +62,11 @@ in
 
       repositories = mkOption {
         type = types.listOf types.str;
-        default = [];
-        example = [ "/srv/git" "/home/user/git/repo2" ];
+        default = [ ];
+        example = [
+          "/srv/git"
+          "/home/user/git/repo2"
+        ];
         description = ''
           A whitelist of paths of git repositories, or directories containing repositories
           all of which would be published. Paths must not end in "/".
@@ -114,18 +122,19 @@ in
       };
     };
 
-    users.groups = optionalAttrs (cfg.group == "git") {
-      git.gid = config.ids.gids.git;
-    };
+    users.groups = optionalAttrs (cfg.group == "git") { git.gid = config.ids.gids.git; };
 
     systemd.services.git-daemon = {
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
-      script = "${getExe cfg.package} daemon --reuseaddr "
+      script =
+        "${getExe cfg.package} daemon --reuseaddr "
         + (optionalString (cfg.basePath != "") "--base-path=${cfg.basePath} ")
         + (optionalString (cfg.listenAddress != "") "--listen=${cfg.listenAddress} ")
         + "--port=${toString cfg.port} --user=${cfg.user} --group=${cfg.group} ${cfg.options} "
-        + "--verbose " + (optionalString cfg.exportAll "--export-all ")  + concatStringsSep " " cfg.repositories;
+        + "--verbose "
+        + (optionalString cfg.exportAll "--export-all ")
+        + concatStringsSep " " cfg.repositories;
     };
 
   };

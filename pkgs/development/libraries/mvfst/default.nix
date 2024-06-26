@@ -1,13 +1,14 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, fizz
-, folly
-, gflags
-, glog
-, libsodium
-, zlib
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  fizz,
+  folly,
+  gflags,
+  glog,
+  libsodium,
+  zlib,
 }:
 
 stdenv.mkDerivation rec {

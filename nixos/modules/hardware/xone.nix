@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 let
@@ -11,7 +16,10 @@ in
 
   config = mkIf cfg.enable {
     boot = {
-      blacklistedKernelModules = [ "xpad" "mt76x2u" ];
+      blacklistedKernelModules = [
+        "xpad"
+        "mt76x2u"
+      ];
       extraModulePackages = with config.boot.kernelPackages; [ xone ];
     };
     hardware.firmware = [ pkgs.xow_dongle-firmware ];

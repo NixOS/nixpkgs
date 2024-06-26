@@ -1,14 +1,15 @@
 # SolidPython is an unmaintained library with old dependencies.
-{ buildPythonPackage
-, fetchFromGitHub
-, lib
-, pythonRelaxDepsHook
+{
+  buildPythonPackage,
+  fetchFromGitHub,
+  lib,
+  pythonRelaxDepsHook,
 
-, poetry-core
-, prettytable
-, ply
-, setuptools
-, euclid3
+  poetry-core,
+  prettytable,
+  ply,
+  setuptools,
+  euclid3,
 }:
 buildPythonPackage rec {
   pname = "solidpython";
@@ -48,9 +49,7 @@ buildPythonPackage rec {
     "pypng"
   ];
 
-  pythonImportsCheck = [
-    "solid"
-  ];
+  pythonImportsCheck = [ "solid" ];
 
   meta = with lib; {
     description = "Python interface to the OpenSCAD declarative geometry language";

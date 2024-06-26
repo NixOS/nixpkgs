@@ -1,5 +1,14 @@
-{ stdenv, lib, python2, python3, kernel, makeWrapper, writeText
-, gawk, iproute2 }:
+{
+  stdenv,
+  lib,
+  python2,
+  python3,
+  kernel,
+  makeWrapper,
+  writeText,
+  gawk,
+  iproute2,
+}:
 
 let
   libexec = "libexec/hypervkvpd";
@@ -39,11 +48,17 @@ let
 
     postFixup = ''
       wrapProgram $out/bin/hv_kvp_daemon \
-        --prefix PATH : $out/bin:${lib.makeBinPath [ gawk iproute2 ]}
+        --prefix PATH : $out/bin:${
+          lib.makeBinPath [
+            gawk
+            iproute2
+          ]
+        }
     '';
   };
 
-  service = bin: title: check:
+  service =
+    bin: title: check:
     writeText "hv-${bin}.service" ''
       [Unit]
       Description=Hyper-V ${title} daemon
@@ -61,21 +76,26 @@ let
       WantedBy=hyperv-daemons.target
     '';
 
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "hyperv-daemons";
   inherit (kernel) version;
 
   # we just stick the bins into out as well as it requires "out"
-  outputs = [ "bin" "lib" "out" ];
+  outputs = [
+    "bin"
+    "lib"
+    "out"
+  ];
 
   buildInputs = [ daemons ];
 
   buildCommand = ''
     system=$lib/lib/systemd/system
 
-    install -Dm444 ${service "fcopy" "file copy (FCOPY)"        "hv_fcopy" } $system/hv-fcopy.service
-    install -Dm444 ${service "kvp"   "key-value pair (KVP)"     "hv_kvp"   } $system/hv-kvp.service
-    install -Dm444 ${service "vss"   "volume shadow copy (VSS)" "hv_vss"   } $system/hv-vss.service
+    install -Dm444 ${service "fcopy" "file copy (FCOPY)" "hv_fcopy"} $system/hv-fcopy.service
+    install -Dm444 ${service "kvp" "key-value pair (KVP)" "hv_kvp"} $system/hv-kvp.service
+    install -Dm444 ${service "vss" "volume shadow copy (VSS)" "hv_vss"} $system/hv-vss.service
 
     cat > $system/hyperv-daemons.target <<EOF
     [Unit]

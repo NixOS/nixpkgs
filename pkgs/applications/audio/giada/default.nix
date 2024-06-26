@@ -1,24 +1,25 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, pkg-config
-, fltk
-, fmt
-, rtmidi
-, libsamplerate
-, libmpg123
-, libsndfile
-, jack2
-, alsa-lib
-, libpulseaudio
-, libXpm
-, libXrandr
-, flac
-, libogg
-, libvorbis
-, libopus
-, nlohmann_json
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  fltk,
+  fmt,
+  rtmidi,
+  libsamplerate,
+  libmpg123,
+  libsndfile,
+  jack2,
+  alsa-lib,
+  libpulseaudio,
+  libXpm,
+  libXrandr,
+  flac,
+  libogg,
+  libvorbis,
+  libopus,
+  nlohmann_json,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -38,9 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-Wno-error"
   ];
 
-  cmakeFlags = [
-    "-DCMAKE_INSTALL_BINDIR=bin"
-  ];
+  cmakeFlags = [ "-DCMAKE_INSTALL_BINDIR=bin" ];
 
   nativeBuildInputs = [
     cmake

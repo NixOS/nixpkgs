@@ -1,5 +1,14 @@
-{ lib, stdenv, gnu-efi, openssl, sbsigntool, perl, perlPackages,
-help2man, fetchzip }:
+{
+  lib,
+  stdenv,
+  gnu-efi,
+  openssl,
+  sbsigntool,
+  perl,
+  perlPackages,
+  help2man,
+  fetchzip,
+}:
 stdenv.mkDerivation rec {
   pname = "efitools";
   version = "1.9.2";
@@ -22,9 +31,7 @@ stdenv.mkDerivation rec {
   };
 
   # https://github.com/ncroxon/gnu-efi/issues/7#issuecomment-2122741592
-  patches = [
-    ./aarch64.patch
-  ];
+  patches = [ ./aarch64.patch ];
 
   postPatch = ''
     sed -i -e 's#/usr/include/efi#${gnu-efi}/include/efi/#g' Make.rules

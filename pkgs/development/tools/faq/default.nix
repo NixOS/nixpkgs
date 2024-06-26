@@ -1,8 +1,9 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, jq
-, oniguruma
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  jq,
+  oniguruma,
 }:
 
 buildGoModule rec {
@@ -29,13 +30,9 @@ buildGoModule rec {
     "-X github.com/jzelinskie/faq/internal/version.Version=${version}"
   ];
 
-  tags = [
-    "netgo"
-  ];
+  tags = [ "netgo" ];
 
-  subPackages = [
-    "cmd/faq"
-  ];
+  subPackages = [ "cmd/faq" ];
 
   doCheck = true;
 

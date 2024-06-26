@@ -1,13 +1,14 @@
-{ stdenv
-, fetchFromGitHub
-, cmake
-, libopus
-, openssl
-, zlib
-, libsodium
-, pkg-config
-, autoPatchelfHook
-, lib
+{
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  libopus,
+  openssl,
+  zlib,
+  libsodium,
+  pkg-config,
+  autoPatchelfHook,
+  lib,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "dpp";

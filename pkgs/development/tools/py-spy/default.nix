@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, darwin
-, fetchFromGitHub
-, libunwind
-, python3
-, rustPlatform
+{
+  lib,
+  stdenv,
+  darwin,
+  fetchFromGitHub,
+  libunwind,
+  python3,
+  rustPlatform,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -25,13 +26,9 @@ rustPlatform.buildRustPackage rec {
     rm .cargo/config
   '';
 
-  nativeBuildInputs = [
-    rustPlatform.bindgenHook
-  ];
+  nativeBuildInputs = [ rustPlatform.bindgenHook ];
 
-  nativeCheckInputs = [
-    python3
-  ];
+  nativeCheckInputs = [ python3 ];
 
   buildInputs = lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
     # Pull a header that contains a definition of proc_pid_rusage().
@@ -40,13 +37,15 @@ rustPlatform.buildRustPackage rec {
 
   env.NIX_CFLAGS_COMPILE = "-L${libunwind}/lib";
 
-  checkFlags = [
-    # thread 'python_data_access::tests::test_copy_string' panicked at 'called `Result::unwrap()` on an `Err`
-    "--skip=python_data_access::tests::test_copy_string"
-  ] ++ lib.optionals (stdenv.hostPlatform.system == "x86_64-linux") [
-    # panicked at 'called `Result::unwrap()` on an `Err` value: failed to get os threadid
-    "--skip=test_thread_reuse"
-  ];
+  checkFlags =
+    [
+      # thread 'python_data_access::tests::test_copy_string' panicked at 'called `Result::unwrap()` on an `Err`
+      "--skip=python_data_access::tests::test_copy_string"
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.system == "x86_64-linux") [
+      # panicked at 'called `Result::unwrap()` on an `Err` value: failed to get os threadid
+      "--skip=test_thread_reuse"
+    ];
 
   meta = with lib; {
     description = "Sampling profiler for Python programs";

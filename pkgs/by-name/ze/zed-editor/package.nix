@@ -25,7 +25,7 @@
   makeFontsConf,
   vulkan-loader,
 
-  withGLES ? false
+  withGLES ? false,
 }:
 
 assert withGLES -> stdenv.isLinux;

@@ -1,7 +1,8 @@
-{ lib
-, fetchFromGitHub
-, python3Packages
-, bash
+{
+  lib,
+  fetchFromGitHub,
+  python3Packages,
+  bash,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -16,13 +17,9 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-hUI5dUqelmRuk65s67rJXrZoPDWAcnNVIHlzxAgRExs=";
   };
 
-  nativeBuildInputs = with python3Packages; [
-    setuptools
-  ];
+  nativeBuildInputs = with python3Packages; [ setuptools ];
 
-  buildInputs = [
-    bash
-  ];
+  buildInputs = [ bash ];
 
   pythonPath = with python3Packages; [
     dill
@@ -36,7 +33,7 @@ python3Packages.buildPythonApplication rec {
     wrapProgram $out/bin/marcel \
       --prefix PATH : "$program_PATH:${lib.getBin bash}/bin" \
       --prefix PYTHONPATH : "$program_PYTHONPATH"
-    '';
+  '';
 
   meta = with lib; {
     description = "Modern shell";

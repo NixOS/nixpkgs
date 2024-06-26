@@ -1,7 +1,13 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
-let cfg = config.services.vector;
+let
+  cfg = config.services.vector;
 
 in
 {
@@ -40,10 +46,9 @@ in
         let
           format = pkgs.formats.toml { };
           conf = format.generate "vector.toml" cfg.settings;
-          validateConfig = file:
-          pkgs.runCommand "validate-vector-conf" {
-            nativeBuildInputs = [ pkgs.vector ];
-          } ''
+          validateConfig =
+            file:
+            pkgs.runCommand "validate-vector-conf" { nativeBuildInputs = [ pkgs.vector ]; } ''
               vector validate --no-environment "${file}"
               ln -s "${file}" "$out"
             '';

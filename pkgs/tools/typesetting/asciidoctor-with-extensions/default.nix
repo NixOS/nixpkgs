@@ -1,8 +1,10 @@
-{ lib
-, bundlerApp
-, bundlerUpdateScript
-, makeWrapper
-, withJava ? true, jre # Used by asciidoctor-diagram for ditaa and PlantUML
+{
+  lib,
+  bundlerApp,
+  bundlerUpdateScript,
+  makeWrapper,
+  withJava ? true,
+  jre, # Used by asciidoctor-diagram for ditaa and PlantUML
 }:
 
 let
@@ -23,10 +25,12 @@ bundlerApp rec {
 
   nativeBuildInputs = [ makeWrapper ];
 
-  postBuild = lib.optionalString (path != "") (lib.concatMapStrings (exe: ''
-    wrapProgram $out/bin/${exe} \
-      --prefix PATH : ${path}
-  '') exes);
+  postBuild = lib.optionalString (path != "") (
+    lib.concatMapStrings (exe: ''
+      wrapProgram $out/bin/${exe} \
+        --prefix PATH : ${path}
+    '') exes
+  );
 
   passthru = {
     updateScript = bundlerUpdateScript "asciidoctor-with-extensions";

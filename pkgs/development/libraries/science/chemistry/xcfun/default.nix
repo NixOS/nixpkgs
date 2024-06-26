@@ -1,10 +1,17 @@
-{ stdenv, lib, fetchFromGitHub, cmake, gfortran, python3 } :
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  gfortran,
+  python3,
+}:
 
 stdenv.mkDerivation rec {
   pname = "xcfun";
   version = "2.1.1";
 
-  src = fetchFromGitHub  {
+  src = fetchFromGitHub {
     owner = "dftlibs";
     repo = pname;
     rev = "v${version}";

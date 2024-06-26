@@ -1,11 +1,12 @@
-{ lib
-, buildDotnetModule
-, fetchFromGitHub
-, dotnetCorePackages
-, libkrb5
-, zlib
-, openssl
-, callPackage
+{
+  lib,
+  buildDotnetModule,
+  fetchFromGitHub,
+  dotnetCorePackages,
+  libkrb5,
+  zlib,
+  openssl,
+  callPackage,
 }:
 
 buildDotnetModule rec {
@@ -27,14 +28,14 @@ buildDotnetModule rec {
 
   projectFile = "ArchiSteamFarm.sln";
   executable = "ArchiSteamFarm";
-  dotnetFlags = [
-    "-p:UseAppHost=false"
-  ];
-  dotnetInstallFlags = [
-    "--framework=net8.0"
-  ];
+  dotnetFlags = [ "-p:UseAppHost=false" ];
+  dotnetInstallFlags = [ "--framework=net8.0" ];
 
-  runtimeDeps = [ libkrb5 zlib openssl ];
+  runtimeDeps = [
+    libkrb5
+    zlib
+    openssl
+  ];
 
   doCheck = true;
 

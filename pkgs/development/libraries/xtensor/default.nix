@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, cmake
-, doctest
-, enableAssertions ? false
-, enableBoundChecks ? false # Broadcasts don't pass bound checks
-, nlohmann_json
-, xtl
-, xsimd
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  doctest,
+  enableAssertions ? false,
+  enableBoundChecks ? false, # Broadcasts don't pass bound checks
+  nlohmann_json,
+  xtl,
+  xsimd,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -22,9 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-hVfdtYcJ6mzqj0AUu6QF9aVKQGYKd45RngY6UN3yOH4=";
   };
 
-  nativeBuildInputs = [
-    cmake
-  ];
+  nativeBuildInputs = [ cmake ];
   propagatedBuildInputs = [
     nlohmann_json
     xtl
@@ -40,9 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   doCheck = true;
-  nativeCheckInputs = [
-    doctest
-  ];
+  nativeCheckInputs = [ doctest ];
   checkTarget = "xtest";
 
   meta = with lib; {

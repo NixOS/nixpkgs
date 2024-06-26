@@ -1,9 +1,16 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 let
   cfg = config.services.meshcentral;
-  configFormat = pkgs.formats.json {};
+  configFormat = pkgs.formats.json { };
   configFile = configFormat.generate "meshcentral-config.json" cfg.settings;
-in with lib; {
+in
+with lib;
+{
   options.services.meshcentral = with types; {
     enable = mkEnableOption "MeshCentral computer management server";
     package = mkPackageOption pkgs "meshcentral" { };
@@ -16,9 +23,7 @@ in with lib; {
         - [complex sample configuration](https://github.com/Ylianst/MeshCentral/blob/master/sample-config-advanced.json)
         - [Old homepage with documentation link](https://www.meshcommander.com/meshcentral2)
       '';
-      type = types.submodule {
-        freeformType = configFormat.type;
-      };
+      type = types.submodule { freeformType = configFormat.type; };
       example = {
         settings = {
           WANonly = true;
@@ -33,7 +38,7 @@ in with lib; {
   config = mkIf cfg.enable {
     services.meshcentral.settings.settings.autoBackup.backupPath = lib.mkDefault "/var/lib/meshcentral/backups";
     systemd.services.meshcentral = {
-      wantedBy = ["multi-user.target"];
+      wantedBy = [ "multi-user.target" ];
       serviceConfig = {
         ExecStart = "${cfg.package}/bin/meshcentral --datapath /var/lib/meshcentral --configfile ${configFile}";
         DynamicUser = true;

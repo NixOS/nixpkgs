@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchurl, gsl
-, dieharder, testers }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  gsl,
+  dieharder,
+  testers,
+}:
 
 stdenv.mkDerivation rec {
   pname = "dieharder";

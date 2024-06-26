@@ -1,4 +1,8 @@
-{ buildGoModule, fetchFromGitHub, lib }:
+{
+  buildGoModule,
+  fetchFromGitHub,
+  lib,
+}:
 
 buildGoModule rec {
   pname = "imgcrypt";
@@ -13,11 +17,12 @@ buildGoModule rec {
 
   vendorHash = null;
 
-  ldflags = [
-    "-X github.com/containerd/containerd/version.Version=${version}"
-  ];
+  ldflags = [ "-X github.com/containerd/containerd/version.Version=${version}" ];
 
-  subPackages = [ "cmd/ctd-decoder" "cmd/ctr" ];
+  subPackages = [
+    "cmd/ctd-decoder"
+    "cmd/ctr"
+  ];
 
   postFixup = ''
     mv $out/bin/ctr $out/bin/ctr-enc

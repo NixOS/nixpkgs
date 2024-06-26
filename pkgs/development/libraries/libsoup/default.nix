@@ -1,56 +1,60 @@
-{ stdenv
-, lib
-, fetchurl
-, glib
-, libxml2
-, meson
-, ninja
-, pkg-config
-, gnome
-, libsysprof-capture
-, gobject-introspection
-, vala
-, libpsl
-, brotli
-, gnomeSupport ? true
-, sqlite
-, buildPackages
-, withIntrospection ? lib.meta.availableOn stdenv.hostPlatform gobject-introspection && stdenv.hostPlatform.emulatorAvailable buildPackages
+{
+  stdenv,
+  lib,
+  fetchurl,
+  glib,
+  libxml2,
+  meson,
+  ninja,
+  pkg-config,
+  gnome,
+  libsysprof-capture,
+  gobject-introspection,
+  vala,
+  libpsl,
+  brotli,
+  gnomeSupport ? true,
+  sqlite,
+  buildPackages,
+  withIntrospection ?
+    lib.meta.availableOn stdenv.hostPlatform gobject-introspection
+    && stdenv.hostPlatform.emulatorAvailable buildPackages,
 }:
 
 stdenv.mkDerivation rec {
   pname = "libsoup";
   version = "2.74.3";
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "sha256-5Ld8Qc/EyMWgNfzcMgx7xs+3XvfFoDQVPfFBP6HZLxM=";
   };
 
-  depsBuildBuild = [
-    pkg-config
-  ];
+  depsBuildBuild = [ pkg-config ];
 
-  nativeBuildInputs = [
-    meson
-    ninja
-    pkg-config
-    glib
-  ] ++ lib.optionals withIntrospection [
-    gobject-introspection
-    vala
-  ];
+  nativeBuildInputs =
+    [
+      meson
+      ninja
+      pkg-config
+      glib
+    ]
+    ++ lib.optionals withIntrospection [
+      gobject-introspection
+      vala
+    ];
 
   buildInputs = [
     sqlite
     libpsl
     glib.out
     brotli
-  ] ++ lib.optionals stdenv.isLinux [
-    libsysprof-capture
-  ];
+  ] ++ lib.optionals stdenv.isLinux [ libsysprof-capture ];
 
   propagatedBuildInputs = [
     glib
@@ -64,9 +68,7 @@ stdenv.mkDerivation rec {
     "-Dintrospection=${if withIntrospection then "enabled" else "disabled"}"
     "-Dgnome=${lib.boolToString gnomeSupport}"
     "-Dntlm=disabled"
-  ] ++ lib.optionals (!stdenv.isLinux) [
-    "-Dsysprof=disabled"
-  ];
+  ] ++ lib.optionals (!stdenv.isLinux) [ "-Dsysprof=disabled" ];
 
   env.NIX_CFLAGS_COMPILE = "-lpthread";
 

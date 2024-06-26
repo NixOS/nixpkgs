@@ -1,10 +1,11 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, blas
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  blas,
   # Check Inputs
-, python3
+  python3,
 }:
 
 stdenv.mkDerivation rec {

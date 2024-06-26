@@ -1,4 +1,13 @@
-{ lib, stdenv, requireFile, cmake, libGLU, libGL, libX11, libXi }:
+{
+  lib,
+  stdenv,
+  requireFile,
+  cmake,
+  libGLU,
+  libGL,
+  libX11,
+  libXi,
+}:
 
 stdenv.mkDerivation rec {
   pname = "liquidfun";
@@ -11,7 +20,12 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ libGLU libGL libX11 libXi ];
+  buildInputs = [
+    libGLU
+    libGL
+    libX11
+    libXi
+  ];
 
   sourceRoot = "liquidfun/Box2D";
 

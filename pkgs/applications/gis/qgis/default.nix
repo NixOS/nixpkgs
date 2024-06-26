@@ -1,15 +1,17 @@
-{ lib
-, makeWrapper
-, nixosTests
-, symlinkJoin
+{
+  lib,
+  makeWrapper,
+  nixosTests,
+  symlinkJoin,
 
-, extraPythonPackages ? (ps: [ ])
+  extraPythonPackages ? (ps: [ ]),
 
-, libsForQt5
+  libsForQt5,
 }:
 let
-  qgis-unwrapped = libsForQt5.callPackage ./unwrapped.nix {  };
-in symlinkJoin rec {
+  qgis-unwrapped = libsForQt5.callPackage ./unwrapped.nix { };
+in
+symlinkJoin rec {
 
   inherit (qgis-unwrapped) version;
   name = "qgis-${version}";

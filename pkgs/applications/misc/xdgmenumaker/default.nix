@@ -1,13 +1,14 @@
-{ lib
-, fetchFromGitHub
-, atk
-, gdk-pixbuf
-, gobject-introspection
-, pango
-, python3Packages
-, txt2tags
-, wrapGAppsHook3
-, gitUpdater
+{
+  lib,
+  fetchFromGitHub,
+  atk,
+  gdk-pixbuf,
+  gobject-introspection,
+  pango,
+  python3Packages,
+  txt2tags,
+  wrapGAppsHook3,
+  gitUpdater,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -44,9 +45,7 @@ python3Packages.buildPythonApplication rec {
     pyxdg
   ];
 
-  makeFlags = [
-    "PREFIX=${placeholder "out"}"
-  ];
+  makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
   preFixup = ''
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")

@@ -1,24 +1,26 @@
-{ lib
-, buildPythonApplication
-, fetchFromGitHub
-, beautifulsoup4
-, boto3
-, configparser
-, filelock
-, keyring
-, keyrings-alt
-, lxml
-, pillow
-, requests
-, six
-, tabulate
-, tzlocal
-, nose
-, mock
-, setuptools
-, aws-google-auth
-, testers
-, withU2F ? false, python-u2flib-host
+{
+  lib,
+  buildPythonApplication,
+  fetchFromGitHub,
+  beautifulsoup4,
+  boto3,
+  configparser,
+  filelock,
+  keyring,
+  keyrings-alt,
+  lxml,
+  pillow,
+  requests,
+  six,
+  tabulate,
+  tzlocal,
+  nose,
+  mock,
+  setuptools,
+  aws-google-auth,
+  testers,
+  withU2F ? false,
+  python-u2flib-host,
 }:
 
 buildPythonApplication rec {
@@ -36,9 +38,7 @@ buildPythonApplication rec {
     sha256 = "sha256-/Xe4RDA9sBEsBBV1VP91VX0VfO8alK8L70m9WrB7qu4=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     beautifulsoup4
@@ -70,9 +70,7 @@ buildPythonApplication rec {
 
   pythonImportsCheck = [ "aws_google_auth" ];
 
-  passthru.tests.version = testers.testVersion {
-    package = aws-google-auth;
-  };
+  passthru.tests.version = testers.testVersion { package = aws-google-auth; };
 
   meta = with lib; {
     description = "Acquire AWS STS (temporary) credentials via Google Apps SAML Single Sign On";

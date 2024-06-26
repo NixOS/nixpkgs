@@ -2,7 +2,9 @@
 
 let
   defs = lib.modules.mergeAttrDefinitionsWithPrio options._module.args;
-  assertLazy = pos: throw "${pos.file}:${toString pos.line}:${toString pos.column}: The test must not evaluate this the assertLazy thunk, but it did. Unexpected strictness leads to unexpected errors and performance problems.";
+  assertLazy =
+    pos:
+    throw "${pos.file}:${toString pos.line}:${toString pos.column}: The test must not evaluate this the assertLazy thunk, but it did. Unexpected strictness leads to unexpected errors and performance problems.";
 in
 
 {

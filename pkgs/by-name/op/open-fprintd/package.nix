@@ -1,4 +1,8 @@
-{ lib, fetchFromGitHub, python3Packages }:
+{
+  lib,
+  fetchFromGitHub,
+  python3Packages,
+}:
 
 python3Packages.buildPythonPackage rec {
   pname = "open-fprintd";
@@ -11,7 +15,10 @@ python3Packages.buildPythonPackage rec {
     sha256 = "sha256-uVFuwtsmR/9epoqot3lJ/5v5OuJjuRjL7FJF7oXNDzU=";
   };
 
-  propagatedBuildInputs = with python3Packages; [ dbus-python pygobject3 ];
+  propagatedBuildInputs = with python3Packages; [
+    dbus-python
+    pygobject3
+  ];
 
   checkInputs = with python3Packages; [ dbus-python ];
 
@@ -35,8 +42,7 @@ python3Packages.buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    description =
-      "Fprintd replacement which allows you to have your own backend as a standalone service";
+    description = "Fprintd replacement which allows you to have your own backend as a standalone service";
     homepage = "https://github.com/uunicorn/open-fprintd";
     license = licenses.gpl2Only;
     platforms = platforms.linux;

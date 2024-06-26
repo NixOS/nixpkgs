@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, coin-utils, zlib, osi }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  coin-utils,
+  zlib,
+  osi,
+}:
 
 stdenv.mkDerivation rec {
   version = "1.17.9";
@@ -12,7 +20,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  propagatedBuildInputs = [ zlib coin-utils osi ];
+  propagatedBuildInputs = [
+    zlib
+    coin-utils
+    osi
+  ];
 
   doCheck = true;
 

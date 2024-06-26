@@ -1,33 +1,34 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, pkg-config
-, gtk-doc
-, docbook_xml_dtd_43
-, python3
-, gobject-introspection
-, glib
-, udev
-, kmod
-, parted
-, cryptsetup
-, lvm2
-, util-linux
-, libbytesize
-, libndctl
-, nss
-, volume_key
-, libxslt
-, docbook_xsl
-, gptfdisk
-, libyaml
-, autoconf-archive
-, thin-provisioning-tools
-, makeBinaryWrapper
-, e2fsprogs
-, libnvme
-, keyutils
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  gtk-doc,
+  docbook_xml_dtd_43,
+  python3,
+  gobject-introspection,
+  glib,
+  udev,
+  kmod,
+  parted,
+  cryptsetup,
+  lvm2,
+  util-linux,
+  libbytesize,
+  libndctl,
+  nss,
+  volume_key,
+  libxslt,
+  docbook_xsl,
+  gptfdisk,
+  libyaml,
+  autoconf-archive,
+  thin-provisioning-tools,
+  makeBinaryWrapper,
+  e2fsprogs,
+  libnvme,
+  keyutils,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "libblockdev";
@@ -40,7 +41,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-WCMedMkaMMhZbB3iJu3c+CTT3AvOjzOSYP45J+NQEDQ=";
   };
 
-  outputs = [ "out" "dev" "devdoc" ];
+  outputs = [
+    "out"
+    "dev"
+    "devdoc"
+  ];
 
   postPatch = ''
     patchShebangs scripts
@@ -87,7 +92,10 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/storaged-project/libblockdev/raw/${finalAttrs.src.rev}/NEWS.rst";
     description = "Library for manipulating block devices";
     homepage = "http://storaged.org/libblockdev/";
-    license = with lib.licenses; [ lgpl2Plus gpl2Plus ]; # lgpl2Plus for the library, gpl2Plus for the utils
+    license = with lib.licenses; [
+      lgpl2Plus
+      gpl2Plus
+    ]; # lgpl2Plus for the library, gpl2Plus for the utils
     maintainers = with lib.maintainers; [ johnazoidberg ];
     platforms = lib.platforms.linux;
   };

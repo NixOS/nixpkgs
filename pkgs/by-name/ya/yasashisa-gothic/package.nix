@@ -1,7 +1,8 @@
-{ lib
-, stdenvNoCC
-, fetchurl
-, unzrip
+{
+  lib,
+  stdenvNoCC,
+  fetchurl,
+  unzrip,
 }:
 
 stdenvNoCC.mkDerivation {
@@ -33,7 +34,10 @@ stdenvNoCC.mkDerivation {
   meta = with lib; {
     description = "Free gothic style font by Fontna";
     homepage = "http://www.fontna.com/blog/379/";
-    license = with licenses; [ ipa mplus ];
+    license = with licenses; [
+      ipa
+      mplus
+    ];
     platforms = platforms.all;
     maintainers = with maintainers; [ h7x4 ];
   };

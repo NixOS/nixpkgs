@@ -1,4 +1,10 @@
-{ config, lib, pkgs, utils, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  utils,
+  ...
+}:
 
 with lib;
 
@@ -39,7 +45,7 @@ in
     };
 
     environment.mate.excludePackages = mkOption {
-      default = [];
+      default = [ ];
       example = literalExpression "[ pkgs.mate.mate-terminal pkgs.mate.pluma ]";
       type = types.listOf types.package;
       description = "Which MATE packages to exclude from the default environment";
@@ -49,31 +55,25 @@ in
 
   config = mkMerge [
     (mkIf (cfg.enable || cfg.enableWaylandSession) {
-      services.displayManager.sessionPackages = [
-        pkgs.mate.mate-session-manager
-      ];
+      services.displayManager.sessionPackages = [ pkgs.mate.mate-session-manager ];
 
       # Debugging
       environment.sessionVariables.MATE_SESSION_DEBUG = mkIf cfg.debug "1";
 
-      environment.systemPackages = utils.removePackagesByName
-        (pkgs.mate.basePackages ++
-        pkgs.mate.extraPackages ++
-        [
-          (pkgs.mate.caja-with-extensions.override {
-            extensions = cfg.extraCajaExtensions;
-          })
-          (pkgs.mate.mate-panel-with-applets.override {
-            applets = cfg.extraPanelApplets;
-          })
+      environment.systemPackages = utils.removePackagesByName (
+        pkgs.mate.basePackages
+        ++ pkgs.mate.extraPackages
+        ++ [
+          (pkgs.mate.caja-with-extensions.override { extensions = cfg.extraCajaExtensions; })
+          (pkgs.mate.mate-panel-with-applets.override { applets = cfg.extraPanelApplets; })
           pkgs.desktop-file-utils
           pkgs.glib
           pkgs.gtk3.out
           pkgs.shared-mime-info
           pkgs.xdg-user-dirs # Update user dirs as described in https://freedesktop.org/wiki/Software/xdg-user-dirs/
           pkgs.yelp # for 'Contents' in 'Help' menus
-        ])
-        config.environment.mate.excludePackages;
+        ]
+      ) config.environment.mate.excludePackages;
 
       programs.dconf.enable = true;
       # Shell integration for VTE terminals

@@ -1,10 +1,12 @@
-{ writeShellApplication, pnpm, pnpmDeps }:
+{
+  writeShellApplication,
+  pnpm,
+  pnpmDeps,
+}:
 writeShellApplication {
   name = "serve-pnpm-store";
 
-  runtimeInputs = [
-    pnpm
-  ];
+  runtimeInputs = [ pnpm ];
 
   text = ''
     storePath=$(mktemp -d)

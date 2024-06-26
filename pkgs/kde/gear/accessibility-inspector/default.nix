@@ -1,4 +1,1 @@
-{mkKdeDerivation}:
-mkKdeDerivation {
-  pname = "accessibility-inspector";
-}
+{ mkKdeDerivation }: mkKdeDerivation { pname = "accessibility-inspector"; }

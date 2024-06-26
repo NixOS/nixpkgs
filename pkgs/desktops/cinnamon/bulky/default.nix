@@ -1,14 +1,15 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, wrapGAppsHook3
-, python3
-, gobject-introspection
-, gsettings-desktop-schemas
-, gettext
-, gtk3
-, glib
-, common-licenses
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  wrapGAppsHook3,
+  python3,
+  gobject-introspection,
+  gsettings-desktop-schemas,
+  gettext,
+  gtk3,
+  glib,
+  common-licenses,
 }:
 
 stdenv.mkDerivation rec {
@@ -30,7 +31,13 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    (python3.withPackages (p: with p; [ pygobject3 magic setproctitle ]))
+    (python3.withPackages (
+      p: with p; [
+        pygobject3
+        magic
+        setproctitle
+      ]
+    ))
     gsettings-desktop-schemas
     gtk3
     glib

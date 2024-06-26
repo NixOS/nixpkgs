@@ -1,4 +1,9 @@
-{ lib, rustPlatform, fetchFromGitHub, installShellFiles }:
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  installShellFiles,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "jrsonnet";
@@ -21,9 +26,7 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ installShellFiles ];
 
   # skip flaky tests
-  checkFlags = [
-    "--skip=tests::native_ext"
-  ];
+  checkFlags = [ "--skip=tests::native_ext" ];
 
   postInstall = ''
     ln -s $out/bin/jrsonnet $out/bin/jsonnet
@@ -40,6 +43,9 @@ rustPlatform.buildRustPackage rec {
     description = "Purely-functional configuration language that helps you define JSON data";
     homepage = "https://github.com/CertainLach/jrsonnet";
     license = licenses.mit;
-    maintainers = with maintainers; [ figsoda lach ];
+    maintainers = with maintainers; [
+      figsoda
+      lach
+    ];
   };
 }

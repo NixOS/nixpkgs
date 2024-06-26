@@ -1,7 +1,8 @@
-{ lib
-, ffmpeg
-, rustPlatform
-, fetchFromGitHub
+{
+  lib,
+  ffmpeg,
+  rustPlatform,
+  fetchFromGitHub,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -26,14 +27,15 @@ rustPlatform.buildRustPackage rec {
   # Running cargo test -- . fails because it expects to have two mp4 files so that it can test the video merging functionalities
   doCheck = false;
 
-  buildInputs = [
-    ffmpeg
-  ];
+  buildInputs = [ ffmpeg ];
 
   meta = with lib; {
     description = "Merge video & audio files via CLI ";
     homepage = "https://github.com/TGotwig/vidmerger";
-    license = with licenses; [ mit commons-clause ];
+    license = with licenses; [
+      mit
+      commons-clause
+    ];
     maintainers = with maintainers; [ ByteSudoer ];
     mainProgram = "vidmerger";
   };

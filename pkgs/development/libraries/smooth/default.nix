@@ -1,19 +1,20 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
 
-, bzip2
-, curl
-, fribidi
-, gtk3
-, iconv
-, libcpuid
-, libjpeg
-, libpng
-, libwebp
-, libxml2
-, zlib
+  bzip2,
+  curl,
+  fribidi,
+  gtk3,
+  iconv,
+  libcpuid,
+  libjpeg,
+  libpng,
+  libwebp,
+  libxml2,
+  zlib,
 }:
 
 stdenv.mkDerivation rec {
@@ -27,9 +28,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-J2Do1iAbE1GBC8co/4nxOzeGJQiPRc+21fgMDpzKX+A=";
   };
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
   makeFlags = [
     "prefix=$(out)"

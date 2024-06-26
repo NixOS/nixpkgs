@@ -1,4 +1,11 @@
-{ stdenvNoCC, lib, fetchFromGitHub, fuse-overlayfs, util-linux, makeWrapper }:
+{
+  stdenvNoCC,
+  lib,
+  fetchFromGitHub,
+  fuse-overlayfs,
+  util-linux,
+  makeWrapper,
+}:
 stdenvNoCC.mkDerivation rec {
   pname = "try";
   version = "0.2.0";
@@ -12,10 +19,15 @@ stdenvNoCC.mkDerivation rec {
   installPhase = ''
     runHook preInstall
     install -Dt $out/bin try
-    wrapProgram $out/bin/try --prefix PATH : ${lib.makeBinPath [ fuse-overlayfs util-linux ]}
+    wrapProgram $out/bin/try --prefix PATH : ${
+      lib.makeBinPath [
+        fuse-overlayfs
+        util-linux
+      ]
+    }
     runHook postInstall
   '';
-  meta = with lib;{
+  meta = with lib; {
     homepage = "https://github.com/binpash/try";
     description = "Lets you run a command and inspect its effects before changing your live system";
     mainProgram = "try";

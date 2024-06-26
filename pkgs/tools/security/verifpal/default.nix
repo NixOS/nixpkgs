@@ -1,7 +1,8 @@
-{ lib
-, fetchgit
-, buildGoModule
-, pigeon
+{
+  lib,
+  fetchgit,
+  buildGoModule,
+  pigeon,
 }:
 
 buildGoModule rec {

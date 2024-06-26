@@ -1,26 +1,31 @@
-{ lib, stdenv
-, fetchFromGitLab
-, pkg-config
-, meson
-, python3
-, ninja
-, gusb
-, pixman
-, glib
-, nss
-, gobject-introspection
-, coreutils
-, cairo
-, libgudev
-, gtk-doc
-, docbook-xsl-nons
-, docbook_xml_dtd_43
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  pkg-config,
+  meson,
+  python3,
+  ninja,
+  gusb,
+  pixman,
+  glib,
+  nss,
+  gobject-introspection,
+  coreutils,
+  cairo,
+  libgudev,
+  gtk-doc,
+  docbook-xsl-nons,
+  docbook_xml_dtd_43,
 }:
 
 stdenv.mkDerivation rec {
   pname = "libfprint";
   version = "1.94.6";
-  outputs = [ "out" "devdoc" ];
+  outputs = [
+    "out"
+    "devdoc"
+  ];
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
@@ -65,9 +70,7 @@ stdenv.mkDerivation rec {
     "-Dudev_hwdb_dir=${placeholder "out"}/lib/udev/hwdb.d"
   ];
 
-  nativeInstallCheckInputs = [
-    (python3.withPackages (p: with p; [ pygobject3 ]))
-  ];
+  nativeInstallCheckInputs = [ (python3.withPackages (p: with p; [ pygobject3 ])) ];
 
   # We need to run tests _after_ install so all the paths that get loaded are in
   # the right place.

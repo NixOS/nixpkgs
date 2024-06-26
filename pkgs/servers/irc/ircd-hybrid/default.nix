@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchurl, openssl, zlib, libxcrypt }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  openssl,
+  zlib,
+  libxcrypt,
+}:
 
 stdenv.mkDerivation rec {
   pname = "ircd-hybrid";
@@ -9,7 +16,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-a/DC/1/GQ9wXV6Iyyb1YJdM4kcfMGDfwJK1P/3xhxnk=";
   };
 
-  buildInputs = [ openssl zlib libxcrypt ];
+  buildInputs = [
+    openssl
+    zlib
+    libxcrypt
+  ];
 
   configureFlags = [
     "--with-nicklen=100"

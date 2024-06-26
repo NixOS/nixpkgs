@@ -1,4 +1,10 @@
-{ lib, buildGoModule, fetchFromSourcehut, installShellFiles, scdoc }:
+{
+  lib,
+  buildGoModule,
+  fetchFromSourcehut,
+  installShellFiles,
+  scdoc,
+}:
 
 buildGoModule rec {
   pname = "senpai";
@@ -18,9 +24,7 @@ buildGoModule rec {
     ./bump-go-version.patch
   ];
 
-  subPackages = [
-    "cmd/senpai"
-  ];
+  subPackages = [ "cmd/senpai" ];
 
   nativeBuildInputs = [
     scdoc

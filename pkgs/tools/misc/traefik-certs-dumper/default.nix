@@ -1,4 +1,8 @@
-{ fetchFromGitHub, buildGoModule, lib }:
+{
+  fetchFromGitHub,
+  buildGoModule,
+  lib,
+}:
 
 buildGoModule rec {
   pname = "traefik-certs-dumper";

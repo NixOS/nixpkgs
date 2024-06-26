@@ -1,40 +1,51 @@
-{ lib, stdenv, fetchFromGitHub, makeWrapper, bat
-# batdiff, batgrep, and batwatch
-, coreutils
-, getconf
-, less
-# tests
-, bash
-, zsh
-, fish
-# batgrep
-, ripgrep
-# prettybat
-, withShFmt ? shfmt != null, shfmt ? null
-, withPrettier ? nodePackages?prettier, nodePackages ? null
-, withClangTools ? clang-tools != null, clang-tools ? null
-, withRustFmt ? rustfmt != null, rustfmt ? null
-# batwatch
-, withEntr ? entr != null, entr ? null
-# batdiff
-, gitMinimal
-, withDelta ? delta != null, delta ? null
-# batman
-, util-linux
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  makeWrapper,
+  bat,
+  # batdiff, batgrep, and batwatch
+  coreutils,
+  getconf,
+  less,
+  # tests
+  bash,
+  zsh,
+  fish,
+  # batgrep
+  ripgrep,
+  # prettybat
+  withShFmt ? shfmt != null,
+  shfmt ? null,
+  withPrettier ? nodePackages ? prettier,
+  nodePackages ? null,
+  withClangTools ? clang-tools != null,
+  clang-tools ? null,
+  withRustFmt ? rustfmt != null,
+  rustfmt ? null,
+  # batwatch
+  withEntr ? entr != null,
+  entr ? null,
+  # batdiff
+  gitMinimal,
+  withDelta ? delta != null,
+  delta ? null,
+  # batman
+  util-linux,
 }:
 
 let
   # Core derivation that all the others are based on.
   # This includes the complete source so the per-script derivations can run the tests.
   core = stdenv.mkDerivation rec {
-    pname   = "bat-extras";
+    pname = "bat-extras";
     version = "2024.02.12";
 
     src = fetchFromGitHub {
-      owner  = "eth-p";
-      repo   = "bat-extras";
-      rev    = "v${version}";
-      hash   = "sha256-EPDGQkwwxYFTJPJtwSkVrpBf27+VlMd/nqEkJupHlyA=";
+      owner = "eth-p";
+      repo = "bat-extras";
+      rev = "v${version}";
+      hash = "sha256-EPDGQkwwxYFTJPJtwSkVrpBf27+VlMd/nqEkJupHlyA=";
       fetchSubmodules = true;
     };
 
@@ -55,7 +66,11 @@ let
 
     # Run the library tests as they don't have external dependencies
     doCheck = true;
-    nativeCheckInputs = [ bash fish zsh ] ++ (lib.optionals stdenv.isDarwin [ getconf ]);
+    nativeCheckInputs = [
+      bash
+      fish
+      zsh
+    ] ++ (lib.optionals stdenv.isDarwin [ getconf ]);
     checkPhase = ''
       runHook preCheck
       # test list repeats suites. Unique them
@@ -84,10 +99,13 @@ let
 
     meta = with lib; {
       description = "Bash scripts that integrate bat with various command line tools";
-      homepage    = "https://github.com/eth-p/bat-extras";
-      license     = with licenses; [ mit ];
-      maintainers = with maintainers; [ bbigras lilyball ];
-      platforms   = platforms.all;
+      homepage = "https://github.com/eth-p/bat-extras";
+      license = with licenses; [ mit ];
+      maintainers = with maintainers; [
+        bbigras
+        lilyball
+      ];
+      platforms = platforms.all;
     };
   };
   script =
@@ -112,23 +130,31 @@ let
       dontBuild = true; # we've already built
 
       doCheck = true;
-      nativeCheckInputs = [ bat bash fish zsh ] ++ (lib.optionals stdenv.isDarwin [ getconf ]);
+      nativeCheckInputs = [
+        bat
+        bash
+        fish
+        zsh
+      ] ++ (lib.optionals stdenv.isDarwin [ getconf ]);
       checkPhase = ''
         runHook preCheck
         bash ./test.sh --compiled --suite ${name}
         runHook postCheck
       '';
 
-      installPhase = ''
-        runHook preInstall
-        mkdir -p $out/bin
-        cp -p bin/${name} $out/bin/${name}
-      '' + lib.optionalString (dependencies != []) ''
-        wrapProgram $out/bin/${name} \
-          --prefix PATH : ${lib.makeBinPath dependencies}
-      '' + ''
-        runHook postInstall
-      '';
+      installPhase =
+        ''
+          runHook preInstall
+          mkdir -p $out/bin
+          cp -p bin/${name} $out/bin/${name}
+        ''
+        + lib.optionalString (dependencies != [ ]) ''
+          wrapProgram $out/bin/${name} \
+            --prefix PATH : ${lib.makeBinPath dependencies}
+        ''
+        + ''
+          runHook postInstall
+        '';
 
       # We already patched
       dontPatchShebangs = true;
@@ -137,19 +163,39 @@ let
         mainProgram = name;
       };
     };
-  optionalDep = cond: dep:
+  optionalDep =
+    cond: dep:
     assert cond -> dep != null;
     lib.optional cond dep;
 in
 {
-  batdiff = script "batdiff" ([ less coreutils gitMinimal ] ++ optionalDep withDelta delta);
-  batgrep = script "batgrep" [ less coreutils ripgrep ];
+  batdiff = script "batdiff" (
+    [
+      less
+      coreutils
+      gitMinimal
+    ]
+    ++ optionalDep withDelta delta
+  );
+  batgrep = script "batgrep" [
+    less
+    coreutils
+    ripgrep
+  ];
   batman = script "batman" (lib.optionals stdenv.isLinux [ util-linux ]);
   batpipe = script "batpipe" [ less ];
-  batwatch = script "batwatch" ([ less coreutils ] ++ optionalDep withEntr entr);
-  prettybat = script "prettybat" ([]
+  batwatch = script "batwatch" (
+    [
+      less
+      coreutils
+    ]
+    ++ optionalDep withEntr entr
+  );
+  prettybat = script "prettybat" (
+    [ ]
     ++ optionalDep withShFmt shfmt
     ++ optionalDep withPrettier nodePackages.prettier
     ++ optionalDep withClangTools clang-tools
-    ++ optionalDep withRustFmt rustfmt);
+    ++ optionalDep withRustFmt rustfmt
+  );
 }

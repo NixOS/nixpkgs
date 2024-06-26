@@ -1,8 +1,9 @@
-{ lib
-, fetchFromGitHub
-, gitUpdater
-, rustPlatform
-, sqlite
+{
+  lib,
+  fetchFromGitHub,
+  gitUpdater,
+  rustPlatform,
+  sqlite,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -20,9 +21,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [ sqlite ];
 
-  passthru.updateScript = gitUpdater {
-    rev-prefix = "v";
-  };
+  passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
   meta = with lib; {
     description = "Cargo subcommand to generate a Dash/Zeal docset for your Rust packages";
@@ -30,6 +29,9 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/Robzz/cargo-docset";
     changelog = "https://github.com/Robzz/cargo-docset/blob/${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ colinsane matthiasbeyer ];
+    maintainers = with maintainers; [
+      colinsane
+      matthiasbeyer
+    ];
   };
 }

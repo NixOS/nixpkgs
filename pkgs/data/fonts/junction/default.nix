@@ -1,4 +1,8 @@
-{ lib, fetchFromGitHub, stdenvNoCC }:
+{
+  lib,
+  fetchFromGitHub,
+  stdenvNoCC,
+}:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "junction";

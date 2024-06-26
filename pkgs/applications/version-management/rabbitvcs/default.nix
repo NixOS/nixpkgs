@@ -1,4 +1,13 @@
-{ fetchFromGitHub, lib, python3Packages, meld, subversion, gvfs, xdg-utils, gtk3 }:
+{
+  fetchFromGitHub,
+  lib,
+  python3Packages,
+  meld,
+  subversion,
+  gvfs,
+  xdg-utils,
+  gtk3,
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "rabbitvcs";
@@ -13,18 +22,29 @@ python3Packages.buildPythonApplication rec {
   };
 
   buildInputs = [ gtk3 ];
-  pythonPath = with python3Packages; [ configobj pygobject3 pysvn dulwich tkinter gvfs xdg-utils ];
+  pythonPath = with python3Packages; [
+    configobj
+    pygobject3
+    pysvn
+    dulwich
+    tkinter
+    gvfs
+    xdg-utils
+  ];
 
   prePatch = ''
-      sed -ie 's|if sys\.argv\[1\] == "install":|if False:|' ./setup.py
-      sed -ie "s|PREFIX = sys.prefix|PREFIX = \"$out\"|" ./setup.py
-      sed -ie 's|/usr/bin/meld|${meld}/bin/meld|' ./rabbitvcs/util/configspec/configspec.ini
-      sed -ie 's|/usr/bin/svnadmin|${subversion.out}/bin/svnadmin|' ./rabbitvcs/ui/create.py
-      sed -ie "s|/usr/share/doc|$out/share/doc|" ./rabbitvcs/ui/about.py
-      sed -ie "s|gnome-open|xdg-open|" ./rabbitvcs/util/helper.py
-    '';
+    sed -ie 's|if sys\.argv\[1\] == "install":|if False:|' ./setup.py
+    sed -ie "s|PREFIX = sys.prefix|PREFIX = \"$out\"|" ./setup.py
+    sed -ie 's|/usr/bin/meld|${meld}/bin/meld|' ./rabbitvcs/util/configspec/configspec.ini
+    sed -ie 's|/usr/bin/svnadmin|${subversion.out}/bin/svnadmin|' ./rabbitvcs/ui/create.py
+    sed -ie "s|/usr/share/doc|$out/share/doc|" ./rabbitvcs/ui/about.py
+    sed -ie "s|gnome-open|xdg-open|" ./rabbitvcs/util/helper.py
+  '';
 
-  outputs = [ "out" "cli" ];
+  outputs = [
+    "out"
+    "cli"
+  ];
 
   postInstall = ''
     mkdir -p $cli/bin

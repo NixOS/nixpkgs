@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, lemon-graph
-, eigen
-, boost
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  lemon-graph,
+  eigen,
+  boost,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -18,9 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-bPDXaNZCNBM0qiu+46cL/zH/41lwqHPqfqTzJaERgVQ=";
   };
 
-  nativeBuildInputs = [
-    cmake
-  ];
+  nativeBuildInputs = [ cmake ];
 
   buildInputs = [
     lemon-graph

@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, makeDesktopItem
-, copyDesktopItems
-, SDL2
-, SDL2_image
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  makeDesktopItem,
+  copyDesktopItems,
+  SDL2,
+  SDL2_image,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -23,9 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
       --replace broguedir= "broguedir=$out/opt/brogue-ce #"
   '';
 
-  nativeBuildInputs = [
-    copyDesktopItems
-  ];
+  nativeBuildInputs = [ copyDesktopItems ];
 
   buildInputs = [
     SDL2
@@ -34,15 +33,20 @@ stdenv.mkDerivation (finalAttrs: {
 
   makeFlags = [ "DATADIR=$(out)/opt/brogue-ce" ];
 
-  desktopItems = [(makeDesktopItem {
-    name = "brogue-ce";
-    desktopName = "Brogue CE";
-    genericName = "Roguelike";
-    comment = "Brave the Dungeons of Doom!";
-    icon = "brogue-ce";
-    exec = "brogue-ce";
-    categories = [ "Game" "AdventureGame" ];
-  })];
+  desktopItems = [
+    (makeDesktopItem {
+      name = "brogue-ce";
+      desktopName = "Brogue CE";
+      genericName = "Roguelike";
+      comment = "Brave the Dungeons of Doom!";
+      icon = "brogue-ce";
+      exec = "brogue-ce";
+      categories = [
+        "Game"
+        "AdventureGame"
+      ];
+    })
+  ];
 
   installPhase = ''
     runHook preInstall
@@ -58,7 +62,10 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "brogue-ce";
     homepage = "https://github.com/tmewett/BrogueCE";
     license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ AndersonTorres fgaz ];
+    maintainers = with maintainers; [
+      AndersonTorres
+      fgaz
+    ];
     platforms = platforms.all;
   };
 })

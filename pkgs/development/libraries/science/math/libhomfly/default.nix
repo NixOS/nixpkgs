@@ -1,7 +1,9 @@
-{ lib, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, boehmgc
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  boehmgc,
 }:
 
 stdenv.mkDerivation rec {
@@ -15,13 +17,9 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-s1Hgy6S9+uREKsgjOVQdQfnds6oSLo5UWTrt5DJnY2s=";
   };
 
-  buildInputs = [
-    boehmgc
-  ];
+  buildInputs = [ boehmgc ];
 
-  nativeBuildInputs = [
-    autoreconfHook
-  ];
+  nativeBuildInputs = [ autoreconfHook ];
 
   doCheck = true;
 

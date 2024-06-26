@@ -1,10 +1,11 @@
-{ buildGoModule
-, fetchFromGitHub
-, makeWrapper
-, lib
-, openssh
-, testers
-, vault-ssh-plus
+{
+  buildGoModule,
+  fetchFromGitHub,
+  makeWrapper,
+  lib,
+  openssh,
+  testers,
+  vault-ssh-plus,
 }:
 buildGoModule rec {
   pname = "vault-ssh-plus";

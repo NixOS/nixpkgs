@@ -31,10 +31,15 @@ mkKdeDerivation {
     echo "${sshfs}" > $out/nix-support/depends
   '';
 
-  extraNativeBuildInputs = [pkg-config];
-  extraBuildInputs = [qtconnectivity qtmultimedia qtwayland wayland wayland-protocols libfakekey];
-
-  extraCmakeFlags = [
-    "-DQtWaylandScanner_EXECUTABLE=${qtwayland}/libexec/qtwaylandscanner"
+  extraNativeBuildInputs = [ pkg-config ];
+  extraBuildInputs = [
+    qtconnectivity
+    qtmultimedia
+    qtwayland
+    wayland
+    wayland-protocols
+    libfakekey
   ];
+
+  extraCmakeFlags = [ "-DQtWaylandScanner_EXECUTABLE=${qtwayland}/libexec/qtwaylandscanner" ];
 }

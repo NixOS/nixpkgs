@@ -1,17 +1,18 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, pkg-config
-, meson
-, python3
-, ninja
-, vala
-, gtk3
-, libgee
-, libhandy
-, granite
-, wrapGAppsHook3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  pkg-config,
+  meson,
+  python3,
+  ninja,
+  vala,
+  gtk3,
+  libgee,
+  libhandy,
+  granite,
+  wrapGAppsHook3,
 }:
 
 stdenv.mkDerivation rec {
@@ -41,9 +42,7 @@ stdenv.mkDerivation rec {
     libhandy
   ];
 
-  patches = [
-    ./plugs-path-env.patch
-  ];
+  patches = [ ./plugs-path-env.patch ];
 
   postPatch = ''
     chmod +x meson/post_install.py

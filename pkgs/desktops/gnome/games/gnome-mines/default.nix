@@ -1,5 +1,23 @@
-{ lib, stdenv, fetchurl, meson, ninja, vala, pkg-config, gnome, gtk3, wrapGAppsHook3
-, librsvg, gettext, itstool, python3, libxml2, libgnome-games-support, libgee, desktop-file-utils }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  meson,
+  ninja,
+  vala,
+  pkg-config,
+  gnome,
+  gtk3,
+  wrapGAppsHook3,
+  librsvg,
+  gettext,
+  itstool,
+  python3,
+  libxml2,
+  libgnome-games-support,
+  libgee,
+  desktop-file-utils,
+}:
 
 stdenv.mkDerivation rec {
   pname = "gnome-mines";
@@ -11,10 +29,24 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    meson ninja vala pkg-config gettext itstool python3
-    libxml2 wrapGAppsHook3 desktop-file-utils
+    meson
+    ninja
+    vala
+    pkg-config
+    gettext
+    itstool
+    python3
+    libxml2
+    wrapGAppsHook3
+    desktop-file-utils
   ];
-  buildInputs = [ gtk3 librsvg gnome.adwaita-icon-theme libgnome-games-support libgee ];
+  buildInputs = [
+    gtk3
+    librsvg
+    gnome.adwaita-icon-theme
+    libgnome-games-support
+    libgee
+  ];
 
   postPatch = ''
     chmod +x build-aux/meson_post_install.py

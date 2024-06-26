@@ -1,9 +1,12 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 {
-  imports = [
-    ../profiles/qemu-guest.nix
-  ];
+  imports = [ ../profiles/qemu-guest.nix ];
 
   config = {
     fileSystems."/" = {

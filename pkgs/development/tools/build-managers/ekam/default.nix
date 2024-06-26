@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, capnproto }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  capnproto,
+}:
 
 stdenv.mkDerivation {
   pname = "ekam";
@@ -38,9 +43,7 @@ stdenv.mkDerivation {
     unset NIX_ENFORCE_PURITY
   '';
 
-  makeFlags = [
-    "PARALLEL=$(NIX_BUILD_CORES)"
-  ];
+  makeFlags = [ "PARALLEL=$(NIX_BUILD_CORES)" ];
 
   installPhase = ''
     mkdir $out

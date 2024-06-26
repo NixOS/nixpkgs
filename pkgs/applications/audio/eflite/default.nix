@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchurl, fetchpatch, flite, alsa-lib, debug ? false }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  flite,
+  alsa-lib,
+  debug ? false,
+}:
 
 stdenv.mkDerivation rec {
   pname = "eflite";
@@ -9,7 +17,10 @@ stdenv.mkDerivation rec {
     sha256 = "088p9w816s02s64grfs28gai3lnibzdjb9d1jwxzr8smbs2qbbci";
   };
 
-  buildInputs = [ flite alsa-lib ];
+  buildInputs = [
+    flite
+    alsa-lib
+  ];
 
   configureFlags = [
     "flite_dir=${flite}"

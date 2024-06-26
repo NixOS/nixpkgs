@@ -1,50 +1,57 @@
-{ alsa-lib
-, boost
-, catch2_3
-, cmake
-, cryptopp
-, cpp-jwt
-, doxygen
-, enet
-, fetchzip
-, fetchurl
-, fmt
-, ffmpeg-headless
-, gamemode
-, httplib
-, inih
-, lib
-, libGL
-, libjack2
-, libpulseaudio
-, libunwind
-, libusb1
-, nlohmann_json
-, openal
-, openssl
-, pipewire
-, pkg-config
-, portaudio
-, sndio
-, spirv-tools
-, soundtouch
-, stdenv
-, vulkan-headers
-, vulkan-loader
-, xorg
-, zstd
-, enableSdl2Frontend ? true , SDL2
-, enableQt ? true , kdePackages
-, enableQtTranslations ? enableQt
-, enableCubeb ? true , cubeb
-, useDiscordRichPresence ? false , rapidjson
-}: let
+{
+  alsa-lib,
+  boost,
+  catch2_3,
+  cmake,
+  cryptopp,
+  cpp-jwt,
+  doxygen,
+  enet,
+  fetchzip,
+  fetchurl,
+  fmt,
+  ffmpeg-headless,
+  gamemode,
+  httplib,
+  inih,
+  lib,
+  libGL,
+  libjack2,
+  libpulseaudio,
+  libunwind,
+  libusb1,
+  nlohmann_json,
+  openal,
+  openssl,
+  pipewire,
+  pkg-config,
+  portaudio,
+  sndio,
+  spirv-tools,
+  soundtouch,
+  stdenv,
+  vulkan-headers,
+  vulkan-loader,
+  xorg,
+  zstd,
+  enableSdl2Frontend ? true,
+  SDL2,
+  enableQt ? true,
+  kdePackages,
+  enableQtTranslations ? enableQt,
+  enableCubeb ? true,
+  cubeb,
+  useDiscordRichPresence ? false,
+  rapidjson,
+}:
+let
   compat-list = fetchurl {
     name = "lime3ds-compat-list";
     url = "https://raw.githubusercontent.com/Lime3DS/compatibility-list/b0c8b6b80d716db6b957ba103c7a9e17ead24d55/compatibility_list.json";
     hash = "sha256-2wNqtorcQo3o09tisikW+cj6cVLLQEiJ1Zcai5ptGEU=";
   };
-in stdenv.mkDerivation (finalAttrs: {
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "lime3ds";
   version = "2114";
 
@@ -57,45 +64,51 @@ in stdenv.mkDerivation (finalAttrs: {
     cmake
     doxygen
     pkg-config
-  ] ++ lib.optionals enableQt [kdePackages.wrapQtAppsHook];
+  ] ++ lib.optionals enableQt [ kdePackages.wrapQtAppsHook ];
 
-  buildInputs = [
-    alsa-lib
-    boost
-    catch2_3
-    cryptopp
-    cpp-jwt
-    enet
-    fmt
-    ffmpeg-headless
-    httplib
-    inih
-    libGL
-    libjack2
-    libpulseaudio
-    libunwind
-    libusb1
-    nlohmann_json
-    openal
-    openssl
-    pipewire
-    portaudio
-    SDL2
-    soundtouch
-    sndio
-    spirv-tools
-    vulkan-headers
-    xorg.libX11
-    xorg.libXext
-    zstd
-  ] ++ lib.optionals enableQt (with kdePackages; [
-    qtbase
-    qtmultimedia
-    qttools
-    qtwayland
-  ]) ++ lib.optionals enableQtTranslations [kdePackages.qttools]
-  ++ lib.optionals enableCubeb [cubeb]
-  ++ lib.optional useDiscordRichPresence rapidjson;
+  buildInputs =
+    [
+      alsa-lib
+      boost
+      catch2_3
+      cryptopp
+      cpp-jwt
+      enet
+      fmt
+      ffmpeg-headless
+      httplib
+      inih
+      libGL
+      libjack2
+      libpulseaudio
+      libunwind
+      libusb1
+      nlohmann_json
+      openal
+      openssl
+      pipewire
+      portaudio
+      SDL2
+      soundtouch
+      sndio
+      spirv-tools
+      vulkan-headers
+      xorg.libX11
+      xorg.libXext
+      zstd
+    ]
+    ++ lib.optionals enableQt (
+      with kdePackages;
+      [
+        qtbase
+        qtmultimedia
+        qttools
+        qtwayland
+      ]
+    )
+    ++ lib.optionals enableQtTranslations [ kdePackages.qttools ]
+    ++ lib.optionals enableCubeb [ cubeb ]
+    ++ lib.optional useDiscordRichPresence rapidjson;
 
   postPatch = ''
     # Fix file not found when looking in var/empty instead of opt
@@ -115,19 +128,22 @@ in stdenv.mkDerivation (finalAttrs: {
       --replace-fail "libgamemode.so.0" "${lib.getLib gamemode}/lib/libgamemode.so.0"
   '';
 
-  postInstall = let
-    libs = lib.makeLibraryPath [ vulkan-loader ];
-  in lib.optionalString enableSdl2Frontend ''
-    for binfile in lime3ds-gui lime3ds-cli lime3ds-room
-    do
-      wrapProgram "$out/bin/$binfile" \
-        --prefix LD_LIBRARY_PATH : ${libs}
-      '' + lib.optionalString enableQt ''
-      qtWrapperArgs+=(
-        --prefix LD_LIBRARY_PATH : ${libs}
-      )
-    done
-  '';
+  postInstall =
+    let
+      libs = lib.makeLibraryPath [ vulkan-loader ];
+    in
+    lib.optionalString enableSdl2Frontend ''
+      for binfile in lime3ds-gui lime3ds-cli lime3ds-room
+      do
+        wrapProgram "$out/bin/$binfile" \
+          --prefix LD_LIBRARY_PATH : ${libs}
+    ''
+    + lib.optionalString enableQt ''
+        qtWrapperArgs+=(
+          --prefix LD_LIBRARY_PATH : ${libs}
+        )
+      done
+    '';
 
   cmakeFlags = with lib; [
     (cmakeBool "CITRA_USE_PRECOMPILED_HEADERS" false)

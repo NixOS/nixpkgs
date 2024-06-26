@@ -1,13 +1,14 @@
-{ stdenv
-, fetchFromGitHub
-, lib
-, cmake
-, mpi
-, blas
-, lapack
-, scalapack
-, gfortran
-} :
+{
+  stdenv,
+  fetchFromGitHub,
+  lib,
+  cmake,
+  mpi,
+  blas,
+  lapack,
+  scalapack,
+  gfortran,
+}:
 
 assert !blas.isILP64;
 assert !lapack.isILP64;
@@ -29,9 +30,16 @@ stdenv.mkDerivation rec {
     EOF
   '';
 
-  nativeBuildInputs = [ cmake gfortran ];
+  nativeBuildInputs = [
+    cmake
+    gfortran
+  ];
 
-  buildInputs = [ blas lapack scalapack ];
+  buildInputs = [
+    blas
+    lapack
+    scalapack
+  ];
 
   propagatedBuildInputs = [ mpi ];
 

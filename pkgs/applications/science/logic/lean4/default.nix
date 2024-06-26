@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, cmake
-, fetchFromGitHub
-, git
-, gmp
-, perl
-, testers
+{
+  lib,
+  stdenv,
+  cmake,
+  fetchFromGitHub,
+  git,
+  gmp,
+  perl,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -32,13 +33,9 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs stage0/src/bin/ src/bin/
   '';
 
-  nativeBuildInputs = [
-    cmake
-  ];
+  nativeBuildInputs = [ cmake ];
 
-  buildInputs = [
-    gmp
-  ];
+  buildInputs = [ gmp ];
 
   nativeCheckInputs = [
     git
@@ -51,9 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   passthru.tests = {
-    version = testers.testVersion {
-      package = finalAttrs.finalPackage;
-    };
+    version = testers.testVersion { package = finalAttrs.finalPackage; };
   };
 
   meta = with lib; {

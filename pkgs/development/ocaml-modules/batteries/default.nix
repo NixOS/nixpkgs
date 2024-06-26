@@ -1,5 +1,14 @@
-{ stdenv, lib, fetchFromGitHub, buildDunePackage, ocaml, qtest, qcheck, num, camlp-streams
-, doCheck ? lib.versionAtLeast ocaml.version "4.08"
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  buildDunePackage,
+  ocaml,
+  qtest,
+  qcheck,
+  num,
+  camlp-streams,
+  doCheck ? lib.versionAtLeast ocaml.version "4.08",
 }:
 
 buildDunePackage rec {
@@ -17,7 +26,10 @@ buildDunePackage rec {
 
   nativeCheckInputs = [ qtest ];
   checkInputs = [ qcheck ];
-  propagatedBuildInputs = [ camlp-streams num ];
+  propagatedBuildInputs = [
+    camlp-streams
+    num
+  ];
 
   inherit doCheck;
   checkTarget = "test";
@@ -31,8 +43,6 @@ buildDunePackage rec {
       language.
     '';
     license = lib.licenses.lgpl21Plus;
-    maintainers = [
-      lib.maintainers.maggesi
-    ];
+    maintainers = [ lib.maintainers.maggesi ];
   };
 }

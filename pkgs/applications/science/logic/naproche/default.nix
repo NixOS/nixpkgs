@@ -1,6 +1,13 @@
-{ lib, fetchFromGitHub, haskellPackages, makeWrapper, eprover }:
+{
+  lib,
+  fetchFromGitHub,
+  haskellPackages,
+  makeWrapper,
+  eprover,
+}:
 
-with haskellPackages; mkDerivation {
+with haskellPackages;
+mkDerivation {
   pname = "Naproche-SAD";
   version = "unstable-2024-01-18";
 
@@ -13,10 +20,27 @@ with haskellPackages; mkDerivation {
 
   isExecutable = true;
 
-  buildTools = [ hpack makeWrapper ];
+  buildTools = [
+    hpack
+    makeWrapper
+  ];
   executableHaskellDepends = [
-    base array bytestring containers ghc-prim megaparsec mtl network process
-    split temporary text threads time transformers uuid
+    base
+    array
+    bytestring
+    containers
+    ghc-prim
+    megaparsec
+    mtl
+    network
+    process
+    split
+    temporary
+    text
+    threads
+    time
+    transformers
+    uuid
   ];
 
   prePatch = "hpack";

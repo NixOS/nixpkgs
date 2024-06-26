@@ -1,5 +1,4 @@
-{ pkgs
-}:
+{ pkgs }:
 
 # The aws-sdk-cpp tests are flaky.  Since pull requests to staging
 # cause nix to be rebuilt, this means that staging PRs end up
@@ -10,8 +9,6 @@
 #
 # See also: https://github.com/NixOS/nix/issues/7582
 
-builtins.mapAttrs (_: pkg:
-  if builtins.isAttrs pkg
-  then pkg.override { withAWS = false; }
-  else pkg)
-  pkgs.nixVersions
+builtins.mapAttrs (
+  _: pkg: if builtins.isAttrs pkg then pkg.override { withAWS = false; } else pkg
+) pkgs.nixVersions

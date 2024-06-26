@@ -1,14 +1,15 @@
-{ lib
-, babel
-, buildPythonApplication
-, fetchPypi
-, fixtures
-, mock
-, pbr
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, testtools
+{
+  lib,
+  babel,
+  buildPythonApplication,
+  fetchPypi,
+  fixtures,
+  mock,
+  pbr,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  testtools,
 }:
 
 buildPythonApplication rec {

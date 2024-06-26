@@ -21,9 +21,7 @@ buildPythonPackage rec {
 
   pyproject = true;
 
-  nativeBuildInputs = [
-    swig
-  ];
+  nativeBuildInputs = [ swig ];
 
   build-system = [
     cmake
@@ -34,17 +32,12 @@ buildPythonPackage rec {
 
   dontUseCmakeConfigure = true;
 
-  pythonImportsCheck = [
-    "py_slvs"
-  ];
+  pythonImportsCheck = [ "py_slvs" ];
 
   meta = {
     description = "Python binding of SOLVESPACE geometry constraint solver";
     homepage = "https://github.com/realthunder/slvs_py";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [
-      traverseda
-    ];
+    maintainers = with lib.maintainers; [ traverseda ];
   };
 }
-

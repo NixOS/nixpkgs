@@ -1,24 +1,25 @@
-{ lib
-, stdenv
-, fetchFromGitHub
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
   # Native build inputs
-, autoreconfHook
-, bison
-, flex
-, pkg-config
+  autoreconfHook,
+  bison,
+  flex,
+  pkg-config,
   # Build inputs
-, expat
-, gsoap
-, openssl
-, zlib
+  expat,
+  gsoap,
+  openssl,
+  zlib,
   # Configuration overridable with .override
   # If not null, the builder will
   # create a new output "etc", move "$out/etc" to "$etc/etc"
   # and symlink "$out/etc" to externalEtc.
-, externalEtc ? "/etc"
+  externalEtc ? "/etc",
 }:
 
-stdenv.mkDerivation rec{
+stdenv.mkDerivation rec {
   pname = "voms-unstable";
   version = "2022-06-14";
 
@@ -47,8 +48,12 @@ stdenv.mkDerivation rec{
     zlib
   ];
 
-  outputs = [ "bin" "out" "dev" "man" ]
-    ++ lib.optional (externalEtc != null) "etc";
+  outputs = [
+    "bin"
+    "out"
+    "dev"
+    "man"
+  ] ++ lib.optional (externalEtc != null) "etc";
 
   preAutoreconf = ''
     mkdir -p aux src/autogen

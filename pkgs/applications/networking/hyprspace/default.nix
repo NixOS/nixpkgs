@@ -1,4 +1,10 @@
-{ lib, stdenv, buildGoModule, fetchFromGitHub, iproute2mac }:
+{
+  lib,
+  stdenv,
+  buildGoModule,
+  fetchFromGitHub,
+  iproute2mac,
+}:
 
 buildGoModule rec {
   pname = "hyprspace";

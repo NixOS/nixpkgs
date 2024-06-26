@@ -1,26 +1,27 @@
-{ stdenv
-, lib
-, fetchurl
-, meson
-, ninja
-, gettext
-, pkg-config
-, wrapGAppsHook4
-, itstool
-, desktop-file-utils
-, vala
-, libxml2
-, gtk4
-, glib
-, sound-theme-freedesktop
-, gsettings-desktop-schemas
-, gnome-desktop
-, geocode-glib_2
-, gnome
-, gdk-pixbuf
-, geoclue2
-, libgweather
-, libadwaita
+{
+  stdenv,
+  lib,
+  fetchurl,
+  meson,
+  ninja,
+  gettext,
+  pkg-config,
+  wrapGAppsHook4,
+  itstool,
+  desktop-file-utils,
+  vala,
+  libxml2,
+  gtk4,
+  glib,
+  sound-theme-freedesktop,
+  gsettings-desktop-schemas,
+  gnome-desktop,
+  geocode-glib_2,
+  gnome,
+  gdk-pixbuf,
+  geoclue2,
+  libgweather,
+  libadwaita,
 }:
 
 stdenv.mkDerivation rec {

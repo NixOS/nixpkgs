@@ -1,22 +1,29 @@
-
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
 let
   cfg = config.console;
 
-  makeColor = i: concatMapStringsSep "," (x: "0x" + substring (2*i) 2 x);
+  makeColor = i: concatMapStringsSep "," (x: "0x" + substring (2 * i) 2 x);
 
   isUnicode = hasSuffix "UTF-8" (toUpper config.i18n.defaultLocale);
 
-  optimizedKeymap = pkgs.runCommand "keymap" {
-    nativeBuildInputs = [ pkgs.buildPackages.kbd ];
-    LOADKEYS_KEYMAP_PATH = "${consoleEnv pkgs.kbd}/share/keymaps/**";
-    preferLocalBuild = true;
-  } ''
-    loadkeys -b ${optionalString isUnicode "-u"} "${cfg.keyMap}" > $out
-  '';
+  optimizedKeymap =
+    pkgs.runCommand "keymap"
+      {
+        nativeBuildInputs = [ pkgs.buildPackages.kbd ];
+        LOADKEYS_KEYMAP_PATH = "${consoleEnv pkgs.kbd}/share/keymaps/**";
+        preferLocalBuild = true;
+      }
+      ''
+        loadkeys -b ${optionalString isUnicode "-u"} "${cfg.keyMap}" > $out
+      '';
 
   # Sadly, systemd-vconsole-setup doesn't support binary keymaps.
   vconsoleConf = pkgs.writeText "vconsole.conf" ''
@@ -24,22 +31,24 @@ let
     ${optionalString (cfg.font != null) "FONT=${cfg.font}"}
   '';
 
-  consoleEnv = kbd: pkgs.buildEnv {
-    name = "console-env";
-    paths = [ kbd ] ++ cfg.packages;
-    pathsToLink = [
-      "/share/consolefonts"
-      "/share/consoletrans"
-      "/share/keymaps"
-      "/share/unimaps"
-    ];
-  };
+  consoleEnv =
+    kbd:
+    pkgs.buildEnv {
+      name = "console-env";
+      paths = [ kbd ] ++ cfg.packages;
+      pathsToLink = [
+        "/share/consolefonts"
+        "/share/consoletrans"
+        "/share/keymaps"
+        "/share/unimaps"
+      ];
+    };
 in
 
 {
   ###### interface
 
-  options.console  = {
+  options.console = {
     enable = mkEnableOption "virtual console" // {
       default = true;
     };
@@ -74,10 +83,22 @@ in
       type = with types; listOf (strMatching "[[:xdigit:]]{6}");
       default = [ ];
       example = [
-        "002b36" "dc322f" "859900" "b58900"
-        "268bd2" "d33682" "2aa198" "eee8d5"
-        "002b36" "cb4b16" "586e75" "657b83"
-        "839496" "6c71c4" "93a1a1" "fdf6e3"
+        "002b36"
+        "dc322f"
+        "859900"
+        "b58900"
+        "268bd2"
+        "d33682"
+        "2aa198"
+        "eee8d5"
+        "002b36"
+        "cb4b16"
+        "586e75"
+        "657b83"
+        "839496"
+        "6c71c4"
+        "93a1a1"
+        "fdf6e3"
       ];
       description = ''
         The 16 colors palette used by the virtual consoles.
@@ -116,20 +137,24 @@ in
 
   };
 
-
   ###### implementation
 
   config = mkMerge [
-    { console.keyMap = with config.services.xserver;
-        mkIf cfg.useXkbConfig
-          (pkgs.runCommand "xkb-console-keymap" { preferLocalBuild = true; } ''
+    {
+      console.keyMap =
+        with config.services.xserver;
+        mkIf cfg.useXkbConfig (
+          pkgs.runCommand "xkb-console-keymap" { preferLocalBuild = true; } ''
             '${pkgs.buildPackages.ckbcomp}/bin/ckbcomp' \
-              ${optionalString (config.environment.sessionVariables ? XKB_CONFIG_ROOT)
-                "-I${config.environment.sessionVariables.XKB_CONFIG_ROOT}"
+              ${
+                optionalString (
+                  config.environment.sessionVariables ? XKB_CONFIG_ROOT
+                ) "-I${config.environment.sessionVariables.XKB_CONFIG_ROOT}"
               } \
               -model '${xkb.model}' -layout '${xkb.layout}' \
               -option '${xkb.options}' -variant '${xkb.variant}' > "$out"
-          '');
+          ''
+        );
     }
 
     (mkIf (!cfg.enable) {
@@ -143,7 +168,8 @@ in
     })
 
     (mkIf cfg.enable (mkMerge [
-      { environment.systemPackages = [ pkgs.kbd ];
+      {
+        environment.systemPackages = [ pkgs.kbd ];
 
         # Let systemd-vconsole-setup.service do the work of setting up the
         # virtual consoles.
@@ -164,38 +190,42 @@ in
         boot.initrd.systemd.contents = {
           "/etc/vconsole.conf".source = vconsoleConf;
           # Add everything if we want full console setup...
-          "/etc/kbd" = lib.mkIf cfg.earlySetup { source = "${consoleEnv config.boot.initrd.systemd.package.kbd}/share"; };
-          # ...but only the keymaps if we don't
-          "/etc/kbd/keymaps" = lib.mkIf (!cfg.earlySetup) { source = "${consoleEnv config.boot.initrd.systemd.package.kbd}/share/keymaps"; };
-        };
-        boot.initrd.systemd.additionalUpstreamUnits = [
-          "systemd-vconsole-setup.service"
-        ];
-        boot.initrd.systemd.storePaths = [
-          "${config.boot.initrd.systemd.package}/lib/systemd/systemd-vconsole-setup"
-          "${config.boot.initrd.systemd.package.kbd}/bin/setfont"
-          "${config.boot.initrd.systemd.package.kbd}/bin/loadkeys"
-          "${config.boot.initrd.systemd.package.kbd.gzip}/bin/gzip" # Fonts and keyboard layouts are compressed
-        ] ++ optionals (cfg.font != null && hasPrefix builtins.storeDir cfg.font) [
-          "${cfg.font}"
-        ] ++ optionals (hasPrefix builtins.storeDir cfg.keyMap) [
-          "${cfg.keyMap}"
-        ];
-
-        systemd.services.reload-systemd-vconsole-setup =
-          { description = "Reset console on configuration changes";
-            wantedBy = [ "multi-user.target" ];
-            restartTriggers = [ vconsoleConf (consoleEnv pkgs.kbd) ];
-            reloadIfChanged = true;
-            serviceConfig =
-              { RemainAfterExit = true;
-                ExecStart = "${pkgs.coreutils}/bin/true";
-                ExecReload = "/run/current-system/systemd/bin/systemctl restart systemd-vconsole-setup";
-              };
+          "/etc/kbd" = lib.mkIf cfg.earlySetup {
+            source = "${consoleEnv config.boot.initrd.systemd.package.kbd}/share";
           };
+          # ...but only the keymaps if we don't
+          "/etc/kbd/keymaps" = lib.mkIf (!cfg.earlySetup) {
+            source = "${consoleEnv config.boot.initrd.systemd.package.kbd}/share/keymaps";
+          };
+        };
+        boot.initrd.systemd.additionalUpstreamUnits = [ "systemd-vconsole-setup.service" ];
+        boot.initrd.systemd.storePaths =
+          [
+            "${config.boot.initrd.systemd.package}/lib/systemd/systemd-vconsole-setup"
+            "${config.boot.initrd.systemd.package.kbd}/bin/setfont"
+            "${config.boot.initrd.systemd.package.kbd}/bin/loadkeys"
+            "${config.boot.initrd.systemd.package.kbd.gzip}/bin/gzip" # Fonts and keyboard layouts are compressed
+          ]
+          ++ optionals (cfg.font != null && hasPrefix builtins.storeDir cfg.font) [ "${cfg.font}" ]
+          ++ optionals (hasPrefix builtins.storeDir cfg.keyMap) [ "${cfg.keyMap}" ];
+
+        systemd.services.reload-systemd-vconsole-setup = {
+          description = "Reset console on configuration changes";
+          wantedBy = [ "multi-user.target" ];
+          restartTriggers = [
+            vconsoleConf
+            (consoleEnv pkgs.kbd)
+          ];
+          reloadIfChanged = true;
+          serviceConfig = {
+            RemainAfterExit = true;
+            ExecStart = "${pkgs.coreutils}/bin/true";
+            ExecReload = "/run/current-system/systemd/bin/systemctl restart systemd-vconsole-setup";
+          };
+        };
       }
 
-      (mkIf (cfg.colors != []) {
+      (mkIf (cfg.colors != [ ]) {
         boot.kernelParams = [
           "vt.default_red=${makeColor 0 cfg.colors}"
           "vt.default_grn=${makeColor 1 cfg.colors}"
@@ -206,11 +236,16 @@ in
       (mkIf (cfg.earlySetup && cfg.font != null && !config.boot.initrd.systemd.enable) {
         boot.initrd.extraUtilsCommands = ''
           mkdir -p $out/share/consolefonts
-          ${if substring 0 1 cfg.font == "/" then ''
-            font="${cfg.font}"
-          '' else ''
-            font="$(echo ${consoleEnv pkgs.kbd}/share/consolefonts/${cfg.font}.*)"
-          ''}
+          ${
+            if substring 0 1 cfg.font == "/" then
+              ''
+                font="${cfg.font}"
+              ''
+            else
+              ''
+                font="$(echo ${consoleEnv pkgs.kbd}/share/consolefonts/${cfg.font}.*)"
+              ''
+          }
           if [[ $font == *.gz ]]; then
             gzip -cd $font > $out/share/consolefonts/font.psf
           else
@@ -222,16 +257,85 @@ in
   ];
 
   imports = [
-    (mkRenamedOptionModule [ "i18n" "consoleFont" ] [ "console" "font" ])
-    (mkRenamedOptionModule [ "i18n" "consoleKeyMap" ] [ "console" "keyMap" ])
-    (mkRenamedOptionModule [ "i18n" "consoleColors" ] [ "console" "colors" ])
-    (mkRenamedOptionModule [ "i18n" "consolePackages" ] [ "console" "packages" ])
-    (mkRenamedOptionModule [ "i18n" "consoleUseXkbConfig" ] [ "console" "useXkbConfig" ])
-    (mkRenamedOptionModule [ "boot" "earlyVconsoleSetup" ] [ "console" "earlySetup" ])
-    (mkRenamedOptionModule [ "boot" "extraTTYs" ] [ "console" "extraTTYs" ])
-    (mkRemovedOptionModule [ "console" "extraTTYs" ] ''
-      Since NixOS switched to systemd (circa 2012), TTYs have been spawned on
-      demand, so there is no need to configure them manually.
-    '')
+    (mkRenamedOptionModule
+      [
+        "i18n"
+        "consoleFont"
+      ]
+      [
+        "console"
+        "font"
+      ]
+    )
+    (mkRenamedOptionModule
+      [
+        "i18n"
+        "consoleKeyMap"
+      ]
+      [
+        "console"
+        "keyMap"
+      ]
+    )
+    (mkRenamedOptionModule
+      [
+        "i18n"
+        "consoleColors"
+      ]
+      [
+        "console"
+        "colors"
+      ]
+    )
+    (mkRenamedOptionModule
+      [
+        "i18n"
+        "consolePackages"
+      ]
+      [
+        "console"
+        "packages"
+      ]
+    )
+    (mkRenamedOptionModule
+      [
+        "i18n"
+        "consoleUseXkbConfig"
+      ]
+      [
+        "console"
+        "useXkbConfig"
+      ]
+    )
+    (mkRenamedOptionModule
+      [
+        "boot"
+        "earlyVconsoleSetup"
+      ]
+      [
+        "console"
+        "earlySetup"
+      ]
+    )
+    (mkRenamedOptionModule
+      [
+        "boot"
+        "extraTTYs"
+      ]
+      [
+        "console"
+        "extraTTYs"
+      ]
+    )
+    (mkRemovedOptionModule
+      [
+        "console"
+        "extraTTYs"
+      ]
+      ''
+        Since NixOS switched to systemd (circa 2012), TTYs have been spawned on
+        demand, so there is no need to configure them manually.
+      ''
+    )
   ];
 }

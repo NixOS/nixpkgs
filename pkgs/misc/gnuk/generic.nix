@@ -1,12 +1,20 @@
-{ lib, stdenv, gcc-arm-embedded, binutils-arm-embedded, makeWrapper
-, python3Packages
+{
+  lib,
+  stdenv,
+  gcc-arm-embedded,
+  binutils-arm-embedded,
+  makeWrapper,
+  python3Packages,
 
-# Extra options
-, device ? "fsij", vid ? "234b", pid ? "0000"
+  # Extra options
+  device ? "fsij",
+  vid ? "234b",
+  pid ? "0000",
 
-# Version specific options
-, version, src
-, ...
+  # Version specific options
+  version,
+  src,
+  ...
 }:
 
 stdenv.mkDerivation {
@@ -14,8 +22,16 @@ stdenv.mkDerivation {
 
   inherit version src;
 
-  nativeBuildInputs = [ gcc-arm-embedded binutils-arm-embedded makeWrapper ];
-  buildInputs = with python3Packages; [ python pyusb colorama ];
+  nativeBuildInputs = [
+    gcc-arm-embedded
+    binutils-arm-embedded
+    makeWrapper
+  ];
+  buildInputs = with python3Packages; [
+    python
+    pyusb
+    colorama
+  ];
 
   configurePhase = ''
     cd src

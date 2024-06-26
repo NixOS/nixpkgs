@@ -1,4 +1,8 @@
-{ lib, stdenv, fetchFromGitHub }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 
 stdenv.mkDerivation rec {
   pname = "schedtool";
@@ -11,7 +15,10 @@ stdenv.mkDerivation rec {
     sha256 = "1wdw6fnf9a01xfjhdah3mn8bp1bvahf2lfq74i6hk5b2cagkppyp";
   };
 
-  makeFlags = [ "DESTDIR=$(out)" "DESTPREFIX=" ];
+  makeFlags = [
+    "DESTDIR=$(out)"
+    "DESTPREFIX="
+  ];
 
   meta = with lib; {
     description = "Query or alter a process' scheduling policy under Linux";

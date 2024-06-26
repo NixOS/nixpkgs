@@ -1,14 +1,22 @@
-{ buildEnv, callPackage, makeWrapper }:
+{
+  buildEnv,
+  callPackage,
+  makeWrapper,
+}:
 
 let
-  sp = callPackage ./sp.nix {};
+  sp = callPackage ./sp.nix { };
   mp = sp.overrideAttrs (oldAttrs: {
     sourceRoot = "${oldAttrs.src.name}/MP";
   });
-in buildEnv {
+in
+buildEnv {
   name = "iortcw";
 
-  paths = [ sp mp ];
+  paths = [
+    sp
+    mp
+  ];
 
   pathsToLink = [ "/opt" ];
 

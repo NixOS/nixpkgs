@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, fetchFromSourcehut
-, meson
-, ninja
-, pkg-config
-, wayland
-, pango
-, wayland-protocols
-, wayland-scanner
-, conf ? null
+{
+  lib,
+  stdenv,
+  fetchFromSourcehut,
+  meson,
+  ninja,
+  pkg-config,
+  wayland,
+  pango,
+  wayland-protocols,
+  wayland-scanner,
+  conf ? null,
 }:
 
 let
@@ -27,8 +28,17 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-PBxCy1dZrOL1nmhVDQozvF0XL79uKMhhERGNpPPzaRU=";
   };
 
-  nativeBuildInputs = [ meson ninja pkg-config wayland-scanner ];
-  buildInputs = [ pango wayland wayland-protocols ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    wayland-scanner
+  ];
+  buildInputs = [
+    pango
+    wayland
+    wayland-protocols
+  ];
 
   prePatch = ''
     cp ${configFile} src/config.hpp

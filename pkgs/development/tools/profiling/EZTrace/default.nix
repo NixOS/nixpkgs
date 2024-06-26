@@ -1,4 +1,5 @@
-{ lib,
+{
+  lib,
   stdenv,
   fetchFromGitLab,
   gfortran,
@@ -10,7 +11,7 @@
   libbfd_2_38,
   libopcodes_2_38,
   buildPackages,
-  autoreconfHook
+  autoreconfHook,
 }:
 
 stdenv.mkDerivation rec {
@@ -24,8 +25,17 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-A6HMr4ib5Ka1lTbbTQOdq3kIdCoN/CwAKRdXdv9wpfU=";
   };
 
-  nativeBuildInputs = [ gfortran autoreconfHook ];
-  buildInputs = [ libelf libiberty zlib libbfd_2_38 libopcodes_2_38 ];
+  nativeBuildInputs = [
+    gfortran
+    autoreconfHook
+  ];
+  buildInputs = [
+    libelf
+    libiberty
+    zlib
+    libbfd_2_38
+    libopcodes_2_38
+  ];
 
   meta = with lib; {
     description = "Tool that aims at generating automatically execution trace from HPC programs";

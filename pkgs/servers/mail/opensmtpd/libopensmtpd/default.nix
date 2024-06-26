@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchurl
-, libevent
-, mandoc
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libevent,
+  mandoc,
 }:
 stdenv.mkDerivation rec {
   pname = "libopensmtpd";

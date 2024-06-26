@@ -1,11 +1,12 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, pkg-config
-, flac
-, stdenv
-, alsa-lib
-, nix-update-script
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  pkg-config,
+  flac,
+  stdenv,
+  alsa-lib,
+  nix-update-script,
 }:
 
 buildGoModule rec {
@@ -31,15 +32,9 @@ buildGoModule rec {
     "-X github.com/go-musicfox/go-musicfox/internal/types.AppVersion=${version}"
   ];
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [
-    flac
-  ] ++ lib.optionals stdenv.isLinux [
-    alsa-lib
-  ];
+  buildInputs = [ flac ] ++ lib.optionals stdenv.isLinux [ alsa-lib ];
 
   passthru.updateScript = nix-update-script { };
 
@@ -48,6 +43,10 @@ buildGoModule rec {
     homepage = "https://github.com/anhoder/go-musicfox";
     license = licenses.mit;
     mainProgram = "musicfox";
-    maintainers = with maintainers; [ zendo Ruixi-rebirth aleksana ];
+    maintainers = with maintainers; [
+      zendo
+      Ruixi-rebirth
+      aleksana
+    ];
   };
 }

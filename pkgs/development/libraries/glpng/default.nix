@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchFromRepoOrCz
-, cmake
-, libGL
-, libpng
-, pkg-config
-, zlib
+{
+  lib,
+  stdenv,
+  fetchFromRepoOrCz,
+  cmake,
+  libGL,
+  libpng,
+  pkg-config,
+  zlib,
 }:
 
 stdenv.mkDerivation rec {

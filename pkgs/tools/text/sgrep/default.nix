@@ -1,4 +1,12 @@
-{ stdenv, sgrep, fetchurl, runCommand, lib, m4, makeWrapper }:
+{
+  stdenv,
+  sgrep,
+  fetchurl,
+  runCommand,
+  lib,
+  m4,
+  makeWrapper,
+}:
 
 stdenv.mkDerivation rec {
   pname = "sgrep";

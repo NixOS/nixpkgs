@@ -1,17 +1,19 @@
-{ lib, stdenv
-, fetchFromGitHub
-, nix-update-script
-, vala
-, meson
-, ninja
-, pkg-config
-, pantheon
-, python3
-, gettext
-, glib
-, gtk3
-, libgee
-, wrapGAppsHook3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  vala,
+  meson,
+  ninja,
+  pkg-config,
+  pantheon,
+  python3,
+  gettext,
+  glib,
+  gtk3,
+  libgee,
+  wrapGAppsHook3,
 }:
 
 stdenv.mkDerivation rec {

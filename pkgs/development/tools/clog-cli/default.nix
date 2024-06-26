@@ -1,4 +1,8 @@
-{ fetchFromGitHub, rustPlatform, lib }:
+{
+  fetchFromGitHub,
+  rustPlatform,
+  lib,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "clog-cli";
@@ -18,7 +22,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/clog-tool/clog-cli";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
-    maintainers = [lib.maintainers.nthorne];
+    maintainers = [ lib.maintainers.nthorne ];
     mainProgram = "clog";
     # error: could not compile `rustc-serialize`
     broken = true; # Added 2024-03-16

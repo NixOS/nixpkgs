@@ -1,10 +1,12 @@
-{ buildOctavePackage
-, lib
-, fetchurl
-# Octave dependencies
-, signal # >= 1.3.0
-# Build dependencies
-, gfortran
+{
+  buildOctavePackage,
+  lib,
+  fetchurl
+  # Octave dependencies
+  ,
+  signal, # >= 1.3.0
+  # Build dependencies
+  gfortran,
 }:
 
 buildOctavePackage rec {
@@ -16,13 +18,9 @@ buildOctavePackage rec {
     sha256 = "0nc2d9h91glxzmpizxdrc2dablw4bqhqhzs37a394c36myk4xjdv";
   };
 
-  nativeBuildInputs = [
-    gfortran
-  ];
+  nativeBuildInputs = [ gfortran ];
 
-  requiredOctavePackages = [
-    signal
-  ];
+  requiredOctavePackages = [ signal ];
 
   meta = with lib; {
     homepage = "https://octave.sourceforge.io/tisean/index.html";

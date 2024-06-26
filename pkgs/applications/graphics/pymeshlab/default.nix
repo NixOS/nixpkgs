@@ -1,32 +1,33 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, libGLU
-, qtbase
-, qtscript
-, qtxmlpatterns
-, lib3ds
-, bzip2
-, muparser
-, eigen
-, glew
-, gmp
-, levmar
-, qhull
-, cmake
-, cgal
-, boost
-, mpfr
-, xercesc
-, tbb
-, embree
-, vcg
-, libigl
-, corto
-, openctm
-, structuresynth
-, wrapQtAppsHook
-, python3Packages
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  libGLU,
+  qtbase,
+  qtscript,
+  qtxmlpatterns,
+  lib3ds,
+  bzip2,
+  muparser,
+  eigen,
+  glew,
+  gmp,
+  levmar,
+  qhull,
+  cmake,
+  cgal,
+  boost,
+  mpfr,
+  xercesc,
+  tbb,
+  embree,
+  vcg,
+  libigl,
+  corto,
+  openctm,
+  structuresynth,
+  wrapQtAppsHook,
+  python3Packages,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -73,9 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
     python3Packages.pybind11
   ];
 
-  propagatedBuildInputs = [
-    python3Packages.numpy
-  ];
+  propagatedBuildInputs = [ python3Packages.numpy ];
 
   preConfigure = ''
     substituteInPlace src/meshlab/src/external/libigl.cmake \
@@ -93,9 +92,7 @@ stdenv.mkDerivation (finalAttrs: {
     "
   '';
 
-  cmakeFlags = [
-    "-DVCGDIR=${vcg.src}"
-  ];
+  cmakeFlags = [ "-DVCGDIR=${vcg.src}" ];
 
   meta = {
     description = "Open source mesh processing python library";

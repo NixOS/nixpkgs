@@ -1,6 +1,9 @@
-{ lib, stdenv, fetchurl
-, testers
-, static ? false
+{
+  lib,
+  stdenv,
+  fetchurl,
+  testers,
+  static ? false,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -14,7 +17,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   configureFlags = lib.optional static "--enable-static --disable-shared";
 
-  outputs = [ "bin" "dev" "out" "man" ];
+  outputs = [
+    "bin"
+    "dev"
+    "out"
+    "man"
+  ];
 
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 

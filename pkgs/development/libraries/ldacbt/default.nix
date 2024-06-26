@@ -1,6 +1,8 @@
-{ lib, stdenv
-, fetchFromGitHub
-, cmake
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
 }:
 
 stdenv.mkDerivation rec {
@@ -15,11 +17,12 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  outputs = [ "out" "dev" ];
-
-  nativeBuildInputs = [
-    cmake
+  outputs = [
+    "out"
+    "dev"
   ];
+
+  nativeBuildInputs = [ cmake ];
 
   cmakeFlags = [
     # CMakeLists.txt by default points to $out
@@ -28,10 +31,10 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "AOSP libldac dispatcher";
-    homepage    = "https://github.com/EHfive/ldacBT";
-    license     = licenses.asl20;
+    homepage = "https://github.com/EHfive/ldacBT";
+    license = licenses.asl20;
     # libldac code detects & #error's out on non-LE byte order
-    platforms   = platforms.littleEndian;
+    platforms = platforms.littleEndian;
     maintainers = with maintainers; [ ];
   };
 }

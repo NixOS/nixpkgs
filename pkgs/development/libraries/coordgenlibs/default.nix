@@ -1,10 +1,11 @@
-{ fetchFromGitHub
-, lib
-, stdenv
-, boost
-, zlib
-, cmake
-, maeparser
+{
+  fetchFromGitHub,
+  lib,
+  stdenv,
+  boost,
+  zlib,
+  cmake,
+  maeparser,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -19,11 +20,13 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ boost zlib maeparser ];
+  buildInputs = [
+    boost
+    zlib
+    maeparser
+  ];
 
-  env = lib.optionalAttrs stdenv.cc.isClang {
-    NIX_CFLAGS_COMPILE = "-Wno-unused-but-set-variable";
-  };
+  env = lib.optionalAttrs stdenv.cc.isClang { NIX_CFLAGS_COMPILE = "-Wno-unused-but-set-variable"; };
 
   doCheck = true;
 

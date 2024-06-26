@@ -1,12 +1,13 @@
-{ fetchFromGitHub
-, lib
-, Security
-, openssl
-, git
-, pkg-config
-, protobuf
-, rustPlatform
-, stdenv
+{
+  fetchFromGitHub,
+  lib,
+  Security,
+  openssl,
+  git,
+  pkg-config,
+  protobuf,
+  rustPlatform,
+  stdenv,
 }:
 
 # Updating this package will force an update for nodePackages.prisma. The
@@ -37,7 +38,10 @@ rustPlatform.buildRustPackage rec {
     };
   };
 
-  nativeBuildInputs = [ pkg-config git ];
+  nativeBuildInputs = [
+    pkg-config
+    git
+  ];
 
   buildInputs = [
     openssl
@@ -56,10 +60,14 @@ rustPlatform.buildRustPackage rec {
   '';
 
   cargoBuildFlags = [
-    "-p" "query-engine"
-    "-p" "query-engine-node-api"
-    "-p" "schema-engine-cli"
-    "-p" "prisma-fmt"
+    "-p"
+    "query-engine"
+    "-p"
+    "query-engine-node-api"
+    "-p"
+    "schema-engine-cli"
+    "-p"
+    "prisma-fmt"
   ];
 
   postInstall = ''
@@ -74,7 +82,12 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://www.prisma.io/";
     license = licenses.asl20;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ pimeys tomhoule ivan aqrln ];
+    maintainers = with maintainers; [
+      pimeys
+      tomhoule
+      ivan
+      aqrln
+    ];
   };
 }
 

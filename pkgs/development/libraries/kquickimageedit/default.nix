@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, extra-cmake-modules
-, qtbase
-, qtdeclarative
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  extra-cmake-modules,
+  qtbase,
+  qtdeclarative,
 }:
 
 stdenv.mkDerivation rec {
@@ -19,8 +20,11 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ extra-cmake-modules ];
-  buildInputs = [ qtbase qtdeclarative ];
-  cmakeFlags = ["-DQT_MAJOR_VERSION=${lib.versions.major qtbase.version}"];
+  buildInputs = [
+    qtbase
+    qtdeclarative
+  ];
+  cmakeFlags = [ "-DQT_MAJOR_VERSION=${lib.versions.major qtbase.version}" ];
   dontWrapQtApps = true;
 
   meta = with lib; {

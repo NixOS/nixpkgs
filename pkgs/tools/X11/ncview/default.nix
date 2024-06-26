@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchurl
-, expat
-, libpng
-, udunits
-, netcdf
-, xorg
+{
+  lib,
+  stdenv,
+  fetchurl,
+  expat,
+  libpng,
+  udunits,
+  netcdf,
+  xorg,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -19,9 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  nativeBuildInputs = [
-    netcdf
-  ];
+  nativeBuildInputs = [ netcdf ];
 
   buildInputs = [
     expat

@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchurl, jre_headless, makeWrapper, testers }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  jre_headless,
+  makeWrapper,
+  testers,
+}:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "flyway";

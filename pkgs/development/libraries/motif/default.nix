@@ -1,9 +1,24 @@
-{ lib, stdenv, fetchurl, fetchpatch, pkg-config, libtool
-, xbitmaps, libXext, libXft, libXrender, libXmu, libXt
-, expat, libjpeg, libpng, libiconv
-, flex
-, libXp, libXau
-, demoSupport ? false
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  pkg-config,
+  libtool,
+  xbitmaps,
+  libXext,
+  libXft,
+  libXrender,
+  libXmu,
+  libXt,
+  expat,
+  libjpeg,
+  libpng,
+  libiconv,
+  flex,
+  libXp,
+  libXau,
+  demoSupport ? false,
 }:
 # refer to the gentoo package
 
@@ -18,13 +33,27 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libtool
-    xbitmaps libXext libXft libXrender libXmu libXt
-    expat libjpeg libpng libiconv
+    xbitmaps
+    libXext
+    libXft
+    libXrender
+    libXmu
+    libXt
+    expat
+    libjpeg
+    libpng
+    libiconv
   ];
 
-  nativeBuildInputs = [ pkg-config flex ];
+  nativeBuildInputs = [
+    pkg-config
+    flex
+  ];
 
-  propagatedBuildInputs = [ libXp libXau ];
+  propagatedBuildInputs = [
+    libXp
+    libXau
+  ];
 
   postPatch = lib.optionalString (!demoSupport) ''
     sed 's/\<demos\>//' -i Makefile.{am,in}

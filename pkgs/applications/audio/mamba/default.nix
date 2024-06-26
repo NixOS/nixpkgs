@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, xxd
-, cairo
-, fluidsynth
-, libX11
-, libjack2
-, alsa-lib
-, liblo
-, libsigcxx
-, libsmf
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  xxd,
+  cairo,
+  fluidsynth,
+  libX11,
+  libjack2,
+  alsa-lib,
+  liblo,
+  libsigcxx,
+  libsmf,
 }:
 
 stdenv.mkDerivation rec {
@@ -25,8 +26,20 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ pkg-config xxd ];
-  buildInputs = [ cairo fluidsynth libX11 libjack2 alsa-lib liblo libsigcxx libsmf ];
+  nativeBuildInputs = [
+    pkg-config
+    xxd
+  ];
+  buildInputs = [
+    cairo
+    fluidsynth
+    libX11
+    libjack2
+    alsa-lib
+    liblo
+    libsigcxx
+    libsmf
+  ];
 
   makeFlags = [ "PREFIX=$(out)" ];
 
@@ -36,7 +49,10 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/brummer10/Mamba";
     description = "Virtual MIDI keyboard for Jack Audio Connection Kit";
     license = licenses.bsd0;
-    maintainers = with maintainers; [ magnetophon orivej ];
+    maintainers = with maintainers; [
+      magnetophon
+      orivej
+    ];
     platforms = platforms.linux;
   };
 }

@@ -1,17 +1,18 @@
-{ stdenv
-, lib
-, fetchurl
-, wrapQtAppsHook
-, dpkg
-, autoPatchelfHook
-, qtserialport
-, qtwebsockets
-, openssl
-, libredirect
-, makeWrapper
-, gzip
-, gnutar
-, nixosTests
+{
+  stdenv,
+  lib,
+  fetchurl,
+  wrapQtAppsHook,
+  dpkg,
+  autoPatchelfHook,
+  qtserialport,
+  qtwebsockets,
+  openssl,
+  libredirect,
+  makeWrapper,
+  gzip,
+  gnutar,
+  nixosTests,
 }:
 
 stdenv.mkDerivation rec {
@@ -23,9 +24,18 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-BE/apFPutNdhlS1NWRHdVcVrt/16aFfZ6zRcjphIlZA=";
   };
 
-  nativeBuildInputs = [ dpkg autoPatchelfHook makeWrapper wrapQtAppsHook ];
+  nativeBuildInputs = [
+    dpkg
+    autoPatchelfHook
+    makeWrapper
+    wrapQtAppsHook
+  ];
 
-  buildInputs = [ qtserialport qtwebsockets openssl ];
+  buildInputs = [
+    qtserialport
+    qtwebsockets
+    openssl
+  ];
 
   unpackPhase = ''
     runHook preUnpack
@@ -61,14 +71,21 @@ stdenv.mkDerivation rec {
         wrapProgram "$p" \
             --set LD_PRELOAD "${libredirect}/lib/libredirect.so" \
             --set NIX_REDIRECTS "/usr/share=$out/share:/usr/bin=$out/bin" \
-            --prefix PATH : "${lib.makeBinPath [ gzip gnutar ]}"
+            --prefix PATH : "${
+              lib.makeBinPath [
+                gzip
+                gnutar
+              ]
+            }"
     done
 
     runHook postInstall
   '';
 
   passthru = {
-    tests = { inherit (nixosTests) deconz; };
+    tests = {
+      inherit (nixosTests) deconz;
+    };
   };
 
   meta = with lib; {

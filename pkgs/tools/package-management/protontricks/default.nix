@@ -1,18 +1,19 @@
-{ lib
-, buildPythonApplication
-, fetchFromGitHub
-, setuptools-scm
-, setuptools
-, vdf
-, pillow
-, substituteAll
-, writeShellScript
-, steam-run
-, winetricks
-, yad
-, pytestCheckHook
-, nix-update-script
-, extraCompatPaths ? ""
+{
+  lib,
+  buildPythonApplication,
+  fetchFromGitHub,
+  setuptools-scm,
+  setuptools,
+  vdf,
+  pillow,
+  substituteAll,
+  writeShellScript,
+  steam-run,
+  winetricks,
+  yad,
+  pytestCheckHook,
+  nix-update-script,
+  extraCompatPaths ? "",
 }:
 
 buildPythonApplication rec {
@@ -45,14 +46,18 @@ buildPythonApplication rec {
     pillow
   ];
 
-  makeWrapperArgs = [
-    "--prefix PATH : ${lib.makeBinPath [
-      winetricks
-      yad
-    ]}"
-    # Steam Runtime does not work outside of steam-run, so don't use it
-    "--set STEAM_RUNTIME 0"
-  ] ++ lib.optional (extraCompatPaths != "") "--set STEAM_EXTRA_COMPAT_TOOLS_PATHS ${extraCompatPaths}";
+  makeWrapperArgs =
+    [
+      "--prefix PATH : ${
+        lib.makeBinPath [
+          winetricks
+          yad
+        ]
+      }"
+      # Steam Runtime does not work outside of steam-run, so don't use it
+      "--set STEAM_RUNTIME 0"
+    ]
+    ++ lib.optional (extraCompatPaths != "") "--set STEAM_EXTRA_COMPAT_TOOLS_PATHS ${extraCompatPaths}";
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -71,6 +76,9 @@ buildPythonApplication rec {
     homepage = "https://github.com/Matoking/protontricks";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ kira-bruneau ];
-    platforms = [ "x86_64-linux" "i686-linux" ];
+    platforms = [
+      "x86_64-linux"
+      "i686-linux"
+    ];
   };
 }

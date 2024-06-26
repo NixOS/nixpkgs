@@ -1,6 +1,14 @@
-{ lib, ocaml, fetchurl, buildDunePackage
-, eqaf
-, alcotest, astring, bos, findlib, fpath
+{
+  lib,
+  ocaml,
+  fetchurl,
+  buildDunePackage,
+  eqaf,
+  alcotest,
+  astring,
+  bos,
+  findlib,
+  fpath,
 }:
 
 buildDunePackage rec {
@@ -17,7 +25,12 @@ buildDunePackage rec {
 
   propagatedBuildInputs = [ eqaf ];
 
-  checkInputs = [ alcotest astring bos fpath ];
+  checkInputs = [
+    alcotest
+    astring
+    bos
+    fpath
+  ];
   doCheck = true;
 
   postCheck = ''

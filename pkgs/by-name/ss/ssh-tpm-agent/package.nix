@@ -1,7 +1,8 @@
-{ lib
-, buildGo122Module
-, fetchFromGitHub
-, openssl
+{
+  lib,
+  buildGo122Module,
+  fetchFromGitHub,
+  openssl,
 }:
 
 buildGo122Module rec {
@@ -19,9 +20,7 @@ buildGo122Module rec {
 
   vendorHash = "sha256-zUAIesBeuh1zlxXcjKSNmMawZGgUr9z3NzT0XKn/YCQ=";
 
-  buildInputs = [
-    openssl
-  ];
+  buildInputs = [ openssl ];
 
   meta = with lib; {
     description = "SSH agent with support for TPM sealed keys for public key authentication";

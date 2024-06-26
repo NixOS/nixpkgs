@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchpatch
-, nixosTests
-, python3
-, fetchPypi
-, radicale3
+{
+  lib,
+  stdenv,
+  fetchpatch,
+  nixosTests,
+  python3,
+  fetchPypi,
+  radicale3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -24,18 +25,21 @@ python3.pkgs.buildPythonApplication rec {
     })
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
-    appdirs
-    etebase
-    etesync
-    flask
-    flask-wtf
-    msgpack
-    setuptools
-    (python.pkgs.toPythonModule (radicale3.override { python3 = python; }))
-    requests
-    types-setuptools
-  ] ++ requests.optional-dependencies.socks;
+  propagatedBuildInputs =
+    with python3.pkgs;
+    [
+      appdirs
+      etebase
+      etesync
+      flask
+      flask-wtf
+      msgpack
+      setuptools
+      (python.pkgs.toPythonModule (radicale3.override { python3 = python; }))
+      requests
+      types-setuptools
+    ]
+    ++ requests.optional-dependencies.socks;
 
   doCheck = false;
 
@@ -48,7 +52,10 @@ python3.pkgs.buildPythonApplication rec {
     description = "Secure, end-to-end encrypted, and privacy respecting sync for contacts, calendars and tasks";
     mainProgram = "etesync-dav";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ thyol valodim ];
+    maintainers = with maintainers; [
+      thyol
+      valodim
+    ];
     broken = stdenv.isDarwin; # pyobjc-framework-Cocoa is missing
   };
 }

@@ -1,7 +1,8 @@
-{ lib
-, buildDotnetModule
-, fetchFromGitHub
-, dotnetCorePackages
+{
+  lib,
+  buildDotnetModule,
+  fetchFromGitHub,
+  dotnetCorePackages,
 }:
 
 buildDotnetModule rec {
@@ -29,9 +30,7 @@ buildDotnetModule rec {
     "-p:PublishSingleFile=true"
   ];
 
-  patches = [
-    ./0001-display-the-message-of-caught-exceptions.patch
-  ];
+  patches = [ ./0001-display-the-message-of-caught-exceptions.patch ];
 
   postInstall = "rm $out/lib/torrentstream/NuGet.config"; # reduce closure size
 

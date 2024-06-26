@@ -1,22 +1,23 @@
-{ lib
-, callPackage
-, fetchFromGitHub
-, fetchPypi
-, fetchpatch
-, python3Packages
+{
+  lib,
+  callPackage,
+  fetchFromGitHub,
+  fetchPypi,
+  fetchpatch,
+  python3Packages,
 }:
 /*
-** To customize the enabled beets plugins, use the pluginOverrides input to the
-** derivation.
-** Examples:
-**
-** Disabling a builtin plugin:
-** beets.override { pluginOverrides = { beatport.enable = false; }; }
-**
-** Enabling an external plugin:
-** beets.override { pluginOverrides = {
-**   alternatives = { enable = true; propagatedBuildInputs = [ beetsPackages.alternatives ]; };
-** }; }
+  ** To customize the enabled beets plugins, use the pluginOverrides input to the
+  ** derivation.
+  ** Examples:
+  **
+  ** Disabling a builtin plugin:
+  ** beets.override { pluginOverrides = { beatport.enable = false; }; }
+  **
+  ** Enabling an external plugin:
+  ** beets.override { pluginOverrides = {
+  **   alternatives = { enable = true; propagatedBuildInputs = [ beetsPackages.alternatives ]; };
+  ** }; }
 */
 lib.makeExtensible (self: {
   beets = self.beets-stable;

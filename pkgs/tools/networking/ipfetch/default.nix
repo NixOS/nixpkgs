@@ -1,4 +1,11 @@
-{ stdenv, lib, fetchFromGitHub, bash, wget, makeWrapper }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  bash,
+  wget,
+  makeWrapper,
+}:
 
 stdenv.mkDerivation rec {
   pname = "ipfetch";
@@ -12,7 +19,10 @@ stdenv.mkDerivation rec {
   };
 
   strictDeps = true;
-  buildInputs = [ bash wget ];
+  buildInputs = [
+    bash
+    wget
+  ];
   nativeBuildInputs = [ makeWrapper ];
   postPatch = ''
     patchShebangs --host ipfetch
@@ -25,7 +35,10 @@ stdenv.mkDerivation rec {
     cp -r flags $out/usr/share/ipfetch/
     cp ipfetch $out/bin/ipfetch
     wrapProgram $out/bin/ipfetch --prefix PATH : ${
-      lib.makeBinPath [ bash wget ]
+      lib.makeBinPath [
+        bash
+        wget
+      ]
     }
   '';
 

@@ -1,15 +1,16 @@
-{ lib
-, stdenv
-, fetchgit
-, libxml2
-, libxslt
-, docbook-xsl
-, docbook_xml_dtd_44
-, perlPackages
-, makeWrapper
-, perl # for pod2man
-, darwin
-, gitUpdater
+{
+  lib,
+  stdenv,
+  fetchgit,
+  libxml2,
+  libxslt,
+  docbook-xsl,
+  docbook_xml_dtd_44,
+  perlPackages,
+  makeWrapper,
+  perl, # for pod2man
+  darwin,
+  gitUpdater,
 }:
 
 stdenv.mkDerivation rec {
@@ -27,10 +28,22 @@ stdenv.mkDerivation rec {
   '';
 
   strictDeps = true;
-  nativeBuildInputs = [ makeWrapper perl libxml2 libxslt docbook-xsl docbook_xml_dtd_44 ];
+  nativeBuildInputs = [
+    makeWrapper
+    perl
+    libxml2
+    libxslt
+    docbook-xsl
+    docbook_xml_dtd_44
+  ];
   buildInputs = lib.optional stdenv.isDarwin darwin.cctools;
 
-  propagatedBuildInputs = with perlPackages; [ perl IPCRun TimeDate TimeDuration ];
+  propagatedBuildInputs = with perlPackages; [
+    perl
+    IPCRun
+    TimeDate
+    TimeDuration
+  ];
 
   buildFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
   installFlags = [ "PREFIX=$(out)" ];
@@ -48,7 +61,10 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Growing collection of the unix tools that nobody thought to write long ago when unix was young";
     homepage = "https://joeyh.name/code/moreutils/";
-    maintainers = with maintainers; [ koral pSub ];
+    maintainers = with maintainers; [
+      koral
+      pSub
+    ];
     platforms = platforms.all;
     license = licenses.gpl2Plus;
   };

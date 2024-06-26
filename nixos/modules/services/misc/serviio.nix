@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -22,7 +27,8 @@ let
     exec ${pkgs.jre}/bin/java -Xmx512M -Xms20M -XX:+UseG1GC -XX:GCTimeRatio=1 -XX:MinHeapFreeRatio=10 -XX:MaxHeapFreeRatio=20 $JAVA_OPTS -classpath "$SERVIIO_CLASS_PATH" org.serviio.MediaServer "$@"
   '';
 
-in {
+in
+{
 
   ###### interface
   options = {
@@ -63,19 +69,19 @@ in {
       };
     };
 
-    users.users.serviio =
-      { group = "serviio";
-        home = cfg.dataDir;
-        description = "Serviio Media Server User";
-        createHome = true;
-        isSystemUser = true;
-      };
+    users.users.serviio = {
+      group = "serviio";
+      home = cfg.dataDir;
+      description = "Serviio Media Server User";
+      createHome = true;
+      isSystemUser = true;
+    };
 
     users.groups.serviio = { };
 
     networking.firewall = {
       allowedTCPPorts = [
-        8895  # serve UPnP responses
+        8895 # serve UPnP responses
         23423 # console
         23424 # mediabrowser
       ];

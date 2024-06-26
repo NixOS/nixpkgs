@@ -1,11 +1,20 @@
-{ stdenv, lib, fetchgit, buildGoModule, zlib, makeWrapper, xcodeenv, androidenv
-, xcodeWrapperArgs ? { }
-, xcodeWrapper ? xcodeenv.composeXcodeWrapper xcodeWrapperArgs
-, withAndroidPkgs ? true
-, androidPkgs ? androidenv.composeAndroidPackages {
+{
+  stdenv,
+  lib,
+  fetchgit,
+  buildGoModule,
+  zlib,
+  makeWrapper,
+  xcodeenv,
+  androidenv,
+  xcodeWrapperArgs ? { },
+  xcodeWrapper ? xcodeenv.composeXcodeWrapper xcodeWrapperArgs,
+  withAndroidPkgs ? true,
+  androidPkgs ? androidenv.composeAndroidPackages {
     includeNDK = true;
     ndkVersion = "22.1.7171670";
-  } }:
+  },
+}:
 
 buildGoModule {
   pname = "gomobile";
@@ -20,13 +29,16 @@ buildGoModule {
     sha256 = "sha256-AOR/p+DW83f2+BOxm2rFXBCrotcIyunK3UzQ/dnauWY=";
   };
 
-  subPackages = [ "bind" "cmd/gobind" "cmd/gomobile" ];
+  subPackages = [
+    "bind"
+    "cmd/gobind"
+    "cmd/gomobile"
+  ];
 
   # Fails with: go: cannot find GOROOT directory
   doCheck = false;
 
-  nativeBuildInputs = [ makeWrapper ]
-    ++ lib.optionals stdenv.isDarwin [ xcodeWrapper ];
+  nativeBuildInputs = [ makeWrapper ] ++ lib.optionals stdenv.isDarwin [ xcodeWrapper ];
 
   # Prevent a non-deterministic temporary directory from polluting the resulting object files
   postPatch = ''
@@ -44,17 +56,20 @@ buildGoModule {
     ln -s $src $out/src/golang.org/x/mobile
   '';
 
-  postFixup = ''
-    for bin in $(ls $out/bin); do
-      wrapProgram $out/bin/$bin \
-        --suffix GOPATH : $out \
-  '' + lib.optionalString withAndroidPkgs ''
-        --prefix PATH : "${androidPkgs.androidsdk}/bin" \
-        --set-default ANDROID_HOME "${androidPkgs.androidsdk}/libexec/android-sdk" \
-  '' + ''
-        --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ zlib ]}"
-    done
-  '';
+  postFixup =
+    ''
+      for bin in $(ls $out/bin); do
+        wrapProgram $out/bin/$bin \
+          --suffix GOPATH : $out \
+    ''
+    + lib.optionalString withAndroidPkgs ''
+      --prefix PATH : "${androidPkgs.androidsdk}/bin" \
+      --set-default ANDROID_HOME "${androidPkgs.androidsdk}/libexec/android-sdk" \
+    ''
+    + ''
+          --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ zlib ]}"
+      done
+    '';
 
   meta = with lib; {
     description = "Tool for building and running mobile apps written in Go";

@@ -1,4 +1,8 @@
-{ buildDotnetGlobalTool, dotnetCorePackages, lib }:
+{
+  buildDotnetGlobalTool,
+  dotnetCorePackages,
+  lib,
+}:
 
 buildDotnetGlobalTool {
   pname = "csharprepl";

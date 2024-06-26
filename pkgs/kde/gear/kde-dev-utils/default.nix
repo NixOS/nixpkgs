@@ -1,9 +1,6 @@
-{
-  mkKdeDerivation,
-  qttools,
-}:
+{ mkKdeDerivation, qttools }:
 mkKdeDerivation {
   pname = "kde-dev-utils";
 
-  extraBuildInputs = [qttools];
+  extraBuildInputs = [ qttools ];
 }

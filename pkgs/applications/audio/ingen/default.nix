@@ -1,10 +1,25 @@
-{ lib, stdenv, fetchgit, boost, ganv, glibmm, gtkmm2, libjack2, lilv
-, lv2, pkg-config, python3, raul, serd, sord, sratom
-, wafHook
-, suil
+{
+  lib,
+  stdenv,
+  fetchgit,
+  boost,
+  ganv,
+  glibmm,
+  gtkmm2,
+  libjack2,
+  lilv,
+  lv2,
+  pkg-config,
+  python3,
+  raul,
+  serd,
+  sord,
+  sratom,
+  wafHook,
+  suil,
 }:
 
-stdenv.mkDerivation  rec {
+stdenv.mkDerivation rec {
   pname = "ingen";
   version = "unstable-2019-12-09";
   name = "${pname}-${version}";
@@ -16,10 +31,26 @@ stdenv.mkDerivation  rec {
     deepClone = true;
   };
 
-  nativeBuildInputs = [ pkg-config wafHook python3 python3.pkgs.wrapPython ];
+  nativeBuildInputs = [
+    pkg-config
+    wafHook
+    python3
+    python3.pkgs.wrapPython
+  ];
   buildInputs = [
-    boost ganv glibmm gtkmm2 libjack2 lilv lv2
-    python3 raul serd sord sratom suil
+    boost
+    ganv
+    glibmm
+    gtkmm2
+    libjack2
+    lilv
+    lv2
+    python3
+    raul
+    serd
+    sord
+    sratom
+    suil
   ];
 
   strictDeps = true;

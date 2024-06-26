@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -6,7 +11,8 @@ let
 
   cfg = config.services.fstrim;
 
-in {
+in
+{
 
   options = {
 
@@ -34,7 +40,10 @@ in {
 
     systemd.timers.fstrim = {
       timerConfig = {
-        OnCalendar = [ "" cfg.interval ];
+        OnCalendar = [
+          ""
+          cfg.interval
+        ];
       };
       wantedBy = [ "timers.target" ];
     };

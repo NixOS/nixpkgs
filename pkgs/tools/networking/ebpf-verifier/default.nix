@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, boost
-, cmake
-, catch2
-, pkg-config
-, substituteAll
-, yaml-cpp
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  boost,
+  cmake,
+  catch2,
+  pkg-config,
+  substituteAll,
+  yaml-cpp,
 }:
 
 stdenv.mkDerivation {

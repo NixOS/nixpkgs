@@ -1,10 +1,11 @@
-{ lib
-, fetchFromGitHub
-, python3Packages
-, nixosTests
-, testers
-, sqlite3-to-mysql
-, mysql80
+{
+  lib,
+  fetchFromGitHub,
+  python3Packages,
+  nixosTests,
+  testers,
+  sqlite3-to-mysql,
+  mysql80,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -42,9 +43,7 @@ python3Packages.buildPythonApplication rec {
     mysql80
   ];
 
-  pythonRelaxDeps = [
-    "mysql-connector-python"
-  ];
+  pythonRelaxDeps = [ "mysql-connector-python" ];
 
   # tests require a mysql server instance
   doCheck = false;

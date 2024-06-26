@@ -1,32 +1,38 @@
-{ stdenv
-, lib
-, perl
-, pkg-config
-, curl
-, nix
-, libsodium
-, boost
-, autoreconfHook
-, autoconf-archive
-, nlohmann_json
-, xz
-, Security
-, meson
-, ninja
-, bzip2
+{
+  stdenv,
+  lib,
+  perl,
+  pkg-config,
+  curl,
+  nix,
+  libsodium,
+  boost,
+  autoreconfHook,
+  autoconf-archive,
+  nlohmann_json,
+  xz,
+  Security,
+  meson,
+  ninja,
+  bzip2,
 }:
 
 let
   atLeast223 = lib.versionAtLeast nix.version "2.23";
 
-  mkConfigureOption = { mesonOption, autoconfOption, value }:
+  mkConfigureOption =
+    {
+      mesonOption,
+      autoconfOption,
+      value,
+    }:
     let
-      setFlagTo = if atLeast223
-        then lib.mesonOption mesonOption
-        else lib.withFeatureAs true autoconfOption;
+      setFlagTo =
+        if atLeast223 then lib.mesonOption mesonOption else lib.withFeatureAs true autoconfOption;
     in
     setFlagTo value;
-in stdenv.mkDerivation (finalAttrs: {
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "nix-perl";
   inherit (nix) version src;
 
@@ -45,24 +51,29 @@ in stdenv.mkDerivation (finalAttrs: {
   # Not cross-safe since Nix checks for curl/perl via
   # NEED_PROG/find_program, but both seem to be needed at runtime
   # as well.
-  nativeBuildInputs = [
-    pkg-config
-    perl
-    curl
-  ] ++ (if atLeast223 then [
-    meson
-    ninja
-  ] else [
-    autoconf-archive
-    autoreconfHook
-  ]);
+  nativeBuildInputs =
+    [
+      pkg-config
+      perl
+      curl
+    ]
+    ++ (
+      if atLeast223 then
+        [
+          meson
+          ninja
+        ]
+      else
+        [
+          autoconf-archive
+          autoreconfHook
+        ]
+    );
 
   # `perlPackages.Test2Harness` is marked broken for Darwin
   doCheck = !stdenv.isDarwin;
 
-  nativeCheckInputs = [
-    perl.pkgs.Test2Harness
-  ];
+  nativeCheckInputs = [ perl.pkgs.Test2Harness ];
 
   ${if atLeast223 then "mesonFlags" else "configureFlags"} = [
     (mkConfigureOption {
@@ -75,9 +86,7 @@ in stdenv.mkDerivation (finalAttrs: {
       autoconfOption = "dbd-sqlite";
       value = "${perl.pkgs.DBDSQLite}/${perl.libPrefix}";
     })
-  ] ++ lib.optionals atLeast223 [
-    (lib.mesonEnable "tests" finalAttrs.doCheck)
-  ];
+  ] ++ lib.optionals atLeast223 [ (lib.mesonEnable "tests" finalAttrs.doCheck) ];
 
   preConfigure = "export NIX_STATE_DIR=$TMPDIR";
 })

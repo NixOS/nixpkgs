@@ -1,9 +1,11 @@
-{ lib
-, stdenv
-, cmake
-, darwin
-, fetchFromGitHub
-, withBlas ? true, blas
+{
+  lib,
+  stdenv,
+  cmake,
+  darwin,
+  fetchFromGitHub,
+  withBlas ? true,
+  blas,
 }:
 
 stdenv.mkDerivation rec {
@@ -19,17 +21,15 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  nativeBuildInputs = [
-    cmake
-  ];
+  nativeBuildInputs = [ cmake ];
 
-  buildInputs = lib.optionals withBlas [
-    blas
-  ] ++ lib.optionals (withBlas && stdenv.isDarwin) [
-    darwin.apple_sdk.frameworks.Accelerate
-    darwin.apple_sdk.frameworks.CoreGraphics
-    darwin.apple_sdk.frameworks.CoreVideo
-  ];
+  buildInputs =
+    lib.optionals withBlas [ blas ]
+    ++ lib.optionals (withBlas && stdenv.isDarwin) [
+      darwin.apple_sdk.frameworks.Accelerate
+      darwin.apple_sdk.frameworks.CoreGraphics
+      darwin.apple_sdk.frameworks.CoreVideo
+    ];
 
   cmakeFlags = [
     "-DUSE_BLAS=${if withBlas then "ON" else "OFF"}"

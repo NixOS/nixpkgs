@@ -1,4 +1,10 @@
-{ lib, stdenv, zig, libyuv, fetchFromGitHub }:
+{
+  lib,
+  stdenv,
+  zig,
+  libyuv,
+  fetchFromGitHub,
+}:
 stdenv.mkDerivation (finalAttrs: {
   pname = "backlight-auto";
   version = "0.0.1";
@@ -10,13 +16,9 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-QPymwlDrgKM/SXDzJdmfzWLSLU2D7egif1OIUE+SHoI=";
   };
 
-  nativeBuildInputs = [
-    zig.hook
-  ];
+  nativeBuildInputs = [ zig.hook ];
 
-  buildInputs = [
-    libyuv
-  ];
+  buildInputs = [ libyuv ];
 
   meta = with lib; {
     description = "Automatically set screen brightness with a webcam";

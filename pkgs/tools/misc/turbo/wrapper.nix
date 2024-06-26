@@ -1,5 +1,11 @@
-{ lib, symlinkJoin, makeWrapper, turbo-unwrapped
-, disableTelemetry ? true, disableUpdateNotifier ? true }:
+{
+  lib,
+  symlinkJoin,
+  makeWrapper,
+  turbo-unwrapped,
+  disableTelemetry ? true,
+  disableUpdateNotifier ? true,
+}:
 
 symlinkJoin {
   pname = "turbo";

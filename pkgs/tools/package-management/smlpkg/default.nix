@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, mlton, unzip }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  mlton,
+  unzip,
+}:
 
 stdenv.mkDerivation rec {
   pname = "smlpkg";
@@ -18,8 +24,8 @@ stdenv.mkDerivation rec {
   # Set as an environment variable in all the phase scripts.
   MLCOMP = "mlton";
 
-  buildFlags = ["all"];
-  installFlags = ["prefix=$(out)"];
+  buildFlags = [ "all" ];
+  installFlags = [ "prefix=$(out)" ];
 
   doCheck = true;
 

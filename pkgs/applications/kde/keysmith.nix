@@ -1,15 +1,16 @@
-{ lib
-, mkDerivation
+{
+  lib,
+  mkDerivation,
 
-, cmake
-, extra-cmake-modules
+  cmake,
+  extra-cmake-modules,
 
-, kdbusaddons
-, ki18n
-, kirigami2
-, kwindowsystem
-, libsodium
-, qtquickcontrols2
+  kdbusaddons,
+  ki18n,
+  kirigami2,
+  kwindowsystem,
+  libsodium,
+  qtquickcontrols2,
 }:
 
 mkDerivation rec {

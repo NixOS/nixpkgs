@@ -1,8 +1,9 @@
-{ lib
-, fetchurl
-, buildDunePackage
-, alcotest
-, mdx
+{
+  lib,
+  fetchurl,
+  buildDunePackage,
+  alcotest,
+  mdx,
 }:
 
 buildDunePackage rec {
@@ -23,9 +24,7 @@ buildDunePackage rec {
     mdx
   ];
 
-  nativeCheckInputs = [
-    mdx.bin
-  ];
+  nativeCheckInputs = [ mdx.bin ];
 
   meta = {
     homepage = "https://github.com/ocaml-multicore/ocaml-${pname}";

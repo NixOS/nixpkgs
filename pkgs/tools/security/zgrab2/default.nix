@@ -1,6 +1,7 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
 
 buildGoModule rec {
@@ -23,15 +24,19 @@ buildGoModule rec {
     ./fix-go-version-error.patch
   ];
 
-  subPackages = [
-    "cmd/zgrab2"
-  ];
+  subPackages = [ "cmd/zgrab2" ];
 
   meta = with lib; {
     description = "Web application scanner";
     mainProgram = "zgrab2";
     homepage = "https://github.com/zmap/zgrab2";
-    license = with licenses; [ asl20 isc ];
-    maintainers = with maintainers; [ fab juliusrickert ];
+    license = with licenses; [
+      asl20
+      isc
+    ];
+    maintainers = with maintainers; [
+      fab
+      juliusrickert
+    ];
   };
 }

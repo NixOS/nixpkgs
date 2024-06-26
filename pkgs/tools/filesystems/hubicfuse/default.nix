@@ -1,4 +1,16 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, pkg-config, curl, openssl, fuse, libxml2, json_c, file }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  pkg-config,
+  curl,
+  openssl,
+  fuse,
+  libxml2,
+  json_c,
+  file,
+}:
 
 stdenv.mkDerivation rec {
   pname = "hubicfuse";
@@ -27,7 +39,14 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ curl openssl fuse libxml2 json_c file ];
+  buildInputs = [
+    curl
+    openssl
+    fuse
+    libxml2
+    json_c
+    file
+  ];
   postInstall = ''
     install hubic_token $out/bin
     mkdir -p $out/sbin

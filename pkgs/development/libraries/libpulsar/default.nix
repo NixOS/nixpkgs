@@ -1,25 +1,26 @@
-{ lib
-, asioSupport ? true
-, asio
-, boost180
-, log4cxxSupport ? false
-, log4cxx
-, snappySupport ? false
-, snappy
-, zlibSupport ? true
-, zlib
-, zstdSupport ? true
-, zstd
-, gtest
-, gtestSupport ? false
-, cmake
-, curl
-, fetchFromGitHub
-, protobuf
-, jsoncpp
-, openssl
-, pkg-config
-, stdenv
+{
+  lib,
+  asioSupport ? true,
+  asio,
+  boost180,
+  log4cxxSupport ? false,
+  log4cxx,
+  snappySupport ? false,
+  snappy,
+  zlibSupport ? true,
+  zlib,
+  zstdSupport ? true,
+  zstd,
+  gtest,
+  gtestSupport ? false,
+  cmake,
+  curl,
+  fetchFromGitHub,
+  protobuf,
+  jsoncpp,
+  openssl,
+  pkg-config,
+  stdenv,
 }:
 
 let
@@ -35,7 +36,8 @@ let
   */
   enableCmakeFeature = p: if (p == null || p == false) then "OFF" else "ON";
 
-  defaultOptionals = [ protobuf ]
+  defaultOptionals =
+    [ protobuf ]
     ++ lib.optional snappySupport snappy.dev
     ++ lib.optional zlibSupport zlib
     ++ lib.optional zstdSupport zstd
@@ -55,12 +57,16 @@ stdenv.mkDerivation (finalAttrs: rec {
     hash = "sha256-BSDkF0MAc54N59t7ozMLof0of4sURL3qiksLZhb+6I8=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config ]
-    ++ defaultOptionals
-    ++ lib.optional gtestSupport gtest.dev;
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ] ++ defaultOptionals ++ lib.optional gtestSupport gtest.dev;
 
-  buildInputs = [ jsoncpp openssl curl ]
-    ++ defaultOptionals;
+  buildInputs = [
+    jsoncpp
+    openssl
+    curl
+  ] ++ defaultOptionals;
 
   cmakeFlags = [
     "-DBUILD_TESTS=${enableCmakeFeature gtestSupport}"
@@ -86,6 +92,9 @@ stdenv.mkDerivation (finalAttrs: rec {
     changelog = "https://github.com/apache/pulsar-client-cpp/releases/tag/v${version}";
     platforms = platforms.all;
     license = licenses.asl20;
-    maintainers = with maintainers; [ corbanr gaelreyrol ];
+    maintainers = with maintainers; [
+      corbanr
+      gaelreyrol
+    ];
   };
 })

@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, SDL2
-, SDL2_mixer
-, cmake
-, libpng
-, darwin
-, libicns
-, imagemagick
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  SDL2,
+  SDL2_mixer,
+  cmake,
+  libpng,
+  darwin,
+  libicns,
+  imagemagick,
 }:
 stdenv.mkDerivation rec {
   pname = "julius";
@@ -26,21 +27,19 @@ stdenv.mkDerivation rec {
     ./darwin-fixes.patch
   ];
 
-  nativeBuildInputs = [
-    cmake
-  ] ++ lib.optionals stdenv.isDarwin [
-    darwin.sigtool
-    libicns
-    imagemagick
-  ];
+  nativeBuildInputs =
+    [ cmake ]
+    ++ lib.optionals stdenv.isDarwin [
+      darwin.sigtool
+      libicns
+      imagemagick
+    ];
 
   buildInputs = [
     SDL2
     SDL2_mixer
     libpng
-  ] ++ lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.Cocoa
-  ];
+  ] ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Cocoa ];
 
   installPhase = lib.optionalString stdenv.isDarwin ''
     runHook preInstall
@@ -54,7 +53,10 @@ stdenv.mkDerivation rec {
     description = "Open source re-implementation of Caesar III";
     mainProgram = "julius";
     license = licenses.agpl3Only;
-    maintainers = with maintainers; [ Thra11 matteopacini ];
+    maintainers = with maintainers; [
+      Thra11
+      matteopacini
+    ];
     platforms = platforms.all;
   };
 }

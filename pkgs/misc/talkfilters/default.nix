@@ -1,4 +1,8 @@
-{ lib, stdenv, fetchurl }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 
 let
   pname = "talkfilters";
@@ -23,4 +27,3 @@ stdenv.mkDerivation {
     platforms = with lib.platforms; unix;
   };
 }
-

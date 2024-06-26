@@ -1,13 +1,33 @@
-{ stdenv, lib, fetchurl, pkg-config, gtk3, itstool, gst_all_1, libxml2, libnotify
-, libcanberra-gtk3, intltool, dvdauthor, libburn, libisofs
-, vcdimager, wrapGAppsHook3, hicolor-icon-theme }:
+{
+  stdenv,
+  lib,
+  fetchurl,
+  pkg-config,
+  gtk3,
+  itstool,
+  gst_all_1,
+  libxml2,
+  libnotify,
+  libcanberra-gtk3,
+  intltool,
+  dvdauthor,
+  libburn,
+  libisofs,
+  vcdimager,
+  wrapGAppsHook3,
+  hicolor-icon-theme,
+}:
 
 let
   major = "3.12";
   minor = "3";
-  binpath = lib.makeBinPath [ dvdauthor vcdimager ];
+  binpath = lib.makeBinPath [
+    dvdauthor
+    vcdimager
+  ];
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   version = "${major}.${minor}";
   pname = "brasero";
 
@@ -16,13 +36,28 @@ in stdenv.mkDerivation rec {
     hash = "sha256-h3SerjOhQSB9GwC+IzttgEWYLtMkntS5ja4fOpdf6hU=";
   };
 
-  nativeBuildInputs = [ pkg-config itstool intltool wrapGAppsHook3 ];
+  nativeBuildInputs = [
+    pkg-config
+    itstool
+    intltool
+    wrapGAppsHook3
+  ];
 
-  buildInputs = [ gtk3 libxml2 libnotify libcanberra-gtk3 libburn libisofs
-                  hicolor-icon-theme
-                  gst_all_1.gstreamer gst_all_1.gst-plugins-base
-                  gst_all_1.gst-plugins-good gst_all_1.gst-plugins-bad
-                  gst_all_1.gst-plugins-ugly gst_all_1.gst-libav ];
+  buildInputs = [
+    gtk3
+    libxml2
+    libnotify
+    libcanberra-gtk3
+    libburn
+    libisofs
+    hicolor-icon-theme
+    gst_all_1.gstreamer
+    gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-good
+    gst_all_1.gst-plugins-bad
+    gst_all_1.gst-plugins-ugly
+    gst_all_1.gst-libav
+  ];
 
   # brasero checks that the applications it uses aren't symlinks, but this
   # will obviously not work on nix

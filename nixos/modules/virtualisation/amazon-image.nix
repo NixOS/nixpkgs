@@ -4,7 +4,12 @@
 # also to reconfigure instances. However, we can't rename it because
 # existing "configuration.nix" files on EC2 instances refer to it.)
 
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -46,18 +51,22 @@ in
 
     boot.zfs.devNodes = mkIf cfg.zfs.enable "/dev/";
 
-    boot.extraModulePackages = [
-      config.boot.kernelPackages.ena
-    ];
+    boot.extraModulePackages = [ config.boot.kernelPackages.ena ];
     boot.initrd.kernelModules = [ "xen-blkfront" ];
     boot.initrd.availableKernelModules = [ "nvme" ];
-    boot.kernelParams = [ "console=ttyS0,115200n8" "random.trust_cpu=on" ];
+    boot.kernelParams = [
+      "console=ttyS0,115200n8"
+      "random.trust_cpu=on"
+    ];
 
     # Prevent the nouveau kernel module from being loaded, as it
     # interferes with the nvidia/nvidia-uvm modules needed for CUDA.
     # Also blacklist xen_fbfront to prevent a 30 second delay during
     # boot.
-    boot.blacklistedKernelModules = [ "nouveau" "xen_fbfront" ];
+    boot.blacklistedKernelModules = [
+      "nouveau"
+      "xen_fbfront"
+    ];
 
     boot.loader.grub.device = if cfg.efi then "nodev" else "/dev/xvda";
     boot.loader.grub.efiSupport = cfg.efi;
@@ -72,7 +81,7 @@ in
     systemd.services.fetch-ec2-metadata = {
       wantedBy = [ "multi-user.target" ];
       wants = [ "network-online.target" ];
-      after = ["network-online.target"];
+      after = [ "network-online.target" ];
       path = [ pkgs.curl ];
       script = builtins.readFile ./ec2-metadata-fetcher.sh;
       serviceConfig.Type = "oneshot";

@@ -1,7 +1,8 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, ncurses
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  ncurses,
 }:
 
 stdenv.mkDerivation {
@@ -15,17 +16,13 @@ stdenv.mkDerivation {
     sha256 = "sha256-zWYXpvEnViT/8gsdMU9Ymi4Hw+nwkG6FT/3h5sNMCE4=";
   };
 
-  buildInputs = [
-    ncurses
-  ];
+  buildInputs = [ ncurses ];
 
   preBuild = ''
     cd build
   '';
 
-  makeFlags = [
-    "CC=${stdenv.cc.targetPrefix}c++"
-  ];
+  makeFlags = [ "CC=${stdenv.cc.targetPrefix}c++" ];
 
   installPhase = ''
     install -D SoliCurses.out $out/bin/solicurses

@@ -1,4 +1,5 @@
-{ fetchFromGitLab }: rec {
+{ fetchFromGitLab }:
+rec {
 
   pname = "mobilizon";
   version = "4.1.0";

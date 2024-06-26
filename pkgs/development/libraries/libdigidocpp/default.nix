@@ -1,23 +1,54 @@
-{ lib, stdenv, fetchurl, cmake, minizip, pcsclite, opensc, openssl
-, xercesc, xml-security-c, pkg-config, xsd, zlib, xalanc, xxd }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cmake,
+  minizip,
+  pcsclite,
+  opensc,
+  openssl,
+  xercesc,
+  xml-security-c,
+  pkg-config,
+  xsd,
+  zlib,
+  xalanc,
+  xxd,
+}:
 
 stdenv.mkDerivation rec {
   version = "3.17.1";
   pname = "libdigidocpp";
 
   src = fetchurl {
-     url = "https://github.com/open-eid/libdigidocpp/releases/download/v${version}/libdigidocpp-${version}.tar.gz";
-     hash = "sha256-3qDsIAOiWMZDj2zLE+Os7BoeCPeC4JQ6p8jSBd7PdV0=";
+    url = "https://github.com/open-eid/libdigidocpp/releases/download/v${version}/libdigidocpp-${version}.tar.gz";
+    hash = "sha256-3qDsIAOiWMZDj2zLE+Os7BoeCPeC4JQ6p8jSBd7PdV0=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config xxd ];
-
-  buildInputs = [
-    minizip pcsclite opensc openssl xercesc
-    xml-security-c xsd zlib xalanc
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    xxd
   ];
 
-  outputs = [ "out" "lib" "dev" "bin" ];
+  buildInputs = [
+    minizip
+    pcsclite
+    opensc
+    openssl
+    xercesc
+    xml-security-c
+    xsd
+    zlib
+    xalanc
+  ];
+
+  outputs = [
+    "out"
+    "lib"
+    "dev"
+    "bin"
+  ];
 
   # libdigidocpp.so's `PKCS11Signer::PKCS11Signer()` dlopen()s "opensc-pkcs11.so"
   # itself, so add OpenSC to its DT_RUNPATH after the fixupPhase shrinked it.

@@ -1,18 +1,41 @@
-{ stdenv, lib, fetchurl, pkg-config, texinfo, libiconv, gdbm, openssl, zlib
-, mbedtls, cacert }:
+{
+  stdenv,
+  lib,
+  fetchurl,
+  pkg-config,
+  texinfo,
+  libiconv,
+  gdbm,
+  openssl,
+  zlib,
+  mbedtls,
+  cacert,
+}:
 
 stdenv.mkDerivation rec {
   pname = "gauche-bootstrap";
   version = "0.9.12";
 
   src = fetchurl {
-    url = "https://github.com/shirok/Gauche/releases/download/release${lib.replaceStrings ["."] ["_"] version}/Gauche-${version}.tgz";
+    url = "https://github.com/shirok/Gauche/releases/download/release${
+      lib.replaceStrings [ "." ] [ "_" ] version
+    }/Gauche-${version}.tgz";
     hash = "sha256-tK5kkhsHqWZhaV69WqwN7IE9GmjlRqYWCRE9eEP1thc=";
   };
 
-  nativeBuildInputs = [ pkg-config texinfo ];
+  nativeBuildInputs = [
+    pkg-config
+    texinfo
+  ];
 
-  buildInputs = [ libiconv gdbm openssl zlib mbedtls cacert ];
+  buildInputs = [
+    libiconv
+    gdbm
+    openssl
+    zlib
+    mbedtls
+    cacert
+  ];
 
   postPatch = ''
     patchShebangs .

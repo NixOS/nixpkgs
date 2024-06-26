@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, fuse
-, fuse3
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  fuse,
+  fuse3,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -15,9 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-wLBg6Uw6IxodSqC88mb/GJmBpO845C++IylqfYFxm3o=";
   };
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = if stdenv.isDarwin then [ fuse ] else [ fuse3 ];
 
@@ -30,7 +29,10 @@ stdenv.mkDerivation (finalAttrs: {
     description = "FUSE filesystem for mounting a directory to another location";
     homepage = "https://bindfs.org";
     license = lib.licenses.gpl2Only;
-    maintainers = with lib.maintainers; [ lovek323 lovesegfault ];
+    maintainers = with lib.maintainers; [
+      lovek323
+      lovesegfault
+    ];
     platforms = lib.platforms.unix;
     broken = stdenv.isDarwin; # last successful build 2023-11-17
   };

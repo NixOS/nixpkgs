@@ -1,8 +1,9 @@
-{ lib
-, buildPythonApplication
-, fetchFromGitHub
-, gitMinimal
-, python3
+{
+  lib,
+  buildPythonApplication,
+  fetchFromGitHub,
+  gitMinimal,
+  python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -37,16 +38,17 @@ python3.pkgs.buildPythonApplication rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "gitlint"
-  ];
+  pythonImportsCheck = [ "gitlint" ];
 
   meta = with lib; {
     description = "Linting for your git commit messages";
     homepage = "https://jorisroovers.com/gitlint/";
     changelog = "https://github.com/jorisroovers/gitlint/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ ethancedwards8 fab ];
+    maintainers = with maintainers; [
+      ethancedwards8
+      fab
+    ];
     mainProgram = "gitlint";
   };
 }

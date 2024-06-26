@@ -1,25 +1,26 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, intltool
-, itstool
-, libxml2
-, gtk3
-, openssl
-, gnome
-, gobject-introspection
-, vala
-, libgee
-, fetchpatch
-, autoreconfHook
-, gtk-doc
-, autoconf-archive
-, yelp-tools
-, mysqlSupport ? false
-, libmysqlclient
-, postgresSupport ? false
-, postgresql
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  intltool,
+  itstool,
+  libxml2,
+  gtk3,
+  openssl,
+  gnome,
+  gobject-introspection,
+  vala,
+  libgee,
+  fetchpatch,
+  autoreconfHook,
+  gtk-doc,
+  autoconf-archive,
+  yelp-tools,
+  mysqlSupport ? false,
+  libmysqlclient,
+  postgresSupport ? false,
+  postgresql,
 }:
 
 stdenv.mkDerivation rec {
@@ -60,15 +61,9 @@ stdenv.mkDerivation rec {
     gtk3
     openssl
     libgee
-  ] ++ lib.optionals mysqlSupport [
-    libmysqlclient
-  ] ++ lib.optionals postgresSupport [
-    postgresql
-  ];
+  ] ++ lib.optionals mysqlSupport [ libmysqlclient ] ++ lib.optionals postgresSupport [ postgresql ];
 
-  propagatedBuildInputs = [
-    libxml2
-  ];
+  propagatedBuildInputs = [ libxml2 ];
 
   configureFlags = [
     "--with-mysql=${if mysqlSupport then "yes" else "no"}"

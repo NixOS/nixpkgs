@@ -1,4 +1,11 @@
-{ stdenv, lib, buildPackages, buildGoModule, fetchFromGitHub, installShellFiles }:
+{
+  stdenv,
+  lib,
+  buildPackages,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+}:
 
 buildGoModule rec {
   pname = "stern";
@@ -17,11 +24,16 @@ buildGoModule rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  ldflags = [ "-s" "-w" "-X github.com/stern/stern/cmd.version=${version}" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X github.com/stern/stern/cmd.version=${version}"
+  ];
 
-  postInstall = let
-    stern = if stdenv.buildPlatform.canExecute stdenv.hostPlatform then "$out" else buildPackages.stern;
-  in
+  postInstall =
+    let
+      stern = if stdenv.buildPlatform.canExecute stdenv.hostPlatform then "$out" else buildPackages.stern;
+    in
     ''
       for shell in bash zsh fish; do
         ${stern}/bin/stern --completion $shell > stern.$shell
@@ -34,6 +46,9 @@ buildGoModule rec {
     mainProgram = "stern";
     homepage = "https://github.com/stern/stern";
     license = licenses.asl20;
-    maintainers = with maintainers; [ mbode preisschild ];
+    maintainers = with maintainers; [
+      mbode
+      preisschild
+    ];
   };
 }

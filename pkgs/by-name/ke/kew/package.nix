@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, ffmpeg
-, fftwFloat
-, chafa
-, freeimage
-, glib
-, pkg-config
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  ffmpeg,
+  fftwFloat,
+  chafa,
+  freeimage,
+  glib,
+  pkg-config,
 }:
 
 stdenv.mkDerivation rec {
@@ -21,7 +22,13 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ ffmpeg freeimage fftwFloat chafa glib ];
+  buildInputs = [
+    ffmpeg
+    freeimage
+    fftwFloat
+    chafa
+    glib
+  ];
 
   installFlags = [
     "MAN_DIR=${placeholder "out"}/share/man"

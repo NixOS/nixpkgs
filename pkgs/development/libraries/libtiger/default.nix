@@ -1,5 +1,13 @@
-{ stdenv, lib, fetchurl, autoreconfHook, pkg-config
-, libkate, pango, cairo, darwin
+{
+  stdenv,
+  lib,
+  fetchurl,
+  autoreconfHook,
+  pkg-config,
+  libkate,
+  pango,
+  cairo,
+  darwin,
 }:
 
 stdenv.mkDerivation rec {
@@ -11,17 +19,21 @@ stdenv.mkDerivation rec {
     sha256 = "0rj1bmr9kngrgbxrjbn4f4f9pww0wmf6viflinq7ava7zdav4hkk";
   };
 
-  patches = [
-    ./pkg-config.patch
-  ];
+  patches = [ ./pkg-config.patch ];
 
   postPatch = ''
     substituteInPlace configure.ac --replace "-Werror" "-Wno-error"
   '';
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
-  buildInputs = [ libkate pango cairo ]
-    ++ lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.ApplicationServices;
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ];
+  buildInputs = [
+    libkate
+    pango
+    cairo
+  ] ++ lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.ApplicationServices;
 
   meta = {
     homepage = "https://code.google.com/archive/p/libtiger/";

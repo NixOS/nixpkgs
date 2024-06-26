@@ -1,6 +1,4 @@
-{ trivialBuild
-, haskellPackages
-}:
+{ trivialBuild, haskellPackages }:
 let
   Agda = haskellPackages.Agda.bin;
 in
@@ -26,4 +24,3 @@ trivialBuild {
     '';
   };
 }
-

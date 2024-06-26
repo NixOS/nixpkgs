@@ -1,21 +1,27 @@
-{ lib, stdenv
-, fetchgit
-, fetchpatch
-, pkg-config
-, glib
-, icu
-, gobject-introspection
-, dbus-glib
-, vala
-, python3
-, autoreconfHook
+{
+  lib,
+  stdenv,
+  fetchgit,
+  fetchpatch,
+  pkg-config,
+  glib,
+  icu,
+  gobject-introspection,
+  dbus-glib,
+  vala,
+  python3,
+  autoreconfHook,
 }:
 
 stdenv.mkDerivation rec {
   pname = "dee";
   version = "unstable-2017-06-16";
 
-  outputs = [ "out" "dev" "py" ];
+  outputs = [
+    "out"
+    "dev"
+    "py"
+  ];
 
   src = fetchgit {
     url = "https://git.launchpad.net/ubuntu/+source/dee";

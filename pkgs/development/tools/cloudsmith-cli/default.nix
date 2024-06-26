@@ -1,7 +1,8 @@
-{ lib
-, python3
-, fetchFromGitHub
-, fetchpatch
+{
+  lib,
+  python3,
+  fetchFromGitHub,
+  fetchpatch,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -21,16 +22,12 @@ python3.pkgs.buildPythonApplication rec {
     (fetchpatch {
       url = "https://github.com/cloudsmith-io/cloudsmith-cli/commit/1a8d2d91c01320537b26778003735d6b694141c2.patch";
       revert = true;
-      includes = [
-        "cloudsmith_cli/core/rest.py"
-      ];
+      includes = [ "cloudsmith_cli/core/rest.py" ];
       hash = "sha256-Rf3MMJuLr8fzkRqSftIJ1eUbgNdfrng2V609jYvpogc=";
     })
   ];
 
-  nativeBuildInputs = with python3.pkgs; [
-    pip
-  ];
+  nativeBuildInputs = with python3.pkgs; [ pip ];
 
   propagatedBuildInputs = with python3.pkgs; [
     click
@@ -53,13 +50,9 @@ python3.pkgs.buildPythonApplication rec {
     pytest-cov
   ];
 
-  checkInputs = with python3.pkgs; [
-    httpretty
-  ];
+  checkInputs = with python3.pkgs; [ httpretty ];
 
-  pythonImportsCheck = [
-    "cloudsmith_cli"
-  ];
+  pythonImportsCheck = [ "cloudsmith_cli" ];
 
   postPatch = ''
     # Permit urllib3 2.0

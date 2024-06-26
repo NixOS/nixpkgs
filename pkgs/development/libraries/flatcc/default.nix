@@ -1,6 +1,8 @@
-{ lib, stdenv
-, fetchFromGitHub
-, cmake
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
 }:
 
 stdenv.mkDerivation rec {
@@ -16,9 +18,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  cmakeFlags = [
-    "-DFLATCC_INSTALL=on"
-  ];
+  cmakeFlags = [ "-DFLATCC_INSTALL=on" ];
 
   env.NIX_CFLAGS_COMPILE = toString [
     "-Wno-error=misleading-indentation"

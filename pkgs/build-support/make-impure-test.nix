@@ -1,4 +1,5 @@
-/* Create tests that run in the nix sandbox with additional access to selected host paths
+/*
+  Create tests that run in the nix sandbox with additional access to selected host paths
 
   This is for example useful for testing hardware where a tests needs access to
   /sys and optionally more.
@@ -28,58 +29,62 @@
   Rerun an already cached test:
     $(nix-build -A mypackage.impureTests) --check
 */
-{ lib
-, stdenv
-, writeShellScript
+{
+  lib,
+  stdenv,
+  writeShellScript,
 
-, name
-, testedPackage ? null
-, testPath ? "${testedPackage}.impureTests.${name}.testDerivation"
-, sandboxPaths ? [ "/sys" ]
-, prepareRunCommands ? ""
-, nixFlags ? [ ]
-, testScript
-, ...
-} @ args:
+  name,
+  testedPackage ? null,
+  testPath ? "${testedPackage}.impureTests.${name}.testDerivation",
+  sandboxPaths ? [ "/sys" ],
+  prepareRunCommands ? "",
+  nixFlags ? [ ],
+  testScript,
+  ...
+}@args:
 
 let
   sandboxPathsTests = builtins.map (path: "[[ ! -e '${path}' ]]") sandboxPaths;
   sandboxPathsTest = lib.concatStringsSep " || " sandboxPathsTests;
   sandboxPathsList = lib.concatStringsSep " " sandboxPaths;
 
-  testDerivation = stdenv.mkDerivation (lib.recursiveUpdate
-    {
-      name = "test-run-${name}";
+  testDerivation = stdenv.mkDerivation (
+    lib.recursiveUpdate
+      {
+        name = "test-run-${name}";
 
-      requiredSystemFeatures = [ "nixos-test" ];
+        requiredSystemFeatures = [ "nixos-test" ];
 
-      buildCommand = ''
-        mkdir -p $out
+        buildCommand = ''
+          mkdir -p $out
 
-        if ${sandboxPathsTest}; then
-          echo 'Run this test as *root* with `--option extra-sandbox-paths '"'${sandboxPathsList}'"'`'
-          exit 1
-        fi
+          if ${sandboxPathsTest}; then
+            echo 'Run this test as *root* with `--option extra-sandbox-paths '"'${sandboxPathsList}'"'`'
+            exit 1
+          fi
 
-        # Run test
-        ${testScript}
-      '';
+          # Run test
+          ${testScript}
+        '';
 
-      passthru.runScript = runScript;
-    }
-    (builtins.removeAttrs args [
-      "lib"
-      "stdenv"
-      "writeShellScript"
+        passthru.runScript = runScript;
+      }
+      (
+        builtins.removeAttrs args [
+          "lib"
+          "stdenv"
+          "writeShellScript"
 
-      "name"
-      "testedPackage"
-      "testPath"
-      "sandboxPaths"
-      "prepareRunCommands"
-      "nixFlags"
-      "testScript"
-    ])
+          "name"
+          "testedPackage"
+          "testPath"
+          "sandboxPaths"
+          "prepareRunCommands"
+          "nixFlags"
+          "testScript"
+        ]
+      )
   );
 
   runScript = writeShellScript "run-script-${name}" ''
@@ -92,5 +97,7 @@ let
 in
 # The main output is the run script, inject the derivation for the actual test
 runScript.overrideAttrs (old: {
-  passthru = { inherit testDerivation; };
+  passthru = {
+    inherit testDerivation;
+  };
 })

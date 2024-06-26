@@ -1,5 +1,11 @@
-{ lib, fetchFromGitHub, makeDesktopItem, copyDesktopItems, makeWrapper
-, jre, maven
+{
+  lib,
+  fetchFromGitHub,
+  makeDesktopItem,
+  copyDesktopItems,
+  makeWrapper,
+  jre,
+  maven,
 }:
 
 let
@@ -15,10 +21,17 @@ let
     comment = "Easy-to-use digital logic designer and circuit simulator";
     exec = pname;
     icon = pname;
-    categories = [ "Education" "Electronics" ];
+    categories = [
+      "Education"
+      "Electronics"
+    ];
     mimeTypes = [ "text/x-digital" ];
     terminal = false;
-    keywords = [ "simulator" "digital" "circuits" ];
+    keywords = [
+      "simulator"
+      "digital"
+      "circuits"
+    ];
   };
 
   # Use the "no-git-rev" maven profile, which deactivates the plugin that
@@ -41,7 +54,10 @@ maven.buildMavenPackage rec {
   inherit mvnParameters;
   mvnHash = "sha256-wm/axWJucoW9P98dKqHI4bjrUnmBTfosCOdJg9VBJ+4=";
 
-  nativeBuildInputs = [ copyDesktopItems makeWrapper ];
+  nativeBuildInputs = [
+    copyDesktopItems
+    makeWrapper
+  ];
 
   installPhase = ''
     runHook preInstall
@@ -71,7 +87,10 @@ maven.buildMavenPackage rec {
     description = pkgDescription;
     mainProgram = "digital";
     license = licenses.gpl3Only;
-    platforms = [ "x86_64-linux" "x86_64-darwin" ];
+    platforms = [
+      "x86_64-linux"
+      "x86_64-darwin"
+    ];
     maintainers = with maintainers; [ Dettorer ];
   };
 }

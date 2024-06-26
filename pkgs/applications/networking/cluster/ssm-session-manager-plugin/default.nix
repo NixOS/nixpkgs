@@ -1,6 +1,7 @@
-{ lib
-, fetchFromGitHub
-, buildGoPackage
+{
+  lib,
+  fetchFromGitHub,
+  buildGoPackage,
 }:
 
 buildGoPackage rec {
@@ -50,6 +51,9 @@ buildGoPackage rec {
     description = "Amazon SSM Session Manager Plugin";
     mainProgram = "session-manager-plugin";
     license = licenses.asl20;
-    maintainers = with maintainers; [ amarshall mbaillie ];
+    maintainers = with maintainers; [
+      amarshall
+      mbaillie
+    ];
   };
 }

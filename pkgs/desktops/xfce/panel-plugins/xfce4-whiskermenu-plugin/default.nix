@@ -1,17 +1,18 @@
-{ mkXfceDerivation
-, lib
-, cmake
-, accountsservice
-, exo
-, garcon
-, gettext
-, glib
-, gtk-layer-shell
-, gtk3
-, libxfce4ui
-, libxfce4util
-, xfce4-panel
-, xfconf
+{
+  mkXfceDerivation,
+  lib,
+  cmake,
+  accountsservice,
+  exo,
+  garcon,
+  gettext,
+  glib,
+  gtk-layer-shell,
+  gtk3,
+  libxfce4ui,
+  libxfce4util,
+  xfce4-panel,
+  xfconf,
 }:
 
 mkXfceDerivation {
@@ -22,9 +23,7 @@ mkXfceDerivation {
   odd-unstable = false;
   sha256 = "sha256-xRLvjRu/I+wsTWXUhrJUcrQz+JkZCYqoJSqYAYOztgg=";
 
-  nativeBuildInputs = [
-    cmake
-  ];
+  nativeBuildInputs = [ cmake ];
 
   buildInputs = [
     accountsservice

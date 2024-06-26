@@ -1,6 +1,7 @@
-{ lib
-, python3Packages
-, fetchFromGitHub
+{
+  lib,
+  python3Packages,
+  fetchFromGitHub,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -32,23 +33,16 @@ python3Packages.buildPythonApplication rec {
   ];
 
   passthru.optional-dependencies = {
-    silerovad = with python3Packages; [
-      pysilero-vad
-    ];
-    webrtc = with python3Packages; [
-      webrtc-noise-gain
-    ];
+    silerovad = with python3Packages; [ pysilero-vad ];
+    webrtc = with python3Packages; [ webrtc-noise-gain ];
   };
 
-  pythonImportsCheck = [
-    "wyoming_satellite"
-  ];
+  pythonImportsCheck = [ "wyoming_satellite" ];
 
   nativeCheckInputs = with python3Packages; [
     pytest-asyncio
     pytestCheckHook
   ];
-
 
   meta = with lib; {
     description = "Remote voice satellite using Wyoming protocol";

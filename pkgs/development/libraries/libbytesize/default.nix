@@ -1,17 +1,18 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, docbook_xml_dtd_43
-, docbook_xsl
-, gettext
-, gmp
-, gtk-doc
-, libxslt
-, mpfr
-, pcre2
-, pkg-config
-, python3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  docbook_xml_dtd_43,
+  docbook_xsl,
+  gettext,
+  gmp,
+  gtk-doc,
+  libxslt,
+  mpfr,
+  pcre2,
+  pkg-config,
+  python3,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -25,7 +26,12 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-IPBoYcnSQ1/ws3mzPUXxgbetZkXRWrGhtakXaVVFb6U=";
   };
 
-  outputs = [ "out" "dev" "devdoc" "man" ];
+  outputs = [
+    "out"
+    "dev"
+    "devdoc"
+    "man"
+  ];
 
   nativeBuildInputs = [
     autoreconfHook

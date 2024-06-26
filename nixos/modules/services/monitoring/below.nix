@@ -1,29 +1,44 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 with lib;
 let
   cfg = config.services.below;
   cfgContents = concatStringsSep "\n" (
-    mapAttrsToList (n: v: ''${n} = "${v}"'') (filterAttrs (_k: v: v != null) {
-      log_dir = cfg.dirs.log;
-      store_dir = cfg.dirs.store;
-      cgroup_filter_out = cfg.cgroupFilterOut;
-    })
+    mapAttrsToList (n: v: ''${n} = "${v}"'') (
+      filterAttrs (_k: v: v != null) {
+        log_dir = cfg.dirs.log;
+        store_dir = cfg.dirs.store;
+        cgroup_filter_out = cfg.cgroupFilterOut;
+      }
+    )
   );
 
-  mkDisableOption = n: mkOption {
-    type = types.bool;
-    default = true;
-    description = "Whether to enable ${n}.";
-  };
-  optionalType = ty: x: mkOption (x // {
-    description = x.description;
-    type = (types.nullOr ty);
-    default = null;
-  });
+  mkDisableOption =
+    n:
+    mkOption {
+      type = types.bool;
+      default = true;
+      description = "Whether to enable ${n}.";
+    };
+  optionalType =
+    ty: x:
+    mkOption (
+      x
+      // {
+        description = x.description;
+        type = (types.nullOr ty);
+        default = null;
+      }
+    );
   optionalPath = optionalType types.path;
   optionalStr = optionalType types.str;
   optionalInt = optionalType types.int;
-in {
+in
+{
   options = {
     services.below = {
       enable = mkEnableOption "'below' resource monitor";
@@ -34,7 +49,7 @@ in {
       };
       collect = {
         diskStats = mkDisableOption "dist_stat collection";
-        ioStats   = mkEnableOption "io.stat collection for cgroups";
+        ioStats = mkEnableOption "io.stat collection for cgroups";
         exitStats = mkDisableOption "eBPF-based exitstats";
       };
       compression.enable = mkEnableOption "data compression";
@@ -90,15 +105,19 @@ in {
 
         serviceConfig.ExecStart = [
           ""
-          ("${lib.getExe pkgs.below} record " + (concatStringsSep " " (
-            optional (!cfg.collect.diskStats) "--disable-disk-stat" ++
-            optional   cfg.collect.ioStats    "--collect-io-stat"   ++
-            optional (!cfg.collect.exitStats) "--disable-exitstats" ++
-            optional   cfg.compression.enable "--compress"          ++
+          (
+            "${lib.getExe pkgs.below} record "
+            + (concatStringsSep " " (
+              optional (!cfg.collect.diskStats) "--disable-disk-stat"
+              ++ optional cfg.collect.ioStats "--collect-io-stat"
+              ++ optional (!cfg.collect.exitStats) "--disable-exitstats"
+              ++ optional cfg.compression.enable "--compress"
+              ++
 
-            optional (cfg.retention.size != null) "--store-size-limit ${toString cfg.retention.size}" ++
-            optional (cfg.retention.time != null) "--retain-for-s ${toString cfg.retention.time}"
-          )))
+                optional (cfg.retention.size != null) "--store-size-limit ${toString cfg.retention.size}"
+              ++ optional (cfg.retention.time != null) "--retain-for-s ${toString cfg.retention.time}"
+            ))
+          )
         ];
       };
     };

@@ -1,11 +1,12 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, libuv
-, libmicrohttpd
-, openssl
-, darwin
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  libuv,
+  libmicrohttpd,
+  openssl,
+  darwin,
 }:
 
 let
@@ -30,18 +31,18 @@ stdenv.mkDerivation rec {
       --replace "set(OPENSSL_USE_STATIC_LIBS TRUE)" "set(OPENSSL_USE_STATIC_LIBS FALSE)"
   '';
 
-  nativeBuildInputs = [
-    cmake
-  ];
+  nativeBuildInputs = [ cmake ];
 
-  buildInputs = [
-    libuv
-    libmicrohttpd
-    openssl
-  ] ++ lib.optionals stdenv.isDarwin [
-    CoreServices
-    IOKit
-  ];
+  buildInputs =
+    [
+      libuv
+      libmicrohttpd
+      openssl
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      CoreServices
+      IOKit
+    ];
 
   installPhase = ''
     runHook preInstall

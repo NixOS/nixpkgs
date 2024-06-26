@@ -1,15 +1,16 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rustPlatform
-, just
-, pkg-config
-, util-linuxMinimal
-, dbus
-, glib
-, libxkbcommon
-, pulseaudio
-, wayland
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  just,
+  pkg-config,
+  util-linuxMinimal,
+  dbus,
+  glib,
+  libxkbcommon,
+  pulseaudio,
+  wayland,
 }:
 
 rustPlatform.buildRustPackage {
@@ -44,29 +45,47 @@ rustPlatform.buildRustPackage {
     substituteInPlace justfile --replace '#!/usr/bin/env' "#!$(command -v env)"
   '';
 
-  nativeBuildInputs = [ just pkg-config util-linuxMinimal ];
-  buildInputs = [ dbus glib libxkbcommon pulseaudio wayland ];
+  nativeBuildInputs = [
+    just
+    pkg-config
+    util-linuxMinimal
+  ];
+  buildInputs = [
+    dbus
+    glib
+    libxkbcommon
+    pulseaudio
+    wayland
+  ];
 
   dontUseJustBuild = true;
 
   justFlags = [
-    "--set" "prefix" (placeholder "out")
-    "--set" "target" "${stdenv.hostPlatform.rust.cargoShortTarget}/release"
+    "--set"
+    "prefix"
+    (placeholder "out")
+    "--set"
+    "target"
+    "${stdenv.hostPlatform.rust.cargoShortTarget}/release"
   ];
 
   # Force linking to libwayland-client, which is always dlopen()ed.
   "CARGO_TARGET_${stdenv.hostPlatform.rust.cargoEnvVarTarget}_RUSTFLAGS" =
-    map (a: "-C link-arg=${a}") [
-      "-Wl,--push-state,--no-as-needed"
-      "-lwayland-client"
-      "-Wl,--pop-state"
-    ];
+    map (a: "-C link-arg=${a}")
+      [
+        "-Wl,--push-state,--no-as-needed"
+        "-lwayland-client"
+        "-Wl,--pop-state"
+      ];
 
   meta = with lib; {
     homepage = "https://github.com/pop-os/cosmic-applets";
     description = "Applets for the COSMIC Desktop Environment";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ qyliss nyanbinary ];
+    maintainers = with maintainers; [
+      qyliss
+      nyanbinary
+    ];
     platforms = platforms.linux;
   };
 }

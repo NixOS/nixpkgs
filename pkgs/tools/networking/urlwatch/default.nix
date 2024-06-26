@@ -1,7 +1,8 @@
-{ lib
-, fetchFromGitHub
-, fetchpatch
-, python3Packages
+{
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  python3Packages,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -49,6 +50,9 @@ python3Packages.buildPythonApplication rec {
     mainProgram = "urlwatch";
     homepage = "https://thp.io/2008/urlwatch/";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ kmein tv ];
+    maintainers = with maintainers; [
+      kmein
+      tv
+    ];
   };
 }

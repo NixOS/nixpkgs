@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, dbus
-, libX11
-, libusb1
-, pkg-config
-, udev
-, wayland
-, libxkbcommon
-, gtk3
-, libayatana-appindicator
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  dbus,
+  libX11,
+  libusb1,
+  pkg-config,
+  udev,
+  wayland,
+  libxkbcommon,
+  gtk3,
+  libayatana-appindicator,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -44,7 +45,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/houmain/keymapper";
     license = lib.licenses.gpl3Only;
     mainProgram = "keymapper";
-    maintainers = with lib.maintainers; [ dit7ya spitulax ];
+    maintainers = with lib.maintainers; [
+      dit7ya
+      spitulax
+    ];
     platforms = lib.platforms.linux;
   };
 })

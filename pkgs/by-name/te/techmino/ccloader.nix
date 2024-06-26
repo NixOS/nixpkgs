@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, libcoldclear
-, luajit
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  libcoldclear,
+  luajit,
 }:
 
 stdenv.mkDerivation rec {
@@ -16,7 +17,10 @@ stdenv.mkDerivation rec {
     hash = "sha256-zfTSMWqjFrAKW5m+9q3K2Je8bbSyhC6pC/vPAWDGCNg=";
   };
 
-  buildInputs = [ libcoldclear luajit ];
+  buildInputs = [
+    libcoldclear
+    luajit
+  ];
 
   buildPhase = ''
     runHook preBuild

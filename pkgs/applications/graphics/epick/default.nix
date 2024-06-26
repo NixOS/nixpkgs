@@ -1,15 +1,16 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, stdenv
-, pkg-config
-, expat
-, fontconfig
-, freetype
-, libGL
-, xorg
-, darwin
-, AppKit
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  stdenv,
+  pkg-config,
+  expat,
+  fontconfig,
+  freetype,
+  libGL,
+  xorg,
+  darwin,
+  AppKit,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -25,21 +26,19 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-OQZPOiMTpoWabxHa3TJG8L3zq8WxMeFttw8xggSXsMA=";
 
-  nativeBuildInputs = lib.optionals stdenv.isLinux [
-    pkg-config
-  ];
+  nativeBuildInputs = lib.optionals stdenv.isLinux [ pkg-config ];
 
-  buildInputs = lib.optionals stdenv.isLinux [
-    expat
-    fontconfig
-    freetype
-    xorg.libX11
-    xorg.libXcursor
-    xorg.libXi
-    xorg.libXrandr
-  ] ++ lib.optionals stdenv.isDarwin [
-    AppKit
-  ];
+  buildInputs =
+    lib.optionals stdenv.isLinux [
+      expat
+      fontconfig
+      freetype
+      xorg.libX11
+      xorg.libXcursor
+      xorg.libXi
+      xorg.libXrandr
+    ]
+    ++ lib.optionals stdenv.isDarwin [ AppKit ];
 
   postInstall = ''
     install -Dm444 assets/epick.desktop -t $out/share/applications

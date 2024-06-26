@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchurl, ppp } :
+{
+  lib,
+  stdenv,
+  fetchurl,
+  ppp,
+}:
 let
 in
 stdenv.mkDerivation rec {
@@ -17,7 +22,9 @@ stdenv.mkDerivation rec {
     export PPPD=${ppp}/sbin/pppd
   '';
 
-  configureFlags = lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [ "rpppoe_cv_pack_bitfields=rev" ];
+  configureFlags = lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    "rpppoe_cv_pack_bitfields=rev"
+  ];
 
   postConfigure = ''
     sed -i Makefile -e 's@DESTDIR)/etc/ppp@out)/etc/ppp@'

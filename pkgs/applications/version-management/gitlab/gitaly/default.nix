@@ -1,7 +1,8 @@
-{ lib
-, fetchFromGitLab
-, buildGoModule
-, pkg-config
+{
+  lib,
+  fetchFromGitLab,
+  buildGoModule,
+  pkg-config,
 }:
 
 let
@@ -22,7 +23,10 @@ let
 
     vendorHash = "sha256-WCZF7XVW6J1zyPx8e/Mcn+HmHElAUGcEICxiF5HLzBg=";
 
-    ldflags = [ "-X ${gitaly_package}/internal/version.version=${version}" "-X ${gitaly_package}/internal/version.moduleVersion=${version}" ];
+    ldflags = [
+      "-X ${gitaly_package}/internal/version.version=${version}"
+      "-X ${gitaly_package}/internal/version.moduleVersion=${version}"
+    ];
 
     tags = [ "static" ];
 
@@ -31,29 +35,43 @@ let
     doCheck = false;
   };
 
-  auxBins = buildGoModule ({
-    pname = "gitaly-aux";
+  auxBins = buildGoModule (
+    {
+      pname = "gitaly-aux";
 
-    subPackages = [ "cmd/gitaly-hooks" "cmd/gitaly-ssh" "cmd/gitaly-lfs-smudge" "cmd/gitaly-gpg" ];
-  } // commonOpts);
+      subPackages = [
+        "cmd/gitaly-hooks"
+        "cmd/gitaly-ssh"
+        "cmd/gitaly-lfs-smudge"
+        "cmd/gitaly-gpg"
+      ];
+    }
+    // commonOpts
+  );
 in
-buildGoModule ({
-  pname = "gitaly";
+buildGoModule (
+  {
+    pname = "gitaly";
 
-  subPackages = [ "cmd/gitaly" "cmd/gitaly-backup" ];
+    subPackages = [
+      "cmd/gitaly"
+      "cmd/gitaly-backup"
+    ];
 
-  preConfigure = ''
-    mkdir -p _build/bin
-    cp -r ${auxBins}/bin/* _build/bin
-  '';
+    preConfigure = ''
+      mkdir -p _build/bin
+      cp -r ${auxBins}/bin/* _build/bin
+    '';
 
-  outputs = [ "out" ];
+    outputs = [ "out" ];
 
-  meta = with lib; {
-    homepage = "https://gitlab.com/gitlab-org/gitaly";
-    description = "Git RPC service for handling all the git calls made by GitLab";
-    platforms = platforms.linux ++ [ "x86_64-darwin" ];
-    maintainers = teams.gitlab.members;
-    license = licenses.mit;
-  };
-} // commonOpts)
+    meta = with lib; {
+      homepage = "https://gitlab.com/gitlab-org/gitaly";
+      description = "Git RPC service for handling all the git calls made by GitLab";
+      platforms = platforms.linux ++ [ "x86_64-darwin" ];
+      maintainers = teams.gitlab.members;
+      license = licenses.mit;
+    };
+  }
+  // commonOpts
+)

@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, doctest
-, nlohmann_json
-, libuuid
-, xtl
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  doctest,
+  nlohmann_json,
+  libuuid,
+  xtl,
 }:
 
 stdenv.mkDerivation rec {
@@ -30,9 +31,7 @@ stdenv.mkDerivation rec {
     xtl
   ];
 
-  cmakeFlags = [
-    "-DXEUS_BUILD_TESTS=ON"
-  ];
+  cmakeFlags = [ "-DXEUS_BUILD_TESTS=ON" ];
 
   doCheck = true;
   preCheck = ''export LD_LIBRARY_PATH=$PWD'';

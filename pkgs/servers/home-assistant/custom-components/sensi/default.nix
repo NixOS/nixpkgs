@@ -16,9 +16,7 @@ buildHomeAssistantComponent rec {
     hash = "sha256-NbK9h0nvcWNSwsc04YgjqKl+InijxftPJ3SLCQF/Hns=";
   };
 
-  propagatedBuildInputs = [
-    websockets
-  ];
+  propagatedBuildInputs = [ websockets ];
 
   meta = with lib; {
     changelog = "https://github.com/iprak/sensi/releases/tag/v${version}";

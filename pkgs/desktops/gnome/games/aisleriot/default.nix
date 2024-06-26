@@ -1,19 +1,20 @@
-{ stdenv
-, lib
-, fetchFromGitLab
-, gitUpdater
-, pkg-config
-, itstool
-, gtk3
-, wrapGAppsHook3
-, meson
-, librsvg
-, libxml2
-, desktop-file-utils
-, guile
-, libcanberra-gtk3
-, ninja
-, yelp-tools
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  gitUpdater,
+  pkg-config,
+  itstool,
+  gtk3,
+  wrapGAppsHook3,
+  meson,
+  librsvg,
+  libxml2,
+  desktop-file-utils,
+  guile,
+  libcanberra-gtk3,
+  ninja,
+  yelp-tools,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -53,13 +54,10 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs src/lib/meson_compileschemas.py
   '';
 
-  mesonFlags = [
-    "-Dtheme_kde=false"
-  ];
+  mesonFlags = [ "-Dtheme_kde=false" ];
 
   passthru = {
-    updateScript = gitUpdater {
-    };
+    updateScript = gitUpdater { };
   };
 
   meta = with lib; {

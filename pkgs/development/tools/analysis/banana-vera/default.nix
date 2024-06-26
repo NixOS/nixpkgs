@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, python310
-, tcl
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  python310,
+  tcl,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

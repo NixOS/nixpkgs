@@ -1,12 +1,13 @@
-{ python3Packages
-, lib
-, fetchFromGitHub
-, makeDesktopItem
-, wrapGAppsHook3
-, gtk3
-, gobject-introspection
-, sox
-, pulseaudio
+{
+  python3Packages,
+  lib,
+  fetchFromGitHub,
+  makeDesktopItem,
+  wrapGAppsHook3,
+  gtk3,
+  gobject-introspection,
+  sox,
+  pulseaudio,
 }:
 let
   desktopItem = makeDesktopItem {
@@ -15,7 +16,10 @@ let
     icon = "${placeholder "out"}/share/lyrebird/icon.png";
     desktopName = "Lyrebird";
     genericName = "Voice Changer";
-    categories = [ "AudioVideo" "Audio" ];
+    categories = [
+      "AudioVideo"
+      "Audio"
+    ];
   };
 in
 python3Packages.buildPythonApplication rec {
@@ -32,15 +36,29 @@ python3Packages.buildPythonApplication rec {
     sha256 = "sha256-VIYcOxvSpzRvJMzEv2i5b7t0WMF7aQxB4Y1jfvuZN/Y=";
   };
 
-  propagatedBuildInputs = with python3Packages; [ toml pygobject3 ];
+  propagatedBuildInputs = with python3Packages; [
+    toml
+    pygobject3
+  ];
 
-  nativeBuildInputs = [ wrapGAppsHook3 gobject-introspection ];
+  nativeBuildInputs = [
+    wrapGAppsHook3
+    gobject-introspection
+  ];
 
-  buildInputs = [ gtk3 sox ];
+  buildInputs = [
+    gtk3
+    sox
+  ];
 
   dontWrapGApps = true;
   makeWrapperArgs = [
-    "--prefix 'PATH' ':' '${lib.makeBinPath [ sox pulseaudio ]}'"
+    "--prefix 'PATH' ':' '${
+      lib.makeBinPath [
+        sox
+        pulseaudio
+      ]
+    }'"
     "--prefix 'PYTHONPATH' ':' '${placeholder "out"}/share/lyrebird'"
     "--chdir '${placeholder "out"}/share/lyrebird'"
     ''"''${gappsWrapperArgs[@]}"''

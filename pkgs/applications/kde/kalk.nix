@@ -1,21 +1,22 @@
-{ lib
-, mkDerivation
+{
+  lib,
+  mkDerivation,
 
-, cmake
-, extra-cmake-modules
-, bison
-, flex
+  cmake,
+  extra-cmake-modules,
+  bison,
+  flex,
 
-, gmp
-, mpfr
+  gmp,
+  mpfr,
 
-, kconfig
-, kcoreaddons
-, ki18n
-, kirigami2
-, kunitconversion
-, qtfeedback
-, qtquickcontrols2
+  kconfig,
+  kcoreaddons,
+  ki18n,
+  kirigami2,
+  kunitconversion,
+  qtfeedback,
+  qtquickcontrols2,
 }:
 
 mkDerivation rec {

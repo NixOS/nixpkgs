@@ -1,4 +1,11 @@
-{ stdenv, lib, fetchFromGitHub, ant, jdk, stripJavaArchivesHook }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  ant,
+  jdk,
+  stripJavaArchivesHook,
+}:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "jna";
@@ -11,7 +18,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-a5l9khKLWfvTHv53utfbw344/UNQOnIU93+wZNQ0ji4=";
   };
 
-  nativeBuildInputs = [ ant jdk stripJavaArchivesHook ];
+  nativeBuildInputs = [
+    ant
+    jdk
+    stripJavaArchivesHook
+  ];
 
   buildPhase = ''
     runHook preBuild
@@ -30,7 +41,10 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/java-native-access/jna/blob/${finalAttrs.version}/CHANGES.md";
     description = "Java Native Access";
     homepage = "https://github.com/java-native-access/jna";
-    license = with licenses; [ lgpl21 asl20 ];
+    license = with licenses; [
+      lgpl21
+      asl20
+    ];
     maintainers = with maintainers; [ nagy ];
     platforms = platforms.linux ++ platforms.darwin;
   };

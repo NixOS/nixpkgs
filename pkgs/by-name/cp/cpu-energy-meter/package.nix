@@ -1,7 +1,8 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, libcap
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  libcap,
 }:
 stdenv.mkDerivation rec {
   pname = "cpu-energy-meter";

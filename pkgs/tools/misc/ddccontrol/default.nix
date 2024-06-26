@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, autoreconfHook
-, intltool
-, libxml2
-, pciutils
-, pkg-config
-, gtk2
-, ddccontrol-db
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  autoreconfHook,
+  intltool,
+  libxml2,
+  pciutils,
+  pkg-config,
+  gtk2,
+  ddccontrol-db,
 }:
 
 stdenv.mkDerivation rec {
@@ -43,9 +44,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  configureFlags = [
-    "--with-systemdsystemunitdir=${placeholder "out"}/etc/systemd/system"
-  ];
+  configureFlags = [ "--with-systemdsystemunitdir=${placeholder "out"}/etc/systemd/system" ];
 
   prePatch = ''
     substituteInPlace configure.ac              \

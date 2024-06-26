@@ -1,5 +1,15 @@
-{ lib, stdenv, fetchFromGitHub, makeWrapper
-, SDL2, gzip, libvorbis, libmad, vulkan-headers, vulkan-loader, moltenvk
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  makeWrapper,
+  SDL2,
+  gzip,
+  libvorbis,
+  libmad,
+  vulkan-headers,
+  vulkan-loader,
+  moltenvk,
 }:
 
 stdenv.mkDerivation rec {

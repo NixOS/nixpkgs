@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchurl, ncurses, libpcap, automake, nixosTests }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  ncurses,
+  libpcap,
+  automake,
+  nixosTests,
+}:
 
 stdenv.mkDerivation rec {
   pname = "iftop";
@@ -17,7 +25,10 @@ stdenv.mkDerivation rec {
     cp ${automake}/share/automake*/config.{sub,guess} config
   '';
 
-  buildInputs = [ncurses libpcap];
+  buildInputs = [
+    ncurses
+    libpcap
+  ];
 
   # Workaround build failure on -fno-common toolchains like upstream
   # gcc-10. Otherwise build fails as:
@@ -25,7 +36,9 @@ stdenv.mkDerivation rec {
   #     iftop.o:/build/iftop-1.0pre4/ui_common.h:41: first defined here
   env.NIX_CFLAGS_COMPILE = "-fcommon";
 
-  passthru.tests = { inherit (nixosTests) iftop; };
+  passthru.tests = {
+    inherit (nixosTests) iftop;
+  };
 
   meta = with lib; {
     description = "Display bandwidth usage on a network interface";

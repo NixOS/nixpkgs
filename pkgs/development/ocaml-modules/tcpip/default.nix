@@ -1,14 +1,35 @@
-{ lib, buildDunePackage, fetchurl
-, pkg-config
-, cstruct, cstruct-lwt, mirage-net, mirage-clock
-, mirage-random, mirage-time
-, macaddr, macaddr-cstruct, fmt
-, lwt, lwt-dllist, logs, duration, randomconv, ethernet
-, alcotest, mirage-flow, mirage-vnetif, pcap-format
-, mirage-clock-unix, arp, ipaddr-cstruct, mirage-random-test
-, lru, metrics
-, withFreestanding ? false
-, ocaml-freestanding
+{
+  lib,
+  buildDunePackage,
+  fetchurl,
+  pkg-config,
+  cstruct,
+  cstruct-lwt,
+  mirage-net,
+  mirage-clock,
+  mirage-random,
+  mirage-time,
+  macaddr,
+  macaddr-cstruct,
+  fmt,
+  lwt,
+  lwt-dllist,
+  logs,
+  duration,
+  randomconv,
+  ethernet,
+  alcotest,
+  mirage-flow,
+  mirage-vnetif,
+  pcap-format,
+  mirage-clock-unix,
+  arp,
+  ipaddr-cstruct,
+  mirage-random-test,
+  lru,
+  metrics,
+  withFreestanding ? false,
+  ocaml-freestanding,
 }:
 
 buildDunePackage rec {
@@ -20,9 +41,7 @@ buildDunePackage rec {
     hash = "sha256-NrTBVr4WcCukxteBotqLoUYrIjcNFVcOERYFbL8CUjM=";
   };
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
   propagatedBuildInputs = [
     cstruct
@@ -45,9 +64,7 @@ buildDunePackage rec {
     metrics
     arp
     mirage-flow
-  ] ++ lib.optionals withFreestanding [
-    ocaml-freestanding
-  ];
+  ] ++ lib.optionals withFreestanding [ ocaml-freestanding ];
 
   doCheck = true;
   checkInputs = [

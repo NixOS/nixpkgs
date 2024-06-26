@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, sqlite
-, gtest
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  sqlite,
+  gtest,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -17,9 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "sha256-8l1JRaE7w9vJ4bCSLGAk9zwYHDFeKkBi9pE5fUJfLRc=";
   };
 
-  nativeBuildInputs = [
-    cmake
-  ];
+  nativeBuildInputs = [ cmake ];
   buildInputs = [
     sqlite
     gtest
@@ -36,6 +35,9 @@ stdenv.mkDerivation (finalAttrs: {
     description = "C++ SQLite3 wrapper";
     license = licenses.mit;
     platforms = platforms.unix;
-    maintainers = [ maintainers.jbedo maintainers.doronbehar ];
+    maintainers = [
+      maintainers.jbedo
+      maintainers.doronbehar
+    ];
   };
 })

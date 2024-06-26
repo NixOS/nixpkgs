@@ -1,4 +1,11 @@
-{ lib, buildDunePackage, json-data-encoding, ocplib-endian, crowbar, alcotest }:
+{
+  lib,
+  buildDunePackage,
+  json-data-encoding,
+  ocplib-endian,
+  crowbar,
+  alcotest,
+}:
 
 buildDunePackage {
   pname = "json-data-encoding-bson";

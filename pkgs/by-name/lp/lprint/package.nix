@@ -1,7 +1,10 @@
-{ lib, stdenv, fetchFromGitHub
-, pappl
-, cups
-, pkg-config
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pappl,
+  cups,
+  pkg-config,
 }:
 
 stdenv.mkDerivation rec {
@@ -15,11 +18,12 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-1OOLGQ8S4oRNSJanX/AzJ+g5F+jYnE/+o+ie5ucY22U=";
   };
 
-  outputs = [ "out" "dev" ];
-
-  nativeBuildInputs = [
-    pkg-config
+  outputs = [
+    "out"
+    "dev"
   ];
+
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
     pappl

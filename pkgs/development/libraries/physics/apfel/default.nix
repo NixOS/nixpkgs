@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, gfortran
-, lhapdf
-, python3
-, swig
-, zlib
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  gfortran,
+  lhapdf,
+  python3,
+  swig,
+  zlib,
 }:
 
 stdenv.mkDerivation rec {

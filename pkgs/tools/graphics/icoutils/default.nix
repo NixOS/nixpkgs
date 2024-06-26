@@ -1,4 +1,14 @@
-{ lib, stdenv, fetchurl, fetchpatch, autoreconfHook, libpng, perl, perlPackages, makeWrapper }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  autoreconfHook,
+  libpng,
+  perl,
+  perlPackages,
+  makeWrapper,
+}:
 
 stdenv.mkDerivation rec {
   pname = "icoutils";
@@ -17,8 +27,14 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ autoreconfHook makeWrapper ];
-  buildInputs = [ libpng perl ];
+  nativeBuildInputs = [
+    autoreconfHook
+    makeWrapper
+  ];
+  buildInputs = [
+    libpng
+    perl
+  ];
   propagatedBuildInputs = [ perlPackages.LWP ];
 
   # Fixes a build failure on aarch64-darwin. Define for all Darwin targets for when x86_64-darwin

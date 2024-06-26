@@ -1,7 +1,8 @@
-{ lib
-, fetchFromGitea
-, pkg-config
-, python3
+{
+  lib,
+  fetchFromGitea,
+  pkg-config,
+  python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -34,13 +35,9 @@ python3.pkgs.buildPythonApplication rec {
     typing-extensions
   ];
 
-  nativeCheckInputs = with python3.pkgs; [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = with python3.pkgs; [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "poezio"
-  ];
+  pythonImportsCheck = [ "poezio" ];
 
   # remove poezio directory to prevent pytest import confusion
   preCheck = ''

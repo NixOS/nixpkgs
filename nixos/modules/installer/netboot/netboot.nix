@@ -1,7 +1,12 @@
 # This module creates netboot media containing the given NixOS
 # configuration.
 
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -9,12 +14,14 @@ with lib;
   options = {
 
     netboot.squashfsCompression = mkOption {
-      default = with pkgs.stdenv.hostPlatform; "xz -Xdict-size 100% "
-                + lib.optionalString isx86 "-Xbcj x86"
-                # Untested but should also reduce size for these platforms
-                + lib.optionalString isAarch "-Xbcj arm"
-                + lib.optionalString (isPower && is32bit && isBigEndian) "-Xbcj powerpc"
-                + lib.optionalString (isSparc) "-Xbcj sparc";
+      default =
+        with pkgs.stdenv.hostPlatform;
+        "xz -Xdict-size 100% "
+        + lib.optionalString isx86 "-Xbcj x86"
+        # Untested but should also reduce size for these platforms
+        + lib.optionalString isAarch "-Xbcj arm"
+        + lib.optionalString (isPower && is32bit && isBigEndian) "-Xbcj powerpc"
+        + lib.optionalString (isSparc) "-Xbcj sparc";
       description = ''
         Compression settings to use for the squashfs nix store.
       '';
@@ -37,43 +44,48 @@ with lib;
     # here and it causes a cyclic dependency.
     boot.loader.grub.enable = false;
 
-    fileSystems."/" = mkImageMediaOverride
-      { fsType = "tmpfs";
-        options = [ "mode=0755" ];
-      };
+    fileSystems."/" = mkImageMediaOverride {
+      fsType = "tmpfs";
+      options = [ "mode=0755" ];
+    };
 
     # In stage 1, mount a tmpfs on top of /nix/store (the squashfs
     # image) to make this a live CD.
-    fileSystems."/nix/.ro-store" = mkImageMediaOverride
-      { fsType = "squashfs";
-        device = "../nix-store.squashfs";
-        options = [ "loop" ];
-        neededForBoot = true;
+    fileSystems."/nix/.ro-store" = mkImageMediaOverride {
+      fsType = "squashfs";
+      device = "../nix-store.squashfs";
+      options = [ "loop" ];
+      neededForBoot = true;
+    };
+
+    fileSystems."/nix/.rw-store" = mkImageMediaOverride {
+      fsType = "tmpfs";
+      options = [ "mode=0755" ];
+      neededForBoot = true;
+    };
+
+    fileSystems."/nix/store" = mkImageMediaOverride {
+      overlay = {
+        lowerdir = [ "/nix/.ro-store" ];
+        upperdir = "/nix/.rw-store/store";
+        workdir = "/nix/.rw-store/work";
       };
+      neededForBoot = true;
+    };
 
-    fileSystems."/nix/.rw-store" = mkImageMediaOverride
-      { fsType = "tmpfs";
-        options = [ "mode=0755" ];
-        neededForBoot = true;
-      };
+    boot.initrd.availableKernelModules = [
+      "squashfs"
+      "overlay"
+    ];
 
-    fileSystems."/nix/store" = mkImageMediaOverride
-      { overlay = {
-          lowerdir = [ "/nix/.ro-store" ];
-          upperdir = "/nix/.rw-store/store";
-          workdir = "/nix/.rw-store/work";
-        };
-        neededForBoot = true;
-      };
-
-    boot.initrd.availableKernelModules = [ "squashfs" "overlay" ];
-
-    boot.initrd.kernelModules = [ "loop" "overlay" ];
+    boot.initrd.kernelModules = [
+      "loop"
+      "overlay"
+    ];
 
     # Closures to be copied to the Nix store, namely the init
     # script and the top-level system configuration directory.
-    netboot.storeContents =
-      [ config.system.build.toplevel ];
+    netboot.storeContents = [ config.system.build.toplevel ];
 
     # Create the squashfs image that contains the Nix store.
     system.build.squashfsStore = pkgs.callPackage ../../../lib/make-squashfs.nix {
@@ -81,17 +93,17 @@ with lib;
       comp = config.netboot.squashfsCompression;
     };
 
-
     # Create the initrd
     system.build.netbootRamdisk = pkgs.makeInitrdNG {
       inherit (config.boot.initrd) compressor;
       prepend = [ "${config.system.build.initialRamdisk}/initrd" ];
 
-      contents =
-        [ { object = config.system.build.squashfsStore;
-            symlink = "/nix-store.squashfs";
-          }
-        ];
+      contents = [
+        {
+          object = config.system.build.squashfsStore;
+          symlink = "/nix-store.squashfs";
+        }
+      ];
     };
 
     system.build.netbootIpxeScript = pkgs.writeTextDir "netboot.ipxe" ''
@@ -136,17 +148,16 @@ with lib;
 
     boot.loader.timeout = 10;
 
-    boot.postBootCommands =
-      ''
-        # After booting, register the contents of the Nix store
-        # in the Nix database in the tmpfs.
-        ${config.nix.package}/bin/nix-store --load-db < /nix/store/nix-path-registration
+    boot.postBootCommands = ''
+      # After booting, register the contents of the Nix store
+      # in the Nix database in the tmpfs.
+      ${config.nix.package}/bin/nix-store --load-db < /nix/store/nix-path-registration
 
-        # nixos-rebuild also requires a "system" profile and an
-        # /etc/NIXOS tag.
-        touch /etc/NIXOS
-        ${config.nix.package}/bin/nix-env -p /nix/var/nix/profiles/system --set /run/current-system
-      '';
+      # nixos-rebuild also requires a "system" profile and an
+      # /etc/NIXOS tag.
+      touch /etc/NIXOS
+      ${config.nix.package}/bin/nix-env -p /nix/var/nix/profiles/system --set /run/current-system
+    '';
 
   };
 

@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, kernel, nixosTests }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  kernel,
+  nixosTests,
+}:
 
 let
   sourceAttrs = (import ./source.nix) { inherit fetchFromGitHub; };
@@ -23,7 +29,9 @@ stdenv.mkDerivation {
 
   installTargets = "modules_install";
 
-  passthru.tests = { inherit (nixosTests) jool; };
+  passthru.tests = {
+    inherit (nixosTests) jool;
+  };
 
   meta = with lib; {
     homepage = "https://www.jool.mx/";

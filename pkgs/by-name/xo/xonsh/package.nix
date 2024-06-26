@@ -29,23 +29,28 @@ let
       wheel
     ];
 
-    propagatedBuildInputs = (with python3Packages; [
-      ply
-      prompt-toolkit
-      pygments
-    ]);
+    propagatedBuildInputs = (
+      with python3Packages;
+      [
+        ply
+        prompt-toolkit
+        pygments
+      ]
+    );
 
-    nativeCheckInputs = [
-      git
-      glibcLocales
-    ] ++ (with python3Packages; [
-      pip
-      pyte
-      pytest-mock
-      pytest-subprocess
-      pytestCheckHook
-      requests
-    ]);
+    nativeCheckInputs =
+      [
+        git
+        glibcLocales
+      ]
+      ++ (with python3Packages; [
+        pip
+        pyte
+        pytest-mock
+        pytest-subprocess
+        pytestCheckHook
+        requests
+      ]);
 
     disabledTests = [
       # fails on sandbox
@@ -111,7 +116,10 @@ let
       changelog = "https://github.com/xonsh/xonsh/raw/main/CHANGELOG.rst";
       license = with lib.licenses; [ bsd3 ];
       mainProgram = "xonsh";
-      maintainers = with lib.maintainers; [ AndersonTorres samlukeyes123 ];
+      maintainers = with lib.maintainers; [
+        AndersonTorres
+        samlukeyes123
+      ];
     };
   };
 in

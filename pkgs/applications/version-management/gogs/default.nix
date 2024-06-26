@@ -1,7 +1,15 @@
-{ lib, buildGoModule, fetchFromGitHub, makeWrapper
-, git, bash, gzip, openssh, pam
-, sqliteSupport ? true
-, pamSupport ? true
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  makeWrapper,
+  git,
+  bash,
+  gzip,
+  openssh,
+  pam,
+  sqliteSupport ? true,
+  pamSupport ? true,
 }:
 
 with lib;
@@ -25,18 +33,26 @@ buildGoModule rec {
     patchShebangs .
   '';
 
-  nativeBuildInputs = [ makeWrapper openssh ];
+  nativeBuildInputs = [
+    makeWrapper
+    openssh
+  ];
 
   buildInputs = optional pamSupport pam;
 
-  tags =
-    (  optional sqliteSupport "sqlite"
-    ++ optional pamSupport "pam");
+  tags = (optional sqliteSupport "sqlite" ++ optional pamSupport "pam");
 
   postInstall = ''
 
     wrapProgram $out/bin/gogs \
-      --prefix PATH : ${makeBinPath [ bash git gzip openssh ]}
+      --prefix PATH : ${
+        makeBinPath [
+          bash
+          git
+          gzip
+          openssh
+        ]
+      }
   '';
 
   meta = {
@@ -45,12 +61,14 @@ buildGoModule rec {
     license = licenses.mit;
     maintainers = [ maintainers.schneefux ];
     mainProgram = "gogs";
-    knownVulnerabilities = [ ''
-      Gogs has known unpatched vulnerabilities and upstream maintainers appears to be unresponsive.
+    knownVulnerabilities = [
+      ''
+        Gogs has known unpatched vulnerabilities and upstream maintainers appears to be unresponsive.
 
-      More information can be found in forgejo's blogpost: https://forgejo.org/2023-11-release-v1-20-5-1/
+        More information can be found in forgejo's blogpost: https://forgejo.org/2023-11-release-v1-20-5-1/
 
-      You might want to consider migrating to Gitea or forgejo.
-    '' ];
+        You might want to consider migrating to Gitea or forgejo.
+      ''
+    ];
   };
 }

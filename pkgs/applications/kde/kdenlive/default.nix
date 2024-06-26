@@ -1,45 +1,44 @@
-{ mkDerivation
-, lib
-, extra-cmake-modules
-, breeze-icons
-, breeze-qt5
-, kdoctools
-, kconfig
-, kcrash
-, kguiaddons
-, kiconthemes
-, ki18n
-, kinit
-, kdbusaddons
-, knotifications
-, knewstuff
-, karchive
-, knotifyconfig
-, kplotting
-, ktextwidgets
-, mediainfo
-, mlt
-, shared-mime-info
-, libv4l
-, kfilemetadata
-, ffmpeg-full
-, frei0r
-, phonon-backend-gstreamer
-, qtdeclarative
-, qtmultimedia
-, qtnetworkauth
-, qtquickcontrols2
-, qtscript
-, rttr
-, kpurpose
-, kdeclarative
-, wrapGAppsHook3
+{
+  mkDerivation,
+  lib,
+  extra-cmake-modules,
+  breeze-icons,
+  breeze-qt5,
+  kdoctools,
+  kconfig,
+  kcrash,
+  kguiaddons,
+  kiconthemes,
+  ki18n,
+  kinit,
+  kdbusaddons,
+  knotifications,
+  knewstuff,
+  karchive,
+  knotifyconfig,
+  kplotting,
+  ktextwidgets,
+  mediainfo,
+  mlt,
+  shared-mime-info,
+  libv4l,
+  kfilemetadata,
+  ffmpeg-full,
+  frei0r,
+  phonon-backend-gstreamer,
+  qtdeclarative,
+  qtmultimedia,
+  qtnetworkauth,
+  qtquickcontrols2,
+  qtscript,
+  rttr,
+  kpurpose,
+  kdeclarative,
+  wrapGAppsHook3,
 }:
 
 let
-  mlt-full = mlt.override {
-    ffmpeg = ffmpeg-full;
-  };
+  mlt-full = mlt.override { ffmpeg = ffmpeg-full; };
 in
 mkDerivation {
   pname = "kdenlive";
@@ -102,9 +101,7 @@ mkDerivation {
   # Frei0r path needs to be set too or Kdenlive will complain. See:
   # https://github.com/NixOS/nixpkgs/issues/83885
   # https://github.com/NixOS/nixpkgs/issues/29614#issuecomment-488849325
-  qtWrapperArgs = [
-    "--set FREI0R_PATH ${frei0r}/lib/frei0r-1"
-  ];
+  qtWrapperArgs = [ "--set FREI0R_PATH ${frei0r}/lib/frei0r-1" ];
 
   preFixup = ''
     qtWrapperArgs+=("''${gappsWrapperArgs[@]}")

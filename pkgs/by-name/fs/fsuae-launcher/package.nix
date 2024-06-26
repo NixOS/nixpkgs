@@ -1,10 +1,11 @@
-{ lib
-, fetchurl
-, fsuae
-, gettext
-, python3Packages
-, stdenv
-, libsForQt5
+{
+  lib,
+  fetchurl,
+  fsuae,
+  gettext,
+  python3Packages,
+  stdenv,
+  libsForQt5,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -50,8 +51,10 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Graphical front-end for the FS-UAE emulator";
     license = lib.licenses.gpl2Plus;
     mainProgram = "fs-uae-launcher";
-    maintainers = with lib.maintainers; [ sander AndersonTorres ];
-    platforms = with lib.systems.inspect;
-      patternLogicalAnd patterns.isx86 patterns.isLinux;
+    maintainers = with lib.maintainers; [
+      sander
+      AndersonTorres
+    ];
+    platforms = with lib.systems.inspect; patternLogicalAnd patterns.isx86 patterns.isLinux;
   };
 })

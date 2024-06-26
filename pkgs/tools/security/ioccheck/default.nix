@@ -1,6 +1,7 @@
-{ lib
-, fetchFromGitHub
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  python3,
 }:
 
 let
@@ -32,7 +33,8 @@ let
       };
     };
   };
-in py.pkgs.buildPythonApplication rec {
+in
+py.pkgs.buildPythonApplication rec {
   pname = "ioccheck";
   version = "unstable-2021-09-29";
   pyproject = true;
@@ -72,9 +74,7 @@ in py.pkgs.buildPythonApplication rec {
     vt-py
   ];
 
-  nativeCheckInputs = with py.pkgs; [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = with py.pkgs; [ pytestCheckHook ];
 
   postPatch = ''
     # Can be removed with the next release
@@ -82,9 +82,7 @@ in py.pkgs.buildPythonApplication rec {
       --replace '"hurry.filesize" = "^0.9"' ""
   '';
 
-  pythonImportsCheck = [
-    "ioccheck"
-  ];
+  pythonImportsCheck = [ "ioccheck" ];
 
   meta = with lib; {
     description = "Tool for researching IOCs";

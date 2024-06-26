@@ -1,11 +1,12 @@
-{ stdenv
-, lib
-, pkg-config
-, libevent
-, libressl
-, libbsd
-, fetchurl
-, readline
+{
+  stdenv,
+  lib,
+  pkg-config,
+  libevent,
+  libressl,
+  libbsd,
+  fetchurl,
+  readline,
 }:
 
 stdenv.mkDerivation rec {
@@ -17,9 +18,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-23LgcZ+R6wcUz1fZA+IbhyshfQOTyiFPZ+uKVwOh680=";
   };
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
     libevent

@@ -1,17 +1,18 @@
-{ lib
-, buildDotnetModule
-, fetchFromGitHub
-, glibc
-, zlib
-, libX11
-, libICE
-, libSM
-, fontconfig
-, gtk3
-, copyDesktopItems
-, icoutils
-, wrapGAppsHook3
-, makeDesktopItem
+{
+  lib,
+  buildDotnetModule,
+  fetchFromGitHub,
+  glibc,
+  zlib,
+  libX11,
+  libICE,
+  libSM,
+  fontconfig,
+  gtk3,
+  copyDesktopItems,
+  icoutils,
+  wrapGAppsHook3,
+  makeDesktopItem,
 }:
 
 buildDotnetModule rec {
@@ -39,9 +40,7 @@ buildDotnetModule rec {
     gtk3
   ];
 
-  buildInputs = [
-    gtk3
-  ];
+  buildInputs = [ gtk3 ];
 
   nativeBuildInputs = [
     copyDesktopItems
@@ -60,15 +59,17 @@ buildDotnetModule rec {
     done
   '';
 
-  desktopItems = [(makeDesktopItem {
-    desktopName = "Scarab";
-    name = "scarab";
-    exec = "Scarab";
-    icon = "scarab";
-    comment = meta.description;
-    type = "Application";
-    categories = [ "Game" ];
-  })];
+  desktopItems = [
+    (makeDesktopItem {
+      desktopName = "Scarab";
+      name = "scarab";
+      exec = "Scarab";
+      icon = "scarab";
+      comment = meta.description;
+      type = "Application";
+      categories = [ "Game" ];
+    })
+  ];
 
   passthru.updateScript = ./update.sh;
 

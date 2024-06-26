@@ -1,24 +1,25 @@
-{ stdenv
-, lib
-, fetchzip
-, rustPlatform
+{
+  stdenv,
+  lib,
+  fetchzip,
+  rustPlatform,
 
-# native build inputs
-, pkg-config
-, installShellFiles
-, makeWrapper
-, mandoc
-, rustfmt
-, file
+  # native build inputs
+  pkg-config,
+  installShellFiles,
+  makeWrapper,
+  mandoc,
+  rustfmt,
+  file,
 
-# build inputs
-, openssl
-, dbus
-, sqlite
+  # build inputs
+  openssl,
+  dbus,
+  sqlite,
 
-# runtime deps
-, gpgme
-, gnum4
+  # runtime deps
+  gpgme,
+  gnum4,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -37,7 +38,7 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-vZkMfaALnRBK9ZwMB2uvvJgQq+BdUX7enNnr9t5H+MY=";
 
   # Needed to get openssl-sys to use pkg-config
-  OPENSSL_NO_VENDOR=1;
+  OPENSSL_NO_VENDOR = 1;
 
   nativeBuildInputs = [
     pkg-config
@@ -53,9 +54,7 @@ rustPlatform.buildRustPackage rec {
     sqlite
   ];
 
-  nativeCheckInputs = [
-    file
-  ];
+  nativeCheckInputs = [ file ];
 
   postInstall = ''
     installManPage meli/docs/*.{1,5,7}
@@ -70,10 +69,10 @@ rustPlatform.buildRustPackage rec {
   '';
 
   checkFlags = [
-    "--skip=conf::test_config_parse"        # panicking due to sandbox
-    "--skip=smtp::test::test_smtp"          # requiring network
-    "--skip=utils::xdg::query_default_app"  # doesn't build
-    "--skip=utils::xdg::query_mime_info"    # doesn't build
+    "--skip=conf::test_config_parse" # panicking due to sandbox
+    "--skip=smtp::test::test_smtp" # requiring network
+    "--skip=utils::xdg::query_default_app" # doesn't build
+    "--skip=utils::xdg::query_mime_info" # doesn't build
   ];
 
   meta = with lib; {
@@ -82,7 +81,10 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "meli";
     homepage = "https://meli.delivery";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ _0x4A6F matthiasbeyer ];
+    maintainers = with maintainers; [
+      _0x4A6F
+      matthiasbeyer
+    ];
     platforms = platforms.linux;
   };
 }

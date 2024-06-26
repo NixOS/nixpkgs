@@ -1,4 +1,8 @@
-{ lib, fetchFromGitHub, rustPlatform }:
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+}:
 
 rustPlatform.buildRustPackage {
   pname = "loop";
@@ -6,8 +10,8 @@ rustPlatform.buildRustPackage {
 
   src = fetchFromGitHub {
     owner = "Miserlou";
-    repo  = "Loop";
-    rev   = "944df766ddecd7a0d67d91cc2dfda8c197179fb0";
+    repo = "Loop";
+    rev = "944df766ddecd7a0d67d91cc2dfda8c197179fb0";
     sha256 = "0v61kahwk1kdy8pb40rjnzcxby42nh02nyg9jqqpx3vgdrpxlnix";
   };
 

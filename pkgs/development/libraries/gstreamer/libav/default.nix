@@ -1,16 +1,18 @@
-{ stdenv
-, lib
-, fetchurl
-, meson
-, ninja
-, pkg-config
-, python3
-, gstreamer
-, gst-plugins-base
-, gettext
-, libav
-# Checks meson.is_cross_build(), so even canExecute isn't enough.
-, enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform, hotdoc
+{
+  stdenv,
+  lib,
+  fetchurl,
+  meson,
+  ninja,
+  pkg-config,
+  python3,
+  gstreamer,
+  gst-plugins-base,
+  gettext,
+  libav,
+  # Checks meson.is_cross_build(), so even canExecute isn't enough.
+  enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform,
+  hotdoc,
 }:
 
 # Note that since gst-libav-1.6, libav is actually ffmpeg. See
@@ -25,7 +27,10 @@ stdenv.mkDerivation rec {
     hash = "sha256-2cWxUkaKRcH6g1FBBCIJCnGScHrXTS4aQ2f1JU4YjZE=";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   nativeBuildInputs = [
     meson
@@ -33,9 +38,7 @@ stdenv.mkDerivation rec {
     gettext
     pkg-config
     python3
-  ] ++ lib.optionals enableDocumentation [
-    hotdoc
-  ];
+  ] ++ lib.optionals enableDocumentation [ hotdoc ];
 
   buildInputs = [
     gstreamer
@@ -43,9 +46,7 @@ stdenv.mkDerivation rec {
     libav
   ];
 
-  mesonFlags = [
-    (lib.mesonEnable "doc" enableDocumentation)
-  ];
+  mesonFlags = [ (lib.mesonEnable "doc" enableDocumentation) ];
 
   postPatch = ''
     patchShebangs \

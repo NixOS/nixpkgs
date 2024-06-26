@@ -1,4 +1,8 @@
-{ lib, fetchurl, appimageTools }:
+{
+  lib,
+  fetchurl,
+  appimageTools,
+}:
 
 let
   pname = "openlens";
@@ -9,9 +13,7 @@ let
     sha256 = "sha256-ZAltAS/U/xh4kCT7vQ+NHAzWV7z0uE5GMQICHKSdj8k=";
   };
 
-  appimageContents = appimageTools.extractType2 {
-    inherit pname version src;
-  };
+  appimageContents = appimageTools.extractType2 { inherit pname version src; };
 
 in
 appimageTools.wrapType2 {
@@ -32,7 +34,10 @@ appimageTools.wrapType2 {
     description = "Kubernetes IDE";
     homepage = "https://github.com/MuhammedKalkan/OpenLens";
     license = licenses.mit;
-    maintainers = with maintainers; [ benwbooth sebtm ];
+    maintainers = with maintainers; [
+      benwbooth
+      sebtm
+    ];
     mainProgram = "openlens";
     platforms = [ "x86_64-linux" ];
   };

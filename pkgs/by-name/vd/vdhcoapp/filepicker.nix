@@ -1,10 +1,11 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, atk
-, gtk3
-, glib
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  atk,
+  gtk3,
+  glib,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -26,9 +27,7 @@ rustPlatform.buildRustPackage rec {
     glib
   ];
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
   meta = with lib; {
     description = "File picker used by VDHCoApp";

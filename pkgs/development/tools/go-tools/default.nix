@@ -1,6 +1,7 @@
-{ buildGoModule
-, lib
-, fetchFromGitHub
+{
+  buildGoModule,
+  lib,
+  fetchFromGitHub,
 }:
 
 buildGoModule rec {
@@ -24,6 +25,10 @@ buildGoModule rec {
     description = "Collection of tools and libraries for working with Go code, including linters and static analysis";
     homepage = "https://staticcheck.io";
     license = licenses.mit;
-    maintainers = with maintainers; [ rvolosatovs kalbasit smasher164 ];
+    maintainers = with maintainers; [
+      rvolosatovs
+      kalbasit
+      smasher164
+    ];
   };
 }

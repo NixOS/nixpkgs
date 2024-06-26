@@ -1,6 +1,12 @@
-{ lib, fetchurl, buildDunePackage
-, logs, lwt, mirage-clock, ptime
-, alcotest
+{
+  lib,
+  fetchurl,
+  buildDunePackage,
+  logs,
+  lwt,
+  mirage-clock,
+  ptime,
+  alcotest,
 }:
 
 buildDunePackage rec {
@@ -14,7 +20,12 @@ buildDunePackage rec {
     hash = "sha256-c1YQIutqp58TRz+a9Vd/69FCv0jnGRvFnei9BtSbOxA=";
   };
 
-  propagatedBuildInputs = [ logs lwt mirage-clock ptime ];
+  propagatedBuildInputs = [
+    logs
+    lwt
+    mirage-clock
+    ptime
+  ];
 
   doCheck = true;
   checkInputs = [ alcotest ];

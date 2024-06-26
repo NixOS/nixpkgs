@@ -1,26 +1,28 @@
-{ lib
-, newScope
-, pidgin
-, texliveBasic
-, config
+{
+  lib,
+  newScope,
+  pidgin,
+  texliveBasic,
+  config,
 }:
 
-lib.makeScope newScope (self:
-  let callPackage = self.callPackage;
-  in {
+lib.makeScope newScope (
+  self:
+  let
+    callPackage = self.callPackage;
+  in
+  {
     pidgin = callPackage ../. {
       withOpenssl = config.pidgin.openssl or true;
       withGnutls = config.pidgin.gnutls or false;
-      plugins = [];
+      plugins = [ ];
     };
 
     pidginPackages = self;
 
     pidgin-indicator = callPackage ./pidgin-indicator { };
 
-    pidgin-latex = callPackage ./pidgin-latex {
-      texLive = texliveBasic;
-    };
+    pidgin-latex = callPackage ./pidgin-latex { texLive = texliveBasic; };
 
     pidgin-msn-pecan = callPackage ./msn-pecan { };
 
@@ -67,4 +69,5 @@ lib.makeScope newScope (self:
     pidgin-opensteamworks = callPackage ./pidgin-opensteamworks { };
 
     purple-facebook = callPackage ./purple-facebook { };
-})
+  }
+)

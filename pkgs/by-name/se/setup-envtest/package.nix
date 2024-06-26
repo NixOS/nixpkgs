@@ -1,22 +1,28 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
 
 buildGoModule rec {
   pname = "setup-envtest";
   version = "0.18.2";
 
-  src = fetchFromGitHub {
-    owner = "kubernetes-sigs";
-    repo = "controller-runtime";
-    rev = "v${version}";
-    hash = "sha256-fQgWwndxzBIi3zsNMYvFDXjetnaQF0NNK+qW8j4Wn/M=";
-  } + "/tools/setup-envtest";
+  src =
+    fetchFromGitHub {
+      owner = "kubernetes-sigs";
+      repo = "controller-runtime";
+      rev = "v${version}";
+      hash = "sha256-fQgWwndxzBIi3zsNMYvFDXjetnaQF0NNK+qW8j4Wn/M=";
+    }
+    + "/tools/setup-envtest";
 
   vendorHash = "sha256-Xr5b/CRz/DMmoc4bvrEyAZcNufLIZOY5OGQ6yw4/W9k=";
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   __darwinAllowLocalNetworking = true;
 

@@ -1,16 +1,17 @@
-{ stdenv
-, lib
-, fetchFromGitHub
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
 
-# build time
-, cmake
-, pkg-config
+  # build time
+  cmake,
+  pkg-config,
 
-# run time
-, pcre2
+  # run time
+  pcre2,
 
-# update script
-, gitUpdater
+  # update script
+  gitUpdater,
 }:
 
 stdenv.mkDerivation rec {
@@ -29,18 +30,14 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  buildInputs = [
-    pcre2
-  ];
+  buildInputs = [ pcre2 ];
 
   cmakeFlags = [
     "-DCMAKE_INSTALL_LIBDIR=lib"
     "-DCMAKE_INSTALL_INCLUDEDIR=include"
   ];
 
-  passthru.updateScript = gitUpdater {
-    rev-prefix = "v";
-  };
+  passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
   meta = with lib; {
     description = "YANG data modelling language parser and toolkit";

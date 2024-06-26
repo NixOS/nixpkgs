@@ -1,22 +1,23 @@
-{ stdenv
-, cmake
-, lib
-, fetchFromGitHub
-, wrapQtAppsHook
-, qtbase
-, qtcharts
-, fftw
-, libtorch-bin
-, portaudio
-, eigen
-, xorg
-, pkg-config
-, autoPatchelfHook
-, soxr
-, freetype
-, libsamplerate
-, armadillo
-, tomlplusplus
+{
+  stdenv,
+  cmake,
+  lib,
+  fetchFromGitHub,
+  wrapQtAppsHook,
+  qtbase,
+  qtcharts,
+  fftw,
+  libtorch-bin,
+  portaudio,
+  eigen,
+  xorg,
+  pkg-config,
+  autoPatchelfHook,
+  soxr,
+  freetype,
+  libsamplerate,
+  armadillo,
+  tomlplusplus,
 }:
 
 stdenv.mkDerivation rec {
@@ -37,7 +38,12 @@ stdenv.mkDerivation rec {
     ./0001-Avoid-using-vendored-dependencies-we-have-in-nixpkgs.patch
   ];
 
-  nativeBuildInputs = [ cmake pkg-config wrapQtAppsHook autoPatchelfHook ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    wrapQtAppsHook
+    autoPatchelfHook
+  ];
 
   buildInputs = [
     qtbase

@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, libxml2
-, systemd
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  libxml2,
+  systemd,
 }:
 
 stdenv.mkDerivation {
-  pname   = "qdl";
+  pname = "qdl";
   version = "unstable-2023-04-11";
 
   src = fetchFromGitHub {
@@ -18,7 +19,10 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ systemd libxml2 ];
+  buildInputs = [
+    systemd
+    libxml2
+  ];
 
   installPhase = ''
     runHook preInstall

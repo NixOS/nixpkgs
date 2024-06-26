@@ -1,6 +1,22 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, intltool, file,
-  desktop-file-utils, enchant, gtk3, gtkmm3, gst_all_1, hicolor-icon-theme,
-  libsigcxx, libxmlxx, xdg-utils, isocodes, wrapGAppsHook3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  intltool,
+  file,
+  desktop-file-utils,
+  enchant,
+  gtk3,
+  gtkmm3,
+  gst_all_1,
+  hicolor-icon-theme,
+  libsigcxx,
+  libxmlxx,
+  xdg-utils,
+  isocodes,
+  wrapGAppsHook3,
 }:
 
 stdenv.mkDerivation rec {
@@ -14,7 +30,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-1Q1nd3GJ6iDGQv4SM2S1ehVW6kPdbqTn8KTtTb0obiQ=";
   };
 
-  nativeBuildInputs =  [
+  nativeBuildInputs = [
     autoreconfHook
     pkg-config
     intltool
@@ -22,7 +38,7 @@ stdenv.mkDerivation rec {
     wrapGAppsHook3
   ];
 
-  buildInputs =  [
+  buildInputs = [
     desktop-file-utils
     enchant
     gtk3
@@ -54,7 +70,7 @@ stdenv.mkDerivation rec {
       can be used for new subtitles or as a tool to transform, edit, correct
       and refine existing subtitle. This program also shows sound waves, which
       makes it easier to synchronise subtitles to voices.
-      '';
+    '';
     homepage = "http://kitone.github.io/subtitleeditor/";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;

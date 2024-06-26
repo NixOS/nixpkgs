@@ -1,8 +1,9 @@
-{ lib
-, melpaBuild
-, fetchFromGitHub
-, emacs
-, writeText
+{
+  lib,
+  melpaBuild,
+  fetchFromGitHub,
+  emacs,
+  writeText,
 }:
 
 let

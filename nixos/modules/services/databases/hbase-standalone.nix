@@ -1,4 +1,10 @@
-{ config, options, lib, pkgs, ... }:
+{
+  config,
+  options,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -6,34 +12,44 @@ let
   cfg = config.services.hbase-standalone;
   opt = options.services.hbase-standalone;
 
-  buildProperty = configAttr:
-    (builtins.concatStringsSep "\n"
-      (lib.mapAttrsToList
-        (name: value: ''
-          <property>
-            <name>${name}</name>
-            <value>${builtins.toString value}</value>
-          </property>
-        '')
-        configAttr));
+  buildProperty =
+    configAttr:
+    (builtins.concatStringsSep "\n" (
+      lib.mapAttrsToList (name: value: ''
+        <property>
+          <name>${name}</name>
+          <value>${builtins.toString value}</value>
+        </property>
+      '') configAttr
+    ));
 
-  configFile = pkgs.writeText "hbase-site.xml"
-    ''<configuration>
-        ${buildProperty (opt.settings.default // cfg.settings)}
-      </configuration>
-    '';
+  configFile = pkgs.writeText "hbase-site.xml" ''
+    <configuration>
+            ${buildProperty (opt.settings.default // cfg.settings)}
+          </configuration>
+  '';
 
   configDir = pkgs.runCommand "hbase-config-dir" { preferLocalBuild = true; } ''
     mkdir -p $out
     cp ${cfg.package}/conf/* $out/
     rm $out/hbase-site.xml
     ln -s ${configFile} $out/hbase-site.xml
-  '' ;
+  '';
 
-in {
+in
+{
 
   imports = [
-    (mkRenamedOptionModule [ "services" "hbase" ] [ "services" "hbase-standalone" ])
+    (mkRenamedOptionModule
+      [
+        "services"
+        "hbase"
+      ]
+      [
+        "services"
+        "hbase-standalone"
+      ]
+    )
   ];
 
   ###### interface
@@ -83,7 +99,13 @@ in {
       };
 
       settings = mkOption {
-        type = with lib.types; attrsOf (oneOf [ str int bool ]);
+        type =
+          with lib.types;
+          attrsOf (oneOf [
+            str
+            int
+            bool
+          ]);
         default = {
           "hbase.rootdir" = "file://${cfg.dataDir}/hbase";
           "hbase.zookeeper.property.dataDir" = "${cfg.dataDir}/zookeeper";

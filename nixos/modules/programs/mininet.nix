@@ -1,6 +1,11 @@
 # Global configuration for mininet
 # kernel must have NETNS/VETH/SCHED
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.programs.mininet;

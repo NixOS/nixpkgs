@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchFromSourcehut, fetchpatch
-, wayland, pixman, pkg-config, wayland-scanner
+{
+  lib,
+  stdenv,
+  fetchFromSourcehut,
+  fetchpatch,
+  wayland,
+  pixman,
+  pkg-config,
+  wayland-scanner,
 }:
 
 stdenv.mkDerivation rec {
@@ -21,8 +28,14 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  buildInputs = [ pixman wayland ];
-  nativeBuildInputs = [ pkg-config wayland-scanner ];
+  buildInputs = [
+    pixman
+    wayland
+  ];
+  nativeBuildInputs = [
+    pkg-config
+    wayland-scanner
+  ];
 
   makeFlags = [
     "DESTDIR=${placeholder "out"}"

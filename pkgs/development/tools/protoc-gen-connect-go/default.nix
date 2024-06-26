@@ -1,6 +1,7 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
 
 buildGoModule rec {
@@ -16,9 +17,7 @@ buildGoModule rec {
 
   vendorHash = "sha256-OKTRxExgJ2V3736fIVvQX3FEa44jGngwCi2D/uk0F58=";
 
-  subPackages = [
-    "cmd/protoc-gen-connect-go"
-  ];
+  subPackages = [ "cmd/protoc-gen-connect-go" ];
 
   preCheck = ''
     # test all paths
@@ -31,6 +30,9 @@ buildGoModule rec {
     homepage = "https://github.com/connectrpc/connect-go";
     changelog = "https://github.com/connectrpc/connect-go/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ kilimnik jk ];
+    maintainers = with maintainers; [
+      kilimnik
+      jk
+    ];
   };
 }

@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.services.goxlr-utility;
@@ -28,21 +33,18 @@ with lib;
     };
   };
 
-  config = mkIf config.services.goxlr-utility.enable
-    {
-      services.udev.packages = [ cfg.package ];
+  config = mkIf config.services.goxlr-utility.enable {
+    services.udev.packages = [ cfg.package ];
 
-      xdg.autostart.enable = mkIf cfg.autoStart.xdg true;
-      environment.systemPackages = mkIf cfg.autoStart.xdg
-        [
-          cfg.package
-          (pkgs.makeAutostartItem
-            {
-              name = "goxlr-utility";
-              package = cfg.package;
-            })
-        ];
-    };
+    xdg.autostart.enable = mkIf cfg.autoStart.xdg true;
+    environment.systemPackages = mkIf cfg.autoStart.xdg [
+      cfg.package
+      (pkgs.makeAutostartItem {
+        name = "goxlr-utility";
+        package = cfg.package;
+      })
+    ];
+  };
 
   meta.maintainers = with maintainers; [ errnoh ];
 }

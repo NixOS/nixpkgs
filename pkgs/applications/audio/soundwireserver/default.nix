@@ -1,9 +1,10 @@
-{ lib
-, qt5
-, autoPatchelfHook
-, unzip
-, fetchzip
-, portaudio
+{
+  lib,
+  qt5,
+  autoPatchelfHook,
+  unzip,
+  fetchzip,
+  portaudio,
 }:
 
 qt5.mkDerivation {
@@ -20,9 +21,7 @@ qt5.mkDerivation {
     autoPatchelfHook
   ];
 
-  buildInputs = [
-    portaudio
-  ];
+  buildInputs = [ portaudio ];
 
   installPhase = ''
     install -D SoundWire-Server.desktop $out/share/applications/SoundWireServer.desktop

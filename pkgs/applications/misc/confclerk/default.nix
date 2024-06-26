@@ -1,4 +1,10 @@
-{ lib, mkDerivation, fetchurl, qtbase, qmake }:
+{
+  lib,
+  mkDerivation,
+  fetchurl,
+  qtbase,
+  qmake,
+}:
 
 mkDerivation rec {
   pname = "confclerk";

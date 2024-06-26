@@ -1,4 +1,9 @@
-{ lib, stdenv, fwts, kernel }:
+{
+  lib,
+  stdenv,
+  fwts,
+  kernel,
+}:
 
 stdenv.mkDerivation rec {
   pname = "fwts-efi-runtime";
@@ -18,9 +23,7 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "pic" ];
 
-  makeFlags = kernel.makeFlags ++ [
-    "INSTALL_MOD_PATH=${placeholder "out"}"
-  ];
+  makeFlags = kernel.makeFlags ++ [ "INSTALL_MOD_PATH=${placeholder "out"}" ];
 
   meta = with lib; {
     inherit (fwts.meta) homepage license;

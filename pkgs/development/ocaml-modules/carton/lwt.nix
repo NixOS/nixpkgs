@@ -1,10 +1,26 @@
-{ buildDunePackage, carton
-, lwt, decompress, optint, bigstringaf
-, alcotest, alcotest-lwt, cstruct, fmt, logs
-, mirage-flow, result, rresult
-, ke, base64, bos, checkseum, digestif, fpath
-, stdlib-shims
-, git-binary # pkgs.git
+{
+  buildDunePackage,
+  carton,
+  lwt,
+  decompress,
+  optint,
+  bigstringaf,
+  alcotest,
+  alcotest-lwt,
+  cstruct,
+  fmt,
+  logs,
+  mirage-flow,
+  result,
+  rresult,
+  ke,
+  base64,
+  bos,
+  checkseum,
+  digestif,
+  fpath,
+  stdlib-shims,
+  git-binary, # pkgs.git
 }:
 
 buildDunePackage {
@@ -24,9 +40,7 @@ buildDunePackage {
   # Tests fail with git 2.41
   # see https://github.com/mirage/ocaml-git/issues/617
   doCheck = false;
-  nativeCheckInputs = [
-    git-binary
-  ];
+  nativeCheckInputs = [ git-binary ];
   checkInputs = [
     alcotest
     alcotest-lwt

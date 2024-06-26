@@ -1,42 +1,43 @@
-{ lib
-, stdenv
-, fetchurl
-, substituteAll
-, pkg-config
-, meson
-, ninja
-, gettext
-, gnome
-, wrapGAppsHook4
-, packagekit
-, ostree
-, glib
-, appstream
-, libsoup_3
-, libadwaita
-, polkit
-, isocodes
-, gspell
-, libxslt
-, gobject-introspection
-, flatpak
-, fwupd
-, gtk4
-, gsettings-desktop-schemas
-, gnome-desktop
-, libgudev
-, libxmlb
-, malcontent
-, json-glib
-, libsecret
-, valgrind-light
-, docbook-xsl-nons
-, docbook_xml_dtd_42
-, docbook_xml_dtd_43
-, gtk-doc
-, desktop-file-utils
-, libsysprof-capture
-, gst_all_1
+{
+  lib,
+  stdenv,
+  fetchurl,
+  substituteAll,
+  pkg-config,
+  meson,
+  ninja,
+  gettext,
+  gnome,
+  wrapGAppsHook4,
+  packagekit,
+  ostree,
+  glib,
+  appstream,
+  libsoup_3,
+  libadwaita,
+  polkit,
+  isocodes,
+  gspell,
+  libxslt,
+  gobject-introspection,
+  flatpak,
+  fwupd,
+  gtk4,
+  gsettings-desktop-schemas,
+  gnome-desktop,
+  libgudev,
+  libxmlb,
+  malcontent,
+  json-glib,
+  libsecret,
+  valgrind-light,
+  docbook-xsl-nons,
+  docbook_xml_dtd_42,
+  docbook_xml_dtd_43,
+  gtk-doc,
+  desktop-file-utils,
+  libsysprof-capture,
+  gst_all_1,
 }:
 
 let
@@ -97,16 +98,12 @@ stdenv.mkDerivation (finalAttrs: {
     # For video screenshots
     gst_all_1.gst-plugins-base
     gst_all_1.gst-plugins-good
-  ] ++ lib.optionals withFwupd [
-    fwupd
-  ];
+  ] ++ lib.optionals withFwupd [ fwupd ];
 
   mesonFlags = [
     # Requires /etc/machine-id, D-Bus system bus, etc.
     "-Dtests=false"
-  ] ++ lib.optionals (!withFwupd) [
-    "-Dfwupd=false"
-  ];
+  ] ++ lib.optionals (!withFwupd) [ "-Dfwupd=false" ];
 
   passthru = {
     updateScript = gnome.updateScript {

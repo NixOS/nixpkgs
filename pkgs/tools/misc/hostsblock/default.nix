@@ -1,23 +1,33 @@
-{ lib, coreutils, curl, fetchFromGitHub, unzip, p7zip, gnused, gnugrep, stdenv
-, blacklist ? [ "adwords.google.com" ]
-, whitelist ? [
-  ".dropbox.com"
-  " www.malwaredomainlists.com"
-  " www.arcamax.com"
-  " www.instructables.com"
-  " goo.gl"
-  " www.reddit.com"
-  " t.co"
-  " bit.ly"
-  " www.viddler.com"
-  " viddler.com"
-  " tinyurl.com"
-  " ompldr.org"
-  " www.ompldr.org"
-  "login.yahoo.com"
-  " l.yimg.com"
-  ".bp.blogspot.com"
-] }:
+{
+  lib,
+  coreutils,
+  curl,
+  fetchFromGitHub,
+  unzip,
+  p7zip,
+  gnused,
+  gnugrep,
+  stdenv,
+  blacklist ? [ "adwords.google.com" ],
+  whitelist ? [
+    ".dropbox.com"
+    " www.malwaredomainlists.com"
+    " www.arcamax.com"
+    " www.instructables.com"
+    " goo.gl"
+    " www.reddit.com"
+    " t.co"
+    " bit.ly"
+    " www.viddler.com"
+    " viddler.com"
+    " tinyurl.com"
+    " ompldr.org"
+    " www.ompldr.org"
+    "login.yahoo.com"
+    " l.yimg.com"
+    ".bp.blogspot.com"
+  ],
+}:
 
 stdenv.mkDerivation {
   pname = "hostsblock";

@@ -1,13 +1,14 @@
-{ mkDerivation
-, lib
-, fetchFromGitHub
-, qtbase
-, cmake
-, qttools
-, qtsvg
-, nix-update-script
-, fetchpatch
-, kguiaddons
+{
+  mkDerivation,
+  lib,
+  fetchFromGitHub,
+  qtbase,
+  cmake,
+  qttools,
+  qtsvg,
+  nix-update-script,
+  fetchpatch,
+  kguiaddons,
 }:
 
 mkDerivation rec {
@@ -34,18 +35,26 @@ mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
-  cmakeFlags = [
-    (lib.cmakeBool "USE_WAYLAND_CLIPBOARD" true)
-  ];
+  cmakeFlags = [ (lib.cmakeBool "USE_WAYLAND_CLIPBOARD" true) ];
 
-  nativeBuildInputs = [ cmake qttools qtsvg ];
-  buildInputs = [ qtbase kguiaddons ];
+  nativeBuildInputs = [
+    cmake
+    qttools
+    qtsvg
+  ];
+  buildInputs = [
+    qtbase
+    kguiaddons
+  ];
 
   meta = with lib; {
     description = "Powerful yet simple to use screenshot software";
     homepage = "https://github.com/flameshot-org/flameshot";
     mainProgram = "flameshot";
-    maintainers = with maintainers; [ scode oxalica ];
+    maintainers = with maintainers; [
+      scode
+      oxalica
+    ];
     license = licenses.gpl3Plus;
     platforms = platforms.linux ++ platforms.darwin;
   };

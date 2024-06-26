@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchurl
-, autoPatchelfHook
-, installShellFiles
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoPatchelfHook,
+  installShellFiles,
 }:
 
 let
@@ -37,14 +38,15 @@ stdenv.mkDerivation {
   pname = "rar";
   inherit version;
 
-  src = fetchurl (srcs.${stdenv.hostPlatform.system} or (throw "unsupported system ${stdenv.hostPlatform.system}"));
+  src = fetchurl (
+    srcs.${stdenv.hostPlatform.system} or (throw "unsupported system ${stdenv.hostPlatform.system}")
+  );
 
   dontBuild = true;
 
   buildInputs = lib.optionals stdenv.isLinux [ stdenv.cc.cc.lib ];
 
-  nativeBuildInputs = [ installShellFiles ]
-    ++ lib.optionals stdenv.isLinux [ autoPatchelfHook ];
+  nativeBuildInputs = [ installShellFiles ] ++ lib.optionals stdenv.isLinux [ autoPatchelfHook ];
 
   installPhase = ''
     runHook preInstall

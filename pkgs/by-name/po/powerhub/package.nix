@@ -1,6 +1,7 @@
-{ lib
-, fetchFromGitHub
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -45,9 +46,7 @@ python3.pkgs.buildPythonApplication rec {
   # Tests uses XDG
   doCheck = false;
 
-  pythonImportsCheck = [
-    "powerhub"
-  ];
+  pythonImportsCheck = [ "powerhub" ];
 
   preCheck = ''
     cd tests/helpers

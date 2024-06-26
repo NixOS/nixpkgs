@@ -1,9 +1,10 @@
-{ buildGoModule
-, fetchFromGitHub
-, lib
-, makeWrapper
-, runc
-, wrapperDir ? "/run/wrappers/bin" # Default for NixOS, other systems might need customization.
+{
+  buildGoModule,
+  fetchFromGitHub,
+  lib,
+  makeWrapper,
+  runc,
+  wrapperDir ? "/run/wrappers/bin", # Default for NixOS, other systems might need customization.
 }:
 
 buildGoModule rec {
@@ -25,9 +26,7 @@ buildGoModule rec {
         --replace "/usr/bin/$V" "${wrapperDir}/$V"
   '';
 
-  nativeBuildInputs = [
-    makeWrapper
-  ];
+  nativeBuildInputs = [ makeWrapper ];
 
   tags = [
     "seccomp"

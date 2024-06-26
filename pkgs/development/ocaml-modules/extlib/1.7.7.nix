@@ -1,8 +1,14 @@
 # Older version of extlib for Haxe 4.0 and 4.1.
 # May be replaceable by the next extlib + extlib-base64 release.
-{ stdenv, lib, fetchurl, ocaml, findlib, cppo
-# De facto, option minimal seems to be the default. See the README.
-, minimal ? true
+{
+  stdenv,
+  lib,
+  fetchurl,
+  ocaml,
+  findlib,
+  cppo,
+  # De facto, option minimal seems to be the default. See the README.
+  minimal ? true,
 }:
 
 stdenv.mkDerivation rec {
@@ -14,7 +20,11 @@ stdenv.mkDerivation rec {
     sha256 = "1sxmzc1mx3kg62j8kbk0dxkx8mkf1rn70h542cjzrziflznap0s1";
   };
 
-  nativeBuildInputs = [ ocaml findlib cppo ];
+  nativeBuildInputs = [
+    ocaml
+    findlib
+    cppo
+  ];
 
   strictDeps = true;
 

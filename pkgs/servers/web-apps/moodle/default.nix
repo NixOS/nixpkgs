@@ -1,15 +1,32 @@
-{ lib, stdenv, fetchurl, writeText, plugins ? [ ], nixosTests }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  writeText,
+  plugins ? [ ],
+  nixosTests,
+}:
 
 let
   version = "4.4.1";
 
   versionParts = lib.take 2 (lib.splitVersion version);
   # 4.2 -> 402, 3.11 -> 311
-  stableVersion = lib.removePrefix "0" (lib.concatMapStrings
-    (p: if (lib.toInt p) < 10 then (lib.concatStrings ["0" p]) else p)
-    versionParts);
+  stableVersion = lib.removePrefix "0" (
+    lib.concatMapStrings (
+      p:
+      if (lib.toInt p) < 10 then
+        (lib.concatStrings [
+          "0"
+          p
+        ])
+      else
+        p
+    ) versionParts
+  );
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "moodle";
   inherit version;
 
@@ -31,27 +48,33 @@ in stdenv.mkDerivation rec {
     cp -r . $out/share/moodle
     cp ${phpConfig} $out/share/moodle/config.php
 
-    ${lib.concatStringsSep "\n" (map (p:
-      let
-        dir = if p.pluginType == "mod" then
-          "mod"
-        else if p.pluginType == "theme" then
-          "theme"
-        else if p.pluginType == "block" then
-          "blocks"
-        else if p.pluginType == "question" then
-          "question/type"
-        else if p.pluginType == "course" then
-          "course/format"
-        else if p.pluginType == "report" then
-          "admin/report"
-        else
-          throw "unknown moodle plugin type";
+    ${lib.concatStringsSep "\n" (
+      map (
+        p:
+        let
+          dir =
+            if p.pluginType == "mod" then
+              "mod"
+            else if p.pluginType == "theme" then
+              "theme"
+            else if p.pluginType == "block" then
+              "blocks"
+            else if p.pluginType == "question" then
+              "question/type"
+            else if p.pluginType == "course" then
+              "course/format"
+            else if p.pluginType == "report" then
+              "admin/report"
+            else
+              throw "unknown moodle plugin type";
+        in
         # we have to copy it, because the plugins have refrences to .. inside
-      in ''
-        mkdir -p $out/share/moodle/${dir}/${p.name}
-        cp -r ${p}/* $out/share/moodle/${dir}/${p.name}/
-      '') plugins)}
+        ''
+          mkdir -p $out/share/moodle/${dir}/${p.name}
+          cp -r ${p}/* $out/share/moodle/${dir}/${p.name}/
+        ''
+      ) plugins
+    )}
 
     runHook postInstall
   '';
@@ -61,8 +84,7 @@ in stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description =
-      "Free and open-source learning management system (LMS) written in PHP";
+    description = "Free and open-source learning management system (LMS) written in PHP";
     license = licenses.gpl3Plus;
     homepage = "https://moodle.org/";
     maintainers = with maintainers; [ freezeboy ];

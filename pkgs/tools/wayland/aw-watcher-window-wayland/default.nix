@@ -24,13 +24,9 @@ rustPlatform.buildRustPackage rec {
       "aw-client-rust-0.1.0" = "sha256-9tlVesnBeTlazKE2UAq6dzivjo42DT7p7XMuWXHHlnU=";
     };
   };
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [
-    openssl
-  ];
+  buildInputs = [ openssl ];
 
   meta = with lib; {
     description = "WIP window and afk watcher for wayland ";

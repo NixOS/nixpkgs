@@ -1,21 +1,22 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, makeWrapper
-, stripJavaArchivesHook
-, meson
-, ninja
-, pkg-config
-, gradle_8
-, curl
-, cryptopp
-, fontconfig
-, jre
-, libxml2
-, openssl
-, pcsclite
-, podofo
-, ghostscript
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  makeWrapper,
+  stripJavaArchivesHook,
+  meson,
+  ninja,
+  pkg-config,
+  gradle_8,
+  curl,
+  cryptopp,
+  fontconfig,
+  jre,
+  libxml2,
+  openssl,
+  pcsclite,
+  podofo,
+  ghostscript,
 }:
 
 let
@@ -144,7 +145,9 @@ stdenv.mkDerivation {
     install -Dm644 LICENSE "$out/share/licenses/cieid/LICENSE"
   '';
 
-  passthru = { inherit javaDeps; };
+  passthru = {
+    inherit javaDeps;
+  };
 
   meta = with lib; {
     homepage = "https://github.com/M0Rf30/cie-middleware-linux";
