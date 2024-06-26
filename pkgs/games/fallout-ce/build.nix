@@ -7,6 +7,7 @@
 
 , extraBuildInputs ? [ ]
 , extraMeta
+, patches
 , pname
 , version
 , src
@@ -45,7 +46,7 @@ let
   '';
 in
 stdenv.mkDerivation {
-  inherit pname version src;
+  inherit pname version src patches;
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ SDL2 ] ++ extraBuildInputs;
