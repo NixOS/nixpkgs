@@ -30391,6 +30391,8 @@ with pkgs;
 
   gpg-mdp = callPackage ../applications/misc/gpg-mdp { };
 
+  gpgfrontend = callPackage ../applications/misc/gpgfrontend { };
+
   greenfoot = callPackage ../applications/editors/greenfoot {
     openjdk = openjdk17.override {
       enableJavaFX = true;
