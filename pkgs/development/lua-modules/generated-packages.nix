@@ -398,7 +398,7 @@ buildLuarocksPackage {
   }).outPath;
   src = fetchurl {
     url    = "http://dkolf.de/dkjson-lua/dkjson-2.8.tar.gz";
-    sha256 = "0js9z5ja3ws1i9gj2m673459rwm0gadxbf86mcif7d8286h61yh9";
+    hash = "sha256-JOjNO+uRwchh63uz+8m9QYu/+a1KpdBHGBYlgjajFTI=";
   };
 
   disabled = luaOlder "5.1" || luaAtLeast "5.5";
