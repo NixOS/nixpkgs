@@ -1,17 +1,36 @@
 --- a/plugins/remote-dev-server/bin/launcher.sh
 +++ b/plugins/remote-dev-server/bin/launcher.sh
-@@ -366,6 +366,8 @@
+@@ -218,10 +218,11 @@
+   exit 1
+ fi
+
++
+ # ---------------------------------------------------------------------
+ # Configure fonts and fontconfig
+ # ---------------------------------------------------------------------
+-if [ $IS_DARWIN -ne 1 ]; then
++if false; then
+   FONTS_CONFIGURATION_BASE_PATH="$REMOTE_DEV_SERVER_DIR/selfcontained/fontconfig"
+   if [ ! -d "$FONTS_CONFIGURATION_BASE_PATH" ]; then
+     echo "ERROR! Unable to locate font configuration source directory in self-contained distribution: '$FONTS_CONFIGURATION_BASE_PATH'." 1>&2
+@@ -366,7 +370,9 @@
+ else
    REMOTE_DEV_SERVER_USE_SELF_CONTAINED_LIBS=1
  fi
 
+-if [ $REMOTE_DEV_SERVER_USE_SELF_CONTAINED_LIBS -eq 1 ]; then
 +REMOTE_DEV_SERVER_USE_SELF_CONTAINED_LIBS=0
 +
- if [ $REMOTE_DEV_SERVER_USE_SELF_CONTAINED_LIBS -eq 1 ]; then
++if false; then
    SELFCONTAINED_LIBS="$REMOTE_DEV_SERVER_DIR/selfcontained/lib"
    if [ ! -d "$SELFCONTAINED_LIBS" ]; then
-@@ -596,3 +598,5 @@
-     "$LAUNCHER" "$STARTER_COMMAND" "$PROJECT_PATH" "$@"
-     ;;
- esac
-+
-+unset REMOTE_DEV_SERVER_USE_SELF_CONTAINED_LIBS
+     echo "ERROR! Unable to locate libraries for self-contained idea distribution. Directory not found: '$SELFCONTAINED_LIBS'." 1>&2
+@@ -588,6 +594,7 @@
+ if [ $PER_PROJECT_CONFIGS -eq 1 ]; then
+       "$LAUNCHER" "$STARTER_COMMAND" "$PROJECT_PATH" "$@"
+       ;;
+   esac
++  unset REMOTE_DEV_SERVER_USE_SELF_CONTAINED_LIBS
+ else
+   # for compatibility with old launcher arguments
+   if [ "$STARTER_COMMAND" = "warmup" ]; then
