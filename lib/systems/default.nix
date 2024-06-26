@@ -179,6 +179,7 @@ let
         (isAndroid || isGnu || isMusl                                  # Linux (allows multiple libcs)
          || isDarwin || isSunOS || isOpenBSD || isFreeBSD || isNetBSD  # BSDs
          || isCygwin || isMinGW                                        # Windows
+         || isGhcjs                                                    # ghc js cross-compilation
         ) && !isStatic;
 
       # The difference between `isStatic` and `hasSharedLibraries` is mainly the
