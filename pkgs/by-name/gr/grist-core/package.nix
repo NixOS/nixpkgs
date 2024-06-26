@@ -1,5 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, fetchYarnDeps, mkYarnPackage, mkYarnModules
-, yarn, python3, sqlite, nodejs, gvisor, coreutils
+{ lib, stdenv, fetchFromGitHub, fetchYarnDeps
+, yarn, python3, sqlite, nodejs, coreutils
 }: let
 
   pname = "grist-core";
@@ -16,6 +16,21 @@
     yarnLock = src + "/yarn.lock";
     hash = "sha256-TxyQdI/tP7q6kevMQJbnXmaVhBiFOK+9C10feNupGxs=";
   };
+
+  gristPython = python3.withPackages (pkgs: with pkgs; [
+    ## see ${src}/sandbox/requirements3.in
+    friendly-traceback
+    openpyxl
+    astroid
+    roman
+    chardet
+    iso8601
+    phonenumbers
+    python-dateutil
+    six
+    sortedcontainers
+    unittest-xml-reporting
+  ]);
 
 in stdenv.mkDerivation {
 
@@ -65,7 +80,7 @@ in stdenv.mkDerivation {
     cp -R . $out/libexec/grist
     substitute ${./grist-run.sh.in} $out/bin/grist-run \
       --subst-var-by gristOut $out/libexec/grist \
-      --subst-var-by path ${lib.makeBinPath [ nodejs coreutils gvisor ]}
+      --subst-var-by path ${lib.makeBinPath [ nodejs coreutils gristPython ]}
     chmod +x $out/bin/grist-run
   '';
 
