@@ -96,11 +96,7 @@ let
     };
   } cfg.extraConfig;
 
-  configFile = pkgs.runCommandLocal "config.toml" { } ''
-    ${pkgs.buildPackages.remarshal}/bin/remarshal -if json -of toml \
-      < ${pkgs.writeText "config.json" (builtins.toJSON configOptions)} \
-      > $out
-  '';
+  configFile = (pkgs.formats.toml {}).generate "config.toml" configOptions;
 in
 {
 
