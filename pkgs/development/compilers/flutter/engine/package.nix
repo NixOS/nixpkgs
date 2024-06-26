@@ -15,6 +15,7 @@
   fetchgit,
   runCommand,
   llvmPackages,
+  llvmPackages_15,
   patchelf,
   openbox,
   xorg,
@@ -67,6 +68,10 @@ let
     url = "https://swiftshader.googlesource.com/SwiftShader.git";
     hash = swiftshaderHash;
     rev = swiftshaderRev;
+
+    postFetch = ''
+      rm -rf $out/third_party/llvm-project
+    '';
   };
 
   llvm = symlinkJoin {
@@ -178,7 +183,14 @@ stdenv.mkDerivation (finalAttrs: {
   postUnpack = ''
     pushd ${src.name}
 
-    ln -s $swiftshader src/flutter/third_party/swiftshader
+    cp -pr --reflink=auto $swiftshader src/flutter/third_party/swiftshader
+    chmod -R u+w -- src/flutter/third_party/swiftshader
+
+    ln -s ${llvmPackages_15.llvm.monorepoSrc} src/flutter/third_party/swiftshader/third_party/llvm-project
+
+    mkdir -p src/flutter/buildtools/${constants.alt-platform}
+    ln -s ${llvm} src/flutter/buildtools/${constants.alt-platform}/clang
+    ln -s ${dart} src/third_party/dart/tools/sdks/dart-sdk
 
     ${lib.optionalString (stdenv.isLinux) ''
       for patchtool in ''${patchtools[@]}; do
@@ -197,9 +209,6 @@ stdenv.mkDerivation (finalAttrs: {
       git commit -a -m "$rev" --quiet
       popd
     done
-
-    mkdir -p src/flutter/buildtools/${constants.alt-platform}
-    ln -s ${llvm} src/flutter/buildtools/${constants.alt-platform}/clang
 
     dart src/third_party/dart/tools/generate_package_config.dart
     cp ${./pkg-config.py} src/build/config/linux/pkg-config.py
