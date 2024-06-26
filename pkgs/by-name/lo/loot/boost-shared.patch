@@ -1,0 +1,12 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index e67328dd..a98c3213 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -42,7 +42,6 @@ configure_file("${CMAKE_SOURCE_DIR}/src/gui/version.cpp.in"
+ # External Projects
+ ##############################
+ 
+-set(Boost_USE_STATIC_LIBS ON)
+ set(Boost_USE_MULTITHREADED ON)
+ set(Boost_USE_STATIC_RUNTIME OFF)
+ 
