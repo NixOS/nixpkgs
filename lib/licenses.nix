@@ -134,6 +134,11 @@ in mkLicense lset) ({
     fullName = "Apache License 2.0 with LLVM Exceptions";
   };
 
+  bitstreamCharter = {
+    spdxId = "Bitstream-Charter";
+    fullName = "Bitstream Charter Font License";
+  };
+
   bitstreamVera = {
     spdxId = "Bitstream-Vera";
     fullName = "Bitstream Vera Font License";
@@ -222,6 +227,11 @@ in mkLicense lset) ({
   bsdProtection = {
     spdxId = "BSD-Protection";
     fullName = "BSD Protection License";
+  };
+
+  bsdSourceCode = {
+    spdx = "BSD-Source-Code";
+    fullName = "BSD Source Code Attribution";
   };
 
   bsl11 = {
@@ -615,6 +625,11 @@ in mkLicense lset) ({
     fullName = "Historic Permission Notice and Disclaimer";
   };
 
+  hpndDocSell = {
+    spdxId = "HPND-doc-sell";
+    fullName = "Historical Permission Notice and Disclaimer - documentation sell variant";
+  };
+
   hpndSellVariant = {
     fullName = "Historical Permission Notice and Disclaimer - sell variant";
     spdxId = "HPND-sell-variant";
@@ -858,6 +873,11 @@ in mkLicense lset) ({
     fullName = "Enlightenment License (e16)";
   };
 
+  mitOpenGroup = {
+    spdxId = "MIT-open-group";
+    fullName = "MIT Open Group variant";
+  };
+
   mit0 = {
     spdxId = "MIT-0";
     fullName = "MIT No Attribution";
@@ -937,6 +957,11 @@ in mkLicense lset) ({
   nposl3 = {
     spdxId = "NPOSL-3.0";
     fullName = "Non-Profit Open Software License 3.0";
+  };
+
+  ntp = {
+    spdxId = "NTP";
+    fullName = "NTP License";
   };
 
   nvidiaCuda = {

@@ -81,8 +81,7 @@ let
       };
     });
 in
-final: prev:
-{
+final: prev: {
   wrapWithXFileSearchPathHook = callPackage (
     {
       makeBinaryWrapper,
@@ -112,21 +111,268 @@ final: prev:
       )
   ) { };
 
-  appres = addMainProgram prev.appres { };
+  appres = prev.appres.overrideAttrs (attrs: {
+    meta = attrs.meta // {
+      license = lib.licenses.mitOpenGroup;
+      mainProgram = "appres";
+    };
+  });
 
   bdftopcf = prev.bdftopcf.overrideAttrs (attrs: {
     buildInputs = attrs.buildInputs ++ [ xorg.xorgproto ];
     meta = attrs.meta // {
+      license = lib.licenses.mitOpenGroup;
       mainProgram = "bdftopcf";
     };
   });
 
-  bitmap = addMainProgram prev.bitmap { };
+  bitmap = prev.bitmap.overrideAttrs (attrs: {
+    meta = attrs.meta // {
+      license = lib.licenses.mitOpenGroup;
+      mainProgram = "bitmap";
+    };
+  });
 
   editres = prev.editres.overrideAttrs (attrs: {
     hardeningDisable = [ "format" ];
     meta = attrs.meta // {
+      license = lib.licenses.mitOpenGroup;
       mainProgram = "editres";
+    };
+  });
+
+  encodings = prev.encodings.overrideAttrs (attrs: {
+    meta = attrs.meta // {
+      license = lib.licenses.publicDomain;
+    };
+  });
+
+  fontadobe100dpi = prev.fontadobe100dpi.overrideAttrs (attrs: {
+    meta = attrs.meta // {
+      # unknown permission notice and disclaimer
+      # seems free to me (use, share and improve is permitted, studying does not really work for fonts)
+      license = lib.licenses.free;
+    };
+  });
+
+  fontadobe75dpi = prev.fontadobe75dpi.overrideAttrs (attrs: {
+    meta = attrs.meta // {
+      # same as fontadobe100dpi
+      license = lib.licenses.free;
+    };
+  });
+
+  fontadobeutopia100dpi = prev.fontadobeutopia100dpi.overrideAttrs (attrs: {
+    meta = attrs.meta // {
+      # unknown permission notice and disclaimer
+      # permission to use and share is granted, but not explicitly to improve
+      # trademark and attribution only have to appear in "unmodified copies",
+      # which could mean that modified copies are allowed,
+      # but that does not seem to me how legal stuff works, so I'd say:
+      license = lib.licenses.unfreeRedistributable;
+    };
+  });
+
+  fontadobeutopia75dpi = prev.fontadobeutopia75dpi.overrideAttrs (attrs: {
+    meta = attrs.meta // {
+      # same as fontadobeutopia100dpi
+      license = lib.licenses.unfreeRedistributable;
+    };
+  });
+
+  fontadobeutopiatype1 = prev.fontadobeutopiatype1.overrideAttrs (attrs: {
+    meta = attrs.meta // {
+      # same as fontadobeutopia100dpi
+      license = lib.licenses.unfreeRedistributable;
+    };
+  });
+
+  fontalias = prev.fontalias.overrideAttrs (attrs: {
+    meta = attrs.meta // {
+      # unknown permission notice and disclaimer that grants all 4 freedoms
+      license = lib.licenses.free;
+    };
+  });
+
+  fontarabicmisc = prev.fontarabicmisc.overrideAttrs (attrs: {
+    meta = attrs.meta // {
+      license = lib.licenses.mit;
+    };
+  });
+
+  fontbh75dpi = prev.fontbh75dpi.overrideAttrs (attrs: {
+    meta = attrs.meta // {
+      # the legal notice only allows the the use of the software
+      # there are no statements about it being redistributable
+      # changing is not allowed unless is is absolutely necessary
+      license = lib.licenses.unfree;
+    };
+  });
+
+  fontbh100dpi = prev.fontbh100dpi.overrideAttrs (attrs: {
+    meta = attrs.meta // {
+      # same as fontbh75dpi
+      license = lib.licenses.unfree;
+    };
+  });
+
+  # Bigelow & Holmes fonts
+  fontbhlucidatypewriter75dpi = prev.fontbhlucidatypewriter75dpi.overrideAttrs (attrs: {
+    meta = attrs.meta // {
+      # https://www.x.org/releases/current/doc/xorg-docs/License.html#Bigelow_Holmes_Inc_and_URW_GmbH_Luxi_font_license
+      license = lib.licenses.unfreeRedistributable;
+    };
+  });
+
+  fontbhlucidatypewriter100dpi = prev.fontbhlucidatypewriter100dpi.overrideAttrs (attrs: {
+    meta = attrs.meta // {
+      # same as fontbhlucidatypewriter75dpi
+      license = lib.licenses.unfreeRedistributable;
+    };
+  });
+
+  fontbhttf = prev.fontbhttf.overrideAttrs (attrs: {
+    meta = attrs.meta // {
+      # copyright notice permits using and distributing,
+      # but changing is not permitted, so:
+      license = lib.licenses.unfreeRedistributable;
+    };
+  });
+
+  fontbhtype1 = prev.fontbhtype1.overrideAttrs (attrs: {
+    meta = attrs.meta // {
+      # same as fontbhttf
+      license = lib.licenses.unfreeRedistributable;
+    };
+  });
+
+  fontbitstream100dpi = prev.fontbitstream100dpi.overrideAttrs (attrs: {
+    meta = attrs.meta // {
+      license = with lib.licenses; [
+        free
+        bitstreamCharter
+      ];
+    };
+  });
+
+  fontbitstream75dpi = prev.fontbitstream75dpi.overrideAttrs (attrs: {
+    meta = attrs.meta // {
+      license = with lib.licenses; [
+        free
+        bitstreamCharter
+      ];
+    };
+  });
+
+  fontbitstreamtype1 = prev.fontbitstreamtype1.overrideAttrs (attrs: {
+    nativeBuildInputs = attrs.nativeBuildInputs ++ [ fontforge ];
+
+    postBuild = ''
+      # convert Postscript (Type 1) font to otf
+      for i in $(find -type f -name '*.pfa' -o -name '*.pfb'); do
+          name=$(basename $i | cut -d. -f1)
+          fontforge -lang=ff -c "Open(\"$i\"); Generate(\"$name.otf\")"
+      done
+    '';
+
+    postInstall = ''
+      # install the otf fonts
+      fontDir="$out/lib/X11/fonts/misc/"
+      install -D -m 644 -t "$fontDir" *.otf
+      mkfontscale "$fontDir"
+    '';
+
+    meta = attrs.meta // {
+      license = lib.licenses.bitstreamCharter;
+    };
+  });
+
+  fontbitstreamspeedo = prev.fontbitstreamspeedo.overrideAttrs (attrs: {
+    meta = attrs.meta // {
+      license = lib.licenses.bitstreamCharter;
+    };
+  });
+
+  fontcronyxcyrillic = prev.fontcronyxcyrillic.overrideAttrs (attrs: {
+    meta = attrs.meta // {
+      # unknown permission notice that grants all 4 freedoms
+      license = lib.licenses.free;
+    };
+  });
+
+  fontcursormisc = prev.fontcursormisc.overrideAttrs (attrs: {
+    meta = attrs.meta // {
+      # whatever this is supposed to mean:
+      # "These ""glyphs"" are unencumbered"
+      license = lib.licenses.unfree;
+    };
+  });
+
+  fontdaewoomisc = prev.fontdaewoomisc.overrideAttrs (attrs: {
+    meta = attrs.meta // {
+      # no license, just a copyright notice
+      license = lib.licenses.unfree;
+    };
+  });
+
+  fontdecmisc = prev.fontdecmisc.overrideAttrs (attrs: {
+    meta = attrs.meta // {
+      license = lib.licenses.hpndSellVariant;
+    };
+  });
+
+  fontibmtype1 = prev.fontibmtype1.overrideAttrs (attrs: {
+    meta = attrs.meta // {
+      license = lib.licenses.unfreeRedistributable;
+    };
+  });
+
+  fontisasmisc = prev.fontisasmisc.overrideAttrs (attrs: {
+    meta = attrs.meta // {
+      license = lib.licenses.hpndSellVariant;
+    };
+  });
+
+  fontjismisc = prev.fontjismisc.overrideAttrs (attrs: {
+    meta = attrs.meta // {
+      # unclear license, "permission to use"?
+      license = lib.licenses.unfree;
+    };
+  });
+
+  fontmicromisc = prev.fontmicromisc.overrideAttrs (attrs: {
+    meta = attrs.meta // {
+      license = lib.licenses.publicDomain;
+    };
+  });
+
+  fontmisccyrillic = prev.fontmisccyrillic.overrideAttrs (attrs: {
+    meta = attrs.meta // {
+      license = with lib.licenses; [
+        # koi12x24b.bdf, koi8x16b.bdf and koi8x16.bdf:
+        # > May be distributed and modified without restrictions.
+        # assuming permission to use this is free
+
+        # koi12x24.bdf and koi6x13.bdf:
+        free
+
+        # koi5x8.bdf, koi6x13b.bdf, koi6x9.bdf, koi7x14b.bdf, koi7x14.bdf,
+        # koi8x13.bdf, koi9x15b.bdf, koi9x15.bdf, koi9x18b.bdf and koi9x18.bdf:
+        publicDomain
+      ];
+    };
+  });
+
+  fontmiscethiopic = prev.fontmiscethiopic.overrideAttrs (attrs: {
+    meta = attrs.meta // {
+      license = lib.licenses.mit;
+    };
+  });
+
+  fontmiscmeltho = prev.fontmiscmeltho.overrideAttrs (attrs: {
+    meta = attrs.meta // {
+      # modified version of the Bigelow & Holmes Font License
+      license = lib.licenses.unfreeRedistributable;
     };
   });
 
@@ -136,6 +382,40 @@ final: prev:
       test -f $ALIASFILE
       cp $ALIASFILE $out/lib/X11/fonts/misc/fonts.alias
     '';
+    meta = attrs.meta // {
+      license = lib.licenses.publicDomain;
+    };
+  });
+
+  fontmuttmisc = prev.fontmuttmisc.overrideAttrs (attrs: {
+    meta = attrs.meta // {
+      license = lib.licenses.mit;
+    };
+  });
+
+  fontschumachermisc = prev.fontschumachermisc.overrideAttrs (attrs: {
+    meta = attrs.meta // {
+      license = lib.licenses.ntp;
+    };
+  });
+
+  fontscreencyrillic = prev.fontscreencyrillic.overrideAttrs (attrs: {
+    meta = attrs.meta // {
+      # unknown permission notice that grants all 4 freedoms
+      license = lib.licenses.free;
+    };
+  });
+
+  fontsonymisc = prev.fontsonymisc.overrideAttrs (attrs: {
+    meta = attrs.meta // {
+      license = lib.licenses.hpndSellVariant;
+    };
+  });
+
+  fontsunmisc = prev.fontsunmisc.overrideAttrs (attrs: {
+    meta = attrs.meta // {
+      license = lib.licenses.mit;
+    };
   });
 
   fonttosfnt = prev.fonttosfnt.overrideAttrs (attrs: {
@@ -145,9 +425,62 @@ final: prev:
     };
   });
 
-  gccmakedep = addMainProgram prev.gccmakedep { };
-  iceauth = addMainProgram prev.iceauth { };
-  ico = addMainProgram prev.ico { };
+  fontutil = prev.fontutil.overrideAttrs (attrs: {
+    meta = attrs.meta // {
+      license = with lib.licenses; [
+        mit
+        bsd2
+        bsdSourceCode
+        mitOpenGroup
+        # Unicode Terms Of Use is included, not sure if this is also a license
+      ];
+    };
+  });
+
+  fontwinitzkicyrillic = prev.fontwinitzkicyrillic.overrideAttrs (attrs: {
+    meta = attrs.meta // {
+      license = lib.licenses.publicDomain;
+    };
+  });
+
+  fontxfree86type1 = prev.fontxfree86type1.overrideAttrs (attrs: {
+    meta = attrs.meta // {
+      license = lib.licenses.x11;
+    };
+  });
+
+  gccmakedep = prev.gccmakedep.overrideAttrs (prev: {
+    meta = prev // {
+      license = with lib.licenses; [
+        # COPYING file suggests looking at the Copyright headers of every file:
+        gpl2Plus
+        gpl3Plus
+        hpndSellVariant
+        X11
+        # gccmakedep.{in,man} have no license statement
+        unfree
+      ];
+      mainProgram = "gccmakedep";
+    };
+  });
+
+  iceauth = prev.iceauth.overrideAttrs (prev: {
+    meta = prev // {
+      license = lib.licenses.mitOpenGroup;
+      mainProgram = "iceauth";
+    };
+  });
+
+  ico = prev.ico.overrideAttrs (prev: {
+    meta = prev // {
+      license = with lib.licenses; [
+        x11
+        smlnj
+        hpndSellVariant
+      ];
+      mainProgram = "ico";
+    };
+  });
 
   imake = prev.imake.overrideAttrs (attrs: {
     inherit (xorg) xorgcffiles;
@@ -166,11 +499,209 @@ final: prev:
     inherit tradcpp;
 
     meta = attrs.meta // {
+      license = with lib.licenses; [
+        x11
+        mitOpenGroup
+      ];
       mainProgram = "imake";
     };
   });
 
-  mkfontdir = xorg.mkfontscale;
+  libAppleWM = prev.libAppleWM.overrideAttrs (attrs: {
+    buildInputs = attrs.buildInputs ++ [ ApplicationServices ];
+    preConfigure = ''
+      substituteInPlace src/Makefile.in --replace -F/System -F${ApplicationServices}
+    '';
+    meta = attrs.meta // {
+      license = lib.licenses.mit;
+    };
+  });
+
+  libdmx = prev.libdmx.overrideAttrs (attrs: {
+    configureFlags = attrs.configureFlags or [ ] ++ malloc0ReturnsNullCrossFlag;
+    meta = attrs.meta // {
+      license = lib.licenses.mit;
+    };
+  });
+
+  libfontenc = prev.libfontenc.overrideAttrs (attrs: {
+    meta = attrs.meta // {
+      license = lib.licenses.mit;
+    };
+  });
+
+  libFS = prev.libFS.overrideAttrs (attrs: {
+    configureFlags = attrs.configureFlags or [ ] ++ malloc0ReturnsNullCrossFlag;
+    meta = attrs.meta // {
+      license = with lib.licenses; [
+        mitOpenGroup
+        hpndSellVariant
+      ];
+    };
+  });
+
+  libICE = prev.libICE.overrideAttrs (attrs: {
+    outputs = [
+      "out"
+      "dev"
+      "doc"
+    ];
+    meta = attrs.meta // {
+      license = lib.licenses.mitOpenGroup;
+    };
+  });
+
+  libpciaccess = prev.libpciaccess.overrideAttrs (attrs: {
+    nativeBuildInputs = attrs.nativeBuildInputs ++ [
+      meson
+      ninja
+    ];
+
+    buildInputs =
+      attrs.buildInputs
+      ++ [ zlib ]
+      ++ lib.optionals stdenv.hostPlatform.isNetBSD (
+        with netbsd;
+        [
+          libarch
+          libpci
+        ]
+      );
+
+    mesonFlags = [
+      (lib.mesonOption "pci-ids" "${hwdata}/share/hwdata")
+      (lib.mesonEnable "zlib" true)
+    ];
+
+    meta = attrs.meta // {
+      license = with lib.licenses; [
+        mit
+        isc
+        x11
+      ];
+      # https://gitlab.freedesktop.org/xorg/lib/libpciaccess/-/blob/master/configure.ac#L108-114
+      platforms = lib.fold (os: ps: ps ++ lib.platforms.${os}) [ ] [
+        "cygwin"
+        "freebsd"
+        "linux"
+        "netbsd"
+        "openbsd"
+        "illumos"
+      ];
+      badPlatforms = [
+        # mandatory shared library
+        lib.systems.inspect.platformPatterns.isStatic
+      ];
+    };
+  });
+
+  libpthreadstubs = prev.libpthreadstubs.overrideAttrs (attrs: {
+    meta = attrs.meta // {
+      license = lib.licenses.x11DistributeModifications; # but with missing copyright notice
+      # only contains a pkgconfig file on linux and windows
+      platforms = lib.platforms.unix ++ lib.platforms.windows;
+    };
+  });
+
+  libSM = prev.libSM.overrideAttrs (attrs: {
+    outputs = [
+      "out"
+      "dev"
+      "doc"
+    ];
+    propagatedBuildInputs = attrs.propagatedBuildInputs or [ ] ++ [ xorg.libICE ];
+    meta = attrs.meta // {
+      license = with lib.licenses; [
+        mit
+        mitOpenGroup
+      ];
+    };
+  });
+
+  libWindowsWM = prev.libWindowsWM.overrideAttrs (attrs: {
+    configureFlags = attrs.configureFlags or [ ] ++ malloc0ReturnsNullCrossFlag;
+    meta = attrs.meta // {
+      license = lib.licenses.mit;
+    };
+  });
+
+  libX11 = prev.libX11.overrideAttrs (attrs: {
+    outputs = [
+      "out"
+      "dev"
+      "man"
+    ];
+    configureFlags = attrs.configureFlags or [ ] ++ malloc0ReturnsNullCrossFlag;
+    depsBuildBuild =
+      [ buildPackages.stdenv.cc ]
+      ++ lib.optionals stdenv.hostPlatform.isStatic [
+        (xorg.buildPackages.stdenv.cc.libc.static or null)
+      ];
+    preConfigure = ''
+      sed 's,^as_dummy.*,as_dummy="\$PATH",' -i configure
+    '';
+    postInstall = ''
+      # Remove useless DocBook XML files.
+      rm -rf $out/share/doc
+    '';
+    CPP = lib.optionalString stdenv.isDarwin "clang -E -";
+    propagatedBuildInputs = attrs.propagatedBuildInputs or [ ] ++ [ xorg.xorgproto ];
+    meta = attrs.meta // {
+      license = with lib.licenses; [
+        mitOpenGroup
+        x11
+        mit
+        hpndSellVariant
+        hpnd
+        smlnj
+        bsd1
+        isc
+        hpndDocSell
+        # some unknown permission notices that grant all 4 freedoms
+        free
+        # quite a few files carry this copyright notice:
+        # > (c) Copyright 1995 FUJITSU LIMITED
+        # > This is source code modified by FUJITSU LIMITED under the Joint
+        # > Development Agreement for the CDE/Motif PST.
+        # commit 5e7d589697755a70fb22d85c6a1ae82b39843e53 removes 2 files
+        # with the same copyright notice and states:
+        # > This is unpublished proprietary source code of FUJITSU LIMITED
+        unfree
+      ];
+    };
+  });
+
+  libXau = prev.libXau.overrideAttrs (attrs: {
+    outputs = [
+      "out"
+      "dev"
+    ];
+    propagatedBuildInputs = attrs.propagatedBuildInputs or [ ] ++ [ xorg.xorgproto ];
+    meta = attrs.meta // {
+      license = lib.licenses.mitOpenGroup;
+    };
+  });
+
+  libXaw = prev.libXaw.overrideAttrs (attrs: {
+    outputs = [
+      "out"
+      "dev"
+      "devdoc"
+    ];
+    propagatedBuildInputs = attrs.propagatedBuildInputs or [ ] ++ [ xorg.libXmu ];
+    meta = attrs.meta // {
+      license = with lib.licenses; [
+        mitOpenGroup
+        x11
+        hpndSellVariant
+        smlnj
+        ntp
+        # some unknown permission notices that grant all 4 freedoms
+        # may also be known, but i couldn't find a license that matches
+        free
+      ];
+    };
+  });
 
   libxcb = prev.libxcb.overrideAttrs (attrs: {
     # $dev/include/xcb/xcb.h includes pthread.h
@@ -188,6 +719,7 @@ final: prev:
       "doc"
     ];
     meta = attrs.meta // {
+      license = lib.licenses.x11DistributeModifications;
       pkgConfigModules = [
         "xcb-composite"
         "xcb-damage"
@@ -218,56 +750,50 @@ final: prev:
     };
   });
 
-  libxcvt = prev.libxcvt.overrideAttrs (
-    {
-      meta ? { },
-      ...
-    }:
-    {
-      meta = meta // {
-        homepage = "https://gitlab.freedesktop.org/xorg/lib/libxcvt";
-        mainProgram = "cvt";
-        badPlatforms = meta.badPlatforms or [ ] ++ [ lib.systems.inspect.platformPatterns.isStatic ];
-      };
-    }
-  );
-
-  libX11 = prev.libX11.overrideAttrs (attrs: {
+  libXcomposite = prev.libXcomposite.overrideAttrs (attrs: {
     outputs = [
       "out"
       "dev"
-      "man"
     ];
-    configureFlags = attrs.configureFlags or [ ] ++ malloc0ReturnsNullCrossFlag;
-    depsBuildBuild =
-      [ buildPackages.stdenv.cc ]
-      ++ lib.optionals stdenv.hostPlatform.isStatic [
-        (xorg.buildPackages.stdenv.cc.libc.static or null)
+    propagatedBuildInputs = attrs.propagatedBuildInputs or [ ] ++ [ xorg.libXfixes ];
+    meta = attrs.meta // {
+      license = with lib.licenses; [
+        hpndSellVariant
+        mit
       ];
-    preConfigure = ''
-      sed 's,^as_dummy.*,as_dummy="\$PATH",' -i configure
-    '';
-    postInstall = ''
-      # Remove useless DocBook XML files.
-      rm -rf $out/share/doc
-    '';
-    CPP = lib.optionalString stdenv.isDarwin "clang -E -";
-    propagatedBuildInputs = attrs.propagatedBuildInputs or [ ] ++ [ xorg.xorgproto ];
+    };
   });
 
-  libAppleWM = prev.libAppleWM.overrideAttrs (attrs: {
-    buildInputs = attrs.buildInputs ++ [ ApplicationServices ];
-    preConfigure = ''
-      substituteInPlace src/Makefile.in --replace -F/System -F${ApplicationServices}
-    '';
-  });
-
-  libXau = prev.libXau.overrideAttrs (attrs: {
+  libXcursor = prev.libXcursor.overrideAttrs (attrs: {
     outputs = [
       "out"
       "dev"
     ];
-    propagatedBuildInputs = attrs.propagatedBuildInputs or [ ] ++ [ xorg.xorgproto ];
+    meta = attrs.meta // {
+      license = lib.licenses.hpndSellVariant;
+    };
+  });
+
+  libxcvt = prev.libxcvt.overrideAttrs (attrs: {
+    meta = (attrs.meta or { }) // {
+      homepage = "https://gitlab.freedesktop.org/xorg/lib/libxcvt";
+      license = with lib.licenses; [
+        mit
+        hpndSellVariant
+      ];
+      mainProgram = "cvt";
+      badPlatforms = attrs.meta.badPlatforms or [ ] ++ [ lib.systems.inspect.platformPatterns.isStatic ];
+    };
+  });
+
+  libXdamage = prev.libXdamage.overrideAttrs (attrs: {
+    outputs = [
+      "out"
+      "dev"
+    ];
+    meta = attrs.meta // {
+      license = lib.licenses.hpndSellVariant;
+    };
   });
 
   libXdmcp = prev.libXdmcp.overrideAttrs (attrs: {
@@ -277,13 +803,48 @@ final: prev:
       "doc"
     ];
     meta = attrs.meta // {
+      license = lib.licenses.mitOpenGroup;
       pkgConfigModules = [ "xdmcp" ];
     };
   });
 
-  libXtst = prev.libXtst.overrideAttrs (attrs: {
+  libXext = prev.libXext.overrideAttrs (attrs: {
+    outputs = [
+      "out"
+      "dev"
+      "man"
+      "doc"
+    ];
+    propagatedBuildInputs = attrs.propagatedBuildInputs or [ ] ++ [
+      xorg.xorgproto
+      xorg.libXau
+    ];
+    configureFlags = attrs.configureFlags or [ ] ++ malloc0ReturnsNullCrossFlag;
     meta = attrs.meta // {
-      pkgConfigModules = [ "xtst" ];
+      license = with lib.licenses; [
+        mitOpenGroup
+        x11DistributeModifications
+        hpndSellVariant
+        smlnj
+        ntp
+        x11
+        hpndDocSell
+        mit
+        isc
+      ];
+    };
+  });
+
+  libXfixes = prev.libXfixes.overrideAttrs (attrs: {
+    outputs = [
+      "out"
+      "dev"
+    ];
+    meta = attrs.meta // {
+      license = with lib.licenses; [
+        hpndSellVariant
+        mit
+      ];
     };
   });
 
@@ -295,6 +856,311 @@ final: prev:
     propagatedBuildInputs = attrs.propagatedBuildInputs or [ ] ++ [ freetype ]; # propagate link reqs. like bzip2
     # prevents "misaligned_stack_error_entering_dyld_stub_binder"
     configureFlags = lib.optional isDarwin "CFLAGS=-O0";
+    meta = attrs.meta // {
+      license = with lib.licenses; [
+        mit
+        mitOpenGroup
+        smlnj
+        hpndSellVariant
+        bsdOriginalUC
+        bsd2
+        # lib/font/fontfile/gunzip.c
+        # > intended for inclusion in X11 public releases.
+        # as well as the last license in COPYING grants no freedoms
+        unfree
+      ];
+    };
+  });
+
+  libXfont2 = prev.libXfont2.overrideAttrs (attrs: {
+    meta = attrs.meta // {
+      # same COPYING file as libXfont
+      license = final.libXfont.meta.license;
+    };
+  });
+
+  libXft = prev.libXft.overrideAttrs (attrs: {
+    outputs = [
+      "out"
+      "dev"
+    ];
+    propagatedBuildInputs = attrs.propagatedBuildInputs or [ ] ++ [
+      xorg.libXrender
+      freetype
+      fontconfig
+    ];
+    configureFlags = attrs.configureFlags or [ ] ++ malloc0ReturnsNullCrossFlag;
+
+    # the include files need ft2build.h, and Requires.private isn't enough for us
+    postInstall = ''
+      sed "/^Requires:/s/$/, freetype2/" -i "$dev/lib/pkgconfig/xft.pc"
+    '';
+    passthru = attrs.passthru // {
+      inherit freetype fontconfig;
+    };
+    meta = attrs.meta // {
+      license = lib.licenses.hpndSellVariant;
+    };
+  });
+
+  libXi = prev.libXi.overrideAttrs (attrs: {
+    outputs = [
+      "out"
+      "dev"
+      "man"
+      "doc"
+    ];
+    propagatedBuildInputs = attrs.propagatedBuildInputs or [ ] ++ [
+      xorg.libXfixes
+      xorg.libXext
+    ];
+    configureFlags =
+      lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [ "xorg_cv_malloc0_returns_null=no" ]
+      ++ lib.optional stdenv.hostPlatform.isStatic "--disable-shared";
+    meta = attrs.meta // {
+      license = with lib.licenses; [
+        mitOpenGroup
+        smlnj
+        mit
+      ];
+    };
+  });
+
+  libXinerama = prev.libXinerama.overrideAttrs (attrs: {
+    outputs = [
+      "out"
+      "dev"
+    ];
+    configureFlags = attrs.configureFlags or [ ] ++ malloc0ReturnsNullCrossFlag;
+    meta = attrs.meta // {
+      license = with lib.licenses; [
+        mitOpenGroup
+        mit
+      ];
+    };
+  });
+
+  libxkbfile = prev.libxkbfile.overrideAttrs (attrs: {
+    outputs = [
+      "out"
+      "dev"
+    ]; # mainly to avoid propagation
+    meta = attrs.meta // {
+      license = with lib.licenses; [
+        hpndSellVariant
+        mitOpenGroup
+        smlnj
+      ];
+    };
+  });
+
+  libXmu = prev.libXmu.overrideAttrs (attrs: {
+    outputs = [
+      "out"
+      "dev"
+      "doc"
+    ];
+    buildFlags = [ "BITMAP_DEFINES='-DBITMAPDIR=\"/no-such-path\"'" ];
+    meta = attrs.meta // {
+      license = with lib.licenses; [
+        mitOpenGroup
+        smlnj
+        x11
+        isc
+      ];
+    };
+  });
+
+  libXp = prev.libXp.overrideAttrs (attrs: {
+    outputs = [
+      "out"
+      "dev"
+    ];
+    meta = attrs.meta // {
+      license = with lib.licenses; [
+        x11DistributeModifications
+        x11
+      ];
+    };
+  });
+
+  libXpm = prev.libXpm.overrideAttrs (attrs: {
+    outputs = [
+      "bin"
+      "dev"
+      "out"
+    ]; # tiny man in $bin
+    patchPhase = "sed -i '/USE_GETTEXT_TRUE/d' sxpm/Makefile.in cxpm/Makefile.in";
+    XPM_PATH_COMPRESS = lib.makeBinPath [ ncompress ];
+    meta = attrs.meta // {
+      license = with lib.licenses; [
+        x11
+        mit
+      ];
+      mainProgram = "sxpm";
+    };
+  });
+
+  libXpresent = prev.libXpresent.overrideAttrs (attrs: {
+    buildInputs =
+      with xorg;
+      attrs.buildInputs
+      ++ [
+        libXext
+        libXfixes
+        libXrandr
+      ];
+    meta = attrs.meta // {
+      license = with lib.licenses; [
+        hpndSellVariant
+        mit
+      ];
+    };
+  });
+
+  libXrandr = prev.libXrandr.overrideAttrs (attrs: {
+    outputs = [
+      "out"
+      "dev"
+    ];
+    configureFlags = attrs.configureFlags or [ ] ++ malloc0ReturnsNullCrossFlag;
+    propagatedBuildInputs = attrs.propagatedBuildInputs or [ ] ++ [ xorg.libXrender ];
+    meta = attrs.meta // {
+      license = lib.licenses.hpndSellVariant;
+    };
+  });
+
+  libXrender = prev.libXrender.overrideAttrs (attrs: {
+    outputs = [
+      "out"
+      "dev"
+      "doc"
+    ];
+    configureFlags = attrs.configureFlags or [ ] ++ malloc0ReturnsNullCrossFlag;
+    propagatedBuildInputs = attrs.propagatedBuildInputs or [ ] ++ [ xorg.xorgproto ];
+    meta = attrs.meta // {
+      license = lib.licenses.hpndSellVariant;
+    };
+  });
+
+  libXres = prev.libXres.overrideAttrs (attrs: {
+    outputs = [
+      "out"
+      "dev"
+      "devdoc"
+    ];
+    buildInputs = with xorg; attrs.buildInputs ++ [ utilmacros ];
+    configureFlags = attrs.configureFlags or [ ] ++ malloc0ReturnsNullCrossFlag;
+    meta = attrs.meta // {
+      license = lib.licenses.x11;
+    };
+  });
+
+  libXScrnSaver = prev.libXScrnSaver.overrideAttrs (attrs: {
+    buildInputs = with xorg; attrs.buildInputs ++ [ utilmacros ];
+    configureFlags = attrs.configureFlags or [ ] ++ malloc0ReturnsNullCrossFlag;
+    meta = attrs.meta // {
+      license = lib.licenses.x11;
+    };
+  });
+
+  libxshmfence = prev.libxshmfence.overrideAttrs (attrs: {
+    outputs = [
+      "out"
+      "dev"
+    ]; # mainly to avoid propagation
+    meta = attrs.meta // {
+      license = lib.licenses.hpndSellVariant;
+    };
+  });
+
+  # Propagate some build inputs because of header file dependencies.
+  # Note: most of these are in Requires.private, so maybe builder.sh
+  # should propagate them automatically.
+  libXt = prev.libXt.overrideAttrs (attrs: {
+    preConfigure = ''
+      sed 's,^as_dummy.*,as_dummy="\$PATH",' -i configure
+    '';
+    configureFlags = attrs.configureFlags or [ ] ++ malloc0ReturnsNullCrossFlag;
+    propagatedBuildInputs = attrs.propagatedBuildInputs or [ ] ++ [ xorg.libSM ];
+    depsBuildBuild = [ buildPackages.stdenv.cc ];
+    CPP = if stdenv.isDarwin then "clang -E -" else "${stdenv.cc.targetPrefix}cc -E -";
+    outputDoc = "devdoc";
+    outputs = [
+      "out"
+      "dev"
+      "devdoc"
+    ];
+    meta = attrs.meta // {
+      license = with lib.licenses; [
+        mit
+        hpndSellVariant
+        smlnj
+        mitOpenGroup
+        x11
+      ];
+    };
+  });
+
+  libXTrap = prev.libXTrap.overrideAttrs (attrs: {
+    meta = attrs.meta // {
+      license = lib.licenses.hpndSellVariant;
+    };
+  });
+
+  libXtst = prev.libXtst.overrideAttrs (attrs: {
+    meta = attrs.meta // {
+      license = with lib.licenses; [
+        mitOpenGroup
+        smlnj
+        hpndSellVariant
+        x11
+        hpndDocSell
+      ];
+      pkgConfigModules = [ "xtst" ];
+    };
+  });
+
+  libXv = prev.libXv.overrideAttrs (attrs: {
+    outputs = [
+      "out"
+      "dev"
+      "devdoc"
+    ];
+    configureFlags = attrs.configureFlags or [ ] ++ malloc0ReturnsNullCrossFlag;
+    meta = attrs.meta // {
+      license = with lib.licenses; [
+        smlnj
+        hpndSellVariant
+      ];
+    };
+  });
+
+  libXvMC = prev.libXvMC.overrideAttrs (attrs: {
+    outputs = [
+      "out"
+      "dev"
+      "doc"
+    ];
+    configureFlags = attrs.configureFlags or [ ] ++ malloc0ReturnsNullCrossFlag;
+    buildInputs = attrs.buildInputs ++ [ xorg.xorgproto ];
+    meta = attrs.meta // {
+      license = lib.licenses.mit;
+    };
+  });
+
+  libXxf86dga = prev.libXxf86dga.overrideAttrs (attrs: {
+    configureFlags = attrs.configureFlags or [ ] ++ malloc0ReturnsNullCrossFlag;
+    meta = attrs.meta // {
+      license = lib.licenses.x11DistributeModifications;
+    };
+  });
+
+  libXxf86misc = prev.libXxf86misc.overrideAttrs (attrs: {
+    configureFlags = attrs.configureFlags or [ ] ++ malloc0ReturnsNullCrossFlag;
+    meta = attrs.meta // {
+      license = lib.licenses.x11DistributeModifications;
+    };
   });
 
   libXxf86vm = prev.libXxf86vm.overrideAttrs (attrs: {
@@ -303,21 +1169,9 @@ final: prev:
       "dev"
     ];
     configureFlags = attrs.configureFlags or [ ] ++ malloc0ReturnsNullCrossFlag;
-  });
-  libXxf86dga = prev.libXxf86dga.overrideAttrs (attrs: {
-    configureFlags = attrs.configureFlags or [ ] ++ malloc0ReturnsNullCrossFlag;
-  });
-  libXxf86misc = prev.libXxf86misc.overrideAttrs (attrs: {
-    configureFlags = attrs.configureFlags or [ ] ++ malloc0ReturnsNullCrossFlag;
-  });
-  libdmx = prev.libdmx.overrideAttrs (attrs: {
-    configureFlags = attrs.configureFlags or [ ] ++ malloc0ReturnsNullCrossFlag;
-  });
-  libFS = prev.libFS.overrideAttrs (attrs: {
-    configureFlags = attrs.configureFlags or [ ] ++ malloc0ReturnsNullCrossFlag;
-  });
-  libWindowsWM = prev.libWindowsWM.overrideAttrs (attrs: {
-    configureFlags = attrs.configureFlags or [ ] ++ malloc0ReturnsNullCrossFlag;
+    meta = attrs.meta // {
+      license = lib.licenses.x11;
+    };
   });
 
   listres = addMainProgram prev.listres { };
@@ -352,25 +1206,6 @@ final: prev:
     };
   });
 
-  # Propagate some build inputs because of header file dependencies.
-  # Note: most of these are in Requires.private, so maybe builder.sh
-  # should propagate them automatically.
-  libXt = prev.libXt.overrideAttrs (attrs: {
-    preConfigure = ''
-      sed 's,^as_dummy.*,as_dummy="\$PATH",' -i configure
-    '';
-    configureFlags = attrs.configureFlags or [ ] ++ malloc0ReturnsNullCrossFlag;
-    propagatedBuildInputs = attrs.propagatedBuildInputs or [ ] ++ [ xorg.libSM ];
-    depsBuildBuild = [ buildPackages.stdenv.cc ];
-    CPP = if stdenv.isDarwin then "clang -E -" else "${stdenv.cc.targetPrefix}cc -E -";
-    outputDoc = "devdoc";
-    outputs = [
-      "out"
-      "dev"
-      "devdoc"
-    ];
-  });
-
   luit = prev.luit.overrideAttrs (attrs: {
     # See https://bugs.freedesktop.org/show_bug.cgi?id=47792
     # Once the bug is fixed upstream, this can be removed.
@@ -379,273 +1214,6 @@ final: prev:
     buildInputs = attrs.buildInputs ++ [ libiconv ];
     meta = attrs.meta // {
       mainProgram = "luit";
-    };
-  });
-
-  libICE = prev.libICE.overrideAttrs (attrs: {
-    outputs = [
-      "out"
-      "dev"
-      "doc"
-    ];
-  });
-
-  libXcomposite = prev.libXcomposite.overrideAttrs (attrs: {
-    outputs = [
-      "out"
-      "dev"
-    ];
-    propagatedBuildInputs = attrs.propagatedBuildInputs or [ ] ++ [ xorg.libXfixes ];
-  });
-
-  libXaw = prev.libXaw.overrideAttrs (attrs: {
-    outputs = [
-      "out"
-      "dev"
-      "devdoc"
-    ];
-    propagatedBuildInputs = attrs.propagatedBuildInputs or [ ] ++ [ xorg.libXmu ];
-  });
-
-  libXcursor = prev.libXcursor.overrideAttrs (attrs: {
-    outputs = [
-      "out"
-      "dev"
-    ];
-  });
-
-  libXdamage = prev.libXdamage.overrideAttrs (attrs: {
-    outputs = [
-      "out"
-      "dev"
-    ];
-  });
-
-  libXft = prev.libXft.overrideAttrs (attrs: {
-    outputs = [
-      "out"
-      "dev"
-    ];
-    propagatedBuildInputs = attrs.propagatedBuildInputs or [ ] ++ [
-      xorg.libXrender
-      freetype
-      fontconfig
-    ];
-    configureFlags = attrs.configureFlags or [ ] ++ malloc0ReturnsNullCrossFlag;
-
-    # the include files need ft2build.h, and Requires.private isn't enough for us
-    postInstall = ''
-      sed "/^Requires:/s/$/, freetype2/" -i "$dev/lib/pkgconfig/xft.pc"
-    '';
-    passthru = attrs.passthru // {
-      inherit freetype fontconfig;
-    };
-  });
-
-  libXext = prev.libXext.overrideAttrs (attrs: {
-    outputs = [
-      "out"
-      "dev"
-      "man"
-      "doc"
-    ];
-    propagatedBuildInputs = attrs.propagatedBuildInputs or [ ] ++ [
-      xorg.xorgproto
-      xorg.libXau
-    ];
-    configureFlags = attrs.configureFlags or [ ] ++ malloc0ReturnsNullCrossFlag;
-  });
-
-  libXfixes = prev.libXfixes.overrideAttrs (attrs: {
-    outputs = [
-      "out"
-      "dev"
-    ];
-  });
-
-  libXi = prev.libXi.overrideAttrs (attrs: {
-    outputs = [
-      "out"
-      "dev"
-      "man"
-      "doc"
-    ];
-    propagatedBuildInputs = attrs.propagatedBuildInputs or [ ] ++ [
-      xorg.libXfixes
-      xorg.libXext
-    ];
-    configureFlags =
-      lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [ "xorg_cv_malloc0_returns_null=no" ]
-      ++ lib.optional stdenv.hostPlatform.isStatic "--disable-shared";
-  });
-
-  libXinerama = prev.libXinerama.overrideAttrs (attrs: {
-    outputs = [
-      "out"
-      "dev"
-    ];
-    configureFlags = attrs.configureFlags or [ ] ++ malloc0ReturnsNullCrossFlag;
-  });
-
-  libXmu = prev.libXmu.overrideAttrs (attrs: {
-    outputs = [
-      "out"
-      "dev"
-      "doc"
-    ];
-    buildFlags = [ "BITMAP_DEFINES='-DBITMAPDIR=\"/no-such-path\"'" ];
-  });
-
-  libXrandr = prev.libXrandr.overrideAttrs (attrs: {
-    outputs = [
-      "out"
-      "dev"
-    ];
-    configureFlags = attrs.configureFlags or [ ] ++ malloc0ReturnsNullCrossFlag;
-    propagatedBuildInputs = attrs.propagatedBuildInputs or [ ] ++ [ xorg.libXrender ];
-  });
-
-  libSM = prev.libSM.overrideAttrs (attrs: {
-    outputs = [
-      "out"
-      "dev"
-      "doc"
-    ];
-    propagatedBuildInputs = attrs.propagatedBuildInputs or [ ] ++ [ xorg.libICE ];
-  });
-
-  libXrender = prev.libXrender.overrideAttrs (attrs: {
-    outputs = [
-      "out"
-      "dev"
-      "doc"
-    ];
-    configureFlags = attrs.configureFlags or [ ] ++ malloc0ReturnsNullCrossFlag;
-    propagatedBuildInputs = attrs.propagatedBuildInputs or [ ] ++ [ xorg.xorgproto ];
-  });
-
-  libXres = prev.libXres.overrideAttrs (attrs: {
-    outputs = [
-      "out"
-      "dev"
-      "devdoc"
-    ];
-    buildInputs = with xorg; attrs.buildInputs ++ [ utilmacros ];
-    configureFlags = attrs.configureFlags or [ ] ++ malloc0ReturnsNullCrossFlag;
-  });
-
-  libXScrnSaver = prev.libXScrnSaver.overrideAttrs (attrs: {
-    buildInputs = with xorg; attrs.buildInputs ++ [ utilmacros ];
-    configureFlags = attrs.configureFlags or [ ] ++ malloc0ReturnsNullCrossFlag;
-  });
-
-  libXv = prev.libXv.overrideAttrs (attrs: {
-    outputs = [
-      "out"
-      "dev"
-      "devdoc"
-    ];
-    configureFlags = attrs.configureFlags or [ ] ++ malloc0ReturnsNullCrossFlag;
-  });
-
-  libXvMC = prev.libXvMC.overrideAttrs (attrs: {
-    outputs = [
-      "out"
-      "dev"
-      "doc"
-    ];
-    configureFlags = attrs.configureFlags or [ ] ++ malloc0ReturnsNullCrossFlag;
-    buildInputs = attrs.buildInputs ++ [ xorg.xorgproto ];
-  });
-
-  libXp = prev.libXp.overrideAttrs (attrs: {
-    outputs = [
-      "out"
-      "dev"
-    ];
-  });
-
-  libXpm = prev.libXpm.overrideAttrs (attrs: {
-    outputs = [
-      "bin"
-      "dev"
-      "out"
-    ]; # tiny man in $bin
-    patchPhase = "sed -i '/USE_GETTEXT_TRUE/d' sxpm/Makefile.in cxpm/Makefile.in";
-    XPM_PATH_COMPRESS = lib.makeBinPath [ ncompress ];
-    meta = attrs.meta // {
-      mainProgram = "sxpm";
-    };
-  });
-
-  libXpresent = prev.libXpresent.overrideAttrs (attrs: {
-    buildInputs =
-      with xorg;
-      attrs.buildInputs
-      ++ [
-        libXext
-        libXfixes
-        libXrandr
-      ];
-  });
-
-  libxkbfile = prev.libxkbfile.overrideAttrs (attrs: {
-    outputs = [
-      "out"
-      "dev"
-    ]; # mainly to avoid propagation
-  });
-
-  libxshmfence = prev.libxshmfence.overrideAttrs (attrs: {
-    outputs = [
-      "out"
-      "dev"
-    ]; # mainly to avoid propagation
-  });
-
-  libpciaccess = prev.libpciaccess.overrideAttrs (attrs: {
-    nativeBuildInputs = attrs.nativeBuildInputs ++ [
-      meson
-      ninja
-    ];
-
-    buildInputs =
-      attrs.buildInputs
-      ++ [ zlib ]
-      ++ lib.optionals stdenv.hostPlatform.isNetBSD (
-        with netbsd;
-        [
-          libarch
-          libpci
-        ]
-      );
-
-    mesonFlags = [
-      (lib.mesonOption "pci-ids" "${hwdata}/share/hwdata")
-      (lib.mesonEnable "zlib" true)
-    ];
-
-    meta = attrs.meta // {
-      # https://gitlab.freedesktop.org/xorg/lib/libpciaccess/-/blob/master/configure.ac#L108-114
-      platforms = lib.fold (os: ps: ps ++ lib.platforms.${os}) [ ] [
-        "cygwin"
-        "freebsd"
-        "linux"
-        "netbsd"
-        "openbsd"
-        "illumos"
-      ];
-      badPlatforms = [
-        # mandatory shared library
-        lib.systems.inspect.platformPatterns.isStatic
-      ];
-    };
-  });
-
-  libpthreadstubs = prev.libpthreadstubs.overrideAttrs (attrs: {
-    # only contains a pkgconfig file on linux and windows
-    meta = attrs.meta // {
-      platforms = lib.platforms.unix ++ lib.platforms.windows;
     };
   });
 
@@ -661,6 +1229,7 @@ final: prev:
   });
 
   makedepend = addMainProgram prev.makedepend { };
+  mkfontdir = xorg.mkfontscale;
   mkfontscale = addMainProgram prev.mkfontscale { };
   oclock = addMainProgram prev.oclock { };
   smproxy = addMainProgram prev.smproxy { };
@@ -1388,6 +1957,10 @@ final: prev:
         "i686-linux"
         "x86_64-linux"
       ];
+      license = with lib.licenses; [
+        hpndSellVariant
+        mit
+      ];
     };
   });
 
@@ -1489,66 +2062,4 @@ final: prev:
   xwd = addMainProgram prev.xwd { };
   xwininfo = addMainProgram prev.xwininfo { };
   xwud = addMainProgram prev.xwud { };
-
-  # convert Type1 vector fonts to OpenType fonts
-  fontbitstreamtype1 = prev.fontbitstreamtype1.overrideAttrs (attrs: {
-    nativeBuildInputs = attrs.nativeBuildInputs ++ [ fontforge ];
-
-    postBuild = ''
-      # convert Postscript (Type 1) font to otf
-      for i in $(find -type f -name '*.pfa' -o -name '*.pfb'); do
-          name=$(basename $i | cut -d. -f1)
-          fontforge -lang=ff -c "Open(\"$i\"); Generate(\"$name.otf\")"
-      done
-    '';
-
-    postInstall = ''
-      # install the otf fonts
-      fontDir="$out/lib/X11/fonts/misc/"
-      install -D -m 644 -t "$fontDir" *.otf
-      mkfontscale "$fontDir"
-    '';
-  });
 }
-
-# mark some packages as unfree
-// (
-  let
-    # unfree but redistributable
-    redist = [
-      "fontadobeutopiatype1"
-      "fontadobeutopia100dpi"
-      "fontadobeutopia75dpi"
-      "fontbhtype1"
-      "fontibmtype1"
-      "fontbhttf"
-      "fontbh100dpi"
-      "fontbh75dpi"
-
-      # Bigelow & Holmes fonts
-      # https://www.x.org/releases/current/doc/xorg-docs/License.html#Bigelow_Holmes_Inc_and_URW_GmbH_Luxi_font_license
-      "fontbhlucidatypewriter100dpi"
-      "fontbhlucidatypewriter75dpi"
-    ];
-
-    # unfree, possibly not redistributable
-    unfree = [
-      # no license, just a copyright notice
-      "fontdaewoomisc"
-
-      # unclear license, "permission to use"?
-      "fontjismisc"
-    ];
-
-    setLicense =
-      license: name:
-      prev.${name}.overrideAttrs (attrs: {
-        meta = attrs.meta // {
-          inherit license;
-        };
-      });
-    mapNamesToAttrs = f: names: with lib; listToAttrs (zipListsWith nameValuePair names (map f names));
-  in
-  mapNamesToAttrs (setLicense lib.licenses.unfreeRedistributable) redist
-  // mapNamesToAttrs (setLicense lib.licenses.unfree) unfree
-)
