@@ -27,6 +27,7 @@
   mda_lv2,
   meson,
   ninja,
+  nix-update-script,
   nlohmann_json,
   pipewire,
   pkg-config,
@@ -114,6 +115,10 @@ stdenv.mkDerivation rec {
     '';
 
   separateDebugInfo = true;
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Audio effects for PipeWire applications";
