@@ -7,8 +7,12 @@
 , openssl
 , withTTS ? false
 , speechd
+, darwin
 }:
-
+let
+  inherit (darwin.apple_sdk.frameworks)
+    CoreAudio AudioUnit AVFoundation AppKit;
+in
 rustPlatform.buildRustPackage rec {
   pname = "blightmud";
   version = "5.3.0";
@@ -17,7 +21,7 @@ rustPlatform.buildRustPackage rec {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-e9Uo0IJYL9/6/nNL27zfUYnsTwDaOJOcR2CY6t++jDE=";
+    hash = "sha256-e9Uo0IJYL9/6/nNL27zfUYnsTwDaOJOcR2CY6t++jDE=";
   };
 
   cargoHash = "sha256-QSgTpmSojZrwZ0RsUL6c2xO310RZX3gkyGl6oNf6pYI=";
@@ -26,7 +30,11 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkg-config rustPlatform.bindgenHook ];
 
-  buildInputs = [ alsa-lib openssl ] ++ lib.optionals withTTS [ speechd ];
+  buildInputs = [ openssl ]
+    ++ lib.optionals (withTTS && stdenv.isLinux) [ speechd ]
+    ++ lib.optionals stdenv.isLinux [ alsa-lib ]
+    ++ lib.optionals (withTTS && stdenv.isDarwin) [ AVFoundation AppKit ]
+    ++ lib.optionals stdenv.isDarwin [ CoreAudio AudioUnit ];
 
   checkFlags =
     let
@@ -44,13 +52,16 @@ rustPlatform.buildRustPackage rec {
         "timer_test"
         "validate_assertion_fail"
         "regex_smoke_test"
+        "test_tls_init_verify_err"
+        "test_tls_init_no_verify"
+        "test_tls_init_verify"
       ];
       skipFlag = test: "--skip " + test;
     in
     builtins.concatStringsSep " " (builtins.map skipFlag skipList);
 
   meta = with lib; {
-    description = "A terminal MUD client written in Rust";
+    description = "Terminal MUD client written in Rust";
     mainProgram = "blightmud";
     longDescription = ''
       Blightmud is a terminal client for connecting to Multi User Dungeon (MUD)
@@ -64,6 +75,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/Blightmud/Blightmud";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ cpu ];
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }

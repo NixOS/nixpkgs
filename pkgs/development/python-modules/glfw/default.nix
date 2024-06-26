@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, glfw3
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  glfw3,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -24,16 +25,12 @@ buildPythonPackage rec {
     substituteInPlace glfw/library.py --replace "_get_library_search_paths()," "[ '${glfw3}/lib' ],"
   '';
 
-  propagatedBuildInputs = [
-    glfw3
-  ];
+  propagatedBuildInputs = [ glfw3 ];
 
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "glfw"
-  ];
+  pythonImportsCheck = [ "glfw" ];
 
   meta = with lib; {
     description = "Python bindings for GLFW";

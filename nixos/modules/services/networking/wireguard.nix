@@ -80,6 +80,15 @@ let
         description = "Commands called at the end of the interface setup.";
       };
 
+      preShutdown = mkOption {
+        example = literalExpression ''"''${pkgs.iproute2}/bin/ip netns del foo"'';
+        default = "";
+        type = with types; coercedTo (listOf str) (concatStringsSep "\n") lines;
+        description = ''
+          Commands called before shutting down the interface.
+        '';
+      };
+
       postShutdown = mkOption {
         example = literalExpression ''"''${pkgs.openresolv}/bin/resolvconf -d wg0"'';
         default = "";
@@ -497,6 +506,7 @@ let
         '';
 
         postStop = ''
+          ${values.preShutdown}
           ${ipPostMove} link del dev "${name}"
           ${values.postShutdown}
         '';

@@ -20,7 +20,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "A gorgeous modern sans-serif with a very long neck";
+    description = "Gorgeous modern sans-serif with a very long neck";
     longDescription = ''
       A gorgeous modern sans-serif with a very long neck. With a whole slew of
       styles & weights.

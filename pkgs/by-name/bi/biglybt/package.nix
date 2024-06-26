@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     changelog = "https://github.com/BiglySoftware/BiglyBT/releases/tag/v${version}";
-    description = "A BitTorrent client based on the Azureus that supports I2P darknet for privacy";
+    description = "BitTorrent client based on the Azureus that supports I2P darknet for privacy";
     downloadPage = "https://github.com/BiglySoftware/BiglyBT";
     homepage = "https://www.biglybt.com/";
     license = lib.licenses.gpl3Plus;

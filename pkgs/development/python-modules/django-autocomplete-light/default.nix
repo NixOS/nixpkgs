@@ -1,20 +1,21 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, django
-, six
-, pytestCheckHook
-, django-debug-toolbar
-, django-extensions
-, django-taggit
-, django-tagging
-, mock
-, pytest-django
-, selenium
-, splinter
-, sqlparse
-, tenacity
-, whitenoise
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  django,
+  six,
+  pytestCheckHook,
+  django-debug-toolbar,
+  django-extensions,
+  django-taggit,
+  django-tagging,
+  mock,
+  pytest-django,
+  selenium,
+  splinter,
+  sqlparse,
+  tenacity,
+  whitenoise,
 }:
 
 buildPythonPackage rec {
@@ -66,7 +67,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "dal" ];
 
   meta = with lib; {
-    description = "A fresh approach to autocomplete implementations, specially for Django";
+    description = "Fresh approach to autocomplete implementations, specially for Django";
     homepage = "https://django-autocomplete-light.readthedocs.io";
     license = licenses.bsd3;
     maintainers = with maintainers; [ ambroisie ];

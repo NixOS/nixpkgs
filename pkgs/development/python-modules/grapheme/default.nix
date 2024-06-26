@@ -1,7 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -20,9 +21,7 @@ buildPythonPackage rec {
   # https://github.com/alvinlindstam/grapheme/issues/18
   doCheck = false;
 
-  pythonImportsCheck = [
-    "grapheme"
-  ];
+  pythonImportsCheck = [ "grapheme" ];
 
   meta = with lib; {
     description = "Python package for grapheme aware string handling";

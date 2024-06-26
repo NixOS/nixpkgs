@@ -1,15 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, setuptools
-, zope-i18nmessageid
-, zope-interface
-, zope-schema
-, pytestCheckHook
-, zope-testing
-, zope-testrunner
-, manuel
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  setuptools,
+  zope-i18nmessageid,
+  zope-interface,
+  zope-schema,
+  pytestCheckHook,
+  zope-testing,
+  zope-testrunner,
+  manuel,
 }:
 
 buildPythonPackage rec {
@@ -25,9 +26,7 @@ buildPythonPackage rec {
     hash = "sha256-81h36tXpmANjhdLdxGkZ6ryZjmmcBZh5ZPFxrY3ZJxs=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   nativeCheckInputs = [
     manuel
@@ -45,13 +44,9 @@ buildPythonPackage rec {
   # Need to investigate how to run the tests with zope-testrunner
   doCheck = false;
 
-  pythonImportsCheck = [
-    "zope.configuration"
-  ];
+  pythonImportsCheck = [ "zope.configuration" ];
 
-  pythonNamespaces = [
-    "zope"
-  ];
+  pythonNamespaces = [ "zope" ];
 
   meta = with lib; {
     description = "Zope Configuration Markup Language (ZCML)";

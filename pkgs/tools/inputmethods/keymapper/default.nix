@@ -9,17 +9,19 @@
 , udev
 , wayland
 , libxkbcommon
+, gtk3
+, libayatana-appindicator
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "keymapper";
-  version = "4.0.2";
+  version = "4.4.0";
 
   src = fetchFromGitHub {
     owner = "houmain";
     repo = "keymapper";
     rev = finalAttrs.version;
-    hash = "sha256-a9CuLchSSfS4w3pZylzdiUr/llMsuU2qDR3mJrAupZk=";
+    hash = "sha256-NB9sVSkd01lm9Ia8fGrnICjD1cNdPfcvJ++Yy3NO5QQ=";
   };
 
   # all the following must be in nativeBuildInputs
@@ -32,11 +34,13 @@ stdenv.mkDerivation (finalAttrs: {
     udev
     libusb1
     libxkbcommon
+    gtk3
+    libayatana-appindicator
   ];
 
   meta = {
     changelog = "https://github.com/houmain/keymapper/blob/${finalAttrs.src.rev}/CHANGELOG.md";
-    description = "A cross-platform context-aware key remapper";
+    description = "Cross-platform context-aware key remapper";
     homepage = "https://github.com/houmain/keymapper";
     license = lib.licenses.gpl3Only;
     mainProgram = "keymapper";

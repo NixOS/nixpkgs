@@ -1,9 +1,10 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, setuptools
-, pytestCheckHook
-, sortedcontainers
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  setuptools,
+  pytestCheckHook,
+  sortedcontainers,
 }:
 
 buildPythonPackage rec {
@@ -28,9 +29,7 @@ buildPythonPackage rec {
   # don't append .dev0 to version
   env.RELEASING_PROCESS = "1";
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -47,7 +46,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "A small pure-python package for data structure related utility functions";
+    description = "Small pure-python package for data structure related utility functions";
     homepage = "https://github.com/shaypal5/strct";
     license = licenses.mit;
     maintainers = with maintainers; [ pbsds ];

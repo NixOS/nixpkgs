@@ -1,4 +1,5 @@
 { fetchFromGitHub
+, bash
 , json_c
 , keyutils
 , lib
@@ -17,7 +18,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libnvme";
-  version = "1.7.1";
+  version = "1.9";
 
   outputs = [ "out" ] ++ lib.optionals withDocs [ "man" ];
 
@@ -25,11 +26,13 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "linux-nvme";
     repo = "libnvme";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-hCR/K8bPXj8HthayrnwwGfI+wxpUwcWkcx3S/8h+3m8=";
+    hash = "sha256-nXzYbj4BDxFii30yR+aTgqjQfyYMFiAIcV/OHI2y5Ws=";
   };
 
   postPatch = ''
     patchShebangs scripts
+    substituteInPlace test/sysfs/sysfs-tree-diff.sh \
+      --replace-fail /bin/bash ${bash}/bin/bash
   '';
 
   nativeBuildInputs = [

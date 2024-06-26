@@ -1,19 +1,20 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, fastprogress
-, fastcore
-, fastdownload
-, torch
-, torchvision
-, matplotlib
-, pillow
-, scikit-learn
-, scipy
-, spacy
-, pandas
-, requests
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  fastprogress,
+  fastcore,
+  fastdownload,
+  torch,
+  torchvision,
+  matplotlib,
+  pillow,
+  scikit-learn,
+  scipy,
+  spacy,
+  pandas,
+  requests,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -47,7 +48,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/fastai/fastai";
-    description = "The fastai deep learning library";
+    description = "Fastai deep learning library";
     mainProgram = "configure_accelerate";
     changelog = "https://github.com/fastai/fastai/blob/${version}/CHANGELOG.md";
     license = licenses.asl20;

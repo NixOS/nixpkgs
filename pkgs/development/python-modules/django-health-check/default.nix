@@ -1,15 +1,17 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, sphinx
-, setuptools-scm
-, django
-, redis
-, celery
-, pytest-django
-, pytestCheckHook
-, mock
-, gitMinimal }:
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  sphinx,
+  setuptools-scm,
+  django,
+  redis,
+  celery,
+  pytest-django,
+  pytestCheckHook,
+  mock,
+  gitMinimal,
+}:
 
 buildPythonPackage rec {
   pname = "django-health-check";

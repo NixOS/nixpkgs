@@ -1,16 +1,18 @@
-{ lib
-, pkgs
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, pygame-ce
-, python-i18n
-, pytestCheckHook
+{
+  lib,
+  pkgs,
+  buildPythonPackage,
+  nix-update-script,
+  fetchFromGitHub,
+  setuptools,
+  pygame-ce,
+  python-i18n,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pygame-gui";
-  version = "0610";
+  version = "0612";
   pyproject = true;
   # nixpkgs-update: no auto update
 
@@ -18,12 +20,10 @@ buildPythonPackage rec {
     owner = "MyreMylar";
     repo = "pygame_gui";
     rev = "refs/tags/v_${version}";
-    hash = "sha256-PVNi/I174AyEEjc+N2UGtgOYSGAgVQbqrKkWZnjOxFY=";
+    hash = "sha256-6Ps3pmQ8tYwQyv0TliOvUNLy3GjSJ2jdDQTTxfYej0o=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     pygame-ce
@@ -55,14 +55,19 @@ buildPythonPackage rec {
     "test_process_event_text_ctrl_x"
   ];
 
-  disabledTestPaths = [
-    "tests/test_performance/test_text_performance.py"
-  ];
+  disabledTestPaths = [ "tests/test_performance/test_text_performance.py" ];
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version-regex" "v_(.*)" ];
+  };
 
   meta = with lib; {
-    description = "A GUI system for pygame";
+    description = "GUI system for pygame";
     homepage = "https://github.com/MyreMylar/pygame_gui";
     license = with licenses; [ mit ];
-    maintainers = with maintainers; [ emilytrau pbsds ];
+    maintainers = with maintainers; [
+      emilytrau
+      pbsds
+    ];
   };
 }

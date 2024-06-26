@@ -88,7 +88,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A generic media player from Linux Mint";
+    description = "Generic media player from Linux Mint";
     license = with licenses; [ gpl2Plus lgpl21Plus ];
     homepage = "https://github.com/linuxmint/xplayer";
     maintainers = with maintainers; [ tu-maurice bobby285271 ];

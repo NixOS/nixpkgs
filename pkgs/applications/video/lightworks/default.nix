@@ -27,15 +27,15 @@ let
   ];
 
   lightworks = stdenv.mkDerivation rec {
-    version = "2023.1";
-    rev = "141770";
+    version = "2023.2";
+    rev = "146240";
     pname = "lightworks";
 
     src =
       if stdenv.hostPlatform.system == "x86_64-linux" then
         fetchurl {
           url = "https://cdn.lwks.com/releases/${version}/lightworks_${version}_r${rev}.deb";
-          sha256 = "sha256-QRbghrZQbprl2wUBKNMJVBeW0Ek6nWvo4006jyPYIBg=";
+          sha256 = "sha256-sVEDCZZsY5OwuWebrhatzZiws89/tEKIdgY54PN0Ddo=";
         }
       else throw "${pname}-${version} is not supported on ${stdenv.hostPlatform.system}";
 

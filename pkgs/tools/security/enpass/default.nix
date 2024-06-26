@@ -57,7 +57,7 @@ let
     };
 
     meta = with lib; {
-      description = "A well known password manager";
+      description = "Well known password manager";
       homepage = "https://www.enpass.io/";
       sourceProvenance = with sourceTypes; [ binaryNativeCode ];
       license = licenses.unfree;

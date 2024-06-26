@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools-scm
-, pytest
-, jinja2
-, matplotlib
-, nose
-, pillow
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools-scm,
+  pytest,
+  jinja2,
+  matplotlib,
+  pynose,
+  pillow,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -20,25 +21,18 @@ buildPythonPackage rec {
     hash = "sha256-LVcWgRJOj/X04rnA0EfTfQSZ1rbY8vSaG1DN2ZMQRGk=";
   };
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
 
-  buildInputs = [
-    pytest
-  ];
+  buildInputs = [ pytest ];
 
   propagatedBuildInputs = [
     jinja2
     matplotlib
-    nose
+    pynose
     pillow
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
-
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTests = [
     # Broken since b6e98f18950c2b5dbdc725c1181df2ad1be19fee

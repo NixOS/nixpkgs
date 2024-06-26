@@ -55,7 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
   meta = {
-    description = "A set of C++ classes that provide a cross platform API for realtime audio input/output";
+    description = "Set of C++ classes that provide a cross platform API for realtime audio input/output";
     homepage = "https://www.music.mcgill.ca/~gary/rtaudio/";
     changelog = "https://github.com/thestk/rtaudio/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;

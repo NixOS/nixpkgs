@@ -61,7 +61,7 @@ python3Packages.buildPythonApplication rec {
   '';
 
   meta = with lib; {
-    description = "A simple, yet powerful tool that allows you to plot and manipulate your data with ease";
+    description = "Simple, yet powerful tool that allows you to plot and manipulate your data with ease";
     homepage = "https://apps.gnome.org/Graphs";
     license = licenses.gpl3Plus;
     mainProgram = "graphs";

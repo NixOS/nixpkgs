@@ -1,6 +1,6 @@
 { lib, mkCoqDerivation, which, coq, version ? null }:
 
-with builtins; with lib; let
+let
   elpi = coq.ocamlPackages.elpi.override (lib.switch coq.coq-version [
     { case = "8.11"; out = { version = "1.11.4"; };}
     { case = "8.12"; out = { version = "1.12.0"; };}
@@ -70,8 +70,8 @@ in mkCoqDerivation {
   propagatedBuildInputs = [ coq.ocamlPackages.findlib elpi ];
 
   meta = {
-    description = "Coq plugin embedding ELPI.";
-    maintainers = [ maintainers.cohencyril ];
-    license = licenses.lgpl21Plus;
+    description = "Coq plugin embedding ELPI";
+    maintainers = [ lib.maintainers.cohencyril ];
+    license = lib.licenses.lgpl21Plus;
   };
 }

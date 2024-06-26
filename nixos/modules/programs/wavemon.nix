@@ -1,14 +1,12 @@
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
   cfg = config.programs.wavemon;
 in {
   options = {
     programs.wavemon = {
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Whether to add wavemon to the global environment and configure a
@@ -18,7 +16,7 @@ in {
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     environment.systemPackages = with pkgs; [ wavemon ];
     security.wrappers.wavemon = {
       owner = "root";

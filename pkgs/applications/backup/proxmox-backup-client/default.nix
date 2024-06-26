@@ -146,7 +146,7 @@ rustPlatform.buildRustPackage {
   };
 
   meta = with lib; {
-    description = "The command line client for Proxmox Backup Server";
+    description = "Command line client for Proxmox Backup Server";
     homepage = "https://pbs.proxmox.com/docs/backup-client.html";
     changelog = "https://git.proxmox.com/?p=proxmox-backup.git;a=blob;f=debian/changelog;hb=refs/tags/v${version}";
     license = licenses.agpl3Only;

@@ -43,7 +43,7 @@ rustPlatform.buildRustPackage rec {
   ];
 
   meta = with lib; {
-    description = "A very fast implementation of tldr in Rust";
+    description = "Very fast implementation of tldr in Rust";
     homepage = "https://github.com/dbrgn/tealdeer";
     maintainers = with maintainers; [ davidak newam ];
     license = with licenses; [ asl20 mit ];

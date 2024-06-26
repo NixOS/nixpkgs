@@ -12,7 +12,7 @@
 , udev
 , eudev
 , libxslt
-, python3
+, python3Packages
 , docbook5
 , docbook_xsl
 , docbook_xsl_ns
@@ -47,11 +47,13 @@ stdenv.mkDerivation rec {
     gettext
     libxslt.bin # xsltproc
     docbook5 docbook_xsl docbook_xsl_ns docbook_xml_dtd_42 docbook_xml_dtd_45 # needed for docbook without Internet
-    (python3.withPackages (p: with p; [ lxml ]))  # fixes: man/meson.build:111:0: ERROR: Could not execute command "/build/source/tools/xml_helper.py".
+
+    # fixes: man/meson.build:111:0: ERROR: Could not execute command "/build/source/tools/xml_helper.py".
+    python3Packages.python
+    python3Packages.lxml
   ];
 
-  buildInputs =
-    if enableSystemd then [ udev ] else [ eudev ];
+  buildInputs = [ libcap ] ++ (if enableSystemd then [ udev ] else [ eudev ]);
 
   # Inspired by the systemd `preConfigure`.
   # Conceptually we should patch all files required during the build, but not scripts

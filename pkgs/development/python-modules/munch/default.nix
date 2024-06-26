@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
 
-# build-system
-, pbr
-, setuptools
+  # build-system
+  pbr,
+  setuptools,
 
-# tests
-, pytestCheckHook
-, pyyaml
+  # tests
+  pytestCheckHook,
+  pyyaml,
 }:
 
 buildPythonPackage rec {
@@ -36,9 +37,8 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "A dot-accessible dictionary (a la JavaScript objects)";
+    description = "Dot-accessible dictionary (a la JavaScript objects)";
     license = licenses.mit;
     homepage = "https://github.com/Infinidat/munch";
   };
-
 }

@@ -1,19 +1,22 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools
-, numpy
-, opencv4
-, pyyaml
-, qudida
-, scikit-image
-, scipy
-, deepdiff
-, pytestCheckHook
-, pythonOlder
-, pythonRelaxDepsHook
-, torch
-, torchvision
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  deepdiff,
+  numpy,
+  opencv4,
+  pyyaml,
+  scikit-image,
+  scikit-learn,
+  scipy,
+  pydantic,
+  pytestCheckHook,
+  pythonOlder,
+  pythonRelaxDepsHook,
+  torch,
+  torchvision,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
@@ -23,30 +26,31 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.8";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-VNpClOBdoaQOqU92Mm/Z5Q7P+fZzR+m43SFA9pSi1M0=";
+  src = fetchFromGitHub {
+    owner = "albumentations-team";
+    repo = "albumentations";
+    rev = "refs/tags/${version}";
+    hash = "sha256-7t1+22zzFtkZaAyOo6xjk+MXT9N44PmQ/NRRfvLeRVk=";
   };
 
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
-  ];
+  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   pythonRemoveDeps = [
     "opencv-python"
+    "pydantic"
   ];
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     numpy
     opencv4
+    pydantic
     pyyaml
-    qudida
     scikit-image
+    scikit-learn
     scipy
+    typing-extensions
   ];
 
   nativeCheckInputs = [

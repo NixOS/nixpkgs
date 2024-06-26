@@ -1,16 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, exceptiongroup
-, h11
-, h2
-, priority
-, wsproto
-, poetry-core
-, pytest-asyncio
-, pytest-trio
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  exceptiongroup,
+  h11,
+  h2,
+  priority,
+  wsproto,
+  poetry-core,
+  pytest-asyncio,
+  pytest-trio,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -31,9 +32,7 @@ buildPythonPackage rec {
     sed -i "/^addopts/d" pyproject.toml
   '';
 
-  build-system = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
   dependencies = [
     exceptiongroup
@@ -58,7 +57,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/pgjones/hypercorn";
-    description = "The ASGI web server inspired by Gunicorn";
+    description = "ASGI web server inspired by Gunicorn";
     mainProgram = "hypercorn";
     license = licenses.mit;
     maintainers = with maintainers; [ dgliwka ];

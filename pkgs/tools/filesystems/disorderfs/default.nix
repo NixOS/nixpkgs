@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   installFlags = [ "PREFIX=$(out)" ];
 
   meta = with lib; {
-    description = "An overlay FUSE filesystem that introduces non-determinism into filesystem metadata";
+    description = "Overlay FUSE filesystem that introduces non-determinism into filesystem metadata";
     mainProgram = "disorderfs";
     license = licenses.gpl3;
     platforms = platforms.linux;

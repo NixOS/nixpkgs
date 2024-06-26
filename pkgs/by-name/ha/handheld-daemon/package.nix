@@ -9,14 +9,14 @@
 }:
 python3.pkgs.buildPythonApplication rec {
   pname = "handheld-daemon";
-  version = "2.6.4";
+  version = "2.7.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "hhd-dev";
     repo = "hhd";
     rev = "v${version}";
-    hash = "sha256-S77APtE1GGfqnv1IkZdJOSlprPOBtrqVXV60yVMvopg=";
+    hash = "sha256-jWLL1nmKam1iJ1R1l/OuIp+isgZ7toRhVamx1nOID/8=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [

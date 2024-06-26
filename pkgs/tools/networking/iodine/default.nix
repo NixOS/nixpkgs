@@ -1,21 +1,27 @@
-{ lib, stdenv, fetchFromGitHub, zlib, nettools, nixosTests }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, zlib
+, nettools
+, nixosTests
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "iodine";
-  version = "unstable-2019-09-27";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "yarrick";
     repo = "iodine";
-    rev = "8e14f18";
-    sha256 = "0k8m99qfjd5n6n56jnq85y7q8h2i2b8yw6ba0kxsz4jyx97lavg3";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-0vDl/F/57puugrEdOtdlpNPMF9ugO7TP3KLWo/7bP2k=";
   };
 
   buildInputs = [ zlib ];
 
   patchPhase = ''sed -i "s,/sbin/route,${nettools}/bin/route," src/tun.c'';
 
-  env.NIX_CFLAGS_COMPILE = "-DIFCONFIGPATH=\"${nettools}/bin/\"";
+  env.NIX_CFLAGS_COMPILE = ''-DIFCONFIGPATH="${nettools}/bin/" -DROUTEPATH="${nettools}/bin/"'';
 
   installFlags = [ "prefix=\${out}" ];
 
@@ -29,4 +35,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.isc;
     platforms = lib.platforms.unix;
   };
-}
+})

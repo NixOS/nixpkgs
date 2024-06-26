@@ -21,7 +21,7 @@
 , jdk21
 , gamemode
 , flite
-, mesa-demos
+, glxinfo
 , pciutils
 , udev
 , vulkan-loader
@@ -113,7 +113,7 @@ symlinkJoin {
 
       runtimePrograms = [
         xorg.xrandr
-        mesa-demos # need glxinfo
+        glxinfo
         pciutils # need lspci
       ]
       ++ additionalPrograms;

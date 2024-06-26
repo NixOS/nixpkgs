@@ -1,19 +1,20 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, glyphslib
-, setuptools-scm
-, ufo2ft
-, fonttools
-, fontmath
-, lxml
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  glyphslib,
+  setuptools-scm,
+  ufo2ft,
+  fonttools,
+  fontmath,
+  lxml,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "fontmake";
   version = "3.9.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;

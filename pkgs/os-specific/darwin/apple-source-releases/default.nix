@@ -11,7 +11,6 @@ let
     };
     "osx-10.12.6" = {
       xnu           = "3789.70.16";
-      libiconv      = "50";
       Libnotify     = "165.20.1";
       objc4         = "709.1";
       dyld          = "433.5";
@@ -38,7 +37,6 @@ let
       dtrace        = "168";
       xnu           = "3248.60.10";
       libpthread    = "138.10.4";
-      libiconv      = "44";
       Libnotify     = "150.40.1";
       objc4         = "680";
       eap8021x      = "222.40.1";
@@ -106,7 +104,6 @@ let
     };
     "osx-10.9.5" = {
       launchd            = "842.92.1";
-      libauto            = "185.5";
       Libc               = "997.90.3"; # We use this, but not from here
       Libsystem          = "1197.1.1";
       Security           = "55471.14.18";
@@ -229,7 +226,7 @@ let
       pname = builtins.head (lib.splitString "/" namePath);
       appleDerivation' = stdenv: appleDerivation'' stdenv pname version sdkName sha256;
       appleDerivation = appleDerivation' stdenv;
-      callPackage = self.newScope { inherit appleDerivation' appleDerivation; };
+      callPackage = self.newScope { inherit appleDerivation' appleDerivation; python3 = pkgs.buildPackages.python3Minimal; };
     in callPackage (./. + "/${namePath}");
 
   applePackage = namePath: sdkName: sha256: let
@@ -261,7 +258,6 @@ developerToolsPackages_11_3_1 // macosPackages_11_0_1 // {
     eap8021x        = applePackage "eap8021x"          "osx-10.11.6"     "sha256-54P3+YhVhOanoZQoqswDnr/GbR/AdEERse135nyuIQo=" {};
     IOKit           = applePackage "IOKit"             "osx-10.11.6"     "" { inherit IOKitSrcs; };
     launchd         = applePackage "launchd"           "osx-10.9.5"      "sha256-dmV0UK7hG9wvTr+F4Z47nCFXcVZCV+cQ46WbE0DBtJs=" {};
-    libauto         = applePackage "libauto"           "osx-10.9.5"      "sha256-GnRcKq8jRbEsI/PSDphwUjWtpEIEcnLlQL9yxYLgSsU=" {};
     Libc            = applePackage "Libc"              "osx-10.12.6"     "sha256-LSsL7S3KFgGU9qjK4atu/4wBh8ftgfsk6JOvg+ZTZOY=" {
       Libc_10-9 = fetchFromGitHub {
         owner  = "apple-oss-distributions";
@@ -272,7 +268,6 @@ developerToolsPackages_11_3_1 // macosPackages_11_0_1 // {
     };
     libclosure      = applePackage "libclosure"        "osx-10.11.6"     "sha256-L5rQ+UBpf3B+W1U+gZKk7fXulslHsc8lxnCsplV+nr0=" {};
     libdispatch     = applePackage "libdispatch"       "osx-10.10.5"     "sha256-jfAEk0OLrJa9AIZVikIoHomd+l+4rCfc320Xh50qK5M=" {};
-    libiconv        = applePackage "libiconv"          "osx-10.12.6"     "sha256-ZzPFkchK3EU95UQUVVrR0t8iilhi/VnIkjjtP6KT2oI=" {};
     Libinfo         = applePackage "Libinfo"           "osx-10.11.6"     "sha256-6F7wiwerv4nz/xXHtp1qCHSaFzZgzcRN+jbmXA5oWOQ=" {};
     Libm            = applePackage "Libm"              "osx-10.7.4"      "sha256-KjMETfT4qJm0m0Ux/F6Rq8bI4Q4UVnFx6IKbKxXd+Es=" {};
     Libnotify       = applePackage "Libnotify"         "osx-10.12.6"     "sha256-6wvMBxAUfiYcQtmlfYCj1d3kFmFM/jdboTd7hRvi3e4=" {};
@@ -292,9 +287,7 @@ developerToolsPackages_11_3_1 // macosPackages_11_0_1 // {
     ppp             = applePackage "ppp"               "osx-10.12.6"     "sha256-M1zoEjjeKIDUEP6ACbpUJk3OXjobw4g/qzUmxGdX1J0=" {};
     removefile      = applePackage "removefile"        "osx-10.12.6"     "sha256-UpNk27kGXnZss1ZXWVJU9jLz/NW63ZAZEDLhyCYoi9M=" {};
     xnu             = if stdenv.isx86_64 then
-    applePackage "xnu"               "osx-10.12.6"     "sha256-C8TPQlUT3RbzAy8YnZPNtr70hpaVG9Llv0h42s3NENI=" {
-      python3 = pkgs.buildPackages.buildPackages.python3; # TODO(@Ericson2314) this shouldn't be needed.
-    }
+      applePackage "xnu" "osx-10.12.6" "sha256-C8TPQlUT3RbzAy8YnZPNtr70hpaVG9Llv0h42s3NENI=" {}
     else macosPackages_11_0_1.xnu;
     hfs             = applePackage "hfs"               "osx-10.12.6"     "sha256-eGi18HQFJrU5UHoBOE0LqO5gQ0xOf8+OJuAWQljfKE4=" {};
     Librpcsvc       = applePackage "Librpcsvc"         "osx-10.11.6"     "sha256-YHbGws901xONzAbo6sB5zSea4Wp0sgYUJ8YgwVfWxnE=" {};

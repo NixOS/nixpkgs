@@ -5,11 +5,11 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "dbip-country-lite";
-  version = "2024-05";
+  version = "2024-06";
 
   src = fetchurl {
     url = "https://download.db-ip.com/free/dbip-country-lite-${finalAttrs.version}.mmdb.gz";
-    hash = "sha256-MFhBCnYOJOVQl+xJ4wxi10nyb5MfRHnNVlba9LV1nsY=";
+    hash = "sha256-utCjcaJ05Wo2KgEccGbvLYSGc3eW1n2S4qrgWd6rERM=";
   };
 
   dontUnpack = true;
@@ -26,7 +26,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   passthru.mmdb = "${finalAttrs.finalPackage}/share/dbip/dbip-country-lite.mmdb";
 
   meta = with lib; {
-    description = "The free IP to Country Lite database by DB-IP";
+    description = "Free IP to Country Lite database by DB-IP";
     homepage = "https://db-ip.com/db/download/ip-to-country-lite";
     license = licenses.cc-by-40;
     maintainers = with maintainers; [ nickcao ];

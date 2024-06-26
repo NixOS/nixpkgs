@@ -2,19 +2,18 @@ diff --git a/CMakeLists.txt b/CMakeLists.txt
 index fb71d2d..3a710a4 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -200,11 +200,11 @@ if(NOT MANUAL_SUBMODULES)
+@@ -364,10 +364,10 @@ if(NOT MANUAL_SUBMODULES)
      endfunction ()
      
      message(STATUS "Checking submodules")
 -    check_submodule(external/miniupnp)
--    check_submodule(external/unbound)
 -    check_submodule(external/rapidjson)
 +    # check_submodule(external/miniupnp)
-+    # check_submodule(external/unbound)
 +    # check_submodule(external/rapidjson)
      check_submodule(external/trezor-common)
 -    check_submodule(external/randomx)
 +    # check_submodule(external/randomx)
+     check_submodule(external/supercop)
    endif()
  endif()
  
@@ -45,13 +44,15 @@ diff --git a/external/CMakeLists.txt b/external/CMakeLists.txt
 index 71b165f..10189ce 100644
 --- a/external/CMakeLists.txt
 +++ b/external/CMakeLists.txt
-@@ -37,19 +37,9 @@
+@@ -37,21 +37,9 @@
  
  find_package(Miniupnpc REQUIRED)
  
 -message(STATUS "Using in-tree miniupnpc")
+-set(UPNPC_NO_INSTALL TRUE CACHE BOOL "Disable miniupnp installation" FORCE)
 -add_subdirectory(miniupnp/miniupnpc)
 -set_property(TARGET libminiupnpc-static PROPERTY FOLDER "external")
+-set_property(TARGET libminiupnpc-static PROPERTY POSITION_INDEPENDENT_CODE ON)
 -if(MSVC)
 -  set_property(TARGET libminiupnpc-static APPEND_STRING PROPERTY COMPILE_FLAGS " -wd4244 -wd4267")
 -elseif(NOT MSVC)
@@ -68,10 +69,11 @@ index 71b165f..10189ce 100644
  
  find_package(Unbound)
  
-@@ -80,4 +70,3 @@ endif()
+@@ -69,5 +69,4 @@ endif()
  
  add_subdirectory(db_drivers)
  add_subdirectory(easylogging++)
+ add_subdirectory(qrcodegen)
 -add_subdirectory(randomx EXCLUDE_FROM_ALL)
 diff --git a/src/p2p/net_node.inl b/src/p2p/net_node.inl
 index c626e22..be570ed 100644

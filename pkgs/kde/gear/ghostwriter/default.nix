@@ -12,7 +12,7 @@
 mkKdeDerivation {
   pname = "ghostwriter";
 
-  extraNativeBuildInputs = [pkg-config kdoctools];
-  extraBuildInputs = [qtsvg qttools qtwebchannel qtwebengine qt5compat hunspell];
+  extraNativeBuildInputs = [pkg-config];
+  extraBuildInputs = [qtsvg qttools qtwebchannel qtwebengine qt5compat kdoctools hunspell];
   meta.mainProgram = "ghostwriter";
 }

@@ -1,38 +1,33 @@
-{ lib
-, stdenv
-, buildGoModule
-, fetchFromGitHub
-, git
-, installShellFiles
-, kubescape
-, testers
+{
+  lib,
+  stdenv,
+  buildGoModule,
+  fetchFromGitHub,
+  git,
+  installShellFiles,
+  kubescape,
+  testers,
 }:
 
 buildGoModule rec {
   pname = "kubescape";
-  version = "3.0.9";
+  version = "3.0.11";
 
   src = fetchFromGitHub {
     owner = "kubescape";
     repo = "kubescape";
     rev = "refs/tags/v${version}";
-    hash = "sha256-pAe289XwKq/PO39/Wt60uipt4Z0ZD5f73pDaOTXXwi0=";
+    hash = "sha256-hxHVQ8Ssvwq5lk+b7v1kLrYeGSfJEj/FudSd0V3tUnQ=";
     fetchSubmodules = true;
   };
 
-  vendorHash = "sha256-UWmsS79N8ooFr4qpKqOVC14cgf5ckAQwzROHGl1smD8=";
+  vendorHash = "sha256-iwcwhBX/Kl55G8SrI1mmkP5bj8BrLAGBdk3UnK1Xfag=";
 
-  subPackages = [
-    "."
-  ];
+  subPackages = [ "." ];
 
-  nativeBuildInputs = [
-    installShellFiles
-  ];
+  nativeBuildInputs = [ installShellFiles ];
 
-  nativeCheckInputs = [
-    git
-  ];
+  nativeCheckInputs = [ git ];
 
   ldflags = [
     "-s"
@@ -89,7 +84,10 @@ buildGoModule rec {
       Jenkins, CircleCI and Github workflows.
     '';
     license = licenses.asl20;
-    maintainers = with maintainers; [ fab jk ];
+    maintainers = with maintainers; [
+      fab
+      jk
+    ];
     mainProgram = "kubescape";
     broken = stdenv.isDarwin;
   };

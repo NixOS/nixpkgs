@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = {
-    description = "A rogue-like game set in the First Age of Middle-earth";
+    description = "Rogue-like game set in the First Age of Middle-earth";
     longDescription = ''
       A game of adventure set in the First Age of Middle-earth, when the world still
       rang with Elven song and gleamed with Dwarven mail.

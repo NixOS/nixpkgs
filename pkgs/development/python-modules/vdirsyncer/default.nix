@@ -1,28 +1,29 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, click
-, click-log
-, click-threading
-, requests-toolbelt
-, requests
-, atomicwrites
-, hypothesis
-, pytestCheckHook
-, pytest-subtesthack
-, setuptools
-, setuptools-scm
-, wheel
-, aiostream
-, aiohttp-oauthlib
-, aiohttp
-, pytest-asyncio
-, trustme
-, aioresponses
-, vdirsyncer
-, testers
-, pythonRelaxDepsHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  click,
+  click-log,
+  click-threading,
+  requests-toolbelt,
+  requests,
+  atomicwrites,
+  hypothesis,
+  pytestCheckHook,
+  pytest-subtesthack,
+  setuptools,
+  setuptools-scm,
+  wheel,
+  aiostream,
+  aiohttp-oauthlib,
+  aiohttp,
+  pytest-asyncio,
+  trustme,
+  aioresponses,
+  vdirsyncer,
+  testers,
+  pythonRelaxDepsHook,
 }:
 
 buildPythonPackage rec {
@@ -48,9 +49,7 @@ buildPythonPackage rec {
     pythonRelaxDepsHook
   ];
 
-  pythonRelaxDeps = [
-    "aiostream"
-  ];
+  pythonRelaxDeps = [ "aiostream" ];
 
   propagatedBuildInputs = [
     atomicwrites

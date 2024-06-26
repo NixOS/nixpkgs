@@ -95,7 +95,7 @@ in stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    description = "A markdown editor, a markdown reader";
+    description = "Markdown editor, a markdown reader";
     homepage = "https://typora.io/";
     license = licenses.unfree;
     maintainers = with maintainers; [ npulidomateo ];

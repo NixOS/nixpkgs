@@ -1,21 +1,22 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  setuptools,
 
-, cmdstanpy
-, numpy
-, matplotlib
-, pandas
-, holidays
-, tqdm
-, importlib-resources
+  cmdstanpy,
+  numpy,
+  matplotlib,
+  pandas,
+  holidays,
+  tqdm,
+  importlib-resources,
 
-, dask
-, distributed
+  dask,
+  distributed,
 
-, pytestCheckHook
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -48,7 +49,10 @@ buildPythonPackage rec {
     importlib-resources
   ];
 
-  passthru.optional-dependencies.parallel = [ dask distributed ] ++ dask.optional-dependencies.dataframe;
+  passthru.optional-dependencies.parallel = [
+    dask
+    distributed
+  ] ++ dask.optional-dependencies.dataframe;
 
   preCheck = ''
     # use the generated files from $out for testing
@@ -62,7 +66,7 @@ buildPythonPackage rec {
 
   meta = {
     changelog = "https://github.com/facebook/prophet/releases/tag/${src.rev}";
-    description = "A tool for producing high quality forecasts for time series data that has multiple seasonality with linear or non-linear growth";
+    description = "Tool for producing high quality forecasts for time series data that has multiple seasonality with linear or non-linear growth";
     homepage = "https://facebook.github.io/prophet/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ tomasajt ];

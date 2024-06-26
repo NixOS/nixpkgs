@@ -17,6 +17,7 @@
   kinfocenter = callPackage ./kinfocenter {};
   kmenuedit = callPackage ./kmenuedit {};
   kpipewire = callPackage ./kpipewire {};
+  krdp = callPackage ./krdp {};
   kscreen = callPackage ./kscreen {};
   kscreenlocker = callPackage ./kscreenlocker {};
   ksshaskpass = callPackage ./ksshaskpass {};

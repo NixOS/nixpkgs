@@ -1,7 +1,6 @@
 { lib, stdenv, fetchurl
 , ncurses
 , libX11, xorgproto, buildEnv
-, fetchpatch
 , useX11 ? stdenv.hostPlatform.isx86
 }:
 

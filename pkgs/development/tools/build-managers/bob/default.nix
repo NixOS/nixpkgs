@@ -44,7 +44,7 @@ buildGoModule rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "A build system for microservices";
+    description = "Build system for microservices";
     mainProgram = "bob";
     homepage = "https://bob.build";
     license = licenses.asl20;

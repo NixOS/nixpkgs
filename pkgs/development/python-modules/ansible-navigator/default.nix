@@ -1,10 +1,11 @@
-{ lib
-, pkgs
-, python3Packages
-, podman
-, oniguruma
-, fetchPypi
-, buildPythonPackage
+{
+  lib,
+  pkgs,
+  python3Packages,
+  podman,
+  oniguruma,
+  fetchPypi,
+  buildPythonPackage,
 }:
 buildPythonPackage rec {
   pname = "ansible-navigator";
@@ -39,7 +40,7 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    description = "A text-based user interface (TUI) for Ansible.";
+    description = "Text-based user interface (TUI) for Ansible";
     homepage = "https://ansible.readthedocs.io/projects/navigator/";
     license = licenses.asl20;
     maintainers = with maintainers; [ melkor333 ];

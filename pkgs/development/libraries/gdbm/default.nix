@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl }:
+{ stdenv, lib, fetchurl, updateAutotoolsGnuConfigScriptsHook }:
 
 stdenv.mkDerivation rec {
   pname = "gdbm";
@@ -8,6 +8,8 @@ stdenv.mkDerivation rec {
     url = "mirror://gnu/gdbm/${pname}-${version}.tar.gz";
     sha256 = "sha256-dLEIHSH/8TrkvXwW5dblBKTCb3zeHcoNljpIQXS7ys0=";
   };
+
+  nativeBuildInputs = [ updateAutotoolsGnuConfigScriptsHook ];
 
   doCheck = true; # not cross;
 

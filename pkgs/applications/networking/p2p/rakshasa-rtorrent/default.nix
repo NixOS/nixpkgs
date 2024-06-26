@@ -1,6 +1,5 @@
 { lib
 , stdenv
-, fetchurl
 , fetchFromGitHub
 , autoreconfHook
 , autoconf-archive
@@ -14,9 +13,10 @@
 , pkg-config
 , xmlrpc_c
 , zlib
+, nixosTests
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "rakshasa-rtorrent";
   version = "0.9.8+date=2022-06-20";
 
@@ -54,6 +54,10 @@ stdenv.mkDerivation rec {
     "--with-posix-fallocate"
   ];
 
+  passthru.tests = {
+    inherit (nixosTests) rtorrent;
+  };
+
   enableParallelBuilding = true;
 
   postInstall = ''
@@ -64,7 +68,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://rakshasa.github.io/rtorrent/";
-    description = "An ncurses client for libtorrent, ideal for use with screen, tmux, or dtach";
+    description = "Ncurses client for libtorrent, ideal for use with screen, tmux, or dtach";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ ebzzry codyopel ];
     platforms = platforms.unix;

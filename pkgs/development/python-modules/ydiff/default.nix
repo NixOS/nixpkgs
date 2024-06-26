@@ -1,5 +1,13 @@
-{ lib, buildPythonPackage, fetchPypi, docutils, pygments
-, gitMinimal, mercurial, subversion, patchutils, less
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pygments,
+  gitMinimal,
+  mercurial,
+  subversion,
+  patchutils,
+  less,
 }:
 
 buildPythonPackage rec {
@@ -26,11 +34,11 @@ buildPythonPackage rec {
     patchShebangs tests/*.sh
   '';
 
-  nativeCheckInputs = [ docutils pygments ];
+  nativeCheckInputs = [ pygments ];
 
   checkPhase = ''
     runHook preCheck
-    make doc-check reg # We don't want the linter or coverage check.
+    make reg # We don't want the linter or coverage check.
     runHook postCheck
   '';
 

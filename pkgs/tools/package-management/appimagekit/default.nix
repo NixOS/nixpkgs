@@ -117,7 +117,7 @@ in stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "A tool to package desktop applications as AppImages";
+    description = "Tool to package desktop applications as AppImages";
     longDescription = ''
       AppImageKit is an implementation of the AppImage format that
       provides tools such as appimagetool and appimaged for handling

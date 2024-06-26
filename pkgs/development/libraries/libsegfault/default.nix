@@ -10,7 +10,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libsegfault";
-  version = "unstable-2022-11-13";
+  version = "0-unstable-2022-11-13";
 
   src = fetchFromGitHub {
     owner = "jonathanpoelen";

@@ -74,7 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = with lib; {
-    description = "An open-source C++ networking library";
+    description = "Open-source C++ networking library";
     longDescription = ''
       Wangle is a framework providing a set of common client/server
       abstractions for building services in a consistent, modular, and

@@ -50,9 +50,18 @@
           runtime ? finalAttrs.finalPackage,
           runInputs ? [],
           run ? null,
+          runAllowNetworking ? false,
         }:
         let
-          built = runCommand "dotnet-test-${name}" { buildInputs = [ finalAttrs.finalPackage ]; } (''
+          sdk = finalAttrs.finalPackage;
+          built = runCommand "dotnet-test-${name}" {
+            buildInputs = [ sdk ];
+            # make sure ICU works in a sandbox
+            propagatedSandboxProfile = toString sdk.__propagatedSandboxProfile + ''
+              (allow network-inbound (local ip))
+              (allow mach-lookup (global-name "com.apple.FSEvents"))
+            '';
+          } (''
             HOME=$PWD/.home
             dotnet new nugetconfig
             dotnet nuget disable source nuget
@@ -65,11 +74,19 @@
           if run == null
             then built
           else
-            runCommand "${built.name}-run" { src = built; nativeBuildInputs = runInputs; } (
-              lib.optionalString (runtime != null) ''
-                # TODO: use runtime here
-                export DOTNET_ROOT=${runtime}
-              '' + run);
+            runCommand "${built.name}-run" ({
+              src = built;
+              nativeBuildInputs = [ built ] ++ runInputs;
+            } // lib.optionalAttrs (stdenv.isDarwin && runAllowNetworking) {
+              sandboxProfile = ''
+                (allow network-inbound (local ip))
+                (allow mach-lookup (global-name "com.apple.FSEvents"))
+              '';
+              __darwinAllowLocalNetworking = true;
+            }) (lib.optionalString (runtime != null) ''
+              # TODO: use runtime here
+              export DOTNET_ROOT=${runtime}
+            '' + run);
 
       # Setting LANG to something other than 'C' forces the runtime to search
       # for ICU, which will be required in most user environments.
@@ -127,6 +144,7 @@
           expect <<"EOF"
             set status 1
             spawn $env(src)/test
+            proc abort { } { exit 2 }
             expect_before default abort
             expect -re {Now listening on: ([^\r]+)\r} {
               set url $expect_out(1,string)
@@ -138,11 +156,14 @@
               exit 1
             }
             send \x03
+            expect_before timeout abort
+            expect eof
             catch wait result
             exit [lindex $result 3]
           EOF
           touch $out
         '';
+        runAllowNetworking = true;
       };
     } // args.passthru.tests or {};
   } // args.passthru or {};

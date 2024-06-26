@@ -17,7 +17,7 @@
 
 trivialBuild {
   pname = "voicemacs";
-  version = "unstable-2022-02-16";
+  version = "0-unstable-2022-02-16";
 
   src = fetchFromGitHub {
     owner = "jcaw";

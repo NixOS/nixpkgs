@@ -11,8 +11,10 @@
   gitUpdater,
   hatchling,
   magic-filter,
+  motor,
   pycryptodomex,
   pydantic,
+  pymongo,
   pytest-aiohttp,
   pytest-asyncio,
   pytest-lazy-fixture,
@@ -25,7 +27,7 @@
 
 buildPythonPackage rec {
   pname = "aiogram";
-  version = "3.5.0";
+  version = "3.7.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -34,7 +36,7 @@ buildPythonPackage rec {
     owner = "aiogram";
     repo = "aiogram";
     rev = "refs/tags/v${version}";
-    hash = "sha256-NOaI01Lb969Lp/v38u2UipN9UbOQNJQEbN2JS3lmFno=";
+    hash = "sha256-GIfujywp+yYRQ4xm6O5GgTCMn6I3TSYE5epaqhMGGnE=";
   };
 
   build-system = [ hatchling ];
@@ -55,7 +57,9 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     aiohttp-socks
     aresponses
+    motor
     pycryptodomex
+    pymongo
     pytest-aiohttp
     pytest-asyncio
     pytest-lazy-fixture

@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, azure-core
-, cryptography
-, msal
-, msal-extensions
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  azure-core,
+  cryptography,
+  msal,
+  msal-extensions,
 }:
 
 buildPythonPackage rec {
@@ -27,9 +28,7 @@ buildPythonPackage rec {
     msal-extensions
   ];
 
-  pythonImportsCheck = [
-    "azure.identity"
-  ];
+  pythonImportsCheck = [ "azure.identity" ];
 
   # Requires checkout from mono-repo and a mock account:
   # https://github.com/Azure/azure-sdk-for-python/blob/master/sdk/identity/tests.yml

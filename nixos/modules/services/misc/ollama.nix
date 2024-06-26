@@ -11,6 +11,11 @@ let
   };
 in
 {
+  imports = [
+    (lib.mkRemovedOptionModule [ "services" "ollama" "listenAddress" ]
+      "Use `services.ollama.host` and `services.ollama.port` instead.")
+  ];
+
   options = {
     services.ollama = {
       enable = lib.mkEnableOption "ollama server for local large language models";
@@ -64,12 +69,20 @@ in
           See also `services.ollama.sandbox`.
         '';
       };
-      listenAddress = lib.mkOption {
+      host = lib.mkOption {
         type = types.str;
-        default = "127.0.0.1:11434";
-        example = "0.0.0.0:11111";
+        default = "127.0.0.1";
+        example = "0.0.0.0";
         description = ''
-          The address which the ollama server HTTP interface binds and listens to.
+          The host address which the ollama server HTTP interface listens to.
+        '';
+      };
+      port = lib.mkOption {
+        type = types.port;
+        default = 11434;
+        example = 11111;
+        description = ''
+          Which port the ollama server listens to.
         '';
       };
       acceleration = lib.mkOption {
@@ -80,12 +93,28 @@ in
           What interface to use for hardware acceleration.
 
           - `null`: default behavior
-            if `nixpkgs.config.rocmSupport` is enabled, uses `"rocm"`
-            if `nixpkgs.config.cudaSupport` is enabled, uses `"cuda"`
-            otherwise defaults to `false`
+            - if `nixpkgs.config.rocmSupport` is enabled, uses `"rocm"`
+            - if `nixpkgs.config.cudaSupport` is enabled, uses `"cuda"`
+            - otherwise defaults to `false`
           - `false`: disable GPU, only use CPU
           - `"rocm"`: supported by most modern AMD GPUs
+            - may require overriding gpu type with `services.ollama.rocmOverrideGfx`
+              if rocm doesn't detect your AMD gpu
           - `"cuda"`: supported by most modern NVIDIA GPUs
+        '';
+      };
+      rocmOverrideGfx = lib.mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        example = "10.3.0";
+        description = ''
+          Override what rocm will detect your gpu model as.
+          For example, make rocm treat your RX 5700 XT (or any other model)
+          as an RX 6900 XT using a value of `"10.3.0"` (gfx 1030).
+
+          This sets the value of `HSA_OVERRIDE_GFX_VERSION`. See [ollama's docs](
+          https://github.com/ollama/ollama/blob/main/docs/gpu.md#amd-radeon
+          ) for details.
         '';
       };
       environmentVariables = lib.mkOption {
@@ -103,6 +132,14 @@ in
           Since `ollama run` is mostly a shell around the ollama server, this is usually sufficient.
         '';
       };
+      openFirewall = lib.mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Whether to open the firewall for ollama.
+          This adds `services.ollama.port` to `networking.firewall.allowedTCPPorts`.
+        '';
+      };
     };
   };
 
@@ -114,7 +151,8 @@ in
       environment = cfg.environmentVariables // {
         HOME = cfg.home;
         OLLAMA_MODELS = cfg.models;
-        OLLAMA_HOST = cfg.listenAddress;
+        OLLAMA_HOST = "${cfg.host}:${toString cfg.port}";
+        HSA_OVERRIDE_GFX_VERSION = lib.mkIf (cfg.rocmOverrideGfx != null) cfg.rocmOverrideGfx;
       };
       serviceConfig = {
         ExecStart = "${lib.getExe ollamaPackage} serve";
@@ -124,6 +162,8 @@ in
         ReadWritePaths = cfg.writablePaths;
       };
     };
+
+    networking.firewall = lib.mkIf cfg.openFirewall { allowedTCPPorts = [ cfg.port ]; };
 
     environment.systemPackages = [ ollamaPackage ];
   };

@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, hatchling
-, pythonRelaxDepsHook
-, dparse
-, packaging
-, pydantic
-, ruamel-yaml
-, typing-extensions
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  hatchling,
+  pythonRelaxDepsHook,
+  dparse,
+  packaging,
+  pydantic,
+  ruamel-yaml,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
@@ -26,9 +27,7 @@ buildPythonPackage rec {
     pythonRelaxDepsHook
   ];
 
-  pythonRelaxDeps = [
-    "dparse"
-  ];
+  pythonRelaxDeps = [ "dparse" ];
 
   propagatedBuildInputs = [
     dparse

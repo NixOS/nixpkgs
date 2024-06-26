@@ -11,14 +11,14 @@
 with python3.pkgs;
 buildPythonApplication rec {
   pname = "pdm";
-  version = "2.15.1";
+  version = "2.15.4";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-HJzQScEBZjOiPvkuwfx4LaiuB0MULvM/r31Ihy+HSzk=";
+    hash = "sha256-WOIlhQVn3K3OQkGNtGOJlt8rE3jNCDDNSK/aG0VdnHI=";
   };
 
   nativeBuildInputs = [
@@ -50,7 +50,6 @@ buildPythonApplication rec {
     unearth
     virtualenv
   ] ++ httpx.optional-dependencies.socks
-  ++ pbs-installer.optional-dependencies.install
   ++ lib.optionals (pythonOlder "3.11") [
     tomli
   ]
@@ -81,11 +80,12 @@ buildPythonApplication rec {
   '';
 
   nativeCheckInputs = [
+    first
     pytestCheckHook
     pytest-mock
     pytest-xdist
     pytest-httpserver
-  ] ++ lib.optional stdenv.isLinux first;
+  ];
 
   pytestFlagsArray = [
     "-m 'not network'"
@@ -120,7 +120,7 @@ buildPythonApplication rec {
   meta = with lib; {
     homepage = "https://pdm-project.org";
     changelog = "https://github.com/pdm-project/pdm/releases/tag/${version}";
-    description = "A modern Python package and dependency manager supporting the latest PEP standards";
+    description = "Modern Python package and dependency manager supporting the latest PEP standards";
     license = licenses.mit;
     maintainers = with maintainers; [ cpcloud ];
     mainProgram = "pdm";

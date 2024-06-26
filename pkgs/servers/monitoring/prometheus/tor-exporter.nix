@@ -34,7 +34,7 @@ python3Packages.buildPythonApplication rec {
     mainProgram = "prometheus-tor-exporter";
     homepage = "https://github.com/atx/prometheus-tor_exporter";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ Scrumplex ];
     platforms = platforms.unix;
   };
 }

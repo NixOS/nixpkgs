@@ -50,7 +50,7 @@ buildPythonPackage rec {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "A Python library for working with macaroons";
+    description = "Python library for working with macaroons";
     homepage = "https://github.com/go-macaroon-bakery/py-macaroon-bakery";
     changelog = "https://github.com/go-macaroon-bakery/py-macaroon-bakery/releases/tag/${version}";
     license = lib.licenses.lgpl3Only;

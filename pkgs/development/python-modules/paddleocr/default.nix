@@ -1,30 +1,31 @@
-{ lib
-, buildPythonPackage
-, pythonRelaxDepsHook
-, fetchFromGitHub
-, attrdict
-, beautifulsoup4
-, cython
-, fire
-, fonttools
-, lmdb
-, lxml
-, numpy
-, opencv4
-, openpyxl
-, pdf2docx
-, pillow
-, premailer
-, pyclipper
-, pymupdf
-, python-docx
-, rapidfuzz
-, scikit-image
-, shapely
-, tqdm
-, paddlepaddle
-, lanms-neo
-, polygon3
+{
+  lib,
+  buildPythonPackage,
+  pythonRelaxDepsHook,
+  fetchFromGitHub,
+  attrdict,
+  beautifulsoup4,
+  cython,
+  fire,
+  fonttools,
+  lmdb,
+  lxml,
+  numpy,
+  opencv4,
+  openpyxl,
+  pdf2docx,
+  pillow,
+  premailer,
+  pyclipper,
+  pymupdf,
+  python-docx,
+  rapidfuzz,
+  scikit-image,
+  shapely,
+  tqdm,
+  paddlepaddle,
+  lanms-neo,
+  polygon3,
 }:
 
 let
@@ -106,6 +107,10 @@ buildPythonPackage {
     '';
     changelog = "https://github.com/PaddlePaddle/PaddleOCR/releases/tag/v${version}";
     maintainers = with maintainers; [ happysalada ];
-    platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-darwin" ];
+    platforms = [
+      "x86_64-linux"
+      "x86_64-darwin"
+      "aarch64-darwin"
+    ];
   };
 }

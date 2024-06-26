@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, strenum
-, token-bucket
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  strenum,
+  token-bucket,
 }:
 
 buildPythonPackage rec {
@@ -28,9 +29,7 @@ buildPythonPackage rec {
   # Module has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "limiter"
-  ];
+  pythonImportsCheck = [ "limiter" ];
 
   meta = with lib; {
     description = "Python rate-limiting, thread-safe and asynchronous decorators and context managers";

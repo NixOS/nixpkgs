@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
   installTargets = [ "install" "install-po" "install-desktop-file" ];
 
   meta = with lib; {
-    description = "A GPS photo correlation tool, to add EXIF geotags";
+    description = "GPS photo correlation tool, to add EXIF geotags";
 
     longDescription = ''
       Digital cameras are cool.  So is GPS.  And, EXIF tags are really

@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
   pythonOlder,
   setuptools,
   versioneer,
@@ -31,9 +30,7 @@ buildPythonPackage rec {
     versioneer
   ];
 
-  pythonImportsCheck = [
-    "ed25519"
-  ];
+  pythonImportsCheck = [ "ed25519" ];
 
   meta = with lib; {
     description = "Ed25519 public-key signatures";

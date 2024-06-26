@@ -1,13 +1,14 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, cargo
-, fetchPypi
-, pytestCheckHook
-, pythonOlder
-, rustc
-, rustPlatform
-, libiconv
+{
+  stdenv,
+  lib,
+  buildPythonPackage,
+  cargo,
+  fetchPypi,
+  pytestCheckHook,
+  pythonOlder,
+  rustc,
+  rustPlatform,
+  libiconv,
 }:
 
 buildPythonPackage rec {
@@ -36,17 +37,11 @@ buildPythonPackage rec {
     rustc
   ];
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    libiconv
-  ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "rpds"
-  ];
+  pythonImportsCheck = [ "rpds" ];
 
   meta = with lib; {
     description = "Python bindings to Rust's persistent data structures (rpds";

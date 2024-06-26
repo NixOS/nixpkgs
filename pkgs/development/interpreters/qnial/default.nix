@@ -30,7 +30,7 @@ stdenv.mkDerivation {
   ];
 
   meta = {
-    description = "An array language from Nial Systems";
+    description = "Array language from Nial Systems";
     mainProgram = "nial";
     homepage = "https://github.com/vrthra/qnial";
     license = lib.licenses.artistic1;

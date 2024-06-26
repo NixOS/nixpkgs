@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation rec {
     pname = "rsgain";
-    version = "3.5";
+    version = "3.5.1";
 
     src = fetchFromGitHub {
       owner = "complexlogic";
       repo = "rsgain";
       rev = "v${version}";
-      sha256 = "sha256-qIRtdgfGDNbZk9TQ3GC3lYetRqjOk8QPhAb4MuFuN0U=";
+      sha256 = "sha256-33ezojvCYAvxmUWzLxes3nUpK4iIWjlXsVSi+q7xeGU=";
     };
 
     cmakeFlags = ["-DCMAKE_BUILD_TYPE='Release'"];
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     buildInputs = [libebur128 taglib ffmpeg inih fmt zlib];
 
     meta = with lib; {
-      description = "A simple, but powerful ReplayGain 2.0 tagging utility";
+      description = "Simple, but powerful ReplayGain 2.0 tagging utility";
       mainProgram = "rsgain";
       homepage = "https://github.com/complexlogic/rsgain";
       changelog = "https://github.com/complexlogic/rsgain/blob/v${version}/CHANGELOG";

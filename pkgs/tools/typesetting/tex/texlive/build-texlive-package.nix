@@ -62,7 +62,7 @@ let
     # TeX Live packages should not be installed directly into the user profile
     outputsToInstall = [ ];
     longDescription = ''
-      This package cannot be installed directly. Please use `texlive.withPackages`.
+      This package cannot be installed or used directly. Please use `texlive.withPackages (ps: [ ps.${lib.strings.escapeNixIdentifier pname} ])`.
     '';
     # discourage nix-env from matching this package
     priority = 10;
@@ -152,7 +152,7 @@ let
 
   # fake derivation for resolving dependencies in the absence of a "tex" containers
   fakeTeX = passthru
-    // { inherit meta; tlOutputName = "tex"; }
+    // { inherit meta; tlOutputName = "tex"; inherit build; }
     // outputDrvs;
 
   containers = rec {
@@ -214,22 +214,31 @@ let
           ln -s {"$texdoc"/doc,"$out"/share}/info
         '') [ "out" ] // outputDrvs;
   };
-in
-if outputs == [ ] then removeAttrs fakeTeX [ "outputSpecified" ] else
-runCommand name
-  {
-    __structuredAttrs = true;
-    inherit meta outputDrvs outputs;
-    passthru = removeAttrs passthru [ "outputSpecified" ];
 
-    # force output name in case "out" is missing
-    nativeBuildInputs = lib.optional (! hasBinfiles)
-      (writeShellScript "force-output.sh" ''
+  # multioutput derivation to be exported under texlivePackages
+  # to make Hydra build all containers
+  build = runCommand name
+    {
+      __structuredAttrs = true;
+      inherit meta outputDrvs;
+      outputs = if outputs != [ ] then outputs else [ "out" ];
+      passthru = removeAttrs passthru [ "outputSpecified" ] // { inherit build; };
+
+      # force output name in case "out" is missing
+      preHook = lib.optionalString (!hasBinfiles && outputs != [ ]) ''
         export out="''${${builtins.head outputs}-}"
-      '');
-  }
-  ''
-    for outputName in ''${!outputs[@]} ; do
-      ln -s "''${outputDrvs[$outputName]}" "''${outputs[$outputName]}"
-    done
-  '' // outputDrvs
+      '';
+    }
+    # each output is just a symlink to the corresponding container
+    # if the container is missing (that is, outputs == [ ]), create a file, to prevent passing the package to .withPackages
+    ''
+      for outputName in ''${!outputs[@]} ; do
+        if [[ -z ''${outputDrvs[$outputName]} ]] ; then
+          ln -s "''${outputDrvs[$outputName]}" "''${outputs[$outputName]}"
+        else
+          touch "''${outputs[$outputName]}"
+        fi
+      done
+    '';
+in
+if outputs == [ ] then removeAttrs fakeTeX [ "outputSpecified" ] else build // outputDrvs

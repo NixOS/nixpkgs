@@ -14,7 +14,7 @@ buildGoModule rec {
   vendorHash = null;
 
   meta = with lib; {
-    description = "A humane alternative to the Redis-cli and TLS";
+    description = "Humane alternative to the Redis-cli and TLS";
     homepage = "https://github.com/IBM-Cloud/redli";
     license = licenses.asl20;
     maintainers = with maintainers; [ tchekda ];

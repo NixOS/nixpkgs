@@ -19,9 +19,14 @@ stdenv.mkDerivation rec {
     ++ lib.optional stdenv.isCygwin ./2.36.3-not-win32.patch;
 
   # These three tests fail due to a (desired) behavior change from our ./requires-private.patch
-  postPatch = if vanilla then null else ''
-    rm -f check/check-requires-private check/check-gtk check/missing
-  '';
+  postPatch =
+    # this could be accomplished by updateAutotoolsGnuConfigScriptsHook, but that causes infinite recursion
+    # necessary for FreeBSD code path in configure
+    ''
+      substituteInPlace ./config.guess ./glib/config.guess --replace-fail /usr/bin/uname uname
+    '' + lib.optionalString (!vanilla) ''
+      rm -f check/check-requires-private check/check-gtk check/missing
+    '';
 
   buildInputs = [ libiconv ];
 
@@ -48,7 +53,7 @@ stdenv.mkDerivation rec {
   postInstall = ''rm -f "$out"/bin/*-pkg-config''; # clean the duplicate file
 
   meta = with lib; {
-    description = "A tool that allows packages to find out information about other packages";
+    description = "Tool that allows packages to find out information about other packages";
     homepage = "http://pkg-config.freedesktop.org/wiki/";
     platforms = platforms.all;
     license = licenses.gpl2Plus;

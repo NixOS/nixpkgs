@@ -5,14 +5,14 @@
 
 buildGoModule rec {
   pname = "node_exporter";
-  version = "1.8.0";
+  version = "1.8.1";
   rev = "v${version}";
 
   src = fetchFromGitHub {
     inherit rev;
     owner = "prometheus";
     repo = "node_exporter";
-    hash = "sha256-TC7F/LQnn6OIhvWLy75MQyVGS7DlgJLbbaAUZUZTvEo=";
+    hash = "sha256-dg4JSJx5xXEOLLb5xEgrNeDmh/En9G6qKA9G+3v9PH0=";
   };
 
   vendorHash = "sha256-sly8AJk+jNZG8ijTBF1Pd5AOOUJJxIG8jHwBUdlt8fM=";

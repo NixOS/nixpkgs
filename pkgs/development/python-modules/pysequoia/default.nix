@@ -1,17 +1,18 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pkg-config
-, rustPlatform
-, cargo
-, rustc
-, bzip2
-, nettle
-, openssl
-, pcsclite
-, stdenv
-, darwin
-, libiconv
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pkg-config,
+  rustPlatform,
+  cargo,
+  rustc,
+  bzip2,
+  nettle,
+  openssl,
+  pcsclite,
+  stdenv,
+  darwin,
+  libiconv,
 }:
 
 buildPythonPackage rec {
@@ -39,16 +40,18 @@ buildPythonPackage rec {
     rustc
   ];
 
-  buildInputs = [
-    bzip2
-    nettle
-    openssl
-    pcsclite
-  ] ++ lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.CoreFoundation
-    darwin.apple_sdk.frameworks.Security
-    libiconv
-  ];
+  buildInputs =
+    [
+      bzip2
+      nettle
+      openssl
+      pcsclite
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      darwin.apple_sdk.frameworks.CoreFoundation
+      darwin.apple_sdk.frameworks.Security
+      libiconv
+    ];
 
   pythonImportsCheck = [ "pysequoia" ];
 

@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools
-, zeep
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  zeep,
 }:
 
 buildPythonPackage rec {
@@ -16,17 +17,11 @@ buildPythonPackage rec {
     hash = "sha256-qou8Aqc+qlCJSwwY45+o0xilg6ZkxlvzWzyAKdHEC0k=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  propagatedBuildInputs = [
-    zeep
-  ];
+  propagatedBuildInputs = [ zeep ];
 
-  pythonImportsCheck = [
-    "onvif"
-  ];
+  pythonImportsCheck = [ "onvif" ];
 
   # Tests require hardware
   doCheck = false;

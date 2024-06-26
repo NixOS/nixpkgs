@@ -1,18 +1,19 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
 
-, setuptools
+  setuptools,
 
-, defusedxml
-, pillow
-, fonttools
+  defusedxml,
+  pillow,
+  fonttools,
 
-, pytestCheckHook
-, qrcode
-, camelot
-, uharfbuzz
-, lxml
+  pytestCheckHook,
+  qrcode,
+  camelot,
+  uharfbuzz,
+  lxml,
 }:
 
 buildPythonPackage rec {
@@ -57,6 +58,9 @@ buildPythonPackage rec {
     "test_png_url" # tries to download file
     "test_page_background" # tries to download file
     "test_share_images_cache" # uses timing functions
+    "test_bidi_character" # tries to download file
+    "test_bidi_conformance" # tries to download file
+    "test_insert_jpg_jpxdecode" # JPEG2000 is broken
   ];
 
   meta = {

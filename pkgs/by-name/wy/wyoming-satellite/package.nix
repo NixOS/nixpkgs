@@ -21,6 +21,7 @@ python3Packages.buildPythonApplication rec {
   ];
 
   pythonRelaxDeps = [
+    "wyoming"
     "zeroconf"
   ];
 

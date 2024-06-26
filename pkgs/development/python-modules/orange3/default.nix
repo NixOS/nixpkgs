@@ -1,47 +1,52 @@
-{ lib
-, baycomp
-, bottleneck
-, buildPythonPackage
-, chardet
-, copyDesktopItems
-, pythonRelaxDepsHook
-, cython
-, catboost
-, xgboost
-, fetchFromGitHub
-, fetchurl
-, httpx
-, joblib
-, keyring
-, keyrings-alt
-, makeDesktopItem
-, matplotlib
-, nix-update-script
-, numpy
-, oldest-supported-numpy
-, openpyxl
-, opentsne
-, orange-canvas-core
-, orange-widget-base
-, pandas
-, pyqtgraph
-, pyqtwebengine
-, python
-, python-louvain
-, pythonOlder
-, pyyaml
-, qt5
-, qtconsole
-, recommonmark
-, requests
-, scikit-learn
-, scipy
-, serverfiles
-, setuptools
-, sphinx
-, wheel
-, xlrd
-, xlsxwriter
+{
+  lib,
+  stdenv,
+  baycomp,
+  bottleneck,
+  buildPythonPackage,
+  chardet,
+  copyDesktopItems,
+  pythonRelaxDepsHook,
+  cython,
+  catboost,
+  xgboost,
+  fetchFromGitHub,
+  fetchurl,
+  httpx,
+  joblib,
+  keyring,
+  keyrings-alt,
+  makeDesktopItem,
+  matplotlib,
+  nix-update-script,
+  numpy,
+  oldest-supported-numpy,
+  openpyxl,
+  opentsne,
+  orange-canvas-core,
+  orange-widget-base,
+  pandas,
+  pytestCheckHook,
+  pytest-qt,
+  pyqtgraph,
+  pyqtwebengine,
+  python,
+  python-louvain,
+  pythonOlder,
+  pyyaml,
+  pip,
+  qt5,
+  qtconsole,
+  recommonmark,
+  requests,
+  scikit-learn,
+  scipy,
+  serverfiles,
+  setuptools,
+  sphinx,
+  wheel,
+  xlrd,
+  xlsxwriter,
 }:
 
 let
@@ -112,6 +117,7 @@ let
       keyrings-alt
       pyyaml
       baycomp
+      pip
     ];
 
     # FIXME: ImportError: cannot import name '_variable' from partially initialized module 'Orange.data' (most likely due to a circular import) (/build/source/Orange/data/__init__.py)
@@ -120,7 +126,10 @@ let
     # FIXME: pythonRelaxDeps is not relaxing the scikit-learn version constraint, had to disable this
     dontCheckRuntimeDeps = true;
 
-    pythonImportsCheck = [ "Orange" "Orange.data._variable" ];
+    pythonImportsCheck = [
+      "Orange"
+      "Orange.data._variable"
+    ];
 
     desktopItems = [
       (makeDesktopItem {
@@ -131,8 +140,19 @@ let
         comment = "Explore, analyze, and visualize your data";
         icon = "orange-canvas";
         mimeTypes = [ "application/x-extension-ows" ];
-        categories = [ "Science" "Education" "ArtificialIntelligence" "DataVisualization" "NumericalAnalysis" "Qt" ];
-        keywords = [ "Machine Learning" "Scientific Visualization" "Statistical Analysis" ];
+        categories = [
+          "Science"
+          "Education"
+          "ArtificialIntelligence"
+          "DataVisualization"
+          "NumericalAnalysis"
+          "Qt"
+        ];
+        keywords = [
+          "Machine Learning"
+          "Scientific Visualization"
+          "Statistical Analysis"
+        ];
       })
     ];
 
@@ -146,9 +166,9 @@ let
 
     passthru = {
       updateScript = nix-update-script { };
-      tests.unittests = self.overridePythonAttrs (old: {
-        pname = "${old.pname}-tests";
-        format = "other";
+      tests.unittests = stdenv.mkDerivation {
+        name = "${self.name}-tests";
+        inherit (self) src;
 
         preCheck = ''
           export HOME=$(mktemp -d)
@@ -160,23 +180,35 @@ let
           cp -r ${self}/${python.sitePackages}/Orange .
           chmod +w -R .
 
-          rm Orange/tests/test_url_reader.py # uses network
-          rm Orange/tests/test_ada_boost.py # broken: The 'base_estimator' parameter of AdaBoostRegressor must be an object implementing 'fit' and 'predict' or a str among {'deprecated'}. Got None instead.
+          substituteInPlace Orange/classification/tests/test_xgb_cls.py \
+            --replace test_learners mk_test_learners
+
+          substituteInPlace Orange/modelling/tests/test_xgb.py \
+            --replace test_learners mk_test_learners
+
+          substituteInPlace Orange/**/tests/*.py \
+            --replace test_filename filename_test
+
+          # TODO: debug why orange is crashing on GC, may be a upstream issue
+          chmod +x Orange/__init__.py
+          echo "import gc; gc.disable()" | tee -a Orange/__init__.py
+
         '';
 
-        checkPhase = ''
-          runHook preCheck
-          ${python.interpreter} -m unittest -b -v ./Orange/**/test*.py
-          runHook postCheck
-        '';
+        nativeBuildInputs = [
+          pytestCheckHook
+          pytest-qt
+        ];
 
-        postInstall = "";
+        postCheck = ''
+          touch $out
+        '';
 
         doBuild = false;
         doInstall = false;
 
-        nativeBuildInputs = [ self ] ++ old.nativeBuildInputs;
-      });
+        buildInputs = [ self ];
+      };
     };
 
     meta = with lib; {

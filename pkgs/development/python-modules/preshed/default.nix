@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, cymem
-, cython
-, python
-, fetchPypi
-, murmurhash
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  cymem,
+  cython,
+  python,
+  fetchPypi,
+  murmurhash,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -21,25 +22,19 @@ buildPythonPackage rec {
     hash = "sha256-chhjxSRP/NJlGtCSiVGix8d7EC9OEaJRrYXTfudiFmA=";
   };
 
-  nativeBuildInputs = [
-    cython
-  ];
+  nativeBuildInputs = [ cython ];
 
   propagatedBuildInputs = [
     cymem
     murmurhash
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   # Tests have import issues with 3.0.8
   doCheck = false;
 
-  pythonImportsCheck = [
-    "preshed"
-  ];
+  pythonImportsCheck = [ "preshed" ];
 
   # don't update to 4.0.0, version was yanked
   passthru.skipBulkUpdate = true;

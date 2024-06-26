@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://awk.dev";
-    description = "The one, true implementation of AWK";
+    description = "One, true implementation of AWK";
     longDescription = ''
       This is the version of awk described in "The AWK Programming Language",
       Second Edition, by Al Aho, Brian Kernighan, and Peter Weinberger

@@ -1,15 +1,16 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchPypi
-, gcc
-, cython
-, boost
-, bluez
-, nlohmann_json
-, pyserial
-, requests
-, warble
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchPypi,
+  gcc,
+  cython,
+  boost,
+  bluez,
+  nlohmann_json,
+  pyserial,
+  requests,
+  warble,
 }:
 
 buildPythonPackage rec {
@@ -22,9 +23,7 @@ buildPythonPackage rec {
     hash = "sha256-gNEI6P6GslNd1DzFwCFndVIfUvSTPYollGdqkZhQ4Y8=";
   };
 
-  nativeBuildInputs = [
-    cython
-  ];
+  nativeBuildInputs = [ cython ];
 
   buildInputs = [
     boost
@@ -47,7 +46,10 @@ buildPythonPackage rec {
 
   enableParallelBuilding = true;
 
-  pythonImportsCheck = [ "mbientlab" "mbientlab.metawear" ];
+  pythonImportsCheck = [
+    "mbientlab"
+    "mbientlab.metawear"
+  ];
 
   meta = with lib; {
     description = "Python bindings for the MetaWear C++ SDK by MbientLab";
@@ -57,4 +59,3 @@ buildPythonPackage rec {
     platforms = platforms.linux;
   };
 }
-

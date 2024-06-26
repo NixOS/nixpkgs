@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch, makeWrapper, writeText
+{ lib, stdenv, fetchurl, writeText
 , graphviz, doxygen
 , ocamlPackages, ltl2ba, coq, why3
 , gdk-pixbuf, wrapGAppsHook3
@@ -99,7 +99,7 @@ stdenv.mkDerivation rec {
 
 
   meta = {
-    description = "An extensible and collaborative platform dedicated to source-code analysis of C software";
+    description = "Extensible and collaborative platform dedicated to source-code analysis of C software";
     homepage    = "http://frama-c.com/";
     license     = lib.licenses.lgpl21;
     maintainers = with lib.maintainers; [ thoughtpolice amiddelk ];

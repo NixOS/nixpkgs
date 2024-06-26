@@ -104,7 +104,7 @@ in stdenv.mkDerivation rec {
 
   meta = with lib; {
     broken = stdenv.isDarwin;
-    description = "JavaFx application to visualize and modify the scenegraph of running JavaFx applications.";
+    description = "JavaFx application to visualize and modify the scenegraph of running JavaFx applications";
     mainProgram = "scenic-view";
     longDescription = ''
       A JavaFX application designed to make it simple to understand the current state of your application scenegraph

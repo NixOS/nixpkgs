@@ -1,29 +1,34 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  python,
 
-# build-system
-, setuptools
+  # build-system
+  setuptools,
 
-# dependencies
-, django
-, python3-openid
-, requests
-, requests-oauthlib
-, pyjwt
+  # build-time dependencies
+  gettext,
 
-# optional-dependencies
-, python3-saml
-, qrcode
+  # dependencies
+  django,
+  python3-openid,
+  requests,
+  requests-oauthlib,
+  pyjwt,
 
-# tests
-, pillow
-, pytestCheckHook
-, pytest-django
+  # optional-dependencies
+  python3-saml,
+  qrcode,
 
-# passthru tests
-, dj-rest-auth
+  # tests
+  pillow,
+  pytestCheckHook,
+  pytest-django,
+
+  # passthru tests
+  dj-rest-auth,
 }:
 
 buildPythonPackage rec {
@@ -41,6 +46,7 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
+    gettext
     setuptools
   ];
 
@@ -52,18 +58,14 @@ buildPythonPackage rec {
     requests-oauthlib
   ] ++ pyjwt.optional-dependencies.crypto;
 
+  preBuild = "${python.interpreter} -m django compilemessages";
+
   passthru.optional-dependencies = {
-    saml = [
-      python3-saml
-    ];
-    mfa = [
-      qrcode
-    ];
+    saml = [ python3-saml ];
+    mfa = [ qrcode ];
   };
 
-  pythonImportsCheck = [
-    "allauth"
-  ];
+  pythonImportsCheck = [ "allauth" ];
 
   nativeCheckInputs = [
     pillow

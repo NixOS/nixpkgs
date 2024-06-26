@@ -3,7 +3,6 @@
   buildPythonPackage,
   deprecated,
   fetchFromGitHub,
-  importlib-metadata,
   ipython,
   lark,
   matplotlib-inline,
@@ -12,7 +11,6 @@
   numpy,
   packaging,
   poetry-core,
-  pydantic,
   pytest-asyncio,
   pytest-mock,
   pytestCheckHook,
@@ -27,20 +25,21 @@
   types-deprecated,
   types-python-dateutil,
   types-retry,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "pyquil";
-  version = "4.8.0";
+  version = "4.9.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "rigetti";
     repo = "pyquil";
     rev = "refs/tags/v${version}";
-    hash = "sha256-MGI+R3oteqDWsXP+SlAGSRGiQiAj44YG6V7o90A4Krc=";
+    hash = "sha256-TxmQ9QXTTr4Xv37WmgArfK8Q5H1zAu8qx8wRsvK+vVM=";
   };
 
   pythonRelaxDeps = [
@@ -61,7 +60,6 @@ buildPythonPackage rec {
     networkx
     numpy
     packaging
-    pydantic
     qcs-sdk-python
     rpcq
     scipy
@@ -69,7 +67,8 @@ buildPythonPackage rec {
     types-deprecated
     types-python-dateutil
     types-retry
-  ] ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
+    typing-extensions
+  ];
 
   nativeCheckInputs = [
     nest-asyncio

@@ -1,6 +1,6 @@
 let
   genericBuild =
-  { pkgs, lib, stdenv, fetchFromGitHub, fetchpatch
+  { pkgs, lib, stdenv, fetchFromGitHub
   , autoreconfHook269, util-linux, nukeReferences, coreutils
   , perl
   , configFile ? "all"

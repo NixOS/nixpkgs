@@ -1,17 +1,18 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, fetchFromGitHub
+{
+  stdenv,
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
 
-# build-system
-, cython
-, setuptools
+  # build-system
+  cython,
+  setuptools,
 
-# native dependencies
-, libxml2
-, libxslt
-, zlib
-, xcodebuild
+  # native dependencies
+  libxml2,
+  libxslt,
+  zlib,
+  xcodebuild,
 }:
 
 buildPythonPackage rec {
@@ -32,9 +33,7 @@ buildPythonPackage rec {
     libxslt.dev
     cython
     setuptools
-   ] ++ lib.optionals stdenv.isDarwin [
-    xcodebuild
-  ];
+  ] ++ lib.optionals stdenv.isDarwin [ xcodebuild ];
   buildInputs = [
     libxml2
     libxslt
@@ -58,6 +57,6 @@ buildPythonPackage rec {
     description = "Pythonic binding for the libxml2 and libxslt libraries";
     homepage = "https://lxml.de";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ jonringer ];
+    maintainers = with maintainers; [ ];
   };
 }

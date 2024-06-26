@@ -1,27 +1,28 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchPypi
-, pyqt5
-, pyqtwebengine
-, matplotlib
-, orange-canvas-core
-, pyqtgraph
-, typing-extensions
-, qt5
-, pytestCheckHook
-, pytest-qt
-, appnope
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchPypi,
+  pyqt5,
+  pyqtwebengine,
+  matplotlib,
+  orange-canvas-core,
+  pyqtgraph,
+  typing-extensions,
+  qt5,
+  pytestCheckHook,
+  pytest-qt,
+  appnope,
 }:
 
 buildPythonPackage rec {
   pname = "orange-widget-base";
-  version = "4.23.0";
+  version = "4.22.0";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-mz+BcZEdg1p9V0ewYRrw3jKBWLMbL9RR6o4hUEUx9DA=";
+    hash = "sha256-nV2aBPZzn7K+QECtCVoLLh5smG31zE2G9jFTKlxh9qM=";
   };
 
   propagatedBuildInputs = [
@@ -31,9 +32,7 @@ buildPythonPackage rec {
     pyqtgraph
     pyqtwebengine
     typing-extensions
-  ] ++ lib.optionals stdenv.isDarwin [
-    appnope
-  ];
+  ] ++ lib.optionals stdenv.isDarwin [ appnope ];
 
   pythonImportsCheck = [ "orangewidget" ];
 

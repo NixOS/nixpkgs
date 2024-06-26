@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, django
-, fetchFromGitHub
-, pythonOlder
-, pythonRelaxDepsHook
-, pywebpush
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  django,
+  fetchFromGitHub,
+  pythonOlder,
+  pythonRelaxDepsHook,
+  pywebpush,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
@@ -22,9 +23,7 @@ buildPythonPackage rec {
     hash = "sha256-Mwp53apdPpBcn7VfDbyDlvLAVAG65UUBhT0w9OKjKbU=";
   };
 
-  pythonRelaxDeps = [
-    "pywebpush"
-  ];
+  pythonRelaxDeps = [ "pywebpush" ];
 
   build-system = [
     pythonRelaxDepsHook
@@ -39,9 +38,7 @@ buildPythonPackage rec {
   # Module has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "webpush"
-  ];
+  pythonImportsCheck = [ "webpush" ];
 
   meta = with lib; {
     description = "Module for integrating and sending Web Push Notification in Django Application";

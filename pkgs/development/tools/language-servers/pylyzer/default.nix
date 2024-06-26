@@ -66,7 +66,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "A fast static code analyzer & language server for Python";
+    description = "Fast static code analyzer & language server for Python";
     homepage = "https://github.com/mtshiba/pylyzer";
     changelog = "https://github.com/mtshiba/pylyzer/releases/tag/v${version}";
     license = licenses.mit;

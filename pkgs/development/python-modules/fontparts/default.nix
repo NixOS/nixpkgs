@@ -1,21 +1,22 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, fetchpatch2
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  fetchpatch2,
+  pythonOlder,
 
-# build-system
-, setuptools
-, setuptools-scm
+  # build-system
+  setuptools,
+  setuptools-scm,
 
-# dependencies
-, fonttools
-, defcon
-, fontmath
-, booleanoperations
+  # dependencies
+  fonttools,
+  defcon,
+  fontmath,
+  booleanoperations,
 
-# tests
-, python
+  # tests
+  python,
 }:
 
 buildPythonPackage rec {
@@ -46,16 +47,17 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
-    booleanoperations
-    defcon
-    fontmath
-    fonttools
-  ]
-  ++ defcon.optional-dependencies.pens
-  ++ fonttools.optional-dependencies.ufo
-  ++ fonttools.optional-dependencies.lxml
-  ++ fonttools.optional-dependencies.unicode;
+  propagatedBuildInputs =
+    [
+      booleanoperations
+      defcon
+      fontmath
+      fonttools
+    ]
+    ++ defcon.optional-dependencies.pens
+    ++ fonttools.optional-dependencies.ufo
+    ++ fonttools.optional-dependencies.lxml
+    ++ fonttools.optional-dependencies.unicode;
 
   checkPhase = ''
     runHook preCheck
@@ -64,7 +66,7 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    description = "An API for interacting with the parts of fonts during the font development process.";
+    description = "API for interacting with the parts of fonts during the font development process";
     homepage = "https://github.com/robotools/fontParts";
     changelog = "https://github.com/robotools/fontParts/releases/tag/${version}";
     license = licenses.mit;

@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A library to parse Matroska files";
+    description = "Library to parse Matroska files";
     homepage = "https://matroska.org/";
     license = licenses.lgpl21;
     maintainers = with maintainers; [ ];

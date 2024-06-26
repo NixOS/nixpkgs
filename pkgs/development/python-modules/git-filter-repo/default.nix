@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchPypi
-, fetchpatch
-, installShellFiles
-, pythonOlder
-, setuptools-scm
-, writeScript
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchPypi,
+  fetchpatch,
+  installShellFiles,
+  pythonOlder,
+  setuptools-scm,
+  writeScript,
 }:
 
 buildPythonPackage rec {
@@ -51,16 +52,20 @@ buildPythonPackage rec {
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "git_filter_repo"
-  ];
+  pythonImportsCheck = [ "git_filter_repo" ];
 
   meta = with lib; {
     description = "Quickly rewrite git repository history";
     mainProgram = "git-filter-repo";
     homepage = "https://github.com/newren/git-filter-repo";
-    license = with licenses; [ mit /* or */ gpl2Plus ];
-    maintainers = with maintainers; [ aiotter fab ];
+    license = with licenses; [
+      mit # or
+      gpl2Plus
+    ];
+    maintainers = with maintainers; [
+      aiotter
+      fab
+    ];
   };
 
   passthru.updateScript = writeScript "update-${pname}" ''

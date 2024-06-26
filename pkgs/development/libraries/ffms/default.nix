@@ -3,19 +3,19 @@
 , fetchFromGitHub
 , autoreconfHook
 , pkg-config
-, ffmpeg_4
+, ffmpeg
 , zlib
 }:
 
 stdenv.mkDerivation rec {
   pname = "ffms";
-  version = "2.40";
+  version = "5.0";
 
   src = fetchFromGitHub {
     owner = "FFMS";
     repo = "ffms2";
     rev = version;
-    sha256 = "sha256-3bPxt911T0bGpAIS2RxBjo+VV84xW06eKcCj3ZAcmvw=";
+    sha256 = "sha256-Ildl8hbKSFGh4MUBK+k8uYMDrOZD9NSMdPAWIIaGy4E=";
   };
 
   env.NIX_CFLAGS_COMPILE = "-fPIC";
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [
-    ffmpeg_4
+    ffmpeg
     zlib
   ];
 
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = "https://github.com/FFMS/ffms2/";
+    homepage = "https://github.com/FFMS/ffms2";
     description = "FFmpeg based source library for easy frame accurate access";
     mainProgram = "ffmsindex";
     license = licenses.mit;

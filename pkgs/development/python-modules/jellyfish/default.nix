@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchPypi
-, isPy3k
-, pytest
-, unicodecsv
-, rustPlatform
-, libiconv
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchPypi,
+  isPy3k,
+  pytest,
+  unicodecsv,
+  rustPlatform,
+  libiconv,
 }:
 
 buildPythonPackage rec {
@@ -27,9 +28,7 @@ buildPythonPackage rec {
     cargoSetupHook
   ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [
-    libiconv
-  ];
+  buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
@@ -37,7 +36,10 @@ buildPythonPackage rec {
     hash = "sha256-Grk+n4VCPjirafcRWWI51jHw/IFUYkBtbXY739j0MFI=";
   };
 
-  nativeCheckInputs = [ pytest unicodecsv ];
+  nativeCheckInputs = [
+    pytest
+    unicodecsv
+  ];
 
   meta = {
     homepage = "https://github.com/sunlightlabs/jellyfish";

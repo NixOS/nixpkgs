@@ -16,13 +16,13 @@
   },
   "zlib": {
     "url": "https://chromium.googlesource.com/chromium/src/third_party/zlib",
-    "rev": "c876c8f87101c5a75f6014b0f832499afeb65b73",
-    "sha256": "sha256-mwozVo8ymyrYN4tw+/ZnSI+xogSTZQ6PUBba/jQqRkE="
+    "rev": "646b7f569718921d7d4b5b8e22572ff6c76f2596",
+    "sha256": "sha256-jNj6SuTZ5/a7crtYhxW3Q/TlfRMNMfYIVxDlr7bYdzQ="
   },
   "harfbuzz": {
     "url": "https://chromium.googlesource.com/external/github.com/harfbuzz/harfbuzz.git",
-    "rev": "4cfc6d8e173e800df086d7be078da2e8c5cfca19",
-    "sha256": "sha256-rrstyAz7Eb8ZgFJZKUASY8nU4YFZAptd5VS9B2cs2Yg="
+    "rev": "c053e8f29257814e11ad61493dbbe29f27656de4",
+    "sha256": "sha256-D8DNcZH/oiJqWvfWFHvQ8AwQ3OrMwyZdfGmZ5y30Hvg="
   },
   "wuffs": {
     "url": "https://skia.googlesource.com/external/github.com/google/wuffs-mirror-release-c.git",
@@ -31,7 +31,7 @@
   },
   "libpng": {
     "url": "https://skia.googlesource.com/third_party/libpng.git",
-    "rev": "386707c6d19b974ca2e3db7f5c61873813c6fe44",
-    "sha256": "sha256-67kf5MBsnBBi0bOfX/RKL52xpaCWm/ampltAI+EeQ+c="
+    "rev": "144b348e072a78e8130ed0acc452c9f039a67bf2",
+    "sha256": "sha256-eTF7q7hR4S1OqV2oPQKmcHujA5Od4rGMc5879kT0SkE="
   }
 }

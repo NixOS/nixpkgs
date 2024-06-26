@@ -12,7 +12,7 @@ let
 in appimageTools.wrapType2 {
   inherit pname src version;
 
-  extraPkgs = pkgs: (appimageTools.defaultFhsEnvArgs.multiPkgs pkgs) ++ [ pkgs.libsecret ];
+  extraPkgs = pkgs: [ pkgs.libsecret ];
 
   extraInstallCommands = ''
     install -m 444 -D ${appimageContents}/buttercup.desktop -t $out/share/applications
@@ -26,7 +26,7 @@ in appimageTools.wrapType2 {
     mainProgram = "buttercup-desktop";
     homepage = "https://buttercup.pw";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ wolfangaukang ];
+    maintainers = [ ];
     platforms = [ "x86_64-linux" ];
   };
 }

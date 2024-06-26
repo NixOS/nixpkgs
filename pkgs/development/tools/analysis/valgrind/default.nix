@@ -6,11 +6,11 @@
 
 stdenv.mkDerivation rec {
   pname = "valgrind";
-  version = "3.22.0";
+  version = "3.23.0";
 
   src = fetchurl {
     url = "https://sourceware.org/pub/${pname}/${pname}-${version}.tar.bz2";
-    hash = "sha256-yBHbWt0sX3KZRMr0fE56Zdyqu5Rh5HK1eHZd179tLUw=";
+    hash = "sha256-xcNKM4BFe5t1YG34kBAuffLHArlCDC6++VQPi11WJk0=";
   };
 
   patches = [
@@ -28,18 +28,19 @@ stdenv.mkDerivation rec {
     })
     # Fix build on armv7l.
     # https://bugs.kde.org/show_bug.cgi?id=454346
-    (fetchpatch {
-      url = "https://bugsfiles.kde.org/attachment.cgi?id=149172";
-      sha256 = "sha256-4MASLsEK8wcshboR4YOc6mIt7AvAgDPvqIZyHqlvTEs=";
-    })
-    (fetchpatch {
-      url = "https://bugsfiles.kde.org/attachment.cgi?id=149173";
-      sha256 = "sha256-jX9hD4utWRebbXMJYZ5mu9jecvdrNP05E5J+PnKRTyQ=";
-    })
-    (fetchpatch {
-      url = "https://bugsfiles.kde.org/attachment.cgi?id=149174";
-      sha256 = "sha256-f1YIFIhWhXYVw3/UNEWewDak2mvbAd3aGzK4B+wTlys=";
-    })
+    #   Applied on 3.22.0. Does not apply on 3.23.0.
+    #(fetchpatch {
+    #  url = "https://bugsfiles.kde.org/attachment.cgi?id=149172";
+    #  sha256 = "sha256-4MASLsEK8wcshboR4YOc6mIt7AvAgDPvqIZyHqlvTEs=";
+    #})
+    #(fetchpatch {
+    #  url = "https://bugsfiles.kde.org/attachment.cgi?id=149173";
+    #  sha256 = "sha256-jX9hD4utWRebbXMJYZ5mu9jecvdrNP05E5J+PnKRTyQ=";
+    #})
+    #(fetchpatch {
+    #  url = "https://bugsfiles.kde.org/attachment.cgi?id=149174";
+    #  sha256 = "sha256-f1YIFIhWhXYVw3/UNEWewDak2mvbAd3aGzK4B+wTlys=";
+    #})
   ];
 
   outputs = [ "out" "dev" "man" "doc" ];

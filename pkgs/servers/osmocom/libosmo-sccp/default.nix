@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libosmo-sccp";
-  version = "1.8.1";
+  version = "1.8.2";
 
   src = fetchFromGitHub {
     owner = "osmocom";
     repo = "libosmo-sccp";
     rev = version;
-    hash = "sha256-GrC++v7PCAnaEtMFt+el/ct2g+/9Axev04g/jMIGyOQ=";
+    hash = "sha256-MT3NM4sXCLUNKQ5wEbUmvf2KYJNdcSFqGYeQbg+eop8=";
   };
 
   configureFlags = [ "--with-systemdsystemunitdir=$out" ];

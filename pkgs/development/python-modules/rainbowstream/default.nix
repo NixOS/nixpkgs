@@ -1,19 +1,20 @@
-{ lib
-, arrow
-, buildPythonPackage
-, fetchFromGitHub
-, freetype
-, glibcLocales
-, libjpeg
-, pillow
-, pocket
-, pyfiglet
-, pysocks
-, python
-, python-dateutil
-, requests
-, twitter
-, zlib
+{
+  lib,
+  arrow,
+  buildPythonPackage,
+  fetchFromGitHub,
+  freetype,
+  glibcLocales,
+  libjpeg,
+  pillow,
+  pocket,
+  pyfiglet,
+  pysocks,
+  python,
+  python-dateutil,
+  requests,
+  twitter,
+  zlib,
 }:
 
 buildPythonPackage rec {

@@ -25,7 +25,7 @@ mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A PDF viewer from the C Suite";
+    description = "PDF viewer from the C Suite";
     mainProgram = "corepdf";
     homepage = "https://gitlab.com/cubocore/coreapps/corepdf";
     license = licenses.gpl3Plus;

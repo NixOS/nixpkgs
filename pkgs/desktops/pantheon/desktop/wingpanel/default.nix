@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "The extensible top panel for Pantheon";
+    description = "Extensible top panel for Pantheon";
     longDescription = ''
       Wingpanel is an empty container that accepts indicators as extensions,
       including the applications menu.

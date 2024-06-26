@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A small single “window” launcher for the WebKit WPE port";
+    description = "Small single “window” launcher for the WebKit WPE port";
     license = licenses.mit;
     maintainers = [ maintainers.matthewbauer ];
     platforms = platforms.linux;

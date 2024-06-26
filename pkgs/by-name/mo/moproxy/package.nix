@@ -31,7 +31,7 @@ rustPlatform.buildRustPackage rec{
 
   meta = with lib; {
     homepage = "https://github.com/sorz/moproxy";
-    description = "A transparent TCP to SOCKSv5/HTTP proxy on Linux written in Rust";
+    description = "Transparent TCP to SOCKSv5/HTTP proxy on Linux written in Rust";
     license = licenses.mit;
     mainProgram = "moproxy";
     maintainers = with maintainers; [ oluceps ];

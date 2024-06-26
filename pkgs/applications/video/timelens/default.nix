@@ -36,7 +36,7 @@ rustPlatform.buildRustPackage rec {
   ];
 
   meta = {
-    description = "A open source project for creating visual timelines";
+    description = "Open source project for creating visual timelines";
     homepage = "https://timelens.blinry.org";
     changelog = "https://github.com/timelens/timelens/blob/${src.rev}/CHANGELOG.md";
     license = lib.licenses.gpl2Plus;

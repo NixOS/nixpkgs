@@ -327,6 +327,10 @@ let
       INET_RAW_DIAG     = mkDefault module;
       INET_DIAG_DESTROY = mkDefault yes;
 
+      # IPsec over TCP
+      INET_ESPINTCP  = whenAtLeast "5.8" yes;
+      INET6_ESPINTCP = whenAtLeast "5.8" yes;
+
       # enable multipath-tcp
       MPTCP           = whenAtLeast "5.6" yes;
       MPTCP_IPV6      = whenAtLeast "5.6" yes;
@@ -435,13 +439,14 @@ let
       DRM_GMA500             = whenAtLeast "5.12" module;
       DRM_GMA600             = whenOlder "5.13" yes;
       DRM_GMA3600            = whenOlder "5.12" yes;
-      DRM_VMWGFX_FBCON       = whenOlder "6.2" yes;
+      DRM_VMWGFX_FBCON       = whenOlder "6.1" yes;
       # (experimental) amdgpu support for verde and newer chipsets
       DRM_AMDGPU_SI = yes;
       # (stable) amdgpu support for bonaire and newer chipsets
       DRM_AMDGPU_CIK = yes;
       # Allow device firmware updates
-      DRM_DP_AUX_CHARDEV = yes;
+      DRM_DP_AUX_CHARDEV = whenOlder "6.10" yes;
+      DRM_DISPLAY_DP_AUX_CHARDEV = whenAtLeast "6.10" yes;
       # amdgpu display core (DC) support
       DRM_AMD_DC_DCN1_0 = whenOlder "5.6" yes;
       DRM_AMD_DC_DCN2_0 = whenBetween "5.3" "5.6" yes;
@@ -470,7 +475,8 @@ let
       MEDIA_CEC_RC = whenAtLeast "5.10" yes;
 
       # Enable CEC over DisplayPort
-      DRM_DP_CEC = yes;
+      DRM_DP_CEC = whenOlder "6.10" yes;
+      DRM_DISPLAY_DP_AUX_CEC = whenAtLeast "6.10" yes;
     } // optionalAttrs (stdenv.hostPlatform.system == "x86_64-linux") {
       # Intel GVT-g graphics virtualization supports 64-bit only
       DRM_I915_GVT = yes;
@@ -615,8 +621,8 @@ let
       F2FS_FS_COMPRESSION = whenAtLeast "5.6" yes;
       UDF_FS              = module;
 
-      NFSD_V2_ACL            = whenOlder "5.15" yes;
-      NFSD_V3                = whenOlder "5.15" yes;
+      NFSD_V2_ACL            = whenOlder "5.10" yes;
+      NFSD_V3                = whenOlder "5.10" yes;
       NFSD_V3_ACL            = yes;
       NFSD_V4                = yes;
       NFSD_V4_SECURITY_LABEL = yes;
@@ -871,12 +877,14 @@ let
     };
 
     zram = {
-      ZRAM            = module;
-      ZRAM_WRITEBACK  = option yes;
-      ZRAM_MULTI_COMP = whenAtLeast "6.2" yes;
-      ZSWAP           = option yes;
-      ZPOOL           = yes;
-      ZBUD            = option yes;
+      ZRAM                          = module;
+      ZRAM_WRITEBACK                = option yes;
+      ZRAM_MULTI_COMP               = whenAtLeast "6.2" yes;
+      ZRAM_DEF_COMP_ZSTD            = whenAtLeast "5.11" yes;
+      ZSWAP                         = option yes;
+      ZSWAP_COMPRESSOR_DEFAULT_ZSTD = whenAtLeast "5.7" (mkOptionDefault yes);
+      ZPOOL                         = yes;
+      ZSMALLOC                      = option yes;
     };
 
     brcmfmac = {
@@ -925,8 +933,10 @@ let
       # i686 issues: https://github.com/NixOS/nixpkgs/pull/117961#issuecomment-812106375
       useZstd = stdenv.buildPlatform.is64bit && versionAtLeast version "5.9";
     in {
-      KERNEL_XZ            = mkIf (!useZstd) yes;
-      KERNEL_ZSTD          = mkIf useZstd yes;
+      # stdenv.hostPlatform.linux-kernel.target assumes uncompressed on RISC-V.
+      KERNEL_UNCOMPRESSED  = mkIf stdenv.hostPlatform.isRiscV yes;
+      KERNEL_XZ            = mkIf (!stdenv.hostPlatform.isRiscV && !useZstd) yes;
+      KERNEL_ZSTD          = mkIf (!stdenv.hostPlatform.isRiscV && useZstd) yes;
 
       HID_BATTERY_STRENGTH = yes;
       # enabled by default in x86_64 but not arm64, so we do that here
@@ -948,8 +958,8 @@ let
       THRUSTMASTER_FF    = yes;
       ZEROPLUS_FF        = yes;
 
-      MODULE_COMPRESS    = whenOlder "5.13" yes;
-      MODULE_COMPRESS_XZ = yes;
+      MODULE_COMPRESS      = whenOlder "5.13" yes;
+      MODULE_COMPRESS_XZ   = yes;
 
       SYSVIPC            = yes;  # System-V IPC
 
@@ -1124,6 +1134,7 @@ let
       FW_LOADER_USER_HELPER_FALLBACK = option no;
 
       FW_LOADER_COMPRESS = whenAtLeast "5.3" yes;
+      FW_LOADER_COMPRESS_ZSTD = whenAtLeast "5.19" yes;
 
       HOTPLUG_PCI_ACPI = yes; # PCI hotplug using ACPI
       HOTPLUG_PCI_PCIE = yes; # PCI-Expresscard hotplug support

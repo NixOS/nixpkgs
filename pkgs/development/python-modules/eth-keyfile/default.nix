@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, eth-keys
-, eth-utils
-, pycryptodome
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  eth-keys,
+  eth-utils,
+  pycryptodome,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -23,7 +24,7 @@ buildPythonPackage rec {
     hash = "sha256-797yhHuU9/lm96YKxl3SZ5IQAwDxDSYkLkiBdAHh0Uk=";
   };
 
-  build-system = [ setuptools];
+  build-system = [ setuptools ];
 
   propagatedBuildInputs = [
     eth-keys
@@ -31,9 +32,7 @@ buildPythonPackage rec {
     pycryptodome
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "eth_keyfile" ];
 

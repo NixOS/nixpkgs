@@ -115,28 +115,18 @@ stdenv.mkDerivation rec {
   # NOTE: You must also bump:
   # <nixpkgs/pkgs/development/python-modules/libvirt/default.nix>
   # SysVirt in <nixpkgs/pkgs/top-level/perl-packages.nix>
-  version = "10.0.0";
+  version = "10.4.0";
 
   src = fetchFromGitLab {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-xFl8AHcbeuydWzhJNnwZ3Bd7TQiTU8hjBxaALXvcLgE=";
+    hash = "sha256-grQyILVy0IYbbz/Wau8QRfCub7j+5nhnkfs2tprfpO0=";
     fetchSubmodules = true;
   };
 
   patches = [
     ./0001-meson-patch-in-an-install-prefix-for-building-on-nix.patch
-    (fetchpatch {
-      name = "CVE-2024-2494.patch";
-      url = "https://gitlab.com/libvirt/libvirt/-/commit/8a3f8d957507c1f8223fdcf25a3ff885b15557f2.patch";
-      hash = "sha256-kxSIZ4bPOhN6PpJepoSF+EDTgdmazRWh3a3KSVfm1GU=";
-    })
-    (fetchpatch {
-      name = "CVE-2024-1441.patch";
-      url = "https://gitlab.com/libvirt/libvirt/-/commit/c664015fe3a7bf59db26686e9ed69af011c6ebb8.patch";
-      hash = "sha256-Qi/gk7+NPz9s9OpWOnF8XW6A75C9BbVxBTE4KVwalo4=";
-    })
   ] ++ lib.optionals enableZfs [
     (substituteAll {
       src = ./0002-substitute-zfs-and-zpool-commands.patch;
@@ -150,7 +140,7 @@ stdenv.mkDerivation rec {
     sed -i '/commandtest/d' tests/meson.build
     sed -i '/virnetsockettest/d' tests/meson.build
     # delete only the first occurrence of this
-    sed -i '0,/qemuxml2argvtest/{/qemuxml2argvtest/d;}' tests/meson.build
+    sed -i '0,/qemuxmlconftest/{/qemuxmlconftest/d;}' tests/meson.build
 
   '' + lib.optionalString isLinux ''
     for binary in mount umount mkfs; do
@@ -283,6 +273,7 @@ stdenv.mkDerivation rec {
       (cfg "install_prefix" (placeholder "out"))
       (cfg "localstatedir" "/var")
       (cfg "runstatedir" (if isDarwin then "/var/run" else "/run"))
+      (cfg "sshconfdir" "/etc/ssh/ssh_config.d")
 
       (cfg "init_script" (if isDarwin then "none" else "systemd"))
       (cfg "qemu_datadir" (lib.optionalString isDarwin "${qemu}/share/qemu"))
@@ -313,6 +304,7 @@ stdenv.mkDerivation rec {
       (feat "polkit" isLinux)
       (feat "readline" true)
       (feat "secdriver_apparmor" isLinux)
+      (feat "ssh_proxy" isLinux)
       (feat "tests" true)
       (feat "udev" isLinux)
       (feat "yajl" true)
@@ -387,7 +379,7 @@ stdenv.mkDerivation rec {
   passthru.tests.libvirtd = nixosTests.libvirtd;
 
   meta = with lib; {
-    description = "A toolkit to interact with the virtualization capabilities of recent versions of Linux and other OSes";
+    description = "Toolkit to interact with the virtualization capabilities of recent versions of Linux and other OSes";
     homepage = "https://libvirt.org/";
     changelog = "https://gitlab.com/libvirt/libvirt/-/raw/v${version}/NEWS.rst";
     license = licenses.lgpl2Plus;

@@ -967,4 +967,58 @@ rec {
       platforms = platforms.all;
     };
   };
+
+  /* ROMANIAN */
+  ro_RO = ro-ro;
+  ro-ro = mkDict rec {
+    pname = "hunspell-dict-ro-ro";
+    version = "3.3.10";
+    shortName = "ro-ro";
+    dictFileName = "ro_RO";
+    fileName = "${dictFileName}.${version}.zip";
+    shortDescription = "Romanian (Romania)";
+    readmeFile = "README";
+
+    src = fetchurl {
+      url = "https://downloads.sourceforge.net/rospell/${fileName}";
+      hash = "sha256-fxKNZOoGyeZxHDCxGMCv7vsBTY8zyS2szfRVq6LQRRk=";
+    };
+
+    nativeBuildInputs = [ unzip ];
+    unpackCmd = ''
+      unzip $src ${dictFileName}.aff ${dictFileName}.dic ${readmeFile} -d ${dictFileName}
+    '';
+
+    meta = {
+      description = "Hunspell dictionary for ${shortDescription} from rospell";
+      homepage = "https://sourceforge.net/projects/rospell/";
+      license = with lib.licenses; [ gpl2Only ];
+      maintainers = with lib.maintainers; [ Andy3153 ];
+    };
+  };
+
+  /* Turkish */
+  tr_TR = tr-tr;
+  tr-tr = mkDict rec {
+    pname = "hunspell-dict-tr-tr";
+    version = "1.1.1";
+
+    src = fetchFromGitHub {
+      owner = "tdd-ai";
+      repo = "hunspell-tr";
+      rev = "7302eca5f3652fe7ae3d3ec06c44697c97342b4e";
+      hash = "sha256-r/I5T/1e7gcp2XZ4UvnpFmWMTsNqLZSCbkqPcgC13PE=";
+    };
+
+    dictFileName = "tr_TR";
+    readmeFile = "README.md";
+
+    meta = with lib; {
+      description = "Hunspell dictionary for Turkish (Turkey) from tdd-ai";
+      homepage = "https://github.com/tdd-ai/hunspell-tr/";
+      license = licenses.mpl20;
+      maintainers = with maintainers; [ samemrecebi ];
+      platforms = platforms.all;
+    };
+  };
 }

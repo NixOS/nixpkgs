@@ -38,7 +38,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "CLI to manage your time.";
+    description = "CLI to manage your time";
     homepage = "https://pimalaya.org/comodoro/";
     changelog = "https://github.com/soywod/comodoro/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;

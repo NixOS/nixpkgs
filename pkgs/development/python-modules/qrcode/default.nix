@@ -1,15 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, mock
-, pillow
-, pypng
-, pytestCheckHook
-, pythonAtLeast
-, qrcode
-, setuptools
-, testers
-, typing-extensions
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  mock,
+  pillow,
+  pypng,
+  pytestCheckHook,
+  pythonAtLeast,
+  qrcode,
+  setuptools,
+  testers,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
@@ -22,9 +23,7 @@ buildPythonPackage rec {
     hash = "sha256-ndlpRUgn4Sfb2TaWsgdHI55tVA4IKTfJDxSslbMPWEU=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     typing-extensions
@@ -33,9 +32,7 @@ buildPythonPackage rec {
     setuptools
   ];
 
-  passthru.optional-dependencies.pil = [
-    pillow
-  ];
+  passthru.optional-dependencies.pil = [ pillow ];
 
   nativeCheckInputs = [
     mock
@@ -49,9 +46,7 @@ buildPythonPackage rec {
     };
   };
 
-  disabledTests = lib.optionals (pythonAtLeast "3.12") [
-    "test_change"
-  ] ++ [
+  disabledTests = lib.optionals (pythonAtLeast "3.12") [ "test_change" ] ++ [
     # Attempts to open a file which doesn't exist in sandbox
     "test_piped"
   ];

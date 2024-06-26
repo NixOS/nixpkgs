@@ -88,7 +88,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "An integrated DNS, DHCP and TFTP server for small networks";
+    description = "Integrated DNS, DHCP and TFTP server for small networks";
     homepage = "https://www.thekelleys.org.uk/dnsmasq/doc.html";
     license = licenses.gpl2Only;
     mainProgram = "dnsmasq";

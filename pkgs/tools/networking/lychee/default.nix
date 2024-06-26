@@ -1,4 +1,5 @@
-{ lib
+{ callPackage
+, lib
 , stdenv
 , rustPlatform
 , fetchFromGitHub
@@ -6,20 +7,21 @@
 , openssl
 , Security
 , SystemConfiguration
+, testers
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "lychee";
-  version = "0.15.0";
+  version = "0.15.1";
 
   src = fetchFromGitHub {
     owner = "lycheeverse";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-luc6rzNYhS+c5B4S3/cOvDqnRF+LfRDY1aw99hkF+nE=";
+    hash = "sha256-L1tvP2lZsFD2swhP1MetQFxxxA+EbrI4aDYTJwbpkVI=";
   };
 
-  cargoHash = "sha256-kGdRz5m0L3v3DBeabYq1Zp0bEEPW5C0y+A7tTjWkCwM=";
+  cargoHash = "sha256-SQ9Dgtg3TKAaj9XkpEzA13U8CumGOlpwiW+Lv6leQW4=";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -41,8 +43,17 @@ rustPlatform.buildRustPackage rec {
     "--skip=src/lib.rs"
   ];
 
+  passthru.tests = {
+    # NOTE: These assume that testers.lycheeLinkCheck uses this exact derivation.
+    #       Which is true most of the time, but not necessarily after overriding.
+    ok = callPackage ./tests/ok.nix { };
+    fail = callPackage ./tests/fail.nix { };
+    fail-emptyDirectory = callPackage ./tests/fail-emptyDirectory.nix { };
+    network = testers.runNixOSTest ./tests/network.nix;
+  };
+
   meta = with lib; {
-    description = "A fast, async, stream-based link checker written in Rust";
+    description = "Fast, async, stream-based link checker written in Rust";
     homepage = "https://github.com/lycheeverse/lychee";
     downloadPage = "https://github.com/lycheeverse/lychee/releases/tag/v${version}";
     license = with licenses; [ asl20 mit ];

@@ -32,7 +32,7 @@ buildGoModule rec {
     else [ pcsclite ];
 
   meta = with lib; {
-    description = "An SSH and GPG agent which you can use with your PIV hardware security device (e.g. a Yubikey)";
+    description = "SSH and GPG agent which you can use with your PIV hardware security device (e.g. a Yubikey)";
     homepage = "https://github.com/smlx/piv-agent";
     license = licenses.asl20;
     maintainers = [ ];

@@ -1,12 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, wheel
-, sortedcontainers
-, numpy
-, scipy
-, typing-extensions
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  numpy,
+  pandas,
+  pytestCheckHook,
+  scipy,
+  setuptools,
+  sortedcontainers,
+  typing-extensions,
+  versioneer,
 }:
 
 buildPythonPackage rec {
@@ -17,20 +20,30 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pyannote";
     repo = "pyannote-core";
-    rev = version;
+    rev = "refs/tags/${version}";
     hash = "sha256-XQVEMy60LkfFr2TKXTeg6cGHRx5BUZ5qDgzIdKy/19Y=";
   };
 
-  propagatedBuildInputs = [
+  postPatch = ''
+    # Remove vendorized versioneer.py
+    rm versioneer.py
+  '';
+
+  build-system = [
+    setuptools
+    versioneer
+  ];
+
+  dependencies = [
     sortedcontainers
     numpy
     scipy
     typing-extensions
   ];
 
-  nativeBuildInputs = [
-    setuptools
-    wheel
+  nativeCheckInputs = [
+    pandas
+    pytestCheckHook
   ];
 
   pythonImportsCheck = [ "pyannote.core" ];
@@ -38,6 +51,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Advanced data structures for handling temporal segments with attached labels";
     homepage = "https://github.com/pyannote/pyannote-core";
+    changelog = "https://github.com/pyannote/pyannote-core/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ ];
   };

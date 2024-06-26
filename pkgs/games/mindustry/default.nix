@@ -98,6 +98,7 @@ let
     desktopName = "Mindustry";
     exec = "mindustry";
     icon = "mindustry";
+    categories = [ "Game" ];
   };
 
   cleanupMindustrySrc = ''
@@ -239,7 +240,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://mindustrygame.github.io/";
     downloadPage = "https://github.com/Anuken/Mindustry/releases";
-    description = "A sandbox tower defense game";
+    description = "Sandbox tower defense game";
     sourceProvenance = with sourceTypes; [
       fromSource
       binaryBytecode  # deps

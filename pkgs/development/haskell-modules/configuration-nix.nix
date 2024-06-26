@@ -770,9 +770,12 @@ self: super: builtins.intersectAttrs super {
     preInstall = drv.preInstall or "" + ''
       installTargets="install"
       installFlagsArray+=(
-        "BUILDER=:"
         "PREFIX="
         "DESTDIR=$out"
+        # Prevent Makefile from calling cabal/Setup again
+        "BUILDER=:"
+        # Make Haskell build dependencies available
+        "GHC=${self.buildHaskellPackages.ghc.targetPrefix}ghc -global-package-db -package-db $setupPackageConfDir"
       )
     '';
     installPhase = null;
@@ -849,8 +852,12 @@ self: super: builtins.intersectAttrs super {
         url = "https://github.com/purescript/purescript-docs-search/releases/download/v0.0.11/purescript-docs-search";
         sha256 = "1hjdprm990vyxz86fgq14ajn0lkams7i00h8k2i2g1a0hjdwppq6";
       };
-
-      spagoDocs = overrideCabal (drv: {
+    in
+    lib.pipe (super.spago.override {
+      versions = self.versions_5_0_5;
+      fsnotify = self.fsnotify_0_3_0_1;
+    }) [
+      (overrideCabal (drv: {
         postUnpack = (drv.postUnpack or "") + ''
           # Spago includes the following two files directly into the binary
           # with Template Haskell.  They are fetched at build-time from the
@@ -875,21 +882,17 @@ self: super: builtins.intersectAttrs super {
             "$sourceRoot/templates/docs-search-app-0.0.11.js" \
             "$sourceRoot/templates/purescript-docs-search-0.0.11"
         '';
-      }) super.spago;
-
-      spagoOldAeson = spagoDocs.overrideScope (hfinal: hprev: {
-        # spago is not yet updated for aeson 2.0
-        aeson = hfinal.aeson_1_5_6_0;
-        # bower-json 1.1.0.0 only supports aeson 2.0, so we pull in the older version here.
-        bower-json = hprev.bower-json_1_0_0_1;
-      });
+      }))
 
       # Tests require network access.
-      spagoWithoutChecks = dontCheck spagoOldAeson;
-    in
-    # spago doesn't currently build with ghc92.  Top-level spago is pulled from
-    # ghc90 and explicitly marked unbroken.
-    markBroken spagoWithoutChecks;
+      dontCheck
+
+      # Overly strict upper bound on text
+      doJailbreak
+
+      # Generate shell completion for spago
+      (self.generateOptparseApplicativeCompletions [ "spago" ])
+    ];
 
   # checks SQL statements at compile time, and so requires a running PostgreSQL
   # database to run it's test suite
@@ -973,7 +976,7 @@ self: super: builtins.intersectAttrs super {
     preCheck = ''
       export HOME=$TMPDIR/home
       export PATH=$PWD/dist/build/ihaskell:$PATH
-      export GHC_PACKAGE_PATH=$PWD/dist/package.conf.inplace/:$GHC_PACKAGE_PATH
+      export NIX_GHC_PACKAGE_PATH_FOR_TEST=$PWD/dist/package.conf.inplace/:$packageConfDir:
     '';
   }) super.ihaskell;
 
@@ -1035,6 +1038,8 @@ self: super: builtins.intersectAttrs super {
         pkgs.buildPackages.makeWrapper
       ];
       postInstall = ''
+        ${drv.postInstall or ""}
+
         wrapProgram $out/bin/cabal2nix \
           --prefix PATH ":" "${
             pkgs.lib.makeBinPath [ pkgs.nix pkgs.nix-prefetch-scripts ]
@@ -1068,6 +1073,14 @@ self: super: builtins.intersectAttrs super {
             pkgs.nix-prefetch-docker
           ]
         }"
+      ''
+      # Prevent erroneous references to other libraries that use Paths_ modules
+      # on aarch64-darwin. Note that references to the data outputs are not removed.
+      + lib.optionalString (with pkgs.stdenv; hostPlatform.isDarwin && hostPlatform.isAarch64) ''
+        remove-references-to -t "${self.shake.out}" "$out/bin/.nvfetcher-wrapped"
+        remove-references-to -t "${self.js-jquery.out}" "$out/bin/.nvfetcher-wrapped"
+        remove-references-to -t "${self.js-flot.out}" "$out/bin/.nvfetcher-wrapped"
+        remove-references-to -t "${self.js-dgtable.out}" "$out/bin/.nvfetcher-wrapped"
       '';
     }) super.nvfetcher);
 
@@ -1377,4 +1390,6 @@ self: super: builtins.intersectAttrs super {
   pvar = dontCheck super.pvar;
 
   kmonad = enableSeparateBinOutput super.kmonad;
+
+  xmobar = enableSeparateBinOutput super.xmobar;
 }

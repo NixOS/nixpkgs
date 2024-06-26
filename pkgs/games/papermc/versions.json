@@ -44,7 +44,19 @@
         "version": "1.20.2-318"
     },
     "1.20.4": {
-        "hash": "sha256-NrIsYLoAAWORw/S26NDFjYBVwpNITJxuWGZow3696wM=",
-        "version": "1.20.4-435"
+        "hash": "sha256-eCCeEIGCuJPO1l2qH8WTtF0xFZAPBJjT6BUqfXPTg5I=",
+        "version": "1.20.4-497"
+    },
+    "1.20.5": {
+        "hash": "sha256-PNfaL435LggqUBo5xnSqs8A0Pt0Xm4b1usyuv8mXQTI=",
+        "version": "1.20.5-22"
+    },
+    "1.20.6": {
+        "hash": "sha256-JMWN40FTFg87RmxwyUr87Js9KyCmaBhj6Dnfe3vblZQ=",
+        "version": "1.20.6-147"
+    },
+    "1.21": {
+        "hash": "sha256-LaQyYAlZ2GQKzT3GlOKr1RUhu0XQpILuqPcDHdczqcU=",
+        "version": "1.21-15"
     }
 }

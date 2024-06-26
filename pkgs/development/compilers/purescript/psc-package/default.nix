@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A package manager for PureScript based on package sets";
+    description = "Package manager for PureScript based on package sets";
     mainProgram = "psc-package";
     license = licenses.bsd3;
     maintainers = with maintainers; [ ];

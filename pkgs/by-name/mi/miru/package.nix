@@ -1,39 +1,22 @@
-{ lib
-, fetchurl
-, appimageTools
+{
+  stdenv,
+  lib,
+  callPackage,
 }:
-
-appimageTools.wrapType2 rec {
+let
   pname = "miru";
-  version = "5.1.0";
-
-  src = fetchurl {
-    url = "https://github.com/ThaUnknown/miru/releases/download/v${version}/linux-Miru-${version}.AppImage";
-    name = "${pname}-${version}.AppImage";
-    sha256 = "sha256-N9I5YNFIfBmANCnJA3gUmgq04cc5LLfOsYiEdwJupf8=";
-  };
-
-  extraInstallCommands =
-    let
-      contents = appimageTools.extractType2 { inherit pname version src; };
-    in
-    ''
-      mkdir -p "$out/share/applications"
-      mkdir -p "$out/share/lib/miru"
-      cp -r ${contents}/{locales,resources} "$out/share/lib/miru"
-      cp -r ${contents}/usr/* "$out"
-      cp "${contents}/${pname}.desktop" "$out/share/applications/"
-      substituteInPlace $out/share/applications/${pname}.desktop --replace 'Exec=AppRun' 'Exec=${pname}'
-    '';
-
+  version = "5.1.4";
   meta = with lib; {
     description = "Stream anime torrents, real-time with no waiting for downloads";
     homepage = "https://miru.watch";
     license = licenses.gpl3Plus;
-    maintainers = [ maintainers.d4ilyrun ];
+    maintainers = with maintainers; [
+      d4ilyrun
+      matteopacini
+    ];
     mainProgram = "miru";
 
-    platforms = [ "x86_64-linux" ];
+    platforms = [ "x86_64-linux" ] ++ platforms.darwin;
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
 
     longDescription = ''
@@ -49,4 +32,8 @@ appimageTools.wrapType2 rec {
       instead of flat out closing MPV.
     '';
   };
-}
+in
+if stdenv.isDarwin then
+  callPackage ./darwin.nix { inherit pname version meta; }
+else
+  callPackage ./linux.nix { inherit pname version meta; }

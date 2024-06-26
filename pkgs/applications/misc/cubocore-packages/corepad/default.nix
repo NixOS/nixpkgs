@@ -23,7 +23,7 @@ mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A document editor from the C Suite";
+    description = "Document editor from the C Suite";
     mainProgram = "corepad";
     homepage = "https://gitlab.com/cubocore/coreapps/corepad";
     license = licenses.gpl3Plus;

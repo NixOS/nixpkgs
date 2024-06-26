@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, h5py
-, numpy
-, pynose
-, pythonOlder
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  h5py,
+  numpy,
+  pynose,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -25,22 +26,16 @@ buildPythonPackage rec {
       --replace-fail "'nose>=1.0'" ""
   '';
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  nativeBuildInputs = [
-    h5py
-  ];
+  nativeBuildInputs = [ h5py ];
 
   nativeCheckInputs = [
     numpy
     pynose
   ];
 
-  pythonImportsCheck = [
-    "annoy"
-  ];
+  pythonImportsCheck = [ "annoy" ];
 
   meta = with lib; {
     description = "Approximate Nearest Neighbors in C++/Python optimized for memory usage and loading/saving to disk";

@@ -14,6 +14,7 @@
 , iptables
 , aardvark-dns
 , netavark
+, passt
 }:
 
 let
@@ -36,6 +37,7 @@ let
     ] ++ lib.optionals stdenv.isLinux [
       aardvark-dns
       netavark
+      passt
     ];
   };
 

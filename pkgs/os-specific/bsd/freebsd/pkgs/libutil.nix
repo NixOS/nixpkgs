@@ -1,7 +1,10 @@
-{ mkDerivation, lib, stdenv }:
+{
+  mkDerivation,
+  lib,
+  stdenv,
+}:
 mkDerivation {
   path = "lib/libutil";
-  extraPaths = ["lib/libc/gen"];
-  clangFixup = true;
+  extraPaths = [ "lib/libc/gen" ];
   MK_TESTS = "no";
 }

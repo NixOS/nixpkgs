@@ -2,7 +2,7 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "scheme-manpages";
-  version = "unstable-2024-02-11";
+  version = "0-unstable-2024-02-11";
 
   src = fetchFromGitHub {
     owner = "schemedoc";

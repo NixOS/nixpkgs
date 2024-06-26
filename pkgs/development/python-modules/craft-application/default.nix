@@ -27,7 +27,7 @@
 
 buildPythonPackage rec {
   pname = "craft-application";
-  version = "2.6.1";
+  version = "2.6.3";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -36,7 +36,7 @@ buildPythonPackage rec {
     owner = "canonical";
     repo = "craft-application";
     rev = "refs/tags/${version}";
-    hash = "sha256-mWXEc54JsZAl6KD33RF8juzDhFheQOLviJbM1B8RPSo=";
+    hash = "sha256-ZhZoR8O5oxcF8+zzihiIbiC/j3AkDL7AjaJSlZ0N48s=";
   };
 
   postPatch = ''
@@ -92,21 +92,23 @@ buildPythonPackage rec {
 
   pytestFlagsArray = [ "tests/unit" ];
 
-  disabledTests = [
-    "test_to_yaml_file"
-    # Tests expecting pytest-time
-    "test_monitor_builds_success"
-  ] ++ lib.optionals stdenv.isAarch64 [
-    # These tests have hardcoded "amd64" strings which fail on aarch64
-    "test_process_grammar_build_for"
-    "test_process_grammar_platform"
-    "test_process_grammar_default"
-  ];
+  disabledTests =
+    [
+      "test_to_yaml_file"
+      # Tests expecting pytest-time
+      "test_monitor_builds_success"
+    ]
+    ++ lib.optionals stdenv.isAarch64 [
+      # These tests have hardcoded "amd64" strings which fail on aarch64
+      "test_process_grammar_build_for"
+      "test_process_grammar_platform"
+      "test_process_grammar_default"
+    ];
 
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "The basis for Canonical craft applications";
+    description = "Basis for Canonical craft applications";
     homepage = "https://github.com/canonical/craft-application";
     changelog = "https://github.com/canonical/craft-application/releases/tag/${version}";
     license = lib.licenses.lgpl3Only;

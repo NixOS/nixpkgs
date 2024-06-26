@@ -12,12 +12,6 @@
   nixpkgsArgs ? { config = {
     allowUnfree = false;
     inHydra = true;
-    permittedInsecurePackages = [
-      # Keep evaluating home-assistant, which is transitively affected
-      # by home-assistant-chip-core consuming OpenSSL 1.1. Affects roughly
-      # 800 jobs.
-      "openssl-1.1.1w"
-    ];
   }; }
 }:
 

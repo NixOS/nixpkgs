@@ -1,17 +1,18 @@
-{ lib
-, buildPythonPackage
-, docker
-, fetchFromGitHub
-, poetry-core
-, pytestCheckHook
-, pythonOlder
-, requests
-, responses
+{
+  lib,
+  buildPythonPackage,
+  docker,
+  fetchFromGitHub,
+  poetry-core,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  responses,
 }:
 
 buildPythonPackage rec {
   pname = "securityreporter";
-  version = "1.0.2";
+  version = "1.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -20,16 +21,12 @@ buildPythonPackage rec {
     owner = "dongit-org";
     repo = "python-reporter";
     rev = "refs/tags/v${version}";
-    hash = "sha256-mBZVsoDnDRYHdcFzi4kuwmAJDRdpysUbNRcDzIhYRGY=";
+    hash = "sha256-Ddq1qjaQemawK+u3ArlsChrkzRbcuaj5LrswyTGwTrg=";
   };
 
-  build-system = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
-  dependencies = [
-    requests
-  ];
+  dependencies = [ requests ];
 
   nativeCheckInputs = [
     docker
@@ -37,9 +34,7 @@ buildPythonPackage rec {
     responses
   ];
 
-  pythonImportsCheck = [
-    "reporter"
-  ];
+  pythonImportsCheck = [ "reporter" ];
 
   disabledTestPaths = [
     # Test require a running Docker instance
@@ -47,7 +42,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "A Python wrapper for the Reporter API";
+    description = "Python wrapper for the Reporter API";
     homepage = "https://github.com/dongit-org/python-reporter";
     changelog = "https://github.com/dongit-org/python-reporter/releases/tag/v${version}";
     license = licenses.mit;

@@ -8,7 +8,6 @@
 mkKdeDerivation {
   pname = "kcalc";
 
-  extraNativeBuildInputs = [kdoctools];
-  extraBuildInputs = [qt5compat gmp mpfr];
+  extraBuildInputs = [qt5compat gmp mpfr kdoctools];
   meta.mainProgram = "kcalc";
 }

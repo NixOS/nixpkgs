@@ -13,7 +13,7 @@
 }:
 
 let
-  version = "4.5.4";
+  version = "4.5.5";
 
   python = python3.override {
     self = python;
@@ -46,7 +46,7 @@ let
     owner = "spesmilo";
     repo = "electrum";
     rev = version;
-    sha256 = "sha256-fDu2PlEQOF7ftlS6dYw15S2XiAx+D/bng4zC9ELj6uk=";
+    sha256 = "sha256-CbhI/q+zjk9odxuvdzpogi046FqkedJooiQwS+WAkJ8=";
 
     postFetch = ''
       mv $out ./all
@@ -62,7 +62,7 @@ python.pkgs.buildPythonApplication {
 
   src = fetchurl {
     url = "https://download.electrum.org/${version}/Electrum-${version}.tar.gz";
-    sha256 = "sha256-lDuwXhOjcbCx8x/oIoigrklDwCbhn1trf5lDf/X/1Qc=";
+    sha256 = "1jiagz9avkbd158pcip7p4wz0pdsxi94ndvg5p8afvshb32aqwav";
   };
 
   postUnpack = ''
@@ -98,7 +98,7 @@ python.pkgs.buildPythonApplication {
     keepkey
     trezor
     bitbox02
-    cbor
+    cbor2
     pyserial
   ] ++ lib.optionals enableQt [
     pyqt5

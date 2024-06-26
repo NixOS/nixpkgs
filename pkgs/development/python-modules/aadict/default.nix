@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, six
-, pynose
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  six,
+  pynose,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -16,24 +17,16 @@ buildPythonPackage rec {
     hash = "sha256-p3MorFXbtXNdqZRBhwJRvv4TX2h6twenoXhWE2OydwQ=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  dependencies = [
-    six
-  ];
+  dependencies = [ six ];
 
-  nativeCheckInputs = [
-    pynose
-  ];
+  nativeCheckInputs = [ pynose ];
 
-  pythonImportsCheck = [
-    "aadict"
-  ];
+  pythonImportsCheck = [ "aadict" ];
 
   meta = with lib; {
-    description = "An auto-attribute dict (and a couple of other useful dict functions)";
+    description = "Auto-attribute dict (and a couple of other useful dict functions)";
     homepage = "https://github.com/metagriffin/aadict";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ glittershark ];

@@ -11,7 +11,7 @@ callPackage ./common.nix ({
       zuluVersion = "22.28.91";
       jdkVersion = "22.0.0";
       hash =
-        if enableJavaFX then "sha256-HvMiODsz+puu1xtxG2RRXH/PWCk91PGNZ7UcOd9orqQ="
+        if enableJavaFX then "sha256-+qUrZ+GlspSP3RLTAbgEtFm0B0fzX/VD1WUl6mk2c/0="
         else "sha256-HvMiODsz+puu1xtxG2RRXH/PWCk91PGNZ7UcOd9orqQ=";
     };
 
@@ -27,7 +27,7 @@ callPackage ./common.nix ({
       zuluVersion = "22.28.91";
       jdkVersion = "22.0.0";
       hash =
-        if enableJavaFX then "sha256-Y6PSNQjHRXukwux2sVbvpTIqT+Cg+KeG1C0iSEwyKZw="
+        if enableJavaFX then "sha256-QkFwbc2YFEWb5rddhH4a+zmtsrXxUBSuS8yg9qUb728="
         else "sha256-Y6PSNQjHRXukwux2sVbvpTIqT+Cg+KeG1C0iSEwyKZw=";
     };
 
@@ -35,7 +35,7 @@ callPackage ./common.nix ({
       zuluVersion = "22.28.91";
       jdkVersion = "22.0.0";
       hash =
-        if enableJavaFX then "sha256-o0VkWB4+PzBmNNWy+FZlyjTgukBTe6owfydb3YNfEE0="
+        if enableJavaFX then "sha256-256UP6MtUReQYqCKVt0ThN9BVDyKLAMXQTdpcDB9t24="
         else "sha256-o0VkWB4+PzBmNNWy+FZlyjTgukBTe6owfydb3YNfEE0=";
     };
   };

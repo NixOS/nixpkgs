@@ -1,14 +1,18 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, gmp
-, mpfr
-, libmpc
-, ppl
-, cython
-, cysignals
-, gmpy2
-, sphinx
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  gmp,
+  mpfr,
+  libmpc,
+  ppl,
+  cython,
+  cysignals,
+  gmpy2,
+  sphinx,
+
+  # Reverse dependency
+  sage,
 }:
 
 buildPythonPackage rec {
@@ -38,7 +42,10 @@ buildPythonPackage rec {
     gmpy2
   ];
 
-  outputs = [ "out" "doc" ];
+  outputs = [
+    "out"
+    "doc"
+  ];
 
   postBuild = ''
     # Find the build result in order to put it into PYTHONPATH. The doc
@@ -54,8 +61,12 @@ buildPythonPackage rec {
     mv docs/build/html "$doc/share/doc/pplpy"
   '';
 
+  passthru.tests = {
+    inherit sage;
+  };
+
   meta = with lib; {
-    description = "A Python wrapper for ppl";
+    description = "Python wrapper for ppl";
     homepage = "https://gitlab.com/videlec/pplpy";
     maintainers = teams.sage.members;
     license = licenses.gpl3;

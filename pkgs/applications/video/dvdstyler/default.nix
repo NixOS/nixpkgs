@@ -93,7 +93,7 @@ in stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://www.dvdstyler.org/";
-    description = "A DVD authoring software";
+    description = "DVD authoring software";
     longDescription = ''
       DVDStyler is a cross-platform free DVD authoring application for the
       creation of professional-looking DVDs. It allows not only burning of video

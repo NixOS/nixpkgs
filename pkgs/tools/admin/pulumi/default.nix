@@ -53,32 +53,6 @@ buildGoModule rec {
     "-X github.com/pulumi/pulumi/pkg/v3/version.Version=v${version}"
   ];
 
-  doCheck = true;
-
-  disabledTests = [
-    # Flaky test
-    "TestPendingDeleteOrder"
-    # Tries to clone repo: github.com/pulumi/templates.git
-    "TestGenerateOnlyProjectCheck"
-    # Following tests give this error, not quite sure why:
-    #     Error Trace:    /build/pulumi/pkg/engine/lifecycletest/update_plan_test.go:273
-    # Error:          Received unexpected error:
-    #                 Unexpected diag message: <{%reset%}>using pulumi-resource-pkgA from $PATH at /build/tmp.bS8caxmTx7/pulumi-resource-pkgA<{%reset%}>
-    # Test:           TestUnplannedDelete
-    "TestExpectedDelete"
-    "TestPlannedInputOutputDifferences"
-    "TestPlannedUpdateChangedStack"
-    "TestExpectedCreate"
-    "TestUnplannedDelete"
-    # Following test gives this  error, not sure why:
-    # --- Expected
-    # +++ Actual
-    # @@ -1 +1 @@
-    # -gcp
-    # +aws
-    "TestPluginMapper_MappedNamesDifferFromPulumiName"
-  ];
-
   nativeCheckInputs = [
     git
   ];
@@ -100,11 +74,38 @@ buildGoModule rec {
     rm codegen/{docs,dotnet,go,nodejs,python,schema}/*_test.go
     rm -R codegen/{dotnet,go,nodejs,python}/gen_program_test
 
-    # Only run tests not marked as disabled
-    buildFlagsArray+=("-run" "[^(${lib.concatStringsSep "|" disabledTests})]")
   '' + lib.optionalString stdenv.isDarwin ''
     export PULUMI_HOME=$(mktemp -d)
   '';
+
+  checkFlags =
+    let
+      disabledTests = [
+        # Flaky test
+        "TestPendingDeleteOrder"
+        # Tries to clone repo: github.com/pulumi/templates.git
+        "TestGenerateOnlyProjectCheck"
+        # Following tests give this error, not quite sure why:
+        #     Error Trace:    /build/pulumi/pkg/engine/lifecycletest/update_plan_test.go:273
+        # Error:          Received unexpected error:
+        #                 Unexpected diag message: <{%reset%}>using pulumi-resource-pkgA from $PATH at /build/tmp.bS8caxmTx7/pulumi-resource-pkgA<{%reset%}>
+        # Test:           TestUnplannedDelete
+        "TestExpectedDelete"
+        "TestPlannedInputOutputDifferences"
+        "TestPlannedUpdateChangedStack"
+        "TestExpectedCreate"
+        "TestUnplannedDelete"
+        # Following test gives this  error, not sure why:
+        # --- Expected
+        # +++ Actual
+        # @@ -1 +1 @@
+        # -gcp
+        # +aws
+        "TestPluginMapper_MappedNamesDifferFromPulumiName"
+        "TestProtect"
+      ];
+    in
+    [ "-skip=^${lib.concatStringsSep "$|^" disabledTests}$" ];
 
   # Allow tests that bind or connect to localhost on macOS.
   __darwinAllowLocalNetworking = true;

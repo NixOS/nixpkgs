@@ -4,6 +4,7 @@
 , makeDesktopItem
 , python3
 , libsForQt5
+, ffmpeg
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -27,6 +28,7 @@ python3.pkgs.buildPythonApplication rec {
   propagatedBuildInputs = with python3.pkgs; [
     charset-normalizer
     defusedxml
+    ffmpeg
     librespot
     music-tag
     packaging
@@ -52,16 +54,32 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonRelaxDeps = true;
 
+  postInstall = ''
+    install -Dm444 $src/src/onthespot/resources/icon.png $out/share/icons/hicolor/256x256/apps/onthespot.png
+  '';
+
   preFixup = ''
     makeWrapperArgs+=("''${qtWrapperArgs[@]}")
   '';
 
+  desktopItems = [
+    (makeDesktopItem {
+      name = "Onthespot";
+      exec = "onthespot_gui";
+      icon = "onthespot";
+      desktopName = "Onthespot";
+      comment = meta.description;
+      categories = [ "Audio" ];
+    })
+  ];
+
   meta = with lib; {
-    description = " QT based Spotify music downloader written in Python";
+    description = "QT based Spotify music downloader written in Python";
     homepage = "https://github.com/casualsnek/onthespot";
     changelog = "https://github.com/casualsnek/onthespot/releases/tag/v${version}";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ onny ];
     platforms = platforms.linux;
+    mainProgram = "onthespot_gui";
   };
 }

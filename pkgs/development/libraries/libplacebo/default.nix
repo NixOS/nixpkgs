@@ -15,6 +15,7 @@
 , libdovi
 , xxHash
 , fast-float
+, vulkanSupport ? true
 }:
 
 stdenv.mkDerivation rec {
@@ -33,13 +34,11 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
-    vulkan-headers
     python3Packages.jinja2
     python3Packages.glad2
   ];
 
   buildInputs = [
-    vulkan-loader
     shaderc
     lcms2
     libGL
@@ -47,15 +46,19 @@ stdenv.mkDerivation rec {
     libunwind
     libdovi
     xxHash
+    vulkan-headers
+  ] ++ lib.optionals vulkanSupport [
+    vulkan-loader
   ] ++ lib.optionals (!stdenv.cc.isGNU) [
     fast-float
   ];
 
   mesonFlags = with lib; [
-    (mesonOption "vulkan-registry" "${vulkan-headers}/share/vulkan/registry/vk.xml")
     (mesonBool "demos" false) # Don't build and install the demo programs
     (mesonEnable "d3d11" false) # Disable the Direct3D 11 based renderer
     (mesonEnable "glslang" false) # rely on shaderc for GLSL compilation instead
+    (mesonEnable "vk-proc-addr" vulkanSupport)
+    (mesonOption "vulkan-registry" "${vulkan-headers}/share/vulkan/registry/vk.xml")
   ] ++ optionals stdenv.isDarwin [
     (mesonEnable "unwind" false) # libplacebo doesn’t build with `darwin.libunwind`
   ];

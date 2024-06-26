@@ -205,11 +205,6 @@ it complains loudly now. So nothing actionable here by default. Alternatively yo
 * set [](#opt-services.nextcloud.settings.log_type) to "file" to be able to view logs
   from the admin panel.
 
-### Your web server is not properly set up to resolve `.well-known` URLs, failed on: `/.well-known/caldav` {#module-services-nextcloud-warning-wellknown-caldav}
-
-This warning appearing seems to be an upstream issue and is being sorted out
-in [nextcloud/server#45033](https://github.com/nextcloud/server/issues/45033).
-
 ## Maintainer information {#module-services-nextcloud-maintainer-info}
 
 As stated in the previous paragraph, we must provide a clean upgrade-path for Nextcloud

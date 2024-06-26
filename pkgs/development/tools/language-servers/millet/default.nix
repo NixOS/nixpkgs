@@ -28,7 +28,7 @@ rustPlatform.buildRustPackage rec {
   cargoTestFlags = [ "--package" "millet-ls" ];
 
   meta = with lib; {
-    description = "A language server for Standard ML";
+    description = "Language server for Standard ML";
     homepage = "https://github.com/azdavis/millet";
     changelog = "https://github.com/azdavis/millet/blob/v${version}/docs/CHANGELOG.md";
     license = [ licenses.mit /* or */ licenses.asl20 ];

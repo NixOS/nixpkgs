@@ -1,35 +1,36 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, gitUpdater
-, pythonOlder
-, pythonRelaxDepsHook
-# pyproject
-, hatchling
-, hatch-requirements-txt
-, hatch-fancy-pypi-readme
-# runtime
-, setuptools
-, fsspec
-, httpx
-, huggingface-hub
-, packaging
-, requests
-, typing-extensions
-, websockets
-# checkInputs
-, pytestCheckHook
-, pytest-asyncio
-, pydub
-, rich
-, tomlkit
-, gradio
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  nix-update-script,
+  pythonOlder,
+  pythonRelaxDepsHook,
+  # pyproject
+  hatchling,
+  hatch-requirements-txt,
+  hatch-fancy-pypi-readme,
+  # runtime
+  setuptools,
+  fsspec,
+  httpx,
+  huggingface-hub,
+  packaging,
+  requests,
+  typing-extensions,
+  websockets,
+  # checkInputs
+  pytestCheckHook,
+  pytest-asyncio,
+  pydub,
+  rich,
+  tomlkit,
+  gradio,
 }:
 
 buildPythonPackage rec {
   pname = "gradio-client";
-  version = "0.14.0";
-  format = "pyproject";
+  version = "1.0.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -37,9 +38,10 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "gradio-app";
     repo = "gradio";
-    rev = "refs/tags/@gradio/client@${version}";
+    # not to be confused with @gradio/client@${version}
+    rev = "refs/tags/gradio_client@${version}";
     sparseCheckout = [ "client/python" ];
-    hash = "sha256-7oC/Z3YUiOFZdv/60q7PkfluV77broRkHgWiY9Vim9Y=";
+    hash = "sha256-nbOWg2ZPcXTft7e4tR5p5xecVU62en0hEdXqAgLDZF4=";
   };
   prePatch = ''
     cd client/python
@@ -52,7 +54,7 @@ buildPythonPackage rec {
     "websockets"
   ];
 
-  nativeBuildInputs = [
+  build-system = [
     hatchling
     hatch-requirements-txt
     hatch-fancy-pypi-readme
@@ -96,7 +98,9 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  passthru.updateScript = gitUpdater { rev-prefix = "@gradio/client@"; };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version-regex" "gradio_client@(.*)" ];
+  };
 
   meta = with lib; {
     homepage = "https://www.gradio.app/";

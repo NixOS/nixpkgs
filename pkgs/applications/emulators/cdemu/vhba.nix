@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
 
   src  = fetchurl {
     url = "mirror://sourceforge/cdemu/vhba-module-${version}.tar.xz";
-    sha256 = "sha256-v1hQ1Lj1AiHKh9c0OpKe2oexkfb1roxhQXRUO1ut3oM=";
+    hash = "sha256-v1hQ1Lj1AiHKh9c0OpKe2oexkfb1roxhQXRUO1ut3oM=";
   };
 
   makeFlags = kernel.makeFlags ++ [ "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build" "INSTALL_MOD_PATH=$(out)" ];

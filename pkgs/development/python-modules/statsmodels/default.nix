@@ -1,15 +1,17 @@
-{ lib
-, buildPythonPackage
-, cython
-, fetchPypi
-, numpy
-, packaging
-, pandas
-, patsy
-, pythonOlder
-, scipy
-, setuptools
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  cython,
+  fetchPypi,
+  numpy,
+  packaging,
+  pandas,
+  patsy,
+  pythonOlder,
+  scipy,
+  setuptools,
+  setuptools-scm,
+  stdenv,
 }:
 
 buildPythonPackage rec {
@@ -48,14 +50,14 @@ buildPythonPackage rec {
   # Huge test suites with several test failures
   doCheck = false;
 
-  pythonImportsCheck = [
-    "statsmodels"
-  ];
+  pythonImportsCheck = [ "statsmodels" ];
 
   meta = with lib; {
     description = "Statistical computations and models for use with SciPy";
     homepage = "https://www.github.com/statsmodels/statsmodels";
     changelog = "https://github.com/statsmodels/statsmodels/releases/tag/v${version}";
     license = licenses.bsd3;
+    # Fails at build time
+    broken = stdenv.isDarwin;
   };
 }

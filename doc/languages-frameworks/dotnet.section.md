@@ -117,7 +117,6 @@ For more detail about managing the `deps.nix` file, see [Generating and updating
 * `useDotnetFromEnv` will change the binary wrapper so that it uses the .NET from the environment. The runtime specified by `dotnet-runtime` is given as a fallback in case no .NET is installed in the user's environment. This is most useful for .NET global tools and LSP servers, which often extend the .NET CLI and their runtime should match the users' .NET runtime.
 * `dotnet-sdk` is useful in cases where you need to change what dotnet SDK is being used. You can also set this to the result of `dotnetSdkPackages.combinePackages`, if the project uses multiple SDKs to build.
 * `dotnet-runtime` is useful in cases where you need to change what dotnet runtime is being used. This can be either a regular dotnet runtime, or an aspnetcore.
-* `dotnet-test-sdk` is useful in cases where unit tests expect a different dotnet SDK. By default, this is set to the `dotnet-sdk` attribute.
 * `testProjectFile` is useful in cases where the regular project file does not contain the unit tests. It gets restored and build, but not installed. You may need to regenerate your nuget lockfile after setting this. Note that if set, only tests from this project are executed.
 * `disabledTests` is used to disable running specific unit tests. This gets passed as: `dotnet test --filter "FullyQualifiedName!={}"`, to ensure compatibility with all unit test frameworks.
 * `dotnetRestoreFlags` can be used to pass flags to `dotnet restore`.
@@ -142,9 +141,7 @@ in buildDotnetModule rec {
   src = ./.;
 
   projectFile = "src/project.sln";
-  # File generated with `nix-build -A package.passthru.fetch-deps`.
-  # To run fetch-deps when this file does not yet exist, set nugetDeps to null
-  nugetDeps = ./deps.nix;
+  nugetDeps = ./deps.nix; # see "Generating and updating NuGet dependencies" section for details
 
   projectReferences = [ referencedProject ]; # `referencedProject` must contain `nupkg` in the folder structure.
 
@@ -220,6 +217,12 @@ buildDotnetGlobalTool {
 ```
 ## Generating and updating NuGet dependencies {#generating-and-updating-nuget-dependencies}
 
+When writing a new expression, you can use the generated `fetch-deps` script to initialise the lockfile.
+After creating a blank `deps.nix` and pointing `nugetDeps` to it,
+build the script with `nix-build -A package.fetch-deps` and then run the result.
+(When the root attr is your package, it's simply `nix-build -A fetch-deps`.)
+
+There is also a manual method:
 First, restore the packages to the `out` directory, ensure you have cloned
 the upstream repository and you are inside it.
 
@@ -255,6 +258,5 @@ Finally, you move the `deps.nix` file to the appropriate location to be used by 
 If you ever need to update the dependencies of a package, you instead do
 
 * `nix-build -A package.fetch-deps` to generate the update script for `package`
-* Run `./result deps.nix` to regenerate the lockfile to `deps.nix`, keep in mind if a location isn't provided, it will write to a temporary path instead
-* Finally, move the file where needed and look at its contents to confirm it has updated the dependencies.
-
+* Run `./result` to regenerate the lockfile to the path passed for `nugetDeps` (keep in mind if it can't be resolved to a local path, the script will write to `$1` or a temporary path instead)
+* Finally, ensure the correct file was written and the derivation can be built.

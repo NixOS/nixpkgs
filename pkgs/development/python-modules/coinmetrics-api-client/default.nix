@@ -1,18 +1,19 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, orjson
-, pandas
-, poetry-core
-, pytest-mock
-, pytestCheckHook
-, python-dateutil
-, pythonOlder
-, pythonRelaxDepsHook
-, requests
-, tqdm
-, typer
-, websocket-client
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  orjson,
+  pandas,
+  poetry-core,
+  pytest-mock,
+  pytestCheckHook,
+  python-dateutil,
+  pythonOlder,
+  pythonRelaxDepsHook,
+  requests,
+  tqdm,
+  typer,
+  websocket-client,
 }:
 
 buildPythonPackage rec {
@@ -30,9 +31,7 @@ buildPythonPackage rec {
     hash = "sha256-rCj8nG7iQFJKs3Mic2wRZKBqx9T0lCPH5Po8k0nLppg=";
   };
 
-  pythonRelaxDeps = [
-    "typer"
-  ];
+  pythonRelaxDeps = [ "typer" ];
 
   nativeBuildInputs = [
     poetry-core
@@ -53,15 +52,11 @@ buildPythonPackage rec {
     pytest-mock
   ] ++ passthru.optional-dependencies.pandas;
 
-  pythonImportsCheck = [
-    "coinmetrics.api_client"
-  ];
+  pythonImportsCheck = [ "coinmetrics.api_client" ];
 
   passthru = {
     optional-dependencies = {
-      pandas = [
-        pandas
-      ];
+      pandas = [ pandas ];
     };
   };
 

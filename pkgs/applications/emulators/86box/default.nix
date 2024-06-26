@@ -88,6 +88,7 @@ stdenv.mkDerivation (finalAttrs: {
       rev = "v${finalAttrs.version}";
       hash = "sha256-58nNTOLund/KeDlNwzwwihjFVigs/P0K8SN07zExE2c=";
     };
+    updateScript = ./update.sh;
   };
 
   # Some libraries are loaded dynamically, but QLibrary doesn't seem to search
@@ -102,7 +103,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
 
   meta = with lib; {
-    description = "Emulator of x86-based machines based on PCem.";
+    description = "Emulator of x86-based machines based on PCem";
     mainProgram = "86Box";
     homepage = "https://86box.net/";
     license = with licenses; [ gpl2Only ] ++ optional (unfreeEnableDiscord || unfreeEnableRoms) unfree;

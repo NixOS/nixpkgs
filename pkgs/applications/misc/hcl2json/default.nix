@@ -22,7 +22,7 @@ buildGoModule rec {
     description = "Convert hcl2 to json";
     homepage = "https://github.com/tmccombs/hcl2json";
     license = licenses.asl20;
-    maintainers = with maintainers; [ jonringer ];
+    maintainers = with maintainers; [ ];
     mainProgram = "hcl2json";
   };
 }

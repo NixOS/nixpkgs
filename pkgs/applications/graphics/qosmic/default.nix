@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A cosmic recursive flame fractal editor";
+    description = "Cosmic recursive flame fractal editor";
     mainProgram = "qosmic";
     homepage = "https://github.com/bitsed/qosmic";
     license = licenses.gpl3Plus;

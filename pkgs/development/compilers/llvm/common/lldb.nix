@@ -50,9 +50,7 @@ stdenv.mkDerivation (rec {
   src = src';
   inherit patches;
 
-  # LLDB expects to find the path to `bin` relative to `lib` on Darwin. It can’t be patched with the location of
-  # the `lib` output because that would create a cycle between it and the `out` output.
-  outputs = [ "out" "dev" ] ++ lib.optionals (!stdenv.isDarwin) [ "lib" ];
+  outputs = [ "out" "lib" "dev" ];
 
   sourceRoot = lib.optional (lib.versionAtLeast release_version "13") "${src.name}/${pname}";
 
@@ -176,7 +174,7 @@ stdenv.mkDerivation (rec {
 
   meta = llvm_meta // {
     homepage = "https://lldb.llvm.org/";
-    description = "A next-generation high-performance debugger";
+    description = "Next-generation high-performance debugger";
     longDescription = ''
       LLDB is a next generation, high-performance debugger. It is built as a set
       of reusable components which highly leverage existing libraries in the

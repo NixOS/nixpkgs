@@ -20,16 +20,16 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "kanidm";
-  version = "1.2.0";
+  version = "1.2.3";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-Clg9jQgKvWP9LniHmNq+WjRmEOzJGfuCU2K9ActZhzo=";
+    hash = "sha256-J02IbAY5lyoMaq6wJiHizqeFBd5hB6id2YMPxlPsASM=";
   };
 
-  cargoHash = "sha256-m3H2mQm+k6vFH+nP+hWl07Z7NJKJlt1E4eRDRA2Z0+o=";
+  cargoHash = "sha256-JuTKHXpEhWga2vAZhCpyPFy4w6+9UaasD70oBcrr0Rw=";
 
   KANIDM_BUILD_PROFILE = "release_nixos_${arch}";
 
@@ -71,6 +71,11 @@ rustPlatform.buildRustPackage rec {
     cp -r server/web_ui/pkg $out/ui
   '';
 
+  # Not sure what pathological case it hits when compiling tests with LTO,
+  # but disabling it takes the total `cargo check` time from 40 minutes to
+  # around 5 on a 16-core machine.
+  cargoTestFlags = ["--config" ''profile.release.lto="off"''];
+
   preFixup = ''
     installShellCompletion \
       --bash $releaseDir/build/completions/*.bash \
@@ -91,7 +96,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     changelog = "https://github.com/kanidm/kanidm/releases/tag/v${version}";
-    description = "A simple, secure and fast identity management platform";
+    description = "Simple, secure and fast identity management platform";
     homepage = "https://github.com/kanidm/kanidm";
     license = licenses.mpl20;
     platforms = platforms.linux;

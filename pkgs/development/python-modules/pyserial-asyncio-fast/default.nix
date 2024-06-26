@@ -1,29 +1,30 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
 
-# build-system
-, setuptools
-, wheel
+  # build-system
+  setuptools,
+  wheel,
 
-# dependencies
-, pyserial
+  # dependencies
+  pyserial,
 
-# tests
-, pytestCheckHook
-, pytest-asyncio
+  # tests
+  pytestCheckHook,
+  pytest-asyncio,
 }:
 
 buildPythonPackage rec {
   pname = "pyserial-asyncio-fast";
-  version = "0.11";
+  version = "0.12";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bdraco";
     repo = "pyserial-asyncio-fast";
     rev = version;
-    hash = "sha256-B1CLk7ggI7l+DaMDlnMjl2tfh+evvaf1nxzBpmqMBZk=";
+    hash = "sha256-37dbJq+9Ex+/uiRR2esgOP15CjySA0MLvxnjiPDTF08=";
   };
 
   nativeBuildInputs = [
@@ -31,13 +32,9 @@ buildPythonPackage rec {
     wheel
   ];
 
-  propagatedBuildInputs = [
-    pyserial
-  ];
+  propagatedBuildInputs = [ pyserial ];
 
-  pythonImportsCheck = [
-    "serial_asyncio_fast"
-  ];
+  pythonImportsCheck = [ "serial_asyncio_fast" ];
 
   nativeCheckInputs = [
     pytestCheckHook

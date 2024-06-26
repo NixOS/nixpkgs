@@ -1,8 +1,8 @@
 { stdenv
 , lib
 , callPackage
+, fetchgit
 , fetchurl
-, fetchpatch
 , makeWrapper
 , cmake
 , coreutils
@@ -24,7 +24,7 @@
 , libGL
 , libxcrypt
 , libxml2
-, llvm_13
+, llvm_16
 , lsof
 , lz4
 , xz
@@ -40,7 +40,6 @@
 , xxHash
 , zlib
 , zstd
-, libAfterImage
 , giflib
 , libjpeg
 , libtiff
@@ -57,7 +56,7 @@
 
 stdenv.mkDerivation rec {
   pname = "root";
-  version = "6.30.06";
+  version = "6.32.00";
 
   passthru = {
     tests = import ./tests { inherit callPackage; };
@@ -65,7 +64,13 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://root.cern.ch/download/root_v${version}.source.tar.gz";
-    hash = "sha256-MA237RtnjtL7ljXKZ1khoZRcfCED2oQAM7STCR9VcAw=";
+    hash = "sha256-EvIDaBpZBBxHTOlSN2Hm8OiGGzvueN9feZqNtVGJ5dI=";
+  };
+
+  clad_src = fetchgit {
+    url = "https://github.com/vgvassilev/clad";
+    rev = "refs/tags/v1.5"; # Make sure that this is the same tag as in the ROOT build files!
+    hash = "sha256-s0DbHfLthv51ZICnTd30O4qG/DyZPk5tADeu3bBRoOw=";
   };
 
   nativeBuildInputs = [ makeWrapper cmake pkg-config git ];
@@ -83,7 +88,7 @@ stdenv.mkDerivation rec {
     lapack
     libxcrypt
     libxml2
-    llvm_13
+    llvm_16
     lz4
     xz
     gsl
@@ -91,7 +96,6 @@ stdenv.mkDerivation rec {
     openblas
     openssl
     xxHash
-    libAfterImage
     giflib
     libjpeg
     libtiff
@@ -109,17 +113,6 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./sw_vers.patch
-
-    # compatibility with recent XRootD
-    # https://github.com/root-project/root/pull/13752
-    (fetchpatch {
-      url = "https://github.com/root-project/root/commit/3d3cda6c520791282298782189cdb8ca07ace4b9.diff";
-      hash = "sha256-O3aXzrOEQiPjZgbAj9TL6Wt/adN1kKFwjooeaFRyT4I=";
-    })
-    (fetchpatch {
-      url = "https://github.com/root-project/root/commit/6e7798e62dbed1ffa8b91a180fa5a080b7c04ba3.diff";
-      hash = "sha256-47/J631DBnVlvM1Pm9iicKXDKAqN8v9hjAstQuHmH8Q=";
-    })
   ];
 
   preConfigure = ''
@@ -130,6 +123,18 @@ stdenv.mkDerivation rec {
     done
     substituteInPlace cmake/modules/SearchInstalledSoftware.cmake \
       --replace 'set(lcgpackages ' '#set(lcgpackages '
+
+    # We have to bypass the connection check, because it would disable clad.
+    # This should probably be fixed upstream with a flag to disable the
+    # connectivity check!
+    substituteInPlace CMakeLists.txt \
+      --replace 'if(clad AND NO_CONNECTION)' 'if(FALSE)'
+    # Make sure that clad is not downloaded when building
+    substituteInPlace interpreter/cling/tools/plugins/clad/CMakeLists.txt \
+      --replace 'UPDATE_COMMAND ""' 'SOURCE_DIR ${clad_src} DOWNLOAD_COMMAND "" UPDATE_COMMAND ""'
+    # Make sure that clad is finding the right llvm version
+    substituteInPlace interpreter/cling/tools/plugins/clad/CMakeLists.txt \
+      --replace '-DLLVM_DIR=''${LLVM_BINARY_DIR}' '-DLLVM_DIR=${llvm_16.dev}/lib/cmake/llvm'
 
     substituteInPlace interpreter/llvm-project/clang/tools/driver/CMakeLists.txt \
       --replace 'add_clang_symlink(''${link} clang)' ""
@@ -151,40 +156,18 @@ stdenv.mkDerivation rec {
   '';
 
   cmakeFlags = [
-    "-Drpath=ON"
     "-DCMAKE_INSTALL_BINDIR=bin"
     "-DCMAKE_INSTALL_LIBDIR=lib"
     "-DCMAKE_INSTALL_INCLUDEDIR=include"
     "-Dbuiltin_llvm=OFF"
-    "-Dbuiltin_freetype=OFF"
-    "-Dbuiltin_gtest=OFF"
-    "-Dbuiltin_nlohmannjson=OFF"
-    "-Dbuiltin_openui5=ON"
-    "-Dclad=OFF"
-    "-Ddavix=ON"
-    "-Ddcache=OFF"
     "-Dfail-on-missing=ON"
-    "-Dfftw3=OFF"
     "-Dfitsio=OFF"
-    "-Dfortran=OFF"
     "-Dgnuinstall=ON"
-    "-Dimt=ON"
-    "-Dgviz=OFF"
-    "-Dhttp=ON"
     "-Dmysql=OFF"
-    "-Dodbc=OFF"
-    "-Dopengl=ON"
     "-Dpgsql=OFF"
-    "-Dpythia8=OFF"
-    "-Droot7=ON"
     "-Dsqlite=OFF"
-    "-Dssl=ON"
-    "-Dtmva=ON"
     "-Dtmva-pymva=OFF"
     "-Dvdt=OFF"
-    "-Dwebgui=ON"
-    "-Dxml=ON"
-    "-Dxrootd=ON"
   ]
   ++ lib.optional (stdenv.cc.libc != null) "-DC_INCLUDE_DIRS=${lib.getDev stdenv.cc.libc}/include"
   ++ lib.optionals stdenv.isDarwin [
@@ -251,8 +234,8 @@ stdenv.mkDerivation rec {
   setupHook = ./setup-hook.sh;
 
   meta = with lib; {
-    homepage = "https://root.cern.ch/";
-    description = "A data analysis framework";
+    homepage = "https://root.cern/";
+    description = "Data analysis framework";
     platforms = platforms.unix;
     maintainers = [ maintainers.guitargeek maintainers.veprbl ];
     license = licenses.lgpl21;

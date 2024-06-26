@@ -1,12 +1,13 @@
-{ lib
- , buildPythonPackage
-, fetchFromGitHub
-, django
-, django-allauth
-, djangorestframework
-, drf-jwt
-, responses
-, six
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  django,
+  django-allauth,
+  djangorestframework,
+  drf-jwt,
+  responses,
+  six,
 }:
 
 buildPythonPackage rec {

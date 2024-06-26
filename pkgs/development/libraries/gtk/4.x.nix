@@ -70,7 +70,7 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gtk4";
-  version = "4.14.3";
+  version = "4.14.4";
 
   outputs = [ "out" "dev" ] ++ lib.optionals x11Support [ "devdoc" ];
   outputBin = "dev";
@@ -82,7 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = with finalAttrs; "mirror://gnome/sources/gtk/${lib.versions.majorMinor version}/gtk-${version}.tar.xz";
-    hash = "sha256-K+XIWL3vEQTTeEjJd5wIk3LI0xUD9u/EuU5TtUb8mkM=";
+    hash = "sha256-RDUYuX6DSPn2QwrENbEBD5psUgf03Gp81dJOOCDO5jM=";
   };
 
   depsBuildBuild = [
@@ -169,18 +169,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   mesonFlags = [
     # ../docs/tools/shooter.c:4:10: fatal error: 'cairo-xlib.h' file not found
-    "-Ddocumentation=${lib.boolToString x11Support}"
+    (lib.mesonBool "documentation" x11Support)
     "-Dbuild-tests=false"
-    "-Dtracker=${if trackerSupport then "enabled" else "disabled"}"
-    "-Dbroadway-backend=${lib.boolToString broadwaySupport}"
-  ] ++ lib.optionals vulkanSupport [
-    "-Dvulkan=enabled"
-  ] ++ lib.optionals (!cupsSupport) [
-    "-Dprint-cups=disabled"
+    (lib.mesonEnable "tracker" trackerSupport)
+    (lib.mesonBool "broadway-backend" broadwaySupport)
+    (lib.mesonEnable "vulkan" vulkanSupport)
+    (lib.mesonEnable "print-cups" cupsSupport)
+    (lib.mesonBool "x11-backend" x11Support)
   ] ++ lib.optionals (stdenv.isDarwin && !stdenv.isAarch64) [
     "-Dmedia-gstreamer=disabled" # requires gstreamer-gl
-  ] ++ lib.optionals (!x11Support) [
-    "-Dx11-backend=false"
   ];
 
   doCheck = false; # needs X11
@@ -264,7 +261,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = with lib; {
-    description = "A multi-platform toolkit for creating graphical user interfaces";
+    description = "Multi-platform toolkit for creating graphical user interfaces";
     longDescription = ''
       GTK is a highly usable, feature rich toolkit for creating
       graphical user interfaces which boasts cross platform
@@ -282,9 +279,13 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://gitlab.gnome.org/GNOME/gtk/-/raw/${finalAttrs.version}/NEWS";
     pkgConfigModules = [
       "gtk4"
+    ] ++ lib.optionals broadwaySupport [
       "gtk4-broadway"
+    ] ++ lib.optionals stdenv.hostPlatform.isUnix [
       "gtk4-unix-print"
+    ] ++ lib.optionals waylandSupport [
       "gtk4-wayland"
+    ] ++ lib.optionals x11Support [
       "gtk4-x11"
     ];
   };

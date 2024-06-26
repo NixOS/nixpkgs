@@ -24,15 +24,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gtksourceview";
-  version = "5.12.0";
+  version = "5.12.1";
 
   outputs = [ "out" "dev" "devdoc" ];
 
-  src = let
-    inherit (finalAttrs) pname version;
-  in fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    hash = "sha256-2vMv9dMVDWOFkX01A6hbngR7oViysDB5MUycAIE/oB8=";
+  src = fetchurl {
+    url = "mirror://gnome/sources/gtksourceview/${lib.versions.majorMinor finalAttrs.version}/gtksourceview-${finalAttrs.version}.tar.xz";
+    hash = "sha256-hMgqrZhcWq2ufOp4BJBKdjQeyCsmjUZZTBpHjzm0LB8=";
   };
 
   patches = [
@@ -115,5 +113,7 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = platforms.unix;
     license = licenses.lgpl21Plus;
     maintainers = teams.gnome.members;
+    # https://hydra.nixos.org/build/258191535/nixlog/1
+    broken = stdenv.isDarwin && stdenv.isx86_64;
   };
 })

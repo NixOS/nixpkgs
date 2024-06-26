@@ -38,6 +38,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     fftw
+    mpi
   ] ++ lib.optionals (gpuBackend == "cuda") [
     cudaPackages.libcufft
     cudaPackages.cuda_cudart
@@ -47,8 +48,6 @@ stdenv.mkDerivation rec {
     rocmPackages.hipfft
   ] ++ lib.optional stdenv.isDarwin llvmPackages.openmp
   ;
-
-  propagatedBuildInputs = [ mpi ];
 
   cmakeFlags = [
     "-DSPFFT_OMP=ON"

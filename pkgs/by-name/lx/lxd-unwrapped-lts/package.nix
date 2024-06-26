@@ -71,7 +71,7 @@ buildGo122Module rec {
     make lxd-agent lxd-migrate
   '';
 
-  preCheck =
+  checkFlags =
     let
       skippedTests = [
         "TestValidateConfig"
@@ -81,10 +81,7 @@ buildGo122Module rec {
         "TestContainerTestSuite"
       ];
     in
-    ''
-      # Disable tests requiring local operations
-      buildFlagsArray+=("-run" "[^(${builtins.concatStringsSep "|" skippedTests})]")
-    '';
+    [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
 
   postInstall = ''
     installShellCompletion --bash --name lxd ./scripts/bash/lxd-client

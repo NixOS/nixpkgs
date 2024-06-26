@@ -8,7 +8,7 @@
 
 trivialBuild rec {
   pname = "helm-words";
-  version = "0.pre+unstable=2019-03-12";
+  version = "0-unstable-2019-03-12";
 
   src = fetchFromGitHub {
     owner = "emacsmirror";

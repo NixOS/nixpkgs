@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pythonOlder
-, pyxdg
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  pythonOlder,
+  pyxdg,
 }:
 
 buildPythonPackage rec {
@@ -24,20 +25,14 @@ buildPythonPackage rec {
     sed -i "/--cov/d" pyproject.toml
   '';
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
-  propagatedBuildInputs = [
-    pyxdg
-  ];
+  propagatedBuildInputs = [ pyxdg ];
 
   # Tests want to interact with actual browsers
   doCheck = false;
 
-  pythonImportsCheck = [
-    "browsers"
-  ];
+  pythonImportsCheck = [ "browsers" ];
 
   meta = with lib; {
     description = "Python library for detecting and launching browsers";

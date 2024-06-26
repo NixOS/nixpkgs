@@ -1,6 +1,6 @@
 { stdenv
 , lib
-, fetchurl
+, fetchgit
 , pkg-config
 , makeWrapper
 , gtk3
@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation {
   pname = "gpu-screen-recorder-gtk";
-  version = "3.2.5";
+  version = "3.7.6";
 
-  src = fetchurl {
-    url = "https://dec05eba.com/snapshot/gpu-screen-recorder-gtk.git.r175.cfd18af.tar.gz";
-    hash = "sha256-HhZe22Hm9yGoy5WoyuP2+Wj8E3nMs4uf96mzmP6CMqU=";
+  src = fetchgit {
+    url = "https://repo.dec05eba.com/gpu-screen-recorder-gtk";
+    rev = "cd777c1506e20514df4b97345e480051cbaf9693";
+    hash = "sha256-ZBYYsW75tq8TaZp0F4v7YIHKHk/DFBIGy3X781ho2oE=";
   };
-  sourceRoot = ".";
 
   nativeBuildInputs = [
     pkg-config
@@ -46,12 +46,12 @@ stdenv.mkDerivation {
     gappsWrapperArgs+=(--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libglvnd ]}:/run/opengl-driver/lib)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "GTK frontend for gpu-screen-recorder.";
     mainProgram = "gpu-screen-recorder-gtk";
     homepage = "https://git.dec05eba.com/gpu-screen-recorder-gtk/about/";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ babbaj ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ babbaj ];
     platforms = [ "x86_64-linux" ];
   };
 }

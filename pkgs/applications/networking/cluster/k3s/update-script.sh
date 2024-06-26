@@ -57,14 +57,14 @@ CHARTS_URL=https://k3s.io/k3s-charts/assets
 rm -f chart-versions.nix.update
 cat > chart-versions.nix.update <<EOF
 {
-    traefik-crd  = {
-        url = "${CHARTS_URL}/traefik-crd/${CHART_FILES[0]}";
-        sha256 = "$(nix-prefetch-url --quiet "${CHARTS_URL}/traefik-crd/${CHART_FILES[0]}")";
-    };
-    traefik = {
-        url = "${CHARTS_URL}/traefik/${CHART_FILES[1]}";
-        sha256 = "$(nix-prefetch-url --quiet "${CHARTS_URL}/traefik/${CHART_FILES[1]}")";
-    };
+  traefik-crd = {
+    url = "${CHARTS_URL}/traefik-crd/${CHART_FILES[0]}";
+    sha256 = "$(nix-prefetch-url --quiet "${CHARTS_URL}/traefik-crd/${CHART_FILES[0]}")";
+  };
+  traefik = {
+    url = "${CHARTS_URL}/traefik/${CHART_FILES[1]}";
+    sha256 = "$(nix-prefetch-url --quiet "${CHARTS_URL}/traefik/${CHART_FILES[1]}")";
+  };
 }
 EOF
 mv chart-versions.nix.update chart-versions.nix

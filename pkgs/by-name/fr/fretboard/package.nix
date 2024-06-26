@@ -18,19 +18,19 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fretboard";
-  version = "6.1";
+  version = "7.0";
 
   src = fetchFromGitHub {
     owner = "bragefuglseth";
     repo = "fretboard";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-Jr7DxoOmggcAxU1y+2jXZvMgAf9SDSA7t5Jr2AYZV7s=";
+    hash = "sha256-8AfIvmL6ttmsH95KRMSv+1RaYYU2h+nVaZozLfxLWXc=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     src = finalAttrs.src;
     name = "${finalAttrs.pname}-${finalAttrs.version}";
-    hash = "sha256-P7dafWBaHVrxh30YxKiraKPMjtmGTTNd8qvoJ1M2vKI=";
+    hash = "sha256-kFV3zd7xp2hBMAdIXZAJhH/BSTKy6DgnFqz7h0yNWgs=";
   };
 
   nativeBuildInputs = [

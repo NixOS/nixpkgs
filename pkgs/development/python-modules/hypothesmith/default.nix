@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, hypothesis
-, lark
-, libcst
-, parso
-, pytestCheckHook
-, pytest-xdist
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  hypothesis,
+  lark,
+  libcst,
+  parso,
+  pytestCheckHook,
+  pytest-xdist,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -22,9 +23,7 @@ buildPythonPackage rec {
     hash = "sha256-lsFIAtbI6F2JdSZBdoeNtUso0u2SH9v+3C5rjOPIFxY=";
   };
 
-  patches = [
-    ./remove-black.patch
-  ];
+  patches = [ ./remove-black.patch ];
 
   postPatch = ''
     substituteInPlace setup.py \
@@ -37,13 +36,19 @@ buildPythonPackage rec {
       --replace "--cov-fail-under=100" ""
   '';
 
-  propagatedBuildInputs = [ hypothesis lark libcst ];
-
-  nativeCheckInputs = [ parso pytestCheckHook pytest-xdist ];
-
-  pytestFlagsArray = [
-    "-v"
+  propagatedBuildInputs = [
+    hypothesis
+    lark
+    libcst
   ];
+
+  nativeCheckInputs = [
+    parso
+    pytestCheckHook
+    pytest-xdist
+  ];
+
+  pytestFlagsArray = [ "-v" ];
 
   disabledTests = [
     # https://github.com/Zac-HD/hypothesmith/issues/21

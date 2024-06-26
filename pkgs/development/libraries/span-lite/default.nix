@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = {
-    description = "A C++20-like span for C++98, C++11 and later in a single-file header-only library";
+    description = "C++20-like span for C++98, C++11 and later in a single-file header-only library";
     homepage = "https://github.com/martinmoene/span-lite";
     license = lib.licenses.bsd1;
     maintainers = with lib.maintainers; [ icewind1991 ];

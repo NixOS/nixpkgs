@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   preferLocalBuild = true;
 
   meta = with lib; {
-    description = "A text-based front-end to Remind";
+    description = "Text-based front-end to Remind";
     longDescription = ''
       Wyrd is a text-based front-end to Remind, a sophisticated
       calendar and alarm program. Remind's power lies in its
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     downloadPage = "http://pessimization.com/software/wyrd/";
     license = licenses.gpl2Only;
     maintainers = [ maintainers.prikhi ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     mainProgram = "wyrd";
   };
 }

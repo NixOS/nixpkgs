@@ -24,11 +24,11 @@
 
 stdenv.mkDerivation rec {
   pname = "liferea";
-  version = "1.15.6";
+  version = "1.15.7";
 
   src = fetchurl {
     url = "https://github.com/lwindolf/${pname}/releases/download/v${version}/${pname}-${version}.tar.bz2";
-    hash = "sha256-4P/0fwHofsRjZcLuFdkUKxWIp/9P5yXA2ED/zqTGd94=";
+    hash = "sha256-vv6hrvfD1T+eH/Bi1ID0yoxB4747Q+nMvklT49uaX38=";
   };
 
   nativeBuildInputs = [
@@ -73,7 +73,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "A GTK-based news feed aggregator";
+    description = "GTK-based news feed aggregator";
     homepage = "http://lzone.de/liferea/";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ romildo yayayayaka ];

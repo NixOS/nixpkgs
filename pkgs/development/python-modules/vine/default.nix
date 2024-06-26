@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, case
-, fetchPypi
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  case,
+  fetchPypi,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -28,9 +29,7 @@ buildPythonPackage rec {
     "t/unit/test_synchronization.py"
   ];
 
-  pythonImportsCheck = [
-    "vine"
-  ];
+  pythonImportsCheck = [ "vine" ];
 
   meta = with lib; {
     description = "Python promises";

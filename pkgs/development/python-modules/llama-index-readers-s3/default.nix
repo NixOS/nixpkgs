@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "llama-index-readers-s3";
-  version = "0.1.7";
+  version = "0.1.9";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "llama_index_readers_s3";
     inherit version;
-    hash = "sha256-xj7uRsc56Wv/SF4OPo/jc+43PabJ4vaM5HcxhnxTzY8=";
+    hash = "sha256-ramC3INitu++AHKCWov78ad66/XnZG+Z4bZJHBdN5Uk=";
   };
 
   build-system = [ poetry-core ];

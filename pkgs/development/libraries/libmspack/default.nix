@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = {
-    description = "A de/compression library for various Microsoft formats";
+    description = "De/compression library for various Microsoft formats";
     homepage = "https://www.cabextract.org.uk/libmspack";
     license = lib.licenses.lgpl2Only;
     platforms = lib.platforms.unix;

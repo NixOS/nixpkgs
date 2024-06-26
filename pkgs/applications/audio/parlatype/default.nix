@@ -21,13 +21,13 @@
 
 stdenv.mkDerivation rec {
   pname = "parlatype";
-  version = "4.1";
+  version = "4.2";
 
   src = fetchFromGitHub {
     owner = "gkarsay";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0546rl5sm7xmgl54cqps3a7bhfs7xdvz98jgdcf4sgiz1k2vh9xq";
+    sha256 = "1wi9f23zgvsa98xcxgghm53jlafnr3pan1zl4gkn0yd8b2d6avhk";
   };
 
   nativeBuildInputs = [
@@ -58,9 +58,6 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    substituteInPlace data/meson_post_install.py \
-      --replace-fail 'gtk-update-icon-cache' 'gtk4-update-icon-cache'
-    patchShebangs data/meson_post_install.py
     patchShebangs libparlatype/tests/data/generate_config_data
   '';
 
@@ -76,8 +73,7 @@ stdenv.mkDerivation rec {
       useful for journalists, students, scientists and whoever needs to
       transcribe audio files.
     '';
-    # maintainer lost control of parlatype.org
-    homepage = "https://github.com/gkarsay/parlatype";
+    homepage = "https://www.parlatype.xyz/";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ alexshpilkin melchips ];
     platforms = platforms.linux;

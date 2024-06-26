@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   env.CXXFLAGS = "-include cstdint";
 
   meta = with lib; {
-    description = "A high dynamic range (HDR) image comparison tool";
+    description = "High dynamic range (HDR) image comparison tool";
     mainProgram = "tev";
     longDescription = ''
       A high dynamic range (HDR) image comparison tool for graphics people. tev

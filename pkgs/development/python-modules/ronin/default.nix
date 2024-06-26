@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, blessings
-, colorama
-, glob2
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  blessings,
+  colorama,
+  glob2,
 }:
 
 buildPythonPackage rec {
@@ -22,13 +23,11 @@ buildPythonPackage rec {
     glob2
   ];
 
-  pythonImportsCheck = [
-    "ronin"
-  ];
+  pythonImportsCheck = [ "ronin" ];
 
   meta = with lib; {
     homepage = "https://github.com/tliron/ronin/";
-    description = "A straightforward but powerful build system based on Ninja and Python";
+    description = "Straightforward but powerful build system based on Ninja and Python";
     license = licenses.asl20;
     maintainers = with maintainers; [ AndersonTorres ];
   };

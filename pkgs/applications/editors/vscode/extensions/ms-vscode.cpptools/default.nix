@@ -1,7 +1,6 @@
 {
   lib,
   vscode-utils,
-  fetchurl,
   writeScript,
   runtimeShell,
   jq,
@@ -43,11 +42,11 @@ let
   gdbDefaultsTo = if gdbUseFixed then "${gdb}/bin/gdb" else "gdb";
   supported = {
     x86_64-linux = {
-      hash = "sha256-p8WFmkQKdzXF0FTWHabyeFMkwXa2RkDRM9SvvkBIOLY=";
+      hash = "sha256-arTBt3UWA5zoo0dL044Sx/NT1LUS76XfGIS96NOMvJk=";
       arch = "linux-x64";
     };
     aarch64-linux = {
-      hash = "sha256-HISE8/M9IpeI8iX0mmw9owExnpgiwpesE7YG/+QFYgc=";
+      hash = "sha256-oVuDxx117bVd/jDqn9KivTwR5T2X5UZMHk/nZ/e/IOg=";
       arch = "linux-arm64";
     };
   };
@@ -58,7 +57,7 @@ vscode-utils.buildVscodeMarketplaceExtension {
   mktplcRef = base // {
     name = "cpptools";
     publisher = "ms-vscode";
-    version = "1.20.2";
+    version = "1.20.5";
   };
 
   nativeBuildInputs = [
@@ -74,6 +73,8 @@ vscode-utils.buildVscodeMarketplaceExtension {
     stdenv.cc.cc.lib
   ];
 
+  dontAutoPatchelf = true;
+
   postPatch = ''
     mv ./package.json ./package_orig.json
 
@@ -88,26 +89,35 @@ vscode-utils.buildVscodeMarketplaceExtension {
     touch "./install.lock"
 
     # Clang-format from nix package.
-    mv ./LLVM/ ./LLVM_orig
+    rm -rf ./LLVM
     mkdir "./LLVM/"
     find "${clang-tools}" -mindepth 1 -maxdepth 1 | xargs ln -s -t "./LLVM"
 
     # Patching binaries
-    chmod +x bin/cpptools bin/cpptools-srv bin/cpptools-wordexp debugAdapters/bin/OpenDebugAD7
+    chmod +x bin/cpptools bin/cpptools-srv bin/cpptools-wordexp bin/libc.so debugAdapters/bin/OpenDebugAD7
     patchelf --replace-needed liblttng-ust.so.0 liblttng-ust.so.1 ./debugAdapters/bin/libcoreclrtraceptprovider.so
   '';
 
-  postFixup = lib.optionalString gdbUseFixed ''
-    wrapProgram $out/share/vscode/extensions/ms-vscode.cpptools/debugAdapters/bin/OpenDebugAD7 --prefix PATH : ${lib.makeBinPath [ gdb ]}
-  '';
+  postFixup =
+    ''
+      autoPatchelf $out/share/vscode/extensions/ms-vscode.cpptools/debugAdapters
+
+      # cpptools* are distributed by the extension and need to be run through the distributed musl interpretter
+      patchelf --set-interpreter $out/share/vscode/extensions/ms-vscode.cpptools/bin/libc.so $out/share/vscode/extensions/ms-vscode.cpptools/bin/cpptools
+      patchelf --set-interpreter $out/share/vscode/extensions/ms-vscode.cpptools/bin/libc.so $out/share/vscode/extensions/ms-vscode.cpptools/bin/cpptools-srv
+      patchelf --set-interpreter $out/share/vscode/extensions/ms-vscode.cpptools/bin/libc.so $out/share/vscode/extensions/ms-vscode.cpptools/bin/cpptools-wordexp
+    ''
+    + lib.optionalString gdbUseFixed ''
+      wrapProgram $out/share/vscode/extensions/ms-vscode.cpptools/debugAdapters/bin/OpenDebugAD7 --prefix PATH : ${lib.makeBinPath [ gdb ]}
+    '';
 
   meta = {
-    description = "The C/C++ extension adds language support for C/C++ to Visual Studio Code, including features such as IntelliSense and debugging.";
+    description = "C/C++ extension adds language support for C/C++ to Visual Studio Code, including features such as IntelliSense and debugging";
     homepage = "https://marketplace.visualstudio.com/items?itemName=ms-vscode.cpptools";
     license = lib.licenses.unfree;
-    maintainers = [
-      lib.maintainers.jraygauthier
-      lib.maintainers.stargate01
+    maintainers = with lib.maintainers; [
+      jraygauthier
+      stargate01
     ];
     platforms = [
       "x86_64-linux"

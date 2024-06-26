@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools
-, libvlc
-, substituteAll
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  libvlc,
+  substituteAll,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -23,20 +24,16 @@ buildPythonPackage rec {
     # Patch path for VLC
     (substituteAll {
       src = ./vlc-paths.patch;
-      libvlcPath="${libvlc}/lib/libvlc.so.5";
+      libvlcPath = "${libvlc}/lib/libvlc.so.5";
     })
   ];
 
-  propagatedBuildInputs = [
-    setuptools
-  ];
+  propagatedBuildInputs = [ setuptools ];
 
   # Module has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "vlc"
-  ];
+  pythonImportsCheck = [ "vlc" ];
 
   meta = with lib; {
     description = "Python bindings for VLC, the cross-platform multimedia player and framework";

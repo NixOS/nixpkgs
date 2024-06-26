@@ -1,20 +1,21 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
 
-# build-system
-, setuptools
+  # build-system
+  setuptools,
 
-# dependencies
-, flask
-, werkzeug
+  # dependencies
+  flask,
+  werkzeug,
 
-# tests
-, asgiref
-, blinker
-, pytestCheckHook
-, semantic-version
+  # tests
+  asgiref,
+  blinker,
+  pytestCheckHook,
+  semantic-version,
 }:
 
 buildPythonPackage rec {
@@ -30,18 +31,14 @@ buildPythonPackage rec {
     hash = "sha256-XiPRSmB+8SgGxplZC4nQ8ODWe67sWZ11lHv5wUczAzM=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     flask
     werkzeug
   ];
 
-  pythonImportsCheck = [
-    "flask_login"
-  ];
+  pythonImportsCheck = [ "flask_login" ];
 
   nativeCheckInputs = [
     asgiref

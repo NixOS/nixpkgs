@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, freezegun
-, mock
-, pytestCheckHook
-, python-dateutil
-, pythonOlder
-, requests-mock
-, requests-oauthlib
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  freezegun,
+  mock,
+  pytestCheckHook,
+  python-dateutil,
+  pythonOlder,
+  requests-mock,
+  requests-oauthlib,
 }:
 
 buildPythonPackage rec {
@@ -41,9 +42,7 @@ buildPythonPackage rec {
     requests-mock
   ];
 
-  pythonImportsCheck = [
-    "fitbit"
-  ];
+  pythonImportsCheck = [ "fitbit" ];
 
   meta = with lib; {
     description = "Fitbit API Python Client Implementation";

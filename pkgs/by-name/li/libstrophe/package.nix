@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = with lib; {
-    description = "A simple, lightweight C library for writing XMPP clients";
+    description = "Simple, lightweight C library for writing XMPP clients";
     longDescription = ''
       libstrophe is a lightweight XMPP client library written in C. It has
       minimal dependencies and is configurable for various environments. It

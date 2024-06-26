@@ -38,11 +38,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "bisq-desktop";
-  version = "1.9.15";
+  version = "1.9.16";
 
   src = fetchurl {
     url = "https://github.com/bisq-network/bisq/releases/download/v${version}/Bisq-64bit-${version}.deb";
-    sha256 = "0bz4yzfrzn9rwsmwwnsqdgxsqd42dyiz3vxi53qxj36h49nh8lzg";
+    sha256 = "sha256-DxYgZgDa3vOHj7svJqu/pdyXKZ+uBTy35Fchw49xxoA=";
   };
 
   nativeBuildInputs = [
@@ -115,7 +115,7 @@ stdenv.mkDerivation rec {
   passthru.updateScript = ./update.sh;
 
   meta = with lib; {
-    description = "A decentralized bitcoin exchange network";
+    description = "Decentralized bitcoin exchange network";
     homepage = "https://bisq.network";
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.mit;

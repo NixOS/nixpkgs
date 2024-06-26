@@ -73,7 +73,7 @@ stdenv.mkDerivation rec {
   env.LANG = "C.UTF-8";
 
   meta = with lib; {
-    description = "A collection of utilities for indexing and searching Maildirs";
+    description = "Collection of utilities for indexing and searching Maildirs";
     license = licenses.gpl3Plus;
     homepage = "https://www.djcbsoftware.nl/code/mu/";
     changelog = "https://github.com/djcb/mu/releases/tag/v${version}";

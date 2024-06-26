@@ -14,26 +14,26 @@
 
 buildGo122Module rec {
   pname = "seabird";
-  version = "0.2.2";
+  version = "0.3.2";
 
   src = fetchFromGitHub {
     owner = "getseabird";
     repo = "seabird";
     rev = "v${version}";
-    hash = "sha256-wrZLWDTgcUS8snCqc5rInqitAkrsStL8zmc8vjl4ApQ=";
+    hash = "sha256-MZEgzTwaBNXLimSj/vXR624DCJ7i2W5lYUdVxqvFii0=";
   };
 
-  vendorHash = "sha256-z9l6g5NkAErRQo8oiqwKG9ssm8K2S+eSZBD0w4kO3kc=";
+  vendorHash = "sha256-g7qKI78VeDUu8yafrk2llCIirW/1uxfx6urVLRexsPE=";
 
   nativeBuildInputs = [
     copyDesktopItems
+    gobject-introspection
     libxml2
     pkg-config
     wrapGAppsHook4
   ];
 
   buildInputs = [
-    gobject-introspection
     gtk4
     gtksourceview5
     libadwaita
@@ -41,6 +41,8 @@ buildGo122Module rec {
   ];
 
   ldflags = [ "-s" "-w" ];
+
+  enableParallelBuilding = true;
 
   postPatch = ''
     substituteInPlace main.go --replace-fail 'version = "dev"' 'version = "${version}"'

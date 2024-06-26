@@ -68,7 +68,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "A fast and minimalistic image viewer";
+    description = "Fast and minimalistic image viewer";
     homepage = "https://arturkovacs.github.io/emulsion-website/";
     maintainers = [ maintainers.magnetophon ];
     platforms = platforms.unix;

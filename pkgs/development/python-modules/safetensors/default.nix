@@ -1,17 +1,18 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, cargo
-, fetchFromGitHub
-, h5py
-, numpy
-, pythonOlder
-, pytestCheckHook
-, rustc
-, rustPlatform
-, setuptools-rust
-, torch
-, libiconv
+{
+  stdenv,
+  lib,
+  buildPythonPackage,
+  cargo,
+  fetchFromGitHub,
+  h5py,
+  numpy,
+  pythonOlder,
+  pytestCheckHook,
+  rustc,
+  rustPlatform,
+  setuptools-rust,
+  torch,
+  libiconv,
 }:
 
 buildPythonPackage rec {
@@ -47,22 +48,25 @@ buildPythonPackage rec {
   buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
 
   nativeCheckInputs = [
-    h5py numpy pytestCheckHook torch
+    h5py
+    numpy
+    pytestCheckHook
+    torch
   ];
   pytestFlagsArray = [ "tests" ];
   # don't require PaddlePaddle (not in Nixpkgs), Flax, or Tensorflow (onerous) to run tests:
-  disabledTestPaths = [
-    "tests/test_flax_comparison.py"
-    "tests/test_paddle_comparison.py"
-    "tests/test_tf_comparison.py"
-  ] ++ lib.optionals stdenv.isDarwin [
-    # don't require mlx (not in Nixpkgs) to run tests
-    "tests/test_mlx_comparison.py"
-  ];
+  disabledTestPaths =
+    [
+      "tests/test_flax_comparison.py"
+      "tests/test_paddle_comparison.py"
+      "tests/test_tf_comparison.py"
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      # don't require mlx (not in Nixpkgs) to run tests
+      "tests/test_mlx_comparison.py"
+    ];
 
-  pythonImportsCheck = [
-    "safetensors"
-  ];
+  pythonImportsCheck = [ "safetensors" ];
 
   meta = with lib; {
     homepage = "https://github.com/huggingface/safetensors";

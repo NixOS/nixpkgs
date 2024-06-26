@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -17,16 +18,12 @@ buildPythonPackage rec {
     hash = "sha256-R+tza5C/2egkajScmilp/8qowoSklYVfEB+f0KMNBqQ=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   # Upstream doesn't have tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "minidump"
-  ];
+  pythonImportsCheck = [ "minidump" ];
 
   meta = with lib; {
     description = "Python library to parse and read Microsoft minidump file format";

@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -19,17 +20,11 @@ buildPythonPackage rec {
     hash = "sha256-rNiJqR7/e+Rhi6kVBY8gZJZczqSUsyszotXkb4OKfWk=";
   };
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "sseclient"
-  ];
+  pythonImportsCheck = [ "sseclient" ];
 
-  pytestFlagsArray = [
-    "tests/unittests.py"
-  ];
+  pytestFlagsArray = [ "tests/unittests.py" ];
 
   meta = with lib; {
     description = "Pure-Python Server Side Events (SSE) client";

@@ -1,137 +1,181 @@
-{ stdenv, lib, stdenvNoCC
-, makeScopeWithSplicing', generateSplicesForMkScope
-, buildPackages
-, fetchcvs
+{
+  lib,
+  crossLibcStdenv,
+  stdenvNoCC,
+  makeScopeWithSplicing',
+  generateSplicesForMkScope,
+  buildPackages,
+  fetchcvs,
 }:
 
-makeScopeWithSplicing' {
+let
   otherSplices = generateSplicesForMkScope "netbsd";
-  f = (self: lib.packagesFromDirectoryRecursive {
-    callPackage = self.callPackage;
-    directory = ./pkgs;
-  } // (let inherit (self) mkDerivation; in {
+  buildNetbsd = otherSplices.selfBuildHost;
+in
 
-    fetchNetBSD = path: version: sha256: fetchcvs {
-      cvsRoot = ":pserver:anoncvs@anoncvs.NetBSD.org:/cvsroot";
-      module = "src/${path}";
-      inherit sha256;
-      tag = "netbsd-${lib.replaceStrings ["."] ["-"] version}-RELEASE";
-    };
+makeScopeWithSplicing' {
+  inherit otherSplices;
+  f = (
+    self:
+    lib.packagesFromDirectoryRecursive {
+      callPackage = self.callPackage;
+      directory = ./pkgs;
+    }
+    // {
+      version = "9.2";
 
-    defaultMakeFlags = [
-      "MKSOFTFLOAT=${if stdenv.hostPlatform.gcc.float or (stdenv.hostPlatform.parsed.abi.float or "hard") == "soft"
-        then "yes"
-        else "no"}"
-    ];
+      defaultMakeFlags = [
+        "MKSOFTFLOAT=${
+          if
+            stdenvNoCC.hostPlatform.gcc.float or (stdenvNoCC.hostPlatform.parsed.abi.float or "hard") == "soft"
+          then
+            "yes"
+          else
+            "no"
+        }"
+      ];
 
-    compatIfNeeded = lib.optional (!stdenvNoCC.hostPlatform.isNetBSD) self.compat;
+      compatIfNeeded = lib.optional (!stdenvNoCC.hostPlatform.isNetBSD) self.compat;
 
-    # The manual callPackages below should in principle be unnecessary because
-    # they're just selecting arguments that would be selected anyway. However,
-    # if we don't perform these manual calls, we get infinite recursion issues
-    # because of the splices.
+      stdenvLibcMinimal = crossLibcStdenv.override (old: {
+        cc = old.cc.override {
+          libc = self.libcMinimal;
+          bintools = old.cc.bintools.override {
+            libc = self.libcMinimal;
+            sharedLibraryLoader = null;
+          };
+        };
+      });
 
-    mkDerivation = self.callPackage ./pkgs/mkDerivation.nix {
-      inherit stdenv stdenvNoCC;
-      inherit (buildPackages.netbsd) netbsdSetupHook makeMinimal install tsort lorder;
-      inherit (buildPackages) mandoc;
-      inherit (buildPackages.buildPackages) rsync;
+      # The manual callPackages below should in principle be unnecessary because
+      # they're just selecting arguments that would be selected anyway. However,
+      # if we don't perform these manual calls, we get infinite recursion issues
+      # because of the splices.
 
-    };
+      compat = self.callPackage ./pkgs/compat/package.nix {
+        inherit (buildPackages) coreutils;
+        inherit (buildPackages.darwin) cctools-port;
+        inherit (buildNetbsd) makeMinimal;
+        inherit (self) install;
+      };
 
-    makeMinimal = self.callPackage ./pkgs/makeMinimal.nix {
-      inherit (self) make;
-    };
+      config = self.callPackage ./pkgs/config.nix {
+        inherit (buildNetbsd) makeMinimal install;
+        inherit (self) cksum;
+      };
 
-    compat = self.callPackage ./pkgs/compat/package.nix {
-      inherit (buildPackages) coreutils;
-      inherit (buildPackages.darwin) cctools-port;
-      inherit (buildPackages.buildPackages) rsync;
-      inherit (buildPackages.netbsd) makeMinimal;
-      inherit (self) install include libc libutil;
-    };
+      csu = self.callPackage ./pkgs/csu.nix {
+        inherit (self) headers sys-headers ld_elf_so;
+        inherit (buildNetbsd)
+          netbsdSetupHook
+          makeMinimal
+          install
+          genassym
+          gencat
+          lorder
+          tsort
+          statHook
+          ;
+      };
 
-    install = self.callPackage ./pkgs/install/package.nix {
-      inherit (self) fts mtree make compatIfNeeded;
-      inherit (buildPackages.buildPackages) rsync;
-      inherit (buildPackages.netbsd) makeMinimal;
-    };
+      include = self.callPackage ./pkgs/include.nix {
+        inherit (buildNetbsd)
+          makeMinimal
+          install
+          nbperf
+          rpcgen
+          ;
+        inherit (buildPackages) stdenv;
+      };
 
-    # See note in pkgs/stat/package.nix
-    stat = self.callPackage ./pkgs/stat/package.nix {
-      inherit (buildPackages.netbsd) makeMinimal install;
-      inherit (buildPackages.buildPackages) rsync;
-    };
+      install = self.callPackage ./pkgs/install/package.nix {
+        inherit (self)
+          fts
+          mtree
+          make
+          compatIfNeeded
+          ;
+        inherit (buildNetbsd) makeMinimal;
+      };
 
-    # See note in pkgs/stat/hook.nix
-    statHook = self.callPackage ./pkgs/stat/hook.nix {
-      inherit (self) stat;
-    };
+      libcMinimal = self.callPackage ./pkgs/libcMinimal.nix {
+        inherit (self) headers csu;
+        inherit (buildNetbsd)
+          netbsdSetupHook
+          makeMinimal
+          install
+          genassym
+          gencat
+          lorder
+          tsort
+          statHook
+          rpcgen
+          ;
+      };
 
-    tsort = self.callPackage ./pkgs/tsort.nix {
-      inherit (buildPackages.netbsd) makeMinimal install;
-      inherit (buildPackages.buildPackages) rsync;
-    };
+      libpthread-headers = self.callPackage ./pkgs/libpthread/headers.nix { };
 
-    lorder = self.callPackage ./pkgs/lorder.nix {
-      inherit (buildPackages.netbsd) makeMinimal install;
-      inherit (buildPackages.buildPackages) rsync;
-    };
+      librpcsvc = self.callPackage ./pkgs/librpcsvc.nix {
+        inherit (buildNetbsd)
+          netbsdSetupHook
+          makeMinimal
+          install
+          lorder
+          tsort
+          statHook
+          rpcgen
+          ;
+      };
 
-    config = self.callPackage ./pkgs/config.nix {
-      inherit (buildPackages.netbsd) makeMinimal install;
-      inherit (buildPackages.buildPackages) rsync;
-      inherit (self) cksum;
-    };
+      libutil = self.callPackage ./pkgs/libutil.nix {
+        inherit (buildNetbsd)
+          netbsdSetupHook
+          makeMinimal
+          install
+          lorder
+          tsort
+          statHook
+          ;
+      };
 
-    include = self.callPackage ./pkgs/include.nix {
-      inherit (buildPackages.netbsd)
-        makeMinimal install nbperf rpcgen;
-      inherit (buildPackages) stdenv;
-      inherit (buildPackages.buildPackages) rsync;
-    };
+      lorder = self.callPackage ./pkgs/lorder.nix { inherit (buildNetbsd) makeMinimal install; };
 
-    sys-headers = self.callPackage ./pkgs/sys/headers.nix {
-      inherit (buildPackages.netbsd)
-        makeMinimal install tsort lorder statHook uudecode config genassym;
-      inherit (buildPackages.buildPackages) rsync;
-    };
+      mtree = self.callPackage ./pkgs/mtree.nix { inherit (self) mknod; };
 
-    libutil = self.callPackage ./pkgs/libutil.nix {
-      inherit (self) libc sys;
-    };
+      mkDerivation = self.callPackage ./pkgs/mkDerivation.nix {
+        inherit (buildNetbsd)
+          netbsdSetupHook
+          makeMinimal
+          install
+          tsort
+          lorder
+          ;
+        inherit (buildPackages) mandoc;
+        inherit (buildPackages.buildPackages) rsync;
+      };
 
-    libpthread-headers = self.callPackage ./pkgs/libpthread/headers.nix { };
+      makeMinimal = self.callPackage ./pkgs/makeMinimal.nix { inherit (self) make; };
 
-    csu = self.callPackage ./pkgs/csu.nix {
-      inherit (self) headers sys ld_elf_so;
-      inherit (buildPackages.netbsd)
-        netbsdSetupHook
-        makeMinimal
-        install
-        genassym gencat lorder tsort statHook;
-      inherit (buildPackages.buildPackages) rsync;
-    };
+      # See note in pkgs/stat/package.nix
+      stat = self.callPackage ./pkgs/stat/package.nix { inherit (buildNetbsd) makeMinimal install; };
 
-    _mainLibcExtraPaths = with self; [
-        common i18n_module.src sys.src
-        ld_elf_so.src libpthread.src libm.src libresolv.src
-        librpcsvc.src libutil.src librt.src libcrypt.src
-    ];
+      # See note in pkgs/stat/hook.nix
+      statHook = self.callPackage ./pkgs/stat/hook.nix { inherit (self) stat; };
 
-    libc = self.callPackage ./pkgs/libc.nix {
-      inherit (self) headers csu librt;
-      inherit (buildPackages.netbsd)
-        netbsdSetupHook
-        makeMinimal
-        install
-        genassym gencat lorder tsort statHook rpcgen;
-      inherit (buildPackages.buildPackages) rsync;
-    };
+      sys-headers = self.callPackage ./pkgs/sys/headers.nix {
+        inherit (buildNetbsd)
+          makeMinimal
+          install
+          tsort
+          lorder
+          statHook
+          uudecode
+          config
+          genassym
+          ;
+      };
 
-    mtree = self.callPackage ./pkgs/mtree.nix {
-      inherit (self) mknod;
-    };
-
-  }));
+      tsort = self.callPackage ./pkgs/tsort.nix { inherit (buildNetbsd) makeMinimal install; };
+    }
+  );
 }

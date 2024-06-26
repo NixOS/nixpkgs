@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, anyascii
-, inflect
-, nltk
-, numpy
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  anyascii,
+  inflect,
+  nltk,
+  numpy,
 }:
 
 buildPythonPackage rec {

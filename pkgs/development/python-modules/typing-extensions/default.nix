@@ -1,8 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, flit-core
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  flit-core,
+  pythonOlder,
+
+  # reverse dependencies
+  mashumaro,
+  pydantic,
 }:
 
 buildPythonPackage rec {
@@ -18,17 +23,17 @@ buildPythonPackage rec {
     hash = "sha256-g/CFvVylnIApX8KoKrXaxnnL4CufM/fYOvaOJBvqUbA=";
   };
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  nativeBuildInputs = [ flit-core ];
 
   # Tests are not part of PyPI releases. GitHub source can't be used
   # as it ends with an infinite recursion
   doCheck = false;
 
-  pythonImportsCheck = [
-    "typing_extensions"
-  ];
+  pythonImportsCheck = [ "typing_extensions" ];
+
+  passthru.tests = {
+    inherit mashumaro pydantic;
+  };
 
   meta = with lib; {
     description = "Backported and Experimental Type Hints for Python";

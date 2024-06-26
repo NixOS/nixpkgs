@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, click
-, fetchPypi
-, ordered-set
-, pillow
-, pythonOlder
-, pythonRelaxDepsHook
-, setuptools
-, setuptools-dso
-, sortedcollections
+{
+  lib,
+  buildPythonPackage,
+  click,
+  fetchPypi,
+  ordered-set,
+  pillow,
+  pythonOlder,
+  pythonRelaxDepsHook,
+  setuptools,
+  setuptools-dso,
+  sortedcollections,
 }:
 
 buildPythonPackage rec {
@@ -23,9 +24,7 @@ buildPythonPackage rec {
     hash = "sha256-uW1g3nlT6Y+1beifo/MOlGxsGL7on/jcAROxSddySHk=";
   };
 
-  pythonRelaxDeps = [
-    "pillow"
-  ];
+  pythonRelaxDeps = [ "pillow" ];
 
   build-system = [
     pythonRelaxDepsHook
@@ -42,9 +41,7 @@ buildPythonPackage rec {
 
   doCheck = false; # there are no tests
 
-  pythonImportsCheck = [
-    "tilequant"
-  ];
+  pythonImportsCheck = [ "tilequant" ];
 
   meta = with lib; {
     description = "Tool for quantizing image colors using tile-based palette restrictions";

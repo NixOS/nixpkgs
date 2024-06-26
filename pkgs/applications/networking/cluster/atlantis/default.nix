@@ -2,20 +2,20 @@
 
 buildGoModule rec {
   pname = "atlantis";
-  version = "0.27.3";
+  version = "0.28.1";
 
   src = fetchFromGitHub {
     owner = "runatlantis";
     repo = "atlantis";
     rev = "v${version}";
-    hash = "sha256-BC4WSyKnDM9RhM+2iU9dBZLbtxDM/UoMmIDTP6DB3no=";
+    hash = "sha256-c9+LPQVgS/nM/SADwTzULEvuB3dAjyAR2VVPQAEHBy0=";
   };
   ldflags = [
     "-X=main.version=${version}"
     "-X=main.date=1970-01-01T00:00:00Z"
   ];
 
-  vendorHash = "sha256-6Di8XLX1rOjVnIA+5kQB59aZ3qRmkjciWD0+GD9Lpzw=";
+  vendorHash = "sha256-eYS7dO9BCnn9p1HgDOt4vliPYLsR0TaNwSpUoMO6eAk=";
 
   subPackages = [ "." ];
 

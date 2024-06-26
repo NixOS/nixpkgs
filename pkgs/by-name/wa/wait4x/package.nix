@@ -4,7 +4,7 @@
 }:
 let
   pname = "wait4x";
-  version = "2.14.0";
+  version = "2.14.1";
 in
 buildGoModule {
   inherit pname version;
@@ -13,10 +13,10 @@ buildGoModule {
     owner = "atkrad";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-4lv6nYeyjjGGQksi2Ffx+Yu0OazNsJ0QEZG5BfuyrJ8=";
+    hash = "sha256-7dm1KERBYkASuRWlCbpbLuHVc4uCMPWbSwegjZ8LwVU=";
   };
 
-  vendorHash = "sha256-D8s42YArp0IGi7I6qB9eQEh1ZQptSrKLLVIIdqk5Kq0=";
+  vendorHash = "sha256-CYE5wvBgNLYzCiibd9SWubIQ+22nffr4jpwgwSxhtGo=";
 
   # Tests make network access
   doCheck = false;

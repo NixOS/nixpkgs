@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://ezquake.com/";
-    description = "A modern QuakeWorld client focused on competitive online play";
+    description = "Modern QuakeWorld client focused on competitive online play";
     mainProgram = "ezquake";
     license = licenses.gpl2;
     platforms = platforms.linux;

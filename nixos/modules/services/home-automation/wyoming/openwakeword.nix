@@ -108,6 +108,9 @@ in
   config = mkIf cfg.enable {
     systemd.services."wyoming-openwakeword" = {
       description = "Wyoming openWakeWord server";
+      wants = [
+        "network-online.target"
+      ];
       after = [
         "network-online.target"
       ];

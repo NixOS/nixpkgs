@@ -7,6 +7,7 @@
   graphviz,
   hatchling,
   hatch-vcs,
+  packaging,
   pytest-mock,
   pytestCheckHook,
   pip,
@@ -15,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "pipdeptree";
-  version = "2.19.1";
+  version = "2.23.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -24,7 +25,7 @@ buildPythonPackage rec {
     owner = "tox-dev";
     repo = "pipdeptree";
     rev = "refs/tags/${version}";
-    hash = "sha256-kXRz78UHQtVyHFFnURSjOOXX8Me2I5tG2bX+u2yGyzY=";
+    hash = "sha256-Er47yUaRCtTYQOhttOMIaM2EFf0l5rMH5YV1kpMCDls=";
   };
 
   build-system = [
@@ -32,7 +33,10 @@ buildPythonPackage rec {
     hatch-vcs
   ];
 
-  dependencies = [ pip ];
+  dependencies = [
+    pip
+    packaging
+  ];
 
   passthru.optional-dependencies = {
     graphviz = [ graphviz ];

@@ -7,7 +7,6 @@
   qtsvg,
   exiv2,
   kirigami-addons,
-  kquickimageeditor,
 }: let
   # URLs snapshotted through
   # https://web.archive.org/save/$url
@@ -41,7 +40,6 @@ in
       qtsvg
       exiv2
       kirigami-addons
-      kquickimageeditor
     ];
     meta.mainProgram = "koko";
   }

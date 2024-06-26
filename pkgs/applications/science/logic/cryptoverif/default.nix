@@ -1,12 +1,12 @@
 { lib, stdenv, fetchurl, ocaml }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cryptoverif";
-  version = "2.08pl1";
+  version = "2.09";
 
   src = fetchurl {
-    url    = "http://prosecco.gforge.inria.fr/personal/bblanche/cryptoverif/cryptoverif${version}.tar.gz";
-    hash = "sha256-rmORSZuhds9W2WpNgYf4AJM2jgEUPoJit4G64qLqj5w=";
+    url    = "http://prosecco.gforge.inria.fr/personal/bblanche/cryptoverif/cryptoverif${finalAttrs.version}.tar.gz";
+    hash = "sha256-FJlPZgTUZ+6HzhG/B0dOiVIjDvoCnF6yg2E9UriSojw=";
   };
 
   /* Fix up the frontend to load the 'default' cryptoverif library
@@ -48,4 +48,4 @@ stdenv.mkDerivation rec {
     platforms   = lib.platforms.unix;
     maintainers = [ lib.maintainers.thoughtpolice ];
   };
-}
+})

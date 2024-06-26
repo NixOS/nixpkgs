@@ -10,8 +10,6 @@
   kimageannotator,
   lcms2,
   libtiff,
-  wayland,
-  wayland-protocols,
 }:
 mkKdeDerivation {
   pname = "gwenview";
@@ -29,7 +27,5 @@ mkKdeDerivation {
     kimageannotator
     lcms2
     libtiff
-    wayland
-    wayland-protocols
   ];
 }

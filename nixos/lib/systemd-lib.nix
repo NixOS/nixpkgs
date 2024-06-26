@@ -18,6 +18,7 @@ let
     flip
     head
     isInt
+    isFloat
     isList
     isPath
     length
@@ -152,7 +153,7 @@ in rec {
       "Systemd ${group} field `${name}' is outside the range [${toString min},${toString max}]";
 
   assertRangeOrOneOf = name: min: max: values: group: attr:
-    optional (attr ? ${name} && !((min <= attr.${name} && max >= attr.${name}) || elem attr.${name} values))
+    optional (attr ? ${name} && !(((isInt attr.${name} || isFloat attr.${name}) && min <= attr.${name} && max >= attr.${name}) || elem attr.${name} values))
       "Systemd ${group} field `${name}' is not a value in range [${toString min},${toString max}], or one of ${toString values}";
 
   assertMinimum = name: min: group: attr:
@@ -180,6 +181,30 @@ in rec {
     errors = concatMap (c: c group defs) checks;
   in if errors == [] then true
      else trace (concatStringsSep "\n" errors) false;
+
+  checkUnitConfigWithLegacyKey = legacyKey: group: checks: attrs:
+    let
+      dump = lib.generators.toPretty { }
+        (lib.generators.withRecursion { depthLimit = 2; throwOnDepthLimit = false; } attrs);
+      attrs' =
+        if legacyKey == null
+          then attrs
+        else if ! attrs?${legacyKey}
+          then attrs
+        else if removeAttrs attrs [ legacyKey ] == {}
+          then attrs.${legacyKey}
+        else throw ''
+          The declaration
+
+          ${dump}
+
+          must not mix unit options with the legacy key '${legacyKey}'.
+
+          This can be fixed by moving all settings from within ${legacyKey}
+          one level up.
+        '';
+    in
+    checkUnitConfig group checks attrs';
 
   toOption = x:
     if x == true then "true"

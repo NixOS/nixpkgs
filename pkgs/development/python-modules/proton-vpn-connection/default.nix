@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, proton-core
-, proton-vpn-killswitch
-, proton-vpn-logger
-, jinja2
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  proton-core,
+  proton-vpn-killswitch,
+  proton-vpn-logger,
+  jinja2,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -21,9 +22,7 @@ buildPythonPackage rec {
     hash = "sha256-Ze/te0G0tDzyZPGVVqvuJlZoHWJqJ36LnHO+Cy5nxx8=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     jinja2
@@ -39,9 +38,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "proton.vpn.connection" ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTests = [
     # Permission denied: '/run'
@@ -66,6 +63,6 @@ buildPythonPackage rec {
     description = "Defines the interface that VPN connection backends should implement";
     homepage = "https://github.com/ProtonVPN/python-proton-vpn-connection";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ wolfangaukang ];
+    maintainers = [ ];
   };
 }

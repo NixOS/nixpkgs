@@ -39,7 +39,7 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   meta = with lib; {
-    description = "A simple tool to detect outdated shared libraries";
+    description = "Simple tool to detect outdated shared libraries";
     homepage = "https://github.com/cloudlinux/kcare-uchecker";
     changelog = "https://github.com/cloudlinux/kcare-uchecker/releases/tag/v${version}";
     license = licenses.gpl2Only;

@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, python
-, typing-extensions
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  python,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
@@ -18,17 +19,13 @@ buildPythonPackage rec {
     hash = "sha256-sNo1auVjdOqHLGzbAJRrsi6c2BfD861rAIAZ46RdgEA=";
   };
 
-  propagatedBuildInputs = lib.lists.optionals (pythonOlder "3.8") [
-    typing-extensions
-  ];
+  propagatedBuildInputs = lib.lists.optionals (pythonOlder "3.8") [ typing-extensions ];
 
   checkPhase = ''
     ${python.interpreter} -m unittest discover
   '';
 
-  pythonImportsCheck = [
-    "awacs"
-  ];
+  pythonImportsCheck = [ "awacs" ];
 
   meta = with lib; {
     description = "AWS Access Policy Language creation library";

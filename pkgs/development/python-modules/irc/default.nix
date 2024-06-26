@@ -1,15 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, jaraco-collections
-, jaraco-itertools
-, jaraco-logging
-, jaraco-stream
-, jaraco-text
-, pytestCheckHook
-, pythonOlder
-, pytz
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  jaraco-collections,
+  jaraco-itertools,
+  jaraco-logging,
+  jaraco-stream,
+  jaraco-text,
+  pytestCheckHook,
+  pythonOlder,
+  pytz,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
@@ -24,9 +25,7 @@ buildPythonPackage rec {
     hash = "sha256-fSUX9VZta/Oqhdf5jHdYth8NY+6RW/2fb1ZxOXNmRPk=";
   };
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
 
   propagatedBuildInputs = [
     jaraco-collections
@@ -37,13 +36,9 @@ buildPythonPackage rec {
     pytz
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "irc"
-  ];
+  pythonImportsCheck = [ "irc" ];
 
   meta = with lib; {
     description = "IRC (Internet Relay Chat) protocol library for Python";

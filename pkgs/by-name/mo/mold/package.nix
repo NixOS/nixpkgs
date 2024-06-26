@@ -23,13 +23,13 @@
 
 stdenv.mkDerivation rec {
   pname = "mold";
-  version = "2.31.0";
+  version = "2.32.0";
 
   src = fetchFromGitHub {
     owner = "rui314";
     repo = "mold";
     rev = "v${version}";
-    hash = "sha256-CUIk1YACM+eCuxyUqyKaVBF00Ybxr23D+FQuXv45Qrs=";
+    hash = "sha256-0cidxsr7mZLtEMSXc+ZFH9l3pXNi4Fyv27XDks+th/I=";
   };
 
   nativeBuildInputs = [
@@ -102,7 +102,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "A faster drop-in replacement for existing Unix linkers (unwrapped)";
+    description = "Faster drop-in replacement for existing Unix linkers (unwrapped)";
     longDescription = ''
       mold is a faster drop-in replacement for existing Unix linkers. It is
       several times faster than the LLVM lld linker. mold is designed to

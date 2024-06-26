@@ -1,19 +1,35 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
+  setuptools,
+  pyyaml,
+  more-itertools,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "tap.py";
   version = "3.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "3c0cd45212ad5a25b35445964e2517efa000a118a1bfc3437dae828892eaf1e1";
+    hash = "sha256-PAzUUhKtWiWzVEWWTiUX76AAoRihv8NDfa6CiJLq8eE=";
+  };
+
+  build-system = [
+    setuptools
+  ];
+
+  optional-dependencies = {
+    yaml = [
+      pyyaml
+      more-itertools
+    ];
   };
 
   nativeCheckInputs = [ pytestCheckHook ];
@@ -21,9 +37,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "tap" ];
 
   meta = with lib; {
-    description = "A set of tools for working with the Test Anything Protocol (TAP) in Python";
+    description = "Set of tools for working with the Test Anything Protocol (TAP) in Python";
     homepage = "https://github.com/python-tap/tappy";
     changelog = "https://tappy.readthedocs.io/en/latest/releases.html";
+    mainProgram = "tappy";
     license = licenses.bsd2;
     maintainers = with maintainers; [ sfrijters ];
   };

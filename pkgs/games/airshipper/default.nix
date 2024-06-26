@@ -1,7 +1,6 @@
 { lib
 , rustPlatform
 , fetchFromGitLab
-, fetchpatch
 , openssl
 , libGL
 , vulkan-loader

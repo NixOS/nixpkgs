@@ -191,7 +191,7 @@ let
       meta = with lib; {
         inherit mainProgram;
         homepage = "https://www.armagetronad.org";
-        description = "A multiplayer networked arcade racing game in 3D similar to Tron";
+        description = "Multiplayer networked arcade racing game in 3D similar to Tron";
         maintainers = with maintainers; [ numinit ];
         license = licenses.gpl2Plus;
         platforms = platforms.linux;

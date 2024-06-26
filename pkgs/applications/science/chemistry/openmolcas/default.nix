@@ -43,13 +43,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "openmolcas";
-  version = "24.02";
+  version = "24.06";
 
   src = fetchFromGitLab {
     owner = "Molcas";
     repo = "OpenMolcas";
     rev = "v${version}";
-    hash = "sha256-4Ek0cnaRfLEbj1Nj31rRp9b2sois4rIFTcpOUq9h2mw=";
+    hash = "sha256-/y6vEvA1Zf+p7Z0WpcN4P5voLN8MmfbKz1FuthgVQp0=";
   };
 
   patches = [

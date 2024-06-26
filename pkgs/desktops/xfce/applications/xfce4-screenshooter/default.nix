@@ -1,10 +1,18 @@
 { lib
 , mkXfceDerivation
+, wayland-scanner
 , exo
+, gtk3
+, libX11
+, libXext
+, libXfixes
+, libXtst
 , libxml2
 , libsoup_3
 , libxfce4ui
 , libxfce4util
+, wayland
+, wlr-protocols
 , xfce4-panel
 , xfconf
 , curl
@@ -16,17 +24,28 @@
 mkXfceDerivation {
   category = "apps";
   pname = "xfce4-screenshooter";
-  version = "1.10.5";
+  version = "1.10.6";
   odd-unstable = false;
 
-  sha256 = "sha256-x1uQIfiUNMYowrCLpwdt1IsHfJLn81f8I/4NBwX/z9k=";
+  sha256 = "sha256-g3wYIyJEnYCFhCs6YXzfEe5lnvIY8ACN/m7He+ww3mA=";
+
+  nativeBuildInputs = [
+    wayland-scanner
+  ];
 
   buildInputs = [
     exo
+    gtk3
+    libX11
+    libXext
+    libXfixes
+    libXtst
     libxml2
     libsoup_3
     libxfce4ui
     libxfce4util
+    wayland
+    wlr-protocols
     xfce4-panel
     xfconf
   ];

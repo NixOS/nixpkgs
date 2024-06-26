@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   passthru.tests.sourcehut = nixosTests.sourcehut;
 
   meta = {
-    description = "A script to register a new Sourcehut OAuth token for a given user";
+    description = "Script to register a new Sourcehut OAuth token for a given user";
     longDescription = ''
       srht-gen-oauth-tok is a Perl script for automating the generation of user
       OAuth tokens for Sourcehut-based code forges. This is done by emulating a

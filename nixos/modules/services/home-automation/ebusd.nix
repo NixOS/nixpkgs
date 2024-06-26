@@ -138,7 +138,7 @@ in
       after = [ "network.target" ];
       serviceConfig = {
         ExecStart = let
-          args = cli.toGNUCommandLineShell { } (foldr (a: b: a // b) { } [
+          args = cli.toGNUCommandLineShell { optionValueSeparator = "="; } (foldr (a: b: a // b) { } [
             {
               inherit (cfg) device port configpath scanconfig readonly;
               foreground = true;

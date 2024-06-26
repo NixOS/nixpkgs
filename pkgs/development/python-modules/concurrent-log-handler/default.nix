@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, hatchling
-, portalocker
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  hatchling,
+  portalocker,
 }:
 
 buildPythonPackage rec {
@@ -16,17 +17,11 @@ buildPythonPackage rec {
     hash = "sha256-HixvAhQU4hTT2sZhB4lIJ6PnjbYwGDBKTynlW6VJrCI=";
   };
 
-  build-system = [
-    hatchling
-  ];
+  build-system = [ hatchling ];
 
-  dependencies = [
-    portalocker
-  ];
+  dependencies = [ portalocker ];
 
-  pythonImportsCheck = [
-    "concurrent_log_handler"
-  ];
+  pythonImportsCheck = [ "concurrent_log_handler" ];
 
   doCheck = false; # upstream has no tests
 

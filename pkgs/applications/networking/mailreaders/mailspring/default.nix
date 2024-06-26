@@ -7,7 +7,7 @@ let
   version = "1.13.3";
 
   meta = with lib; {
-    description = "A beautiful, fast and maintained fork of Nylas Mail by one of the original authors";
+    description = "Beautiful, fast and maintained fork of Nylas Mail by one of the original authors";
     downloadPage = "https://github.com/Foundry376/Mailspring";
     homepage = "https://getmailspring.com";
     license = licenses.gpl3Plus;

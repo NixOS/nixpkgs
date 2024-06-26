@@ -39,7 +39,6 @@ stdenv.mkDerivation {
     homepage = "http://wili.cc/blog/gpu-burn.html";
     description = "Multi-GPU CUDA stress test";
     platforms = platforms.linux;
-    maintainers = with maintainers; [ elohmeier ];
     license = licenses.bsd2;
     mainProgram = "gpu_burn";
   };

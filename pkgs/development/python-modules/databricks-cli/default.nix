@@ -1,18 +1,19 @@
-{ lib
-, buildPythonPackage
-, click
-, configparser
-, decorator
-, fetchFromGitHub
-, mock
-, oauthlib
-, pyjwt
-, pytestCheckHook
-, pythonOlder
-, requests
-, requests-mock
-, six
-, tabulate
+{
+  lib,
+  buildPythonPackage,
+  click,
+  configparser,
+  decorator,
+  fetchFromGitHub,
+  mock,
+  oauthlib,
+  pyjwt,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  requests-mock,
+  six,
+  tabulate,
 }:
 
 buildPythonPackage rec {
@@ -52,9 +53,7 @@ buildPythonPackage rec {
     "integration/workspace/test_integration.py"
   ];
 
-  pythonImportsCheck = [
-    "databricks_cli"
-  ];
+  pythonImportsCheck = [ "databricks_cli" ];
 
   meta = with lib; {
     description = "Command line interface for Databricks";

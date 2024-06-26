@@ -107,7 +107,7 @@ in {
         fonts = optional (cfg.fonts != null) "font-name=${lib.concatMapStringsSep ", " (f: f.name) cfg.fonts}";
       in lib.concatStringsSep "\n" (render ++ fonts);
 
-    hardware.opengl.enable = mkIf cfg.hwRender true;
+    hardware.graphics.enable = mkIf cfg.hwRender true;
 
     fonts = mkIf (cfg.fonts != null) {
       fontconfig.enable = true;

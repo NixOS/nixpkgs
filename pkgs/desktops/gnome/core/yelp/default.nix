@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://apps.gnome.org/Yelp/";
-    description = "The help viewer in Gnome";
+    description = "Help viewer in Gnome";
     maintainers = teams.gnome.members;
     license = licenses.gpl2;
     platforms = platforms.linux;

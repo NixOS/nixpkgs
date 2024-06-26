@@ -19,7 +19,7 @@ buildGoModule rec {
   ldflags = [ "-s" "-w" ];
 
   meta = with lib; {
-    description = "An interactive CLI tool for managing local git branches";
+    description = "Interactive CLI tool for managing local git branches";
     homepage = "https://github.com/a-camarillo/broom";
     license = licenses.mit;
     maintainers = with maintainers; [ a-camarillo ];

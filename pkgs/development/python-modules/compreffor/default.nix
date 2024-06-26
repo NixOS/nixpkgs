@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, cython
-, fetchpatch
-, fetchPypi
-, setuptools-scm
-, fonttools
-, pytestCheckHook
-, wheel
+{
+  lib,
+  buildPythonPackage,
+  cython,
+  fetchpatch,
+  fetchPypi,
+  setuptools-scm,
+  fonttools,
+  pytestCheckHook,
+  wheel,
 }:
 
 buildPythonPackage rec {
@@ -34,20 +35,14 @@ buildPythonPackage rec {
     wheel
   ];
 
-  propagatedBuildInputs = [
-    fonttools
-  ];
+  propagatedBuildInputs = [ fonttools ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   # Tests cannot seem to open the cpython module.
   doCheck = false;
 
-  pythonImportsCheck = [
-    "compreffor"
-  ];
+  pythonImportsCheck = [ "compreffor" ];
 
   meta = with lib; {
     description = "CFF table subroutinizer for FontTools";

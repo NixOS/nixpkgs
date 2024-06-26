@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   makeFlags = [ "PREFIX=$(out)" ];
 
   meta = with lib; {
-    description = "A fucking fucking fast file fucker (afffff)";
+    description = "Fucking fucking fast file fucker (afffff)";
     homepage = "https://github.com/buffet/filet";
     license = licenses.mpl20;
     platforms = platforms.all;

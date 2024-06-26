@@ -17,7 +17,7 @@ tcl.mkTclDerivation rec {
 
   meta = {
     homepage = "https://core.tcl-lang.org/tcltls/index";
-    description = "An OpenSSL / RSA-bsafe Tcl extension";
+    description = "OpenSSL / RSA-bsafe Tcl extension";
     maintainers = [ lib.maintainers.agbrooks ];
     license = lib.licenses.tcltk;
     platforms = lib.platforms.unix;

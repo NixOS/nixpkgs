@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "A wallpaper browser and setter for X11";
+    description = "Wallpaper browser and setter for X11";
     longDescription = ''
       nitrogen is a lightweight utility that can set the root background on X11.
       It operates independently of any desktop environment, and supports

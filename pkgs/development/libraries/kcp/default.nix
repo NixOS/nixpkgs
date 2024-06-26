@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
 
   meta = with lib; {
-    description = "A Fast and Reliable ARQ Protocol";
+    description = "Fast and Reliable ARQ Protocol";
     homepage = "https://github.com/skywind3000/kcp";
     license = licenses.mit;
     maintainers = with maintainers; [ ];

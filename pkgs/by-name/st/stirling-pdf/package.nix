@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "stirling-pdf";
-  version = "0.23.1";
+  version = "0.25.1";
 
   src = fetchFromGitHub {
     owner = "Stirling-Tools";
     repo = "Stirling-PDF";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-71caSM4J0sNMqWX0ok8aO3wdpVcjfrn/yVGLWeO5fOk=";
+    hash = "sha256-DgQLn4+uBAF8/c3G6ckkq/0gtJEE9GPHd1d/xB6omlA=";
   };
 
   patches = [
@@ -75,7 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
-    outputHash = "sha256-8suWAX1+GGMvMUaymZnze7cBL701P/381dGqnyfha7s=";
+    outputHash = "sha256-JaTL6/DyBAqXkIQOkbi8MYoIZrhWqc3MpJ7DDB4h+ok=";
   };
 
   nativeBuildInputs = [
@@ -104,7 +104,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     changelog = "https://github.com/Stirling-Tools/Stirling-PDF/releases/tag/${finalAttrs.src.rev}";
-    description = "A locally hosted web application that allows you to perform various operations on PDF files";
+    description = "Locally hosted web application that allows you to perform various operations on PDF files";
     homepage = "https://github.com/Stirling-Tools/Stirling-PDF";
     license = lib.licenses.gpl3Only;
     mainProgram = "Stirling-PDF";

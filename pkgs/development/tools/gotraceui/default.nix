@@ -36,7 +36,7 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    description = "An efficient frontend for Go execution traces";
+    description = "Efficient frontend for Go execution traces";
     mainProgram = "gotraceui";
     homepage = "https://github.com/dominikh/gotraceui";
     platforms = platforms.linux;

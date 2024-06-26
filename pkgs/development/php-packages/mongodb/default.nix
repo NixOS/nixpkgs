@@ -16,13 +16,13 @@
 
 buildPecl rec {
   pname = "mongodb";
-  version = "1.18.1";
+  version = "1.19.3";
 
   src = fetchFromGitHub {
     owner = "mongodb";
     repo = "mongo-php-driver";
     rev = version;
-    hash = "sha256-GstDJShuwzXZqlzhLWMEkvrNgCdmORAkGncpmPe879Q=";
+    hash = "sha256-gpnL4mXOD/MDG7xWxUpLLKfRD2w6HqNokC5358OkFSg=";
     fetchSubmodules = true;
   };
 
@@ -43,7 +43,7 @@ buildPecl rec {
     ];
 
   meta = {
-    description = "The Official MongoDB PHP driver";
+    description = "Official MongoDB PHP driver";
     homepage = "https://github.com/mongodb/mongo-php-driver";
     license = lib.licenses.asl20;
     maintainers = lib.teams.php.members;

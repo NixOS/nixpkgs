@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
    '';
 
   meta = {
-    description = "Console Light is a lightweight, real-time activity monitoring interface.";
+    description = "Console Light is a lightweight, real-time activity monitoring interface";
     homepage    = "https://angie.software/en/console/";
     license     = lib.licenses.asl20;
     platforms   = lib.platforms.all;

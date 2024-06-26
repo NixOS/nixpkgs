@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, callPackage
-, fetchFromGitHub
-, rustPlatform
-, libiconv
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  callPackage,
+  fetchFromGitHub,
+  rustPlatform,
+  libiconv,
 }:
 
 buildPythonPackage rec {
@@ -26,7 +27,10 @@ buildPythonPackage rec {
 
   format = "pyproject";
 
-  nativeBuildInputs = with rustPlatform; [ cargoSetupHook maturinBuildHook ];
+  nativeBuildInputs = with rustPlatform; [
+    cargoSetupHook
+    maturinBuildHook
+  ];
 
   buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
 

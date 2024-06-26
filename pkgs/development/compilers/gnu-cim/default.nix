@@ -23,12 +23,12 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  CFLAGS = lib.optionalString stdenv.cc.isClang "-Wno-return-type";
+  env.CFLAGS = lib.optionalString stdenv.cc.isClang "-Wno-return-type -Wno-error=implicit-function-declaration -Wno-error=implicit-int";
 
   doCheck = true;
 
   meta = with lib; {
-    description = "A GNU compiler for the programming language Simula";
+    description = "GNU compiler for the programming language Simula";
     longDescription = ''
       GNU Cim is a compiler for the programming language Simula.
       It offers a class concept, separate compilation with full type checking,

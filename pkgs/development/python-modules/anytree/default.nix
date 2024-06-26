@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fontconfig
-, graphviz
-, poetry-core
-, pytest7CheckHook
-, pythonOlder
-, six
-, substituteAll
-, withGraphviz ? true
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fontconfig,
+  graphviz,
+  poetry-core,
+  pytest7CheckHook,
+  pythonOlder,
+  six,
+  substituteAll,
+  withGraphviz ? true,
 }:
 
 buildPythonPackage rec {
@@ -32,17 +33,11 @@ buildPythonPackage rec {
     })
   ];
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
-  propagatedBuildInputs = [
-    six
-  ];
+  propagatedBuildInputs = [ six ];
 
-  nativeCheckInputs = [
-    pytest7CheckHook
-  ];
+  nativeCheckInputs = [ pytest7CheckHook ];
 
   # Tests print “Fontconfig error: Cannot load default config file”
   preCheck = lib.optionalString withGraphviz ''
@@ -52,9 +47,7 @@ buildPythonPackage rec {
   # Circular dependency anytree → graphviz → pango → glib → gtk-doc → anytree
   doCheck = withGraphviz;
 
-  pythonImportsCheck = [
-    "anytree"
-  ];
+  pythonImportsCheck = [ "anytree" ];
 
   meta = with lib; {
     description = "Powerful and Lightweight Python Tree Data Structure";

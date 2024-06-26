@@ -1,7 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -13,13 +14,9 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-vWsg0g8sTj9TUj7pACEdynWu7KcvT1qf2NyswXX+HAs=";
   };
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "oath"
-  ];
+  pythonImportsCheck = [ "oath" ];
 
   meta = with lib; {
     description = "Python implementation of the three main OATH specifications: HOTP, TOTP and OCRA";

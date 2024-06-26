@@ -53,7 +53,7 @@ stdenvNoCC.mkDerivation rec {
   passthru.updateScript = gitUpdater { };
 
   meta = with lib; {
-    description = "A flat Design theme for KDE Plasma desktop";
+    description = "Flat Design theme for KDE Plasma desktop";
     homepage = "https://github.com/vinceliuice/Qogir-kde";
     license = licenses.gpl3Only;
     platforms = platforms.all;

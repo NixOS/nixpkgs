@@ -10,7 +10,7 @@
 , fetchFromGitHub
 }:
 stdenv.mkDerivation rec {
-  name = "kdiskmark";
+  pname = "kdiskmark";
   version = "3.1.4";
 
   src = fetchFromGitHub {

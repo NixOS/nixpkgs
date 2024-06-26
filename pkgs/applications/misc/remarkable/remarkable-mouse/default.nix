@@ -16,7 +16,7 @@ buildPythonApplication rec {
   pythonImportsCheck = [ "remarkable_mouse" ];
 
   meta = with lib; {
-    description = "A program to use a reMarkable as a graphics tablet";
+    description = "Program to use a reMarkable as a graphics tablet";
     homepage = "https://github.com/evidlo/remarkable_mouse";
     license = licenses.gpl3;
     maintainers = [ maintainers.nickhu ];

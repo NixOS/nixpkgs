@@ -6,11 +6,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cdk";
-  version = "5.0-20230201";
+  version = "5.0-20240619";
 
   src = fetchurl {
     url = "https://invisible-mirror.net/archives/cdk/cdk-${finalAttrs.version}.tgz";
-    hash = "sha256-oxJ7Wf5QX16Jjao90VsM9yShJ0zmgWW3eb4vKdTE8vY=";
+    hash = "sha256-Q28U6KdW5j3f9ZJ+73DJ3PceTFnVZYfiYwKk9yahnv8=";
   };
 
   buildInputs = [

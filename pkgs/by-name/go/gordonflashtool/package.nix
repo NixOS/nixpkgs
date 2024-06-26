@@ -32,7 +32,7 @@ stdenv.mkDerivation {
 
   meta = {
     homepage = "https://github.com/marmolak/GordonFlashTool";
-    description = "Toolset for Gotek SFR1M44-U100 formatted usb flash drives.";
+    description = "Toolset for Gotek SFR1M44-U100 formatted usb flash drives";
     maintainers = with lib.maintainers; [ marmolak ];
     license = lib.licenses.bsd3;
     platforms = lib.platforms.all;

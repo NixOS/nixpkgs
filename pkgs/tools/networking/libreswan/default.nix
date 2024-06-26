@@ -104,11 +104,11 @@ stdenv.mkDerivation rec {
         -i $out/bin/ipsec
   '';
 
-  passthru.tests.libreswan = nixosTests.libreswan;
+  passthru.tests = { inherit (nixosTests) libreswan libreswan-nat; };
 
   meta = with lib; {
     homepage = "https://libreswan.org";
-    description = "A free software implementation of the VPN protocol based on IPSec and the Internet Key Exchange";
+    description = "Free software implementation of the VPN protocol based on IPSec and the Internet Key Exchange";
     platforms = platforms.linux ++ platforms.freebsd;
     license = with licenses; [ gpl2Plus mpl20 ] ;
     maintainers = with maintainers; [ afranchuk rnhmjoj ];

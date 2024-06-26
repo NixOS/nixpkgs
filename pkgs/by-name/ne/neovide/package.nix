@@ -26,16 +26,16 @@
 
 rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } rec {
   pname = "neovide";
-  version = "0.12.2";
+  version = "0.13.1";
 
   src = fetchFromGitHub {
     owner = "neovide";
     repo = "neovide";
     rev = version;
-    sha256 = "sha256-M19LKNjUmC0WkVGm4t7vjxgMMe0FdMTmB1mLcG33OUg=";
+    hash = "sha256-vN4LwJdVU0OWBuG7omDYY3Q6QZ2pTyCxWxFzv9Z1/6I=";
   };
 
-  cargoHash = "sha256-2fPprZVT7V+Ot8aCpWj6WTdyFylmzlujFdTJCrtE0rk=";
+  cargoHash = "sha256-TiGEAwNXBNTXVU/CyKrUkjy8eIypYiLtoTyjskMpWvs=";
 
   SKIA_SOURCE_DIR =
     let
@@ -43,8 +43,8 @@ rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } rec {
         owner = "rust-skia";
         repo = "skia";
         # see rust-skia:skia-bindings/Cargo.toml#package.metadata skia
-        rev = "m119-0.67.3";
-        sha256 = "sha256-U75NuJnQa5+SNlOrsBmdlvflGdjo3el63EeIsbnE7ms=";
+        rev = "m124-0.72.3";
+        hash = "sha256-zlHUJUXukE4CsXwwmVl3KHf9mnNPT8lC/ETEE15Gb4s=";
       };
       # The externals for skia are taken from skia/DEPS
       externals = linkFarm "skia-externals" (lib.mapAttrsToList
@@ -96,7 +96,11 @@ rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } rec {
         --prefix LD_LIBRARY_PATH : ${libPath}
     '';
 
-  postInstall = ''
+  postInstall = lib.optionalString stdenv.isDarwin ''
+    mkdir -p $out/Applications
+    cp -r extra/osx/Neovide.app $out/Applications
+    ln -s $out/bin $out/Applications/Neovide.app/Contents/MacOS
+  '' + lib.optionalString stdenv.isLinux ''
     for n in 16x16 32x32 48x48 256x256; do
       install -m444 -D "assets/neovide-$n.png" \
         "$out/share/icons/hicolor/$n/apps/neovide.png"
@@ -108,12 +112,12 @@ rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } rec {
   disallowedReferences = [ SKIA_SOURCE_DIR ];
 
   meta = with lib; {
-    description = "This is a simple graphical user interface for Neovim.";
+    description = "This is a simple graphical user interface for Neovim";
     mainProgram = "neovide";
     homepage = "https://github.com/neovide/neovide";
     changelog = "https://github.com/neovide/neovide/releases/tag/${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ ck3d ];
-    platforms = platforms.all;
+    platforms = platforms.linux ++ [ "aarch64-darwin" ];
   };
 }

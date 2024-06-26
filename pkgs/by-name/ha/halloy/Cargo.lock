@@ -121,6 +121,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "anyhow"
+version = "1.0.82"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "f538837af36e6f6a9be0faa67f9a314f8119e4e4b5867c6ab40ed60360142519"
+
+[[package]]
 name = "approx"
 version = "0.5.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -243,6 +249,18 @@ dependencies = [
  "async-lock 3.3.0",
  "blocking",
  "futures-lite 2.3.0",
+]
+
+[[package]]
+name = "async-http-proxy"
+version = "1.2.5"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "29faa5d4d308266048bd7505ba55484315a890102f9345b9ff4b87de64201592"
+dependencies = [
+ "base64 0.13.1",
+ "httparse",
+ "thiserror",
+ "tokio",
 ]
 
 [[package]]
@@ -411,6 +429,12 @@ dependencies = [
  "object",
  "rustc-demangle",
 ]
+
+[[package]]
+name = "base64"
+version = "0.13.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "9e1b586273c5702936fe7b7d6896644d8be71e6314cfe09d3167c95f712589e8"
 
 [[package]]
 name = "base64"
@@ -923,7 +947,7 @@ dependencies = [
 name = "data"
 version = "0.1.0"
 dependencies = [
- "base64",
+ "base64 0.21.7",
  "bytes",
  "chrono",
  "dirs-next",
@@ -947,6 +971,7 @@ dependencies = [
  "tokio",
  "tokio-stream",
  "toml",
+ "xdg",
 ]
 
 [[package]]
@@ -1268,6 +1293,20 @@ dependencies = [
  "rayon-core",
  "smallvec",
  "zune-inflate",
+]
+
+[[package]]
+name = "fast-socks5"
+version = "0.9.6"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "f89f36d4ee12370d30d57b16c7e190950a1a916e7dbbb5fd5a412f5ef913fe84"
+dependencies = [
+ "anyhow",
+ "async-trait",
+ "log",
+ "thiserror",
+ "tokio",
+ "tokio-stream",
 ]
 
 [[package]]
@@ -1924,7 +1963,7 @@ dependencies = [
 [[package]]
 name = "iced"
 version = "0.13.0-dev"
-source = "git+https://github.com/iced-rs/iced?rev=31d1d5fecbef50fa319cabd5d4194f1e4aaefa21#31d1d5fecbef50fa319cabd5d4194f1e4aaefa21"
+source = "git+https://github.com/iced-rs/iced?rev=a05b8044a9a82c1802d4d97f1723e24b9d9dad9c#a05b8044a9a82c1802d4d97f1723e24b9d9dad9c"
 dependencies = [
  "iced_core",
  "iced_futures",
@@ -1938,7 +1977,7 @@ dependencies = [
 [[package]]
 name = "iced_core"
 version = "0.13.0-dev"
-source = "git+https://github.com/iced-rs/iced?rev=31d1d5fecbef50fa319cabd5d4194f1e4aaefa21#31d1d5fecbef50fa319cabd5d4194f1e4aaefa21"
+source = "git+https://github.com/iced-rs/iced?rev=a05b8044a9a82c1802d4d97f1723e24b9d9dad9c#a05b8044a9a82c1802d4d97f1723e24b9d9dad9c"
 dependencies = [
  "bitflags 2.5.0",
  "dark-light",
@@ -1957,7 +1996,7 @@ dependencies = [
 [[package]]
 name = "iced_futures"
 version = "0.13.0-dev"
-source = "git+https://github.com/iced-rs/iced?rev=31d1d5fecbef50fa319cabd5d4194f1e4aaefa21#31d1d5fecbef50fa319cabd5d4194f1e4aaefa21"
+source = "git+https://github.com/iced-rs/iced?rev=a05b8044a9a82c1802d4d97f1723e24b9d9dad9c#a05b8044a9a82c1802d4d97f1723e24b9d9dad9c"
 dependencies = [
  "futures",
  "iced_core",
@@ -1971,7 +2010,7 @@ dependencies = [
 [[package]]
 name = "iced_graphics"
 version = "0.13.0-dev"
-source = "git+https://github.com/iced-rs/iced?rev=31d1d5fecbef50fa319cabd5d4194f1e4aaefa21#31d1d5fecbef50fa319cabd5d4194f1e4aaefa21"
+source = "git+https://github.com/iced-rs/iced?rev=a05b8044a9a82c1802d4d97f1723e24b9d9dad9c#a05b8044a9a82c1802d4d97f1723e24b9d9dad9c"
 dependencies = [
  "bitflags 2.5.0",
  "bytemuck",
@@ -1992,7 +2031,7 @@ dependencies = [
 [[package]]
 name = "iced_renderer"
 version = "0.13.0-dev"
-source = "git+https://github.com/iced-rs/iced?rev=31d1d5fecbef50fa319cabd5d4194f1e4aaefa21#31d1d5fecbef50fa319cabd5d4194f1e4aaefa21"
+source = "git+https://github.com/iced-rs/iced?rev=a05b8044a9a82c1802d4d97f1723e24b9d9dad9c#a05b8044a9a82c1802d4d97f1723e24b9d9dad9c"
 dependencies = [
  "iced_graphics",
  "iced_tiny_skia",
@@ -2004,7 +2043,7 @@ dependencies = [
 [[package]]
 name = "iced_runtime"
 version = "0.13.0-dev"
-source = "git+https://github.com/iced-rs/iced?rev=31d1d5fecbef50fa319cabd5d4194f1e4aaefa21#31d1d5fecbef50fa319cabd5d4194f1e4aaefa21"
+source = "git+https://github.com/iced-rs/iced?rev=a05b8044a9a82c1802d4d97f1723e24b9d9dad9c#a05b8044a9a82c1802d4d97f1723e24b9d9dad9c"
 dependencies = [
  "iced_core",
  "iced_futures",
@@ -2015,7 +2054,7 @@ dependencies = [
 [[package]]
 name = "iced_tiny_skia"
 version = "0.13.0-dev"
-source = "git+https://github.com/iced-rs/iced?rev=31d1d5fecbef50fa319cabd5d4194f1e4aaefa21#31d1d5fecbef50fa319cabd5d4194f1e4aaefa21"
+source = "git+https://github.com/iced-rs/iced?rev=a05b8044a9a82c1802d4d97f1723e24b9d9dad9c#a05b8044a9a82c1802d4d97f1723e24b9d9dad9c"
 dependencies = [
  "bytemuck",
  "cosmic-text",
@@ -2030,7 +2069,7 @@ dependencies = [
 [[package]]
 name = "iced_wgpu"
 version = "0.13.0-dev"
-source = "git+https://github.com/iced-rs/iced?rev=31d1d5fecbef50fa319cabd5d4194f1e4aaefa21#31d1d5fecbef50fa319cabd5d4194f1e4aaefa21"
+source = "git+https://github.com/iced-rs/iced?rev=a05b8044a9a82c1802d4d97f1723e24b9d9dad9c#a05b8044a9a82c1802d4d97f1723e24b9d9dad9c"
 dependencies = [
  "bitflags 2.5.0",
  "bytemuck",
@@ -2049,7 +2088,7 @@ dependencies = [
 [[package]]
 name = "iced_widget"
 version = "0.13.0-dev"
-source = "git+https://github.com/iced-rs/iced?rev=31d1d5fecbef50fa319cabd5d4194f1e4aaefa21#31d1d5fecbef50fa319cabd5d4194f1e4aaefa21"
+source = "git+https://github.com/iced-rs/iced?rev=a05b8044a9a82c1802d4d97f1723e24b9d9dad9c#a05b8044a9a82c1802d4d97f1723e24b9d9dad9c"
 dependencies = [
  "iced_renderer",
  "iced_runtime",
@@ -2063,7 +2102,7 @@ dependencies = [
 [[package]]
 name = "iced_winit"
 version = "0.13.0-dev"
-source = "git+https://github.com/iced-rs/iced?rev=31d1d5fecbef50fa319cabd5d4194f1e4aaefa21#31d1d5fecbef50fa319cabd5d4194f1e4aaefa21"
+source = "git+https://github.com/iced-rs/iced?rev=a05b8044a9a82c1802d4d97f1723e24b9d9dad9c#a05b8044a9a82c1802d4d97f1723e24b9d9dad9c"
 dependencies = [
  "iced_graphics",
  "iced_runtime",
@@ -2156,7 +2195,9 @@ checksum = "8f518f335dce6725a761382244631d86cf0ccb2863413590b31338feb467f9c3"
 name = "irc"
 version = "0.1.0"
 dependencies = [
+ "async-http-proxy",
  "bytes",
+ "fast-socks5",
  "futures",
  "irc_proto",
  "rustls-native-certs",
@@ -3377,7 +3418,7 @@ version = "0.12.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "2d66674f2b6fb864665eea7a3c1ac4e3dfacd2fda83cf6f935a612e01b0e3338"
 dependencies = [
- "base64",
+ "base64 0.21.7",
  "bytes",
  "encoding_rs",
  "futures-core",
@@ -3548,7 +3589,7 @@ version = "1.0.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "1c74cae0a4cf6ccbbf5f359f08efdf8ee7e1dc532573bf0db71968cb56b1448c"
 dependencies = [
- "base64",
+ "base64 0.21.7",
 ]
 
 [[package]]
@@ -3557,7 +3598,7 @@ version = "2.1.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f48172685e6ff52a556baa527774f61fcaa884f59daf3375c62a3f1cd2549dab"
 dependencies = [
- "base64",
+ "base64 0.21.7",
  "rustls-pki-types",
 ]
 
@@ -5300,6 +5341,12 @@ name = "xcursor"
 version = "0.3.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "6a0ccd7b4a5345edfcd0c3535718a4e9ff7798ffc536bb5b5a0e26ff84732911"
+
+[[package]]
+name = "xdg"
+version = "2.5.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "213b7324336b53d2414b2db8537e56544d981803139155afa84f76eeebb7a546"
 
 [[package]]
 name = "xdg-home"

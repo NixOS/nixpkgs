@@ -421,6 +421,53 @@ let
         buildDependencies = [ depCrate ];
         dependencies = [ depCrate ];
       };
+      # Support new invocation prefix for build scripts `cargo::`
+      # https://doc.rust-lang.org/cargo/reference/build-scripts.html#outputs-of-the-build-script
+      buildScriptInvocationPrefix = let
+        depCrate = buildRustCrate: mkCrate buildRustCrate {
+          crateName = "bar";
+          src = mkFile "build.rs" ''
+              fn main() {
+                // Old invocation prefix
+                // We likely won't see be mixing these syntaxes in the same build script in the wild.
+                println!("cargo:key_old=value_old");
+
+                // New invocation prefix
+                println!("cargo::metadata=key=value");
+                println!("cargo::metadata=key_complex=complex(value)");
+              }
+          '';
+        };
+      in {
+        crateName = "foo";
+        src = symlinkJoin {
+          name = "build-script-and-main-invocation-prefix";
+          paths = [
+            (mkFile  "src/main.rs" ''
+              const BUILDFOO: &'static str = env!("BUILDFOO");
+
+              #[test]
+              fn build_foo_check() { assert!(BUILDFOO == "yes(check)"); }
+
+              fn main() { }
+            '')
+            (mkFile  "build.rs" ''
+              use std::env;
+              fn main() {
+                assert!(env::var_os("DEP_BAR_KEY_OLD").expect("metadata key 'key_old' not set in dependency") == "value_old");
+                assert!(env::var_os("DEP_BAR_KEY").expect("metadata key 'key' not set in dependency") == "value");
+                assert!(env::var_os("DEP_BAR_KEY_COMPLEX").expect("metadata key 'key_complex' not set in dependency") == "complex(value)");
+
+                println!("cargo::rustc-env=BUILDFOO=yes(check)");
+              }
+            '')
+          ];
+        };
+        buildDependencies = [ (depCrate buildPackages.buildRustCrate) ];
+        dependencies = [ (depCrate buildRustCrate) ];
+        buildTests = true;
+        expectedTestOutputs = [ "test build_foo_check ... ok" ];
+      };
       # Regression test for https://github.com/NixOS/nixpkgs/issues/74071
       # Whenevever a build.rs file is generating files those should not be overlayed onto the actual source dir
       buildRsOutDirOverlay = {
@@ -479,7 +526,7 @@ let
             # `-undefined dynamic_lookup` as otherwise the compilation fails.
             $CC -shared \
               ${lib.optionalString stdenv.isDarwin "-undefined dynamic_lookup"} \
-              -o $out/lib/${name}${stdenv.hostPlatform.extensions.sharedLibrary} ${src}
+              -o $out/lib/${name}${stdenv.hostPlatform.extensions.library} ${src}
           '';
           b = compile "libb" ''
             #include <stdio.h>

@@ -21,7 +21,7 @@ in
 
     meta = with lib; {
       homepage = "https://github.com/9999years/git-upstream";
-      description = "A shortcut for `git push --set-upstream`";
+      description = "Shortcut for `git push --set-upstream`";
       license = [licenses.mit];
       maintainers = [maintainers._9999years];
       mainProgram = "git-upstream";

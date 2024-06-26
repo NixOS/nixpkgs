@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, pythonOlder
-, pytestCheckHook
-, ujson
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  pythonOlder,
+  pytestCheckHook,
+  ujson,
 }:
 
 buildPythonPackage rec {
@@ -26,23 +27,15 @@ buildPythonPackage rec {
       --replace-fail "pytest-runner" ""
   '';
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   passthru.optional-dependencies = {
-    ujson = [
-      ujson
-    ];
+    ujson = [ ujson ];
   };
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "demoji"
-  ];
+  pythonImportsCheck = [ "demoji" ];
 
   meta = with lib; {
     description = "Module to find/replace/remove emojis in text strings";

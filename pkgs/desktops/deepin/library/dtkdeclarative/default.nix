@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "dtkdeclarative";
-  version = "5.6.24";
+  version = "5.6.29";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    hash = "sha256-bGy8e+JAyHiAwWvO5Xz1TubHUDP4i4nWUR4h5/appM0=";
+    hash = "sha256-7pAC7NHsmQudAO2KvEgI5BbnsgjqxaJY5v9GNfKBm1U=";
   };
 
   patches = [
@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" "doc" ];
 
   meta = with lib; {
-    description = "A widget development toolkit based on QtQuick/QtQml";
+    description = "Widget development toolkit based on QtQuick/QtQml";
     mainProgram = "dtk-exhibition";
     homepage = "https://github.com/linuxdeepin/dtkdeclarative";
     license = licenses.lgpl3Plus;

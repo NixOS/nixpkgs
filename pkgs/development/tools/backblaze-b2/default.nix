@@ -10,18 +10,19 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "backblaze-b2";
-  version = "3.19.1";
+  version = "4.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Backblaze";
     repo = "B2_Command_Line_Tool";
     rev = "refs/tags/v${version}";
-    hash = "sha256-/P1cgAC+a2YCcvbsysYdD+fEwibo+GyE0XY4A0+gMh4=";
+    hash = "sha256-rZUWPSI7CrKOdEKdsSpekwBerbIMf2iiVrWkV8WrqSc=";
   };
 
-  nativeBuildInputs = [
+  nativeBuildInputs = with python3Packages; [
     installShellFiles
+    argcomplete
   ];
 
   build-system = with python3Packages; [
@@ -77,8 +78,8 @@ python3Packages.buildPythonApplication rec {
   ''
   + ''
     installShellCompletion --cmd ${execName} \
-      --bash <(${python3Packages.argcomplete}/bin/register-python-argcomplete ${execName}) \
-      --zsh <(${python3Packages.argcomplete}/bin/register-python-argcomplete ${execName})
+      --bash <(register-python-argcomplete ${execName}) \
+      --zsh <(register-python-argcomplete ${execName})
   '';
 
   passthru.tests.version = (testers.testVersion {

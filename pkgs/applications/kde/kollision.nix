@@ -4,7 +4,7 @@ mkDerivation {
   pname = "kollision";
   meta = with lib; {
     homepage = "https://kde.org/applications/en/games/org.kde.kollision";
-    description = "A casual game";
+    description = "Casual game";
     mainProgram = "kollision";
     maintainers = with maintainers; [ freezeboy ];
     license = licenses.gpl2Plus;

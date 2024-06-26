@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools-scm
-, absl-py
-, lxml
-, skia-pathops
-, pytestCheckHook
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools-scm,
+  absl-py,
+  lxml,
+  skia-pathops,
+  pytestCheckHook,
 }:
 buildPythonPackage rec {
   pname = "picosvg";
@@ -20,9 +21,7 @@ buildPythonPackage rec {
     hash = "sha256-jG1rfamegnX8GXDwqkGFBFzUeycRLDObJvGbxNk6OpM=";
   };
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
 
   propagatedBuildInputs = [
     absl-py
@@ -30,9 +29,7 @@ buildPythonPackage rec {
     skia-pathops
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   # a few tests are failing on aarch64
   doCheck = !stdenv.isAarch64;

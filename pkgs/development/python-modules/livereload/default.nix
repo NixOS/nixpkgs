@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, django
-, pytestCheckHook
-, tornado
-, six
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  django,
+  pytestCheckHook,
+  tornado,
+  six,
 }:
 
 buildPythonPackage rec {
@@ -21,13 +22,14 @@ buildPythonPackage rec {
 
   buildInputs = [ django ];
 
-  propagatedBuildInputs = [ tornado six ];
+  propagatedBuildInputs = [
+    tornado
+    six
+  ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  disabledTests = [
-    "test_watch_multiple_dirs"
-  ];
+  disabledTests = [ "test_watch_multiple_dirs" ];
 
   meta = {
     description = "Runs a local server that reloads as you develop";

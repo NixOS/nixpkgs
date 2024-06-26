@@ -27,7 +27,7 @@ rustPlatform.buildRustPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "A tag-based filesystem";
+    description = "Tag-based filesystem";
     longDescription = ''
       Supertag is a tag-based filesystem, written in Rust, for Linux and MacOS.
       It provides a tag-based view of your files by removing the hierarchy

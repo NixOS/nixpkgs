@@ -1,4 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, unittestCheckHook }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  unittestCheckHook,
+  pythonOlder,
+}:
 
 buildPythonPackage rec {
   pname = "pycparser";
@@ -11,8 +17,12 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [ unittestCheckHook ];
+  disabled = pythonOlder "3.8";
 
-  unittestFlagsArray = [ "-s" "tests" ];
+  unittestFlagsArray = [
+    "-s"
+    "tests"
+  ];
 
   meta = with lib; {
     description = "C parser in Python";

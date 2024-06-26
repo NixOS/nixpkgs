@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "A parser generator for C";
+    description = "Parser generator for C";
     mainProgram = "packcc";
     longDescription = ''
       PackCC is a parser generator for C. Its main features are as follows:

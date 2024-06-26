@@ -18,7 +18,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "freefilesync";
-  version = "13.5";
+  version = "13.6";
 
   src = fetchurl {
     url = "https://freefilesync.org/download/FreeFileSync_${finalAttrs.version}_Source.zip";
@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
       rm -f $out
       tryDownload "$url"
     '';
-    hash = "sha256-8At8QobAQR2mQnFjFSPTkEuxmP9M8gINP0qH28J3ynY=";
+    hash = "sha256-lJ4LiisUy8w6OPd44wJufH+ol1YwjOfFQfqzj3HWb2w=";
   };
 
   sourceRoot = ".";
@@ -55,14 +55,6 @@ stdenv.mkDerivation (finalAttrs: {
       debianRevision = "1";
       patch = "Disable_wxWidgets_uncaught_exception_handling.patch";
       hash = "sha256-Fem7eDDKSqPFU/t12Jco8OmYC8FM9JgB4/QVy/ouvbI=";
-    })
-    # Disable update patch
-    (fetchDebianPatch {
-      pname = "freefilesync";
-      version = "13.3";
-      debianRevision = "1";
-      patch = "ffs_no_check_updates.patch";
-      hash = "sha256-lPyHpxhZz8BSnDI8QfAzKpKwVkp2jiF49RWjKNuZGII=";
     })
   ];
 

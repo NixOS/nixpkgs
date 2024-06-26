@@ -1,12 +1,12 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, loguru
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, typing-extensions
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  loguru,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
@@ -29,14 +29,10 @@ buildPythonPackage rec {
       -e '/--mypy/d'
   '';
 
-  propagatedBuildInputs = [
-    typing-extensions
-  ];
+  propagatedBuildInputs = [ typing-extensions ];
 
   passthru.optional-dependencies = {
-    loguru = [
-      loguru
-    ];
+    loguru = [ loguru ];
   };
 
   nativeCheckInputs = [
@@ -44,16 +40,12 @@ buildPythonPackage rec {
     pytestCheckHook
   ] ++ passthru.optional-dependencies.loguru;
 
-  pythonImportsCheck = [
-    "python_utils"
-  ];
+  pythonImportsCheck = [ "python_utils" ];
 
-  pytestFlagsArray = [
-    "_python_utils_tests"
-  ];
+  pytestFlagsArray = [ "_python_utils_tests" ];
 
-  disabledTests = lib.optionals stdenv.isDarwin [
-    # Flaky tests on darwin
+  disabledTests = [
+    # Flaky tests
     "test_timeout_generator"
   ];
 

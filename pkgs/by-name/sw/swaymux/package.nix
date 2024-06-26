@@ -24,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     changelog = "https://git.grimmauld.de/Grimmauld/swaymux/commits/branch/main";
-    description = "A program to quickly navigate sway";
+    description = "Program to quickly navigate sway";
     homepage = "https://git.grimmauld.de/Grimmauld/swaymux";
     license = licenses.bsd3;
     longDescription = ''

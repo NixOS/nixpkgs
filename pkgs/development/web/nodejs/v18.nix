@@ -1,4 +1,4 @@
-{ callPackage, lib, overrideCC, pkgs, buildPackages, fetchpatch, openssl, python3, enableNpm ? true }:
+{ callPackage, lib, overrideCC, pkgs, buildPackages, openssl, python3, enableNpm ? true }:
 
 let
   # Clang 16+ cannot build Node v18 due to -Wenum-constexpr-conversion errors.

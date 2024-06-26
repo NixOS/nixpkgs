@@ -32,7 +32,7 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   meta = {
-    description = "A cozy nest for your scripts";
+    description = "Cozy nest for your scripts";
     homepage = "https://github.com/ianthehenry/sd";
     changelog = "https://github.com/ianthehenry/sd/tree/${src.rev}#changelog";
     license = lib.licenses.mit;

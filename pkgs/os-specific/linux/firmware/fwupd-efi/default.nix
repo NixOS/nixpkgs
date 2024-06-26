@@ -1,8 +1,7 @@
 { lib
 , stdenv
 , fetchurl
-, fetchFromGitHub
-, substituteAll
+, fetchpatch
 , pkg-config
 , meson
 , ninja

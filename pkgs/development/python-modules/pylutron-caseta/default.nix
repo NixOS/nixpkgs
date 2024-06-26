@@ -1,16 +1,17 @@
-{ lib
-, async-timeout
-, buildPythonPackage
-, click
-, cryptography
-, fetchFromGitHub
-, hatchling
-, pytest-asyncio
-, pytest-timeout
-, pytestCheckHook
-, pythonOlder
-, xdg
-, zeroconf
+{
+  lib,
+  async-timeout,
+  buildPythonPackage,
+  click,
+  cryptography,
+  fetchFromGitHub,
+  hatchling,
+  pytest-asyncio,
+  pytest-timeout,
+  pytestCheckHook,
+  pythonOlder,
+  xdg,
+  zeroconf,
 }:
 
 buildPythonPackage rec {
@@ -27,15 +28,9 @@ buildPythonPackage rec {
     hash = "sha256-7uUNLlVrMEgah2YvTECC4S2WArAQjeAyfgDd62sQsYA=";
   };
 
-  nativeBuildInputs = [
-    hatchling
-  ];
+  nativeBuildInputs = [ hatchling ];
 
-  propagatedBuildInputs = [
-    cryptography
-  ] ++ lib.optionals (pythonOlder "3.11") [
-    async-timeout
-  ];
+  propagatedBuildInputs = [ cryptography ] ++ lib.optionals (pythonOlder "3.11") [ async-timeout ];
 
   passthru.optional-dependencies = {
     cli = [
@@ -49,17 +44,11 @@ buildPythonPackage rec {
     pytest-asyncio
     pytest-timeout
     pytestCheckHook
-  ] ++ lib.optionals (pythonOlder "3.11") [
-    async-timeout
-  ];
+  ] ++ lib.optionals (pythonOlder "3.11") [ async-timeout ];
 
-  pytestFlagsArray = [
-    "--asyncio-mode=auto"
-  ];
+  pytestFlagsArray = [ "--asyncio-mode=auto" ];
 
-  pythonImportsCheck = [
-    "pylutron_caseta"
-  ];
+  pythonImportsCheck = [ "pylutron_caseta" ];
 
   meta = with lib; {
     description = "Python module o control Lutron Caseta devices";

@@ -34,7 +34,7 @@ in stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "The GNOME Office Spreadsheet";
+    description = "GNOME Office Spreadsheet";
     license = lib.licenses.gpl2Plus;
     homepage = "http://projects.gnome.org/gnumeric/";
     platforms = platforms.unix;

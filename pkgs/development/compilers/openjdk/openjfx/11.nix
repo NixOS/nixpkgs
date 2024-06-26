@@ -7,7 +7,7 @@
 
 let
   major = "11";
-  update = ".0.18";
+  update = ".0.20";
   build = "1";
   repover = "${major}${update}+${build}";
   gradle_ = (gradle_7.override {
@@ -31,7 +31,7 @@ let
       owner = "openjdk";
       repo = "jfx${major}u";
       rev = repover;
-      sha256 = "sha256-46DjIzcBHkmp5vnhYnLu78CG72bIBRM4A6mgk2OLOko=";
+      sha256 = "sha256-BbBP2DiPZTSn1SBYMCgyiNdF9GD+NqR6YjeVNOQHHn4=";
     };
 
     buildInputs = [ gtk2 gtk3 libXtst libXxf86vm glib alsa-lib ffmpeg_4-headless ];
@@ -129,7 +129,7 @@ in makePackage {
   meta = with lib; {
     homepage = "http://openjdk.java.net/projects/openjfx/";
     license = licenses.gpl2;
-    description = "The next-generation Java client toolkit";
+    description = "Next-generation Java client toolkit";
     maintainers = with maintainers; [ abbradar ];
     platforms = [ "x86_64-linux" ];
   };

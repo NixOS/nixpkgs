@@ -51,7 +51,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   meta = with lib; {
-    description = "A private network system that uses WireGuard under the hood";
+    description = "Private network system that uses WireGuard under the hood";
     homepage = "https://github.com/tonarino/innernet";
     changelog = "https://github.com/tonarino/innernet/releases/tag/v${version}";
     license = licenses.mit;

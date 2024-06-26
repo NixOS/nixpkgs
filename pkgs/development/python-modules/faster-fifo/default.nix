@@ -1,26 +1,27 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
 
-# build-system
-, cython
-, setuptools
+  # build-system
+  cython,
+  setuptools,
 
-# tests
-, numpy
-, unittestCheckHook
+  # tests
+  numpy,
+  unittestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "faster-fifo";
-  version = "1.4.5";
+  version = "1.4.6";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "alex-petrenko";
     repo = "faster-fifo";
     rev = "v${version}";
-    hash = "sha256-35kD+RWXwUXHG5leTVj4wY6hJAjDka69YczgSTIbCeg=";
+    hash = "sha256-vgaaIJTtNg2XqEZ9TB7tTMPJ9yMyWjtfdgNU/lcNLcg=";
   };
 
   nativeBuildInputs = [
@@ -28,9 +29,7 @@ buildPythonPackage rec {
     setuptools
   ];
 
-  pythonImportsCheck = [
-    "faster_fifo"
-  ];
+  pythonImportsCheck = [ "faster_fifo" ];
 
   nativeCheckInputs = [
     numpy

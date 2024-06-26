@@ -7,7 +7,7 @@
 , python3
 , giflib
 , darwin
-, ghostscript
+, ghostscript_headless
 , imagemagickBig
 , jbig2enc
 , optipng
@@ -24,13 +24,13 @@
 }:
 
 let
-  version = "2.7.2";
+  version = "2.10.2";
 
   src = fetchFromGitHub {
     owner = "paperless-ngx";
     repo = "paperless-ngx";
     rev = "refs/tags/v${version}";
-    hash = "sha256-vXW2d45Mth3Y95xPPH8bFjVLWVdUl+WuvSXJyPD3FyU=";
+    hash = "sha256-LwWdgoVlZjL5o+T8zzU9jkYaQbdiZokrCGn8ZTIQ4OQ=";
   };
 
   # subpath installation is broken with uvicorn >= 0.26
@@ -50,12 +50,24 @@ let
           hash = "sha256-ng98DTw49zyFjrPnEwfnPfONyjKKZYuLl0qduxSppYk=";
         };
       });
+
+      djangorestframework = prev.djangorestframework.overridePythonAttrs (oldAttrs: rec {
+        version = "3.14.0";
+        src = oldAttrs.src.override {
+          rev = version;
+          hash = "sha256-Fnj0n3NS3SetOlwSmGkLE979vNJnYE6i6xwVBslpNz4=";
+        };
+        nativeCheckInputs = with prev; [
+          pytest7CheckHook
+          pytest-django
+        ];
+      });
     };
   };
 
 
   path = lib.makeBinPath [
-    ghostscript
+    ghostscript_headless
     imagemagickBig
     jbig2enc
     optipng
@@ -74,7 +86,7 @@ let
       cd src-ui
     '';
 
-    npmDepsHash = "sha256-MJ5pnQChghZBfVN6Lbz6VcMtbe8QadiFLTsMF5TlebQ=";
+    npmDepsHash = "sha256-zmlYwlH2cnGbbKf6jt5zBLh0Iv3C9/xN0iA4xVetRNE=";
 
     nativeBuildInputs = [
       pkg-config
@@ -138,6 +150,7 @@ python.pkgs.buildPythonApplication rec {
     django-filter
     django-guardian
     django-multiselectfield
+    django-soft-delete
     djangorestframework
     djangorestframework-guardian2
     drf-writable-nested
@@ -153,7 +166,7 @@ python.pkgs.buildPythonApplication rec {
     ocrmypdf
     pathvalidate
     pdf2image
-    psycopg2
+    psycopg
     python-dateutil
     python-dotenv
     python-gnupg
@@ -244,9 +257,12 @@ python.pkgs.buildPythonApplication rec {
   disabledTests = [
     # FileNotFoundError(2, 'No such file or directory'): /build/tmp...
     "test_script_with_output"
+    "test_script_exit_non_zero"
     # AssertionError: 10 != 4 (timezone/time issue)
     # Due to getting local time from modification date in test_consumer.py
     "testNormalOperation"
+    # Something broken with new Tesseract and inline RTL/LTR overrides?
+    "test_rtl_language_detection"
   ];
 
   doCheck = !stdenv.isDarwin;

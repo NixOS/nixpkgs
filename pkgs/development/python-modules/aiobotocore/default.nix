@@ -1,21 +1,22 @@
-{ lib
-, aiohttp
-, aioitertools
-, botocore
-, buildPythonPackage
-, dill
-, fetchFromGitHub
-, flask
-, flask-cors
-, awscli
-, moto
-, boto3
-, setuptools
-, pytest-asyncio
-, pytestCheckHook
-, pythonAtLeast
-, pythonOlder
-, wrapt
+{
+  lib,
+  aiohttp,
+  aioitertools,
+  botocore,
+  buildPythonPackage,
+  dill,
+  fetchFromGitHub,
+  flask,
+  flask-cors,
+  awscli,
+  moto,
+  boto3,
+  setuptools,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonAtLeast,
+  pythonOlder,
+  wrapt,
 }:
 
 buildPythonPackage rec {
@@ -38,9 +39,7 @@ buildPythonPackage rec {
     sed -i "s/'botocore>=.*'/'botocore'/" setup.py
   '';
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     aiohttp
@@ -50,12 +49,8 @@ buildPythonPackage rec {
   ];
 
   passthru.optional-dependencies = {
-    awscli = [
-      awscli
-    ];
-    boto3 = [
-      boto3
-    ];
+    awscli = [ awscli ];
+    boto3 = [ boto3 ];
   };
 
   nativeCheckInputs = [
@@ -67,9 +62,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "aiobotocore"
-  ];
+  pythonImportsCheck = [ "aiobotocore" ];
 
   disabledTestPaths = [
     # Tests require network access
@@ -90,18 +83,20 @@ buildPythonPackage rec {
     "tests/test_waiter.py"
   ];
 
-  disabledTests = [
-    "test_get_credential"
-    "test_load_sso_credentials_without_cache"
-    "test_load_sso_credentials"
-    "test_required_config_not_set"
-    "test_sso_cred_fetcher_raises_helpful_message_on_unauthorized_exception"
-    "test_sso_credential_fetcher_can_fetch_credentials"
-  ] ++ lib.optionals (pythonAtLeast "3.12.") [
-    # AttributeError: 'called_with' is not a valid assertion. Use a spec for the mock if 'called_with' is meant to be an attribute.
-    "test_max_rate_updated_on_success_response"
-    "test_max_rate_cant_exceed_20_percent_max"
-  ];
+  disabledTests =
+    [
+      "test_get_credential"
+      "test_load_sso_credentials_without_cache"
+      "test_load_sso_credentials"
+      "test_required_config_not_set"
+      "test_sso_cred_fetcher_raises_helpful_message_on_unauthorized_exception"
+      "test_sso_credential_fetcher_can_fetch_credentials"
+    ]
+    ++ lib.optionals (pythonAtLeast "3.12.") [
+      # AttributeError: 'called_with' is not a valid assertion. Use a spec for the mock if 'called_with' is meant to be an attribute.
+      "test_max_rate_updated_on_success_response"
+      "test_max_rate_cant_exceed_20_percent_max"
+    ];
 
   __darwinAllowLocalNetworking = true;
 

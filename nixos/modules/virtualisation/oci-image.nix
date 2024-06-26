@@ -9,10 +9,10 @@ in
   config = {
     system.build.OCIImage = import ../../lib/make-disk-image.nix {
       inherit config lib pkgs;
+      inherit (cfg) diskSize;
       name = "oci-image";
       configFile = ./oci-config-user.nix;
       format = "qcow2";
-      diskSize = 8192;
       partitionTableType = if cfg.efi then "efi" else "legacy";
     };
 

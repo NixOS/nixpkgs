@@ -7,16 +7,16 @@
 
 buildGoModule rec {
   pname = "ko";
-  version = "0.15.2";
+  version = "0.15.4";
 
   src = fetchFromGitHub {
     owner = "ko-build";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-/1s335bXbBKlzKT4AevuHltLdU2qj6pJFngOrJCLtUw=";
+    hash = "sha256-MeFoy2WoPsJIgUhpzt/4sEP6J9lM4nsSAK2VZiTS7jo=";
   };
 
-  vendorHash = null;
+  vendorHash = "sha256-n/NbbitSyjl05gESPVG3Uv2ek1U0Cd2fQqcxBhDKULU=";
 
   nativeBuildInputs = [ installShellFiles ];
 

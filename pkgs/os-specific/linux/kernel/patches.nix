@@ -82,15 +82,21 @@
 
   rust_1_77-6_8 = {
     name = "rust-1.77.patch";
-    patch = fetchurl {
-      name = "rust-1.77.patch";
-      url = "https://lore.kernel.org/rust-for-linux/20240217002717.57507-1-ojeda@kernel.org/raw";
-      hash = "sha256-0KW9nHpJeMSDssCPXWZbrN8kxq5bA434t+XuPfwslUc=";
-    };
+    patch = ./rust-1.77-6.8.patch;
   };
 
   rust_1_77-6_9 = {
     name = "rust-1.77.patch";
     patch = ./rust-1.77.patch;
+  };
+
+  rust_1_78 = {
+    name = "rust-1.78.patch";
+    patch = fetchpatch {
+      name = "rust-1.78.patch";
+      url = "https://lore.kernel.org/rust-for-linux/20240401212303.537355-4-ojeda@kernel.org/raw";
+      excludes = [ "Documentation/process/changes.rst" ]; # Conflicts on 6.8.
+      hash = "sha256-EZ+Qa9z1AtAv08e72M7BEsCZi9UK572gmW+AR62a8EM=";
+    };
   };
 }

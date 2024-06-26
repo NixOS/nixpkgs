@@ -1,42 +1,47 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, dj-rest-auth
-, django
-, django-allauth
-, django-filter
-, django-oauth-toolkit
-, django-polymorphic
-, django-rest-auth
-, django-rest-polymorphic
-, djangorestframework
-, djangorestframework-camel-case
-, djangorestframework-dataclasses
-, djangorestframework-recursive
-, djangorestframework-simplejwt
-, drf-jwt
-, drf-nested-routers
-, drf-spectacular-sidecar
-, inflection
-, jsonschema
-, psycopg2
-, pytest-django
-, pytestCheckHook
-, pyyaml
-, uritemplate
+{
+  lib,
+  buildPythonPackage,
+  dj-rest-auth,
+  django,
+  django-allauth,
+  django-filter,
+  django-oauth-toolkit,
+  django-polymorphic,
+  django-rest-auth,
+  django-rest-polymorphic,
+  djangorestframework,
+  djangorestframework-camel-case,
+  djangorestframework-dataclasses,
+  djangorestframework-recursive,
+  djangorestframework-simplejwt,
+  drf-jwt,
+  drf-nested-routers,
+  drf-spectacular-sidecar,
+  fetchFromGitHub,
+  fetchpatch,
+  inflection,
+  jsonschema,
+  psycopg2,
+  pytest-django,
+  pytestCheckHook,
+  pythonOlder,
+  pyyaml,
+  setuptools,
+  uritemplate,
 }:
 
 buildPythonPackage rec {
   pname = "drf-spectacular";
-  version = "0.27.1";
-  format = "setuptools";
+  version = "0.27.2";
+  pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "tfranzel";
     repo = "drf-spectacular";
     rev = "refs/tags/${version}";
-    hash = "sha256-R6rxEo9SNNziXRWB+01UUInParpGcFDIkDZtN4k+dFE=";
+    hash = "sha256-lOgFDkAY+PqSeyLSvWFT7KPVicSJZxd6yl17GAGHbRs=";
   };
 
   patches = [
@@ -47,7 +52,9 @@ buildPythonPackage rec {
     })
   ];
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     django
     djangorestframework
     inflection
@@ -77,10 +84,11 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
-    # requires django with gdal
+    # Test requires django with gdal
     "test_rest_framework_gis"
-    # outdated test artifact
+    # Outdated test artifact
     "test_pydantic_decoration"
+    "test_knox_auth_token"
   ];
 
   pythonImportsCheck = [ "drf_spectacular" ];

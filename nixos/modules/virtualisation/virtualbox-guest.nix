@@ -31,7 +31,9 @@ let
   };
 in
 {
-  ###### interface
+  imports = [
+    (mkRenamedOptionModule [ "virtualisation" "virtualbox" "guest" "draganddrop" ] [ "virtualisation" "virtualbox" "guest" "dragAndDrop" ])
+  ];
 
   options.virtualisation.virtualbox.guest = {
     enable = mkOption {
@@ -52,7 +54,7 @@ in
       description = "Whether to enable seamless mode. When activated windows from the guest appear next to the windows of the host.";
     };
 
-    draganddrop = mkOption {
+    dragAndDrop = mkOption {
       default = true;
       type = types.bool;
       description = "Whether to enable drag and drop support.";
@@ -109,6 +111,11 @@ in
     (
       mkIf cfg.seamless {
         systemd.user.services.virtualboxClientSeamless = mkVirtualBoxUserService "--seamless";
+      }
+    )
+    (
+      mkIf cfg.dragAndDrop {
+        systemd.user.services.virtualboxClientDragAndDrop = mkVirtualBoxUserService "--draganddrop";
       }
     )
   ]);

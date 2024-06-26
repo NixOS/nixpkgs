@@ -473,8 +473,8 @@ in {
         "${cfg.package.util-linux}/bin/umount"
         "${cfg.package.util-linux}/bin/sulogin"
 
-        # required for script services
-        "${pkgs.runtimeShell}"
+        # required for script services, and some tools like xfs still want the sh symlink
+        "${pkgs.bash}/bin"
 
         # so NSS can look up usernames
         "${pkgs.glibc}/lib/libnss_files.so.2"

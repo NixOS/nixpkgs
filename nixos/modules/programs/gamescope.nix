@@ -3,30 +3,30 @@
 , pkgs
 , ...
 }:
-with lib; let
+let
   cfg = config.programs.gamescope;
 
   gamescope =
     let
       wrapperArgs =
-        optional (cfg.args != [ ])
-          ''--add-flags "${toString cfg.args}"''
-        ++ builtins.attrValues (mapAttrs (var: val: "--set-default ${var} ${val}") cfg.env);
+        lib.optional (cfg.args != [ ])
+          ''--add-flags "${builtins.toString cfg.args}"''
+        ++ builtins.attrValues (builtins.mapAttrs (var: val: "--set-default ${var} ${val}") cfg.env);
     in
     pkgs.runCommand "gamescope" { nativeBuildInputs = [ pkgs.makeBinaryWrapper ]; } ''
       mkdir -p $out/bin
       makeWrapper ${cfg.package}/bin/gamescope $out/bin/gamescope --inherit-argv0 \
-        ${toString wrapperArgs}
+        ${builtins.toString wrapperArgs}
     '';
 in
 {
   options.programs.gamescope = {
-    enable = mkEnableOption "gamescope, the SteamOS session compositing window manager";
+    enable = lib.mkEnableOption "gamescope, the SteamOS session compositing window manager";
 
-    package = mkPackageOption pkgs "gamescope" { };
+    package = lib.mkPackageOption pkgs "gamescope" { };
 
-    capSysNice = mkOption {
-      type = types.bool;
+    capSysNice = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         Add cap_sys_nice capability to the GameScope
@@ -34,8 +34,8 @@ in
       '';
     };
 
-    args = mkOption {
-      type = types.listOf types.str;
+    args = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
       default = [ ];
       example = [ "--rt" "--prefer-vk-device 8086:9bc4" ];
       description = ''
@@ -43,10 +43,10 @@ in
       '';
     };
 
-    env = mkOption {
-      type = types.attrsOf types.str;
+    env = lib.mkOption {
+      type = lib.types.attrsOf lib.types.str;
       default = { };
-      example = literalExpression ''
+      example = lib.literalExpression ''
         # for Prime render offload on Nvidia laptops.
         # Also requires `hardware.nvidia.prime.offload.enable`.
         {
@@ -61,8 +61,8 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
-    security.wrappers = mkIf cfg.capSysNice {
+  config = lib.mkIf cfg.enable {
+    security.wrappers = lib.mkIf cfg.capSysNice {
       gamescope = {
         owner = "root";
         group = "root";
@@ -71,8 +71,8 @@ in
       };
     };
 
-    environment.systemPackages = mkIf (!cfg.capSysNice) [ gamescope ];
+    environment.systemPackages = lib.mkIf (!cfg.capSysNice) [ gamescope ];
   };
 
-  meta.maintainers = with maintainers; [ nrdxp ];
+  meta.maintainers = with lib.maintainers; [ nrdxp ];
 }

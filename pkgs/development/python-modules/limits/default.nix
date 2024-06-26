@@ -1,28 +1,29 @@
-{ lib
-, aetcd
-, buildPythonPackage
-, coredis
-, deprecated
-, etcd3
-, fetchFromGitHub
-, hiro
-, importlib-resources
-, motor
-, packaging
-, pymemcache
-, pymongo
-, pytest-asyncio
-, pytest-lazy-fixture
-, pytestCheckHook
-, pythonOlder
-, redis
-, setuptools
-, typing-extensions
+{
+  lib,
+  aetcd,
+  buildPythonPackage,
+  coredis,
+  deprecated,
+  etcd3,
+  fetchFromGitHub,
+  hiro,
+  importlib-resources,
+  motor,
+  packaging,
+  pymemcache,
+  pymongo,
+  pytest-asyncio,
+  pytest-lazy-fixture,
+  pytestCheckHook,
+  pythonOlder,
+  redis,
+  setuptools,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "limits";
-  version = "3.10.1";
+  version = "3.12.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -37,7 +38,7 @@ buildPythonPackage rec {
     postFetch = ''
       rm "$out/limits/_version.py"
     '';
-    hash = "sha256-Ax0P9rYTPOrhtOw7FLElSNTGQ3WWCboM3FodTOGZWu8=";
+    hash = "sha256-EH2/75tcKuS11XKuo4lCQrFe4/XJZpcWhuGlSuhIk18=";
   };
 
   postPatch = ''
@@ -52,9 +53,7 @@ buildPythonPackage rec {
     echo 'def get_versions(): return {"version": "${version}"}' > limits/_version.py
   '';
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     deprecated
@@ -64,45 +63,29 @@ buildPythonPackage rec {
   ];
 
   passthru.optional-dependencies = {
-    redis = [
-      redis
-    ];
-    rediscluster = [
-      redis
-    ];
-    memcached = [
-      pymemcache
-    ];
-    mongodb = [
-      pymongo
-    ];
-    etcd = [
-      etcd3
-    ];
-    async-redis = [
-      coredis
-    ];
+    redis = [ redis ];
+    rediscluster = [ redis ];
+    memcached = [ pymemcache ];
+    mongodb = [ pymongo ];
+    etcd = [ etcd3 ];
+    async-redis = [ coredis ];
     # async-memcached = [
     #   emcache  # Missing module
     # ];
-    async-mongodb = [
-      motor
-    ];
-    async-etcd = [
-      aetcd
-    ];
+    async-mongodb = [ motor ];
+    async-etcd = [ aetcd ];
   };
+
+  doCheck = pythonOlder "3.12"; # SystemError in protobuf
 
   nativeCheckInputs = [
     hiro
     pytest-asyncio
     pytest-lazy-fixture
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
 
-  pythonImportsCheck = [
-    "limits"
-  ];
+  pythonImportsCheck = [ "limits" ];
 
   pytestFlagsArray = [
     # All other tests require a running Docker instance

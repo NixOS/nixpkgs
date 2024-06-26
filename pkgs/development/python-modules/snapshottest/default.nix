@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, fastdiff
-, six
-, termcolor
-, pytestCheckHook
-, pytest-cov
-, django
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  fastdiff,
+  six,
+  termcolor,
+  pytestCheckHook,
+  pytest-cov,
+  django,
 }:
 
 buildPythonPackage rec {
@@ -19,9 +20,17 @@ buildPythonPackage rec {
     sha256 = "0g35ggqw4jd9zmazw55kj6gfjdghv49qx4jw5q231qyqj8fzijmv";
   };
 
-  propagatedBuildInputs = [ fastdiff six termcolor ];
+  propagatedBuildInputs = [
+    fastdiff
+    six
+    termcolor
+  ];
 
-  nativeCheckInputs = [ django pytestCheckHook pytest-cov ];
+  nativeCheckInputs = [
+    django
+    pytestCheckHook
+    pytest-cov
+  ];
 
   pythonImportsCheck = [ "snapshottest" ];
 

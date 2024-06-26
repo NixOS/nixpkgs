@@ -11,7 +11,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wxformbuilder";
-  version = "4.1.0";
+  version = "4.2.1";
 
   src = fetchFromGitHub {
     owner = "wxFormBuilder";
@@ -21,17 +21,17 @@ stdenv.mkDerivation (finalAttrs: {
     leaveDotGit = true;
     postFetch = ''
       substituteInPlace $out/.git-properties \
-        --replace "\$Format:%h\$" "$(git -C $out rev-parse --short HEAD)" \
-        --replace "\$Format:%(describe)\$" "$(git -C $out rev-parse --short HEAD)"
+        --replace-fail "\$Format:%h\$" "$(git -C $out rev-parse --short HEAD)" \
+        --replace-fail "\$Format:%(describe)\$" "$(git -C $out rev-parse --short HEAD)"
       rm -rf $out/.git
     '';
-    hash = "sha256-Ob+6MAf2iQGd3lgeN+dLfscpmYYrzD3dsN+2ZmvJog0=";
+    hash = "sha256-e0oYyUv8EjGDVj/TWx2jGaj22YyFJf1xa6lredV1J0Y=";
   };
 
   postPatch = ''
     substituteInPlace third_party/tinyxml2/cmake/tinyxml2.pc.in \
-      --replace '$'{exec_prefix}/@CMAKE_INSTALL_LIBDIR@ @CMAKE_INSTALL_FULL_LIBDIR@ \
-      --replace '$'{prefix}/@CMAKE_INSTALL_INCLUDEDIR@ @CMAKE_INSTALL_FULL_INCLUDEDIR@
+      --replace-fail '$'{exec_prefix}/@CMAKE_INSTALL_LIBDIR@ @CMAKE_INSTALL_FULL_LIBDIR@ \
+      --replace-fail '$'{prefix}/@CMAKE_INSTALL_INCLUDEDIR@ @CMAKE_INSTALL_FULL_INCLUDEDIR@
     sed -i '/fixup_bundle/d' cmake/macros.cmake
   '';
 

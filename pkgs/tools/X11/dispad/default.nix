@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ libX11 libXi libconfuse ];
 
   meta = with lib; {
-    description = "A small daemon for disabling trackpads while typing";
+    description = "Small daemon for disabling trackpads while typing";
     homepage = "https://github.com/BlueDragonX/dispad";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ zimbatm ];

@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "anova-wifi";
-  version = "0.12.0";
+  version = "0.13.0";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "Lash-L";
     repo = "anova_wifi";
     rev = "refs/tags/v${version}";
-    hash = "sha256-0RRnQBLglPnPin9/gqWDKIsfi5V7ydrdDKwm93WEnvk=";
+    hash = "sha256-5BSkUg36k2gNfOrVNkeRwU/4SlfEua3ZU4KTZmKSq4Q=";
   };
 
   postPatch = ''
@@ -49,7 +49,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "anova_wifi" ];
 
   meta = with lib; {
-    description = "A Python package for reading anova sous vide api data";
+    description = "Python package for reading anova sous vide api data";
     homepage = "https://github.com/Lash-L/anova_wifi";
     changelog = "https://github.com/Lash-L/anova_wifi/releases/tag/v${version}";
     maintainers = with maintainers; [ jamiemagee ];

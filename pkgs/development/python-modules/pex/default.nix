@@ -1,38 +1,38 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, hatchling
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  hatchling,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pex";
-  version = "2.3.1";
+  version = "2.4.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-0SZMkRYcIRObRUdEyAU+Jbiq0tFdqJIyGBtPOPP1RXU=";
+    hash = "sha256-WH6aklJP8Wk1XgxULedM/rIt6XWAV5ur9hOAta7TsD4=";
   };
 
-  build-system = [
-    hatchling
-  ];
+  build-system = [ hatchling ];
 
   # A few more dependencies I don't want to handle right now...
   doCheck = false;
 
-  pythonImportsCheck = [
-    "pex"
-  ];
+  pythonImportsCheck = [ "pex" ];
 
   meta = with lib; {
     description = "Python library and tool for generating .pex (Python EXecutable) files";
     homepage = "https://github.com/pantsbuild/pex";
     changelog = "https://github.com/pantsbuild/pex/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ copumpkin phaer ];
+    maintainers = with maintainers; [
+      copumpkin
+      phaer
+    ];
   };
 }

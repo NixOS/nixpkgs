@@ -9,23 +9,23 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "boxbuddy";
-  version = "2.2.3";
+  version = "2.2.8";
 
   src = fetchFromGitHub {
     owner = "Dvlv";
     repo = "BoxBuddyRS";
     rev = version;
-    hash = "sha256-b7b5IWo2REr0HBfsKbnFYcReEQG5SfuGDa9KSKIC3t0=";
+    hash = "sha256-AW2RKtxvF4WxCyb6QEDuTEAOy/DqBxoZrtc2JGeKFtk=";
   };
 
-  cargoHash = "sha256-h+pDjS+VtvfiaWMQjpFHBBJ/8bZ0SRgayRmx4vg96Jw=";
+  cargoHash = "sha256-J7VJSOY7Cj9Dsq0jj9uVTGJOessyx3WOlDbg7dS+1dg=";
 
   # The software assumes it is installed either in flatpak or in the home directory
   # so the xdg data path needs to be patched here
   postPatch = ''
     substituteInPlace src/utils.rs \
       --replace-fail '{data_home}/locale' "$out/share/locale" \
-      --replace-fail '{data_home}/icons/boxbuddy/{}' "$out/share/icons/boxbuddy/{}"
+      --replace-fail '{data_home}/icons/boxbuddy/{icon}' "$out/share/icons/boxbuddy/{icon}"
   '';
 
   nativeBuildInputs = [
@@ -51,7 +51,7 @@ rustPlatform.buildRustPackage rec {
   doCheck = false; # No checks defined
 
   meta = with lib; {
-    description = "An unofficial GUI for managing your Distroboxes, written with GTK4 + Libadwaita";
+    description = "Unofficial GUI for managing your Distroboxes, written with GTK4 + Libadwaita";
     homepage = "https://dvlv.github.io/BoxBuddyRS";
     license = licenses.mit;
     mainProgram = "boxbuddy-rs";

@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   pname = "qsynth";
-  version = "0.9.90";
+  version = "1.0.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/qsynth/${pname}-${version}.tar.gz";
-    hash = "sha256-5lqmoUku4/8oKxlQio1nJtMu1kn42iK8mi0K3s9y70M=";
+    hash = "sha256-FOoqnJeh29J0clsqZ+wbhQmsaybrAbIqgeB7m/7Q+3M=";
   };
 
   nativeBuildInputs = [ cmake pkg-config wrapQtAppsHook ];

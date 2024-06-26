@@ -3,7 +3,6 @@
   recurseIntoAttrs,
 
   cudaPackages,
-  cudaPackagesGoogle,
 
   cudaPackages_10_0,
   cudaPackages_10_1,

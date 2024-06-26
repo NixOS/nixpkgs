@@ -113,7 +113,7 @@ in
         type = lib.types.nullOr lib.types.str // {
           description = "session name";
           check = d:
-            lib.assertMsg (d != null -> (lib.types.str.check d && lib.elem d config.services.displayManager.sessionData.sessionNames)) ''
+            lib.assertMsg (d != null -> (lib.types.str.check d && lib.elem d cfg.sessionData.sessionNames)) ''
                 Default graphical session, '${d}', not found.
                 Valid names for 'services.displayManager.defaultSession' are:
                   ${lib.concatStringsSep "\n  " cfg.sessionData.sessionNames}
@@ -187,7 +187,7 @@ in
 
     services.displayManager.sessionData = {
       desktops = installedSessions;
-      sessionNames = lib.concatMap (p: p.providedSessions) config.services.displayManager.sessionPackages;
+      sessionNames = lib.concatMap (p: p.providedSessions) cfg.sessionPackages;
       # We do not want to force users to set defaultSession when they have only single DE.
       autologinSession =
         if cfg.defaultSession != null then
@@ -212,9 +212,7 @@ in
       after = [ "acpid.service" "systemd-logind.service" "systemd-user-sessions.service" ];
       restartIfChanged = false;
 
-      environment = lib.optionalAttrs config.hardware.opengl.setLdLibraryPath {
-        LD_LIBRARY_PATH = lib.makeLibraryPath [ pkgs.addOpenGLRunpath.driverLink ];
-      } // cfg.environment;
+      environment = cfg.environment;
 
       preStart = cfg.preStart;
       script = lib.mkIf (config.systemd.services.display-manager.enable == true) cfg.execCmd;

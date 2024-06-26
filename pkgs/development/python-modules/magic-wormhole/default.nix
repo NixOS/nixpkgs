@@ -1,49 +1,50 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchPypi,
 
-# build-system
-, setuptools
+  # build-system
+  setuptools,
 
-# dependencies
-, spake2
-, pynacl
-, six
-, attrs
-, twisted
-, autobahn
-, automat
-, tqdm
-, click
-, humanize
-, txtorcon
+  # dependencies
+  spake2,
+  pynacl,
+  six,
+  attrs,
+  twisted,
+  autobahn,
+  automat,
+  tqdm,
+  click,
+  humanize,
+  iterable-io,
+  txtorcon,
+  zipstream-ng,
 
-# optional-dependencies
-, noiseprotocol
+  # optional-dependencies
+  noiseprotocol,
 
-# tests
-, nettools
-, unixtools
-, mock
-, magic-wormhole-transit-relay
-, magic-wormhole-mailbox-server
-, pytestCheckHook
+  # tests
+  nettools,
+  unixtools,
+  mock,
+  magic-wormhole-transit-relay,
+  magic-wormhole-mailbox-server,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "magic-wormhole";
   version = "0.14.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-AG0jn4i/98N7wu/2CgBOJj+vklj3J5GS0Gugyc7WsIA=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     spake2
@@ -56,15 +57,13 @@ buildPythonPackage rec {
     tqdm
     click
     humanize
+    iterable-io
     txtorcon
-  ]
-  ++ autobahn.optional-dependencies.twisted
-  ++ twisted.optional-dependencies.tls;
+    zipstream-ng
+  ] ++ autobahn.optional-dependencies.twisted ++ twisted.optional-dependencies.tls;
 
   passthru.optional-dependencies = {
-    dilation = [
-      noiseprotocol
-    ];
+    dilation = [ noiseprotocol ];
   };
 
   nativeCheckInputs = [
@@ -72,9 +71,7 @@ buildPythonPackage rec {
     magic-wormhole-transit-relay
     magic-wormhole-mailbox-server
     pytestCheckHook
-  ]
-  ++ passthru.optional-dependencies.dilation
-  ++ lib.optionals stdenv.isDarwin [ unixtools.locale ];
+  ] ++ passthru.optional-dependencies.dilation ++ lib.optionals stdenv.isDarwin [ unixtools.locale ];
 
   disabledTests = lib.optionals stdenv.isDarwin [
     # These tests doesn't work within Darwin's sandbox
@@ -111,12 +108,12 @@ buildPythonPackage rec {
     install -Dm644 docs/wormhole.1 $out/share/man/man1/wormhole.1
   '';
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/magic-wormhole/magic-wormhole/blob/${version}/NEWS.md";
     description = "Securely transfer data between computers";
     homepage = "https://github.com/magic-wormhole/magic-wormhole";
-    license = licenses.mit;
-    maintainers = with maintainers; [ asymmetric ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.mjoerg ];
     mainProgram = "wormhole";
   };
 }

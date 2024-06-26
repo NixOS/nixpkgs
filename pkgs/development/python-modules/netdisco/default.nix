@@ -1,4 +1,12 @@
-{ lib, buildPythonPackage, isPy3k, fetchPypi, requests, zeroconf, pytestCheckHook }:
+{
+  lib,
+  buildPythonPackage,
+  isPy3k,
+  fetchPypi,
+  requests,
+  zeroconf,
+  pytestCheckHook,
+}:
 
 buildPythonPackage rec {
   pname = "netdisco";
@@ -12,7 +20,10 @@ buildPythonPackage rec {
     hash = "sha256-TbtZBILzd8zEYeAXQnB8y+jx0tGyhXivkdybf+vNy9I=";
   };
 
-  propagatedBuildInputs = [ requests zeroconf ];
+  propagatedBuildInputs = [
+    requests
+    zeroconf
+  ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

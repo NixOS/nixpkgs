@@ -1,17 +1,18 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, python
-, zope-testrunner
-, transaction
-, six
-, zope-interface
-, zodbpickle
-, zconfig
-, persistent
-, zc-lockfile
-, btrees
-, manuel
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  python,
+  zope-testrunner,
+  transaction,
+  six,
+  zope-interface,
+  zodbpickle,
+  zconfig,
+  persistent,
+  zc-lockfile,
+  btrees,
+  manuel,
 }:
 
 buildPythonPackage rec {

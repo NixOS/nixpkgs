@@ -67,8 +67,11 @@
 /nixos/lib/make-disk-image.nix                 @raitobezarius
 
 # Nix, the package manager
-pkgs/tools/package-management/nix/                    @raitobezarius @ma27
-nixos/modules/installer/tools/nix-fallback-paths.nix  @raitobezarius @ma27
+# @raitobezarius is not "code owner", but is listed here to be notified of changes
+# pertaining to the Nix package manager.
+# i.e. no authority over those files.
+pkgs/tools/package-management/nix/                    @raitobezarius
+nixos/modules/installer/tools/nix-fallback-paths.nix  @raitobezarius
 
 # Nixpkgs documentation
 /maintainers/scripts/db-to-md.sh @jtojnar @ryantm
@@ -93,7 +96,6 @@ nixos/modules/installer/tools/nix-fallback-paths.nix  @raitobezarius @ma27
 /nixos/default.nix                                    @infinisil
 /nixos/lib/from-env.nix                               @infinisil
 /nixos/lib/eval-config.nix                            @infinisil
-/nixos/modules/system                                 @dasJ
 /nixos/modules/system/activation/bootspec.nix         @grahamc @cole-h @raitobezarius
 /nixos/modules/system/activation/bootspec.cue         @grahamc @cole-h @raitobezarius
 
@@ -125,7 +127,7 @@ nixos/modules/installer/tools/nix-fallback-paths.nix  @raitobezarius @ma27
 
 # Python-related code and docs
 /doc/languages-frameworks/python.section.md                 @mweinelt
-/pkgs/development/interpreters/python/hooks                 @jonringer
+/pkgs/development/interpreters/python/hooks
 
 # Haskell
 /doc/languages-frameworks/haskell.section.md  @sternenseemann @maralorn @ncfavier
@@ -137,9 +139,9 @@ nixos/modules/installer/tools/nix-fallback-paths.nix  @raitobezarius @ma27
 /pkgs/top-level/haskell-packages.nix          @sternenseemann @maralorn @ncfavier
 
 # Perl
-/pkgs/development/interpreters/perl @stigtsp @zakame @dasJ
-/pkgs/top-level/perl-packages.nix   @stigtsp @zakame @dasJ
-/pkgs/development/perl-modules      @stigtsp @zakame @dasJ
+/pkgs/development/interpreters/perl @stigtsp @zakame @marcusramberg
+/pkgs/top-level/perl-packages.nix   @stigtsp @zakame @marcusramberg
+/pkgs/development/perl-modules      @stigtsp @zakame @marcusramberg
 
 # R
 /pkgs/applications/science/math/R   @jbedo
@@ -152,6 +154,7 @@ nixos/modules/installer/tools/nix-fallback-paths.nix  @raitobezarius @ma27
 
 # C compilers
 /pkgs/development/compilers/gcc
+/pkgs/development/compilers/llvm @RossComputerGuy
 /pkgs/development/compilers/emscripten @raitobezarius
 /doc/languages-frameworks/emscripten.section.md @raitobezarius
 
@@ -259,13 +262,13 @@ nixos/modules/services/networking/networkmanager.nix @Janik-Haag
 /pkgs/top-level/emacs-packages.nix              @adisbladis
 
 # Neovim
-/pkgs/applications/editors/neovim      @figsoda @jonringer @teto
+/pkgs/applications/editors/neovim      @figsoda @teto
 
 # VimPlugins
-/pkgs/applications/editors/vim/plugins         @figsoda @jonringer
+/pkgs/applications/editors/vim/plugins         @figsoda
 
 # VsCode Extensions
-/pkgs/applications/editors/vscode/extensions   @jonringer
+/pkgs/applications/editors/vscode/extensions
 
 # PHP interpreter, packages, extensions, tests and documentation
 /doc/languages-frameworks/php.section.md          @aanderse @drupol @globin @ma27 @talyz
@@ -285,9 +288,9 @@ nixos/modules/services/networking/networkmanager.nix @Janik-Haag
 /pkgs/applications/blockchains  @mmahut @RaghavSood
 
 # Go
-/doc/languages-frameworks/go.section.md @kalbasit @Mic92 @zowoq
-/pkgs/build-support/go @kalbasit @Mic92 @zowoq
-/pkgs/development/compilers/go @kalbasit @Mic92 @zowoq
+/doc/languages-frameworks/go.section.md @kalbasit @katexochen @Mic92 @zowoq
+/pkgs/build-support/go @kalbasit @katexochen @Mic92 @zowoq
+/pkgs/development/compilers/go @kalbasit @katexochen @Mic92 @zowoq
 
 # GNOME
 /pkgs/desktops/gnome                              @jtojnar
@@ -306,8 +309,8 @@ nixos/modules/services/networking/networkmanager.nix @Janik-Haag
 /pkgs/applications/networking/cluster/terraform-providers @zowoq
 
 # Forgejo
-nixos/modules/services/misc/forgejo.nix      @bendlas @emilylange
-pkgs/applications/version-management/forgejo @bendlas @emilylange
+nixos/modules/services/misc/forgejo.nix @adamcstephens @bendlas @emilylange
+pkgs/by-name/fo/forgejo/package.nix     @adamcstephens @bendlas @emilylange
 
 # Dotnet
 /pkgs/build-support/dotnet                  @IvarWithoutBones
@@ -345,8 +348,11 @@ pkgs/development/tools/continuous-integration/buildbot @Mic92 @zowoq
 
 # Pretix
 pkgs/by-name/pr/pretix/ @mweinelt
+pkgs/by-name/pr/pretalx/ @mweinelt
 nixos/modules/services/web-apps/pretix.nix @mweinelt
+nixos/modules/services/web-apps/pretalx.nix @mweinelt
 nixos/tests/web-apps/pretix.nix @mweinelt
+nixos/tests/web-apps/pretalx.nix @mweinelt
 
 # incus/lxc/lxd
 nixos/maintainers/scripts/lxd/          @adamcstephens
@@ -360,3 +366,15 @@ pkgs/by-name/lx/lxc*                    @adamcstephens
 pkgs/by-name/lx/lxd*                    @adamcstephens
 pkgs/os-specific/linux/lxc/             @adamcstephens
 
+# ExpidusOS, Flutter
+/pkgs/development/compilers/flutter @RossComputerGuy
+/pkgs/desktops/expidus              @RossComputerGuy
+
+# GNU Tar & Zip
+/pkgs/tools/archivers/gnutar        @RossComputerGuy
+/pkgs/tools/archivers/zip           @RossComputerGuy
+
+# SELinux
+/pkgs/os-specific/linux/checkpolicy @RossComputerGuy
+/pkgs/os-specific/linux/libselinux  @RossComputerGuy
+/pkgs/os-specific/linux/libsepol    @RossComputerGuy

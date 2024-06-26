@@ -43,7 +43,7 @@ buildGoModule rec {
 
   meta = {
     changelog = "https://github.com/danielfoehrKn/kubeswitch/releases/tag/${version}";
-    description = "The kubectx for operators, a drop-in replacement for kubectx";
+    description = "Kubectx for operators, a drop-in replacement for kubectx";
     license = lib.licenses.asl20;
     homepage = "https://github.com/danielfoehrKn/kubeswitch";
     maintainers = with lib.maintainers; [ bryanasdev000 ];

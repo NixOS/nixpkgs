@@ -46,7 +46,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   meta = with lib; {
-    description = "A cargo subcommand to build and install C-ABI compatible dynamic and static libraries";
+    description = "Cargo subcommand to build and install C-ABI compatible dynamic and static libraries";
     longDescription = ''
       Cargo C-ABI helpers. A cargo applet that produces and installs a correct
       pkg-config file, a static library and a dynamic library, and a C header

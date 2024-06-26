@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with lib; {
-    description = "A POS-based cryptocurrency that rewards users for participating on the BOINC network";
+    description = "POS-based cryptocurrency that rewards users for participating on the BOINC network";
     longDescription = ''
       A POS-based cryptocurrency that rewards users for participating on the BOINC network,
       using peer-to-peer technology to operate with no central authority - managing transactions,

@@ -54,12 +54,26 @@ let
     else if stdenv.hostPlatform.osxMinVersion == "10.5"  then "9"
     else "8";
 
+  cpu =
+    /**/ if stdenv.hostPlatform.isArmv7 then "armv7"
+    else if stdenv.hostPlatform.isAarch64 then "arm64"
+    else if stdenv.hostPlatform.isx86_32 then "x86"
+    else stdenv.hostPlatform.parsed.cpu.name;
+
   kernel =
     # Build system doesn't understand BSD, so pretend to be Linux.
     /**/ if stdenv.isBSD then "linux"
     else if stdenv.isDarwin then "darwin${darwinVersion}"
     else stdenv.hostPlatform.parsed.kernel.name;
 
+  isGeneric =
+    /**/ (stdenv.hostPlatform.isPower && stdenv.hostPlatform.isLittleEndian)
+    || stdenv.hostPlatform.parsed.cpu.name == "armv6l";
+
+  target =
+    /**/ if (stdenv.isBSD || stdenv.hostPlatform != stdenv.buildPlatform) then
+      (if isGeneric then "generic-gnu" else "${cpu}-${kernel}-gcc")
+    else null;
 in
 
 assert vp8DecoderSupport || vp8EncoderSupport || vp9DecoderSupport || vp9EncoderSupport;
@@ -163,8 +177,8 @@ stdenv.mkDerivation rec {
     (enableFeature (experimentalSpatialSvcSupport ||
                     experimentalFpMbStatsSupport ||
                     experimentalEmulateHardwareSupport) "experimental")
-  ] ++ optionals (stdenv.isBSD || stdenv.hostPlatform != stdenv.buildPlatform) [
-    "--force-target=${stdenv.hostPlatform.parsed.cpu.name}-${kernel}-gcc"
+  ] ++ optionals (target != null) [
+    "--target=${target}"
     (lib.optionalString stdenv.hostPlatform.isCygwin "--enable-static-msvcrt")
   ] # Experimental features
     ++ optional experimentalSpatialSvcSupport "--enable-spatial-svc"

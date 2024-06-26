@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = with lib; {
-    description = "A Tiny Racket for Scripting";
+    description = "Tiny Racket for Scripting";
     mainProgram = "zuo";
     homepage = "https://github.com/racket/zuo";
     license = licenses.mit;

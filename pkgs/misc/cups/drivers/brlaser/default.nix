@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   cmakeFlags = [ "-DCUPS_SERVER_BIN=lib/cups" "-DCUPS_DATA_DIR=share/cups" ];
 
   meta = with lib; {
-    description = "A CUPS driver for Brother laser printers";
+    description = "CUPS driver for Brother laser printers";
     longDescription =
       ''
        Although most Brother printers support a standard printer language such as PCL or PostScript, not all do. If you have a monochrome Brother laser printer (or multi-function device) and the other open source drivers don't work, this one might help.

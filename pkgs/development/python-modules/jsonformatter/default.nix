@@ -1,7 +1,8 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, setuptools
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -18,9 +19,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ setuptools ];
 
-  pythonImportsCheck = [
-    "jsonformatter"
-  ];
+  pythonImportsCheck = [ "jsonformatter" ];
 
   meta = with lib; {
     description = "jsonformatter is a formatter for python output json log, e.g. output LogStash needed log";

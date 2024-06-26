@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, llama-index-core
-, llama-parse
-, poetry-core
-, pythonOlder
-, pythonRelaxDepsHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  llama-index-core,
+  llama-parse,
+  poetry-core,
+  pythonOlder,
+  pythonRelaxDepsHook,
 }:
 
 buildPythonPackage rec {
@@ -21,9 +22,7 @@ buildPythonPackage rec {
     hash = "sha256-eGCLGTyBiJSu/u4KowPwK3+A8uTK8Thmwv07CxAj4sA=";
   };
 
-  pythonRelaxDeps = [
-    "llama-parse"
-  ];
+  pythonRelaxDeps = [ "llama-parse" ];
 
   nativeBuildInputs = [
     poetry-core
@@ -38,9 +37,7 @@ buildPythonPackage rec {
   # Tests are only available in the mono repo
   doCheck = false;
 
-  pythonImportsCheck = [
-    "llama_index.readers.llama_parse"
-  ];
+  pythonImportsCheck = [ "llama_index.readers.llama_parse" ];
 
   meta = with lib; {
     description = "LlamaIndex Readers Integration for files";

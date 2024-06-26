@@ -95,10 +95,12 @@ let
       inherit (callPackage ./occivink.nix { }) blacklistExtensions seekTo;
 
       buildLua = callPackage ./buildLua.nix { };
+      autosubsync-mpv = callPackage ./autosubsync-mpv.nix { };
       chapterskip = callPackage ./chapterskip.nix { };
       convert = callPackage ./convert.nix { };
       cutter = callPackage ./cutter.nix { };
       dynamic-crop = callPackage ./dynamic-crop.nix { };
+      evafast = callPackage ./evafast.nix { };
       inhibit-gnome = callPackage ./inhibit-gnome.nix { };
       memo = callPackage ./memo.nix { };
       manga-reader = callPackage ./manga-reader.nix { };

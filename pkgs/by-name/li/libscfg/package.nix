@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://sr.ht/~emersion/libscfg";
-    description = "A simple configuration file format";
+    description = "Simple configuration file format";
     license = licenses.mit;
     maintainers = with maintainers; [ michaeladler ];
     platforms = platforms.linux;

@@ -20,7 +20,7 @@ stdenvNoCC.mkDerivation {
   '';
 
   meta = with lib; {
-    description = "A 21st century LaTeX wrapper";
+    description = "21st century LaTeX wrapper";
     mainProgram = "latexrun";
     homepage = "https://github.com/aclements/latexrun";
     license = licenses.mit;

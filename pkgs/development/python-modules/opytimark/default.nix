@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, numpy
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  numpy,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -28,13 +29,9 @@ buildPythonPackage rec {
     })
   ];
 
-  propagatedBuildInputs = [
-    numpy
-  ];
+  propagatedBuildInputs = [ numpy ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   # several tests are failing
   disabledTests = [
@@ -44,9 +41,7 @@ buildPythonPackage rec {
     "cec_benchmark"
   ];
 
-  pythonImportsCheck = [
-    "opytimark"
-  ];
+  pythonImportsCheck = [ "opytimark" ];
 
   meta = with lib; {
     description = "Library consisting of optimization benchmarking functions";

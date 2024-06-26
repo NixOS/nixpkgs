@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage rec {
   cargoSha256 = "01a8k60qnx2pgxb2adgw30c2hjb60w6230khm5hyqgmp7z4rm8k8";
 
   meta = with lib; {
-    description = "A stupid simple graphical login manager";
+    description = "Stupid simple graphical login manager";
     mainProgram = "dlm";
     homepage = "https://git.sr.ht/~kennylevinsen/dlm";
     license = licenses.gpl3Plus;

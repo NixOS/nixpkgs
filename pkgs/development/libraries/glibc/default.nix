@@ -182,6 +182,6 @@ in
         inherit libgcc;
       };
 
-  meta = (previousAttrs.meta or {}) // { description = "The GNU C Library"; };
+  meta = (previousAttrs.meta or {}) // { description = "GNU C Library"; };
 })
 

@@ -2,11 +2,11 @@
 
 appimageTools.wrapType2 rec {
   name = "steam-rom-manager";
-  version = "2.4.24";
+  version = "2.5.11";
 
   src = fetchurl {
     url = "https://github.com/SteamGridDB/steam-rom-manager/releases/download/v${version}/Steam-ROM-Manager-${version}.AppImage";
-    sha256 = "sha256-mNH6ySA2bW5gEHGSJgJ8e2XkQrObQeiAWQlAp7aV688=";
+    sha256 = "sha256-KeJ1O7YZOP8l09XFIa043tEAAU6bwpvCsJQ5r5aeuQY=";
   };
 
   extraInstallCommands = let
@@ -19,7 +19,7 @@ appimageTools.wrapType2 rec {
     '';
 
   meta = with lib; {
-    description = "An app for managing ROMs in Steam";
+    description = "App for managing ROMs in Steam";
     homepage = "https://github.com/SteamGridDB/steam-rom-manager";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ squarepear ];

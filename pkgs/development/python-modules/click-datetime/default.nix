@@ -1,5 +1,9 @@
-{ lib, buildPythonPackage, fetchFromGitHub
-, click }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  click,
+}:
 
 buildPythonPackage rec {
   pname = "click-datetime";
@@ -21,7 +25,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "click_datetime" ];
 
   meta = with lib; {
-    description = "Datetime type support for click.";
+    description = "Datetime type support for click";
     homepage = "https://github.com/click-contrib/click-datetime";
     license = licenses.mit;
     maintainers = with maintainers; [ hexa ];

@@ -23,14 +23,14 @@ stdenv.mkDerivation rec {
   #   in \
   #   rWrapper.override{ packages = [ lgbm ]; }"
   pname = lib.optionalString rLibrary "r-" + pnameBase;
-  version = "4.3.0";
+  version = "4.4.0";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = pnameBase;
     rev = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-hEoGdzC6n8t14ZUFWFrdljEkQRo9qaDGYTamvIAgrbg=";
+    hash = "sha256-i4mtJwSwnbGMXVfQ8a9jZZPUBBibXyQPgMVJ3uXxeGQ=";
   };
 
   nativeBuildInputs = [ cmake ]

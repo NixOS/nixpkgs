@@ -12,13 +12,13 @@
 
 buildDotnetModule rec {
   pname = "naps2";
-  version = "7.4.0";
+  version = "7.4.2";
 
   src = fetchFromGitHub {
     owner = "cyanfish";
     repo = "naps2";
     rev = "v${version}";
-    hash = "sha256-zU6VjHNtuX8JHC03CmaDnTAAei+mEhA/oMs9p42EgtA=";
+    hash = "sha256-1tPPb8bAQSc5FpizWpi7q4alxoA6xfb/QOAaTK2eNc8=";
   };
 
   projectFile = "NAPS2.App.Gtk/NAPS2.App.Gtk.csproj";
@@ -48,7 +48,7 @@ buildDotnetModule rec {
   '';
 
   meta = {
-    description = "Scan documents to PDF and more, as simply as possible.";
+    description = "Scan documents to PDF and more, as simply as possible";
     homepage = "https://www.naps2.com";
     changelog = "https://github.com/cyanfish/naps2/blob/master/CHANGELOG.md";
     license = lib.licenses.gpl2Plus;

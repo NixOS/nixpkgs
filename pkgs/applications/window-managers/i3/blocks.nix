@@ -25,7 +25,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ autoreconfHook pkg-config ];
 
   meta = {
-    description = "A flexible scheduler for your i3bar blocks";
+    description = "Flexible scheduler for your i3bar blocks";
     mainProgram = "i3blocks";
     homepage = "https://github.com/vivien/i3blocks";
     license = licenses.gpl3;

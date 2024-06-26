@@ -10,10 +10,8 @@ vscode-utils.buildVscodeMarketplaceExtension {
   mktplcRef = {
     name = "tinymist";
     publisher = "myriad-dreamin";
-    # Please update the corresponding binary (tinymist) when updating
-    # this extension.
-    version = "0.11.6";
-    hash = "sha256-qS+QY9RmJYXWRcohMcorF3SxoniBPE8SFcg0Ka1vvOE=";
+    inherit (tinymist) version;
+    hash = "sha256-Oama8FkRhEY4yza77RpWHg0Aeo9WFhveucJqJvCYMJQ=";
   };
 
   nativeBuildInputs = [
@@ -30,7 +28,7 @@ vscode-utils.buildVscodeMarketplaceExtension {
 
   meta = {
     changelog = "https://marketplace.visualstudio.com/items/myriad-dreamin.tinymist/changelog";
-    description = "A VSCode extension for providing an integration solution for Typst";
+    description = "VSCode extension for providing an integration solution for Typst";
     downloadPage = "https://marketplace.visualstudio.com/items?itemName=myriad-dreamin.tinymist";
     homepage = "https://github.com/myriad-dreamin/tinymist";
     license = lib.licenses.asl20;

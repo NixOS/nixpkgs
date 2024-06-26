@@ -1,7 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -21,13 +22,9 @@ buildPythonPackage rec {
       --replace "setup_requires='pytest-runner'," ""
   '';
 
-  pythonImportsCheck = [
-    "apcaccess"
-  ];
+  pythonImportsCheck = [ "apcaccess" ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     description = "Library offers programmatic access to the status information provided by apcupsd over its Network Information Server";

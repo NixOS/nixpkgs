@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, fetchurl, perlPackages, shortenPerlShebang, texlive }:
+{ lib, stdenv, fetchFromGitHub, perlPackages, shortenPerlShebang, texlive }:
 
 let
   biberSource = texlive.pkgs.biber-ms.texsource;

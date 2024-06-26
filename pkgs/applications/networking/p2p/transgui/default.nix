@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, makeDesktopItem, fetchpatch, unzip
+{ lib, stdenv, fetchFromGitHub, pkg-config, makeDesktopItem, unzip
 , fpc, lazarus, libX11, glib, gtk2, gdk-pixbuf, pango, atk, cairo, openssl
 , unstableGitUpdater }:
 

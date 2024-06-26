@@ -13,7 +13,7 @@ buildGoModule {
   vendorHash = "sha256-zJJ9PzQShv2iRNyCg1XVscbwjV9ZtMIojJDtXXm3rVM=";
 
   meta = with lib; {
-    description = "A file system based matrix client";
+    description = "File system based matrix client";
     mainProgram = "mm";
     homepage = "https://git.lost.host/meutraa/mm";
     license = licenses.isc;

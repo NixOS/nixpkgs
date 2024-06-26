@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/lxqt/pavucontrol-qt";
-    description = "A Pulseaudio mixer in Qt (port of pavucontrol)";
+    description = "Pulseaudio mixer in Qt (port of pavucontrol)";
     mainProgram = "pavucontrol-qt";
     license = licenses.gpl2Plus;
     platforms = with platforms; linux;

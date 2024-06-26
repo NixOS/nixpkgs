@@ -7,16 +7,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-i18n";
-  version = "0.2.12";
+  version = "0.2.13";
 
   src = fetchFromGitHub {
     owner = "kellpossible";
     repo = "cargo-i18n";
     rev = "v${version}";
-    hash = "sha256-ck0GYy9DLngOunpItGQ4+qrlzaWDk0zTnIzuRQt2/Gw=";
+    hash = "sha256-azwQlXsoCgNB/TjSBBE+taUR1POBJXaPnS5Sr+HVR90=";
   };
 
-  cargoHash = "sha256-nvZx2wJDs7PZQLCl8Hrf2blR+lNUBVr6k664VSVQ5iI=";
+  cargoHash = "sha256-vN62QmCuhu7AjL6xSpBU6/ul4WgNLZbjWDCFyHj6rIM=";
 
   buildInputs = lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.Foundation

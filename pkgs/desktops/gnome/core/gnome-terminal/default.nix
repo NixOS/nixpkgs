@@ -27,16 +27,16 @@
 , nixosTests
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-terminal";
-  version = "3.52.1";
+  version = "3.52.2";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "GNOME";
     repo = "gnome-terminal";
-    rev = version;
-    hash = "sha256-npoQfe5+HTn7CsrW6MuOoiYBc3rYMAMv4apC6dFR8O4=";
+    rev = finalAttrs.version;
+    hash = "sha256-c6xMUyhQnJiIrFnnUEx6vGVvFghGvLjTxiAFq+nSj2A=";
   };
 
   nativeBuildInputs = [
@@ -87,11 +87,11 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "The GNOME Terminal Emulator";
+    description = "GNOME Terminal Emulator";
     mainProgram = "gnome-terminal";
     homepage = "https://gitlab.gnome.org/GNOME/gnome-terminal";
     platforms = platforms.linux;
     license = licenses.gpl3Plus;
     maintainers = teams.gnome.members;
   };
-}
+})

@@ -1,7 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonAtLeast
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonAtLeast,
 }:
 
 buildPythonPackage rec {
@@ -23,5 +24,4 @@ buildPythonPackage rec {
     license = licenses.mit;
     maintainers = with maintainers; [ goibhniu ];
   };
-
 }

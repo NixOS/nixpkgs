@@ -1,16 +1,17 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, pytestCheckHook
-, libxslt
-, libxml2
-, libtool
-, pkg-config
-, xmlsec
-, pkgconfig
-, setuptools-scm
-, lxml
-, hypothesis
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  pytestCheckHook,
+  libxslt,
+  libxml2,
+  libtool,
+  pkg-config,
+  xmlsec,
+  pkgconfig,
+  setuptools-scm,
+  lxml,
+  hypothesis,
 }:
 
 buildPythonPackage rec {
@@ -23,13 +24,25 @@ buildPythonPackage rec {
     hash = "sha256-k0+ATy+JW824bx6u4ja2YQE1YO5p7BCNKc3W5fKSotk=";
   };
 
-  nativeBuildInputs = [ pkg-config pkgconfig setuptools-scm ];
+  nativeBuildInputs = [
+    pkg-config
+    pkgconfig
+    setuptools-scm
+  ];
 
-  buildInputs = [ xmlsec libxslt libxml2 libtool ];
+  buildInputs = [
+    xmlsec
+    libxslt
+    libxml2
+    libtool
+  ];
 
   propagatedBuildInputs = [ lxml ];
 
-  nativeCheckInputs = [ pytestCheckHook hypothesis ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    hypothesis
+  ];
 
   disabledTestPaths = [
     # Full git clone required for test_doc_examples

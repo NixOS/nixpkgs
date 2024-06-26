@@ -74,7 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "http://sawfish.tuxfamily.org/";
-    description = "An extensible, Lisp-based window manager";
+    description = "Extensible, Lisp-based window manager";
     longDescription = ''
       Sawfish is an extensible window manager using a Lisp-based scripting
       language. Its policy is very minimal compared to most window managers. Its

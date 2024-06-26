@@ -24,9 +24,12 @@ stdenv.mkDerivation rec {
     chmod +x $out/fuseki
     ln -s "$out"/{fuseki-backup,fuseki-server,fuseki} "$out/bin"
     for i in "$out"/bin/*; do
+      # It is necessary to set the default $FUSEKI_BASE directory to a writable location
+      # By default it points to $FUSEKI_HOME/run which is in the nix store
       wrapProgram "$i" \
         --prefix "PATH" : "${java}/bin/:${coreutils}/bin:${which}/bin" \
         --set-default "FUSEKI_HOME" "$out" \
+        --run "if [ -z \"\$FUSEKI_BASE\" ]; then export FUSEKI_BASE=\"\$HOME/.local/fuseki\" ; mkdir -p \"\$HOME/.local/fuseki\" ; fi" \
         ;
     done
   '';
@@ -40,7 +43,9 @@ stdenv.mkDerivation rec {
     license = licenses.asl20;
     maintainers = with maintainers; [ raskin ];
     platforms = platforms.all;
+    sourceProvenance = with sourceTypes; [ binaryBytecode binaryNativeCode ];
     homepage = "https://jena.apache.org";
     downloadPage = "https://archive.apache.org/dist/jena/binaries/";
+    mainProgram = "fuseki";
   };
 }

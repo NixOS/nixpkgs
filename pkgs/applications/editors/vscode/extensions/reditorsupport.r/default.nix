@@ -12,8 +12,8 @@ vscode-utils.buildVscodeMarketplaceExtension {
   mktplcRef = {
     name = "r";
     publisher = "reditorsupport";
-    version = "2.8.2";
-    hash = "sha256-FPL/JjW452KRchcQ0iHXRJarZXvS3B8PvZhXjf3rMhQ=";
+    version = "2.8.4";
+    hash = "sha256-wVT9/JUuqP8whW99q1gwVMf7PRzgZNLoIdlXsclpbck=";
   };
   nativeBuildInputs = [
     jq
@@ -33,7 +33,7 @@ vscode-utils.buildVscodeMarketplaceExtension {
   '';
   meta = {
     changelog = "https://marketplace.visualstudio.com/items/REditorSupport.r/changelog";
-    description = "A Visual Studio Code extension for the R programming language";
+    description = "Visual Studio Code extension for the R programming language";
     downloadPage = "https://marketplace.visualstudio.com/items?itemName=REditorSupport.r";
     homepage = "https://github.com/REditorSupport/vscode-R";
     license = lib.licenses.mit;

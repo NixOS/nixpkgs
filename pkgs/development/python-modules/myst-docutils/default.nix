@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, docutils
-, fetchPypi
-, flit-core
-, jinja2
-, markdown-it-py
-, mdit-py-plugins
-, pythonOlder
-, pyyaml
-, typing-extensions
+{
+  lib,
+  buildPythonPackage,
+  docutils,
+  fetchPypi,
+  flit-core,
+  jinja2,
+  markdown-it-py,
+  mdit-py-plugins,
+  pythonOlder,
+  pyyaml,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
@@ -22,9 +23,7 @@ buildPythonPackage rec {
     hash = "sha256-alQvF0OWNjDck022ORJ1Nl4t1jgzMZKEbJxPHsrmBcI=";
   };
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  nativeBuildInputs = [ flit-core ];
 
   propagatedBuildInputs = [
     docutils
@@ -38,7 +37,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "myst_parser" ];
 
   meta = with lib; {
-    description = "An extended commonmark compliant parser, with bridges to docutils/sphinx.";
+    description = "Extended commonmark compliant parser, with bridges to docutils/sphinx";
     homepage = "https://github.com/executablebooks/MyST-Parser";
     license = licenses.mit;
     maintainers = with maintainers; [ dpausp ];

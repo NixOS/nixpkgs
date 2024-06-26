@@ -12,13 +12,13 @@ SystemConfiguration
 
 rustPlatform.buildRustPackage rec {
   pname = "trunk";
-  version = "0.20.0";
+  version = "0.20.2";
 
   src = fetchFromGitHub {
     owner = "trunk-rs";
     repo = "trunk";
     rev = "v${version}";
-    hash = "sha256-iUW2tltF8RGyd84rN60Wv2NFgHS/x3cEFeD+YhMizhY=";
+    hash = "sha256-hyjv3UJWIfJjdGtju4T6ufhz97F76uib/B9kyBHsC64=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -28,7 +28,7 @@ rustPlatform.buildRustPackage rec {
   # requires network
   checkFlags = [ "--skip=tools::tests::download_and_install_binaries" ];
 
-  cargoHash = "sha256-fUURwuOwuI9ED08AwrVLhQtltwczyX4Q2M4rZlNEAHU=";
+  cargoHash = "sha256-BI/jA5/7/QP62EtOXXRkbsJILsHbVacZY/bKZGcXk34=";
 
   meta = with lib; {
     homepage = "https://github.com/trunk-rs/trunk";

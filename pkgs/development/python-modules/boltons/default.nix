@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -19,16 +20,12 @@ buildPythonPackage rec {
     hash = "sha256-Ie5CPT2u/2/hAIhDzXT6CPzJwmbgt3B6q3oxqKYb27o=";
   };
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   # Tests bind to localhost
   __darwinAllowLocalNetworking = true;
 
-  pythonImportsCheck = [
-    "boltons"
-  ];
+  pythonImportsCheck = [ "boltons" ];
 
   meta = with lib; {
     description = "Constructs, recipes, and snippets extending the Python standard library";

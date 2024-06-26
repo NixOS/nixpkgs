@@ -1,10 +1,11 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, isPy3k
-, dawg-python
-, docopt
-, pymorphy2-dicts-ru
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  isPy3k,
+  dawg-python,
+  docopt,
+  pymorphy2-dicts-ru,
 }:
 
 buildPythonPackage rec {

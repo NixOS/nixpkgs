@@ -5,12 +5,11 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "litecli";
-  version = "1.10.1";
-  disabled = python3Packages.pythonOlder "3.4";
+  version = "1.11.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-N+aAH2vgDV1YU7iIHbH/276bCBfGxhuy2ceWL2z/oI8=";
+    sha256 = "sha256-YW3mjYfSuxi/XmaetrWmjVuTfqgaitQ5wfUaJdHIH1Y=";
   };
 
   propagatedBuildInputs = with python3Packages; [
