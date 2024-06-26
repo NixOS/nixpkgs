@@ -1,7 +1,8 @@
-{ fetchzip, lib }:
+{ lib, repoRevToNameMaybe, fetchzip }:
 
 lib.makeOverridable (
-{ owner, repo, rev, name ? "source"
+{ owner, repo, rev
+, name ? repoRevToNameMaybe repo rev "bitbucket"
 , ... # For hash agility
 }@args: fetchzip ({
   inherit name;

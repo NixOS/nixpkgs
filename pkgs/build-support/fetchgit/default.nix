@@ -1,22 +1,20 @@
-{lib, stdenvNoCC, git, git-lfs, cacert}: let
+{lib, stdenvNoCC, git, git-lfs, cacert}:
+
+let
   urlToName = url: rev: let
-    inherit (lib) removeSuffix splitString last;
-    base = last (splitString ":" (baseNameOf (removeSuffix "/" url)));
-
-    matched = builtins.match "(.*)\\.git" base;
-
-    short = builtins.substring 0 7 rev;
-
-    appendShort = lib.optionalString ((builtins.match "[a-f0-9]*" rev) != null) "-${short}";
-  in "${if matched == null then base else builtins.head matched}${appendShort}";
+    shortRev = lib.sources.shortRev rev;
+    appendShort = lib.optionalString ((builtins.match "[a-f0-9]*" rev) != null) "-${shortRev}";
+  in "${lib.sources.urlToName url}${appendShort}";
 in
+
 lib.makeOverridable (
-{ url, rev ? "HEAD", sha256 ? "", hash ? "", leaveDotGit ? deepClone
+{ url, rev ? "HEAD"
+, name ? urlToName url rev
+, sha256 ? "", hash ? "", leaveDotGit ? deepClone
 , fetchSubmodules ? true, deepClone ? false
 , branchName ? null
 , sparseCheckout ? []
 , nonConeMode ? false
-, name ? urlToName url rev
 , # Shell code executed after the file has been fetched
   # successfully. This can do things like check or transform the file.
   postFetch ? ""

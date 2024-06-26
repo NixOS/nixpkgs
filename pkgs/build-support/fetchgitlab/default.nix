@@ -1,8 +1,9 @@
-{ lib, fetchgit, fetchzip }:
+{ lib, repoRevToNameMaybe, fetchgit, fetchzip }:
 
 lib.makeOverridable (
 # gitlab example
-{ owner, repo, rev, protocol ? "https", domain ? "gitlab.com", name ? "source", group ? null
+{ owner, repo, rev, protocol ? "https", domain ? "gitlab.com", group ? null
+, name ? repoRevToNameMaybe repo rev "gitlab"
 , fetchSubmodules ? false, leaveDotGit ? false
 , deepClone ? false, forceFetchGit ? false
 , sparseCheckout ? []
