@@ -1,4 +1,17 @@
-{ lib, stdenv, fetchurl, openssl, zlib, windows }:
+{ lib
+, stdenv
+, fetchurl
+, openssl
+, zlib
+, windows
+
+# for passthru.tests
+, aria2
+, curl
+, libgit2
+, mc
+, vlc
+}:
 
 stdenv.mkDerivation rec {
   pname = "libssh2";
@@ -26,6 +39,11 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ openssl ]; # see Libs: in libssh2.pc
   buildInputs = [ zlib ]
     ++ lib.optional stdenv.hostPlatform.isMinGW windows.mingw_w64;
+
+  passthru.tests = {
+    inherit aria2 libgit2 mc vlc;
+    curl = (curl.override { scpSupport = true; }).tests.withCheck;
+  };
 
   meta = with lib; {
     description = "Client-side C library implementing the SSH2 protocol";
