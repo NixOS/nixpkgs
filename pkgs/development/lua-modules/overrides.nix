@@ -161,6 +161,18 @@ in
     '';
   });
 
+  gitsigns-nvim = prev.gitsigns-nvim.overrideAttrs {
+    doCheck = true;
+    # We shall skip the official testsuite that relies on nvim-test and call busted ourselves
+    # https://github.com/lewis6991/gitsigns.nvim/blob/main/Makefile#L25C1-L27C23
+    # TODO need busted
+    checkPhase = ''
+      runHook preCheck
+      make test
+      runHook postCheck
+    '';
+  };
+
   http = prev.http.overrideAttrs (oa: {
     patches = [
       (fetchpatch {
