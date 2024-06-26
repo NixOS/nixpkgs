@@ -4,7 +4,6 @@
 , fetchFromGitHub
 , jdk11
 , gradle_6
-, perl
 , metasploit
 , makeWrapper
 , makeDesktopItem
@@ -15,6 +14,8 @@
 let
   pname = "armitage";
   version = "unstable-2022-12-05";
+
+  gradle = gradle_6;
 
   src = fetchFromGitHub {
     owner = "r00t0v3rr1d3";
@@ -46,30 +47,9 @@ let
     })
   ];
 
-  deps = stdenv.mkDerivation {
-    pname = "${pname}-deps";
-    inherit version src patches;
-    nativeBuildInputs = [ gradle_6 perl ];
-    buildPhase = ''
-      export GRADLE_USER_HOME=$(mktemp -d)
-      gradle --no-daemon assemble
-    '';
-    # perl code mavenizes pathes (com.squareup.okio/okio/1.13.0/a9283170b7305c8d92d25aff02a6ab7e45d06cbe/okio-1.13.0.jar -> com/squareup/okio/okio/1.13.0/okio-1.13.0.jar)
-    installPhase = ''
-      find $GRADLE_USER_HOME -type f -regex '.*\.\(jar\|pom\)' \
-        | perl -pe 's#(.*/([^/]+)/([^/]+)/([^/]+)/[0-9a-f]{30,40}/([^/\s]+))$# ($x = $2) =~ tr|\.|/|; "install -Dm444 $1 \$out/$x/$3/$4/$5" #e' \
-        | sh
-      rm -rf $out/tmp
-    '';
-    outputHashAlgo = "sha256";
-    outputHashMode = "recursive";
-    outputHash = "sha256-6o3HlBfmpjpmMeiRydOme6fJc8caq8EBRVf3nJq9vqo=";
-  };
 in
 stdenv.mkDerivation (finalAttrs: {
   inherit pname version src patches;
-
-  __darwinAllowLocalNetworking = true;
 
   desktopItems = [
     (makeDesktopItem {
@@ -85,25 +65,19 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     jdk11
-    gradle_6
+    gradle
     makeWrapper
     copyDesktopItems
   ] ++ lib.optionals stdenv.isDarwin [
     writeDarwinBundle
   ];
 
-  buildPhase = ''
-    runHook preBuild
+  mitmCache = gradle.fetchDeps {
+    inherit pname;
+    data = ./deps.json;
+  };
 
-    export GRADLE_USER_HOME=$(mktemp -d)
-    substituteInPlace armitage/build.gradle \
-      --replace 'mavenCentral()' 'mavenLocal(); maven { url uri("${deps}") }'
-    substituteInPlace cortana/build.gradle \
-      --replace 'mavenCentral()' 'mavenLocal(); maven { url uri("${deps}") }'
-    gradle --offline --no-daemon assemble
-
-    runHook postBuild
-  '';
+  __darwinAllowLocalNetworking = true;
 
   installPhase = ''
     runHook preInstall
