@@ -36,6 +36,7 @@
 , tzdata
 , gcr_4
 , gnome-session-ctl
+, disabled-plugins ? []
 }:
 
 stdenv.mkDerivation rec {
@@ -54,6 +55,13 @@ stdenv.mkDerivation rec {
     (substituteAll {
       src = ./fix-paths.patch;
       inherit tzdata;
+    })
+
+    # HACK: We want to be able to disable arbitrary gnome-settings-daemon plugins,
+    # but Meson does not support this, so we need to convince it to anyway.
+    (substituteAll {
+      src = ./disabled-plugins.patch;
+      disabled = lib.concatStringsSep ", " (map (x: "'" + x + "'") disabled-plugins);
     })
   ];
 
