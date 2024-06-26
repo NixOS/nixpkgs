@@ -33658,15 +33658,6 @@ let
         sha512 = "XmOWe7eyHYH14cLdVPoyg+GOH3rYX++KpzrylJwSW98t3Nk+U8XOl8FWKOgwtzdb8lXGf6zYwDUzeHMWfxasyg==";
       };
     };
-    "json5-relaxed-0.5.4" = {
-      name = "json5-relaxed";
-      packageName = "json5-relaxed";
-      version = "0.5.4";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/json5-relaxed/-/json5-relaxed-0.5.4.tgz";
-        sha512 = "oDPf7b6nFDKcX2qt5OLI/ZwGwH43qS/g2Z98UWo8ChoNtVMYdGa3Y48WHvjPqvNKnTUa2fOanvHFeE7ZxkiboQ==";
-      };
-    };
     "jsonata-1.8.7" = {
       name = "jsonata";
       packageName = "jsonata";
@@ -72553,55 +72544,6 @@ in
       description = "faunadb shell";
       homepage = "https://github.com/fauna/fauna-shell";
       license = "MPL-2.0";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
-  fixjson = nodeEnv.buildNodePackage {
-    name = "fixjson";
-    packageName = "fixjson";
-    version = "1.1.2";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/fixjson/-/fixjson-1.1.2.tgz";
-      sha512 = "NptKAXT3UrePy8JfK6ww/yiwqjVipouoEYUucKVpLNOiOWsrZ7XtcG3iUWpb3yGUoaN7OEafsd3cEGFMIjoXUQ==";
-    };
-    dependencies = [
-      sources."ansi-regex-5.0.1"
-      sources."ansi-styles-4.3.0"
-      sources."balanced-match-1.0.2"
-      sources."brace-expansion-1.1.11"
-      sources."cliui-7.0.4"
-      sources."color-convert-2.0.1"
-      sources."color-name-1.1.4"
-      sources."concat-map-0.0.1"
-      sources."detect-indent-6.1.0"
-      sources."emoji-regex-8.0.0"
-      sources."escalade-3.1.2"
-      sources."fs.realpath-1.0.0"
-      sources."get-caller-file-2.0.5"
-      sources."glob-7.2.3"
-      sources."inflight-1.0.6"
-      sources."inherits-2.0.4"
-      sources."is-fullwidth-code-point-3.0.0"
-      sources."json5-relaxed-0.5.4"
-      sources."minimatch-3.1.2"
-      sources."once-1.4.0"
-      sources."path-is-absolute-1.0.1"
-      sources."require-directory-2.1.1"
-      sources."string-width-4.2.3"
-      sources."strip-ansi-6.0.1"
-      sources."wrap-ansi-7.0.0"
-      sources."wrappy-1.0.2"
-      sources."y18n-5.0.8"
-      sources."yargs-16.2.0"
-      sources."yargs-parser-20.2.9"
-    ];
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "JSON fixer for humans using (relaxed) JSON5";
-      homepage = "https://github.com/rhysd/fixjson#readme";
-      license = "MIT";
     };
     production = true;
     bypassCache = true;
