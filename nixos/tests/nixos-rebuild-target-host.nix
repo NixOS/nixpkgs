@@ -26,6 +26,23 @@ import ./make-test-python.nix ({ pkgs, ... }: {
       system.build.publicKey = snakeOilPublicKey;
     };
 
+    builder = { nodes, lib, ... }: {
+      nix.settings = {
+        substituters = lib.mkForce [ ];
+        hashed-mirrors = null;
+        connect-timeout = 1;
+      };
+
+      system.includeBuildDependencies = true;
+
+      services.openssh.enable = true;
+      users.users.root.openssh.authorizedKeys.keys = [ nodes.deployer.system.build.publicKey ];
+      virtualisation = {
+        cores = 2;
+        memorySize = 2048;
+      };
+    };
+
     target = { nodes, lib, ... }: let
       targetConfig = {
         documentation.enable = false;
@@ -65,7 +82,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
   testScript = { nodes, ... }:
     let
       sshConfig = builtins.toFile "ssh.conf" ''
-        UserKnownHostsFile=/dev/null
+        # UserKnownHostsFile=/dev/null
         StrictHostKeyChecking=no
       '';
 
@@ -99,14 +116,23 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     in
     ''
       start_all()
-      target.wait_for_open_port(22)
 
       deployer.wait_until_succeeds("ping -c1 target")
       deployer.succeed("install -Dm 600 ${nodes.deployer.system.build.privateKey} ~root/.ssh/id_ecdsa")
       deployer.succeed("install ${sshConfig} ~root/.ssh/config")
 
+      builder.wait_for_open_port(22)
+      # Nix needs a host key for the builder.
+      # nixos-rebuild otoh can be configured with an ssh config, because that's
+      # not behind nix-daemon.
+      deployer.succeed("ssh-keyscan builder >> ~root/.ssh/known_hosts")
+
       target.succeed("nixos-generate-config")
+      target.wait_for_open_port(22)
       deployer.succeed("scp alice@target:/etc/nixos/hardware-configuration.nix /root/hardware-configuration.nix")
+      deployer.succeed("cat ~root/.ssh/known_hosts >&2")
+      deployer.succeed("""echo "~ is" ~  " and ~root is " ~root >&2""")
+      deployer.succeed("find /root >&2")
 
       deployer.copy_from_host("${configFile "config-1-deployed"}", "/root/configuration-1.nix")
       deployer.copy_from_host("${configFile "config-2-deployed"}", "/root/configuration-2.nix")
@@ -119,7 +145,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
 
       # This test also ensures that sudo is not called without --use-remote-sudo
       with subtest("Deploy to root@target"):
-        deployer.succeed("nixos-rebuild switch -I nixos-config=/root/configuration-1.nix --target-host root@target &>/dev/console")
+        deployer.succeed("nixos-rebuild switch -I nixos-config=/root/configuration-1.nix --target-host root@target --build-host builder &>/dev/console")
         target_hostname = deployer.succeed("ssh alice@target cat /etc/hostname").rstrip()
         assert target_hostname == "config-1-deployed", f"{target_hostname=}"
 
