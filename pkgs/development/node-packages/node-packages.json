@@ -270,7 +270,6 @@
 , "vim-language-server"
 , "vls"
 , "vscode-json-languageserver"
-, "vscode-json-languageserver-bin"
 , "wavedrom-cli"
 , "webpack"
 , "webpack-cli"

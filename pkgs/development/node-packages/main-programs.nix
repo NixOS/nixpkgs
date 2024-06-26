@@ -55,7 +55,6 @@
   typescript-language-server = "typescript-language-server";
   uglify-js = "uglifyjs";
   undollar = "$";
-  vscode-json-languageserver-bin = "json-languageserver";
   vscode-json-languageserver = "vscode-json-languageserver";
   webtorrent-cli = "webtorrent";
 }
