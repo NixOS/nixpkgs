@@ -92039,34 +92039,6 @@ in
     bypassCache = true;
     reconstructLock = true;
   };
-  vscode-css-languageserver-bin = nodeEnv.buildNodePackage {
-    name = "vscode-css-languageserver-bin";
-    packageName = "vscode-css-languageserver-bin";
-    version = "1.4.0";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/vscode-css-languageserver-bin/-/vscode-css-languageserver-bin-1.4.0.tgz";
-      sha512 = "KWrF5f4RYYe8RBDfqb1c0Sdf9xPS2Ly/Z/T18H+uUOMw2QyzIrkxv4bMKy5GFfPm4479k6Ln4ji4UHqSmhGf3g==";
-    };
-    dependencies = [
-      sources."vscode-css-languageservice-3.0.13"
-      sources."vscode-jsonrpc-8.2.0"
-      sources."vscode-languageserver-4.4.2"
-      sources."vscode-languageserver-protocol-3.17.5"
-      sources."vscode-languageserver-protocol-foldingprovider-2.0.1"
-      sources."vscode-languageserver-types-3.17.5"
-      sources."vscode-nls-4.1.2"
-      sources."vscode-uri-1.0.8"
-    ];
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "Binary version published on npm of vscode-css-languageserver extracted from VSCode tree";
-      homepage = "https://github.com/vscode-langservers/vscode-css-languageserver-bin#readme";
-      license = "MIT";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
   vscode-html-languageserver-bin = nodeEnv.buildNodePackage {
     name = "vscode-html-languageserver-bin";
     packageName = "vscode-html-languageserver-bin";
