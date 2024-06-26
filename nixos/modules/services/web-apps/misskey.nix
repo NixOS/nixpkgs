@@ -34,7 +34,11 @@ let
         url = lib.mkOption {
           type = lib.types.str;
           example = "https://example.tld/";
-          description = "The final user-facing URL. Do not change after running Misskey for the first time.";
+          description = ''
+            The final user-facing URL. Do not change after running Misskey for the first time.
+
+            This needs to match up with the configured reverse proxy and is automatically configured when using `services.misskey.reverseProxy`.
+          '';
         };
         port = lib.mkOption {
           type = lib.types.port;
@@ -66,22 +70,22 @@ let
               port = lib.mkOption {
                 type = lib.types.port;
                 default = 5432;
-                description = "The PostgreSQL port";
+                description = "The PostgreSQL port.";
               };
               db = lib.mkOption {
                 type = lib.types.str;
                 default = "misskey";
-                description = "The database name";
+                description = "The database name.";
               };
               user = lib.mkOption {
                 type = lib.types.str;
                 default = "misskey";
-                description = "The user used for database authentication";
+                description = "The user used for database authentication.";
               };
               pass = lib.mkOption {
                 type = lib.types.nullOr lib.types.str;
                 default = null;
-                description = "The password used for database authentication";
+                description = "The password used for database authentication.";
               };
               disableCache = lib.mkOption {
                 type = lib.types.bool;
@@ -178,36 +182,36 @@ in
         createLocally = lib.mkOption {
           type = lib.types.bool;
           default = false;
-          description = "Create the PostgreSQL database locally. Overrides `settings.db.{db,host,port,user,pass}`.";
+          description = "Create the PostgreSQL database locally. Overrides `services.misskey.settings.db.{db,host,port,user,pass}`.";
         };
         passwordFile = lib.mkOption {
           type = lib.types.nullOr lib.types.path;
           default = null;
-          description = "The path to a file containing the database password. Overrides `settings.db.pass`.";
+          description = "The path to a file containing the database password. Overrides `services.misskey.settings.db.pass`.";
         };
       };
       redis = {
         createLocally = lib.mkOption {
           type = lib.types.bool;
           default = false;
-          description = "Create and use a local Redis instance. Overrides `settings.redis.host`";
+          description = "Create and use a local Redis instance. Overrides `services.misskey.settings.redis.host`.";
         };
         passwordFile = lib.mkOption {
           type = lib.types.nullOr lib.types.path;
           default = null;
-          description = "The path to a file containing the Redis password. Overrides `settings.redis.pass`.";
+          description = "The path to a file containing the Redis password. Overrides `services.misskey.settings.redis.pass`.";
         };
       };
       meilisearch = {
         createLocally = lib.mkOption {
           type = lib.types.bool;
           default = false;
-          description = "Create and use a local Meilisearch instance. Overrides `settings.meilisearch.{host,port,ssl}`";
+          description = "Create and use a local Meilisearch instance. Overrides `services.misskey.settings.meilisearch.{host,port,ssl}`.";
         };
         keyFile = lib.mkOption {
           type = lib.types.nullOr lib.types.path;
           default = null;
-          description = "The path to a file containing the Meilisearch API key. Overrides `settings.meilisearch.apiKey`.";
+          description = "The path to a file containing the Meilisearch API key. Overrides `services.misskey.settings.meilisearch.apiKey`.";
         };
       };
       reverseProxy = {
@@ -233,11 +237,38 @@ in
           };
           description = "The webserver to use as the reverse proxy.";
         };
+        host = lib.mkOption {
+          type = lib.types.nullOr lib.types.str;
+          description = ''
+            The fully qualified domain name to bind to. Overrides `services.misskey.settings.url`.
+
+            This is required when using `services.misskey.reverseProxy.enable = true`.
+          '';
+          example = "misskey.example.com";
+          default = null;
+        };
+        ssl = lib.mkOption {
+          type = lib.types.nullOr lib.types.bool;
+          description = ''
+            Whether to enable SSL for the reverse proxy. Overrides `services.misskey.settings.url`.
+
+            This is required when using `services.misskey.reverseProxy.enable = true`.
+          '';
+          example = true;
+          default = null;
+        };
       };
     };
   };
 
   config = lib.mkIf cfg.enable {
+    assertions = [
+      {
+        assertion = cfg.reverseProxy.enable -> ((cfg.reverseProxy.host != null) && (cfg.reverseProxy.ssl != null));
+        message = "`services.misskey.reverseProxy.enable` requires `services.misskey.reverseProxy.host` and `services.misskey.reverseProxy.ssl` to be set.";
+      }
+    ];
+
     services.misskey.settings = lib.mkMerge [
       (lib.mkIf cfg.database.createLocally {
         db = {
@@ -268,6 +299,9 @@ in
       })
       (lib.mkIf (cfg.meilisearch.keyFile != null) {
         meilisearch.apiKey = lib.mkForce "@MEILISEARCH_KEY@";
+      })
+      (lib.mkIf cfg.reverseProxy.enable {
+        url = lib.mkForce "${if cfg.reverseProxy.ssl then "https" else "http"}://${cfg.reverseProxy.host}";
       })
     ];
 
@@ -333,8 +367,9 @@ in
       enable = true;
     };
 
-    services.caddy.virtualHosts = lib.mkIf (cfg.reverseProxy.enable && cfg.reverseProxy.webserver ? caddy) {
-      ${cfg.settings.url} = lib.mkMerge [
+    services.caddy = lib.mkIf (cfg.reverseProxy.enable && cfg.reverseProxy.webserver ? caddy) {
+      enable = true;
+      virtualHosts.${cfg.settings.url} = lib.mkMerge [
         cfg.reverseProxy.webserver.caddy
         {
           hostName = lib.mkForce cfg.settings.url;
@@ -345,16 +380,20 @@ in
       ];
     };
 
-    services.nginx.virtualHosts = lib.mkIf (cfg.reverseProxy.enable && cfg.reverseProxy.webserver ? nginx) {
-      ${cfg.settings.url} = lib.mkMerge [
+    services.nginx = lib.mkIf (cfg.reverseProxy.enable && cfg.reverseProxy.webserver ? nginx) {
+      enable = true;
+      virtualHosts.${cfg.reverseProxy.host} = lib.mkMerge [
         cfg.reverseProxy.webserver.nginx
         {
           locations."/" = {
-            proxyPass = "http://localhost:${toString cfg.settings.port}";
-            proxyWebsockets = true;
-            recommendedProxySettings = true;
+            proxyPass = lib.mkForce "http://localhost:${toString cfg.settings.port}";
+            proxyWebsockets = lib.mkForce true;
+            recommendedProxySettings = lib.mkForce true;
           };
         }
+        (lib.mkIf (cfg.reverseProxy.ssl != null) {
+          forceSSL = lib.mkForce cfg.reverseProxy.ssl;
+        })
       ];
     };
   };
