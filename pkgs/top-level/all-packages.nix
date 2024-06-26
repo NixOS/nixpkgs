@@ -22021,6 +22021,8 @@ with pkgs;
 
   libnats-c = callPackage ../development/libraries/libnats-c { };
 
+  # liboprf = callPackage ../development/libraries/liboprf { };
+
   liburing = callPackage ../development/libraries/liburing { };
 
   librseq = callPackage ../development/libraries/librseq { };
