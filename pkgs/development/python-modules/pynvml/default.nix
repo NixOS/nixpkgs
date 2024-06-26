@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  callPackage,
+  cudaPackages,
   fetchFromGitHub,
   substituteAll,
   pythonOlder,
@@ -9,6 +9,7 @@
   setuptools,
   pytestCheckHook,
   versioneer,
+  pynvml,
 }:
 
 buildPythonPackage rec {
@@ -51,7 +52,12 @@ buildPythonPackage rec {
   # OSError: /run/opengl-driver/lib/libnvidia-ml.so.1: cannot open shared object file: No such file or directory
   doCheck = false;
 
-  passthru.gpuChecks.nvmlInit = callPackage ./test-gpu.nix { };
+  passthru.tests.tester-nvmlInit = cudaPackages.writeGpuTestPython { libraries = [ pynvml ]; } ''
+    import pynvml
+    from pynvml.smi import nvidia_smi  # noqa: F401
+
+    print(f"{pynvml.nvmlInit()=}")
+  '';
 
   meta = with lib; {
     description = "Python bindings for the NVIDIA Management Library";

@@ -85,7 +85,6 @@ in
             opengl.paths = config.hardware.opengl.extraPackages ++ [
               config.hardware.opengl.package
               pkgs.addOpenGLRunpath.driverLink
-              "/dev/video*"
               "/dev/dri"
             ];
           }

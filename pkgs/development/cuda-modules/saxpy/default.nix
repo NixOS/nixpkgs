@@ -16,7 +16,6 @@ let
     cudatoolkit
     flags
     libcublas
-    setupCudaHook
     ;
   inherit (lib) getDev getLib getOutput;
   fs = lib.fileset;
@@ -59,20 +58,19 @@ backendStdenv.mkDerivation {
     (lib.cmakeFeature "CMAKE_CUDA_ARCHITECTURES" flags.cmakeCudaArchitecturesString)
   ];
 
-  passthru.gpuChecks.withCuda = saxpy.overrideAttrs (
-    _: {
-      requiredSystemFeatures = ["cuda"];
-      doInstallCheck = true;
-      postInstallCheck = ''
-        $out/bin/saxpy
-      '';
-    }
-  );
+  passthru.gpuCheck = saxpy.overrideAttrs (_: {
+    requiredSystemFeatures = [ "cuda" ];
+    doInstallCheck = true;
+    postInstallCheck = ''
+      $out/bin/${saxpy.meta.mainProgram or (lib.getName saxpy)}
+    '';
+  });
 
   meta = rec {
     description = "Simple (Single-precision AX Plus Y) FindCUDAToolkit.cmake example for testing cross-compilation";
     license = lib.licenses.mit;
     maintainers = lib.teams.cuda.members;
+    mainProgram = "saxpy";
     platforms = lib.platforms.unix;
     badPlatforms = lib.optionals (flags.isJetsonBuild && cudaOlder "11.4") platforms;
   };
