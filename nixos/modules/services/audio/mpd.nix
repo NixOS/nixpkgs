@@ -222,7 +222,7 @@ in {
       };
 
       settings = mkOption {
-        type = with types; nullOr (attrsOf (oneOf [ baseType (attrsOf baseType) (listOf (attrsOf baseType)) ]));
+        type = with types; nullOr (attrsOf (oneOf [ baseType (listOf baseType) (attrsOf baseType) (listOf (attrsOf baseType)) ]));
         default = null;
         description = ''
           Manages the configuration file declaratively.
