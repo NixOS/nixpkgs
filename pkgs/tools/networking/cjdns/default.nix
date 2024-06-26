@@ -1,66 +1,44 @@
 { lib
-, stdenv
 , fetchFromGitHub
 , rustPlatform
 , nodejs
-, which
+, git
 , python39
-, libuv
-, util-linux
 , nixosTests
-, libsodium
-, pkg-config
-, substituteAll
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cjdns";
-  version = "21.4";
+  date = "2024-06-26";
+  version = "22-unstable-${date}";
 
   src = fetchFromGitHub {
     owner = "cjdelisle";
     repo = "cjdns";
-    rev = "cjdns-v${version}";
-    sha256 = "sha256-vI3uHZwmbFqxGasKqgCl0PLEEO8RNEhwkn5ZA8K7bxU=";
+    rev = "3e61aa36d92a4a0171c2e7586b3a14dac7b90df8";
+    sha256 = "sha256-qDiofLQ0xK/gHF7tdXgHIRuS9OnrxNUW+u9lvOXHQ9o=";
   };
-
-  patches = [
-    (substituteAll {
-      src = ./system-libsodium.patch;
-      libsodium_include_dir = "${libsodium.dev}/include";
-    })
-  ];
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "libsodium-sys-0.2.6" = "sha256-yr6wh0njbCFZViLROcqSSoRFj7ZAMYG5lo1g0j75SN0=";
+      "libsodium-sys-0.2.6" = "sha256-icnA8IEvuu/KxtA23l0jdpw28VPfFJvnMUE7sb8QgK4=";
+      "boringtun-0.3.0" = "1r7s3jfjxsxj40v8qgd1m0ng6k8p9kf87zrdzkfcyhhvv3l4snis";
+      "cjdns-crypto-0.1.0" = "00hhk7xwk58lmqapx3fxs5b47fl8iyqfxa1bp8d0g3fipa1nr81c";
     };
   };
 
-  nativeBuildInputs = [
-    which
-    python39
-    nodejs
-    pkg-config
-  ] ++
-    # for flock
-    lib.optional stdenv.isLinux util-linux;
-
-  buildInputs = [
-    libuv
-    libsodium
+  checkFlags = [
+    # Skip dysfunctional tests (no longer covered by cjdns's 'do' build script)
+    "--skip=crypto::crypto_auth::tests::test_wireguard_iface_encrypt_decrypt"
+    "--skip=crypto::crypto_auth::tests::test_wireguard_iface_encrypt_decrypt_with_auth"
   ];
 
-  env.SODIUM_USE_PKG_CONFIG = 1;
-  env.NIX_CFLAGS_COMPILE = toString ([
-    "-O2"
-    "-Wno-error=array-bounds"
-    "-Wno-error=stringop-overflow"
-    "-Wno-error=stringop-truncation"
-  ] ++ lib.optionals (stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.version "11") [
-    "-Wno-error=stringop-overread"
-  ]);
+  nativeBuildInputs = [
+    python39
+    nodejs
+    git
+  ];
 
   passthru.tests.basic = nixosTests.cjdns;
 
@@ -70,6 +48,5 @@ rustPlatform.buildRustPackage rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ ehmry ];
     platforms = platforms.linux;
-    broken = stdenv.isAarch64;
   };
 }
