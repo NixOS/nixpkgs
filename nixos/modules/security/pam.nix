@@ -1055,7 +1055,7 @@ in
           the dp9ik pam module provided by tlsclient.
 
           If set, users can be authenticated against the 9front
-          authentication server given in {option}`security.pam.dp9ik.authserver`.
+          authentication server given in {option}`security.pam.dp9ik.authserver`
         '';
       control = mkOption {
         default = "sufficient";

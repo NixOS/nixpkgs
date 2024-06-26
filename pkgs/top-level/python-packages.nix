@@ -3482,7 +3482,7 @@ self: super: with self; {
   dm-sonnet = callPackage ../development/python-modules/dm-sonnet { };
 
   dm-tree = callPackage ../development/python-modules/dm-tree {
-    abseil-cpp = pkgs.abseil-cpp_202103.override {
+    abseil-cpp = pkgs.abseil-cpp.override {
       cxxStandard = "14";
     };
   };
@@ -4032,6 +4032,10 @@ self: super: with self; {
   exif = callPackage ../development/python-modules/exif { };
 
   exifread = callPackage ../development/python-modules/exifread { };
+
+  exiv2 = callPackage ../development/python-modules/exiv2 {
+    inherit (pkgs) exiv2;
+  };
 
   expandvars = callPackage ../development/python-modules/expandvars { };
 
@@ -9202,9 +9206,7 @@ self: super: with self; {
 
   onlykey-solo-python = callPackage ../development/python-modules/onlykey-solo-python { };
 
-  onnx = callPackage ../development/python-modules/onnx {
-    abseil-cpp = pkgs.abseil-cpp_202301;
-  };
+  onnx = callPackage ../development/python-modules/onnx { };
 
   onnxconverter-common = callPackage ../development/python-modules/onnxconverter-common {
     inherit (pkgs) protobuf;
@@ -10697,7 +10699,9 @@ self: super: with self; {
 
   py3buddy = toPythonModule (callPackage ../development/python-modules/py3buddy { });
 
-  py3exiv2 = callPackage ../development/python-modules/py3exiv2 { };
+  py3exiv2 = callPackage ../development/python-modules/py3exiv2 {
+    inherit (pkgs) exiv2;
+  };
 
   py3langid = callPackage ../development/python-modules/py3langid { };
 

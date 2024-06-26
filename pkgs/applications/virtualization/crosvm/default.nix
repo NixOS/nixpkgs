@@ -1,6 +1,7 @@
 { lib, rustPlatform, fetchgit, fetchpatch
 , pkg-config, protobuf, python3, wayland-scanner
 , libcap, libdrm, libepoxy, minijail, virglrenderer, wayland, wayland-protocols
+, pkgsCross
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -44,7 +45,12 @@ rustPlatform.buildRustPackage rec {
 
   buildFeatures = [ "virgl_renderer" ];
 
-  passthru.updateScript = ./update.py;
+  passthru = {
+    updateScript = ./update.py;
+    tests = {
+      musl = pkgsCross.musl64.crosvm;
+    };
+  };
 
   meta = with lib; {
     description = "Secure virtual machine monitor for KVM";

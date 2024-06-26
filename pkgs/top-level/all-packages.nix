@@ -587,8 +587,6 @@ with pkgs;
 
   dt = callPackage ../tools/text/dt { };
 
-  dtv-scan-tables = callPackage ../data/misc/dtv-scan-tables { };
-
   dufs = callPackage ../servers/http/dufs { };
 
   dynein = callPackage ../development/tools/database/dynein {
@@ -3613,6 +3611,8 @@ with pkgs;
 
   cyclonedx-python = callPackage ../tools/misc/cyclonedx-python { };
 
+  dazel = python3Packages.callPackage ../development/tools/dazel { };
+
   dcap = callPackage ../tools/networking/dcap { };
 
   deltachat-cursed = callPackage ../applications/networking/instant-messengers/deltachat-cursed { };
@@ -5152,6 +5152,10 @@ with pkgs;
   fdroidcl = pkgs.callPackage ../development/mobile/fdroidcl { };
 
   fdroidserver = python3Packages.callPackage ../development/tools/fdroidserver { };
+
+  fedimint = callPackage ../by-name/fe/fedimint/package.nix {
+    inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
+  };
 
   fetch-scm = callPackage ../tools/misc/fetch-scm { };
 
@@ -7467,8 +7471,6 @@ with pkgs;
   eid-mw = callPackage ../tools/security/eid-mw {
     autoreconfHook = buildPackages.autoreconfHook269;
   };
-
-  emote = callPackage ../tools/inputmethods/emote { };
 
   engauge-digitizer = libsForQt5.callPackage ../applications/science/math/engauge-digitizer { };
 
@@ -11011,8 +11013,6 @@ with pkgs;
 
   noisetorch = callPackage ../applications/audio/noisetorch { };
 
-  notary = callPackage ../tools/security/notary { };
-
   notation = callPackage ../tools/security/notation { };
 
   notify-osd = callPackage ../applications/misc/notify-osd { };
@@ -12262,8 +12262,6 @@ with pkgs;
   redir = callPackage ../tools/networking/redir { };
 
   redpanda-client = callPackage ../servers/redpanda { };
-
-  redpanda-server = redpanda-client.server;
 
   redsocks = callPackage ../tools/networking/redsocks { };
 
@@ -19824,19 +19822,7 @@ with pkgs;
       then overrideSDK stdenv { darwinMinVersion = "10.13"; }
       else stdenv;
   };
-  abseil-cpp_202206 = callPackage ../development/libraries/abseil-cpp/202206.nix {
-    # If abseil-cpp doesn’t have a deployment target of 10.13+, arrow-cpp crashes in libgrpc.dylib.
-    stdenv = if stdenv.isDarwin && stdenv.isx86_64
-      then overrideSDK stdenv { darwinMinVersion = "10.13"; }
-      else stdenv;
-  };
   abseil-cpp_202301 = callPackage ../development/libraries/abseil-cpp/202301.nix {
-    # If abseil-cpp doesn’t have a deployment target of 10.13+, arrow-cpp crashes in libgrpc.dylib.
-    stdenv = if stdenv.isDarwin && stdenv.isx86_64
-      then overrideSDK stdenv { darwinMinVersion = "10.13"; }
-      else stdenv;
-  };
-  abseil-cpp_202308 = callPackage ../development/libraries/abseil-cpp/202308.nix {
     # If abseil-cpp doesn’t have a deployment target of 10.13+, arrow-cpp crashes in libgrpc.dylib.
     stdenv = if stdenv.isDarwin && stdenv.isx86_64
       then overrideSDK stdenv { darwinMinVersion = "10.13"; }
@@ -25105,7 +25091,11 @@ with pkgs;
 
   # Armed Bear Common Lisp
   abcl = wrapLisp {
-    pkg = callPackage ../development/compilers/abcl { };
+    pkg = callPackage ../development/compilers/abcl {
+      # https://armedbear.common-lisp.dev/ lists OpenJDK 17 as the highest
+      # supported JDK.
+      jdk = openjdk17;
+    };
     faslExt = "abcl";
   };
 
@@ -26240,7 +26230,6 @@ with pkgs;
   prometheus-lnd-exporter = callPackage ../servers/monitoring/prometheus/lnd-exporter.nix { };
   prometheus-mail-exporter = callPackage ../servers/monitoring/prometheus/mail-exporter.nix { };
   prometheus-mikrotik-exporter = callPackage ../servers/monitoring/prometheus/mikrotik-exporter.nix { };
-  prometheus-minio-exporter = callPackage ../servers/monitoring/prometheus/minio-exporter { };
   prometheus-modemmanager-exporter = callPackage ../servers/monitoring/prometheus/modemmanager-exporter.nix { };
   prometheus-mongodb-exporter = callPackage ../servers/monitoring/prometheus/mongodb-exporter.nix { };
   prometheus-mysqld-exporter = callPackage ../servers/monitoring/prometheus/mysqld-exporter.nix { };
@@ -32794,7 +32783,7 @@ with pkgs;
 
   mailspring = callPackage ../applications/networking/mailreaders/mailspring { };
 
-  memento = libsForQt5.callPackage ../applications/video/memento { };
+  memento = qt6Packages.callPackage ../applications/video/memento { };
 
   mm = callPackage ../applications/networking/instant-messengers/mm { };
 
@@ -38036,7 +38025,7 @@ with pkgs;
     protobuf = protobuf_21;
     # or-tools builds with -std=c++20, so abseil-cpp must
     # also be built that way
-    abseil-cpp = abseil-cpp_202206.override {
+    abseil-cpp = abseil-cpp.override {
       static = true;
       cxxStandard = "20";
     };

@@ -477,6 +477,7 @@
   ./services/desktops/bamf.nix
   ./services/desktops/blueman.nix
   ./services/desktops/cpupower-gui.nix
+  ./services/desktops/deepin/deepin-anything.nix
   ./services/desktops/deepin/dde-api.nix
   ./services/desktops/deepin/app-services.nix
   ./services/desktops/deepin/dde-daemon.nix
@@ -1224,6 +1225,7 @@
   ./services/networking/vsftpd.nix
   ./services/networking/wasabibackend.nix
   ./services/networking/websockify.nix
+  ./services/networking/wg-access-server.nix
   ./services/networking/wg-netmanager.nix
   ./services/networking/webhook.nix
   ./services/networking/wg-quick.nix

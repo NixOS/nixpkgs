@@ -44,7 +44,6 @@ buildPythonPackage rec {
     maintainers = with maintainers; [
       olcai
       maxwilson
-      jonringer
     ];
   };
 }

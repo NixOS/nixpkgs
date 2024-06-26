@@ -29,10 +29,7 @@ let
   stdenv = throw "Use effectiveStdenv instead";
   effectiveStdenv = if cudaSupport then cudaPackages.backendStdenv else inputs.stdenv;
 
-  cudaCapabilities = cudaPackages.cudaFlags.cudaCapabilities;
-  # E.g. [ "80" "86" "90" ]
-  cudaArchitectures = (builtins.map cudaPackages.cudaFlags.dropDot cudaCapabilities);
-  cudaArchitecturesString = lib.strings.concatStringsSep ";" cudaArchitectures;
+  cudaArchitecturesString = cudaPackages.flags.cmakeCudaArchitecturesString;
 
   howard-hinnant-date = fetchFromGitHub {
     owner = "HowardHinnant";
@@ -249,6 +246,6 @@ effectiveStdenv.mkDerivation rec {
     # https://github.com/microsoft/onnxruntime/blob/master/BUILD.md#architectures
     platforms = platforms.unix;
     license = licenses.mit;
-    maintainers = with maintainers; [ jonringer puffnfresh ck3d cbourjau ];
+    maintainers = with maintainers; [ puffnfresh ck3d cbourjau ];
   };
 }

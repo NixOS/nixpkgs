@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ipfetch";
-  version = "unstable-2022-03-24";
+  version = "unstable-2024-02-02";
 
   src = fetchFromGitHub {
     owner = "trakBan";
     repo = "ipfetch";
-    rev = "fc295bfda4f9fea6eee9f6f3f2dabc26b6f25be4";
-    sha256 = "sha256-YKQ9pRBj2hgPg2ShCqWGxzHs/n7kNhKRNyElRDwHDBU=";
+    rev = "09b61e0d1d316dbcfab798dd00bc3f9ceb02431d";
+    sha256 = "sha256-RlbNIDRuf4sFS2zw4fIkTu0mB7xgJfPMDIk1I3UYXLk=";
   };
 
   strictDeps = true;

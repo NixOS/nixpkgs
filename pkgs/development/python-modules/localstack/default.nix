@@ -69,6 +69,6 @@ buildPythonPackage rec {
     description = "Fully functional local Cloud stack";
     homepage = "https://github.com/localstack/localstack";
     license = licenses.asl20;
-    maintainers = with maintainers; [ jonringer ];
+    maintainers = with maintainers; [ ];
   };
 }

@@ -4,9 +4,7 @@
 , ffmpeg
 }:
 
-let
-  python = python3;
-in python.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "spotdl";
   version = "4.2.5";
   pyproject = true;
@@ -18,40 +16,40 @@ in python.pkgs.buildPythonApplication rec {
     hash = "sha256-vxMhFs2mLbVQndlC2UpeDP+M4pwU9Y4cZHbZ8y3vWbI=";
   };
 
-  build-system = with python.pkgs; [
-    poetry-core
-    pythonRelaxDepsHook
-  ];
+  build-system = with python3.pkgs; [ poetry-core ];
+
+  nativeBuildInputs = with python3.pkgs; [ pythonRelaxDepsHook ];
 
   pythonRelaxDeps = true;
 
-  dependencies = with python.pkgs; [
-    spotipy
-    ytmusicapi
-    pytube
-    yt-dlp
-    mutagen
-    rich
-    beautifulsoup4
-    requests
-    rapidfuzz
-    python-slugify
-    uvicorn
-    pydantic
-    fastapi
-    platformdirs
-    pykakasi
-    syncedlyrics
-    soundcloud-v2
+  dependencies = with python3.pkgs; [
     bandcamp-api
+    beautifulsoup4
+    fastapi
+    mutagen
+    platformdirs
+    pydantic
+    pykakasi
+    python-slugify
+    pytube
+    rapidfuzz
+    requests
+    rich
+    setuptools
+    soundcloud-v2
+    spotipy
+    syncedlyrics
+    uvicorn
+    yt-dlp
+    ytmusicapi
   ] ++ python-slugify.optional-dependencies.unidecode;
 
-  nativeCheckInputs = with python.pkgs; [
-    pytestCheckHook
-    pytest-mock
-    pytest-vcr
+  nativeCheckInputs = with python3.pkgs; [
     pyfakefs
+    pytest-mock
     pytest-subprocess
+    pytest-vcr
+    pytestCheckHook
   ];
 
   preCheck = ''
@@ -59,7 +57,7 @@ in python.pkgs.buildPythonApplication rec {
   '';
 
   disabledTestPaths = [
-    # require networking
+    # Tests require networking
     "tests/test_init.py"
     "tests/test_matching.py"
     "tests/providers/lyrics"
@@ -71,7 +69,7 @@ in python.pkgs.buildPythonApplication rec {
   ];
 
   disabledTests = [
-    # require networking
+    # Test require networking
     "test_convert"
     "test_download_ffmpeg"
     "test_download_song"
@@ -88,10 +86,10 @@ in python.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Download your Spotify playlists and songs along with album art and metadata";
-    mainProgram = "spotdl";
     homepage = "https://github.com/spotDL/spotify-downloader";
     changelog = "https://github.com/spotDL/spotify-downloader/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ dotlambda ];
+    mainProgram = "spotdl";
   };
 }
