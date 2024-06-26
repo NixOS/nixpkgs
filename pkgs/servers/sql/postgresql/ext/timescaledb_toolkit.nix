@@ -39,7 +39,7 @@
     homepage = "https://github.com/timescale/timescaledb-toolkit";
     maintainers = with maintainers; [ typetetris ];
     platforms = postgresql.meta.platforms;
-    license = licenses.asl20;
+    license = licenses.tsl;
 
     # as it needs to be used with timescaledb, simply use the condition from there
     broken = stdenv.isDarwin;
