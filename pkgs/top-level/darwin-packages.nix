@@ -83,10 +83,23 @@ impure-cmds // appleSourcePackages // chooseLibs // {
   };
 
   binutils-unwrapped = callPackage ../os-specific/darwin/binutils {
-    inherit (pkgs) binutils-unwrapped;
-    inherit (pkgs.llvmPackages) llvm clang-unwrapped;
+    inherit (pkgs.llvmPackages) clang-unwrapped llvm llvm-manpages;
   };
 
+  # x86-64 Darwin gnat-bootstrap emits assembly
+  # with MOVQ as the mnemonic for quadword interunit moves
+  # such as `movq %rbp, %xmm0`.
+  # The clang integrated assembler recognises this as valid,
+  # but unfortunately the cctools^gas GNU assembler does not;
+  # it instead uses MOVD as the mnemonic.
+  # The assembly that a GCC build emits is determined at build time
+  # and cannot be changed afterwards.
+  #
+  # To build GNAT on x86-64 Darwin, therefore,
+  # we need both the clang _and_ the cctools^gas assemblers to be available:
+  # the former to build at least the stage1 compiler,
+  # and the latter at least to be detectable
+  # as the target for the final compiler.
   binutils = pkgs.wrapBintoolsWith {
     libc =
       if stdenv.targetPlatform != stdenv.hostPlatform
@@ -95,37 +108,21 @@ impure-cmds // appleSourcePackages // chooseLibs // {
     bintools = self.binutils-unwrapped;
   };
 
-  binutilsDualAs-unwrapped = callPackage ../os-specific/darwin/binutils {
-    inherit (pkgs) binutils-unwrapped;
-    inherit (pkgs.llvmPackages) llvm clang-unwrapped;
-    dualAs = true;
+  binutilsDualAs-unwrapped = pkgs.buildEnv {
+    name = "${lib.getName self.binutils-unwrapped}-dualas-${lib.getVersion self.binutils-unwrapped}";
+    paths = [
+      self.binutils-unwrapped
+      (lib.getOutput "gas" pkgs.cctools)
+    ];
   };
 
-  binutilsDualAs = pkgs.wrapBintoolsWith {
-    libc =
-      if stdenv.targetPlatform != stdenv.hostPlatform
-      then pkgs.libcCross
-      else pkgs.stdenv.cc.libc;
+  binutilsDualAs = self.binutils.override {
     bintools = self.binutilsDualAs-unwrapped;
   };
 
   binutilsNoLibc = pkgs.wrapBintoolsWith {
     libc = preLibcCrossHeaders;
     bintools = self.binutils-unwrapped;
-  };
-
-  cctools = self.cctools-llvm;
-
-  cctools-apple = callPackage ../os-specific/darwin/cctools/apple.nix {
-    stdenv = if stdenv.isDarwin then stdenv else pkgs.libcxxStdenv;
-  };
-
-  cctools-llvm = callPackage ../os-specific/darwin/cctools/llvm.nix {
-    stdenv = if stdenv.isDarwin then stdenv else pkgs.libcxxStdenv;
-  };
-
-  cctools-port = callPackage ../os-specific/darwin/cctools/port.nix {
-    stdenv = if stdenv.isDarwin then stdenv else pkgs.libcxxStdenv;
   };
 
   # TODO(@connorbaker): See https://github.com/NixOS/nixpkgs/issues/229389.

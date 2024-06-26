@@ -1363,7 +1363,7 @@ with pkgs;
 
   fixDarwinDylibNames = makeSetupHook {
     name = "fix-darwin-dylib-names-hook";
-    substitutions = { inherit (binutils) targetPrefix; };
+    substitutions = { inherit (darwin.binutils) targetPrefix; };
     meta.platforms = lib.platforms.darwin;
   } ../build-support/setup-hooks/fix-darwin-dylib-names.sh;
 
@@ -16892,7 +16892,6 @@ with pkgs;
     noLibc = (self.libc == null);
 
     inherit bintools libc;
-    inherit (darwin) postLinkSignHook signingUtils;
   } // extraArgs; in self);
 
   yaml-language-server = callPackage  ../development/tools/language-servers/yaml-language-server { };

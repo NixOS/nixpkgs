@@ -1,0 +1,47 @@
+From 645c61100ed6cc087237a645c6572931cbcd0d29 Mon Sep 17 00:00:00 2001
+From: Randy Eckenrode <randy@largeandhighquality.com>
+Date: Wed, 10 Apr 2024 20:36:53 -0400
+Subject: [PATCH 2/6] Rely on libcd_is_blob_a_linker_signature
+
+---
+ libstuff/code_directory.c | 17 -----------------
+ 1 file changed, 17 deletions(-)
+
+diff --git a/libstuff/code_directory.c b/libstuff/code_directory.c
+index 7c158fa..229e11a 100644
+--- a/libstuff/code_directory.c
++++ b/libstuff/code_directory.c
+@@ -146,22 +146,6 @@ static const char* format_version_xyz(uint32_t version)
+  */
+ int codedir_is_linker_signed(const char* data, uint32_t size)
+ {
+-#if 1
+-    // HACK: libcodedirectory.h is in both the macOS SDK in /usr/local/include, and in the tool chain at /usr/include.
+-    // but there is no way to control clang's search path to look in the toolchain first.
+-    // So, declare newer API locally. Once this new header is in all SDKs we can remove this.
+-    // Can't use real function name because it returns an enum type and we cannot define the enum
+-    // here because it will cause a duplicate definition when the header is updated.
+-    extern int my_libcd_is_blob_a_linker_signature(const uint8_t *buf, size_t buf_len, int *is_linker_signature) __asm("_libcd_is_blob_a_linker_signature");
+-    int ret;
+-    int linker_signed = 0;
+-
+-    ret = my_libcd_is_blob_a_linker_signature((const uint8_t*)data,
+-					   (size_t)size,
+-					   &linker_signed);
+-    if ( (ret == 0) && linker_signed )
+-        return 1;
+-#else
+     enum libcd_signature_query_ret ret = LIBCD_SIGNATURE_QUERY_SUCCESS;
+     int linker_signed = 0;
+ 
+@@ -176,7 +160,6 @@ int codedir_is_linker_signed(const char* data, uint32_t size)
+ 	case LIBCD_SIGNATURE_QUERY_NOT_A_SIGNATURE:
+ 	    ;
+     }
+-#endif
+     return 0;
+ }
+ 
+-- 
+2.44.0
+
