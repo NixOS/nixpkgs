@@ -511,7 +511,7 @@ let
       # Support configuring jack functions via fw mechanism at boot
       SND_HDA_PATCH_LOADER = yes;
       SND_HDA_CODEC_CA0132_DSP = whenOlder "5.7" yes; # Enable DSP firmware loading on Creative Soundblaster Z/Zx/ZxR/Recon
-      SND_HDA_CODEC_CS8409 = yes; # Cirrus Logic HDA Bridge CS8409 
+      SND_HDA_CODEC_CS8409 = yes; # Cirrus Logic HDA Bridge CS8409
       SND_OSSEMUL         = yes;
       SND_USB_CAIAQ_INPUT = yes;
       SND_USB_AUDIO_MIDI_V2 = whenAtLeast "6.5" yes;
