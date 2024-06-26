@@ -12,6 +12,11 @@ lib.recurseIntoAttrs rec {
 
   localFromCabalSdist = haskellPackages.buildFromCabalSdist localRaw;
 
+  # NOTE: ./local refers to the "./." path in `./local/generated.nix`.
+  # This test makes sure that localHasNoDirectReference can actually fail if
+  # it doesn't do anything. If this test fails, either the test setup was broken,
+  # or Haskell packaging has changed the way `src` is treated in such a way that
+  # either the test or the design of `buildFromCabalSdist` needs to be reconsidered.
   assumptionLocalHasDirectReference = runCommand "localHasDirectReference" {
     drvPath = builtins.unsafeDiscardOutputDependency localRaw.drvPath;
   } ''
