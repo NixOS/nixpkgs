@@ -123,6 +123,8 @@ stdenv.mkDerivation rec {
     ./0001-not-for-upstream-CMakeLists-Link-against-webkit2gtk-.patch
     # Fix build with cgal-5.6.1+
     ./meshboolean-const.patch
+    # Workaround for https://github.com/bambulab/BambuStudio/pull/4172
+    ./4172.patch
   ];
 
   doCheck = true;
