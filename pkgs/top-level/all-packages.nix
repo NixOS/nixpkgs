@@ -37887,11 +37887,7 @@ with pkgs;
 
   arpack = callPackage ../development/libraries/science/math/arpack { };
 
-  blas = callPackage ../build-support/alternatives/blas { };
-
   blas-ilp64 = blas.override { isILP64 = true; };
-
-  blas-reference = callPackage ../development/libraries/science/math/blas { };
 
   bonmin = callPackage ../development/libraries/science/math/bonmin { };
 
@@ -37919,12 +37915,9 @@ with pkgs;
 
   labplot = libsForQt5.callPackage ../applications/science/math/labplot { };
 
-  lapack = callPackage ../build-support/alternatives/lapack { };
-
   lapack-ilp64 = lapack.override { isILP64 = true; };
 
-  lapack-reference = callPackage ../development/libraries/science/math/liblapack { };
-  liblapack = lapack-reference;
+  lapack-reference = liblapack;
 
   libamplsolver = callPackage ../development/libraries/science/math/libamplsolver { };
 
@@ -37948,12 +37941,8 @@ with pkgs;
 
   notus-scanner = with python3Packages; toPythonApplication notus-scanner;
 
-  openblas = callPackage ../development/libraries/science/math/openblas {
-    inherit (llvmPackages) openmp;
-  };
-
-  # A version of OpenBLAS using 32-bit integers on all platforms for compatibility with
-  # standard BLAS and LAPACK.
+  # A version of OpenBLAS using 32-bit integers on all platforms for
+  # compatibility with standard BLAS and LAPACK.
   openblasCompat = openblas.override { blas64 = false; };
 
   openlibm = callPackage ../development/libraries/science/math/openlibm { };
