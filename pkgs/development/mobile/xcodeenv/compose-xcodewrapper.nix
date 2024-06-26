@@ -29,7 +29,7 @@ stdenv.mkDerivation {
     ln -s "${xcodeBaseDir}/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs"
 
     # Check if we have the xcodebuild version that we want
-    currVer=$($out/bin/xcodebuild -version | head -n1)
+    currVer=$($out/bin/xcodebuild -version | head -n1 || true)
     ${if allowHigher then ''
     if [ -z "$(printf '%s\n' "${version}" "$currVer" | sort -V | head -n1)""" != "${version}" ]
     '' else ''
