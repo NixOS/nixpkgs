@@ -15141,6 +15141,13 @@
     github = "p3psi-boo";
     githubId = 43925055;
   };
+  pablito2020 = {
+    email = "pablo@pablofraile.net";
+    github = "pablito2020";
+    githubId = 18640261;
+    name = "Pablo Fraile Alonso";
+    keys = [ { fingerprint = "8F6E E99C F702 CAF8 A833 3DF5 A6FF F50C A3F2 7559"; } ];
+  };
   pabloaul = {
     email = "contact@nojus.org";
     github = "pabloaul";
