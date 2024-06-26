@@ -18,12 +18,18 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [ autoreconfHook ];
-
+  outputs = [ "out" "dev" ];
+  configureFlags = [ "--enable-install-npth-config" ];
   doCheck = true;
 
   passthru.tests = {
     musl = pkgsCross.musl64.npth;
   };
+
+  postInstall = ''
+    rm -rf $out/bin
+    install -Dm755 npth-config -t $dev/bin
+  '';
 
   meta = with lib; {
     description = "New GNU Portable Threads Library";
