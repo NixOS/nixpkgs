@@ -2,24 +2,24 @@
 
 let
   wasiPreviewCommandComponentAdapter = fetchurl {
-    url = "https://github.com/bytecodealliance/wasmtime/releases/download/v13.0.0/wasi_snapshot_preview1.command.wasm";
-    hash = "sha256-QihT0Iaq9VJs2mLL9CdS32lVMtDc9M952k/ZZ4tO6qs=";
+    url = "https://github.com/bytecodealliance/wasmtime/releases/download/v21.0.1/wasi_snapshot_preview1.command.wasm";
+    hash = "sha256-Dr/vQlMF8h79vAMtwuAtq6vII1h94kcUdaSspFIsbKY=";
   };
   wasiPreviewReactorComponentAdapter = fetchurl {
-    url = "https://github.com/bytecodealliance/wasmtime/releases/download/v13.0.0/wasi_snapshot_preview1.reactor.wasm";
-    hash = "sha256-bNmx/IqYPkA7YHvlYvHPmIMF/fkKtSXlZx1bjR3Neow=";
+    url = "https://github.com/bytecodealliance/wasmtime/releases/download/v21.0.1/wasi_snapshot_preview1.reactor.wasm";
+    hash = "sha256-NWumxeKoUt8HlwVJSVAbnlH9XGyOZGoNo6gJbRi+xRo=";
   };
 
 in rustPlatform.buildRustPackage rec {
   pname = "wash-cli";
-  version = "0.24.0";
+  version = "0.28.1";
 
   src = fetchCrate {
     inherit version pname;
-      hash = "sha256-exhN+44Sikcn2JiIry/jHOpYrPG2oQOpwq/Mq+0VK0U=";
+      hash = "sha256-sEMOINkoYBR2E3QO8Ri28TshlqZSzSVDVKavv+jCiZg=";
   };
 
-  cargoHash = "sha256-eEfkMoi4BPpKWkiTshHj59loFPzyrhFN/S8HKdMCGFM=";
+  cargoHash = "sha256-8ftRSi2kWexD4Ltr8WejFuHdrcrgYPs0ion9/0PC0A0=";
 
   nativeBuildInputs = [ pkg-config ];
 
