@@ -7,7 +7,6 @@
   setuptools,
   orjson,
   pyreqwest-impersonate,
-  curl-cffi,
 
   # Optional dependencies
   lxml,
@@ -15,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "duckduckgo-search";
-  version = "v5.3.1";
+  version = "v6.1.6";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -24,14 +23,13 @@ buildPythonPackage rec {
     owner = "deedy5";
     repo = "duckduckgo_search";
     rev = version;
-    hash = "sha256-T7rlB3dU7y+HbHr1Ss9KkejlXFORhnv9Va7cFTRtfQU=";
+    hash = "sha256-qaF7X1vGiqce4IH4UyOKbgAQx7s9TXPvDeDsG14Wd78=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [
     click
-    curl-cffi
     orjson
     pyreqwest-impersonate
   ];
