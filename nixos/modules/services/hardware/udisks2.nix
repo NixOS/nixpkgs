@@ -20,6 +20,8 @@ in
 
       enable = mkEnableOption "udisks2, a DBus service that allows applications to query and manipulate storage devices";
 
+      package = mkPackageOption pkgs "udisks2" {};
+
       mountOnMedia = mkOption {
         type = types.bool;
         default = false;
@@ -69,11 +71,11 @@ in
 
   config = mkIf config.services.udisks2.enable {
 
-    environment.systemPackages = [ pkgs.udisks2 ];
+    environment.systemPackages = [ cfg.package ];
 
     environment.etc = (mapAttrs' (name: value: nameValuePair "udisks2/${name}" { source = value; } ) configFiles) // (
     let
-      libblockdev = pkgs.udisks2.libblockdev;
+      libblockdev = cfg.package.libblockdev;
       majorVer = versions.major libblockdev.version;
     in {
       # We need to make sure /etc/libblockdev/@major_ver@/conf.d is populated to avoid
@@ -84,18 +86,18 @@ in
 
     security.polkit.enable = true;
 
-    services.dbus.packages = [ pkgs.udisks2 ];
+    services.dbus.packages = [ cfg.package ];
 
     systemd.tmpfiles.rules = [ "d /var/lib/udisks2 0755 root root -" ]
       ++ optional cfg.mountOnMedia "D! /media 0755 root root -";
 
-    services.udev.packages = [ pkgs.udisks2 ];
+    services.udev.packages = [ cfg.package ];
 
     services.udev.extraRules = optionalString cfg.mountOnMedia ''
       ENV{ID_FS_USAGE}=="filesystem", ENV{UDISKS_FILESYSTEM_SHARED}="1"
     '';
 
-    systemd.packages = [ pkgs.udisks2 ];
+    systemd.packages = [ cfg.package ];
   };
 
 }
