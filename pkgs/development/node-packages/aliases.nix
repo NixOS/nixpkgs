@@ -86,6 +86,7 @@ mapAliases {
   inherit (pkgs) firebase-tools; # added 2023-08-18
   flood = pkgs.flood; # Added 2023-07-25
   generator-code = throw "generator-code was removed because it provides no executable"; # added 2023-09-24
+  inherit (pkgs) git-run; # added 2024-06-26
   git-ssb = throw "git-ssb was removed because it was broken"; # added 2023-08-21
   inherit (pkgs) git-standup; # added 2024-06-26
   inherit (pkgs) gitmoji-cli; # added 2023-09-23

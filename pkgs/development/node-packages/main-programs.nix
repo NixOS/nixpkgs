@@ -30,7 +30,6 @@
   fauna-shell = "fauna";
   fkill-cli = "fkill";
   fleek-cli = "fleek";
-  git-run = "gr";
   graphql-cli = "graphql";
   graphql-language-service-cli = "graphql-lsp";
   grunt-cli = "grunt";
