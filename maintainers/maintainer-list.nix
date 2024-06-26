@@ -1735,6 +1735,12 @@
     githubId = 10285250;
     name = "Artur E. Ruuge";
   };
+  asandikci = {
+    email = "git@aliberksandikci.com.tr";
+    github = "asandikci";
+    githubId = 94538585;
+    name = "Aliberk Sandıkçı";
+  };
   asbachb = {
     email = "asbachb-nixpkgs-5c2a@impl.it";
     matrix = "@asbachb:matrix.org";
