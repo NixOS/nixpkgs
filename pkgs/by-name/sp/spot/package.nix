@@ -74,12 +74,12 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Native Spotify client for the GNOME desktop";
-    mainProgram = "spot";
     homepage = "https://github.com/xou816/spot";
-    license = licenses.mit;
-    maintainers = with maintainers; [ getchoo ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ getchoo ];
+    mainProgram = "spot";
+    platforms = lib.platforms.linux;
   };
 }
