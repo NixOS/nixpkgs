@@ -11,7 +11,6 @@
   pycparser,
   pythonAtLeast,
 }:
-
 if isPyPy then
   null
 else
@@ -25,27 +24,22 @@ else
       hash = "sha256-vLPvQ+WGZbvaL7GYaY/K5ndkg+DEpjGqVkeAbCXgLMA=";
     };
 
-    patches =
-      [
-        #
-        # Trusts the libffi library inside of nixpkgs on Apple devices.
-        #
-        # Based on some analysis I did:
-        #
-        #   https://groups.google.com/g/python-cffi/c/xU0Usa8dvhk
-        #
-        # I believe that libffi already contains the code from Apple's fork that is
-        # deemed safe to trust in cffi.
-        #
-        ./darwin-use-libffi-closures.diff
-      ]
-      ++ lib.optionals (stdenv.cc.isClang && lib.versionAtLeast (lib.getVersion stdenv.cc) "13") [
-        # -Wnull-pointer-subtraction is enabled with -Wextra. Suppress it to allow the following tests
-        # to run and pass when cffi is built with newer versions of clang:
-        # - testing/cffi1/test_verify1.py::test_enum_usage
-        # - testing/cffi1/test_verify1.py::test_named_pointer_as_argument
-        ./clang-pointer-substraction-warning.diff
-      ];
+    patches = [
+      #
+      # Trusts the libffi library inside of nixpkgs on Apple devices.
+      #
+      # Based on some analysis I did:
+      #
+      #   https://groups.google.com/g/python-cffi/c/xU0Usa8dvhk
+      #
+      # I believe that libffi already contains the code from Apple's fork that is
+      # deemed safe to trust in cffi.
+      #
+      ./darwin-use-libffi-closures.diff
+      # https://github.com/python-cffi/cffi/commit/39bdab23615a83c1001ed822f974ae52020201ba
+      # Needed on newer Clang versions.
+      ./avoid-null-pointer-subtraction-error.diff
+    ];
 
     postPatch = lib.optionalString stdenv.isDarwin ''
       # Remove setup.py impurities

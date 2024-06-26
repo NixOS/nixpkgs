@@ -1,0 +1,14 @@
+diff --git a/src/cffi/recompiler.py b/src/cffi/recompiler.py
+index 4167bc05..ac6c163e 100644
+--- a/src/cffi/recompiler.py
++++ b/src/cffi/recompiler.py
+@@ -953,7 +953,7 @@ def _struct_ctx(self, tp, cname, approxname, named_ptr=None):
+                 if cname is None or fbitsize >= 0:
+                     offset = '(size_t)-1'
+                 elif named_ptr is not None:
+-                    offset = '((char *)&((%s)0)->%s) - (char *)0' % (
++                    offset = '((char *)&((%s)4096)->%s) - (char *)4096' % (
+                         named_ptr.name, fldname)
+                 else:
+                     offset = 'offsetof(%s, %s)' % (tp.get_c_name(''), fldname)
+ Login with GitHub
