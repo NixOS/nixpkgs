@@ -42,7 +42,7 @@ pkgs.runCommand "nixpkgs-release-checks"
 
         # To get a call trace; see https://nixos.org/manual/nixpkgs/stable/#function-library-lib.trivial.warn
         # Relies on impure eval
-        export NIX_ABORT_ON_WARN=true
+        export NIXPKGS_ABORT_ON_WARN=true
 
         set +e
         (
@@ -79,7 +79,7 @@ pkgs.runCommand "nixpkgs-release-checks"
             exit 1
         fi
 
-        # Catch any trace calls not caught by NIX_ABORT_ON_WARN (lib.warn)
+        # Catch any trace calls not caught by NIXPKGS_ABORT_ON_WARN (lib.warn)
         if [ -s eval-warnings.log ]; then
             echo "Nixpkgs on $platform evaluated with warnings, aborting"
             exit 1
