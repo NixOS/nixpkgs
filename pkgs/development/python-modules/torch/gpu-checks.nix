@@ -13,7 +13,7 @@ let
       torch,
       cudaPackages,
     }:
-    cudaPackages.writeGpuPythonTest
+    cudaPackages.writeGpuTestPython
       {
         inherit feature;
         libraries = [ torch ];
