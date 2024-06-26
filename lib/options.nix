@@ -230,18 +230,20 @@ rec {
      This is useful for sharing a module across different module sets
      without having to implement similar features as long as the
      values of the options are not accessed. */
-  mkSinkUndeclaredOptions = attrs: mkOption ({
-    internal = true;
-    visible = false;
-    default = false;
-    description = "Sink for option definitions.";
-    type = mkOptionType {
-      name = "sink";
-      check = x: true;
-      merge = loc: defs: false;
+  mkSinkUndeclaredOptions = let
+    defaultAttrs = {
+      internal = true;
+      visible = false;
+      default = false;
+      description = "Sink for option definitions.";
+      type = mkOptionType {
+        name = "sink";
+        check = x: true;
+        merge = loc: defs: false;
+      };
+      apply = x: throw "Option value is not readable because the option is not declared.";
     };
-    apply = x: throw "Option value is not readable because the option is not declared.";
-  } // attrs);
+  in attrs: mkOption (defaultAttrs // attrs);
 
   mergeDefaultOption = loc: defs:
     let list = getValues defs; in
@@ -428,20 +430,21 @@ rec {
        (showOption ["foo" "*" "bar"]) == "foo.*.bar"
        (showOption ["foo" "<name>" "bar"]) == "foo.<name>.bar"
   */
-  showOption = parts: let
+  showOption = let
+    # We assume that these are "special values" and not real configuration data.
+    # If it is real configuration data, it is rendered incorrectly.
+    specialIdentifiers = [
+      "<name>"          # attrsOf (submodule {})
+      "*"               # listOf (submodule {})
+      "<function body>" # functionTo
+    ];
+  in parts: let
     escapeOptionPart = part:
-      let
-        # We assume that these are "special values" and not real configuration data.
-        # If it is real configuration data, it is rendered incorrectly.
-        specialIdentifiers = [
-          "<name>"          # attrsOf (submodule {})
-          "*"               # listOf (submodule {})
-          "<function body>" # functionTo
-        ];
-      in if builtins.elem part specialIdentifiers
+       if builtins.elem part specialIdentifiers
          then part
          else lib.strings.escapeNixIdentifier part;
     in (concatStringsSep ".") (map escapeOptionPart parts);
+
   showFiles = files: concatStringsSep " and " (map (f: "`${f}'") files);
 
   showDefs = defs: concatMapStrings (def:

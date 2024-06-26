@@ -226,12 +226,13 @@ let
       };
 
       merged =
-        let collected = collectModules
+        mergeModules prefix (reverseList (
+          collectModules
           class
           (specialArgs.modulesPath or "")
           (regularModules ++ [ internalModule ])
-          ({ inherit lib options config specialArgs; } // specialArgs);
-        in mergeModules prefix (reverseList collected);
+          ({ inherit lib options config specialArgs; } // specialArgs)
+        ));
 
       options = merged.matchedOptions;
 
