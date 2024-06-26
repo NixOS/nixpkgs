@@ -25,7 +25,10 @@ let
     changelog = "https://github.com/goauthentik/authentik/releases/tag/version%2F${version}";
     homepage = "https://goauthentik.io/";
     license = licenses.mit;
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ [
+      # "x86_64-darwin" # TODO: fix build
+      "aarch64-darwin"
+    ];
     maintainers = with maintainers; [ jvanbruegge ];
   };
 
@@ -159,7 +162,8 @@ let
             --replace-fail 'dumb-init = "*"' "" \
             --replace-fail 'djangorestframework-guardian' 'djangorestframework-guardian2' \
             --replace-fail 'version = "4.9.4"' 'version = "*"' \
-            --replace-fail 'version = "<2"' 'version = "*"'
+            --replace-fail 'version = "<2"' 'version = "*"' \
+            --replace-fail '{ version = "5.0.0", platform = "darwin" }' '{ version = "*", platform = "darwin" }'
           substituteInPlace authentik/stages/email/utils.py \
             --replace-fail 'web/' '${webui}/'
         '';
