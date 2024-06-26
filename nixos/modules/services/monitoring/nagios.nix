@@ -55,7 +55,7 @@ let
   # authentication.
   nagiosCGICfgFile = pkgs.writeText "nagios.cgi.conf"
     ''
-      main_config_file=${cfg.mainConfigFile}
+      main_config_file=${nagiosCfgFile}
       use_authentication=0
       url_html_path=${urlPath}
     '';
@@ -75,6 +75,7 @@ let
       <Directory "${pkgs.nagios}/share">
         Options None
         Require all granted
+        DirectoryIndex index.html index.php
       </Directory>
     '';
 
@@ -206,8 +207,11 @@ in
       };
     };
 
-    services.httpd.virtualHosts = optionalAttrs cfg.enableWebInterface {
-      ${cfg.virtualHost.hostName} = mkMerge [ cfg.virtualHost { extraConfig = extraHttpdConfig; } ];
+    services.httpd = optionalAttrs cfg.enableWebInterface {
+      enablePHP = true;
+      virtualHosts = {
+        ${cfg.virtualHost.hostName} = mkMerge [ cfg.virtualHost { extraConfig = extraHttpdConfig; } ];
+      };
     };
   };
 }
