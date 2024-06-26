@@ -47,6 +47,6 @@ stdenv.mkDerivation (finalAttrs: {
     pkgConfigModules = [ "xevd" ];
     maintainers = with lib.maintainers; [ jopejoe1 ];
     platforms = lib.platforms.all;
-    broken = !stdenv.hostPlatform.isx86 || stdenv.hostPlatform.isDarwin;
+    broken = !stdenv.hostPlatform.isx86 || !stdenv.cc.isGNU;
   };
 })
