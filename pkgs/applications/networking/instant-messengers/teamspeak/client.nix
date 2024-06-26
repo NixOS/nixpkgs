@@ -1,6 +1,8 @@
 { lib, stdenv, fetchurl, makeWrapper, makeDesktopItem, zlib, glib, libpng, freetype, openssl
 , xorg, fontconfig, qtbase, qtwebengine, qtwebchannel, qtsvg, qtwebsockets, xkeyboard_config
 , alsa-lib, libpulseaudio ? null, libredirect, quazip, which, unzip, perl, llvmPackages
+, symlinkJoin
+, ts3Plugins ? [ ]
 }:
 
 let
@@ -24,6 +26,11 @@ let
     desktopName = "TeamSpeak";
     genericName = "TeamSpeak";
     categories = [ "Network" ];
+  };
+
+  plugins = symlinkJoin {
+    name = "ts3-plugins";
+    paths = map (p: p.ts3_plugin or (throw "plugin ${p} must have a `ts3_plugin` output!.")) ts3Plugins;
   };
 in
 
@@ -90,11 +97,14 @@ stdenv.mkDerivation rec {
       cp pluginsdk/docs/client_html/images/logo.png $out/share/icons/hicolor/64x64/apps/teamspeak.png
       cp ${desktopItem}/share/applications/* $out/share/applications/
 
-      # Make a symlink to the binary from bin.
+    ''
+    + lib.optionalString (ts3Plugins != [ ]) ''
+      mkdir -p $out/lib/teamspeak/
+      ln -s ${plugins} $out/lib/teamspeak/plugins
+    ''
+    + ''
       mkdir -p $out/bin/
-      ln -s $out/lib/teamspeak/ts3client $out/bin/ts3client
-
-      wrapProgram $out/bin/ts3client \
+      makeWrapper $out/lib/teamspeak/ts3client $out/bin/ts3client \
         --set LD_PRELOAD "${libredirect}/lib/libredirect.so" \
         --set QT_PLUGIN_PATH "${qtbase}/${qtbase.qtPluginPrefix}" \
     '' /* wayland is currently broken, remove when TS3 fixes that */ + ''
