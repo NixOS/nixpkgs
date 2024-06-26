@@ -59,7 +59,7 @@ in
     # boot.
     boot.blacklistedKernelModules = [ "nouveau" "xen_fbfront" ];
 
-    boot.loader.grub.device = if cfg.efi then "nodev" else "/dev/xvda";
+    boot.loader.grub.device = "nodev";
     boot.loader.grub.efiSupport = cfg.efi;
     boot.loader.grub.efiInstallAsRemovable = cfg.efi;
     boot.loader.timeout = 1;
