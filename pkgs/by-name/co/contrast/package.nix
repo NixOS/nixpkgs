@@ -57,12 +57,12 @@ stdenv.mkDerivation rec {
     pango
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Checks whether the contrast between two colors meet the WCAG requirements";
     homepage = "https://gitlab.gnome.org/World/design/contrast";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ getchoo ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ getchoo ];
+    platforms = lib.platforms.unix;
     # never built on aarch64-darwin, x86_64-darwin since first introduction in nixpkgs
     broken = stdenv.isDarwin;
     mainProgram = "contrast";
