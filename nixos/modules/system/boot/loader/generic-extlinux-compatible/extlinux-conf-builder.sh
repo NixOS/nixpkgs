@@ -103,6 +103,10 @@ addEntry() {
         return
     fi
 
+    if [ -f "$path/devicetree-overlays" ]; then
+        local dtbOverlays="$(cat $path/devicetree-overlays)"
+    fi
+
     if [ -d "$dtbDir" ]; then
         # if a dtbName was specified explicitly, use that, else use FDTDIR
         if [ -n "$dtbName" ]; then
@@ -110,9 +114,21 @@ addEntry() {
         else
             echo "  FDTDIR ../nixos/$(basename $dtbs)"
         fi
+
+        if [ -n "$dtbOverlays" ]; then
+            echo -n "  FDTOVERLAYS"
+            for overlay in $dtbOverlays; do
+                echo -n " ../nixos/$(basename $dtbs)/${overlay}"
+            done
+            echo
+        fi
     else
         if [ -n "$dtbName" ]; then
             echo "Explicitly requested dtbName $dtbName, but there's no FDTDIR - bailing out." >&2
+            exit 1
+        fi
+        if [ -n "$dtbOverlays" ]; then
+            echo "Requested overlays $dtbOverlays, but there's no FDTDIR - bailing out." >&2
             exit 1
         fi
     fi
