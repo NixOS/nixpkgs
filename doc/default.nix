@@ -23,6 +23,7 @@ let
       { name = "fileset"; description = "file set functions"; }
       { name = "sources"; description = "source filtering functions"; }
       { name = "cli"; description = "command-line serialization functions"; }
+      { name = "generators"; description = "functions that create file formats from nix data structures"; }
       { name = "gvariant"; description = "GVariant formatted string serialization functions"; }
       { name = "customisation"; description = "Functions to customise (derivation-related) functions, derivatons, or attribute sets"; }
       { name = "meta"; description = "functions for derivation metadata"; }
