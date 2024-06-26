@@ -28771,15 +28771,6 @@ let
         sha512 = "tdcqOOpwArNjEr0gNQKCXwaNCWnQJrog14nJNQPeemcLnXQUUGrsCWpWkVKt46zLjcS6/KGoayeJfHHyPDlvwA==";
       };
     };
-    "graphql-14.7.0" = {
-      name = "graphql";
-      packageName = "graphql";
-      version = "14.7.0";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/graphql/-/graphql-14.7.0.tgz";
-        sha512 = "l0xWZpoPKpppFzMfvVyFmp9vLN7w/ZZJPefUicMCepfJeQ8sMcztloGYY9DfjVPo6tIUDzU5Hw3MUbIjj9AVVA==";
-      };
-    };
     "graphql-15.3.0" = {
       name = "graphql";
       packageName = "graphql";
@@ -31039,15 +31030,6 @@ let
         sha512 = "v7cSY1J8ydZ0GyjUHqF+1bshJ6cnEVLo9EnjB8p+4HDRPZc9N5jjmvUV7NvEsqQOKyH0pmIBFWXVQbiS0+OBbA==";
       };
     };
-    "intercept-stdout-0.1.2" = {
-      name = "intercept-stdout";
-      packageName = "intercept-stdout";
-      version = "0.1.2";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/intercept-stdout/-/intercept-stdout-0.1.2.tgz";
-        sha512 = "Umb41Ryp5FzLurfCRAWx+jjNAk8jsw2RTk2XPIwus+86h/Y2Eb4DfOWof/mZ6FBww8SoO45rJSlg25054/Di9w==";
-      };
-    };
     "internal-ip-1.2.0" = {
       name = "internal-ip";
       packageName = "internal-ip";
@@ -32855,15 +32837,6 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/isobject/-/isobject-3.0.1.tgz";
         sha512 = "WhB9zCku7EGTj/HQQRz5aUQEUeoQZH2bWcltRErOpymJ4boYE6wL9Tbr23krRPSZ+C5zqNSrSw+Cc7sZZ4b7vg==";
-      };
-    };
-    "isomorphic-fetch-3.0.0" = {
-      name = "isomorphic-fetch";
-      packageName = "isomorphic-fetch";
-      version = "3.0.0";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/isomorphic-fetch/-/isomorphic-fetch-3.0.0.tgz";
-        sha512 = "qvUtwJ3j6qwsF3jLxkZ72qCgjMysPzDfeV240JHiGZsANBYd+EEuu35v7dfrJ9Up0Ak07D7GGSkGhCHTqg/5wA==";
       };
     };
     "isomorphic-textencoder-1.0.1" = {
@@ -35170,15 +35143,6 @@ let
         sha512 = "mKnC+QJ9pWVzv+C4/U3rRsHapFfHvQFoFB92e52xeyGMcX6/OlIl78je1u8vePzYZSkkogMPJ2yjxxsb89cxyw==";
       };
     };
-    "lodash._arraycopy-3.0.0" = {
-      name = "lodash._arraycopy";
-      packageName = "lodash._arraycopy";
-      version = "3.0.0";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/lodash._arraycopy/-/lodash._arraycopy-3.0.0.tgz";
-        sha512 = "RHShTDnPKP7aWxlvXKiDT6IX2jCs6YZLCtNhOru/OX2Q/tzX295vVBK5oX1ECtN+2r86S0Ogy8ykP1sgCZAN0A==";
-      };
-    };
     "lodash._arrayeach-3.0.0" = {
       name = "lodash._arrayeach";
       packageName = "lodash._arrayeach";
@@ -35897,15 +35861,6 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/lodash.throttle/-/lodash.throttle-4.1.1.tgz";
         sha512 = "wIkUCfVKpVsWo3JSZlc+8MB5it+2AN5W8J7YVMST30UrvcQNZ1Okbj+rbVniijTWE6FGYy4XJq/rHkas8qJMLQ==";
-      };
-    };
-    "lodash.toarray-3.0.2" = {
-      name = "lodash.toarray";
-      packageName = "lodash.toarray";
-      version = "3.0.2";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/lodash.toarray/-/lodash.toarray-3.0.2.tgz";
-        sha512 = "ptkjUqvuHjTuMJJxiktJpZhxM5l60bEkfntJx+NFzdQd1bZVxfpTF1bhFYFqBrT4F0wZ1qx9KbVmHJV3Rfc7Tw==";
       };
     };
     "lodash.toarray-4.4.0" = {
@@ -44640,15 +44595,6 @@ let
         sha512 = "7PiHtLll5LdnKIMw100I+8xJXR5gW2QwWYkT6iJva0bXitZKa/XMrSbdmg3r2Xnaidz9Qumd0VPaMrZlF9V9sA==";
       };
     };
-    "progress-stream-2.0.0" = {
-      name = "progress-stream";
-      packageName = "progress-stream";
-      version = "2.0.0";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/progress-stream/-/progress-stream-2.0.0.tgz";
-        sha512 = "xJwOWR46jcXUq6EH9yYyqp+I52skPySOeHfkxOZ2IY1AiBi/sFJhbhAKHoV3OTw/omQ45KTio9215dRJ2Yxd3Q==";
-      };
-    };
     "prom-client-11.5.3" = {
       name = "prom-client";
       packageName = "prom-client";
@@ -50200,15 +50146,6 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/speedometer/-/speedometer-0.1.4.tgz";
         sha512 = "phdEoDlA6EUIVtzwq1UiNMXDUogczp204aYF/yfOhjNePWFfIpBJ1k5wLMuXQhEOOMjuTJEcc4vdZa+vuP+n/Q==";
-      };
-    };
-    "speedometer-1.0.0" = {
-      name = "speedometer";
-      packageName = "speedometer";
-      version = "1.0.0";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/speedometer/-/speedometer-1.0.0.tgz";
-        sha512 = "lgxErLl/7A5+vgIIXsh9MbeukOaCb2axgQ+bKCdIE+ibNT4XNYGNCR1qFEGq6F+YDASXK3Fh/c5FgtZchFolxw==";
       };
     };
     "speedtest-net-1.6.2" = {
@@ -56449,15 +56386,6 @@ let
         sha512 = "GuayqdKZqAwwaCUjDvMTAVRPJOp/SLON3mJ07eGsx/Iq9HjRymhKWztX41rISqDKhHVVyFM+IywICyZDla6U3A==";
       };
     };
-    "vscode-languageserver-6.1.1" = {
-      name = "vscode-languageserver";
-      packageName = "vscode-languageserver";
-      version = "6.1.1";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/vscode-languageserver/-/vscode-languageserver-6.1.1.tgz";
-        sha512 = "DueEpkUAkD5XTR4MLYNr6bQIp/UFR0/IPApgXU3YfCBCB08u2sm9hRCs6DxYZELkk++STPjpcjksR2H8qI3cDQ==";
-      };
-    };
     "vscode-languageserver-6.2.0-next.2" = {
       name = "vscode-languageserver";
       packageName = "vscode-languageserver";
@@ -57194,15 +57122,6 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/whatwg-encoding/-/whatwg-encoding-2.0.0.tgz";
         sha512 = "p41ogyeMUrw3jWclHWTQg1k05DSVXPLcVxRTYsXUk+ZooOCZLcoYgPZ/HL/D/N+uQPOtcp1me1WhBEaX02mhWg==";
-      };
-    };
-    "whatwg-fetch-3.6.20" = {
-      name = "whatwg-fetch";
-      packageName = "whatwg-fetch";
-      version = "3.6.20";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/whatwg-fetch/-/whatwg-fetch-3.6.20.tgz";
-        sha512 = "EqhiFU6daOA8kpjOWTL0olhVOF3i7OrFzSYiGsEMB8GcXS+RrzauAERX65xMeNWVqxA6HXH2m69Z9LaKKdisfg==";
       };
     };
     "whatwg-mimetype-2.3.0" = {
@@ -63573,42 +63492,6 @@ in
     bypassCache = true;
     reconstructLock = true;
   };
-  auto-changelog = nodeEnv.buildNodePackage {
-    name = "auto-changelog";
-    packageName = "auto-changelog";
-    version = "2.4.0";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/auto-changelog/-/auto-changelog-2.4.0.tgz";
-      sha512 = "vh17hko1c0ItsEcw6m7qPRf3m45u+XK5QyCrrBFViElZ8jnKrPC1roSznrd1fIB/0vR/zawdECCRJtTuqIXaJw==";
-    };
-    dependencies = [
-      sources."commander-7.2.0"
-      sources."encoding-0.1.13"
-      sources."handlebars-4.7.8"
-      sources."iconv-lite-0.6.3"
-      sources."minimist-1.2.8"
-      sources."neo-async-2.6.2"
-      sources."node-fetch-2.7.0"
-      sources."parse-github-url-1.0.2"
-      sources."safer-buffer-2.1.2"
-      sources."semver-7.6.2"
-      sources."source-map-0.6.1"
-      sources."tr46-0.0.3"
-      sources."uglify-js-3.18.0"
-      sources."webidl-conversions-3.0.1"
-      sources."whatwg-url-5.0.0"
-      sources."wordwrap-1.0.0"
-    ];
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "Command line tool for generating a changelog from git tags and commit history";
-      homepage = "https://github.com/CookPete/auto-changelog";
-      license = "MIT";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
   aws-cdk = nodeEnv.buildNodePackage {
     name = "aws-cdk";
     packageName = "aws-cdk";
@@ -68649,92 +68532,6 @@ in
       description = "A DHCP server written in JavaScript";
       homepage = "https://github.com/infusion/node-dhcp";
       license = "MIT OR GPL-2.0";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
-  diagnostic-languageserver = nodeEnv.buildNodePackage {
-    name = "diagnostic-languageserver";
-    packageName = "diagnostic-languageserver";
-    version = "1.15.0";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/diagnostic-languageserver/-/diagnostic-languageserver-1.15.0.tgz";
-      sha512 = "B1kH0j0jOd106t5E14xItYazxFAYOsAvhK+e0+eYW3nOzG3saKFXfkoeJ86T8g2U40lIwo0Jt8xusn8gd34Swg==";
-    };
-    dependencies = [
-      sources."@nodelib/fs.scandir-2.1.5"
-      sources."@nodelib/fs.stat-2.0.5"
-      sources."@nodelib/fs.walk-1.2.8"
-      sources."aggregate-error-3.1.0"
-      sources."array-union-2.1.0"
-      sources."balanced-match-1.0.2"
-      sources."brace-expansion-1.1.11"
-      sources."braces-3.0.3"
-      sources."clean-stack-2.2.0"
-      sources."commander-5.1.0"
-      sources."concat-map-0.0.1"
-      sources."crypto-random-string-2.0.0"
-      sources."del-6.1.1"
-      sources."dir-glob-3.0.1"
-      sources."fast-glob-3.3.2"
-      sources."fastq-1.17.1"
-      sources."fill-range-7.1.1"
-      sources."find-up-4.1.0"
-      sources."fs.realpath-1.0.0"
-      sources."glob-7.2.3"
-      sources."glob-parent-5.1.2"
-      sources."globby-11.1.0"
-      sources."graceful-fs-4.2.11"
-      sources."ignore-5.3.1"
-      sources."indent-string-4.0.0"
-      sources."inflight-1.0.6"
-      sources."inherits-2.0.4"
-      sources."is-extglob-2.1.1"
-      sources."is-glob-4.0.3"
-      sources."is-number-7.0.0"
-      sources."is-path-cwd-2.2.0"
-      sources."is-path-inside-3.0.3"
-      sources."is-stream-2.0.1"
-      sources."locate-path-5.0.0"
-      sources."lodash-4.17.21"
-      sources."merge2-1.4.1"
-      sources."micromatch-4.0.7"
-      sources."minimatch-3.1.2"
-      sources."once-1.4.0"
-      sources."p-limit-2.3.0"
-      sources."p-locate-4.1.0"
-      sources."p-map-4.0.0"
-      sources."p-try-2.2.0"
-      sources."path-exists-4.0.0"
-      sources."path-is-absolute-1.0.1"
-      sources."path-type-4.0.0"
-      sources."picomatch-2.3.1"
-      sources."queue-microtask-1.2.3"
-      sources."reusify-1.0.4"
-      sources."rimraf-3.0.2"
-      sources."run-parallel-1.2.0"
-      sources."rxjs-6.6.7"
-      sources."slash-3.0.0"
-      sources."temp-dir-2.0.0"
-      sources."tempy-0.7.1"
-      sources."to-regex-range-5.0.1"
-      sources."tslib-1.14.1"
-      sources."type-fest-0.16.0"
-      sources."unique-string-2.0.0"
-      sources."vscode-jsonrpc-8.2.0"
-      sources."vscode-languageserver-6.1.1"
-      sources."vscode-languageserver-protocol-3.17.5"
-      sources."vscode-languageserver-textdocument-1.0.11"
-      sources."vscode-languageserver-types-3.17.5"
-      sources."vscode-uri-2.1.2"
-      sources."wrappy-1.0.2"
-    ];
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "diagnostic language server";
-      homepage = "https://github.com/iamcco/diagnostic-languageserver#readme";
-      license = "MIT";
     };
     production = true;
     bypassCache = true;
@@ -74233,43 +74030,6 @@ in
     bypassCache = true;
     reconstructLock = true;
   };
-  get-graphql-schema = nodeEnv.buildNodePackage {
-    name = "get-graphql-schema";
-    packageName = "get-graphql-schema";
-    version = "2.1.2";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/get-graphql-schema/-/get-graphql-schema-2.1.2.tgz";
-      sha512 = "1z5Hw91VrE3GrpCZE6lE8Dy+jz4kXWesLS7rCSjwOxf5BOcIedAZeTUJRIeIzmmR+PA9CKOkPTYFRJbdgUtrxA==";
-    };
-    dependencies = [
-      sources."ansi-styles-3.2.1"
-      sources."chalk-2.4.2"
-      sources."color-convert-1.9.3"
-      sources."color-name-1.1.3"
-      sources."encoding-0.1.13"
-      sources."escape-string-regexp-1.0.5"
-      sources."graphql-14.7.0"
-      sources."has-flag-3.0.0"
-      sources."iconv-lite-0.6.3"
-      sources."iterall-1.3.0"
-      sources."minimist-1.2.8"
-      sources."node-fetch-2.7.0"
-      sources."safer-buffer-2.1.2"
-      sources."supports-color-5.5.0"
-      sources."tr46-0.0.3"
-      sources."webidl-conversions-3.0.1"
-      sources."whatwg-url-5.0.0"
-    ];
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "Downloads the GraphQL Schema of an GraphQL endpoint URL";
-      homepage = "https://github.com/graphcool/get-graphql-schema#readme";
-      license = "MIT";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
   git-run = nodeEnv.buildNodePackage {
     name = "git-run";
     packageName = "git-run";
@@ -74294,24 +74054,6 @@ in
       description = "A tool for managing multiple git repositories";
       homepage = "https://github.com/mixu/gr#readme";
       license = "BSD-3-Clause";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
-  git-standup = nodeEnv.buildNodePackage {
-    name = "git-standup";
-    packageName = "git-standup";
-    version = "2.3.2";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/git-standup/-/git-standup-2.3.2.tgz";
-      sha512 = "vDYicak+2y+u6TCtneCx/j6LuT9WhJShyWjTB5dhjXqTB9TJ/uF444OmYwrMlaT0/CqxHOV9NXlML+CR8AJxdA==";
-    };
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "Recall what you did on the last working day. Psst! or be nosy and find what someone else in your team did ;-)";
-      homepage = "https://github.com/kamranahmedse/git-standup#readme";
-      license = "MIT";
     };
     production = true;
     bypassCache = true;
@@ -74360,168 +74102,6 @@ in
       description = "CLI implementation of the GitLab API.";
       homepage = "https://github.com/jdalrymple/gitbeaker#readme";
       license = "MIT";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
-  gramma = nodeEnv.buildNodePackage {
-    name = "gramma";
-    packageName = "gramma";
-    version = "1.6.0";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/gramma/-/gramma-1.6.0.tgz";
-      sha512 = "5I4yc0miSXU2jvD17zpleKufSggU8etr5uxxLX0nkFLJRfB4Fp2yg1s1SuietfaripT9H2lVhftFYrj2wl56uw==";
-    };
-    dependencies = [
-      sources."ansi-regex-5.0.1"
-      sources."ansi-styles-4.3.0"
-      sources."async-2.6.4"
-      sources."balanced-match-1.0.2"
-      sources."base64-js-1.5.1"
-      sources."bl-1.2.3"
-      sources."brace-expansion-1.1.11"
-      sources."buffer-5.7.1"
-      sources."buffer-alloc-1.2.0"
-      sources."buffer-alloc-unsafe-1.1.0"
-      sources."buffer-crc32-0.2.13"
-      sources."buffer-fill-1.0.0"
-      sources."cli-progress-3.12.0"
-      sources."cliui-8.0.1"
-      sources."color-convert-2.0.1"
-      sources."color-name-1.1.4"
-      sources."commander-2.20.3"
-      sources."concat-map-0.0.1"
-      sources."core-util-is-1.0.3"
-      sources."debug-3.2.7"
-      sources."decode-uri-component-0.2.2"
-      sources."decompress-4.2.1"
-      sources."decompress-tar-4.1.1"
-      (sources."decompress-tarbz2-4.1.1" // {
-        dependencies = [
-          sources."file-type-6.2.0"
-        ];
-      })
-      sources."decompress-targz-4.1.1"
-      (sources."decompress-unzip-4.0.1" // {
-        dependencies = [
-          sources."file-type-3.9.0"
-        ];
-      })
-      sources."deep-is-0.1.4"
-      sources."dotenv-10.0.0"
-      sources."emoji-regex-8.0.0"
-      sources."encoding-0.1.13"
-      sources."end-of-stream-1.4.4"
-      sources."escalade-3.1.2"
-      sources."fd-slicer-1.1.0"
-      sources."file-type-5.2.0"
-      sources."filter-obj-1.1.0"
-      sources."fs-constants-1.0.0"
-      sources."fs.realpath-1.0.0"
-      sources."get-caller-file-2.0.5"
-      sources."get-stream-2.3.1"
-      sources."glob-7.2.3"
-      sources."graceful-fs-4.2.11"
-      sources."iconv-lite-0.6.3"
-      sources."ieee754-1.2.1"
-      sources."inflight-1.0.6"
-      sources."inherits-2.0.4"
-      sources."intercept-stdout-0.1.2"
-      sources."ip-regex-4.3.0"
-      sources."is-fullwidth-code-point-3.0.0"
-      sources."is-natural-number-4.0.1"
-      sources."is-stream-1.1.0"
-      sources."is-url-1.2.4"
-      sources."is2-2.0.9"
-      sources."isarray-1.0.0"
-      sources."isomorphic-fetch-3.0.0"
-      sources."kleur-4.1.5"
-      sources."lodash-4.17.21"
-      sources."lodash._arraycopy-3.0.0"
-      sources."lodash._basevalues-3.0.0"
-      sources."lodash._getnative-3.9.1"
-      sources."lodash.isarguments-3.1.0"
-      sources."lodash.isarray-3.0.4"
-      sources."lodash.keys-3.1.2"
-      sources."lodash.toarray-3.0.2"
-      (sources."make-dir-1.3.0" // {
-        dependencies = [
-          sources."pify-3.0.0"
-        ];
-      })
-      sources."minimatch-3.1.2"
-      sources."minimist-1.2.8"
-      sources."mkdirp-0.5.6"
-      sources."ms-2.1.3"
-      sources."node-fetch-2.7.0"
-      sources."object-assign-4.1.1"
-      sources."once-1.4.0"
-      sources."path-is-absolute-1.0.1"
-      sources."pend-1.2.0"
-      sources."pify-2.3.0"
-      sources."pinkie-2.0.4"
-      sources."pinkie-promise-2.0.1"
-      sources."portfinder-1.0.32"
-      sources."process-nextick-args-2.0.1"
-      sources."progress-stream-2.0.0"
-      (sources."prompts-2.4.2" // {
-        dependencies = [
-          sources."kleur-3.0.3"
-        ];
-      })
-      sources."query-string-7.1.3"
-      (sources."readable-stream-2.3.8" // {
-        dependencies = [
-          sources."safe-buffer-5.1.2"
-        ];
-      })
-      sources."require-directory-2.1.1"
-      sources."rimraf-3.0.2"
-      sources."safe-buffer-5.2.1"
-      sources."safer-buffer-2.1.2"
-      sources."seek-bzip-1.0.6"
-      sources."sisteransi-1.0.5"
-      sources."speedometer-1.0.0"
-      sources."split-on-first-1.1.0"
-      sources."strict-uri-encode-2.0.0"
-      sources."string-width-4.2.3"
-      (sources."string_decoder-1.1.1" // {
-        dependencies = [
-          sources."safe-buffer-5.1.2"
-        ];
-      })
-      sources."strip-ansi-6.0.1"
-      sources."strip-dirs-2.1.0"
-      sources."tar-stream-1.6.2"
-      (sources."tcp-port-used-1.0.2" // {
-        dependencies = [
-          sources."debug-4.3.1"
-          sources."ms-2.1.2"
-        ];
-      })
-      sources."through-2.3.8"
-      sources."through2-2.0.5"
-      sources."to-buffer-1.1.1"
-      sources."tr46-0.0.3"
-      sources."unbzip2-stream-1.4.3"
-      sources."util-deprecate-1.0.2"
-      sources."webidl-conversions-3.0.1"
-      sources."whatwg-fetch-3.6.20"
-      sources."whatwg-url-5.0.0"
-      sources."wrap-ansi-7.0.0"
-      sources."wrappy-1.0.2"
-      sources."xtend-4.0.2"
-      sources."y18n-5.0.8"
-      sources."yargs-17.7.2"
-      sources."yargs-parser-21.1.1"
-      sources."yauzl-2.10.0"
-    ];
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "Command line grammar checker";
-      homepage = "https://caderek.github.io/gramma/";
-      license = "ISC";
     };
     production = true;
     bypassCache = true;
@@ -85668,24 +85248,6 @@ in
     meta = {
       description = "Streaming torrent client for node.js with web ui.";
       homepage = "https://github.com/asapach/peerflix-server#readme";
-      license = "MIT";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
-  pnpm = nodeEnv.buildNodePackage {
-    name = "pnpm";
-    packageName = "pnpm";
-    version = "9.3.0";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/pnpm/-/pnpm-9.3.0.tgz";
-      sha512 = "7nuT4MK9EUCcZCT5K4ZvMdPqG+9fvkfTx1AM3DyWaIM9LlVoGtZt9bZAxh+p3CXVRu+lTXbX+L9UsTYUrCk2MQ==";
-    };
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "Fast, disk space efficient package manager";
-      homepage = "https://pnpm.io";
       license = "MIT";
     };
     production = true;
