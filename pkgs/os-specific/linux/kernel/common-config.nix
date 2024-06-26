@@ -1011,12 +1011,15 @@ let
       SERIAL_DEV_CTRL_TTYPORT = yes; # enables support for TTY serial devices
 
       BT_HCIBTUSB_MTK = whenAtLeast "5.3" yes; # MediaTek protocol support
-      BT_HCIUART_QCA = yes; # Qualcomm Atheros protocol support
-      BT_HCIUART_SERDEV = yes; # required by BT_HCIUART_QCA
+
       BT_HCIUART = module; # required for BT devices with serial port interface (QCA6390)
-      BT_HCIUART_BCSP = option yes;
+      BT_HCIUART_BCM = option yes; # Broadcom Bluetooth support
+      BT_HCIUART_BCSP = option yes; # CSR BlueCore support
+      BT_HCIUART_QCA = yes; # Qualcomm Atheros support
+      BT_HCIUART_SERDEV = yes; # required by BT_HCIUART_QCA
       BT_HCIUART_H4   = option yes; # UART (H4) protocol support
-      BT_HCIUART_LL   = option yes;
+      BT_HCIUART_LL   = option yes; # Texas Instruments BRF
+
       BT_RFCOMM_TTY   = option yes; # RFCOMM TTY support
       BT_QCA = module; # enables QCA6390 bluetooth
 
