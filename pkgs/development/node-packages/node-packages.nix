@@ -14512,15 +14512,6 @@ let
         sha512 = "o5Roy6tNG4SL/FOkCAN6RzjiakZS25RLYFrcMttJqbdd8BWrnA+fGz57iN5Pb06pvBGvl5gQ0B48dJlslXvoTg==";
       };
     };
-    "argparse-1.0.4" = {
-      name = "argparse";
-      packageName = "argparse";
-      version = "1.0.4";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/argparse/-/argparse-1.0.4.tgz";
-        sha512 = "nChgTocTucFvebsRskyrPUK/9GVYovJHGuQDVEKQw5wNhrhDlrKBQ7tjHsMmHr5qf45hUsxLkhDiGuX6g4/+LQ==";
-      };
-    };
     "argparse-2.0.1" = {
       name = "argparse";
       packageName = "argparse";
@@ -16382,42 +16373,6 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/boolean/-/boolean-3.2.0.tgz";
         sha512 = "d0II/GO9uf9lfUHH2BQsjxzRJZBdsjgsBiW4BvhWk/3qoKwQFjIDVN19PfX8F2D/r9PCMTtLWjYVCFrpeYUzsw==";
-      };
-    };
-    "bower-1.8.14" = {
-      name = "bower";
-      packageName = "bower";
-      version = "1.8.14";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/bower/-/bower-1.8.14.tgz";
-        sha512 = "8Rq058FD91q9Nwthyhw0la9fzpBz0iwZTrt51LWl+w+PnJgZk9J+5wp3nibsJcIUPglMYXr4NRBaR+TUj0OkBQ==";
-      };
-    };
-    "bower-endpoint-parser-0.2.1" = {
-      name = "bower-endpoint-parser";
-      packageName = "bower-endpoint-parser";
-      version = "0.2.1";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/bower-endpoint-parser/-/bower-endpoint-parser-0.2.1.tgz";
-        sha512 = "Hn0mrtju2JFNMLDrseDbcc17kSJyj/KrkrrjIb1gPinqx2Nr3g/J5j43clUdQLOvT3QeuhpP1C29qTACSJKI5Q==";
-      };
-    };
-    "bower-json-0.6.0" = {
-      name = "bower-json";
-      packageName = "bower-json";
-      version = "0.6.0";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/bower-json/-/bower-json-0.6.0.tgz";
-        sha512 = "K3UdrU7QOfgkrddBHMGWE6KWZZDpTnChj13J6YjTW2CH1L4gdfInoAYPpNmjXGqAEvwNF7yeu9KW8MADC0mYjw==";
-      };
-    };
-    "bower-logger-0.2.1" = {
-      name = "bower-logger";
-      packageName = "bower-logger";
-      version = "0.2.1";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/bower-logger/-/bower-logger-0.2.1.tgz";
-        sha512 = "z1kTna8TAJnvqhnkXTDBe7d+CX6dNpdQbAcHbm6rIurWCkMDT1JiQZOwJ+EhY52DxEIv+67ENujUZak5eFu3oQ==";
       };
     };
     "bowser-2.11.0" = {
@@ -22046,15 +22001,6 @@ let
         sha512 = "ZIwpnevOurS8bpT4192sqAowWM76JDKSHYzMLty3BZGSswgq6pBaH3DhCSW5xVAZICZyKdOBPjwww5wfgT/6PA==";
       };
     };
-    "deep-extend-0.4.2" = {
-      name = "deep-extend";
-      packageName = "deep-extend";
-      version = "0.4.2";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/deep-extend/-/deep-extend-0.4.2.tgz";
-        sha512 = "cQ0iXSEKi3JRNhjUsLWvQ+MVPxLVqpwCd0cFsWbJxlCim2TlCo1JvN5WaPdPvSpUdEnkJ/X+mPGcq5RJ68EK8g==";
-      };
-    };
     "deep-extend-0.5.1" = {
       name = "deep-extend";
       packageName = "deep-extend";
@@ -23701,15 +23647,6 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/end-of-stream/-/end-of-stream-1.4.4.tgz";
         sha512 = "+uw1inIHVPQoaVuHzRyXd21icM+cnt4CzD5rW+NC1wjOUSTOs+Te7FOv7AhN7vS9x/oIyhLP5PR1H+phQAHu5Q==";
-      };
-    };
-    "ends-with-0.2.0" = {
-      name = "ends-with";
-      packageName = "ends-with";
-      version = "0.2.0";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/ends-with/-/ends-with-0.2.0.tgz";
-        sha512 = "lRppY4dK3VkqBdR242sKcAJeYc8Gf/DhoX9AWvWI2RzccmLnqBQfwm2k4oSDv5MPDjUqawCauXhZkyWxkVhRsg==";
       };
     };
     "engine.io-1.3.1" = {
@@ -25627,15 +25564,6 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/ext-list/-/ext-list-2.2.2.tgz";
         sha512 = "u+SQgsubraE6zItfVA0tBuCBhfU9ogSRnsvygI7wht9TS510oLkBRXBsqopeUG/GBOIQyKZO9wjTqIu/sf5zFA==";
-      };
-    };
-    "ext-name-3.0.0" = {
-      name = "ext-name";
-      packageName = "ext-name";
-      version = "3.0.0";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/ext-name/-/ext-name-3.0.0.tgz";
-        sha512 = "a5CV1NyCQvSG+isfUoD4jrjIhwRIZ2E2htpZTXLhaHbmjd0ECduGGYOvXj3Fajus2DuZpjRSbPMlF5PBO4iqBA==";
       };
     };
     "ext-name-5.0.0" = {
@@ -28654,15 +28582,6 @@ let
         sha512 = "R7eWptXuGYxwijs0eV+v3o6+XH1IqVK8dJOEecQfTmkncw9AV4dcw/Dhxi8MdlqPthxxpZyizMzyg8RTmEsG+Q==";
       };
     };
-    "graceful-fs-3.0.12" = {
-      name = "graceful-fs";
-      packageName = "graceful-fs";
-      version = "3.0.12";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/graceful-fs/-/graceful-fs-3.0.12.tgz";
-        sha512 = "J55gaCS4iTTJfTXIxSVw3EMQckcqkpdRv3IR7gu6sq0+tbC363Zx6KH/SEwXASK9JRbhyZmVjJEVJIOxYsB3Qg==";
-      };
-    };
     "graceful-fs-4.2.10" = {
       name = "graceful-fs";
       packageName = "graceful-fs";
@@ -31100,15 +31019,6 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/interpret/-/interpret-3.1.1.tgz";
         sha512 = "6xwYfHbajpoF0xLW+iwLkhwgvLoZDfjYfoFNu8ftMoXINzwuymNLd9u/KmwtdT2GbR+/Cz66otEGEVVUHX9QLQ==";
-      };
-    };
-    "intersect-1.0.1" = {
-      name = "intersect";
-      packageName = "intersect";
-      version = "1.0.1";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/intersect/-/intersect-1.0.1.tgz";
-        sha512 = "qsc720yevCO+4NydrJWgEWKccAQwTOvj2m73O/VBA6iUL2HGZJ9XqBiyraNrBXX/W1IAjdpXdRZk24sq8TzBRg==";
       };
     };
     "into-stream-3.1.0" = {
@@ -35123,15 +35033,6 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/lodash/-/lodash-4.17.21.tgz";
         sha512 = "v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==";
-      };
-    };
-    "lodash-4.2.1" = {
-      name = "lodash";
-      packageName = "lodash";
-      version = "4.2.1";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/lodash/-/lodash-4.2.1.tgz";
-        sha512 = "GZttIEgpAXIRPojhmAjK8qs5sDIYi7Usv7vp0l2O6ccLU9fxZB0TtvkemdjHyljjMFQt02w4lhKLyvB5YH2C7g==";
       };
     };
     "lodash-es-4.17.21" = {
@@ -39363,15 +39264,6 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/native-promise-only/-/native-promise-only-0.8.1.tgz";
         sha512 = "zkVhZUA3y8mbz652WrL5x0fB0ehrBkulWT3TomAQ9iDtyXZvzKeEA6GPxAItBYeNYl5yngKRX612qHOhvMkDeg==";
-      };
-    };
-    "natives-1.1.6" = {
-      name = "natives";
-      packageName = "natives";
-      version = "1.1.6";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/natives/-/natives-1.1.6.tgz";
-        sha512 = "6+TDFewD4yxY14ptjKaS63GVdtKiES1pTPyxn9Jb0rBqPMZ7VcCiooEhPNsr+mqHtMGxa/5c/HhcC4uPEUw/nA==";
       };
     };
     "natural-compare-1.4.0" = {
@@ -44665,15 +44557,6 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/promise.prototype.finally/-/promise.prototype.finally-3.1.8.tgz";
         sha512 = "aVDtsXOml9iuMJzUco9J1je/UrIT3oMYfWkCTiUhkt+AvZw72q4dUZnR/R/eB3h5GeAagQVXvM1ApoYniJiwoA==";
-      };
-    };
-    "promised-temp-0.1.0" = {
-      name = "promised-temp";
-      packageName = "promised-temp";
-      version = "0.1.0";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/promised-temp/-/promised-temp-0.1.0.tgz";
-        sha512 = "hftln6irUZlMiaQIvet59HEDUKFJ8pGHMyyMk9DuA5DTezIa8z9pDLBhjt78AKs/JMdZEJ7JATzT/G8mizbORQ==";
       };
     };
     "promisepipe-3.0.0" = {
@@ -51974,15 +51857,6 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/teex/-/teex-1.0.1.tgz";
         sha512 = "eYE6iEI62Ni1H8oIa7KlDU6uQBtqr4Eajni3wX7rpfXD8ysFx8z0+dri+KWEPWpBsxXfxu58x/0jvTVT1ekOSg==";
-      };
-    };
-    "temp-0.8.3" = {
-      name = "temp";
-      packageName = "temp";
-      version = "0.8.3";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/temp/-/temp-0.8.3.tgz";
-        sha512 = "jtnWJs6B1cZlHs9wPG7BrowKxZw/rf6+UpGAkr8AaYmiTyTO7zQlLoST8zx/8TcUPnZmeBoB+H8ARuHZaSijVw==";
       };
     };
     "temp-0.8.4" = {
@@ -63971,140 +63845,6 @@ in
       description = "Linter for Awesome lists";
       homepage = "https://github.com/sindresorhus/awesome-lint#readme";
       license = "MIT";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
-  bower2nix = nodeEnv.buildNodePackage {
-    name = "bower2nix";
-    packageName = "bower2nix";
-    version = "3.2.0";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/bower2nix/-/bower2nix-3.2.0.tgz";
-      sha512 = "oNHyIWiU5OpUoDCSSRCZQ6JkXyBgtyi+odbv+XSmO6/KCn3B4SRT3/d+QKNj5UQ8KRsrBAI0Ry7CG2OtqrFE1A==";
-    };
-    dependencies = [
-      sources."argparse-1.0.4"
-      sources."array-find-index-1.0.2"
-      sources."balanced-match-1.0.2"
-      sources."bower-1.8.14"
-      sources."bower-endpoint-parser-0.2.1"
-      sources."bower-json-0.6.0"
-      sources."bower-logger-0.2.1"
-      sources."brace-expansion-1.1.11"
-      sources."camelcase-2.1.1"
-      sources."camelcase-keys-2.1.0"
-      sources."concat-map-0.0.1"
-      sources."currently-unhandled-0.4.1"
-      sources."debug-2.6.9"
-      sources."decamelize-1.2.0"
-      sources."deep-extend-0.4.2"
-      sources."ends-with-0.2.0"
-      sources."error-ex-1.3.2"
-      sources."ext-list-2.2.2"
-      sources."ext-name-3.0.0"
-      sources."find-up-1.1.2"
-      (sources."fs-extra-0.26.7" // {
-        dependencies = [
-          sources."graceful-fs-4.2.11"
-        ];
-      })
-      sources."fs.realpath-1.0.0"
-      sources."function-bind-1.1.2"
-      sources."get-stdin-4.0.1"
-      sources."glob-6.0.4"
-      sources."graceful-fs-3.0.12"
-      sources."hasown-2.0.2"
-      sources."hosted-git-info-2.8.9"
-      sources."indent-string-2.1.0"
-      sources."inflight-1.0.6"
-      sources."inherits-2.0.4"
-      sources."intersect-1.0.1"
-      sources."is-arrayish-0.2.1"
-      sources."is-core-module-2.13.1"
-      sources."is-finite-1.1.0"
-      sources."is-plain-obj-1.1.0"
-      sources."is-utf8-0.2.1"
-      (sources."jsonfile-2.4.0" // {
-        dependencies = [
-          sources."graceful-fs-4.2.11"
-        ];
-      })
-      (sources."klaw-1.3.1" // {
-        dependencies = [
-          sources."graceful-fs-4.2.11"
-        ];
-      })
-      (sources."load-json-file-1.1.0" // {
-        dependencies = [
-          sources."graceful-fs-4.2.11"
-        ];
-      })
-      sources."lodash-4.2.1"
-      sources."loud-rejection-1.6.0"
-      sources."map-obj-1.0.1"
-      sources."meow-3.7.0"
-      sources."mime-db-1.52.0"
-      sources."minimatch-3.1.2"
-      sources."minimist-1.2.8"
-      sources."mkdirp-0.5.6"
-      sources."ms-2.0.0"
-      sources."natives-1.1.6"
-      sources."normalize-package-data-2.5.0"
-      sources."object-assign-4.1.1"
-      sources."once-1.4.0"
-      sources."os-tmpdir-1.0.2"
-      sources."parse-json-2.2.0"
-      sources."path-exists-2.1.0"
-      sources."path-is-absolute-1.0.1"
-      sources."path-parse-1.0.7"
-      (sources."path-type-1.1.0" // {
-        dependencies = [
-          sources."graceful-fs-4.2.11"
-        ];
-      })
-      sources."pify-2.3.0"
-      sources."pinkie-2.0.4"
-      sources."pinkie-promise-2.0.1"
-      sources."promised-temp-0.1.0"
-      sources."q-1.5.1"
-      sources."read-pkg-1.1.0"
-      sources."read-pkg-up-1.0.1"
-      sources."redent-1.0.0"
-      sources."repeating-2.0.1"
-      sources."resolve-1.22.8"
-      (sources."rimraf-2.7.1" // {
-        dependencies = [
-          sources."glob-7.2.3"
-        ];
-      })
-      sources."semver-5.7.2"
-      sources."signal-exit-3.0.7"
-      sources."sort-keys-1.1.2"
-      sources."sort-keys-length-1.0.1"
-      sources."spdx-correct-3.2.0"
-      sources."spdx-exceptions-2.5.0"
-      sources."spdx-expression-parse-3.0.1"
-      sources."spdx-license-ids-3.0.18"
-      sources."sprintf-js-1.0.3"
-      sources."strip-bom-2.0.0"
-      sources."strip-indent-1.0.1"
-      sources."supports-preserve-symlinks-flag-1.0.0"
-      (sources."temp-0.8.3" // {
-        dependencies = [
-          sources."rimraf-2.2.8"
-        ];
-      })
-      sources."trim-newlines-1.0.0"
-      sources."validate-npm-package-license-3.0.4"
-      sources."wrappy-1.0.2"
-    ];
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "Generate nix expressions to fetch bower dependencies";
-      homepage = "https://github.com/rvl/bower2nix";
-      license = "GPL-3.0";
     };
     production = true;
     bypassCache = true;

@@ -23,7 +23,6 @@
 , "autoprefixer"
 , "aws-cdk"
 , "awesome-lint"
-, "bower2nix"
 , "browserify"
 , "browser-sync"
 , "cdk8s-cli"
