@@ -9,6 +9,7 @@
 , argp-standalone
 , musl-obstack
 , nixosTests
+, fetchpatch
 }:
 
 stdenv.mkDerivation rec {
@@ -26,8 +27,16 @@ stdenv.mkDerivation rec {
     musl-obstack
   ];
 
-  # https://github.com/acmel/dwarves/pull/51
-  patches = [ ./threading-reproducibility.patch ];
+  patches = [
+    # https://github.com/acmel/dwarves/pull/51 / https://lkml.kernel.org/r/20240626032253.3406460-1-asmadeus@codewreck.org
+    ./threading-reproducibility.patch
+    # https://github.com/acmel/dwarves/issues/53
+    (fetchpatch {
+      name = "fix-clang-btf-generation-bug.patch";
+      url = "https://github.com/acmel/dwarves/commit/6a2b27c0f512619b0e7a769a18a0fb05bb3789a5.patch";
+      hash = "sha256-Le1BAew/a/QKkYNLgSQxEvZ9mEEglUw8URwz1kiheeE=";
+    })
+  ];
 
   # Put libraries in "lib" subdirectory, not top level of $out
   cmakeFlags = [ "-D__LIB=lib" "-DLIBBPF_EMBEDDED=OFF" ];
