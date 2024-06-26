@@ -2,6 +2,7 @@
 
 import ./make-test-python.nix ({ lib, pkgs, ...} : let
   foo = pkgs.writeText "foo" "Hello World";
+  fakeSelfDotRev = "a5c58fc8bea401cea8db100cfa41431679716d81";
 in {
   name = "misc";
   meta.maintainers = with lib.maintainers; [ eelco ];
@@ -40,12 +41,15 @@ in {
       boot.kernel.sysctl."vm.swappiness" = 1;
       boot.kernelParams = [ "vsyscall=emulate" ];
       system.extraDependencies = [ foo ];
+      system.configurationRevision = fakeSelfDotRev;
     };
 
   testScript =
     ''
       with subtest("nixos-version"):
           machine.succeed("[ `nixos-version | wc -w` = 2 ]")
+          machine.succeed("nixos-version --configuration-revision | grep ${fakeSelfDotRev}")
+          machine.succeed("nixos-version --json | grep ${fakeSelfDotRev}")
 
       with subtest("nixos-rebuild"):
           assert "NixOS module" in machine.succeed("nixos-rebuild --help")
