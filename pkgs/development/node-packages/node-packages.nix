@@ -91825,24 +91825,6 @@ in
     bypassCache = true;
     reconstructLock = true;
   };
-  vim-language-server = nodeEnv.buildNodePackage {
-    name = "vim-language-server";
-    packageName = "vim-language-server";
-    version = "2.3.1";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/vim-language-server/-/vim-language-server-2.3.1.tgz";
-      sha512 = "Y9Zy3NKzfndLUfuZRrITkpfGvpL2K7hNPV8sJ1iB6mf1YRxIX3Hs6lwZimoD5pmvamUaOQhNGYMS/Ox9itzA4Q==";
-    };
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "vim language server";
-      homepage = "https://github.com/iamcco/vim-language-server#readme";
-      license = "MIT";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
   vls = nodeEnv.buildNodePackage {
     name = "vls";
     packageName = "vls";
