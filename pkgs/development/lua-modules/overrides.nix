@@ -334,7 +334,7 @@ in
     buildInputs = oa.buildInputs ++ [
       zlib.dev
     ];
-    meta.broken = luaOlder "5.1" || luaAtLeast "5.4";
+    meta = oa.meta // { broken = luaOlder "5.1" || luaAtLeast "5.4"; };
   });
 
   luadbi-mysql = prev.luadbi-mysql.overrideAttrs (oa: {
