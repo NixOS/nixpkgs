@@ -3,7 +3,7 @@
 
 set -o errexit -o nounset
 
-BASEDIR="$(dirname "$(readlink -f $0)")"
+BASEDIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)
 
 for directory in "basic" "full"; do
   pushd "$BASEDIR/$directory"
