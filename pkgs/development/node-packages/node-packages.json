@@ -89,7 +89,6 @@
 , "csslint"
 , "dhcp"
 , "diff2html-cli"
-, "dotenv-cli"
 , "dotenv-vault"
 , "elasticdump"
 , "@electron-forge/cli"
