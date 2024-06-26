@@ -61,12 +61,12 @@ stdenv.mkDerivation rec {
     version = testers.testVersion { package = lgogdownloader; };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Unofficial downloader to GOG.com for Linux users. It uses the same API as the official GOGDownloader";
     mainProgram = "lgogdownloader";
     homepage = "https://github.com/Sude-/lgogdownloader";
-    license = licenses.wtfpl;
-    maintainers = with maintainers; [ _0x4A6F ];
-    platforms = platforms.linux;
+    license = lib.licenses.wtfpl;
+    maintainers = with lib.maintainers; [ _0x4A6F ];
+    platforms = lib.platforms.linux;
   };
 }
