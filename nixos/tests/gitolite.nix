@@ -71,13 +71,12 @@ in
       { pkgs, ... }:
       {
         environment.systemPackages = [ pkgs.git ];
-        programs.ssh.extraConfig = ''
-          Host *
-            UserKnownHostsFile /dev/null
-            StrictHostKeyChecking no
-            # there's nobody around that can input password
-            PreferredAuthentications publickey
-        '';
+        programs.ssh.hostSettings."*" = {
+          UserKnownHostsFile = "/dev/null";
+          StrictHostKeyChecking = false;
+          # there's nobody around that can input password
+          PreferredAuthentications = "publickey";
+        };
         users.users.alice = { isNormalUser = true; };
         users.users.bob = { isNormalUser = true; };
       };

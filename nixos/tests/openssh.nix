@@ -155,6 +155,8 @@ in {
     client =
       { ... }: {
         virtualisation.vlans = [ 1 2 ];
+        programs.ssh.hostSettings."*".UserKnownHostsFile = "/dev/null";
+        programs.ssh.hostSettings."192.168.2.5".Port = 2222;
       };
 
   };
@@ -191,20 +193,20 @@ in {
 
         client.wait_for_unit("network.target")
         client.succeed(
-            "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no server 'echo hello world' >&2",
+            "ssh -o StrictHostKeyChecking=no server 'echo hello world' >&2",
             timeout=30
         )
         client.succeed(
-            "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no server 'ulimit -l' | grep 1024",
+            "ssh -o StrictHostKeyChecking=no server 'ulimit -l' | grep 1024",
             timeout=30
         )
 
         client.succeed(
-            "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no server-lazy 'echo hello world' >&2",
+            "ssh -o StrictHostKeyChecking=no server-lazy 'echo hello world' >&2",
             timeout=30
         )
         client.succeed(
-            "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no server-lazy 'ulimit -l' | grep 1024",
+            "ssh -o StrictHostKeyChecking=no server-lazy 'ulimit -l' | grep 1024",
             timeout=30
         )
 
@@ -215,7 +217,7 @@ in {
         client.succeed("chmod 600 privkey.snakeoil")
         # The final segment in this IP is allocated according to the alphabetical order of machines in this test.
         client.succeed(
-            "ssh -p 2222 -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i privkey.snakeoil root@192.168.2.5 true",
+            "ssh -o StrictHostKeyChecking=no -i privkey.snakeoil root@192.168.2.5 true",
             timeout=30
         )
 
@@ -225,11 +227,11 @@ in {
         )
         client.succeed("chmod 600 privkey.snakeoil")
         client.succeed(
-            "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i privkey.snakeoil server true",
+            "ssh -o StrictHostKeyChecking=no -i privkey.snakeoil server true",
             timeout=30
         )
         client.succeed(
-            "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i privkey.snakeoil server-lazy true",
+            "ssh -o StrictHostKeyChecking=no -i privkey.snakeoil server-lazy true",
             timeout=30
         )
 
@@ -246,15 +248,15 @@ in {
         )
         client.succeed("chmod 600 privkey.snakeoil")
         client.succeed(
-            "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i privkey.snakeoil alice@server-allowed-users true",
+            "ssh -o StrictHostKeyChecking=no -i privkey.snakeoil alice@server-allowed-users true",
             timeout=30
         )
         client.succeed(
-            "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i privkey.snakeoil bob@server-allowed-users true",
+            "ssh -o StrictHostKeyChecking=no -i privkey.snakeoil bob@server-allowed-users true",
             timeout=30
         )
         client.fail(
-            "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i privkey.snakeoil carol@server-allowed-users true",
+            "ssh -o StrictHostKeyChecking=no -i privkey.snakeoil carol@server-allowed-users true",
             timeout=30
         )
 
@@ -264,7 +266,7 @@ in {
         )
         client.succeed("chmod 600 privkey.snakeoil")
         client.succeed(
-            "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i privkey.snakeoil server-no-openssl true",
+            "ssh -o StrictHostKeyChecking=no -i privkey.snakeoil server-no-openssl true",
             timeout=30
         )
 
@@ -274,7 +276,7 @@ in {
         )
         client.succeed("chmod 600 privkey.snakeoil")
         client.succeed(
-            "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i privkey.snakeoil server-no-pam true",
+            "ssh -o StrictHostKeyChecking=no -i privkey.snakeoil server-no-pam true",
             timeout=30
         )
   '';
