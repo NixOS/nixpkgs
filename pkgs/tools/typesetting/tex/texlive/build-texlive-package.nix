@@ -58,6 +58,7 @@ let
   # common metadata
   name = "${pname}-${version}${extraVersion}";
   meta = {
+    homepage = "https://ctan.org/pkg/${pname}";
     license = map (x: lib.licenses.${x}) license;
     # TeX Live packages should not be installed directly into the user profile
     outputsToInstall = [ ];
