@@ -40,17 +40,16 @@ stdenv.mkDerivation rec {
     mainProgram = "scmp_sys_resolver";
     homepage = "https://github.com/seccomp/libseccomp";
     license = licenses.lgpl21Only;
-    platforms = platforms.linux;
-    badPlatforms = [
-      "alpha-linux"
-      "loongarch64-linux"
-      "m68k-linux"
-      "microblaze-linux"
-      "microblazeel-linux"
-      "riscv32-linux"
-      "sparc-linux"
-      "sparc64-linux"
-    ];
+    # https://github.com/seccomp/libseccomp/blob/main/README.md#supported-architectures
+    platforms = intersectLists platforms.linux (
+      platforms.x86 ++
+      platforms.arm ++
+      platforms.aarch64 ++
+      platforms.mips ++
+      platforms.power ++
+      platforms.s390 ++
+      platforms.riscv64
+    );
     maintainers = with maintainers; [ thoughtpolice ];
   };
 }
