@@ -9148,6 +9148,8 @@ self: super: with self; {
 
   od = callPackage ../development/python-modules/od { };
 
+  oddsprout = callPackage ../development/python-modules/oddsprout { };
+
   odfpy = callPackage ../development/python-modules/odfpy { };
 
   odp-amsterdam = callPackage ../development/python-modules/odp-amsterdam { };
