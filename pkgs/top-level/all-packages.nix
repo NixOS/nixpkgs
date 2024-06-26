@@ -10247,6 +10247,8 @@ with pkgs;
 
   librest_1_0 = callPackage ../development/libraries/librest/1.0.nix { };
 
+  libspeedhack = callPackage ../tools/misc/libspeedhack { };
+
   libwebsockets = callPackage ../development/libraries/libwebsockets { };
 
   libyafaray = callPackage ../tools/graphics/libyafaray { };
