@@ -38,6 +38,10 @@
 , zam-plugins
 , zita-convolver
 }:
+let
+  # Fix crashes with speexdsp effects
+  speexdsp' = speexdsp.override { withFftw3 = false; };
+in
 
 stdenv.mkDerivation rec {
   pname = "easyeffects";
@@ -83,7 +87,7 @@ stdenv.mkDerivation rec {
     rnnoise
     rubberband
     soundtouch
-    speexdsp
+    speexdsp'
     tbb
     zita-convolver
   ];
