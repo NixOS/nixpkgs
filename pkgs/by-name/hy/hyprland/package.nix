@@ -64,14 +64,14 @@ assert lib.assertMsg (!hidpiXWayland) "The option `hidpiXWayland` has been remov
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hyprland" + lib.optionalString debug "-debug";
-  version = "0.41.1";
+  version = "0.41.2";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = finalAttrs.pname;
     fetchSubmodules = true;
     rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-hLnnNBWP1Qjs1I3fndMgp8rbWJruxdnGTq77A4Rv4R4=";
+    hash = "sha256-JmfnYz+9a4TjNl3mAus1VpoWtTI9d1xkW9MHbkcV0Po=";
   };
 
   postPatch = ''
@@ -186,8 +186,9 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Dynamic tiling Wayland compositor that doesn't sacrifice on its looks";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [
-      wozeparrot
       fufexan
+      johnrtitor
+      wozeparrot
     ];
     mainProgram = "Hyprland";
     platforms = lib.platforms.linux;
