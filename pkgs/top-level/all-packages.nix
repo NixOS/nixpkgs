@@ -5249,6 +5249,8 @@ with pkgs;
 
   pgfplots = callPackage ../tools/typesetting/tex/pgf-tikz/pgfplots.nix { };
 
+  pgsrip = with python3Packages; toPythonApplication pgsrip;
+
   pplatex = callPackage ../tools/typesetting/tex/pplatex { };
 
   tetex = callPackage ../tools/typesetting/tex/tetex { libpng = libpng12; };
@@ -15185,6 +15187,8 @@ with pkgs;
   libcxxStdenv = if stdenv.isDarwin then stdenv else lowPrio llvmPackages.libcxxStdenv;
 
   clean = callPackage ../development/compilers/clean { };
+
+  cleanit = with python3Packages; toPythonApplication cleanit;
 
   clickable = python3Packages.callPackage ../development/tools/clickable { };
 
@@ -37190,6 +37194,8 @@ with pkgs;
   torus-trooper = callPackage ../games/torus-trooper { };
 
   trackballs = callPackage ../games/trackballs { };
+
+  trakit = with python3Packages; toPythonApplication trakit;
 
   try = callPackage ../tools/admin/try { };
 
