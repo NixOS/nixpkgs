@@ -116,7 +116,6 @@
 , "git-run"
 , "git-standup"
 , "@gitbeaker/cli"
-, "gramma"
 , "grammarly-languageserver"
 , "graphql"
 , "graphql-cli"
