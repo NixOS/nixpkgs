@@ -1261,6 +1261,7 @@
   ./services/search/sonic-server.nix
   ./services/search/typesense.nix
   ./services/security/aesmd.nix
+  ./services/security/aide.nix
   ./services/security/authelia.nix
   ./services/security/bitwarden-directory-connector-cli.nix
   ./services/security/certmgr.nix
