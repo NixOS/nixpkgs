@@ -17,7 +17,7 @@ argsStdenv@{ name ? "stdenv", preHook ? "", initialPath
   # (see all-packages.nix).
   fetchurlBoot
 
-, setupScript ? ./setup.sh
+, setupScript ? config.setupScript or ./setup.sh
 
 , extraNativeBuildInputs ? []
 , extraBuildInputs ? []
