@@ -45,6 +45,16 @@ in mkLicense lset) ({
     free = false;
   };
 
+  adobeUtopia = {
+    spdxId = "Adobe-Utopia";
+    fullName = "Adobe Utopia Font License";
+    # permission to use and share is granted, but not explicitly to improve, but
+    # trademark and attribution only have to appear in "unmodified copies", which
+    # could mean that modified copies are allowed. Fedora allows this license.
+    # https://docs.fedoraproject.org/en-US/legal/allowed-licenses/#_allowed_font_licenses
+    free = true;
+  };
+
   afl20 = {
     spdxId = "AFL-2.0";
     fullName = "Academic Free License v2.0";
@@ -395,6 +405,11 @@ in mkLicense lset) ({
   cecill-c = {
     spdxId = "CECILL-C";
     fullName  = "CeCILL-C Free Software License Agreement";
+  };
+
+  cronyx = {
+    spdxId = "Cronyx";
+    fullName = "Cronyx License";
   };
 
   cpal10 = {

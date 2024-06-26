@@ -149,8 +149,7 @@ final: prev: {
 
   fontadobe100dpi = prev.fontadobe100dpi.overrideAttrs (attrs: {
     meta = attrs.meta // {
-      # unknown permission notice and disclaimer
-      # seems free to me (use, share and improve is permitted, studying does not really work for fonts)
+      # HPND-sell-variant, but with Adobe trademark and no disclaimer
       license = lib.licenses.free;
     };
   });
@@ -164,33 +163,25 @@ final: prev: {
 
   fontadobeutopia100dpi = prev.fontadobeutopia100dpi.overrideAttrs (attrs: {
     meta = attrs.meta // {
-      # unknown permission notice and disclaimer
-      # permission to use and share is granted, but not explicitly to improve
-      # trademark and attribution only have to appear in "unmodified copies",
-      # which could mean that modified copies are allowed,
-      # but that does not seem to me how legal stuff works, so I'd say:
-      license = lib.licenses.unfreeRedistributable;
+      license = lib.licenses.adobeUtopia;
     };
   });
 
   fontadobeutopia75dpi = prev.fontadobeutopia75dpi.overrideAttrs (attrs: {
     meta = attrs.meta // {
-      # same as fontadobeutopia100dpi
-      license = lib.licenses.unfreeRedistributable;
+      license = lib.licenses.adobeUtopia;
     };
   });
 
   fontadobeutopiatype1 = prev.fontadobeutopiatype1.overrideAttrs (attrs: {
     meta = attrs.meta // {
-      # same as fontadobeutopia100dpi
-      license = lib.licenses.unfreeRedistributable;
+      license = lib.licenses.adobeUtopia;
     };
   });
 
   fontalias = prev.fontalias.overrideAttrs (attrs: {
     meta = attrs.meta // {
-      # unknown permission notice and disclaimer that grants all 4 freedoms
-      license = lib.licenses.free;
+      license = lib.licenses.cronyx;
     };
   });
 
@@ -200,48 +191,48 @@ final: prev: {
     };
   });
 
+
+  # Lucida Bigelow & Holmes fonts
+  # the legal notice only allows the the use of the software
+  # there are no statements about it being redistributable
+  # changing is not allowed unless is is "absolutely necessary"
+  # the typewriter fonts only include a copyright
+  # Wikipedia says the license is "commercial":
+  # https://en.wikipedia.org/wiki/Lucida
   fontbh75dpi = prev.fontbh75dpi.overrideAttrs (attrs: {
     meta = attrs.meta // {
-      # the legal notice only allows the the use of the software
-      # there are no statements about it being redistributable
-      # changing is not allowed unless is is absolutely necessary
       license = lib.licenses.unfree;
     };
   });
-
   fontbh100dpi = prev.fontbh100dpi.overrideAttrs (attrs: {
     meta = attrs.meta // {
-      # same as fontbh75dpi
       license = lib.licenses.unfree;
     };
   });
-
-  # Bigelow & Holmes fonts
   fontbhlucidatypewriter75dpi = prev.fontbhlucidatypewriter75dpi.overrideAttrs (attrs: {
     meta = attrs.meta // {
-      # https://www.x.org/releases/current/doc/xorg-docs/License.html#Bigelow_Holmes_Inc_and_URW_GmbH_Luxi_font_license
-      license = lib.licenses.unfreeRedistributable;
+      license = lib.licenses.unfree;
     };
   });
-
   fontbhlucidatypewriter100dpi = prev.fontbhlucidatypewriter100dpi.overrideAttrs (attrs: {
     meta = attrs.meta // {
-      # same as fontbhlucidatypewriter75dpi
-      license = lib.licenses.unfreeRedistributable;
+      license = lib.licenses.unfree;
     };
   });
 
   fontbhttf = prev.fontbhttf.overrideAttrs (attrs: {
     meta = attrs.meta // {
-      # copyright notice permits using and distributing,
-      # but changing is not permitted, so:
+      # Copyright notice permits using and distributing, but changing is explicitly disallowed.
+      # Wikipedia says they are non-free (quoting Debian):
+      # https://en.wikipedia.org/wiki/Luxi_fonts
+      # https://web.archive.org/web/20141006121747/https://packages.debian.org/wheezy/ttf-xfree86-nonfree
       license = lib.licenses.unfreeRedistributable;
     };
   });
 
   fontbhtype1 = prev.fontbhtype1.overrideAttrs (attrs: {
     meta = attrs.meta // {
-      # same as fontbhttf
+      # same license as fontbhttf
       license = lib.licenses.unfreeRedistributable;
     };
   });
@@ -295,8 +286,7 @@ final: prev: {
 
   fontcronyxcyrillic = prev.fontcronyxcyrillic.overrideAttrs (attrs: {
     meta = attrs.meta // {
-      # unknown permission notice that grants all 4 freedoms
-      license = lib.licenses.free;
+      license = lib.licenses.cronyx;
     };
   });
 
@@ -323,6 +313,9 @@ final: prev: {
 
   fontibmtype1 = prev.fontibmtype1.overrideAttrs (attrs: {
     meta = attrs.meta // {
+      # The COPYING file doesn't state anything about the font being allowed to be modified.
+      # OpenMandriva agrees that the font is not allowed to be modified:
+      # https://github.com/OpenMandrivaAssociation/x11-font-ibm-type1/blob/11b1ac6c83aed0e9205876da3d4ed78cc606f981/x11-font-ibm-type1.spec
       license = lib.licenses.unfreeRedistributable;
     };
   });
@@ -335,8 +328,11 @@ final: prev: {
 
   fontjismisc = prev.fontjismisc.overrideAttrs (attrs: {
     meta = attrs.meta // {
-      # unclear license, "permission to use"?
-      license = lib.licenses.unfree;
+      # unclear license: "permission to use"
+      # however Wikipedia says it is public domain:
+      # https://ja.wikipedia.org/w/index.php?title=Jiskan&oldid=100304028
+      # Apparantly, because Japan didn't have copyright when the original font was created.
+      license = lib.licenses.publicDomain;
     };
   });
 
@@ -371,8 +367,9 @@ final: prev: {
 
   fontmiscmeltho = prev.fontmiscmeltho.overrideAttrs (attrs: {
     meta = attrs.meta // {
-      # modified version of the Bigelow & Holmes Font License
-      license = lib.licenses.unfreeRedistributable;
+      # modified version of the Lucida Bigelow & Holmes Font License
+      # still unfree tho  :(
+      license = lib.licenses.unfree;
     };
   });
 
@@ -402,7 +399,7 @@ final: prev: {
   fontscreencyrillic = prev.fontscreencyrillic.overrideAttrs (attrs: {
     meta = attrs.meta // {
       # unknown permission notice that grants all 4 freedoms
-      license = lib.licenses.free;
+      license = lib.licenses.cronyx;
     };
   });
 
@@ -456,8 +453,18 @@ final: prev: {
         gpl2Plus
         gpl3Plus
         hpndSellVariant
-        X11
-        # gccmakedep.{in,man} have no license statement
+        x11
+        # gccmakedep.man was written by Colin Watson for Debian somewhen earlier than November 2003.
+        # While I wasn't able to trace the exact source, between 1997 and 2004 the
+        # "Debian Social Contract, Version 1.0" was in effect, which requires all components
+        # of the Debian Operating System to be free software, which includes this man page.
+        # https://www.debian.org/social_contract.1.0
+        free
+        # gccmakedep.in is "Based on mdepend.cpp and code supplied by Hongjiu Lu <hjl@nynexst.com>"
+        # mdepend.cpp is part of motif, which at the time of basing the file on it was proprietary
+        # TODO: look into if that is now retroactively considered LGPL, since newer motif versions are LGPL-2.1
+        # The license of the code by Hongjiu Lu is unclear.
+        # I also asked Kaleb Keithley, the guy who commited that code, if they know something.
         unfree
       ];
       mainProgram = "gccmakedep";
