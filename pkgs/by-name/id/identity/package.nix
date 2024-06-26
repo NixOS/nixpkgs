@@ -3,23 +3,21 @@
   stdenv,
   fetchFromGitLab,
   rustPlatform,
-  nix-update-script,
-
+  cargo,
+  rustc,
   appstream,
   blueprint-compiler,
-  cargo,
-  desktop-file-utils,
-  meson,
-  ninja,
-  pkg-config,
-  rustc,
-  wrapGAppsHook4,
-
   dav1d,
+  desktop-file-utils,
   gst_all_1,
   gtk4,
   libadwaita,
   libwebp,
+  meson,
+  ninja,
+  pkg-config,
+  nix-update-script,
+  wrapGAppsHook4,
 }:
 
 stdenv.mkDerivation rec {
