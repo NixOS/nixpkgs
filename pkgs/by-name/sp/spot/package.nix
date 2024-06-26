@@ -79,7 +79,7 @@ stdenv.mkDerivation rec {
     mainProgram = "spot";
     homepage = "https://github.com/xou816/spot";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ getchoo ];
     platforms = platforms.linux;
   };
 }
