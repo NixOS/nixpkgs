@@ -27,7 +27,7 @@ assert systemdSupport -> dbusSupport;
 
 stdenv.mkDerivation (finalAttrs: {
   inherit pname;
-  version = "2.1.0";
+  version = "2.2.3";
 
   outputs = [ "out" "lib" "dev" "doc" "man" ];
 
@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "rousseau";
     repo = "PCSC";
     rev = "refs/tags/${finalAttrs.version}";
-    hash = "sha256-aJKI6pWrZJFmiTxZ9wgCuxKRWRMFVRAkzlo+tSqV8B4=";
+    hash = "sha256-hKyxXqZaqg8KGFoBWhRHV1/50uoxqiG0RsYtgw2BuQ4=";
   };
 
   configureFlags = [
