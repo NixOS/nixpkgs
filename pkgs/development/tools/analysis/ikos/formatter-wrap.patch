@@ -1,0 +1,13 @@
+diff --git a/analyzer/python/ikos/view.py b/analyzer/python/ikos/view.py
+index 4e9ed5d..6643db8 100644
+--- a/analyzer/python/ikos/view.py
++++ b/analyzer/python/ikos/view.py
+@@ -422,7 +422,7 @@ class Formatter(HtmlFormatter):
+         self.call_contexts = {}
+         self.checks = {}
+ 
+-    def wrap(self, source, outfile):
++    def wrap(self, source):
+         return self._wrap_code(source)
+ 
+     def _wrap_code(self, source):
