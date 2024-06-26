@@ -13141,6 +13141,10 @@ with pkgs;
 
   sudo = callPackage ../tools/security/sudo { };
 
+  sudoWithSssd = sudo.override {
+    withSssd = true;
+  };
+
   sudo-rs = callPackage ../tools/security/sudo-rs { };
 
   suidChroot = callPackage ../tools/system/suid-chroot { };
