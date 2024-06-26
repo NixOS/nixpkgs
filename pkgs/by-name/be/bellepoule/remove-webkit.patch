@@ -1,0 +1,15 @@
+diff --git a/build/BellePoule/Makefile b/build/BellePoule/Makefile
+index ee43afa7..784b2b69 100644
+--- a/build/BellePoule/Makefile
++++ b/build/BellePoule/Makefile
+@@ -46,8 +46,8 @@ GOO = goocanvas
+ #----------------------------------------------------
+ #-- WEBKIT  -----------------------------------------
+ #----------------------------------------------------
+-DWEBKIT    = -DWEBKIT
+-WEBKIT_LIB = webkit-1.0
++
++
+ ifeq ($(DISTRIB),$(filter $(DISTRIB),osx focal))
+ 	undefine DWEBKIT
+ 	undefine WEBKIT_LIB
