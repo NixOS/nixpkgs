@@ -7,12 +7,10 @@
 , fd
 , fzf
 , git
-, gnumake
-, gnused
+, gnumake , gnused
 , gnutar
 , gzip
 , lua-language-server
-, neovim
 , nodejs
 , nodePackages
 , ripgrep
@@ -24,6 +22,13 @@
 , globalConfig ? ""
 }:
 
+let
+  pkgs = import (builtins.fetchTarball {
+    # has neovim 0.9.2
+    url = "https://github.com/NixOS/nixpkgs/archive/9957cd48326fe8dbd52fdc50dd2502307f188b0d.tar.gz";
+  }) {};
+  neovim-pinned = pkgs.neovim;
+in
 stdenv.mkDerivation (finalAttrs: {
   inherit nvimAlias viAlias vimAlias globalConfig;
 
@@ -53,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
     gnutar
     gzip
     lua-language-server
-    neovim
+    neovim-pinned
     nodejs
     nodePackages.neovim
     ripgrep
@@ -86,7 +91,7 @@ stdenv.mkDerivation (finalAttrs: {
       --replace CONFIG_DIR_VAR \$HOME/.config/lvim \
       --replace CACHE_DIR_VAR \$HOME/.cache/lvim \
       --replace BASE_DIR_VAR $out/share/lvim \
-      --replace nvim ${neovim}/bin/nvim
+      --replace nvim ${neovim-pinned}/bin/nvim
 
     # Allow language servers to be overridden by appending instead of prepending
     # the mason.nvim path.
