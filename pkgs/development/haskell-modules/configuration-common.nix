@@ -2098,11 +2098,7 @@ self: super: {
     pkgs.nix-prefetch-git
   ] (doJailbreak super.cli-nix);
 
-  # https://github.com/obsidiansystems/nix-thunk/pull/51/
-  nix-thunk = appendPatch (fetchpatch {
-    url = "https://github.com/obsidiansystems/nix-thunk/commit/c3dc3e799e8ce7756330f98b9f73f59c4b7a5502.patch";
-    sha256 = "sha256-C1ii1FXiCPFfw5NzyQZ0cEG6kIYGohVsnHycpYEJ24Q=";
-  }) (doJailbreak super.nix-thunk);
+  nix-thunk = doJailbreak super.nix-thunk;
 
   # list `modbus` in librarySystemDepends, correct to `libmodbus`
   libmodbus = doJailbreak (addExtraLibrary pkgs.libmodbus super.libmodbus);
