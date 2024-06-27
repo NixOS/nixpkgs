@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchzip,
   darwin,
   gfortran,
   python3,
@@ -11,6 +11,11 @@
   mpi, # generic mpi dependency
   openssh, # required for openmpi tests
   petsc-withp4est ? false,
+  hdf5-support ? false,
+  hdf5,
+  metis,
+  parmetis,
+  pkg-config,
   p4est,
   zlib, # propagated by p4est but required by petsc
   petsc-optimized ? false,
@@ -23,11 +28,11 @@ assert petsc-withp4est -> p4est.mpiSupport;
 
 stdenv.mkDerivation rec {
   pname = "petsc";
-  version = "3.19.4";
+  version = "3.21.0";
 
-  src = fetchurl {
-    url = "http://ftp.mcs.anl.gov/pub/petsc/release-snapshots/petsc-${version}.tar.gz";
-    sha256 = "sha256-fJQbcb5Sw7dkIU5JLfYBCdEvl/fYVMl6RN8MTZWLOQY=";
+  src = fetchzip {
+    url = "https://web.cels.anl.gov/projects/petsc/download/release-snapshots/petsc-${version}.tar.gz";
+    hash = "sha256-2J6jtIKz1ZT9qwN8tuYQNBIeBJdE4Gt9cE3b5rTIeF4=";
   };
 
   inherit mpiSupport;
@@ -37,11 +42,12 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     python3
     gfortran
+    pkg-config
   ] ++ lib.optional mpiSupport mpi ++ lib.optional (mpiSupport && mpi.pname == "openmpi") openssh;
   buildInputs = [
     blas
     lapack
-  ] ++ lib.optional withp4est p4est;
+  ] ++ lib.optional hdf5-support hdf5 ++ lib.optional withp4est p4est;
 
   prePatch = lib.optionalString stdenv.isDarwin ''
     substituteInPlace config/install.py \
@@ -69,6 +75,10 @@ stdenv.mkDerivation rec {
             "--with-cxx=mpicxx"
             "--with-fc=mpif90"
             "--with-mpi=1"
+            "--with-metis=1"
+            "--with-metis-dir=${metis}"
+            "--with-parmetis=1"
+            "--with-parmetis-dir=${parmetis}"
           ''
       }
       ${lib.optionalString withp4est ''
@@ -76,27 +86,45 @@ stdenv.mkDerivation rec {
         "--with-zlib-include=${zlib.dev}/include"
         "--with-zlib-lib=-L${zlib}/lib -lz"
       ''}
+      ${lib.optionalString hdf5-support ''
+        "--with-hdf5=1"
+        "--with-hdf5-fortran-bindings=1"
+        "--with-hdf5-lib=-L${hdf5}/lib -lhdf5"
+        "--with-hdf5-include=${hdf5.dev}/include"
+      ''}
       "--with-blas=1"
       "--with-lapack=1"
       "--with-scalar-type=${petsc-scalar-type}"
       "--with-precision=${petsc-precision}"
       ${lib.optionalString petsc-optimized ''
         "--with-debugging=0"
-        COPTFLAGS='-g -O3'
-        FOPTFLAGS='-g -O3'
-        CXXOPTFLAGS='-g -O3'
+        COPTFLAGS='-O3'
+        FOPTFLAGS='-O3'
+        CXXOPTFLAGS='-O3'
+        CXXFLAGS='-O3'
       ''}
     )
   '';
 
+  hardeningDisable = lib.optionals (!petsc-optimized) [
+    "fortify"
+    "fortify3"
+  ];
+
   configureScript = "python ./configure";
 
   enableParallelBuilding = true;
-  doCheck = stdenv.hostPlatform == stdenv.buildPlatform;
+
+  # This is needed as the checks need to compile and link the test cases with
+  # -lpetsc, which is not available in the checkPhase, which is executed before
+  # the installPhase. The installCheckPhase comes after the installPhase, so
+  # the library is installed and available.
+  doInstallCheck = true;
+  installCheckTarget = "check_install";
 
   meta = with lib; {
     description = "Portable Extensible Toolkit for Scientific computation";
-    homepage = "https://www.mcs.anl.gov/petsc/index.html";
+    homepage = "https://petsc.org/release/";
     license = licenses.bsd2;
     maintainers = with maintainers; [ cburstedde ];
   };
