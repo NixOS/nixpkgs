@@ -3,6 +3,7 @@
   buildPythonPackage,
   pythonOlder,
   fetchFromGitHub,
+  fetchpatch,
   setuptools,
   torch,
   wheel,
@@ -12,7 +13,6 @@
   h5py,
   pytestCheckHook,
   stdenv,
-  pythonAtLeast,
 }:
 
 buildPythonPackage rec {
@@ -28,6 +28,14 @@ buildPythonPackage rec {
     rev = "refs/tags/v${version}";
     hash = "sha256-wKEzNaaazGEkoElzp93RIlq/r5uRUdM7UyDy/DygIEc=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "python312-support";
+      url = "https://github.com/pytorch/tensordict/commit/2de45fd1016ec3bb01beb993cbd87083288f4208.patch";
+      hash = "sha256-QvAaJU6/zSscA1ebjKcnEULMufZYkmUVDx4rEnxfaoA=";
+    })
+  ];
 
   build-system = [
     setuptools
@@ -76,7 +84,5 @@ buildPythonPackage rec {
     homepage = "https://github.com/pytorch/tensordict";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ GaetanLepage ];
-    # No python 3.12 support yet: https://github.com/pytorch/rl/issues/2035
-    broken = pythonAtLeast "3.12";
   };
 }
