@@ -78,6 +78,54 @@ let
         Defines whether hourly snapshots should be created.
       '';
     };
+
+    TIMELINE_LIMIT_HOURLY = mkOption {
+      type = types.str;
+      default = "10";
+      description = ''
+        Limits for timeline cleanup.
+      '';
+    };
+
+    TIMELINE_LIMIT_DAILY = mkOption {
+      type = types.str;
+      default = "10";
+      description = ''
+        Limits for timeline cleanup.
+      '';
+    };
+
+    TIMELINE_LIMIT_WEEKLY = mkOption {
+      type = types.str;
+      default = "0";
+      description = ''
+        Limits for timeline cleanup.
+      '';
+    };
+
+    TIMELINE_LIMIT_MONTHLY = mkOption {
+      type = types.str;
+      default = "10";
+      description = ''
+        Limits for timeline cleanup.
+      '';
+    };
+
+    TIMELINE_LIMIT_QUARTERLY = mkOption {
+      type = types.str;
+      default = "0";
+      description = ''
+        Limits for timeline cleanup.
+      '';
+    };
+
+    TIMELINE_LIMIT_YEARLY = mkOption {
+      type = types.str;
+      default = "10";
+      description = ''
+        Limits for timeline cleanup.
+      '';
+    };
   };
 in
 
