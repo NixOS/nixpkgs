@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchurl
-, perl
 , perlPackages
 }:
 
