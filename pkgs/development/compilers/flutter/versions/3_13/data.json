@@ -6,7 +6,7 @@
   "channel": "stable",
   "engineHashes": {
     "aarch64-linux": "sha256-+MIGPmKHkcn3TlFYu6jXv8KBRqdECgtGSqAKQE33iAM=",
-    "x86_64-linux": "sha256-+MIGPmKHkcn3TlFYu6jXv8KBRqdECgtGSqAKQE33iAM="
+    "x86_64-linux": "sha256-JnoFiKaMhJA/eAHv9Qi1lAqZfLW0K3qalEo8Oe923Jo="
   },
   "dartVersion": "3.1.4",
   "dartHash": {
