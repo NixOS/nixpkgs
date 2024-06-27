@@ -46,12 +46,14 @@ let
   inherit (lib.types)
     attrsOf
     coercedTo
+    enum
     lines
     listOf
     nullOr
     oneOf
     package
     path
+    singleLineStr
     submodule
     ;
 
@@ -70,6 +72,30 @@ let
       source = mkOption {
         type = path;
         description = "Path of the source file.";
+      };
+
+      dlopen = {
+        usePriority = mkOption {
+          type = enum [ "required" "recommended" "suggested" ];
+          default = "recommended";
+          description = ''
+            Priority of dlopen ELF notes to include. "required" is
+            minimal, "recommended" includes "required", and
+            "suggested" includes "recommended".
+
+            See: https://systemd.io/ELF_DLOPEN_METADATA/
+          '';
+        };
+
+        features = mkOption {
+          type = listOf singleLineStr;
+          default = [ ];
+          description = ''
+            Features to enable via dlopen ELF notes. These will be in
+            addition to anything included via 'usePriority',
+            regardless of their priority.
+          '';
+        };
       };
     };
   };
