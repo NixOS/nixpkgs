@@ -35,7 +35,7 @@ in
       default = 5050;
     };
 
-    package = mkPackageOptionMD pkgs "pgadmin4" { };
+    package = mkPackageOption pkgs "pgadmin4" { };
 
     initialEmail = mkOption {
       description = "Initial email for the pgAdmin account";

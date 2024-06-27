@@ -11,7 +11,7 @@ in
     services.suwayomi-server = {
       enable = mkEnableOption "Suwayomi, a free and open source manga reader server that runs extensions built for Tachiyomi";
 
-      package = lib.mkPackageOptionMD pkgs "suwayomi-server" { };
+      package = lib.mkPackageOption pkgs "suwayomi-server" { };
 
       dataDir = mkOption {
         type = types.path;
