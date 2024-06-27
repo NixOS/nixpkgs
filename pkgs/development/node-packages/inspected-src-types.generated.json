@@ -1,0 +1,228 @@
+{
+  "@angular/cli": [
+    "binaryNativeCode"
+  ],
+  "@electron-forge/cli": [
+    "binaryNativeCode"
+  ],
+  "@shopify/cli": [
+    "binaryNativeCode"
+  ],
+  "@tailwindcss/aspect-ratio": [
+    "binaryNativeCode"
+  ],
+  "@tailwindcss/forms": [
+    "binaryNativeCode"
+  ],
+  "@tailwindcss/language-server": [
+    "binaryNativeCode"
+  ],
+  "@tailwindcss/line-clamp": [
+    "binaryNativeCode"
+  ],
+  "@tailwindcss/typography": [
+    "binaryNativeCode"
+  ],
+  "@uppy/companion": [
+    "binaryNativeCode"
+  ],
+  "@vue/cli": [
+    "binaryNativeCode"
+  ],
+  "@withgraphite/graphite-cli": [
+    "binaryNativeCode"
+  ],
+  "@zwave-js/server": [
+    "binaryNativeCode"
+  ],
+  "aws-cdk": [
+    "binaryNativeCode"
+  ],
+  "browser-sync": [
+    "binaryNativeCode"
+  ],
+  "cdktf-cli": [
+    "binaryNativeCode"
+  ],
+  "clipboard-cli": [
+    "binaryNativeCode"
+  ],
+  "coc-explorer": [
+    "binaryNativeCode"
+  ],
+  "coc-java": [
+    "binaryBytecode",
+    "binaryNativeCode"
+  ],
+  "coc-metals": [
+    "binaryNativeCode"
+  ],
+  "coc-pyright": [
+    "binaryNativeCode"
+  ],
+  "diff2html-cli": [
+    "binaryNativeCode"
+  ],
+  "emoj": [
+    "binaryNativeCode"
+  ],
+  "esy": [
+    "binaryNativeCode"
+  ],
+  "expo-cli": [
+    "binaryNativeCode"
+  ],
+  "fast-cli": [
+    "binaryNativeCode"
+  ],
+  "fkill-cli": [
+    "binaryNativeCode"
+  ],
+  "ganache": [
+    "binaryNativeCode"
+  ],
+  "gatsby-cli": [
+    "binaryNativeCode"
+  ],
+  "graphite-cli": [
+    "binaryNativeCode"
+  ],
+  "graphql-cli": [
+    "binaryNativeCode"
+  ],
+  "graphql-language-service-cli": [
+    "binaryNativeCode"
+  ],
+  "ijavascript": [
+    "binaryNativeCode"
+  ],
+  "insect": [
+    "binaryNativeCode"
+  ],
+  "jsonlint": [
+    "binaryBytecode"
+  ],
+  "keyoxide": [
+    "binaryNativeCode"
+  ],
+  "lerna": [
+    "binaryNativeCode"
+  ],
+  "livedown": [
+    "binaryNativeCode"
+  ],
+  "makam": [
+    "binaryNativeCode"
+  ],
+  "mastodon-bot": [
+    "binaryNativeCode"
+  ],
+  "meshcommander": [
+    "binaryNativeCode"
+  ],
+  "mocha": [
+    "binaryNativeCode"
+  ],
+  "node-red": [
+    "binaryNativeCode"
+  ],
+  "nodemon": [
+    "binaryNativeCode"
+  ],
+  "orval": [
+    "binaryNativeCode"
+  ],
+  "parcel": [
+    "binaryNativeCode"
+  ],
+  "parcel-bundler": [
+    "binaryNativeCode"
+  ],
+  "peerflix-server": [
+    "binaryNativeCode"
+  ],
+  "pgrok-build-deps-../../tools/networking/pgrok/build-deps": [
+    "binaryNativeCode"
+  ],
+  "pkg": [
+    "binaryNativeCode"
+  ],
+  "pm2": [
+    "binaryNativeCode"
+  ],
+  "pnpm": [
+    "binaryNativeCode"
+  ],
+  "postcss-cli": [
+    "binaryNativeCode"
+  ],
+  "purty": [
+    "binaryNativeCode"
+  ],
+  "pyright": [
+    "binaryNativeCode"
+  ],
+  "rollup": [
+    "binaryNativeCode"
+  ],
+  "sass": [
+    "binaryNativeCode"
+  ],
+  "serve": [
+    "binaryNativeCode"
+  ],
+  "serverless": [
+    "binaryNativeCode"
+  ],
+  "socket.io": [
+    "binaryNativeCode"
+  ],
+  "svelte-check": [
+    "binaryNativeCode"
+  ],
+  "svelte-language-server": [
+    "binaryNativeCode"
+  ],
+  "tailwindcss": [
+    "binaryNativeCode"
+  ],
+  "teck-programmer": [
+    "binaryNativeCode"
+  ],
+  "textlint-rule-alex": [
+    "binaryNativeCode"
+  ],
+  "thelounge-plugin-closepms": [
+    "binaryNativeCode"
+  ],
+  "thelounge-plugin-giphy": [
+    "binaryNativeCode"
+  ],
+  "thelounge-theme-flat-blue": [
+    "binaryNativeCode"
+  ],
+  "thelounge-theme-flat-dark": [
+    "binaryNativeCode"
+  ],
+  "uppy-companion": [
+    "binaryNativeCode"
+  ],
+  "vercel": [
+    "binaryNativeCode"
+  ],
+  "vue-cli": [
+    "binaryNativeCode"
+  ],
+  "wavedrom-cli": [
+    "binaryNativeCode"
+  ],
+  "webpack-dev-server": [
+    "binaryNativeCode"
+  ],
+  "webtorrent-cli": [
+    "binaryNativeCode"
+  ],
+  "wrangler": [
+    "binaryNativeCode"
+  ]
+}
