@@ -14313,6 +14313,8 @@ self: super: with self; {
 
   solc-select = callPackage ../development/python-modules/solc-select { };
 
+  solidpython2 = callPackage ../development/python-modules/solidpython2 { };
+
   solo-python = disabledIf (!pythonAtLeast "3.6") (callPackage ../development/python-modules/solo-python { });
 
   somajo = callPackage ../development/python-modules/somajo { };
