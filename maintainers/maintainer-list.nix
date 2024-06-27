@@ -5883,6 +5883,13 @@
     githubId = 13485450;
     name = "Emmanuel Rosa";
   };
+  emneo = {
+    name = "emneo";
+    email = "emneo@kreog.com";
+    github = "emneo-dev";
+    githubId = 44233177;
+    keys = [ { fingerprint = "5FD0 400D 0E78 EAF9 8431  4880 8EBF C4B9 24C6 2D20"; } ];
+  };
   emptyflask = {
     email = "jon@emptyflask.dev";
     github = "emptyflask";
@@ -14196,7 +14203,7 @@
   networkexception = {
     name = "networkException";
     email = "nix@nwex.de";
-    matrix = "@networkexception:chat.upi.li";
+    matrix = "@networkexception:nwex.de";
     github = "networkException";
     githubId = 42888162;
     keys = [ { fingerprint = "A0B9 48C5 A263 55C2 035F  8567 FBB7 2A94 52D9 1A72"; } ];

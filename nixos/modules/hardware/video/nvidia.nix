@@ -46,8 +46,6 @@ in
           TRUNK_LINK_FAILURE_MODE = 0;
           NVSWITCH_FAILURE_MODE = 0;
           ABORT_CUDA_JOBS_ON_FM_EXIT = 1;
-          TOPOLOGY_FILE_PATH = "${nvidia_x11.fabricmanager}/share/nvidia-fabricmanager/nvidia/nvswitch";
-          DATABASE_PATH = "${nvidia_x11.fabricmanager}/share/nvidia-fabricmanager/nvidia/nvswitch";
         };
         defaultText = lib.literalExpression ''
           {
@@ -69,8 +67,6 @@ in
             TRUNK_LINK_FAILURE_MODE=0;
             NVSWITCH_FAILURE_MODE=0;
             ABORT_CUDA_JOBS_ON_FM_EXIT=1;
-            TOPOLOGY_FILE_PATH="''${nvidia_x11.fabricmanager}/share/nvidia-fabricmanager/nvidia/nvswitch";
-            DATABASE_PATH="''${nvidia_x11.fabricmanager}/share/nvidia-fabricmanager/nvidia/nvswitch";
           }
         '';
         description = ''
@@ -628,7 +624,14 @@ in
                     TimeoutStartSec = 240;
                     ExecStart =
                       let
-                        nv-fab-conf = settingsFormat.generate "fabricmanager.conf" cfg.datacenter.settings;
+                        # Since these rely on the `nvidia_x11.fabricmanager` derivation, they're
+                        # unsuitable to be mentioned in the configuration defaults, but they _can_
+                        # be overridden in `cfg.datacenter.settings` if needed.
+                        fabricManagerConfDefaults = {
+                          TOPOLOGY_FILE_PATH = "${nvidia_x11.fabricmanager}/share/nvidia-fabricmanager/nvidia/nvswitch";
+                          DATABASE_PATH = "${nvidia_x11.fabricmanager}/share/nvidia-fabricmanager/nvidia/nvswitch";
+                        };
+                        nv-fab-conf = settingsFormat.generate "fabricmanager.conf" (fabricManagerConfDefaults // cfg.datacenter.settings);
                       in
                       "${lib.getExe nvidia_x11.fabricmanager} -c ${nv-fab-conf}";
                     LimitCORE = "infinity";
