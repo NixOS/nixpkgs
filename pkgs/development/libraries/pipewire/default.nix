@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , fetchFromGitLab
-, fetchpatch
 , python3
 , meson
 , ninja
@@ -76,7 +75,7 @@ assert ldacbtSupport -> bluezSupport;
 
 stdenv.mkDerivation(finalAttrs: {
   pname = "pipewire";
-  version = "1.0.7";
+  version = "1.2.0";
 
   outputs = [
     "out"
@@ -92,7 +91,7 @@ stdenv.mkDerivation(finalAttrs: {
     owner = "pipewire";
     repo = "pipewire";
     rev = finalAttrs.version;
-    sha256 = "sha256-YzI+hkX1ZdeTfxuKaw5P9OYPtkWtUg9cNo32wLCgjNU=";
+    sha256 = "sha256-hjjiH7+JoyRTcdbPDvkUEpO72b5p8CbTD6Un/vZrHL8=";
   };
 
   patches = [
@@ -100,12 +99,6 @@ stdenv.mkDerivation(finalAttrs: {
     ./0060-libjack-path.patch
     # Move installed tests into their own output.
     ./0070-installed-tests-path.patch
-    # fix module-roc-sink explicity specifying sender packet encoding
-    # https://gitlab.freedesktop.org/pipewire/pipewire/-/merge_requests/2048
-    (fetchpatch {
-      url = "https://gitlab.freedesktop.org/pipewire/pipewire/-/commit/6acfb53884c6f3936030fe43a584bfa01c27d3ea.patch";
-      hash = "sha256-UQTWnw2fJ8Sx+eMaUmbJEFopV3HPr63v4xVtk0z3/xM=";
-    })
   ];
 
   strictDeps = true;
@@ -192,6 +185,7 @@ stdenv.mkDerivation(finalAttrs: {
     (lib.mesonBool "rlimits-install" false) # installs to /etc, we won't use this anyway
     (lib.mesonEnable "compress-offload" true)
     (lib.mesonEnable "man" true)
+    (lib.mesonEnable "snap" false) # we don't currently have a working snapd
   ];
 
   # Fontconfig error: Cannot load default config file

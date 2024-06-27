@@ -7,6 +7,7 @@
   SDL,
   addOpenGLRunpath,
   alembic,
+  blender,
   boost,
   brotli,
   callPackage,
@@ -372,6 +373,20 @@ stdenv.mkDerivation (finalAttrs: {
             --render-frame 1
         done
       '';
+      tester-cudaAvailable = cudaPackages.writeGpuTestPython { } ''
+        import subprocess
+        subprocess.run([${
+          lib.concatMapStringsSep ", " (x: ''"${x}"'') [
+            (lib.getExe (blender.override { cudaSupport = true; }))
+            "--background"
+            "-noaudio"
+            "--python-exit-code"
+            "1"
+            "--python"
+            "${./test-cuda.py}"
+          ]
+        }], check=True)  # noqa: E501
+      '';
     };
   };
 
@@ -381,7 +396,8 @@ stdenv.mkDerivation (finalAttrs: {
     # They comment two licenses: GPLv2 and Blender License, but they
     # say: "We've decided to cancel the BL offering for an indefinite period."
     # OptiX, enabled with cudaSupport, is non-free.
-    license = with lib.licenses; [ gpl2Plus ] ++ lib.optional cudaSupport unfree;
+    license = with lib.licenses; [ gpl2Plus ] ++ lib.optional cudaSupport (unfree // { shortName = "NVidia OptiX EULA"; });
+
     platforms = [
       "aarch64-linux"
       "x86_64-darwin"

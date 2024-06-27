@@ -143,7 +143,7 @@ self: let
 
       org = super.org.overrideAttrs (old: {
         dontUnpack = false;
-        patches = old.patches or [ ] ++ [
+        patches = old.patches or [ ] ++ lib.optionals (lib.versionOlder old.version "9.7.5") [
           # security fix backported from 9.7.5
           (pkgs.fetchpatch {
             url = "https://git.savannah.gnu.org/cgit/emacs/org-mode.git/patch/?id=f4cc61636947b5c2f0afc67174dd369fe3277aa8";

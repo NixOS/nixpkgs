@@ -15,7 +15,7 @@ let
       level = "info";
     };
   };
-  configFile = toml.generate "scion-dispatcher.toml" (defaultConfig // cfg.settings);
+  configFile = toml.generate "scion-dispatcher.toml" (recursiveUpdate defaultConfig cfg.settings);
 in
 {
   options.services.scion.scion-dispatcher = {
