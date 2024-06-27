@@ -29468,6 +29468,8 @@ with pkgs;
 
   ascii-image-converter = callPackage ../applications/graphics/ascii-image-converter { };
 
+  around = callPackage ../applications/networking/instant-messengers/around { };
+
   artha = callPackage ../applications/misc/artha { };
 
   atlassian-cli = callPackage ../applications/office/atlassian-cli { };
