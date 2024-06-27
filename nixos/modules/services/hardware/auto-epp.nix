@@ -10,7 +10,7 @@ in {
     services.auto-epp = {
       enable = lib.mkEnableOption "auto-epp for amd active pstate";
 
-      package = lib.mkPackageOptionMD pkgs "auto-epp" {};
+      package = lib.mkPackageOption pkgs "auto-epp" {};
 
       settings = mkOption {
         type = types.submodule {

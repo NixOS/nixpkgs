@@ -19,7 +19,7 @@ in {
         '';
       };
 
-      package = mkPackageOptionMD pkgs "hound" { };
+      package = mkPackageOption pkgs "hound" { };
 
       user = mkOption {
         default = "hound";

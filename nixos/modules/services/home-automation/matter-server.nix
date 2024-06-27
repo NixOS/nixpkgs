@@ -19,7 +19,7 @@ in
   options.services.matter-server = with types; {
     enable = mkEnableOption "Matter-server";
 
-    package = mkPackageOptionMD pkgs "python-matter-server" { };
+    package = mkPackageOption pkgs "python-matter-server" { };
 
     port = mkOption {
       type = types.port;
