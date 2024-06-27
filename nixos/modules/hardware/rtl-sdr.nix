@@ -16,7 +16,7 @@ in {
   };
 
   config = lib.mkIf cfg.enable {
-    boot.blacklistedKernelModules = [ "dvb_usb_rtl28xxu" "e4000" "rtl2832" ];
+    boot.blacklistedKernelModules = [ "dvb_usb_rtl28xxu" "e4000" "rtl2832" "rtl2830" "rtl2838" ];
     services.udev.packages = [ pkgs.rtl-sdr ];
     users.groups.plugdev = {};
   };
