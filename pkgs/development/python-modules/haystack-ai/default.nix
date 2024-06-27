@@ -1,11 +1,19 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
+  fetchPypi,
   pythonRelaxDepsHook,
+
+  # Feature flags
+  withJax ? false,
+  withTorch ? true,
+  withTensorflow ? false,
+
+  # Dependencies
   hatchling,
   boilerpy3,
   events,
+  flax,
   httpx,
   jsonschema,
   lazy-imports,
@@ -48,7 +56,9 @@
   python-multipart,
   reno,
   responses,
+  tensorflow,
   toml,
+  torch,
   tox,
   watchdog,
   elastic-transport,
@@ -90,16 +100,18 @@
   weaviate-client,
 }:
 
+# only allow one type of ml backend
+assert !(withTorch && (withJax || withTensorflow) || (withJax && withTensorflow));
+
 buildPythonPackage rec {
-  pname = "farm-haystack";
-  version = "1.25.0";
+  pname = "haystack-ai";
+  version = "2.2.3";
   pyproject = true;
 
-  src = fetchFromGitHub {
-    owner = "deepset-ai";
-    repo = "haystack";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-lAXzWnHpOBVjgleFTYqlZ34hmZkcrPJ/h1kk4iVVvec=";
+  src = fetchPypi {
+    inherit version;
+    pname = builtins.replaceStrings [ "-" ] [ "_" ] pname;
+    hash = "sha256-u1V96abjLI0q2g/mh3ujE+Mw8DDRXaDfvUv3boC4/LQ=";
   };
 
   nativeBuildInputs = [
@@ -112,31 +124,37 @@ buildPythonPackage rec {
     "faiss-cpu"
   ];
 
-  propagatedBuildInputs = [
-    boilerpy3
-    events
-    httpx
-    jsonschema
-    lazy-imports
-    more-itertools
-    networkx
-    pandas
-    pillow
-    platformdirs
-    posthog
-    prompthub-py
-    pydantic
-    quantulum3
-    rank-bm25
-    requests
-    requests-cache
-    scikit-learn
-    sseclient-py
-    tenacity
-    tiktoken
-    tqdm
-    transformers
-  ];
+  propagatedBuildInputs =
+    [
+      boilerpy3
+      events
+      httpx
+      jsonschema
+      jinja2
+      lazy-imports
+      more-itertools
+      networkx
+      openai
+      pandas
+      pillow
+      platformdirs
+      posthog
+      prompthub-py
+      pydantic
+      quantulum3
+      rank-bm25
+      requests
+      requests-cache
+      scikit-learn
+      sseclient-py
+      tenacity
+      tiktoken
+      tqdm
+      transformers
+    ]
+    ++ lib.optionals withJax [ flax ]
+    ++ lib.optionals withTensorflow [ tensorflow ]
+    ++ lib.optionals withTorch [ torch ];
 
   env.HOME = "$(mktemp -d)";
 
@@ -264,7 +282,7 @@ buildPythonPackage rec {
     longDescription = ''
       LLM orchestration framework to build customizable, production-ready LLM applications. Connect components (models, vector DBs, file converters) to pipelines or agents that can interact with your data. With advanced retrieval methods, it's best suited for building RAG, question answering, semantic search or conversational agent chatbots
     '';
-    changelog = "https://github.com/deepset-ai/haystack/releases/tag/${src.rev}";
+    changelog = "https://github.com/deepset-ai/haystack/releases/tag/v${version}";
     homepage = "https://github.com/deepset-ai/haystack";
     license = licenses.asl20;
     maintainers = with maintainers; [ happysalada ];
