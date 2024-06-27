@@ -27,8 +27,6 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   libgnome = callPackage ./platform/libgnome { };
 
-  libgnomeui = callPackage ./platform/libgnomeui { };
-
   libbonobo = callPackage ./platform/libbonobo { };
 
   libbonoboui = callPackage ./platform/libbonoboui { };
@@ -72,6 +70,7 @@ lib.makeScope pkgs.newScope (self: with self; {
   libgnomecups = throw "gnome2.libgnomecups has been removed"; # 2023-01-15
   libgnomeprint = throw "gnome2.libgnomeprint has been removed"; # 2023-01-15
   libgnomeprintui = throw "gnome2.libgnomeprintui has been removed"; # 2023-01-15
+  libgnomeui = throw "gnome2.libgnomeui has been removed"; # 2024-06-27
   libgtkhtml = throw "gnome2.libgtkhtml has been removed"; # 2023-01-15
   python_rsvg = throw "gnome2.python_rsvg has been removed"; # 2023-01-14
 })
