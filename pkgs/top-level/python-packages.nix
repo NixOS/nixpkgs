@@ -12554,6 +12554,8 @@ self: super: with self; {
 
   python-linux-procfs = callPackage ../development/python-modules/python-linux-procfs { };
 
+  python-logging-loki = callPackage ../development/python-modules/python-logging-loki { };
+
   python-logstash = callPackage ../development/python-modules/python-logstash { };
 
   python-louvain = callPackage ../development/python-modules/python-louvain { };
@@ -14320,6 +14322,8 @@ self: super: with self; {
   solax = callPackage ../development/python-modules/solax { };
 
   solc-select = callPackage ../development/python-modules/solc-select { };
+
+  solidpython2 = callPackage ../development/python-modules/solidpython2 { };
 
   solo-python = disabledIf (!pythonAtLeast "3.6") (callPackage ../development/python-modules/solo-python { });
 

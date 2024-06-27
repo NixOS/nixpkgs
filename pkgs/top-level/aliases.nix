@@ -86,6 +86,13 @@ mapAliases ({
   ansible_2_13 = throw "Ansible 2.13 goes end of life in 2023/11"; # Added 2023-12-30
   ansible_2_14 = throw "Ansible 2.14 goes end of life in 2024/05 and can't be supported throughout the 24.05 release cycle"; # Added 2024-04-11
   apacheAnt_1_9 = throw "Ant 1.9 has been removed since it's not used in nixpkgs anymore"; # Added 2023-11-12
+  apacheKafka_2_8 = throw "apacheKafka_2_8 through _3_5 have been removed from nixpkgs as outdated"; # Added 2024-02-12
+  apacheKafka_3_0 = throw "apacheKafka_2_8 through _3_5 have been removed from nixpkgs as outdated"; # Added 2024-02-12
+  apacheKafka_3_1 = throw "apacheKafka_2_8 through _3_5 have been removed from nixpkgs as outdated"; # Added 2024-02-12
+  apacheKafka_3_2 = throw "apacheKafka_2_8 through _3_5 have been removed from nixpkgs as outdated"; # Added 2024-02-12
+  apacheKafka_3_3 = throw "apacheKafka_2_8 through _3_5 have been removed from nixpkgs as outdated"; # Added 2024-02-12
+  apacheKafka_3_4 = throw "apacheKafka_2_8 through _3_5 have been removed from nixpkgs as outdated"; # Added 2024-02-12
+  apacheKafka_3_5 = throw "apacheKafka_2_8 through _3_5 have been removed from nixpkgs as outdated"; # Added 2024-06-13
   antimicroX = antimicrox; # Added 2021-10-31
   appthreat-depscan = dep-scan; # Added 2024-04-10
   arcanist = throw "arcanist was removed as phabricator is not supported and does not accept fixes"; # Added 2024-06-07
@@ -914,18 +921,18 @@ mapAliases ({
   netbox_3_3 = throw "netbox 3.3 series has been removed as it was EOL"; # Added 2023-09-02
   netbox_3_5 = throw "netbox 3.5 series has been removed as it was EOL"; # Added 2024-01-22
   netease-music-tui = throw "netease-music-tui has been removed due to unmaintained by upstream and broken functionality"; # Added 2024-03-03
-  nextcloud26 = throw ''
-    Nextcloud v26 has been removed from `nixpkgs` as the support for is dropped
-    by upstream in 2024-04. Please upgrade to at least Nextcloud v27 by declaring
+  nextcloud27 = throw ''
+    Nextcloud v27 has been removed from `nixpkgs` as the support for is dropped
+    by upstream in 2024-06. Please upgrade to at least Nextcloud v28 by declaring
 
-        services.nextcloud.package = pkgs.nextcloud27;
+        services.nextcloud.package = pkgs.nextcloud28;
 
     in your NixOS config.
 
-    WARNING: if you were on Nextcloud 25 you have to upgrade to Nextcloud 26
-    first on 23.11 because Nextcloud doesn't support upgrades across multiple major versions!
-  ''; # Added 2023-10-13
-  nextcloud25Packages = throw "Nextcloud25 is EOL!"; # Added 2023-10-13
+    WARNING: if you were on Nextcloud 26 you have to upgrade to Nextcloud 27
+    first on 24.05 because Nextcloud doesn't support upgrades across multiple major versions!
+  ''; # Added 2024-06-25
+  nextcloud27Packages = throw "Nextcloud27 is EOL!"; # Added 2024-06-25
   nagiosPluginsOfficial = monitoring-plugins;
   neochat = libsForQt5.kdeGear.neochat; # added 2022-05-10
   neoload = throw "'neoload' has been removed as it is broken and unmaintained"; # Added 2024-03-02

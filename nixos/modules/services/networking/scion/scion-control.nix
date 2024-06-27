@@ -24,7 +24,7 @@ let
       level = "info";
     };
   };
-  configFile = toml.generate "scion-control.toml" (defaultConfig // cfg.settings);
+  configFile = toml.generate "scion-control.toml" (recursiveUpdate defaultConfig cfg.settings);
 in
 {
   options.services.scion.scion-control = {

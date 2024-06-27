@@ -5,11 +5,11 @@
 
 let
   pname = "codux";
-  version = "15.29.0";
+  version = "15.29.1";
 
   src = fetchurl {
     url = "https://github.com/wixplosives/codux-versions/releases/download/${version}/Codux-${version}.x86_64.AppImage";
-    sha256 = "sha256-BvDrhs37XGCQdQV2yQJZXlnNWVArFCMLfFlXuXz9ea0=";
+    sha256 = "sha256-wiAME0jNtqGbMk6w1jzKUZUzhS0Gg5FgqXD1vuRSpxo=";
   };
 
   appimageContents = appimageTools.extractType2 { inherit pname version src; };
