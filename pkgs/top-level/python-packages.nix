@@ -5197,6 +5197,8 @@ self: super: with self; {
 
   greatfet = callPackage ../development/python-modules/greatfet { };
 
+  great-tables = callPackage ../development/python-modules/great-tables { };
+
   greeclimate = callPackage ../development/python-modules/greeclimate { };
 
   green = callPackage ../development/python-modules/green { };
@@ -5558,6 +5560,8 @@ self: super: with self; {
   htmllistparse = callPackage ../development/python-modules/htmllistparse { };
 
   htmlmin = callPackage ../development/python-modules/htmlmin { };
+
+  htmltools = callPackage ../development/python-modules/htmltools { };
 
   html-sanitizer = callPackage ../development/python-modules/html-sanitizer { };
 
@@ -10326,6 +10330,8 @@ self: super: with self; {
 
   plugwise = callPackage ../development/python-modules/plugwise { };
 
+  plum-dispatch = callPackage ../development/python-modules/plum-dispatch { };
+
   plum-py = callPackage ../development/python-modules/plum-py { };
 
   plumbum = callPackage ../development/python-modules/plumbum { };
@@ -13080,6 +13086,8 @@ self: super: with self; {
 
   quart = callPackage ../development/python-modules/quart { };
 
+  quartodoc = callPackage ../development/python-modules/quartodoc { };
+
   quart-cors = callPackage ../development/python-modules/quart-cors { };
 
   quaternion = callPackage ../development/python-modules/quaternion { };
@@ -14005,6 +14013,8 @@ self: super: with self; {
 
   shimmy = callPackage ../development/python-modules/shimmy { };
 
+  shiny = callPackage ../development/python-modules/shiny { };
+
   shippai = callPackage ../development/python-modules/shippai { };
 
   shiv = callPackage ../development/python-modules/shiv { };
@@ -14401,6 +14411,8 @@ self: super: with self; {
 
   sphfile = callPackage ../development/python-modules/sphfile { };
 
+  sphobjinv = callPackage ../development/python-modules/sphobjinv { };
+
   spiderpy = callPackage ../development/python-modules/spiderpy { };
 
   spinners = callPackage ../development/python-modules/spinners { };
@@ -14544,6 +14556,8 @@ self: super: with self; {
   sphinx-material = callPackage ../development/python-modules/sphinx-material { };
 
   sphinx-mdinclude = callPackage ../development/python-modules/sphinx-mdinclude { };
+
+  sphinx-removed-in = callPackage ../development/python-modules/sphinx-removed-in { };
 
   sphinx-rtd-dark-mode = callPackage ../development/python-modules/sphinx-rtd-dark-mode { };
 
@@ -14702,6 +14716,8 @@ self: super: with self; {
   std2 = callPackage ../development/python-modules/std2 { };
 
   stdiomask = callPackage ../development/python-modules/stdiomask { };
+
+  stdio-mgr = callPackage ../development/python-modules/stdio-mgr { };
 
   stdlib-list = callPackage ../development/python-modules/stdlib-list { };
 

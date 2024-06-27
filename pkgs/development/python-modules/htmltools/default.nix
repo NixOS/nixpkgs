@@ -1,0 +1,45 @@
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  packaging,
+  typing-extensions,
+  pytestCheckHook,
+  syrupy,
+}:
+
+buildPythonPackage rec {
+  pname = "htmltools";
+  version = "0.5.2";
+  pyproject = true;
+
+  src = fetchFromGitHub {
+    owner = "posit-dev";
+    repo = "py-htmltools";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-H0M9dY8CNQAMEGEGHhPIWEYRmk4omCuVFgJUg8ef8Zw=";
+  };
+
+  build-system = [ setuptools ];
+
+  dependencies = [
+    packaging
+    typing-extensions
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+    syrupy
+  ];
+
+  pythonImportsCheck = [ "htmltools" ];
+
+  meta = {
+    description = "Tools for HTML generation and output";
+    homepage = "https://github.com/posit-dev/py-htmltools";
+    changelog = "https://github.com/posit-dev/py-htmltools/blob/${src.rev}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ moraxyc ];
+  };
+}
