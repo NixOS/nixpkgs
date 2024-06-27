@@ -29618,8 +29618,6 @@ with pkgs;
 
   bashSnippets = callPackage ../applications/misc/bashSnippets { };
 
-  batik = callPackage ../applications/graphics/batik { };
-
   batsignal = callPackage ../applications/misc/batsignal { };
 
   baudline = callPackage ../applications/audio/baudline { };
