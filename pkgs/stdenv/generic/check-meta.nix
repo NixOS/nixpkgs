@@ -10,7 +10,9 @@ let
     concatMapStrings
     concatMapStringsSep
     concatStrings
+    filter
     findFirst
+    head
     isDerivation
     length
     concatMap
@@ -303,6 +305,10 @@ let
       (listOf str)
       str
     ];
+    repository = union [
+      (listOf str)
+      str
+    ];
     downloadPage = str;
     changelog = union [
       (listOf str)
@@ -442,6 +448,15 @@ let
     # -----
     else validYes;
 
+  unlist = list:
+    if length list == 1
+    then head list
+    else list;
+
+  valOrEmpty = res:
+   if res.success
+   then res.value
+   else [];
 
   # The meta attribute is passed in the resulting attribute set,
   # but it's not part of the actual derivation, i.e., it's not
@@ -456,6 +471,17 @@ let
       hasOutput = out: builtins.elem out outputs;
     in
     {
+      # get the default value for the meta.repository field.
+      # the fetchFrom* fetchers set src.meta.homepage
+      # tryEval will catch any throw-class errors, abort-class errors during
+      # evaluation are bugs and should be fixed.
+      repository =
+        valOrEmpty (builtins.tryEval (
+          if attrs ? src.meta.homepage
+          then attrs.src.meta.homepage
+          else if attrs ? srcs && isList attrs.srcs
+          then unlist (map (src: src.meta.homepage) (filter (src: src ? meta.homepage) attrs.srcs))
+          else []));
       # `name` derivation attribute includes cross-compilation cruft,
       # is under assert, and is sanitized.
       # Let's have a clean always accessible version here.
