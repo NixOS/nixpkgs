@@ -1,5 +1,5 @@
 { lib, rustPlatform, fetchFromGitHub, pkg-config, openssl, stdenv, CoreServices
-, Security }:
+, Security, SystemConfiguration }:
 
 rustPlatform.buildRustPackage rec {
   pname = "railway";
@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ openssl ]
-    ++ lib.optionals stdenv.isDarwin [ CoreServices Security ];
+    ++ lib.optionals stdenv.isDarwin [ CoreServices Security SystemConfiguration ];
 
   OPENSSL_NO_VENDOR = 1;
 
