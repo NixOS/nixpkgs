@@ -5,7 +5,7 @@
 , setJavaClassPath
 , headless ? false
 , enableJavaFX ? false, openjfx
-, enableGnome2 ? true, gtk3, glib
+, enableGtk ? true, gtk3, glib
 }:
 
 let
@@ -30,7 +30,7 @@ let
       cpio file which zip perl zlib cups freetype alsa-lib libjpeg giflib
       libpng zlib lcms2 libX11 libICE libXrender libXext libXtst libXt libXtst
       libXi libXinerama libXcursor libXrandr fontconfig openjdk-bootstrap
-    ] ++ lib.optionals (!headless && enableGnome2) [
+    ] ++ lib.optionals (!headless && enableGtk) [
       gtk3 glib
     ];
 
@@ -52,7 +52,7 @@ let
         url = "https://github.com/openjdk/panama-foreign/commit/af5c725b8109ce83fc04ef0f8bf6aaf0b50c0441.patch";
         sha256 = "0ja84kih5wkjn58pml53s59qnavb1z92dc88cbgw7vcyqwc1gs0h";
       })
-    ] ++ lib.optionals (!headless && enableGnome2) [
+    ] ++ lib.optionals (!headless && enableGtk) [
       ./swing-use-gtk-jdk10.patch
     ];
 
@@ -83,7 +83,7 @@ let
 
     NIX_LDFLAGS = lib.optionals (!headless) [
       "-lfontconfig" "-lcups" "-lXinerama" "-lXrandr" "-lmagic"
-    ] ++ lib.optionals (!headless && enableGnome2) [
+    ] ++ lib.optionals (!headless && enableGtk) [
       "-lgtk-3" "-lgio-2.0"
     ];
 

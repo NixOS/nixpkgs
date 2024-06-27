@@ -38,7 +38,7 @@
 , headless ? stdenv.targetPlatform.isGhcjs
 , enableJavaFX ? false
 , openjfx
-, enableGnome2 ? true
+, enableGtk ? true
 , gtk3
 , glib
 , writeShellScript
@@ -99,7 +99,7 @@ stdenv.mkDerivation (finalAttrs: {
     libXrandr
     fontconfig
     openjdk-bootstrap
-  ] ++ lib.optionals (!headless && enableGnome2) [
+  ] ++ lib.optionals (!headless && enableGtk) [
     gtk3
     glib
   ];
@@ -127,7 +127,7 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/openjdk/jdk/commit/9341d135b855cc208d48e47d30cd90aafa354c36.patch";
       hash = "sha256-Qcm3ZmGCOYLZcskNjj7DYR85R4v07vYvvavrVOYL8vg=";
     })
-  ] ++ lib.optionals (!headless && enableGnome2) [
+  ] ++ lib.optionals (!headless && enableGtk) [
     ./swing-use-gtk-jdk13.patch
   ];
 
@@ -169,7 +169,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-lXinerama"
     "-lXrandr"
     "-lmagic"
-  ] ++ lib.optionals (!headless && enableGnome2) [
+  ] ++ lib.optionals (!headless && enableGtk) [
     "-lgtk-3"
     "-lgio-2.0"
   ]);
