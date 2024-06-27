@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "kde-rounded-corners";
-  version = "0.6.6";
+  version = "0.6.7";
 
   src = fetchFromGitHub {
     owner = "matinlotfali";
     repo = "KDE-Rounded-Corners";
     rev = "v${version}";
-    hash = "sha256-pmUuYD0RPyF5I2p5MBErziehBrfc5MswQVvfwl4ozg8=";
+    hash = "sha256-xzs5eTNOO27//vfkax4cpKO3xnsjavSNU6tyt8H/dF0=";
   };
 
   nativeBuildInputs = [ cmake extra-cmake-modules wrapQtAppsHook ];
