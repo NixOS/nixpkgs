@@ -1,39 +1,39 @@
 {
-alsa-lib,
-at-spi2-atk,
-at-spi2-core,
-atk,
-cairo,
-cups,
-curl,
-dbus,
-dpkg,
-expat,
-fetchurl,
-fontconfig,
-freetype,
-gdk-pixbuf,
-glib,
-gtk3,
-lib,
-libdrm,
-libnotify,
-libsecret,
-libuuid,
-libxcb,
-libxkbcommon,
-mesa,
-nspr,
-nss,
-pango,
-stdenv,
-systemd,
-wrapGAppsHook3,
-xorg,
+  alsa-lib,
+  at-spi2-atk,
+  at-spi2-core,
+  atk,
+  cairo,
+  cups,
+  curl,
+  dbus,
+  dpkg,
+  expat,
+  fetchurl,
+  fontconfig,
+  freetype,
+  gdk-pixbuf,
+  glib,
+  gtk3,
+  lib,
+  libdrm,
+  libnotify,
+  libsecret,
+  libuuid,
+  libxcb,
+  libxkbcommon,
+  mesa,
+  nspr,
+  nss,
+  pango,
+  stdenv,
+  systemd,
+  wrapGAppsHook3,
+  xorg,
 }:
 
 let
-  version = "1.43.0";
+  version = "1.43.2";
 
   rpath = lib.makeLibraryPath [
     alsa-lib
@@ -82,20 +82,24 @@ let
     if stdenv.hostPlatform.system == "x86_64-linux" then
       fetchurl {
         url = "https://downloads.mongodb.com/compass/mongodb-compass_${version}_amd64.deb";
-        sha256 = "sha256-hzPhF0NGwv+Lm+q5SoS8qv10UmuKf4RarGMkEeCxp9w=";
+        hash = "sha256-idOFt60MlspB8Bm9HbLAhd/F1zhkHSVmdTxvCsgjGvk=";
       }
     else
       throw "MongoDB compass is not supported on ${stdenv.hostPlatform.system}";
-      # NOTE While MongoDB Compass is available to darwin, I do not have resources to test it
-      # Feel free to make a PR adding support if desired
-
-in stdenv.mkDerivation {
+in
+# NOTE While MongoDB Compass is available to darwin, I do not have resources to test it
+# Feel free to make a PR adding support if desired
+stdenv.mkDerivation {
   pname = "mongodb-compass";
   inherit version;
 
   inherit src;
 
-  buildInputs = [ dpkg wrapGAppsHook3 gtk3 ];
+  buildInputs = [
+    dpkg
+    wrapGAppsHook3
+    gtk3
+  ];
   dontUnpack = true;
 
   buildCommand = ''
@@ -127,12 +131,16 @@ in stdenv.mkDerivation {
     wrapGAppsHook $out/bin/mongodb-compass
   '';
 
-  meta = with lib; {
+  meta = {
     description = "GUI for MongoDB";
-    maintainers = with maintainers; [ bryanasdev000 ];
+    changelog = "https://github.com/mongodb-js/compass/releases/tag/v${version}";
+    maintainers = with lib.maintainers; [
+      bryanasdev000
+      luftmensch-luftmensch
+    ];
     homepage = "https://github.com/mongodb-js/compass";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.sspl;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    # license = lib.licenses.sspl;
     platforms = [ "x86_64-linux" ];
     mainProgram = "mongodb-compass";
   };
