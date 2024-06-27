@@ -10625,6 +10625,12 @@
     github = "kkoniuszy";
     githubId = 120419423;
   };
+  klchen0112 = {
+    name = "klchen0112";
+    email = "klchen0112@gmail.com";
+    github = "klchen0112";
+    githubId = 32459567;
+  };
   klden = {
     name = "Kenzyme Le";
     email = "kl@kenzymele.com";
@@ -11090,12 +11096,6 @@
     github = "Lassulus";
     githubId = 621759;
     name = "Lassulus";
-  };
-  laurailway = {
-    email = "laurailway.git@posteo.net";
-    github = "LAURAilway";
-    githubId = 118690640;
-    name = "Laura";
   };
   laurent-f1z1 = {
     email = "laurent.nixpkgs@fainsin.bzh";
@@ -20325,6 +20325,12 @@
   tomkoid = {
     email = "tomaszierl@outlook.com";
     name = "Tomkoid";
+  };
+  Tommimon = {
+    name = "Tommaso Montanari";
+    email = "sefymw7q8@mozmail.com";
+    github = "Tommimon";
+    githubId = 37435103;
   };
   tomodachi94 = {
     email = "tomodachi94@protonmail.com";

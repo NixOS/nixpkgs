@@ -1,10 +1,11 @@
 { lib
 , stdenv
-, fetchFromGitHub
-, autoreconfHook
 , autoconf-archive
+, autoreconfHook
 , cppunit
 , curl
+, fetchFromGitHub
+, installShellFiles
 , libsigcxx
 , libtool
 , libtorrent
@@ -14,18 +15,21 @@
 , xmlrpc_c
 , zlib
 , nixosTests
+, unstableGitUpdater
 }:
 
 stdenv.mkDerivation {
   pname = "rakshasa-rtorrent";
-  version = "0.9.8+date=2022-06-20";
+  version = "0.9.8-unstable-2023-03-16";
 
   src = fetchFromGitHub {
     owner = "rakshasa";
     repo = "rtorrent";
-    rev = "92bec88d0904bfb31c808085c2fd0f22d0ec8db7";
-    hash = "sha256-er7UdIb+flhq0ye76UmomgfHV2ZSBROpXmfrNDHwTWw=";
+    rev = "1da0e3476dcabbf74b2e836d6b4c37b4d96bde09";
+    hash = "sha256-OXOZSMuNAU+VGwNyyfzcmkTRjDJq9HsKUNxZDYpSvFQ=";
   };
+
+  outputs = [ "out" "man" ];
 
   passthru = {
     inherit libtorrent;
@@ -34,6 +38,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [
     autoconf-archive
     autoreconfHook
+    installShellFiles
     pkg-config
   ];
 
@@ -54,24 +59,26 @@ stdenv.mkDerivation {
     "--with-posix-fallocate"
   ];
 
-  passthru.tests = {
-    inherit (nixosTests) rtorrent;
+  passthru = {
+    updateScript = unstableGitUpdater { tagPrefix = "v"; };
+    tests = {
+      inherit (nixosTests) rtorrent;
+    };
   };
 
   enableParallelBuilding = true;
 
   postInstall = ''
-    mkdir -p $out/share/man/man1 $out/share/doc/rtorrent
-    mv doc/old/rtorrent.1 $out/share/man/man1/rtorrent.1
-    mv doc/rtorrent.rc $out/share/doc/rtorrent/rtorrent.rc
+    installManPage doc/old/rtorrent.1
+    install -Dm644 doc/rtorrent.rc-example -t $out/share/doc/rtorrent/rtorrent.rc
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://rakshasa.github.io/rtorrent/";
     description = "Ncurses client for libtorrent, ideal for use with screen, tmux, or dtach";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ ebzzry codyopel ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ ebzzry codyopel thiagokokada ];
+    platforms = lib.platforms.unix;
     mainProgram = "rtorrent";
   };
 }

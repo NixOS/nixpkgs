@@ -1,28 +1,32 @@
-{ lib
-, stdenv
-, fetchFromGitHub
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
 
-, docbook_xml_dtd_45
-, docbook_xsl
-, installShellFiles
-, libxslt
-, pcre
-, pkg-config
-, python3
-, which
+  docbook_xml_dtd_45,
+  docbook_xsl,
+  installShellFiles,
+  libxslt,
+  pcre,
+  pkg-config,
+  python3,
+  which,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cppcheck";
-  version = "2.14.1";
+  version = "2.14.2";
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
   src = fetchFromGitHub {
     owner = "danmar";
     repo = "cppcheck";
     rev = finalAttrs.version;
-    hash = "sha256-KXE3zmhaTweQhs0Qh7Xd5ILiuGVewtrvOkRkt8hjU58=";
+    hash = "sha256-aVjQqwsTw6TCLxs2oQif3hX5kfXHua7ekBpO/PyneAQ=";
   };
 
   nativeBuildInputs = [
@@ -40,7 +44,12 @@ stdenv.mkDerivation (finalAttrs: {
     (python3.withPackages (ps: [ ps.pygments ]))
   ];
 
-  makeFlags = [ "PREFIX=$(out)" "MATCHCOMPILER=yes" "FILESDIR=$(out)/share/cppcheck" "HAVE_RULES=yes" ];
+  makeFlags = [
+    "PREFIX=$(out)"
+    "MATCHCOMPILER=yes"
+    "FILESDIR=$(out)/share/cppcheck"
+    "HAVE_RULES=yes"
+  ];
 
   enableParallelBuilding = true;
   strictDeps = true;
@@ -73,13 +82,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Static analysis tool for C/C++ code";
-    homepage = "http://cppcheck.sourceforge.net";
-    license = lib.licenses.gpl3Plus;
     longDescription = ''
       Check C/C++ code for memory leaks, mismatching allocation-deallocation,
       buffer overruns and more.
     '';
-    maintainers = with lib.maintainers; [ joachifm paveloom ];
+    homepage = "http://cppcheck.sourceforge.net";
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
+      joachifm
+      paveloom
+    ];
     platforms = lib.platforms.unix;
   };
 })

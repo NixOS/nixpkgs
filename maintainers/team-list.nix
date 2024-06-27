@@ -380,6 +380,7 @@ with lib.maintainers;
   golang = {
     members = [
       kalbasit
+      katexochen
       mic92
       zowoq
       qbit

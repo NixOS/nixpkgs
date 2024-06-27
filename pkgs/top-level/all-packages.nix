@@ -10208,10 +10208,6 @@ with pkgs;
 
   libnids = callPackage ../tools/networking/libnids { };
 
-  rtorrent = callPackage ../applications/networking/p2p/rakshasa-rtorrent {
-    libtorrent = callPackage ../applications/networking/p2p/rakshasa-rtorrent/libtorrent.nix { };
-  };
-
   jesec-rtorrent = callPackage ../applications/networking/p2p/jesec-rtorrent {
     libtorrent = callPackage ../applications/networking/p2p/jesec-rtorrent/libtorrent.nix { };
   };
@@ -11472,8 +11468,6 @@ with pkgs;
   pagmo2 = callPackage ../development/libraries/pagmo2 { };
 
   paho-mqtt-c = callPackage ../development/libraries/paho-mqtt-c { };
-
-  paho-mqtt-cpp = callPackage ../development/libraries/paho-mqtt-cpp { };
 
   pakcs = callPackage ../development/compilers/pakcs {
     # Doesn't compile with GHC 9.0 due to whitespace syntax changes
@@ -17867,14 +17861,11 @@ with pkgs;
   apacheAnt = callPackage ../development/tools/build-managers/apache-ant { };
   ant = apacheAnt;
 
-  apacheKafka = apacheKafka_3_5;
-  apacheKafka_2_8 = callPackage ../servers/apache-kafka { majorVersion = "2.8"; };
-  apacheKafka_3_0 = callPackage ../servers/apache-kafka { majorVersion = "3.0"; };
-  apacheKafka_3_1 = callPackage ../servers/apache-kafka { majorVersion = "3.1"; };
-  apacheKafka_3_2 = callPackage ../servers/apache-kafka { majorVersion = "3.2"; };
-  apacheKafka_3_3 = callPackage ../servers/apache-kafka { majorVersion = "3.3"; };
-  apacheKafka_3_4 = callPackage ../servers/apache-kafka { majorVersion = "3.4"; };
-  apacheKafka_3_5 = callPackage ../servers/apache-kafka { majorVersion = "3.5"; };
+  inherit (callPackages ../servers/apache-kafka { })
+    apacheKafka_3_6
+    apacheKafka_3_7;
+
+  apacheKafka = apacheKafka_3_7;
 
   apng2gif = callPackage ../tools/graphics/apng2gif { };
 
@@ -18325,8 +18316,6 @@ with pkgs;
   cflow = callPackage ../development/tools/misc/cflow { };
 
   cov-build = callPackage ../development/tools/analysis/cov-build { };
-
-  cppcheck = callPackage ../development/tools/analysis/cppcheck { };
 
   cpplint = callPackage ../development/tools/analysis/cpplint { };
 
@@ -21325,13 +21314,11 @@ with pkgs;
 
   icu-versions = callPackages ../development/libraries/icu { };
   inherit (icu-versions)
-    icu58
     icu60
     icu63
     icu64
     icu66
     icu67
-    icu68
     icu69
     icu70
     icu71
@@ -25056,6 +25043,17 @@ with pkgs;
   };
   buildGo122Package = darwin.apple_sdk_11_0.callPackage ../build-support/go/package.nix {
     go = buildPackages.go_1_22;
+  };
+
+  # requires a newer Apple SDK
+  go_1_23 = darwin.apple_sdk_11_0.callPackage ../development/compilers/go/1.23.nix {
+    inherit (darwin.apple_sdk_11_0.frameworks) Foundation Security;
+  };
+  buildGo123Module = darwin.apple_sdk_11_0.callPackage ../build-support/go/module.nix {
+    go = buildPackages.go_1_23;
+  };
+  buildGo123Package = darwin.apple_sdk_11_0.callPackage ../build-support/go/package.nix {
+    go = buildPackages.go_1_23;
   };
 
   leaps = callPackage ../development/tools/leaps { };
@@ -36673,8 +36671,6 @@ with pkgs;
   legendary-gl = python3Packages.callPackage ../games/legendary-gl { };
 
   left4gore-bin = callPackage ../games/left4gore { };
-
-  lgogdownloader = libsForQt5.callPackage ../games/lgogdownloader { };
 
   liberal-crime-squad = callPackage ../games/liberal-crime-squad { };
 
