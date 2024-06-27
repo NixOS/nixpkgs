@@ -2646,12 +2646,6 @@ self: super: {
     relative = "dependent-sum-template";
   }) super.dependent-sum-template;
 
-  aeson-gadt-th = appendPatch (fetchpatch {
-    url = "https://github.com/obsidiansystems/aeson-gadt-th/commit/8f6922a6440019dece637d73d70766c473bcd6c0.patch";
-    hash = "sha256-564DhfiubwNV8nAj8L5DzsWn4MdzqqaYYNmOSPUa7ys=";
-    excludes = [ ".github/**" ];
-  }) super.aeson-gadt-th;
-
   # Too strict bounds on chell: https://github.com/fpco/haskell-filesystem/issues/24
   system-fileio = doJailbreak super.system-fileio;
 
