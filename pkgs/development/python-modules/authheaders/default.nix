@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "authheaders";
-  version = "0.16.2";
+  version = "0.16.3";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "ValiMail";
     repo = "authentication-headers";
     rev = "refs/tags/${version}";
-    hash = "sha256-/vxUUSWwysYQzcy2AmkF4f8R59FHRnBfFlPRpfM9e5o=";
+    hash = "sha256-BFMZpSJ4qCEL42xTiM/D5dkatxohiCrOWAkNZHFUhac=";
   };
 
   nativeBuildInputs = [ setuptools ];
