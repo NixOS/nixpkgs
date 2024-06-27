@@ -11,13 +11,13 @@ let
 in
 haskellPackages.mkDerivation rec {
   pname = "oama";
-  version = "0.13.3";
+  version = "0.14";
 
   src = fetchFromGitHub {
     owner = "pdobsan";
     repo = pname;
     rev = version;
-    hash = "sha256-6/Bx8CwBhpjHBVWT5XqrPDVIKAq/hNwo2oildl513UI=";
+    hash = "sha256-ADtXgGq0h5wUiCGavHXGnPYsGjwxqrnD6NsSCA2bsME=";
   };
 
   isLibrary = false;
