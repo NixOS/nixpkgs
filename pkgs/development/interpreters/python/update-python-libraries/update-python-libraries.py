@@ -284,7 +284,7 @@ def _get_latest_version_github(attr_path, package, extension, current_version, t
     if _get_attr_value(f"{attr_path}.src.leaveDotGit"):
         git_fetcher_args.append("--leave-dotGit")
 
-    if git_fetcher_args:
+    if git_fetcher_args or _get_attr_value(f"{attr_path}.src.fetcher").endswith("nix-prefetch-git"):
         algorithm = "sha256"
         cmd = [
             "nix-prefetch-git",
