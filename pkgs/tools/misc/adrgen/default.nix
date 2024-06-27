@@ -4,35 +4,39 @@
 , fetchpatch
 , testers
 , adrgen
+, installShellFiles
 }:
 
 buildGoModule rec {
   pname = "adrgen";
-  version = "0.4.0-beta";
+  version = "0.4.1-beta";
 
   src = fetchFromGitHub {
     owner = "asiermarques";
     repo = "adrgen";
     rev = "v${version}";
-    hash = "sha256-2ZE/orsfwL59Io09c4yfXt2enVmpSM/QHlUMgyd9RYQ=";
+    hash = "sha256-9EiJe5shhwbjLIvUQMUTSGTgCA+r3RdkLkPRPoWvZ3g=";
   };
 
-  patches = [
-    # https://github.com/asiermarques/adrgen/pull/14
-    (fetchpatch {
-      name = "update-x-sys-for-go-1.18-on-aarch64-darwin.patch";
-      url = "https://github.com/asiermarques/adrgen/commit/485dc383106467d1029ee6d92c9bcbc3c2281626.patch";
-      hash = "sha256-38ktHrRgW5ysQmafvFthNtkZ6nnM61z4yEA7wUGmWb4=";
-    })
-  ];
+  nativeBuildInputs = [ installShellFiles ];
+
 
   vendorHash = "sha256-RXwwv3Q/kQ6FondpiUm5XZogAVK2aaVmKu4hfr+AnAM=";
+
+  ldflags = [ "-s" "-w" ];
 
   passthru.tests.version = testers.testVersion {
     package = adrgen;
     command = "adrgen version";
     version = "v${version}";
   };
+
+  postInstall = ''
+    installShellCompletion --cmd adrgen \
+      --bash <($out/bin/adrgen completion bash) \
+      --fish <($out/bin/adrgen completion fish) \
+      --zsh <($out/bin/adrgen completion zsh)
+  '';
 
   meta = with lib; {
     homepage = "https://github.com/asiermarques/adrgen";
