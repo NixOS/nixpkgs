@@ -140,7 +140,7 @@ stdenv.mkDerivation {
     ];
     homepage = "https://github.com/mongodb-js/compass";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    # license = lib.licenses.sspl;
+    license = lib.licenses.sspl;
     platforms = [ "x86_64-linux" ];
     mainProgram = "mongodb-compass";
   };
