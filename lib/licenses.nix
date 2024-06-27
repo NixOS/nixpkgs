@@ -879,7 +879,6 @@ in mkLicense lset) ({
     # - SPDX Lists the license (meaning it is free according to their inclusion policy)
     # - Fedora and other Linux Distributions allow this License:
     # - https://docs.fedoraproject.org/en-US/legal/allowed-licenses/#_allowed_font_licenses (accessed 2024-06-27)
-    # - Wikipedia says the license is "commercial": https://en.wikipedia.org/w/index.php?title=Lucida&oldid=1182121399
     free = true;
   };
 

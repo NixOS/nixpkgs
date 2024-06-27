@@ -205,14 +205,14 @@ final: prev: {
 
   fontbhlucidatypewriter75dpi = prev.fontbhlucidatypewriter75dpi.overrideAttrs (attrs: {
     meta = attrs.meta // {
-      # only include a copyright
+      # only includes a copyright
       license = lib.licenses.unfree;
     };
   });
 
   fontbhlucidatypewriter100dpi = prev.fontbhlucidatypewriter100dpi.overrideAttrs (attrs: {
     meta = attrs.meta // {
-      # only include a copyright
+      # only includes a copyright
       license = lib.licenses.unfree;
     };
   });
@@ -364,9 +364,9 @@ final: prev: {
 
   fontmiscmeltho = prev.fontmiscmeltho.overrideAttrs (attrs: {
     meta = attrs.meta // {
-      # modified version of the Lucida Bigelow & Holmes Font License
-      # still unfree tho  :(
-      license = lib.licenses.unfree;
+      # modified version of the Luxi Bigelow & Holmes Font License
+      # no license relevant changes only Luxi -> Meltho
+      license = lib.licenses.unfreeRedistributable;
     };
   });
 
@@ -395,7 +395,6 @@ final: prev: {
 
   fontscreencyrillic = prev.fontscreencyrillic.overrideAttrs (attrs: {
     meta = attrs.meta // {
-      # unknown permission notice that grants all 4 freedoms
       license = lib.licenses.cronyx;
     };
   });
@@ -701,7 +700,6 @@ final: prev: {
         smlnj
         ntp
         # some unknown permission notices that grant all 4 freedoms
-        # may also be known, but i couldn't find a license that matches
         free
       ];
     };
