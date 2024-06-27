@@ -66,6 +66,9 @@ stdenv.mkDerivation (rec {
     # Enable TLS/SSL verification in HTTP::Tiny by default
     lib.optional (lib.versionOlder version "5.38.0") ./http-tiny-verify-ssl-by-default.patch
 
+    # Fix duplicated symbol identification on pkgsStatic - Already fixed in 5.39.2+
+    ++ lib.optional (lib.versionOlder version "5.39.2" && stdenv.hostPlatform.isStatic) ./static-stdenv-5.39.2.patch
+
     # Do not look in /usr etc. for dependencies.
     ++ lib.optional (lib.versionOlder version "5.38.0") ./no-sys-dirs-5.31.patch
     ++ lib.optional (lib.versionAtLeast version "5.38.0") ./no-sys-dirs-5.38.0.patch
@@ -110,7 +113,7 @@ stdenv.mkDerivation (rec {
     ++ lib.optional stdenv.isSunOS "-Dcc=gcc"
     ++ lib.optional enableThreading "-Dusethreads"
     ++ lib.optional (!enableCrypt) "-A clear:d_crypt_r"
-    ++ lib.optional stdenv.hostPlatform.isStatic "--all-static"
+    ++ lib.optionals stdenv.hostPlatform.isStatic [ "--all-static" "-Uusedl" ]
     ++ lib.optionals (!crossCompiling) [
       "-Dprefix=${placeholder "out"}"
       "-Dman1dir=${placeholder "out"}/share/man/man1"
