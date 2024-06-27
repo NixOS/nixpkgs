@@ -488,8 +488,6 @@ in {
         # fido2 support
         "${cfg.package}/lib/cryptsetup/libcryptsetup-token-systemd-fido2.so"
         "${pkgs.libfido2}/lib/libfido2.so.1"
-      ] ++ optionals cfg.package.withKmod [
-        "${pkgs.kmod.lib}/lib/libkmod.so.2"
       ] ++ jobScripts
       ++ map (c: builtins.removeAttrs c ["text"]) (builtins.attrValues cfg.contents);
 

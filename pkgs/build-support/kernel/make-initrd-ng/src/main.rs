@@ -1,4 +1,4 @@
-use std::collections::{HashSet, VecDeque};
+use std::collections::{BTreeSet, HashSet, VecDeque};
 use std::env;
 use std::ffi::{OsStr, OsString};
 use std::fs;
@@ -12,10 +12,41 @@ use eyre::Context;
 use goblin::{elf::Elf, Object};
 use serde::Deserialize;
 
+#[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Copy, Debug, Deserialize, Hash)]
+#[serde(rename_all = "lowercase")]
+enum DLOpenPriority {
+    Required,
+    Recommended,
+    Suggested,
+}
+
+#[derive(PartialEq, Eq, Debug, Deserialize, Clone, Hash)]
+#[serde(rename_all = "camelCase")]
+struct DLOpenConfig {
+    use_priority: DLOpenPriority,
+    features: BTreeSet<String>,
+}
+
 #[derive(Deserialize, Debug)]
+struct DLOpenNote {
+    soname: Vec<String>,
+    feature: Option<String>,
+    // description is in the spec, but we don't need it here.
+    // description: Option<String>,
+    priority: Option<DLOpenPriority>,
+}
+
+#[derive(Deserialize, Debug, PartialEq, Eq, Hash, Clone)]
 struct StoreInput {
     source: String,
     target: Option<String>,
+    dlopen: Option<DLOpenConfig>,
+}
+
+#[derive(PartialEq, Eq, Hash, Clone)]
+struct StorePath {
+    path: Box<Path>,
+    dlopen: Option<DLOpenConfig>,
 }
 
 struct NonRepeatingQueue<T> {
@@ -48,13 +79,47 @@ impl<T: Clone + Eq + Hash> NonRepeatingQueue<T> {
     }
 }
 
-fn add_dependencies<P: AsRef<Path> + AsRef<OsStr>>(
+fn add_dependencies<P: AsRef<Path> + AsRef<OsStr> + std::fmt::Debug>(
     source: P,
     elf: Elf,
-    queue: &mut NonRepeatingQueue<Box<Path>>,
-) {
+    contents: &[u8],
+    dlopen: &Option<DLOpenConfig>,
+    queue: &mut NonRepeatingQueue<StorePath>,
+) -> eyre::Result<()> {
     if let Some(interp) = elf.interpreter {
-        queue.push_back(Box::from(Path::new(interp)));
+        queue.push_back(StorePath {
+            path: Box::from(Path::new(interp)),
+            dlopen: dlopen.clone(),
+        });
+    }
+
+    let mut dlopen_libraries = vec![];
+    if let Some(dlopen) = dlopen {
+        for n in elf
+            .iter_note_sections(&contents, Some(".note.dlopen"))
+            .into_iter()
+            .flatten()
+        {
+            let note = n.wrap_err_with(|| format!("bad note in {:?}", source))?;
+            // Payload is padded and zero terminated
+            let payload = &note.desc[..note
+                .desc
+                .iter()
+                .position(|x| *x == 0)
+                .unwrap_or(note.desc.len())];
+            let parsed = serde_json::from_slice::<Vec<DLOpenNote>>(payload)?;
+            for mut parsed_note in parsed {
+                if dlopen.use_priority
+                    >= parsed_note.priority.unwrap_or(DLOpenPriority::Recommended)
+                    || parsed_note
+                        .feature
+                        .map(|f| dlopen.features.contains(&f))
+                        .unwrap_or(false)
+                {
+                    dlopen_libraries.append(&mut parsed_note.soname);
+                }
+            }
+        }
     }
 
     let rpaths = if elf.runpaths.len() > 0 {
@@ -71,13 +136,21 @@ fn add_dependencies<P: AsRef<Path> + AsRef<OsStr>>(
         .map(|p| Box::<Path>::from(Path::new(p)))
         .collect::<Vec<_>>();
 
-    for line in elf.libraries {
+    for line in elf
+        .libraries
+        .into_iter()
+        .map(|s| s.to_string())
+        .chain(dlopen_libraries)
+    {
         let mut found = false;
         for path in &rpaths_as_path {
-            let lib = path.join(line);
+            let lib = path.join(&line);
             if lib.exists() {
                 // No need to recurse. The queue will bring it back round.
-                queue.push_back(Box::from(lib.as_path()));
+                queue.push_back(StorePath {
+                    path: Box::from(lib.as_path()),
+                    dlopen: dlopen.clone(),
+                });
                 found = true;
                 break;
             }
@@ -92,6 +165,8 @@ fn add_dependencies<P: AsRef<Path> + AsRef<OsStr>>(
             );
         }
     }
+
+    Ok(())
 }
 
 fn copy_file<
@@ -100,7 +175,8 @@ fn copy_file<
 >(
     source: P,
     target: S,
-    queue: &mut NonRepeatingQueue<Box<Path>>,
+    dlopen: &Option<DLOpenConfig>,
+    queue: &mut NonRepeatingQueue<StorePath>,
 ) -> eyre::Result<()> {
     fs::copy(&source, &target)
         .wrap_err_with(|| format!("failed to copy {:?} to {:?}", source, target))?;
@@ -109,7 +185,7 @@ fn copy_file<
         fs::read(&source).wrap_err_with(|| format!("failed to read from {:?}", source))?;
 
     if let Ok(Object::Elf(e)) = Object::parse(&contents) {
-        add_dependencies(source, e, queue);
+        add_dependencies(source, e, &contents, &dlopen, queue)?;
 
         // Make file writable to strip it
         let mut permissions = fs::metadata(&target)
@@ -138,14 +214,18 @@ fn copy_file<
 
 fn queue_dir<P: AsRef<Path> + std::fmt::Debug>(
     source: P,
-    queue: &mut NonRepeatingQueue<Box<Path>>,
+    dlopen: &Option<DLOpenConfig>,
+    queue: &mut NonRepeatingQueue<StorePath>,
 ) -> eyre::Result<()> {
     for entry in
         fs::read_dir(&source).wrap_err_with(|| format!("failed to read dir {:?}", source))?
     {
         let entry = entry?;
         // No need to recurse. The queue will bring us back round here on its own.
-        queue.push_back(Box::from(entry.path().as_path()));
+        queue.push_back(StorePath {
+            path: Box::from(entry.path().as_path()),
+            dlopen: dlopen.clone(),
+        });
     }
 
     Ok(())
@@ -153,12 +233,12 @@ fn queue_dir<P: AsRef<Path> + std::fmt::Debug>(
 
 fn handle_path(
     root: &Path,
-    p: &Path,
-    queue: &mut NonRepeatingQueue<Box<Path>>,
+    p: StorePath,
+    queue: &mut NonRepeatingQueue<StorePath>,
 ) -> eyre::Result<()> {
     let mut source = PathBuf::new();
     let mut target = Path::new(root).to_path_buf();
-    let mut iter = p.components().peekable();
+    let mut iter = p.path.components().peekable();
     while let Some(comp) = iter.next() {
         match comp {
             Component::Prefix(_) => panic!("This tool is not meant for Windows"),
@@ -182,7 +262,7 @@ fn handle_path(
                     .wrap_err_with(|| format!("failed to get symlink metadata for {:?}", source))?
                     .file_type();
                 if typ.is_file() && !target.exists() {
-                    copy_file(&source, &target, queue)?;
+                    copy_file(&source, &target, &p.dlopen, queue)?;
 
                     if let Some(filename) = source.file_name() {
                         source.set_file_name(OsString::from_iter([
@@ -193,7 +273,10 @@ fn handle_path(
 
                         let wrapped_path = source.as_path();
                         if wrapped_path.exists() {
-                            queue.push_back(Box::from(wrapped_path));
+                            queue.push_back(StorePath {
+                                path: Box::from(wrapped_path),
+                                dlopen: p.dlopen.clone(),
+                            });
                         }
                     }
                 } else if typ.is_symlink() {
@@ -213,7 +296,10 @@ fn handle_path(
                     }
                     let link_target_path = source.as_path();
                     if link_target_path.exists() {
-                        queue.push_back(Box::from(link_target_path));
+                        queue.push_back(StorePath {
+                            path: Box::from(link_target_path),
+                            dlopen: p.dlopen.clone(),
+                        });
                     }
                     break;
                 } else if typ.is_dir() {
@@ -224,7 +310,7 @@ fn handle_path(
 
                     // Only recursively copy if the directory is the target object
                     if iter.peek().is_none() {
-                        queue_dir(&source, queue)
+                        queue_dir(&source, &p.dlopen, queue)
                             .wrap_err_with(|| format!("failed to queue dir {:?}", source))?;
                     }
                 }
@@ -244,11 +330,14 @@ fn main() -> eyre::Result<()> {
     let output = &args[2];
     let out_path = Path::new(output);
 
-    let mut queue = NonRepeatingQueue::<Box<Path>>::new();
+    let mut queue = NonRepeatingQueue::<StorePath>::new();
 
     for sp in input {
         let obj_path = Path::new(&sp.source);
-        queue.push_back(Box::from(obj_path));
+        queue.push_back(StorePath {
+            path: Box::from(obj_path),
+            dlopen: sp.dlopen,
+        });
         if let Some(target) = sp.target {
             println!("{} -> {}", &target, &sp.source);
             // We don't care about preserving symlink structure here
@@ -264,7 +353,7 @@ fn main() -> eyre::Result<()> {
         }
     }
     while let Some(obj) = queue.pop_front() {
-        handle_path(out_path, &*obj, &mut queue)?;
+        handle_path(out_path, obj, &mut queue)?;
     }
 
     Ok(())
