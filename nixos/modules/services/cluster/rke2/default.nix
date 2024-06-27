@@ -31,7 +31,7 @@ in
       default = "server";
     };
 
-    configPath = mkOption {
+    configFile = mkOption {
       type = types.path;
       description = "Load configuration from FILE.";
       default = "/etc/rancher/rke2/config.yaml";
@@ -202,12 +202,12 @@ in
   config = mkIf cfg.enable {
     assertions = [
       {
-        assertion = cfg.role == "agent" -> (builtins.pathExists cfg.configPath || cfg.serverAddr != "");
-        message = "serverAddr or configPath (with 'server' key) should be set if role is 'agent'";
+        assertion = cfg.role == "agent" -> (builtins.pathExists cfg.configFile || cfg.serverAddr != "");
+        message = "serverAddr or configFile (with 'server' key) should be set if role is 'agent'";
       }
       {
-        assertion = cfg.role == "agent" -> (builtins.pathExists cfg.configPath || cfg.tokenFile != null || cfg.token != "");
-        message = "token or tokenFile or configPath (with 'token' or 'token-file' keys) should be set if role is 'agent'";
+        assertion = cfg.role == "agent" -> (builtins.pathExists cfg.configFile || cfg.tokenFile != null || cfg.token != "");
+        message = "token or tokenFile or configFile (with 'token' or 'token-file' keys) should be set if role is 'agent'";
       }
       {
         assertion = cfg.role == "agent" -> ! (cfg.agentTokenFile != null || cfg.agentToken != "");
@@ -278,7 +278,7 @@ in
           "-${pkgs.kmod}/bin/modprobe overlay"
         ];
         ExecStart = "${cfg.package}/bin/rke2 '${cfg.role}' ${escapeShellArgs (
-             (optional (cfg.configPath != "/etc/rancher/rke2/config.yaml") "--config=${cfg.configPath}")
+             (optional (cfg.configFile != "/etc/rancher/rke2/config.yaml") "--config=${cfg.configFile}")
           ++ (optional cfg.debug "--debug")
           ++ (optional (cfg.dataDir != "/var/lib/rancher/rke2") "--data-dir=${cfg.dataDir}")
           ++ (optional (cfg.token != "") "--token=${cfg.token}")
