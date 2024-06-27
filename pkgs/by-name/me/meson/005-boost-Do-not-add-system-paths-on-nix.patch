@@ -1,13 +1,18 @@
-diff -Naur meson-0.60.2-old/mesonbuild/dependencies/boost.py meson-0.60.2-new/mesonbuild/dependencies/boost.py
---- meson-0.60.2-old/mesonbuild/dependencies/boost.py	2021-11-02 16:58:07.000000000 -0300
-+++ meson-0.60.2-new/mesonbuild/dependencies/boost.py	2021-12-12 19:21:27.895705897 -0300
-@@ -682,16 +682,7 @@
+diff --git a/mesonbuild/dependencies/boost.py b/mesonbuild/dependencies/boost.py
+index 11cf0beca..80f950866 100644
+--- a/mesonbuild/dependencies/boost.py
++++ b/mesonbuild/dependencies/boost.py
+@@ -687,20 +687,7 @@ class BoostDependency(SystemDependency):
          else:
-             tmp = []  # type: T.List[Path]
+             tmp: T.List[Path] = []
  
 -            # Add some default system paths
+-            if m.is_darwin():
+-                tmp.extend([
+-                    Path('/opt/homebrew/'),        # for Apple Silicon MacOS
+-                    Path('/usr/local/opt/boost'),  # for Intel Silicon MacOS
+-                ])
 -            tmp += [Path('/opt/local')]
--            tmp += [Path('/usr/local/opt/boost')]
 -            tmp += [Path('/usr/local')]
 -            tmp += [Path('/usr')]
 -
