@@ -2633,12 +2633,6 @@ self: super: {
     hash = "sha256-QKDUh4jO8xZrThrkjTVNnkoVY+GejxOhpXOVA4+n1H8=";
   }) super.dependent-monoidal-map;
 
-  # 2025-05-05: Bounds need to be loosened https://github.com/obsidiansystems/dependent-sum-aeson-orphans/pull/13
-  dependent-sum-aeson-orphans = appendPatch (fetchpatch {
-    url = "https://github.com/obsidiansystems/dependent-sum-aeson-orphans/commit/9b4698154303a9865d7d68a2f01d280a8a39f108.patch";
-    hash = "sha256-Pzjl2yp01XsYWcyhpLnsuccg7bOACgv+RpafauUox8c=";
-  }) super.dependent-sum-aeson-orphans;
-
   # https://github.com/obsidiansystems/dependent-sum/pull/73
   dependent-sum-template = appendPatch (fetchpatch {
     url = "https://github.com/obsidiansystems/dependent-sum/commit/619727ba1792e39a68d23c62e75a923672e87a54.patch";
