@@ -17,7 +17,7 @@
 , gnugrep
 , gnused
 , gnutar
-, gtk2, gnome_vfs, glib, GConf
+, gtk2, glib
 , gzip
 , fontconfig
 , freetype
@@ -175,9 +175,7 @@ let
 
           # For GTKLookAndFeel
           gtk2
-          gnome_vfs
           glib
-          GConf
         ]}"
 
       # AS launches LLDBFrontend with a custom LD_LIBRARY_PATH
