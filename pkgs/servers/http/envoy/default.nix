@@ -25,15 +25,15 @@ let
     # However, the version string is more useful for end-users.
     # These are contained in a attrset of their own to make it obvious that
     # people should update both.
-    version = "1.30.2";
-    rev = "d79f6e8d453ee260e9094093b8dd31af0056e67b";
-    hash = "sha256-qbe9M4dH7NFDY5UF17urJ6WvnZNhvdMU4HAg0BaL+KA=";
+    version = "1.30.3";
+    rev = "12a6a79966203969a23aa2f0d705f39b679744c2";
+    hash = "sha256-S18bnAVha4CnYKHTzytKY6PHWSbOzmObbyZEhzIHsf8=";
   };
 
   # these need to be updated for any changes to fetchAttrs
   depsHash = {
-    x86_64-linux = "sha256-/IpTRFBkif1HSycPrWxphKTnhL6wHgPAweyxoXZ1oVg=";
-    aarch64-linux = "sha256-uA1CHKzdBht+WYxgwR2g5t7fRybhbo6Hgpzdr+H1vqY=";
+    x86_64-linux = "sha256-m7dMr/dCmjpKLPT+8FXBHGkTlNoN9x1oQ7D6uO0sHtQ=";
+    aarch64-linux = "sha256-9GqVpWkMHP9nb5EZHjGKixkWazi//oLlIUum45xTvoM=";
   }.${stdenv.system} or (throw "unsupported system ${stdenv.system}");
 in
 buildBazelPackage {
@@ -56,8 +56,6 @@ buildBazelPackage {
     sed -i 's,#!/usr/bin/env python3,#!${python3}/bin/python,' bazel/foreign_cc/luajit.patch
     sed -i '/javabase=/d' .bazelrc
     sed -i '/"-Werror"/d' bazel/envoy_internal.bzl
-
-    cp ${./dd_trace_cpp.patch} bazel/dd_trace_cpp.patch
   '';
 
   patches = [
@@ -69,11 +67,6 @@ buildBazelPackage {
 
     # use system C/C++ tools
     ./0003-nixpkgs-use-system-C-C-toolchains.patch
-
-    # apply patch to dd-trace-cpp
-    # remove once a version of dd-trace-cpp is released and adopted by envoy
-    # that contains https://github.com/DataDog/dd-trace-cpp/commit/3a8e1e9a3cf4e87ef053e954a39dc7a967ac6965
-    ./0004-nixpkgs-add-cstdint-in-dd-trace-cpp.patch
   ];
 
   nativeBuildInputs = [
