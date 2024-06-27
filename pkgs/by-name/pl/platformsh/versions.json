@@ -1,0 +1,19 @@
+{
+  "version": "5.0.14",
+  "darwin-amd64": {
+    "hash": "sha256-wAMpPxJMMhgQ562hP9MVGTt6ctIBljBoM4fl/hhlGoY=",
+    "url": "https://github.com/platformsh/cli/releases/download/5.0.14/platform_5.0.14_darwin_all.tar.gz"
+  },
+  "darwin-arm64": {
+    "hash": "sha256-wAMpPxJMMhgQ562hP9MVGTt6ctIBljBoM4fl/hhlGoY=",
+    "url": "https://github.com/platformsh/cli/releases/download/5.0.14/platform_5.0.14_darwin_all.tar.gz"
+  },
+  "linux-amd64": {
+    "hash": "sha256-iqRTvniAhCevFHgLnk/lxcDzxA6iUZECV0Y+wU8egg4=",
+    "url": "https://github.com/platformsh/cli/releases/download/5.0.14/platform_5.0.14_linux_amd64.tar.gz"
+  },
+  "linux-arm64": {
+    "hash": "sha256-iKiX7T5hDvbGR3d/T7zpWZ6Y5S1KSySpEmHj0gvP88w=",
+    "url": "https://github.com/platformsh/cli/releases/download/5.0.14/platform_5.0.14_linux_arm64.tar.gz"
+  }
+}
