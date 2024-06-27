@@ -1,4 +1,6 @@
 {
+  stdenvNoCC,
+  python3,
   lib,
   buildNpmPackage,
   fetchFromGitHub,
@@ -7,13 +9,13 @@
 }:
 
 let
-  version = "1.12.6";
+  version = "1.13.1";
 
   src = fetchFromGitHub {
     owner = "detachhead";
     repo = "basedpyright";
     rev = "refs/tags/v${version}";
-    hash = "sha256-1F3T+BGamFJEDAIMz684oIn4xEDbNadEh8TTG5l8fPo=";
+    hash = "sha256-dIIYHVsDSNwhedWlPnLCvB5aGgVukGLs5K84WHqQyVM=";
   };
 
   patchedPackageJSON = runCommand "package.json" { } ''
@@ -43,7 +45,7 @@ let
     pname = "pyright-internal";
     inherit version src;
     sourceRoot = "${src.name}/packages/pyright-internal";
-    npmDepsHash = "sha256-8nXW5Z5xTr8EXxyBylxCr7C88zmRxppe8EaspFy7b6o=";
+    npmDepsHash = "sha256-OZHCAJd/O6u1LhkJZ/TK9L8s4bcXMMNVlKF3If+Ms1A=";
     dontNpmBuild = true;
     # FIXME: Remove this flag when TypeScript 5.5 is released
     npmFlags = [ "--legacy-peer-deps" ];
@@ -53,16 +55,50 @@ let
       runHook postInstall
     '';
   };
+
+  docify = python3.pkgs.buildPythonApplication {
+    pname = "docify";
+    version = "unstable";
+    format = "pyproject";
+    src = fetchFromGitHub {
+      owner = "AThePeanut4";
+      repo = "docify";
+      rev = "7380a6faa6d1e8a3dc790a00254e6d77f84cbd91";
+      hash = "sha256-BPR1rc/JzdBweiWmdHxgardDDrJZVWkUIF3ZEmEYf/A=";
+    };
+    buildInputs = [ python3.pkgs.setuptools ];
+    propagatedBuildInputs = [
+      python3.pkgs.libcst
+      python3.pkgs.tqdm
+    ];
+  };
+
+  docstubs = stdenvNoCC.mkDerivation {
+    name = "docstubs";
+    inherit src;
+    buildInputs = [ docify ];
+
+    installPhase = ''
+      runHook preInstall
+      cp -r packages/pyright-internal/typeshed-fallback docstubs
+      ${docify}/bin/docify docstubs/stdlib --builtins-only --in-place
+      cp -rv docstubs "$out"
+      runHook postInstall
+    '';
+
+  };
 in
 buildNpmPackage rec {
   pname = "basedpyright";
   inherit version src;
 
   sourceRoot = "${src.name}/packages/pyright";
-  npmDepsHash = "sha256-ZFuCY2gveimFK5Hztj6k6PkeTpbR7XiyQyS5wPaNNts=";
+  npmDepsHash = "sha256-wjwF1OlR9ohrl8gWW7ctVpeCq2Fu2m1XdHOEkXt7zjA=";
 
   postPatch = ''
     chmod +w ../../
+    mkdir ../../docstubs
+    cp -r ${docstubs}/stubs ../../docstubs
     ln -s ${pyright-root}/node_modules ../../node_modules
     chmod +w ../pyright-internal
     ln -s ${pyright-internal}/node_modules ../pyright-internal/node_modules
