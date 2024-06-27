@@ -36,6 +36,12 @@ rec {
     diff -u "''${nixpkgsTlpdbNix}" "''${tlpdbNix}" | tee "$out/tlpdb.nix.patch"
   '';
 
+  tlcontribNix = tlpdbNix.overrideAttrs {
+    name = "texlive-test-tlcontrib-nix";
+    nixpkgsTlpdbNix = ../../tools/typesetting/tex/texlive/tlcontrib.nix;
+    tlpdbNix = texlive.tlcontrib.nix;
+  };
+
   # test two completely different font discovery mechanisms, both of which were once broken:
   #  - lualatex uses its own luaotfload script (#220228)
   #  - xelatex uses fontconfig (#228196)
