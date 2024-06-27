@@ -131,6 +131,9 @@ stdenv.mkDerivation rec {
     # Meson does not support using different directories during build and
     # for installation like Autotools did with flags passed to make install.
     ./fix-install-paths.patch
+
+    # https://gitlab.freedesktop.org/NetworkManager/NetworkManager/-/merge_requests/1966
+    ./without-systemd.patch
   ];
 
   buildInputs = [
