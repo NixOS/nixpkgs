@@ -1930,7 +1930,17 @@ self: super: {
   readline = appendPatch ./patches/readline-fix-for-cabal-3.patch super.readline;
 
   # https://github.com/jgm/pandoc/issues/9589
-  pandoc = assert super.pandoc.version == "3.1.11.1"; dontCheck super.pandoc;
+  pandoc = assert super.pandoc.version == "3.1.11.1"; lib.pipe super.pandoc
+    [
+      dontCheck
+      (appendPatch
+        (pkgs.fetchpatch {
+          name = "drop-usage-known-bad-actor-cdn.patch";
+          url = "https://github.com/jgm/pandoc/commit/5877ec546df29115163b36de32837f5e08506092.patch";
+          hash = "sha256-2ffdL2dS/hHWBjJcIHbae5OdL/VKlHNKUMDHRy3hqvc=";
+        })
+      )
+    ];
 
   # 2020-12-06: Restrictive upper bounds w.r.t. pandoc-types (https://github.com/owickstrom/pandoc-include-code/issues/27)
   pandoc-include-code = doJailbreak super.pandoc-include-code;
