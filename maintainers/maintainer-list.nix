@@ -9862,6 +9862,12 @@
     githubId = 20675;
     name = "Joël Perras";
   };
+  jpeterburs = {
+    email = "nix@jpeterburs.de";
+    github = "jpeterburs";
+    githubId = 39838608;
+    name = "Jonas Peterburs";
+  };
   jpetrucciani = {
     email = "j@cobi.dev";
     github = "jpetrucciani";
