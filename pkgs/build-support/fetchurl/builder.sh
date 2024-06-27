@@ -19,7 +19,9 @@ curl=(
     --user-agent "curl/$curlVersion Nixpkgs/$nixpkgsVersion"
 )
 
-if ! [ -f "$SSL_CERT_FILE" ]; then
+if [ -n "$NIX_SSL_CERT_FILE" ]; then
+    curl+=(--cacert $NIX_SSL_CERT_FILE)
+elif ! [ -f "$SSL_CERT_FILE" ]; then
     curl+=(--insecure)
 fi
 
