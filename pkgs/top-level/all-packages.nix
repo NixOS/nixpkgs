@@ -34885,9 +34885,7 @@ with pkgs;
     inherit (darwin.apple_sdk_11_0.frameworks) Carbon CoreServices OpenCL;
   };
 
-  verbiste = callPackage ../applications/misc/verbiste {
-    inherit (gnome2) libgnomeui;
-  };
+  verbiste = callPackage ../applications/misc/verbiste { };
 
   veusz = libsForQt5.callPackage ../applications/graphics/veusz { };
 
