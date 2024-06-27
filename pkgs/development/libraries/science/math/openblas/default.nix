@@ -167,11 +167,21 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   patches = [
+    # fix position of endif - gemm3m tests should not be run in cross-compiles
+    # To remove in the next release of openblas > 0.3.27
     (fetchpatch {
       name = "no-gemm3m-tests-static.patch";
       url = "https://github.com/OpenMathLib/OpenBLAS/commit/48e017de095018c60d83355804a3075658b4970c.patch";
       hash = "sha256-Wa6EE0M1H0efVn26pOKpi0dFGLuPuzmvAzpBLrAYe5k=";
     })
+    # Fix FTBFS on big-endian 64-bit architectures (A long* pointer was incorrectly cast as an int*).
+    # To remove in the next release of openblas > 0.3.27
+    (fetchpatch {
+      name = "testsuite-64bit-big-endian.patch";
+      url = "https://github.com/OpenMathLib/OpenBLAS/commit/b1d722fc0cf563298de8c5ae66fc04a1901d4bf1.patch";
+      hash = "sha256-dMV/P0VkQjh6dcp6foJT0pBwtdJU+rgEBw71EwtpjeE=";
+    })
+
   ];
 
   postPatch = ''
