@@ -2,6 +2,7 @@
 , lib
 , stdenv
 , fetchurl
+, fetchpatch
 , gettext
 , meson
 , ninja
@@ -69,6 +70,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = lib.optionals stdenv.isDarwin [
     ./darwin-compilation.patch
+    # FIXME: remove when https://gitlab.gnome.org/GNOME/glib/-/merge_requests/4088 is merged and is in the tagged release
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/glib/-/commit/9d0988ca62ee96e09aa76abbd65ff192cfce6858.patch";
+      hash = "sha256-JrR3Ba6L+3M0Nt8DgHmPG8uKtx7hOgUp7np08ATIzjA=";
+    })
   ] ++ lib.optionals stdenv.hostPlatform.isMusl [
     ./quark_init_on_demand.patch
     ./gobject_init_on_demand.patch
