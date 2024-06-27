@@ -6020,6 +6020,8 @@ with pkgs;
 
   photoprism = callPackage ../servers/photoprism { };
 
+  photoview = callPackage ../servers/photoview { };
+
   piglit = callPackage ../tools/graphics/piglit { };
 
   pika = callPackage ../applications/graphics/pika { };
