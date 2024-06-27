@@ -4,6 +4,7 @@
   fetchurl,
   writeText,
   runCommand,
+  buildPlatform,
   hostPlatform,
   darwin,
   writeShellScriptBin,
@@ -29,7 +30,7 @@
   },
 }:
 let
-  constants = callPackage ./constants.nix { targetPlatform = hostPlatform; };
+  constants = callPackage ./constants.nix { platform = buildPlatform; };
 in
 {
   depot_tools = fetchgit {
@@ -39,17 +40,40 @@ in
   };
 
   cipd =
-    runCommand "cipd-${cipdCommit}"
-      {
-        unwrapped = fetchurl {
+    let
+      unwrapped = runCommand "cipd-${cipdCommit}" {
+        src = fetchurl {
           name = "cipd-${cipdCommit}-unwrapped";
           url = "https://chrome-infra-packages.appspot.com/client?platform=${constants.platform}&version=git_revision:${cipdCommit}";
           sha256 = cipdHashes.${constants.platform};
         };
-      }
-      ''
+      } ''
         mkdir -p $out/bin
-        install -m755 $unwrapped $out/bin/cipd
+        install -m755 $src $out/bin/cipd
+      '';
+    in writeShellScriptBin "cipd"
+      ''
+        params=$@
+
+        if [[ "$1" == "ensure" ]]; then
+          shift 1
+          params="ensure"
+
+          while [ "$#" -ne 0 ]; do
+            if [[ "$1" == "-ensure-file" ]]; then
+              ensureFile="$2"
+              shift 2
+              params="$params -ensure-file $ensureFile"
+
+              sed -i 's/''${platform}/${(callPackage ./constants.nix { platform = hostPlatform; }).platform}/g' "$ensureFile"
+            else
+              params="$params $1"
+              shift 1
+            fi
+          done
+        fi
+
+        exec ${unwrapped}/bin/cipd $params
       '';
 
   vpython =
