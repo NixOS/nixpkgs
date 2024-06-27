@@ -147,8 +147,8 @@ in lib.makeExtensible (self: ({
   };
 
   nix_2_18 = common {
-    version = "2.18.2";
-    hash = "sha256-8gNJlBlv2bnffRg0CejiBXc6U/S6YeCLAdHrYvTPyoY=";
+    version = "2.18.3";
+    hash = "sha256-430V4oN1Pid0h3J1yucrik6lbDh5D+pHI455bzLPEDY=";
     self_attribute_name = "nix_2_18";
   };
 
