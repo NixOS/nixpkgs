@@ -12,6 +12,8 @@ stdenv.mkDerivation rec {
     hash = "sha256-FFBbbmVPP74p/OkqNXXgynBS/NcuPoYs3OCof11NZOI=";
   };
 
+  outputs = [ "out" "man" ];
+
   postPatch = ''
     substituteInPlace incdefs.sh --replace \
        '/usr/include/linux/' "${linuxHeaders}/include/linux/"
