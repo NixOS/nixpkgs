@@ -191,31 +191,28 @@ final: prev: {
     };
   });
 
-
-  # Lucida Bigelow & Holmes fonts
-  # the legal notice only allows the the use of the software
-  # there are no statements about it being redistributable
-  # changing is not allowed unless is is "absolutely necessary"
-  # the typewriter fonts only include a copyright
-  # Wikipedia says the license is "commercial":
-  # https://en.wikipedia.org/wiki/Lucida
   fontbh75dpi = prev.fontbh75dpi.overrideAttrs (attrs: {
     meta = attrs.meta // {
-      license = lib.licenses.unfree;
+      license = lib.licenses.lucidaBitmapFonts;
     };
   });
+
   fontbh100dpi = prev.fontbh100dpi.overrideAttrs (attrs: {
     meta = attrs.meta // {
-      license = lib.licenses.unfree;
+      license = lib.licenses.lucidaBitmapFonts;
     };
   });
+
   fontbhlucidatypewriter75dpi = prev.fontbhlucidatypewriter75dpi.overrideAttrs (attrs: {
     meta = attrs.meta // {
+      # only include a copyright
       license = lib.licenses.unfree;
     };
   });
+
   fontbhlucidatypewriter100dpi = prev.fontbhlucidatypewriter100dpi.overrideAttrs (attrs: {
     meta = attrs.meta // {
+      # only include a copyright
       license = lib.licenses.unfree;
     };
   });
@@ -446,8 +443,8 @@ final: prev: {
     };
   });
 
-  gccmakedep = prev.gccmakedep.overrideAttrs (prev: {
-    meta = prev // {
+  gccmakedep = prev.gccmakedep.overrideAttrs (attrs: {
+    meta = attrs.meta // {
       license = with lib.licenses; [
         # COPYING file suggests looking at the Copyright headers of every file:
         gpl2Plus
@@ -471,15 +468,15 @@ final: prev: {
     };
   });
 
-  iceauth = prev.iceauth.overrideAttrs (prev: {
-    meta = prev // {
+  iceauth = prev.iceauth.overrideAttrs (attrs: {
+    meta = attrs.meta // {
       license = lib.licenses.mitOpenGroup;
       mainProgram = "iceauth";
     };
   });
 
-  ico = prev.ico.overrideAttrs (prev: {
-    meta = prev // {
+  ico = prev.ico.overrideAttrs (attrs: {
+    meta = attrs.meta // {
       license = with lib.licenses; [
         x11
         smlnj

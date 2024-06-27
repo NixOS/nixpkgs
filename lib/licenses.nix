@@ -867,6 +867,22 @@ in mkLicense lset) ({
     fullName = "Lucent Public License v1.02";
   };
 
+  lucidaBitmapFonts = {
+    spxId = "Lucida-Bitmap-Fonts";
+    fullName = "Lucida Bitmap Fonts License";
+    # We consider this as free which is debatable, however
+    # > use […] in individual and commercial software
+    # usage in software implies redistribution
+    # > Users are granted […] to use the trademark […] if the fonts […] are not modified […].
+    # inplies that modification is allowed
+    # Other Opinions:
+    # - SPDX Lists the license (meaning it is free according to their inclusion policy)
+    # - Fedora and other Linux Distributions allow this License:
+    # - https://docs.fedoraproject.org/en-US/legal/allowed-licenses/#_allowed_font_licenses (accessed 2024-06-27)
+    # - Wikipedia says the license is "commercial": https://en.wikipedia.org/w/index.php?title=Lucida&oldid=1182121399
+    free = true;
+  };
+
   miros = {
     spdxId = "MirOS";
     fullName = "MirOS License";
