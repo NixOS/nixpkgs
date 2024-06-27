@@ -7,13 +7,13 @@
 
 buildGoModule rec {
   pname = "avalanchego";
-  version = "1.11.7";
+  version = "1.11.8";
 
   src = fetchFromGitHub {
     owner = "ava-labs";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-pdfZMKsNKmQVUfYobaOdUqGgP99fatEpgn0AHt0bIBQ=";
+    hash = "sha256-lb0kjPvpjqHQ+DUdrQmaSIaxEdwsOq29RTe3zL25NQc=";
   };
 
   vendorHash = "sha256-CN+2+aOOPF7gouvp7lCfRIKA1quNCcrvzHg8lF6J4f8=";
