@@ -2337,6 +2337,8 @@ self: super: with self; {
 
   clvm-tools-rs = throw "clvm-tools-rs has been removed. see https://github.com/NixOS/nixpkgs/pull/270254";
 
+  cmapy = callPackage ../development/python-modules/cmapy { };
+
   cma = callPackage ../development/python-modules/cma { };
 
   cmaes = callPackage ../development/python-modules/cmaes { };
@@ -7420,6 +7422,8 @@ self: super: with self; {
   mediafile = callPackage ../development/python-modules/mediafile { };
 
   mediafire-dl = callPackage ../development/python-modules/mediafire-dl { };
+
+  mediapipe-bin =  ../development/python-modules/mediapipe-bin { };
 
   mediapy = callPackage ../development/python-modules/mediapy { };
 
