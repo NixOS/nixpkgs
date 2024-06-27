@@ -1,29 +1,15 @@
-{ mkDerivation
-, lib
+{ lib
 , fetchFromGitHub
-, aeson
-, base
-, bytestring
-, containers
-, directory
-, hsyslog
-, http-conduit
-, http2
-, network-uri
-, optparse-applicative
-, pretty-simple
-, process
-, string-qq
-, strings
-, text
-, time
-, unix
-, utf8-string
-, twain
-, warp
-, yaml
+, haskellPackages
 }:
-mkDerivation rec {
+# Redirect http2 & warp. needs to be done that way as deps are somehow inherited
+let
+  redirectedHaskellPackages = haskellPackages.extend (final: prev: {
+    http2 = prev.http2_3_0_3;
+    warp = prev.warp_3_3_30;
+  });
+in
+haskellPackages.mkDerivation rec {
   pname = "oama";
   version = "0.13.3";
 
@@ -36,7 +22,7 @@ mkDerivation rec {
 
   isLibrary = false;
   isExecutable = true;
-  executableHaskellDepends = [
+  executableHaskellDepends = with redirectedHaskellPackages; [
     aeson
     base
     bytestring
