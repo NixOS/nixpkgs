@@ -1,18 +1,19 @@
 { lib
 , stdenv
 , fetchurl
-, jdk
 , ant
+, jdk
+, stripJavaArchivesHook
 , cunit
 , ncurses
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "java-service-wrapper";
   version = "3.5.57";
 
   src = fetchurl {
-    url = "https://wrapper.tanukisoftware.com/download/${version}/wrapper_${version}_src.tar.gz";
+    url = "https://wrapper.tanukisoftware.com/download/${finalAttrs.version}/wrapper_${finalAttrs.version}_src.tar.gz";
     hash = "sha256-86YusgyLUveMrXepAtnABgdZCGlQDQjVFnG9GqFnCIg=";
   };
 
@@ -20,11 +21,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ cunit ncurses ];
 
-  nativeBuildInputs = [ ant jdk ];
+  nativeBuildInputs = [ ant jdk stripJavaArchivesHook ];
 
-  postConfigure = ''
+  postPatch = ''
     substituteInPlace default.properties \
-      --replace "javac.target.version=1.4" "javac.target.version=8"
+        --replace-fail "javac.target.version=1.4" "javac.target.version=8"
   '';
 
   buildPhase = ''
@@ -53,7 +54,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Enables a Java Application to be run as a Windows Service or Unix Daemon";
     homepage = "https://wrapper.tanukisoftware.com/";
-    changelog = "https://wrapper.tanukisoftware.com/doc/english/release-notes.html#${version}";
+    changelog = "https://wrapper.tanukisoftware.com/doc/english/release-notes.html#${finalAttrs.version}";
     license = licenses.gpl2Only;
     platforms = [ "x86_64-linux" "i686-linux" "aarch64-linux" ];
     maintainers = [ maintainers.suhr ];
@@ -63,4 +64,4 @@ stdenv.mkDerivation rec {
     # Tracking issue: https://github.com/NixOS/nixpkgs/issues/281557
     broken = stdenv.hostPlatform.isMusl;
   };
-}
+})
