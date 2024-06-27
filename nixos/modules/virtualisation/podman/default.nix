@@ -84,7 +84,7 @@ in
       description = ''
         **Deprecated**, please use virtualisation.containers.cdi.dynamic.nvidia.enable instead.
 
-        Enable use of NVidia GPUs from within podman containers.
+        Enable use of Nvidia GPUs from within podman containers.
       '';
     };
 
