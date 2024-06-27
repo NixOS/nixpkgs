@@ -14,7 +14,7 @@
 buildPythonPackage rec {
   pname = "adguardhome";
   version = "0.7.0";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.11";
 
@@ -27,16 +27,13 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace "--cov" "" \
-      --replace '"0.0.0"' '"${version}"'
-
-    substituteInPlace tests/test_adguardhome.py \
-      --replace 0.0.0 ${version}
+      --replace-fail "--cov" "" \
+      --replace-fail '"0.0.0"' '"${version}"'
   '';
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     yarl
   ];
