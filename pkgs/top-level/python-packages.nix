@@ -12544,6 +12544,8 @@ self: super: with self; {
 
   python-linux-procfs = callPackage ../development/python-modules/python-linux-procfs { };
 
+  python-logging-loki = callPackage ../development/python-modules/python-logging-loki { };
+
   python-logstash = callPackage ../development/python-modules/python-logstash { };
 
   python-louvain = callPackage ../development/python-modules/python-louvain { };
