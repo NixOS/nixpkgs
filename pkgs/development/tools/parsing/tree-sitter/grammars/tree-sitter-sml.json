@@ -1,0 +1,12 @@
+{
+  "url": "https://github.com/stonebuddha/tree-sitter-sml.git",
+  "rev": "ec1d78668f160731a818f9b6c75c41ad5fd4e67c",
+  "date": "2022-01-14T19:23:46+08:00",
+  "path": "/nix/store/4pis7a8y40n63a16f07qzb59civg5msp-tree-sitter-sml-ec1d786",
+  "sha256": "0716kq4wrc1cs5zgc3qjczm80gzi6qvlqn5hn00si2ivp6dd37kf",
+  "hash": "sha256-bp7Rmrk7iqgBsLBYTDc28T+A6mcSD/Z+0SywzAmeJhw=",
+  "fetchLFS": false,
+  "fetchSubmodules": false,
+  "deepClone": false,
+  "leaveDotGit": false
+}
