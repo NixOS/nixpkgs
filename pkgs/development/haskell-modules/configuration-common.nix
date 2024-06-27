@@ -2087,13 +2087,7 @@ self: super: {
   # Need https://github.com/obsidiansystems/cli-extras/pull/12 and more
   cli-extras = doJailbreak super.cli-extras;
 
-  # https://github.com/obsidiansystems/cli-git/pull/7 turned into a flat patch
   cli-git = lib.pipe super.cli-git [
-    (appendPatch (fetchpatch {
-      url = "https://github.com/obsidiansystems/cli-git/commit/be378a97e2f46522174231b77c952f759df3fad6.patch";
-      sha256 = "sha256-6RrhqkKpnb+FTHxccHNx6pdC7ClfqcJ2eoo+W7h+JUo=";
-      excludes = [ ".github/**" ];
-    }))
     doJailbreak
     (addBuildTool pkgs.git)
   ];
