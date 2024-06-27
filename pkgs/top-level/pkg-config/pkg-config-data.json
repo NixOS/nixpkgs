@@ -279,18 +279,6 @@
         "libgnome-keyring"
       ]
     },
-    "gnome-vfs-2.0": {
-      "attrPath": [
-        "gnome2",
-        "gnome_vfs"
-      ]
-    },
-    "gnome-vfs-module-2.0": {
-      "attrPath": [
-        "gnome2",
-        "gnome_vfs"
-      ]
-    },
     "gobject-2.0": {
       "attrPath": [
         "glib"
