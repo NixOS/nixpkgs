@@ -8,14 +8,14 @@
 
 python3Packages.buildPythonPackage rec {
   pname = "yubikey-manager";
-  version = "5.4.0";
+  version = "5.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Yubico";
     repo = "yubikey-manager";
     rev = version;
-    hash = "sha256-Rn3iGiiR48EFVAn9BRQ043L8x7WwH7XnazZlVw50IGU=";
+    hash = "sha256-zNxB96gHyAjReqgj/oRINQT8ecBBhQwdGMbLHkMh94Y=";
   };
 
   postPatch = ''
