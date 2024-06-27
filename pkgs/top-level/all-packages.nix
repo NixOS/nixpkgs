@@ -35273,6 +35273,8 @@ with pkgs;
 
   wllvm = callPackage  ../development/tools/wllvm { };
 
+  wmbusmeters = callPackage ../applications/radio/wmbusmeters { };
+
   wmname = callPackage ../applications/misc/wmname { };
 
   wmctrl = callPackage ../tools/X11/wmctrl { };
