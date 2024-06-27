@@ -12272,6 +12272,8 @@ self: super: with self; {
 
   pytest-resource-path = callPackage ../development/python-modules/pytest-resource-path { };
 
+  pytest-responses = callPackage ../development/python-modules/pytest-responses { };
+
   pytest-runner = callPackage ../development/python-modules/pytest-runner { };
 
   pytest-server-fixtures = callPackage ../development/python-modules/pytest-server-fixtures { };
