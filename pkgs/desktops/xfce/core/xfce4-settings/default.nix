@@ -9,8 +9,11 @@
 , libxfce4util
 , libxklavier
 , upower
+, withUpower ? true
 , xfconf
 , xf86inputlibinput
+, colord
+, withColord ? false
 }:
 
 mkXfceDerivation {
@@ -29,15 +32,18 @@ mkXfceDerivation {
     libxfce4ui
     libxfce4util
     libxklavier
-    upower
     xf86inputlibinput
     xfconf
-  ];
+  ]
+  ++ lib.optional withUpower [ upower.dev ]
+  ++ lib.optional withColord [ colord.dev ];
 
   configureFlags = [
     "--enable-pluggable-dialogs"
     "--enable-sound-settings"
-  ];
+  ]
+  ++ lib.optional withUpower [ "--enable-upower-glib" ]
+  ++ lib.optional withColord [ "--enable-colord" ];
 
   meta = with lib; {
     description = "Settings manager for Xfce";
