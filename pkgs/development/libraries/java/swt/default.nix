@@ -11,7 +11,6 @@
 , libGLU
 , libXt
 , libXtst
-, gnome2
 }:
 
 let
@@ -68,9 +67,6 @@ in stdenv.mkDerivation rec {
     libGL
     libGLU
     libXtst
-    gnome2.gnome_vfs
-    gnome2.libgnome
-    gnome2.libgnomeui
   ] ++ lib.optionals (lib.hasPrefix "8u" jdk.version) [
     libXt
   ];
