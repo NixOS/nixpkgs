@@ -23,8 +23,6 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   gnome_mime_data = callPackage ./platform/gnome-mime-data { };
 
-  gnome_vfs = callPackage ./platform/gnome-vfs { };
-
   libbonobo = callPackage ./platform/libbonobo { };
 
   libbonoboui = callPackage ./platform/libbonoboui { };
@@ -61,6 +59,7 @@ lib.makeScope pkgs.newScope (self: with self; {
   gnome_common = gnome-common;
   gnome_python = throw "gnome2.gnome_python has been removed"; # 2023-01-14
   gnome_python_desktop = throw "gnome2.gnome_python_desktop has been removed"; # 2023-01-14
+  gnome_vfs = throw "gnome2.gnome_vfs has been removed"; # 2024-06-27
   gtkhtml = throw "gnome2.gtkhtml has been removed"; # 2023-01-15
   gtkhtml4 = throw "gnome2.gtkhtml4 has been removed"; # 2023-01-15
   libglademm = throw "gnome2.libglademm has been removed"; # 2022-01-15
