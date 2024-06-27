@@ -3,7 +3,6 @@ use std::env;
 use std::ffi::{OsStr, OsString};
 use std::fs;
 use std::hash::Hash;
-use std::io::{BufRead, BufReader};
 use std::iter::FromIterator;
 use std::os::unix;
 use std::path::{Component, Path, PathBuf};
@@ -11,6 +10,13 @@ use std::process::Command;
 
 use eyre::Context;
 use goblin::{elf::Elf, Object};
+use serde::Deserialize;
+
+#[derive(Deserialize, Debug)]
+struct StoreInput {
+    source: String,
+    target: Option<String>,
+}
 
 struct NonRepeatingQueue<T> {
     queue: VecDeque<T>,
@@ -231,26 +237,23 @@ fn handle_path(
 
 fn main() -> eyre::Result<()> {
     let args: Vec<String> = env::args().collect();
-    let input =
-        fs::File::open(&args[1]).wrap_err_with(|| format!("failed to open file {:?}", &args[1]))?;
+    let contents =
+        fs::read(&args[1]).wrap_err_with(|| format!("failed to open file {:?}", &args[1]))?;
+    let input = serde_json::from_slice::<Vec<StoreInput>>(&contents)
+        .wrap_err_with(|| format!("failed to parse JSON in {:?}", &args[1]))?;
     let output = &args[2];
     let out_path = Path::new(output);
 
     let mut queue = NonRepeatingQueue::<Box<Path>>::new();
 
-    let mut lines = BufReader::new(input).lines();
-    while let Some(obj) = lines.next() {
-        // Lines should always come in pairs
-        let obj = obj?;
-        let sym = lines.next().unwrap()?;
-
-        let obj_path = Path::new(&obj);
+    for sp in input {
+        let obj_path = Path::new(&sp.source);
         queue.push_back(Box::from(obj_path));
-        if !sym.is_empty() {
-            println!("{} -> {}", &sym, &obj);
+        if let Some(target) = sp.target {
+            println!("{} -> {}", &target, &sp.source);
             // We don't care about preserving symlink structure here
             // nearly as much as for the actual objects.
-            let link_string = format!("{}/{}", output, sym);
+            let link_string = format!("{}/{}", output, target);
             let link_path = Path::new(&link_string);
             let mut link_parent = link_path.to_path_buf();
             link_parent.pop();
