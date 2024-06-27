@@ -2627,12 +2627,6 @@ self: super: {
   # 2022-03-16: Upstream stopped updating bounds https://github.com/haskell-hvr/base-noprelude/pull/15
   base-noprelude = doJailbreak super.base-noprelude;
 
-  # 2025-05-05: Bounds need to be loosened https://github.com/obsidiansystems/dependent-sum-aeson-orphans/pull/13
-  dependent-monoidal-map = appendPatch (fetchpatch {
-    url = "https://github.com/obsidiansystems/dependent-monoidal-map/commit/3f8be15fa9bd2796d1c917e9f0979b4d6c62cf91.patch";
-    hash = "sha256-QKDUh4jO8xZrThrkjTVNnkoVY+GejxOhpXOVA4+n1H8=";
-  }) super.dependent-monoidal-map;
-
   # https://github.com/obsidiansystems/dependent-sum/pull/73
   dependent-sum-template = appendPatch (fetchpatch {
     url = "https://github.com/obsidiansystems/dependent-sum/commit/619727ba1792e39a68d23c62e75a923672e87a54.patch";
