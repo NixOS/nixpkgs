@@ -1365,11 +1365,7 @@ self: super: {
     pkgs.postgresqlTestHook
   ] super.users-postgresql-simple;
 
-  # Need https://github.com/obsidiansystems/gargoyle/pull/45
-  gargoyle = doJailbreak super.gargoyle;
-  gargoyle-postgresql = doJailbreak super.gargoyle-postgresql;
-  gargoyle-postgresql-nix = doJailbreak (addBuildTool [pkgs.postgresql] super.gargoyle-postgresql-nix);
-  gargoyle-postgresql-connect = doJailbreak super.gargoyle-postgresql-connect;
+  gargoyle-postgresql-nix = addBuildTool [pkgs.postgresql] super.gargoyle-postgresql-nix;
 
   # PortMidi needs an environment variable to have ALSA find its plugins:
   # https://github.com/NixOS/nixpkgs/issues/6860
