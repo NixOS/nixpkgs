@@ -1,0 +1,173 @@
+diff --git a/sandbox/gvisor/run.py b/sandbox/gvisor/run.py
+index 61a6b916..4786d70d 100755
+--- a/sandbox/gvisor/run.py
++++ b/sandbox/gvisor/run.py
+@@ -48,8 +48,7 @@ sys.stderr.write('run.py: ' + ' '.join(sys.argv) + "\n")
+ sys.stderr.flush()
+ 
+ include_bash = args.command == 'bash'
+-include_python2 = args.command == 'python2'
+-include_python3 = args.command == 'python3'
++include_python3 = args.command == 'python3' or args.command == 'python2'
+ 
+ # Basic settings for gvisor's runsc.  This follows the standard OCI specification:
+ #   https://github.com/opencontainers/runtime-spec/blob/master/config.md
+@@ -72,11 +71,9 @@ mounts = [             # These will be filled in more fully programmatically bel
+     ]
+   }
+ ]
++path = "PATH=/usr/bin:/bin"
+ preserved = set()
+-env = [
+-  "PATH=/usr/local/bin:/usr/bin:/bin",
+-  "LD_LIBRARY_PATH=/usr/local/lib"      # Assumes python version in /usr/local
+-] + (args.env or [])
++env = (args.env or [])
+ settings = {
+   "ociVersion": "1.0.0",
+   "process": {
+@@ -142,12 +139,12 @@ def preserve(*locations, short_failure=False):
+         raise Exception('cannot find: ' + location)
+       raise Exception('cannot find: ' + location + ' ' +
+                       '(if tmp path, make sure TMPDIR when running grist and GRIST_TMP line up)')
+-    mounts.append({
+-      "destination": location,
+-      "source": location,
+-      "options": ["ro"],
+-      "type": "bind"
+-    })
++      #mounts.append({
++      #"destination": location,
++      #"source": location,
++      #"options": ["ro"],
++      #"type": "bind"
++    #})
+     preserved.add(location)
+ 
+ # Prepare the file system - blank out everything that need not be shared.
+@@ -158,91 +155,71 @@ exceptions += ["proc", "sys"]   # already virtualized
+ start = args.start
+ if include_bash or start:
+   exceptions.append("bin")
+-  preserve("/usr/bin")
++  preserve("@bash@/bin/sh")
++  path += ":@bash@/bin"
++
+ 
+-preserve("/usr/local/lib")
+ if os.path.exists('/lib64'):
+   preserve("/lib64")
+ if os.path.exists('/usr/lib64'):
+   preserve("/usr/lib64")
+-preserve("/usr/lib")
+-
+-# include python3 for bash and python3
+-best = None
+-if not include_python2:
+-  # We expect python3 in /usr/bin or /usr/local/bin.
+-  candidates = [
+-    path
+-    # Pick the most generic python if not matching python3.11.
+-    # Sorry this is delicate because of restores, mounts, symlinks.
+-    for pattern in ['python3.11', 'python3.10', 'python3.9', 'python3', 'python3*']
+-    for root in ['/usr/local', '/usr']
+-    for path in glob.glob(f'{root}/bin/{pattern}')
+-    if os.path.exists(path)
+-  ]
+-  if not candidates:
+-    raise Exception('could not find python3')
+-  best = os.path.realpath(candidates[0])
+-  preserve(best)
+ 
+-# include python2 for bash and python2
+-if not include_python3:
+-  # Try to include python2 only if it is present or we were specifically asked for it.
+-  # This is to facilitate testing on a python3-only container.
+-  if os.path.exists("/usr/bin/python2.7") or include_python2:
+-    preserve("/usr/bin/python2.7", short_failure=True)
+-    best = "/usr/bin/python2.7"
+-  preserve("/usr/lib")
++preserve("@python3@/bin/python")
++path += ":@python3@/bin"
+ 
+ # Set up any specific shares requested.
+ if args.mount:
+   preserve(*args.mount)
+ 
+-for directory in os.listdir('/'):
+-  if directory not in exceptions and ("/" + directory) not in preserved:
+-    mounts.insert(0, {
++# for directory in os.listdir('/'):
++#  if directory not in exceptions and ("/" + directory) not in preserved:
++      #mounts.insert(0, {
+       # This places an empty directory at this destination.
+       # Follow any symlinks since otherwise there is an error.
+-      "destination": os.path.realpath("/" + directory),
+-      "type": "tmpfs"
+-    })
++      #"destination": os.path.realpath("/" + directory),
++      #"type": "tmpfs"
++    #})
+ 
+ # Set up faketime inside the sandbox if requested.  Can't be set up outside the sandbox,
+ # because gvisor is written in Go and doesn't use the standard library that faketime
+ # tweaks.
+ if args.faketime:
+-  preserve('/usr/lib/x86_64-linux-gnu/faketime')
++  preserve("@libfaketime@/bin/faketime")
++  preserve("@coreutils@/bin/date")
++  path += ":@libfaketime@/bin:@coreutils@/bin"
+   cmd_args.append('faketime')
+   cmd_args.append('-f')
+   cmd_args.append('2020-01-01 00:00:00' if args.faketime == 'default' else args.faketime)
+-  preserve('/usr/bin/faketime')
+-  preserve('/bin/date')
+ 
+ # Pick and set an initial entry point (bash or python).
+ if start:
+   cmd_args.append(start)
+ else:
+-  cmd_args.append('bash' if include_bash else best)
++    cmd_args.append('bash' if include_bash else "@python3@/bin/python")
+ 
+ # Add any requested arguments for the program that will be run.
+ cmd_args += more_args
+ 
++settings["process"]["env"] += path
++
+ # Helper for assembling a runsc command.
+ # Takes the directory to work in and a list of arguments to append.
+ def make_command(root_dir, action):
+   flag_string = os.environ.get('GVISOR_FLAGS') or '-rootless'
+   flags = flag_string.split(' ')
+-  command = ["runsc",
+-             "-root", "/tmp/runsc",   # Place container information somewhere writable.
++  command = ["@gvisor@/bin/runsc",
++             "-root", root_dir,   # Place container information somewhere writable.
+             ] + flags + [
+              "-network",
+              "none"] + action + [
+              root_dir.replace('/', '_')]  # Derive an arbitrary container name.
+   return command
+ 
++print(os.environ.get("TMPDIR"))
+ # Generate the OCI spec as config.json in a temporary directory, and either show
+ # it (if --dry-run) or pass it on to gvisor runsc.
+-with tempfile.TemporaryDirectory() as root:  # pylint: disable=no-member
++if True:
++  root = tempfile.TemporaryDirectory().name  # pylint: disable=no-member
+   config_filename = os.path.join(root, 'config.json')
+   with open(config_filename, 'w') as fout:
+     json.dump(settings, fout, indent=2)
+@@ -256,9 +233,9 @@ with tempfile.TemporaryDirectory() as root:  # pylint: disable=no-member
+         command = make_command(root, ["restore", "--image-path=" + args.restore])
+       else:
+         command = make_command(root, ["run"])
+-      result = subprocess.run(command, cwd=root)  # pylint: disable=no-member
++      result = subprocess.run(command, cwd=root, capture_output=True)  # pylint: disable=no-member
+       if result.returncode != 0:
+-        raise Exception('gvisor runsc problem: ' + json.dumps(command))
++          raise Exception('gvisor runsc problem: ' + json.dumps(command) + ' : ' + str(config_filename) + ' ' + str(result))
+     else:
+       # We've been asked to make a checkpoint.
+       # Start up the sandbox, and wait for it to emit a message on stderr ('Ready').
