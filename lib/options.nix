@@ -78,8 +78,6 @@ rec {
   /**
     Creates an Option attribute set. mkOption accepts an attribute set with the following keys:
 
-    All keys default to `null` when not given.
-
     # Inputs
 
     Structured attribute set
@@ -87,7 +85,6 @@ rec {
 
       `default`
       : Optional default value used when no definition is given in the configuration.
-
 
       `defaultText`
       : Substitute for documenting the `default`, if evaluating the default value during documentation rendering is not possible.
@@ -101,7 +98,7 @@ rec {
       : Usage with `lib.literalMD` or `lib.literalExpression` is supported
 
       `description`
-      : Optional string describing the option.
+      : Optional string describing the option. This is required if option documentation is generated.
 
       `relatedPackages`
       : Optional related packages used in the manual (see `genRelatedPackages` in `../nixos/lib/make-options-doc/default.nix`).
