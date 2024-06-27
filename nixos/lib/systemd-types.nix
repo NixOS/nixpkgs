@@ -45,12 +45,35 @@ let
 
   inherit (lib.types)
     attrsOf
+    coercedTo
     lines
     listOf
     nullOr
+    oneOf
+    package
     path
     submodule
     ;
+
+  initrdStorePathModule = { config, ... }: {
+    options = {
+      enable = (mkEnableOption "copying of this file and symlinking it") // { default = true; };
+
+      target = mkOption {
+        type = nullOr path;
+        description = ''
+          Path of the symlink.
+        '';
+        default = null;
+      };
+
+      source = mkOption {
+        type = path;
+        description = "Path of the source file.";
+      };
+    };
+  };
+
 in
 
 {
@@ -86,31 +109,23 @@ in
   automounts = listOf (submodule [ stage2AutomountOptions unitConfig automountConfig ]);
   initrdAutomounts = attrsOf (submodule [ stage1AutomountOptions unitConfig automountConfig ]);
 
+  initrdStorePath = listOf (coercedTo
+    (oneOf [ singleLineStr package ])
+    (source: { inherit source; })
+    (submodule initrdStorePathModule));
+
   initrdContents = attrsOf (submodule ({ config, options, name, ... }: {
+    imports = [ initrdStorePathModule ];
     options = {
-      enable = (mkEnableOption "copying of this file and symlinking it") // { default = true; };
-
-      target = mkOption {
-        type = path;
-        description = ''
-          Path of the symlink.
-        '';
-        default = name;
-      };
-
       text = mkOption {
         default = null;
         type = nullOr lines;
         description = "Text of the file.";
       };
-
-      source = mkOption {
-        type = path;
-        description = "Path of the source file.";
-      };
     };
 
     config = {
+      target = mkDefault name;
       source = mkIf (config.text != null) (
         let name' = "initrd-" + baseNameOf name;
         in mkDerivedConfig options.text (pkgs.writeText name')
