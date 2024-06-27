@@ -11,6 +11,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-jhdgfCWbkF+jD/iXsJ+fYKOtPymxcC46Q4w0aqpvcek=";
   };
 
+  # Fix PATH forwarding to child processes.
+  # See #126681 issue for more information
+  patches = [ ./interception-tools-udevmon-path-fix.patch ];
+
   nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [ libevdev udev yaml-cpp boost ];
 
