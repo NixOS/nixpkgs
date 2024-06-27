@@ -6,7 +6,7 @@
 
 bambu-studio.overrideAttrs (
   finalAttrs: previousAttrs: {
-    version = "2.1.0";
+    version = "2.1.1";
     pname = "orca-slicer";
 
     # Don't inherit patches from bambu-studio
@@ -16,7 +16,7 @@ bambu-studio.overrideAttrs (
       owner = "SoftFever";
       repo = "OrcaSlicer";
       rev = "v${finalAttrs.version}";
-      hash = "sha256-ujpDrfwScCslm9ve7fsbwvprLz/+N1I5joi/bZPQwrk=";
+      hash = "sha256-7fusdSYpZb4sYl5L/+81PzMd42Nsejj+kCZsq0f7eIk=";
     };
 
     # needed to prevent collisions between the LICENSE.txt files of
