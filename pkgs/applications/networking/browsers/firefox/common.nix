@@ -296,7 +296,10 @@ buildStdenv.mkDerivation {
     nodejs
     perl
     pkg-config
-    python3
+    (python3.withPackages (ps: with ps; [
+      # https://bugzilla.mozilla.org/show_bug.cgi?id=1743785
+      setuptools
+    ]))
     rust-cbindgen
     rustPlatform.bindgenHook
     rustc
