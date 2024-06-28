@@ -8,16 +8,16 @@
 
 php.buildComposerProject (finalAttrs: {
   pname = "snipe-it";
-  version = "7.0.4";
+  version = "7.0.6";
 
   src = fetchFromGitHub {
     owner = "snipe";
     repo = "snipe-it";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-yu0f2NyHj+5UR1YKD+eZIksBWtykTN6/Pcam1pfyQTM=";
+    hash = "sha256-WsjUXHbl3HTOrXSeNJrykHv9x5Kbch5GH4yOFKYf+jU=";
   };
 
-  vendorHash = "sha256-+h4jj8VBDQ76V3udrr4e54jhRwjsbxqgAtntILCAHy8=";
+  vendorHash = "sha256-qAypUevd4qGt5WFYfuVx00nRKdk2qf9a0T6l/la8mpA=";
 
   postInstall = ''
     snipe_it_out="$out/share/php/snipe-it"
