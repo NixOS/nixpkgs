@@ -53,6 +53,7 @@ rustPlatform.buildRustPackage rec {
     maintainers = with maintainers; [
       cafkafk
       uncenter
+      aleksana
     ];
     platforms = platforms.unix;
   };
