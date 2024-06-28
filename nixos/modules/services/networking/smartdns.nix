@@ -52,11 +52,18 @@ in {
   config = lib.mkIf cfg.enable {
     services.smartdns.settings.bind = mkDefault ":${toString cfg.bindPort}";
 
-    systemd.packages = [ pkgs.smartdns ];
-    systemd.services.smartdns.wantedBy = [ "multi-user.target" ];
-    systemd.services.smartdns.restartTriggers = [ confFile ];
-    environment.etc."smartdns/smartdns.conf".source = confFile;
-    environment.etc."default/smartdns".source =
-      "${pkgs.smartdns}/etc/default/smartdns";
+    systemd.services.smartdns = {
+      wants = [ "network.target" ];
+      wantedBy = [ "multi-user.target" ];
+      unitConfig = {
+        StartLimitBurst = 0;
+        StartLimitIntervalSec = 60;
+      };
+      serviceConfig = {
+        ExecStart = "${pkgs.smartdns}/bin/smartdns -f -c ${confFile}";
+        Restart = "always";
+        TimeoutStopSec = 5;
+      };
+    };
   };
 }
