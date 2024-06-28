@@ -20,16 +20,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "celeste";
-  version = "0.8.1";
+  version = "0.8.3";
 
   src = fetchFromGitHub {
     owner = "hwittenborn";
     repo = "celeste";
     rev = "v${version}";
-    hash = "sha256-fJK3UTa5NS+dSsjnqZtRN3HmHQ1bYU2jepkJ5tchYD4=";
+    hash = "sha256-Yj2PvAlAkwLaSE27KnzEmiRAD5K/YVGbF4+N3uhDVT8=";
   };
 
-  cargoHash = "sha256-/0w52bh9CsBoMTJsnWuEAQNgQzf92mbzh53H4iQYswc=";
+  cargoHash = "sha256-nlYkFgm5r6nAbJvtrXW2VxzVYq1GrSs8bzHYWOglL1c=";
 
   postPatch = ''
     pushd $cargoDepsCopy/librclone-sys
