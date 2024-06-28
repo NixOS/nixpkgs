@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "cftime";
-  version = "1.6.3";
+  version = "1.6.4";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-0Kayn3KhPwjgCLm+z/JHzHXISsshMzLt4Yh5xbaqTf0=";
+    hash = "sha256-4yVAYZN1in7WcwjetS5yd4KhnjhOGDN45/9iCYvgrtw=";
   };
 
   postPatch = ''
@@ -38,6 +38,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Time-handling functionality from netcdf4-python";
     homepage = "https://github.com/Unidata/cftime";
+    changelog = "https://github.com/Unidata/cftime/blob/v${version}rel/Changelog";
     license = licenses.mit;
     maintainers = with maintainers; [ ];
   };
