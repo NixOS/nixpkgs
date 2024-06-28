@@ -26,7 +26,8 @@ in
         address = "2001:db8:0:0:0:0:0:ffff";
         prefixLength = 32;
         firstAddress = "2001:db8:0:0:0:0:0:0";
-        lastAddress = "2001:db8:ffff:ffff:ffff:ffff:ffff:ffff"
+        lastAddress = "2001:db8:ffff:ffff:ffff:ffff:ffff:ffff";
+        nextAddress = "2001:db8:0:0:0:0:1:0";
       }
       ```
 
@@ -45,6 +46,11 @@ in
         address = _ipv6.toStringFromExpandedIp addrInternal;
         firstAddress = _ipv6.toStringFromExpandedIp (_ipv6.calculateFirstAddress addrInternal prefixLength);
         lastAddress = _ipv6.toStringFromExpandedIp (_ipv6.calculateLastAddress addrInternal prefixLength);
+        nextAddress =
+          let
+            nextAddr = _ipv6.calculateNextAddress addrInternal;
+          in
+          if nextAddr != null then _ipv6.toStringFromExpandedIp nextAddr else null;
       in
       {
         inherit
@@ -52,6 +58,7 @@ in
           prefixLength
           firstAddress
           lastAddress
+          nextAddress
           ;
       };
   };

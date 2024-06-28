@@ -120,8 +120,17 @@ expectSuccess '(internal._ipv6.calculateLastAddress [0 0 0 0 0 0 0 0] 1)'       
 expectSuccess '(internal._ipv6.calculateLastAddress [0 0 0 0 0 0 0 0] 64)'      '[0,0,0,0,65535,65535,65535,65535]'
 expectSuccess '(internal._ipv6.calculateLastAddress [0 0 1 0 0 0 0 65535] 127)' '[0,0,1,0,0,0,0,65535]'
 
+expectSuccess '(internal._common.modList 10 [0 0])' '[0,0]'
+expectSuccess '(internal._common.modList 10 [0 100])' '[1,0,0]'
+expectSuccess '(internal._common.modList 10 [9 9 9 10])' '[1,0,0,0,0]'
+expectSuccess '(internal._common.modList 10 [10 0 0 10])' '[1,0,0,1,0]'
+expectSuccess '(internal._common.modList 10 [])' '[]'
+
+expectFailure '(internal._common.modList (-1) [])' 'module must be positive integer'
+
 # Library API
-expectSuccess 'lib.network.ipv6.fromString "2001:DB8::ffff/64"' '{"address":"2001:db8:0:0:0:0:0:ffff","firstAddress":"2001:db8:0:0:0:0:0:0","lastAddress":"2001:db8:0:0:ffff:ffff:ffff:ffff","prefixLength":64}'
-expectSuccess 'lib.network.ipv6.fromString "1234:5678:90ab:cdef:fedc:ba09:8765:4321/44"' '{"address":"1234:5678:90ab:cdef:fedc:ba09:8765:4321","firstAddress":"1234:5678:90a0:0:0:0:0:0","lastAddress":"1234:5678:90af:ffff:ffff:ffff:ffff:ffff","prefixLength":44}'
+expectSuccess 'lib.network.ipv6.fromString "2001:DB8::ffff/64"' '{"address":"2001:db8:0:0:0:0:0:ffff","firstAddress":"2001:db8:0:0:0:0:0:0","lastAddress":"2001:db8:0:0:ffff:ffff:ffff:ffff","nextAddress":"2001:db8:0:0:0:0:1:0","prefixLength":64}'
+expectSuccess 'lib.network.ipv6.fromString "1234:5678:90ab:cdef:fedc:ba09:8765:4321/44"' '{"address":"1234:5678:90ab:cdef:fedc:ba09:8765:4321","firstAddress":"1234:5678:90a0:0:0:0:0:0","lastAddress":"1234:5678:90af:ffff:ffff:ffff:ffff:ffff","nextAddress":"1234:5678:90ab:cdef:fedc:ba09:8765:4322","prefixLength":44}'
+expectSuccess 'lib.network.ipv6.fromString "ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff"' '{"address":"ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff","firstAddress":"ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff","lastAddress":"ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff","nextAddress":null,"prefixLength":128}'
 
 echo >&2 tests ok

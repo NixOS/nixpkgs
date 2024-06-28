@@ -14,8 +14,6 @@ let
 
   inherit (lib) lists strings trivial;
 
-  inherit (lib.lists) last;
-
   /*
     IPv6 addresses are 128-bit identifiers. The preferred form is 'x:x:x:x:x:x:x:x',
     where the 'x's are one to four hexadecimal digits of the eight 16-bit pieces of
@@ -103,6 +101,48 @@ let
           throw "0x${hex} is not a valid u16 integer";
     in
     map (piece: u16FromHexStr piece) addr;
+
+  /**
+    Returns a new list where each element is taken modulo `mod`. The algorithm
+    starts with the last element, the last element becomes the remainder of `mod`
+    and adds an quotient part to the previous element.
+
+    # Example:
+    ```nix
+    modList 10 [9 10]
+    => [1 0 0]
+    modList 3 [1 2 10]
+    => [2 2 1]
+    ```
+
+    # Type: Int -> [ Int ] -> [ Int ]
+  */
+  modList =
+    mod: list:
+    assert lib.assertMsg (mod > 0) "modList: module must be positive integer";
+    let
+      modListRec =
+        add: mod: list:
+        let
+          listLen = length list;
+        in
+        if listLen == 0 then
+          if add == 0 then [ ] else [ add ]
+        else
+          # Create a new list. The last element is the remainder and add the
+          # quotient to the previous element.
+          let
+            newValue = lists.last list + add;
+            newList = lists.take (listLen - 1) list;
+          in
+          let
+            quot = newValue / mod;
+            rem = trivial.mod newValue mod;
+            prefix = modListRec quot mod newList;
+          in
+          prefix ++ [ rem ];
+    in
+    modListRec 0 mod list;
 in
 let
   /**
@@ -128,6 +168,10 @@ let
       lists.foldl' (acc: _: acc * base) 1 (lists.range 1 exponent);
 in
 {
+  _common = {
+    modList = modList;
+  };
+
   # Internally IPv6 address is stored as a list of 16 bits integers with 8 elements.
   _ipv6 = {
     /**
@@ -164,7 +208,7 @@ in
           address = parseIpv6FromString (head splitted);
           prefixLength =
             let
-              n = strings.toInt (last splitted);
+              n = strings.toInt (lists.last splitted);
             in
             if 1 <= n && n <= ipv6Bits then
               n
@@ -222,5 +266,21 @@ in
         lastAddress = lists.zipListsWith (l: r: trivial.bitOr l r) addr suffixMask;
       in
       lastAddress;
+
+    /**
+      Calculates the next address. Returns null if the passed address is the
+      last one.
+
+      # Type: IPv6 -> IPv6
+    */
+    calculateNextAddress =
+      addr:
+      let
+        # Add one to the last piece of the address, then take the modulus - if
+        # it's greater than 65535, make it 0 and add one to the penultimate piece.
+        newAddr = (lists.take (length addr - 1) addr) ++ [ (lists.last addr + 1) ];
+        nextAddr = modList (ipv6PieceMaxValue + 1) newAddr;
+      in
+      if length nextAddr != ipv6Pieces then null else nextAddr;
   };
 }
