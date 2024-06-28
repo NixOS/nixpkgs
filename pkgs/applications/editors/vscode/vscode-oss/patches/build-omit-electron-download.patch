@@ -1,0 +1,32 @@
+From 2f3fe75948f1cada5c67da46c51a03443d7e38e0 Mon Sep 17 00:00:00 2001
+From: Yingchi Long <i@lyc.dev>
+Date: Mon, 3 Jun 2024 22:32:04 +0800
+Subject: [PATCH] build: omit electron download
+
+---
+ build/gulpfile.vscode.js | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/build/gulpfile.vscode.js b/build/gulpfile.vscode.js
+index e1507e0424f..50f38dccedc 100644
+--- a/build/gulpfile.vscode.js
++++ b/build/gulpfile.vscode.js
+@@ -199,7 +199,6 @@ function packageTask(platform, arch, sourceFolderName, destinationFolderName, op
+ 	platform = platform || process.platform;
+
+ 	return () => {
+-		const electron = require('@vscode/gulp-electron');
+ 		const json = require('gulp-json-editor');
+
+ 		const out = sourceFolderName;
+@@ -340,7 +339,7 @@ function packageTask(platform, arch, sourceFolderName, destinationFolderName, op
+ 			.pipe(util.skipDirectories())
+ 			.pipe(util.fixWin32DirectoryPermissions())
+ 			.pipe(filter(['**', '!**/.github/**'], { dot: true })) // https://github.com/microsoft/vscode/issues/116523
+-			.pipe(electron({ ...config, platform, arch: arch === 'armhf' ? 'arm' : arch, ffmpegChromium: false }))
++			.pipe(rename(path => { path.dirname = "resources/app" + (path.dirname === "." ? "" : "/" + path.dirname); }))
+ 			.pipe(filter(['**', '!LICENSE', '!version'], { dot: true }));
+
+ 		if (platform === 'linux') {
+--
+2.44.0

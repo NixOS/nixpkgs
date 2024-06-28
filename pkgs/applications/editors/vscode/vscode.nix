@@ -2,6 +2,7 @@
 , lib
 , callPackage
 , fetchurl
+, makeDesktopItem
 , nixosTests
 , srcOnly
 , isInsiders ? false
@@ -37,7 +38,7 @@ let
     armv7l-linux = "1xpvcypm0xnwjmbj2c1a245yav3nwi0g2k564x91vazfw4nmi7mv";
   }.${system} or throwSystem;
 in
-  callPackage ./generic.nix rec {
+  callPackage ./binary-generic.nix rec {
     # Please backport all compatible updates to the stable release.
     # This is important for the extension ecosystem.
     version = "1.90.2";
@@ -50,6 +51,17 @@ in
     longName = "Visual Studio Code" + lib.optionalString isInsiders " - Insiders";
     shortName = "Code" + lib.optionalString isInsiders " - Insiders";
     inherit commandLineArgs useVSCodeRipgrep sourceExecutableName;
+
+
+    common = import ./common.nix {
+      inherit
+        lib
+        executableName
+        longName
+        shortName
+        makeDesktopItem
+        ;
+    };
 
     src = fetchurl {
       name = "VSCode_${version}_${plat}.${archive_fmt}";
@@ -81,23 +93,15 @@ in
     # See https://eclecticlight.co/2022/06/17/app-security-changes-coming-in-ventura/ for more information.
     dontFixup = stdenv.isDarwin;
 
-    meta = with lib; {
-      description = ''
-        Open source source code editor developed by Microsoft for Windows,
-        Linux and macOS
-      '';
-      mainProgram = "code";
-      longDescription = ''
-        Open source source code editor developed by Microsoft for Windows,
-        Linux and macOS. It includes support for debugging, embedded Git
-        control, syntax highlighting, intelligent code completion, snippets,
-        and code refactoring. It is also customizable, so users can change the
-        editor's theme, keyboard shortcuts, and preferences
-      '';
+    meta = common.meta // {
       homepage = "https://code.visualstudio.com/";
       downloadPage = "https://code.visualstudio.com/Updates";
-      license = licenses.unfree;
-      maintainers = with maintainers; [ eadwu synthetica bobby285271 Enzime ];
-      platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-darwin" "aarch64-linux" "armv7l-linux" ];
+      license = lib.licenses.unfree;
+      maintainers = with lib.maintainers; [
+        eadwu
+        synthetica
+        bobby285271
+        Enzime
+      ];
     };
-  }
+}

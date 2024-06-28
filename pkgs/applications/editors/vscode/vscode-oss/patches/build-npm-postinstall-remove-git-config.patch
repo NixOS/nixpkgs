@@ -1,0 +1,21 @@
+From c833c4a3d41b96b2b382d8750388806e25d1bdc5 Mon Sep 17 00:00:00 2001
+From: Yingchi Long <i@lyc.dev>
+Date: Mon, 3 Jun 2024 22:29:45 +0800
+Subject: [PATCH] build/npm/postinstall: remove git config
+
+---
+ build/npm/postinstall.js | 2 --
+ 1 file changed, 2 deletions(-)
+
+diff --git a/build/npm/postinstall.js b/build/npm/postinstall.js
+index 72dd74f8986..f72ce6d6e23 100644
+--- a/build/npm/postinstall.js
++++ b/build/npm/postinstall.js
+@@ -131,5 +131,3 @@ for (let dir of dirs) {
+ 	yarnInstall(dir, opts);
+ }
+
+-cp.execSync('git config pull.rebase merges');
+-cp.execSync('git config blame.ignoreRevsFile .git-blame-ignore-revs');
+--
+2.44.0

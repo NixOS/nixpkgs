@@ -1,0 +1,26 @@
+From e65885dcce66e77bd8ec738cf3dc59160d32d507 Mon Sep 17 00:00:00 2001
+From: Yingchi Long <i@lyc.dev>
+Date: Mon, 3 Jun 2024 23:25:08 +0800
+Subject: [PATCH] build/npm: allow npm for rebuilding binaries
+
+---
+ build/npm/preinstall.js | 4 ----
+ 1 file changed, 4 deletions(-)
+
+diff --git a/build/npm/preinstall.js b/build/npm/preinstall.js
+index edf0d98c3d5..2c814494279 100644
+--- a/build/npm/preinstall.js
++++ b/build/npm/preinstall.js
+@@ -39,10 +39,6 @@ if (
+ 	err = true;
+ }
+
+-if (!/yarn[\w-.]*\.c?js$|yarnpkg$/.test(process.env['npm_execpath'])) {
+-	console.error('\x1b[1;31m*** Please use yarn to install dependencies.\x1b[0;0m');
+-	err = true;
+-}
+
+ if (process.platform === 'win32') {
+ 	if (!hasSupportedVisualStudioVersion()) {
+--
+2.44.0
