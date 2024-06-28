@@ -2669,6 +2669,12 @@
     githubId = 37907;
     name = "Julian Stecklina";
   };
+  bloeckchengrafik = {
+    email = "christian.bergschneider@gmx.de";
+    github = "Bloeckchengrafik";
+    githubId = 37768199;
+    name = "Christian Bergschneider";
+  };
   bloveless = {
     email = "brennon.loveless@gmail.com";
     github = "bloveless";
