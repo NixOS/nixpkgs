@@ -20,6 +20,7 @@ python3.pkgs.buildPythonApplication rec {
     "beautifulsoup4"
     "dnspython"
     "pyopenssl"
+    "requests"
     "tqdm"
   ];
 
