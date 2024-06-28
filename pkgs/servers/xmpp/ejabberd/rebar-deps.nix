@@ -6,11 +6,21 @@ let
   packages = with self; {
     unicode_util_compat = builder {
       name = "unicode_util_compat";
-      version = "0.4.1";
+      version = "0.7.0";
       src = fetchHex {
         pkg = "unicode_util_compat";
-        version = "0.4.1";
-        sha256 = "sha256-HRhIxASHzbCzDo7ZdeNOAlhgwC5BnLYV0lWEnzQnQ50=";
+        version = "0.7.0";
+        sha256 = "sha256-Je7m1n32GWDPanlCOVZlmbCeF+Zo03ACR7xJhjgVJSE=";
+      };
+      beamDeps = [ ];
+    };
+    base64url = builder {
+      name = "base64url";
+      version = "1.0.1";
+      src = fetchHex {
+        pkg = "base64url";
+        version = "1.0.1";
+        sha256 = "sha256-+bOt1HMaAqmwQQOYtHWzPnVmppU2Ujemve4btEdxn1w=";
       };
       beamDeps = [ ];
     };
@@ -26,11 +36,12 @@ let
     };
     xmpp = builder {
       name = "xmpp";
-      version = "1.8.1";
-      src = fetchHex {
-        pkg = "xmpp";
-        version = "1.8.1";
-        sha256 = "sha256-MtSjCKZhPk5BVfpOguzNyIMwltD6jZnI1CjIAGEeWdM=";
+      version = "git";
+      src = fetchFromGitHub {
+        owner = "processone";
+        repo = "xmpp";
+        rev = "a1fb778bd385d832f913e564558152ea507dac37";
+        sha256 = "1k4rbn9nxb94md1amdi58svxmdr16iqka885ahn3nb1kl1q49g6d";
       };
       beamDeps = [ ezlib fast_tls fast_xml idna p1_utils stringprep ];
     };
@@ -66,11 +77,12 @@ let
     };
     pkix = builder {
       name = "pkix";
-      version = "1.0.9";
-      src = fetchHex {
-        pkg = "pkix";
-        version = "1.0.9";
-        sha256 = "sha256-2qssCc3U7aBcm0WlwA6ZShpfJ2NJKeE3fi5ZtwcQPjo=";
+      version = "git";
+      src = fetchFromGitHub {
+        owner = "processone";
+        repo = "pkix";
+        rev = "03be27c7168449bdfeb8c5b6cc0f800f71f8cfe9";
+        sha256 = "0m83jjdvs37989qf8hami1g9sq2j1wx0idj75l68610viqxx5f93";
       };
       beamDeps = [ ];
     };
@@ -86,11 +98,12 @@ let
     };
     p1_pgsql = builder {
       name = "p1_pgsql";
-      version = "1.1.25";
-      src = fetchHex {
-        pkg = "p1_pgsql";
-        version = "1.1.25";
-        sha256 = "sha256-tlTB4H0+d1tia0B+dpbKz9iNF76D5xaLnYnDgy2RPec=";
+      version = "git";
+      src = fetchFromGitHub {
+        owner = "processone";
+        repo = "p1_pgsql";
+        rev = "fe0bb2a2a2ae21cd9fc48b81520cfce508520a56";
+        sha256 = "0cn36n6sjfirgpl3lflsa1k1awhvynjshvvkq9h801rpg3gvwcnj";
       };
       beamDeps = [ xmpp ];
     };
@@ -106,21 +119,23 @@ let
     };
     p1_mysql = builder {
       name = "p1_mysql";
-      version = "1.0.23";
-      src = fetchHex {
-        pkg = "p1_mysql";
-        version = "1.0.23";
-        sha256 = "sha256-nO+YJl+yhzdOe2S/QCLE317GYZbKMc9L7XPGfEW/gk4=";
+      version = "git";
+      src = fetchFromGitHub {
+        owner = "processone";
+        repo = "p1_mysql";
+        rev = "0dccb755a60cda61d41e7b092b344d38d1ebc802";
+        sha256 = "0pdggllh9y9k57hykyi0l4zbq2w5d1c7lw8077q6jfajs80p6ajm";
       };
       beamDeps = [ ];
     };
     p1_acme = builder {
       name = "p1_acme";
-      version = "1.0.22";
-      src = fetchHex {
-        pkg = "p1_acme";
-        version = "1.0.22";
-        sha256 = "sha256-wrJaeylaQ12sTyeKc9hBf/KwAgxF4Wg1BOhpLvA+IFc=";
+      version = "git";
+      src = fetchFromGitHub {
+        owner = "processone";
+        repo = "p1_acme";
+        rev = "176b4a8c67627c3229fbea3c05d82a5d567e6e49";
+        sha256 = "1g30sc2rzfrkh5c7771z7nl79w3shq8faag437q3ca7k1jjwqf19";
       };
       beamDeps = [ base64url idna jiffy jose yconf ];
     };
@@ -136,21 +151,21 @@ let
     };
     luerl = builder {
       name = "luerl";
-      version = "1.1.1";
+      version = "1.2.0";
       src = fetchHex {
         pkg = "luerl";
-        version = "1.1.1";
-        sha256 = "sha256-4X7yRqf/h27JDmh5KjlwiXlBYATU6s/op2QyBrlHB3M=";
+        version = "1.2.0";
+        sha256 = "sha256-nK/U9glP8PWp0nj9gdYNPgJsggvftsrNSxvZCfIbUl0=";
       };
       beamDeps = [ ];
     };
     jose = builder {
       name = "jose";
-      version = "1.11.5";
+      version = "1.11.10";
       src = fetchHex {
         pkg = "jose";
-        version = "1.11.5";
-        sha256 = "sha256-3NOyFbr+Aup8WyPa/T64Bipc2PLZBP2cqjI9NwNKs4Q=";
+        version = "1.11.10";
+        sha256 = "sha256-DWzTb/i6F02ykUj8EStYQhhraKkM6fwrPsOv52WT5hQ=";
       };
       beamDeps = [ ];
     };
@@ -166,11 +181,11 @@ let
     };
     idna = builder {
       name = "idna";
-      version = "6.0.0";
+      version = "6.1.1";
       src = fetchHex {
         pkg = "idna";
-        version = "6.0.0";
-        sha256 = "sha256-S90wXrZOGLAnOGSSBpXLGNeiAh8xoRucX7zZolP5NuI=";
+        version = "6.1.1";
+        sha256 = "sha256-kjdut4lEEu0ZrEdeSob3tBPBufu1vRbczVeTQVeUTOo=";
       };
       beamDeps = [ unicode_util_compat ];
     };
@@ -263,16 +278,6 @@ let
         sha256 = "sha256-bYpeANj4TEJidwam2+2wLjTVhJXz7WGTXIR1ygUxzaA=";
       };
       beamDeps = [ p1_utils ];
-    };
-    base64url = builder {
-      name = "base64url";
-      version = "1.0.1";
-      src = fetchHex {
-        pkg = "base64url";
-        version = "1.0.1";
-        sha256 = "sha256-+bOt1HMaAqmwQQOYtHWzPnVmppU2Ujemve4btEdxn1w=";
-      };
-      beamDeps = [ ];
     };
   };
 in self
