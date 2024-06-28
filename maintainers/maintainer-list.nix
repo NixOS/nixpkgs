@@ -97,6 +97,12 @@
     githubId = 9675338;
     keys = [ { fingerprint = "F466 A548 AD3F C1F1 8C88  4576 8702 7528 B006 D66D"; } ];
   };
+  _0x5a4 = {
+    email = "bej86nug@hhu.de";
+    name = "0x5a4";
+    github = "0x5a4";
+    githubId = 54070204;
+  };
   _0xB10C = {
     email = "nixpkgs@b10c.me";
     name = "0xB10C";
