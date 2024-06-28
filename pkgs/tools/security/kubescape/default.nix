@@ -21,7 +21,8 @@ buildGoModule rec {
     fetchSubmodules = true;
   };
 
-  vendorHash = "sha256-iwcwhBX/Kl55G8SrI1mmkP5bj8BrLAGBdk3UnK1Xfag=";
+  proxyVendor = true;
+  vendorHash = "sha256-JWpviZqegrIUIOtGG6yvDGxq30TUw+fZcqCJevYqxvY";
 
   subPackages = [ "." ];
 
@@ -89,6 +90,5 @@ buildGoModule rec {
       jk
     ];
     mainProgram = "kubescape";
-    broken = stdenv.isDarwin;
   };
 }
