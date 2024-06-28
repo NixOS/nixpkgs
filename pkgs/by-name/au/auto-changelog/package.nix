@@ -14,7 +14,7 @@
     hash = "sha256-qgJ/TVyViMhISt/EfCWV7XWQLXKTeZalGHFG905Ma5I=";
   };
 
-  packageJSON = ./package.json;
+  packageJSON = "${src}/package.json";
   offlineCache = fetchYarnDeps {
     yarnLock = "${src}/yarn.lock";
     hash = "sha256-rP/Xt0txwfEUmGZ0CyHXSEG9zSMtv8wr5M2Na+6PbyQ=";
