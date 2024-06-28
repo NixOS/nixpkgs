@@ -1230,7 +1230,7 @@
   };
 
   otter-nvim = super.otter-nvim.overrideAttrs {
-    dependencies = with self; [ nvim-lspconfig nvim-treesitter ];
+    dependencies = [ self.nvim-lspconfig ];
   };
 
   overseer-nvim = super.overseer-nvim.overrideAttrs {
