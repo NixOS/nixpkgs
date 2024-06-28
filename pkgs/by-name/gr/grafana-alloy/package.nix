@@ -120,7 +120,7 @@ buildGoModule rec {
     mainProgram = "alloy";
     license = licenses.asl20;
     homepage = "https://grafana.com/oss/alloy";
-    maintainers = with maintainers; [ flokli emilylange hbjydev ];
+    maintainers = with maintainers; [ azahi flokli emilylange hbjydev ];
     platforms = platforms.unix;
   };
 }
