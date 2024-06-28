@@ -6,13 +6,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "er-patcher";
-  version = "1.12-1";
+  version = "1.12-2";
 
   src = fetchFromGitHub {
     owner = "gurrgur";
     repo = "er-patcher";
     rev = "v${version}";
-    sha256 = "sha256-IN7JKaPexc6XLOymBWKbwtjhIlSEy3NhXoPpLiIc7qY=";
+    sha256 = "sha256-C+QtPpvEuYAYxYGs2lbYLaYkDge6r0RNCISglkQpjEQ=";
   };
 
   buildInputs = [

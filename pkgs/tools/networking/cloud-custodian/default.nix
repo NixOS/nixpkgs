@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "cloud-custodian";
-  version = "0.9.36.0";
+  version = "0.9.38.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cloud-custodian";
     repo = "cloud-custodian";
     rev = "refs/tags/${version}";
-    hash = "sha256-cOzh0lNBh35MQx4wg4ssg+haX1kPLVh3GJS27/eKlZI=";
+    hash = "sha256-jGWPwHiETS4+hk9euLLxs0PBb7mxz2PHCbYYlFfLQUw=";
   };
 
   pythonRelaxDeps = [

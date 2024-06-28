@@ -11,8 +11,8 @@
   };
   gi-crystal = {
     url = "https://github.com/hugopl/gi-crystal.git";
-    rev = "v0.22.2";
-    sha256 = "0bpa1f8iaf97z2kbgjc7nc8km7nd7bppiwna319lm2hvm8m5pw15";
+    rev = "v0.22.3";
+    sha256 = "1xyj5bf3l2i1yzqxb8yyj0fc3kwi9nnd57n5dhs5xm9jxzcvw1kk";
   };
   gtk4 = {
     url = "https://github.com/hugopl/gtk4.cr.git";
