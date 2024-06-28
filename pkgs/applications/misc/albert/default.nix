@@ -1,21 +1,22 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, libqalculate
-, muparser
-, libarchive
-, python3Packages
-, qtbase
-, qtscxml
-, qtsvg
-, qtdeclarative
-, qtwayland
-, qt5compat
-, qttools
-, wrapQtAppsHook
-, nix-update-script
-, pkg-config
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  libqalculate,
+  muparser,
+  libarchive,
+  python3Packages,
+  qtbase,
+  qtscxml,
+  qtsvg,
+  qtdeclarative,
+  qtwayland,
+  qt5compat,
+  qttools,
+  wrapQtAppsHook,
+  nix-update-script,
+  pkg-config,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -36,18 +37,23 @@ stdenv.mkDerivation (finalAttrs: {
     wrapQtAppsHook
   ];
 
-  buildInputs = [
-    libqalculate
-    libarchive
-    muparser
-    qtbase
-    qtscxml
-    qtsvg
-    qtdeclarative
-    qtwayland
-    qt5compat
-    qttools
-  ] ++ (with python3Packages; [ python pybind11 ]);
+  buildInputs =
+    [
+      libqalculate
+      libarchive
+      muparser
+      qtbase
+      qtscxml
+      qtsvg
+      qtdeclarative
+      qtwayland
+      qt5compat
+      qttools
+    ]
+    ++ (with python3Packages; [
+      python
+      pybind11
+    ]);
 
   postPatch = ''
     find -type f -name CMakeLists.txt -exec sed -i {} -e '/INSTALL_RPATH/d' \;
@@ -77,7 +83,11 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/albertlauncher/albert/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     # See: https://github.com/NixOS/nixpkgs/issues/279226
     license = licenses.unfree;
-    maintainers = with maintainers; [ ericsagnes synthetica eljamm ];
+    maintainers = with maintainers; [
+      ericsagnes
+      synthetica
+      eljamm
+    ];
     mainProgram = "albert";
     platforms = platforms.linux;
   };
