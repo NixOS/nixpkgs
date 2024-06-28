@@ -307,7 +307,6 @@ backendStdenv.mkDerivation (finalAttrs: {
   # Make the CUDA-patched stdenv available
   passthru.stdenv = backendStdenv;
 
-
   meta = {
     description = "${redistribRelease.name}. By downloading and using the packages you accept the terms and conditions of the ${finalAttrs.meta.license.shortName}";
     sourceProvenance = [ sourceTypes.binaryNativeCode ];
