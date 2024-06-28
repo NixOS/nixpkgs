@@ -21,13 +21,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "albert";
-  version = "0.23.0";
+  version = "0.24.1";
 
   src = fetchFromGitHub {
     owner = "albertlauncher";
     repo = "albert";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-L6qHaksArgwySk6J7N5zamUDWh5qa6zTtPFdpxU2NTM=";
+    sha256 = "sha256-vlap8gTZYoQS70Co99bZ16Fv9eq1N3rH7skjwrLDWiM=";
     fetchSubmodules = true;
   };
 
@@ -58,8 +58,10 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     find -type f -name CMakeLists.txt -exec sed -i {} -e '/INSTALL_RPATH/d' \;
 
-    sed -i src/qtpluginprovider.cpp \
-      -e "/QStringList dirs = {/a    QFileInfo(\"$out/lib\").canonicalFilePath(),"
+    # WARN: This is necessary for albert to detect the package libraries.
+    # Please check if the file below has changed upstream before updating.
+    sed -i src/app/qtpluginprovider.cpp \
+      -e "/QStringList install_paths;/a    install_paths << QFileInfo(\"$out/lib\").canonicalFilePath();"
   '';
 
   postFixup = ''
