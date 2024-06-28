@@ -8,6 +8,7 @@
   fetchFromGitHub,
   jaxlib,
   jaxlib-bin,
+  jaxlib-build,
   hypothesis,
   lapack,
   matplotlib,
@@ -23,10 +24,6 @@
 
 let
   usingMKL = blas.implementation == "mkl" || lapack.implementation == "mkl";
-  # jaxlib is broken on aarch64-* as of 2023-03-05, but the binary wheels work
-  # fine. jaxlib is only used in the checkPhase, so switching backends does not
-  # impact package behavior. Get rid of this once jaxlib is fixed on aarch64-*.
-  jaxlib' = if jaxlib.meta.broken then jaxlib-bin else jaxlib;
 in
 buildPythonPackage rec {
   pname = "jax";
@@ -61,7 +58,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     hypothesis
-    jaxlib'
+    jaxlib
     matplotlib
     pytestCheckHook
     pytest-xdist
@@ -147,7 +144,7 @@ buildPythonPackage rec {
   #   NIXPKGS_ALLOW_UNFREE=1 nixglhost -- nix run --impure .#python3Packages.jax.passthru.tests.test_cuda_jaxlibBin
   passthru.tests = {
     test_cuda_jaxlibSource = callPackage ./test-cuda.nix {
-      jaxlib = jaxlib.override { cudaSupport = true; };
+      jaxlib = jaxlib-build.override { cudaSupport = true; };
     };
     test_cuda_jaxlibBin = callPackage ./test-cuda.nix {
       jaxlib = jaxlib-bin.override { cudaSupport = true; };
