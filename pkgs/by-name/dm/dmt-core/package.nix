@@ -1,6 +1,7 @@
-{ lib, buildPythonApplication, fetchurl, fetchPypi, pythonPackages }:
+{ lib, fetchurl, fetchPypi, python3Packages }:
 
 let
+  inherit (python3Packages) buildPythonApplication;
   reprint = buildPythonApplication rec {
     pname = "reprint";
     version = "0.6.0";
@@ -24,7 +25,7 @@ let
   };
 
 in buildPythonApplication rec {
-  pname = "DMT_core";
+  pname = "dmt-core";
   version = "2.1.0";
   pyproject = true;
 
@@ -34,38 +35,38 @@ in buildPythonApplication rec {
   };
 
   propagatedBuildInputs = [
-    pythonPackages.joblib
-    pythonPackages.pint
-    pythonPackages.pyyaml
-    pythonPackages.more-itertools
-    pythonPackages.semver
-    pythonPackages.h5py
-    pythonPackages.cycler
-    pythonPackages.colormath
-    pythonPackages.colorama
-    pythonPackages.scipy
-    pythonPackages.scikit-rf
-    pythonPackages.packaging
-    pythonPackages.pandas
-    pythonPackages.pyqtgraph
-    pythonPackages.matplotlib
-    pythonPackages.pyarrow
-    pythonPackages.requests
+    python3Packages.colorama
+    python3Packages.colormath
+    python3Packages.cycler
+    python3Packages.h5py
+    python3Packages.joblib
+    python3Packages.matplotlib
+    python3Packages.more-itertools
+    python3Packages.packaging
+    python3Packages.pandas
+    python3Packages.pint
+    python3Packages.pyarrow
+    python3Packages.pyqtgraph
+    python3Packages.pyyaml
+    python3Packages.requests
+    python3Packages.scikit-rf
+    python3Packages.scipy
+    python3Packages.semver
+    python3Packages.setuptools
     reprint
     verilogae
-    pythonPackages.setuptools
   ];
 
-  nativeCheckInputs = [ pythonPackages.pytest ];
+  nativeCheckInputs = [ python3Packages.pytest ];
 
-  meta = with lib; {
+  meta = {
     changelog =
       "https://gitlab.com/dmt-development/dmt-core/-/blob/Version_${version}/CHANGELOG?ref_type=tags";
     description =
-      "DeviceModelingToolkit (DMT) is a Python tool targeted at helping modeling engineers extract model parameters, run circuit and TCAD simulations and automate their infrastructure.";
+      "Python tool to help modeling engineers extract model parameters, run circuit and TCAD simulations and automate infrastructure";
     homepage = "https://gitlab.com/dmt-development/dmt-core";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ jasonodoom ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ jasonodoom ];
+    platforms = lib.platforms.linux;
   };
 }
