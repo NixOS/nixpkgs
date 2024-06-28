@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "aiohttp-isal";
-  version = "0.3.1";
+  version = "0.3.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bdraco";
     repo = "aiohttp-isal";
-    rev = "v${version}";
-    hash = "sha256-rSXV5Z5JdznQGtRI83UIbaSfbIYkUHphJTVK/LM2V4U=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-sAtAzqMJoKryhB8q/TxqgFE+Z4Uxxw0hghk/Y2VNvx0=";
   };
 
   build-system = [ poetry-core ];

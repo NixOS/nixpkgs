@@ -23772,8 +23772,7 @@ with pkgs;
 
   flatbuffers = callPackage ../development/libraries/flatbuffers { };
 
-  nanopb = callPackage ../development/libraries/nanopb { };
-  nanopbMalloc = callPackage ../development/libraries/nanopb { mallocBuild = true; };
+  nanopbMalloc = callPackage ../by-name/na/nanopb/package.nix { enableMalloc = true; };
 
   gnupth = callPackage ../development/libraries/pth { };
   pth = if stdenv.hostPlatform.isMusl then npth else gnupth;
@@ -36911,12 +36910,6 @@ with pkgs;
   planetary_annihilation = callPackage ../games/planetaryannihilation { };
 
   principia = callPackage ../games/principia { };
-
-  prismlauncher-unwrapped = kdePackages.callPackage ../games/prismlauncher {
-    inherit (darwin.apple_sdk.frameworks) Cocoa;
-  };
-
-  prismlauncher = kdePackages.callPackage ../games/prismlauncher/wrapper.nix { };
 
   pong3d = callPackage ../games/pong3d { };
 
