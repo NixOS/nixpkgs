@@ -12,7 +12,6 @@
   freefont_ttf,
   makeFontsConf,
   setuptools,
-  python,
 }:
 
 let
@@ -70,12 +69,12 @@ buildPythonPackage rec {
       "test_rescaleData"
     ];
 
-  meta = with lib; {
+  meta = {
     description = "Scientific Graphics and GUI Library for Python";
     homepage = "https://www.pyqtgraph.org/";
     changelog = "https://github.com/pyqtgraph/pyqtgraph/blob/master/CHANGELOG";
-    license = licenses.mit;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ koral ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ koral doronbehar ];
   };
 }
