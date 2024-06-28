@@ -14,6 +14,7 @@
 , crateLicenseFile
 , crateLinks
 , crateName
+, crateType
 , crateReadme
 , crateRenames
 , crateRepository
@@ -208,6 +209,11 @@ in ''
      EXTRA_LINK_ARGS_LIB=$(sed -n "s/^cargo::\{0,1\}rustc-link-arg-lib=\(.*\)/-C link-arg=\1/p" target/build/${crateName}.opt | tr '\n' ' ')
      EXTRA_LINK_LIBS=$(sed -n "s/^cargo::\{0,1\}rustc-link-lib=\(.*\)/\1/p" target/build/${crateName}.opt | tr '\n' ' ')
      EXTRA_LINK_SEARCH=$(sed -n "s/^cargo::\{0,1\}rustc-link-search=\(.*\)/\1/p" target/build/${crateName}.opt | tr '\n' ' ' | sort -u)
+
+     ${lib.optionalString (lib.elem "cdylib" crateType) ''
+     CRATE_TYPE_IS_CDYLIB="true"
+     EXTRA_CDYLIB_LINK_ARGS=$(sed -n "s/^cargo::\{0,1\}rustc-cdylib-link-arg=\(.*\)/-C link-arg=\1/p" target/build/${crateName}.opt | tr '\n' ' ')
+''}
 
      # We want to read part of every line that has cargo:rustc-env= prefix and
      # export it as environment variables. This turns out tricky if the lines
