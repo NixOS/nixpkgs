@@ -12175,7 +12175,7 @@ with pkgs;
   raider = callPackage ../applications/misc/raider { };
 
   railway = callPackage ../development/tools/railway {
-    inherit (darwin.apple_sdk.frameworks) CoreServices Security;
+    inherit (darwin.apple_sdk.frameworks) CoreServices Security SystemConfiguration;
   };
 
   quota = if stdenv.isLinux then linuxquota else unixtools.quota;
