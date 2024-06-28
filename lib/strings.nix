@@ -19,7 +19,6 @@ rec {
     filter
     fromJSON
     genList
-    head
     isInt
     isList
     isAttrs
@@ -33,11 +32,21 @@ rec {
     storeDir
     stringLength
     substring
-    tail
     toJSON
     typeOf
     unsafeDiscardStringContext
     ;
+
+  # TODO: warnings added 2024-05-21; remove after NixOS 2024.11
+  head = lib.warn ''
+    lib.strings.head only supports lists; use lib.lists.head instead.
+    The lib.strings.head alias is deprecated and will be removed after the NixOS 2024.11 release.
+  '' lib.head;
+
+  tail = lib.warn ''
+    lib.strings.tail only supports lists; use lib.lists.tail instead.
+    The lib.strings.tail alias is deprecated and will be removed after the NixOS 2024.11 release.
+  '' lib.tail;
 
   /* Concatenate a list of strings.
 
@@ -85,7 +94,7 @@ rec {
     list:
     if list == [] || length list == 1
     then list
-    else tail (lib.concatMap (x: [separator x]) list);
+    else lib.tail (lib.concatMap (x: [separator x]) list);
 
   /* Concatenate a list of strings with a separator between each element
 
@@ -763,7 +772,7 @@ rec {
     let
       components = splitString "/" url;
       filename = lib.last components;
-      name = head (splitString sep filename);
+      name = lib.head (splitString sep filename);
     in assert name != filename; name;
 
   /* Create a "-D<feature>:<type>=<value>" string that can be passed to typical
@@ -1062,10 +1071,10 @@ rec {
       strippedInput = matchStripInput str;
 
       # RegEx: Match a leading '0' then one or more digits.
-      isLeadingZero = matchLeadingZero (head strippedInput) == [];
+      isLeadingZero = matchLeadingZero (lib.head strippedInput) == [];
 
       # Attempt to parse input
-      parsedInput = fromJSON (head strippedInput);
+      parsedInput = fromJSON (lib.head strippedInput);
 
       generalError = "toInt: Could not convert ${escapeNixString str} to int.";
 
@@ -1116,10 +1125,10 @@ rec {
       strippedInput = matchStripInput str;
 
       # RegEx: Match at least one '0'.
-      isZero = matchZero (head strippedInput) == [];
+      isZero = matchZero (lib.head strippedInput) == [];
 
       # Attempt to parse input
-      parsedInput = fromJSON (head strippedInput);
+      parsedInput = fromJSON (lib.head strippedInput);
 
       generalError = "toIntBase10: Could not convert ${escapeNixString str} to int.";
 
