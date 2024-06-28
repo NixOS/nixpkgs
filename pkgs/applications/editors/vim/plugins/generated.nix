@@ -10147,14 +10147,14 @@ final: prev:
 
   specs-nvim = buildVimPlugin {
     pname = "specs.nvim";
-    version = "2022-09-20";
+    version = "2024-05-19";
     src = fetchFromGitHub {
-      owner = "edluffy";
+      owner = "cxwx";
       repo = "specs.nvim";
-      rev = "2743e412bbe21c9d73954c403d01e8de7377890d";
-      sha256 = "1ycqvxrn13bfimf9k03bmm1baml8gyq5lxqjxh1fya44s2bg714r";
+      rev = "dd82496f538b688cedf98429f89fef47ecb0625e";
+      sha256 = "0427fx6iw3i2y9ny3sz1na32bxcj8i93dbm93ckxf3bii8zqjs0s";
     };
-    meta.homepage = "https://github.com/edluffy/specs.nvim/";
+    meta.homepage = "https://github.com/cxwx/specs.nvim/";
   };
 
   spellsitter-nvim = buildVimPlugin {
