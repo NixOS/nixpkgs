@@ -84,6 +84,7 @@ in
 
   # passthru tests
 , pkgsi686Linux
+, runCommand
 }: let
 self = stdenv.mkDerivation {
   pname = "nix";
@@ -255,6 +256,20 @@ self = stdenv.mkDerivation {
 
     tests = {
       nixi686 = pkgsi686Linux.nixVersions.${self_attribute_name};
+      srcVersion = runCommand "nix-src-version" {
+        inherit version;
+      } ''
+        # This file is an implementation detail, but it's a good sanity check
+        # If upstream changes that, we'll have to adapt.
+        srcVersion=$(cat ${src}/.version)
+        echo "Version in nix nix expression: $version"
+        echo "Version in nix.src: $srcVersion"
+        if [ "$version" != "$srcVersion" ]; then
+          echo "Version mismatch!"
+          exit 1
+        fi
+        touch $out
+      '';
     };
   };
 
