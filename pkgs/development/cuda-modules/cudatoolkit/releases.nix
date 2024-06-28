@@ -105,4 +105,14 @@
     url = "https://developer.download.nvidia.com/compute/cuda/12.3.0/local_installers/cuda_12.3.0_545.23.06_linux.run";
     sha256 = "sha256-fBP6zjr2TW4WSNbjEB0xyBEedHFDrLAHfZc8FpCCBCI=";
   };
+  "12.4" = {
+    version = "12.4.1";
+    url = "https://developer.download.nvidia.com/compute/cuda/12.4.1/local_installers/cuda_12.4.1_550.54.15_linux.run";
+    sha256 = "sha256-Nn0imbOkWIq0h6bScnbKXZ6tbjlJBPGLzLnhJDO5xPs=";
+  };
+  "12.5" = {
+    version = "12.5.0";
+    url = "https://developer.download.nvidia.com/compute/cuda/12.5.0/local_installers/cuda_12.5.0_555.42.02_linux.run";
+    sha256 = "sha256-kPzH30giZDQGX/EqQ3ITa0C5pMvwyGArt2O3RfIrepk=";
+  };
 }
