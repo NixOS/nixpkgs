@@ -26,11 +26,12 @@ let
   };
 
 in buildPythonPackage rec {
-  pname = "DMT_core";
+  pname = "dmt-core";
   version = "2.1.0";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit version;
+    pname = "DMT_core";
     hash = "sha256-489E+uNn4NgyCwxsUMEPH/1ZuM+5uNq4zx8F88rkHMU=";
   };
   doCheck = false;
