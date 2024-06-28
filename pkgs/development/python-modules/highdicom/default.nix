@@ -10,6 +10,7 @@
   pydicom,
   pylibjpeg,
   pylibjpeg-libjpeg,
+  pylibjpeg-openjpeg,
 }:
 
 let
@@ -45,7 +46,7 @@ buildPythonPackage rec {
     libjpeg = [
       pylibjpeg
       pylibjpeg-libjpeg
-      #pylibjpeg-openjpeg  # not in nixpkgs yet
+      #pylibjpeg-openjpeg  # broken on aarch64-linux
     ];
   };
 
