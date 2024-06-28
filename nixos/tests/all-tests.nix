@@ -694,7 +694,7 @@ in {
   openstack-image-metadata = (handleTestOn ["x86_64-linux"] ./openstack-image.nix {}).metadata or {};
   openstack-image-userdata = (handleTestOn ["x86_64-linux"] ./openstack-image.nix {}).userdata or {};
   opentabletdriver = handleTest ./opentabletdriver.nix {};
-  opentelemetry-collector = handleTest ./opentelemetry-collector.nix {};
+  opentelemetry-collector = handleTest ./opentelemetry-collector {};
   ocsinventory-agent = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./ocsinventory-agent.nix {};
   owncast = handleTest ./owncast.nix {};
   outline = handleTest ./outline.nix {};
