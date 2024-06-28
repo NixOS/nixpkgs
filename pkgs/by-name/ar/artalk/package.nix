@@ -3,8 +3,10 @@
   buildGoModule,
   fetchFromGitHub,
   artalk,
-  testers,
   fetchurl,
+  installShellFiles,
+  stdenv,
+  testers,
 }:
 buildGoModule rec {
   pname = "artalk";
@@ -32,14 +34,23 @@ buildGoModule rec {
     "-X github.com/ArtalkJS/Artalk/internal/config.CommitHash=${version}"
   ];
 
+  nativeBuildInputs = [ installShellFiles ];
+
   preBuild = ''
     tar -xzf ${web}
     cp -r ./artalk_ui/* ./public
   '';
 
-  postInstall = ''
-    mv $out/bin/Artalk $out/bin/artalk
-  '';
+  postInstall =
+    ''
+      mv $out/bin/Artalk $out/bin/artalk
+    ''
+    + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+      installShellCompletion --cmd artalk \
+        --bash <($out/bin/artalk completion bash) \
+        --fish <($out/bin/artalk completion fish) \
+        --zsh <($out/bin/artalk completion zsh)
+    '';
 
   passthru.tests = {
     version = testers.testVersion { package = artalk; };
