@@ -56,6 +56,8 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   patches = [
+    # don't append bin to search path when env var NIXPKGS_CMAKE_DISABLE_BIN_PREFIX is set
+    ./000-nixpkgs-disable-bin-prefix.diff
     # Don't search in non-Nix locations such as /usr, but do search in our libc.
     ./001-search-path.diff
     # Don't depend on frameworks.

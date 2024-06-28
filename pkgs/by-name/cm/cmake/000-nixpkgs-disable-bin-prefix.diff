@@ -1,0 +1,31 @@
+diff --git a/Source/cmSearchPath.cxx b/Source/cmSearchPath.cxx
+index 2b992ef2..adee9750 100644
+--- a/Source/cmSearchPath.cxx
++++ b/Source/cmSearchPath.cxx
+@@ -151,6 +151,16 @@ void cmSearchPath::AddSuffixes(const std::vector<std::string>& suffixes)
+   }
+ }
+ 
++static bool IsBinPrefixDisabled(void)
++{
++  enum States { UNDEFINED, DISABLED, ENABLED };
++  static States state = UNDEFINED;
++  if (state == UNDEFINED) {
++    state = cmSystemTools::GetEnvVar("NIXPKGS_CMAKE_DISABLE_BIN_PREFIX") != std::nullopt ? DISABLED : ENABLED;
++  }
++  return state == DISABLED;
++}
++
+ void cmSearchPath::AddPrefixPaths(const std::vector<std::string>& paths,
+                                   const char* base)
+ {
+@@ -165,6 +175,9 @@ void cmSearchPath::AddPrefixPaths(const std::vector<std::string>& paths,
+     subdir = "lib";
+   } else if (this->FC->CMakePathName == "FRAMEWORK") {
+     subdir.clear(); // ? what to do for frameworks ?
++  } else if (IsBinPrefixDisabled()) {
++      // don't look at the bin component of CMAKE_PREFIX_PATH
++      return;
+   }
+ 
+   for (std::string const& path : paths) {

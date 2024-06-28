@@ -123,7 +123,8 @@ cmakeConfigurePhase() {
 
     echo "cmake flags: $cmakeFlags ${cmakeFlagsArray[@]}"
 
-    cmake "$cmakeDir" $cmakeFlags "${cmakeFlagsArray[@]}"
+    # seting env var prevents cmake from appending `bin` on search paths
+    NIXPKGS_CMAKE_DISABLE_BIN_PREFIX= cmake "$cmakeDir" $cmakeFlags "${cmakeFlagsArray[@]}"
 
     if ! [[ -v enableParallelBuilding ]]; then
         enableParallelBuilding=1
