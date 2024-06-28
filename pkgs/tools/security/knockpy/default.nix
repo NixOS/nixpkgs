@@ -1,6 +1,7 @@
-{ lib
-, fetchFromGitHub
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -22,10 +23,9 @@ python3.pkgs.buildPythonApplication rec {
     "tqdm"
   ];
 
-  build-system = with python3.pkgs; [
-    pythonRelaxDepsHook
-    setuptools
-  ];
+  build-system = with python3.pkgs; [ setuptools ];
+
+  nativeBuildInputs = with python3.pkgs; [ pythonRelaxDepsHook ];
 
   dependencies = with python3.pkgs; [
     beautifulsoup4
@@ -38,15 +38,13 @@ python3.pkgs.buildPythonApplication rec {
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "knock"
-  ];
+  pythonImportsCheck = [ "knock" ];
 
   meta = with lib; {
     description = "Tool to scan subdomains";
     homepage = "https://github.com/guelfoweb/knock";
     changelog = "https://github.com/guelfoweb/knock/releases/tag/${version}";
-    license = with licenses; [ gpl3Only ];
+    license = licenses.gpl3Only;
     maintainers = with maintainers; [ fab ];
     mainProgram = "knockpy";
   };
