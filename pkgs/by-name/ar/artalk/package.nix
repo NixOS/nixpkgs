@@ -31,9 +31,14 @@ buildGoModule rec {
     "-X github.com/ArtalkJS/Artalk/internal/config.Version=${version}"
     "-X github.com/ArtalkJS/Artalk/internal/config.CommitHash=${version}"
   ];
+
   preBuild = ''
     tar -xzf ${web}
     cp -r ./artalk_ui/* ./public
+  '';
+
+  postInstall = ''
+    mv $out/bin/Artalk $out/bin/artalk
   '';
 
   passthru.tests = {
@@ -45,6 +50,6 @@ buildGoModule rec {
     homepage = "https://github.com/ArtalkJS/Artalk";
     license = licenses.mit;
     maintainers = with maintainers; [ moraxyc ];
-    mainProgram = "Artalk";
+    mainProgram = "artalk";
   };
 }
