@@ -43,6 +43,7 @@
 , libffi
 , libepoxy
 , libevdev
+, libpangocairo
 # postPatch:
 , glibc # gconv + locale
 # postFixup:
