@@ -697,11 +697,6 @@ with pkgs;
     inherit (darwin) DarwinTools;
   };
 
-  probe-run = callPackage ../development/tools/rust/probe-run {
-    inherit (darwin.apple_sdk.frameworks) AppKit IOKit;
-    inherit (darwin) DarwinTools;
-  };
-
   mix2nix = callPackage ../development/tools/mix2nix { };
 
   n98-magerun = callPackage ../development/tools/misc/n98-magerun { };
