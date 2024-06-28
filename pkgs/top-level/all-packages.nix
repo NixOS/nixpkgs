@@ -5689,8 +5689,8 @@ with pkgs;
   loccount = callPackage ../development/tools/misc/loccount { };
 
   logseq = callPackage ../by-name/lo/logseq/package.nix {
-    # electron version from: https://github.com/logseq/logseq/blob/d8c6ca264bdf9a6a0f03c46dbf3509210367624a/package.json#L116
-    electron = electron_28;
+    # electron version from: https://github.com/logseq/logseq/blob/0.10.9/package.json#L116
+    electron = electron_27;
   };
 
   long-shebang = callPackage ../misc/long-shebang { };
