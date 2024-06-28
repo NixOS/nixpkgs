@@ -105,6 +105,25 @@ stdenv.mkDerivation (finalAttrs: {
     xz
   ] ++ lib.optionals useEspeak [ espeak-ng ];
 
+  cmakeFlags = [
+    # The upstream project recommends tagging the distribution
+    (lib.cmakeFeature "DISTR_TAG" "Nixpkgs")
+    (lib.cmakeFeature "ENGINE_BUILDTAG" finalAttrs.src.rev)
+    (lib.cmakeFeature "BUILD_PRESET" "everything")
+    (lib.cmakeBool "BUILTIN_LUA" useBuiltinLua)
+    (lib.cmakeBool "DISABLE_JIT" useBuiltinLua)
+    (lib.cmakeBool "STATIC_LIBUVC" useStaticLibuvc)
+    (lib.cmakeBool "STATIC_SQLite3" useStaticSqlite)
+    (lib.cmakeBool "ENABLE_TRACY" useTracy)
+    "../src"
+  ];
+
+  outputs = [ "out" "dev" "lib" "man" ];
+
+  hardeningDisable = [ "format" ];
+
+  strictDeps = true;
+
   # Emulate external/git/clone.sh
   postUnpack =
     let
@@ -134,10 +153,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace ./src/platform/posix/paths.c \
-      --replace "/usr/bin" "$out/bin" \
-      --replace "/usr/share" "$out/share"
+      --replace-fail "/usr/bin" "$out/bin" \
+      --replace-fail "/usr/share" "$out/share"
     substituteInPlace ./src/CMakeLists.txt \
-      --replace "SETUID" "# SETUID"
+      --replace-fail "SETUID" "# SETUID"
   '';
 
   # INFO: Arcan build scripts require the manpages to be generated *before* the
@@ -147,21 +166,6 @@ stdenv.mkDerivation (finalAttrs: {
     ruby docgen.rb mangen
     popd
   '';
-
-  cmakeFlags = [
-    # The upstream project recommends tagging the distribution
-    (lib.cmakeFeature "DISTR_TAG" "Nixpkgs")
-    (lib.cmakeFeature "ENGINE_BUILDTAG" finalAttrs.src.rev)
-    (lib.cmakeFeature "BUILD_PRESET" "everything")
-    (lib.cmakeBool "BUILTIN_LUA" useBuiltinLua)
-    (lib.cmakeBool "DISABLE_JIT" useBuiltinLua)
-    (lib.cmakeBool "STATIC_LIBUVC" useStaticLibuvc)
-    (lib.cmakeBool "STATIC_SQLite3" useStaticSqlite)
-    (lib.cmakeBool "ENABLE_TRACY" useTracy)
-    "../src"
-  ];
-
-  hardeningDisable = [ "format" ];
 
   passthru = {
     inherit sources;
