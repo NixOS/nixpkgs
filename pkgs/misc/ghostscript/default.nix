@@ -34,6 +34,12 @@
 , lilypond
 , pstoedit
 , python3
+
+, makeWrapper
+, coreutils
+, gnused
+, which
+, gawk
 }:
 
 let
@@ -81,7 +87,7 @@ stdenv.mkDerivation rec {
     buildPackages.stdenv.cc
   ];
 
-  nativeBuildInputs = [ pkg-config autoconf zlib ]
+  nativeBuildInputs = [ pkg-config autoconf zlib makeWrapper ]
     ++ lib.optional cupsSupport cups;
 
   buildInputs = [
@@ -144,7 +150,23 @@ stdenv.mkDerivation rec {
 
   # dynamic library name only contains maj.min, eg. '9.53'
   dylib_version = lib.versions.majorMinor version;
-  preFixup = lib.optionalString stdenv.isDarwin ''
+  preFixup = ''
+    for bin in $out/bin/{eps2eps,gsbj,gsdj,gsdj500,gslj,gslp,gsnd,printafm,pphs,pdf2ps} $out/bin/pf* ; do
+      wrapProgram $bin --prefix PATH : ${lib.makeBinPath [ coreutils ]}
+    done
+
+    for bin in $out/bin/ps2* ; do
+      wrapProgram $bin --prefix PATH : ${lib.makeBinPath [ coreutils ]}:$out/bin
+    done
+
+    wrapProgram $out/bin/pdf2dsc --prefix PATH : ${lib.makeBinPath [ coreutils gnused ]}
+    wrapProgram $out/bin/lprsetup.sh --prefix PATH : ${lib.makeBinPath [ coreutils which gawk ]}:$out/bin
+
+    substituteInPlace $out/bin/unix-lpr.sh \
+      --replace "PATH=/bin:/usr/bin:/usr/ucb:/usr/etc" ""
+    wrapProgram $out/bin/unix-lpr.sh --prefix PATH : ${lib.makeBinPath [ coreutils gnused ]}:$out/bin
+
+  '' + lib.optionalString stdenv.isDarwin ''
     install_name_tool -change libgs.dylib.$dylib_version $out/lib/libgs.dylib.$dylib_version $out/bin/gs
     install_name_tool -change libgs.dylib.$dylib_version $out/lib/libgs.dylib.$dylib_version $out/bin/gsx
   '';
