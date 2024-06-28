@@ -36,6 +36,7 @@
     "base64-blob": "^1.4.1",
     "bootstrap": "^4.6.2",
     "classnames": "^2.3.2",
+    "event-target-polyfill": "^0.0.4",
     "flag-icons": "^6.6.6",
     "flexbin": "^0.2.0",
     "formik": "^2.4.5",
@@ -121,7 +122,7 @@
     "terser": "^5.9.0",
     "ts-node": "^10.9.1",
     "typescript": "~4.8.4",
-    "vite": "^4.5.2",
+    "vite": "^4.5.3",
     "vite-plugin-compression": "^0.5.1",
     "vite-tsconfig-paths": "^4.0.5"
   }
