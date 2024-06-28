@@ -69,7 +69,9 @@ stdenv.mkDerivation rec {
 
   clad_src = fetchgit {
     url = "https://github.com/vgvassilev/clad";
-    rev = "refs/tags/v1.5"; # Make sure that this is the same tag as in the ROOT build files!
+    # Make sure that this is the same tag as in the ROOT build files!
+    # https://github.com/root-project/root/blob/master/interpreter/cling/tools/plugins/clad/CMakeLists.txt#L76
+    rev = "refs/tags/v1.5";
     hash = "sha256-s0DbHfLthv51ZICnTd30O4qG/DyZPk5tADeu3bBRoOw=";
   };
 
