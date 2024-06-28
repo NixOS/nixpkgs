@@ -236,6 +236,12 @@ if (( "${NIX_DEBUG:-0}" >= 1 )); then
     printf "  %q\n" ${extraAfter+"${extraAfter[@]}"} >&2
 fi
 
+# Uses mktemp so should be done before PATH is restored
+if (( "${NIX_CC_USE_RESPONSE_FILE:-@use_response_file_by_default@}" >= 1 )); then
+    responseFile=$(mktemp "${TMPDIR:-/tmp}/cc-params.XXXXXX")
+    trap 'rm -f -- "$responseFile"' EXIT
+fi
+
 PATH="$path_backup"
 # Old bash workaround, see above.
 
@@ -246,8 +252,6 @@ if [[ -e @out@/nix-support/cc-wrapper-hook ]]; then
 fi
 
 if (( "${NIX_CC_USE_RESPONSE_FILE:-@use_response_file_by_default@}" >= 1 )); then
-    responseFile=$(mktemp "${TMPDIR:-/tmp}/cc-params.XXXXXX")
-    trap 'rm -f -- "$responseFile"' EXIT
     printf "%q\n" \
        ${extraBefore+"${extraBefore[@]}"} \
        ${params+"${params[@]}"} \
