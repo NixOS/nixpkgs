@@ -35,13 +35,13 @@ assert withGLES -> stdenv.isLinux;
 
 rustPlatform.buildRustPackage rec {
   pname = "zed";
-  version = "0.141.2";
+  version = "0.141.3";
 
   src = fetchFromGitHub {
     owner = "zed-industries";
     repo = "zed";
     rev = "refs/tags/v${version}";
-    hash = "sha256-pbflVG4JoXWZEf4Elmd4+RDb9uAaTsj+8lTaBGMaMdo=";
+    hash = "sha256-D4wVHMNy7xESuEORULyKf3ZxFfRSKfWEXjBnjh3yBVU=";
     fetchSubmodules = true;
   };
 
@@ -160,17 +160,17 @@ rustPlatform.buildRustPackage rec {
     ];
   };
 
-  meta = with lib; {
+  meta = {
     description = "High-performance, multiplayer code editor from the creators of Atom and Tree-sitter";
     homepage = "https://zed.dev";
     changelog = "https://github.com/zed-industries/zed/releases/tag/v${version}";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [
       GaetanLepage
       niklaskorz
     ];
     mainProgram = "zed";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
     # Currently broken on darwin: https://github.com/NixOS/nixpkgs/pull/303233#issuecomment-2048650618
     broken = stdenv.isDarwin;
   };
