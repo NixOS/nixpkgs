@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "man" ];
 
   postPatch = ''
-    substituteInPlace incdefs.sh --replace \
+    substituteInPlace incdefs.sh --replace-fail \
        '/usr/include/linux/' "${linuxHeaders}/include/linux/"
   '';
 
