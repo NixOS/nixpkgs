@@ -132,6 +132,10 @@ stdenv.mkDerivation (finalAttrs: {
       --set-default CC ${targetPackages.stdenv.cc}/bin/cc
   '';
 
+  passthru = {
+    inherit ldcBootstrap;
+  };
+
   meta = with lib; {
     description = "LLVM-based D compiler";
     homepage = "https://github.com/ldc-developers/ldc";
