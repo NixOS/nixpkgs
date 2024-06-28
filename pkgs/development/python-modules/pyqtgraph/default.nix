@@ -34,9 +34,14 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     numpy
-    pyqt5
     scipy
     pyopengl
+  ];
+  buildInputs = [
+    # Not propagating it so that every consumer of this package will be able to
+    # use any of the upstream supported Qt Library, See:
+    # https://pyqtgraph.readthedocs.io/en/pyqtgraph-0.13.7/getting_started/how_to_use.html#pyqt-and-pyside
+    pyqt5
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];
