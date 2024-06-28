@@ -16,9 +16,8 @@ let
     perlPackages.DevelCover
     perlPackages.GD
     perlPackages.JSONXS
-    perlPackages.MemoryProcess
     perlPackages.PathTools
-  ];
+  ] ++ lib.optionals (!stdenv.isDarwin) [ perlPackages.MemoryProcess ];
 in
 stdenv.mkDerivation rec {
   pname = "lcov";
