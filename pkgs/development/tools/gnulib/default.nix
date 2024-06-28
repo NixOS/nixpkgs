@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromSavannah, python3 }:
+{ lib, stdenv, fetchFromSavannah, python3, perl }:
 
 stdenv.mkDerivation rec {
   pname = "gnulib";
@@ -12,6 +12,9 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     patchShebangs gnulib-tool.py
+    # Avoid shell re-exec by directly executing the script with perl
+    substituteInPlace build-aux/{prefix-gnulib-mk,useless-if-before-free,update-copyright,gitlog-to-changelog,announce-gen} \
+      --replace-fail '#!/bin/sh' '#!${lib.getExe perl}'
   '';
 
   buildInputs = [ python3 ];
