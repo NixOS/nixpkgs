@@ -38129,6 +38129,8 @@ with pkgs;
 
   ### SCIENCE/MEDICINE
 
+  aliza = libsForQt5.callPackage ../applications/science/medicine/aliza { };
+
   dcmtk = callPackage ../applications/science/medicine/dcmtk { };
 
   xmedcon = callPackage ../applications/science/medicine/xmedcon { };
