@@ -77,7 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/albertlauncher/albert/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     # See: https://github.com/NixOS/nixpkgs/issues/279226
     license = licenses.unfree;
-    maintainers = with maintainers; [ ericsagnes synthetica ];
+    maintainers = with maintainers; [ ericsagnes synthetica eljamm ];
     mainProgram = "albert";
     platforms = platforms.linux;
   };
