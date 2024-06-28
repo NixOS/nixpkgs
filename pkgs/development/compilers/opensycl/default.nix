@@ -24,13 +24,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "OpenSYCL";
-  version = "0.9.4";
+  version = "24.02.0";
 
   src = fetchFromGitHub {
     owner = "OpenSYCL";
     repo = "OpenSYCL";
     rev = "v${version}";
-    sha256 = "sha256-5YkuUOAnvoAD5xDKxKMPq0B7+1pb6hVisPAhs0Za1ls=";
+    sha256 = "sha256-9TBc5XZwz1is8D6PMfxs/MAttjXe6SLXGO5BnXIF2T0=";
   };
 
   nativeBuildInputs = [
