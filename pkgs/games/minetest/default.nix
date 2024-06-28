@@ -130,7 +130,8 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru.updateScript = gitUpdater {
-    ignoredVersions = "^[^.]+$|.*-android$";
+    allowedVersions = "\\.";
+    ignoredVersions = "-android$";
   };
 
   meta = with lib; {
