@@ -178,8 +178,8 @@ buildPythonApplication rec {
     "pre_commit"
   ];
 
-  passthru.tests.version = testers.testVersion {
-    package = pre-commit;
+  passthru.tests = callPackage ./tests.nix {
+    inherit git pre-commit;
   };
 
   meta = with lib; {
