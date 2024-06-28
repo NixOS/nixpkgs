@@ -1,9 +1,17 @@
-{ stdenv, protobuf, nanopb }:
+{ lib, stdenv, nanopb }:
 
 stdenv.mkDerivation {
   name = "nanopb-test-message-with-options";
   meta.timeout = 60;
-  src = ./.;
+  src = lib.fileset.toSource {
+    root = ./.;
+    fileset = lib.fileset.unions [
+      ./withoptions.proto
+      ./withoptions.options
+    ];
+  };
+
+  buildInputs = [ nanopb ];
 
   # protoc requires any .proto file to be compiled to reside within it's
   # proto_path. By default the current directory is automatically added to the
@@ -13,7 +21,7 @@ stdenv.mkDerivation {
   buildPhase = ''
     mkdir $out
 
-    ${protobuf}/bin/protoc --plugin=protoc-gen-nanopb=${nanopb}/bin/protoc-gen-nanopb --nanopb_out=$out withoptions.proto
+    protoc --plugin=protoc-gen-nanopb=${nanopb}/bin/protoc-gen-nanopb --nanopb_out=$out withoptions.proto
   '';
 
   doCheck = true;
