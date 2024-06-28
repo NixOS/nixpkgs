@@ -4147,6 +4147,12 @@
     githubId = 11145016;
     name = "J.C.";
   };
+  confusedalex = {
+    email = "alex@confusedalex.dev";
+    github = "ConfusedAlex";
+    githubId = 29258035;
+    name = "Alexander Loll";
+  };
   congee = {
     email = "changshengwu@pm.me";
     matrix = "@congeec:matrix.org";
