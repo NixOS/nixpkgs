@@ -130,7 +130,7 @@ let
         echo >> $out
 
         echo "$config" >> $out
-      ''; # */
+      '';
 
   prefixStringLines = prefix: str:
     concatMapStringsSep "\n" (line: prefix + line) (splitString "\n" str);
@@ -164,14 +164,9 @@ in
     [ ./display-managers/default.nix
       ./window-managers/default.nix
       ./desktop-managers/default.nix
-      (mkRemovedOptionModule [ "services" "xserver" "startGnuPGAgent" ]
-        "See the 16.09 release notes for more information.")
-      (mkRemovedOptionModule
-        [ "services" "xserver" "startDbusSession" ]
-        "The user D-Bus session is now always socket activated and this option can safely be removed.")
-      (mkRemovedOptionModule [ "services" "xserver" "useXFS" ]
-        "Use services.xserver.fontPath instead of useXFS")
-      (mkRemovedOptionModule [ "services" "xserver" "useGlamor" ]
+      (lib.mkRemovedOptionModule [ "services" "xserver" "videoDriver" ]
+        "videoDriver has been removed, use services.xserver.videoDrivers instead.")
+      (lib.mkRemovedOptionModule [ "services" "xserver" "useGlamor" ]
         "Option services.xserver.useGlamor was removed because it is unnecessary. Drivers that uses Glamor will use it automatically.")
       (lib.mkRenamedOptionModuleWith {
         sinceRelease = 2311;
@@ -320,17 +315,6 @@ in
 
           For unfree "nvidia*", the supported GPU lists are on
           https://www.nvidia.com/object/unix.html
-        '';
-      };
-
-      videoDriver = mkOption {
-        type = types.nullOr types.str;
-        default = null;
-        example = "i810";
-        description = ''
-          The name of the video driver for your graphics card.  This
-          option is obsolete; please set the
-          {option}`services.xserver.videoDrivers` instead.
         '';
       };
 
@@ -650,8 +634,6 @@ in
                     || dmConf.startx.enable
                     || config.services.greetd.enable);
       in mkIf (default) (mkDefault true);
-
-    services.xserver.videoDrivers = mkIf (cfg.videoDriver != null) [ cfg.videoDriver ];
 
     # FIXME: somehow check for unknown driver names.
     services.xserver.drivers = flip concatMap cfg.videoDrivers (name:
