@@ -4,7 +4,6 @@
   lib,
   callPackage,
   gradle_7,
-  perl,
   makeBinaryWrapper,
   openjdk17,
   unzip,
@@ -76,69 +75,6 @@ let
     HERE
   '';
 
-  # Adds a gradle step that downloads all the dependencies to the gradle cache.
-  addResolveStep = ''
-        cat >>build.gradle <<HERE
-    task resolveDependencies {
-      doLast {
-        project.rootProject.allprojects.each { subProject ->
-          subProject.buildscript.configurations.each { configuration ->
-            resolveConfiguration(subProject, configuration, "buildscript config \''${configuration.name}")
-          }
-          subProject.configurations.each { configuration ->
-            resolveConfiguration(subProject, configuration, "config \''${configuration.name}")
-          }
-        }
-      }
-    }
-    void resolveConfiguration(subProject, configuration, name) {
-      if (configuration.canBeResolved) {
-        logger.info("Resolving project {} {}", subProject.name, name)
-        configuration.resolve()
-      }
-    }
-    HERE
-  '';
-
-  # fake build to pre-download deps into fixed-output derivation
-  # Taken from mindustry derivation.
-  deps = stdenv.mkDerivation {
-    pname = "${pname}-deps";
-    inherit version src patches;
-
-    postPatch = addResolveStep;
-
-    nativeBuildInputs = [
-      gradle
-      perl
-    ] ++ lib.optional stdenv.isDarwin xcbuild;
-    buildPhase = ''
-      runHook preBuild
-      export HOME="$NIX_BUILD_TOP/home"
-      mkdir -p "$HOME"
-      export JAVA_TOOL_OPTIONS="-Duser.home='$HOME'"
-      export GRADLE_USER_HOME="$HOME/.gradle"
-
-      # First, fetch the static dependencies.
-      gradle --no-daemon --info -Dorg.gradle.java.home=${openjdk17} -I gradle/support/fetchDependencies.gradle init
-
-      # Then, fetch the maven dependencies.
-      gradle --no-daemon --info -Dorg.gradle.java.home=${openjdk17} resolveDependencies
-      runHook postBuild
-    '';
-    # perl code mavenizes pathes (com.squareup.okio/okio/1.13.0/a9283170b7305c8d92d25aff02a6ab7e45d06cbe/okio-1.13.0.jar -> com/squareup/okio/okio/1.13.0/okio-1.13.0.jar)
-    installPhase = ''
-      runHook preInstall
-      find $GRADLE_USER_HOME/caches/modules-2 -type f -regex '.*\.\(jar\|pom\)' \
-        | perl -pe 's#(.*/([^/]+)/([^/]+)/([^/]+)/[0-9a-f]{30,40}/([^/\s]+))$# ($x = $2) =~ tr|\.|/|; "install -Dm444 $1 \$out/maven/$x/$3/$4/$5" #e' \
-        | sh
-      cp -r dependencies $out/dependencies
-      runHook postInstall
-    '';
-    outputHashAlgo = "sha256";
-    outputHashMode = "recursive";
-    outputHash = "sha256-66gL4UFlBUo2JIEOXoF6tFvXtBdEX4b2MeSrV1b6Vg4=";
-  };
 in
 stdenv.mkDerivation (finalAttrs: {
   inherit
@@ -187,19 +123,19 @@ stdenv.mkDerivation (finalAttrs: {
 
   __darwinAllowLocalNetworking = true;
 
-  buildPhase = ''
-    runHook preBuild
-    export HOME="$NIX_BUILD_TOP/home"
-    mkdir -p "$HOME"
-    export JAVA_TOOL_OPTIONS="-Duser.home='$HOME'"
+  mitmCache = gradle.fetchDeps {
+    inherit pname;
+    data = ./deps.json;
+  };
 
-    ln -s ${deps}/dependencies dependencies
+  gradleFlags = [ "-Dorg.gradle.java.home=${openjdk17}" ];
 
-    sed -i "s#mavenLocal()#mavenLocal(); maven { url '${deps}/maven' }#g" build.gradle
-
-    gradle --offline --no-daemon --info -Dorg.gradle.java.home=${openjdk17} buildGhidra
-    runHook postBuild
+  preBuild = ''
+    export JAVA_TOOL_OPTIONS="-Duser.home=$NIX_BUILD_TOP/home"
+    gradle -I gradle/support/fetchDependencies.gradle init
   '';
+
+  gradleBuildTask = "buildGhidra";
 
   installPhase = ''
     runHook preInstall
