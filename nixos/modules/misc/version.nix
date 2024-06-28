@@ -44,6 +44,26 @@ let
   };
   initrdRelease = pkgs.writeText "initrd-release" (attrsToText initrdReleaseContents);
 
+  checkRelease = version:
+    let
+      parts = lib.versions.splitVersion version;
+      isVersion = lib.length parts == 2 && lib.all (p: lib.stringLength p == 2) parts;
+      majorVersion = lib.elemAt parts 0;
+      minorVersion = lib.elemAt parts 1;
+      correctMinorVersion =
+        if lib.versionOlder majorVersion "21"
+        then lib.elem minorVersion [ "03" "09" ]
+        else lib.elem minorVersion [ "05" "11" ];
+      notNewerThanNixpkgs = lib.versionAtLeast trivial.release version;
+    in isVersion && correctMinorVersion && notNewerThanNixpkgs;
+
+  releaseType = types.addCheck
+    (types.strMatching "[[:digit:]]{2}\\.[[:digit:]]{2}")
+    checkRelease // {
+      name = "nixosRelease";
+      description = "NixOS release version, e.g. \"${trivial.release}\"";
+      descriptionClass = "nonRestrictiveClause";
+    };
 in
 {
   imports = [
@@ -70,7 +90,7 @@ in
 
       release = mkOption {
         readOnly = true;
-        type = types.str;
+        type = releaseType;
         default = trivial.release;
         description = "The NixOS release (e.g. `16.03`).";
       };
@@ -151,7 +171,7 @@ in
     };
 
     stateVersion = mkOption {
-      type = types.str;
+      type = releaseType;
       # TODO Remove this and drop the default of the option so people are forced to set it.
       # Doing this also means fixing the comment in nixos/modules/testing/test-instrumentation.nix
       apply = v:
