@@ -120,9 +120,9 @@
     ]
   },
   "mail": {
-    "sha256": "1q0ihgrb6sk0rizs45clqhjpmai2m2zislw6s1694j1zssz4jpqg",
-    "url": "https://github.com/nextcloud-releases/mail/releases/download/v3.7.1/mail-v3.7.1.tar.gz",
-    "version": "3.7.1",
+    "sha256": "0bxbzibzsdqmd751759lg3vwhw9nyy5n37snijd083s1498sfqs5",
+    "url": "https://github.com/nextcloud-releases/mail/releases/download/v3.7.2/mail-v3.7.2.tar.gz",
+    "version": "3.7.2",
     "description": "**💌 A mail app for Nextcloud**\n\n- **🚀 Integration with other Nextcloud apps!** Currently Contacts, Calendar & Files – more to come.\n- **📥 Multiple mail accounts!** Personal and company account? No problem, and a nice unified inbox. Connect any IMAP account.\n- **🔒 Send & receive encrypted mails!** Using the great [Mailvelope](https://mailvelope.com) browser extension.\n- **🙈 We’re not reinventing the wheel!** Based on the great [Horde](https://horde.org) libraries.\n- **📬 Want to host your own mail server?** We do not have to reimplement this as you could set up [Mail-in-a-Box](https://mailinabox.email)!\n\n## Ethical AI Rating\n\n### Priority Inbox\n\nPositive:\n* The software for training and inferencing of this model is open source.\n* The model is created and trained on-premises based on the user's own data.\n* The training data is accessible to the user, making it possible to check or correct for bias or optimise the performance and CO2 usage.\n\n### Thread Summaries (opt-in)\n\n**Rating:** 🟢/🟡/🟠/🔴\n\nThe rating depends on the installed text processing backend. See [the rating overview](https://docs.nextcloud.com/server/latest/admin_manual/ai/index.html) for details.\n\nLearn more about the Nextcloud Ethical AI Rating [in our blog](https://nextcloud.com/blog/nextcloud-ethical-ai-rating/).",
     "homepage": "https://github.com/nextcloud/mail#readme",
     "licenses": [
@@ -150,9 +150,9 @@
     ]
   },
   "music": {
-    "sha256": "04dh6vzriiiqnn02pjbwn9rv0q427njbx558jl504jp91b8qd2wn",
-    "url": "https://github.com/owncloud/music/releases/download/v1.11.0/music_1.11.0_for_nextcloud.tar.gz",
-    "version": "1.11.0",
+    "sha256": "17anhb0zcky4fwmbj1czm536d7k8n03iwsn3dqnyq1b9c4bqyj4m",
+    "url": "https://github.com/owncloud/music/releases/download/v2.0.0/music_2.0.0_for_nextcloud.tar.gz",
+    "version": "2.0.0",
     "description": "A stand-alone music player app and a \"lite\" player for the Files app\n\n- On modern browsers, supports audio types .mp3, .ogg, .m4a, .m4b, .flac, .wav, and more\n- Playlist support with import from m3u, m3u8, and pls files\n- Browse by artists, albums, genres, or folders\n- Gapless play\n- Filter the shown content with the search function\n- Play internet radio and podcast channels\n- Setup Last.fm connection to see background information on artists, albums, and songs\n- Control with media control keys on the keyboard or OS\n- The app can handle libraries consisting of thousands of albums and tens of thousands of songs\n- Includes a server backend compatible with the Subsonic and Ampache protocols, allowing playback and browsing of your library on various external apps e.g. on Android or iPhone",
     "homepage": "https://github.com/owncloud/music",
     "licenses": [
@@ -200,9 +200,9 @@
     ]
   },
   "polls": {
-    "sha256": "1crs6fks9ywywyi3pnji49dxnry5vpcmd1x29y8anyp32ji2a35r",
-    "url": "https://github.com/nextcloud/polls/releases/download/v7.0.3/polls.tar.gz",
-    "version": "7.0.3",
+    "sha256": "1s8ym7msl4cax69kr2piphgapllsva1vjh2xb7g03yb7z1hglhjs",
+    "url": "https://github.com/nextcloud/polls/releases/download/v7.1.2/polls.tar.gz",
+    "version": "7.1.2",
     "description": "A polls app, similar to Doodle/Dudle with the possibility to restrict access (members, certain groups/users, hidden and public).",
     "homepage": "https://github.com/nextcloud/polls",
     "licenses": [
@@ -240,9 +240,9 @@
     ]
   },
   "richdocuments": {
-    "sha256": "1gbgygb7ymsg7gjb29r3caglsrimcrk7yn4kka5f8swv9b1k0qx6",
-    "url": "https://github.com/nextcloud-releases/richdocuments/releases/download/v8.4.2/richdocuments-v8.4.2.tar.gz",
-    "version": "8.4.2",
+    "sha256": "0x1x4x21sknih87gzqzmhxnvi1s1h4j70i4wsn7hnpdvc9j830vs",
+    "url": "https://github.com/nextcloud-releases/richdocuments/releases/download/v8.4.3/richdocuments-v8.4.3.tar.gz",
+    "version": "8.4.3",
     "description": "This application can connect to a Collabora Online (or other) server (WOPI-like Client). Nextcloud is the WOPI Host. Please read the documentation to learn more about that.\n\nYou can also edit your documents off-line with the Collabora Office app from the **[Android](https://play.google.com/store/apps/details?id=com.collabora.libreoffice)** and **[iOS](https://apps.apple.com/us/app/collabora-office/id1440482071)** store.",
     "homepage": "https://collaboraoffice.com/",
     "licenses": [
@@ -250,9 +250,9 @@
     ]
   },
   "spreed": {
-    "sha256": "106y9mbnwga7pfhydrd8rjpcr89ir3fjrdn81xykyzqwrq29fxgs",
-    "url": "https://github.com/nextcloud-releases/spreed/releases/download/v19.0.1/spreed-v19.0.1.tar.gz",
-    "version": "19.0.1",
+    "sha256": "1ydd156cjhjydbjmzjm0bq0garxfgbppgd7q6bfz04y10yjyjkah",
+    "url": "https://github.com/nextcloud-releases/spreed/releases/download/v19.0.3/spreed-v19.0.3.tar.gz",
+    "version": "19.0.3",
     "description": "Chat, video & audio-conferencing using WebRTC\n\n* 💬 **Chat** Nextcloud Talk comes with a simple text chat, allowing you to share or upload files from your Nextcloud Files app or local device and mention other participants.\n* 👥 **Private, group, public and password protected calls!** Invite someone, a whole group or send a public link to invite to a call.\n* 🌐 **Federated chats** Chat with other Nextcloud users on their servers\n* 💻 **Screen sharing!** Share your screen with the participants of your call.\n* 🚀 **Integration with other Nextcloud apps** like Files, Calendar, User status, Dashboard, Flow, Maps, Smart picker, Contacts, Deck, and many more.\n* 🌉 **Sync with other chat solutions** With [Matterbridge](https://github.com/42wim/matterbridge/) being integrated in Talk, you can easily sync a lot of other chat solutions to Nextcloud Talk and vice-versa.",
     "homepage": "https://github.com/nextcloud/spreed",
     "licenses": [
@@ -300,9 +300,9 @@
     ]
   },
   "user_oidc": {
-    "sha256": "0nl716c8jx6hhpkxjdpbldlnqhh6jsm6xx1zmcmvkzkdr9pjkggj",
-    "url": "https://github.com/nextcloud-releases/user_oidc/releases/download/v5.0.2/user_oidc-v5.0.2.tar.gz",
-    "version": "5.0.2",
+    "sha256": "1qarpmwk66mz6mvif0cc4jb7wi4yv76flzwhyvmzxk0ahafpi8x1",
+    "url": "https://github.com/nextcloud-releases/user_oidc/releases/download/v5.0.3/user_oidc-v5.0.3.tar.gz",
+    "version": "5.0.3",
     "description": "Allows flexible configuration of an OIDC server as Nextcloud login user backend.",
     "homepage": "https://github.com/nextcloud/user_oidc",
     "licenses": [
