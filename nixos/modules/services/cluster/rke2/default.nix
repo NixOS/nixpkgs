@@ -5,7 +5,9 @@ let
   cfg = config.services.rke2;
 in
 {
-  imports = [ ];
+  imports = [
+    (mkRenamedOptionModule [ "services" "rke2" "configPath" ] [ "services" "rke2" "configFile" ])
+  ];
 
   options.services.rke2 = {
     enable = mkEnableOption "rke2";
@@ -296,15 +298,17 @@ in
           ++ (optional cfg.cisHardening "--profile=${if cfg.package.version >= "1.25" then "cis-1.23" else "cis-1.6"}")
           ++ cfg.extraFlags
         )}";
-        ExecStopPost = let
-          killProcess = pkgs.writeScript "kill-process.sh" ''
-            #! ${pkgs.runtimeShell}
-            /run/current-system/systemd/bin/systemd-cgls /system.slice/$1 | \
-            ${pkgs.gnugrep}/bin/grep -Eo '[0-9]+ (containerd|kubelet)' | \
-            ${pkgs.gawk}/bin/awk '{print $1}' | \
-            ${pkgs.findutils}/bin/xargs -r ${pkgs.util-linux}/bin/kill
-          '';
-        in "-${killProcess} %n";
+        ExecStopPost =
+          let
+            killProcess = pkgs.writeScript "kill-process.sh" ''
+              #! ${pkgs.runtimeShell}
+              /run/current-system/systemd/bin/systemd-cgls /system.slice/$1 | \
+              ${pkgs.gnugrep}/bin/grep -Eo '[0-9]+ (containerd|kubelet)' | \
+              ${pkgs.gawk}/bin/awk '{print $1}' | \
+              ${pkgs.findutils}/bin/xargs -r ${pkgs.util-linux}/bin/kill
+            '';
+          in
+          "-${killProcess} %n";
       };
     };
   };
