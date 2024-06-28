@@ -227,17 +227,13 @@ in lib.makeExtensible (self: ({
   };
 
   nix_2_18 = common {
-    version = "2.18.1";
-    hash = "sha256-WNmifcTsN9aG1ONkv+l2BC4sHZZxtNKy0keqBHXXQ7w=";
-    patches = [
-      patch-rapidcheck-shared
-      ./patches/2_18/CVE-2024-27297.patch
-    ];
+    version = "2.18.4";
+    hash = "sha256-tebjp83ABKrBW3d/6n/Irr1+xhtw8qIkqHZHJOoJaLk=";
   };
 
   nix_2_19 = common {
-    version = "2.19.2";
-    hash = "sha256-iA8DqS+W2fWTfR+nNJSvMHqQ+4NpYMRT3b+2zS6JTvE=";
+    version = "2.19.5";
+    hash = "sha256-n4efeDi8KtLgkAKl5kBQ4svmdxfnRp8KrSZGrlFsr/E=";
   };
 
   # The minimum Nix version supported by Nixpkgs
