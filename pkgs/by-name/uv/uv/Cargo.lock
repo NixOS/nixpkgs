@@ -4427,7 +4427,7 @@ checksum = "a183cf7feeba97b4dd1c0d46788634f6221d87fa961b305bed08c851829efcc0"
 
 [[package]]
 name = "uv"
-version = "0.2.15"
+version = "0.2.17"
 dependencies = [
  "anstream",
  "anyhow",
@@ -4488,6 +4488,7 @@ dependencies = [
  "uv-requirements",
  "uv-resolver",
  "uv-settings",
+ "uv-tool",
  "uv-toolchain",
  "uv-types",
  "uv-virtualenv",
@@ -4829,6 +4830,7 @@ dependencies = [
  "dashmap",
  "fs-err",
  "reqwest",
+ "reqwest-middleware",
  "thiserror",
  "tokio",
  "tracing",
@@ -4998,6 +5000,7 @@ dependencies = [
  "uv-normalize",
  "uv-resolver",
  "uv-toolchain",
+ "uv-warnings",
 ]
 
 [[package]]
@@ -5007,6 +5010,27 @@ dependencies = [
  "directories",
  "fs-err",
  "tempfile",
+]
+
+[[package]]
+name = "uv-tool"
+version = "0.0.1"
+dependencies = [
+ "dirs-sys",
+ "fs-err",
+ "install-wheel-rs",
+ "pep440_rs",
+ "pep508_rs",
+ "pypi-types",
+ "serde",
+ "thiserror",
+ "toml",
+ "tracing",
+ "uv-cache",
+ "uv-fs",
+ "uv-state",
+ "uv-toolchain",
+ "uv-virtualenv",
 ]
 
 [[package]]
@@ -5077,7 +5101,7 @@ dependencies = [
 
 [[package]]
 name = "uv-version"
-version = "0.2.15"
+version = "0.2.17"
 
 [[package]]
 name = "uv-virtualenv"
