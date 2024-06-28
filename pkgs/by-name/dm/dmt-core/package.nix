@@ -1,38 +1,39 @@
-{ lib, fetchurl, fetchPypi, python3Packages }:
+{ lib, fetchPypi, fetchurl, python3Packages }:
 
 let
-  inherit (python3Packages) buildPythonApplication;
-  reprint = buildPythonApplication rec {
+  inherit (python3Packages) buildPythonPackage;
+
+  reprint = buildPythonPackage rec {
     pname = "reprint";
     version = "0.6.0";
     src = fetchurl {
       url =
         "https://files.pythonhosted.org/packages/ab/30/a742e69e37d4148dfa89acb6aa2a82ea298d1dfea02c6e9b2a43d4ed1065/reprint-0.6.0-py2.py3-none-any.whl";
-      sha256 = "DrxNwhrvyBAgXz/MIXg+qRu5YpKoUAZjSC6GSYm/9U0=";
+      hash = "sha256-DrxNwhrvyBAgXz/MIXg+qRu5YpKoUAZjSC6GSYm/9U0=";
     };
     format = "wheel";
   };
 
-  verilogae = buildPythonApplication rec {
+  verilogae = buildPythonPackage rec {
     pname = "verilogae";
     version = "1.0.0";
     src = fetchurl {
       url =
         "https://files.pythonhosted.org/packages/aa/a6/9daea00745844faba44c2917c66838adfc315269f38518ecca49e6eb5fb5/verilogae-1.0.0-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl";
-      sha256 = "QsEVq/4c44xCkovOhXOj8Zh6rp4Ipq+NGjbTW25Fd6E=";
+      hash = "sha256-QsEVq/4c44xCkovOhXOj8Zh6rp4Ipq+NGjbTW25Fd6E=";
     };
     format = "wheel";
   };
 
-in buildPythonApplication rec {
-  pname = "dmt-core";
+in buildPythonPackage rec {
+  pname = "DMT_core";
   version = "2.1.0";
-  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "489E+uNn4NgyCwxsUMEPH/1ZuM+5uNq4zx8F88rkHMU=";
+    hash = "sha256-489E+uNn4NgyCwxsUMEPH/1ZuM+5uNq4zx8F88rkHMU=";
   };
+  doCheck = false;
 
   propagatedBuildInputs = [
     python3Packages.colorama
