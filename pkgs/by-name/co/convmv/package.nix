@@ -53,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
       gpl2Only
       gpl3Only
     ];
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ al3xtjames ];
     mainProgram = "convmv";
     platforms = platforms.unix;
   };
