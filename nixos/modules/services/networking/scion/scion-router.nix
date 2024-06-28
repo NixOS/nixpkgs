@@ -42,7 +42,7 @@ in
         ExecStart = "${pkgs.scion}/bin/scion-router --config ${configFile}";
         Restart = "on-failure";
         DynamicUser = true;
-        StateDirectory = "scion-router";
+        RuntimeDirectory = "scion-router";
       };
     };
   };
