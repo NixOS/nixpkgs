@@ -377,8 +377,8 @@ let
             { x86_64-linux = "sha256-VGNMf5/DgXbgsu1w5J1Pmrukw+7UO31BNU+crKVsX5k="; }
           else
             {
-              x86_64-linux = "sha256-uOoAyMBLHPX6jzdN43b5wZV5eW0yI8sCDD7BSX2h4oQ=";
-              aarch64-linux = "sha256-+SnGKY9LIT1Qhu/x6Uh7sHRaAEjlc//qyKj1m4t16PA=";
+              x86_64-linux = "sha256-R5Bm+0GYN1zJ1aEUBW76907MxYKAIawHHJoIb1RdsKE=";
+              aarch64-linux = "sha256-P5JEmJljN1DeRA0dNkzyosKzRnJH+5SD2aWdV5JsoiY=";
             }
         ).${effectiveStdenv.system} or (throw "jaxlib: unsupported system: ${effectiveStdenv.system}");
     };
