@@ -30310,15 +30310,6 @@ let
         sha512 = "5Fytz/IraMjqpwfd34ke28PTVMjZjJG2MPn5t7OE4eUCUNf8BAa7b5WUS9/Qvr6mwOQS7Mk6vdsMno5he+T8Xw==";
       };
     };
-    "ignore-by-default-1.0.1" = {
-      name = "ignore-by-default";
-      packageName = "ignore-by-default";
-      version = "1.0.1";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/ignore-by-default/-/ignore-by-default-1.0.1.tgz";
-        sha512 = "Ius2VYcGNk7T90CppJqcIkS5ooHUZyIQK+ClZfMfMNFEF9VSE73Fq+906u/CWu92x4gzZMWOwfFYckPObzdEbA==";
-      };
-    };
     "ignore-walk-3.0.4" = {
       name = "ignore-walk";
       packageName = "ignore-walk";
@@ -44874,15 +44865,6 @@ let
         sha512 = "E/ZsdU4HLs/68gYzgGTkMicWTLPdAftJLfJFlLUAAKZGkStNU72sZjT66SnMDVOfOWY/YAoiD7Jxa9iHvngcag==";
       };
     };
-    "pstree.remy-1.1.8" = {
-      name = "pstree.remy";
-      packageName = "pstree.remy";
-      version = "1.1.8";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/pstree.remy/-/pstree.remy-1.1.8.tgz";
-        sha512 = "77DZwxQmxKnu3aR542U+X8FypNzbfJ+C5XQDk3uWjWxn6151aIMGthWYRXTqT1E5oJvg+ljaa2OJi+VfvCOQ8w==";
-      };
-    };
     "public-encrypt-4.0.3" = {
       name = "public-encrypt";
       packageName = "public-encrypt";
@@ -49257,15 +49239,6 @@ let
         sha512 = "JA//kQgZtbuY83m+xT+tXJkmJncGMTFT+C+g2h2R9uxkYIrE2yy9sgmcLhCnw57/WSD+Eh3J97FPEDFnbXnDUg==";
       };
     };
-    "simple-update-notifier-2.0.0" = {
-      name = "simple-update-notifier";
-      packageName = "simple-update-notifier";
-      version = "2.0.0";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/simple-update-notifier/-/simple-update-notifier-2.0.0.tgz";
-        sha512 = "a2B9Y0KlNXl9u/vsW6sTIu9vGEpfKu2wRV6l1H3XEas/0gUIzGzBoP/IouTcUQbm9JWZLH3COxyn03TYlFax6w==";
-      };
-    };
     "simple-websocket-4.3.1" = {
       name = "simple-websocket";
       packageName = "simple-websocket";
@@ -52732,15 +52705,6 @@ let
         sha512 = "sf4i37nQ2LBx4m3wB74y+ubopq6W/dIzXg0FDGjsYnZHVa1Da8FH853wlL2gtUhg+xJXjfk3kUZS3BRoQeoQBQ==";
       };
     };
-    "touch-3.1.1" = {
-      name = "touch";
-      packageName = "touch";
-      version = "3.1.1";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/touch/-/touch-3.1.1.tgz";
-        sha512 = "r0eojU4bI8MnHr8c5bNo7lJDdI2qXlWWJk6a9EAFG7vbhTjElYhBVS3/miuE0uOuoLdb8Mc/rVfsmm6eo5o9GA==";
-      };
-    };
     "tough-cookie-2.4.3" = {
       name = "tough-cookie";
       packageName = "tough-cookie";
@@ -53864,15 +53828,6 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/undeclared-identifiers/-/undeclared-identifiers-1.1.3.tgz";
         sha512 = "pJOW4nxjlmfwKApE4zvxLScM/njmwj/DiUBv7EabwE4O8kRUy+HIwxQtZLBPll/jx1LJyBcqNfB3/cpv9EZwOw==";
-      };
-    };
-    "undefsafe-2.0.5" = {
-      name = "undefsafe";
-      packageName = "undefsafe";
-      version = "2.0.5";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/undefsafe/-/undefsafe-2.0.5.tgz";
-        sha512 = "WxONCrssBM8TSPRqN5EmsjVrsv4A8X12J4ArBiiayv3DyyG3ZlIg6yysuuSYdZsVz3TKcTg2fd//Ujd4CHV1iA==";
       };
     };
     "underscore-1.13.6" = {
@@ -82618,54 +82573,6 @@ in
     meta = {
       description = "Generate Nix expressions to build NPM packages";
       homepage = "https://github.com/svanderburg/node2nix";
-      license = "MIT";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
-  nodemon = nodeEnv.buildNodePackage {
-    name = "nodemon";
-    packageName = "nodemon";
-    version = "3.1.3";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/nodemon/-/nodemon-3.1.3.tgz";
-      sha512 = "m4Vqs+APdKzDFpuaL9F9EVOF85+h070FnkHVEoU4+rmT6Vw0bmNl7s61VEkY/cJkL7RCv1p4urnUDUMrS5rk2w==";
-    };
-    dependencies = [
-      sources."anymatch-3.1.3"
-      sources."balanced-match-1.0.2"
-      sources."binary-extensions-2.3.0"
-      sources."brace-expansion-1.1.11"
-      sources."braces-3.0.3"
-      sources."chokidar-3.6.0"
-      sources."concat-map-0.0.1"
-      sources."debug-4.3.5"
-      sources."fill-range-7.1.1"
-      sources."glob-parent-5.1.2"
-      sources."has-flag-3.0.0"
-      sources."ignore-by-default-1.0.1"
-      sources."is-binary-path-2.1.0"
-      sources."is-extglob-2.1.1"
-      sources."is-glob-4.0.3"
-      sources."is-number-7.0.0"
-      sources."minimatch-3.1.2"
-      sources."ms-2.1.2"
-      sources."normalize-path-3.0.0"
-      sources."picomatch-2.3.1"
-      sources."pstree.remy-1.1.8"
-      sources."readdirp-3.6.0"
-      sources."semver-7.6.2"
-      sources."simple-update-notifier-2.0.0"
-      sources."supports-color-5.5.0"
-      sources."to-regex-range-5.0.1"
-      sources."touch-3.1.1"
-      sources."undefsafe-2.0.5"
-    ];
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "Simple monitor script for use during development of a Node.js app.";
-      homepage = "https://nodemon.io";
       license = "MIT";
     };
     production = true;
