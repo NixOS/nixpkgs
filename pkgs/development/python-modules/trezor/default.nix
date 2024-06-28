@@ -25,14 +25,14 @@
 
 buildPythonPackage rec {
   pname = "trezor";
-  version = "0.13.8";
+  version = "0.13.9";
   format = "setuptools";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Y01O3fNWAyV8MhYY2FSMajWyc4Rle2XjsL261jWlfP8=";
+    hash = "sha256-lFC9e7nSPl4zo8nljhjwWLRMnZw0ymZLSYGnlaqfse8=";
   };
 
   nativeBuildInputs = [ installShellFiles ];
