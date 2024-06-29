@@ -22046,15 +22046,6 @@ let
         sha512 = "Cuia7IBvmSanM+7ZmKYtP9hq+Du7n7mv2cpCt8GiEIkUDni0ecSlVCFJUL6HWwGzqLX03uA49xVOZOjwnabWmQ==";
       };
     };
-    "discontinuous-range-1.0.0" = {
-      name = "discontinuous-range";
-      packageName = "discontinuous-range";
-      version = "1.0.0";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/discontinuous-range/-/discontinuous-range-1.0.0.tgz";
-        sha512 = "c68LpLbO+7kP/b1Hr1qs8/BJ09F5khZGTxqxZuhzxpmwJKOgRFHJWIb9/KmqnqHhLdO55aOxFH/EGBvUQbL/RQ==";
-      };
-    };
     "dlnacasts-0.1.0" = {
       name = "dlnacasts";
       packageName = "dlnacasts";
@@ -37853,15 +37844,6 @@ let
         sha512 = "HIWmqA86KcmCAhnMAN0wuDOARV/525R2+lOLotuGFzn4HO+FH+/645z2wx0Dt3iDv6/p61SIvKnDstISainhLQ==";
       };
     };
-    "moo-0.5.2" = {
-      name = "moo";
-      packageName = "moo";
-      version = "0.5.2";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/moo/-/moo-0.5.2.tgz";
-        sha512 = "iSAJLHYKnX41mKcJKjqvnAN9sf0LMDTXDEvFv+ffuRR9a1MIuXLjMNL6EsnDHSkKLTWNqQQ5uo61P4EbU4NU+Q==";
-      };
-    };
     "morgan-1.10.0" = {
       name = "morgan";
       packageName = "morgan";
@@ -38301,15 +38283,6 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/ndarray-pack/-/ndarray-pack-1.2.1.tgz";
         sha512 = "51cECUJMT0rUZNQa09EoKsnFeDL4x2dHRT0VR5U2H5ZgEcm95ZDWcMA5JShroXjHOejmAD/fg8+H+OvUnVXz2g==";
-      };
-    };
-    "nearley-2.20.1" = {
-      name = "nearley";
-      packageName = "nearley";
-      version = "2.20.1";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/nearley/-/nearley-2.20.1.tgz";
-        sha512 = "+Mc8UaAebFzgV+KpI5n7DasuuQCHA89dmwm7JXw3TV43ukfNQ9DnBH3Mdb2g/I4Fdxc26pwimBWvjIw0UAILSQ==";
       };
     };
     "nedb-1.8.0" = {
@@ -44136,15 +44109,6 @@ let
         sha512 = "1s5BQAy643nfjtnZZrH8V2fhj3snKrKkwp8cDaf2KfjW4/auwB+qffSEsvs1/iOuKiOr5vK7R0HQ0dQ1zituiQ==";
       };
     };
-    "railroad-diagrams-1.0.0" = {
-      name = "railroad-diagrams";
-      packageName = "railroad-diagrams";
-      version = "1.0.0";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/railroad-diagrams/-/railroad-diagrams-1.0.0.tgz";
-        sha512 = "cz93DjNeLY0idrCNOH6PviZGRN9GJhsdm9hpn1YCS879fj4W+x5IFJhhkRZcwVgMmFF7R82UA/7Oh+R8lLZg6A==";
-      };
-    };
     "ramda-0.27.2" = {
       name = "ramda";
       packageName = "ramda";
@@ -44152,15 +44116,6 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/ramda/-/ramda-0.27.2.tgz";
         sha512 = "SbiLPU40JuJniHexQSAgad32hfwd+DRUdwF2PlVuI5RZD0/vahUco7R8vD86J/tcEKKF9vZrUVwgtmGCqlCKyA==";
-      };
-    };
-    "randexp-0.4.6" = {
-      name = "randexp";
-      packageName = "randexp";
-      version = "0.4.6";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/randexp/-/randexp-0.4.6.tgz";
-        sha512 = "80WNmd9DA0tmZrw9qQa62GPPWfuXJknrmVmLcxvq4uZBdYqb1wYoKTmnlGUchvVWe0XiLupYkBoXVOxz3C8DYQ==";
       };
     };
     "random-access-file-2.2.1" = {
@@ -84039,35 +83994,6 @@ in
     meta = {
       description = "Test your internet connection speed and ping using speedtest.net from the CLI";
       homepage = "https://github.com/sindresorhus/speed-test#readme";
-      license = "MIT";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
-  sql-formatter = nodeEnv.buildNodePackage {
-    name = "sql-formatter";
-    packageName = "sql-formatter";
-    version = "15.3.2";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/sql-formatter/-/sql-formatter-15.3.2.tgz";
-      sha512 = "pNxSMf5DtwhpZ8gUcOGCGZIWtCcyAUx9oLgAtlO4ag7DvlfnETL0BGqXaISc84pNrXvTWmt8Wal1FWKxdTsL3Q==";
-    };
-    dependencies = [
-      sources."argparse-2.0.1"
-      sources."commander-2.20.3"
-      sources."discontinuous-range-1.0.0"
-      sources."get-stdin-8.0.0"
-      sources."moo-0.5.2"
-      sources."nearley-2.20.1"
-      sources."railroad-diagrams-1.0.0"
-      sources."randexp-0.4.6"
-      sources."ret-0.1.15"
-    ];
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "Format whitespace in a SQL query to make it more readable";
-      homepage = "https://github.com/sql-formatter-org/sql-formatter#readme";
       license = "MIT";
     };
     production = true;
