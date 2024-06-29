@@ -77,13 +77,13 @@ stdenv.mkDerivation rec {
     categories = [ "Application" "Game" ];
   })];
 
-  meta = with lib; {
+  meta = {
     description = "A decompilation of Supaplex in C and SDL";
     homepage = "https://github.com/sergiou87/open-supaplex";
     changelog = "https://github.com/sergiou87/open-supaplex/blob/master/changelog/v${version}.txt";
-    license = licenses.gpl3Only;
-    maintainers = [ ];
-    platforms = platforms.linux; # Many more are supported upstream, but only linux is tested.
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ matteopacini ];
+    platforms = lib.platforms.linux; # Many more are supported upstream, but only linux is tested.
     mainProgram = "opensupaplex";
   };
 }
