@@ -123,6 +123,9 @@ let
       # Allows this host to act as a DHCP4 client without first having to use APIPA
       iptables -t mangle -A nixos-fw-rpfilter -p udp --sport 67 --dport 68 -j RETURN
 
+      # Allows decrypted packets from an IPsec VPN
+      ip46tables -t mangle -A nixos-fw-rpfilter -m policy --dir in --pol ipsec -j RETURN
+
       # Allows this host to act as a DHCPv4 server
       iptables -t mangle -A nixos-fw-rpfilter -s 0.0.0.0 -d 255.255.255.255 -p udp --sport 68 --dport 67 -j RETURN
 
