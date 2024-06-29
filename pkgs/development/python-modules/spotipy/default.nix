@@ -14,7 +14,7 @@ buildPythonPackage rec {
   version = "2.24.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
@@ -24,7 +24,6 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     redis
     requests
-    six
     urllib3
   ];
 
