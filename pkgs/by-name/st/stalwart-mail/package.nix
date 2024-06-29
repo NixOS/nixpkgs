@@ -1,6 +1,7 @@
 { lib
 , rustPlatform
 , fetchFromGitHub
+, fetchpatch
 , pkg-config
 , protobuf
 , bzip2
@@ -22,7 +23,7 @@ let
   # See upstream issue for rocksdb 9.X support
   # https://github.com/stalwartlabs/mail-server/issues/407
   rocksdb = rocksdb_8_11;
-  version = "0.8.1";
+  version = "0.8.2";
 in
 rustPlatform.buildRustPackage {
   pname = "stalwart-mail";
@@ -32,11 +33,21 @@ rustPlatform.buildRustPackage {
     owner = "stalwartlabs";
     repo = "mail-server";
     rev = "v${version}";
-    hash = "sha256-al2+/+HPbjJ30rju2ih/yFZgmTdO2bQ6jDv+dtoIqsc=";
+    hash = "sha256-JzbfQ/WZrHGdG9vv9ngfTxqwBxS+ZezIIp8yUJ2VplE=";
     fetchSubmodules = true;
   };
 
-  cargoHash = "sha256-ek9vPo/M4peDcDkfzjXoKlJ+gFZUiREwNflOKEJNaWQ=";
+  cargoHash = "sha256-w40mksUVMBXSr/LBXj0uyZ/VbvJFMFJaQN5Kx6sLm5I=";
+
+  patches = [
+    # Remove "PermissionsStartOnly" from systemd service files,
+    # which is deprecated and conflicts with our module's ExecPreStart.
+    # Upstream PR: https://github.com/stalwartlabs/mail-server/pull/528
+    (fetchpatch {
+      url = "https://github.com/stalwartlabs/mail-server/pull/528/commits/6e292b3d7994441e58e367b87967c9a277bce490.patch";
+      hash = "sha256-j/Li4bYNE7IppxG3FGfljra70/rHyhRvDgOkZOlhMHY=";
+    })
+  ];
 
   nativeBuildInputs = [
     pkg-config
@@ -63,6 +74,10 @@ rustPlatform.buildRustPackage {
   };
 
   postInstall = ''
+    mkdir -p $out/etc/stalwart
+    cp resources/config/spamfilter.toml $out/etc/stalwart/spamfilter.toml
+    cp -r resources/config/spamfilter $out/etc/stalwart/
+
     mkdir -p $out/lib/systemd/system
 
     substitute resources/systemd/stalwart-mail.service $out/lib/systemd/system/stalwart-mail.service \

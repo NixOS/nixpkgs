@@ -329,7 +329,6 @@ in
 
             hostname = mkOption {
               type = nullOr str;
-              default = null;
               example = "keycloak.example.com";
               description = ''
                 The hostname part of the public URL used as base for
@@ -340,16 +339,13 @@ in
               '';
             };
 
-            hostname-strict-backchannel = mkOption {
+            hostname-backchannel-dynamic = mkOption {
               type = bool;
               default = false;
               example = true;
               description = ''
-                Whether Keycloak should force all requests to go
-                through the frontend URL. By default, Keycloak allows
-                backend requests to instead use its local hostname or
-                IP address and may also advertise it to clients
-                through its OpenID Connect Discovery endpoint.
+                Enables dynamic resolving of backchannel URLs,
+                including hostname, scheme, port and context path.
 
                 See <https://www.keycloak.org/server/hostname>
                 for more information about hostname configuration.
@@ -482,12 +478,24 @@ in
             message = "Setting up a local PostgreSQL db for Keycloak requires `standard_conforming_strings` turned on to work reliably";
           }
           {
-            assertion = cfg.settings.hostname != null || cfg.settings.hostname-url or null != null;
+            assertion = cfg.settings.hostname != null || ! cfg.settings.hostname-strict or true;
             message = "Setting the Keycloak hostname is required, see `services.keycloak.settings.hostname`";
           }
           {
-            assertion = !(cfg.settings.hostname != null && cfg.settings.hostname-url or null != null);
-            message = "`services.keycloak.settings.hostname` and `services.keycloak.settings.hostname-url` are mutually exclusive";
+            assertion = cfg.settings.hostname-url or null == null;
+            message = ''
+              The option `services.keycloak.settings.hostname-url' has been removed.
+              Set `services.keycloak.settings.hostname' instead.
+              See [New Hostname options](https://www.keycloak.org/docs/25.0.0/upgrading/#new-hostname-options) for details.
+            '';
+          }
+          {
+            assertion = cfg.settings.hostname-strict-backchannel or null == null;
+            message = ''
+              The option `services.keycloak.settings.hostname-strict-backchannel' has been removed.
+              Set `services.keycloak.settings.hostname-backchannel-dynamic' instead.
+              See [New Hostname options](https://www.keycloak.org/docs/25.0.0/upgrading/#new-hostname-options) for details.
+            '';
           }
         ];
 

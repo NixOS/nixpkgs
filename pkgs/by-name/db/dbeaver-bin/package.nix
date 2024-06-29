@@ -12,16 +12,7 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "dbeaver-bin";
-  version = "24.0.5";
-
-  nativeBuildInputs =
-    [ makeWrapper ]
-    ++ lib.optionals (!stdenvNoCC.isDarwin) [
-      gnused
-      wrapGAppsHook3
-      autoPatchelfHook
-    ]
-    ++ lib.optionals stdenvNoCC.isDarwin [ undmg ];
+  version = "24.1.1";
 
   src =
     let
@@ -34,10 +25,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
         aarch64-darwin = "macos-aarch64.dmg";
       };
       hash = selectSystem {
-        x86_64-linux = "sha256-q6VIr55hXn47kZrE2i6McEOfp2FBOvwB0CcUnRHFMZs=";
-        aarch64-linux = "sha256-Xn3X1C31UALBAsZIGyMWdp0HNhJEm5N+7Go7nMs8W64=";
-        x86_64-darwin = "sha256-XOQaMNQHOC4dVJXIUn4l4Oa7Gohbq+JMDFusIy/U+tc=";
-        aarch64-darwin = "sha256-554ea5p1MR4XIHtSeByd4S/Ke4cKRZbITTNRRDoRqPI=";
+        x86_64-linux = "sha256-33W7uDxzfAQ5gH10sI4IbzmHl8SxQLYj88C/BGOoRks=";
+        aarch64-linux = "sha256-ZAr9vymCdLFAYiXEXtT+97x1tY5mrbr2N6INj4Bp4Nk=";
+        x86_64-darwin = "sha256-dgOtufARRVmwtXl+csmr2sMBzDvq+5XRotOQrTz8jys=";
+        aarch64-darwin = "sha256-R5TQJq+sRUFHH8EuaXgeSJUOnhepbCJLTUmO0FMOgzE=";
       };
     in
     fetchurl {
@@ -45,15 +36,25 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       inherit hash;
     };
 
+  sourceRoot = lib.optional stdenvNoCC.isDarwin "dbeaver.app";
+
+  nativeBuildInputs =
+    [ makeWrapper ]
+    ++ lib.optionals (!stdenvNoCC.isDarwin) [
+      gnused
+      wrapGAppsHook3
+      autoPatchelfHook
+    ]
+    ++ lib.optionals stdenvNoCC.isDarwin [ undmg ];
+
   dontConfigure = true;
   dontBuild = true;
-
-  sourceRoot = lib.optional stdenvNoCC.isDarwin "dbeaver.app";
 
   installPhase =
     if !stdenvNoCC.isDarwin then
       ''
         runHook preInstall
+
         mkdir -p $out/opt/dbeaver $out/bin
         cp -r * $out/opt/dbeaver
         makeWrapper $out/opt/dbeaver/dbeaver $out/bin/dbeaver \

@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     description = "GUI for trace-cmd which is an interface for the Linux kernel ftrace subsystem";
     homepage    = "https://kernelshark.org/";
-    license     = licenses.gpl2;
+    license     = licenses.gpl2Only;
     platforms   = platforms.linux;
     maintainers = with maintainers; [ basvandijk ];
   };

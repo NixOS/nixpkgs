@@ -201,14 +201,10 @@ in
               message   = "If samba.nsswins is enabled, then samba.enableWinbindd must also be enabled";
             }
           ];
-        # Always provide a smb.conf to shut up programs like smbclient and smbspool.
-        environment.etc."samba/smb.conf".source = mkOptionDefault (
-          if cfg.enable then configFile
-          else pkgs.writeText "smb-dummy.conf" "# Samba is disabled."
-        );
       }
 
       (mkIf cfg.enable {
+        environment.etc."samba/smb.conf".source = configFile;
 
         system.nssModules = optional cfg.nsswins samba;
         system.nssDatabases.hosts = optional cfg.nsswins "wins";

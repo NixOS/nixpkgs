@@ -1,31 +1,16 @@
 { lib, stdenv, fetchFromGitHub, openssl, nss, nspr, libkrb5, gmp, zlib, libpcap, re2
-, gcc, python3Packages, perl, perlPackages, makeWrapper, fetchpatch
-}:
+, gcc, python3Packages, perl, perlPackages, makeWrapper, }:
 
 stdenv.mkDerivation rec {
   pname = "john";
-  version = "1.9.0-jumbo-1";
+  version = "rolling-2404";
 
   src = fetchFromGitHub {
     owner = "openwall";
-    repo = pname;
-    rev = "1.9.0-Jumbo-1";
-    sha256 = "sha256-O1iPh5QTMjZ78sKvGbvSpaHFbBuVc1z49UKTbMa24Rs=";
+    repo = "john";
+    rev = "f9fedd238b0b1d69181c1fef033b85c787e96e57";
+    hash = "sha256-zvoN+8Sx6qpVg2JeRLOIH1ehfl3tFTv7r5wQZ44Qsbc=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "fix-gcc-11-struct-allignment-incompatibility.patch";
-      url = "https://github.com/openwall/john/commit/154ee1156d62dd207aff0052b04c61796a1fde3b.patch";
-      sha256 = "sha256-3rfS2tu/TF+KW2MQiR+bh4w/FVECciTooDQNTHNw31A=";
-    })
-    (fetchpatch {
-      name = "improve-apple-clang-pseudo-intrinsics-portability.patch";
-      url = "https://github.com/openwall/john/commit/c9825e688d1fb9fdd8942ceb0a6b4457b0f9f9b4.patch";
-      excludes = [ "doc/*" ];
-      sha256 = "sha256-hgoiz7IgR4f66fMP7bV1F8knJttY8g2Hxyk3QfkTu+g=";
-    })
-  ];
 
   postPatch = ''
     sed -ri -e '
@@ -85,7 +70,7 @@ stdenv.mkDerivation rec {
     description = "John the Ripper password cracker";
     license = licenses.gpl2Plus;
     homepage = "https://github.com/openwall/john/";
-    maintainers = with maintainers; [ offline matthewbauer ];
+    maintainers = with maintainers; [ offline matthewbauer cherrykitten ];
     platforms = platforms.unix;
   };
 }

@@ -23,6 +23,7 @@ python3.pkgs.buildPythonApplication rec {
     "azure-mgmt-containerservice"
     "azure-mgmt-network"
     "azure-mgmt-security"
+    "azure-mgmt-storage"
     "azure-storage-blob"
     "boto3"
     "botocore"

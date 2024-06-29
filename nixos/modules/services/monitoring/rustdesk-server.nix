@@ -4,7 +4,7 @@ let
   UDPPorts = [21116];
 in {
   options.services.rustdesk-server = with lib; with types; {
-    enable = mkEnableOption "RustDesk, a remote access and remote control software, allowing maintenance of computers and other devices.";
+    enable = mkEnableOption "RustDesk, a remote access and remote control software, allowing maintenance of computers and other devices";
 
     package = mkPackageOption pkgs "rustdesk-server" {};
 

@@ -60,7 +60,6 @@ let
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [
       arianvp
-      kiwi
       toonn
     ];
     platforms = platforms.darwin ++ [

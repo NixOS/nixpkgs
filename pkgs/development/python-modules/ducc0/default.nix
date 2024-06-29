@@ -1,5 +1,4 @@
 {
-  stdenv,
   lib,
   buildPythonPackage,
   fetchFromGitLab,
@@ -36,7 +35,6 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "ducc0" ];
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
     homepage = "https://gitlab.mpcdf.mpg.de/mtr/ducc";
     description = "Efficient algorithms for Fast Fourier transforms and more";
     license = licenses.gpl2Plus;

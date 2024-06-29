@@ -68,6 +68,7 @@ self: super: {
   stylish-haskell = self.stylish-haskell_0_14_6_0;
   hlint = self.hlint_3_8;
   ghc-syntax-highlighter = self.ghc-syntax-highlighter_0_0_11_0;
+  websockets = self.websockets_0_13_0_0;
 
   # A given major version of ghc-exactprint only supports one version of GHC.
   ghc-exactprint = self.ghc-exactprint_1_8_0_0;
@@ -131,8 +132,10 @@ self: super: {
   hip = appendConfigureFlag "--ghc-options=-fsimpl-tick-factor=200" super.hip;
 
   # Fix build with text-2.x.
-  libmpd = appendPatch (pkgs.fetchpatch
-      { url = "https://github.com/vimus/libmpd-haskell/pull/138.patch";
+  libmpd = appendPatch
+    (pkgs.fetchpatch {
+        name = "138.patch"; # https://github.com/vimus/libmpd-haskell/pull/138
+        url = "https://github.com/vimus/libmpd-haskell/compare/95d3b3bab5858d6d1f0e079d0ab7c2d182336acb...f1cbf247261641565a3937b90721f7955d254c5e.patch";
         sha256 = "Q4fA2J/Tq+WernBo+UIMdj604ILOMlIYkG4Pr046DfM=";
       })
     super.libmpd;

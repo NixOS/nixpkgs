@@ -38,7 +38,6 @@ runTest ({ config, ... }: {
       services.nextcloud = {
         enable = true;
         datadir = "/var/lib/nextcloud-data";
-        config.dbtableprefix = "nixos_";
         autoUpdateApps = {
           enable = true;
           startAt = "20:00";

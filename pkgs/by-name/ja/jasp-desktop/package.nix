@@ -66,6 +66,9 @@ stdenv.mkDerivation {
     "-DCUSTOM_R_PATH=${customREnv}"
   ];
 
+  # necessary for R 4.4.0
+  hardeningDisable = [ "format" ];
+
   nativeBuildInputs = [
     cmake
     ninja

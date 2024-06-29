@@ -8,17 +8,20 @@
 , CoreServices
 , Libsystem
 , SystemConfiguration
+, nix-update-script
+, testers
+, rye
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "rye";
-  version = "0.34.0";
+  version = "0.35.0";
 
   src = fetchFromGitHub {
     owner = "mitsuhiko";
     repo = "rye";
     rev = "refs/tags/${version}";
-    hash = "sha256-M5TJXyh1fNigHOuBpEpnUeOWboZWxZ9bGrBuMB1oHgE=";
+    hash = "sha256-mkBp9iFoN1LanJrcm4VdZ9k8cWNaRZIYl10ukT4Rfqc=";
   };
 
   cargoLock = {
@@ -80,12 +83,17 @@ rustPlatform.buildRustPackage rec {
     "--skip=test_version"
   ];
 
-  meta = with lib; {
+  passthru = {
+    updateScript = nix-update-script { };
+    tests.version = testers.testVersion { package = rye; };
+  };
+
+  meta = {
     description = "Tool to easily manage python dependencies and environments";
     homepage = "https://github.com/mitsuhiko/rye";
     changelog = "https://github.com/mitsuhiko/rye/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ GaetanLepage ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ GaetanLepage ];
     mainProgram = "rye";
   };
 }

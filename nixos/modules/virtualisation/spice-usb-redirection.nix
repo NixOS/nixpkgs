@@ -22,5 +22,5 @@
     };
   };
 
-  meta.maintainers = [ lib.maintainers.lheckemann ];
+  meta.maintainers = [ ];
 }

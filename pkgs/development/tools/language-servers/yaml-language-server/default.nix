@@ -6,13 +6,13 @@
 
 mkYarnPackage rec {
   pname = "yaml-language-server";
-  version = "1.14.0";
+  version = "1.15.0";
 
   src = fetchFromGitHub {
     owner = "redhat-developer";
     repo = "yaml-language-server";
     rev = version;
-    hash = "sha256-DS5kMw/x8hP2MzxHdHXnBqqBGLq21NiZBb5ApjEe/ts=";
+    hash = "sha256-Y3Q/y9UIiy7US8Jl4vxT0Pfw8h3hiXK+Cu9TEQHyAaA=";
   };
 
   packageJSON = ./package.json;
@@ -36,6 +36,6 @@ mkYarnPackage rec {
     homepage = "https://github.com/redhat-developer/yaml-language-server";
     license = lib.licenses.mit;
     mainProgram = "yaml-language-server";
-    maintainers = with lib.maintainers; [ wolfangaukang ];
+    maintainers = [ ];
   };
 }

@@ -466,6 +466,8 @@ let
 
     eqaf = callPackage ../development/ocaml-modules/eqaf { };
 
+    eqaf-cstruct = callPackage ../development/ocaml-modules/eqaf/cstruct.nix { };
+
     erm_xml = callPackage ../development/ocaml-modules/erm_xml { };
 
     erm_xmpp = callPackage ../development/ocaml-modules/erm_xmpp { };

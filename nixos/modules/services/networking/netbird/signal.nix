@@ -28,7 +28,7 @@ in
 
     package = mkPackageOption pkgs "netbird" { };
 
-    enableNginx = mkEnableOption "Nginx reverse-proxy for the netbird signal service.";
+    enableNginx = mkEnableOption "Nginx reverse-proxy for the netbird signal service";
 
     domain = mkOption {
       type = str;

@@ -192,7 +192,7 @@ in buildNpmPackage rec {
     inherit description;
     homepage = "https://bitwarden.com";
     license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [ amarshall kiwi ];
+    maintainers = with lib.maintainers; [ amarshall ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "bitwarden";
   };

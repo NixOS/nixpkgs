@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ openssl ];
 
   meta = {
-    maintainers = with lib.maintainers; [ lheckemann willibutz ];
+    maintainers = with lib.maintainers; [ willibutz ];
     description = "Tool for converting Xen images to raw and back";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;

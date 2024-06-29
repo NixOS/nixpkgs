@@ -152,6 +152,7 @@ package-maintainers:
     - ghcjs-dom
     - ghcjs-dom-hello
     - ghcjs-dom-javascript
+    - ghcjs-dom-jsaddle
     - haveibeenpwned
     - jsaddle
     - jsaddle-clib
@@ -305,15 +306,6 @@ package-maintainers:
     - elm-export-persistent
     # - pipes-mongodb
     - streaming-wai
-  kiwi:
-    - config-schema
-    - config-value
-    - glirc
-    - irc-core
-    - matterhorn
-    - mattermost-api
-    - mattermost-api-qc
-    - Unique
   libjared:
     - sensei
   malo:
@@ -649,6 +641,24 @@ package-maintainers:
     - nix-tree
   zowoq:
     - ShellCheck
+  mpscholten:
+    - ihp-hsx
+    - push-notify-apn
+    - hs-pkpass
+    - raven-haskell
+    - stripe-concepts
+    - stripe-signature
+    - http2-client
+    - zip
+    - currencies
+    - string-random
+    - inflections
+    - pcre-heavy
+    - mmark
+    - mmark-ext
+    - typerep-map
+    - minio-hs
+    - smtp-mail
 
 unsupported-platforms:
   Allure:                                       [ platforms.darwin ]
@@ -670,7 +680,6 @@ unsupported-platforms:
   freenect:                                     [ platforms.darwin ]
   FTGL:                                         [ platforms.darwin ]
   fuzzytime:                                    [ platforms.darwin ] # https://github.com/kamwitsta/fuzzytime/issues/2
-  ghcjs-dom-hello:                              [ platforms.darwin ]
   ghc-gc-hook:                                  [ platforms.darwin ] # requires C11 threads which Apple doesn't support
   gi-adwaita:                                   [ platforms.darwin ]
   gi-dbusmenugtk3:                              [ platforms.darwin ]
@@ -699,7 +708,6 @@ unsupported-platforms:
   intricacy:                                    [ platforms.darwin ] # depends on mesa
   iwlib:                                        [ platforms.darwin ]
   Jazzkell:                                     [ platforms.darwin ] # depends on Euterpea
-  jsaddle-hello:                                [ platforms.darwin ] # depends on jsaddle-webkit2gtk
   jsaddle-webkit2gtk:                           [ platforms.darwin ]
   Kulitta:                                      [ platforms.darwin ] # depends on Euterpea
   LambdaHack:                                   [ platforms.darwin ]
@@ -792,6 +800,8 @@ supported-platforms:
   geomancy:                                     [ platforms.x86 ] # x86 intrinsics
   geomancy-layout:                              [ platforms.x86 ] # x86 intrinsics
   gi-gtkosxapplication:                         [ platforms.darwin ]
+  ghcjs-base:                                   [ javascript-ghcjs ]
+  ghcjs-dom-javascript:                         [ javascript-ghcjs ]
   gtk-mac-integration:                          [ platforms.darwin ]
   gtk3-mac-integration:                         [ platforms.darwin ]
   halide-haskell:                               [ platforms.linux ]

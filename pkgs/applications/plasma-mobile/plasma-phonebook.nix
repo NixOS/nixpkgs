@@ -37,6 +37,6 @@ mkDerivation rec {
     homepage = "https://invent.kde.org/plasma-mobile/plasma-phonebook";
     # https://invent.kde.org/plasma-mobile/plasma-phonebook/-/commit/3ac27760417e51c051c5dd44155c3f42dd000e4f
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ samueldr ];
+    maintainers = with maintainers; [ ];
   };
 }

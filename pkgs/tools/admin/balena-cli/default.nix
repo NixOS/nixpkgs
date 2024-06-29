@@ -18,16 +18,16 @@ let
   };
 in buildNpmPackage' rec {
   pname = "balena-cli";
-  version = "18.2.4";
+  version = "18.2.10";
 
   src = fetchFromGitHub {
     owner = "balena-io";
     repo = "balena-cli";
     rev = "v${version}";
-    hash = "sha256-cn6H8dFRZDK/ye0zqS+BXQzlBPpSfdotrp+TuQZ1Hko=";
+    hash = "sha256-HZAQpK7cai4FEBvQSIHGBdDMe4pQRXXF9DSax07rjF0=";
   };
 
-  npmDepsHash = "sha256-5ri/eb85MPzjBac20WFMiD2cBux4grIyjGflQMW66bQ=";
+  npmDepsHash = "sha256-9XVjyqLgi+gkEEp09P4HzmeRNINeXUC4mBmib6M6YyE=";
 
   postPatch = ''
     ln -s npm-shrinkwrap.json package-lock.json

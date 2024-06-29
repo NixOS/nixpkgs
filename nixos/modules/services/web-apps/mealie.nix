@@ -59,7 +59,7 @@ in
         PRODUCTION = "true";
         ALEMBIC_CONFIG_FILE="${pkg}/config/alembic.ini";
         API_PORT = toString cfg.port;
-        BASE_URL = "http://localhost:${cfg.port}";
+        BASE_URL = "http://localhost:${toString cfg.port}";
         DATA_DIR = "/var/lib/mealie";
         CRF_MODEL_PATH = "/var/lib/mealie/model.crfmodel";
       } // (builtins.mapAttrs (_: val: toString val) cfg.settings);

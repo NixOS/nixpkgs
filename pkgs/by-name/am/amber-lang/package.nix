@@ -1,36 +1,43 @@
-{ lib,
+{
+  lib,
   fetchFromGitHub,
   rustPlatform,
   bc,
+  util-linux,
   makeWrapper,
   runCommand,
-  amber-lang
+  amber-lang,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "amber-lang";
-  version = "0.3.1-alpha";
+  version = "0.3.3-alpha";
 
   src = fetchFromGitHub {
     owner = "Ph0enixKM";
     repo = "Amber";
     rev = version;
-    hash = "sha256-VSlLPgoi+KPnUQJEb6m0VZQVs1zkxEnfqs3fAp8m1o4=";
+    hash = "sha256-Al1zTwQufuVGSlttf02s5uI3cyCNDShhzMT3l9Ctv3Y=";
   };
 
-  cargoHash = "sha256-NzcyX/1yeFcI80pNxx/OTkaI82qyQFJW8U0vPbqSU7g=";
-
-  buildInputs = [ makeWrapper ];
-
-  nativeCheckInputs = [ bc ];
+  cargoHash = "sha256-HbkIkCVy2YI+nP5t01frXBhlp/rCsB6DwLL53AHJ4vE=";
 
   preConfigure = ''
     substituteInPlace src/compiler.rs \
-      --replace-fail "/bin/bash" "bash"
+      --replace-fail 'Command::new("/usr/bin/env")' 'Command::new("env")'
   '';
 
+  nativeBuildInputs = [ makeWrapper ];
+
+  nativeCheckInputs = [
+    bc
+    # 'rev' in generated bash script of test
+    # tests::validity::variable_ref_function_invocation
+    util-linux
+  ];
+
   postInstall = ''
-    wrapProgram "$out/bin/amber" --prefix PATH : "${lib.makeBinPath [bc]}"
+    wrapProgram "$out/bin/amber" --prefix PATH : "${lib.makeBinPath [ bc ]}"
   '';
 
   passthru.tests.run = runCommand "amber-lang-eval-test" { nativeBuildInputs = [ amber-lang ]; } ''
@@ -43,7 +50,11 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://amber-lang.com";
     license = licenses.gpl3Plus;
     mainProgram = "amber";
-    maintainers = with maintainers; [ cafkafk uncenter ];
+    maintainers = with maintainers; [
+      cafkafk
+      uncenter
+      aleksana
+    ];
     platforms = platforms.unix;
   };
 }

@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = gitUpdater {
     rev-prefix = "v";
-    ignoredVersions = "^[^.]+$"; # ignore versions without a dot
+    allowedVersions = "\\.";
   };
 
   meta = with lib; {

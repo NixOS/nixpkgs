@@ -7,7 +7,6 @@
   mandoc,
   groff,
   nbperf,
-  rsync,
   compatIfNeeded,
   defaultMakeFlags,
   libterminfo,
@@ -25,7 +24,6 @@ mkDerivation {
     mandoc
     groff
     nbperf
-    rsync
   ];
   makeFlags = defaultMakeFlags ++ [ "TOOLDIR=$(out)" ];
   extraPaths = [

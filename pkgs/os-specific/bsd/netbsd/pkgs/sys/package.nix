@@ -9,7 +9,6 @@
   tsort,
   lorder,
   statHook,
-  rsync,
   uudecode,
   config,
   genassym,
@@ -28,7 +27,6 @@ let
       tsort
       lorder
       statHook
-      rsync
       uudecode
       config
       genassym

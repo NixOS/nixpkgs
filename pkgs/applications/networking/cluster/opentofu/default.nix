@@ -58,7 +58,6 @@ let
       changelog = "https://github.com/opentofu/opentofu/blob/v${version}/CHANGELOG.md";
       license = licenses.mpl20;
       maintainers = with maintainers; [
-        gmemstr
         nickcao
         zowoq
       ];

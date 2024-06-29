@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "sticky";
-  version = "1.20";
+  version = "1.21";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    hash = "sha256-HzTXaJgDu72pWM0mGNNBy2yFB0u0rqATFK9JzyOw8oE=";
+    hash = "sha256-EH5EyvI3iAZr+aSV3DKM9RLkPmUcwKKXlOXSU0ECsPI=";
   };
 
   postPatch = ''

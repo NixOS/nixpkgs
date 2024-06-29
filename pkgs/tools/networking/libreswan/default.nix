@@ -104,7 +104,7 @@ stdenv.mkDerivation rec {
         -i $out/bin/ipsec
   '';
 
-  passthru.tests.libreswan = nixosTests.libreswan;
+  passthru.tests = { inherit (nixosTests) libreswan libreswan-nat; };
 
   meta = with lib; {
     homepage = "https://libreswan.org";

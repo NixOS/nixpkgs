@@ -37,7 +37,6 @@ in
 {
   meta.maintainers = with maintainers; [
     misuzu
-    thubrecht
   ];
   meta.doc = ./netbird.md;
 

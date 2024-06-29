@@ -35,7 +35,7 @@ python3.pkgs.buildPythonApplication rec {
     description = "GTK frontend for ratbagd mouse config daemon";
     mainProgram = "piper";
     homepage    = "https://github.com/libratbag/piper";
-    license     = licenses.gpl2;
+    license     = licenses.gpl2Only;
     maintainers = with maintainers; [ mvnetbiz ];
     platforms   = platforms.linux;
   };

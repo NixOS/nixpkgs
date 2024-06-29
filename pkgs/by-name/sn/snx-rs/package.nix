@@ -28,6 +28,6 @@ rustPlatform.buildRustPackage {
     description = "Open source Linux client for Checkpoint VPN tunnels";
     homepage = "https://github.com/ancwrd1/snx-rs";
     license = lib.licenses.agpl3Plus;
-    maintainers = [ lib.maintainers.lheckemann ];
+    maintainers = [ ];
   };
 }

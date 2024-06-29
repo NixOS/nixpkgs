@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "qt6gtk2";
-  version = "0.2-unstable-2024-05-06";
+  version = "0.2-unstable-2024-06-22";
 
   src = fetchFromGitHub {
     owner = "trialuser02";
     repo = finalAttrs.pname;
-    rev = "d29ba6c1fb4ac933ed7b91f0480cbd0c5a975ab8";
-    hash = "sha256-lIUCdfsmvuzDQaOi2U/CHch1re6Jn6yDfcX26Gu0eUo=";
+    rev = "2e8729481649d0a2fd4cc07051daf6134809d2c5";
+    hash = "sha256-j1PFJEGCd2snQ6bAcsmFNrupoZg+ib/08Xs1oJyWyN0=";
   };
 
   buildInputs = [ gtk2 qtbase ];

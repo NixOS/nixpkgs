@@ -30,7 +30,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportCheck = [ "requests_gssapi" ];
+  pythonImportsCheck = [ "requests_gssapi" ];
 
   meta = with lib; {
     description = "GSSAPI authentication handler for python-requests";

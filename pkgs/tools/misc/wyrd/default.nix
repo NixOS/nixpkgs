@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     downloadPage = "http://pessimization.com/software/wyrd/";
     license = licenses.gpl2Only;
     maintainers = [ maintainers.prikhi ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     mainProgram = "wyrd";
   };
 }

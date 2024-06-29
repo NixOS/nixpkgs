@@ -9,12 +9,12 @@
 , gtk4
 , glib
 , pango
-, atk
 , gdk-pixbuf
 , shared-mime-info
 , itstool
 , poppler
-, ghostscriptX
+, gnome
+, darwin
 , djvulibre
 , libspectre
 , libarchive
@@ -29,6 +29,7 @@
 , libgxps
 , supportXPS ? true # Open XML Paper Specification via libgxps
 , withLibsecret ? true
+, supportNautilus ? (!stdenv.isDarwin)
 , libadwaita
 , exempi
 , cargo
@@ -37,7 +38,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "papers";
-  version = "45.0-unstable-2024-03-27";
+  version = "46.2";
 
   outputs = [ "out" "dev" "devdoc" ];
 
@@ -45,8 +46,8 @@ stdenv.mkDerivation (finalAttrs: {
     domain = "gitlab.gnome.org";
     owner = "GNOME/Incubator";
     repo = "papers";
-    rev = "4374535f4f5e5cea613b2df7b3dc99e97da27d99";
-    hash = "sha256-wjLRGENJ+TjXV3JPn/lcqv3DonAsJrC0OiLs1DoNHkc=";
+    rev = finalAttrs.version;
+    hash = "sha256-T67d7xHK23CvmT8omEqNZrV5KloK4QXU973dtP9lTDE=";
   };
 
   cargoRoot = "shell-rs";
@@ -55,8 +56,8 @@ stdenv.mkDerivation (finalAttrs: {
     lockFile = ./Cargo.lock;
 
     outputHashes = {
-      "cairo-rs-0.20.0" = "sha256-aCG9rh/tXqmcCIijuqJZJEgrGdG/IygcdWlvKYzVPhU=";
-      "gdk4-0.9.0" = "sha256-KYisC8nm6KVfowiKXtMoimXzB3UjHarH+2ZLhvW8oMU=";
+      "cairo-rs-0.20.0" = "sha256-us8Q1cqHbs0wSfMcRgZx7wTqSagYkLv/aNI8Fle2nNk=";
+      "gdk4-0.9.0" = "sha256-a+fkiCilKbq7sBHZ9Uvq9a/qqbsVomxG6K07B5f4eYM=";
       "libadwaita-0.7.0" = "sha256-gfkaj/BIqvWj1UNVAGNNXww4aoJPlqvBwIRGmDiv48E=";
     };
   };
@@ -77,12 +78,10 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    atk
     dbus # only needed to find the service directory
     djvulibre
     exempi
     gdk-pixbuf
-    ghostscriptX
     glib
     gtk4
     gsettings-desktop-schemas
@@ -96,17 +95,33 @@ stdenv.mkDerivation (finalAttrs: {
     libsecret
   ] ++ lib.optionals supportXPS [
     libgxps
+  ] ++ lib.optionals supportNautilus [
+    gnome.nautilus
+  ] ++ lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.Foundation
   ];
 
   mesonFlags = [
-    "-Dnautilus=false"
     "-Dps=enabled"
   ] ++ lib.optionals (!withLibsecret) [
     "-Dkeyring=disabled"
+  ] ++ lib.optionals (!supportNautilus) [
+    "-Dnautilus=false"
   ];
 
+  env.NIX_CFLAGS_COMPILE = lib.optionalString (
+    stdenv.cc.isClang && lib.versionAtLeast stdenv.cc.version "16"
+  ) "-Wno-error=incompatible-function-pointer-types";
+
   preFixup = ''
-    gappsWrapperArgs+=(--prefix XDG_DATA_DIRS : "${shared-mime-info}/share")
+    gappsWrapperArgs+=(
+      --prefix XDG_DATA_DIRS : "${shared-mime-info}/share"
+      # Required to open multiple files.
+      # https://gitlab.gnome.org/GNOME/Incubator/papers/-/issues/176
+      --prefix PATH : "$out/bin"
+    )
+  '' + lib.optionalString stdenv.isDarwin ''
+    install_name_tool -add_rpath "$out/lib" "$out/bin/papers"
   '';
 
   postFixup = ''

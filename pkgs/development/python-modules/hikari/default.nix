@@ -61,7 +61,7 @@ buildPythonPackage rec {
     mock
   ];
 
-  pythonImportChecks = [ "hikari" ];
+  pythonImportsCheck = [ "hikari" ];
 
   disabled = pythonOlder "3.7";
 

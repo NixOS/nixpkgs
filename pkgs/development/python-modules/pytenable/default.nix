@@ -12,6 +12,7 @@
   pythonOlder,
   requests,
   requests-pkcs12,
+  requests-toolbelt,
   responses,
   restfly,
   semver,
@@ -21,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "pytenable";
-  version = "1.4.22";
+  version = "1.5.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -30,7 +31,7 @@ buildPythonPackage rec {
     owner = "tenable";
     repo = "pyTenable";
     rev = "refs/tags/${version}";
-    hash = "sha256-acMafLlO0yGEnW+0XeBWUpDWvOPFAB4RK/XyAb2JbPw=";
+    hash = "sha256-uLZ1TQx5awHOOF+IR3aWTwwYTd71O/V+EHaDrb1LAXU=";
   };
 
   build-system = [ setuptools ];
@@ -41,6 +42,7 @@ buildPythonPackage rec {
     python-box
     python-dateutil
     requests
+    requests-toolbelt
     restfly
     semver
     typing-extensions

@@ -385,8 +385,8 @@ in
 
     power.ups = {
       enable = mkEnableOption ''
-        Enables support for Power Devices, such as Uninterruptible Power
-        Supplies, Power Distribution Units and Solar Controllers.
+        support for Power Devices, such as Uninterruptible Power
+        Supplies, Power Distribution Units and Solar Controllers
       '';
 
       mode = mkOption {

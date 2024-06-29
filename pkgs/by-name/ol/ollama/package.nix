@@ -31,13 +31,13 @@
 let
   pname = "ollama";
   # don't forget to invalidate all hashes each update
-  version = "0.1.44";
+  version = "0.1.47";
 
   src = fetchFromGitHub {
     owner = "ollama";
     repo = "ollama";
     rev = "v${version}";
-    hash = "sha256-HM7xtVdhRwhsLEBLvCgjU1iwdaqowRdrxh/Z0BzTPn8=";
+    hash = "sha256-gxai2ORHABchnmdzjr9oYzk9p21qQjSIxrKt5k356i4=";
     fetchSubmodules = true;
   };
 
@@ -47,12 +47,13 @@ let
   # `ollama/llm/generate/gen_common.sh` -> "apply temporary patches until fix is upstream"
   # each update, these patches should be synchronized with the contents of `ollama/llm/patches/`
   llamacppPatches = [
-    (preparePatch "01-load-progress.diff" "sha256-3QxyKX1n5NeMLU8d7wI/96wCM1Cvb5X5sQL5CFhMFo4=")
+    (preparePatch "01-load-progress.diff" "sha256-K4GryCH/1cl01cyxaMLX3m4mTE79UoGwLMMBUgov+ew=")
     (preparePatch "02-clip-log.diff" "sha256-rMWbl3QgrPlhisTeHwD7EnGRJyOhLB4UeS7rqa0tdXM=")
     (preparePatch "03-load_exception.diff" "sha256-0XfMtMyg17oihqSFDBakBtAF0JwhsR188D+cOodgvDk=")
     (preparePatch "04-metal.diff" "sha256-Ne8J9R8NndUosSK0qoMvFfKNwqV5xhhce1nSoYrZo7Y=")
-    (preparePatch "05-default-pretokenizer.diff" "sha256-NrQ0Fv5DAZYtRM0NBEeM2JLVTLFmb4Fs9RhwXhdMCC4=")
+    (preparePatch "05-default-pretokenizer.diff" "sha256-JnCmFzAkmuI1AqATG3jbX7nGIam4hdDKqqbG5oh7h70=")
     (preparePatch "06-qwen2.diff" "sha256-nMtoAQUsjYuJv45uTlz8r/K1oF5NUsc75SnhgfSkE30=")
+    (preparePatch "07-gemma.diff" "sha256-dKJrRvg/XC6xtwxLHZ7lFkLNMwT8Ugmd5xRPuKQDXvU=")
   ];
 
   preparePatch = patch: hash: fetchpatch {
@@ -109,12 +110,6 @@ let
     ];
   };
 
-  runtimeLibs = lib.optionals enableRocm [
-    rocmPath
-  ] ++ lib.optionals enableCuda [
-    linuxPackages.nvidia_x11
-  ];
-
   appleFrameworks = darwin.apple_sdk_11_0.frameworks;
   metalFrameworks = [
     appleFrameworks.Accelerate
@@ -122,6 +117,17 @@ let
     appleFrameworks.MetalKit
     appleFrameworks.MetalPerformanceShaders
   ];
+
+  runtimeLibs = lib.optionals enableRocm [
+    rocmPath
+  ] ++ lib.optionals enableCuda [
+    linuxPackages.nvidia_x11
+  ];
+  wrapperOptions = builtins.concatStringsSep " " ([
+    "--suffix LD_LIBRARY_PATH : '/run/opengl-driver/lib:${lib.makeLibraryPath runtimeLibs}'"
+  ] ++ lib.optionals enableRocm [
+    "--set-default HIP_PATH '${rocmPath}'"
+  ]);
 
 
   goBuild =
@@ -183,10 +189,7 @@ goBuild ((lib.optionalAttrs enableRocm {
   '' + lib.optionalString (enableRocm || enableCuda) ''
     # expose runtime libraries necessary to use the gpu
     mv "$out/bin/ollama" "$out/bin/.ollama-unwrapped"
-    makeWrapper "$out/bin/.ollama-unwrapped" "$out/bin/ollama" ${
-      lib.optionalString enableRocm
-        ''--set-default HIP_PATH '${rocmPath}' ''} \
-      --suffix LD_LIBRARY_PATH : '/run/opengl-driver/lib:${lib.makeLibraryPath runtimeLibs}'
+    makeWrapper "$out/bin/.ollama-unwrapped" "$out/bin/ollama" ${wrapperOptions}
   '';
 
   ldflags = [

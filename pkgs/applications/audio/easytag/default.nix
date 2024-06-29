@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     # https://gitlab.gnome.org/GNOME/easytag/-/merge_requests/8
     # Borrowed from Gentoo
     (fetchpatch {
-      url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/media-sound/easytag/files/easytag-2.4.3-ogg-corruption.patch";
+      url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/media-sound/easytag/files/easytag-2.4.3-ogg-corruption.patch?id=b175a159c1138702bdfb009ff4d6565019ed3c4a";
       hash = "sha256-z75dYTEVp1raSFROjpakLeBjF96sgWBxxRB6ut9wYXw=";
     })
   ];

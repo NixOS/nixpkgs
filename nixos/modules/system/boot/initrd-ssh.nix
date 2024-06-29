@@ -150,9 +150,13 @@ in
         HostKey ${initrdKeyPath path}
       '')}
 
-      KexAlgorithms ${concatStringsSep "," sshdCfg.settings.KexAlgorithms}
-      Ciphers ${concatStringsSep "," sshdCfg.settings.Ciphers}
-      MACs ${concatStringsSep "," sshdCfg.settings.Macs}
+      '' + lib.optionalString (sshdCfg.settings.KexAlgorithms != null) ''
+        KexAlgorithms ${concatStringsSep "," sshdCfg.settings.KexAlgorithms}
+      '' + lib.optionalString (sshdCfg.settings.Ciphers != null) ''
+        Ciphers ${concatStringsSep "," sshdCfg.settings.Ciphers}
+      '' + lib.optionalString (sshdCfg.settings.Macs != null) ''
+        MACs ${concatStringsSep "," sshdCfg.settings.Macs}
+      '' + ''
 
       LogLevel ${sshdCfg.settings.LogLevel}
 

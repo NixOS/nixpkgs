@@ -14,6 +14,15 @@ let
     packageOverrides = self: super: {
       django = super.django_4;
 
+      django-oauth-toolkit = super.django-oauth-toolkit.overridePythonAttrs (oldAttrs: {
+        version = "2.3.0";
+        src = fetchFromGitHub {
+          inherit (oldAttrs.src) owner repo;
+          rev = "refs/tags/v${version}";
+          hash = "sha256-oGg5MD9p4PSUVkt5pGLwjAF4SHHf4Aqr+/3FsuFaybY=";
+        };
+      });
+
       stripe = super.stripe.overridePythonAttrs rec {
         version = "7.9.0";
 
@@ -81,7 +90,6 @@ python.pkgs.buildPythonApplication rec {
       --replace-fail psycopg2-binary psycopg2 \
       --replace-fail vat_moss_forked==2020.3.20.0.11.0 vat-moss \
       --replace-fail "bleach==5.0.*" bleach \
-      --replace-fail "django-oauth-toolkit==2.3.*" django-oauth-toolkit \
       --replace-fail "djangorestframework==3.15.*" djangorestframework \
       --replace-fail "dnspython==2.6.*" dnspython \
       --replace-fail "importlib_metadata==7.*" importlib_metadata \

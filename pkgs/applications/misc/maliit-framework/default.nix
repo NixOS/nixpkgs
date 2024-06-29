@@ -73,6 +73,6 @@ mkDerivation rec {
     mainProgram = "maliit-server";
     homepage = "http://maliit.github.io/";
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ samueldr ];
+    maintainers = with maintainers; [ ];
   };
 }

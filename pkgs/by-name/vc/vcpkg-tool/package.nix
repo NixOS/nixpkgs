@@ -29,10 +29,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
-    cmakerc
-    fmt
     ninja
     makeWrapper
+  ];
+
+  buildInputs = [
+    cmakerc
+    fmt
   ];
 
   patches = [

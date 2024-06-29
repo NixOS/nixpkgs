@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Userspace utilities for the ksmbd kernel SMB server";
     homepage = "https://www.kernel.org/doc/html/latest/filesystems/cifs/ksmbd.html";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     platforms = platforms.linux;
   };
 }

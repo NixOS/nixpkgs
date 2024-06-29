@@ -263,7 +263,7 @@ in
         '';
         type = with types; attrsOf (either lines (submodule ({ name, ... }: {
           options = {
-            enabled = mkEnableOption "this jail." // {
+            enabled = mkEnableOption "this jail" // {
               default = true;
               readOnly = name == "DEFAULT";
             };

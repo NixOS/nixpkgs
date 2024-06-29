@@ -43,13 +43,13 @@
 
 stdenv.mkDerivation rec {
   pname = "dde-file-manager";
-  version = "6.0.40";
+  version = "6.0.51";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    hash = "sha256-fvxP6wle4hezt9nEDpTgK+xB4J5XIC0mP5jWCmkjJPA=";
+    hash = "sha256-MvrOhdejQPK693wFlqkERuwYM88ALtFNnbyu7H3TI4Q=";
   };
 
   nativeBuildInputs = [
@@ -69,25 +69,25 @@ stdenv.mkDerivation rec {
     patchShebangs .
 
     substituteInPlace src/plugins/filemanager/dfmplugin-vault/utils/vaultdefine.h \
-      --replace "/usr/bin/deepin-compressor" "deepin-compressor"
+      --replace-fail "/usr/bin/deepin-compressor" "deepin-compressor"
 
     substituteInPlace src/plugins/filemanager/dfmplugin-avfsbrowser/utils/avfsutils.cpp \
-      --replace "/usr/bin/mountavfs" "mountavfs" \
-      --replace "/usr/bin/umountavfs" "umountavfs"
+      --replace-fail "/usr/bin/mountavfs" "mountavfs" \
+      --replace-fail "/usr/bin/umountavfs" "umountavfs"
 
     substituteInPlace src/plugins/common/core/dfmplugin-menu/{extendmenuscene/extendmenu/dcustomactionparser.cpp,oemmenuscene/oemmenu.cpp} \
-      --replace "/usr" "$out"
+      --replace-fail "/usr" "$out"
 
     substituteInPlace src/tools/upgrade/dialog/processdialog.cpp \
-      --replace "/usr/bin/dde-file-manager" "dde-file-manager" \
-      --replace "/usr/bin/dde-desktop" "dde-desktop"
+      --replace-fail "/usr/bin/dde-file-manager" "dde-file-manager" \
+      --replace-fail "/usr/bin/dde-desktop" "dde-desktop"
 
     substituteInPlace src/dfm-base/file/local/localfilehandler.cpp \
-      --replace "/usr/lib/deepin-daemon" "/run/current-system/sw/lib/deepin-daemon"
+      --replace-fail "/usr/lib/deepin-daemon" "/run/current-system/sw/lib/deepin-daemon"
 
     substituteInPlace src/plugins/desktop/ddplugin-background/backgroundservice.cpp \
       src/plugins/desktop/ddplugin-wallpapersetting/wallpapersettings.cpp \
-      --replace "/usr/share/backgrounds" "/run/current-system/sw/share/backgrounds"
+      --replace-fail "/usr/share/backgrounds" "/run/current-system/sw/share/backgrounds"
 
     find . -type f -regex ".*\\.\\(service\\|policy\\|desktop\\)" -exec sed -i -e "s|/usr/|$out/|g" {} \;
   '';

@@ -1,11 +1,12 @@
 { lib
 , buildNpmPackage
 , copyDesktopItems
-, electron_28
+, electron
 , buildGoModule
 , esbuild
 , fetchFromGitHub
 , jq
+, deltachat-rpc-server
 , libdeltachat
 , makeDesktopItem
 , makeWrapper
@@ -36,16 +37,16 @@ let
 in
 buildNpmPackage rec {
   pname = "deltachat-desktop";
-  version = "1.44.1";
+  version = "1.46.1";
 
   src = fetchFromGitHub {
     owner = "deltachat";
     repo = "deltachat-desktop";
     rev = "v${version}";
-    hash = "sha256-fL+9oPQ5dAgvQREZ7A+hKo2MnZKeVvadQDvDPsDNbnQ=";
+    hash = "sha256-90/Wmh0h75i3kvqj3Wo+A3KlKW8LLDWfPza2gDrDY6E=";
   };
 
-  npmDepsHash = "sha256-rUxJLDsAfp+brecTThYTdHIVIfVkKwZ/W5sHV0hHHIk=";
+  npmDepsHash = "sha256-UzWxMd+DYH5A8Zo1rzi8oIsoKbmzsVbGpr3uWtc02rY=";
 
   postPatch = ''
     test \
@@ -64,6 +65,7 @@ buildNpmPackage rec {
   ];
 
   buildInputs = [
+    deltachat-rpc-server
     libdeltachat
   ] ++ lib.optionals stdenv.isDarwin [
     CoreServices
@@ -77,7 +79,8 @@ buildNpmPackage rec {
   };
 
   preBuild = ''
-    rm -r node_modules/deltachat-node/node/prebuilds
+    rm node_modules/@deltachat/stdio-rpc-server-*/deltachat-rpc-server
+    ln -s ${lib.getExe deltachat-rpc-server} node_modules/@deltachat/stdio-rpc-server-linux-*
   '';
 
   npmBuildScript = "build4production";
@@ -93,6 +96,9 @@ buildNpmPackage rec {
     awk '!/^#/ && NF' build/packageignore_list \
       | xargs -I {} sh -c "rm -rf $out/lib/node_modules/deltachat-desktop/{}" || true
 
+    # required for electron to import index.js as a module
+    cp package.json $out/lib/node_modules/deltachat-desktop
+
     install -D build/icon.png \
       $out/share/icons/hicolor/scalable/apps/deltachat.png
 
@@ -103,7 +109,7 @@ buildNpmPackage rec {
         $out/lib/node_modules/deltachat-desktop/html-dist/fonts
     done
 
-    makeWrapper ${lib.getExe electron_28} $out/bin/deltachat \
+    makeWrapper ${lib.getExe electron} $out/bin/deltachat \
       --set LD_PRELOAD ${sqlcipher}/lib/libsqlcipher${stdenv.hostPlatform.extensions.sharedLibrary} \
       --add-flags $out/lib/node_modules/deltachat-desktop
 

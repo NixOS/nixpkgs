@@ -29,6 +29,6 @@ stdenv.mkDerivation rec {
     description = "Suite of real-time tests - cyclictest, hwlatdetect, pip_stress, pi_stress, pmqtest, ptsematest, rt-migrate-test, sendme, signaltest, sigwaittest, svsematest";
     platforms = platforms.linux;
     maintainers = with maintainers; [ poelzi ];
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
   };
 }

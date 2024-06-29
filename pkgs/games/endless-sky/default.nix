@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
       cc-by-sa-40
       publicDomain
     ];
-    maintainers = with maintainers; [ lheckemann _360ied ];
+    maintainers = with maintainers; [ _360ied ];
     platforms = platforms.linux; # Maybe other non-darwin Unix
   };
 }

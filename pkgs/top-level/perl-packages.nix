@@ -6966,6 +6966,22 @@ with self; {
     };
   };
 
+  DevelCover = buildPerlPackage {
+    pname = "Devel-Cover";
+    version = "1.44";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/P/PJ/PJCJ/Devel-Cover-1.44.tar.gz";
+      hash = "sha256-9AwVQ5kuXWWm94AD1GLVms15rm0w04BHscadmZ0rH9g=";
+    };
+    propagatedBuildInputs = [ HTMLParser ];
+    doCheck = false;
+    meta = {
+      description = "Code coverage metrics for Perl";
+      homepage = "http://www.pjcj.net/perl.html";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   DevelDeprecationsEnvironmental = buildPerlPackage {
     pname = "Devel-Deprecations-Environmental";
     version = "1.101";
@@ -13005,6 +13021,19 @@ with self; {
     };
   };
 
+  IOSocketSocks = buildPerlPackage {
+    pname = "IO-Socket-Socks";
+    version = "0.74";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/O/OL/OLEG/IO-Socket-Socks-0.74.tar.gz";
+      hash = "sha256-N/Bxos9LqPCQoil8ZIK3osUJ61Lc1s5dgDXU7ixoJLE=";
+    };
+    meta = {
+      description = "Provides a way to create socks client or server both 4 and 5 version";
+      license = lib.licenses.free;
+    };
+  };
+
   IOSocketTimeout = buildPerlModule {
     pname = "IO-Socket-Timeout";
     version = "0.32";
@@ -15650,6 +15679,36 @@ with self; {
     };
   };
 
+  MemoryProcess = buildPerlPackage {
+    pname = "Memory-Process";
+    version = "0.06";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/S/SK/SKIM/Memory-Process-0.06.tar.gz";
+      hash = "sha256-NYFEiP/SnJdiFiXqOz1wCvv6YO0FW9dZ1OWNnI/UTk4=";
+    };
+    buildInputs = [ CaptureTiny TestNoWarnings ];
+    propagatedBuildInputs = [ MemoryUsage Readonly ];
+    meta = {
+      description = "Memory process reporting";
+      homepage = "https://github.com/michal-josef-spacek/Memory-Process";
+      license = lib.licenses.bsd3;
+      platforms = lib.platforms.linux;
+    };
+  };
+
+  MemoryUsage = buildPerlPackage {
+    pname = "Memory-Usage";
+    version = "0.201";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/D/DO/DONEILL/Memory-Usage-0.201.tar.gz";
+      hash = "sha256-jyr60h5Ap0joHIwPPkDKcYwU3bn7LYgL+9KK6RPOU0k=";
+    };
+    meta = {
+      description = "Tools to determine actual memory usage";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   Menlo = buildPerlPackage {
     pname = "Menlo";
     version = "1.9019";
@@ -15873,10 +15932,10 @@ with self; {
 
   Minion = buildPerlPackage {
     pname = "Minion";
-    version = "10.25";
+    version = "10.30";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SR/SRI/Minion-10.25.tar.gz";
-      hash = "sha256-C+CoN1N2iJ2gRgRpY4TAz5iyYh0mUNnrAwf25LlAra0=";
+      url = "mirror://cpan/authors/id/S/SR/SRI/Minion-10.30.tar.gz";
+      hash = "sha256-twS9ZuxK8cAzlGifAsCsBIDr0GzpzKFykVAbkgLG7Rw=";
     };
     propagatedBuildInputs = [ Mojolicious YAMLLibYAML ];
     meta = {
@@ -23924,12 +23983,12 @@ with self; {
 
   SysVirt = buildPerlModule rec {
     pname = "Sys-Virt";
-    version = "10.0.0";
+    version = "10.2.0";
     src = fetchFromGitLab {
       owner = "libvirt";
       repo = "libvirt-perl";
       rev = "v${version}";
-      hash = "sha256-FK2SaerA/GB0ZAg/QXG9Ig1Cvpg6v9lh1sKPjYU52M8=";
+      hash = "sha256-xpgZeXk9QefqbBMsvcMh/Cg/XFGEiVi3FbU/jBbSIr0=";
     };
     nativeBuildInputs = [ pkgs.pkg-config ];
     buildInputs = [ pkgs.libvirt CPANChanges TestPod TestPodCoverage XMLXPath ];
@@ -29076,10 +29135,10 @@ with self; {
 
   YAMLPP = buildPerlPackage {
     pname = "YAML-PP";
-    version = "0.036";
+    version = "0.38.0";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/T/TI/TINITA/YAML-PP-0.036.tar.gz";
-      hash = "sha256-yLTlBYSt+S73Vz9rsB1u1Y5iF2MsV0J7cnTPp8pG/Bs=";
+      url = "mirror://cpan/authors/id/T/TI/TINITA/YAML-PP-v0.38.0.tar.gz";
+      hash = "sha256-qBlGXFL2o0EEmjlCdCwI4E8olLKmZILkOn9AfOELTqA=";
     };
     buildInputs = [ TestDeep TestWarn ];
     meta = {

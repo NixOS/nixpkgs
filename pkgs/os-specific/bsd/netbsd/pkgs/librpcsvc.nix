@@ -14,8 +14,14 @@
 
 mkDerivation {
   path = "lib/librpcsvc";
-  makeFlags = defaultMakeFlags ++ [ "INCSDIR=$(out)/include/rpcsvc" ];
-  meta.platforms = lib.platforms.netbsd;
+
+  libcMinimal = true;
+
+  outputs = [
+    "out"
+    "dev"
+  ];
+
   nativeBuildInputs = [
     bsdSetupHook
     netbsdSetupHook
@@ -26,4 +32,8 @@ mkDerivation {
     rpcgen
     statHook
   ];
+
+  makeFlags = defaultMakeFlags ++ [ "INCSDIR=$(dev)/include/rpcsvc" ];
+
+  meta.platforms = lib.platforms.netbsd;
 }

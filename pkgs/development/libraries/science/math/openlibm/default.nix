@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "openlibm";
-  version = "0.8.2";
+  version = "0.8.3";
 
   src = fetchFromGitHub {
     owner = "JuliaLang";
     repo = "openlibm";
     rev = "v${version}";
-    sha256 = "sha256-EnpwYtBpY+s5FVI2jhaFHTtAKHeaRlZVnWE/o2T1+FY=";
+    sha256 = "sha256-WSf4mcZXiEL3nKTLQh3Oi1MxeH9MOFRe7DU5zFT2aQE=";
   };
 
   makeFlags = [ "prefix=$(out)" "CC=${stdenv.cc.targetPrefix}cc" ];

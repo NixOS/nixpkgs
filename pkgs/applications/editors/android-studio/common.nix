@@ -17,7 +17,7 @@
 , gnugrep
 , gnused
 , gnutar
-, gtk2, gnome_vfs, glib, GConf
+, gtk2, glib
 , gzip
 , fontconfig
 , freetype
@@ -175,9 +175,7 @@ let
 
           # For GTKLookAndFeel
           gtk2
-          gnome_vfs
           glib
-          GConf
         ]}"
 
       # AS launches LLDBFrontend with a custom LD_LIBRARY_PATH
@@ -257,12 +255,14 @@ let
     passthru = let
       withSdk = androidSdk: mkAndroidStudioWrapper { inherit androidStudio androidSdk; };
     in {
+      inherit version;
       unwrapped = androidStudio;
       full = withSdk androidenv.androidPkgs.androidsdk;
       inherit withSdk;
       sdk = androidSdk;
+      updateScript = [ ./update.sh "${channel}" ];
     };
-    meta = with lib; {
+    meta = {
       description = "Official IDE for Android (${channel} channel)";
       longDescription = ''
         Android Studio is the official IDE for Android app development, based on
@@ -271,7 +271,7 @@ let
       homepage = if channel == "stable"
         then "https://developer.android.com/studio/index.html"
         else "https://developer.android.com/studio/preview/index.html";
-      license = with licenses; [ asl20 unfree ]; # The code is under Apache-2.0, but:
+      license = with lib.licenses; [ asl20 unfree ]; # The code is under Apache-2.0, but:
       # If one selects Help -> Licenses in Android Studio, the dialog shows the following:
       # "Android Studio includes proprietary code subject to separate license,
       # including JetBrains CLion(R) (www.jetbrains.com/clion) and IntelliJ(R)
@@ -280,11 +280,11 @@ let
       # binaries are also distributed as proprietary software (unlike the
       # source-code itself).
       platforms = [ "x86_64-linux" ];
-      maintainers = with maintainers; rec {
-        stable = [ alapshin numinit ];
-        beta = [ alapshin numinit ];
-        canary = [ alapshin numinit ];
-        dev = canary;
+      maintainers = with lib.maintainers; rec {
+        stable = [ alapshin johnrtitor numinit ];
+        beta = stable;
+        canary = stable;
+        dev = stable;
       }."${channel}";
       mainProgram = pname;
     };

@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     gst-plugins-ugly
     gst-libav
   ]) ++ (with python3.pkgs; [
-    bsddb3
+    berkeleydb
     dbus-python
     mutagen
     pygobject3

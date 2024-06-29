@@ -10,7 +10,6 @@
   statHook,
   nbperf,
   tic,
-  rsync,
   compatIfNeeded,
 }:
 
@@ -27,7 +26,6 @@ mkDerivation {
     statHook
     nbperf
     tic
-    rsync
   ];
   buildInputs = compatIfNeeded;
   SHLIBINSTALLDIR = "$(out)/lib";

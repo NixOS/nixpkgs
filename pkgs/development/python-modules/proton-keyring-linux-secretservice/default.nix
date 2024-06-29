@@ -36,6 +36,6 @@ buildPythonPackage rec {
     description = "ProtonVPN component to access Linux's keyring secret service API";
     homepage = "https://github.com/ProtonVPN/python-proton-keyring-linux-secretservice";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ wolfangaukang ];
+    maintainers = [ ];
   };
 }

@@ -1,13 +1,12 @@
 { lib
-, stdenv
+, llvmPackages
 , fetchurl
 , fetchFromGitHub
-, which
 , linuxHeaders
-, clang
-, llvm
 , python3
 , curl
+, which
+, nix-update-script
 , debugRuntime ? true
 , runtimeAsserts ? false
 , extraKleeuClibcConfig ? {}
@@ -24,21 +23,22 @@ let
     "RUNTIME_PREFIX" = "/";
     "DEVEL_PREFIX" = "/";
   });
-in stdenv.mkDerivation rec {
+in
+llvmPackages.stdenv.mkDerivation rec {
   pname = "klee-uclibc";
   version = "1.4";
   src = fetchFromGitHub {
     owner = "klee";
     repo = "klee-uclibc";
     rev = "klee_uclibc_v${version}";
-    sha256 = "sha256-sogQK5Ed0k5tf4rrYwCKT4YRKyEovgT25p0BhGvJ1ok=";
+    hash = "sha256-sogQK5Ed0k5tf4rrYwCKT4YRKyEovgT25p0BhGvJ1ok=";
   };
 
   nativeBuildInputs = [
-    clang
-    curl
-    llvm
+    llvmPackages.clang
+    llvmPackages.llvm
     python3
+    curl
     which
   ];
 
@@ -47,11 +47,11 @@ in stdenv.mkDerivation rec {
 
   # HACK: needed for cross-compile.
   # See https://www.mail-archive.com/klee-dev@imperial.ac.uk/msg03141.html
-  KLEE_CFLAGS = "-idirafter ${clang}/resource-root/include";
+  KLEE_CFLAGS = "-idirafter ${llvmPackages.clang}/resource-root/include";
 
   prePatch = ''
-    patchShebangs ./configure
-    patchShebangs ./extra
+    patchShebangs --build ./configure
+    patchShebangs --build ./extra
   '';
 
   # klee-uclibc configure does not support --prefix, so we override configurePhase entirely
@@ -88,13 +88,19 @@ in stdenv.mkDerivation rec {
 
   makeFlags = ["HAVE_DOT_CONFIG=y"];
 
+  enableParallelBuilding = true;
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version-regex" "v(\d\.\d)" ];
+  };
+
   meta = with lib; {
     description = "Modified version of uClibc for KLEE";
     longDescription = ''
       klee-uclibc is a bitcode build of uClibc meant for compatibility with the
       KLEE symbolic virtual machine.
     '';
-    homepage = "https://klee.github.io/";
+    homepage = "https://github.com/klee/klee-uclibc";
     license = licenses.lgpl3;
     maintainers = with maintainers; [ numinit ];
   };

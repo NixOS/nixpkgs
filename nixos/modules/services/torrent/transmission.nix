@@ -174,7 +174,10 @@ in
         };
       };
 
-      package = mkPackageOption pkgs "transmission" {};
+      package = mkPackageOption pkgs "transmission" {
+        default = "transmission_3";
+        example = "pkgs.transmission_4";
+      };
 
       downloadDirPermissions = mkOption {
         type = with types; nullOr str;

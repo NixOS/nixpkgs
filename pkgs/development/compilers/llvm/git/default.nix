@@ -1,6 +1,7 @@
-{ lowPrio, newScope, pkgs, lib, stdenv, cmake, ninja
+{ lowPrio, newScope, pkgs, lib, stdenv
 , preLibcCrossHeaders
-, libxml2, python3, fetchFromGitHub, substituteAll, overrideCC, wrapCCWith, wrapBintoolsWith
+, substitute, substituteAll, fetchFromGitHub, fetchpatch
+, overrideCC, wrapCCWith, wrapBintoolsWith
 , buildLlvmTools # tools, but from the previous stage, for cross
 , targetLlvmLibraries # libraries, but from the next stage, for cross
 , targetLlvm
@@ -19,9 +20,9 @@
 # LLVM release information; specify one of these but not both:
 , gitRelease ? {
     version = "19.0.0-git";
-    rev = "78ee473784e5ef6f0b19ce4cb111fb6e4d23c6b2";
-    rev-version = "19.0.0-unstable-2024-06-12";
-    sha256 = "sha256-oLVMwWjo6Nt8ZsTnDTfoiM5U0+1lVIc1NO+4qBNYlzs=";
+    rev = "a9ac31910db3975d5e92a6265ab29dafd6a4691d";
+    rev-version = "19.0.0-unstable-2024-06-23";
+    sha256 = "sha256-MTt2FU84rgu6FqB9aCO6M54VZexoogkdx5RKS1NzSkk=";
 }
   # i.e.:
   # {
@@ -44,6 +45,10 @@
 # to you to make sure that the LLVM repo given matches the release configuration
 # specified.
 , monorepoSrc ? null
+# Allows passthrough to packages via newScope. This makes it possible to
+# do `(llvmPackages.override { <someLlvmDependency> = bar; }).clang` and get
+# an llvmPackages whose packages are overridden in an internally consistent way.
+, ...
 }@args:
 
 assert
@@ -175,6 +180,9 @@ in let
       enableManpages = true;
       python3 = pkgs.python3;  # don't use python-boot
     });
+
+    # Wrapper for standalone command line utilities
+    clang-tools = callPackage ../common/clang-tools { };
 
     # pick clang appropriate for package set we are targeting
     clang =

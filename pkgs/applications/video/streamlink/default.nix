@@ -7,12 +7,12 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "streamlink";
-  version = "6.7.4";
+  version = "6.8.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-kzdTerEZ/ndSSl1mWq7Ou/sG4suN8o0SYNkodkJXUc4=";
+    hash = "sha256-TEN++sKCtN8CZRnyBp4niRFlb+LPSNcyMCu9Rm+GOZ0=";
   };
 
   patches = [
@@ -42,7 +42,6 @@ python3Packages.buildPythonApplication rec {
 
   propagatedBuildInputs = with python3Packages; [
     certifi
-    exceptiongroup
     isodate
     lxml
     pycountry

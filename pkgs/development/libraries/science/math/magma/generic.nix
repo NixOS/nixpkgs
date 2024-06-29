@@ -41,8 +41,7 @@ let
     then cudaPackages_11
     else cudaPackages;
 
-  inherit (effectiveCudaPackages) cudaAtLeast cudaFlags cudaOlder;
-  inherit (cudaFlags) cudaCapabilities;
+  inherit (effectiveCudaPackages) cudaAtLeast flags cudaOlder;
 
   # move to newer ROCm version once supported
   rocmPackages = rocmPackages_5;
@@ -52,7 +51,7 @@ let
   #   lists.subtractLists a b = b - a
 
   # For ROCm
-  # NOTE: The hip.gpuTargets are prefixed with "gfx" instead of "sm" like cudaFlags.realArches.
+  # NOTE: The hip.gpuTargets are prefixed with "gfx" instead of "sm" like flags.realArches.
   #   For some reason, Magma's CMakeLists.txt file does not handle the "gfx" prefix, so we must
   #   remove it.
   rocmArches = lists.map (x: strings.removePrefix "gfx" x) rocmPackages.clr.gpuTargets;
@@ -83,12 +82,11 @@ let
       throw "No GPU targets specified"
   );
 
-  # E.g. [ "80" "86" "90" ]
-  cudaArchitectures = (builtins.map cudaFlags.dropDot cudaCapabilities);
-
-  cudaArchitecturesString = strings.concatStringsSep ";" cudaArchitectures;
+  cudaArchitecturesString = flags.cmakeCudaArchitecturesString;
   minArch =
     let
+      # E.g. [ "80" "86" "90" ]
+      cudaArchitectures = (builtins.map flags.dropDot flags.cudaCapabilities);
       minArch' = builtins.head (builtins.sort strings.versionOlder cudaArchitectures);
     in
     # "75" -> "750"  Cf. https://bitbucket.org/icl/magma/src/f4ec79e2c13a2347eff8a77a3be6f83bc2daec20/CMakeLists.txt#lines-273

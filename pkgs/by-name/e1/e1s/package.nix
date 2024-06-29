@@ -1,7 +1,7 @@
 { stdenv, lib, buildGoModule, fetchFromGitHub }:
 let
   pname = "e1s";
-  version = "1.0.37";
+  version = "1.0.38";
 in
 buildGoModule {
   inherit pname version;
@@ -10,7 +10,7 @@ buildGoModule {
     owner = "keidarcy";
     repo = "e1s";
     rev = "refs/tags/v${version}";
-    hash = "sha256-lqaLfGEllyRlVPkUfLUzPO2o+Ruzp1lFD6/RY4o1L14=";
+    hash = "sha256-OFnriW+rerVTyonuXe9qilR78Qok6QUYQvTDbsTi5L0=";
   };
 
   vendorHash = "sha256-oQVZ1SNXaXOngZazUVeWLvtZu17XvtIcrx+XC6PvGH0=";

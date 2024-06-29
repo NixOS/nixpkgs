@@ -12,16 +12,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "gitu";
-  version = "0.21.0";
+  version = "0.21.1";
 
   src = fetchFromGitHub {
     owner = "altsem";
     repo = "gitu";
     rev = "v${version}";
-    hash = "sha256-2YcQl9aPFPE/t/Pzoo0mWkCjOE6b4BJH0oT8Gbx+vIg=";
+    hash = "sha256-cbH2gXMBD/D+dqdYLcFZxvhuSZklw2hi2+9mrqu+pjc=";
   };
 
-  cargoHash = "sha256-RldCa0UITX8zj5tliww1xiL1Y60t9EN6o1ZA5eVEaT4=";
+  cargoHash = "sha256-UB4z0jh0AQAareRbS7l/402u0yZxEV748xzE/fQcQfY=";
 
   nativeBuildInputs = [
     pkg-config

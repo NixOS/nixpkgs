@@ -1,16 +1,22 @@
 {
   lib,
   mkDerivation,
-  libc,
-  headers,
+  libcMinimal,
 }:
 
 mkDerivation {
   path = "lib/librt";
+
+  libcMinimal = true;
+
+  outputs = [
+    "out"
+    "man"
+  ];
+
+  extraPaths = [ libcMinimal.path ] ++ libcMinimal.extraPaths;
+
+  inherit (libcMinimal) postPatch;
+
   meta.platforms = lib.platforms.netbsd;
-  extraPaths = [ libc.path ] ++ libc.extraPaths;
-  postPatch = ''
-    sed -i 's,/usr\(/include/sys/syscall.h\),${headers}\1,g' \
-      $BSDSRCDIR/lib/{libc,librt}/sys/Makefile.inc
-  '';
 }

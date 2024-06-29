@@ -13,8 +13,8 @@
 
 buildPythonPackage rec {
   pname = "aemet-opendata";
-  version = "0.5.1";
-  format = "pyproject";
+  version = "0.5.2";
+  pyproject = true;
 
   disabled = pythonOlder "3.11";
 
@@ -22,15 +22,15 @@ buildPythonPackage rec {
     owner = "Noltari";
     repo = "AEMET-OpenData";
     rev = "refs/tags/${version}";
-    hash = "sha256-qj1rXM3yHYDQhtOkHfKEGS2ICjN7B2olD4og3uISjcw=";
+    hash = "sha256-cUvm8WJs2eW/KHIaLhQq/DYj7VIuTqxjhcwHprYIxAo=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     wheel
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     geopy
     requests

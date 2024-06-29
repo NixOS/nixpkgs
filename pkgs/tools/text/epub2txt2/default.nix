@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "epub2txt2";
-  version = "2.07";
+  version = "2.08";
 
   src = fetchFromGitHub {
     owner = "kevinboone";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-/P81ZXhB0wyRx2bb/CO7+kTTNspYKoGUpBGLb8Yfb5I=";
+    sha256 = "sha256-YFaXkcIdat2cn1ITYFyG1hxbbepqcxvyJ6ZzDo4dVYI=";
   };
 
   makeFlags = [ "CC:=$(CC)" "PREFIX:=$(out)" ];

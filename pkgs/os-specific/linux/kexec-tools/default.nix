@@ -43,6 +43,6 @@ stdenv.mkDerivation rec {
       "riscv64-linux" "riscv32-linux"
       "sparc-linux" "sparc64-linux"
     ];
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
   };
 }

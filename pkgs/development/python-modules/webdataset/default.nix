@@ -27,12 +27,12 @@ buildPythonPackage rec {
     hash = "sha256-selj7XD7NS831lbPnx/4o46bNpsxuFdSEIIb4S2b7S0=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     wheel
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     braceexpand
     numpy
     pyyaml
@@ -84,12 +84,20 @@ buildPythonPackage rec {
       "test_webloader_unbatched"
     ];
 
-  meta = with lib; {
+  disabledTestPaths = lib.optionals stdenv.isDarwin [
+    # AttributeError: <module 'torch.distributed' from /nix/store/...
+    "tests/test_wids.py"
+
+    # Issue with creating a temp file in the sandbox
+    "tests/test_wids_mmtar.py"
+  ];
+
+  meta = {
     description = "High-performance Python-based I/O system for large (and small) deep learning problems, with strong support for PyTorch";
     mainProgram = "widsindex";
     homepage = "https://github.com/webdataset/webdataset";
     changelog = "https://github.com/webdataset/webdataset/releases/tag/${version}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ iynaix ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ iynaix ];
   };
 }

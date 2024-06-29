@@ -16,7 +16,7 @@ in {
     services.gns3-server = {
       enable = lib.mkEnableOption "GNS3 Server daemon";
 
-      package = lib.mkPackageOptionMD pkgs "gns3-server" { };
+      package = lib.mkPackageOption pkgs "gns3-server" { };
 
       auth = {
         enable = lib.mkEnableOption "password based HTTP authentication to access the GNS3 Server";
@@ -87,18 +87,18 @@ in {
       };
 
       dynamips = {
-        enable = lib.mkEnableOption ''Whether to enable Dynamips support.'';
-        package = lib.mkPackageOptionMD pkgs "dynamips" { };
+        enable = lib.mkEnableOption ''Dynamips support'';
+        package = lib.mkPackageOption pkgs "dynamips" { };
       };
 
       ubridge = {
-        enable = lib.mkEnableOption ''Whether to enable uBridge support.'';
-        package = lib.mkPackageOptionMD pkgs "ubridge" { };
+        enable = lib.mkEnableOption ''uBridge support'';
+        package = lib.mkPackageOption pkgs "ubridge" { };
       };
 
       vpcs = {
-        enable = lib.mkEnableOption ''Whether to enable VPCS support.'';
-        package = lib.mkPackageOptionMD pkgs "vpcs" { };
+        enable = lib.mkEnableOption ''VPCS support'';
+        package = lib.mkPackageOption pkgs "vpcs" { };
       };
     };
   };

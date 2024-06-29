@@ -11,7 +11,7 @@
     pam.services.swaylock = {};
   };
 
-  hardware.opengl.enable = lib.mkDefault true;
+  hardware.graphics.enable = lib.mkDefault true;
   fonts.enableDefaultPackages = lib.mkDefault true;
 
   programs = {

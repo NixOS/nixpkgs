@@ -46,7 +46,6 @@ buildGoModule rec {
     homepage = "https://github.com/spicetify/spicetify-cli/";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [
-      jonringer
       mdarocha
     ];
     mainProgram = "spicetify";

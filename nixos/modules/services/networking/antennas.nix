@@ -50,10 +50,7 @@ in
       };
 
       serviceConfig = {
-         ExecStart = "${pkgs.antennas}/bin/antennas";
-
-        # Antennas expects all resources like html and config to be relative to it's working directory
-        WorkingDirectory = "${pkgs.antennas}/libexec/antennas/deps/antennas/";
+        ExecStart = "${pkgs.antennas}/bin/antennas";
 
         # Hardening
         CapabilityBoundingSet = [ "" ];

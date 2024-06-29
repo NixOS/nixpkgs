@@ -202,7 +202,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://www.freerdp.com/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ peterhoeg lheckemann ];
+    maintainers = with maintainers; [ peterhoeg ];
     platforms = platforms.unix;
   };
 })

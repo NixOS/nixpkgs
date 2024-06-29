@@ -33,6 +33,7 @@ clangStdenv.mkDerivation rec {
       url = "https://gitlab.com/ananicy-cpp/ananicy-cpp/-/commit/6ea2dccceec39b6c4913f617dad81d859aa20f24.patch";
       hash = "sha256-C+7x/VpVwewXEPwibi7GxGfjuhDkhcjTyGbZHlYL2Bs=";
     })
+    ./match-wrappers.patch
   ];
 
   strictDeps = true;
@@ -80,6 +81,7 @@ clangStdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [
       artturin
       johnrtitor
+      diniamo
     ];
     mainProgram = "ananicy-cpp";
   };

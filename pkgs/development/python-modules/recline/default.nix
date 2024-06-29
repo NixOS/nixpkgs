@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "recline";
-  version = "2023.5";
+  version = "2024.6";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "NetApp";
     repo = "recline";
-    rev = "v${version}";
-    sha256 = "sha256-jsWOPkzhN4D+Q/lK5yWg1kTgFkmOEIQY8O7oAXq5Nak=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-wVUM5vkavdLDtwRlbtVlVaBOXX+7tcB+SxYe1jZdq9I=";
   };
 
   nativeBuildInputs = [ setuptools ];

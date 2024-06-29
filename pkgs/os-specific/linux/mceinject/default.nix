@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
       kernel machine check handler.
     '';
     homepage = "https://github.com/andikleen/mce-inject/";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     maintainers = with maintainers; [ arkivm ];
     platforms = platforms.linux;
   };

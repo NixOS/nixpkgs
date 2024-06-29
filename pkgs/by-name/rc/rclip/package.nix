@@ -4,14 +4,14 @@
 }:
 python3Packages.buildPythonApplication rec {
   pname = "rclip";
-  version = "1.10.0";
+  version = "1.10.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "yurijmikhalevich";
     repo = "rclip";
     rev = "refs/tags/v${version}";
-    hash = "sha256-l3KsOX5IkU4/wQyXXHR+09KPSD6nsnBaiGjSi7fMyqA=";
+    hash = "sha256-02ZbeUw+O7tBQwauklaPPcgNasG+mYrSnw9TGJqtJfk=";
   };
 
   nativeBuildInputs = with python3Packages; [

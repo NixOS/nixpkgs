@@ -71,9 +71,7 @@ in {
 
     host = mkOption {
       type = lib.types.str;
-      default = "bluemap.${config.networking.domain}";
-      defaultText = lib.literalExpression "bluemap.\${config.networking.domain}";
-      description = "Domain to configure nginx for";
+      description = "Domain on which nginx will serve the bluemap webapp";
     };
 
     onCalendar = mkOption {

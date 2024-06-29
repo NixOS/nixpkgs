@@ -8,13 +8,13 @@
 
 buildPythonApplication rec {
   pname = "fortls";
-  version = "3.1.1";
+  version = "3.1.2";
 
   src = fetchFromGitHub {
     owner = "fortran-lang";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-7imZLSE7USFXmv/V3olE698J8Q8a7cJt15nBKkPZJoU=";
+    hash = "sha256-mOYPtysPj+JczRPTeM1DUckAH0XC9cO1ssP8pviYa0E=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];

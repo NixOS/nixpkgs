@@ -217,25 +217,6 @@ final: prev: {
     '';
   };
 
-  pnpm = prev.pnpm.override {
-    nativeBuildInputs = [ pkgs.buildPackages.makeWrapper ];
-
-    preRebuild = ''
-      sed 's/"link:/"file:/g' --in-place package.json
-    '';
-
-    postInstall = let
-      pnpmLibPath = lib.makeBinPath [
-        nodejs.passthru.python
-        nodejs
-      ];
-    in ''
-      for prog in $out/bin/*; do
-        wrapProgram "$prog" --prefix PATH : ${pnpmLibPath}
-      done
-    '';
-  };
-
   postcss-cli = prev.postcss-cli.override (oldAttrs: let
     esbuild-version = (lib.findFirst (dep: dep.name == "esbuild") null oldAttrs.dependencies).version;
     esbuild-linux-x64 = {
@@ -447,11 +428,6 @@ final: prev: {
         };
       };
   };
-
-  volar = final."@volar/vue-language-server".override ({ meta, ... }: {
-    name = "volar";
-    meta = meta // { mainProgram = "vue-language-server"; };
-  });
 
   wavedrom-cli = prev.wavedrom-cli.override {
     nativeBuildInputs = [ pkgs.pkg-config final.node-pre-gyp ];

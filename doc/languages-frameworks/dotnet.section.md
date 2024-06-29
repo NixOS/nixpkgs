@@ -141,9 +141,7 @@ in buildDotnetModule rec {
   src = ./.;
 
   projectFile = "src/project.sln";
-  # File generated with `nix-build -A package.passthru.fetch-deps`.
-  # To run fetch-deps when this file does not yet exist, set nugetDeps to null
-  nugetDeps = ./deps.nix;
+  nugetDeps = ./deps.nix; # see "Generating and updating NuGet dependencies" section for details
 
   projectReferences = [ referencedProject ]; # `referencedProject` must contain `nupkg` in the folder structure.
 
@@ -219,6 +217,12 @@ buildDotnetGlobalTool {
 ```
 ## Generating and updating NuGet dependencies {#generating-and-updating-nuget-dependencies}
 
+When writing a new expression, you can use the generated `fetch-deps` script to initialise the lockfile.
+After creating a blank `deps.nix` and pointing `nugetDeps` to it,
+build the script with `nix-build -A package.fetch-deps` and then run the result.
+(When the root attr is your package, it's simply `nix-build -A fetch-deps`.)
+
+There is also a manual method:
 First, restore the packages to the `out` directory, ensure you have cloned
 the upstream repository and you are inside it.
 
@@ -254,6 +258,5 @@ Finally, you move the `deps.nix` file to the appropriate location to be used by 
 If you ever need to update the dependencies of a package, you instead do
 
 * `nix-build -A package.fetch-deps` to generate the update script for `package`
-* Run `./result deps.nix` to regenerate the lockfile to `deps.nix`, keep in mind if a location isn't provided, it will write to a temporary path instead
-* Finally, move the file where needed and look at its contents to confirm it has updated the dependencies.
-
+* Run `./result` to regenerate the lockfile to the path passed for `nugetDeps` (keep in mind if it can't be resolved to a local path, the script will write to `$1` or a temporary path instead)
+* Finally, ensure the correct file was written and the derivation can be built.

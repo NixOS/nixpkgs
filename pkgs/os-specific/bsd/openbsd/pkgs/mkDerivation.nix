@@ -2,6 +2,8 @@
   lib,
   stdenv,
   stdenvNoCC,
+  crossLibcStdenv,
+  stdenvLibcMinimal,
   runCommand,
   rsync,
   source,
@@ -9,12 +11,22 @@
   openbsdSetupHook,
   makeMinimal,
   install,
+  tsort,
+  lorder,
 }:
 
 lib.makeOverridable (
   attrs:
   let
-    stdenv' = if attrs.noCC or false then stdenvNoCC else stdenv;
+    stdenv' =
+      if attrs.noCC or false then
+        stdenvNoCC
+      else if attrs.noLibc or false then
+        crossLibcStdenv
+      else if attrs.libcMinimal or false then
+        stdenvLibcMinimal
+      else
+        stdenv;
   in
   stdenv'.mkDerivation (
     rec {
@@ -39,17 +51,11 @@ lib.makeOverridable (
         openbsdSetupHook
         makeMinimal
         install
+        tsort
+        lorder
       ];
 
       HOST_SH = stdenv'.shell;
-
-      # Since STRIP below is the flag
-      STRIPBIN = "${stdenv.cc.bintools.targetPrefix}strip";
-
-      makeFlags = [
-        "STRIP=-s" # flag to install, not command
-        "-B"
-      ];
 
       MACHINE_ARCH =
         {

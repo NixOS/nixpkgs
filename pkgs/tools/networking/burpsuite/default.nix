@@ -1,15 +1,23 @@
-{ lib, fetchurl, jdk, buildFHSEnv, unzip, makeDesktopItem, proEdition ? false }:
+{ lib
+, buildFHSEnv
+, fetchurl
+, jdk
+, makeDesktopItem
+, proEdition ? false
+, unzip
+}:
+
 let
-  version = "2024.1.1.4";
+  version = "2024.5.3";
 
   product = if proEdition then {
     productName = "pro";
     productDesktop = "Burp Suite Professional Edition";
-    hash = "sha256-jJUTsNF7Jy2VbFBIW7ha/ty9ZwVyVX1cTKNZJgD7zg4=";
+    hash = "sha256-1+IAlm4irUVqGFHlL+vNZNdDJrq3ZpJdUJYGrUN2cuY=";
   } else {
     productName = "community";
     productDesktop = "Burp Suite Community Edition";
-    hash = "sha256-VkrI1M4lCdCuQypHSd2W5X6LyqLUhnbKZKMVj0w4THE=";
+    hash = "sha256-+YgRKYF9NPAAfuy97nmAVeI8fCvwjvHn7hHtBUjUoXk=";
   };
 
   src = fetchurl {
@@ -48,6 +56,8 @@ buildFHSEnv {
     expat
     glib
     gtk3
+    gtk3-x11
+    jython
     libcanberra-gtk3
     libdrm
     libudev0-shim
@@ -56,7 +66,6 @@ buildFHSEnv {
     nspr
     nss
     pango
-    gtk3-x11
     xorg.libX11
     xorg.libxcb
     xorg.libXcomposite
@@ -85,7 +94,7 @@ buildFHSEnv {
     license = licenses.unfree;
     platforms = jdk.meta.platforms;
     hydraPlatforms = [ ];
-    maintainers = with maintainers; [ arcayr bennofs ];
+    maintainers = with maintainers; [ bennofs ];
     mainProgram = "burpsuite";
   };
 }

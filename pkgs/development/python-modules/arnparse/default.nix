@@ -25,6 +25,6 @@ buildPythonPackage rec {
     description = "Parse ARNs using Python";
     homepage = "https://github.com/PokaInc/arnparse";
     license = licenses.mit;
-    maintainers = with maintainers; [ wolfangaukang ];
+    maintainers = [ ];
   };
 }

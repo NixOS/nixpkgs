@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     description = "Graphical application for configuring displays in Wayland compositors";
     homepage = "https://github.com/luispabon/wdisplays";
-    maintainers = with maintainers; [ lheckemann ma27 ];
+    maintainers = with maintainers; [ ma27 ];
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     mainProgram = "wdisplays";

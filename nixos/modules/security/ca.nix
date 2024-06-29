@@ -26,13 +26,13 @@ in
 
     security.pki.useCompatibleBundle = mkEnableOption ''usage of a compatibility bundle.
 
-      Such a bundle consist exclusively of `BEGIN CERTIFICATE` and no `BEGIN TRUSTED CERTIFICATE`,
-      which is a OpenSSL specific PEM format.
+      Such a bundle consists exclusively of `BEGIN CERTIFICATE` and no `BEGIN TRUSTED CERTIFICATE`,
+      which is an OpenSSL specific PEM format.
 
       It is known to be incompatible with certain software stacks.
 
       Nevertheless, enabling this will strip all additional trust rules provided by the
-      certificates themselves, this can have security consequences depending on your usecases.
+      certificates themselves. This can have security consequences depending on your usecases
     '';
 
     security.pki.certificateFiles = mkOption {

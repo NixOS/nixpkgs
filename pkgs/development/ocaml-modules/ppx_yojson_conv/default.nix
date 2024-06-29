@@ -10,7 +10,7 @@ buildDunePackage rec {
   pname = "ppx_yojson_conv";
   version = "0.15.1";
   duneVersion = "3";
-  minimumOCamlVersion = "4.08.0";
+  minimalOCamlVersion = "4.08.0";
 
   src = fetchFromGitHub {
     owner = "janestreet";

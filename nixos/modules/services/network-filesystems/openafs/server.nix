@@ -183,7 +183,7 @@ in {
 
           enableFabs = mkEnableOption ''
             FABS, the flexible AFS backup system. It stores volumes as dump files, relying on other
-            pre-existing backup solutions for handling them.
+            pre-existing backup solutions for handling them
           '';
 
           buserverArgs = mkOption {

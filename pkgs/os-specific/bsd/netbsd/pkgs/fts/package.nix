@@ -2,7 +2,6 @@
   mkDerivation,
   bsdSetupHook,
   netbsdSetupHook,
-  rsync,
   compatIfNeeded,
 }:
 
@@ -12,7 +11,6 @@ mkDerivation {
   nativeBuildInputs = [
     bsdSetupHook
     netbsdSetupHook
-    rsync
   ];
   propagatedBuildInputs = compatIfNeeded;
   extraPaths = [

@@ -1,13 +1,4 @@
 { lib, stdenv, callPackage, ecl, coreutils, fetchurl, strace, texinfo, which, writeText, zstd
-, threadSupport ? (stdenv.hostPlatform.isx86 || "aarch64-linux" == stdenv.hostPlatform.system || "aarch64-darwin" == stdenv.hostPlatform.system)
-, linkableRuntime ? stdenv.hostPlatform.isx86
-, disableImmobileSpace ? false
-  # Meant for sbcl used for creating binaries portable to non-NixOS via save-lisp-and-die.
-  # Note that the created binaries still need `patchelf --set-interpreter ...`
-  # to get rid of ${glibc} dependency.
-, purgeNixReferences ? false
-, coreCompression ? true
-, markRegionGC ? threadSupport
 , version
   # Set this to a lisp binary to use a custom bootstrap lisp compiler for SBCL.
   # Leave as null to use the default.  This is useful for local development of
@@ -65,12 +56,14 @@ let
 
 in
 
-stdenv.mkDerivation (self: rec {
+stdenv.mkDerivation (self: {
   pname = "sbcl";
   inherit version;
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/sbcl/sbcl/${version}/${pname}-${version}-source.tar.bz2";
+    # Changing the version shouldn’t change the source for the
+    # derivation. Override the src entirely if desired.
+    url = "mirror://sourceforge/project/sbcl/sbcl/${version}/sbcl-${version}-source.tar.bz2";
     inherit (versionMap.${version}) sha256;
   };
 
@@ -83,14 +76,24 @@ stdenv.mkDerivation (self: rec {
       strace
     ]
   );
-  buildInputs = lib.optionals coreCompression (
+  buildInputs = lib.optionals self.coreCompression (
     # Declare at the point of actual use in case the caller wants to override
     # buildInputs to sidestep this.
-    assert lib.assertMsg (!purgeNixReferences) ''
+    assert lib.assertMsg (!self.purgeNixReferences) ''
       Cannot enable coreCompression when purging Nix references, because compression requires linking in zstd
     '';
     [ zstd ]
   );
+
+  threadSupport = (stdenv.hostPlatform.isx86 || "aarch64-linux" == stdenv.hostPlatform.system || "aarch64-darwin" == stdenv.hostPlatform.system);
+  # Meant for sbcl used for creating binaries portable to non-NixOS via save-lisp-and-die.
+  # Note that the created binaries still need `patchelf --set-interpreter ...`
+  # to get rid of ${glibc} dependency.
+  purgeNixReferences = false;
+  coreCompression = true;
+  markRegionGC = self.threadSupport;
+  disableImmobileSpace = false;
+  linkableRuntime = stdenv.hostPlatform.isx86;
 
   # I don’t know why these are failing (on ofBorg), and I’d rather just disable
   # them and move forward with the succeeding tests than block testing
@@ -125,7 +128,7 @@ stdenv.mkDerivation (self: rec {
   postPatch = lib.optionalString (self.disabledTestFiles != [ ]) ''
     (cd tests ; rm -f ${lib.concatStringsSep " " self.disabledTestFiles})
   ''
-  + lib.optionalString purgeNixReferences ''
+  + lib.optionalString self.purgeNixReferences ''
     # This is the default location to look for the core; by default in $out/lib/sbcl
     sed 's@^\(#define SBCL_HOME\) .*$@\1 "/no-such-path"@' \
         -i src/runtime/runtime.c
@@ -137,7 +140,7 @@ stdenv.mkDerivation (self: rec {
       # binary. There are some tricky files in nested directories which should
       # definitely NOT be patched this way, hence just a single * (and no
       # globstar).
-      substituteInPlace ${if purgeNixReferences then "tests" else "{tests,src/code}"}/*.{lisp,sh} \
+      substituteInPlace ${if self.purgeNixReferences then "tests" else "{tests,src/code}"}/*.{lisp,sh} \
         --replace-quiet /usr/bin/env "${coreutils}/bin/env" \
         --replace-quiet /bin/uname "${coreutils}/bin/uname" \
         --replace-quiet /bin/sh "${stdenv.shell}"
@@ -146,7 +149,7 @@ stdenv.mkDerivation (self: rec {
     # want to override { src = ... } it might not exist. It’s required for
     # building, so create a mock version as a backup.
     if [[ ! -a version.lisp-expr ]]; then
-      echo '"${version}.nixos"' > version.lisp-expr
+      echo '"${self.version}.nixos"' > version.lisp-expr
     fi
   '';
 
@@ -157,16 +160,16 @@ stdenv.mkDerivation (self: rec {
   '';
 
   enableFeatures = with lib;
-    assert assertMsg (markRegionGC -> threadSupport) "SBCL mark region GC requires thread support";
-    optional threadSupport "sb-thread" ++
-    optional linkableRuntime "sb-linkable-runtime" ++
-    optional coreCompression "sb-core-compression" ++
+    assert assertMsg (self.markRegionGC -> self.threadSupport) "SBCL mark region GC requires thread support";
+    optional self.threadSupport "sb-thread" ++
+    optional self.linkableRuntime "sb-linkable-runtime" ++
+    optional self.coreCompression "sb-core-compression" ++
     optional stdenv.isAarch32 "arm" ++
-    optional markRegionGC "mark-region-gc";
+    optional self.markRegionGC "mark-region-gc";
 
   disableFeatures = with lib;
-    optional (!threadSupport) "sb-thread" ++
-    optionals disableImmobileSpace [ "immobile-space" "immobile-code" "compact-instance-header" ];
+    optional (!self.threadSupport) "sb-thread" ++
+    optionals self.disableImmobileSpace [ "immobile-space" "immobile-code" "compact-instance-header" ];
 
   buildArgs = [
     "--prefix=$out"
@@ -210,7 +213,7 @@ stdenv.mkDerivation (self: rec {
     INSTALL_ROOT=$out sh install.sh
 
   ''
-  + lib.optionalString (!purgeNixReferences) ''
+  + lib.optionalString (!self.purgeNixReferences) ''
     cp -r src $out/lib/sbcl
     cp -r contrib $out/lib/sbcl
     cat >$out/lib/sbcl/sbclrc <<EOF
@@ -222,7 +225,7 @@ stdenv.mkDerivation (self: rec {
     runHook postInstall
   '';
 
-  setupHook = lib.optional purgeNixReferences (writeText "setupHook.sh" ''
+  setupHook = lib.optional self.purgeNixReferences (writeText "setupHook.sh" ''
     addEnvHooks "$targetOffset" _setSbclHome
     _setSbclHome() {
       export SBCL_HOME='@out@/lib/sbcl/'

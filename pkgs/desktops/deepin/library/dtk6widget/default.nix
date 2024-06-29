@@ -12,19 +12,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dtk6widget";
-  version = "6.0.15";
+  version = "6.0.16";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = "dtk6widget";
     rev = finalAttrs.version;
-    hash = "sha256-QCdRjkD4JTPecLeZK+Y5U/H9pBgKI4DHRuchz/GymWQ=";
+    hash = "sha256-4WmnO4msQVWAEOzH1zOWfvJl5X+/VKWv4bbZAH//IXg=";
   };
 
   patches = [
     ./fix-pkgconfig-path.patch
     ./fix-pri-path.patch
-    ./fix-build-on-qt-6_7.patch
   ];
 
   postPatch = ''

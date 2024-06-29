@@ -170,7 +170,7 @@ in
       '';
     };
 
-    caddy.enable = mkEnableOption "Whether to enable caddy reverse proxy to expose jitsi-meet";
+    caddy.enable = mkEnableOption "caddy reverse proxy to expose jitsi-meet";
 
     prosody.enable = mkOption {
       type = bool;

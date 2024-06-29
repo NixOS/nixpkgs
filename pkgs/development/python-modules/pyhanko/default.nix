@@ -132,6 +132,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/MatthiasValvekens/pyHanko";
     changelog = "https://github.com/MatthiasValvekens/pyHanko/blob/v${version}/docs/changelog.rst";
     license = licenses.mit;
-    maintainers = with maintainers; [ wolfangaukang ];
+    maintainers = [ ];
   };
 }

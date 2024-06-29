@@ -36,6 +36,16 @@ stdenv.mkDerivation (finalAttrs: {
     llvm
   ]);
 
+  # On Darwin, Zig calls std.zig.system.darwin.macos.detect during the build,
+  # which parses /System/Library/CoreServices/SystemVersion.plist and
+  # /System/Library/CoreServices/.SystemVersionPlatform.plist to determine the
+  # OS version. This causes the build to fail during stage 3 with
+  # OSVersionDetectionFail when the sandbox is enabled.
+  __impureHostDeps = lib.optionals stdenv.isDarwin [
+    "/System/Library/CoreServices/.SystemVersionPlatform.plist"
+    "/System/Library/CoreServices/SystemVersion.plist"
+  ];
+
   env.ZIG_GLOBAL_CACHE_DIR = "$TMPDIR/zig-cache";
 
   # Zig's build looks at /usr/bin/env to find dynamic linking info. This doesn't

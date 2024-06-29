@@ -35,7 +35,7 @@ python3Packages.buildPythonApplication rec {
     homepage = "http://dag.wieers.com/home-made/dstat/";
     description = "Versatile resource statistics tool";
     mainProgram = "dstat";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ ];
     changelog = "https://github.com/dstat-real/dstat/blob/v${version}/ChangeLog";

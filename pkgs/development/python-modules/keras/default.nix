@@ -3,7 +3,11 @@
   buildPythonPackage,
   pythonOlder,
   fetchFromGitHub,
+
+  # build-system
   setuptools,
+
+  # dependencies
   absl-py,
   dm-tree,
   h5py,
@@ -12,13 +16,14 @@
   namex,
   numpy,
   optree,
+  packaging,
   rich,
   tensorflow,
 }:
 
 buildPythonPackage rec {
   pname = "keras";
-  version = "3.3.3";
+  version = "3.4.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -27,7 +32,7 @@ buildPythonPackage rec {
     owner = "keras-team";
     repo = "keras";
     rev = "refs/tags/v${version}";
-    hash = "sha256-hhY28Ocv4zacZiwFflJtufKpeKfH1MD1PZJ+NTJfpH0=";
+    hash = "sha256-P/TRczWi/prv5D0/I6yLChIDfc6QdGcRSaF4Dd1Iowk=";
   };
 
   build-system = [
@@ -43,6 +48,7 @@ buildPythonPackage rec {
     namex
     numpy
     optree
+    packaging
     rich
     tensorflow
   ];
@@ -58,6 +64,7 @@ buildPythonPackage rec {
   meta = {
     description = "Multi-backend implementation of the Keras API, with support for TensorFlow, JAX, and PyTorch";
     homepage = "https://keras.io";
+    changelog = "https://github.com/keras-team/keras/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ NikolaMandic ];
   };
