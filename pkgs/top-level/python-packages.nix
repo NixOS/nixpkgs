@@ -4457,6 +4457,10 @@ self: super: with self; {
 
   flet-runtime = callPackage ../development/python-modules/flet-runtime { };
 
+  flexcache = callPackage ../development/python-modules/flexcache { };
+
+  flexparser = callPackage ../development/python-modules/flexparser { };
+
   flexmock = callPackage ../development/python-modules/flexmock { };
 
   flickrapi = callPackage ../development/python-modules/flickrapi { };
