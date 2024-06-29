@@ -1,6 +1,7 @@
 {
   lib,
   fetchFromGitLab,
+  gitUpdater,
   python3Packages,
   stdenv,
 }:
@@ -70,11 +71,15 @@ python3Packages.buildPythonApplication rec {
       "test_restricted_arch"
     ];
 
+  passthru.updateScript = gitUpdater { rev-prefix = "v"; };
+
   meta = {
     description = "Build system for Ubuntu Touch apps";
     mainProgram = "clickable";
     homepage = "https://clickable-ut.dev";
-    changelog = "https://clickable-ut.dev/en/latest/changelog.html";
+    changelog = "https://clickable-ut.dev/en/latest/changelog.html#changes-in-v${
+      lib.strings.replaceStrings [ "." ] [ "-" ] version
+    }";
     license = lib.licenses.gpl3Only;
     maintainers = lib.teams.lomiri.members ++ (with lib.maintainers; [ ilyakooo0 ]);
   };
