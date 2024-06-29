@@ -21,7 +21,7 @@ BOOT_MOUNT_POINT = "@bootMountPoint@"
 LOADER_CONF = f"{EFI_SYS_MOUNT_POINT}/loader/loader.conf"  # Always stored on the ESP
 NIXOS_DIR = "@nixosDir@"
 TIMEOUT = "@timeout@"
-EDITOR = "@editor@" == "1"
+EDITOR = "@editor@" == "1" # noqa: PLR0133
 CONSOLE_MODE = "@consoleMode@"
 BOOTSPEC_TOOLS = "@bootspecTools@"
 DISTRO_NAME = "@distroName@"
@@ -38,13 +38,13 @@ class BootSpec:
     init: str
     initrd: str
     kernel: str
-    kernelParams: List[str]
+    kernelParams: List[str]  # noqa: N815
     label: str
     system: str
     toplevel: str
     specialisations: Dict[str, "BootSpec"]
-    sortKey: str
-    initrdSecrets: str | None = None
+    sortKey: str  # noqa: N815
+    initrdSecrets: str | None = None  # noqa: N815
 
 
 libc = ctypes.CDLL("libc.so.6")
