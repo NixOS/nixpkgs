@@ -35889,6 +35889,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) CoreData IOKit PCSC;
   };
 
+  haveno = callPackage ../applications/blockchains/haveno { };
+
   monero-gui = libsForQt5.callPackage ../applications/blockchains/monero-gui { };
 
   masari = callPackage ../applications/blockchains/masari { };
