@@ -71,6 +71,7 @@ self: super: {
   websockets = self.websockets_0_13_0_0;
   th-desugar = self.th-desugar_1_16;
   singletons-th = self.singletons-th_3_3;
+  singletons-base = self.singletons-base_3_3;
 
   # A given major version of ghc-exactprint only supports one version of GHC.
   ghc-exactprint = self.ghc-exactprint_1_8_0_0;
