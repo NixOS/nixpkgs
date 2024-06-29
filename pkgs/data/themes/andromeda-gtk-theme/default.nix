@@ -56,6 +56,6 @@ stdenvNoCC.mkDerivation {
     homepage = "https://github.com/EliverLara/Andromeda-gtk";
     license = licenses.gpl3Only;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ jakedevs ];
+    maintainers = with maintainers; [ jakedevs romildo ];
   };
 }
