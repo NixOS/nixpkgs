@@ -897,4 +897,16 @@ rec {
     '';
   };
 
+  nix-layered = pkgs.dockerTools.streamLayeredImage  {
+    name = "nix-layered";
+    tag = "latest";
+    contents = [ pkgs.nix pkgs.bash ];
+    includeNixDB = true;
+    config = {
+      Env = [
+        "NIX_PAGER=cat"
+      ];
+    };
+  };
+
 }

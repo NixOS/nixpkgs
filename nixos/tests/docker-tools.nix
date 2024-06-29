@@ -567,6 +567,12 @@ in {
         docker.succeed("docker run --rm image-with-certs:latest test -r /etc/pki/tls/certs/ca-bundle.crt")
         docker.succeed("docker image rm image-with-certs:latest")
 
+    with subtest("buildImageWithNixDB: Has a nix database"):
+        docker.succeed(
+            "docker load --input='${examples.nix}'",
+            "docker run --rm ${examples.nix.imageName} nix-store -q --references /bin/bash"
+        )
+
     with subtest("buildNixShellImage: Can build a basic derivation"):
         docker.succeed(
             "${examples.nix-shell-basic} | docker load",
@@ -631,6 +637,12 @@ in {
         docker.succeed(
             "${nonRootTestImage} | docker load",
             "docker run --rm ${chownTestImage.imageName} | diff /dev/stdin <(echo 12345:12345)"
+        )
+
+    with subtest("streamLayeredImage: with nix db"):
+        docker.succeed(
+            "${examples.nix-layered} | docker load",
+            "docker run --rm ${examples.nix-layered.imageName} nix-store -q --references /bin/bash"
         )
   '';
 })
