@@ -36711,12 +36711,13 @@ with pkgs;
 
   methane = callPackage ../games/methane { };
 
-  mindustry = callPackage ../games/mindustry { };
-  mindustry-wayland = callPackage ../games/mindustry {
+  mindustry = callPackage ../games/mindustry {
+    gradle = gradle_7;
+  };
+  mindustry-wayland = mindustry.override {
     enableWayland = true;
   };
-
-  mindustry-server = callPackage ../games/mindustry {
+  mindustry-server = mindustry.override {
     enableClient = false;
     enableServer = true;
   };
