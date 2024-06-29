@@ -1,9 +1,10 @@
 {
   lib,
   buildPythonPackage,
-  python,
   fetchFromGitHub,
   sdcc,
+  setuptools,
+  setuptools-scm,
   libusb1,
   crcmod,
 }:
@@ -11,7 +12,7 @@
 buildPythonPackage rec {
   pname = "fx2";
   version = "0.13";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "whitequark";
@@ -20,12 +21,21 @@ buildPythonPackage rec {
     hash = "sha256-PtWxjT+97+EeNMN36zOT1+ost/w3lRRkaON3Cl3dpp4=";
   };
 
-  nativeBuildInputs = [ sdcc ];
+  nativeBuildInputs = [
+    sdcc
+    setuptools
+    setuptools-scm
+  ];
 
   propagatedBuildInputs = [
     libusb1
     crcmod
   ];
+
+  postPatch = ''
+    substituteInPlace software/pyproject.toml \
+      --replace-fail 'setuptools~=67.0' 'setuptools'
+  '';
 
   preBuild = ''
     make -C firmware
