@@ -8,13 +8,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "clickable";
-  version = "7.11.0";
+  version = "8.2.0";
 
   src = fetchFromGitLab {
     owner = "clickable";
     repo = "clickable";
     rev = "v${version}";
-    sha256 = "sha256-OVS+FK2ABoKbBFLDc3drcjeaa3yO9/8Ah8FzlN2fd8g=";
+    sha256 = "sha256-MFzpeiWeqJ0MG8ouwRkYXD1e6Nsxshmz1NSzCIBRjZ0=";
   };
 
   propagatedBuildInputs = with python3Packages; [
@@ -62,6 +62,7 @@ python3Packages.buildPythonApplication rec {
       "test_devices"
       "test_install"
       "test_skip_container_mode"
+      "test_godot_plugin"
     ]
     ++
     # There are no docker images available for the aarch64 architecutre
