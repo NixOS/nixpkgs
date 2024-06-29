@@ -169,6 +169,7 @@ mapAliases {
   inherit (pkgs) titanium; # added 2023-08-17
   triton = pkgs.triton; # Added 2023-05-06
   typescript = pkgs.typescript; # Added 2023-06-21
+  inherit (pkgs) undollar; # added 2024-06-29
   inherit (pkgs) ungit; # added 2023-08-20
   inherit (pkgs) vim-language-server; # added 2024-06-25
   inherit (pkgs) vsc-leetcode-cli; # Added 2023-08-30
