@@ -157,6 +157,29 @@ rec {
   */
   replicate = n: s: concatStrings (lib.lists.replicate n s);
 
+  /*
+    Remove leading and trailing whitespace from a string.
+
+    Whitespace is defined as any of the following characters:
+      " ", "\t" "\r" "\n"
+
+    Type: trim :: string -> string
+
+    Example:
+      trim "   hello, world!   "
+      => "hello, world!"
+  */
+  trim = s:
+    let
+      # This regex matches leading whitespace and trailing whitespace,
+      # and captures a group that ends in a non-whitespace character.
+      res = match "[ \t\r\n]*(.*[^ \t\r\n])[ \t\r\n]*" s;
+    in
+      # If the string was empty or entirely whitespace,
+      # then the regex would not match and `res` will be `null`.
+      # Otherwise, `res` is a singleton list containing the captured group.
+      optionalString (res != null) (head res);
+
   /* Construct a Unix-style, colon-separated search path consisting of
      the given `subDir` appended to each of the given paths.
 

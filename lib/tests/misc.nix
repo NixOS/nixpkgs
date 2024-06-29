@@ -352,6 +352,36 @@ runTests {
     expected = "hellohellohellohellohello";
   };
 
+  # Test various strings are trimmed correctly
+  testTrimString = {
+    expr = mapAttrs (_: strings.trim) {
+      empty = "";
+      cr = "\r";
+      lf = "\n";
+      tab = "\t";
+      spaces = "   ";
+      leading = "  Hello, world";
+      trailing = "Hello, world   ";
+      mixed = " Hello, world ";
+      mixed-tabs = " \t\tHello, world \t \t ";
+      multiline = "  Hello,\n  world!  ";
+      multiline-crlf = "  Hello,\r\n  world!  ";
+    };
+    expected = {
+      empty = "";
+      cr = "";
+      lf = "";
+      tab = "";
+      spaces = "";
+      leading = "Hello, world";
+      trailing = "Hello, world";
+      mixed = "Hello, world";
+      mixed-tabs = "Hello, world";
+      multiline = "Hello,\n  world!";
+      multiline-crlf = "Hello,\r\n  world!";
+    };
+  };
+
   testSplitStringsSimple = {
     expr = strings.splitString "." "a.b.c.d";
     expected = [ "a" "b" "c" "d" ];

@@ -102,7 +102,7 @@ let
       hasInfix hasPrefix hasSuffix stringToCharacters stringAsChars escape
       escapeShellArg escapeShellArgs
       isStorePath isStringLike
-      isValidPosixName toShellVar toShellVars
+      isValidPosixName toShellVar toShellVars trim
       escapeRegex escapeURL escapeXML replaceChars lowerChars
       upperChars toLower toUpper addContextFrom splitString
       removePrefix removeSuffix versionOlder versionAtLeast
