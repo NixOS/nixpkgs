@@ -14,6 +14,10 @@
   python3Packages,
   perl,
   perlPackages,
+  withOpenCL ? true,
+  opencl-headers,
+  ocl-icd,
+  substituteAll,
   makeWrapper,
 }:
 
@@ -28,6 +32,13 @@ stdenv.mkDerivation rec {
     hash = "sha256-zvoN+8Sx6qpVg2JeRLOIH1ehfl3tFTv7r5wQZ44Qsbc=";
   };
 
+  patches = lib.optionals withOpenCL [
+    (substituteAll {
+      src = ./opencl.patch;
+      ocl_icd = ocl-icd;
+    })
+  ];
+
   postPatch = ''
     sed -ri -e '
       s!^(#define\s+CFG_[A-Z]+_NAME\s+).*/!\1"'"$out"'/etc/john/!
@@ -39,28 +50,37 @@ stdenv.mkDerivation rec {
     }' run/*.conf
   '';
 
-  preConfigure = ''
-    cd src
-    # Makefile.in depends on AS and LD being set to CC, which is set by default in configure.ac.
-    # This ensures we override the environment variables set in cc-wrapper/setup-hook.sh
-    export AS=$CC
-    export LD=$CC
-  '';
+  preConfigure =
+    ''
+      cd src
+      # Makefile.in depends on AS and LD being set to CC, which is set by default in configure.ac.
+      # This ensures we override the environment variables set in cc-wrapper/setup-hook.sh
+      export AS=$CC
+      export LD=$CC
+    ''
+    + lib.optionalString withOpenCL ''
+      python ./opencl_generate_dynamic_loader.py  # Update opencl_dynamic_loader.c
+    '';
   configureFlags = [
     "--disable-native-tests"
     "--with-systemwide"
   ];
 
-  buildInputs = [
-    openssl
-    nss
-    nspr
-    libkrb5
-    gmp
-    zlib
-    libpcap
-    re2
-  ];
+  buildInputs =
+    [
+      openssl
+      nss
+      nspr
+      libkrb5
+      gmp
+      zlib
+      libpcap
+      re2
+    ]
+    ++ lib.optionals withOpenCL [
+      opencl-headers
+      ocl-icd
+    ];
   nativeBuildInputs = [
     gcc
     python3Packages.wrapPython
