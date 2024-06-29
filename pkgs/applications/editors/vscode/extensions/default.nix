@@ -1030,6 +1030,23 @@ let
         };
       };
 
+      danielsanmedium.dscodegpt = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          publisher = "DanielSanMedium";
+          name = "dscodegpt";
+          version = "3.4.10";
+          hash = "sha256-zjaM9YME0wfBOwhJTacnQbQvw35QL5NvXIBAx5d/bjI=";
+        };
+        meta = {
+          changelog = "https://marketplace.visualstudio.com/items/DanielSanMedium.dscodegpt/changelog";
+          description = "Easily connect to AI providers using their official APIs in VSCode";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=DanielSanMedium.dscodegpt";
+          homepage = "https://codegpt.co";
+          license = lib.licenses.unfree;
+          maintainers = [ lib.maintainers.onny ];
+        };
+      };
+
       daohong-emilio.yash = buildVscodeMarketplaceExtension {
         mktplcRef = {
           publisher = "daohong-emilio";
