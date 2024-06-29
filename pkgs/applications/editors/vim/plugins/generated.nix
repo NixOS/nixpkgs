@@ -17143,6 +17143,18 @@ final: prev:
     meta.homepage = "https://github.com/HerringtonDarkholme/yats.vim/";
   };
 
+  yazi-nvim = buildVimPlugin {
+    pname = "yazi.nvim";
+    version = "2024-06-01";
+    src = fetchFromGitHub {
+      owner = "DreamMaoMao";
+      repo = "yazi.nvim";
+      rev = "0e7dce1a936b92099180ff80cbf35eb7e8a5f660";
+      sha256 = "xKwQXwvqGBNveu94i6NW4I7L/mAnbqLmYS3Uc/6qTyw=";
+    };
+    meta.homepage = "https://github.com/DreamMaoMao/yazi.nvim";
+  };
+
   yescapsquit-vim = buildVimPlugin {
     pname = "yescapsquit.vim";
     version = "2022-08-31";
