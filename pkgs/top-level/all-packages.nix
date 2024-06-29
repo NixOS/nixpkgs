@@ -2038,6 +2038,8 @@ with pkgs;
 
   tailwindcss = callPackage ../development/tools/tailwindcss { };
 
+  task-keeper = callPackage ../tools/misc/task-keeper { };
+
   tauon = callPackage ../applications/audio/tauon { };
 
   tere = callPackage ../tools/misc/tere { };
