@@ -23,6 +23,7 @@
   pyrsistent,
   pyspark,
   pysocks,
+  pytest-asyncio,
   pytest-forked,
   pytest-localserver,
   pytest-watch,
@@ -39,7 +40,7 @@
 
 buildPythonPackage rec {
   pname = "sentry-sdk";
-  version = "1.45.0";
+  version = "2.2.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -48,7 +49,7 @@ buildPythonPackage rec {
     owner = "getsentry";
     repo = "sentry-python";
     rev = "refs/tags/${version}";
-    hash = "sha256-OWoMqJlf0vmBHWWsW6mF4u5X9USzxkFmCJyX7Ws0dD0=";
+    hash = "sha256-MP/KGWVDt1RvqX32D+omkeipQC2mbIooCxjcMV5UDww=";
   };
 
   build-system = [ setuptools ];
@@ -96,6 +97,7 @@ buildPythonPackage rec {
     pure-eval
     pyrsistent
     pysocks
+    pytest-asyncio
     pytest-forked
     pytest-localserver
     pytest-watch
@@ -108,6 +110,9 @@ buildPythonPackage rec {
     # Issue with the asseration
     "test_auto_enabling_integrations_catches_import_error"
     "test_default_release"
+    # AttributeError: type object 'ABCMeta' has no attribute 'setup_once'
+    "test_ensure_integration_enabled_no_original_function_enabled"
+    "test_ensure_integration_enabled_async_no_original_function_enabled"
   ];
 
   disabledTestPaths =
