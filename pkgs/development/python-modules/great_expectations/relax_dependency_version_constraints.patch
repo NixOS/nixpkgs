@@ -1,0 +1,27 @@
+diff --git a/requirements.txt b/requirements.txt
+index c823bc919..b5bd22437 100644
+--- a/requirements.txt
++++ b/requirements.txt
+@@ -4,7 +4,7 @@ colorama>=0.4.3
+ cryptography>=3.2,<37.0.0
+ importlib-metadata>=1.7.0 # (included in Python 3.8 by default.)
+ Ipython>=7.16.3
+-jinja2>=2.10,<3.1.0 # contextfilter has been renamed
++jinja2>=2.10,<=3.1.1 # contextfilter has been renamed
+ jsonpatch>=1.22
+ jsonschema>=2.5.1
+ mistune>=0.8.4
+@@ -13,11 +13,11 @@ notebook>=6.4.10
+ numpy>=1.14.1
+ packaging
+ pandas>=0.23.0
+-pyparsing>=2.4,<3
++pyparsing>=2.4,<3.1
+ python-dateutil>=2.8.1
+ pytz>=2021.3
+ requests>=2.20
+-ruamel.yaml>=0.16,<0.17.18
++ruamel.yaml>=0.16,<=0.17.21
+ scipy>=0.19.0
+ termcolor>=1.1.0
+ tqdm>=4.59.0
