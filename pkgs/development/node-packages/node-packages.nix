@@ -60484,23 +60484,6 @@ in
     bypassCache = true;
     reconstructLock = true;
   };
-  coc-css = nodeEnv.buildNodePackage {
-    name = "coc-css";
-    packageName = "coc-css";
-    version = "2.1.0";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/coc-css/-/coc-css-2.1.0.tgz";
-      sha512 = "4DG6chaAQg5pQ4B4WLff04+AzKrQo9+WRDJIl0j0Mmcx7IOPP4QE+m00mDuyowsw4eZvaQ/Mc8bwtg5MbPdIcQ==";
-    };
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "Css extension for coc.nvim";
-      license = "MIT";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
   coc-docker = nodeEnv.buildNodePackage {
     name = "coc-docker";
     packageName = "coc-docker";
