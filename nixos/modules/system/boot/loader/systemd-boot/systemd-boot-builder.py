@@ -230,10 +230,10 @@ def remove_old_entries(gens: list[SystemIdentifier]) -> None:
             gen_number = int(rex_generation.sub(r"\1", path))
         except ValueError:
             continue
-        if not (prof, gen_number, None) in gens:
+        if (prof, gen_number, None) not in gens:
             os.unlink(path)
     for path in glob.iglob(f"{BOOT_MOUNT_POINT}/{NIXOS_DIR}/*"):
-        if not path in known_paths and not os.path.isdir(path):
+        if path not in known_paths and not os.path.isdir(path):
             os.unlink(path)
 
 
