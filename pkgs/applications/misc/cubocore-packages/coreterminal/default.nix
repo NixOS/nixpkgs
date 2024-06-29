@@ -41,5 +41,7 @@ mkDerivation rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ dan4ik605743 ];
     platforms = platforms.linux;
+    broken = true; # At 2024-06-29
+                   # https://hydra.nixos.org/build/264686032/nixlog/1
   };
 }
