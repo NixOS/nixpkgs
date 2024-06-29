@@ -6,6 +6,7 @@ let
 in {
   idris2 = callPackage ./idris2.nix { };
   idris2Lsp = callPackage ./idris2-lsp.nix { };
+  idris2-rational = callPackage ./rational.nix { };
 
   buildIdris = callPackage ./build-idris.nix { };
 
