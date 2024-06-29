@@ -5,6 +5,7 @@
 , sage-docbuild
 , env-locations
 , gfortran
+, ninja
 , bash
 , coreutils
 , gnused
@@ -63,6 +64,7 @@ let
     "@sage-local@/build"
     pythonEnv
     gfortran # for inline fortran
+    ninja # for inline fortran via numpy.f2py
     stdenv.cc # for cython
     bash
     coreutils
