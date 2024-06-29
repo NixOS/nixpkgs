@@ -1336,6 +1336,8 @@ with pkgs;
 
   substituteAllFiles = callPackage ../build-support/substitute-files/substitute-all-files.nix { };
 
+  substituteAttrs = callPackage ../build-support/substitute/substitute-attrs.nix { };
+
   replaceDependency = callPackage ../build-support/replace-dependency.nix { };
 
   nukeReferences = callPackage ../build-support/nuke-references {
