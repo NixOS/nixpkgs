@@ -22196,7 +22196,7 @@ with pkgs;
 
   liblc3 = callPackage ../development/libraries/liblc3 { };
 
-  inherit (callPackages ../development/libraries/libliftoff { }) libliftoff_0_4 libliftoff_0_5;
+  inherit (callPackage ../development/libraries/libliftoff { }) libliftoff_0_4 libliftoff_0_5;
   libliftoff = libliftoff_0_5;
 
   liblqr1 = callPackage ../development/libraries/liblqr-1 {
