@@ -27,7 +27,6 @@
 , "cdktf-cli"
 , "clipboard-cli"
 , "coc-cmake"
-, "coc-css"
 , "coc-docker"
 , "coc-emmet"
 , "coc-eslint"
