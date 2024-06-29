@@ -33156,7 +33156,7 @@ with pkgs;
   netcoredbg = callPackage ../development/tools/misc/netcoredbg { };
 
   ncdu = callPackage ../tools/misc/ncdu {
-    zig = zig_0_12;
+    zig = buildPackages.zig_0_12;
   };
 
   ncdu_1 = callPackage ../tools/misc/ncdu/1.nix { };
