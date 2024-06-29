@@ -287,10 +287,10 @@ rec {
     all (elem: !platformMatch platform elem) (pkg.meta.badPlatforms or []);
 
   /**
-    Get the corresponding attribute in lib.licenses
-    from the SPDX ID.
-    For SPDX IDs, see
-    https://spdx.org/licenses
+    Get the corresponding attribute in lib.licenses from the SPDX ID
+    or warn and fallback to `{ shortName = <license string>; }`.
+
+    For SPDX IDs, see https://spdx.org/licenses
 
     # Type
 
