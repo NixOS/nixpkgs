@@ -9,19 +9,20 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "glasgow";
-  version = "unstable-2023-09-20";
-  # python -m setuptools_scm
-  realVersion = "0.1.dev1798+g${lib.substring 0 7 src.rev}";
+  version = "unstable-2024-06-28";
+  realVersion = "0.1.dev2085+g${lib.substring 0 7 src.rev}";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "GlasgowEmbedded";
     repo = "glasgow";
-    rev = "e9a9801d5be3dcba0ee188dd8a6e9115e337795d";
-    sha256 = "sha256-ztB3I/jrDSm1gKB1e5igivUVloq+YYhkshDlWg75NMA=";
+    rev = "a599e3caa64c2e445358894fd050e16917f2ee42";
+    sha256 = "sha256-5qg0/j1MgwHMOjySBY5cKuQqlqltV5cXcR/Ap6J9vys=";
   };
 
   nativeBuildInputs = [
-    python3.pkgs.setuptools-scm
+    python3.pkgs.unittestCheckHook
+    python3.pkgs.pdm-backend
     sdcc
   ];
 
@@ -34,6 +35,7 @@ python3.pkgs.buildPythonApplication rec {
     fx2
     libusb1
     packaging
+    platformdirs
     pyvcd
     setuptools
   ];
@@ -46,7 +48,7 @@ python3.pkgs.buildPythonApplication rec {
     make -C firmware LIBFX2=${python3.pkgs.fx2}/share/libfx2
     cp firmware/glasgow.ihex software/glasgow
     cd software
-    export SETUPTOOLS_SCM_PRETEND_VERSION="${realVersion}"
+    export PDM_BUILD_SCM_VERSION="${realVersion}"
   '';
 
   # installCheck tries to build_ext again
@@ -54,16 +56,16 @@ python3.pkgs.buildPythonApplication rec {
 
   postInstall = ''
     mkdir -p $out/etc/udev/rules.d
-    cp $src/config/99-glasgow.rules $out/etc/udev/rules.d
+    cp $src/config/70-cypress.rules $out/etc/udev/rules.d
+    cp $src/config/70-glasgow.rules $out/etc/udev/rules.d
   '';
 
-  checkPhase = ''
+  preCheck = ''
     # tests attempt to cache bitstreams
     # for linux:
     export XDG_CACHE_HOME=$TMPDIR
     # for darwin:
     export HOME=$TMPDIR
-    ${python3.interpreter} -W ignore::DeprecationWarning test.py
   '';
 
   makeWrapperArgs = [
