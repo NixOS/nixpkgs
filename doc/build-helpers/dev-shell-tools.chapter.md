@@ -11,4 +11,19 @@ However, `nix-shell` is not the only way to create such environments, and even `
 
 This library provides a set of functions that help create such environments.
 
-<!-- ## `devShellTools.<function>` {#sec-devShellTools-<function>} -->
+## `devShellTools.stringValue` {#sec-devShellTools-stringValue}
+
+Converts Nix values to strings in the way the [`derivation` built-in function](https://nix.dev/manual/nix/2.23/language/derivations) does.
+
+:::{.example}
+## `stringValue` usage examples
+
+```nix
+devShellTools.stringValue (builtins.toFile "foo" "bar")
+=> "/nix/store/...-foo"
+```
+
+```nix
+devShellTools.stringValue false
+=> ""
+```
