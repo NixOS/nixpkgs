@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [ dbus ];
 
   meta = with lib; {
-    description = "Controls for the Nothing Ear (2)";
+    description = "Linux controller for the Nothing Ear (2)";
     homepage = "https://gitlab.com/bharadwaj-raju/ear2ctl";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
