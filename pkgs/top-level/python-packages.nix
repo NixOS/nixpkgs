@@ -3599,6 +3599,8 @@ self: super: with self; {
 
   dremel3dpy = callPackage ../development/python-modules/dremel3dpy { };
 
+  drf-extra-fields = callPackage ../development/python-modules/drf-extra-fields { };
+
   drf-jwt = callPackage ../development/python-modules/drf-jwt { };
 
   drf-nested-routers = callPackage ../development/python-modules/drf-nested-routers { };
@@ -8836,6 +8838,8 @@ self: super: with self; {
   netapp-lib = callPackage ../development/python-modules/netapp-lib { };
 
   netapp-ontap = callPackage ../development/python-modules/netapp-ontap { };
+
+  netbox-documents = callPackage ../development/python-modules/netbox-documents { };
 
   netcdf4 = callPackage ../development/python-modules/netcdf4 { };
 
