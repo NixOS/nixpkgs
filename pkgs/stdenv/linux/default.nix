@@ -93,7 +93,7 @@
     or (throw "unsupported libc for the pure Linux stdenv");
   files = archLookupTable.${localSystem.system} or (if getCompatibleTools != null then getCompatibleTools
     else (throw "unsupported platform for the pure Linux stdenv"));
-  in files
+  in (config.replaceBootstrapFiles or lib.id) files
 }:
 
 assert crossSystem == localSystem;
