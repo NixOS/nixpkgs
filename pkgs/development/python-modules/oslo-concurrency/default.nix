@@ -1,5 +1,4 @@
 {
-  stdenv,
   lib,
   buildPythonPackage,
   fetchPypi,
@@ -71,7 +70,6 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "oslo_concurrency" ];
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
     description = "Oslo Concurrency library";
     mainProgram = "lockutils-wrapper";
     homepage = "https://github.com/openstack/oslo.concurrency";

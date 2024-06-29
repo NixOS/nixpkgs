@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "router";
-  version = "1.30.1";
+  version = "1.49.1";
 
   src = fetchFromGitHub {
     owner = "apollographql";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-mQtIjfXDcEy5HfZbWauL0NQLPneGq9EJt/yB8zMuhSU=";
+    hash = "sha256-Dhl8CKXMeiZ38hDbNviKBzg6zmCpO2wJFWHHZbJXJWI=";
   };
 
-  cargoHash = "sha256-XCDU6cXw+Wf5MR6m+HCI8/VFRRylMywktZbd5k7Lcwo=";
+  cargoHash = "sha256-FbIUvjm1tYMbsWdwu78drUQuMjcl6Ju/pPV9pmWHcf4=";
 
   nativeBuildInputs = [
     cmake
@@ -36,7 +36,7 @@ rustPlatform.buildRustPackage rec {
   RUSTY_V8_ARCHIVE = callPackage ./librusty_v8.nix { };
 
   cargoTestFlags = [
-    "-- --skip=uplink::test::stream_from_uplink_error_no_retry"
+    "-- --skip=query_planner::tests::missing_typename_and_fragments_in_requires"
   ];
 
   meta = with lib; {
@@ -44,6 +44,5 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://www.apollographql.com/docs/router/";
     license = licenses.elastic20;
     maintainers = [ maintainers.bbigras ];
-    knownVulnerabilities = [ "CVE-2023-45812" ];
   };
 }

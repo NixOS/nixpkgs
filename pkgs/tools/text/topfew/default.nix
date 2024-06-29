@@ -6,13 +6,13 @@
 
 buildGoModule rec {
   pname = "topfew";
-  version = "0.9.0";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "timbray";
     repo = "topfew";
-    rev = version;
-    hash = "sha256-6ydi/4LyqTLKpR00f4zpcrTnCorlhnsBOxdhzBMNcRI=";
+    rev = "v${version}";
+    hash = "sha256-P3K3IhgYkrxmEG2l7EQDVWQ+P7fOjUMUFrlAnY+8NmI=";
   };
 
   vendorHash = null;

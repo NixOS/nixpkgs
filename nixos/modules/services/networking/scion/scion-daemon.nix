@@ -12,10 +12,10 @@ let
       reconnect_to_dispatcher = true;
     };
     path_db = {
-      connection = "/var/lib/scion-daemon/sd.path.db";
+      connection = "/run/scion-daemon/sd.path.db";
     };
     trust_db = {
-      connection = "/var/lib/scion-daemon/sd.trust.db";
+      connection = "/run/scion-daemon/sd.trust.db";
     };
     log.console = {
       level = "info";
@@ -32,7 +32,7 @@ in
       example = literalExpression ''
         {
           path_db = {
-            connection = "/var/lib/scion-daemon/sd.path.db";
+            connection = "/run/scion-daemon/sd.path.db";
           };
           log.console = {
             level = "info";
@@ -57,7 +57,7 @@ in
         ExecStart = "${pkgs.scion}/bin/scion-daemon --config ${configFile}";
         Restart = "on-failure";
         DynamicUser = true;
-        StateDirectory = "scion-daemon";
+        RuntimeDirectory = "scion-daemon";
       };
     };
   };

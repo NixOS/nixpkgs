@@ -115,8 +115,8 @@ nixos/modules/installer/tools/nix-fallback-paths.nix  @raitobezarius
 /nixos/modules/system/boot/loader/systemd-boot      @JulienMalka
 
 # Images and installer media
-/nixos/modules/installer/cd-dvd/            @samueldr
-/nixos/modules/installer/sd-card/           @samueldr
+/nixos/modules/installer/cd-dvd/
+/nixos/modules/installer/sd-card/
 
 # Updaters
 ## update.nix
@@ -313,10 +313,10 @@ nixos/modules/services/misc/forgejo.nix @adamcstephens @bendlas @emilylange
 pkgs/by-name/fo/forgejo/package.nix     @adamcstephens @bendlas @emilylange
 
 # Dotnet
-/pkgs/build-support/dotnet                  @IvarWithoutBones
-/pkgs/development/compilers/dotnet          @IvarWithoutBones
-/pkgs/test/dotnet                           @IvarWithoutBones
-/doc/languages-frameworks/dotnet.section.md @IvarWithoutBones
+/pkgs/build-support/dotnet                  @corngood
+/pkgs/development/compilers/dotnet          @corngood
+/pkgs/test/dotnet                           @corngood
+/doc/languages-frameworks/dotnet.section.md @corngood
 
 # Node.js
 /pkgs/build-support/node/build-npm-package      @lilyinstarlight @winterqt
