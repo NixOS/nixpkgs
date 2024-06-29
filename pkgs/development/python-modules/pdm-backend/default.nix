@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "pdm-backend";
-  version = "2.3.0";
+  version = "2.3.1";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "pdm-project";
     repo = "pdm-backend";
     rev = "refs/tags/${version}";
-    hash = "sha256-V+NESf7NavR6L6ko4Oh4KhAR2iIN5GiHZPELwvkpr4c=";
+    hash = "sha256-I1bAjryLDXzlstIHK4cD6/HPJBGGskRUVp7B2PDwXhc=";
   };
 
   env.PDM_BUILD_SCM_VERSION = version;
