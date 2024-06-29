@@ -129,6 +129,7 @@ mapAliases {
   ocaml-language-server = throw "ocaml-language-server was removed because it was abandoned upstream"; # added 2023-09-04
   parcel-bundler = parcel; # added 2023-09-04
   pkg = pkgs.vercel-pkg; # added 2023-10-04
+  parsoid = throw "The JS version of parsoid has been deprecated upstream"; # added 2024-06-28
   inherit (pkgs) pm2; # added 2024-01-22
   inherit (pkgs) pnpm; # added 2024-06-26
   prettier_d_slim = pkgs.prettier-d-slim; # added 2023-09-14
