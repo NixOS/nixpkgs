@@ -19979,7 +19979,7 @@ with pkgs;
   babl = callPackage ../development/libraries/babl { };
 
   backlight-auto = callPackage ../by-name/ba/backlight-auto/package.nix {
-    zig = zig_0_11;
+    zig = buildPackages.zig_0_11;
   };
 
   backward-cpp = callPackage ../development/libraries/backward-cpp { };
