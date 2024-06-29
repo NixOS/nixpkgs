@@ -203,7 +203,6 @@
 , "smartdc"
 , "socket.io"
 , "speed-test"
-, "sql-formatter"
 , "stackdriver-statsd-backend"
 , "svelte-check"
 , "svgo"
