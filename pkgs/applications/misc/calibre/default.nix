@@ -91,47 +91,48 @@ stdenv.mkDerivation (finalAttrs: {
     qtbase
     qtwayland
     sqlite
+    (python3Packages.python.withPackages
+      (ps: with ps; [
+        (apsw.overrideAttrs (oldAttrs: {
+          setupPyBuildFlags = [ "--enable=load_extension" ];
+        }))
+        beautifulsoup4
+        css-parser
+        cssselect
+        python-dateutil
+        dnspython
+        faust-cchardet
+        feedparser
+        html2text
+        html5-parser
+        lxml
+        markdown
+        mechanize
+        msgpack
+        netifaces
+        pillow
+        pychm
+        pyqt-builder
+        pyqt6
+        python
+        regex
+        sip
+        setuptools
+        zeroconf
+        jeepney
+        pycryptodome
+        xxhash
+        # the following are distributed with calibre, but we use upstream instead
+        odfpy
+      ] ++ lib.optionals (lib.lists.any (p: p == stdenv.hostPlatform.system) pyqt6-webengine.meta.platforms) [
+        # much of calibre's functionality is usable without a web
+        # browser, so we enable building on platforms which qtwebengine
+        # does not support by simply omitting qtwebengine.
+        pyqt6-webengine
+      ] ++ lib.optional (unrarSupport) unrardll)
+    )
     xdg-utils
-  ] ++ (
-    with python3Packages; [
-      (apsw.overrideAttrs (oldAttrs: {
-        setupPyBuildFlags = [ "--enable=load_extension" ];
-      }))
-      beautifulsoup4
-      css-parser
-      cssselect
-      python-dateutil
-      dnspython
-      faust-cchardet
-      feedparser
-      html2text
-      html5-parser
-      lxml
-      markdown
-      mechanize
-      msgpack
-      netifaces
-      pillow
-      pychm
-      pyqt-builder
-      pyqt6
-      python
-      regex
-      sip
-      setuptools
-      zeroconf
-      jeepney
-      pycryptodome
-      xxhash
-      # the following are distributed with calibre, but we use upstream instead
-      odfpy
-    ] ++ lib.optionals (lib.lists.any (p: p == stdenv.hostPlatform.system) pyqt6-webengine.meta.platforms) [
-      # much of calibre's functionality is usable without a web
-      # browser, so we enable building on platforms which qtwebengine
-      # does not support by simply omitting qtwebengine.
-      pyqt6-webengine
-    ] ++ lib.optional (unrarSupport) unrardll
-  ) ++ lib.optional (speechSupport) speechd;
+  ] ++ lib.optional (speechSupport) speechd;
 
   installPhase = ''
     runHook preInstall
@@ -148,7 +149,7 @@ stdenv.mkDerivation (finalAttrs: {
     export XDG_DATA_HOME=$out/share
     export XDG_UTILS_INSTALL_MODE="user"
 
-    ${python3Packages.python.pythonOnBuildForHost.interpreter} setup.py install --root=$out \
+    python setup.py install --root=$out \
       --prefix=$out \
       --libdir=$out/lib \
       --staging-root=$out \
@@ -181,7 +182,6 @@ stdenv.mkDerivation (finalAttrs: {
         wrapProgram $program \
           ''${qtWrapperArgs[@]} \
           ''${gappsWrapperArgs[@]} \
-          --prefix PYTHONPATH : $PYTHONPATH \
           ${if popplerSupport then popplerArgs else ""}
       done
     '';
