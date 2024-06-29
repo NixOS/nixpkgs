@@ -4094,7 +4094,7 @@
       ha-ffmpeg
     ];
     "slack" = ps: with ps; [
-      slackclient
+      slack-sdk
     ];
     "sleepiq" = ps: with ps; [
       asyncsleepiq

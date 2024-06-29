@@ -1,4 +1,5 @@
 { egl-wayland
+, bash
 , libepoxy
 , fetchurl
 , fetchpatch
@@ -72,6 +73,11 @@ stdenv.mkDerivation rec {
       hash = "sha256-4/A6aOiOGouPe2v4wIYDQY9rWkuNZJwk0h4gpfrl6hI=";
     })
   ];
+
+  postPatch = ''
+    substituteInPlace os/utils.c \
+      --replace-fail '/bin/sh' '${lib.getExe' bash "sh"}'
+  '';
 
   depsBuildBuild = [
     pkg-config

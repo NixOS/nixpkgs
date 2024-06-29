@@ -84,7 +84,7 @@ in stdenv.mkDerivation rec {
     homepage = "https://gitlab.com/leinardi/gwe";
     platforms = platforms.linux;
     license = licenses.gpl3Only;
-    maintainers = [ maintainers.ivar ];
+    maintainers = [ ];
     mainProgram = "gwe";
   };
 }

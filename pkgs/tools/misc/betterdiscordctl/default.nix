@@ -37,7 +37,7 @@ stdenvNoCC.mkDerivation rec {
     description = "Utility for managing BetterDiscord on Linux";
     license = licenses.mit;
     mainProgram = "betterdiscordctl";
-    maintainers = with maintainers; [ ivar bb010g ];
+    maintainers = with maintainers; [ bb010g ];
     platforms = platforms.linux;
   };
 }
