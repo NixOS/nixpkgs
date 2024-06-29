@@ -1,0 +1,13 @@
+diff --git a/setup.py b/setup.py
+index e65631013..d511c2996 100755
+--- a/setup.py
++++ b/setup.py
+@@ -412,7 +412,7 @@ if __name__ == '__main__':
+         Extension(
+             'google.protobuf.pyext._message',
+             glob.glob('google/protobuf/pyext/*.cc'),
+-            include_dirs=['.', '../src', '../third_party/abseil-cpp'],
++            include_dirs=['.', '../src', '@abseil_cpp_include_path@'],
+             libraries=libraries,
+             extra_objects=extra_objects,
+             extra_link_args=message_extra_link_args,

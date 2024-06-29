@@ -1,0 +1,31 @@
+name: "Build NixOS manual"
+
+permissions: read-all
+
+on:
+  pull_request_target:
+    branches:
+      - master
+    paths:
+      - 'nixos/**'
+
+jobs:
+  nixos:
+    runs-on: ubuntu-latest
+    if: github.repository_owner == 'NixOS'
+    steps:
+      - uses: actions/checkout@44c2b7a8a4ea60a981eaca3cf939b5f4305c123b # v4.1.5
+        with:
+          # pull_request_target checks out the base branch by default
+          ref: refs/pull/${{ github.event.pull_request.number }}/merge
+      - uses: cachix/install-nix-action@8887e596b4ee1134dae06b98d573bd674693f47c # v26
+        with:
+          # explicitly enable sandbox
+          extra_nix_config: sandbox = true
+      - uses: cachix/cachix-action@ad2ddac53f961de1989924296a1f236fcfbaa4fc # v15
+        with:
+          # This cache is for the nixpkgs repo checks and should not be trusted or used elsewhere.
+          name: nixpkgs-ci
+          authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
+      - name: Building NixOS manual
+        run: NIX_PATH=nixpkgs=$(pwd) nix-build --option restrict-eval true nixos/release.nix -A manual.x86_64-linux

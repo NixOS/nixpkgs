@@ -1,0 +1,17 @@
+diff --git a/gcc/config/riscv/riscv.h b/gcc/config/riscv/riscv.h
+index 701f5ea1544..8de333caf54 100644
+--- a/gcc/config/riscv/riscv.h
++++ b/gcc/config/riscv/riscv.h
+@@ -886,11 +886,7 @@ extern unsigned riscv_stack_boundary;
+   "%{mabi=lp64f:lp64f}" \
+   "%{mabi=lp64d:lp64d}" \
+ 
+-#define STARTFILE_PREFIX_SPEC 			\
+-   "/lib" XLEN_SPEC "/" ABI_SPEC "/ "		\
+-   "/usr/lib" XLEN_SPEC "/" ABI_SPEC "/ "	\
+-   "/lib/ "					\
+-   "/usr/lib/ "
++#define STARTFILE_PREFIX_SPEC ""
+ 
+ /* ISA constants needed for code generation.  */
+ #define OPCODE_LW    0x2003

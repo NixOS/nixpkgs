@@ -1,0 +1,17 @@
+diff --git a/webpack.config.js b/webpack.config.js
+index 469ffe1..3233c4b 100644
+--- a/webpack.config.js
++++ b/webpack.config.js
+@@ -1,11 +1,7 @@
+ const path = require('path');
+ const { execSync } = require('child_process');
+ 
+-let env =
+-	execSync('git branch --show-current').toString().trim() == 'main'
+-		? 'production'
+-		: 'development';
+-env = 'production';
++let env = 'production';
+ 
+ module.exports = {
+ 	mode: env,

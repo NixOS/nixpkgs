@@ -1,0 +1,58 @@
+diff --git a/data/org.gnome.Shell-disable-extensions.service b/data/org.gnome.Shell-disable-extensions.service
+index de91167c5..1c9965678 100644
+--- a/data/org.gnome.Shell-disable-extensions.service
++++ b/data/org.gnome.Shell-disable-extensions.service
+@@ -11,5 +11,5 @@ ConditionPathExists=%t/gnome-shell-disable-extensions
+ [Service]
+ Type=simple
+ # Disable extensions
+-ExecStart=gsettings set org.gnome.shell disable-user-extensions true
++ExecStart=@gsettings@ set org.gnome.shell disable-user-extensions true
+ Restart=no
+diff --git a/js/ui/extensionDownloader.js b/js/ui/extensionDownloader.js
+index 197cc1c1c..dd74aa167 100644
+--- a/js/ui/extensionDownloader.js
++++ b/js/ui/extensionDownloader.js
+@@ -110,7 +110,7 @@ async function extractExtensionArchive(bytes, dir) {
+     stream.close_async(GLib.PRIORITY_DEFAULT, null);
+ 
+     const unzip = Gio.Subprocess.new(
+-        ['unzip', '-uod', dir.get_path(), '--', file.get_path()],
++        ['@unzip@', '-uod', dir.get_path(), '--', file.get_path()],
+         Gio.SubprocessFlags.NONE);
+     await unzip.wait_check_async(null);
+ 
+@@ -132,7 +132,7 @@ async function extractExtensionArchive(bytes, dir) {
+     }
+ 
+     const compileSchema = Gio.Subprocess.new(
+-        ['glib-compile-schemas', '--strict', schemasPath.get_path()],
++        ['@glib_compile_schemas@', '--strict', schemasPath.get_path()],
+         Gio.SubprocessFlags.NONE);
+ 
+     try {
+diff --git a/js/ui/status/keyboard.js b/js/ui/status/keyboard.js
+index fff4e73c2..92859b099 100644
+--- a/js/ui/status/keyboard.js
++++ b/js/ui/status/keyboard.js
+@@ -1092,6 +1092,6 @@ class InputSourceIndicator extends PanelMenu.Button {
+         if (xkbVariant.length > 0)
+             description = `${description}\t${xkbVariant}`;
+ 
+-        Util.spawn(['tecla', description]);
++        Util.spawn(['@tecla@', description]);
+     }
+ });
+diff --git a/subprojects/extensions-tool/src/command-install.c b/subprojects/extensions-tool/src/command-install.c
+index 11fb4b6b7..e00e4807b 100644
+--- a/subprojects/extensions-tool/src/command-install.c
++++ b/subprojects/extensions-tool/src/command-install.c
+@@ -158,7 +158,7 @@ install_extension (const char *bundle,
+ 
+       schemapath = g_file_get_path (schemadir);
+       proc = g_subprocess_new (G_SUBPROCESS_FLAGS_STDERR_SILENCE, &error,
+-                               "glib-compile-schemas", "--strict", schemapath,
++                               "@glib_compile_schemas@", "--strict", schemapath,
+                                NULL);
+ 
+       if (!g_subprocess_wait_check (proc, NULL, &error))

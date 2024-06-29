@@ -1,0 +1,35 @@
+diff --git a/libmat2/bubblewrap.py b/libmat2/bubblewrap.py
+index 970d5dd..5d3c0b7 100644
+--- a/libmat2/bubblewrap.py
++++ b/libmat2/bubblewrap.py
+@@ -22,11 +22,7 @@ CalledProcessError = subprocess.CalledProcessError
+ 
+ 
+ def _get_bwrap_path() -> str:
+-    which_path = shutil.which('bwrap')
+-    if which_path:
+-        return which_path
+-
+-    raise RuntimeError("Unable to find bwrap")  # pragma: no cover
++    return '@bwrap@'
+ 
+ 
+ def _get_bwrap_args(tempdir: str,
+@@ -37,16 +33,11 @@ def _get_bwrap_args(tempdir: str,
+ 
+     # XXX: use --ro-bind-try once all supported platforms
+     # have a bubblewrap recent enough to support it.
+-    ro_bind_dirs = ['/usr', '/lib', '/lib64', '/bin', '/sbin', '/etc/alternatives', cwd]
++    ro_bind_dirs = ['/nix/store', cwd]
+     for bind_dir in ro_bind_dirs:
+         if os.path.isdir(bind_dir):  # pragma: no cover
+             ro_bind_args.extend(['--ro-bind', bind_dir, bind_dir])
+ 
+-    ro_bind_files = ['/etc/ld.so.cache']
+-    for bind_file in ro_bind_files:
+-        if os.path.isfile(bind_file):  # pragma: no cover
+-            ro_bind_args.extend(['--ro-bind', bind_file, bind_file])
+-
+     args = ro_bind_args + \
+         ['--dev', '/dev',
+          '--proc', '/proc',

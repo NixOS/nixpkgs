@@ -1,0 +1,20 @@
+diff -Naur org.kde.plasma.volumewin7mixer/CMakeLists.txt org.kde.plasma.volumewin7mixer.patch/CMakeLists.txt
+--- org.kde.plasma.volumewin7mixer/CMakeLists.txt	1970-01-01 01:00:00.000000000 +0100
++++ org.kde.plasma.volumewin7mixer.patch/CMakeLists.txt	2016-04-19 11:23:35.137866949 +0200
+@@ -0,0 +1,15 @@
++# Set minimum CMake version (required for CMake 3.0 or later)
++cmake_minimum_required(VERSION 2.8.12)
++
++# Use Extra CMake Modules (ECM) for common functionality.
++# See http://api.kde.org/ecm/manual/ecm.7.html
++# and http://api.kde.org/ecm/manual/ecm-kde-modules.7.html
++find_package(ECM REQUIRED NO_MODULE)
++# Needed by find_package(KF5Plasma) below.
++set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH} ${ECM_KDE_MODULE_DIR} ${CMAKE_MODULE_PATH})
++
++# Locate plasma_install_package macro.
++find_package(KF5Plasma REQUIRED)
++
++# Add installatation target ("make install").
++plasma_install_package(package org.kde.plasma.volumewin7mixer)
+

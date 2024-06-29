@@ -1,0 +1,22 @@
+GIT
+  remote: https://0xacab.org/schleuder/schleuder-cli
+  revision: fd010d28b1503504056e714e03abf043b64794ea
+  tag: schleuder-cli-0.2.0
+  specs:
+    schleuder-cli (0.2.0)
+      thor (~> 1)
+
+GEM
+  remote: https://rubygems.org/
+  specs:
+    thor (1.3.1)
+
+PLATFORMS
+  aarch64-linux
+  x86_64-linux
+
+DEPENDENCIES
+  schleuder-cli!
+
+BUNDLED WITH
+   2.5.9

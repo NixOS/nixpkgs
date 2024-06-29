@@ -1,0 +1,6 @@
+gpsbabel/1.8.0+ds-4
+gpsbabelfe_disable_version_check
+gpsbabelfe_opt-in-for-usage-data-reporting
+gpsbabelfe_do-not-check-for-newer-version
+htmldoc-location
+Disable-donation-nagging
