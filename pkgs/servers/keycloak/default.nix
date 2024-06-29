@@ -7,7 +7,7 @@
 , callPackage
 , confFile ? null
 , plugins ? [ ]
-, extraFeatures ? [ ]
+, extraFeatures ? [ "hostname:v1" ]
 , disabledFeatures ? [ ]
 }:
 
