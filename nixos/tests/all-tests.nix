@@ -271,6 +271,7 @@ in {
   domination = handleTest ./domination.nix {};
   dovecot = handleTest ./dovecot.nix {};
   drawterm = discoverTests (import ./drawterm.nix);
+  draupnir = handleTest ./matrix/draupnir.nix {};
   drbd = handleTest ./drbd.nix {};
   dublin-traceroute = handleTest ./dublin-traceroute.nix {};
   earlyoom = handleTestOn ["x86_64-linux"] ./earlyoom.nix {};
