@@ -1,15 +1,16 @@
-{ stdenv
-, lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, makeWrapper
-, webkitgtk
-, zenity
-, Cocoa
-, Security
-, WebKit
-, withGui ? true
+{
+  stdenv,
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  makeWrapper,
+  webkitgtk,
+  zenity,
+  Cocoa,
+  Security,
+  WebKit,
+  withGui ? true,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -32,15 +33,20 @@ rustPlatform.buildRustPackage rec {
     };
   };
 
-  nativeBuildInputs = [ pkg-config makeWrapper ];
-  buildInputs = lib.optional stdenv.isDarwin Security
+  nativeBuildInputs = [
+    pkg-config
+    makeWrapper
+  ];
+  buildInputs =
+    lib.optional stdenv.isDarwin Security
     ++ lib.optional (withGui && stdenv.isLinux) webkitgtk
-    ++ lib.optionals (withGui && stdenv.isDarwin) [ Cocoa WebKit ];
+    ++ lib.optionals (withGui && stdenv.isDarwin) [
+      Cocoa
+      WebKit
+    ];
 
   buildNoDefaultFeatures = true;
-  buildFeatures = [
-    "doh"
-  ] ++ lib.optional withGui "webgui";
+  buildFeatures = [ "doh" ] ++ lib.optional withGui "webgui";
 
   checkFlags = [
     # these want internet access, disable them
