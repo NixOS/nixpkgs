@@ -1,0 +1,286 @@
+{
+  lib ? import ../.,
+}:
+let
+  inherit (builtins)
+    map
+    match
+    genList
+    length
+    concatMap
+    head
+    toString
+    ;
+
+  inherit (lib) lists strings trivial;
+
+  /*
+    IPv6 addresses are 128-bit identifiers. The preferred form is 'x:x:x:x:x:x:x:x',
+    where the 'x's are one to four hexadecimal digits of the eight 16-bit pieces of
+    the address. See RFC 4291.
+  */
+  ipv6Bits = 128;
+  ipv6Pieces = 8; # 'x:x:x:x:x:x:x:x'
+  ipv6PieceBits = 16; # One piece in range from 0 to 0xffff.
+  ipv6PieceMaxValue = 65535; # 2^16 - 1
+in
+let
+  /**
+    Expand an IPv6 address by removing the "::" compression and padding them
+    with the necessary number of zeros. Converts an address from the string to
+    the list of strings which then can be parsed using `_parseExpanded`.
+    Throws an error when the address is malformed.
+
+    # Type: String -> [ String ]
+  */
+  expandIpv6 =
+    addr:
+    if match "^[0-9A-Fa-f:]+$" addr == null then
+      throw "${addr} contains malformed characters for IPv6 address"
+    else
+      let
+        pieces = strings.splitString ":" addr;
+        piecesNoEmpty = lists.remove "" pieces;
+        piecesNoEmptyLen = length piecesNoEmpty;
+        zeros = genList (_: "0") (ipv6Pieces - piecesNoEmptyLen);
+        hasPrefix = strings.hasPrefix "::" addr;
+        hasSuffix = strings.hasSuffix "::" addr;
+        hasInfix = strings.hasInfix "::" addr;
+      in
+      if addr == "::" then
+        zeros
+      else if
+        let
+          emptyCount = length pieces - piecesNoEmptyLen;
+          emptyExpected =
+            # splitString produces two empty pieces when "::" in the beginning
+            # or in the end, and only one when in the middle of an address.
+            if hasPrefix || hasSuffix then
+              2
+            else if hasInfix then
+              1
+            else
+              0;
+        in
+        emptyCount != emptyExpected
+        || (hasInfix && piecesNoEmptyLen >= ipv6Pieces) # "::" compresses at least one group of zeros.
+        || (!hasInfix && piecesNoEmptyLen != ipv6Pieces)
+      then
+        throw "${addr} is not a valid IPv6 address"
+      # Create a list of 8 elements, filling some of them with zeros depending
+      # on where the "::" was found.
+      else if hasPrefix then
+        zeros ++ piecesNoEmpty
+      else if hasSuffix then
+        piecesNoEmpty ++ zeros
+      else if hasInfix then
+        concatMap (piece: if piece == "" then zeros else [ piece ]) pieces
+      else
+        pieces;
+
+  /**
+    Parses an expanded IPv6 address (see `expandIpv6`), converting each part
+    from a string to an u16 integer. Returns an internal representation of IPv6
+    address (list of integers) that can be easily processed by other helper
+    functions.
+    Throws an error some element is not an u16 integer.
+
+    # Type: [ String ] -> IPv6
+  */
+  parseExpandedIpv6 =
+    addr:
+    let
+      u16FromHexStr =
+        hex:
+        let
+          parsed = trivial.fromHexString hex;
+        in
+        if 0 <= parsed && parsed <= ipv6PieceMaxValue then
+          parsed
+        else
+          throw "0x${hex} is not a valid u16 integer";
+    in
+    map (piece: u16FromHexStr piece) addr;
+
+  /**
+    Returns a new list where each element is taken modulo `mod`. The algorithm
+    starts with the last element, the last element becomes the remainder of `mod`
+    and adds an quotient part to the previous element.
+
+    # Example:
+    ```nix
+    modList 10 [9 10]
+    => [1 0 0]
+    modList 3 [1 2 10]
+    => [2 2 1]
+    ```
+
+    # Type: Int -> [ Int ] -> [ Int ]
+  */
+  modList =
+    mod: list:
+    assert lib.assertMsg (mod > 0) "modList: module must be positive integer";
+    let
+      modListRec =
+        add: mod: list:
+        let
+          listLen = length list;
+        in
+        if listLen == 0 then
+          if add == 0 then [ ] else [ add ]
+        else
+          # Create a new list. The last element is the remainder and add the
+          # quotient to the previous element.
+          let
+            newValue = lists.last list + add;
+            newList = lists.take (listLen - 1) list;
+          in
+          let
+            quot = newValue / mod;
+            rem = trivial.mod newValue mod;
+            prefix = modListRec quot mod newList;
+          in
+          prefix ++ [ rem ];
+    in
+    modListRec 0 mod list;
+in
+let
+  /**
+    Parses an IPv6 address from a string to the internal representation (list
+    of integers).
+
+    # Type: String -> IPv6
+  */
+  parseIpv6FromString = addr: parseExpandedIpv6 (expandIpv6 addr);
+
+  /**
+    Raises `base` to the power of `exponent`.
+
+    # Type: Int -> Int -> Int
+  */
+  pow =
+    base: exponent:
+    if exponent < 0 then
+      throw "lib.network.pow: Exponent cannot be negative."
+    else if exponent == 0 then
+      1
+    else
+      lists.foldl' (acc: _: acc * base) 1 (lists.range 1 exponent);
+in
+{
+  _common = {
+    modList = modList;
+  };
+
+  # Internally IPv6 address is stored as a list of 16 bits integers with 8 elements.
+  _ipv6 = {
+    /**
+      Converts an internal representation of an IPv6 address (i.e, a list
+      of integers) to a string. The returned string is not a canonical
+      representation as defined in RFC 5952, i.e zeros are not compressed.
+
+      # Type: IPv6 -> String
+    */
+    toStringFromExpandedIp =
+      pieces: strings.concatMapStringsSep ":" (piece: strings.toLower (trivial.toHexString piece)) pieces;
+
+    /**
+      Extract an address and subnet prefix length from a string. The subnet
+      prefix length is optional and defaults to 128. The resulting address and
+      prefix length are validated and converted to an internal representation
+      that can be used by other functions.
+
+      # Type: String -> [ {address :: IPv6, prefixLength :: Int} ]
+    */
+    split =
+      addr:
+      let
+        splitted = strings.splitString "/" addr;
+        splittedLength = length splitted;
+      in
+      if splittedLength == 1 then # [ ip ]
+        {
+          address = parseIpv6FromString addr;
+          prefixLength = ipv6Bits;
+        }
+      else if splittedLength == 2 then # [ ip subnet ]
+        {
+          address = parseIpv6FromString (head splitted);
+          prefixLength =
+            let
+              n = strings.toInt (lists.last splitted);
+            in
+            if 1 <= n && n <= ipv6Bits then
+              n
+            else
+              throw "${addr} IPv6 subnet should be in range [1;${toString ipv6Bits}], got ${toString n}";
+        }
+      else
+        throw "${addr} is not a valid IPv6 address in CIDR notation";
+
+    /**
+      Calculates the first address in a subnet.
+
+      # Type: IPv6 -> Int -> IPv6
+    */
+    calculateFirstAddress =
+      addr: prefixLength:
+      let
+        prefixMask = lists.imap0 (
+          idx: piece:
+          # Generate a decimal number, which in binary format will have the format "1111111100000000", where the number of ones is equal to `bits'.
+          let
+            bits = trivial.min (trivial.max (prefixLength - ipv6PieceBits * idx) 0) ipv6PieceBits;
+            # 2^n - 2^(n-k) to pad k bits with ones on the left.
+            maskForPiece = (pow 2 ipv6PieceBits) - (pow 2 (ipv6PieceBits - bits));
+          in
+          maskForPiece
+        ) addr;
+
+        firstAddress = lists.zipListsWith (l: r: trivial.bitAnd l r) addr prefixMask;
+      in
+      firstAddress;
+
+    /**
+      Calculates the last address in a subnet.
+
+      # Type: IPv6 -> Int -> IPv6
+    */
+    calculateLastAddress =
+      addr: prefixLength:
+      let
+        suffixLength = ipv6Bits - prefixLength;
+        suffixMask = lists.imap0 (
+          idx: piece:
+          # Generate a decimal number, which in binary format will have the format "0000000011111111", where the number of ones is equal to `bits'.
+          let
+            bits = trivial.min (trivial.max (
+              suffixLength - ipv6PieceBits * (ipv6Pieces - idx - 1)
+            ) 0) ipv6PieceBits;
+            # 2^n - 1 to pad k bits with ones on the right.
+            maskForPiece = (pow 2 bits) - 1;
+          in
+          maskForPiece
+        ) addr;
+
+        lastAddress = lists.zipListsWith (l: r: trivial.bitOr l r) addr suffixMask;
+      in
+      lastAddress;
+
+    /**
+      Calculates the next address. Returns null if the passed address is the
+      last one.
+
+      # Type: IPv6 -> IPv6
+    */
+    calculateNextAddress =
+      addr:
+      let
+        # Add one to the last piece of the address, then take the modulus - if
+        # it's greater than 65535, make it 0 and add one to the penultimate piece.
+        newAddr = (lists.take (length addr - 1) addr) ++ [ (lists.last addr + 1) ];
+        nextAddr = modList (ipv6PieceMaxValue + 1) newAddr;
+      in
+      if length nextAddr != ipv6Pieces then null else nextAddr;
+  };
+}

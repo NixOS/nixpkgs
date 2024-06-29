@@ -1075,6 +1075,32 @@ in {
     else k: v;
 
   /**
+    Convert a hexadecimal string to it's integer representation.
+
+    # Type
+
+    ```
+    fromHexString :: String -> [ String ]
+    ```
+
+    # Examples
+
+    ```nix
+    fromHexString "FF"
+    => 255
+
+    fromHexString (builtins.hashString "sha256" "test")
+    => 9223372036854775807
+    ```
+  */
+  fromHexString = value:
+  let
+    noPrefix = lib.strings.removePrefix "0x" (lib.strings.toLower value);
+  in let
+    parsed = builtins.fromTOML "v=0x${noPrefix}";
+  in parsed.v;
+
+  /**
     Convert the given positive integer to a string of its hexadecimal
     representation. For example:
 
