@@ -660,6 +660,7 @@ let
           "IPv6SendRA"
           "DHCPPrefixDelegation"
           "IPv6MTUBytes"
+          "KeepMaster"
           "Bridge"
           "Bond"
           "VRF"
