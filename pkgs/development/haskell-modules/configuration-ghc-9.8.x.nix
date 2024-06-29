@@ -69,6 +69,7 @@ self: super: {
   hlint = self.hlint_3_8;
   ghc-syntax-highlighter = self.ghc-syntax-highlighter_0_0_11_0;
   websockets = self.websockets_0_13_0_0;
+  th-desugar = self.th-desugar_1_16;
 
   # A given major version of ghc-exactprint only supports one version of GHC.
   ghc-exactprint = self.ghc-exactprint_1_8_0_0;
