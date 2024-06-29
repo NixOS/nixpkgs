@@ -1,17 +1,10 @@
 { lib
 , fetchFromGitLab
-, buildPythonPackage
-, cookiecutter
-, requests
-, pyyaml
-, jsonschema
-, argcomplete
-, pytestCheckHook
-, watchdog
+, python3Packages
 , stdenv
 }:
 
-buildPythonPackage rec {
+python3Packages.buildPythonApplication rec {
   pname = "clickable";
   version = "7.11.0";
 
@@ -22,7 +15,7 @@ buildPythonPackage rec {
     sha256 = "sha256-OVS+FK2ABoKbBFLDc3drcjeaa3yO9/8Ah8FzlN2fd8g=";
   };
 
-  propagatedBuildInputs = [
+  propagatedBuildInputs = with python3Packages; [
     cookiecutter
     requests
     pyyaml
@@ -31,7 +24,7 @@ buildPythonPackage rec {
     watchdog
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ python3Packages.pytestCheckHook ];
 
   disabledTests = [
     # Tests require docker
