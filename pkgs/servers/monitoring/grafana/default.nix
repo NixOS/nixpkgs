@@ -3,7 +3,7 @@
 , yarn, nodejs, python3, cacert
 , jq, moreutils
 , nix-update-script, nixosTests, xcbuild
-, util-linux
+, faketty
 }:
 
 let
@@ -77,7 +77,8 @@ buildGoModule rec {
 
   proxyVendor = true;
 
-  nativeBuildInputs = [ wire yarn jq moreutils removeReferencesTo python3 ] ++ lib.optionals stdenv.isDarwin [ xcbuild.xcbuild ];
+  nativeBuildInputs = [ wire yarn jq moreutils removeReferencesTo python3 faketty ]
+    ++ lib.optionals stdenv.isDarwin [ xcbuild.xcbuild ];
 
   postPatch = ''
     ${patchGoVersion}
@@ -113,7 +114,7 @@ buildGoModule rec {
     # After having built all the Go code, run the JS builders now.
 
     # Workaround for https://github.com/nrwl/nx/issues/22445
-    ${util-linux}/bin/script -c 'yarn run build' /dev/null
+    faketty yarn run build
     yarn run plugins:build-bundled
   '';
 
@@ -154,8 +155,5 @@ buildGoModule rec {
     maintainers = with maintainers; [ offline fpletz willibutz globin ma27 Frostman ];
     platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" "aarch64-darwin" ];
     mainProgram = "grafana-server";
-    # requires util-linux to work around https://github.com/nrwl/nx/issues/22445
-    # `script` doesn't seem to be part of util-linux on Darwin though.
-    broken = stdenv.isDarwin;
   };
 }
