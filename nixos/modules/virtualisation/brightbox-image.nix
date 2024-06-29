@@ -134,7 +134,8 @@ in
           # into the image (a Nova feature).
           if ! [ -e /root/.ssh/authorized_keys ]; then
               echo "obtaining SSH key..."
-              mkdir -m 0700 -p /root/.ssh
+              mkdir -p /root/.ssh
+              chown 0700 /root/.ssh
               $wget http://169.254.169.254/latest/meta-data/public-keys/0/openssh-key > /root/key.pub
               if [ $? -eq 0 -a -e /root/key.pub ]; then
                   if ! grep -q -f /root/key.pub /root/.ssh/authorized_keys; then
@@ -153,7 +154,8 @@ in
           key="$(sed 's/|/\n/g; s/SSH_HOST_DSA_KEY://; t; d' /root/user-data)"
           key_pub="$(sed 's/SSH_HOST_DSA_KEY_PUB://; t; d' /root/user-data)"
           if [ -n "$key" -a -n "$key_pub" -a ! -e /etc/ssh/ssh_host_dsa_key ]; then
-              mkdir -m 0755 -p /etc/ssh
+              mkdir -p /etc/ssh
+              chown 0755 /etc/ssh
               (umask 077; echo "$key" > /etc/ssh/ssh_host_dsa_key)
               echo "$key_pub" > /etc/ssh/ssh_host_dsa_key.pub
           fi
