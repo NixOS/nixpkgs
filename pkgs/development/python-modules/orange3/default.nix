@@ -29,6 +29,7 @@
   pytestCheckHook,
   pytest-qt,
   pyqtgraph,
+  pyqt5,
   pyqtwebengine,
   python,
   python-louvain,
@@ -113,6 +114,7 @@ let
       xlsxwriter
       httpx
       pyqtgraph
+      pyqt5
       orange-widget-base
       keyrings-alt
       pyyaml
