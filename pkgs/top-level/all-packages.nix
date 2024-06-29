@@ -29297,6 +29297,8 @@ with pkgs;
 
   ### APPLICATIONS
 
+  _010-editor = callPackage ../applications/editors/010-editor { };
+
   _2bwm = callPackage ../applications/window-managers/2bwm {
     patches = config."2bwm".patches or [];
   };
