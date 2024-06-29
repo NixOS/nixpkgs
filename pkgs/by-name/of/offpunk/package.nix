@@ -32,7 +32,7 @@ let
 in
 python3Packages.buildPythonApplication rec {
   pname = "offpunk";
-  version = "2.2";
+  version = "2.3";
   pyproject = true;
 
   disabled = python3Packages.pythonOlder "3.7";
@@ -41,7 +41,7 @@ python3Packages.buildPythonApplication rec {
     owner = "~lioploum";
     repo = "offpunk";
     rev = "v${version}";
-    hash = "sha256-ygVL17qqmNB7hzw1VuYIAbirbaq4EVppWCHSvTl+/Jw=";
+    hash = "sha256-Tiby+JjPc7eFQKziQFUdqcNgx9UhU4GNeRcI/aAzcvk=";
   };
 
   nativeBuildInputs = [ python3Packages.hatchling installShellFiles ];
