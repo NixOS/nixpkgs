@@ -12,7 +12,7 @@ import subprocess
 import sys
 import warnings
 import json
-from typing import NamedTuple, Dict, List
+from typing import NamedTuple, Any
 from dataclasses import dataclass
 
 # These values will be replaced with actual values during the package build
@@ -38,11 +38,11 @@ class BootSpec:
     init: str
     initrd: str
     kernel: str
-    kernelParams: List[str]  # noqa: N815
+    kernelParams: list[str]  # noqa: N815
     label: str
     system: str
     toplevel: str
-    specialisations: Dict[str, "BootSpec"]
+    specialisations: dict[str, "BootSpec"]
     sortKey: str  # noqa: N815
     initrdSecrets: str | None = None  # noqa: N815
 
@@ -51,7 +51,7 @@ libc = ctypes.CDLL("libc.so.6")
 
 FILE = None | int
 
-def run(cmd: List[str], stdout: FILE = None) -> subprocess.CompletedProcess[str]:
+def run(cmd: list[str], stdout: FILE = None) -> subprocess.CompletedProcess[str]:
     return subprocess.run(cmd, check=True, text=True, stdout=stdout)
 
 class SystemIdentifier(NamedTuple):
@@ -130,7 +130,7 @@ def get_bootspec(profile: str | None, generation: int) -> BootSpec:
         bootspec_json = json.loads(boot_json_str)
     return bootspec_from_json(bootspec_json)
 
-def bootspec_from_json(bootspec_json: Dict) -> BootSpec:
+def bootspec_from_json(bootspec_json: dict[str, Any]) -> BootSpec:
     specialisations = bootspec_json['org.nixos.specialisation.v1']
     specialisations = {k: bootspec_from_json(v) for k, v in specialisations.items()}
     systemdBootExtension = bootspec_json.get('org.nixos.systemd-boot', {})
