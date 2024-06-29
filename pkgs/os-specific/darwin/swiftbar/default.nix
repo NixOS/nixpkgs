@@ -41,6 +41,6 @@ stdenvNoCC.mkDerivation rec {
     license = licenses.mit;
     platforms = platforms.darwin;
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ matteopacini ];
   };
 }
