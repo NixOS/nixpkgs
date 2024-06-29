@@ -8953,6 +8953,11 @@
     githubId = 3874017;
     name = "Jappie Klooster";
   };
+  jaredmontoya = {
+    name = "Jared Montoya";
+    github = "jaredmontoya";
+    githubId = 49511278;
+  };
   jasoncarr = {
     email = "jcarr250@gmail.com";
     github = "jasoncarr0";
@@ -14002,11 +14007,6 @@
     github = "nbren12";
     githubId = 1386642;
     name = "Noah Brenowitz";
-  };
-  jaredmontoya = {
-    name = "Jared Montoya";
-    github = "jaredmontoya";
-    githubId = 49511278;
   };
   nbsp = {
     email = "aoife@enby.space";
