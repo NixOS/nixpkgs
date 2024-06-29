@@ -4,6 +4,7 @@
   fetchFromGitLab,
   fetchpatch,
   gitUpdater,
+  nixosTests,
   cmake,
   content-hub,
   geonames,
@@ -205,6 +206,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
+    tests.vm = nixosTests.lomiri-clock-app;
     updateScript = gitUpdater { rev-prefix = "v"; };
   };
 
