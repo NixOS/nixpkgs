@@ -6659,6 +6659,12 @@
     githubId = 1109959;
     name = "Florian Jacob";
   };
+  floriansanderscc = {
+    email = "florian.sanders+nixos@clever-cloud.com";
+    github = "florian-sanders-cc";
+    githubId = 100240294;
+    name = "Florian Sanders";
+  };
   flosse = {
     email = "mail@markus-kohlhase.de";
     github = "flosse";
