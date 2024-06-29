@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
     hash = "sha256-TVc3LvCOr6n7doLbjQe+D+BRPljoR4wuyOm2JIbn/l4=";
   };
 
+  patches = [ ./sixel-256.support.patch ];
+
   strictDeps = true;
 
   nativeBuildInputs = [ makeWrapper pkg-config fontconfig ];
@@ -31,8 +33,6 @@ stdenv.mkDerivation rec {
     xorg.libXft
     xorg.luit
   ];
-
-  patches = [ ./sixel-256.support.patch ];
 
   configureFlags = [
     "--enable-wide-chars"
