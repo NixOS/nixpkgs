@@ -1,0 +1,14 @@
+diff --git a/package.json b/package.json
+index b1786e16f..bbaf84087 100644
+--- a/package.json
++++ b/package.json
+@@ -6,7 +6,7 @@
+ 		"type": "git",
+ 		"url": "https://github.com/misskey-dev/misskey.git"
+ 	},
+-	"packageManager": "pnpm@9.0.6",
++	"packageManager": "pnpm@9.1.1",
+ 	"workspaces": [
+ 		"packages/frontend",
+ 		"packages/backend",
+
