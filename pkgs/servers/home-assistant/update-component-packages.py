@@ -42,6 +42,7 @@ PKG_PREFERENCES = {
     "fiblary3": "fiblary3-fork",  # https://github.com/home-assistant/core/issues/66466
     "HAP-python": "hap-python",
     "ollama-hass": "ollama",
+    "slackclient": "slack-sdk",
     "SQLAlchemy": "sqlalchemy",
     "tensorflow": "tensorflow",
     "yt-dlp": "yt-dlp",
