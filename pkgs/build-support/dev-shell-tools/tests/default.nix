@@ -9,12 +9,12 @@ let
   inherit (lib) escapeShellArg;
 in
 {
-  # nix-build -A tests.devShellTools.stringValue
-  stringValue =
-    let inherit (devShellTools) stringValue; in
+  # nix-build -A tests.devShellTools.valueToString
+  valueToString =
+    let inherit (devShellTools) valueToString; in
 
     stdenv.mkDerivation {
-      name = "devShellTools-stringValue-built-tests";
+      name = "devShellTools-valueToString-built-tests";
 
       # Test inputs
       inherit emptyFile hello;
@@ -30,15 +30,15 @@ in
       buildCommand = ''
         touch $out
         ( set -x
-          [[ "$one" = ${escapeShellArg (stringValue 1)} ]]
-          [[ "$boolTrue" = ${escapeShellArg (stringValue true)} ]]
-          [[ "$boolFalse" = ${escapeShellArg (stringValue false)} ]]
-          [[ "$foo" = ${escapeShellArg (stringValue "foo")} ]]
-          [[ "$hello" = ${escapeShellArg (stringValue hello)} ]]
-          [[ "$list" = ${escapeShellArg (stringValue [ 1 2 3 ])} ]]
-          [[ "$packages" = ${escapeShellArg (stringValue [ hello emptyFile ])} ]]
-          [[ "$pathDefaultNix" = ${escapeShellArg (stringValue ./default.nix)} ]]
-          [[ "$emptyFile" = ${escapeShellArg (stringValue emptyFile)} ]]
+          [[ "$one" = ${escapeShellArg (valueToString 1)} ]]
+          [[ "$boolTrue" = ${escapeShellArg (valueToString true)} ]]
+          [[ "$boolFalse" = ${escapeShellArg (valueToString false)} ]]
+          [[ "$foo" = ${escapeShellArg (valueToString "foo")} ]]
+          [[ "$hello" = ${escapeShellArg (valueToString hello)} ]]
+          [[ "$list" = ${escapeShellArg (valueToString [ 1 2 3 ])} ]]
+          [[ "$packages" = ${escapeShellArg (valueToString [ hello emptyFile ])} ]]
+          [[ "$pathDefaultNix" = ${escapeShellArg (valueToString ./default.nix)} ]]
+          [[ "$emptyFile" = ${escapeShellArg (valueToString emptyFile)} ]]
         ) >log 2>&1 || { cat log; exit 1; }
       '';
     };
