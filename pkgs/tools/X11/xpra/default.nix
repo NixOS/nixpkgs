@@ -1,5 +1,5 @@
 { lib
-, fetchurl
+, fetchFromGitHub
 , substituteAll
 , pkg-config
 , runCommand
@@ -68,11 +68,13 @@ let
   '';
 in buildPythonApplication rec {
   pname = "xpra";
-  version = "4.4.6";
+  version = "5.0.8";
 
-  src = fetchurl {
-    url = "https://xpra.org/src/${pname}-${version}.tar.xz";
-    hash = "sha256-BWf3nypfSrYCzpJ0OfBkecoHGbG1lEgu5jLZhfkIejQ=";
+  src = fetchFromGitHub {
+    owner = "Xpra-org";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "sha256-geGgQUlUUT/kJ+0KxpHjcHyxOeZmgzka4MTew9kzsCk=";
   };
 
   patches = [
