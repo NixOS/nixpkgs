@@ -59,10 +59,10 @@ in
       };
 
       port = mkOption {
-        type = types.port;
-        default = 3389;
+        type = types.enum [ types.port types.str ];
+        default = "tcp://:3389";
         description = ''
-          Specifies on which port the xrdp daemon listens.
+          Specifies a port or a listen string on which the xrdp daemon should listen on.
         '';
       };
 
