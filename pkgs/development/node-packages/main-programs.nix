@@ -40,7 +40,6 @@
   localtunnel = "lt";
   lua-fmt = "luafmt";
   neovim = "neovim-node-host";
-  parsoid = "parse.js";
   poor-mans-t-sql-formatter-cli = "sqlformat";
   postcss-cli = "postcss";
   prettier = "prettier";
