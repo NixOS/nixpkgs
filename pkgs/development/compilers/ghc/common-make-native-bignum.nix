@@ -3,7 +3,7 @@
 , url ? "https://downloads.haskell.org/ghc/${version}/ghc-${version}-src.tar.xz"
 }:
 
-{ lib, stdenv, pkgsBuildTarget, pkgsHostTarget, targetPackages
+{ lib, stdenv, pkgsBuildTarget, pkgsHostTarget, buildPackages, targetPackages
 
 # build-tools
 , bootPkgs
@@ -42,7 +42,10 @@
   enableShared ? with stdenv.targetPlatform; !isWindows && !useiOSPrebuilt && !isStatic
 
 , # Whether to build terminfo.
-  enableTerminfo ? !stdenv.targetPlatform.isWindows
+  enableTerminfo ? !(stdenv.targetPlatform.isWindows
+                     # terminfo can't be built for cross
+                     || (stdenv.buildPlatform != stdenv.hostPlatform)
+                     || (stdenv.hostPlatform != stdenv.targetPlatform))
 
 , # What flavour to build. An empty string indicates no
   # specific flavour and falls back to ghc default values.
@@ -51,25 +54,37 @@
 
 , #  Whether to build sphinx documentation.
   enableDocs ? (
-    # Docs disabled if we are building on musl because it's a large task to keep
-    # all `sphinx` dependencies building in this environment.
-    !stdenv.buildPlatform.isMusl
+    # Docs disabled if we are building on musl or cross-building because it's a
+    # large task to keep all `sphinx` dependencies building in this environment.
+    (stdenv.buildPlatform == stdenv.hostPlatform && stdenv.targetPlatform == stdenv.hostPlatform)
+    && !stdenv.buildPlatform.isMusl
   )
 
 , enableHaddockProgram ?
     # Disabled for cross; see note [HADDOCK_DOCS].
-    (stdenv.targetPlatform == stdenv.hostPlatform)
+    (stdenv.buildPlatform == stdenv.hostPlatform && stdenv.targetPlatform == stdenv.hostPlatform)
 
 , # Whether to disable the large address space allocator
   # necessary fix for iOS: https://www.reddit.com/r/haskell/comments/4ttdz1/building_an_osxi386_to_iosarm64_cross_compiler/d5qvd67/
   disableLargeAddressSpace ? stdenv.targetPlatform.isiOS
+
+, # Whether to build an unregisterised version of GHC.
+  # GHC will normally auto-detect whether it can do a registered build, but this
+  # option will force it to do an unregistered build when set to true.
+  # See https://gitlab.haskell.org/ghc/ghc/-/wikis/building/unregisterised
+  # Registerised RV64 compiler produces programs that segfault
+  # See https://gitlab.haskell.org/ghc/ghc/-/issues/23957
+  enableUnregisterised ? stdenv.hostPlatform.isRiscV64 || stdenv.targetPlatform.isRiscV64
 }:
 
 assert !enableNativeBignum -> gmp != null;
 
 # Cross cannot currently build the `haddock` program for silly reasons,
 # see note [HADDOCK_DOCS].
-assert (stdenv.targetPlatform != stdenv.hostPlatform) -> !enableHaddockProgram;
+assert (stdenv.buildPlatform != stdenv.hostPlatform || stdenv.targetPlatform != stdenv.hostPlatform) -> !enableHaddockProgram;
+
+# GHC does not support building when all 3 platforms are different.
+assert stdenv.buildPlatform == stdenv.hostPlatform || stdenv.hostPlatform == stdenv.targetPlatform;
 
 let
   inherit (stdenv) buildPlatform hostPlatform targetPlatform;
@@ -88,6 +103,8 @@ let
     endif
     BUILD_SPHINX_HTML = ${if enableDocs then "YES" else "NO"}
     BUILD_SPHINX_PDF = NO
+
+    WITH_TERMINFO = ${if enableTerminfo then "YES" else "NO"}
   '' +
   # Note [HADDOCK_DOCS]:
   # Unfortunately currently `HADDOCK_DOCS` controls both whether the `haddock`
@@ -134,7 +151,9 @@ let
     pkgsBuildTarget.targetPackages.stdenv.cc
   ] ++ lib.optional useLLVM buildTargetLlvmPackages.llvm;
 
+  buildCC = buildPackages.stdenv.cc;
   targetCC = builtins.head toolsForTarget;
+  installCC = pkgsHostTarget.targetPackages.stdenv.cc;
 
   # toolPath calculates the absolute path to the name tool associated with a
   # given `stdenv.cc` derivation, i.e. it picks the correct derivation to take
@@ -187,14 +206,11 @@ let
     (lib.optionalString enableNativeBignum "-native-bignum")
   ];
 
-in
+  targetLibffi = if hostPlatform != targetPlatform
+    then targetPackages.libffi
+    else pkgsHostTarget.libffi;
 
-# C compiler, bintools and LLVM are used at build time, but will also leak into
-# the resulting GHC's settings file and used at runtime. This means that we are
-# currently only able to build GHC if hostPlatform == buildPlatform.
-assert targetCC == pkgsHostTarget.targetPackages.stdenv.cc;
-assert buildTargetLlvmPackages.llvm == llvmPackages.llvm;
-assert stdenv.targetPlatform.isDarwin -> buildTargetLlvmPackages.clang == llvmPackages.clang;
+in
 
 stdenv.mkDerivation (rec {
   pname = "${targetPrefix}ghc${variantSuffix}";
@@ -307,6 +323,11 @@ stdenv.mkDerivation (rec {
     export CLANG="${buildTargetLlvmPackages.clang}/bin/${buildTargetLlvmPackages.clang.targetPrefix}clang"
   ''
   + ''
+    # No need for absolute paths since these tools only need to work during the build
+    export CC_STAGE0="$CC_FOR_BUILD"
+    export LD_STAGE0="$LD_FOR_BUILD"
+    export AR_STAGE0="$AR_FOR_BUILD"
+
     echo -n "${buildMK}" > mk/build.mk
   ''
   + lib.optionalString (lib.versionOlder version "9.2" || lib.versionAtLeast version "9.4") ''
@@ -348,18 +369,20 @@ stdenv.mkDerivation (rec {
       'MinBootGhcVersion="8.10"'
   '';
 
+  # Although it is usually correct to pass --host, we don't do that here because
+  # GHC's usage of build, host, and target is non-standard.
+  # See https://gitlab.haskell.org/ghc/ghc/-/wikis/building/cross-compiling
   # TODO(@Ericson2314): Always pass "--target" and always prefix.
-  configurePlatforms = [ "build" "host" ]
-    ++ lib.optional (targetPlatform != hostPlatform) "target";
+  configurePlatforms = [ "build" ]
+    ++ lib.optional (buildPlatform != hostPlatform || targetPlatform != hostPlatform) "target";
 
   # `--with` flags for libraries needed for RTS linker
   configureFlags = [
     "--datadir=$doc/share/doc/ghc"
-    "--with-curses-includes=${ncurses.dev}/include" "--with-curses-libraries=${ncurses.out}/lib"
   ] ++ lib.optionals (libffi != null) [
     "--with-system-libffi"
-    "--with-ffi-includes=${targetPackages.libffi.dev}/include"
-    "--with-ffi-libraries=${targetPackages.libffi.out}/lib"
+    "--with-ffi-includes=${targetLibffi.dev}/include"
+    "--with-ffi-libraries=${targetLibffi.out}/lib"
   ] ++ lib.optionals (targetPlatform == hostPlatform && !enableNativeBignum) [
     "--with-gmp-includes=${targetPackages.gmp.dev}/include"
     "--with-gmp-libraries=${targetPackages.gmp.out}/lib"
@@ -374,6 +397,8 @@ stdenv.mkDerivation (rec {
     "CONF_GCC_LINKER_OPTS_STAGE2=-fuse-ld=gold"
   ] ++ lib.optionals (disableLargeAddressSpace) [
     "--disable-large-address-space"
+  ] ++ lib.optionals enableUnregisterised [
+    "--enable-unregisterised"
   ];
 
   # Make sure we never relax`$PATH` and hooks support for compatibility.
@@ -385,6 +410,7 @@ stdenv.mkDerivation (rec {
   nativeBuildInputs = [
     perl autoconf automake m4 python3
     ghc bootPkgs.alex bootPkgs.happy bootPkgs.hscolour
+    bootPkgs.ghc-settings-edit
   ] ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
     autoSignDarwinBinariesHook
   ] ++ lib.optionals enableDocs [
@@ -395,6 +421,12 @@ stdenv.mkDerivation (rec {
     xattr
   ];
 
+  # Used by the STAGE0 compiler to build stage1
+  depsBuildBuild = [
+    buildCC
+    # stage0 builds terminfo unconditionally, so we always need ncurses
+    ncurses
+  ];
   # For building runtime libs
   depsBuildTarget = toolsForTarget;
 
@@ -425,6 +457,17 @@ stdenv.mkDerivation (rec {
   requiredSystemFeatures = [ "big-parallel" ];
 
   postInstall = ''
+    # Make the installed GHC use the host platform's tools.
+    ghc-settings-edit "$out/lib/${targetPrefix}${passthru.haskellCompilerName}/settings" \
+      "C compiler command" "${installCC}/bin/${installCC.targetPrefix}cc" \
+      "Haskell CPP command" "${installCC}/bin/${installCC.targetPrefix}cc" \
+      "C++ compiler command" "${installCC}/bin/${installCC.targetPrefix}c++" \
+      "ld command" "${installCC.bintools}/bin/${installCC.bintools.targetPrefix}ld${lib.optionalString useLdGold ".gold"}" \
+      "Merge objects command" "${installCC.bintools}/bin/${installCC.bintools.targetPrefix}ld${lib.optionalString useLdGold ".gold"}" \
+      "ar command" "${installCC.bintools}/bin/${installCC.bintools.targetPrefix}ar" \
+      "ranlib command" "${installCC.bintools}/bin/${installCC.bintools.targetPrefix}ranlib"
+    # TODO: otool/install_name_tool
+
     # Install the bash completion file.
     install -D -m 444 utils/completion/ghc.bash $out/share/bash-completion/completions/${targetPrefix}ghc
   '';
@@ -450,7 +493,8 @@ stdenv.mkDerivation (rec {
       guibou
     ] ++ lib.teams.haskell.members;
     timeout = 24 * 3600;
-    inherit (ghc.meta) license platforms;
+    platforms = lib.platforms.all;
+    inherit (ghc.meta) license;
   };
 
 } // lib.optionalAttrs targetPlatform.useAndroidPrebuilt {
