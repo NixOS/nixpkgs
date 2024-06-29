@@ -165,6 +165,7 @@ in
     services.tumbler.enable = true;
     services.system-config-printer.enable = (mkIf config.services.printing.enable (mkDefault true));
     services.libinput.enable = mkDefault true; # used in xfce4-settings-manager
+    services.colord.enable = mkDefault true;
 
     # Enable default programs
     programs.dconf.enable = true;

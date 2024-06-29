@@ -4,6 +4,7 @@
 , runCommand
 , cmake
 , ffmpeg_4
+, glslang
 , libdrm
 , libglvnd
 , libffi
@@ -17,7 +18,10 @@
 , ninja
 , pkg-config
 , python3
+, spirv-headers
+, vulkan-headers
 , vulkan-loader
+, vulkan-utility-libraries
 , wayland
 , wayland-protocols
 , wayland-scanner
@@ -39,13 +43,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "vulkan-cts";
-  version = "1.3.8.3";
+  version = "1.3.9.0";
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "VK-GL-CTS";
     rev = "${finalAttrs.pname}-${finalAttrs.version}";
-    hash = "sha256-+xmbPezWTEwjxX+o2b7FjQcsoWxWe0RTSaTJOrXSIhc=";
+    hash = "sha256-JCepNBVHaN4KXRcLOZ2z7toBMri90tV7kjNWHRXRESE=";
   };
 
   prePatch = ''
@@ -54,6 +58,9 @@ stdenv.mkDerivation (finalAttrs: {
     cp -r ${renderdoc} external/renderdoc/src/renderdoc_app.h
 
     ${sources.prePatch}
+
+    substituteInPlace external/vulkan-validationlayers/CMakeLists.txt \
+      --replace-fail 'UPDATE_DEPS ON' 'UPDATE_DEPS OFF'
 
     chmod u+w -R external
   '';
@@ -68,6 +75,8 @@ stdenv.mkDerivation (finalAttrs: {
     libXau
     libXdmcp
     libxcb
+    vulkan-headers
+    vulkan-utility-libraries
     wayland
     wayland-protocols
     zlib
@@ -89,6 +98,9 @@ stdenv.mkDerivation (finalAttrs: {
     "-DCMAKE_INSTALL_INCLUDEDIR=include"
 
     "-DWAYLAND_SCANNER=wayland-scanner"
+    # For vulkan-validation-layers
+    "-DGLSLANG_INSTALL_DIR=${glslang}"
+    "-DSPIRV_HEADERS_INSTALL_DIR=${spirv-headers}"
   ];
 
   postInstall = ''

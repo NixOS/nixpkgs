@@ -5,6 +5,7 @@ mkCoqDerivation {
 
   releaseRev = v: "v${v}";
 
+  release."8.20.0".sha256 = "sha256-VQzeINIZAfP3Qyh29uPqcNVlNJfIzzRLtN0Cm4EuGCk=";
   release."8.19.1".sha256 = "sha256-W/V57h+rjb3m0ktCG83PquMHfXiv6H1Nhvw9sVEPLqM=";
   release."8.19.0".sha256 = "sha256-IeCBd8gcu4bAXH5I/XIT7neQIILi+EWR6qqAA4GzQD0=";
   release."8.18.0".sha256 = "sha256-Vpe79qCyFLOdOtFFvLKR0N+MMpGD661Q01yx4gxRhZo=";
@@ -25,6 +26,7 @@ mkCoqDerivation {
 
   inherit version;
   defaultVersion = with lib.versions; lib.switch coq.coq-version [
+    { case = "8.20"; out = "8.20.0"; }
     { case = "8.19"; out = "8.19.1"; }
     { case = "8.18"; out = "8.18.0"; }
     { case = "8.17"; out = "8.17.0"; }

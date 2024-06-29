@@ -1,21 +1,22 @@
-{ lib
-, stdenv
-, fetchurl
-, autoPatchelfHook
-, wrapQtAppsHook
-, hidapi
-, readline
-, qtsvg
-, qtxmlpatterns
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoPatchelfHook,
+  wrapQtAppsHook,
+  hidapi,
+  readline,
+  qtsvg,
+  qtxmlpatterns,
 }:
 
 stdenv.mkDerivation {
   pname = "flirc";
-  version = "3.27.10";
+  version = "3.27.15";
 
   src = fetchurl {
-    url = "https://web.archive.org/web/20240110170238/http://apt.flirc.tv/arch/x86_64/flirc.latest.x86_64.tar.gz";
-    hash = "sha256-iTr4vzFQ/+dsbsYD6sc8aTHctTkLKf5HnHBnO7cX5qc=";
+    url = "https://web.archive.org/web/20240626115121/http://apt.flirc.tv/arch/x86_64/flirc.latest.x86_64.tar.gz";
+    hash = "sha256-8bUsOsp5obJJdZU9QHfJnZKNAXJwi0nrHkSeDTE1Xa4=";
   };
 
   nativeBuildInputs = [
@@ -46,6 +47,7 @@ stdenv.mkDerivation {
     maintainers = with maintainers; [ aanderse ];
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
+    mainProgram = "Flirc";
     platforms = [ "x86_64-linux" ];
   };
 }

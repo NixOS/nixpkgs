@@ -59,6 +59,5 @@ buildPythonPackage rec {
     homepage = "https://github.com/openstack/oslo.log";
     license = licenses.asl20;
     maintainers = teams.openstack.members;
-    broken = stdenv.isDarwin;
   };
 }

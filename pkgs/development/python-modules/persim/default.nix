@@ -1,5 +1,4 @@
 {
-  stdenv,
   lib,
   buildPythonPackage,
   fetchPypi,
@@ -70,6 +69,5 @@ buildPythonPackage rec {
     changelog = "https://github.com/scikit-tda/persim/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ ];
-    broken = stdenv.isDarwin;
   };
 }
