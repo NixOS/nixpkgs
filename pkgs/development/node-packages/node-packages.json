@@ -32,7 +32,6 @@
 , "clipboard-cli"
 , "coc-clangd"
 , "coc-cmake"
-, "coc-css"
 , "coc-diagnostic"
 , "coc-docker"
 , "coc-emmet"
