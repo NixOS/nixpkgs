@@ -15175,8 +15175,6 @@ with pkgs;
 
   clean = callPackage ../development/compilers/clean { };
 
-  clickable = python3Packages.callPackage ../development/tools/clickable { };
-
   closurecompiler = callPackage ../development/compilers/closure { };
 
   cmdstan = callPackage ../development/compilers/cmdstan { };
