@@ -15,9 +15,12 @@ buildNodejs {
     ./bypass-darwin-xcrun-node16.patch
     ./node-npm-build-npm-package-logic.patch
     ./use-correct-env-in-tests.patch
+    ./bin-sh-node-run-v22.patch
     (fetchpatch2 {
-      url = "https://github.com/nodejs/node/commit/534c122de166cb6464b489f3e6a9a544ceb1c913.patch";
-      hash = "sha256-4q4LFsq4yU1xRwNsM1sJoNVphJCnxaVe2IyL6AeHJ/I=";
+      # Fixes OpenSSL 3.0.14 compatibility in tests.
+      # See https://github.com/nodejs/node/pull/53373
+      url = "https://github.com/nodejs/node/commit/14863e80584e579fd48c55f6373878c821c7ff7e.patch";
+      hash = "sha256-I7Wjc7DE059a/ZyXAvAqEGvDudPjxQqtkBafckHCFzo=";
     })
   ];
 }
