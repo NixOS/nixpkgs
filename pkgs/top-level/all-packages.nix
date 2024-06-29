@@ -34950,8 +34950,6 @@ with pkgs;
 
   gnvim = callPackage ../applications/editors/neovim/gnvim/wrapper.nix { };
 
-  neovim-remote = callPackage ../applications/editors/neovim/neovim-remote.nix { };
-
   viw = callPackage ../applications/editors/viw { };
 
   virter = callPackage ../applications/virtualization/virter { };
