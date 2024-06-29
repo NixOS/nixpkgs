@@ -27,7 +27,7 @@ buildGoModule rec {
   patches = [ ./disable-auto-update.patch ];
 
   preBuild = ''
-    go generate ./...
+    GOOS= GOARCH= CGO_ENABLED=0 go generate ./...
   '';
 
   preCheck = ''
