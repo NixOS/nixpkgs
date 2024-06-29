@@ -4580,6 +4580,8 @@ self: super: with self; {
 
   freebox-api = callPackage ../development/python-modules/freebox-api { };
 
+  freertos-gdb = callPackage ../development/python-modules/freertos-gdb { };
+
   freetype-py = callPackage ../development/python-modules/freetype-py { };
 
   freezegun = callPackage ../development/python-modules/freezegun { };
@@ -7806,6 +7808,8 @@ self: super: with self; {
   moviepy = callPackage ../development/python-modules/moviepy { };
 
   mox3 = callPackage ../development/python-modules/mox3 { };
+
+  mozilla-django-oidc = callPackage ../development/python-modules/mozilla-django-oidc { };
 
   mpd2 = callPackage ../development/python-modules/mpd2 { };
 

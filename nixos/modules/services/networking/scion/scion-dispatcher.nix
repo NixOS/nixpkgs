@@ -66,7 +66,7 @@ in
         ExecStartPre = "${pkgs.coreutils}/bin/rm -rf /run/shm/dispatcher";
         ExecStart = "${pkgs.scion}/bin/scion-dispatcher --config ${configFile}";
         Restart = "on-failure";
-        StateDirectory = "scion-dispatcher";
+        RuntimeDirectory = "scion-dispatcher";
       };
     };
   };
