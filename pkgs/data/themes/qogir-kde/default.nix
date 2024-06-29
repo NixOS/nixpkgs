@@ -4,7 +4,7 @@
 , kdeclarative
 , plasma-framework
 , plasma-workspace
-, gitUpdater
+, unstableGitUpdater
 }:
 
 stdenvNoCC.mkDerivation rec {
@@ -50,7 +50,7 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  passthru.updateScript = gitUpdater { };
+  passthru.updateScript = unstableGitUpdater { };
 
   meta = with lib; {
     description = "Flat Design theme for KDE Plasma desktop";
