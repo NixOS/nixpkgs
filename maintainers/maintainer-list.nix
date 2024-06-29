@@ -14003,6 +14003,11 @@
     githubId = 1386642;
     name = "Noah Brenowitz";
   };
+  jaredmontoya = {
+    name = "Jared Montoya";
+    github = "jaredmontoya";
+    githubId = 49511278;
+  };
   nbsp = {
     email = "aoife@enby.space";
     matrix = "@nbsp:enby.space";
