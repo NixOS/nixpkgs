@@ -14556,7 +14556,7 @@ with pkgs;
   clipboard-jh = callPackage ../tools/misc/clipboard-jh { };
 
   clipbuzz = callPackage ../tools/misc/clipbuzz {
-    zig = zig_0_12;
+    zig = buildPackages.zig_0_12;
   };
 
   xclip = callPackage ../tools/misc/xclip { };
