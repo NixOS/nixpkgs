@@ -1540,8 +1540,8 @@ let
           # semver scheme, contrary to preview versions which are listed on
           # the VSCode Marketplace and use a calver scheme. We should avoid
           # using preview versions, because they expire after two weeks.
-          version = "14.9.0";
-          hash = "sha256-Z6KeIUw1SLZ4tUgs7sU9IJO/6diozPxQuTbXr6DayHA=";
+          version = "15.1.0";
+          hash = "sha256-xGgm/WNJDIh/Bs11fLYwHQ9ULiZBWbKw4QYl/l4KYJ4=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/eamodio.gitlens/changelog";
