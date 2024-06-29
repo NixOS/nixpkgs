@@ -121,7 +121,7 @@ packages.
 The update script flow:
 
 - Build the derivation's source via `pkgs.srcOnly`
-- Enter a `nix-shell` for the derivation in an `nsjail` sandbox (the
+- Enter a `nix-shell` for the derivation in an `bwrap` sandbox (the
   sandbox is only used on Linux)
 - Set the `IN_GRADLE_UPDATE_DEPS` environment variable to `1`
 - Run the derivation's `unpack`, `patch`, `configure` phases
@@ -141,7 +141,7 @@ The update script flow:
   will generally use instead of `pkg` or `attrPath`.
 - `pkg` - the package to be used for fetching the dependencies. Defaults
   to `getAttrFromPath (splitString "." attrPath) pkgs`.
-- `nsjailFlags` - allows you to override nsjail flags (only relevant for
+- `bwrapFlags` - allows you to override bwrap flags (only relevant for
   downstream, non-nixpkgs projects)
 - `preBuild` / `postBuild` - run these commands before/after fetching
   dependencies

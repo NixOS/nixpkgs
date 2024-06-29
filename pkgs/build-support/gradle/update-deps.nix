@@ -6,7 +6,7 @@
 , writeTextFile
 , writeShellScript
 , path
-, nsjail
+, bubblewrap
 , coreutils
 , curl
 , jq
@@ -28,9 +28,9 @@ lib.makeOverridable (
 { pkg ? getPkg attrPath
 , pname ? null
 , attrPath ? pname
-# nsjail flags (this will be put in bash as-is)
+# bwrap flags (this will be put in bash as-is)
 # this is relevant for downstream users
-, nsjailFlags ? "-R \"$PWD\""
+, bwrapFlags ? "--ro-bind \"$PWD\" \"$PWD\""
 # run before fetching the dependencies (in sandbox)
 , preBuild ? ""
 # the gradle commands for fetching the necessary dependencies
@@ -41,7 +41,7 @@ lib.makeOverridable (
 , depsPath ? "deps.json"
 # redirect stdout to stderr to allow the script to be used with update script combinators
 , silent ? true
-, useNsjail ? stdenv.isLinux
+, useBwrap ? stdenv.isLinux
 }:
 
 let
@@ -122,15 +122,15 @@ writeTextFile {
     export MITM_CACHE_CERT_DIR="$PWD"
     export MITM_CACHE_CA="$MITM_CACHE_CERT_DIR/ca.cer"
     popd >/dev/null
-    useNsjail="''${USE_NSJAIL:-${toString useNsjail}}"
-    if [ -n "$useNsjail" ]; then
-      # nsjail isn't necessary, it's only used to prevent messy build scripts from touching ~
-      ${nsjail}/bin/nsjail \
-        -N --keep_caps --chroot / --disable_rlimits \
-        -T /home -T /root -B /tmp \
-        -R ${toString path} -B "$MITM_CACHE_CERT_DIR" \
-        ${lib.escapeShellArgs (map (x: "-E${x}") keep)} \
-        -E NIX_BUILD_SHELL=bash ${nsjailFlags} ''${NSJAIL_FLAGS:-} \
+    useBwrap="''${USE_BWRAP:-${toString useBwrap}}"
+    if [ -n "$useBwrap" ]; then
+      # bwrap isn't necessary, it's only used to prevent messy build scripts from touching ~
+      ${bubblewrap}/bin/bwrap \
+        --unshare-all --share-net --clearenv --chdir / --setenv HOME /homeless-shelter \
+        --tmpfs /home --bind /tmp /tmp --ro-bind /nix /nix --ro-bind /run /run --proc /proc --dev /dev  \
+        --ro-bind ${toString path} ${toString path} --bind "$MITM_CACHE_CERT_DIR" "$MITM_CACHE_CERT_DIR" \
+        ${builtins.concatStringsSep " " (map (x: "--setenv ${x} \"\$${x}\"") keep)} \
+        --setenv NIX_BUILD_SHELL bash ${bwrapFlags} ''${BWRAP_FLAGS:-} \
         -- ${nix}/bin/nix-shell --pure --run ${gradleScript} ${nixShellKeep} ${sourceDrvPath}
     else
       NIX_BUILD_SHELL=bash nix-shell --pure --run ${gradleScript} ${nixShellKeep} ${sourceDrvPath}
