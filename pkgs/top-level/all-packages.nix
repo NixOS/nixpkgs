@@ -15171,8 +15171,6 @@ with pkgs;
 
   clean = callPackage ../development/compilers/clean { };
 
-  clickable = callPackage ../development/tools/clickable { };
-
   closurecompiler = callPackage ../development/compilers/closure { };
 
   cmdstan = callPackage ../development/compilers/cmdstan { };
