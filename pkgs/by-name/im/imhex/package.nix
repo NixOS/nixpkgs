@@ -1,26 +1,27 @@
-{ lib
-, stdenv
-, cmake
-, llvm
-, fetchFromGitHub
-, mbedtls
-, gtk3
-, pkg-config
-, capstone
-, dbus
-, libGLU
-, libGL
-, glfw3
-, file
-, perl
-, python3
-, jansson
-, curl
-, fmt_8
-, nlohmann_json
-, yara
-, rsync
-, autoPatchelfHook
+{
+  lib,
+  stdenv,
+  cmake,
+  llvm,
+  fetchFromGitHub,
+  mbedtls,
+  gtk3,
+  pkg-config,
+  capstone,
+  dbus,
+  libGLU,
+  libGL,
+  glfw3,
+  file,
+  perl,
+  python3,
+  jansson,
+  curl,
+  fmt_8,
+  nlohmann_json,
+  yara,
+  rsync,
+  autoPatchelfHook,
 }:
 
 let
@@ -49,7 +50,15 @@ stdenv.mkDerivation rec {
     hash = "sha256-8vhOOHfg4D9B9yYgnGZBpcjAjuL4M4oHHax9ad5PJtA=";
   };
 
-  nativeBuildInputs = [ autoPatchelfHook cmake llvm python3 perl pkg-config rsync ];
+  nativeBuildInputs = [
+    autoPatchelfHook
+    cmake
+    llvm
+    python3
+    perl
+    pkg-config
+    rsync
+  ];
 
   buildInputs = [
     capstone
@@ -94,7 +103,10 @@ stdenv.mkDerivation rec {
     description = "Hex Editor for Reverse Engineers, Programmers and people who value their retinas when working at 3 AM";
     homepage = "https://github.com/WerWolv/ImHex";
     license = with licenses; [ gpl2Only ];
-    maintainers = with maintainers; [ kashw2 cafkafk ];
+    maintainers = with maintainers; [
+      kashw2
+      cafkafk
+    ];
     platforms = platforms.linux;
   };
 }
