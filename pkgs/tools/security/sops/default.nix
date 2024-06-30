@@ -20,7 +20,7 @@ buildGoModule rec {
   passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
-    homepage = "https://github.com/getsops/sops";
+    homepage = "https://getsops.io/";
     description = "Simple and flexible tool for managing secrets";
     changelog = "https://github.com/getsops/sops/blob/v${version}/CHANGELOG.rst";
     mainProgram = "sops";
