@@ -143,8 +143,11 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   # Register some undeclared runtime dependencies to be patched in by autoPatchelfHook
+  # Note: dyalog.rt is used internally to run child APL processes in
   preFixup = ''
-    patchelf ${dyalogHome}/dyalog --add-needed libncurses.so
+    for exec in "dyalog" "dyalog.rt"; do
+        patchelf ${dyalogHome}/$exec --add-needed libncurses.so
+    done
   ''
   + lib.optionalString htmlRendererSupport ''
     patchelf ${dyalogHome}/libcef.so --add-needed libudev.so --add-needed libGL.so
