@@ -51,7 +51,7 @@ let
   };
 
   mkCc = cc:
-    if stdenv.isAarch64 then cc
+    if lib.versionAtLeast stdenv.hostPlatform.darwinSdkVersion "11" then cc
     else
       cc.override {
         bintools = stdenv.cc.bintools.override { libc = packages.Libsystem; };
@@ -59,7 +59,7 @@ let
       };
 
   mkStdenv = stdenv:
-    if stdenv.isAarch64 then stdenv
+    if lib.versionAtLeast stdenv.hostPlatform.darwinSdkVersion "11" then stdenv
     else
       let
         darwinMinVersion = "10.12";
