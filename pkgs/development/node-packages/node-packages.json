@@ -164,7 +164,6 @@
 , "node-pre-gyp"
 , "node-red"
 , "node2nix"
-, "nodemon"
 , "np"
 , "npm"
 , "npm-merge-driver"
