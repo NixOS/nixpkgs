@@ -25,8 +25,6 @@
 #   The command line administrative tools are part of other packages:
 #   see pkgs.mongodb-tools and pkgs.mongosh.
 
-with lib;
-
 { version, sha256, patches ? []
 , license ? lib.licenses.sspl
 , avxSupport ? stdenv.hostPlatform.avxSupport
@@ -39,7 +37,7 @@ let
     cheetah3
     psutil
     setuptools
-  ] ++ lib.optionals (versionAtLeast version "6.0") [
+  ] ++ lib.optionals (lib.versionAtLeast version "6.0") [
     packaging
     pymongo
   ]);
@@ -57,7 +55,7 @@ let
     #"stemmer"  -- not nice to package yet (no versioning, no makefile, no shared libs).
     #"valgrind" -- mongodb only requires valgrind.h, which is vendored in the source.
     #"wiredtiger"
-  ] ++ optionals stdenv.isLinux [ "tcmalloc" ];
+  ] ++ lib.optionals stdenv.isLinux [ "tcmalloc" ];
   inherit (lib) systems subtractLists;
 
 in stdenv.mkDerivation rec {
@@ -108,7 +106,7 @@ in stdenv.mkDerivation rec {
     #include <string>'
     substituteInPlace src/mongo/db/exec/plan_stats.h --replace '#include <string>' '#include <optional>
     #include <string>'
-  '' + lib.optionalString (stdenv.isDarwin && versionOlder version "6.0") ''
+  '' + lib.optionalString (stdenv.isDarwin && lib.versionOlder version "6.0") ''
     substituteInPlace src/third_party/mozjs-${mozjsVersion}/extract/js/src/jsmath.cpp --replace '${mozjsReplace}' 0
   '' + lib.optionalString stdenv.isi686 ''
 
@@ -143,9 +141,9 @@ in stdenv.mkDerivation rec {
   preBuild = ''
     sconsFlags+=" CC=$CC"
     sconsFlags+=" CXX=$CXX"
-  '' + optionalString (!stdenv.isDarwin) ''
+  '' + lib.optionalString (!stdenv.isDarwin) ''
     sconsFlags+=" AR=$AR"
-  '' + optionalString stdenv.isAarch64 ''
+  '' + lib.optionalString stdenv.isAarch64 ''
     sconsFlags+=" CCFLAGS='-march=armv8-a+crc'"
   '';
 
@@ -165,7 +163,7 @@ in stdenv.mkDerivation rec {
   '';
 
   installTargets =
-    if (versionAtLeast version "6.0") then "install-devcore"
+    if (lib.versionAtLeast version "6.0") then "install-devcore"
     else "install-core";
 
   prefixKey = "DESTDIR=";
@@ -174,7 +172,7 @@ in stdenv.mkDerivation rec {
 
   hardeningEnable = [ "pie" ];
 
-  meta = {
+  meta = with lib; {
     description = "Scalable, high-performance, open source NoSQL database";
     homepage = "http://www.mongodb.org";
     inherit license;
