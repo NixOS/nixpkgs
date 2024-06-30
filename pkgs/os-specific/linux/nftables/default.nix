@@ -30,6 +30,13 @@ stdenv.mkDerivation rec {
   ] ++ lib.optional withCli libedit
     ++ lib.optional withXtables iptables;
 
+  patches = [ ./fix-py-libnftables.patch ];
+
+  postPatch = ''
+    substituteInPlace "py/nftables.py" \
+      --subst-var-by "out" "$out"
+  '';
+
   configureFlags = [
     "--with-json"
     (lib.withFeatureAs withCli "cli" "editline")
