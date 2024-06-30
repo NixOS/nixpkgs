@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation rec {
   pname = "telescope";
-  version = "0.9.1";
+  version = "0.10";
 
   src = fetchFromGitHub {
     owner = "omar-polo";
     repo = pname;
     rev = version;
-    hash = "sha256-OAqXYmlehL9AjZ7V0U0h7RCm/hn77Sf0Wp6R/GRaGY8=";
+    hash = "sha256-hkXXM/I7sNFomWamT0q1JH62arX1hFbt68Axcijadug=";
   };
 
   postPatch = ''
