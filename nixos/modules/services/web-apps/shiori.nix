@@ -80,10 +80,14 @@ in {
 
           # For SSL certificates, and the resolv.conf
           "/etc"
-        ] ++ lib.optional (lib.strings.hasInfix "postgres" cfg.databaseUrl
-          && config.services.postgresql.enable) "/run/postgresql"
-          ++ lib.optional (lib.strings.hasInfix "mysql" cfg.databaseUrl
-            && config.services.mysql.enable) "/var/run/mysqld";
+        ] ++ lib.optional (config.services.postgresql.enable &&
+                           cfg.databaseUrl != null &&
+                           lib.strings.hasPrefix "postgres://" cfg.databaseUrl)
+            "/run/postgresql"
+          ++ lib.optional (config.services.mysql.enable &&
+                           cfg.databaseUrl != null &&
+                           lib.strings.hasPrefix "mysql://" cfg.databaseUrl)
+            "/var/run/mysqld";
 
         CapabilityBoundingSet = "";
         AmbientCapabilities = "CAP_NET_BIND_SERVICE";
