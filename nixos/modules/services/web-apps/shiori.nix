@@ -31,7 +31,7 @@ in {
       };
 
       environmentFile = lib.mkOption {
-        type = lib.types.null or lib.types.path;
+        type = lib.types.nullOr lib.types.path;
         default = null;
         example = "/path/to/environmentFile";
         description = ''
@@ -42,7 +42,7 @@ in {
       };
 
       databaseUrl = lib.mkOption {
-        type = lib.types.null or lib.types.str;
+        type = lib.types.nullOr lib.types.str;
         default = null;
         example = "postgresql:///shiori?host=/run/postgresql";
         description = "The connection URL to connect to MySQL or PostgreSQL";
