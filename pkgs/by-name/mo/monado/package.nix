@@ -30,6 +30,7 @@
 , libXdmcp
 , libXext
 , libXrandr
+, nix-update-script
 , onnxruntime
 , opencv4
 , openhmd
@@ -141,8 +142,9 @@ stdenv.mkDerivation (finalAttrs: {
     export XDG_CONFIG_DIRS=@out@/etc/xdg''${XDG_CONFIG_DIRS:+:''${XDG_CONFIG_DIRS}}
   '';
 
-  passthru.tests = {
-    basic-service = nixosTests.monado;
+  passthru = {
+    updateScript = nix-update-script { };
+    tests.basic-service = nixosTests.monado;
   };
 
   meta = with lib; {
