@@ -111,7 +111,6 @@ in
           db_path = lib.mkOption {
             description = "Path to Kanidm database.";
             default = "/var/lib/kanidm/kanidm.db";
-            readOnly = true;
             type = lib.types.path;
           };
           tls_chain = lib.mkOption {
