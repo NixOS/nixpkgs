@@ -4552,14 +4552,14 @@ with pkgs;
   cloudflared = callPackage ../applications/networking/cloudflared {
     # https://github.com/cloudflare/cloudflared/issues/1151#issuecomment-1888819250
     buildGoModule = buildGoModule.override {
-      go = go_1_21.overrideAttrs {
+      go = go_1_22.overrideAttrs {
         pname = "cloudflare-go";
-        version = "0-unstable-2023-12-06";
+        version = "1.22.2-devel-cf";
         src = fetchFromGitHub {
           owner = "cloudflare";
           repo = "go";
-          rev = "34129e47042e214121b6bbff0ded4712debed18e";
-          sha256 = "sha256-RA9KTY4cSxIt7dyJgAFQPemc6YBgcSwc/hqB4JHPxng=";
+          rev = "ec0a014545f180b0c74dfd687698657a9e86e310";
+          sha256 = "sha256-oQQ9Jyh8TphZSCaHqaugTL7v0aeZjyOdVACz86I2KvU=";
         };
       };
     };
