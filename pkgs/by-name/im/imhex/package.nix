@@ -22,14 +22,15 @@
 }:
 
 let
-  version = "1.33.2";
-  patterns_version = "1.33.2";
+  version = "1.35.3";
+  patterns_version = "1.35.3";
 
   patterns_src = fetchFromGitHub {
+    name = "ImHex-Patterns-source-${patterns_version}";
     owner = "WerWolv";
     repo = "ImHex-Patterns";
     rev = "ImHex-v${patterns_version}";
-    hash = "sha256-5a6aFT8R8vMzPS+Y+fcDV5+olhioEpLjdMqa7qOyGsw=";
+    hash = "sha256-h86qoFMSP9ehsXJXOccUK9Mfqe+DVObfSRT4TCtK0rY=";
   };
 
 in
@@ -38,11 +39,12 @@ stdenv.mkDerivation rec {
   inherit version;
 
   src = fetchFromGitHub {
+    name = "ImHex-source-${version}";
     fetchSubmodules = true;
     owner = "WerWolv";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-8Ehpk0TjE4itQ7D9Nx74plYwABVufuYmxfxyuSqak1c=";
+    repo = "ImHex";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-8vhOOHfg4D9B9yYgnGZBpcjAjuL4M4oHHax9ad5PJtA=";
   };
 
   nativeBuildInputs = [ cmake llvm python3 perl pkg-config rsync ];
