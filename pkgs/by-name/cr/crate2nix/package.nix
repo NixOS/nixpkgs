@@ -2,10 +2,11 @@
 , rustPlatform
 , fetchFromGitHub
 , makeWrapper
-
 , cargo
 , nix
 , nix-prefetch-git
+, installShellFiles
+,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -19,26 +20,33 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-esWhRnt7FhiYq0CcIxw9pvH+ybOQmWBfHYMtleaMhBE=";
   };
 
-  sourceRoot = "${src.name}/crate2nix";
+  sourceRoot = "${src.name}/${pname}";
 
   cargoHash = "sha256-nQ1VUCFMmpWZWvKFbyJFIZUJ24N9ZPY8JCHWju385NE=";
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [
+    makeWrapper
+    installShellFiles
+  ];
 
-  # Tests use nix(1), which tries (and fails) to set up /nix/var inside the
-  # sandbox
+  # Tests use nix(1), which tries (and fails) to set up /nix/var inside the sandbox.
   doCheck = false;
 
-  postFixup = ''
-    wrapProgram $out/bin/crate2nix \
-        --suffix PATH ":" ${lib.makeBinPath [ cargo nix nix-prefetch-git ]}
+  postInstall = ''
+    wrapProgram $out/bin/${pname} \
+      --prefix PATH ":" ${
+        lib.makeBinPath [
+          cargo
+          nix
+          nix-prefetch-git
+        ]
+      }
 
-    rm -rf $out/lib $out/bin/crate2nix.d
-    mkdir -p \
-      $out/share/bash-completion/completions \
-      $out/share/zsh/vendor-completions
-    $out/bin/crate2nix completions -s 'bash' -o $out/share/bash-completion/completions
-    $out/bin/crate2nix completions -s 'zsh' -o $out/share/zsh/vendor-completions
+      for shell in bash zsh fish
+      do
+        $out/bin/${pname} completions -s $shell
+        installShellCompletion ${pname}.$shell || installShellCompletion --$shell _${pname}
+      done
   '';
 
   meta = with lib; {
@@ -49,9 +57,12 @@ rustPlatform.buildRustPackage rec {
       so that you can build every crate individually in a Nix sandbox.
     '';
     homepage = "https://github.com/nix-community/crate2nix";
+    changelog = "https://nix-community.github.io/crate2nix/90_reference/90_changelog";
     license = licenses.asl20;
-    maintainers = with maintainers; [ kolloch cole-h ];
-    platforms = platforms.all;
+    maintainers = with maintainers; [
+      kolloch
+      cole-h
+      kranzes
+    ];
   };
 }
-
