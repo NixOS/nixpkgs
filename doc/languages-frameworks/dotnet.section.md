@@ -253,6 +253,12 @@ Which `nuget-to-nix` will generate an output similar to below
 ]
 ```
 
+If some of your packages are restored from non-standard sources provide path to your `nuget.config` file. If your source requires authentication, make sure you have `.netrc` file configured.
+
+```bash
+$ nuget-to-nix out $excludedPackages $src/nuget.config > deps.nix
+```
+
 Finally, you move the `deps.nix` file to the appropriate location to be used by `nugetDeps`, then you're all set!
 
 If you ever need to update the dependencies of a package, you instead do
