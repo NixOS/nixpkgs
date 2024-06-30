@@ -14841,6 +14841,12 @@
     githubId = 13085275;
     name = "Juozas Norkus";
   };
+  norepercussions = {
+    name = "Tucker Shea";
+    email = "nix@tuckershea.com";
+    github = "NoRePercussions";
+    githubId = 66567994;
+  };
   norfair = {
     email = "syd@cs-syd.eu";
     github = "NorfairKing";
