@@ -23,7 +23,7 @@ buildGoModule rec {
       --zsh <($out/bin/shiori completion zsh)
   '';
 
-  # passthru.tests.smoke-test = nixosTests.shiori; # test broken
+  passthru.tests.smoke-test = nixosTests.shiori;
 
   meta = with lib; {
     description = "Simple bookmark manager built with Go";
