@@ -91,6 +91,7 @@ stdenv'.mkDerivation rec {
     homepage = "https://moonlight-stream.org";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [
+      azuwis
       luc65r
       zmitchell
     ];
