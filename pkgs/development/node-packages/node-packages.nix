@@ -29653,15 +29653,6 @@ let
         sha512 = "K//PSRMQk4FZ78Kyau+mZurHn3FH0Vwr+H36eE0rPbeYkRRi9YxceYPhuN60UwWorxyKHhqoAJl2OFKa4BVtaA==";
       };
     };
-    "html-link-extractor-1.0.5" = {
-      name = "html-link-extractor";
-      packageName = "html-link-extractor";
-      version = "1.0.5";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/html-link-extractor/-/html-link-extractor-1.0.5.tgz";
-        sha512 = "ADd49pudM157uWHwHQPUSX4ssMsvR/yHIswOR5CUfBdK9g9ZYGMhVSE6KZVHJ6kCkR0gH4htsfzU6zECDNVwyw==";
-      };
-    };
     "html-minifier-4.0.0" = {
       name = "html-minifier";
       packageName = "html-minifier";
@@ -31345,15 +31336,6 @@ let
         sha512 = "opmNIX7uFnS96NtPmhWQgQx6/NYFgsUXYMllcfzwWKUMwfo8kku1TvE6hkNcH+Q1ts5cMVrsY7j0bxXQDciu9Q==";
       };
     };
-    "is-absolute-url-4.0.1" = {
-      name = "is-absolute-url";
-      packageName = "is-absolute-url";
-      version = "4.0.1";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/is-absolute-url/-/is-absolute-url-4.0.1.tgz";
-        sha512 = "/51/TKE88Lmm7Gc4/8btclNXWS+g50wXhYJq8HWIBAGUBnoAdRu1aXeh364t/O7wXDAcTJDP8PNuNKWUDWie+A==";
-      };
-    };
     "is-accessor-descriptor-1.0.1" = {
       name = "is-accessor-descriptor";
       packageName = "is-accessor-descriptor";
@@ -32362,15 +32344,6 @@ let
         sha512 = "Kw/ReK0iqwKeu0MITLFuj0jbPAmEiOsIwyIXvvbfa6QfmN9pkD1M+8pdk7Rl/dTKbH34/XBFMbgD4iMJhLQbGA==";
       };
     };
-    "is-relative-url-4.0.0" = {
-      name = "is-relative-url";
-      packageName = "is-relative-url";
-      version = "4.0.0";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/is-relative-url/-/is-relative-url-4.0.0.tgz";
-        sha512 = "PkzoL1qKAYXNFct5IKdKRH/iBQou/oCC85QhXj6WKtUQBliZ4Yfd3Zk27RHu9KQG8r6zgvAA2AQKC9p+rqTszg==";
-      };
-    };
     "is-resolvable-1.1.0" = {
       name = "is-resolvable";
       packageName = "is-resolvable";
@@ -32783,15 +32756,6 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/isbinaryfile/-/isbinaryfile-4.0.10.tgz";
         sha512 = "iHrqe5shvBUcFbmZq9zOQHBoeOhZJu6RQGrDpBgenUm/Am+F3JM2MgQj+rK3Z601fzrL5gLZWtAPH2OBaSVcyw==";
-      };
-    };
-    "isemail-3.2.0" = {
-      name = "isemail";
-      packageName = "isemail";
-      version = "3.2.0";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/isemail/-/isemail-3.2.0.tgz";
-        sha512 = "zKqkK+O+dGqevc93KNsbZ/TqTUFd46MwWjYOoMrjIMZ51eU7DtQG3Wmd9SQQT7i7RVnuTPEiYEWHU3MSbxC1Tg==";
       };
     };
     "isexe-2.0.0" = {
@@ -34736,15 +34700,6 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/linewise/-/linewise-0.0.3.tgz";
         sha512 = "8oI90ziJlcTi4k2DnQ0o0Waa2Uk00xbIN8ylvhstEqfJtiRaB4LJ6u8H63If7zTrnnuhCw8SjTJoHf+wLs3ICg==";
-      };
-    };
-    "link-check-5.3.0" = {
-      name = "link-check";
-      packageName = "link-check";
-      version = "5.3.0";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/link-check/-/link-check-5.3.0.tgz";
-        sha512 = "Jhb7xueDgQgBaZzkfOtAyOZEZAIMJQIjUpYD2QY/zEB+LKTY1tWiBwZg8QIDbzQdPBOcqzg7oLQDNcES/tQmXg==";
       };
     };
     "linkify-it-2.2.0" = {
@@ -36809,15 +36764,6 @@ let
         sha512 = "UB/IbzjWazwTlNAX0pvWNlJS8NKsOQ4syrXZQ/C72j+jirrsjVRT627lCaylrKJFBQWfRsPmIVQie8x38DEhAQ==";
       };
     };
-    "markdown-link-extractor-4.0.2" = {
-      name = "markdown-link-extractor";
-      packageName = "markdown-link-extractor";
-      version = "4.0.2";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/markdown-link-extractor/-/markdown-link-extractor-4.0.2.tgz";
-        sha512 = "5cUOu4Vwx1wenJgxaudsJ8xwLUMN7747yDJX3V/L7+gi3e4MsCm7w5nbrDQQy8nEfnl4r5NV3pDXMAjhGXYXAw==";
-      };
-    };
     "markdown-table-3.0.3" = {
       name = "markdown-table";
       packageName = "markdown-table";
@@ -36825,15 +36771,6 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/markdown-table/-/markdown-table-3.0.3.tgz";
         sha512 = "Z1NL3Tb1M9wH4XESsCDEksWoKTdlUafKc4pt0GRwjUyXaCFZ+dc3g2erqB6zm3szA2IUSi7VnPI+o/9jnxh9hw==";
-      };
-    };
-    "marked-12.0.2" = {
-      name = "marked";
-      packageName = "marked";
-      version = "12.0.2";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/marked/-/marked-12.0.2.tgz";
-        sha512 = "qXUm7e/YKFoqFPYPa3Ukg9xlI5cyAtGmyEIzMfW//m6kXwCy2Ps9DYf5ioijFKQ8qyuscrHoY04iJGctu2Kg0Q==";
       };
     };
     "marked-4.3.0" = {
@@ -80930,94 +80867,6 @@ in
     meta = {
       description = "Madoko is a fast scholarly Markdown processor written in Koka";
       homepage = "http://madoko.codeplex.com";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
-  markdown-link-check = nodeEnv.buildNodePackage {
-    name = "markdown-link-check";
-    packageName = "markdown-link-check";
-    version = "3.12.2";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/markdown-link-check/-/markdown-link-check-3.12.2.tgz";
-      sha512 = "GWMwSvxuZn+uGGydi5yywnnDZy08SGps4I/63xqvWT7lxtH4cVLnhgZZYtEcPz/QvgPg9vbH2rvWpa29owMtHA==";
-    };
-    dependencies = [
-      sources."@tootallnate/quickjs-emscripten-0.23.0"
-      sources."agent-base-7.1.1"
-      sources."ast-types-0.13.4"
-      sources."async-3.2.5"
-      sources."basic-ftp-5.0.5"
-      sources."boolbase-1.0.0"
-      sources."chalk-5.3.0"
-      sources."cheerio-1.0.0-rc.12"
-      sources."cheerio-select-2.1.0"
-      sources."commander-12.1.0"
-      sources."css-select-5.1.0"
-      sources."css-what-6.1.0"
-      sources."data-uri-to-buffer-6.0.2"
-      (sources."debug-4.3.5" // {
-        dependencies = [
-          sources."ms-2.1.2"
-        ];
-      })
-      sources."degenerator-5.0.1"
-      sources."dom-serializer-2.0.0"
-      sources."domelementtype-2.3.0"
-      sources."domhandler-5.0.3"
-      sources."domutils-3.1.0"
-      sources."entities-4.5.0"
-      sources."escodegen-2.1.0"
-      sources."esprima-4.0.1"
-      sources."estraverse-5.3.0"
-      sources."esutils-2.0.3"
-      sources."fs-extra-11.2.0"
-      sources."get-uri-6.0.3"
-      sources."graceful-fs-4.2.11"
-      sources."html-link-extractor-1.0.5"
-      sources."htmlparser2-8.0.2"
-      sources."http-proxy-agent-7.0.2"
-      sources."https-proxy-agent-7.0.4"
-      sources."iconv-lite-0.6.3"
-      sources."ip-address-9.0.5"
-      sources."is-absolute-url-4.0.1"
-      sources."is-relative-url-4.0.0"
-      sources."isemail-3.2.0"
-      sources."jsbn-1.1.0"
-      sources."jsonfile-6.1.0"
-      sources."link-check-5.3.0"
-      sources."lodash-4.17.21"
-      sources."lru-cache-7.18.3"
-      sources."markdown-link-extractor-4.0.2"
-      sources."marked-12.0.2"
-      sources."ms-2.1.3"
-      sources."needle-3.3.1"
-      sources."netmask-2.0.2"
-      sources."nth-check-2.1.1"
-      sources."pac-proxy-agent-7.0.1"
-      sources."pac-resolver-7.0.1"
-      sources."parse5-7.1.2"
-      sources."parse5-htmlparser2-tree-adapter-7.0.0"
-      sources."progress-2.0.3"
-      sources."proxy-agent-6.4.0"
-      sources."proxy-from-env-1.1.0"
-      sources."punycode-2.3.1"
-      sources."safer-buffer-2.1.2"
-      sources."sax-1.4.1"
-      sources."smart-buffer-4.2.0"
-      sources."socks-2.8.3"
-      sources."socks-proxy-agent-8.0.3"
-      sources."source-map-0.6.1"
-      sources."sprintf-js-1.1.3"
-      sources."tslib-2.6.3"
-      sources."universalify-2.0.1"
-    ];
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "checks the all of the hyperlinks in a markdown text to determine if they are alive or dead";
-      homepage = "https://github.com/tcort/markdown-link-check#readme";
-      license = "ISC";
     };
     production = true;
     bypassCache = true;

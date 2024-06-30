@@ -112,6 +112,7 @@ mapAliases {
   karma = pkgs.karma-runner; # added 2023-07-29
   leetcode-cli = vsc-leetcode-cli; # added 2023-08-31
   manta = pkgs.node-manta; # Added 2023-05-06
+  inherit (pkgs) markdown-link-check; # added 2024-06-28
   markdownlint-cli = pkgs.markdownlint-cli; # added 2023-07-29
   inherit (pkgs) markdownlint-cli2; # added 2023-08-22
   inherit (pkgs) mathjax-node-cli; # added 2023-11-02
