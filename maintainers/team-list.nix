@@ -141,6 +141,13 @@ with lib.maintainers;
     enableFeatureFreezePing = true;
   };
 
+  clevercloud = {
+    members = [ floriansanderscc ];
+    scope = "Maintain Clever Cloud related packages.";
+    shortName = "CleverCloud";
+    githubTeams = [ "CleverCloud" ];
+  };
+
   cloudposse = {
     members = [ dudymas ];
     scope = "Maintain atmos and applications made by the Cloud Posse team.";
@@ -192,7 +199,6 @@ with lib.maintainers;
 
   dotnet = {
     members = [
-      ivar
       mdarocha
       corngood
       ggg

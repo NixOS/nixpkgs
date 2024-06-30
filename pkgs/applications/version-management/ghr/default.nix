@@ -31,7 +31,7 @@ buildGoModule rec {
     homepage = "https://github.com/tcnksm/ghr";
     description = "Upload multiple artifacts to GitHub Release in parallel";
     license = licenses.mit;
-    maintainers = [ maintainers.ivar ];
+    maintainers = [ ];
     mainProgram = "ghr";
   };
 }

@@ -59,6 +59,6 @@ stdenv.mkDerivation rec {
     mainProgram = "flycast";
     license = licenses.gpl2Only;
     platforms = platforms.unix;
-    maintainers = [ maintainers.ivar ];
+    maintainers = [ ];
   };
 }
