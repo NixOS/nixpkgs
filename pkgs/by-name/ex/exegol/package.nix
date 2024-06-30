@@ -1,8 +1,4 @@
-{
-  fetchPypi,
-  lib,
-  python3,
-}:
+{ fetchPypi, lib, python3, }:
 python3.pkgs.buildPythonApplication rec {
   pname = "exegol";
   version = "4.3.4";
