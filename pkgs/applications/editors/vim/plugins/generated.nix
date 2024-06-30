@@ -17145,12 +17145,12 @@ final: prev:
 
   yazi-nvim = buildVimPlugin {
     pname = "yazi.nvim";
-    version = "2024-06-01";
+    version = "2024-06-29";
     src = fetchFromGitHub {
-      owner = "DreamMaoMao";
+      owner = "mikavilpas";
       repo = "yazi.nvim";
-      rev = "0e7dce1a936b92099180ff80cbf35eb7e8a5f660";
-      sha256 = "xKwQXwvqGBNveu94i6NW4I7L/mAnbqLmYS3Uc/6qTyw=";
+      rev = "05849f390175f2ba8fd277b224d4fd9e35455895";
+      sha256 = "zj+lmxsOEW+YaCk5hb7u454gACUmqYPA/IeW6av4D7k=";
     };
     meta.homepage = "https://github.com/DreamMaoMao/yazi.nvim";
   };
