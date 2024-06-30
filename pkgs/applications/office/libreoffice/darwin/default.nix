@@ -44,7 +44,7 @@ stdenvNoCC.mkDerivation {
     cp -R . $out/Applications/${appName}
     cat > $out/bin/${scriptName} << EOF
     #!${stdenvNoCC.shell}
-    open -na $out/Applications/${appName} --args "$@"
+    open -na $out/Applications/${appName} --args "\$@"
     EOF
     chmod +x $out/bin/${scriptName}
     runHook postInstall
