@@ -4,6 +4,7 @@
 , dbus
 , elfutils
 , expat
+, extraEnv ? { }
 , fetchurl
 , glib
 , glibc
@@ -128,6 +129,7 @@ buildFHSEnv {
       export LIBGL_DRIVERS_PATH=${plex-desktop}/usr/lib/x86_64-linux-gnu/dri
       export QT_QPA_PLATFORM=xcb
       export DISABLE_WAYLAND=1
+      export ${lib.toShellVars extraEnv}
       ${plex-desktop}/Plex.sh
   '';
 }
