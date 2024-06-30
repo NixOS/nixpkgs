@@ -56,6 +56,6 @@ stdenv.mkDerivation rec {
     priority = 11; # less than coreutils, which also provides "kill" and "uptime"
     license = licenses.gpl2;
     platforms = platforms.unix;
-    maintainers = [ maintainers.typetetris ];
+    maintainers = [ ];
   };
 }
