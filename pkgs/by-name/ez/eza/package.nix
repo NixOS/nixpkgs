@@ -13,6 +13,7 @@
   # once eza upstream gets support for setting up a compatibility symlink for exa, we should change
   # the handling here from postInstall to passing the required argument to the builder.
 , exaAlias ? true
+, fetchpatch
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -25,6 +26,14 @@ rustPlatform.buildRustPackage rec {
     rev = "v${version}";
     hash = "sha256-yhrzjm6agMshdjCkK88aGXd0aM9Uurs1GeAA3w/umqI=";
   };
+
+  patches = [
+    (fetchpatch { # https://github.com/eza-community/eza/pull/1037
+      name = "fix_zsh-completion.diff";
+      url = "https://github.com/eza-community/eza/commit/30d78ba5ce7fd2aabae174bcac106d6b202c6d31.patch";
+      hash = "sha256-AF2NSKF2TIOWloIvHJz7NssTwx1hN9X/Z+s91Qjub+Y=";
+    })
+  ];
 
   cargoHash = "sha256-AJH+fZFaSSgRLIsDu5GVe4d9MI2e4N2DvWZ2JOZx+pM=";
 
