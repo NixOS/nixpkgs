@@ -11,11 +11,14 @@
 # This also holds true for GitHub teams. Since almost none of our teams have write
 # permissions, you need to list all members of the team with commit access individually.
 
-# GitHub actions
+# CI
 /.github/workflows @NixOS/Security @Mic92 @zowoq
+/.github/workflows/check-nix-format.yml @infinisil
+/ci @infinisil
 
-# EditorConfig
+# Develompent support
 /.editorconfig @Mic92 @zowoq
+/shell.nix @infinisil @NixOS/Security
 
 # Libraries
 /lib                        @infinisil

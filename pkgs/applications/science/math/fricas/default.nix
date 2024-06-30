@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "fricas";
-  version = "1.3.10";
+  version = "1.3.11";
 
   src = fetchFromGitHub {
     owner = "fricas";
     repo = "fricas";
     rev = version;
-    sha256 = "sha256-T1xDndDnHq/hmhTWWO3Eu0733u8+C8sJMCF6pbLU2GI=";
+    sha256 = "sha256-EX/boSs6rK4RrJ5W6Rd0TSHsbQsNiFI1evFuNPBMeu8=";
   };
 
   buildInputs = [ sbcl libX11 libXpm libICE libSM libXt libXau libXdmcp ];

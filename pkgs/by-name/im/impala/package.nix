@@ -5,16 +5,16 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "impala";
-  version = "0.2";
+  version = "0.2.1";
 
   src = fetchFromGitHub {
     owner = "pythops";
     repo = "impala";
     rev = "v${version}";
-    hash = "sha256-7UMHkm3AtPqUILrsUnM0SbZT4Sq55dEElMN0KonjwtE=";
+    hash = "sha256-0ULcknkZKYEvuqlcY8E1kZtpA0lPxxjRV2/zfak+FKU=";
   };
 
-  cargoHash = "sha256-CtEirsSQAg2Fv44YoKKmSjQs85++QWFRcWoA4VrBbgU=";
+  cargoHash = "sha256-1jFUfpinqXBu8eTFAA1dRDk1F1IhNjcA7CkJmaIjkFQ=";
 
   meta = {
     description = "TUI for managing wifi";

@@ -84,8 +84,10 @@ mapAliases {
   inherit (pkgs.elmPackages) elm-test;
   eslint_d = pkgs.eslint_d; # Added 2023-05-26
   inherit (pkgs) firebase-tools; # added 2023-08-18
+  inherit (pkgs) fixjson; # added 2024-06-26
   flood = pkgs.flood; # Added 2023-07-25
   generator-code = throw "generator-code was removed because it provides no executable"; # added 2023-09-24
+  inherit (pkgs) git-run; # added 2024-06-26
   git-ssb = throw "git-ssb was removed because it was broken"; # added 2023-08-21
   inherit (pkgs) git-standup; # added 2024-06-26
   inherit (pkgs) gitmoji-cli; # added 2023-09-23
@@ -111,6 +113,7 @@ mapAliases {
   karma = pkgs.karma-runner; # added 2023-07-29
   leetcode-cli = vsc-leetcode-cli; # added 2023-08-31
   manta = pkgs.node-manta; # Added 2023-05-06
+  inherit (pkgs) markdown-link-check; # added 2024-06-28
   markdownlint-cli = pkgs.markdownlint-cli; # added 2023-07-29
   inherit (pkgs) markdownlint-cli2; # added 2023-08-22
   inherit (pkgs) mathjax-node-cli; # added 2023-11-02
@@ -119,6 +122,7 @@ mapAliases {
   musescore-downloader = pkgs.dl-librescore; # added 2023-08-19
   inherit (pkgs) near-cli; # added 2023-09-09
   node-inspector = throw "node-inspector was removed because it was broken"; # added 2023-08-21
+  inherit (pkgs) nodemon; # added 2024-06-28
   inherit (pkgs) npm-check-updates; # added 2023-08-22
   ocaml-language-server = throw "ocaml-language-server was removed because it was abandoned upstream"; # added 2023-09-04
   parcel-bundler = parcel; # added 2023-09-04

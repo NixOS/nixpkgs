@@ -4,10 +4,10 @@
 , lib
 , makeDesktopItem
 , makeWrapper
-, stdenv
+, stdenvNoCC
 
-, gamemodeSupport ? stdenv.isLinux
-, textToSpeechSupport ? stdenv.isLinux
+, gamemodeSupport ? stdenvNoCC.isLinux
+, textToSpeechSupport ? stdenvNoCC.isLinux
 , additionalLibs ? [ ]
 
 , # dependencies
@@ -19,7 +19,7 @@
 , xorg
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "atlauncher";
   version = "3.4.36.9";
 

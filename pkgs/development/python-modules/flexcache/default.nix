@@ -50,6 +50,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/hgrecco/flexcache";
     changelog = "https://github.com/hgrecco/flexcache/blob/${src.rev}/CHANGES";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ doronbehar ];
   };
 }
