@@ -12,7 +12,7 @@ appleDerivation' (if headersOnly then stdenvNoCC else stdenv) (
 
   nativeBuildInputs = [ bootstrap_cmds bison flex gnum4 unifdef perl python3 ];
 
-  patches = lib.optionals stdenv.isx86_64 [ ./python3.patch ];
+  patches = lib.optionals (lib.versionOlder stdenv.hostPlatform.darwinSdkVersion "11") [ ./python3.patch ];
 
   postPatch = ''
     substituteInPlace Makefile \
@@ -48,7 +48,7 @@ appleDerivation' (if headersOnly then stdenvNoCC else stdenv) (
       --replace 'MACHINE_ARCH=armv7' 'MACHINE_ARCH=arm64' # this might break the comments saying 32-bit is required
 
     patchShebangs .
-  '' + lib.optionalString stdenv.isAarch64 ''
+  '' + lib.optionalString (lib.versionAtLeast stdenv.hostPlatform.darwinSdkVersion "11") ''
     # iig is closed-sourced, we don't have it
     # create an empty file to the header instead
     # this line becomes: echo "" > $@; echo --header ...
@@ -80,7 +80,7 @@ appleDerivation' (if headersOnly then stdenvNoCC else stdenv) (
 
   preBuild = let macosVersion =
     "10.0 10.1 10.2 10.3 10.4 10.5 10.6 10.7 10.8 10.9 10.10 10.11" +
-    lib.optionalString stdenv.isAarch64 " 10.12 10.13 10.14 10.15 11.0";
+    lib.optionalString (lib.versionAtLeast stdenv.hostPlatform.darwinSdkVersion "11") " 10.12 10.13 10.14 10.15 11.0";
    in ''
     # This is a bit of a hack...
     mkdir -p sdk/usr/local/libexec
@@ -150,7 +150,9 @@ appleDerivation' (if headersOnly then stdenvNoCC else stdenv) (
     mv $out/Library/Frameworks/IOKit.framework $out/Library/PrivateFrameworks
   '';
 
-  appleHeaders = builtins.readFile (./. + "/headers-${arch}.txt");
+  appleHeaders = let
+    name = if stdenv.hostPlatform.darwinSdkVersion == "10.12" then "headers-10.12-${arch}.txt" else "headers-${arch}.txt";
+  in builtins.readFile (./. + "/${name}");
 } // lib.optionalAttrs headersOnly {
   HOST_CODESIGN = "echo";
   HOST_CODESIGN_ALLOCATE = "echo";
