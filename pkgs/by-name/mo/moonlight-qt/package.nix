@@ -20,6 +20,7 @@
   libvdpau,
   libxkbcommon,
   wayland,
+  nix-update-script,
 }:
 
 let
@@ -97,6 +98,8 @@ stdenv'.mkDerivation rec {
     mv app/Moonlight.app $out/Applications
     ln -s $out/Applications/Moonlight.app/Contents/MacOS/Moonlight $out/bin/moonlight
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Play your PC games on almost any device";
