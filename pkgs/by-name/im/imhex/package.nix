@@ -9,6 +9,7 @@
 , capstone
 , dbus
 , libGLU
+, libGL
 , glfw3
 , file
 , perl
@@ -19,6 +20,7 @@
 , nlohmann_json
 , yara
 , rsync
+, autoPatchelfHook
 }:
 
 let
@@ -47,7 +49,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-8vhOOHfg4D9B9yYgnGZBpcjAjuL4M4oHHax9ad5PJtA=";
   };
 
-  nativeBuildInputs = [ cmake llvm python3 perl pkg-config rsync ];
+  nativeBuildInputs = [ autoPatchelfHook cmake llvm python3 perl pkg-config rsync ];
 
   buildInputs = [
     capstone
@@ -62,6 +64,14 @@ stdenv.mkDerivation rec {
     mbedtls
     nlohmann_json
     yara
+  ];
+
+  # autoPatchelfHook only searches for *.so and *.so.*, and won't find *.hexpluglib
+  # however, we will append to RUNPATH ourselves
+  autoPatchelfIgnoreMissingDeps = [ "*.hexpluglib" ];
+  appendRunpaths = [
+    (lib.makeLibraryPath [ libGL ])
+    "${placeholder "out"}/lib/imhex/plugins"
   ];
 
   cmakeFlags = [
