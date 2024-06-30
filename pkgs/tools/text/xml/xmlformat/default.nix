@@ -14,9 +14,9 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    mkdir -p $out/bin
+    mkdir -p $out/bin $out/usr/share/$pname
     cp ./xmlformat.pl $out/bin/xmlformat
-    cp ./LICENSE $out/
+    cp ./LICENSE $out/usr/share/$pname
   '';
 
   meta = {
