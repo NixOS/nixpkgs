@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=WorldPainter
+GenericName=WorldPainter
+Comment=Paint your own Minecraft worlds
+Comment[de]=Minecraft-Welten durch malen erstellen
+Terminal=false
+Type=Application
+Categories=Game;
+StartupWMClass=install4j-org-pepsoft-worldpainter-Main

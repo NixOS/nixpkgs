@@ -1,0 +1,5 @@
+newmtl minecraft_material
+Kd 0.91015625 0.87890625 0.6015625
+Ks 0.91015625 0.87890625 0.6015625
+map_Kd tex/texture.png
+map_d tex/texture_a.png
