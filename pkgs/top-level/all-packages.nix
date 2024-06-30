@@ -34944,13 +34944,9 @@ with pkgs;
   };
   neovim = wrapNeovim neovim-unwrapped { };
 
-  neovim-gtk = callPackage ../applications/editors/neovim/neovim-gtk.nix { };
-
   gnvim-unwrapped = callPackage ../applications/editors/neovim/gnvim { };
 
   gnvim = callPackage ../applications/editors/neovim/gnvim/wrapper.nix { };
-
-  neovim-remote = callPackage ../applications/editors/neovim/neovim-remote.nix { };
 
   viw = callPackage ../applications/editors/viw { };
 
