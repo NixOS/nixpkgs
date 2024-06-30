@@ -44,7 +44,7 @@ in {
       databaseUrl = lib.mkOption {
         type = lib.types.nullOr lib.types.str;
         default = null;
-        example = "postgresql:///shiori?host=/run/postgresql";
+        example = "postgres:///shiori?host=/run/postgresql";
         description = "The connection URL to connect to MySQL or PostgreSQL";
       };
     };
