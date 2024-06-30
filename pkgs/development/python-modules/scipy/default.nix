@@ -6,7 +6,6 @@
   fetchurl,
   writeText,
   python,
-  pythonOlder,
   buildPythonPackage,
   cython,
   gfortran,
@@ -22,7 +21,6 @@
   numpy,
   pybind11,
   pooch,
-  libxcrypt,
   xsimd,
   blas,
   lapack,
@@ -108,7 +106,7 @@ buildPythonPackage {
     pybind11
     pooch
     xsimd
-  ] ++ lib.optionals (pythonOlder "3.9") [ libxcrypt ];
+  ];
 
   propagatedBuildInputs = [ numpy ];
 
