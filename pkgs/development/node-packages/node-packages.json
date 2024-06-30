@@ -109,7 +109,6 @@
 , "fx"
 , "ganache"
 , "gatsby-cli"
-, "git-run"
 , "@gitbeaker/cli"
 , "grammarly-languageserver"
 , "graphql"

@@ -37601,15 +37601,6 @@ let
         sha512 = "/0LLxhzP0tfiR5hcQebtudP56gUurs2CLkGarnCiB/OqEyUFQ6U3paQi/tgLv0hBJYt2rnr9MNpxz4fiiugstg==";
       };
     };
-    "microee-0.0.6" = {
-      name = "microee";
-      packageName = "microee";
-      version = "0.0.6";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/microee/-/microee-0.0.6.tgz";
-        sha512 = "/LdL3jiBWDJ3oQIRLgRhfeCZNE3patM1LiwCC124+/HHn10sI/G2OAyiMfTNzH5oYWoZBk0tRZADAUOv+0Wt0A==";
-      };
-    };
     "micromark-2.11.4" = {
       name = "micromark";
       packageName = "micromark";
@@ -38463,15 +38454,6 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/miniflare/-/miniflare-3.20240610.0.tgz";
         sha512 = "J6aXmkII5gcq+kC4TurxKiR4rC++apPST/K8P/YjqoQQgrJ+NRPacBhf6iVh8R3ujnXYXaq+Ae+gm+LM0XHK/w==";
-      };
-    };
-    "minilog-3.1.0" = {
-      name = "minilog";
-      packageName = "minilog";
-      version = "3.1.0";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/minilog/-/minilog-3.1.0.tgz";
-        sha512 = "Xfm4jWjWzSAduvEWtuZX/8TMkxfJlCfH7XvikCZe3ptojYTBq1eoEs3rh9/3LNLOckUP86m+8l8+Iw5NU/pBww==";
       };
     };
     "minimalistic-assert-1.0.1" = {
@@ -49194,15 +49176,6 @@ let
         sha512 = "brv7p5WgH0jmQJr1ZDDfKDOSeWWg+OVypG99A/5vYGPqJ6pxiaHLy8nxtFjBA7oMa01ebA9gfh1uMCFqOuXxvA==";
       };
     };
-    "simple-git-1.132.0" = {
-      name = "simple-git";
-      packageName = "simple-git";
-      version = "1.132.0";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/simple-git/-/simple-git-1.132.0.tgz";
-        sha512 = "xauHm1YqCTom1sC9eOjfq3/9RKiUA9iPnxBbrY2DdL8l4ADMu0jjM5l5lphQP5YWNqAL2aXC/OeuQ76vHtW5fg==";
-      };
-    };
     "simple-git-2.21.0" = {
       name = "simple-git";
       packageName = "simple-git";
@@ -51784,16 +51757,6 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/table-layout/-/table-layout-0.4.5.tgz";
         sha512 = "zTvf0mcggrGeTe/2jJ6ECkJHAQPIYEwDoqsiqBjI24mvRmQbInK5jq33fyypaCBxX08hMkfmdOqj6haT33EqWw==";
-      };
-    };
-    "tabtab-git+https://github.com/mixu/node-tabtab.git" = {
-      name = "tabtab";
-      packageName = "tabtab";
-      version = "0.0.2";
-      src = fetchgit {
-        url = "https://github.com/mixu/node-tabtab.git";
-        rev = "94af2b878b174527b6636aec88acd46979247755";
-        sha256 = "c824206b33da96cf5c01c21f1b133a0e3568e07ee4dcc9beefa8226864cd0272";
       };
     };
     "tailwindcss-3.4.4" = {
@@ -73996,35 +73959,6 @@ in
       description = "Gatsby command-line interface for creating new sites and running Gatsby commands";
       homepage = "https://github.com/gatsbyjs/gatsby/tree/master/packages/gatsby-cli#readme";
       license = "MIT";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
-  git-run = nodeEnv.buildNodePackage {
-    name = "git-run";
-    packageName = "git-run";
-    version = "0.5.5";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/git-run/-/git-run-0.5.5.tgz";
-      sha512 = "76zCOpXUl/85CMk9aJwWbBy2vGYv+Yn17PcUMhksTtMJLAUujje3eP8v7FufC2pN9SbQx88Gtr4ARXGeVWwAJA==";
-    };
-    dependencies = [
-      sources."async-2.6.4"
-      sources."debug-4.3.5"
-      sources."lodash-4.17.21"
-      sources."lodash.groupby-4.6.0"
-      sources."microee-0.0.6"
-      sources."minilog-3.1.0"
-      sources."ms-2.1.2"
-      sources."simple-git-1.132.0"
-      sources."tabtab-git+https://github.com/mixu/node-tabtab.git"
-    ];
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "A tool for managing multiple git repositories";
-      homepage = "https://github.com/mixu/gr#readme";
-      license = "BSD-3-Clause";
     };
     production = true;
     bypassCache = true;
