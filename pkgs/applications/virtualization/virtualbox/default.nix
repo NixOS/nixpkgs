@@ -22,9 +22,6 @@
 , extraConfigureFlags ? ""
 }:
 
-# See https://github.com/cyberus-technology/virtualbox-kvm/issues/12
-assert enableKvm -> !enableHardening;
-
 # The web services use Java infrastructure.
 assert enableWebService -> javaBindings;
 
@@ -35,8 +32,8 @@ let
   virtualboxVersion = "7.0.18";
   virtualboxSha256 = "d999513533631674a024762668de999411d8197060c51e68c5faf0a2c0eea1a5";
 
-  kvmPatchVersion = "20240515";
-  kvmPatchHash = "sha256-Kh/tlPScdf7CbEEpL54iqMpeUIdmnJL2r/mxnlEzLd0=";
+  kvmPatchVersion = "20240617";
+  kvmPatchHash = "sha256-bOcM9xA1SXB1uTwljpw2vevVeSdHa3omCRon/8DoAUk=";
 
   # The KVM build is not compatible to VirtualBox's kernel modules. So don't export
   # modsrc at all.
