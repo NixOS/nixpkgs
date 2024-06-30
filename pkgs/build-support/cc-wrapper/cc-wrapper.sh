@@ -246,8 +246,8 @@ if [[ -e @out@/nix-support/cc-wrapper-hook ]]; then
 fi
 
 if (( "${NIX_CC_USE_RESPONSE_FILE:-@use_response_file_by_default@}" >= 1 )); then
-    responseFile=$(mktemp "${TMPDIR:-/tmp}/cc-params.XXXXXX")
-    trap 'rm -f -- "$responseFile"' EXIT
+    responseFile=$(@coreutils_bin@/bin/mktemp "${TMPDIR:-/tmp}/cc-params.XXXXXX")
+    trap '@coreutils_bin@/bin/rm -f -- "$responseFile"' EXIT
     printf "%q\n" \
        ${extraBefore+"${extraBefore[@]}"} \
        ${params+"${params[@]}"} \
