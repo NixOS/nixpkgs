@@ -16087,6 +16087,11 @@
     githubId = 146413;
     name = "Tobias Poschwatta";
   };
+  potb = {
+    name = "Peïo Thibault";
+    github = "potb";
+    githubId = 10779093;
+  };
   poweredbypie = {
     name = "poweredbypie";
     github = "poweredbypie";
