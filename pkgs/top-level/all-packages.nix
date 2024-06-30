@@ -25155,17 +25155,17 @@ with pkgs;
   };
 
   # Steel Bank Common Lisp
-  sbcl_2_4_4 = wrapLisp {
-    pkg = callPackage ../development/compilers/sbcl { version = "2.4.4"; };
-    faslExt = "fasl";
-    flags = [ "--dynamic-space-size" "3000" ];
-  };
   sbcl_2_4_5 = wrapLisp {
     pkg = callPackage ../development/compilers/sbcl { version = "2.4.5"; };
     faslExt = "fasl";
     flags = [ "--dynamic-space-size" "3000" ];
   };
-  sbcl = sbcl_2_4_5;
+  sbcl_2_4_6 = wrapLisp {
+    pkg = callPackage ../development/compilers/sbcl { version = "2.4.6"; };
+    faslExt = "fasl";
+    flags = [ "--dynamic-space-size" "3000" ];
+  };
+  sbcl = sbcl_2_4_6;
 
   sbclPackages = recurseIntoAttrs sbcl.pkgs;
 
