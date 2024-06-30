@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, pkg-config
-, autoreconfHook
-, ffmpeg
-, poco
-, ocl-icd
-, opencl-clhpp
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  pkg-config,
+  autoreconfHook,
+  ffmpeg,
+  poco,
+  ocl-icd,
+  opencl-clhpp,
 }:
 
 stdenv.mkDerivation rec {
