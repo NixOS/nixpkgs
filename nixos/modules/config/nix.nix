@@ -379,10 +379,10 @@ in
       substituters = mkAfter [ "https://cache.nixos.org/" ];
       system-features = mkDefault (
         [ "nixos-test" "benchmark" "big-parallel" "kvm" ] ++
-        optionals (pkgs.stdenv.hostPlatform ? gcc.arch) (
-          # a builder can run code for `gcc.arch` and inferior architectures
-          [ "gccarch-${pkgs.stdenv.hostPlatform.gcc.arch}" ] ++
-          map (x: "gccarch-${x}") (systems.architectures.inferiors.${pkgs.stdenv.hostPlatform.gcc.arch} or [])
+        optionals (pkgs.stdenv.hostPlatform ? cpuModel && pkgs.stdenv.hostPlatform.cpuModel.gnu != "generic") (
+          # a builder can run code for `cpuModel.gnu`
+          [ "gccarch-${pkgs.stdenv.hostPlatform.cpuModel.gnu}" ] ++
+          map (x: "gccarch-${x}") (pkgs.stdenv.hostPlatform.cpuModel.inferiors or [])
         )
       );
     };
