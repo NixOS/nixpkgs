@@ -34656,10 +34656,6 @@ with pkgs;
 
   tofi = callPackage ../applications/misc/tofi { };
 
-  tokyonight-gtk-theme = tokyonight-gtk-theme-variants.full;
-
-  tokyonight-gtk-theme-variants = recurseIntoAttrs (callPackage ../data/themes/tokyonight-gtk-theme { });
-
   topydo = callPackage ../applications/misc/topydo { };
 
   torrential = callPackage ../applications/networking/p2p/torrential { };
