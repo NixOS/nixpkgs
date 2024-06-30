@@ -20,7 +20,6 @@
   pytest-lazy-fixture,
   pytestCheckHook,
   pythonOlder,
-  pythonRelaxDepsHook,
   pytz,
   redis,
 }:
@@ -41,7 +40,6 @@ buildPythonPackage rec {
 
   build-system = [ hatchling ];
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   pythonRelaxDeps = [ "pydantic" ];
 

@@ -181,6 +181,10 @@ stdenv.mkDerivation rec {
     "strictoverflow"
     # don't interfere with dynamic target detection
     "relro" "bindnow"
+  ] ++ lib.optionals stdenv.hostPlatform.isAarch64 [
+    # "__builtin_clear_padding not supported for variable length aggregates"
+    # in aarch64-specific code
+    "trivialautovarinit"
   ];
 
   nativeBuildInputs = [

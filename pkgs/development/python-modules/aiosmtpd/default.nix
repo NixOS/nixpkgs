@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "aiosmtpd";
-  version = "1.4.5";
+  version = "1.4.6";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "aio-libs";
     repo = "aiosmtpd";
     rev = "refs/tags/v${version}";
-    hash = "sha256-8nQ4BVSLYgZHRGkbujy/olV/+GABlkDhe5wef3hyQpQ=";
+    hash = "sha256-Ih/xbWM9O/fFQiZezydlPlIr36fLRc2lLgdfxD5Jviw=";
   };
 
   nativeBuildInputs = [ setuptools ];

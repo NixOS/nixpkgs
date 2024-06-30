@@ -9,7 +9,6 @@
   pandas,
   pynose,
   pytestCheckHook,
-  pythonRelaxDepsHook,
 }:
 
 buildPythonPackage rec {
@@ -24,7 +23,6 @@ buildPythonPackage rec {
     hash = "sha256-1c78baBBsDyvAWrNx5mZI/Q75wyXv0DAwAdWm3EwX/I=";
   };
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   pythonRelaxDeps = [ "looseversion" ];
 

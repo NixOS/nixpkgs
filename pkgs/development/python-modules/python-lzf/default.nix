@@ -1,18 +1,26 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
+  setuptools,
+  unittestCheckHook,
 }:
 
 buildPythonPackage rec {
-  version = "0.2.4";
-  format = "setuptools";
+  version = "0.2.6";
   pname = "python-lzf";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "1l8m6vzwm1m8hn7ldw8j8r2b6r199k8z3q0wnhdyy4p68hahyhni";
+  src = fetchFromGitHub {
+    owner = "teepark";
+    repo = "python-lzf";
+    rev = "refs/tags/release-${version}";
+    hash = "sha256-n5E75kRqe0dDbyFicoyLBAVi/SuoUU7qJka3viipQk8=";
   };
+
+  build-system = [ setuptools ];
+
+  nativeCheckInputs = [ unittestCheckHook ];
 
   meta = with lib; {
     description = "liblzf python bindings";

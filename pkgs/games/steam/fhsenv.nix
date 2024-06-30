@@ -162,7 +162,7 @@ in buildFHSEnv rec {
     gtk2
     bzip2
     flac
-    freeglut
+    libglut
     libjpeg
     libpng
     libpng12

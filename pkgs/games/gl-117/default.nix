@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl
-, libGLU, libGL, SDL, freeglut, SDL_mixer, autoconf, automake, libtool
+, libGLU, libGL, SDL, libglut, SDL_mixer, autoconf, automake, libtool
 }:
 
 stdenv.mkDerivation rec {
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ automake autoconf ];
-  buildInputs = [ libGLU libGL SDL freeglut SDL_mixer libtool ];
+  buildInputs = [ libGLU libGL SDL libglut SDL_mixer libtool ];
 
   meta = with lib; {
     description = "Air combat simulator";

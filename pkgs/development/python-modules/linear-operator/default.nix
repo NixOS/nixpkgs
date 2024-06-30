@@ -4,7 +4,6 @@
   fetchFromGitHub,
   jaxtyping,
   pytestCheckHook,
-  pythonRelaxDepsHook,
   scipy,
   setuptools,
   setuptools-scm,
@@ -26,7 +25,6 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
-    pythonRelaxDepsHook
     setuptools
     setuptools-scm
     wheel

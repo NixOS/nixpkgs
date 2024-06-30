@@ -4,6 +4,7 @@
   buildPythonPackage,
   pythonOlder,
   fetchFromGitHub,
+  fetchpatch2,
 
   # build-system
   setuptools,
@@ -30,6 +31,14 @@ buildPythonPackage rec {
     hash = "sha256-MD7lIKwAwULZp7yLE6jiao2PU6h6RIl0SQ/6b4Lq+9I=";
     fetchSubmodules = true;
   };
+
+  patches = [
+    (fetchpatch2 {
+      # pytest8 compat
+      url = "https://github.com/davidhalter/jedi/commit/39c8317922f8f0312c12127cad10aea38d0ed7b5.patch";
+      hash = "sha256-wXHWcfoRJUl+ADrNMML0+DYTcRTyLs55Qrs7sDqT8BA=";
+    })
+  ];
 
   nativeBuildInputs = [ setuptools ];
 

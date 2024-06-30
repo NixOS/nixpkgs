@@ -7,7 +7,6 @@
   pdm-backend,
   pytestCheckHook,
   pythonOlder,
-  pythonRelaxDepsHook,
   requests,
   responses,
   setuptools,
@@ -36,10 +35,6 @@ buildPythonPackage rec {
 
   build-system = [
     pdm-backend
-  ];
-
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
   ];
 
   dependencies = [

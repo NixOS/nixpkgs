@@ -38,8 +38,8 @@ let
   #     nix-shell maintainers/scripts/update.nix --argstr package python3.pkgs.scipy
   #
   # The update script uses sed regexes to replace them with the updated hashes.
-  version = "1.13.1";
-  srcHash = "sha256-KpTvBJhiJ/IBjIFQhvS+NhRP3tbyXU5gQnAiFv47sKU=";
+  version = "1.14.0";
+  srcHash = "sha256-rNplvbDExmMfcPuvhs+y9j5/9G6QR1GdMgQLty6oi2c=";
   datasetsHashes = {
     ascent = "1qjp35ncrniq9rhzb14icwwykqg2208hcssznn3hz27w39615kh3";
     ecg = "1bwbjp43b7znnwha5hv6wiz3g0bhwrpqpi75s12zidxrbwvd62pj";

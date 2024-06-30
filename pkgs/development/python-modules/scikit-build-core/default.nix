@@ -23,13 +23,13 @@
 
 buildPythonPackage rec {
   pname = "scikit-build-core";
-  version = "0.8.2";
+  version = "0.9.6";
   pyproject = true;
 
   src = fetchPypi {
     pname = "scikit_build_core";
     inherit version;
-    hash = "sha256-UOwkuVaMmqbicjPe6yl4kyvHmFYhKzBXXL+kBJZVxDY=";
+    hash = "sha256-e+r5M89zSsvrttlsApNlQQIkcJvN5o87C08MsD4FSTk=";
   };
 
   postPatch = lib.optionalString (pythonOlder "3.11") ''
@@ -73,6 +73,7 @@ buildPythonPackage rec {
   disabledTestPaths = [
     # runs pip, requires network access
     "tests/test_custom_modules.py"
+    "tests/test_hatchling.py"
     "tests/test_pyproject_pep517.py"
     "tests/test_pyproject_pep518.py"
     "tests/test_pyproject_pep660.py"

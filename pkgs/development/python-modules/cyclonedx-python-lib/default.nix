@@ -9,7 +9,6 @@
   lxml,
   packageurl-python,
   py-serializable,
-  pythonRelaxDepsHook,
   poetry-core,
   pytestCheckHook,
   pythonOlder,
@@ -38,7 +37,6 @@ buildPythonPackage rec {
 
   build-system = [ poetry-core ];
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   dependencies = [
     importlib-metadata

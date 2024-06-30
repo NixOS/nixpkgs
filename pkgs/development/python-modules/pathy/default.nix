@@ -6,7 +6,6 @@
   pathlib-abc,
   pytestCheckHook,
   pythonOlder,
-  pythonRelaxDepsHook,
   setuptools,
   smart-open,
   typer,
@@ -24,7 +23,6 @@ buildPythonPackage rec {
     hash = "sha256-uz0OawuL92709jxxkeluCvLtZcj9tfoXSI+ch55jcG0=";
   };
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   pythonRelaxDeps = [ "smart-open" ];
 

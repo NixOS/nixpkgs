@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "gbulb";
-  version = "0.6.4";
+  version = "0.6.5";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "beeware";
     repo = "gbulb";
     rev = "refs/tags/v${version}";
-    hash = "sha256-AdZSvxix0cpoFQSrslGl+hB/s6Nh0EsWMQmXZAJVJOg=";
+    hash = "sha256-03Ott+V3Y4+Y72Llsug5coqG3C+pjAdLkPYbaY/6Uow=";
   };
 
   propagatedBuildInputs = [

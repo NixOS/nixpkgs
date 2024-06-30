@@ -18,8 +18,6 @@ python3.pkgs.buildPythonApplication rec {
 
   build-system = with python3.pkgs; [ poetry-core ];
 
-  nativeBuildInputs = with python3.pkgs; [ pythonRelaxDepsHook ];
-
   pythonRelaxDeps = true;
 
   dependencies = with python3.pkgs; [

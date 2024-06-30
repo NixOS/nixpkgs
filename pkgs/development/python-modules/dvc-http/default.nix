@@ -7,7 +7,6 @@
   fsspec,
   funcy,
   pythonOlder,
-  pythonRelaxDepsHook,
   setuptools-scm,
 }:
 

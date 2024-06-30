@@ -4,7 +4,6 @@
   fetchPypi,
   fonttools,
   protobuf,
-  pythonRelaxDepsHook,
   pytestCheckHook,
   setuptools-scm,
 }:
@@ -24,7 +23,6 @@ buildPythonPackage rec {
     protobuf
   ];
   nativeBuildInputs = [
-    pythonRelaxDepsHook
     setuptools-scm
   ];
 

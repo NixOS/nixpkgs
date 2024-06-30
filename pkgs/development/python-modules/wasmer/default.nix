@@ -25,7 +25,7 @@ let
     }:
     buildPythonPackage rec {
       inherit pname;
-      version = "1.1.1";
+      version = "1.2.0";
       format = "pyproject";
 
       outputs = [ "out" ] ++ lib.optional (pname == "wasmer") "testsout";
@@ -87,19 +87,19 @@ in
   wasmer = common {
     pname = "wasmer";
     buildAndTestSubdir = "packages/api";
-    cargoHash = "sha256-vpbwU1HrIQmQkce9SK8UOHrX5tOLv/XKsfJHteqOteA=";
+    cargoHash = "sha256-HKbVss6jGFdnCgXV3UYf6RxtmQM3+tq3cHfOSKw5JnY=";
   };
 
   wasmer-compiler-cranelift = common {
     pname = "wasmer-compiler-cranelift";
     buildAndTestSubdir = "packages/compiler-cranelift";
-    cargoHash = "sha256-nv4cr52mUIuR3LWRT3eXU5b2LORwuN4iMbLX1efzovI=";
+    cargoHash = "sha256-BTBkoTluK7IVS+TpbQnMjn2Wvwhfxv1ev5PZWS/kW0w=";
   };
 
   wasmer-compiler-llvm = common {
     pname = "wasmer-compiler-llvm";
     buildAndTestSubdir = "packages/compiler-llvm";
-    cargoHash = "sha256-FA/xXlPaK8NxZIw7MCm9Fyesgu72Dsxhmb5xzOIINhE=";
+    cargoHash = "sha256-AfLp4RLfnJ3R1Wg+RCJRmYr7748LQtl1W+ttTgIMls4=";
     extraNativeBuildInputs = [ llvm_14 ];
     extraBuildInputs = [
       libffi
@@ -112,6 +112,6 @@ in
   wasmer-compiler-singlepass = common {
     pname = "wasmer-compiler-singlepass";
     buildAndTestSubdir = "packages/compiler-singlepass";
-    cargoHash = "sha256-yew7cB/7RLjW55jZmHFfIvaErgZ6XVxL1ucGGX2Cx18=";
+    cargoHash = "sha256-4DoeKRjS/2ijpUva0p/AE3qoIyt8CvCjkPWFPyLH6gs=";
   };
 }

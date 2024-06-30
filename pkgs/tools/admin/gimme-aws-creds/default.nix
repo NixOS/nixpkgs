@@ -37,7 +37,6 @@ python.pkgs.buildPythonApplication rec {
 
   nativeBuildInputs = with python.pkgs; [
     installShellFiles
-    pythonRelaxDepsHook
   ];
 
   pythonRemoveDeps = [

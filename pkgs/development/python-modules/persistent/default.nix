@@ -1,35 +1,38 @@
 {
   lib,
   buildPythonPackage,
-  cffi,
   fetchPypi,
+  isPyPy,
+
+  # build-systems
+  setuptools,
+
+  # dependencies
+  cffi,
+  zope-deferredimport,
   zope-interface,
-  sphinx,
-  manuel,
   pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "persistent";
-  version = "5.2";
-  format = "setuptools";
+  version = "6.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-2+pdH/nbTkUco5vAtCqepTfmyskoKujAeA+4/64+yDQ=";
+    hash = "sha256-CDZQwP/ty4gDKJY8KUuVEaArawXkIec3p9Vfnu2I+18=";
   };
 
-  nativeBuildInputs = [
-    sphinx
-    manuel
-  ];
+  build-system = [ setuptools ];
 
   propagatedBuildInputs = [
     zope-interface
-    cffi
-  ];
+    zope-deferredimport
+  ]
+  ++ lib.optionals (!isPyPy) [ cffi ];
 
   pythonImportsCheck = [ "persistent" ];
 

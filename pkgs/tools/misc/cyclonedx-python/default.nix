@@ -36,7 +36,6 @@ python3.pkgs.buildPythonApplication rec {
 
   nativeBuildInputs = with py.pkgs; [
     poetry-core
-    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = with py.pkgs; [

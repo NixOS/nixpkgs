@@ -12,7 +12,6 @@
   pycryptodomex,
   pytestCheckHook,
   pythonOlder,
-  pythonRelaxDepsHook,
   sensor-state-data,
 }:
 
@@ -37,7 +36,6 @@ buildPythonPackage rec {
 
   build-system = [ poetry-core ];
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   pythonRelaxDeps = [ "pycryptodomex" ];
 

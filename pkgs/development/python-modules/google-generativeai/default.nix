@@ -9,7 +9,6 @@
   protobuf,
   pydantic,
   pythonOlder,
-  pythonRelaxDepsHook,
   setuptools,
   tqdm,
   typing-extensions,
@@ -33,7 +32,6 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   dependencies = [
     google-ai-generativelanguage

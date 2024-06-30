@@ -43,6 +43,7 @@ stdenv.mkDerivation {
   cmakeFlags = [
     (lib.cmakeBool "USE_SYSTEM_OPENXR" true)
     (lib.cmakeBool "USE_SYSTEM_GLM" true)
+    (lib.cmakeFeature "CMAKE_CXX_FLAGS" "-DGLM_ENABLE_EXPERIMENTAL")
     # debug logging macros cause format-security warnings
     (lib.cmakeFeature "CMAKE_CXX_FLAGS" "-Wno-error=format-security")
   ];

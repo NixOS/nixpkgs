@@ -2,30 +2,41 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  future,
+
+  # build-system
+  setuptools,
+  setuptools-scm,
+
+  # optional-dependencies
   numpy,
-  pynose,
+
+  # tests
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "uncertainties";
-  version = "3.1.7";
-  format = "setuptools";
+  version = "3.2.1";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-gBEeCDnyOcWyM8tHcgF7SDoLehVzpYG5Krd0ajXm+qs=";
+    hash = "sha256-sFQXtYve8jbCDnEfsv7hjk23NIqS7c7AExizKqs0kl4=";
   };
 
-  propagatedBuildInputs = [ future ];
-  nativeCheckInputs = [
-    pynose
-    numpy
+  build-system = [
+    setuptools
+    setuptools-scm
   ];
 
-  checkPhase = ''
-    nosetests -sve test_1to2
-  '';
+  optional-dependencies.arrays = [ numpy ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ]
+  ++ optional-dependencies.arrays;
+
+  pythonImportsCheck = [ "uncertainties" ];
 
   meta = with lib; {
     homepage = "https://pythonhosted.org/uncertainties/";

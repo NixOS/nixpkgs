@@ -1,8 +1,8 @@
 {
   lib,
-  python,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
   pytestCheckHook,
 
   # for passthru.tests
@@ -20,15 +20,17 @@
 
 buildPythonPackage rec {
   pname = "tornado";
-  version = "6.4.0";
-  format = "setuptools";
+  version = "6.4.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tornadoweb";
     repo = "tornado";
     rev = "v${version}";
-    hash = "sha256-VAH/frbR6kgi4dZr+Co8gOtF7yin6pncDyW4EDva1y8=";
+    hash = "sha256-vWiTLKL5gzrf3J6T3u8I1HHg5Ww0sf5ybSbZX6G3UXM=";
   };
+
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

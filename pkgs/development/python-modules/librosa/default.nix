@@ -34,7 +34,7 @@
 
 buildPythonPackage rec {
   pname = "librosa";
-  version = "0.10.2";
+  version = "0.10.2.post1";
   format = "pyproject";
 
   src = fetchFromGitHub {
@@ -42,7 +42,7 @@ buildPythonPackage rec {
     repo = "librosa";
     rev = "refs/tags/${version}";
     fetchSubmodules = true; # for test data
-    hash = "sha256-zUKljPKWOhyb3Zv4KEUcvLsVkxVhL+rzErKycAl6jIg=";
+    hash = "sha256-0FbKVAFWmcFTW2dR27nif6hPZeIxFWYF1gTm4BEJZ/Q=";
   };
 
   nativeBuildInputs = [ setuptools ];

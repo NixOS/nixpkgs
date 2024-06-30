@@ -2,38 +2,42 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+
+  # build-system
+  hatchling,
+  hatch-fancy-pypi-readme,
+
+  # dependencies
+  smbus2,
+
+  # checks
   mock,
-  smbus-cffi,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "bme680";
-  version = "1.1.1";
-  format = "setuptools";
+  version = "2.0.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pimoroni";
     repo = "bme680-python";
-    rev = "v${version}";
-    hash = "sha256-gmdRxMJ0DoCyNcb/bYp746PBi4HktHAAYOcSQJ0Uheg=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-ep0dnok/ycEoUAnOK4QmdqdO0r4ttzSoqHDl7aPengE=";
   };
 
-  propagatedBuildInputs = [ smbus-cffi ];
+  build-system = [
+    hatchling
+    hatch-fancy-pypi-readme
+  ];
 
-  preBuild = ''
-    cd library
-  '';
+  dependencies = [ smbus2 ];
 
   nativeCheckInputs = [
     mock
     pytestCheckHook
   ];
-
-  postPatch = ''
-    substituteInPlace library/setup.cfg \
-      --replace "smbus" "smbus-cffi"
-  '';
 
   pythonImportsCheck = [ "bme680" ];
 

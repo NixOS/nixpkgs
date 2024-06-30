@@ -7,7 +7,6 @@
   pysmt,
   pytestCheckHook,
   pythonOlder,
-  pythonRelaxDepsHook,
   setuptools,
   z3-solver,
 }:
@@ -30,7 +29,6 @@ buildPythonPackage rec {
   pythonRemoveDeps = [ "z3-solver" ];
 
   build-system = [
-    pythonRelaxDepsHook
     setuptools
   ];
 

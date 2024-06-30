@@ -5,7 +5,6 @@
   fetchFromGitHub,
   poetry-core,
   pythonOlder,
-  pythonRelaxDepsHook,
   rapidfuzz,
   requests,
 }:
@@ -26,7 +25,6 @@ buildPythonPackage rec {
 
   build-system = [
     poetry-core
-    pythonRelaxDepsHook
   ];
 
   pythonRelaxDeps = [ "rapidfuzz" ];

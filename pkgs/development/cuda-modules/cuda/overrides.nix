@@ -235,7 +235,7 @@ filterAndCreateOverrides {
 
   cuda_demo_suite =
     {
-      freeglut,
+      libglut,
       libcufft,
       libcurand,
       libGLU,
@@ -244,7 +244,7 @@ filterAndCreateOverrides {
     }:
     prevAttrs: {
       buildInputs = prevAttrs.buildInputs ++ [
-        freeglut
+        libglut
         libcufft.lib
         libcurand.lib
         libGLU

@@ -22,7 +22,6 @@ python3Packages.buildPythonApplication rec {
         --replace-fail 'opencv-python' 'opencv'
   '';
 
-  nativeBuildInputs = with python3Packages; [ pythonRelaxDepsHook ];
 
   pythonRelaxDeps = [ "torchvision" ];
 

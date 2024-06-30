@@ -10,15 +10,16 @@
 
 buildPythonPackage rec {
   pname = "zeroc-ice";
-  version = "3.7.10";
+  version = "3.7.10.1";
   pyproject = true;
 
   src = fetchPypi {
-    inherit version pname;
-    hash = "sha256-Bwn2Y/Bbu6O89iaSNWvMpXBhyJRmj6eL8j6HiPpbQbM=";
+    pname = "zeroc_ice";
+    inherit version;
+    hash = "sha256-sGOq/aNg33EfdpRVKbtUFXbyZr5B5dWi3Xf10yDBhmQ=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
   buildInputs = [
     bzip2

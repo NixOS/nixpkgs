@@ -4,7 +4,6 @@
   pythonOlder,
   fetchFromGitHub,
   poetry-core,
-  pythonRelaxDepsHook,
   pdfrw,
   reportlab,
   rmscene,
@@ -30,7 +29,6 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     poetry-core
-    pythonRelaxDepsHook
   ];
 
   pythonRelaxDeps = [

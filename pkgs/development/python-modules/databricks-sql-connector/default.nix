@@ -12,14 +12,13 @@
   pyarrow,
   pytestCheckHook,
   pythonOlder,
-  pythonRelaxDepsHook,
   sqlalchemy,
   thrift,
 }:
 
 buildPythonPackage rec {
   pname = "databricks-sql-connector";
-  version = "3.1.0";
+  version = "3.2.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -28,7 +27,7 @@ buildPythonPackage rec {
     owner = "databricks";
     repo = "databricks-sql-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-LiA+zZuhPPXgBb8B1vZ/PuAYMrBXzxgd1CXwugf0mk8=";
+    hash = "sha256-Sk/tYgFnWWHAsMSHhEUIwUagc6femAzQpQGyzJGXW1E=";
   };
 
   pythonRelaxDeps = [
@@ -38,7 +37,6 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     poetry-core
-    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [

@@ -25,7 +25,7 @@ stdenv.mkDerivation {
     })
   ] ++ (lib.optional stdenv.isAarch64 ./no-sse-on-arm.patch);
 
-  buildInputs = [ qtbase qttools libGLU.dev ];
+  buildInputs = [ qtbase qttools libGLU ];
   nativeBuildInputs = [ qmake wrapQtAppsHook ];
 
   preConfigure = ''

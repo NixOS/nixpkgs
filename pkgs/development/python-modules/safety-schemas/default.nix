@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchPypi,
   hatchling,
-  pythonRelaxDepsHook,
   dparse,
   packaging,
   pydantic,
@@ -24,7 +23,6 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     hatchling
-    pythonRelaxDepsHook
   ];
 
   pythonRelaxDeps = [ "dparse" ];

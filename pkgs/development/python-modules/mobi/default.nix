@@ -5,7 +5,6 @@
   loguru,
   poetry-core,
   pythonOlder,
-  pythonRelaxDepsHook,
   setuptools,
 }:
 
@@ -27,7 +26,6 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     poetry-core
-    pythonRelaxDepsHook
     setuptools
   ];
 

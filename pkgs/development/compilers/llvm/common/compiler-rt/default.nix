@@ -142,7 +142,7 @@ stdenv.mkDerivation ({
   '' + (if stdenv.hostPlatform.isFreeBSD then
     # As per above, but in FreeBSD assert is a macro and simply allowing it to be implicitly declared causes Issues!!!!!
     ''
-    substituteInPlace lib/builtins/clear_cache.c lib/builtins/cpu_model.c \
+    substituteInPlace lib/builtins/clear_cache.c lib/builtins/cpu_model${lib.optionalString (lib.versionAtLeast version "18") "/x86"}.c \
       --replace "#include <assert.h>" "#define assert(e) ((e)?(void)0:__assert(__FUNCTION__,__FILE__,__LINE__,#e))"
     '' else ''
     substituteInPlace lib/builtins/clear_cache.c \

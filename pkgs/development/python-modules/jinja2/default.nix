@@ -2,6 +2,7 @@
   lib,
   stdenv,
   python,
+  pythonAtLeast,
   buildPythonPackage,
   pythonOlder,
   fetchPypi,
@@ -43,6 +44,14 @@ buildPythonPackage rec {
   doCheck = !stdenv.is32bit;
 
   nativeCheckInputs = [ pytestCheckHook ] ++ passthru.optional-dependencies.i18n;
+
+  disabledTests = lib.optionals (pythonAtLeast "3.13") [
+    # https://github.com/pallets/jinja/issues/1900
+    "test_custom_async_iteratable_filter"
+    "test_first"
+    "test_loop_errors"
+    "test_package_zip_list"
+  ];
 
   passthru.doc = stdenv.mkDerivation {
     # Forge look and feel of multi-output derivation as best as we can.

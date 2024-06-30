@@ -119,6 +119,7 @@ let
     "pie"
     "relro"
     "stackprotector"
+    "stackclashprotection"
     "strictoverflow"
     "trivialautovarinit"
     "zerocallusedregs"

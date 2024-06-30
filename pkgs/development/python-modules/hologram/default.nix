@@ -6,7 +6,6 @@
   jsonschema,
   pytestCheckHook,
   python-dateutil,
-  pythonRelaxDepsHook,
   setuptools,
   wheel,
 }:
@@ -33,7 +32,6 @@ buildPythonPackage rec {
   ];
 
   nativeBuildInputs = [
-    pythonRelaxDepsHook
     setuptools
     wheel
   ];

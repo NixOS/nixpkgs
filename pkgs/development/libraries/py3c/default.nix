@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, python3 }:
+{ lib, stdenv, fetchFromGitHub, python311 }:
 
 stdenv.mkDerivation rec {
   pname = "py3c";
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   nativeCheckInputs = [
-    python3
+    python311
   ];
 
   checkTarget = "test-python";

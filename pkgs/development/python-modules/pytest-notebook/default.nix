@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   flit-core,
-  pythonRelaxDepsHook,
   attrs,
   jsonschema,
   nbclient,
@@ -32,7 +31,6 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     flit-core
-    pythonRelaxDepsHook
   ];
 
   pythonRelaxDeps = [

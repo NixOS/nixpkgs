@@ -4,11 +4,12 @@ stdenvNoCC.mkDerivation rec {
   inherit (src) pname version;
 
   src = texlive.pkgs.iwona;
+  dontUnpack = true;
 
   installPhase = ''
     runHook preInstall
 
-    install -Dm644 fonts/opentype/nowacki/iwona/*.otf -t $out/share/fonts/opentype
+    install -Dm644 $src/fonts/opentype/nowacki/iwona/*.otf -t $out/share/fonts/opentype
 
     runHook postInstall
   '';

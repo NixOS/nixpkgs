@@ -12,7 +12,6 @@
   pydantic,
   pytestCheckHook,
   pythonOlder,
-  pythonRelaxDepsHook,
   redis,
   requests,
   sentence-transformers,
@@ -46,7 +45,6 @@ buildPythonPackage rec {
   pythonRelaxDeps = [ "pydantic" ];
 
   build-system = [
-    pythonRelaxDepsHook
     setuptools
   ];
 

@@ -3,7 +3,6 @@
   buildPythonPackage,
   pythonOlder,
   fetchFromGitHub,
-  pythonRelaxDepsHook,
   setuptools,
   watchdog,
   portalocker,
@@ -32,7 +31,6 @@ buildPythonPackage rec {
   pythonRemoveDeps = [ "setuptools" ];
 
   nativeBuildInputs = [
-    pythonRelaxDepsHook
     setuptools
   ];
 

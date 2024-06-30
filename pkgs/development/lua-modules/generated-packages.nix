@@ -1963,16 +1963,16 @@ buildLuarocksPackage {
 luarocks = callPackage({ buildLuarocksPackage, fetchFromGitHub, fetchurl }:
 buildLuarocksPackage {
   pname = "luarocks";
-  version = "3.11.0-1";
+  version = "3.11.1-1";
   knownRockspec = (fetchurl {
-    url    = "mirror://luarocks/luarocks-3.11.0-1.rockspec";
-    sha256 = "0pi55445dskpw6nhrq52589h4v39fsf23c0kp8d4zg2qaf6y2n38";
+    url    = "mirror://luarocks/luarocks-3.11.1-1.rockspec";
+    sha256 = "sha256-di00mD8txN7rjaVpvxzNbnQsAh6H16zUtJZapH7U4HU=";
   }).outPath;
   src = fetchFromGitHub {
     owner = "luarocks";
     repo = "luarocks";
-    rev = "v3.11.0";
-    hash = "sha256-mSwwBuLWoMT38iYaV/BTdDmmBz4heTRJzxBHC0Vrvc4=";
+    rev = "v3.11.1";
+    hash = "sha256-GglygI8HP+aDFEuucOkjQ2Pgfv4+jW+og+2vL3KoZCQ=";
   };
 
 
@@ -2345,14 +2345,14 @@ buildLuarocksPackage {
 luv = callPackage({ buildLuarocksPackage, cmake, fetchurl, luaOlder }:
 buildLuarocksPackage {
   pname = "luv";
-  version = "1.44.2-1";
+  version = "1.48.0-2";
   knownRockspec = (fetchurl {
-    url    = "mirror://luarocks/luv-1.44.2-1.rockspec";
-    sha256 = "07jwi50i16rv7sj914k1q3l9dy9wldbw2skmsdrzlkc57mqvg348";
+    url    = "mirror://luarocks/luv-1.48.0-2.rockspec";
+    sha256 = "0353bjn9z90a1hd7rksdfrd9fbdd31hbvdaxr1fb0fh0bc1cpy94";
   }).outPath;
   src = fetchurl {
-    url    = "https://github.com/luvit/luv/releases/download/1.44.2-1/luv-1.44.2-1.tar.gz";
-    sha256 = "0c2wkszxw6gwa4l6g1d2zzh660j13lif6c7a910vq7zn8jycgd9y";
+    url    = "https://github.com/luvit/luv/releases/download/1.48.0-2/luv-1.48.0-2.tar.gz";
+    sha256 = "2c3a1ddfebb4f6550293a40ee789f7122e97647eede51511f57203de48c03b7a";
   };
 
   disabled = luaOlder "5.1";

@@ -1,61 +1,61 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, ninja
-, chromium
-, grpc
-, haskellPackages
-, mercurial
-, python3Packages
-, abseil-cpp
+{
+  abseil-cpp,
+  chromium,
+  cmake,
+  fetchFromGitHub,
+  gbenchmark,
+  grpc,
+  gtest,
+  haskellPackages,
+  icu,
+  lib,
+  mercurial,
+  ninja,
+  python3Packages,
+  stdenv,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "re2";
-  version = "2024-05-01";
+  version = "2024-06-01";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "re2";
-    rev = version;
-    hash = "sha256-p4MdHjTk0SQsBPVkEy+EceAN/QTyzBDe7Pd1hJwOs3A=";
+    rev = finalAttrs.version;
+    hash = "sha256-iQETsjdIFcYM5I/W8ytvV3z/4va6TaZ/+KkSjb8CtF0=";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
-  nativeBuildInputs = [ cmake ninja ];
+  nativeBuildInputs = [
+    cmake
+    ninja
+  ];
 
-  propagatedBuildInputs = [ abseil-cpp ];
+  buildInputs = lib.optionals finalAttrs.doCheck [
+    gbenchmark
+    gtest
+  ];
 
-  postPatch = ''
-    substituteInPlace re2Config.cmake.in \
-      --replace "\''${PACKAGE_PREFIX_DIR}/" ""
-  '';
+  propagatedBuildInputs = [
+    abseil-cpp
+    icu
+  ];
 
-  # Needed for case-insensitive filesystems (i.e. MacOS) because a file named
-  # BUILD already exists.
-  cmakeBuildDir = "build_dir";
-
-  cmakeFlags = lib.optional (!stdenv.hostPlatform.isStatic) "-DBUILD_SHARED_LIBS:BOOL=ON";
-
-  # This installs a pkg-config definition.
-  postInstall = ''
-    pushd "$src"
-    make common-install prefix="$dev" SED_INPLACE="sed -i"
-    popd
-  '';
+  cmakeFlags = [
+    (lib.cmakeBool "RE2_BUILD_TESTING" finalAttrs.doCheck)
+    (lib.cmakeBool "RE2_USE_ICU" true)
+  ] ++ lib.optional (!stdenv.hostPlatform.isStatic) (lib.cmakeBool "BUILD_SHARED_LIBS" true);
 
   doCheck = true;
 
   passthru.tests = {
-    inherit
-      chromium
-      grpc
-      mercurial;
-    inherit (python3Packages)
-      fb-re2
-      google-re2;
+    inherit chromium grpc mercurial;
+    inherit (python3Packages) fb-re2 google-re2;
     haskell-re2 = haskellPackages.re2;
   };
 
@@ -68,7 +68,10 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.bsd3;
     homepage = "https://github.com/google/re2";
-    maintainers = with maintainers; [ azahi networkexception ];
+    maintainers = with maintainers; [
+      azahi
+      networkexception
+    ];
     platforms = platforms.all;
   };
-}
+})

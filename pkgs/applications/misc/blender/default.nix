@@ -342,10 +342,10 @@ stdenv.mkDerivation (finalAttrs: {
       };
 
     tests = {
-      render = runCommand "${finalAttrs.pname}-test" { } ''
+      render = runCommand "${finalAttrs.pname}-test" {
+        nativeBuildInputs = [ mesa.llvmpipeHook ];
+      } ''
         set -euo pipefail
-        export LIBGL_DRIVERS_PATH=${mesa.drivers}/lib/dri
-        export __EGL_VENDOR_LIBRARY_FILENAMES=${mesa.drivers}/share/glvnd/egl_vendor.d/50_mesa.json
         cat <<'PYTHON' > scene-config.py
         import bpy
         bpy.context.scene.eevee.taa_render_samples = 32

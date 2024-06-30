@@ -27,15 +27,20 @@
 
 buildPythonPackage rec {
   pname = "astropy";
-  version = "6.0.1";
+  version = "6.1.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8"; # according to setup.cfg
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ial13jVtBgjnTx9JNEL7Osu7eoW3OeB0RguwNAAUs5w=";
+    hash = "sha256-5cb0XZEcMKy41VbH+O2ZSuxxsQjmHu5QZ/AK8eTjYTg=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "numpy>=2.0.0"  "numpy"
+  '';
 
   nativeBuildInputs = [
     astropy-extension-helpers

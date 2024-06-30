@@ -1,8 +1,8 @@
-{ stdenv, lib, fetchurl, fetchpatch, fixDarwinDylibNames, testers, buildPackages }:
+{ stdenv, lib, fetchurl, fetchpatch, fixDarwinDylibNames, testers, buildPackages, updateAutotoolsGnuConfigScriptsHook }:
 
 let
   make-icu = (import ./make-icu.nix) {
-    inherit stdenv lib buildPackages fetchurl fixDarwinDylibNames testers;
+    inherit stdenv lib buildPackages fetchurl fixDarwinDylibNames testers updateAutotoolsGnuConfigScriptsHook;
   };
 in
 {

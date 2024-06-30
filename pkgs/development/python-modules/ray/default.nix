@@ -37,7 +37,6 @@
   python,
   pythonAtLeast,
   pythonOlder,
-  pythonRelaxDepsHook,
   pyyaml,
   requests,
   scikit-image,
@@ -112,7 +111,6 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     autoPatchelfHook
-    pythonRelaxDepsHook
   ];
 
   pythonRelaxDeps = [

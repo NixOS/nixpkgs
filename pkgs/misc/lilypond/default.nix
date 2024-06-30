@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--disable-documentation"
      # FIXME: these URW fonts are not OTF, configure reports "URW++ OTF files... no".
-    "--with-urwotf-dir=${ghostscript}/share/ghostscript/fonts"
+    "--with-urwotf-dir=${ghostscript.fonts}/share/fonts"
     "--with-texgyre-dir=${gyre-fonts}/share/fonts/truetype/"
   ];
 

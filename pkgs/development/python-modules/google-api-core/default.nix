@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "google-api-core";
-  version = "2.18.0";
+  version = "2.19.0";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Ytl0F7/GdNbO8lHlxNY5qWVeAMRVKMQ2T7/rtHjOcqk=";
+    hash = "sha256-zxt8JpQEeIbSrxEooDrpnjkRCKCIBPh8/TWXDknJzRA=";
   };
 
   nativeBuildInputs = [ setuptools ];

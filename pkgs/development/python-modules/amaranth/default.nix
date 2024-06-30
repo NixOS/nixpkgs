@@ -20,14 +20,14 @@
 buildPythonPackage rec {
   pname = "amaranth";
   format = "pyproject";
-  version = "0.4.5";
+  version = "0.5.0";
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "amaranth-lang";
     repo = "amaranth";
     rev = "refs/tags/v${version}";
-    hash = "sha256-g9dn6gUTdFHz9GMWHERsRLWHoI3E7vjuQDK0usbZO7g=";
+    hash = "sha256-+EV2NgYSuCbYTQKeBUN+/D0attfrJ3cso7U6RjLEIbg=";
   };
 
   nativeBuildInputs = [

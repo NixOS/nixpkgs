@@ -1,5 +1,5 @@
 { mkDerivation, lib, fetchurl, cmake, pkg-config, qtbase, qt5, libGLU, libGL
-, freeglut ? null, openal ? null, SDL2 ? null }:
+, libglut ? null, openal ? null, SDL2 ? null }:
 
 mkDerivation rec {
   pname = "yabause";
@@ -11,7 +11,7 @@ mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
-  buildInputs = [ qtbase qt5.qtmultimedia libGLU libGL freeglut openal SDL2 ];
+  buildInputs = [ qtbase qt5.qtmultimedia libGLU libGL libglut openal SDL2 ];
 
   patches = [
     ./linkage-rwx-linux-elf.patch

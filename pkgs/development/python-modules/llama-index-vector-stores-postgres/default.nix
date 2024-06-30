@@ -7,7 +7,6 @@
   pgvector,
   poetry-core,
   psycopg2,
-  pythonRelaxDepsHook,
   pythonOlder,
 }:
 
@@ -28,7 +27,6 @@ buildPythonPackage rec {
 
   build-system = [
     poetry-core
-    pythonRelaxDepsHook
   ];
 
   dependencies = [

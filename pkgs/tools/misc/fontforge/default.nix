@@ -29,6 +29,9 @@ stdenv.mkDerivation rec {
       url = "https://github.com/fontforge/fontforge/commit/216eb14b558df344b206bf82e2bdaf03a1f2f429.patch";
       hash = "sha256-aRnir09FSQMT50keoB7z6AyhWAVBxjSQsTRvBzeBuHU=";
     })
+
+    # https://github.com/fontforge/fontforge/pull/5423
+    ./replace-distutils.patch
   ];
 
   # use $SOURCE_DATE_EPOCH instead of non-deterministic timestamps

@@ -9,7 +9,6 @@
 , pytest-mock
 , responses
 , pytestCheckHook
-, pythonRelaxDepsHook
 }:
 
 buildPythonApplication rec {
@@ -33,7 +32,6 @@ buildPythonApplication rec {
   ];
 
   nativeBuildInputs = [
-    pythonRelaxDepsHook
   ];
 
   nativeCheckInputs = [

@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
   pyasn1,
   pytestCheckHook,
   pythonOlder,
@@ -9,29 +10,31 @@
 
 buildPythonPackage rec {
   pname = "pyasn1-modules";
-  version = "0.3.0";
-  format = "setuptools";
+  version = "0.4.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "pyasn1";
-    repo = pname;
+    repo = "pyasn1-modules";
     rev = "refs/tags/v${version}";
-    hash = "sha256-AAS1VuppCIxgswpLSHFAc6q9cyJBLpdDuU9D1KU13vg=";
+    hash = "sha256-UJycVfj08+3zjHPji5Qlh3yqeS30dEwu1pyrN1yo1Vc=";
   };
 
-  propagatedBuildInputs = [ pyasn1 ];
+  build-system = [ setuptools ];
+
+  dependencies = [ pyasn1 ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "pyasn1_modules" ];
 
-  meta = with lib; {
+  meta = {
     description = "Collection of ASN.1-based protocols modules";
-    homepage = "https://github.com/pyasn1/pyasn1-modules";
+    homepage = "https://pyasn1.readthedocs.io";
     changelog = "https://github.com/pyasn1/pyasn1-modules/releases/tag/v${version}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    license = lib.licenses.bsd2;
+    maintainers = [ ];
   };
 }

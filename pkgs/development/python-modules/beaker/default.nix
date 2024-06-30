@@ -22,14 +22,14 @@
 
 buildPythonPackage rec {
   pname = "beaker";
-  version = "1.11.0";
+  version = "1.13.0";
 
   # The pypy release do not contains the tests
   src = fetchFromGitHub {
     owner = "bbangert";
     repo = "beaker";
-    rev = version;
-    sha256 = "059sc7iar90lc2y9mppdis5ddfcxyirz03gmsfb0307f5dsa1dhj";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-HzjhOPXElwKoJLrhGIbVn798tbX/kaS1EpQIX+vXCtE=";
   };
 
   propagatedBuildInputs =

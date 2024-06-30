@@ -292,7 +292,7 @@ let
           pkgsExtraHardening = super';
           stdenv = super'.withDefaultHardeningFlags (
             super'.stdenv.cc.defaultHardeningFlags ++ [
-              "zerocallusedregs"
+              "stackclashprotection"
               "trivialautovarinit"
             ]
           ) super'.stdenv;

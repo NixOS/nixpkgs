@@ -8,7 +8,6 @@
   pymupdf,
   pypdf,
   pythonOlder,
-  pythonRelaxDepsHook,
   striprtf,
 }:
 
@@ -32,7 +31,6 @@ buildPythonPackage rec {
 
   build-system = [ poetry-core ];
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   dependencies = [
     beautifulsoup4

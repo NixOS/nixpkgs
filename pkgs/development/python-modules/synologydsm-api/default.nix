@@ -5,7 +5,6 @@
   fetchFromGitHub,
   fetchpatch,
   poetry-core,
-  pythonRelaxDepsHook,
   requests,
   urllib3,
   pytestCheckHook,
@@ -37,7 +36,6 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     poetry-core
-    pythonRelaxDepsHook
   ];
 
   pythonRelaxDeps = [ "urllib3" ];

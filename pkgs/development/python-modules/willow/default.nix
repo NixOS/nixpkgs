@@ -35,6 +35,8 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ flit-core ];
 
+  pythonRelaxDeps = [ "defusedxml" ];
+
   propagatedBuildInputs = [
     filetype
     defusedxml

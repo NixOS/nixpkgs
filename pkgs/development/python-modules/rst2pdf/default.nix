@@ -22,12 +22,12 @@
 
 buildPythonPackage rec {
   pname = "rst2pdf";
-  version = "0.101";
+  version = "0.102";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-AF8FssEIFHmeY2oVrAPNe85pbmgKWO52yD6ycNNzTSg=";
+    hash = "sha256-NzAGJOlTpz7d3cuubyRjDvVGfCC+61jfZIrcUwhE9CU=";
   };
 
   outputs = [

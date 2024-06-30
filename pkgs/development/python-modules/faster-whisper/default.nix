@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonRelaxDepsHook,
 
   # build-system
   setuptools,
@@ -32,7 +31,6 @@ buildPythonPackage rec {
 
   build-system = [
     setuptools
-    pythonRelaxDepsHook
   ];
 
   pythonRelaxDeps = [ "tokenizers" ];

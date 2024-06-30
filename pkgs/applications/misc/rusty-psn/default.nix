@@ -56,7 +56,6 @@ rustPlatform.buildRustPackage rec {
     xorg.libXi
     xorg.libxcb
     libGL
-    libGL.dev
   ];
 
   buildNoDefaultFeatures = true;

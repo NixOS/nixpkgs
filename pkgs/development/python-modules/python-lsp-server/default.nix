@@ -22,7 +22,6 @@
   pytestCheckHook,
   python-lsp-jsonrpc,
   pythonOlder,
-  pythonRelaxDepsHook,
   rope,
   setuptools,
   setuptools-scm,

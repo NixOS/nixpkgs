@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
     eigen
     fltk
     itk
-    libGLU.dev
+    libGLU
     python3
     tbb
     vtk

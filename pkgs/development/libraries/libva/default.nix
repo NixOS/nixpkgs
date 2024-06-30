@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libva" + lib.optionalString minimal "-minimal";
-  version = "2.21.0";
+  version = "2.22.0";
 
   src = fetchFromGitHub {
     owner  = "intel";
     repo   = "libva";
     rev    = finalAttrs.version;
-    sha256 = "sha256-X9H5nxbYFSMfxZMxs3iWwCgdrJ2FTVWW7tlgQek3WIg=";
+    sha256 = "sha256-0eOYxyMt2M2lkhoWOhoUQgP/1LYY3QQqSF5TdRUuCbs=";
   };
 
   outputs = [ "dev" "out" ];
@@ -33,9 +33,9 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [ libdrm ]
     ++ lib.optionals (!minimal) [ libX11 libXext libXfixes wayland libffi libGL ];
 
-  mesonFlags = [
+  mesonFlags = lib.optionals stdenv.isLinux [
     # Add FHS and Debian paths for non-NixOS applications
-    "-Ddriverdir=${mesa.drivers.driverLink}/lib/dri:/usr/lib/dri:/usr/lib32/dri:/usr/lib/x86_64-linux-gnu/dri:/usr/lib/i386-linux-gnu/dri"
+    "-Ddriverdir=${mesa.driverLink}/lib/dri:/usr/lib/dri:/usr/lib32/dri:/usr/lib/x86_64-linux-gnu/dri:/usr/lib/i386-linux-gnu/dri"
   ];
 
   passthru.tests = {

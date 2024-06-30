@@ -21,7 +21,6 @@
   protobuf,
   python3,
   pythonOlder,
-  pythonRelaxDepsHook,
   pytz,
   pyyaml,
   requests,
@@ -34,7 +33,7 @@
 
 buildPythonPackage rec {
   pname = "dbt-core";
-  version = "1.7.14";
+  version = "1.8.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -43,7 +42,7 @@ buildPythonPackage rec {
     owner = "dbt-labs";
     repo = "dbt-core";
     rev = "refs/tags/v${version}";
-    hash = "sha256-4PydrJGhriGCB6oc4kQE8/a24Sn9cqZhoKsiBJuEDYM=";
+    hash = "sha256-W1bD/XUmBYKzx66/rO//lCG+LOwDSlOW/KQPs0+cKTI=";
   };
 
   sourceRoot = "${src.name}/core";
@@ -59,7 +58,6 @@ buildPythonPackage rec {
   ];
 
   build-system = [
-    pythonRelaxDepsHook
     setuptools
   ];
 

@@ -38,6 +38,11 @@ in
     Default: pname
   */
 , ename ? pname
+  /*
+    version: Either a stable version such as "1.2" or an unstable version.
+    An unstable version can use either Nix format (preferred) such as
+    "1.2-unstable-2024-06-01" or MELPA format such as "20240601.1230".
+  */
 , version
   /*
     commit: Optional package history commit.
@@ -71,6 +76,19 @@ genericBuild ({
 
   inherit packageBuild commit ename recipe;
 
+  melpaVersion =
+    let
+      parsed = lib.flip builtins.match version
+        # match <version>-unstable-YYYY-MM-DD format
+        "^.*-unstable-([[:digit:]]{4})-([[:digit:]]{2})-([[:digit:]]{2})$";
+      unstableVersionInNixFormat = parsed != null; # heuristics
+      date = builtins.concatStringsSep "" parsed;
+      time = "0"; # unstable version in nix format lacks this info
+    in
+    if unstableVersionInNixFormat
+    then date + "." + time
+    else version;
+
   preUnpack = ''
     mkdir -p "$NIX_BUILD_TOP/recipes"
     if [ -n "$recipe" ]; then
@@ -96,7 +114,7 @@ genericBuild ({
         -L "$NIX_BUILD_TOP/package-build" \
         -l "$melpa2nix" \
         -f melpa2nix-build-package \
-        $ename $version $commit
+        $ename $melpaVersion $commit
 
     runHook postBuild
     '';
@@ -104,9 +122,9 @@ genericBuild ({
   installPhase = ''
     runHook preInstall
 
-    archive="$NIX_BUILD_TOP/packages/$ename-$version.el"
+    archive="$NIX_BUILD_TOP/packages/$ename-$melpaVersion.el"
     if [ ! -f "$archive" ]; then
-        archive="$NIX_BUILD_TOP/packages/$ename-$version.tar"
+        archive="$NIX_BUILD_TOP/packages/$ename-$melpaVersion.tar"
     fi
 
     emacs --batch -Q \

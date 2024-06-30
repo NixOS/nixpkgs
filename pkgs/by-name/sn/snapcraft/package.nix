@@ -105,7 +105,6 @@ python3Packages.buildPythonApplication rec {
   ];
 
   nativeBuildInputs = with python3Packages; [
-    pythonRelaxDepsHook
     setuptools
   ];
 

@@ -1,4 +1,4 @@
-{ alsa-lib, at-spi2-core, cmake, curl, dbus, libepoxy, fetchFromGitHub, freeglut
+{ alsa-lib, at-spi2-core, cmake, curl, dbus, libepoxy, fetchFromGitHub, libglut
 , freetype, gcc-unwrapped, gtk3, lib, libGL, libXcursor, libXdmcp, libXext
 , libXinerama, libXrandr, libXtst, libdatrie, libjack2, libpsl, libselinux
 , libsepol, libsysprof-capture, libthai, libxkbcommon, pcre, pkg-config
@@ -24,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
     curl
     dbus
     libepoxy
-    freeglut
+    libglut
     freetype
     gtk3
     libGL

@@ -10,7 +10,6 @@
   pycryptodomex,
   pygtrie,
   pytestCheckHook,
-  pythonRelaxDepsHook,
   pythonOlder,
   setuptools,
 }:
@@ -33,7 +32,6 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     setuptools
     poetry-core
-    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [

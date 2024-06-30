@@ -12,7 +12,6 @@
   pytestCheckHook,
   python-bidi,
   pythonOlder,
-  pythonRelaxDepsHook,
   reportlab,
   setuptools,
   svglib,
@@ -42,7 +41,6 @@ buildPythonPackage rec {
   ];
 
   nativeBuildInputs = [
-    pythonRelaxDepsHook
     setuptools
   ];
 
