@@ -23,13 +23,13 @@
 
 ## configurability of the wrapper itself
 
-browser:
+browser':
 
 let
   wrapper =
-    { applicationName ? browser.binaryName or (lib.getName browser)
+    { applicationName ? browser'.binaryName or (lib.getName browser')
     , pname ? applicationName
-    , version ? lib.getVersion browser
+    , version ? lib.getVersion browser'
     , desktopName ? # applicationName with first letter capitalized
       (lib.toUpper (lib.substring 0 1 applicationName) + lib.substring 1 (-1) applicationName)
     , nameSuffix ? ""
@@ -50,11 +50,16 @@ let
     # https://mozilla.github.io/policy-templates/
     , extraPolicies ? {}
     , extraPoliciesFiles ? []
-    , libName ? browser.libName or "firefox" # Important for tor package or the like
+    , libName ? browser'.libName or "firefox" # Important for tor package or the like
     , nixExtensions ? null
+
+    , requireSigning ? browser'.requireSigning
+    , allowAddonSideload ? browser'.allowAddonSideload
     }:
 
     let
+      browser = browser'.override { inherit requireSigning allowAddonSideload; };
+
       ffmpegSupport = browser.ffmpegSupport or false;
       gssSupport = browser.gssSupport or false;
       alsaSupport = browser.alsaSupport or false;
