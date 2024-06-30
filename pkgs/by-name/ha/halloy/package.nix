@@ -122,7 +122,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/squidowl/halloy";
     changelog = "https://github.com/squidowl/halloy/blob/${version}/CHANGELOG.md";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [ fab iivusly ];
     mainProgram = "halloy";
   };
 }
