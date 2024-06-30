@@ -282,6 +282,7 @@ in {
         # Testing any more would require more applications & setup, the fact that it's already being attempted is a good sign
         machine.send_key("esc")
 
+        machine.sleep(2) # sleep a tiny bit so morph can close & the focus can return to LSS
         machine.send_key("alt-f4")
 
     # The ayatana indicators are an important part of the experience, and they hold the only graphical way of exiting the session.
