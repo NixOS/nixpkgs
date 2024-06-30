@@ -64,6 +64,15 @@ in
         '';
       };
 
+      useResolvConfUpstreams = mkOption {
+        type = types.bool;
+        default = false;
+        description = lib.mdDoc ''
+          Whether dnsmasq should include as upstream servers the DNS servers
+          provided by resolvconf (which are typically determined via DHCP).
+        '';
+      };
+
       alwaysKeepRunning = mkOption {
         type = types.bool;
         default = false;
@@ -131,8 +140,8 @@ in
 
     services.dnsmasq.settings = {
       dhcp-leasefile = mkDefault "${stateDir}/dnsmasq.leases";
-      conf-file = mkDefault (optional cfg.resolveLocalQueries "/etc/dnsmasq-conf.conf");
-      resolv-file = mkDefault (optional cfg.resolveLocalQueries "/etc/dnsmasq-resolv.conf");
+      conf-file = mkDefault (optional cfg.useResolvConfUpstreams "/etc/dnsmasq-conf.conf");
+      resolv-file = mkDefault (optional cfg.useResolvConfUpstreams "/etc/dnsmasq-resolv.conf");
     };
 
     networking.nameservers =
@@ -147,10 +156,10 @@ in
     };
     users.groups.dnsmasq = {};
 
-    networking.resolvconf = mkIf cfg.resolveLocalQueries {
-      useLocalResolver = mkDefault true;
+    networking.resolvconf = {
+      useLocalResolver = mkIf cfg.resolveLocalQueries (mkDefault true);
 
-      extraConfig = ''
+      extraConfig = mkIf cfg.useResolvConfUpstreams ''
         dnsmasq_conf=/etc/dnsmasq-conf.conf
         dnsmasq_resolv=/etc/dnsmasq-resolv.conf
       '';
