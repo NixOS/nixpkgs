@@ -8,7 +8,7 @@
 
 buildGoModule rec {
   pname = "boulder";
-  version = "2024-06-17a";
+  version = "2024-06-25";
 
   src = fetchFromGitHub {
     owner = "letsencrypt";
@@ -21,7 +21,7 @@ buildGoModule rec {
       find $out -name .git -print0 | xargs -0 rm -rf
       popd
     '';
-    hash = "sha256-kObCD9diy1ryyeLQNyfWNMJPfvtjAWVp8OVUO0MLV6A=";
+    hash = "sha256-AOCYCTIgT9QAn6LR72OG2C8Li1UMFieDrtkplXv4plA=";
   };
 
   vendorHash = null;
