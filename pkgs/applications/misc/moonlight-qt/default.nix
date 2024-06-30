@@ -4,7 +4,9 @@
 , wrapQtAppsHook
 , pkg-config
 , qmake
-, qtquickcontrols2
+, qtdeclarative
+, qtwayland
+, qtsvg
 , SDL2
 , SDL2_ttf
 , libva
@@ -20,7 +22,7 @@
 }:
 
 let
-  inherit (darwin.apple_sdk_11_0.frameworks) AVFoundation AppKit AudioUnit VideoToolbox;
+  inherit (darwin.apple_sdk_11_0.frameworks) AVFoundation AppKit AudioUnit Cocoa VideoToolbox;
 in
 
 stdenv.mkDerivation rec {
@@ -44,7 +46,8 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    qtquickcontrols2
+    qtdeclarative
+    qtsvg
     SDL2
     SDL2_ttf
     openssl
@@ -57,10 +60,12 @@ stdenv.mkDerivation rec {
     alsa-lib
     libpulseaudio
     wayland
+    qtwayland
   ] ++ lib.optionals stdenv.isDarwin [
     AVFoundation
     AppKit
     AudioUnit
+    Cocoa
     VideoToolbox
   ];
 
