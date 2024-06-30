@@ -13,10 +13,10 @@
     options = mountOptions;
   };
   jqAddMountExpression = ".containerEdits.mounts[.containerEdits.mounts | length] |= . +";
-  allJqMounts = lib.concatMap
+  existingJqMounts = lib.concatMap
     (mount:
       ["${lib.getExe jq} '${jqAddMountExpression} ${builtins.toJSON (mkMount mount)}'"])
-    mounts;
+    (builtins.filter (mount: builtins.pathExists mount.hostPath) mounts);
 in
 writeScriptBin "nvidia-cdi-generator"
 ''
@@ -31,5 +31,5 @@ function cdiGenerate {
 }
 
 cdiGenerate | \
-  ${lib.concatStringsSep " | " allJqMounts} > $RUNTIME_DIRECTORY/nvidia-container-toolkit.json
+  ${lib.concatStringsSep " | " existingJqMounts} > $RUNTIME_DIRECTORY/nvidia-container-toolkit.json
 ''
