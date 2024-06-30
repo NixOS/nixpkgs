@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub, nixosTests, installShellFiles }:
+{ lib, buildGoModule, fetchFromGitHub, nixosTests, installShellFiles, stdenv }:
 
 buildGoModule rec {
   pname = "shiori";
@@ -16,7 +16,7 @@ buildGoModule rec {
   };
 
   nativeBuildInputs = [ installShellFiles ];
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
     installShellCompletion --cmd shiori \
       --bash <($out/bin/shiori completion bash) \
       --fish <($out/bin/shiori completion fish) \
