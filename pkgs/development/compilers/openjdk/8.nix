@@ -215,6 +215,10 @@ let
       maintainers = with maintainers; [ edwtjo ];
       platforms = [ "i686-linux" "x86_64-linux" "aarch64-linux" ];
       mainProgram = "java";
+      # Broken for musl at 2024-01-17. Tracking issue:
+      # https://github.com/NixOS/nixpkgs/issues/281618
+      # error: ‘isnanf’ was not declared in this scope
+      broken = stdenv.hostPlatform.isMusl;
     };
 
     passthru = {
