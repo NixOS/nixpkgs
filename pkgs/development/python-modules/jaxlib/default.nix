@@ -377,8 +377,8 @@ let
             { x86_64-linux = "sha256-Uf0VMRE0jgaWEYiuphWkWloZ5jMeqaWBl3lSvk2y1HI="; }
           else
             {
-              x86_64-linux = "";
-              aarch64-linux = "";
+              x86_64-linux = "sha256-NzJJg6NlrPGMiR8Fn8u4+fu0m+AulfmN5Xqk63Um6sw=";
+              aarch64-linux = "sha256-Ro3qzrUxSR+3TH6ROoJTq+dLSufrDN/9oEo2MRkx7wM=";
             }
         ).${effectiveStdenv.system} or (throw "jaxlib: unsupported system: ${effectiveStdenv.system}");
 
@@ -425,7 +425,7 @@ let
       throw "Unsupported target platform: ${effectiveStdenv.hostPlatform}";
 in
 buildPythonPackage {
-  inherit meta pname version;
+  inherit pname version;
   format = "wheel";
 
   src =
@@ -483,4 +483,6 @@ buildPythonPackage {
     # Note "bazel.*.tar.gz" can be accessed as `jaxlib.bazel-build.deps`
     inherit bazel-build;
   };
+
+  inherit meta;
 }
