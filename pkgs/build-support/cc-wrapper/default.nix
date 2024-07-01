@@ -673,7 +673,7 @@ stdenvNoCC.mkDerivation {
       done
     ''
 
-    + optionalString targetPlatform.isDarwin ''
+    + optionalString (targetPlatform.isDarwin && !targetPlatform.isx86_64) ''
         echo "-arch ${targetPlatform.darwinArch}" >> $out/nix-support/cc-cflags
     ''
 
