@@ -8,8 +8,10 @@ buildNpmPackage rec {
   pname = "wranger";
   version = "3.62.0";
 
-  src = fetchurl {
-    url = "https://registry.npmjs.org/wrangler/-/wrangler-${version}.tgz";
+  src = fetchFromGitHub {
+    owner = "cloudflare";
+    repo = "workers-sdk";
+    rev = "${pname}@${version}";
     hash = "sha256-x/USGgWXn7aJtkMekfTf/zaGBguOZxxPtq29wo2yBq8=";
   };
 
