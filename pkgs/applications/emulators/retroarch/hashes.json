@@ -125,10 +125,10 @@
         "src": {
             "owner": "libretro",
             "repo": "beetle-vb-libretro",
-            "rev": "9d1bd03f21dac7897f65269e1095496331efce8b",
-            "hash": "sha256-CT6CfRe8TOgXuJoUA0TKl71m10XeocUCTUjh88eCenU="
+            "rev": "4395c809d407c8b5a80b0d0ee87783aad5fedf8f",
+            "hash": "sha256-lO4tbJeQIZPGhW0Ew0BOcfbwNeV+yR8PTZ/RyCIt14s="
         },
-        "version": "unstable-2023-11-01"
+        "version": "unstable-2024-06-28"
     },
     "beetle-wswan": {
         "fetcher": "fetchFromGitHub",
