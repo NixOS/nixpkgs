@@ -57,6 +57,7 @@
 , parted ? null
 , systemd ? null
 , util-linux ? null
+, mdevctl ? null
 
   # Darwin
 , gmp
@@ -96,6 +97,7 @@ let
     openssh
     pmutils
     systemd
+    mdevctl
   ] ++ lib.optionals enableIscsi [
     libiscsi
     openiscsi
