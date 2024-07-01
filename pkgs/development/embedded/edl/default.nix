@@ -1,10 +1,10 @@
 { lib, stdenv, fetchFromGitHub, python3Packages }:
 
-python3Packages.buildPythonPackage rec {
+python3Packages.buildPythonPackage {
   pname = "edl";
   version = "unstable-2022-09-07";
 
-  src = fetchFromGitHub rec {
+  src = fetchFromGitHub {
     owner = "bkerler";
     repo = "edl";
     rev = "f6b94da5faa003b48d24a5f4a8f0b8495626fd5b";
@@ -28,7 +28,6 @@ python3Packages.buildPythonPackage rec {
     pycryptodome
     lxml
     colorama
-    # usb
     capstone
     keystone-engine
   ];
