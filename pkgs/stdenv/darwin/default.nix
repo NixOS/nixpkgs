@@ -623,7 +623,7 @@ in
 
     overrides = self: super: {
       inherit (prevStage) ccWrapperStdenv
-        autoconf automake bash binutils binutils-unwrapped bison brotli cmake cmakeMinimal
+        autoconf automake bash binutils-unwrapped bison brotli cmake cmakeMinimal
         coreutils cpio curl cyrus_sasl db ed expat flex gettext gmp gnugrep groff icu
         libedit libffi libidn2 libkrb5 libssh2 libtool libunistring libxml2 m4
         ncurses nghttp2 ninja openldap openssh openssl patchutils pbzx perl pkg-config
@@ -645,7 +645,7 @@ in
 
       darwin = super.darwin.overrideScope (_: superDarwin: {
         inherit (prevStage.darwin)
-          CF sdkRoot Libsystem binutils-unwrapped cctools cctools-port configd darwin-stubs dyld
+          CF sdkRoot Libsystem binutils binutils-unwrapped cctools cctools-port configd darwin-stubs dyld
           launchd libclosure libdispatch libobjc locale objc4 postLinkSignHook
           print-reexports rewrite-tbd signingUtils sigtool;
 
@@ -714,7 +714,7 @@ in
 
     overrides = self: super: {
       inherit (prevStage) ccWrapperStdenv
-        atf autoconf automake bash binutils binutils-unwrapped bison brotli cmake cmakeMinimal
+        atf autoconf automake bash binutils-unwrapped bison brotli cmake cmakeMinimal
         cpio curl cyrus_sasl db ed expat flex gettext gmp groff icu kyua libedit libffi libiconv
         libidn2 libkrb5 libssh2 libtool libunistring libxml2 m4 meson ncurses nghttp2 ninja
         openldap openssh openssl patchutils pbzx perl pkg-config python3 python3Minimal
@@ -1034,7 +1034,7 @@ in
 
     overrides = self: super: {
       inherit (prevStage) ccWrapperStdenv
-        autoconf automake bash binutils binutils-unwrapped bison brotli cmake cmakeMinimal
+        autoconf automake bash binutils-unwrapped bison brotli cmake cmakeMinimal
         coreutils cpio curl cyrus_sasl db ed expat flex gettext gmp gnugrep groff libedit
         libidn2 libkrb5 libssh2 libtool libunistring m4 meson nghttp2 ninja openbsm openldap
         openpam openssh openssl patchutils pbzx perl pkg-config python3 python3Minimal scons
@@ -1116,7 +1116,7 @@ in
 
     overrides = self: super: {
       inherit (prevStage) ccWrapperStdenv
-        autoconf automake bash bison cmake cmakeMinimal curl cyrus_sasl db expat flex groff
+        autoconf automake bash binutils-unwrapped bison cmake cmakeMinimal curl cyrus_sasl db expat flex groff
         libedit libtool m4 meson ninja openldap openssh patchutils perl pkg-config python3 scons
         serf sqlite subversion sysctl texinfo unzip which
 
@@ -1390,7 +1390,7 @@ in
 
       overrides = self: super: {
         inherit (prevStage)
-          bash binutils brotli bzip2 coreutils cpio diffutils ed file findutils gawk
+          bash brotli bzip2 coreutils cpio diffutils ed file findutils gawk
           gettext gmp gnugrep gnumake gnused gnutar gzip icu libffi libiconv libiconv-darwin
           libidn2 libssh2 libunistring libxml2 libyaml ncurses nghttp2 openbsm openpam
           openssl patch pbzx pcre python3Minimal xar xz zlib zstd;
