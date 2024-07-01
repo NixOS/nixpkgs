@@ -1,55 +1,64 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
-  pytest,
-  pytest-cov,
-  pytest-xdist,
-  six,
-  numpy,
-  scipy,
-  pyyaml,
+  pythonOlder,
+  fetchFromGitHub,
+  setuptools,
+  absl-py,
+  dm-tree,
   h5py,
+  markdown-it-py,
+  ml-dtypes,
+  namex,
+  numpy,
   optree,
-  keras-applications,
-  keras-preprocessing,
+  rich,
+  tensorflow,
 }:
 
 buildPythonPackage rec {
   pname = "keras";
-  version = "3.2.1";
-  format = "wheel";
+  version = "3.3.3";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit format pname version;
-    hash = "sha256-C+HomwQeaXvlYthCLsuVjuVIGs/AiZEyAJJsVh0ligM=";
-    python = "py3";
-    dist = "py3";
+  disabled = pythonOlder "3.9";
+
+  src = fetchFromGitHub {
+    owner = "keras-team";
+    repo = "keras";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-hhY28Ocv4zacZiwFflJtufKpeKfH1MD1PZJ+NTJfpH0=";
   };
 
-  nativeCheckInputs = [
-    pytest
-    pytest-cov
-    pytest-xdist
+  build-system = [
+    setuptools
   ];
 
-  propagatedBuildInputs = [
-    six
-    pyyaml
-    numpy
-    scipy
+  dependencies = [
+    absl-py
+    dm-tree
     h5py
-    keras-applications
-    keras-preprocessing
+    markdown-it-py
+    ml-dtypes
+    namex
+    numpy
+    optree
+    rich
+    tensorflow
+  ];
+
+  pythonImportsCheck = [
+    "keras"
+    "keras._tf_keras"
   ];
 
   # Couldn't get tests working
   doCheck = false;
 
-  meta = with lib; {
-    description = "Deep Learning library for Theano and TensorFlow";
+  meta = {
+    description = "Multi-backend implementation of the Keras API, with support for TensorFlow, JAX, and PyTorch";
     homepage = "https://keras.io";
-    license = licenses.mit;
-    maintainers = with maintainers; [ NikolaMandic ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ NikolaMandic ];
   };
 }
