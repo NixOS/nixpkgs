@@ -166,6 +166,10 @@ in
         UseDNS no
       ''}
 
+      ${optionalString (!config.boot.initrd.systemd.enable) ''
+        SshdSessionPath /bin/sshd-session
+      ''}
+
       ${cfg.extraConfig}
     '';
   in mkIf enabled {
@@ -191,6 +195,7 @@ in
 
     boot.initrd.extraUtilsCommands = mkIf (!config.boot.initrd.systemd.enable) ''
       copy_bin_and_libs ${package}/bin/sshd
+      copy_bin_and_libs ${package}/libexec/sshd-session
       cp -pv ${pkgs.glibc.out}/lib/libnss_files.so.* $out/lib
     '';
 
