@@ -369,7 +369,7 @@ in {
                   };
 
                   type = mkOption {
-                    type = enum [ "sendreceive" "sendonly" "receiveonly" "receiveencrypted" ];
+                    type = types.enum [ "sendreceive" "sendonly" "receiveonly" "receiveencrypted" ];
                     default = "sendreceive";
                     description = ''
                       Controls how the folder is handled by Syncthing.
