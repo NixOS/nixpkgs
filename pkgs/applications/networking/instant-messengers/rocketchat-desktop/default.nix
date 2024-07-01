@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     atk
     pango
     freetype
-    libgnome-keyring3
+    libgnome-keyring
     fontconfig
     gdk-pixbuf
     cairo

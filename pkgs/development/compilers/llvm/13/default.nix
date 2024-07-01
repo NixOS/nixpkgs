@@ -394,14 +394,14 @@ in let
       patches = [
         (substitute {
           src = ../common/libcxxabi/wasm.patch;
-          replacements = [
+          substitutions = [
             "--replace-fail" "/cmake/" "/llvm/cmake/"
           ];
         })
       ] ++ lib.optionals stdenv.hostPlatform.isMusl [
         (substitute {
           src = ../common/libcxx/libcxx-0001-musl-hacks.patch;
-          replacements = [
+          substitutions = [
             "--replace-fail" "/include/" "/libcxx/include/"
           ];
         })

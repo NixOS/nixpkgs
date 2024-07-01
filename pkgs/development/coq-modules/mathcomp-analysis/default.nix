@@ -32,7 +32,7 @@ let
 
   defaultVersion = let inherit (lib.versions) range; in
     lib.switch [ coq.version mathcomp.version ] [
-      { cases = [ (range "8.17" "8.19") (range "2.0.0" "2.2.0") ];   out = "1.1.0"; }
+      { cases = [ (range "8.17" "8.20") (range "2.0.0" "2.2.0") ];   out = "1.1.0"; }
       { cases = [ (range "8.17" "8.19") (range "1.17.0" "1.19.0") ]; out = "0.7.0"; }
       { cases = [ (range "8.17" "8.18") (range "1.15.0" "1.18.0") ]; out = "0.6.7"; }
       { cases = [ (range "8.17" "8.18") (range "1.15.0" "1.18.0") ]; out = "0.6.6"; }
