@@ -115,7 +115,7 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals (qt != null) [
     "-DMOD_QT${lib.versions.major qt.qtbase.version}=ON"
   ] ++ lib.optionals enableGlaxnimate [
-    "-DMOD_GLAXNIMATE=ON"
+    "-DMOD_GLAXNIMATE${if lib.versions.major qt.qtbase.version == "5" then "" else "_QT6"}=ON"
   ];
 
   preFixup = ''
