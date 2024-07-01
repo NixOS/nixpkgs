@@ -814,10 +814,10 @@
         "src": {
             "owner": "libretro",
             "repo": "swanstation",
-            "rev": "7a27436548128c00e70b08dde63c52118e2a6228",
-            "hash": "sha256-u7D044lKNAH4aAaY/Ol7BR3dNeusX4wirIMdUEGw2oM="
+            "rev": "8a999111ff3b8e40dd093c214dd56ba1596e1115",
+            "hash": "sha256-H9NWRbtqc+Zx/cBtS6LAbL6DsTLeDGGXhRRBD5W5tHg="
         },
-        "version": "unstable-2024-05-30"
+        "version": "unstable-2024-06-29"
     },
     "tgbdual": {
         "fetcher": "fetchFromGitHub",
