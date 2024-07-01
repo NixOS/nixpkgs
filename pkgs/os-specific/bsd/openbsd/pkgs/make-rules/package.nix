@@ -19,6 +19,11 @@ mkDerivation {
       sha256 = "sha256-bigxJGbaf9mCmFXxLVzQpnUUaEMMDfF3eZkTXVzd6B8=";
     })
     ./netbsd-make-sinclude.patch
+    (fetchpatch {
+      url = "https://marc.info/?l=openbsd-tech&m=171972639411562&q=raw";
+      sha256 = "sha256-p4izV6ZXkfgJud+ZZU1Wqr5qFuHUzE6qVXM7QnXvV3k=";
+      includes = [ "share/mk/*" ];
+    })
   ];
 
   postPatch = ''

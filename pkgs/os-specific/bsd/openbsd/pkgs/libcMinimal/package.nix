@@ -2,6 +2,7 @@
   lib,
   crossLibcStdenv,
   mkDerivation,
+  fetchpatch,
   bsdSetupHook,
   openbsdSetupHook,
   makeMinimal,
@@ -9,13 +10,11 @@
   flex,
   byacc,
   gencat,
+  lorder,
+  tsort,
   rpcgen,
   csu,
   include,
-  ctags,
-  tsort,
-  llvmPackages,
-  fetchpatch,
 }:
 
 mkDerivation {
@@ -47,6 +46,7 @@ mkDerivation {
     makeMinimal
     install
     tsort
+    lorder
     gencat
   ];
 
