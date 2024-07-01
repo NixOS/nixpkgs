@@ -355,10 +355,10 @@ in
                 ${pkgs.writeScript "backupPrepareCommand" backup.backupPrepareCommand}
               ''}
               ${optionalString (backup.initialize) ''
-                ${resticCmd} snapshots || ${resticCmd} init
+                ${resticCmd} snapshots --latest=1 || ${resticCmd} init
               ''}
               ${optionalString (backup.paths != null && backup.paths != []) ''
-                cat ${pkgs.writeText "staticPaths" (concatStringsSep "\n" backup.paths)} >> ${filesFromTmpFile}
+                cat ${pkgs.writeText "staticPaths" ((concatStringsSep "\n" backup.paths) + "\n")} >> ${filesFromTmpFile}
               ''}
               ${optionalString (backup.dynamicFilesFrom != null) ''
                 ${pkgs.writeScript "dynamicFilesFromScript" backup.dynamicFilesFrom} >> ${filesFromTmpFile}
