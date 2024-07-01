@@ -28,14 +28,13 @@
 
 stdenv.mkDerivation {
   pname = "linux-wallpaperengine";
-  version = "unstable-2023-09-23";
+  version = "0-unstable-2023-12-24";
 
   src = fetchFromGitHub {
     owner = "Almamu";
     repo = "linux-wallpaperengine";
-    # upstream lacks versioned releases
-    rev = "21c38d9fd1d3d89376c870cec5c5e5dc7086bc3c";
-    hash = "sha256-bZlMHlNKSydh9eGm5cFSEtv/RV9sA5ABs99uurblBZY=";
+    rev = "e28780562bdf8bcb2867cca7f79b2ed398130eb9";
+    hash = "sha256-VvrYOh/cvWxDx9dghZV5dcOrfMxjVCzIGhVPm9d7P2g=";
   };
 
   nativeBuildInputs = [
