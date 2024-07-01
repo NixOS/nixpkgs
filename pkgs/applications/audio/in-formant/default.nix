@@ -67,6 +67,6 @@ stdenv.mkDerivation rec {
     license = licenses.asl20;
     # currently broken on i686-linux and aarch64-linux due to other nixpkgs dependencies
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ ckie ];
+    maintainers = with maintainers; [ ];
   };
 }
