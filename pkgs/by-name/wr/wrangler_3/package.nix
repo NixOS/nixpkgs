@@ -12,10 +12,10 @@ buildNpmPackage rec {
     owner = "cloudflare";
     repo = "workers-sdk";
     rev = "${pname}@${version}";
-    hash = "sha256-x/USGgWXn7aJtkMekfTf/zaGBguOZxxPtq29wo2yBq8=";
+    hash = "sha256-Dd1ngrnQnU2QCSvbsZq51DObjgd3Fq1LkCAqe/Qsd9k=";
   };
 
-  npmDepsHash = "sha256-wYrLN42If6gAjRok0tAdVvVoDmv5oK/vvPoT3BxtgdA=";
+  npmDepsHash = "sha256-RbxJYKFMPlklXjMb/iqmp/qnvV72NT4y3DIDD2UZG1U=";
 
   postPatch = ''
     ln -s ${./package-lock.json} package-lock.json
