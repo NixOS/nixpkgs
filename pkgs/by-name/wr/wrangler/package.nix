@@ -14,12 +14,12 @@ stdenv.mkDerivation(finalAttrs: {
     owner = "cloudflare";
     repo = "workers-sdk";
     rev = "${finalAttrs.pname}@${finalAttrs.version}";
-    hash = "sha256-Dd1ngrnQnU2QCSvbsZq51DObjgd3Fq1LkCAqe/Qsd9k=";
+    hash = "sha256-/4iIkvSn85fkRggmIha2kRlW0MEwvzy0ZAmIb8+LpZQ=";
   };
 
   pnpmDeps = pnpm.fetchDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-Dd1ngrnQnU2QCSvbsZq51DObjgd3Fq1LkCAqe/Qsd9k=";
+    hash = "sha256-/4iIkvSn85fkRggmIha2kRlW0MEwvzy0ZAmIb8+LpZQ=";
     sourceRoot = "${finalAttrs.src.name}/packages/wrangler";
   };
 
