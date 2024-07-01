@@ -2,13 +2,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "datalad";
-  version = "1.0.2";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "datalad";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-oq+DdlWcwjJSQdnqHlYCa9I7iSOKf+hI35Lcv/GM24c=";
+    hash = "sha256-1VGLNt5plGhSJzawi2rLwSA14DTew5tf/039fWYIQbM=";
   };
 
   nativeBuildInputs = [ installShellFiles git ];
