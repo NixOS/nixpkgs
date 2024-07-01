@@ -1,0 +1,24 @@
+diff --git a/av/datasets.py b/av/datasets.py
+index 5954a9c..a239ba0 100644
+--- a/av/datasets.py
++++ b/av/datasets.py
+@@ -105,6 +105,9 @@ def fate(name: str) -> str:
+     See the `FFmpeg Automated Test Environment <https://www.ffmpeg.org/fate.html>`_
+ 
+     """
++    if(os.environ.get("SKIP_NETWORK_TESTS") == "1"):
++        import pytest
++        pytest.skip("Test uses network", allow_module_level=True)
+     return cached_download(
+         "http://fate.ffmpeg.org/fate-suite/" + name,
+         os.path.join("fate-suite", name.replace("/", os.path.sep)),
+@@ -117,6 +120,9 @@ def curated(name: str) -> str:
+     Data is handled by :func:`cached_download`.
+ 
+     """
++    if(os.environ.get("SKIP_NETWORK_TESTS") == "1"):
++        import pytest
++        pytest.skip("Test uses network", allow_module_level=True)
+     return cached_download(
+         "https://pyav.org/datasets/" + name,
+         os.path.join("pyav-curated", name.replace("/", os.path.sep)),
