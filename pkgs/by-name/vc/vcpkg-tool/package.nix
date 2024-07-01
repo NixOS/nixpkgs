@@ -5,6 +5,7 @@
 , cacert
 , cmake
 , cmakerc
+, curl
 , fmt
 , git
 , gzip
@@ -12,6 +13,7 @@
 , ninja
 , openssh
 , python3
+, unzip
 , zip
 , zstd
 , extraRuntimeDeps ? []
@@ -55,12 +57,14 @@ stdenv.mkDerivation (finalAttrs: {
     runtimeDeps = [
       cacert
       cmake
+      curl
       git
       gzip
       meson
       ninja
       openssh
       python3
+      unzip
       zip
       zstd
     ] ++ extraRuntimeDeps;
