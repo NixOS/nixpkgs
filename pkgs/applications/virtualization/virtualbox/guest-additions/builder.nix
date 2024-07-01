@@ -1,11 +1,9 @@
 { config, stdenv, kernel, fetchurl, lib, pam, libxslt
 , libX11, libXext, libXcursor, libXmu
-, glib, alsa-lib, libXrandr, dbus
+, glib, libXrandr, dbus, xz
 , pkg-config, which, zlib, xorg
-, yasm, patchelf, makeWrapper, makeself, nasm
-, linuxHeaders, openssl, libpulseaudio}:
-
-with lib;
+, yasm, patchelf, makeself
+, linuxHeaders, openssl}:
 
 let
   buildType = "release";
@@ -21,17 +19,21 @@ in stdenv.mkDerivation (finalAttrs: {
 
   env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types -Wno-error=implicit-function-declaration";
 
-  nativeBuildInputs = [ patchelf makeWrapper pkg-config which yasm ];
-  buildInputs =  kernel.moduleBuildDependencies ++ [ libxslt libX11 libXext libXcursor
-    glib nasm alsa-lib makeself pam libXmu libXrandr linuxHeaders openssl libpulseaudio xorg.xorgserver ];
+  nativeBuildInputs = [ patchelf pkg-config which yasm makeself xorg.xorgserver openssl linuxHeaders xz ] ++ kernel.moduleBuildDependencies;
+  buildInputs = [ dbus libxslt libXext libXcursor pam libXmu libXrandr ];
 
   KERN_DIR = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
   KERN_INCL = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/source/include";
 
   prePatch = ''
     rm -r src/VBox/Additions/x11/x11include/
+    rm -r src/VBox/Additions/3D/mesa/mesa-*/
     rm -r src/libs/openssl-*/
     rm -r src/libs/curl-*/
+    rm -r src/libs/libpng-*/
+    rm -r src/libs/libxml2-*/
+    rm -r src/libs/liblzma-*/
+    rm -r src/libs/zlib*/
   '';
 
   patches = [
@@ -81,6 +83,10 @@ in stdenv.mkDerivation (finalAttrs: {
       VBOX_USE_SYSTEM_XORG_HEADERS := 1
       VBOX_USE_SYSTEM_GL_HEADERS := 1
       VBOX_NO_LEGACY_XORG_X11 := 1
+      SDK_VBoxLibPng_INCS :=
+      SDK_VBoxLibXml2_INCS :=
+      SDK_VBoxLibLzma_INCS := ${xz.dev}/include
+      SDK_VBoxLibLzma_LIBS := ${xz.out}/lib
 
       SDK_VBoxOpenSslStatic_INCS := ${openssl.dev}/include/ssl
 
@@ -92,6 +98,9 @@ in stdenv.mkDerivation (finalAttrs: {
       VBOX_WITH_GUEST_CONTROL := 1
       VBOX_WITHOUT_LINUX_GUEST_PACKAGE := 1
       VBOX_WITH_PAM :=
+      VBOX_WITH_UPDATE_AGENT :=
+      VBOX_WITH_AUDIO_ALSA :=
+      VBOX_WITH_AUDIO_PULSE :=
 
       VBOX_BUILD_PUBLISHER := _NixOS
       LOCAL_CONFIG
