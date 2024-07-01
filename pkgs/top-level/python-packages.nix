@@ -4600,6 +4600,8 @@ self: super: with self; {
 
   frida-python = callPackage ../development/python-modules/frida-python { };
 
+  friendly-traceback = callPackage ../development/python-modules/friendly-traceback { };
+
   frigidaire = callPackage ../development/python-modules/frigidaire { };
 
   frilouz = callPackage ../development/python-modules/frilouz { };
