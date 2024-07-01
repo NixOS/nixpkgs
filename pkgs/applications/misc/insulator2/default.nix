@@ -12,7 +12,7 @@
 , perl
 , cyrus_sasl
 , stdenv
-, fixup_yarn_lock
+, fixup-yarn-lock
 , yarn
 , nodejs-slim
 , cargo-tauri
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
   configurePhase = ''
     export HOME=$(mktemp -d)
     yarn config --offline set yarn-offline-mirror ${yarnOfflineCache}
-    fixup_yarn_lock yarn.lock
+    fixup-yarn-lock yarn.lock
     yarn install --offline --frozen-lockfile --ignore-scripts --no-progress --non-interactive
     patchShebangs node_modules/
     yarn run postinstall --offline
@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
     cargo
     rustc
     cargo-tauri
-    fixup_yarn_lock
+    fixup-yarn-lock
     yarn
     nodejs-slim
     cyrus_sasl
