@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libhwy";
-  version = "1.0.7";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "highway";
     rev = version;
-    hash = "sha256-Z+mAR9nSAbCskUvo6oK79Yd85bu0HtI2aR5THS1EozM=";
+    hash = "sha256-yJQH5ZkpEdJ6lsTAt6yJSN3TQnVoxNpkbChENaxhcHo=";
   };
 
   patches = lib.optional stdenv.hostPlatform.isRiscV
