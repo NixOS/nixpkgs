@@ -591,9 +591,6 @@ in
     extraPreHook = ''
       stripAllFlags=" "    # the cctools "strip" command doesn't know "-s"
       stripDebugFlags="-S" # the cctools "strip" command does something odd with "-p"
-
-      # Don’t assume the ld64 in bootstrap tools supports response files. Only recent versions do.
-      export NIX_LD_USE_RESPONSE_FILE=0
     '';
   })
 
