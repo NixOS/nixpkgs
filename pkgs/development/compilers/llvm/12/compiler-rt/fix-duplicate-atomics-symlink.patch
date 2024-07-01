@@ -1,0 +1,19 @@
+diff --git a/compiler-rt/lib/builtins/CMakeLists.txt b/compiler-rt/lib/builtins/CMakeLists.txt
+index 73b6bead8424..73acce29b1a4 100644
+--- a/compiler-rt/lib/builtins/CMakeLists.txt
++++ b/compiler-rt/lib/builtins/CMakeLists.txt
+@@ -525,10 +525,12 @@ foreach(pat cas swp ldadd ldclr ldeor ldset)
+   foreach(size 1 2 4 8 16)
+     foreach(model 1 2 3 4)
+       if(pat STREQUAL "cas" OR NOT size STREQUAL "16")
++        set(source_asm "${CMAKE_CURRENT_SOURCE_DIR}/aarch64/lse.S")
+         set(helper_asm "${OA_HELPERS_DIR}/outline_atomic_${pat}${size}_${model}.S")
+         add_custom_command(
+-          OUTPUT ${helper_asm}
+-          COMMAND ${CMAKE_COMMAND} -E ${COMPILER_RT_LINK_OR_COPY} "${CMAKE_CURRENT_SOURCE_DIR}/aarch64/lse.S" "${helper_asm}"
++          OUTPUT "${helper_asm}"
++          COMMAND ${CMAKE_COMMAND} -E ${COMPILER_RT_LINK_OR_COPY} "${source_asm}" "${helper_asm}"
++          DEPENDS "${source_asm}"
+         )
+         set_source_files_properties("${helper_asm}"
+           PROPERTIES

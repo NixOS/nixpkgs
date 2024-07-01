@@ -311,7 +311,7 @@ let
         ../common/compiler-rt/armv6-mcr-dmb.patch
         ../common/compiler-rt/armv6-sync-ops-no-thumb.patch
         ../common/compiler-rt/armv6-no-ldrexd-strexd.patch
-      ];
+      ] ++ lib.optional stdenv.isDarwin ./compiler-rt/fix-duplicate-atomics-symlink.patch;
       stdenv = if stdenv.hostPlatform.useLLVM or false
                then overrideCC stdenv buildLlvmTools.clangNoCompilerRtWithLibc
                else stdenv;
