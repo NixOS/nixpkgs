@@ -20,7 +20,7 @@ in
 
 stdenv.mkDerivation {
   pname = "dns-root-data";
-  version = "2023-11-27";
+  version = "2024-06-20";
 
   buildCommand = ''
     mkdir $out
