@@ -1,18 +1,20 @@
 {
   lib,
+  aiofile,
   backoff,
   buildPythonPackage,
   fetchFromGitHub,
   pythonOlder,
   pyserial,
   pyserial-asyncio-fast,
+  pytest-asyncio,
   pytestCheckHook,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "velbus-aio";
-  version = "2024.5.1";
+  version = "2024.7.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -21,19 +23,27 @@ buildPythonPackage rec {
     owner = "Cereal2nd";
     repo = "velbus-aio";
     rev = "refs/tags/${version}";
-    hash = "sha256-rOuw1Iw6mGoXNSqxOlBappARzSGIlii03Hd8/3jWiQg=";
+    hash = "sha256-FR5tpCvuJuMhW2bl8tf8jaxyDS1E+Od5y93qazXcSto=";
     fetchSubmodules = true;
   };
 
   build-system = [ setuptools ];
 
   dependencies = [
+    aiofile
     backoff
     pyserial
     pyserial-asyncio-fast
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytest-asyncio
+    pytestCheckHook
+  ];
+
+  preCheck = ''
+    export HOME=$(mktemp -d)
+  '';
 
   pythonImportsCheck = [ "velbusaio" ];
 
