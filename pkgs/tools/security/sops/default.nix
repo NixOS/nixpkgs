@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
 
 buildGoModule rec {
   pname = "sops";
@@ -16,6 +16,12 @@ buildGoModule rec {
   subPackages = [ "cmd/sops" ];
 
   ldflags = [ "-s" "-w" "-X github.com/getsops/sops/v3/version.Version=${version}" ];
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall = ''
+    installShellCompletion --cmd sops --bash <($out/bin/sops --generate-bash-completion)
+  '';
 
   meta = with lib; {
     homepage = "https://github.com/getsops/sops";
