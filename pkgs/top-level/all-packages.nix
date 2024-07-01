@@ -7599,13 +7599,13 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  wrangler = wrangler_2;
+  wrangler = wrangler_3;
 
   wrangler_1 = callPackage ../development/tools/wrangler_1 {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation CoreServices Security;
   };
 
-  wrangler_2 = callPackage ../by-name/wr/wrangler;
+  wrangler_3 = callPackage ../by-name/wr/wrangler_3;
 
   snowflake = callPackage ../tools/networking/snowflake { };
 
