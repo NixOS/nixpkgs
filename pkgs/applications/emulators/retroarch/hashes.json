@@ -724,10 +724,10 @@
         "src": {
             "owner": "libretro",
             "repo": "sameboy",
-            "rev": "09138330990da32362246c7034cf4de2ea0a2a2b",
-            "hash": "sha256-hQWIuNwCykkJR+6naNarR50kUvIFNny+bbZHR6/GA/4="
+            "rev": "51433012a871a44555492273fd22f29867d12655",
+            "hash": "sha256-vPT2uRGbXmJ62yig/yk485/TxEEKHJeWdNrM2c0IjKw="
         },
-        "version": "unstable-2022-08-19"
+        "version": "unstable-2024-06-28"
     },
     "scummvm": {
         "fetcher": "fetchFromGitHub",
