@@ -875,10 +875,10 @@
         "src": {
             "owner": "libretro",
             "repo": "libretro-vecx",
-            "rev": "3a5655ff67e161ef33f66b0f6c26aaf2e59ceda8",
-            "hash": "sha256-NGZo1bUGgw4YMyyBfTsvXPQG/P130mkXzt4GXE/yatU="
+            "rev": "0e48a8903bd9cc359da3f7db783f83e22722c0cf",
+            "hash": "sha256-lB8NSaxDbN2qljhI0M/HFDuN0D/wMhFUQXhfSdGHsHU="
         },
-        "version": "unstable-2024-03-17"
+        "version": "unstable-2024-06-28"
     },
     "virtualjaguar": {
         "fetcher": "fetchFromGitHub",
