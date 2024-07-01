@@ -16012,6 +16012,8 @@ with pkgs;
   openjdk = jdk;
   openjdk_headless = jdk_headless;
 
+  graalvmPackages =
+    recurseIntoAttrs (callPackage ../development/compilers/graalvm { });
   graalvmCEPackages =
     recurseIntoAttrs (callPackage ../development/compilers/graalvm/community-edition { });
   graalvm-ce = graalvmCEPackages.graalvm-ce;
