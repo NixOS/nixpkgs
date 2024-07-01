@@ -166,6 +166,10 @@ in
         UseDNS no
       ''}
 
+      ${optionalString (!config.boot.initrd.systemd.enable) ''
+        SshdSessionPath /bin/sshd-session
+      ''}
+
       ${cfg.extraConfig}
     '';
   in mkIf enabled {
@@ -191,6 +195,7 @@ in
 
     boot.initrd.extraUtilsCommands = mkIf (!config.boot.initrd.systemd.enable) ''
       copy_bin_and_libs ${package}/bin/sshd
+      copy_bin_and_libs ${package}/libexec/sshd-session
       cp -pv ${pkgs.glibc.out}/lib/libnss_files.so.* $out/lib
     '';
 
@@ -265,7 +270,10 @@ in
             config.boot.initrd.network.ssh.authorizedKeys ++
             (map (file: lib.fileContents file) config.boot.initrd.network.ssh.authorizedKeyFiles));
       };
-      storePaths = ["${package}/bin/sshd"];
+      storePaths = [
+        "${package}/bin/sshd"
+        "${package}/libexec/sshd-session"
+      ];
 
       services.sshd = {
         description = "SSH Daemon";
