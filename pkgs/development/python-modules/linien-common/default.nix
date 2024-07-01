@@ -48,6 +48,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Shared components of the Linien spectroscopy lock application";
     homepage = "https://github.com/linien-org/linien/tree/develop/linien-common";
+    changelog = "https://github.com/linien-org/linien/blob/v${version}/CHANGELOG.md";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [
       fsagbuya

@@ -82,6 +82,7 @@ stdenv.mkDerivation {
       to know the customer's physical address.
     '';
     homepage = "https://taler.net/";
+    changelog = "https://git.taler.net/merchant.git/tree/ChangeLog";
     license = licenses.agpl3Plus;
     maintainers = with maintainers; [ astro ];
     platforms = platforms.linux;

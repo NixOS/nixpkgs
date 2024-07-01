@@ -127,6 +127,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Freeware version of the world's smartest and most feature-full disassembler";
     homepage = "https://hex-rays.com/ida-free/";
+    changelog = "https://hex-rays.com/products/ida/news/";
     license = licenses.unfree;
     mainProgram = "ida64";
     maintainers = with maintainers; [ msanft ];
