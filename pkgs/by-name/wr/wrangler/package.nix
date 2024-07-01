@@ -23,8 +23,6 @@ stdenv.mkDerivation(finalAttrs: {
     sourceRoot = "${finalAttrs.src.name}/packages/wrangler";
   };
 
-  pnpmRoot = "packages/wrangler";
-
   meta = {
     description = "Command-line interface for all things Cloudflare Workers";
     homepage = "https://github.com/cloudflare/workers-sdk#readme";
