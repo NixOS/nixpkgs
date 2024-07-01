@@ -55,8 +55,6 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   gnome-keyring = callPackage ./core/gnome-keyring { };
 
-  libgnome-keyring = callPackage ./core/libgnome-keyring { };
-
   gnome-initial-setup = callPackage ./core/gnome-initial-setup { };
 
   gnome-online-miners = callPackage ./core/gnome-online-miners { };
@@ -257,6 +255,7 @@ lib.makeScope pkgs.newScope (self: with self; {
   gnome-packagekit = callPackage ./misc/gnome-packagekit { };
 }) // lib.optionalAttrs config.allowAliases {
 #### Legacy aliases. They need to be outside the scope or they will shadow the attributes from parent scope.
+  libgnome-keyring = lib.warn "The ‘gnome.libgnome-keyring’ was moved to top-level. Please use ‘pkgs.libgnome-keyring’ directly." pkgs.libgnome-keyring; # Added on 2024-06-22.
 
   gedit = throw "The ‘gnome.gedit’ alias was removed. Please use ‘pkgs.gedit’ directly."; # converted to throw on 2023-12-27
   gnome-todo = throw "The ‘gnome.gnome-todo’ alias was removed. Please use ‘pkgs.endeavour’ directly."; # converted to throw on 2023-12-27
