@@ -10218,6 +10218,8 @@ self: super: with self; {
 
   python-ecobee-api = callPackage ../development/python-modules/python-ecobee-api { };
 
+  python-ffmpeg = callPackage ../development/python-modules/python-ffmpeg { };
+
   python-flirt = callPackage ../development/python-modules/python-flirt { };
 
   python-fullykiosk = callPackage ../development/python-modules/python-fullykiosk { };
