@@ -141,6 +141,8 @@ assert (lib.isList curlOpts) -> lib.warn ''
     - If you wish for each list element to be passed as a separate curl argument, allowing arguments to contain spaces, use curlOptsList instead:
       curlOptsList = [ ${lib.concatMapStringsSep " " lib.strings.escapeNixString curlOpts} ];'' true;
 
+lib.throwIfNot (hash_.outputHash != null) "the hash passed to fetchurl cannot be null"
+
 stdenvNoCC.mkDerivation ((
   if (pname != "" && version != "") then
     { inherit pname version; }
