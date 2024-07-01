@@ -6,11 +6,11 @@
 
 buildNpmPackage rec {
   pname = "wranger";
-  version = "3.60.3";
+  version = "3.62.0";
 
   src = fetchurl {
     url = "https://registry.npmjs.org/wrangler/-/wrangler-${version}.tgz";
-    hash = "a6zn/KFnYaYp3nxJR/aP0TeaBvJDkrrfI89KoxUtx28H7zpya/5/VLu3CxQ3PRspEojJGF0s6f3/pddRy3F+BQ==";
+    hash = "sha256-x/USGgWXn7aJtkMekfTf/zaGBguOZxxPtq29wo2yBq8=";
   };
 
   npmDepsHash = "sha256-wYrLN42If6gAjRok0tAdVvVoDmv5oK/vvPoT3BxtgdA=";
