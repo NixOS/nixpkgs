@@ -19,7 +19,7 @@ sha256=$(nix-prefetch-url --name "$store_name" "$url")
 src_hash=$(nix-hash --to-sri --type sha256 "$sha256")
 sed -i 's#hash = "[^"]*"#hash = "'"$src_hash"'"#' package.nix
 
-rm -f *.tar.gz
+rm -f package-lock.json *.tar.gz
 rm -rf "${tarball%.tar.gz}"
 
 wget "$url"
@@ -32,6 +32,7 @@ tar xf "$tarball" -C "${tarball%.tar.gz}"
 target_dir="${tarball%.tar.gz}/workers-sdk-wrangler-${version}"
 npm i --save-dev --legacy-peer-deps --package-lock-only --ignore-scripts --prefix "$target_dir"
 npm_hash=$(prefetch-npm-deps "${target_dir}/package-lock.json")
+cp "${target_dir}/package-lock.json" package-lock.json
 rm -f *.tar.gz
 rm -rf "${tarball%.tar.gz}"
 
