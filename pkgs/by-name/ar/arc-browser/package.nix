@@ -29,6 +29,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+  dontFixup = true;
+
   passthru.updateScript = lib.getExe (writeShellApplication {
     name = "arc-browser-update-script";
     runtimeInputs = [ curl common-updater-scripts ];
