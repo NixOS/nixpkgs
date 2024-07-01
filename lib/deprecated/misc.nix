@@ -238,27 +238,6 @@ let
   # eg { a = 7; } {  a = [ 2 3 ]; } becomes { a = [ 7 2 3 ]; }
   mergeAttrsConcatenateValues = mergeAttrsWithFunc ( a: b: (toList a) ++ (toList b) );
 
-  # merges attributes using //, if a name exists in both attributes
-  # an error will be triggered unless its listed in mergeLists
-  # so you can mergeAttrsNoOverride { buildInputs = [a]; } { buildInputs = [a]; } {} to get
-  # { buildInputs = [a b]; }
-  # merging buildPhase doesn't really make sense. The cases will be rare where appending /prefixing will fit your needs?
-  # in these cases the first buildPhase will override the second one
-  # ! deprecated, use mergeAttrByFunc instead
-  mergeAttrsNoOverride = { mergeLists ? ["buildInputs" "propagatedBuildInputs"],
-                           overrideSnd ? [ "buildPhase" ]
-                         }: attrs1: attrs2:
-    foldr (n: set:
-        setAttr set n ( if set ? ${n}
-            then # merge
-              if elem n mergeLists # attribute contains list, merge them by concatenating
-                then attrs2.${n} ++ attrs1.${n}
-              else if elem n overrideSnd
-                then attrs1.${n}
-              else throw "error mergeAttrsNoOverride, attribute ${n} given in both attributes - no merge func defined"
-            else attrs2.${n} # add attribute not existing in attr1
-           )) attrs1 (attrNames attrs2);
-
 
   # example usage:
   # mergeAttrByFunc  {
@@ -361,7 +340,6 @@ in
     mergeAttrsByFuncDefaults
     mergeAttrsByFuncDefaultsClean
     mergeAttrsConcatenateValues
-    mergeAttrsNoOverride
     mergeAttrsWithFunc
     modifySumArgs
     nixType

@@ -571,9 +571,6 @@ rec {
     ["\"" "'" "<" ">" "&"]
     ["&quot;" "&apos;" "&lt;" "&gt;" "&amp;"];
 
-  # warning added 12-12-2022
-  replaceChars = lib.warn "lib.replaceChars is a deprecated alias of lib.replaceStrings." builtins.replaceStrings;
-
   # Case conversion utilities.
   lowerChars = stringToCharacters "abcdefghijklmnopqrstuvwxyz";
   upperChars = stringToCharacters "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -978,12 +975,6 @@ rec {
   in lib.warnIf (!precise) "Imprecise conversion from float to string ${result}"
     result;
 
-  /* Soft-deprecated function. While the original implementation is available as
-     isConvertibleWithToString, consider using isStringLike instead, if suitable. */
-  isCoercibleToString = lib.warnIf (lib.isInOldestRelease 2305)
-    "lib.strings.isCoercibleToString is deprecated in favor of either isStringLike or isConvertibleWithToString. Only use the latter if it needs to return true for null, numbers, booleans and list of similarly coercibles."
-    isConvertibleWithToString;
-
   /* Check whether a list or other value can be passed to toString.
 
      Many types of value are coercible to string this way, including int, float,
@@ -1135,31 +1126,6 @@ rec {
       then throw generalError
       # Return result.
       else parsedInput;
-
-  /* Read a list of paths from `file`, relative to the `rootPath`.
-     Lines beginning with `#` are treated as comments and ignored.
-     Whitespace is significant.
-
-     NOTE: This function is not performant and should be avoided.
-
-     Example:
-       readPathsFromFile /prefix
-         ./pkgs/development/libraries/qt-5/5.4/qtbase/series
-       => [ "/prefix/dlopen-resolv.patch" "/prefix/tzdir.patch"
-            "/prefix/dlopen-libXcursor.patch" "/prefix/dlopen-openssl.patch"
-            "/prefix/dlopen-dbus.patch" "/prefix/xdg-config-dirs.patch"
-            "/prefix/nix-profiles-library-paths.patch"
-            "/prefix/compose-search-path.patch" ]
-  */
-  readPathsFromFile = lib.warn "lib.readPathsFromFile is deprecated, use a list instead."
-    (rootPath: file:
-      let
-        lines = lib.splitString "\n" (readFile file);
-        removeComments = lib.filter (line: line != "" && !(lib.hasPrefix "#" line));
-        relativePaths = removeComments lines;
-        absolutePaths = map (path: rootPath + "/${path}") relativePaths;
-      in
-        absolutePaths);
 
   /* Read the contents of a file removing the trailing \n
 

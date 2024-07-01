@@ -1726,43 +1726,6 @@ rec {
     assert lib.assertMsg (list != []) "lists.init: list must not be empty!";
     take (length list - 1) list;
 
-
-  /**
-    Return the image of the cross product of some lists by a function.
-
-
-    # Examples
-    :::{.example}
-    ## `lib.lists.crossLists` usage example
-
-    ```nix
-    crossLists (x: y: "${toString x}${toString y}") [[1 2] [3 4]]
-    => [ "13" "14" "23" "24" ]
-    ```
-
-    The following function call is equivalent to the one deprecated above:
-
-    ```nix
-    mapCartesianProduct (x: "${toString x.a}${toString x.b}") { a = [1 2]; b = [3 4]; }
-    => [ "13" "14" "23" "24" ]
-    ```
-    :::
-  */
-  crossLists = warn
-    ''lib.crossLists is deprecated, use lib.mapCartesianProduct instead.
-
-    For example, the following function call:
-
-    nix-repl> lib.crossLists (x: y: x+y) [[1 2] [3 4]]
-    [ 4 5 5 6 ]
-
-    Can now be replaced by the following one:
-
-    nix-repl> lib.mapCartesianProduct ({x,y}: x+y) { x = [1 2]; y = [3 4]; }
-    [ 4 5 5 6 ]
-    ''
-    (f: foldl (fs: args: concatMap (f: map f args) fs) [f]);
-
   /**
     Remove duplicate elements from the `list`. O(n^2) complexity.
 
