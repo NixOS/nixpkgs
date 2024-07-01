@@ -1342,6 +1342,7 @@ let
           "Wash"
           "SplitGSO"
           "AckFilter"
+          "RTTSec"
         ])
         (assertValueOneOf "AutoRateIngress" boolValues)
         (assertInt "OverheadBytes")
