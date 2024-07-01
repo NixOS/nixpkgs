@@ -1,0 +1,91 @@
+{
+  "name": "coc-diagnostic",
+  "version": "0.24.1",
+  "description": "diagnostic-languageserver extension for coc.nvim",
+  "keywords": [
+    "coc.nvim",
+    "diagnostic",
+    "linter",
+    "lsp",
+    "format",
+    "neovim",
+    "vim"
+  ],
+  "main": "./out/index.js",
+  "repository": "https://github.com/iamcco/coc-diagnostic",
+  "author": "年糕小豆汤 <ooiss@qq.com>",
+  "license": "MIT",
+  "engines": {
+    "coc": "^0.0.46"
+  },
+  "activationEvents": [
+    "*"
+  ],
+  "contributes": {
+    "configuration": {
+      "title": "diagnostic-languageserver",
+      "properties": {
+        "diagnostic-languageserver.enable": {
+          "type": "boolean",
+          "default": true,
+          "description": "enable this extension?"
+        },
+        "diagnostic-languageserver.mergeConfig": {
+          "type": "boolean",
+          "default": false,
+          "description": "merge config?"
+        },
+        "diagnostic-languageserver.debug": {
+          "type": "boolean",
+          "default": false,
+          "description": "enable debug?"
+        },
+        "diagnostic-languageserver.trace.server": {
+          "type": "string",
+          "default": "off",
+          "enum": [
+            "off",
+            "messages",
+            "verbose"
+          ],
+          "description": "Trace level of diagnostic-languageserver"
+        },
+        "diagnostic-languageserver.linters": {
+          "type": "object",
+          "default": {},
+          "description": "linters config same as diagnostic-languageserver's linters config"
+        },
+        "diagnostic-languageserver.filetypes": {
+          "type": "object",
+          "default": {},
+          "description": "filetypes config same as diagnostic-languageserver's filetypes config"
+        },
+        "diagnostic-languageserver.formatters": {
+          "type": "object",
+          "default": {},
+          "description": "formatters config same as diagnostic-languageserver's formatters config"
+        },
+        "diagnostic-languageserver.formatFiletypes": {
+          "type": "object",
+          "default": {},
+          "description": "formatFiletypes config same as diagnostic-languageserver's formatFiletypes config"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "clean": "rimraf ./out",
+    "watch": "cross-env NODE_ENV=development node esbuild.js --watch",
+    "build": "cross-env NODE_ENV=production node esbuild.js",
+    "prepare": "npm run clean && npm run build"
+  },
+  "devDependencies": {
+    "@types/node": "^12.0.0",
+    "coc.nvim": "^0.0.77",
+    "diagnostic-languageserver": "^1.14.2",
+    "cross-env": "^7.0.3",
+    "esbuild": "^0.9.0",
+    "typescript": "^4.1.3",
+    "rimraf": "^3.0.2"
+  }
+}
