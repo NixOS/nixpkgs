@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "aws-secretsmanager-caching";
-  version = "1.1.2";
+  version = "1.1.3";
   pyprject = true;
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "aws_secretsmanager_caching";
     inherit version;
-    hash = "sha256-hhdo+I1yA/pLA+YFDFi8Ekrv27xQLpxiqXh1+4XqteA=";
+    hash = "sha256-9tbsnUPg2+T21d6982tMtpHRWpZ7NYsldfXZGXSmwP8=";
   };
 
   patches = [
