@@ -1,0 +1,11 @@
+--- a/src/tests/common.rs
++++ b/src/tests/common.rs
+@@ -74,7 +74,6 @@ pub mod tests {
+             cmd.timeout(Duration::from_secs(3));
+             cmd.arg("-c");
+             cmd.arg(&dl_cmd);
+-            cmd.env("PATH", "/bin");
+             cmd.unwrap()
+         });
+
+
