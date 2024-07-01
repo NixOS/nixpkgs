@@ -12,6 +12,7 @@
   setuptools,
   setuptools-scm,
   playwright-driver,
+  nodejs,
 }:
 
 let
@@ -64,7 +65,8 @@ buildPythonPackage rec {
 
     # Set the correct driver path with the help of a patch in patches
     substituteInPlace playwright/_impl/_driver.py \
-      --replace "@driver@" "${driver}/bin/playwright"
+      --replace-fail "@node@" "${lib.getExe nodejs}" \
+      --replace-fail "@driver@" "${driver}/package/cli.js"
   '';
 
   nativeBuildInputs = [
