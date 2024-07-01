@@ -41,6 +41,12 @@ in {
           }; in nullOr (nonEmptyListOf fontType);
       };
 
+      useXkbConfig = mkOption {
+        description = "Configure keymap from xserver keyboard settings.";
+        type = types.bool;
+        default = false;
+      };
+
       extraConfig = mkOption {
         description = "Extra contents of the kmscon.conf file.";
         type = types.lines;
@@ -91,9 +97,15 @@ in {
 
     services.kmscon.extraConfig =
       let
+        xkb = optionals cfg.useXkbConfig
+          lib.mapAttrsToList (n: v: "xkb-${n}=${v}") (
+            lib.filterAttrs
+              (n: v: builtins.elem n ["layout" "model" "options" "variant"] && v != "")
+              config.services.xserver.xkb
+          );
         render = optionals cfg.hwRender [ "drm" "hwaccel" ];
         fonts = optional (cfg.fonts != null) "font-name=${lib.concatMapStringsSep ", " (f: f.name) cfg.fonts}";
-      in lib.concatStringsSep "\n" (render ++ fonts);
+      in lib.concatStringsSep "\n" (xkb ++ render ++ fonts);
 
     hardware.graphics.enable = mkIf cfg.hwRender true;
 

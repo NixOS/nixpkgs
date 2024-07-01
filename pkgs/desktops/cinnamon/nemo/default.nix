@@ -13,6 +13,8 @@
 , cinnamon-desktop
 , xapp
 , libexif
+, json-glib
+, gtk-layer-shell
 , exempi
 , intltool
 , shared-mime-info
@@ -22,13 +24,13 @@
 
 stdenv.mkDerivation rec {
   pname = "nemo";
-  version = "6.0.2";
+  version = "6.2.1";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    sha256 = "sha256-vSLFp0sgqGsZtcXdv82PVH0HcBbmcxrMySLFCBrLJpA=";
+    sha256 = "sha256-c6asFiDpFctNn+ap0cRptdFbjv5blTaJqDuzZ1Je+3I=";
   };
 
   patches = [
@@ -49,6 +51,8 @@ stdenv.mkDerivation rec {
     exempi
     gvfs
     libgsf
+    json-glib
+    gtk-layer-shell
   ];
 
   nativeBuildInputs = [
@@ -64,6 +68,8 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     # use locales from cinnamon-translations
     "--localedir=${cinnamon-translations}/share/locale"
+    # enabled by default in Mint packaging (see debian/rules)
+    "-Dgtk_layer_shell=true"
   ];
 
   postInstall = ''

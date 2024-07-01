@@ -487,6 +487,7 @@
   ./services/desktops/espanso.nix
   ./services/desktops/flatpak.nix
   ./services/desktops/geoclue2.nix
+  ./services/desktops/playerctld.nix
   ./services/desktops/gnome/at-spi2-core.nix
   ./services/desktops/gnome/evolution-data-server.nix
   ./services/desktops/gnome/glib-networking.nix

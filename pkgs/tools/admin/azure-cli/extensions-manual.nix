@@ -1,3 +1,7 @@
+# Manually packaged extensions for azure-cli
+#
+# Checkout ./README.md for more information.
+
 { lib
 , mkAzExtension
 , mycli
@@ -12,6 +16,7 @@
     sha256 = "658a2854d8c80f874f9382d421fa45abf6a38d00334737dda006f8dec64cf70a";
     description = "Tools for managing Azure DevOps";
     propagatedBuildInputs = with python3Packages; [ distro ];
+    meta.maintainers = with lib.maintainers; [ katexochen ];
   };
 
   rdbms-connect = mkAzExtension rec {

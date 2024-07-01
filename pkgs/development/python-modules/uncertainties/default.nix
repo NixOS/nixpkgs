@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
 
   # build-system
   setuptools,
@@ -19,9 +19,11 @@ buildPythonPackage rec {
   version = "3.2.1";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-sFQXtYve8jbCDnEfsv7hjk23NIqS7c7AExizKqs0kl4=";
+  src = fetchFromGitHub {
+    owner = "lmfit";
+    repo = "uncertainties";
+    rev = "refs/tags/${version}";
+    hash = "sha256-AaFazHeq7t4DnG2s9GvmAJ3ni62PWHR//mNPL+WyGSI=";
   };
 
   build-system = [

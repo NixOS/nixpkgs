@@ -50,6 +50,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/hgrecco/flexparser";
     changelog = "https://github.com/hgrecco/flexparser/blob/${src.rev}/CHANGES";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ doronbehar ];
   };
 }

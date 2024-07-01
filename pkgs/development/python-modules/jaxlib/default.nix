@@ -377,7 +377,7 @@ let
             { x86_64-linux = "sha256-vUoAPkYKEnHkV4fw6BI0mCeuP2e8BMCJnVuZMm9LwSA="; }
           else
             {
-              x86_64-linux = "sha256-R1TIIyyyLlDqAlUkuhJhtyTxZMra2q5S/jX0OCInsEQ=";
+              x86_64-linux = "sha256-R5Bm+0GYN1zJ1aEUBW76907MxYKAIawHHJoIb1RdsKE=";
               aarch64-linux = "sha256-P5JEmJljN1DeRA0dNkzyosKzRnJH+5SD2aWdV5JsoiY=";
             }
         ).${effectiveStdenv.system} or (throw "jaxlib: unsupported system: ${effectiveStdenv.system}");
