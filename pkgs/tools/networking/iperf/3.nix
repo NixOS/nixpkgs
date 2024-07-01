@@ -35,5 +35,9 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     license = licenses.bsd3;
     maintainers = with maintainers; [ fpletz ];
+
+    # prioritize iperf2
+    # https://iperf2.sourceforge.io/IperfCompare.html
+    priority = 10;
   };
 }
