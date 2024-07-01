@@ -1,4 +1,6 @@
-{ lib, stdenv, fetchFromGitHub, cmake, fuse, zlib, bzip2, openssl, libxml2, icu, lzfse, libiconv }:
+{ lib, stdenv, fetchFromGitHub, cmake, fuse, zlib, bzip2, openssl, libxml2, icu, lzfse, libiconv
+, nixosTests
+}:
 
 stdenv.mkDerivation rec {
   pname = "darling-dmg";
@@ -19,6 +21,10 @@ stdenv.mkDerivation rec {
     "-DCOMPILE_WITH_LZFSE=1"
     "-llzfse"
   ];
+
+  passthru.tests = {
+    inherit (nixosTests) darling-dmg;
+  };
 
   meta = with lib; {
     homepage = "https://www.darlinghq.org/";
