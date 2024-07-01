@@ -4920,8 +4920,8 @@
     email = "drewrypope@gmail.com";
     github = "dezren39";
     githubId = 11225574;
-    name = "Drewry Pope"
-  }
+    name = "Drewry Pope";
+  };
   dfithian = {
     email = "daniel.m.fithian@gmail.com";
     name = "Daniel Fithian";
