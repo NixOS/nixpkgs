@@ -102,7 +102,6 @@
 , "expo-cli"
 , "fast-cli"
 , "fauna-shell"
-, "fixjson"
 , "fkill-cli"
 , "fleek-cli"
 , "forever"

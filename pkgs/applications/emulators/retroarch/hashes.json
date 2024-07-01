@@ -5,10 +5,10 @@
         "src": {
             "owner": "libretro",
             "repo": "libretro-2048",
-            "rev": "331c1de588ed8f8c370dcbc488e5434a3c09f0f2",
-            "hash": "sha256-gPrAmoBnfuTnW6t699pqS43vE6t0ca3jZcqTNRaJipA="
+            "rev": "5474ed1ab880b3296c9860d0943d7de1970c79dd",
+            "hash": "sha256-i6bbxsLpSicDDGYKAxTMCMioHHfvBzVokun3PNYgDsc="
         },
-        "version": "unstable-2023-02-20"
+        "version": "unstable-2024-06-28"
     },
     "atari800": {
         "fetcher": "fetchFromGitHub",

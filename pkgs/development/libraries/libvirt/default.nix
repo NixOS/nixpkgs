@@ -163,6 +163,7 @@ stdenv.mkDerivation rec {
     sed -i '/qemuhotplugtest/d' tests/meson.build
     sed -i '/qemuvhostusertest/d' tests/meson.build
     sed -i '/qemuxml2xmltest/d' tests/meson.build
+    sed -i '/domaincapstest/d' tests/meson.build
   '';
 
   strictDeps = true;
