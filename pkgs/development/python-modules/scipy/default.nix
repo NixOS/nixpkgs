@@ -5,8 +5,8 @@
   fetchpatch,
   fetchurl,
   writeText,
+  xcbuild,
   python,
-  pythonOlder,
   buildPythonPackage,
   cython,
   gfortran,
@@ -22,8 +22,11 @@
   numpy,
   pybind11,
   pooch,
-  libxcrypt,
   xsimd,
+  # Upstream has support for using Darwin's Accelerate package. However this
+  # requires a Darwin user to work on a nice way to do that via an override.
+  # See:
+  # https://github.com/scipy/scipy/blob/v1.14.0/scipy/meson.build#L194-L211
   blas,
   lapack,
 
@@ -100,6 +103,12 @@ buildPythonPackage {
     pkg-config
     wheel
     setuptools
+  ] ++ lib.optionals stdenv.isDarwin [
+    # Minimal version required according to:
+    # https://github.com/scipy/scipy/blob/v1.14.0/scipy/meson.build#L185-L188
+    (xcbuild.override {
+      sdkVer = "13.3";
+    })
   ];
 
   buildInputs = [
@@ -108,7 +117,7 @@ buildPythonPackage {
     pybind11
     pooch
     xsimd
-  ] ++ lib.optionals (pythonOlder "3.9") [ libxcrypt ];
+  ];
 
   propagatedBuildInputs = [ numpy ];
 
