@@ -6,6 +6,7 @@
 , withQuartz ? stdenv.isDarwin, ApplicationServices
 , withRandr ? stdenv.isLinux, libxcb
 , withDrm ? stdenv.isLinux, libdrm
+, withVidmode ? stdenv.isLinux, libXxf86vm
 
 , withGeolocation ? true
 , withCoreLocation ? withGeolocation && stdenv.isDarwin, CoreLocation, Foundation, Cocoa
@@ -43,6 +44,7 @@ let
         "--enable-randr=${if withRandr then "yes" else "no"}"
         "--enable-geoclue2=${if withGeoclue then "yes" else "no"}"
         "--enable-drm=${if withDrm then "yes" else "no"}"
+        "--enable-vidmode=${if withVidmode then "yes" else "no"}"
         "--enable-quartz=${if withQuartz then "yes" else "no"}"
         "--enable-corelocation=${if withCoreLocation then "yes" else "no"}"
       ] ++ lib.optionals (pname == "gammastep") [
@@ -55,6 +57,7 @@ let
       ] ++ lib.optional  withRandr        libxcb
         ++ lib.optional  withGeoclue      geoclue
         ++ lib.optional  withDrm          libdrm
+        ++ lib.optional  withVidmode      libXxf86vm
         ++ lib.optional  withQuartz       ApplicationServices
         ++ lib.optionals withCoreLocation [ CoreLocation Foundation Cocoa ]
         ++ lib.optional  withAppIndicator (if (pname != "gammastep")
