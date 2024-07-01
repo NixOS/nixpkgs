@@ -20,6 +20,10 @@ in {
     hash = "sha256-JDoHNrl4oz3uKfnMp1IXM7eKZbVBggb+970cPUzxC2Q=";
   };
 
+  hardeningDisable = lib.optionals stdenv.isDarwin [
+    "pie"
+  ];
+
   outputs = [ "out" "dev" "devdoc" ];
   outputBin = "dev"; # very small
   separateDebugInfo = true;
