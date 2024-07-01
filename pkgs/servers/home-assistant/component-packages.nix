@@ -52,7 +52,8 @@
     "air_quality" = ps: with ps; [
     ];
     "airgradient" = ps: with ps; [
-    ]; # missing inputs: airgradient
+      airgradient
+    ];
     "airly" = ps: with ps; [
       airly
     ];
@@ -5242,6 +5243,7 @@
     "aftership"
     "agent_dvr"
     "air_quality"
+    "airgradient"
     "airly"
     "airnow"
     "airq"
