@@ -10,7 +10,7 @@ stdenv.mkDerivation(finalAttrs: {
   version = "3.62.0";
 
   src = fetchFromGitHub {
-    inherit (finalAttrs) pname version
+    inherit (finalAttrs) pname version;
     owner = "cloudflare";
     repo = "workers-sdk";
     rev = "${pname}@${version}";
