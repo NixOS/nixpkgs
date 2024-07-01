@@ -465,11 +465,8 @@ in
       );
     };
 
-    # The bootstrap tools may use `strip` from cctools, so use a compatible set of flags until LLVM
-    # is rebuilt, and darwin.binutils can use its implementation instead.
     extraPreHook = ''
-      stripAllFlags=" "    # the cctools "strip" command doesn't know "-s"
-      stripDebugFlags="-S" # the cctools "strip" command does something odd with "-p"
+      stripDebugFlags="-S" # llvm-strip does not support "-p" for Mach-O
     '';
   })
 
@@ -586,11 +583,9 @@ in
       prevStage.gnu-config
     ];
 
-    # The bootstrap tools may use `strip` from cctools, so use a compatible set of flags until LLVM
-    # is rebuilt, and darwin.binutils can use its implementation instead.
+
     extraPreHook = ''
-      stripAllFlags=" "    # the cctools "strip" command doesn't know "-s"
-      stripDebugFlags="-S" # the cctools "strip" command does something odd with "-p"
+      stripDebugFlags="-S" # llvm-strip does not support "-p" for Mach-O
     '';
   })
 
@@ -678,10 +673,8 @@ in
       prevStage.gnu-config
     ];
 
-    # Until LLVM is rebuilt, assume `strip` is the one from cctools.
     extraPreHook = ''
-      stripAllFlags=" "    # the cctools "strip" command doesn't know "-s"
-      stripDebugFlags="-S" # the cctools "strip" command does something odd with "-p"
+      stripDebugFlags="-S" # llvm-strip does not support "-p" for Mach-O
     '';
   })
 
@@ -782,8 +775,7 @@ in
     ];
 
     extraPreHook = ''
-      stripAllFlags=" "    # the cctools "strip" command doesn't know "-s"
-      stripDebugFlags="-S" # the cctools "strip" command does something odd with "-p"
+      stripDebugFlags="-S" # llvm-strip does not support "-p" for Mach-O
     '';
   })
 
