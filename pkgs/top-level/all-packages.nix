@@ -4729,8 +4729,6 @@ with pkgs;
 
   clockify = callPackage ../applications/office/clockify { };
 
-  contrast = callPackage ../applications/accessibility/contrast { };
-
   cplex = callPackage ../applications/science/math/cplex (config.cplex or {});
 
   cpulimit = callPackage ../tools/misc/cpulimit { };
