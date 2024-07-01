@@ -6,6 +6,7 @@
 };
 "12many" = {
   revision = 15878;
+  catalogue = "one2many";
   shortdesc = "Generalising mathematical index sets";
   stripPrefix = 0;
   sha512.run = "57a177b65450718631f36bfd8db0f2d1bff788f3bf147137b6412714cc945c7e08832f14f9e7e659adf7e072a91f13a2ea27fe3161cd9b60313bc956f1f543c6";
@@ -14,9 +15,11 @@
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.3";
+  hasCatalogue = true;
 };
 "2up" = {
   revision = 55076;
+  catalogue = "twoup-gen";
   shortdesc = "Macros to print two-up";
   stripPrefix = 0;
   sha512.run = "6408d1d99a97df71640bcdde4133edc2e5861bbcdc8c5e1be98d5704f7ecf9c043c5538ea19ac4952d811e3677ee0698bdd477eadbd1068725bdb210787d9dbc";
@@ -24,6 +27,7 @@
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.3a";
+  hasCatalogue = true;
 };
 a0poster = {
   revision = 54071;
@@ -34,6 +38,7 @@ a0poster = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.22b";
+  hasCatalogue = true;
 };
 a2ping = {
   revision = 52964;
@@ -44,6 +49,7 @@ a2ping = {
   hasRunfiles = true;
   license = [ "gpl1Only" ];
   version = "2.84p";
+  hasCatalogue = true;
 };
 a2ping.binfiles = [
   "a2ping"
@@ -56,6 +62,7 @@ a4wide = {
   sha512.doc = "bf059462ec7e28ba782d5842d090c93f4e911bdf44eb3d4f184a7324b454105295460a52414ffcb9fc71dceeba902b1d78ba208d0998f71727ad41299eb1138f";
   hasRunfiles = true;
   license = [ "lppl1" ];
+  hasCatalogue = true;
 };
 a5comb = {
   revision = 17020;
@@ -66,6 +73,7 @@ a5comb = {
   hasRunfiles = true;
   license = [ "publicDomain" ];
   version = "4";
+  hasCatalogue = true;
 };
 aaai-named = {
   revision = 52470;
@@ -74,6 +82,7 @@ aaai-named = {
   sha512.run = "bb851e6bb3d9c2efd8d9abd32056d0853e320ee7f495b3c595d6a112d5e66bdbcb24107f741249fdfde350dead6763484cc412d380188d29155649b4076c4e77";
   hasRunfiles = true;
   license = [ "free" ];
+  hasCatalogue = true;
 };
 aalok = {
   revision = 61719;
@@ -85,6 +94,7 @@ aalok = {
   hasRunfiles = true;
   license = [ "gpl3Plus" "free" "fdl13Only" ];
   version = "0.6";
+  hasCatalogue = true;
 };
 aastex = {
   revision = 58057;
@@ -95,6 +105,7 @@ aastex = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "6.3.1";
+  hasCatalogue = true;
 };
 abbr = {
   revision = 15878;
@@ -104,6 +115,7 @@ abbr = {
   sha512.doc = "7080dea132581fdb0803b4ecfdcf4fd5ed5a689bd7e0c7b7b699ef5b3faeab908042f1704cb553ce38e7f37d9facf7d22a74ac71e2cbd269298f35666367f41a";
   hasRunfiles = true;
   license = [ "publicDomain" ];
+  hasCatalogue = true;
 };
 abc = {
   revision = 41157;
@@ -115,6 +127,7 @@ abc = {
   hasRunfiles = true;
   license = [ "lppl12" ];
   version = "2.0b";
+  hasCatalogue = true;
 };
 abnt = {
   revision = 55471;
@@ -124,6 +137,7 @@ abnt = {
   sha512.doc = "0a46414ec99e14a60a167ec7ca09d074c802f4232cbd4204e52e9d489edb3b1657c7f33f0a3fd0bbaa09f624cb52903b8a18db43f54c7a1b0aef8c804b53b1b7";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 abntex2 = {
   revision = 49248;
@@ -134,6 +148,7 @@ abntex2 = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.9.7";
+  hasCatalogue = true;
 };
 abntexto = {
   revision = 68837;
@@ -144,6 +159,7 @@ abntexto = {
   hasRunfiles = true;
   license = [ "publicDomain" ];
   version = "3.1.0-beta";
+  hasCatalogue = true;
 };
 aboensis = {
   revision = 62977;
@@ -153,6 +169,7 @@ aboensis = {
   sha512.doc = "84317ef83e712296819b25926adb7522531482b9d17d807cdfd3897f712aae8a8f161a242bffdbe7511478a3e5ec2c1e76fcf51c14661b3465aabbc6b95bbaf2";
   hasRunfiles = true;
   license = [ "ofl" "lppl13c" "cc-by-40" "publicDomain" ];
+  hasCatalogue = true;
 };
 abraces = {
   revision = 64967;
@@ -163,6 +180,7 @@ abraces = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.1";
+  hasCatalogue = true;
 };
 abspos = {
   revision = 64465;
@@ -174,6 +192,7 @@ abspos = {
   hasRunfiles = true;
   license = [ "mit" ];
   version = "0.1";
+  hasCatalogue = true;
 };
 abstract = {
   revision = 15878;
@@ -185,15 +204,18 @@ abstract = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.2a";
+  hasCatalogue = true;
 };
 abstyles = {
   revision = 15878;
+  catalogue = "abstyles-orig";
   shortdesc = "Adaptable BibTeX styles";
   stripPrefix = 0;
   sha512.run = "de7e7a5c7e56ae4fb478c9a072c6b2dc8716ea34ee17be577cf4a485c5506f16cc5b79293cfbc80b245ab350c2e2059dd5fb37a2e28818f492edf7c0416d52e3";
   sha512.doc = "d12304eeb2cf797153d7e17beb25c462b3fdf75f5b7b1b24e1ff89d52ce8fe5b2a0fbf88d083ba51301afc45f51871e376253aede36bef21becc1a4350da8259";
   hasRunfiles = true;
   license = [ "free" ];
+  hasCatalogue = true;
 };
 academicons = {
   revision = 62622;
@@ -204,6 +226,7 @@ academicons = {
   hasRunfiles = true;
   license = [ "lppl13c" "ofl" ];
   version = "1.9.1-2";
+  hasCatalogue = true;
 };
 accanthis = {
   revision = 64844;
@@ -216,6 +239,7 @@ accanthis = {
   sha512.doc = "6789c3c330d1e6a0d20364e4e98ef72fd1c6294655f704366b0e6c1fd081d1aea312dc9e6767fb3e076b3cd91ea5a67606e8bf62f7f92af097ba766c99ab0cff";
   hasRunfiles = true;
   license = [ "gpl2Plus" "lppl13c" ];
+  hasCatalogue = true;
 };
 accents = {
   revision = 51497;
@@ -226,6 +250,7 @@ accents = {
   hasRunfiles = true;
   license = [ "mit" ];
   version = "1.4";
+  hasCatalogue = true;
 };
 accessibility = {
   revision = 55777;
@@ -237,6 +262,7 @@ accessibility = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.0.3";
+  hasCatalogue = true;
 };
 accfonts = {
   revision = 18835;
@@ -246,6 +272,7 @@ accfonts = {
   hasRunfiles = true;
   license = [ "gpl1Only" ];
   version = "0.25";
+  hasCatalogue = true;
 };
 accfonts.binfiles = [
   "mkt1font"
@@ -262,6 +289,7 @@ accsupp = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.6";
+  hasCatalogue = true;
 };
 achemso = {
   revision = 69638;
@@ -273,6 +301,7 @@ achemso = {
   hasRunfiles = true;
   license = [ "lppl13c" "free" ];
   version = "3.13g";
+  hasCatalogue = true;
 };
 acmart = {
   revision = 69721;
@@ -284,6 +313,7 @@ acmart = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.03";
+  hasCatalogue = true;
 };
 acmconf = {
   revision = 15878;
@@ -295,6 +325,7 @@ acmconf = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.3";
+  hasCatalogue = true;
 };
 acro = {
   revision = 62925;
@@ -310,6 +341,7 @@ acro = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "3.8";
+  hasCatalogue = true;
 };
 acronym = {
   revision = 54758;
@@ -321,6 +353,7 @@ acronym = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.47";
+  hasCatalogue = true;
 };
 acroterm = {
   revision = 61719;
@@ -332,6 +365,7 @@ acroterm = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.1";
+  hasCatalogue = true;
 };
 active-conf = {
   revision = 15878;
@@ -343,6 +377,7 @@ active-conf = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.3a";
+  hasCatalogue = true;
 };
 actuarialangle = {
   revision = 67201;
@@ -354,6 +389,7 @@ actuarialangle = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.1";
+  hasCatalogue = true;
 };
 actuarialsymbol = {
   revision = 67201;
@@ -365,6 +401,7 @@ actuarialsymbol = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 addfont = {
   revision = 58559;
@@ -375,6 +412,7 @@ addfont = {
   hasRunfiles = true;
   license = [ "gpl3Plus" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 addliga = {
   revision = 50912;
@@ -385,6 +423,7 @@ addliga = {
   hasRunfiles = true;
   license = [ "publicDomain" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 addlines = {
   revision = 49326;
@@ -396,6 +435,7 @@ addlines = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.3";
+  hasCatalogue = true;
 };
 addtoluatexpath = {
   revision = 67821;
@@ -405,6 +445,7 @@ addtoluatexpath = {
   sha512.doc = "ccc8ca7fc9423192a68260b6f441fa7be8a1144bdff8e0eee478f01e2c09d0e54f2a25d7a7fb935f76803003842f16e41916861d9a69e3ea2bca5724b1be5411";
   hasRunfiles = true;
   license = [ "mit" ];
+  hasCatalogue = true;
 };
 adfathesis = {
   revision = 26048;
@@ -416,6 +457,7 @@ adfathesis = {
   hasRunfiles = true;
   license = [ "publicDomain" ];
   version = "2.42";
+  hasCatalogue = true;
 };
 adforn = {
   revision = 54512;
@@ -429,6 +471,7 @@ adforn = {
   hasRunfiles = true;
   license = [ "lppl13c" "gpl2Only" ];
   version = "1.1b";
+  hasCatalogue = true;
 };
 adfsymbols = {
   revision = 54512;
@@ -443,6 +486,7 @@ adfsymbols = {
   hasRunfiles = true;
   license = [ "lppl13c" "gpl2Only" ];
   version = "1.2b";
+  hasCatalogue = true;
 };
 adhocfilelist = {
   revision = 29349;
@@ -452,6 +496,7 @@ adhocfilelist = {
   sha512.source = "15e7f652408c5975ba47131109e0d18bcb1d270e0ea630a9a3ff385e499cf3607a366e708a5ec9559d7ccc2a5e0b2d3d0f5f615142978a918b0bd1bd0218a30d";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 adhocfilelist.binfiles = [
   "adhocfilelist"
@@ -465,6 +510,7 @@ adigraph = {
   hasRunfiles = true;
   license = [ "mit" ];
   version = "1.7.2";
+  hasCatalogue = true;
 };
 adjmulticol = {
   revision = 63320;
@@ -476,6 +522,7 @@ adjmulticol = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.5";
+  hasCatalogue = true;
 };
 adjustbox = {
   revision = 64967;
@@ -492,6 +539,7 @@ adjustbox = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.3a";
+  hasCatalogue = true;
 };
 adobemapping = {
   revision = 66552;
@@ -500,6 +548,7 @@ adobemapping = {
   sha512.run = "363f7fd337e5a34737608a2bc37521bb526ce726f5c9b5b4d08416e534448306002bc7af1be3f5e6fefcaba16ffc2260c4dea8a486d44dbccad577fb04d6da5b";
   hasRunfiles = true;
   license = [ "bsd3" ];
+  hasCatalogue = true;
 };
 adrconv = {
   revision = 46817;
@@ -511,6 +560,7 @@ adrconv = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.4";
+  hasCatalogue = true;
 };
 adtrees = {
   revision = 51618;
@@ -521,6 +571,7 @@ adtrees = {
   hasRunfiles = true;
   license = [ "gpl1Only" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 advdate = {
   revision = 20538;
@@ -530,6 +581,7 @@ advdate = {
   sha512.doc = "acfcbd6a40630da2cf9024cbf3ed378c1f7f8a16c8f8395b69c12f9693e903ba54b9b051c364c5cb4de957876bbd41f0b480c4f4b320e22f2c6df7b08502873a";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 advice = {
   revision = 69283;
@@ -541,6 +593,7 @@ advice = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1.0";
+  hasCatalogue = true;
 };
 ae = {
   revision = 15878;
@@ -552,6 +605,7 @@ ae = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.4";
+  hasCatalogue = true;
 };
 aeguill = {
   revision = 15878;
@@ -561,6 +615,7 @@ aeguill = {
   sha512.doc = "8361fc02999b080f19beb793fb0d1d802203114c1e1581c312a21e3a682191470b93e373fc269f8aea0e2643a69c8caf80855597ff6a71aadb6bfc869f4370da";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 aesupp = {
   revision = 58253;
@@ -575,6 +630,7 @@ aesupp = {
   hasRunfiles = true;
   license = [ "gfl" "gpl3Plus" ];
   version = "1";
+  hasCatalogue = true;
 };
 affilauthor = {
   revision = 68996;
@@ -585,6 +641,7 @@ affilauthor = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0.1";
+  hasCatalogue = true;
 };
 afm2pl = {
   revision = 66186;
@@ -607,6 +664,7 @@ afparticle = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.3";
+  hasCatalogue = true;
 };
 afthesis = {
   revision = 15878;
@@ -617,6 +675,7 @@ afthesis = {
   hasRunfiles = true;
   license = [ "publicDomain" ];
   version = "2.7";
+  hasCatalogue = true;
 };
 aguplus = {
   revision = 17156;
@@ -627,6 +686,7 @@ aguplus = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.6b";
+  hasCatalogue = true;
 };
 aiaa = {
   revision = 15878;
@@ -638,6 +698,7 @@ aiaa = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "3.6";
+  hasCatalogue = true;
 };
 aichej = {
   revision = 15878;
@@ -646,6 +707,7 @@ aichej = {
   sha512.run = "7edc0ca36209f18dcca0b794c7ee712f0eba82e3e69b09fd46fdc7ede6bd33e93d4936d7bfcff88fe4f699acd04493053a7c76cabb87670215efaae12aaabc83";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 ajl = {
   revision = 34016;
@@ -654,6 +716,7 @@ ajl = {
   sha512.run = "083a549d425336eceee0ab8e85ef592aa15983e9a4dcf2264d835b5242933fed8719b81b427fcf7784b38b8e0b3dac2e2a7f8b9ffd10cf2690b96bf8b586ff3d";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 akktex = {
   revision = 26055;
@@ -664,6 +727,7 @@ akktex = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.3.2";
+  hasCatalogue = true;
 };
 akletter = {
   revision = 15878;
@@ -674,6 +738,7 @@ akletter = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.5i";
+  hasCatalogue = true;
 };
 akshar = {
   revision = 56277;
@@ -685,6 +750,7 @@ akshar = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.2";
+  hasCatalogue = true;
 };
 albatross = {
   revision = 69879;
@@ -699,6 +765,7 @@ albatross = {
   ];
   license = [ "bsd3" ];
   version = "0.5.1";
+  hasCatalogue = true;
 };
 albatross.binfiles = [
   "albatross"
@@ -712,6 +779,7 @@ alchemist = {
   hasRunfiles = true;
   license = [ "gpl1Only" "lppl13c" ];
   version = "1.00";
+  hasCatalogue = true;
 };
 alegreya = {
   revision = 64384;
@@ -724,6 +792,7 @@ alegreya = {
   sha512.doc = "dcff5d4a47c3649155a79659012aa07123e5108b85804da9c1697d1f93d7b336ef7e37e1272c8e2e8f283971bfbfebc2e0cd2ebae3ff8ee69531629635ed7d74";
   hasRunfiles = true;
   license = [ "ofl" "lppl13c" ];
+  hasCatalogue = true;
 };
 aleph = {
   revision = 66203;
@@ -748,6 +817,7 @@ aleph = {
   sha512.doc = "33dbdb3fc2ed1cb698b1b3a1826771475b27e33c19ab102b5f0f403f670abd10330dbdb4223d9f5b96cff001a14dc8d25ecc9a084a612b9db8a1cc6a70bec090";
   hasManpages = true;
   license = [ "gpl1Only" ];
+  hasCatalogue = true;
 };
 aleph.binfiles = [
   "aleph"
@@ -762,6 +832,7 @@ alertmessage = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 alfaslabone = {
   revision = 57452;
@@ -775,6 +846,7 @@ alfaslabone = {
   hasRunfiles = true;
   license = [ "ofl" ];
   version = "0.0.1";
+  hasCatalogue = true;
 };
 alg = {
   revision = 15878;
@@ -785,6 +857,7 @@ alg = {
   sha512.source = "a8231edf9c10855b312bb00f2bf37b68ada65b876ab621f459b3ee12da5bc5b90080ab6eff5c3a48c0821753a02576aac0100b3a577cfb7c5dc2cd4b47c8a026";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 algobox = {
   revision = 67201;
@@ -796,6 +869,7 @@ algobox = {
   hasRunfiles = true;
   license = [ "gpl3Plus" ];
   version = "1.3";
+  hasCatalogue = true;
 };
 algolrevived = {
   revision = 56864;
@@ -809,6 +883,7 @@ algolrevived = {
   hasRunfiles = true;
   license = [ "ofl" "lppl13c" ];
   version = "1.052";
+  hasCatalogue = true;
 };
 algorithm2e = {
   revision = 44846;
@@ -819,6 +894,7 @@ algorithm2e = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "5.2";
+  hasCatalogue = true;
 };
 algorithmicx = {
   revision = 15878;
@@ -828,6 +904,7 @@ algorithmicx = {
   sha512.doc = "cda9c4082faeaaf504194d75c014fda9cda20fe85ab9dd8c4f5a3c9e39fc2c8c8428ef20b921790f36c8abae2ecd8ea089353db540477909039575bc65ed5228";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 algorithms = {
   revision = 42428;
@@ -839,6 +916,7 @@ algorithms = {
   hasRunfiles = true;
   license = [ "lgpl21" ];
   version = "0.1";
+  hasCatalogue = true;
 };
 algpseudocodex = {
   revision = 66924;
@@ -849,6 +927,7 @@ algpseudocodex = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1.2";
+  hasCatalogue = true;
 };
 algxpar = {
   revision = 67495;
@@ -859,6 +938,7 @@ algxpar = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.99";
+  hasCatalogue = true;
 };
 aligned-overset = {
   revision = 47290;
@@ -870,6 +950,7 @@ aligned-overset = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.1.0";
+  hasCatalogue = true;
 };
 alkalami = {
   revision = 44497;
@@ -880,6 +961,7 @@ alkalami = {
   hasRunfiles = true;
   license = [ "ofl" ];
   version = "1.000";
+  hasCatalogue = true;
 };
 allrunes = {
   revision = 42221;
@@ -894,6 +976,7 @@ allrunes = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.1.1";
+  hasCatalogue = true;
 };
 almendra = {
   revision = 64539;
@@ -906,6 +989,7 @@ almendra = {
   sha512.doc = "477d5d068353d06e591af13e7e970cccd3d5229765f89150e4d9bb5f1de2b0283e4212bc475fdd6771f4e33f046a3e64dd4ca794c3691af95f7e36f77c7eed76";
   hasRunfiles = true;
   license = [ "ofl" "lppl13c" ];
+  hasCatalogue = true;
 };
 almfixed = {
   revision = 35065;
@@ -916,6 +1000,7 @@ almfixed = {
   hasRunfiles = true;
   license = [ "gfl" ];
   version = "0.92";
+  hasCatalogue = true;
 };
 alnumsec = {
   revision = 15878;
@@ -927,6 +1012,7 @@ alnumsec = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.03";
+  hasCatalogue = true;
 };
 alpha-persian = {
   revision = 66115;
@@ -937,6 +1023,7 @@ alpha-persian = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.3";
+  hasCatalogue = true;
 };
 alphalph = {
   revision = 53087;
@@ -948,6 +1035,7 @@ alphalph = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.6";
+  hasCatalogue = true;
 };
 alterqcm = {
   revision = 59265;
@@ -958,6 +1046,7 @@ alterqcm = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "4.42c";
+  hasCatalogue = true;
 };
 altfont = {
   revision = 15878;
@@ -969,6 +1058,7 @@ altfont = {
   hasRunfiles = true;
   license = [ "gpl1Only" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 altsubsup = {
   revision = 62738;
@@ -980,6 +1070,7 @@ altsubsup = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 amiri = {
   revision = 65191;
@@ -990,6 +1081,7 @@ amiri = {
   hasRunfiles = true;
   license = [ "ofl" ];
   version = "1.000";
+  hasCatalogue = true;
 };
 amiweb2c-guide = {
   revision = 56878;
@@ -999,6 +1091,7 @@ amiweb2c-guide = {
   sha512.doc = "d8f6ab658d8d8f2e05876ce27b5220eb2e10a58775cde91f975cdd106708ddef86781cc1c004b4381176fa7ee8ee6630a34bf7cacec374bf21ffe5e06c8d4d68";
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 amnestyreport = {
   revision = 69439;
@@ -1010,6 +1103,7 @@ amnestyreport = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.2";
+  hasCatalogue = true;
 };
 amsaddr = {
   revision = 64357;
@@ -1021,6 +1115,7 @@ amsaddr = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.2";
+  hasCatalogue = true;
 };
 amscdx = {
   revision = 51532;
@@ -1032,6 +1127,7 @@ amscdx = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.2x";
+  hasCatalogue = true;
 };
 amscls = {
   revision = 55378;
@@ -1043,6 +1139,7 @@ amscls = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.20.6";
+  hasCatalogue = true;
 };
 amscls-doc = {
   revision = 46110;
@@ -1051,6 +1148,7 @@ amscls-doc = {
   sha512.run = "132432f34812f009233392ea29d6c4145717a80ea305632687da30de6969dcef8af9c2aa88cbf1809dd34b0c3dfca0f40a52b6216a7370f2a225b2602d0bbaf3";
   sha512.doc = "8c08813abf65f00b68441d1e5cad3eb4a16fc1a77b30e10d96e22f34d6af547804af4d47b62ef0dfc895e2bc7cc5ecf7bc08d912448fefefbf716430c4502a64";
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 amsfonts = {
   revision = 61937;
@@ -1070,6 +1168,7 @@ amsfonts = {
   hasRunfiles = true;
   license = [ "ofl" ];
   version = "3.04";
+  hasCatalogue = true;
 };
 amslatex-primer = {
   revision = 28980;
@@ -1079,6 +1178,7 @@ amslatex-primer = {
   sha512.doc = "85faf2a9c03f7d7d1e23d72b7041c9b322d5f8bd8cb309a60f7256416249ceb7582c112d25f8953ee67dd2b79a3697e29cf6250d7b199a9eb73a9682f123354f";
   license = [ "lppl13c" ];
   version = "2.3";
+  hasCatalogue = true;
 };
 amsldoc-it = {
   revision = 45662;
@@ -1089,15 +1189,18 @@ amsldoc-it = {
 };
 amsldoc-vn = {
   revision = 21855;
+  catalogue = "amslatexdoc-vietnamese";
   shortdesc = "Vietnamese translation of AMSLaTeX documentation";
   stripPrefix = 0;
   sha512.run = "5b0c2cc1afcc4060249be20271af92c71c866db47d2551a176b5685c58182a6ca17da9540dd9a7c7abd33de75b0335a625aa921fdbd77329bc91d16718fb346a";
   sha512.doc = "827c294eb1cedd51a3924796b461ec3d6c858e7875254e0fdb6cb496fecbb6d2ec541e930327c54cc446b15dd69ed795470ae6cbf1cf1e51c0f3ae90f3f6c12f";
   license = [ "lppl13c" ];
   version = "2.0";
+  hasCatalogue = true;
 };
 amsmath = {
   revision = 68720;
+  catalogue = "latex-amsmath";
   shortdesc = "AMS mathematical facilities for LaTeX";
   stripPrefix = 0;
   sha512.run = "39e87ac8255c577fa8b1c0cd155d4fa21bd0c0f789141e6d1e75cad1c34a78bf5fa44277342ae9d93d80f4f88f31ca9f88dba9c592ceba04961e601e3e8e9650";
@@ -1105,6 +1208,7 @@ amsmath = {
   sha512.source = "c1d052395b6f6291a269d610f713ce01383940685af91b1c2dd711b73f5d765e801524a538687d7f8cde055bb1dda9ca11900e4e8b58182b3cd792fdfbaca6be";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 amsmath-it = {
   revision = 22930;
@@ -1113,6 +1217,7 @@ amsmath-it = {
   sha512.run = "6bc869e3cf11a9521ff883e9b8cd227a267d28291124c0f268556ea576bc0af8ea4eaa145e45d1de84709df08182fc83946d80fd0f116a8656a35d75ca83eef5";
   sha512.doc = "814539a2a82601c930097113a9baca5166fcf68d1b0c4dcf25d8afa8991e667619517879bc415ff114b9e86664b9ff5e25a7bcf1bb04160b9297cbfabb4a639d";
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 amsrefs = {
   revision = 61937;
@@ -1124,6 +1229,7 @@ amsrefs = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.14";
+  hasCatalogue = true;
 };
 amstex = {
   revision = 67930;
@@ -1151,6 +1257,7 @@ amstex = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.01";
+  hasCatalogue = true;
 };
 amstex.binfiles = [
   "amstex"
@@ -1174,6 +1281,7 @@ andika = {
   hasRunfiles = true;
   license = [ "ofl" "lppl13c" ];
   version = "6.101";
+  hasCatalogue = true;
 };
 animate = {
   revision = 67401;
@@ -1184,6 +1292,7 @@ animate = {
   sha512.source = "d0b799be895882ba64d200f4c77d8794212fecce55b8c65e874b77587ed4bc186930f9abf1f662d0c7c7e8383f34afc3679f11679d22c035539d93b8dcd19e7b";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 annee-scolaire = {
   revision = 55988;
@@ -1195,6 +1304,7 @@ annee-scolaire = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.6";
+  hasCatalogue = true;
 };
 annotate = {
   revision = 52824;
@@ -1203,6 +1313,7 @@ annotate = {
   sha512.run = "bd31306b72bec73d4a2367fda6804e648ade536181d7a5c34d196591bb5fbd483f13a1e4aa2c28d3a4f29d0c74d37d5f1a77046b15d321c29176d9f742e91a72";
   hasRunfiles = true;
   license = [ "free" ];
+  hasCatalogue = true;
 };
 annotate-equations = {
   revision = 67044;
@@ -1213,6 +1324,7 @@ annotate-equations = {
   hasRunfiles = true;
   license = [ "mit" ];
   version = "0.2.2";
+  hasCatalogue = true;
 };
 anonchap = {
   revision = 17049;
@@ -1223,6 +1335,7 @@ anonchap = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1a";
+  hasCatalogue = true;
 };
 anonymous-acm = {
   revision = 55121;
@@ -1233,6 +1346,7 @@ anonymous-acm = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 anonymouspro = {
   revision = 51631;
@@ -1247,6 +1361,7 @@ anonymouspro = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.2";
+  hasCatalogue = true;
 };
 answers = {
   revision = 35032;
@@ -1258,6 +1373,7 @@ answers = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.16";
+  hasCatalogue = true;
 };
 antanilipsum = {
   revision = 55250;
@@ -1269,9 +1385,11 @@ antanilipsum = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.8.1";
+  hasCatalogue = true;
 };
 antiqua = {
   revision = 24266;
+  catalogue = "urw-antiqua";
   shortdesc = "URW Antiqua condensed font, for use with TeX";
   stripPrefix = 0;
   fontMaps = [
@@ -1282,6 +1400,7 @@ antiqua = {
   hasRunfiles = true;
   license = [ "gpl1Only" ];
   version = "001.003";
+  hasCatalogue = true;
 };
 antique-spanish-units = {
   revision = 69568;
@@ -1291,6 +1410,7 @@ antique-spanish-units = {
   sha512.doc = "4c4cd96889c2f1db9766099de6d149963579d27256f44d555023e205ca09617b570237e7eec2b5523c61af4d1124683ade9eeed4a5fb96f140423176ef163cad";
   license = [ "cc-by-40" ];
   version = "1.6";
+  hasCatalogue = true;
 };
 antomega = {
   revision = 21933;
@@ -1305,6 +1425,7 @@ antomega = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.8";
+  hasCatalogue = true;
 };
 antt = {
   revision = 18651;
@@ -1318,6 +1439,7 @@ antt = {
   hasRunfiles = true;
   license = [ "gfsl" ];
   version = "2.08";
+  hasCatalogue = true;
 };
 anufinalexam = {
   revision = 26053;
@@ -1326,6 +1448,7 @@ anufinalexam = {
   sha512.run = "0f7deb262a96bf55eba167475ca7c55887c1cdfbe60f9a32debb6926d855764eb595acb693ce9ab74a2af89efd98114f6694255580b5d594915cb2470d84b485";
   sha512.doc = "0821831108f81bc8d23dfb7d26f2201057a897a2dc783959b9e298b8e59b79a12453db072b824397a9625b8a63e7fb19ad8ba6d4500436bb0f7b9a23f96d1c3d";
   license = [ "gpl1Only" ];
+  hasCatalogue = true;
 };
 anyfontsize = {
   revision = 17050;
@@ -1335,6 +1458,7 @@ anyfontsize = {
   sha512.doc = "9003fdbf712448de70c858eba74f7de79e0cb83e8f9fe72d9c1b71869161d5a63099473c4f9ec670b28b356ceccd9b56110a1724dcde3062ae209a678f5b0e16";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 anysize = {
   revision = 15878;
@@ -1344,6 +1468,7 @@ anysize = {
   sha512.doc = "96591bba808fc91a876dd49a6e1ede3b679c18952244f14b07e992b40d20f6c4a0f4b4dad00a409c766c5f2e883fc4923c501e65b06ad93193719001c2629f08";
   hasRunfiles = true;
   license = [ "publicDomain" ];
+  hasCatalogue = true;
 };
 aobs-tikz = {
   revision = 32662;
@@ -1355,6 +1480,7 @@ aobs-tikz = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 aomart = {
   revision = 63442;
@@ -1366,6 +1492,7 @@ aomart = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.27";
+  hasCatalogue = true;
 };
 apa = {
   revision = 54080;
@@ -1376,6 +1503,7 @@ apa = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.3.4";
+  hasCatalogue = true;
 };
 apa6 = {
   revision = 67848;
@@ -1387,6 +1515,7 @@ apa6 = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.35";
+  hasCatalogue = true;
 };
 apa6e = {
   revision = 23350;
@@ -1398,6 +1527,7 @@ apa6e = {
   hasRunfiles = true;
   license = [ "bsd3" ];
   version = "0.3";
+  hasCatalogue = true;
 };
 apa7 = {
   revision = 63974;
@@ -1409,6 +1539,7 @@ apa7 = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.16";
+  hasCatalogue = true;
 };
 apacite = {
   revision = 54080;
@@ -1420,6 +1551,7 @@ apacite = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "6.03";
+  hasCatalogue = true;
 };
 apalike-ejor = {
   revision = 59667;
@@ -1430,6 +1562,7 @@ apalike-ejor = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.2.0";
+  hasCatalogue = true;
 };
 apalike-german = {
   revision = 65403;
@@ -1439,6 +1572,7 @@ apalike-german = {
   sha512.doc = "eae2fa13afb28c51926a1fc4aa8e8e39da35d9a6b3297eb2a1b42bd39580daaf45a782c4cbba16dba6c7a4c315873d6ad1a7b6dd61b4de06cf5628f8d381c63a";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 apalike2 = {
   revision = 54080;
@@ -1447,6 +1581,7 @@ apalike2 = {
   sha512.run = "cb837c6299628a58189f33570de7717d53d83d9de456255b489ae4ef73693b51bffc2dd12c9496265ebc8cda64d8da8b1c71d46f9d96a4bc13c07c9a6e021a2f";
   hasRunfiles = true;
   license = [ "knuth" ];
+  hasCatalogue = true;
 };
 apnum = {
   revision = 47510;
@@ -1457,6 +1592,7 @@ apnum = {
   hasRunfiles = true;
   license = [ "publicDomain" ];
   version = "1.7";
+  hasCatalogue = true;
 };
 appendix = {
   revision = 53718;
@@ -1468,6 +1604,7 @@ appendix = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.2c";
+  hasCatalogue = true;
 };
 appendixnumberbeamer = {
   revision = 46317;
@@ -1478,6 +1615,7 @@ appendixnumberbeamer = {
   hasRunfiles = true;
   license = [ "gpl3Only" ];
   version = "1.2";
+  hasCatalogue = true;
 };
 apprendre-a-programmer-en-tex = {
   revision = 57179;
@@ -1486,6 +1624,7 @@ apprendre-a-programmer-en-tex = {
   sha512.run = "2008619320d2b7e906c2511609e76894dd065f8e56dd1800cfac0e13af4415dc76c437cdadcf15cfea85d7862996e99ba3240aa30d36fa70d9c1d950b7c97e96";
   sha512.doc = "34c86cf9f0a296846a85f896f31da102013dd7b78ddc11d20aca93770671f2ab05930167160d3bf6282b7740fd9d5eb5238ec70bdf405658c1688d3bbd769d7e";
   license = [ "lppl12" ];
+  hasCatalogue = true;
 };
 apprends-latex = {
   revision = 19306;
@@ -1495,6 +1634,7 @@ apprends-latex = {
   sha512.doc = "d65d5f56e055ac4628e8198b718689631edca80abb3593480948ee8ba3336d7baccc091cac9f95b4dff745d84d409488d3a2032a1587f1f1a5db186af4da1413";
   license = [ "lppl13c" ];
   version = "4.02";
+  hasCatalogue = true;
 };
 apptools = {
   revision = 28400;
@@ -1506,6 +1646,7 @@ apptools = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 apxproof = {
   revision = 64715;
@@ -1517,6 +1658,7 @@ apxproof = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.2.4";
+  hasCatalogue = true;
 };
 arabi = {
   revision = 44662;
@@ -1530,6 +1672,7 @@ arabi = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 arabi-add = {
   revision = 67573;
@@ -1540,6 +1683,7 @@ arabi-add = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 arabic-book = {
   revision = 59594;
@@ -1550,6 +1694,7 @@ arabic-book = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 arabicfront = {
   revision = 51474;
@@ -1560,6 +1705,7 @@ arabicfront = {
   hasRunfiles = true;
   license = [ "mit" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 arabluatex = {
   revision = 67201;
@@ -1571,6 +1717,7 @@ arabluatex = {
   hasRunfiles = true;
   license = [ "gpl3Plus" "cc-by-sa-40" ];
   version = "1.20";
+  hasCatalogue = true;
 };
 arabtex = {
   revision = 64260;
@@ -1584,6 +1731,7 @@ arabtex = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "3.17";
+  hasCatalogue = true;
 };
 arabxetex = {
   revision = 38299;
@@ -1595,6 +1743,7 @@ arabxetex = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.2.1";
+  hasCatalogue = true;
 };
 aramaic-serto = {
   revision = 30042;
@@ -1608,6 +1757,7 @@ aramaic-serto = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 arara = {
   revision = 69878;
@@ -1622,6 +1772,7 @@ arara = {
   ];
   license = [ "bsd3" ];
   version = "7.1.3";
+  hasCatalogue = true;
 };
 arara.binfiles = [
   "arara"
@@ -1636,6 +1787,7 @@ archaeologie = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.5.0";
+  hasCatalogue = true;
 };
 archaic = {
   revision = 38005;
@@ -1649,6 +1801,7 @@ archaic = {
   sha512.source = "5a39568546651ef10937849550c3305bde9379737b21e24b2adbec532dee8192ddbdaaa77f2e6bc135d518f354c1b20d7c43bc03f65ccf47d423f4af1e75d620";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 archivo = {
   revision = 57283;
@@ -1662,6 +1815,7 @@ archivo = {
   hasRunfiles = true;
   license = [ "ofl" "lppl13c" ];
   version = "0.0.2";
+  hasCatalogue = true;
 };
 arcs = {
   revision = 15878;
@@ -1673,6 +1827,7 @@ arcs = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1";
+  hasCatalogue = true;
 };
 arev = {
   revision = 15878;
@@ -1686,6 +1841,7 @@ arev = {
   sha512.source = "6c92c2f3ef59dcb93207ea90643d11aa8cf81850e2696414f489c40cef97737d00ee4444893669f12d4592c6573a71cb229c232b62f10db38195aabbe83fe523";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 argumentation = {
   revision = 69023;
@@ -1696,6 +1852,7 @@ argumentation = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 arimo = {
   revision = 68950;
@@ -1708,6 +1865,7 @@ arimo = {
   sha512.doc = "dc70491f5b2b5a900f3d6f9bd543974b81976907a7c3dd53fd7530e3d0a6d83fc44a61607b27d9644eeca6f6228faa171916e67fc7517c35d466d9c50a186808";
   hasRunfiles = true;
   license = [ "asl20" ];
+  hasCatalogue = true;
 };
 armtex = {
   revision = 69418;
@@ -1722,6 +1880,7 @@ armtex = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "3.0-beta5";
+  hasCatalogue = true;
 };
 around-the-bend = {
   revision = 15878;
@@ -1730,6 +1889,7 @@ around-the-bend = {
   sha512.run = "8fdfb83017cafe87778ea8a9e7147d6b73ead7019dfc9dc8b620858a67a2a02991e291d622aefc77723f6faa8a66b132313a100d298a2f6327473df4e0fb17f1";
   sha512.doc = "acec7325203a96ab3937cb687e3265b5cdf6d77af5740e1e187f993fcdcbb9db743835e9ab579b6c8b0534311ba94f3d1591330bedf1c2f9eb9e6955ad070f9c";
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 arphic = {
   revision = 15878;
@@ -1745,6 +1905,7 @@ arphic = {
   sha512.doc = "327dbc2cc7b4bad5e410dbb07dd2a2d5052dcb54c98310ffc3596c1e5b4121c1a12e3067b7074f209a3972cb51280f057cfe718eb963869bf05a76e17c528dee";
   hasRunfiles = true;
   license = [ "free" ];
+  hasCatalogue = true;
 };
 arphic-ttf = {
   revision = 42675;
@@ -1754,6 +1915,7 @@ arphic-ttf = {
   sha512.doc = "000030c21bf1ccd74ebc1c6bf8e46dc5d9f884480b2c31407353a3ff45a4d1072f759e9e31abbe5c9de7dfc68820fa359d42c5e980bfb7e9d408f015f8944aab";
   hasRunfiles = true;
   license = [ "free" ];
+  hasCatalogue = true;
 };
 arraycols = {
   revision = 68277;
@@ -1765,6 +1927,7 @@ arraycols = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.4";
+  hasCatalogue = true;
 };
 arrayjobx = {
   revision = 18125;
@@ -1775,6 +1938,7 @@ arrayjobx = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.04";
+  hasCatalogue = true;
 };
 arraysort = {
   revision = 31576;
@@ -1786,6 +1950,7 @@ arraysort = {
   hasRunfiles = true;
   license = [ "lppl12" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 arsclassica = {
   revision = 45656;
@@ -1795,6 +1960,7 @@ arsclassica = {
   sha512.doc = "84cd0583c074af45837f38c21815019613753890e056109abab3c79c774a7ebe966c35875264998398b18d7a7fc92ac6762dd72726e708193f699e321f296535";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 arsenal = {
   revision = 68191;
@@ -1806,6 +1972,7 @@ arsenal = {
   hasRunfiles = true;
   license = [ "ofl" "lppl13c" ];
   version = "0.2";
+  hasCatalogue = true;
 };
 articleingud = {
   revision = 38741;
@@ -1817,6 +1984,7 @@ articleingud = {
   hasRunfiles = true;
   license = [ "lppl12" ];
   version = "0.3";
+  hasCatalogue = true;
 };
 arvo = {
   revision = 57213;
@@ -1829,6 +1997,7 @@ arvo = {
   sha512.doc = "3d3c6a92159b47e8dd5ae7360c06c8d5db8ccab609dd5f3db47db2ddc9d62badc3e6bd7c881ec5955003ac2b460c550ce56154cb2323ebd2bdb8205318a709ce";
   hasRunfiles = true;
   license = [ "ofl" "lppl13c" ];
+  hasCatalogue = true;
 };
 arydshln = {
   revision = 50084;
@@ -1840,6 +2009,7 @@ arydshln = {
   hasRunfiles = true;
   license = [ "lppl1" ];
   version = "1.76";
+  hasCatalogue = true;
 };
 asaetr = {
   revision = 15878;
@@ -1850,6 +2020,7 @@ asaetr = {
   hasRunfiles = true;
   license = [ "publicDomain" ];
   version = "1.0a";
+  hasCatalogue = true;
 };
 asana-math = {
   revision = 59629;
@@ -1860,6 +2031,7 @@ asana-math = {
   hasRunfiles = true;
   license = [ "ofl" ];
   version = "000.958";
+  hasCatalogue = true;
 };
 asapsym = {
   revision = 40201;
@@ -1871,6 +2043,7 @@ asapsym = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 ascelike = {
   revision = 29129;
@@ -1881,6 +2054,7 @@ ascelike = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.3";
+  hasCatalogue = true;
 };
 ascii-chart = {
   revision = 20536;
@@ -1889,6 +2063,7 @@ ascii-chart = {
   sha512.run = "ffc1634e3e5313eb0cf04caaa227d6477cf81ba9b6eb887b2897b6740999f1f338b2dc53e6da735876f9c3b130394be59b0a285309d61909a73fdb0d6f28a8cc";
   sha512.doc = "51b11a22dd963336fd93a87e2948d05f291b4191253a474b9d6f70ec31a2645801fb5f6fb6238f6a9b2979dbaba4a6ec8ac15a41c4e8867645dfa54408f18373";
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 ascii-font = {
   revision = 29989;
@@ -1903,6 +2078,7 @@ ascii-font = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.0";
+  hasCatalogue = true;
 };
 asciilist = {
   revision = 49060;
@@ -1914,6 +2090,7 @@ asciilist = {
   hasRunfiles = true;
   license = [ "lppl12" ];
   version = "2.2b";
+  hasCatalogue = true;
 };
 ascmac = {
   revision = 53411;
@@ -1928,6 +2105,7 @@ ascmac = {
   hasRunfiles = true;
   license = [ "bsd3" ];
   version = "2.1";
+  hasCatalogue = true;
 };
 askinclude = {
   revision = 54725;
@@ -1939,6 +2117,7 @@ askinclude = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.7";
+  hasCatalogue = true;
 };
 askmaps = {
   revision = 56730;
@@ -1949,6 +2128,7 @@ askmaps = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.2";
+  hasCatalogue = true;
 };
 asmeconf = {
   revision = 69742;
@@ -1959,6 +2139,7 @@ asmeconf = {
   hasRunfiles = true;
   license = [ "mit" ];
   version = "1.37";
+  hasCatalogue = true;
 };
 asmejour = {
   revision = 69722;
@@ -1969,6 +2150,7 @@ asmejour = {
   hasRunfiles = true;
   license = [ "mit" ];
   version = "1.22";
+  hasCatalogue = true;
 };
 aspectratio = {
   revision = 25243;
@@ -1982,6 +2164,7 @@ aspectratio = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.0";
+  hasCatalogue = true;
 };
 assignment = {
   revision = 20431;
@@ -1991,6 +2174,7 @@ assignment = {
   sha512.doc = "49198297494adbb538385029d41681e55bf64c89fc9cee7d923b7ba9849c039a7e5aa2c1fbfc15f06c1a93a3b694899ffd8988d1833fd88c6f5dd51379289a14";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 assoccnt = {
   revision = 38497;
@@ -2001,6 +2185,7 @@ assoccnt = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.8";
+  hasCatalogue = true;
 };
 association-matrix = {
   revision = 64845;
@@ -2011,6 +2196,7 @@ association-matrix = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 asternote = {
   revision = 63838;
@@ -2021,6 +2207,7 @@ asternote = {
   hasRunfiles = true;
   license = [ "mit" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 astro = {
   revision = 15878;
@@ -2031,6 +2218,7 @@ astro = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.20";
+  hasCatalogue = true;
 };
 asyfig = {
   revision = 17512;
@@ -2042,6 +2230,7 @@ asyfig = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.1c";
+  hasCatalogue = true;
 };
 asymptote = {
   revision = 70583;
@@ -2053,6 +2242,7 @@ asymptote = {
   hasRunfiles = true;
   license = [ "lgpl3" ];
   version = "2.88";
+  hasCatalogue = true;
 };
 asymptote-by-example-zh-cn = {
   revision = 15878;
@@ -2061,6 +2251,7 @@ asymptote-by-example-zh-cn = {
   sha512.run = "34608d6412d7936a15bf649555683ff03c5021e1688c99285a6b7ecdfc3a43eac4ed32108626243d6e9b07c23c557f07762897a96501a27412c7c5d039747553";
   sha512.doc = "a0087e5be69962c671e1972d9e7be12f76be64582182afe042693cbad92cf3fd027422c605dcf7860cd2e61f0b925860a50e94523b9ae2d1af7a8aa6d356c3a7";
   license = [ "gpl1Only" ];
+  hasCatalogue = true;
 };
 asymptote-faq-zh-cn = {
   revision = 15878;
@@ -2069,6 +2260,7 @@ asymptote-faq-zh-cn = {
   sha512.run = "1efc7098392ac5cad5eeaa0dcf527bd158e3f7497ff1992603b833ff63d5cfa61fe5e7bc33c5cc0c441c13fc03dfe1e18a334411be6ad2f5acc94c902e9ccf2c";
   sha512.doc = "b7dbcf256cffae9cc8f5027934946929b4be7a8794fb8364892802eeff4e7cf970ca8549ef442a35f173ada61533b51c2da301bf2ce931107a7ce0c564ce0c60";
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 asymptote-manual-zh-cn = {
   revision = 15878;
@@ -2077,6 +2269,7 @@ asymptote-manual-zh-cn = {
   sha512.run = "c04fc953a0a9035c238b9f80873d9fc605b23b322e898ae55b8eda7537f0172076e512022b163e3cd397ce2e4e721afa2e981454db53511c1a7347a017185df5";
   sha512.doc = "0f82e25773a14b0f81b34354f16931834d0496b2c6636c498c6af686f46e7ff93a274739a1a4c189433c9df1ae91ca010f0887081c81f2ac9006a105c7fd4ac9";
   license = [ "lgpl2" ];
+  hasCatalogue = true;
 };
 asymptote.binfiles = [
   "asy"
@@ -2092,6 +2285,7 @@ asypictureb = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.3";
+  hasCatalogue = true;
 };
 atbegshi = {
   revision = 53051;
@@ -2103,6 +2297,7 @@ atbegshi = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.19";
+  hasCatalogue = true;
 };
 atenddvi = {
   revision = 56922;
@@ -2114,6 +2309,7 @@ atenddvi = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.5";
+  hasCatalogue = true;
 };
 atendofenv = {
   revision = 62164;
@@ -2125,6 +2321,7 @@ atendofenv = {
   hasRunfiles = true;
   license = [ "publicDomain" ];
   version = "0.2";
+  hasCatalogue = true;
 };
 atkinson = {
   revision = 64385;
@@ -2137,6 +2334,7 @@ atkinson = {
   sha512.doc = "f5bcfd015fc4292f4568e9d960e921739a9ebcd8f198f648323d475f6ae5d803d3f0ef77d368fa9fe36f53947908e4bcf1cfbdbd621e780221c5e8432ca9db05";
   hasRunfiles = true;
   license = [ "lppl13c" "free" ];
+  hasCatalogue = true;
 };
 attachfile = {
   revision = 42099;
@@ -2148,6 +2346,7 @@ attachfile = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.9";
+  hasCatalogue = true;
 };
 attachfile2 = {
   revision = 69505;
@@ -2159,6 +2358,7 @@ attachfile2 = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.12";
+  hasCatalogue = true;
 };
 attachfile2.binfiles = [
   "pdfatfi"
@@ -2173,6 +2373,7 @@ atveryend = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.11";
+  hasCatalogue = true;
 };
 aucklandthesis = {
   revision = 51323;
@@ -2182,6 +2383,7 @@ aucklandthesis = {
   sha512.doc = "ae73abe45b0aecd033df666f3095486fb29252449e840e9a978cf916a2eeec4a126be8c3ec60379408bd6f7322c8794ba1fa3bd77e45f1723affa18ec109d93e";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 augie = {
   revision = 61719;
@@ -2194,6 +2396,7 @@ augie = {
   sha512.doc = "434c1d88522ae41e8a41fbeda6685a059fafb8f6cdec26d8737b5f6a6ddcf1e4f2a443ffdffa6b62a74f4abd2ed2e947176f59e64bf5691debeb62d9d54e719b";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 auncial-new = {
   revision = 62977;
@@ -2208,6 +2411,7 @@ auncial-new = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.0";
+  hasCatalogue = true;
 };
 aurical = {
   revision = 15878;
@@ -2221,6 +2425,7 @@ aurical = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.5";
+  hasCatalogue = true;
 };
 aurl = {
   revision = 41853;
@@ -2230,6 +2435,7 @@ aurl = {
   sha512.doc = "a58f7cbbae262c7650bc5147b400f25f0c666effdcf37e565f665092d1cff820d2d98652947d36f6940b8d16027336b970ff88ecd9f3500d9a39a45eb4a19acf";
   hasRunfiles = true;
   license = [ "publicDomain" ];
+  hasCatalogue = true;
 };
 authoraftertitle = {
   revision = 55889;
@@ -2240,6 +2446,7 @@ authoraftertitle = {
   hasRunfiles = true;
   license = [ "cc0" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 authorarchive = {
   revision = 65777;
@@ -2250,6 +2457,7 @@ authorarchive = {
   hasRunfiles = true;
   license = [ "lppl13c" "bsd2" ];
   version = "1.3.0";
+  hasCatalogue = true;
 };
 authordate = {
   revision = 52564;
@@ -2259,6 +2467,7 @@ authordate = {
   sha512.doc = "156fec304fa95388fdbb386153482016a4d78d4862943bcd6124466b12df920498d5b42446465fc0f70da6353f58c329a27a822efb5cca8f0c4d7fdcb3239a02";
   hasRunfiles = true;
   license = [ "knuth" ];
+  hasCatalogue = true;
 };
 authorindex = {
   revision = 51757;
@@ -2267,6 +2476,7 @@ authorindex = {
   sha512.doc = "a6c48d89cfd854d8acae47e318bc3951f8e81434d9a81901c8a7b7f1c25188afb013b94780ceb201e81b5d10efb7f5c24f5b5e4c8d8379aba390431707bc4d55";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 authorindex.binfiles = [
   "authorindex"
@@ -2286,6 +2496,7 @@ auto-pst-pdf = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.7";
+  hasCatalogue = true;
 };
 auto-pst-pdf-lua = {
   revision = 66637;
@@ -2299,6 +2510,7 @@ auto-pst-pdf-lua = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.03a";
+  hasCatalogue = true;
 };
 autoaligne = {
   revision = 66655;
@@ -2309,9 +2521,11 @@ autoaligne = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.5";
+  hasCatalogue = true;
 };
 autoarea = {
   revision = 59552;
+  catalogue = "pictex-autoarea";
   shortdesc = "Automatic computation of bounding boxes with PiCTeX";
   stripPrefix = 0;
   sha512.run = "dadd69326335b6fe6e425a867e2e62a0b1df2f3179801bcc726c6ceebc15c24e3a7c9ecb3034209e25e503be47a9ad8639addfb628f720bd0c0d64c15177043d";
@@ -2319,6 +2533,7 @@ autoarea = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.3a";
+  hasCatalogue = true;
 };
 autobreak = {
   revision = 43337;
@@ -2330,6 +2545,7 @@ autobreak = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.3";
+  hasCatalogue = true;
 };
 autofancyhdr = {
   revision = 54049;
@@ -2340,6 +2556,7 @@ autofancyhdr = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.1";
+  hasCatalogue = true;
 };
 automata = {
   revision = 19717;
@@ -2350,6 +2567,7 @@ automata = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.3";
+  hasCatalogue = true;
 };
 autonum = {
   revision = 36084;
@@ -2361,6 +2579,7 @@ autonum = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.3.11";
+  hasCatalogue = true;
 };
 autopdf = {
   revision = 32377;
@@ -2372,6 +2591,7 @@ autopdf = {
   hasRunfiles = true;
   license = [ "lppl12" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 autopuncitems = {
   revision = 63045;
@@ -2381,6 +2601,7 @@ autopuncitems = {
   sha512.doc = "9c88cdb757a53e89bf7625fad0623154ea6101ee8c9cff2679698d0f6144d98a6099a68ef3fb1a31e99e7dee92572e34654321e44496e863f1444feab8a6cb1d";
   hasRunfiles = true;
   license = [ "mit" ];
+  hasCatalogue = true;
 };
 autosp = {
   revision = 58211;
@@ -2389,6 +2610,7 @@ autosp = {
   sha512.doc = "2905669b9e2b61749cb7b1eaa02be889c4e8d8adbd78b126e7ee6d894f24f623c888a24abac1d163f3332c5cfa9cd1f64d0de95200350b88a7f47faeacb841a6";
   hasManpages = true;
   license = [ "gpl2Plus" ];
+  hasCatalogue = true;
 };
 autosp.binfiles = [
   "autosp"
@@ -2403,6 +2625,7 @@ autotype = {
   hasRunfiles = true;
   license = [ "lppl13c" "mit" "free" ];
   version = "0.5";
+  hasCatalogue = true;
 };
 auxhook = {
   revision = 53173;
@@ -2414,9 +2637,11 @@ auxhook = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.6";
+  hasCatalogue = true;
 };
 avantgar = {
   revision = 61983;
+  catalogue = "urw-base35";
   shortdesc = "URW 'Base 35' font pack for LaTeX";
   stripPrefix = 0;
   fontMaps = [
@@ -2425,6 +2650,7 @@ avantgar = {
   sha512.run = "c08c987c385bf9eeca0f4f5b7edcd41570c81f18751593824da8eea770c29d63725bed100fa2ff37a80a5c70086533ddc1e91848d5ddeedec3c5c669907ed20b";
   hasRunfiles = true;
   license = [ "gpl1Only" ];
+  hasCatalogue = true;
 };
 avremu = {
   revision = 35373;
@@ -2436,6 +2662,7 @@ avremu = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.1";
+  hasCatalogue = true;
 };
 awesomebox = {
   revision = 57349;
@@ -2446,6 +2673,7 @@ awesomebox = {
   hasRunfiles = true;
   license = [ "free" ];
   version = "0.6";
+  hasCatalogue = true;
 };
 axessibility = {
   revision = 57105;
@@ -2457,6 +2685,7 @@ axessibility = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "3.0";
+  hasCatalogue = true;
 };
 axodraw2 = {
   revision = 58155;
@@ -2468,6 +2697,7 @@ axodraw2 = {
   hasRunfiles = true;
   license = [ "gpl3Plus" ];
   version = "2.1.1c";
+  hasCatalogue = true;
 };
 axodraw2.binfiles = [
   "axohelp"
@@ -2482,6 +2712,7 @@ b1encoding = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 babel = {
   revision = 69742;
@@ -2493,6 +2724,7 @@ babel = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "24.2";
+  hasCatalogue = true;
 };
 babel-albanian = {
   revision = 57005;
@@ -2504,6 +2736,7 @@ babel-albanian = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0d";
+  hasCatalogue = true;
 };
 babel-azerbaijani = {
   revision = 44197;
@@ -2515,6 +2748,7 @@ babel-azerbaijani = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0a";
+  hasCatalogue = true;
 };
 babel-basque = {
   revision = 30256;
@@ -2526,6 +2760,7 @@ babel-basque = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0f";
+  hasCatalogue = true;
 };
 babel-belarusian = {
   revision = 49022;
@@ -2537,6 +2772,7 @@ babel-belarusian = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.5";
+  hasCatalogue = true;
 };
 babel-bosnian = {
   revision = 38174;
@@ -2548,6 +2784,7 @@ babel-bosnian = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 babel-breton = {
   revision = 30257;
@@ -2559,6 +2796,7 @@ babel-breton = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0h";
+  hasCatalogue = true;
 };
 babel-bulgarian = {
   revision = 31902;
@@ -2570,6 +2808,7 @@ babel-bulgarian = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.2g";
+  hasCatalogue = true;
 };
 babel-catalan = {
   revision = 30259;
@@ -2581,6 +2820,7 @@ babel-catalan = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.2p";
+  hasCatalogue = true;
 };
 babel-croatian = {
   revision = 35198;
@@ -2592,6 +2832,7 @@ babel-croatian = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.3l";
+  hasCatalogue = true;
 };
 babel-czech = {
   revision = 30261;
@@ -2603,6 +2844,7 @@ babel-czech = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "3.1a";
+  hasCatalogue = true;
 };
 babel-danish = {
   revision = 57642;
@@ -2614,6 +2856,7 @@ babel-danish = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.3s";
+  hasCatalogue = true;
 };
 babel-dutch = {
   revision = 60362;
@@ -2625,6 +2868,7 @@ babel-dutch = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "3.8l";
+  hasCatalogue = true;
 };
 babel-english = {
   revision = 44495;
@@ -2636,6 +2880,7 @@ babel-english = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "3.3r";
+  hasCatalogue = true;
 };
 babel-esperanto = {
   revision = 30265;
@@ -2647,6 +2892,7 @@ babel-esperanto = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.4t";
+  hasCatalogue = true;
 };
 babel-estonian = {
   revision = 38064;
@@ -2658,6 +2904,7 @@ babel-estonian = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1a";
+  hasCatalogue = true;
 };
 babel-finnish = {
   revision = 57643;
@@ -2669,6 +2916,7 @@ babel-finnish = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.3s";
+  hasCatalogue = true;
 };
 babel-french = {
   revision = 70261;
@@ -2680,6 +2928,7 @@ babel-french = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "3.5s";
+  hasCatalogue = true;
 };
 babel-friulan = {
   revision = 39861;
@@ -2691,6 +2940,7 @@ babel-friulan = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.3";
+  hasCatalogue = true;
 };
 babel-galician = {
   revision = 30270;
@@ -2702,6 +2952,7 @@ babel-galician = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "4.3c";
+  hasCatalogue = true;
 };
 babel-georgian = {
   revision = 45864;
@@ -2712,6 +2963,7 @@ babel-georgian = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.2";
+  hasCatalogue = true;
 };
 babel-german = {
   revision = 69506;
@@ -2723,6 +2975,7 @@ babel-german = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.14";
+  hasCatalogue = true;
 };
 babel-greek = {
   revision = 68532;
@@ -2734,6 +2987,7 @@ babel-greek = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.15";
+  hasCatalogue = true;
 };
 babel-hebrew = {
   revision = 68016;
@@ -2745,6 +2999,7 @@ babel-hebrew = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.4a";
+  hasCatalogue = true;
 };
 babel-hungarian = {
   revision = 49701;
@@ -2755,6 +3010,7 @@ babel-hungarian = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.5c";
+  hasCatalogue = true;
 };
 babel-icelandic = {
   revision = 51551;
@@ -2766,6 +3022,7 @@ babel-icelandic = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.3";
+  hasCatalogue = true;
 };
 babel-indonesian = {
   revision = 43235;
@@ -2777,6 +3034,7 @@ babel-indonesian = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0m";
+  hasCatalogue = true;
 };
 babel-interlingua = {
   revision = 30276;
@@ -2788,6 +3046,7 @@ babel-interlingua = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.6";
+  hasCatalogue = true;
 };
 babel-irish = {
   revision = 30277;
@@ -2799,6 +3058,7 @@ babel-irish = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0h";
+  hasCatalogue = true;
 };
 babel-italian = {
   revision = 69298;
@@ -2810,6 +3070,7 @@ babel-italian = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.5.00";
+  hasCatalogue = true;
 };
 babel-japanese = {
   revision = 57733;
@@ -2820,6 +3081,7 @@ babel-japanese = {
   sha512.source = "956aa7cc75bb2a007fbbf4ba4e7209251d3232f585976dc0002429372062e9c1933241bf05c34aefc481a82032594b922df3851d6f88bdbdfd7c181b9a44d6e8";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 babel-kurmanji = {
   revision = 30279;
@@ -2831,6 +3093,7 @@ babel-kurmanji = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 babel-latin = {
   revision = 59800;
@@ -2842,6 +3105,7 @@ babel-latin = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "4.0";
+  hasCatalogue = true;
 };
 babel-latvian = {
   revision = 46681;
@@ -2853,6 +3117,7 @@ babel-latvian = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.0b";
+  hasCatalogue = true;
 };
 babel-lithuanian = {
   revision = 66513;
@@ -2864,6 +3129,7 @@ babel-lithuanian = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 babel-macedonian = {
   revision = 39587;
@@ -2874,6 +3140,7 @@ babel-macedonian = {
   sha512.source = "c5866f925540742391981848fb5a76908863fba8a7c77da97b6e6bc634a8425c2d39459f789749cd1ccc4e7888e6d0f5b40d3d9a0a76611f4b1ff2db80866c72";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 babel-malay = {
   revision = 43234;
@@ -2885,6 +3152,7 @@ babel-malay = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0m";
+  hasCatalogue = true;
 };
 babel-norsk = {
   revision = 69603;
@@ -2896,6 +3164,7 @@ babel-norsk = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.0j";
+  hasCatalogue = true;
 };
 babel-occitan = {
   revision = 39608;
@@ -2907,6 +3176,7 @@ babel-occitan = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.2";
+  hasCatalogue = true;
 };
 babel-piedmontese = {
   revision = 30282;
@@ -2918,6 +3188,7 @@ babel-piedmontese = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 babel-polish = {
   revision = 62680;
@@ -2929,6 +3200,7 @@ babel-polish = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.3";
+  hasCatalogue = true;
 };
 babel-portuges = {
   revision = 59883;
@@ -2940,6 +3212,7 @@ babel-portuges = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.2t";
+  hasCatalogue = true;
 };
 babel-romanian = {
   revision = 58776;
@@ -2951,6 +3224,7 @@ babel-romanian = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.2m";
+  hasCatalogue = true;
 };
 babel-romansh = {
   revision = 30286;
@@ -2961,6 +3235,7 @@ babel-romansh = {
   sha512.source = "e26e9ec260d7f01550799f90c6bb76c0c29cd200896c4634085627599f5c3d7438159ea9f72df416e334200a7e1aa3f063dfe9bac5817f55c8f6cc83fe906a63";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 babel-russian = {
   revision = 57376;
@@ -2972,6 +3247,7 @@ babel-russian = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.3m";
+  hasCatalogue = true;
 };
 babel-samin = {
   revision = 69604;
@@ -2983,6 +3259,7 @@ babel-samin = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0d";
+  hasCatalogue = true;
 };
 babel-scottish = {
   revision = 69610;
@@ -2994,6 +3271,7 @@ babel-scottish = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0h";
+  hasCatalogue = true;
 };
 babel-serbian = {
   revision = 64571;
@@ -3005,6 +3283,7 @@ babel-serbian = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.2a";
+  hasCatalogue = true;
 };
 babel-serbianc = {
   revision = 64588;
@@ -3016,6 +3295,7 @@ babel-serbianc = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "3.2a";
+  hasCatalogue = true;
 };
 babel-slovak = {
   revision = 30292;
@@ -3027,6 +3307,7 @@ babel-slovak = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "3.1a";
+  hasCatalogue = true;
 };
 babel-slovenian = {
   revision = 69742;
@@ -3038,6 +3319,7 @@ babel-slovenian = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.2o";
+  hasCatalogue = true;
 };
 babel-sorbian = {
   revision = 60975;
@@ -3049,6 +3331,7 @@ babel-sorbian = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0j";
+  hasCatalogue = true;
 };
 babel-spanish = {
   revision = 59367;
@@ -3060,6 +3343,7 @@ babel-spanish = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "5.0q";
+  hasCatalogue = true;
 };
 babel-swedish = {
   revision = 57647;
@@ -3071,6 +3355,7 @@ babel-swedish = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.3e";
+  hasCatalogue = true;
 };
 babel-thai = {
   revision = 30564;
@@ -3082,6 +3367,7 @@ babel-thai = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0.0";
+  hasCatalogue = true;
 };
 babel-turkish = {
   revision = 51560;
@@ -3093,6 +3379,7 @@ babel-turkish = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.4";
+  hasCatalogue = true;
 };
 babel-ukrainian = {
   revision = 56674;
@@ -3104,6 +3391,7 @@ babel-ukrainian = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.4e";
+  hasCatalogue = true;
 };
 babel-vietnamese = {
   revision = 39246;
@@ -3115,6 +3403,7 @@ babel-vietnamese = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.4";
+  hasCatalogue = true;
 };
 babel-welsh = {
   revision = 38372;
@@ -3126,6 +3415,7 @@ babel-welsh = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1a";
+  hasCatalogue = true;
 };
 babelbib = {
   revision = 57349;
@@ -3136,6 +3426,7 @@ babelbib = {
   hasRunfiles = true;
   license = [ "lppl1" ];
   version = "1.34";
+  hasCatalogue = true;
 };
 background = {
   revision = 42428;
@@ -3147,6 +3438,7 @@ background = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.1";
+  hasCatalogue = true;
 };
 backnaur = {
   revision = 54080;
@@ -3158,6 +3450,7 @@ backnaur = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "3.1";
+  hasCatalogue = true;
 };
 baekmuk = {
   revision = 56915;
@@ -3168,6 +3461,7 @@ baekmuk = {
   hasRunfiles = true;
   license = [ "free" ];
   version = "2.2.1";
+  hasCatalogue = true;
 };
 bagpipe = {
   revision = 34393;
@@ -3178,6 +3472,7 @@ bagpipe = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "3.02";
+  hasCatalogue = true;
 };
 bangla = {
   revision = 65786;
@@ -3192,6 +3487,7 @@ bangla = {
   hasRunfiles = true;
   license = [ "lppl13c" "ofl" ];
   version = "2.1";
+  hasCatalogue = true;
 };
 bangorcsthesis = {
   revision = 61770;
@@ -3203,6 +3499,7 @@ bangorcsthesis = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.5.5";
+  hasCatalogue = true;
 };
 bangorexam = {
   revision = 65140;
@@ -3214,6 +3511,7 @@ bangorexam = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.5.0";
+  hasCatalogue = true;
 };
 bangtex = {
   revision = 55475;
@@ -3223,6 +3521,7 @@ bangtex = {
   sha512.doc = "05ca923b97240a766d3ff448c6b16a33613a16e3307509ed7c369da6ec889e7e19d57e5f542b829c788ac4e87bd7025a62af9f7127e2eebe7fdd3eba4aeeb7ce";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 bankstatement = {
   revision = 38857;
@@ -3233,6 +3532,7 @@ bankstatement = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.9.2";
+  hasCatalogue = true;
 };
 barcodes = {
   revision = 15878;
@@ -3243,6 +3543,7 @@ barcodes = {
   sha512.source = "9b72c54e083622b95df17e643a6466125a22fb62e3ebc64c3b0f5304253ba5625f0ce2e0071dfc4e06643259b4d7b575a1bae5bc6beb213e5bdd3e83074ba9d9";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 bardiag = {
   revision = 22013;
@@ -3253,15 +3554,18 @@ bardiag = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.4a";
+  hasCatalogue = true;
 };
 barr = {
   revision = 38479;
+  catalogue = "diagxy";
   shortdesc = "Diagram macros by Michael Barr";
   stripPrefix = 0;
   sha512.run = "6bd398efda5027e3b762b817ce777adb9bb1c8e593ca04386adedeab7dc26ba382058ccfa3c281ef8612fcc50c9b719e7f881dcde0cfec041cf4b2cd05f238f8";
   sha512.doc = "6600ecadc60fdd00e4d894969a84118265b5c5d07e9a411d3f01887fd1e94c481b117cbda80451774294dbb989a61379b16fe3ba5c3b8363a9a2485b76752aed";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 barracuda = {
   revision = 63708;
@@ -3272,6 +3576,7 @@ barracuda = {
   hasRunfiles = true;
   license = [ "gpl2Only" ];
   version = "0.0.12";
+  hasCatalogue = true;
 };
 bartel-chess-fonts = {
   revision = 20619;
@@ -3281,6 +3586,7 @@ bartel-chess-fonts = {
   sha512.doc = "e61232eed7f345e28796192d836af9de29bda257fb85460f67a89bbdfd7dce01b8361962b7cccf314311c0e772e69367f2921ad898c106389195164b6c925ffc";
   hasRunfiles = true;
   license = [ "gpl1Only" ];
+  hasCatalogue = true;
 };
 bashful = {
   revision = 25597;
@@ -3291,6 +3597,7 @@ bashful = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.93";
+  hasCatalogue = true;
 };
 basicarith = {
   revision = 35460;
@@ -3302,9 +3609,11 @@ basicarith = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 baskervald = {
   revision = 19490;
+  catalogue = "baskervaldadf";
   shortdesc = "Baskervald ADF fonts collection with TeX/LaTeX support";
   stripPrefix = 0;
   fontMaps = [
@@ -3316,6 +3625,7 @@ baskervald = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.016";
+  hasCatalogue = true;
 };
 baskervaldx = {
   revision = 69273;
@@ -3329,6 +3639,7 @@ baskervaldx = {
   hasRunfiles = true;
   license = [ "gpl2Plus" "lppl13c" ];
   version = "1.077";
+  hasCatalogue = true;
 };
 baskervillef = {
   revision = 55475;
@@ -3342,6 +3653,7 @@ baskervillef = {
   hasRunfiles = true;
   license = [ "ofl" "lppl13c" ];
   version = "1.051";
+  hasCatalogue = true;
 };
 basque-book = {
   revision = 32924;
@@ -3353,6 +3665,7 @@ basque-book = {
   hasRunfiles = true;
   license = [ "lppl12" ];
   version = "1.20";
+  hasCatalogue = true;
 };
 basque-date = {
   revision = 26477;
@@ -3364,6 +3677,7 @@ basque-date = {
   hasRunfiles = true;
   license = [ "lppl12" ];
   version = "1.05";
+  hasCatalogue = true;
 };
 bath-bst = {
   revision = 63398;
@@ -3375,6 +3689,7 @@ bath-bst = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "6.0";
+  hasCatalogue = true;
 };
 bbcard = {
   revision = 19440;
@@ -3384,6 +3699,7 @@ bbcard = {
   sha512.doc = "9e4561e97ea77c84e3c1cc8f75ca61318937c45b7b50dab66d6745f61725b6397458a05e50a267937bf6db4b28558ff0e9f2225078b9516fe574620982ab2cb4";
   hasRunfiles = true;
   license = [ "publicDomain" ];
+  hasCatalogue = true;
 };
 bbding = {
   revision = 17186;
@@ -3395,6 +3711,7 @@ bbding = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.01";
+  hasCatalogue = true;
 };
 bbm = {
   revision = 15878;
@@ -3404,6 +3721,7 @@ bbm = {
   sha512.doc = "034d880588fa88d97045d73dd651a0b3573c624dbbf1d2f9fee046c59f007b9e3e2121d5d773b34aa7b0bc8c72daa540447981bf60731e64d99cde49b5f6e911";
   hasRunfiles = true;
   license = [ "free" ];
+  hasCatalogue = true;
 };
 bbm-macros = {
   revision = 17224;
@@ -3414,6 +3732,7 @@ bbm-macros = {
   sha512.source = "11d1d83d558a7943e35e8146b7f44df6a553a513f8e0478e1a9c773d66d004a4110288f91896b283dc4153372bb638a444c53b9184745858976a7e6aac69b121";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 bbold = {
   revision = 17187;
@@ -3425,6 +3744,7 @@ bbold = {
   hasRunfiles = true;
   license = [ "bsd3" ];
   version = "1.01";
+  hasCatalogue = true;
 };
 bbold-type1 = {
   revision = 33143;
@@ -3437,6 +3757,7 @@ bbold-type1 = {
   sha512.doc = "ad841ac652a7985ab907572f66462091b1c40f7cdab2b00086209a2d96056e0a9e32842dfbc22c829b27799882252da95e3d10d4a9dd174f487327d5f3ac3899";
   hasRunfiles = true;
   license = [ "free" ];
+  hasCatalogue = true;
 };
 bboldx = {
   revision = 65424;
@@ -3450,6 +3771,7 @@ bboldx = {
   hasRunfiles = true;
   license = [ "free" ];
   version = "1.032";
+  hasCatalogue = true;
 };
 bchart = {
   revision = 43928;
@@ -3460,6 +3782,7 @@ bchart = {
   hasRunfiles = true;
   license = [ "mit" ];
   version = "0.1.3";
+  hasCatalogue = true;
 };
 bclogo = {
   revision = 69578;
@@ -3470,6 +3793,7 @@ bclogo = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "3.15";
+  hasCatalogue = true;
 };
 beamer = {
   revision = 69316;
@@ -3493,6 +3817,7 @@ beamer = {
   hasRunfiles = true;
   license = [ "lppl13c" "gpl2Plus" "fdl13Only" ];
   version = "3.71";
+  hasCatalogue = true;
 };
 beamer-fuberlin = {
   revision = 63161;
@@ -3503,6 +3828,7 @@ beamer-fuberlin = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.02b";
+  hasCatalogue = true;
 };
 beamer-rl = {
   revision = 69254;
@@ -3513,6 +3839,7 @@ beamer-rl = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.9";
+  hasCatalogue = true;
 };
 beamer-tut-pt = {
   revision = 15878;
@@ -3521,6 +3848,7 @@ beamer-tut-pt = {
   sha512.run = "6074f5933b945f02b24c31353bd7d683b35a54f53aacfa2ac19de382f56fbb9f6284316ee70c0eacea3760101d98d4a6b7d78412a0d41b13c9e1c907d181ee16";
   sha512.doc = "ef6e80c3417cfad3e2f3e0ecd3ce249aa0b4cf0a6b5dced09c27138e34a8c86a74d0d03c6888d0944fe2b03bb5b8180872306263c58f54281f4ed2fe3424d4bc";
   license = [ "gpl1Only" ];
+  hasCatalogue = true;
 };
 beamer-verona = {
   revision = 39180;
@@ -3531,6 +3859,7 @@ beamer-verona = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.2";
+  hasCatalogue = true;
 };
 beamer2thesis = {
   revision = 27539;
@@ -3541,6 +3870,7 @@ beamer2thesis = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.2";
+  hasCatalogue = true;
 };
 beamerappendixnote = {
   revision = 55732;
@@ -3552,6 +3882,7 @@ beamerappendixnote = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.2.0";
+  hasCatalogue = true;
 };
 beameraudience = {
   revision = 23427;
@@ -3562,6 +3893,7 @@ beameraudience = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.1";
+  hasCatalogue = true;
 };
 beamerauxtheme = {
   revision = 56087;
@@ -3572,6 +3904,7 @@ beamerauxtheme = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.02a";
+  hasCatalogue = true;
 };
 beamercolorthemeowl = {
   revision = 40105;
@@ -3583,6 +3916,7 @@ beamercolorthemeowl = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.1.1";
+  hasCatalogue = true;
 };
 beamerdarkthemes = {
   revision = 55117;
@@ -3593,6 +3927,7 @@ beamerdarkthemes = {
   hasRunfiles = true;
   license = [ "lppl13c" "cc-by-40" ];
   version = "0.5.1";
+  hasCatalogue = true;
 };
 beamerposter = {
   revision = 54512;
@@ -3603,6 +3938,7 @@ beamerposter = {
   hasRunfiles = true;
   license = [ "lppl13c" "gpl1Only" ];
   version = "1.13";
+  hasCatalogue = true;
 };
 beamersubframe = {
   revision = 23510;
@@ -3614,6 +3950,7 @@ beamersubframe = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.2";
+  hasCatalogue = true;
 };
 beamerswitch = {
   revision = 64182;
@@ -3625,6 +3962,7 @@ beamerswitch = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.9";
+  hasCatalogue = true;
 };
 beamertheme-arguelles = {
   revision = 70209;
@@ -3635,6 +3973,7 @@ beamertheme-arguelles = {
   hasRunfiles = true;
   license = [ "mit" ];
   version = "2.4.0";
+  hasCatalogue = true;
 };
 beamertheme-cuerna = {
   revision = 42161;
@@ -3645,6 +3984,7 @@ beamertheme-cuerna = {
   sha512.source = "a4381e52d7e46336d8d8989be45c185156e67df776d5ad159f2db6c62c751dae59e0c19fa0c5ec3de4b0385047d5f6fdf166b6c12707c889cffeabe11802a10f";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 beamertheme-detlevcm = {
   revision = 39048;
@@ -3655,6 +3995,7 @@ beamertheme-detlevcm = {
   hasRunfiles = true;
   license = [ "gpl1Only" ];
   version = "1.02";
+  hasCatalogue = true;
 };
 beamertheme-epyt = {
   revision = 41404;
@@ -3665,6 +4006,7 @@ beamertheme-epyt = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 beamertheme-focus = {
   revision = 69742;
@@ -3675,6 +4017,7 @@ beamertheme-focus = {
   hasRunfiles = true;
   license = [ "gpl3Only" ];
   version = "3.4.0";
+  hasCatalogue = true;
 };
 beamertheme-light = {
   revision = 49867;
@@ -3685,6 +4028,7 @@ beamertheme-light = {
   hasRunfiles = true;
   license = [ "gpl3Only" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 beamertheme-metropolis = {
   revision = 43031;
@@ -3696,6 +4040,7 @@ beamertheme-metropolis = {
   hasRunfiles = true;
   license = [ "free" ];
   version = "1.2";
+  hasCatalogue = true;
 };
 beamertheme-npbt = {
   revision = 54512;
@@ -3706,6 +4051,7 @@ beamertheme-npbt = {
   hasRunfiles = true;
   license = [ "gpl3Only" "publicDomain" ];
   version = "4.1";
+  hasCatalogue = true;
 };
 beamertheme-phnompenh = {
   revision = 39100;
@@ -3716,6 +4062,7 @@ beamertheme-phnompenh = {
   hasRunfiles = true;
   license = [ "gpl1Only" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 beamertheme-pure-minimalistic = {
   revision = 56934;
@@ -3726,6 +4073,7 @@ beamertheme-pure-minimalistic = {
   hasRunfiles = true;
   license = [ "gpl3Plus" ];
   version = "2.0.0";
+  hasCatalogue = true;
 };
 beamertheme-rainbow = {
   revision = 67542;
@@ -3736,6 +4084,7 @@ beamertheme-rainbow = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.1";
+  hasCatalogue = true;
 };
 beamertheme-saintpetersburg = {
   revision = 45877;
@@ -3746,6 +4095,7 @@ beamertheme-saintpetersburg = {
   sha512.source = "6cd3ed424b3a724e397de3fb7b47de33a5c9f0c5ac0e0f8b26bde55ef69b66015874dbd438912c682c9aa1c33e4e916fb895458964dea11fe228e29c1afc40e8";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 beamertheme-simpledarkblue = {
   revision = 60061;
@@ -3755,6 +4105,7 @@ beamertheme-simpledarkblue = {
   sha512.doc = "9f8f642ebe4cafed03699377be6bb647cbdfb80f99e075e2863b69a4d6b6f59cab6dd4dc831b0fb015302b3737b32d08cf37b3034365b021e8fd9f086f7e6ddf";
   hasRunfiles = true;
   license = [ "publicDomain" ];
+  hasCatalogue = true;
 };
 beamertheme-simpleplus = {
   revision = 64770;
@@ -3765,6 +4116,7 @@ beamertheme-simpleplus = {
   hasRunfiles = true;
   license = [ "publicDomain" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 beamertheme-tcolorbox = {
   revision = 67000;
@@ -3775,6 +4127,7 @@ beamertheme-tcolorbox = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.6";
+  hasCatalogue = true;
 };
 beamertheme-trigon = {
   revision = 65985;
@@ -3786,6 +4139,7 @@ beamertheme-trigon = {
   hasRunfiles = true;
   license = [ "cc-by-sa-40" ];
   version = "0.7.0";
+  hasCatalogue = true;
 };
 beamertheme-upenn-bc = {
   revision = 29937;
@@ -3796,6 +4150,7 @@ beamertheme-upenn-bc = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 beamerthemeamurmaple = {
   revision = 69742;
@@ -3806,6 +4161,7 @@ beamerthemeamurmaple = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.3";
+  hasCatalogue = true;
 };
 beamerthemeconcrete = {
   revision = 69528;
@@ -3816,6 +4172,7 @@ beamerthemeconcrete = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2024B";
+  hasCatalogue = true;
 };
 beamerthemejltree = {
   revision = 21977;
@@ -3825,6 +4182,7 @@ beamerthemejltree = {
   hasRunfiles = true;
   license = [ "gpl1Only" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 beamerthemelalic = {
   revision = 58777;
@@ -3835,6 +4193,7 @@ beamerthemelalic = {
   hasRunfiles = true;
   license = [ "gpl3Plus" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 beamerthemenirma = {
   revision = 20765;
@@ -3845,6 +4204,7 @@ beamerthemenirma = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.1";
+  hasCatalogue = true;
 };
 beamerthemenord = {
   revision = 56180;
@@ -3855,6 +4215,7 @@ beamerthemenord = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.2.0";
+  hasCatalogue = true;
 };
 bearwear = {
   revision = 54826;
@@ -3866,6 +4227,7 @@ bearwear = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.2";
+  hasCatalogue = true;
 };
 beaulivre = {
   revision = 70050;
@@ -3878,6 +4240,7 @@ beaulivre = {
   sha512.doc = "efb52d0b4df908a4425fb9d5f2767c54dd7b2d614076374d81b15f53322528a24231feb9145de9bf1f0086a6ffcff37d529a925fca879984b4c5860b00b12a1d";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 beautybook = {
   revision = 68438;
@@ -3887,6 +4250,7 @@ beautybook = {
   sha512.doc = "62eeb012597c27e02b00ac5d7b2b280136986c412baf7113634bf62e0fe82b1fb9e4fdab3ab6a2345517a046fe46bfad6f2031926f07f69609e895800e215ed4";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 beautynote = {
   revision = 70166;
@@ -3896,14 +4260,17 @@ beautynote = {
   sha512.doc = "36e71d750df5b5e5d8d05251a4be60214c09027a10c77551ff6261464729004fe0e3be586687af23db115b7cb4c99086dbe9278da0b8d6292b57005019628fc3";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 beebe = {
   revision = 70064;
+  catalogue = "biblio";
   shortdesc = "A collection of bibliographies";
   stripPrefix = 0;
   sha512.run = "ff133e38a475bba0e8aea3a8a98d20ff1aa17eef7c0d0f5a6d404d51b1062c2a5957d3261e844d956f9a5e97fcc2d8a438beb5b724f84f8f3734091551e7aba0";
   hasRunfiles = true;
   license = [ "publicDomain" ];
+  hasCatalogue = true;
 };
 begingreek = {
   revision = 63255;
@@ -3915,6 +4282,7 @@ begingreek = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.7";
+  hasCatalogue = true;
 };
 begriff = {
   revision = 15878;
@@ -3925,6 +4293,7 @@ begriff = {
   hasRunfiles = true;
   license = [ "gpl1Only" ];
   version = "1.6";
+  hasCatalogue = true;
 };
 beilstein = {
   revision = 56193;
@@ -3936,6 +4305,7 @@ beilstein = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.1";
+  hasCatalogue = true;
 };
 belleek = {
   revision = 66115;
@@ -3949,9 +4319,11 @@ belleek = {
   sha512.source = "b8547d1b3da8be829b7fe99d0cd7cee8fc6b7158c1799712ea85614534d0b020cfafdc1696a0e5037ad15b215173e1461c64f86a1f52795209272aed9991d107";
   hasRunfiles = true;
   license = [ "publicDomain" ];
+  hasCatalogue = true;
 };
 bengali = {
   revision = 55475;
+  catalogue = "bengali-pandey";
   shortdesc = "Support for the Bengali language";
   stripPrefix = 0;
   sha512.run = "2ace635791a4c7a8af0843a5a92d518d0e93fc09a94929a277002a3e4426f199e207238766b07ff3f1e1bf0e3c0cf8b83897b30ba105ee7239d6ce1d591289fe";
@@ -3959,6 +4331,7 @@ bengali = {
   sha512.source = "ddfd0dce8379aaa3e224f74fd33fa4dd1fbe6a40d9a01bc6dc8da1dbca5b5eae97c4837ff21c75be8658d37693cdff3c2983fe01c77d13bd0eb89e14f78d6e2a";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 bera = {
   revision = 20031;
@@ -3971,6 +4344,7 @@ bera = {
   sha512.doc = "2606c87871d6f6ed27b2a5e49117c50f00573bc6b9ce249d1433da214764b220eb00c73e59be43e32e8a4827c397c53504103e00b7e5602de5df5bb817e2145d";
   hasRunfiles = true;
   license = [ "free" ];
+  hasCatalogue = true;
 };
 berenisadf = {
   revision = 32215;
@@ -3984,15 +4358,18 @@ berenisadf = {
   hasRunfiles = true;
   license = [ "free" ];
   version = "1.004";
+  hasCatalogue = true;
 };
 besjournals = {
   revision = 45662;
+  catalogue = "besjournals-bst";
   shortdesc = "Bibliographies suitable for British Ecological Society journals";
   stripPrefix = 0;
   sha512.run = "e797bce36fa6529d6b57be352ed81b7413c2ca818fa904a8cc4c7c8f0801369543482aa5c286b40f6f7c5e0b73d53b6aa6b9aaeab3e6229da7dd954a3dedb1ca";
   sha512.doc = "c790eb0ced559adc6696f0f228c88a2314214ff6a4ab71ae03dc46b3974cdaae53fc685c05f0bbb7646a5b31d332f763fce4a71919319aa520965f56979eee54";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 bestpapers = {
   revision = 38708;
@@ -4003,6 +4380,7 @@ bestpapers = {
   hasRunfiles = true;
   license = [ "publicDomain" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 betababel = {
   revision = 15878;
@@ -4013,6 +4391,7 @@ betababel = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.5";
+  hasCatalogue = true;
 };
 beton = {
   revision = 15878;
@@ -4023,6 +4402,7 @@ beton = {
   sha512.source = "79e129919c06ef083e4f8fdcd88a60339591b3f95776feb9cc076e46fb379b5ab10f9b48f3b8a948e9a120412f818dd3d99cc24957d3eaa812bbefb388d91049";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 beuron = {
   revision = 46374;
@@ -4036,6 +4416,7 @@ beuron = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.3";
+  hasCatalogue = true;
 };
 bewerbung = {
   revision = 61632;
@@ -4047,6 +4428,7 @@ bewerbung = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.3";
+  hasCatalogue = true;
 };
 bez123 = {
   revision = 15878;
@@ -4058,6 +4440,7 @@ bez123 = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1b";
+  hasCatalogue = true;
 };
 bezierplot = {
   revision = 51398;
@@ -4068,6 +4451,7 @@ bezierplot = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.4";
+  hasCatalogue = true;
 };
 bfh-ci = {
   revision = 68828;
@@ -4106,6 +4490,7 @@ bfh-ci = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.2.0";
+  hasCatalogue = true;
 };
 bgteubner = {
   revision = 54080;
@@ -4117,6 +4502,7 @@ bgteubner = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.11";
+  hasCatalogue = true;
 };
 bguq = {
   revision = 27401;
@@ -4131,6 +4517,7 @@ bguq = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.4";
+  hasCatalogue = true;
 };
 bhcexam = {
   revision = 64093;
@@ -4141,6 +4528,7 @@ bhcexam = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.7";
+  hasCatalogue = true;
 };
 bib-fr = {
   revision = 15878;
@@ -4151,6 +4539,7 @@ bib-fr = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.5";
+  hasCatalogue = true;
 };
 bib2gls = {
   revision = 69635;
@@ -4168,6 +4557,7 @@ bib2gls = {
   ];
   license = [ "gpl3Plus" ];
   version = "3.9";
+  hasCatalogue = true;
 };
 bib2gls.binfiles = [
   "bib2gls"
@@ -4183,6 +4573,7 @@ bibarts = {
   hasRunfiles = true;
   license = [ "gpl1Only" ];
   version = "2.6";
+  hasCatalogue = true;
 };
 bibcop = {
   revision = 69467;
@@ -4198,6 +4589,7 @@ bibcop = {
   hasRunfiles = true;
   license = [ "mit" ];
   version = "0.0.19";
+  hasCatalogue = true;
 };
 bibcop.binfiles = [
   "bibcop"
@@ -4210,6 +4602,7 @@ biber = {
   sha512.source = "8fd59f63eaa86ea4d87c8c01458fea16c0e470969f3dd6ac65e20954e8a63e793a58888cdb61f913fcc291fb5d2f3e0205e7e7488946738e27c23f1ac51be9b2";
   license = [ "artistic2" ];
   version = "2.19";
+  hasCatalogue = true;
 };
 biber-ms = {
   revision = 66478;
@@ -4219,6 +4612,7 @@ biber-ms = {
   sha512.source = "9c15f088c5c97d63b928ef10a8d1f0a628874ad664182b631e5a52407b1a034bea478fdbe1c287ddb703fd9c9d3d84a8bdb47ea09d6de25ad99aa1ef8e227fcd";
   license = [ "artistic2" ];
   version = "4.0-1";
+  hasCatalogue = true;
 };
 biber-ms.binfiles = [
   "biber-ms"
@@ -4235,6 +4629,7 @@ bibexport = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "3.03";
+  hasCatalogue = true;
 };
 bibexport.binfiles = [
   "bibexport"
@@ -4248,6 +4643,7 @@ bibhtml = {
   hasRunfiles = true;
   license = [ "gpl1Only" ];
   version = "2.0.2";
+  hasCatalogue = true;
 };
 biblatex = {
   revision = 66403;
@@ -4265,6 +4661,7 @@ biblatex = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "3.19";
+  hasCatalogue = true;
 };
 biblatex-abnt = {
   revision = 49179;
@@ -4275,6 +4672,7 @@ biblatex-abnt = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "3.4";
+  hasCatalogue = true;
 };
 biblatex-ajc2020unofficial = {
   revision = 54401;
@@ -4285,6 +4683,7 @@ biblatex-ajc2020unofficial = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.2.0";
+  hasCatalogue = true;
 };
 biblatex-anonymous = {
   revision = 48548;
@@ -4295,6 +4694,7 @@ biblatex-anonymous = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.6.2";
+  hasCatalogue = true;
 };
 biblatex-apa = {
   revision = 66605;
@@ -4305,6 +4705,7 @@ biblatex-apa = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "9.17";
+  hasCatalogue = true;
 };
 biblatex-apa6 = {
   revision = 56209;
@@ -4315,6 +4716,7 @@ biblatex-apa6 = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "8.5";
+  hasCatalogue = true;
 };
 biblatex-archaeology = {
   revision = 53281;
@@ -4326,6 +4728,7 @@ biblatex-archaeology = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.2";
+  hasCatalogue = true;
 };
 biblatex-arthistory-bonn = {
   revision = 46637;
@@ -4336,6 +4739,7 @@ biblatex-arthistory-bonn = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.2";
+  hasCatalogue = true;
 };
 biblatex-bath = {
   revision = 63401;
@@ -4347,6 +4751,7 @@ biblatex-bath = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "6.0";
+  hasCatalogue = true;
 };
 biblatex-bookinarticle = {
   revision = 40323;
@@ -4357,6 +4762,7 @@ biblatex-bookinarticle = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.3.1a";
+  hasCatalogue = true;
 };
 biblatex-bookinother = {
   revision = 54015;
@@ -4367,6 +4773,7 @@ biblatex-bookinother = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.3.3";
+  hasCatalogue = true;
 };
 biblatex-bwl = {
   revision = 26556;
@@ -4377,6 +4784,7 @@ biblatex-bwl = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.02";
+  hasCatalogue = true;
 };
 biblatex-caspervector = {
   revision = 70496;
@@ -4387,6 +4795,7 @@ biblatex-caspervector = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.3.7";
+  hasCatalogue = true;
 };
 biblatex-cheatsheet = {
   revision = 44685;
@@ -4395,6 +4804,7 @@ biblatex-cheatsheet = {
   sha512.run = "a974a8eeb4282f66ebdc7a57d40c76b0f2bc957249c130d4f97aa9f9749f5091745a87db277c3bef43d0f4e37790a9663949ca3bba3b28a16d37c13bd6029181";
   sha512.doc = "a2b9a82afe127d0bfb71f3a481eed3198e27ef35caa5cd08557ed35645f6209e9187f1e0c21d6fa51e6c32d0cf044c0d85373195a5f034c856fb4beec360af13";
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 biblatex-chem = {
   revision = 57904;
@@ -4405,6 +4815,7 @@ biblatex-chem = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1z";
+  hasCatalogue = true;
 };
 biblatex-chicago = {
   revision = 65037;
@@ -4415,6 +4826,7 @@ biblatex-chicago = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.3a";
+  hasCatalogue = true;
 };
 biblatex-claves = {
   revision = 43723;
@@ -4425,6 +4837,7 @@ biblatex-claves = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.2.1";
+  hasCatalogue = true;
 };
 biblatex-cv = {
   revision = 59433;
@@ -4435,6 +4848,7 @@ biblatex-cv = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.01";
+  hasCatalogue = true;
 };
 biblatex-dw = {
   revision = 66579;
@@ -4445,6 +4859,7 @@ biblatex-dw = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.7b";
+  hasCatalogue = true;
 };
 biblatex-enc = {
   revision = 44627;
@@ -4455,6 +4870,7 @@ biblatex-enc = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 biblatex-ext = {
   revision = 66641;
@@ -4465,6 +4881,7 @@ biblatex-ext = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.17";
+  hasCatalogue = true;
 };
 biblatex-fiwi = {
   revision = 45876;
@@ -4475,6 +4892,7 @@ biblatex-fiwi = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.7";
+  hasCatalogue = true;
 };
 biblatex-gb7714-2015 = {
   revision = 69775;
@@ -4485,6 +4903,7 @@ biblatex-gb7714-2015 = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1p";
+  hasCatalogue = true;
 };
 biblatex-german-legal = {
   revision = 66461;
@@ -4495,6 +4914,7 @@ biblatex-german-legal = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "003";
+  hasCatalogue = true;
 };
 biblatex-gost = {
   revision = 66935;
@@ -4505,6 +4925,7 @@ biblatex-gost = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.24";
+  hasCatalogue = true;
 };
 biblatex-historian = {
   revision = 19787;
@@ -4515,6 +4936,7 @@ biblatex-historian = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.4";
+  hasCatalogue = true;
 };
 biblatex-ieee = {
   revision = 61243;
@@ -4525,6 +4947,7 @@ biblatex-ieee = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.3f";
+  hasCatalogue = true;
 };
 biblatex-ijsra = {
   revision = 41634;
@@ -4535,6 +4958,7 @@ biblatex-ijsra = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.1";
+  hasCatalogue = true;
 };
 biblatex-iso690 = {
   revision = 62866;
@@ -4545,6 +4969,7 @@ biblatex-iso690 = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.4.1";
+  hasCatalogue = true;
 };
 biblatex-jura2 = {
   revision = 64762;
@@ -4555,6 +4980,7 @@ biblatex-jura2 = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.5";
+  hasCatalogue = true;
 };
 biblatex-juradiss = {
   revision = 56502;
@@ -4565,6 +4991,7 @@ biblatex-juradiss = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.23";
+  hasCatalogue = true;
 };
 biblatex-license = {
   revision = 58437;
@@ -4575,6 +5002,7 @@ biblatex-license = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.1";
+  hasCatalogue = true;
 };
 biblatex-lncs = {
   revision = 67053;
@@ -4585,6 +5013,7 @@ biblatex-lncs = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.7";
+  hasCatalogue = true;
 };
 biblatex-lni = {
   revision = 68755;
@@ -4595,6 +5024,7 @@ biblatex-lni = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.6";
+  hasCatalogue = true;
 };
 biblatex-luh-ipw = {
   revision = 32180;
@@ -4605,6 +5035,7 @@ biblatex-luh-ipw = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.3";
+  hasCatalogue = true;
 };
 biblatex-manuscripts-philology = {
   revision = 66977;
@@ -4615,6 +5046,7 @@ biblatex-manuscripts-philology = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.1.4";
+  hasCatalogue = true;
 };
 biblatex-mla = {
   revision = 62138;
@@ -4625,6 +5057,7 @@ biblatex-mla = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.1a";
+  hasCatalogue = true;
 };
 biblatex-morenames = {
   revision = 43049;
@@ -4635,6 +5068,7 @@ biblatex-morenames = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.3.1";
+  hasCatalogue = true;
 };
 biblatex-ms = {
   revision = 66480;
@@ -4652,6 +5086,7 @@ biblatex-ms = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "4.0-1";
+  hasCatalogue = true;
 };
 biblatex-multiple-dm = {
   revision = 37081;
@@ -4662,6 +5097,7 @@ biblatex-multiple-dm = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0.1";
+  hasCatalogue = true;
 };
 biblatex-musuos = {
   revision = 24097;
@@ -4672,6 +5108,7 @@ biblatex-musuos = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 biblatex-nature = {
   revision = 57262;
@@ -4682,6 +5119,7 @@ biblatex-nature = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.3d";
+  hasCatalogue = true;
 };
 biblatex-nejm = {
   revision = 49839;
@@ -4693,6 +5131,7 @@ biblatex-nejm = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.5.0";
+  hasCatalogue = true;
 };
 biblatex-nottsclassic = {
   revision = 41596;
@@ -4703,6 +5142,7 @@ biblatex-nottsclassic = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.1";
+  hasCatalogue = true;
 };
 biblatex-opcit-booktitle = {
   revision = 48983;
@@ -4713,6 +5153,7 @@ biblatex-opcit-booktitle = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.9.0";
+  hasCatalogue = true;
 };
 biblatex-oxref = {
   revision = 68950;
@@ -4724,6 +5165,7 @@ biblatex-oxref = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "3.2";
+  hasCatalogue = true;
 };
 biblatex-philosophy = {
   revision = 64414;
@@ -4735,6 +5177,7 @@ biblatex-philosophy = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.9.8g";
+  hasCatalogue = true;
 };
 biblatex-phys = {
   revision = 55643;
@@ -4745,6 +5188,7 @@ biblatex-phys = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1b";
+  hasCatalogue = true;
 };
 biblatex-publist = {
   revision = 70515;
@@ -4755,6 +5199,7 @@ biblatex-publist = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.8";
+  hasCatalogue = true;
 };
 biblatex-readbbl = {
   revision = 61549;
@@ -4765,6 +5210,7 @@ biblatex-readbbl = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.01";
+  hasCatalogue = true;
 };
 biblatex-realauthor = {
   revision = 45865;
@@ -4775,6 +5221,7 @@ biblatex-realauthor = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.7.1a";
+  hasCatalogue = true;
 };
 biblatex-sbl = {
   revision = 63639;
@@ -4785,6 +5232,7 @@ biblatex-sbl = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.14";
+  hasCatalogue = true;
 };
 biblatex-science = {
   revision = 48945;
@@ -4795,6 +5243,7 @@ biblatex-science = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.2";
+  hasCatalogue = true;
 };
 biblatex-shortfields = {
   revision = 45858;
@@ -4805,6 +5254,7 @@ biblatex-shortfields = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0.1";
+  hasCatalogue = true;
 };
 biblatex-socialscienceshuberlin = {
   revision = 47839;
@@ -4815,6 +5265,7 @@ biblatex-socialscienceshuberlin = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.0.1";
+  hasCatalogue = true;
 };
 biblatex-software = {
   revision = 64030;
@@ -4826,6 +5277,7 @@ biblatex-software = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.2-5";
+  hasCatalogue = true;
 };
 biblatex-source-division = {
   revision = 45379;
@@ -4836,6 +5288,7 @@ biblatex-source-division = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.4.2";
+  hasCatalogue = true;
 };
 biblatex-spbasic = {
   revision = 61439;
@@ -4846,6 +5299,7 @@ biblatex-spbasic = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.04";
+  hasCatalogue = true;
 };
 biblatex-subseries = {
   revision = 43330;
@@ -4856,6 +5310,7 @@ biblatex-subseries = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.2.0";
+  hasCatalogue = true;
 };
 biblatex-swiss-legal = {
   revision = 64491;
@@ -4866,6 +5321,7 @@ biblatex-swiss-legal = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1.2a";
+  hasCatalogue = true;
 };
 biblatex-trad = {
   revision = 58169;
@@ -4876,6 +5332,7 @@ biblatex-trad = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.5";
+  hasCatalogue = true;
 };
 biblatex-true-citepages-omit = {
   revision = 44653;
@@ -4886,6 +5343,7 @@ biblatex-true-citepages-omit = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.0.0";
+  hasCatalogue = true;
 };
 biblatex-unified = {
   revision = 64975;
@@ -4896,6 +5354,7 @@ biblatex-unified = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.20";
+  hasCatalogue = true;
 };
 biblatex-vancouver = {
   revision = 55339;
@@ -4906,6 +5365,7 @@ biblatex-vancouver = {
   hasRunfiles = true;
   license = [ "gpl3Plus" ];
   version = "0.1";
+  hasCatalogue = true;
 };
 biblatex2bibitem = {
   revision = 67201;
@@ -4916,6 +5376,7 @@ biblatex2bibitem = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.2.2";
+  hasCatalogue = true;
 };
 bibleref = {
   revision = 55626;
@@ -4927,6 +5388,7 @@ bibleref = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.25";
+  hasCatalogue = true;
 };
 bibleref-french = {
   revision = 53138;
@@ -4938,6 +5400,7 @@ bibleref-french = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.3.3";
+  hasCatalogue = true;
 };
 bibleref-german = {
   revision = 21923;
@@ -4948,6 +5411,7 @@ bibleref-german = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0a";
+  hasCatalogue = true;
 };
 bibleref-lds = {
   revision = 25526;
@@ -4959,6 +5423,7 @@ bibleref-lds = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 bibleref-mouth = {
   revision = 25527;
@@ -4970,6 +5435,7 @@ bibleref-mouth = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 bibleref-parse = {
   revision = 22054;
@@ -4980,6 +5446,7 @@ bibleref-parse = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 bibletext = {
   revision = 45196;
@@ -4990,6 +5457,7 @@ bibletext = {
   hasRunfiles = true;
   license = [ "mit" ];
   version = "0.1.2";
+  hasCatalogue = true;
 };
 biblist = {
   revision = 17116;
@@ -4999,6 +5467,7 @@ biblist = {
   sha512.doc = "b5bdd51d7acb738569671f13dbd25fc7b98a8e2e03e324e9501a20ac34cf1ae3578fcd622be73a80467e47a64a81f4d897c4e167b07a5ff5d06635b09dbec51d";
   hasRunfiles = true;
   license = [ "gpl1Only" ];
+  hasCatalogue = true;
 };
 bibtex = {
   revision = 66186;
@@ -5012,6 +5481,7 @@ bibtex = {
   hasRunfiles = true;
   license = [ "knuth" ];
   version = "0.99d";
+  hasCatalogue = true;
 };
 bibtex.binfiles = [
   "bibtex"
@@ -5025,6 +5495,7 @@ bibtex8 = {
   hasRunfiles = true;
   license = [ "gpl1Only" ];
   version = "3.72";
+  hasCatalogue = true;
 };
 bibtex8.binfiles = [
   "bibtex8"
@@ -5039,6 +5510,7 @@ bibtexperllibs = {
   hasRunfiles = true;
   license = [ "gpl1Only" "artistic1-cl8" "publicDomain" ];
   version = "1.9";
+  hasCatalogue = true;
 };
 bibtexperllibs.binfiles = [
   "ltx2unitxt"
@@ -5051,6 +5523,7 @@ bibtexu = {
   hasManpages = true;
   license = [ "gpl1Only" ];
   version = "3.72";
+  hasCatalogue = true;
 };
 bibtexu.binfiles = [
   "bibtexu"
@@ -5063,6 +5536,7 @@ bibtools = {
   sha512.source = "3507bf7da29aad37a43cdd1ab2668908e227a2002438fb161c822fbac48be0e6b120070d6866fa553205ed404375d160e3a8b756c0681fb6a3e3b5600ac7a7b1";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 bibtopic = {
   revision = 15878;
@@ -5074,6 +5548,7 @@ bibtopic = {
   hasRunfiles = true;
   license = [ "gpl1Only" ];
   version = "1.1a";
+  hasCatalogue = true;
 };
 bibtopicprefix = {
   revision = 15878;
@@ -5085,6 +5560,7 @@ bibtopicprefix = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.10";
+  hasCatalogue = true;
 };
 bibunits = {
   revision = 15878;
@@ -5096,6 +5572,7 @@ bibunits = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.2";
+  hasCatalogue = true;
 };
 bidi = {
   revision = 67798;
@@ -5107,6 +5584,7 @@ bidi = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "39.8";
+  hasCatalogue = true;
 };
 bidi-atbegshi = {
   revision = 62009;
@@ -5117,6 +5595,7 @@ bidi-atbegshi = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.2";
+  hasCatalogue = true;
 };
 bidicontour = {
   revision = 34631;
@@ -5127,6 +5606,7 @@ bidicontour = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.2";
+  hasCatalogue = true;
 };
 bidihl = {
   revision = 37795;
@@ -5137,6 +5617,7 @@ bidihl = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.1c";
+  hasCatalogue = true;
 };
 bidipagegrid = {
   revision = 34632;
@@ -5147,6 +5628,7 @@ bidipagegrid = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.2";
+  hasCatalogue = true;
 };
 bidipresentation = {
   revision = 35267;
@@ -5157,6 +5639,7 @@ bidipresentation = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.3";
+  hasCatalogue = true;
 };
 bidishadowtext = {
   revision = 34633;
@@ -5167,6 +5650,7 @@ bidishadowtext = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.1";
+  hasCatalogue = true;
 };
 bigfoot = {
   revision = 38248;
@@ -5178,6 +5662,7 @@ bigfoot = {
   hasRunfiles = true;
   license = [ "gpl2Only" ];
   version = "2.1";
+  hasCatalogue = true;
 };
 bigintcalc = {
   revision = 53172;
@@ -5189,6 +5674,7 @@ bigintcalc = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.5";
+  hasCatalogue = true;
 };
 bigints = {
   revision = 29803;
@@ -5198,6 +5684,7 @@ bigints = {
   sha512.doc = "46799d5c6758657eadca7fb30d214baf47c237b63655a71ad19e188fd54b664397babbbc5cf6d9897e81decd027dea1e0d1a6fea97384461ec8976fc19c7fd8d";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 bilingualpages = {
   revision = 59643;
@@ -5208,6 +5695,7 @@ bilingualpages = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0.0";
+  hasCatalogue = true;
 };
 binarytree = {
   revision = 41777;
@@ -5219,6 +5707,7 @@ binarytree = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.01";
+  hasCatalogue = true;
 };
 binomexp = {
   revision = 15878;
@@ -5230,6 +5719,7 @@ binomexp = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 biochemistry-colors = {
   revision = 54512;
@@ -5240,6 +5730,7 @@ biochemistry-colors = {
   hasRunfiles = true;
   license = [ "lppl13c" "gpl1Only" ];
   version = "1.00";
+  hasCatalogue = true;
 };
 biocon = {
   revision = 15878;
@@ -5249,6 +5740,7 @@ biocon = {
   sha512.doc = "c296c8402129338295a3043a66bab91a499b29703f7ecead0a045e0820ced683a4c25168ecdfc184c07282904afed3703b31f8ca707492a913de7c49a351c322";
   hasRunfiles = true;
   license = [ "gpl1Only" ];
+  hasCatalogue = true;
 };
 biolett-bst = {
   revision = 66115;
@@ -5258,6 +5750,7 @@ biolett-bst = {
   sha512.doc = "2a839dfad925ca94f26bada0d14fecdd7c096d3c99e903a57e4a1d093b2d1b9cf8770974aa1ac51baa9759c68e2a4fdd6efbc861c5bdebaea4cb523c00662487";
   hasRunfiles = true;
   license = [ "lppl1" ];
+  hasCatalogue = true;
 };
 bitelist = {
   revision = 25779;
@@ -5269,6 +5762,7 @@ bitelist = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.1";
+  hasCatalogue = true;
 };
 bithesis = {
   revision = 70136;
@@ -5280,6 +5774,7 @@ bithesis = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "3.6.2";
+  hasCatalogue = true;
 };
 bitpattern = {
   revision = 39073;
@@ -5290,6 +5785,7 @@ bitpattern = {
   sha512.source = "8c5860792394f85ab87d2a3ab234496a1f550a24f98a5e2f8f4d815b24e4fd3e7d0a1ffefac3912536d22cd39fdbd91db013b1c8e05d4de92aca47db679fa7e3";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 bitset = {
   revision = 53837;
@@ -5304,6 +5800,7 @@ bitset = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.3";
+  hasCatalogue = true;
 };
 bitter = {
   revision = 67598;
@@ -5316,6 +5813,7 @@ bitter = {
   sha512.doc = "2bff9fef75632fb43c59cba04ea531eba8420c3841a0343cbb1d56995a8c322beff036da61d494112e9c89f82d367ec3bcc9e39ecbe153c99dc012cbc8c15bea";
   hasRunfiles = true;
   license = [ "lppl13c" "ofl" ];
+  hasCatalogue = true;
 };
 bizcard = {
   revision = 15878;
@@ -5327,6 +5825,7 @@ bizcard = {
   hasRunfiles = true;
   license = [ "gpl1Only" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 bjfuthesis = {
   revision = 59809;
@@ -5337,6 +5836,7 @@ bjfuthesis = {
   hasRunfiles = true;
   license = [ "gpl3Only" ];
   version = "1.2.1";
+  hasCatalogue = true;
 };
 blacklettert1 = {
   revision = 15878;
@@ -5347,6 +5847,7 @@ blacklettert1 = {
   sha512.source = "0951e374a22fda09a3fe51e3a7743874c774a756560fb63a68aa199ad2cca674ee87d1dd30b98709b0e74e018e0eec878316ff303575eabb014158311f22a273";
   hasRunfiles = true;
   license = [ "free" ];
+  hasCatalogue = true;
 };
 blindtext = {
   revision = 25039;
@@ -5358,6 +5859,7 @@ blindtext = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.0";
+  hasCatalogue = true;
 };
 blkarray = {
   revision = 36406;
@@ -5368,6 +5870,7 @@ blkarray = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.07";
+  hasCatalogue = true;
 };
 blochsphere = {
   revision = 38388;
@@ -5379,6 +5882,7 @@ blochsphere = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 block = {
   revision = 17209;
@@ -5388,6 +5892,7 @@ block = {
   sha512.doc = "77b8c5b6949fb7eade5eee082be1c28433136b8374d45f255a80daa0c7a0340a3154a9f6f174fc52b25c252f1b5a2304b32e26c6d6a2f9af033569d7ba602952";
   hasRunfiles = true;
   license = [ "publicDomain" ];
+  hasCatalogue = true;
 };
 blockdraw_mp = {
   revision = 15878;
@@ -5397,6 +5902,7 @@ blockdraw_mp = {
   sha512.doc = "01fc4226a952c76b52726d1217649d9d98ec708163e4a9b997e36f505b385ed145182bca747a2b5334cfe8b4663d010a699664728c5be05cc4daba63ff1f3c00";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 blopentype = {
   revision = 69080;
@@ -5412,6 +5918,7 @@ blopentype = {
   hasRunfiles = true;
   license = [ "lppl13c" "mit" ];
   version = "0.0.4";
+  hasCatalogue = true;
 };
 bloques = {
   revision = 22490;
@@ -5422,6 +5929,7 @@ bloques = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 blowup = {
   revision = 67640;
@@ -5433,6 +5941,7 @@ blowup = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.2.0";
+  hasCatalogue = true;
 };
 blox = {
   revision = 57949;
@@ -5444,6 +5953,7 @@ blox = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.51";
+  hasCatalogue = true;
 };
 bmstu = {
   revision = 65897;
@@ -5454,6 +5964,7 @@ bmstu = {
   hasRunfiles = true;
   license = [ "lppl13c" "free" ];
   version = "2.0.0";
+  hasCatalogue = true;
 };
 bmstu-iu8 = {
   revision = 61937;
@@ -5464,6 +5975,7 @@ bmstu-iu8 = {
   hasRunfiles = true;
   license = [ "mit" ];
   version = "1.2";
+  hasCatalogue = true;
 };
 bnumexpr = {
   revision = 59244;
@@ -5475,6 +5987,7 @@ bnumexpr = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.5";
+  hasCatalogue = true;
 };
 bodegraph = {
   revision = 68785;
@@ -5485,6 +5998,7 @@ bodegraph = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.6";
+  hasCatalogue = true;
 };
 bodeplot = {
   revision = 69742;
@@ -5496,6 +6010,7 @@ bodeplot = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1.7";
+  hasCatalogue = true;
 };
 bohr = {
   revision = 62977;
@@ -5506,6 +6021,7 @@ bohr = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 boisik = {
   revision = 15878;
@@ -5516,6 +6032,7 @@ boisik = {
   hasRunfiles = true;
   license = [ "gpl2Only" ];
   version = "0.5";
+  hasCatalogue = true;
 };
 boites = {
   revision = 32235;
@@ -5527,6 +6044,7 @@ boites = {
   hasRunfiles = true;
   license = [ "gpl1Only" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 bold-extra = {
   revision = 17076;
@@ -5537,6 +6055,7 @@ bold-extra = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.1";
+  hasCatalogue = true;
 };
 boldtensors = {
   revision = 15878;
@@ -5546,6 +6065,7 @@ boldtensors = {
   sha512.doc = "657bdc4960e2d40621520240840ab4252e927baca704da0388e3124938c55de834e59cf8ff3d900aa294ac366ae7b1367909cbe885de08790d51380726960146";
   hasRunfiles = true;
   license = [ "gpl1Only" ];
+  hasCatalogue = true;
 };
 bondgraph = {
   revision = 21670;
@@ -5556,6 +6076,7 @@ bondgraph = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 bondgraphs = {
   revision = 36605;
@@ -5567,6 +6088,7 @@ bondgraphs = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0.1";
+  hasCatalogue = true;
 };
 book-of-common-prayer = {
   revision = 62240;
@@ -5577,6 +6099,7 @@ book-of-common-prayer = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1.0";
+  hasCatalogue = true;
 };
 bookcover = {
   revision = 65394;
@@ -5588,6 +6111,7 @@ bookcover = {
   hasRunfiles = true;
   license = [ "lppl12" ];
   version = "3.5";
+  hasCatalogue = true;
 };
 bookdb = {
   revision = 37536;
@@ -5598,6 +6122,7 @@ bookdb = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.2";
+  hasCatalogue = true;
 };
 bookest = {
   revision = 15878;
@@ -5608,6 +6133,7 @@ bookest = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 bookhands = {
   revision = 46480;
@@ -5621,6 +6147,7 @@ bookhands = {
   sha512.source = "4df12247bff50722ae11636ecc0071e03d8d296ea958d2a1b84b5b2952f35d890be66af4b85dcf1fe2599e787e71c1b9e7f727a8be9b4ec79eb1bd6aec21925d";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 booklet = {
   revision = 15878;
@@ -5632,9 +6159,11 @@ booklet = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.7b";
+  hasCatalogue = true;
 };
 bookman = {
   revision = 61719;
+  catalogue = "urw-base35";
   shortdesc = "URW 'Base 35' font pack for LaTeX";
   stripPrefix = 0;
   fontMaps = [
@@ -5643,6 +6172,7 @@ bookman = {
   sha512.run = "8bef9b6e467384a2b5adc6bd61ed2e410f026f6ee867a5a62239c55391ebd6eb5e521c82f9bd0e4de995591458ec32f98ce821493a85113beaeef6535b938ff4";
   hasRunfiles = true;
   license = [ "gpl1Only" ];
+  hasCatalogue = true;
 };
 bookmark = {
   revision = 69084;
@@ -5654,6 +6184,7 @@ bookmark = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.31";
+  hasCatalogue = true;
 };
 bookshelf = {
   revision = 55475;
@@ -5665,6 +6196,7 @@ bookshelf = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.5";
+  hasCatalogue = true;
 };
 booktabs = {
   revision = 53402;
@@ -5676,6 +6208,7 @@ booktabs = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.61803398";
+  hasCatalogue = true;
 };
 booktabs-de = {
   revision = 21907;
@@ -5685,6 +6218,7 @@ booktabs-de = {
   sha512.doc = "1016522eb74332542a9497f47fb0ea884c7d8b3d0a0630b8a6604bdc41ee08d29d963fcee0d643a8260d2e667c0b39edc74f4998ecbe66bc7a45ef23ac78371c";
   license = [ "gpl1Only" ];
   version = "1.61803";
+  hasCatalogue = true;
 };
 booktabs-fr = {
   revision = 21948;
@@ -5694,6 +6228,7 @@ booktabs-fr = {
   sha512.doc = "eab2c83e6d81a601ec98ffe43ed4b5ec71e17c6ec42c26c519fdbbb3c3e82154b01bb569adca65dbf540ccbd7263cc20806dbe901ba44204b84d07d235b07bc7";
   license = [ "lppl13c" ];
   version = "1.00";
+  hasCatalogue = true;
 };
 boolexpr = {
   revision = 17830;
@@ -5705,6 +6240,7 @@ boolexpr = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "3.14";
+  hasCatalogue = true;
 };
 boondox = {
   revision = 54512;
@@ -5718,6 +6254,7 @@ boondox = {
   hasRunfiles = true;
   license = [ "ofl" "lppl13c" ];
   version = "1.02d";
+  hasCatalogue = true;
 };
 bophook = {
   revision = 17062;
@@ -5729,6 +6266,7 @@ bophook = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.02";
+  hasCatalogue = true;
 };
 borceux = {
   revision = 21047;
@@ -5738,6 +6276,7 @@ borceux = {
   sha512.doc = "202e6b476c5c6f48ea2e6bdf2710d01afcdd9a02669d220bb11bab8fa920f41fddb8aa152a815045ce9d0c92b761f90ab34cd426ba62cf26282d71696f00f03f";
   hasRunfiles = true;
   license = [ "free" ];
+  hasCatalogue = true;
 };
 bosisio = {
   revision = 16989;
@@ -5748,6 +6287,7 @@ bosisio = {
   sha512.source = "494ff83253abdc9f0d81b3ee36f1d860938b1eb8a7691ecda596d31126624f3272ba65685a9436a5817b93a786da97e6bc6702249630d71f697ef394f801584e";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 boxedminipage = {
   revision = 54827;
@@ -5759,6 +6299,7 @@ boxedminipage = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 boxhandler = {
   revision = 28031;
@@ -5770,6 +6311,7 @@ boxhandler = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.30";
+  hasCatalogue = true;
 };
 bpchem = {
   revision = 45120;
@@ -5781,6 +6323,7 @@ bpchem = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 bpolynomial = {
   revision = 15878;
@@ -5791,6 +6334,7 @@ bpolynomial = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.5";
+  hasCatalogue = true;
 };
 br-lex = {
   revision = 44939;
@@ -5800,6 +6344,7 @@ br-lex = {
   sha512.doc = "3d277aeef55721a833cd613c98852c33f7ce22a8034e2fe62952409cffe1ea49ebe1f3b80f91018ea51fadef226939a14e103884dca19227193a32d1e3ba3110";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 bracketkey = {
   revision = 17129;
@@ -5810,6 +6355,7 @@ bracketkey = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 braids = {
   revision = 69398;
@@ -5821,6 +6367,7 @@ braids = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.3";
+  hasCatalogue = true;
 };
 braille = {
   revision = 20655;
@@ -5830,6 +6377,7 @@ braille = {
   sha512.doc = "1cf6922ffa0785adb8e7e7fa5cfe134b206d70d012eb2ec1bd40bedb72ace43c8a17b3e94b16635473d425420f362c49f1b509796d43ca0d2aff0bd9be9f25cf";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 braket = {
   revision = 17127;
@@ -5839,6 +6387,7 @@ braket = {
   sha512.doc = "9bdd3cec0da91ffd13d556b9620e9c502a658374657e2821141191000a2321bf030edc9c32641b5ae6c52acfc7266c377a8f4dfe4891cb616f8d4f6a377d9ee0";
   hasRunfiles = true;
   license = [ "publicDomain" ];
+  hasCatalogue = true;
 };
 brandeis-dissertation = {
   revision = 67935;
@@ -5850,6 +6399,7 @@ brandeis-dissertation = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "3.14";
+  hasCatalogue = true;
 };
 brandeis-problemset = {
   revision = 50991;
@@ -5860,6 +6410,7 @@ brandeis-problemset = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.5.5";
+  hasCatalogue = true;
 };
 brandeis-thesis = {
   revision = 68092;
@@ -5871,6 +6422,7 @@ brandeis-thesis = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "3.3";
+  hasCatalogue = true;
 };
 breakcites = {
   revision = 21014;
@@ -5880,6 +6432,7 @@ breakcites = {
   sha512.doc = "2184e40db7f4a01113ba1040a62f8213f43bf34202a57a33abfc6291e84b01cf27298442f0f636289892d02764f1000ff3542f2ca6e490e0eaf6d5bab247b3f4";
   hasRunfiles = true;
   license = [ "free" ];
+  hasCatalogue = true;
 };
 breakurl = {
   revision = 29901;
@@ -5891,6 +6444,7 @@ breakurl = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.40";
+  hasCatalogue = true;
 };
 bredzenie = {
   revision = 44371;
@@ -5901,6 +6455,7 @@ bredzenie = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 breqn = {
   revision = 60881;
@@ -5912,6 +6467,7 @@ breqn = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.98l";
+  hasCatalogue = true;
 };
 bropd = {
   revision = 35383;
@@ -5923,6 +6479,7 @@ bropd = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.2";
+  hasCatalogue = true;
 };
 brushscr = {
   revision = 28363;
@@ -5935,6 +6492,7 @@ brushscr = {
   sha512.doc = "41ad7b1afc7cb0f4bfdf0bcff4c1d85f3d9603c3d48ccb62f94a6fa2258cf3f60f03ee1b4b5756d85a77ba4ff9afddbccaba1c4bd5b69d85ce4fed206aa16b1c";
   hasRunfiles = true;
   license = [ "publicDomain" ];
+  hasCatalogue = true;
 };
 bubblesort = {
   revision = 56070;
@@ -5946,6 +6504,7 @@ bubblesort = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 buctthesis = {
   revision = 67818;
@@ -5957,6 +6516,7 @@ buctthesis = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.0";
+  hasCatalogue = true;
 };
 bullcntr = {
   revision = 15878;
@@ -5968,6 +6528,7 @@ bullcntr = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.04";
+  hasCatalogue = true;
 };
 bundledoc = {
   revision = 64620;
@@ -5978,6 +6539,7 @@ bundledoc = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "3.4";
+  hasCatalogue = true;
 };
 bundledoc.binfiles = [
   "arlatex"
@@ -5995,6 +6557,7 @@ burmese = {
   sha512.source = "066d164d97f4fa9e1050d75c3c20997be859718a2be37c465010040f969b2d3aa17edc3c241f5aca45d91dd12517d72a731d02954088ee83ff5aeec3be0b0fcd";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 businesscard-qrcode = {
   revision = 61719;
@@ -6005,6 +6568,7 @@ businesscard-qrcode = {
   hasRunfiles = true;
   license = [ "lgpl2" ];
   version = "1.2";
+  hasCatalogue = true;
 };
 bussproofs = {
   revision = 54080;
@@ -6015,6 +6579,7 @@ bussproofs = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 bussproofs-extra = {
   revision = 51299;
@@ -6026,6 +6591,7 @@ bussproofs-extra = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.4";
+  hasCatalogue = true;
 };
 bxbase = {
   revision = 66115;
@@ -6036,6 +6602,7 @@ bxbase = {
   hasRunfiles = true;
   license = [ "mit" ];
   version = "1.2a";
+  hasCatalogue = true;
 };
 bxcalc = {
   revision = 56431;
@@ -6046,6 +6613,7 @@ bxcalc = {
   hasRunfiles = true;
   license = [ "mit" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 bxcjkjatype = {
   revision = 67705;
@@ -6056,6 +6624,7 @@ bxcjkjatype = {
   hasRunfiles = true;
   license = [ "mit" ];
   version = "0.5";
+  hasCatalogue = true;
 };
 bxdpx-beamer = {
   revision = 41813;
@@ -6066,6 +6635,7 @@ bxdpx-beamer = {
   hasRunfiles = true;
   license = [ "mit" ];
   version = "0.3";
+  hasCatalogue = true;
 };
 bxdvidriver = {
   revision = 43219;
@@ -6076,6 +6646,7 @@ bxdvidriver = {
   hasRunfiles = true;
   license = [ "mit" ];
   version = "0.2a";
+  hasCatalogue = true;
 };
 bxeepic = {
   revision = 30559;
@@ -6086,6 +6657,7 @@ bxeepic = {
   hasRunfiles = true;
   license = [ "free" ];
   version = "0.2";
+  hasCatalogue = true;
 };
 bxenclose = {
   revision = 40213;
@@ -6096,6 +6668,7 @@ bxenclose = {
   hasRunfiles = true;
   license = [ "mit" ];
   version = "0.2";
+  hasCatalogue = true;
 };
 bxghost = {
   revision = 66147;
@@ -6106,6 +6679,7 @@ bxghost = {
   hasRunfiles = true;
   license = [ "mit" ];
   version = "0.5.1";
+  hasCatalogue = true;
 };
 bxjaholiday = {
   revision = 60636;
@@ -6116,6 +6690,7 @@ bxjaholiday = {
   hasRunfiles = true;
   license = [ "mit" ];
   version = "1.1.1";
+  hasCatalogue = true;
 };
 bxjalipsum = {
   revision = 67620;
@@ -6126,6 +6701,7 @@ bxjalipsum = {
   hasRunfiles = true;
   license = [ "mit" ];
   version = "1.0a";
+  hasCatalogue = true;
 };
 bxjaprnind = {
   revision = 59641;
@@ -6136,6 +6712,7 @@ bxjaprnind = {
   hasRunfiles = true;
   license = [ "mit" ];
   version = "0.4a";
+  hasCatalogue = true;
 };
 bxjatoucs = {
   revision = 52509;
@@ -6146,6 +6723,7 @@ bxjatoucs = {
   hasRunfiles = true;
   license = [ "mit" ];
   version = "0.2";
+  hasCatalogue = true;
 };
 bxjscls = {
   revision = 69637;
@@ -6157,6 +6735,7 @@ bxjscls = {
   hasRunfiles = true;
   license = [ "bsd2" ];
   version = "2.9b";
+  hasCatalogue = true;
 };
 bxnewfont = {
   revision = 44173;
@@ -6167,6 +6746,7 @@ bxnewfont = {
   hasRunfiles = true;
   license = [ "mit" ];
   version = "0.2b";
+  hasCatalogue = true;
 };
 bxorigcapt = {
   revision = 64072;
@@ -6177,6 +6757,7 @@ bxorigcapt = {
   hasRunfiles = true;
   license = [ "mit" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 bxpapersize = {
   revision = 63174;
@@ -6187,6 +6768,7 @@ bxpapersize = {
   hasRunfiles = true;
   license = [ "mit" ];
   version = "0.6";
+  hasCatalogue = true;
 };
 bxpdfver = {
   revision = 63185;
@@ -6197,6 +6779,7 @@ bxpdfver = {
   hasRunfiles = true;
   license = [ "mit" ];
   version = "0.6";
+  hasCatalogue = true;
 };
 bxtexlogo = {
   revision = 63231;
@@ -6207,6 +6790,7 @@ bxtexlogo = {
   hasRunfiles = true;
   license = [ "mit" ];
   version = "0.6";
+  hasCatalogue = true;
 };
 bxwareki = {
   revision = 67594;
@@ -6217,6 +6801,7 @@ bxwareki = {
   hasRunfiles = true;
   license = [ "mit" ];
   version = "0.7";
+  hasCatalogue = true;
 };
 byo-twemojis = {
   revision = 58917;
@@ -6228,6 +6813,7 @@ byo-twemojis = {
   hasRunfiles = true;
   license = [ "cc-by-40" "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 byrne = {
   revision = 61943;
@@ -6238,6 +6824,7 @@ byrne = {
   hasRunfiles = true;
   license = [ "gpl3Plus" ];
   version = "0.2.2";
+  hasCatalogue = true;
 };
 bytefield = {
   revision = 68366;
@@ -6249,6 +6836,7 @@ bytefield = {
   hasRunfiles = true;
   license = [ "lppl13a" ];
   version = "2.8";
+  hasCatalogue = true;
 };
 c-pascal = {
   revision = 18337;
@@ -6259,6 +6847,7 @@ c-pascal = {
   hasRunfiles = true;
   license = [ "publicDomain" ];
   version = "1.2";
+  hasCatalogue = true;
 };
 c90 = {
   revision = 60830;
@@ -6280,6 +6869,7 @@ cabin = {
   sha512.doc = "95353266181cfda03973d68472ad564185abac4d828141e339183f69380f99151e0a3165f099235db54be8a3ee35ffe069512240633972f4b7dbf14ca1e06126";
   hasRunfiles = true;
   license = [ "ofl" "lppl13c" ];
+  hasCatalogue = true;
 };
 cachepic = {
   revision = 26313;
@@ -6292,6 +6882,7 @@ cachepic = {
   ];
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 cachepic.binfiles = [
   "cachepic"
@@ -6305,6 +6896,7 @@ cahierprof = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 caladea = {
   revision = 64549;
@@ -6317,6 +6909,7 @@ caladea = {
   sha512.doc = "e3f84460394d1a806a06836535c8f9110715608e2110743863e4c9d37abe696a3169e904a4ef507105d54790af4165d3a5a7559b28568b86b73761975b8c0b3e";
   hasRunfiles = true;
   license = [ "asl20" "lppl13c" ];
+  hasCatalogue = true;
 };
 calcage = {
   revision = 27725;
@@ -6328,6 +6921,7 @@ calcage = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.90";
+  hasCatalogue = true;
 };
 calcfrac = {
   revision = 68684;
@@ -6338,6 +6932,7 @@ calcfrac = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.2";
+  hasCatalogue = true;
 };
 calctab = {
   revision = 15878;
@@ -6348,6 +6943,7 @@ calctab = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.6.1";
+  hasCatalogue = true;
 };
 calculation = {
   revision = 35973;
@@ -6359,6 +6955,7 @@ calculation = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 calculator = {
   revision = 64424;
@@ -6370,6 +6967,7 @@ calculator = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.1";
+  hasCatalogue = true;
 };
 calligra = {
   revision = 15878;
@@ -6379,6 +6977,7 @@ calligra = {
   sha512.doc = "05e7b61864f483f0fc50d4680d80a395282a5c7f36b7ccaebb70e1c24cb5a101c4ee5accfec8d12c7fac0e7a32851dc15906267b93e6d75094b7ac646826dead";
   hasRunfiles = true;
   license = [ "free" ];
+  hasCatalogue = true;
 };
 calligra-type1 = {
   revision = 24302;
@@ -6392,6 +6991,7 @@ calligra-type1 = {
   hasRunfiles = true;
   license = [ "free" ];
   version = "001.000";
+  hasCatalogue = true;
 };
 callouts = {
   revision = 44899;
@@ -6401,6 +7001,7 @@ callouts = {
   sha512.doc = "0801298bd110f2e484b45c66626c790217666f3351aeeab87881d7f32ada1868222a21f2a7861afaacdea302ad269d2062aaf5fa9d13fdf8efb93efaeb499bb6";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 calrsfs = {
   revision = 17125;
@@ -6410,6 +7011,7 @@ calrsfs = {
   sha512.doc = "2378c004fe888bd2d60d0830ec98e805a2bdea3a5a6f4161dd3d4cb56c437dabdb579f3293845a10e316cd868725abd304ecb8eab55fb4c728ed5bc0d2073673";
   hasRunfiles = true;
   license = [ "publicDomain" ];
+  hasCatalogue = true;
 };
 cals = {
   revision = 43003;
@@ -6421,6 +7023,7 @@ cals = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.4.2";
+  hasCatalogue = true;
 };
 calxxxx-yyyy = {
   revision = 69266;
@@ -6431,6 +7034,7 @@ calxxxx-yyyy = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "20.24a";
+  hasCatalogue = true;
 };
 cancel = {
   revision = 32508;
@@ -6441,6 +7045,7 @@ cancel = {
   hasRunfiles = true;
   license = [ "publicDomain" ];
   version = "2.2";
+  hasCatalogue = true;
 };
 canoniclayout = {
   revision = 64889;
@@ -6452,6 +7057,7 @@ canoniclayout = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 cantarell = {
   revision = 54512;
@@ -6465,6 +7071,7 @@ cantarell = {
   hasRunfiles = true;
   license = [ "ofl" "lppl13c" ];
   version = "3.2";
+  hasCatalogue = true;
 };
 capt-of = {
   revision = 29803;
@@ -6475,6 +7082,7 @@ capt-of = {
   sha512.source = "87d4bb47226cef478ada2482605b925a3ebb3c1ee1fc624f39e724a857101b113856d99bf659ec5e01ce6773e0f695e424c41ba0640f23a76e9721d06a1d4f56";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 captcont = {
   revision = 15878;
@@ -6486,6 +7094,7 @@ captcont = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.0";
+  hasCatalogue = true;
 };
 captdef = {
   revision = 17353;
@@ -6495,6 +7104,7 @@ captdef = {
   sha512.doc = "c0a1a4584d0802eda39812d2c293fabed2487b0cedb57df622519d5857c2ef10e54e66032e9e9ee9ab81c757fb827eabf422b1bf2ab0ae6f7c22ab3aecb49a8f";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 caption = {
   revision = 68425;
@@ -6505,6 +7115,7 @@ caption = {
   sha512.source = "160a286e1145f2669dcd1abd651cf2fd725ceb95c87506d0844e95393be85624fe53b2f549b7006d8470449ee9305aeed2e81d1a7f2c69cd2f38a26aaf4fecb5";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 carbohydrates = {
   revision = 39000;
@@ -6515,6 +7126,7 @@ carbohydrates = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.1";
+  hasCatalogue = true;
 };
 carlisle = {
   revision = 59577;
@@ -6525,6 +7137,7 @@ carlisle = {
   sha512.source = "9acfe2c47c7a6a9ee358bc79482f2b21f6ab735fe25696e04a996cfad798a0461dcc0bccf6ee7fff9a6b9e22307f5312e26f9c4fba46a03f0289b8031a6bb97d";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 carlito = {
   revision = 64624;
@@ -6537,9 +7150,11 @@ carlito = {
   sha512.doc = "6718aed70469e95dc4d077552b453f81c9fbbcad6201194eb264bba6aa9c9f9b1b1b09d1ed987b963d6b09e13afe5dfda1436333f0c44ee3c368caa90d790613";
   hasRunfiles = true;
   license = [ "ofl" ];
+  hasCatalogue = true;
 };
 carolmin-ps = {
   revision = 15878;
+  catalogue = "carolmin-t1";
   shortdesc = "Adobe Type 1 format of Carolingian Minuscule fonts";
   stripPrefix = 0;
   fontMaps = [
@@ -6549,6 +7164,7 @@ carolmin-ps = {
   sha512.doc = "284d9f740d1e4b1a4c989b527bac80e54afa74013d1234bf9e1c2d42ac2ca4387c3b0d24004818e1fb92b001582114a4432480804c721cc7df0bd3b85835f111";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 cartonaugh = {
   revision = 59938;
@@ -6560,6 +7176,7 @@ cartonaugh = {
   hasRunfiles = true;
   license = [ "cc-by-sa-30" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 cascade = {
   revision = 65757;
@@ -6571,6 +7188,7 @@ cascade = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.2a";
+  hasCatalogue = true;
 };
 cascadia-code = {
   revision = 68485;
@@ -6584,6 +7202,7 @@ cascadia-code = {
   hasRunfiles = true;
   license = [ "ofl" "lppl13c" ];
   version = "0.0.2";
+  hasCatalogue = true;
 };
 cascadilla = {
   revision = 25144;
@@ -6594,6 +7213,7 @@ cascadilla = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.8.2";
+  hasCatalogue = true;
 };
 cases = {
   revision = 54682;
@@ -6604,6 +7224,7 @@ cases = {
   hasRunfiles = true;
   license = [ "free" ];
   version = "3.2";
+  hasCatalogue = true;
 };
 casyl = {
   revision = 15878;
@@ -6614,6 +7235,7 @@ casyl = {
   hasRunfiles = true;
   license = [ "publicDomain" ];
   version = "2.0";
+  hasCatalogue = true;
 };
 catchfile = {
   revision = 53084;
@@ -6625,6 +7247,7 @@ catchfile = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.8";
+  hasCatalogue = true;
 };
 catchfilebetweentags = {
   revision = 21476;
@@ -6636,6 +7259,7 @@ catchfilebetweentags = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 catcodes = {
   revision = 38859;
@@ -6647,6 +7271,7 @@ catcodes = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "r0.2";
+  hasCatalogue = true;
 };
 catechis = {
   revision = 59998;
@@ -6658,6 +7283,7 @@ catechis = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.6";
+  hasCatalogue = true;
 };
 catoptions = {
   revision = 68982;
@@ -6668,6 +7294,7 @@ catoptions = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.2.7i";
+  hasCatalogue = true;
 };
 causets = {
   revision = 66359;
@@ -6678,6 +7305,7 @@ causets = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.4";
+  hasCatalogue = true;
 };
 cbcoptic = {
   revision = 16666;
@@ -6688,9 +7316,11 @@ cbcoptic = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.2";
+  hasCatalogue = true;
 };
 cbfonts = {
   revision = 54080;
+  catalogue = "cbgreek-complete";
   shortdesc = "Complete set of Greek fonts";
   stripPrefix = 0;
   deps = [
@@ -6703,6 +7333,7 @@ cbfonts = {
   sha512.doc = "a069b7ca1b46e5656a05a5e38a0f9ea5c3ab1e5301edc47d7fdd43817a8f5d641980c2e54b7731dcbcf16e12f0dff17df5a816d66f7bd2b613232788815bb8e0";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 cbfonts-fd = {
   revision = 54080;
@@ -6714,6 +7345,7 @@ cbfonts-fd = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.2";
+  hasCatalogue = true;
 };
 cc-pl = {
   revision = 58602;
@@ -6727,6 +7359,7 @@ cc-pl = {
   hasRunfiles = true;
   license = [ "publicDomain" ];
   version = "1.02.3";
+  hasCatalogue = true;
 };
 ccaption = {
   revision = 23443;
@@ -6738,6 +7371,7 @@ ccaption = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "3.2c";
+  hasCatalogue = true;
 };
 ccfonts = {
   revision = 61431;
@@ -6748,6 +7382,7 @@ ccfonts = {
   sha512.source = "30a301941132ba7b85c59b7e806d2b28ff314bcaae30c228337344f09846cc1051a73df1e4a2b76e36d499095c5a21000f250ec13f967a6080280ea120dbecc7";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 ccicons = {
   revision = 54512;
@@ -6762,6 +7397,7 @@ ccicons = {
   hasRunfiles = true;
   license = [ "lppl13c" "ofl" ];
   version = "1.6";
+  hasCatalogue = true;
 };
 cclicenses = {
   revision = 15878;
@@ -6772,6 +7408,7 @@ cclicenses = {
   sha512.source = "d20b1cce1635b415d7368e49a9a32ee3a61efca8d0807b67c7e92ed59604fda1fd9b9d168ac23d54b90e396d971fd421463eb1ec77009d3e077e474166afed55";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 ccool = {
   revision = 60600;
@@ -6783,6 +7420,7 @@ ccool = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "3.2";
+  hasCatalogue = true;
 };
 cd = {
   revision = 34452;
@@ -6794,9 +7432,11 @@ cd = {
   hasRunfiles = true;
   license = [ "gpl1Only" ];
   version = "1.4";
+  hasCatalogue = true;
 };
 cd-cover = {
   revision = 17121;
+  catalogue = "cdcover";
   shortdesc = "Typeset CD covers";
   stripPrefix = 0;
   sha512.run = "345b001cd40137d9739a97c3c06549c3c7b761f56f61109dd4908c767151515081defd6c432232ec7a9fdeb8e85e95258ded345facdef0cf6bffa82bb5c39fbe";
@@ -6805,6 +7445,7 @@ cd-cover = {
   hasRunfiles = true;
   license = [ "gpl1Only" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 cdcmd = {
   revision = 60742;
@@ -6816,6 +7457,7 @@ cdcmd = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 cdpbundl = {
   revision = 61719;
@@ -6827,6 +7469,7 @@ cdpbundl = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.36d";
+  hasCatalogue = true;
 };
 cell = {
   revision = 42428;
@@ -6836,6 +7479,7 @@ cell = {
   sha512.doc = "3cbf1ffa3902f49c155f2ee6b13e24b9abcbdf50da4668042dbc720ef20f483e230fd2ffdc8448007df7ced1ed34077811199cda4fbb35c104dce73084215bf4";
   hasRunfiles = true;
   license = [ "publicDomain" ];
+  hasCatalogue = true;
 };
 cellprops = {
   revision = 67201;
@@ -6847,6 +7491,7 @@ cellprops = {
   hasRunfiles = true;
   license = [ "gpl3Plus" ];
   version = "2.0";
+  hasCatalogue = true;
 };
 cellspace = {
   revision = 61501;
@@ -6857,6 +7502,7 @@ cellspace = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.9.0";
+  hasCatalogue = true;
 };
 celtic = {
   revision = 39797;
@@ -6868,6 +7514,7 @@ celtic = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 censor = {
   revision = 67293;
@@ -6878,6 +7525,7 @@ censor = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "4.3";
+  hasCatalogue = true;
 };
 centeredline = {
   revision = 64672;
@@ -6888,6 +7536,7 @@ centeredline = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.2";
+  hasCatalogue = true;
 };
 centerlastline = {
   revision = 56644;
@@ -6899,6 +7548,7 @@ centerlastline = {
   hasRunfiles = true;
   license = [ "lppl12" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 cesenaexam = {
   revision = 44960;
@@ -6910,6 +7560,7 @@ cesenaexam = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.2";
+  hasCatalogue = true;
 };
 cfr-initials = {
   revision = 61719;
@@ -6920,6 +7571,7 @@ cfr-initials = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.01";
+  hasCatalogue = true;
 };
 cfr-lm = {
   revision = 36195;
@@ -6934,6 +7586,7 @@ cfr-lm = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.5";
+  hasCatalogue = true;
 };
 changebar = {
   revision = 69367;
@@ -6945,6 +7598,7 @@ changebar = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "3.7d";
+  hasCatalogue = true;
 };
 changelayout = {
   revision = 16094;
@@ -6955,6 +7609,7 @@ changelayout = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 changelog = {
   revision = 65861;
@@ -6965,6 +7620,7 @@ changelog = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.5.0";
+  hasCatalogue = true;
 };
 changepage = {
   revision = 15878;
@@ -6976,6 +7632,7 @@ changepage = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0c";
+  hasCatalogue = true;
 };
 changes = {
   revision = 67201;
@@ -6987,6 +7644,7 @@ changes = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "4.2.1";
+  hasCatalogue = true;
 };
 chappg = {
   revision = 15878;
@@ -6998,6 +7656,7 @@ chappg = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.1b";
+  hasCatalogue = true;
 };
 chapterfolder = {
   revision = 15878;
@@ -7009,6 +7668,7 @@ chapterfolder = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.0.1";
+  hasCatalogue = true;
 };
 charissil = {
   revision = 64998;
@@ -7022,6 +7682,7 @@ charissil = {
   hasRunfiles = true;
   license = [ "ofl" "lppl13c" ];
   version = "6.101";
+  hasCatalogue = true;
 };
 charter = {
   revision = 15878;
@@ -7031,6 +7692,7 @@ charter = {
   sha512.doc = "846ccf6ea679e3fc70192e340ce79982cd916d1383579a8549dba7125de645e4fcd4c276800bd5815fcb67d7227081a66b51f42dabebe8cf112585ce9685fb8e";
   hasRunfiles = true;
   license = [ "free" ];
+  hasCatalogue = true;
 };
 chbibref = {
   revision = 17120;
@@ -7041,6 +7703,7 @@ chbibref = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 cheatsheet = {
   revision = 45069;
@@ -7052,6 +7715,7 @@ cheatsheet = {
   hasRunfiles = true;
   license = [ "mit" ];
   version = "0.8";
+  hasCatalogue = true;
 };
 checkcites = {
   revision = 70398;
@@ -7064,6 +7728,7 @@ checkcites = {
   ];
   license = [ "lppl13c" ];
   version = "2.7";
+  hasCatalogue = true;
 };
 checkcites.binfiles = [
   "checkcites"
@@ -7077,6 +7742,7 @@ checkend = {
   hasRunfiles = true;
   license = [ "mit" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 checklistings = {
   revision = 38300;
@@ -7087,6 +7753,7 @@ checklistings = {
   hasRunfiles = true;
   license = [ "lppl12" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 checklistings.binfiles = [
   "checklistings"
@@ -7098,6 +7765,7 @@ chem-journal = {
   sha512.run = "afe7c82f6e139c1321759ef9125f262d504bf602c1c5e16a11d41cc00ea47dac3f2befd602a863a12c46beaac4c50fe6fcdb145c5c6582c9d44c2740aa1b7743";
   hasRunfiles = true;
   license = [ "gpl1Only" ];
+  hasCatalogue = true;
 };
 chemarrow = {
   revision = 17146;
@@ -7112,6 +7780,7 @@ chemarrow = {
   hasRunfiles = true;
   license = [ "publicDomain" ];
   version = "0.9";
+  hasCatalogue = true;
 };
 chembst = {
   revision = 15878;
@@ -7123,6 +7792,7 @@ chembst = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.2.5";
+  hasCatalogue = true;
 };
 chemcompounds = {
   revision = 15878;
@@ -7133,6 +7803,7 @@ chemcompounds = {
   sha512.source = "d1a0c821c6624efcb31ca21ab658a64919dd6eca51add909bea4467dbf47b20dfb60f10ee979a7525a04bae0f7440ddfae2c244da25444ccf0486708b4d1a1a6";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 chemcono = {
   revision = 17119;
@@ -7143,6 +7814,7 @@ chemcono = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.3";
+  hasCatalogue = true;
 };
 chemexec = {
   revision = 21632;
@@ -7153,6 +7825,7 @@ chemexec = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 chemfig = {
   revision = 69227;
@@ -7163,6 +7836,7 @@ chemfig = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.66";
+  hasCatalogue = true;
 };
 chemformula = {
   revision = 61719;
@@ -7176,6 +7850,7 @@ chemformula = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "4.17";
+  hasCatalogue = true;
 };
 chemformula-ru = {
   revision = 70357;
@@ -7185,6 +7860,7 @@ chemformula-ru = {
   sha512.doc = "290b509e2eacd081d690f857ed2a2ba3f860ec25788150af8da5f3eedc5291bbfeea84e117d04959b1a30775ebe72e88f2c0a4a4dc89517ac81b239e3c001d39";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 chemgreek = {
   revision = 53437;
@@ -7195,6 +7871,7 @@ chemgreek = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1a";
+  hasCatalogue = true;
 };
 chemmacros = {
   revision = 62655;
@@ -7205,6 +7882,7 @@ chemmacros = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "6.2a";
+  hasCatalogue = true;
 };
 chemnum = {
   revision = 57490;
@@ -7215,6 +7893,7 @@ chemnum = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.3a";
+  hasCatalogue = true;
 };
 chemobabel = {
   revision = 64778;
@@ -7226,6 +7905,7 @@ chemobabel = {
   hasRunfiles = true;
   license = [ "bsd2" ];
   version = "0.9l";
+  hasCatalogue = true;
 };
 chemplants = {
   revision = 60606;
@@ -7236,6 +7916,7 @@ chemplants = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.9.9";
+  hasCatalogue = true;
 };
 chemschemex = {
   revision = 46723;
@@ -7247,6 +7928,7 @@ chemschemex = {
   hasRunfiles = true;
   license = [ "lppl12" ];
   version = "1.2";
+  hasCatalogue = true;
 };
 chemsec = {
   revision = 46972;
@@ -7258,6 +7940,7 @@ chemsec = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.12a";
+  hasCatalogue = true;
 };
 chemstyle = {
   revision = 31096;
@@ -7269,6 +7952,7 @@ chemstyle = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.0m";
+  hasCatalogue = true;
 };
 cherokee = {
   revision = 21046;
@@ -7278,6 +7962,7 @@ cherokee = {
   sha512.doc = "34b258b5b699f644cc0f7f9b673f3dbe48357bbd338726af2b404da4888a9e742f04e397cc3b6a3221d218a96ac7180ce1e6ba80a19c688de0960ce59cb14bb8";
   hasRunfiles = true;
   license = [ "free" ];
+  hasCatalogue = true;
 };
 chess = {
   revision = 20582;
@@ -7288,6 +7973,7 @@ chess = {
   hasRunfiles = true;
   license = [ "publicDomain" ];
   version = "1.2";
+  hasCatalogue = true;
 };
 chess-problem-diagrams = {
   revision = 63708;
@@ -7299,6 +7985,7 @@ chess-problem-diagrams = {
   hasRunfiles = true;
   license = [ "lppl12" ];
   version = "1.21";
+  hasCatalogue = true;
 };
 chessboard = {
   revision = 56833;
@@ -7310,6 +7997,7 @@ chessboard = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.9";
+  hasCatalogue = true;
 };
 chessfss = {
   revision = 19440;
@@ -7321,6 +8009,7 @@ chessfss = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.2a";
+  hasCatalogue = true;
 };
 chet = {
   revision = 45081;
@@ -7331,6 +8020,7 @@ chet = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.2";
+  hasCatalogue = true;
 };
 chextras = {
   revision = 27118;
@@ -7342,6 +8032,7 @@ chextras = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.01";
+  hasCatalogue = true;
 };
 chhaya = {
   revision = 61719;
@@ -7353,6 +8044,7 @@ chhaya = {
   hasRunfiles = true;
   license = [ "gpl3Plus" "free" "fdl13Only" ];
   version = "0.4";
+  hasCatalogue = true;
 };
 chicago = {
   revision = 15878;
@@ -7361,6 +8053,7 @@ chicago = {
   sha512.run = "2313d7911a8c6bbcfbfb25405e3fd2ea8c0721045f77b9ecf27e4daaee5cfc1a5c010c72d192583e6025aecc6f69421fbd7921d63daa9f29145eb6f9c96c3abb";
   hasRunfiles = true;
   license = [ "free" ];
+  hasCatalogue = true;
 };
 chicago-annote = {
   revision = 15878;
@@ -7370,6 +8063,7 @@ chicago-annote = {
   sha512.doc = "893ba3ff20355e0c395b2092fc01689bd956eb177434ab7152aea686210a7167a04b64ed8ec21030e4f4cbc7e1367a90976168b174fd068d6aecbd0304f380db";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 chicagoa = {
   revision = 52567;
@@ -7378,6 +8072,7 @@ chicagoa = {
   sha512.run = "47cd96b4933b6c0bc4af01e5085af2450b60168813715c946ea18e3e7e5f6bda409862638038917bb678579bfba127fadf51b9a5916e4fb6c78bd10481a273a4";
   hasRunfiles = true;
   license = [ "free" ];
+  hasCatalogue = true;
 };
 chicagolinks = {
   revision = 70566;
@@ -7396,6 +8091,7 @@ chickenize = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.3";
+  hasCatalogue = true;
 };
 chifoot = {
   revision = 57312;
@@ -7406,6 +8102,7 @@ chifoot = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 childdoc = {
   revision = 49543;
@@ -7417,6 +8114,7 @@ childdoc = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.0";
+  hasCatalogue = true;
 };
 chinese-jfm = {
   revision = 57758;
@@ -7427,6 +8125,7 @@ chinese-jfm = {
   hasRunfiles = true;
   license = [ "mit" ];
   version = "1.1.1";
+  hasCatalogue = true;
 };
 chinesechess = {
   revision = 63276;
@@ -7437,6 +8136,7 @@ chinesechess = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.2.0";
+  hasCatalogue = true;
 };
 chivo = {
   revision = 65029;
@@ -7451,6 +8151,7 @@ chivo = {
   hasRunfiles = true;
   license = [ "ofl" "lppl13c" ];
   version = "2.2";
+  hasCatalogue = true;
 };
 chkfloat = {
   revision = 27473;
@@ -7461,6 +8162,7 @@ chkfloat = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.1";
+  hasCatalogue = true;
 };
 chklref = {
   revision = 52649;
@@ -7471,6 +8173,7 @@ chklref = {
   hasRunfiles = true;
   license = [ "gpl3Only" ];
   version = "3.1.2";
+  hasCatalogue = true;
 };
 chklref.binfiles = [
   "chklref"
@@ -7484,6 +8187,7 @@ chktex = {
   hasRunfiles = true;
   license = [ "gpl2Plus" ];
   version = "1.7.8";
+  hasCatalogue = true;
 };
 chktex.binfiles = [
   "chktex"
@@ -7500,6 +8204,7 @@ chletter = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.0";
+  hasCatalogue = true;
 };
 chngcntr = {
   revision = 47577;
@@ -7510,6 +8215,7 @@ chngcntr = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1a";
+  hasCatalogue = true;
 };
 chordbars = {
   revision = 70402;
@@ -7520,6 +8226,7 @@ chordbars = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.3.2";
+  hasCatalogue = true;
 };
 chordbox = {
   revision = 51000;
@@ -7530,6 +8237,7 @@ chordbox = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 chronology = {
   revision = 67973;
@@ -7540,6 +8248,7 @@ chronology = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.0";
+  hasCatalogue = true;
 };
 chronosys = {
   revision = 26700;
@@ -7550,6 +8259,7 @@ chronosys = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.2";
+  hasCatalogue = true;
 };
 chs-physics-report = {
   revision = 54512;
@@ -7559,6 +8269,7 @@ chs-physics-report = {
   sha512.doc = "edfd22aa48a1d3db245d3e41b36cdceabe4e3c2e263d3fb270325b6acc57dabe686561af5359b849e8a17d1f2e9b77f2016cfbcf8b0af37ba3120085de9e6764";
   hasRunfiles = true;
   license = [ "publicDomain" "cc-by-sa-30" ];
+  hasCatalogue = true;
 };
 chscite = {
   revision = 28552;
@@ -7570,6 +8281,7 @@ chscite = {
   hasRunfiles = true;
   license = [ "lppl12" ];
   version = "2.9999";
+  hasCatalogue = true;
 };
 churchslavonic = {
   revision = 67474;
@@ -7587,6 +8299,7 @@ churchslavonic = {
   hasRunfiles = true;
   license = [ "mit" ];
   version = "0.2.4";
+  hasCatalogue = true;
 };
 cidarticle = {
   revision = 68976;
@@ -7598,6 +8311,7 @@ cidarticle = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 cinzel = {
   revision = 64550;
@@ -7610,6 +8324,7 @@ cinzel = {
   sha512.doc = "7edcb9894dfbae936ef6dbde1645890feb50ba5914ffdcfd4539a44f8c8ce24f150662fec06663de54e8bfa69479c8ce006038f063f6587bf70f7c3449623a4e";
   hasRunfiles = true;
   license = [ "ofl" "lppl13c" ];
+  hasCatalogue = true;
 };
 circ = {
   revision = 62977;
@@ -7621,6 +8336,7 @@ circ = {
   hasRunfiles = true;
   license = [ "gpl1Only" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 circledsteps = {
   revision = 67889;
@@ -7631,6 +8347,7 @@ circledsteps = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.3.3";
+  hasCatalogue = true;
 };
 circledtext = {
   revision = 63166;
@@ -7641,6 +8358,7 @@ circledtext = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1.0";
+  hasCatalogue = true;
 };
 circuit-macros = {
   revision = 69263;
@@ -7651,6 +8369,7 @@ circuit-macros = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "10.5";
+  hasCatalogue = true;
 };
 circuitikz = {
   revision = 69757;
@@ -7661,6 +8380,7 @@ circuitikz = {
   hasRunfiles = true;
   license = [ "lppl13c" "gpl1Only" ];
   version = "1.6.7";
+  hasCatalogue = true;
 };
 circularglyphs = {
   revision = 68476;
@@ -7671,6 +8391,7 @@ circularglyphs = {
   hasRunfiles = true;
   license = [ "lppl13c" "free" ];
   version = "0.1.1";
+  hasCatalogue = true;
 };
 citation-style-language = {
   revision = 70583;
@@ -7694,6 +8415,7 @@ citation-style-language = {
   ];
   license = [ "mit" "cc-by-sa-30" ];
   version = "0.4.7";
+  hasCatalogue = true;
 };
 citation-style-language.binfiles = [
   "citeproc-lua"
@@ -7707,6 +8429,7 @@ cite = {
   hasRunfiles = true;
   license = [ "free" ];
   version = "5.5";
+  hasCatalogue = true;
 };
 citeall = {
   revision = 45975;
@@ -7717,6 +8440,7 @@ citeall = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.4";
+  hasCatalogue = true;
 };
 citeref = {
   revision = 47407;
@@ -7727,6 +8451,7 @@ citeref = {
   hasRunfiles = true;
   license = [ "bsdOriginal" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 cje = {
   revision = 68656;
@@ -7737,6 +8462,7 @@ cje = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.07";
+  hasCatalogue = true;
 };
 cjhebrew = {
   revision = 43444;
@@ -7750,6 +8476,7 @@ cjhebrew = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.2a";
+  hasCatalogue = true;
 };
 cjk = {
   revision = 60865;
@@ -7769,6 +8496,7 @@ cjk = {
   hasRunfiles = true;
   license = [ "gpl2Only" ];
   version = "4.8.5";
+  hasCatalogue = true;
 };
 cjk-gs-integrate = {
   revision = 59705;
@@ -7779,6 +8507,7 @@ cjk-gs-integrate = {
   hasRunfiles = true;
   license = [ "gpl3Only" ];
   version = "20210625.0";
+  hasCatalogue = true;
 };
 cjk-gs-integrate.binfiles = [
   "cjk-gs-integrate"
@@ -7795,6 +8524,7 @@ cjk-ko = {
   hasRunfiles = true;
   license = [ "gpl1Only" "lppl13c" "publicDomain" ];
   version = "2.5";
+  hasCatalogue = true;
 };
 cjkpunct = {
   revision = 41119;
@@ -7806,9 +8536,11 @@ cjkpunct = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "4.8.4";
+  hasCatalogue = true;
 };
 cjkutils = {
   revision = 60833;
+  catalogue = "cjk";
   shortdesc = "CJK language support";
   sha512.run = "36b0d0ef4bae2a9e5f2238c5c9aa125eabfca509462b65a159f66cbafc690939e16760a86e7e7dcce22ffda2f301c039059cdff1af8ed862017f18552e13e728";
   sha512.doc = "636e6486f9661061d22d248b0b7a8debdb81cd08c56b449067782568fcc7db58922f7c9d40fbc992bdd008908f22a6733af4a8115d85c0572556d01e925c5587";
@@ -7816,6 +8548,7 @@ cjkutils = {
   hasRunfiles = true;
   license = [ "gpl2Only" ];
   version = "4.8.5";
+  hasCatalogue = true;
 };
 cjkutils.binfiles = [
   "bg5+latex"
@@ -7850,6 +8583,7 @@ cjs-rcs-article = {
   hasRunfiles = true;
   license = [ "lppl13c" "cc-by-sa-40" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 clara = {
   revision = 54512;
@@ -7862,6 +8596,7 @@ clara = {
   sha512.doc = "6b7912050fd352e3095f6abede303f67d3c779b778825852bdaa37345dfec91df860e5b9d0f2fccb7e4e20abfb93740f7f8dba5959aa1d630b7cd990bc0fcf77";
   hasRunfiles = true;
   license = [ "ofl" "gpl2Plus" ];
+  hasCatalogue = true;
 };
 classics = {
   revision = 53671;
@@ -7872,6 +8607,7 @@ classics = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.1a";
+  hasCatalogue = true;
 };
 classicthesis = {
   revision = 48041;
@@ -7882,6 +8618,7 @@ classicthesis = {
   hasRunfiles = true;
   license = [ "gpl2Plus" ];
   version = "4.6";
+  hasCatalogue = true;
 };
 classpack = {
   revision = 55218;
@@ -7893,6 +8630,7 @@ classpack = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.19";
+  hasCatalogue = true;
 };
 cleanthesis = {
   revision = 51472;
@@ -7903,6 +8641,7 @@ cleanthesis = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.4.0";
+  hasCatalogue = true;
 };
 clearsans = {
   revision = 64400;
@@ -7915,6 +8654,7 @@ clearsans = {
   sha512.doc = "a2be117afd912bab15e5ef69cfd54dd66385699677dc357233efaa73e2bd2cfaa9a29c0cf492f48ecf152a9640c95a4ebdee9366f2c27bcead571b5177345ed1";
   hasRunfiles = true;
   license = [ "asl20" "lppl13c" ];
+  hasCatalogue = true;
 };
 clefval = {
   revision = 55985;
@@ -7926,6 +8666,7 @@ clefval = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.1";
+  hasCatalogue = true;
 };
 cleveref = {
   revision = 61719;
@@ -7937,6 +8678,7 @@ cleveref = {
   hasRunfiles = true;
   license = [ "lppl12" ];
   version = "0.21.4";
+  hasCatalogue = true;
 };
 cleveref-forward = {
   revision = 70181;
@@ -7946,6 +8688,7 @@ cleveref-forward = {
   sha512.doc = "b89360c16f6f77ed7386f51afcf4e46aacdb6d1f567fa5dbd4d05e46953d1a0cfba24af687abae59a72189ad84eb475d80ffb6c613ba8b3a88a91c9008a1ffea";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 cleveref-usedon = {
   revision = 70496;
@@ -7957,6 +8700,7 @@ cleveref-usedon = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.4.0";
+  hasCatalogue = true;
 };
 clicks = {
   revision = 64602;
@@ -7972,6 +8716,7 @@ clicks = {
   hasRunfiles = true;
   license = [ "mit" ];
   version = "0.4.1";
+  hasCatalogue = true;
 };
 clipboard = {
   revision = 47747;
@@ -7982,6 +8727,7 @@ clipboard = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.3";
+  hasCatalogue = true;
 };
 clistmap = {
   revision = 61811;
@@ -7993,6 +8739,7 @@ clistmap = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.2";
+  hasCatalogue = true;
 };
 clock = {
   revision = 15878;
@@ -8002,6 +8749,7 @@ clock = {
   sha512.doc = "d06e263266ab91b48ae3238af6ce283c7f720c2113d95d10c7de6026b4557b0fcb22aaec44caba2f7ad743e578e9840da1b116fd3372558d545c424159d8f2e5";
   hasRunfiles = true;
   license = [ "free" ];
+  hasCatalogue = true;
 };
 clojure-pamphlet = {
   revision = 67201;
@@ -8013,6 +8761,7 @@ clojure-pamphlet = {
   hasRunfiles = true;
   license = [ "gpl3Plus" ];
   version = "1.3";
+  hasCatalogue = true;
 };
 clojure-pamphlet.binfiles = [
   "pamphletangler"
@@ -8027,6 +8776,7 @@ cloze = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.6";
+  hasCatalogue = true;
 };
 clrdblpg = {
   revision = 47511;
@@ -8038,6 +8788,7 @@ clrdblpg = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 clrscode = {
   revision = 51136;
@@ -8048,6 +8799,7 @@ clrscode = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.7";
+  hasCatalogue = true;
 };
 clrscode3e = {
   revision = 51137;
@@ -8057,6 +8809,7 @@ clrscode3e = {
   sha512.doc = "0792d458ee46b44d37c31a5bbeaad2257ae1aca818ce33d0b1c8ae96b7e90ea6e06e9036ce61063f232c3829ec36bcef58f111b5df0b25d209e867ac53d322d1";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 clrstrip = {
   revision = 60363;
@@ -8067,6 +8820,7 @@ clrstrip = {
   sha512.source = "db0be0ba5c5686846abc9eabfffcbe24c1b3f0e62554328c254126f7b0450ad0f066f7b3da20aabd83c80545e3400d0d52b639cc23b55a64e6b5735be79ea21f";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 cluttex = {
   revision = 68912;
@@ -8080,6 +8834,7 @@ cluttex = {
   ];
   license = [ "gpl3Plus" ];
   version = "0.6";
+  hasCatalogue = true;
 };
 cluttex.binfiles = [
   "cllualatex"
@@ -8097,6 +8852,7 @@ cm = {
   sha512.doc = "39ccdee82d86f01e11aaeb53844639b4f976677c0baef7675817fafe4263e8e44cfec144f6fce265c9c80d9a9373a2f46ac8a55b7f20923c680eaddd0222a045";
   hasRunfiles = true;
   license = [ "knuth" ];
+  hasCatalogue = true;
 };
 cm-lgc = {
   revision = 28250;
@@ -8110,6 +8866,7 @@ cm-lgc = {
   hasRunfiles = true;
   license = [ "gpl1Only" ];
   version = "0.5";
+  hasCatalogue = true;
 };
 cm-mf-extra-bold = {
   revision = 54512;
@@ -8118,6 +8875,7 @@ cm-mf-extra-bold = {
   sha512.run = "1845d58827ff828d6b60b82e4eda94760cd3c86076982b861e53b4f996a0dfcc9a5926ce58de27891ca3ea115a752cc4abc56b06b112d43194aa8a27c61b86fd";
   hasRunfiles = true;
   license = [ "gpl1Only" "publicDomain" ];
+  hasCatalogue = true;
 };
 cm-super = {
   revision = 15878;
@@ -8135,6 +8893,7 @@ cm-super = {
   sha512.doc = "5b524c55dbcfa1db87484d3437156ca9987fcca66e2c2e6d69e562c48ae708e51f089051524f324cbafb72a29e08f90e70c408d7fea7341e9ef0b5d53288b7d3";
   hasRunfiles = true;
   license = [ "gpl1Only" ];
+  hasCatalogue = true;
 };
 cm-unicode = {
   revision = 58661;
@@ -8145,6 +8904,7 @@ cm-unicode = {
   hasRunfiles = true;
   license = [ "ofl" ];
   version = "0.7.0";
+  hasCatalogue = true;
 };
 cmap = {
   revision = 57640;
@@ -8155,6 +8915,7 @@ cmap = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0j";
+  hasCatalogue = true;
 };
 cmarrows = {
   revision = 24378;
@@ -8165,6 +8926,7 @@ cmarrows = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.9";
+  hasCatalogue = true;
 };
 cmathbb = {
   revision = 56414;
@@ -8178,6 +8940,7 @@ cmathbb = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 cmbright = {
   revision = 21107;
@@ -8189,6 +8952,7 @@ cmbright = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "8.1";
+  hasCatalogue = true;
 };
 cmcyr = {
   revision = 68681;
@@ -8201,6 +8965,7 @@ cmcyr = {
   sha512.doc = "153db17097c5a1e6bbad3e13e7bbfaf13bd8380633f62e9323d2c0514a2649b001c997bad9e7495a88f5cf9c1289f2987d147e22bdca6100e7adc1d88561d443";
   hasRunfiles = true;
   license = [ "publicDomain" ];
+  hasCatalogue = true;
 };
 cmdstring = {
   revision = 15878;
@@ -8211,6 +8976,7 @@ cmdstring = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 cmdtrack = {
   revision = 28910;
@@ -8221,6 +8987,7 @@ cmdtrack = {
   sha512.source = "c6b02dd165bfb3ab40ee05aa3ac9df74faff8167de021495fb08e0d173b83f75453915a634d81d260d4739166b2e5a519b8cecfc7807d25f396c27c5b65f58f3";
   hasRunfiles = true;
   license = [ "lppl1" ];
+  hasCatalogue = true;
 };
 cmexb = {
   revision = 54074;
@@ -8235,11 +9002,13 @@ cmexb = {
 };
 cmextra = {
   revision = 57866;
+  catalogue = "knuth-local";
   shortdesc = "Knuth's local information";
   stripPrefix = 0;
   sha512.run = "fa6bd1e79ca96500080405e01a7524a6fd13358335d34b3e2983a7f33f7b7a50ff4106ee5f2f483f3e040a3a7135b4133d727c6a7cb0c90f63be40e5410e3b48";
   hasRunfiles = true;
   license = [ "publicDomain" ];
+  hasCatalogue = true;
 };
 cmll = {
   revision = 17964;
@@ -8253,6 +9022,7 @@ cmll = {
   sha512.source = "de17c8e0627408358ae3de41a5bf557d99abf76bb480ab28ef9df424d8b7ae1f73ca2e30f4eeb26ac9eb2dd36ddafa143cd49ce6618b2ca36fcfc6e22e83d217";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 cmpica = {
   revision = 15878;
@@ -8262,6 +9032,7 @@ cmpica = {
   sha512.doc = "7c6251f1c5090328c93f6ec224bbb6d05433b5471c6cb8b4d7f3b9ff05f9be8ad49587d24a34702fb23b9f1803ca3df3a638b16335944a9b2dc35422ca8bf9fe";
   hasRunfiles = true;
   license = [ "publicDomain" ];
+  hasCatalogue = true;
 };
 cmpj = {
   revision = 58506;
@@ -8272,6 +9043,7 @@ cmpj = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "3.03";
+  hasCatalogue = true;
 };
 cmsd = {
   revision = 18787;
@@ -8281,6 +9053,7 @@ cmsd = {
   sha512.doc = "f9994a39f6e14f40398abacfe0f4c1a9cbd71d7b55c29787105fdbf8212953fb761f1696cf35196d446b9905a967d2908d7e41e7742e5cd7dd538ac0e7d3f5d0";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 cmsrb = {
   revision = 54706;
@@ -8294,6 +9067,7 @@ cmsrb = {
   hasRunfiles = true;
   license = [ "gpl1Only" ];
   version = "4.0";
+  hasCatalogue = true;
 };
 cmtiup = {
   revision = 39728;
@@ -8304,6 +9078,7 @@ cmtiup = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.1";
+  hasCatalogue = true;
 };
 cmupint = {
   revision = 54735;
@@ -8317,6 +9092,7 @@ cmupint = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 cnbwp = {
   revision = 69931;
@@ -8327,6 +9103,7 @@ cnbwp = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2024.02";
+  hasCatalogue = true;
 };
 cnltx = {
   revision = 55265;
@@ -8337,9 +9114,11 @@ cnltx = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.15";
+  hasCatalogue = true;
 };
 cns = {
   revision = 45677;
+  catalogue = "cjk-fonts";
   shortdesc = "Chinese/Japanese/Korean bitmap fonts";
   stripPrefix = 0;
   sha512.run = "0b3645da07e0fc9482cfeddd93f949e18dc12b6aa02e5a6c45669f3d5f7f25d5fa7ff4992f40b9b71894e21b5b1855999ba8e1b130be27e8b7001444ed30db0f";
@@ -8347,6 +9126,7 @@ cns = {
   hasRunfiles = true;
   license = [ "publicDomain" ];
   version = "4.2.0";
+  hasCatalogue = true;
 };
 cntformats = {
   revision = 34668;
@@ -8357,6 +9137,7 @@ cntformats = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.7";
+  hasCatalogue = true;
 };
 cntperchap = {
   revision = 37572;
@@ -8367,6 +9148,7 @@ cntperchap = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.3";
+  hasCatalogue = true;
 };
 cochineal = {
   revision = 70537;
@@ -8380,6 +9162,7 @@ cochineal = {
   hasRunfiles = true;
   license = [ "ofl" "lppl13c" ];
   version = "1.085";
+  hasCatalogue = true;
 };
 codeanatomy = {
   revision = 65648;
@@ -8391,6 +9174,7 @@ codeanatomy = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.4-Beta";
+  hasCatalogue = true;
 };
 codebox = {
   revision = 61771;
@@ -8401,6 +9185,7 @@ codebox = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0.4";
+  hasCatalogue = true;
 };
 codedescribe = {
   revision = 69944;
@@ -8411,6 +9196,7 @@ codedescribe = {
   hasRunfiles = true;
   license = [ "lppl13c" "gpl1Only" ];
   version = "1.4";
+  hasCatalogue = true;
 };
 codedoc = {
   revision = 17630;
@@ -8421,6 +9207,7 @@ codedoc = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.3";
+  hasCatalogue = true;
 };
 codehigh = {
   revision = 65787;
@@ -8431,6 +9218,7 @@ codehigh = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2023A";
+  hasCatalogue = true;
 };
 codepage = {
   revision = 51502;
@@ -8441,6 +9229,7 @@ codepage = {
   sha512.source = "2c12bf42c1aa818d5718f2bbbb07460364ad40f7bc4cf0676cb064a03751e1bd88be16fffaae097f5ed9c0793f60ffb93374b43f7b90acf8ad3cbc8f5d7b8b70";
   hasRunfiles = true;
   license = [ "free" ];
+  hasCatalogue = true;
 };
 codesection = {
   revision = 34481;
@@ -8452,6 +9241,7 @@ codesection = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.1";
+  hasCatalogue = true;
 };
 codicefiscaleitaliano = {
   revision = 29803;
@@ -8463,6 +9253,7 @@ codicefiscaleitaliano = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.2";
+  hasCatalogue = true;
 };
 coelacanth = {
   revision = 64558;
@@ -8476,6 +9267,7 @@ coelacanth = {
   hasRunfiles = true;
   license = [ "ofl" "lppl13c" ];
   version = "0.005";
+  hasCatalogue = true;
 };
 coffeestains = {
   revision = 59703;
@@ -8486,6 +9278,7 @@ coffeestains = {
   hasRunfiles = true;
   license = [ "publicDomain" ];
   version = "0.5.1";
+  hasCatalogue = true;
 };
 collargs = {
   revision = 69284;
@@ -8497,6 +9290,7 @@ collargs = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1.0";
+  hasCatalogue = true;
 };
 collcell = {
   revision = 64967;
@@ -8508,6 +9302,7 @@ collcell = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.5";
+  hasCatalogue = true;
 };
 collectbox = {
   revision = 64967;
@@ -8519,6 +9314,7 @@ collectbox = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.4c";
+  hasCatalogue = true;
 };
 collection-basic = {
   revision = 59159;
@@ -13299,6 +14095,7 @@ collref = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.0c";
+  hasCatalogue = true;
 };
 colophon = {
   revision = 47913;
@@ -13310,6 +14107,7 @@ colophon = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 color-edits = {
   revision = 56707;
@@ -13321,6 +14119,7 @@ color-edits = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 colordoc = {
   revision = 18270;
@@ -13331,6 +14130,7 @@ colordoc = {
   sha512.source = "2c42638129705d6e08375298684ff96c867a4deeb1d836ea12f8d6b0ad9f61f6840159ed04b92f2cac4c8d126da3a8e657589635ebd3388b9d457994bbc53a36";
   hasRunfiles = true;
   license = [ "lppl1" ];
+  hasCatalogue = true;
 };
 coloredbelts = {
   revision = 68747;
@@ -13341,6 +14141,7 @@ coloredbelts = {
   hasRunfiles = true;
   license = [ "lppl13c" "cc-by-sa-30" ];
   version = "0.1.0";
+  hasCatalogue = true;
 };
 colorframed = {
   revision = 64551;
@@ -13351,6 +14152,7 @@ colorframed = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.9b";
+  hasCatalogue = true;
 };
 colorinfo = {
   revision = 15878;
@@ -13361,6 +14163,7 @@ colorinfo = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.3c";
+  hasCatalogue = true;
 };
 coloring = {
   revision = 41042;
@@ -13371,6 +14174,7 @@ coloring = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.2";
+  hasCatalogue = true;
 };
 colorist = {
   revision = 70101;
@@ -13383,6 +14187,7 @@ colorist = {
   sha512.doc = "133f8e9e5e504aa069ed60e7549579064664bb375af27e9e6457bc0347201a5902c1a3c699c4eecec5485fa905c7f026af9fe8a2de3aa8d5d2daac8c95efac83";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 colorprofiles = {
   revision = 49086;
@@ -13393,6 +14198,7 @@ colorprofiles = {
   hasRunfiles = true;
   license = [ "free" ];
   version = "20181105";
+  hasCatalogue = true;
 };
 colorsep = {
   revision = 13293;
@@ -13401,6 +14207,7 @@ colorsep = {
   sha512.run = "3c6387a4c538235181dcaf7b6c3ac51d2893d35fa2c18d95d85810b778fecaed7ae2337d2b284ee3439f44d3570ee86884d42616539bf61a15526aa711da70e9";
   hasRunfiles = true;
   license = [ "publicDomain" ];
+  hasCatalogue = true;
 };
 colorspace = {
   revision = 50585;
@@ -13411,6 +14218,7 @@ colorspace = {
   hasRunfiles = true;
   license = [ "mit" ];
   version = "1.3";
+  hasCatalogue = true;
 };
 colortab = {
   revision = 22155;
@@ -13421,6 +14229,7 @@ colortab = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 colortbl = {
   revision = 70034;
@@ -13432,6 +14241,7 @@ colortbl = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0g";
+  hasCatalogue = true;
 };
 colorwav = {
   revision = 67012;
@@ -13443,6 +14253,7 @@ colorwav = {
   hasRunfiles = true;
   license = [ "lgpl2" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 colorweb = {
   revision = 31490;
@@ -13454,6 +14265,7 @@ colorweb = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.3";
+  hasCatalogue = true;
 };
 colourchange = {
   revision = 21741;
@@ -13464,6 +14276,7 @@ colourchange = {
   hasRunfiles = true;
   license = [ "gpl3Only" ];
   version = "1.22";
+  hasCatalogue = true;
 };
 combelow = {
   revision = 18462;
@@ -13474,6 +14287,7 @@ combelow = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.99f";
+  hasCatalogue = true;
 };
 combine = {
   revision = 19361;
@@ -13485,6 +14299,7 @@ combine = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.7a";
+  hasCatalogue = true;
 };
 combinedgraphics = {
   revision = 27198;
@@ -13496,6 +14311,7 @@ combinedgraphics = {
   hasRunfiles = true;
   license = [ "gpl1Only" ];
   version = "0.2.2";
+  hasCatalogue = true;
 };
 combofont = {
   revision = 51348;
@@ -13506,6 +14322,7 @@ combofont = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.3";
+  hasCatalogue = true;
 };
 comfortaa = {
   revision = 54512;
@@ -13519,6 +14336,7 @@ comfortaa = {
   hasRunfiles = true;
   license = [ "ofl" "lppl13c" ];
   version = "3.2";
+  hasCatalogue = true;
 };
 comicneue = {
   revision = 54891;
@@ -13533,6 +14351,7 @@ comicneue = {
   hasRunfiles = true;
   license = [ "ofl" ];
   version = "1.2";
+  hasCatalogue = true;
 };
 comma = {
   revision = 18259;
@@ -13543,6 +14362,7 @@ comma = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.2";
+  hasCatalogue = true;
 };
 commado = {
   revision = 38875;
@@ -13554,6 +14374,7 @@ commado = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "r0.11a";
+  hasCatalogue = true;
 };
 commath = {
   revision = 15878;
@@ -13564,6 +14385,7 @@ commath = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.3";
+  hasCatalogue = true;
 };
 commedit = {
   revision = 50116;
@@ -13575,6 +14397,7 @@ commedit = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.02";
+  hasCatalogue = true;
 };
 comment = {
   revision = 41927;
@@ -13585,6 +14408,7 @@ comment = {
   hasRunfiles = true;
   license = [ "gpl2Only" ];
   version = "3.8";
+  hasCatalogue = true;
 };
 commonunicode = {
   revision = 62901;
@@ -13595,6 +14419,7 @@ commonunicode = {
   hasRunfiles = true;
   license = [ "mit" ];
   version = "1.0.0";
+  hasCatalogue = true;
 };
 commutative-diagrams = {
   revision = 68044;
@@ -13605,6 +14430,7 @@ commutative-diagrams = {
   hasRunfiles = true;
   license = [ "mit" ];
   version = "1.1.0";
+  hasCatalogue = true;
 };
 compactbib = {
   revision = 15878;
@@ -13613,6 +14439,7 @@ compactbib = {
   sha512.run = "dbc3bb28178a656b400a2a72e48ec813d6e282ddba7c70bb4dd0b5ed7f76e9e0be1dffb0ecf43e4893210453ef420c1b1d859c287663cad6bfe8c7f46dc8d86b";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 compare = {
   revision = 54265;
@@ -13621,6 +14448,7 @@ compare = {
   sha512.run = "16d6ffeaa66c1165ce4c6795ff2f73e0cc5a811045198db6e7aa2556bc6ff8b20883478011fae9f06400475f9a96a57fea34f7513b7fbbb392aee03dbd30ad01";
   hasRunfiles = true;
   license = [ "publicDomain" ];
+  hasCatalogue = true;
 };
 competences = {
   revision = 47573;
@@ -13632,6 +14460,7 @@ competences = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 complexity = {
   revision = 45322;
@@ -13642,14 +14471,17 @@ complexity = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.81a";
+  hasCatalogue = true;
 };
 components = {
   revision = 63184;
+  catalogue = "components";
   shortdesc = "Components of TeX";
   stripPrefix = 0;
   sha512.run = "e7f8aebb11919cd389648b1417c9d43f163858b7de28592998636a69003274d3825bb23f8faa2c29101d51343d9865780523cd95a2a014433399e2373970a116";
   sha512.doc = "f64c61df38424c72abbb778e7e39023193562228bc1eaa3f683bd81f3eb61075c4948b75a47d81946f4acf1cb5affd242309b95a248240ee413b8dd5dcb40a96";
   license = [ "gpl1Only" ];
+  hasCatalogue = true;
 };
 comprehensive = {
   revision = 69619;
@@ -13659,6 +14491,7 @@ comprehensive = {
   sha512.doc = "8d6e7b2de1d4a89e493d0ebc9b1e1a7e11e0839089d06a36f2cd8d0df47a66642edd8ab20e9688e18f6eac70d803da3edee1f8588fdfdb7bc3e46dd993523671";
   license = [ "lppl13c" ];
   version = "15.0";
+  hasCatalogue = true;
 };
 computational-complexity = {
   revision = 44847;
@@ -13670,6 +14503,7 @@ computational-complexity = {
   hasRunfiles = true;
   license = [ "lppl12" ];
   version = "2.25f";
+  hasCatalogue = true;
 };
 concepts = {
   revision = 29020;
@@ -13680,6 +14514,7 @@ concepts = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.0.5-r1";
+  hasCatalogue = true;
 };
 concmath = {
   revision = 17219;
@@ -13690,6 +14525,7 @@ concmath = {
   sha512.source = "6c4a5a4af907174df5fdeb77f0c4d0f554c2b8ac0d95031fe98f4a748bc4a96c7a526e44229174ffaccdec5bcf086722b355b3c4dcbc4441e1a67c91a71376db";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 concmath-fonts = {
   revision = 17218;
@@ -13699,6 +14535,7 @@ concmath-fonts = {
   sha512.doc = "7b2db9b8f2f23816cf413676dfbf6ca3413a39bb20cbc12070b9202bd2e98714a86dcb5f27a746ae197efd2284eb794f06af1b2941667abfddb72773ceb61378";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 concmath-otf = {
   revision = 70337;
@@ -13709,6 +14546,7 @@ concmath-otf = {
   hasRunfiles = true;
   license = [ "ofl" "lppl13c" ];
   version = "0.63";
+  hasCatalogue = true;
 };
 concprog = {
   revision = 18791;
@@ -13718,6 +14556,7 @@ concprog = {
   sha512.doc = "bf4d76362f7a764ae4c7937edf05a575b3faa8d6919c6c857ae350b742f53d6390546263d14958dbdfd423c9b45a7f9eebe862a00378f51c754b5fee65f60bc0";
   hasRunfiles = true;
   license = [ "gpl1Only" ];
+  hasCatalogue = true;
 };
 concrete = {
   revision = 57963;
@@ -13727,6 +14566,7 @@ concrete = {
   sha512.doc = "c70e9c299e69daa29e9471293b59ed4bf375b8314729381c1973c5390ec5d73b3cffa16db8864e8d84466dbd078179e98b2ffa3e6466d67441e30efcd02676fb";
   hasRunfiles = true;
   license = [ "knuth" ];
+  hasCatalogue = true;
 };
 conditext = {
   revision = 55387;
@@ -13737,6 +14577,7 @@ conditext = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.5";
+  hasCatalogue = true;
 };
 confproc = {
   revision = 29349;
@@ -13748,6 +14589,7 @@ confproc = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.8";
+  hasCatalogue = true;
 };
 constants = {
   revision = 15878;
@@ -13759,6 +14601,7 @@ constants = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 conteq = {
   revision = 37868;
@@ -13770,6 +14613,7 @@ conteq = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.1.1";
+  hasCatalogue = true;
 };
 context = {
   revision = 69665;
@@ -13796,6 +14640,7 @@ context = {
     "lua"
   ];
   license = [ "free" ];
+  hasCatalogue = true;
 };
 context-calendar-examples = {
   revision = 66947;
@@ -13808,6 +14653,7 @@ context-calendar-examples = {
   sha512.doc = "62a63d54d0388a027cb6afa58141a6fc303fde6cc0f989348fe29fd10e825a03d86ff682f480723b223b606e296591cf03092c886cf13cde03463ff8012caca1";
   hasRunfiles = true;
   license = [ "publicDomain" ];
+  hasCatalogue = true;
 };
 context-collating-marks = {
   revision = 68696;
@@ -13820,6 +14666,7 @@ context-collating-marks = {
   sha512.doc = "6a5d88d6091e95025e7a4f12a6e831e5bf462156afa06c7b49d35086f9b555ed8fc1ed9cde970146106f3efc29b70bf0699c1b5eadcf970c1f8978c46ad590bc";
   hasRunfiles = true;
   license = [ "publicDomain" ];
+  hasCatalogue = true;
 };
 context-cyrillicnumbers = {
   revision = 47085;
@@ -13832,6 +14679,7 @@ context-cyrillicnumbers = {
   sha512.doc = "d95b1df26033aaff0a9f6759268ac3e68bff02556001e3f9b2bae1db68aa13c839a87047a6ae0a296f8e5817398ba35b7cbacc4f194dd93cf72684904190e7e3";
   hasRunfiles = true;
   license = [ "bsd3" ];
+  hasCatalogue = true;
 };
 context-filter = {
   revision = 62070;
@@ -13844,6 +14692,7 @@ context-filter = {
   sha512.doc = "a9c2ea88b0e2514840c368ea7686894dda4b86c93ec8f34989238ffdf5704f1c1898d0ee5e0724035314d2d37803f1a1afdd445dd802a94f5ff4223148f81767";
   hasRunfiles = true;
   license = [ "bsd2" ];
+  hasCatalogue = true;
 };
 context-gnuplot = {
   revision = 47085;
@@ -13856,6 +14705,7 @@ context-gnuplot = {
   sha512.doc = "40e471b27d53ced33590792ac62992a220357c6db1c78cba901197362a36817bc14b049f2573ee2e5b5adad5182c5bea2880c4f7a2477bcd1a06ee7ccf88b0b9";
   hasRunfiles = true;
   license = [ "gpl1Only" ];
+  hasCatalogue = true;
 };
 context-handlecsv = {
   revision = 70074;
@@ -13868,6 +14718,7 @@ context-handlecsv = {
   sha512.doc = "763f75ab94a317788d9d96b88f1b7e25847ed316b4dcd84158719ef1c3cc48c90c884ec3158412d574839adf1ce8bcb12f9c0cefb6650338afa424fbd0213be3";
   hasRunfiles = true;
   license = [ "gpl3Only" ];
+  hasCatalogue = true;
 };
 context-legacy = {
   revision = 69173;
@@ -13913,6 +14764,7 @@ context-letter = {
   sha512.doc = "94e1bf68371f3e8c426cfff5c471f93c86ce51fdd92dfad59669d32cc73d86de606113ece55d13a0f25ac4a26f16916407de9175b84acc79ba107156c20cd20a";
   hasRunfiles = true;
   license = [ "gpl1Only" ];
+  hasCatalogue = true;
 };
 context-mathsets = {
   revision = 47085;
@@ -13925,6 +14777,7 @@ context-mathsets = {
   sha512.doc = "f2c33244814da8e8838483038f507fe6b3e146f37691e55a37bb5355985d2af4c5fc423318133c4f13837a3e66a4fe72d5c14f6721bb5ee0417a59691b86d3f1";
   hasRunfiles = true;
   license = [ "free" ];
+  hasCatalogue = true;
 };
 context-notes-zh-cn = {
   revision = 66725;
@@ -13936,6 +14789,7 @@ context-notes-zh-cn = {
   sha512.run = "46be6b5f9f86d6da5514f0ae0cd77aa9beab67572699f9779f3a6cd461a8600336103eaf71d6e6d99fd7ac300a3e5fedcd6e378d349cf648c9aa5a8be2aaa5b5";
   sha512.doc = "a49b1c85508128e0a2e9ae0218e3622f7479da528f51380c1e109bf877f401531689e8119cab3bde6a91e507f0bd7f16e334cb3affaba7fae5927cc23b17a207";
   license = [ "gpl3Only" ];
+  hasCatalogue = true;
 };
 context-pocketdiary = {
   revision = 66953;
@@ -13948,6 +14802,7 @@ context-pocketdiary = {
   sha512.doc = "a78ed374f6a7ad63a93aef4c9cb2ecc0937c2e3df821c543f49a3ad762ed6949a7d1c4c5a03c7cf54eeb0b9ad891a18c5d10b97a42bbb840c74fef2bf8f14cfb";
   hasRunfiles = true;
   license = [ "publicDomain" ];
+  hasCatalogue = true;
 };
 context-simpleslides = {
   revision = 67070;
@@ -13960,6 +14815,7 @@ context-simpleslides = {
   sha512.doc = "e7a410ec0d99f945dae91c041b396875a6350aa06333f5a5d2d7aa4c6bb62f926ec53a27a1c95a724ce7b320ddef11d6550b0b92a34c00ac63c7c0da96a35928";
   hasRunfiles = true;
   license = [ "gpl1Only" ];
+  hasCatalogue = true;
 };
 context-squares = {
   revision = 70141;
@@ -13972,6 +14828,7 @@ context-squares = {
   sha512.doc = "08b652e69c1719991daf36b9d9360b5736c25283ef10bdb5859bdfaecf1dd3a47d7417b9884d7bf51a32b073f99e08f35d8f172ff0d6a4817923c00f81dd6dfc";
   hasRunfiles = true;
   license = [ "mit" ];
+  hasCatalogue = true;
 };
 context-sudoku = {
   revision = 67289;
@@ -13984,6 +14841,7 @@ context-sudoku = {
   sha512.doc = "e7f9b6c0ae6bad729074ffb2e4e1673336954adb9013ee6525e87715f3d22720efbe1f7e2cb6b695e01940a4d7f58489889612749ea2f4dbcba3ac6faaa741c4";
   hasRunfiles = true;
   license = [ "mit" ];
+  hasCatalogue = true;
 };
 context-texlive = {
   revision = 66924;
@@ -14003,6 +14861,7 @@ context-transliterator = {
   sha512.doc = "8473c1ca7b48009055f5c33031ec60f80d84dc43396789b0c0c7e6d65bcf014a237088dca07211beae4bfb80377f55cf12a9f379995cff50f52143fc4bc81295";
   hasRunfiles = true;
   license = [ "bsd3" ];
+  hasCatalogue = true;
 };
 context-typescripts = {
   revision = 60422;
@@ -14015,6 +14874,7 @@ context-typescripts = {
   sha512.doc = "3d948f22da14b1d481817477235657cee714e4a2a69834729c20e18157f1175890ddc7fce992e8f5f27e26cd6d08186ff1521e2186681557cfff1a4778267324";
   hasRunfiles = true;
   license = [ "gpl2Only" ];
+  hasCatalogue = true;
 };
 context-vim = {
   revision = 62071;
@@ -14028,6 +14888,7 @@ context-vim = {
   sha512.doc = "0f49e22b9e1d465f46727a9e952e095eceab55e77a2559fe497cf14690377f77ca42aa23ce7eaca659e9b0983e5a950b36733eef49b0473fd33a8f783edb43b1";
   hasRunfiles = true;
   license = [ "bsd3" ];
+  hasCatalogue = true;
 };
 context-visualcounter = {
   revision = 47085;
@@ -14041,6 +14902,7 @@ context-visualcounter = {
   sha512.source = "39bba551e9f0bb8d70c0b60a2b0fba3d7cad30555d4052fc6ae722bfd9cb79d5cca784474a9f1847faccccb1618662bc4dd2fadd1fdacaf2f4cc9c035b5501ec";
   hasRunfiles = true;
   license = [ "bsd2" ];
+  hasCatalogue = true;
 };
 context.binfiles = [
   "context"
@@ -14062,6 +14924,7 @@ continue = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.2";
+  hasCatalogue = true;
 };
 contour = {
   revision = 18950;
@@ -14073,6 +14936,7 @@ contour = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.14";
+  hasCatalogue = true;
 };
 contracard = {
   revision = 67201;
@@ -14084,6 +14948,7 @@ contracard = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.0.0";
+  hasCatalogue = true;
 };
 contract = {
   revision = 69759;
@@ -14095,6 +14960,7 @@ contract = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.91";
+  hasCatalogue = true;
 };
 conv-xkv = {
   revision = 43558;
@@ -14105,6 +14971,7 @@ conv-xkv = {
   sha512.source = "edd5feac4453010dd996edbb3741339904b0380c021f9429933f6b27df6d9c002d593d617467043ae6087de3c5842fb7a4e8ccfcc95c7763e124ab5f5c9dc024";
   hasRunfiles = true;
   license = [ "lppl12" ];
+  hasCatalogue = true;
 };
 convbkmk = {
   revision = 49252;
@@ -14117,6 +14984,7 @@ convbkmk = {
   ];
   license = [ "mit" ];
   version = "0.30";
+  hasCatalogue = true;
 };
 convbkmk.binfiles = [
   "convbkmk"
@@ -14131,6 +14999,7 @@ cooking = {
   hasRunfiles = true;
   license = [ "gpl1Only" ];
   version = "0.9b";
+  hasCatalogue = true;
 };
 cooking-units = {
   revision = 65241;
@@ -14142,6 +15011,7 @@ cooking-units = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "3.00";
+  hasCatalogue = true;
 };
 cookingsymbols = {
   revision = 35929;
@@ -14153,6 +15023,7 @@ cookingsymbols = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 cool = {
   revision = 67013;
@@ -14164,6 +15035,7 @@ cool = {
   hasRunfiles = true;
   license = [ "lgpl2" ];
   version = "1.35";
+  hasCatalogue = true;
 };
 coolfn = {
   revision = 69007;
@@ -14174,6 +15046,7 @@ coolfn = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.2.2";
+  hasCatalogue = true;
 };
 coollist = {
   revision = 67048;
@@ -14185,6 +15058,7 @@ coollist = {
   hasRunfiles = true;
   license = [ "lgpl2" ];
   version = "1.4";
+  hasCatalogue = true;
 };
 coolstr = {
   revision = 67015;
@@ -14196,6 +15070,7 @@ coolstr = {
   hasRunfiles = true;
   license = [ "lgpl2" ];
   version = "2.2";
+  hasCatalogue = true;
 };
 coolthms = {
   revision = 29062;
@@ -14207,6 +15082,7 @@ coolthms = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.2";
+  hasCatalogue = true;
 };
 cooltooltips = {
   revision = 60201;
@@ -14218,6 +15094,7 @@ cooltooltips = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 coop-writing = {
   revision = 61607;
@@ -14229,6 +15106,7 @@ coop-writing = {
   hasRunfiles = true;
   license = [ "mit" ];
   version = "1.2.4";
+  hasCatalogue = true;
 };
 cooperhewitt = {
   revision = 64967;
@@ -14241,6 +15119,7 @@ cooperhewitt = {
   sha512.doc = "211601a3a1fe2092a1cbb67cf6fa71f7ea2225f425a8556c1b88396c3f0d721ee144346fbd29204c4d68da77363653b1f0b14693139278f2b22a6104bdf949d0";
   hasRunfiles = true;
   license = [ "ofl" "lppl13c" ];
+  hasCatalogue = true;
 };
 coordsys = {
   revision = 15878;
@@ -14252,6 +15131,7 @@ coordsys = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.4";
+  hasCatalogue = true;
 };
 copyedit = {
   revision = 37928;
@@ -14263,6 +15143,7 @@ copyedit = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.6";
+  hasCatalogue = true;
 };
 copyrightbox = {
   revision = 24829;
@@ -14273,6 +15154,7 @@ copyrightbox = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.1";
+  hasCatalogue = true;
 };
 cormorantgaramond = {
   revision = 64411;
@@ -14286,6 +15168,7 @@ cormorantgaramond = {
   hasRunfiles = true;
   license = [ "ofl" "lppl13c" ];
   version = "3.601";
+  hasCatalogue = true;
 };
 correctmathalign = {
   revision = 44131;
@@ -14296,6 +15179,7 @@ correctmathalign = {
   hasRunfiles = true;
   license = [ "bsd3" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 coseoul = {
   revision = 23862;
@@ -14306,6 +15190,7 @@ coseoul = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 couleurs-fr = {
   revision = 67901;
@@ -14316,6 +15201,7 @@ couleurs-fr = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.1.2";
+  hasCatalogue = true;
 };
 counterz = {
   revision = 67335;
@@ -14327,6 +15213,7 @@ counterz = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1.1";
+  hasCatalogue = true;
 };
 countriesofeurope = {
   revision = 54512;
@@ -14340,6 +15227,7 @@ countriesofeurope = {
   hasRunfiles = true;
   license = [ "ofl" "lppl13c" ];
   version = "0.23";
+  hasCatalogue = true;
 };
 counttexruns = {
   revision = 27576;
@@ -14351,9 +15239,11 @@ counttexruns = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.00a";
+  hasCatalogue = true;
 };
 courier = {
   revision = 61719;
+  catalogue = "urw-base35";
   shortdesc = "URW 'Base 35' font pack for LaTeX";
   stripPrefix = 0;
   fontMaps = [
@@ -14362,6 +15252,7 @@ courier = {
   sha512.run = "30d6c8906671239b9ef04b3c4d571f59e928ffefc965cd592ecd3277062c778b6f8cb0782f5eb8c6bc27d03b69a88a120593477ced93bcc44cdd4fbc3e5b8adb";
   hasRunfiles = true;
   license = [ "gpl1Only" ];
+  hasCatalogue = true;
 };
 courier-scaled = {
   revision = 24940;
@@ -14371,6 +15262,7 @@ courier-scaled = {
   sha512.doc = "59c5cec8491e678b084afb4c6e63ed07ca179b5f17be8fe581ff341c80b3cee8016601799ada090e1fcde9eeb72197986f3d4aeffa7c7a9d10a014e34282f52a";
   hasRunfiles = true;
   license = [ "lppl12" ];
+  hasCatalogue = true;
 };
 courierten = {
   revision = 55436;
@@ -14383,6 +15275,7 @@ courierten = {
   sha512.doc = "737818c02e35e5502eca7bd80427fb814f54d495bd1315b124ad32a033da0ba0b9b4a2cc5a1f8c19b0f8d91f8534a783253742728ad1c8499d97e14fc3a67938";
   hasRunfiles = true;
   license = [ "free" ];
+  hasCatalogue = true;
 };
 courseoutline = {
   revision = 15878;
@@ -14393,6 +15286,7 @@ courseoutline = {
   hasRunfiles = true;
   license = [ "free" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 coursepaper = {
   revision = 15878;
@@ -14403,6 +15297,7 @@ coursepaper = {
   hasRunfiles = true;
   license = [ "free" ];
   version = "2.0";
+  hasCatalogue = true;
 };
 coverpage = {
   revision = 63509;
@@ -14414,6 +15309,7 @@ coverpage = {
   hasRunfiles = true;
   license = [ "lppl12" ];
   version = "1.01";
+  hasCatalogue = true;
 };
 covington = {
   revision = 69091;
@@ -14424,6 +15320,7 @@ covington = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.14";
+  hasCatalogue = true;
 };
 cprotect = {
   revision = 21209;
@@ -14435,6 +15332,7 @@ cprotect = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0e";
+  hasCatalogue = true;
 };
 cprotectinside = {
   revision = 63833;
@@ -14445,6 +15343,7 @@ cprotectinside = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.0.0";
+  hasCatalogue = true;
 };
 cqubeamer = {
   revision = 54512;
@@ -14455,6 +15354,7 @@ cqubeamer = {
   hasRunfiles = true;
   license = [ "mit" "cc-by-40" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 cquthesis = {
   revision = 55643;
@@ -14466,6 +15366,7 @@ cquthesis = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.50";
+  hasCatalogue = true;
 };
 crbox = {
   revision = 29803;
@@ -14476,6 +15377,7 @@ crbox = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.1";
+  hasCatalogue = true;
 };
 create-theorem = {
   revision = 70180;
@@ -14488,6 +15390,7 @@ create-theorem = {
   sha512.doc = "4ce2d32999518c46478fb6563da42d073a04fcda76391ca722e20a4b0651819722fe62325c7bc858162368645c259de2407bf6b67681a7990e225195459c54af";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 creationboites = {
   revision = 68087;
@@ -14498,6 +15401,7 @@ creationboites = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.1.0";
+  hasCatalogue = true;
 };
 crefthe = {
   revision = 70165;
@@ -14507,6 +15411,7 @@ crefthe = {
   sha512.doc = "35d45eb3ad323dc4699ee103a7efedbfb4fac371632d82e5e449a49e89ff6ee25ba9b7d86ee2ebe76c5094dbc24c0813d2a89328d28414b04ba2d20c513cdf3e";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 crimson = {
   revision = 64559;
@@ -14519,6 +15424,7 @@ crimson = {
   sha512.doc = "105068d0dd81b33a8c073ab33542f2ba7893d4e1d95dcf7af58b413d54a3e7e0cf24911fc2e56ee9821d6d55f016355d4e42db2d981e48e1feaa98b498e20e73";
   hasRunfiles = true;
   license = [ "ofl" "lppl13c" ];
+  hasCatalogue = true;
 };
 crimsonpro = {
   revision = 64565;
@@ -14531,6 +15437,7 @@ crimsonpro = {
   sha512.doc = "3f151947afe36a62d958804ffafddf533b9970162511ff2038629582acb15b4614d9bd5ffa28b53961c53996d2a8ebc0852b511007ae83d2b4f5f908a1d1b04e";
   hasRunfiles = true;
   license = [ "ofl" "lppl13c" ];
+  hasCatalogue = true;
 };
 crop = {
   revision = 55424;
@@ -14542,6 +15449,7 @@ crop = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.10.2";
+  hasCatalogue = true;
 };
 crossrefenum = {
   revision = 66014;
@@ -14552,6 +15460,7 @@ crossrefenum = {
   hasRunfiles = true;
   license = [ "gpl3Plus" "fdl13Only" ];
   version = "1.0.2";
+  hasCatalogue = true;
 };
 crossreference = {
   revision = 15878;
@@ -14562,6 +15471,7 @@ crossreference = {
   sha512.source = "ebf66eeddeccc32574b0f6285d655d5e9a00e4c4c6a50c232ecbc438b51e4ac45876e925b41b71717b23004a24680b3302b8a0afb9ba124e279094d705676b2c";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 crossreftools = {
   revision = 55879;
@@ -14572,6 +15482,7 @@ crossreftools = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 crossrefware = {
   revision = 69700;
@@ -14581,6 +15492,7 @@ crossrefware = {
   hasManpages = true;
   hasRunfiles = true;
   license = [ "gpl1Only" ];
+  hasCatalogue = true;
 };
 crossrefware.binfiles = [
   "bbl2bib"
@@ -14600,6 +15512,7 @@ crossword = {
   hasRunfiles = true;
   license = [ "free" ];
   version = "1.11";
+  hasCatalogue = true;
 };
 crosswrd = {
   revision = 16896;
@@ -14611,6 +15524,7 @@ crosswrd = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "3.0";
+  hasCatalogue = true;
 };
 crumbs = {
   revision = 64602;
@@ -14627,6 +15541,7 @@ crumbs = {
   hasRunfiles = true;
   license = [ "mit" ];
   version = "0.4.1";
+  hasCatalogue = true;
 };
 cryptocode = {
   revision = 60249;
@@ -14638,6 +15553,7 @@ cryptocode = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.44";
+  hasCatalogue = true;
 };
 cryst = {
   revision = 15878;
@@ -14647,9 +15563,11 @@ cryst = {
   sha512.doc = "55c765a9a4799f719383473700a0ef5627ec8873fc9fbd4ffd191d205d24b29d57255d90687176789240a3c4a547a3a57ed341a0558d99aa01dbcff0fc7dffc1";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 cs = {
   revision = 41553;
+  catalogue = "csfonts";
   shortdesc = "Czech/Slovak-tuned Computer Modern fonts";
   stripPrefix = 0;
   deps = [
@@ -14662,6 +15580,7 @@ cs = {
   sha512.run = "bc956c595d4460f35c64c92e7730a7cc9cd3af95301afba56c49bcf8415666863de926733409ce1afd99ba767fe3a3fa45c68f2dcc912b69c6f72b618289fb30";
   hasRunfiles = true;
   license = [ "gpl1Only" ];
+  hasCatalogue = true;
 };
 csassignments = {
   revision = 63992;
@@ -14673,6 +15592,7 @@ csassignments = {
   hasRunfiles = true;
   license = [ "mit" ];
   version = "1.0.2";
+  hasCatalogue = true;
 };
 csbulletin = {
   revision = 65250;
@@ -14682,6 +15602,7 @@ csbulletin = {
   sha512.doc = "2ca7ffe0973b443a2114cdd1e171f62b845f4f0185aaa5b7c7cc2809cd3a2b927784a4fa68c9a3a28fa40f44217826d1f34165a027838d3bd9f4e0e740a294d3";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 cslatex = {
   revision = 67494;
@@ -14722,6 +15643,7 @@ cslatex = {
   sha512.source = "8ea942f9cf3b9939311ae29bc4badbb2a67c6f4f2e03a4745142a0b570aeb0e668dfc47dea278f960e6a11231856464370507379cdbd77588720a16ff5e25d17";
   hasRunfiles = true;
   license = [ "gpl1Only" ];
+  hasCatalogue = true;
 };
 csplain = {
   revision = 67934;
@@ -14776,6 +15698,7 @@ csplain = {
   hasRunfiles = true;
   license = [ "free" ];
   version = "Mar._2022";
+  hasCatalogue = true;
 };
 csplain.binfiles = [
   "csplain"
@@ -14794,6 +15717,7 @@ csquotes = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "5.2n";
+  hasCatalogue = true;
 };
 csquotes-de = {
   revision = 23371;
@@ -14803,6 +15727,7 @@ csquotes-de = {
   sha512.doc = "1e8829faf2cb23b2e565a4b5daa5a09ef01d590d920444ee4659964bee042148ea19e9fbcb63e4c4ea1e2698697554e0bc532fa0fb7610bbf9bb4bca234d33d5";
   license = [ "lppl13c" ];
   version = "1.01";
+  hasCatalogue = true;
 };
 css-colors = {
   revision = 54512;
@@ -14813,6 +15738,7 @@ css-colors = {
   hasRunfiles = true;
   license = [ "lppl13c" "gpl1Only" ];
   version = "1.02";
+  hasCatalogue = true;
 };
 cstex = {
   revision = 64149;
@@ -14821,6 +15747,7 @@ cstex = {
   sha512.run = "cc0f0d0e2af2c210cb7888e90d668016dba4cfce3ae90faf0597a7f8c2058dfe56b92b71d185705c7d3b19d53b989724a9106ab56664fd2e6f4e95da5c0a48b8";
   sha512.doc = "e84c12eed94f459a7769527197f8b4b2f638297eec5d41bc7e4e3cc86c593cf957158946eb495947ff557ff323a085212b61cb3233972238d3afa2fff54e367b";
   license = [ "free" ];
+  hasCatalogue = true;
 };
 cstypo = {
   revision = 41986;
@@ -14831,6 +15758,7 @@ cstypo = {
   hasRunfiles = true;
   license = [ "mit" ];
   version = "0.03";
+  hasCatalogue = true;
 };
 csvmerge = {
   revision = 51857;
@@ -14842,6 +15770,7 @@ csvmerge = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 csvsimple = {
   revision = 69494;
@@ -14852,6 +15781,7 @@ csvsimple = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.6.0";
+  hasCatalogue = true;
 };
 ctable = {
   revision = 38672;
@@ -14863,6 +15793,7 @@ ctable = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.31";
+  hasCatalogue = true;
 };
 ctablestack = {
   revision = 38514;
@@ -14874,6 +15805,7 @@ ctablestack = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 ctan-o-mat = {
   revision = 51578;
@@ -14884,6 +15816,7 @@ ctan-o-mat = {
   hasRunfiles = true;
   license = [ "bsd3" ];
   version = "1.2";
+  hasCatalogue = true;
 };
 ctan-o-mat.binfiles = [
   "ctan-o-mat"
@@ -14896,6 +15829,7 @@ ctan_chk = {
   sha512.doc = "c61bc0d70cadcc4382dae55cdc1af076882801321a2de16f164223267732e476e41f949f566808c928f446d69aa22bd9965adb155c97905e32b93808810c76c0";
   license = [ "gpl3Only" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 ctanbib = {
   revision = 68650;
@@ -14906,6 +15840,7 @@ ctanbib = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.2d";
+  hasCatalogue = true;
 };
 ctanbib.binfiles = [
   "ctanbib"
@@ -14919,6 +15854,7 @@ ctanify = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.9.1";
+  hasCatalogue = true;
 };
 ctanify.binfiles = [
   "ctanify"
@@ -14931,6 +15867,7 @@ ctanupload = {
   hasRunfiles = true;
   license = [ "gpl3Only" ];
   version = "1.2c";
+  hasCatalogue = true;
 };
 ctanupload.binfiles = [
   "ctanupload"
@@ -14984,6 +15921,7 @@ ctex = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.5.10";
+  hasCatalogue = true;
 };
 ctex-faq = {
   revision = 15878;
@@ -14992,9 +15930,11 @@ ctex-faq = {
   sha512.run = "39ff8931e0007a78e4fa0788d7c7fcd8f25dd4cf4fa3f34b694e681e10dfb3d804842daf45a6e56b5ff450bb965bc322dcf593bdce176ffec27f4696c1c99fc0";
   sha512.doc = "0942a249a30f97d56bf5cbac2eb4de285a63406620b825a36d9ff8d46fbccd614af488f89e2af7472f1a9075a0e2b7228bb65a5804451df6945ce6bf4287b0a2";
   license = [ "fdl13Only" ];
+  hasCatalogue = true;
 };
 ctib = {
   revision = 15878;
+  catalogue = "ctib4tex";
   shortdesc = "Tibetan for TeX and LaTeX2e";
   stripPrefix = 0;
   sha512.run = "8999ea42b82e56cbb06e2485060b829a0781550834ea421607b4621199692976488f4031266eee1a6b1443b12828e2fb5148ff43eff137c01ee9db8770bb1565";
@@ -15002,6 +15942,7 @@ ctib = {
   sha512.source = "b387b2cc636f98bf7bf43fc3be04cbb62dfd6597c419b7791605011f59981cd9e90737f9d2f0f668f63bf9abff854219a75a7527d881c991190188f307f3642d";
   hasRunfiles = true;
   license = [ "gpl1Only" ];
+  hasCatalogue = true;
 };
 ctie = {
   revision = 66186;
@@ -15014,6 +15955,7 @@ ctie = {
   hasManpages = true;
   license = [ "gpl1Only" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 ctie.binfiles = [
   "ctie"
@@ -15028,6 +15970,7 @@ cuisine = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.7";
+  hasCatalogue = true;
 };
 culmus = {
   revision = 68495;
@@ -15043,6 +15986,7 @@ culmus = {
   hasRunfiles = true;
   license = [ "lppl13c" "gpl2Only" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 cuprum = {
   revision = 49909;
@@ -15055,6 +15999,7 @@ cuprum = {
   sha512.doc = "b9a9bda8eab6087a134b3b0660282998c7c3fa7fda8890e61ba107b9f7576d85ca01b59664c1c198679151e01cef6ebce5b8de29644a2e249a6ca2100f526fe2";
   hasRunfiles = true;
   license = [ "ofl" ];
+  hasCatalogue = true;
 };
 currency = {
   revision = 48990;
@@ -15066,6 +16011,7 @@ currency = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.4";
+  hasCatalogue = true;
 };
 currfile = {
   revision = 64673;
@@ -15077,6 +16023,7 @@ currfile = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.8";
+  hasCatalogue = true;
 };
 curriculum-vitae = {
   revision = 68211;
@@ -15087,6 +16034,7 @@ curriculum-vitae = {
   hasRunfiles = true;
   license = [ "asl20" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 currvita = {
   revision = 15878;
@@ -15097,6 +16045,7 @@ currvita = {
   sha512.source = "a1dc7d983ac6badf9ced1492c712373205d5b0a91934f0a76eb1ac546470292e6c9dda4cd5f5d721e06c90d6237eb39236f1417d1c6992a774f7a9f7df9213bb";
   hasRunfiles = true;
   license = [ "gpl1Only" ];
+  hasCatalogue = true;
 };
 cursolatex = {
   revision = 24139;
@@ -15105,6 +16054,7 @@ cursolatex = {
   sha512.run = "6c58f5a0f6fb8f129e202b786c258ba088efa44639f162b9e0109182072c16bfc6ba928953d6e9b31b2b1c2f693fe064476095c232dcb9e0c6bfcf18bfb7994e";
   sha512.doc = "a0f726330a5b2d8da94cbf25fb1b1a2b22e5e9010e0cafdfdee3781bf518f0cb48adb27dce0fe2e46572460f8c1749c0db1c16e06343cabb8cb94227e3da58b6";
   license = [ "gpl1Only" ];
+  hasCatalogue = true;
 };
 curve = {
   revision = 20745;
@@ -15116,6 +16066,7 @@ curve = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.16";
+  hasCatalogue = true;
 };
 curve2e = {
   revision = 67599;
@@ -15127,6 +16078,7 @@ curve2e = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.3.1";
+  hasCatalogue = true;
 };
 curves = {
   revision = 45255;
@@ -15138,6 +16090,7 @@ curves = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.55";
+  hasCatalogue = true;
 };
 custom-bib = {
   revision = 24729;
@@ -15149,6 +16102,7 @@ custom-bib = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "4.33";
+  hasCatalogue = true;
 };
 customdice = {
   revision = 64089;
@@ -15160,6 +16114,7 @@ customdice = {
   hasRunfiles = true;
   license = [ "cc-by-sa-40" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 customenvs = {
   revision = 68637;
@@ -15170,6 +16125,7 @@ customenvs = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.1.1";
+  hasCatalogue = true;
 };
 cutwin = {
   revision = 60901;
@@ -15181,6 +16137,7 @@ cutwin = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.2";
+  hasCatalogue = true;
 };
 cv = {
   revision = 15878;
@@ -15190,6 +16147,7 @@ cv = {
   sha512.doc = "c04b207a635f1b6f76e316284da987b45fd4387961c59b7b1f1b947284937f91f4d95ade824195d1f0db00766fec870e6859a6dd27cf3b6b426d095866f17d6a";
   hasRunfiles = true;
   license = [ "gpl1Only" ];
+  hasCatalogue = true;
 };
 cv4tw = {
   revision = 34577;
@@ -15200,6 +16158,7 @@ cv4tw = {
   hasRunfiles = true;
   license = [ "free" ];
   version = "0.2";
+  hasCatalogue = true;
 };
 cvss = {
   revision = 65169;
@@ -15211,15 +16170,18 @@ cvss = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1.0";
+  hasCatalogue = true;
 };
 cweb = {
   revision = 69586;
+  catalogue = "cwebbin";
   shortdesc = "CWEB for ANSI-C/C++ compilers";
   sha512.run = "6ba6d7e560abe642d30e4b9eab349eeb0135666a8f6f27d1e0e12d825048ec772305e0870edbe85dd3b977fb3e3ea0c7d3de84d9c6a02316be9691092c6b34bd";
   sha512.doc = "306eb00fed91a6a7ec679b9ffa46a9f5a8747817cdb3230accc5f322505aa928bb670eac09c77b508186cb3e308ac347bea3107ea0a5dafa2aa6075555e0c61d";
   hasManpages = true;
   hasRunfiles = true;
   license = [ "knuth" ];
+  hasCatalogue = true;
 };
 cweb-latex = {
   revision = 28878;
@@ -15229,6 +16191,7 @@ cweb-latex = {
   sha512.doc = "16c8cd2681e216084564cec718401b9e8d98228e6597d38c42f8ef4cc4775e8e606fa11c84d21f0450d85ee18c7ed1e5fd9e1f54bcd0e8c2927b1147ecd4591b";
   hasRunfiles = true;
   license = [ "gpl1Only" ];
+  hasCatalogue = true;
 };
 cweb-old = {
   revision = 49271;
@@ -15254,6 +16217,7 @@ cyber = {
   hasRunfiles = true;
   license = [ "mit" ];
   version = "2.2";
+  hasCatalogue = true;
 };
 cybercic = {
   revision = 37659;
@@ -15265,6 +16229,7 @@ cybercic = {
   hasRunfiles = true;
   license = [ "mit" ];
   version = "2.1";
+  hasCatalogue = true;
 };
 cyklop = {
   revision = 18651;
@@ -15278,9 +16243,11 @@ cyklop = {
   hasRunfiles = true;
   license = [ "gfl" ];
   version = "0.915";
+  hasCatalogue = true;
 };
 cyrillic = {
   revision = 63613;
+  catalogue = "latex-cyrillic";
   shortdesc = "Support for Cyrillic fonts in LaTeX";
   stripPrefix = 0;
   deps = [
@@ -15292,6 +16259,7 @@ cyrillic = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2022-06-01-PL1";
+  hasCatalogue = true;
 };
 cyrillic-bin = {
   revision = 62517;
@@ -15307,11 +16275,13 @@ cyrillic-bin.binfiles = [
 ];
 cyrplain = {
   revision = 45692;
+  catalogue = "t2";
   shortdesc = "Support for using T2 encoding";
   stripPrefix = 0;
   sha512.run = "84651aeb63d3e47f208732f3c0d54ba86862d0ff7da7c56b3d8b8d1b49b6b88ed4c5f9abfb4c1c9d8a1ef8a455632aaa69408651e238bdc4aeb4eb7709f62096";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 dad = {
   revision = 54191;
@@ -15325,6 +16295,7 @@ dad = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.2";
+  hasCatalogue = true;
 };
 dancers = {
   revision = 13293;
@@ -15333,6 +16304,7 @@ dancers = {
   sha512.run = "f570e4c775a7e4cdbeaf2ad764ee147a685b5332369aea29175a76fdc9fb37f052da295d20a177eda8e4b8352d733034eba36882c2507fe804d7b996c0e0537a";
   hasRunfiles = true;
   license = [ "free" ];
+  hasCatalogue = true;
 };
 dantelogo = {
   revision = 38599;
@@ -15346,6 +16318,7 @@ dantelogo = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.03";
+  hasCatalogue = true;
 };
 darkmode = {
   revision = 64271;
@@ -15357,6 +16330,7 @@ darkmode = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0.1";
+  hasCatalogue = true;
 };
 dashbox = {
   revision = 23425;
@@ -15368,6 +16342,7 @@ dashbox = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.14";
+  hasCatalogue = true;
 };
 dashrule = {
   revision = 29579;
@@ -15379,6 +16354,7 @@ dashrule = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.3";
+  hasCatalogue = true;
 };
 dashundergaps = {
   revision = 58150;
@@ -15390,6 +16366,7 @@ dashundergaps = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.0h";
+  hasCatalogue = true;
 };
 dataref = {
   revision = 62942;
@@ -15400,6 +16377,7 @@ dataref = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.7";
+  hasCatalogue = true;
 };
 datatool = {
   revision = 52663;
@@ -15417,6 +16395,7 @@ datatool = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.32";
+  hasCatalogue = true;
 };
 datax = {
   revision = 61772;
@@ -15428,6 +16407,7 @@ datax = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.2.0";
+  hasCatalogue = true;
 };
 dateiliste = {
   revision = 27974;
@@ -15439,6 +16419,7 @@ dateiliste = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.6";
+  hasCatalogue = true;
 };
 datenumber = {
   revision = 61761;
@@ -15450,6 +16431,7 @@ datenumber = {
   hasRunfiles = true;
   license = [ "lppl12" ];
   version = "0.03";
+  hasCatalogue = true;
 };
 datestamp = {
   revision = 61719;
@@ -15461,6 +16443,7 @@ datestamp = {
   hasRunfiles = true;
   license = [ "gpl3Plus" "fdl13Only" ];
   version = "0.3";
+  hasCatalogue = true;
 };
 datetime = {
   revision = 36650;
@@ -15472,6 +16455,7 @@ datetime = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.60";
+  hasCatalogue = true;
 };
 datetime2 = {
   revision = 63102;
@@ -15488,6 +16472,7 @@ datetime2 = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.5.7";
+  hasCatalogue = true;
 };
 datetime2-bahasai = {
   revision = 46287;
@@ -15499,6 +16484,7 @@ datetime2-bahasai = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.01";
+  hasCatalogue = true;
 };
 datetime2-basque = {
   revision = 47064;
@@ -15510,6 +16496,7 @@ datetime2-basque = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.2a";
+  hasCatalogue = true;
 };
 datetime2-breton = {
   revision = 52647;
@@ -15521,6 +16508,7 @@ datetime2-breton = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.2";
+  hasCatalogue = true;
 };
 datetime2-bulgarian = {
   revision = 47031;
@@ -15532,6 +16520,7 @@ datetime2-bulgarian = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 datetime2-catalan = {
   revision = 47032;
@@ -15543,6 +16532,7 @@ datetime2-catalan = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 datetime2-croatian = {
   revision = 36682;
@@ -15554,6 +16544,7 @@ datetime2-croatian = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 datetime2-czech = {
   revision = 47033;
@@ -15565,6 +16556,7 @@ datetime2-czech = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 datetime2-danish = {
   revision = 47034;
@@ -15576,6 +16568,7 @@ datetime2-danish = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 datetime2-dutch = {
   revision = 47355;
@@ -15587,6 +16580,7 @@ datetime2-dutch = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 datetime2-en-fulltext = {
   revision = 36705;
@@ -15598,6 +16592,7 @@ datetime2-en-fulltext = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 datetime2-english = {
   revision = 52479;
@@ -15609,6 +16604,7 @@ datetime2-english = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.05";
+  hasCatalogue = true;
 };
 datetime2-esperanto = {
   revision = 47356;
@@ -15620,6 +16616,7 @@ datetime2-esperanto = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 datetime2-estonian = {
   revision = 47565;
@@ -15631,6 +16628,7 @@ datetime2-estonian = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 datetime2-finnish = {
   revision = 47047;
@@ -15642,6 +16640,7 @@ datetime2-finnish = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.2";
+  hasCatalogue = true;
 };
 datetime2-french = {
   revision = 56393;
@@ -15653,6 +16652,7 @@ datetime2-french = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.03";
+  hasCatalogue = true;
 };
 datetime2-galician = {
   revision = 47631;
@@ -15664,6 +16664,7 @@ datetime2-galician = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 datetime2-german = {
   revision = 67201;
@@ -15675,6 +16676,7 @@ datetime2-german = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "3.0";
+  hasCatalogue = true;
 };
 datetime2-greek = {
   revision = 47533;
@@ -15686,6 +16688,7 @@ datetime2-greek = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 datetime2-hebrew = {
   revision = 47534;
@@ -15697,6 +16700,7 @@ datetime2-hebrew = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 datetime2-icelandic = {
   revision = 65213;
@@ -15708,6 +16712,7 @@ datetime2-icelandic = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.2";
+  hasCatalogue = true;
 };
 datetime2-irish = {
   revision = 47632;
@@ -15719,6 +16724,7 @@ datetime2-irish = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 datetime2-it-fulltext = {
   revision = 54779;
@@ -15733,6 +16739,7 @@ datetime2-it-fulltext = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.6";
+  hasCatalogue = true;
 };
 datetime2-italian = {
   revision = 37146;
@@ -15744,6 +16751,7 @@ datetime2-italian = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.3";
+  hasCatalogue = true;
 };
 datetime2-latin = {
   revision = 47748;
@@ -15755,6 +16763,7 @@ datetime2-latin = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 datetime2-lsorbian = {
   revision = 47749;
@@ -15766,6 +16775,7 @@ datetime2-lsorbian = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 datetime2-magyar = {
   revision = 48266;
@@ -15777,6 +16787,7 @@ datetime2-magyar = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 datetime2-norsk = {
   revision = 48267;
@@ -15788,6 +16799,7 @@ datetime2-norsk = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 datetime2-polish = {
   revision = 48456;
@@ -15799,6 +16811,7 @@ datetime2-polish = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 datetime2-portuges = {
   revision = 48457;
@@ -15810,6 +16823,7 @@ datetime2-portuges = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 datetime2-romanian = {
   revision = 56394;
@@ -15821,6 +16835,7 @@ datetime2-romanian = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.02";
+  hasCatalogue = true;
 };
 datetime2-russian = {
   revision = 49345;
@@ -15832,6 +16847,7 @@ datetime2-russian = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 datetime2-samin = {
   revision = 49346;
@@ -15843,6 +16859,7 @@ datetime2-samin = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 datetime2-scottish = {
   revision = 52101;
@@ -15854,6 +16871,7 @@ datetime2-scottish = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 datetime2-serbian = {
   revision = 67201;
@@ -15865,6 +16883,7 @@ datetime2-serbian = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.1.0";
+  hasCatalogue = true;
 };
 datetime2-slovak = {
   revision = 52281;
@@ -15876,6 +16895,7 @@ datetime2-slovak = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 datetime2-slovene = {
   revision = 52282;
@@ -15887,6 +16907,7 @@ datetime2-slovene = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 datetime2-spanish = {
   revision = 45785;
@@ -15898,6 +16919,7 @@ datetime2-spanish = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 datetime2-swedish = {
   revision = 36700;
@@ -15909,6 +16931,7 @@ datetime2-swedish = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 datetime2-turkish = {
   revision = 52331;
@@ -15920,6 +16943,7 @@ datetime2-turkish = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 datetime2-ukrainian = {
   revision = 47552;
@@ -15931,6 +16955,7 @@ datetime2-ukrainian = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.2a";
+  hasCatalogue = true;
 };
 datetime2-usorbian = {
   revision = 52375;
@@ -15942,6 +16967,7 @@ datetime2-usorbian = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 datetime2-welsh = {
   revision = 52553;
@@ -15953,6 +16979,7 @@ datetime2-welsh = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 dblfloatfix = {
   revision = 28983;
@@ -15963,6 +16990,7 @@ dblfloatfix = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0a";
+  hasCatalogue = true;
 };
 dbshow = {
   revision = 61634;
@@ -15974,6 +17002,7 @@ dbshow = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.5";
+  hasCatalogue = true;
 };
 dccpaper = {
   revision = 67890;
@@ -15985,6 +17014,7 @@ dccpaper = {
   hasRunfiles = true;
   license = [ "lppl13c" "cc-by-40" ];
   version = "2.4";
+  hasCatalogue = true;
 };
 dcpic = {
   revision = 30206;
@@ -15995,6 +17025,7 @@ dcpic = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "5.0.0";
+  hasCatalogue = true;
 };
 ddphonism = {
   revision = 52009;
@@ -16005,6 +17036,7 @@ ddphonism = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.2";
+  hasCatalogue = true;
 };
 de-macro = {
   revision = 66746;
@@ -16014,6 +17046,7 @@ de-macro = {
   hasRunfiles = true;
   license = [ "free" ];
   version = "1.4.1";
+  hasCatalogue = true;
 };
 de-macro.binfiles = [
   "de-macro"
@@ -16036,6 +17069,7 @@ debate = {
   hasRunfiles = true;
   license = [ "mit" ];
   version = "0.2.1";
+  hasCatalogue = true;
 };
 decimal = {
   revision = 23374;
@@ -16046,6 +17080,7 @@ decimal = {
   sha512.source = "a880091295229345290acf605feb833489976ed3b661b403c8effaabd07c48730ac958a4b48dd48d429a3f031413c1392f4006b820f04e3dde6b2035a948747e";
   hasRunfiles = true;
   license = [ "lppl1" ];
+  hasCatalogue = true;
 };
 decimalcomma = {
   revision = 69251;
@@ -16057,6 +17092,7 @@ decimalcomma = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.4";
+  hasCatalogue = true;
 };
 decision-table = {
   revision = 60673;
@@ -16068,6 +17104,7 @@ decision-table = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.0.4";
+  hasCatalogue = true;
 };
 decorule = {
   revision = 55230;
@@ -16079,6 +17116,7 @@ decorule = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.7";
+  hasCatalogue = true;
 };
 defoldfonts = {
   revision = 68234;
@@ -16090,6 +17128,7 @@ defoldfonts = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 dehyph = {
   revision = 48599;
@@ -16098,6 +17137,7 @@ dehyph = {
   sha512.run = "2dc4ee5b4389549c032f3a4d87740ab3c5e296a1ef109a6b673656a82ca4c317ca774f39f61417568b8ccbeac787c4058184fc893d53799bbf0b042ba5aca9a2";
   hasRunfiles = true;
   license = [ "lppl1" ];
+  hasCatalogue = true;
 };
 dehyph-exptl = {
   revision = 70496;
@@ -16132,6 +17172,7 @@ dehyph-exptl = {
   hasRunfiles = true;
   license = [ "mit" "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 dejavu = {
   revision = 31771;
@@ -16145,6 +17186,7 @@ dejavu = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.34";
+  hasCatalogue = true;
 };
 dejavu-otf = {
   revision = 45991;
@@ -16155,6 +17197,7 @@ dejavu-otf = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.04";
+  hasCatalogue = true;
 };
 delim = {
   revision = 23974;
@@ -16166,6 +17209,7 @@ delim = {
   hasRunfiles = true;
   license = [ "lppl12" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 delimseasy = {
   revision = 39589;
@@ -16176,6 +17220,7 @@ delimseasy = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.0";
+  hasCatalogue = true;
 };
 delimset = {
   revision = 49544;
@@ -16187,6 +17232,7 @@ delimset = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 delimtxt = {
   revision = 16549;
@@ -16197,6 +17243,7 @@ delimtxt = {
   sha512.source = "487557d866b99ec0fed6d9bf18c4bdaffa4ad6a8294cd2e9c681a4f65fbba051a97577b82e7170464daf4eb9f154e66478f46512331e1f4f41b48e61d65a86a3";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 democodetools = {
   revision = 64314;
@@ -16207,6 +17254,7 @@ democodetools = {
   hasRunfiles = true;
   license = [ "lppl13c" "gpl1Only" ];
   version = "1.0.1beta";
+  hasCatalogue = true;
 };
 denisbdoc = {
   revision = 70611;
@@ -16218,6 +17266,7 @@ denisbdoc = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.9.5";
+  hasCatalogue = true;
 };
 derivative = {
   revision = 69746;
@@ -16228,6 +17277,7 @@ derivative = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.4";
+  hasCatalogue = true;
 };
 detex = {
   revision = 66186;
@@ -16236,6 +17286,7 @@ detex = {
   sha512.doc = "3d5a3b371e007bda61441460479a208062fd0d477d1fc9ab9a6764c1969fd383acec9e336e8d0b16aab5606444f5d87335320e010657cf088e9caeb18d6dddf5";
   hasManpages = true;
   license = [ "free" ];
+  hasCatalogue = true;
 };
 detex.binfiles = [
   "detex"
@@ -16250,6 +17301,7 @@ dhua = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.11";
+  hasCatalogue = true;
 };
 diabetes-logbook = {
   revision = 54810;
@@ -16259,6 +17311,7 @@ diabetes-logbook = {
   sha512.doc = "3a8c1c45b24d23ff236ca2d8bba6ff6d9ad055a688b5621a660cefbdff4e1407d71d96420cfa39dbb896f8035e6d5a2bf3f33fc2e80074527c9a41fcab72f976";
   hasRunfiles = true;
   license = [ "free" ];
+  hasCatalogue = true;
 };
 diadia = {
   revision = 37656;
@@ -16271,6 +17324,7 @@ diadia = {
   ];
   license = [ "lppl13c" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 diadia.binfiles = [
   "diadia"
@@ -16285,6 +17339,7 @@ diagbox = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.4";
+  hasCatalogue = true;
 };
 diagmac2 = {
   revision = 15878;
@@ -16295,6 +17350,7 @@ diagmac2 = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.1";
+  hasCatalogue = true;
 };
 diagnose = {
   revision = 19387;
@@ -16305,6 +17361,7 @@ diagnose = {
   hasRunfiles = true;
   license = [ "gpl1Only" ];
   version = "0.2";
+  hasCatalogue = true;
 };
 dialogl = {
   revision = 28946;
@@ -16315,6 +17372,7 @@ dialogl = {
   sha512.source = "0a39faa751021dbfe7638f139e50689201f93d4490339af70b4ddd42a77cec252cffe7a18a5ddce43ce8dde7f9645dd088fbe9c6cbdc4efefa65280f70c54d23";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 dice = {
   revision = 28501;
@@ -16324,6 +17382,7 @@ dice = {
   sha512.doc = "9c09c47b70e28e4c8ccffd4c75f8cac7942767279d0e01e543538ddf0ee70fe60cd15d1e3ddce27b56e1a9f865d5ad9b1794a875e41d131d763c11a3e0fb96ef";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 dichokey = {
   revision = 17192;
@@ -16333,6 +17392,7 @@ dichokey = {
   sha512.doc = "16a75d20463a0b0b508c2d50aa67a77999cab525e003704ab34663d1f0212c39432caab0e4df1c69b540be014bc86901031c7c8f647ff18ceda77dcef7239233";
   hasRunfiles = true;
   license = [ "publicDomain" ];
+  hasCatalogue = true;
 };
 dickimaw = {
   revision = 32925;
@@ -16341,6 +17401,7 @@ dickimaw = {
   sha512.run = "8e478160699ca5dd9c52ea7e6b0a7be491d0af44b3022c22797b02b9e6ba6ef67ce9dc35649d9a2ebb9b123e3fbcc02c0602271bd8049a12c4520a32a15d4ef3";
   sha512.doc = "5ebe8605d1a4ebeb11896919c39aa736220e9ca247912b5655dbcadf03bfa45b4cdfe44ee6555bf8d5ecdaf63b0d2527d3d58ee6d7056a194a6a42f88ab0aa41";
   license = [ "fdl13Only" ];
+  hasCatalogue = true;
 };
 dictsym = {
   revision = 69720;
@@ -16353,6 +17414,7 @@ dictsym = {
   sha512.doc = "787f3d06b1239c95022c8dd64f07d98cca654250f9846e70f2e7571def724b0e316d66d60289ebbcef204088d6f603d7702af36b985cc640a4f963adb7d347aa";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 didec = {
   revision = 70237;
@@ -16363,6 +17425,7 @@ didec = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0.0";
+  hasCatalogue = true;
 };
 diffcoeff = {
   revision = 68838;
@@ -16373,6 +17436,7 @@ diffcoeff = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "5.4";
+  hasCatalogue = true;
 };
 digestif = {
   revision = 65223;
@@ -16385,6 +17449,7 @@ digestif = {
   ];
   license = [ "gpl3Plus" "lppl13c" "fdl13Only" ];
   version = "0.5.1";
+  hasCatalogue = true;
 };
 digestif.binfiles = [
   "digestif"
@@ -16398,6 +17463,7 @@ digiconfigs = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.5";
+  hasCatalogue = true;
 };
 dijkstra = {
   revision = 64580;
@@ -16408,6 +17474,7 @@ dijkstra = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.13";
+  hasCatalogue = true;
 };
 dimnum = {
   revision = 58774;
@@ -16419,6 +17486,7 @@ dimnum = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0.1";
+  hasCatalogue = true;
 };
 din1505 = {
   revision = 19441;
@@ -16428,6 +17496,7 @@ din1505 = {
   sha512.doc = "4479f5ea1e1ade4bc7951d5722e397a688e75293da55ec57dd0f3d32add2bd551844da81336be0a77cc783e4c9af958be46501c4b78adbbf8a5463770b5cbb2c";
   hasRunfiles = true;
   license = [ "free" ];
+  hasCatalogue = true;
 };
 dinat = {
   revision = 15878;
@@ -16438,6 +17507,7 @@ dinat = {
   hasRunfiles = true;
   license = [ "publicDomain" ];
   version = "2.5";
+  hasCatalogue = true;
 };
 dinbrief = {
   revision = 15878;
@@ -16448,6 +17518,7 @@ dinbrief = {
   sha512.source = "0f81c2cea6799ccd39039b3fc9c45ab38b2041d0eef6efad245cae9fdfc17a7f967c24509b241fd19870170b4028ebed40db25884556bdf74e0ce2fef1a6e1ec";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 dingbat = {
   revision = 27918;
@@ -16459,6 +17530,7 @@ dingbat = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 directory = {
   revision = 15878;
@@ -16469,6 +17541,7 @@ directory = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.20";
+  hasCatalogue = true;
 };
 dirtree = {
   revision = 42428;
@@ -16480,6 +17553,7 @@ dirtree = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.32";
+  hasCatalogue = true;
 };
 dirtytalk = {
   revision = 20520;
@@ -16491,6 +17565,7 @@ dirtytalk = {
   hasRunfiles = true;
   license = [ "publicDomain" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 disser = {
   revision = 43417;
@@ -16502,6 +17577,7 @@ disser = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.5.0";
+  hasCatalogue = true;
 };
 ditaa = {
   revision = 48932;
@@ -16512,6 +17588,7 @@ ditaa = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.9";
+  hasCatalogue = true;
 };
 dithesis = {
   revision = 34295;
@@ -16522,6 +17599,7 @@ dithesis = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.2";
+  hasCatalogue = true;
 };
 dk-bib = {
   revision = 15878;
@@ -16533,6 +17611,7 @@ dk-bib = {
   hasRunfiles = true;
   license = [ "free" ];
   version = "0.6";
+  hasCatalogue = true;
 };
 dlfltxb = {
   revision = 17337;
@@ -16542,6 +17621,7 @@ dlfltxb = {
   sha512.doc = "171d6661ca71533fb869832be2bf6f7d26244bb5735fb884b5b1ce7c27d291b3e9518a902d6c7565d94d2c55c37b00564184bc5851824a00b5a71963a577128f";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 dnaseq = {
   revision = 17194;
@@ -16553,6 +17633,7 @@ dnaseq = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.01";
+  hasCatalogue = true;
 };
 dnp = {
   revision = 54074;
@@ -16568,6 +17649,7 @@ doc-pictex = {
   sha512.run = "c866f0855f701917fa81966c16a7f1c869320ddaf38e2c1c2a71844fa7b224fe2216f267b7b700ef6e36a13f97fa6f33a1d05342d5a7a8dd47ccda761fc577f4";
   sha512.doc = "3440fd4d0e2117594d6b350dcfed891506ce7fc0500ecdd4f156431363a38e399061469f5def9082d59c39b14b65ebc19ccb3204fef71ade300825cf35659158";
   license = [ "free" ];
+  hasCatalogue = true;
 };
 docbytex = {
   revision = 34294;
@@ -16577,6 +17659,7 @@ docbytex = {
   sha512.doc = "0daa32aa23ca248dce228b8029cb19c6d4509114094d46efdcc45b52d6593176c44da88040b37d83054ec286c4b79727ea4ab2cf07c4522e5f597750d85118fd";
   hasRunfiles = true;
   license = [ "free" ];
+  hasCatalogue = true;
 };
 doclicense = {
   revision = 68441;
@@ -16588,6 +17671,7 @@ doclicense = {
   hasRunfiles = true;
   license = [ "cc0" "lppl13c" ];
   version = "3.3.0";
+  hasCatalogue = true;
 };
 docmfp = {
   revision = 15878;
@@ -16599,6 +17683,7 @@ docmfp = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.2d";
+  hasCatalogue = true;
 };
 docmute = {
   revision = 25741;
@@ -16610,6 +17695,7 @@ docmute = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.4";
+  hasCatalogue = true;
 };
 docshots = {
   revision = 69676;
@@ -16628,6 +17714,7 @@ docshots = {
   hasRunfiles = true;
   license = [ "mit" ];
   version = "0.4.3";
+  hasCatalogue = true;
 };
 docsurvey = {
   revision = 70449;
@@ -16636,6 +17723,7 @@ docsurvey = {
   sha512.run = "ce94e7c797ec87694ab4df4ad3eba18586c0251d6cf4a5ef3d615062125a1cbd46ac2e9b7d822cfa07e44961d5354fec093cadbbd48cef403f9ac2c0ca665fed";
   sha512.doc = "4edd65ee2c7c910fc8bcfec3f33bc1f390ab1bb67bd06a84e84eea8421775b28c519615b23d2c25fe4524f79e8e295778fef6868d741f4484f42b1265d49eef0";
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 doctools = {
   revision = 34474;
@@ -16647,6 +17735,7 @@ doctools = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.1";
+  hasCatalogue = true;
 };
 documentation = {
   revision = 34521;
@@ -16658,6 +17747,7 @@ documentation = {
   hasRunfiles = true;
   license = [ "lppl12" ];
   version = "0.1";
+  hasCatalogue = true;
 };
 docutils = {
   revision = 56594;
@@ -16667,6 +17757,7 @@ docutils = {
   sha512.doc = "1748ee0bfe61704d8174202dfaf6a674fd52ba154456f6aa18cf90b2248be90f12bdb36993cfc4a701a8aa3037614c2f86be93ac8528f3da3bce96a611cb5748";
   hasRunfiles = true;
   license = [ "bsd3" ];
+  hasCatalogue = true;
 };
 doi = {
   revision = 48634;
@@ -16676,6 +17767,7 @@ doi = {
   sha512.doc = "3dd77559fbcb32d8bee7121f62bc37ca14c14c8e62f8d2ba44978438920dcdd54605a543135a6294e2ea9742f5fde4862a2efe3eeb6bf22b6d7418b4b01a2ebd";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 doipubmed = {
   revision = 15878;
@@ -16687,6 +17779,7 @@ doipubmed = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.01";
+  hasCatalogue = true;
 };
 domitian = {
   revision = 55286;
@@ -16700,6 +17793,7 @@ domitian = {
   hasRunfiles = true;
   license = [ "lppl13c" "ofl" "free" ];
   version = "1.0.1";
+  hasCatalogue = true;
 };
 dosepsbin = {
   revision = 29752;
@@ -16711,6 +17805,7 @@ dosepsbin = {
   hasRunfiles = true;
   license = [ "artistic1-cl8" ];
   version = "1.2";
+  hasCatalogue = true;
 };
 dosepsbin.binfiles = [
   "dosepsbin"
@@ -16724,6 +17819,7 @@ dot2texi = {
   hasRunfiles = true;
   license = [ "gpl1Only" ];
   version = "3.0";
+  hasCatalogue = true;
 };
 dotarrow = {
   revision = 15878;
@@ -16735,6 +17831,7 @@ dotarrow = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.01a";
+  hasCatalogue = true;
 };
 dotlessi = {
   revision = 51476;
@@ -16745,6 +17842,7 @@ dotlessi = {
   hasRunfiles = true;
   license = [ "mit" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 dotseqn = {
   revision = 17195;
@@ -16756,6 +17854,7 @@ dotseqn = {
   hasRunfiles = true;
   license = [ "free" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 dottex = {
   revision = 15878;
@@ -16767,6 +17866,7 @@ dottex = {
   hasRunfiles = true;
   license = [ "gpl1Only" ];
   version = "0.6";
+  hasCatalogue = true;
 };
 doublestroke = {
   revision = 15878;
@@ -16780,6 +17880,7 @@ doublestroke = {
   hasRunfiles = true;
   license = [ "free" ];
   version = "1.111";
+  hasCatalogue = true;
 };
 doulossil = {
   revision = 63255;
@@ -16790,6 +17891,7 @@ doulossil = {
   hasRunfiles = true;
   license = [ "ofl" ];
   version = "0.1";
+  hasCatalogue = true;
 };
 dowith = {
   revision = 38860;
@@ -16801,6 +17903,7 @@ dowith = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "r0.32";
+  hasCatalogue = true;
 };
 download = {
   revision = 52257;
@@ -16812,6 +17915,7 @@ download = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.2";
+  hasCatalogue = true;
 };
 dox = {
   revision = 46011;
@@ -16823,6 +17927,7 @@ dox = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.4";
+  hasCatalogue = true;
 };
 dozenal = {
   revision = 47680;
@@ -16834,6 +17939,7 @@ dozenal = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "7.2";
+  hasCatalogue = true;
 };
 dpcircling = {
   revision = 54994;
@@ -16844,6 +17950,7 @@ dpcircling = {
   hasRunfiles = true;
   license = [ "mit" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 dpfloat = {
   revision = 17196;
@@ -16853,6 +17960,7 @@ dpfloat = {
   sha512.doc = "2cbdb8711556580d14a01b9daf03b1a1095387c077413b2815bfaef1af2781fc8bc56fa7a6a36abee60d6ce6928f920c9d9c3deecc2e071e8e99d51c1421508c";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 dprogress = {
   revision = 15878;
@@ -16864,6 +17972,7 @@ dprogress = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.1";
+  hasCatalogue = true;
 };
 drac = {
   revision = 15878;
@@ -16875,6 +17984,7 @@ drac = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1";
+  hasCatalogue = true;
 };
 draftcopy = {
   revision = 15878;
@@ -16886,6 +17996,7 @@ draftcopy = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.16";
+  hasCatalogue = true;
 };
 draftfigure = {
   revision = 44854;
@@ -16896,6 +18007,7 @@ draftfigure = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.2";
+  hasCatalogue = true;
 };
 draftwatermark = {
   revision = 70401;
@@ -16907,6 +18019,7 @@ draftwatermark = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "3.3";
+  hasCatalogue = true;
 };
 dramatist = {
   revision = 35866;
@@ -16918,6 +18031,7 @@ dramatist = {
   hasRunfiles = true;
   license = [ "gpl1Only" ];
   version = "1.2e";
+  hasCatalogue = true;
 };
 dratex = {
   revision = 15878;
@@ -16927,6 +18041,7 @@ dratex = {
   sha512.doc = "0ff34bd23dd8718f4f8b0dc3e84068ca2b38a9758849d98230f1a8d4561705d6db7be3b0fcb34621054993f27df7a9215267b3ebbd7fb3d77b8cd9cfefa0ad60";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 drawing-with-metapost = {
   revision = 66846;
@@ -16935,6 +18050,7 @@ drawing-with-metapost = {
   sha512.run = "9e9deb95f1ca68c4f7b2a1e82bbc213da68e60bea65510e18dfa12528dbf65b20d06769c766009a1db49b9b7a649598f64a513957a4874f6c657ea0c1bc99901";
   sha512.doc = "9d3ac79b2d4165a3e7fe1675826db2190b7bbdeaf8b14460a618ae909e29dcd9796aff70af98bae5307f67945434ab3a304d955ed5d56e17ea94a67f83f2ef09";
   license = [ "opubl" ];
+  hasCatalogue = true;
 };
 drawmatrix = {
   revision = 44471;
@@ -16946,6 +18062,7 @@ drawmatrix = {
   hasRunfiles = true;
   license = [ "mit" ];
   version = "1.5.0";
+  hasCatalogue = true;
 };
 drawstack = {
   revision = 28582;
@@ -16955,6 +18072,7 @@ drawstack = {
   sha512.doc = "d435447ec29bc26262886b3dc4c41cefae81d24e0704857a9ea61f1fc08ff8e4bfb4ead7686a9f49808dff30da47fc5638e2c0dbea4c6a551800a373f68df0e6";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 drm = {
   revision = 38157;
@@ -16966,6 +18084,7 @@ drm = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "4.4";
+  hasCatalogue = true;
 };
 droid = {
   revision = 54512;
@@ -16981,6 +18100,7 @@ droid = {
   hasRunfiles = true;
   license = [ "lppl13c" "asl20" ];
   version = "3.2";
+  hasCatalogue = true;
 };
 droit-fr = {
   revision = 39802;
@@ -16991,6 +18111,7 @@ droit-fr = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.2";
+  hasCatalogue = true;
 };
 drs = {
   revision = 19232;
@@ -17001,6 +18122,7 @@ drs = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1b";
+  hasCatalogue = true;
 };
 drv = {
   revision = 29349;
@@ -17011,6 +18133,7 @@ drv = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.97";
+  hasCatalogue = true;
 };
 dsptricks = {
   revision = 68753;
@@ -17021,6 +18144,7 @@ dsptricks = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 dsserif = {
   revision = 60898;
@@ -17035,6 +18159,7 @@ dsserif = {
   hasRunfiles = true;
   license = [ "ofl" "lppl13c" ];
   version = "1.031";
+  hasCatalogue = true;
 };
 dtk = {
   revision = 70117;
@@ -17045,6 +18170,7 @@ dtk = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.10e";
+  hasCatalogue = true;
 };
 dtk-bibliography = {
   revision = 70517;
@@ -17055,6 +18181,7 @@ dtk-bibliography = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2024-01";
+  hasCatalogue = true;
 };
 dtl = {
   revision = 62387;
@@ -17064,6 +18191,7 @@ dtl = {
   hasManpages = true;
   license = [ "publicDomain" ];
   version = "0.6.1";
+  hasCatalogue = true;
 };
 dtl.binfiles = [
   "dt2dv"
@@ -17079,6 +18207,7 @@ dtxdescribe = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.09";
+  hasCatalogue = true;
 };
 dtxgallery = {
   revision = 49504;
@@ -17088,6 +18217,7 @@ dtxgallery = {
   sha512.doc = "ea56d62e0fb8b168461f8d01a08a9829ed00db4e2d6a460791de3018be21b4b446ad8ebf4a1c4a69e99a0989b85b55cbaa8aed171a53479df0501ea36cf03bdc";
   license = [ "lppl13c" ];
   version = "1";
+  hasCatalogue = true;
 };
 dtxgen = {
   revision = 51663;
@@ -17097,6 +18227,7 @@ dtxgen = {
   hasRunfiles = true;
   license = [ "gpl1Only" ];
   version = "1.08";
+  hasCatalogue = true;
 };
 dtxgen.binfiles = [
   "dtxgen"
@@ -17109,6 +18240,7 @@ dtxtut = {
   sha512.doc = "f7d37f9d766175c816eaad931a7623c3a537d4d8d73c28b57802c417bbd954b1781cee8bcc7445ed09fac9a6f36b2336aa6a9b5b769bba877f72754bc713eb4f";
   license = [ "lppl13c" ];
   version = "2.4";
+  hasCatalogue = true;
 };
 ducksay = {
   revision = 64655;
@@ -17120,6 +18252,7 @@ ducksay = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.6";
+  hasCatalogue = true;
 };
 duckuments = {
   revision = 52271;
@@ -17131,6 +18264,7 @@ duckuments = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.5";
+  hasCatalogue = true;
 };
 duerer = {
   revision = 20741;
@@ -17140,6 +18274,7 @@ duerer = {
   sha512.doc = "babbe18510ab7acc910639e2993858b2cf27c4414772d2a03fd2d3576f7dd64f4c7b1aa05d9a7913b4eb8d4eddc942137b41b87816631b34cf35e0120dd3ea40";
   hasRunfiles = true;
   license = [ "publicDomain" ];
+  hasCatalogue = true;
 };
 duerer-latex = {
   revision = 15878;
@@ -17150,6 +18285,7 @@ duerer-latex = {
   hasRunfiles = true;
   license = [ "gpl1Only" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 duotenzor = {
   revision = 18728;
@@ -17160,6 +18296,7 @@ duotenzor = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.00";
+  hasCatalogue = true;
 };
 dutchcal = {
   revision = 54080;
@@ -17173,6 +18310,7 @@ dutchcal = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 dvdcoll = {
   revision = 15878;
@@ -17183,6 +18321,7 @@ dvdcoll = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1a";
+  hasCatalogue = true;
 };
 dvgloss = {
   revision = 29103;
@@ -17194,6 +18333,7 @@ dvgloss = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.1";
+  hasCatalogue = true;
 };
 dvi2tty = {
   revision = 66186;
@@ -17203,6 +18343,7 @@ dvi2tty = {
   hasManpages = true;
   license = [ "gpl2Only" ];
   version = "6.0.0";
+  hasCatalogue = true;
 };
 dvi2tty.binfiles = [
   "disdvi"
@@ -17219,6 +18360,7 @@ dviasm = {
     "py"
   ];
   license = [ "gpl3Plus" ];
+  hasCatalogue = true;
 };
 dviasm.binfiles = [
   "dviasm"
@@ -17231,6 +18373,7 @@ dvicopy = {
   hasManpages = true;
   license = [ "gpl1Only" ];
   version = "1.5";
+  hasCatalogue = true;
 };
 dvicopy.binfiles = [
   "dvicopy"
@@ -17242,6 +18385,7 @@ dvidvi = {
   sha512.doc = "b571021445b822e9824782ab35a0743ca23f69b809354dea6676c58209a451be5bf595641fbcb461211e6dec15e765bbfaf8164c0ce1ed4204ea72a2073ecb92";
   hasManpages = true;
   license = [ "free" ];
+  hasCatalogue = true;
 };
 dvidvi.binfiles = [
   "dvidvi"
@@ -17255,6 +18399,7 @@ dviincl = {
   hasRunfiles = true;
   license = [ "publicDomain" ];
   version = "1.00";
+  hasCatalogue = true;
 };
 dviinfox = {
   revision = 59216;
@@ -17264,6 +18409,7 @@ dviinfox = {
   hasRunfiles = true;
   license = [ "mit" ];
   version = "1.06";
+  hasCatalogue = true;
 };
 dviinfox.binfiles = [
   "dviinfox"
@@ -17275,6 +18421,7 @@ dviljk = {
   sha512.doc = "4b5815d766a41eb74125269e297eb6f7d1626d68b3f2cf9d6c4f8734721e3c71b63e84e729c39fef41320e4f728888796e421bb5c7ea5ffe76cd549400d18d37";
   hasManpages = true;
   license = [ "gpl1Only" ];
+  hasCatalogue = true;
 };
 dviljk.binfiles = [
   "dvihp"
@@ -17307,6 +18454,7 @@ dvipdfmx = {
   hasRunfiles = true;
   hasTlpkg = true;
   license = [ "gpl1Only" ];
+  hasCatalogue = true;
 };
 dvipdfmx.binfiles = [
   "dvipdfm"
@@ -17325,6 +18473,7 @@ dvipng = {
   hasInfo = true;
   license = [ "lgpl3" ];
   version = "1.17";
+  hasCatalogue = true;
 };
 dvipng.binfiles = [
   "dvigif"
@@ -17349,6 +18498,7 @@ dvips = {
   hasInfo = true;
   hasRunfiles = true;
   license = [ "free" ];
+  hasCatalogue = true;
 };
 dvips.binfiles = [
   "afm2tfm"
@@ -17362,6 +18512,7 @@ dvipsconfig = {
   hasRunfiles = true;
   license = [ "gpl1Only" ];
   version = "1.6";
+  hasCatalogue = true;
 };
 dvisvgm = {
   revision = 70496;
@@ -17371,6 +18522,7 @@ dvisvgm = {
   hasManpages = true;
   license = [ "gpl3Plus" ];
   version = "3.2.2";
+  hasCatalogue = true;
 };
 dvisvgm.binfiles = [
   "dvisvgm"
@@ -17385,6 +18537,7 @@ dynamicnumber = {
   hasRunfiles = true;
   license = [ "mit" ];
   version = "0.1.3";
+  hasCatalogue = true;
 };
 dynblocks = {
   revision = 35193;
@@ -17395,6 +18548,7 @@ dynblocks = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.2b";
+  hasCatalogue = true;
 };
 dynkin-diagrams = {
   revision = 67267;
@@ -17405,6 +18559,7 @@ dynkin-diagrams = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "3.1415926535897932384";
+  hasCatalogue = true;
 };
 dyntree = {
   revision = 67016;
@@ -17416,6 +18571,7 @@ dyntree = {
   hasRunfiles = true;
   license = [ "lgpl2" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 e-french = {
   revision = 52027;
@@ -17426,6 +18582,7 @@ e-french = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "6.11";
+  hasCatalogue = true;
 };
 ean = {
   revision = 20851;
@@ -17435,6 +18592,7 @@ ean = {
   sha512.doc = "35c7d054236569b03082af07412f00dd08d760547433ec8da1876a83546c7432c4cdbffb617ff34b4e48b86873d699d41749bd838e12ffe32980b3d6e92865b0";
   hasRunfiles = true;
   license = [ "gpl1Only" ];
+  hasCatalogue = true;
 };
 ean13isbn = {
   revision = 57514;
@@ -17444,6 +18602,7 @@ ean13isbn = {
   sha512.doc = "e7c474d1d488d95786d5f061412d051c9306cedeb86f6e31915d44e6fb71f09303b8f0e782be393e56dc6887730560825ef29d57af5a20f7bf02d96f77eb554b";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 easing = {
   revision = 59975;
@@ -17455,6 +18614,7 @@ easing = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.1";
+  hasCatalogue = true;
 };
 easy = {
   revision = 19440;
@@ -17465,6 +18625,7 @@ easy = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.99";
+  hasCatalogue = true;
 };
 easy-todo = {
   revision = 32677;
@@ -17474,6 +18635,7 @@ easy-todo = {
   sha512.doc = "b2c49273445084f94083ed11f43492ed8ca32582fd9ffe9d12ccb7afe316b06b1924a507c5a12ab5880cae40ef4ee196c6d3e5d05f916356fdc026acc0a9acf1";
   hasRunfiles = true;
   license = [ "asl20" ];
+  hasCatalogue = true;
 };
 easybook = {
   revision = 70236;
@@ -17485,6 +18647,7 @@ easybook = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2024an";
+  hasCatalogue = true;
 };
 easydtx = {
   revision = 68514;
@@ -17495,6 +18658,7 @@ easydtx = {
   hasRunfiles = true;
   license = [ "gpl3Plus" ];
   version = "0.1.0";
+  hasCatalogue = true;
 };
 easydtx.binfiles = [
   "edtx2dtx"
@@ -17509,6 +18673,7 @@ easyfig = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.2a";
+  hasCatalogue = true;
 };
 easyfloats = {
   revision = 57204;
@@ -17527,6 +18692,7 @@ easyfloats = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0.0";
+  hasCatalogue = true;
 };
 easyformat = {
   revision = 44543;
@@ -17537,6 +18703,7 @@ easyformat = {
   hasRunfiles = true;
   license = [ "gpl3Plus" ];
   version = "1.4.0";
+  hasCatalogue = true;
 };
 easylist = {
   revision = 32661;
@@ -17547,6 +18714,7 @@ easylist = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.3";
+  hasCatalogue = true;
 };
 easyreview = {
   revision = 38352;
@@ -17558,6 +18726,7 @@ easyreview = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 ebezier = {
   revision = 15878;
@@ -17569,6 +18738,7 @@ ebezier = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "4";
+  hasCatalogue = true;
 };
 ebgaramond = {
   revision = 66604;
@@ -17581,6 +18751,7 @@ ebgaramond = {
   sha512.doc = "82713ea36e1eeb1d2673a049d9ffcae97627406571e6e8e47fa6a6853511beb5a5eeef8a63fbe88e6c79539b1fbde880d0b2779f6f01f20eb7b1c7fc716104bc";
   hasRunfiles = true;
   license = [ "ofl" "lppl13c" ];
+  hasCatalogue = true;
 };
 ebgaramond-maths = {
   revision = 52168;
@@ -17594,6 +18765,7 @@ ebgaramond-maths = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.2";
+  hasCatalogue = true;
 };
 ebong = {
   revision = 67933;
@@ -17605,6 +18777,7 @@ ebong = {
     "py"
   ];
   license = [ "publicDomain" ];
+  hasCatalogue = true;
 };
 ebong.binfiles = [
   "ebong"
@@ -17617,6 +18790,7 @@ ebook = {
   sha512.doc = "0aba8d5010ece8e6e3c155d05a87eea960d8ec1b4deb1cd7ba948b4106eb8e20d752d3032696bb98c1d23b1927317d3d53a79fdf0b62e9053245aa86ef6e79e5";
   hasRunfiles = true;
   license = [ "publicDomain" ];
+  hasCatalogue = true;
 };
 ebproof = {
   revision = 57544;
@@ -17628,6 +18802,7 @@ ebproof = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.1.1";
+  hasCatalogue = true;
 };
 ebsthesis = {
   revision = 15878;
@@ -17639,6 +18814,7 @@ ebsthesis = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 ec = {
   revision = 25033;
@@ -17649,6 +18825,7 @@ ec = {
   hasRunfiles = true;
   license = [ "free" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 ecc = {
   revision = 15878;
@@ -17658,6 +18835,7 @@ ecc = {
   sha512.doc = "e3263aab5c8ac9985c579d4fba121085419d5c28e4813798402ad67213f96575dac0776d18918edaa18d42d458937a1e60ad666b2a01dea445675eea7e32b2c2";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 ecclesiastic = {
   revision = 38172;
@@ -17669,6 +18847,7 @@ ecclesiastic = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.3";
+  hasCatalogue = true;
 };
 ecgdraw = {
   revision = 41617;
@@ -17680,6 +18859,7 @@ ecgdraw = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.1";
+  hasCatalogue = true;
 };
 ecltree = {
   revision = 15878;
@@ -17690,6 +18870,7 @@ ecltree = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1a";
+  hasCatalogue = true;
 };
 eco = {
   revision = 29349;
@@ -17701,6 +18882,7 @@ eco = {
   hasRunfiles = true;
   license = [ "gpl1Only" ];
   version = "1.3";
+  hasCatalogue = true;
 };
 ecobiblatex = {
   revision = 39233;
@@ -17711,6 +18893,7 @@ ecobiblatex = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 econ-bst = {
   revision = 68761;
@@ -17721,6 +18904,7 @@ econ-bst = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "3.2";
+  hasCatalogue = true;
 };
 econlipsum = {
   revision = 58390;
@@ -17732,6 +18916,7 @@ econlipsum = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.8.2";
+  hasCatalogue = true;
 };
 econometrics = {
   revision = 39396;
@@ -17742,6 +18927,7 @@ econometrics = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 economic = {
   revision = 32639;
@@ -17751,6 +18937,7 @@ economic = {
   sha512.doc = "39c319f14ee3d6fb10fa3c4f5d3a873322d332bc181a33a70020a9fa787383b72809b3b9aea5fcf4a3cff9930543e0d0269f74146c12f2b0d77a4f77c159eeb7";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 ecothesis = {
   revision = 48007;
@@ -17760,6 +18947,7 @@ ecothesis = {
   sha512.doc = "7e1e3716de1eb964142a85ab31e28fc807ca1433f964e44cc8a7103b9ed023457bcdb01af2797a5e22fcf75a2e851d9c534f17937fdc44e4ebb6b5a670c6c115";
   license = [ "lppl13c" ];
   version = "1.2";
+  hasCatalogue = true;
 };
 ecv = {
   revision = 24928;
@@ -17771,6 +18959,7 @@ ecv = {
   hasRunfiles = true;
   license = [ "free" ];
   version = "0.3";
+  hasCatalogue = true;
 };
 eczar = {
   revision = 57716;
@@ -17781,6 +18970,7 @@ eczar = {
   hasRunfiles = true;
   license = [ "ofl" ];
   version = "0.1";
+  hasCatalogue = true;
 };
 ed = {
   revision = 25231;
@@ -17792,6 +18982,7 @@ ed = {
   hasRunfiles = true;
   license = [ "lppl1" ];
   version = "1.8";
+  hasCatalogue = true;
 };
 edfnotes = {
   revision = 21540;
@@ -17803,6 +18994,7 @@ edfnotes = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.6b";
+  hasCatalogue = true;
 };
 edichokey = {
   revision = 56223;
@@ -17813,6 +19005,7 @@ edichokey = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.01y";
+  hasCatalogue = true;
 };
 edmac = {
   revision = 61719;
@@ -17824,6 +19017,7 @@ edmac = {
   hasRunfiles = true;
   license = [ "gpl2Only" ];
   version = "3.17";
+  hasCatalogue = true;
 };
 edmargin = {
   revision = 27599;
@@ -17835,6 +19029,7 @@ edmargin = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.2";
+  hasCatalogue = true;
 };
 eemeir = {
   revision = 15878;
@@ -17846,6 +19041,7 @@ eemeir = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1b";
+  hasCatalogue = true;
 };
 eepic = {
   revision = 15878;
@@ -17856,6 +19052,7 @@ eepic = {
   hasRunfiles = true;
   license = [ "publicDomain" ];
   version = "1.1e";
+  hasCatalogue = true;
 };
 efbox = {
   revision = 33236;
@@ -17867,6 +19064,7 @@ efbox = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 egameps = {
   revision = 15878;
@@ -17877,6 +19075,7 @@ egameps = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 egpeirce = {
   revision = 66924;
@@ -17887,6 +19086,7 @@ egpeirce = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0.0";
+  hasCatalogue = true;
 };
 egplot = {
   revision = 20617;
@@ -17898,6 +19098,7 @@ egplot = {
   hasRunfiles = true;
   license = [ "gpl1Only" ];
   version = "1.02a";
+  hasCatalogue = true;
 };
 ehhline = {
   revision = 54676;
@@ -17908,6 +19109,7 @@ ehhline = {
   hasRunfiles = true;
   license = [ "mit" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 eiad = {
   revision = 15878;
@@ -17917,6 +19119,7 @@ eiad = {
   sha512.doc = "546bbad79f9f13e420b05b318010f078ea8844a02cedf11faa506d41073e2e0668356291a4e12758e5a37586e4aa9c79c17c8135f244756c39b61076038fb8e6";
   hasRunfiles = true;
   license = [ "publicDomain" ];
+  hasCatalogue = true;
 };
 eiad-ltx = {
   revision = 15878;
@@ -17928,6 +19131,7 @@ eiad-ltx = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 eijkhout = {
   revision = 15878;
@@ -17936,6 +19140,7 @@ eijkhout = {
   sha512.run = "448f3b51c984a1ec81428c1840ba01d072cef4d1110b85f8d4f4d786d02e8d08e702e0b33e757035aecef1f43b604746c7b6f492905fbb201fc1a34ca6fb859e";
   hasRunfiles = true;
   license = [ "free" ];
+  hasCatalogue = true;
 };
 einfart = {
   revision = 70318;
@@ -17948,6 +19153,7 @@ einfart = {
   sha512.doc = "56b8b1415b0526af7610502a65d13f304f05f18def4fd4c2870be9adaacefbd6e9cf34d318f135d358a85d56eb57f4f2fb583a529c43d4ffe9bed729310ce4ca";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 ejpecp = {
   revision = 60950;
@@ -17959,6 +19165,7 @@ ejpecp = {
   hasRunfiles = true;
   license = [ "lppl12" ];
   version = "1.11.3";
+  hasCatalogue = true;
 };
 ekaia = {
   revision = 49594;
@@ -17970,6 +19177,7 @@ ekaia = {
   hasRunfiles = true;
   license = [ "lppl12" ];
   version = "1.06";
+  hasCatalogue = true;
 };
 ekdosis = {
   revision = 69568;
@@ -17981,6 +19189,7 @@ ekdosis = {
   hasRunfiles = true;
   license = [ "gpl3Plus" "fdl13Only" ];
   version = "1.4";
+  hasCatalogue = true;
 };
 ektype-tanka = {
   revision = 63255;
@@ -17991,6 +19200,7 @@ ektype-tanka = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.2";
+  hasCatalogue = true;
 };
 elbioimp = {
   revision = 21758;
@@ -18002,9 +19212,11 @@ elbioimp = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.2";
+  hasCatalogue = true;
 };
 electrum = {
   revision = 19705;
+  catalogue = "electrumadf";
   shortdesc = "Electrum ADF fonts collection";
   stripPrefix = 0;
   fontMaps = [
@@ -18016,6 +19228,7 @@ electrum = {
   hasRunfiles = true;
   license = [ "free" ];
   version = "1.005-b";
+  hasCatalogue = true;
 };
 eledform = {
   revision = 38114;
@@ -18027,6 +19240,7 @@ eledform = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1a";
+  hasCatalogue = true;
 };
 eledmac = {
   revision = 45418;
@@ -18038,6 +19252,7 @@ eledmac = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.24.12";
+  hasCatalogue = true;
 };
 elements = {
   revision = 61792;
@@ -18048,6 +19263,7 @@ elements = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.4";
+  hasCatalogue = true;
 };
 ellipse = {
   revision = 39025;
@@ -18059,6 +19275,7 @@ ellipse = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 ellipsis = {
   revision = 55418;
@@ -18070,6 +19287,7 @@ ellipsis = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.8";
+  hasCatalogue = true;
 };
 elmath = {
   revision = 15878;
@@ -18081,6 +19299,7 @@ elmath = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.2";
+  hasCatalogue = true;
 };
 elocalloc = {
   revision = 42712;
@@ -18092,6 +19311,7 @@ elocalloc = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.03";
+  hasCatalogue = true;
 };
 elpres = {
   revision = 60209;
@@ -18102,6 +19322,7 @@ elpres = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0.1";
+  hasCatalogue = true;
 };
 els-cas-templates = {
   revision = 62931;
@@ -18112,6 +19333,7 @@ els-cas-templates = {
   hasRunfiles = true;
   license = [ "lppl12" ];
   version = "2.3";
+  hasCatalogue = true;
 };
 elsarticle = {
   revision = 56999;
@@ -18123,6 +19345,7 @@ elsarticle = {
   hasRunfiles = true;
   license = [ "lppl12" ];
   version = "3.3";
+  hasCatalogue = true;
 };
 elteiktdk = {
   revision = 66821;
@@ -18133,6 +19356,7 @@ elteiktdk = {
   hasRunfiles = true;
   license = [ "mit" ];
   version = "2.0";
+  hasCatalogue = true;
 };
 elteikthesis = {
   revision = 66820;
@@ -18143,6 +19367,7 @@ elteikthesis = {
   hasRunfiles = true;
   license = [ "mit" ];
   version = "2.3.1";
+  hasCatalogue = true;
 };
 eltex = {
   revision = 15878;
@@ -18153,6 +19378,7 @@ eltex = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.0";
+  hasCatalogue = true;
 };
 elvish = {
   revision = 15878;
@@ -18162,6 +19388,7 @@ elvish = {
   sha512.doc = "e296ece5bb11d273b33e801ecddb1b9bb93e5f8cfc4a7d62b1555ddca89661557149935b7c5a71880efb888364989715b4e39585b2de1bcd8ecc24203afef199";
   hasRunfiles = true;
   license = [ "free" ];
+  hasCatalogue = true;
 };
 elzcards = {
   revision = 51894;
@@ -18173,6 +19400,7 @@ elzcards = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.60";
+  hasCatalogue = true;
 };
 emarks = {
   revision = 24504;
@@ -18184,6 +19412,7 @@ emarks = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 embedall = {
   revision = 51177;
@@ -18195,6 +19424,7 @@ embedall = {
   hasRunfiles = true;
   license = [ "lppl12" ];
   version = "2.0";
+  hasCatalogue = true;
 };
 embedfile = {
   revision = 65528;
@@ -18206,6 +19436,7 @@ embedfile = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.12";
+  hasCatalogue = true;
 };
 embrac = {
   revision = 57814;
@@ -18216,6 +19447,7 @@ embrac = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.9a";
+  hasCatalogue = true;
 };
 emf = {
   revision = 42023;
@@ -18226,6 +19458,7 @@ emf = {
   hasRunfiles = true;
   license = [ "gpl3Only" ];
   version = "1";
+  hasCatalogue = true;
 };
 emisa = {
   revision = 60068;
@@ -18237,6 +19470,7 @@ emisa = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.3.0";
+  hasCatalogue = true;
 };
 emo = {
   revision = 66944;
@@ -18248,6 +19482,7 @@ emo = {
   hasRunfiles = true;
   license = [ "lppl13c" "asl20" "free" "ofl" ];
   version = "0.4";
+  hasCatalogue = true;
 };
 emoji = {
   revision = 59961;
@@ -18258,6 +19493,7 @@ emoji = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.2.2";
+  hasCatalogue = true;
 };
 emojicite = {
   revision = 55131;
@@ -18268,6 +19504,7 @@ emojicite = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.3";
+  hasCatalogue = true;
 };
 emotion = {
   revision = 69881;
@@ -18278,6 +19515,7 @@ emotion = {
   hasRunfiles = true;
   license = [ "asl20" ];
   version = "0.2";
+  hasCatalogue = true;
 };
 emp = {
   revision = 23483;
@@ -18288,6 +19526,7 @@ emp = {
   sha512.source = "e80aeb8566f31c3582423abc2794cd468b2a7b3505d4d01cbcf261201e4e8a95ca6ed87c6deffa03c9f868762fbe8b2078bf8327172ee9a172605fa0e6e72c40";
   hasRunfiles = true;
   license = [ "gpl1Only" ];
+  hasCatalogue = true;
 };
 emptypage = {
   revision = 18064;
@@ -18299,6 +19538,7 @@ emptypage = {
   hasRunfiles = true;
   license = [ "lppl12" ];
   version = "1.2";
+  hasCatalogue = true;
 };
 emulateapj = {
   revision = 28469;
@@ -18308,6 +19548,7 @@ emulateapj = {
   sha512.doc = "2d226b60313de3387d87c373a23e490a66c2fe1a94e97ef2364e65fafb037a148db7f5162ab9d3f1d788a037fdebe02ddedaa772eb715dc1ec8fea941b0e6708";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 enctex = {
   revision = 34957;
@@ -18317,6 +19558,7 @@ enctex = {
   sha512.doc = "2bf47c879c6ed0fc539763c899d8db261135f1a0ef0052904d03a72663cff38d40d2fe7b0daacaf2d54771c7b9eb5e98b73ef71d2a733899d458803f8caee723";
   hasRunfiles = true;
   license = [ "gpl1Only" ];
+  hasCatalogue = true;
 };
 encxvlna = {
   revision = 34087;
@@ -18327,6 +19569,7 @@ encxvlna = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 endfloat = {
   revision = 57090;
@@ -18338,6 +19581,7 @@ endfloat = {
   hasRunfiles = true;
   license = [ "gpl1Only" ];
   version = "2.7";
+  hasCatalogue = true;
 };
 endheads = {
   revision = 43750;
@@ -18349,6 +19593,7 @@ endheads = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.6";
+  hasCatalogue = true;
 };
 endiagram = {
   revision = 34486;
@@ -18359,6 +19604,7 @@ endiagram = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.1d";
+  hasCatalogue = true;
 };
 endnotes = {
   revision = 53319;
@@ -18368,6 +19614,7 @@ endnotes = {
   sha512.doc = "e4de81d6cf0d7bc686d84420dff1e390ad18747ebc9381c6df006f871f9d5e000aae5cd43a3648dfdab2806da83efc6b375ceb4a9110137ed6b373538a7a8b57";
   hasRunfiles = true;
   license = [ "lppl12" ];
+  hasCatalogue = true;
 };
 endnotes-hy = {
   revision = 54758;
@@ -18378,6 +19625,7 @@ endnotes-hy = {
   sha512.source = "6771356602da1fef77f350eb8390abcda0f1267c0761bf255f4aedeca79fadf1c0255bb267b456469c1d8dffb1ff052e567d0bb6b07035c1f5d676d5ae2d4cdc";
   hasRunfiles = true;
   license = [ "lppl12" ];
+  hasCatalogue = true;
 };
 endnotesj = {
   revision = 47703;
@@ -18388,6 +19636,7 @@ endnotesj = {
   hasRunfiles = true;
   license = [ "bsd3" ];
   version = "3.0";
+  hasCatalogue = true;
 };
 endofproofwd = {
   revision = 55643;
@@ -18397,6 +19646,7 @@ endofproofwd = {
   sha512.doc = "5953acfac90a34bb2c57cd813d220279fb96fa74415f0d7677ed7b7a8839b858f64b3c96d1dfd2dce5a8704e76ffc7eda1e5aa337585f6715ae229a759148ec3";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 engpron = {
   revision = 16558;
@@ -18408,6 +19658,7 @@ engpron = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2";
+  hasCatalogue = true;
 };
 engrec = {
   revision = 15878;
@@ -18419,6 +19670,7 @@ engrec = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 engtlc = {
   revision = 28571;
@@ -18429,6 +19681,7 @@ engtlc = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "3.2";
+  hasCatalogue = true;
 };
 enigma = {
   revision = 29802;
@@ -18439,6 +19692,7 @@ enigma = {
   hasRunfiles = true;
   license = [ "bsd3" ];
   version = "0.1";
+  hasCatalogue = true;
 };
 enotez = {
   revision = 61490;
@@ -18449,6 +19703,7 @@ enotez = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.10d";
+  hasCatalogue = true;
 };
 enumitem = {
   revision = 51423;
@@ -18459,6 +19714,7 @@ enumitem = {
   hasRunfiles = true;
   license = [ "mit" ];
   version = "3.9";
+  hasCatalogue = true;
 };
 enumitem-zref = {
   revision = 21472;
@@ -18470,6 +19726,7 @@ enumitem-zref = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.8";
+  hasCatalogue = true;
 };
 envbig = {
   revision = 15878;
@@ -18479,6 +19736,7 @@ envbig = {
   sha512.doc = "cd8c32d4694252449e78736be1697f9a8da01079a8aeafb774d92ded858de9ee7ae163b3758710df466dd0f75fb8b325e86e575457b66c8107f3c580fe0fc737";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 environ = {
   revision = 56615;
@@ -18493,6 +19751,7 @@ environ = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.3";
+  hasCatalogue = true;
 };
 envlab = {
   revision = 61937;
@@ -18504,6 +19763,7 @@ envlab = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.2";
+  hasCatalogue = true;
 };
 eolang = {
   revision = 69868;
@@ -18524,6 +19784,7 @@ eolang = {
   hasRunfiles = true;
   license = [ "mit" ];
   version = "0.18.1";
+  hasCatalogue = true;
 };
 eolang.binfiles = [
   "eolang"
@@ -18540,6 +19801,7 @@ epigrafica = {
   hasRunfiles = true;
   license = [ "gpl1Only" ];
   version = "1.01";
+  hasCatalogue = true;
 };
 epigram = {
   revision = 20513;
@@ -18548,6 +19810,7 @@ epigram = {
   sha512.run = "8952dbb6f7c573028b1f9621cd9c947a264847e59e1ead9547d386d71c2c15ab5f9c26088568b023030645b02191c9b72d827a80706ca1570785876c6acac6f0";
   hasRunfiles = true;
   license = [ "publicDomain" ];
+  hasCatalogue = true;
 };
 epigraph = {
   revision = 54857;
@@ -18559,6 +19822,7 @@ epigraph = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.5e";
+  hasCatalogue = true;
 };
 epigraph-keys = {
   revision = 61719;
@@ -18569,6 +19833,7 @@ epigraph-keys = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 epiolmec = {
   revision = 15878;
@@ -18582,6 +19847,7 @@ epiolmec = {
   sha512.source = "a52ef99c57524444151175f8e345cc59ae99c962e31420363c01e3121e1b4ecfbaeed28a01c3185d9d57beae90aaa8fe55dec15fd0790088f72fc4ee8860ea12";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 eplain = {
   revision = 64721;
@@ -18624,6 +19890,7 @@ eplain = {
   hasRunfiles = true;
   license = [ "gpl2Plus" ];
   version = "3.13";
+  hasCatalogue = true;
 };
 eplain.binfiles = [
   "eplain"
@@ -18638,6 +19905,7 @@ epsdice = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.1";
+  hasCatalogue = true;
 };
 epsf = {
   revision = 21461;
@@ -18648,6 +19916,7 @@ epsf = {
   hasRunfiles = true;
   license = [ "publicDomain" ];
   version = "2.7.4";
+  hasCatalogue = true;
 };
 epsf-dvipdfmx = {
   revision = 35575;
@@ -18658,6 +19927,7 @@ epsf-dvipdfmx = {
   hasRunfiles = true;
   license = [ "publicDomain" ];
   version = "2014";
+  hasCatalogue = true;
 };
 epsincl = {
   revision = 29349;
@@ -18668,14 +19938,17 @@ epsincl = {
   hasRunfiles = true;
   license = [ "publicDomain" ];
   version = "0.2";
+  hasCatalogue = true;
 };
 epslatex-fr = {
   revision = 19440;
+  catalogue = "fepslatex";
   shortdesc = "French version of \"graphics in LaTeX\"";
   stripPrefix = 0;
   sha512.run = "f3e90ecb487259301c20ab4c4c28702b9cadfa844a49361fee0881a26f827ae602f954e4a3e824e910d2e098097c387aa5311c5f32cb58df5a0a1e2fcd9d2364";
   sha512.doc = "7965e6094535d22b04193619842bc0bd090c2b47139e65498dcdf428f4ce2ec54e7da5edbdf9015c9d8f2013642d11347373e625a3884c629d9d807af2a9880a";
   license = [ "gpl1Only" ];
+  hasCatalogue = true;
 };
 epspdf = {
   revision = 66115;
@@ -18690,6 +19963,7 @@ epspdf = {
   ];
   license = [ "gpl2Only" ];
   version = "0.6.5.1";
+  hasCatalogue = true;
 };
 epspdf.binfiles = [
   "epspdf"
@@ -18704,6 +19978,7 @@ epspdfconversion = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.61";
+  hasCatalogue = true;
 };
 epstopdf = {
   revision = 68301;
@@ -18714,6 +19989,7 @@ epstopdf = {
   hasRunfiles = true;
   license = [ "free" ];
   version = "2.33";
+  hasCatalogue = true;
 };
 epstopdf-pkg = {
   revision = 53546;
@@ -18725,6 +20001,7 @@ epstopdf-pkg = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.11";
+  hasCatalogue = true;
 };
 epstopdf.binfiles = [
   "epstopdf"
@@ -18739,6 +20016,7 @@ eq-pin2corr = {
   sha512.source = "eb40f073d1763c59f9a0ed0444930f6698fbde754e213a73bff251df7f83b2c5a730345104d3b947ee8400363d324f968e3ebb7b74ed6f484d0c3589d5134b37";
   hasRunfiles = true;
   license = [ "lppl12" ];
+  hasCatalogue = true;
 };
 eqell = {
   revision = 22931;
@@ -18748,6 +20026,7 @@ eqell = {
   sha512.doc = "9210b85937d0bae3eab982f45b1f38f7020327c9b4cfc6604de5b171ecc84f54f5bfd088a3f06ba7123a7fc01a6fb09953015b1813db9ab2fbabf2a15bca955c";
   hasRunfiles = true;
   license = [ "gpl1Only" ];
+  hasCatalogue = true;
 };
 eqexpl = {
   revision = 63629;
@@ -18758,6 +20037,7 @@ eqexpl = {
   hasRunfiles = true;
   license = [ "cc-by-sa-40" ];
   version = "1.1.1";
+  hasCatalogue = true;
 };
 eqlist = {
   revision = 32257;
@@ -18769,6 +20049,7 @@ eqlist = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.1";
+  hasCatalogue = true;
 };
 eqnalign = {
   revision = 43278;
@@ -18780,6 +20061,7 @@ eqnalign = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0a";
+  hasCatalogue = true;
 };
 eqname = {
   revision = 20678;
@@ -18788,6 +20070,7 @@ eqname = {
   sha512.run = "1717aa83439019ba2c07ced56ca5dc969a68b78c9a711d97d0a168d432c6e26b53f30b2a3f6f8d241acf465fe8817d7e4fc4238982a68bf2ae143c5fdc2ca72e";
   hasRunfiles = true;
   license = [ "free" ];
+  hasCatalogue = true;
 };
 eqnarray = {
   revision = 20641;
@@ -18799,6 +20082,7 @@ eqnarray = {
   hasRunfiles = true;
   license = [ "gpl3Only" ];
   version = "1.3";
+  hasCatalogue = true;
 };
 eqnnumwarn = {
   revision = 45511;
@@ -18809,6 +20093,7 @@ eqnnumwarn = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 eqparbox = {
   revision = 45215;
@@ -18820,6 +20105,7 @@ eqparbox = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "4.1";
+  hasCatalogue = true;
 };
 erdc = {
   revision = 15878;
@@ -18831,6 +20117,7 @@ erdc = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 erewhon = {
   revision = 63312;
@@ -18844,6 +20131,7 @@ erewhon = {
   hasRunfiles = true;
   license = [ "ofl" "lppl13c" ];
   version = "1.12";
+  hasCatalogue = true;
 };
 erewhon-math = {
   revision = 70336;
@@ -18854,6 +20142,7 @@ erewhon-math = {
   hasRunfiles = true;
   license = [ "ofl" "lppl13c" ];
   version = "0.66";
+  hasCatalogue = true;
 };
 errata = {
   revision = 42428;
@@ -18865,6 +20154,7 @@ errata = {
   hasRunfiles = true;
   license = [ "lppl1" ];
   version = "0.3";
+  hasCatalogue = true;
 };
 erw-l3 = {
   revision = 61799;
@@ -18876,15 +20166,18 @@ erw-l3 = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "4.2";
+  hasCatalogue = true;
 };
 es-tex-faq = {
   revision = 15878;
+  catalogue = "faq-es";
   shortdesc = "CervanTeX (Spanish TeX Group) FAQ";
   stripPrefix = 0;
   sha512.run = "33f66e4f928591188289f07e003cac10229735e69ee7390020748e119930ea7b74ad69e5eea991d8e34325ac4d548ce0b843a00b3ca50b9e6fae3e96526a4ad8";
   sha512.doc = "5b5d0ebda1bde2c1c67fd4853a41bb10956487fa5ad2686d6814dbdd51f68dde2a3d294797b7b1602d587a44ea6acbd8260ab9965efab81d91eb9d9fdb93da69";
   license = [ "lppl13c" ];
   version = "1.97";
+  hasCatalogue = true;
 };
 esami = {
   revision = 67707;
@@ -18895,6 +20188,7 @@ esami = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.8";
+  hasCatalogue = true;
 };
 esdiff = {
   revision = 21385;
@@ -18906,6 +20200,7 @@ esdiff = {
   hasRunfiles = true;
   license = [ "lppl1" ];
   version = "1.2";
+  hasCatalogue = true;
 };
 esieecv = {
   revision = 59638;
@@ -18916,6 +20211,7 @@ esieecv = {
   sha512.source = "73f00171770070e8d71396540fb8adeb79804b341c7906ac7ebaf67d8d9696a178b5458d6b4d7bbf2949c9d7e3a6d142bf682931763714c5d0ce0a77416bd28a";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 esindex = {
   revision = 52342;
@@ -18926,6 +20222,7 @@ esindex = {
   hasRunfiles = true;
   license = [ "mit" ];
   version = "1.7";
+  hasCatalogue = true;
 };
 esint = {
   revision = 52240;
@@ -18937,6 +20234,7 @@ esint = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.2d";
+  hasCatalogue = true;
 };
 esint-type1 = {
   revision = 15878;
@@ -18952,6 +20250,7 @@ esint-type1 = {
   sha512.doc = "081a225225f503fac403d306fac3ee3b2747341ef5c4ee9420f49a56ca959c7757f154c24f90ed9506041b13464ea216e6edb52f29790d189ea7b33c7c797f8e";
   hasRunfiles = true;
   license = [ "publicDomain" ];
+  hasCatalogue = true;
 };
 esk = {
   revision = 18115;
@@ -18963,6 +20262,7 @@ esk = {
   hasRunfiles = true;
   license = [ "gpl1Only" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 eskd = {
   revision = 15878;
@@ -18973,6 +20273,7 @@ eskd = {
   sha512.source = "88b3edc0487b638142ba353ef108558b8fa6d420f2560a4fb1c189829af87d877a8900566c042556b15d654d11d2a0def58fa958fb9b234fca84419b2621cba4";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 eskdx = {
   revision = 29235;
@@ -18983,6 +20284,7 @@ eskdx = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.98";
+  hasCatalogue = true;
 };
 eso-pic = {
   revision = 67001;
@@ -18994,6 +20296,7 @@ eso-pic = {
   hasRunfiles = true;
   license = [ "lppl12" ];
   version = "3.0c";
+  hasCatalogue = true;
 };
 esrelation = {
   revision = 37236;
@@ -19007,6 +20310,7 @@ esrelation = {
   sha512.source = "17b0495b4b19ca5166835549c62c9c5e1dbcb59e2252e321860dc7254b9ebc9d073f317a344a2a8a4ec772ee1a931a5181d9d3b1af45f913b0ad04ebf189bd3a";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 esstix = {
   revision = 22426;
@@ -19020,6 +20324,7 @@ esstix = {
   hasRunfiles = true;
   license = [ "ofl" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 estcpmm = {
   revision = 17335;
@@ -19031,6 +20336,7 @@ estcpmm = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.4";
+  hasCatalogue = true;
 };
 esvect = {
   revision = 32098;
@@ -19045,6 +20351,7 @@ esvect = {
   hasRunfiles = true;
   license = [ "gpl1Only" ];
   version = "1.3";
+  hasCatalogue = true;
 };
 etaremune = {
   revision = 15878;
@@ -19056,6 +20363,7 @@ etaremune = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.2";
+  hasCatalogue = true;
 };
 etbb = {
   revision = 69098;
@@ -19069,6 +20377,7 @@ etbb = {
   hasRunfiles = true;
   license = [ "mit" "lppl13c" ];
   version = "1.057";
+  hasCatalogue = true;
 };
 etdipa = {
   revision = 36354;
@@ -19078,6 +20387,7 @@ etdipa = {
   sha512.doc = "6aa2ecdb393932a485857222e66471b9c52388e726edffd0b4357e340e8a5092af96ad1847486a58d6a8485a4ce0e80e25e80ad58f60991004136739d26aa996";
   license = [ "lppl13c" ];
   version = "2.6";
+  hasCatalogue = true;
 };
 etex = {
   revision = 70496;
@@ -19088,6 +20398,7 @@ etex = {
   hasManpages = true;
   hasRunfiles = true;
   license = [ "knuth" ];
+  hasCatalogue = true;
 };
 etex-pkg = {
   revision = 41784;
@@ -19098,6 +20409,7 @@ etex-pkg = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.7";
+  hasCatalogue = true;
 };
 etexcmds = {
   revision = 53171;
@@ -19109,6 +20421,7 @@ etexcmds = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.7";
+  hasCatalogue = true;
 };
 etextools = {
   revision = 20694;
@@ -19120,6 +20433,7 @@ etextools = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "3.1415926";
+  hasCatalogue = true;
 };
 ethiop = {
   revision = 15878;
@@ -19131,6 +20445,7 @@ ethiop = {
   hasRunfiles = true;
   license = [ "gpl1Only" ];
   version = "0.7";
+  hasCatalogue = true;
 };
 ethiop-t1 = {
   revision = 15878;
@@ -19143,6 +20458,7 @@ ethiop-t1 = {
   sha512.doc = "81f2ed72d5cef9119c94c4b0025e31be6739153e36b7b31a2c59b0cbe5a683a67746da8346345d561472fdbb760c07831d1936222ce1388ee12d70c9053ca8ac";
   hasRunfiles = true;
   license = [ "gpl1Only" ];
+  hasCatalogue = true;
 };
 etl = {
   revision = 60998;
@@ -19154,6 +20470,7 @@ etl = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.3";
+  hasCatalogue = true;
 };
 etoc = {
   revision = 69343;
@@ -19165,6 +20482,7 @@ etoc = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.2d";
+  hasCatalogue = true;
 };
 etoolbox = {
   revision = 56554;
@@ -19175,6 +20493,7 @@ etoolbox = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.5k";
+  hasCatalogue = true;
 };
 etoolbox-de = {
   revision = 21906;
@@ -19184,6 +20503,7 @@ etoolbox-de = {
   sha512.doc = "4c966dc094430caf72e462c1a854995fb78b54dca84322233a16508e41f33f0dd71db2b997b26beb7fd4722f0df1695a118ef782d7954983e9df3ba2132b828b";
   license = [ "lppl13c" ];
   version = "1";
+  hasCatalogue = true;
 };
 etoolbox-generic = {
   revision = 68513;
@@ -19194,6 +20514,7 @@ etoolbox-generic = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.5k";
+  hasCatalogue = true;
 };
 etsvthor = {
   revision = 48186;
@@ -19204,6 +20525,7 @@ etsvthor = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 euclideangeometry = {
   revision = 67608;
@@ -19215,6 +20537,7 @@ euclideangeometry = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.2.2";
+  hasCatalogue = true;
 };
 euenc = {
   revision = 19795;
@@ -19226,6 +20549,7 @@ euenc = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.1h";
+  hasCatalogue = true;
 };
 euflag = {
   revision = 55265;
@@ -19237,6 +20561,7 @@ euflag = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.8";
+  hasCatalogue = true;
 };
 eukdate = {
   revision = 15878;
@@ -19248,6 +20573,7 @@ eukdate = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.04";
+  hasCatalogue = true;
 };
 euler = {
   revision = 42428;
@@ -19259,6 +20585,7 @@ euler = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.5";
+  hasCatalogue = true;
 };
 euler-math = {
   revision = 70335;
@@ -19269,6 +20596,7 @@ euler-math = {
   hasRunfiles = true;
   license = [ "ofl" "lppl13c" ];
   version = "0.61";
+  hasCatalogue = true;
 };
 eulerpx = {
   revision = 63967;
@@ -19279,6 +20607,7 @@ eulerpx = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 eulervm = {
   revision = 15878;
@@ -19290,6 +20619,7 @@ eulervm = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "4.0";
+  hasCatalogue = true;
 };
 euro = {
   revision = 22191;
@@ -19301,6 +20631,7 @@ euro = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 euro-ce = {
   revision = 25714;
@@ -19311,6 +20642,7 @@ euro-ce = {
   hasRunfiles = true;
   license = [ "bsd3" ];
   version = "3.0b";
+  hasCatalogue = true;
 };
 europasscv = {
   revision = 56829;
@@ -19320,6 +20652,7 @@ europasscv = {
   sha512.doc = "834c4266e343a8b615a45a2c4b064170bf6c9516a8631342ff02d4de7154229458818192670f3f73aac5600407c830c1be384226bb3b0923af964905a39d99b3";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 europecv = {
   revision = 69661;
@@ -19329,6 +20662,7 @@ europecv = {
   sha512.doc = "ce96aa71bf8886c67c65d0ec4e24e97d45ea4b4a948d9b1b6dd51f79781f0667798fbee8fc2577c13b13860c5a886be2b4eb6bf743500a01e1982e5c8e29ac9b";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 eurosym = {
   revision = 17265;
@@ -19342,6 +20676,7 @@ eurosym = {
   hasRunfiles = true;
   license = [ "free" ];
   version = "1.4-subrfix";
+  hasCatalogue = true;
 };
 euxm = {
   revision = 54074;
@@ -19360,6 +20695,7 @@ evangelion-jfm = {
   hasRunfiles = true;
   license = [ "mit" ];
   version = "1.0.5_c";
+  hasCatalogue = true;
 };
 everyhook = {
   revision = 35675;
@@ -19371,6 +20707,7 @@ everyhook = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.2";
+  hasCatalogue = true;
 };
 everypage = {
   revision = 56694;
@@ -19382,6 +20719,7 @@ everypage = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.0b";
+  hasCatalogue = true;
 };
 everysel = {
   revision = 57489;
@@ -19393,6 +20731,7 @@ everysel = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.1";
+  hasCatalogue = true;
 };
 everyshi = {
   revision = 57001;
@@ -19404,6 +20743,7 @@ everyshi = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "4.00";
+  hasCatalogue = true;
 };
 exam = {
   revision = 67600;
@@ -19414,6 +20754,7 @@ exam = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.704";
+  hasCatalogue = true;
 };
 exam-lite = {
   revision = 65754;
@@ -19423,6 +20764,7 @@ exam-lite = {
   sha512.doc = "a1a2ea02e4ed3d846e428f5ae43f25150a982f2d490d9753071345d53e640f3ef05b43e812ff84155a44f369ab49e294050bbc53823da4e899c7e1b6c2d1f36c";
   hasRunfiles = true;
   license = [ "cc-by-sa-40" ];
+  hasCatalogue = true;
 };
 exam-n = {
   revision = 64674;
@@ -19434,6 +20776,7 @@ exam-n = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.4.0";
+  hasCatalogue = true;
 };
 exam-randomizechoices = {
   revision = 61719;
@@ -19444,6 +20787,7 @@ exam-randomizechoices = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.2";
+  hasCatalogue = true;
 };
 exam-zh = {
   revision = 69920;
@@ -19454,6 +20798,7 @@ exam-zh = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.2.1";
+  hasCatalogue = true;
 };
 examdesign = {
   revision = 15878;
@@ -19465,6 +20810,7 @@ examdesign = {
   hasRunfiles = true;
   license = [ "gpl1Only" ];
   version = "1.101";
+  hasCatalogue = true;
 };
 example = {
   revision = 33398;
@@ -19473,6 +20819,7 @@ example = {
   sha512.run = "2f790c1bb8934e1127ba64c61ccf0d9ed503c01cb8975c114257a2179db7d88b4c969475b0e357d17785fcf7e42487e991e176df3dd7a1be5db4cdf87abb9cad";
   hasRunfiles = true;
   license = [ "gpl1Only" ];
+  hasCatalogue = true;
 };
 examplep = {
   revision = 55265;
@@ -19483,6 +20830,7 @@ examplep = {
   hasRunfiles = true;
   license = [ "gpl1Only" ];
   version = "0.04";
+  hasCatalogue = true;
 };
 examz = {
   revision = 67303;
@@ -19494,6 +20842,7 @@ examz = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0.0";
+  hasCatalogue = true;
 };
 exceltex = {
   revision = 26313;
@@ -19503,6 +20852,7 @@ exceltex = {
   hasRunfiles = true;
   license = [ "gpl1Only" ];
   version = "0.5.1";
+  hasCatalogue = true;
 };
 exceltex.binfiles = [
   "exceltex"
@@ -19516,6 +20866,7 @@ excludeonly = {
   hasRunfiles = true;
   license = [ "publicDomain" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 exercise = {
   revision = 35417;
@@ -19527,6 +20878,7 @@ exercise = {
   hasRunfiles = true;
   license = [ "gpl2Only" ];
   version = "1.6";
+  hasCatalogue = true;
 };
 exercisebank = {
   revision = 50448;
@@ -19537,6 +20889,7 @@ exercisebank = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.3.0";
+  hasCatalogue = true;
 };
 exercisepoints = {
   revision = 49590;
@@ -19547,6 +20900,7 @@ exercisepoints = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.2.3";
+  hasCatalogue = true;
 };
 exercises = {
   revision = 55188;
@@ -19558,6 +20912,7 @@ exercises = {
   hasRunfiles = true;
   license = [ "lppl12" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 exesheet = {
   revision = 69885;
@@ -19569,6 +20924,7 @@ exesheet = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.7";
+  hasCatalogue = true;
 };
 exframe = {
   revision = 53911;
@@ -19580,6 +20936,7 @@ exframe = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "3.4";
+  hasCatalogue = true;
 };
 exp-testopt = {
   revision = 15878;
@@ -19591,6 +20948,7 @@ exp-testopt = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.3";
+  hasCatalogue = true;
 };
 expdlist = {
   revision = 15878;
@@ -19602,6 +20960,7 @@ expdlist = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.4";
+  hasCatalogue = true;
 };
 expex = {
   revision = 44499;
@@ -19612,6 +20971,7 @@ expex = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "5.1b";
+  hasCatalogue = true;
 };
 expex-acro = {
   revision = 68046;
@@ -19623,6 +20983,7 @@ expex-acro = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.0.3";
+  hasCatalogue = true;
 };
 expex-glossonly = {
   revision = 69923;
@@ -19633,6 +20994,7 @@ expex-glossonly = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.9b";
+  hasCatalogue = true;
 };
 expkv-bundle = {
   revision = 65623;
@@ -19643,6 +21005,7 @@ expkv-bundle = {
   sha512.source = "aa9721025f7ccf9091933d95ff411a7fdc763f9d34bc191eb693dd2fdf4e8056e6db929977c89956cd4bbf0804a2c6f1e902b06e26047f55e11e6e2c15fb17ad";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 export = {
   revision = 27206;
@@ -19654,6 +21017,7 @@ export = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.8";
+  hasCatalogue = true;
 };
 expose-expl3-dunkerque-2019 = {
   revision = 54451;
@@ -19663,6 +21027,7 @@ expose-expl3-dunkerque-2019 = {
   sha512.doc = "d3b09af828ace720aa3f7b0fe979893f9fca3d358a69abd818bca7a81d45928cd02e0557bd607bcd91f223ad9f4808b0aeb61ba7269728d467eab46999ea5f92";
   license = [ "lppl13c" ];
   version = "1.2";
+  hasCatalogue = true;
 };
 expressg = {
   revision = 29349;
@@ -19674,6 +21039,7 @@ expressg = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.5";
+  hasCatalogue = true;
 };
 exsheets = {
   revision = 67300;
@@ -19684,6 +21050,7 @@ exsheets = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.21k";
+  hasCatalogue = true;
 };
 exsol = {
   revision = 69343;
@@ -19695,6 +21062,7 @@ exsol = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.6";
+  hasCatalogue = true;
 };
 extarrows = {
   revision = 54400;
@@ -19705,6 +21073,7 @@ extarrows = {
   hasRunfiles = true;
   license = [ "lgpl2" ];
   version = "1.2.0";
+  hasCatalogue = true;
 };
 exteps = {
   revision = 19859;
@@ -19715,6 +21084,7 @@ exteps = {
   hasRunfiles = true;
   license = [ "gpl1Only" ];
   version = "0.41";
+  hasCatalogue = true;
 };
 extpfeil = {
   revision = 16243;
@@ -19726,6 +21096,7 @@ extpfeil = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.4";
+  hasCatalogue = true;
 };
 extract = {
   revision = 52117;
@@ -19737,6 +21108,7 @@ extract = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.9a";
+  hasCatalogue = true;
 };
 extsizes = {
   revision = 17263;
@@ -19747,6 +21119,7 @@ extsizes = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.4a";
+  hasCatalogue = true;
 };
 facsimile = {
   revision = 21328;
@@ -19758,6 +21131,7 @@ facsimile = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 factura = {
   revision = 61697;
@@ -19769,6 +21143,7 @@ factura = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "4.32";
+  hasCatalogue = true;
 };
 facture = {
   revision = 67538;
@@ -19780,6 +21155,7 @@ facture = {
   hasRunfiles = true;
   license = [ "cc-by-sa-20" ];
   version = "1.3";
+  hasCatalogue = true;
 };
 facture-belge-simple-sans-tva = {
   revision = 67573;
@@ -19790,6 +21166,7 @@ facture-belge-simple-sans-tva = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.1";
+  hasCatalogue = true;
 };
 fadingimage = {
   revision = 70610;
@@ -19800,6 +21177,7 @@ fadingimage = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.1c";
+  hasCatalogue = true;
 };
 fail-fast = {
   revision = 67543;
@@ -19811,6 +21189,7 @@ fail-fast = {
   hasRunfiles = true;
   license = [ "mit" ];
   version = "0.0.2";
+  hasCatalogue = true;
 };
 faktor = {
   revision = 15878;
@@ -19822,6 +21201,7 @@ faktor = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.1b";
+  hasCatalogue = true;
 };
 familytree = {
   revision = 63739;
@@ -19833,6 +21213,7 @@ familytree = {
   hasRunfiles = true;
   license = [ "gpl2Plus" ];
   version = "3.1";
+  hasCatalogue = true;
 };
 fancybox = {
   revision = 18304;
@@ -19843,6 +21224,7 @@ fancybox = {
   hasRunfiles = true;
   license = [ "lppl12" ];
   version = "1.4";
+  hasCatalogue = true;
 };
 fancyhandout = {
   revision = 46411;
@@ -19852,6 +21234,7 @@ fancyhandout = {
   sha512.doc = "be4c7b2caf2e85ec192f3aded87309ee2361fbb7e8fd1225f8f98f96446251aacd69e04e306473d06e14c8a8b686dd7a1c54cb0311bc4138fc9c34fa2d528ddf";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 fancyhdr = {
   revision = 64977;
@@ -19863,6 +21246,7 @@ fancyhdr = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "4.1";
+  hasCatalogue = true;
 };
 fancyhdr-it = {
   revision = 21912;
@@ -19871,6 +21255,7 @@ fancyhdr-it = {
   sha512.run = "6899f3c11ed4a8f7476fe954166ea7576446b670d0b22737766927fcd29eb24e6143ff3031b974856562a7ff55e68f208164729618a4d28d28b856919f2a666b";
   sha512.doc = "cda5ff0581545e4eca9787b27dddcdad226b5dc9a630773b13073e9248b7b30b985fa5f5fc1bc5380e5a0d96f06c666d4e7e73168afbc2fa4ed0dd202967dafa";
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 fancylabel = {
   revision = 46736;
@@ -19882,6 +21267,7 @@ fancylabel = {
   hasRunfiles = true;
   license = [ "lppl12" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 fancynum = {
   revision = 15878;
@@ -19893,6 +21279,7 @@ fancynum = {
   hasRunfiles = true;
   license = [ "free" ];
   version = "0.92";
+  hasCatalogue = true;
 };
 fancypar = {
   revision = 58895;
@@ -19904,6 +21291,7 @@ fancypar = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.3";
+  hasCatalogue = true;
 };
 fancyqr = {
   revision = 64182;
@@ -19914,6 +21302,7 @@ fancyqr = {
   hasRunfiles = true;
   license = [ "gpl3Only" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 fancyref = {
   revision = 15878;
@@ -19925,6 +21314,7 @@ fancyref = {
   hasRunfiles = true;
   license = [ "gpl1Only" ];
   version = "0.9c";
+  hasCatalogue = true;
 };
 fancyslides = {
   revision = 36263;
@@ -19935,6 +21325,7 @@ fancyslides = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 fancytabs = {
   revision = 41549;
@@ -19946,6 +21337,7 @@ fancytabs = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.9";
+  hasCatalogue = true;
 };
 fancytooltips = {
   revision = 68931;
@@ -19957,6 +21349,7 @@ fancytooltips = {
   hasRunfiles = true;
   license = [ "lppl12" ];
   version = "1.8";
+  hasCatalogue = true;
 };
 fancyvrb = {
   revision = 69536;
@@ -19967,6 +21360,7 @@ fancyvrb = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "4.5c";
+  hasCatalogue = true;
 };
 fandol = {
   revision = 37889;
@@ -19977,6 +21371,7 @@ fandol = {
   hasRunfiles = true;
   license = [ "gpl1Only" ];
   version = "0.3";
+  hasCatalogue = true;
 };
 fascicules = {
   revision = 54080;
@@ -19988,6 +21383,7 @@ fascicules = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1";
+  hasCatalogue = true;
 };
 fast-diagram = {
   revision = 29264;
@@ -19998,6 +21394,7 @@ fast-diagram = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 fbb = {
   revision = 55728;
@@ -20011,6 +21408,7 @@ fbb = {
   hasRunfiles = true;
   license = [ "ofl" "lppl13c" ];
   version = "1.16";
+  hasCatalogue = true;
 };
 fbithesis = {
   revision = 21340;
@@ -20022,6 +21420,7 @@ fbithesis = {
   hasRunfiles = true;
   license = [ "free" ];
   version = "1.2m";
+  hasCatalogue = true;
 };
 fbox = {
   revision = 69041;
@@ -20032,6 +21431,7 @@ fbox = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.07";
+  hasCatalogue = true;
 };
 fbs = {
   revision = 15878;
@@ -20040,6 +21440,7 @@ fbs = {
   sha512.run = "2d5bce7890fd8e087e035e60064bf134d8ac7ca2646f7b846df8fca7c594843c2778d0ad1752ffefed40283153194b5da97156e866bb4b8bd10b14c8ee3f2c4d";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 fc = {
   revision = 32796;
@@ -20050,6 +21451,7 @@ fc = {
   hasRunfiles = true;
   license = [ "gpl2Only" ];
   version = "1.4";
+  hasCatalogue = true;
 };
 fcavtex = {
   revision = 38074;
@@ -20060,6 +21462,7 @@ fcavtex = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 fcltxdoc = {
   revision = 24500;
@@ -20071,6 +21474,7 @@ fcltxdoc = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 fcolumn = {
   revision = 67729;
@@ -20082,6 +21486,7 @@ fcolumn = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.4.2";
+  hasCatalogue = true;
 };
 fdsymbol = {
   revision = 61719;
@@ -20096,6 +21501,7 @@ fdsymbol = {
   hasRunfiles = true;
   license = [ "ofl" ];
   version = "0.8";
+  hasCatalogue = true;
 };
 fduthesis = {
   revision = 67231;
@@ -20107,6 +21513,7 @@ fduthesis = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.9a";
+  hasCatalogue = true;
 };
 featpost = {
   revision = 35346;
@@ -20117,6 +21524,7 @@ featpost = {
   hasRunfiles = true;
   license = [ "gpl1Only" ];
   version = "0.8.8";
+  hasCatalogue = true;
 };
 fei = {
   revision = 65352;
@@ -20128,6 +21536,7 @@ fei = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "4.10.4";
+  hasCatalogue = true;
 };
 fenetrecas = {
   revision = 68779;
@@ -20138,6 +21547,7 @@ fenetrecas = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.1.4";
+  hasCatalogue = true;
 };
 fenixpar = {
   revision = 24730;
@@ -20148,6 +21558,7 @@ fenixpar = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.92";
+  hasCatalogue = true;
 };
 fetamont = {
   revision = 43812;
@@ -20161,6 +21572,7 @@ fetamont = {
   sha512.source = "de4a25f0a86f29d10fd1cf799ac6c8efc58633a7ba0c48bb33716c46e6b0e1c9d5be6ee4e8e4955739ddb324270e44d6fa658c360d03123c18cc275ba6abff06";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 fetchcls = {
   revision = 45245;
@@ -20172,6 +21584,7 @@ fetchcls = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 feupphdteses = {
   revision = 30962;
@@ -20182,6 +21595,7 @@ feupphdteses = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "4.0";
+  hasCatalogue = true;
 };
 fewerfloatpages = {
   revision = 58058;
@@ -20193,6 +21607,7 @@ fewerfloatpages = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0b";
+  hasCatalogue = true;
 };
 feyn = {
   revision = 63945;
@@ -20204,6 +21619,7 @@ feyn = {
   hasRunfiles = true;
   license = [ "bsd2" ];
   version = "0.4.3";
+  hasCatalogue = true;
 };
 feynmf = {
   revision = 17259;
@@ -20215,6 +21631,7 @@ feynmf = {
   hasRunfiles = true;
   license = [ "gpl1Only" ];
   version = "1.08";
+  hasCatalogue = true;
 };
 feynmp-auto = {
   revision = 30223;
@@ -20226,6 +21643,7 @@ feynmp-auto = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 ffcode = {
   revision = 69706;
@@ -20245,6 +21663,7 @@ ffcode = {
   hasRunfiles = true;
   license = [ "mit" ];
   version = "0.9.2";
+  hasCatalogue = true;
 };
 ffslides = {
   revision = 38895;
@@ -20254,6 +21673,7 @@ ffslides = {
   sha512.doc = "4a8e176b7bce3d54464a30497e41d5a899905a0029199710aedca7234612092f0b2e265a465084536434c9b8c7f45eec3f2ac3df5eef66cecfdae5cdae36c798";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 fge = {
   revision = 68353;
@@ -20268,6 +21688,7 @@ fge = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.25";
+  hasCatalogue = true;
 };
 fgruler = {
   revision = 63721;
@@ -20279,6 +21700,7 @@ fgruler = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.5";
+  hasCatalogue = true;
 };
 fifinddo-info = {
   revision = 29349;
@@ -20289,6 +21711,7 @@ fifinddo-info = {
   sha512.source = "f01f2453c206cc7fefaafd1269c77b43bf1f24a8fef034ebdc40ac2be5c4ef553d2096f4168e7933e63aa816b1397c74fe21d725f0a6bc3d8187c751145a44a7";
   license = [ "lppl13c" ];
   version = "1.1b";
+  hasCatalogue = true;
 };
 fifo-stack = {
   revision = 33288;
@@ -20300,6 +21723,7 @@ fifo-stack = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 fig4latex = {
   revision = 26313;
@@ -20309,6 +21733,7 @@ fig4latex = {
   hasRunfiles = true;
   license = [ "gpl3Only" ];
   version = "0.2";
+  hasCatalogue = true;
 };
 fig4latex.binfiles = [
   "fig4latex"
@@ -20322,6 +21747,7 @@ figbas = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0.3";
+  hasCatalogue = true;
 };
 figbib = {
   revision = 19388;
@@ -20331,6 +21757,7 @@ figbib = {
   sha512.doc = "ba42f6cc811fc9e00c41bb6fb410a57a2efe759a0fd0621cd83801963d0ed138dc66a1a245a4b7256cb056f3fe71e883a8fa84d19dda785ba24825e85edfa044";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 figchild = {
   revision = 62945;
@@ -20341,6 +21768,7 @@ figchild = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.1.1";
+  hasCatalogue = true;
 };
 figflow = {
   revision = 21462;
@@ -20350,6 +21778,7 @@ figflow = {
   sha512.doc = "c972bfb356731aa119e8cdf1292a3bcbfc08a74453feb7e509a5cc519f62ae6c7e6b0c087973549b9d860b97ff1a3bae9cfd1166c4ac6a74553ca6c0f463694d";
   hasRunfiles = true;
   license = [ "free" ];
+  hasCatalogue = true;
 };
 figput = {
   revision = 63957;
@@ -20360,6 +21789,7 @@ figput = {
   hasRunfiles = true;
   license = [ "cc-by-sa-40" ];
   version = "0.90";
+  hasCatalogue = true;
 };
 figsize = {
   revision = 18784;
@@ -20370,6 +21800,7 @@ figsize = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.1";
+  hasCatalogue = true;
 };
 filecontents = {
   revision = 66740;
@@ -20381,6 +21812,7 @@ filecontents = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.5a";
+  hasCatalogue = true;
 };
 filecontentsdef = {
   revision = 52208;
@@ -20392,6 +21824,7 @@ filecontentsdef = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.5";
+  hasCatalogue = true;
 };
 filedate = {
   revision = 29529;
@@ -20402,6 +21835,7 @@ filedate = {
   sha512.source = "cc2a12c8f3b9e7391d6b57eec6c0f486137524022d89d3d3e7c037ab468a4858b253e8baa1cc8eeb731510c5e221b7cbe9a9f22a972023b3d1fe2f975e4751dc";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 filehook = {
   revision = 64822;
@@ -20413,6 +21847,7 @@ filehook = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.8b";
+  hasCatalogue = true;
 };
 fileinfo = {
   revision = 28421;
@@ -20424,6 +21859,7 @@ fileinfo = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.81a";
+  hasCatalogue = true;
 };
 filemod = {
   revision = 64967;
@@ -20434,14 +21870,17 @@ filemod = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.2";
+  hasCatalogue = true;
 };
 finbib = {
   revision = 15878;
+  catalogue = "finplain";
   shortdesc = "A Finnish version of plain.bst";
   stripPrefix = 0;
   sha512.run = "14f08cdc92a2d6d511c112c480efb0112d45c199023e89c9314740c2b9b83598bc9f8917ce616bb2493671f408f946ada3de4535136eff48b7bbf72e7436f912";
   hasRunfiles = true;
   license = [ "free" ];
+  hasCatalogue = true;
 };
 findhyph = {
   revision = 47444;
@@ -20452,6 +21891,7 @@ findhyph = {
   hasRunfiles = true;
   license = [ "gpl2Only" ];
   version = "3.4";
+  hasCatalogue = true;
 };
 findhyph.binfiles = [
   "findhyph"
@@ -20466,6 +21906,7 @@ fink = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.2.1";
+  hasCatalogue = true;
 };
 finstrut = {
   revision = 21719;
@@ -20477,6 +21918,7 @@ finstrut = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.5";
+  hasCatalogue = true;
 };
 fira = {
   revision = 64422;
@@ -20490,6 +21932,7 @@ fira = {
   hasRunfiles = true;
   license = [ "ofl" "lppl13c" ];
   version = "4.3";
+  hasCatalogue = true;
 };
 firamath = {
   revision = 56672;
@@ -20500,6 +21943,7 @@ firamath = {
   hasRunfiles = true;
   license = [ "ofl" ];
   version = "0.3.4";
+  hasCatalogue = true;
 };
 firamath-otf = {
   revision = 68233;
@@ -20513,6 +21957,7 @@ firamath-otf = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.03b";
+  hasCatalogue = true;
 };
 first-latex-doc = {
   revision = 15878;
@@ -20521,9 +21966,11 @@ first-latex-doc = {
   sha512.run = "39641224689a1d45d59b5643e5037599d03df3ecbe95090d565778758d334bddf832e867a25c1688adbee1f99eea23b3ed21fd6729fb3d4e50f1503537c9a400";
   sha512.doc = "497080fdad8195bdc43bef476f9e678b49d83829f10a6653c9443d327cb0da8505623e941cd3038349b6307ee37a65ce1a3d3eb48e4c6262f9d636d10d96e17b";
   license = [ "publicDomain" ];
+  hasCatalogue = true;
 };
 firstaid = {
   revision = 70324;
+  catalogue = "latex-firstaid";
   shortdesc = "First aid for external LaTeX files and packages that need updating";
   stripPrefix = 0;
   sha512.run = "610aa5b4c12511436b7b26145f24c294a3c98e75a9b4211198c144e8c0cd58142853d0d581ea0bd620a4f01f48bcc186c40db1d0a27ecc559bc5ba012508bf59";
@@ -20532,6 +21979,7 @@ firstaid = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1c";
+  hasCatalogue = true;
 };
 fistrum = {
   revision = 66461;
@@ -20543,6 +21991,7 @@ fistrum = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.1";
+  hasCatalogue = true;
 };
 fitbox = {
   revision = 50088;
@@ -20554,6 +22003,7 @@ fitbox = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.02";
+  hasCatalogue = true;
 };
 fitch = {
   revision = 69160;
@@ -20564,6 +22014,7 @@ fitch = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 fithesis = {
   revision = 70536;
@@ -20575,6 +22026,7 @@ fithesis = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1.1";
+  hasCatalogue = true;
 };
 fix2col = {
   revision = 38770;
@@ -20586,6 +22038,7 @@ fix2col = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.04";
+  hasCatalogue = true;
 };
 fixcmex = {
   revision = 51825;
@@ -20597,6 +22050,7 @@ fixcmex = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 fixdif = {
   revision = 66606;
@@ -20608,6 +22062,7 @@ fixdif = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.1";
+  hasCatalogue = true;
 };
 fixfoot = {
   revision = 17131;
@@ -20618,6 +22073,7 @@ fixfoot = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.3a";
+  hasCatalogue = true;
 };
 fixjfm = {
   revision = 63967;
@@ -20628,6 +22084,7 @@ fixjfm = {
   hasRunfiles = true;
   license = [ "knuth" ];
   version = "0.8";
+  hasCatalogue = true;
 };
 fixlatvian = {
   revision = 21631;
@@ -20639,6 +22096,7 @@ fixlatvian = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1a";
+  hasCatalogue = true;
 };
 fixltxhyph = {
   revision = 25832;
@@ -20650,6 +22108,7 @@ fixltxhyph = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.4";
+  hasCatalogue = true;
 };
 fixmath = {
   revision = 64648;
@@ -20661,6 +22120,7 @@ fixmath = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.9.1";
+  hasCatalogue = true;
 };
 fixme = {
   revision = 63708;
@@ -20672,6 +22132,7 @@ fixme = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "4.5";
+  hasCatalogue = true;
 };
 fixmetodonotes = {
   revision = 30168;
@@ -20683,6 +22144,7 @@ fixmetodonotes = {
   hasRunfiles = true;
   license = [ "publicDomain" ];
   version = "0.2.2";
+  hasCatalogue = true;
 };
 fixpdfmag = {
   revision = 15878;
@@ -20691,6 +22153,7 @@ fixpdfmag = {
   sha512.run = "733995ec82df92bea5a674fc25a3a6af2102739c3c73eeed7c9f40cd54bc4c5d65cafb35366b70641ff0661dc83700071054f7af274487474c3893ce5a44c9ad";
   hasRunfiles = true;
   license = [ "publicDomain" ];
+  hasCatalogue = true;
 };
 fiziko = {
   revision = 61944;
@@ -20701,6 +22164,7 @@ fiziko = {
   hasRunfiles = true;
   license = [ "gpl3Plus" "cc-by-sa-40" ];
   version = "0.2.0";
+  hasCatalogue = true;
 };
 fjodor = {
   revision = 53207;
@@ -20710,6 +22174,7 @@ fjodor = {
   sha512.doc = "a0a0e01d4d40f1b847f40401d20604bafd2723097e72c208df2a5acb30f57042b35df4cabfc93108d4278f5725dd4b50539f7e17b7c51adf875898071a368fbd";
   hasRunfiles = true;
   license = [ "gpl1Only" ];
+  hasCatalogue = true;
 };
 flabels = {
   revision = 17272;
@@ -20721,6 +22186,7 @@ flabels = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 flacards = {
   revision = 19440;
@@ -20731,6 +22197,7 @@ flacards = {
   hasRunfiles = true;
   license = [ "gpl1Only" ];
   version = "0.1.1b";
+  hasCatalogue = true;
 };
 flagderiv = {
   revision = 15878;
@@ -20742,6 +22209,7 @@ flagderiv = {
   hasRunfiles = true;
   license = [ "gpl1Only" ];
   version = "0.10";
+  hasCatalogue = true;
 };
 flashcards = {
   revision = 62104;
@@ -20753,6 +22221,7 @@ flashcards = {
   hasRunfiles = true;
   license = [ "gpl2Plus" ];
   version = "1.0.2";
+  hasCatalogue = true;
 };
 flashmovie = {
   revision = 25768;
@@ -20763,6 +22232,7 @@ flashmovie = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.4";
+  hasCatalogue = true;
 };
 flexipage = {
   revision = 66614;
@@ -20774,6 +22244,7 @@ flexipage = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.02";
+  hasCatalogue = true;
 };
 flipbook = {
   revision = 25584;
@@ -20784,6 +22255,7 @@ flipbook = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.2";
+  hasCatalogue = true;
 };
 flippdf = {
   revision = 56782;
@@ -20795,6 +22267,7 @@ flippdf = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.0b";
+  hasCatalogue = true;
 };
 float = {
   revision = 15878;
@@ -20806,6 +22279,7 @@ float = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.3d";
+  hasCatalogue = true;
 };
 floatbytocbasic = {
   revision = 67945;
@@ -20817,6 +22291,7 @@ floatbytocbasic = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 floatflt = {
   revision = 25540;
@@ -20828,6 +22303,7 @@ floatflt = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.31";
+  hasCatalogue = true;
 };
 floatrow = {
   revision = 15878;
@@ -20839,6 +22315,7 @@ floatrow = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.3b";
+  hasCatalogue = true;
 };
 floatrowbytocbasic = {
   revision = 67946;
@@ -20850,6 +22327,7 @@ floatrowbytocbasic = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 flowchart = {
   revision = 36572;
@@ -20861,6 +22339,7 @@ flowchart = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "3.3";
+  hasCatalogue = true;
 };
 flowfram = {
   revision = 35291;
@@ -20872,6 +22351,7 @@ flowfram = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.17";
+  hasCatalogue = true;
 };
 fltpoint = {
   revision = 56594;
@@ -20883,6 +22363,7 @@ fltpoint = {
   hasRunfiles = true;
   license = [ "free" ];
   version = "1.1b";
+  hasCatalogue = true;
 };
 fmp = {
   revision = 15878;
@@ -20893,6 +22374,7 @@ fmp = {
   sha512.source = "912cfb9e0d4669c5d128ace088190ab4c5f90e371b45f1e399346816d606ef3f96901775a51b5f89a8670abd1b08e159587c9eab4ee6383c12e260d26e070034";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 fmtcount = {
   revision = 53912;
@@ -20904,6 +22386,7 @@ fmtcount = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "3.07";
+  hasCatalogue = true;
 };
 fn2end = {
   revision = 15878;
@@ -20914,6 +22397,7 @@ fn2end = {
   hasRunfiles = true;
   license = [ "publicDomain" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 fnbreak = {
   revision = 66615;
@@ -20925,6 +22409,7 @@ fnbreak = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.40";
+  hasCatalogue = true;
 };
 fncychap = {
   revision = 20710;
@@ -20935,6 +22420,7 @@ fncychap = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.34";
+  hasCatalogue = true;
 };
 fncylab = {
   revision = 52090;
@@ -20945,6 +22431,7 @@ fncylab = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 fnpara = {
   revision = 25607;
@@ -20954,6 +22441,7 @@ fnpara = {
   sha512.doc = "798c7fb03a8fb20695ed63ba1333686d21832a936a74a93ca77c7614346316234b2255b8e0340dd87fd57bc1480f23df24381107fc81c68cd4c0cd594ddf5329";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 fnpct = {
   revision = 62248;
@@ -20964,6 +22452,7 @@ fnpct = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1a";
+  hasCatalogue = true;
 };
 fnspe = {
   revision = 45360;
@@ -20974,6 +22463,7 @@ fnspe = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.2a";
+  hasCatalogue = true;
 };
 fntproof = {
   revision = 20638;
@@ -20983,6 +22473,7 @@ fntproof = {
   sha512.doc = "cf9e8909ed030b27a57573cc257682da84b7f14c3c3775e17fdc8a2203fe99dda8797ae7b2599dc92e9684140102f6d1ca2147bbb437edcf8eb41ffd28b9a576";
   hasRunfiles = true;
   license = [ "publicDomain" ];
+  hasCatalogue = true;
 };
 fnumprint = {
   revision = 29173;
@@ -20994,6 +22485,7 @@ fnumprint = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1a";
+  hasCatalogue = true;
 };
 foekfont = {
   revision = 15878;
@@ -21006,6 +22498,7 @@ foekfont = {
   sha512.doc = "7e1aa7a240d825c014be6af7be5cd7c1bbcbc6e52bd55be36f987b4a25223179bcc4c4d342906c10f9df624536252fe4dc5a45cd3b5ddb63f91e9f4c7401a239";
   hasRunfiles = true;
   license = [ "gpl1Only" ];
+  hasCatalogue = true;
 };
 foilhtml = {
   revision = 61937;
@@ -21017,6 +22510,7 @@ foilhtml = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.2";
+  hasCatalogue = true;
 };
 foliono = {
   revision = 58877;
@@ -21027,6 +22521,7 @@ foliono = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.000";
+  hasCatalogue = true;
 };
 fonetika = {
   revision = 21326;
@@ -21039,6 +22534,7 @@ fonetika = {
   sha512.doc = "ac3f0de2a9a5b5052d4ae626b4368f8b1fef419503cab9a88d4bf89db348c1a756555a6cef7aa70bcf733fa032840fe9ae7cfe347fb40bae32b54506e60ccf37";
   hasRunfiles = true;
   license = [ "free" ];
+  hasCatalogue = true;
 };
 font-change = {
   revision = 40403;
@@ -21049,6 +22545,7 @@ font-change = {
   hasRunfiles = true;
   license = [ "free" ];
   version = "2015.2";
+  hasCatalogue = true;
 };
 font-change-xetex = {
   revision = 40404;
@@ -21059,6 +22556,7 @@ font-change-xetex = {
   hasRunfiles = true;
   license = [ "free" ];
   version = "2016.1";
+  hasCatalogue = true;
 };
 fontawesome = {
   revision = 48145;
@@ -21072,6 +22570,7 @@ fontawesome = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "4.6.3.2";
+  hasCatalogue = true;
 };
 fontawesome5 = {
   revision = 63207;
@@ -21085,6 +22584,7 @@ fontawesome5 = {
   hasRunfiles = true;
   license = [ "ofl" "lppl13c" ];
   version = "5.15.4";
+  hasCatalogue = true;
 };
 fontaxes = {
   revision = 55920;
@@ -21096,6 +22596,7 @@ fontaxes = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0e";
+  hasCatalogue = true;
 };
 fontbook = {
   revision = 23608;
@@ -21107,6 +22608,7 @@ fontbook = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.2";
+  hasCatalogue = true;
 };
 fontch = {
   revision = 17859;
@@ -21117,6 +22619,7 @@ fontch = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.2";
+  hasCatalogue = true;
 };
 fontinst = {
   revision = 62517;
@@ -21128,6 +22631,7 @@ fontinst = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.933";
+  hasCatalogue = true;
 };
 fontinst.binfiles = [
   "fontinst"
@@ -21140,6 +22644,7 @@ fontinstallationguide = {
   sha512.doc = "785a84a3bbcf67fcbb878f331815fd585093de89faee6f2556727ef820e392131545646242ebdef603e85e22e86b1e97f5369db4e1c565875e79683ff4987198";
   license = [ "fdl13Only" ];
   version = "2.14";
+  hasCatalogue = true;
 };
 fontmfizz = {
   revision = 43546;
@@ -21149,6 +22654,7 @@ fontmfizz = {
   sha512.doc = "6dc0f6c10d44a17d42d8ed4148f39bf89c84dd5a3a672755340456b0ab983b1b52cbd3bb62cd6f5ef4c3f6dfed8a39568d5ca35598c4b016483fcf7d3cdeb360";
   hasRunfiles = true;
   license = [ "mit" ];
+  hasCatalogue = true;
 };
 fontname = {
   revision = 64477;
@@ -21159,6 +22665,7 @@ fontname = {
   hasInfo = true;
   hasRunfiles = true;
   license = [ "gpl1Only" ];
+  hasCatalogue = true;
 };
 fontools = {
   revision = 69241;
@@ -21168,6 +22675,7 @@ fontools = {
   hasManpages = true;
   hasRunfiles = true;
   license = [ "gpl2Only" ];
+  hasCatalogue = true;
 };
 fontools.binfiles = [
   "afm2afm"
@@ -21183,6 +22691,7 @@ fonts-churchslavonic = {
   hasRunfiles = true;
   license = [ "ofl" ];
   version = "2.3";
+  hasCatalogue = true;
 };
 fonts-tlwg = {
   revision = 60817;
@@ -21200,6 +22709,7 @@ fonts-tlwg = {
   hasRunfiles = true;
   license = [ "gpl2Plus" "lppl13c" "free" ];
   version = "0.7.3";
+  hasCatalogue = true;
 };
 fontscale = {
   revision = 70541;
@@ -21210,6 +22720,7 @@ fontscale = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0.1";
+  hasCatalogue = true;
 };
 fontsetup = {
   revision = 70135;
@@ -21220,6 +22731,7 @@ fontsetup = {
   hasRunfiles = true;
   license = [ "gpl3Only" ];
   version = "2.1.1";
+  hasCatalogue = true;
 };
 fontsize = {
   revision = 60161;
@@ -21231,6 +22743,7 @@ fontsize = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.8.5";
+  hasCatalogue = true;
 };
 fontspec = {
   revision = 69880;
@@ -21250,6 +22763,7 @@ fontspec = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.9a";
+  hasCatalogue = true;
 };
 fonttable = {
   revision = 44799;
@@ -21261,14 +22775,17 @@ fonttable = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.6c";
+  hasCatalogue = true;
 };
 fontware = {
   revision = 66186;
+  catalogue = "vfware";
   shortdesc = "Tools for virtual font metrics";
   sha512.run = "7cec7df72b76ed64b864401c809b48e51f69338c7cb3ed05ac4ea69899a077983763c728543f99130f18afdd2a03c955d848066a239c97547ab0240d87c97d7e";
   sha512.doc = "ccd22e262e5fa2cccd5da0ff016447d2df04aefcdd6960f226762667ea2e81b4afd406ea9f822b74d07c8f93cbe70ef90cfcc4040cae2820cf5ace94ce8d1113";
   hasManpages = true;
   license = [ "knuth" ];
+  hasCatalogue = true;
 };
 fontware.binfiles = [
   "pltotf"
@@ -21284,6 +22801,7 @@ fontwrap = {
   sha512.doc = "857be54c81d9bfb14277c17638ec24c643c278d660b56e18a4701aea0ad28e496df0aec191b12d93bb29b7ab326b39ad9cc7ddc3615871d1b70fdf6e44ccdc6e";
   hasRunfiles = true;
   license = [ "gpl1Only" ];
+  hasCatalogue = true;
 };
 footbib = {
   revision = 17115;
@@ -21295,6 +22813,7 @@ footbib = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.0.7";
+  hasCatalogue = true;
 };
 footmisc = {
   revision = 69729;
@@ -21309,6 +22828,7 @@ footmisc = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "6.0f";
+  hasCatalogue = true;
 };
 footmisx = {
   revision = 42621;
@@ -21320,6 +22840,7 @@ footmisx = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "20161201";
+  hasCatalogue = true;
 };
 footnotebackref = {
   revision = 27034;
@@ -21330,6 +22851,7 @@ footnotebackref = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 footnotehyper = {
   revision = 60374;
@@ -21341,6 +22863,7 @@ footnotehyper = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1e";
+  hasCatalogue = true;
 };
 footnoterange = {
   revision = 66149;
@@ -21352,6 +22875,7 @@ footnoterange = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1a";
+  hasCatalogue = true;
 };
 footnpag = {
   revision = 15878;
@@ -21362,6 +22886,7 @@ footnpag = {
   sha512.source = "a44b0ba4ef7b6328d6d307eca25c34d494000a238c69fec3686a55057ff56ae1ada7cacc763ff1cd26aaa83962257442060fbd795c76d61f92761bd66be81378";
   hasRunfiles = true;
   license = [ "gpl1Only" ];
+  hasCatalogue = true;
 };
 forarray = {
   revision = 15878;
@@ -21373,6 +22898,7 @@ forarray = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.01";
+  hasCatalogue = true;
 };
 foreign = {
   revision = 27819;
@@ -21384,6 +22910,7 @@ foreign = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.7";
+  hasCatalogue = true;
 };
 forest = {
   revision = 57398;
@@ -21404,6 +22931,7 @@ forest = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.1.5";
+  hasCatalogue = true;
 };
 forest-quickstart = {
   revision = 55688;
@@ -21412,6 +22940,7 @@ forest-quickstart = {
   sha512.run = "52e77fa1a6aca02eb15838d7c04e37744cb4f37f0bb078fa571c1309244fc329d92b553f3e7c62f574561929b5e4964b71cd2cca3d17d4f9d13f9bdb9b0ab8b5";
   sha512.doc = "974a0d0e5a5e7e640e4e18cc5eb59b5a10efa7c5ab4f81e2915e9bbea30bcd68323cf95c62891ce1711d822336e5ee054735761a474d186e3c9f11fd4dcf6f9a";
   license = [ "fdl13Only" ];
+  hasCatalogue = true;
 };
 forloop = {
   revision = 67017;
@@ -21423,6 +22952,7 @@ forloop = {
   hasRunfiles = true;
   license = [ "lgpl2" ];
   version = "3.0";
+  hasCatalogue = true;
 };
 formal-grammar = {
   revision = 61955;
@@ -21434,6 +22964,7 @@ formal-grammar = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.2";
+  hasCatalogue = true;
 };
 formation-latex-ul = {
   revision = 70516;
@@ -21444,6 +22975,7 @@ formation-latex-ul = {
   sha512.source = "d2c09f1700193814485fd25ef4a119875821a39a54a52429ef2f3889d276a9a50d74cab2df73e77c4ee62d96a413a5a8b488e216f9f11e5d6410fc0337662156";
   license = [ "cc-by-40" ];
   version = "2024.03";
+  hasCatalogue = true;
 };
 formlett = {
   revision = 21480;
@@ -21454,6 +22986,7 @@ formlett = {
   hasRunfiles = true;
   license = [ "gpl1Only" ];
   version = "2.3";
+  hasCatalogue = true;
 };
 forms16be = {
   revision = 51305;
@@ -21465,6 +22998,7 @@ forms16be = {
   hasRunfiles = true;
   license = [ "lppl12" ];
   version = "1.3";
+  hasCatalogue = true;
 };
 formular = {
   revision = 15878;
@@ -21476,6 +23010,7 @@ formular = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0a";
+  hasCatalogue = true;
 };
 forum = {
   revision = 64566;
@@ -21488,6 +23023,7 @@ forum = {
   sha512.doc = "6598777d072ce157440923c767ec77f710ef38bfb019b7134d0ef8ee216d1a66af185a63a54a6af0c17d537a4027c7fa322ebdad07466787e400b6ff4fd77d99";
   hasRunfiles = true;
   license = [ "ofl" "lppl13c" ];
+  hasCatalogue = true;
 };
 fouridx = {
   revision = 32214;
@@ -21499,6 +23035,7 @@ fouridx = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.00";
+  hasCatalogue = true;
 };
 fourier = {
   revision = 61937;
@@ -21513,6 +23050,7 @@ fourier = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.3";
+  hasCatalogue = true;
 };
 fouriernc = {
   revision = 29646;
@@ -21522,6 +23060,7 @@ fouriernc = {
   sha512.doc = "039ce79d06bd1fb55b257f1c65c53412b15c26d4eafb9d3abe9bb7a7fa836c8b545718f70d935f1449fa235f33d07c81ad8f228608de20ffdfa99b9f532e059d";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 fp = {
   revision = 49719;
@@ -21532,6 +23071,7 @@ fp = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.1d";
+  hasCatalogue = true;
 };
 fpl = {
   revision = 54512;
@@ -21543,6 +23083,7 @@ fpl = {
   hasRunfiles = true;
   license = [ "gpl2Only" "lppl13c" ];
   version = "1.003";
+  hasCatalogue = true;
 };
 fragmaster = {
   revision = 26313;
@@ -21552,6 +23093,7 @@ fragmaster = {
   hasRunfiles = true;
   license = [ "gpl1Only" ];
   version = "1.6";
+  hasCatalogue = true;
 };
 fragmaster.binfiles = [
   "fragmaster"
@@ -21564,6 +23106,7 @@ fragments = {
   sha512.doc = "dcf795392d989fdea695512c8f7011f783ea9091bfcc238ad296b0cdf1775bcf631c3097ede09a138117e39c7fa71da7eb355878c8389bdab2deb76a319102e1";
   hasRunfiles = true;
   license = [ "free" ];
+  hasCatalogue = true;
 };
 frame = {
   revision = 18312;
@@ -21574,6 +23117,7 @@ frame = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 framed = {
   revision = 26789;
@@ -21584,6 +23128,7 @@ framed = {
   hasRunfiles = true;
   license = [ "free" ];
   version = "0.96";
+  hasCatalogue = true;
 };
 francais-bst = {
   revision = 69866;
@@ -21595,6 +23140,7 @@ francais-bst = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.0a";
+  hasCatalogue = true;
 };
 frankenstein = {
   revision = 15878;
@@ -21605,6 +23151,7 @@ frankenstein = {
   sha512.source = "8481205c937e58fc0b46eb25e4f7c8b28becc7ebf2529ab784f0bbb7292dc21faa9ebd1ef3be2a98950f1d2570b23eb13f7d6e134b8c8c5eea25e81c0e6c6eb5";
   hasRunfiles = true;
   license = [ "free" ];
+  hasCatalogue = true;
 };
 frcursive = {
   revision = 24559;
@@ -21617,6 +23164,7 @@ frcursive = {
   sha512.doc = "eb0559574af52a711f61ab84cbda996c7cf4b2314b4d5faaa18824ae3396f041b7a5948151b2b5cffae6675bbe09c2e4358b81e9ad7792e5ece8a2912d7ff030";
   hasRunfiles = true;
   license = [ "lppl12" ];
+  hasCatalogue = true;
 };
 frederika2016 = {
   revision = 42157;
@@ -21627,6 +23175,7 @@ frederika2016 = {
   hasRunfiles = true;
   license = [ "ofl" ];
   version = "1.000_2016_initial_release";
+  hasCatalogue = true;
 };
 freealign = {
   revision = 69267;
@@ -21637,6 +23186,7 @@ freealign = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2024A";
+  hasCatalogue = true;
 };
 frege = {
   revision = 27417;
@@ -21647,6 +23197,7 @@ frege = {
   hasRunfiles = true;
   license = [ "gpl1Only" ];
   version = "1.3";
+  hasCatalogue = true;
 };
 frenchmath = {
   revision = 70163;
@@ -21658,6 +23209,7 @@ frenchmath = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.10";
+  hasCatalogue = true;
 };
 frimurer = {
   revision = 56704;
@@ -21669,6 +23221,7 @@ frimurer = {
   hasRunfiles = true;
   license = [ "gpl3Only" ];
   version = "1";
+  hasCatalogue = true;
 };
 frletter = {
   revision = 15878;
@@ -21678,6 +23231,7 @@ frletter = {
   sha512.doc = "36fbbc422eed8e577e054067e7b442cc84b640fcbd0706e3d8cb503884a5208e0a5bbe0c40b67cb5b495bcdd0ba7a78855338588757e5a9d26dce21f9bedcf3e";
   hasRunfiles = true;
   license = [ "publicDomain" ];
+  hasCatalogue = true;
 };
 frontespizio = {
   revision = 24054;
@@ -21689,6 +23243,7 @@ frontespizio = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.4a";
+  hasCatalogue = true;
 };
 froufrou = {
   revision = 67201;
@@ -21700,6 +23255,7 @@ froufrou = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.4.0";
+  hasCatalogue = true;
 };
 frpseudocode = {
   revision = 56088;
@@ -21710,6 +23266,7 @@ frpseudocode = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.3.0";
+  hasCatalogue = true;
 };
 ftc-notebook = {
   revision = 50043;
@@ -21720,6 +23277,7 @@ ftc-notebook = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 ftcap = {
   revision = 17275;
@@ -21730,6 +23288,7 @@ ftcap = {
   hasRunfiles = true;
   license = [ "gpl1Only" ];
   version = "1.4";
+  hasCatalogue = true;
 };
 ftnxtra = {
   revision = 29652;
@@ -21741,6 +23300,7 @@ ftnxtra = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.1";
+  hasCatalogue = true;
 };
 fullblck = {
   revision = 25434;
@@ -21752,6 +23312,7 @@ fullblck = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.03";
+  hasCatalogue = true;
 };
 fullminipage = {
   revision = 34545;
@@ -21763,6 +23324,7 @@ fullminipage = {
   hasRunfiles = true;
   license = [ "gpl3Only" ];
   version = "0.1.1";
+  hasCatalogue = true;
 };
 fullwidth = {
   revision = 24684;
@@ -21773,6 +23335,7 @@ fullwidth = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.1";
+  hasCatalogue = true;
 };
 functan = {
   revision = 15878;
@@ -21783,6 +23346,7 @@ functan = {
   sha512.source = "f83465845900ae5bc872fceead5a83fa972c9fa8b858606007237251ee2dd77cbd095376194aca0356e5c8be53fe653a88f5a10c1f73effa8201b3adf55c5a17";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 functional = {
   revision = 69929;
@@ -21793,6 +23357,7 @@ functional = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2024A";
+  hasCatalogue = true;
 };
 fundus-calligra = {
   revision = 26018;
@@ -21804,6 +23369,7 @@ fundus-calligra = {
   hasRunfiles = true;
   license = [ "free" ];
   version = "1.2";
+  hasCatalogue = true;
 };
 fundus-cyr = {
   revision = 26019;
@@ -21812,6 +23378,7 @@ fundus-cyr = {
   sha512.run = "de84ebbe6e70f61bf9765b9368df95fa5ae607a8d6e1c5535240e8665bb097c6958956d1b19ccf12a2a510672675c7ffa08ab98bd80b6ae2973fbe65d0e8d343";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 fundus-sueterlin = {
   revision = 26030;
@@ -21823,6 +23390,7 @@ fundus-sueterlin = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.2";
+  hasCatalogue = true;
 };
 fvextra = {
   revision = 69001;
@@ -21834,6 +23402,7 @@ fvextra = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.6.1";
+  hasCatalogue = true;
 };
 fwlw = {
   revision = 29803;
@@ -21843,6 +23412,7 @@ fwlw = {
   sha512.doc = "bb55ca044aafb5b11b89b3c817066c4fb20facba8812667398ecf945bd8ed4b11bec2dfd21455db9cfa5e81e5f865655a3e6f4d3724bf40e47ad1db708896902";
   hasRunfiles = true;
   license = [ "free" ];
+  hasCatalogue = true;
 };
 g-brief = {
   revision = 50415;
@@ -21854,6 +23424,7 @@ g-brief = {
   hasRunfiles = true;
   license = [ "lppl1" ];
   version = "4.0.3";
+  hasCatalogue = true;
 };
 gaceta = {
   revision = 15878;
@@ -21864,6 +23435,7 @@ gaceta = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.06";
+  hasCatalogue = true;
 };
 galois = {
   revision = 15878;
@@ -21875,6 +23447,7 @@ galois = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.5";
+  hasCatalogue = true;
 };
 gamebook = {
   revision = 24714;
@@ -21886,6 +23459,7 @@ gamebook = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 gamebooklib = {
   revision = 67772;
@@ -21897,6 +23471,7 @@ gamebooklib = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.4";
+  hasCatalogue = true;
 };
 gammas = {
   revision = 56403;
@@ -21907,6 +23482,7 @@ gammas = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 garamond-libre = {
   revision = 64412;
@@ -21920,6 +23496,7 @@ garamond-libre = {
   hasRunfiles = true;
   license = [ "mit" "lppl13c" ];
   version = "1.4";
+  hasCatalogue = true;
 };
 garamond-math = {
   revision = 61481;
@@ -21929,6 +23506,7 @@ garamond-math = {
   sha512.doc = "c7c5795e7d9de09a590dbfd7311786027be9dcbe51b1f40284639341953effbb0dfcb331061cad0a8d01df55c52611a8d61a6b62fba701565bb643826ba55734";
   hasRunfiles = true;
   license = [ "ofl" ];
+  hasCatalogue = true;
 };
 garrigues = {
   revision = 15878;
@@ -21938,6 +23516,7 @@ garrigues = {
   sha512.doc = "0c91f7e1c8fe4910fa7052440edd9afd81c8932e99368219c8a5037bddfa4c8c11037576e9c94721062df9cf7fd5d467389ddcf3aed3e1853be38846c049100f";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 garuda-c90 = {
   revision = 60832;
@@ -21962,6 +23541,7 @@ gastex = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "3.1";
+  hasCatalogue = true;
 };
 gates = {
   revision = 29803;
@@ -21972,6 +23552,7 @@ gates = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.2";
+  hasCatalogue = true;
 };
 gatherenum = {
   revision = 67201;
@@ -21983,6 +23564,7 @@ gatherenum = {
   hasRunfiles = true;
   license = [ "gpl3Plus" ];
   version = "1.8";
+  hasCatalogue = true;
 };
 gauss = {
   revision = 32934;
@@ -21992,6 +23574,7 @@ gauss = {
   sha512.doc = "50de7e9af2360367de7f7136def2536a82348752656b1c40022d7e13271cfde64e67bcd482c2d208f47b88a30560f8179b7b8706288809b41d023c037147f0c2";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 gb4e = {
   revision = 19216;
@@ -22001,6 +23584,7 @@ gb4e = {
   sha512.doc = "9b8c8e2590a1a515aa84e11a4028aadeff9e4acb7d3ce99b0d21009e17443db3d2feee85d888a333595e144244efbf978239e6dbf48c68a43bd5709d9489c203";
   hasRunfiles = true;
   license = [ "lppl12" ];
+  hasCatalogue = true;
 };
 gbt7714 = {
   revision = 64633;
@@ -22017,6 +23601,7 @@ gbt7714 = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.1.5";
+  hasCatalogue = true;
 };
 gcard = {
   revision = 15878;
@@ -22026,6 +23611,7 @@ gcard = {
   sha512.doc = "f7fd3c07e053962c88d0a0b8e5899272a3bd9af4cf1731f88a7014773d8f0ecc91fb45e1e59b1a372d8c8977e1dce91c5162558d0245d77a187ac7787a3710ea";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 gchords = {
   revision = 29803;
@@ -22036,6 +23622,7 @@ gchords = {
   hasRunfiles = true;
   license = [ "gpl1Only" ];
   version = "1.20";
+  hasCatalogue = true;
 };
 gcite = {
   revision = 15878;
@@ -22047,6 +23634,7 @@ gcite = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0.1";
+  hasCatalogue = true;
 };
 gckanbun = {
   revision = 61719;
@@ -22057,6 +23645,7 @@ gckanbun = {
   hasRunfiles = true;
   license = [ "mit" ];
   version = "1.2";
+  hasCatalogue = true;
 };
 gelasio = {
   revision = 66805;
@@ -22069,6 +23658,7 @@ gelasio = {
   sha512.doc = "aa49c6e0bebb4c097b78ba11781f7027b783c6280a5fa0e3077f9c1eb20f6b372b3910f5c78b0103afa2429938a94b277bdcacd210afb8bad2bac92f5022ed8a";
   hasRunfiles = true;
   license = [ "ofl" "lppl13c" ];
+  hasCatalogue = true;
 };
 gender = {
   revision = 36464;
@@ -22080,6 +23670,7 @@ gender = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 gene-logic = {
   revision = 15878;
@@ -22090,6 +23681,7 @@ gene-logic = {
   hasRunfiles = true;
   license = [ "free" ];
   version = "1.4";
+  hasCatalogue = true;
 };
 genealogy = {
   revision = 25112;
@@ -22099,6 +23691,7 @@ genealogy = {
   sha512.doc = "34c9d737d31626331a18051a5b04584fd896d7cb8ea1814ff2fbf30486ec3578b2bef16155b9c8f2ca645d42f797f3101c799d3422c05f824026e268fa4f94e8";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 genealogy-profiles = {
   revision = 69580;
@@ -22108,6 +23701,7 @@ genealogy-profiles = {
   sha512.doc = "52f75186e84f03f21e33bc1b5ca935bddf8f45b348ee5dc93d82506b444cf72a1a51c4a33b0510cccd8e89cd46a74215e6acbeaa5d2f32953ff7ff3629bea5b2";
   hasRunfiles = true;
   license = [ "cc-by-sa-40" ];
+  hasCatalogue = true;
 };
 genealogytree = {
   revision = 66513;
@@ -22118,6 +23712,7 @@ genealogytree = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.3.0";
+  hasCatalogue = true;
 };
 genmpage = {
   revision = 15878;
@@ -22129,6 +23724,7 @@ genmpage = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.3.1";
+  hasCatalogue = true;
 };
 gensymb = {
   revision = 64740;
@@ -22140,6 +23736,7 @@ gensymb = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0.2";
+  hasCatalogue = true;
 };
 gentium-tug = {
   revision = 63470;
@@ -22154,6 +23751,7 @@ gentium-tug = {
   hasRunfiles = true;
   license = [ "ofl" "free" ];
   version = "1.102";
+  hasCatalogue = true;
 };
 gentle = {
   revision = 15878;
@@ -22162,6 +23760,7 @@ gentle = {
   sha512.run = "b244b249329d1ee622686d2a44d1469ceeed7e2adec5d82a2482e8659266a8224490531e0ed971b56f945b63fd1081f29aded9c43cea78fa8a9aec836301b26b";
   sha512.doc = "fe296c5bc38a1e6d13d2b46dc8081a6658764f7017d0831cfd46dd86082371d6ae095ec3b52b3aaaacc0a57cbcee066b94644a5746391fae4129eebaa246e146";
   license = [ "free" ];
+  hasCatalogue = true;
 };
 gentombow = {
   revision = 64333;
@@ -22171,6 +23770,7 @@ gentombow = {
   sha512.doc = "af1d418f108bb050d8380223548d7fd77681e942a1a48aff8b7fb2c7e7a4d79b288e47099382e6ab9218bca78dc5406a57a42de00c2029f080285d6f11183a5c";
   hasRunfiles = true;
   license = [ "bsd3" ];
+  hasCatalogue = true;
 };
 geometry = {
   revision = 61719;
@@ -22186,6 +23786,7 @@ geometry = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "5.9";
+  hasCatalogue = true;
 };
 geradwp = {
   revision = 63134;
@@ -22197,6 +23798,7 @@ geradwp = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 german = {
   revision = 42428;
@@ -22208,6 +23810,7 @@ german = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.5e";
+  hasCatalogue = true;
 };
 germbib = {
   revision = 15878;
@@ -22217,6 +23820,7 @@ germbib = {
   sha512.doc = "53dd4fff2fbb7044436f37e8a2baf48877699db4f99b92a701d10c0230439b00b48ee09051839efe4392abdb4335c3998d92d6239802c765bde4aa2df3d34ab6";
   hasRunfiles = true;
   license = [ "free" ];
+  hasCatalogue = true;
 };
 germkorr = {
   revision = 15878;
@@ -22227,6 +23831,7 @@ germkorr = {
   hasRunfiles = true;
   license = [ "gpl1Only" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 geschichtsfrkl = {
   revision = 42121;
@@ -22238,6 +23843,7 @@ geschichtsfrkl = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.4";
+  hasCatalogue = true;
 };
 getfiledate = {
   revision = 16189;
@@ -22248,6 +23854,7 @@ getfiledate = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.2";
+  hasCatalogue = true;
 };
 getitems = {
   revision = 39365;
@@ -22259,6 +23866,7 @@ getitems = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 getmap = {
   revision = 50589;
@@ -22271,6 +23879,7 @@ getmap = {
   ];
   license = [ "lppl13c" ];
   version = "1.11";
+  hasCatalogue = true;
 };
 getmap.binfiles = [
   "getmapdl"
@@ -22284,6 +23893,7 @@ getoptk = {
   hasRunfiles = true;
   license = [ "free" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 gettitlestring = {
   revision = 53170;
@@ -22295,6 +23905,7 @@ gettitlestring = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.6";
+  hasCatalogue = true;
 };
 gfdl = {
   revision = 65415;
@@ -22306,6 +23917,7 @@ gfdl = {
   hasRunfiles = true;
   license = [ "gpl3Plus" "fdl13Only" ];
   version = "0.1";
+  hasCatalogue = true;
 };
 gfnotation = {
   revision = 37156;
@@ -22316,6 +23928,7 @@ gfnotation = {
   hasRunfiles = true;
   license = [ "gpl3Only" ];
   version = "2.9";
+  hasCatalogue = true;
 };
 gfsartemisia = {
   revision = 19469;
@@ -22329,6 +23942,7 @@ gfsartemisia = {
   hasRunfiles = true;
   license = [ "free" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 gfsbaskerville = {
   revision = 19440;
@@ -22342,6 +23956,7 @@ gfsbaskerville = {
   hasRunfiles = true;
   license = [ "free" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 gfsbodoni = {
   revision = 28484;
@@ -22355,6 +23970,7 @@ gfsbodoni = {
   hasRunfiles = true;
   license = [ "ofl" ];
   version = "1.01";
+  hasCatalogue = true;
 };
 gfscomplutum = {
   revision = 19469;
@@ -22368,6 +23984,7 @@ gfscomplutum = {
   hasRunfiles = true;
   license = [ "ofl" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 gfsdidot = {
   revision = 69112;
@@ -22380,6 +23997,7 @@ gfsdidot = {
   sha512.doc = "29b49271f62496e6537e84301b361d372b24cf208365d97f3ac1d6d5b82fae84ff82954ad45e87201eee0df9dfc58f3486049e219480d20add06e9eef934f17e";
   hasRunfiles = true;
   license = [ "free" ];
+  hasCatalogue = true;
 };
 gfsdidotclassic = {
   revision = 52778;
@@ -22390,6 +24008,7 @@ gfsdidotclassic = {
   hasRunfiles = true;
   license = [ "ofl" ];
   version = "001.001";
+  hasCatalogue = true;
 };
 gfsneohellenic = {
   revision = 63944;
@@ -22403,6 +24022,7 @@ gfsneohellenic = {
   hasRunfiles = true;
   license = [ "free" ];
   version = "1.02";
+  hasCatalogue = true;
 };
 gfsneohellenicmath = {
   revision = 63928;
@@ -22413,6 +24033,7 @@ gfsneohellenicmath = {
   hasRunfiles = true;
   license = [ "ofl" ];
   version = "1.02";
+  hasCatalogue = true;
 };
 gfsporson = {
   revision = 18651;
@@ -22426,6 +24047,7 @@ gfsporson = {
   hasRunfiles = true;
   license = [ "free" ];
   version = "1.01";
+  hasCatalogue = true;
 };
 gfssolomos = {
   revision = 18651;
@@ -22439,6 +24061,7 @@ gfssolomos = {
   hasRunfiles = true;
   license = [ "ofl" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 ghab = {
   revision = 29803;
@@ -22449,6 +24072,7 @@ ghab = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.5";
+  hasCatalogue = true;
 };
 ghsystem = {
   revision = 53822;
@@ -22459,6 +24083,7 @@ ghsystem = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "4.8c";
+  hasCatalogue = true;
 };
 gillcm = {
   revision = 19878;
@@ -22469,6 +24094,7 @@ gillcm = {
   hasRunfiles = true;
   license = [ "bsd3" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 gillius = {
   revision = 64865;
@@ -22481,6 +24107,7 @@ gillius = {
   sha512.doc = "df8f143a6a80e9e5038744744b649fc26d042672eca7080fc8493a965ef4e3bcfb714735e83ae9a3bb500e3a298bc9bc9d940ff343caaed4ebfb8bf8d8101fb8";
   hasRunfiles = true;
   license = [ "gpl2Plus" "lppl13c" ];
+  hasCatalogue = true;
 };
 gincltex = {
   revision = 64967;
@@ -22492,6 +24119,7 @@ gincltex = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.3";
+  hasCatalogue = true;
 };
 gindex = {
   revision = 52311;
@@ -22502,6 +24130,7 @@ gindex = {
   hasRunfiles = true;
   license = [ "mit" ];
   version = "0.2";
+  hasCatalogue = true;
 };
 ginpenc = {
   revision = 24980;
@@ -22513,6 +24142,7 @@ ginpenc = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 git-latexdiff = {
   revision = 54732;
@@ -22523,6 +24153,7 @@ git-latexdiff = {
   hasRunfiles = true;
   license = [ "bsd2" ];
   version = "1.6.0";
+  hasCatalogue = true;
 };
 git-latexdiff.binfiles = [
   "git-latexdiff"
@@ -22537,6 +24168,7 @@ gitfile-info = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.5";
+  hasCatalogue = true;
 };
 gitinfo = {
   revision = 34049;
@@ -22547,6 +24179,7 @@ gitinfo = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 gitinfo-lua = {
   revision = 70117;
@@ -22557,6 +24190,7 @@ gitinfo-lua = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0.2";
+  hasCatalogue = true;
 };
 gitinfo2 = {
   revision = 38913;
@@ -22567,6 +24201,7 @@ gitinfo2 = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.0.7";
+  hasCatalogue = true;
 };
 gitlog = {
   revision = 38932;
@@ -22577,6 +24212,7 @@ gitlog = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.0.beta";
+  hasCatalogue = true;
 };
 gitstatus = {
   revision = 64662;
@@ -22588,6 +24224,7 @@ gitstatus = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 gitver = {
   revision = 63920;
@@ -22598,6 +24235,7 @@ gitver = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.4";
+  hasCatalogue = true;
 };
 globalvals = {
   revision = 49962;
@@ -22608,6 +24246,7 @@ globalvals = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 glosmathtools = {
   revision = 55920;
@@ -22618,6 +24257,7 @@ glosmathtools = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0.0";
+  hasCatalogue = true;
 };
 gloss = {
   revision = 15878;
@@ -22628,6 +24268,7 @@ gloss = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.5.2";
+  hasCatalogue = true;
 };
 gloss-occitan = {
   revision = 52593;
@@ -22638,6 +24279,7 @@ gloss-occitan = {
   sha512.source = "043c132580baf8e66ac76a01312706996902c448cbd81f596db732cbb90d66be64d8a1f673275edaf11031d1f878587270663bba7db32da37360ed024e210280";
   license = [ "lppl13c" ];
   version = "0.1";
+  hasCatalogue = true;
 };
 glossaries = {
   revision = 68437;
@@ -22661,6 +24303,7 @@ glossaries = {
   ];
   license = [ "lppl13c" ];
   version = "4.53";
+  hasCatalogue = true;
 };
 glossaries-danish = {
   revision = 35665;
@@ -22672,6 +24315,7 @@ glossaries-danish = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 glossaries-dutch = {
   revision = 35685;
@@ -22683,6 +24327,7 @@ glossaries-dutch = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 glossaries-english = {
   revision = 35665;
@@ -22694,6 +24339,7 @@ glossaries-english = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 glossaries-estonian = {
   revision = 49928;
@@ -22705,6 +24351,7 @@ glossaries-estonian = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 glossaries-extra = {
   revision = 68409;
@@ -22716,6 +24363,7 @@ glossaries-extra = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.53";
+  hasCatalogue = true;
 };
 glossaries-finnish = {
   revision = 54080;
@@ -22727,6 +24375,7 @@ glossaries-finnish = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 glossaries-french = {
   revision = 42873;
@@ -22738,6 +24387,7 @@ glossaries-french = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 glossaries-german = {
   revision = 35665;
@@ -22749,6 +24399,7 @@ glossaries-german = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 glossaries-irish = {
   revision = 35665;
@@ -22760,6 +24411,7 @@ glossaries-irish = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 glossaries-italian = {
   revision = 35665;
@@ -22771,6 +24423,7 @@ glossaries-italian = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 glossaries-magyar = {
   revision = 35665;
@@ -22782,6 +24435,7 @@ glossaries-magyar = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 glossaries-norsk = {
   revision = 67141;
@@ -22793,6 +24447,7 @@ glossaries-norsk = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 glossaries-nynorsk = {
   revision = 67201;
@@ -22804,6 +24459,7 @@ glossaries-nynorsk = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 glossaries-polish = {
   revision = 35665;
@@ -22815,6 +24471,7 @@ glossaries-polish = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 glossaries-portuges = {
   revision = 36064;
@@ -22826,6 +24483,7 @@ glossaries-portuges = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 glossaries-serbian = {
   revision = 35665;
@@ -22837,6 +24495,7 @@ glossaries-serbian = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 glossaries-slovene = {
   revision = 51211;
@@ -22848,6 +24507,7 @@ glossaries-slovene = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 glossaries-spanish = {
   revision = 35665;
@@ -22859,6 +24519,7 @@ glossaries-spanish = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 glossaries.binfiles = [
   "makeglossaries"
@@ -22880,6 +24541,7 @@ gmdoc = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.993";
+  hasCatalogue = true;
 };
 gmdoc-enhance = {
   revision = 15878;
@@ -22891,6 +24553,7 @@ gmdoc-enhance = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.2";
+  hasCatalogue = true;
 };
 gmiflink = {
   revision = 15878;
@@ -22901,6 +24564,7 @@ gmiflink = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.97";
+  hasCatalogue = true;
 };
 gmp = {
   revision = 21691;
@@ -22912,6 +24576,7 @@ gmp = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 gmutils = {
   revision = 24287;
@@ -22922,6 +24587,7 @@ gmutils = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.996";
+  hasCatalogue = true;
 };
 gmverb = {
   revision = 24288;
@@ -22932,6 +24598,7 @@ gmverb = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.98";
+  hasCatalogue = true;
 };
 gmverse = {
   revision = 29803;
@@ -22942,6 +24609,7 @@ gmverse = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.73";
+  hasCatalogue = true;
 };
 gnu-freefont = {
   revision = 68624;
@@ -22952,6 +24620,7 @@ gnu-freefont = {
   sha512.source = "b81ca0245e9a7b1bdfb0745ade7cd9da0734a407dd8c5cf3859a7fa269b949f38a3ca18341b6ff0e1c3d99ca04282ed6dd9fe2923901a06506fc9bd6b677006e";
   hasRunfiles = true;
   license = [ "gpl3Only" ];
+  hasCatalogue = true;
 };
 gnuplottex = {
   revision = 54758;
@@ -22963,6 +24632,7 @@ gnuplottex = {
   hasRunfiles = true;
   license = [ "gpl2Only" ];
   version = "0.9.5";
+  hasCatalogue = true;
 };
 go = {
   revision = 28628;
@@ -22973,6 +24643,7 @@ go = {
   sha512.source = "54cbaf16bd4a1a9bdd02b7811120cc82269be40e97853d94b1d526eef98e7df8e7ab8de2e7abcdd7e7db4c1f7fdf3d7355d511ed57c44c09643ea291e5b1c6d0";
   hasRunfiles = true;
   license = [ "publicDomain" ];
+  hasCatalogue = true;
 };
 gobble = {
   revision = 64967;
@@ -22984,6 +24655,7 @@ gobble = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.2";
+  hasCatalogue = true;
 };
 gofonts = {
   revision = 64358;
@@ -22996,6 +24668,7 @@ gofonts = {
   sha512.doc = "6a9d31a1d55f65d05922b71d9651198f9f9a8c6df754cdc93c4605fb6bc241b5c7cb56d0313a2681f60f4d92c45cbc42a9f61eba0c1eb1ba447a0363ff72593a";
   hasRunfiles = true;
   license = [ "free" "lppl13c" ];
+  hasCatalogue = true;
 };
 gost = {
   revision = 57616;
@@ -23007,6 +24680,7 @@ gost = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.2l";
+  hasCatalogue = true;
 };
 gothic = {
   revision = 49869;
@@ -23017,6 +24691,7 @@ gothic = {
   sha512.source = "f6e600c736989ac81cde1fd51306ddb520e693b6a5ee8338c3413b5656aaacade8d4f1ca7aa316589c4d49fa8b96b598637792825b03ab0fe3efa4bb584067b2";
   hasRunfiles = true;
   license = [ "free" ];
+  hasCatalogue = true;
 };
 gotoh = {
   revision = 44764;
@@ -23028,6 +24703,7 @@ gotoh = {
   hasRunfiles = true;
   license = [ "mit" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 grabbox = {
   revision = 65223;
@@ -23039,6 +24715,7 @@ grabbox = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.4";
+  hasCatalogue = true;
 };
 gradient-text = {
   revision = 65567;
@@ -23049,6 +24726,7 @@ gradient-text = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.2";
+  hasCatalogue = true;
 };
 gradientframe = {
   revision = 21387;
@@ -23060,6 +24738,7 @@ gradientframe = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.2";
+  hasCatalogue = true;
 };
 grading-scheme = {
   revision = 62505;
@@ -23071,6 +24750,7 @@ grading-scheme = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.1.1";
+  hasCatalogue = true;
 };
 gradstudentresume = {
   revision = 38832;
@@ -23080,6 +24760,7 @@ gradstudentresume = {
   sha512.doc = "e7b166b87a5dce9941d6bd931dec91124a118ba127075aedbe70fc9fe415a8083911f90f094ddede551eef197baee9cfa4ab6ac65c8ae081cd8938f872ad7bb2";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 grafcet = {
   revision = 22509;
@@ -23090,6 +24771,7 @@ grafcet = {
   hasRunfiles = true;
   license = [ "lppl1" ];
   version = "1.3.5";
+  hasCatalogue = true;
 };
 grant = {
   revision = 56852;
@@ -23101,6 +24783,7 @@ grant = {
   hasRunfiles = true;
   license = [ "mit" ];
   version = "0.0.5";
+  hasCatalogue = true;
 };
 graph35 = {
   revision = 66772;
@@ -23112,6 +24795,7 @@ graph35 = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.1.4";
+  hasCatalogue = true;
 };
 graphbox = {
   revision = 46360;
@@ -23123,9 +24807,11 @@ graphbox = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 graphics = {
   revision = 66204;
+  catalogue = "latex-graphics";
   shortdesc = "The LaTeX standard graphics bundle";
   stripPrefix = 0;
   deps = [
@@ -23137,6 +24823,7 @@ graphics = {
   sha512.source = "45f998e3729e81f50cf7c064d1a3926c18007069b4a89b478e87a6f97f3e6820eb5d58be6025f374b05d9c443c8a101918ebff84de512366f5415e041356a848";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 graphics-cfg = {
   revision = 41448;
@@ -23146,6 +24833,7 @@ graphics-cfg = {
   sha512.doc = "dbcfdf635c2816f305205915119e1f6acba816c17b683622a8a32c361d75338376426b258c1fa3271abc1d7ad2a520ac85092a7b3bfbac6463106449bc906ae4";
   hasRunfiles = true;
   license = [ "publicDomain" ];
+  hasCatalogue = true;
 };
 graphics-def = {
   revision = 64487;
@@ -23155,6 +24843,7 @@ graphics-def = {
   sha512.doc = "b52099d553c2bdf52ddb7b50231303f106db445d58e675ad819dd0dd84750f0fc6d164fa21deb1f622644a6651e6bdbe41ad3362fb021f4a7da2e7599fe0a526";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 graphics-pln = {
   revision = 68760;
@@ -23164,6 +24853,7 @@ graphics-pln = {
   sha512.doc = "27600b6127990a06a75ad8aea49a86b8f16b68ed306ca3ec54762124af02ddd1859adb714eb0dadcacc652578427d230d37416cf3326f567239dfa4b9d8b53e8";
   hasRunfiles = true;
   license = [ "lppl1" ];
+  hasCatalogue = true;
 };
 graphicscache = {
   revision = 65318;
@@ -23175,6 +24865,7 @@ graphicscache = {
   hasRunfiles = true;
   license = [ "bsd3" ];
   version = "0.4";
+  hasCatalogue = true;
 };
 graphicx-psmin = {
   revision = 56931;
@@ -23186,6 +24877,7 @@ graphicx-psmin = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.2";
+  hasCatalogue = true;
 };
 graphicxbox = {
   revision = 32630;
@@ -23197,6 +24889,7 @@ graphicxbox = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 graphicxpsd = {
   revision = 57341;
@@ -23207,6 +24900,7 @@ graphicxpsd = {
   hasRunfiles = true;
   license = [ "mit" ];
   version = "1.2";
+  hasCatalogue = true;
 };
 graphpaper = {
   revision = 63116;
@@ -23218,6 +24912,7 @@ graphpaper = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 graphviz = {
   revision = 31517;
@@ -23229,6 +24924,7 @@ graphviz = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.94";
+  hasCatalogue = true;
 };
 grayhints = {
   revision = 49052;
@@ -23239,6 +24935,7 @@ grayhints = {
   sha512.source = "7342b60e1957297f41970fa2af45a8736f438e6560e4cb6bd279516fa40ca283d7cd60e5faad2959aba12958c0fa70a95d94bb9c48e7ad47956bbc646af82173";
   hasRunfiles = true;
   license = [ "lppl12" ];
+  hasCatalogue = true;
 };
 greek-fontenc = {
   revision = 68877;
@@ -23249,6 +24946,7 @@ greek-fontenc = {
   hasRunfiles = true;
   license = [ "lppl13c" "bsd2" ];
   version = "2.6";
+  hasCatalogue = true;
 };
 greek-inputenc = {
   revision = 66634;
@@ -23259,6 +24957,7 @@ greek-inputenc = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.9";
+  hasCatalogue = true;
 };
 greekdates = {
   revision = 15878;
@@ -23270,6 +24969,7 @@ greekdates = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 greektex = {
   revision = 28327;
@@ -23279,6 +24979,7 @@ greektex = {
   sha512.doc = "b58305d403a58a60ac0cd6ebb60afe3058430eae15774895e03e41b331824673c128c5f06b583525e2311dd8ee5166549ea831e756e8c934c73ae911a0adbaa7";
   hasRunfiles = true;
   license = [ "publicDomain" ];
+  hasCatalogue = true;
 };
 greektonoi = {
   revision = 39419;
@@ -23288,6 +24989,7 @@ greektonoi = {
   sha512.doc = "94da0bcac7b513fb9f720c0bc6d7ca8d822956b1517a95335b415e477d3144063bbff65d57978421b6b9611c6b4a866701762cbb2ab09351fe6c5d02e4b02f39";
   hasRunfiles = true;
   license = [ "lgpl3" ];
+  hasCatalogue = true;
 };
 greenpoint = {
   revision = 15878;
@@ -23297,6 +24999,7 @@ greenpoint = {
   sha512.doc = "84143440a421999f0a59461652be21d49d8ace66fd3b8d9d89132c6f06f67ef4b571522d6ed54d87f614a15dceb99cdf4c3caecb54eed9a4bbf49401de20ada5";
   hasRunfiles = true;
   license = [ "gpl1Only" ];
+  hasCatalogue = true;
 };
 gregoriotex = {
   revision = 58331;
@@ -23310,6 +25013,7 @@ gregoriotex = {
   ];
   license = [ "gpl3Only" ];
   version = "6.0.0";
+  hasCatalogue = true;
 };
 gregoriotex.binfiles = [
   "gregorio"
@@ -23324,6 +25028,7 @@ grfext = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.3";
+  hasCatalogue = true;
 };
 grffile = {
   revision = 52756;
@@ -23335,6 +25040,7 @@ grffile = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.1";
+  hasCatalogue = true;
 };
 grfpaste = {
   revision = 17354;
@@ -23345,6 +25051,7 @@ grfpaste = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.2";
+  hasCatalogue = true;
 };
 grid = {
   revision = 61719;
@@ -23356,6 +25063,7 @@ grid = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 grid-system = {
   revision = 32981;
@@ -23366,6 +25074,7 @@ grid-system = {
   hasRunfiles = true;
   license = [ "asl20" ];
   version = "0.3.0";
+  hasCatalogue = true;
 };
 gridpapers = {
   revision = 58723;
@@ -23377,6 +25086,7 @@ gridpapers = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0.2";
+  hasCatalogue = true;
 };
 gridset = {
   revision = 53762;
@@ -23388,6 +25098,7 @@ gridset = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.3";
+  hasCatalogue = true;
 };
 gridslides = {
   revision = 54512;
@@ -23398,9 +25109,11 @@ gridslides = {
   hasRunfiles = true;
   license = [ "lppl13c" "gpl2Only" ];
   version = "0.1.1";
+  hasCatalogue = true;
 };
 grotesq = {
   revision = 35859;
+  catalogue = "urw-grotesq";
   shortdesc = "URW Grotesq font pack for LaTeX";
   stripPrefix = 0;
   fontMaps = [
@@ -23410,6 +25123,7 @@ grotesq = {
   sha512.doc = "d41ae946f315d87b483a03d8b5a1034706f5bda765c69fa692f117b79bd5046b409e42c7b17577ee086ec98795e8a93acd761e30815c6083520b4bd244c33cd5";
   hasRunfiles = true;
   license = [ "gpl1Only" ];
+  hasCatalogue = true;
 };
 grundgesetze = {
   revision = 58997;
@@ -23421,6 +25135,7 @@ grundgesetze = {
   hasRunfiles = true;
   license = [ "gpl2Only" ];
   version = "1.03";
+  hasCatalogue = true;
 };
 gs1 = {
   revision = 59620;
@@ -23432,6 +25147,7 @@ gs1 = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "23";
+  hasCatalogue = true;
 };
 gsemthesis = {
   revision = 56291;
@@ -23443,6 +25159,7 @@ gsemthesis = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.9.4";
+  hasCatalogue = true;
 };
 gsftopk = {
   revision = 52851;
@@ -23453,6 +25170,7 @@ gsftopk = {
   hasRunfiles = true;
   license = [ "gpl1Only" ];
   version = "1.19.2";
+  hasCatalogue = true;
 };
 gsftopk.binfiles = [
   "gsftopk"
@@ -23467,6 +25185,7 @@ gtl = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.6";
+  hasCatalogue = true;
 };
 gtrcrd = {
   revision = 32484;
@@ -23477,6 +25196,7 @@ gtrcrd = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 gtrlib-largetrees = {
   revision = 49062;
@@ -23488,6 +25208,7 @@ gtrlib-largetrees = {
   hasRunfiles = true;
   license = [ "lppl12" ];
   version = "1.2b";
+  hasCatalogue = true;
 };
 gu = {
   revision = 15878;
@@ -23497,6 +25218,7 @@ gu = {
   sha512.doc = "151f9765d6da2312a10523ffca06cb4e0529d4ebf8189e9ddc00f86510c9cd13be9a04e47b85dc8cd815461c17f7e4b8be9604a1a605c86d7228d1113f985a23";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 gudea = {
   revision = 57359;
@@ -23510,6 +25232,7 @@ gudea = {
   hasRunfiles = true;
   license = [ "ofl" "lppl13c" ];
   version = "0.0.1";
+  hasCatalogue = true;
 };
 guide-to-latex = {
   revision = 45712;
@@ -23528,6 +25251,7 @@ guitar = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.6";
+  hasCatalogue = true;
 };
 guitarchordschemes = {
   revision = 54512;
@@ -23538,6 +25262,7 @@ guitarchordschemes = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.7";
+  hasCatalogue = true;
 };
 guitartabs = {
   revision = 48102;
@@ -23547,6 +25272,7 @@ guitartabs = {
   sha512.doc = "ef5f516db586d1473d949f44a2eb9fb307b84ea5a7dcc3c9419298203b41c54ff4dad75d3b24cf30fbc24f4c60ad4b79b9c1fd58804667732a66b0ccb52cc3b4";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 guitlogo = {
   revision = 55741;
@@ -23558,6 +25284,7 @@ guitlogo = {
   hasRunfiles = true;
   license = [ "lppl13a" ];
   version = "1.0.0-alpha.4";
+  hasCatalogue = true;
 };
 gustlib = {
   revision = 54074;
@@ -23584,6 +25311,7 @@ gzt = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1.4";
+  hasCatalogue = true;
 };
 h2020proposal = {
   revision = 38428;
@@ -23594,6 +25322,7 @@ h2020proposal = {
   hasRunfiles = true;
   license = [ "gpl3Only" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 ha-prosper = {
   revision = 59651;
@@ -23605,6 +25334,7 @@ ha-prosper = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "4.21";
+  hasCatalogue = true;
 };
 hackthefootline = {
   revision = 46494;
@@ -23614,6 +25344,7 @@ hackthefootline = {
   sha512.doc = "960c6a0bd61210b097710cc6715012e4406b54dafcf070659228074598a05e0dbb65669ef77c3f6ca2cf80001e95c5f801070be29d416d2bd552d6c2a1d27f56";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 hacm = {
   revision = 27671;
@@ -23627,6 +25358,7 @@ hacm = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.1";
+  hasCatalogue = true;
 };
 hagenberg-thesis = {
   revision = 65819;
@@ -23636,6 +25368,7 @@ hagenberg-thesis = {
   sha512.doc = "9e73ee93a231c319ed65a2c23d23d28ad224367ef7773a9d5c1de474eaf6f9d2a402ae1afa4138ec172ca9e07a5fe64c47d57e16ceaf24b203390a0adbf645fc";
   hasRunfiles = true;
   license = [ "cc-by-40" ];
+  hasCatalogue = true;
 };
 halloweenmath = {
   revision = 52602;
@@ -23647,6 +25380,7 @@ halloweenmath = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.11";
+  hasCatalogue = true;
 };
 hamnosys = {
   revision = 61941;
@@ -23658,6 +25392,7 @@ hamnosys = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0.3";
+  hasCatalogue = true;
 };
 handin = {
   revision = 48255;
@@ -23668,6 +25403,7 @@ handin = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.1.1";
+  hasCatalogue = true;
 };
 handout = {
   revision = 43962;
@@ -23678,6 +25414,7 @@ handout = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.6.0";
+  hasCatalogue = true;
 };
 handoutwithnotes = {
   revision = 62140;
@@ -23689,6 +25426,7 @@ handoutwithnotes = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.3";
+  hasCatalogue = true;
 };
 hands = {
   revision = 13293;
@@ -23697,6 +25435,7 @@ hands = {
   sha512.run = "77c1742d045110ee4da7473b14c1804fcfab3772ae10223848fee99c7c8a8fb3809aabeb82e4c99460f3cfa0e009ee8d470d60e8be4c79c25c3ff990b7d1595a";
   hasRunfiles = true;
   license = [ "publicDomain" ];
+  hasCatalogue = true;
 };
 hang = {
   revision = 43280;
@@ -23707,6 +25446,7 @@ hang = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.1";
+  hasCatalogue = true;
 };
 hanging = {
   revision = 15878;
@@ -23718,6 +25458,7 @@ hanging = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.2b";
+  hasCatalogue = true;
 };
 hanoi = {
   revision = 25019;
@@ -23727,6 +25468,7 @@ hanoi = {
   hasRunfiles = true;
   license = [ "publicDomain" ];
   version = "20120101";
+  hasCatalogue = true;
 };
 hanzibox = {
   revision = 63062;
@@ -23738,6 +25480,7 @@ hanzibox = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.3.0";
+  hasCatalogue = true;
 };
 happy4th = {
   revision = 25020;
@@ -23747,6 +25490,7 @@ happy4th = {
   sha512.doc = "78fe311673e370b867ad209fc1c62acd7aeb515e4b145bb7c487d30c121715994803e6dd540bcbf1b9b0776014327c7ca2f6c03437d9ff0b40f477ebff9cf254";
   license = [ "publicDomain" ];
   version = "20120102";
+  hasCatalogue = true;
 };
 har2nat = {
   revision = 54080;
@@ -23757,6 +25501,7 @@ har2nat = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 haranoaji = {
   revision = 68501;
@@ -23768,6 +25513,7 @@ haranoaji = {
   hasTlpkg = true;
   license = [ "ofl" ];
   version = "20231009";
+  hasCatalogue = true;
 };
 haranoaji-extra = {
   revision = 68500;
@@ -23778,6 +25524,7 @@ haranoaji-extra = {
   hasRunfiles = true;
   license = [ "ofl" ];
   version = "20231009";
+  hasCatalogue = true;
 };
 hardwrap = {
   revision = 21396;
@@ -23789,6 +25536,7 @@ hardwrap = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.2";
+  hasCatalogue = true;
 };
 harmony = {
   revision = 15878;
@@ -23798,6 +25546,7 @@ harmony = {
   sha512.doc = "3226831df9702b669ba4c269549927563ae321e8e10e0e41c6bd1a8d6522dcdaa4ae6a25a907a84cc1dc324c516a53754c81a0e1296fd8e3afbbb29f0992ead9";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 harnon-cv = {
   revision = 26543;
@@ -23808,6 +25557,7 @@ harnon-cv = {
   hasRunfiles = true;
   license = [ "publicDomain" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 harpoon = {
   revision = 21327;
@@ -23818,6 +25568,7 @@ harpoon = {
   hasRunfiles = true;
   license = [ "publicDomain" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 harvard = {
   revision = 15878;
@@ -23829,6 +25580,7 @@ harvard = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.0.5";
+  hasCatalogue = true;
 };
 harveyballs = {
   revision = 32003;
@@ -23839,6 +25591,7 @@ harveyballs = {
   hasRunfiles = true;
   license = [ "gpl3Only" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 harvmac = {
   revision = 15878;
@@ -23848,6 +25601,7 @@ harvmac = {
   sha512.doc = "a0f3308b938ae73c66398c5a3140662240603248cd6fe338a22f3ca6b23f28789dbccee48dcd94a8bf84de029ec103aa35c5b9a78151ceaf61a9cb60b832c484";
   hasRunfiles = true;
   license = [ "free" ];
+  hasCatalogue = true;
 };
 hatching = {
   revision = 23818;
@@ -23858,6 +25612,7 @@ hatching = {
   hasRunfiles = true;
   license = [ "publicDomain" ];
   version = "0.11";
+  hasCatalogue = true;
 };
 hausarbeit-jura = {
   revision = 56070;
@@ -23869,6 +25624,7 @@ hausarbeit-jura = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.1.0";
+  hasCatalogue = true;
 };
 havannah = {
   revision = 36348;
@@ -23879,6 +25635,7 @@ havannah = {
   sha512.source = "9831ea87fbe6e12af8c7fb49d321049316221f4dd33b79a9495c5205b60ddf2f3593c8dfe2f4157e3934f21e69e3004b05802a0d592ae608b2de69cceb2f0c7c";
   hasRunfiles = true;
   license = [ "lppl12" ];
+  hasCatalogue = true;
 };
 hc = {
   revision = 15878;
@@ -23889,6 +25646,7 @@ hc = {
   sha512.source = "42d3f57fb2c38823875116a67e3e71a3b1aeccdfa00c7a201163325c31fbd47d60a1dd028c6d9102d38d6490424bb118178c7589a433a69ec26e505b805418f8";
   hasRunfiles = true;
   license = [ "free" ];
+  hasCatalogue = true;
 };
 he-she = {
   revision = 41359;
@@ -23899,6 +25657,7 @@ he-she = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.3";
+  hasCatalogue = true;
 };
 hebrew-fonts = {
   revision = 68038;
@@ -23910,6 +25669,7 @@ hebrew-fonts = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.3";
+  hasCatalogue = true;
 };
 hecthese = {
   revision = 68584;
@@ -23921,6 +25681,7 @@ hecthese = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.0";
+  hasCatalogue = true;
 };
 helmholtz-ellis-ji-notation = {
   revision = 55213;
@@ -23932,9 +25693,11 @@ helmholtz-ellis-ji-notation = {
   hasRunfiles = true;
   license = [ "cc-by-40" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 helvetic = {
   revision = 61719;
+  catalogue = "urw-base35";
   shortdesc = "URW 'Base 35' font pack for LaTeX";
   stripPrefix = 0;
   fontMaps = [
@@ -23943,6 +25706,7 @@ helvetic = {
   sha512.run = "243904e50c3458e62bf346f5a48332709db226e54b17c731ed0bdac5fce04d76b19411a12b01b51ca93b5ff7f06eee38f78a8375f6244d7b7d53116713d601b8";
   hasRunfiles = true;
   license = [ "gpl1Only" ];
+  hasCatalogue = true;
 };
 hep = {
   revision = 15878;
@@ -23953,6 +25717,7 @@ hep = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 hep-acronym = {
   revision = 67632;
@@ -23964,6 +25729,7 @@ hep-acronym = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.2";
+  hasCatalogue = true;
 };
 hep-bibliography = {
   revision = 67632;
@@ -23975,6 +25741,7 @@ hep-bibliography = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.2";
+  hasCatalogue = true;
 };
 hep-float = {
   revision = 67632;
@@ -23986,6 +25753,7 @@ hep-float = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.2";
+  hasCatalogue = true;
 };
 hep-font = {
   revision = 67632;
@@ -23997,6 +25765,7 @@ hep-font = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.2";
+  hasCatalogue = true;
 };
 hep-graphic = {
   revision = 67641;
@@ -24008,6 +25777,7 @@ hep-graphic = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.2";
+  hasCatalogue = true;
 };
 hep-math = {
   revision = 67632;
@@ -24019,6 +25789,7 @@ hep-math = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.2";
+  hasCatalogue = true;
 };
 hep-math-font = {
   revision = 67632;
@@ -24030,6 +25801,7 @@ hep-math-font = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.2";
+  hasCatalogue = true;
 };
 hep-paper = {
   revision = 67632;
@@ -24041,6 +25813,7 @@ hep-paper = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.2";
+  hasCatalogue = true;
 };
 hep-reference = {
   revision = 67632;
@@ -24052,6 +25825,7 @@ hep-reference = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.2";
+  hasCatalogue = true;
 };
 hep-text = {
   revision = 67632;
@@ -24063,6 +25837,7 @@ hep-text = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.2";
+  hasCatalogue = true;
 };
 hep-title = {
   revision = 67632;
@@ -24074,6 +25849,7 @@ hep-title = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.2";
+  hasCatalogue = true;
 };
 hepnames = {
   revision = 35722;
@@ -24084,6 +25860,7 @@ hepnames = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.0";
+  hasCatalogue = true;
 };
 hepparticles = {
   revision = 35723;
@@ -24094,6 +25871,7 @@ hepparticles = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.0";
+  hasCatalogue = true;
 };
 hepthesis = {
   revision = 46054;
@@ -24104,6 +25882,7 @@ hepthesis = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.5.2";
+  hasCatalogue = true;
 };
 hepunits = {
   revision = 54758;
@@ -24114,6 +25893,7 @@ hepunits = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.0.0";
+  hasCatalogue = true;
 };
 here = {
   revision = 16135;
@@ -24123,6 +25903,7 @@ here = {
   sha512.doc = "482a2ef8edbe41ce76e2c32bb579b132c84306cbd5387cb5249b10a02826e610229ec9c75a1df53b5b930bb982e1157ad9ffa63a77f84461cb6cc6332f6d6e54";
   hasRunfiles = true;
   license = [ "publicDomain" ];
+  hasCatalogue = true;
 };
 hereapplies = {
   revision = 68638;
@@ -24133,6 +25914,7 @@ hereapplies = {
   hasRunfiles = true;
   license = [ "gpl3Plus" ];
   version = "1.0.2";
+  hasCatalogue = true;
 };
 heria = {
   revision = 69058;
@@ -24144,6 +25926,7 @@ heria = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "3.2.1.0";
+  hasCatalogue = true;
 };
 heros-otf = {
   revision = 64695;
@@ -24154,6 +25937,7 @@ heros-otf = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.01";
+  hasCatalogue = true;
 };
 hershey-mp = {
   revision = 64878;
@@ -24164,6 +25948,7 @@ hershey-mp = {
   hasRunfiles = true;
   license = [ "free" ];
   version = "2022-1.0";
+  hasCatalogue = true;
 };
 heuristica = {
   revision = 69649;
@@ -24177,6 +25962,7 @@ heuristica = {
   hasRunfiles = true;
   license = [ "ofl" "lppl13c" ];
   version = "1.093";
+  hasCatalogue = true;
 };
 hexboard = {
   revision = 62102;
@@ -24188,6 +25974,7 @@ hexboard = {
   hasRunfiles = true;
   license = [ "cc-by-sa-40" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 hexgame = {
   revision = 15878;
@@ -24198,6 +25985,7 @@ hexgame = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 hf-tikz = {
   revision = 34733;
@@ -24209,6 +25997,7 @@ hf-tikz = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.3a";
+  hasCatalogue = true;
 };
 hfbright = {
   revision = 29349;
@@ -24221,6 +26010,7 @@ hfbright = {
   sha512.doc = "7de24b513093d965fab1f8d7d13ec4b356e7f5495cb3a8f17204b1a786288488b4921df6b7e184262bdd3aa11fed6483a25d0bf8e898db05c8b1f7dff769c175";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 hfoldsty = {
   revision = 29349;
@@ -24232,6 +26022,7 @@ hfoldsty = {
   hasRunfiles = true;
   license = [ "gpl1Only" ];
   version = "1.15";
+  hasCatalogue = true;
 };
 hfutexam = {
   revision = 68829;
@@ -24242,6 +26033,7 @@ hfutexam = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.9";
+  hasCatalogue = true;
 };
 hfutthesis = {
   revision = 64025;
@@ -24252,6 +26044,7 @@ hfutthesis = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0.4";
+  hasCatalogue = true;
 };
 hhtensor = {
   revision = 54080;
@@ -24263,6 +26056,7 @@ hhtensor = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.61";
+  hasCatalogue = true;
 };
 hideanswer = {
   revision = 63852;
@@ -24273,6 +26067,7 @@ hideanswer = {
   hasRunfiles = true;
   license = [ "mit" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 highlightlatex = {
   revision = 58392;
@@ -24282,6 +26077,7 @@ highlightlatex = {
   sha512.doc = "20760262af6cfeccf512ab205fb874b3f1c9b3c15637ed6500bf5b627ba2f319963eee0f76aa480e1257b0cb31288829bfe324f05afde290c3433aa9a018c10d";
   hasRunfiles = true;
   license = [ "mit" ];
+  hasCatalogue = true;
 };
 highlightx = {
   revision = 68756;
@@ -24292,6 +26088,7 @@ highlightx = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.1.5";
+  hasCatalogue = true;
 };
 hindawi-latex-template = {
   revision = 57757;
@@ -24301,6 +26098,7 @@ hindawi-latex-template = {
   sha512.doc = "459a131616a15431dd489aaa87a23533ae5eb58575f38757a81af8eba425bd4e5c0c0f3a11a3c030d04ecd7d29e9ab08b3f4e270961c4c8e8791c15a497ba7fe";
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 hindmadurai = {
   revision = 57360;
@@ -24314,6 +26112,7 @@ hindmadurai = {
   hasRunfiles = true;
   license = [ "ofl" "lppl13c" ];
   version = "0.0.1";
+  hasCatalogue = true;
 };
 histogr = {
   revision = 15878;
@@ -24325,6 +26124,7 @@ histogr = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.01";
+  hasCatalogue = true;
 };
 historische-zeitschrift = {
   revision = 42635;
@@ -24335,6 +26135,7 @@ historische-zeitschrift = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.2";
+  hasCatalogue = true;
 };
 hitec = {
   revision = 15878;
@@ -24345,6 +26146,7 @@ hitec = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.0beta";
+  hasCatalogue = true;
 };
 hitex = {
   revision = 66924;
@@ -24389,6 +26191,7 @@ hitex = {
   hasManpages = true;
   hasRunfiles = true;
   license = [ "x11" ];
+  hasCatalogue = true;
 };
 hitex.binfiles = [
   "hilatex"
@@ -24406,6 +26209,7 @@ hithesis = {
   hasRunfiles = true;
   license = [ "lppl13a" ];
   version = "2.0.11";
+  hasCatalogue = true;
 };
 hitreport = {
   revision = 58357;
@@ -24417,6 +26221,7 @@ hitreport = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0.0";
+  hasCatalogue = true;
 };
 hitszbeamer = {
   revision = 54381;
@@ -24428,6 +26233,7 @@ hitszbeamer = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0.0";
+  hasCatalogue = true;
 };
 hitszthesis = {
   revision = 61073;
@@ -24439,6 +26245,7 @@ hitszthesis = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "3.2.1";
+  hasCatalogue = true;
 };
 hletter = {
   revision = 30002;
@@ -24449,6 +26256,7 @@ hletter = {
   hasRunfiles = true;
   license = [ "lppl12" ];
   version = "4.2";
+  hasCatalogue = true;
 };
 hlist = {
   revision = 44983;
@@ -24459,6 +26267,7 @@ hlist = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.11";
+  hasCatalogue = true;
 };
 hmtrump = {
   revision = 54512;
@@ -24469,6 +26278,7 @@ hmtrump = {
   hasRunfiles = true;
   license = [ "cc-by-sa-40" "free" ];
   version = "1.2a";
+  hasCatalogue = true;
 };
 hobby = {
   revision = 68137;
@@ -24480,6 +26290,7 @@ hobby = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.12";
+  hasCatalogue = true;
 };
 hobete = {
   revision = 27036;
@@ -24489,6 +26300,7 @@ hobete = {
   sha512.doc = "ef7b1bd487c496cb2ffc01fb2940a72ac69edb1a5516d19ce6a6e6cb197ba6f517e03ac673b2372cc9cd4f40e5c6ea2469c2712528a10a3f5ba09e9d3a46f209";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 hobsub = {
   revision = 52810;
@@ -24498,6 +26310,7 @@ hobsub = {
   sha512.doc = "8cf2210285b162e52e2cbaf0d1a9e7027ca3aeb7da81ba238fff97a9cb10c7ba9058f5eb4f28303031a7774f457207ace1f30610cef2f733dd65b35d9ab6b1b7";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 hologo = {
   revision = 61719;
@@ -24509,6 +26322,7 @@ hologo = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.15";
+  hasCatalogue = true;
 };
 homework = {
   revision = 70050;
@@ -24521,6 +26335,7 @@ homework = {
   sha512.doc = "6dbf5889b71e0022f87c59008b884b49c7e882d99dc2e7dd39a2e04d8429a71064b71ea389279dcbe919b1d04da9dd3bb6a4998c066aa507ae64f96e95c1e94c";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 hook-pre-commit-pkg = {
   revision = 41378;
@@ -24530,6 +26345,7 @@ hook-pre-commit-pkg = {
   sha512.doc = "3873c4714a8a6d221f860a5d0606113c64482b363727067e0017d27e99d73f31cfdac88a799fb1412225baffaecd7bb03dbdc66b607a075b1e4539ffc0df2a9d";
   license = [ "gpl3Only" ];
   version = "1.1.2";
+  hasCatalogue = true;
 };
 hopatch = {
   revision = 65491;
@@ -24541,6 +26357,7 @@ hopatch = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.5";
+  hasCatalogue = true;
 };
 horoscop = {
   revision = 56021;
@@ -24552,6 +26369,7 @@ horoscop = {
   hasRunfiles = true;
   license = [ "publicDomain" ];
   version = "1.01";
+  hasCatalogue = true;
 };
 hpsdiss = {
   revision = 15878;
@@ -24563,6 +26381,7 @@ hpsdiss = {
   hasRunfiles = true;
   license = [ "gpl1Only" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 href-ul = {
   revision = 69359;
@@ -24578,6 +26397,7 @@ href-ul = {
   hasRunfiles = true;
   license = [ "mit" ];
   version = "0.4.0";
+  hasCatalogue = true;
 };
 hrefhide = {
   revision = 66189;
@@ -24589,6 +26409,7 @@ hrefhide = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1a";
+  hasCatalogue = true;
 };
 hrlatex = {
   revision = 18020;
@@ -24600,6 +26421,7 @@ hrlatex = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.23";
+  hasCatalogue = true;
 };
 hu-berlin-bundle = {
   revision = 67128;
@@ -24611,6 +26433,7 @@ hu-berlin-bundle = {
   hasRunfiles = true;
   license = [ "lppl13c" "gpl2Only" "bsd3" ];
   version = "1.1.2";
+  hasCatalogue = true;
 };
 huawei = {
   revision = 69871;
@@ -24663,6 +26486,7 @@ huawei = {
   hasRunfiles = true;
   license = [ "mit" ];
   version = "0.18.3";
+  hasCatalogue = true;
 };
 huaz = {
   revision = 64723;
@@ -24673,6 +26497,7 @@ huaz = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 huffman = {
   revision = 67071;
@@ -24683,6 +26508,7 @@ huffman = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.1";
+  hasCatalogue = true;
 };
 hulipsum = {
   revision = 56848;
@@ -24694,6 +26520,7 @@ hulipsum = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 hustthesis = {
   revision = 42547;
@@ -24705,6 +26532,7 @@ hustthesis = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.4";
+  hasCatalogue = true;
 };
 hvarabic = {
   revision = 59423;
@@ -24715,6 +26543,7 @@ hvarabic = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.02";
+  hasCatalogue = true;
 };
 hvextern = {
   revision = 69651;
@@ -24725,6 +26554,7 @@ hvextern = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.39";
+  hasCatalogue = true;
 };
 hvfloat = {
   revision = 70400;
@@ -24735,6 +26565,7 @@ hvfloat = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.48";
+  hasCatalogue = true;
 };
 hvindex = {
   revision = 46051;
@@ -24745,6 +26576,7 @@ hvindex = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.04";
+  hasCatalogue = true;
 };
 hvlogos = {
   revision = 69581;
@@ -24755,6 +26587,7 @@ hvlogos = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.12";
+  hasCatalogue = true;
 };
 hvpygmentex = {
   revision = 62405;
@@ -24765,6 +26598,7 @@ hvpygmentex = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.01";
+  hasCatalogue = true;
 };
 hvqrurl = {
   revision = 69723;
@@ -24775,6 +26609,7 @@ hvqrurl = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.07";
+  hasCatalogue = true;
 };
 hwemoji = {
   revision = 65001;
@@ -24785,6 +26620,7 @@ hwemoji = {
   hasRunfiles = true;
   license = [ "lppl13c" "cc-by-40" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 hycolor = {
   revision = 53584;
@@ -24796,6 +26632,7 @@ hycolor = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.10";
+  hasCatalogue = true;
 };
 hypdestopt = {
   revision = 56253;
@@ -24806,6 +26643,7 @@ hypdestopt = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.7";
+  hasCatalogue = true;
 };
 hypdoc = {
   revision = 68661;
@@ -24817,6 +26655,7 @@ hypdoc = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.19";
+  hasCatalogue = true;
 };
 hypdvips = {
   revision = 53197;
@@ -24827,6 +26666,7 @@ hypdvips = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "3.03";
+  hasCatalogue = true;
 };
 hyper = {
   revision = 17357;
@@ -24838,6 +26678,7 @@ hyper = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "4.2d";
+  hasCatalogue = true;
 };
 hyperbar = {
   revision = 48147;
@@ -24849,6 +26690,7 @@ hyperbar = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.1";
+  hasCatalogue = true;
 };
 hypernat = {
   revision = 17358;
@@ -24859,6 +26701,7 @@ hypernat = {
   hasRunfiles = true;
   license = [ "gpl1Only" ];
   version = "1.0b";
+  hasCatalogue = true;
 };
 hyperref = {
   revision = 69523;
@@ -24889,6 +26732,7 @@ hyperref = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "7.01h";
+  hasCatalogue = true;
 };
 hyperxmp = {
   revision = 68251;
@@ -24900,6 +26744,7 @@ hyperxmp = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "5.12";
+  hasCatalogue = true;
 };
 hyperxmp.binfiles = [
   "hyperxmp-add-bytecount"
@@ -24913,6 +26758,7 @@ hyph-utf8 = {
   sha512.source = "2ed5177a81f46bb538517447d89129d82bab87f937c98e4afc6c74863d5f4cc3342470f66d2f5d05247fb3ac26b23ed4b6ce4fd093fcb61fbabac6dd330889f2";
   hasRunfiles = true;
   license = [ "mit" ];
+  hasCatalogue = true;
 };
 hyphen-afrikaans = {
   revision = 58609;
@@ -25013,6 +26859,7 @@ hyphen-base = {
 };
 hyphen-basque = {
   revision = 58652;
+  catalogue = "bahyph";
   shortdesc = "Basque hyphenation patterns.";
   stripPrefix = 0;
   deps = [
@@ -25033,6 +26880,7 @@ hyphen-basque = {
   sha512.source = "75a20da77fa056c719ecc1f014bb09c67f62f1c4a3abe04b7cadf45c7a4e06e4492cb0d34a8025f19f3ee5e3330e488212885095335d4a7e97baa5b106576223";
   hasRunfiles = true;
   license = [ "free" ];
+  hasCatalogue = true;
 };
 hyphen-belarusian = {
   revision = 58652;
@@ -25162,6 +27010,7 @@ hyphen-coptic = {
 };
 hyphen-croatian = {
   revision = 58652;
+  catalogue = "hrhyph";
   shortdesc = "Croatian hyphenation patterns.";
   stripPrefix = 0;
   deps = [
@@ -25181,6 +27030,7 @@ hyphen-croatian = {
   sha512.run = "8355d0aa95bb2e72bfc45015f9ae9f6a138f94441387a4daadfec5be4060878f6e69d05eab15432d99c256c1a3f68c122d5c915164fe343459d658a4543ddf42";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 hyphen-czech = {
   revision = 58609;
@@ -25205,6 +27055,7 @@ hyphen-czech = {
 };
 hyphen-danish = {
   revision = 58652;
+  catalogue = "dkhyphen";
   shortdesc = "Danish hyphenation patterns.";
   stripPrefix = 0;
   deps = [
@@ -25224,9 +27075,11 @@ hyphen-danish = {
   sha512.run = "954543a3fb81ff00d9c58315ba59d7a5e3430217dda6c1453bcb7ffb0516025dea4b877eb9d66c9f80ccc69d3d4895bdc6ae1b611d8394435fa647b8b806559d";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 hyphen-dutch = {
   revision = 58609;
+  catalogue = "nehyph";
   shortdesc = "Dutch hyphenation patterns.";
   stripPrefix = 0;
   deps = [
@@ -25247,6 +27100,7 @@ hyphen-dutch = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 hyphen-english = {
   revision = 58609;
@@ -25365,6 +27219,7 @@ hyphen-farsi = {
 };
 hyphen-finnish = {
   revision = 58652;
+  catalogue = "fihyph";
   shortdesc = "Finnish hyphenation patterns.";
   stripPrefix = 0;
   deps = [
@@ -25392,6 +27247,7 @@ hyphen-finnish = {
   sha512.run = "6aa171d77952165cdcb1b667885f16dd382124ed70ed1db80a9a89553d972720d8ff5f0da1b36669e02c3030d9ff362ab77ba1fa2ba45cddfb460018f0c0191d";
   hasRunfiles = true;
   license = [ "publicDomain" ];
+  hasCatalogue = true;
 };
 hyphen-french = {
   revision = 58652;
@@ -25519,6 +27375,7 @@ hyphen-german = {
 };
 hyphen-greek = {
   revision = 58652;
+  catalogue = "elhyphen";
   shortdesc = "Modern Greek hyphenation patterns.";
   stripPrefix = 0;
   deps = [
@@ -25549,9 +27406,11 @@ hyphen-greek = {
   hasRunfiles = true;
   license = [ "free" ];
   version = "5";
+  hasCatalogue = true;
 };
 hyphen-hungarian = {
   revision = 58652;
+  catalogue = "hungarian";
   shortdesc = "Hungarian hyphenation patterns.";
   stripPrefix = 0;
   deps = [
@@ -25572,9 +27431,11 @@ hyphen-hungarian = {
   sha512.doc = "164180f0485e16a49ba83dcb4721902e8a29f399032d4f5a59d55e424b8178a25dedd9fb99919d9d772142342fb78fe0dbf7a5303382a0b7feae4a381b76f8bb";
   hasRunfiles = true;
   license = [ "gpl1Only" ];
+  hasCatalogue = true;
 };
 hyphen-icelandic = {
   revision = 58652;
+  catalogue = "icehyph";
   shortdesc = "Icelandic hyphenation patterns.";
   stripPrefix = 0;
   deps = [
@@ -25594,6 +27455,7 @@ hyphen-icelandic = {
   sha512.run = "69add7ccde189e86810e2a82692a260de9a9fcc0ba011352881d202d4f4c94c4dbd84fe36dff40ef9b9ad3e8e990947cc61022307790f13cad56744f3ef5e41f";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 hyphen-indic = {
   revision = 58652;
@@ -25769,6 +27631,7 @@ hyphen-irish = {
 };
 hyphen-italian = {
   revision = 58652;
+  catalogue = "ithyph";
   shortdesc = "Italian hyphenation patterns.";
   stripPrefix = 0;
   deps = [
@@ -25789,6 +27652,7 @@ hyphen-italian = {
   hasRunfiles = true;
   license = [ "lgpl2" ];
   version = "4.8g";
+  hasCatalogue = true;
 };
 hyphen-kurmanji = {
   revision = 58652;
@@ -25813,6 +27677,7 @@ hyphen-kurmanji = {
 };
 hyphen-latin = {
   revision = 58652;
+  catalogue = "lahyph";
   shortdesc = "Latin hyphenation patterns.";
   stripPrefix = 0;
   deps = [
@@ -25849,6 +27714,7 @@ hyphen-latin = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "3.1";
+  hasCatalogue = true;
 };
 hyphen-latvian = {
   revision = 58652;
@@ -26015,6 +27881,7 @@ hyphen-piedmontese = {
 };
 hyphen-polish = {
   revision = 58609;
+  catalogue = "plhyph";
   shortdesc = "Polish hyphenation patterns.";
   stripPrefix = 0;
   deps = [
@@ -26035,6 +27902,7 @@ hyphen-polish = {
   hasRunfiles = true;
   license = [ "knuth" ];
   version = "3.0b";
+  hasCatalogue = true;
 };
 hyphen-portuguese = {
   revision = 58609;
@@ -26146,6 +28014,7 @@ hyphen-sanskrit = {
 };
 hyphen-serbian = {
   revision = 58609;
+  catalogue = "srhyphc";
   shortdesc = "Serbian hyphenation patterns.";
   stripPrefix = 0;
   deps = [
@@ -26174,6 +28043,7 @@ hyphen-serbian = {
   hasRunfiles = true;
   license = [ "gpl1Only" ];
   version = "1.0a";
+  hasCatalogue = true;
 };
 hyphen-slovak = {
   revision = 58609;
@@ -26243,6 +28113,7 @@ hyphen-spanish = {
   hasRunfiles = true;
   license = [ "mit" ];
   version = "5.0";
+  hasCatalogue = true;
 };
 hyphen-swedish = {
   revision = 58652;
@@ -26288,6 +28159,7 @@ hyphen-thai = {
 };
 hyphen-turkish = {
   revision = 58652;
+  catalogue = "tkhyph";
   shortdesc = "Turkish hyphenation patterns.";
   stripPrefix = 0;
   deps = [
@@ -26308,6 +28180,7 @@ hyphen-turkish = {
   sha512.source = "2aa80889b9657b03b6beb6510b6790fba13811b97abbac186eaf4d3f40212b41db0dd2d21583429820faad558b0415a09aa8254d2edd96812cf6396fb18ccf5c";
   hasRunfiles = true;
   license = [ "free" ];
+  hasCatalogue = true;
 };
 hyphen-turkmen = {
   revision = 58652;
@@ -26405,6 +28278,7 @@ hyphenat = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.3c";
+  hasCatalogue = true;
 };
 hyphenex = {
   revision = 57387;
@@ -26414,6 +28288,7 @@ hyphenex = {
   sha512.source = "d93fbc4f3f1a711967f40bbb492e9f6497b7a91b90d42eab92f3815fd0d15b239286c96519acff2d6609be00809a86846ba2cea4bd94719a35aae024e5785a4c";
   hasRunfiles = true;
   license = [ "free" ];
+  hasCatalogue = true;
 };
 hyplain = {
   revision = 15878;
@@ -26424,6 +28299,7 @@ hyplain = {
   hasRunfiles = true;
   license = [ "publicDomain" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 ibarra = {
   revision = 66892;
@@ -26436,6 +28312,7 @@ ibarra = {
   sha512.doc = "318a4bb5d2fd012c783053f457023604d53cdb2b02739ef8a1780f1856d5a63713774568cfa7a230f8ca1eb4711fa65f99d5a99b5c4e9235fb1b449751bc50b0";
   hasRunfiles = true;
   license = [ "ofl" "lppl13c" ];
+  hasCatalogue = true;
 };
 ibrackets = {
   revision = 67736;
@@ -26447,6 +28324,7 @@ ibrackets = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.2";
+  hasCatalogue = true;
 };
 ibycus-babel = {
   revision = 15878;
@@ -26458,6 +28336,7 @@ ibycus-babel = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "3.0";
+  hasCatalogue = true;
 };
 ibygrk = {
   revision = 15878;
@@ -26471,6 +28350,7 @@ ibygrk = {
   hasRunfiles = true;
   license = [ "gpl1Only" ];
   version = "4.5";
+  hasCatalogue = true;
 };
 icite = {
   revision = 67201;
@@ -26482,6 +28362,7 @@ icite = {
   hasRunfiles = true;
   license = [ "gpl3Plus" "cc-by-sa-40" ];
   version = "1.3a";
+  hasCatalogue = true;
 };
 icsv = {
   revision = 15878;
@@ -26493,6 +28374,7 @@ icsv = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.2";
+  hasCatalogue = true;
 };
 identkey = {
   revision = 61719;
@@ -26503,6 +28385,7 @@ identkey = {
   hasRunfiles = true;
   license = [ "gpl3Only" ];
   version = "0.1.0";
+  hasCatalogue = true;
 };
 idxcmds = {
   revision = 54554;
@@ -26513,6 +28396,7 @@ idxcmds = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.2c";
+  hasCatalogue = true;
 };
 idxlayout = {
   revision = 25821;
@@ -26524,6 +28408,7 @@ idxlayout = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.4d";
+  hasCatalogue = true;
 };
 ieeeconf = {
   revision = 59665;
@@ -26535,6 +28420,7 @@ ieeeconf = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.4";
+  hasCatalogue = true;
 };
 ieeepes = {
   revision = 17359;
@@ -26545,6 +28431,7 @@ ieeepes = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "4.0";
+  hasCatalogue = true;
 };
 ieeetran = {
   revision = 59672;
@@ -26555,6 +28442,7 @@ ieeetran = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.8b";
+  hasCatalogue = true;
 };
 ieejtran = {
   revision = 65641;
@@ -26565,6 +28453,7 @@ ieejtran = {
   hasRunfiles = true;
   license = [ "mit" ];
   version = "0.19";
+  hasCatalogue = true;
 };
 ietfbibs = {
   revision = 41332;
@@ -26574,6 +28463,7 @@ ietfbibs = {
   sha512.doc = "586dc66004dcf4abed254d223394badd45557d79c7e1b56bd20080f41185ea8dca28b3d501e708cc3ed4088f1368f153ba2d2af313d5d6add2d072b46954952f";
   license = [ "mit" ];
   version = "1.0.0";
+  hasCatalogue = true;
 };
 iexec = {
   revision = 69420;
@@ -26588,6 +28478,7 @@ iexec = {
   hasRunfiles = true;
   license = [ "mit" ];
   version = "0.14.0";
+  hasCatalogue = true;
 };
 ifallfalse = {
   revision = 60027;
@@ -26599,6 +28490,7 @@ ifallfalse = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.0.0";
+  hasCatalogue = true;
 };
 iffont = {
   revision = 38823;
@@ -26610,6 +28502,7 @@ iffont = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0.0";
+  hasCatalogue = true;
 };
 ifmslide = {
   revision = 20727;
@@ -26620,6 +28513,7 @@ ifmslide = {
   hasRunfiles = true;
   license = [ "lppl12" ];
   version = "0.47";
+  hasCatalogue = true;
 };
 ifmtarg = {
   revision = 47544;
@@ -26631,6 +28525,7 @@ ifmtarg = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.2b";
+  hasCatalogue = true;
 };
 ifnextok = {
   revision = 23379;
@@ -26642,6 +28537,7 @@ ifnextok = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.3";
+  hasCatalogue = true;
 };
 ifoddpage = {
   revision = 64967;
@@ -26653,6 +28549,7 @@ ifoddpage = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.2";
+  hasCatalogue = true;
 };
 ifplatform = {
   revision = 45533;
@@ -26664,6 +28561,7 @@ ifplatform = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.4a";
+  hasCatalogue = true;
 };
 ifptex = {
   revision = 66803;
@@ -26674,6 +28572,7 @@ ifptex = {
   hasRunfiles = true;
   license = [ "mit" ];
   version = "2.2c";
+  hasCatalogue = true;
 };
 ifsym = {
   revision = 24868;
@@ -26683,6 +28582,7 @@ ifsym = {
   sha512.doc = "10dca0c00a52d9d9775bd2ae35b50d7d56294da9b8eb21f2bc35f7863cbf1ab357cf8f3e1d949570ebf4908a60d9ccfe604e69fe779780c8e7527172f3f0e999";
   hasRunfiles = true;
   license = [ "free" ];
+  hasCatalogue = true;
 };
 iftex = {
   revision = 61910;
@@ -26693,6 +28593,7 @@ iftex = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0f";
+  hasCatalogue = true;
 };
 ifthenx = {
   revision = 25819;
@@ -26703,6 +28604,7 @@ ifthenx = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.1a";
+  hasCatalogue = true;
 };
 ifxptex = {
   revision = 46153;
@@ -26713,6 +28615,7 @@ ifxptex = {
   hasRunfiles = true;
   license = [ "knuth" ];
   version = "0.2";
+  hasCatalogue = true;
 };
 iitem = {
   revision = 29613;
@@ -26724,6 +28627,7 @@ iitem = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 ijmart = {
   revision = 30958;
@@ -26735,6 +28639,7 @@ ijmart = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.7";
+  hasCatalogue = true;
 };
 ijqc = {
   revision = 15878;
@@ -26745,6 +28650,7 @@ ijqc = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.2";
+  hasCatalogue = true;
 };
 ijsra = {
   revision = 44886;
@@ -26755,6 +28661,7 @@ ijsra = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 imac = {
   revision = 17347;
@@ -26764,6 +28671,7 @@ imac = {
   sha512.doc = "df4232356db6e2001277bdd8de706549d2f91b2d59d4a55f39c4aa9628e1a2b6ce092a7630ed4fc20096d069d19f2ecdf445129a870ca8bfc9d87e522350798c";
   hasRunfiles = true;
   license = [ "gpl1Only" ];
+  hasCatalogue = true;
 };
 image-gallery = {
   revision = 15878;
@@ -26774,6 +28682,7 @@ image-gallery = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0j";
+  hasCatalogue = true;
 };
 imakeidx = {
   revision = 42287;
@@ -26785,6 +28694,7 @@ imakeidx = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.3e";
+  hasCatalogue = true;
 };
 imfellenglish = {
   revision = 64568;
@@ -26797,6 +28707,7 @@ imfellenglish = {
   sha512.doc = "ca9e465e985ad5568713c5cd79f4b6d8b0474ecff9e35356bb2c88cbd6e71e451c44cd9e407bf0e8b15b4267d44bfce2a64fcc052a7f4be662b560695c34a865";
   hasRunfiles = true;
   license = [ "ofl" ];
+  hasCatalogue = true;
 };
 impatient = {
   revision = 54080;
@@ -26806,24 +28717,29 @@ impatient = {
   sha512.doc = "7b0811a691b9ff35fe245df7929164420f2155b4797d372988c7cb7f6052291c5735fdf44a0cd3f7a956be9dec424b5b59385b3f147f39b5beab7b56d1eeae1a";
   license = [ "fdl13Only" ];
   version = "2020";
+  hasCatalogue = true;
 };
 impatient-cn = {
   revision = 54080;
+  catalogue = "impatient";
   shortdesc = "Free edition of the book \"TeX for the Impatient\"";
   stripPrefix = 0;
   sha512.run = "e75363bb36568ec42f13217dc740b839e109529e41ac9cc713e8c7eb620e557dcc08d20f36cbdb5f0e3145d9201d659fc8478d40fae4862fefd3eec005a3463b";
   sha512.doc = "ea0918afe1c785d864bc280a6b64a87cc62cabb02540cdf64a7cbf4b8f81afcef9ac85a6f28b5bdbb42a75b6ce1e12139c12d0e1af4183a28115f8d740c6e78e";
   license = [ "fdl13Only" ];
   version = "2020";
+  hasCatalogue = true;
 };
 impatient-fr = {
   revision = 54080;
+  catalogue = "impatient";
   shortdesc = "Free edition of the book \"TeX for the Impatient\"";
   stripPrefix = 0;
   sha512.run = "f6a9a69ded33199fcd46d518fe8ed7dca48677c78fac5f90cdbbed2290558c4a9d7c9b0721c188023384acc97ad95df29565b06abc16fa33deb04490ca50b4ac";
   sha512.doc = "963a379e3fbf422f4f4d53a41d6bd074fd077360908eb0db1db0a50699e12f37dc6b3ec8b42812604de4ea444ecb38cbfc81d3445cd67626a65fa9b520fb8550";
   license = [ "fdl13Only" ];
   version = "2020";
+  hasCatalogue = true;
 };
 impnattypo = {
   revision = 50227;
@@ -26835,6 +28751,7 @@ impnattypo = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.5";
+  hasCatalogue = true;
 };
 import = {
   revision = 54683;
@@ -26845,6 +28762,7 @@ import = {
   hasRunfiles = true;
   license = [ "publicDomain" ];
   version = "6.2";
+  hasCatalogue = true;
 };
 imsproc = {
   revision = 29803;
@@ -26855,6 +28773,7 @@ imsproc = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.1";
+  hasCatalogue = true;
 };
 imtekda = {
   revision = 17667;
@@ -26866,6 +28785,7 @@ imtekda = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.7";
+  hasCatalogue = true;
 };
 incgraph = {
   revision = 60810;
@@ -26876,6 +28796,7 @@ incgraph = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.2.0";
+  hasCatalogue = true;
 };
 includernw = {
   revision = 47557;
@@ -26886,6 +28807,7 @@ includernw = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.1.0";
+  hasCatalogue = true;
 };
 inconsolata = {
   revision = 54512;
@@ -26899,6 +28821,7 @@ inconsolata = {
   hasRunfiles = true;
   license = [ "ofl" "asl20" "lppl13c" ];
   version = "1.121";
+  hasCatalogue = true;
 };
 inconsolata-nerd-font = {
   revision = 69061;
@@ -26910,6 +28833,7 @@ inconsolata-nerd-font = {
   hasRunfiles = true;
   license = [ "ofl" "lppl13c" ];
   version = "0.4";
+  hasCatalogue = true;
 };
 index = {
   revision = 24099;
@@ -26921,6 +28845,7 @@ index = {
   hasRunfiles = true;
   license = [ "free" ];
   version = "4.1beta";
+  hasCatalogue = true;
 };
 indextools = {
   revision = 68555;
@@ -26932,6 +28857,7 @@ indextools = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.7.0";
+  hasCatalogue = true;
 };
 infwarerr = {
   revision = 53023;
@@ -26943,6 +28869,7 @@ infwarerr = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.5";
+  hasCatalogue = true;
 };
 initials = {
   revision = 54080;
@@ -26977,6 +28904,7 @@ initials = {
   sha512.doc = "c8e837291eb7dced1d4bc4d94e7e6bc042ebeb5c561ad3688a491f451991f122896d7df01040575ac6fd705d3ad55350e12afc986dd619c4303ba2919f64dc6d";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 inkpaper = {
   revision = 54080;
@@ -26987,6 +28915,7 @@ inkpaper = {
   hasRunfiles = true;
   license = [ "gpl3Only" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 inline-images = {
   revision = 61719;
@@ -26997,6 +28926,7 @@ inline-images = {
   hasRunfiles = true;
   license = [ "lgpl3" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 inlinebib = {
   revision = 22018;
@@ -27006,6 +28936,7 @@ inlinebib = {
   sha512.doc = "2a00d2f51daca68362b5243d8cc485bff6f64fbb9156d1a221d75dc5eec001c3377e6d67afe5d6384ba3f7504eafd65919f5afca8e1170f8b584eb101c947faf";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 inlinedef = {
   revision = 15878;
@@ -27017,6 +28948,7 @@ inlinedef = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 inlinelabel = {
   revision = 63853;
@@ -27027,6 +28959,7 @@ inlinelabel = {
   hasRunfiles = true;
   license = [ "mit" ];
   version = "1.2.1";
+  hasCatalogue = true;
 };
 innerscript = {
   revision = 68776;
@@ -27038,6 +28971,7 @@ innerscript = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.2";
+  hasCatalogue = true;
 };
 inputenx = {
   revision = 52986;
@@ -27049,6 +28983,7 @@ inputenx = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.12";
+  hasCatalogue = true;
 };
 inputnormalization = {
   revision = 59850;
@@ -27060,6 +28995,7 @@ inputnormalization = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.2";
+  hasCatalogue = true;
 };
 inputtrc = {
   revision = 28019;
@@ -27071,6 +29007,7 @@ inputtrc = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.3";
+  hasCatalogue = true;
 };
 inriafonts = {
   revision = 54512;
@@ -27085,6 +29022,7 @@ inriafonts = {
   hasRunfiles = true;
   license = [ "ofl" "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 insbox = {
   revision = 34299;
@@ -27095,6 +29033,7 @@ insbox = {
   hasRunfiles = true;
   license = [ "publicDomain" ];
   version = "2.2";
+  hasCatalogue = true;
 };
 install-latex-guide-zh-cn = {
   revision = 69264;
@@ -27104,6 +29043,7 @@ install-latex-guide-zh-cn = {
   sha512.doc = "13042cd81cae222dab8ca8966702a28938f7f4b4a734905d64dba2bd819e610108078f0f81b3999b28a63dcb015bcb7941b177be9cab243fc9d01b6808ddf587";
   license = [ "lppl13c" ];
   version = "2024.1.1";
+  hasCatalogue = true;
 };
 installfont = {
   revision = 31205;
@@ -27113,6 +29053,7 @@ installfont = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.7";
+  hasCatalogue = true;
 };
 installfont.binfiles = [
   "installfont-tl"
@@ -27127,6 +29068,7 @@ intcalc = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.3";
+  hasCatalogue = true;
 };
 inter = {
   revision = 68966;
@@ -27139,6 +29081,7 @@ inter = {
   sha512.doc = "64260a91b781bc0ca36a73e1b44ffc34847b26b977a950cefa27649d7382e9cb9d34f70f982831912489d86e343d4abfc81ae0d91302d3276aaa5c8567c3ba42";
   hasRunfiles = true;
   license = [ "ofl" "lppl13c" ];
+  hasCatalogue = true;
 };
 interactiveworkbook = {
   revision = 15878;
@@ -27148,6 +29091,7 @@ interactiveworkbook = {
   sha512.doc = "cdc12a36f547787fd1e6aaa5f9dc38b99092f4fd7e71095c1b5ca25730b4d2a5a5fc1636798978741538624091721c96220d91b8f1cc29d7f4698767ce0269f0";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 interchar = {
   revision = 36312;
@@ -27158,6 +29102,7 @@ interchar = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.2";
+  hasCatalogue = true;
 };
 interfaces = {
   revision = 21474;
@@ -27169,6 +29114,7 @@ interfaces = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "3.1";
+  hasCatalogue = true;
 };
 interpreter = {
   revision = 27232;
@@ -27179,6 +29125,7 @@ interpreter = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.2";
+  hasCatalogue = true;
 };
 interval = {
   revision = 50265;
@@ -27189,6 +29136,7 @@ interval = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.4";
+  hasCatalogue = true;
 };
 intopdf = {
   revision = 63987;
@@ -27200,6 +29148,7 @@ intopdf = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.4.1";
+  hasCatalogue = true;
 };
 intro-scientific = {
   revision = 15878;
@@ -27209,6 +29158,7 @@ intro-scientific = {
   sha512.doc = "0daf84bdf7821aeb2f7971ed15de5546a13a444f3dc1b757f31490679350199fc893111109fc564aae2c8786fefc9e198e79e817bb318a1ad62698b6a5c79af5";
   license = [ "lppl13c" ];
   version = "5th_edition";
+  hasCatalogue = true;
 };
 inversepath = {
   revision = 15878;
@@ -27220,6 +29170,7 @@ inversepath = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.2";
+  hasCatalogue = true;
 };
 invoice = {
   revision = 48359;
@@ -27229,6 +29180,7 @@ invoice = {
   sha512.doc = "7b827f575eca669f15767be9fd215e827a3e98b03ea3e1f353039f5190fa7d75a5e59dd5d89ada982518101fc5164449843656c60a65679dd82061dbfcb95ea2";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 invoice-class = {
   revision = 49749;
@@ -27239,6 +29191,7 @@ invoice-class = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 invoice2 = {
   revision = 67327;
@@ -27258,6 +29211,7 @@ invoice2 = {
   sha512.source = "eb17a9ad06f67433b749e798783676212ca16dd78ab9a2029335c923235110e9c8bd8fb0654fc47417c60cd263d868789d8f86fb075cadcbd19fcd6142872121";
   hasRunfiles = true;
   license = [ "gpl3Plus" ];
+  hasCatalogue = true;
 };
 iodhbwm = {
   revision = 57773;
@@ -27268,6 +29222,7 @@ iodhbwm = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.2.2";
+  hasCatalogue = true;
 };
 ionumbers = {
   revision = 33457;
@@ -27279,6 +29234,7 @@ ionumbers = {
   hasRunfiles = true;
   license = [ "gpl1Only" ];
   version = "0.3.3";
+  hasCatalogue = true;
 };
 iopart-num = {
   revision = 15878;
@@ -27289,6 +29245,7 @@ iopart-num = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.1";
+  hasCatalogue = true;
 };
 ipaex = {
   revision = 61719;
@@ -27298,6 +29255,7 @@ ipaex = {
   sha512.doc = "c53cf11bc81d9a8f5aa19c264a1970d4819400ceaffa20b688d0709546113f932b82b6b6d12cf9fb31b2a3d2c0d45b6b33ee3cb3bd0060c961360389839b1475";
   hasRunfiles = true;
   license = [ "free" ];
+  hasCatalogue = true;
 };
 ipaex-type1 = {
   revision = 47700;
@@ -27311,6 +29269,7 @@ ipaex-type1 = {
   hasRunfiles = true;
   license = [ "free" ];
   version = "0.5";
+  hasCatalogue = true;
 };
 ipsum = {
   revision = 68861;
@@ -27321,6 +29280,7 @@ ipsum = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.1.2";
+  hasCatalogue = true;
 };
 iran-bibtex = {
   revision = 69347;
@@ -27331,6 +29291,7 @@ iran-bibtex = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.4.0";
+  hasCatalogue = true;
 };
 is-bst = {
   revision = 52623;
@@ -27341,6 +29302,7 @@ is-bst = {
   hasRunfiles = true;
   license = [ "free" ];
   version = "2.03";
+  hasCatalogue = true;
 };
 iscram = {
   revision = 45801;
@@ -27351,6 +29313,7 @@ iscram = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 iso = {
   revision = 15878;
@@ -27362,6 +29325,7 @@ iso = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.4";
+  hasCatalogue = true;
 };
 iso10303 = {
   revision = 15878;
@@ -27373,6 +29337,7 @@ iso10303 = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.5";
+  hasCatalogue = true;
 };
 isodate = {
   revision = 16613;
@@ -27384,6 +29349,7 @@ isodate = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.28";
+  hasCatalogue = true;
 };
 isodoc = {
   revision = 59709;
@@ -27395,6 +29361,7 @@ isodoc = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.14";
+  hasCatalogue = true;
 };
 isomath = {
   revision = 27654;
@@ -27405,6 +29372,7 @@ isomath = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.6.1";
+  hasCatalogue = true;
 };
 isonums = {
   revision = 17362;
@@ -27415,6 +29383,7 @@ isonums = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 isopt = {
   revision = 45509;
@@ -27425,6 +29394,7 @@ isopt = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.01";
+  hasCatalogue = true;
 };
 isorot = {
   revision = 15878;
@@ -27435,6 +29405,7 @@ isorot = {
   sha512.source = "99767e98f2eca92d4f0d8e32024805bea9646f10eda7cdc7fa5b325de04d6e70648c1e1421172e2358d7a6ef7eeca718db3e31e7f272160ddba2f24e4c516888";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 isosafety = {
   revision = 68801;
@@ -27446,6 +29417,7 @@ isosafety = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 isotope = {
   revision = 23711;
@@ -27457,6 +29429,7 @@ isotope = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.3";
+  hasCatalogue = true;
 };
 isphysicalmath = {
   revision = 69343;
@@ -27468,6 +29441,7 @@ isphysicalmath = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1.0";
+  hasCatalogue = true;
 };
 issuulinks = {
   revision = 25742;
@@ -27479,6 +29453,7 @@ issuulinks = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 istgame = {
   revision = 62946;
@@ -27489,6 +29464,7 @@ istgame = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.1";
+  hasCatalogue = true;
 };
 itnumpar = {
   revision = 15878;
@@ -27500,6 +29476,7 @@ itnumpar = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 iwona = {
   revision = 19611;
@@ -27513,6 +29490,7 @@ iwona = {
   hasRunfiles = true;
   license = [ "gfl" ];
   version = "0.995b";
+  hasCatalogue = true;
 };
 iwonamath = {
   revision = 68144;
@@ -27524,6 +29502,7 @@ iwonamath = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 jablantile = {
   revision = 16364;
@@ -27533,6 +29512,7 @@ jablantile = {
   sha512.doc = "00e753a85f3521ac0c6f336e0e563bd0a68a5e2ae756dfce72d3cf59a01eb9654b6f5c9ad9b83047d3d4f7743b7cce6f2d0d734510532db13942ef6619ae813f";
   hasRunfiles = true;
   license = [ "publicDomain" ];
+  hasCatalogue = true;
 };
 jacow = {
   revision = 63060;
@@ -27543,6 +29523,7 @@ jacow = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.7";
+  hasCatalogue = true;
 };
 jadetex = {
   revision = 69742;
@@ -27630,6 +29611,7 @@ jadetex = {
   hasRunfiles = true;
   license = [ "free" ];
   version = "3.13";
+  hasCatalogue = true;
 };
 jadetex.binfiles = [
   "jadetex"
@@ -27644,6 +29626,7 @@ jamtimes = {
   hasRunfiles = true;
   license = [ "free" ];
   version = "1.12";
+  hasCatalogue = true;
 };
 japanese-mathformulas = {
   revision = 64678;
@@ -27654,6 +29637,7 @@ japanese-mathformulas = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0.2";
+  hasCatalogue = true;
 };
 japanese-otf = {
   revision = 68492;
@@ -27671,6 +29655,7 @@ japanese-otf = {
   sha512.source = "c5ee59b3741e19c96f151483ab5444f3fc41dd498ef8a8a34f87dd087439d29b614fe3d9597d1a29e65bcafa47b570bbe119fbe6d705436fbf1dcbf9a6b76576";
   hasRunfiles = true;
   license = [ "bsd3" ];
+  hasCatalogue = true;
 };
 jbact = {
   revision = 52717;
@@ -27680,6 +29665,7 @@ jbact = {
   hasRunfiles = true;
   license = [ "free" ];
   version = "1.30";
+  hasCatalogue = true;
 };
 jeuxcartes = {
   revision = 68266;
@@ -27690,6 +29676,7 @@ jeuxcartes = {
   hasRunfiles = true;
   license = [ "lppl13c" "lgpl21" "publicDomain" "cc-by-sa-40" "publicDomain" "mit" ];
   version = "0.2.8";
+  hasCatalogue = true;
 };
 jfmutil = {
   revision = 60987;
@@ -27699,6 +29686,7 @@ jfmutil = {
   hasRunfiles = true;
   license = [ "mit" ];
   version = "1.3.3";
+  hasCatalogue = true;
 };
 jfmutil.binfiles = [
   "jfmutil"
@@ -27712,6 +29700,7 @@ jieeetran = {
   hasRunfiles = true;
   license = [ "mit" ];
   version = "0.19";
+  hasCatalogue = true;
 };
 jigsaw = {
   revision = 66009;
@@ -27722,6 +29711,7 @@ jigsaw = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.4";
+  hasCatalogue = true;
 };
 jkmath = {
   revision = 47109;
@@ -27732,15 +29722,18 @@ jkmath = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.1";
+  hasCatalogue = true;
 };
 jknapltx = {
   revision = 19440;
+  catalogue = "jknappen";
   shortdesc = "Miscellaneous packages by Joerg Knappen";
   stripPrefix = 0;
   sha512.run = "0369405034393ea8de2cd94497a97ba6c40264ec9142eefee09647fd4e51f83e169a99757a4b92c1c9d911637f137404fa54231de452bcd208ba3f9982984153";
   sha512.doc = "cadb522c007963278990e75a011e22d2c6bd8429e55fe5ecba3c2f20b9ae13fda4eac304bc405440c1c1566b1458e0f3e77a6d4adc77117b20673204bf502131";
   hasRunfiles = true;
   license = [ "gpl1Only" ];
+  hasCatalogue = true;
 };
 jlabels = {
   revision = 24858;
@@ -27750,6 +29743,7 @@ jlabels = {
   sha512.doc = "7736480f6736d8b623fac61683321eb7444ca8672eadf0da200eeca928de9dc031152e4599783d602e9c11b58463b03fc1162756edbaa5bd3dc1f6c5b64e08a6";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 jlreq = {
   revision = 69932;
@@ -27760,6 +29754,7 @@ jlreq = {
   sha512.source = "e6f452eaebc5b9a3b7a257dc1754f6aac822a92acac243b3301475f38828787972f8c15a34d92117c3036fd38f6a3c0b8895979234a52f3a65f518b129a601f0";
   hasRunfiles = true;
   license = [ "bsd2" ];
+  hasCatalogue = true;
 };
 jlreq-deluxe = {
   revision = 69971;
@@ -27770,6 +29765,7 @@ jlreq-deluxe = {
   hasRunfiles = true;
   license = [ "mit" ];
   version = "0.5.0";
+  hasCatalogue = true;
 };
 jmb = {
   revision = 52718;
@@ -27779,6 +29775,7 @@ jmb = {
   hasRunfiles = true;
   license = [ "free" ];
   version = "1.21";
+  hasCatalogue = true;
 };
 jmlr = {
   revision = 61957;
@@ -27790,6 +29787,7 @@ jmlr = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.30";
+  hasCatalogue = true;
 };
 jmn = {
   revision = 45751;
@@ -27808,6 +29806,7 @@ jmsdelim = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.2.0";
+  hasCatalogue = true;
 };
 jneurosci = {
   revision = 17346;
@@ -27818,6 +29817,7 @@ jneurosci = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.00";
+  hasCatalogue = true;
 };
 jnuexam = {
   revision = 70117;
@@ -27828,6 +29828,7 @@ jnuexam = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.1.1";
+  hasCatalogue = true;
 };
 jobname-suffix = {
   revision = 64797;
@@ -27838,6 +29839,7 @@ jobname-suffix = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 joinbox = {
   revision = 68003;
@@ -27848,6 +29850,7 @@ joinbox = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0.2";
+  hasCatalogue = true;
 };
 josefin = {
   revision = 64569;
@@ -27860,6 +29863,7 @@ josefin = {
   sha512.doc = "cc41ce980515708238256db38ff05c74a22f78ee5a8f4dc63d68339a064799e1beacab7be71ec15b2c97a6d9aecc7a39064fcadf4d7c67ff172eb9b8f7a939db";
   hasRunfiles = true;
   license = [ "ofl" "lppl13c" ];
+  hasCatalogue = true;
 };
 jourcl = {
   revision = 65290;
@@ -27869,6 +29873,7 @@ jourcl = {
   sha512.doc = "873b2e5636f6409f7b6c4c8c4a8c8988108ad4740df9fdcaef4e7998d3eeba0a2a26e84fac5e6c7b6534bafd120a3dcf066974fc9419e4544cf597bc99fdaeb3";
   hasRunfiles = true;
   license = [ "cc-by-sa-40" ];
+  hasCatalogue = true;
 };
 jourrr = {
   revision = 68556;
@@ -27878,6 +29883,7 @@ jourrr = {
   sha512.doc = "395fadb1bcc91eb1c3090f57d783b0b2deff507d22a4221258dd826d635ba382c4c4d00c0d341402374ba4bb037e39cb23efa2bb323652d73b0940ea89eb9f7b";
   hasRunfiles = true;
   license = [ "cc-by-sa-40" ];
+  hasCatalogue = true;
 };
 jpneduenumerate = {
   revision = 63893;
@@ -27888,6 +29894,7 @@ jpneduenumerate = {
   hasRunfiles = true;
   license = [ "mit" ];
   version = "1.2";
+  hasCatalogue = true;
 };
 jpnedumathsymbols = {
   revision = 63864;
@@ -27898,6 +29905,7 @@ jpnedumathsymbols = {
   hasRunfiles = true;
   license = [ "mit" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 jpsj = {
   revision = 66115;
@@ -27908,6 +29916,7 @@ jpsj = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.2.2";
+  hasCatalogue = true;
 };
 js-misc = {
   revision = 16211;
@@ -27917,6 +29926,7 @@ js-misc = {
   sha512.doc = "507cc8c04589dfa7b4d36bf32e4c1d18af42b90df58fee128c0ad37284a87aa1adad32623591d0e8ca880c53a1f583b0bd8054487e231bb2a58ed06d1bf6c6e3";
   hasRunfiles = true;
   license = [ "publicDomain" ];
+  hasCatalogue = true;
 };
 jsclasses = {
   revision = 66093;
@@ -27927,6 +29937,7 @@ jsclasses = {
   sha512.source = "4b8e605a8f9d3de33b9deef3dd58ae2984881f9716b0a9647fd794a3c97549e50ffe3f2556bb4b4ebc5938ce3516abda9445d4ddff21882b53ccfd9276b37e02";
   hasRunfiles = true;
   license = [ "bsd3" ];
+  hasCatalogue = true;
 };
 jslectureplanner = {
   revision = 70448;
@@ -27937,6 +29948,7 @@ jslectureplanner = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.13";
+  hasCatalogue = true;
 };
 jumplines = {
   revision = 37553;
@@ -27947,6 +29959,7 @@ jumplines = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.2";
+  hasCatalogue = true;
 };
 junicode = {
   revision = 69355;
@@ -27960,6 +29973,7 @@ junicode = {
   hasRunfiles = true;
   license = [ "ofl" "lppl13c" ];
   version = "2.206";
+  hasCatalogue = true;
 };
 junicodevf = {
   revision = 69374;
@@ -27970,6 +29984,7 @@ junicodevf = {
   hasRunfiles = true;
   license = [ "ofl" "lppl13c" ];
   version = "2.206";
+  hasCatalogue = true;
 };
 jupynotex = {
   revision = 56715;
@@ -27980,6 +29995,7 @@ jupynotex = {
   hasRunfiles = true;
   license = [ "asl20" ];
   version = "0.1";
+  hasCatalogue = true;
 };
 jura = {
   revision = 15878;
@@ -27991,6 +30007,7 @@ jura = {
   hasRunfiles = true;
   license = [ "gpl1Only" ];
   version = "4.3";
+  hasCatalogue = true;
 };
 juraabbrev = {
   revision = 15878;
@@ -28001,6 +30018,7 @@ juraabbrev = {
   sha512.source = "3a92a5231317d6f7d7b1afdf5df14997e17217e10b694ad97a9a2f3984b0afdfe5a3edeb4368108e4fb389a98a7f5414409e5fc7d319f4c78802cdc1a350d6a2";
   hasRunfiles = true;
   license = [ "gpl1Only" ];
+  hasCatalogue = true;
 };
 jurabib = {
   revision = 15878;
@@ -28012,6 +30030,7 @@ jurabib = {
   hasRunfiles = true;
   license = [ "gpl1Only" ];
   version = "0.6";
+  hasCatalogue = true;
 };
 juramisc = {
   revision = 15878;
@@ -28022,6 +30041,7 @@ juramisc = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.91";
+  hasCatalogue = true;
 };
 jurarsp = {
   revision = 15878;
@@ -28033,6 +30053,7 @@ jurarsp = {
   hasRunfiles = true;
   license = [ "gpl1Only" ];
   version = "0.52";
+  hasCatalogue = true;
 };
 jvlisting = {
   revision = 24638;
@@ -28044,6 +30065,7 @@ jvlisting = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.7";
+  hasCatalogue = true;
 };
 jwjournal = {
   revision = 69162;
@@ -28056,6 +30078,7 @@ jwjournal = {
   sha512.doc = "dde16cc247d095b61e09b62039f081afa1855778b7d804e6e5692213c25a14c2746204a730f7934a531142f5b9151dc183b20f1d2aa14429d448cc5d4e543996";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 kalendarium = {
   revision = 48744;
@@ -28067,6 +30090,7 @@ kalendarium = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 kanaparser = {
   revision = 48052;
@@ -28077,6 +30101,7 @@ kanaparser = {
   hasRunfiles = true;
   license = [ "bsd3" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 kanbun = {
   revision = 62026;
@@ -28087,6 +30112,7 @@ kanbun = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.2";
+  hasCatalogue = true;
 };
 kantlipsum = {
   revision = 68983;
@@ -28098,6 +30124,7 @@ kantlipsum = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.8c";
+  hasCatalogue = true;
 };
 karnaugh = {
   revision = 21338;
@@ -28107,6 +30134,7 @@ karnaugh = {
   sha512.doc = "379638ab38cdfe3d94d049fec7701995566df9c5451f4f6a862c7cde232ceea899222b13f3c40398676bd2746305ee48e8b43781804cd24f48f36946526d23e4";
   hasRunfiles = true;
   license = [ "lppl1" ];
+  hasCatalogue = true;
 };
 karnaugh-map = {
   revision = 61614;
@@ -28118,6 +30146,7 @@ karnaugh-map = {
   hasRunfiles = true;
   license = [ "cc-by-sa-30" ];
   version = "2.0";
+  hasCatalogue = true;
 };
 karnaughmap = {
   revision = 36989;
@@ -28129,9 +30158,11 @@ karnaughmap = {
   hasRunfiles = true;
   license = [ "lppl12" ];
   version = "2.0";
+  hasCatalogue = true;
 };
 kastrup = {
   revision = 15878;
+  catalogue = "binhex";
   shortdesc = "Convert numbers into binary, octal and hexadecimal";
   stripPrefix = 0;
   sha512.run = "d7cbd22ead6633284e9d114d90b2cb47924bfeb10c15eb350e4c2f82b883930c953410362313cdf8ac476a68cfa3a9b020217097909504b97a8ecd7addbc8d97";
@@ -28139,6 +30170,7 @@ kastrup = {
   sha512.source = "60390a053fe2fa53685403df1d67a2bf8795f49db0f4eaa5a147ccaed951a55c1ed50c9cc5802bcdb5e356b694c2b4be78715022842c958f784908cab89a3f75";
   hasRunfiles = true;
   license = [ "free" ];
+  hasCatalogue = true;
 };
 kaytannollista-latexia = {
   revision = 69876;
@@ -28148,6 +30180,7 @@ kaytannollista-latexia = {
   sha512.doc = "f44779f63f301091ac2119f6c5002c29d2969509775acc752ca4aefeca8b16bbc02f352c36e3b869ea6070f3fd70bacecf3e7d41d00bc5007d0176e5cc489f3e";
   license = [ "cc-by-sa-40" ];
   version = "2024.2";
+  hasCatalogue = true;
 };
 kblocks = {
   revision = 57617;
@@ -28158,6 +30191,7 @@ kblocks = {
   hasRunfiles = true;
   license = [ "mit" ];
   version = "2.0";
+  hasCatalogue = true;
 };
 kdgdocs = {
   revision = 24498;
@@ -28169,6 +30203,7 @@ kdgdocs = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 kdpcover = {
   revision = 65150;
@@ -28193,6 +30228,7 @@ kdpcover = {
   hasRunfiles = true;
   license = [ "mit" ];
   version = "0.5.1";
+  hasCatalogue = true;
 };
 kerkis = {
   revision = 56271;
@@ -28206,6 +30242,7 @@ kerkis = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.11";
+  hasCatalogue = true;
 };
 kerntest = {
   revision = 15878;
@@ -28217,6 +30254,7 @@ kerntest = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.32";
+  hasCatalogue = true;
 };
 ketcindy = {
   revision = 58661;
@@ -28229,6 +30267,7 @@ ketcindy = {
   ];
   license = [ "gpl3Plus" ];
   version = "20191225.0";
+  hasCatalogue = true;
 };
 ketcindy.binfiles = [
   "ketcindy"
@@ -28243,6 +30282,7 @@ keycommand = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "3.1415";
+  hasCatalogue = true;
 };
 keyfloat = {
   revision = 69399;
@@ -28254,6 +30294,7 @@ keyfloat = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.09";
+  hasCatalogue = true;
 };
 keyindex = {
   revision = 50828;
@@ -28265,6 +30306,7 @@ keyindex = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 keyparse = {
   revision = 60277;
@@ -28276,6 +30318,7 @@ keyparse = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 keyreader = {
   revision = 28195;
@@ -28286,6 +30329,7 @@ keyreader = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.5b";
+  hasCatalogue = true;
 };
 keystroke = {
   revision = 17992;
@@ -28296,6 +30340,7 @@ keystroke = {
   hasRunfiles = true;
   license = [ "gpl1Only" ];
   version = "1.6";
+  hasCatalogue = true;
 };
 keyval2e = {
   revision = 23698;
@@ -28306,6 +30351,7 @@ keyval2e = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.0.2";
+  hasCatalogue = true;
 };
 keyvaltable = {
   revision = 65416;
@@ -28317,6 +30363,7 @@ keyvaltable = {
   hasRunfiles = true;
   license = [ "lppl12" ];
   version = "2.3";
+  hasCatalogue = true;
 };
 kfupm-math-exam = {
   revision = 63977;
@@ -28328,6 +30375,7 @@ kfupm-math-exam = {
   hasRunfiles = true;
   license = [ "mit" ];
   version = "0.1.0";
+  hasCatalogue = true;
 };
 khatalmaqala = {
   revision = 68280;
@@ -28338,6 +30386,7 @@ khatalmaqala = {
   hasRunfiles = true;
   license = [ "ofl" ];
   version = "1.0.2";
+  hasCatalogue = true;
 };
 kinematikz = {
   revision = 61392;
@@ -28348,6 +30397,7 @@ kinematikz = {
   hasRunfiles = true;
   license = [ "lppl13c" "gpl1Only" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 kix = {
   revision = 21606;
@@ -28357,6 +30407,7 @@ kix = {
   sha512.doc = "3d3816d395e69ec83c88fe55801cab052b12f5e38702edafec2d3f9225c80a31165dca553b60401dedac7689c583feb00615e41c7179fd19ccdc420fbd5e6d86";
   hasRunfiles = true;
   license = [ "lppl1" ];
+  hasCatalogue = true;
 };
 kixfont = {
   revision = 18488;
@@ -28366,6 +30417,7 @@ kixfont = {
   sha512.doc = "ca250703364924daf9827ddeb48126fb21ff5ec3230afbc3f6778d23e96dbbb16173e5504900032ddbe14920cb40adf8130be50ee92f3c9c2dbceb95b8ecb90f";
   hasRunfiles = true;
   license = [ "free" ];
+  hasCatalogue = true;
 };
 kluwer = {
   revision = 54074;
@@ -28388,6 +30440,7 @@ knitting = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "3.0";
+  hasCatalogue = true;
 };
 knittingpattern = {
   revision = 17205;
@@ -28397,6 +30450,7 @@ knittingpattern = {
   sha512.doc = "d391a25a224713092128af5adf68e5331c530a67a763dc37f657d8bfcee0d904632e86ae2f3745ec2c4bb0cea5e886c85da15b064780dbe997104b9afbef9e4e";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 knowledge = {
   revision = 70609;
@@ -28408,6 +30462,7 @@ knowledge = {
   hasRunfiles = true;
   license = [ "lppl12" ];
   version = "1.29";
+  hasCatalogue = true;
 };
 knuth-errata = {
   revision = 58682;
@@ -28416,6 +30471,7 @@ knuth-errata = {
   sha512.run = "f74443cd6bd0ebc039ff7eb0f5df2709b28c34c1fbf49793ee6d8ba2477337d8b7d0072573c32d67da17f7796efa058aa0d2d7cc2f7e196111c9ff90668ddb97";
   sha512.doc = "86abd134ee7d4afd4398735964c83340b67edb9b41a960d205aacb3dbf1c702a854eb469d3c39b06a7ed1974c8e2a951dcb1c3fcfdeb2c394b7d21e4205ceca4";
   license = [ "knuth" ];
+  hasCatalogue = true;
 };
 knuth-hint = {
   revision = 67373;
@@ -28425,6 +30481,7 @@ knuth-hint = {
   sha512.doc = "5b47b3cbf6164bce8cf6903702b5a6ed93fcd13def2de2e6b30e3c8e758fdf076a1c14f1bc452768c9841d967e932a6597ff0a1a7c9140ce2100036fa04f031b";
   license = [ "publicDomain" "knuth" ];
   version = "2.1";
+  hasCatalogue = true;
 };
 knuth-lib = {
   revision = 57963;
@@ -28433,6 +30490,7 @@ knuth-lib = {
   sha512.run = "47d50b1966dc5a3adf4921c297d9ed5917035e917098154fc08d1c72ebd0ba70ebfa41735c7ae52c5087d62242bcfa9b0b49914c6da4f392e2d4c56a6d72807d";
   hasRunfiles = true;
   license = [ "knuth" ];
+  hasCatalogue = true;
 };
 knuth-local = {
   revision = 57963;
@@ -28441,6 +30499,7 @@ knuth-local = {
   sha512.run = "91962f359e8b2f668130a6511e7fafad26a0c4c14a46f715172aa28723f743e08c50be666cadafd7a591f2283daec4fdd45039afc714115077667b66e67cedb5";
   hasRunfiles = true;
   license = [ "publicDomain" ];
+  hasCatalogue = true;
 };
 knuth-pdf = {
   revision = 67332;
@@ -28450,6 +30509,7 @@ knuth-pdf = {
   sha512.doc = "0f16994ee8e64478d01f7b0f2c54c55369b5f661abe7f4db347cb2b7d146c4efbf337e20fd7eba1cce497d8cfa5058bbf4c013073028c364678334c524aea155";
   license = [ "publicDomain" ];
   version = "2.1";
+  hasCatalogue = true;
 };
 koma-moderncvclassic = {
   revision = 25025;
@@ -28460,6 +30520,7 @@ koma-moderncvclassic = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.5";
+  hasCatalogue = true;
 };
 koma-script = {
   revision = 69755;
@@ -28473,6 +30534,7 @@ koma-script = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "3.41";
+  hasCatalogue = true;
 };
 koma-script-examples = {
   revision = 63833;
@@ -28481,6 +30543,7 @@ koma-script-examples = {
   sha512.run = "03941b9cb516d836b59f493e1e6af7ef409306cc567ace2abc467c7b6c73156819fd23212668ab5506c03697e29840073162dff5f912f605354cf9851ab6dda8";
   sha512.doc = "d355edd3348b454015a390449e251bf476350385b062d314d9e924b187e85802e815cca97c550073605ec3a91a38a15d2a9af79b7771ec74557067dbedebdbff";
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 koma-script-sfs = {
   revision = 26137;
@@ -28491,6 +30554,7 @@ koma-script-sfs = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 komacv = {
   revision = 57721;
@@ -28502,6 +30566,7 @@ komacv = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1.2";
+  hasCatalogue = true;
 };
 komacv-rg = {
   revision = 49064;
@@ -28513,6 +30578,7 @@ komacv-rg = {
   hasRunfiles = true;
   license = [ "lppl12" ];
   version = "0.9.2";
+  hasCatalogue = true;
 };
 korigamik = {
   revision = 68204;
@@ -28523,6 +30589,7 @@ korigamik = {
   hasRunfiles = true;
   license = [ "gpl3Plus" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 kotex-oblivoir = {
   revision = 70496;
@@ -28537,6 +30604,7 @@ kotex-oblivoir = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "3.3";
+  hasCatalogue = true;
 };
 kotex-plain = {
   revision = 63689;
@@ -28547,6 +30615,7 @@ kotex-plain = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "3.0.0";
+  hasCatalogue = true;
 };
 kotex-utf = {
   revision = 63690;
@@ -28560,6 +30629,7 @@ kotex-utf = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "3.0.0";
+  hasCatalogue = true;
 };
 kotex-utils = {
   revision = 38727;
@@ -28572,6 +30642,7 @@ kotex-utils = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.1.0";
+  hasCatalogue = true;
 };
 kotex-utils.binfiles = [
   "jamo-normalize"
@@ -28587,6 +30658,7 @@ kpathsea = {
   hasInfo = true;
   hasRunfiles = true;
   license = [ "lgpl21" ];
+  hasCatalogue = true;
 };
 kpathsea.binfiles = [
   "kpseaccess"
@@ -28606,6 +30678,7 @@ kpfonts = {
   hasRunfiles = true;
   license = [ "lppl13c" "gpl1Only" ];
   version = "3.35";
+  hasCatalogue = true;
 };
 kpfonts-otf = {
   revision = 69636;
@@ -28616,15 +30689,18 @@ kpfonts-otf = {
   hasRunfiles = true;
   license = [ "ofl" "lppl13c" ];
   version = "0.62";
+  hasCatalogue = true;
 };
 ksfh_nat = {
   revision = 24825;
+  catalogue = "ksfh-nat";
   shortdesc = "BibTeX style for KSFH Munich";
   stripPrefix = 0;
   sha512.run = "8893133ed49c9b4ba7472bc80a4e5583ec2546838e261fa2cf9aee188a0b00bca45de05c4e969af0b6f222a9668c3a7fac0caadbb180c10500fc53ae8c9f56c6";
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 ksp-thesis = {
   revision = 39080;
@@ -28635,6 +30711,7 @@ ksp-thesis = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0.2";
+  hasCatalogue = true;
 };
 ktv-texdata = {
   revision = 27369;
@@ -28646,6 +30723,7 @@ ktv-texdata = {
   hasRunfiles = true;
   license = [ "gpl1Only" ];
   version = "05.34";
+  hasCatalogue = true;
 };
 ku-template = {
   revision = 45935;
@@ -28656,6 +30734,7 @@ ku-template = {
   hasRunfiles = true;
   license = [ "mit" ];
   version = "0.02";
+  hasCatalogue = true;
 };
 kurdishlipsum = {
   revision = 47518;
@@ -28666,6 +30745,7 @@ kurdishlipsum = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 kurier = {
   revision = 19612;
@@ -28679,6 +30759,7 @@ kurier = {
   hasRunfiles = true;
   license = [ "gfl" ];
   version = "0.995b";
+  hasCatalogue = true;
 };
 kvdefinekeys = {
   revision = 53193;
@@ -28690,6 +30771,7 @@ kvdefinekeys = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.6";
+  hasCatalogue = true;
 };
 kvmap = {
   revision = 67201;
@@ -28706,6 +30788,7 @@ kvmap = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.3.5";
+  hasCatalogue = true;
 };
 kvoptions = {
   revision = 63622;
@@ -28717,6 +30800,7 @@ kvoptions = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "3.15";
+  hasCatalogue = true;
 };
 kvsetkeys = {
   revision = 64632;
@@ -28728,6 +30812,7 @@ kvsetkeys = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.19";
+  hasCatalogue = true;
 };
 l2picfaq = {
   revision = 19601;
@@ -28737,6 +30822,7 @@ l2picfaq = {
   sha512.doc = "e4202740ea2842296338e9d635b27c35801f4a5f8b21eb8dc0c1db572da0718fc5adcefc5c122793618336272606ec27f02f13825f8d2a6cf4b83583ea372288";
   license = [ "fdl13Only" ];
   version = "1.50";
+  hasCatalogue = true;
 };
 l2tabu = {
   revision = 63708;
@@ -28746,6 +30832,7 @@ l2tabu = {
   sha512.doc = "c6913d96a1821725c0d1a91cabf2db7a8afe692c1dbcd23113c3df63793653de48aeedf142d2dc81ec81c863d16583767766955a7ba0cba0de09840b9d3f74b6";
   license = [ "free" ];
   version = "2.4";
+  hasCatalogue = true;
 };
 l2tabu-english = {
   revision = 15878;
@@ -28755,6 +30842,7 @@ l2tabu-english = {
   sha512.doc = "250ebdbd2a6dd3dd7d05c35cea0ea8fdb969bef983bc0a5f2c804129091f22ac0a499df482a1a990bf278ad94befc774d354341b30f9a0cd67539e1f63074ee4";
   license = [ "gpl1Only" ];
   version = "1.8.5.7";
+  hasCatalogue = true;
 };
 l2tabu-french = {
   revision = 31315;
@@ -28764,6 +30852,7 @@ l2tabu-french = {
   sha512.doc = "f489b0bd07b60797b53fc9010c699029dabccbf326767948dd815224f1c591cb59d6da7bbac0d0385ddfb6f0e885e187b2385bfcdbb88933588b06dfc34f640c";
   license = [ "gpl1Only" ];
   version = "2.3";
+  hasCatalogue = true;
 };
 l2tabu-italian = {
   revision = 25218;
@@ -28773,6 +30862,7 @@ l2tabu-italian = {
   sha512.doc = "c76981112631423d5d92ee9236d9b5b076e3d71086f9dada77de51362a5d5e01d82d5b018a68950c2b7f4b10eff1882d677243594436bae41bcc6ab996aa900a";
   license = [ "free" ];
   version = "2.3";
+  hasCatalogue = true;
 };
 l2tabu-spanish = {
   revision = 15878;
@@ -28782,6 +30872,7 @@ l2tabu-spanish = {
   sha512.doc = "a6886d54c0f5e1915ff9efbc4974ab1ef7f6dc026d67a0596ed47ac9e94da098e690bc70d5ed3e45a4d8cbd0f877f0cd6cd3a3757288dfc2df284e9c040b7c1e";
   license = [ "publicDomain" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 l3backend = {
   revision = 70027;
@@ -28792,6 +30883,7 @@ l3backend = {
   sha512.source = "4fc5659fefbcdb53f30f6852b38ebe2e05238637ebbcf9885fef6496c5f4e54749f341bc492bc65c17e268c71bdfd6ee5add0bdcde9baf8e527ae48a4915fc14";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 l3build = {
   revision = 69748;
@@ -28808,6 +30900,7 @@ l3build = {
     "lua"
   ];
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 l3build.binfiles = [
   "l3build"
@@ -28824,6 +30917,7 @@ l3experimental = {
   sha512.source = "834b404c08acc25cdcc1124512d527e7f094c18ca6283ddecf85bebe25ed8bbcd40f2c9dbf56c19280f8dc1db3a2f35a6bb996175ef2a85a15280c9be6cd3ce2";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 l3kernel = {
   revision = 70027;
@@ -28837,6 +30931,7 @@ l3kernel = {
   sha512.source = "e9b7b0e179fb168106277716bc8519b6a39d8062e3dce86212d582d42680ff7bb594542210a8ed1ee969226485db1d4055df071da898234cfeb9edad92d675fe";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 l3packages = {
   revision = 69992;
@@ -28850,6 +30945,7 @@ l3packages = {
   sha512.source = "9afaf6e363b3a1a3402b64bbd6ef2236dd062c933583ab8be5f57217d90196b456aa477f5c9c830fe6fffcb79d2e0f2dc3ad51ab3c9cc764b61b5252cb211aa2";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 labbook = {
   revision = 15878;
@@ -28860,6 +30956,7 @@ labbook = {
   sha512.source = "23b9f993dbd431328590617c6715bb082cd1dac757db003b05296d318a002e85c8c541f5ce6a45703fa2cc481c7af98fe41e483c77b5025e50de324b68fcf525";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 labels = {
   revision = 15878;
@@ -28871,6 +30968,7 @@ labels = {
   hasRunfiles = true;
   license = [ "lppl12" ];
   version = ".13";
+  hasCatalogue = true;
 };
 labels4easylist = {
   revision = 51124;
@@ -28881,6 +30979,7 @@ labels4easylist = {
   hasRunfiles = true;
   license = [ "mit" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 labelschanged = {
   revision = 69400;
@@ -28892,6 +30991,7 @@ labelschanged = {
   hasRunfiles = true;
   license = [ "publicDomain" ];
   version = "1.01";
+  hasCatalogue = true;
 };
 labyrinth = {
   revision = 33454;
@@ -28902,6 +31002,7 @@ labyrinth = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 lacheck = {
   revision = 66186;
@@ -28910,6 +31011,7 @@ lacheck = {
   sha512.doc = "cf4355d56985f9335270e4280d10602299fadfd01605e83edb4e8b89cf0d91b3e8ca671257a9599d5f5578e7a85140d390edd40c3b109f77bb9fca5ba47ca517";
   hasManpages = true;
   license = [ "gpl1Only" ];
+  hasCatalogue = true;
 };
 lacheck.binfiles = [
   "lacheck"
@@ -28922,6 +31024,7 @@ ladder = {
   sha512.doc = "1cf2a2a2267e819c9ee723af9cf51d711f778c3583c859eb01f2b2faebfd0f7a6fc4f4ab6caa83a9df6a797175ec27d29f0debbeaeb39387954070623ab60b29";
   hasRunfiles = true;
   license = [ "mit" ];
+  hasCatalogue = true;
 };
 lambda = {
   revision = 45756;
@@ -28938,6 +31041,7 @@ lambda-lists = {
   sha512.doc = "846c403f99194a19cd21e4d7367a1b43a8ad608055315bb36a1113fb37dd3d922dd8c5cb8474ae52ed3006be520b7e9023680e85f0dbb17f69a41c8c17e81a5c";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 lambdax = {
   revision = 60278;
@@ -28949,6 +31053,7 @@ lambdax = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 langcode = {
   revision = 27764;
@@ -28960,6 +31065,7 @@ langcode = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.2";
+  hasCatalogue = true;
 };
 langnames = {
   revision = 69101;
@@ -28971,6 +31077,7 @@ langnames = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "3.0.0";
+  hasCatalogue = true;
 };
 langsci = {
   revision = 70028;
@@ -28980,6 +31087,7 @@ langsci = {
   sha512.doc = "05c1231243e03156ffa01cb84f16708542598fcd5349c858913c2d0c6f0962871ee70034fe8c2255ee6338d7d659ef0262a408650a262ea8c6c1e8e173ca4e12";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 langsci-avm = {
   revision = 66016;
@@ -28991,6 +31099,7 @@ langsci-avm = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.3.0";
+  hasCatalogue = true;
 };
 lapdf = {
   revision = 23806;
@@ -29001,6 +31110,7 @@ lapdf = {
   hasRunfiles = true;
   license = [ "gpl1Only" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 lastbib = {
   revision = 70377;
@@ -29011,6 +31121,7 @@ lastbib = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.1";
+  hasCatalogue = true;
 };
 lastpackage = {
   revision = 34481;
@@ -29022,6 +31133,7 @@ lastpackage = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.1";
+  hasCatalogue = true;
 };
 lastpage = {
   revision = 68557;
@@ -29033,6 +31145,7 @@ lastpage = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.0e";
+  hasCatalogue = true;
 };
 latex = {
   revision = 69443;
@@ -29050,6 +31163,7 @@ latex = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2023-11-01_PL1";
+  hasCatalogue = true;
 };
 latex-amsmath-dev = {
   revision = 68730;
@@ -29061,6 +31175,7 @@ latex-amsmath-dev = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2024-06-01_pre-release_0";
+  hasCatalogue = true;
 };
 latex-base-dev = {
   revision = 69872;
@@ -29072,6 +31187,7 @@ latex-base-dev = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2024-06-01_pre-release_1";
+  hasCatalogue = true;
 };
 latex-bin = {
   revision = 66186;
@@ -29218,6 +31334,7 @@ latex-brochure = {
   sha512.run = "de98a91947d5cb919b6a2c6e6a87f63499c8c5975992d039bb8d2a4662ed597cbdad99668b006cf775f71af936e5ad285958b48b57eac61783460fe37ed76298";
   sha512.doc = "f057b86b61ee1f50430cdb83a56c27896e052047bbc93c4f09884b7d76f16f73cb1b570341faa2b8c771c0d42bb4d6450b8715c921fe866a57727eb4ffdd329a";
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 latex-context-ppchtex = {
   revision = 66687;
@@ -29227,6 +31344,7 @@ latex-context-ppchtex = {
   sha512.doc = "130b525dbf4172306b9bf6b74defccbaa17ab1871d044ce693ba2c0ebf568adce98eacc6cebae94bca425c7b8cb7bd2860747768a03380018a9abd33175786c9";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 latex-course = {
   revision = 68681;
@@ -29236,6 +31354,7 @@ latex-course = {
   sha512.doc = "56f0cdd7a50b396657d60d3d10586e0472e18f3b66005df08746fd93cd481742bec1f1e820248185f9b25d6b58251dd8a4715231272324a5208e25335ede85e9";
   license = [ "gpl1Only" ];
   version = "2";
+  hasCatalogue = true;
 };
 latex-doc-ptr = {
   revision = 57311;
@@ -29244,6 +31363,7 @@ latex-doc-ptr = {
   sha512.run = "22017cc47746d2e14436915a0d649b31050debff1827cca44a3ab7bf9b240f40450d445a8eaab811b8737f589839ab7f2078aced47b65b320237ddbcc443b99a";
   sha512.doc = "c7d7217a9136785cfd6ddb000e51d455e7482bfe395a9131329767bfffc71f918c2349b1426b615a6740263c958530c68c044ee3ae78300a004a8acf20bd8bdc";
   license = [ "publicDomain" ];
+  hasCatalogue = true;
 };
 latex-firstaid-dev = {
   revision = 68730;
@@ -29255,6 +31375,7 @@ latex-firstaid-dev = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1b";
+  hasCatalogue = true;
 };
 latex-fonts = {
   revision = 28888;
@@ -29264,6 +31385,7 @@ latex-fonts = {
   sha512.doc = "4d3162776a17f31caa8e6a0fe05eed9447b681d77e653371cb5fa5d8dd2f01bddddc9f95ca916f233c11f8ec7d15e02fe575dc953fdd18c34ba877829a142bea";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 latex-for-undergraduates = {
   revision = 70210;
@@ -29273,6 +31395,7 @@ latex-for-undergraduates = {
   sha512.doc = "b21b7a6a759eba0ae086ba3492266b9784aa651a727b22b671b3e3668197727118f35095245ad8d4b99a40f6c5c00500f7791b3cb6a6237493b7656a17abdf3c";
   license = [ "publicDomain" ];
   version = "1.0.3";
+  hasCatalogue = true;
 };
 latex-git-log = {
   revision = 54010;
@@ -29283,17 +31406,20 @@ latex-git-log = {
   hasRunfiles = true;
   license = [ "gpl3Plus" ];
   version = "1.0.0";
+  hasCatalogue = true;
 };
 latex-git-log.binfiles = [
   "latex-git-log"
 ];
 latex-graphics-companion = {
   revision = 29235;
+  catalogue = "lgc-examples";
   shortdesc = "Examples from The LaTeX Graphics Companion";
   stripPrefix = 0;
   sha512.run = "3148a646539db3622096f9aeefd7ca2d44b0cf83cd454673893978897d07cfe7107b8f5bc745bc6b60734d4ad3429be1ffc2edaa8c9dd1721b41bfe913fa0dbe";
   sha512.doc = "ab9d885c811af3964e8cdd8576349059bd45d660e6b9a7e931697f7c7fa5282c725e044817de8f2648ded59519d1592945e0804ba7cbe0054ce2bd4d44606af5";
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 latex-graphics-dev = {
   revision = 68730;
@@ -29308,6 +31434,7 @@ latex-graphics-dev = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2024-06-01_pre-release_0";
+  hasCatalogue = true;
 };
 latex-lab = {
   revision = 68720;
@@ -29318,6 +31445,7 @@ latex-lab = {
   sha512.source = "acc092bf6cc685cf8c9d5a0cd5af47022c3936ff0e509a3743ae22ab888daffd0c1b7b657c5a1e1019232c4047e89626963ec1784b406ad16d3dd3f10f6e19b7";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 latex-lab-dev = {
   revision = 69872;
@@ -29329,6 +31457,7 @@ latex-lab-dev = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2024-06-01_pre-release_1";
+  hasCatalogue = true;
 };
 latex-make = {
   revision = 60874;
@@ -29340,6 +31469,7 @@ latex-make = {
   hasRunfiles = true;
   license = [ "gpl1Only" ];
   version = "2.4.3";
+  hasCatalogue = true;
 };
 latex-mr = {
   revision = 55475;
@@ -29349,6 +31479,7 @@ latex-mr = {
   sha512.doc = "51dcfff4a8df46a8715d07d2528d3a1960479ce4bffba9b8eb5170d5d6307f0c776e197bdbe788d316067070c1d5f5d1382c32430e94ea83664868931a844e52";
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 latex-notes-zh-cn = {
   revision = 15878;
@@ -29358,6 +31489,7 @@ latex-notes-zh-cn = {
   sha512.doc = "477df31445a2991db3c2b8cafaa97662d722f3f7171c2f756cf025717cb3b896c1773adadbc42c22cb360f7542a0e658547f15cd71c54e9b79f76fb1e2097e90";
   license = [ "lppl13c" ];
   version = "1.20";
+  hasCatalogue = true;
 };
 latex-papersize = {
   revision = 53131;
@@ -29370,6 +31502,7 @@ latex-papersize = {
   ];
   license = [ "asl20" ];
   version = "1.63";
+  hasCatalogue = true;
 };
 latex-papersize.binfiles = [
   "latex-papersize"
@@ -29382,6 +31515,7 @@ latex-refsheet = {
   sha512.doc = "77149dabb1fe5c4a46591b3b307d02b2e2b33a07267afcdb44b77a2a823dcea9ea76b4be5ddad530151b638cfbcaf5d87ed0fed59a9e8ed99acb0895717bc71a";
   license = [ "lppl13c" ];
   version = "1.2";
+  hasCatalogue = true;
 };
 latex-tools-dev = {
   revision = 69872;
@@ -29393,6 +31527,7 @@ latex-tools-dev = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2024-06-01_pre-release_1";
+  hasCatalogue = true;
 };
 latex-uni8 = {
   revision = 49729;
@@ -29403,6 +31538,7 @@ latex-uni8 = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.03";
+  hasCatalogue = true;
 };
 latex-veryshortguide = {
   revision = 55228;
@@ -29412,6 +31548,7 @@ latex-veryshortguide = {
   sha512.doc = "e2c521e768ea425312a400d88c893404c0f86c5886f595162b2a03493836ee1a949e2feebf8a8b3c9d6450630ff644b8973374f9963c67478af29e2a432d2f9d";
   license = [ "lppl13c" ];
   version = "0.7";
+  hasCatalogue = true;
 };
 latex-via-exemplos = {
   revision = 68627;
@@ -29421,14 +31558,17 @@ latex-via-exemplos = {
   sha512.doc = "605dba889bfa1ad23b2990b2f0f40db42947b718cd272d8f61243818d40ad9a552fb61f87ff4e3844e580d3acaaa9842c2484c62c5c5dfb4450755db3fb02758";
   license = [ "gpl2Plus" ];
   version = "0.5.10";
+  hasCatalogue = true;
 };
 latex-web-companion = {
   revision = 29349;
+  catalogue = "lwc-examples";
   shortdesc = "Examples from The LaTeX Web Companion";
   stripPrefix = 0;
   sha512.run = "5f45c7f74a0e97b938009ada69146875e141edd556165b62185553b0ce5f590d5ca6f93a875dae1c546ebc788156d5cfc69c46535000adfe6933abe79a2fb06d";
   sha512.doc = "a972860f65d763c6fb45e9726e5dd7b8234509b90634f45b8b25e090da92d0ac577bf8b33ea7b0a0f91e4e5639bf62c07086dc36708ae697c1e16e644acc83f0";
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 latex2e-help-texinfo = {
   revision = 65552;
@@ -29438,6 +31578,7 @@ latex2e-help-texinfo = {
   sha512.doc = "d4584d9259f3c1867e7445d4a219e4decc5ba3b305e20d1e780180a47fbad8df4d55552726d8288e78c8388823a2b652b81080c8139b00f4ea3ca10e5789375b";
   hasInfo = true;
   license = [ "free" ];
+  hasCatalogue = true;
 };
 latex2e-help-texinfo-fr = {
   revision = 64228;
@@ -29447,15 +31588,18 @@ latex2e-help-texinfo-fr = {
   sha512.doc = "52f6aea9ac2393a73d7dc7ce8ad4d6f08e0a224397199d5def97412502026717e8cb966552368899c50718a1049b1ad4610d2d23150a45bee55cc2c776003db7";
   hasInfo = true;
   license = [ "publicDomain" ];
+  hasCatalogue = true;
 };
 latex2e-help-texinfo-spanish = {
   revision = 65614;
+  catalogue = "latex2e-help-texinfo";
   shortdesc = "Unofficial reference manual covering LaTeX2e";
   stripPrefix = 0;
   sha512.run = "870c8f3af54ac42df5f4958669cf730cd16084c985f0b377c5aba9d526b8f7be14b367791d2c0a1f1a715739390ab63777ff2a92e7f9aad09897c8bbecff495e";
   sha512.doc = "4c751a7305e089dab61bf991436ab1e612cfca0d17e416e21d659c04ef32eeb2d14dbeb09d63649a2b79f842766a218c43ae2c6fbeeba5549f039f991049a79d";
   hasInfo = true;
   license = [ "free" ];
+  hasCatalogue = true;
 };
 latex2man = {
   revision = 64477;
@@ -29467,6 +31611,7 @@ latex2man = {
   hasRunfiles = true;
   license = [ "lppl1" ];
   version = "1.29";
+  hasCatalogue = true;
 };
 latex2man.binfiles = [
   "latex2man"
@@ -29482,6 +31627,7 @@ latex2nemeth = {
   ];
   license = [ "gpl3Only" ];
   version = "1.1.3";
+  hasCatalogue = true;
 };
 latex2nemeth.binfiles = [
   "latex2nemeth"
@@ -29496,6 +31642,7 @@ latex2pydata = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.1";
+  hasCatalogue = true;
 };
 latex4musicians = {
   revision = 49759;
@@ -29505,6 +31652,7 @@ latex4musicians = {
   sha512.doc = "738c2c467d9df87cb1eccf0442b5c94a97a3c4c2b329d78d80b05d2adf9e3be11aaf2fb407ebc29f07e6455e6533464d981ae65122b080aebabdfaa29cf71b61";
   license = [ "fdl13Only" ];
   version = "1.0.1";
+  hasCatalogue = true;
 };
 latex4wp = {
   revision = 68096;
@@ -29514,6 +31662,7 @@ latex4wp = {
   sha512.doc = "eae8e0b5e4fe28311508b09b4b8b03ac31469e32772427c5d016bf43d48e458fea06f9dcf9ed696e1eaaea7bfd6b0ef4661d8b84c2bdedec44ca35c782079bf9";
   license = [ "fdl13Only" ];
   version = "1.2";
+  hasCatalogue = true;
 };
 latex4wp-it = {
   revision = 36000;
@@ -29523,6 +31672,7 @@ latex4wp-it = {
   sha512.doc = "c0c527bc7e9e71038316be5c6a57f4200ed69e7ed6fa0f066923cb14d14e20e90213cf0b989d3ba746bdb3e2263cf1daba56db3073017a0d7582e40640d35fd3";
   license = [ "fdl13Only" ];
   version = "1.0.10";
+  hasCatalogue = true;
 };
 latexbangla = {
   revision = 55475;
@@ -29533,6 +31683,7 @@ latexbangla = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.2";
+  hasCatalogue = true;
 };
 latexbug = {
   revision = 63596;
@@ -29544,6 +31695,7 @@ latexbug = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0n";
+  hasCatalogue = true;
 };
 latexcheat = {
   revision = 15878;
@@ -29553,6 +31705,7 @@ latexcheat = {
   sha512.doc = "28abbdc3b53c245b0cfb6ab68549661a72d37df004a5c760f5021e91b1df892b02872c7e20f328c7dd4624edff96f3b1fadfb46cf35d080c6b7c5635dc36adfc";
   license = [ "lppl13c" ];
   version = "1.13";
+  hasCatalogue = true;
 };
 latexcheat-de = {
   revision = 35702;
@@ -29561,6 +31714,7 @@ latexcheat-de = {
   sha512.run = "84de8075c1ba86467c8b34ed614462953ca8b9a237bb84453b2f9a1482eebfdb628c3e460d38da126416cc111387d68d3f479c5806ecbf06d079e47c35b88ca6";
   sha512.doc = "dda8002178b55e155f7ce1f49f57f928b6c5097007daf36aa473c1a2d07aef4c3ec5e1c238537c0531731af0cb0d51804b0c0310be63954f112f266e737c7d37";
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 latexcheat-esmx = {
   revision = 36866;
@@ -29570,6 +31724,7 @@ latexcheat-esmx = {
   sha512.doc = "a45f2db2445e2daec8b31e995669a189c1d201f457e06de7fc2a85ad85686b31fcf70040e7840e1168e29b2e5caf796c45b6ce934780fa5982d0750438263606";
   license = [ "lppl13c" ];
   version = "2.00";
+  hasCatalogue = true;
 };
 latexcheat-ptbr = {
   revision = 15878;
@@ -29579,6 +31734,7 @@ latexcheat-ptbr = {
   sha512.doc = "00369fce725567a85310afd3063a4a20e670d8a0c57ef7e4515579ee0f91157f44bac2471b076c2ba51253e2c172447cc4b915877d80b0c43874c4e125f5f9d4";
   license = [ "lppl13c" ];
   version = "1.13";
+  hasCatalogue = true;
 };
 latexcolors = {
   revision = 49888;
@@ -29590,6 +31746,7 @@ latexcolors = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.1a";
+  hasCatalogue = true;
 };
 latexconfig = {
   revision = 68923;
@@ -29606,6 +31763,7 @@ latexcourse-rug = {
   sha512.doc = "aeaeeef2c43a5ddf782a91152c9e2e18f00d9b3e18b7023837920a53eb390652d7ea85afcae338519a00b84a972a723eedd7819e73944ef7015f8c028822fea9";
   license = [ "free" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 latexdemo = {
   revision = 67201;
@@ -29617,6 +31775,7 @@ latexdemo = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.2";
+  hasCatalogue = true;
 };
 latexdiff = {
   revision = 64980;
@@ -29627,6 +31786,7 @@ latexdiff = {
   hasRunfiles = true;
   license = [ "gpl3Only" ];
   version = "1.3.3";
+  hasCatalogue = true;
 };
 latexdiff.binfiles = [
   "latexdiff"
@@ -29643,6 +31803,7 @@ latexfileinfo-pkgs = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.22";
+  hasCatalogue = true;
 };
 latexfileversion = {
   revision = 29349;
@@ -29652,6 +31813,7 @@ latexfileversion = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.3";
+  hasCatalogue = true;
 };
 latexfileversion.binfiles = [
   "latexfileversion"
@@ -29665,6 +31827,7 @@ latexgit = {
   sha512.source = "8a09f128428644335c9d909d23acc91ede2020304ebf009be00928cdef670aba23d245b979e5fd8d927c9d0e652bc195c717a744015a31fbb2aed1c566abfaf4";
   hasRunfiles = true;
   license = [ "gpl3Only" ];
+  hasCatalogue = true;
 };
 latexindent = {
   revision = 69472;
@@ -29674,6 +31837,7 @@ latexindent = {
   hasRunfiles = true;
   license = [ "gpl3Only" ];
   version = "3.23.6";
+  hasCatalogue = true;
 };
 latexindent.binfiles = [
   "latexindent"
@@ -29687,6 +31851,7 @@ latexmk = {
   hasRunfiles = true;
   license = [ "gpl2Only" ];
   version = "4.83";
+  hasCatalogue = true;
 };
 latexmk.binfiles = [
   "latexmk"
@@ -29700,6 +31865,7 @@ latexmp = {
   hasRunfiles = true;
   license = [ "publicDomain" ];
   version = "1.2.1";
+  hasCatalogue = true;
 };
 latexpand = {
   revision = 66226;
@@ -29709,6 +31875,7 @@ latexpand = {
   hasRunfiles = true;
   license = [ "bsd3" ];
   version = "1.7.2";
+  hasCatalogue = true;
 };
 latexpand.binfiles = [
   "latexpand"
@@ -29722,6 +31889,7 @@ latino-sine-flexione = {
   hasRunfiles = true;
   license = [ "publicDomain" ];
   version = "1.2";
+  hasCatalogue = true;
 };
 lato = {
   revision = 54512;
@@ -29735,6 +31903,7 @@ lato = {
   hasRunfiles = true;
   license = [ "ofl" "lppl13c" ];
   version = "3.3";
+  hasCatalogue = true;
 };
 layaureo = {
   revision = 19087;
@@ -29746,6 +31915,7 @@ layaureo = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.2";
+  hasCatalogue = true;
 };
 layouts = {
   revision = 42428;
@@ -29757,6 +31927,7 @@ layouts = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.6d";
+  hasCatalogue = true;
 };
 lazylist = {
   revision = 17691;
@@ -29767,6 +31938,7 @@ lazylist = {
   hasRunfiles = true;
   license = [ "lppl12" ];
   version = "1.0a";
+  hasCatalogue = true;
 };
 lccaps = {
   revision = 46432;
@@ -29778,6 +31950,7 @@ lccaps = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 lcd = {
   revision = 16549;
@@ -29789,9 +31962,11 @@ lcd = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.3";
+  hasCatalogue = true;
 };
 lcdftypetools = {
   revision = 52851;
+  catalogue = "lcdf-typetools";
   shortdesc = "A bundle of outline font manipulation tools";
   deps = [
     "glyphlist"
@@ -29800,6 +31975,7 @@ lcdftypetools = {
   sha512.doc = "5a1dd1e2fd79351afc65d6786b24aebd9681a2b9e92755b44a836b47da5ceb1817f085483f306991a113dc0c26edfcd84839dec93bb46a003034536f31b31e5f";
   hasManpages = true;
   license = [ "gpl1Only" ];
+  hasCatalogue = true;
 };
 lcdftypetools.binfiles = [
   "cfftot1"
@@ -29824,6 +32000,7 @@ lcg = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.3";
+  hasCatalogue = true;
 };
 lcyw = {
   revision = 15878;
@@ -29835,6 +32012,7 @@ lcyw = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 leading = {
   revision = 15878;
@@ -29846,6 +32024,7 @@ leading = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.3";
+  hasCatalogue = true;
 };
 leadsheets = {
   revision = 61504;
@@ -29856,6 +32035,7 @@ leadsheets = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.7";
+  hasCatalogue = true;
 };
 leaflet = {
   revision = 56878;
@@ -29867,6 +32047,7 @@ leaflet = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.1a";
+  hasCatalogue = true;
 };
 lebhart = {
   revision = 70050;
@@ -29879,6 +32060,7 @@ lebhart = {
   sha512.doc = "9932c964d79640a85a28dcbf523625c4b291f9a2a6f89be6a4c416c7318a7e55c15923406457ad5ccac8ab4257aba21b1f97ca3e2acba6339178c7307895ee10";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 lecturer = {
   revision = 23916;
@@ -29888,6 +32070,7 @@ lecturer = {
   sha512.doc = "97892442ebe9263cbdc8e35ecbc2f3acebdaa886e5fe814bcc0ada98b0cecd9e140a0d103adc9eb0aab1e5e48e9d7f4ab42e786d52f8fcc96d03db17c51fc17b";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 lectures = {
   revision = 53642;
@@ -29898,6 +32081,7 @@ lectures = {
   hasRunfiles = true;
   license = [ "mit" ];
   version = "1.0.5";
+  hasCatalogue = true;
 };
 lectureslides = {
   revision = 62292;
@@ -29908,6 +32092,7 @@ lectureslides = {
   hasRunfiles = true;
   license = [ "cc-by-40" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 ledmac = {
   revision = 41811;
@@ -29919,6 +32104,7 @@ ledmac = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.19.4";
+  hasCatalogue = true;
 };
 leftidx = {
   revision = 15878;
@@ -29929,6 +32115,7 @@ leftidx = {
   sha512.source = "3339968b569bf6fba6d7332399d0727148add95c1c0dc2ae06626269c156a4e365dbbf672b652d3c5d097d0570b0955e6cb34255e3f8383f05ea52fa2c12e375";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 leftindex = {
   revision = 69660;
@@ -29939,6 +32126,7 @@ leftindex = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.2beta";
+  hasCatalogue = true;
 };
 leipzig = {
   revision = 52450;
@@ -29950,6 +32138,7 @@ leipzig = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.3";
+  hasCatalogue = true;
 };
 lengthconvert = {
   revision = 55064;
@@ -29961,6 +32150,7 @@ lengthconvert = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0a";
+  hasCatalogue = true;
 };
 letgut = {
   revision = 70496;
@@ -29972,6 +32162,7 @@ letgut = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.9.9";
+  hasCatalogue = true;
 };
 letltxmacro = {
   revision = 53022;
@@ -29983,6 +32174,7 @@ letltxmacro = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.6";
+  hasCatalogue = true;
 };
 letterspacing = {
   revision = 54266;
@@ -29991,6 +32183,7 @@ letterspacing = {
   sha512.run = "30fdc0f87976feb698b9736e9deb6726746e4c25e4ed4a4637ff26699e171738be6447e8e2d02d154cf57944aa988208ee97859c0a7fac784d55fa6ef889b86c";
   hasRunfiles = true;
   license = [ "knuth" ];
+  hasCatalogue = true;
 };
 letterswitharrows = {
   revision = 59993;
@@ -30001,6 +32194,7 @@ letterswitharrows = {
   sha512.source = "50e2521b55a238cd6e461b3bcde326c5948573363988bf3bdcc428d04341728dbf73e891d09af65ca1832924cdbd0b0320bd94d662afdf78b3d1039ca3519231";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 lettre = {
   revision = 54722;
@@ -30011,6 +32205,7 @@ lettre = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "3.002";
+  hasCatalogue = true;
 };
 lettrine = {
   revision = 69508;
@@ -30022,15 +32217,18 @@ lettrine = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.60";
+  hasCatalogue = true;
 };
 levy = {
   revision = 21750;
+  catalogue = "levy-font";
   shortdesc = "Fonts for typesetting classical greek";
   stripPrefix = 0;
   sha512.run = "a71294df1b2bdb1402892ebc0c82dd60275cf41f6844cdd284e1ba73c8515e98258118c5a1e5158fb6d09acdc53427eb4e3f62f24591fd2eafc90d0bb69b71ea";
   sha512.doc = "e69a1e2e421100a50416f86bda40702aa9a4d5c5b0b8c783e328e56e1ce587f832cad984fee2cad259603e893413155bc4539e853e1df0d95c89e9167c67b2e1";
   hasRunfiles = true;
   license = [ "gpl2Only" ];
+  hasCatalogue = true;
 };
 lewis = {
   revision = 15878;
@@ -30041,6 +32239,7 @@ lewis = {
   hasRunfiles = true;
   license = [ "publicDomain" ];
   version = "0.1";
+  hasCatalogue = true;
 };
 lexend = {
   revision = 57564;
@@ -30051,6 +32250,7 @@ lexend = {
   hasRunfiles = true;
   license = [ "lppl13c" "ofl" ];
   version = "1.1.0.70";
+  hasCatalogue = true;
 };
 lexikon = {
   revision = 17364;
@@ -30061,6 +32261,7 @@ lexikon = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0c";
+  hasCatalogue = true;
 };
 lexref = {
   revision = 36026;
@@ -30071,6 +32272,7 @@ lexref = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1a";
+  hasCatalogue = true;
 };
 lfb = {
   revision = 15878;
@@ -30081,6 +32283,7 @@ lfb = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 lgreek = {
   revision = 21818;
@@ -30090,6 +32293,7 @@ lgreek = {
   sha512.doc = "915df985f4766f492a70a35342e086567d17c155ea0dfce5514c6edebaf1dacb78998dc4bf5cc44415fef580a7779083bc2261a22dfd668e8f2023f1f15bff35";
   hasRunfiles = true;
   license = [ "gpl2Only" ];
+  hasCatalogue = true;
 };
 lgrmath = {
   revision = 65038;
@@ -30101,6 +32305,7 @@ lgrmath = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 lh = {
   revision = 15878;
@@ -30115,6 +32320,7 @@ lh = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "3.5g";
+  hasCatalogue = true;
 };
 lhcyr = {
   revision = 31795;
@@ -30124,6 +32330,7 @@ lhcyr = {
   sha512.source = "18fc370261acff25634107705a36d06ec6367da95526a79fdd78c887234a2f2a6a17147eb317e97effa2ae8fe8e21e8df71cff3da5572055356386d26d2b06d8";
   hasRunfiles = true;
   license = [ "free" ];
+  hasCatalogue = true;
 };
 lhelp = {
   revision = 23638;
@@ -30135,6 +32342,7 @@ lhelp = {
   hasRunfiles = true;
   license = [ "gpl1Only" ];
   version = "2.0";
+  hasCatalogue = true;
 };
 libertine = {
   revision = 68981;
@@ -30154,6 +32362,7 @@ libertine = {
   hasRunfiles = true;
   license = [ "gpl1Only" "ofl" "lppl13c" ];
   version = "5.3.0";
+  hasCatalogue = true;
 };
 libertinegc = {
   revision = 44616;
@@ -30167,6 +32376,7 @@ libertinegc = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.01";
+  hasCatalogue = true;
 };
 libertinus = {
   revision = 61719;
@@ -30177,6 +32387,7 @@ libertinus = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.02";
+  hasCatalogue = true;
 };
 libertinus-fonts = {
   revision = 57948;
@@ -30187,6 +32398,7 @@ libertinus-fonts = {
   hasRunfiles = true;
   license = [ "ofl" ];
   version = "7.040";
+  hasCatalogue = true;
 };
 libertinus-otf = {
   revision = 68333;
@@ -30197,6 +32409,7 @@ libertinus-otf = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.32";
+  hasCatalogue = true;
 };
 libertinus-type1 = {
   revision = 67450;
@@ -30209,6 +32422,7 @@ libertinus-type1 = {
   sha512.doc = "c656af53b98735bec8c63c3e56160da943379f4b908f553a27cd1c82111b201eb15c1f1eb1b6ff89fee281c27ea36d6fffc5592b75722cd561c8770ef2d3f6a6";
   hasRunfiles = true;
   license = [ "gpl2Only" "ofl" "lppl13c" ];
+  hasCatalogue = true;
 };
 libertinust1math = {
   revision = 69440;
@@ -30222,6 +32436,7 @@ libertinust1math = {
   hasRunfiles = true;
   license = [ "ofl" "lppl13c" ];
   version = "2.0.4";
+  hasCatalogue = true;
 };
 libgreek = {
   revision = 65004;
@@ -30233,6 +32448,7 @@ libgreek = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 librarian = {
   revision = 19880;
@@ -30243,6 +32459,7 @@ librarian = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 librebaskerville = {
   revision = 64421;
@@ -30255,6 +32472,7 @@ librebaskerville = {
   sha512.doc = "9cfecbbfea90ff99af78bac088674061c7123ea046aa42da806fc09d6fe5e88c94fbaa3053bf87b563e55f514eda5cda108d5bf6b096253e79fa0d09567221ee";
   hasRunfiles = true;
   license = [ "ofl" "lppl13c" ];
+  hasCatalogue = true;
 };
 librebodoni = {
   revision = 64431;
@@ -30267,6 +32485,7 @@ librebodoni = {
   sha512.doc = "be63dcbe34c1f09f560f85aba54e469b3b14331a4ccaf8e44ce7ffcc649ec1a0c4ba2494ff844cede73943a646cc8c62c8bf7a949b602389e4abf9ae5181331e";
   hasRunfiles = true;
   license = [ "ofl" "lppl13c" ];
+  hasCatalogue = true;
 };
 librecaslon = {
   revision = 64432;
@@ -30279,6 +32498,7 @@ librecaslon = {
   sha512.doc = "9f7c6662af462f0c73b97de098cc4bbff5a3060e44a72ce294b175c5d5a3f520a93026b1bab17bdaf5c48d2de55c4045730386f7f8f046b3ff797c4d715acb8f";
   hasRunfiles = true;
   license = [ "ofl" "lppl13c" ];
+  hasCatalogue = true;
 };
 librefranklin = {
   revision = 64441;
@@ -30291,6 +32511,7 @@ librefranklin = {
   sha512.doc = "092dfd68010c10942f030828552e4609ded2b27bbd13d213556ad301629893748ace3380aefda1adc8ad23261b2de253599f6784b461fac8a1bf49cd6e1370d8";
   hasRunfiles = true;
   license = [ "lppl13c" "ofl" ];
+  hasCatalogue = true;
 };
 libris = {
   revision = 19409;
@@ -30305,6 +32526,7 @@ libris = {
   hasRunfiles = true;
   license = [ "gpl1Only" ];
   version = "1.007";
+  hasCatalogue = true;
 };
 lie-hasse = {
   revision = 61719;
@@ -30315,6 +32537,7 @@ lie-hasse = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 liftarm = {
   revision = 62981;
@@ -30325,6 +32548,7 @@ liftarm = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.0";
+  hasCatalogue = true;
 };
 light-latex-make = {
   revision = 66473;
@@ -30338,6 +32562,7 @@ light-latex-make = {
   ];
   license = [ "mit" ];
   version = "1.2.0";
+  hasCatalogue = true;
 };
 light-latex-make.binfiles = [
   "llmk"
@@ -30351,6 +32576,7 @@ ligtype = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.3";
+  hasCatalogue = true;
 };
 lilyglyphs = {
   revision = 56473;
@@ -30364,6 +32590,7 @@ lilyglyphs = {
   ];
   license = [ "lppl13c" ];
   version = "0.2.4";
+  hasCatalogue = true;
 };
 lilyglyphs.binfiles = [
   "lily-glyph-commands"
@@ -30380,6 +32607,7 @@ limap = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.2";
+  hasCatalogue = true;
 };
 limecv = {
   revision = 61199;
@@ -30391,6 +32619,7 @@ limecv = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.1.12";
+  hasCatalogue = true;
 };
 lineara = {
   revision = 63169;
@@ -30404,6 +32633,7 @@ lineara = {
   sha512.source = "6476de5673f0e0f4896b0f579bd37e31c7301916dff1de1a957044b7782c04c43b5b5add887960d1a7013648a7e352d2655bd9a8e57dd0cafd31c851cef5f21e";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 linebreaker = {
   revision = 66639;
@@ -30414,6 +32644,7 @@ linebreaker = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.1c";
+  hasCatalogue = true;
 };
 linegoal = {
   revision = 21523;
@@ -30425,6 +32656,7 @@ linegoal = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.9";
+  hasCatalogue = true;
 };
 lineno = {
   revision = 67171;
@@ -30435,6 +32667,7 @@ lineno = {
   hasRunfiles = true;
   license = [ "lppl13a" ];
   version = "5.3";
+  hasCatalogue = true;
 };
 ling-macros = {
   revision = 42268;
@@ -30444,6 +32677,7 @@ ling-macros = {
   sha512.doc = "fe424a7db4be743168c4b1016fc25c95d33cf9d66767b39db0e79a5ba1bb667c76b9b5f10b23a08449362a3fef281d60f0b53e2b0f196846efe9f4765f3f08c6";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 linguex = {
   revision = 30815;
@@ -30454,6 +32688,7 @@ linguex = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "4.3";
+  hasCatalogue = true;
 };
 linguisticspro = {
   revision = 64858;
@@ -30466,6 +32701,7 @@ linguisticspro = {
   sha512.doc = "8f0c8937cacdec2e2ea4999dd1bb45af96a99a3707ef22b54a2bf1e0c745d663550ff0b68d80cf895e8bdfa1f279873c4725c7851af547f06155589d8e5bfde5";
   hasRunfiles = true;
   license = [ "lppl13c" "ofl" ];
+  hasCatalogue = true;
 };
 linop = {
   revision = 41304;
@@ -30476,6 +32712,7 @@ linop = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.1";
+  hasCatalogue = true;
 };
 lion-msc = {
   revision = 55415;
@@ -30486,6 +32723,7 @@ lion-msc = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.30";
+  hasCatalogue = true;
 };
 lipsum = {
   revision = 60561;
@@ -30497,6 +32735,7 @@ lipsum = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.7";
+  hasCatalogue = true;
 };
 lisp-on-tex = {
   revision = 38722;
@@ -30507,6 +32746,7 @@ lisp-on-tex = {
   hasRunfiles = true;
   license = [ "bsd3" ];
   version = "2.0";
+  hasCatalogue = true;
 };
 listbib = {
   revision = 29349;
@@ -30517,6 +32757,7 @@ listbib = {
   hasRunfiles = true;
   license = [ "gpl1Only" ];
   version = "2.2";
+  hasCatalogue = true;
 };
 listbib.binfiles = [
   "listbib"
@@ -30530,6 +32771,7 @@ listing = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.2";
+  hasCatalogue = true;
 };
 listings = {
   revision = 70052;
@@ -30541,6 +32783,7 @@ listings = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.10";
+  hasCatalogue = true;
 };
 listings-ext = {
   revision = 29349;
@@ -30551,6 +32794,7 @@ listings-ext = {
   hasRunfiles = true;
   license = [ "lppl12" ];
   version = "67";
+  hasCatalogue = true;
 };
 listings-ext.binfiles = [
   "listings-ext.sh"
@@ -30565,6 +32809,7 @@ listingsutf8 = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.5";
+  hasCatalogue = true;
 };
 listlbls = {
   revision = 67215;
@@ -30576,6 +32821,7 @@ listlbls = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.04";
+  hasCatalogue = true;
 };
 listliketab = {
   revision = 15878;
@@ -30586,6 +32832,7 @@ listliketab = {
   sha512.source = "68b75e9dcce30acb59d928f4ff95732cd7e37061d31625f8c1835ef6b8da85ef39f4d8ee86b50e299e71cace2ca5307c25641042f325a93a93bd04bf804ec5b4";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 listofitems = {
   revision = 70583;
@@ -30596,6 +32843,7 @@ listofitems = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.65";
+  hasCatalogue = true;
 };
 listofsymbols = {
   revision = 16134;
@@ -30607,6 +32855,7 @@ listofsymbols = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.2";
+  hasCatalogue = true;
 };
 litebook = {
   revision = 70583;
@@ -30617,6 +32866,7 @@ litebook = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.1c";
+  hasCatalogue = true;
 };
 litesolution = {
   revision = 70608;
@@ -30627,6 +32877,7 @@ litesolution = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.0a";
+  hasCatalogue = true;
 };
 litetable = {
   revision = 70355;
@@ -30637,6 +32888,7 @@ litetable = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.4c";
+  hasCatalogue = true;
 };
 lithuanian = {
   revision = 66461;
@@ -30649,6 +32901,7 @@ lithuanian = {
   sha512.doc = "ae7a5e3bea2bd62a0cdbbfbde7e0d9e06554fa4b3bb825b45febed42556fa101fd2e6c611ad9fc1cc87ed5c92540977780fde47ae78a89dd37b70f89c94b5e8d";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 liturg = {
   revision = 15878;
@@ -30660,6 +32913,7 @@ liturg = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 lkproof = {
   revision = 20021;
@@ -30670,6 +32924,7 @@ lkproof = {
   hasRunfiles = true;
   license = [ "gpl1Only" ];
   version = "3.1";
+  hasCatalogue = true;
 };
 llncs = {
   revision = 69629;
@@ -30680,6 +32935,7 @@ llncs = {
   hasRunfiles = true;
   license = [ "cc-by-40" ];
   version = "2.24";
+  hasCatalogue = true;
 };
 llncsconf = {
   revision = 63136;
@@ -30690,6 +32946,7 @@ llncsconf = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.2.0";
+  hasCatalogue = true;
 };
 lm = {
   revision = 67718;
@@ -30703,6 +32960,7 @@ lm = {
   hasRunfiles = true;
   license = [ "gfl" ];
   version = "2.005";
+  hasCatalogue = true;
 };
 lm-math = {
   revision = 67718;
@@ -30713,6 +32971,7 @@ lm-math = {
   hasRunfiles = true;
   license = [ "gfl" ];
   version = "1.959";
+  hasCatalogue = true;
 };
 lmake = {
   revision = 25552;
@@ -30724,6 +32983,7 @@ lmake = {
   hasRunfiles = true;
   license = [ "lppl12" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 lni = {
   revision = 69361;
@@ -30735,6 +32995,7 @@ lni = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.8.1";
+  hasCatalogue = true;
 };
 lobster2 = {
   revision = 64442;
@@ -30747,6 +33008,7 @@ lobster2 = {
   sha512.doc = "a02034161dcd7d09ab14d907fde0b4cbc570ee7e13fc1945e18c71eaffe90e5dc039266f0ac83dd7887fa1e298add0d2be9e4259cb58f6dbfe13b7bce228ab8c";
   hasRunfiles = true;
   license = [ "ofl" "lppl13c" ];
+  hasCatalogue = true;
 };
 locality = {
   revision = 20422;
@@ -30758,6 +33020,7 @@ locality = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.2";
+  hasCatalogue = true;
 };
 localloc = {
   revision = 56496;
@@ -30768,6 +33031,7 @@ localloc = {
   sha512.source = "9a19531358e4809a90c1e571a8f7c507ec1b0807a009627ad2dfa3ebdf97fb749a4f57441b0855e44cae93ccbdc64e79b640de078fb9ccdca1de891a2d156eae";
   hasRunfiles = true;
   license = [ "free" ];
+  hasCatalogue = true;
 };
 logbox = {
   revision = 24499;
@@ -30779,6 +33043,7 @@ logbox = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 logical-markup-utils = {
   revision = 15878;
@@ -30788,6 +33053,7 @@ logical-markup-utils = {
   sha512.doc = "80c44068a6e474071e40a0bf3dc67f0201b21eb84a041fad8423c59c9e34ce138833c54ead638979357dc3026eea55da034daa05e71a56ecabe701ebf53faf24";
   hasRunfiles = true;
   license = [ "gpl3Only" ];
+  hasCatalogue = true;
 };
 logicproof = {
   revision = 33254;
@@ -30798,6 +33064,7 @@ logicproof = {
   sha512.source = "4cde464059a65161c6ab069ef0c8905e4e6cefb7ebfd8c7c3b2af909209af4a911dd1bb0daee5b27868305660601187fe7a105660b395de98ae3d30864f012ea";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 logicpuzzle = {
   revision = 34491;
@@ -30808,6 +33075,7 @@ logicpuzzle = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.5";
+  hasCatalogue = true;
 };
 logix = {
   revision = 63688;
@@ -30818,6 +33086,7 @@ logix = {
   hasRunfiles = true;
   license = [ "ofl" "lppl13c" ];
   version = "1.13";
+  hasCatalogue = true;
 };
 logoetalab = {
   revision = 68916;
@@ -30828,6 +33097,7 @@ logoetalab = {
   hasRunfiles = true;
   license = [ "lppl13c" "cc-by-20" ];
   version = "0.1.1";
+  hasCatalogue = true;
 };
 logpap = {
   revision = 15878;
@@ -30839,6 +33109,7 @@ logpap = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.6";
+  hasCatalogue = true;
 };
 logreq = {
   revision = 53003;
@@ -30852,6 +33123,7 @@ logreq = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 lollipop = {
   revision = 69742;
@@ -30874,6 +33146,7 @@ lollipop = {
   hasRunfiles = true;
   license = [ "gpl3Only" ];
   version = "1.07";
+  hasCatalogue = true;
 };
 lollipop.binfiles = [
   "lollipop"
@@ -30887,6 +33160,7 @@ longdivision = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.2.2";
+  hasCatalogue = true;
 };
 longfbox = {
   revision = 39028;
@@ -30897,6 +33171,7 @@ longfbox = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 longfigure = {
   revision = 34302;
@@ -30908,6 +33183,7 @@ longfigure = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 longnamefilelist = {
   revision = 27889;
@@ -30919,6 +33195,7 @@ longnamefilelist = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.2";
+  hasCatalogue = true;
 };
 loops = {
   revision = 30704;
@@ -30929,6 +33206,7 @@ loops = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.3";
+  hasCatalogue = true;
 };
 lparse = {
   revision = 65693;
@@ -30939,6 +33217,7 @@ lparse = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.1.0";
+  hasCatalogue = true;
 };
 lpform = {
   revision = 36918;
@@ -30948,6 +33227,7 @@ lpform = {
   sha512.doc = "92ddf3b473e13fe8b77ad955d55acbe7a6da34381bfaac78184342a900f2c9bb1e0981d5ebdb440cf0f44affe2eb0dd862f9b51d2a40c9abd90f1dbe81584c9d";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 lpic = {
   revision = 20843;
@@ -30958,6 +33238,7 @@ lpic = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.8";
+  hasCatalogue = true;
 };
 lplfitch = {
   revision = 31077;
@@ -30969,6 +33250,7 @@ lplfitch = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.9";
+  hasCatalogue = true;
 };
 lps = {
   revision = 21322;
@@ -30980,6 +33262,7 @@ lps = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.7";
+  hasCatalogue = true;
 };
 lroundrect = {
   revision = 39804;
@@ -30991,6 +33274,7 @@ lroundrect = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 lsc = {
   revision = 15878;
@@ -31000,6 +33284,7 @@ lsc = {
   sha512.doc = "5d0550421ee0657c378cc1ad8159e16e43644f533e3d8a013d917c494bbb8d11cba79b99fcaa7bdcf8ef5f5deb88d144ed64d75a5682fe4c4187c60c634297f5";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 lshort-bulgarian = {
   revision = 15878;
@@ -31008,15 +33293,18 @@ lshort-bulgarian = {
   sha512.run = "b528c16903ca8ed5ce69f5e2397dff8f05b13016384bc1304980cad71d86bbb55004d41db92dc29dd412a12b9a0a1b1ea99afcbea621a25bb20da4639d008776";
   sha512.doc = "7cd22cad45d7ef2972679cf2a3653c3bbcb1d9bcfe94a65fb9dac23760de05b659470ca45cf8be13513924fa1cbb98599a304a51bc18f8f4d6631f082e662bc4";
   license = [ "publicDomain" ];
+  hasCatalogue = true;
 };
 lshort-chinese = {
   revision = 67025;
+  catalogue = "lshort-zh-cn";
   shortdesc = "Introduction to LaTeX, in Chinese";
   stripPrefix = 0;
   sha512.run = "6d6ac34f79c3d5447c1bbd7f2c87071a92867bd770fd023bc4d6fb48500d27f1b1a8706a727b0d0a7b47eaa9a639c6b5a691b7d21a5e178eb79131cb4bd75b6c";
   sha512.doc = "c220f086c2e0c9bd52ba3ee1eddd2afcb0aaed1c4fc4b9ebf854ce57b4720df7ab3c5475f3164cf740b3020c14c5682e1798e43c8ad9e39eba596a24b04644d3";
   license = [ "fdl13Only" ];
   version = "6.04";
+  hasCatalogue = true;
 };
 lshort-czech = {
   revision = 55643;
@@ -31026,6 +33314,7 @@ lshort-czech = {
   sha512.doc = "10de238b8152907ec04834d6b4737cebb13bd6567c9867e19e2003d123299c733012569cd64a66d31a79894f9b37c1fc409cd5b76ed10832762988fc318875e5";
   license = [ "gpl1Only" ];
   version = "4.27";
+  hasCatalogue = true;
 };
 lshort-dutch = {
   revision = 15878;
@@ -31035,6 +33324,7 @@ lshort-dutch = {
   sha512.doc = "29fc8b6a2645f241e8af437de3a295be8d56a088bd7c7666c35b14f104f242e68ecef2757d62a393400d9f337eb685e48ebac06769259c723d634312a7288ab9";
   license = [ "gpl1Only" ];
   version = "1.3";
+  hasCatalogue = true;
 };
 lshort-english = {
   revision = 58309;
@@ -31044,6 +33334,7 @@ lshort-english = {
   sha512.doc = "ab6dccb0110d7033a36d743b9f8132ec5ab4a0b4b334ab7800dd68f9e65bdc7de6c5e766fba6a7a3596d3fd8d6a3a16299344fcbfd67585f1fbe5e519876d7ba";
   license = [ "gpl2Only" ];
   version = "6.4";
+  hasCatalogue = true;
 };
 lshort-estonian = {
   revision = 39323;
@@ -31053,6 +33344,7 @@ lshort-estonian = {
   sha512.doc = "e16397fac3e6cefa699b412ada1851c7792520da8af1230274fa1a337b890629b68f71d94b3894044f28e687c6aa60d766377e12232d0e522e82e18dc97428e3";
   license = [ "gpl2Only" ];
   version = "5.05";
+  hasCatalogue = true;
 };
 lshort-finnish = {
   revision = 15878;
@@ -31061,6 +33353,7 @@ lshort-finnish = {
   sha512.run = "997db393d16942e78e4f52eef886ac7b14cba7ec3fd0c88f8c2cc74fb6b35f3802c58c51ac0112cc2b086f9c3b965b5f8d508ea81a36edb7da1ce84ef83cd203";
   sha512.doc = "71c2e5c4d49a779f529a527cda5fcc6e55cfa0149fc2d9272ae7e69aecf2a8a361b057bcfdf5deaa7791073bc6252c3101f5ce0b8d231c779e99c34910a3343f";
   license = [ "publicDomain" ];
+  hasCatalogue = true;
 };
 lshort-french = {
   revision = 23332;
@@ -31070,6 +33363,7 @@ lshort-french = {
   sha512.doc = "2974f067584486528adf42a13cad28afd205f2f52680e89e8de33c4c0debdccb2d0d9d8259d6e2adaa5f86af0b9451232450d40ffacd9f63c43af2519cd8a06a";
   license = [ "gpl1Only" ];
   version = "5.01fr-0";
+  hasCatalogue = true;
 };
 lshort-german = {
   revision = 55643;
@@ -31079,6 +33373,7 @@ lshort-german = {
   sha512.doc = "69cebdd6a1444670a154d5cdd199022f6f1d6612b24b05fc8dc1e9f54a89fb65cda1f545341cd37616dbf6dd94077ccb924bf4b49f1473e45eb0bcd33f5f33a6";
   license = [ "opubl" ];
   version = "3.0c";
+  hasCatalogue = true;
 };
 lshort-italian = {
   revision = 57038;
@@ -31088,6 +33383,7 @@ lshort-italian = {
   sha512.doc = "6caa8b7d2795779ef010c0ef9ac387c73b15715929557a6227e0a8112f4d99717ad82fdcdf8d1fe18ad5ea9b502ed559bd7b44f73381475034b481eeb6ab1c9a";
   license = [ "gpl1Only" ];
   version = "6.2";
+  hasCatalogue = true;
 };
 lshort-japanese = {
   revision = 36207;
@@ -31096,6 +33392,7 @@ lshort-japanese = {
   sha512.run = "25de64f37ca5811ce39c8efc3e895c1deea317c8dd02ac3e091a41ff11ab7a4730a0e476d323d8375c41fd60401cf441c2c15d614a090092d66413701500d43c";
   sha512.doc = "83292d42fa21614a055420eeb372ae5cf21a9a15b999e0b39f1063f63ee7fe53f77ce771a8aa649e860827214138fbd435161cb3dc4b3fdf2b75775979d904cd";
   license = [ "gpl1Only" ];
+  hasCatalogue = true;
 };
 lshort-korean = {
   revision = 58468;
@@ -31104,6 +33401,7 @@ lshort-korean = {
   sha512.run = "3050ad46874a78c36d8bf247c00e2369c18e122ec89a36b0423df290ba8e06e9c5dbd1d9bba5485e370cd73dc500a6d2415b3d8f6de0eabb3932b9ae5515fb8c";
   sha512.doc = "6789054257f176828b341fe9ad258b1f7100d2fc880aab68244842317b45cea872ee49031ad2c1d376011772fb39d2ef05a700f962279f5ce3a286270b77ee1d";
   license = [ "fdl13Only" ];
+  hasCatalogue = true;
 };
 lshort-mongol = {
   revision = 15878;
@@ -31113,6 +33411,7 @@ lshort-mongol = {
   sha512.doc = "cb60632992b187e5cc80973b9e9848675b464b075b13356db171c1a7613c94dd9bf8ea53df47e0c36c910772316f4c43857c8e638819d8ece7c1ce1790fc9d29";
   license = [ "lppl13c" ];
   version = "4.26";
+  hasCatalogue = true;
 };
 lshort-persian = {
   revision = 31296;
@@ -31122,6 +33421,7 @@ lshort-persian = {
   sha512.doc = "9e7c43f3df8299db4bfad3c0b270c5b54a1448370e6782d095dd9a9b82ccc186aae98da86b2efe71c34031a5f4a07f54f4640de6d8b6fad913252979d440ccd1";
   license = [ "publicDomain" ];
   version = "5.01";
+  hasCatalogue = true;
 };
 lshort-polish = {
   revision = 63289;
@@ -31131,6 +33431,7 @@ lshort-polish = {
   sha512.doc = "abc5162a490b9646649dfdf50779ab12632eb3ddc6d1c2bae93a4bb00ef1f9387bc8d873a7b5c062b92a999c9d62b74e64b1688dd3582255f7386958649ee009";
   license = [ "gpl2Plus" ];
   version = "6.4PL1";
+  hasCatalogue = true;
 };
 lshort-portuguese = {
   revision = 55643;
@@ -31140,6 +33441,7 @@ lshort-portuguese = {
   sha512.doc = "19c55e5547d83fbce705121dbb09fe329c23cd42c1cedb812cc282bb447f9cc51ce0861e61a984e2863103a2bccaa6a4c7ffe8bd2913637930e42747c6947b02";
   license = [ "publicDomain" ];
   version = "5.01.0";
+  hasCatalogue = true;
 };
 lshort-russian = {
   revision = 55643;
@@ -31148,6 +33450,7 @@ lshort-russian = {
   sha512.run = "d6641dc4f19c740898dccc357aa1004860952d0a2add37c6c37fe69ac222dd8396e506ff6a00ef98f77d8cdcea2287c96258214159f08d8b63184eb014ececc3";
   sha512.doc = "b991cb5fc833446ab36c82beefa82afa026eda6b1084d99e6c4525687b82bf7c2f64f9cea38d244065cecf1b12a00331d4e70716880c5bf2509add05257accac";
   license = [ "gpl1Only" ];
+  hasCatalogue = true;
 };
 lshort-slovak = {
   revision = 15878;
@@ -31156,6 +33459,7 @@ lshort-slovak = {
   sha512.run = "bf3821d0846701c2e45d89578625f517567d401d613f5aa7aaa4cdfdf8c4c4f87abec22d6fccac21b274afdba9c29c21a6918fabef77f4cca506071341b7cdbe";
   sha512.doc = "8ee79c17e5ccc9dbb9f833b4f8927b22e7ce368f49f4d016fb936d2a5ec964791d9473b679a037d704efb269dc6caa1344168927a90a8e859527c64b0410996b";
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 lshort-slovenian = {
   revision = 68204;
@@ -31165,6 +33469,7 @@ lshort-slovenian = {
   sha512.doc = "851951cd5822f257ecd23d73901d833ba6067d3860002a4dd4449f23d5e7a50fa97ed579f5cbab8bc9494801055ef8f23f6f3249d9f6843a28f7da1b4f15409b";
   license = [ "gpl1Only" ];
   version = "4.20";
+  hasCatalogue = true;
 };
 lshort-spanish = {
   revision = 35050;
@@ -31174,6 +33479,7 @@ lshort-spanish = {
   sha512.doc = "f968352fe1e32a918c1d5ebfce16d3975c436539349af22b32bfae1ab06061ac2b2b85feaed3e8a28da89956f4d5948e7d1a6426766144b0c0ebec72ecfe99cb";
   license = [ "free" ];
   version = "0.5";
+  hasCatalogue = true;
 };
 lshort-thai = {
   revision = 55643;
@@ -31183,6 +33489,7 @@ lshort-thai = {
   sha512.doc = "fc805e2749305cff0164ccd8d0b043d26731fd6f39e19c0023c87e4812f8509b923d4c1a97594563394dd7bbbe4a99d3b25aa37366f6e5bfb3cc1c2aa21c0606";
   license = [ "publicDomain" ];
   version = "1.32";
+  hasCatalogue = true;
 };
 lshort-turkish = {
   revision = 15878;
@@ -31192,6 +33499,7 @@ lshort-turkish = {
   sha512.doc = "3aad40a5de5eee9e59064b15fe3e9c6a2585146fc21fdaf4683bfcba6786366c4ff1b3c38b6932426f53a6a9211809d4173f688f0878cbf2011d8982e3732834";
   license = [ "publicDomain" ];
   version = "4.20";
+  hasCatalogue = true;
 };
 lshort-ukr = {
   revision = 55643;
@@ -31201,6 +33509,7 @@ lshort-ukr = {
   sha512.doc = "f707d0491bb6a246243035d1cad265787ec4aeb7cbcc73e3500295dc67bf3a3a06b316f9f82d559502b7f108ab636b90fd01c3d1b0ee5f13fa3418910557c8b3";
   license = [ "free" ];
   version = "4.00";
+  hasCatalogue = true;
 };
 lshort-vietnamese = {
   revision = 55643;
@@ -31210,6 +33519,7 @@ lshort-vietnamese = {
   sha512.doc = "a0bad6d83fbc288ac1f39bee6bf1cfb3267a47852a0860f56b8251b67b2dbcd526d203c20b91f7adbe42034481255e5e3128b525e49f8cb341f18d9fc2407e14";
   license = [ "lppl13c" ];
   version = "4.00";
+  hasCatalogue = true;
 };
 lstaddons = {
   revision = 64967;
@@ -31221,6 +33531,7 @@ lstaddons = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.1";
+  hasCatalogue = true;
 };
 lstbayes = {
   revision = 48160;
@@ -31231,6 +33542,7 @@ lstbayes = {
   sha512.source = "9378291c820b65d1f1f126a47d6db40ad757009d71327f84e5b78fc4309d77272231cc892fb6881426130d6571b0e7caca7ee910117a9e2660cef42f6f0d7827";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 lstfiracode = {
   revision = 49503;
@@ -31241,6 +33553,7 @@ lstfiracode = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.1c";
+  hasCatalogue = true;
 };
 lt3graph = {
   revision = 45913;
@@ -31251,6 +33564,7 @@ lt3graph = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.1.9";
+  hasCatalogue = true;
 };
 lt3luabridge = {
   revision = 69867;
@@ -31262,6 +33576,7 @@ lt3luabridge = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.1.0";
+  hasCatalogue = true;
 };
 lt3rawobjects = {
   revision = 66619;
@@ -31273,6 +33588,7 @@ lt3rawobjects = {
   hasRunfiles = true;
   license = [ "gpl3Plus" ];
   version = "2.3";
+  hasCatalogue = true;
 };
 ltablex = {
   revision = 34923;
@@ -31283,6 +33599,7 @@ ltablex = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 ltabptch = {
   revision = 17533;
@@ -31293,6 +33610,7 @@ ltabptch = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.74d";
+  hasCatalogue = true;
 };
 ltb2bib = {
   revision = 43746;
@@ -31304,6 +33622,7 @@ ltb2bib = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.01";
+  hasCatalogue = true;
 };
 ltxcmds = {
   revision = 69032;
@@ -31315,6 +33634,7 @@ ltxcmds = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.26";
+  hasCatalogue = true;
 };
 ltxdockit = {
   revision = 21869;
@@ -31325,6 +33645,7 @@ ltxdockit = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.2d";
+  hasCatalogue = true;
 };
 ltxfileinfo = {
   revision = 38663;
@@ -31334,6 +33655,7 @@ ltxfileinfo = {
   hasRunfiles = true;
   license = [ "gpl1Only" ];
   version = "2.04";
+  hasCatalogue = true;
 };
 ltxfileinfo.binfiles = [
   "ltxfileinfo"
@@ -31347,6 +33669,7 @@ ltxguidex = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.2.0";
+  hasCatalogue = true;
 };
 ltximg = {
   revision = 59335;
@@ -31357,6 +33680,7 @@ ltximg = {
   hasRunfiles = true;
   license = [ "gpl3Plus" ];
   version = "2.1";
+  hasCatalogue = true;
 };
 ltximg.binfiles = [
   "ltximg"
@@ -31370,6 +33694,7 @@ ltxkeys = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.0.3c";
+  hasCatalogue = true;
 };
 ltxmisc = {
   revision = 21927;
@@ -31378,6 +33703,7 @@ ltxmisc = {
   sha512.run = "3433a283f52c41f198b944eaf58a961751e7fd3c0991960a2516fd72af61671e776f48c6a5e241e379b54a08af6fba732ab1c35e42b8c93a62937b5a38cdb767";
   hasRunfiles = true;
   license = [ "free" ];
+  hasCatalogue = true;
 };
 ltxnew = {
   revision = 21586;
@@ -31389,6 +33715,7 @@ ltxnew = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.3";
+  hasCatalogue = true;
 };
 ltxtools = {
   revision = 24897;
@@ -31399,6 +33726,7 @@ ltxtools = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.0.1a";
+  hasCatalogue = true;
 };
 lua-alt-getopt = {
   revision = 56414;
@@ -31409,6 +33737,7 @@ lua-alt-getopt = {
   hasRunfiles = true;
   license = [ "mit" ];
   version = "0.7.0";
+  hasCatalogue = true;
 };
 lua-check-hyphen = {
   revision = 47527;
@@ -31419,6 +33748,7 @@ lua-check-hyphen = {
   hasRunfiles = true;
   license = [ "mit" ];
   version = "0.7a";
+  hasCatalogue = true;
 };
 lua-physical = {
   revision = 59138;
@@ -31429,6 +33759,7 @@ lua-physical = {
   hasRunfiles = true;
   license = [ "mit" ];
   version = "1.0.5";
+  hasCatalogue = true;
 };
 lua-placeholders = {
   revision = 70055;
@@ -31439,6 +33770,7 @@ lua-placeholders = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0.2";
+  hasCatalogue = true;
 };
 lua-tinyyaml = {
   revision = 66776;
@@ -31449,6 +33781,7 @@ lua-tinyyaml = {
   hasRunfiles = true;
   license = [ "mit" ];
   version = "0.4.3";
+  hasCatalogue = true;
 };
 lua-typo = {
   revision = 69403;
@@ -31460,6 +33793,7 @@ lua-typo = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.86";
+  hasCatalogue = true;
 };
 lua-uca = {
   revision = 61023;
@@ -31471,6 +33805,7 @@ lua-uca = {
   hasRunfiles = true;
   license = [ "mit" ];
   version = "0.1b";
+  hasCatalogue = true;
 };
 lua-ul = {
   revision = 70206;
@@ -31482,6 +33817,7 @@ lua-ul = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.2.1";
+  hasCatalogue = true;
 };
 lua-uni-algos = {
   revision = 62204;
@@ -31492,6 +33828,7 @@ lua-uni-algos = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.4.1";
+  hasCatalogue = true;
 };
 lua-visual-debug = {
   revision = 65464;
@@ -31502,6 +33839,7 @@ lua-visual-debug = {
   hasRunfiles = true;
   license = [ "mit" ];
   version = "0.9";
+  hasCatalogue = true;
 };
 lua-widow-control = {
   revision = 70602;
@@ -31513,6 +33851,7 @@ lua-widow-control = {
   hasRunfiles = true;
   license = [ "free" "cc-by-sa-40" ];
   version = "3.0.1";
+  hasCatalogue = true;
 };
 luaaddplot = {
   revision = 62842;
@@ -31524,6 +33863,7 @@ luaaddplot = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 luabibentry = {
   revision = 55777;
@@ -31535,6 +33875,7 @@ luabibentry = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.1a";
+  hasCatalogue = true;
 };
 luabidi = {
   revision = 68432;
@@ -31545,6 +33886,7 @@ luabidi = {
   hasRunfiles = true;
   license = [ "lppl13c" "mit" ];
   version = "0.6";
+  hasCatalogue = true;
 };
 luacas = {
   revision = 67247;
@@ -31555,6 +33897,7 @@ luacas = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0.2";
+  hasCatalogue = true;
 };
 luacensor = {
   revision = 62167;
@@ -31565,6 +33908,7 @@ luacensor = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1.0";
+  hasCatalogue = true;
 };
 luacode = {
   revision = 25193;
@@ -31576,6 +33920,7 @@ luacode = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.2a";
+  hasCatalogue = true;
 };
 luacolor = {
   revision = 67987;
@@ -31587,6 +33932,7 @@ luacolor = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.18";
+  hasCatalogue = true;
 };
 luacomplex = {
   revision = 68883;
@@ -31597,6 +33943,7 @@ luacomplex = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.4";
+  hasCatalogue = true;
 };
 luafindfont = {
   revision = 67468;
@@ -31610,6 +33957,7 @@ luafindfont = {
   ];
   license = [ "lppl13c" ];
   version = "0.13";
+  hasCatalogue = true;
 };
 luafindfont.binfiles = [
   "luafindfont"
@@ -31623,6 +33971,7 @@ luagcd = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 luahbtex = {
   revision = 66186;
@@ -31663,6 +34012,7 @@ luahttp = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0.1";
+  hasCatalogue = true;
 };
 luahyphenrules = {
   revision = 56200;
@@ -31673,6 +34023,7 @@ luahyphenrules = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 luaimageembed = {
   revision = 50788;
@@ -31683,6 +34034,7 @@ luaimageembed = {
   hasRunfiles = true;
   license = [ "mit" ];
   version = "0.1";
+  hasCatalogue = true;
 };
 luaindex = {
   revision = 25882;
@@ -31694,6 +34046,7 @@ luaindex = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.1b";
+  hasCatalogue = true;
 };
 luainputenc = {
   revision = 20491;
@@ -31705,6 +34058,7 @@ luainputenc = {
   hasRunfiles = true;
   license = [ "publicDomain" ];
   version = "0.973";
+  hasCatalogue = true;
 };
 luajittex = {
   revision = 66186;
@@ -31755,6 +34109,7 @@ luakeys = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.13.0";
+  hasCatalogue = true;
 };
 lualatex-doc-de = {
   revision = 30474;
@@ -31764,6 +34119,7 @@ lualatex-doc-de = {
   sha512.doc = "b615887d8b543af1c125b6e9fb9c533f52816f8087075a8bd4e6ef752ff48f51169f5945ccb067228612cbdeb10dbeb298a090bdb93d201b9629b128b0c5a466";
   license = [ "fdl13Only" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 lualatex-math = {
   revision = 61464;
@@ -31779,6 +34135,7 @@ lualatex-math = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.12";
+  hasCatalogue = true;
 };
 lualatex-truncate = {
   revision = 67201;
@@ -31790,6 +34147,7 @@ lualatex-truncate = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 lualibs = {
   revision = 67994;
@@ -31801,6 +34159,7 @@ lualibs = {
   hasRunfiles = true;
   license = [ "gpl2Only" ];
   version = "2.76";
+  hasCatalogue = true;
 };
 lualinalg = {
   revision = 68918;
@@ -31811,6 +34170,7 @@ lualinalg = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.9";
+  hasCatalogue = true;
 };
 luamathalign = {
   revision = 63226;
@@ -31822,6 +34182,7 @@ luamathalign = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.3";
+  hasCatalogue = true;
 };
 luamaths = {
   revision = 68883;
@@ -31832,6 +34193,7 @@ luamaths = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.6";
+  hasCatalogue = true;
 };
 luamesh = {
   revision = 63875;
@@ -31842,6 +34204,7 @@ luamesh = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.7";
+  hasCatalogue = true;
 };
 luamodulartables = {
   revision = 68893;
@@ -31852,6 +34215,7 @@ luamodulartables = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 luamplib = {
   revision = 70583;
@@ -31863,6 +34227,7 @@ luamplib = {
   hasRunfiles = true;
   license = [ "gpl2Only" ];
   version = "2.26.4";
+  hasCatalogue = true;
 };
 luanumint = {
   revision = 68918;
@@ -31873,6 +34238,7 @@ luanumint = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.2";
+  hasCatalogue = true;
 };
 luaoptions = {
   revision = 64870;
@@ -31883,6 +34249,7 @@ luaoptions = {
   hasRunfiles = true;
   license = [ "mit" ];
   version = "0.8";
+  hasCatalogue = true;
 };
 luaotfload = {
   revision = 70234;
@@ -31903,6 +34270,7 @@ luaotfload = {
   ];
   license = [ "gpl2Only" ];
   version = "3.28";
+  hasCatalogue = true;
 };
 luaotfload.binfiles = [
   "luaotfload-tool"
@@ -31919,6 +34287,7 @@ luapackageloader = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.2";
+  hasCatalogue = true;
 };
 luaplot = {
   revision = 68918;
@@ -31929,6 +34298,7 @@ luaplot = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.5";
+  hasCatalogue = true;
 };
 luaprogtable = {
   revision = 56113;
@@ -31939,6 +34309,7 @@ luaprogtable = {
   hasRunfiles = true;
   license = [ "mit" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 luapstricks = {
   revision = 67207;
@@ -31949,6 +34320,7 @@ luapstricks = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.10";
+  hasCatalogue = true;
 };
 luaquotes = {
   revision = 65652;
@@ -31959,6 +34331,7 @@ luaquotes = {
   hasRunfiles = true;
   license = [ "lppl13c" "cc-by-sa-30" ];
   version = "1.4.0";
+  hasCatalogue = true;
 };
 luarandom = {
   revision = 68847;
@@ -31969,6 +34342,7 @@ luarandom = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.02";
+  hasCatalogue = true;
 };
 luaset = {
   revision = 68883;
@@ -31979,6 +34353,7 @@ luaset = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 luasseq = {
   revision = 65511;
@@ -31989,6 +34364,7 @@ luasseq = {
   sha512.source = "3a6b4fa48956e2f448a1be96eb9d05f236c9e1b2177de13ad16aa942c9b4ef5d4d4585bdb6f5d9b1a19901375f34cbd381430c629e037be500d84cf626065500";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 luatex = {
   revision = 69182;
@@ -32024,6 +34400,7 @@ luatex = {
   hasManpages = true;
   hasRunfiles = true;
   license = [ "gpl2Plus" ];
+  hasCatalogue = true;
 };
 luatex.binfiles = [
   "dviluatex"
@@ -32041,6 +34418,7 @@ luatex85 = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.4";
+  hasCatalogue = true;
 };
 luatexbase = {
   revision = 52663;
@@ -32055,6 +34433,7 @@ luatexbase = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.3";
+  hasCatalogue = true;
 };
 luatexja = {
   revision = 69988;
@@ -32069,6 +34448,7 @@ luatexja = {
   hasRunfiles = true;
   license = [ "bsd3" ];
   version = "20240219.0";
+  hasCatalogue = true;
 };
 luatexko = {
   revision = 68243;
@@ -32079,6 +34459,7 @@ luatexko = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "3.6";
+  hasCatalogue = true;
 };
 luatextra = {
   revision = 20747;
@@ -32090,6 +34471,7 @@ luatextra = {
   hasRunfiles = true;
   license = [ "publicDomain" ];
   version = "1.0.1";
+  hasCatalogue = true;
 };
 luatodonotes = {
   revision = 53825;
@@ -32101,6 +34483,7 @@ luatodonotes = {
   hasRunfiles = true;
   license = [ "lppl12" ];
   version = "0.5";
+  hasCatalogue = true;
 };
 luatruthtable = {
   revision = 68893;
@@ -32111,6 +34494,7 @@ luatruthtable = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.3";
+  hasCatalogue = true;
 };
 luavlna = {
   revision = 67442;
@@ -32121,6 +34505,7 @@ luavlna = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.1l";
+  hasCatalogue = true;
 };
 luaxml = {
   revision = 70117;
@@ -32131,6 +34516,7 @@ luaxml = {
   hasRunfiles = true;
   license = [ "free" ];
   version = "0.1r";
+  hasCatalogue = true;
 };
 lutabulartools = {
   revision = 67714;
@@ -32140,6 +34526,7 @@ lutabulartools = {
   sha512.doc = "9595cf869f480951f9d0d142abb05548e4f71d8af6d62c4ff0626ad9d9019d63b91333bfc8ba1f6948c9075d62fb7b7956658079fd17ea5e86f920eb7c6ed49b";
   hasRunfiles = true;
   license = [ "mit" ];
+  hasCatalogue = true;
 };
 lwarp = {
   revision = 70072;
@@ -32153,6 +34540,7 @@ lwarp = {
   ];
   license = [ "lppl13c" ];
   version = "0.916";
+  hasCatalogue = true;
 };
 lwarp.binfiles = [
   "lwarpmk"
@@ -32170,6 +34558,7 @@ lxfonts = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.0b";
+  hasCatalogue = true;
 };
 ly1 = {
   revision = 63565;
@@ -32179,6 +34568,7 @@ ly1 = {
   sha512.doc = "c1a39c96000fa3e929ab6518acb71c26bb06179cf06af4f4eb1f2bde0d21816e108c6a89dfa2f7dd71f95887a37d532bb2914a03732dfe4080541ffa204e8e43";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 lyluatex = {
   revision = 66880;
@@ -32189,6 +34579,7 @@ lyluatex = {
   hasRunfiles = true;
   license = [ "mit" ];
   version = "1.1.5";
+  hasCatalogue = true;
 };
 m-tx = {
   revision = 64182;
@@ -32202,6 +34593,7 @@ m-tx = {
   ];
   license = [ "mit" ];
   version = "0.63d";
+  hasCatalogue = true;
 };
 m-tx.binfiles = [
   "m-tx"
@@ -32217,6 +34609,7 @@ macrolist = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.1.0";
+  hasCatalogue = true;
 };
 macros2e = {
   revision = 64967;
@@ -32227,6 +34620,7 @@ macros2e = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.4a";
+  hasCatalogue = true;
 };
 macroswap = {
   revision = 31498;
@@ -32238,6 +34632,7 @@ macroswap = {
   hasRunfiles = true;
   license = [ "lppl12" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 mafr = {
   revision = 15878;
@@ -32248,6 +34643,7 @@ mafr = {
   hasRunfiles = true;
   license = [ "gpl1Only" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 magaz = {
   revision = 24694;
@@ -32258,6 +34654,7 @@ magaz = {
   hasRunfiles = true;
   license = [ "free" ];
   version = "0.4";
+  hasCatalogue = true;
 };
 magicnum = {
   revision = 52983;
@@ -32269,6 +34666,7 @@ magicnum = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.7";
+  hasCatalogue = true;
 };
 magicwatermark = {
   revision = 63656;
@@ -32280,6 +34678,7 @@ magicwatermark = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0.1";
+  hasCatalogue = true;
 };
 magra = {
   revision = 57373;
@@ -32293,6 +34692,7 @@ magra = {
   hasRunfiles = true;
   license = [ "ofl" "lppl13c" ];
   version = "0.0.1";
+  hasCatalogue = true;
 };
 mahjong = {
   revision = 58896;
@@ -32304,6 +34704,7 @@ mahjong = {
   hasRunfiles = true;
   license = [ "mit" "cc-by-10" ];
   version = "1.0.1";
+  hasCatalogue = true;
 };
 mailing = {
   revision = 15878;
@@ -32314,6 +34715,7 @@ mailing = {
   sha512.source = "5adf58b4bc60e939906b8ae587829937afffc54af81623e640a513ed8522984c2308d3af1631857f4469a5774a844e3655bc3a9ca8ee09445b545d10dbcfea5c";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 mailmerge = {
   revision = 15878;
@@ -32325,6 +34727,7 @@ mailmerge = {
   hasRunfiles = true;
   license = [ "lppl12" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 make4ht = {
   revision = 70117;
@@ -32340,6 +34743,7 @@ make4ht = {
   ];
   license = [ "lppl13c" ];
   version = "0.4";
+  hasCatalogue = true;
 };
 make4ht.binfiles = [
   "make4ht"
@@ -32353,6 +34757,7 @@ makebarcode = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 makebase = {
   revision = 41012;
@@ -32364,6 +34769,7 @@ makebase = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.2";
+  hasCatalogue = true;
 };
 makebox = {
   revision = 15878;
@@ -32375,6 +34781,7 @@ makebox = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.1";
+  hasCatalogue = true;
 };
 makecell = {
   revision = 15878;
@@ -32386,6 +34793,7 @@ makecell = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.1e";
+  hasCatalogue = true;
 };
 makecirc = {
   revision = 15878;
@@ -32395,6 +34803,7 @@ makecirc = {
   sha512.doc = "25190b3a5d911de1d02fa596f604527006f3adf7512afae397e5ba15ab62d6471ab834f92437d35a9f37ed83c8b84990d79ef0fd9ce2b0edfffdfaa2ec97a345";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 makecmds = {
   revision = 15878;
@@ -32405,6 +34814,7 @@ makecmds = {
   sha512.source = "380eca4f5fed0ae72cded8f6d3a201cacb05a57851c4c207f086dd17762689cd53a6b27daa23d8043c311adc9baed32808d2c7eb1855892f8113ec7f13c02946";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 makecookbook = {
   revision = 49311;
@@ -32414,6 +34824,7 @@ makecookbook = {
   sha512.doc = "84c97dd438e3d3abedce031da5841f789f3b8c28672c9e3b6c53929e2e781a9d51adaec6d883d0008b42f1eae2ed5bbf992ec229bb8b2f7f510346d10dbc31fb";
   license = [ "lppl13c" ];
   version = "0.85";
+  hasCatalogue = true;
 };
 makedtx = {
   revision = 46702;
@@ -32424,6 +34835,7 @@ makedtx = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.2";
+  hasCatalogue = true;
 };
 makedtx.binfiles = [
   "makedtx"
@@ -32436,15 +34848,18 @@ makeglos = {
   sha512.doc = "c580a23d65422d8405ce011fb6b088f53836811e3da517423f6d0dce098ffbd64c0648318eb9fb74ab637e1796d19247ee87ca8a25c7d306e3dc35a5d6d79f99";
   hasRunfiles = true;
   license = [ "gpl1Only" ];
+  hasCatalogue = true;
 };
 makeindex = {
   revision = 62517;
+  catalogue = "makeindexk";
   shortdesc = "Makeindex development sources";
   sha512.run = "5967ba4123fd4c708ce841d29211fdb66c28518f4b418903be0ddf2a49964f706af96b250eec814c547e0703460c1273ce72a7acf3ea9fe28cc1c7073af29d3c";
   sha512.doc = "40b9ee1ebf7dba9a4bb4bb3077cdb1e88b07f276a9d0ae9c2817bd76a2f742ec9237d1b6d9658694fc5fc4e8f82591194862637bd83ea8e106c0541591d343ee";
   hasManpages = true;
   hasRunfiles = true;
   license = [ "free" ];
+  hasCatalogue = true;
 };
 makeindex.binfiles = [
   "makeindex"
@@ -32460,6 +34875,7 @@ makelabels = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 makeplot = {
   revision = 15878;
@@ -32471,6 +34887,7 @@ makeplot = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0.6";
+  hasCatalogue = true;
 };
 maker = {
   revision = 44823;
@@ -32481,6 +34898,7 @@ maker = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 makerobust = {
   revision = 52811;
@@ -32491,6 +34909,7 @@ makerobust = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.0";
+  hasCatalogue = true;
 };
 makeshape = {
   revision = 28973;
@@ -32502,6 +34921,7 @@ makeshape = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.1";
+  hasCatalogue = true;
 };
 mandi = {
   revision = 70235;
@@ -32513,6 +34933,7 @@ mandi = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "3.2.2";
+  hasCatalogue = true;
 };
 manfnt = {
   revision = 54684;
@@ -32523,9 +34944,11 @@ manfnt = {
   sha512.source = "c90ac97080e2c0c767673f7128e1850427218bb4b05024401fe37aae71ae65f1feae2e11301055dbe6b74fe56e7b16bee4ba1fe0f1a1defbc07763fc5f5cdeb0";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 manfnt-font = {
   revision = 45777;
+  catalogue = "manual";
   shortdesc = "Knuth's \"manual\" fonts";
   stripPrefix = 0;
   fontMaps = [
@@ -32534,6 +34957,7 @@ manfnt-font = {
   sha512.run = "fe7ddf667368990f988005a44013aab80af9c097f4f824f717d84fddfd61dfc658f507d5b1bf8f7c076be1bd5a4363f117b388ecd39b0ce2b0ee5fc8aa83fd4c";
   hasRunfiles = true;
   license = [ "knuth" ];
+  hasCatalogue = true;
 };
 manuscript = {
   revision = 36110;
@@ -32545,6 +34969,7 @@ manuscript = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.7";
+  hasCatalogue = true;
 };
 manyind = {
   revision = 49874;
@@ -32554,6 +34979,7 @@ manyind = {
   sha512.doc = "e8d9c687c1b3525c5e4d218a380781f1b2e7d512b053a583b00c97f0b7eefa1202dea310454065194039841bf8763acc2b0c4712ca8d5e9d31b57cf03c50b928";
   hasRunfiles = true;
   license = [ "lppl12" ];
+  hasCatalogue = true;
 };
 marathi = {
   revision = 61719;
@@ -32565,6 +34991,7 @@ marathi = {
   hasRunfiles = true;
   license = [ "gpl3Plus" "free" "fdl13Only" ];
   version = "1.7";
+  hasCatalogue = true;
 };
 marcellus = {
   revision = 64451;
@@ -32577,6 +35004,7 @@ marcellus = {
   sha512.doc = "5267a43751ac7a0aadfba28ec4427da7c1afbafac2425f09582a736520ab4bbd769e08ef02b86816225cd76bedcbb23f6cfd3e77352c9e4008f9443b826b48e9";
   hasRunfiles = true;
   license = [ "ofl" "lppl13c" ];
+  hasCatalogue = true;
 };
 margbib = {
   revision = 15878;
@@ -32588,6 +35016,7 @@ margbib = {
   hasRunfiles = true;
   license = [ "gpl1Only" ];
   version = "1.0c";
+  hasCatalogue = true;
 };
 marginfit = {
   revision = 48281;
@@ -32599,6 +35028,7 @@ marginfit = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 marginfix = {
   revision = 55064;
@@ -32610,6 +35040,7 @@ marginfix = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.2";
+  hasCatalogue = true;
 };
 marginnote = {
   revision = 68204;
@@ -32620,6 +35051,7 @@ marginnote = {
   sha512.source = "edcdc3acba09440dd7d1594a1813fd205447c672e0bb73e3b968ac6e211365c488d3ce0287b7df5e198a75e12d3301248e39674be831387cdd06636e97d76138";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 markdown = {
   revision = 70583;
@@ -32631,6 +35063,7 @@ markdown = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "3.4.2-0-ga45cf0ed";
+  hasCatalogue = true;
 };
 marvosym = {
   revision = 29349;
@@ -32645,6 +35078,7 @@ marvosym = {
   hasRunfiles = true;
   license = [ "ofl" ];
   version = "2.2a";
+  hasCatalogue = true;
 };
 matapli = {
   revision = 62632;
@@ -32655,6 +35089,7 @@ matapli = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.2.0";
+  hasCatalogue = true;
 };
 matc3 = {
   revision = 29845;
@@ -32666,6 +35101,7 @@ matc3 = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0.1";
+  hasCatalogue = true;
 };
 matc3mem = {
   revision = 35773;
@@ -32677,6 +35113,7 @@ matc3mem = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 match_parens = {
   revision = 66681;
@@ -32687,6 +35124,7 @@ match_parens = {
   hasRunfiles = true;
   license = [ "gpl1Only" ];
   version = "1.44";
+  hasCatalogue = true;
 };
 match_parens.binfiles = [
   "match_parens"
@@ -32698,6 +35136,7 @@ math-into-latex-4 = {
   sha512.run = "d5739155ac3cd6a02f356bbb600f7f76022faa4a5c004a93531678ead3c2f0a9f8e1419044883306ce453ac96ab8726ee45d8e49c86b0fca6a9232010a8927e3";
   sha512.doc = "5fee7c89fc9f273817b23fa25260733ee0552df7bed0333bbe604c17bdecfc28d7e386478f7b42d3c2aef89f80ce7a1d35215fdc386ea47e4db3a334bc6a9597";
   license = [ "free" ];
+  hasCatalogue = true;
 };
 mathabx = {
   revision = 15878;
@@ -32707,6 +35146,7 @@ mathabx = {
   sha512.doc = "e1f9f96794f6d20dd75bd7ceabd40993e56d5315848bbea8a6812a16f74c0fb92ddc6356c71aaa1367c47b1dc26a3711793ec88cf0b90d391f8157fe20f77196";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 mathabx-type1 = {
   revision = 21129;
@@ -32722,6 +35162,7 @@ mathabx-type1 = {
   sha512.doc = "2504e85d659cba06fa25ae4e154309a6d3dcba2ac8bae0d4066b6637f19081987b0bc774902365e5b723f4b6c35cad07709e316ec1893a018baabc699d755e8b";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 mathalpha = {
   revision = 61089;
@@ -32732,6 +35173,7 @@ mathalpha = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.143";
+  hasCatalogue = true;
 };
 mathastext = {
   revision = 69237;
@@ -32743,6 +35185,7 @@ mathastext = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.3zb";
+  hasCatalogue = true;
 };
 mathcommand = {
   revision = 59512;
@@ -32754,6 +35197,7 @@ mathcommand = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.04";
+  hasCatalogue = true;
 };
 mathcomp = {
   revision = 15878;
@@ -32765,6 +35209,7 @@ mathcomp = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.1f";
+  hasCatalogue = true;
 };
 mathdesign = {
   revision = 31639;
@@ -32784,6 +35229,7 @@ mathdesign = {
   hasRunfiles = true;
   license = [ "gpl1Only" ];
   version = "2.31";
+  hasCatalogue = true;
 };
 mathdots = {
   revision = 34301;
@@ -32795,6 +35241,7 @@ mathdots = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.9";
+  hasCatalogue = true;
 };
 mathexam = {
   revision = 15878;
@@ -32806,6 +35253,7 @@ mathexam = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.00";
+  hasCatalogue = true;
 };
 mathfam256 = {
   revision = 53519;
@@ -32816,6 +35264,7 @@ mathfam256 = {
   hasRunfiles = true;
   license = [ "bsd3" ];
   version = "0.5";
+  hasCatalogue = true;
 };
 mathfixs = {
   revision = 49547;
@@ -32827,6 +35276,7 @@ mathfixs = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.01";
+  hasCatalogue = true;
 };
 mathfont = {
   revision = 68241;
@@ -32838,6 +35288,7 @@ mathfont = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.3";
+  hasCatalogue = true;
 };
 mathlig = {
   revision = 54244;
@@ -32847,6 +35298,7 @@ mathlig = {
   hasRunfiles = true;
   license = [ "free" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 mathpartir = {
   revision = 39864;
@@ -32858,6 +35310,7 @@ mathpartir = {
   hasRunfiles = true;
   license = [ "gpl2Only" ];
   version = "1.3.2";
+  hasCatalogue = true;
 };
 mathpazo = {
   revision = 52663;
@@ -32873,6 +35326,7 @@ mathpazo = {
   hasRunfiles = true;
   license = [ "gpl1Only" ];
   version = "1.003";
+  hasCatalogue = true;
 };
 mathpunctspace = {
   revision = 46754;
@@ -32883,6 +35337,7 @@ mathpunctspace = {
   hasRunfiles = true;
   license = [ "bsd2" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 maths-symbols = {
   revision = 37763;
@@ -32892,6 +35347,7 @@ maths-symbols = {
   sha512.doc = "b60a66b3cc67e4dde62b0fc0552233ab59b1981ab92cedbe4c0de31a4c9e9d3207cf54ec5d2361f81937867d81bd345e77c4ab3e36fcd8588851765ec3267864";
   license = [ "lppl12" ];
   version = "3.4";
+  hasCatalogue = true;
 };
 mathsemantics = {
   revision = 63241;
@@ -32902,6 +35358,7 @@ mathsemantics = {
   hasRunfiles = true;
   license = [ "mit" ];
   version = "1.0.0";
+  hasCatalogue = true;
 };
 mathspec = {
   revision = 42773;
@@ -32912,6 +35369,7 @@ mathspec = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.2b";
+  hasCatalogue = true;
 };
 mathspic = {
   revision = 31957;
@@ -32922,6 +35380,7 @@ mathspic = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.13";
+  hasCatalogue = true;
 };
 mathspic.binfiles = [
   "mathspic"
@@ -32936,6 +35395,7 @@ mathtools = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.30";
+  hasCatalogue = true;
 };
 matlab-prettifier = {
   revision = 34323;
@@ -32947,6 +35407,7 @@ matlab-prettifier = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.3";
+  hasCatalogue = true;
 };
 matrix-skeleton = {
   revision = 65013;
@@ -32957,6 +35418,7 @@ matrix-skeleton = {
   hasRunfiles = true;
   license = [ "isc" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 mattens = {
   revision = 62326;
@@ -32968,6 +35430,7 @@ mattens = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.3b";
+  hasCatalogue = true;
 };
 maybemath = {
   revision = 15878;
@@ -32977,6 +35440,7 @@ maybemath = {
   sha512.doc = "b0f978f89ebb7f681e7b045d03a9a6e7e9083d7c468c91d52ef417c85d707243fa0ef253b3e2d1f1737a9c7235fefae06c4a8fe2975cf2c13f7f09ada7752f26";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 maze = {
   revision = 65508;
@@ -32987,6 +35451,7 @@ maze = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.2";
+  hasCatalogue = true;
 };
 mcaption = {
   revision = 15878;
@@ -32998,6 +35463,7 @@ mcaption = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "3.0";
+  hasCatalogue = true;
 };
 mceinleger = {
   revision = 15878;
@@ -33007,6 +35473,7 @@ mceinleger = {
   sha512.doc = "2dab78fd096927e3958d7270ddf15de9350ec30d1d000e7cf92be3b249ccf70e6faa1dce482a07995e65b4a4549693ce3b34d1a63bcc403ebe81f3d1887ecf90";
   hasRunfiles = true;
   license = [ "gpl1Only" ];
+  hasCatalogue = true;
 };
 mcexam = {
   revision = 60481;
@@ -33017,6 +35484,7 @@ mcexam = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.5";
+  hasCatalogue = true;
 };
 mcf2graph = {
   revision = 70167;
@@ -33026,6 +35494,7 @@ mcf2graph = {
   sha512.doc = "ddc7500877bf459121a7ffe242618efdabe2e201da58f9038fe863451456a013816d66b807df74735a6bd1701cb72341bce771489e186b21c404d623d58b8205";
   license = [ "mit" ];
   version = "5.12";
+  hasCatalogue = true;
 };
 mcite = {
   revision = 18173;
@@ -33037,6 +35506,7 @@ mcite = {
   hasRunfiles = true;
   license = [ "gpl1Only" ];
   version = "1.6";
+  hasCatalogue = true;
 };
 mciteplus = {
   revision = 31648;
@@ -33047,6 +35517,7 @@ mciteplus = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.2";
+  hasCatalogue = true;
 };
 mcmthesis = {
   revision = 69538;
@@ -33058,6 +35529,7 @@ mcmthesis = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "6.3.3";
+  hasCatalogue = true;
 };
 mdframed = {
   revision = 31075;
@@ -33069,6 +35541,7 @@ mdframed = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.9b";
+  hasCatalogue = true;
 };
 mdputu = {
   revision = 20298;
@@ -33079,6 +35552,7 @@ mdputu = {
   hasRunfiles = true;
   license = [ "free" ];
   version = "1.2";
+  hasCatalogue = true;
 };
 mdsymbol = {
   revision = 28399;
@@ -33093,6 +35567,7 @@ mdsymbol = {
   hasRunfiles = true;
   license = [ "ofl" ];
   version = "0.5";
+  hasCatalogue = true;
 };
 mdwtools = {
   revision = 15878;
@@ -33104,6 +35579,7 @@ mdwtools = {
   hasRunfiles = true;
   license = [ "gpl1Only" ];
   version = "1.05.4";
+  hasCatalogue = true;
 };
 mecaso = {
   revision = 60346;
@@ -33114,6 +35590,7 @@ mecaso = {
   hasRunfiles = true;
   license = [ "gpl3Plus" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 media4svg = {
   revision = 64686;
@@ -33124,6 +35601,7 @@ media4svg = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.13";
+  hasCatalogue = true;
 };
 media9 = {
   revision = 64047;
@@ -33135,6 +35613,7 @@ media9 = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.25";
+  hasCatalogue = true;
 };
 medmath = {
   revision = 69510;
@@ -33145,6 +35624,7 @@ medmath = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2024E";
+  hasCatalogue = true;
 };
 medstarbeamer = {
   revision = 38828;
@@ -33154,6 +35634,7 @@ medstarbeamer = {
   sha512.doc = "1605cf9ac4eba56059b6e90e6a6e7f3cba9a924df1cf3dcfed300e218bbb71d79bd69b47a5e376da209490a8869061d6de8415e1670b4ac5b0fa977f74d7c035";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 meetingmins = {
   revision = 31878;
@@ -33165,6 +35646,7 @@ meetingmins = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.6";
+  hasCatalogue = true;
 };
 membranecomputing = {
   revision = 64627;
@@ -33175,6 +35657,7 @@ membranecomputing = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.2.1";
+  hasCatalogue = true;
 };
 memdesign = {
   revision = 48664;
@@ -33183,6 +35666,7 @@ memdesign = {
   sha512.run = "42949db3193952d1ae75855110ed40a1ff467b3cef0bb6d43195bac960a0873a47fad002695ad1376da2d4a1df5e1e05f89289102780d27b173da2e852b53cdc";
   sha512.doc = "f4dfa00676379ce33857cc0fdeae867d1ae5c99e6767884a029285a94d2197926a68cd85c574bd876a2eeb85f0453520ef5efcb7f2a71a77c725f8066e7adf8d";
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 memexsupp = {
   revision = 15878;
@@ -33193,6 +35677,7 @@ memexsupp = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.1";
+  hasCatalogue = true;
 };
 memoir = {
   revision = 69600;
@@ -33204,6 +35689,7 @@ memoir = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "3.8.2";
+  hasCatalogue = true;
 };
 memoirchapterstyles = {
   revision = 59766;
@@ -33213,6 +35699,7 @@ memoirchapterstyles = {
   sha512.doc = "2f8a20d21dc1db21017435cd58c4ae3ff744b5f5605aafcfef6dfbedb1461a8fbee456ffb8ac1399416f7ae6b8ebec5d59b5d50886182ba5116e22e3768fd530";
   license = [ "lppl13c" ];
   version = "1.7e";
+  hasCatalogue = true;
 };
 memoize = {
   revision = 69522;
@@ -33227,6 +35714,7 @@ memoize = {
   ];
   license = [ "lppl13c" ];
   version = "1.1.2";
+  hasCatalogue = true;
 };
 memoize.binfiles = [
   "memoize-clean.pl"
@@ -33244,6 +35732,7 @@ memory = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.2";
+  hasCatalogue = true;
 };
 memorygraphs = {
   revision = 49631;
@@ -33254,6 +35743,7 @@ memorygraphs = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.1.1";
+  hasCatalogue = true;
 };
 mendex-doc = {
   revision = 62914;
@@ -33264,6 +35754,7 @@ mendex-doc = {
   sha512.source = "e22c3a7573e8f57d8324d7ca74b3c6b4c716dfa0ea6f43ba3e6eaa63aecf0fe0591ccf9cc4b18984ed2730fc5b9e0b84287bca677717f81c583e0c3c3e0c564c";
   hasRunfiles = true;
   license = [ "bsd3" ];
+  hasCatalogue = true;
 };
 mensa-tex = {
   revision = 45997;
@@ -33273,6 +35764,7 @@ mensa-tex = {
   sha512.doc = "8297e3f69517f3bace8f509dfb42616e223073f5d428c2269d9dbeeb53579f105fb65755b22ab552e5635f1267e437c4aaeda284a8325b2d95717cf7adc2de01";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 mentis = {
   revision = 15878;
@@ -33284,6 +35776,7 @@ mentis = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.5";
+  hasCatalogue = true;
 };
 menu = {
   revision = 15878;
@@ -33295,6 +35788,7 @@ menu = {
   hasRunfiles = true;
   license = [ "free" ];
   version = "0.994";
+  hasCatalogue = true;
 };
 menucard = {
   revision = 55643;
@@ -33306,6 +35800,7 @@ menucard = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.1";
+  hasCatalogue = true;
 };
 menukeys = {
   revision = 64314;
@@ -33317,6 +35812,7 @@ menukeys = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.6.2";
+  hasCatalogue = true;
 };
 mercatormap = {
   revision = 56060;
@@ -33327,6 +35823,7 @@ mercatormap = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.02";
+  hasCatalogue = true;
 };
 merriweather = {
   revision = 64452;
@@ -33339,6 +35836,7 @@ merriweather = {
   sha512.doc = "8762dfd5b3f3443177e0900c434c74d4b8ccca6c8817b1d8353c41ee8310b2299e2fa67113881bb47dd6def3295663aeeefafb15d7b808def000b6e253ac2d3f";
   hasRunfiles = true;
   license = [ "ofl" "lppl13c" ];
+  hasCatalogue = true;
 };
 messagepassing = {
   revision = 69123;
@@ -33350,6 +35848,7 @@ messagepassing = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.2";
+  hasCatalogue = true;
 };
 metafont = {
   revision = 66186;
@@ -33372,6 +35871,7 @@ metafont = {
   hasRunfiles = true;
   license = [ "knuth" ];
   version = "2.71828182";
+  hasCatalogue = true;
 };
 metafont-beginners = {
   revision = 29803;
@@ -33380,6 +35880,7 @@ metafont-beginners = {
   sha512.run = "39352d8b181f3010fd4dbfbfad18a8cd3f68f0c38bdb89996ea4c77a649acbbd15e9a7fa318193db08733b3722a07a8ebfb17a6430bcc9af8101dc444608d75b";
   sha512.doc = "4fb7148b0668845447fd38411df0288972312a56897b1d5bce69a7e57ae632aacd12c273a911045204705a5534ac1d1c290af08a7057bd62184a59eb7146feb6";
   license = [ "publicDomain" ];
+  hasCatalogue = true;
 };
 metafont.binfiles = [
   "inimf"
@@ -33395,6 +35896,7 @@ metago = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.9";
+  hasCatalogue = true;
 };
 metalogo = {
   revision = 18611;
@@ -33406,6 +35908,7 @@ metalogo = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.12";
+  hasCatalogue = true;
 };
 metalogox = {
   revision = 70496;
@@ -33417,6 +35920,7 @@ metalogox = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.06";
+  hasCatalogue = true;
 };
 metanorma = {
   revision = 55010;
@@ -33427,6 +35931,7 @@ metanorma = {
   hasRunfiles = true;
   license = [ "mit" ];
   version = "0.5.0";
+  hasCatalogue = true;
 };
 metaobj = {
   revision = 15878;
@@ -33437,6 +35942,7 @@ metaobj = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.93";
+  hasCatalogue = true;
 };
 metaplot = {
   revision = 15878;
@@ -33447,6 +35953,7 @@ metaplot = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.91";
+  hasCatalogue = true;
 };
 metapost = {
   revision = 66815;
@@ -33462,6 +35969,7 @@ metapost = {
   hasManpages = true;
   hasRunfiles = true;
   license = [ "lgpl2" ];
+  hasCatalogue = true;
 };
 metapost-colorbrewer = {
   revision = 48753;
@@ -33471,6 +35979,7 @@ metapost-colorbrewer = {
   sha512.doc = "59f17d78ef78a142bde5783996f149b3a7c740c2b3ec6f90133115ebddcf6c460dada543482f5379872054a74eb772bab8afd96fa48b2484f7932a478b8bde2d";
   hasRunfiles = true;
   license = [ "gpl3Plus" ];
+  hasCatalogue = true;
 };
 metapost-examples = {
   revision = 15878;
@@ -33479,6 +35988,7 @@ metapost-examples = {
   sha512.run = "95942b1b110e65274839ba01c16fed3e63a0ac99aa564d7a000bc9d9a0f5625ddc1dca13e786d0721bf93e76410722d4d76c86a05297bc39cd9af6dc91c2e6f8";
   sha512.doc = "2a3aec80b511864878e07ff973e17ed4fe1aec692c7e6983b57dde586aa19500cdd373687b0e081dc80c8584f116f0fa3de7ed4f09ba232eee8adce5e998c954";
   license = [ "free" ];
+  hasCatalogue = true;
 };
 metapost.binfiles = [
   "dvitomp"
@@ -33496,6 +36006,7 @@ metastr = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1.2";
+  hasCatalogue = true;
 };
 metatex = {
   revision = 15878;
@@ -33506,6 +36017,7 @@ metatex = {
   hasRunfiles = true;
   license = [ "gpl1Only" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 metatype1 = {
   revision = 37105;
@@ -33515,6 +36027,7 @@ metatype1 = {
   sha512.source = "26f891bb5a62da78763df29f1d9caf26588c6dff57e063eb445ae23a5dfd7108956068de991bbb514ee394c49d4ad119d4a0fdb5398aad48d9be223b8f13d388";
   license = [ "publicDomain" ];
   version = "0.56";
+  hasCatalogue = true;
 };
 metauml = {
   revision = 49923;
@@ -33525,6 +36038,7 @@ metauml = {
   hasRunfiles = true;
   license = [ "gpl1Only" ];
   version = "0.2.6";
+  hasCatalogue = true;
 };
 method = {
   revision = 17485;
@@ -33536,6 +36050,7 @@ method = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.0b";
+  hasCatalogue = true;
 };
 metre = {
   revision = 18489;
@@ -33547,6 +36062,7 @@ metre = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 metrix = {
   revision = 52323;
@@ -33558,6 +36074,7 @@ metrix = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.5";
+  hasCatalogue = true;
 };
 metsymb = {
   revision = 68175;
@@ -33572,6 +36089,7 @@ metsymb = {
   hasRunfiles = true;
   license = [ "bsd3" ];
   version = "1.2.0";
+  hasCatalogue = true;
 };
 mex = {
   revision = 58661;
@@ -33618,6 +36136,7 @@ mex = {
   hasRunfiles = true;
   license = [ "knuth" ];
   version = "1.05a";
+  hasCatalogue = true;
 };
 mex.binfiles = [
   "mex"
@@ -33633,6 +36152,7 @@ mf2pt1 = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.7";
+  hasCatalogue = true;
 };
 mf2pt1.binfiles = [
   "mf2pt1"
@@ -33647,6 +36167,7 @@ mfirstuc = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.08";
+  hasCatalogue = true;
 };
 mflogo = {
   revision = 42428;
@@ -33658,6 +36179,7 @@ mflogo = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.0";
+  hasCatalogue = true;
 };
 mflogo-font = {
   revision = 54512;
@@ -33671,6 +36193,7 @@ mflogo-font = {
   hasRunfiles = true;
   license = [ "knuth" ];
   version = "1.002";
+  hasCatalogue = true;
 };
 mflua = {
   revision = 62774;
@@ -33709,6 +36232,7 @@ mfnfss = {
   sha512.source = "2bd5aee80abf38884cc4a3ad6d6226243a6ffe0d2e879101aee56168a10cd0c7293eec7ccf53c7a7e8087ca94398e3f4ef38d71ccbbfe48677ffee3f8b813bc9";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 mfpic = {
   revision = 28444;
@@ -33720,6 +36244,7 @@ mfpic = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.10";
+  hasCatalogue = true;
 };
 mfpic4ode = {
   revision = 17745;
@@ -33731,6 +36256,7 @@ mfpic4ode = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.4";
+  hasCatalogue = true;
 };
 mftinc = {
   revision = 15878;
@@ -33742,6 +36268,7 @@ mftinc = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0a";
+  hasCatalogue = true;
 };
 mfware = {
   revision = 66186;
@@ -33751,6 +36278,7 @@ mfware = {
   hasManpages = true;
   hasRunfiles = true;
   license = [ "publicDomain" ];
+  hasCatalogue = true;
 };
 mfware.binfiles = [
   "gftodvi"
@@ -33770,6 +36298,7 @@ mgltex = {
   hasRunfiles = true;
   license = [ "gpl3Only" "cc-by-sa-30" ];
   version = "4.2";
+  hasCatalogue = true;
 };
 mhchem = {
   revision = 69639;
@@ -33787,6 +36316,7 @@ mhchem = {
   sha512.doc = "487a5d90782d1c0814c7110388e5277e70dff9adc82048f8b5c33ffbf8c82e9df73293b4ab78bc83c2ef23674e341a2fb15f6b3268d1fdff1aa57d4d3813ea1e";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 mhequ = {
   revision = 64978;
@@ -33797,6 +36327,7 @@ mhequ = {
   hasRunfiles = true;
   license = [ "publicDomain" ];
   version = "1.72";
+  hasCatalogue = true;
 };
 mi-solns = {
   revision = 49651;
@@ -33808,6 +36339,7 @@ mi-solns = {
   hasRunfiles = true;
   license = [ "lppl12" ];
   version = "0.6";
+  hasCatalogue = true;
 };
 miama = {
   revision = 54512;
@@ -33822,6 +36354,7 @@ miama = {
   hasRunfiles = true;
   license = [ "ofl" "lppl13c" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 microtype = {
   revision = 66587;
@@ -33833,6 +36366,7 @@ microtype = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "3.1a";
+  hasCatalogue = true;
 };
 microtype-de = {
   revision = 54080;
@@ -33842,6 +36376,7 @@ microtype-de = {
   sha512.doc = "fa524a0225a57fc60bbad95cdd7855f4ba73691a6787c906ef5091183425a650f583340d65ce8b11792046c767b0b31e5131c62dcc281898457234134aec291b";
   license = [ "lppl13c" ];
   version = "2.4";
+  hasCatalogue = true;
 };
 midnight = {
   revision = 15878;
@@ -33851,6 +36386,7 @@ midnight = {
   sha512.doc = "0c594cac3c7e8d3064145f1b2b088d74a5445b7a7506fc2629b3df6f63419b025779e348116f7dbc859d7c406d87e5b5988d529e5da61d01b0759b0f0fec2382";
   hasRunfiles = true;
   license = [ "free" ];
+  hasCatalogue = true;
 };
 midpage = {
   revision = 17484;
@@ -33861,6 +36397,7 @@ midpage = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1a";
+  hasCatalogue = true;
 };
 miller = {
   revision = 18789;
@@ -33872,6 +36409,7 @@ miller = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.2";
+  hasCatalogue = true;
 };
 milog = {
   revision = 41610;
@@ -33882,6 +36420,7 @@ milog = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 milsymb = {
   revision = 66697;
@@ -33892,6 +36431,7 @@ milsymb = {
   hasRunfiles = true;
   license = [ "cc-by-sa-40" ];
   version = "1.03";
+  hasCatalogue = true;
 };
 mindflow = {
   revision = 65236;
@@ -33902,6 +36442,7 @@ mindflow = {
   sha512.source = "1a267ca0f437c707ba05b65aa4355ad721aa2de26518143aae4e752ce1dc69d12f6e4b42b670c032d82ae15f5a6753cbc29f56bc44f4bb48d63ff6dc0afb9e1c";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 minibox = {
   revision = 30914;
@@ -33913,6 +36454,7 @@ minibox = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.2a";
+  hasCatalogue = true;
 };
 minidocument = {
   revision = 43752;
@@ -33924,6 +36466,7 @@ minidocument = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 minifp = {
   revision = 32559;
@@ -33935,6 +36478,7 @@ minifp = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.96";
+  hasCatalogue = true;
 };
 minim = {
   revision = 70320;
@@ -33945,6 +36489,7 @@ minim = {
   hasRunfiles = true;
   license = [ "free" ];
   version = "2024-1.5";
+  hasCatalogue = true;
 };
 minim-hatching = {
   revision = 62395;
@@ -33955,6 +36500,7 @@ minim-hatching = {
   hasRunfiles = true;
   license = [ "free" ];
   version = "2022-1.1";
+  hasCatalogue = true;
 };
 minim-math = {
   revision = 69352;
@@ -33965,6 +36511,7 @@ minim-math = {
   hasRunfiles = true;
   license = [ "free" ];
   version = "2024-1.4";
+  hasCatalogue = true;
 };
 minim-mp = {
   revision = 70322;
@@ -33975,6 +36522,7 @@ minim-mp = {
   hasRunfiles = true;
   license = [ "free" ];
   version = "2024-1.5";
+  hasCatalogue = true;
 };
 minim-pdf = {
   revision = 70321;
@@ -33985,6 +36533,7 @@ minim-pdf = {
   hasRunfiles = true;
   license = [ "free" ];
   version = "2024-1.5";
+  hasCatalogue = true;
 };
 minim-xmp = {
   revision = 69352;
@@ -33995,6 +36544,7 @@ minim-xmp = {
   hasRunfiles = true;
   license = [ "free" ];
   version = "2024-1.3";
+  hasCatalogue = true;
 };
 minimalist = {
   revision = 70329;
@@ -34007,6 +36557,7 @@ minimalist = {
   sha512.doc = "9f887a4043097a7fad52699d2568bf3e534d27df57f0567e392560e5153d7706068f2835ed03f5543bcb8e9021393e526b1499180bf00da851ac661cc86e2443";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 minipage-marginpar = {
   revision = 15878;
@@ -34018,6 +36569,7 @@ minipage-marginpar = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.2";
+  hasCatalogue = true;
 };
 miniplot = {
   revision = 17483;
@@ -34027,6 +36579,7 @@ miniplot = {
   sha512.doc = "6ae8000b3d0ef50e37dfbda399396a42bd348d6ed9ee485ff01ded9d850693f43b0c1945dfde93d9ea0f17494ac2e03391824f2f0c0eff67355c3d3f3ad6cccf";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 minitoc = {
   revision = 61719;
@@ -34037,6 +36590,7 @@ minitoc = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "62";
+  hasCatalogue = true;
 };
 minorrevision = {
   revision = 32165;
@@ -34047,6 +36601,7 @@ minorrevision = {
   hasRunfiles = true;
   license = [ "lppl12" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 minted = {
   revision = 69163;
@@ -34074,6 +36629,7 @@ minted = {
   hasRunfiles = true;
   license = [ "lppl13c" "bsd3" ];
   version = "2.9";
+  hasCatalogue = true;
 };
 mintspirit = {
   revision = 64461;
@@ -34086,6 +36642,7 @@ mintspirit = {
   sha512.doc = "8a7855b5cd117a5a11eda118b8a4b08eff4183a427655c501c5e3c40e1e9617397d58e6622058187a48d04948fad9164b866e58c76080404d7bdf4ff9fbc4d9b";
   hasRunfiles = true;
   license = [ "ofl" "lppl13c" ];
+  hasCatalogue = true;
 };
 minutes = {
   revision = 42186;
@@ -34097,6 +36654,7 @@ minutes = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.8f";
+  hasCatalogue = true;
 };
 mismath = {
   revision = 70260;
@@ -34108,6 +36666,7 @@ mismath = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.12";
+  hasCatalogue = true;
 };
 missaali = {
   revision = 61719;
@@ -34118,6 +36677,7 @@ missaali = {
   hasRunfiles = true;
   license = [ "ofl" "lppl13c" ];
   version = "2.0";
+  hasCatalogue = true;
 };
 mitthesis = {
   revision = 68732;
@@ -34128,15 +36688,18 @@ mitthesis = {
   hasRunfiles = true;
   license = [ "mit" ];
   version = "1.11";
+  hasCatalogue = true;
 };
 mkgrkindex = {
   revision = 26313;
+  catalogue = "greek-makeindex";
   shortdesc = "Makeindex working with Greek";
   sha512.run = "bbb0b306f30b4fe898f5d5bfdcb1eaa4d2d88a95cfa1ea0da51957aad1de028928562c930180f6c0a7d66b5cdfd804d52afbd229e7ca43173477a229cefff192";
   sha512.doc = "5a5b14d4282e97420f796456155a71c23a44d4197d4d92bfea1f0f20e95b42e506c7be3f2b0aba37508415341e999522bd823c649cc6259a6e26d42399c6b8cf";
   hasRunfiles = true;
   license = [ "free" ];
   version = "2.0";
+  hasCatalogue = true;
 };
 mkgrkindex.binfiles = [
   "mkgrkindex"
@@ -34151,6 +36714,7 @@ mkjobtexmf = {
   hasRunfiles = true;
   license = [ "artistic1-cl8" ];
   version = "0.8";
+  hasCatalogue = true;
 };
 mkjobtexmf.binfiles = [
   "mkjobtexmf"
@@ -34164,6 +36728,7 @@ mkpattern = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.2";
+  hasCatalogue = true;
 };
 mkpic = {
   revision = 33700;
@@ -34173,6 +36738,7 @@ mkpic = {
   hasRunfiles = true;
   license = [ "gpl1Only" ];
   version = "1.02";
+  hasCatalogue = true;
 };
 mkpic.binfiles = [
   "mkpic"
@@ -34185,6 +36751,7 @@ mla-paper = {
   sha512.doc = "6bf3856fced879c5dce5cf1442ed0302453f7a02ec30b4d1a2cd63228baeef58d11999d56f505c1aab6a78eff1e4671665da381b7e319a467e42f70c56cfc89e";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 mlacls = {
   revision = 67201;
@@ -34196,6 +36763,7 @@ mlacls = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 mlawriter = {
   revision = 67558;
@@ -34206,6 +36774,7 @@ mlawriter = {
   hasRunfiles = true;
   license = [ "cc0" ];
   version = "1.1.0";
+  hasCatalogue = true;
 };
 mleftright = {
   revision = 53021;
@@ -34217,6 +36786,7 @@ mleftright = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.2";
+  hasCatalogue = true;
 };
 mlist = {
   revision = 15878;
@@ -34228,6 +36798,7 @@ mlist = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.6a";
+  hasCatalogue = true;
 };
 mlmodern = {
   revision = 57458;
@@ -34241,6 +36812,7 @@ mlmodern = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.2";
+  hasCatalogue = true;
 };
 mltex = {
   revision = 62145;
@@ -34286,6 +36858,7 @@ mltex = {
   hasRunfiles = true;
   license = [ "knuth" ];
   version = "2.2";
+  hasCatalogue = true;
 };
 mltex.binfiles = [
   "mllatex"
@@ -34301,6 +36874,7 @@ mluexercise = {
   hasRunfiles = true;
   license = [ "mit" ];
   version = "2.0";
+  hasCatalogue = true;
 };
 mmap = {
   revision = 15878;
@@ -34311,6 +36885,7 @@ mmap = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.03";
+  hasCatalogue = true;
 };
 mnhyphn = {
   revision = 69727;
@@ -34321,6 +36896,7 @@ mnhyphn = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.4";
+  hasCatalogue = true;
 };
 mnotes = {
   revision = 63406;
@@ -34332,6 +36908,7 @@ mnotes = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.9";
+  hasCatalogue = true;
 };
 mnras = {
   revision = 68878;
@@ -34342,6 +36919,7 @@ mnras = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "3.2";
+  hasCatalogue = true;
 };
 mnsymbol = {
   revision = 18651;
@@ -34356,6 +36934,7 @@ mnsymbol = {
   hasRunfiles = true;
   license = [ "publicDomain" ];
   version = "1.4";
+  hasCatalogue = true;
 };
 modeles-factures-belges-assocs = {
   revision = 67840;
@@ -34366,6 +36945,7 @@ modeles-factures-belges-assocs = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0.1";
+  hasCatalogue = true;
 };
 moderncv = {
   revision = 62128;
@@ -34388,6 +36968,7 @@ moderncv = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.3.1";
+  hasCatalogue = true;
 };
 modernposter = {
   revision = 47269;
@@ -34398,6 +36979,7 @@ modernposter = {
   hasRunfiles = true;
   license = [ "cc-by-sa-40" ];
   version = "1.03.1";
+  hasCatalogue = true;
 };
 moderntimeline = {
   revision = 55518;
@@ -34409,6 +36991,7 @@ moderntimeline = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.11";
+  hasCatalogue = true;
 };
 modes = {
   revision = 69113;
@@ -34419,6 +37002,7 @@ modes = {
   hasRunfiles = true;
   license = [ "publicDomain" ];
   version = "4.3";
+  hasCatalogue = true;
 };
 modiagram = {
   revision = 56886;
@@ -34429,6 +37013,7 @@ modiagram = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.3a";
+  hasCatalogue = true;
 };
 modref = {
   revision = 15878;
@@ -34440,6 +37025,7 @@ modref = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 modroman = {
   revision = 29803;
@@ -34451,6 +37037,7 @@ modroman = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1";
+  hasCatalogue = true;
 };
 modular = {
   revision = 44142;
@@ -34460,6 +37047,7 @@ modular = {
   sha512.doc = "7d7201db0a2791700748d440fdc5cca9d8d274ceeacddb3715d99b68b4c04f52949e8b9897377168463059deec86177470a997bfea7a32a2765afda713aed499";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 modulus = {
   revision = 47599;
@@ -34471,6 +37059,7 @@ modulus = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 moloch = {
   revision = 70496;
@@ -34482,6 +37071,7 @@ moloch = {
   hasRunfiles = true;
   license = [ "cc-by-sa-40" ];
   version = "0.3.0";
+  hasCatalogue = true;
 };
 mongolian-babel = {
   revision = 15878;
@@ -34493,6 +37083,7 @@ mongolian-babel = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.2";
+  hasCatalogue = true;
 };
 monofill = {
   revision = 28140;
@@ -34504,6 +37095,7 @@ monofill = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.2";
+  hasCatalogue = true;
 };
 montex = {
   revision = 29349;
@@ -34520,6 +37112,7 @@ montex = {
   hasRunfiles = true;
   license = [ "gpl1Only" ];
   version = "IVu.04.092";
+  hasCatalogue = true;
 };
 montserrat = {
   revision = 54512;
@@ -34533,6 +37126,7 @@ montserrat = {
   hasRunfiles = true;
   license = [ "ofl" "lppl13c" ];
   version = "1.03";
+  hasCatalogue = true;
 };
 moodle = {
   revision = 65672;
@@ -34544,6 +37138,7 @@ moodle = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 moreenum = {
   revision = 24479;
@@ -34554,6 +37149,7 @@ moreenum = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.03";
+  hasCatalogue = true;
 };
 morefloats = {
   revision = 37927;
@@ -34565,6 +37161,7 @@ morefloats = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0h";
+  hasCatalogue = true;
 };
 morehype = {
   revision = 38815;
@@ -34576,6 +37173,7 @@ morehype = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "r0.83";
+  hasCatalogue = true;
 };
 moresize = {
   revision = 17513;
@@ -34587,6 +37185,7 @@ moresize = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.9";
+  hasCatalogue = true;
 };
 moreverb = {
   revision = 22126;
@@ -34598,6 +37197,7 @@ moreverb = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.3a";
+  hasCatalogue = true;
 };
 morewrites = {
   revision = 69679;
@@ -34608,6 +37208,7 @@ morewrites = {
   sha512.source = "e3db6542cdd4548e0a9fa10a40b333e48ad4ab713acf8f38389f8ebe5113b598f647e9eb11047339ae09ae344aa22ea3ccc0f782c35dca2552fdf8707d4926c8";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 morisawa = {
   revision = 46946;
@@ -34621,6 +37222,7 @@ morisawa = {
   sha512.source = "7e3821bc1f5dad076307ebf00cacb68cdeb9e18a060c9c024c0fea85c558f7373f214f16952fa643f8b832376101ec8c8bb839a902e6e8213912a4cbc10862ad";
   hasRunfiles = true;
   license = [ "bsd3" ];
+  hasCatalogue = true;
 };
 movement-arrows = {
   revision = 67270;
@@ -34631,6 +37233,7 @@ movement-arrows = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.0";
+  hasCatalogue = true;
 };
 movie15 = {
   revision = 26473;
@@ -34640,6 +37243,7 @@ movie15 = {
   sha512.doc = "4df2fec7f0abac6ef4d948285b3156bb9489a3b7b18939fa109abcd9c537e383d505e308516e1bc852aa5c5bdd6b8825e8f7e887c9787d7c2d337124942cc9e5";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 mp3d = {
   revision = 29349;
@@ -34650,6 +37254,7 @@ mp3d = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.34";
+  hasCatalogue = true;
 };
 mparhack = {
   revision = 59066;
@@ -34661,6 +37266,7 @@ mparhack = {
   hasRunfiles = true;
   license = [ "gpl2Plus" ];
   version = "1.5";
+  hasCatalogue = true;
 };
 mparrows = {
   revision = 39729;
@@ -34671,6 +37277,7 @@ mparrows = {
   hasRunfiles = true;
   license = [ "publicDomain" ];
   version = "0.1";
+  hasCatalogue = true;
 };
 mpattern = {
   revision = 15878;
@@ -34680,6 +37287,7 @@ mpattern = {
   sha512.doc = "4ec7cadd89449ca049fdd723de9e29f20199a630fc28585a4802e3ce3666783822e4f0769907cafbfb0fe097b1da4a08d3e5e5f4038ecebbe9fe3543dd3413d6";
   hasRunfiles = true;
   license = [ "publicDomain" ];
+  hasCatalogue = true;
 };
 mpchess = {
   revision = 67704;
@@ -34690,6 +37298,7 @@ mpchess = {
   hasRunfiles = true;
   license = [ "lppl13c" "gpl2Plus" ];
   version = "0.7";
+  hasCatalogue = true;
 };
 mpcolornames = {
   revision = 23252;
@@ -34701,6 +37310,7 @@ mpcolornames = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.20";
+  hasCatalogue = true;
 };
 mpfonts = {
   revision = 54512;
@@ -34710,6 +37320,7 @@ mpfonts = {
   sha512.doc = "4aa1296012f4ed3483f444320d7d28d942823da0cd58c1350dc4a90da1fa5e51cd5bac86f257290c720f9808b74c2cc87c49f18882073ac44ef7f577248f57be";
   hasRunfiles = true;
   license = [ "knuth" "lppl13c" "ofl" "free" "publicDomain" ];
+  hasCatalogue = true;
 };
 mpgraphics = {
   revision = 29776;
@@ -34721,6 +37332,7 @@ mpgraphics = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.3";
+  hasCatalogue = true;
 };
 mpman-ru = {
   revision = 15878;
@@ -34730,6 +37342,7 @@ mpman-ru = {
   sha512.doc = "57f2449eaed3651b808095348f056fdfa90b00979ba2e21fad120efe096dca9a9e48474e9dbb539f347ffe20ccd5582f4815ff4552c54e9ea5f9df391dd75edb";
   license = [ "free" ];
   version = "1.004";
+  hasCatalogue = true;
 };
 mpostinl = {
   revision = 49559;
@@ -34741,6 +37354,7 @@ mpostinl = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.5";
+  hasCatalogue = true;
 };
 mptopdf = {
   revision = 69363;
@@ -34774,6 +37388,7 @@ mptrees = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "24.02";
+  hasCatalogue = true;
 };
 ms = {
   revision = 57473;
@@ -34784,6 +37399,7 @@ ms = {
   sha512.source = "b03f9ac6bc7ab56bacac4053d278d0c826925f4f81df80e73ee2a48209e1e51c48b0706dbd0d69ec9a068e4a59a12df104b8e7dfd60cd0cd5c6210f43d528ce7";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 msc = {
   revision = 67718;
@@ -34794,6 +37410,7 @@ msc = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.00";
+  hasCatalogue = true;
 };
 msg = {
   revision = 49578;
@@ -34805,6 +37422,7 @@ msg = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.51";
+  hasCatalogue = true;
 };
 mslapa = {
   revision = 54080;
@@ -34814,6 +37432,7 @@ mslapa = {
   sha512.doc = "b53311156cb6872ec996130474f18d8735f9fbba8d53258638f78d498b3cb294eb490b6eb1460546dcec39258e0785401dad5ecb66c82e2cfd7814bfa852908b";
   hasRunfiles = true;
   license = [ "free" ];
+  hasCatalogue = true;
 };
 msu-thesis = {
   revision = 68480;
@@ -34824,6 +37443,7 @@ msu-thesis = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "4.1h";
+  hasCatalogue = true;
 };
 mtgreek = {
   revision = 17967;
@@ -34835,6 +37455,7 @@ mtgreek = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1+";
+  hasCatalogue = true;
 };
 mucproc = {
   revision = 43445;
@@ -34846,6 +37467,7 @@ mucproc = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.02";
+  hasCatalogue = true;
 };
 mugsthesis = {
   revision = 64259;
@@ -34857,6 +37479,7 @@ mugsthesis = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 muling = {
   revision = 66741;
@@ -34868,6 +37491,7 @@ muling = {
   hasRunfiles = true;
   license = [ "gpl3Plus" "fdl13Only" ];
   version = "0.5";
+  hasCatalogue = true;
 };
 multenum = {
   revision = 21775;
@@ -34877,6 +37501,7 @@ multenum = {
   sha512.doc = "889ffbce149b1f0a98e22a1ebcafc60e29858d08b57e2e567956830c679515759a6c8209901641e3d77ded31238e8fe93f7e4cdff95d1be925e3972c9005f4a7";
   hasRunfiles = true;
   license = [ "lppl1" ];
+  hasCatalogue = true;
 };
 multiaudience = {
   revision = 60688;
@@ -34888,6 +37513,7 @@ multiaudience = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.04";
+  hasCatalogue = true;
 };
 multibbl = {
   revision = 15878;
@@ -34899,6 +37525,7 @@ multibbl = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 multibib = {
   revision = 15878;
@@ -34910,6 +37537,7 @@ multibib = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.4";
+  hasCatalogue = true;
 };
 multibibliography = {
   revision = 30939;
@@ -34920,6 +37548,7 @@ multibibliography = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.03";
+  hasCatalogue = true;
 };
 multibibliography.binfiles = [
   "multibibliography"
@@ -34933,6 +37562,7 @@ multicap = {
   sha512.source = "95df0571a8741db7d0b4d3ab0fd0d1469c531a00e3cf524977fe2cec57c3cb9ce9cf3c3136b42a8d0fb8f9dea2e8f4cc6f07fa48490167094e04c0e688d45527";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 multicolrule = {
   revision = 56366;
@@ -34944,6 +37574,7 @@ multicolrule = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.3a";
+  hasCatalogue = true;
 };
 multidef = {
   revision = 40637;
@@ -34955,6 +37586,7 @@ multidef = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.10";
+  hasCatalogue = true;
 };
 multido = {
   revision = 18302;
@@ -34966,6 +37598,7 @@ multido = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.42";
+  hasCatalogue = true;
 };
 multienv = {
   revision = 64967;
@@ -34977,6 +37610,7 @@ multienv = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 multiexpand = {
   revision = 45943;
@@ -34988,6 +37622,7 @@ multiexpand = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.5";
+  hasCatalogue = true;
 };
 multifootnote = {
   revision = 63456;
@@ -34997,6 +37632,7 @@ multifootnote = {
   sha512.doc = "9e74a56d5d27506e354d0d68b4639df92ba4d017354e3f12bb2c9be33c210eef6cd2ad3dbcf0fa17b75b0c938da9407f0b4f9ce3e5fee000e2840d702d28fca9";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 multilang = {
   revision = 49065;
@@ -35008,6 +37644,7 @@ multilang = {
   hasRunfiles = true;
   license = [ "lppl12" ];
   version = "0.9b";
+  hasCatalogue = true;
 };
 multiobjective = {
   revision = 15878;
@@ -35019,6 +37656,7 @@ multiobjective = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 multiple-choice = {
   revision = 63722;
@@ -35029,6 +37667,7 @@ multiple-choice = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.2";
+  hasCatalogue = true;
 };
 multirow = {
   revision = 58396;
@@ -35040,6 +37679,7 @@ multirow = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.8";
+  hasCatalogue = true;
 };
 munich = {
   revision = 15878;
@@ -35049,6 +37689,7 @@ munich = {
   sha512.doc = "ed2dc99df090a012f1b1b922659eebe4c2d8523127e17341b9c4b66413acfc89f8b64ed639c8fd40ace0f4fddc8662f42630411c67026311a26fed436a363b78";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 musical = {
   revision = 54758;
@@ -35059,6 +37700,7 @@ musical = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "3.1";
+  hasCatalogue = true;
 };
 musicography = {
   revision = 68220;
@@ -35068,6 +37710,7 @@ musicography = {
   sha512.doc = "52dc06ba9b0394c0ea66fc02094174b45733002a3a492784b1e67670614caf57a162d5ab74cd51bbe6d884fbf0f04458d6eeafa2faf637ccfde4fbbfa435cb7f";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 musikui = {
   revision = 47472;
@@ -35078,6 +37721,7 @@ musikui = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1";
+  hasCatalogue = true;
 };
 musixguit = {
   revision = 21649;
@@ -35088,6 +37732,7 @@ musixguit = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.2.2";
+  hasCatalogue = true;
 };
 musixtex = {
   revision = 69742;
@@ -35102,6 +37747,7 @@ musixtex = {
   ];
   license = [ "gpl2Plus" ];
   version = "1.37";
+  hasCatalogue = true;
 };
 musixtex-fonts = {
   revision = 65517;
@@ -35114,6 +37760,7 @@ musixtex-fonts = {
   sha512.doc = "eff2e4596dd426f1f57003d6441eb0632f7b9bbbb216ab4e2b069a1a624e77e06f032f191ba13afd2e55b472f5a719936f34fcf2ba6997336a3c3716c4d936c3";
   hasRunfiles = true;
   license = [ "gpl1Only" ];
+  hasCatalogue = true;
 };
 musixtex.binfiles = [
   "musixflx"
@@ -35130,6 +37777,7 @@ musixtnt = {
   hasManpages = true;
   hasRunfiles = true;
   license = [ "gpl2Only" ];
+  hasCatalogue = true;
 };
 musixtnt.binfiles = [
   "msxlint"
@@ -35144,6 +37792,7 @@ musuos = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1d";
+  hasCatalogue = true;
 };
 muthesis = {
   revision = 23861;
@@ -35153,6 +37802,7 @@ muthesis = {
   sha512.doc = "5ed08b459ffdc954f5857be1a1970e9a23d2cfc23cbb04e820b82368b1febb9bf04811e53ce6fd05cc12da302d182179d29b278fb99157e801afd05db15cbaa1";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 mversion = {
   revision = 29370;
@@ -35164,6 +37814,7 @@ mversion = {
   hasRunfiles = true;
   license = [ "lppl12" ];
   version = "1.0.1";
+  hasCatalogue = true;
 };
 mwcls = {
   revision = 44352;
@@ -35175,6 +37826,7 @@ mwcls = {
   hasRunfiles = true;
   license = [ "lppl12" ];
   version = "0.75";
+  hasCatalogue = true;
 };
 mwe = {
   revision = 64967;
@@ -35186,6 +37838,7 @@ mwe = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.5";
+  hasCatalogue = true;
 };
 mweights = {
   revision = 53520;
@@ -35195,6 +37848,7 @@ mweights = {
   sha512.doc = "b103ae1a7e4072e646aa70ccd660cef52b6954deec6425fe2007c15a1f56fb45d43d276449e436f188e52192609766237ec22b69c7782af5c0e3f15081989dc1";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 mxedruli = {
   revision = 30021;
@@ -35208,6 +37862,7 @@ mxedruli = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "3.3c";
+  hasCatalogue = true;
 };
 mycv = {
   revision = 26807;
@@ -35219,6 +37874,7 @@ mycv = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.5.6";
+  hasCatalogue = true;
 };
 mylatex = {
   revision = 56751;
@@ -35228,6 +37884,7 @@ mylatex = {
   sha512.doc = "791cce1eb8370e62642b64389b26a91af563ca875268039ffa978cd07a743b999573199f1a3851ee65f8118cb462ab5d5c658118a735875db90eb8482246e889";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 mylatexformat = {
   revision = 21392;
@@ -35239,6 +37896,7 @@ mylatexformat = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "3.4";
+  hasCatalogue = true;
 };
 mynsfc = {
   revision = 60280;
@@ -35250,6 +37908,7 @@ mynsfc = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.30";
+  hasCatalogue = true;
 };
 na-box = {
   revision = 45130;
@@ -35260,6 +37919,7 @@ na-box = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 na-position = {
   revision = 55559;
@@ -35270,6 +37930,7 @@ na-position = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.2";
+  hasCatalogue = true;
 };
 nag = {
   revision = 24741;
@@ -35281,6 +37942,7 @@ nag = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.7";
+  hasCatalogue = true;
 };
 naive-ebnf = {
   revision = 67892;
@@ -35297,6 +37959,7 @@ naive-ebnf = {
   hasRunfiles = true;
   license = [ "mit" ];
   version = "0.0.15";
+  hasCatalogue = true;
 };
 nameauth = {
   revision = 69758;
@@ -35308,6 +37971,7 @@ nameauth = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "4.0";
+  hasCatalogue = true;
 };
 namedef = {
   revision = 55881;
@@ -35322,6 +37986,7 @@ namedef = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 namedtensor = {
   revision = 65346;
@@ -35332,6 +37997,7 @@ namedtensor = {
   hasRunfiles = true;
   license = [ "mit" ];
   version = "0.4";
+  hasCatalogue = true;
 };
 namespc = {
   revision = 15878;
@@ -35342,6 +38008,7 @@ namespc = {
   sha512.source = "33579dd40ba708e2e8a727f923f727f893f2f8e9562d369b1e025b50300250010d2829217a7aa72c1ee5781f3ed501e60b010cfc3cf3211b4bed1168494fa4ab";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 nanicolle = {
   revision = 56224;
@@ -35352,6 +38019,7 @@ nanicolle = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.03y";
+  hasCatalogue = true;
 };
 nanumtype1 = {
   revision = 29558;
@@ -35365,6 +38033,7 @@ nanumtype1 = {
   hasRunfiles = true;
   license = [ "ofl" ];
   version = "3.0";
+  hasCatalogue = true;
 };
 nar = {
   revision = 38100;
@@ -35374,6 +38043,7 @@ nar = {
   hasRunfiles = true;
   license = [ "free" ];
   version = "3.19";
+  hasCatalogue = true;
 };
 natbib = {
   revision = 20668;
@@ -35385,6 +38055,7 @@ natbib = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "8.31b";
+  hasCatalogue = true;
 };
 natded = {
   revision = 32693;
@@ -35395,6 +38066,7 @@ natded = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.1";
+  hasCatalogue = true;
 };
 nath = {
   revision = 15878;
@@ -35404,6 +38076,7 @@ nath = {
   sha512.doc = "ea75b3f282f81963484b2f6b29513a99f3153f222931dfa811deca40cc79a814a225a0a79e67237f53e3aabd33f7749095d3c7fb8f374ec802ee054ebca291d4";
   hasRunfiles = true;
   license = [ "gpl1Only" ];
+  hasCatalogue = true;
 };
 nature = {
   revision = 21819;
@@ -35414,6 +38087,7 @@ nature = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 navigator = {
   revision = 41413;
@@ -35424,6 +38098,7 @@ navigator = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 navydocs = {
   revision = 41643;
@@ -35435,6 +38110,7 @@ navydocs = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 ncclatex = {
   revision = 15878;
@@ -35445,6 +38121,7 @@ ncclatex = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.5";
+  hasCatalogue = true;
 };
 ncctools = {
   revision = 51810;
@@ -35456,6 +38133,7 @@ ncctools = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "3.5.3";
+  hasCatalogue = true;
 };
 nchairx = {
   revision = 60196;
@@ -35467,9 +38145,11 @@ nchairx = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0.0";
+  hasCatalogue = true;
 };
 ncntrsbk = {
   revision = 61719;
+  catalogue = "urw-base35";
   shortdesc = "URW 'Base 35' font pack for LaTeX";
   stripPrefix = 0;
   fontMaps = [
@@ -35478,6 +38158,7 @@ ncntrsbk = {
   sha512.run = "cafa6f6ba366c07bfa0fe37ae415cf924ca54249288a52726eed52b9c8147925b6ac4a85fcb69a19596944ed8585cab4ce8fc2710a7c32998b360ea2ab143d56";
   hasRunfiles = true;
   license = [ "gpl1Only" ];
+  hasCatalogue = true;
 };
 nddiss = {
   revision = 45107;
@@ -35489,6 +38170,7 @@ nddiss = {
   hasRunfiles = true;
   license = [ "lppl12" ];
   version = "3.2017.2";
+  hasCatalogue = true;
 };
 ndsu-thesis = {
   revision = 46639;
@@ -35498,6 +38180,7 @@ ndsu-thesis = {
   sha512.doc = "8e93554ef50d43562d1c42fff3da81b77b4ae444d644e5b1a818571e80cef88a2006f1b1c61c320e467724df7847be50f4f3ec1663bd767261720cc1a80419ba";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 ndsu-thesis-2022 = {
   revision = 63881;
@@ -35507,6 +38190,7 @@ ndsu-thesis-2022 = {
   sha512.doc = "ab0c8ca7aa865052422192b51d1affe2c26af465dfe3de9a0bd10a30e5cbaa8f9f9594e1337bf175a069ff189c8924c844acff0b7788692f19e44198c1f578d0";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 needspace = {
   revision = 29601;
@@ -35518,6 +38202,7 @@ needspace = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.3d";
+  hasCatalogue = true;
 };
 nestquot = {
   revision = 27323;
@@ -35526,6 +38211,7 @@ nestquot = {
   sha512.run = "cc75905a3423deb02f226340eeb6a5f97d9d83470f156bc75cdf39569da845279fe8d4a3907fdf269bac75e7afae02faa04dea367cf0326720301ba3f1c31395";
   hasRunfiles = true;
   license = [ "free" ];
+  hasCatalogue = true;
 };
 neuralnetwork = {
   revision = 31500;
@@ -35536,6 +38222,7 @@ neuralnetwork = {
   hasRunfiles = true;
   license = [ "gpl1Only" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 nevelok = {
   revision = 39029;
@@ -35547,6 +38234,7 @@ nevelok = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.03";
+  hasCatalogue = true;
 };
 newcastle-bst = {
   revision = 62856;
@@ -35557,6 +38245,7 @@ newcastle-bst = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 newcommand = {
   revision = 18704;
@@ -35566,6 +38255,7 @@ newcommand = {
   sha512.doc = "84f71adb1cdf4213f34e30a2737f41c93fd0e8ac4970b2adb832570c98c5f3876502556392fa077a8cb647a552a8e914b2a30e4e38a039c355802e2c85c5f3e1";
   license = [ "lppl13c" ];
   version = "2.0";
+  hasCatalogue = true;
 };
 newcomputermodern = {
   revision = 69379;
@@ -35576,6 +38266,7 @@ newcomputermodern = {
   hasRunfiles = true;
   license = [ "gfl" ];
   version = "5.1";
+  hasCatalogue = true;
 };
 newenviron = {
   revision = 29331;
@@ -35586,6 +38277,7 @@ newenviron = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 newfile = {
   revision = 15878;
@@ -35597,6 +38289,7 @@ newfile = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0c";
+  hasCatalogue = true;
 };
 newfloat = {
   revision = 68434;
@@ -35608,6 +38301,7 @@ newfloat = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.2";
+  hasCatalogue = true;
 };
 newlfm = {
   revision = 15878;
@@ -35619,6 +38313,7 @@ newlfm = {
   hasRunfiles = true;
   license = [ "gpl1Only" ];
   version = "9.4";
+  hasCatalogue = true;
 };
 newpax = {
   revision = 68762;
@@ -35630,6 +38325,7 @@ newpax = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.55";
+  hasCatalogue = true;
 };
 newpx = {
   revision = 69777;
@@ -35644,6 +38340,7 @@ newpx = {
   hasRunfiles = true;
   license = [ "lppl13c" "gfl" ];
   version = "1.536";
+  hasCatalogue = true;
 };
 newsletr = {
   revision = 15878;
@@ -35653,6 +38350,7 @@ newsletr = {
   sha512.doc = "aff23fd9e3397c52a1566930d6da6184786f07adc64c63e5d9e0062451014d261db8dab06e9d393cb66b3b56a51b57f494f01c9ab27b05bbe2a226cd4623d590";
   hasRunfiles = true;
   license = [ "free" ];
+  hasCatalogue = true;
 };
 newspaper = {
   revision = 15878;
@@ -35664,6 +38362,7 @@ newspaper = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 newtx = {
   revision = 70496;
@@ -35680,6 +38379,7 @@ newtx = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.742";
+  hasCatalogue = true;
 };
 newtxsf = {
   revision = 69597;
@@ -35693,6 +38393,7 @@ newtxsf = {
   hasRunfiles = true;
   license = [ "ofl" "lppl13c" ];
   version = "1.056";
+  hasCatalogue = true;
 };
 newtxtt = {
   revision = 70403;
@@ -35706,6 +38407,7 @@ newtxtt = {
   hasRunfiles = true;
   license = [ "gpl3Only" "lppl13c" ];
   version = "1.058";
+  hasCatalogue = true;
 };
 newunicodechar = {
   revision = 47382;
@@ -35717,6 +38419,7 @@ newunicodechar = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.2";
+  hasCatalogue = true;
 };
 newvbtm = {
   revision = 23996;
@@ -35728,6 +38431,7 @@ newvbtm = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 newverbs = {
   revision = 64833;
@@ -35739,6 +38443,7 @@ newverbs = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.6a";
+  hasCatalogue = true;
 };
 nextpage = {
   revision = 15878;
@@ -35748,6 +38453,7 @@ nextpage = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1a";
+  hasCatalogue = true;
 };
 nfssext-cfr = {
   revision = 43640;
@@ -35757,6 +38463,7 @@ nfssext-cfr = {
   sha512.doc = "28b2aff47d74de3a42c441dafc156297904b5db20d267f1af07d1e3210e7f9959474b3cec387be7d9b20dc04560b4100a0d9da6979ab8ad2a7cd1e4518cec278";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 nicefilelist = {
   revision = 65842;
@@ -35768,6 +38475,7 @@ nicefilelist = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.9b";
+  hasCatalogue = true;
 };
 niceframe = {
   revision = 36086;
@@ -35779,6 +38487,7 @@ niceframe = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1c";
+  hasCatalogue = true;
 };
 niceframe-type1 = {
   revision = 68091;
@@ -35791,6 +38500,7 @@ niceframe-type1 = {
   sha512.doc = "9f30b52e177fd2fe5bb3ef1f23a16b29a80f049cf33d8ade3dbfb187663e4a8872a18bef0fec1531cabe610839ba21b118623db244b52ab16418a7ad4dfb3d67";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 nicematrix = {
   revision = 69991;
@@ -35802,6 +38512,7 @@ nicematrix = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "6.27a";
+  hasCatalogue = true;
 };
 nicetext = {
   revision = 38914;
@@ -35813,6 +38524,7 @@ nicetext = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "r0.67";
+  hasCatalogue = true;
 };
 nidanfloat = {
   revision = 48295;
@@ -35823,6 +38535,7 @@ nidanfloat = {
   sha512.source = "8a778b33036445dbe375af746244433470e5d10a963ebbfbc397c0376d5c4f7c23cdbc2ff3ff6455e274e83b465a64d8bac5023e8537d5b949fff038098d862e";
   hasRunfiles = true;
   license = [ "bsd3" ];
+  hasCatalogue = true;
 };
 nih = {
   revision = 15878;
@@ -35832,6 +38545,7 @@ nih = {
   sha512.doc = "1c209615f0745ed0ae4d2f4c55cf9447ec4711e9345ca3db778fbf45ccca76792039e6a7e51f2e7286034ae229b5c696ba7deee5bb8c224dbf95a4cccca650f2";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 nihbiosketch = {
   revision = 54191;
@@ -35841,6 +38555,7 @@ nihbiosketch = {
   sha512.doc = "4315c32e1ba43339b609c272fab7aa0b18c44b2c323f43cc303210f37c44c5a08d0dfcbf62e450bdd9ce899d69afd5eceafad91074fec73ac9bcc1e5c8c8540e";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 nimbus15 = {
   revision = 58839;
@@ -35857,6 +38572,7 @@ nimbus15 = {
   hasRunfiles = true;
   license = [ "free" "lppl13c" ];
   version = "1.014";
+  hasCatalogue = true;
 };
 nimsticks = {
   revision = 64118;
@@ -35868,6 +38584,7 @@ nimsticks = {
   hasRunfiles = true;
   license = [ "mit" ];
   version = "2.0.1";
+  hasCatalogue = true;
 };
 ninecolors = {
   revision = 62006;
@@ -35878,6 +38595,7 @@ ninecolors = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2022D";
+  hasCatalogue = true;
 };
 njurepo = {
   revision = 50492;
@@ -35889,6 +38607,7 @@ njurepo = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1.2";
+  hasCatalogue = true;
 };
 njustthesis = {
   revision = 62451;
@@ -35900,6 +38619,7 @@ njustthesis = {
   hasRunfiles = true;
   license = [ "gpl3Plus" ];
   version = "0.0.1";
+  hasCatalogue = true;
 };
 njuthesis = {
   revision = 69051;
@@ -35911,6 +38631,7 @@ njuthesis = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.3.2";
+  hasCatalogue = true;
 };
 njuvisual = {
   revision = 65261;
@@ -35922,6 +38643,7 @@ njuvisual = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.3.0";
+  hasCatalogue = true;
 };
 nkarta = {
   revision = 16437;
@@ -35933,6 +38655,7 @@ nkarta = {
   hasRunfiles = true;
   license = [ "publicDomain" ];
   version = "0.2";
+  hasCatalogue = true;
 };
 nl-interval = {
   revision = 58328;
@@ -35943,6 +38666,7 @@ nl-interval = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 nlctdoc = {
   revision = 68448;
@@ -35953,6 +38677,7 @@ nlctdoc = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.10";
+  hasCatalogue = true;
 };
 nmbib = {
   revision = 37984;
@@ -35964,6 +38689,7 @@ nmbib = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.04";
+  hasCatalogue = true;
 };
 nndraw = {
   revision = 59674;
@@ -35975,6 +38701,7 @@ nndraw = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 nnext = {
   revision = 56575;
@@ -35986,6 +38713,7 @@ nnext = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.0";
+  hasCatalogue = true;
 };
 noconflict = {
   revision = 30140;
@@ -35996,6 +38724,7 @@ noconflict = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 nodetree = {
   revision = 68244;
@@ -36007,6 +38736,7 @@ nodetree = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.3.0";
+  hasCatalogue = true;
 };
 noindentafter = {
   revision = 59195;
@@ -36018,6 +38748,7 @@ noindentafter = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.00";
+  hasCatalogue = true;
 };
 noitcrul = {
   revision = 15878;
@@ -36029,6 +38760,7 @@ noitcrul = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.2";
+  hasCatalogue = true;
 };
 nolbreaks = {
   revision = 26786;
@@ -36039,6 +38771,7 @@ nolbreaks = {
   hasRunfiles = true;
   license = [ "publicDomain" ];
   version = "1.2";
+  hasCatalogue = true;
 };
 nomencl = {
   revision = 61029;
@@ -36050,6 +38783,7 @@ nomencl = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "5.6";
+  hasCatalogue = true;
 };
 nomentbl = {
   revision = 16549;
@@ -36061,6 +38795,7 @@ nomentbl = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.4";
+  hasCatalogue = true;
 };
 non-decimal-units = {
   revision = 69742;
@@ -36070,6 +38805,7 @@ non-decimal-units = {
   sha512.doc = "fe3e393e6f2de3d5678f71fcfc0e98577ae77d063b8d09966cde4d5145a9a4c0696f4c09d24757e18d8adf75a9473eda57fa5bc1218ca96c2b4594bbecfb5d3a";
   hasRunfiles = true;
   license = [ "cc-by-sa-40" ];
+  hasCatalogue = true;
 };
 nonfloat = {
   revision = 17598;
@@ -36081,6 +38817,7 @@ nonfloat = {
   hasRunfiles = true;
   license = [ "publicDomain" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 nonumonpart = {
   revision = 22114;
@@ -36092,6 +38829,7 @@ nonumonpart = {
   hasRunfiles = true;
   license = [ "lppl12" ];
   version = "1";
+  hasCatalogue = true;
 };
 nopageno = {
   revision = 18128;
@@ -36101,6 +38839,7 @@ nopageno = {
   sha512.doc = "5988c42840efc02f816ca0f9ff7ad2d731c66563c0c4de21b857de975bbec08962cef4ed1dad096abc39ecd8489d3a34a66809e98f49b0a280c186d03e6540a2";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 norasi-c90 = {
   revision = 60831;
@@ -36126,6 +38865,7 @@ normalcolor = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "r11";
+  hasCatalogue = true;
 };
 nostarch = {
   revision = 67683;
@@ -36137,6 +38877,7 @@ nostarch = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.4";
+  hasCatalogue = true;
 };
 notebeamer = {
   revision = 68871;
@@ -36147,6 +38888,7 @@ notebeamer = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.3a";
+  hasCatalogue = true;
 };
 notes = {
   revision = 42428;
@@ -36158,6 +38900,7 @@ notes = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0.1";
+  hasCatalogue = true;
 };
 notes2bib = {
   revision = 52231;
@@ -36169,6 +38912,7 @@ notes2bib = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.0m";
+  hasCatalogue = true;
 };
 notespages = {
   revision = 41906;
@@ -36180,6 +38924,7 @@ notespages = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.8.1";
+  hasCatalogue = true;
 };
 notestex = {
   revision = 45396;
@@ -36190,6 +38935,7 @@ notestex = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 notex-bst = {
   revision = 42361;
@@ -36198,6 +38944,7 @@ notex-bst = {
   sha512.run = "68627ca4a07ed0228b9b9ea4b70cdea5196e907f71f343310259d19464d503e76e2ea8fb5f59f01337916ee1f2ef398bdb1d3e4d97f0d49eac660fdce20590ff";
   hasRunfiles = true;
   license = [ "publicDomain" ];
+  hasCatalogue = true;
 };
 noto = {
   revision = 64351;
@@ -36210,6 +38957,7 @@ noto = {
   sha512.doc = "20b8371eec90440f2a491e1f34a0fce79b700e7b2f0aea2a808baaaf4e3275dd253b65d32429a78be6ed2b31b576f4291cc1f3cc2f625a675cd7a317bab90759";
   hasRunfiles = true;
   license = [ "lppl13c" "ofl" ];
+  hasCatalogue = true;
 };
 noto-emoji = {
   revision = 62950;
@@ -36220,6 +38968,7 @@ noto-emoji = {
   hasRunfiles = true;
   license = [ "ofl" ];
   version = "2.034";
+  hasCatalogue = true;
 };
 notoccite = {
   revision = 18129;
@@ -36229,6 +38978,7 @@ notoccite = {
   sha512.doc = "83b3d2c7b97bb88af13d888d04f08ebb7e79661b4924ed6e328f26b9d19e4c6eea6719b49e6f227dc37c96201a901fe57da3745dfa7151bec27c7e8bfb81b236";
   hasRunfiles = true;
   license = [ "publicDomain" ];
+  hasCatalogue = true;
 };
 notomath = {
   revision = 68014;
@@ -36242,6 +38992,7 @@ notomath = {
   hasRunfiles = true;
   license = [ "ofl" "lppl13c" ];
   version = "1.03";
+  hasCatalogue = true;
 };
 novel = {
   revision = 69945;
@@ -36252,6 +39003,7 @@ novel = {
   hasRunfiles = true;
   license = [ "lppl13c" "ofl" ];
   version = "2.1";
+  hasCatalogue = true;
 };
 nowidow = {
   revision = 24066;
@@ -36263,6 +39015,7 @@ nowidow = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 nox = {
   revision = 30991;
@@ -36273,6 +39026,7 @@ nox = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 nrc = {
   revision = 29027;
@@ -36284,6 +39038,7 @@ nrc = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.01a";
+  hasCatalogue = true;
 };
 ntgclass = {
   revision = 65522;
@@ -36295,6 +39050,7 @@ ntgclass = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.1f";
+  hasCatalogue = true;
 };
 nth = {
   revision = 54252;
@@ -36303,6 +39059,7 @@ nth = {
   sha512.run = "e94365bee89f78b13ec22d8d34ac78aaf50f060f9282c0529d98518ce1e5b7f7995bd2da1d17654ed795f7555e7dcfd9d51399f4a83affc059eb3a760a76bf97";
   hasRunfiles = true;
   license = [ "publicDomain" ];
+  hasCatalogue = true;
 };
 ntheorem = {
   revision = 27609;
@@ -36314,6 +39071,7 @@ ntheorem = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.33";
+  hasCatalogue = true;
 };
 ntheorem-vn = {
   revision = 15878;
@@ -36323,6 +39081,7 @@ ntheorem-vn = {
   sha512.doc = "e097290ec9f9696aaabaef4dce11bec4337050848ee547535c30a9ecdf12a1e0be014f905b235fa1d851ad2c20426cd4a9a442a19475063dd4fa73945c3e1780";
   license = [ "lppl13c" ];
   version = "1.203";
+  hasCatalogue = true;
 };
 nuc = {
   revision = 22256;
@@ -36333,6 +39092,7 @@ nuc = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.1";
+  hasCatalogue = true;
 };
 nucleardata = {
   revision = 47307;
@@ -36344,6 +39104,7 @@ nucleardata = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 numberedblock = {
   revision = 33109;
@@ -36354,6 +39115,7 @@ numberedblock = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.10";
+  hasCatalogue = true;
 };
 numberpt = {
   revision = 51640;
@@ -36365,6 +39127,7 @@ numberpt = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 numerica = {
   revision = 68021;
@@ -36375,6 +39138,7 @@ numerica = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "3.0.0";
+  hasCatalogue = true;
 };
 numerica-plus = {
   revision = 68019;
@@ -36385,6 +39149,7 @@ numerica-plus = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "3.0.0";
+  hasCatalogue = true;
 };
 numerica-tables = {
   revision = 68193;
@@ -36395,6 +39160,7 @@ numerica-tables = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "3.1.0";
+  hasCatalogue = true;
 };
 numericplots = {
   revision = 31729;
@@ -36405,6 +39171,7 @@ numericplots = {
   hasRunfiles = true;
   license = [ "gpl3Only" ];
   version = "2.0.2";
+  hasCatalogue = true;
 };
 numname = {
   revision = 18130;
@@ -36414,6 +39181,7 @@ numname = {
   sha512.doc = "41aaa9057415ad83177f416e43fde4c8c81e335b2f3c025cbc53ffe1d9d61fc05dfe33221c16f1d652837e4ab5a797f60391fb4c319339517090ad0e2ffe66bb";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 numnameru = {
   revision = 44895;
@@ -36423,6 +39191,7 @@ numnameru = {
   sha512.doc = "5e67f1908356e1f21e672e63a8873e46ebb36af39e55a64c174c3bc5c49057c6d19ac36523c34a7f1c1fc53346f6ddde8fd239ca88b5790ebba1eb8b7dbeb0ed";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 numprint = {
   revision = 27498;
@@ -36434,6 +39203,7 @@ numprint = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.39";
+  hasCatalogue = true;
 };
 numspell = {
   revision = 61132;
@@ -36444,6 +39214,7 @@ numspell = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.5";
+  hasCatalogue = true;
 };
 nunito = {
   revision = 57429;
@@ -36457,6 +39228,7 @@ nunito = {
   hasRunfiles = true;
   license = [ "ofl" "lppl13c" ];
   version = "0.0.1";
+  hasCatalogue = true;
 };
 nwafuthesis = {
   revision = 66895;
@@ -36468,6 +39240,7 @@ nwafuthesis = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.25";
+  hasCatalogue = true;
 };
 nwejm = {
   revision = 70606;
@@ -36479,6 +39252,7 @@ nwejm = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0.6";
+  hasCatalogue = true;
 };
 oberdiek = {
   revision = 69038;
@@ -36498,6 +39272,7 @@ oberdiek = {
   sha512.source = "726481c21c3bda68ab4050c8dca78cfef2a9e7fdd6f8ee21540fc1dcd629383e21db06588cfd836915a58e4c8da7fa7762f4e65bb01da8d0ba94e874c1d04742";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 objectz = {
   revision = 61719;
@@ -36508,6 +39283,7 @@ objectz = {
   sha512.source = "77332f847ae68cfcbe61b1568e7079a9d2c5a51012c0de3bbad166df71f3cc2af61317d886e4092192e647ad2ac13c7f768b9397770587910ef63a89acff117e";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 obnov = {
   revision = 33355;
@@ -36518,6 +39294,7 @@ obnov = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.11";
+  hasCatalogue = true;
 };
 ocg-p = {
   revision = 28803;
@@ -36528,6 +39305,7 @@ ocg-p = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.4";
+  hasCatalogue = true;
 };
 ocgx = {
   revision = 54512;
@@ -36539,6 +39317,7 @@ ocgx = {
   hasRunfiles = true;
   license = [ "lppl13c" "lppl13c" ];
   version = "0.5";
+  hasCatalogue = true;
 };
 ocgx2 = {
   revision = 65292;
@@ -36549,6 +39328,7 @@ ocgx2 = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.56";
+  hasCatalogue = true;
 };
 ocherokee = {
   revision = 25689;
@@ -36561,6 +39341,7 @@ ocherokee = {
   sha512.doc = "40bb5e47b2ac627007d349c0b043f299f09321aa0d6fc11ad9f345576fd7a902be4d012d56ceede9e66c8a5972828e7b5a5646c101c08fd28fa3ab1c935f8256";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 ocr-b = {
   revision = 20852;
@@ -36570,6 +39351,7 @@ ocr-b = {
   sha512.doc = "6d162b10b558a9db8269b2535ac9df4f76973c54d7e23dea20efb29974b839278888fceab2da85f945da483415bbbafc614c8ae4c1cea6d262d6a46dea5b69a2";
   hasRunfiles = true;
   license = [ "free" ];
+  hasCatalogue = true;
 };
 ocr-b-outline = {
   revision = 20969;
@@ -36583,6 +39365,7 @@ ocr-b-outline = {
   sha512.source = "b2fa5f4561a4fe61c216e800fcb47bf99a09a62d41d62e30669753139484b58b137649248ec152f7631461c54ab4e51873f3c7a42d43ccf2db86d3cd21d3493f";
   hasRunfiles = true;
   license = [ "free" ];
+  hasCatalogue = true;
 };
 ocr-latex = {
   revision = 15878;
@@ -36592,6 +39375,7 @@ ocr-latex = {
   sha512.doc = "d0de99d5cf93517f5be8627d649a1d8018766cbba44c40cfbe0f93a3b69c1a5f10b4057dd79194d148030948509a26ef45ea83208c2922cc64b10473d663d591";
   hasRunfiles = true;
   license = [ "gpl1Only" ];
+  hasCatalogue = true;
 };
 octave = {
   revision = 66115;
@@ -36601,6 +39385,7 @@ octave = {
   sha512.doc = "13cf74923401dfd58978c2365e27aa394aecf01849543cb6f65a52b3344902c546599c350927950f63e3faf1b81667e9329b9c18aca6cbb87327046f0d695988";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 octavo = {
   revision = 15878;
@@ -36612,6 +39397,7 @@ octavo = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.2";
+  hasCatalogue = true;
 };
 odesandpdes = {
   revision = 69485;
@@ -36623,6 +39409,7 @@ odesandpdes = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0.0";
+  hasCatalogue = true;
 };
 odsfile = {
   revision = 68204;
@@ -36633,6 +39420,7 @@ odsfile = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.8";
+  hasCatalogue = true;
 };
 ofs = {
   revision = 16991;
@@ -36642,6 +39430,7 @@ ofs = {
   sha512.doc = "13f7fd3ab4cb31ae521827b703cf4c3a0c796b6a33f46b2a24a2a8c488e92d6039a9b136440b00b6a0aba14a2dbad832b777cd5a3aa120ccfc4888ee147954e7";
   hasRunfiles = true;
   license = [ "knuth" ];
+  hasCatalogue = true;
 };
 ogham = {
   revision = 24876;
@@ -36651,6 +39440,7 @@ ogham = {
   sha512.doc = "6d406cd0a2ba68946be8d2eb148a6c9286a164ae701f66802ecabe6661807ea54eba175617e00920d37a88dee376c1bfcecef6184320ef1790716d53e5a07871";
   hasRunfiles = true;
   license = [ "publicDomain" ];
+  hasCatalogue = true;
 };
 oinuit = {
   revision = 28668;
@@ -36664,6 +39454,7 @@ oinuit = {
   sha512.source = "0d81c9803b9b45b20c096ab00d0c0e5ca26e71d5af463e511660c5bbd28b5b962afe243f21418883575b5d40f503bada65b5c34ba48486aa74a6f9ddcbd48680";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 old-arrows = {
   revision = 42872;
@@ -36677,6 +39468,7 @@ old-arrows = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.0";
+  hasCatalogue = true;
 };
 oldlatin = {
   revision = 17932;
@@ -36687,6 +39479,7 @@ oldlatin = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.00";
+  hasCatalogue = true;
 };
 oldstandard = {
   revision = 70428;
@@ -36700,6 +39493,7 @@ oldstandard = {
   hasRunfiles = true;
   license = [ "ofl" "gfl" "lppl13c" "fdl13Only" ];
   version = "2.7a";
+  hasCatalogue = true;
 };
 oldstyle = {
   revision = 15878;
@@ -36711,6 +39505,7 @@ oldstyle = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.2";
+  hasCatalogue = true;
 };
 olsak-misc = {
   revision = 65631;
@@ -36721,6 +39516,7 @@ olsak-misc = {
   hasRunfiles = true;
   license = [ "publicDomain" ];
   version = "Aug._2022";
+  hasCatalogue = true;
 };
 omega = {
   revision = 33046;
@@ -36733,14 +39529,17 @@ omega = {
   sha512.doc = "31eb2aa643ec37d68d902f4de7be391e7da3af61bde93e78beb1e6df1c6367fcfe00f88e29c8cc878b9cd40f2e3a45f9e46bf24ca3a5608aeae09be491130fef";
   hasRunfiles = true;
   license = [ "gpl1Only" ];
+  hasCatalogue = true;
 };
 omegaware = {
   revision = 66186;
+  catalogue = "omega";
   shortdesc = "A wide-character-set extension of TeX";
   sha512.run = "9978e66b66e988d49f3dea44b947585e5ec4fd61f204ee06a56a9d32df721c1bd66ab32a05c3d36ca92e740aaec2b478261f3eaf8c48c0cb30fbf9bbb410d804";
   sha512.doc = "e3312826fc6f2bb7fb8f116f7d73f4f113e2b4fda8acdce29668ffc324bdc90f26dfe21becccea36e53f22707067c19116fa2942fb4165aed3d7c28da88992ce";
   hasManpages = true;
   license = [ "gpl1Only" ];
+  hasCatalogue = true;
 };
 omegaware.binfiles = [
   "odvicopy"
@@ -36767,6 +39566,7 @@ onedown = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.7";
+  hasCatalogue = true;
 };
 onlyamsmath = {
   revision = 42927;
@@ -36778,6 +39578,7 @@ onlyamsmath = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.20";
+  hasCatalogue = true;
 };
 onrannual = {
   revision = 17474;
@@ -36788,6 +39589,7 @@ onrannual = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 opbible = {
   revision = 68465;
@@ -36798,6 +39600,7 @@ opbible = {
   hasRunfiles = true;
   license = [ "gpl1Only" ];
   version = "0.31";
+  hasCatalogue = true;
 };
 opcit = {
   revision = 15878;
@@ -36809,6 +39612,7 @@ opcit = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 opencolor = {
   revision = 66363;
@@ -36819,6 +39623,7 @@ opencolor = {
   hasRunfiles = true;
   license = [ "mit" ];
   version = "1.0.1";
+  hasCatalogue = true;
 };
 opensans = {
   revision = 54512;
@@ -36832,6 +39637,7 @@ opensans = {
   hasRunfiles = true;
   license = [ "asl20" "lppl13c" ];
   version = "2.2";
+  hasCatalogue = true;
 };
 oplotsymbl = {
   revision = 44951;
@@ -36842,6 +39648,7 @@ oplotsymbl = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.4";
+  hasCatalogue = true;
 };
 opteng = {
   revision = 27331;
@@ -36852,6 +39659,7 @@ opteng = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 optex = {
   revision = 69864;
@@ -36882,6 +39690,7 @@ optex = {
   hasRunfiles = true;
   license = [ "publicDomain" ];
   version = "1.14";
+  hasCatalogue = true;
 };
 optex.binfiles = [
   "optex"
@@ -36895,6 +39704,7 @@ optexcount = {
   hasRunfiles = true;
   license = [ "mit" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 optexcount.binfiles = [
   "optexcount"
@@ -36908,6 +39718,7 @@ optidef = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "3.1";
+  hasCatalogue = true;
 };
 optional = {
   revision = 18131;
@@ -36918,6 +39729,7 @@ optional = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.2b";
+  hasCatalogue = true;
 };
 options = {
   revision = 39030;
@@ -36928,6 +39740,7 @@ options = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 orcidlink = {
   revision = 69253;
@@ -36939,6 +39752,7 @@ orcidlink = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0.5";
+  hasCatalogue = true;
 };
 ordinalpt = {
   revision = 15878;
@@ -36950,6 +39764,7 @@ ordinalpt = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.1";
+  hasCatalogue = true;
 };
 orientation = {
   revision = 57390;
@@ -36960,6 +39775,7 @@ orientation = {
   hasRunfiles = true;
   license = [ "cc0" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 orkhun = {
   revision = 15878;
@@ -36969,6 +39785,7 @@ orkhun = {
   sha512.doc = "ad0c15ca89057f2ff7d43a1bb8ea4513973978e1316e661a0e32ad8fb8005257a634954e85990958ba22360d29eea2d6ea9d87049435416616349874617d9dd0";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 oscola = {
   revision = 54328;
@@ -36979,6 +39796,7 @@ oscola = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.7";
+  hasCatalogue = true;
 };
 oststud = {
   revision = 67217;
@@ -36990,6 +39808,7 @@ oststud = {
   hasRunfiles = true;
   license = [ "cc-by-sa-40" ];
   version = "0.4";
+  hasCatalogue = true;
 };
 oswald = {
   revision = 60784;
@@ -37002,6 +39821,7 @@ oswald = {
   sha512.doc = "1f6606c8786b0eb54a4c3aad0220347eac3b2bead83ca5540345737cfae509be42b9eb10f27a5ff1ced559aacad7413b69708eacd215afd47636d17194b40082";
   hasRunfiles = true;
   license = [ "ofl" "lppl13c" ];
+  hasCatalogue = true;
 };
 ot-tableau = {
   revision = 67813;
@@ -37011,6 +39831,7 @@ ot-tableau = {
   sha512.doc = "45bcff2db460c23e543434ec46b8a168498ccf1fc1ac977f72f3022ac7ec02a874eda98a3bb6814edd22d86915b354fac5105efd1bcdb8eb979837edcada699b";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 othello = {
   revision = 15878;
@@ -37020,6 +39841,7 @@ othello = {
   sha512.doc = "8ba85bf32ff739e4588512c2b33bf242b00e3f38a7ddb1b3f5582cd19b925e1adf52b4243857f1ef4b9d8198e8dc80a9aff8a63a7b3ff926978dc7e5c81262de";
   hasRunfiles = true;
   license = [ "gpl1Only" ];
+  hasCatalogue = true;
 };
 othelloboard = {
   revision = 23714;
@@ -37030,6 +39852,7 @@ othelloboard = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.2";
+  hasCatalogue = true;
 };
 otibet = {
   revision = 45777;
@@ -37048,6 +39871,7 @@ oubraces = {
   sha512.doc = "c97f91df77f64d824605c56669136585b94d95031ed5a4a67f3404c54b2c96f32bafaecc06d114755d0e65c3fcd0379d63f28f94aa32ccb8d23730f5f3eaf63c";
   hasRunfiles = true;
   license = [ "free" ];
+  hasCatalogue = true;
 };
 oup-authoring-template = {
   revision = 64491;
@@ -37058,6 +39882,7 @@ oup-authoring-template = {
   hasRunfiles = true;
   license = [ "lppl12" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 outerhbox = {
   revision = 54254;
@@ -37067,6 +39892,7 @@ outerhbox = {
   hasRunfiles = true;
   license = [ "gpl1Only" ];
   version = "1.2";
+  hasCatalogue = true;
 };
 outilsgeomtikz = {
   revision = 69124;
@@ -37077,6 +39903,7 @@ outilsgeomtikz = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.1.5";
+  hasCatalogue = true;
 };
 outline = {
   revision = 18360;
@@ -37086,6 +39913,7 @@ outline = {
   sha512.doc = "301ad12a8f964a7dab05b208649c74ad39a64264f113963ebf36dbf83c90ed8ed042d8cc15f626f6081bd41f51d66dec592eaadabec32c65a0d67d15e8ead37a";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 outliner = {
   revision = 21095;
@@ -37096,6 +39924,7 @@ outliner = {
   hasRunfiles = true;
   license = [ "gpl1Only" ];
   version = "0.94";
+  hasCatalogue = true;
 };
 outlines = {
   revision = 25192;
@@ -37106,6 +39935,7 @@ outlines = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 outlining = {
   revision = 45601;
@@ -37117,6 +39947,7 @@ outlining = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.1";
+  hasCatalogue = true;
 };
 overarrows = {
   revision = 65853;
@@ -37128,6 +39959,7 @@ overarrows = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 overlays = {
   revision = 57866;
@@ -37138,6 +39970,7 @@ overlays = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.12";
+  hasCatalogue = true;
 };
 overlock = {
   revision = 64495;
@@ -37150,6 +39983,7 @@ overlock = {
   sha512.doc = "44aec04d96e2867a074ca1ac85fb3449cd276d6a14c893c8cd73dfaa91e60ef5f98ec7ed3859cc57efe746ae1454a5fcd01b44ac580369a87f69bf5cff3e3b22";
   hasRunfiles = true;
   license = [ "ofl" ];
+  hasCatalogue = true;
 };
 overpic = {
   revision = 69343;
@@ -37161,6 +39995,7 @@ overpic = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.1";
+  hasCatalogue = true;
 };
 pacioli = {
   revision = 24947;
@@ -37171,6 +40006,7 @@ pacioli = {
   sha512.source = "d9347b85cd548f5861b83ef2f213760805c3cb76fe0313f02935bf28baae72caf2d548459aed2acb7ad5061e49c6e6694e46e88bccc1164e83f63a6f97045d04";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 padauk = {
   revision = 42617;
@@ -37181,6 +40017,7 @@ padauk = {
   hasRunfiles = true;
   license = [ "ofl" ];
   version = "3.002";
+  hasCatalogue = true;
 };
 padcount = {
   revision = 47621;
@@ -37192,6 +40029,7 @@ padcount = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 pagecolor = {
   revision = 66885;
@@ -37203,6 +40041,7 @@ pagecolor = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.2c";
+  hasCatalogue = true;
 };
 pagecont = {
   revision = 15878;
@@ -37214,6 +40053,7 @@ pagecont = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 pagegrid = {
   revision = 64470;
@@ -37225,6 +40065,7 @@ pagegrid = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.6";
+  hasCatalogue = true;
 };
 pagelayout = {
   revision = 69486;
@@ -37235,6 +40076,7 @@ pagelayout = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1.0";
+  hasCatalogue = true;
 };
 pagelayout.binfiles = [
   "pagelayoutapi"
@@ -37249,6 +40091,7 @@ pagella-otf = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.02";
+  hasCatalogue = true;
 };
 pagenote = {
   revision = 63708;
@@ -37260,6 +40103,7 @@ pagenote = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1a";
+  hasCatalogue = true;
 };
 pagerange = {
   revision = 16915;
@@ -37270,6 +40114,7 @@ pagerange = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.5";
+  hasCatalogue = true;
 };
 pagesel = {
   revision = 56105;
@@ -37281,6 +40126,7 @@ pagesel = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.10";
+  hasCatalogue = true;
 };
 pageslts = {
   revision = 39164;
@@ -37292,9 +40138,11 @@ pageslts = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.2f";
+  hasCatalogue = true;
 };
 palatino = {
   revision = 61719;
+  catalogue = "urw-base35";
   shortdesc = "URW 'Base 35' font pack for LaTeX";
   stripPrefix = 0;
   fontMaps = [
@@ -37303,6 +40151,7 @@ palatino = {
   sha512.run = "5db043495b8daf0a5a854367ca1c82007a154d09b2bcae9f399e8f851f30a554fa98970cf45ccd8f0681f70ae7e01f54dfd414bcbd888b802e93993c2ed172df";
   hasRunfiles = true;
   license = [ "gpl1Only" ];
+  hasCatalogue = true;
 };
 palette = {
   revision = 60119;
@@ -37314,6 +40163,7 @@ palette = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1.0";
+  hasCatalogue = true;
 };
 pangram = {
   revision = 66300;
@@ -37325,6 +40175,7 @@ pangram = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.0c";
+  hasCatalogue = true;
 };
 panneauxroute = {
   revision = 67951;
@@ -37335,6 +40186,7 @@ panneauxroute = {
   hasRunfiles = true;
   license = [ "lppl13c" "cc-by-sa-30" ];
   version = "0.1.0";
+  hasCatalogue = true;
 };
 paper = {
   revision = 34521;
@@ -37346,6 +40198,7 @@ paper = {
   hasRunfiles = true;
   license = [ "gpl1Only" ];
   version = "1.0l";
+  hasCatalogue = true;
 };
 papercdcase = {
   revision = 15878;
@@ -37356,6 +40209,7 @@ papercdcase = {
   sha512.source = "7bce5742cc7504e789011ec877fc2a934300b0edfa2e6b8f89d625184e5dd0c8cc6116aae7701c313e133d8669522c1414a2a16d11e7e6eec0d1c7112fc44d56";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 papermas = {
   revision = 66835;
@@ -37367,6 +40221,7 @@ papermas = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1a";
+  hasCatalogue = true;
 };
 papertex = {
   revision = 19230;
@@ -37378,6 +40233,7 @@ papertex = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.2b";
+  hasCatalogue = true;
 };
 papiergurvan = {
   revision = 68239;
@@ -37388,6 +40244,7 @@ papiergurvan = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.1.0";
+  hasCatalogue = true;
 };
 paracol = {
   revision = 49560;
@@ -37399,6 +40256,7 @@ paracol = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.35";
+  hasCatalogue = true;
 };
 parades = {
   revision = 40042;
@@ -37408,6 +40266,7 @@ parades = {
   sha512.doc = "eca6b66f0bb424730177498fd6310718a78ffdd031961f8de877bd6f9d027430143c19310b158abf26f92b4280016cdac696f423b493aa49d60b06cefc546688";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 paralist = {
   revision = 43021;
@@ -37419,6 +40278,7 @@ paralist = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.7";
+  hasCatalogue = true;
 };
 parallel = {
   revision = 15878;
@@ -37429,6 +40289,7 @@ parallel = {
   sha512.source = "6dde2ae1a2ee65decf5c1ba547d2683948d58a7955b75e5a3bd74d0b6705e7c6a75f2fe4dbed01562211b670d455a0360d0fff3ac0f24e3e77b4bb01a65577b5";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 paratype = {
   revision = 68624;
@@ -37441,6 +40302,7 @@ paratype = {
   sha512.doc = "ba91b90030c703dc35a77b9a51a23d90e5cd6f0a6490f74e151023248b05a6a0ea5bcf188e3c8e69611b9b7d5f72b4569538a9da02193ca737e94e744c83c107";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 paresse = {
   revision = 59228;
@@ -37452,6 +40314,7 @@ paresse = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "5.0.2";
+  hasCatalogue = true;
 };
 parnotes = {
   revision = 51720;
@@ -37462,6 +40325,7 @@ parnotes = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "3b";
+  hasCatalogue = true;
 };
 parrun = {
   revision = 15878;
@@ -37472,6 +40336,7 @@ parrun = {
   sha512.source = "9a4fb32c53f5bd2f6f79992b4ce076ab211c24e2c0f4ca2665c903b2e3d5268b5615bb5e9c8107d1d44df6a9e50a9f942f61cbb1fd05a388738449e4b312f306";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 parsa = {
   revision = 54840;
@@ -37482,6 +40347,7 @@ parsa = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.3";
+  hasCatalogue = true;
 };
 parselines = {
   revision = 21475;
@@ -37493,6 +40359,7 @@ parselines = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.4";
+  hasCatalogue = true;
 };
 parsimatn = {
   revision = 69090;
@@ -37503,6 +40370,7 @@ parsimatn = {
   hasRunfiles = true;
   license = [ "ofl" ];
   version = "2.1a";
+  hasCatalogue = true;
 };
 parsinevis = {
   revision = 68395;
@@ -37513,6 +40381,7 @@ parsinevis = {
   hasRunfiles = true;
   license = [ "ofl" ];
   version = "2.1";
+  hasCatalogue = true;
 };
 parskip = {
   revision = 58358;
@@ -37524,6 +40393,7 @@ parskip = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.0h";
+  hasCatalogue = true;
 };
 pas-cours = {
   revision = 55859;
@@ -37534,6 +40404,7 @@ pas-cours = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.9";
+  hasCatalogue = true;
 };
 pas-crosswords = {
   revision = 32313;
@@ -37544,6 +40415,7 @@ pas-crosswords = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.03";
+  hasCatalogue = true;
 };
 pas-cv = {
   revision = 32263;
@@ -37554,6 +40426,7 @@ pas-cv = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.01";
+  hasCatalogue = true;
 };
 pas-tableur = {
   revision = 66860;
@@ -37564,6 +40437,7 @@ pas-tableur = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.05";
+  hasCatalogue = true;
 };
 pascaltriangle = {
   revision = 61774;
@@ -37574,6 +40448,7 @@ pascaltriangle = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0.1";
+  hasCatalogue = true;
 };
 passivetex = {
   revision = 69742;
@@ -37582,6 +40457,7 @@ passivetex = {
   sha512.run = "2253d07d753a5c20c29c2ebb97446453d2c0912c9f26b2e3bd78676e7c3c2ee82953e188e62253c80da538546481da58602b5478b2b8ccb3a6f7554ee41d228b";
   hasRunfiles = true;
   license = [ "free" ];
+  hasCatalogue = true;
 };
 patch = {
   revision = 42428;
@@ -37590,6 +40466,7 @@ patch = {
   sha512.run = "0ddcaa07696216f9fdea55471e1265fcaa71dd8ba2b8a50690dd519ad8b9442015502ec59b8f9f05c79f5031be3de2956cd71af58153dea8e1917f33c246fa63";
   sha512.source = "ada97aba615160b3c30c9cdccf3360f3692612bc702247ae3fa44f7821aefa2ee60c89ab79417b0ff658335768512a0d8d9b5b17df619c57d169f6487d39e5bf";
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 patchcmd = {
   revision = 41379;
@@ -37601,6 +40478,7 @@ patchcmd = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.05";
+  hasCatalogue = true;
 };
 patgen = {
   revision = 66186;
@@ -37613,6 +40491,7 @@ patgen = {
   hasManpages = true;
   license = [ "publicDomain" ];
   version = "2.4";
+  hasCatalogue = true;
 };
 patgen.binfiles = [
   "patgen"
@@ -37625,6 +40504,7 @@ patgen2-tutorial = {
   sha512.doc = "5abe4de29113af4db20d85ed0089190f5ae82ef1573d8ffffcb9f5f03a4417dacbea5aebd0b274ea27dc54255f8ac6792c841a9bf77ee39628c8bb1dca49b084";
   license = [ "lppl13c" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 path = {
   revision = 22045;
@@ -37635,6 +40515,7 @@ path = {
   hasRunfiles = true;
   license = [ "free" ];
   version = "3.05";
+  hasCatalogue = true;
 };
 pauldoc = {
   revision = 16005;
@@ -37646,6 +40527,7 @@ pauldoc = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.5";
+  hasCatalogue = true;
 };
 pawpict = {
   revision = 21629;
@@ -37657,6 +40539,7 @@ pawpict = {
   hasRunfiles = true;
   license = [ "gpl1Only" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 pax = {
   revision = 63509;
@@ -37669,6 +40552,7 @@ pax = {
     "jar"
   ];
   license = [ "lppl13c" "gpl1Only" ];
+  hasCatalogue = true;
 };
 pax.binfiles = [
   "pdfannotextractor"
@@ -37682,6 +40566,7 @@ pb-diagram = {
   hasRunfiles = true;
   license = [ "free" ];
   version = "5.0";
+  hasCatalogue = true;
 };
 pbalance = {
   revision = 67201;
@@ -37693,6 +40578,7 @@ pbalance = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.4.0";
+  hasCatalogue = true;
 };
 pbibtex-base = {
   revision = 66085;
@@ -37702,6 +40588,7 @@ pbibtex-base = {
   sha512.doc = "69a7e564464d8b1c31474ca37b5e9fadeb4c2d4f4d25dad5f884317b226c6b7f8f467cd1809e1330cb64fe2006f1ab397cf4f163e469a14fb8de5b778dc70c08";
   hasRunfiles = true;
   license = [ "bsd3" ];
+  hasCatalogue = true;
 };
 pbibtex-manual = {
   revision = 66181;
@@ -37710,6 +40597,7 @@ pbibtex-manual = {
   sha512.run = "ca4690e0ce37561dcb877d17310f498b5b528cf6892beb075b4ed87f1a4432957c2ac56ad29f66da1452794c587f2d9343fdf7715c670ac7c3f7880f620f698e";
   sha512.doc = "152ac93c6e1bf07d90434581a8891f293527d4ff93f7d439e7e15c99d53b0cf43872c9f8a6935fe314614b9c3fe3cbe7bb3dfdbba486dc7248fffc60742f37a0";
   license = [ "bsd3" ];
+  hasCatalogue = true;
 };
 pbox = {
   revision = 24807;
@@ -37721,6 +40609,7 @@ pbox = {
   hasRunfiles = true;
   license = [ "gpl2Only" ];
   version = "1.2";
+  hasCatalogue = true;
 };
 pbsheet = {
   revision = 24830;
@@ -37732,6 +40621,7 @@ pbsheet = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.1";
+  hasCatalogue = true;
 };
 pdf-trans = {
   revision = 32809;
@@ -37742,6 +40632,7 @@ pdf-trans = {
   hasRunfiles = true;
   license = [ "publicDomain" ];
   version = "2.4";
+  hasCatalogue = true;
 };
 pdf14 = {
   revision = 17583;
@@ -37753,6 +40644,7 @@ pdf14 = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.1";
+  hasCatalogue = true;
 };
 pdfannotations = {
   revision = 68958;
@@ -37763,6 +40655,7 @@ pdfannotations = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "3.1";
+  hasCatalogue = true;
 };
 pdfarticle = {
   revision = 51127;
@@ -37773,6 +40666,7 @@ pdfarticle = {
   hasRunfiles = true;
   license = [ "mit" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 pdfbook2 = {
   revision = 53521;
@@ -37783,6 +40677,7 @@ pdfbook2 = {
   hasRunfiles = true;
   license = [ "gpl3Only" ];
   version = "1.4";
+  hasCatalogue = true;
 };
 pdfbook2.binfiles = [
   "pdfbook2"
@@ -37797,6 +40692,7 @@ pdfcol = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.7";
+  hasCatalogue = true;
 };
 pdfcolfoot = {
   revision = 65512;
@@ -37808,6 +40704,7 @@ pdfcolfoot = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.4";
+  hasCatalogue = true;
 };
 pdfcolmk = {
   revision = 52912;
@@ -37818,6 +40715,7 @@ pdfcolmk = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.0";
+  hasCatalogue = true;
 };
 pdfcomment = {
   revision = 49047;
@@ -37828,6 +40726,7 @@ pdfcomment = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.4a";
+  hasCatalogue = true;
 };
 pdfcprot = {
   revision = 18735;
@@ -37839,6 +40738,7 @@ pdfcprot = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.7a";
+  hasCatalogue = true;
 };
 pdfcrop = {
   revision = 66862;
@@ -37848,6 +40748,7 @@ pdfcrop = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.42";
+  hasCatalogue = true;
 };
 pdfcrop.binfiles = [
   "pdfcrop"
@@ -37863,6 +40764,7 @@ pdfescape = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.15";
+  hasCatalogue = true;
 };
 pdfextra = {
   revision = 65184;
@@ -37873,6 +40775,7 @@ pdfextra = {
   hasRunfiles = true;
   license = [ "free" ];
   version = "0.3";
+  hasCatalogue = true;
 };
 pdfjam = {
   revision = 68597;
@@ -37883,6 +40786,7 @@ pdfjam = {
   hasRunfiles = true;
   license = [ "gpl2Plus" ];
   version = "3.10";
+  hasCatalogue = true;
 };
 pdfjam.binfiles = [
   "pdfjam"
@@ -37895,6 +40799,7 @@ pdflatexpicscale = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.32";
+  hasCatalogue = true;
 };
 pdflatexpicscale.binfiles = [
   "pdflatexpicscale"
@@ -37909,6 +40814,7 @@ pdflscape = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.13";
+  hasCatalogue = true;
 };
 pdfmanagement-testphase = {
   revision = 70328;
@@ -37920,6 +40826,7 @@ pdfmanagement-testphase = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.96f";
+  hasCatalogue = true;
 };
 pdfmarginpar = {
   revision = 23492;
@@ -37930,6 +40837,7 @@ pdfmarginpar = {
   hasRunfiles = true;
   license = [ "gpl1Only" ];
   version = "0.92";
+  hasCatalogue = true;
 };
 pdfmsym = {
   revision = 66618;
@@ -37940,6 +40848,7 @@ pdfmsym = {
   hasRunfiles = true;
   license = [ "mit" ];
   version = "1.1.1";
+  hasCatalogue = true;
 };
 pdfoverlay = {
   revision = 64210;
@@ -37951,6 +40860,7 @@ pdfoverlay = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.3";
+  hasCatalogue = true;
 };
 pdfpagediff = {
   revision = 37946;
@@ -37961,6 +40871,7 @@ pdfpagediff = {
   hasRunfiles = true;
   license = [ "lppl1" ];
   version = "1.4";
+  hasCatalogue = true;
 };
 pdfpages = {
   revision = 69524;
@@ -37978,6 +40889,7 @@ pdfpages = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.5y";
+  hasCatalogue = true;
 };
 pdfpc = {
   revision = 68610;
@@ -37988,6 +40900,7 @@ pdfpc = {
   hasRunfiles = true;
   license = [ "gpl3Plus" ];
   version = "0.7.1";
+  hasCatalogue = true;
 };
 pdfpc-movie = {
   revision = 67201;
@@ -37999,6 +40912,7 @@ pdfpc-movie = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 pdfprivacy = {
   revision = 45985;
@@ -38010,6 +40924,7 @@ pdfprivacy = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 pdfrender = {
   revision = 69058;
@@ -38021,6 +40936,7 @@ pdfrender = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.8";
+  hasCatalogue = true;
 };
 pdfreview = {
   revision = 50100;
@@ -38031,6 +40947,7 @@ pdfreview = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.2";
+  hasCatalogue = true;
 };
 pdfscreen = {
   revision = 42428;
@@ -38041,6 +40958,7 @@ pdfscreen = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.5";
+  hasCatalogue = true;
 };
 pdfslide = {
   revision = 15878;
@@ -38050,6 +40968,7 @@ pdfslide = {
   sha512.doc = "92008d1e461e5309649ec5160b7dd3796455f04e923f4e5c8593a3a4cc76f704639206c48a4af13bfa9fa3fd735b03ad419f07d1222a45d093a6824aafcb8df1";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 pdfsync = {
   revision = 20373;
@@ -38059,6 +40978,7 @@ pdfsync = {
   sha512.doc = "7e103ba84fd41acbed007f4acceb0188372a4984977a3fbee3bf4484612c6e0621a934709982407bd1d59a69167c1d2f5ebd4b94f73bc502baa8a4830fe3f983";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 pdftex = {
   revision = 66243;
@@ -38105,6 +41025,7 @@ pdftex = {
   hasManpages = true;
   hasRunfiles = true;
   license = [ "gpl1Only" ];
+  hasCatalogue = true;
 };
 pdftex-quiet = {
   revision = 49169;
@@ -38114,6 +41035,7 @@ pdftex-quiet = {
   hasRunfiles = true;
   license = [ "gpl3Only" ];
   version = "1.1.0";
+  hasCatalogue = true;
 };
 pdftex-quiet.binfiles = [
   "pdftex-quiet"
@@ -38134,6 +41056,7 @@ pdftexcmds = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.33";
+  hasCatalogue = true;
 };
 pdftosrc = {
   revision = 66186;
@@ -38154,6 +41077,7 @@ pdftricks = {
   hasRunfiles = true;
   license = [ "gpl1Only" ];
   version = "1.16";
+  hasCatalogue = true;
 };
 pdftricks2 = {
   revision = 31016;
@@ -38164,6 +41088,7 @@ pdftricks2 = {
   hasRunfiles = true;
   license = [ "gpl2Only" ];
   version = "1.01";
+  hasCatalogue = true;
 };
 pdfwin = {
   revision = 68667;
@@ -38183,6 +41108,7 @@ pdfx = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.6.3";
+  hasCatalogue = true;
 };
 pdfxup = {
   revision = 59001;
@@ -38193,6 +41119,7 @@ pdfxup = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.10";
+  hasCatalogue = true;
 };
 pdfxup.binfiles = [
   "pdfxup"
@@ -38206,6 +41133,7 @@ pecha = {
   hasRunfiles = true;
   license = [ "gpl1Only" ];
   version = "0.1";
+  hasCatalogue = true;
 };
 pedigree-perl = {
   revision = 64227;
@@ -38217,6 +41145,7 @@ pedigree-perl = {
   hasRunfiles = true;
   license = [ "gpl2Only" ];
   version = "2.1";
+  hasCatalogue = true;
 };
 pedigree-perl.binfiles = [
   "pedigree"
@@ -38229,6 +41158,7 @@ penlight = {
   sha512.doc = "30307bc7774c3768227da33c31c6296e8d470f1f835f792248ed4ff40e261ea682fd967987396808fcd36e7e0a74c3da2bb947de7eab7af5783e3790857b081e";
   hasRunfiles = true;
   license = [ "mit" ];
+  hasCatalogue = true;
 };
 penlightplus = {
   revision = 70319;
@@ -38238,6 +41168,7 @@ penlightplus = {
   sha512.doc = "e35a2d252d8377efd170d9b42ac233af921b34b2a9a91248ed7640d9b79809debaca54451251fe5cc1394df73f0ef476c72f614ae5aefba5db319d7f38aae7b9";
   hasRunfiles = true;
   license = [ "mit" ];
+  hasCatalogue = true;
 };
 perception = {
   revision = 48861;
@@ -38247,6 +41178,7 @@ perception = {
   sha512.doc = "35428e19d9e2429691948331ef574168a3eb5dd3e09f4286c66003ced8c0a65da9853de4dd57a1920e2f2315b8543f9ec9e096bbd26123554455dd8c23b33f55";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 perfectcut = {
   revision = 67201;
@@ -38257,6 +41189,7 @@ perfectcut = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.3";
+  hasCatalogue = true;
 };
 perltex = {
   revision = 52162;
@@ -38268,6 +41201,7 @@ perltex = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.2";
+  hasCatalogue = true;
 };
 perltex.binfiles = [
   "perltex"
@@ -38281,6 +41215,7 @@ permute = {
   sha512.source = "4273fc09b30de6ea203e13b09822a07b222de8d1abc143e67c0c465bd8c31ca4648b83a7fbd895a8865b7793462bd020642d383e761c926504a6d40e785c0108";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 persian-bib = {
   revision = 37297;
@@ -38291,6 +41226,7 @@ persian-bib = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.9";
+  hasCatalogue = true;
 };
 petiteannonce = {
   revision = 25915;
@@ -38301,6 +41237,7 @@ petiteannonce = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0001";
+  hasCatalogue = true;
 };
 petri-nets = {
   revision = 39165;
@@ -38309,6 +41246,7 @@ petri-nets = {
   sha512.doc = "cf03048e2bccded143fb493b100fd19103ab90f40713441c5380446702d6c57ac3820f2892a3dfdb80880952e09de78e69b309783767a3e157f76b81c9360535";
   hasRunfiles = true;
   license = [ "gpl1Only" ];
+  hasCatalogue = true;
 };
 petri-nets.binfiles = [
   "pn2pdf"
@@ -38325,6 +41263,7 @@ pfarrei = {
   ];
   license = [ "lppl13c" ];
   version = "r37";
+  hasCatalogue = true;
 };
 pfarrei.binfiles = [
   "a5toa4"
@@ -38339,6 +41278,7 @@ pfdicons = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0a";
+  hasCatalogue = true;
 };
 pgf = {
   revision = 65553;
@@ -38357,6 +41297,7 @@ pgf = {
   hasRunfiles = true;
   license = [ "lppl13c" "gpl2Only" "fdl13Only" ];
   version = "3.1.10";
+  hasCatalogue = true;
 };
 pgf-blur = {
   revision = 54512;
@@ -38368,6 +41309,7 @@ pgf-blur = {
   hasRunfiles = true;
   license = [ "lppl13c" "publicDomain" ];
   version = "1.02";
+  hasCatalogue = true;
 };
 pgf-interference = {
   revision = 61562;
@@ -38378,6 +41320,7 @@ pgf-interference = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.1";
+  hasCatalogue = true;
 };
 pgf-periodictable = {
   revision = 69924;
@@ -38388,6 +41331,7 @@ pgf-periodictable = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.1.0";
+  hasCatalogue = true;
 };
 pgf-pie = {
   revision = 63603;
@@ -38403,6 +41347,7 @@ pgf-pie = {
   hasRunfiles = true;
   license = [ "gpl2Only" "lppl13c" ];
   version = "0.7";
+  hasCatalogue = true;
 };
 pgf-soroban = {
   revision = 32269;
@@ -38413,6 +41358,7 @@ pgf-soroban = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 pgf-spectra = {
   revision = 66961;
@@ -38423,6 +41369,7 @@ pgf-spectra = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "3.0.1";
+  hasCatalogue = true;
 };
 pgf-umlcd = {
   revision = 63386;
@@ -38437,6 +41384,7 @@ pgf-umlcd = {
   hasRunfiles = true;
   license = [ "gpl2Only" "lppl13c" ];
   version = "0.3";
+  hasCatalogue = true;
 };
 pgf-umlsd = {
   revision = 55342;
@@ -38451,6 +41399,7 @@ pgf-umlsd = {
   hasRunfiles = true;
   license = [ "gpl1Only" ];
   version = "0.7";
+  hasCatalogue = true;
 };
 pgfgantt = {
   revision = 52662;
@@ -38465,6 +41414,7 @@ pgfgantt = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "5.0";
+  hasCatalogue = true;
 };
 pgfkeysearch = {
   revision = 69385;
@@ -38475,6 +41425,7 @@ pgfkeysearch = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.2";
+  hasCatalogue = true;
 };
 pgfkeyx = {
   revision = 26093;
@@ -38485,6 +41436,7 @@ pgfkeyx = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.0.1";
+  hasCatalogue = true;
 };
 pgfmath-xfp = {
   revision = 59268;
@@ -38496,6 +41448,7 @@ pgfmath-xfp = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 pgfmolbio = {
   revision = 35152;
@@ -38507,6 +41460,7 @@ pgfmolbio = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.21";
+  hasCatalogue = true;
 };
 pgfmorepages = {
   revision = 54770;
@@ -38517,6 +41471,7 @@ pgfmorepages = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.20";
+  hasCatalogue = true;
 };
 pgfopts = {
   revision = 56615;
@@ -38531,6 +41486,7 @@ pgfopts = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.1a";
+  hasCatalogue = true;
 };
 pgfornament = {
   revision = 55326;
@@ -38541,6 +41497,7 @@ pgfornament = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.2";
+  hasCatalogue = true;
 };
 pgfornament-han = {
   revision = 68704;
@@ -38550,6 +41507,7 @@ pgfornament-han = {
   sha512.doc = "7b9138088db1581571508ccb550b1b128ce0b574dcb2a903f5311b9a6e63e9d9c6e56eca0e46ffb5224f5685c5b047a57e5e7d292e7d6de6a9bfb06ee568d9b6";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 pgfplots = {
   revision = 61719;
@@ -38564,6 +41522,7 @@ pgfplots = {
   hasRunfiles = true;
   license = [ "gpl3Plus" ];
   version = "1.18.1";
+  hasCatalogue = true;
 };
 phaistos = {
   revision = 18651;
@@ -38578,6 +41537,7 @@ phaistos = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 phfcc = {
   revision = 60731;
@@ -38589,6 +41549,7 @@ phfcc = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.0";
+  hasCatalogue = true;
 };
 phfextendedabstract = {
   revision = 60732;
@@ -38600,6 +41561,7 @@ phfextendedabstract = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 phffullpagefigure = {
   revision = 41857;
@@ -38611,6 +41573,7 @@ phffullpagefigure = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 phfnote = {
   revision = 60733;
@@ -38622,6 +41585,7 @@ phfnote = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "4.0";
+  hasCatalogue = true;
 };
 phfparen = {
   revision = 41859;
@@ -38633,6 +41597,7 @@ phfparen = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 phfqit = {
   revision = 60734;
@@ -38644,6 +41609,7 @@ phfqit = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "4.1";
+  hasCatalogue = true;
 };
 phfquotetext = {
   revision = 41869;
@@ -38655,6 +41621,7 @@ phfquotetext = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 phfsvnwatermark = {
   revision = 41870;
@@ -38666,6 +41633,7 @@ phfsvnwatermark = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 phfthm = {
   revision = 60735;
@@ -38677,6 +41645,7 @@ phfthm = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.2";
+  hasCatalogue = true;
 };
 philex = {
   revision = 36396;
@@ -38687,6 +41656,7 @@ philex = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.3";
+  hasCatalogue = true;
 };
 philokalia = {
   revision = 45356;
@@ -38698,6 +41668,7 @@ philokalia = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.2";
+  hasCatalogue = true;
 };
 philosophersimprint = {
   revision = 56954;
@@ -38709,6 +41680,7 @@ philosophersimprint = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.5";
+  hasCatalogue = true;
 };
 phonenumbers = {
   revision = 63774;
@@ -38719,6 +41691,7 @@ phonenumbers = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.5";
+  hasCatalogue = true;
 };
 phonetic = {
   revision = 56468;
@@ -38728,6 +41701,7 @@ phonetic = {
   sha512.doc = "626ca0614b723fc3e4b75ca977c7a12e77908ca710ec52994e62e9e89e2064f973ab2bda3182a3b466eb2df2bdf030e0e6432cbf9f984bd7316b483f9c310b47";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 phonrule = {
   revision = 43963;
@@ -38738,6 +41712,7 @@ phonrule = {
   hasRunfiles = true;
   license = [ "lppl1" ];
   version = "1.3.2";
+  hasCatalogue = true;
 };
 photo = {
   revision = 18739;
@@ -38748,6 +41723,7 @@ photo = {
   sha512.source = "644303a7eda6cbe50db8cf871ffd642dde5115d4f1a72edde65e9218337faaa63ffebc94bca96da28a4a2d7568ae0ea124f1aa12fe5402cfc1c57619e86746ab";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 photobook = {
   revision = 68313;
@@ -38787,6 +41763,7 @@ photobook = {
   hasRunfiles = true;
   license = [ "bsd3" ];
   version = "0.1.29";
+  hasCatalogue = true;
 };
 physconst = {
   revision = 58727;
@@ -38798,6 +41775,7 @@ physconst = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1.2";
+  hasCatalogue = true;
 };
 physics = {
   revision = 28590;
@@ -38808,6 +41786,7 @@ physics = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.3";
+  hasCatalogue = true;
 };
 physics2 = {
   revision = 69369;
@@ -38819,6 +41798,7 @@ physics2 = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0.1";
+  hasCatalogue = true;
 };
 physunits = {
   revision = 58728;
@@ -38830,6 +41810,7 @@ physunits = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.2.0";
+  hasCatalogue = true;
 };
 piano = {
   revision = 21574;
@@ -38840,6 +41821,7 @@ piano = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 picinpar = {
   revision = 65097;
@@ -38850,6 +41832,7 @@ picinpar = {
   hasRunfiles = true;
   license = [ "gpl1Only" ];
   version = "1.3";
+  hasCatalogue = true;
 };
 pict2e = {
   revision = 56504;
@@ -38861,6 +41844,7 @@ pict2e = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.4b";
+  hasCatalogue = true;
 };
 pictex = {
   revision = 59551;
@@ -38871,6 +41855,7 @@ pictex = {
   hasRunfiles = true;
   license = [ "lppl1" ];
   version = "1.1b";
+  hasCatalogue = true;
 };
 pictex2 = {
   revision = 15878;
@@ -38879,6 +41864,7 @@ pictex2 = {
   sha512.run = "26b608cc8409c62f4c0130cc032f2ca5929886fafb9d22d93aa23af5a6dee62bbde83926bccbcb4fbd3d86a43810d751eb43a2a94be9528e1639c59fb61e5446";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 pictexsum = {
   revision = 24965;
@@ -38887,6 +41873,7 @@ pictexsum = {
   sha512.run = "a24861e4b6184084fffa783918db485e5c7cacf7a6528681e7d8d4212287f1f6687604bd4f347e9e34ab7d29867dec2b30c9871a13b9bedae31b5dbb82ba1ed2";
   sha512.doc = "148b7c29cb8189174442b95cd39b0d5fdf9f937a7a44a17314b93cce555cf3db459e21ae2c4eb9098c15551bd7aada2804855d68f9408fdbe974f6c12dd724a2";
   license = [ "free" ];
+  hasCatalogue = true;
 };
 pictochrono = {
   revision = 69865;
@@ -38897,6 +41884,7 @@ pictochrono = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.1.0";
+  hasCatalogue = true;
 };
 picture = {
   revision = 54867;
@@ -38908,6 +41896,7 @@ picture = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.6";
+  hasCatalogue = true;
 };
 piechartmp = {
   revision = 19440;
@@ -38918,6 +41907,7 @@ piechartmp = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.3.0";
+  hasCatalogue = true;
 };
 piff = {
   revision = 21894;
@@ -38927,6 +41917,7 @@ piff = {
   sha512.doc = "ef9d14cf4a38315e4d523082db9baf8d0f89e5963001d12ba7ffe260ca2255a6aa99dc38392a6ceb0fe24e6abb8c77b9343f29300ff5c814c01adfff3321923c";
   hasRunfiles = true;
   license = [ "publicDomain" ];
+  hasCatalogue = true;
 };
 pigpen = {
   revision = 69687;
@@ -38940,6 +41931,7 @@ pigpen = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.3";
+  hasCatalogue = true;
 };
 pinlabel = {
   revision = 24769;
@@ -38950,6 +41942,7 @@ pinlabel = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.2";
+  hasCatalogue = true;
 };
 pinoutikz = {
   revision = 55966;
@@ -38960,6 +41953,7 @@ pinoutikz = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1.2";
+  hasCatalogue = true;
 };
 pitex = {
   revision = 24731;
@@ -38969,6 +41963,7 @@ pitex = {
   sha512.doc = "c3765f6acd4a147ffd2c216b1cda58e5e6ac8dc1202b444fe80d0dd69449b01df3eb17069842ef745e76e88371bf71c178d06c5ad2bc85e3427726bb30b74002";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 piton = {
   revision = 70446;
@@ -38980,6 +41975,7 @@ piton = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.6a";
+  hasCatalogue = true;
 };
 pittetd = {
   revision = 15878;
@@ -38991,6 +41987,7 @@ pittetd = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.618";
+  hasCatalogue = true;
 };
 pixelart = {
   revision = 66012;
@@ -39001,6 +41998,7 @@ pixelart = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0.2";
+  hasCatalogue = true;
 };
 pixelarttikz = {
   revision = 68520;
@@ -39011,6 +42009,7 @@ pixelarttikz = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.1.2";
+  hasCatalogue = true;
 };
 pkfix = {
   revision = 26032;
@@ -39020,6 +42019,7 @@ pkfix = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.7";
+  hasCatalogue = true;
 };
 pkfix-helper = {
   revision = 56061;
@@ -39030,6 +42030,7 @@ pkfix-helper = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.6";
+  hasCatalogue = true;
 };
 pkfix-helper.binfiles = [
   "pkfix-helper"
@@ -39046,6 +42047,7 @@ pkgloader = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.7.0";
+  hasCatalogue = true;
 };
 pkuthss = {
   revision = 70496;
@@ -39056,9 +42058,11 @@ pkuthss = {
   hasRunfiles = true;
   license = [ "lppl13c" "bsd3" "publicDomain" ];
   version = "1.9.4";
+  hasCatalogue = true;
 };
 pl = {
   revision = 58661;
+  catalogue = "pl-mf";
   shortdesc = "Polish extension of Computer Modern fonts";
   stripPrefix = 0;
   fontMaps = [
@@ -39070,6 +42074,7 @@ pl = {
   hasRunfiles = true;
   license = [ "publicDomain" ];
   version = "1.09a";
+  hasCatalogue = true;
 };
 placeat = {
   revision = 45145;
@@ -39081,6 +42086,7 @@ placeat = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.1d1";
+  hasCatalogue = true;
 };
 placeins = {
   revision = 19848;
@@ -39091,6 +42097,7 @@ placeins = {
   hasRunfiles = true;
   license = [ "publicDomain" ];
   version = "2.2";
+  hasCatalogue = true;
 };
 placeins-plain = {
   revision = 15878;
@@ -39100,6 +42107,7 @@ placeins-plain = {
   hasRunfiles = true;
   license = [ "publicDomain" ];
   version = "2.0";
+  hasCatalogue = true;
 };
 plain = {
   revision = 57963;
@@ -39109,14 +42117,17 @@ plain = {
   hasRunfiles = true;
   license = [ "knuth" ];
   version = "3.141592653";
+  hasCatalogue = true;
 };
 plain-doc = {
   revision = 28424;
+  catalogue = "csname-doc";
   shortdesc = "A list of plain.tex cs names";
   stripPrefix = 0;
   sha512.run = "bae58c957de52e1a45f91d8ea49579ea9c5b50b641331ae8d27146b6bbda1cf93e09abe58a011164ef99e5513cc32d346da7d693e975271e1892674aa5799406";
   sha512.doc = "03f17a65680e4fedd76abf2ec46dbac4b7871c3106c74d3d7c7f200bd6124146b2f78848a3761eaf63b2c909eb5925b78441d73a48a4437ef496b8643777d847";
   license = [ "publicDomain" ];
+  hasCatalogue = true;
 };
 plainpkg = {
   revision = 27765;
@@ -39128,6 +42139,7 @@ plainpkg = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.4a";
+  hasCatalogue = true;
 };
 plainyr = {
   revision = 52783;
@@ -39136,6 +42148,7 @@ plainyr = {
   sha512.run = "a42c5fc8c9a530f91d467ab3707fbec05f49764e85b906510f4605749c60bdda224a4ba23be85acd722f48b0958ed7184b4bfe88dc7c3fea4a64e70f9407afc6";
   hasRunfiles = true;
   license = [ "free" ];
+  hasCatalogue = true;
 };
 plantslabels = {
   revision = 29803;
@@ -39146,6 +42159,7 @@ plantslabels = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 plantuml = {
   revision = 67097;
@@ -39156,6 +42170,7 @@ plantuml = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.3.2";
+  hasCatalogue = true;
 };
 plari = {
   revision = 15878;
@@ -39166,6 +42181,7 @@ plari = {
   sha512.source = "e03c7b5fe7406c447509d4ae841c13c579c608564f45b83e1fddb066248b53e46f83a2760d745db1a5acae08dff493686d667f0328c9c3d467df6a92d8304a5a";
   hasRunfiles = true;
   license = [ "gpl1Only" ];
+  hasCatalogue = true;
 };
 plates = {
   revision = 15878;
@@ -39176,6 +42192,7 @@ plates = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.1";
+  hasCatalogue = true;
 };
 platex = {
   revision = 67315;
@@ -39223,6 +42240,7 @@ platex = {
   sha512.source = "a1ba3fe817e5f4aa23c2c4c9b7397cdda6ecc889ee244a05fd7eeda59fba1baa02fd29820107c887982983b2115631f1aac7d19ae281f88779b3e99253b12036";
   hasRunfiles = true;
   license = [ "bsd3" ];
+  hasCatalogue = true;
 };
 platex-tools = {
   revision = 66185;
@@ -39232,6 +42250,7 @@ platex-tools = {
   sha512.doc = "cf04b2c5d4df6d68bfdc3b0a3a8dc0f988cb0549252b3a6ccba58df685c41a9312197a63c97c3ff63c1ec15177a43d1e8064fd449054eed3df968fe213703552";
   hasRunfiles = true;
   license = [ "bsd3" ];
+  hasCatalogue = true;
 };
 platex.binfiles = [
   "platex"
@@ -39245,6 +42264,7 @@ platexcheat = {
   sha512.doc = "bfe47b947a915099de15e5519a3aff201b327c31d29c1966d4fd3e9b73581792d918b461ed1944aaf5e8a5eb7956c38579a3fd972f189b1e3abb903c7c904cbe";
   license = [ "mit" ];
   version = "3.1";
+  hasCatalogue = true;
 };
 plautopatch = {
   revision = 64072;
@@ -39255,6 +42275,7 @@ plautopatch = {
   hasRunfiles = true;
   license = [ "bsd3" ];
   version = "0.9q";
+  hasCatalogue = true;
 };
 play = {
   revision = 15878;
@@ -39265,6 +42286,7 @@ play = {
   sha512.source = "3bf9b5449611ce72af26a68c99a7ea813c7eebce59336d5c7bf65da1a870e6c26238f803ba8e07ee2a084826e6bee7ec819a919e7abbbbf11946f611cab17a03";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 playcards = {
   revision = 67342;
@@ -39275,6 +42297,7 @@ playcards = {
   hasRunfiles = true;
   license = [ "lgpl3" ];
   version = "0.2.1";
+  hasCatalogue = true;
 };
 playfair = {
   revision = 64857;
@@ -39287,6 +42310,7 @@ playfair = {
   sha512.doc = "006319162a3a7035955064d7ab99e704bf828cc7441a9c930cfccf4cb7e70ac52ff672de3ce8b415fbfb20f29a0b4c09703fe0e3715d15e38c1293973bd3a86a";
   hasRunfiles = true;
   license = [ "ofl" "lppl13c" ];
+  hasCatalogue = true;
 };
 plex = {
   revision = 69154;
@@ -39299,6 +42323,7 @@ plex = {
   sha512.doc = "175abcc07f213d5837070171b7fc483aec2c26b80f530ca7ad7a6f571de028c833e32d71a4c465fbfbb803afcba934e68df560944b8b54b20827d31cd21fa9f0";
   hasRunfiles = true;
   license = [ "ofl" "lppl13c" ];
+  hasCatalogue = true;
 };
 plex-otf = {
   revision = 68238;
@@ -39309,6 +42334,7 @@ plex-otf = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.08a";
+  hasCatalogue = true;
 };
 plimsoll = {
   revision = 56605;
@@ -39323,6 +42349,7 @@ plimsoll = {
   hasRunfiles = true;
   license = [ "gpl3Plus" ];
   version = "1";
+  hasCatalogue = true;
 };
 plipsum = {
   revision = 30353;
@@ -39333,6 +42360,7 @@ plipsum = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "4.3";
+  hasCatalogue = true;
 };
 plnfss = {
   revision = 15878;
@@ -39343,6 +42371,7 @@ plnfss = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 plstmary = {
   revision = 31088;
@@ -39353,9 +42382,11 @@ plstmary = {
   hasRunfiles = true;
   license = [ "publicDomain" ];
   version = "0.5c";
+  hasCatalogue = true;
 };
 plweb = {
   revision = 15878;
+  catalogue = "pl";
   shortdesc = "Literate Programming for Prolog with LaTeX";
   stripPrefix = 0;
   sha512.run = "1899a3498d10950f67d24d2d7bf0488cd8867bd862960fa892581137bb1fb3426dea9e193f8993ffa93df11684dbd1f25bc79a98489317998936ab4186e9a22d";
@@ -39364,6 +42395,7 @@ plweb = {
   hasRunfiles = true;
   license = [ "free" ];
   version = "3.0";
+  hasCatalogue = true;
 };
 pm-isomath = {
   revision = 60368;
@@ -39375,6 +42407,7 @@ pm-isomath = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.2.00";
+  hasCatalogue = true;
 };
 pmboxdraw = {
   revision = 53046;
@@ -39386,6 +42419,7 @@ pmboxdraw = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.4";
+  hasCatalogue = true;
 };
 pmdraw = {
   revision = 69366;
@@ -39396,6 +42430,7 @@ pmdraw = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.2";
+  hasCatalogue = true;
 };
 pmgraph = {
   revision = 15878;
@@ -39406,6 +42441,7 @@ pmgraph = {
   hasRunfiles = true;
   license = [ "gpl1Only" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 pmhanguljamo = {
   revision = 66361;
@@ -39416,6 +42452,7 @@ pmhanguljamo = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0.2";
+  hasCatalogue = true;
 };
 pmx = {
   revision = 65926;
@@ -39426,6 +42463,7 @@ pmx = {
   hasRunfiles = true;
   license = [ "gpl2Only" ];
   version = "3.00";
+  hasCatalogue = true;
 };
 pmx.binfiles = [
   "pmxab"
@@ -39443,6 +42481,7 @@ pmxchords = {
   ];
   license = [ "gpl2Only" ];
   version = "2.0.2";
+  hasCatalogue = true;
 };
 pmxchords.binfiles = [
   "pmxchords"
@@ -39455,6 +42494,7 @@ pnas2009 = {
   hasRunfiles = true;
   license = [ "free" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 poemscol = {
   revision = 56082;
@@ -39466,6 +42506,7 @@ poemscol = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "3.1415926";
+  hasCatalogue = true;
 };
 poetry = {
   revision = 53129;
@@ -39477,6 +42518,7 @@ poetry = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.2";
+  hasCatalogue = true;
 };
 poetrytex = {
   revision = 68353;
@@ -39488,6 +42530,7 @@ poetrytex = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "3.0.1";
+  hasCatalogue = true;
 };
 poiretone = {
   revision = 64856;
@@ -39500,6 +42543,7 @@ poiretone = {
   sha512.doc = "c164f53258e08e74cade46f03f1e6d3d538a0f65cf3086629150c2741488bd33a82fca89d91bcbb83045d126defc3ee9493fc5e1d05e2c567464d4d29afc0cd9";
   hasRunfiles = true;
   license = [ "ofl" "lppl13c" ];
+  hasCatalogue = true;
 };
 polexpr = {
   revision = 63337;
@@ -39510,6 +42554,7 @@ polexpr = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.8.7a";
+  hasCatalogue = true;
 };
 polski = {
   revision = 60322;
@@ -39525,6 +42570,7 @@ polski = {
   hasRunfiles = true;
   license = [ "lppl12" ];
   version = "1.3.6";
+  hasCatalogue = true;
 };
 poltawski = {
   revision = 67718;
@@ -39538,6 +42584,7 @@ poltawski = {
   hasRunfiles = true;
   license = [ "gfl" ];
   version = "1.101";
+  hasCatalogue = true;
 };
 polyglossia = {
   revision = 70496;
@@ -39557,6 +42604,7 @@ polyglossia = {
   hasRunfiles = true;
   license = [ "mit" "lppl13c" "cc0" ];
   version = "2.1";
+  hasCatalogue = true;
 };
 polyhedra = {
   revision = 68770;
@@ -39567,6 +42615,7 @@ polyhedra = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.3";
+  hasCatalogue = true;
 };
 polynom = {
   revision = 44832;
@@ -39578,6 +42627,7 @@ polynom = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.19";
+  hasCatalogue = true;
 };
 polynomial = {
   revision = 15878;
@@ -39589,6 +42639,7 @@ polynomial = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 polytable = {
   revision = 55837;
@@ -39600,6 +42651,7 @@ polytable = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.8.6";
+  hasCatalogue = true;
 };
 poormanlog = {
   revision = 63400;
@@ -39610,6 +42662,7 @@ poormanlog = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.07";
+  hasCatalogue = true;
 };
 postage = {
   revision = 55920;
@@ -39621,6 +42674,7 @@ postage = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 postcards = {
   revision = 21641;
@@ -39630,6 +42684,7 @@ postcards = {
   sha512.doc = "936c1f923bea76aa323d2c8ce9949cea3364eeb1a145e735ff5bdf609de4c54cc78125392e9e3cc914180815bb9dd5bae63e50c0000b2143fe7de94c199bc50e";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 poster-mac = {
   revision = 18305;
@@ -39640,6 +42695,7 @@ poster-mac = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 postit = {
   revision = 67344;
@@ -39650,6 +42706,7 @@ postit = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.1.3";
+  hasCatalogue = true;
 };
 postnotes = {
   revision = 69102;
@@ -39661,6 +42718,7 @@ postnotes = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.2.8";
+  hasCatalogue = true;
 };
 powerdot = {
   revision = 59272;
@@ -39672,6 +42730,7 @@ powerdot = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.7";
+  hasCatalogue = true;
 };
 powerdot-fuberlin = {
   revision = 52922;
@@ -39682,6 +42741,7 @@ powerdot-fuberlin = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.02a";
+  hasCatalogue = true;
 };
 powerdot-tuliplab = {
   revision = 47963;
@@ -39692,6 +42752,7 @@ powerdot-tuliplab = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0.0";
+  hasCatalogue = true;
 };
 ppmcheckpdf = {
   revision = 69527;
@@ -39702,6 +42763,7 @@ ppmcheckpdf = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2024B";
+  hasCatalogue = true;
 };
 ppr-prv = {
   revision = 15878;
@@ -39713,6 +42775,7 @@ ppr-prv = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.13c";
+  hasCatalogue = true;
 };
 ppt-slides = {
   revision = 69568;
@@ -39738,6 +42801,7 @@ ppt-slides = {
   hasRunfiles = true;
   license = [ "mit" ];
   version = "0.3.2";
+  hasCatalogue = true;
 };
 pracjourn = {
   revision = 61719;
@@ -39749,6 +42813,7 @@ pracjourn = {
   hasRunfiles = true;
   license = [ "gpl1Only" ];
   version = "0.4n";
+  hasCatalogue = true;
 };
 practicalreports = {
   revision = 52312;
@@ -39759,6 +42824,7 @@ practicalreports = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.0.3";
+  hasCatalogue = true;
 };
 precattl = {
   revision = 63967;
@@ -39769,6 +42835,7 @@ precattl = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.0.0";
+  hasCatalogue = true;
 };
 prelim2e = {
   revision = 57000;
@@ -39780,6 +42847,7 @@ prelim2e = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.00";
+  hasCatalogue = true;
 };
 preprint = {
   revision = 30447;
@@ -39791,6 +42859,7 @@ preprint = {
   hasRunfiles = true;
   license = [ "free" ];
   version = "2011";
+  hasCatalogue = true;
 };
 prerex = {
   revision = 54512;
@@ -39801,6 +42870,7 @@ prerex = {
   hasManpages = true;
   hasRunfiles = true;
   license = [ "gpl2Only" "lppl13c" ];
+  hasCatalogue = true;
 };
 present = {
   revision = 50048;
@@ -39811,6 +42881,7 @@ present = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.2.1";
+  hasCatalogue = true;
 };
 pressrelease = {
   revision = 35147;
@@ -39822,6 +42893,7 @@ pressrelease = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 prettyref = {
   revision = 15878;
@@ -39833,6 +42905,7 @@ prettyref = {
   hasRunfiles = true;
   license = [ "publicDomain" ];
   version = "3.0";
+  hasCatalogue = true;
 };
 prettytok = {
   revision = 66884;
@@ -39848,6 +42921,7 @@ prettytok = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.2.0";
+  hasCatalogue = true;
 };
 preview = {
   revision = 69470;
@@ -39859,6 +42933,7 @@ preview = {
   hasRunfiles = true;
   license = [ "gpl3Only" ];
   version = "13.3";
+  hasCatalogue = true;
 };
 prftree = {
   revision = 54080;
@@ -39869,6 +42944,7 @@ prftree = {
   hasRunfiles = true;
   license = [ "gpl1Only" ];
   version = "1.6";
+  hasCatalogue = true;
 };
 principia = {
   revision = 66625;
@@ -39879,6 +42955,7 @@ principia = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.0";
+  hasCatalogue = true;
 };
 printlen = {
   revision = 19847;
@@ -39889,6 +42966,7 @@ printlen = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1a";
+  hasCatalogue = true;
 };
 proba = {
   revision = 15878;
@@ -39899,6 +42977,7 @@ proba = {
   sha512.source = "d1305e797d8884f264a20df021b6b0619cee1df1aba8943f5533c2cd839e093420e43ebd1aa46282457a650569a883f4f11a9319f6b6612dbec5b99d29f37087";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 probsoln = {
   revision = 44783;
@@ -39910,6 +42989,7 @@ probsoln = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "3.05";
+  hasCatalogue = true;
 };
 prociagssymp = {
   revision = 63242;
@@ -39919,6 +42999,7 @@ prociagssymp = {
   sha512.doc = "9d7e118fb0b704649176bb51f523d8a64ed11fb8e58cd1cafc7ffe3f4ad5005366cf518df9d7a4577b600524e19f089a4086d46f946668e82a1272b28c750f8f";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 prodint = {
   revision = 21893;
@@ -39931,6 +43012,7 @@ prodint = {
   sha512.doc = "addad035cb9e7b88d9da2bf161723db51897342872dd6c671695bb7bb0a6a4c7bac872ce40f31b22f5fdd84cc03994562a6f78f14d9203977d5b7c8d17130db8";
   hasRunfiles = true;
   license = [ "ofl" ];
+  hasCatalogue = true;
 };
 productbox = {
   revision = 20886;
@@ -39942,6 +43024,7 @@ productbox = {
   hasRunfiles = true;
   license = [ "free" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 profcollege = {
   revision = 69539;
@@ -39952,6 +43035,7 @@ profcollege = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.99-z-z";
+  hasCatalogue = true;
 };
 proflabo = {
   revision = 63147;
@@ -39962,6 +43046,7 @@ proflabo = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 proflycee = {
   revision = 70513;
@@ -39972,6 +43057,7 @@ proflycee = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "3.02f";
+  hasCatalogue = true;
 };
 profmaquette = {
   revision = 70496;
@@ -39982,6 +43068,7 @@ profmaquette = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.88";
+  hasCatalogue = true;
 };
 profsio = {
   revision = 70211;
@@ -39992,6 +43079,7 @@ profsio = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.2.1";
+  hasCatalogue = true;
 };
 program = {
   revision = 44214;
@@ -40002,6 +43090,7 @@ program = {
   hasRunfiles = true;
   license = [ "gpl3Only" ];
   version = "3.3.14";
+  hasCatalogue = true;
 };
 progress = {
   revision = 19519;
@@ -40012,6 +43101,7 @@ progress = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.10";
+  hasCatalogue = true;
 };
 progressbar = {
   revision = 33822;
@@ -40022,6 +43112,7 @@ progressbar = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0b-4";
+  hasCatalogue = true;
 };
 projlib = {
   revision = 70327;
@@ -40035,6 +43126,7 @@ projlib = {
   sha512.source = "0d943cd81f384da704841841fab42276b66db825258b4aaa0392ee651527960be60a80d87469a679ee7292a0096c5d438f4c76ad39154981b113cfd12e273d44";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 proof-at-the-end = {
   revision = 69602;
@@ -40045,6 +43137,7 @@ proof-at-the-end = {
   sha512.source = "088cefbdb746236e400b232079c54c6e8f73d8adf94f022c842f45d5bfe0e83cdcf8540c0dd51214c5538d6609dc0a0cec7fa3b5a2458a28eccd288249f4f9fd";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 proofread = {
   revision = 61719;
@@ -40056,6 +43149,7 @@ proofread = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.04";
+  hasCatalogue = true;
 };
 prooftrees = {
   revision = 67399;
@@ -40066,6 +43160,7 @@ prooftrees = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.8_svn_9582";
+  hasCatalogue = true;
 };
 properties = {
   revision = 15878;
@@ -40076,6 +43171,7 @@ properties = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.2";
+  hasCatalogue = true;
 };
 proposal = {
   revision = 40538;
@@ -40086,6 +43182,7 @@ proposal = {
   sha512.source = "39ec30b5c0d94a2beb6d83d796ed13ca95b5e0045edc8e7828f5528e44e9f24350fceef93ec2c3bf9cdbf3766d7ddb0b72d6e10a909a6fc92e393681d425d8b4";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 prosper = {
   revision = 33033;
@@ -40096,6 +43193,7 @@ prosper = {
   hasRunfiles = true;
   license = [ "lppl12" ];
   version = "1.0h";
+  hasCatalogue = true;
 };
 protex = {
   revision = 41633;
@@ -40105,6 +43203,7 @@ protex = {
   sha512.doc = "95746823c32526fb5e2c9968749a7da2149d23c2ec9f1ced2a655a4fe54ad272bb414abd0be0d78775b0ac95e6440d9b6ead609de7615dcceb0186e4683e4138";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 protocol = {
   revision = 25562;
@@ -40116,6 +43215,7 @@ protocol = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.13";
+  hasCatalogue = true;
 };
 prtec = {
   revision = 51919;
@@ -40126,6 +43226,7 @@ prtec = {
   hasRunfiles = true;
   license = [ "mit" ];
   version = "1.06";
+  hasCatalogue = true;
 };
 przechlewski-book = {
   revision = 23552;
@@ -40135,6 +43236,7 @@ przechlewski-book = {
   sha512.doc = "0441621561c2c4208d083f84eaf47573de94248cc1aaf027061de636c1a65f35a307260eaf390257bd02acac34b42963f96030ee27c83650deb11234edec89bf";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 ps2eps = {
   revision = 62856;
@@ -40145,6 +43247,7 @@ ps2eps = {
   hasRunfiles = true;
   license = [ "gpl1Only" ];
   version = "1.70";
+  hasCatalogue = true;
 };
 ps2eps.binfiles = [
   "bbox"
@@ -40157,6 +43260,7 @@ ps2pk = {
   sha512.doc = "032c5ab3442cf668d6b40851bdf710b4e4b9eca701bf04c87359c579a5fce52bedea15ee5dc9e4c5967fcc0e3b84805450987b73c204e0df4708b65a7cf74c13";
   hasManpages = true;
   license = [ "free" ];
+  hasCatalogue = true;
 };
 ps2pk.binfiles = [
   "mag"
@@ -40173,6 +43277,7 @@ psbao = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 pseudo = {
   revision = 66638;
@@ -40183,6 +43288,7 @@ pseudo = {
   hasRunfiles = true;
   license = [ "mit" ];
   version = "1.2.3";
+  hasCatalogue = true;
 };
 pseudocode = {
   revision = 54080;
@@ -40192,6 +43298,7 @@ pseudocode = {
   sha512.doc = "ad53ed572d7d79caa21baa8c34482ca6032369824967e2966479e85a95d140a6477acf0e69ca7bc2d6dda6f8b161253b1afd43cc53ce4d44641dda64d82abe13";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 psfrag = {
   revision = 15878;
@@ -40203,6 +43310,7 @@ psfrag = {
   hasRunfiles = true;
   license = [ "free" ];
   version = "3.04";
+  hasCatalogue = true;
 };
 psfrag-italian = {
   revision = 15878;
@@ -40211,6 +43319,7 @@ psfrag-italian = {
   sha512.run = "4d26f0191ffbbe7fa6a9aae1ece6e72739925b59a1a1db5ad3cbe8f2b3ece92ec8265f008e91fcabfe2e04863300db833eff3104486e9c33985ce5c7f8dd7543";
   sha512.doc = "7a513ff265d259adfbaee9ffb47856602004f19679dad1316f04d36848f2e22bff8c3164ba9b045e7a4a57df76c2ad17b071a9cac68d4b92cff57a29f1e99f55";
   license = [ "gpl1Only" ];
+  hasCatalogue = true;
 };
 psfragx = {
   revision = 26243;
@@ -40222,6 +43331,7 @@ psfragx = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 psgo = {
   revision = 15878;
@@ -40232,6 +43342,7 @@ psgo = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.17";
+  hasCatalogue = true;
 };
 psizzl = {
   revision = 69742;
@@ -40243,6 +43354,7 @@ psizzl = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.35";
+  hasCatalogue = true;
 };
 pslatex = {
   revision = 67469;
@@ -40253,6 +43365,7 @@ pslatex = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.3";
+  hasCatalogue = true;
 };
 psnfss = {
   revision = 54694;
@@ -40275,6 +43388,7 @@ psnfss = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "9.3";
+  hasCatalogue = true;
 };
 pspicture = {
   revision = 15878;
@@ -40285,6 +43399,7 @@ pspicture = {
   sha512.source = "af1deb00966a7d4d1d68e156dd5fbc60e95f60a65a942f1bda1acbd579b932e0c81875386bd3eb1945fab211cc9ad5607c3e21e5d240048d775c28574cb754ba";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 pst-2dplot = {
   revision = 15878;
@@ -40295,6 +43410,7 @@ pst-2dplot = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.5";
+  hasCatalogue = true;
 };
 pst-3d = {
   revision = 17257;
@@ -40306,6 +43422,7 @@ pst-3d = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.10";
+  hasCatalogue = true;
 };
 pst-3dplot = {
   revision = 68727;
@@ -40316,6 +43433,7 @@ pst-3dplot = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.09";
+  hasCatalogue = true;
 };
 pst-abspos = {
   revision = 15878;
@@ -40327,6 +43445,7 @@ pst-abspos = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.2";
+  hasCatalogue = true;
 };
 pst-am = {
   revision = 19591;
@@ -40338,6 +43457,7 @@ pst-am = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.02";
+  hasCatalogue = true;
 };
 pst-antiprism = {
   revision = 46643;
@@ -40348,6 +43468,7 @@ pst-antiprism = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.02";
+  hasCatalogue = true;
 };
 pst-arrow = {
   revision = 61069;
@@ -40358,6 +43479,7 @@ pst-arrow = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.05";
+  hasCatalogue = true;
 };
 pst-asr = {
   revision = 22138;
@@ -40368,6 +43490,7 @@ pst-asr = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.3";
+  hasCatalogue = true;
 };
 pst-bar = {
   revision = 64331;
@@ -40378,6 +43501,7 @@ pst-bar = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.93";
+  hasCatalogue = true;
 };
 pst-barcode = {
   revision = 64182;
@@ -40388,6 +43512,7 @@ pst-barcode = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.19";
+  hasCatalogue = true;
 };
 pst-bezier = {
   revision = 41981;
@@ -40398,6 +43523,7 @@ pst-bezier = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.03";
+  hasCatalogue = true;
 };
 pst-blur = {
   revision = 15878;
@@ -40409,6 +43535,7 @@ pst-blur = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.0";
+  hasCatalogue = true;
 };
 pst-bspline = {
   revision = 40685;
@@ -40419,6 +43546,7 @@ pst-bspline = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.62";
+  hasCatalogue = true;
 };
 pst-calculate = {
   revision = 49817;
@@ -40429,6 +43557,7 @@ pst-calculate = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.02";
+  hasCatalogue = true;
 };
 pst-calendar = {
   revision = 60480;
@@ -40439,6 +43568,7 @@ pst-calendar = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.48";
+  hasCatalogue = true;
 };
 pst-cie = {
   revision = 60959;
@@ -40449,6 +43579,7 @@ pst-cie = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.06b";
+  hasCatalogue = true;
 };
 pst-circ = {
   revision = 60464;
@@ -40459,6 +43590,7 @@ pst-circ = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.19";
+  hasCatalogue = true;
 };
 pst-coil = {
   revision = 62977;
@@ -40469,6 +43601,7 @@ pst-coil = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.07";
+  hasCatalogue = true;
 };
 pst-contourplot = {
   revision = 48230;
@@ -40479,6 +43612,7 @@ pst-contourplot = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.6";
+  hasCatalogue = true;
 };
 pst-cox = {
   revision = 15878;
@@ -40489,6 +43623,7 @@ pst-cox = {
   hasRunfiles = true;
   license = [ "lgpl2" ];
   version = "0.98_Beta";
+  hasCatalogue = true;
 };
 pst-dart = {
   revision = 60476;
@@ -40499,6 +43634,7 @@ pst-dart = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.03";
+  hasCatalogue = true;
 };
 pst-dbicons = {
   revision = 17556;
@@ -40510,6 +43646,7 @@ pst-dbicons = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.16";
+  hasCatalogue = true;
 };
 pst-diffraction = {
   revision = 62977;
@@ -40521,6 +43658,7 @@ pst-diffraction = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.03";
+  hasCatalogue = true;
 };
 pst-electricfield = {
   revision = 29803;
@@ -40532,6 +43670,7 @@ pst-electricfield = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.14";
+  hasCatalogue = true;
 };
 pst-eps = {
   revision = 15878;
@@ -40543,6 +43682,7 @@ pst-eps = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 pst-eucl = {
   revision = 66924;
@@ -40553,6 +43693,7 @@ pst-eucl = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.77";
+  hasCatalogue = true;
 };
 pst-eucl-translation-bg = {
   revision = 19296;
@@ -40562,6 +43703,7 @@ pst-eucl-translation-bg = {
   sha512.doc = "9f6d0153e79a205d0fce5b289fa43317ded0b70abc06139a503b98199584e8cb12b083c8235b6b53ff2a80cf249a4a43cefd3e0b39a9a406c62c1e684bcb35eb";
   license = [ "lppl13c" ];
   version = "1.3.2";
+  hasCatalogue = true;
 };
 pst-exa = {
   revision = 45289;
@@ -40572,6 +43714,7 @@ pst-exa = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.06";
+  hasCatalogue = true;
 };
 pst-feyn = {
   revision = 48781;
@@ -40582,6 +43725,7 @@ pst-feyn = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.01";
+  hasCatalogue = true;
 };
 pst-fill = {
   revision = 60671;
@@ -40592,6 +43736,7 @@ pst-fill = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.02";
+  hasCatalogue = true;
 };
 pst-fit = {
   revision = 45109;
@@ -40602,6 +43747,7 @@ pst-fit = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.02";
+  hasCatalogue = true;
 };
 pst-flags = {
   revision = 65501;
@@ -40611,6 +43757,7 @@ pst-flags = {
   sha512.doc = "4c8bed4fa6f527fd5e0262692cf4acfd52d36bfe8461acb97615c127ab54336ada7a274ed9e5a7a75d26cf764c2f63734aa75d5bc45ec833f3b77b6179fa74fe";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 pst-fr3d = {
   revision = 15878;
@@ -40622,6 +43769,7 @@ pst-fr3d = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.10";
+  hasCatalogue = true;
 };
 pst-fractal = {
   revision = 64714;
@@ -40632,6 +43780,7 @@ pst-fractal = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.12";
+  hasCatalogue = true;
 };
 pst-fun = {
   revision = 17909;
@@ -40643,6 +43792,7 @@ pst-fun = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.04";
+  hasCatalogue = true;
 };
 pst-func = {
   revision = 66845;
@@ -40653,6 +43803,7 @@ pst-func = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.02";
+  hasCatalogue = true;
 };
 pst-gantt = {
   revision = 35832;
@@ -40663,6 +43814,7 @@ pst-gantt = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.22a";
+  hasCatalogue = true;
 };
 pst-geo = {
   revision = 60387;
@@ -40673,6 +43825,7 @@ pst-geo = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.07";
+  hasCatalogue = true;
 };
 pst-geometrictools = {
   revision = 61430;
@@ -40683,6 +43836,7 @@ pst-geometrictools = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.3";
+  hasCatalogue = true;
 };
 pst-gr3d = {
   revision = 15878;
@@ -40694,6 +43848,7 @@ pst-gr3d = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.34";
+  hasCatalogue = true;
 };
 pst-grad = {
   revision = 15878;
@@ -40704,6 +43859,7 @@ pst-grad = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.06";
+  hasCatalogue = true;
 };
 pst-graphicx = {
   revision = 21717;
@@ -40714,6 +43870,7 @@ pst-graphicx = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.02";
+  hasCatalogue = true;
 };
 pst-hsb = {
   revision = 66739;
@@ -40724,6 +43881,7 @@ pst-hsb = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.03";
+  hasCatalogue = true;
 };
 pst-infixplot = {
   revision = 15878;
@@ -40734,6 +43892,7 @@ pst-infixplot = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.11";
+  hasCatalogue = true;
 };
 pst-intersect = {
   revision = 33210;
@@ -40745,6 +43904,7 @@ pst-intersect = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.4";
+  hasCatalogue = true;
 };
 pst-jtree = {
   revision = 20946;
@@ -40755,6 +43915,7 @@ pst-jtree = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.6";
+  hasCatalogue = true;
 };
 pst-knot = {
   revision = 16033;
@@ -40765,6 +43926,7 @@ pst-knot = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.2";
+  hasCatalogue = true;
 };
 pst-labo = {
   revision = 67147;
@@ -40775,6 +43937,7 @@ pst-labo = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.06";
+  hasCatalogue = true;
 };
 pst-layout = {
   revision = 29803;
@@ -40785,6 +43948,7 @@ pst-layout = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = ".95";
+  hasCatalogue = true;
 };
 pst-lens = {
   revision = 15878;
@@ -40796,6 +43960,7 @@ pst-lens = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.02";
+  hasCatalogue = true;
 };
 pst-light3d = {
   revision = 15878;
@@ -40807,6 +43972,7 @@ pst-light3d = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.12";
+  hasCatalogue = true;
 };
 pst-lsystem = {
   revision = 49556;
@@ -40817,6 +43983,7 @@ pst-lsystem = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.02";
+  hasCatalogue = true;
 };
 pst-magneticfield = {
   revision = 69493;
@@ -40827,6 +43994,7 @@ pst-magneticfield = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.17a";
+  hasCatalogue = true;
 };
 pst-marble = {
   revision = 50925;
@@ -40837,6 +44005,7 @@ pst-marble = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.6";
+  hasCatalogue = true;
 };
 pst-math = {
   revision = 67535;
@@ -40847,6 +44016,7 @@ pst-math = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.67";
+  hasCatalogue = true;
 };
 pst-mirror = {
   revision = 60506;
@@ -40857,6 +44027,7 @@ pst-mirror = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.02";
+  hasCatalogue = true;
 };
 pst-moire = {
   revision = 60411;
@@ -40867,6 +44038,7 @@ pst-moire = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.2";
+  hasCatalogue = true;
 };
 pst-node = {
   revision = 61838;
@@ -40877,6 +44049,7 @@ pst-node = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.43";
+  hasCatalogue = true;
 };
 pst-ob3d = {
   revision = 54514;
@@ -40888,6 +44061,7 @@ pst-ob3d = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.22";
+  hasCatalogue = true;
 };
 pst-ode = {
   revision = 69296;
@@ -40898,6 +44072,7 @@ pst-ode = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.19";
+  hasCatalogue = true;
 };
 pst-optexp = {
   revision = 62977;
@@ -40909,6 +44084,7 @@ pst-optexp = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "6.1";
+  hasCatalogue = true;
 };
 pst-optic = {
   revision = 67052;
@@ -40919,6 +44095,7 @@ pst-optic = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.02a";
+  hasCatalogue = true;
 };
 pst-osci = {
   revision = 68781;
@@ -40929,6 +44106,7 @@ pst-osci = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.82b";
+  hasCatalogue = true;
 };
 pst-ovl = {
   revision = 54963;
@@ -40939,6 +44117,7 @@ pst-ovl = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.07b";
+  hasCatalogue = true;
 };
 pst-pad = {
   revision = 15878;
@@ -40950,6 +44129,7 @@ pst-pad = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.3b";
+  hasCatalogue = true;
 };
 pst-pdf = {
   revision = 56622;
@@ -40960,6 +44140,7 @@ pst-pdf = {
   hasRunfiles = true;
   license = [ "lppl12" ];
   version = "1.2f";
+  hasCatalogue = true;
 };
 pst-pdf.binfiles = [
   "ps4pdf"
@@ -40974,6 +44155,7 @@ pst-pdgr = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.4";
+  hasCatalogue = true;
 };
 pst-perspective = {
   revision = 39585;
@@ -40984,6 +44166,7 @@ pst-perspective = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.05";
+  hasCatalogue = true;
 };
 pst-platon = {
   revision = 16538;
@@ -40995,6 +44178,7 @@ pst-platon = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.01";
+  hasCatalogue = true;
 };
 pst-plot = {
   revision = 65346;
@@ -41005,6 +44189,7 @@ pst-plot = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.94";
+  hasCatalogue = true;
 };
 pst-poker = {
   revision = 65818;
@@ -41015,6 +44200,7 @@ pst-poker = {
   hasRunfiles = true;
   license = [ "lgpl3" ];
   version = "0.03b";
+  hasCatalogue = true;
 };
 pst-poly = {
   revision = 35062;
@@ -41025,6 +44211,7 @@ pst-poly = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.63";
+  hasCatalogue = true;
 };
 pst-pulley = {
   revision = 62977;
@@ -41035,6 +44222,7 @@ pst-pulley = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.02";
+  hasCatalogue = true;
 };
 pst-qtree = {
   revision = 15878;
@@ -41044,6 +44232,7 @@ pst-qtree = {
   sha512.doc = "4a0bba9fa7072e5860403c3b22a23947045106fd4b89781af848d17afbc5ac456c77617979ebcb80afe07620ab8b990e868c688301c4637804d32790fa4bd7f4";
   hasRunfiles = true;
   license = [ "gpl1Only" ];
+  hasCatalogue = true;
 };
 pst-rputover = {
   revision = 44724;
@@ -41054,6 +44243,7 @@ pst-rputover = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 pst-rubans = {
   revision = 23464;
@@ -41065,6 +44255,7 @@ pst-rubans = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.2";
+  hasCatalogue = true;
 };
 pst-shell = {
   revision = 56070;
@@ -41076,6 +44267,7 @@ pst-shell = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.03";
+  hasCatalogue = true;
 };
 pst-sigsys = {
   revision = 21667;
@@ -41086,6 +44278,7 @@ pst-sigsys = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.4";
+  hasCatalogue = true;
 };
 pst-slpe = {
   revision = 24391;
@@ -41097,6 +44290,7 @@ pst-slpe = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.31";
+  hasCatalogue = true;
 };
 pst-solarsystem = {
   revision = 69675;
@@ -41107,6 +44301,7 @@ pst-solarsystem = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.15";
+  hasCatalogue = true;
 };
 pst-solides3d = {
   revision = 68786;
@@ -41117,6 +44312,7 @@ pst-solides3d = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "4.35a";
+  hasCatalogue = true;
 };
 pst-soroban = {
   revision = 15878;
@@ -41128,6 +44324,7 @@ pst-soroban = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 pst-spectra = {
   revision = 15878;
@@ -41138,6 +44335,7 @@ pst-spectra = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.91";
+  hasCatalogue = true;
 };
 pst-spinner = {
   revision = 66115;
@@ -41148,6 +44346,7 @@ pst-spinner = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.02";
+  hasCatalogue = true;
 };
 pst-stru = {
   revision = 38613;
@@ -41158,6 +44357,7 @@ pst-stru = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.13";
+  hasCatalogue = true;
 };
 pst-support = {
   revision = 15878;
@@ -41166,6 +44366,7 @@ pst-support = {
   sha512.run = "05ddd6f09d603a2a6887f03aa3da0374ad061e2ab52ad25f0036192179f985f3695b0248c602607172c94c55cd9d2bb453e8f145d73f133bf79a881ccb1daacc";
   sha512.doc = "ab2adb2c06d4f7f4b4a4fbfec59e1fc8d6b9f4ccff5aacc29f0a1524759fc1f0792640e8cc301e614477ad45261bbedb3ede93de2463e0a655aeff846561c185";
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 pst-text = {
   revision = 49542;
@@ -41176,6 +44377,7 @@ pst-text = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.02";
+  hasCatalogue = true;
 };
 pst-thick = {
   revision = 16369;
@@ -41187,6 +44389,7 @@ pst-thick = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 pst-tools = {
   revision = 60621;
@@ -41197,6 +44400,7 @@ pst-tools = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.12";
+  hasCatalogue = true;
 };
 pst-tree = {
   revision = 60421;
@@ -41207,6 +44411,7 @@ pst-tree = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.14";
+  hasCatalogue = true;
 };
 pst-turtle = {
   revision = 52261;
@@ -41217,6 +44422,7 @@ pst-turtle = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.02";
+  hasCatalogue = true;
 };
 pst-tvz = {
   revision = 23451;
@@ -41228,6 +44434,7 @@ pst-tvz = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.01";
+  hasCatalogue = true;
 };
 pst-uml = {
   revision = 15878;
@@ -41242,6 +44449,7 @@ pst-uml = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.83";
+  hasCatalogue = true;
 };
 pst-vectorian = {
   revision = 60488;
@@ -41252,6 +44460,7 @@ pst-vectorian = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.41";
+  hasCatalogue = true;
 };
 pst-vehicle = {
   revision = 61438;
@@ -41262,6 +44471,7 @@ pst-vehicle = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.3";
+  hasCatalogue = true;
 };
 pst-venn = {
   revision = 49316;
@@ -41272,6 +44482,7 @@ pst-venn = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.01";
+  hasCatalogue = true;
 };
 pst-vowel = {
   revision = 25228;
@@ -41282,6 +44493,7 @@ pst-vowel = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 pst2pdf = {
   revision = 56172;
@@ -41291,6 +44503,7 @@ pst2pdf = {
   hasRunfiles = true;
   license = [ "gpl2Only" ];
   version = "0.20";
+  hasCatalogue = true;
 };
 pst2pdf.binfiles = [
   "pst2pdf"
@@ -41304,9 +44517,11 @@ pstool = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.5e";
+  hasCatalogue = true;
 };
 pstricks = {
   revision = 69674;
+  catalogue = "pstricks-base";
   shortdesc = "PostScript macros for TeX";
   stripPrefix = 0;
   sha512.run = "8c9d0a2c8355a338f459a34dee22893acd54fc314ef588a8fc6a727f4dc0d6fc34e64059479c096e490bb2c90d627b555d5052cbf871089099acd18fff0cebfd";
@@ -41314,6 +44529,7 @@ pstricks = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "3.19c";
+  hasCatalogue = true;
 };
 pstricks-add = {
   revision = 66887;
@@ -41324,15 +44540,18 @@ pstricks-add = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "3.94";
+  hasCatalogue = true;
 };
 pstricks_calcnotes = {
   revision = 34363;
+  catalogue = "pstricks-calcnotes";
   shortdesc = "Use of PSTricks in calculus lecture notes";
   stripPrefix = 0;
   sha512.run = "1b17e544484b71f3c29e5c3e1bed6021658ce7b9a256c21c004113b722a85be7ea6861753230910771b7c900184ca8cce146408301e75de79e0c2bf8939c49a6";
   sha512.doc = "bab8492549fd268f856e11f5f6db4e1ca878c67634387e7295bc163cd17080ee6b685893ddc85a882bd895adf3689639bfa7fc7d0da5e9916ef305c18d94ad65";
   license = [ "lppl13c" ];
   version = "1.2";
+  hasCatalogue = true;
 };
 pstring = {
   revision = 42857;
@@ -41342,6 +44561,7 @@ pstring = {
   sha512.doc = "51c316c27c3d4083696dd9ee86e378c83ed09c75c632a7f0a580bd84d0033c7776008056a4b26d7835a4974b879c0f2b0389ae83c70cbd6ab093bc8b2add9ed4";
   hasRunfiles = true;
   license = [ "publicDomain" ];
+  hasCatalogue = true;
 };
 psutils = {
   revision = 61719;
@@ -41352,6 +44572,7 @@ psutils = {
   hasRunfiles = true;
   license = [ "free" ];
   version = "p17";
+  hasCatalogue = true;
 };
 psutils.binfiles = [
   "epsffit"
@@ -41398,6 +44619,7 @@ ptex = {
   sha512.doc = "160902b1b32b9725f4c7cabd06dfb612fbbeef31845df108efd50917d85ef619ba62d03760852d31a21a23e2bdcb5035292b317982d7fede260a696041bb2293";
   hasManpages = true;
   license = [ "bsd3" ];
+  hasCatalogue = true;
 };
 ptex-base = {
   revision = 64072;
@@ -41407,6 +44629,7 @@ ptex-base = {
   sha512.doc = "85b6422630754144e4f9c552899e588f1650af2837cf88e8f47106e2919bee8dd956002e102f83dd76107edb0e61e2a6d4ebfaaf6fc06289942fdb32385454ba";
   hasRunfiles = true;
   license = [ "bsd3" ];
+  hasCatalogue = true;
 };
 ptex-fontmaps = {
   revision = 65953;
@@ -41419,6 +44642,7 @@ ptex-fontmaps = {
   hasTlpkg = true;
   license = [ "publicDomain" "gpl3Only" ];
   version = "20210625.0";
+  hasCatalogue = true;
 };
 ptex-fontmaps.binfiles = [
   "kanji-config-updmap"
@@ -41434,6 +44658,7 @@ ptex-fonts = {
   sha512.doc = "3a07313f79f31d09bf96c78a574d00d57641df75b9eeb89c76425ee3d6cd51d1e6ad6574fffdeb834d2bc2fa8c41511561aec34ca6be2be43d55da6227d19a19";
   hasRunfiles = true;
   license = [ "bsd3" ];
+  hasCatalogue = true;
 };
 ptex-manual = {
   revision = 68147;
@@ -41442,6 +44667,7 @@ ptex-manual = {
   sha512.run = "ffad7c7c67e7c6c92ec7b814cba8ca8cd7fc9935d5b6c7f685ee83b97cca56ac410ee2c15f8d86f4bbf443508f2e2224603c9abc64e734451ee94ce968425d62";
   sha512.doc = "dc2643c258a98410d9a456e16794d70bf6de6e1a40b8db2bcf7fb40e20953bbe482cb26cf3e65b0caa19806e915cfdd3787ddcbf69108e2af0d83e03d3b0104b";
   license = [ "bsd3" ];
+  hasCatalogue = true;
 };
 ptex.binfiles = [
   "eptex"
@@ -41469,6 +44695,7 @@ ptex2pdf = {
   ];
   license = [ "gpl2Only" ];
   version = "20200520.0";
+  hasCatalogue = true;
 };
 ptex2pdf.binfiles = [
   "ptex2pdf"
@@ -41482,6 +44709,7 @@ ptext = {
   hasRunfiles = true;
   license = [ "lppl12" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 ptlatexcommands = {
   revision = 67125;
@@ -41493,6 +44721,7 @@ ptlatexcommands = {
   hasRunfiles = true;
   license = [ "mit" ];
   version = "0.1";
+  hasCatalogue = true;
 };
 ptolemaicastronomy = {
   revision = 50810;
@@ -41504,6 +44733,7 @@ ptolemaicastronomy = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 ptptex = {
   revision = 19440;
@@ -41514,6 +44744,7 @@ ptptex = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.91";
+  hasCatalogue = true;
 };
 punk = {
   revision = 27388;
@@ -41523,6 +44754,7 @@ punk = {
   sha512.doc = "33842d1fb46a78654d7351ccf88b40b87e6e03d83598f661ac21ee99d45156dd8b37a652c5c8e55506f95fc57b83e7f62f6c90c3fea5443dc5bb6590302b3e7d";
   hasRunfiles = true;
   license = [ "knuth" ];
+  hasCatalogue = true;
 };
 punk-latex = {
   revision = 27389;
@@ -41533,6 +44765,7 @@ punk-latex = {
   hasRunfiles = true;
   license = [ "gpl1Only" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 punknova = {
   revision = 24649;
@@ -41543,6 +44776,7 @@ punknova = {
   hasRunfiles = true;
   license = [ "free" ];
   version = "1.003";
+  hasCatalogue = true;
 };
 purifyeps = {
   revision = 29725;
@@ -41553,6 +44787,7 @@ purifyeps = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 purifyeps.binfiles = [
   "purifyeps"
@@ -41566,6 +44801,7 @@ puyotikz = {
   hasRunfiles = true;
   license = [ "mit" ];
   version = "1.0.1";
+  hasCatalogue = true;
 };
 pwebmac = {
   revision = 69027;
@@ -41576,6 +44812,7 @@ pwebmac = {
   hasRunfiles = true;
   license = [ "publicDomain" ];
   version = "4.11";
+  hasCatalogue = true;
 };
 pxbase = {
   revision = 66187;
@@ -41586,6 +44823,7 @@ pxbase = {
   hasRunfiles = true;
   license = [ "mit" ];
   version = "1.4";
+  hasCatalogue = true;
 };
 pxchfon = {
   revision = 68103;
@@ -41596,6 +44834,7 @@ pxchfon = {
   hasRunfiles = true;
   license = [ "mit" ];
   version = "2.0";
+  hasCatalogue = true;
 };
 pxcjkcat = {
   revision = 63967;
@@ -41606,6 +44845,7 @@ pxcjkcat = {
   hasRunfiles = true;
   license = [ "mit" ];
   version = "1.4";
+  hasCatalogue = true;
 };
 pxfonts = {
   revision = 15878;
@@ -41618,6 +44858,7 @@ pxfonts = {
   sha512.doc = "71898d307cabff64078bbb98bee9417c79504fd56f1cfc1427b9e4ccc9448b5e2e8436fa085a63d6fa6601e591673ef52eb2225ddfad5e34943456a2239206a5";
   hasRunfiles = true;
   license = [ "gpl1Only" ];
+  hasCatalogue = true;
 };
 pxgreeks = {
   revision = 21838;
@@ -41629,6 +44870,7 @@ pxgreeks = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 pxjahyper = {
   revision = 66272;
@@ -41639,6 +44881,7 @@ pxjahyper = {
   hasRunfiles = true;
   license = [ "mit" ];
   version = "1.3";
+  hasCatalogue = true;
 };
 pxjodel = {
   revision = 64072;
@@ -41649,6 +44892,7 @@ pxjodel = {
   hasRunfiles = true;
   license = [ "mit" ];
   version = "0.3";
+  hasCatalogue = true;
 };
 pxpgfmark = {
   revision = 30212;
@@ -41659,6 +44903,7 @@ pxpgfmark = {
   hasRunfiles = true;
   license = [ "mit" ];
   version = "0.2";
+  hasCatalogue = true;
 };
 pxpic = {
   revision = 67955;
@@ -41670,6 +44915,7 @@ pxpic = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.5";
+  hasCatalogue = true;
 };
 pxrubrica = {
   revision = 66298;
@@ -41681,6 +44927,7 @@ pxrubrica = {
   hasRunfiles = true;
   license = [ "mit" ];
   version = "1.3e";
+  hasCatalogue = true;
 };
 pxtatescale = {
   revision = 63967;
@@ -41691,6 +44938,7 @@ pxtatescale = {
   hasRunfiles = true;
   license = [ "mit" ];
   version = "0.4";
+  hasCatalogue = true;
 };
 pxtxalfa = {
   revision = 60847;
@@ -41701,6 +44949,7 @@ pxtxalfa = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2";
+  hasCatalogue = true;
 };
 pxufont = {
   revision = 67573;
@@ -41711,6 +44960,7 @@ pxufont = {
   hasRunfiles = true;
   license = [ "mit" ];
   version = "0.7";
+  hasCatalogue = true;
 };
 pygmentex = {
   revision = 64131;
@@ -41723,6 +44973,7 @@ pygmentex = {
   ];
   license = [ "lppl13c" ];
   version = "0.11";
+  hasCatalogue = true;
 };
 pygmentex.binfiles = [
   "pygmentex"
@@ -41736,6 +44987,7 @@ pyluatex = {
   hasRunfiles = true;
   license = [ "mit" "lppl13c" ];
   version = "0.6.3";
+  hasCatalogue = true;
 };
 pynotebook = {
   revision = 69990;
@@ -41746,6 +44998,7 @@ pynotebook = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.1.1";
+  hasCatalogue = true;
 };
 python = {
   revision = 60162;
@@ -41756,6 +45009,7 @@ python = {
   hasRunfiles = true;
   license = [ "gpl1Only" ];
   version = "0.22";
+  hasCatalogue = true;
 };
 pythonhighlight = {
   revision = 43191;
@@ -41765,6 +45019,7 @@ pythonhighlight = {
   sha512.doc = "31297eb541060d760fd61ebe169b840cf182f8f857986aba5a2a578373037d3c99ee12ec9c707ab1f9d29564925821665997ea45f728273007f61a5f0bea5180";
   hasRunfiles = true;
   license = [ "free" ];
+  hasCatalogue = true;
 };
 pythonimmediate = {
   revision = 69487;
@@ -41781,6 +45036,7 @@ pythonimmediate = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.5.0";
+  hasCatalogue = true;
 };
 pythontex = {
   revision = 59514;
@@ -41794,6 +45050,7 @@ pythontex = {
   ];
   license = [ "lppl13c" ];
   version = "0.18";
+  hasCatalogue = true;
 };
 pythontex.binfiles = [
   "depythontex"
@@ -41810,6 +45067,7 @@ q-and-a = {
   sha512.doc = "885a499e877514022277317c5f4d4fef22e5a0593b9a69cea2021e2326b4f57662daf55977da5078ac45f0146a76a0cc644498ae6c2c9dc49d5e5c8a39565037";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 qcircuit = {
   revision = 48400;
@@ -41820,6 +45078,7 @@ qcircuit = {
   hasRunfiles = true;
   license = [ "gpl2Only" ];
   version = "2.6.0";
+  hasCatalogue = true;
 };
 qcm = {
   revision = 63833;
@@ -41831,6 +45090,7 @@ qcm = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.1";
+  hasCatalogue = true;
 };
 qobitree = {
   revision = 15878;
@@ -41840,6 +45100,7 @@ qobitree = {
   sha512.doc = "b3b587bbe835456cb6298804cac2a8d61c85d4bad6550cd355e6a9ba155e7b691c5b2f5f919ded355b21dde9c4009ee30466bcfc5cb6d81e0af0fdeb97aa3b64";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 qpxqtx = {
   revision = 45797;
@@ -41859,6 +45120,7 @@ qrbill = {
   hasRunfiles = true;
   license = [ "lppl13c" "bsd3" ];
   version = "2.01";
+  hasCatalogue = true;
 };
 qrcode = {
   revision = 36065;
@@ -41870,6 +45132,7 @@ qrcode = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.51";
+  hasCatalogue = true;
 };
 qsharp = {
   revision = 49722;
@@ -41881,6 +45144,7 @@ qsharp = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.3.1901.1401";
+  hasCatalogue = true;
 };
 qstest = {
   revision = 15878;
@@ -41891,6 +45155,7 @@ qstest = {
   sha512.source = "1ff5ae66e8620b298f4cb5ca4d53e420ed0e89e476edae48f1f37fb1785e8bf4693da410cf2149d690734ad11fcd669152ffa7a560bde94e923e772560f8ca19";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 qsymbols = {
   revision = 15878;
@@ -41901,6 +45166,7 @@ qsymbols = {
   sha512.source = "5c88d0d929f6491b6b9df65ac3ce2be28ee5461d5cae5bc2ecaba64a9012ce4d84cf3f63bec19971ca2e8ec37fa869b8707c8d6ebb9e80f8302cc04127873962";
   hasRunfiles = true;
   license = [ "gpl1Only" ];
+  hasCatalogue = true;
 };
 qtree = {
   revision = 15878;
@@ -41911,6 +45177,7 @@ qtree = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "3.1b";
+  hasCatalogue = true;
 };
 qualitype = {
   revision = 54512;
@@ -41920,6 +45187,7 @@ qualitype = {
   sha512.doc = "20ddd865622520e4f9a7a1472c03f3c18bac039dbbe10849364a8ae1d0ee7d8771f30a02511a701962b2db25c79c74d3c2aa14f42951c7df9c0feb199092d510";
   hasRunfiles = true;
   license = [ "ofl" "gpl2Plus" ];
+  hasCatalogue = true;
 };
 quantikz = {
   revision = 67206;
@@ -41930,6 +45198,7 @@ quantikz = {
   hasRunfiles = true;
   license = [ "cc-by-40" ];
   version = "1.0.1";
+  hasCatalogue = true;
 };
 quantumarticle = {
   revision = 65242;
@@ -41940,6 +45209,7 @@ quantumarticle = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "6.1";
+  hasCatalogue = true;
 };
 quattrocento = {
   revision = 64372;
@@ -41952,6 +45222,7 @@ quattrocento = {
   sha512.doc = "f3881de285a603b1fb11c470f0c16698cdb4a4b165750a2bcc17fd4deaf44d5d94a7af531ddb1135d12556317731639ea779d25663a81bd25b578241ae3fab1d";
   hasRunfiles = true;
   license = [ "ofl" "lppl13c" ];
+  hasCatalogue = true;
 };
 quickreaction = {
   revision = 66867;
@@ -41962,6 +45233,7 @@ quickreaction = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.02.01";
+  hasCatalogue = true;
 };
 quicktype = {
   revision = 42183;
@@ -41972,6 +45244,7 @@ quicktype = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.1";
+  hasCatalogue = true;
 };
 quiver = {
   revision = 67779;
@@ -41982,6 +45255,7 @@ quiver = {
   hasRunfiles = true;
   license = [ "mit" ];
   version = "1.3.0";
+  hasCatalogue = true;
 };
 quiz2socrative = {
   revision = 52276;
@@ -41992,6 +45266,7 @@ quiz2socrative = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 quizztex = {
   revision = 68823;
@@ -42002,6 +45277,7 @@ quizztex = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.1.2";
+  hasCatalogue = true;
 };
 quotchap = {
   revision = 56926;
@@ -42013,6 +45289,7 @@ quotchap = {
   hasRunfiles = true;
   license = [ "gpl2Only" ];
   version = "1.3";
+  hasCatalogue = true;
 };
 quoting = {
   revision = 32818;
@@ -42024,6 +45301,7 @@ quoting = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.1c";
+  hasCatalogue = true;
 };
 quotmark = {
   revision = 15878;
@@ -42035,6 +45313,7 @@ quotmark = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 quran = {
   revision = 67791;
@@ -42045,6 +45324,7 @@ quran = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.2";
+  hasCatalogue = true;
 };
 quran-bn = {
   revision = 68345;
@@ -42055,6 +45335,7 @@ quran-bn = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.2";
+  hasCatalogue = true;
 };
 quran-de = {
   revision = 54191;
@@ -42065,6 +45346,7 @@ quran-de = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.2";
+  hasCatalogue = true;
 };
 quran-en = {
   revision = 68790;
@@ -42075,6 +45357,7 @@ quran-en = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.1";
+  hasCatalogue = true;
 };
 quran-id = {
   revision = 68747;
@@ -42085,6 +45368,7 @@ quran-id = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.1";
+  hasCatalogue = true;
 };
 quran-ur = {
   revision = 68314;
@@ -42095,6 +45379,7 @@ quran-ur = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.22";
+  hasCatalogue = true;
 };
 qyxf-book = {
   revision = 56319;
@@ -42105,9 +45390,11 @@ qyxf-book = {
   hasRunfiles = true;
   license = [ "mit" ];
   version = "3.1.0";
+  hasCatalogue = true;
 };
 r_und_s = {
   revision = 15878;
+  catalogue = "r-und-s";
   shortdesc = "Chemical hazard codes";
   stripPrefix = 0;
   sha512.run = "86b219305e4e085af2a22d34bc586253b5674abb18e257fa96bab1d45695f841020c0004f1da51fcfca0fd0b325e4043f2e368740841a5a2e8db774711ac6348";
@@ -42115,6 +45402,7 @@ r_und_s = {
   hasRunfiles = true;
   license = [ "free" ];
   version = "1.3i";
+  hasCatalogue = true;
 };
 ragged2e = {
   revision = 67441;
@@ -42126,6 +45414,7 @@ ragged2e = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "3.6";
+  hasCatalogue = true;
 };
 raleway = {
   revision = 42629;
@@ -42139,6 +45428,7 @@ raleway = {
   hasRunfiles = true;
   license = [ "ofl" ];
   version = "1.4";
+  hasCatalogue = true;
 };
 ran_toks = {
   revision = 59515;
@@ -42149,6 +45439,7 @@ ran_toks = {
   sha512.source = "ad77e0842ddd144f49b26a548846f2058611336f51d7540e96ad63258ee46c2f0a139b6945c0fea1f26fbf61b5e1d21ec45f87a9f68009d87ea6b9b5634a2895";
   hasRunfiles = true;
   license = [ "lppl1" ];
+  hasCatalogue = true;
 };
 randbild = {
   revision = 15878;
@@ -42160,6 +45451,7 @@ randbild = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.2";
+  hasCatalogue = true;
 };
 randexam = {
   revision = 69965;
@@ -42170,6 +45462,7 @@ randexam = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2024E";
+  hasCatalogue = true;
 };
 random = {
   revision = 54723;
@@ -42180,6 +45473,7 @@ random = {
   hasRunfiles = true;
   license = [ "publicDomain" ];
   version = "0.2";
+  hasCatalogue = true;
 };
 randomlist = {
   revision = 45281;
@@ -42191,6 +45485,7 @@ randomlist = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.3";
+  hasCatalogue = true;
 };
 randomwalk = {
   revision = 49513;
@@ -42202,6 +45497,7 @@ randomwalk = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.6";
+  hasCatalogue = true;
 };
 randtext = {
   revision = 15878;
@@ -42211,6 +45507,7 @@ randtext = {
   sha512.doc = "3bec31ca40816e7e86642e080021ab5faabb19656a15463f712e111485f1de00d698816e84b1ed7b63ea9380970d4e80b04aa0cf79442c7d1d77d5fa3f4d072a";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 rank-2-roots = {
   revision = 68161;
@@ -42221,6 +45518,7 @@ rank-2-roots = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.2";
+  hasCatalogue = true;
 };
 rbt-mathnotes = {
   revision = 61193;
@@ -42231,6 +45529,7 @@ rbt-mathnotes = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0.2";
+  hasCatalogue = true;
 };
 rccol = {
   revision = 15878;
@@ -42242,6 +45541,7 @@ rccol = {
   hasRunfiles = true;
   license = [ "lppl12" ];
   version = "1.2c";
+  hasCatalogue = true;
 };
 rcs = {
   revision = 15878;
@@ -42252,6 +45552,7 @@ rcs = {
   sha512.source = "3c2db69ab4106eac241e9126407e90d8b20cf3e186d50cabcb35041a68c1b670eb3bf9b571d00a52c8e4cd410cdd7cfb38e6bb4558560d46420d1074312910fa";
   hasRunfiles = true;
   license = [ "gpl1Only" ];
+  hasCatalogue = true;
 };
 rcs-multi = {
   revision = 64967;
@@ -42263,6 +45564,7 @@ rcs-multi = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.1a";
+  hasCatalogue = true;
 };
 rcsinfo = {
   revision = 15878;
@@ -42274,6 +45576,7 @@ rcsinfo = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.11";
+  hasCatalogue = true;
 };
 readablecv = {
   revision = 67986;
@@ -42284,6 +45587,7 @@ readablecv = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "4.0";
+  hasCatalogue = true;
 };
 readarray = {
   revision = 60540;
@@ -42294,6 +45598,7 @@ readarray = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "3.1";
+  hasCatalogue = true;
 };
 realboxes = {
   revision = 64967;
@@ -42305,6 +45610,7 @@ realboxes = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.2";
+  hasCatalogue = true;
 };
 realhats = {
   revision = 66924;
@@ -42316,6 +45622,7 @@ realhats = {
   hasRunfiles = true;
   license = [ "mit" ];
   version = "7.1";
+  hasCatalogue = true;
 };
 realscripts = {
   revision = 56594;
@@ -42327,6 +45634,7 @@ realscripts = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.3d";
+  hasCatalogue = true;
 };
 realtranspose = {
   revision = 56623;
@@ -42338,6 +45646,7 @@ realtranspose = {
   hasRunfiles = true;
   license = [ "mit" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 rec-thy = {
   revision = 63982;
@@ -42348,6 +45657,7 @@ rec-thy = {
   hasRunfiles = true;
   license = [ "publicDomain" ];
   version = "3.8.2";
+  hasCatalogue = true;
 };
 recipe = {
   revision = 54080;
@@ -42358,6 +45668,7 @@ recipe = {
   hasRunfiles = true;
   license = [ "publicDomain" ];
   version = "0.9";
+  hasCatalogue = true;
 };
 recipebook = {
   revision = 37026;
@@ -42367,6 +45678,7 @@ recipebook = {
   sha512.doc = "0c9d803360e1ef65b38f5b66c6d3eba6e9c38c371a430e2cca371594935fda16a051d6d1ee33e787114747b9efc36475c6c92b2c8b199aa1a5b48e214f7a4643";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 recipecard = {
   revision = 15878;
@@ -42378,6 +45690,7 @@ recipecard = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.0";
+  hasCatalogue = true;
 };
 recorder-fingering = {
   revision = 68595;
@@ -42388,6 +45701,7 @@ recorder-fingering = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.3b";
+  hasCatalogue = true;
 };
 rectopma = {
   revision = 19980;
@@ -42397,6 +45711,7 @@ rectopma = {
   sha512.doc = "27ae9a381a685373a980e13b9b5c3f6057f98224a7c9659edc0c056a6292e7289ed9772f3a503e8de3ea93b796f271dafeba57f6e240caaf738003e1ab848e46";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 recycle = {
   revision = 15878;
@@ -42409,6 +45724,7 @@ recycle = {
   sha512.doc = "3bbe68b48915c6fa662fb72072eb9e130613587e86d3d4172766c8fe690a995d23d252cbda9a226a7716c9da8741b3ed0e18eae1cab2f547d08265ee493a64dc";
   hasRunfiles = true;
   license = [ "gpl1Only" ];
+  hasCatalogue = true;
 };
 refcheck = {
   revision = 29128;
@@ -42419,6 +45735,7 @@ refcheck = {
   hasRunfiles = true;
   license = [ "gpl1Only" ];
   version = "1.9.1";
+  hasCatalogue = true;
 };
 refcount = {
   revision = 53164;
@@ -42430,6 +45747,7 @@ refcount = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "3.6";
+  hasCatalogue = true;
 };
 refenums = {
   revision = 44131;
@@ -42440,6 +45758,7 @@ refenums = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1.2";
+  hasCatalogue = true;
 };
 reflectgraphics = {
   revision = 40612;
@@ -42451,6 +45770,7 @@ reflectgraphics = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.2c";
+  hasCatalogue = true;
 };
 refman = {
   revision = 15878;
@@ -42462,6 +45782,7 @@ refman = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.0e";
+  hasCatalogue = true;
 };
 refstyle = {
   revision = 69680;
@@ -42473,6 +45794,7 @@ refstyle = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.6b";
+  hasCatalogue = true;
 };
 regcount = {
   revision = 19979;
@@ -42484,6 +45806,7 @@ regcount = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 regexpatch = {
   revision = 58668;
@@ -42495,6 +45818,7 @@ regexpatch = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.2f";
+  hasCatalogue = true;
 };
 register = {
   revision = 54485;
@@ -42506,6 +45830,7 @@ register = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.0";
+  hasCatalogue = true;
 };
 regstats = {
   revision = 66795;
@@ -42517,6 +45842,7 @@ regstats = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1a";
+  hasCatalogue = true;
 };
 regulatory = {
   revision = 69611;
@@ -42527,6 +45853,7 @@ regulatory = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.0.3";
+  hasCatalogue = true;
 };
 reledmac = {
   revision = 70207;
@@ -42538,6 +45865,7 @@ reledmac = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.40.0";
+  hasCatalogue = true;
 };
 relenc = {
   revision = 22050;
@@ -42548,6 +45876,7 @@ relenc = {
   sha512.source = "ef1a5c1034dfac3ed942354fad6a9e4cca44a33d2252120fe824bb41280453a6c8e00c259331e4159206f60e5043664bb4008e758d8b81dff06c7d68c3382e6a";
   hasRunfiles = true;
   license = [ "lppl1" ];
+  hasCatalogue = true;
 };
 relsize = {
   revision = 30707;
@@ -42558,6 +45887,7 @@ relsize = {
   hasRunfiles = true;
   license = [ "publicDomain" ];
   version = "4.1";
+  hasCatalogue = true;
 };
 reotex = {
   revision = 34924;
@@ -42568,6 +45898,7 @@ reotex = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 repeatindex = {
   revision = 24305;
@@ -42578,6 +45909,7 @@ repeatindex = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.01";
+  hasCatalogue = true;
 };
 repere = {
   revision = 66998;
@@ -42588,6 +45920,7 @@ repere = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "23.05.b";
+  hasCatalogue = true;
 };
 repltext = {
   revision = 56433;
@@ -42599,6 +45932,7 @@ repltext = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 rerunfilecheck = {
   revision = 63869;
@@ -42614,6 +45948,7 @@ rerunfilecheck = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.10";
+  hasCatalogue = true;
 };
 rescansync = {
   revision = 63856;
@@ -42624,6 +45959,7 @@ rescansync = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.0.0";
+  hasCatalogue = true;
 };
 resmes = {
   revision = 65375;
@@ -42635,6 +45971,7 @@ resmes = {
   hasRunfiles = true;
   license = [ "mit" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 resolsysteme = {
   revision = 66192;
@@ -42645,6 +45982,7 @@ resolsysteme = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.1.5";
+  hasCatalogue = true;
 };
 resphilosophica = {
   revision = 50935;
@@ -42656,6 +45994,7 @@ resphilosophica = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.35";
+  hasCatalogue = true;
 };
 responsive = {
   revision = 69147;
@@ -42666,6 +46005,7 @@ responsive = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.1";
+  hasCatalogue = true;
 };
 rest-api = {
   revision = 57068;
@@ -42677,6 +46017,7 @@ rest-api = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.4";
+  hasCatalogue = true;
 };
 resumecls = {
   revision = 54815;
@@ -42688,6 +46029,7 @@ resumecls = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.4.1";
+  hasCatalogue = true;
 };
 resumemac = {
   revision = 15878;
@@ -42697,6 +46039,7 @@ resumemac = {
   sha512.doc = "5b89a7684cbe4da1c653d4a6253f82304b7b3634a9dc973e5f7da41967bdb034597e64a4fd82a922fac5ca62ee40e2ce35be6234deceb25000ff9103859e165b";
   hasRunfiles = true;
   license = [ "publicDomain" ];
+  hasCatalogue = true;
 };
 returntogrid = {
   revision = 48485;
@@ -42707,6 +46050,7 @@ returntogrid = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.2";
+  hasCatalogue = true;
 };
 reverxii = {
   revision = 63753;
@@ -42717,6 +46061,7 @@ reverxii = {
   sha512.source = "2dd66631854044834677e0167545de184382c2f9a925b4761b041137ac957dfb2bc645f1065c675efc45e400f7d8ea2a79f0bdcbdc84bb29c1e4bad1d54769d7";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 revquantum = {
   revision = 43505;
@@ -42728,6 +46073,7 @@ revquantum = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.11";
+  hasCatalogue = true;
 };
 revtex = {
   revision = 67271;
@@ -42739,9 +46085,11 @@ revtex = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "4.2f";
+  hasCatalogue = true;
 };
 revtex4 = {
   revision = 56589;
+  catalogue = "revtex4-0";
   shortdesc = "Styles for various Physics Journals (old version)";
   stripPrefix = 0;
   sha512.run = "cd1f83a7f2664c6002b93bf7ac3b5dfef4767b79f66cd03ed738e395027736d062d23f1a6a9354834093857d467664168295e615ed1c734b708c098943d7bf87";
@@ -42750,6 +46098,7 @@ revtex4 = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "4.0a";
+  hasCatalogue = true;
 };
 revtex4-1 = {
   revision = 56590;
@@ -42761,6 +46110,7 @@ revtex4-1 = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "4.1s";
+  hasCatalogue = true;
 };
 rgltxdoc = {
   revision = 53858;
@@ -42772,6 +46122,7 @@ rgltxdoc = {
   hasRunfiles = true;
   license = [ "lppl12" ];
   version = "1.3";
+  hasCatalogue = true;
 };
 ribbonproofs = {
   revision = 31137;
@@ -42782,6 +46133,7 @@ ribbonproofs = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 rit-fonts = {
   revision = 67659;
@@ -42792,6 +46144,7 @@ rit-fonts = {
   hasRunfiles = true;
   license = [ "ofl" "lppl13c" ];
   version = "0.9";
+  hasCatalogue = true;
 };
 rjlparshap = {
   revision = 15878;
@@ -42803,6 +46156,7 @@ rjlparshap = {
   hasRunfiles = true;
   license = [ "lppl12" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 rlepsf = {
   revision = 19082;
@@ -42812,6 +46166,7 @@ rlepsf = {
   sha512.doc = "fc06c857011fe01b07180c9530a334e021f5b9c034c65e15959e173a409670947c7aa406bf751d64d5d77d462139f4835824aa53203381d27d4ecb0e51463e7f";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 rmathbr = {
   revision = 57173;
@@ -42823,6 +46178,7 @@ rmathbr = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1.1";
+  hasCatalogue = true;
 };
 rmpage = {
   revision = 54080;
@@ -42833,6 +46189,7 @@ rmpage = {
   hasRunfiles = true;
   license = [ "gpl1Only" ];
   version = "0.92";
+  hasCatalogue = true;
 };
 robotarm = {
   revision = 63116;
@@ -42844,6 +46201,7 @@ robotarm = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.1";
+  hasCatalogue = true;
 };
 roboto = {
   revision = 64350;
@@ -42856,6 +46214,7 @@ roboto = {
   sha512.doc = "2ceaedd2b273c252e8510a98cb05d581dad8aff94f3c8be1dc47fbbc9b52a0546ba8025c6bf0c51d97d0573d208af2f8a635c0cf405a980ae8cf8e4a1f13e499";
   hasRunfiles = true;
   license = [ "asl20" "ofl" "lppl13c" ];
+  hasCatalogue = true;
 };
 robust-externalize = {
   revision = 70605;
@@ -42866,6 +46225,7 @@ robust-externalize = {
   hasRunfiles = true;
   license = [ "mit" ];
   version = "2.7";
+  hasCatalogue = true;
 };
 robustcommand = {
   revision = 15878;
@@ -42877,6 +46237,7 @@ robustcommand = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.1";
+  hasCatalogue = true;
 };
 robustindex = {
   revision = 49877;
@@ -42886,15 +46247,18 @@ robustindex = {
   sha512.doc = "aab461e990176e1d0cb82573edcfe11a4bf668b2d09edff05f673fa20d24ec76464495bebc64086fe3bb4411d5ec9590f43cd57949bedaa3366f6c7313359f56";
   hasRunfiles = true;
   license = [ "lppl12" ];
+  hasCatalogue = true;
 };
 roex = {
   revision = 45818;
+  catalogue = "mf-ps";
   shortdesc = "Metafont-PostScript conversions";
   stripPrefix = 0;
   sha512.run = "7df2224f9970b72cfa1474898c057799fe42d717876eed864f35aab113d01dfb483edb71f7f4a0a98b6762bbc309ce6fb51e41dc222a6f19be2025f6448fb1cd";
   sha512.source = "d89d02dd79142344334678f2d8ec4f34eb825532e8be9260cd08a43b28e1aa94ff5655c1c1eadb2f9a365e51693f6195a4851e1420072c867d8b2c0f1cbcbbb4";
   hasRunfiles = true;
   license = [ "publicDomain" ];
+  hasCatalogue = true;
 };
 rojud = {
   revision = 56895;
@@ -42908,6 +46272,7 @@ rojud = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.2";
+  hasCatalogue = true;
 };
 romanbar = {
   revision = 25005;
@@ -42919,6 +46284,7 @@ romanbar = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0f";
+  hasCatalogue = true;
 };
 romanbarpagenumber = {
   revision = 36236;
@@ -42930,9 +46296,11 @@ romanbarpagenumber = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 romande = {
   revision = 19537;
+  catalogue = "romandeadf";
   shortdesc = "Romande ADF fonts and LaTeX support";
   stripPrefix = 0;
   fontMaps = [
@@ -42944,6 +46312,7 @@ romande = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.008-v7-sc";
+  hasCatalogue = true;
 };
 romanneg = {
   revision = 20087;
@@ -42953,6 +46322,7 @@ romanneg = {
   sha512.doc = "cd583b94911ed57e6c61689d437fb4a55a868813fad5791dfa7231b4cbd8b7d22cf4e6f3fe90e2cd36eb08202f4058abf93b5df2d74e1841070378dc9c31db64";
   hasRunfiles = true;
   license = [ "publicDomain" ];
+  hasCatalogue = true;
 };
 romannum = {
   revision = 15878;
@@ -42964,6 +46334,7 @@ romannum = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0b";
+  hasCatalogue = true;
 };
 rorlink = {
   revision = 67461;
@@ -42975,6 +46346,7 @@ rorlink = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1.0";
+  hasCatalogue = true;
 };
 rosario = {
   revision = 51688;
@@ -42989,6 +46361,7 @@ rosario = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.1";
+  hasCatalogue = true;
 };
 rotfloat = {
   revision = 18292;
@@ -43000,6 +46373,7 @@ rotfloat = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.2";
+  hasCatalogue = true;
 };
 rotpages = {
   revision = 18740;
@@ -43010,6 +46384,7 @@ rotpages = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "3.0";
+  hasCatalogue = true;
 };
 rouequestions = {
   revision = 67670;
@@ -43020,6 +46395,7 @@ rouequestions = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.0.3";
+  hasCatalogue = true;
 };
 roundbox = {
   revision = 29675;
@@ -43030,6 +46406,7 @@ roundbox = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.2";
+  hasCatalogue = true;
 };
 roundrect = {
   revision = 39796;
@@ -43041,6 +46418,7 @@ roundrect = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.2";
+  hasCatalogue = true;
 };
 rrgtrees = {
   revision = 27322;
@@ -43052,6 +46430,7 @@ rrgtrees = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 rsc = {
   revision = 41923;
@@ -43063,6 +46442,7 @@ rsc = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "3.1f";
+  hasCatalogue = true;
 };
 rsfs = {
   revision = 15878;
@@ -43075,6 +46455,7 @@ rsfs = {
   sha512.doc = "2d23715b38d90c686d7edae77f2a774041d3b679035e0399b7b6089f9b17db3ea4c6c3cdd655bb6e5f3a3cae782e30984c1fe89f5f263a0cd86b441c5376848a";
   hasRunfiles = true;
   license = [ "free" ];
+  hasCatalogue = true;
 };
 rsfso = {
   revision = 60849;
@@ -43088,6 +46469,7 @@ rsfso = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.03";
+  hasCatalogue = true;
 };
 rterface = {
   revision = 30084;
@@ -43097,6 +46479,7 @@ rterface = {
   sha512.doc = "c8c38026ce2bf2a996ba40062fe3bce797b381633e4aac50ec438bc9fb567f73ad1c4e764af3cdc816e62713d4f1dd8bf2ab1814b50d086811359e999103c7bf";
   hasRunfiles = true;
   license = [ "lppl12" ];
+  hasCatalogue = true;
 };
 rtkinenc = {
   revision = 20003;
@@ -43108,15 +46491,18 @@ rtkinenc = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 rtklage = {
   revision = 15878;
+  catalogue = "ratex";
   shortdesc = "A package for German lawyers";
   stripPrefix = 0;
   sha512.run = "6e39e34a7c293f503949da66f1d5ebc65ae0388dc56e87992e9fc4daff1a250196afe68150be14ee2ec3242393ce9e5ea7b681cba31b7ed1c2d58526f6506554";
   sha512.doc = "550c21bcd8af04041f1fac11f2be3ae2a1f01265ad6bf31243569820c7b8d83f32ccd0cdbcc4d5a7a5905ae9aa0512a449a1b2d6923affceb344152e6c12d72d";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 rubik = {
   revision = 46791;
@@ -43128,6 +46514,7 @@ rubik = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "5.0";
+  hasCatalogue = true;
 };
 rubik.binfiles = [
   "rubikrotation"
@@ -43141,6 +46528,7 @@ ruhyphen = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.6";
+  hasCatalogue = true;
 };
 ruler = {
   revision = 54251;
@@ -43150,6 +46538,7 @@ ruler = {
   hasRunfiles = true;
   license = [ "gpl1Only" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 rulerbox = {
   revision = 50984;
@@ -43160,6 +46549,7 @@ rulerbox = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.01";
+  hasCatalogue = true;
 };
 rulercompass = {
   revision = 32392;
@@ -43171,6 +46561,7 @@ rulercompass = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1";
+  hasCatalogue = true;
 };
 runcode = {
   revision = 69471;
@@ -43181,6 +46572,7 @@ runcode = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.3";
+  hasCatalogue = true;
 };
 runtexshebang = {
   revision = 68882;
@@ -43193,6 +46585,7 @@ runtexshebang = {
   ];
   license = [ "mit" ];
   version = "0.5";
+  hasCatalogue = true;
 };
 runtexshebang.binfiles = [
   "runtexshebang"
@@ -43205,6 +46598,7 @@ russ = {
   sha512.doc = "876cba326071d0f347d9a1a4c1eca692ca743729b9604a51bb5b53de96da6006ff24168040e77df60b1999cb22901b7318669c32378a869081956dde40974802";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 rutitlepage = {
   revision = 62143;
@@ -43216,6 +46610,7 @@ rutitlepage = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "3.0";
+  hasCatalogue = true;
 };
 rviewport = {
   revision = 23739;
@@ -43227,6 +46622,7 @@ rviewport = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 rvwrite = {
   revision = 19614;
@@ -43237,6 +46633,7 @@ rvwrite = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.2";
+  hasCatalogue = true;
 };
 ryersonsgsthesis = {
   revision = 50119;
@@ -43247,6 +46644,7 @@ ryersonsgsthesis = {
   hasRunfiles = true;
   license = [ "asl20" ];
   version = "1.0.3";
+  hasCatalogue = true;
 };
 ryethesis = {
   revision = 33945;
@@ -43258,6 +46656,7 @@ ryethesis = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.36";
+  hasCatalogue = true;
 };
 sa-tikz = {
   revision = 32815;
@@ -43268,6 +46667,7 @@ sa-tikz = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.7a";
+  hasCatalogue = true;
 };
 sacsymb = {
   revision = 65768;
@@ -43277,6 +46677,7 @@ sacsymb = {
   sha512.doc = "135724503c2c646bd49ad1e434f5e4c20335f23605839847b3c6729945e4550b6f855ea015e5020ff9de7ca4bc5a46d70e99dc9f372e6fbd2cbe8aaf55683984";
   hasRunfiles = true;
   license = [ "lppl1" ];
+  hasCatalogue = true;
 };
 sageep = {
   revision = 15878;
@@ -43288,6 +46689,7 @@ sageep = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 sanitize-umlaut = {
   revision = 67126;
@@ -43298,6 +46700,7 @@ sanitize-umlaut = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.3.0";
+  hasCatalogue = true;
 };
 sankey = {
   revision = 61874;
@@ -43309,6 +46712,7 @@ sankey = {
   hasRunfiles = true;
   license = [ "lppl13c" "gpl1Only" ];
   version = "3.0.1";
+  hasCatalogue = true;
 };
 sanskrit = {
   revision = 64502;
@@ -43320,6 +46724,7 @@ sanskrit = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.2.4";
+  hasCatalogue = true;
 };
 sanskrit-t1 = {
   revision = 55475;
@@ -43332,6 +46737,7 @@ sanskrit-t1 = {
   sha512.doc = "11a0bbb4212f72a18df5eb1ce1e2259774c6376a3c107fe32bed4176d23da2f5bda5cab71a7df618c67113ac9d65969ea8e680ab939c7c6cb2542ebd4c7e5efa";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 sansmath = {
   revision = 17997;
@@ -43342,6 +46748,7 @@ sansmath = {
   hasRunfiles = true;
   license = [ "publicDomain" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 sansmathaccent = {
   revision = 53628;
@@ -43354,6 +46761,7 @@ sansmathaccent = {
   sha512.doc = "c9bf7d65a232d668243df9867b2eca64e0288fd733c6b39ce200f64fc5b0a07c98ea6a971446f67f1766998e169c14a80eda71104c1653ed54d3865e6e145fc0";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 sansmathfonts = {
   revision = 68777;
@@ -43366,6 +46774,7 @@ sansmathfonts = {
   sha512.doc = "5972253d34cb39cb0151050b4e9dab45dea50901a84f736ee8a25beb5ad647a112462ed5b3d46c61ff20a3a20852000c64736c88df9ed59defa2da5bf54b5638";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 sapthesis = {
   revision = 63810;
@@ -43376,6 +46785,7 @@ sapthesis = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "5.1";
+  hasCatalogue = true;
 };
 sasnrdisplay = {
   revision = 63255;
@@ -43386,6 +46796,7 @@ sasnrdisplay = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.95";
+  hasCatalogue = true;
 };
 sauerj = {
   revision = 15878;
@@ -43396,6 +46807,7 @@ sauerj = {
   sha512.source = "05d2adc3b802e3c338dd92818cf7ce4d3bd6964dba8522bf4628bfc2d13939bde47cd0892b4fb629270d5e9104b9577fe6e3ba6eb71ca60a07f5e6441b0f572b";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 sauter = {
   revision = 13293;
@@ -43405,6 +46817,7 @@ sauter = {
   hasRunfiles = true;
   license = [ "gpl1Only" ];
   version = "2.4";
+  hasCatalogue = true;
 };
 sauterfonts = {
   revision = 15878;
@@ -43415,6 +46828,7 @@ sauterfonts = {
   sha512.source = "d8379fb3c2dfc5dcd9fc5c22101855a27ef5de3ac377f1e6a56bfd397888c5f7f94dd37c24c6625a9dc40f15160721c468b5a5bbe8a35f98f983755889e250d8";
   hasRunfiles = true;
   license = [ "gpl1Only" ];
+  hasCatalogue = true;
 };
 saveenv = {
   revision = 65346;
@@ -43428,6 +46842,7 @@ saveenv = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.0.1";
+  hasCatalogue = true;
 };
 savefnmark = {
   revision = 15878;
@@ -43439,6 +46854,7 @@ savefnmark = {
   hasRunfiles = true;
   license = [ "gpl1Only" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 savesym = {
   revision = 31565;
@@ -43448,6 +46864,7 @@ savesym = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.2";
+  hasCatalogue = true;
 };
 savetrees = {
   revision = 40525;
@@ -43459,6 +46876,7 @@ savetrees = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.4";
+  hasCatalogue = true;
 };
 scale = {
   revision = 15878;
@@ -43470,6 +46888,7 @@ scale = {
   hasRunfiles = true;
   license = [ "gpl1Only" ];
   version = "1.1.2";
+  hasCatalogue = true;
 };
 scalebar = {
   revision = 15878;
@@ -43481,6 +46900,7 @@ scalebar = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 scalerel = {
   revision = 42809;
@@ -43491,6 +46911,7 @@ scalerel = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.8";
+  hasCatalogue = true;
 };
 scanpages = {
   revision = 42633;
@@ -43504,6 +46925,7 @@ scanpages = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.05a";
+  hasCatalogue = true;
 };
 schedule = {
   revision = 51805;
@@ -43515,6 +46937,7 @@ schedule = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.20";
+  hasCatalogue = true;
 };
 schemabloc = {
   revision = 68445;
@@ -43525,6 +46948,7 @@ schemabloc = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.9";
+  hasCatalogue = true;
 };
 schemata = {
   revision = 58020;
@@ -43536,6 +46960,7 @@ schemata = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.4";
+  hasCatalogue = true;
 };
 scheme-basic = {
   revision = 54191;
@@ -43883,6 +47308,7 @@ schola-otf = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.01";
+  hasCatalogue = true;
 };
 scholax = {
   revision = 61836;
@@ -43896,6 +47322,7 @@ scholax = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.033";
+  hasCatalogue = true;
 };
 schooldocs = {
   revision = 69659;
@@ -43907,6 +47334,7 @@ schooldocs = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.5";
+  hasCatalogue = true;
 };
 schule = {
   revision = 68483;
@@ -43917,6 +47345,7 @@ schule = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.9.0";
+  hasCatalogue = true;
 };
 schulmathematik = {
   revision = 69244;
@@ -43927,6 +47356,7 @@ schulmathematik = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.6";
+  hasCatalogue = true;
 };
 schulschriften = {
   revision = 59388;
@@ -43937,6 +47367,7 @@ schulschriften = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "5";
+  hasCatalogue = true;
 };
 schwalbe-chess = {
   revision = 63708;
@@ -43948,6 +47379,7 @@ schwalbe-chess = {
   hasRunfiles = true;
   license = [ "lppl12" ];
   version = "2.12";
+  hasCatalogue = true;
 };
 scientific-thesis-cover = {
   revision = 47923;
@@ -43959,6 +47391,7 @@ scientific-thesis-cover = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "4.0.2";
+  hasCatalogue = true;
 };
 scikgtex = {
   revision = 66764;
@@ -43969,6 +47402,7 @@ scikgtex = {
   hasRunfiles = true;
   license = [ "mit" ];
   version = "2.2.0";
+  hasCatalogue = true;
 };
 sciposter = {
   revision = 15878;
@@ -43979,6 +47413,7 @@ sciposter = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.18";
+  hasCatalogue = true;
 };
 sclang-prettifier = {
   revision = 35087;
@@ -43990,6 +47425,7 @@ sclang-prettifier = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.1";
+  hasCatalogue = true;
 };
 scontents = {
   revision = 62902;
@@ -44001,6 +47437,7 @@ scontents = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.0";
+  hasCatalogue = true;
 };
 scrabble = {
   revision = 69599;
@@ -44011,6 +47448,7 @@ scrabble = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.1.6";
+  hasCatalogue = true;
 };
 scrambledenvs = {
   revision = 60615;
@@ -44022,6 +47460,7 @@ scrambledenvs = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1.0";
+  hasCatalogue = true;
 };
 scratch = {
   revision = 66655;
@@ -44032,6 +47471,7 @@ scratch = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.41";
+  hasCatalogue = true;
 };
 scratch3 = {
   revision = 61921;
@@ -44042,6 +47482,7 @@ scratch3 = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.19";
+  hasCatalogue = true;
 };
 scratchx = {
   revision = 44906;
@@ -44052,6 +47493,7 @@ scratchx = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 screenplay = {
   revision = 27223;
@@ -44063,6 +47505,7 @@ screenplay = {
   hasRunfiles = true;
   license = [ "gpl1Only" ];
   version = "1.6";
+  hasCatalogue = true;
 };
 screenplay-pkg = {
   revision = 44965;
@@ -44073,6 +47516,7 @@ screenplay-pkg = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 scripture = {
   revision = 69232;
@@ -44084,6 +47528,7 @@ scripture = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.0";
+  hasCatalogue = true;
 };
 scrjrnl = {
   revision = 27810;
@@ -44095,6 +47540,7 @@ scrjrnl = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.1";
+  hasCatalogue = true;
 };
 scrlayer-fancyhdr = {
   revision = 63844;
@@ -44106,6 +47552,7 @@ scrlayer-fancyhdr = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.2.2";
+  hasCatalogue = true;
 };
 scrlttr2copy = {
   revision = 56733;
@@ -44116,6 +47563,7 @@ scrlttr2copy = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.3a";
+  hasCatalogue = true;
 };
 scrwfile = {
   revision = 66872;
@@ -44127,6 +47575,7 @@ scrwfile = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.1.99";
+  hasCatalogue = true;
 };
 scsnowman = {
   revision = 66115;
@@ -44137,6 +47586,7 @@ scsnowman = {
   hasRunfiles = true;
   license = [ "bsd2" ];
   version = "1.3c";
+  hasCatalogue = true;
 };
 sdaps = {
   revision = 65345;
@@ -44156,6 +47606,7 @@ sdaps = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.9.10";
+  hasCatalogue = true;
 };
 sdrt = {
   revision = 15878;
@@ -44166,6 +47617,7 @@ sdrt = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 sduthesis = {
   revision = 41401;
@@ -44177,6 +47629,7 @@ sduthesis = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.2.1";
+  hasCatalogue = true;
 };
 se2thesis = {
   revision = 70117;
@@ -44188,6 +47641,7 @@ se2thesis = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "3.3.1";
+  hasCatalogue = true;
 };
 secdot = {
   revision = 20208;
@@ -44198,6 +47652,7 @@ secdot = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 secnum = {
   revision = 61813;
@@ -44208,6 +47663,7 @@ secnum = {
   sha512.source = "ca61cea878ed892f46b4defcd0a05176578d01b01b5f3924dfe6278278fb77ed89df3d41bd788a06bd7af389904421439ca06afac2440ba557948aa4e80a5817";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 section = {
   revision = 20180;
@@ -44217,6 +47673,7 @@ section = {
   sha512.doc = "91defb5391b9e607cfaf74ac3abe53127ddec379d7a7c052f5c8f776bcef1728010a94ef7b590ddac8df140ee11fff4fd843bdbe1a13efd322a9a939ea2df39b";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 sectionbox = {
   revision = 37749;
@@ -44227,6 +47684,7 @@ sectionbox = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.01";
+  hasCatalogue = true;
 };
 sectionbreak = {
   revision = 50339;
@@ -44237,6 +47695,7 @@ sectionbreak = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.1d";
+  hasCatalogue = true;
 };
 sectsty = {
   revision = 15878;
@@ -44248,6 +47707,7 @@ sectsty = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.0.2";
+  hasCatalogue = true;
 };
 seealso = {
   revision = 43595;
@@ -44259,14 +47719,17 @@ seealso = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.2";
+  hasCatalogue = true;
 };
 seetexk = {
   revision = 57972;
+  catalogue = "dvibook";
   shortdesc = "Utilities for manipulating DVI files";
   sha512.run = "1f217550f7455a82dd1771556045e10a39138eebddc90f4d38a274d56d9072501d94476c6045012f3c5cda43aea71924268fd222895079b225d893df3b78fa97";
   sha512.doc = "1b36ac131e25541123a7d18e9a5e3cb1fccab04ffca1b0d1e5a036a26de99fb05e6745d43cac6dc76a295eac5503f90eafdb2b40f96c88836123b5b599a47e2e";
   hasManpages = true;
   license = [ "free" ];
+  hasCatalogue = true;
 };
 seetexk.binfiles = [
   "dvibook"
@@ -44283,6 +47746,7 @@ selectp = {
   hasRunfiles = true;
   license = [ "publicDomain" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 selinput = {
   revision = 53098;
@@ -44294,6 +47758,7 @@ selinput = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.6";
+  hasCatalogue = true;
 };
 selnolig = {
   revision = 68747;
@@ -44304,6 +47769,7 @@ selnolig = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.302";
+  hasCatalogue = true;
 };
 semantex = {
   revision = 65679;
@@ -44317,6 +47783,7 @@ semantex = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.525";
+  hasCatalogue = true;
 };
 semantic = {
   revision = 15878;
@@ -44328,6 +47795,7 @@ semantic = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.0";
+  hasCatalogue = true;
 };
 semantic-markup = {
   revision = 53607;
@@ -44337,6 +47805,7 @@ semantic-markup = {
   sha512.doc = "f1498e628054e91f7b0ecc0fea7c926aa55d7bec56c3c13ebcc5073f96df84e8c1e255532f9ec72b8133d21511e4f5f2996d95c39c15cb74ae39fffa87d5a785";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 semaphor = {
   revision = 18651;
@@ -44349,6 +47818,7 @@ semaphor = {
   sha512.doc = "ef0c85ca5e86a17d59c03255d679d54cc8fb36eec02c8546f29e1c514408559788d1dbe3ac7565224b320b71e9ad77979b1092fb0f098a1c48c3a7093b72b172";
   hasRunfiles = true;
   license = [ "gpl1Only" ];
+  hasCatalogue = true;
 };
 semesterplanner = {
   revision = 56841;
@@ -44360,6 +47830,7 @@ semesterplanner = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 seminar = {
   revision = 59801;
@@ -44370,6 +47841,7 @@ seminar = {
   hasRunfiles = true;
   license = [ "lppl12" ];
   version = "1.63a";
+  hasCatalogue = true;
 };
 semioneside = {
   revision = 15878;
@@ -44381,6 +47853,7 @@ semioneside = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.41";
+  hasCatalogue = true;
 };
 semproc = {
   revision = 37568;
@@ -44392,6 +47865,7 @@ semproc = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.1";
+  hasCatalogue = true;
 };
 semtex = {
   revision = 56530;
@@ -44402,6 +47876,7 @@ semtex = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.45";
+  hasCatalogue = true;
 };
 sepfootnotes = {
   revision = 41732;
@@ -44412,6 +47887,7 @@ sepfootnotes = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.3c";
+  hasCatalogue = true;
 };
 sepnum = {
   revision = 20186;
@@ -44422,6 +47898,7 @@ sepnum = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.0";
+  hasCatalogue = true;
 };
 seqsplit = {
   revision = 15878;
@@ -44433,6 +47910,7 @@ seqsplit = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.1";
+  hasCatalogue = true;
 };
 serbian-apostrophe = {
   revision = 23799;
@@ -44442,6 +47920,7 @@ serbian-apostrophe = {
   sha512.doc = "38c8ac74b304ac992bad807f2727a3e75a727a77c5bfe5042e24a39ad305162e828ca0333963a3f91c5f26ca0324e7feea97dc6ab84c1cfdb6c26b05ed5f4fd5";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 serbian-date-lat = {
   revision = 23446;
@@ -44451,6 +47930,7 @@ serbian-date-lat = {
   sha512.doc = "5c10fe13a4e1d6117ebfe8d737d50047dc97483c7a0cc287a9e79d367af50ec1cbdc0800161919b92c6d82774c9e756970db71344259028c254fbf2c1fe86219";
   hasRunfiles = true;
   license = [ "gpl2Only" ];
+  hasCatalogue = true;
 };
 serbian-def-cyr = {
   revision = 23734;
@@ -44460,6 +47940,7 @@ serbian-def-cyr = {
   sha512.doc = "0f2a2fb44eaef8e0eb01e12260fa310d661501c3e1dacde2882199ce4bd5323c837704fd50e8db5b4ba567a38038b37be28fd834874262de2e3ad36b65816498";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 serbian-lig = {
   revision = 53127;
@@ -44469,6 +47950,7 @@ serbian-lig = {
   sha512.doc = "6ed0551c176ddd34e1a4eb4449fd78ca38c166efd41b31c78dc1e192a714fdc81b195cf83587f256462b610681136b69960867d5f1a571a5b1b47256fca88f05";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 sesamanuel = {
   revision = 36613;
@@ -44480,6 +47962,7 @@ sesamanuel = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.6";
+  hasCatalogue = true;
 };
 sesstime = {
   revision = 49750;
@@ -44491,6 +47974,7 @@ sesstime = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.12";
+  hasCatalogue = true;
 };
 setdeck = {
   revision = 40613;
@@ -44501,6 +47985,7 @@ setdeck = {
   hasRunfiles = true;
   license = [ "gpl3Only" ];
   version = "0.1";
+  hasCatalogue = true;
 };
 setspace = {
   revision = 65206;
@@ -44511,6 +47996,7 @@ setspace = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "6.7b";
+  hasCatalogue = true;
 };
 setspaceenhanced = {
   revision = 68493;
@@ -44522,6 +48008,7 @@ setspaceenhanced = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.02";
+  hasCatalogue = true;
 };
 seu-ml-assign = {
   revision = 62933;
@@ -44532,6 +48019,7 @@ seu-ml-assign = {
   hasRunfiles = true;
   license = [ "mit" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 seuthesis = {
   revision = 33042;
@@ -44543,6 +48031,7 @@ seuthesis = {
   hasRunfiles = true;
   license = [ "gpl3Only" ];
   version = "2.1.2";
+  hasCatalogue = true;
 };
 seuthesix = {
   revision = 40088;
@@ -44554,6 +48043,7 @@ seuthesix = {
   hasRunfiles = true;
   license = [ "gpl3Only" ];
   version = "1.0.1";
+  hasCatalogue = true;
 };
 sexam = {
   revision = 46628;
@@ -44564,6 +48054,7 @@ sexam = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1";
+  hasCatalogue = true;
 };
 sf298 = {
   revision = 41653;
@@ -44575,6 +48066,7 @@ sf298 = {
   hasRunfiles = true;
   license = [ "lppl12" ];
   version = "1.3";
+  hasCatalogue = true;
 };
 sffms = {
   revision = 15878;
@@ -44586,6 +48078,7 @@ sffms = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.0";
+  hasCatalogue = true;
 };
 sfg = {
   revision = 20209;
@@ -44596,6 +48089,7 @@ sfg = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.91";
+  hasCatalogue = true;
 };
 sfmath = {
   revision = 15878;
@@ -44605,6 +48099,7 @@ sfmath = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.8";
+  hasCatalogue = true;
 };
 sgame = {
   revision = 30959;
@@ -44615,6 +48110,7 @@ sgame = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.15";
+  hasCatalogue = true;
 };
 shade = {
   revision = 22212;
@@ -44625,6 +48121,7 @@ shade = {
   hasRunfiles = true;
   license = [ "lppl1" ];
   version = "1";
+  hasCatalogue = true;
 };
 shadethm = {
   revision = 53350;
@@ -44634,6 +48131,7 @@ shadethm = {
   sha512.doc = "c24f37f7f864283f9ced1da1728dd7ae137395ecda3010aeff8ad778b96723224df77755f8f71f7672f5870ad6832a22bce47bec88ae51d0992e39c0a00c8caa";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 shadow = {
   revision = 20312;
@@ -44643,6 +48141,7 @@ shadow = {
   sha512.doc = "402e64195e247cd2c5106e3bd621705b80c006b2f6cf0b1da14ea459acb7dd97e2ebeda87ec118be3e73bf76edebe3067330498a2875c52c4248add70d7a0a25";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 shadowtext = {
   revision = 26522;
@@ -44653,6 +48152,7 @@ shadowtext = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.3";
+  hasCatalogue = true;
 };
 shapepar = {
   revision = 69343;
@@ -44663,6 +48163,7 @@ shapepar = {
   hasRunfiles = true;
   license = [ "free" ];
   version = "2.2";
+  hasCatalogue = true;
 };
 shapes = {
   revision = 42428;
@@ -44674,6 +48175,7 @@ shapes = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 shdoc = {
   revision = 41991;
@@ -44685,6 +48187,7 @@ shdoc = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.1b";
+  hasCatalogue = true;
 };
 shipunov = {
   revision = 52334;
@@ -44695,6 +48198,7 @@ shipunov = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.2";
+  hasCatalogue = true;
 };
 shobhika = {
   revision = 50555;
@@ -44705,6 +48209,7 @@ shobhika = {
   hasRunfiles = true;
   license = [ "ofl" ];
   version = "1.05";
+  hasCatalogue = true;
 };
 short-math-guide = {
   revision = 46126;
@@ -44714,6 +48219,7 @@ short-math-guide = {
   sha512.doc = "0feaf4b3cafbac8fc78855250dc39858b0b8326b803c851efd831f36476dac2f1ce86083c11476e36ac88b44a2a8d25094f9203c774044306536fcb2b261a184";
   license = [ "lppl13c" ];
   version = "2.0";
+  hasCatalogue = true;
 };
 shortmathj = {
   revision = 67201;
@@ -44724,6 +48230,7 @@ shortmathj = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.5.0";
+  hasCatalogue = true;
 };
 shorttoc = {
   revision = 15878;
@@ -44735,6 +48242,7 @@ shorttoc = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.3";
+  hasCatalogue = true;
 };
 show2e = {
   revision = 15878;
@@ -44746,6 +48254,7 @@ show2e = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 showcharinbox = {
   revision = 29803;
@@ -44757,6 +48266,7 @@ showcharinbox = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.1";
+  hasCatalogue = true;
 };
 showdim = {
   revision = 28918;
@@ -44767,6 +48277,7 @@ showdim = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.2";
+  hasCatalogue = true;
 };
 showexpl = {
   revision = 57414;
@@ -44778,6 +48289,7 @@ showexpl = {
   hasRunfiles = true;
   license = [ "lppl12" ];
   version = "0.3s";
+  hasCatalogue = true;
 };
 showhyphenation = {
   revision = 67602;
@@ -44788,6 +48300,7 @@ showhyphenation = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.3";
+  hasCatalogue = true;
 };
 showkerning = {
   revision = 67603;
@@ -44798,6 +48311,7 @@ showkerning = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.3";
+  hasCatalogue = true;
 };
 showlabels = {
   revision = 63940;
@@ -44809,6 +48323,7 @@ showlabels = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.9.2";
+  hasCatalogue = true;
 };
 showtags = {
   revision = 20336;
@@ -44819,6 +48334,7 @@ showtags = {
   hasRunfiles = true;
   license = [ "publicDomain" ];
   version = "1.05";
+  hasCatalogue = true;
 };
 shtthesis = {
   revision = 62441;
@@ -44857,6 +48373,7 @@ shtthesis = {
   hasRunfiles = true;
   license = [ "gpl3Only" ];
   version = "0.3.3";
+  hasCatalogue = true;
 };
 shuffle = {
   revision = 15878;
@@ -44868,6 +48385,7 @@ shuffle = {
   hasRunfiles = true;
   license = [ "publicDomain" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 sidecap = {
   revision = 65618;
@@ -44879,6 +48397,7 @@ sidecap = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.7a";
+  hasCatalogue = true;
 };
 sidenotes = {
   revision = 54524;
@@ -44890,6 +48409,7 @@ sidenotes = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.00a";
+  hasCatalogue = true;
 };
 sidenotesplus = {
   revision = 69176;
@@ -44901,6 +48421,7 @@ sidenotesplus = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.04";
+  hasCatalogue = true;
 };
 sides = {
   revision = 15878;
@@ -44910,6 +48431,7 @@ sides = {
   sha512.doc = "653a8472a278bb1d33d9f86559398b62e32b521c6ce8dd977dbbc4f44183e37b95378ea4b29356948735c42925f9ed25153cc6a9009341ff01d80befe2bcddb3";
   hasRunfiles = true;
   license = [ "gpl1Only" ];
+  hasCatalogue = true;
 };
 signchart = {
   revision = 39707;
@@ -44921,6 +48443,7 @@ signchart = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.01";
+  hasCatalogue = true;
 };
 silence = {
   revision = 27028;
@@ -44932,6 +48455,7 @@ silence = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.5b";
+  hasCatalogue = true;
 };
 sillypage = {
   revision = 66349;
@@ -44943,6 +48467,7 @@ sillypage = {
   hasRunfiles = true;
   license = [ "cc-by-sa-40" "lppl13c" ];
   version = "1.6";
+  hasCatalogue = true;
 };
 sim-os-menus = {
   revision = 68843;
@@ -44953,6 +48478,7 @@ sim-os-menus = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.1.1";
+  hasCatalogue = true;
 };
 simple-resume-cv = {
   revision = 43057;
@@ -44962,6 +48488,7 @@ simple-resume-cv = {
   sha512.doc = "a380b2a498bde69cef1ba2401e16886d35edb40e3338963bcbd6e862da3e54f547e7900a18f668515b3ff178462a4ea0d41bc228b6b6e7ea8b0693e295231e92";
   hasRunfiles = true;
   license = [ "publicDomain" ];
+  hasCatalogue = true;
 };
 simple-thesis-dissertation = {
   revision = 43058;
@@ -44971,6 +48498,7 @@ simple-thesis-dissertation = {
   sha512.doc = "8dd82147b1096f728fd52a56c39309d0f421abdd972a1297b88b516e0a5ecf8387a3accc508047bcd3996ab81d778dbdd221934e2bb4c96e1ef2a59cd0fc6995";
   hasRunfiles = true;
   license = [ "publicDomain" ];
+  hasCatalogue = true;
 };
 simplebnf = {
   revision = 68959;
@@ -44981,6 +48509,7 @@ simplebnf = {
   hasRunfiles = true;
   license = [ "mit" ];
   version = "1.0.0";
+  hasCatalogue = true;
 };
 simplecd = {
   revision = 29260;
@@ -44992,6 +48521,7 @@ simplecd = {
   hasRunfiles = true;
   license = [ "lppl12" ];
   version = "1.4";
+  hasCatalogue = true;
 };
 simplecv = {
   revision = 35537;
@@ -45003,6 +48533,7 @@ simplecv = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.6a";
+  hasCatalogue = true;
 };
 simpleicons = {
   revision = 70519;
@@ -45016,6 +48547,7 @@ simpleicons = {
   hasRunfiles = true;
   license = [ "cc-by-10" ];
   version = "11.7.0";
+  hasCatalogue = true;
 };
 simpleinvoice = {
   revision = 45673;
@@ -45025,6 +48557,7 @@ simpleinvoice = {
   sha512.doc = "81e5ff2bf76f2b35549feb9b6336bd04b9273d4e6b951ee327101d4e5a5d3c429276735238b63c3b2ee03466b477ca2d7990a68615c1d0eee4f12a37d6b65472";
   hasRunfiles = true;
   license = [ "gpl3Only" ];
+  hasCatalogue = true;
 };
 simplekv = {
   revision = 68439;
@@ -45035,6 +48568,7 @@ simplekv = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.2c";
+  hasCatalogue = true;
 };
 simplenodes = {
   revision = 62888;
@@ -45044,6 +48578,7 @@ simplenodes = {
   sha512.doc = "df7900304a63225b51ceebb02d387f172cc415c09a65209cc850485668f893e4effb3befe424164dc291e283f80054eb6ae18785024278e93739e9d98562eb21";
   hasRunfiles = true;
   license = [ "mit" ];
+  hasCatalogue = true;
 };
 simpleoptics = {
   revision = 62977;
@@ -45054,6 +48589,7 @@ simpleoptics = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1.1";
+  hasCatalogue = true;
 };
 simpler-wick = {
   revision = 39074;
@@ -45064,6 +48600,7 @@ simpler-wick = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0.0";
+  hasCatalogue = true;
 };
 simples-matrices = {
   revision = 63802;
@@ -45075,6 +48612,7 @@ simples-matrices = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0.1";
+  hasCatalogue = true;
 };
 simplewick = {
   revision = 15878;
@@ -45086,6 +48624,7 @@ simplewick = {
   hasRunfiles = true;
   license = [ "gpl1Only" ];
   version = "1.2a";
+  hasCatalogue = true;
 };
 simplified-latex = {
   revision = 20620;
@@ -45094,6 +48633,7 @@ simplified-latex = {
   sha512.run = "31313aede3900675d183bfcff0045df5fa7719b982df1822823c15d645c7ef64c0b46e0f1690d98d30b2a6057e082684f23cb61a490fb2217887d0f20231ce73";
   sha512.doc = "f5bf92ed89cfc83f306cd4b2599446a11b73f73a0b82afbd0f441e26d837e6f436913bd2df18585c5e215fa0504bfee3d5d4f5ef4da8925161f85c70c14045e6";
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 simplivre = {
   revision = 70317;
@@ -45106,6 +48646,7 @@ simplivre = {
   sha512.doc = "890638ab256f56c1a964e89d990ba57288fe4ff2d8149065b1a6d24b056eca50751a932c5ac91a453bcffd1b909a7e8c277c3e240d525a97bee259d6a40bf91b";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 simurgh = {
   revision = 31719;
@@ -45116,6 +48657,7 @@ simurgh = {
   hasRunfiles = true;
   license = [ "gpl2Only" ];
   version = "0.01b";
+  hasCatalogue = true;
 };
 sistyle = {
   revision = 59682;
@@ -45127,6 +48669,7 @@ sistyle = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.3a";
+  hasCatalogue = true;
 };
 sitem = {
   revision = 22136;
@@ -45138,6 +48681,7 @@ sitem = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 siunits = {
   revision = 59702;
@@ -45149,6 +48693,7 @@ siunits = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.36";
+  hasCatalogue = true;
 };
 siunitx = {
   revision = 69922;
@@ -45164,6 +48709,7 @@ siunitx = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "3.3.12";
+  hasCatalogue = true;
 };
 sjtutex = {
   revision = 69967;
@@ -45175,6 +48721,7 @@ sjtutex = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.1";
+  hasCatalogue = true;
 };
 skak = {
   revision = 61719;
@@ -45185,6 +48732,7 @@ skak = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.5.3";
+  hasCatalogue = true;
 };
 skaknew = {
   revision = 20031;
@@ -45197,6 +48745,7 @@ skaknew = {
   sha512.doc = "8c26115910f2e9a9ae28e1b6c0933db3308c9f59eb151bb37b23de3f0f790b9726aef895def0826e00928b75753d925c5c9db0a6b91ebf7035fad5a4e473a315";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 skb = {
   revision = 22781;
@@ -45208,6 +48757,7 @@ skb = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.52";
+  hasCatalogue = true;
 };
 skdoc = {
   revision = 56950;
@@ -45219,6 +48769,7 @@ skdoc = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.5d";
+  hasCatalogue = true;
 };
 skeldoc = {
   revision = 57922;
@@ -45229,6 +48780,7 @@ skeldoc = {
   hasRunfiles = true;
   license = [ "mit" ];
   version = "0.1.2";
+  hasCatalogue = true;
 };
 skeycommand = {
   revision = 24652;
@@ -45239,6 +48791,7 @@ skeycommand = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.4";
+  hasCatalogue = true;
 };
 skeyval = {
   revision = 30560;
@@ -45249,6 +48802,7 @@ skeyval = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.3";
+  hasCatalogue = true;
 };
 skills = {
   revision = 56734;
@@ -45259,6 +48813,7 @@ skills = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0.0";
+  hasCatalogue = true;
 };
 skmath = {
   revision = 52411;
@@ -45270,6 +48825,7 @@ skmath = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.5a";
+  hasCatalogue = true;
 };
 skrapport = {
   revision = 52412;
@@ -45281,6 +48837,7 @@ skrapport = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.12k";
+  hasCatalogue = true;
 };
 skull = {
   revision = 51907;
@@ -45291,6 +48848,7 @@ skull = {
   hasRunfiles = true;
   license = [ "gpl1Only" ];
   version = "0.1";
+  hasCatalogue = true;
 };
 slantsc = {
   revision = 25007;
@@ -45302,6 +48860,7 @@ slantsc = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.11";
+  hasCatalogue = true;
 };
 slideshow = {
   revision = 15878;
@@ -45312,6 +48871,7 @@ slideshow = {
   hasRunfiles = true;
   license = [ "free" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 smalltableof = {
   revision = 20333;
@@ -45321,6 +48881,7 @@ smalltableof = {
   sha512.doc = "ca62aa29f6ad62f149dd9c5077ee2b14ed69d8a750f33d3de274ae275e5d1528482e58140a78b0917cf02a879206194e24a6beecd33060544abb50dd6fc564a6";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 smart-eqn = {
   revision = 61719;
@@ -45332,6 +48893,7 @@ smart-eqn = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 smartdiagram = {
   revision = 42781;
@@ -45343,6 +48905,7 @@ smartdiagram = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.3b";
+  hasCatalogue = true;
 };
 smartref = {
   revision = 20311;
@@ -45353,6 +48916,7 @@ smartref = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.9";
+  hasCatalogue = true;
 };
 smartunits = {
   revision = 39592;
@@ -45363,6 +48927,7 @@ smartunits = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.2";
+  hasCatalogue = true;
 };
 smflatex = {
   revision = 58910;
@@ -45374,6 +48939,7 @@ smflatex = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.6";
+  hasCatalogue = true;
 };
 snapshot = {
   revision = 56735;
@@ -45385,6 +48951,7 @@ snapshot = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.14";
+  hasCatalogue = true;
 };
 snaptodo = {
   revision = 61155;
@@ -45394,6 +48961,7 @@ snaptodo = {
   sha512.doc = "ed3df0276b44e2539b9b8cd0b5f6b46f86b18723d0913ed29fba45e30a132b53f8e0206add2d31bc152c78f319b8f7671ea000a1f344dc7f7d80ad9de32cd66b";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 snotez = {
   revision = 61992;
@@ -45404,6 +48972,7 @@ snotez = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.7";
+  hasCatalogue = true;
 };
 songbook = {
   revision = 18136;
@@ -45415,6 +48984,7 @@ songbook = {
   hasRunfiles = true;
   license = [ "lgpl21" ];
   version = "4.5";
+  hasCatalogue = true;
 };
 songproj = {
   revision = 66704;
@@ -45426,6 +48996,7 @@ songproj = {
   hasRunfiles = true;
   license = [ "bsd3" ];
   version = "1.2.0";
+  hasCatalogue = true;
 };
 songs = {
   revision = 51494;
@@ -45437,6 +49008,7 @@ songs = {
   hasRunfiles = true;
   license = [ "gpl2Only" ];
   version = "3.1";
+  hasCatalogue = true;
 };
 sort-by-letters = {
   revision = 27128;
@@ -45446,6 +49018,7 @@ sort-by-letters = {
   sha512.doc = "e2b6c68a42b9364d44dfa06ea93d8c8ea2444d97a3cf3c111065b720d3706b36315a7c8650877f1d6a2a72c1aa42268af4f17fc4632032e1e3c0a2d0fa08e577";
   hasRunfiles = true;
   license = [ "free" ];
+  hasCatalogue = true;
 };
 soton = {
   revision = 16215;
@@ -45456,6 +49029,7 @@ soton = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.1";
+  hasCatalogue = true;
 };
 soul = {
   revision = 67365;
@@ -45467,6 +49041,7 @@ soul = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "3.1";
+  hasCatalogue = true;
 };
 soulpos = {
   revision = 60772;
@@ -45481,6 +49056,7 @@ soulpos = {
   hasRunfiles = true;
   license = [ "mit" ];
   version = "1.2";
+  hasCatalogue = true;
 };
 soup = {
   revision = 50815;
@@ -45492,6 +49068,7 @@ soup = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0.2";
+  hasCatalogue = true;
 };
 sourcecodepro = {
   revision = 54512;
@@ -45505,6 +49082,7 @@ sourcecodepro = {
   hasRunfiles = true;
   license = [ "ofl" "lppl13c" ];
   version = "2.7";
+  hasCatalogue = true;
 };
 sourcesanspro = {
   revision = 54892;
@@ -45518,6 +49096,7 @@ sourcesanspro = {
   hasRunfiles = true;
   license = [ "ofl" "lppl13c" ];
   version = "2.8";
+  hasCatalogue = true;
 };
 sourceserifpro = {
   revision = 54512;
@@ -45531,6 +49110,7 @@ sourceserifpro = {
   hasRunfiles = true;
   license = [ "ofl" "lppl13c" ];
   version = "1.4";
+  hasCatalogue = true;
 };
 spacekern = {
   revision = 67604;
@@ -45541,6 +49121,7 @@ spacekern = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.3";
+  hasCatalogue = true;
 };
 spacingtricks = {
   revision = 69048;
@@ -45552,6 +49133,7 @@ spacingtricks = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.8";
+  hasCatalogue = true;
 };
 spalign = {
   revision = 42225;
@@ -45562,6 +49144,7 @@ spalign = {
   sha512.source = "3a12b34469bbefd61112b7338c8b5d440de46837632a695b52ae18e4f297d6ac0cde7ae71db7bb0a7bd3db0aeaa83e78f33a60e4dd496cf9c0ccda1a297b4ae9";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 spark-otf = {
   revision = 62481;
@@ -45572,6 +49155,7 @@ spark-otf = {
   hasRunfiles = true;
   license = [ "ofl" "lppl13c" ];
   version = "0.05a";
+  hasCatalogue = true;
 };
 sparklines = {
   revision = 42821;
@@ -45582,6 +49166,7 @@ sparklines = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.7";
+  hasCatalogue = true;
 };
 spath3 = {
   revision = 64818;
@@ -45593,6 +49178,7 @@ spath3 = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.7";
+  hasCatalogue = true;
 };
 spbmark = {
   revision = 69927;
@@ -45603,6 +49189,7 @@ spbmark = {
   hasRunfiles = true;
   license = [ "cc-by-40" ];
   version = "1.46e";
+  hasCatalogue = true;
 };
 spectral = {
   revision = 64528;
@@ -45615,6 +49202,7 @@ spectral = {
   sha512.doc = "4fba6fa0576a84b05d0a0bc3520ac6e08dbedb7f37e5af5a0cc961c80deb98d53065be3c645c0eb0dc08a495d113e72f4474de32dad5d080ce67b000aaf4042d";
   hasRunfiles = true;
   license = [ "ofl" "lppl13c" ];
+  hasCatalogue = true;
 };
 spectralsequences = {
   revision = 65667;
@@ -45625,6 +49213,7 @@ spectralsequences = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.3.3";
+  hasCatalogue = true;
 };
 spelling = {
   revision = 30715;
@@ -45635,6 +49224,7 @@ spelling = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.41";
+  hasCatalogue = true;
 };
 sphack = {
   revision = 20842;
@@ -45644,6 +49234,7 @@ sphack = {
   sha512.doc = "6b490ee2e736a6bf1ddf32d5db605ab5fe77f079d585c2e377bda73a688a7de575b99d56c6626d9888c395f6a4d181cd0b42e77dd5673c8456bb0e029510b8d9";
   hasRunfiles = true;
   license = [ "free" ];
+  hasCatalogue = true;
 };
 sphdthesis = {
   revision = 34374;
@@ -45654,6 +49245,7 @@ sphdthesis = {
   hasRunfiles = true;
   license = [ "publicDomain" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 spie = {
   revision = 15878;
@@ -45664,6 +49256,7 @@ spie = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "3.25";
+  hasCatalogue = true;
 };
 spix = {
   revision = 65050;
@@ -45677,6 +49270,7 @@ spix = {
   ];
   license = [ "gpl3Plus" ];
   version = "1.3.0";
+  hasCatalogue = true;
 };
 spix.binfiles = [
   "spix"
@@ -45691,6 +49285,7 @@ splines = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.2";
+  hasCatalogue = true;
 };
 splitbib = {
   revision = 15878;
@@ -45702,6 +49297,7 @@ splitbib = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.17";
+  hasCatalogue = true;
 };
 splitindex = {
   revision = 39766;
@@ -45716,6 +49312,7 @@ splitindex = {
   ];
   license = [ "lppl13c" ];
   version = "1.2c";
+  hasCatalogue = true;
 };
 splitindex.binfiles = [
   "splitindex"
@@ -45730,6 +49327,7 @@ spot = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 spotcolor = {
   revision = 15878;
@@ -45740,6 +49338,7 @@ spotcolor = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.2";
+  hasCatalogue = true;
 };
 spreadtab = {
   revision = 68256;
@@ -45750,6 +49349,7 @@ spreadtab = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.52";
+  hasCatalogue = true;
 };
 spverbatim = {
   revision = 15878;
@@ -45761,6 +49361,7 @@ spverbatim = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 sr-vorl = {
   revision = 59333;
@@ -45772,15 +49373,18 @@ sr-vorl = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.2";
+  hasCatalogue = true;
 };
 srbook-mem = {
   revision = 45818;
+  catalogue = "serbian-book";
   shortdesc = "Support for use of memoir in Serbian";
   stripPrefix = 0;
   sha512.run = "5cae41da74957078b2b0ed38c9fa4186006f24abca804b879641b4bff5324950b1a59296c5733fcadd2ef05661ff1dba8cd7d9a2c5f9e2a5c6bc1e6d993ff218";
   sha512.doc = "5e06fb85b3398cc65372fc0c82eaae3d807c6c908eedbfa8f4ea593ea6213790c3fe9c5142990a9b7d4c267ed01cd61aef4fb950a0c2b51424b0ef5e1f2aa520";
   hasRunfiles = true;
   license = [ "gpl1Only" ];
+  hasCatalogue = true;
 };
 srbtiks = {
   revision = 63308;
@@ -45794,6 +49398,7 @@ srbtiks = {
   hasRunfiles = true;
   license = [ "ofl" "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 srcltx = {
   revision = 15878;
@@ -45805,6 +49410,7 @@ srcltx = {
   hasRunfiles = true;
   license = [ "publicDomain" ];
   version = "1.6";
+  hasCatalogue = true;
 };
 srcredact = {
   revision = 38710;
@@ -45815,6 +49421,7 @@ srcredact = {
   hasRunfiles = true;
   license = [ "gpl2Only" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 srcredact.binfiles = [
   "srcredact"
@@ -45828,6 +49435,7 @@ srdp-mathematik = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.12.2";
+  hasCatalogue = true;
 };
 sseq = {
   revision = 31585;
@@ -45839,6 +49447,7 @@ sseq = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.01";
+  hasCatalogue = true;
 };
 sslides = {
   revision = 32293;
@@ -45848,6 +49457,7 @@ sslides = {
   sha512.doc = "4a0fde19b43390f80d6d671933ba51b0be854d774d6f35f3e8fb33653ef7784df85871dc4fdec03f2c734e819af6c1098e8be152e0bd42740ec2f4ae53c38f4a";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 stack = {
   revision = 15878;
@@ -45858,6 +49468,7 @@ stack = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.00";
+  hasCatalogue = true;
 };
 stackengine = {
   revision = 60019;
@@ -45871,6 +49482,7 @@ stackengine = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "4.11";
+  hasCatalogue = true;
 };
 stage = {
   revision = 62929;
@@ -45882,6 +49494,7 @@ stage = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.03";
+  hasCatalogue = true;
 };
 standalone = {
   revision = 64677;
@@ -45900,6 +49513,7 @@ standalone = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.3b";
+  hasCatalogue = true;
 };
 stanli = {
   revision = 54512;
@@ -45910,6 +49524,7 @@ stanli = {
   hasRunfiles = true;
   license = [ "gpl1Only" "lppl13c" ];
   version = "3.0";
+  hasCatalogue = true;
 };
 starfont = {
   revision = 19982;
@@ -45923,6 +49538,7 @@ starfont = {
   hasRunfiles = true;
   license = [ "publicDomain" ];
   version = "1.2";
+  hasCatalogue = true;
 };
 starray = {
   revision = 70604;
@@ -45933,6 +49549,7 @@ starray = {
   hasRunfiles = true;
   license = [ "lppl13c" "gpl1Only" ];
   version = "1.6";
+  hasCatalogue = true;
 };
 startex = {
   revision = 69742;
@@ -45944,6 +49561,7 @@ startex = {
   hasRunfiles = true;
   license = [ "publicDomain" ];
   version = "1.04";
+  hasCatalogue = true;
 };
 statex = {
   revision = 20306;
@@ -45954,6 +49572,7 @@ statex = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.6";
+  hasCatalogue = true;
 };
 statex2 = {
   revision = 23961;
@@ -45964,6 +49583,7 @@ statex2 = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.1";
+  hasCatalogue = true;
 };
 statistics = {
   revision = 67201;
@@ -45975,6 +49595,7 @@ statistics = {
   hasRunfiles = true;
   license = [ "gpl3Plus" ];
   version = "2.2";
+  hasCatalogue = true;
 };
 statistik = {
   revision = 20334;
@@ -45986,6 +49607,7 @@ statistik = {
   hasRunfiles = true;
   license = [ "gpl1Only" ];
   version = "0.03";
+  hasCatalogue = true;
 };
 statmath = {
   revision = 46925;
@@ -45997,6 +49619,7 @@ statmath = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.1";
+  hasCatalogue = true;
 };
 staves = {
   revision = 15878;
@@ -46010,6 +49633,7 @@ staves = {
   sha512.source = "9dbe40efcd1699cc9267b739bc1b182fc0e5dc23ae52d19ea89c1742b815e4ea9b7612e4fb80aeb83f3d9206ab408cb0ca3fcb99c85883fb86f89f3ac26f0b5d";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 stdclsdv = {
   revision = 15878;
@@ -46021,6 +49645,7 @@ stdclsdv = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1a";
+  hasCatalogue = true;
 };
 stdpage = {
   revision = 15878;
@@ -46032,6 +49657,7 @@ stdpage = {
   hasRunfiles = true;
   license = [ "lppl12" ];
   version = "0.6";
+  hasCatalogue = true;
 };
 stealcaps = {
   revision = 64967;
@@ -46043,6 +49669,7 @@ stealcaps = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 steinmetz = {
   revision = 15878;
@@ -46054,6 +49681,7 @@ steinmetz = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 stellenbosch = {
   revision = 68039;
@@ -46065,6 +49693,7 @@ stellenbosch = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "11a";
+  hasCatalogue = true;
 };
 stellenbosch-2 = {
   revision = 68183;
@@ -46076,6 +49705,7 @@ stellenbosch-2 = {
   hasRunfiles = true;
   license = [ "cc-by-40" ];
   version = "2.0";
+  hasCatalogue = true;
 };
 step = {
   revision = 57307;
@@ -46089,6 +49719,7 @@ step = {
   hasRunfiles = true;
   license = [ "ofl" ];
   version = "2.0.5";
+  hasCatalogue = true;
 };
 stepgreek = {
   revision = 57074;
@@ -46102,6 +49733,7 @@ stepgreek = {
   hasRunfiles = true;
   license = [ "ofl" ];
   version = "3.0b1";
+  hasCatalogue = true;
 };
 stex = {
   revision = 68569;
@@ -46113,6 +49745,7 @@ stex = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "3.4.0";
+  hasCatalogue = true;
 };
 stickstoo = {
   revision = 60793;
@@ -46126,6 +49759,7 @@ stickstoo = {
   hasRunfiles = true;
   license = [ "ofl" "lppl13c" ];
   version = "1.035";
+  hasCatalogue = true;
 };
 stix = {
   revision = 54512;
@@ -46140,6 +49774,7 @@ stix = {
   hasRunfiles = true;
   license = [ "ofl" "lppl13c" ];
   version = "1.1.3";
+  hasCatalogue = true;
 };
 stix2-otf = {
   revision = 58735;
@@ -46150,6 +49785,7 @@ stix2-otf = {
   hasRunfiles = true;
   license = [ "ofl" ];
   version = "2.12";
+  hasCatalogue = true;
 };
 stix2-type1 = {
   revision = 57448;
@@ -46164,6 +49800,7 @@ stix2-type1 = {
   hasRunfiles = true;
   license = [ "ofl" "lppl13c" ];
   version = "2.0.2";
+  hasCatalogue = true;
 };
 stmaryrd = {
   revision = 22027;
@@ -46177,6 +49814,7 @@ stmaryrd = {
   sha512.source = "ebefe2836daed0dd4db99517af0f40c73f0a7b19453d5415c80ae6cf723f4ec4e4ae6f9700a21722b4c0d9b8507c58a596697017893716111b46222f54676aa2";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 storebox = {
   revision = 64967;
@@ -46188,6 +49826,7 @@ storebox = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.3a";
+  hasCatalogue = true;
 };
 storecmd = {
   revision = 24431;
@@ -46198,6 +49837,7 @@ storecmd = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.0.2";
+  hasCatalogue = true;
 };
 strands = {
   revision = 59906;
@@ -46209,6 +49849,7 @@ strands = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 stricttex = {
   revision = 56320;
@@ -46219,6 +49860,7 @@ stricttex = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.2beta";
+  hasCatalogue = true;
 };
 string-diagrams = {
   revision = 67363;
@@ -46230,6 +49872,7 @@ string-diagrams = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.2.1";
+  hasCatalogue = true;
 };
 stringenc = {
   revision = 52982;
@@ -46241,6 +49884,7 @@ stringenc = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.12";
+  hasCatalogue = true;
 };
 stringstrings = {
   revision = 57097;
@@ -46252,6 +49896,7 @@ stringstrings = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.24";
+  hasCatalogue = true;
 };
 structmech = {
   revision = 66724;
@@ -46262,6 +49907,7 @@ structmech = {
   hasRunfiles = true;
   license = [ "gpl3Plus" ];
   version = "1.2";
+  hasCatalogue = true;
 };
 struktex = {
   revision = 47931;
@@ -46273,6 +49919,7 @@ struktex = {
   hasRunfiles = true;
   license = [ "lppl12" ];
   version = "2.3c-0-g7d3fc5b";
+  hasCatalogue = true;
 };
 sttools = {
   revision = 60736;
@@ -46284,6 +49931,7 @@ sttools = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "3.0";
+  hasCatalogue = true;
 };
 stubs = {
   revision = 69128;
@@ -46294,6 +49942,7 @@ stubs = {
   hasRunfiles = true;
   license = [ "gpl1Only" ];
   version = "0.1.1";
+  hasCatalogue = true;
 };
 studenthandouts = {
   revision = 43516;
@@ -46304,6 +49953,7 @@ studenthandouts = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 sty2dtx = {
   revision = 64967;
@@ -46314,6 +49964,7 @@ sty2dtx = {
   hasRunfiles = true;
   license = [ "gpl3Only" ];
   version = "2.4";
+  hasCatalogue = true;
 };
 sty2dtx.binfiles = [
   "sty2dtx"
@@ -46328,6 +49979,7 @@ styledcmd = {
   hasRunfiles = true;
   license = [ "gpl3Plus" ];
   version = "2.0.1";
+  hasCatalogue = true;
 };
 suanpan = {
   revision = 15878;
@@ -46337,6 +49989,7 @@ suanpan = {
   sha512.doc = "667d3c5590468170acfded106a2a468d9abe7b4b34a9b56d153d401a60e8f24bce99a4f6c5f2761572a42b85c7faae5741ee5b6f22c3f1004e6d6685463b9350";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 subdepth = {
   revision = 15878;
@@ -46348,6 +50001,7 @@ subdepth = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.1";
+  hasCatalogue = true;
 };
 subdocs = {
   revision = 51480;
@@ -46358,6 +50012,7 @@ subdocs = {
   hasRunfiles = true;
   license = [ "mit" ];
   version = "0.1";
+  hasCatalogue = true;
 };
 subeqn = {
   revision = 15878;
@@ -46369,6 +50024,7 @@ subeqn = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.0b";
+  hasCatalogue = true;
 };
 subeqnarray = {
   revision = 15878;
@@ -46380,6 +50036,7 @@ subeqnarray = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.1c";
+  hasCatalogue = true;
 };
 subfig = {
   revision = 15878;
@@ -46391,6 +50048,7 @@ subfig = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.3";
+  hasCatalogue = true;
 };
 subfigmat = {
   revision = 20308;
@@ -46401,6 +50059,7 @@ subfigmat = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 subfigure = {
   revision = 15878;
@@ -46412,6 +50071,7 @@ subfigure = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.1.5";
+  hasCatalogue = true;
 };
 subfiles = {
   revision = 56977;
@@ -46426,6 +50086,7 @@ subfiles = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.2";
+  hasCatalogue = true;
 };
 subfloat = {
   revision = 29349;
@@ -46437,6 +50098,7 @@ subfloat = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.14";
+  hasCatalogue = true;
 };
 substances = {
   revision = 40989;
@@ -46447,6 +50109,7 @@ substances = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.2a";
+  hasCatalogue = true;
 };
 substr = {
   revision = 16117;
@@ -46457,6 +50120,7 @@ substr = {
   hasRunfiles = true;
   license = [ "lppl1" ];
   version = "1.2";
+  hasCatalogue = true;
 };
 subsupscripts = {
   revision = 16080;
@@ -46467,6 +50131,7 @@ subsupscripts = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 subtext = {
   revision = 51273;
@@ -46477,6 +50142,7 @@ subtext = {
   hasRunfiles = true;
   license = [ "gpl3Only" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 sudoku = {
   revision = 67189;
@@ -46488,6 +50154,7 @@ sudoku = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 sudokubundle = {
   revision = 15878;
@@ -46499,6 +50166,7 @@ sudokubundle = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0a";
+  hasCatalogue = true;
 };
 suftesi = {
   revision = 68204;
@@ -46510,6 +50178,7 @@ suftesi = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "3.2.1";
+  hasCatalogue = true;
 };
 sugconf = {
   revision = 58752;
@@ -46519,6 +50188,7 @@ sugconf = {
   sha512.doc = "4a64c9ff5c9350b80601052093baf0d9ebddf24de17c9ded5cffb299b94cb6b4e6f0beb03c058b8a7a4c4f7cfea118cf8e95b797881ad9f77e879b228ecc2165";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 superiors = {
   revision = 69387;
@@ -46529,6 +50199,7 @@ superiors = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.0";
+  hasCatalogue = true;
 };
 supertabular = {
   revision = 53658;
@@ -46540,6 +50211,7 @@ supertabular = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "4.1g";
+  hasCatalogue = true;
 };
 suppose = {
   revision = 59281;
@@ -46550,6 +50222,7 @@ suppose = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.2.2";
+  hasCatalogue = true;
 };
 susy = {
   revision = 19440;
@@ -46559,6 +50232,7 @@ susy = {
   sha512.doc = "f802ccdadb5ac2bd96ff27396b020798ac023889f751bc3a286392f62341ee6ac50486899f4e633b90b85320f1bbb679dfba98aa3746d01f0220f07cf65549f6";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 svg = {
   revision = 57010;
@@ -46570,6 +50244,7 @@ svg = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.02k";
+  hasCatalogue = true;
 };
 svg-inkscape = {
   revision = 32199;
@@ -46578,6 +50253,7 @@ svg-inkscape = {
   sha512.run = "e1708206e6fe85271e729ee8c9bf952f45af662a54ad2e816b449fed263fefd8527529ea777b85a50f736d0ec7875afcb3059ed2ac81afd45c54ccdc687c3979";
   sha512.doc = "609d1a7d2256461a749c3a74ac5dffdb7efec999faa15315872f4e61884933cf47c380bfd8eba53de491494cb498a45ba263dc889fa0fd337c48f82842fa6bdd";
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 svgcolor = {
   revision = 15878;
@@ -46588,6 +50264,7 @@ svgcolor = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 svn = {
   revision = 15878;
@@ -46599,6 +50276,7 @@ svn = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "43";
+  hasCatalogue = true;
 };
 svn-multi = {
   revision = 64967;
@@ -46609,6 +50287,7 @@ svn-multi = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.4d";
+  hasCatalogue = true;
 };
 svn-multi.binfiles = [
   "svn-multi"
@@ -46623,6 +50302,7 @@ svn-prov = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "3.1862";
+  hasCatalogue = true;
 };
 svninfo = {
   revision = 62157;
@@ -46634,6 +50314,7 @@ svninfo = {
   hasRunfiles = true;
   license = [ "lppl1" ];
   version = "0.7.4";
+  hasCatalogue = true;
 };
 svrsymbols = {
   revision = 50019;
@@ -46648,6 +50329,7 @@ svrsymbols = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.0b";
+  hasCatalogue = true;
 };
 swebib = {
   revision = 15878;
@@ -46657,6 +50339,7 @@ swebib = {
   sha512.doc = "a3db201554a0b828cfc72d47a22b777fd7b44b25c361a4d8f032cc62658780628e83f6eabfbf342b867fda335c1ddc228347f5fc66651193c8229e0bc6e46f67";
   hasRunfiles = true;
   license = [ "lppl12" ];
+  hasCatalogue = true;
 };
 swfigure = {
   revision = 63255;
@@ -46668,6 +50351,7 @@ swfigure = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.9.20";
+  hasCatalogue = true;
 };
 swimgraf = {
   revision = 25446;
@@ -46677,6 +50361,7 @@ swimgraf = {
   sha512.doc = "2394080a393e2a0cc8e8299dc4debbcc7548186a714454c87662c22a371308c7e8e6705c9dcbf6eca632f2f80788a733f9d5a9f3fddb2f46167fd50654c5bcdc";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 swrule = {
   revision = 54267;
@@ -46685,6 +50370,7 @@ swrule = {
   sha512.run = "fbb2a8fd060e41340a876595310b54d069cf808d4e2eacba0d913732fe45a3cea698c1e6e229dd152666f7b509eca424d17378c74ad14edd0d5f08ec85c6c65a";
   hasRunfiles = true;
   license = [ "free" ];
+  hasCatalogue = true;
 };
 swungdash = {
   revision = 64204;
@@ -46695,6 +50381,7 @@ swungdash = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0.0";
+  hasCatalogue = true;
 };
 syllogism = {
   revision = 15878;
@@ -46705,6 +50392,7 @@ syllogism = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.2";
+  hasCatalogue = true;
 };
 symbats3 = {
   revision = 63833;
@@ -46714,9 +50402,11 @@ symbats3 = {
   sha512.doc = "e7a1a3f915000ad773f47a5529fc0aa97fa6dc2a56feefb8ae55815580301704a3c49eb7ae92b7f1248fd7115d7d55a54a6f2b38f05825be57b1e155ab8997ee";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 symbol = {
   revision = 61719;
+  catalogue = "urw-base35";
   shortdesc = "URW 'Base 35' font pack for LaTeX";
   stripPrefix = 0;
   fontMaps = [
@@ -46725,6 +50415,7 @@ symbol = {
   sha512.run = "1a2d3239cf7c9910b19db527d5c2b43af2b399114b3186505e790a139ae5ef82c2ff1ecd5adc858a46febaf2e46e028037ba65bd5b84fec0737edd89d5061c09";
   hasRunfiles = true;
   license = [ "gpl1Only" ];
+  hasCatalogue = true;
 };
 sympycalc = {
   revision = 67087;
@@ -46735,9 +50426,11 @@ sympycalc = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.1.1";
+  hasCatalogue = true;
 };
 sympytexpackage = {
   revision = 57090;
+  catalogue = "sympytex";
   shortdesc = "Include symbolic computation (using sympy) in documents";
   stripPrefix = 0;
   sha512.run = "9a1fa177703dbed088861ff47e5b53f3c0f433abe15d471d181368c52e0cdae7350090ce5cb3c25d4ca816d1132eb009359977ada3f3c0b5c3b80bc0873f8110";
@@ -46746,6 +50439,7 @@ sympytexpackage = {
   hasRunfiles = true;
   license = [ "gpl2Only" ];
   version = "0.3";
+  hasCatalogue = true;
 };
 synctex = {
   revision = 66203;
@@ -46766,15 +50460,18 @@ synproof = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 syntax = {
   revision = 15878;
+  catalogue = "syntax2";
   shortdesc = "Creation of syntax diagrams";
   stripPrefix = 0;
   sha512.run = "be1e049a98cd7e45cec9675e707575107af9c613028012b8fbfa658c6c9cbbac5782d3a7111f37edc719fb90e7c168c9a98a3d30a4c997b6ac4ed0691fc7fdc3";
   sha512.doc = "7d0754c08081abc9867d0d40fc910ae5f8b34518004bf698dddc184f0b514d75a7feb3085870cf8322b3d6f3bc4c32ab50acdaeb56b574bf41604a18c23a6656";
   hasRunfiles = true;
   license = [ "gpl1Only" ];
+  hasCatalogue = true;
 };
 syntaxdi = {
   revision = 56685;
@@ -46785,6 +50482,7 @@ syntaxdi = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.8.2";
+  hasCatalogue = true;
 };
 syntrace = {
   revision = 15878;
@@ -46796,6 +50494,7 @@ syntrace = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 synttree = {
   revision = 16252;
@@ -46807,6 +50506,7 @@ synttree = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.4.2";
+  hasCatalogue = true;
 };
 systeme = {
   revision = 66655;
@@ -46817,6 +50517,7 @@ systeme = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.34";
+  hasCatalogue = true;
 };
 t-angles = {
   revision = 15878;
@@ -46826,6 +50527,7 @@ t-angles = {
   sha512.doc = "32dc9adfda93bee5e61eb062e6970f6e093a09016a6ddf32f82d110b7717916fcc92f961c8be682958d1f3f345e02ad49cde4a85ad4a0d0add08a0bc80109d8f";
   hasRunfiles = true;
   license = [ "gpl1Only" ];
+  hasCatalogue = true;
 };
 t1utils = {
   revision = 57972;
@@ -46834,6 +50536,7 @@ t1utils = {
   sha512.doc = "34eacd2f14282108ba41d49cc68c066e12383c4873c9cb8a2389300f9c5685b3f3d7d0626e33008d28c229f8311daf2404b2bfa164fa550184f1e856163ab386";
   hasManpages = true;
   license = [ "publicDomain" ];
+  hasCatalogue = true;
 };
 t1utils.binfiles = [
   "t1ascii"
@@ -46851,6 +50554,7 @@ t2 = {
   sha512.doc = "8c30658eab02eb576963a6a2f722b143444abf5d286473f165b6cab84c75ef703462a1841121a5d12cf822b150ce8c23a96256754a2d662fbe6c451a058333ef";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 tabbing = {
   revision = 59715;
@@ -46861,6 +50565,7 @@ tabbing = {
   sha512.source = "7ed54e677b3dbd8e10e85e84c69791339fefc223a753164c0e9aa8c47301ded6c0737cf62b25cd9d3b152eb63bc32406d9a8a86a620b0e8e00d562ee795f6aa8";
   hasRunfiles = true;
   license = [ "lppl1" ];
+  hasCatalogue = true;
 };
 tabfigures = {
   revision = 25202;
@@ -46872,6 +50577,7 @@ tabfigures = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 table-fct = {
   revision = 41849;
@@ -46882,6 +50588,7 @@ table-fct = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 tableaux = {
   revision = 42413;
@@ -46891,6 +50598,7 @@ tableaux = {
   sha512.doc = "cfa58a8e76dd61659f6c13ea6b3f97ae484715b735028c513576312dfa7dfe92c8c15a0858077e3ff2399807274dd5a836182ea65b948a976f6384bd8d1b19d6";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 tablefootnote = {
   revision = 32804;
@@ -46902,6 +50610,7 @@ tablefootnote = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1c";
+  hasCatalogue = true;
 };
 tableof = {
   revision = 59837;
@@ -46913,6 +50622,7 @@ tableof = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.4c";
+  hasCatalogue = true;
 };
 tablists = {
   revision = 15878;
@@ -46924,6 +50634,7 @@ tablists = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.0e";
+  hasCatalogue = true;
 };
 tablor = {
   revision = 31855;
@@ -46934,6 +50645,7 @@ tablor = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "4.07-g";
+  hasCatalogue = true;
 };
 tabls = {
   revision = 17255;
@@ -46944,6 +50656,7 @@ tabls = {
   hasRunfiles = true;
   license = [ "free" ];
   version = "3.5";
+  hasCatalogue = true;
 };
 tablvar = {
   revision = 69212;
@@ -46955,6 +50668,7 @@ tablvar = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.0";
+  hasCatalogue = true;
 };
 tabriz-thesis = {
   revision = 51729;
@@ -46965,6 +50679,7 @@ tabriz-thesis = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 tabstackengine = {
   revision = 46848;
@@ -46975,6 +50690,7 @@ tabstackengine = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.10";
+  hasCatalogue = true;
 };
 tabto-generic = {
   revision = 15878;
@@ -46983,6 +50699,7 @@ tabto-generic = {
   sha512.run = "5b3bd8081ec6800c96ce4b4cbdd8091578ad1df2b625fb2792202a6c31f3f126d612f99f04802d82d490cb529e03e63f98b01c7842ec0df69b48c2fc289108fa";
   hasRunfiles = true;
   license = [ "publicDomain" ];
+  hasCatalogue = true;
 };
 tabto-ltx = {
   revision = 54080;
@@ -46993,6 +50710,7 @@ tabto-ltx = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.4";
+  hasCatalogue = true;
 };
 tabu = {
   revision = 61719;
@@ -47007,6 +50725,7 @@ tabu = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.9";
+  hasCatalogue = true;
 };
 tabularborder = {
   revision = 17885;
@@ -47018,6 +50737,7 @@ tabularborder = {
   hasRunfiles = true;
   license = [ "lppl12" ];
   version = "1.0a";
+  hasCatalogue = true;
 };
 tabularcalc = {
   revision = 15878;
@@ -47028,6 +50748,7 @@ tabularcalc = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.2";
+  hasCatalogue = true;
 };
 tabularew = {
   revision = 15878;
@@ -47039,6 +50760,7 @@ tabularew = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.1";
+  hasCatalogue = true;
 };
 tabularray = {
   revision = 69926;
@@ -47049,6 +50771,7 @@ tabularray = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2024A";
+  hasCatalogue = true;
 };
 tabulary = {
   revision = 34368;
@@ -47060,6 +50783,7 @@ tabulary = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.10";
+  hasCatalogue = true;
 };
 tabvar = {
   revision = 63921;
@@ -47074,6 +50798,7 @@ tabvar = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.8";
+  hasCatalogue = true;
 };
 tagging = {
   revision = 52064;
@@ -47084,6 +50809,7 @@ tagging = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1.0.1";
+  hasCatalogue = true;
 };
 tagpair = {
   revision = 42138;
@@ -47094,6 +50820,7 @@ tagpair = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 tagpdf = {
   revision = 70259;
@@ -47105,6 +50832,7 @@ tagpdf = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.98x";
+  hasCatalogue = true;
 };
 talk = {
   revision = 42428;
@@ -47116,6 +50844,7 @@ talk = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 talos = {
   revision = 61820;
@@ -47126,6 +50855,7 @@ talos = {
   hasRunfiles = true;
   license = [ "gfl" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 tamefloats = {
   revision = 27345;
@@ -47136,6 +50866,7 @@ tamefloats = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.42";
+  hasCatalogue = true;
 };
 tamethebeast = {
   revision = 15878;
@@ -47145,6 +50876,7 @@ tamethebeast = {
   sha512.doc = "0df79f434714deefd60b9b9d32dfbd47ac7e560c26ec0d02465538eefbc779f0252aef235ae2e0a2d2d634d618bb52c73b31c229b5245866239776c742ebe69a";
   license = [ "lppl13c" ];
   version = "1.4";
+  hasCatalogue = true;
 };
 tangocolors = {
   revision = 66733;
@@ -47156,6 +50888,7 @@ tangocolors = {
   hasRunfiles = true;
   license = [ "lppl13c" "gpl1Only" ];
   version = "0.3";
+  hasCatalogue = true;
 };
 tangramtikz = {
   revision = 66183;
@@ -47166,6 +50899,7 @@ tangramtikz = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.1.5";
+  hasCatalogue = true;
 };
 tap = {
   revision = 31731;
@@ -47176,6 +50910,7 @@ tap = {
   hasRunfiles = true;
   license = [ "publicDomain" ];
   version = "0.77";
+  hasCatalogue = true;
 };
 tapir = {
   revision = 20484;
@@ -47186,6 +50921,7 @@ tapir = {
   hasRunfiles = true;
   license = [ "gpl1Only" ];
   version = "0.2";
+  hasCatalogue = true;
 };
 tasks = {
   revision = 61541;
@@ -47196,6 +50932,7 @@ tasks = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.4a";
+  hasCatalogue = true;
 };
 tblr-extras = {
   revision = 69776;
@@ -47206,9 +50943,11 @@ tblr-extras = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 tcldoc = {
   revision = 22018;
+  catalogue = "tclldoc";
   shortdesc = "Doc/docstrip for tcl";
   stripPrefix = 0;
   sha512.run = "82348df3f6dcedc17a3cd50f709d01b1f2b0e4be9345e63d40ee6ad2aff908f97c7d19d586431e3fe8399a8d076505ceaadb5afe0116093240a6e59a335934c9";
@@ -47217,6 +50956,7 @@ tcldoc = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.40";
+  hasCatalogue = true;
 };
 tcolorbox = {
   revision = 69370;
@@ -47227,6 +50967,7 @@ tcolorbox = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "6.2.0";
+  hasCatalogue = true;
 };
 tdclock = {
   revision = 33043;
@@ -47237,6 +50978,7 @@ tdclock = {
   hasRunfiles = true;
   license = [ "gpl2Only" ];
   version = "2.5";
+  hasCatalogue = true;
 };
 tds = {
   revision = 64477;
@@ -47247,6 +50989,7 @@ tds = {
   hasInfo = true;
   license = [ "free" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 tdsfrmath = {
   revision = 15878;
@@ -47258,6 +51001,7 @@ tdsfrmath = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.3";
+  hasCatalogue = true;
 };
 technics = {
   revision = 29349;
@@ -47268,6 +51012,7 @@ technics = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 technion-thesis-template = {
   revision = 49889;
@@ -47278,6 +51023,7 @@ technion-thesis-template = {
   hasRunfiles = true;
   license = [ "cc-by-40" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 ted = {
   revision = 15878;
@@ -47289,6 +51035,7 @@ ted = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.06";
+  hasCatalogue = true;
 };
 templates-fenn = {
   revision = 15878;
@@ -47297,6 +51044,7 @@ templates-fenn = {
   sha512.run = "cc61496f15f9c4060c8d42de23e3bf6f6d2be02d3a8b4fb761f2fda4a9c3565d74bf1f107dd9371e096bef79ddbdef56d2e696cd84cb4fe39a41986b8ffbbc78";
   sha512.doc = "2a96b0963b2d09edd3f6a6866ae298001e6ccd4e96b98a9002df6e6718284a786b63761441c287ddd63dd5eba636fcb8ce9769d498962ffe2565e771902755e1";
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 templates-sommer = {
   revision = 15878;
@@ -47305,6 +51053,7 @@ templates-sommer = {
   sha512.run = "55b47c4718786fd4910d099878d5808288e83714567adbdbceea32a76e92f7e36c3f850d8597b297445a6ff428d1d0dbaf9209a387485eca0fb1a85f4909ed59";
   sha512.doc = "543b5cce4842dc6b084d90f9bf4e3c19c18a690ebe85379d9d93a5998fed06272bcac4cb3ae44f965614962827b9926fec3439322e38a720c134133a88cd94f0";
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 templatetools = {
   revision = 67201;
@@ -47316,6 +51065,7 @@ templatetools = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.2";
+  hasCatalogue = true;
 };
 tempora = {
   revision = 39596;
@@ -47329,6 +51079,7 @@ tempora = {
   hasRunfiles = true;
   license = [ "gpl2Only" ];
   version = "1.05";
+  hasCatalogue = true;
 };
 tengwarscript = {
   revision = 34594;
@@ -47340,6 +51091,7 @@ tengwarscript = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.3.1";
+  hasCatalogue = true;
 };
 tensind = {
   revision = 51481;
@@ -47350,6 +51102,7 @@ tensind = {
   hasRunfiles = true;
   license = [ "mit" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 tensor = {
   revision = 67667;
@@ -47361,6 +51114,7 @@ tensor = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.2";
+  hasCatalogue = true;
 };
 termcal = {
   revision = 22514;
@@ -47372,6 +51126,7 @@ termcal = {
   hasRunfiles = true;
   license = [ "lppl1" ];
   version = "1.8";
+  hasCatalogue = true;
 };
 termcal-de = {
   revision = 47111;
@@ -47383,6 +51138,7 @@ termcal-de = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.0";
+  hasCatalogue = true;
 };
 termes-otf = {
   revision = 64733;
@@ -47393,6 +51149,7 @@ termes-otf = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.02";
+  hasCatalogue = true;
 };
 termlist = {
   revision = 18923;
@@ -47404,6 +51161,7 @@ termlist = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 termmenu = {
   revision = 37700;
@@ -47414,6 +51172,7 @@ termmenu = {
   sha512.source = "56c1396e90a4c1db5dd28ae96c6f3ebe0310c163d7fdb2cb4e3ade78b522b349fba0bd43556165c282bedcab167241033b065feaac4c4a5e3dc2d8a8a55dca61";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 termsim = {
   revision = 61414;
@@ -47425,6 +51184,7 @@ termsim = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1.1";
+  hasCatalogue = true;
 };
 testhyphens = {
   revision = 38928;
@@ -47436,6 +51196,7 @@ testhyphens = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.7";
+  hasCatalogue = true;
 };
 testidx = {
   revision = 60966;
@@ -47447,6 +51208,7 @@ testidx = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.2";
+  hasCatalogue = true;
 };
 tetragonos = {
   revision = 49732;
@@ -47457,6 +51219,7 @@ tetragonos = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1";
+  hasCatalogue = true;
 };
 teubner = {
   revision = 68074;
@@ -47468,6 +51231,7 @@ teubner = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "5.8.3";
+  hasCatalogue = true;
 };
 tex = {
   revision = 66186;
@@ -47492,6 +51256,7 @@ tex = {
   hasManpages = true;
   license = [ "knuth" ];
   version = "3.141592653";
+  hasCatalogue = true;
 };
 tex-ewd = {
   revision = 15878;
@@ -47501,6 +51266,7 @@ tex-ewd = {
   sha512.doc = "05f6414dd2309401d1800e2b053d7907703e144f829c2e7623a7c98c1313da50c0a659c25fa0d9a0fcb8b50891c575b47d8fb8a90b925e105ed9a6f8c45b8667";
   hasRunfiles = true;
   license = [ "bsd3" ];
+  hasCatalogue = true;
 };
 tex-font-errors-cheatsheet = {
   revision = 18314;
@@ -47510,6 +51276,7 @@ tex-font-errors-cheatsheet = {
   sha512.doc = "adc72626fcb4c5a9285ad4a7cfd1c6b984f1aa26c7732f35cdc241f7b00d623f6b646e878317f30d10b9f47f4eee33e923538be58f3c15bee668f4fe652f0170";
   license = [ "lppl13c" ];
   version = "0.1";
+  hasCatalogue = true;
 };
 tex-gyre = {
   revision = 68624;
@@ -47531,6 +51298,7 @@ tex-gyre = {
   hasRunfiles = true;
   license = [ "gfl" ];
   version = "2.501";
+  hasCatalogue = true;
 };
 tex-gyre-math = {
   revision = 41264;
@@ -47541,6 +51309,7 @@ tex-gyre-math = {
   sha512.source = "3c58821e5307257578ec149317cb621331aafa00bfa465eeb055f1f93691ce57a489a32a7eea068b12b70228433031de33c0ffe36b0e8e10b368e0ef5e33fe24";
   hasRunfiles = true;
   license = [ "gfl" ];
+  hasCatalogue = true;
 };
 tex-ini-files = {
   revision = 68920;
@@ -47550,6 +51319,7 @@ tex-ini-files = {
   sha512.doc = "9caf187a5589e49f946a7fc5ad332073dd2a90d82f71587a57ee9d62e365321fbf14e69e3e3448d85302cf5418a2eb7d94a114f95c575867b52579f6c35d5e48";
   hasRunfiles = true;
   license = [ "publicDomain" ];
+  hasCatalogue = true;
 };
 tex-label = {
   revision = 16372;
@@ -47560,6 +51330,7 @@ tex-label = {
   sha512.source = "07c29de4e85fc21404dad1da3a01a5037b641526110fe5410899c60aeae6a92836de322895afc83824df60f431955a4da959c4d4c21cf17dc32929f445cc1ed8";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 tex-locale = {
   revision = 48500;
@@ -47571,6 +51342,7 @@ tex-locale = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 tex-nutshell = {
   revision = 70378;
@@ -47580,6 +51352,7 @@ tex-nutshell = {
   sha512.doc = "cb3d558047b0737a0dedc904f615c309be9b13ae53f99871d8facc62c3efcd00b933a67f496d24d9d896c1b96b8f21e257487b610633a73b30017b87e98bf70d";
   license = [ "publicDomain" ];
   version = "0.10";
+  hasCatalogue = true;
 };
 tex-overview = {
   revision = 41403;
@@ -47589,6 +51362,7 @@ tex-overview = {
   sha512.doc = "0cd9941afc0e50d3d936f5ba1f9d2c7f16244899982ff7eaa44bb019653b5e4e142edc1ee608ca1664636c77178dd8a02f4625a2216a019e770651a718f0a27b";
   license = [ "lppl13c" ];
   version = "0.2";
+  hasCatalogue = true;
 };
 tex-ps = {
   revision = 15878;
@@ -47598,15 +51372,18 @@ tex-ps = {
   sha512.doc = "2f82f63954c1407c2caa9c39a538ed1cffeabfde8ac0506906f0f28430d12e18d858040ee66f2326cad3fa758c23d1ed490b70c5d18eb68b699b7ddd0afd15d1";
   hasRunfiles = true;
   license = [ "publicDomain" ];
+  hasCatalogue = true;
 };
 tex-refs = {
   revision = 57349;
+  catalogue = "tex-references";
   shortdesc = "References for TeX and Friends";
   stripPrefix = 0;
   sha512.run = "aa03714a0ebb90c7431935608851c504080f8985db3bbba98cbfa9b957e0a3fbb87de8e0119bfdcc996d664aa46bb943c6f90b36c4408a42f14fcc8387508df6";
   sha512.doc = "f033d8d8bfafdece7b79c8417bce19dde484adbaa958497c0b4426448e6ebbfe8dcda07a34c336c3abe038447ea9e5177bce4660c9b8be36b0f94d02fc7a41d5";
   license = [ "free" ];
   version = "0.4.8";
+  hasCatalogue = true;
 };
 tex-virtual-academy-pl = {
   revision = 67718;
@@ -47615,6 +51392,7 @@ tex-virtual-academy-pl = {
   sha512.run = "23005895f708b07162b2b251be125b70dfa8ef6add8ef7c5dbab2c5a2e211f65fce8432cbf3ee324a9b72c2296d5dfffaaf5a52d77425e4d6fc3c042397d6bec";
   sha512.doc = "fd22d5a6c34e5ab7859bbb515d54e822eb5167853abba3e25d5137df1bc34f0bad9892c16f7ed5dfded8b90651551e1ed84a00d561c561ba18f50fa04e7bc7af";
   license = [ "fdl13Only" ];
+  hasCatalogue = true;
 };
 tex-vpat = {
   revision = 66758;
@@ -47624,6 +51402,7 @@ tex-vpat = {
   sha512.doc = "f16ad935930ab663bb2e5b486c4fe53b3bd9e883c660d97893c4aa86bfe22f7ffed77dc66d88060f7eabb1daadd2dc77742c1d9604ea94d26594aba340693f35";
   license = [ "cc-by-30" ];
   version = "2.3";
+  hasCatalogue = true;
 };
 tex.binfiles = [
   "initex"
@@ -47644,6 +51423,7 @@ tex4ebook = {
   ];
   license = [ "lppl13c" ];
   version = "0.4";
+  hasCatalogue = true;
 };
 tex4ebook.binfiles = [
   "tex4ebook"
@@ -47660,6 +51440,7 @@ tex4ht = {
     "lua"
   ];
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 tex4ht.binfiles = [
   "ht"
@@ -47687,6 +51468,7 @@ texaccents = {
   ];
   license = [ "mit" ];
   version = "1.0.1";
+  hasCatalogue = true;
 };
 texaccents.binfiles = [
   "texaccents"
@@ -47700,6 +51482,7 @@ texapi = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.04";
+  hasCatalogue = true;
 };
 texblend = {
   revision = 68961;
@@ -47709,6 +51492,7 @@ texblend = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.1";
+  hasCatalogue = true;
 };
 texblend.binfiles = [
   "texblend"
@@ -47720,6 +51504,7 @@ texbytopic = {
   sha512.run = "d2418ef6b672e82c08b2f7b7f0089a9dea1f514db584662351135b511912faab828956fc252cd854fd2bb1243bc0e1af428e294eb92935cb63b38e73078858d9";
   sha512.doc = "787b12bc92a17a00fd8278138d0e36d94be377fc23401c4bd677c372dc1d19b4b88c12395366b8ba5d766fbd7bc364588986d7528572510a43ba48ee0330b787";
   license = [ "fdl13Only" ];
+  hasCatalogue = true;
 };
 texcount = {
   revision = 49013;
@@ -47729,6 +51514,7 @@ texcount = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "3.1.1";
+  hasCatalogue = true;
 };
 texcount.binfiles = [
   "texcount"
@@ -47743,6 +51529,7 @@ texdate = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.0";
+  hasCatalogue = true;
 };
 texdef = {
   revision = 64967;
@@ -47753,6 +51540,7 @@ texdef = {
   hasRunfiles = true;
   license = [ "gpl3Only" ];
   version = "1.9";
+  hasCatalogue = true;
 };
 texdef.binfiles = [
   "latexdef"
@@ -47767,6 +51555,7 @@ texdiff = {
   hasRunfiles = true;
   license = [ "artistic1-cl8" ];
   version = "0.4";
+  hasCatalogue = true;
 };
 texdiff.binfiles = [
   "texdiff"
@@ -47780,6 +51569,7 @@ texdimens = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 texdirflatten = {
   revision = 55064;
@@ -47790,6 +51580,7 @@ texdirflatten = {
   hasRunfiles = true;
   license = [ "artistic1-cl8" ];
   version = "1.3";
+  hasCatalogue = true;
 };
 texdirflatten.binfiles = [
   "texdirflatten"
@@ -47809,6 +51600,7 @@ texdoc = {
   ];
   license = [ "gpl1Only" ];
   version = "4.1";
+  hasCatalogue = true;
 };
 texdoc.binfiles = [
   "texdoc"
@@ -47825,6 +51617,7 @@ texdoctk = {
   hasRunfiles = true;
   license = [ "gpl1Only" ];
   version = "0.6.0";
+  hasCatalogue = true;
 };
 texdoctk.binfiles = [
   "texdoctk"
@@ -47839,6 +51632,7 @@ texdraw = {
   hasRunfiles = true;
   license = [ "cc-by-40" ];
   version = "v2r3";
+  hasCatalogue = true;
 };
 texfindpkg = {
   revision = 67027;
@@ -47853,6 +51647,7 @@ texfindpkg = {
   ];
   license = [ "gpl3Only" ];
   version = "2023E";
+  hasCatalogue = true;
 };
 texfindpkg.binfiles = [
   "texfindpkg"
@@ -47866,6 +51661,7 @@ texfot = {
   hasRunfiles = true;
   license = [ "publicDomain" ];
   version = "1.50";
+  hasCatalogue = true;
 };
 texfot.binfiles = [
   "texfot"
@@ -47878,6 +51674,7 @@ texilikechaps = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0a";
+  hasCatalogue = true;
 };
 texilikecover = {
   revision = 15878;
@@ -47887,6 +51684,7 @@ texilikecover = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.1";
+  hasCatalogue = true;
 };
 texinfo = {
   revision = 69818;
@@ -47896,6 +51694,7 @@ texinfo = {
   hasRunfiles = true;
   license = [ "gpl1Only" ];
   version = "6.8";
+  hasCatalogue = true;
 };
 texlive-common = {
   revision = 68510;
@@ -48073,6 +51872,7 @@ texliveonfly = {
     "py"
   ];
   license = [ "gpl3Only" ];
+  hasCatalogue = true;
 };
 texliveonfly.binfiles = [
   "texliveonfly"
@@ -48085,6 +51885,7 @@ texloganalyser = {
   hasRunfiles = true;
   license = [ "bsd3" ];
   version = "0.11";
+  hasCatalogue = true;
 };
 texloganalyser.binfiles = [
   "texloganalyser"
@@ -48098,6 +51899,7 @@ texlogfilter = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.3";
+  hasCatalogue = true;
 };
 texlogfilter.binfiles = [
   "texlogfilter"
@@ -48110,6 +51912,7 @@ texlogos = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.3.1";
+  hasCatalogue = true;
 };
 texlogsieve = {
   revision = 69436;
@@ -48120,6 +51923,7 @@ texlogsieve = {
   hasRunfiles = true;
   license = [ "gpl3Plus" ];
   version = "1.4.1";
+  hasCatalogue = true;
 };
 texlogsieve.binfiles = [
   "texlogsieve"
@@ -48134,6 +51938,7 @@ texmate = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2";
+  hasCatalogue = true;
 };
 texments = {
   revision = 15878;
@@ -48145,6 +51950,7 @@ texments = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.2.0";
+  hasCatalogue = true;
 };
 texnegar = {
   revision = 57692;
@@ -48156,6 +51962,7 @@ texnegar = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.1e";
+  hasCatalogue = true;
 };
 texonly = {
   revision = 50985;
@@ -48165,6 +51972,7 @@ texonly = {
   sha512.doc = "5f03987ce079f21801f08a7e325a36c6f1065f5cc32ff2dbec7989bdd3a6b3c54ade8f96a71e19553972d3c36454a08b007adf3287a7be7972a8b3ce6961778a";
   license = [ "lppl13c" ];
   version = "2";
+  hasCatalogue = true;
 };
 texosquery = {
   revision = 53676;
@@ -48178,6 +51986,7 @@ texosquery = {
   ];
   license = [ "lppl13c" ];
   version = "1.7";
+  hasCatalogue = true;
 };
 texosquery.binfiles = [
   "texosquery"
@@ -48196,6 +52005,7 @@ texplate = {
   ];
   license = [ "bsd3" ];
   version = "1.0.4";
+  hasCatalogue = true;
 };
 texplate.binfiles = [
   "texplate"
@@ -48213,6 +52023,7 @@ texpower = {
   hasRunfiles = true;
   license = [ "gpl1Only" ];
   version = "0.2";
+  hasCatalogue = true;
 };
 texproposal = {
   revision = 43151;
@@ -48222,6 +52033,7 @@ texproposal = {
   sha512.doc = "70c04643ced459099ae095c88c0316e96c75e99bba0877198c7800d3b5cc9ac872f74b36adfb03dde968150abb3cb99131fb52ecaff56dfbf1aa85379718a74f";
   license = [ "free" ];
   version = "1.4";
+  hasCatalogue = true;
 };
 texshade = {
   revision = 69371;
@@ -48233,6 +52045,7 @@ texshade = {
   hasRunfiles = true;
   license = [ "gpl2Only" ];
   version = "1.28";
+  hasCatalogue = true;
 };
 texsis = {
   revision = 69742;
@@ -48259,6 +52072,7 @@ texsis = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.18";
+  hasCatalogue = true;
 };
 texsis.binfiles = [
   "texsis"
@@ -48272,6 +52086,7 @@ texsurgery = {
   hasRunfiles = true;
   license = [ "bsd3" ];
   version = "0.6.0";
+  hasCatalogue = true;
 };
 textcase = {
   revision = 67755;
@@ -48283,6 +52098,7 @@ textcase = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.04";
+  hasCatalogue = true;
 };
 textcsc = {
   revision = 67193;
@@ -48293,6 +52109,7 @@ textcsc = {
   hasRunfiles = true;
   license = [ "lppl13c" "cc-by-sa-30" ];
   version = "1.2.0";
+  hasCatalogue = true;
 };
 textfit = {
   revision = 20591;
@@ -48304,6 +52121,7 @@ textfit = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "5";
+  hasCatalogue = true;
 };
 textglos = {
   revision = 30788;
@@ -48315,6 +52133,7 @@ textglos = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 textgreek = {
   revision = 44192;
@@ -48329,6 +52148,7 @@ textgreek = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.7";
+  hasCatalogue = true;
 };
 textmerg = {
   revision = 20677;
@@ -48340,6 +52160,7 @@ textmerg = {
   hasRunfiles = true;
   license = [ "publicDomain" ];
   version = "2.01";
+  hasCatalogue = true;
 };
 textopo = {
   revision = 23796;
@@ -48351,6 +52172,7 @@ textopo = {
   hasRunfiles = true;
   license = [ "gpl1Only" ];
   version = "1.5";
+  hasCatalogue = true;
 };
 textpath = {
   revision = 15878;
@@ -48361,6 +52183,7 @@ textpath = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.6";
+  hasCatalogue = true;
 };
 textpos = {
   revision = 63967;
@@ -48372,6 +52195,7 @@ textpos = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.10.1";
+  hasCatalogue = true;
 };
 textualicomma = {
   revision = 67201;
@@ -48383,6 +52207,7 @@ textualicomma = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 texvc = {
   revision = 46844;
@@ -48394,6 +52219,7 @@ texvc = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 texware = {
   revision = 66186;
@@ -48402,6 +52228,7 @@ texware = {
   sha512.doc = "c4be0bdc3490a0bee08d6a99907f7abe1145ae8f8f89dd8665cf6a8738d07c7a537c0d7e767b56a6eed3a00ea169729b4d78208aab2aa883c9fb422e4dde3383";
   hasManpages = true;
   license = [ "publicDomain" ];
+  hasCatalogue = true;
 };
 texware.binfiles = [
   "dvitype"
@@ -48426,6 +52253,7 @@ tfrupee = {
   hasRunfiles = true;
   license = [ "gpl3Only" ];
   version = "1.02";
+  hasCatalogue = true;
 };
 thaienum = {
   revision = 44140;
@@ -48436,6 +52264,7 @@ thaienum = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.2";
+  hasCatalogue = true;
 };
 thaispec = {
   revision = 58019;
@@ -48447,6 +52276,7 @@ thaispec = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2021.03.01";
+  hasCatalogue = true;
 };
 thalie = {
   revision = 65249;
@@ -48457,6 +52287,7 @@ thalie = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.13a";
+  hasCatalogue = true;
 };
 theanodidot = {
   revision = 64518;
@@ -48469,6 +52300,7 @@ theanodidot = {
   sha512.doc = "0396291a9213e2b80607572a2313801a6a93f4ca2f54889a4c18e8330ffe9f057b856ff957d58d61ddc2828838c6db9e45e26cf611ff88ee80f3b2073668ed64";
   hasRunfiles = true;
   license = [ "lppl13c" "ofl" ];
+  hasCatalogue = true;
 };
 theanomodern = {
   revision = 64520;
@@ -48481,6 +52313,7 @@ theanomodern = {
   sha512.doc = "934ad9a47609277dc1a10bd20f55f0ca01b6f1167a574ee8609352d94f4aff6305db9ca0e3ca5b83cad1f1eac74e5227fa92acd65df9de3f91abcb653f60d21e";
   hasRunfiles = true;
   license = [ "ofl" "lppl13c" ];
+  hasCatalogue = true;
 };
 theanooldstyle = {
   revision = 64519;
@@ -48493,6 +52326,7 @@ theanooldstyle = {
   sha512.doc = "cb896fd78684c8c21ae5579da4b510636336e4959c0943577657aa90d2d843415eaaa2eb42e7d1cc031f6a50044a7702c7d01abb8af7dabd4b6132545c799a07";
   hasRunfiles = true;
   license = [ "ofl" "lppl13c" ];
+  hasCatalogue = true;
 };
 theatre = {
   revision = 45363;
@@ -48502,6 +52336,7 @@ theatre = {
   sha512.doc = "cb4920d5acfe0e1288c7d459d15b06b9ced1130b56ea92c9ed49376743cee7e3fbb694362bac51f2660269992d64717effc5d8e9f52a21337fe7eed51a4622f6";
   license = [ "lppl12" ];
   version = "0.1";
+  hasCatalogue = true;
 };
 thematicpuzzle = {
   revision = 69356;
@@ -48512,6 +52347,7 @@ thematicpuzzle = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.1.1";
+  hasCatalogue = true;
 };
 theoremref = {
   revision = 54512;
@@ -48521,6 +52357,7 @@ theoremref = {
   sha512.doc = "022ef42c6765c661f5828a8adcad7710d74f168b3a2dfad0e73218d1a5295b25ea24d5fa010a01151939e87989cfd6457917167e69cebf5ee5a364347eea5f2f";
   hasRunfiles = true;
   license = [ "lppl13c" "gpl2Only" ];
+  hasCatalogue = true;
 };
 thermodynamics = {
   revision = 69086;
@@ -48532,6 +52369,7 @@ thermodynamics = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.01";
+  hasCatalogue = true;
 };
 thesis-ekf = {
   revision = 60228;
@@ -48543,6 +52381,7 @@ thesis-ekf = {
   hasRunfiles = true;
   license = [ "lppl12" ];
   version = "4.2";
+  hasCatalogue = true;
 };
 thesis-gwu = {
   revision = 54287;
@@ -48553,6 +52392,7 @@ thesis-gwu = {
   hasRunfiles = true;
   license = [ "gpl3Only" ];
   version = "1.7.0";
+  hasCatalogue = true;
 };
 thesis-qom = {
   revision = 63524;
@@ -48563,6 +52403,7 @@ thesis-qom = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.5";
+  hasCatalogue = true;
 };
 thesis-titlepage-fhac = {
   revision = 15878;
@@ -48574,6 +52415,7 @@ thesis-titlepage-fhac = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.1";
+  hasCatalogue = true;
 };
 thinsp = {
   revision = 39669;
@@ -48584,6 +52426,7 @@ thinsp = {
   hasRunfiles = true;
   license = [ "gpl1Only" ];
   version = "0.2";
+  hasCatalogue = true;
 };
 thmbox = {
   revision = 15878;
@@ -48594,6 +52437,7 @@ thmbox = {
   sha512.source = "1b559b9286a97c3157d568982513541028d96cfd5d67ac541909586251ac3729574c23a05ebdfc42ab06a92ab2ea0cef878b1f42983d06fd48f825962de57cb6";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 thmtools = {
   revision = 67018;
@@ -48605,6 +52449,7 @@ thmtools = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "76";
+  hasCatalogue = true;
 };
 threadcol = {
   revision = 28754;
@@ -48616,6 +52461,7 @@ threadcol = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 threeddice = {
   revision = 20675;
@@ -48626,6 +52472,7 @@ threeddice = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 threeparttable = {
   revision = 17383;
@@ -48635,6 +52482,7 @@ threeparttable = {
   sha512.doc = "6b5eb1d6ceea740ec54ba935c45f03c2e6328140e86122a38b90d84e375382adfcfe14e2e9f56384f825c913140f01a1eb6266d2d46f6b813a34b4da652ee31d";
   hasRunfiles = true;
   license = [ "free" ];
+  hasCatalogue = true;
 };
 threeparttablex = {
   revision = 34206;
@@ -48645,6 +52493,7 @@ threeparttablex = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.3";
+  hasCatalogue = true;
 };
 thuaslogos = {
   revision = 51347;
@@ -48655,6 +52504,7 @@ thuaslogos = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.2";
+  hasCatalogue = true;
 };
 thubeamer = {
   revision = 61071;
@@ -48666,6 +52516,7 @@ thubeamer = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1.0";
+  hasCatalogue = true;
 };
 thucoursework = {
   revision = 56435;
@@ -48677,6 +52528,7 @@ thucoursework = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.6";
+  hasCatalogue = true;
 };
 thumb = {
   revision = 16549;
@@ -48688,6 +52540,7 @@ thumb = {
   hasRunfiles = true;
   license = [ "gpl1Only" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 thumbpdf = {
   revision = 62518;
@@ -48698,6 +52551,7 @@ thumbpdf = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "3.17";
+  hasCatalogue = true;
 };
 thumbpdf.binfiles = [
   "thumbpdf"
@@ -48712,6 +52566,7 @@ thumbs = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0q";
+  hasCatalogue = true;
 };
 thumby = {
   revision = 16736;
@@ -48722,6 +52577,7 @@ thumby = {
   hasRunfiles = true;
   license = [ "gpl3Only" ];
   version = "0.1";
+  hasCatalogue = true;
 };
 thuthesis = {
   revision = 67127;
@@ -48733,6 +52589,7 @@ thuthesis = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "7.4.0";
+  hasCatalogue = true;
 };
 ticket = {
   revision = 42280;
@@ -48743,6 +52600,7 @@ ticket = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.4d";
+  hasCatalogue = true;
 };
 ticollege = {
   revision = 36306;
@@ -48753,6 +52611,7 @@ ticollege = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 tidyres = {
   revision = 67738;
@@ -48763,6 +52622,7 @@ tidyres = {
   hasRunfiles = true;
   license = [ "cc-by-40" ];
   version = "2.0.0";
+  hasCatalogue = true;
 };
 tie = {
   revision = 66186;
@@ -48775,6 +52635,7 @@ tie = {
   hasManpages = true;
   license = [ "free" ];
   version = "2.4";
+  hasCatalogue = true;
 };
 tie.binfiles = [
   "tie"
@@ -48787,6 +52648,7 @@ tikz-3dplot = {
   sha512.doc = "0fd9bde0f12ddf5a4bf6e2e1df66a9aafa42e81cd945b41e09e8d289c57b04faddd303a415c36239e6686be90f06e8a7cc794ea50d17ec54f1e25703314257da";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 tikz-among-us = {
   revision = 60880;
@@ -48797,6 +52659,7 @@ tikz-among-us = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.2.0";
+  hasCatalogue = true;
 };
 tikz-bagua = {
   revision = 64103;
@@ -48807,6 +52670,7 @@ tikz-bagua = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.01";
+  hasCatalogue = true;
 };
 tikz-bayesnet = {
   revision = 38295;
@@ -48817,6 +52681,7 @@ tikz-bayesnet = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.1";
+  hasCatalogue = true;
 };
 tikz-bbox = {
   revision = 57444;
@@ -48827,6 +52692,7 @@ tikz-bbox = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.1";
+  hasCatalogue = true;
 };
 tikz-cd = {
   revision = 59133;
@@ -48837,6 +52703,7 @@ tikz-cd = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 tikz-dependency = {
   revision = 54512;
@@ -48847,6 +52714,7 @@ tikz-dependency = {
   hasRunfiles = true;
   license = [ "lppl13c" "gpl2Only" ];
   version = "1.2";
+  hasCatalogue = true;
 };
 tikz-dimline = {
   revision = 35805;
@@ -48857,6 +52725,7 @@ tikz-dimline = {
   hasRunfiles = true;
   license = [ "free" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 tikz-ext = {
   revision = 66737;
@@ -48867,6 +52736,7 @@ tikz-ext = {
   hasRunfiles = true;
   license = [ "fdl13Only" "lppl13c" ];
   version = "0.5.1";
+  hasCatalogue = true;
 };
 tikz-feynhand = {
   revision = 51915;
@@ -48877,6 +52747,7 @@ tikz-feynhand = {
   hasRunfiles = true;
   license = [ "gpl3Plus" ];
   version = "1.1.0";
+  hasCatalogue = true;
 };
 tikz-feynman = {
   revision = 56615;
@@ -48891,6 +52762,7 @@ tikz-feynman = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1.0";
+  hasCatalogue = true;
 };
 tikz-imagelabels = {
   revision = 51490;
@@ -48902,6 +52774,7 @@ tikz-imagelabels = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.2";
+  hasCatalogue = true;
 };
 tikz-inet = {
   revision = 15878;
@@ -48912,6 +52785,7 @@ tikz-inet = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.1";
+  hasCatalogue = true;
 };
 tikz-kalender = {
   revision = 52890;
@@ -48922,6 +52796,7 @@ tikz-kalender = {
   hasRunfiles = true;
   license = [ "cc-by-sa-10" ];
   version = "0.4f";
+  hasCatalogue = true;
 };
 tikz-karnaugh = {
   revision = 62040;
@@ -48932,6 +52807,7 @@ tikz-karnaugh = {
   hasRunfiles = true;
   license = [ "lppl1" ];
   version = "1.5";
+  hasCatalogue = true;
 };
 tikz-ladder = {
   revision = 62992;
@@ -48942,6 +52818,7 @@ tikz-ladder = {
   hasRunfiles = true;
   license = [ "lppl1" ];
   version = "1.3";
+  hasCatalogue = true;
 };
 tikz-lake-fig = {
   revision = 55288;
@@ -48952,6 +52829,7 @@ tikz-lake-fig = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 tikz-layers = {
   revision = 46660;
@@ -48962,6 +52840,7 @@ tikz-layers = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.9";
+  hasCatalogue = true;
 };
 tikz-mirror-lens = {
   revision = 65500;
@@ -48972,6 +52851,7 @@ tikz-mirror-lens = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0.2";
+  hasCatalogue = true;
 };
 tikz-nef = {
   revision = 55920;
@@ -48982,6 +52862,7 @@ tikz-nef = {
   hasRunfiles = true;
   license = [ "mit" ];
   version = "0.1";
+  hasCatalogue = true;
 };
 tikz-network = {
   revision = 51884;
@@ -48992,6 +52873,7 @@ tikz-network = {
   hasRunfiles = true;
   license = [ "gpl3Plus" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 tikz-nfold = {
   revision = 67718;
@@ -49002,6 +52884,7 @@ tikz-nfold = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0.0";
+  hasCatalogue = true;
 };
 tikz-opm = {
   revision = 32769;
@@ -49012,6 +52895,7 @@ tikz-opm = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.1.1";
+  hasCatalogue = true;
 };
 tikz-optics = {
   revision = 62977;
@@ -49022,6 +52906,7 @@ tikz-optics = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.2.3";
+  hasCatalogue = true;
 };
 tikz-osci = {
   revision = 68636;
@@ -49032,6 +52917,7 @@ tikz-osci = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.4.0";
+  hasCatalogue = true;
 };
 tikz-page = {
   revision = 42039;
@@ -49043,6 +52929,7 @@ tikz-page = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 tikz-palattice = {
   revision = 43442;
@@ -49053,6 +52940,7 @@ tikz-palattice = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.3";
+  hasCatalogue = true;
 };
 tikz-planets = {
   revision = 55002;
@@ -49063,6 +52951,7 @@ tikz-planets = {
   hasRunfiles = true;
   license = [ "cc-by-sa-40" ];
   version = "1.0.2";
+  hasCatalogue = true;
 };
 tikz-qtree = {
   revision = 26108;
@@ -49073,6 +52962,7 @@ tikz-qtree = {
   hasRunfiles = true;
   license = [ "gpl1Only" ];
   version = "1.2";
+  hasCatalogue = true;
 };
 tikz-relay = {
   revision = 64072;
@@ -49083,6 +52973,7 @@ tikz-relay = {
   hasRunfiles = true;
   license = [ "lppl1" ];
   version = "1.3";
+  hasCatalogue = true;
 };
 tikz-sfc = {
   revision = 49424;
@@ -49093,6 +52984,7 @@ tikz-sfc = {
   hasRunfiles = true;
   license = [ "lppl1" ];
   version = "1.0.1";
+  hasCatalogue = true;
 };
 tikz-swigs = {
   revision = 59889;
@@ -49102,6 +52994,7 @@ tikz-swigs = {
   sha512.doc = "3ad431f150914461149b85fbc7ce05213c5176e6eaee553ecbf8d150644bc36fdcfa2d836e5201d9a8aecb58751eedd8b98a06ff305c60688766ce8dd00c817e";
   hasRunfiles = true;
   license = [ "lppl13c" "gpl1Only" ];
+  hasCatalogue = true;
 };
 tikz-timing = {
   revision = 64967;
@@ -49116,6 +53009,7 @@ tikz-timing = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.7f";
+  hasCatalogue = true;
 };
 tikz-trackschematic = {
   revision = 63480;
@@ -49126,6 +53020,7 @@ tikz-trackschematic = {
   hasRunfiles = true;
   license = [ "isc" ];
   version = "0.7.1";
+  hasCatalogue = true;
 };
 tikz-truchet = {
   revision = 50020;
@@ -49136,6 +53031,7 @@ tikz-truchet = {
   sha512.source = "88a3d1ca19871e0329e40165b35ec90ce65b1565d42b4a678bfe611311a0cde68a6a8c67ff3ebdf78a1bafed1fec875a4f221efc6934724a265a3402d4970832";
   hasRunfiles = true;
   license = [ "mit" ];
+  hasCatalogue = true;
 };
 tikz2d-fr = {
   revision = 67239;
@@ -49146,6 +53042,7 @@ tikz2d-fr = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.1.1";
+  hasCatalogue = true;
 };
 tikz3d-fr = {
   revision = 67774;
@@ -49156,6 +53053,7 @@ tikz3d-fr = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.1.2";
+  hasCatalogue = true;
 };
 tikzbricks = {
   revision = 63952;
@@ -49166,6 +53064,7 @@ tikzbricks = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.4";
+  hasCatalogue = true;
 };
 tikzcodeblocks = {
   revision = 54758;
@@ -49176,6 +53075,7 @@ tikzcodeblocks = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.13";
+  hasCatalogue = true;
 };
 tikzdotncross = {
   revision = 69382;
@@ -49186,6 +53086,7 @@ tikzdotncross = {
   hasRunfiles = true;
   license = [ "lppl13c" "gpl3Plus" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 tikzducks = {
   revision = 66773;
@@ -49196,6 +53097,7 @@ tikzducks = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.6";
+  hasCatalogue = true;
 };
 tikzfill = {
   revision = 67847;
@@ -49206,6 +53108,7 @@ tikzfill = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0.1";
+  hasCatalogue = true;
 };
 tikzinclude = {
   revision = 28715;
@@ -49217,6 +53120,7 @@ tikzinclude = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 tikzlings = {
   revision = 63628;
@@ -49227,6 +53131,7 @@ tikzlings = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 tikzmark = {
   revision = 64819;
@@ -49238,6 +53143,7 @@ tikzmark = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.15";
+  hasCatalogue = true;
 };
 tikzmarmots = {
   revision = 54080;
@@ -49248,6 +53154,7 @@ tikzmarmots = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 tikzorbital = {
   revision = 36439;
@@ -49257,6 +53164,7 @@ tikzorbital = {
   sha512.doc = "676980e8772650f77ed37d545cbd4ac22af170e1a4541acbd0739f3b5c0aff91f3d48cd3b3fa3c562510c1c624f46de2218fe33a9e53532ca88ccbb929e3495b";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 tikzpackets = {
   revision = 55827;
@@ -49267,6 +53175,7 @@ tikzpackets = {
   hasRunfiles = true;
   license = [ "mit" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 tikzpagenodes = {
   revision = 64967;
@@ -49278,6 +53187,7 @@ tikzpagenodes = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 tikzpeople = {
   revision = 67840;
@@ -49288,6 +53198,7 @@ tikzpeople = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.4";
+  hasCatalogue = true;
 };
 tikzpfeile = {
   revision = 25777;
@@ -49299,6 +53210,7 @@ tikzpfeile = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 tikzpingus = {
   revision = 68310;
@@ -49309,6 +53221,7 @@ tikzpingus = {
   hasRunfiles = true;
   license = [ "gpl3Only" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 tikzposter = {
   revision = 32732;
@@ -49320,6 +53233,7 @@ tikzposter = {
   hasRunfiles = true;
   license = [ "lppl12" ];
   version = "2.0";
+  hasCatalogue = true;
 };
 tikzquads = {
   revision = 69409;
@@ -49330,6 +53244,7 @@ tikzquads = {
   hasRunfiles = true;
   license = [ "lppl13c" "free" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 tikzquests = {
   revision = 69388;
@@ -49340,6 +53255,7 @@ tikzquests = {
   hasRunfiles = true;
   license = [ "lppl13c" "gpl3Plus" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 tikzscale = {
   revision = 30637;
@@ -49351,6 +53267,7 @@ tikzscale = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.2.6";
+  hasCatalogue = true;
 };
 tikzsymbols = {
   revision = 61300;
@@ -49362,6 +53279,7 @@ tikzsymbols = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "4.12a";
+  hasCatalogue = true;
 };
 tikztosvg = {
   revision = 60289;
@@ -49372,6 +53290,7 @@ tikztosvg = {
   hasRunfiles = true;
   license = [ "gpl3Only" ];
   version = "0.3.0";
+  hasCatalogue = true;
 };
 tikztosvg.binfiles = [
   "tikztosvg"
@@ -49385,6 +53304,7 @@ tikzviolinplots = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.7.2";
+  hasCatalogue = true;
 };
 tile-graphic = {
   revision = 55325;
@@ -49395,6 +53315,7 @@ tile-graphic = {
   sha512.source = "8334012b871abc58eb44f3b20f76d1afb2764f07be12b7122c81e5ab627a14fe2221596756868523ab8c6b11e0e7f4aba0b9740efbb221e569ab1889141b250c";
   hasRunfiles = true;
   license = [ "lppl12" ];
+  hasCatalogue = true;
 };
 tilings = {
   revision = 67292;
@@ -49406,6 +53327,7 @@ tilings = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.0";
+  hasCatalogue = true;
 };
 timbreicmc = {
   revision = 49740;
@@ -49417,9 +53339,11 @@ timbreicmc = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.0";
+  hasCatalogue = true;
 };
 times = {
   revision = 61719;
+  catalogue = "urw-base35";
   shortdesc = "URW 'Base 35' font pack for LaTeX";
   stripPrefix = 0;
   fontMaps = [
@@ -49428,6 +53352,7 @@ times = {
   sha512.run = "06f93b823a6141a51554bbd682c128977676775b1c097f7787916c0c14b76d6e9c4041645003111d5a1b905de4faafde5b3efb61d9be9740b9627ab57f3f8eef";
   hasRunfiles = true;
   license = [ "gpl1Only" ];
+  hasCatalogue = true;
 };
 timetable = {
   revision = 15878;
@@ -49436,6 +53361,7 @@ timetable = {
   sha512.run = "caee17cfe1a4bae7bae4479066e2f869e6ccee34d28a8952bed7a1409bd9ecb27adfd005f0e824d8ddacbd0e65762da79f9ea5b04d0332d643749ef36b908946";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 timing-diagrams = {
   revision = 31491;
@@ -49445,6 +53371,7 @@ timing-diagrams = {
   sha512.doc = "1882008e990cd6cfea47b35bd70a50f22972dab0470ada417edf1aa236d2619d57bd3b1d4a149ecc08c1a196c36c9dbf97328f58ea4aa25acb0a6addfcfe8651";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 tinos = {
   revision = 68950;
@@ -49457,6 +53384,7 @@ tinos = {
   sha512.doc = "e7f6fa5253e729b602c1bde603e568d5cdcb953e2a4f1e478c52959d25f58f7678cd107466d7a99b459af70250076c5f16224e4ee549998356c1b1957aaa60cd";
   hasRunfiles = true;
   license = [ "asl20" "lppl13c" ];
+  hasCatalogue = true;
 };
 tipa = {
   revision = 29349;
@@ -49470,6 +53398,7 @@ tipa = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.3";
+  hasCatalogue = true;
 };
 tipa-de = {
   revision = 22005;
@@ -49479,6 +53408,7 @@ tipa-de = {
   sha512.doc = "c69333d9a7d335fb217dacb00610b9f0e5eaaf78e535d69998fc600fe53f0ba61c7e3cc1e82d75f52b435cd6945044560b2d275476e96d84d611ab4978c02e3f";
   license = [ "lppl13c" ];
   version = "1.3";
+  hasCatalogue = true;
 };
 tipauni = {
   revision = 65817;
@@ -49490,6 +53420,7 @@ tipauni = {
   hasRunfiles = true;
   license = [ "gpl3Plus" "fdl13Only" ];
   version = "0.7a";
+  hasCatalogue = true;
 };
 tipfr = {
   revision = 38646;
@@ -49500,6 +53431,7 @@ tipfr = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.5";
+  hasCatalogue = true;
 };
 tiscreen = {
   revision = 62602;
@@ -49509,6 +53441,7 @@ tiscreen = {
   sha512.doc = "58add8332b25188cc4d7199cabc2ca49e3d08598f6ee2511bc525500b1ab0dd7cf8212d5310ee7fc803bf06c09e4c248eae6c52c52e0a3b3a6694ec1d36ec57f";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 titlecaps = {
   revision = 63020;
@@ -49519,6 +53452,7 @@ titlecaps = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.3";
+  hasCatalogue = true;
 };
 titlefoot = {
   revision = 15878;
@@ -49527,6 +53461,7 @@ titlefoot = {
   sha512.run = "aee68d15213c20d9ba0ef6e3a95f111804e4438d2c80a6cd83ae67725c3174db7f38b0d4280b26f7119e9e1c6477a0aa04d3ee5877e15b05ff2742d94a720c5b";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 titlepages = {
   revision = 19457;
@@ -49535,6 +53470,7 @@ titlepages = {
   sha512.run = "affb8e221dd2ba1ad6e18d08dcbf3176bf65ae3006a732a7d2bf954fbfe90215175cd3de0dbb7546906b7d65eecb9aff06fabce86c46e88e5027851e11e52260";
   sha512.doc = "703f376c6bb2480f7a326f31ec277716073ddf67834930401c17627dba41c5321a0115e01ec73160917c68fb7ba4e0042e8ac40d968eef89f52b5dd27c2e0495";
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 titlepic = {
   revision = 43497;
@@ -49545,6 +53481,7 @@ titlepic = {
   hasRunfiles = true;
   license = [ "publicDomain" ];
   version = "1.2";
+  hasCatalogue = true;
 };
 titleref = {
   revision = 18729;
@@ -49555,6 +53492,7 @@ titleref = {
   hasRunfiles = true;
   license = [ "publicDomain" ];
   version = "3.1";
+  hasCatalogue = true;
 };
 titlesec = {
   revision = 68677;
@@ -49565,6 +53503,7 @@ titlesec = {
   hasRunfiles = true;
   license = [ "mit" ];
   version = "2.16";
+  hasCatalogue = true;
 };
 titling = {
   revision = 15878;
@@ -49576,6 +53515,7 @@ titling = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.1d";
+  hasCatalogue = true;
 };
 tkz-base = {
   revision = 69460;
@@ -49586,6 +53526,7 @@ tkz-base = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "4.21c";
+  hasCatalogue = true;
 };
 tkz-berge = {
   revision = 57485;
@@ -49596,6 +53537,7 @@ tkz-berge = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.0";
+  hasCatalogue = true;
 };
 tkz-bernoulli = {
   revision = 68780;
@@ -49606,6 +53548,7 @@ tkz-bernoulli = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.1.3";
+  hasCatalogue = true;
 };
 tkz-doc = {
   revision = 68665;
@@ -49616,6 +53559,7 @@ tkz-doc = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.45c";
+  hasCatalogue = true;
 };
 tkz-elements = {
   revision = 69715;
@@ -49626,6 +53570,7 @@ tkz-elements = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.00c";
+  hasCatalogue = true;
 };
 tkz-euclide = {
   revision = 69702;
@@ -49636,6 +53581,7 @@ tkz-euclide = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "5.06c";
+  hasCatalogue = true;
 };
 tkz-fct = {
   revision = 61949;
@@ -49646,6 +53592,7 @@ tkz-fct = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.7c";
+  hasCatalogue = true;
 };
 tkz-graph = {
   revision = 57484;
@@ -49656,6 +53603,7 @@ tkz-graph = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.0";
+  hasCatalogue = true;
 };
 tkz-orm = {
   revision = 61719;
@@ -49666,6 +53614,7 @@ tkz-orm = {
   hasRunfiles = true;
   license = [ "gpl2Only" "lppl13c" ];
   version = "0.1.4";
+  hasCatalogue = true;
 };
 tkz-tab = {
   revision = 66115;
@@ -49676,6 +53625,7 @@ tkz-tab = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.12c";
+  hasCatalogue = true;
 };
 tkzexample = {
   revision = 63908;
@@ -49686,6 +53636,7 @@ tkzexample = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.45c";
+  hasCatalogue = true;
 };
 tlc-article = {
   revision = 51431;
@@ -49696,14 +53647,17 @@ tlc-article = {
   hasRunfiles = true;
   license = [ "bsd3" ];
   version = "1.0.17";
+  hasCatalogue = true;
 };
 tlc2 = {
   revision = 26096;
+  catalogue = "tlc2-examples";
   shortdesc = "Examples from \"The LaTeX Companion\", second edition";
   stripPrefix = 0;
   sha512.run = "3ac7d28285b15d7e97839619a449c870b3f96e1c557470ba4bf680016c9834af9f09715e09525b00aa2b951bbe20e5d3b1d0a5e5f957de99c13fdb39f4267e3d";
   sha512.doc = "79eead14f268eab643f676c36b20ba89828928fb3b418956277304ac6cf7145d53b4f97c30605690cddce8660361614b58ac65e8454b7740dde17ff82a053818";
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 tlc3-examples = {
   revision = 65496;
@@ -49712,6 +53666,7 @@ tlc3-examples = {
   sha512.run = "2bdb38f294d1737c73068fa9d768d9a8f96ae858d400f1f8b651c4c51427bdb0e4d623fb8b9b0c0ab2adfe8d55fe472ffa4a27e7064b51528f3eb03ace111a06";
   sha512.doc = "b5bbeccc60b9754e888a0ce457cb88f5c86a6b20c3cdc7850d28c85c409057391355551a97e49bc964521c3b4b498927b499e21bfdcaf15b8b8266c7316ebd11";
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 tlcockpit = {
   revision = 54857;
@@ -49726,6 +53681,7 @@ tlcockpit = {
   ];
   license = [ "gpl3Plus" ];
   version = "1.2";
+  hasCatalogue = true;
 };
 tlcockpit.binfiles = [
   "tlcockpit"
@@ -49737,6 +53693,7 @@ tlmgr-intro-zh-cn = {
   sha512.run = "a89c2f99ad63c8352462ef7139b36e8563e1db815dcb06bd2e0f8b96554c380b574f7d856aa6bffb3c972bd68e9505d7864d87cfb7bcfef1bdebacd10f14a96a";
   sha512.doc = "2b5a7672c600eb2f4cbfb2810090e4383a7032d851f35a74e36c75914d9813566603019f232715e2e39ab6d2f8a60273c01e5cbdcb345892b0bf8c99995e3d4d";
   license = [ "gpl3Plus" ];
+  hasCatalogue = true;
 };
 tlmgrbasics = {
   revision = 68999;
@@ -49745,6 +53702,7 @@ tlmgrbasics = {
   sha512.run = "53f7cc8c2a39ea21a8c5eeb57ae7f99759b364ff7f1b41e2f4599d464ce17920746b8a8e182a044faf0621fa3dc842e14cbe93652d351d9fe8e1fde8a7682daa";
   sha512.doc = "ee69a90ccf9b83396b0d9fdd5f030e673d00b2c372334378ad450089b40b93de8b596ed5bc8a459253689316a7219080b88248c1f65a475980ec270a6c84c8ea";
   license = [ "gpl2Plus" ];
+  hasCatalogue = true;
 };
 tlshell = {
   revision = 66771;
@@ -49774,6 +53732,7 @@ to-be-determined = {
   hasRunfiles = true;
   license = [ "mit" ];
   version = "0.3.0";
+  hasCatalogue = true;
 };
 tocbibind = {
   revision = 20085;
@@ -49785,6 +53744,7 @@ tocbibind = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.5k";
+  hasCatalogue = true;
 };
 tocdata = {
   revision = 69512;
@@ -49796,6 +53756,7 @@ tocdata = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.07";
+  hasCatalogue = true;
 };
 tocloft = {
   revision = 53364;
@@ -49807,6 +53768,7 @@ tocloft = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.3j";
+  hasCatalogue = true;
 };
 tocvsec2 = {
   revision = 33146;
@@ -49818,6 +53780,7 @@ tocvsec2 = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.3a";
+  hasCatalogue = true;
 };
 todo = {
   revision = 17746;
@@ -49829,6 +53792,7 @@ todo = {
   hasRunfiles = true;
   license = [ "lppl1" ];
   version = "2.142";
+  hasCatalogue = true;
 };
 todonotes = {
   revision = 69319;
@@ -49846,6 +53810,7 @@ todonotes = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1.7";
+  hasCatalogue = true;
 };
 tokcycle = {
   revision = 60320;
@@ -49856,6 +53821,7 @@ tokcycle = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.42";
+  hasCatalogue = true;
 };
 tokenizer = {
   revision = 15878;
@@ -49866,6 +53832,7 @@ tokenizer = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1.0";
+  hasCatalogue = true;
 };
 tonevalue = {
   revision = 60058;
@@ -49876,6 +53843,7 @@ tonevalue = {
   hasRunfiles = true;
   license = [ "asl20" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 toolbox = {
   revision = 32260;
@@ -49887,9 +53855,11 @@ toolbox = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "5.1";
+  hasCatalogue = true;
 };
 tools = {
   revision = 68941;
+  catalogue = "latex-tools";
   shortdesc = "The LaTeX standard tools bundle";
   stripPrefix = 0;
   sha512.run = "6da3f34edda1c3839737f6ce0db95a899af8c47fe9901a502dbc6a6c95ae9fbe317c7365d6cebe3a20bdce8af0e37b803480f8489de57ccc6daac8a758a5c9d9";
@@ -49898,6 +53868,7 @@ tools = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2023-11-01c";
+  hasCatalogue = true;
 };
 topfloat = {
   revision = 19084;
@@ -49907,6 +53878,7 @@ topfloat = {
   sha512.doc = "6c37c3b9ad32a121eb03f23049e11fe52b7cf6d49353e94a18eb39aaed3c049bee86ef6c6984440c9700546f20023f7a71975591c1f3750d31e176e8ba4f4c47";
   hasRunfiles = true;
   license = [ "gpl1Only" ];
+  hasCatalogue = true;
 };
 topiclongtable = {
   revision = 54758;
@@ -49917,6 +53889,7 @@ topiclongtable = {
   hasRunfiles = true;
   license = [ "mit" ];
   version = "1.3.2";
+  hasCatalogue = true;
 };
 topletter = {
   revision = 48182;
@@ -49928,6 +53901,7 @@ topletter = {
   hasRunfiles = true;
   license = [ "asl20" ];
   version = "0.3.0";
+  hasCatalogue = true;
 };
 toptesi = {
   revision = 56276;
@@ -49939,6 +53913,7 @@ toptesi = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "6.4.06";
+  hasCatalogue = true;
 };
 totalcount = {
   revision = 67201;
@@ -49950,6 +53925,7 @@ totalcount = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0a";
+  hasCatalogue = true;
 };
 totcount = {
   revision = 21178;
@@ -49961,6 +53937,7 @@ totcount = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.2";
+  hasCatalogue = true;
 };
 totpages = {
   revision = 15878;
@@ -49972,6 +53949,7 @@ totpages = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.00";
+  hasCatalogue = true;
 };
 tpic2pdftex = {
   revision = 52851;
@@ -49980,6 +53958,7 @@ tpic2pdftex = {
   sha512.doc = "f24f8508279ded0689bb9dda8c653cfbd903c46782744fcb8d004f50a771ca74b86549c86abc765a408f2be67334048390e407be9446faa476a02ce9c27d5547";
   hasManpages = true;
   license = [ "gpl1Only" ];
+  hasCatalogue = true;
 };
 tpic2pdftex.binfiles = [
   "tpic2pdftex"
@@ -49994,6 +53973,7 @@ tpslifonts = {
   hasRunfiles = true;
   license = [ "gpl1Only" ];
   version = "0.6";
+  hasCatalogue = true;
 };
 tqft = {
   revision = 44455;
@@ -50005,6 +53985,7 @@ tqft = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.1";
+  hasCatalogue = true;
 };
 tracklang = {
   revision = 65263;
@@ -50016,6 +53997,7 @@ tracklang = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.6.1";
+  hasCatalogue = true;
 };
 trajan = {
   revision = 15878;
@@ -50030,6 +54012,7 @@ trajan = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 tram = {
   revision = 29803;
@@ -50040,6 +54023,7 @@ tram = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.2";
+  hasCatalogue = true;
 };
 tramlines = {
   revision = 65692;
@@ -50050,6 +54034,7 @@ tramlines = {
   hasRunfiles = true;
   license = [ "lppl13c" "cc-by-sa-30" ];
   version = "1.1.0";
+  hasCatalogue = true;
 };
 translation-array-fr = {
   revision = 24344;
@@ -50058,6 +54043,7 @@ translation-array-fr = {
   sha512.run = "d32d6b397916bf631d65171f4f7de4bdb6049eec5414d1a9adbbe88d147ce2e4930a4f17b70c5c12b7ef9c3300d9eb099d63fb14ccd5478c6bfcd0557074b343";
   sha512.doc = "7d9b2e43f4fde3e6a3b7436a55b2095fbc4ffa31223019c1cbfdf3d623c48be406858cdb96c8693e10fd0023050ddfbb09b463a9a3804879945ac0d6aa616be4";
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 translation-arsclassica-de = {
   revision = 23803;
@@ -50066,6 +54052,7 @@ translation-arsclassica-de = {
   sha512.run = "76ced8c2c93e35d6bee10f34a7de5709b8027f9d498f8fcd21ba776850c65e1e20eaf20528414b7d9da1891a2db7132b6e3b703c4f8d91f4ff0c69eb9159c996";
   sha512.doc = "58773adb7493e6ef31d8fd3854a51cd37921dd331f56f1d9eab5283c121fa8c3316ffc41242356a87af04bb6da68761ea15829e5e8555d2e6cdbb68833c8d313";
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 translation-biblatex-de = {
   revision = 59382;
@@ -50075,6 +54062,7 @@ translation-biblatex-de = {
   sha512.doc = "e7e634d9d581f781f33ebcad17f4f496738d6364725dae75d7dae6d357bb7deb08a5e01de0e1ac6aa32cdc09ebefbf0190d9f6f11b286a20ce0fce23c0516fef";
   license = [ "lppl13c" ];
   version = "3.15b";
+  hasCatalogue = true;
 };
 translation-chemsym-de = {
   revision = 23804;
@@ -50083,6 +54071,7 @@ translation-chemsym-de = {
   sha512.run = "e23821fc1bbdee758e534bb52c4e0f348d6be3396ca2d8e3c11c9425132fc9c28f2bf6c98cb1beee9b23716cc1a75704561d9d8f16d2f4e94851fc2f88e0895a";
   sha512.doc = "efe9f711c42925fd035339c25284e09ca7a99c246bf70ef2c15c4f1149accf5bab09e396b94d6d59d4e8c303bfdb3f40570912713dcbd33e7ae360a6b21c36de";
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 translation-dcolumn-fr = {
   revision = 24345;
@@ -50091,6 +54080,7 @@ translation-dcolumn-fr = {
   sha512.run = "8d2288707f13896dbb578b538b535efffc89991d56586f27a35b284b5be7c553df97a72ac163a625238e281bfe97bb79fa716855dc8e93f25f0a8af69674eb45";
   sha512.doc = "95d1633884f7237bf2a7abf8a43127ac1954fb5d0e308d676a7f4c3255d709496a382f01a8af6c28f793bcd1863e98f8ed1441e7cc288d3b8de3176631cdca1d";
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 translation-ecv-de = {
   revision = 24754;
@@ -50099,6 +54089,7 @@ translation-ecv-de = {
   sha512.run = "33998fcadaf7b42874968348ef4e3232652ea401410eea6a8011db146a4989afb102a2bba247df53b875bc02b1ea8f21ec5c68783ae43f36a3f175e77dde6453";
   sha512.doc = "a86784aaeaa786251f35ddf273050e9c981a68d060ba1a2f186379e04f89edc696090b44b402996c4f2422d1cbfd7fd68136c29fc7c74a2fd32d6d230eb2e489";
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 translation-enumitem-de = {
   revision = 24196;
@@ -50107,6 +54098,7 @@ translation-enumitem-de = {
   sha512.run = "7018a95d7b68b6b736472d6f43d356d25d2a73df4a5dbc080485f3b4e747d122889788b3d1a75ec4c479a84a4453128104f01b2e1788e9dc50d09bda0eb53cfe";
   sha512.doc = "bee33ecf7a3045c382242f4b6ec9599f32fb254053a6417ceb514f3aad64b2bf51c50f660b562a2a3f0207f7bdc4676527627f432b1556362e3a9f5e9eda8694";
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 translation-europecv-de = {
   revision = 23840;
@@ -50115,6 +54107,7 @@ translation-europecv-de = {
   sha512.run = "6102a92b45fb7c19d2190bf4289e8b6b24ded67d0255ce2f483627bbdbee00c42c044be03bc10c9d0e23c2b911e781d21a7e6562e80988620a6da60562d98bf4";
   sha512.doc = "f50e761fc7925f0cf404788ad2ad70586536e1676bc7a026be5a81136a1323f011a281160a344c455346553e90cb632133668c2483200a05ecf961e46e50bfb3";
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 translation-filecontents-de = {
   revision = 24010;
@@ -50123,6 +54116,7 @@ translation-filecontents-de = {
   sha512.run = "78dd9ee41d9b06438e01ec12f716929c4cf0fbf6ff209f45fadce9fad4bac0d1b31732b3f66896bf7526dac7532504e0913dbb69c3c7e13830e81297b2761935";
   sha512.doc = "17ed1c39c549b43c31c13dfd6ffbd968ecbdd3e64b00cbc66b0a8914726f4baa7faf98edf30c23ed81850cee98a732bbdd70ef667973163ccee0b35c160fdc64";
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 translation-moreverb-de = {
   revision = 23957;
@@ -50131,6 +54125,7 @@ translation-moreverb-de = {
   sha512.run = "6b11a1b522c728722d4d5d5b38dd453ec017dc053d360180b943778923ca9a23b3ebb92516c1a6880e507f5e8b6d8d87878c92762637acc5ac93f42ad790446e";
   sha512.doc = "955070d4e92e38712a5df837fd0df716d1a597780a4b06046d5aac5164efc0fec1121c51ea09c3ef1a090d51732f57308f4db386440118548e2167f3cafe16ce";
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 translation-natbib-fr = {
   revision = 25105;
@@ -50139,6 +54134,7 @@ translation-natbib-fr = {
   sha512.run = "ff34cb7cece157b933117ba0e9aadb0e9caa759a406fabf7b0ebb89e5b03ee6db7aa493551816e9061ff91a460e46a58f1402b086d37c48863b4e093d19326a8";
   sha512.doc = "971570414f9705cc4026a21a557b2f1dfe8fc010feca4f1ada946d11aa30169746c2017fb3882e65e68520539974eaf2361ebab7bcd292eed177fa7f6eb7337c";
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 translation-tabbing-fr = {
   revision = 24228;
@@ -50147,6 +54143,7 @@ translation-tabbing-fr = {
   sha512.run = "76f1c6318cd964b94d5a1d836b1a40fc58de49566cdc30b1ea60fc29fbcc8c6b01a477f4739a5fd9bb24998325dbf42817ad016fff27207e710bfc4b51b29985";
   sha512.doc = "ae2f1aa60162512287f15c770a465c2e39abe1fa5d1223d96c524dc81bf065d62f307893d22dfc06fc50da8d63d817ed60c8f07fd4fede984b6febe9c8b7b710";
   license = [ "lppl1" ];
+  hasCatalogue = true;
 };
 translations = {
   revision = 61896;
@@ -50157,6 +54154,7 @@ translations = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.12";
+  hasCatalogue = true;
 };
 translator = {
   revision = 59412;
@@ -50167,6 +54165,7 @@ translator = {
   hasRunfiles = true;
   license = [ "lppl13c" "gpl1Only" ];
   version = "1.12d";
+  hasCatalogue = true;
 };
 transparent = {
   revision = 64852;
@@ -50178,6 +54177,7 @@ transparent = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.5";
+  hasCatalogue = true;
 };
 transparent-io = {
   revision = 64113;
@@ -50186,6 +54186,7 @@ transparent-io = {
   sha512.run = "69d27356f57d5b610fc9e6e839f6df111f6b98b8bf446327ecfba473dea6bc997cb6802ca382b3438d44de85fd5f50f82bd4e5508bfa43d08223463b5436950c";
   sha512.doc = "2e54e51744c482f98c1b35588cc934ba18e3358fc2be043459d7e16f8c85ee6aae7acf4b6c3b329cdfddcf1b3126000c6559d41d5b2c4e88d5018844717cb8eb";
   license = [ "gpl3Only" ];
+  hasCatalogue = true;
 };
 tree-dvips = {
   revision = 21751;
@@ -50196,15 +54197,18 @@ tree-dvips = {
   hasRunfiles = true;
   license = [ "lppl1" ];
   version = ".91";
+  hasCatalogue = true;
 };
 treetex = {
   revision = 28176;
+  catalogue = "treetex-plain";
   shortdesc = "Draw trees";
   stripPrefix = 0;
   sha512.run = "49202a38697bd9bd3bc6fcbf30d28047b8ddc4d737bfa68cfdb83197b484352997a33f55e195211eff1d548f95e2072f07ed18f1d7c6772a03c66a13051d1709";
   sha512.doc = "fb9e09bc2f6e45b854824c9c757733c2c17b4d48edc955ea48bea3ab3fb5dd914eb6427c8ae4f74ebc62b4715bada84c8f3fca0ee7d01f8d3c2526339a844681";
   hasRunfiles = true;
   license = [ "publicDomain" ];
+  hasCatalogue = true;
 };
 trfsigns = {
   revision = 15878;
@@ -50216,6 +54220,7 @@ trfsigns = {
   hasRunfiles = true;
   license = [ "gpl1Only" ];
   version = "1.01";
+  hasCatalogue = true;
 };
 trigonometry = {
   revision = 43006;
@@ -50225,6 +54230,7 @@ trigonometry = {
   sha512.doc = "a9bd77bda2cca604a69ca1b60deeb8da3128c625b87d64ccf39aaae853a645e736b5350d3d575302ec2a35e9736e4133cd4ffd223b9bff6191b6fed9549a8092";
   hasRunfiles = true;
   license = [ "knuth" ];
+  hasCatalogue = true;
 };
 trimspaces = {
   revision = 15878;
@@ -50236,6 +54242,7 @@ trimspaces = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 trivfloat = {
   revision = 15878;
@@ -50247,6 +54254,7 @@ trivfloat = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.3b";
+  hasCatalogue = true;
 };
 trivialpursuit = {
   revision = 68971;
@@ -50257,6 +54265,7 @@ trivialpursuit = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.1.1";
+  hasCatalogue = true;
 };
 trsym = {
   revision = 18732;
@@ -50268,6 +54277,7 @@ trsym = {
   hasRunfiles = true;
   license = [ "lppl12" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 truncate = {
   revision = 18921;
@@ -50278,6 +54288,7 @@ truncate = {
   hasRunfiles = true;
   license = [ "publicDomain" ];
   version = "3.6";
+  hasCatalogue = true;
 };
 truthtable = {
   revision = 68300;
@@ -50288,6 +54299,7 @@ truthtable = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.1.0";
+  hasCatalogue = true;
 };
 tsemlines = {
   revision = 23440;
@@ -50297,6 +54309,7 @@ tsemlines = {
   hasRunfiles = true;
   license = [ "publicDomain" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 tsvtemplate = {
   revision = 65333;
@@ -50307,6 +54320,7 @@ tsvtemplate = {
   hasRunfiles = true;
   license = [ "free" ];
   version = "2022-1.0";
+  hasCatalogue = true;
 };
 ttfutils = {
   revision = 66186;
@@ -50332,6 +54346,7 @@ tucv = {
   hasRunfiles = true;
   license = [ "free" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 tuda-ci = {
   revision = 69351;
@@ -50342,6 +54357,7 @@ tuda-ci = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "3.36";
+  hasCatalogue = true;
 };
 tudscr = {
   revision = 64085;
@@ -50370,6 +54386,7 @@ tudscr = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.06o";
+  hasCatalogue = true;
 };
 tufte-latex = {
   revision = 37649;
@@ -50388,6 +54405,7 @@ tufte-latex = {
   hasRunfiles = true;
   license = [ "asl20" ];
   version = "3.5.2";
+  hasCatalogue = true;
 };
 tugboat = {
   revision = 68694;
@@ -50399,6 +54417,7 @@ tugboat = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.31";
+  hasCatalogue = true;
 };
 tugboat-plain = {
   revision = 68695;
@@ -50409,6 +54428,7 @@ tugboat-plain = {
   hasRunfiles = true;
   license = [ "free" ];
   version = "1.29";
+  hasCatalogue = true;
 };
 tui = {
   revision = 27253;
@@ -50419,6 +54439,7 @@ tui = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.9";
+  hasCatalogue = true;
 };
 turabian = {
   revision = 36298;
@@ -50429,6 +54450,7 @@ turabian = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.1.0";
+  hasCatalogue = true;
 };
 turabian-formatting = {
   revision = 58561;
@@ -50438,6 +54460,7 @@ turabian-formatting = {
   sha512.doc = "6cac53c6fe5dd36702ec07e22a00871932dd4b2e421649d33e33f50e8b8b8cc57e42c752ff6e4e2a53610d28f42ddc68b0b6c1cddb0a7a045f3a547c04e77735";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 turkmen = {
   revision = 17748;
@@ -50449,6 +54472,7 @@ turkmen = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.2";
+  hasCatalogue = true;
 };
 turnstile = {
   revision = 64967;
@@ -50460,6 +54484,7 @@ turnstile = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 turnthepage = {
   revision = 29803;
@@ -50470,6 +54495,7 @@ turnthepage = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.3a";
+  hasCatalogue = true;
 };
 tutodoc = {
   revision = 69343;
@@ -50480,6 +54506,7 @@ tutodoc = {
   hasRunfiles = true;
   license = [ "gpl3Only" ];
   version = "1.1.0";
+  hasCatalogue = true;
 };
 twemoji-colr = {
   revision = 64854;
@@ -50490,6 +54517,7 @@ twemoji-colr = {
   hasRunfiles = true;
   license = [ "cc-by-sa-40" "asl20" ];
   version = "0.7.0";
+  hasCatalogue = true;
 };
 twemojis = {
   revision = 62930;
@@ -50501,6 +54529,7 @@ twemojis = {
   hasRunfiles = true;
   license = [ "lppl13c" "cc-by-40" ];
   version = "1.3.1_twemoji_v14.0.1";
+  hasCatalogue = true;
 };
 twoinone = {
   revision = 17024;
@@ -50510,9 +54539,11 @@ twoinone = {
   sha512.doc = "5b79b0b235fda5e32680884702a16fe033f3a617daa765a72233d22df5e217f6d2a617a2d067f6a230985e5144e6e6d733ef6e7060f267c6d22bf5de39361d41";
   hasRunfiles = true;
   license = [ "publicDomain" ];
+  hasCatalogue = true;
 };
 twoup = {
   revision = 15878;
+  catalogue = "twoupltx";
   shortdesc = "Print two virtual pages on each physical page";
   stripPrefix = 0;
   sha512.run = "b3734b3818498a7038d544304d27376ff481b81fbd776cc44b9d246c3e69560364a784d897755cb69f9608c51135a1fdbb8ed370d624db64dd7b5f18a48bf754";
@@ -50521,6 +54552,7 @@ twoup = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.3";
+  hasCatalogue = true;
 };
 twoxtwogame = {
   revision = 70426;
@@ -50531,6 +54563,7 @@ twoxtwogame = {
   hasRunfiles = true;
   license = [ "asl20" "cc-by-40" ];
   version = "0.2";
+  hasCatalogue = true;
 };
 txfonts = {
   revision = 15878;
@@ -50543,6 +54576,7 @@ txfonts = {
   sha512.doc = "f19a988305799931023026f714b63ee539ebaddcd39e9be1f1bf765cc4cc89428b626ff4d6bfc91ea2f324f08cf09b618b6a0f8db6b01dc9d8685618daa1e2d1";
   hasRunfiles = true;
   license = [ "gpl1Only" ];
+  hasCatalogue = true;
 };
 txfontsb = {
   revision = 54512;
@@ -50557,6 +54591,7 @@ txfontsb = {
   hasRunfiles = true;
   license = [ "gpl1Only" "lppl1" ];
   version = "1.1.1";
+  hasCatalogue = true;
 };
 txgreeks = {
   revision = 21839;
@@ -50568,6 +54603,7 @@ txgreeks = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 txuprcal = {
   revision = 43327;
@@ -50581,6 +54617,7 @@ txuprcal = {
   hasRunfiles = true;
   license = [ "gpl3Only" ];
   version = "1.00";
+  hasCatalogue = true;
 };
 type1cm = {
   revision = 21820;
@@ -50591,6 +54628,7 @@ type1cm = {
   sha512.source = "6a66a866c6edbe8c914bd3b0a7568c0e23914253fcb70fd849326e42b2c32860c97756fb94f5879dead5bc3f057cba64f639038b5a125f607c3f21abe4807bf7";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 typed-checklist = {
   revision = 63445;
@@ -50602,6 +54640,7 @@ typed-checklist = {
   hasRunfiles = true;
   license = [ "lppl12" ];
   version = "2.1";
+  hasCatalogue = true;
 };
 typeface = {
   revision = 27046;
@@ -50613,6 +54652,7 @@ typeface = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.1";
+  hasCatalogue = true;
 };
 typehtml = {
   revision = 17134;
@@ -50623,6 +54663,7 @@ typehtml = {
   sha512.source = "729bb6acd2e6ec28bb18972cc58b7ef8efae136bea2d96a38cedb4b0d40b02e00e2b21143706325bcf9add879e8adcc6b0194b6cbef3803c5566e7f6f0e63ca7";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 typeoutfileinfo = {
   revision = 67526;
@@ -50635,6 +54676,7 @@ typeoutfileinfo = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.32";
+  hasCatalogue = true;
 };
 typeoutfileinfo.binfiles = [
   "typeoutfileinfo"
@@ -50648,6 +54690,7 @@ typewriter = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 typicons = {
   revision = 37623;
@@ -50658,6 +54701,7 @@ typicons = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.0.7";
+  hasCatalogue = true;
 };
 typoaid = {
   revision = 44238;
@@ -50668,6 +54712,7 @@ typoaid = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.4.7";
+  hasCatalogue = true;
 };
 typogrid = {
   revision = 24994;
@@ -50679,6 +54724,7 @@ typogrid = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.21";
+  hasCatalogue = true;
 };
 tzplot = {
   revision = 64537;
@@ -50689,6 +54735,7 @@ tzplot = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.1";
+  hasCatalogue = true;
 };
 uaclasses = {
   revision = 15878;
@@ -50699,6 +54746,7 @@ uaclasses = {
   sha512.source = "ffc4902edf6b4007c3685a58d3e5a20a02a6ca3072466b7415cb4fa98de236e52c6a391c5e5cf30aabf37c7374cf00aaf2c7d6c845a3a61e2f9c0b0505e215bd";
   hasRunfiles = true;
   license = [ "publicDomain" ];
+  hasCatalogue = true;
 };
 uafthesis = {
   revision = 57349;
@@ -50709,6 +54757,7 @@ uafthesis = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "12.12";
+  hasCatalogue = true;
 };
 uantwerpendocs = {
   revision = 66819;
@@ -50720,6 +54769,7 @@ uantwerpendocs = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "4.5";
+  hasCatalogue = true;
 };
 uassign = {
   revision = 38459;
@@ -50730,6 +54780,7 @@ uassign = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.01";
+  hasCatalogue = true;
 };
 ucalgmthesis = {
   revision = 66602;
@@ -50739,6 +54790,7 @@ ucalgmthesis = {
   sha512.doc = "acd371ab0e495a664d37f5da31cfaa9d31edda71b2542afe9b4ece6e4845da19e16d4b84d64b0418b49696d080fc019e521874527ecc0aa8559f2c2341c80cec";
   hasRunfiles = true;
   license = [ "mit" ];
+  hasCatalogue = true;
 };
 ucbthesis = {
   revision = 51690;
@@ -50749,6 +54801,7 @@ ucbthesis = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "3.6";
+  hasCatalogue = true;
 };
 ucdavisthesis = {
   revision = 40772;
@@ -50760,6 +54813,7 @@ ucdavisthesis = {
   hasRunfiles = true;
   license = [ "lppl12" ];
   version = "1.3";
+  hasCatalogue = true;
 };
 ucharcat = {
   revision = 38907;
@@ -50771,6 +54825,7 @@ ucharcat = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.03";
+  hasCatalogue = true;
 };
 ucharclasses = {
   revision = 64782;
@@ -50781,6 +54836,7 @@ ucharclasses = {
   hasRunfiles = true;
   license = [ "publicDomain" ];
   version = "2.6";
+  hasCatalogue = true;
 };
 ucph-revy = {
   revision = 69750;
@@ -50792,6 +54848,7 @@ ucph-revy = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0.1";
+  hasCatalogue = true;
 };
 ucs = {
   revision = 68759;
@@ -50803,6 +54860,7 @@ ucs = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.4";
+  hasCatalogue = true;
 };
 ucsmonograph = {
   revision = 52698;
@@ -50814,6 +54872,7 @@ ucsmonograph = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.3.0";
+  hasCatalogue = true;
 };
 ucthesis = {
   revision = 15878;
@@ -50824,6 +54883,7 @@ ucthesis = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "3.2";
+  hasCatalogue = true;
 };
 udepcolor = {
   revision = 69701;
@@ -50834,6 +54894,7 @@ udepcolor = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 udes-genie-these = {
   revision = 68141;
@@ -50845,6 +54906,7 @@ udes-genie-these = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "3.1.0";
+  hasCatalogue = true;
 };
 udesoftec = {
   revision = 57866;
@@ -50856,6 +54918,7 @@ udesoftec = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.7.1";
+  hasCatalogue = true;
 };
 uebungsblatt = {
   revision = 15878;
@@ -50866,6 +54929,7 @@ uebungsblatt = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.5.0";
+  hasCatalogue = true;
 };
 uestcthesis = {
   revision = 36371;
@@ -50876,6 +54940,7 @@ uestcthesis = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1.0";
+  hasCatalogue = true;
 };
 ufrgscca = {
   revision = 70603;
@@ -50886,6 +54951,7 @@ ufrgscca = {
   hasRunfiles = true;
   license = [ "lppl13c" "gpl1Only" ];
   version = "2.7";
+  hasCatalogue = true;
 };
 uhc = {
   revision = 16791;
@@ -50898,6 +54964,7 @@ uhc = {
   sha512.doc = "c37c5041d155f9a175a6761154211a683405d094850cc829a6b942afcb93af987b4049e663d260ae2b066827007d8c6576fdcd5d14d3ff599f031b13c00e162f";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 uhhassignment = {
   revision = 44026;
@@ -50909,6 +54976,7 @@ uhhassignment = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 uhrzeit = {
   revision = 39570;
@@ -50919,6 +54987,7 @@ uhrzeit = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.2c";
+  hasCatalogue = true;
 };
 uiucredborder = {
   revision = 29974;
@@ -50930,6 +54999,7 @@ uiucredborder = {
   hasRunfiles = true;
   license = [ "lppl12" ];
   version = "1.00";
+  hasCatalogue = true;
 };
 uiucthesis = {
   revision = 15878;
@@ -50941,6 +55011,7 @@ uiucthesis = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.25";
+  hasCatalogue = true;
 };
 ukbill = {
   revision = 69362;
@@ -50951,6 +55022,7 @@ ukbill = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.2.1";
+  hasCatalogue = true;
 };
 ukrhyph = {
   revision = 21081;
@@ -50960,6 +55032,7 @@ ukrhyph = {
   sha512.doc = "a283d11ed922181d4f29f521e3019fbca2b1bba1aacb312e22dd8e69d05d7dafbabc5c23b63707f265bcd215d8f517f58ab2ffee2b87d9bc1a968d00e9542840";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 ulem = {
   revision = 53365;
@@ -50969,6 +55042,7 @@ ulem = {
   sha512.doc = "153dcf2057d267c2f59c7705c4997752e902aa004201f97d52a180419d7c0fea4173c0b5b1a1c8a11bc1703226e55ea55721a4d18c265b30343a5812d1f4e0e7";
   hasRunfiles = true;
   license = [ "free" ];
+  hasCatalogue = true;
 };
 ulqda = {
   revision = 26313;
@@ -50979,6 +55053,7 @@ ulqda = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 ulqda.binfiles = [
   "ulqda"
@@ -50993,6 +55068,7 @@ ulthese = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "5.3a";
+  hasCatalogue = true;
 };
 umbclegislation = {
   revision = 41348;
@@ -51003,6 +55079,7 @@ umbclegislation = {
   hasRunfiles = true;
   license = [ "gpl3Only" ];
   version = "2016-6-8";
+  hasCatalogue = true;
 };
 umich-thesis = {
   revision = 15878;
@@ -51013,6 +55090,7 @@ umich-thesis = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.20";
+  hasCatalogue = true;
 };
 uml = {
   revision = 17476;
@@ -51024,6 +55102,7 @@ uml = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.11";
+  hasCatalogue = true;
 };
 umlaute = {
   revision = 15878;
@@ -51035,6 +55114,7 @@ umlaute = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.1";
+  hasCatalogue = true;
 };
 umoline = {
   revision = 19085;
@@ -51045,6 +55125,7 @@ umoline = {
   sha512.source = "13f53876f0b1c5921b480ad9d2c63ef3abf1e175006145f200f61f515e778161ba631c6da9ca4c4d928f94220e0964b64130638d7dd7195160b54f39e4bf868d";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 umthesis = {
   revision = 15878;
@@ -51055,6 +55136,7 @@ umthesis = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.2";
+  hasCatalogue = true;
 };
 umtypewriter = {
   revision = 64443;
@@ -51065,6 +55147,7 @@ umtypewriter = {
   hasRunfiles = true;
   license = [ "ofl" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 unam-thesis = {
   revision = 51207;
@@ -51075,6 +55158,7 @@ unam-thesis = {
   hasRunfiles = true;
   license = [ "gpl3Plus" ];
   version = "0.5";
+  hasCatalogue = true;
 };
 unamth-template = {
   revision = 68681;
@@ -51084,6 +55168,7 @@ unamth-template = {
   sha512.doc = "e7e17ba71d47769db4766628d334ed66980d7f133ec0bf2bf21d7a00e92d661dfa624def736891c5d70f11755215bff47b8cc9ffaded3baebbaf52e0365227e4";
   license = [ "gpl3Only" ];
   version = "2.0";
+  hasCatalogue = true;
 };
 unamthesis = {
   revision = 43639;
@@ -51094,6 +55179,7 @@ unamthesis = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.1";
+  hasCatalogue = true;
 };
 unbtex = {
   revision = 70325;
@@ -51104,6 +55190,7 @@ unbtex = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.5.1";
+  hasCatalogue = true;
 };
 undar-digitacion = {
   revision = 69742;
@@ -51115,6 +55202,7 @@ undar-digitacion = {
   hasRunfiles = true;
   license = [ "cc-by-sa-40" ];
   version = "0.0";
+  hasCatalogue = true;
 };
 undergradmath = {
   revision = 57286;
@@ -51123,6 +55211,7 @@ undergradmath = {
   sha512.run = "948d0f0ac20a63fb0c6de8003c572c11704d2016d2ddea6674f58742e997021d709d51806b5acb4716c79539b96086758814f4f5d303a257768c8716821e8451";
   sha512.doc = "6300a5d0781bae331091cfc8007e974ed3534ec3672dedc080c8e118e8526c98206438a6841d50d2e642e8d6c7859cabae14e140c211bc8175e7f9d1cba0ddfe";
   license = [ "cc-by-sa-40" ];
+  hasCatalogue = true;
 };
 underlin = {
   revision = 15878;
@@ -51134,6 +55223,7 @@ underlin = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.01";
+  hasCatalogue = true;
 };
 underoverlap = {
   revision = 29019;
@@ -51144,6 +55234,7 @@ underoverlap = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.0.1-r1";
+  hasCatalogue = true;
 };
 underscore = {
   revision = 18261;
@@ -51153,6 +55244,7 @@ underscore = {
   sha512.doc = "e1f0730b39a5d25cc52160e090b797ed73a5becc16b6813cd0c2f4bf78696b23aec5c82367c347d0e734f3b92761ad2090e517bb6dd2a40879639f62149fdba6";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 undolabl = {
   revision = 65846;
@@ -51164,6 +55256,7 @@ undolabl = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0m";
+  hasCatalogue = true;
 };
 unfonts-core = {
   revision = 56291;
@@ -51173,6 +55266,7 @@ unfonts-core = {
   sha512.doc = "8f51172be1093ff9da6ebb7071f5fea435e2bdace5619faa24ebdef52b3e34197d91b8f9d302844d4e1377a2a4712247743172afcd4b01367e9f166bd76112fd";
   hasRunfiles = true;
   license = [ "gpl2Only" ];
+  hasCatalogue = true;
 };
 unfonts-extra = {
   revision = 56291;
@@ -51182,6 +55276,7 @@ unfonts-extra = {
   sha512.doc = "6173d49bb64c9b162763ff08af445e518fa650fcc13e02f5c72454d335285d9c82347cf79f945fae94429f3a9d15f9c9b58ff1d175c8f59ea7b75766cd279303";
   hasRunfiles = true;
   license = [ "gpl2Only" ];
+  hasCatalogue = true;
 };
 uni-titlepage = {
   revision = 68917;
@@ -51193,6 +55288,7 @@ uni-titlepage = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.2";
+  hasCatalogue = true;
 };
 uni-wtal-ger = {
   revision = 31541;
@@ -51203,6 +55299,7 @@ uni-wtal-ger = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.2";
+  hasCatalogue = true;
 };
 uni-wtal-lin = {
   revision = 31409;
@@ -51213,6 +55310,7 @@ uni-wtal-lin = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.2";
+  hasCatalogue = true;
 };
 unicode-alphabets = {
   revision = 66225;
@@ -51222,6 +55320,7 @@ unicode-alphabets = {
   sha512.doc = "ded2197bb621622c7f9947ce736814a6acb63ce86bd866792a8fe8e1f22a8131ee12c785a81c764ab707e5bf1b2c99df73c1214ff71159e3c9fdd34ee7aef7cb";
   hasRunfiles = true;
   license = [ "cc-by-sa-40" ];
+  hasCatalogue = true;
 };
 unicode-bidi = {
   revision = 42482;
@@ -51232,6 +55331,7 @@ unicode-bidi = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.01";
+  hasCatalogue = true;
 };
 unicode-data = {
   revision = 68311;
@@ -51242,6 +55342,7 @@ unicode-data = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.17";
+  hasCatalogue = true;
 };
 unicode-math = {
   revision = 67919;
@@ -51257,6 +55358,7 @@ unicode-math = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.8r";
+  hasCatalogue = true;
 };
 unicode-math-input = {
   revision = 69591;
@@ -51271,6 +55373,7 @@ unicode-math-input = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.1.1";
+  hasCatalogue = true;
 };
 unicodefonttable = {
   revision = 70354;
@@ -51282,6 +55385,7 @@ unicodefonttable = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0h";
+  hasCatalogue = true;
 };
 unifith = {
   revision = 60698;
@@ -51292,6 +55396,7 @@ unifith = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.6";
+  hasCatalogue = true;
 };
 unifront = {
   revision = 67054;
@@ -51302,6 +55407,7 @@ unifront = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 unigrazpub = {
   revision = 64797;
@@ -51313,6 +55419,7 @@ unigrazpub = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.00";
+  hasCatalogue = true;
 };
 unimath-plain-xetex = {
   revision = 66394;
@@ -51323,6 +55430,7 @@ unimath-plain-xetex = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.2b";
+  hasCatalogue = true;
 };
 uninormalize = {
   revision = 57257;
@@ -51333,6 +55441,7 @@ uninormalize = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.1";
+  hasCatalogue = true;
 };
 uniquecounter = {
   revision = 53162;
@@ -51344,6 +55453,7 @@ uniquecounter = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.4";
+  hasCatalogue = true;
 };
 unisc = {
   revision = 63178;
@@ -51355,6 +55465,7 @@ unisc = {
   hasRunfiles = true;
   license = [ "gpl3Plus" "fdl13Only" ];
   version = "0.2";
+  hasCatalogue = true;
 };
 unisugar = {
   revision = 22357;
@@ -51365,6 +55476,7 @@ unisugar = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.92";
+  hasCatalogue = true;
 };
 unitconv = {
   revision = 55060;
@@ -51375,6 +55487,7 @@ unitconv = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.01";
+  hasCatalogue = true;
 };
 unitn-bimrep = {
   revision = 45581;
@@ -51384,6 +55497,7 @@ unitn-bimrep = {
   sha512.doc = "3049a0bfcbae6666f309979e2c2b8d52647d3c445992201afbbfa28684b83adb2a1ad5f227360c49826ba2de2cfebbc87195801c38413f5eb26bcd793b77ca61";
   hasRunfiles = true;
   license = [ "mit" ];
+  hasCatalogue = true;
 };
 units = {
   revision = 42428;
@@ -51395,6 +55509,7 @@ units = {
   hasRunfiles = true;
   license = [ "gpl1Only" ];
   version = "0.9b";
+  hasCatalogue = true;
 };
 unitsdef = {
   revision = 15878;
@@ -51406,6 +55521,7 @@ unitsdef = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.2";
+  hasCatalogue = true;
 };
 universa = {
   revision = 51984;
@@ -51417,6 +55533,7 @@ universa = {
   hasRunfiles = true;
   license = [ "gpl1Only" ];
   version = "2.1";
+  hasCatalogue = true;
 };
 universalis = {
   revision = 64505;
@@ -51429,6 +55546,7 @@ universalis = {
   sha512.doc = "79c500724365b3fec6f25dc49dd019ca23d0d3bfc9889f75f10a090250eb1614549c8f3ef215102fe5d5ea8c317bd1f1b60557133be0afe376cfd74d73d67fea";
   hasRunfiles = true;
   license = [ "gpl2Plus" "lppl13c" ];
+  hasCatalogue = true;
 };
 univie-ling = {
   revision = 66728;
@@ -51439,6 +55557,7 @@ univie-ling = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.4";
+  hasCatalogue = true;
 };
 unizgklasa = {
   revision = 51647;
@@ -51449,6 +55568,7 @@ unizgklasa = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 unravel = {
   revision = 69308;
@@ -51460,6 +55580,7 @@ unravel = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.3c";
+  hasCatalogue = true;
 };
 unswcover = {
   revision = 66115;
@@ -51470,6 +55591,7 @@ unswcover = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 uol-physics-report = {
   revision = 65761;
@@ -51481,6 +55603,7 @@ uol-physics-report = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 uothesis = {
   revision = 25355;
@@ -51492,6 +55615,7 @@ uothesis = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.5.6";
+  hasCatalogue = true;
 };
 uowthesis = {
   revision = 19700;
@@ -51502,6 +55626,7 @@ uowthesis = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0a";
+  hasCatalogue = true;
 };
 uowthesistitlepage = {
   revision = 54512;
@@ -51512,6 +55637,7 @@ uowthesistitlepage = {
   hasRunfiles = true;
   license = [ "lppl13c" "cc-by-sa-40" ];
   version = "3.0.1";
+  hasCatalogue = true;
 };
 upca = {
   revision = 22511;
@@ -51521,6 +55647,7 @@ upca = {
   sha512.doc = "f19dd751bffb9ee92ee80f74f692ac410781e87817ee841c01f37bac87fc770b9fc97d488ffbe97490206899653d329034d82cf649de0ee52cfa4643f956d7de";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 updatemarks = {
   revision = 69989;
@@ -51531,6 +55658,7 @@ updatemarks = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.2e";
+  hasCatalogue = true;
 };
 uplatex = {
   revision = 66186;
@@ -51578,6 +55706,7 @@ uplatex = {
   sha512.source = "7fe21c87bcdcfc7ba7221a51c59eafd17a767aff04a1f267682167962f2a75a34e12af5b035319b6e413ef1037533f2bc07e7b7d21cda63355ef4185844d51e4";
   hasRunfiles = true;
   license = [ "bsd3" ];
+  hasCatalogue = true;
 };
 uplatex.binfiles = [
   "uplatex"
@@ -51591,6 +55720,7 @@ upmendex = {
   hasManpages = true;
   license = [ "bsd3" ];
   version = "1.07";
+  hasCatalogue = true;
 };
 upmendex.binfiles = [
   "upmendex"
@@ -51604,6 +55734,7 @@ upmethodology = {
   hasRunfiles = true;
   license = [ "lgpl3" ];
   version = "20221004";
+  hasCatalogue = true;
 };
 uppunctlm = {
   revision = 42334;
@@ -51614,6 +55745,7 @@ uppunctlm = {
   hasRunfiles = true;
   license = [ "gfsl" ];
   version = "0.1";
+  hasCatalogue = true;
 };
 upquote = {
   revision = 26059;
@@ -51625,6 +55757,7 @@ upquote = {
   hasRunfiles = true;
   license = [ "lppl12" ];
   version = "1.3";
+  hasCatalogue = true;
 };
 uptex = {
   revision = 66381;
@@ -51664,6 +55797,7 @@ uptex = {
   sha512.doc = "edd326824f93b2e893ac9bc7b6f498178427477138c2e068a3cffddfef5ac658cfad2671454caa6c222bf165a2d4a16964fa67eed86c01342d119053f31a3fa3";
   hasManpages = true;
   license = [ "free" ];
+  hasCatalogue = true;
 };
 uptex-base = {
   revision = 68298;
@@ -51673,6 +55807,7 @@ uptex-base = {
   sha512.doc = "93332d9861526dba5c338bd14a20cb7e6e95aa6666417aa92dfa99200ea735d8ee0b61d8da1eb09c758b9b179f613c51a725abc997275905b3a832580302df51";
   hasRunfiles = true;
   license = [ "bsd3" ];
+  hasCatalogue = true;
 };
 uptex-fonts = {
   revision = 68297;
@@ -51682,6 +55817,7 @@ uptex-fonts = {
   sha512.doc = "5cfc4bbb9ba533d38bc52e5274c0cc42bca2a2cf6c3ddb623eb4f48c9a49275b2a6959311935fd3e1ca32ce775da6bf0c531542a49c31039c438000d1d15c8ab";
   hasRunfiles = true;
   license = [ "bsd3" ];
+  hasCatalogue = true;
 };
 uptex.binfiles = [
   "euptex"
@@ -51704,6 +55840,7 @@ upzhkinsoku = {
   hasRunfiles = true;
   license = [ "knuth" ];
   version = "0.5";
+  hasCatalogue = true;
 };
 urcls = {
   revision = 49903;
@@ -51714,6 +55851,7 @@ urcls = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.1";
+  hasCatalogue = true;
 };
 uri = {
   revision = 48602;
@@ -51725,6 +55863,7 @@ uri = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.0b";
+  hasCatalogue = true;
 };
 url = {
   revision = 32528;
@@ -51735,6 +55874,7 @@ url = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "3.4";
+  hasCatalogue = true;
 };
 urlbst = {
   revision = 65694;
@@ -51745,6 +55885,7 @@ urlbst = {
   hasRunfiles = true;
   license = [ "gpl2Only" "lppl13c" ];
   version = "0.9.1";
+  hasCatalogue = true;
 };
 urlbst.binfiles = [
   "urlbst"
@@ -51758,6 +55899,7 @@ urwchancal = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1";
+  hasCatalogue = true;
 };
 usebib = {
   revision = 25969;
@@ -51769,6 +55911,7 @@ usebib = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0a";
+  hasCatalogue = true;
 };
 useclass = {
   revision = 70447;
@@ -51780,6 +55923,7 @@ useclass = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 ushort = {
   revision = 32261;
@@ -51791,6 +55935,7 @@ ushort = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.2";
+  hasCatalogue = true;
 };
 uspace = {
   revision = 63123;
@@ -51801,6 +55946,7 @@ uspace = {
   hasRunfiles = true;
   license = [ "mit" ];
   version = "0.05";
+  hasCatalogue = true;
 };
 uspatent = {
   revision = 27744;
@@ -51811,6 +55957,7 @@ uspatent = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 ut-thesis = {
   revision = 65767;
@@ -51822,6 +55969,7 @@ ut-thesis = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "3.1.7";
+  hasCatalogue = true;
 };
 utexasthesis = {
   revision = 48648;
@@ -51832,6 +55980,7 @@ utexasthesis = {
   hasRunfiles = true;
   license = [ "cc0" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 utf8add = {
   revision = 61074;
@@ -51841,6 +55990,7 @@ utf8add = {
   sha512.doc = "c1f41ca0ea536db11e2e6c1df561e74f8bc51da3147410f7f33863d0be1d38948bcb64d0f4d8c41737278435d2f88b8ad758d2c48f1672b682169de5e0099b70";
   hasRunfiles = true;
   license = [ "gpl3Plus" ];
+  hasCatalogue = true;
 };
 utf8mex = {
   revision = 15878;
@@ -51850,6 +56000,7 @@ utf8mex = {
   sha512.doc = "cd438089d90faa0e9144d23adb78ce91d85b80ce084cb92511cc23882c675cb654cb704aebeb623bb29c70b764c8a0ab19915607664895c457c583f376c1088e";
   hasRunfiles = true;
   license = [ "publicDomain" ];
+  hasCatalogue = true;
 };
 utfsym = {
   revision = 63076;
@@ -51860,6 +56011,7 @@ utfsym = {
   hasRunfiles = true;
   license = [ "cc0" ];
   version = "0.9.0";
+  hasCatalogue = true;
 };
 utopia = {
   revision = 15878;
@@ -51869,6 +56021,7 @@ utopia = {
   sha512.doc = "ba60eaf55cc08378560048ebc6f735e743449a18d2822e6027a86e595a9634461713ceb37d15b9f0c8239f1935f910bbdbd9a0d0d6fa1683174739f91c16a504";
   hasRunfiles = true;
   license = [ "free" ];
+  hasCatalogue = true;
 };
 uvaletter = {
   revision = 66712;
@@ -51879,6 +56032,7 @@ uvaletter = {
   hasRunfiles = true;
   license = [ "mit" ];
   version = "1.1.1";
+  hasCatalogue = true;
 };
 uwa-colours = {
   revision = 60443;
@@ -51890,6 +56044,7 @@ uwa-colours = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0.0";
+  hasCatalogue = true;
 };
 uwa-letterhead = {
   revision = 64491;
@@ -51901,6 +56056,7 @@ uwa-letterhead = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0.1";
+  hasCatalogue = true;
 };
 uwa-pcf = {
   revision = 64491;
@@ -51912,6 +56068,7 @@ uwa-pcf = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0.1";
+  hasCatalogue = true;
 };
 uwa-pif = {
   revision = 64491;
@@ -51923,6 +56080,7 @@ uwa-pif = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0.1";
+  hasCatalogue = true;
 };
 uwmslide = {
   revision = 27354;
@@ -51932,6 +56090,7 @@ uwmslide = {
   sha512.doc = "7560c214913e9dc61d01ba8528e1bc147a4f261995294c8c938ffd853a9b6a174c1d1d47e49fa20351ea45d61dca03ef7f0ff085e8725820c24d2895a0d17530";
   hasRunfiles = true;
   license = [ "artistic1-cl8" ];
+  hasCatalogue = true;
 };
 uwthesis = {
   revision = 15878;
@@ -51942,6 +56101,7 @@ uwthesis = {
   hasRunfiles = true;
   license = [ "asl20" ];
   version = "6.13";
+  hasCatalogue = true;
 };
 vak = {
   revision = 23431;
@@ -51951,6 +56111,7 @@ vak = {
   sha512.doc = "1e6f148de79c2ecb5fcd03ff1509c3a509ee40795af0e7f7a95fdc64c403f2de7f9d9ca37716b6488cd496e2be0565749222ae95f8b97e5cf7e05b3877bb6d62";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 vancouver = {
   revision = 59192;
@@ -51961,6 +56122,7 @@ vancouver = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 variablelm = {
   revision = 60014;
@@ -51971,6 +56133,7 @@ variablelm = {
   hasRunfiles = true;
   license = [ "gfl" ];
   version = "1.2";
+  hasCatalogue = true;
 };
 variations = {
   revision = 15878;
@@ -51981,6 +56144,7 @@ variations = {
   hasRunfiles = true;
   license = [ "gpl1Only" ];
   version = "0.3";
+  hasCatalogue = true;
 };
 varindex = {
   revision = 32262;
@@ -51992,6 +56156,7 @@ varindex = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.3";
+  hasCatalogue = true;
 };
 varisize = {
   revision = 15878;
@@ -52001,6 +56166,7 @@ varisize = {
   sha512.doc = "f575e4faff4a80f72108ef5b97abb0bda08573669bb8b28592fa607538c632d3b59626282a0ff8d7805e6b66121b2c231618901a9dd71f0242e1a0875a3e2068";
   hasRunfiles = true;
   license = [ "publicDomain" ];
+  hasCatalogue = true;
 };
 varsfromjobname = {
   revision = 44154;
@@ -52011,6 +56177,7 @@ varsfromjobname = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 varwidth = {
   revision = 24104;
@@ -52021,6 +56188,7 @@ varwidth = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.92";
+  hasCatalogue = true;
 };
 vaucanson-g = {
   revision = 15878;
@@ -52031,6 +56199,7 @@ vaucanson-g = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.4";
+  hasCatalogue = true;
 };
 vcell = {
   revision = 59039;
@@ -52041,6 +56210,7 @@ vcell = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0.2";
+  hasCatalogue = true;
 };
 vdmlisting = {
   revision = 56905;
@@ -52051,6 +56221,7 @@ vdmlisting = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 vectorlogos = {
   revision = 69010;
@@ -52061,9 +56232,11 @@ vectorlogos = {
   hasRunfiles = true;
   license = [ "lppl13c" "cc-by-30" "cc-by-40" "free" ];
   version = "0.1.2";
+  hasCatalogue = true;
 };
 velthuis = {
   revision = 66186;
+  catalogue = "devanagari";
   shortdesc = "Typeset Devanagari";
   deps = [
     "xetex-devanagari"
@@ -52077,6 +56250,7 @@ velthuis = {
   hasRunfiles = true;
   license = [ "gpl1Only" ];
   version = "2.17.1";
+  hasCatalogue = true;
 };
 velthuis.binfiles = [
   "devnag"
@@ -52089,6 +56263,7 @@ venn = {
   sha512.doc = "0b1940cdc2bcbb7e2f103497622c4d5971abf4f6f4885f60b35a360cd655c34cd789ecbfbef9d35c61611ef22198200b11008f4f59588a5cd111870b77ba19d5";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 venndiagram = {
   revision = 47952;
@@ -52100,6 +56275,7 @@ venndiagram = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.2";
+  hasCatalogue = true;
 };
 venturisadf = {
   revision = 19444;
@@ -52118,6 +56294,7 @@ venturisadf = {
   hasRunfiles = true;
   license = [ "free" ];
   version = "1.005";
+  hasCatalogue = true;
 };
 verbasef = {
   revision = 21922;
@@ -52128,6 +56305,7 @@ verbasef = {
   hasRunfiles = true;
   license = [ "gpl1Only" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 verbatimbox = {
   revision = 67865;
@@ -52138,6 +56316,7 @@ verbatimbox = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "3.2";
+  hasCatalogue = true;
 };
 verbatimcopy = {
   revision = 15878;
@@ -52148,6 +56327,7 @@ verbatimcopy = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.06";
+  hasCatalogue = true;
 };
 verbdef = {
   revision = 17177;
@@ -52158,6 +56338,7 @@ verbdef = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.2";
+  hasCatalogue = true;
 };
 verbments = {
   revision = 23670;
@@ -52168,6 +56349,7 @@ verbments = {
   hasRunfiles = true;
   license = [ "lppl12" ];
   version = "1.2";
+  hasCatalogue = true;
 };
 verifica = {
   revision = 56625;
@@ -52179,6 +56361,7 @@ verifica = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.3";
+  hasCatalogue = true;
 };
 verifiche = {
   revision = 69726;
@@ -52190,6 +56373,7 @@ verifiche = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "7.1";
+  hasCatalogue = true;
 };
 verifycommand = {
   revision = 69389;
@@ -52201,6 +56385,7 @@ verifycommand = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.00";
+  hasCatalogue = true;
 };
 verse = {
   revision = 69882;
@@ -52212,6 +56397,7 @@ verse = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.4c";
+  hasCatalogue = true;
 };
 version = {
   revision = 21920;
@@ -52222,6 +56408,7 @@ version = {
   hasRunfiles = true;
   license = [ "free" ];
   version = "2.0";
+  hasCatalogue = true;
 };
 versions = {
   revision = 21921;
@@ -52232,6 +56419,7 @@ versions = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.55";
+  hasCatalogue = true;
 };
 versonotes = {
   revision = 69249;
@@ -52243,6 +56431,7 @@ versonotes = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.5";
+  hasCatalogue = true;
 };
 vertbars = {
   revision = 49429;
@@ -52253,6 +56442,7 @@ vertbars = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0c";
+  hasCatalogue = true;
 };
 vgrid = {
   revision = 32457;
@@ -52264,6 +56454,7 @@ vgrid = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.1";
+  hasCatalogue = true;
 };
 vhistory = {
   revision = 61719;
@@ -52274,6 +56465,7 @@ vhistory = {
   hasRunfiles = true;
   license = [ "lppl12" ];
   version = "1.8.0";
+  hasCatalogue = true;
 };
 visualfaq = {
   revision = 61719;
@@ -52282,6 +56474,7 @@ visualfaq = {
   sha512.run = "e746106e0525c9d40c3600e283e1b652d2a5e4e99381dd7ce88ff2ded109024d86610b6305fdcc6f06220802c7ce565b3e01f9562c00884fe5e161104ad4f8ed";
   sha512.doc = "cd8f11ebec1eda30ba7b673fe6fd241e61c4ef42a769988d34e58546f608af6a4ea569b2a30957dec0463385c5a4df70f7d10bc6e5b898229c5e6cf46f7e4fca";
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 visualfaq-fr = {
   revision = 67718;
@@ -52290,6 +56483,7 @@ visualfaq-fr = {
   sha512.run = "06a9f22c86f54883ce55b23ba81315e53afed4f7ed2b77d13a8958bc18e5a96cae849a327126843865b6ecd55d7153cf261ab784625b9a848e7dc661df95fbb8";
   sha512.doc = "8d18a3712c42eb7921d6e0e7d29ac96c4718386643bf967b3c428fe5846830dbaca382822ae3d23523dda2e4c7d5f0d96c137412c2302f5e634471d83fdc4547";
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 visualpstricks = {
   revision = 39799;
@@ -52299,6 +56493,7 @@ visualpstricks = {
   sha512.doc = "3d2dfea937b2b99e148fb0220067b9a777126854d82cd1e591f84a1d13e1090755660509814e4690dad20d2568286ce05653d3b5c7c6653df61d27229c9cd5e2";
   license = [ "gpl1Only" ];
   version = "2.3";
+  hasCatalogue = true;
 };
 visualtikz = {
   revision = 54080;
@@ -52308,6 +56503,7 @@ visualtikz = {
   sha512.doc = "16a32e64ef4d00d2bf6f99fa05b35a071539d71944227eaa5b37762e838a62b80ee4b227a8bb9cc49b831bf19976421684872f8eb104f37365669907e9621a6b";
   license = [ "lppl13c" ];
   version = "0.65";
+  hasCatalogue = true;
 };
 vlna = {
   revision = 66186;
@@ -52329,6 +56525,7 @@ vmargin = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.5";
+  hasCatalogue = true;
 };
 vntex = {
   revision = 62837;
@@ -52352,6 +56549,7 @@ vntex = {
   hasRunfiles = true;
   license = [ "free" ];
   version = "3.2.2";
+  hasCatalogue = true;
 };
 vocaltract = {
   revision = 25629;
@@ -52362,6 +56560,7 @@ vocaltract = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1";
+  hasCatalogue = true;
 };
 volumes = {
   revision = 15878;
@@ -52373,6 +56572,7 @@ volumes = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 voss-mathcol = {
   revision = 32954;
@@ -52382,6 +56582,7 @@ voss-mathcol = {
   sha512.doc = "5d91b23d9eb45998282731620097f214b274ee744972b3d7fbeda1be2268799572f36b5f4c8b707f48e8ec2d825438bcdcee7f1376531f366af8949a862ff379";
   license = [ "lppl13c" ];
   version = "0.1";
+  hasCatalogue = true;
 };
 vpe = {
   revision = 26039;
@@ -52391,6 +56592,7 @@ vpe = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.2";
+  hasCatalogue = true;
 };
 vpe.binfiles = [
   "vpe"
@@ -52404,6 +56606,7 @@ vruler = {
   hasRunfiles = true;
   license = [ "lppl1" ];
   version = "2.3";
+  hasCatalogue = true;
 };
 vtable = {
   revision = 51126;
@@ -52414,6 +56617,7 @@ vtable = {
   hasRunfiles = true;
   license = [ "mit" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 vwcol = {
   revision = 36254;
@@ -52425,6 +56629,7 @@ vwcol = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.2";
+  hasCatalogue = true;
 };
 wadalab = {
   revision = 42428;
@@ -52442,6 +56647,7 @@ wadalab = {
   sha512.doc = "f9c35379b396dfb563c66a05d200c405f03de96e22ec94de3a9f0c99ada057db21d31b43d59391bc0175479b5f150435f8e704fa40f6b58f2c116bbda3ec4603";
   hasRunfiles = true;
   license = [ "free" ];
+  hasCatalogue = true;
 };
 wallcalendar = {
   revision = 45568;
@@ -52452,6 +56658,7 @@ wallcalendar = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.3.1";
+  hasCatalogue = true;
 };
 wallpaper = {
   revision = 15878;
@@ -52462,6 +56669,7 @@ wallpaper = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.10";
+  hasCatalogue = true;
 };
 wargame = {
   revision = 69692;
@@ -52473,6 +56681,7 @@ wargame = {
   hasRunfiles = true;
   license = [ "cc-by-sa-40" ];
   version = "0.6";
+  hasCatalogue = true;
 };
 warning = {
   revision = 66616;
@@ -52483,6 +56692,7 @@ warning = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.10";
+  hasCatalogue = true;
 };
 warpcol = {
   revision = 15878;
@@ -52494,6 +56704,7 @@ warpcol = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0c";
+  hasCatalogue = true;
 };
 was = {
   revision = 64691;
@@ -52504,6 +56715,7 @@ was = {
   sha512.source = "9053fd6524c572ea80670ed9af80780579e6961e326620120f87f809d76f3c23310fb572f39536eee1ee8c20269ecfc1ad5bd5ca195ed986d87c46bc53058a31";
   hasRunfiles = true;
   license = [ "free" ];
+  hasCatalogue = true;
 };
 wasy = {
   revision = 53533;
@@ -52514,6 +56726,7 @@ wasy = {
   hasRunfiles = true;
   license = [ "publicDomain" ];
   version = "2.5";
+  hasCatalogue = true;
 };
 wasy-type1 = {
   revision = 53534;
@@ -52530,6 +56743,7 @@ wasy-type1 = {
   hasRunfiles = true;
   license = [ "publicDomain" ];
   version = "001.002";
+  hasCatalogue = true;
 };
 wasysym = {
   revision = 54080;
@@ -52541,6 +56755,7 @@ wasysym = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.4";
+  hasCatalogue = true;
 };
 web = {
   revision = 66186;
@@ -52553,6 +56768,7 @@ web = {
   hasManpages = true;
   license = [ "knuth" ];
   version = "4.5";
+  hasCatalogue = true;
 };
 web.binfiles = [
   "tangle"
@@ -52565,6 +56781,7 @@ webguide = {
   sha512.run = "0c99e86fcba92d067ddd658893b58463390764b215515068e025563b66f445b23ae11482345bf305106afc1284ffaf32b23a28c8e0f81319002dd6332c8a3848";
   sha512.doc = "933ceaf7bb2400fff1bfc5ec26f60d750e0995680579fe487536ddcf8eca670e2b6d3fb6150b4ad659c6fa594b9db540523a878c74e9aba9be7710b5380e55af";
   license = [ "free" ];
+  hasCatalogue = true;
 };
 webquiz = {
   revision = 58808;
@@ -52578,6 +56795,7 @@ webquiz = {
   ];
   license = [ "gpl3Plus" ];
   version = "5.2";
+  hasCatalogue = true;
 };
 webquiz.binfiles = [
   "webquiz"
@@ -52592,6 +56810,7 @@ weiqi = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.1";
+  hasCatalogue = true;
 };
 wheelchart = {
   revision = 70518;
@@ -52602,6 +56821,7 @@ wheelchart = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "3.0";
+  hasCatalogue = true;
 };
 widetable = {
   revision = 53409;
@@ -52613,6 +56833,7 @@ widetable = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.1";
+  hasCatalogue = true;
 };
 widows-and-orphans = {
   revision = 66753;
@@ -52624,6 +56845,7 @@ widows-and-orphans = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0f";
+  hasCatalogue = true;
 };
 williams = {
   revision = 15878;
@@ -52633,6 +56855,7 @@ williams = {
   sha512.doc = "c559e587868698c1a635db13b6db265234b3b475937fa1759f9e7e3a8d0644a43543005e9607b5a965bbdc304863d6c7cae6e5cb8345b546dc34afd8c7e2de43";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 willowtreebook = {
   revision = 60638;
@@ -52643,6 +56866,7 @@ willowtreebook = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.03";
+  hasCatalogue = true;
 };
 windycity = {
   revision = 67011;
@@ -52652,6 +56876,7 @@ windycity = {
   sha512.doc = "eff7b0bd0603d563d077842e77fff4b9a104d008724d3e81f58cb26ebb77f8e61811f5a74d9cf2d5d62f3351ca692d5028cea9629ac1a9e8dc6263637c1cb616";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 withargs = {
   revision = 52641;
@@ -52662,6 +56887,7 @@ withargs = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.3.1";
+  hasCatalogue = true;
 };
 witharrows = {
   revision = 69996;
@@ -52673,6 +56899,7 @@ witharrows = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.8b";
+  hasCatalogue = true;
 };
 wnri = {
   revision = 22459;
@@ -52682,6 +56909,7 @@ wnri = {
   sha512.doc = "c3d6ff664edd89fa711e9573b138b29b113b588ddef9ad4a258e1f28c4ca2aad1f05741a402c1c1972bbc317e0cb989ce7a51e52d59b42629343d9a5780b64d0";
   hasRunfiles = true;
   license = [ "gpl1Only" ];
+  hasCatalogue = true;
 };
 wnri-latex = {
   revision = 22338;
@@ -52693,6 +56921,7 @@ wnri-latex = {
   hasRunfiles = true;
   license = [ "gpl2Only" ];
   version = "1.0b";
+  hasCatalogue = true;
 };
 wordcloud = {
   revision = 68209;
@@ -52703,6 +56932,7 @@ wordcloud = {
   hasRunfiles = true;
   license = [ "lppl13c" "fdl13Only" ];
   version = "0.2";
+  hasCatalogue = true;
 };
 wordcount = {
   revision = 46165;
@@ -52712,6 +56942,7 @@ wordcount = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.7";
+  hasCatalogue = true;
 };
 wordcount.binfiles = [
   "wordcount"
@@ -52725,6 +56956,7 @@ wordle = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.1.1";
+  hasCatalogue = true;
 };
 wordlike = {
   revision = 15878;
@@ -52736,6 +56968,7 @@ wordlike = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.2b";
+  hasCatalogue = true;
 };
 worksheet = {
   revision = 48423;
@@ -52746,6 +56979,7 @@ worksheet = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 worldflags = {
   revision = 68827;
@@ -52755,6 +56989,7 @@ worldflags = {
   sha512.doc = "16948753f069aa0e9f0e19efe9072c35eddf4bd20e32e6a47321a93bd3117f2206d44d3a76bee1581f7d4dd7e392d2bf1a4fd0ebb83d0d7b6cf207e69a42c7ac";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 wrapfig = {
   revision = 61719;
@@ -52765,6 +57000,7 @@ wrapfig = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "3.6";
+  hasCatalogue = true;
 };
 wrapfig2 = {
   revision = 69513;
@@ -52776,6 +57012,7 @@ wrapfig2 = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "7.0.0";
+  hasCatalogue = true;
 };
 wrapstuff = {
   revision = 64058;
@@ -52787,6 +57024,7 @@ wrapstuff = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.3";
+  hasCatalogue = true;
 };
 writeongrid = {
   revision = 68863;
@@ -52797,6 +57035,7 @@ writeongrid = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.1.5";
+  hasCatalogue = true;
 };
 wsemclassic = {
   revision = 31532;
@@ -52808,6 +57047,7 @@ wsemclassic = {
   hasRunfiles = true;
   license = [ "bsd3" ];
   version = "1.0.1";
+  hasCatalogue = true;
 };
 wsuipa = {
   revision = 25469;
@@ -52817,6 +57057,7 @@ wsuipa = {
   sha512.doc = "b24aa32e2e7b466d7afc827aed570deb70b41163cbe6ce975d8df77e9dcc92b453e5f0d5f0edd5a2f05c006939003849b7b44c2e3f8a86ffd61a51ff307466e5";
   hasRunfiles = true;
   license = [ "free" ];
+  hasCatalogue = true;
 };
 wtref = {
   revision = 69214;
@@ -52827,6 +57068,7 @@ wtref = {
   hasRunfiles = true;
   license = [ "mit" ];
   version = "1.0.0";
+  hasCatalogue = true;
 };
 xargs = {
   revision = 15878;
@@ -52838,6 +57080,7 @@ xargs = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 xassoccnt = {
   revision = 61112;
@@ -52848,6 +57091,7 @@ xassoccnt = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.0";
+  hasCatalogue = true;
 };
 xbmks = {
   revision = 53448;
@@ -52858,6 +57102,7 @@ xbmks = {
   sha512.source = "4c3a9ade3d3c204db2c2d0e11a55bef0a18cf1e3e4dfa292c3da356ef5ef5aab9ed6021d07f6222f1ec722298c46ee4e4eff02658e76b99bb426e6e289fbc136";
   hasRunfiles = true;
   license = [ "lppl12" ];
+  hasCatalogue = true;
 };
 xcharter = {
   revision = 67742;
@@ -52871,6 +57116,7 @@ xcharter = {
   hasRunfiles = true;
   license = [ "free" "lppl13c" ];
   version = "1.25";
+  hasCatalogue = true;
 };
 xcharter-math = {
   revision = 70333;
@@ -52881,6 +57127,7 @@ xcharter-math = {
   hasRunfiles = true;
   license = [ "ofl" "lppl13c" ];
   version = "0.62";
+  hasCatalogue = true;
 };
 xcite = {
   revision = 53486;
@@ -52892,6 +57139,7 @@ xcite = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "16383.99998";
+  hasCatalogue = true;
 };
 xcjk2uni = {
   revision = 54958;
@@ -52903,6 +57151,7 @@ xcjk2uni = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 xcntperchap = {
   revision = 54080;
@@ -52913,6 +57162,7 @@ xcntperchap = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.5";
+  hasCatalogue = true;
 };
 xcolor = {
   revision = 68864;
@@ -52924,6 +57174,7 @@ xcolor = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "3.01";
+  hasCatalogue = true;
 };
 xcolor-material = {
   revision = 42289;
@@ -52935,6 +57186,7 @@ xcolor-material = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.1";
+  hasCatalogue = true;
 };
 xcolor-solarized = {
   revision = 61719;
@@ -52946,6 +57198,7 @@ xcolor-solarized = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.4";
+  hasCatalogue = true;
 };
 xcomment = {
   revision = 20031;
@@ -52956,6 +57209,7 @@ xcomment = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.3";
+  hasCatalogue = true;
 };
 xcookybooky = {
   revision = 36435;
@@ -52967,6 +57221,7 @@ xcookybooky = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.5";
+  hasCatalogue = true;
 };
 xcpdftips = {
   revision = 50449;
@@ -52978,6 +57233,7 @@ xcpdftips = {
   hasRunfiles = true;
   license = [ "gpl3Plus" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 xdoc = {
   revision = 15878;
@@ -52989,6 +57245,7 @@ xdoc = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "prot2.5";
+  hasCatalogue = true;
 };
 xduthesis = {
   revision = 63116;
@@ -53000,6 +57257,7 @@ xduthesis = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.00";
+  hasCatalogue = true;
 };
 xduts = {
   revision = 66661;
@@ -53011,6 +57269,7 @@ xduts = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "6.1.4.2";
+  hasCatalogue = true;
 };
 xdvi = {
   revision = 62387;
@@ -53020,6 +57279,7 @@ xdvi = {
   hasManpages = true;
   hasRunfiles = true;
   license = [ "free" ];
+  hasCatalogue = true;
 };
 xdvi.binfiles = [
   "xdvi"
@@ -53034,6 +57294,7 @@ xebaposter = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.53";
+  hasCatalogue = true;
 };
 xechangebar = {
   revision = 54080;
@@ -53044,6 +57305,7 @@ xechangebar = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 xecjk = {
   revision = 64059;
@@ -53058,6 +57320,7 @@ xecjk = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "3.9.1";
+  hasCatalogue = true;
 };
 xecolor = {
   revision = 29660;
@@ -53068,6 +57331,7 @@ xecolor = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.1";
+  hasCatalogue = true;
 };
 xecyr = {
   revision = 54308;
@@ -53078,6 +57342,7 @@ xecyr = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.2";
+  hasCatalogue = true;
 };
 xecyrmongolian = {
   revision = 53160;
@@ -53089,6 +57354,7 @@ xecyrmongolian = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 xeindex = {
   revision = 35756;
@@ -53099,6 +57365,7 @@ xeindex = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.3";
+  hasCatalogue = true;
 };
 xelatex-dev = {
   revision = 62145;
@@ -53146,6 +57413,7 @@ xellipsis = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.0";
+  hasCatalogue = true;
 };
 xepersian = {
   revision = 68117;
@@ -53157,6 +57425,7 @@ xepersian = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "25.0";
+  hasCatalogue = true;
 };
 xepersian-hm = {
   revision = 56272;
@@ -53168,6 +57437,7 @@ xepersian-hm = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1a";
+  hasCatalogue = true;
 };
 xesearch = {
   revision = 51908;
@@ -53178,6 +57448,7 @@ xesearch = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.2";
+  hasCatalogue = true;
 };
 xespotcolor = {
   revision = 58212;
@@ -53189,6 +57460,7 @@ xespotcolor = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.1";
+  hasCatalogue = true;
 };
 xetex = {
   revision = 66203;
@@ -53237,6 +57509,7 @@ xetex = {
   hasRunfiles = true;
   hasTlpkg = true;
   license = [ "x11" ];
+  hasCatalogue = true;
 };
 xetex-devanagari = {
   revision = 34296;
@@ -53247,6 +57520,7 @@ xetex-devanagari = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.5";
+  hasCatalogue = true;
 };
 xetex-itrans = {
   revision = 55475;
@@ -53257,6 +57531,7 @@ xetex-itrans = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "4.2";
+  hasCatalogue = true;
 };
 xetex-pstricks = {
   revision = 17055;
@@ -53266,6 +57541,7 @@ xetex-pstricks = {
   sha512.doc = "cf71359ea6e56061848b085da9755fd3d96d2a9d30484b5d5028c7a3dfb52dfbe275c46f17016179a56f90db3b6df4453cbf3a990a709e59503fbf1a576eaf8d";
   hasRunfiles = true;
   license = [ "publicDomain" ];
+  hasCatalogue = true;
 };
 xetex-tibetan = {
   revision = 28847;
@@ -53276,6 +57552,7 @@ xetex-tibetan = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.1";
+  hasCatalogue = true;
 };
 xetex.binfiles = [
   "teckit_compile"
@@ -53299,6 +57576,7 @@ xetexfontinfo = {
   sha512.doc = "a5a9b085e5dac02d75b83c7063fe653724367ce203c20832e2ef6b11db10e31bcb90745a7b7d65427a33cb018d68afdd4acf9f92c907f91904188ad60f2e1460";
   hasRunfiles = true;
   license = [ "asl20" ];
+  hasCatalogue = true;
 };
 xetexko = {
   revision = 70316;
@@ -53309,6 +57587,7 @@ xetexko = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "4.3";
+  hasCatalogue = true;
 };
 xetexref = {
   revision = 68072;
@@ -53317,6 +57596,7 @@ xetexref = {
   sha512.run = "a26a066a25162d3f3484158b6a5d3e3f44727ab5b7e3d3d9a4457fd80e92522f09d61015a4a3b0fea4dc63987ef773c8850b6afe8a50fa5ac2ed58cca51a4ded";
   sha512.doc = "d0f2de750f04ce63aeecdf00a5f0628978c78afaa753f8dd2b41a819c76bb0531bee8906d4eb2014075cf4d0202b6c1fb41a9093120614478045fcb0820a70a9";
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 xevlna = {
   revision = 43864;
@@ -53327,6 +57607,7 @@ xevlna = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 xfakebold = {
   revision = 68929;
@@ -53340,6 +57621,7 @@ xfakebold = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.10";
+  hasCatalogue = true;
 };
 xfor = {
   revision = 15878;
@@ -53351,6 +57633,7 @@ xfor = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.05";
+  hasCatalogue = true;
 };
 xfrac = {
   revision = 69888;
@@ -53361,6 +57644,7 @@ xfrac = {
   sha512.source = "f22458c874e394753b0dc6296a86a2dc6cd8df8f03ff3f84e09118bb0069d84c2de56213368cf351ee922e8f753c3348dfac7bc4d9f496a3aae8302304460136";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 xgreek = {
   revision = 69652;
@@ -53372,6 +57656,7 @@ xgreek = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "3.4.0";
+  hasCatalogue = true;
 };
 xhfill = {
   revision = 22575;
@@ -53382,6 +57667,7 @@ xhfill = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.01";
+  hasCatalogue = true;
 };
 xifthen = {
   revision = 38929;
@@ -53392,6 +57678,7 @@ xifthen = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.4.0";
+  hasCatalogue = true;
 };
 xii = {
   revision = 45804;
@@ -53400,6 +57687,7 @@ xii = {
   sha512.run = "a5355a456005e09eac4135735973a14a6add3a31639fcea441d8d6a7c06e7a7efbfc1470d485ab317fa193897abc2d9edeccadd19239944014b7fccecdda52a3";
   sha512.doc = "c9b348da09c3a9c1522eb7713a17a58b3eabf4ff8ed52e8d14dc9eeff528ed93af505b5e3cb59c1af4c2ce999c6c1d98f66d026a6ab3d7a09778230286059d84";
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 xii-lat = {
   revision = 45805;
@@ -53408,6 +57696,7 @@ xii-lat = {
   sha512.run = "e4538ac31b6508371ee156168d4da71644a65297b91be7f070291f35563a45a1ee5a528d25585bc23a4690e8fc5c6ad04bfc829de4e95f49468a5852fac9e822";
   sha512.doc = "50322d89f494d07793d964fe515b8a0bacb74bd5706a6da80f6860771a8e3cad35c7d06bf398217a7e4364594d54f4dc490f39980194804a04460047ff5083f8";
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 xindex = {
   revision = 67771;
@@ -53420,6 +57709,7 @@ xindex = {
   ];
   license = [ "lppl13c" ];
   version = "0.55";
+  hasCatalogue = true;
 };
 xindex.binfiles = [
   "xindex"
@@ -53433,6 +57723,7 @@ xindy = {
   hasRunfiles = true;
   license = [ "gpl1Only" ];
   version = "2.5.1";
+  hasCatalogue = true;
 };
 xindy-persian = {
   revision = 59013;
@@ -53442,6 +57733,7 @@ xindy-persian = {
   sha512.doc = "3868c7f2c20e22cfb3b1ffc61c830581d774ca909c4fc450586ed0bc82a091546efc46540a883e667ac5ac7d292a4786019384afa741599634a2fc05975c36e7";
   license = [ "lppl13c" ];
   version = "0.8";
+  hasCatalogue = true;
 };
 xindy.binfiles = [
   "tex2xindy"
@@ -53460,6 +57752,7 @@ xint = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.4m";
+  hasCatalogue = true;
 };
 xintsession = {
   revision = 60926;
@@ -53470,6 +57763,7 @@ xintsession = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.4alpha";
+  hasCatalogue = true;
 };
 xistercian = {
   revision = 61366;
@@ -53481,6 +57775,7 @@ xistercian = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.2";
+  hasCatalogue = true;
 };
 xits = {
   revision = 55730;
@@ -53491,6 +57786,7 @@ xits = {
   hasRunfiles = true;
   license = [ "ofl" ];
   version = "1.302";
+  hasCatalogue = true;
 };
 xkcdcolors = {
   revision = 67895;
@@ -53501,6 +57797,7 @@ xkcdcolors = {
   hasRunfiles = true;
   license = [ "lppl13c" "cc0" ];
   version = "1.0.2";
+  hasCatalogue = true;
 };
 xkeymask = {
   revision = 69223;
@@ -53511,6 +57808,7 @@ xkeymask = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 xkeyval = {
   revision = 63616;
@@ -53522,6 +57820,7 @@ xkeyval = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.9";
+  hasCatalogue = true;
 };
 xlop = {
   revision = 56910;
@@ -53532,6 +57831,7 @@ xlop = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.28";
+  hasCatalogue = true;
 };
 xltabular = {
   revision = 56855;
@@ -53542,6 +57842,7 @@ xltabular = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.2e";
+  hasCatalogue = true;
 };
 xltxtra = {
   revision = 56594;
@@ -53556,6 +57857,7 @@ xltxtra = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.7";
+  hasCatalogue = true;
 };
 xml2pmx = {
   revision = 57972;
@@ -53564,6 +57866,7 @@ xml2pmx = {
   sha512.doc = "973960f65159f5107caa7e9a041dca75f0171fc61f94794c7b7560eb9b6898534974fb8b360a28dfa3a01d422b71618bcaf8aba2ed25ae4d4b9f67d24ab730be";
   hasManpages = true;
   license = [ "gpl3Plus" ];
+  hasCatalogue = true;
 };
 xml2pmx.binfiles = [
   "xml2pmx"
@@ -53614,6 +57917,7 @@ xmltex = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.8";
+  hasCatalogue = true;
 };
 xmltex.binfiles = [
   "pdfxmltex"
@@ -53635,6 +57939,7 @@ xmpincl = {
   hasRunfiles = true;
   license = [ "gpl1Only" ];
   version = "2.4";
+  hasCatalogue = true;
 };
 xmuthesis = {
   revision = 56614;
@@ -53646,6 +57951,7 @@ xmuthesis = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.4.1";
+  hasCatalogue = true;
 };
 xnewcommand = {
   revision = 15878;
@@ -53656,6 +57962,7 @@ xnewcommand = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.2";
+  hasCatalogue = true;
 };
 xoptarg = {
   revision = 15878;
@@ -53666,6 +57973,7 @@ xoptarg = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 xpatch = {
   revision = 54563;
@@ -53677,6 +57985,7 @@ xpatch = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.3";
+  hasCatalogue = true;
 };
 xpdfopen = {
   revision = 65952;
@@ -53686,6 +57995,7 @@ xpdfopen = {
   hasManpages = true;
   license = [ "publicDomain" ];
   version = "0.86";
+  hasCatalogue = true;
 };
 xpdfopen.binfiles = [
   "pdfclose"
@@ -53701,6 +58011,7 @@ xpeek = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.2";
+  hasCatalogue = true;
 };
 xpiano = {
   revision = 61719;
@@ -53712,6 +58023,7 @@ xpiano = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 xpicture = {
   revision = 28770;
@@ -53723,6 +58035,7 @@ xpicture = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.2a";
+  hasCatalogue = true;
 };
 xpinyin = {
   revision = 66115;
@@ -53734,6 +58047,7 @@ xpinyin = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "3.1";
+  hasCatalogue = true;
 };
 xprintlen = {
   revision = 35928;
@@ -53744,6 +58058,7 @@ xprintlen = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 xpunctuate = {
   revision = 67918;
@@ -53755,6 +58070,7 @@ xpunctuate = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.0";
+  hasCatalogue = true;
 };
 xq = {
   revision = 35211;
@@ -53765,6 +58081,7 @@ xq = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.4";
+  hasCatalogue = true;
 };
 xsavebox = {
   revision = 64049;
@@ -53776,6 +58093,7 @@ xsavebox = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.18";
+  hasCatalogue = true;
 };
 xsim = {
   revision = 61988;
@@ -53786,6 +58104,7 @@ xsim = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.21";
+  hasCatalogue = true;
 };
 xskak = {
   revision = 51432;
@@ -53797,6 +58116,7 @@ xskak = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.5";
+  hasCatalogue = true;
 };
 xstring = {
   revision = 68015;
@@ -53807,6 +58127,7 @@ xstring = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.86";
+  hasCatalogue = true;
 };
 xtab = {
   revision = 23347;
@@ -53818,6 +58139,7 @@ xtab = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.3f";
+  hasCatalogue = true;
 };
 xtuthesis = {
   revision = 47049;
@@ -53828,6 +58150,7 @@ xtuthesis = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 xunicode = {
   revision = 30466;
@@ -53841,6 +58164,7 @@ xunicode = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.981";
+  hasCatalogue = true;
 };
 xurl = {
   revision = 61553;
@@ -53851,6 +58175,7 @@ xurl = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.10";
+  hasCatalogue = true;
 };
 xwatermark = {
   revision = 61719;
@@ -53861,6 +58186,7 @@ xwatermark = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.5.2d";
+  hasCatalogue = true;
 };
 xyling = {
   revision = 15878;
@@ -53871,6 +58197,7 @@ xyling = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 xymtex = {
   revision = 32182;
@@ -53882,6 +58209,7 @@ xymtex = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "5.06";
+  hasCatalogue = true;
 };
 xypic = {
   revision = 61719;
@@ -53895,6 +58223,7 @@ xypic = {
   hasRunfiles = true;
   license = [ "gpl1Only" ];
   version = "3.8.9";
+  hasCatalogue = true;
 };
 xypic-tut-pt = {
   revision = 15878;
@@ -53903,6 +58232,7 @@ xypic-tut-pt = {
   sha512.run = "291825c3461b397deb825266c7ee4316c5d04b8db1a29759378409de55c20d81552e31260468f4fa6a9a04f04705422714a8ec70a866c87fca2f4f1e189e0e4e";
   sha512.doc = "e27dfa0b36341bcd02ba63a8b543f1a6c55c674745cc790543ea2cfded80e536e5901f184a3af62b92b4534c738a06bf4fd5cbd4dfb4da865d13991279309aac";
   license = [ "gpl1Only" ];
+  hasCatalogue = true;
 };
 xytree = {
   revision = 15878;
@@ -53913,6 +58243,7 @@ xytree = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.5";
+  hasCatalogue = true;
 };
 yafoot = {
   revision = 48568;
@@ -53924,6 +58255,7 @@ yafoot = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 yagusylo = {
   revision = 29803;
@@ -53935,6 +58267,7 @@ yagusylo = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.2";
+  hasCatalogue = true;
 };
 yaletter = {
   revision = 42830;
@@ -53946,6 +58279,7 @@ yaletter = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 yamlvars = {
   revision = 69071;
@@ -53955,6 +58289,7 @@ yamlvars = {
   sha512.doc = "686e2be82054f40c93dfcfbda35d2fa45fe0c28d0b85af30c5ec9c9a8c125a6789fb7185d08da9859bf714f6f5e4dc4057890ee4782fbea446aec923e0adfa6e";
   hasRunfiles = true;
   license = [ "mit" ];
+  hasCatalogue = true;
 };
 yannisgr = {
   revision = 22613;
@@ -53964,6 +58299,7 @@ yannisgr = {
   sha512.doc = "40ecdfe71670357e8ec84fd262015b5b5d0b8e486ab80c05d0863a335649501e9548d785cc2b2374f989b820dadd9a074cc229674dd1ae9a6252d4a0ebeb4191";
   hasRunfiles = true;
   license = [ "gpl2Only" ];
+  hasCatalogue = true;
 };
 yathesis = {
   revision = 70512;
@@ -53975,6 +58311,7 @@ yathesis = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0.12";
+  hasCatalogue = true;
 };
 yax = {
   revision = 54080;
@@ -53985,6 +58322,7 @@ yax = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.03";
+  hasCatalogue = true;
 };
 yazd-thesis = {
   revision = 61719;
@@ -53995,6 +58333,7 @@ yazd-thesis = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.3";
+  hasCatalogue = true;
 };
 yb-book = {
   revision = 67188;
@@ -54038,6 +58377,7 @@ yb-book = {
   hasRunfiles = true;
   license = [ "mit" ];
   version = "0.3.0";
+  hasCatalogue = true;
 };
 ycbook = {
   revision = 46201;
@@ -54047,6 +58387,7 @@ ycbook = {
   sha512.doc = "45ee725849230549b4b2f200e0b140c1fc99a60d91730a42d2e3df63e828eb6053845a2eb84ff25bf916341df46a3f3c01166848afb291d322dfb21426903644";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 ydoc = {
   revision = 64887;
@@ -54070,6 +58411,7 @@ ydoc = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.7alpha";
+  hasCatalogue = true;
 };
 yet-another-guide-latex2e = {
   revision = 68564;
@@ -54079,6 +58421,7 @@ yet-another-guide-latex2e = {
   sha512.doc = "8ab0ebad6b627dc1a5d90477d48868715830c6558e9091d3782284e9766f22f9764170a3e89d55c8437dbca2c8eab446a1be0336baf43b3ddcaf67e125ea2f64";
   license = [ "fdl13Only" ];
   version = "1.2";
+  hasCatalogue = true;
 };
 yfonts = {
   revision = 50755;
@@ -54090,6 +58433,7 @@ yfonts = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.4";
+  hasCatalogue = true;
 };
 yfonts-otf = {
   revision = 65030;
@@ -54100,6 +58444,7 @@ yfonts-otf = {
   hasRunfiles = true;
   license = [ "ofl" "lppl13c" ];
   version = "0.43";
+  hasCatalogue = true;
 };
 yfonts-t1 = {
   revision = 36013;
@@ -54113,6 +58458,7 @@ yfonts-t1 = {
   hasRunfiles = true;
   license = [ "free" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 yhmath = {
   revision = 54377;
@@ -54127,6 +58473,7 @@ yhmath = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.6";
+  hasCatalogue = true;
 };
 yinit-otf = {
   revision = 40207;
@@ -54137,6 +58484,7 @@ yinit-otf = {
   hasRunfiles = true;
   license = [ "publicDomain" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 york-thesis = {
   revision = 23348;
@@ -54148,6 +58496,7 @@ york-thesis = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "3.6";
+  hasCatalogue = true;
 };
 youngtab = {
   revision = 56500;
@@ -54159,6 +58508,7 @@ youngtab = {
   hasRunfiles = true;
   license = [ "lppl1" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 yplan = {
   revision = 34398;
@@ -54167,6 +58517,7 @@ yplan = {
   sha512.doc = "7d3cddf3f2d54283b777c7ab7867df68fdb484c67d2f88589e29fc087db721e7ba9e0fcea2ffde9328e89075884d668b7de8fc61f462b735d9f1cfadb9662463";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 yplan.binfiles = [
   "yplan"
@@ -54180,6 +58531,7 @@ yquant = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.7.5";
+  hasCatalogue = true;
 };
 ysabeau = {
   revision = 69663;
@@ -54193,6 +58545,7 @@ ysabeau = {
   hasRunfiles = true;
   license = [ "ofl" "publicDomain" "free" ];
   version = "1.1";
+  hasCatalogue = true;
 };
 ytableau = {
   revision = 59580;
@@ -54204,9 +58557,11 @@ ytableau = {
   hasRunfiles = true;
   license = [ "lppl12" ];
   version = "1.4";
+  hasCatalogue = true;
 };
 zapfchan = {
   revision = 61719;
+  catalogue = "urw-base35";
   shortdesc = "URW 'Base 35' font pack for LaTeX";
   stripPrefix = 0;
   fontMaps = [
@@ -54215,9 +58570,11 @@ zapfchan = {
   sha512.run = "a5a8a672e1753cd39b44dfb43b9b83673f7bd20dfb4e4640630ba0908c228dd75dda7933432d6d6f7e2c4920d554aa8cd41a523ebe665832edbc4aa7b8034332";
   hasRunfiles = true;
   license = [ "gpl1Only" ];
+  hasCatalogue = true;
 };
 zapfding = {
   revision = 61719;
+  catalogue = "urw-base35";
   shortdesc = "URW 'Base 35' font pack for LaTeX";
   stripPrefix = 0;
   fontMaps = [
@@ -54226,6 +58583,7 @@ zapfding = {
   sha512.run = "3e0503c2d4e30c8d727caa1d9438d4c6b12c3a15729eae65d5c4a8dd9ab0d0c8eee2f63138e9d267f4ae98ef7607388888f7acd78e189a5c322bda22827166fe";
   hasRunfiles = true;
   license = [ "gpl1Only" ];
+  hasCatalogue = true;
 };
 zbmath-review-template = {
   revision = 59693;
@@ -54236,6 +58594,7 @@ zbmath-review-template = {
   hasRunfiles = true;
   license = [ "gpl3Only" "cc-by-sa-40" ];
   version = "2.1";
+  hasCatalogue = true;
 };
 zebra-goodies = {
   revision = 66630;
@@ -54247,6 +58606,7 @@ zebra-goodies = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.8.1";
+  hasCatalogue = true;
 };
 zed-csp = {
   revision = 17258;
@@ -54256,6 +58616,7 @@ zed-csp = {
   sha512.doc = "e5e657656e46023e32366ba415f46322f4c9b4fe0e69f03c88d4e5fcdd577e3436be6436424f502c3807278efe3a31ab7cba3020ef3c9e44874de3660dcccd2b";
   hasRunfiles = true;
   license = [ "free" ];
+  hasCatalogue = true;
 };
 zennote = {
   revision = 65549;
@@ -54266,6 +58627,7 @@ zennote = {
   hasRunfiles = true;
   license = [ "cc-by-40" ];
   version = "1.0.0";
+  hasCatalogue = true;
 };
 zhlineskip = {
   revision = 51142;
@@ -54276,6 +58638,7 @@ zhlineskip = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0e";
+  hasCatalogue = true;
 };
 zhlipsum = {
   revision = 54994;
@@ -54287,6 +58650,7 @@ zhlipsum = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.2.0";
+  hasCatalogue = true;
 };
 zhmetrics = {
   revision = 22207;
@@ -54298,6 +58662,7 @@ zhmetrics = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "r206";
+  hasCatalogue = true;
 };
 zhmetrics-uptex = {
   revision = 40728;
@@ -54308,6 +58673,7 @@ zhmetrics-uptex = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 zhnumber = {
   revision = 66115;
@@ -54319,6 +58685,7 @@ zhnumber = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "3.0";
+  hasCatalogue = true;
 };
 zhspacing = {
   revision = 41145;
@@ -54328,6 +58695,7 @@ zhspacing = {
   sha512.doc = "7fd15e4f29671081670e881e9366ba627f5bed6d981fa0ef1c670d0744e1286c04e785e28b92279d66af851803d84949c2f463370f23c64987fea78531172128";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 ziffer = {
   revision = 32279;
@@ -54338,6 +58706,7 @@ ziffer = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.1";
+  hasCatalogue = true;
 };
 zitie = {
   revision = 60676;
@@ -54348,6 +58717,7 @@ zitie = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.4.0";
+  hasCatalogue = true;
 };
 zlmtt = {
   revision = 64076;
@@ -54358,6 +58728,7 @@ zlmtt = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.032";
+  hasCatalogue = true;
 };
 zootaxa-bst = {
   revision = 50619;
@@ -54368,6 +58739,7 @@ zootaxa-bst = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.0";
+  hasCatalogue = true;
 };
 zref = {
   revision = 68278;
@@ -54379,6 +58751,7 @@ zref = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "2.35";
+  hasCatalogue = true;
 };
 zref-check = {
   revision = 68846;
@@ -54390,6 +58763,7 @@ zref-check = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.3.5";
+  hasCatalogue = true;
 };
 zref-clever = {
   revision = 68846;
@@ -54401,6 +58775,7 @@ zref-clever = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.4.3";
+  hasCatalogue = true;
 };
 zref-vario = {
   revision = 68846;
@@ -54416,6 +58791,7 @@ zref-vario = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "0.1.10";
+  hasCatalogue = true;
 };
 zwgetfdate = {
   revision = 15878;
@@ -54425,6 +58801,7 @@ zwgetfdate = {
   sha512.doc = "7ab61dc4252ef7f60d1d5be8d4415bcaeaed194384a1da14a3400617b36c6efae3679dbbd6c8d64b8cc9f9947babe88c064d637379f663408cbe63ca42334bfb";
   hasRunfiles = true;
   license = [ "lppl13c" ];
+  hasCatalogue = true;
 };
 zwpagelayout = {
   revision = 63074;
@@ -54435,6 +58812,7 @@ zwpagelayout = {
   hasRunfiles = true;
   license = [ "lppl13c" ];
   version = "1.4e";
+  hasCatalogue = true;
 };
 zx-calculus = {
   revision = 70612;
@@ -54445,6 +58823,7 @@ zx-calculus = {
   hasRunfiles = true;
   license = [ "mit" ];
   version = "2.2";
+  hasCatalogue = true;
 };
 zxjafbfont = {
   revision = 28539;
@@ -54455,6 +58834,7 @@ zxjafbfont = {
   hasRunfiles = true;
   license = [ "mit" ];
   version = "0.2";
+  hasCatalogue = true;
 };
 zxjafont = {
   revision = 62864;
@@ -54465,6 +58845,7 @@ zxjafont = {
   hasRunfiles = true;
   license = [ "mit" ];
   version = "1.3";
+  hasCatalogue = true;
 };
 zxjatype = {
   revision = 53500;
@@ -54475,6 +58856,7 @@ zxjatype = {
   hasRunfiles = true;
   license = [ "mit" ];
   version = "0.7";
+  hasCatalogue = true;
 };
 zztex = {
   revision = 55862;
@@ -54485,5 +58867,6 @@ zztex = {
   hasRunfiles = true;
   license = [ "mit" ];
   version = "17.7";
+  hasCatalogue = true;
 };
 }
