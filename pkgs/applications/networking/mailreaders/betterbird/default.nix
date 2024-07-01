@@ -36,7 +36,7 @@ let
       . ./external.sh
       rm external.sh
     '';
-    hash = "";
+    hash = "sha256-YfBwh6P16eQejfauu08QPnQDgWiPRVZb3zzDu+w3dLw=";
   };
 in ((buildMozillaMach {
   pname = "betterbird";
