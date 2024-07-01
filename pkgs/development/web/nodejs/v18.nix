@@ -17,6 +17,8 @@ let
     python = python3;
   };
 
+  python312Patches = callPackage ./python312-v18-patches.nix { };
+
   gypPatches = callPackage ./gyp-patches.nix { } ++ [
     ./gyp-patches-pre-v22-import-sys.patch
   ];
@@ -33,8 +35,10 @@ buildNodejs {
     ./trap-handler-backport.patch
     ./use-correct-env-in-tests.patch
     (fetchpatch2 {
+      # build: add --skip-tests to test-ci-js target
+      # https://github.com/nodejs/node/pull/53105
       url = "https://github.com/nodejs/node/commit/534c122de166cb6464b489f3e6a9a544ceb1c913.patch";
       hash = "sha256-4q4LFsq4yU1xRwNsM1sJoNVphJCnxaVe2IyL6AeHJ/I=";
     })
-  ] ++ gypPatches;
+  ] ++ python312Patches ++ gypPatches;
 }
