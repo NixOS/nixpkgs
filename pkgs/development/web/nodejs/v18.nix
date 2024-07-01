@@ -1,4 +1,4 @@
-{ callPackage, lib, overrideCC, pkgs, buildPackages, openssl, python311, fetchpatch2, enableNpm ? true }:
+{ callPackage, lib, overrideCC, pkgs, buildPackages, openssl, python3, fetchpatch2, enableNpm ? true }:
 
 let
   # Clang 16+ cannot build Node v18 due to -Wenum-constexpr-conversion errors.
@@ -14,8 +14,10 @@ let
     inherit openssl;
     stdenv = ensureCompatibleCC pkgs;
     buildPackages = buildPackages // { stdenv = ensureCompatibleCC buildPackages; };
-    python = python311;
+    python = python3;
   };
+
+  python312Patches = callPackage ./python312-v18-patches.nix { };
 in
 buildNodejs {
   inherit enableNpm;
@@ -30,8 +32,10 @@ buildNodejs {
     ./use-correct-env-in-tests.patch
     ./v18-openssl-3.0.14.patch
     (fetchpatch2 {
+      # build: add --skip-tests to test-ci-js target
+      # https://github.com/nodejs/node/pull/53105
       url = "https://github.com/nodejs/node/commit/534c122de166cb6464b489f3e6a9a544ceb1c913.patch";
       hash = "sha256-4q4LFsq4yU1xRwNsM1sJoNVphJCnxaVe2IyL6AeHJ/I=";
     })
-  ];
+  ] ++ python312Patches;
 }
