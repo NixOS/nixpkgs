@@ -166,6 +166,12 @@ let
     qtscript = [ ./qtscript.patch ];
     qtserialport = [ ./qtserialport.patch ];
     qtsystems = [
+      # Fix crash if no X11 display available
+      (fetchpatch {
+        url = "https://salsa.debian.org/qt-kde-team/qt/qtsystems/-/raw/1a4df40671d6f1bb0657a9dfdae4cd9bd48fcf21/debian/patches/1005_check_XOpenDisplay.patch";
+        hash = "sha256-/onla2nlUSySEgz2IYOYajx/LZkJzAKDyxwAZzy0Ivs=";
+      })
+
       # Enable building with udisks support
       (fetchpatch {
         url = "https://salsa.debian.org/qt-kde-team/qt/qtsystems/-/raw/a23fd92222c33479d7f3b59e48116def6b46894c/debian/patches/2001_build_with_udisk.patch";
