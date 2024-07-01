@@ -79,6 +79,8 @@
 , CoreServices
 , # nvim-treesitter dependencies
   callPackage
+, # Preview-nvim dependencies
+  md-tui
 , # sg.nvim dependencies
   darwin
 , # sved dependencies
@@ -1273,6 +1275,15 @@
 
     doInstallCheck = true;
     nvimRequireCheck = "plenary";
+  };
+
+  Preview-nvim = super.Preview-nvim.overrideAttrs {
+    patches = [
+      (substituteAll {
+        src = ./patches/preview-nvim/hardcode-mdt-binary-path.patch;
+        mdt = lib.getExe md-tui;
+      })
+    ];
   };
 
   range-highlight-nvim = super.range-highlight-nvim.overrideAttrs {
