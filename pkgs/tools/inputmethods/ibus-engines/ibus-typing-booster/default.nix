@@ -13,13 +13,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "ibus-typing-booster";
-  version = "2.25.10";
+  version = "2.25.11";
 
   src = fetchFromGitHub {
     owner = "mike-fabian";
     repo = "ibus-typing-booster";
     rev = version;
-    hash = "sha256-6kcU6oOH75X/M1+fv3m+r05ffIFYrXrlNl8tB6K+B5I=";
+    hash = "sha256-of8FcuYeLIEQgPmEQt1UqcMT6Bd2l5sCDj0Cia0JbmM=";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config wrapGAppsHook3 gobject-introspection ];
