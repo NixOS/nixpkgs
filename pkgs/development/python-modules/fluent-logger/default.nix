@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "fluent-logger";
-  version = "0.11.0";
+  version = "0.11.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fluent";
     repo = "fluent-logger-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-PfyjJZT5K/IMsyyWNZdh/CZf+uZHeJGfhyAPuu0IhJk=";
+    hash = "sha256-i6S5S2ZUwC5gQPdVjefUXrKj43iLIqxd8tdXbMBJNnA=";
   };
 
   build-system = [ hatchling ];
