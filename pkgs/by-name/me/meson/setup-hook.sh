@@ -25,10 +25,7 @@ mesonConfigurePhase() {
         "--buildtype=${mesonBuildType:-plain}"
     )
 
-    flagsArray+=(
-        $mesonFlags
-        "${mesonFlagsArray[@]}"
-    )
+    _accumFlagsArray mesonFlags mesonFlagsArray
 
     echoCmd 'mesonConfigurePhase flags' "${flagsArray[@]}"
 
