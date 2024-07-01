@@ -1,25 +1,27 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, meson
-, ninja
-, gettext
-, desktop-file-utils
-, cargo
-, rustPlatform
-, rustc
-, pkg-config
-, glib
-, libadwaita
-, libhandy
-, gtk4
-, openssl
-, alsa-lib
-, libpulseaudio
-, wrapGAppsHook4
-, blueprint-compiler
-, gst_all_1
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  cargo,
+  rustc,
+  alsa-lib,
+  appstream-glib,
+  blueprint-compiler,
+  desktop-file-utils,
+  gettext,
+  glib,
+  gst_all_1,
+  gtk4,
+  libadwaita,
+  libpulseaudio,
+  libhandy,
+  meson,
+  ninja,
+  nix-update-script,
+  openssl,
+  pkg-config,
+  wrapGAppsHook4,
 }:
 
 stdenv.mkDerivation rec {
@@ -40,30 +42,31 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
+    cargo
+    rustc
+    appstream-glib
+    blueprint-compiler
+    desktop-file-utils
     gettext
+    gtk4 # for gtk-update-icon-cache
+    glib # for glib-compile-schemas
     meson
     ninja
     pkg-config
-    gtk4 # for gtk-update-icon-cache
-    glib # for glib-compile-schemas
-    desktop-file-utils
-    cargo
     rustPlatform.cargoSetupHook
-    rustc
     wrapGAppsHook4
-    blueprint-compiler
   ];
 
   buildInputs = [
+    alsa-lib
     glib
+    gst_all_1.gst-plugins-base
+    gst_all_1.gstreamer
     gtk4
     libadwaita
     libhandy
-    openssl
-    alsa-lib
     libpulseaudio
-    gst_all_1.gst-plugins-base
-    gst_all_1.gstreamer
+    openssl
   ];
 
   # https://github.com/xou816/spot/issues/313
@@ -73,12 +76,13 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Native Spotify client for the GNOME desktop";
-    mainProgram = "spot";
     homepage = "https://github.com/xou816/spot";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ];
-    platforms = platforms.linux;
+    changelog = "https://github.com/xou816/spot/releases/tag/${src.rev}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ getchoo ];
+    mainProgram = "spot";
+    platforms = lib.platforms.linux;
   };
 }
