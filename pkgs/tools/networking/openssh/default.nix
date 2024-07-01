@@ -12,7 +12,11 @@ in
       hash = "sha256-SQQm92bYKidj/KzY2D6j1weYdQx70q/y5X3FZg93P/0=";
     };
 
-    extraPatches = [ ./ssh-keysign-8.5.patch ];
+    extraPatches = [
+      ./ssh-keysign-8.5.patch
+      ./openssh-9.6_p1-CVE-2024-6387.patch
+      ./openssh-9.6_p1-chaff-logic.patch
+    ];
     extraMeta.maintainers = lib.teams.helsinki-systems.members;
   };
 
