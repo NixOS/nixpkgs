@@ -19,10 +19,10 @@ stdenv.mkDerivation rec {
         "arm64"
     }"
     "-DENABLE_CLI=ON"
-  ] ++ lib.optional (!stdenv.isAarch64) "-DCMAKE_LIBRARY_PATH=${darwin.apple_sdk.sdk}/usr/lib";
+  ] ++ lib.optional  (darwin.apple_sdk ? sdk) "-DCMAKE_LIBRARY_PATH=${darwin.apple_sdk.sdk}/usr/lib";
 
   buildInputs = [ openpam ]
-    ++ lib.optional (!stdenv.isAarch64) darwin.apple_sdk.sdk;
+    ++ lib.optional (darwin.apple_sdk ? sdk) darwin.apple_sdk.sdk;
 
   nativeBuildInputs = [ cmake ];
 

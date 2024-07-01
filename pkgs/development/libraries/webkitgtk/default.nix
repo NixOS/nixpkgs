@@ -151,7 +151,7 @@ stdenv.mkDerivation (finalAttrs: {
   ] ++ lib.optionals stdenv.isDarwin [
     libedit
     readline
-  ] ++ lib.optional (stdenv.isDarwin && !stdenv.isAarch64) (
+  ] ++ lib.optional (stdenv.isDarwin && apple_sdk ? sdk) (
     # Pull a header that contains a definition of proc_pid_rusage().
     # (We pick just that one because using the other headers from `sdk` is not
     # compatible with our C++ standard library. This header is already in

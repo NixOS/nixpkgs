@@ -101,7 +101,7 @@ stdenv.mkDerivation (rec {
   ++ lib.optional
     (
       stdenv.targetPlatform.isDarwin
-        && !stdenv.targetPlatform.isAarch64
+        && darwin.apple_sdk ? sdk
         && (lib.versionAtLeast release_version "15")
     )
     (

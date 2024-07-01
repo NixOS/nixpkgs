@@ -234,7 +234,7 @@ in let
         # https://github.com/NixOS/nixpkgs/pull/194634#issuecomment-1272129132
         ++ lib.optional (
           stdenv.targetPlatform.isDarwin
-            && !stdenv.targetPlatform.isAarch64
+            && darwin.apple_sdk ? sdk
             && (lib.versionOlder darwin.apple_sdk.sdk.version "11.0")
         ) ./lldb/cpu_subtype_arm64e_replacement.patch;
     };
