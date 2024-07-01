@@ -63,7 +63,7 @@ buildNpmPackage rec {
         --replace-fail '- target: "tar.gz"' '- target: "dir"'
 
     # add extra fields to resolve the electron provided by nixpkgs
-    sed -e 1i'electronDist: ${electron}/libexec/electron' \
+    sed -e 1i'electronDist: ${electron.dist}' \
         -e 1i'electronVersion: ${electron.version}' \
         -i electron-builder-linux.yml
 
