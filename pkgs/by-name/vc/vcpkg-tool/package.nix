@@ -7,7 +7,6 @@
 , fmt
 , git
 , gzip
-, makeWrapper
 , meson
 , ninja
 , openssh
@@ -30,7 +29,6 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     ninja
-    makeWrapper
   ];
 
   buildInputs = [
@@ -47,7 +45,11 @@ stdenv.mkDerivation (finalAttrs: {
     "-DVCPKG_DEPENDENCY_CMAKERC=ON"
   ];
 
-  postFixup = let
+
+  # vcpkg needs two directories to write to that is independent of installation directory.
+  # Since vcpkg already creates $HOME/.vcpkg/ we use that to create a root where vcpkg can write into.
+  passAsFile = [ "vcpkgWrapper" ];
+  vcpkgWrapper = let
     # These are the most common binaries used by vcpkg
     # Extra binaries can be added via overlay when needed
     runtimeDeps = [
@@ -63,7 +65,20 @@ stdenv.mkDerivation (finalAttrs: {
       zstd
     ] ++ extraRuntimeDeps;
   in ''
-    wrapProgram $out/bin/vcpkg --prefix PATH ${lib.makeBinPath runtimeDeps}
+    vcpkg_writable_path="$HOME/.vcpkg/root/"
+
+    export PATH="${lib.makeBinPath runtimeDeps}''${PATH:+":$PATH"}"
+
+    "${placeholder "out"}/bin/vcpkg" \
+      --x-downloads-root="$vcpkg_writable_path"/downloads \
+      --x-buildtrees-root="$vcpkg_writable_path"/buildtrees \
+      --x-packages-root="$vcpkg_writable_path"/packages \
+      "$@"
+  '';
+
+  postFixup = ''
+    mv "$out/bin/vcpkg" "$out/bin/.vcpkg-wrapped"
+    install -Dm555 "$vcpkgWrapperPath" "$out/bin/vcpkg"
   '';
 
   meta = {

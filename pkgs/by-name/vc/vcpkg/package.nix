@@ -2,7 +2,7 @@
 , stdenvNoCC
 , lib
 , vcpkg-tool
-, writeShellScript
+, makeWrapper
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -16,25 +16,17 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     hash = "sha256-eDpMGDtC44eh0elLWV0r1H/WbpVdZ5qMedKh7Ct50Cs=";
   };
 
-  installPhase = let
-    # vcpkg needs two directories to write to that is independent of installation directory.
-    # Since vcpkg already creates $HOME/.vcpkg/ we use that to create a root where vcpkg can write into.
-    vcpkgScript = writeShellScript "vcpkg" ''
-      vcpkg_writable_path="$HOME/.vcpkg/root/"
+  nativeBuildInputs = [ makeWrapper ];
 
-      VCPKG_ROOT="@out@/share/vcpkg" ${vcpkg-tool}/bin/vcpkg \
-        --x-downloads-root="$vcpkg_writable_path"/downloads \
-        --x-buildtrees-root="$vcpkg_writable_path"/buildtrees \
-        --x-packages-root="$vcpkg_writable_path"/packages \
-        "$@"
-      '';
-    in ''
+  installPhase = ''
       runHook preInstall
 
       mkdir -p $out/bin $out/share/vcpkg/scripts/buildsystems
       cp --preserve=mode -r ./{docs,ports,triplets,scripts,.vcpkg-root,versions,LICENSE.txt} $out/share/vcpkg/
-      substitute ${vcpkgScript} $out/bin/vcpkg --subst-var-by out $out
-      chmod +x $out/bin/vcpkg
+
+      makeWrapper "${vcpkg-tool}/bin/vcpkg" "$out/bin/vcpkg" \
+        --set-default VCPKG_ROOT "$out/share/vcpkg"
+
       ln -s $out/bin/vcpkg $out/share/vcpkg/vcpkg
       touch $out/share/vcpkg/vcpkg.disable-metrics
 
