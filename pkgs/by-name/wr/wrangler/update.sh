@@ -1,5 +1,5 @@
 #! /usr/bin/env nix-shell
-#! nix-shell -i bash -p gnused nix nodejs prefetch-npm-deps wget
+#! nix-shell -i bash -p gnused nix nodejs prefetch-npm-deps wget pnpm
 
 set -euo pipefail
 pushd "$(dirname "${BASH_SOURCE[0]}")"
@@ -18,24 +18,5 @@ store_name="wrangler_$version.tar.gz"
 sha256=$(nix-prefetch-url --name "$store_name" "$url")
 src_hash=$(nix-hash --to-sri --type sha256 "$sha256")
 sed -i 's#hash = "[^"]*"#hash = "'"$src_hash"'"#' package.nix
-
-rm -f package-lock.json *.tar.gz
-rm -rf "${tarball%.tar.gz}"
-
-wget "$url"
-
-mkdir -p "${tarball%.tar.gz}"
-tar xf "$tarball" -C "${tarball%.tar.gz}"
-
-tar xf "$tarball" -C "${tarball%.tar.gz}"
-
-target_dir="${tarball%.tar.gz}/workers-sdk-wrangler-${version}"
-npm i --save-dev --legacy-peer-deps --package-lock-only --ignore-scripts --prefix "$target_dir"
-npm_hash=$(prefetch-npm-deps "${target_dir}/package-lock.json")
-cp "${target_dir}/package-lock.json" package-lock.json
-rm -f *.tar.gz
-rm -rf "${tarball%.tar.gz}"
-
-sed -i 's#npmDepsHash = "[^"]*"#npmDepsHash = "'"$npm_hash"'"#' package.nix
 
 popd

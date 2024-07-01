@@ -1,10 +1,10 @@
 {
+  stdenv,
   lib,
-  buildNpmPackage,
-  fetchFromGitHub,
+  pnpm
 }:
 
-buildNpmPackage rec {
+stdenv.mkDerivation(finalAttrs: {
   pname = "wrangler";
   version = "3.62.0";
 
@@ -15,15 +15,13 @@ buildNpmPackage rec {
     hash = "sha256-Dd1ngrnQnU2QCSvbsZq51DObjgd3Fq1LkCAqe/Qsd9k=";
   };
 
-  npmDepsHash = "sha256-RbxJYKFMPlklXjMb/iqmp/qnvV72NT4y3DIDD2UZG1U=";
+  pnpmDeps = pnpm.fetchDeps {
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-Dd1ngrnQnU2QCSvbsZq51DObjgd3Fq1LkCAqe/Qsd9k=";
+    sourceRoot = "${finalAttrs.src.name}/packages/wrangler"
+  };
 
-  postPatch = ''
-    ln -s ${./package-lock.json} package-lock.json
-  '';
-
-  dontNpmBuild = true;
-
-  passthru.updateScript = ./update.sh;
+  pnpmRoot = "packages/wrangler"
 
   meta = {
     description = "Command-line interface for all things Cloudflare Workers";
@@ -32,4 +30,4 @@ buildNpmPackage rec {
     maintainers = with lib.maintainers; [ dezren39 ];
     mainProgram = "wrangler";
   };
-}
+})
