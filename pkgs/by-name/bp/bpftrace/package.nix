@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub
 , llvmPackages, elfutils, bcc
-, libbpf, libbfd, libopcodes
+, libbpf, libbfd, libopcodes, glibc
 , cereal, asciidoctor
 , cmake, pkg-config, flex, bison
 , util-linux
@@ -41,9 +41,21 @@ stdenv.mkDerivation rec {
     "-DBUILD_TESTING=FALSE"
     "-DLIBBCC_INCLUDE_DIRS=${bcc}/include"
     "-DINSTALL_TOOL_DOCS=OFF"
-    "-DUSE_SYSTEM_BPF_BCC=ON"
+    "-DSYSTEM_INCLUDE_PATHS=${glibc.dev}/include"
   ];
 
+  patches = [
+    # https://github.com/bpftrace/bpftrace/pull/3243 (merged)
+    ./override-system-headers.patch
+    # https://github.com/bpftrace/bpftrace/pull/3152 (merged)
+    ./tcp-bt-no-includes.patch
+    # https://github.com/bpftrace/bpftrace/pull/3262 (merged)
+    ./runqlat-bt-no-includes.patch
+    # https://github.com/bpftrace/bpftrace/pull/3242 (merged)
+    ./kheaders-not-found-message-fix.patch
+    # https://github.com/bpftrace/bpftrace/pull/3265
+    ./kheaders-not-found-message-only-on-error.patch
+  ];
 
   # Pull BPF scripts into $PATH (next to their bcc program equivalents), but do
   # not move them to keep `${pkgs.bpftrace}/share/bpftrace/tools/...` working.
