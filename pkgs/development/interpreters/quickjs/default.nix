@@ -2,8 +2,11 @@
 , stdenv
 , fetchurl
 , texinfo
+, buildPackages
 }:
-
+let
+  isCross = !stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+in
 stdenv.mkDerivation rec {
   pname = "quickjs";
   version = "2024-01-13";
@@ -17,7 +20,9 @@ stdenv.mkDerivation rec {
     substituteInPlace Makefile --replace "CONFIG_LTO=y" ""
   '';
 
-  makeFlags = [ "PREFIX=${placeholder "out"}" ];
+  depsBuildBuild = lib.optional isCross buildPackages.stdenv.cc;
+
+  makeFlags = [ "PREFIX=${placeholder "out"}" ] ++ lib.optional isCross "CROSS_PREFIX=${stdenv.cc.targetPrefix}";
   enableParallelBuilding = true;
 
   nativeBuildInputs = [
