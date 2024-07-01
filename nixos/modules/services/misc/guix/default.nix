@@ -212,12 +212,12 @@ in
       # should be sandboxed.
       systemd.services.guix-daemon = {
         environment = serviceEnv;
-        script = ''
-          ${lib.getExe' package "guix-daemon"} \
-            --build-users-group=${cfg.group} \
-            ${lib.escapeShellArgs cfg.extraArgs}
-        '';
         serviceConfig = {
+          ExecStart = ''
+            ${lib.getExe' package "guix-daemon"} \
+              --build-users-group=${cfg.group} \
+              ${lib.escapeShellArgs cfg.extraArgs}
+          '';
           OOMPolicy = "continue";
           RemainAfterExit = "yes";
           Restart = "always";
@@ -324,7 +324,7 @@ in
             }
         '';
         script = ''
-          ${lib.getExe' package "guix"} publish \
+          exec ${lib.getExe' package "guix"} publish \
             --user=${cfg.publish.user} --port=${builtins.toString cfg.publish.port} \
             ${lib.escapeShellArgs cfg.publish.extraArgs}
         '';
@@ -379,13 +379,9 @@ in
       systemd.services.guix-gc = {
         description = "Guix garbage collection";
         startAt = cfg.gc.dates;
-        script = ''
-          ${lib.getExe' package "guix"} gc ${lib.escapeShellArgs cfg.gc.extraArgs}
-        '';
-
         serviceConfig = {
           Type = "oneshot";
-
+          ExecStart = "${lib.getExe' package "guix"} gc ${lib.escapeShellArgs cfg.gc.extraArgs}";
           PrivateDevices = true;
           PrivateNetworks = true;
           ProtectControlGroups = true;

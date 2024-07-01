@@ -97,10 +97,8 @@ in
         description = "BOINC Client";
         after = ["network.target"];
         wantedBy = ["multi-user.target"];
-        script = ''
-          ${fhsEnvExecutable} --dir ${cfg.dataDir} ${allowRemoteGuiRpcFlag}
-        '';
         serviceConfig = {
+          ExecStart = "${fhsEnvExecutable} --dir ${cfg.dataDir} ${allowRemoteGuiRpcFlag}";
           User = "boinc";
           Nice = 10;
         };
