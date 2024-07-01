@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "elasticsearch-dsl";
-  version = "8.13.1";
+  version = "8.14.0";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-FTMFODQZp+5hulOG9P4iueIHMnmv75c01bWfXKtoL3o=";
+    hash = "sha256-MmxtzPMvH/PUyEiJOIWQd4REuhj3cK3uUvJHIcuXxMc=";
   };
 
   propagatedBuildInputs = [
@@ -35,6 +35,7 @@ buildPythonPackage rec {
       the official low-level client (elasticsearch-py).
     '';
     homepage = "https://github.com/elasticsearch/elasticsearch-dsl-py";
+    changelog = "https://github.com/elastic/elasticsearch-dsl-py/blob/v${version}/Changelog.rst";
     license = licenses.asl20;
     maintainers = with maintainers; [ desiderius ];
   };
