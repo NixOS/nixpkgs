@@ -2,14 +2,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "rabbitvcs";
-  version = "0.18";
+  version = "0.19";
   namePrefix = "";
 
   src = fetchFromGitHub {
     owner = "rabbitvcs";
     repo = "rabbitvcs";
-    rev = "v${version}";
-    hash = "sha256-gVrdf8vQWAGORZqlTS/axs4U7aZlS8OAgPM3iKgqAtM=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-8lC9SgtEPnPn0MZCs9IJnbTX0fCJUMlJKOAVgjuj4YA=";
   };
 
   buildInputs = [ gtk3 ];
