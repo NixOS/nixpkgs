@@ -77,6 +77,8 @@ in lib.init bootStages ++ [
                then buildPackages.llvmPackages.clang
              else if crossSystem.useZig or false
                then buildPackages.zig.cc
+             else if crossSystem.useArocc or false
+               then buildPackages.arocc
              else buildPackages.gcc;
 
         extraNativeBuildInputs = old.extraNativeBuildInputs
