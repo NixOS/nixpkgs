@@ -865,10 +865,10 @@
         "src": {
             "owner": "libretro",
             "repo": "vba-next",
-            "rev": "ee92625d2f1666496be4f5662508a2430e846b00",
-            "hash": "sha256-r3FKBD4GUUkobMJ33VceseyTyqxm/Wsa5Er6XcfGL2Q="
+            "rev": "2c726f25da75a5600ef5791ce904befe06c4dddd",
+            "hash": "sha256-Elb6cOm2oO+3fNUaTXLN4kyhftoJ/oWXD571mXApybs="
         },
-        "version": "unstable-2023-06-03"
+        "version": "unstable-2024-06-28"
     },
     "vecx": {
         "fetcher": "fetchFromGitHub",
