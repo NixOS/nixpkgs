@@ -1,53 +1,59 @@
-{ lib
-, stdenv
-, appstream-glib
-, desktop-file-utils
-, deepfilternet
-, fetchFromGitHub
-, calf
-, fftw
-, fftwFloat
-, fmt_9
-, glib
-, gsl
-, gtk4
-, itstool
-, ladspaH
-, libadwaita
-, libbs2b
-, libebur128
-, libportal-gtk4
-, libsamplerate
-, libsigcxx30
-, libsndfile
-, lilv
-, lsp-plugins
-, lv2
-, mda_lv2
-, meson
-, ninja
-, nlohmann_json
-, pipewire
-, pkg-config
-, rnnoise
-, rubberband
-, speexdsp
-, soundtouch
-, tbb
-, wrapGAppsHook4
-, zam-plugins
-, zita-convolver
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  appstream-glib,
+  calf,
+  deepfilternet,
+  desktop-file-utils,
+  fftw,
+  fftwFloat,
+  fmt_9,
+  glib,
+  gsl,
+  gtk4,
+  itstool,
+  ladspaH,
+  libadwaita,
+  libbs2b,
+  libebur128,
+  libportal-gtk4,
+  libsamplerate,
+  libsigcxx30,
+  libsndfile,
+  lilv,
+  lsp-plugins,
+  lv2,
+  mda_lv2,
+  meson,
+  ninja,
+  nix-update-script,
+  nlohmann_json,
+  pipewire,
+  pkg-config,
+  rnnoise,
+  rubberband,
+  speexdsp,
+  soundtouch,
+  tbb,
+  wrapGAppsHook4,
+  zam-plugins,
+  zita-convolver,
 }:
+let
+  # Fix crashes with speexdsp effects
+  speexdsp' = speexdsp.override { withFftw3 = false; };
+in
 
 stdenv.mkDerivation rec {
   pname = "easyeffects";
-  version = "7.1.6";
+  version = "7.1.7";
 
   src = fetchFromGitHub {
     owner = "wwmm";
     repo = "easyeffects";
     rev = "v${version}";
-    hash = "sha256-NViRZHNgsweoD1YbyWYrRTZPKTCkKk3fGDLLYDD7JfA=";
+    hash = "sha256-y7we7/MQWweAoZkM8SuHiOTVyWFj9/foufLYBum/KKc=";
   };
 
   nativeBuildInputs = [
@@ -83,7 +89,7 @@ stdenv.mkDerivation rec {
     rnnoise
     rubberband
     soundtouch
-    speexdsp
+    speexdsp'
     tbb
     zita-convolver
   ];
@@ -110,13 +116,17 @@ stdenv.mkDerivation rec {
 
   separateDebugInfo = true;
 
-  meta = with lib; {
-    changelog = "https://github.com/wwmm/easyeffects/blob/v${version}/CHANGELOG.md";
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
+  meta = {
     description = "Audio effects for PipeWire applications";
     homepage = "https://github.com/wwmm/easyeffects";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ ];
-    platforms = platforms.linux;
+    changelog = "https://github.com/wwmm/easyeffects/blob/v${version}/CHANGELOG.md";
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ getchoo ];
     mainProgram = "easyeffects";
+    platforms = lib.platforms.linux;
   };
 }

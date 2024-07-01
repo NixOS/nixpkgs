@@ -25954,11 +25954,6 @@ with pkgs;
 
   libcardiacarrest = callPackage ../misc/libcardiacarrest { };
 
-  easyeffects = callPackage ../applications/audio/easyeffects {
-    # Fix crashes with speexdsp effects
-    speexdsp = speexdsp.override { withFftw3 = false; };
-  };
-
   pulseeffects-legacy = callPackage ../applications/audio/pulseeffects-legacy { };
 
   tomcat_connectors = callPackage ../servers/http/apache-modules/tomcat-connectors { };
