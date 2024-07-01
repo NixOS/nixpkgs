@@ -303,4 +303,10 @@ in stdenv.mkDerivation (finalAttrs: {
       "i686-windows" "x86_64-windows"
     ];
   };
+} // lib.optionalAttrs stdenv.cc.isClang { # FIXME: move inside again when rebuilds are OK
+  hardeningDisable = optionals stdenv.cc.isClang [
+    # remove once https://github.com/NixOS/nixpkgs/issues/318674 is
+    # addressed properly
+    "zerocallusedregs"
+  ];
 })
