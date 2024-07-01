@@ -85,7 +85,7 @@ in
   options = {
     services.drupal = {
       enable = mkEnableOption "drupal";
-      package = mkPackageOption pkgs "drupal";
+      package = mkPackageOption pkgs "drupal" { };
 
       sites = mkOption {
         type = types.attrsOf (types.submodule siteOpts);
