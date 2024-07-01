@@ -18,6 +18,8 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-86KQpRpYSCQs6SUeG0HV26b58x/QUyovoL+5fg8JCOI=";
 
+  buildAndTestSubdir = "tokio-console";
+
   nativeBuildInputs = [
     installShellFiles
     protobuf
