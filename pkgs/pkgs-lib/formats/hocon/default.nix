@@ -27,13 +27,9 @@ let
   '';
 in
 {
-  # https://github.com/lightbend/config/blob/main/HOCON.md
   format = {
     generator ? hocon-generator
     , validator ? hocon-validator
-    # `include classpath("")` is not implemented in pyhocon.
-    # In the case that you need this functionality,
-    # you will have to disable pyhocon validation.
     , doCheck ? true
   }: let
     hoconLib = {
