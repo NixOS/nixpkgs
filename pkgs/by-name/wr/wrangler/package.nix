@@ -13,7 +13,7 @@ stdenv.mkDerivation(finalAttrs: {
     inherit (finalAttrs) pname version;
     owner = "cloudflare";
     repo = "workers-sdk";
-    rev = "${pname}@${version}";
+    rev = "${finalAttrs.pname}@${finalAttrs.version}";
     hash = "sha256-Dd1ngrnQnU2QCSvbsZq51DObjgd3Fq1LkCAqe/Qsd9k=";
   };
 
