@@ -265,7 +265,10 @@ in
             config.boot.initrd.network.ssh.authorizedKeys ++
             (map (file: lib.fileContents file) config.boot.initrd.network.ssh.authorizedKeyFiles));
       };
-      storePaths = ["${package}/bin/sshd"];
+      storePaths = [
+        "${package}/bin/sshd"
+        "${package}/libexec/sshd-session"
+      ];
 
       services.sshd = {
         description = "SSH Daemon";
