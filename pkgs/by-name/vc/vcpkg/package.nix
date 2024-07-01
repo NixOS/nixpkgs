@@ -21,14 +21,14 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   installPhase = ''
       runHook preInstall
 
-      mkdir -p $out/bin $out/share/vcpkg/scripts/buildsystems
-      cp --preserve=mode -r ./{docs,ports,triplets,scripts,.vcpkg-root,versions,LICENSE.txt} $out/share/vcpkg/
+      mkdir -p "$out/bin" "$out/share/vcpkg/scripts/buildsystems"
+      cp --preserve=mode -r ./{docs,ports,triplets,scripts,.vcpkg-root,versions,LICENSE.txt} "$out/share/vcpkg/"
 
       makeWrapper "${vcpkg-tool}/bin/vcpkg" "$out/bin/vcpkg" \
         --set-default VCPKG_ROOT "$out/share/vcpkg"
 
-      ln -s $out/bin/vcpkg $out/share/vcpkg/vcpkg
-      touch $out/share/vcpkg/vcpkg.disable-metrics
+      ln -s "$out/bin/vcpkg" "$out/share/vcpkg/vcpkg"
+      touch "$out/share/vcpkg/vcpkg.disable-metrics"
 
       runHook postInstall
     '';
