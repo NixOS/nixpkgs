@@ -7,7 +7,6 @@
   perlPackages,
   stdenv,
   fetchFromGitHub,
-  fetchzip,
   perl,
   makeWrapper,
 }:
@@ -25,10 +24,11 @@ let
     # Copy modules directly
     stdenv.mkDerivation {
       inherit name version;
-      # Not available through fetchFromGitHub
-      src = fetchzip {
+      src = fetchFromGitHub {
         inherit sha256 version;
-        url = "https://github.com/Ensembl/${name}/archive/release/${version}.zip";
+        owner = "Ensembl";
+        repo = name;
+        rev = "release/${version}";
       };
       installPhase = customInstallPhase;
     };
@@ -60,7 +60,7 @@ let
   };
 
   # it contains compiled versions of certain key subroutines used in VEP
-  ensembl = ensemblGit "ensembl" "sha256-labyyqp+FRLIN9y4koePkX5fUls8HbCJlgYHUA0JR/0=";
+  ensembl = ensemblGit "ensembl" "sha256-ZhI4VNxIY+53RX2uYRNlFeo/ydAmlwGx00WDXaxv6h4=";
   ensembl-io = ensemblGit "ensembl-io" "sha256-r3RvN5U2kcyghoKM0XuiBRe54t1U4FaZ0QEeYIFiG0w=";
   ensembl-variation = ensemblGit "ensembl-variation" "sha256-UjrLHF9EqI+Mp+SZR4sLNZUCGiA/UYhoFWtpwiKF8tM=";
   ensembl-funcgen = ensemblGit "ensembl-funcgen" "sha256-a9hxLBoXJsF5JWuRdpyOac1u033M8ivEjEQecuncghs=";
@@ -105,11 +105,13 @@ perlPackages.buildPerlModule rec {
       --add-flags "--dir_plugins ${vepPlugins}";
   '';
   installPhase = ''
-    mkdir -p $out/bin
-    cp vep filter_vep haplo variant_recoder $out/bin/
+    runHook preInstall
 
     mkdir -p $out/${perl.libPrefix}/${perl.version}/
-    cp -r modules/Bio $out/${perl.libPrefix}/${perl.version}/
+    tests=$(find modules/ -mindepth 1 -maxdepth 1 -type d | grep -v t)
+    cp -r $tests $out/${perl.libPrefix}/${perl.version}/
+
+    runHook postInstall
   '';
 
   meta = {
@@ -118,5 +120,6 @@ perlPackages.buildPerlModule rec {
     license = lib.licenses.asl20;
     mainProgram = "vep";
     maintainers = with lib.maintainers; [ apraga ];
+    platforms = lib.platforms.unix;
   };
 }
