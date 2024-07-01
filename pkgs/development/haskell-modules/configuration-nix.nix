@@ -242,6 +242,19 @@ self: super: builtins.intersectAttrs super {
   cabal2nix = self.generateOptparseApplicativeCompletions [ "cabal2nix" ] super.cabal2nix;
 
   arbtt = overrideCabal (drv: {
+    buildTools = drv.buildTools or [] ++ [
+      pkgs.buildPackages.installShellFiles
+      pkgs.buildPackages.libxslt
+    ];
+    postBuild = ''
+      xsl=${pkgs.buildPackages.docbook_xsl}/share/xml/docbook-xsl
+      make -C doc man XSLTPROC_MAN_STYLESHEET=$xsl/manpages/profile-docbook.xsl
+    '';
+    postInstall = ''
+      for f in doc/man/man[1-9]/*; do
+        installManPage $f
+      done
+    '';
     # The test suite needs the packages's executables in $PATH to succeed.
     preCheck = ''
       for i in $PWD/dist/build/*; do
