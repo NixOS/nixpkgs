@@ -37,6 +37,7 @@
   sndio,
   spdlog,
   sway,
+  systemd,
   udev,
   upower,
   wayland,
@@ -118,6 +119,7 @@ stdenv.mkDerivation (finalAttrs: {
       libsigcxx
       libxkbcommon
       spdlog
+      systemd
       wayland
     ]
     ++ lib.optionals cavaSupport [
@@ -164,12 +166,14 @@ stdenv.mkDerivation (finalAttrs: {
       "pulseaudio" = pulseSupport;
       "rfkill" = rfkillSupport;
       "sndio" = sndioSupport;
-      "systemd" = false;
+      "systemd" = true;
       "tests" = runTests;
       "upower_glib" = upowerSupport;
       "wireplumber" = wireplumberSupport;
     })
     ++ lib.optional experimentalPatches (lib.mesonBool "experimental" true);
+
+  PKG_CONFIG_SYSTEMD_SYSTEMDUSERUNITDIR = "${placeholder "out"}/lib/systemd/user";
 
   postPatch = ''
     substituteInPlace include/util/command.hpp \
