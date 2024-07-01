@@ -54,7 +54,8 @@ setupCUDAToolkit_ROOT() {
         fi
     done
 
-    export cmakeFlags+=" -DCUDAToolkit_INCLUDE_DIR=$CUDAToolkit_INCLUDE_DIR -DCUDAToolkit_ROOT=$CUDAToolkit_ROOT"
+    appendToVar cmakeFlags "-DCUDAToolkit_INCLUDE_DIR=$CUDAToolkit_INCLUDE_DIR"
+    appendToVar cmakeFlags "-DCUDAToolkit_ROOT=$CUDAToolkit_ROOT"
 }
 preConfigureHooks+=(setupCUDAToolkit_ROOT)
 
@@ -72,8 +73,8 @@ setupCUDAToolkitCompilers() {
     # https://cmake.org/cmake/help/latest/envvar/CUDAHOSTCXX.html
     # https://cmake.org/cmake/help/latest/variable/CMAKE_CUDA_HOST_COMPILER.html
 
-    export cmakeFlags+=" -DCUDA_HOST_COMPILER=@ccFullPath@"
-    export cmakeFlags+=" -DCMAKE_CUDA_HOST_COMPILER=@ccFullPath@"
+    appendToVar cmakeFlags "-DCUDA_HOST_COMPILER=@ccFullPath@"
+    appendToVar cmakeFlags "-DCMAKE_CUDA_HOST_COMPILER=@ccFullPath@"
 
     # For non-CMake projects:
     # We prepend --compiler-bindir to nvcc flags.

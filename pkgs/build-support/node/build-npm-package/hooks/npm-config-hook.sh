@@ -87,7 +87,10 @@ npmConfigHook() {
 
     echo "Installing dependencies"
 
-    if ! npm ci --ignore-scripts $npmInstallFlags "${npmInstallFlagsArray[@]}" $npmFlags "${npmFlagsArray[@]}"; then
+    local flagsArray=()
+    concatTo flagsArray npmInstallFlags npmInstallFlagsArray npmFlags npmFlagsArray
+
+    if ! npm ci --ignore-scripts "${flagsArray[@]}"; then
         echo
         echo "ERROR: npm failed to install dependencies"
         echo

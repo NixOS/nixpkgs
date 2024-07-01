@@ -21,7 +21,9 @@ buildPhase() {
         echo "Building linux driver against kernel: $kernel";
         cd kernel
         unset src # used by the nv makefile
-        make $makeFlags -j $NIX_BUILD_CORES module
+        local flagsArray=()
+        concatTo flagsArray makeFlags
+        make "${flagsArray[@]}" -j $NIX_BUILD_CORES module
 
         cd ..
     fi

@@ -1,3 +1,5 @@
+# shellcheck shell=bash disable=SC2154,SC2164
+
 # BSD makefiles should be able to detect this
 # but without they end up using gcc on Darwin stdenv
 addMakeFlags() {
@@ -35,38 +37,38 @@ addMakeFlags() {
   export MKUNPRIVED=yes
   export EXTERNAL_TOOLCHAIN=yes
 
-  makeFlags="MACHINE=$MACHINE $makeFlags"
-  makeFlags="MACHINE_ARCH=$MACHINE_ARCH $makeFlags"
-  makeFlags="AR=$AR $makeFlags"
-  makeFlags="CC=$CC $makeFlags"
-  makeFlags="CPP=$CPP $makeFlags"
-  makeFlags="CXX=$CXX $makeFlags"
-  makeFlags="LD=$LD $makeFlags"
-  makeFlags="STRIP=$STRIP $makeFlags"
+  prependToVar makeFlags "MACHINE=$MACHINE"
+  prepentToVar makeFlags "MACHINE_ARCH=$MACHINE_ARCH"
+  prepentToVar makeFlags "AR=$AR"
+  prepentToVar makeFlags "CC=$CC"
+  prepentToVar makeFlags "CPP=$CPP"
+  prepentToVar makeFlags "CXX=$CXX"
+  prepentToVar makeFlags "LD=$LD"
+  prepentToVar makeFlags "STRIP=$STRIP"
 
-  makeFlags="BINDIR=${!outputBin}/bin $makeFlags"
-  makeFlags="LIBDIR=${!outputLib}/lib $makeFlags"
-  makeFlags="SHLIBDIR=${!outputLib}/lib $makeFlags"
-  makeFlags="SHAREDIR=${!outputLib}/share $makeFlags"
-  makeFlags="INFODIR=${!outputInfo}/share/info $makeFlags"
-  makeFlags="DOCDIR=${!outputDoc}/share/doc $makeFlags"
-  makeFlags="LOCALEDIR=${!outputLib}/share/locale $makeFlags"
+  prepentToVar makeFlags "BINDIR=${!outputBin}/bin"
+  prepentToVar makeFlags "LIBDIR=${!outputLib}/lib"
+  prepentToVar makeFlags "SHLIBDIR=${!outputLib}/lib"
+  prepentToVar makeFlags "SHAREDIR=${!outputLib}/share"
+  prepentToVar makeFlags "INFODIR=${!outputInfo}/share/info"
+  prepentToVar makeFlags "DOCDIR=${!outputDoc}/share/doc"
+  prepentToVar makeFlags "LOCALEDIR=${!outputLib}/share/locale"
 
   # Parallel building. Needs the space.
-  makeFlags="-j $NIX_BUILD_CORES $makeFlags"
+  prepentToVar makeFlags "-j $NIX_BUILD_CORES"
 }
 
 setBSDSourceDir() {
   sourceRoot=$PWD/$sourceRoot
   export BSDSRCDIR=$sourceRoot
   export _SRC_TOP_=$BSDSRCDIR
-  cd $sourceRoot
+  cd "$sourceRoot"
 }
 
 cdBSDPath() {
   if [ -d "$COMPONENT_PATH" ]
     then sourceRoot=$sourceRoot/$COMPONENT_PATH
-    cd $COMPONENT_PATH
+    cd "$COMPONENT_PATH"
   fi
 }
 
@@ -74,10 +76,9 @@ includesPhase() {
   if [ -z "${skipIncludesPhase:-}" ]; then
     runHook preIncludes
 
-    local flagsArray=(
-         $makeFlags ${makeFlagsArray+"${makeFlagsArray[@]}"}
-         includes
-    )
+    local flagsArray=()
+    concatTo flagsArray makeFlags makeFlagsArray
+    flagsArray+=(includes)
 
     echoCmd 'includes flags' "${flagsArray[@]}"
     make ${makefile:+-f $makefile} "${flagsArray[@]}"
@@ -89,19 +90,19 @@ includesPhase() {
 }
 
 moveUsrDir() {
-  if [ -d $prefix ]; then
+  if [ -d "$prefix" ]; then
     # Remove lingering /usr references
-    if [ -d $prefix/usr ]; then
+    if [ -d "$prefix/usr" ]; then
       # Didn't try using rsync yet because per
       # https://unix.stackexchange.com/questions/127712/merging-folders-with-mv,
       # it's not neessarily better.
-      pushd $prefix/usr
-      find . -type d -exec mkdir -p $out/\{} \;
-      find . \( -type f -o -type l \) -exec mv \{} $out/\{} \;
+      pushd "$prefix/usr"
+      find . -type d -exec mkdir -p "$out/{}" \;
+      find . \( -type f -o -type l \) -exec mv "{}" "$out/{}" \;
       popd
     fi
 
-    find $prefix -type d -empty -delete
+    find "$prefix" -type d -empty -delete
   fi
 }
 
