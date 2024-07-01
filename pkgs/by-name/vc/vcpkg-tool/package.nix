@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, runtimeShell
 , cacert
 , cmake
 , cmakerc
@@ -47,7 +48,6 @@ stdenv.mkDerivation (finalAttrs: {
 
 
   # vcpkg needs two directories to write to that is independent of installation directory.
-  # Since vcpkg already creates $HOME/.vcpkg/ we use that to create a root where vcpkg can write into.
   passAsFile = [ "vcpkgWrapper" ];
   vcpkgWrapper = let
     # These are the most common binaries used by vcpkg
@@ -64,15 +64,27 @@ stdenv.mkDerivation (finalAttrs: {
       zip
       zstd
     ] ++ extraRuntimeDeps;
+    setEnvvar = k: v: ''${k}=''${${k}-"${v}"}'';
   in ''
-    vcpkg_writable_path="$HOME/.vcpkg/root/"
+    #!${runtimeShell}
+
+    NIX_VCPKG_WRITABLE_PATH=''${NIX_VCPKG_WRITABLE_PATH:-''${XDG_CACHE_HOME+"$XDG_CACHE_HOME/vcpkg"}}
+    NIX_VCPKG_WRITABLE_PATH=''${NIX_VCPKG_WRITABLE_PATH:-''${HOME+"$HOME/.vcpkg/root"}}
+    NIX_VCPKG_WRITABLE_PATH=''${NIX_VCPKG_WRITABLE_PATH:-''${TMP}}
+    NIX_VCPKG_WRITABLE_PATH=''${NIX_VCPKG_WRITABLE_PATH:-'/tmp'}
+
+    ${setEnvvar "NIX_VCPKG_DOWNLOADS_ROOT" "$NIX_VCPKG_WRITABLE_PATH/downloads"}
+    ${setEnvvar "NIX_VCPKG_BUILDTREES_ROOT" "$NIX_VCPKG_WRITABLE_PATH/buildtrees"}
+    ${setEnvvar "NIX_VCPKG_PACKAGES_ROOT" "$NIX_VCPKG_WRITABLE_PATH/packages"}
+    ${setEnvvar "NIX_VCPKG_INSTALL_ROOT" "$NIX_VCPKG_WRITABLE_PATH/installed"}
 
     export PATH="${lib.makeBinPath runtimeDeps}''${PATH:+":$PATH"}"
 
-    "${placeholder "out"}/bin/vcpkg" \
-      --x-downloads-root="$vcpkg_writable_path"/downloads \
-      --x-buildtrees-root="$vcpkg_writable_path"/buildtrees \
-      --x-packages-root="$vcpkg_writable_path"/packages \
+    exec -a "$0" "${placeholder "out"}/bin/.vcpkg-wrapped" \
+      --x-downloads-root="$NIX_VCPKG_DOWNLOADS_ROOT" \
+      --x-buildtrees-root="$NIX_VCPKG_BUILDTREES_ROOT" \
+      --x-packages-root="$NIX_VCPKG_PACKAGES_ROOT" \
+      --x-install-root="$NIX_VCPKG_INSTALL_ROOT" \
       "$@"
   '';
 
