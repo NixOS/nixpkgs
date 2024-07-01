@@ -21760,6 +21760,12 @@
     github = "x0ba";
     githubId = 64868985;
   };
+  x123 = {
+    name = "x123";
+    email = "nix@boxchop.city";
+    github = "x123";
+    githubId = 5481629;
+  };
   x3ro = {
     name = "^x3ro";
     email = "nix@x3ro.dev";
