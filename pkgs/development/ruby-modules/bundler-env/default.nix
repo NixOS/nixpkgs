@@ -1,5 +1,6 @@
 { ruby, lib, callPackage, defaultGemConfig, buildEnv, runCommand
-, bundler, rsync
+, buildPackages
+, bundler
 }@defs:
 
 { name ? null
@@ -21,7 +22,7 @@
 }@args:
 
 let
-  inherit (import ../bundled-common/functions.nix {inherit lib ruby gemConfig groups; }) genStubsScript;
+  inherit (import ../bundled-common/functions.nix { inherit lib ruby gemConfig groups; }) genStubsScript;
 
   basicEnv = (callPackage ../bundled-common { inherit bundler; }) (args // { inherit pname name; mainGemName = pname; });
 
@@ -51,7 +52,7 @@ in
         pathsToLink = [ "/lib" ];
 
         postBuild = genStubsScript {
-          inherit lib ruby bundler groups;
+          inherit lib runCommand ruby bundler groups;
           confFiles = basicEnv.confFiles;
           binPaths = [ basicEnv.gems.${pname} ];
         } + lib.optionalString (postBuild != null) postBuild;
@@ -67,7 +68,7 @@ in
         runCommand basicEnv.name bundlerEnvArgs ''
           mkdir -p $out
           for i in $paths; do
-            ${rsync}/bin/rsync -a $i/lib $out/
+            ${buildPackages.rsync}/bin/rsync -a $i/lib $out/
           done
           eval "$postBuild"
         ''
