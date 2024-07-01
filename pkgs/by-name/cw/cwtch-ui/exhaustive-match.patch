@@ -1,0 +1,13 @@
+diff --git a/lib/settings.dart b/lib/settings.dart
+index 29e76f40..d0120e9e 100644
+--- a/lib/settings.dart
++++ b/lib/settings.dart
+@@ -318,6 +318,8 @@ class Settings extends ChangeNotifier {
+         return [1, 2];
+       case DualpaneMode.Dual1to4:
+         return [1, 4];
++      case DualpaneMode.CopyPortrait:
++        return [1];
+     }
+     print("impossible column configuration: portrait/$uiColumnModePortrait landscape/$uiColumnModeLandscape");
+     return [1];
