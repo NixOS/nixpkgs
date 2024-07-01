@@ -18,10 +18,10 @@ stdenv.mkDerivation(finalAttrs: {
   pnpmDeps = pnpm.fetchDeps {
     inherit (finalAttrs) pname version src;
     hash = "sha256-Dd1ngrnQnU2QCSvbsZq51DObjgd3Fq1LkCAqe/Qsd9k=";
-    sourceRoot = "${finalAttrs.src.name}/packages/wrangler"
+    sourceRoot = "${finalAttrs.src.name}/packages/wrangler";
   };
 
-  pnpmRoot = "packages/wrangler"
+  pnpmRoot = "packages/wrangler";
 
   meta = {
     description = "Command-line interface for all things Cloudflare Workers";
