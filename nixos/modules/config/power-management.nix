@@ -1,4 +1,4 @@
-{ config, lib, ... }:
+{ config, lib, pkgs, ... }:
 
 with lib;
 
@@ -41,6 +41,8 @@ in
             Commands executed when the machine powers up.  That is,
             they're executed both when the system first boots and when
             it resumes from suspend or hibernation.
+            `$GOAL` contains either `suspend`, `hibernate`, `hybrid-sleep`, `suspend-then-hibernate` or `off`.
+            `$SYSTEMD_SLEEP_ACTION` is identical to `$GOAL` except when `$GOAL` is `suspend-then-hibernate` where it refines it by either `suspend`, `hibernate`, or `suspend-after-failed-hibernate`.
           '';
       };
 
@@ -54,6 +56,8 @@ in
             Commands executed when the machine powers down.  That is,
             they're executed both when the system shuts down and when
             it goes to suspend or hibernation.
+            `$GOAL` contains either `suspend`, `hibernate`, `hybrid-sleep`, `suspend-then-hibernate` or `off`.
+            `$SYSTEMD_SLEEP_ACTION` is identical to `$GOAL` except when `$GOAL` is `suspend-then-hibernate` where it refines it by either `suspend`, `hibernate`, or `suspend-after-failed-hibernate`.
           '';
       };
 
@@ -65,39 +69,46 @@ in
   ###### implementation
 
   config = mkIf cfg.enable {
-
-    systemd.targets.post-resume = {
-      description = "Post-Resume Actions";
-      requires = [ "post-resume.service" ];
-      after = [ "post-resume.service" ];
-      wantedBy = [ "sleep.target" ];
-      unitConfig.StopWhenUnneeded = true;
+    # this file will be executed by system-sleep.service
+    environment.etc."systemd/system-sleep/nixos-sleep.sh".source = pkgs.writeShellScript "nixos-sleep.sh" ''
+      set +e
+      export GOAL="$2"
+      if [[ "$2" = "off" ]]; then
+        export SYSTEMD_SLEEP_ACTION=off
+      fi
+      case "$1" in
+        pre)
+          ${cfg.powerDownCommands}
+          ;;
+        post)
+          ${cfg.powerUpCommands}
+          case "$SYSTEMD_SLEEP_ACTION" in
+            suspend|suspend-after-failed-hibernate)
+              ${cfg.resumeCommands}
+              ;;
+            *)
+          esac
+          ;;
+        *)
+          echo "/etc/systemd/system-sleep/nixos-sleep.sh called with unexpected argument $@"
+        esac
+    '';
+    # system-suspend.service and co do not handle bootup and poweroff
+    systemd.services.bootup-commands = {
+      after = [ "multi-user.target" ];
+      wantedBy = [ "multi-user.target" ];
+      serviceConfig = {
+        ExecStart = [ "/etc/systemd/system-sleep/nixos-sleep.sh post off" ];
+        Type = "oneshot";
+      };
     };
-
-    # Service executed before suspending/hibernating.
-    systemd.services.pre-sleep =
-      { description = "Pre-Sleep Actions";
-        wantedBy = [ "sleep.target" ];
-        before = [ "sleep.target" ];
-        script =
-          ''
-            ${cfg.powerDownCommands}
-          '';
-        serviceConfig.Type = "oneshot";
+    systemd.services.poweroff-commands = rec {
+      before = wantedBy;
+      wantedBy = [ "halt.target" "poweroff.target" "reboot.target" ];
+      serviceConfig = {
+        ExecStart = [ "/etc/systemd/system-sleep/nixos-sleep.sh pre off" ];
+        Type = "oneshot";
       };
-
-    systemd.services.post-resume =
-      { description = "Post-Resume Actions";
-        after = [ "suspend.target" "hibernate.target" "hybrid-sleep.target" "suspend-then-hibernate.target" ];
-        script =
-          ''
-            /run/current-system/systemd/bin/systemctl try-restart --no-block post-resume.target
-            ${cfg.resumeCommands}
-            ${cfg.powerUpCommands}
-          '';
-        serviceConfig.Type = "oneshot";
-      };
-
+    };
   };
-
 }
