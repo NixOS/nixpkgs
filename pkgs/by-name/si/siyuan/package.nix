@@ -32,6 +32,10 @@ buildNpmPackage rec {
       })
     ];
 
+    # Set flags and tags as per https://github.com/siyuan-note/siyuan/blob/${rev}/Dockerfile#L12
+    ldflags = [ "-s" "-w" "-X" "github.com/siyuan-note/siyuan/kernel/util.Mode=prod" ];
+    tags = [ "fts5" ];
+
     # this patch makes it so that file permissions are not kept when copying files using the gulu package
     # this fixes a problem where it was copying files from the store and keeping their permissions
     # hopefully this doesn't break other functionality
