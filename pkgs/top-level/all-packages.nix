@@ -16012,8 +16012,7 @@ with pkgs;
   openjdk = jdk;
   openjdk_headless = jdk_headless;
 
-  graalvmCEPackages =
-    recurseIntoAttrs (callPackage ../development/compilers/graalvm/community-edition { });
+  graalvmCEPackages = callPackage ../development/compilers/graalvm/community-edition { };
   graalvm-ce = graalvmCEPackages.graalvm-ce;
   buildGraalvmNativeImage = (callPackage ../build-support/build-graalvm-native-image {
     graalvmDrv = graalvm-ce;
