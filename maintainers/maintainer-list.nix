@@ -8132,6 +8132,13 @@
     githubId = 1903556;
     keys = [ { fingerprint = "F1C5 760E 45B9 9A44 72E9  6BFB D65C 9AFB 4C22 4DA3"; } ];
   };
+  hobr = {
+    name = "Hobr";
+    email = "mail@hobr.site";
+    github = "Hobr";
+    githubId = 13460388;
+    keys = [ { fingerprint = "931C DF57 61E8 4E2C 2CBB  D361 DA2E F9FF 208D C734"; } ];
+  };
   hodapp = {
     email = "hodapp87@gmail.com";
     github = "Hodapp87";
