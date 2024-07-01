@@ -8,7 +8,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "marwaita-manjaro";
+  pname = "marwaita-darkcyan";
   version = "20.1";
 
   src = fetchFromGitHub {
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Manjaro Style (green version) of Marwaita GTK theme";
+    description = "Manjaro Style of Marwaita GTK theme";
     homepage = "https://www.pling.com/p/1351213/";
     license = licenses.gpl3Only;
     platforms = platforms.unix;
