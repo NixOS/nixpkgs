@@ -1,5 +1,6 @@
 { lib, stdenv, fetchurl, openssl, python, zlib, libuv, util-linux, http-parser, bash
 , pkg-config, which, buildPackages
+, testers
 # for `.pkgs` attribute
 , callPackage
 # Updater dependencies
@@ -258,6 +259,13 @@ let
       Cflags: -I$libv8/include
       EOF
     '';
+
+    passthru.tests = {
+      version = testers.testVersion {
+        package = self;
+        version = "v${version}";
+      };
+    };
 
     passthru.updateScript = import ./update.nix {
       inherit writeScript coreutils gnugrep jq curl common-updater-scripts gnupg nix runtimeShell;
