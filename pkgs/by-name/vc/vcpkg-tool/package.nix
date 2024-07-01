@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, runtimeShell
 , cacert
 , cmake
 , cmakerc
@@ -14,6 +15,7 @@
 , zip
 , zstd
 , extraRuntimeDeps ? []
+, doWrap ? true
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "vcpkg-tool";
@@ -46,12 +48,10 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
 
-  # vcpkg needs two directories to write to that is independent of installation directory.
-  # Since vcpkg already creates $HOME/.vcpkg/ we use that to create a root where vcpkg can write into.
   passAsFile = [ "vcpkgWrapper" ];
   vcpkgWrapper = let
     # These are the most common binaries used by vcpkg
-    # Extra binaries can be added via overlay when needed
+    # Extra binaries can be added through override when needed
     runtimeDeps = [
       cacert
       cmake
@@ -64,19 +64,79 @@ stdenv.mkDerivation (finalAttrs: {
       zip
       zstd
     ] ++ extraRuntimeDeps;
+
+    # Apart from adding the runtime dependencies to $PATH,
+    # the wrapper will also override these arguments by default.
+    # This is to ensure that the executable does not try to
+    # write to the nix store. If the user tries to set any of the
+    # arguments themself, the wrapper will detect that the
+    # arguments are present, and prefer the user-provided value.
+    #
+    # It is also possible to override the cli arguments by
+    # settings either of the nix-specific environment variables.
+    argsWithDefault = [
+      {
+        arg = "--downloads-root";
+        env = "NIX_VCPKG_DOWNLOADS_ROOT";
+        default = "$NIX_VCPKG_WRITABLE_PATH/downloads";
+      }
+      {
+        arg = "--x-buildtrees-root";
+        env = "NIX_VCPKG_BUILDTREES_ROOT";
+        default = "$NIX_VCPKG_WRITABLE_PATH/buildtrees";
+      }
+      {
+        arg = "--x-packages-root";
+        env = "NIX_VCPKG_PACKAGES_ROOT";
+        default = "$NIX_VCPKG_WRITABLE_PATH/packages";
+      }
+      {
+        arg = "--x-install-root";
+        env = "NIX_VCPKG_INSTALL_ROOT";
+        default = "$NIX_VCPKG_WRITABLE_PATH/installed";
+      }
+    ];
   in ''
-    vcpkg_writable_path="$HOME/.vcpkg/root/"
+    #!${runtimeShell}
+
+    NIX_VCPKG_WRITABLE_PATH=''${NIX_VCPKG_WRITABLE_PATH:-''${XDG_CACHE_HOME+"$XDG_CACHE_HOME/vcpkg"}}
+    NIX_VCPKG_WRITABLE_PATH=''${NIX_VCPKG_WRITABLE_PATH:-''${HOME+"$HOME/.vcpkg/root"}}
+    NIX_VCPKG_WRITABLE_PATH=''${NIX_VCPKG_WRITABLE_PATH:-''${TMP}}
+    NIX_VCPKG_WRITABLE_PATH=''${NIX_VCPKG_WRITABLE_PATH:-'/tmp'}
+
+    ${lib.concatMapStringsSep "\n" ({ env, default, ... }: ''${env}=''${${env}-"${default}"}'') argsWithDefault}
 
     export PATH="${lib.makeBinPath runtimeDeps}''${PATH:+":$PATH"}"
 
-    "${placeholder "out"}/bin/vcpkg" \
-      --x-downloads-root="$vcpkg_writable_path"/downloads \
-      --x-buildtrees-root="$vcpkg_writable_path"/buildtrees \
-      --x-packages-root="$vcpkg_writable_path"/packages \
-      "$@"
+    ARGS=( "$@" )
+    FINAL_NONMODIFIED_ARGS=()
+
+    for (( i=0; i<''${#ARGS[@]}; i++ ));
+    do
+      case "''${ARGS[i]%%=*}" in
+        ${let
+          f = { arg, env, ... }: ''
+            '${arg}')
+              ${env}="''${ARGS[i]#*=}"
+              if [ "''$${env}" = '${arg}' ]; then
+                ${env}="''${ARGS[i+1]}"
+                ((i++))
+              fi
+              ;;
+          '';
+        in lib.concatMapStringsSep "\n" f argsWithDefault}
+        *)
+          FINAL_NONMODIFIED_ARGS+=(''${ARGS[i]})
+          ;;
+      esac
+    done
+
+    exec -a "$0" "${placeholder "out"}/bin/.vcpkg-wrapped" \
+    ${lib.concatMapStringsSep "\n" ({ arg, env, ... }: "  " + ''${arg}="''$${env}" \'') argsWithDefault}
+      "''${FINAL_NONMODIFIED_ARGS[@]}"
   '';
 
-  postFixup = ''
+  postFixup = lib.optionalString doWrap ''
     mv "$out/bin/vcpkg" "$out/bin/.vcpkg-wrapped"
     install -Dm555 "$vcpkgWrapperPath" "$out/bin/vcpkg"
   '';
