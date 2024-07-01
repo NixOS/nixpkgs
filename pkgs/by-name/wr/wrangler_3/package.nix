@@ -5,7 +5,7 @@
 }:
 
 buildNpmPackage rec {
-  pname = "wranger";
+  pname = "wrangler";
   version = "3.62.0";
 
   src = fetchFromGitHub {
