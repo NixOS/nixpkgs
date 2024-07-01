@@ -58,6 +58,7 @@ let
     genList
     getExe
     getExe'
+    getLicenseFromSpdxIdOr
     groupBy
     groupBy'
     hasAttrByPath
@@ -2305,6 +2306,25 @@ runTests {
 
   testGetExe'FailureSecondArg = testingThrow (
     getExe' { type = "derivation"; } "dir/executable"
+  );
+
+  testGetLicenseFromSpdxIdOrExamples = {
+    expr = [
+      (getLicenseFromSpdxIdOr "MIT" null)
+      (getLicenseFromSpdxIdOr "mIt" null)
+      (getLicenseFromSpdxIdOr "MY LICENSE" lib.licenses.free)
+      (getLicenseFromSpdxIdOr "MY LICENSE" null)
+    ];
+    expected = [
+      lib.licenses.mit
+      lib.licenses.mit
+      lib.licenses.free
+      null
+    ];
+  };
+
+  testGetLicenseFromSpdxIdOrThrow = testingThrow (
+    getLicenseFromSpdxIdOr "MY LICENSE" (throw "No SPDX ID matches MY LICENSE")
   );
 
   testPlatformMatch = {
