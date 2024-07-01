@@ -1,5 +1,6 @@
 { lib, stdenv
 , fetchFromGitLab
+, fetchpatch2
 , glm
 , glslang
 , meson
@@ -15,16 +16,16 @@
 , glib
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "xrgears";
-  version = "unstable-2021-06-19";
+  version = "unstable-2023-12-09";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "monado";
     repo = "demos/xrgears";
-    rev = "6331b98e065494995c9cc4b48ccdd9d5ccaef461";
-    sha256 = "sha256-buw2beTPIWScq+3VQjUyF+uOwS6VF+mnAPHZ2eFGZjc=";
+    rev = "6376389139a11eec16138148e17073bbe96f137d";
+    sha256 = "sha256-B9mTCMrZ4Kr7d3EAsbWEQmTF0BgfleLxIjBdhTtp0IY=";
   };
 
   nativeBuildInputs = [
@@ -44,6 +45,15 @@ stdenv.mkDerivation rec {
     glib
   ];
 
+  patches = [
+    # https://gitlab.freedesktop.org/monado/demos/xrgears/-/merge_requests/18
+    (fetchpatch2 {
+      name = "xrgears-use-openxr-1.0.0.patch";
+      url = "https://gitlab.freedesktop.org/monado/demos/xrgears/-/commit/3cb484bbe17417b3ae2be4463ee94699786ac309.patch";
+      hash = "sha256-HioXeDgyuYBjHJcI01mgYH8WQGp0OCfUQGI4+PUIVz0=";
+    })
+  ];
+
   fixupPhase = ''
     wrapProgram $out/bin/xrgears \
       --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ SDL2 libGL ]}
@@ -55,6 +65,6 @@ stdenv.mkDerivation rec {
     mainProgram = "xrgears";
     platforms = platforms.linux;
     license = licenses.mit;
-    maintainers = with maintainers; [ expipiplus1 ];
+    maintainers = with maintainers; [ expipiplus1 Scrumplex ];
   };
 }
