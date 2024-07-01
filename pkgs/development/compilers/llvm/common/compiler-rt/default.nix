@@ -154,10 +154,10 @@ stdenv.mkDerivation ({
   # Hack around weird upsream RPATH bug
   postInstall = lib.optionalString (stdenv.hostPlatform.isDarwin) ''
     ln -s "$out/lib"/*/* "$out/lib"
-  '' + lib.optionalString (useLLVM && stdenv.hostPlatform.isLinux) ''
+  '' + lib.optionalString (useLLVM && stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAndroid) ''
     ln -s $out/lib/*/clang_rt.crtbegin-*.o $out/lib/crtbegin.o
     ln -s $out/lib/*/clang_rt.crtend-*.o $out/lib/crtend.o
-    # Note the history of crt{begin,end}S in previous versions of llvm in nixpkg:
+    # Note the history of crt{begin,end}S in previous versions of llvm in nixpkgs:
     # The presence of crtbegin_shared has been added and removed; it's possible
     # people have added/removed it to get it working on their platforms.
     # Try each in turn for now.
