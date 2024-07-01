@@ -19039,10 +19039,35 @@ with pkgs;
 
   norminette = callPackage ../development/tools/norminette { };
 
-  nwjs = callPackage ../development/tools/nwjs { };
+  nwjs = callPackage ../development/tools/nwjs {
+    version = "0.88.0";
+    hashes = {
+      "sdk-ia32" = "sha256-pk8Fdzw8zBBF4xeU5BlmkF1gbf7HIn8jheSjbdV4hI0=";
+      "sdk-x64" = "sha256-51alZRf/+bpKfVLUQuy1VtLHCgkVuptQaJgupt7zxcU=";
+      "ia32" = "sha256-OLkOJo3xDZ6WKbf6zPeY+KcgzoEjYWMIV7YWWbESjPo=";
+      "x64" = "sha256-KSsaTs0W8m2dI+0ByLqU4H4ai/PXUt6LtroZIBeymgs=";
+    };
+  };
 
   nwjs-sdk = callPackage ../development/tools/nwjs {
     sdk = true;
+    version = "0.88.0";
+    hashes = {
+      "sdk-ia32" = "sha256-pk8Fdzw8zBBF4xeU5BlmkF1gbf7HIn8jheSjbdV4hI0=";
+      "sdk-x64" = "sha256-51alZRf/+bpKfVLUQuy1VtLHCgkVuptQaJgupt7zxcU=";
+      "ia32" = "sha256-OLkOJo3xDZ6WKbf6zPeY+KcgzoEjYWMIV7YWWbESjPo=";
+      "x64" = "sha256-KSsaTs0W8m2dI+0ByLqU4H4ai/PXUt6LtroZIBeymgs=";
+    };
+  };
+
+  nwjs084 = callPackage ../development/tools/nwjs {
+    version = "0.84.0";
+    hashes = {
+      "sdk-ia32" = "sha256-uy6WZuA5b79yACSe3wiKiEeMb6K/z84cSeQDrKFUUdE=";
+      "sdk-x64" = "sha256-xI/YMHg5RWYh9XCLskSkuDwemH77U43Fzb8C9+fS9wE=";
+      "ia32" = "sha256-Sc9geGuwl9TIdLrKr97Wz2h4S+AEgP3DAd12Toyk7b8=";
+      "x64" = "sha256-VIygMzCPTKzLr47bG1DYy/zj0OxsjGcms0G1BkI/TEI=";
+    };
   };
 
   nrf5-sdk = callPackage ../development/libraries/nrf5-sdk { };
