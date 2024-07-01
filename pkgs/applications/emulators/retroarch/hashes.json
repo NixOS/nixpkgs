@@ -591,10 +591,10 @@
         "src": {
             "owner": "libretro",
             "repo": "libretro-o2em",
-            "rev": "44fe5f306033242f7d74144105e19a7d4939477e",
-            "hash": "sha256-zg8wplVTKRzqa47mmWlqribg+JU4Nap4Ar/iR7y87xs="
+            "rev": "c8f458d035392963823fbb50db0cec0033d9315f",
+            "hash": "sha256-riqMXm+3BG4Gz0wrmVFxtVhuMRtZHZqCViAupp/Q42U="
         },
-        "version": "unstable-2023-10-19"
+        "version": "unstable-2024-06-28"
     },
     "opera": {
         "fetcher": "fetchFromGitHub",
