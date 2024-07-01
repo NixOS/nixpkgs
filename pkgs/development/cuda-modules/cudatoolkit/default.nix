@@ -20,7 +20,7 @@
   libkrb5,
   krb5,
   makeWrapper,
-  markForCudatoolkitRootHook,
+  markForCudatoolkitRoot,
   ncurses5,
   numactl,
   nss,
@@ -28,7 +28,7 @@
   perl,
   python3, # FIXME: CUDAToolkit 10 may still need python27
   pulseaudio,
-  setupCudaHook,
+  setupCuda,
   stdenv,
   backendStdenv, # E.g. gcc11Stdenv, set in extension.nix
   unixODBC,
@@ -77,11 +77,11 @@ backendStdenv.mkDerivation rec {
       addOpenGLRunpath
       autoPatchelfHook
       autoAddDriverRunpath
-      markForCudatoolkitRootHook
+      markForCudatoolkitRoot
     ]
     ++ lib.optionals (lib.versionOlder version "11") [ libsForQt5.wrapQtAppsHook ]
     ++ lib.optionals (lib.versionAtLeast version "11.8") [ qt6Packages.wrapQtAppsHook ];
-  propagatedBuildInputs = [ setupCudaHook ];
+  propagatedBuildInputs = [ setupCuda ];
   buildInputs =
     lib.optionals (lib.versionOlder version "11") [
       libsForQt5.qt5.qtwebengine
