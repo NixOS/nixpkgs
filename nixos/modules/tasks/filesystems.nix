@@ -321,22 +321,31 @@ in
       notAutoResizable = fs: fs.autoResize && !(builtins.elem fs.fsType resizableFSes);
     in [
       { assertion = ! (fileSystems' ? cycle);
-        message = "The ‘fileSystems’ option can't be topologically sorted: mountpoint dependency path ${ls " -> " fileSystems'.cycle} loops to ${ls ", " fileSystems'.loops}";
+        message =
+          if fileSystems' ? cycle then
+            "The ‘fileSystems’ option can't be topologically sorted: mountpoint dependency path ${ls " -> " fileSystems'.cycle} loops to ${ls ", " fileSystems'.loops}"
+          else
+            "The ‘fileSystems’ option can't be topologically sorted: there is a loop";
       }
       { assertion = ! (any notAutoResizable fileSystems);
-        message = let
-          fs = head (filter notAutoResizable fileSystems);
-        in ''
-          Mountpoint '${fs.mountPoint}': 'autoResize = true' is not supported for 'fsType = "${fs.fsType}"'
-          ${optionalString (fs.fsType == "auto") "fsType has to be explicitly set and"}
-          only the following support it: ${lib.concatStringsSep ", " resizableFSes}.
-        '';
+        message =
+          if any notAutoResizable fileSystems then
+            let
+              fs = head (filter notAutoResizable fileSystems);
+            in ''
+              Mountpoint '${fs.mountPoint}': 'autoResize = true' is not supported for 'fsType = "${fs.fsType}"'
+              ${optionalString (fs.fsType == "auto") "fsType has to be explicitly set and"}
+              only the following support it: ${lib.concatStringsSep ", " resizableFSes}.
+            ''
+          else
+            ''
+              `fileSystems.<name>.autoResize = true` is only supported for these filesystems:
+              ${lib.concatStringsSep ", " resizableFSes}
+            '';
       }
       {
         assertion = ! (any (fs: fs.formatOptions != null) fileSystems);
-        message = let
-          fs = head (filter (fs: fs.formatOptions != null) fileSystems);
-        in ''
+        message = ''
           'fileSystems.<name>.formatOptions' has been removed, since
           systemd-makefs does not support any way to provide formatting
           options.
