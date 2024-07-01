@@ -18,5 +18,7 @@ stdenvNoCC.mkDerivation {
   outputHash = sha256;
 
   inherit cvsRoot module sha256 tag date;
+
+  meta.repository = [ cvsRoot ];
 }
 )

@@ -31,4 +31,6 @@ stdenvNoCC.mkDerivation {
 
   inherit url rev;
   inherit preferLocalBuild;
+
+  meta.repository = [ url ];
 }
