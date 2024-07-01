@@ -7551,6 +7551,7 @@ with pkgs;
   timeline = callPackage ../applications/office/timeline { };
 
   tsm-client = callPackage ../tools/backup/tsm-client { };
+
   tsm-client-withGui = callPackage ../tools/backup/tsm-client { enableGui = true; };
 
   tracker = callPackage ../development/libraries/tracker { };
@@ -7597,8 +7598,6 @@ with pkgs;
   worker-build = callPackage ../development/tools/worker-build {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
-
-  inherit (nodePackages) wrangler;
 
   wrangler_1 = callPackage ../development/tools/wrangler_1 {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation CoreServices Security;

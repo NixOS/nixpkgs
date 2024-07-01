@@ -4916,6 +4916,12 @@
     githubId = 579369;
     name = "Tuomas Tynkkynen";
   };
+  dezren39 = {
+    email = "drewrypope@gmail.com";
+    github = "dezren39";
+    githubId = 11225574;
+    name = "Drewry Pope"
+  }
   dfithian = {
     email = "daniel.m.fithian@gmail.com";
     name = "Daniel Fithian";
