@@ -318,10 +318,10 @@
         "src": {
             "owner": "libretro",
             "repo": "fmsx-libretro",
-            "rev": "9b5cf868825a629cc4c7086768338165d3bbf706",
-            "hash": "sha256-zDDAMzV+pfu+AwjgXwduPfHyW1rQnvaDpFvz++QBBkA="
+            "rev": "cf97a3c6da07d5f8e98c90c907ad987ffea432e0",
+            "hash": "sha256-mPgmt05XDnB+eIWtOpBfZ37Cz24VBei1lLLaYsJNeAA="
         },
-        "version": "unstable-2024-02-08"
+        "version": "unstable-2024-06-28"
     },
     "freeintv": {
         "fetcher": "fetchFromGitHub",
