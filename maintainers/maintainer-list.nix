@@ -14884,6 +14884,12 @@
     githubId = 158758;
     name = "Oliver Dunkl";
   };
+  odygrd = {
+    email = "odysseas.georgoudis@gmail.com";
+    github = "odygrd";
+    githubId = 7397786;
+    name = "Odysseas Georgoudis";
+  };
   ofek = {
     email = "oss@ofek.dev";
     github = "ofek";
