@@ -374,13 +374,20 @@ let
       sha256 =
         (
           if cudaSupport then
-            { x86_64-linux = "sha256-vUoAPkYKEnHkV4fw6BI0mCeuP2e8BMCJnVuZMm9LwSA="; }
+            { x86_64-linux = "sha256-Uf0VMRE0jgaWEYiuphWkWloZ5jMeqaWBl3lSvk2y1HI="; }
           else
             {
-              x86_64-linux = "sha256-R5Bm+0GYN1zJ1aEUBW76907MxYKAIawHHJoIb1RdsKE=";
-              aarch64-linux = "sha256-P5JEmJljN1DeRA0dNkzyosKzRnJH+5SD2aWdV5JsoiY=";
+              x86_64-linux = "sha256-NzJJg6NlrPGMiR8Fn8u4+fu0m+AulfmN5Xqk63Um6sw=";
+              aarch64-linux = "sha256-Ro3qzrUxSR+3TH6ROoJTq+dLSufrDN/9oEo2MRkx7wM=";
             }
         ).${effectiveStdenv.system} or (throw "jaxlib: unsupported system: ${effectiveStdenv.system}");
+
+        # Non-reproducible fetch https://github.com/NixOS/nixpkgs/issues/321920#issuecomment-2184940546
+        preInstall = ''
+          cat << \EOF > "$bazelOut/external/go_sdk/versions.json"
+          []
+          EOF
+        '';
     };
 
     buildAttrs = {
@@ -418,7 +425,7 @@ let
       throw "Unsupported target platform: ${effectiveStdenv.hostPlatform}";
 in
 buildPythonPackage {
-  inherit meta pname version;
+  inherit pname version;
   format = "wheel";
 
   src =
@@ -471,4 +478,11 @@ buildPythonPackage {
   # Without it there are complaints about libcudart.so.11.0 not being found
   # because RPATH path entries added above are stripped.
   dontPatchELF = cudaSupport;
+
+  passthru = {
+    # Note "bazel.*.tar.gz" can be accessed as `jaxlib.bazel-build.deps`
+    inherit bazel-build;
+  };
+
+  inherit meta;
 }
