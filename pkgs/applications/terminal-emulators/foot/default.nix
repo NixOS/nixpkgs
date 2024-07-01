@@ -23,6 +23,8 @@
 # for clang stdenv check
 , foot
 , llvmPackages
+, libnotify
+, xdg-utils
 }:
 
 let
@@ -100,6 +102,12 @@ stdenv.mkDerivation {
     rev = version;
     hash = "sha256-p+qaWHBrUn6YpNyAmQf6XoQyO3degHP5oMN53/9gIr4=";
   };
+
+  postPatch = ''
+    substituteInPlace config.c \
+      --replace-fail notify-send "${lib.getExe' libnotify "notify-send"}" \
+      --replace-fail xdg-open "${lib.getExe' xdg-utils "xdg-open"}"
+  '';
 
   separateDebugInfo = true;
 
