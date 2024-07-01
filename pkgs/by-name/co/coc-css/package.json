@@ -1,0 +1,37 @@
+{
+  "name": "coc-css",
+  "version": "2.1.0",
+  "description": "Css extension for coc.nvim",
+  "main": "lib/index.js",
+  "publisher": "chemzqm",
+  "engines": {
+    "coc": "^0.0.82"
+  },
+  "keywords": [
+    "coc.nvim",
+    "css",
+    "languageserver"
+  ],
+  "scripts": {
+    "build": "node esbuild.js",
+    "prepare": "node esbuild.js"
+  },
+  "activationEvents": [
+    "onLanguage:css",
+    "onLanguage:less",
+    "onLanguage:scss"
+  ],
+  "author": "chemzqm@gmail.com",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^14.14",
+    "coc.nvim": "0.0.83-next.8",
+    "esbuild": "^0.14.7",
+    "typescript": "^4",
+    "vscode-css-languageservice": "^6.2.7",
+    "vscode-languageserver": "^8.2.0-next.3",
+    "vscode-languageserver-protocol": "^3.17.2",
+    "vscode-uri": "^3.0.7"
+  },
+  "dependencies": {}
+}
