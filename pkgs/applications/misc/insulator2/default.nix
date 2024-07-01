@@ -1,4 +1,5 @@
 { lib
+, cmake
 , dbus
 , fetchFromGitHub
 , fetchYarnDeps
@@ -11,7 +12,6 @@
 , perl
 , cyrus_sasl
 , stdenv
-, fixup_yarn_lock
 , yarnConfigHook
 , nodejs-slim
 , cargo-tauri
@@ -20,6 +20,7 @@
 , rustc
 , jq
 , moreutils
+, fetchpatch
 }:
 
 stdenv.mkDerivation rec {
@@ -30,8 +31,17 @@ stdenv.mkDerivation rec {
     owner = "andrewinci";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-Bi9GCQr7yox5Plc7o0svRKYi1XoK/HDGj1VbW1z4jac=";
+    hash = "sha256-34JRIB7/x7miReWOxR/m+atjfUiE3XGyh9OBSbMg3m4=";
   };
+
+  patches = [
+    # see: https://github.com/andrewinci/insulator2/pull/733
+    (fetchpatch {
+      name = "fix-rust-1.80.0";
+      url = "https://github.com/andrewinci/insulator2/commit/7dbff0777c4364eec68cf90488d99f06b11dfa98.patch";
+      hash = "sha256-P8rBufYpREP5tOO9vSymvms4f2JbsUEjK7/yn9P7gYk=";
+    })
+  ];
 
   # Yarn *really* wants us to use corepack if this is set
   postPatch = ''
@@ -54,16 +64,22 @@ stdenv.mkDerivation rec {
   };
 
   cargoRoot = "backend/";
-  buildAndTestDir = cargoRoot;
+  buildAndTestSubdir = cargoRoot;
+
+  dontUseCmakeConfigure = true;
+
+  preInstall = ''
+    mkdir -p "$out"
+  '';
 
   nativeBuildInputs = [
+    cmake
     pkg-config
     perl
     rustPlatform.cargoSetupHook
     cargo
     rustc
     cargo-tauri.hook
-    fixup_yarn_lock
     yarnConfigHook
     nodejs-slim
     cyrus_sasl
@@ -87,5 +103,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ tc-kaluza ];
     mainProgram = "insulator-2";
   };
-
 }
