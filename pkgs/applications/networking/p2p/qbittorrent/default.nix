@@ -96,5 +96,8 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
     maintainers = with maintainers; [ Anton-Latukha kashw2 ];
+    mainProgram = "qbittorrent"
+      + lib.optionalString (!guiSupport) "-nox"
+      + lib.optionalString (guiSupport && qtVersion == "5") "-qt5";
   };
 }
