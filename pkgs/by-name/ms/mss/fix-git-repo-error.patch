@@ -1,0 +1,27 @@
+diff --git a/tests/constants.py b/tests/constants.py
+index be503bf8..bc6d2a48 100644
+--- a/tests/constants.py
++++ b/tests/constants.py
+@@ -29,17 +29,13 @@ import os
+ import fs
+ from fs.tempfs import TempFS
+ 
++import git
+ try:
+-    import git
+-except ImportError:
+-    SHA = ""
+-else:
+     repo = git.Repo(os.path.dirname(os.path.realpath(__file__)), search_parent_directories=True)
+-    try:
+-        SHA = repo.head.object.hexsha[0:10]
+-    except ValueError:
+-        # mounted dir in docker container and owner is not root
+-        SHA = ""
++    SHA = repo.head.object.hexsha[0:10]
++except (ValueError, git.InvalidGitRepositoryError):
++    # source under test is not a git repository
++    SHA = ""
+ 
+ CACHED_CONFIG_FILE = None
+ SERVER_CONFIG_FILE = "mswms_settings.py"
