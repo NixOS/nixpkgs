@@ -35,6 +35,12 @@ python3Packages.buildPythonPackage {
     sed -i '/'usb'/d' setup.py
   '';
 
+  postInstall = ''
+    mkdir -p $out/etc/udev/rules.d
+    cp $src/Drivers/50-android.rules $out/etc/udev/rules.d/50-android.rules
+    cp $src/Drivers/51-edl.rules $out/etc/udev/rules.d/51-edl.rules
+  '';
+
   meta = with lib; {
     homepage = "https://github.com/bkerler/edl";
     description = "Qualcomm EDL tool (Sahara / Firehose / Diag)";
