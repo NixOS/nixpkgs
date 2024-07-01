@@ -8,12 +8,21 @@ let
     if (limit == null && window == null) then null
     else assert asserts.assertMsg (limit != null && window != null) "Both power limit and window must be set";
       "${toString limit} ${toString window}";
+  hasCliArgs = (
+    # One of the following must be set to enable the service
+    (cfg.coreOffset != null) ||
+    (cfg.gpuOffset != null) ||
+    (cfg.uncoreOffset != null) ||
+    (cfg.analogioOffset != null) ||
+    (cfg.temp != null) ||
+    (cfg.tempBat != null) ||
+    (cfg.turbo != null) ||
+    # Both limit and window must be set if either are set. This is enforced by the assertion in mkPLimit
+    (cfg.p1.limit != null) ||
+    (cfg.p2.limit != null)
+  );
   cliArgs = lib.cli.toGNUCommandLine {} {
-    inherit (cfg)
-      verbose
-      temp
-      turbo
-      ;
+    inherit (cfg) verbose turbo;
     # `core` and `cache` are both intentionally set to `cfg.coreOffset` as according to the undervolt docs:
     #
     #     Core or Cache offsets have no effect. It is not possible to set different offsets for
@@ -25,19 +34,23 @@ let
     uncore = cfg.uncoreOffset;
     analogio = cfg.analogioOffset;
 
+    temp = cfg.temp;
     temp-bat = cfg.tempBat;
-    temp-ac = cfg.tempAc;
 
     power-limit-long = mkPLimit cfg.p1.limit cfg.p1.window;
     power-limit-short = mkPLimit cfg.p2.limit cfg.p2.window;
   };
 in
 {
+  imports = [
+    (lib.mkRemovedOptionModule [ "options" "services" "undervolt" "tempAc" ] "Use options.services.undervolt.temp instead")
+  ];
+
   options.services.undervolt = {
     enable = mkEnableOption ''
-       Undervolting service for Intel CPUs.
+      Undervolting service for Intel CPUs.
 
-       Warning: This service is not endorsed by Intel and may permanently damage your hardware. Use at your own risk
+      Warning: Use at your own risk! This service is not endorsed by Intel and may permanently damage your hardware
     '';
 
     verbose = mkOption {
@@ -86,15 +99,7 @@ in
       type = types.nullOr types.int;
       default = null;
       description = ''
-        The temperature target in Celsius degrees.
-      '';
-    };
-
-    tempAc = mkOption {
-      type = types.nullOr types.int;
-      default = null;
-      description = ''
-        The temperature target on AC power in Celsius degrees.
+        The temperature target on AC power in degrees Celsius.
       '';
     };
 
@@ -102,7 +107,9 @@ in
       type = types.nullOr types.int;
       default = null;
       description = ''
-        The temperature target on battery power in Celsius degrees.
+        The temperature target on battery power in degrees Celsius.
+
+        If unset, defaults to the temperature target on AC power.
       '';
     };
 
@@ -161,6 +168,23 @@ in
   };
 
   config = mkIf cfg.enable {
+    assertions = [ {
+      assertion = hasCliArgs;
+      message = ''
+        At least one of the following undervolt parameters must be set to enable service.undervolt
+
+        - services.undervolt.coreOffset
+        - services.undervolt.gpuOffset
+        - services.undervolt.uncoreOffset
+        - services.undervolt.analogioOffset
+        - services.undervolt.temp
+        - services.undervolt.tempBat
+        - services.undervolt.turbo
+        - services.undervolt.p1.limit and services.undervolt.p1.window
+        - services.undervolt.p2.limit and services.undervolt.p2.window
+      '';
+    } ];
+
     hardware.cpu.x86.msr.enable = true;
 
     environment.systemPackages = [ cfg.package ];
