@@ -1,0 +1,55 @@
+diff --git a/tools/version.sh b/tools/version.sh
+index 8df33e175..1f36fb4a0 100755
+--- a/tools/version.sh
++++ b/tools/version.sh
+@@ -3,20 +3,15 @@ srcdir="$2"
+ 
+ # If no git repo try to read from the existing git_version.h, for building from tarballs
+ version_h_path="${builddir}/git_version.h"
+-if ! test -d "${srcdir}/.git"; then
+   if test -f "${version_h_path}"; then
+-    while read line; do
+-      set -- $line
+-      export $2=$(echo $3 | sed 's/"//g')
+-    done < "${version_h_path}"
+-    if test x$BUILD_GIT_VERSION_NUMBER != x -a x$BUILD_GIT_VERSION_STRING != x; then
+-      exit 0
+-    else
+-      echo "invalid git_version.h"
+-      exit 2
+-    fi
++  while read line; do
++    set -- $line
++    export $2=$(echo $3 | sed 's/"//g')
++  done < "${version_h_path}"
++  if test x$BUILD_GIT_VERSION_NUMBER != x -a x$BUILD_GIT_VERSION_STRING != x; then
++    exit 0
+   else
+-    echo "git repo not found and no cached git_version.h"
++    echo "invalid git_version.h"
+     exit 2
+   fi
+ fi
+@@ -25,8 +20,8 @@ osx_bundle_sed_path="${builddir}/osx-bundle.sed"
+ last_svn_revision=6962
+ last_svn_hash="16cd907fe7482cb54a7374cd28b8501f138116be"
+ 
+-git_revision=$(expr $last_svn_revision + $(git rev-list --count $last_svn_hash..HEAD))
+-git_version_str=$(git describe --exact-match 2> /dev/null)
++git_revision=$(expr $last_svn_revision + 2744)
++git_version_str=""
+ installer_version='0.0.0'
+ resource_version='0, 0, 0'
+ if test x$git_version_str != x; then
+@@ -37,9 +32,8 @@ if test x$git_version_str != x; then
+     resource_version=$(echo $git_version_str | sed 's/\./, /g')
+   fi
+ else
+-  git_branch="$(git symbolic-ref HEAD 2> /dev/null)" || git_branch="(unnamed branch)"
+-  git_branch="${git_branch##refs/heads/}"
+-  git_hash=$(git rev-parse --short HEAD)
++  git_branch="feature_11"
++  git_hash="20caaabc0"
+ 
+   git_version_str="${git_revision}-${git_branch}-${git_hash}"
+   tagged_release=0
