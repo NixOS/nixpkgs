@@ -15137,6 +15137,12 @@
     githubId = 108072;
     name = "Slawomir Gonet";
   };
+  OulipianSummer = {
+    email = "amb@disroot.org";
+    name = "Andrew Benbow";
+    github = "OulipianSummer";
+    githubId = 47955980;
+  };
   ovlach = {
     email = "ondrej@vlach.xyz";
     name = "Ondrej Vlach";
