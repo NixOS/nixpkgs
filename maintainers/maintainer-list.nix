@@ -15519,12 +15519,6 @@
     githubId = 13225611;
     name = "Nicolas Martin";
   };
-  pennae = {
-    name = "pennae";
-    email = "github@quasiparticle.net";
-    github = "pennae";
-    githubId = 82953136;
-  };
   perchun = {
     name = "Perchun Pak";
     email = "nixpkgs@perchun.it";
