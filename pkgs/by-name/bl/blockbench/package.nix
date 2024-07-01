@@ -102,7 +102,6 @@ buildNpmPackage rec {
     license = lib.licenses.gpl3Only;
     mainProgram = "blockbench";
     maintainers = with lib.maintainers; [
-      ckie
       tomasajt
     ];
   };
