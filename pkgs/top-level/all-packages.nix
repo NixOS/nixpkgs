@@ -38951,8 +38951,6 @@ with pkgs;
 
   cnijfilter2 = callPackage ../misc/cups/drivers/cnijfilter2 { };
 
-  darling-dmg = callPackage ../tools/filesystems/darling-dmg { };
-
   depotdownloader = callPackage ../tools/misc/depotdownloader { };
 
   dbacl = callPackage ../tools/misc/dbacl { };
