@@ -38,7 +38,7 @@ let
 
     configurationLimit = if cfg.configurationLimit == null then 0 else cfg.configurationLimit;
 
-    inherit (cfg) consoleMode graceful editor;
+    inherit (cfg) consoleMode graceful editor installDeviceTree;
 
     inherit (efi) efiSysMountPoint canTouchEfiVariables;
 
@@ -181,6 +181,16 @@ in {
 
         `null` means no limit i.e. all generations
         that have not been garbage collected yet.
+      '';
+    };
+
+    installDeviceTree = mkOption {
+      default = with config.hardware.deviceTree; enable && name != null;
+      defaultText = ''with config.hardware.deviceTree; enable && name != null'';
+      description = ''
+        Install the devicetree blob specified by
+        `config.hardware.deviceTree.name` to the ESP and instruct systemd-boot
+        to pass this DTB to linux.
       '';
     };
 
@@ -337,6 +347,10 @@ in {
         assertion = (config.boot.kernelPackages.kernel.features or { efiBootStub = true; }) ? efiBootStub;
         message = "This kernel does not support the EFI boot stub";
       }
+      {
+        assertion = cfg.installDeviceTree -> config.hardware.deviceTree.enable -> config.hardware.deviceTree.name != null;
+        message = "Cannot install devicetree without 'config.hardware.deviceTree.enable' enabled and 'config.hardware.deviceTree.name' set";
+      }
     ] ++ concatMap (filename: [
       {
         assertion = !(hasInfix "/" filename);
@@ -394,6 +408,7 @@ in {
 
     boot.bootspec.extensions."org.nixos.systemd-boot" = {
       inherit (config.boot.loader.systemd-boot) sortKey;
+      devicetree = lib.mkIf cfg.installDeviceTree "${config.hardware.deviceTree.package}/${config.hardware.deviceTree.name}";
     };
 
     system = {
