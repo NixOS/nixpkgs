@@ -1,7 +1,8 @@
 {
   stdenv,
   lib,
-  pnpm
+  pnpm,
+  fetchFromGitHub
 }:
 
 stdenv.mkDerivation(finalAttrs: {
