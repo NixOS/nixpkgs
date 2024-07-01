@@ -7549,7 +7549,7 @@ with pkgs;
   the-way = callPackage ../development/tools/the-way { };
 
   timeline = callPackage ../applications/office/timeline { };
-
+/
   tsm-client = callPackage ../tools/backup/tsm-client { };
   tsm-client-withGui = callPackage ../tools/backup/tsm-client { enableGui = true; };
 
@@ -7598,11 +7598,13 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  inherit (nodePackages) wrangler;
+  wrangler = wrangler_2;
 
   wrangler_1 = callPackage ../development/tools/wrangler_1 {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation CoreServices Security;
   };
+
+  wrangler_2 = callPackage ../by-name/wr/wrangler;
 
   snowflake = callPackage ../tools/networking/snowflake { };
 
