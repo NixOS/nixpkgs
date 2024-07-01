@@ -488,9 +488,9 @@ in
                       extraConfig = { options, ... }: {
                         _file = "module at ${__curPos.file}:${toString __curPos.line}";
                         config = {
-                          nixpkgs = if options.nixpkgs?hostPlatform && host.options.nixpkgs.hostPlatform.isDefined
-                                    then { inherit (host.config.nixpkgs) hostPlatform; }
-                                    else { inherit (host.config.nixpkgs) localSystem; }
+                          nixpkgs = if pkgs.stdenv ? hostPlatform
+                                    then { inherit (pkgs.stdenv) hostPlatform; }
+                                    else { inherit (pkgs.stdenv) localSystem; }
                           ;
                           boot.isContainer = true;
                           networking.hostName = mkDefault name;
