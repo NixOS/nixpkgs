@@ -11,15 +11,7 @@ python3Packages.buildPythonPackage {
     fetchSubmodules = true;
     hash = "sha256-bxnRy+inWNArE2gUA/qDPy7NKvqBm43sbxdIaTc9N28=";
   };
-  # edl has a spurious dependency on "usb" which has nothing to do with the
-  # project and was probably added by accident trying to add pyusb
-  postPatch = ''
-    sed -i '/'usb'/d' setup.py
-  '';
-  # No tests set up
-  doCheck = false;
-  # EDL loaders are ELFs but shouldn't be touched, rest is Python anyways
-  dontStrip = true;
+
   propagatedBuildInputs = with python3Packages; [
     pyusb
     pyserial
@@ -31,6 +23,17 @@ python3Packages.buildPythonPackage {
     capstone
     keystone-engine
   ];
+
+  # No tests set up
+  doCheck = false;
+  # EDL loaders are ELFs but shouldn't be touched, rest is Python anyways
+  dontStrip = true;
+
+  # edl has a spurious dependency on "usb" which has nothing to do with the
+  # project and was probably added by accident trying to add pyusb
+  postPatch = ''
+    sed -i '/'usb'/d' setup.py
+  '';
 
   meta = with lib; {
     homepage = "https://github.com/bkerler/edl";
