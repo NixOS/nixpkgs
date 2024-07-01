@@ -18,13 +18,6 @@ let
 in stdenv.mkDerivation {
   inherit (common) pname version src meta;
 
-  patches = [
-    # Reorder things to make it build on Darwin again
-    # Submitted upstream: https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/29592
-    # FIXME: remove when merged or otherwise addressed
-    ./darwin.patch
-  ];
-
   outputs = [ "out" "dev" ];
 
   nativeBuildInputs = [
@@ -33,6 +26,7 @@ in stdenv.mkDerivation {
     meson
     ninja
     pkg-config
+    python3Packages.packaging
     python3Packages.python
     python3Packages.mako
   ];
