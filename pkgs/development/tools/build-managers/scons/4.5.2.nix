@@ -1,6 +1,8 @@
-{ lib, fetchFromGitHub, python3 }:
+{ lib, fetchFromGitHub, python311 }:
 
 let
+  python3 = python311;
+
   pname = "scons";
   version = "4.5.2";
   src = fetchFromGitHub {
