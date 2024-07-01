@@ -1,6 +1,7 @@
 { go, cacert, git, lib, stdenv }:
 
-{ name ? "${args'.pname}-${args'.version}"
+let postArgsFunc =
+{ name ? "${prevAttrs.pname}-${prevAttrs.version}"
 , src
 , nativeBuildInputs ? [ ]
 , passthru ? { }
@@ -17,7 +18,7 @@
   # if vendorHash is null, then we won't fetch any dependencies and
   # rely on the vendor folder within the source.
 , vendorHash ? throw (
-    if args'?vendorSha256 then
+    if prevAttrs?vendorSha256 then
       "buildGoModule: Expect vendorHash instead of vendorSha256"
     else
       "buildGoModule: vendorHash is missing"
@@ -53,13 +54,11 @@
 , buildFlagsArray ? ""
 
 , ...
-}@args':
+}@prevAttrs:
 
 assert goPackagePath != "" -> throw "`goPackagePath` is not needed with `buildGoModule`";
 
 let
-  args = removeAttrs args' [ "overrideModAttrs" "vendorSha256" "vendorHash" ];
-
   GO111MODULE = "on";
   GOTOOLCHAIN = "local";
 
@@ -67,9 +66,9 @@ let
   (stdenv.mkDerivation {
     name = "${name}-go-modules";
 
-    nativeBuildInputs = (args.nativeBuildInputs or [ ]) ++ [ go git cacert ];
+    nativeBuildInputs = (prevAttrs.nativeBuildInputs or [ ]) ++ [ go git cacert ];
 
-    inherit (args) src;
+    inherit (prevAttrs) src;
     inherit (go) GOOS GOARCH;
     inherit GO111MODULE GOTOOLCHAIN;
 
@@ -77,14 +76,14 @@ let
     # argue it's not ideal. Changing it may break vendor hashes in Nixpkgs and
     # out in the wild. In anycase, it's documented in:
     # doc/languages-frameworks/go.section.md
-    prePatch = args.prePatch or "";
-    patches = args.patches or [ ];
-    patchFlags = args.patchFlags or [ ];
-    postPatch = args.postPatch or "";
-    preBuild = args.preBuild or "";
-    postBuild = args.modPostBuild or "";
-    sourceRoot = args.sourceRoot or "";
-    env = args.env or { };
+    prePatch = prevAttrs.prePatch or "";
+    patches = prevAttrs.patches or [ ];
+    patchFlags = prevAttrs.patchFlags or [ ];
+    postPatch = prevAttrs.postPatch or "";
+    preBuild = prevAttrs.preBuild or "";
+    postBuild = prevAttrs.modPostBuild or "";
+    sourceRoot = prevAttrs.sourceRoot or "";
+    env = prevAttrs.env or { };
 
     impureEnvVars = lib.fetchers.proxyImpureEnvVars ++ [
       "GIT_PROXY_COMMAND"
@@ -92,7 +91,7 @@ let
       "GOPROXY"
     ];
 
-    configurePhase = args.modConfigurePhase or ''
+    configurePhase = prevAttrs.modConfigurePhase or ''
       runHook preConfigure
       export GOCACHE=$TMPDIR/go-cache
       export GOPATH="$TMPDIR/go"
@@ -100,7 +99,7 @@ let
       runHook postConfigure
     '';
 
-    buildPhase = args.modBuildPhase or (''
+    buildPhase = prevAttrs.modBuildPhase or (''
       runHook preBuild
     '' + lib.optionalString deleteVendor ''
       if [ ! -d vendor ]; then
@@ -130,7 +129,7 @@ let
       runHook postBuild
     '');
 
-    installPhase = args.modInstallPhase or ''
+    installPhase = prevAttrs.modInstallPhase or ''
       runHook preInstall
 
       ${if proxyVendor then ''
@@ -156,8 +155,12 @@ let
     # error: empty hash requires explicit hash algorithm
     outputHashAlgo = if vendorHash == "" then "sha256" else null;
   }).overrideAttrs overrideModAttrs;
-
-  package = stdenv.mkDerivation (args // {
+in
+  (builtins.removeAttrs prevAttrs [
+    "overrideModAttrs"
+    "vendorSha256"
+    "vendorHash"
+  ]) // {
     nativeBuildInputs = [ go ] ++ nativeBuildInputs;
 
     inherit (go) GOOS GOARCH;
@@ -172,7 +175,7 @@ let
     # If not set to an explicit value, set the buildid empty for reproducibility.
     ldflags = ldflags ++ lib.optional (!lib.any (lib.hasPrefix "-buildid=") ldflags) "-buildid=";
 
-    configurePhase = args.configurePhase or (''
+    configurePhase = prevAttrs.configurePhase or (''
       runHook preConfigure
 
       export GOCACHE=$TMPDIR/go-cache
@@ -198,7 +201,7 @@ let
       runHook postConfigure
     '');
 
-    buildPhase = args.buildPhase or (
+    buildPhase = prevAttrs.buildPhase or (
       lib.warnIf (buildFlags != "" || buildFlagsArray != "")
         "`buildFlags`/`buildFlagsArray` are deprecated and will be removed in the 24.11 release. Use the `ldflags` and/or `tags` attributes instead of `buildFlags`/`buildFlagsArray`"
       lib.warnIf (builtins.elem "-buildid=" ldflags)
@@ -285,8 +288,8 @@ let
       runHook postBuild
     '');
 
-    doCheck = args.doCheck or true;
-    checkPhase = args.checkPhase or ''
+    doCheck = prevAttrs.doCheck or true;
+    checkPhase = prevAttrs.checkPhase or ''
       runHook preCheck
       # We do not set trimpath for tests, in case they reference test assets
       export GOFLAGS=''${GOFLAGS//-trimpath/}
@@ -298,7 +301,7 @@ let
       runHook postCheck
     '';
 
-    installPhase = args.installPhase or ''
+    installPhase = prevAttrs.installPhase or ''
       runHook preInstall
 
       mkdir -p $out
@@ -318,6 +321,8 @@ let
       # Add default meta information
       platforms = go.meta.platforms or lib.platforms.all;
     } // meta;
-  });
+  };
 in
-package
+args: stdenv.mkDerivation (finalAttrs:
+  postArgsFunc (if builtins.isAttrs args then args else args finalAttrs)
+)
