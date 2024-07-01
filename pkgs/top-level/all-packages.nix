@@ -21553,6 +21553,8 @@ with pkgs;
 
   jxrlib = callPackage ../development/libraries/jxrlib { };
 
+  lianad = liana.override { withGui = false; };
+
   libjson = callPackage ../development/libraries/libjson { };
 
   libjodycode = callPackage ../development/libraries/libjodycode {
