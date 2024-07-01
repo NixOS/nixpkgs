@@ -467,7 +467,7 @@ final: prev: {
         version = workerdVersion;
         src = fetchurl {
           url = "https://registry.npmjs.org/@cloudflare/workerd-linux-arm64/-/workerd-linux-arm64-${workerdVersion}.tgz";
-          sha512 = "sha512-/Fr1W671t2triNCDCBWdStxngnbUfZunZ/2e4kaMLzJDJLYDtYdmvOUCBDzUD4ssqmIMbn9RCQQ0U+CLEoqBqw==";
+          sha512 = "sha512-7y41rPi5xmIYJN8CY+t3RHnjLL0xx/WYmaTd/j552k1qSr02eTE2o/TGyWZmGUC+lWnwdPQJla0mXbvdqgRdQg==";
         };
       };
       darwinWorkerd = {
@@ -477,7 +477,7 @@ final: prev: {
         version = workerdVersion;
         src = fetchurl {
           url = "https://registry.npmjs.org/@cloudflare/workerd-darwin-64/-/workerd-darwin-64-${workerdVersion}.tgz";
-          sha512 = "sha512-ATaXjefbTsrv4mpn4Fdua114RRDXcX5Ky+Mv+f4JTUllgalmqC4CYMN4jxRz9IpJU/fNMN8IEfvUyuJBAcl9Iw==";
+          sha512 = "sha512-YanZ1iXgMGaUWlleB5cswSE6qbzyjQ8O7ENWZcPAcZZ6BfuL7q3CWi0t9iM1cv2qx92rRztsRTyjcfq099++XQ==";
         };
       };
       darwinWorkerdArm = {
@@ -487,7 +487,7 @@ final: prev: {
         version = workerdVersion;
         src = fetchurl {
           url = "https://registry.npmjs.org/@cloudflare/workerd-darwin-arm64/-/workerd-darwin-arm64-${workerdVersion}.tgz";
-          sha512 = "sha512-wnbsZI4CS0QPCd+wnBHQ40C28A/2Qo4ESi1YhE2735G3UNcc876MWksZhsubd+XH0XPIra6eNFqyw6wRMpQOXA==";
+          sha512 = "sha512-bRe/y/LKjIgp3L2EHjc+CvoCzfHhf4aFTtOBkv2zW+VToNJ4KlXridndf7LvR9urfsFRRo9r4TXCssuKaU+ypQ==";
         };
       };
 
