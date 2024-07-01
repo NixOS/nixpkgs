@@ -478,4 +478,9 @@ buildPythonPackage {
   # Without it there are complaints about libcudart.so.11.0 not being found
   # because RPATH path entries added above are stripped.
   dontPatchELF = cudaSupport;
+
+  passthru = {
+    # Note "bazel.*.tar.gz" can be accessed as `jaxlib.bazel-build.deps`
+    inherit bazel-build;
+  };
 }
