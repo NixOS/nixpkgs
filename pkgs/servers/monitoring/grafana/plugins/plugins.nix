@@ -15,4 +15,5 @@
   redis-app = callPackage ./redis-app { };
   redis-datasource = callPackage ./redis-datasource { };
   redis-explorer-app = callPackage ./redis-explorer-app { };
+  yesoreyeram-infinity-datasource = callPackage ./yesoreyeram-infinity-datasource { };
 }
