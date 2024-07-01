@@ -13,12 +13,12 @@ stdenv.mkDerivation (prev: {
     hash = "sha256-Fb73EOHGgEehZJwTCtCG12xwyiqtDXFs9eFDsHBQiDo=";
   };
 
-  # NOTE: librandombytes uses a custom Python `./configure`: it does not expect standard
+  # NOTE: libcpucycles uses a custom Python `./configure`: it does not expect standard
   # autoconfig --build --host etc. arguments: disable
   configurePlatforms = [ ];
 
-  # NOTE: the librandombytes library has required specific CFLAGS defined:
-  # https://randombytes.cr.yp.to/librandombytes-20240318/compilers/default.html
+  # NOTE: the libcpucycles library has required specific CFLAGS defined:
+  # https://cpucycles.cr.yp.to/libcpucycles-20240318/compilers/default.html
   # - `-O` (alias `-O1`) safe optimization
   # - `-Qunused-arguments` suppress clang warning
   # the default "fortify" hardening sets -O2, -D_FORTIFY_SOURCE=2:
