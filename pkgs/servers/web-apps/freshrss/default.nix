@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , nixosTests
 , php
+, writeText
 }:
 
 stdenvNoCC.mkDerivation rec {
@@ -16,6 +17,16 @@ stdenvNoCC.mkDerivation rec {
     hash = "sha256-AAOON1RdbG6JSnCc123jmIlIXHOE1PE49BV4hcASO/s=";
   };
 
+  postPatch = ''
+    patchShebangs cli/*.php app/actualize_script.php
+  '';
+
+  # the thirdparty_extension_path can only be set by config, but should be read by an env-var.
+  overrideConfig = writeText "constants.local.php" ''
+    <?php
+      define('THIRDPARTY_EXTENSIONS_PATH', getenv('THIRDPARTY_EXTENSIONS_PATH') . '/extensions');
+  '';
+
   buildInputs = [ php ];
 
   # There's nothing to build.
@@ -25,11 +36,8 @@ stdenvNoCC.mkDerivation rec {
     runHook preInstall
     mkdir -p $out
     cp -vr * $out/
+    cp $overrideConfig $out/constants.local.php
     runHook postInstall
-  '';
-
-  postPatch = ''
-    patchShebangs cli/*.php app/actualize_script.php
   '';
 
   passthru.tests = {
