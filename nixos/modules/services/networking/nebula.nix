@@ -1,63 +1,64 @@
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
 
   cfg = config.services.nebula;
-  enabledNetworks = filterAttrs (n: v: v.enable) cfg.networks;
+  enabledNetworks = lib.filterAttrs (n: v: v.enable) cfg.networks;
 
   format = pkgs.formats.yaml {};
 
   nameToId = netName: "nebula-${netName}";
 
   resolveFinalPort = netCfg:
-    if netCfg.listen.port == null then
-      if (netCfg.isLighthouse || netCfg.isRelay) then
-        4242
-      else
-        0
-    else
-      netCfg.listen.port;
+    if (netCfg.listen.port != null) then netCfg.listen.port
+    else if (netCfg.isLighthouse || netCfg.isRelay) then 4242
+    else 0;
 in
 {
+  # Maintainers
+
+  meta.maintainers = with lib.maintainers; [ pandapip1 ];
+
   # Interface
 
   options = {
     services.nebula = {
-      networks = mkOption {
-        description = "Nebula network definitions.";
+      package = lib.mkPackageOption pkgs "nebula" { };
+      networks = lib.mkOption {
+        description = "Nebula network definitions";
         default = {};
-        type = types.attrsOf (types.submodule {
+        type = lib.types.attrsOf (lib.types.submodule {
           options = {
-            enable = mkOption {
-              type = types.bool;
+            enable = lib.mkOption {
+              type = lib.types.bool;
               default = true;
-              description = "Enable or disable this network.";
+              description = "Enable or disable this network";
             };
 
-            package = mkPackageOption pkgs "nebula" { };
+            package = lib.mkPackageOption pkgs "nebula" {
+              default = null;
+            };
 
-            ca = mkOption {
-              type = types.path;
-              description = "Path to the certificate authority certificate.";
+            ca = lib.mkOption {
+              type = lib.types.path;
+              description = "Path to the certificate authority certificate";
               example = "/etc/nebula/ca.crt";
             };
 
-            cert = mkOption {
-              type = types.path;
-              description = "Path to the host certificate.";
+            cert = lib.mkOption {
+              type = lib.types.path;
+              description = "Path to the host certificate";
               example = "/etc/nebula/host.crt";
             };
 
-            key = mkOption {
-              type = types.path;
-              description = "Path to the host key.";
+            key = lib.mkOption {
+              type = lib.types.path;
+              description = "Path to the host key";
               example = "/etc/nebula/host.key";
             };
 
-            staticHostMap = mkOption {
-              type = types.attrsOf (types.listOf (types.str));
+            staticHostMap = lib.mkOption {
+              type = lib.types.attrsOf (lib.types.listOf lib.types.str);
               default = {};
               description = ''
                 The static host map defines a set of hosts with fixed IP addresses on the internet (or any network).
@@ -66,20 +67,20 @@ in
               example = { "192.168.100.1" = [ "100.64.22.11:4242" ]; };
             };
 
-            isLighthouse = mkOption {
-              type = types.bool;
+            isLighthouse = lib.mkOption {
+              type = lib.types.bool;
               default = false;
-              description = "Whether this node is a lighthouse.";
+              description = "Whether this node is a lighthouse";
             };
 
-            isRelay = mkOption {
-              type = types.bool;
+            isRelay = lib.mkOption {
+              type = lib.types.bool;
               default = false;
-              description = "Whether this node is a relay.";
+              description = "Whether this node is a relay";
             };
 
-            lighthouses = mkOption {
-              type = types.listOf types.str;
+            lighthouses = lib.mkOption {
+              type = lib.types.listOf lib.types.str;
               default = [];
               description = ''
                 List of IPs of lighthouse hosts this node should report to and query from. This should be empty on lighthouse
@@ -88,23 +89,21 @@ in
               example = [ "192.168.100.1" ];
             };
 
-            relays = mkOption {
-              type = types.listOf types.str;
+            relays = lib.mkOption {
+              type = lib.types.listOf lib.types.str;
               default = [];
-              description = ''
-                List of IPs of relays that this node should allow traffic from.
-              '';
+              description = "List of IPs of relays that this node should allow traffic from.";
               example = [ "192.168.100.1" ];
             };
 
-            listen.host = mkOption {
-              type = types.str;
+            listen.host = lib.mkOption {
+              type = lib.types.str;
               default = "0.0.0.0";
-              description = "IP address to listen on.";
+              description = "IP address to listen on";
             };
 
-            listen.port = mkOption {
-              type = types.nullOr types.port;
+            listen.port = lib.mkOption {
+              type = lib.types.nullOr lib.types.port;
               default = null;
               defaultText = lib.literalExpression ''
                 if (config.services.nebula.networks.''${name}.isLighthouse ||
@@ -113,38 +112,38 @@ in
                 else
                   0;
               '';
-              description = "Port number to listen on.";
+              description = "Port number to listen on";
             };
 
-            tun.disable = mkOption {
-              type = types.bool;
+            tun.disable = lib.mkOption {
+              type = lib.types.bool;
               default = false;
               description = ''
-                When tun is disabled, a lighthouse can be started without a local tun interface (and therefore without root).
+                Disables the creation of a local tun interface; allows starting lighthouses without root
               '';
             };
 
-            tun.device = mkOption {
-              type = types.nullOr types.str;
+            tun.device = lib.mkOption {
+              type = lib.types.nullOr lib.types.str;
               default = null;
-              description = "Name of the tun device. Defaults to nebula.\${networkName}.";
+              description = "Name of the tun device; defaults to nebula.\${networkName}";
             };
 
-            firewall.outbound = mkOption {
-              type = types.listOf types.attrs;
+            firewall.outbound = lib.mkOption {
+              type = lib.types.listOf lib.types.attrs;
               default = [];
-              description = "Firewall rules for outbound traffic.";
+              description = "Firewall rules for outbound traffic";
               example = [ { port = "any"; proto = "any"; host = "any"; } ];
             };
 
-            firewall.inbound = mkOption {
-              type = types.listOf types.attrs;
+            firewall.inbound = lib.mkOption {
+              type = lib.types.listOf lib.types.attrs;
               default = [];
-              description = "Firewall rules for inbound traffic.";
+              description = "Firewall rules for inbound traffic";
               example = [ { port = "any"; proto = "any"; host = "any"; } ];
             };
 
-            settings = mkOption {
+            settings = lib.mkOption {
               type = format.type;
               default = {};
               description = ''
@@ -152,7 +151,7 @@ in
                 <https://github.com/slackhq/nebula/blob/master/examples/config.yml>
                 for details on supported values.
               '';
-              example = literalExpression ''
+              example = lib.literalExpression ''
                 {
                   lighthouse.dns = {
                     host = "0.0.0.0";
@@ -168,11 +167,12 @@ in
   };
 
   # Implementation
-  config = mkIf (enabledNetworks != {}) {
-    systemd.services = mkMerge (mapAttrsToList (netName: netCfg:
+  config = lib.mkIf (enabledNetworks != {}) {
+    environment.systemPackages = [ cfg.package ];
+    systemd.services = lib.mkMerge (lib.mapAttrsToList (netName: netCfg:
       let
         networkId = nameToId netName;
-        settings = recursiveUpdate {
+        settings = lib.recursiveUpdate {
           pki = {
             ca = netCfg.ca;
             cert = netCfg.cert;
@@ -202,11 +202,11 @@ in
           };
         } netCfg.settings;
         configFile = format.generate "nebula-config-${netName}.yml" (
-          warnIf
+          lib.warnIf
             ((settings.lighthouse.am_lighthouse || settings.relay.am_relay) && settings.listen.port == 0)
             ''
-              Nebula network '${netName}' is configured as a lighthouse or relay, and its port is ${builtins.toString settings.listen.port}.
-              You will likely experience connectivity issues: https://nebula.defined.net/docs/config/listen/#listenport
+              Nebula network '${netName}' is configured as a lighthouse or relay, but its port is ${builtins.toString settings.listen.port}.
+              You will likely experience connectivity issues. See https://nebula.defined.net/docs/config/listen/#listenport for more information.
             ''
             settings
           );
@@ -222,7 +222,9 @@ in
             serviceConfig = {
               Type = "notify";
               Restart = "always";
-              ExecStart = "${netCfg.package}/bin/nebula -config ${configFile}";
+              ExecStart = "${
+                if netCfg.package != null then netCfg.package else cfg.package
+              }/bin/nebula -config ${configFile}";
               UMask = "0027";
               CapabilityBoundingSet = "CAP_NET_ADMIN";
               AmbientCapabilities = "CAP_NET_ADMIN";
@@ -253,20 +255,20 @@ in
 
     # Open the chosen ports for UDP.
     networking.firewall.allowedUDPPorts =
-      unique (filter (port: port > 0) (mapAttrsToList (netName: netCfg: resolveFinalPort netCfg) enabledNetworks));
+      lib.unique (lib.filter (port: port > 0) (lib.mapAttrsToList (netName: netCfg: resolveFinalPort netCfg) enabledNetworks));
 
     # Create the service users and groups.
-    users.users = mkMerge (mapAttrsToList (netName: netCfg:
+    users.users = lib.mkMerge (lib.mapAttrsToList (netName: netCfg:
       {
-        ${nameToId netName} = {
+        "${nameToId netName}" = {
           group = nameToId netName;
           description = "Nebula service user for network ${netName}";
           isSystemUser = true;
         };
       }) enabledNetworks);
 
-    users.groups = mkMerge (mapAttrsToList (netName: netCfg: {
-      ${nameToId netName} = {};
+    users.groups = lib.mkMerge (lib.mapAttrsToList (netName: netCfg: {
+      "${nameToId netName}" = {};
     }) enabledNetworks);
   };
 }
