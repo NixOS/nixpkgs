@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
     python3Packages.python
   ];
 
-  buildInputs = lib.optionals pythonSupport [
+  propagatedBuildInputs = lib.optionals pythonSupport [
     python3Packages.pinocchio
   ];
 
