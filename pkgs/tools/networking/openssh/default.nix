@@ -5,11 +5,11 @@ in
 {
   openssh = common rec {
     pname = "openssh";
-    version = "9.7p1";
+    version = "9.8p1";
 
     src = fetchurl {
       url = "mirror://openbsd/OpenSSH/portable/openssh-${version}.tar.gz";
-      hash = "sha256-SQQm92bYKidj/KzY2D6j1weYdQx70q/y5X3FZg93P/0=";
+      hash = "sha256-3YvQAqN5tdSZ37BQ3R+pr4Ap6ARh9LtsUjxJlz9aOfM=";
     };
 
     extraPatches = [ ./ssh-keysign-8.5.patch ];
