@@ -12,7 +12,11 @@ in
       hash = "sha256-kQIRwHJVqMWtZUORtA7lmABxDdgRndU2LeCThap6d3w=";
     };
 
-    extraPatches = [ ./ssh-keysign-8.5.patch ];
+    extraPatches = [
+      ./ssh-keysign-8.5.patch
+      ./openssh-9.6_p1-CVE-2024-6387.patch
+      ./openssh-9.6_p1-chaff-logic.patch
+    ];
     extraMeta.maintainers = with lib.maintainers; [ das_j ];
   };
 
