@@ -24072,8 +24072,6 @@ with pkgs;
 
   tomlcpp = callPackage ../development/libraries/tomlcpp { };
 
-  toml11 = callPackage ../development/libraries/toml11 { };
-
   tomlplusplus = callPackage ../development/libraries/tomlplusplus { };
 
   tokyocabinet = callPackage ../development/libraries/tokyo-cabinet { };
