@@ -4117,6 +4117,12 @@
     githubId = 34543609;
     name = "creator54";
   };
+  crertel = {
+    email = "chris@kedagital.com";
+    github = "crertel";
+    githubId = 1707779;
+    name = "Chris Ertel";
+  };
   crinklywrappr = {
     email = "crinklywrappr@pm.me";
     name = "Daniel Fitzpatrick";
