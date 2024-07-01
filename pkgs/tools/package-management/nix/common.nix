@@ -19,6 +19,7 @@ let
   atLeast219 = lib.versionAtLeast version "2.19pre";
   atLeast220 = lib.versionAtLeast version "2.20pre";
   atLeast221 = lib.versionAtLeast version "2.21pre";
+  atLeast224 = lib.versionAtLeast version "2.24pre";
   # Major.minor versions unaffected by CVE-2024-27297
   unaffectedByFodSandboxEscape = [
     "2.3"
@@ -58,6 +59,7 @@ in
 , libxml2
 , libxslt
 , lowdown
+, toml11
 , man
 , mdbook
 , mdbook-linkcheck
@@ -136,6 +138,8 @@ self = stdenv.mkDerivation {
     lowdown
   ] ++ lib.optionals atLeast220 [
     libgit2
+  ] ++ lib.optionals (atLeast224 || lib.versionAtLeast version "pre20240626") [
+    toml11
   ] ++ lib.optionals stdenv.isDarwin [
     Security
   ] ++ lib.optionals (stdenv.isx86_64) [

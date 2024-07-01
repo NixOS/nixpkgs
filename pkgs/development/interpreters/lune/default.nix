@@ -4,6 +4,7 @@
 , fetchFromGitHub
 , pkg-config
 , darwin
+, cmake
 }:
 
 let
@@ -11,20 +12,21 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "lune";
-  version = "0.8.0";
+  version = "0.8.6";
 
   src = fetchFromGitHub {
     owner = "filiptibell";
     repo = "lune";
     rev = "v${version}";
-    hash = "sha256-ZVETw+GdkrR2V8RrHAWBR+avAuN0158DlJkYBquju8E=";
+    hash = "sha256-03ckR2FpSlaAZlhjyX3ob+7W5Pq8OLri7jT+XIM7oeQ=";
     fetchSubmodules = true;
   };
 
-  cargoHash = "sha256-zOjDT8Sn/p3YaG+dWyYxSWUOo11p9/WG3EyNagZRtQQ=";
+  cargoHash = "sha256-xEUq3Cc15bUAXpUoZw8tNQo6tW3/VXeuOtjIW4zrh1Q=";
 
   nativeBuildInputs = [
     pkg-config
+    cmake # required for libz-ng-sys
   ];
 
   buildInputs = lib.optionals stdenv.isDarwin [
@@ -39,6 +41,7 @@ rustPlatform.buildRustPackage rec {
 
   checkFlags = [
     # require internet access
+    "--skip=tests::net_socket_basic"
     "--skip=tests::net_request_codes"
     "--skip=tests::net_request_compression"
     "--skip=tests::net_request_methods"

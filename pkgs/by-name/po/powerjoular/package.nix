@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "powerjoular";
-  version = "0.7.3";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "joular";
     repo = pname;
     rev = version;
-    hash = "sha256-UjoGY1C58xhINmji7R63wqkWK9yCeXa0wwosnIcfYdA=";
+    hash = "sha256-3YKoxZTh9ScudAtsE4CJUbcallm7/vvxIdXwaOZt2hA=";
   };
 
   nativeBuildInputs = [

@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   pythonOlder,
 
   # build-system
@@ -10,6 +10,9 @@
 
   # propagates
   typing-extensions,
+  appdirs,
+  flexcache,
+  flexparser,
 
   # tests
   pytestCheckHook,
@@ -22,15 +25,16 @@
 
 buildPythonPackage rec {
   pname = "pint";
-  version = "0.23";
+  version = "0.24";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
 
-  src = fetchPypi {
-    inherit version;
-    pname = "Pint";
-    hash = "sha256-4VCbkWBtvFJSfGAKTvdP+sEv/3Boiv8g6QckCTRuybQ=";
+  src = fetchFromGitHub {
+    owner = "hgrecco";
+    repo = "pint";
+    rev = "refs/tags/${version}";
+    hash = "sha256-zMcLC3SSl/W7+xX4ah3ZV7fN/LIGJzatqH4MNK8/fec=";
   };
 
   nativeBuildInputs = [
@@ -38,15 +42,23 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [ typing-extensions ];
+  propagatedBuildInputs = [
+    appdirs
+    flexcache
+    flexparser
+    typing-extensions
+    # Both uncertainties and numpy are not necessarily needed for every
+    # function of pint, but needed for the pint-convert executable which we
+    # necessarily distribute with this package as it is.
+    uncertainties
+    numpy
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook
     pytest-subtests
     pytest-benchmark
-    numpy
     matplotlib
-    uncertainties
   ];
 
   pytestFlagsArray = [ "--benchmark-disable" ];
@@ -54,13 +66,6 @@ buildPythonPackage rec {
   preCheck = ''
     export HOME=$(mktemp -d)
   '';
-
-  disabledTests = [
-    # https://github.com/hgrecco/pint/issues/1898
-    "test_load_definitions_stage_2"
-    # pytest8 deprecation
-    "test_nonnumeric_magnitudes"
-  ];
 
   meta = with lib; {
     changelog = "https://github.com/hgrecco/pint/blob/${version}/CHANGES";

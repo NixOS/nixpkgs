@@ -64,14 +64,6 @@ let
 
   etcHardlinks = filter (f: f.mode != "symlink" && f.mode != "direct-symlink") etc';
 
-  build-composefs-dump = pkgs.runCommand "build-composefs-dump.py"
-    {
-      buildInputs = [ pkgs.python3 ];
-    } ''
-    install ${./build-composefs-dump.py} $out
-    patchShebangs --host $out
-  '';
-
 in
 
 {
@@ -295,10 +287,12 @@ in
     system.build.etcMetadataImage =
       let
         etcJson = pkgs.writeText "etc-json" (builtins.toJSON etc');
-        etcDump = pkgs.runCommand "etc-dump" { } "${build-composefs-dump} ${etcJson} > $out";
+        etcDump = pkgs.runCommand "etc-dump" { } ''
+          ${lib.getExe pkgs.buildPackages.python3} ${./build-composefs-dump.py} ${etcJson} > $out
+        '';
       in
       pkgs.runCommand "etc-metadata.erofs" {
-        nativeBuildInputs = [ pkgs.composefs pkgs.erofs-utils ];
+        nativeBuildInputs = with pkgs.buildPackages; [ composefs erofs-utils ];
       } ''
         mkcomposefs --from-file ${etcDump} $out
         fsck.erofs $out

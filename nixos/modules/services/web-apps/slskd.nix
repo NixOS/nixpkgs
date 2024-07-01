@@ -7,7 +7,7 @@ in {
   options.services.slskd = with lib; with types; {
     enable = mkEnableOption "slskd";
 
-    package = mkPackageOptionMD pkgs "slskd" { };
+    package = mkPackageOption pkgs "slskd" { };
 
     user = mkOption {
       type = types.str;

@@ -15,6 +15,7 @@
   fetchgit,
   runCommand,
   llvmPackages,
+  llvmPackages_15,
   patchelf,
   openbox,
   xorg,
@@ -67,6 +68,10 @@ let
     url = "https://swiftshader.googlesource.com/SwiftShader.git";
     hash = swiftshaderHash;
     rev = swiftshaderRev;
+
+    postFetch = ''
+      rm -rf $out/third_party/llvm-project
+    '';
   };
 
   llvm = symlinkJoin {
@@ -78,6 +83,8 @@ let
   };
 
   outName = "host_${runtimeMode}${lib.optionalString (!isOptimized) "_unopt --unoptimized"}";
+
+  dartPath = "${if (lib.versionAtLeast flutterVersion "3.23") then "flutter/third_party" else "third_party"}/dart";
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "flutter-engine-${runtimeMode}${lib.optionalString (!isOptimized) "-unopt"}";
@@ -163,14 +170,14 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [ gtk3 ];
 
   patchtools = [
-    "third_party/dart/tools/sdks/dart-sdk/bin/dart"
+    "${dartPath}/tools/sdks/dart-sdk/bin/dart"
     "flutter/third_party/gn/gn"
   ];
 
   dontPatch = true;
 
   patchgit = [
-    "third_party/dart"
+    dartPath
     "flutter"
     "."
   ] ++ lib.optional (lib.versionAtLeast flutterVersion "3.21") "flutter/third_party/skia";
@@ -178,7 +185,17 @@ stdenv.mkDerivation (finalAttrs: {
   postUnpack = ''
     pushd ${src.name}
 
-    ln -s $swiftshader src/flutter/third_party/swiftshader
+    cp ${./pkg-config.py} src/build/config/linux/pkg-config.py
+
+    cp -pr --reflink=auto $swiftshader src/flutter/third_party/swiftshader
+    chmod -R u+w -- src/flutter/third_party/swiftshader
+
+    ln -s ${llvmPackages_15.llvm.monorepoSrc} src/flutter/third_party/swiftshader/third_party/llvm-project
+
+    mkdir -p src/flutter/buildtools/${constants.alt-platform}
+    ln -s ${llvm} src/flutter/buildtools/${constants.alt-platform}/clang
+
+    ln -s ${dart} src/${dartPath}/tools/sdks/dart-sdk
 
     ${lib.optionalString (stdenv.isLinux) ''
       for patchtool in ''${patchtools[@]}; do
@@ -198,12 +215,8 @@ stdenv.mkDerivation (finalAttrs: {
       popd
     done
 
-    mkdir -p src/flutter/buildtools/${constants.alt-platform}
-    ln -s ${llvm} src/flutter/buildtools/${constants.alt-platform}/clang
-
-    dart src/third_party/dart/tools/generate_package_config.dart
-    cp ${./pkg-config.py} src/build/config/linux/pkg-config.py
-    echo "${dartSdkVersion}" >src/third_party/dart/sdk/version
+    dart src/${dartPath}/tools/generate_package_config.dart
+    echo "${dartSdkVersion}" >src/${dartPath}/sdk/version
 
     rm -rf src/third_party/angle/.git
     python3 src/flutter/tools/pub_get_offline.py

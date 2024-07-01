@@ -2,7 +2,6 @@
   lib,
   stdenvLibcMinimal,
   mkDerivation,
-  headers,
   libcMinimal,
   librt,
 }:

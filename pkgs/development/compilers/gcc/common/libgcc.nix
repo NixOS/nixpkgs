@@ -84,21 +84,20 @@ in
       rm -f $out/lib/libgcc_s.so*
     ''
 
-    # TODO(amjoseph): remove the `libgcc_s.so` symlinks below and replace them
-    # with a `-L${gccForLibs.libgcc}/lib` in cc-wrapper's
-    # `$out/nix-support/cc-flags`.  See also:
-    # - https://github.com/NixOS/nixpkgs/pull/209870#discussion_r1130614895
-    # - https://github.com/NixOS/nixpkgs/pull/209870#discussion_r1130635982
-    # - https://github.com/NixOS/nixpkgs/commit/404155c6acfa59456aebe6156b22fe385e7dec6f
-    #
     # move `libgcc_s.so` into its own output, `$libgcc`
+    # We maintain $libgcc/lib/$target/ structure to make sure target
+    # strip runs over libgcc_s.so and remove debug references to headers:
+    #   https://github.com/NixOS/nixpkgs/issues/316114
     + lib.optionalString enableLibGccOutput (''
       # move libgcc from lib to its own output (libgcc)
-      mkdir -p $libgcc/lib
-      mv    $lib/${targetPlatformSlash}lib/libgcc_s.so      $libgcc/lib/
-      mv    $lib/${targetPlatformSlash}lib/libgcc_s.so.${libgcc_s-version-major}    $libgcc/lib/
-      ln -s $libgcc/lib/libgcc_s.so   $lib/${targetPlatformSlash}lib/
-      ln -s $libgcc/lib/libgcc_s.so.${libgcc_s-version-major} $lib/${targetPlatformSlash}lib/
+      mkdir -p $libgcc/${targetPlatformSlash}lib
+      mv    $lib/${targetPlatformSlash}lib/libgcc_s.so      $libgcc/${targetPlatformSlash}lib/
+      mv    $lib/${targetPlatformSlash}lib/libgcc_s.so.${libgcc_s-version-major}    $libgcc/${targetPlatformSlash}lib/
+      ln -s $libgcc/${targetPlatformSlash}lib/libgcc_s.so   $lib/${targetPlatformSlash}lib/
+      ln -s $libgcc/${targetPlatformSlash}lib/libgcc_s.so.${libgcc_s-version-major} $lib/${targetPlatformSlash}lib/
+    ''
+    + lib.optionalString (targetPlatformSlash != "") ''
+      ln -s ${targetPlatformSlash}lib $libgcc/lib
     ''
     #
     # Nixpkgs ordinarily turns dynamic linking into pseudo-static linking:

@@ -3,7 +3,7 @@
 , useSteamRun ? true }:
 
 let
-  rev = "1.0.8";
+  rev = "1.0.9";
 in
   buildDotnetModule rec {
     pname = "XIVLauncher";
@@ -13,7 +13,7 @@ in
       owner = "goatcorp";
       repo = "XIVLauncher.Core";
       inherit rev;
-      hash = "sha256-x4W5L4k+u0MYKDWJu82QcXARW0zjmqqwGiueR1IevMk=";
+      hash = "sha256-UOKJMQPule0swwm5p6OPcOt1SYHji2J4MWvN6nGkj/M=";
       fetchSubmodules = true;
     };
 
@@ -24,6 +24,10 @@ in
     projectFile = "src/XIVLauncher.Core/XIVLauncher.Core.csproj";
     nugetDeps = ./deps.nix; # File generated with `nix-build -A xivlauncher.passthru.fetch-deps`
 
+    # please do not unpin these even if they match the defaults, xivlauncher is sensitive to .NET versions
+    dotnet-sdk = dotnetCorePackages.sdk_8_0;
+    dotnet-runtime = dotnetCorePackages.runtime_6_0;
+
     dotnetFlags = [
       "-p:BuildHash=${rev}"
       "-p:PublishSingleFile=false"
@@ -31,7 +35,7 @@ in
 
     postPatch = ''
       substituteInPlace lib/FFXIVQuickLauncher/src/XIVLauncher.Common/Game/Patch/Acquisition/Aria/AriaHttpPatchAcquisition.cs \
-        --replace 'ariaPath = "aria2c"' 'ariaPath = "${aria2}/bin/aria2c"'
+        --replace-fail 'ariaPath = "aria2c"' 'ariaPath = "${aria2}/bin/aria2c"'
     '';
 
     postInstall = ''

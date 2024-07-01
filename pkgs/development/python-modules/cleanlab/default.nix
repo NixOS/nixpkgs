@@ -1,14 +1,19 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
   pythonOlder,
+  fetchFromGitHub,
+
+  # build-system
+  setuptools,
+
+  # dependencies
   numpy,
   scikit-learn,
   termcolor,
   tqdm,
   pandas,
-  setuptools,
+
   # test dependencies
   datasets,
   fasttext,
@@ -26,7 +31,7 @@
 
 buildPythonPackage rec {
   pname = "cleanlab";
-  version = "2.6.5";
+  version = "2.6.6";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -35,7 +40,7 @@ buildPythonPackage rec {
     owner = "cleanlab";
     repo = "cleanlab";
     rev = "refs/tags/v${version}";
-    hash = "sha256-wehvGh27Ey1YK+eWTjT6jRwa7yqPpx3P0HUNePoljpw=";
+    hash = "sha256-08ePFTCRuggr4hTCfr/gbzMhLozz4KCywhPFSKYDNng=";
   };
 
   build-system = [ setuptools ];

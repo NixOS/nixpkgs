@@ -32,6 +32,8 @@
 , wrapGAppsHook3
 , qtwayland
 , cairo
+, openscad
+, runCommand
 }:
 
 mkDerivation rec {
@@ -69,7 +71,11 @@ mkDerivation rec {
     ++ lib.optional spacenavSupport libspnav
   ;
 
-  qmakeFlags = [ "VERSION=${version}" ] ++
+  qmakeFlags = [
+    "VERSION=${version}"
+    "LIB3MF_INCLUDEPATH=${lib3mf.dev}/include/lib3mf/Bindings/Cpp"
+    "LIB3MF_LIBPATH=${lib3mf}/lib"
+  ] ++
     lib.optionals spacenavSupport [
       "ENABLE_SPNAV=1"
       "SPNAV_INCLUDEPATH=${libspnav}/include"
@@ -111,5 +117,15 @@ mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ bjornfor raskin gebner ];
     mainProgram = "openscad";
+  };
+
+  passthru.tests = {
+    lib3mf_support = runCommand "${pname}-lib3mf-support-test" {
+      nativeBuildInputs = [ openscad ];
+    } ''
+      echo "cube([1, 1, 1]);" | openscad -o cube.3mf -
+      echo "import(\"cube.3mf\");" | openscad -o cube-import.3mf -
+      mv cube-import.3mf $out
+    '';
   };
 }

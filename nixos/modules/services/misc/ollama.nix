@@ -1,6 +1,6 @@
 { config, lib, pkgs, ... }:
 let
-  inherit (lib) types;
+  inherit (lib) types mkBefore;
 
   cfg = config.services.ollama;
   ollamaPackage = cfg.package.override {
@@ -132,6 +132,14 @@ in
           Since `ollama run` is mostly a shell around the ollama server, this is usually sufficient.
         '';
       };
+      loadModels = lib.mkOption {
+        type = types.listOf types.str;
+        default = [ ];
+        description = ''
+          The models to download as soon as the service starts.
+          Search for models of your choice from: https://ollama.com/library
+        '';
+      };
       openFirewall = lib.mkOption {
         type = types.bool;
         default = false;
@@ -161,6 +169,14 @@ in
         DynamicUser = cfg.sandbox;
         ReadWritePaths = cfg.writablePaths;
       };
+      postStart = mkBefore ''
+        set -x
+        export OLLAMA_HOST=${lib.escapeShellArg cfg.host}:${builtins.toString cfg.port}
+        for model in ${lib.escapeShellArgs cfg.loadModels}
+        do
+          ${lib.escapeShellArg (lib.getExe ollamaPackage)} pull "$model"
+        done
+      '';
     };
 
     networking.firewall = lib.mkIf cfg.openFirewall { allowedTCPPorts = [ cfg.port ]; };

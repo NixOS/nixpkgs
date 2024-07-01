@@ -77,7 +77,7 @@ in
   };
   spark_3_4 = spark rec {
     pname = "spark";
-    version = "3.4.2";
-    hash = "sha256-qr0tRuzzEcarJznrQYkaQzGqI7tugp/XJpoZxL7tJwk=";
+    version = "3.4.3";
+    hash = "sha256-ifeytk08oaEyiEawwWbUWWuoynGTJNvnrkOW/CjeaSk=";
   };
 }

@@ -15,7 +15,7 @@ let
       level = "info";
     };
   };
-  configFile = toml.generate "scion-dispatcher.toml" (defaultConfig // cfg.settings);
+  configFile = toml.generate "scion-dispatcher.toml" (recursiveUpdate defaultConfig cfg.settings);
 in
 {
   options.services.scion.scion-dispatcher = {
@@ -66,7 +66,7 @@ in
         ExecStartPre = "${pkgs.coreutils}/bin/rm -rf /run/shm/dispatcher";
         ExecStart = "${pkgs.scion}/bin/scion-dispatcher --config ${configFile}";
         Restart = "on-failure";
-        StateDirectory = "scion-dispatcher";
+        RuntimeDirectory = "scion-dispatcher";
       };
     };
   };

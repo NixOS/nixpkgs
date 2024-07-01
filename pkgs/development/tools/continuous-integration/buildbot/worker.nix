@@ -1,6 +1,5 @@
 { lib
 , buildPythonPackage
-, fetchPypi
 , buildbot
 , stdenv
 
@@ -22,16 +21,12 @@
 , nixosTests
 }:
 
-buildPythonPackage (rec {
+buildPythonPackage ({
   pname = "buildbot_worker";
-  inherit (buildbot) version;
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-TFymBnUufOEWZ/IUKd7nebZ+yl58ZChFkGrUxOXn28g=";
-  };
+  inherit (buildbot) src version;
 
   postPatch = ''
+    cd worker
     substituteInPlace buildbot_worker/scripts/logwatcher.py \
       --replace /usr/bin/tail "${coreutils}/bin/tail"
   '';

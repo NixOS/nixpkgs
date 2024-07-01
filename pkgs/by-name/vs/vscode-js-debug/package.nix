@@ -1,8 +1,12 @@
 { lib
+, stdenv
 , buildNpmPackage
 , fetchFromGitHub
 , buildPackages
 , libsecret
+, xcbuild
+, Security
+, AppKit
 , pkg-config
 , nodePackages
 , runCommand
@@ -23,9 +27,17 @@ buildNpmPackage rec {
 
   npmDepsHash = "sha256-DfeaiqKadTnGzOObK01ctlavwqTMa0tqn59sLZMPvUM=";
 
-  nativeBuildInputs = [ pkg-config nodePackages.node-gyp ];
+  nativeBuildInputs = [
+    pkg-config
+    nodePackages.node-gyp
+  ] ++ lib.optionals stdenv.isDarwin [ xcbuild ];
 
-  buildInputs = [ libsecret ];
+  buildInputs =
+    lib.optionals (!stdenv.isDarwin) [ libsecret ]
+    ++ lib.optionals stdenv.isDarwin [
+      Security
+      AppKit
+    ];
 
   postPatch = ''
     ${lib.getExe buildPackages.jq} '

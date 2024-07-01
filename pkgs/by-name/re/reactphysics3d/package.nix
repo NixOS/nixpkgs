@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "reactphysics3d";
-  version = "0.10.0";
+  version = "0.10.1";
 
   src = fetchFromGitHub {
     owner = "DanielChappuis";
     repo = "reactphysics3d";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-LWBnrqDFhpzN/XUEGniZeViDq3R1MtmuU5CMCQ59VOY=";
+    hash = "sha256-j57wzqAmBV/pK7PPUDXV6ciOCQVs2gX+BaGHk4kLuUI=";
   };
 
   nativeBuildInputs = [ cmake ];
