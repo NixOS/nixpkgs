@@ -21,7 +21,7 @@ let
     { pkgs, ... }:
 
     { imports = [ ./common/x11.nix ];
-      hardware.opengl.driSupport = true;
+      hardware.graphics.enable = true;
       environment.systemPackages = [ pkgs.quake3demo ];
       nixpkgs.config.packageOverrides = overrides;
       nixpkgs.config.allowUnfreePredicate = unfreePredicate;
@@ -32,7 +32,7 @@ in
 rec {
   name = "quake3";
   meta = with lib.maintainers; {
-    maintainers = [ domenkozar eelco ];
+    maintainers = [ domenkozar ];
   };
 
   # TODO: lcov doesn't work atm

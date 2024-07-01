@@ -5,6 +5,7 @@
 , bash
 , makeWrapper
 , electron
+, asar
 }:
 
 let
@@ -31,7 +32,7 @@ stdenv.mkDerivation rec {
     inherit sha256;
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper asar ];
 
   dontConfigure = true;
   dontBuild = true;
@@ -48,6 +49,13 @@ stdenv.mkDerivation rec {
     cp -a usr/share/* $out/share
     cp -a "opt/Terra Station/"{locales,resources} $out/share/${pname}
 
+    # patch pre-built node modules
+    asar e $out/share/${pname}/resources/app.asar asar-unpacked
+    find asar-unpacked -name '*.node' -exec patchelf \
+      --add-rpath "${lib.makeLibraryPath [ stdenv.cc.cc.lib ]}" \
+      {} \;
+    asar p asar-unpacked $out/share/${pname}/resources/app.asar
+
     substituteInPlace $out/share/applications/station-electron.desktop \
       --replace "/opt/Terra Station/station-electron" ${pname}
 
@@ -60,7 +68,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Terra station is the official wallet of the Terra blockchain.";
+    description = "Terra station is the official wallet of the Terra blockchain";
     homepage = "https://docs.terra.money/docs/learn/terra-station/README.html";
     license = licenses.isc;
     maintainers = [ maintainers.peterwilli ];

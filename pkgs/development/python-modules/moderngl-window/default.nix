@@ -1,22 +1,23 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, pythonRelaxDepsHook
-, setuptools
-, glfw
-, moderngl
-, numpy
-, pillow
-, pygame
-, pyglet
-, pyqt5
-, pyrr
-, pysdl2
-, pyside2
-, pythonOlder
-, scipy
-, trimesh
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonRelaxDepsHook,
+  setuptools,
+  glfw,
+  moderngl,
+  numpy,
+  pillow,
+  pygame,
+  pyglet,
+  pyqt5,
+  pyrr,
+  pysdl2,
+  pyside2,
+  pythonOlder,
+  scipy,
+  trimesh,
 }:
 
 buildPythonPackage rec {
@@ -33,9 +34,7 @@ buildPythonPackage rec {
     hash = "sha256-zTygSXU/vQZaFCuHbRBpO9/BYYA2UOid+wvhyc2bWMI=";
   };
 
-  pythonRelaxDeps = [
-    "pillow"
-  ];
+  pythonRelaxDeps = [ "pillow" ];
 
   nativeBuildInputs = [
     pythonRelaxDepsHook
@@ -55,29 +54,17 @@ buildPythonPackage rec {
       trimesh
       scipy
     ];
-    glfw = [
-      glfw
-    ];
-    pygame = [
-      pygame
-    ];
-    PySDL2 = [
-      pysdl2
-    ];
-    PySide2 = [
-      pyside2
-    ];
-    pyqt5 = [
-      pyqt5
-    ];
+    glfw = [ glfw ];
+    pygame = [ pygame ];
+    PySDL2 = [ pysdl2 ];
+    PySide2 = [ pyside2 ];
+    pyqt5 = [ pyqt5 ];
   };
 
   # Tests need a display to run.
   doCheck = false;
 
-  pythonImportsCheck = [
-    "moderngl_window"
-  ];
+  pythonImportsCheck = [ "moderngl_window" ];
 
   meta = with lib; {
     description = "Cross platform helper library for ModernGL making window creation and resource loading simple";

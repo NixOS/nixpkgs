@@ -18,7 +18,7 @@ php.buildComposerProject (finalAttrs: {
   vendorHash = "sha256-B5w5n2S/mTF7vpsLuHtf2DGR5aPBfO9QGmodYGXE+Cg=";
 
   meta = {
-    description = "A CLI tool to check whether a specific composer package uses imported symbols that aren't part of its direct composer dependencies";
+    description = "CLI tool to check whether a specific composer package uses imported symbols that aren't part of its direct composer dependencies";
     homepage = "https://github.com/maglnet/ComposerRequireChecker/";
     changelog = "https://github.com/maglnet/ComposerRequireChecker/releases/tag/${finalAttrs.version}";
     license = with lib.licenses; [ mit ];

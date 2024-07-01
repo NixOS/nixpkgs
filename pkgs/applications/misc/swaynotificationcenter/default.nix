@@ -2,7 +2,7 @@
 , stdenv
 , fetchFromGitHub
 , testers
-, wrapGAppsHook
+, wrapGAppsHook3
 , bash-completion
 , dbus
 , dbus-glib
@@ -57,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: rec {
     sassc
     scdoc
     vala
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

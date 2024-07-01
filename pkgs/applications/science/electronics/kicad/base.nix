@@ -42,7 +42,7 @@
 , swig4
 , python
 , wxPython
-, opencascade-occt
+, opencascade-occt_7_6
 , libngspice
 , valgrind
 
@@ -65,6 +65,7 @@ assert testing -> !stable
   -> throw "testing implies stable and cannot be used with stable = false";
 
 let
+  opencascade-occt = opencascade-occt_7_6;
   inherit (lib) optional optionals optionalString;
 in
 stdenv.mkDerivation rec {

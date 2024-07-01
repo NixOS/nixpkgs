@@ -52,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://github.com/ladislav-zezula/StormLib";
-    description = "An open-source project that can work with Blizzard MPQ archives";
+    description = "Open-source project that can work with Blizzard MPQ archives";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ aanderse karolchmist ];
     platforms = lib.platforms.all;

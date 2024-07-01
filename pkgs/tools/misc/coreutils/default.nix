@@ -39,7 +39,13 @@ stdenv.mkDerivation rec {
     hash = "sha256-zTKO3qyS9qZl3p8yPJO3Eq8YWLwuDYjz9xAEaUcKG4o=";
   };
 
-  patches = lib.optionals stdenv.hostPlatform.isMusl [
+  patches = [
+    # https://lists.gnu.org/archive/html/bug-coreutils/2024-05/msg00037.html
+    # This is not precisely the patch provided - this is a diff of the Makefile.in
+    # after the patch was applied and autoreconf was run, since adding autoreconf
+    # here causes infinite recursion.
+    ./fix-mix-flags-deps-libintl.patch
+  ] ++ lib.optionals stdenv.hostPlatform.isMusl [
     # https://lists.gnu.org/archive/html/bug-coreutils/2024-03/msg00089.html
     ./fix-test-failure-musl.patch
   ];
@@ -53,6 +59,9 @@ stdenv.mkDerivation rec {
     sed '2i echo Skipping env test && exit 77' -i ./tests/env/env.sh
     sed '2i echo Skipping rm deep-2 test && exit 77' -i ./tests/rm/deep-2.sh
     sed '2i echo Skipping du long-from-unreadable test && exit 77' -i ./tests/du/long-from-unreadable.sh
+
+    # The test tends to fail on cephfs
+    sed '2i echo Skipping df total-verify test && exit 77' -i ./tests/df/total-verify.sh
 
     # Some target platforms, especially when building inside a container have
     # issues with the inotify test.
@@ -96,13 +105,12 @@ stdenv.mkDerivation rec {
   separateDebugInfo = true;
 
   nativeBuildInputs = [
-    # autoreconfHook is due to patch, normally only needed for cygwin
-    autoreconfHook
     perl
     xz.bin
   ]
   ++ optionals stdenv.hostPlatform.isCygwin [
     # due to patch
+    autoreconfHook
     texinfo
   ];
 
@@ -175,7 +183,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://www.gnu.org/software/coreutils/";
-    description = "The GNU Core Utilities";
+    description = "GNU Core Utilities";
     longDescription = ''
       The GNU Core Utilities are the basic file, shell and text manipulation
       utilities of the GNU operating system. These are the core utilities which

@@ -1,8 +1,20 @@
-{ lib, stdenv, fetchFromGitHub
-, buildPythonPackage, python
-, pytestCheckHook, mock, path, pyhamcrest, pytest-html
-, glibcLocales
-, colorama, cucumber-tag-expressions, parse, parse-type, six
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  buildPythonPackage,
+  python,
+  pytestCheckHook,
+  mock,
+  path,
+  pyhamcrest,
+  pytest-html,
+  glibcLocales,
+  colorama,
+  cucumber-tag-expressions,
+  parse,
+  parse-type,
+  six,
 }:
 
 buildPythonPackage rec {
@@ -17,7 +29,13 @@ buildPythonPackage rec {
     hash = "sha256-B8PUN1Q4UAsDWrHjPZDlpaPjCKjI/pAogCSI+BQnaWs=";
   };
 
-  nativeCheckInputs = [ pytestCheckHook mock path pyhamcrest pytest-html ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    mock
+    path
+    pyhamcrest
+    pytest-html
+  ];
 
   # upstream tests are failing, so instead we only check if we can import it
   doCheck = false;
@@ -25,7 +43,13 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "behave" ];
 
   buildInputs = [ glibcLocales ];
-  propagatedBuildInputs = [ colorama cucumber-tag-expressions parse parse-type six ];
+  propagatedBuildInputs = [
+    colorama
+    cucumber-tag-expressions
+    parse
+    parse-type
+    six
+  ];
 
   postPatch = ''
     patchShebangs bin
@@ -49,6 +73,9 @@ buildPythonPackage rec {
     description = "behaviour-driven development, Python style";
     mainProgram = "behave";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ alunduil maxxk ];
+    maintainers = with maintainers; [
+      alunduil
+      maxxk
+    ];
   };
 }

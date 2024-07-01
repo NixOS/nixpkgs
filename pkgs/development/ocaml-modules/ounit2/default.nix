@@ -17,7 +17,7 @@ buildDunePackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/gildor478/ounit";
-    description = "A unit test framework for OCaml";
+    description = "Unit test framework for OCaml";
     license = licenses.mit;
     maintainers = with maintainers; [ sternenseemann ];
   };

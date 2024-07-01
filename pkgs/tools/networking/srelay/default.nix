@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   installPhase = "install -D srelay $out/bin/srelay";
 
   meta = {
-    description = "A SOCKS proxy and relay";
+    description = "SOCKS proxy and relay";
     homepage = "http://socks-relay.sourceforge.net/";
     platforms = lib.platforms.unix;
     license = lib.licenses.bsd3;

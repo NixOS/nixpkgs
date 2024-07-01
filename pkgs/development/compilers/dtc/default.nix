@@ -47,6 +47,12 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/dgibson/dtc/commit/35f26d2921b68d97fefbd5a2b6e821a2f02ff65d.patch";
       sha256 = "sha256-cO4f/jJX/pQL7kk4jpKUhsCVESW2ZuWaTr7z3BuvVkw=";
     })
+
+    (fetchpatch {
+      name = "static.patch";
+      url = "https://git.kernel.org/pub/scm/utils/dtc/dtc.git/patch/?id=3fbfdd08afd2a7a25b27433f6f5678c0fe694721";
+      hash = "sha256-skK8m1s4xkK6x9AqzxiEK+1uMEmS27dBI1CdEXNFTfU=";
+    })
   ];
 
   env.SETUPTOOLS_SCM_PRETEND_VERSION = finalAttrs.version;

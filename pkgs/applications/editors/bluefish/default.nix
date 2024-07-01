@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , fetchurl
-, wrapGAppsHook
+, wrapGAppsHook3
 , pkg-config
 , gtk
 , libxml2
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-YUPlHGtVedWW86moXg8NhYDJ9Y+ChXWxGYgODKHZQbw=";
   };
 
-  nativeBuildInputs = [ pkg-config wrapGAppsHook ];
+  nativeBuildInputs = [ pkg-config wrapGAppsHook3 ];
   buildInputs = [
     gnome.adwaita-icon-theme
     gtk
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A powerful editor targeted towards programmers and webdevelopers";
+    description = "Powerful editor targeted towards programmers and webdevelopers";
     homepage = "https://bluefish.openoffice.nl/";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ vbgl ];

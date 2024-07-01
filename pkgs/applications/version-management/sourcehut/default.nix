@@ -6,6 +6,7 @@
 , nixosTests
 , config
 , fetchPypi
+, fetchpatch
 }:
 
 # To expose the *srht modules, they have to be a python module so we use `buildPythonModule`
@@ -64,6 +65,13 @@ let
           inherit version;
           hash = "sha256-VUslfHS763oNJUFgpPj/4YUkP1KlIDUGC3Ycpi2XfwM=";
         };
+        # Fixes a test failure with Pytest 8
+        patches = (oldAttrs.patches or []) ++ [
+          (fetchpatch {
+            url = "https://github.com/pallets/werkzeug/commit/4e5bdca7f8227d10cae828f8064fb98190ace4aa.patch";
+            hash = "sha256-83doVvfdpymlAB0EbfrHmuoKE5B2LJbFq+AY2xGpnl4=";
+          })
+        ];
       });
 
       # sourcehut is not (yet) compatible with factory-boy 3.x

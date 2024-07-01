@@ -1,23 +1,24 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, distlib
-, pythonOlder
-, exceptiongroup
-, hatch-vcs
-, hatchling
-, cattrs
-, cmake
-, ninja
-, packaging
-, pathspec
-, pyproject-metadata
-, pytest-subprocess
-, pytestCheckHook
-, setuptools
-, tomli
-, virtualenv
-, wheel
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  distlib,
+  pythonOlder,
+  exceptiongroup,
+  hatch-vcs,
+  hatchling,
+  cattrs,
+  cmake,
+  ninja,
+  packaging,
+  pathspec,
+  pyproject-metadata,
+  pytest-subprocess,
+  pytestCheckHook,
+  setuptools,
+  tomli,
+  virtualenv,
+  wheel,
 }:
 
 buildPythonPackage rec {
@@ -41,12 +42,12 @@ buildPythonPackage rec {
     hatchling
   ];
 
-  propagatedBuildInputs = [
-    packaging
-  ] ++ lib.optionals (pythonOlder "3.11") [
-    exceptiongroup
-    tomli
-  ];
+  propagatedBuildInputs =
+    [ packaging ]
+    ++ lib.optionals (pythonOlder "3.11") [
+      exceptiongroup
+      tomli
+    ];
 
   passthru.optional-dependencies = {
     pyproject = [
@@ -81,12 +82,10 @@ buildPythonPackage rec {
     "tests/test_editable.py"
   ];
 
-  pythonImportsCheck = [
-    "scikit_build_core"
-  ];
+  pythonImportsCheck = [ "scikit_build_core" ];
 
   meta = with lib; {
-    description = "A next generation Python CMake adaptor and Python API for plugins";
+    description = "Next generation Python CMake adaptor and Python API for plugins";
     homepage = "https://github.com/scikit-build/scikit-build-core";
     changelog = "https://github.com/scikit-build/scikit-build-core/releases/tag/v${version}";
     license = with licenses; [ asl20 ];

@@ -1,18 +1,19 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, nix-update-script
-, craft-cli
-, craft-parts
-, craft-providers
-, pydantic-yaml-0
-, pyyaml
-, setuptools
-, setuptools-scm
-, pytestCheckHook
-, pytest-check
-, pytest-mock
-, hypothesis
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  nix-update-script,
+  craft-cli,
+  craft-parts,
+  craft-providers,
+  pydantic-yaml-0,
+  pyyaml,
+  setuptools,
+  setuptools-scm,
+  pytestCheckHook,
+  pytest-check,
+  pytest-mock,
+  hypothesis,
 }:
 
 buildPythonPackage rec {
@@ -49,9 +50,7 @@ buildPythonPackage rec {
     pyyaml
   ];
 
-  pythonImportsCheck = [
-    "craft_application"
-  ];
+  pythonImportsCheck = [ "craft_application" ];
 
   nativeCheckInputs = [
     hypothesis
@@ -66,14 +65,12 @@ buildPythonPackage rec {
 
   pytestFlagsArray = [ "tests/unit" ];
 
-  disabledTests = [
-    "test_to_yaml_file"
-  ];
+  disabledTests = [ "test_to_yaml_file" ];
 
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "The basis for Canonical craft applications";
+    description = "Basis for Canonical craft applications";
     homepage = "https://github.com/canonical/craft-application";
     changelog = "https://github.com/canonical/craft-application/releases/tag/${version}";
     license = lib.licenses.lgpl3Only;
@@ -81,4 +78,3 @@ buildPythonPackage rec {
     platforms = lib.platforms.linux;
   };
 }
-

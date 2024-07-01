@@ -10,7 +10,7 @@
 , gettext
 , glib
 , desktop-file-utils
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -38,7 +38,7 @@ python3.pkgs.buildPythonApplication rec {
     glib
     gtk3
     desktop-file-utils
-    wrapGAppsHook
+    wrapGAppsHook3
     gobject-introspection
   ];
 

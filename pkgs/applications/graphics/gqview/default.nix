@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   NIX_LDFLAGS = "-lm";
 
   meta = with lib; {
-    description = "A fast image viewer";
+    description = "Fast image viewer";
     homepage = "https://gqview.sourceforge.net";
     license = licenses.gpl2;
     platforms = platforms.unix;

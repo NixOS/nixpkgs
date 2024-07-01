@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "A settings app for mobile specific things";
+    description = "Settings app for mobile specific things";
     mainProgram = "phosh-mobile-settings";
     homepage = "https://gitlab.gnome.org/World/Phosh/phosh-mobile-settings";
     changelog = "https://gitlab.gnome.org/World/Phosh/phosh-mobile-settings/-/blob/v${version}/debian/changelog";

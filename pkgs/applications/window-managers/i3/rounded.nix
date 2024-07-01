@@ -14,7 +14,7 @@ i3.overrideAttrs (oldAttrs: rec {
   buildInputs = oldAttrs.buildInputs ++ [ pcre ];
 
   meta = with lib; {
-    description = "A fork of i3-gaps that adds rounding to window corners";
+    description = "Fork of i3-gaps that adds rounding to window corners";
     homepage = "https://github.com/LinoBigatti/i3-rounded";
     maintainers = with maintainers; [ marsupialgutz ];
     license = licenses.bsd3;

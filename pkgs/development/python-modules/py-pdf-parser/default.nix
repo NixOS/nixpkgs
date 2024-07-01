@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, docopt
-, fetchPypi
-, pdfminer-six
-, pythonOlder
-, pythonRelaxDepsHook
-, setuptools
-, wand
+{
+  lib,
+  buildPythonPackage,
+  docopt,
+  fetchPypi,
+  pdfminer-six,
+  pythonOlder,
+  pythonRelaxDepsHook,
+  setuptools,
+  wand,
 }:
 
 buildPythonPackage rec {
@@ -47,7 +48,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "A tool to help extracting information from structured PDFs";
+    description = "Tool to help extracting information from structured PDFs";
     homepage = "https://github.com/jstockwin/py-pdf-parser";
     changelog = "https://github.com/jstockwin/py-pdf-parser/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;

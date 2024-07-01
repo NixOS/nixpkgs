@@ -6,13 +6,13 @@
 
 buildGoModule rec {
   pname = "yanic";
-  version = "1.5.0";
+  version = "1.5.2";
 
   src = fetchFromGitHub {
     owner = "FreifunkBremen";
     repo = "yanic";
     rev = "v${version}";
-    sha256 = "sha256-++tF6nTFIDeqWSqlBDXw/zEfl5YYa4ufzVZaUG2c8Zo=";
+    sha256 = "sha256-UxTlo8HkC5iTfcfTAlhSkRQo8QJhI03JDSSItuE7BCE=";
   };
 
   vendorHash = "sha256-D9V53/+C/+iv1U4kVrYWzJ8iD0MA1QcR8f5ifejFhLo=";
@@ -29,7 +29,7 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    description = "A tool to collect and aggregate respondd data";
+    description = "Tool to collect and aggregate respondd data";
     homepage = "https://github.com/FreifunkBremen/yanic";
     changelog = "https://github.com/FreifunkBremen/yanic/releases/tag/${src.rev}";
     license = licenses.agpl3Only;

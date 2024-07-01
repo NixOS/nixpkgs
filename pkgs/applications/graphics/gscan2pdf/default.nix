@@ -1,4 +1,4 @@
-{ lib, fetchurl, perlPackages, wrapGAppsHook, fetchpatch,
+{ lib, fetchurl, perlPackages, wrapGAppsHook3, fetchpatch,
   # libs
   librsvg, sane-backends, sane-frontends,
   # runtime dependencies
@@ -28,7 +28,7 @@ perlPackages.buildPerlPackage rec {
     ./image-utf8-fix.patch
   ];
 
-  nativeBuildInputs = [ wrapGAppsHook ];
+  nativeBuildInputs = [ wrapGAppsHook3 ];
 
   buildInputs =
     [ librsvg sane-backends sane-frontends ] ++
@@ -146,7 +146,7 @@ perlPackages.buildPerlPackage rec {
   '';
 
   meta = {
-    description = "A GUI to produce PDFs or DjVus from scanned documents";
+    description = "GUI to produce PDFs or DjVus from scanned documents";
     homepage = "https://gscan2pdf.sourceforge.net/";
     license = licenses.gpl3;
     maintainers = with maintainers; [ pacien ];

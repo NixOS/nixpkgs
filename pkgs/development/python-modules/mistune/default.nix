@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -21,19 +22,15 @@ buildPythonPackage rec {
     hash = "sha256-OoTiqJ7hsFP1Yx+7xW3rL+Yc/O2lCMdhBBbaZucyZXM=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "mistune" ];
 
   meta = with lib; {
     changelog = "https://github.com/lepture/mistune/blob/${src.rev}/docs/changes.rst";
-    description = "A sane Markdown parser with useful plugins and renderers";
+    description = "Sane Markdown parser with useful plugins and renderers";
     homepage = "https://github.com/lepture/mistune";
     license = licenses.bsd3;
     maintainers = with maintainers; [ dotlambda ];

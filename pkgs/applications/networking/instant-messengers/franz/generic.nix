@@ -1,7 +1,7 @@
 { stdenv
 , lib
 , makeWrapper
-, wrapGAppsHook
+, wrapGAppsHook3
 , autoPatchelfHook
 , dpkg
 , xorg
@@ -38,7 +38,7 @@ in stdenv.mkDerivation (rec {
   # Don't remove runtime deps.
   dontPatchELF = true;
 
-  nativeBuildInputs = [ autoPatchelfHook makeWrapper wrapGAppsHook dpkg ];
+  nativeBuildInputs = [ autoPatchelfHook makeWrapper wrapGAppsHook3 dpkg ];
   buildInputs = extraBuildInputs ++ (with xorg; [
     libXi
     libXcursor

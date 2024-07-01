@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, dill
-, fetchFromGitHub
-, hatchling
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  dill,
+  fetchFromGitHub,
+  hatchling,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -21,21 +22,13 @@ buildPythonPackage rec {
     hash = "sha256-4924pqgc+C8VDTTK5Dac6UJV0tcicVBdnkWvE1ynyvY=";
   };
 
-  build-system = [
-    hatchling
-  ];
+  build-system = [ hatchling ];
 
-  dependencies = [
-    dill
-  ];
+  dependencies = [ dill ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "latexify"
-  ];
+  pythonImportsCheck = [ "latexify" ];
 
   preCheck = ''
     cd src

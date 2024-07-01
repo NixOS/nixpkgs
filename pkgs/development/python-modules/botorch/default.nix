@@ -1,29 +1,30 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, gpytorch
-, linear-operator
-, multipledispatch
-, pyro-ppl
-, setuptools
-, setuptools-scm
-, wheel
-, torch
-, scipy
-, pytestCheckHook
-, pythonRelaxDepsHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  gpytorch,
+  linear-operator,
+  multipledispatch,
+  pyro-ppl,
+  setuptools,
+  setuptools-scm,
+  wheel,
+  torch,
+  scipy,
+  pytestCheckHook,
+  pythonRelaxDepsHook,
 }:
 
 buildPythonPackage rec {
   pname = "botorch";
-  version = "0.10.0";
+  version = "0.11.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "pytorch";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-IaFtQWrgOhVHDOiPQ4oG8l+Q0igWamYVWEReGccbVoI=";
+    hash = "sha256-eL0buwqrGt4qcwdzCwD85IyiWjAFuP1n8aUb2pvvIKw=";
   };
 
   nativeBuildInputs = [
@@ -42,13 +43,9 @@ buildPythonPackage rec {
     torch
   ];
 
-  pythonRelaxDeps = [
-    "linear-operator"
-  ];
+  pythonRelaxDeps = [ "linear-operator" ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
   pythonImportsCheck = [ "botorch" ];
 
   meta = with lib; {

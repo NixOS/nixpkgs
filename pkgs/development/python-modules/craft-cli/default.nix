@@ -1,15 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, nix-update-script
-, platformdirs
-, pydantic_1
-, pyyaml
-, setuptools
-, setuptools-scm
-, pytest-check
-, pytest-mock
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  nix-update-script,
+  platformdirs,
+  pydantic_1,
+  pyyaml,
+  setuptools,
+  setuptools-scm,
+  pytest-check,
+  pytest-mock,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -44,9 +45,7 @@ buildPythonPackage rec {
     pyyaml
   ];
 
-  pythonImportsCheck = [
-    "craft_cli"
-  ];
+  pythonImportsCheck = [ "craft_cli" ];
 
   nativeCheckInputs = [
     pytest-check
@@ -59,7 +58,7 @@ buildPythonPackage rec {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "A CLI builder for Canonical's CLI Guidelines";
+    description = "CLI builder for Canonical's CLI Guidelines";
     homepage = "https://github.com/canonical/craft-cli";
     changelog = "https://github.com/canonical/craft-cli/releases/tag/${version}";
     license = lib.licenses.lgpl3Only;

@@ -1,16 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, hatchling
-, textual
-, universal-pathlib
-, adlfs
-, aiohttp
-, gcsfs
-, paramiko
-, requests
-, s3fs
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  hatchling,
+  textual,
+  universal-pathlib,
+  adlfs,
+  aiohttp,
+  gcsfs,
+  paramiko,
+  requests,
+  s3fs,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -27,9 +28,7 @@ buildPythonPackage rec {
     hash = "sha256-ncQ3IRaZaCv1rMUWT9dkUKo6OAEC5pziMCM7adIBGWo=";
   };
 
-  nativeBuildInputs = [
-    hatchling
-  ];
+  nativeBuildInputs = [ hatchling ];
 
   propagatedBuildInputs = [
     textual
@@ -47,9 +46,7 @@ buildPythonPackage rec {
     ];
   };
 
-  pythonImportsCheck = [
-    "textual_universal_directorytree"
-  ];
+  pythonImportsCheck = [ "textual_universal_directorytree" ];
 
   meta = with lib; {
     description = "Textual plugin for a DirectoryTree compatible with remote filesystems";

@@ -1,22 +1,29 @@
-{ lib
-, buildPythonPackage
-, fetchurl
-, protobuf
-, pymorphy3
-, pymorphy3-dicts-uk
-, sentencepiece
-, setuptools
-, spacy
-, spacy-pkuseg
-, spacy-transformers
-, writeScript
-, stdenv
-, jq
-, nix
-, moreutils
+{
+  lib,
+  buildPythonPackage,
+  fetchurl,
+  protobuf,
+  pymorphy3,
+  pymorphy3-dicts-uk,
+  sentencepiece,
+  setuptools,
+  spacy,
+  spacy-pkuseg,
+  spacy-transformers,
+  writeScript,
+  stdenv,
+  jq,
+  nix,
+  moreutils,
 }:
 let
-  buildModelPackage = { pname, version, sha256, license }:
+  buildModelPackage =
+    {
+      pname,
+      version,
+      sha256,
+      license,
+    }:
 
     let
       lang = builtins.substring 0 2 pname;
@@ -31,10 +38,14 @@ let
         inherit sha256;
       };
 
-      propagatedBuildInputs = [ spacy ]
+      propagatedBuildInputs =
+        [ spacy ]
         ++ lib.optionals (lib.hasSuffix "_trf" pname) [ spacy-transformers ]
         ++ lib.optionals (lang == "ru") [ pymorphy3 ]
-        ++ lib.optionals (lang == "uk") [ pymorphy3 pymorphy3-dicts-uk ]
+        ++ lib.optionals (lang == "uk") [
+          pymorphy3
+          pymorphy3-dicts-uk
+        ]
         ++ lib.optionals (lang == "zh") [ spacy-pkuseg ]
         ++ lib.optionals (pname == "fr_dep_news_trf") [ sentencepiece ];
 
@@ -43,18 +54,20 @@ let
           --replace "protobuf<3.21.0" "protobuf"
       '';
 
-      nativeBuildInputs = [
-        setuptools
-      ] ++ lib.optionals requires-protobuf [
-        protobuf
-      ];
+      nativeBuildInputs = [ setuptools ] ++ lib.optionals requires-protobuf [ protobuf ];
 
       pythonImportsCheck = [ pname ];
 
       passthru.updateScript = writeScript "update-spacy-models" ''
         #!${stdenv.shell}
         set -eou pipefail
-        PATH=${lib.makeBinPath [ jq nix moreutils ]}
+        PATH=${
+          lib.makeBinPath [
+            jq
+            nix
+            moreutils
+          ]
+        }
 
         IFS=. read -r major minor patch <<<"${spacy.version}"
         spacyVersion="$(echo "$major.$minor.0")"
@@ -82,7 +95,7 @@ let
       };
     };
 
-  makeModelSet = models: with lib; listToAttrs (map (m: nameValuePair m.pname (buildModelPackage m)) models);
-
+  makeModelSet =
+    models: with lib; listToAttrs (map (m: nameValuePair m.pname (buildModelPackage m)) models);
 in
 makeModelSet (lib.importJSON ./models.json)

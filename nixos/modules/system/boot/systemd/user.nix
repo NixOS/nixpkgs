@@ -144,6 +144,18 @@ in {
       };
     };
 
+    systemd.user.generators = mkOption {
+      type = types.attrsOf types.path;
+      default = {};
+      example = { systemd-gpt-auto-generator = "/dev/null"; };
+      description = ''
+        Definition of systemd generators; see {manpage}`systemd.generator(5)`.
+
+        For each `NAME = VALUE` pair of the attrSet, a link is generated from
+        `/etc/systemd/user-generators/NAME` to `VALUE`.
+      '';
+    };
+
     systemd.additionalUpstreamUserUnits = mkOption {
       default = [];
       type = types.listOf types.str;

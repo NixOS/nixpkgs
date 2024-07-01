@@ -37,7 +37,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   meta = with lib; {
-    description = "A terminal based slideshow tool";
+    description = "Terminal based slideshow tool";
     changelog = "https://github.com/mfontanini/presenterm/releases/tag/v${version}";
     homepage = "https://github.com/mfontanini/presenterm";
     license = licenses.bsd2;

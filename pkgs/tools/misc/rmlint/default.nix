@@ -14,7 +14,7 @@
 , scons
 , sphinx
 , util-linux
-, wrapGAppsHook
+, wrapGAppsHook3
 , withGui ? false }:
 
 assert withGui -> !stdenv.isDarwin;
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     scons
   ] ++ lib.optionals withGui [
     makeWrapper
-    wrapGAppsHook
+    wrapGAppsHook3
     gobject-introspection
   ];
 

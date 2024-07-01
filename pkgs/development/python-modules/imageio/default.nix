@@ -1,37 +1,38 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, isPyPy
-, substituteAll
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  isPyPy,
+  substituteAll,
 
-# build-system
-, setuptools
+  # build-system
+  setuptools,
 
-# native dependencies
-, libGL
+  # native dependencies
+  libGL,
 
-# dependencies
-, numpy
-, pillow
+  # dependencies
+  numpy,
+  pillow,
 
-# optional-dependencies
-, astropy
-, av
-, imageio-ffmpeg
-, pillow-heif
-, psutil
-, tifffile
+  # optional-dependencies
+  astropy,
+  av,
+  imageio-ffmpeg,
+  pillow-heif,
+  psutil,
+  tifffile,
 
-# tests
-, pytestCheckHook
-, fsspec
+  # tests
+  pytestCheckHook,
+  fsspec,
 }:
 
 buildPythonPackage rec {
   pname = "imageio";
-  version = "2.34.1";
+  version = "2.34.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -40,7 +41,7 @@ buildPythonPackage rec {
     owner = "imageio";
     repo = "imageio";
     rev = "refs/tags/v${version}";
-    hash = "sha256-/VZUifiz8iImq+JLvckFDr7YMIqu0Xro2t3GFj0obg0=";
+    hash = "sha256-1q/LPEdo9rzcIR1ZD+bIP8MIKe7PmxRd8UX6c5C0V5k=";
   };
 
   patches = lib.optionals (!stdenv.isDarwin) [
@@ -50,9 +51,7 @@ buildPythonPackage rec {
     })
   ];
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     numpy
@@ -60,45 +59,36 @@ buildPythonPackage rec {
   ];
 
   passthru.optional-dependencies = {
-    bsdf = [];
-    dicom = [];
-    feisem = [];
+    bsdf = [ ];
+    dicom = [ ];
+    feisem = [ ];
     ffmpeg = [
       imageio-ffmpeg
       psutil
     ];
-    fits = lib.optionals (!isPyPy) [
-      astropy
-    ];
-    freeimage = [];
-    lytro = [];
-    numpy = [];
-    pillow = [];
-    simpleitk = [];
-    spe = [];
-    swf = [];
-    tifffile = [
-      tifffile
-    ];
-    pyav = [
-      av
-    ];
-    heif = [
-      pillow-heif
-    ];
+    fits = lib.optionals (!isPyPy) [ astropy ];
+    freeimage = [ ];
+    lytro = [ ];
+    numpy = [ ];
+    pillow = [ ];
+    simpleitk = [ ];
+    spe = [ ];
+    swf = [ ];
+    tifffile = [ tifffile ];
+    pyav = [ av ];
+    heif = [ pillow-heif ];
   };
 
-  nativeCheckInputs = [
-    fsspec
-    psutil
-    pytestCheckHook
-  ]
-  ++ fsspec.optional-dependencies.github
-  ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  nativeCheckInputs =
+    [
+      fsspec
+      psutil
+      pytestCheckHook
+    ]
+    ++ fsspec.optional-dependencies.github
+    ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
-  pytestFlagsArray = [
-    "-m 'not needs_internet'"
-  ];
+  pytestFlagsArray = [ "-m 'not needs_internet'" ];
 
   preCheck = ''
     export IMAGEIO_USERDIR="$TMP"
@@ -123,11 +113,11 @@ buildPythonPackage rec {
     "test_reverse_read"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for reading and writing a wide range of image, video, scientific, and volumetric data formats";
     homepage = "https://imageio.readthedocs.io";
     changelog = "https://github.com/imageio/imageio/blob/v${version}/CHANGELOG.md";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ Luflosi ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ Luflosi ];
   };
 }

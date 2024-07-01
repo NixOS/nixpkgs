@@ -30,7 +30,7 @@ rustPlatform.buildRustPackage {
   '';
 
   meta = with lib; {
-    description = "Command that rotates default between two PipeWire audio sinks.";
+    description = "Command that rotates default between two PipeWire audio sinks";
     homepage = "https://github.com/mightyiam/sink-rotate";
     license = licenses.mit;
     maintainers = with maintainers; [ mightyiam ];

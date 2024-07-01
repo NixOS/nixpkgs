@@ -8,7 +8,6 @@
 , fetchurl
 , fetchpatch
 , glibmm
-, kernel
 , libavc1394
 , libconfig
 , libiec61883
@@ -22,7 +21,6 @@
 }:
 
 let
-  inherit (python3.pkgs) pyqt5 dbus-python;
   python = python3.withPackages (pkgs: with pkgs; [ pyqt5 dbus-python ]);
 in
 mkDerivation rec {
@@ -61,7 +59,7 @@ mkDerivation rec {
     pkg-config
     which
     python
-    pyqt5
+    python3.pkgs.pyqt5
     wrapQtAppsHook
   ];
 

@@ -1,7 +1,6 @@
 { lib
 , buildGoModule
 , mullvad
-, fetchpatch
 }:
 buildGoModule {
   pname = "libwg";
@@ -30,7 +29,7 @@ buildGoModule {
   '';
 
   meta = with lib; {
-    description = "A tiny wrapper around wireguard-go";
+    description = "Tiny wrapper around wireguard-go";
     homepage = "https://github.com/mullvad/mullvadvpn-app/tree/main/wireguard/libwg";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ cole-h ];

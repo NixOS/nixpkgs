@@ -24,7 +24,7 @@ python3Packages.buildPythonApplication rec {
   pythonImportsCheck = [ "twspace_dl" ];
 
   meta = with lib; {
-    description = "A python module to download twitter spaces";
+    description = "Python module to download twitter spaces";
     homepage = "https://github.com/HoloArchivists/twspace-dl";
     changelog = "https://github.com/HoloArchivists/twspace-dl/releases/tag/${version}";
     license = licenses.gpl2Only;

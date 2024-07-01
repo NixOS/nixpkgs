@@ -21,7 +21,7 @@ mkDerivation rec {
   ];
 
   meta = {
-    description = "A program to write hybrid ISO files onto USB disks";
+    description = "Program to write hybrid ISO files onto USB disks";
     homepage = "https://invent.kde.org/utilities/isoimagewriter";
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl3Plus;

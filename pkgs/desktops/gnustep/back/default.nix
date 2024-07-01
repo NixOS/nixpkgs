@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [ cairo base gui fontconfig freetype libXft libXmu ];
 
   meta = {
-    description = "A generic backend for GNUstep";
+    description = "Generic backend for GNUstep";
     mainProgram = "gpbs";
     homepage = "https://gnustep.github.io/";
     license = lib.licenses.lgpl2Plus;

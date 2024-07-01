@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, icontract
-, pytestCheckHook
-, pythonOlder
-, substituteAll
-, typing-extensions
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  icontract,
+  pytestCheckHook,
+  pythonOlder,
+  substituteAll,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {

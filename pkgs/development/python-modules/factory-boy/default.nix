@@ -1,15 +1,16 @@
-{ lib
-, buildPythonPackage
-, django
-, faker
-, fetchPypi
-, flask
-, flask-sqlalchemy
-, mongoengine
-, pytestCheckHook
-, pythonOlder
-, sqlalchemy
-, sqlalchemy-utils
+{
+  lib,
+  buildPythonPackage,
+  django,
+  faker,
+  fetchPypi,
+  flask,
+  flask-sqlalchemy,
+  mongoengine,
+  pytestCheckHook,
+  pythonOlder,
+  sqlalchemy,
+  sqlalchemy-utils,
 }:
 
 buildPythonPackage rec {
@@ -30,9 +31,7 @@ buildPythonPackage rec {
       --replace '"3.2.1.dev0")' '"${version}")'
   '';
 
-  propagatedBuildInputs = [
-    faker
-  ];
+  propagatedBuildInputs = [ faker ];
 
   nativeCheckInputs = [
     django
@@ -45,18 +44,14 @@ buildPythonPackage rec {
   ];
 
   # Checks for MongoDB requires an a running DB
-  disabledTests = [
-    "MongoEngineTestCase"
-  ];
+  disabledTests = [ "MongoEngineTestCase" ];
 
   disabledTestPaths = [
     # incompatible with latest flask-sqlalchemy
     "examples/flask_alchemy/test_demoapp.py"
   ];
 
-  pythonImportsCheck = [
-    "factory"
-  ];
+  pythonImportsCheck = [ "factory" ];
 
   meta = with lib; {
     description = "Python package to create factories for complex objects";

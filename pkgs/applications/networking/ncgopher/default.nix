@@ -28,7 +28,7 @@ rustPlatform.buildRustPackage rec {
   ];
 
   meta = with lib; {
-    description = "A gopher and gemini client for the modern internet";
+    description = "Gopher and gemini client for the modern internet";
     homepage = "https://github.com/jansc/ncgopher";
     license = licenses.bsd2;
     maintainers = with maintainers; [ shamilton ];

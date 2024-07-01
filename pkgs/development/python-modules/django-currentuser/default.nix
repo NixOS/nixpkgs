@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, python3
-, pythonOlder
-, django
-, hatchling
-, pyhamcrest
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  python3,
+  pythonOlder,
+  django,
+  hatchling,
+  pyhamcrest,
 }:
 let
   version = "0.6.1";

@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, torch
-, ninja
-, scipy
-, which
-, pybind11
-, pytest-xdist
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  torch,
+  ninja,
+  scipy,
+  which,
+  pybind11,
+  pytest-xdist,
+  pytestCheckHook,
 }:
 
 let
@@ -48,7 +49,10 @@ buildPythonPackage rec {
     export HOME=$(mktemp -d)
   '';
 
-  propagatedBuildInputs = [ torch pybind11 ];
+  propagatedBuildInputs = [
+    torch
+    pybind11
+  ];
 
   nativeCheckInputs = [
     which

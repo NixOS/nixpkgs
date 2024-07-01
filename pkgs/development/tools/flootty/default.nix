@@ -10,7 +10,7 @@ python3Packages.buildPythonApplication rec {
   };
 
   meta = with lib; {
-    description = "A collaborative terminal. In practice, it's similar to a shared screen or tmux session";
+    description = "Collaborative terminal. In practice, it's similar to a shared screen or tmux session";
     mainProgram = "flootty";
     homepage = "https://floobits.com/help/flootty";
     license = licenses.asl20;

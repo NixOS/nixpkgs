@@ -1,22 +1,23 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, flit-core
-, importlib-metadata
-, typing-extensions
-, cloudpathlib
-, azure-storage-blob
-, google-cloud-storage
-, boto3
-, psutil
-, pydantic
-, pytest7CheckHook
-, pytest-cases
-, pytest-cov
-, pytest-xdist
-, python-dotenv
-, shortuuid
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  flit-core,
+  importlib-metadata,
+  typing-extensions,
+  cloudpathlib,
+  azure-storage-blob,
+  google-cloud-storage,
+  boto3,
+  psutil,
+  pydantic,
+  pytest7CheckHook,
+  pytest-cases,
+  pytest-cov,
+  pytest-xdist,
+  python-dotenv,
+  shortuuid,
 }:
 
 buildPythonPackage rec {
@@ -33,9 +34,7 @@ buildPythonPackage rec {
     hash = "sha256-RrdRUqQ3QyMUpTi1FEsSXK6WS37r77SdPBH1oVVvSw0=";
   };
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  nativeBuildInputs = [ flit-core ];
 
   propagatedBuildInputs = [
     importlib-metadata
@@ -43,18 +42,10 @@ buildPythonPackage rec {
   ];
 
   passthru.optional-dependencies = {
-    all = [
-      cloudpathlib
-    ];
-    azure = [
-      azure-storage-blob
-    ];
-    gs = [
-      google-cloud-storage
-    ];
-    s3 = [
-      boto3
-    ];
+    all = [ cloudpathlib ];
+    azure = [ azure-storage-blob ];
+    gs = [ google-cloud-storage ];
+    s3 = [ boto3 ];
   };
 
   pythonImportsCheck = [ "cloudpathlib" ];

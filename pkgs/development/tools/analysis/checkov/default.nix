@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "checkov";
-  version = "3.2.74";
+  version = "3.2.159";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bridgecrewio";
     repo = "checkov";
     rev = "refs/tags/${version}";
-    hash = "sha256-Ge0SCoZeBdEKGjvPXGzsYptKBzNWrUbjLEdNxsYUlcI=";
+    hash = "sha256-ZWJf499yr4aOrNHNaoaQ+t4zxCUZrw3FzEytEkGcAnk=";
   };
 
   patches = [ ./flake8-compat-5.x.patch ];
@@ -23,6 +23,7 @@ python3.pkgs.buildPythonApplication rec {
     "bc-python-hcl2"
     "boto3"
     "botocore"
+    "cyclonedx-python-lib"
     "dpath"
     "igraph"
     "license-expression"
@@ -33,6 +34,7 @@ python3.pkgs.buildPythonApplication rec {
     "pycep-parser"
     "rustworkx"
     "termcolor"
+    "urllib3"
   ];
 
   pythonRemoveDeps = [
@@ -122,6 +124,8 @@ python3.pkgs.buildPythonApplication rec {
     "test_runner"
     # AssertionError: assert ['<?xml versi...
     "test_get_cyclonedx_report"
+    # Test fails on Hydra
+    "test_sast_js_filtered_files_by_ts"
   ];
 
   disabledTestPaths = [

@@ -1,17 +1,19 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, httpretty
-, pyjwt
-, pytestCheckHook
-, python-dateutil
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  httpretty,
+  pyjwt,
+  pytestCheckHook,
+  python-dateutil,
+  requests,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "adal";
   version = "1.2.7";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "AzureAD";
@@ -24,7 +26,9 @@ buildPythonPackage rec {
     sed -i '/cryptography/d' setup.py
   '';
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     pyjwt
     python-dateutil
     requests
@@ -40,9 +44,7 @@ buildPythonPackage rec {
     "test_failed_request"
   ];
 
-  pythonImportsCheck = [
-    "adal"
-  ];
+  pythonImportsCheck = [ "adal" ];
 
   meta = with lib; {
     description = "Python module to authenticate to Azure Active Directory (AAD) in order to access AAD protected web resources";

@@ -2,34 +2,49 @@
 , lib
 , fetchFromGitHub
 , crystal
-, vte
+, vte-gtk4
 , libgit2
+, gtk4
+, libadwaita
 , editorconfig-core-c
-, gtksourceview4
-, wrapGAppsHook
+, gtksourceview5
+, wrapGAppsHook4
+, gobject-introspection
 , desktopToDarwinBundle
 }:
+
 crystal.buildCrystalPackage rec {
   pname = "tijolo";
-  version = "0.7.4";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "hugopl";
     repo = "tijolo";
     rev = "v${version}";
-    hash = "sha256-3TfXvRVP3lu43qF3RWCHnZ3czTaSl5EzrhuTlpnMfKo=";
+    hash = "sha256-RVdZce9csnhJx5p+jBANDCsz2eB/l3EHExwKMbKL9y0=";
   };
 
-  nativeBuildInputs = [ wrapGAppsHook ]
+  postPatch = ''
+    substituteInPlace Makefile \
+      --replace-fail "shards install" "true"
+  '';
+
+  shardsFile = ./shards.nix;
+  copyShardDeps = true;
+
+  preBuild = ''
+    cd lib/gi-crystal && shards build -Dpreview_mt --release --no-debug
+    cd ../.. && mkdir bin/ && cp lib/gi-crystal/bin/gi-crystal bin/
+  '';
+
+  nativeBuildInputs = [ wrapGAppsHook4 gobject-introspection ]
     ++ lib.optionals stdenv.isDarwin [ desktopToDarwinBundle ];
-  buildInputs = [ vte libgit2 gtksourceview4 editorconfig-core-c ];
+  buildInputs = [ gtk4 libadwaita vte-gtk4 libgit2 gtksourceview5 editorconfig-core-c ];
 
   buildTargets = [ "all" ];
   doCheck = false;
 
-  shardsFile = ./shards.nix;
-
-  installTargets = [ "install" "install-fonts"];
+  installTargets = [ "install" "post-install" "install-fonts"];
   doInstallCheck = false;
 
   meta = with lib; {

@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, click
-, requests
-, ruamel-yaml
-, pykwalify
-, jsonschema
-, pytestCheckHook
-, pytest-cov
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  click,
+  requests,
+  ruamel-yaml,
+  pykwalify,
+  jsonschema,
+  pytestCheckHook,
+  pytest-cov,
 }:
 
 buildPythonPackage rec {
@@ -23,9 +24,7 @@ buildPythonPackage rec {
     hash = "sha256-/2qhWVNylrqPSf1KmuZQahzq+YH860cohVSfJsDm1BE=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     click
@@ -35,9 +34,7 @@ buildPythonPackage rec {
     jsonschema
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   checkInputs = [
     # addopts uses --no-cov
@@ -49,9 +46,7 @@ buildPythonPackage rec {
     "tests/cli/test_rawify_url.py"
   ];
 
-  pythonImportsCheckHook = [
-    "cffconvert"
-  ];
+  pythonImportsCheckHook = [ "cffconvert" ];
 
   meta = {
     changelog = "https://github.com/citation-file-format/cffconvert/blob/${src.rev}/CHANGELOG.md";

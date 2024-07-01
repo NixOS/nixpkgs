@@ -45,7 +45,7 @@ in symlinkJoin {
   ];
 
   meta = with lib; {
-    description = "A collection of wordlists useful for security testing";
+    description = "Collection of wordlists useful for security testing";
     longDescription = ''
       The `wordlists` package provides two scripts. One is called {command}`wordlists`,
       and it will list a tree of all the wordlists installed. The other one is

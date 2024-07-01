@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-A+sOT0rloAktDdVXe2HEPK25euh9T7c0rXybZmZpqC0=";
 
   meta = with lib; {
-    description = "A small extensible programming language designed for concise expression with little code";
+    description = "Small extensible programming language designed for concise expression with little code";
     mainProgram = "passerine";
     homepage = "https://www.passerine.io/";
     license = licenses.mit;

@@ -44,6 +44,10 @@
 let
 
   platformSpecific = {
+    i686.msVarsArgs = {
+      flavor = "OVMF";
+      archDir = "Ia32";
+    };
     x86_64.msVarsArgs = {
       flavor = "OVMF_4M";
       archDir = "X64";

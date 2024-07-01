@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, packaging
-, pybrowsers
-, pytestCheckHook
-, python-dotenv
-, pythonOlder
-, requests
-, selenium
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  packaging,
+  pybrowsers,
+  pytestCheckHook,
+  python-dotenv,
+  pythonOlder,
+  requests,
+  selenium,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -25,11 +26,11 @@ buildPythonPackage rec {
     hash = "sha256-PdUlloJ4DncnktKQHofn/OLVrgSVyWhaeEEhl3Hgjek=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  __darwinAllowLocalNetworking = true;
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     packaging
     python-dotenv
     requests
@@ -41,9 +42,7 @@ buildPythonPackage rec {
     selenium
   ];
 
-  pythonImportsCheck = [
-    "webdriver_manager"
-  ];
+  pythonImportsCheck = [ "webdriver_manager" ];
 
   disabledTestPaths = [
     # Tests require network access and browsers available
@@ -69,5 +68,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/SergeyPirogov/webdriver_manager/blob/${version}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
+    platforms = platforms.linux;
   };
 }

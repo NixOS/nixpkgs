@@ -91,7 +91,7 @@ stdenv.mkDerivation rec {
 
   meta =  with lib; {
     homepage = "http://www.profanity.im/";
-    description = "A console based XMPP client";
+    description = "Console based XMPP client";
     mainProgram = "profanity";
     longDescription = ''
       Profanity is a console based XMPP client written in C using ncurses and

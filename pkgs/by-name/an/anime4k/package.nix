@@ -23,7 +23,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   meta = with lib; {
-    description = "A high-quality real time upscaler for anime";
+    description = "High-quality real time upscaler for anime";
     homepage = "https://github.com/bloc97/Anime4K";
     license = licenses.mit;
     maintainers = with maintainers; [ surfaceflinger ];

@@ -1,7 +1,8 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, hatchling
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  hatchling,
 }:
 
 buildPythonPackage rec {
@@ -16,9 +17,7 @@ buildPythonPackage rec {
     hash = "sha256-/jU30Ol10/4haR3ZPJWZ3iWRfXG/RUOU1oclOYGjjAY=";
   };
 
-  nativeBuildInputs = [
-    hatchling
-  ];
+  nativeBuildInputs = [ hatchling ];
 
   doCheck = false; # Circular dependency
 

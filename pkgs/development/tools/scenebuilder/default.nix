@@ -6,7 +6,7 @@
 , copyDesktopItems
 , glib
 , makeWrapper
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 let
@@ -53,7 +53,7 @@ maven'.buildMavenPackage rec {
     copyDesktopItems
     glib
     makeWrapper
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   dontWrapGApps = true; # prevent double wrapping
@@ -89,7 +89,7 @@ maven'.buildMavenPackage rec {
 
   meta = with lib; {
     changelog = "https://github.com/gluonhq/scenebuilder/releases/tag/${src.rev}";
-    description = "A visual, drag'n'drop, layout tool for designing JavaFX application user interfaces.";
+    description = "Visual, drag'n'drop, layout tool for designing JavaFX application user interfaces";
     homepage = "https://gluonhq.com/products/scene-builder/";
     license = licenses.bsd3;
     mainProgram = "scenebuilder";

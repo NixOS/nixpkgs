@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   pname = "uriparser";
-  version = "0.9.7";
+  version = "0.9.8";
 
   # Release tarball differs from source tarball
   src = fetchurl {
     url = "https://github.com/uriparser/uriparser/releases/download/${pname}-${version}/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-0n3qDItvb7l5jwfK7e8c2WpuP8XGGJWWd04Zr6fd3tc=";
+    hash = "sha256-ctG1Wb46GAb3iKPZvjShsGPUKqI4spuk7mM9bv/NM70=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -20,6 +20,7 @@ stdenv.mkDerivation rec {
   doCheck = stdenv.buildPlatform == stdenv.hostPlatform;
 
   meta = with lib; {
+    changelog = "https://github.com/uriparser/uriparser/blob/uriparser-${version}/ChangeLog";
     description = "Strictly RFC 3986 compliant URI parsing library";
     longDescription = ''
       uriparser is a strictly RFC 3986 compliant URI parsing and handling library written in C.

@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://locomalito.com/abbaye_des_morts.php";
-    description = "A retro arcade video game";
+    description = "Retro arcade video game";
     mainProgram = "abbayev2";
     license = licenses.gpl3;
     maintainers = [ maintainers.marius851000 ];

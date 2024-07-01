@@ -3,21 +3,21 @@
 
 {
   idea-community = callPackage ./build.nix {
-    buildVer = "233.13135.103";
+    buildVer = "241.17890.1";
     buildType = "idea";
-    ideaHash = "sha256-ld6qvc0ceERrLSJOC07JEgDmg3lEYdU/XgjZXgzWTAg=";
-    androidHash = "sha256-D8zKkmPOx4RliAtyq2Z8Up2u224blP0SjNjW3yO7nSQ=";
-    jpsHash = "sha256-0cmn0N1UVNzw1hNOpy+9HhkHHNq+rVKnfXM+LjHAQ40=";
-    restarterHash = "sha256-56GqBY/w8expWTXSP3Bad9u7QV3q8LpNN8nd8tk+Zzk=";
+    ideaHash = "sha256-jWFnewxRkriSmV6CgGX1r//uaErMINfx3Z+JpkE34jk=";
+    androidHash = "sha256-hX2YdRYNRg0guskNiYfxdl9osgZojRen82IhgA6G0Eo=";
+    jpsHash = "sha256-Abr7L1FyqzRoUSDtsJs3cTEdkhORY5DzsQnOo5irVRI=";
+    restarterHash = "sha256-XdjyuJUQMvhC0fl6sMj0sRWlqgUb3ZgBmKKXcD3egkk=";
     mvnDeps = ./idea_maven_artefacts.json;
   };
   pycharm-community = callPackage ./build.nix {
-    buildVer = "233.13135.95";
+    buildVer = "241.17890.14";
     buildType = "pycharm";
-    ideaHash = "sha256-avRdwIr+uSXZhcMeamfy7OMYy0Ez7qWljwPc5V6n/60=";
-    androidHash = "sha256-D8zKkmPOx4RliAtyq2Z8Up2u224blP0SjNjW3yO7nSQ=";
-    jpsHash = "sha256-0cmn0N1UVNzw1hNOpy+9HhkHHNq+rVKnfXM+LjHAQ40=";
-    restarterHash = "sha256-YW+5Jl0EWqBj7iRkk70NFL+gccK9/tAOlm/n08XKH8M=";
+    ideaHash = "sha256-tTB91/RHEWP/ZILPNFAbolVBLvgjLXTdD/uF/pdJ22Y=";
+    androidHash = "sha256-hX2YdRYNRg0guskNiYfxdl9osgZojRen82IhgA6G0Eo=";
+    jpsHash = "sha256-Abr7L1FyqzRoUSDtsJs3cTEdkhORY5DzsQnOo5irVRI=";
+    restarterHash = "sha256-TbTIz9pc5wqL54TAMRoQ/9Ax/qsDp+r+h5jn2ub0hes=";
     mvnDeps = ./idea_maven_artefacts.json;
   };
 }

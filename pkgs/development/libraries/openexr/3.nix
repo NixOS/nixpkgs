@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "A high dynamic-range (HDR) image file format";
+    description = "High dynamic-range (HDR) image file format";
     homepage = "https://www.openexr.com";
     license = licenses.bsd3;
     maintainers = with maintainers; [ paperdigits ];

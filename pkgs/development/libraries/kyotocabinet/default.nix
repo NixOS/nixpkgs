@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://dbmx.net/kyotocabinet";
-    description = "A library of routines for managing a database";
+    description = "Library of routines for managing a database";
     license = licenses.gpl3Plus;
     platforms = platforms.all;
   };

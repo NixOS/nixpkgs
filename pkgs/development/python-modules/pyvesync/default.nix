@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, requests
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  requests,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -17,16 +18,12 @@ buildPythonPackage rec {
     hash = "sha256-ddtTtTAUpvS8DN1vKVN+CjnmYp20xyxHydwOaDRjWzo=";
   };
 
-  propagatedBuildInputs = [
-    requests
-  ];
+  propagatedBuildInputs = [ requests ];
 
   # Test are not available (not in PyPI tarball and there are no GitHub releases)
   doCheck = false;
 
-  pythonImportsCheck = [
-    "pyvesync"
-  ];
+  pythonImportsCheck = [ "pyvesync" ];
 
   meta = with lib; {
     description = "Python library to manage Etekcity Devices and Levoit Air Purifier";

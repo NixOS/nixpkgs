@@ -32,7 +32,7 @@ python3.pkgs.buildPythonApplication {
   doCheck = false;  # Tests are interactive.
 
   meta = with lib; {
-    description = "A Password Safe V3 compatible password vault";
+    description = "Password Safe V3 compatible password vault";
     mainProgram = "loxodo";
     homepage = "https://www.christoph-sommer.de/loxodo/";
     license = licenses.gpl2Plus;

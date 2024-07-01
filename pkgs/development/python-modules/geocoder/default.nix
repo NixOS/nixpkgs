@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, click
-, fetchPypi
-, future
-, pythonOlder
-, ratelim
-, requests
-, setuptools
-, six
+{
+  lib,
+  buildPythonPackage,
+  click,
+  fetchPypi,
+  future,
+  pythonOlder,
+  ratelim,
+  requests,
+  setuptools,
+  six,
 }:
 
 buildPythonPackage rec {
@@ -22,9 +23,7 @@ buildPythonPackage rec {
     hash = "sha256-yZJTdMlhV30K7kA7Ceb46hlx2RPwEfAMpwx2vq96d+c=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     click
@@ -34,9 +33,7 @@ buildPythonPackage rec {
     six
   ];
 
-  pythonImportsCheck = [
-    "geocoder"
-  ];
+  pythonImportsCheck = [ "geocoder" ];
 
   meta = with lib; {
     description = "Module for geocoding";

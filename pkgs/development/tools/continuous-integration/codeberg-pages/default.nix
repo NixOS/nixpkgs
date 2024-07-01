@@ -14,7 +14,10 @@ buildGoModule rec {
 
   vendorHash = "sha256-vTYB3ka34VooN2Wh/Rcj+2S1qAsA2a/VtXlILn1W7oU=";
 
-  patches = [ ./disable_httptest.patch ];
+  postPatch = ''
+    # disable httptest
+    rm server/handler/handler_test.go
+  '';
 
   ldflags = [ "-s" "-w" ];
 

@@ -77,7 +77,7 @@ mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A suite of productivity applications";
+    description = "Suite of productivity applications";
     longDescription = ''
       Calligra Suite is a set of applications written to help
       you to accomplish your work. Calligra includes efficient

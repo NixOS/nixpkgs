@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, setuptools
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  setuptools,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "argcomplete";
-  version = "3.2.3";
+  version = "3.3.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -17,7 +18,7 @@ buildPythonPackage rec {
     owner = "kislyuk";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-sGXHRHmzapJM/c4D4j3QWhkTNzPNZPLO7JOptnTXuR8=";
+    hash = "sha256-ekTmT6jYkC36X2e0ukwHfDGwdPg3jK8jML2naBCgNI8=";
   };
 
   nativeBuildInputs = [
@@ -28,9 +29,7 @@ buildPythonPackage rec {
   # Tries to build and install test packages which fails
   doCheck = false;
 
-  pythonImportsCheck = [
-    "argcomplete"
-  ];
+  pythonImportsCheck = [ "argcomplete" ];
 
   meta = with lib; {
     changelog = "https://github.com/kislyuk/argcomplete/blob/v${version}/Changes.rst";

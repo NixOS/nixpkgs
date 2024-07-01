@@ -12,6 +12,15 @@ let
   usePostgresql = cfg.database.type == "postgres";
   useSqlite = cfg.database.type == "sqlite3";
 
+  secrets = let
+    mkSecret = section: values: lib.mapAttrsToList (key: value: {
+      env = envEscape "FORGEJO__${section}__${key}__FILE";
+      path = value;
+    }) values;
+    # https://codeberg.org/forgejo/forgejo/src/tag/v7.0.2/contrib/environment-to-ini/environment-to-ini.go
+    envEscape = string: lib.replaceStrings [ "." "-" ] [ "_0X2E_" "_0X2D_" ] (lib.strings.toUpper string);
+  in lib.flatten (lib.mapAttrsToList mkSecret cfg.secrets);
+
   inherit (lib)
     literalExpression
     mkChangedOptionModule
@@ -34,6 +43,7 @@ in
     (mkRenamedOptionModule [ "services" "forgejo" "appName" ] [ "services" "forgejo" "settings" "DEFAULT" "APP_NAME" ])
     (mkRemovedOptionModule [ "services" "forgejo" "extraConfig" ] "services.forgejo.extraConfig has been removed. Please use the freeform services.forgejo.settings option instead")
     (mkRemovedOptionModule [ "services" "forgejo" "database" "password" ] "services.forgejo.database.password has been removed. Please use services.forgejo.database.passwordFile instead")
+    (mkRenamedOptionModule [ "services" "forgejo" "mailerPasswordFile" ] [ "services" "forgejo" "secrets" "mailer" "PASSWD" ])
 
     # copied from services.gitea; remove at some point
     (mkRenamedOptionModule [ "services" "forgejo" "cookieSecure" ] [ "services" "forgejo" "settings" "session" "COOKIE_SECURE" ])
@@ -224,13 +234,6 @@ in
         description = "Path to the git repositories.";
       };
 
-      mailerPasswordFile = mkOption {
-        type = types.nullOr types.str;
-        default = null;
-        example = "/run/keys/forgejo-mailpw";
-        description = "Path to a file containing the SMTP password.";
-      };
-
       settings = mkOption {
         default = { };
         description = ''
@@ -347,6 +350,44 @@ in
           };
         };
       };
+
+      secrets = mkOption {
+        default = { };
+        description = ''
+          This is a small wrapper over systemd's `LoadCredential`.
+
+          It takes the same sections and keys as {option}`services.forgejo.settings`,
+          but the value of each key is a path instead of a string or bool.
+
+          The path is then loaded as credential, exported as environment variable
+          and then feed through
+          <https://codeberg.org/forgejo/forgejo/src/branch/forgejo/contrib/environment-to-ini/environment-to-ini.go>.
+
+          It does the required environment variable escaping for you.
+
+          ::: {.note}
+          Keys specified here take priority over the ones in {option}`services.forgejo.settings`!
+          :::
+        '';
+        example = literalExpression ''
+        {
+          metrics = {
+            TOKEN = "/run/keys/forgejo-metrics-token";
+          };
+          camo = {
+            HMAC_KEY = "/run/keys/forgejo-camo-hmac";
+          };
+          service = {
+            HCAPTCHA_SECRET = "/run/keys/forgejo-hcaptcha-secret";
+            HCAPTCHA_SITEKEY = "/run/keys/forgejo-hcaptcha-sitekey";
+          };
+        }
+        '';
+        type = types.submodule {
+          freeformType = with types; attrsOf (attrsOf path);
+          options = { };
+        };
+      };
     };
   };
 
@@ -381,7 +422,6 @@ in
           HOST = if cfg.database.socket != null then cfg.database.socket else cfg.database.host + ":" + toString cfg.database.port;
           NAME = cfg.database.name;
           USER = cfg.database.user;
-          PASSWD = "#dbpass#";
         })
         (mkIf useSqlite {
           PATH = cfg.database.path;
@@ -397,7 +437,6 @@ in
 
       server = mkIf cfg.lfs.enable {
         LFS_START_SERVER = true;
-        LFS_JWT_SECRET = "#lfsjwtsecret#";
       };
 
       session = {
@@ -405,21 +444,30 @@ in
       };
 
       security = {
-        SECRET_KEY = "#secretkey#";
-        INTERNAL_TOKEN = "#internaltoken#";
         INSTALL_LOCK = true;
-      };
-
-      mailer = mkIf (cfg.mailerPasswordFile != null) {
-        PASSWD = "#mailerpass#";
-      };
-
-      oauth2 = {
-        JWT_SECRET = "#oauth2jwtsecret#";
       };
 
       lfs = mkIf cfg.lfs.enable {
         PATH = cfg.lfs.contentDir;
+      };
+    };
+
+    services.forgejo.secrets = {
+      security = {
+        SECRET_KEY = "${cfg.customDir}/conf/secret_key";
+        INTERNAL_TOKEN = "${cfg.customDir}/conf/internal_token";
+      };
+
+      oauth2 = {
+        JWT_SECRET = "${cfg.customDir}/conf/oauth2_jwt_secret";
+      };
+
+      database = mkIf (cfg.database.passwordFile != null) {
+        PASSWD = cfg.database.passwordFile;
+      };
+
+      server = mkIf cfg.lfs.enable {
+        LFS_JWT_SECRET = "${cfg.customDir}/conf/lfs_jwt_secret";
       };
     };
 
@@ -476,6 +524,37 @@ in
       "z '${cfg.lfs.contentDir}' 0750 ${cfg.user} ${cfg.group} - -"
     ];
 
+    systemd.services.forgejo-secrets = mkIf (!cfg.useWizard) {
+      description = "Forgejo secret bootstrap helper";
+      script = ''
+        if [ ! -s '${cfg.secrets.security.SECRET_KEY}' ]; then
+            ${exe} generate secret SECRET_KEY > '${cfg.secrets.security.SECRET_KEY}'
+        fi
+
+        if [ ! -s '${cfg.secrets.oauth2.JWT_SECRET}' ]; then
+            ${exe} generate secret JWT_SECRET > '${cfg.secrets.oauth2.JWT_SECRET}'
+        fi
+
+        ${optionalString cfg.lfs.enable ''
+        if [ ! -s '${cfg.secrets.server.LFS_JWT_SECRET}' ]; then
+            ${exe} generate secret LFS_JWT_SECRET > '${cfg.secrets.server.LFS_JWT_SECRET}'
+        fi
+        ''}
+
+        if [ ! -s '${cfg.secrets.security.INTERNAL_TOKEN}' ]; then
+            ${exe} generate secret INTERNAL_TOKEN > '${cfg.secrets.security.INTERNAL_TOKEN}'
+        fi
+      '';
+      serviceConfig = {
+        Type = "oneshot";
+        RemainAfterExit = true;
+        User = cfg.user;
+        Group = cfg.group;
+        ReadWritePaths = [ cfg.customDir ];
+        UMask = "0077";
+      };
+    };
+
     systemd.services.forgejo = {
       description = "Forgejo (Beyond coding. We forge.)";
       after = [
@@ -484,11 +563,15 @@ in
         "postgresql.service"
       ] ++ optionals useMysql [
         "mysql.service"
+      ] ++ optionals (!cfg.useWizard) [
+        "forgejo-secrets.service"
       ];
       requires = optionals (cfg.database.createDatabase && usePostgresql) [
         "postgresql.service"
       ] ++ optionals (cfg.database.createDatabase && useMysql) [
         "mysql.service"
+      ] ++ optionals (!cfg.useWizard) [
+        "forgejo-secrets.service"
       ];
       wantedBy = [ "multi-user.target" ];
       path = [ cfg.package pkgs.git pkgs.gnupg ];
@@ -501,61 +584,15 @@ in
       # lfs_jwt_secret.
       # We have to consider this to stay compatible with older installations.
       preStart =
-        let
-          runConfig = "${cfg.customDir}/conf/app.ini";
-          secretKey = "${cfg.customDir}/conf/secret_key";
-          oauth2JwtSecret = "${cfg.customDir}/conf/oauth2_jwt_secret";
-          oldLfsJwtSecret = "${cfg.customDir}/conf/jwt_secret"; # old file for LFS_JWT_SECRET
-          lfsJwtSecret = "${cfg.customDir}/conf/lfs_jwt_secret"; # new file for LFS_JWT_SECRET
-          internalToken = "${cfg.customDir}/conf/internal_token";
-          replaceSecretBin = "${pkgs.replace-secret}/bin/replace-secret";
-        in
         ''
-          # copy custom configuration and generate random secrets if needed
-          ${lib.optionalString (!cfg.useWizard) ''
+          ${optionalString (!cfg.useWizard) ''
             function forgejo_setup {
-              cp -f '${format.generate "app.ini" cfg.settings}' '${runConfig}'
+              config='${cfg.customDir}/conf/app.ini'
+              cp -f '${format.generate "app.ini" cfg.settings}' "$config"
 
-              if [ ! -s '${secretKey}' ]; then
-                  ${exe} generate secret SECRET_KEY > '${secretKey}'
-              fi
-
-              # Migrate LFS_JWT_SECRET filename
-              if [[ -s '${oldLfsJwtSecret}' && ! -s '${lfsJwtSecret}' ]]; then
-                  mv '${oldLfsJwtSecret}' '${lfsJwtSecret}'
-              fi
-
-              if [ ! -s '${oauth2JwtSecret}' ]; then
-                  ${exe} generate secret JWT_SECRET > '${oauth2JwtSecret}'
-              fi
-
-              ${optionalString cfg.lfs.enable ''
-              if [ ! -s '${lfsJwtSecret}' ]; then
-                  ${exe} generate secret LFS_JWT_SECRET > '${lfsJwtSecret}'
-              fi
-              ''}
-
-              if [ ! -s '${internalToken}' ]; then
-                  ${exe} generate secret INTERNAL_TOKEN > '${internalToken}'
-              fi
-
-              chmod u+w '${runConfig}'
-              ${replaceSecretBin} '#secretkey#' '${secretKey}' '${runConfig}'
-              ${replaceSecretBin} '#oauth2jwtsecret#' '${oauth2JwtSecret}' '${runConfig}'
-              ${replaceSecretBin} '#internaltoken#' '${internalToken}' '${runConfig}'
-
-              ${optionalString cfg.lfs.enable ''
-                ${replaceSecretBin} '#lfsjwtsecret#' '${lfsJwtSecret}' '${runConfig}'
-              ''}
-
-              ${optionalString (cfg.database.passwordFile != null) ''
-                ${replaceSecretBin} '#dbpass#' '${cfg.database.passwordFile}' '${runConfig}'
-              ''}
-
-              ${optionalString (cfg.mailerPasswordFile != null) ''
-                ${replaceSecretBin} '#mailerpass#' '${cfg.mailerPasswordFile}' '${runConfig}'
-              ''}
-              chmod u-w '${runConfig}'
+              chmod u+w "$config"
+              ${lib.getExe' cfg.package "environment-to-ini"} --config "$config"
+              chmod u-w "$config"
             }
             (umask 027; forgejo_setup)
           ''}
@@ -616,6 +653,8 @@ in
         # System Call Filtering
         SystemCallArchitectures = "native";
         SystemCallFilter = [ "~@cpu-emulation @debug @keyring @mount @obsolete @privileged @setuid" "setrlimit" ];
+        # cfg.secrets
+        LoadCredential = map (e: "${e.env}:${e.path}") secrets;
       };
 
       environment = {
@@ -625,7 +664,7 @@ in
         # is resolved.
         GITEA_WORK_DIR = cfg.stateDir;
         GITEA_CUSTOM = cfg.customDir;
-      };
+      } // lib.listToAttrs (map (e: lib.nameValuePair e.env "%d/${e.env}") secrets);
     };
 
     services.openssh.settings.AcceptEnv = mkIf (!cfg.settings.START_SSH_SERVER or false) "GIT_PROTOCOL";

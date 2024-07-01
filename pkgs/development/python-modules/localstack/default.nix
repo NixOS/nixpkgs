@@ -1,21 +1,22 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, apispec
-, boto3
-, cachetools
-, click
-, localstack-client
-, localstack-ext
-, plux
-, psutil
-, python-dotenv
-, pyyaml
-, packaging
-, requests
-, rich
-, semver
-, tailer
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  apispec,
+  boto3,
+  cachetools,
+  click,
+  localstack-client,
+  localstack-ext,
+  plux,
+  psutil,
+  python-dotenv,
+  pyyaml,
+  packaging,
+  requests,
+  rich,
+  semver,
+  tailer,
 }:
 
 buildPythonPackage rec {
@@ -65,9 +66,9 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    description = "A fully functional local Cloud stack";
+    description = "Fully functional local Cloud stack";
     homepage = "https://github.com/localstack/localstack";
     license = licenses.asl20;
-    maintainers = with maintainers; [ jonringer ];
+    maintainers = with maintainers; [ ];
   };
 }

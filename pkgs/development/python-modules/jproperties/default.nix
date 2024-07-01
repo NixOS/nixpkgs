@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, six
-, pytest-datadir
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  six,
+  pytest-datadir,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
@@ -19,13 +20,9 @@ buildPythonPackage rec {
     hash = "sha256-O+ALeGHMNjW1dc9IRyLzO81k8DW2vbGjuZqXxgrhYjo=";
   };
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
 
-  propagatedBuildInputs = [
-    six
-  ];
+  propagatedBuildInputs = [ six ];
 
   nativeCheckInputs = [
     pytest-datadir
@@ -44,9 +41,7 @@ buildPythonPackage rec {
     "tests/test_simple_utf8.py"
   ];
 
-  pythonImportsCheck = [
-    "jproperties"
-  ];
+  pythonImportsCheck = [ "jproperties" ];
 
   meta = with lib; {
     description = "Java Property file parser and writer for Python";

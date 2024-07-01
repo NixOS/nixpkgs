@@ -20,7 +20,7 @@ buildDunePackage rec {
   checkInputs = [ alcotest ];
 
   meta = {
-    description = "A reporter for the Logs library that writes log messages to stderr, using a Mirage `CLOCK` to add timestamps";
+    description = "Reporter for the Logs library that writes log messages to stderr, using a Mirage `CLOCK` to add timestamps";
     homepage = "https://github.com/mirage/mirage-logs";
     license = lib.licenses.isc;
     maintainers = [ lib.maintainers.vbgl ];

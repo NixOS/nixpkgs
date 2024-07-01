@@ -27,7 +27,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = lib.optionals stdenv.isDarwin [ CoreServices ];
 
   meta = with lib; {
-    description = "A package manager for JavaScript projects";
+    description = "Package manager for JavaScript projects";
     mainProgram = "cotton";
     homepage = "https://github.com/danielhuang/cotton";
     license = licenses.gpl3Only;

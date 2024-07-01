@@ -1,5 +1,6 @@
 {
   bundlerApp,
+  defaultGemConfig,
   bundlerUpdateScript,
   lib,
   makeWrapper,
@@ -7,17 +8,19 @@
   testers,
 }:
 
-bundlerApp {
+(bundlerApp {
   pname = "bolt";
 
   gemdir = ./.;
   exes = [ "bolt" ];
   nativeBuildInputs = [ makeWrapper ];
 
-  gemConfig.bolt = attrs: {
-    # scripts in libexec will be executed by remote host,
-    # so shebangs should remain unchanged
-    dontPatchShebangs = true;
+  gemConfig = defaultGemConfig // {
+    bolt = attrs: {
+      # scripts in libexec will be executed by remote host,
+      # so shebangs should remain unchanged
+      dontPatchShebangs = true;
+    };
   };
 
   postBuild = ''
@@ -42,4 +45,6 @@ bundlerApp {
     maintainers = with lib.maintainers; [ uvnikita anthonyroussel ];
     platforms = lib.platforms.unix;
   };
-}
+}).overrideAttrs (old: {
+  name = "puppet-bolt-${(import ./gemset.nix).bolt.version}";
+})

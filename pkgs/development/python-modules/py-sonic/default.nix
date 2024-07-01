@@ -1,4 +1,9 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27 }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPy27,
+}:
 
 buildPythonPackage rec {
   pname = "py-sonic";
@@ -17,7 +22,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/crustymonkey/py-sonic";
-    description = "A python wrapper library for the Subsonic REST API";
+    description = "Python wrapper library for the Subsonic REST API";
     license = licenses.gpl3;
     maintainers = with maintainers; [ wenngle ];
   };

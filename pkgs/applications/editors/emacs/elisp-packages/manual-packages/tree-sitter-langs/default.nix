@@ -1,10 +1,5 @@
 { lib
-, pkgs
-, symlinkJoin
-, fetchzip
-, melpaBuild
 , stdenv
-, fetchFromGitHub
 , writeText
 , melpaStablePackages
 , runCommand
@@ -16,9 +11,8 @@
 let
   inherit (melpaStablePackages) tree-sitter-langs;
 
-  libSuffix = if stdenv.isDarwin then "dylib" else "so";
   langName = g: lib.removeSuffix "-grammar" (lib.removePrefix "tree-sitter-" g.pname);
-  soName = g: langName g + "." + libSuffix;
+  soName = g: langName g + stdenv.hostPlatform.extensions.sharedLibrary;
 
   grammarDir = runCommand "emacs-tree-sitter-grammars" {
     # Fake same version number as upstream language bundle to prevent triggering runtime downloads

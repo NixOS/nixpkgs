@@ -10,6 +10,11 @@
 , dbus
 , polkit
 , systemdLibs
+, udev
+, dbusSupport ? stdenv.isLinux
+, systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemdLibs
+, udevSupport ? dbusSupport
+, libusb1
 , IOKit
 , testers
 , nix-update-script
@@ -17,9 +22,12 @@
 , polkitSupport ? false
 }:
 
+assert polkitSupport -> dbusSupport;
+assert systemdSupport -> dbusSupport;
+
 stdenv.mkDerivation (finalAttrs: {
   inherit pname;
-  version = "2.0.3";
+  version = "2.1.0";
 
   outputs = [ "out" "lib" "dev" "doc" "man" ];
 
@@ -28,18 +36,20 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "rousseau";
     repo = "PCSC";
     rev = "refs/tags/${finalAttrs.version}";
-    hash = "sha256-VDQh2PYAMFwgWvZFD20H3JxgKSFrSUoDLv/6fKEoy5Y=";
+    hash = "sha256-aJKI6pWrZJFmiTxZ9wgCuxKRWRMFVRAkzlo+tSqV8B4=";
   };
 
   configureFlags = [
     "--enable-confdir=/etc"
     # The OS should care on preparing the drivers into this location
     "--enable-usbdropdir=/var/lib/pcsc/drivers"
-    (lib.enableFeature stdenv.isLinux "libsystemd")
+    (lib.enableFeature systemdSupport "libsystemd")
     (lib.enableFeature polkitSupport "polkit")
-  ] ++ lib.optionals stdenv.isLinux [
     "--enable-ipcdir=/run/pcscd"
+  ] ++ lib.optionals systemdSupport [
     "--with-systemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
+  ] ++ lib.optionals (!udevSupport) [
+    "--disable-libudev"
   ];
 
   makeFlags = [
@@ -50,8 +60,11 @@ stdenv.mkDerivation (finalAttrs: {
   # see also: https://github.com/LudovicRousseau/PCSC/issues/25
   postPatch = lib.optionalString (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     substituteInPlace src/Makefile.am \
-      --replace "noinst_PROGRAMS = testpcsc pcsc-wirecheck pcsc-wirecheck-gen" \
-                "noinst_PROGRAMS = testpcsc"
+      --replace-fail "noinst_PROGRAMS = testpcsc pcsc-wirecheck pcsc-wirecheck-gen" \
+                     "noinst_PROGRAMS = testpcsc"
+  '' + ''
+    substituteInPlace src/libredirect.c src/spy/libpcscspy.c \
+      --replace-fail "libpcsclite_real.so.1" "$lib/lib/libpcsclite_real.so.1"
   '';
 
   postInstall = ''
@@ -70,25 +83,32 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [ python3 ]
-    ++ lib.optionals stdenv.isLinux [ systemdLibs ]
+    ++ lib.optionals systemdSupport [ systemdLibs ]
+    ++ lib.optionals (!systemdSupport && udevSupport) [ udev ]
     ++ lib.optionals stdenv.isDarwin [ IOKit ]
-    ++ lib.optionals polkitSupport [ dbus polkit ];
+    ++ lib.optionals dbusSupport [ dbus ]
+    ++ lib.optionals polkitSupport [ polkit ]
+    ++ lib.optionals (!udevSupport) [ libusb1 ];
 
   passthru = {
-    tests.version = testers.testVersion {
-      package = finalAttrs.finalPackage;
-      command = "pcscd --version";
+    tests = {
+      pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+      version = testers.testVersion {
+        package = finalAttrs.finalPackage;
+        command = "pcscd --version";
+      };
     };
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Middleware to access a smart card using SCard API (PC/SC)";
     homepage = "https://pcsclite.apdu.fr/";
     changelog = "https://salsa.debian.org/rousseau/PCSC/-/blob/${finalAttrs.version}/ChangeLog";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     mainProgram = "pcscd";
-    maintainers = [ maintainers.anthonyroussel ];
-    platforms = with platforms; unix;
+    maintainers = [ lib.maintainers.anthonyroussel ];
+    pkgConfigModules = [ "libpcsclite" ];
+    platforms = lib.platforms.unix;
   };
 })

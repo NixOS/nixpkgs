@@ -1,6 +1,5 @@
 { lib
 , fetchzip
-, fetchpatch
 , stdenv
 , gettext
 , libtool

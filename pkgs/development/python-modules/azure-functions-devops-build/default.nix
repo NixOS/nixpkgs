@@ -1,7 +1,10 @@
-{ lib, buildPythonPackage, fetchFromGitHub
-, jinja2
-, msrest
-, vsts
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  jinja2,
+  msrest,
+  vsts,
 }:
 
 buildPythonPackage rec {
@@ -17,7 +20,11 @@ buildPythonPackage rec {
     sha256 = "1slc7jd92v9q1qg1yacnrpi2a7hi7iw61wzbzfd6wx9q63pw9yqi";
   };
 
-  propagatedBuildInputs = [ jinja2 msrest vsts ];
+  propagatedBuildInputs = [
+    jinja2
+    msrest
+    vsts
+  ];
 
   # circular dependency with azure-cli-core
   doCheck = false;
@@ -26,6 +33,6 @@ buildPythonPackage rec {
     description = "Integrate Azure Functions with Azure DevOps. Specifically made for the Azure CLI";
     homepage = "https://github.com/Azure/azure-functions-devops-build";
     license = licenses.mit;
-    maintainers = with maintainers; [ jonringer ];
+    maintainers = with maintainers; [ ];
   };
 }

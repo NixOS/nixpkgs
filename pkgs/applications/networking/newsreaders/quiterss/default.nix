@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ qtbase qttools qtwebkit sqlite.dev ];
 
   meta = with lib; {
-    description = "A Qt-based RSS/Atom news feed reader";
+    description = "Qt-based RSS/Atom news feed reader";
     longDescription = ''
       QuiteRSS is a open-source cross-platform RSS/Atom news feeds reader
       written on Qt/C++

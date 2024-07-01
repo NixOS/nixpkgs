@@ -1,4 +1,5 @@
 {callPackage}: {
+  accessibility-inspector = callPackage ./accessibility-inspector {};
   akonadi = callPackage ./akonadi {};
   akonadi-calendar = callPackage ./akonadi-calendar {};
   akonadi-calendar-tools = callPackage ./akonadi-calendar-tools {};
@@ -15,6 +16,7 @@
   arianna = callPackage ./arianna {};
   ark = callPackage ./ark {};
   artikulate = callPackage ./artikulate {};
+  audex = callPackage ./audex {};
   audiocd-kio = callPackage ./audiocd-kio {};
   audiotube = callPackage ./audiotube {};
   baloo-widgets = callPackage ./baloo-widgets {};
@@ -34,6 +36,7 @@
   falkon = callPackage ./falkon {};
   ffmpegthumbs = callPackage ./ffmpegthumbs {};
   filelight = callPackage ./filelight {};
+  francis = callPackage ./francis {};
   ghostwriter = callPackage ./ghostwriter {};
   granatier = callPackage ./granatier {};
   grantlee-editor = callPackage ./grantlee-editor {};
@@ -51,6 +54,7 @@
   kalarm = callPackage ./kalarm {};
   kalgebra = callPackage ./kalgebra {};
   kalk = callPackage ./kalk {};
+  kalm = callPackage ./kalm {};
   kalzium = callPackage ./kalzium {};
   kamera = callPackage ./kamera {};
   kamoso = callPackage ./kamoso {};
@@ -112,7 +116,6 @@
   kimap = callPackage ./kimap {};
   kio-admin = callPackage ./kio-admin {};
   kio-extras = callPackage ./kio-extras {};
-  kio-extras-kf5 = callPackage ./kio-extras-kf5 {};
   kio-gdrive = callPackage ./kio-gdrive {};
   kio-zeroconf = callPackage ./kio-zeroconf {};
   kipi-plugins = callPackage ./kipi-plugins {};
@@ -236,6 +239,7 @@
   signon-kwallet-extension = callPackage ./signon-kwallet-extension {};
   skanlite = callPackage ./skanlite {};
   skanpage = callPackage ./skanpage {};
+  skladnik = callPackage ./skladnik {};
   spectacle = callPackage ./spectacle {};
   step = callPackage ./step {};
   svgpart = callPackage ./svgpart {};

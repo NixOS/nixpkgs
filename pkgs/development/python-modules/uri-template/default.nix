@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, python
-, pythonOlder
-, setuptools
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  python,
+  pythonOlder,
+  setuptools,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
@@ -30,12 +31,10 @@ buildPythonPackage rec {
     ${python.interpreter} test.py
   '';
 
-  pythonImportsCheck = [
-    "uri_template"
-  ];
+  pythonImportsCheck = [ "uri_template" ];
 
   meta = with lib; {
-    description = "An implementation of RFC 6570 URI Templates";
+    description = "Implementation of RFC 6570 URI Templates";
     homepage = "https://github.com/plinss/uri_template/";
     license = licenses.mit;
     maintainers = with maintainers; [ ];

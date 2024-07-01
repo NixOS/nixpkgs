@@ -3,7 +3,7 @@
 , meerk40t-camera
 , python3Packages
 , gtk3
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -19,7 +19,7 @@ python3Packages.buildPythonApplication rec {
   };
 
   nativeBuildInputs = [
-    wrapGAppsHook
+    wrapGAppsHook3
   ] ++ (with python3Packages; [
     setuptools
   ]);

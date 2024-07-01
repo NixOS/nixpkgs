@@ -52,7 +52,7 @@ buildGoModule rec {
   ];
 
   meta = with lib; {
-    description = "A Kubernetes based CI/CD system";
+    description = "Kubernetes based CI/CD system";
     longDescription = ''
       Prow is a Kubernetes based CI/CD system. Jobs can be triggered by various
       types of events and report their status to many different services. In

@@ -1,14 +1,15 @@
-{ python
-, pythonAtLeast
-, disabledIf
-, fetchurl
-, lib
-, stdenv
-, cmake
-, libxcrypt
-, ninja
-, qt5
-, shiboken2
+{
+  python,
+  pythonAtLeast,
+  disabledIf,
+  fetchurl,
+  lib,
+  stdenv,
+  cmake,
+  libxcrypt,
+  ninja,
+  qt5,
+  shiboken2,
 }:
 stdenv.mkDerivation rec {
   pname = "pyside2";
@@ -19,9 +20,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-2lZ807eFTSegtK/j6J3osvmLem1XOTvlbx/BP3cPryk=";
   };
 
-  patches = [
-    ./dont_ignore_optional_modules.patch
-  ];
+  patches = [ ./dont_ignore_optional_modules.patch ];
 
   postPatch = ''
     cd sources/pyside2
@@ -34,30 +33,36 @@ stdenv.mkDerivation rec {
 
   env.NIX_CFLAGS_COMPILE = "-I${qt5.qtdeclarative.dev}/include/QtQuick/${qt5.qtdeclarative.version}/QtQuick";
 
-  nativeBuildInputs = [ cmake ninja qt5.qmake python ];
+  nativeBuildInputs = [
+    cmake
+    ninja
+    qt5.qmake
+    python
+  ];
 
-  buildInputs = (with qt5; [
-    qtbase
-    qtxmlpatterns
-    qtmultimedia
-    qttools
-    qtx11extras
-    qtlocation
-    qtscript
-    qtwebsockets
-    qtwebengine
-    qtwebchannel
-    qtcharts
-    qtsensors
-    qtsvg
-    qt3d
-  ]) ++ (with python.pkgs; [
-    setuptools
-  ]) ++ (lib.optionals (python.pythonOlder "3.9") [
-    # see similar issue: 202262
-    # libxcrypt is required for crypt.h for building older python modules
-    libxcrypt
-  ]);
+  buildInputs =
+    (with qt5; [
+      qtbase
+      qtxmlpatterns
+      qtmultimedia
+      qttools
+      qtx11extras
+      qtlocation
+      qtscript
+      qtwebsockets
+      qtwebengine
+      qtwebchannel
+      qtcharts
+      qtsensors
+      qtsvg
+      qt3d
+    ])
+    ++ (with python.pkgs; [ setuptools ])
+    ++ (lib.optionals (python.pythonOlder "3.9") [
+      # see similar issue: 202262
+      # libxcrypt is required for crypt.h for building older python modules
+      libxcrypt
+    ]);
 
   propagatedBuildInputs = [ shiboken2 ];
 

@@ -40,7 +40,7 @@ rustPlatform.buildRustPackage rec {
   VERGEN_GIT_SEMVER = "v${version}";
 
   meta = with lib; {
-    description = "A key and secret workflow (validation, invalidation, etc.) tool";
+    description = "Key and secret workflow (validation, invalidation, etc.) tool";
     mainProgram = "keyscope";
     homepage = "https://github.com/spectralops/keyscope";
     changelog = "https://github.com/spectralops/keyscope/blob/v${version}/CHANGELOG.md";

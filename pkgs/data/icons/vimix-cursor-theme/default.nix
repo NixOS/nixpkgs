@@ -24,7 +24,7 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "An x-cursor theme inspired by Materia design and based on capitaine-cursors";
+    description = "X-cursor theme inspired by Materia design and based on capitaine-cursors";
     homepage = "https://github.com/vinceliuice/Vimix-cursors";
     license = licenses.gpl3Only;
     platforms = platforms.all;

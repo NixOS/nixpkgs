@@ -20,7 +20,7 @@ buildGoModule rec {
   };
 
   meta = with lib; {
-    description = "A Dash Generator Script for Any HTML";
+    description = "Dash Generator Script for Any HTML";
     homepage = "https://github.com/technosophos/dashing";
     license = licenses.mit;
     maintainers = with maintainers; [ ];

@@ -51,6 +51,9 @@ in
       peer1.wait_for_unit("mycelium.service")
       peer2.wait_for_unit("mycelium.service")
 
+      peer1.succeed("mycelium peers list | grep 192.168.1.12")
+      peer2.succeed("mycelium peers list | grep 192.168.1.11")
+
       peer1.succeed("ping -c5 ${peer2-ip}")
       peer2.succeed("ping -c5 ${peer1-ip}")
     '';

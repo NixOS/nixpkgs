@@ -10,16 +10,16 @@
 
 buildNpmPackage rec {
   pname = "igir";
-  version = "2.6.3";
+  version = "2.8.2";
 
   src = fetchFromGitHub {
     owner = "emmercm";
     repo = "igir";
     rev = "v${version}";
-    hash = "sha256-0WA+7qw5ZuELHc8P0yizV+kEwSmoUBmgReM8ZosGnqs=";
+    hash = "sha256-EKY9vzN4JYq+ydcjNZPHSqh5Tf6bLeDh1bwkPw01oK8=";
   };
 
-  npmDepsHash = "sha256-UfTq7/da1V9ubHh2wGvktP/SiWfyL8yF9iuCOq8Hxwg=";
+  npmDepsHash = "sha256-7d/aMaKo3gsQ8PI8pSqRrv07k8+xBIpaHL+DPxAGTio=";
 
   # I have no clue why I have to do this
   postPatch = ''
@@ -35,7 +35,7 @@ buildNpmPackage rec {
   autoPatchelfIgnoreMissingDeps = [ "libc.musl-x86_64.so.1" ];
 
   meta = with lib; {
-    description = "A video game ROM collection manager to help filter, sort, patch, archive, and report on collections on any OS";
+    description = "Video game ROM collection manager to help filter, sort, patch, archive, and report on collections on any OS";
     mainProgram = "igir";
     homepage = "https://igir.io";
     license = licenses.gpl3Plus;

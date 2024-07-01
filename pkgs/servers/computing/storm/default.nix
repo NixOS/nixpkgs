@@ -1,26 +1,27 @@
 { stdenv, lib, fetchurl, zip, unzip
-, jdk, python2
+, jdk, python3
 , confFile ? ""
 , extraLibraryPaths ? []
 , extraJars ? []
+, testers
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "apache-storm";
-  version = "2.4.0";
-  name = "${pname}-${version}";
+  version = "2.6.2";
+  name = "${finalAttrs.pname}-${finalAttrs.version}";
 
   src = fetchurl {
-    url = "mirror://apache/storm/${name}/${name}.tar.gz";
-    sha256 = "sha256-VFNcaISPBRMGR5l/P6/pGnK7lHClDW2AmXJ00gzxwMY=";
+    url = "mirror://apache/storm/${finalAttrs.name}/${finalAttrs.name}.tar.gz";
+    hash = "sha256-ZAwsVKWTzc/++UQTNnOHdK5hiDDT5j6453DCLWi+7TA=";
   };
 
   nativeBuildInputs = [ zip unzip ];
 
   installPhase = ''
-    mkdir -p $out/share/${name}
+    mkdir -p $out/share/${finalAttrs.name}
     mv public $out/docs
-    mv examples $out/share/${name}/.
+    mv examples $out/share/${finalAttrs.name}/.
 
     mv external extlib* lib $out/.
     mv conf bin $out/.
@@ -28,23 +29,23 @@ stdenv.mkDerivation rec {
   '';
 
   fixupPhase = ''
+    patchShebangs $out
     # Fix python reference
     sed -i \
-      -e '19iPYTHON=${python2}/bin/python' \
-      -e 's|#!/usr/bin/.*python|#!${python2}/bin/python|' \
+      -e '19iPYTHON=${python3}/bin/python' \
+      -e 's|#!/usr/bin/.*python|#!${python3}/bin/python|' \
       $out/bin/storm
     sed -i \
-      -e 's|#!/usr/bin/.*python|#!${python2}/bin/python|' \
+      -e 's|#!/usr/bin/.*python|#!${python3}/bin/python|' \
       -e "s|STORM_CONF_DIR = .*|STORM_CONF_DIR = os.getenv('STORM_CONF_DIR','$out/conf')|" \
       -e 's|STORM_LOG4J2_CONF_DIR =.*|STORM_LOG4J2_CONF_DIR = os.path.join(STORM_CONF_DIR, "log4j2")|' \
         $out/bin/storm.py
 
     # Default jdk location
-    sed -i -e 's|#.*export JAVA_HOME=.*|export JAVA_HOME="${jdk.home}"|' \
+    sed -i -e 's|export JAVA_HOME=.*|export JAVA_HOME="${jdk.home}"|' \
            $out/conf/storm-env.sh
-    ls -lh $out/lib
-    unzip  $out/lib/storm-client-${version}.jar defaults.yaml;
-    zip -d $out/lib/storm-client-${version}.jar defaults.yaml;
+    unzip  $out/lib/storm-client-${finalAttrs.version}.jar defaults.yaml;
+    zip -d $out/lib/storm-client-${finalAttrs.version}.jar defaults.yaml;
     sed -i \
        -e 's|java.library.path: .*|java.library.path: "${lib.concatStringsSep ":" extraLibraryPaths}"|' \
        -e 's|storm.log4j2.conf.dir: .*|storm.log4j2.conf.dir: "conf/log4j2"|' \
@@ -59,6 +60,11 @@ stdenv.mkDerivation rec {
 
   dontStrip = true;
 
+  passthru.tests.version = testers.testVersion {
+    package = finalAttrs.finalPackage;
+    command = "storm version";
+  };
+
   meta = with lib; {
     homepage = "https://storm.apache.org/";
     description = "Distributed realtime computation system";
@@ -67,4 +73,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ edwtjo vizanto ];
     platforms = with platforms; unix;
   };
-}
+})

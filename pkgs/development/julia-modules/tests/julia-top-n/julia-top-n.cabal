@@ -27,6 +27,7 @@ executable julia-top-n-exe
     , filepath
     , optparse-applicative
     , sandwich
+    , string-interpolate
     , text
     , unliftio
     , vector

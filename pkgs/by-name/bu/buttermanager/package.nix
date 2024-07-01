@@ -1,7 +1,7 @@
 { lib
 , fetchFromGitHub
 , python3Packages
-, wrapGAppsHook
+, wrapGAppsHook3
 , qt5
 }:
 
@@ -25,7 +25,7 @@ python3Packages.buildPythonApplication rec {
   ];
 
   nativeBuildInputs = [
-    wrapGAppsHook
+    wrapGAppsHook3
     qt5.wrapQtAppsHook
   ];
 

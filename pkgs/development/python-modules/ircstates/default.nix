@@ -1,18 +1,19 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, irctokens
-, pendulum
-, freezegun
-, python
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  irctokens,
+  pendulum,
+  freezegun,
+  python,
 }:
 
 buildPythonPackage rec {
   pname = "ircstates";
   version = "0.12.1";
   format = "setuptools";
-  disabled = pythonOlder "3.6";  # f-strings
+  disabled = pythonOlder "3.6"; # f-strings
 
   src = fetchFromGitHub {
     owner = "jesopo";
@@ -26,9 +27,7 @@ buildPythonPackage rec {
     pendulum
   ];
 
-  nativeCheckInputs = [
-    freezegun
-  ];
+  nativeCheckInputs = [ freezegun ];
 
   checkPhase = ''
     ${python.interpreter} -m unittest test

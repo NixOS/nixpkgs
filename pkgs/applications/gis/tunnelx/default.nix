@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "A program for drawing cave surveys in 2D";
+    description = "Program for drawing cave surveys in 2D";
     homepage = "https://github.com/CaveSurveying/tunnelx/";
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ goatchurchprime ];

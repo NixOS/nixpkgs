@@ -1,57 +1,56 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, fetchPypi
-, fetchpatch
+{
+  stdenv,
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 
-# build-system
-, cython
-, gfortran
-, numpy
-, scipy
-, setuptools
-, wheel
+  # build-system
+  cython,
+  gfortran,
+  numpy,
+  scipy,
+  setuptools,
+  wheel,
 
-# native dependencies
-, glibcLocales
-, llvmPackages
-, pytestCheckHook
-, pytest-xdist
-, pillow
-, joblib
-, threadpoolctl
-, pythonOlder
+  # native dependencies
+  glibcLocales,
+  llvmPackages,
+  pytestCheckHook,
+  pythonRelaxDepsHook,
+  pytest-xdist,
+  pillow,
+  joblib,
+  threadpoolctl,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "scikit-learn";
-  version = "1.4.1.post1";
+  version = "1.4.2";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-k9PUlv8ZZUcPmXfQXl7DN2+x5jsQ5P2l450jwtiWmjA=";
+    hash = "sha256-2qHEcdlbrQgMbkS0lGyTkKSEKtwwglcsIOT4iE456Vk=";
   };
 
-  patches = [
-    (fetchpatch { # included in >= 1.4.2
-      name = "test_standard_scaler_dtype.patch";
-      url = "https://github.com/jeremiedbb/scikit-learn/commit/87c32d35eeb8f6f7fec63dc3d97d9c416545f053.diff";
-      hash = "sha256-iOBOoWHuWChCTnZ5go7MobPcHRGMChROpCI7V/5ik1Y=";
-    })
-  ];
+  # Avoid build-system requirements causing failure
+  prePatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "numpy==2.0.0rc1" "numpy"
+  '';
 
   buildInputs = [
+    numpy.blas
     pillow
     glibcLocales
-  ] ++ lib.optionals stdenv.cc.isClang [
-    llvmPackages.openmp
-  ];
+  ] ++ lib.optionals stdenv.cc.isClang [ llvmPackages.openmp ];
 
   nativeBuildInputs = [
     gfortran
+    pythonRelaxDepsHook
   ];
 
   build-system = [
@@ -60,10 +59,6 @@ buildPythonPackage rec {
     scipy
     setuptools
     wheel
-  ];
-
-  propagatedBuildInputs = [
-    numpy.blas
   ];
 
   dependencies = [
@@ -78,7 +73,7 @@ buildPythonPackage rec {
     pytest-xdist
   ];
 
-  env.LC_ALL="en_US.UTF-8";
+  env.LC_ALL = "en_US.UTF-8";
 
   preBuild = ''
     export SKLEARN_BUILD_PARALLEL=$NIX_BUILD_CORES
@@ -95,14 +90,16 @@ buildPythonPackage rec {
   pytestFlagsArray = [
     # verbose build outputs needed to debug hard-to-reproduce hydra failures
     "-v"
-    "--pyargs" "sklearn"
+    "--pyargs"
+    "sklearn"
 
     # NuSVC memmap tests causes segmentation faults in certain environments
     # (e.g. Hydra Darwin machines) related to a long-standing joblib issue
     # (https://github.com/joblib/joblib/issues/563). See also:
     # https://github.com/scikit-learn/scikit-learn/issues/17582
     # Since we are overriding '-k' we need to include the 'disabledTests' from above manually.
-    "-k" "'not (NuSVC and memmap) ${toString (lib.forEach disabledTests (t: "and not ${t}"))}'"
+    "-k"
+    "'not (NuSVC and memmap) ${toString (lib.forEach disabledTests (t: "and not ${t}"))}'"
   ];
 
   preCheck = ''
@@ -114,12 +111,13 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "sklearn" ];
 
   meta = with lib; {
-    description = "A set of python modules for machine learning and data mining";
-    changelog = let
-      major = versions.major version;
-      minor = versions.minor version;
-      dashVer = replaceStrings ["."] ["-"] version;
-    in
+    description = "Set of python modules for machine learning and data mining";
+    changelog =
+      let
+        major = versions.major version;
+        minor = versions.minor version;
+        dashVer = replaceStrings [ "." ] [ "-" ] version;
+      in
       "https://scikit-learn.org/stable/whats_new/v${major}.${minor}.html#version-${dashVer}";
     homepage = "https://scikit-learn.org";
     license = licenses.bsd3;

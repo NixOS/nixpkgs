@@ -1,22 +1,23 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, hatch-jupyter-builder
-, hatchling
-, jupyterlab
-, nbformat
-, colorama
-, pygments
-, tornado
-, requests
-, gitpython
-, jupyter-server
-, jupyter-server-mathjax
-, jinja2
-, git
-, pytest-tornado
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
+  hatch-jupyter-builder,
+  hatchling,
+  jupyterlab,
+  nbformat,
+  colorama,
+  pygments,
+  tornado,
+  requests,
+  gitpython,
+  jupyter-server,
+  jupyter-server-mathjax,
+  jinja2,
+  git,
+  pytest-tornado,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -76,9 +77,7 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  pythonImportsCheck = [
-    "nbdime"
-  ];
+  pythonImportsCheck = [ "nbdime" ];
 
   meta = with lib; {
     homepage = "https://github.com/jupyter/nbdime";

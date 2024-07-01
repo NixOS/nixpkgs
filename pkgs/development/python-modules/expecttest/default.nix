@@ -1,9 +1,10 @@
-{ buildPythonPackage
-, fetchFromGitHub
-, hypothesis
-, lib
-, poetry-core
-, pytestCheckHook
+{
+  buildPythonPackage,
+  fetchFromGitHub,
+  hypothesis,
+  lib,
+  poetry-core,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -20,7 +21,10 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ poetry-core ];
 
-  nativeCheckInputs = [ hypothesis pytestCheckHook ];
+  nativeCheckInputs = [
+    hypothesis
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [ "expecttest" ];
 

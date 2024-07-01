@@ -1,23 +1,24 @@
-{ lib
-, blas
-, buildPythonPackage
-, callPackage
-, setuptools
-, importlib-metadata
-, fetchFromGitHub
-, jaxlib
-, jaxlib-bin
-, hypothesis
-, lapack
-, matplotlib
-, ml-dtypes
-, numpy
-, opt-einsum
-, pytestCheckHook
-, pytest-xdist
-, pythonOlder
-, scipy
-, stdenv
+{
+  lib,
+  blas,
+  buildPythonPackage,
+  callPackage,
+  setuptools,
+  importlib-metadata,
+  fetchFromGitHub,
+  jaxlib,
+  jaxlib-bin,
+  hypothesis,
+  lapack,
+  matplotlib,
+  ml-dtypes,
+  numpy,
+  opt-einsum,
+  pytestCheckHook,
+  pytest-xdist,
+  pythonOlder,
+  scipy,
+  stdenv,
 }:
 
 let
@@ -29,7 +30,7 @@ let
 in
 buildPythonPackage rec {
   pname = "jax";
-  version = "0.4.25";
+  version = "0.4.28";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -39,12 +40,10 @@ buildPythonPackage rec {
     repo = "jax";
     # google/jax contains tags for jax and jaxlib. Only use jax tags!
     rev = "refs/tags/jax-v${version}";
-    hash = "sha256-poQQo2ZgEhPYzK3aCs+BjaHTNZbezJAECd+HOdY1Yok=";
+    hash = "sha256-qSHPwi3is6Ts7pz5s4KzQHBMbcjGp+vAOsejW3o36Ek=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   # The version is automatically set to ".dev" if this variable is not set.
   # https://github.com/google/jax/commit/e01f2617b85c5bdffc5ffb60b3d8d8ca9519a1f3
@@ -81,44 +80,55 @@ buildPythonPackage rec {
     "tests/"
   ];
 
-  disabledTests = [
-    # Exceeds tolerance when the machine is busy
-    "test_custom_linear_solve_aux"
-    # UserWarning: Explicitly requested dtype <class 'numpy.float64'>
-    #  requested in astype is not available, and will be truncated to
-    # dtype float32. (With numpy 1.24)
-    "testKde3"
-    "testKde5"
-    "testKde6"
-    # Invokes python manually in a subprocess, which does not have the correct dependencies
-    # ImportError: This version of jax requires jaxlib version >= 0.4.19.
-    "test_no_log_spam"
-  ] ++ lib.optionals usingMKL [
-    # See
-    #  * https://github.com/google/jax/issues/9705
-    #  * https://discourse.nixos.org/t/getting-different-results-for-the-same-build-on-two-equally-configured-machines/17921
-    #  * https://github.com/NixOS/nixpkgs/issues/161960
-    "test_custom_linear_solve_cholesky"
-    "test_custom_root_with_aux"
-    "testEigvalsGrad_shape"
-  ] ++ lib.optionals stdenv.isAarch64 [
-    # See https://github.com/google/jax/issues/14793.
-    "test_for_loop_fixpoint_correctly_identifies_loop_varying_residuals_unrolled_for_loop"
-    "testQdwhWithRandomMatrix3"
-    "testScanGrad_jit_scan"
+  # Prevents `tests/export_back_compat_test.py::CompatTest::test_*` tests from failing on darwin with
+  # PermissionError: [Errno 13] Permission denied: '/tmp/back_compat_testdata/test_*.py'
+  # See https://github.com/google/jax/blob/jaxlib-v0.4.27/jax/_src/internal_test_util/export_back_compat_test_util.py#L240-L241
+  # NOTE: this doesn't seem to be an issue on linux
+  preCheck = lib.optionalString stdenv.isDarwin ''
+    export TEST_UNDECLARED_OUTPUTS_DIR=$(mktemp -d)
+  '';
 
-    # See https://github.com/google/jax/issues/17867.
-    "test_array"
-    "test_async"
-    "test_copy0"
-    "test_device_put"
-    "test_make_array_from_callback"
-    "test_make_array_from_single_device_arrays"
+  disabledTests =
+    [
+      # Exceeds tolerance when the machine is busy
+      "test_custom_linear_solve_aux"
+      # UserWarning: Explicitly requested dtype <class 'numpy.float64'>
+      #  requested in astype is not available, and will be truncated to
+      # dtype float32. (With numpy 1.24)
+      "testKde3"
+      "testKde5"
+      "testKde6"
+      # Invokes python manually in a subprocess, which does not have the correct dependencies
+      # ImportError: This version of jax requires jaxlib version >= 0.4.19.
+      "test_no_log_spam"
+    ]
+    ++ lib.optionals usingMKL [
+      # See
+      #  * https://github.com/google/jax/issues/9705
+      #  * https://discourse.nixos.org/t/getting-different-results-for-the-same-build-on-two-equally-configured-machines/17921
+      #  * https://github.com/NixOS/nixpkgs/issues/161960
+      "test_custom_linear_solve_cholesky"
+      "test_custom_root_with_aux"
+      "testEigvalsGrad_shape"
+    ]
+    ++ lib.optionals stdenv.isAarch64 [
+      # See https://github.com/google/jax/issues/14793.
+      "test_for_loop_fixpoint_correctly_identifies_loop_varying_residuals_unrolled_for_loop"
+      "testQdwhWithRandomMatrix3"
+      "testScanGrad_jit_scan"
 
-    # Fails on some hardware due to some numerical error
-    # See https://github.com/google/jax/issues/18535
-    "testQdwhWithOnRankDeficientInput5"
-  ];
+      # See https://github.com/google/jax/issues/17867.
+      "test_array"
+      "test_async"
+      "test_copy0"
+      "test_device_put"
+      "test_make_array_from_callback"
+      "test_make_array_from_single_device_arrays"
+
+      # Fails on some hardware due to some numerical error
+      # See https://github.com/google/jax/issues/18535
+      "testQdwhWithOnRankDeficientInput5"
+    ];
 
   disabledTestPaths = lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
     # RuntimeWarning: invalid value encountered in cast

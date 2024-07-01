@@ -2,7 +2,7 @@
 , ocamlPackages, coqPackages, rubber, hevea, emacs
 , version ? "1.7.2"
 , ideSupport ? true
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 stdenv.mkDerivation rec {
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   strictDeps = true;
 
   nativeBuildInputs = lib.optional ideSupport
-    wrapGAppsHook
+    wrapGAppsHook3
   ++ (with ocamlPackages;  [
     ocaml findlib menhir
   ]) ++ [
@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
   passthru.withProvers = callPackage ./with-provers.nix {};
 
   meta = with lib; {
-    description = "A platform for deductive program verification";
+    description = "Platform for deductive program verification";
     homepage    = "https://why3.lri.fr/";
     license     = licenses.lgpl21;
     platforms   = platforms.unix;

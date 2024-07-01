@@ -26,7 +26,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    description = "The free computer aided translation (CAT) tool for professionals";
+    description = "Free computer aided translation (CAT) tool for professionals";
     mainProgram = "omegat";
     longDescription = ''
       OmegaT is a free and open source multiplatform Computer Assisted Translation

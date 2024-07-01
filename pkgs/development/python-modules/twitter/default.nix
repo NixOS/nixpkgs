@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools-scm
-, certifi
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools-scm,
+  certifi,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -18,19 +19,13 @@ buildPythonPackage rec {
     hash = "sha256-gN3WmuLuuIMT/u3uoxvxGf1ueVQe5bN6u5xD0jMZThA=";
   };
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
 
-  propagatedBuildInputs = [
-    certifi
-  ];
+  propagatedBuildInputs = [ certifi ];
 
   doCheck = false;
 
-  pythonImportsCheck = [
-    "twitter"
-  ];
+  pythonImportsCheck = [ "twitter" ];
 
   meta = with lib; {
     description = "Twitter API library";

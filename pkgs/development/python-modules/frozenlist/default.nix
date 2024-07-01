@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, cython
-, expandvars
-, fetchFromGitHub
-, pep517
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, wheel
+{
+  lib,
+  buildPythonPackage,
+  cython,
+  expandvars,
+  fetchFromGitHub,
+  pep517,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  wheel,
 }:
 
 buildPythonPackage rec {
@@ -36,17 +37,13 @@ buildPythonPackage rec {
     wheel
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   preBuild = ''
     cython frozenlist/_frozenlist.pyx
   '';
 
-  pythonImportsCheck = [
-    "frozenlist"
-  ];
+  pythonImportsCheck = [ "frozenlist" ];
 
   meta = with lib; {
     description = "Python module for list-like structure";

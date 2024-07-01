@@ -33,7 +33,7 @@ rustPlatform.buildRustPackage rec {
   RUSTC_BOOTSTRAP = 1;
 
   meta = with lib; {
-    description = "A tool for generating realistic data using a declarative data model";
+    description = "Tool for generating realistic data using a declarative data model";
     homepage = "https://github.com/getsynth/synth";
     license = licenses.asl20;
     maintainers = with maintainers; [ figsoda ];

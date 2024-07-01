@@ -82,7 +82,7 @@ python.pkgs.buildPythonApplication rec {
   };
 
   meta = with lib; {
-    description = "The web end of seafile server";
+    description = "Web end of seafile server";
     homepage = "https://github.com/haiwen/seahub";
     license = licenses.asl20;
     maintainers = with maintainers; [ greizgh schmittlauch ];

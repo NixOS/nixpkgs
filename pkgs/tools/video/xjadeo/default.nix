@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "The X Jack Video Monitor";
+    description = "X Jack Video Monitor";
     longDescription = ''
       Xjadeo is a software video player that displays a video-clip in sync with
       an external time source (MTC, LTC, JACK-transport). Xjadeo is useful in

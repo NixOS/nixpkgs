@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://lv2plug.in";
-    description = "A plugin standard for audio systems";
+    description = "Plugin standard for audio systems";
     mainProgram = "lv2_validate";
     license = licenses.mit;
     maintainers = with maintainers; [ goibhniu ];

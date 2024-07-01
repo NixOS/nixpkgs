@@ -455,7 +455,7 @@ in stdenv.mkDerivation (commonAttrs // {
   setupHook = ./setup-hook.sh;
 
   meta = {
-    description = "The Package Manager for the Swift Programming Language";
+    description = "Package Manager for the Swift Programming Language";
     homepage = "https://github.com/apple/swift-package-manager";
     platforms = with lib.platforms; linux ++ darwin;
     license = lib.licenses.asl20;

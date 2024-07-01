@@ -79,21 +79,21 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "gdal";
-  version = "3.8.5";
+  pname = "gdal" + lib.optionalString useMinimalFeatures "-minimal";
+  version = "3.9.0";
 
   src = fetchFromGitHub {
     owner = "OSGeo";
     repo = "gdal";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-Z+mYlyOX9vJ772qwZMQfCbD/V7RL6+9JLHTzoZ55ot0=";
+    hash = "sha256-xEekgF9GzsPYkwk7Nny9b1DMLTxBqTSdudYxaz4jl/c=";
   };
 
   patches = [
-    # bump java source option to fix build with JDK 21
+    # HDF5: add support for libhdf5 >= 1.14.4.2 when built with Float16
     (fetchpatch {
-      url = "https://github.com/OSGeo/gdal/commit/ca2eb4130750b0e6365f738a5f8ff77081f5c5bb.patch";
-      sha256 = "sha256-wShYm9yA7twJR72co+Tvf/IuYXqbI0OrjWl0uqC3bwo=";
+      url = "https://github.com/OSGeo/gdal/commit/16ade8253f26200246abb5ab24d17e18216e7a11.patch";
+      sha256 = "sha256-N6YqfcOUWeaJXVE9RUo1dzulxqIY5Q/UygPnZHau3Lc=";
     })
   ];
 
@@ -229,8 +229,8 @@ stdenv.mkDerivation (finalAttrs: {
     export GDAL_DOWNLOAD_TEST_DATA=OFF
     # allows to skip tests that fail because of file handle leak
     # the issue was not investigated
-    # https://github.com/OSGeo/gdal/blob/v3.7.0/autotest/gdrivers/bag.py#L61
-    export BUILD_NAME=fedora
+    # https://github.com/OSGeo/gdal/blob/v3.9.0/autotest/gdrivers/bag.py#L54
+    export CI=1
   '';
   nativeInstallCheckInputs = with python3.pkgs; [
     pytestCheckHook

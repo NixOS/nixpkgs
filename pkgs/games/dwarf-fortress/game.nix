@@ -160,7 +160,7 @@ stdenv.mkDerivation {
   };
 
   meta = {
-    description = "A single-player fantasy game with a randomly generated adventure world";
+    description = "Single-player fantasy game with a randomly generated adventure world";
     homepage = "https://www.bay12games.com/dwarves/";
     license = licenses.unfreeRedistributable;
     platforms = attrNames platforms;

@@ -1,4 +1,11 @@
-{ stdenv, lib, buildPythonPackage, fetchPypi, pytestCheckHook, pyusb }:
+{
+  stdenv,
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
+  pyusb,
+}:
 
 buildPythonPackage rec {
   pname = "python-yubico";
@@ -20,8 +27,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python code to talk to YubiKeys";
-    homepage    = "https://github.com/Yubico/python-yubico";
-    license     = licenses.bsd2;
+    homepage = "https://github.com/Yubico/python-yubico";
+    license = licenses.bsd2;
     maintainers = with maintainers; [ s1341 ];
   };
 }

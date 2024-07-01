@@ -19,7 +19,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = lib.optionals stdenv.isDarwin [ CoreServices Security ];
 
   meta = with lib; {
-    description = "A Cargo subcommand for the client-side Web";
+    description = "Cargo subcommand for the client-side Web";
     mainProgram = "cargo-web";
     homepage = "https://github.com/koute/cargo-web";
     license = with licenses; [ asl20 /* or */ mit ];

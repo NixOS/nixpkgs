@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage rec {
   cargoSha256 = "sha256-BCwpiBPvnLgbpOaXgUK2EDXnT8d4jo7aqgM6uwl80eg=";
 
   meta = with lib; {
-    description = "A CLI for generating vim help docs from emmylua comments";
+    description = "CLI for generating vim help docs from emmylua comments";
     longDescription = ''
       `lemmy-help` is an emmylua parser as well as a CLI which takes that parsed tree and converts it into vim help docs.
     '';

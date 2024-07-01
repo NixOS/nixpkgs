@@ -3,7 +3,6 @@
 , fetchFromGitHub
 , unstableGitUpdater
 , alsa-lib
-, libfmvoice
 , libjack2
 , pkg-config
 , zlib
@@ -11,19 +10,17 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fmtoy";
-  version = "0-unstable-2024-04-18";
+  version = "0-unstable-2024-06-07";
 
   src = fetchFromGitHub {
     owner = "vampirefrog";
     repo = "fmtoy";
-    rev = "aca005c770724f21c8a91dc6a482738871e78c9f";
-    hash = "sha256-vrd7Eg3Bh8ll2yCfD1rAJpotEe+Zq+JuF4VMhiYsbDw=";
+    rev = "1339600e2f5a4357f7a50f5c6ad49f3c7635adec";
+    hash = "sha256-1kjUPEklZyue/DYn0jSfmXLjF22C+im6klY+S5KCvhc=";
+    fetchSubmodules = true;
   };
 
   postPatch = ''
-    rmdir libfmvoice
-    cp --no-preserve=all -r ${libfmvoice.src} libfmvoice
-
     substituteInPlace Makefile \
       --replace 'pkg-config' "$PKG_CONFIG"
   '';

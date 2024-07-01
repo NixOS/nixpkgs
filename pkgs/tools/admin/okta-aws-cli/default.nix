@@ -18,7 +18,7 @@ buildGoModule rec {
   ldflags = [ "-s" "-w" ];
 
   meta = with lib; {
-    description = "A CLI for having Okta as the IdP for AWS CLI operations";
+    description = "CLI for having Okta as the IdP for AWS CLI operations";
     homepage = "https://github.com/okta/okta-aws-cli";
     license = licenses.asl20;
     maintainers = with maintainers; [ daniyalsuri6 ];

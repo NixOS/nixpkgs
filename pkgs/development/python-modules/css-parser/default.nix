@@ -1,6 +1,7 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
 
 buildPythonPackage rec {
@@ -17,12 +18,10 @@ buildPythonPackage rec {
   # See https://github.com/ebook-utils/css-parser/pull/2
   doCheck = false;
 
-  pythonImportsCheck = [
-    "css_parser"
-  ];
+  pythonImportsCheck = [ "css_parser" ];
 
   meta = with lib; {
-    description = "A CSS Cascading Style Sheets library for Python";
+    description = "CSS Cascading Style Sheets library for Python";
     homepage = "https://github.com/ebook-utils/css-parser";
     license = licenses.lgpl3Plus;
     maintainers = with maintainers; [ jethro ];

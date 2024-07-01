@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
 
 
   meta = with lib; {
-    description = "A compiler for Inno Setup, a tool for creating Windows installers";
+    description = "Compiler for Inno Setup, a tool for creating Windows installers";
     homepage = "https://jrsoftware.org/isinfo.php";
     license = licenses.unfreeRedistributable;
     maintainers = with maintainers; [ ];

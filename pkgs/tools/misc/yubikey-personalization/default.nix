@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://developers.yubico.com/yubikey-personalization";
-    description = "A library and command line tool to personalize YubiKeys";
+    description = "Library and command line tool to personalize YubiKeys";
     license = licenses.bsd2;
     platforms = platforms.unix;
   };

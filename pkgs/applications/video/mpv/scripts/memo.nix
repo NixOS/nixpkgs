@@ -1,7 +1,8 @@
-{ fetchFromGitHub
-, buildLua
-, lib
-, unstableGitUpdater
+{
+  fetchFromGitHub,
+  buildLua,
+  lib,
+  unstableGitUpdater,
 }:
 
 buildLua {
@@ -15,10 +16,10 @@ buildLua {
     hash = "sha256-m8ikXuw7PM4Btg8w7ufLneKA4fnYjMyfVJYueZILMw8=";
   };
 
-  passthru.updateScript = unstableGitUpdater {};
+  passthru.updateScript = unstableGitUpdater { };
 
   meta = with lib; {
-    description = "A recent files menu for mpv";
+    description = "Recent files menu for mpv";
     homepage = "https://github.com/po5/memo";
     license = licenses.gpl3Only;
     maintainers = with lib.maintainers; [ purrpurrn ];

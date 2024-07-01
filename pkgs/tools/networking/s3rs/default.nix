@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage rec {
     ++ lib.optionals stdenv.isDarwin [ Security ];
 
   meta = with lib; {
-    description = "A s3 cli client with multi configs with diffent provider";
+    description = "S3 cli client with multi configs with diffent provider";
     homepage = "https://github.com/yanganto/s3rs";
     license = licenses.mit;
     maintainers = with maintainers; [ yanganto ];

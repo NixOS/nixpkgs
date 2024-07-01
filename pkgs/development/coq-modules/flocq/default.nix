@@ -29,7 +29,7 @@ mkCoqDerivation {
   useMelquiondRemake.logpath = "Flocq";
 
   meta = with lib; {
-    description = "A floating-point formalization for the Coq system";
+    description = "Floating-point formalization for the Coq system";
     license = licenses.lgpl3;
     maintainers = with maintainers; [ jwiegley ];
   };

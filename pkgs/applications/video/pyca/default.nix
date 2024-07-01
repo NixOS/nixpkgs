@@ -73,7 +73,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     broken = stdenv.isDarwin;
-    description = "A fully functional Opencast capture agent written in Python";
+    description = "Fully functional Opencast capture agent written in Python";
     mainProgram = "pyca";
     homepage = "https://github.com/opencast/pyCA";
     license = licenses.lgpl3;

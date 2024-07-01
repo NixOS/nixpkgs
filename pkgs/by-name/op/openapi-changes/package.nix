@@ -32,7 +32,7 @@ buildGoModule rec {
   vendorHash = "sha256-gaBVwrSaIwe1eh8voq928cxM/d0urVUF0OUwWZb2fR8=";
 
   meta = with lib; {
-    description = "The world's sexiest OpenAPI breaking changes detector";
+    description = "World's sexiest OpenAPI breaking changes detector";
     homepage = "https://pb33f.io/openapi-changes/";
     changelog = "https://github.com/pb33f/openapi-changes/releases/tag/v${version}";
     license = licenses.gpl3;

@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, chex
-, jaxlib
-, numpy
-, tensorflow-probability
-, dm-haiku
-, pytest-xdist
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  chex,
+  jaxlib,
+  numpy,
+  tensorflow-probability,
+  dm-haiku,
+  pytest-xdist,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -38,9 +39,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "distrax"
-  ];
+  pythonImportsCheck = [ "distrax" ];
 
   disabledTests = [
     # AssertionError on numerical values

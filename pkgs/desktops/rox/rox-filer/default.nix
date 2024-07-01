@@ -3,7 +3,7 @@
 , fetchurl
 , fetchpatch
 , pkg-config
-, wrapGAppsHook
+, wrapGAppsHook3
 , libxml2
 , gtk
 , libSM
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
   buildInputs = [ libxml2 gtk shared-mime-info libSM ];
   NIX_LDFLAGS = "-lm";

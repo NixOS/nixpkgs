@@ -1,4 +1,9 @@
-{ lib, buildPythonPackage, fetchPypi, nose }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  nose,
+}:
 
 buildPythonPackage rec {
   pname = "nose-pattern-exclude";

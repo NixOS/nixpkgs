@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pytest-asyncio
-, nix-update-script
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pytest-asyncio,
+  nix-update-script,
 }:
 
 buildPythonPackage rec {
@@ -33,7 +34,7 @@ buildPythonPackage rec {
     pytest-asyncio
   ];
 
-  passthru.updateScript = nix-update-script {};
+  passthru.updateScript = nix-update-script { };
   pythonImportsCheck = [ "result" ];
 
   meta = with lib; {

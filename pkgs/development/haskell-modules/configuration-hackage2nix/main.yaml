@@ -28,13 +28,23 @@ default-package-overrides:
   - gi-gdkx11 < 4
   # 2021-11-09: ghc-bignum is bundled starting with 9.0.1; only 1.0 builds with GHCs prior to 9.2.1
   - ghc-bignum == 1.0
+  # 2024-05-18: Various overrides for hls compatibility
+  - lsp < 2.5
+  - lsp-types < 2.2
+  - lsp-test < 0.17.0.1
+  - extensions < 0.1.0.2 # Incompatible with Cabal < 3.12, the newest extensions version is only needed on ghc 9.10
+  # 2024-05-10: need to match hlegder from stackage
+  - hledger-ui < 1.33
+  - chs-cabal < 0.1.1.2 # Incompatible with Cabal < 3.12
+
 
 extra-packages:
   - Cabal-syntax == 3.6.*               # Dummy package that ensures packages depending on Cabal-syntax can work for Cabal < 3.8
   - Cabal == 3.2.*                      # Used for packages needing newer Cabal on ghc 8.6 and 8.8
   - Cabal == 3.6.*                      # used for packages needing newer Cabal on ghc 8.10 and 9.0
   - Cabal-syntax == 3.8.*               # version required for ormolu and fourmolu on ghc 9.2 and 9.0
-  - Cabal-syntax == 3.10.*              # newest version required for cabal-install and other packages
+  - Cabal-syntax == 3.10.*              # version required for cabal-install and other packages
+  - Cabal == 3.10.*                     # version required for cabal-install and other packages
   - directory == 1.3.7.*                # required to build cabal-install 3.10.* with GHC 9.2
   - Diff < 0.4                          # required by liquidhaskell-0.8.10.2: https://github.com/ucsd-progsys/liquidhaskell/issues/1729
   - aeson < 2                           # required by pantry-0.5.2
@@ -43,7 +53,6 @@ extra-packages:
   - attoparsec == 0.13.*                # 2022-02-23: Needed to compile elm for now
   - base16-bytestring < 1               # required for cabal-install etc.
   - basement < 0.0.15                   # 2022-08-30: last version to support GHC < 8.10
-  - bower-json == 1.0.0.1               # 2022-05-21: Needed for spago 0.20.9
   - brick == 0.70.*                     # 2022-08-13: needed by taskell
   - brittany == 0.13.1.2                # 2022-09-20: needed for hls on ghc 8.8
   - crackNum < 3.0                      # 2021-05-21: 3.0 removed the lib which sbv 7.13 uses
@@ -56,9 +65,13 @@ extra-packages:
   - ghc-exactprint == 0.6.*             # 2022-12-12: needed for GHC < 9.2
   - ghc-exactprint == 1.5.*             # 2023-03-30: needed for GHC == 9.2
   - ghc-exactprint == 1.6.*             # 2023-03-30: needed for GHC == 9.4
-  - ghc-lib == 9.2.*                    # 2022-02-17: preserve for GHC 9.2
-  - ghc-lib-parser == 9.2.*             # 2022-02-17: preserve for GHC 9.2
-  - ghc-lib-parser-ex == 9.2.*          # 2022-07-13: preserve for GHC 9.2
+  - ghc-exactprint == 1.8.*             # 2024-05-20: needed for GHC == 9.8
+  - ghc-lib == 9.2.*                    # 2022-02-17: preserve for GHC 8.10, 9.0
+  - ghc-lib == 9.8.*                    # 2024-05-19: preserve for GHC 9.8
+  - ghc-lib-parser == 9.2.*             # 2022-02-17: preserve for GHC 8.10, 9.0
+  - ghc-lib-parser == 9.8.*             # 2024-05-19: preserve for GHC 9.8
+  - ghc-lib-parser-ex == 9.2.*          # 2022-07-13: preserve for GHC 8.10, 9.0
+  - ghc-lib-parser-ex == 9.8.*          # 2024-05-19: preserve for GHC 9.8
   - ghc-syntax-highlighter == 0.0.10.*  # 2023-11-20:
   - gi-soup == 2.4.28                   # 2023-04-05: the last version to support libsoup-2.4 (and thus be compatible with our other gi- packages)
   - haddock == 2.23.*                   # required on GHC < 8.10.x
@@ -106,14 +119,69 @@ extra-packages:
   - retrie < 1.2.0.0                    # 2022-12-30: required for hls on ghc < 9.2
   - ghc-tags == 1.5.*                   # 2023-02-18: preserve for ghc-lib == 9.2.*
   - ghc-tags == 1.6.*                   # 2023-02-18: preserve for ghc-lib == 9.4.*
+  - ghc-tags == 1.7.*                   # 2023-02-18: preserve for ghc-lib == 9.6.*
   - shake-cabal < 0.2.2.3               # 2023-07-01: last version to support Cabal 3.6.*
   - algebraic-graphs < 0.7              # 2023-08-14: Needed for building weeder < 2.6.0
   - fuzzyset == 0.2.4                   # 2023-12-20: Needed for building postgrest > 10
   - ShellCheck == 0.9.0                 # 2024-03-21: pinned by haskell-ci
+  - versions < 6                        # 2024-04-22: required by spago-0.21
+  - fsnotify < 0.4                      # 2024-04-22: required by spago-0.21
 
 package-maintainers:
   abbradar:
     - Agda
+  alexfmpe:
+    - aeson-gadt-th
+    - basic-sop
+    - cli-extras
+    - cli-git
+    - cli-nix
+    - commutative-semigroups
+    - constraints-extras
+    - dependent-map
+    - dependent-monoidal-map
+    - dependent-sum
+    - dependent-sum-aeson-orphans
+    - dependent-sum-template
+    - gargoyle
+    - gargoyle-postgresql
+    - gargoyle-postgresql-connect
+    - gargoyle-postgresql-nix
+    - generics-sop
+    - ghcjs-base
+    - ghcjs-dom
+    - ghcjs-dom-hello
+    - ghcjs-dom-javascript
+    - ghcjs-dom-jsaddle
+    - haveibeenpwned
+    - jsaddle
+    - jsaddle-clib
+    - jsaddle-dom
+    - jsaddle-hello
+    - jsaddle-warp
+    - jsaddle-webkit2gtk
+    - jsaddle-wkwebview
+    - json-sop
+    - large-generics
+    - large-records
+    - lens-sop
+    - linux-namespaces
+    - monoidal-containers
+    - nix-thunk
+    - patch
+    - proto-lens-arbitrary
+    - proto3-suite
+    - proto3-wire
+    - records-sop
+    - reflex
+    - reflex-dom
+    - reflex-dom-core
+    - reflex-gadt-api
+    - universe
+    - universe-some
+    - vessel
+    - warp
+    - which
   Anton-Latukha:
     - hnix
     - hnix-store-core
@@ -238,17 +306,10 @@ package-maintainers:
     - elm-export-persistent
     # - pipes-mongodb
     - streaming-wai
-  kiwi:
-    - config-schema
-    - config-value
-    - glirc
-    - irc-core
-    - matterhorn
-    - mattermost-api
-    - mattermost-api-qc
-    - Unique
   libjared:
     - sensei
+  malo:
+    - cornelis
   maralorn:
     - bluefin
     - cabal-fmt
@@ -317,8 +378,12 @@ package-maintainers:
     - titlecase
     - xmonad
     - xmonad-contrib
+  phijor:
+    - cornelis
   poscat:
     - hinit
+  Profpatsch:
+    - gitit
   psibi:
     - path-pieces
     - persistent
@@ -576,6 +641,24 @@ package-maintainers:
     - nix-tree
   zowoq:
     - ShellCheck
+  mpscholten:
+    - ihp-hsx
+    - push-notify-apn
+    - hs-pkpass
+    - raven-haskell
+    - stripe-concepts
+    - stripe-signature
+    - http2-client
+    - zip
+    - currencies
+    - string-random
+    - inflections
+    - pcre-heavy
+    - mmark
+    - mmark-ext
+    - typerep-map
+    - minio-hs
+    - smtp-mail
 
 unsupported-platforms:
   Allure:                                       [ platforms.darwin ]
@@ -597,7 +680,6 @@ unsupported-platforms:
   freenect:                                     [ platforms.darwin ]
   FTGL:                                         [ platforms.darwin ]
   fuzzytime:                                    [ platforms.darwin ] # https://github.com/kamwitsta/fuzzytime/issues/2
-  ghcjs-dom-hello:                              [ platforms.darwin ]
   ghc-gc-hook:                                  [ platforms.darwin ] # requires C11 threads which Apple doesn't support
   gi-adwaita:                                   [ platforms.darwin ]
   gi-dbusmenugtk3:                              [ platforms.darwin ]
@@ -626,7 +708,6 @@ unsupported-platforms:
   intricacy:                                    [ platforms.darwin ] # depends on mesa
   iwlib:                                        [ platforms.darwin ]
   Jazzkell:                                     [ platforms.darwin ] # depends on Euterpea
-  jsaddle-hello:                                [ platforms.darwin ] # depends on jsaddle-webkit2gtk
   jsaddle-webkit2gtk:                           [ platforms.darwin ]
   Kulitta:                                      [ platforms.darwin ] # depends on Euterpea
   LambdaHack:                                   [ platforms.darwin ]
@@ -648,7 +729,6 @@ unsupported-platforms:
   monomer:                                      [ platforms.darwin ] # depends on mesa
   monomer-hagrid:                               [ platforms.darwin ] # depends on mesa
   mptcp-pm:                                     [ platforms.darwin ]
-  mueval:                                       [ aarch64-linux ] # https://hydra.nixos.org/build/257076117/nixlog/2 https://gitlab.haskell.org/ghc/ghc/-/issues/24432
   nanovg:                                       [ platforms.darwin ] # depends on mesa
   netlink:                                      [ platforms.darwin ]
   notifications-tray-icon:                      [ platforms.darwin ] # depends on gi-dbusmenu
@@ -665,7 +745,6 @@ unsupported-platforms:
   Raincat:                                      [ platforms.darwin ]
   reactive-balsa:                               [ platforms.darwin ] # depends on alsa-core
   reflex-dom-fragment-shader-canvas:            [ platforms.darwin, aarch64-linux ]
-  reflex-dom:                                   [ platforms.darwin ]
   reflex-localize-dom:                          [ platforms.darwin, aarch64-linux ]
   rsi-break:                                    [ platforms.darwin ] # depends on monomer
   rtlsdr:                                       [ platforms.darwin ]
@@ -715,11 +794,14 @@ supported-platforms:
   dx9base:                                      [ platforms.windows ]
   dx9d3d:                                       [ platforms.windows ]
   dx9d3dx:                                      [ platforms.windows ]
+  erebos-tester:                                [ platforms.linux ] # depends on linux-namespaces
   evdev:                                        [ platforms.linux ]
   evdev-streamly:                               [ platforms.linux ]
   geomancy:                                     [ platforms.x86 ] # x86 intrinsics
   geomancy-layout:                              [ platforms.x86 ] # x86 intrinsics
   gi-gtkosxapplication:                         [ platforms.darwin ]
+  ghcjs-base:                                   [ javascript-ghcjs ]
+  ghcjs-dom-javascript:                         [ javascript-ghcjs ]
   gtk-mac-integration:                          [ platforms.darwin ]
   gtk3-mac-integration:                         [ platforms.darwin ]
   halide-haskell:                               [ platforms.linux ]
@@ -734,6 +816,7 @@ supported-platforms:
   htune:                                        [ platforms.linux ] # depends on alsa-pcm
   hw-prim-bits:                                 [ platforms.x86 ] # x86 assembler
   inline-asm:                                   [ platforms.x86 ] # x86 assembler
+  jsaddle-wkwebview:                            [ platforms.darwin ]
   keid-core:                                    [ x86_64-linux ] # geomancy (only x86), vulkan (no i686, no darwin, …)
   keid-frp-banana:                              [ x86_64-linux ] # geomancy (only x86), vulkan (no i686, no darwin, …)
   keid-geometry:                                [ x86_64-linux ] # geomancy (only x86), vulkan (no i686, no darwin, …)

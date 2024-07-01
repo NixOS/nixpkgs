@@ -116,6 +116,10 @@ let
     export PKG_CONFIG_PATH=/usr/lib/pkgconfig
     export ACLOCAL_PATH=/usr/share/aclocal
 
+    # GStreamer searches for plugins relative to its real binary's location
+    # https://gitlab.freedesktop.org/gstreamer/gstreamer/-/commit/bd97973ce0f2c5495bcda5cccd4f7ef7dcb7febc
+    export GST_PLUGIN_SYSTEM_PATH_1_0=/usr/lib/gstreamer-1.0:/usr/lib32/gstreamer-1.0
+
     ${profile}
   '';
 

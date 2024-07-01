@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, freezegun
-, isodate
-, lxml
-, pytestCheckHook
-, pythonOlder
-, poetry-core
-, xmlsec
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  freezegun,
+  isodate,
+  lxml,
+  pytestCheckHook,
+  pythonOlder,
+  poetry-core,
+  xmlsec,
 }:
 
 buildPythonPackage rec {
@@ -34,9 +35,7 @@ buildPythonPackage rec {
     })
   ];
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     isodate
@@ -49,9 +48,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "onelogin.saml2"
-  ];
+  pythonImportsCheck = [ "onelogin.saml2" ];
 
   disabledTests = [
     # Tests require network acces or additions files

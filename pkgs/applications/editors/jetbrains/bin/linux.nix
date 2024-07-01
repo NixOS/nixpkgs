@@ -16,6 +16,7 @@
 , python3
 , autoPatchelfHook
 , vmopts ? null
+, glibcLocales
 }:
 
 { pname
@@ -110,8 +111,9 @@ with stdenv; lib.makeOverridable mkDerivation (rec {
       --set-default JDK_HOME "$jdk" \
       --set-default ANDROID_JAVA_HOME "$jdk" \
       --set-default JAVA_HOME "$jdk" \
-      --set-default JETBRAINSCLIENT_JDK "$jdk" \
+      --set-default JETBRAINS_CLIENT_JDK "$jdk" \
       --set-default ${hiName}_JDK "$jdk" \
+      --set-default LOCALE_ARCHIVE "${glibcLocales}/lib/locale/locale-archive" \
       --set-default ${hiName}_VM_OPTIONS ${vmoptsFile}
 
     ln -s "$out/$pname/bin/${loName}.sh" $out/bin/$pname

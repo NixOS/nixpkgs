@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , cargo
 , cmake
 , ninja
@@ -35,19 +36,19 @@
 
 stdenv.mkDerivation rec {
   pname = "ddnet";
-  version = "18.1";
+  version = "18.3";
 
   src = fetchFromGitHub {
     owner = "ddnet";
     repo = pname;
     rev = version;
-    hash = "sha256-kAMKeYYMCFMgG3+G/05DwA3mj4JkJdrXadjFUMPDAbM=";
+    hash = "sha256-QefbA6ncxMDHmd7tBH1bU+8FoVVJVdEtOuVXEvteSOE=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     name = "${pname}-${version}";
     inherit src;
-    hash = "sha256-8mUo2I5FsA3ym/hrlGaUW8yltLuh/0H6wetCbzvRga0=";
+    hash = "sha256-XwSdDvE0p/A+6ZbV82K78jgIxGs71fu7ZDGTl0I0cCI=";
   };
 
   nativeBuildInputs = [
@@ -91,6 +92,13 @@ stdenv.mkDerivation rec {
     Security
   ]);
 
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/ddnet/ddnet/pull/8517/commits/c840bf45016a30e629f7684df5fab5d07b2c70d5.patch";
+      hash = "sha256-UG7pi0Xh/nAHFEF1RIyNZLewF+NFilTLARbV5oUlftc=";
+    })
+  ];
+
   postPatch = ''
     substituteInPlace src/engine/shared/storage.cpp \
       --replace /usr/ $out/
@@ -114,7 +122,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A Teeworlds modification with a unique cooperative gameplay";
+    description = "Teeworlds modification with a unique cooperative gameplay";
     longDescription = ''
       DDraceNetwork (DDNet) is an actively maintained version of DDRace,
       a Teeworlds modification with a unique cooperative gameplay.

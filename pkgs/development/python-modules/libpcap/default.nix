@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, dbus
-, pkgsLibpcap
-, pkg-about
-, setuptools
-, pytestCheckHook
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  dbus,
+  pkgsLibpcap,
+  pkg-about,
+  setuptools,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -23,9 +24,7 @@ buildPythonPackage rec {
     hash = "sha256-6XhEVOO2Z2rFZiMz4d32tTR+xUu1KdMdDjChmt2wsQo=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   # tox is listed in build requirements but not actually used to build
   # keeping it as a requirement breaks the build unnecessarily
@@ -49,13 +48,9 @@ buildPythonPackage rec {
   postCheck = ''
     popd
   '';
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "libpcap"
-  ];
+  pythonImportsCheck = [ "libpcap" ];
 
   meta = with lib; {
     description = "Python binding for the libpcap C library";

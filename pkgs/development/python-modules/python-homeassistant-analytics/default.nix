@@ -58,8 +58,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "python_homeassistant_analytics" ];
 
   meta = with lib; {
-    changelog = "https://github.com/joostlek/python-homeassistant-analytics
-/releases/tag/v${version}";
+    changelog = "https://github.com/joostlek/python-homeassistant-analytics/releases/tag/v${version}";
     description = "Asynchronous Python client for Homeassistant Analytics";
     homepage = "https://github.com/joostlek/python-homeassistant-analytics
 ";

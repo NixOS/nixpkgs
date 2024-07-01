@@ -78,7 +78,7 @@ let common = { version, sha256, patches ? [ ], tag ? "z3" }:
       ++ optional ocamlBindings "ocaml";
 
     meta = with lib; {
-      description = "A high-performance theorem prover and SMT solver";
+      description = "High-performance theorem prover and SMT solver";
       mainProgram = "z3";
       homepage = "https://github.com/Z3Prover/z3";
       changelog = "https://github.com/Z3Prover/z3/releases/tag/z3-${version}";

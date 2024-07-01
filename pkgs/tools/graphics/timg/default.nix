@@ -54,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   meta = {
-    description = "A terminal image and video viewer";
+    description = "Terminal image and video viewer";
     homepage = "https://timg.sh/";
     license = lib.licenses.gpl2Only;
     mainProgram = "timg";

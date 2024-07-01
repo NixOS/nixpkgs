@@ -46,7 +46,7 @@ rustPlatform.buildRustPackage rec {
   env = { ZSTD_SYS_USE_PKG_CONFIG = true; };
 
   meta = with lib; {
-    description = "An embeddable and experimental Javascript engine written in Rust";
+    description = "Embeddable and experimental Javascript engine written in Rust";
     mainProgram = "boa";
     homepage = "https://github.com/boa-dev/boa";
     changelog = "https://github.com/boa-dev/boa/blob/${src.rev}/CHANGELOG.md";

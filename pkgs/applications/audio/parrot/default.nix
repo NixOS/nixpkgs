@@ -38,7 +38,7 @@ rustPlatform.buildRustPackage {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "A hassle-free Discord music bot";
+    description = "Hassle-free Discord music bot";
     homepage = "https://github.com/aquelemiguel/parrot";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ gerg-l ];

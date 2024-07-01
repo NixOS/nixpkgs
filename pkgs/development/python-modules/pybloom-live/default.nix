@@ -1,12 +1,13 @@
-{ lib
-, bitarray
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, wheel
-, xxhash
+{
+  lib,
+  bitarray,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  wheel,
+  xxhash,
 }:
 
 buildPythonPackage rec {
@@ -32,16 +33,12 @@ buildPythonPackage rec {
     xxhash
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "pybloom_live"
-  ];
+  pythonImportsCheck = [ "pybloom_live" ];
 
   meta = with lib; {
-    description = "A Probabilistic data structure";
+    description = "Probabilistic data structure";
     homepage = "https://github.com/joseph-fox/python-bloomfilter";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];

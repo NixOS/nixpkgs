@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     pam libX11 libev cairo libxkbcommon libxkbfile xorg.xcbutil ];
 
   meta = with lib; {
-    description = "A simple screen locker like slock";
+    description = "Simple screen locker like slock";
     longDescription = ''
       Simple screen locker. After locking, a colored background (default: white) or
       a configurable image is shown, and a ring-shaped unlock-indicator gives feedback

@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lean4";
-  version = "4.7.0";
+  version = "4.8.0";
 
   src = fetchFromGitHub {
     owner = "leanprover";
     repo = "lean4";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-jHY8BhDotfGcMS0Xzl5iawqCaug3dDEKuD5Y1WcM06I=";
+    hash = "sha256-R75RrAQb/tRTtMvy/ddLl1KQaA7V71nocvjIS9geMrg=";
   };
 
   postPatch = ''

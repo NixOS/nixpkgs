@@ -53,7 +53,7 @@ python3.pkgs.buildPythonApplication rec {
   pytestFlagsArray = [ "tests/" ];
 
   meta = with lib; {
-    description = "A full-featured file system for online data storage";
+    description = "Full-featured file system for online data storage";
     homepage = "https://github.com/s3ql/s3ql/";
     changelog = "https://github.com/s3ql/s3ql/releases/tag/s3ql-${version}";
     license = licenses.gpl3Only;

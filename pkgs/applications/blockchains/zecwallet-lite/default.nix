@@ -19,7 +19,7 @@ appimageTools.wrapType2 rec {
     '';
 
   meta = with lib; {
-    description = "A fully featured shielded wallet for Zcash";
+    description = "Fully featured shielded wallet for Zcash";
     homepage = "https://www.zecwallet.co/";
     license = licenses.mit;
     maintainers = with maintainers; [ colinsane ];

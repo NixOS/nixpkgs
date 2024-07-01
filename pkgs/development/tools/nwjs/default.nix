@@ -17,6 +17,7 @@
 , lib
 , libcap
 , libdrm
+, libGL
 , libnotify
 , libuuid
 , libxcb
@@ -31,7 +32,7 @@
 , stdenv
 , systemd
 , udev
-, wrapGAppsHook
+, wrapGAppsHook3
 , xorg
 }:
 
@@ -55,6 +56,7 @@ let
       gtk3
       libcap
       libdrm
+      libGL
       libnotify
       libxkbcommon
       mesa
@@ -85,7 +87,7 @@ let
     extraOutputsToInstall = [ "lib" "out" ];
   };
 
-  version = "0.85.0";
+  version = "0.88.0";
 in
 stdenv.mkDerivation {
   pname = "nwjs";
@@ -96,16 +98,16 @@ stdenv.mkDerivation {
     in fetchurl {
       url = "https://dl.nwjs.io/v${version}/nwjs-${flavor}v${version}-linux-${bits}.tar.gz";
       hash = {
-        "sdk-ia32" = "sha256-QcFKX+TLRBYAMt5oUYoVMfBgGFZZ/4pdhhtNI0OxF/M=";
-        "sdk-x64" = "sha256-Wqq0iI5VLa/hJLTNF10YpFTtLRP6okjCC2EzlXxeuWI=";
-        "ia32" = "sha256-st/J/Zejo3R0dKxxdM7XBvmAlfsO2+2i5lYlAv9A5lY=";
-        "x64" = "sha256-hxSyzNEH6UJVejUqoG01vpJxb319wrLgp7uyF6Pt5YQ=";
+        "sdk-ia32" = "sha256-pk8Fdzw8zBBF4xeU5BlmkF1gbf7HIn8jheSjbdV4hI0=";
+        "sdk-x64" = "sha256-51alZRf/+bpKfVLUQuy1VtLHCgkVuptQaJgupt7zxcU=";
+        "ia32" = "sha256-OLkOJo3xDZ6WKbf6zPeY+KcgzoEjYWMIV7YWWbESjPo=";
+        "x64" = "sha256-KSsaTs0W8m2dI+0ByLqU4H4ai/PXUt6LtroZIBeymgs=";
       }."${flavor + bits}";
     };
 
   nativeBuildInputs = [
     autoPatchelfHook
-    (wrapGAppsHook.override { inherit makeWrapper; })
+    (wrapGAppsHook3.override { inherit makeWrapper; })
   ];
 
   buildInputs = [ nwEnv ];
@@ -136,7 +138,7 @@ stdenv.mkDerivation {
     '';
 
   meta = with lib; {
-    description = "An app runtime based on Chromium and node.js";
+    description = "App runtime based on Chromium and node.js";
     homepage = "https://nwjs.io/";
     platforms = [ "i686-linux" "x86_64-linux" ];
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];

@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, nose2
-, pytestCheckHook
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  nose2,
+  pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -19,7 +20,10 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  nativeCheckInputs = [ nose2 pytestCheckHook ];
+  nativeCheckInputs = [
+    nose2
+    pytestCheckHook
+  ];
 
   meta = with lib; {
     description = "setuptools extension for building non-Python Dynamic Shared Objects";

@@ -139,7 +139,7 @@ in
     enableOCR = mkOption {
       description = ''
         Whether to enable Optical Character Recognition functionality for
-        testing graphical programs. See [Machine objects](`ssec-machine-objects`).
+        testing graphical programs. See [`Machine objects`](#ssec-machine-objects).
       '';
       type = types.bool;
       default = false;

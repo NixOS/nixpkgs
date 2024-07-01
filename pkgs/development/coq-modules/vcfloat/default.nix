@@ -19,7 +19,7 @@ let self = mkCoqDerivation {
   propagatedBuildInputs = [ interval compcert flocq bignums ];
 
   meta = {
-    description = "A tool for Coq proofs about floating-point round-off error";
+    description = "Tool for Coq proofs about floating-point round-off error";
     maintainers = with lib.maintainers; [ quinn-dougherty ];
     license = lib.licenses.lgpl3Plus;
   };

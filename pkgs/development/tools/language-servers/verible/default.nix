@@ -87,7 +87,7 @@ buildBazelPackage rec {
   };
 
   meta = with lib; {
-    description = "Suite of SystemVerilog developer tools. Including a style-linter, indexer, formatter, and language server.";
+    description = "Suite of SystemVerilog developer tools. Including a style-linter, indexer, formatter, and language server";
     homepage = "https://github.com/chipsalliance/verible";
     license = licenses.asl20;
     maintainers = with maintainers; [ hzeller newam ];

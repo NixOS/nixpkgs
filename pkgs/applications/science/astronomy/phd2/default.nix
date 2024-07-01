@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, pkg-config, cmake, gtk3, wxGTK32
-, curl, gettext, glib, indi-full, libnova, wrapGAppsHook }:
+, curl, gettext, glib, indi-full, libnova, wrapGAppsHook3 }:
 
 stdenv.mkDerivation rec {
   pname = "phd2";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

@@ -21,7 +21,7 @@
 }:
 
 let
-  version = "0.10.2";
+  version = "0.11.2";
 in
 stdenv.mkDerivation {
   pname = "taler-exchange";
@@ -31,7 +31,7 @@ stdenv.mkDerivation {
     url = "https://git.taler.net/exchange.git";
     rev = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-dl8lZ7uKUr+KSUaT4xlkaX3W5UoW2Zfu/0iVXvLejnA=";
+    hash = "sha256-DflUfXAe310LRhZmaHgF1ZpCi+hHF30lpzAIpI1HZvM=";
   };
 
   nativeBuildInputs = [

@@ -120,7 +120,7 @@ in stdenv.mkDerivation {
   desktopItems = builtins.attrValues desktopItems;
 
   meta = with lib; {
-    description = "An office suite with a word processor, spreadsheet and presentation program";
+    description = "Office suite with a word processor, spreadsheet and presentation program";
     homepage = "https://www.softmaker.com/";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;

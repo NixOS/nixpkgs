@@ -1,20 +1,20 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, jsonschema
-, pytestCheckHook
-, python-dateutil
-, python-socketio
-, pythonOlder
-, requests
-, websocket-client
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  jsonschema,
+  pytestCheckHook,
+  python-dateutil,
+  python-socketio,
+  pythonOlder,
+  requests,
+  websocket-client,
 }:
 
 buildPythonPackage rec {
   pname = "ripe-atlas-cousteau";
   version = "2.0.0";
   format = "setuptools";
-
 
   disabled = pythonOlder "3.6";
 
@@ -42,9 +42,7 @@ buildPythonPackage rec {
     jsonschema
   ];
 
-  pythonImportsCheck = [
-    "ripe.atlas.cousteau"
-  ];
+  pythonImportsCheck = [ "ripe.atlas.cousteau" ];
 
   meta = with lib; {
     description = "Python client library for RIPE ATLAS API";

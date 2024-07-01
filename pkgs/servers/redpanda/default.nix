@@ -1,5 +1,4 @@
 { buildGoModule
-, callPackage
 , doCheck ? !stdenv.isDarwin # Can't start localhost test server in MacOS sandbox.
 , fetchFromGitHub
 , installShellFiles
@@ -7,21 +6,20 @@
 , stdenv
 }:
 let
-  version = "23.3.13";
+  version = "24.1.9";
   src = fetchFromGitHub {
     owner = "redpanda-data";
     repo = "redpanda";
     rev = "v${version}";
-    sha256 = "sha256-5JbC9FEF0h9nExrb4IGnc5lzStf7FyQ9imkz6ekRyJg=";
+    sha256 = "sha256-/A6BzhCdN8e7mV/Tp9TYfOmSAjmaa4S3FNCko4G9Vgs=";
   };
-  server = callPackage ./server.nix { inherit src version; };
 in
 buildGoModule rec {
   pname = "redpanda-rpk";
   inherit doCheck src version;
   modRoot = "./src/go/rpk";
   runVend = false;
-  vendorHash = "sha256-B//qmqxS3g9u2yir8Z3iV2fjQ4XXPAjFujeOZjdt8PE=";
+  vendorHash = "sha256-mpzWKJwE5ghySiiOdJO81w8Jvk1k34lb3Gvj+p5U1FU=";
 
   ldflags = [
     ''-X "github.com/redpanda-data/redpanda/src/go/rpk/pkg/cli/cmd/version.version=${version}"''
@@ -37,10 +35,6 @@ buildGoModule rec {
       installShellCompletion rpk.$shell
     done
   '';
-
-  passthru = {
-    inherit server;
-  };
 
   meta = with lib; {
     description = "Redpanda client";

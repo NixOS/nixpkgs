@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ libevent curl spdlog ];
 
   meta = with lib; {
-    description = "A simple async wrapper around CURL for C++";
+    description = "Simple async wrapper around CURL for C++";
     homepage = "https://nheko.im/nheko-reborn/coeurl";
     license = licenses.mit;
     platforms = platforms.all;

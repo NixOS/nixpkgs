@@ -25,7 +25,7 @@ buildGoModule rec {
   passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
-    description = "An alternative git CLI";
+    description = "Alternative git CLI";
     homepage = "https://gut-cli.dev";
     license = licenses.mit;
     maintainers = with maintainers; [ ];

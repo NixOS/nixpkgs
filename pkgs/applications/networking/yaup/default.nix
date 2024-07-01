@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , intltool
 , pkg-config
-, wrapGAppsHook
+, wrapGAppsHook3
 , gtk3
 , miniupnpc
 }:
@@ -22,7 +22,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [
     intltool
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

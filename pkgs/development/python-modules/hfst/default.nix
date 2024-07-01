@@ -1,10 +1,11 @@
-{ lib
-, pkgs
-, stdenv
-, buildPythonPackage
-, foma
-, icu
-, swig
+{
+  lib,
+  pkgs,
+  stdenv,
+  buildPythonPackage,
+  foma,
+  icu,
+  swig,
 }:
 
 buildPythonPackage rec {
@@ -19,18 +20,14 @@ buildPythonPackage rec {
     sed -i 's/libhfst_swig/hfst/' setup.py;
   '';
 
-  nativeBuildInputs = [
-    swig
-  ];
+  nativeBuildInputs = [ swig ];
 
   buildInputs = [
     icu
     pkgs.hfst
   ];
 
-  setupPyBuildFlags = [
-    "--inplace"
-  ];
+  setupPyBuildFlags = [ "--inplace" ];
 
   # Find foma in Darwin tests
   preCheck = lib.optionalString stdenv.isDarwin ''

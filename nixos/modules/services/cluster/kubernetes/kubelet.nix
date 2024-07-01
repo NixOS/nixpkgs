@@ -356,7 +356,7 @@ in
       boot.kernelModules = ["br_netfilter" "overlay"];
 
       services.kubernetes.kubelet.hostname =
-        mkDefault config.networking.fqdnOrHostName;
+        mkDefault (lib.toLower config.networking.fqdnOrHostName);
 
       services.kubernetes.pki.certs = with top.lib; {
         kubelet = mkCert {

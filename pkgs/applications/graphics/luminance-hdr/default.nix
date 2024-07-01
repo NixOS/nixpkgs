@@ -34,7 +34,7 @@ mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://qtpfsgui.sourceforge.net/";
-    description = "A complete open source solution for HDR photography";
+    description = "Complete open source solution for HDR photography";
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = [ maintainers.hrdinka ];

@@ -472,6 +472,9 @@ sub handle_modified_unit { ## no critic(Subroutines::ProhibitManyArgs, Subroutin
             $units_to_reload->{$unit} = 1;
             record_unit($reload_list_file, $unit);
         }
+        elsif ($unit eq "dbus.service" || $unit eq "dbus-broker.service") {
+            # dbus service should only ever be reloaded, not started/stoped/restarted as that would break the system.
+        }
         elsif (!parse_systemd_bool(\%new_unit_info, "Service", "X-RestartIfChanged", 1) || parse_systemd_bool(\%new_unit_info, "Unit", "RefuseManualStop", 0) || parse_systemd_bool(\%new_unit_info, "Unit", "X-OnlyManualStart", 0)) {
             $units_to_skip->{$unit} = 1;
         } else {

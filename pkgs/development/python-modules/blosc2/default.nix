@@ -1,31 +1,32 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
 
-# build-system
-, cmake
-, cython
-, ninja
-, oldest-supported-numpy
-, pkg-config
-, scikit-build
-, setuptools
-, wheel
+  # build-system
+  cmake,
+  cython,
+  ninja,
+  oldest-supported-numpy,
+  pkg-config,
+  scikit-build,
+  setuptools,
+  wheel,
 
-# c library
-, c-blosc2
+  # c library
+  c-blosc2,
 
-# propagates
-, msgpack
-, ndindex
-, numpy
-, py-cpuinfo
-, rich
+  # propagates
+  msgpack,
+  ndindex,
+  numpy,
+  py-cpuinfo,
+  rich,
 
-# tests
-, psutil
-, pytestCheckHook
-, torch
+  # tests
+  psutil,
+  pytestCheckHook,
+  torch,
 }:
 
 buildPythonPackage rec {

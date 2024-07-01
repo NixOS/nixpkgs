@@ -1,13 +1,14 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, six
-, lxml
-, pytestCheckHook
-, doFullCheck ? false  # weird filenames cause issues on some filesystems
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  six,
+  lxml,
+  pytestCheckHook,
+  doFullCheck ? false, # weird filenames cause issues on some filesystems
 
-# for passthru.tests
-, jpylyzer
+  # for passthru.tests
+  jpylyzer,
 }:
 
 let
@@ -17,40 +18,36 @@ let
   testFiles = fetchFromGitHub {
     owner = "openpreserve";
     repo = "jpylyzer-test-files";
-    rev = "146cb0029b5ea9d8ef22dc6683cec8afae1cc63a";
-    hash = "sha256-uKUau7mYXqGs4dSnXGPnPsH9k81ZCK0aPj5F9HWBMZ8=";
+    rev = "0290e98bae9c5480c995954d3f14b4cf0a0395ff";
+    hash = "sha256-dr3hC6dGd3HNSE4nRj1xrfFSW9cepQ1mdVH8S3YQdtw=";
   };
-
-in buildPythonPackage rec {
+in
+buildPythonPackage rec {
   pname = "jpylyzer";
-  version = "2.2.0";
+  version = "2.2.1";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "openpreserve";
     repo = pname;
     rev = version;
-    hash = "sha256-SK6Z+JkFBD9V99reRZf+jM8Z2SiDNSG72gusp2FPfmI=";
+    hash = "sha256-P42qAks8suI/Xknwd8WAkymbGE7RApRa/a11J/V4LA0=";
   };
 
   propagatedBuildInputs = [ six ];
 
-  nativeCheckInputs = [ pytestCheckHook lxml ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    lxml
+  ];
 
   # don't depend on testFiles unless doFullCheck as it may not be extractable
   # on some filesystems due to weird filenames
   preCheck = lib.optionalString doFullCheck ''
-    sed -i '/^testFilesDir = /ctestFilesDir = "${testFiles}"' tests/unit/test_testfiles.py
+    sed -i '/^testFilesDir = /ctestFilesDir = "${testFiles}/files"' tests/unit/test_testfiles.py
   '';
 
-  disabledTests = [
-    # missing file, but newer test files breaks other tests
-    "test_groundtruth_complete"
-  ];
-
-  disabledTestPaths = lib.optionals (!doFullCheck) [
-    "tests/unit/test_testfiles.py"
-  ];
+  disabledTestPaths = lib.optionals (!doFullCheck) [ "tests/unit/test_testfiles.py" ];
 
   pythonImportsCheck = [ "jpylyzer" ];
 

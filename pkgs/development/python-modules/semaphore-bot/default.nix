@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, python-dateutil
-, attrs
-, anyio
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  python-dateutil,
+  attrs,
+  anyio,
 }:
 
 buildPythonPackage rec {

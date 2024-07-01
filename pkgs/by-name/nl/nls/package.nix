@@ -11,7 +11,7 @@ symlinkJoin {
 
   meta = {
     inherit (nickel.meta) homepage changelog license maintainers;
-    description = "A language server for the Nickel programming language";
+    description = "Language server for the Nickel programming language";
     mainProgram = "nls";
     longDescription = ''
       The Nickel Language Server (NLS) is a language server for the Nickel

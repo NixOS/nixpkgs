@@ -24,7 +24,7 @@
 , libvlc
 , libGL
 , mbedtls
-, wrapGAppsHook
+, wrapGAppsHook3
 , scriptingSupport ? true
 , luajit
 , swig4
@@ -90,7 +90,7 @@ stdenv.mkDerivation (finalAttrs: {
     addOpenGLRunpath
     cmake
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
     wrapQtAppsHook
   ]
   ++ optional scriptingSupport swig4;

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, libpng, perl, perlPackages, makeWrapper }:
+{ lib, stdenv, fetchurl, fetchpatch, autoreconfHook, libpng, perl, perlPackages, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "icoutils";
@@ -9,7 +9,15 @@ stdenv.mkDerivation rec {
     sha256 = "1q66cksms4l62y0wizb8vfavhmf7kyfgcfkynil3n99s0hny1aqp";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  patches = [
+    # Fixes a linker failure with newer versions of ld64 due to not supporting nested archives.
+    (fetchpatch {
+      url = "https://git.savannah.nongnu.org/cgit/icoutils.git/patch/?id=aa3572119bfe34484025f37dbbc4d5070f735908";
+      hash = "sha256-4YCI+SYT2bCBNegkpN5jcfi6gOeec65TmCABr98HHB4=";
+    })
+  ];
+
+  nativeBuildInputs = [ autoreconfHook makeWrapper ];
   buildInputs = [ libpng perl ];
   propagatedBuildInputs = [ perlPackages.LWP ];
 
@@ -17,7 +25,7 @@ stdenv.mkDerivation rec {
   # upgrades to a newer SDK.
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-DTARGET_OS_IPHONE=0";
 
-  patchPhase = ''
+  postPatch = ''
     patchShebangs extresso/extresso
     patchShebangs extresso/extresso.in
     patchShebangs extresso/genresscript

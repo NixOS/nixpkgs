@@ -106,7 +106,7 @@ stdenv.mkDerivation rec {
   dontPatchELF = true;
 
   meta = with lib; {
-    description = "The TeamSpeak voice communication tool";
+    description = "TeamSpeak voice communication tool";
     homepage = "https://teamspeak.com/";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = {

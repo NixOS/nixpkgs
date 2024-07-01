@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   '';
   buildInputs = [mono];
   meta = {
-    description = "A generator of bitmaps that are locally similar to the input bitmap";
+    description = "Generator of bitmaps that are locally similar to the input bitmap";
     license = lib.licenses.mit;
     maintainers = [lib.maintainers.raskin];
     platforms = lib.platforms.linux;

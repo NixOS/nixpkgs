@@ -28,7 +28,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "A Weblate commandline client using Weblate's REST API";
+    description = "Weblate commandline client using Weblate's REST API";
     homepage = "https://github.com/WeblateOrg/wlc";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ paperdigits ];

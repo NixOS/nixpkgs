@@ -1,28 +1,37 @@
-{ lib, fetchFromGitLab, buildGoModule, scdoc, nix-update-script }:
+{ lib
+, fetchFromGitLab
+, buildGoModule
+, scdoc
+, nix-update-script
+}:
 
 buildGoModule rec {
   pname = "darkman";
-  version = "1.5.4";
+  version = "2.0.1";
 
   src = fetchFromGitLab {
     owner = "WhyNotHugo";
     repo = "darkman";
     rev = "v${version}";
-    sha256 = "sha256-6SNXVe6EfVwcXH9O6BxNw+v4/uhKhCtVS3XE2GTc2Sc=";
+    sha256 = "sha256-FaEpVy/0PqY5Bmw00hMyFZb9wcwYwEuCKMatYN8Xk3o=";
   };
 
-  vendorHash = "sha256-xEPmNnaDwFU4l2G4cMvtNeQ9KneF5g9ViQSFrDkrafY=";
-
-  nativeBuildInputs = [ scdoc ];
+  patches = [
+    ./go-mod.patch
+    ./makefile.patch
+  ];
 
   postPatch = ''
     substituteInPlace darkman.service \
-      --replace "/usr/bin/darkman" "$out/bin/darkman"
+      --replace-fail /usr/bin/darkman $out/bin/darkman
     substituteInPlace contrib/dbus/nl.whynothugo.darkman.service \
-      --replace "/usr/bin/darkman" "$out/bin/darkman"
+      --replace-fail /usr/bin/darkman $out/bin/darkman
     substituteInPlace contrib/dbus/org.freedesktop.impl.portal.desktop.darkman.service \
-      --replace "/usr/bin/darkman" "$out/bin/darkman"
+      --replace-fail /usr/bin/darkman $out/bin/darkman
   '';
+
+  vendorHash = "sha256-3lILSVm7mtquCdR7+cDMuDpHihG+gDJTcQa1cM2o7ZU=";
+  nativeBuildInputs = [ scdoc ];
 
   buildPhase = ''
     runHook preBuild
@@ -32,6 +41,7 @@ buildGoModule rec {
 
   installPhase = ''
     runHook preInstall
+    install -Dm755 darkman -t $out/bin
     make PREFIX=$out install
     runHook postInstall
   '';

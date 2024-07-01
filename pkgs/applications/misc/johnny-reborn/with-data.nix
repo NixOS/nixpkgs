@@ -52,7 +52,7 @@ stdenvNoCC.mkDerivation {
   '';
 
   meta = {
-    description = "An open-source engine for the classic \"Johnny Castaway\" screensaver (ready to use, with resources)";
+    description = "Open-source engine for the classic \"Johnny Castaway\" screensaver (ready to use, with resources)";
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [ pedrohlc ];
     inherit (johnny-reborn-engine.meta) homepage platforms mainProgram;

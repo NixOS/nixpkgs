@@ -1,6 +1,7 @@
-{ lowPrio, newScope, pkgs, lib, stdenv, cmake, ninja
+{ lowPrio, newScope, pkgs, lib, stdenv
 , preLibcCrossHeaders
-, libxml2, python3, fetchFromGitHub, fetchpatch, substitute, substituteAll, overrideCC, wrapCCWith, wrapBintoolsWith
+, substitute, substituteAll, fetchFromGitHub, fetchpatch
+, overrideCC, wrapCCWith, wrapBintoolsWith
 , buildLlvmTools # tools, but from the previous stage, for cross
 , targetLlvmLibraries # libraries, but from the next stage, for cross
 , targetLlvm
@@ -39,7 +40,11 @@
 # to you to make sure that the LLVM repo given matches the release configuration
 # specified.
 , monorepoSrc ? null
-}:
+# Allows passthrough to packages via newScope. This makes it possible to
+# do `(llvmPackages.override { <someLlvmDependency> = bar; }).clang` and get
+# an llvmPackages whose packages are overridden in an internally consistent way.
+, ...
+}@args:
 
 assert
   lib.assertMsg
@@ -51,10 +56,13 @@ assert
 let
   monorepoSrc' = monorepoSrc;
 in let
-  # Import releaseInfo separately to avoid infinite recursion
-  inherit (import ../common/common-let.nix { inherit lib gitRelease officialRelease; }) releaseInfo;
-  inherit (releaseInfo) release_version version;
-  inherit (import ../common/common-let.nix { inherit lib fetchFromGitHub release_version gitRelease officialRelease monorepoSrc'; }) llvm_meta monorepoSrc;
+
+  metadata = rec {
+    # Import releaseInfo separately to avoid infinite recursion
+    inherit (import ../common/common-let.nix { inherit lib gitRelease officialRelease; }) releaseInfo;
+    inherit (releaseInfo) release_version version;
+    inherit (import ../common/common-let.nix { inherit lib fetchFromGitHub release_version gitRelease officialRelease monorepoSrc'; }) llvm_meta monorepoSrc;
+  };
 
   lldbPlugins = lib.makeExtensible (lldbPlugins: let
     callPackage = newScope (lldbPlugins // { inherit stdenv; inherit (tools) lldb; });
@@ -63,11 +71,11 @@ in let
   });
 
   tools = lib.makeExtensible (tools: let
-    callPackage = newScope (tools // { inherit stdenv cmake ninja libxml2 python3 release_version version monorepoSrc buildLlvmTools; });
+    callPackage = newScope (tools // args // metadata);
     mkExtraBuildCommands0 = cc: ''
       rsrc="$out/resource-root"
       mkdir "$rsrc"
-      ln -s "${cc.lib}/lib/clang/${release_version}/include" "$rsrc"
+      ln -s "${cc.lib}/lib/clang/${metadata.release_version}/include" "$rsrc"
       echo "-resource-dir=$rsrc" >> $out/nix-support/cc-cflags
     '';
     mkExtraBuildCommands = cc: mkExtraBuildCommands0 cc + ''
@@ -86,8 +94,64 @@ in let
 
   in {
 
-    libllvm = callPackage ./llvm {
-      inherit llvm_meta;
+    libllvm = callPackage ../common/llvm {
+      patches = [
+        ./llvm/gnu-install-dirs.patch
+
+        # Running the tests involves invoking binaries (like `opt`) that depend on
+        # the LLVM dylibs and reference them by absolute install path (i.e. their
+        # nix store path).
+        #
+        # Because we have not yet run the install phase (we're running these tests
+        # as part of `checkPhase` instead of `installCheckPhase`) these absolute
+        # paths do not exist yet; to work around this we point the loader (`ld` on
+        # unix, `dyld` on macOS) at the `lib` directory which will later become this
+        # package's `lib` output.
+        #
+        # Previously we would just set `LD_LIBRARY_PATH` to include the build `lib`
+        # dir but:
+        #   - this doesn't generalize well to other platforms; `lit` doesn't forward
+        #     `DYLD_LIBRARY_PATH` (macOS):
+        #     + https://github.com/llvm/llvm-project/blob/0d89963df354ee309c15f67dc47c8ab3cb5d0fb2/llvm/utils/lit/lit/TestingConfig.py#L26
+        #   - even if `lit` forwarded this env var, we actually cannot set
+        #     `DYLD_LIBRARY_PATH` in the child processes `lit` launches because
+        #     `DYLD_LIBRARY_PATH` (and `DYLD_FALLBACK_LIBRARY_PATH`) is cleared for
+        #     "protected processes" (i.e. the python interpreter that runs `lit`):
+        #     https://stackoverflow.com/a/35570229
+        #   - other LLVM subprojects deal with this issue by having their `lit`
+        #     configuration set these env vars for us; it makes sense to do the same
+        #     for LLVM:
+        #     + https://github.com/llvm/llvm-project/blob/4c106cfdf7cf7eec861ad3983a3dd9a9e8f3a8ae/clang-tools-extra/test/Unit/lit.cfg.py#L22-L31
+        #
+        # !!! TODO: look into upstreaming this patch
+        ./llvm/llvm-lit-cfg-add-libs-to-dylib-path.patch
+
+        # `lit` has a mode where it executes run lines as a shell script which is
+        # constructs; this is problematic for macOS because it means that there's
+        # another process in between `lit` and the binaries being tested. As noted
+        # above, this means that `DYLD_LIBRARY_PATH` is cleared which means that our
+        # tests fail with dyld errors.
+        #
+        # To get around this we patch `lit` to reintroduce `DYLD_LIBRARY_PATH`, when
+        # present in the test configuration.
+        #
+        # It's not clear to me why this isn't an issue for LLVM developers running
+        # on macOS (nothing about this _seems_ nix specific)..
+        ./llvm/lit-shell-script-runner-set-dyld-library-path.patch
+
+        # Fix musl build.
+        (fetchpatch {
+          url = "https://github.com/llvm/llvm-project/commit/5cd554303ead0f8891eee3cd6d25cb07f5a7bf67.patch";
+          relative = "llvm";
+          hash = "sha256-XPbvNJ45SzjMGlNUgt/IgEvM2dHQpDOe6woUJY+nUYA=";
+        })
+      ];
+      pollyPatches = [
+        ./llvm/gnu-install-dirs-polly.patch
+
+        # Just like the `llvm-lit-cfg` patch, but for `polly`.
+        ./llvm/polly-lit-cfg-add-libs-to-dylib-path.patch
+      ];
     };
 
     # `llvm` historically had the binaries.  When choosing an output explicitly,
@@ -105,7 +169,6 @@ in let
           libllvmLibdir = "${tools.libllvm.lib}/lib";
         })
       ];
-      inherit llvm_meta;
     };
 
     clang-unwrapped = tools.libclang;
@@ -124,6 +187,9 @@ in let
       enableManpages = true;
       python3 = pkgs.python3;  # don't use python-boot
     });
+
+    # Wrapper for standalone command line utilities
+    clang-tools = callPackage ../common/clang-tools { };
 
     # pick clang appropriate for package set we are targeting
     clang =
@@ -155,7 +221,6 @@ in let
       patches = [
         ./lld/gnu-install-dirs.patch
       ];
-      inherit llvm_meta;
     };
 
     lldb = callPackage ../common/lldb.nix {
@@ -188,7 +253,6 @@ in let
             && !stdenv.targetPlatform.isAarch64
             && (lib.versionOlder darwin.apple_sdk.sdk.version "11.0")
         ) ./lldb/cpu_subtype_arm64e_replacement.patch;
-      inherit llvm_meta;
     };
 
     # Below, is the LLVM bootstrapping logic. It handles building a
@@ -291,7 +355,7 @@ in let
   });
 
   libraries = lib.makeExtensible (libraries: let
-    callPackage = newScope (libraries // buildLlvmTools // { inherit stdenv cmake ninja libxml2 python3 release_version version monorepoSrc; });
+    callPackage = newScope (libraries // buildLlvmTools // args // metadata);
   in {
 
     compiler-rt-libc = callPackage ../common/compiler-rt {
@@ -308,7 +372,6 @@ in let
         # See: https://github.com/NixOS/nixpkgs/pull/194634#discussion_r999829893
         ../common/compiler-rt/armv7l-15.patch
       ];
-      inherit llvm_meta;
       stdenv = if stdenv.hostPlatform.useLLVM or false
                then overrideCC stdenv buildLlvmTools.clangNoCompilerRtWithLibc
                else stdenv;
@@ -328,7 +391,6 @@ in let
         # See: https://github.com/NixOS/nixpkgs/pull/194634#discussion_r999829893
         ../common/compiler-rt/armv7l-15.patch
       ];
-      inherit llvm_meta;
       stdenv = if stdenv.hostPlatform.useLLVM or false
                then overrideCC stdenv buildLlvmTools.clangNoCompilerRt
                else stdenv;
@@ -358,19 +420,18 @@ in let
         })
         (substitute {
           src = ../common/libcxxabi/wasm.patch;
-          replacements = [
+          substitutions = [
             "--replace-fail" "/cmake/" "/llvm/cmake/"
           ];
         })
       ] ++ lib.optionals stdenv.hostPlatform.isMusl [
         (substitute {
           src = ../common/libcxx/libcxx-0001-musl-hacks.patch;
-          replacements = [
+          substitutions = [
             "--replace-fail" "/include/" "/libcxx/include/"
           ];
         })
       ];
-      inherit llvm_meta;
       stdenv = overrideCC stdenv buildLlvmTools.clangNoLibcxx;
     };
 
@@ -378,7 +439,6 @@ in let
       patches = [
         ./libunwind/gnu-install-dirs.patch
       ];
-      inherit llvm_meta;
       stdenv = overrideCC stdenv buildLlvmTools.clangNoLibcxx;
     };
 
@@ -388,9 +448,8 @@ in let
         ./openmp/gnu-install-dirs.patch
         ./openmp/run-lit-directly.patch
       ];
-      inherit llvm_meta targetLlvm;
     };
   });
   noExtend = extensible: lib.attrsets.removeAttrs extensible [ "extend" ];
 
-in { inherit tools libraries release_version lldbPlugins; } // (noExtend libraries) // (noExtend tools)
+in { inherit tools libraries lldbPlugins; inherit (metadata) release_version; } // (noExtend libraries) // (noExtend tools)

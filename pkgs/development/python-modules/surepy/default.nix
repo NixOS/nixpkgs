@@ -1,19 +1,20 @@
-{ lib
-, aiodns
-, aiohttp
-, async-timeout
-, attrs
-, brotlipy
-, buildPythonPackage
-, faust-cchardet
-, click
-, colorama
-, fetchFromGitHub
-, halo
-, poetry-core
-, pythonOlder
-, requests
-, rich
+{
+  lib,
+  aiodns,
+  aiohttp,
+  async-timeout,
+  attrs,
+  brotlipy,
+  buildPythonPackage,
+  faust-cchardet,
+  click,
+  colorama,
+  fetchFromGitHub,
+  halo,
+  poetry-core,
+  pythonOlder,
+  requests,
+  rich,
 }:
 
 buildPythonPackage rec {
@@ -37,9 +38,7 @@ buildPythonPackage rec {
       --replace 'rich = "^10.1.0"' 'rich = ">=10.1.0"'
   '';
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     aiodns
@@ -58,9 +57,7 @@ buildPythonPackage rec {
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "surepy"
-  ];
+  pythonImportsCheck = [ "surepy" ];
 
   meta = with lib; {
     description = "Python library to interact with the Sure Petcare API";

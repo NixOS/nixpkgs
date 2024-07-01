@@ -1,10 +1,12 @@
-{ lib, stdenv
-, bottle
-, buildPythonPackage
-, fetchpatch
-, fetchPypi
-, pytestCheckHook
-, pythonAtLeast
+{
+  lib,
+  stdenv,
+  bottle,
+  buildPythonPackage,
+  fetchpatch,
+  fetchPypi,
+  pytestCheckHook,
+  pythonAtLeast,
 }:
 
 buildPythonPackage rec {
@@ -28,27 +30,25 @@ buildPythonPackage rec {
     })
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   # There is a version of bottle bundled with Pympler, but it is broken on
   # Python 3.11. Fortunately, Pympler will preferentially import an external
   # bottle if it is available, so we make it an explicit dependency.
-  propagatedBuildInputs = [
-    bottle
-  ];
+  propagatedBuildInputs = [ bottle ];
 
-  disabledTests = [
-    # 'AssertionError: 'function (test.muppy.test_summary.func)' != 'function (muppy.test_summary.func)'
-    # https://github.com/pympler/pympler/issues/134
-    "test_repr_function"
-  ] ++ lib.optionals (pythonAtLeast "3.11") [
-    # https://github.com/pympler/pympler/issues/148
-    "test_findgarbage"
-    "test_get_tree"
-    "test_prune"
-  ];
+  disabledTests =
+    [
+      # 'AssertionError: 'function (test.muppy.test_summary.func)' != 'function (muppy.test_summary.func)'
+      # https://github.com/pympler/pympler/issues/134
+      "test_repr_function"
+    ]
+    ++ lib.optionals (pythonAtLeast "3.11") [
+      # https://github.com/pympler/pympler/issues/148
+      "test_findgarbage"
+      "test_get_tree"
+      "test_prune"
+    ];
 
   doCheck = stdenv.hostPlatform.isLinux;
 
@@ -57,5 +57,4 @@ buildPythonPackage rec {
     homepage = "https://pythonhosted.org/Pympler/";
     license = licenses.asl20;
   };
-
 }

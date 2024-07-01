@@ -68,6 +68,7 @@ self: super: {
   ] (super.hashable.override {
     os-string = null;
   });
+  hashable-time = doDistribute (unmarkBroken super.hashable-time);
 
   # Too strict lower bounds on base
   primitive-addr = doJailbreak super.primitive-addr;
@@ -81,9 +82,6 @@ self: super: {
   # Jailbreak to fix the build.
   base-noprelude = doJailbreak super.base-noprelude;
   unliftio-core = doJailbreak super.unliftio-core;
-
-  # Jailbreaking because monoidal-containers hasn’t bumped it's base dependency for 8.10.
-  monoidal-containers = doJailbreak super.monoidal-containers;
 
   # Jailbreak to fix the build.
   brick = doJailbreak super.brick;

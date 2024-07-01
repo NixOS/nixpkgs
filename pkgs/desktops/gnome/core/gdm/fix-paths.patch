@@ -1,8 +1,8 @@
 diff --git a/daemon/gdm-local-display-factory.c b/daemon/gdm-local-display-factory.c
-index 5fbbad68..739718ec 100644
+index f2d8e155b..54b998826 100644
 --- a/daemon/gdm-local-display-factory.c
 +++ b/daemon/gdm-local-display-factory.c
-@@ -233,9 +233,9 @@ struct GdmDisplayServerConfiguration {
+@@ -245,9 +245,9 @@ struct GdmDisplayServerConfiguration {
          const char *session_type;
  } display_server_configuration[] = {
  #ifdef ENABLE_WAYLAND_SUPPORT
@@ -15,10 +15,10 @@ index 5fbbad68..739718ec 100644
  };
  
 diff --git a/daemon/gdm-manager.c b/daemon/gdm-manager.c
-index cc61efc9..4c9d15af 100644
+index fc5aef6ac..c61e0046b 100644
 --- a/daemon/gdm-manager.c
 +++ b/daemon/gdm-manager.c
-@@ -148,7 +148,7 @@ plymouth_is_running (void)
+@@ -151,7 +151,7 @@ plymouth_is_running (void)
          GError  *error;
  
          error = NULL;
@@ -27,7 +27,7 @@ index cc61efc9..4c9d15af 100644
                                           NULL, NULL, &status, &error);
          if (! res) {
                  g_debug ("Could not ping plymouth: %s", error->message);
-@@ -166,7 +166,7 @@ plymouth_prepare_for_transition (void)
+@@ -169,7 +169,7 @@ plymouth_prepare_for_transition (void)
          GError  *error;
  
          error = NULL;
@@ -36,7 +36,7 @@ index cc61efc9..4c9d15af 100644
                                           NULL, NULL, NULL, &error);
          if (! res) {
                  g_warning ("Could not deactivate plymouth: %s", error->message);
-@@ -181,7 +181,7 @@ plymouth_quit_with_transition (void)
+@@ -184,7 +184,7 @@ plymouth_quit_with_transition (void)
          GError  *error;
  
          error = NULL;
@@ -45,7 +45,7 @@ index cc61efc9..4c9d15af 100644
          if (! res) {
                  g_warning ("Could not quit plymouth: %s", error->message);
                  g_error_free (error);
-@@ -197,7 +197,7 @@ plymouth_quit_without_transition (void)
+@@ -200,7 +200,7 @@ plymouth_quit_without_transition (void)
          GError  *error;
  
          error = NULL;
@@ -55,10 +55,10 @@ index cc61efc9..4c9d15af 100644
                  g_warning ("Could not quit plymouth: %s", error->message);
                  g_error_free (error);
 diff --git a/daemon/gdm-session.c b/daemon/gdm-session.c
-index 4b709731..245ac0cf 100644
+index a4c4b2dcf..67416b204 100644
 --- a/daemon/gdm-session.c
 +++ b/daemon/gdm-session.c
-@@ -2972,16 +2972,16 @@ gdm_session_start_session (GdmSession *self,
+@@ -3193,16 +3193,16 @@ gdm_session_start_session (GdmSession *self,
                   */
                  if (run_launcher) {
                          if (is_x11) {
@@ -79,7 +79,7 @@ index 4b709731..245ac0cf 100644
                  }
          }
 diff --git a/data/gdm.service.in b/data/gdm.service.in
-index 17e8a8de..afc70977 100644
+index 17e8a8de8..afc709778 100644
 --- a/data/gdm.service.in
 +++ b/data/gdm.service.in
 @@ -26,7 +26,7 @@ Restart=always

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub
 , xorg, bdf2psf, bdftopcf
 , libfaketime
 }:

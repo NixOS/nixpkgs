@@ -1,10 +1,15 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, qemu
-, setuptools
-, fuseSupport ? false, fusepy
-, tuiSupport ? false, urwid, urwid-readline, pygments
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  qemu,
+  setuptools,
+  fuseSupport ? false,
+  fusepy,
+  tuiSupport ? false,
+  urwid,
+  urwid-readline,
+  pygments,
 }:
 
 buildPythonPackage {
@@ -29,13 +34,16 @@ buildPythonPackage {
     fi
   '';
 
-  buildInputs = [
-    setuptools
-  ];
+  buildInputs = [ setuptools ];
 
-  propagatedBuildInputs = [ ]
+  propagatedBuildInputs =
+    [ ]
     ++ lib.optionals fuseSupport [ fusepy ]
-    ++ lib.optionals tuiSupport [ urwid urwid-readline pygments ];
+    ++ lib.optionals tuiSupport [
+      urwid
+      urwid-readline
+      pygments
+    ];
 
   # Project requires avocado-framework for testing, therefore replacing check phase
   checkPhase = ''
@@ -47,10 +55,10 @@ buildPythonPackage {
   pythonImportsCheck = [ "qemu" ];
 
   preFixup =
-    (lib.optionalString (! tuiSupport) ''
+    (lib.optionalString (!tuiSupport) ''
       rm $out/bin/qmp-tui
     '')
-    + (lib.optionalString (! fuseSupport) ''
+    + (lib.optionalString (!fuseSupport) ''
       rm $out/bin/qom-fuse
     '');
 
@@ -58,6 +66,9 @@ buildPythonPackage {
     homepage = "http://www.qemu.org/";
     description = "Python tooling used by the QEMU project to build, configure, and test QEMU";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ devplayer0 davhau ];
+    maintainers = with maintainers; [
+      devplayer0
+      davhau
+    ];
   };
 }

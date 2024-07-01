@@ -1,15 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, wheel
-, anyio
-, numpy
-, pillow
-, pytest-forked
-, pytest-xdist
-, pytestCheckHook
-, scipy
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  setuptools,
+  wheel,
+  anyio,
+  numpy,
+  pillow,
+  pytest-forked,
+  pytest-xdist,
+  pytestCheckHook,
+  scipy,
 }:
 
 buildPythonPackage rec {
@@ -24,14 +26,22 @@ buildPythonPackage rec {
     hash = "sha256-nx2sGXeeh8S17TfRDFifQbdSxc4YGsDNnrPSSbxv7S4=";
   };
 
-  nativeBuildInputs = [
+  patches = [
+    (fetchpatch {
+      name = "fix-assert-tests";
+      url = "https://github.com/meerk40t/svgelements/commit/23da98941a94cf1afed39c10750222ccfee73c9f.patch";
+      hash = "sha256-/53w4eWlaSNEQxuoAxPrN2HciZ3Az2A2SKcIAlNgKAs=";
+    })
+  ];
+
+  build-system = [
     setuptools
     wheel
   ];
 
   pythonImportsCheck = [ "svgelements" ];
 
-  nativeCheckInputs =  [
+  nativeCheckInputs = [
     anyio
     numpy
     pillow
@@ -41,10 +51,10 @@ buildPythonPackage rec {
     scipy
   ];
 
-  meta = with lib; {
+  meta = {
     description = "SVG Parsing for Elements, Paths, and other SVG Objects";
     homepage = "https://github.com/meerk40t/svgelements";
-    license = licenses.mit;
-    maintainers = with maintainers; [ GaetanLepage ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ GaetanLepage ];
   };
 }

@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ zlib libffi elfutils libdwarf ];
 
   meta = with lib; {
-    description = "A foreign function interface for bash";
+    description = "Foreign function interface for bash";
     mainProgram = "ctypes.sh";
     homepage = "https://github.com/taviso/ctypes.sh";
     license = licenses.mit;

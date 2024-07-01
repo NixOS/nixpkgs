@@ -12,7 +12,7 @@ rebar3Relx rec {
   };
   meta = with lib; {
     homepage = "https://github.com/WhatsApp/erlfmt";
-    description = "An automated code formatter for Erlang";
+    description = "Automated code formatter for Erlang";
     mainProgram = "erlfmt";
     platforms = platforms.unix;
     license = licenses.asl20;

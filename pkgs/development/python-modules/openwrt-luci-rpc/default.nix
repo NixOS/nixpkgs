@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, click
-, fetchPypi
-, packaging
-, pytestCheckHook
-, requests
+{
+  lib,
+  buildPythonPackage,
+  click,
+  fetchPypi,
+  packaging,
+  pytestCheckHook,
+  requests,
 }:
 
 buildPythonPackage rec {
@@ -23,9 +24,7 @@ buildPythonPackage rec {
     packaging
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "openwrt_luci_rpc" ];
 

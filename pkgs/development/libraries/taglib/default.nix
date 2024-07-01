@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     homepage = "https://taglib.org/";
-    description = "A library for reading and editing audio file metadata";
+    description = "Library for reading and editing audio file metadata";
     mainProgram = "taglib-config";
     longDescription = ''
       TagLib is a library for reading and editing the meta-data of several

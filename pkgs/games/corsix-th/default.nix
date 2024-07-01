@@ -10,9 +10,15 @@
 , SDL2
 , SDL2_mixer
 , timidity
+# Darwin dependencies
+, libiconv
+, Cocoa
+, CoreVideo
+# Update
+, nix-update-script
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation(finalAttrs: {
   pname = "corsix-th";
   version = "0.67";
 
@@ -23,23 +29,50 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-WA/VJqHXzBfVUBNtxCVsGBRzSRQ0pvDvAy03ntc0KZE=";
   };
 
-  luaEnv = lua.withPackages(p: with p; [ luafilesystem lpeg luasec luasocket ]);
+  patches = [
+    ./darwin-cmake-no-fixup-bundle.patch
+  ];
+
   nativeBuildInputs = [ cmake doxygen makeWrapper ];
-  buildInputs = [ ffmpeg freetype lua finalAttrs.luaEnv SDL2 SDL2_mixer timidity ];
+
+  buildInputs = let
+    luaEnv = lua.withPackages(p: with p; [ luafilesystem lpeg luasec luasocket ]);
+  in [
+    ffmpeg
+    freetype
+    lua
+    luaEnv
+    SDL2
+    SDL2_mixer
+    timidity
+  ] ++ lib.optionals stdenv.isDarwin [
+    libiconv
+    Cocoa
+    CoreVideo
+  ];
+
   cmakeFlags = [ "-Wno-dev" ];
 
-  postInstall = ''
+  postInstall = lib.optionalString stdenv.isLinux ''
     wrapProgram $out/bin/corsix-th \
     --set LUA_PATH "$LUA_PATH" \
     --set LUA_CPATH "$LUA_CPATH"
+  '' + lib.optionalString stdenv.isDarwin ''
+    mkdir -p $out/Applications
+    mv $out/CorsixTH.app $out/Applications
+    wrapProgram $out/Applications/CorsixTH.app/Contents/MacOS/CorsixTH \
+      --set LUA_PATH "$LUA_PATH" \
+      --set LUA_CPATH "$LUA_CPATH"
   '';
 
+  passthru.updateScript = nix-update-script { };
+
   meta = with lib; {
-    description = "A reimplementation of the 1997 Bullfrog business sim Theme Hospital";
+    description = "Reimplementation of the 1997 Bullfrog business sim Theme Hospital";
     mainProgram = "corsix-th";
     homepage = "https://corsixth.com/";
     license = licenses.mit;
-    maintainers = with maintainers; [ hughobrien ];
-    platforms = platforms.linux;
+    maintainers = with maintainers; [ hughobrien matteopacini ];
+    platforms = platforms.linux ++ platforms.darwin;
   };
 })

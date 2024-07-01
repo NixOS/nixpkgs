@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, docopt
-, six
-, wcwidth
-, pygments
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
+  docopt,
+  six,
+  wcwidth,
+  pygments,
 }:
 
 buildPythonPackage rec {
@@ -18,13 +19,16 @@ buildPythonPackage rec {
     sha256 = "dd4fca02c8069497ad931a2d09914c6b0d1b50151ce876bc15bde4c747090126";
   };
 
-  propagatedBuildInputs = [ docopt six wcwidth pygments ];
+  propagatedBuildInputs = [
+    docopt
+    six
+    wcwidth
+    pygments
+  ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  disabledTests = [
-    "test_pathcompleter_can_expanduser"
-  ];
+  disabledTests = [ "test_pathcompleter_can_expanduser" ];
 
   meta = with lib; {
     description = "Python library for building powerful interactive command lines";

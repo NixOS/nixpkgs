@@ -20,7 +20,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "A digital version of Frederic Goudy’s Deepdene";
+    description = "Digital version of Frederic Goudy’s Deepdene";
     longDescription = ''
       Linden Hill is a digital version of Frederic Goudy’s Deepdene. The
       package includes roman and italic.

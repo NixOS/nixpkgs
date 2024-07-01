@@ -25,6 +25,7 @@ in
     webui = lib.mkOption {
       default = null;
       type = lib.types.nullOr lib.types.path;
+      example = lib.literalExpression "pkgs.metacubexd";
       description = ''
         Local web interface to use.
 

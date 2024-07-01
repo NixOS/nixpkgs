@@ -1,22 +1,23 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, substituteAll
-, dbus-python
-, distro
-, jinja2
-, keyring
-, proton-client
-, pygobject3
-, pyxdg
-, systemd
-, ncurses
-, networkmanager
-, pkgs-systemd
-, python
-, xdg-utils
-, makeWrapper
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  substituteAll,
+  dbus-python,
+  distro,
+  jinja2,
+  keyring,
+  proton-client,
+  pygobject3,
+  pyxdg,
+  systemd,
+  ncurses,
+  networkmanager,
+  pkgs-systemd,
+  python,
+  xdg-utils,
+  makeWrapper,
 }:
 
 buildPythonPackage rec {
@@ -76,7 +77,7 @@ buildPythonPackage rec {
     mainProgram = "protonvpn_reconnector.py";
     homepage = "https://github.com/ProtonVPN/protonvpn-nm-lib";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ wolfangaukang ];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 }

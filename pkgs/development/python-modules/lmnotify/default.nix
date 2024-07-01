@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, oauthlib
-, requests
-, requests-oauthlib
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  oauthlib,
+  requests,
+  requests-oauthlib,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -28,9 +29,7 @@ buildPythonPackage rec {
   # Module has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "lmnotify"
-  ];
+  pythonImportsCheck = [ "lmnotify" ];
 
   meta = with lib; {
     description = "Python package for sending notifications to LaMetric Time";

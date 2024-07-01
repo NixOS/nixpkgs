@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "man" ];
 
   meta = with lib; {
-    description = "A converter from Rich Text Format to other formats";
+    description = "Converter from Rich Text Format to other formats";
     mainProgram = "unrtf";
     longDescription = ''
       UnRTF converts documents in Rich Text Format to other

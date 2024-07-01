@@ -103,7 +103,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     homepage = "https://polybar.github.io/";
     changelog = "https://github.com/polybar/polybar/releases/tag/${finalAttrs.version}";
-    description = "A fast and easy-to-use tool for creating status bars";
+    description = "Fast and easy-to-use tool for creating status bars";
     longDescription = ''
       Polybar aims to help users build beautiful and highly customizable
       status bars for their desktop environment, without the need of

@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl, unzip, makeDesktopItem, nwjs, wrapGAppsHook, gsettings-desktop-schemas, gtk3 }:
+{lib, stdenv, fetchurl, unzip, makeDesktopItem, nwjs, wrapGAppsHook3, gsettings-desktop-schemas, gtk3 }:
 
 let
   pname = "betaflight-configurator";
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     find -name "lib*.so" -delete
   '';
 
-  nativeBuildInputs = [ wrapGAppsHook unzip ];
+  nativeBuildInputs = [ wrapGAppsHook3 unzip ];
 
   buildInputs = [ gsettings-desktop-schemas gtk3 ];
 
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "The Betaflight flight control system configuration tool";
+    description = "Betaflight flight control system configuration tool";
     mainProgram = "betaflight-configurator";
     longDescription = ''
       A crossplatform configuration tool for the Betaflight flight control system.

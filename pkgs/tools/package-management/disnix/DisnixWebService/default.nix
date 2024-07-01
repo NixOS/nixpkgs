@@ -55,7 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "A SOAP interface and client for Disnix";
+    description = "SOAP interface and client for Disnix";
     mainProgram = "disnix-soap-client";
     homepage = "https://github.com/svanderburg/DisnixWebService";
     changelog = "https://github.com/svanderburg/DisnixWebService/blob/${finalAttrs.src.rev}/NEWS.txt";

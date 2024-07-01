@@ -12,7 +12,7 @@
 , iproute2
 , iptables
 , util-linux
-, wrapGAppsHook
+, wrapGAppsHook3
 , wl-clipboard
 , runtimeShell
 }:
@@ -39,7 +39,7 @@ python3Packages.buildPythonApplication rec {
 
   nativeBuildInputs = [
     gobject-introspection
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

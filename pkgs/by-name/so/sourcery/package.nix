@@ -4,25 +4,25 @@
   python3Packages,
   fetchPypi,
   autoPatchelfHook,
-  libxcrypt-legacy,
+  zlib,
 }:
 
 let
   platformInfos = {
     "x86_64-linux" = {
       platform = "manylinux1_x86_64";
-      hash = "sha256-gr5z8VYkuCqgmcnyA01/Ez6aX9NrKR4MgA0Bc6IHnfs=";
+      hash = "sha256-IJFuMtrddHciuHGeiCuv4hgco9E3GJveegL7dBmVmAw=";
     };
     "x86_64-darwin" = {
       platform = "macosx_10_9_universal2";
-      hash = "sha256-5LsxeozPgInUC1QAxDSlr8NIfmRSl5BN+g9/ZYAxiRE=";
+      hash = "sha256-eTD8NnmDTMSB0dt5skPOlWbnW6AexxEkKZ9ABc+kUas=";
     };
   };
   platformInfo = platformInfos.${stdenv.system} or (throw "Unsupported platform ${stdenv.system}");
 in
 python3Packages.buildPythonApplication rec {
   pname = "sourcery";
-  version = "1.16.0";
+  version = "1.19.0";
   format = "wheel";
 
   src = fetchPypi {
@@ -32,11 +32,11 @@ python3Packages.buildPythonApplication rec {
 
   nativeBuildInputs = lib.optionals stdenv.isLinux [ autoPatchelfHook ];
 
-  buildInputs = [ libxcrypt-legacy ];
+  buildInputs = [ zlib ];
 
   meta = {
     changelog = "https://sourcery.ai/changelog/";
-    description = "An AI-powered code review and pair programming tool for Python";
+    description = "AI-powered code review and pair programming tool for Python";
     downloadPage = "https://pypi.org/project/sourcery/";
     homepage = "https://sourcery.ai";
     license = lib.licenses.unfree;

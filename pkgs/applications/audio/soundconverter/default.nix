@@ -1,7 +1,7 @@
 { lib, fetchurl
 # Optional due to unfree license.
 , faacSupport ? false
-, glib, python3Packages, gtk3, wrapGAppsHook
+, glib, python3Packages, gtk3, wrapGAppsHook3
 , gsettings-desktop-schemas, intltool, xvfb-run
 , gobject-introspection, gst_all_1, fdk-aac-encoder }:
 
@@ -26,7 +26,7 @@ python3Packages.buildPythonApplication rec {
 
   nativeBuildInputs = [
     intltool
-    wrapGAppsHook
+    wrapGAppsHook3
     gobject-introspection
   ];
 

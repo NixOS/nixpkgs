@@ -43,7 +43,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "reuse" ];
 
   meta = with lib; {
-    description = "A tool for compliance with the REUSE Initiative recommendations";
+    description = "Tool for compliance with the REUSE Initiative recommendations";
     homepage = "https://github.com/fsfe/reuse-tool";
     changelog = "https://github.com/fsfe/reuse-tool/blob/v${version}/CHANGELOG.md";
     license = with licenses; [

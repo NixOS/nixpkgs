@@ -1,32 +1,33 @@
-{ buildPythonPackage
-, lib
-, fetchFromGitHub
-, cmake
-, blas
-, libcint
-, libxc
-, xcfun
-, cppe
-, h5py
-, numpy
-, scipy
-, pytestCheckHook
+{
+  buildPythonPackage,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  blas,
+  libcint,
+  libxc,
+  xcfun,
+  cppe,
+  h5py,
+  numpy,
+  scipy,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pyscf";
-  version = "2.5.0";
+  version = "2.6.2";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "pyscf";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-UCchzoYsqeIGViewPf4KedmhYktXLmp5Me4lzb1i8p0=";
+    hash = "sha256-gudkKhC5Cpd6ZM9mJ1SfemqmwDqhDmpAfYE8XGFpzmA=";
   };
 
   # setup.py calls Cmake and passes the arguments in CMAKE_CONFIGURE_ARGS to cmake.
-  nativeBuildInputs = [ cmake ];
+  build-system = [ cmake ];
   dontUseCmakeConfigure = true;
   preConfigure = ''
     export CMAKE_CONFIGURE_ARGS="-DBUILD_LIBCINT=0 -DBUILD_LIBXC=0 -DBUILD_XCFUN=0"
@@ -40,7 +41,7 @@ buildPythonPackage rec {
     xcfun
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     cppe
     h5py
     numpy
@@ -99,7 +100,10 @@ buildPythonPackage rec {
     description = "Python-based simulations of chemistry framework";
     homepage = "https://github.com/pyscf/pyscf";
     license = licenses.asl20;
-    platforms = [ "x86_64-linux" "x86_64-darwin" ];
+    platforms = [
+      "x86_64-linux"
+      "x86_64-darwin"
+    ];
     maintainers = [ maintainers.sheepforce ];
   };
 }

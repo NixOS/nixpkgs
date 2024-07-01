@@ -1,20 +1,18 @@
 { config, pkgs, lib, ... }:
 
-with lib;
-
 let
   cfg = config.programs.geary;
 
 in {
   meta = {
-    maintainers = teams.gnome.members;
+    maintainers = lib.teams.gnome.members;
   };
 
   options = {
-    programs.geary.enable = mkEnableOption "Geary, a Mail client for GNOME";
+    programs.geary.enable = lib.mkEnableOption "Geary, a Mail client for GNOME";
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     environment.systemPackages = [ pkgs.gnome.geary ];
     programs.dconf.enable = true;
     services.gnome.gnome-keyring.enable = true;

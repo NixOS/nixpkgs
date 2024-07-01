@@ -210,5 +210,5 @@ in
     };
   };
 
-  meta.maintainers = [ lib.maintainers.piegames ];
+  meta.maintainers = [ ];
 }

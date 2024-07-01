@@ -30,7 +30,7 @@ rustPlatform.buildRustPackage rec {
   cargoTestFlags = [ "-p" "cargo-guppy" ];
 
   meta = with lib; {
-    description = "A command-line frontend for guppy";
+    description = "Command-line frontend for guppy";
     mainProgram = "cargo-guppy";
     homepage = "https://github.com/guppy-rs/guppy/tree/main/cargo-guppy";
     license = with licenses; [ mit /* or */ asl20 ];

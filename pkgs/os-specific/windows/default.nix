@@ -34,10 +34,6 @@ lib.makeScope newScope (self: with self; {
     stdenv = crossThreadsStdenv;
   };
 
-  mcfgthreads_pre_gcc_13 = callPackage ./mcfgthreads/pre_gcc_13.nix {
-    stdenv = crossThreadsStdenv;
-  };
-
   mcfgthreads = callPackage ./mcfgthreads {
     stdenv = crossThreadsStdenv;
   };

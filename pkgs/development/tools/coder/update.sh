@@ -5,11 +5,10 @@ set -eu -o pipefail
 
 cd "$(dirname "${BASH_SOURCE[0]}")"
 
-LATEST_STABLE_VERSION=$(curl ${GITHUB_TOKEN:+" -u \":$GITHUB_TOKEN\""} --fail -sSL https://api.github.com/repos/coder/coder/releases | jq -r 'map(select(.prerelease == false)) | sort_by(.tag_name | sub("^v"; "") | split(".") | map(tonumber)) | .[-1].tag_name | sub("^v"; "")')
-
-# Fetch the latest mainline version
-LATEST_MAINLINE_TAG=$(curl ${GITHUB_TOKEN:+" -u \":$GITHUB_TOKEN\""} --silent https://api.github.com/repos/coder/coder/releases | jq -r '.[0].tag_name')
-LATEST_MAINLINE_VERSION=$(echo ${LATEST_MAINLINE_TAG} | sed 's/^v//')
+# The released tagged as "latest" is always stable.
+LATEST_STABLE_VERSION=$(curl ${GITHUB_TOKEN:+" -u \":$GITHUB_TOKEN\""} --fail -sSL https://api.github.com/repos/coder/coder/releases/latest | jq -r '.tag_name | sub("^v"; "")')
+# The highest version that is not a pre-release is the latest mainline version.
+LATEST_MAINLINE_VERSION=$(curl ${GITHUB_TOKEN:+" -u \":$GITHUB_TOKEN\""} --fail -sSL https://api.github.com/repos/coder/coder/releases | jq -r 'map(select(.prerelease == false)) | sort_by(.tag_name | sub("^v"; "") | split(".") | map(tonumber)) | .[-1].tag_name | sub("^v"; "")')
 
 # Define the platforms
 declare -A ARCHS=(["x86_64-linux"]="linux_amd64.tar.gz"

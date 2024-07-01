@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, dnspython
-, fetchPypi
-, idna
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  dnspython,
+  fetchPypi,
+  idna,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -25,9 +26,7 @@ buildPythonPackage rec {
     idna
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTestPaths = [
     # dns.resolver.NoResolverConfiguration: cannot open /etc/resolv.conf
@@ -35,9 +34,7 @@ buildPythonPackage rec {
     "tests/test_main.py"
   ];
 
-  pythonImportsCheck = [
-    "email_validator"
-  ];
+  pythonImportsCheck = [ "email_validator" ];
 
   meta = with lib; {
     description = "Email syntax and deliverability validation library";

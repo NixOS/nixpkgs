@@ -16,7 +16,7 @@
 , libxml2
 , gettext
 , docbook-xsl-nons
-, wrapGAppsHook
+, wrapGAppsHook3
 , gobject-introspection
 }:
 
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     vala
     libxslt
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
     gettext
     docbook-xsl-nons
     libxml2
@@ -72,7 +72,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "GSettings editor for GNOME";
     mainProgram = "dconf-editor";
-    homepage = "https://wiki.gnome.org/Apps/DconfEditor";
+    homepage = "https://apps.gnome.org/DconfEditor/";
     license = licenses.gpl3Plus;
     maintainers = teams.gnome.members;
     platforms = platforms.unix;

@@ -1,27 +1,28 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, isPyPy
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  isPyPy,
 
-# build-system
-, poetry-core
-, rustPlatform
+  # build-system
+  poetry-core,
+  rustPlatform,
 
-# native dependencies
-, iconv
+  # native dependencies
+  iconv,
 
-# dependencies
-, backports-zoneinfo
-, importlib-resources
-, python-dateutil
-, time-machine
-, tzdata
+  # dependencies
+  backports-zoneinfo,
+  importlib-resources,
+  python-dateutil,
+  time-machine,
+  tzdata,
 
-# tests
-, pytestCheckHook
-, pytz
+  # tests
+  pytestCheckHook,
+  pytz,
 }:
 
 buildPythonPackage rec {
@@ -59,35 +60,32 @@ buildPythonPackage rec {
     rustPlatform.cargoSetupHook
   ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [
-    iconv
-  ];
+  buildInputs = lib.optionals stdenv.isDarwin [ iconv ];
 
-  propagatedBuildInputs = [
-    python-dateutil
-    tzdata
-  ] ++ lib.optional (!isPyPy) [
-    time-machine
-  ] ++ lib.optionals (pythonOlder "3.9") [
-    backports-zoneinfo
-    importlib-resources
-  ];
+  propagatedBuildInputs =
+    [
+      python-dateutil
+      tzdata
+    ]
+    ++ lib.optional (!isPyPy) [ time-machine ]
+    ++ lib.optionals (pythonOlder "3.9") [
+      backports-zoneinfo
+      importlib-resources
+    ];
 
-  pythonImportsCheck = [
-    "pendulum"
-  ];
+  pythonImportsCheck = [ "pendulum" ];
 
   nativeCheckInputs = [
     pytestCheckHook
     pytz
   ];
 
-  disabledTestPaths = [
-    "tests/benchmarks"
-  ] ++ lib.optionals stdenv.isDarwin [
-    # PermissionError: [Errno 1] Operation not permitted: '/etc/localtime'
-    "tests/testing/test_time_travel.py"
-  ];
+  disabledTestPaths =
+    [ "tests/benchmarks" ]
+    ++ lib.optionals stdenv.isDarwin [
+      # PermissionError: [Errno 1] Operation not permitted: '/etc/localtime'
+      "tests/testing/test_time_travel.py"
+    ];
 
   meta = with lib; {
     description = "Python datetimes made easy";

@@ -14,7 +14,18 @@
 , libllvm
 , linuxHeaders
 , libxcrypt
+
+# Some platforms have switched to using compiler-rt, but still want a
+# libgcc.a for ABI compat purposes. The use case would be old code that
+# expects to link `-lgcc` but doesn't care exactly what its contents
+# are, so long as it provides some builtins.
 , doFakeLibgcc ? stdenv.hostPlatform.isFreeBSD
+
+# In recent releases, the compiler-rt build seems to produce
+# many `libclang_rt*` libraries, but not a single unified
+# `libcompiler_rt` library, at least under certain configurations. Some
+# platforms stil expect this, however, so we symlink one into place.
+, forceLinkCompilerRt ? stdenv.hostPlatform.isOpenBSD
 }:
 
 let
@@ -128,11 +139,17 @@ stdenv.mkDerivation ({
   '') + ''
     substituteInPlace lib/builtins/int_util.c \
       --replace "#include <stdlib.h>" ""
+  '' + (if stdenv.hostPlatform.isFreeBSD then
+    # As per above, but in FreeBSD assert is a macro and simply allowing it to be implicitly declared causes Issues!!!!!
+    ''
+    substituteInPlace lib/builtins/clear_cache.c lib/builtins/cpu_model.c \
+      --replace "#include <assert.h>" "#define assert(e) ((e)?(void)0:__assert(__FUNCTION__,__FILE__,__LINE__,#e))"
+    '' else ''
     substituteInPlace lib/builtins/clear_cache.c \
       --replace "#include <assert.h>" ""
     substituteInPlace lib/builtins/cpu_model${lib.optionalString (lib.versionAtLeast version "18") "/x86"}.c \
       --replace "#include <assert.h>" ""
-  '');
+  ''));
 
   # Hack around weird upsream RPATH bug
   postInstall = lib.optionalString (stdenv.hostPlatform.isDarwin) ''
@@ -149,7 +166,9 @@ stdenv.mkDerivation ({
     ln -s $out/lib/*/clang_rt.crtbegin_shared-*.o $out/lib/crtbeginS.o
     ln -s $out/lib/*/clang_rt.crtend_shared-*.o $out/lib/crtendS.o
   '' + lib.optionalString doFakeLibgcc ''
-     ln -s $out/lib/freebsd/libclang_rt.builtins-*.a $out/lib/libgcc.a
+     ln -s $out/lib/*/libclang_rt.builtins-*.a $out/lib/libgcc.a
+  '' + lib.optionalString forceLinkCompilerRt ''
+     ln -s $out/lib/*/libclang_rt.builtins-*.a $out/lib/libcompiler_rt.a
   '';
 
   meta = llvm_meta // {

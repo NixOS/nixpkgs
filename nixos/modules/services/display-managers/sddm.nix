@@ -66,7 +66,14 @@ let
       HideShells = "/run/current-system/sw/bin/nologin";
     };
 
-    X11 = optionalAttrs xcfg.enable {
+    Wayland = {
+      EnableHiDPI = cfg.enableHidpi;
+      SessionDir = "${dmcfg.sessionData.desktops}/share/wayland-sessions";
+      CompositorCommand = lib.optionalString cfg.wayland.enable cfg.wayland.compositorCommand;
+    };
+
+  } // optionalAttrs xcfg.enable {
+    X11 = {
       MinimumVT = if xcfg.tty != null then xcfg.tty else 7;
       ServerPath = toString xserverWrapper;
       XephyrPath = "${pkgs.xorg.xorgserver.out}/bin/Xephyr";
@@ -76,12 +83,6 @@ let
       DisplayCommand = toString Xsetup;
       DisplayStopCommand = toString Xstop;
       EnableHiDPI = cfg.enableHidpi;
-    };
-
-    Wayland = {
-      EnableHiDPI = cfg.enableHidpi;
-      SessionDir = "${dmcfg.sessionData.desktops}/share/wayland-sessions";
-      CompositorCommand = lib.optionalString cfg.wayland.enable cfg.wayland.compositorCommand;
     };
   } // optionalAttrs dmcfg.autoLogin.enable {
     Autologin = {

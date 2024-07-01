@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/zraorg/ZRA";
     description = "Library for ZStandard random access";
     platforms = platforms.all;
-    maintainers = [ maintainers.ivar ];
+    maintainers = [ ];
     license = licenses.bsd3;
   };
 }

@@ -27,7 +27,7 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    description = "An experimental distribution of Temporal that runs as a single process";
+    description = "Experimental distribution of Temporal that runs as a single process";
     mainProgram = "temporalite";
     homepage = "https://github.com/temporalio/temporalite";
     license = licenses.mit;

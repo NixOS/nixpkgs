@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "wxsqlite3";
-  version = "4.9.10";
+  version = "4.9.11";
 
   src = fetchFromGitHub {
     owner = "utelle";
     repo = "wxsqlite3";
     rev = "v${version}";
-    hash = "sha256-L7GpDAqx7hF/PBLy6h10pAydpjaJU3JFgTZ2bJhZtG0=";
+    hash = "sha256-aX1YU35ATL+f18tGIba6cgNYZvYm3TshHsN7RFD+vI4=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://utelle.github.io/wxsqlite3/";
-    description = "A C++ wrapper around the public domain SQLite 3.x for wxWidgets";
+    description = "C++ wrapper around the public domain SQLite 3.x for wxWidgets";
     platforms = platforms.unix;
     maintainers = with maintainers; [ vrthra ];
     license = with licenses; [ lgpl3Plus gpl3Plus ];

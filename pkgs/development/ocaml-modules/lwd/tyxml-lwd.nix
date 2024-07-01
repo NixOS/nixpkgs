@@ -1,4 +1,4 @@
-{ lib, fetchurl, fetchpatch, buildDunePackage, js_of_ocaml, js_of_ocaml-ppx, lwd, tyxml }:
+{ lib, fetchpatch, buildDunePackage, js_of_ocaml, js_of_ocaml-ppx, lwd, tyxml }:
 
 buildDunePackage {
   pname = "tyxml-lwd";

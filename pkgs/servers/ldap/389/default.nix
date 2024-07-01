@@ -31,26 +31,35 @@
 , withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd, systemd
 , zlib
 , rsync
+, fetchpatch
 , withCockpit ? true
 , withAsan ? false
 }:
 
 stdenv.mkDerivation rec {
   pname = "389-ds-base";
-  version = "2.4.3";
+  version = "2.4.5";
 
   src = fetchFromGitHub {
     owner = "389ds";
     repo = pname;
     rev = "${pname}-${version}";
-    hash = "sha256-bUjL1fjzyrq9jjpB/xbRCAISiPBwrlXbbDqT0aLOVOc=";
+    hash = "sha256-12JCd2R00L0T5EPUNO/Aw2HRID+z2krNQ09RSX9Qkj8=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "fix-32bit.patch";
+      url = "https://github.com/389ds/389-ds-base/commit/1fe029c495cc9f069c989cfbb09d449a078c56e2.patch";
+      hash = "sha256-b0HSaDjuEUKERIXKg8np+lZDdZNmrCTAXybJzF+0hq0=";
+    })
+  ];
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     sourceRoot = "${src.name}/src";
     name = "${pname}-${version}";
-    hash = "sha256-FlrHaz1whwzDvm3MA+wEaQpq7h2X9ZDnQc3f73vLZ58=";
+    hash = "sha256-fE3bJROwti9Ru0jhCiWhXcuQdxXTqzN9yOd2nlhKABI=";
   };
 
   nativeBuildInputs = [
@@ -141,9 +150,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = [ maintainers.ners ];
-    # https://hydra.nixos.org/build/249763145, doesn't build since glibc 2.39.
-    # Potential fix is documented in https://github.com/389ds/389-ds-base/issues/5332,
-    # but it doesn't apply here.
-    broken = true;
   };
 }

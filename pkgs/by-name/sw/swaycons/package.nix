@@ -5,21 +5,21 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "swaycons";
-  version = "unstable-2023-01-05";
+  version = "unstable-2023-11-29";
 
   src = fetchFromGitHub {
-    owner = "ActuallyAllie";
+    owner = "allie-wake-up";
     repo = "swaycons";
-    rev = "e863599fb56177fc9747d60db661be2d7c2d290b";
-    hash = "sha256-zkCpZ3TehFKNePtSyFaEk+MA4mi1+la9yFjRPFy+eq8=";
+    rev = "aa1102393be34e8bd7ed4e74c574e851fbd8cff9";
+    hash = "sha256-vyZcfBH2mry8Yd41QPX4+yLv0nS9J1yrgg7lpslJs7M=";
   };
 
-  cargoSha256 = "sha256-GcoRx52dwL/ehJ1Xg6xQHVzPIKXWqBrG7IjzxRjfgqA=";
+  cargoSha256 = "sha256-cdZ7DpH//c9TulvPYd6aaXpQHYC1b+T7BrxAyr56Pf0=";
 
   meta = with lib; {
     description = "Window Icons in Sway with Nerd Fonts!";
     mainProgram = "swaycons";
-    homepage = "https://github.com/ActuallyAllie/swaycons";
+    homepage = "https://github.com/allie-wake-up/swaycons";
     license = licenses.asl20;
     platforms = platforms.linux;
     maintainers = with maintainers; [ aacebedo ];

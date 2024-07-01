@@ -3,7 +3,7 @@
 , cargo
 , copyDesktopItems
 , dbus
-, electron_28
+, electron_29
 , fetchFromGitHub
 , glib
 , gnome
@@ -14,7 +14,7 @@
 , makeWrapper
 , moreutils
 , napi-rs-cli
-, nodejs_18
+, nodejs_20
 , patchutils_0_4_2
 , pkg-config
 , python3
@@ -24,18 +24,18 @@
 }:
 
 let
-  description = "A secure and free password manager for all of your devices";
+  description = "Secure and free password manager for all of your devices";
   icon = "bitwarden";
-  electron = electron_28;
+  electron = electron_29;
 in buildNpmPackage rec {
   pname = "bitwarden-desktop";
-  version = "2024.4.1";
+  version = "2024.6.0";
 
   src = fetchFromGitHub {
     owner = "bitwarden";
     repo = "clients";
     rev = "desktop-v${version}";
-    hash = "sha256-UzVzo8tq719W2EwUE4NfvUrqhb61fvd60EGkavQmv3Q=";
+    hash = "sha256-qiUUrs23WHE3+KFsWDknuDSA6M3Zwjz9Jdjq6mn5XkE=";
   };
 
   patches = [
@@ -55,12 +55,12 @@ in buildNpmPackage rec {
       | ${moreutils}/bin/sponge apps/desktop/src/package-lock.json
   '';
 
-  nodejs = nodejs_18;
+  nodejs = nodejs_20;
 
   makeCacheWritable = true;
-  npmFlags = [ "--legacy-peer-deps" ];
+  npmFlags = [ "--engine-strict" "--legacy-peer-deps" ];
   npmWorkspace = "apps/desktop";
-  npmDepsHash = "sha256-qkg1psct/ekIXB6QmJX1n/UOKUhYSD9Su7t/b4/4miM=";
+  npmDepsHash = "sha256-Mgd15eFJtWoBqFFCsjmsnlNbcg5NDs1U7DlMkE0hIb8=";
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     name = "${pname}-${version}";
@@ -76,7 +76,7 @@ in buildNpmPackage rec {
       patches;
     patchFlags = [ "-p4" ];
     sourceRoot = "${src.name}/${cargoRoot}";
-    hash = "sha256-lvEJmjzhpMhm+9INYHWpdltinUOI3DMtFN/ddDQrUvo=";
+    hash = "sha256-BL+j2hMwb3QGgS29Y6LjqnKscH+tEXMCOyivilHHwVI=";
   };
   cargoRoot = "apps/desktop/desktop_native";
 
@@ -159,7 +159,7 @@ in buildNpmPackage rec {
     cp -r locales resources{,.pak} $out/opt/Bitwarden
     popd
 
-    makeWrapper '${electron}/bin/electron' "$out/bin/bitwarden" \
+    makeWrapper '${lib.getExe electron}' "$out/bin/bitwarden" \
       --add-flags $out/opt/Bitwarden/resources/app.asar \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
       --set-default ELECTRON_IS_DEV 0 \
@@ -192,7 +192,7 @@ in buildNpmPackage rec {
     inherit description;
     homepage = "https://bitwarden.com";
     license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [ amarshall kiwi ];
+    maintainers = with lib.maintainers; [ amarshall ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "bitwarden";
   };

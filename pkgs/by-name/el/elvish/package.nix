@@ -41,7 +41,7 @@ buildGoModule {
 
   meta = {
     homepage = "https://elv.sh/";
-    description = "A friendly and expressive command shell";
+    description = "Friendly and expressive command shell";
     mainProgram = "elvish";
     longDescription = ''
       Elvish is a friendly interactive shell and an expressive programming

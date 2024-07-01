@@ -52,7 +52,7 @@
 , udisks2
 , upower
 , webp-pixbuf-loader
-, wrapGAppsHook
+, wrapGAppsHook3
 , enableSshSocket ? false
 }:
 
@@ -86,7 +86,7 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     pkg-config
     shared-mime-info
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -168,7 +168,7 @@ stdenv.mkDerivation (finalAttrs: {
   separateDebugInfo = true;
 
   meta = {
-    description = "A fork of GNOME Control Center for the Budgie 10 Series";
+    description = "Fork of GNOME Control Center for the Budgie 10 Series";
     homepage = "https://github.com/BuddiesOfBudgie/budgie-control-center";
     mainProgram = "budgie-control-center";
     platforms = lib.platforms.linux;

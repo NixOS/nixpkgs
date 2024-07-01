@@ -39,7 +39,7 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A Qt5/Qt6 library to write cross-platform clients for Matrix";
+    description = "Qt5/Qt6 library to write cross-platform clients for Matrix";
     homepage = "https://quotient-im.github.io/libQuotient/";
     license = licenses.lgpl21;
     maintainers = with maintainers; [ colemickens matthiasbeyer ];

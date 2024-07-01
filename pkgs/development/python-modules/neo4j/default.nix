@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "neo4j";
-  version = "5.20.0";
+  version = "5.22.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "neo4j";
     repo = "neo4j-python-driver";
     rev = "refs/tags/${version}";
-    hash = "sha256-ebWEtsgVj2NLYAKe8z6ge6TvnPmXh0Mqkx0b+ZcOePY=";
+    hash = "sha256-/yilbKui0D49zviNM9MI5ElGAYPB3MlbMgpDyI1kVX8=";
   };
 
   postPatch = ''

@@ -1,7 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -19,9 +20,7 @@ buildPythonPackage rec {
     hash = "sha256-JthHYq78SYr49+sTNtLZ8GjtrHcr1dzXcPskTrb4M3o=";
   };
 
-  pythonImportsCheck = [
-    "heatshrink2"
-  ];
+  pythonImportsCheck = [ "heatshrink2" ];
 
   meta = with lib; {
     description = "Compression using the Heatshrink algorithm";

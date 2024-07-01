@@ -1,12 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, django
-, django-appconf
-, celery
-, pytest-django
-, pytestCheckHook
-, python }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  django,
+  django-appconf,
+  celery,
+  pytest-django,
+  pytestCheckHook,
+  python,
+}:
 
 buildPythonPackage rec {
   pname = "django-celery-email";

@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "An image viewer and organizer";
+    description = "Image viewer and organizer";
     mainProgram = "phototonic";
     homepage = "https://github.com/oferkv/phototonic";
     license = licenses.gpl3Plus;

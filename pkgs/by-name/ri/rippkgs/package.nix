@@ -27,7 +27,7 @@ rustPlatform.buildRustPackage rec {
   ];
 
   meta = {
-    description = "A CLI for indexing and searching packages in Nix expressions";
+    description = "CLI for indexing and searching packages in Nix expressions";
     homepage = "https://github.com/replit/rippkgs";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ eclairevoyant cdmistman ];

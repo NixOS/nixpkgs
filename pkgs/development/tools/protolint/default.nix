@@ -1,16 +1,16 @@
 { lib, buildGoModule, fetchFromGitHub }:
 buildGoModule rec {
   pname = "protolint";
-  version = "0.49.6";
+  version = "0.50.1";
 
   src = fetchFromGitHub {
     owner = "yoheimuta";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-wGAHc0I2ewXJeHPH2qO6V3ScixUAMIX5U7zCBi4fqew=";
+    hash = "sha256-zn9bxOWJWlF3lpVAuJQTTnBqNeTAZg+0bPVGAzf3a54=";
   };
 
-  vendorHash = "sha256-0+GaTE/qKfPfZpkzUBglIXQoZD6fYkX6Z3QabkZ+IcE=";
+  vendorHash = "sha256-E3pzeu+JA97z2q21ARTgwTPldhWODqkCP7rQMMKygAw=";
 
   # Something about the way we run tests causes issues. It doesn't happen
   # when using "go test" directly:
@@ -30,7 +30,7 @@ buildGoModule rec {
   ];
 
   meta = with lib; {
-    description = "A pluggable linter and fixer to enforce Protocol Buffer style and conventions";
+    description = "Pluggable linter and fixer to enforce Protocol Buffer style and conventions";
     homepage = "https://github.com/yoheimuta/protolint";
     license = licenses.mit;
     platforms = platforms.all;

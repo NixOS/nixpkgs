@@ -1,19 +1,20 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, build
-, click
-, fetchPypi
-, pep517
-, pip
-, pytest-xdist
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, setuptools-scm
-, tomli
-, tomli-w
-, wheel
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  build,
+  click,
+  fetchPypi,
+  pep517,
+  pip,
+  pytest-xdist,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  setuptools-scm,
+  tomli,
+  tomli-w,
+  wheel,
 }:
 
 buildPythonPackage rec {
@@ -30,9 +31,7 @@ buildPythonPackage rec {
 
   patches = [ ./fix-setup-py-bad-syntax-detection.patch ];
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
 
   propagatedBuildInputs = [
     build
@@ -41,9 +40,7 @@ buildPythonPackage rec {
     pip
     setuptools
     wheel
-  ] ++ lib.optionals (pythonOlder "3.11") [
-    tomli
-  ];
+  ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
   __darwinAllowLocalNetworking = true;
 
@@ -73,9 +70,7 @@ buildPythonPackage rec {
     "test_error_in_pyproject_toml"
   ];
 
-  pythonImportsCheck = [
-    "piptools"
-  ];
+  pythonImportsCheck = [ "piptools" ];
 
   meta = with lib; {
     description = "Keeps your pinned dependencies fresh";

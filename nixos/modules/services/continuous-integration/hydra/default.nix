@@ -335,7 +335,7 @@ in
           mkdir -m 0700 -p ${baseDir}/queue-runner
           mkdir -m 0750 -p ${baseDir}/build-logs
           mkdir -m 0750 -p ${baseDir}/runcommand-logs
-          chown hydra-queue-runner.hydra \
+          chown hydra-queue-runner:hydra \
             ${baseDir}/queue-runner \
             ${baseDir}/build-logs \
             ${baseDir}/runcommand-logs

@@ -1,23 +1,23 @@
 { lib, rustPlatform, fetchFromGitHub, pkg-config, openssl, stdenv, CoreServices
-, Security }:
+, Security, SystemConfiguration }:
 
 rustPlatform.buildRustPackage rec {
   pname = "railway";
-  version = "3.7.0";
+  version = "3.9.3";
 
   src = fetchFromGitHub {
     owner = "railwayapp";
     repo = "cli";
     rev = "v${version}";
-    hash = "sha256-a3d1FtcXSLL8peveBagTEF6EcNADNDhnLAmyCfTW4+4=";
+    hash = "sha256-8K+awKsSQotPqVJg7SkpPCjenU6a/cqEZogqwQAe0I8=";
   };
 
-  cargoHash = "sha256-fwraQd7dOamhc3Tp3yLxASWCVhDOxj4vX7oTTOufkeY=";
+  cargoHash = "sha256-2KNSPn0zrx5zwF9g29x3/L/ptza+NstBu4Lc1PR4ymE=";
 
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ openssl ]
-    ++ lib.optionals stdenv.isDarwin [ CoreServices Security ];
+    ++ lib.optionals stdenv.isDarwin [ CoreServices Security SystemConfiguration ];
 
   OPENSSL_NO_VENDOR = 1;
 

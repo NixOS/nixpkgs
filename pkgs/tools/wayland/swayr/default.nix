@@ -25,7 +25,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = {
-    description = "A window switcher (and more) for sway";
+    description = "Window switcher (and more) for sway";
     homepage = "https://git.sr.ht/~tsdh/swayr";
     license = lib.licenses.gpl3Plus;
     mainProgram = "swayr";

@@ -1,10 +1,11 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, setuptools
-, urllib3
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  setuptools,
+  urllib3,
 }:
 
 buildPythonPackage rec {
@@ -20,9 +21,7 @@ buildPythonPackage rec {
     hash = "sha256-2lEKPu5vjyqNUqz1NGmZ5b6YP3oWnCgoubDdiQCbdps=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     aiohttp
@@ -32,9 +31,7 @@ buildPythonPackage rec {
   # No tests are present
   doCheck = false;
 
-  pythonImportsCheck = [
-    "opendata_transport"
-  ];
+  pythonImportsCheck = [ "opendata_transport" ];
 
   meta = with lib; {
     description = "Python client for interacting with transport.opendata.ch";

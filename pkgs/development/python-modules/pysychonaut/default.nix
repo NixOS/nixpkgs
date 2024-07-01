@@ -1,4 +1,11 @@
-{ lib, buildPythonPackage, fetchPypi, requests, requests-cache, beautifulsoup4 }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  requests,
+  requests-cache,
+  beautifulsoup4,
+}:
 
 buildPythonPackage rec {
   pname = "pysychonaut";
@@ -14,7 +21,11 @@ buildPythonPackage rec {
     substituteInPlace setup.py --replace "bs4" "beautifulsoup4"
   '';
 
-  propagatedBuildInputs = [ requests requests-cache beautifulsoup4 ];
+  propagatedBuildInputs = [
+    requests
+    requests-cache
+    beautifulsoup4
+  ];
 
   # No tests available
   doCheck = false;
@@ -23,7 +34,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Unofficial python api for Erowid, PsychonautWiki and AskTheCaterpillar";
     homepage = "https://github.com/OpenJarbas/PySychonaut";
-    maintainers = [ maintainers.ivar ];
+    maintainers = [ ];
     license = licenses.asl20;
   };
 }

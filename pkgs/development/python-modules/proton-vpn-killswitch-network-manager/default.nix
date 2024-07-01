@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, gobject-introspection
-, setuptools
-, networkmanager
-, proton-vpn-killswitch
-, proton-vpn-logger
-, pycairo
-, pygobject3
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  gobject-introspection,
+  setuptools,
+  networkmanager,
+  proton-vpn-killswitch,
+  proton-vpn-logger,
+  pycairo,
+  pygobject3,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -45,14 +46,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "proton.vpn.killswitch.backend.linux.networkmanager" ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     description = "Implementation of the proton-vpn-killswitch interface using Network Manager";
     homepage = "https://github.com/ProtonVPN/python-proton-vpn-killswitch-network-manager";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ wolfangaukang ];
+    maintainers = [ ];
   };
 }

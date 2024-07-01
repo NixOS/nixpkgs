@@ -10,6 +10,6 @@ buildDunePackage {
   propagatedBuildInputs = [ dolmen spelll uutf ];
 
   meta = dolmen.meta // {
-    description = "A typechecker for automated deduction languages";
+    description = "Typechecker for automated deduction languages";
   };
 }

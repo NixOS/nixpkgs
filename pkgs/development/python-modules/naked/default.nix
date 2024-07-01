@@ -1,13 +1,14 @@
-{ buildPythonPackage
-, fetchFromGitHub
-, lib
-, requests
-, pyyaml
-, setuptools
-, wheel
-, nodejs
-, ruby
-, pytestCheckHook
+{
+  buildPythonPackage,
+  fetchFromGitHub,
+  lib,
+  requests,
+  pyyaml,
+  setuptools,
+  wheel,
+  nodejs,
+  ruby,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -28,16 +29,23 @@ buildPythonPackage rec {
       --replace /Users/ces/Desktop/code/naked /build/source
   '';
 
-  nativeBuildInputs = [ wheel setuptools ];
+  nativeBuildInputs = [
+    wheel
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     requests
     pyyaml
   ];
 
-  nativeCheckInputs = [ pytestCheckHook nodejs ruby ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    nodejs
+    ruby
+  ];
 
-  preCheck =''
+  preCheck = ''
     cd tests
 
     PATH=$PATH:$out/bin
@@ -94,7 +102,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "Naked" ];
 
   meta = with lib; {
-    description = "A Python command line application framework";
+    description = "Python command line application framework";
     homepage = "https://github.com/chrissimpkins/naked";
     downloadPage = "https://github.com/chrissimpkins/naked/tags";
     license = licenses.mit;

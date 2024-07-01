@@ -67,7 +67,7 @@ in melpaBuild {
   '';
 
   meta = {
-    description = "A chat client and API wrapper for Matrix.org";
+    description = "Chat client and API wrapper for Matrix.org";
     license = lib.licenses.gpl3Plus;
   };
 }

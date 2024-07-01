@@ -16,7 +16,7 @@ buildGoModule rec {
   subPackages = [ "cmd/gen" ];
 
   meta = with lib; {
-    description = "An implementation of the BARE message format for Go";
+    description = "Implementation of the BARE message format for Go";
     mainProgram = "gen";
     homepage = "https://git.sr.ht/~sircmpwn/go-bare";
     license = licenses.asl20;

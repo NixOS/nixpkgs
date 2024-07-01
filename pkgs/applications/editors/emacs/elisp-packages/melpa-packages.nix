@@ -508,14 +508,29 @@ let
 
         rime = super.rime.overrideAttrs (old: {
           buildInputs = (old.buildInputs or [ ]) ++ [ pkgs.librime ];
-          preBuild = (old.preBuild or "") + ''
+          preBuild = (old.preBuild or "") +
+          (if pkgs.stdenv.isDarwin then
+            ''
+              export MODULE_FILE_SUFFIX=".dylib"
+              make lib
+              mkdir -p /tmp/build/rime-lib
+              cp *.dylib /tmp/build/rime-lib
+            ''
+          else
+          ''
             make lib
             mkdir -p /build/rime-lib
             cp *.so /build/rime-lib
-          '';
-          postInstall = (old.postInstall or "") + ''
+          '');
+          postInstall = (old.postInstall or "") +
+          (if pkgs.stdenv.isDarwin then
+          ''
+            install -m444 -t $out/share/emacs/site-lisp/elpa/rime-* /tmp/build/rime-lib/*.dylib
+          ''
+          else
+          ''
             install -m444 -t $out/share/emacs/site-lisp/elpa/rime-* /build/rime-lib/*.so
-          '';
+          '');
         });
 
         shm = super.shm.overrideAttrs (attrs: {

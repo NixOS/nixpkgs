@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, formencode
-, pastedeploy
-, paste
-, pydispatcher
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
+  formencode,
+  pastedeploy,
+  paste,
+  pydispatcher,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -29,18 +30,14 @@ buildPythonPackage rec {
     pydispatcher
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTests = [
     # https://github.com/sqlobject/sqlobject/issues/179
     "test_fail"
   ];
 
-  pythonImportsCheck = [
-    "sqlobject"
-  ];
+  pythonImportsCheck = [ "sqlobject" ];
 
   meta = with lib; {
     description = "Object Relational Manager for providing an object interface to your database";

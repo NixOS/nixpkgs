@@ -53,7 +53,7 @@ in {
           pkgs.substitute {
             src = "${systemd}/example/sysctl.d/50-coredump.conf";
             substitutions = [
-              "--replace"
+              "--replace-fail"
               "${systemd}"
               "${pkgs.symlinkJoin { name = "systemd"; paths = [ systemd ]; }}"
             ];

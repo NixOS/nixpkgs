@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, cramjam
-, setuptools
-, snappy
-, unittestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  cramjam,
+  setuptools,
+  snappy,
+  unittestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -24,9 +25,7 @@ buildPythonPackage rec {
 
   buildInputs = [ snappy ];
 
-  dependencies = [
-    cramjam
-  ];
+  dependencies = [ cramjam ];
 
   nativeCheckInputs = [ unittestCheckHook ];
 

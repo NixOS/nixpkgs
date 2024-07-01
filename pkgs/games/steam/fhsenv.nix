@@ -190,11 +190,14 @@ in buildFHSEnv rec {
     libvdpau
 
     # required by coreutils stuff to run correctly
-    # Steam ends up with LD_LIBRARY_PATH=<bunch of runtime stuff>:/usr/lib:<etc>
+    # Steam ends up with LD_LIBRARY_PATH=/usr/lib:<bunch of runtime stuff>:<etc>
     # which overrides DT_RUNPATH in our binaries, so it tries to dynload the
     # very old versions of stuff from the runtime.
     # FIXME: how do we even fix this correctly
     attr
+    # same thing, but for Xwayland (usually via gamescope), already in the closure
+    libkrb5
+    keyutils
   ] ++ lib.optionals withGameSpecificLibraries [
     # Not formally in runtime but needed by some games
     at-spi2-atk
@@ -277,7 +280,7 @@ in buildFHSEnv rec {
     WARNING: Steam is not set up. Add the following options to /etc/nixos/configuration.nix
     and then run \`sudo nixos-rebuild switch\`:
     {
-      hardware.opengl.driSupport32Bit = true;
+      hardware.graphics.enable32Bit = true;
       hardware.pulseaudio.support32Bit = true;
     }
     **

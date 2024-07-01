@@ -12,7 +12,7 @@ with lib;
     system.nssModules = mkOption {
       type = types.listOf types.path;
       internal = true;
-      default = [];
+      default = [ ];
       description = ''
         Search path for NSS (Name Service Switch) modules.  This allows
         several DNS resolution methods to be specified via
@@ -35,7 +35,7 @@ with lib;
 
           This option only takes effect if nscd is enabled.
         '';
-        default = [];
+        default = [ ];
       };
 
       group = mkOption {
@@ -47,7 +47,7 @@ with lib;
 
           This option only takes effect if nscd is enabled.
         '';
-        default = [];
+        default = [ ];
       };
 
       shadow = mkOption {
@@ -59,7 +59,19 @@ with lib;
 
           This option only takes effect if nscd is enabled.
         '';
-        default = [];
+        default = [ ];
+      };
+
+      sudoers = mkOption {
+        type = types.listOf types.str;
+        description = ''
+          List of sudoers entries to configure in {file}`/etc/nsswitch.conf`.
+
+          Note that "files" is always prepended.
+
+          This option only takes effect if nscd is enabled.
+        '';
+        default = [ ];
       };
 
       hosts = mkOption {
@@ -71,7 +83,7 @@ with lib;
 
           This option only takes effect if nscd is enabled.
         '';
-        default = [];
+        default = [ ];
       };
 
       services = mkOption {
@@ -83,7 +95,7 @@ with lib;
 
           This option only takes effect if nscd is enabled.
         '';
-        default = [];
+        default = [ ];
       };
     };
   };
@@ -112,6 +124,7 @@ with lib;
       passwd:    ${concatStringsSep " " config.system.nssDatabases.passwd}
       group:     ${concatStringsSep " " config.system.nssDatabases.group}
       shadow:    ${concatStringsSep " " config.system.nssDatabases.shadow}
+      sudoers:   ${concatStringsSep " " config.system.nssDatabases.sudoers}
 
       hosts:     ${concatStringsSep " " config.system.nssDatabases.hosts}
       networks:  files
@@ -126,6 +139,7 @@ with lib;
       passwd = mkBefore [ "files" ];
       group = mkBefore [ "files" ];
       shadow = mkBefore [ "files" ];
+      sudoers = mkBefore [ "files" ];
       hosts = mkMerge [
         (mkOrder 998 [ "files" ])
         (mkOrder 1499 [ "dns" ])

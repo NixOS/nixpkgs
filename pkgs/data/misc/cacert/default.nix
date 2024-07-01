@@ -24,7 +24,7 @@ let
   version = if nssOverride != null then nssOverride.version else srcVersion;
   meta = with lib; {
     homepage = "https://curl.haxx.se/docs/caextract.html";
-    description = "A bundle of X.509 certificates of public Certificate Authorities (CA)";
+    description = "Bundle of X.509 certificates of public Certificate Authorities (CA)";
     platforms = platforms.all;
     maintainers = with maintainers; [ fpletz lukegb ];
     license = licenses.mpl20;

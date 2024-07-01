@@ -35,7 +35,7 @@ maven.buildMavenPackage rec {
   '';
 
   meta = with lib; {
-    description = "A library for extracting tables from PDF files.";
+    description = "Library for extracting tables from PDF files";
     longDescription = ''
       tabula-java is the table extraction engine that powers
       Tabula. You can use tabula-java as a command-line tool to

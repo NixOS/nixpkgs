@@ -40,7 +40,7 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     platforms = platforms.linux;
     maintainers = with maintainers; [ globin ];
-    description = "A time traveling resource monitor for modern Linux systems";
+    description = "Time traveling resource monitor for modern Linux systems";
     license = licenses.asl20;
     homepage = "https://github.com/facebookincubator/below";
     mainProgram = "below";

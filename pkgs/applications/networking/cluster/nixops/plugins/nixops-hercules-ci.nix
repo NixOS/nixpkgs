@@ -8,7 +8,7 @@
 
 buildPythonPackage {
   pname = "nixops-hercules-ci";
-  version = "unstable-2021-10-06";
+  version = "0-unstable-2021-10-06";
   pyproject = true;
 
   src = fetchFromGitHub {

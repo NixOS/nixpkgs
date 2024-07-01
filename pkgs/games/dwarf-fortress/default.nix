@@ -1,4 +1,4 @@
-{ stdenv, stdenvNoCC, gccStdenv, lib, recurseIntoAttrs, libsForQt5, newScope, texliveBasic, perlPackages, jdk8, jre8 }:
+{ stdenv, stdenvNoCC, gccStdenv, lib, recurseIntoAttrs, libsForQt5, newScope, perlPackages, jdk8, jre8 }:
 
 # To whomever it may concern:
 #
@@ -49,7 +49,7 @@ let
   # The latest Dwarf Fortress version. Maintainers: when a new version comes
   # out, ensure that (unfuck|dfhack|twbt) are all up to date before changing
   # this. Note that unfuck and twbt are not required for 50.
-  latestVersion = "50.12";
+  latestVersion = "50.13";
 
   # Converts a version to a package name.
   versionToName = version: "dwarf-fortress_${replaceStrings ["."] ["_"] version}";
@@ -79,9 +79,7 @@ let
 
           dwarf-therapist = libsForQt5.callPackage ./dwarf-therapist/wrapper.nix {
             inherit dwarf-fortress;
-            dwarf-therapist = (libsForQt5.callPackage ./dwarf-therapist {
-              texlive = texliveBasic.withPackages (ps: with ps; [ float caption wrapfig adjmulticol sidecap preprint enumitem ]);
-            }).override (optionalAttrs (!isAtLeast50) {
+            dwarf-therapist = (libsForQt5.callPackage ./dwarf-therapist {}).override (optionalAttrs (!isAtLeast50) {
               # 41.2.5 is the last version to support Dwarf Fortress 0.47.
               version = "41.2.5";
               hash = "sha256-xfYBtnO1n6OcliVt07GsQ9alDJIfWdVhtuyWwuvXSZs=";

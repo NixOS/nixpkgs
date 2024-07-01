@@ -32,12 +32,12 @@
 }:
 
 let
-  version = "3.1.0";
+  version = "3.1.2";
   src = fetchFromGitHub {
     owner = "koka-lang";
     repo = "koka";
     rev = "v${version}";
-    sha256 = "sha256-Twm2Hr8BQ0xTdA30e2Az/57525jTUkmv2Zs/+SNiQns=";
+    sha256 = "sha256-BNkMtYf5maWtKEZzob+218ke1SIkrP7/nboQ2sZKkxI=";
     fetchSubmodules = true;
   };
   kklib = stdenv.mkDerivation {
@@ -65,14 +65,6 @@ mkDerivation rec {
   isLibrary = false;
   isExecutable = true;
   libraryToolDepends = [ hpack ];
-  patches = [
-    (fetchpatch {
-      name = "koka-stackage-22.patch";
-      url = "https://github.com/koka-lang/koka/commit/95f9b360544996e06d4bb33321a83a6b9605d092.patch";
-      sha256 = "1a1sv1r393wkhsnj56awsi8mqxakqdy86p7dg9i9xfv13q2g4h6x";
-      includes = [ "src/**" ];
-    })
-  ];
   executableHaskellDepends = [
     aeson
     array

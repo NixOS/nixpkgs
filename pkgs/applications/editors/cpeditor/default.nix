@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "An IDE specially designed for competitive programming";
+    description = "IDE specially designed for competitive programming";
     homepage = "https://cpeditor.org";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;

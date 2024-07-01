@@ -1,18 +1,19 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
 
-# build-system
-, cython
-, poetry-core
-, setuptools
+  # build-system
+  cython,
+  poetry-core,
+  setuptools,
 
-# propagates
-, cryptography
+  # propagates
+  cryptography,
 
-# tests
-, pytestCheckHook
+  # tests
+  pytestCheckHook,
 }:
 
 let
@@ -39,22 +40,16 @@ buildPythonPackage {
     setuptools
   ];
 
-  propagatedBuildInputs = [
-    cryptography
-  ];
+  propagatedBuildInputs = [ cryptography ];
 
-  pythonImportsCheck = [
-    "chacha20poly1305_reuseable"
-  ];
+  pythonImportsCheck = [ "chacha20poly1305_reuseable" ];
 
   preCheck = ''
     substituteInPlace pyproject.toml \
       --replace "--cov=chacha20poly1305_reuseable --cov-report=term-missing:skip-covered" ""
   '';
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     description = "ChaCha20Poly1305 that is reuseable for asyncio";

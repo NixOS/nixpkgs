@@ -6,7 +6,7 @@
 , xorg # for lndir
 , runCommand
 , substituteAll
-# For Emulating wrapGAppsHook
+# For Emulating wrapGAppsHook3
 , gsettings-desktop-schemas
 , hicolor-icon-theme
 , dconf

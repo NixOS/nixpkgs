@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://kotlinlang.org/";
-    description = "A modern programming language that makes developers happier";
+    description = "Modern programming language that makes developers happier";
     longDescription = ''
       Kotlin/Native is a technology for compiling Kotlin code to native
       binaries, which can run without a virtual machine. It is an LLVM based

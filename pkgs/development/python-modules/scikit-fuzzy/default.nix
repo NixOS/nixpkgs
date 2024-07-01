@@ -1,15 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, pythonAtLeast
-, setuptools
-, matplotlib
-, networkx
-, nose
-, numpy
-, scipy
-, pytest7CheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  pythonAtLeast,
+  setuptools,
+  matplotlib,
+  networkx,
+  nose,
+  numpy,
+  scipy,
+  pytest7CheckHook,
 }:
 
 buildPythonPackage rec {
@@ -46,9 +47,7 @@ buildPythonPackage rec {
     })
   ];
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   propagatedBuildInputs = [
     networkx

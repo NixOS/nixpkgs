@@ -4,7 +4,7 @@
 , meson
 , ninja
 , pkg-config
-, wrapGAppsHook
+, wrapGAppsHook3
 , python3
 , gettext
 , gnome
@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     pkg-config
     gettext
-    wrapGAppsHook
+    wrapGAppsHook3
     python3
   ];
 
@@ -54,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     description = "Puzzle game where you move atoms to build a molecule";
     mainProgram = "atomix";
-    homepage = "https://wiki.gnome.org/Apps/Atomix";
+    homepage = "https://gitlab.gnome.org/GNOME/atomix";
     license = licenses.gpl2Plus;
     maintainers = teams.gnome.members;
     platforms = platforms.unix;

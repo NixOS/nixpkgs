@@ -107,7 +107,8 @@ let
     ]
     ++ lib.optionals withCyrus_sasl [ "--enable-cyrus-sasl=yes" ]
     ++ lib.optionals withGnutls [ "--enable-gnutls=yes" "--enable-nss=no" ]
-    ++ lib.optionals stdenv.isDarwin [ "--disable-gtkspell" "--disable-vv" ];
+    ++ lib.optionals stdenv.isDarwin [ "--disable-gtkspell" "--disable-vv" ]
+    ++ lib.optionals stdenv.cc.isClang [ "CFLAGS=-Wno-error=int-conversion" ];
 
     enableParallelBuilding = true;
 
@@ -138,6 +139,7 @@ let
 
     meta = {
       description = "Multi-protocol instant messaging client";
+      mainProgram = "pidgin";
       homepage = "https://pidgin.im/";
       license = lib.licenses.gpl2Plus;
       platforms = lib.platforms.unix;

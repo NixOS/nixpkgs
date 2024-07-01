@@ -1,7 +1,8 @@
-{ buildPythonPackage
-, fetchFromGitHub
-, lib
-, pytestCheckHook
+{
+  buildPythonPackage,
+  fetchFromGitHub,
+  lib,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -16,17 +17,13 @@ buildPythonPackage rec {
     hash = "sha256-cshP1kraLENqWuQTlm4HPAP/0ywRRLFOJI8mteWcjR4=";
   };
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "json5"
-  ];
+  pythonImportsCheck = [ "json5" ];
 
   meta = with lib; {
     homepage = "https://github.com/dpranke/pyjson5";
-    description = "A Python implementation of the JSON5 data format";
+    description = "Python implementation of the JSON5 data format";
     mainProgram = "pyjson5";
     license = licenses.asl20;
     maintainers = with maintainers; [ veehaitch ];

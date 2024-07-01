@@ -11,6 +11,7 @@
 , polkit
 , dbus
 , gobject-introspection
+, wrapGAppsNoGuiHook
 , gettext
 , gtk-doc
 , docbook-xsl-nons
@@ -49,6 +50,7 @@ stdenv.mkDerivation rec {
     libxml2 # for xmllint for stripping GResources
     libxslt # for xsltproc for building docs
     gobject-introspection
+    wrapGAppsNoGuiHook
     # checkInput but cheked for during the configuring
     (python3.pythonOnBuildForHost.withPackages (ps: with ps; [
       pygobject3
@@ -95,6 +97,9 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
+  # Only need to wrap the Python tool (powerprofilectl)
+  dontWrapGApps = true;
+
   PKG_CONFIG_POLKIT_GOBJECT_1_POLICYDIR = "${placeholder "out"}/share/polkit-1/actions";
 
   postPatch = ''
@@ -104,6 +109,10 @@ stdenv.mkDerivation rec {
 
     patchShebangs --host \
       src/powerprofilesctl
+  '';
+
+  postFixup = ''
+    wrapGApp "$out/bin/powerprofilesctl"
   '';
 
   passthru = {

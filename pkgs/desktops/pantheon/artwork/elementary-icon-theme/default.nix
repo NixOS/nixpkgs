@@ -3,7 +3,6 @@
 , fetchFromGitHub
 , nix-update-script
 , meson
-, python3
 , ninja
 , hicolor-icon-theme
 , gtk3
@@ -13,13 +12,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "elementary-icon-theme";
-  version = "7.3.1";
+  version = "8.0.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "icons";
     rev = version;
-    sha256 = "sha256-3qvbpY1O8E3sX+66yBoZXEOeWQrgyNu2rOT6PPbli58=";
+    sha256 = "sha256-EPmQgE33+HBI78SlCBV3WlyLCP6AggvqsQa7gZuOMRM=";
   };
 
   nativeBuildInputs = [
@@ -27,7 +26,6 @@ stdenvNoCC.mkDerivation rec {
     librsvg
     meson
     ninja
-    python3
     xcursorgen
   ];
 
@@ -41,11 +39,6 @@ stdenvNoCC.mkDerivation rec {
     "-Dvolume_icons=false" # Tries to install some icons to /
     "-Dpalettes=false" # Don't install gimp and inkscape palette files
   ];
-
-  postPatch = ''
-    chmod +x meson/symlink.py
-    patchShebangs meson/symlink.py
-  '';
 
   postFixup = "gtk-update-icon-cache $out/share/icons/elementary";
 

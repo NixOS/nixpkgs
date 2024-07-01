@@ -1,6 +1,5 @@
 { lib
 , python310
-, fetchPypi
 , fetchFromGitHub
 , gdk-pixbuf
 , gnome
@@ -13,7 +12,7 @@
 , sqlite
 , tzdata
 , webkitgtk
-, wrapGAppsHook
+, wrapGAppsHook3
 , xvfb-run
 }:
 
@@ -48,7 +47,7 @@ in python.pkgs.buildPythonApplication rec {
 
   nativeBuildInputs = [
     gobject-introspection
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

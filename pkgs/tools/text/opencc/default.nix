@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/BYVoid/OpenCC";
     license = licenses.asl20;
-    description = "A project for conversion between Traditional and Simplified Chinese";
+    description = "Project for conversion between Traditional and Simplified Chinese";
     longDescription = ''
       Open Chinese Convert (OpenCC) is an opensource project for conversion between
       Traditional Chinese and Simplified Chinese, supporting character-level conversion,

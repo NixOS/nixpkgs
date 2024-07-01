@@ -15,20 +15,22 @@
 , glib
 , gtk4
 , libadwaita
+, zbar
+, gst_all_1
 , Security
 , Foundation
 }:
 
 stdenv.mkDerivation rec {
   pname = "warp";
-  version = "0.6.2";
+  version = "0.7.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
-    repo = pname;
+    repo = "warp";
     rev = "v${version}";
-    hash = "sha256-pntHIY0cScDKhWR6kXp6YrEbBQiQjUId3MrJzy5l+K8=";
+    hash = "sha256-GRxZ3y1PdJpBDnGCfmOmZgN8n1aaYf9IhyszRwo3MjQ=";
   };
 
   postPatch = ''
@@ -38,7 +40,7 @@ stdenv.mkDerivation rec {
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-Go/a7aVHF1Yt3yIccKJIVeFy5rckXhSKfd13hdhlLUQ=";
+    hash = "sha256-v/MhVcQmMYD/n/8wmPCYUy4YpXhL0v4fq8h6cllo/pw=";
   };
 
   nativeBuildInputs = [
@@ -59,7 +61,12 @@ stdenv.mkDerivation rec {
     glib
     gtk4
     libadwaita
-  ] ++ lib.optionals stdenv.isDarwin [
+    zbar
+  ] ++ (with gst_all_1; [
+    gstreamer
+    gst-plugins-base
+    gst-plugins-bad
+  ]) ++ lib.optionals stdenv.isDarwin [
     Security
     Foundation
   ];

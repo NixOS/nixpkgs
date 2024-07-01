@@ -75,7 +75,7 @@ stdenv'.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    description = "A highly customizable macOS status bar replacement";
+    description = "Highly customizable macOS status bar replacement";
     homepage = "https://github.com/FelixKratz/SketchyBar";
     license = lib.licenses.gpl3;
     mainProgram = "sketchybar";

@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, cython
-, fetchPypi
-, pythonOlder
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  cython,
+  fetchPypi,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -25,9 +26,7 @@ buildPythonPackage rec {
 
   doCheck = false;
 
-  pythonImportsCheck = [
-    "clickhouse_cityhash"
-  ];
+  pythonImportsCheck = [ "clickhouse_cityhash" ];
 
   meta = with lib; {
     description = "Python-bindings for CityHash, a fast non-cryptographic hash algorithm";

@@ -1,17 +1,18 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-# documentation build dependencies
-, sphinxHook
-, sphinx-rtd-theme
-, matplotlib
-, ipython
-# runtime dependencies
-, sphinx
-, beautifulsoup4
-# check dependencies
-, pytest
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  # documentation build dependencies
+  sphinxHook,
+  sphinx-rtd-theme,
+  matplotlib,
+  ipython,
+  # runtime dependencies
+  sphinx,
+  beautifulsoup4,
+  # check dependencies
+  pytest,
 }:
 
 buildPythonPackage rec {
@@ -19,7 +20,10 @@ buildPythonPackage rec {
   version = "0.15.1";
   format = "pyproject";
 
-  outputs = [ "out" "doc" ];
+  outputs = [
+    "out"
+    "doc"
+  ];
 
   src = fetchFromGitHub {
     owner = "felix-hilden";
@@ -38,14 +42,17 @@ buildPythonPackage rec {
 
   sphinxRoot = "docs/src";
 
-  propagatedBuildInputs = [ sphinx beautifulsoup4 ];
+  propagatedBuildInputs = [
+    sphinx
+    beautifulsoup4
+  ];
 
   nativeCheckInputs = [ pytest ];
 
   pythonImportsCheck = [ "sphinx_codeautolink" ];
 
   meta = with lib; {
-    description = "A sphinx extension that makes code examples clickable";
+    description = "Sphinx extension that makes code examples clickable";
     homepage = "https://github.com/felix-hilden/sphinx-codeautolink";
     license = licenses.mit;
     maintainers = with maintainers; [ kaction ];

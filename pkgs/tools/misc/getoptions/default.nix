@@ -30,7 +30,7 @@ stdenvNoCC.mkDerivation rec {
   checkTarget = "testall";
 
   meta = with lib; {
-    description = "An elegant option/argument parser for shell scripts (full support for bash and all POSIX shells)";
+    description = "Elegant option/argument parser for shell scripts (full support for bash and all POSIX shells)";
     homepage = "https://github.com/ko1nksm/getoptions";
     license = licenses.cc0;
     platforms = platforms.all;

@@ -21,8 +21,10 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-HqnxemAPjjKl/l4dVjEUIIvgW3ibNtQWnA10QYcd8Os=";
   };
 
-  nativeBuildInputs = [ protobuf ] ++ lib.optionals stdenv.isDarwin [ xcodebuild ];
-  buildInputs = [ rustPlatform.bindgenHook ];
+  nativeBuildInputs = [
+    protobuf
+    rustPlatform.bindgenHook
+  ] ++ lib.optionals stdenv.isDarwin [ xcodebuild ];
 
   env.BORING_BSSL_PATH = "${boringssl-wrapper}";
 
@@ -38,7 +40,7 @@ rustPlatform.buildRustPackage rec {
   cargoBuildFlags = [ "-p" "libsignal-ffi" ];
 
   meta = with lib; {
-    description = "A C ABI library which exposes Signal protocol logic";
+    description = "C ABI library which exposes Signal protocol logic";
     homepage = "https://github.com/signalapp/libsignal";
     license = licenses.agpl3Plus;
     maintainers = with maintainers; [ niklaskorz ];

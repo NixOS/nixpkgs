@@ -43,6 +43,6 @@ stdenvNoCC.mkDerivation {
   '';
 
   meta = graphicsmagick.meta // {
-    description = "A repack of GraphicsMagick that provides compatibility with ImageMagick interfaces";
+    description = "Repack of GraphicsMagick that provides compatibility with ImageMagick interfaces";
   };
 }

@@ -218,6 +218,10 @@ in
     buildInputs = [ openssl ];
   };
 
+  opentelemetry-proto = attrs: {
+    nativeBuildInputs = [ protobuf ];
+  };
+
   pam-sys = attr: {
     buildInputs = [ linux-pam ];
   };
@@ -233,6 +237,10 @@ in
   };
 
   prost-build = attr: {
+    nativeBuildInputs = [ protobuf ];
+  };
+
+  prost-wkt-types = attr: {
     nativeBuildInputs = [ protobuf ];
   };
 
@@ -297,6 +305,10 @@ in
   thrussh-libsodium = attrs: {
     nativeBuildInputs = [ pkg-config ];
     buildInputs = [ libsodium ];
+  };
+
+  tonic-reflection = attrs: {
+    nativeBuildInputs = [ protobuf ];
   };
 
   xcb = attrs: {

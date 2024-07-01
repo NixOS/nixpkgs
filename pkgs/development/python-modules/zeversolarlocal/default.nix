@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, fetchpatch
-, flit-core
-, dos2unix
-, httpx
-, pytest-asyncio
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  fetchpatch,
+  flit-core,
+  dos2unix,
+  httpx,
+  pytest-asyncio,
+  pytest-mock,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -28,9 +29,7 @@ buildPythonPackage rec {
     dos2unix
   ];
 
-  propagatedBuildInputs = [
-    httpx
-  ];
+  propagatedBuildInputs = [ httpx ];
 
   nativeCheckInputs = [
     pytest-asyncio
@@ -62,9 +61,7 @@ buildPythonPackage rec {
     "test_httpx_timeout"
   ];
 
-  pythonImportsCheck = [
-    "zeversolarlocal"
-  ];
+  pythonImportsCheck = [ "zeversolarlocal" ];
 
   meta = with lib; {
     description = "Python module to interact with Zeversolar inverters";

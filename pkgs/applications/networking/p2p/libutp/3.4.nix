@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libutp";
-  version = "unstable-2023-11-14";
+  version = "0-unstable-2023-11-14";
 
   src = fetchFromGitHub {
     # Use transmission fork from post-3.4-transmission branch

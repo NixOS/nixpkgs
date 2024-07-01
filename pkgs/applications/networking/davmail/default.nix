@@ -16,17 +16,17 @@
 }:
 
 let
-  rev = 3464;
+  rev = 3546;
   jre' = if preferZulu then zulu else jre;
   gtk' = if preferGtk3 then gtk3 else gtk2;
 in
 stdenv.mkDerivation rec {
   pname = "davmail";
-  version = "6.2.0";
+  version = "6.2.2";
 
   src = fetchurl {
     url = "mirror://sourceforge/${pname}/${version}/${pname}-${version}-${toString rev}.zip";
-    sha256 = "sha256-FatB0t/BhZRMofYE0KD5LDYGjDQ8hriIszKJP8qNvhw=";
+    hash = "sha256-45paGy6SfUFXK6vY8L4tHFYiio1/5ah9vTyGImdgwHI=";
   };
 
   postPatch = ''
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A Java application which presents a Microsoft Exchange server as local CALDAV, IMAP and SMTP servers";
+    description = "Java application which presents a Microsoft Exchange server as local CALDAV, IMAP and SMTP servers";
     homepage = "https://davmail.sourceforge.net/";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ peterhoeg ];

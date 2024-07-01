@@ -1,15 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, wheel
-, deprecation
-, flask
-, pydantic
-, pytestCheckHook
-, requests
-, sanic
-, sanic-testing
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  wheel,
+  deprecation,
+  flask,
+  pydantic,
+  pytestCheckHook,
+  requests,
+  sanic,
+  sanic-testing,
 }:
 
 buildPythonPackage rec {
@@ -41,9 +42,7 @@ buildPythonPackage rec {
     sanic-testing
   ];
 
-  disabledTestPaths = [
-    "samples/http-image-cloudevents/image_sample_test.py"
-  ];
+  disabledTestPaths = [ "samples/http-image-cloudevents/image_sample_test.py" ];
 
   meta = with lib; {
     description = "Python SDK for CloudEvents";

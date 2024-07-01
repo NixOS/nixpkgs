@@ -70,7 +70,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "A CLI tool to get help with CLI tools";
+    description = "CLI tool to get help with CLI tools";
     homepage = "https://github.com/orhun/halp";
     changelog = "https://github.com/orhun/halp/blob/${src.rev}/CHANGELOG.md";
     license = with licenses; [ asl20 mit ];

@@ -1,14 +1,15 @@
-{ lib
-, async-timeout
-, buildPythonPackage
-, deprecated
-, fetchFromGitHub
-, pympler
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, redis
-, wrapt
+{
+  lib,
+  async-timeout,
+  buildPythonPackage,
+  deprecated,
+  fetchFromGitHub,
+  pympler,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  redis,
+  wrapt,
 }:
 
 buildPythonPackage rec {
@@ -43,9 +44,7 @@ buildPythonPackage rec {
     pytest-asyncio
   ];
 
-  pythonImportsCheck = [
-    "coredis"
-  ];
+  pythonImportsCheck = [ "coredis" ];
 
   pytestFlagsArray = [
     # All other tests require Docker
@@ -56,7 +55,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "An async redis client with support for redis server, cluster & sentinel";
+    description = "Async redis client with support for redis server, cluster & sentinel";
     homepage = "https://github.com/alisaifee/coredis";
     changelog = "https://github.com/alisaifee/coredis/blob/${src.rev}/HISTORY.rst";
     license = licenses.mit;

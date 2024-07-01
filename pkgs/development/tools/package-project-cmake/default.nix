@@ -29,7 +29,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     homepage = "https://github.com/TheLartians/PackageProject.cmake";
-    description = "A CMake script for packaging C/C++ projects";
+    description = "CMake script for packaging C/C++ projects";
     longDescription = ''
       Help other developers use your project. A CMake script for packaging
       C/C++ projects for simple project installation while employing

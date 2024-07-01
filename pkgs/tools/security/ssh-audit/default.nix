@@ -1,5 +1,6 @@
 { lib
 , fetchFromGitHub
+, installShellFiles
 , nixosTests
 , python3Packages
 }:
@@ -8,6 +9,7 @@ python3Packages.buildPythonApplication rec {
   pname = "ssh-audit";
   version = "3.2.0";
   format = "setuptools";
+  outputs = [ "out" "man" ];
 
   src = fetchFromGitHub {
     owner = "jtesta";
@@ -15,6 +17,11 @@ python3Packages.buildPythonApplication rec {
     rev = "refs/tags/v${version}";
     sha256 = "sha256-g5h0A1BJqzOZaSVUxyi7IsCcrbto4+7+HpiVjFZy50Y=";
   };
+
+  nativeBuildInputs = [ installShellFiles ];
+  postInstall = ''
+    installManPage $src/ssh-audit.1
+  '';
 
   nativeCheckInputs = with python3Packages; [
     pytestCheckHook

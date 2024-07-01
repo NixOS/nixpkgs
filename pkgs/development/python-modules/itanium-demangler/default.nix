@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -19,22 +20,19 @@ buildPythonPackage rec {
     hash = "sha256-I6NUfckt2cocQt5dZSFadpshTCuA/6bVNauNXypWh+A=";
   };
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [
-    "tests/test.py"
-  ];
+  pytestFlagsArray = [ "tests/test.py" ];
 
-  pythonImportsCheck = [
-    "itanium_demangler"
-  ];
+  pythonImportsCheck = [ "itanium_demangler" ];
 
   meta = with lib; {
     description = "Python parser for the Itanium C++ ABI symbol mangling language";
     homepage = "https://github.com/whitequark/python-itanium_demangler";
     license = licenses.bsd0;
-    maintainers = with maintainers; [ fab pamplemousse ];
+    maintainers = with maintainers; [
+      fab
+      pamplemousse
+    ];
   };
 }

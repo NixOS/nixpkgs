@@ -80,7 +80,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = {
-    description = "A frantic 80's style 2D shooter, similar to XKobo and Kobo Deluxe" +
+    description = "Frantic 80's style 2D shooter, similar to XKobo and Kobo Deluxe" +
       optionalString (!useProprietaryAssets) " (built without proprietary assets)";
     mainProgram = "kobord";
     longDescription = ''

@@ -1,10 +1,11 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, parameterized
-, pygments
-, pythonOlder
-, pytestCheckHook
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  parameterized,
+  pygments,
+  pythonOlder,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -21,9 +22,7 @@ buildPythonPackage rec {
     hash = "sha256-MMBfH4q5AtC/azQUj1a1tMz1MdUf4ad5/tl7lcQCTOw=";
   };
 
-  pythonImportsCheck = [
-    "mistletoe"
-  ];
+  pythonImportsCheck = [ "mistletoe" ];
 
   nativeCheckInputs = [
     parameterized

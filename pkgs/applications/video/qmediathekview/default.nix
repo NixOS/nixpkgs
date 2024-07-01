@@ -32,7 +32,7 @@ mkDerivation rec {
   installFlags = [ "INSTALL_ROOT=$(out)" ];
 
   meta = with lib; {
-    description = "An alternative Qt-based front-end for the database maintained by the MediathekView project";
+    description = "Alternative Qt-based front-end for the database maintained by the MediathekView project";
     inherit (src.meta) homepage;
     license = licenses.gpl3Plus;
     platforms = platforms.linux;

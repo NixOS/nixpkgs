@@ -1,7 +1,8 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
 }:
 
 buildPythonPackage rec {
@@ -19,9 +20,7 @@ buildPythonPackage rec {
   # fails..
   doCheck = false;
 
-  pythonImportsCheck = [
-    "zodbpickle"
-  ];
+  pythonImportsCheck = [ "zodbpickle" ];
 
   meta = with lib; {
     description = "Fork of Python's pickle module to work with ZODB";

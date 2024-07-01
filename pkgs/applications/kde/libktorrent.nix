@@ -8,7 +8,7 @@
 mkDerivation {
   pname = "libktorrent";
   meta = with lib; {
-    description = "A BitTorrent library used by KTorrent";
+    description = "BitTorrent library used by KTorrent";
     homepage    = "https://apps.kde.org/ktorrent/";
     maintainers = with maintainers; [ eelco ];
   };

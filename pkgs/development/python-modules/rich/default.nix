@@ -1,29 +1,30 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
 
-# build-system
-, poetry-core
+  # build-system
+  poetry-core,
 
-# dependencies
-, markdown-it-py
-, pygments
-, typing-extensions
+  # dependencies
+  markdown-it-py,
+  pygments,
+  typing-extensions,
 
-# optional-dependencies
-, ipywidgets
+  # optional-dependencies
+  ipywidgets,
 
-# tests
-, attrs
-, pytestCheckHook
-, setuptools
+  # tests
+  attrs,
+  pytestCheckHook,
+  setuptools,
 
-# for passthru.tests
-, enrich
-, httpie
-, rich-rst
-, textual
+  # for passthru.tests
+  enrich,
+  httpie,
+  rich-rst,
+  textual,
 }:
 
 buildPythonPackage rec {
@@ -40,21 +41,15 @@ buildPythonPackage rec {
     hash = "sha256-7LvmPrCpHfPEfJ1r8IFnQhYkBstvtIrWYhGwcchlc0s=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     markdown-it-py
     pygments
-  ] ++ lib.optionals (pythonOlder "3.9") [
-    typing-extensions
-  ];
+  ] ++ lib.optionals (pythonOlder "3.9") [ typing-extensions ];
 
   passthru.optional-dependencies = {
-    jupyter = [
-      ipywidgets
-    ];
+    jupyter = [ ipywidgets ];
   };
 
   nativeCheckInputs = [
@@ -77,12 +72,15 @@ buildPythonPackage rec {
     "test_syntax_highlight_ranges"
   ];
 
-  pythonImportsCheck = [
-    "rich"
-  ];
+  pythonImportsCheck = [ "rich" ];
 
   passthru.tests = {
-    inherit enrich httpie rich-rst textual;
+    inherit
+      enrich
+      httpie
+      rich-rst
+      textual
+      ;
   };
 
   meta = with lib; {
@@ -90,6 +88,9 @@ buildPythonPackage rec {
     homepage = "https://github.com/Textualize/rich";
     changelog = "https://github.com/Textualize/rich/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ ris joelkoen ];
+    maintainers = with maintainers; [
+      ris
+      joelkoen
+    ];
   };
 }

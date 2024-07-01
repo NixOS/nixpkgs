@@ -3,7 +3,7 @@
 , pkg-config
 , gnome
 , gtk3
-, wrapGAppsHook
+, wrapGAppsHook3
 , gobject-introspection
 , itstool
 , libxml2
@@ -34,7 +34,7 @@ python3.pkgs.buildPythonApplication rec {
     libxml2
     pkg-config
     dbus
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -68,7 +68,7 @@ python3.pkgs.buildPythonApplication rec {
   };
 
   meta = with lib; {
-    homepage = "https://wiki.gnome.org/Apps/Accerciser";
+    homepage = "https://gitlab.gnome.org/GNOME/accerciser";
     description = "Interactive Python accessibility explorer";
     mainProgram = "accerciser";
     maintainers = teams.gnome.members;

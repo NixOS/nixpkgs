@@ -34,7 +34,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "An implementation of WebDAV server in Rust";
+    description = "Implementation of WebDAV server in Rust";
     longDescription = ''
       webdav-server-rs is an implementation of WebDAV with full support for
       RFC4918.  It also supports local unix accounts, PAM authentication, and

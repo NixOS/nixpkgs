@@ -1,58 +1,47 @@
-{ lib, stdenv, fetchurl, appimageTools, makeDesktopItem }:
-
-stdenv.mkDerivation (finalAttrs: let
-  inherit (finalAttrs) pname version src appexec icon desktopItem;
-
-in
 {
+  lib,
+  fetchurl,
+  appimageTools,
+  writeScript,
+}:
+let
   pname = "remnote";
-  version = "1.16.4";
-
+  version = "1.16.48";
   src = fetchurl {
-    url = "https://download.remnote.io/remnote-desktop/RemNote-${version}.AppImage";
-    hash = "sha256-dgbQ0cbPq7BSQ9VwwH6+GoAxb85HDxRixfjeDJBtOrg=";
+    url = "https://download2.remnote.io/remnote-desktop2/RemNote-${version}.AppImage";
+    hash = "sha256-tECIn43fTr+Enkp63S7INUjOrs8Ni7Nmhxsr/p6kPzo=";
   };
+  appimageContents = appimageTools.extractType2 { inherit pname version src; };
+in
+appimageTools.wrapType2 {
+  inherit pname version src;
 
-  appexec = appimageTools.wrapType2 {
-    inherit pname version src;
-  };
+  extraInstallCommands = ''
+    install -Dm444 ${appimageContents}/remnote.desktop -t $out/share/applications
+    substituteInPlace $out/share/applications/remnote.desktop \
+      --replace-fail 'Exec=AppRun --no-sandbox %U' 'Exec=remnote %u'
+    install -Dm444 ${appimageContents}/remnote.png -t $out/share/pixmaps
+  '';
 
-  icon = fetchurl {
-    url = "https://www.remnote.io/icon.png";
-    hash = "sha256-r5D7fNefKPdjtmV7f/88Gn3tqeEG8LGuD4nHI/sCk94=";
-  };
-
-  desktopItem = makeDesktopItem {
-    type = "Application";
-    name = "remnote";
-    desktopName = "RemNote";
-    comment = "Spaced Repetition";
-    icon = "remnote";
-    exec = "remnote %u";
-    categories = [ "Office" ];
-    mimeTypes = [ "x-scheme-handler/remnote" "x-scheme-handler/rn" ];
-  };
-
-  dontUnpack = true;
-  dontConfigure = true;
-  dontBuild = true;
-
-  installPhase = ''
-    runHook preInstall
-
-    install -Dm755 ${appexec}/bin/remnote $out/bin/remnote
-    install -Dm444 "${desktopItem}/share/applications/"* -t $out/share/applications/
-    install -Dm444 ${icon} $out/share/pixmaps/remnote.png
-
-    runHook postInstall
+  passthru.updateScript = writeScript "update.sh" ''
+    #!/usr/bin/env nix-shell
+    #!nix-shell -i bash -p curl coreutils gnused common-updater-scripts
+    set -eu -o pipefail
+    url="$(curl -ILs -w %{url_effective} -o /dev/null https://backend.remnote.com/desktop/linux)"
+    version="$(echo $url | sed -n 's/.*RemNote-\([0-9]\+\.[0-9]\+\.[0-9]\+\).*/\1/p')"
+    currentVersion=$(nix-instantiate --eval -E "with import ./. {}; remnote.version or (lib.getVersion remnote)" | tr -d '"')
+    if [[ "$version" != "$currentVersion" ]]; then
+      hash=$(nix-hash --to-sri --type sha256 "$(nix-prefetch-url "$url")")
+      update-source-version remnote "$version" "$hash" --print-changes
+    fi
   '';
 
   meta = with lib; {
-    description = "A note-taking application focused on learning and productivity";
+    description = "Note-taking application focused on learning and productivity";
     homepage = "https://remnote.com/";
-    maintainers = with maintainers; [ max-niederman chewblacka ];
+    maintainers = with maintainers; [ chewblacka ];
     license = licenses.unfree;
     platforms = [ "x86_64-linux" ];
     mainProgram = "remnote";
   };
-})
+}

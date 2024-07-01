@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   python3,
   qmake,
   qtwebengine,
@@ -12,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "python-qt";
-  version = "3.5.1";
+  version = "3.5.2";
 
   src = fetchFromGitHub {
     owner = "MeVisLab";
     repo = "pythonqt";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-IED6UFk8UTle7g/yPC0nXOEgJwrs6sB/Dk3OTyVgHPo=";
+    hash = "sha256-Mpi1pAPS/UuzaBK7I1kI0HlS3dphcKiVXIPuJwdEDXM=";
   };
 
   nativeBuildInputs = [

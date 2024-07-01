@@ -1,14 +1,14 @@
 { pkgs, lib, stdenv, fetchFromGitHub, fetchzip, darktable, rawtherapee, ffmpeg, libheif, exiftool, imagemagick, makeWrapper, testers }:
 
 let
-  version = "231128-f48ff16ef";
+  version = "240420-ef5f14bc4";
   pname = "photoprism";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    hash = "sha256-gVxKa5JKGz5VSVCuJHat0DWCYaUH+9an6JsYUPe9muQ=";
+    hash = "sha256-oJRd4eTwoTYKAJAsG9y0mnG+zF+eeLlSXNgaKLcb43w=";
   };
 
   libtensorflow = pkgs.callPackage ./libtensorflow.nix { };

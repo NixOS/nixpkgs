@@ -29,7 +29,7 @@ let
 
     meta = with lib; {
       homepage = "https://tomcat.apache.org/";
-      description = "An implementation of the Java Servlet and JavaServer Pages technologies";
+      description = "Implementation of the Java Servlet and JavaServer Pages technologies";
       platforms = jre.meta.platforms;
       maintainers = with maintainers; [ anthonyroussel ];
       license = [ licenses.asl20 ];
@@ -39,12 +39,12 @@ let
 
 in {
   tomcat9 = common {
-    version = "9.0.87";
-    hash = "sha256-2kgvuSIAhtvzceGAqgnGQCr48EhYZzTN7dSgjEjUzgI=";
+    version = "9.0.88";
+    hash = "sha256-vvgcyqT318ieqG61b2NDxRzXkzdMjswgOLen9eJ9Zig=";
   };
 
   tomcat10 = common {
-    version = "10.1.20";
-    hash = "sha256-hCfFUJ8U5IKUCgFfP2DeIDQtPXLI3qmYKk1xEstxpu4=";
+    version = "10.1.23";
+    hash = "sha256-pVcsnpD/geoWaB35cXa7ap9Texw/vg/7pSl/7lnDmKo=";
   };
 }

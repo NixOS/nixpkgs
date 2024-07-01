@@ -25,7 +25,7 @@ buildNpmPackage rec {
   '';
 
   meta = with lib; {
-    description = "A modular documentation site generator. Designed for users of Asciidoctor.";
+    description = "Modular documentation site generator. Designed for users of Asciidoctor";
     mainProgram = "antora";
     homepage = "https://antora.org";
     license = licenses.mpl20;

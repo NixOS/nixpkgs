@@ -1,9 +1,16 @@
-{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder, pytestCheckHook }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  pytestCheckHook,
+  setuptools
+}:
 
 buildPythonPackage rec {
-  version = "2.3.post0";
+  version = "2.4";
   pname = "crc32c";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.5";
 
@@ -11,8 +18,10 @@ buildPythonPackage rec {
     owner = "ICRAR";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-lPEojWeAhfWpGR+k+Tuo4n68iZOk7lUDxjWXj5vN4I0=";
+    hash = "sha256-rWR2MtTLhqqvgdqEyevg/i8ZHM3OU1bJb27JkBx1J3w=";
   };
+
+  nativeBuildInputs = [ setuptools ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

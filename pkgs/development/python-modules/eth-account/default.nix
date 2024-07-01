@@ -1,16 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, bitarray
-, eth-abi
-, eth-keyfile
-, eth-keys
-, eth-rlp
-, eth-utils
-, websockets
-, hexbytes
-, pythonOlder
-, rlp
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  bitarray,
+  eth-abi,
+  eth-keyfile,
+  eth-keys,
+  eth-rlp,
+  eth-utils,
+  websockets,
+  hexbytes,
+  pythonOlder,
+  rlp,
 }:
 
 buildPythonPackage rec {

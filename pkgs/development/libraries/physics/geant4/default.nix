@@ -9,7 +9,7 @@
 , enableRaytracerX11   ? false
 
 # Standard build environment with cmake.
-, lib, stdenv, fetchurl, fetchpatch, cmake
+, lib, stdenv, fetchurl, cmake
 
 , clhep
 , expat
@@ -48,12 +48,12 @@ in
 lib.warnIf (enableQT != false) "geant4: enableQT is deprecated, please use enableQt"
 
 stdenv.mkDerivation rec {
-  version = "11.2.1";
+  version = "11.2.2";
   pname = "geant4";
 
   src = fetchurl {
     url = "https://cern.ch/geant4-data/releases/geant4-v${version}.tar.gz";
-    hash = "sha256-g122VD1csugBZ1lYllvpaHf2bWkHu1IZVLWYt4Xerl4=";
+    hash = "sha256-0k9lc1uKCgOcAPlDSZHpnvEZuGxRDQ8qshFV24KjSR0=";
   };
 
   # Fix broken paths in a .pc
@@ -129,7 +129,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     broken = (stdenv.isLinux && stdenv.isAarch64);
-    description = "A toolkit for the simulation of the passage of particles through matter";
+    description = "Toolkit for the simulation of the passage of particles through matter";
     longDescription = ''
       Geant4 is a toolkit for the simulation of the passage of particles through matter.
       Its areas of application include high energy, nuclear and accelerator physics, as well as studies in medical and space science.

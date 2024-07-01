@@ -1,18 +1,19 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
 
-# build-system
-, poetry-core
+  # build-system
+  poetry-core,
 
-# dependencies
-, pyasn1
-, pysmi-lextudio
-, pysnmpcrypto
+  # dependencies
+  pyasn1,
+  pysmi-lextudio,
+  pysnmpcrypto,
 
-# tests
-, pytestCheckHook
-, pytest-asyncio
+  # tests
+  pytestCheckHook,
+  pytest-asyncio,
 }:
 
 buildPythonPackage rec {
@@ -27,9 +28,7 @@ buildPythonPackage rec {
     hash = "sha256-iVej39OmTPiZL11+IetnqHaxFAhZ/YR7tjiRoc7pu8U=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     pyasn1
@@ -61,9 +60,7 @@ buildPythonPackage rec {
     "test_v2_walk"
   ];
 
-  pythonImportsCheck = [
-    "pysnmp"
-  ];
+  pythonImportsCheck = [ "pysnmp" ];
 
   meta = with lib; {
     description = "Python SNMP library";

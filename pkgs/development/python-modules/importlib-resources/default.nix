@@ -1,23 +1,27 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
 
-# build-system
-, setuptools
-, setuptools-scm
+  # build-system
+  setuptools,
+  setuptools-scm,
 
-# dependencies
-, importlib-metadata
+  # dependencies
+  importlib-metadata,
 
-# tests
-, jaraco-collections
-, pytestCheckHook
+  # Reverse dependency
+  sage,
+
+  # tests
+  jaraco-collections,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "importlib-resources";
-  version = "6.1.3";
+  version = "6.3.2";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
@@ -25,7 +29,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "importlib_resources";
     inherit version;
-    hash = "sha256-VvtFJRl7eFRKM1TqJ3k5UquT+TW7S/dGuEa7EBUCDys=";
+    hash = "sha256-lj63lkklKwFgwa/P5aHT/jrWbt0KixFL6s/7cMBnQiM=";
   };
 
   build-system = [
@@ -33,18 +37,18 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  dependencies = [
-    importlib-metadata
-  ];
+  dependencies = [ importlib-metadata ];
 
   nativeCheckInputs = [
     pytestCheckHook
     jaraco-collections
   ];
 
-  pythonImportsCheck = [
-    "importlib_resources"
-  ];
+  pythonImportsCheck = [ "importlib_resources" ];
+
+  passthru.tests = {
+    inherit sage;
+  };
 
   meta = with lib; {
     description = "Read resources from Python packages";

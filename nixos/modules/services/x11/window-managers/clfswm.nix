@@ -10,7 +10,7 @@ in
   options = {
     services.xserver.windowManager.clfswm = {
       enable = mkEnableOption "clfswm";
-      package = mkPackageOption pkgs [ "lispPackages" "clfswm" ] { };
+      package = mkPackageOption pkgs [ "sbclPackages" "clfswm" ] { };
     };
   };
 

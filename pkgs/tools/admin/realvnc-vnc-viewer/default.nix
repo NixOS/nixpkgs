@@ -17,7 +17,6 @@ let
     };
     maintainers = with maintainers; [ emilytrau onedragon ];
     platforms = [ "x86_64-linux" ] ++ platforms.darwin;
-    hydraPlatforms = [];
     mainProgram = "vncviewer";
   };
 in

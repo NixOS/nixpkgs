@@ -10,14 +10,19 @@
 
 buildGoModule rec {
   pname = "symfony-cli";
-  version = "5.8.15";
-  vendorHash = "sha256-rkvQhZSoKZIl/gFgekLUelem2FGbRL9gp1LEzYN88Dc=";
+  version = "5.9.1";
+  vendorHash = "sha256-oo4lLJTF44hBb8QaIMONj+2WRdDSlhImZaC/nniWAhs=";
 
   src = fetchFromGitHub {
     owner = "symfony-cli";
     repo = "symfony-cli";
     rev = "v${version}";
-    hash = "sha256-HbBg2oCsogY3X4jgjknqwNe2bszXjylvE+h5/iyg2pM=";
+    hash = "sha256-uJbX1IzZtcXH7mZuqh2YZy9wYZHNWfUHRZ8Tlm5zEac=";
+    leaveDotGit = true;
+    postFetch = ''
+      git --git-dir $out/.git log -1 --pretty=%cd --date=format:'%Y-%m-%dT%H:%M:%SZ' > $out/SOURCE_DATE
+      rm -rf $out/.git
+    '';
   };
 
   ldflags = [
@@ -26,6 +31,10 @@ buildGoModule rec {
     "-X main.version=${version}"
     "-X main.channel=stable"
   ];
+
+  preBuild = ''
+    ldflags+=" -X main.buildDate=$(cat SOURCE_DATE)"
+  '';
 
   buildInputs = [ makeBinaryWrapper ];
 

@@ -24,7 +24,7 @@
 , rtmidi
 , speexdsp
 , stdenv
-, wrapGAppsHook
+, wrapGAppsHook3
 , zstd
 }:
 
@@ -183,7 +183,7 @@ stdenv.mkDerivation rec {
     libicns
     makeWrapper
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
   buildInputs = [
     alsa-lib
@@ -250,6 +250,7 @@ stdenv.mkDerivation rec {
     # no-derivatives clause
     license = with licenses; [ gpl3Plus cc-by-nc-40 unfreeRedistributable ];
     maintainers = with maintainers; [ nathyong jpotier ddelabru ];
+    mainProgram = "Rack";
     platforms = platforms.linux;
   };
 }

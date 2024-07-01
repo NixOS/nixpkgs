@@ -1,17 +1,18 @@
-{ lib
-, argcomplete
-, buildPythonPackage
-, fetchFromGitHub
-, hatchling
-, hatch-vcs
-, installShellFiles
-, packaging
-, platformdirs
-, pytestCheckHook
-, pythonOlder
-, tomli
-, userpath
-, git
+{
+  lib,
+  argcomplete,
+  buildPythonPackage,
+  fetchFromGitHub,
+  hatchling,
+  hatch-vcs,
+  installShellFiles,
+  packaging,
+  platformdirs,
+  pytestCheckHook,
+  pythonOlder,
+  tomli,
+  userpath,
+  git,
 }:
 
 buildPythonPackage rec {
@@ -38,13 +39,9 @@ buildPythonPackage rec {
     packaging
     platformdirs
     userpath
-  ] ++ lib.optionals (pythonOlder "3.11") [
-    tomli
-  ];
+  ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
-  nativeBuildInputs = [
-      installShellFiles
-  ];
+  nativeBuildInputs = [ installShellFiles ];
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -84,7 +81,7 @@ buildPythonPackage rec {
     "test_skip_maintenance"
   ];
 
-  postInstall =  ''
+  postInstall = ''
     installShellCompletion --cmd pipx \
       --bash <(${argcomplete}/bin/register-python-argcomplete pipx --shell bash) \
       --zsh <(${argcomplete}/bin/register-python-argcomplete pipx --shell zsh) \

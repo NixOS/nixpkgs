@@ -29,7 +29,13 @@ rustPlatform.buildRustPackage rec {
     "--skip=pipeline::runner::tests::test_time_to_send_next_frame"
   ];
 
-  nativeBuildInputs = [ pkg-config clang ffmpeg ];
+  nativeBuildInputs = [
+    rustPlatform.bindgenHook
+    pkg-config
+    clang
+    ffmpeg
+  ];
+
   buildInputs = [
     openssl.dev
     alsa-lib.dev
@@ -37,8 +43,6 @@ rustPlatform.buildRustPackage rec {
     ffmpeg.dev
     opencv
   ];
-
-  env.LIBCLANG_PATH = "${libclang.lib}/lib";
 
   meta = {
     description = "Terminal Media Player";

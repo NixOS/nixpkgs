@@ -2,7 +2,7 @@
 , buildPythonApplication
 , fetchFromGitHub
 , setuptools
-, wrapGAppsHook
+, wrapGAppsHook3
 , gdk-pixbuf
 , glib-networking
 , gobject-introspection
@@ -35,7 +35,7 @@ buildPythonApplication rec {
     gobject-introspection
     imagemagick
     setuptools
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   propagatedBuildInputs = [
@@ -71,7 +71,7 @@ buildPythonApplication rec {
   meta = with lib; {
     description = "Official ProtonVPN Linux app";
     homepage = "https://github.com/ProtonVPN/linux-app";
-    maintainers = with maintainers; [ wolfangaukang ];
+    maintainers = [ ];
     license = licenses.gpl3Plus;
     mainProgram = "protonvpn";
     platforms = platforms.linux;

@@ -9,7 +9,7 @@ let
   configFile = format.generate "conduit.toml" cfg.settings;
 in
   {
-    meta.maintainers = with maintainers; [ pstn piegames ];
+    meta.maintainers = with maintainers; [ pstn ];
     options.services.matrix-conduit = {
       enable = mkEnableOption "matrix-conduit";
 

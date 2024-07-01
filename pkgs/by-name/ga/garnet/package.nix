@@ -26,7 +26,7 @@ buildDotnetModule {
 
   meta = with lib; {
     mainProgram = "GarnetServer";
-    description = "A remote cache-store from Microsoft Research";
+    description = "Remote cache-store from Microsoft Research";
     longDescription = ''
       A remote cache-store that offers strong performance, scalability,
       storage, recovery, cluster sharding, key migration, replication features,

@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "easyrsa";
-  version = "3.1.7";
+  version = "3.2.0";
 
   src = fetchFromGitHub {
     owner = "OpenVPN";
     repo = "easy-rsa";
     rev = "v${version}";
-    hash = "sha256-zdVcT04nj7eE1a6M7WHeWpwG/TVTwyK+WgD70XwPXfY=";
+    hash = "sha256-hjebDE7Ts93vtoOTquFbfTWdInhI7HXc4pRxIsvNLtg=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Simple shell based CA utility";
     homepage = "https://openvpn.net/";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     maintainers = [ maintainers.offline maintainers.numinit ];
     platforms = platforms.unix;
   };

@@ -1,10 +1,11 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, dm-tree
-, numpy
-, absl-py
-, pytestCheckHook
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  dm-tree,
+  numpy,
+  absl-py,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -23,13 +24,9 @@ buildPythonPackage rec {
     numpy
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "dm_env"
-  ];
+  pythonImportsCheck = [ "dm_env" ];
 
   meta = with lib; {
     description = "Pure Python client for Apache Kafka";

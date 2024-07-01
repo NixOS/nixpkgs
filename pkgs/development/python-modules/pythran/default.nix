@@ -1,29 +1,29 @@
-{ lib
-, python
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, isPy3k
-, substituteAll
+{
+  lib,
+  python,
+  buildPythonPackage,
+  fetchFromGitHub,
+  isPy3k,
+  substituteAll,
 
-# build-system
-, setuptools
+  # build-system
+  setuptools,
 
-# native dependencies
-, openmp
-, xsimd
+  # native dependencies
+  openmp,
+  xsimd,
 
-# dependencies
-, ply
-, gast
-, numpy
-, beniget
+  # dependencies
+  ply,
+  gast,
+  numpy,
+  beniget,
 }:
 
 let
   inherit (python) stdenv;
-
-in buildPythonPackage rec {
+in
+buildPythonPackage rec {
   pname = "pythran";
   version = "0.15.0";
   pyproject = true;
@@ -39,7 +39,9 @@ in buildPythonPackage rec {
     # Hardcode path to mp library
     (substituteAll {
       src = ./0001-hardcode-path-to-libgomp.patch;
-      gomp = "${if stdenv.cc.isClang then openmp else stdenv.cc.cc.lib}/lib/libgomp${stdenv.hostPlatform.extensions.sharedLibrary}";
+      gomp = "${
+        if stdenv.cc.isClang then openmp else stdenv.cc.cc.lib
+      }/lib/libgomp${stdenv.hostPlatform.extensions.sharedLibrary}";
     })
   ];
 
@@ -49,9 +51,7 @@ in buildPythonPackage rec {
     ln -s '${lib.getDev xsimd}'/include/xsimd pythran/
   '';
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     ply

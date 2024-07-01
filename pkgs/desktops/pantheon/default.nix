@@ -221,10 +221,8 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   ### THIRD-PARTY
 
-  # Put packages that ONLY works with Pantheon in pkgs/desktops/pantheon/third-party,
-  # specifically third party switchboard plugins and wingpanel indicators.
-  # Please call these packages in pkgs/top-level/all-packages.nix instead of this file.
-  # https://github.com/NixOS/nixpkgs/issues/115222#issuecomment-906868654
+  # As suggested in https://github.com/NixOS/nixpkgs/issues/115222#issuecomment-906868654
+  # please avoid putting third-party packages in the `pantheon` scope.
 
 }) // lib.optionalAttrs config.allowAliases {
 

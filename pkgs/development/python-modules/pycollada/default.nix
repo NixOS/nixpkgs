@@ -1,4 +1,10 @@
-{ lib, fetchPypi, buildPythonPackage, numpy, python-dateutil }:
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  numpy,
+  python-dateutil,
+}:
 
 buildPythonPackage rec {
   pname = "pycollada";
@@ -10,7 +16,10 @@ buildPythonPackage rec {
     sha256 = "sha256-86N1nMTOwdWekyqtdDmdvPVB0YhiqtkDx3AEDaQq8g4=";
   };
 
-  propagatedBuildInputs = [ numpy python-dateutil ];
+  propagatedBuildInputs = [
+    numpy
+    python-dateutil
+  ];
 
   # Some tests fail because they refer to test data files that don't exist
   # (upstream packaging issue)

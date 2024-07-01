@@ -4,6 +4,7 @@
 , fetchFromGitHub
 , lvm2
 , pkg-config
+, stdenv
 }:
 
 buildGoModule rec {
@@ -17,18 +18,22 @@ buildGoModule rec {
     hash = "sha256-buEahr6lr+C/99ANAgYdexPX76ECW6yGMes8u2GZKh4=";
   };
 
-  vendorHash = "sha256-eAqF0ohZGryRh4u+j/30BObYP23yyrTecPrt+xmn9Sg=";
+  vendorHash = "sha256-JY64fqzNBpo9Jwo8sWsWTVVAO5zzwxwXy0A2bgqJHuU=";
+
+  proxyVendor = true;
 
   nativeBuildInputs = [
     pkg-config
   ];
 
-  buildInputs = [
+  buildInputs = lib.optionals stdenv.isLinux [
     btrfs-progs
     lvm2
   ];
 
   sourceRoot = "${src.name}/cli";
+
+  CGO_ENABLED = "0";
 
   ldflags = [
     "-s"

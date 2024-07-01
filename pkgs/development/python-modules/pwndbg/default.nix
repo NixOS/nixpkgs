@@ -1,24 +1,25 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, capstone
-, future
-, ipython
-, psutil
-, pwntools
-, pycparser
-, pyelftools
-, pygments
-, requests
-, rpyc
-, sortedcontainers
-, tabulate
-, typing-extensions
-, unicorn
-, gdb-pt-dump
-, poetry-core
-, pythonRelaxDepsHook
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  capstone,
+  future,
+  ipython,
+  psutil,
+  pwntools,
+  pycparser,
+  pyelftools,
+  pygments,
+  requests,
+  rpyc,
+  sortedcontainers,
+  tabulate,
+  typing-extensions,
+  unicorn,
+  gdb-pt-dump,
+  poetry-core,
+  pythonRelaxDepsHook,
 }:
 let
   # The newest gdb-pt-dump is incompatible with pwndbg 2024.02.14.
@@ -49,7 +50,10 @@ buildPythonPackage rec {
     hash = "sha256-/pDo2J5EtpWWCurD7H34AlTlQi7WziIRRxHxGm3K2yk=";
   };
 
-  nativeBuildInputs = [ poetry-core pythonRelaxDepsHook ];
+  nativeBuildInputs = [
+    poetry-core
+    pythonRelaxDepsHook
+  ];
   pythonRelaxDeps = true;
 
   propagatedBuildInputs = [

@@ -33,7 +33,7 @@ stdenv.mkDerivation {
   enableParallelBuilding = true;
 
   meta = {
-    description = "An IRC proxy (bouncer)";
+    description = "IRC proxy (bouncer)";
     homepage = "http://bip.milkypond.org/";
     license = lib.licenses.gpl2;
     downloadPage = "https://projects.duckcorp.org/projects/bip/files";

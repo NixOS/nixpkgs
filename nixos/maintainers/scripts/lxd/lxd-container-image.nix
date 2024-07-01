@@ -20,7 +20,7 @@
     };
   in ''
     if [ ! -e /etc/nixos/configuration.nix ]; then
-      install -m 644 -D ${config} /etc/nixos/configuration.nix
+      install -m 0644 -D ${config} /etc/nixos/configuration.nix
     fi
   '';
 

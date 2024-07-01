@@ -3,15 +3,15 @@
   stdenv,
   vscode-utils,
   autoPatchelfHook,
-  libxcrypt-legacy,
+  zlib,
 }:
 
 vscode-utils.buildVscodeMarketplaceExtension {
   mktplcRef = {
     name = "sourcery";
     publisher = "sourcery";
-    version = "1.16.0";
-    hash = "sha256-SHgS2C+ElTJW4v90Wg0QcsSL2FoSz+SxZQpgq2J4JiU=";
+    version = "1.19.0";
+    hash = "sha256-Wit2ozgaVwINL3PvPfmZWQ4WN7seQMWfXwXGgEKecn0=";
   };
 
   postPatch = ''
@@ -24,12 +24,12 @@ vscode-utils.buildVscodeMarketplaceExtension {
 
   buildInputs = [
     stdenv.cc.cc.lib
-    libxcrypt-legacy
+    zlib
   ];
 
   meta = {
     changelog = "https://sourcery.ai/changelog/";
-    description = "A VSCode extension for Sourcery, an AI-powered code review and pair programming tool for Python";
+    description = "VSCode extension for Sourcery, an AI-powered code review and pair programming tool for Python";
     downloadPage = "https://marketplace.visualstudio.com/items?itemName=sourcery.sourcery";
     homepage = "https://github.com/sourcery-ai/sourcery-vscode";
     license = lib.licenses.unfree;

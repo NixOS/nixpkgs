@@ -202,7 +202,7 @@ stdenv.mkDerivation rec {
     '';
 
   meta = with lib; {
-    description = "A movie player that supports many video formats";
+    description = "Movie player that supports many video formats";
     homepage = "http://mplayerhq.hu";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ eelco ];

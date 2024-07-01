@@ -43,7 +43,7 @@ buildGoModule rec {
   __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
-    description = "A Docker credential helper for GCR (https://gcr.io) users";
+    description = "Docker credential helper for GCR (https://gcr.io) users";
     longDescription = ''
       docker-credential-gcr is Google Container Registry's Docker credential
       helper. It allows for Docker clients v1.11+ to easily make

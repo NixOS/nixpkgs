@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
@@ -21,14 +22,16 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  pythonImportsCheck = [
-    "mplhep_data"
-  ];
+  pythonImportsCheck = [ "mplhep_data" ];
 
   meta = with lib; {
     description = "Sub-package to hold data (fonts) for mplhep";
     homepage = "https://github.com/scikit-hep/mplhep_data";
-    license = with licenses; [ mit gfl ofl ];
+    license = with licenses; [
+      mit
+      gfl
+      ofl
+    ];
     maintainers = with maintainers; [ veprbl ];
   };
 }

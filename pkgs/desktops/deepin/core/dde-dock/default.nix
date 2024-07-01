@@ -1,13 +1,12 @@
 { stdenv
 , lib
-, fetchpatch
 , fetchFromGitHub
 , cmake
 , extra-cmake-modules
 , qttools
 , pkg-config
 , wrapQtAppsHook
-, wrapGAppsHook
+, wrapGAppsHook3
 , qtbase
 , dtkwidget
 , qt5integration
@@ -48,7 +47,7 @@ stdenv.mkDerivation rec {
     qttools
     pkg-config
     wrapQtAppsHook
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
   dontWrapGApps = true;
 

@@ -52,7 +52,8 @@ in rec {
   };
 
   unifi8 = generic {
-    version = "8.1.113";
-    sha256 = "sha256-1knm+l8MSb7XKq2WIbehAnz7loRPjgnc+R98zpWKEAE=";
+    version = "8.2.93";
+    suffix = "-1c329ecd26";
+    sha256 = "sha256-7zcRxflEvPRxH7MtudOqumeUpSzAaEIbjaaJVpr2Gbc=";
   };
 }

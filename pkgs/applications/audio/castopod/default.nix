@@ -7,11 +7,11 @@
 }:
 stdenv.mkDerivation {
   pname = "castopod";
-  version = "1.10.5";
+  version = "1.11.0";
 
   src = fetchurl {
-    url = "https://code.castopod.org/adaures/castopod/uploads/66de724407be8f940af5eb1d633fbbc3/castopod-1.10.5.tar.gz";
-    sha256 = "0ssdgqxqldg2f6ni54k5vlndnjjy9lah47q1crpz5nnkkjgvc96y";
+    url = "https://code.castopod.org/adaures/castopod/uploads/0f1fbf6eb849b208e26b53d930b9e22f/castopod-1.11.0.tar.gz";
+    sha256 = "09l4q8v809jnvgx9vpa1fyjhgqdbbrwkyk591kx5k1gg935rmgnx";
   };
 
   dontBuild = true;
@@ -47,7 +47,7 @@ stdenv.mkDerivation {
   passthru.updateScript = ./update.sh;
 
   meta = with lib; {
-    description = "An open-source hosting platform made for podcasters who want to engage and interact with their audience";
+    description = "Open-source hosting platform made for podcasters who want to engage and interact with their audience";
     homepage = "https://castopod.org";
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ alexoundos ];

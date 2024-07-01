@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
   makeFlags = [ "all" "build-data" ];
 
   meta = with lib; {
-    description = "A space adventure game set in the Milky Way galaxy at the turn of the 31st century";
+    description = "Space adventure game set in the Milky Way galaxy at the turn of the 31st century";
     homepage = "https://pioneerspacesim.net";
     license = with licenses; [
         gpl3Only cc-by-sa-30

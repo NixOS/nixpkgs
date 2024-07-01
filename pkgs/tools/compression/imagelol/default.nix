@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/MCredstoner2004/ImageLOL";
     description = "Simple program to store a file into a PNG image";
     license = licenses.mit;
-    maintainers = [ maintainers.ivar ];
+    maintainers = [ ];
     platforms = platforms.unix;
     mainProgram = "ImageLOL";
   };

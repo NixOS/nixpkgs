@@ -21,7 +21,7 @@ stdenv.mkDerivation {
   preInstall = "mkdir -p $out/lib/lv2";
 
   meta = {
-    description = "a flexible 8 operator FM synthesizer for LV2";
+    description = "Flexible 8 operator FM synthesizer for LV2";
     longDescription = ''
       The synth core supports:
 

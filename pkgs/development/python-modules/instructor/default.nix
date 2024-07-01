@@ -1,24 +1,50 @@
-{ lib
-, python3
-, fetchPypi
-, buildPythonPackage
+{
+  lib,
+  aiohttp,
+  anthropic,
+  buildPythonPackage,
+  docstring-parser,
+  fetchFromGitHub,
+  openai,
+  poetry-core,
+  pydantic,
+  pytest-examples,
+  pytest-asyncio,
+  pytestCheckHook,
+  fastapi,
+  diskcache,
+  redis,
+  pythonOlder,
+  pythonRelaxDepsHook,
+  rich,
+  tenacity,
+  typer,
 }:
 
 buildPythonPackage rec {
   pname = "instructor";
-  version = "0.6.8";
+  version = "1.2.3";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-4mHXPes1NdYu53XEN7gq626cKy9ju1M7U6n6akfbuVo=";
+  disabled = pythonOlder "3.9";
+
+  src = fetchFromGitHub {
+    owner = "jxnl";
+    repo = "instructor";
+    rev = "refs/tags/${version}";
+    hash = "sha256-LmorlFKIG7iPAK4pDbQqjxjiwB1md3u52B4u5WlqqTk=";
   };
 
-  nativeBuildInputs = [
-    python3.pkgs.poetry-core
+  pythonRelaxDeps = [
+    "docstring-parser"
+    "pydantic"
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  build-system = [ poetry-core ];
+
+  nativeBuildInputs = [ pythonRelaxDepsHook ];
+
+  dependencies = [
     aiohttp
     docstring-parser
     openai
@@ -28,7 +54,30 @@ buildPythonPackage rec {
     typer
   ];
 
+  nativeCheckInputs = [
+    anthropic
+    fastapi
+    redis
+    diskcache
+    pytest-asyncio
+    pytest-examples
+    pytestCheckHook
+  ];
+
   pythonImportsCheck = [ "instructor" ];
+
+  disabledTests = [
+    # Tests require OpenAI API key
+    "test_partial"
+    "successfully"
+  ];
+
+  disabledTestPaths = [
+    # Tests require OpenAI API key
+    "tests/test_distil.py"
+    "tests/test_new_client.py"
+    "tests/llm/"
+  ];
 
   meta = with lib; {
     description = "Structured outputs for llm";

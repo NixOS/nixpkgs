@@ -32,7 +32,10 @@ in stdenv.mkDerivation {
     cp -a --no-preserve=mode ${libapp} libapp
     cp -a --no-preserve=mode ${libjson} libjson
   '';
-  patches = [ ./work-around-API-borkage.patch ];
+  patches = [
+    ./work-around-API-borkage.patch
+    ./libapp-include-ctype.diff
+  ];
 
   buildInputs = [ curl fuse libxml2 ];
   nativeBuildInputs = [ pkg-config ];

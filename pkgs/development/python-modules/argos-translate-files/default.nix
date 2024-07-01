@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, lxml
-, translatehtml
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  lxml,
+  translatehtml,
 }:
 
 buildPythonPackage rec {

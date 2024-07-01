@@ -49,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://github.com/wb9688/wwp-switcher";
-    description = "A plugin to switch active window";
+    description = "Plugin to switch active window";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ rewine ];
     inherit (wayfire.meta) platforms;

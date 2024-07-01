@@ -1,18 +1,19 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
 
-# dependencies
-, django
-, pytz
+  # dependencies
+  django,
+  pytz,
 
-# optionals
-, django-taggit
+  # optionals
+  django-taggit,
 
-# tests
-, pytest-django
-, pytestCheckHook
+  # tests
+  pytest-django,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -34,9 +35,7 @@ buildPythonPackage rec {
     pytz
   ];
 
-  passthru.optional-dependencies.taggit = [
-    django-taggit
-  ];
+  passthru.optional-dependencies.taggit = [ django-taggit ];
 
   env.DJANGO_SETTINGS_MODULE = "tests.settings";
 
@@ -56,5 +55,4 @@ buildPythonPackage rec {
     license = licenses.bsd2;
     maintainers = with maintainers; [ desiderius ];
   };
-
 }

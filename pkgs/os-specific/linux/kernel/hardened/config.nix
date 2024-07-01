@@ -88,7 +88,7 @@ assert (versionAtLeast version "4.9");
   UBSAN      = yes;
   UBSAN_TRAP = whenAtLeast "5.7" yes;
   UBSAN_BOUNDS = whenAtLeast "5.7" yes;
-  UBSAN_SANITIZE_ALL = yes;
+  UBSAN_SANITIZE_ALL = whenOlder "6.9" yes;
   UBSAN_LOCAL_BOUNDS = option yes; # clang only
   CFI_CLANG = option yes; # clang only Control Flow Integrity since 6.1
 
@@ -97,7 +97,7 @@ assert (versionAtLeast version "4.9");
   RANDSTRUCT_PERFORMANCE = whenAtLeast "5.19" yes;
 
   # Disable various dangerous settings
-  ACPI_CUSTOM_METHOD = no; # Allows writing directly to physical memory
+  ACPI_CUSTOM_METHOD = whenOlder "6.9" no; # Allows writing directly to physical memory
   PROC_KCORE         = no; # Exposes kernel text image layout
   INET_DIAG          = no; # Has been used for heap based attacks in the past
 

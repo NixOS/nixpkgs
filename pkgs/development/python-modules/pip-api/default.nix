@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pip
-, pretend
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, virtualenv
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pip,
+  pretend,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  virtualenv,
 }:
 
 buildPythonPackage rec {
@@ -23,13 +24,9 @@ buildPythonPackage rec {
     hash = "sha256-bDM31YpVB0pZMqeGTCbnINSmJc03N0HuU8hcc8nnHgw=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  propagatedBuildInputs = [
-    pip
-  ];
+  propagatedBuildInputs = [ pip ];
 
   nativeCheckInputs = [
     pretend
@@ -37,9 +34,7 @@ buildPythonPackage rec {
     virtualenv
   ];
 
-  pythonImportsCheck = [
-    "pip_api"
-  ];
+  pythonImportsCheck = [ "pip_api" ];
 
   disabledTests = [
     "test_hash"

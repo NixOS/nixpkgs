@@ -27,7 +27,7 @@
 , udisks2
 , systemd
 , hicolor-icon-theme
-, wrapGAppsHook
+, wrapGAppsHook3
 , mateUpdateScript
 }:
 
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     gettext
     itstool
     desktop-file-utils
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

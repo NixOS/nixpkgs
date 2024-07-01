@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, cachelib
-, flask
-, asgiref
-, pytest-asyncio
-, pytest-xprocess
-, pytestCheckHook
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
+  cachelib,
+  flask,
+  asgiref,
+  pytest-asyncio,
+  pytest-xprocess,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -40,20 +41,22 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  disabledTests = [
-    # backend_cache relies on pytest-cache, which is a stale package from 2013
-    "backend_cache"
-    # optional backends
-    "Redis"
-    "Memcache"
-  ] ++ lib.optionals stdenv.isDarwin [
-    # ignore flaky test
-    "test_cache_timeout_dynamic"
-    "test_cached_view_class"
-  ];
+  disabledTests =
+    [
+      # backend_cache relies on pytest-cache, which is a stale package from 2013
+      "backend_cache"
+      # optional backends
+      "Redis"
+      "Memcache"
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      # ignore flaky test
+      "test_cache_timeout_dynamic"
+      "test_cached_view_class"
+    ];
 
   meta = with lib; {
-    description = "A caching extension for Flask";
+    description = "Caching extension for Flask";
     homepage = "https://github.com/pallets-eco/flask-caching";
     changelog = "https://github.com/pallets-eco/flask-caching/blob/v${version}/CHANGES.rst";
     maintainers = with maintainers; [ ];

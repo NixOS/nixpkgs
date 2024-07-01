@@ -22,8 +22,13 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Additional completion definitions for zsh";
     homepage = "https://github.com/zsh-users/zsh-completions";
-    license = lib.licenses.free;
-
+    license = with lib.licenses; [
+      asl20
+      bsd3
+      isc
+      mit
+      zsh
+    ];
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.olejorgenb ];
   };

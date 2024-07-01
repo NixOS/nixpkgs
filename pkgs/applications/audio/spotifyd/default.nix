@@ -38,7 +38,7 @@ rustPackages.rustPlatform.buildRustPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "An open source Spotify client running as a UNIX daemon";
+    description = "Open source Spotify client running as a UNIX daemon";
     homepage = "https://spotifyd.rs/";
     changelog = "https://github.com/Spotifyd/spotifyd/blob/${src.rev}/CHANGELOG.md";
     license = licenses.gpl3Plus;

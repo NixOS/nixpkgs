@@ -2,7 +2,7 @@
 , buildDotnetModule
 , fetchFromGitHub
 , dotnetCorePackages
-, wrapGAppsHook
+, wrapGAppsHook3
 , copyDesktopItems
 , gtk3
 , libnotify
@@ -35,7 +35,7 @@ buildDotnetModule rec {
 
   nugetDeps = ./deps.nix;
 
-  nativeBuildInputs = [ wrapGAppsHook copyDesktopItems ];
+  nativeBuildInputs = [ wrapGAppsHook3 copyDesktopItems ];
 
   runtimeDeps = [ gtk3 libnotify ];
 
@@ -58,7 +58,7 @@ buildDotnetModule rec {
   '';
 
   meta = with lib; {
-    description = "An Ansi/Ascii text and RIPscrip vector graphic art editor/viewer with multi-user capabilities";
+    description = "Ansi/Ascii text and RIPscrip vector graphic art editor/viewer with multi-user capabilities";
     homepage = "https://picoe.ca/products/pablodraw";
     license = licenses.mit;
     mainProgram = "PabloDraw";

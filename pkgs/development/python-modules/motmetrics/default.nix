@@ -1,19 +1,20 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
 
-# build-system
-, setuptools
+  # build-system
+  setuptools,
 
-# dependencies
-, numpy
-, pandas
-, scipy
-, xmltodict
+  # dependencies
+  numpy,
+  pandas,
+  scipy,
+  xmltodict,
 
-# tests
-, pytestCheckHook
-, pytest-benchmark
+  # tests
+  pytestCheckHook,
+  pytest-benchmark,
 }:
 
 buildPythonPackage rec {
@@ -29,9 +30,7 @@ buildPythonPackage rec {
     hash = "sha256-7LKLHXWgW4QpivAgzvWl6qEG0auVvpiZ6bfDViCKsFY=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     numpy
@@ -45,9 +44,7 @@ buildPythonPackage rec {
     pytest-benchmark
   ];
 
-  pythonImportsCheck = [
-    "motmetrics"
-  ];
+  pythonImportsCheck = [ "motmetrics" ];
 
   meta = with lib; {
     description = "Bar_chart: Benchmark multiple object trackers (MOT) in Python";

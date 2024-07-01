@@ -23,6 +23,10 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
+  configureFlags = [
+    "--color" "auto"
+  ];
+
   makeFlags = [
     "PREFIX=$(out)"
     "SBINDIR=$(out)/sbin"
@@ -46,7 +50,9 @@ stdenv.mkDerivation rec {
 
   depsBuildBuild = [ buildPackages.stdenv.cc ]; # netem requires $HOSTCC
   nativeBuildInputs = [ bison flex pkg-config ];
-  buildInputs = [ db iptables elfutils libmnl ];
+  buildInputs = [ db iptables libmnl ]
+    # needed to uploaded bpf programs
+    ++ lib.optionals (!stdenv.hostPlatform.isStatic) [ elfutils ];
 
   enableParallelBuilding = true;
 
@@ -58,9 +64,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://wiki.linuxfoundation.org/networking/iproute2";
-    description = "A collection of utilities for controlling TCP/IP networking and traffic control in Linux";
+    description = "Collection of utilities for controlling TCP/IP networking and traffic control in Linux";
     platforms = platforms.linux;
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     maintainers = with maintainers; [ primeos eelco fpletz globin ];
   };
 }

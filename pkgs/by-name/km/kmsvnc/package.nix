@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A VNC server for DRM/KMS capable GNU/Linux devices";
+    description = "VNC server for DRM/KMS capable GNU/Linux devices";
     homepage = "https://github.com/isjerryxiao/kmsvnc";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ nickcao ];

@@ -5,7 +5,7 @@ mkCoqDerivation {
   pname = "math-classes";
   inherit version;
   defaultVersion = with lib.versions; lib.switch coq.coq-version [
-    { case = range "8.17" "8.19"; out = "8.19.0"; }
+    { case = range "8.17" "8.20"; out = "8.19.0"; }
     { case = range "8.12" "8.18"; out = "8.18.0"; }
     { case = range "8.12" "8.17"; out = "8.17.0"; }
     { case = range "8.6"  "8.16"; out = "8.15.0"; }
@@ -21,7 +21,7 @@ mkCoqDerivation {
 
   meta = {
     homepage = "https://math-classes.github.io";
-    description = "A library of abstract interfaces for mathematical structures in Coq.";
+    description = "Library of abstract interfaces for mathematical structures in Coq";
     maintainers = with lib.maintainers; [ siddharthist jwiegley ];
   };
 }

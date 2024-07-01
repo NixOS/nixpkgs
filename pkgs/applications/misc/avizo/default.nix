@@ -13,7 +13,7 @@
 , librsvg
 , gobject-introspection
 , gdk-pixbuf
-, wrapGAppsHook
+, wrapGAppsHook3
 , pamixer
 , brightnessctl
 }:
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-Vj8OrNlAstl0AXTeVAPdEf5JgnAmJwl9s3Jdc0ZiYQc=";
   };
 
-  nativeBuildInputs = [ meson ninja pkg-config vala gobject-introspection wrapGAppsHook ];
+  nativeBuildInputs = [ meson ninja pkg-config vala gobject-introspection wrapGAppsHook3 ];
 
   buildInputs = [ dbus dbus-glib gdk-pixbuf glib gtk-layer-shell gtk3 librsvg ];
 
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A neat notification daemon for Wayland";
+    description = "Neat notification daemon for Wayland";
     homepage = "https://github.com/misterdanb/avizo";
     license = licenses.gpl3;
     platforms = platforms.linux;

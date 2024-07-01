@@ -160,9 +160,9 @@ rec {
   # https://docs.gradle.org/current/userguide/compatibility.html
 
   gradle_8 = gen {
-    version = "8.7";
-    nativeVersion = "0.22-milestone-25";
-    hash = "sha256-VEw11r2Emuil7QvOo5umd9xA9J330YNVYVgtogCblh0=";
+    version = "8.8";
+    nativeVersion = "0.22-milestone-26";
+    hash = "sha256-pLQVhgH4Y2ze6rCb12r7ZAAwu1sUSq/iYaXorwJ9xhI=";
     defaultJava = jdk21;
   };
 

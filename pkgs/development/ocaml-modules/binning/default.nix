@@ -15,7 +15,7 @@ buildDunePackage rec {
   };
 
   meta = {
-    description = "A datastructure to accumulate values in bins";
+    description = "Datastructure to accumulate values in bins";
     license = lib.licenses.cecill-b;
     homepage = "https://github.com/pveber/binning/";
     maintainers = [ lib.maintainers.vbgl ];

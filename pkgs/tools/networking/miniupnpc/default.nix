@@ -1,17 +1,21 @@
 { lib
 , stdenv
-, fetchurl
+, fetchFromGitHub
 , cmake
 }:
 
 stdenv.mkDerivation rec {
   pname = "miniupnpc";
-  version = "2.2.6";
+  version = "2.2.7";
 
-  src = fetchurl {
-    url = "https://miniupnp.tuxfamily.org/files/${pname}-${version}.tar.gz";
-    sha256 = "sha256-N/zZGVNQjD5i1pZLuP+8XUfz4TSB+lTmIU/MaHBMZvE=";
+  src = fetchFromGitHub {
+    owner = "miniupnp";
+    repo = "miniupnp";
+    rev = "miniupnpc_${lib.replaceStrings ["."] ["_"] version}";
+    hash = "sha256-cIijY1NcdF169tibfB13845UT9ZoJ/CZ+XLES9ctWTY=";
   };
+
+  sourceRoot = "${src.name}/miniupnpc";
 
   nativeBuildInputs = [ cmake ];
 
@@ -33,7 +37,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://miniupnp.tuxfamily.org/";
-    description = "A client that implements the UPnP Internet Gateway Device (IGD) specification";
+    description = "Client that implements the UPnP Internet Gateway Device (IGD) specification";
     platforms = with platforms; linux ++ freebsd ++ darwin;
     license = licenses.bsd3;
     mainProgram = "upnpc";

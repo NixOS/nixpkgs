@@ -4,7 +4,7 @@
   lib
 }:
 stdenv.mkDerivation (finalAttrs: {
-  name = "lcrq";
+  pname = "lcrq";
   version = "0.1.2";
 
   src = fetchFromGitea {
@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     changelog = "https://codeberg.org/librecast/lcrq/src/tag/v${finalAttrs.version}/CHANGELOG.md";
-    description = "Librecast RaptorQ library.";
+    description = "Librecast RaptorQ library";
     homepage = "https://librecast.net/lcrq.html";
     license = [ lib.licenses.gpl2 lib.licenses.gpl3 ];
     maintainers = with lib.maintainers; [ albertchae aynish DMills27 jasonodoom jleightcap ];

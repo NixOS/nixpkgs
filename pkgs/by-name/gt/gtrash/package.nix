@@ -40,7 +40,7 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    description = "A Trash CLI manager written in Go";
+    description = "Trash CLI manager written in Go";
     homepage = "https://github.com/umlx5h/gtrash";
     changelog = "https://github.com/umlx5h/gtrash/releases/tag/v${version}";
     license = licenses.mit;

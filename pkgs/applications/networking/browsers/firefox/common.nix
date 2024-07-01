@@ -50,7 +50,7 @@ in
 , rustPlatform
 , unzip
 , which
-, wrapGAppsHook
+, wrapGAppsHook3
 
 # runtime
 , bzip2
@@ -254,8 +254,21 @@ buildStdenv.mkDerivation {
       hash = "sha256-cWOyvjIPUU1tavPRqg61xJ53XE4EJTdsFzadfVxyTyM=";
     })
   ]
+  ++ lib.optionals (lib.versionOlder version "122") [
+    ./bindgen-0.64-clang-18.patch
+  ]
   ++ lib.optionals (lib.versionAtLeast version "122" && lib.versionOlder version "123") [
     ./122.0-libvpx-mozbz1875201.patch
+  ]
+  ++ lib.optionals (lib.versionOlder version "123") [
+    (fetchpatch {
+      name = "clang-18.patch";
+      url = "https://hg.mozilla.org/mozilla-central/raw-rev/ba6abbd36b496501cea141e17b61af674a18e279";
+      hash = "sha256-2IpdSyye3VT4VB95WurnyRFtdN1lfVtYpgEiUVhfNjw=";
+    })
+  ]
+  ++ lib.optionals (lib.versionOlder version "115.12") [
+    ./rust-1.78.patch
   ]
   ++ extraPatches;
 
@@ -289,7 +302,7 @@ buildStdenv.mkDerivation {
     rustc
     unzip
     which
-    wrapGAppsHook
+    wrapGAppsHook3
   ]
   ++ lib.optionals crashreporterSupport [ dump_syms patchelf ]
   ++ lib.optionals pgoSupport [ xvfb-run ]

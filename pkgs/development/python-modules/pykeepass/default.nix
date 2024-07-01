@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, argon2-cffi
-, construct
-, lxml
-, pycryptodomex
-, pyotp
-, unittestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  argon2-cffi,
+  construct,
+  lxml,
+  pycryptodomex,
+  pyotp,
+  unittestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -28,9 +29,7 @@ buildPythonPackage rec {
       --replace-fail 'packages = ["pykeepass"]' 'packages = ["pykeepass", "pykeepass.kdbx_parsing"]'
   '';
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     argon2-cffi

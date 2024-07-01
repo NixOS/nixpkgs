@@ -365,8 +365,8 @@ If `pname` and `version` are specified, `fetchurl` will use those values and wil
   _Default value:_ `{}`.
 
 `passthru` (Attribute Set; _optional_)
-: Specifies any extra [passthru](#var-stdenv-passthru) attributes for the derivation returned by `fetchurl`.
-  Note that `fetchurl` defines [passthru attributes of its own](#ssec-pkgs-fetchers-fetchurl-passthru-outputs).
+: Specifies any extra [`passthru`](#chap-passthru) attributes for the derivation returned by `fetchurl`.
+  Note that `fetchurl` defines [`passthru` attributes of its own](#ssec-pkgs-fetchers-fetchurl-passthru-outputs).
   Attributes specified in `passthru` can override the default attributes returned by `fetchurl`.
 
   _Default value:_ `{}`.
@@ -387,7 +387,7 @@ If `pname` and `version` are specified, `fetchurl` will use those values and wil
 
 ### Passthru outputs {#ssec-pkgs-fetchers-fetchurl-passthru-outputs}
 
-`fetchurl` also defines its own [`passthru`](#var-stdenv-passthru) attributes:
+`fetchurl` also defines its own [`passthru`](#chap-passthru) attributes:
 
 `url` (String)
 

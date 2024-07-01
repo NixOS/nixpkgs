@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://yasr.sourceforge.net";
-    description = "A general-purpose console screen reader";
+    description = "General-purpose console screen reader";
     longDescription = "Yasr is a general-purpose console screen reader for GNU/Linux and other Unix-like operating systems.";
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl2;

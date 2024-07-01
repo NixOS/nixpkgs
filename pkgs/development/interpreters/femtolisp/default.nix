@@ -6,7 +6,7 @@
 
 stdenv.mkDerivation {
   pname = "femtolisp";
-  version = "unstable-2023-07-12";
+  version = "0-unstable-2023-07-12";
 
   src = fetchFromSourcehut {
     owner = "~ft";
@@ -30,7 +30,7 @@ stdenv.mkDerivation {
   passthru.updateScript = unstableGitUpdater { };
 
   meta = {
-    description = "A compact interpreter for a minimal lisp/scheme dialect";
+    description = "Compact interpreter for a minimal lisp/scheme dialect";
     homepage = "https://git.sr.ht/~ft/femtolisp";
     license = with lib.licenses; [ mit bsd3 ];
     maintainers = with lib.maintainers; [ moody ];

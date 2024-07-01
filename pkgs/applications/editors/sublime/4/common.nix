@@ -17,7 +17,7 @@
   cairo,
   pango,
   makeWrapper,
-  wrapGAppsHook,
+  wrapGAppsHook3,
   writeShellScript,
   common-updater-scripts,
   curl,
@@ -80,7 +80,7 @@ let
 
     nativeBuildInputs = [
       makeWrapper
-      wrapGAppsHook
+      wrapGAppsHook3
     ];
 
     buildPhase = ''
@@ -192,10 +192,7 @@ stdenv.mkDerivation (rec {
           fi
 
           for platform in ${lib.escapeShellArgs meta.platforms}; do
-              # The script will not perform an update when the version attribute is up to date from previous platform run
-              # We need to clear it before each run
-              update-source-version "${packageAttribute}.${primaryBinary}" 0 "${lib.fakeSha256}" --file="$versionFile" --version-key=buildVersion --source-key="sources.$platform"
-              update-source-version "${packageAttribute}.${primaryBinary}" "$latestVersion" --file="$versionFile" --version-key=buildVersion --source-key="sources.$platform"
+              update-source-version "${packageAttribute}.${primaryBinary}" "$latestVersion" --ignore-same-version --file="$versionFile" --version-key=buildVersion --source-key="sources.$platform"
           done
         '';
       in

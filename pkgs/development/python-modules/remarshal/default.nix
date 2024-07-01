@@ -1,20 +1,21 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonRelaxDepsHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonRelaxDepsHook,
 
-# build deps
-, poetry-core
+  # build deps
+  poetry-core,
 
-# propagates
-, cbor2
-, python-dateutil
-, pyyaml
-, tomlkit
-, u-msgpack-python
+  # propagates
+  cbor2,
+  python-dateutil,
+  pyyaml,
+  tomlkit,
+  u-msgpack-python,
 
-# tested using
-, pytestCheckHook
+  # tested using
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -34,9 +35,7 @@ buildPythonPackage rec {
     pythonRelaxDepsHook
   ];
 
-  pythonRelaxDeps = [
-    "pytest"
-  ];
+  pythonRelaxDeps = [ "pytest" ];
 
   propagatedBuildInputs = [
     cbor2
@@ -46,9 +45,7 @@ buildPythonPackage rec {
     u-msgpack-python
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     changelog = "https://github.com/remarshal-project/remarshal/releases/tag/v${version}";

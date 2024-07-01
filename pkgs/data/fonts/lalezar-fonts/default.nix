@@ -22,7 +22,7 @@ stdenvNoCC.mkDerivation {
 
   meta = with lib; {
     homepage = "https://github.com/BornaIz/Lalezar";
-    description = "A multi-script display typeface for popular culture";
+    description = "Multi-script display typeface for popular culture";
     license = licenses.ofl;
     platforms = platforms.all;
     maintainers = [ ];

@@ -21,14 +21,14 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    (fetchpatch {
+    (fetchpatch { # https://github.com/morganstanley/modern-cpp-kafka/pull/221
       name = "fix-avoid-overwriting-library-paths.patch";
-      url = "https://github.com/morganstanley/modern-cpp-kafka/pull/221.patch";
+      url = "https://github.com/morganstanley/modern-cpp-kafka/compare/a146d10bcf166f55299c7a55728abaaea52cb0e5...a0b5ec08315759097ce656813be57b2c38d79091.patch";
       hash = "sha256-UsQcMvJoRTn5kgXhmXOyqfW3n59kGKO596U2WjtdqAY=";
     })
-    (fetchpatch {
+    (fetchpatch { # https://github.com/morganstanley/modern-cpp-kafka/pull/222
       name = "add-pkg-config-cmake-config.patch";
-      url = "https://github.com/morganstanley/modern-cpp-kafka/pull/222.patch";
+      url = "https://github.com/morganstanley/modern-cpp-kafka/commit/edc576ab83710412f6201e2bb8de5cb41682ee4a.patch";
       hash = "sha256-OjoSttnpgEwSZjCVKc888xJb5f1Dulu/rQqoGmqXNM4=";
     })
     # Fix gcc-13 build failure:
@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
   checkInputs = [ gtest rapidjson ];
 
   meta = with lib; {
-    description = "A C++ API for Kafka clients (i.e. KafkaProducer, KafkaConsumer, AdminClient)";
+    description = "C++ API for Kafka clients (i.e. KafkaProducer, KafkaConsumer, AdminClient)";
     homepage = "https://github.com/morganstanley/modern-cpp-kafka";
     license = licenses.asl20;
     maintainers = with maintainers; [ ditsuke ];

@@ -1,16 +1,16 @@
 { lib, stdenv, buildPackages, fetchurl, fetchpatch, pkg-config, libuuid, gettext, texinfo
-, withFuse ? stdenv.isLinux, fuse
+, withFuse ? stdenv.isLinux, fuse3
 , shared ? !stdenv.hostPlatform.isStatic
 , e2fsprogs, runCommand
 }:
 
 stdenv.mkDerivation rec {
   pname = "e2fsprogs";
-  version = "1.47.0";
+  version = "1.47.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/${pname}/${pname}-${version}.tar.gz";
-    hash = "sha256-Zmev3lbu8MavJmhJdEAOTSKI6knpRBv15iKRldUaNXg=";
+    hash = "sha256-mvzSAfOUKdLbJJKusT26XnXWzFBoK3MtyjVkO9XwkuM=";
   };
 
   # fuse2fs adds 14mb of dependencies
@@ -20,21 +20,25 @@ stdenv.mkDerivation rec {
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [ pkg-config texinfo ];
   buildInputs = [ libuuid gettext ]
-    ++ lib.optionals withFuse [ fuse ];
+    ++ lib.optionals withFuse [ fuse3 ];
 
   patches = [
-    (fetchpatch { # avoid using missing __GNUC_PREREQ(X,Y)
-      url = "https://raw.githubusercontent.com/void-linux/void-packages/9583597eb3e6e6b33f61dbc615d511ce030bc443/srcpkgs/e2fsprogs/patches/fix-glibcism.patch";
-      sha256 = "1gfcsr0i3q8q2f0lqza8na0iy4l4p3cbii51ds6zmj0y4hz2dwhb";
-      excludes = [ "lib/ext2fs/hashmap.h" ];
-      extraPrefix = "";
-    })
     # Avoid trouble with older systems like NixOS 23.05.
     # TODO: most likely drop this at some point, e.g. when 23.05 loses support.
     (fetchurl {
       name = "mke2fs-avoid-incompatible-features.patch";
       url = "https://git.kernel.org/pub/scm/fs/ext2/e2fsprogs.git/plain/debian/patches/disable-metadata_csum_seed-and-orphan_file-by-default?h=debian/master&id=3fb3d18baba90e5d48d94f4c0b79b2d271b0c913";
       hash = "sha256-YD11K4s2bqv0rvzrxtaiodzLp3ztULlOlPUf1XcpxRY=";
+    })
+    (fetchurl {
+      name = "SIZEOF_SIZE_T.patch";
+      url = "https://lore.kernel.org/linux-ext4/20240527074121.2767083-1-hi@alyssa.is/raw";
+      hash = "sha256-QdsvcvBi0mC/4YErqG0UKl94MH0OZpFVTGszNqBe/qw=";
+    })
+    (fetchurl {
+      name = "unused-parameters.patch";
+      url = "https://lore.kernel.org/linux-ext4/20240527091542.4121237-2-hi@alyssa.is/raw";
+      hash = "sha256-pMoqm2eo5zYaTdU+Ppa4+posCVFb2A9S4uo5oApaaqc=";
     })
   ];
 

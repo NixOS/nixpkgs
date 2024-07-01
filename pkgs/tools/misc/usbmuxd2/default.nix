@@ -78,7 +78,7 @@ clangStdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/tihmstar/usbmuxd2";
-    description = "A socket daemon to multiplex connections from and to iOS devices";
+    description = "Socket daemon to multiplex connections from and to iOS devices";
     license = licenses.lgpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ onny ];

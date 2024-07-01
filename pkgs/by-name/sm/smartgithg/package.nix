@@ -6,7 +6,7 @@
 , gtk3
 , glib
 , gnome
-, wrapGAppsHook
+, wrapGAppsHook3
 , libXtst
 , which
 }:
@@ -15,14 +15,14 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "smartgithg";
-  version = "23.1.2";
+  version = "23.1.3";
 
   src = fetchurl {
     url = "https://www.syntevo.com/downloads/smartgit/smartgit-linux-${builtins.replaceStrings [ "." ] [ "_" ] version}.tar.gz";
-    hash = "sha256-gXfHmRPUhs8s7IQIhN0vQyx8NpLrS28ufNNYOMA4AXw=";
+    hash = "sha256-UvdHr1L5MYwl7eT1BVS/M8Ydtw8VjDG+QuqMW0Q5La4=";
   };
 
-  nativeBuildInputs = [ wrapGAppsHook ];
+  nativeBuildInputs = [ wrapGAppsHook3 ];
 
   buildInputs = [ jre gnome.adwaita-icon-theme gtk3 ];
 

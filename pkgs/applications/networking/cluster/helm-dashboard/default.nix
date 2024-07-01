@@ -19,7 +19,7 @@ buildGoModule rec {
   ldflags = [ "-s" "-w" "-X main.version=v${version}" ];
 
   meta = {
-    description = "A simplified way of working with Helm";
+    description = "Simplified way of working with Helm";
     mainProgram = "helm-dashboard";
     longDescription = ''
       Helm Dashboard is an open-source project which offers a UI-driven way to view the installed Helm charts,

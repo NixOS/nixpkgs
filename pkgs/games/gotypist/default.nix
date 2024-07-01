@@ -14,7 +14,7 @@ buildGoModule rec {
   vendorHash = null;
 
   meta = with lib; {
-    description = "A touch-typing tutor";
+    description = "Touch-typing tutor";
     mainProgram = "gotypist";
     longDescription = ''
       A simple touch-typing tutor that follows Steve Yegge's methodology of

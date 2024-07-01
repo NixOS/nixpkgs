@@ -10,7 +10,7 @@ in
   meta.maintainers = with maintainers; [ etu stunkymonkey mattchrist ];
 
   options.services.freshrss = {
-    enable = mkEnableOption "FreshRSS feed reader";
+    enable = mkEnableOption "FreshRSS RSS aggregator and reader with php-fpm backend.";
 
     package = mkPackageOption pkgs "freshrss" { };
 
@@ -108,7 +108,7 @@ in
       type = types.str;
       default = poolName;
       description = ''
-        Name of the phpfpm pool to use and setup. If not specified, a pool will be created
+        Name of the php-fpm pool to use and setup. If not specified, a pool will be created
         with default values.
       '';
     };
@@ -255,13 +255,10 @@ in
         {
           description = "Set up the state directory for FreshRSS before use";
           wantedBy = [ "multi-user.target" ];
-          serviceConfig = defaultServiceConfig //{
-            Type = "oneshot";
-            User = "freshrss";
-            Group = "freshrss";
-            StateDirectory = "freshrss";
-            WorkingDirectory = cfg.package;
+          serviceConfig = defaultServiceConfig // {
+            RemainAfterExit = true;
           };
+          restartIfChanged = true;
           environment = {
             DATA_PATH = cfg.dataDir;
           };
@@ -299,7 +296,7 @@ in
         environment = {
           DATA_PATH = cfg.dataDir;
         };
-        serviceConfig = defaultServiceConfig //{
+        serviceConfig = defaultServiceConfig // {
           ExecStart = "${cfg.package}/app/actualize_script.php";
         };
       };

@@ -2,7 +2,6 @@
   lib,
   stdenvNoCC,
   overrideCC,
-  fetchFromGitHub,
   pkgsCross,
   bash,
 }:

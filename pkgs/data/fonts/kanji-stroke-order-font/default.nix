@@ -1,28 +1,36 @@
-{ lib, stdenv, fetchurl }:
+{ lib, stdenv, fetchzip }:
 
 let
-  version = "4.003";
-  debianVersion = "dfsg-1";
-in stdenv.mkDerivation {
-  name = "kanji-stroke-order-font-${version}";
+  font = "kanji-stroke-order";
+  version = "4.004";
+in
+stdenv.mkDerivation {
+  pname = "${font}-font";
+  inherit version;
 
-  src = fetchurl {
-    url = "https://salsa.debian.org/fonts-team/fonts-kanjistrokeorders/-/archive/debian/${version}_${debianVersion}/fonts-kanjistrokeorders-debian-${version}_${debianVersion}.tar.bz2";
-    sha256 = "1a8hxzkrfjz0h5gl9h0panzzsn7cldlklxryyzmpam23g32q6bg1";
+  src = fetchzip {
+    # https://github.com/NixOS/nixpkgs/issues/60157
+    url = "https://drive.google.com/uc?export=download&id=1snpD-IQmT6fGGQjEePHdDzE2aiwuKrz4#${font}.zip";
+    hash = "sha256-wQpurDS6APnpNMbMHofwW/UKeBF8FXeiCVx4wAOeRoE=";
+    stripRoot = false;
   };
 
   installPhase = ''
-    mkdir -p $out/share/fonts/kanji-stroke-order $out/share/doc/kanji-stroke-order
-    cp *.ttf $out/share/fonts/kanji-stroke-order
-    cp *.txt $out/share/doc/kanji-stroke-order
+    runHook preInstall
+
+    install -Dm644 *.ttf -t $out/share/fonts/${font}
+    install -Dm644 *.txt -t $out/share/doc/${font}
+    install -Dm644 *.pdf -t $out/share/doc/${font}
+
+    runHook postInstall
   '';
 
   meta = with lib; {
     description = "Font containing stroke order diagrams for over 6500 kanji, 180 kana and other characters";
-    homepage = "https://sites.google.com/site/nihilistorguk/";
+    homepage = "https://www.nihilist.org.uk/";
 
     license = [ licenses.bsd3 ];
-    maintainers = with maintainers; [ ptrhlm ];
+    maintainers = with maintainers; [ ptrhlm stephen-huan ];
     platforms = platforms.all;
   };
 }

@@ -9,7 +9,7 @@
 , keybinder3
 , desktop-file-utils
 , shared-mime-info
-, wrapGAppsHook
+, wrapGAppsHook3
 , wafHook
 , bash
 , dbus
@@ -29,7 +29,7 @@ buildPythonApplication rec {
   };
 
   nativeBuildInputs = [
-    wrapGAppsHook intltool
+    wrapGAppsHook3 intltool
     # For setup hook
     gobject-introspection wafHook
     itstool            # for help pages
@@ -51,7 +51,7 @@ buildPythonApplication rec {
   doCheck = false; # no tests
 
   meta = with lib; {
-    description = "A smart, quick launcher";
+    description = "Smart, quick launcher";
     homepage    = "https://kupferlauncher.github.io/";
     license     = licenses.gpl3;
     maintainers = with maintainers; [ cobbal ];

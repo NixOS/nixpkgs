@@ -1,14 +1,15 @@
-{ lib
-, pkgs
-, buildPythonPackage
-, fetchFromGitHub
-, pdm-backend
-, setuptools
-, wheel
-, pcre
-, pkg-config
-, pytestCheckHook
-, pytest-mock
+{
+  lib,
+  pkgs,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pdm-backend,
+  setuptools,
+  wheel,
+  pcre,
+  pkg-config,
+  pytestCheckHook,
+  pytest-mock,
 }:
 
 buildPythonPackage rec {
@@ -44,10 +45,13 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "A CPython extension for the Hyperscan regular expression matching library";
+    description = "CPython extension for the Hyperscan regular expression matching library";
     homepage = "https://github.com/darvid/python-hyperscan";
     changelog = "https://github.com/darvid/python-hyperscan/blob/${src.rev}/CHANGELOG.md";
-    platforms = [ "x86_64-linux" "x86_64-darwin" ];
+    platforms = [
+      "x86_64-linux"
+      "x86_64-darwin"
+    ];
     license = licenses.mit;
     maintainers = with maintainers; [ mbalatsko ];
   };

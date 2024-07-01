@@ -17,7 +17,7 @@ buildGoModule rec {
   ldflags = [ "-s" "-w" "-X=main.Version=${version}" ];
 
   meta = with lib; {
-    description = "A personal multi-machine syncable key value store";
+    description = "Personal multi-machine syncable key value store";
     homepage = "https://github.com/charmbracelet/skate";
     changelog = "https://github.com/charmbracelet/skate/releases/tag/${src.rev}";
     license = licenses.mit;

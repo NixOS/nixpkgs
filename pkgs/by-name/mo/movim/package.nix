@@ -1,5 +1,4 @@
 { lib
-, fetchpatch
 , fetchFromGitHub
 , writeShellScript
 , dash
@@ -39,21 +38,14 @@ let
 in
 php.buildComposerProject (finalAttrs: {
   pname = "movim";
-  version = "0.24";
+  version = "0.25.1";
 
   src = fetchFromGitHub {
     owner = "movim";
     repo = "movim";
     rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-t63POjywZLk5ulppuCedFhhEhOsnB90vy3k/HhM3MGc=";
+    hash = "sha256-VshDFHDCfemHS/TN5qEe8CGizZksf44xENSmvX44uAc=";
   };
-
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/movim/movim/commit/4dd2842f4617f3baaa166157892a532ad07df80d.patch";
-      hash = "sha256-32MLS5g60Rhm8HQDBPnUo9k+aB7L8dNMcnSjPIlooks=";
-    })
-  ];
 
   php = php.buildEnv ({
     extensions = ({ all, enabled }:
@@ -75,7 +67,7 @@ php.buildComposerProject (finalAttrs: {
   # pinned commonmark
   composerStrictValidation = false;
 
-  vendorHash = "sha256-SinS5ocf4kLMBR2HF3tcdmEomw9ICUqTg2IXPJFoujU=";
+  vendorHash = "sha256-nxbsw0re/7zKhpWxtA8JAf7JL3RLghqaYsi4rkM6VZg=";
 
   postPatch = ''
     # Our modules are already wrapped, removes missing *.so warnings;
@@ -144,7 +136,7 @@ php.buildComposerProject (finalAttrs: {
   };
 
   meta = {
-    description = "a federated blogging & chat platform that acts as a web front end for the XMPP protocol";
+    description = "Federated blogging & chat platform that acts as a web front end for the XMPP protocol";
     homepage = "https://movim.eu";
     license = lib.licenses.agpl3Plus;
     maintainers = with lib.maintainers; [ toastal ];

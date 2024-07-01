@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   passthru.tests = { inherit (nixosTests) podman; };
 
   meta = with lib; {
-    description = "A container init that is so simple it's effectively brain-dead";
+    description = "Container init that is so simple it's effectively brain-dead";
     homepage = "https://github.com/openSUSE/catatonit";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ erosennin ] ++ teams.podman.members;

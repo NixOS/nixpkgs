@@ -60,7 +60,7 @@ in stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://chromedriver.chromium.org/";
-    description = "A WebDriver server for running Selenium tests on Chrome";
+    description = "WebDriver server for running Selenium tests on Chrome";
     longDescription = ''
       WebDriver is an open source tool for automated testing of webapps across
       many browsers. It provides capabilities for navigating to web pages, user

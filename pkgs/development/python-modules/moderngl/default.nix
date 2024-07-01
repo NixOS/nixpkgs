@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, libGL
-, libX11
-, glcontext
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  libGL,
+  libX11,
+  glcontext,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -24,16 +25,12 @@ buildPythonPackage rec {
     libX11
   ];
 
-  propagatedBuildInputs = [
-    glcontext
-  ];
+  propagatedBuildInputs = [ glcontext ];
 
   # Tests need a display to run.
   doCheck = false;
 
-  pythonImportsCheck = [
-    "moderngl"
-  ];
+  pythonImportsCheck = [ "moderngl" ];
 
   meta = with lib; {
     description = "High performance rendering for Python";

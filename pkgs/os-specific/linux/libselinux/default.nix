@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch, buildPackages, pcre2, pkg-config, libsepol
+{ lib, stdenv, fetchurl, buildPackages, pcre2, pkg-config, libsepol
 , enablePython ? !stdenv.hostPlatform.isStatic
 , swig ? null, python3 ? null, python3Packages
 , fts

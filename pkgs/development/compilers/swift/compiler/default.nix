@@ -696,7 +696,7 @@ in stdenv.mkDerivation {
   };
 
   meta = {
-    description = "The Swift Programming Language";
+    description = "Swift Programming Language";
     homepage = "https://github.com/apple/swift";
     maintainers = with lib.maintainers; [ dtzWill trepetti dduan trundle stephank ];
     license = lib.licenses.asl20;

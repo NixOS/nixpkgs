@@ -1,0 +1,152 @@
+diff --git a/spectral_cube/conftest.py b/spectral_cube/conftest.py
+index 0d7c158..6fac9b4 100644
+--- a/spectral_cube/conftest.py
++++ b/spectral_cube/conftest.py
+@@ -4,7 +4,7 @@
+ from __future__ import print_function, absolute_import, division
+ 
+ import os
+-from distutils.version import LooseVersion
++from looseversion import LooseVersion
+ from astropy.units.equivalencies import pixel_scale
+ 
+ # Import casatools and casatasks here if available as they can otherwise
+diff --git a/spectral_cube/lower_dimensional_structures.py b/spectral_cube/lower_dimensional_structures.py
+index f0e3745..1b1e1f8 100644
+--- a/spectral_cube/lower_dimensional_structures.py
++++ b/spectral_cube/lower_dimensional_structures.py
+@@ -526,7 +526,7 @@ class Projection(LowerDimensionalObject, SpatialCoordMixinClass,
+                               " installed.")
+ 
+         # Need version > 0.2 to work with cubes
+-        from distutils.version import LooseVersion
++        from looseversion import LooseVersion
+         if LooseVersion(version) < "0.3":
+             raise Warning("Requires version >=0.3 of reproject. The current "
+                           "version is: {}".format(version))
+diff --git a/spectral_cube/np_compat.py b/spectral_cube/np_compat.py
+index ed4a134..39aa320 100644
+--- a/spectral_cube/np_compat.py
++++ b/spectral_cube/np_compat.py
+@@ -1,7 +1,7 @@
+ from __future__ import print_function, absolute_import, division
+ 
+ import numpy as np
+-from distutils.version import LooseVersion
++from looseversion import LooseVersion
+ 
+ def allbadtonan(function):
+     """
+diff --git a/spectral_cube/spectral_cube.py b/spectral_cube/spectral_cube.py
+index 771a2d4..af752b4 100644
+--- a/spectral_cube/spectral_cube.py
++++ b/spectral_cube/spectral_cube.py
+@@ -57,7 +57,7 @@ from .spectral_axis import (determine_vconv_from_ctype, get_rest_value_from_wcs,
+                             doppler_beta, doppler_gamma, doppler_z)
+ from .io.core import SpectralCubeRead, SpectralCubeWrite
+ 
+-from distutils.version import LooseVersion
++from looseversion import LooseVersion
+ 
+ 
+ __all__ = ['BaseSpectralCube', 'SpectralCube', 'VaryingResolutionSpectralCube']
+@@ -2659,7 +2659,7 @@ class BaseSpectralCube(BaseNDClass, MaskableArrayMixinClass,
+ 
+         reproj_kwargs = kwargs
+         # Need version > 0.2 to work with cubes, >= 0.5 for memmap
+-        from distutils.version import LooseVersion
++        from looseversion import LooseVersion
+         if LooseVersion(version) < "0.5":
+             raise Warning("Requires version >=0.5 of reproject. The current "
+                           "version is: {}".format(version))
+diff --git a/spectral_cube/tests/test_masks.py b/spectral_cube/tests/test_masks.py
+index c38ba27..1d6895d 100644
+--- a/spectral_cube/tests/test_masks.py
++++ b/spectral_cube/tests/test_masks.py
+@@ -14,7 +14,7 @@ from .. import (BooleanArrayMask, LazyMask, LazyComparisonMask,
+                 FunctionMask, CompositeMask)
+ from ..masks import is_broadcastable_and_smaller, dims_to_skip, view_of_subset
+ 
+-from distutils.version import LooseVersion
++from looseversion import LooseVersion
+ 
+ 
+ def test_spectral_cube_mask():
+diff --git a/spectral_cube/tests/test_moments.py b/spectral_cube/tests/test_moments.py
+index 3043dd5..7e05c5b 100644
+--- a/spectral_cube/tests/test_moments.py
++++ b/spectral_cube/tests/test_moments.py
+@@ -1,7 +1,7 @@
+ from __future__ import print_function, absolute_import, division
+ 
+ import warnings
+-from distutils.version import LooseVersion
++from looseversion import LooseVersion
+ 
+ import pytest
+ import numpy as np
+diff --git a/spectral_cube/tests/test_performance.py b/spectral_cube/tests/test_performance.py
+index bdee040..a778abc 100644
+--- a/spectral_cube/tests/test_performance.py
++++ b/spectral_cube/tests/test_performance.py
+@@ -20,7 +20,7 @@ except ImportError:
+ 
+ # The comparison of Quantities in test_memory_usage
+ # fail with older versions of numpy
+-from distutils.version import LooseVersion
++from looseversion import LooseVersion
+ 
+ NPY_VERSION_CHECK = LooseVersion(np.version.version) >= "1.13"
+ 
+diff --git a/spectral_cube/tests/test_regrid.py b/spectral_cube/tests/test_regrid.py
+index 496ddd5..5b1fec7 100644
+--- a/spectral_cube/tests/test_regrid.py
++++ b/spectral_cube/tests/test_regrid.py
+@@ -18,7 +18,7 @@ except ImportError:
+ 
+ # The comparison of Quantities in test_memory_usage
+ # fail with older versions of numpy
+-from distutils.version import LooseVersion
++from looseversion import LooseVersion
+ 
+ NPY_VERSION_CHECK = LooseVersion(np.version.version) >= "1.13"
+ 
+diff --git a/spectral_cube/tests/test_spectral_cube.py b/spectral_cube/tests/test_spectral_cube.py
+index 9ebeb7d..93e5647 100644
+--- a/spectral_cube/tests/test_spectral_cube.py
++++ b/spectral_cube/tests/test_spectral_cube.py
+@@ -6,7 +6,7 @@ import operator
+ import itertools
+ import warnings
+ import mmap
+-from distutils.version import LooseVersion
++from looseversion import LooseVersion
+ import sys
+ 
+ import pytest
+diff --git a/spectral_cube/tests/test_subcubes.py b/spectral_cube/tests/test_subcubes.py
+index 6f74f68..217c324 100644
+--- a/spectral_cube/tests/test_subcubes.py
++++ b/spectral_cube/tests/test_subcubes.py
+@@ -1,7 +1,7 @@
+ from __future__ import print_function, absolute_import, division
+ 
+ import pytest
+-from distutils.version import LooseVersion
++from looseversion import LooseVersion
+ 
+ from astropy import units as u
+ from astropy import wcs
+diff --git a/spectral_cube/tests/test_visualization.py b/spectral_cube/tests/test_visualization.py
+index 85ea038..0ac8d58 100644
+--- a/spectral_cube/tests/test_visualization.py
++++ b/spectral_cube/tests/test_visualization.py
+@@ -1,7 +1,7 @@
+ from __future__ import print_function, absolute_import, division
+ 
+ import pytest
+-from distutils.version import LooseVersion
++from looseversion import LooseVersion
+ 
+ from .test_spectral_cube import cube_and_raw
+ 

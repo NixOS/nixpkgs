@@ -1,24 +1,25 @@
-{ lib
-, appdirs
-, babelfish
-, beautifulsoup4
-, buildPythonPackage
-, chardet
-, click
-, dogpile-cache
-, enzyme
-, fetchFromGitHub
-, guessit
-, pysrt
-, pytestCheckHook
-, pythonOlder
-, pytz
-, rarfile
-, requests
-, six
-, stevedore
-, sympy
-, vcrpy
+{
+  lib,
+  appdirs,
+  babelfish,
+  beautifulsoup4,
+  buildPythonPackage,
+  chardet,
+  click,
+  dogpile-cache,
+  enzyme,
+  fetchFromGitHub,
+  guessit,
+  pysrt,
+  pytestCheckHook,
+  pythonOlder,
+  pytz,
+  rarfile,
+  requests,
+  six,
+  stevedore,
+  sympy,
+  vcrpy,
 }:
 
 buildPythonPackage rec {
@@ -63,9 +64,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "subliminal"
-  ];
+  pythonImportsCheck = [ "subliminal" ];
 
   disabledTests = [
     # Tests rewuire network access

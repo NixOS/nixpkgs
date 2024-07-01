@@ -80,7 +80,7 @@ else
     };
 
     meta = with lib; {
-      description = "A wrapper substituting the deprecated runfile-based CUDA installation";
+      description = "Wrapper substituting the deprecated runfile-based CUDA installation";
       license = licenses.nvidiaCuda;
     };
   }

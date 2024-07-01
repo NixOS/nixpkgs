@@ -1,7 +1,7 @@
 { lib, stdenv, fetchFromGitHub
 , autoPatchelfHook
 , fuse3
-, maven, jdk, makeShellWrapper, glib, wrapGAppsHook
+, maven, jdk, makeShellWrapper, glib, wrapGAppsHook3
 , libayatana-appindicator
 }:
 
@@ -86,7 +86,7 @@ mavenJdk.buildMavenPackage rec {
   nativeBuildInputs = [
     autoPatchelfHook
     makeShellWrapper
-    wrapGAppsHook
+    wrapGAppsHook3
     jdk
   ];
   buildInputs = [ fuse3 jdk glib libayatana-appindicator ];

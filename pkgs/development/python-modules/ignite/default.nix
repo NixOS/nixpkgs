@@ -1,16 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pytest-xdist
-, torchvision
-, pythonOlder
-, matplotlib
-, mock
-, packaging
-, torch
-, scikit-learn
-, tqdm
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pytest-xdist,
+  torchvision,
+  pythonOlder,
+  matplotlib,
+  mock,
+  packaging,
+  torch,
+  scikit-learn,
+  tqdm,
 }:
 
 buildPythonPackage rec {
@@ -25,8 +26,19 @@ buildPythonPackage rec {
     hash = "sha256-Lg7ASODYwWWhC45X4+Bk50gSlSWwgn2tM4atLXWbQLI=";
   };
 
-  nativeCheckInputs = [ pytestCheckHook matplotlib mock pytest-xdist torchvision ];
-  propagatedBuildInputs = [ packaging torch scikit-learn tqdm ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    matplotlib
+    mock
+    pytest-xdist
+    torchvision
+  ];
+  propagatedBuildInputs = [
+    packaging
+    torch
+    scikit-learn
+    tqdm
+  ];
 
   # runs successfully in 3.9, however, async isn't correctly closed so it will fail after test suite.
   doCheck = pythonOlder "3.9";

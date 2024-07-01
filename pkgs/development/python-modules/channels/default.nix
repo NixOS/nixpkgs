@@ -1,14 +1,15 @@
-{ lib
-, asgiref
-, buildPythonPackage
-, daphne
-, django
-, fetchFromGitHub
-, async-timeout
-, pytest-asyncio
-, pytest-django
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  asgiref,
+  buildPythonPackage,
+  daphne,
+  django,
+  fetchFromGitHub,
+  async-timeout,
+  pytest-asyncio,
+  pytest-django,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -31,9 +32,7 @@ buildPythonPackage rec {
   ];
 
   passthru.optional-dependencies = {
-    daphne = [
-      daphne
-    ];
+    daphne = [ daphne ];
   };
 
   nativeCheckInputs = [
@@ -43,9 +42,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ] ++ passthru.optional-dependencies.daphne;
 
-  pythonImportsCheck = [
-    "channels"
-  ];
+  pythonImportsCheck = [ "channels" ];
 
   meta = with lib; {
     description = "Brings event-driven capabilities to Django with a channel system";

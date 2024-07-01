@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://developers.yubico.com/pam-u2f/";
-    description = "A PAM module for allowing authentication with a U2F device";
+    description = "PAM module for allowing authentication with a U2F device";
     changelog = "https://github.com/Yubico/pam-u2f/raw/pam_u2f-${version}/NEWS";
     license = licenses.bsd2;
     platforms = platforms.unix;

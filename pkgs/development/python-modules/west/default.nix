@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, colorama
-, configobj
-, fetchPypi
-, packaging
-, pykwalify
-, pythonOlder
-, pyyaml
+{
+  lib,
+  buildPythonPackage,
+  colorama,
+  configobj,
+  fetchPypi,
+  packaging,
+  pykwalify,
+  pythonOlder,
+  pyyaml,
 }:
 
 buildPythonPackage rec {
@@ -33,9 +34,7 @@ buildPythonPackage rec {
   # tests run under 'tox' and have west try to git clone repos (not sandboxable)
   doCheck = false;
 
-  pythonImportsCheck = [
-    "west"
-  ];
+  pythonImportsCheck = [ "west" ];
 
   meta = with lib; {
     description = "Zephyr RTOS meta tool";

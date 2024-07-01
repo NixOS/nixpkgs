@@ -64,6 +64,12 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
+  patches = [
+    # Remove the build command line from the source.
+    # This avoids dependencies to .dev inputs
+    ./remove-compiler-options.patch
+  ];
+
   nativeBuildInputs = [ python3 which openssh makeWrapper pkg-config ]
     ++ lib.optional (gpuBackend == "cuda") cudaPackages.cuda_nvcc;
 
@@ -75,6 +81,7 @@ stdenv.mkDerivation rec {
     libvori
     libxc
     libxsmm
+    mpi
     spglib
     scalapack
     blas
@@ -101,7 +108,7 @@ stdenv.mkDerivation rec {
   ]
   ;
 
-  propagatedBuildInputs = [ mpi ];
+  propagatedBuildInputs = [ (lib.getBin mpi) ];
   propagatedUserEnvPkgs = [ mpi ];
 
   makeFlags = [
@@ -149,14 +156,16 @@ stdenv.mkDerivation rec {
                  -D__PLUMED2 -D__HDF5 -D__GSL -D__SIRIUS -D__LIBVDWXC -D__SPFFT -D__SPLA \
                  ${lib.strings.optionalString (gpuBackend == "cuda") "-D__OFFLOAD_CUDA -D__ACC -D__DBCSR_ACC -D__NO_OFFLOAD_PW"} \
                  ${lib.strings.optionalString (gpuBackend == "rocm") "-D__OFFLOAD_HIP -D__DBCSR_ACC -D__NO_OFFLOAD_PW"}
-    CFLAGS    = -fopenmp -I${lib.getDev hdf5-fortran}/include -I${lib.getDev gsl}/include
+    CFLAGS    = -fopenmp
     FCFLAGS    = \$(DFLAGS) -O2 -ffree-form -ffree-line-length-none \
                  -ftree-vectorize -funroll-loops -msse2 \
                  -std=f2008 \
                  -fopenmp -ftree-vectorize -funroll-loops \
-                 -I${lib.getDev libint}/include ${lib.optionalString enableElpa "$(pkg-config --variable=fcflags elpa)"} \
+                   ${lib.optionalString enableElpa "$(pkg-config --variable=fcflags elpa)"} \
+                 -I${lib.getDev libint}/include  \
                  -I${lib.getDev sirius}/include/sirius \
-                 -I${lib.getDev libxc}/include -I${lib.getDev libxsmm}/include \
+                 -I${lib.getDev libxc}/include \
+                 -I${lib.getDev libxsmm}/include \
                  -I${lib.getDev hdf5-fortran}/include \
                  -fallow-argument-mismatch
     LIBS       = -lfftw3 -lfftw3_threads \

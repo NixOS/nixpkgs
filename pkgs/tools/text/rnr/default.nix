@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
   cargoSha256 = "sha256-+oDRNBQ03MknhcTpZFKt0ipJY43LPOKbGF014rrs6dw=";
 
   meta = with lib; {
-    description = "A command-line tool to batch rename files and directories";
+    description = "Command-line tool to batch rename files and directories";
     mainProgram = "rnr";
     homepage = "https://github.com/ismaelgv/rnr";
     changelog = "https://github.com/ismaelgv/rnr/blob/v${version}/CHANGELOG.md";

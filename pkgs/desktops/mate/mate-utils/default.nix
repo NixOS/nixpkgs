@@ -16,7 +16,7 @@
 , mate-panel
 , hicolor-icon-theme
 , wayland
-, wrapGAppsHook
+, wrapGAppsHook3
 , mateUpdateScript
 }:
 
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     gettext
     itstool
     inkscape
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

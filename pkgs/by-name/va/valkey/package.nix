@@ -75,7 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     homepage = "https://valkey.io/";
-    description = "A high-performance data structure server that primarily serves key/value workloads";
+    description = "High-performance data structure server that primarily serves key/value workloads";
     license = licenses.bsd3;
     platforms = platforms.all;
     maintainers = with maintainers; [ rucadi ];

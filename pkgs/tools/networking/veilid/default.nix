@@ -10,13 +10,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "veilid";
-  version = "0.3.1";
+  version = "0.3.2";
 
   src = fetchFromGitLab {
     owner = "veilid";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-pBMUwCZ1dLLde+RF9smy4/RZYmtyW+oTeo3LHNtscSc=";
+    sha256 = "sha256-iaWdI6lhxX3xdpd5caPl5cWXrBkWiMc7T/dMXp2hqNM=";
   };
 
   cargoLock = {
@@ -49,7 +49,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "An open-source, peer-to-peer, mobile-first, networked application framework";
+    description = "Open-source, peer-to-peer, mobile-first, networked application framework";
     homepage = "https://veilid.com";
     license = licenses.mpl20;
     maintainers = with maintainers; [ bbigras qbit ];

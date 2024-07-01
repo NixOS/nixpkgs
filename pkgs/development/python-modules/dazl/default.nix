@@ -1,26 +1,27 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, fetchpatch
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  fetchpatch,
 
-, poetry-core
+  poetry-core,
 
-, aiohttp
-, googleapis-common-protos
-, grpcio
-, protobuf
-, requests
-, semver
-, toposort
+  aiohttp,
+  googleapis-common-protos,
+  grpcio,
+  protobuf,
+  requests,
+  semver,
+  toposort,
 
-#, async_exit_stack
-#, dataclasses
-, google-auth
-, oauthlib
-, prometheus-client
-, pygments
-, pyopenssl
-, typing-extensions
+  #, async_exit_stack
+  #, dataclasses
+  google-auth,
+  oauthlib,
+  prometheus-client,
+  pygments,
+  pyopenssl,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
@@ -35,16 +36,15 @@ buildPythonPackage rec {
   patches = [
     # Merged, remove this next release
     (fetchpatch {
-      url = "https://github.com/digital-asset/dazl-client/pull/428.patch";
+      name = "428.patch"; # https://github.com/digital-asset/dazl-client/pull/428
+      url = "https://github.com/digital-asset/dazl-client/commit/a68bad0471d22210f0abf31447a7732477de39d4.patch";
       sha256 = "sha256-Gx9W1XkvMPg8FAOAXijDF5QnMbntk5mR0q5+o5i2KAE=";
     })
   ];
 
   format = "pyproject";
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     aiohttp

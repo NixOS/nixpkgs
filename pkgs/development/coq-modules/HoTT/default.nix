@@ -27,7 +27,7 @@ mkCoqDerivation {
 
   meta = {
     homepage = "https://homotopytypetheory.org/";
-    description = "The Homotopy Type Theory library";
+    description = "Homotopy Type Theory library";
     longDescription = ''
       Homotopy Type Theory is an interpretation of Martin-Löf’s intensional
       type theory into abstract homotopy theory. Propositional equality is

@@ -18,7 +18,7 @@ buildGoModule rec {
   vendorHash = "sha256-y+/hjYUTFZuq55YAZ5M4T1cwIR+XFQBmWVE+Cg1Y7PI=";
 
   meta = with lib; {
-    description = "The Go language implementation of gRPC. HTTP/2 based RPC";
+    description = "Go language implementation of gRPC. HTTP/2 based RPC";
     mainProgram = "protoc-gen-go-grpc";
     license = licenses.asl20;
     maintainers = [ maintainers.raboof ];

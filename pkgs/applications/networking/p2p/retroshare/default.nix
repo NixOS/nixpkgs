@@ -2,7 +2,7 @@
 , fetchpatch
 , qmake, cmake, pkg-config, miniupnpc, bzip2
 , speex, libmicrohttpd, libxml2, libxslt, sqlcipher, rapidjson, libXScrnSaver
-, qtbase, qtx11extras, qtmultimedia, libgnome-keyring3
+, qtbase, qtx11extras, qtmultimedia, libgnome-keyring
 }:
 
 mkDerivation rec {
@@ -33,7 +33,7 @@ mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config qmake cmake ];
   buildInputs = [
-    speex miniupnpc qtmultimedia qtx11extras qtbase libgnome-keyring3
+    speex miniupnpc qtmultimedia qtx11extras qtbase libgnome-keyring
     bzip2 libXScrnSaver libxml2 libxslt sqlcipher libmicrohttpd rapidjson
   ];
 
@@ -54,7 +54,7 @@ mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Decentralized peer to peer chat application.";
+    description = "Decentralized peer to peer chat application";
     homepage = "https://retroshare.cc/";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;

@@ -1,7 +1,5 @@
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
   cfg = config.programs.xwayland;
 
@@ -10,13 +8,13 @@ in
 {
   options.programs.xwayland = {
 
-    enable = mkEnableOption "Xwayland (an X server for interfacing X11 apps with the Wayland protocol)";
+    enable = lib.mkEnableOption "Xwayland (an X server for interfacing X11 apps with the Wayland protocol)";
 
-    defaultFontPath = mkOption {
-      type = types.str;
-      default = optionalString config.fonts.fontDir.enable
+    defaultFontPath = lib.mkOption {
+      type = lib.types.str;
+      default = lib.optionalString config.fonts.fontDir.enable
         "/run/current-system/sw/share/X11/fonts";
-      defaultText = literalExpression ''
+      defaultText = lib.literalExpression ''
         optionalString config.fonts.fontDir.enable "/run/current-system/sw/share/X11/fonts"
       '';
       description = ''
@@ -24,12 +22,12 @@ in
       '';
     };
 
-    package = mkOption {
-      type = types.path;
+    package = lib.mkOption {
+      type = lib.types.path;
       default = pkgs.xwayland.override (oldArgs: {
         inherit (cfg) defaultFontPath;
       });
-      defaultText = literalExpression ''
+      defaultText = lib.literalExpression ''
         pkgs.xwayland.override (oldArgs: {
           inherit (config.programs.xwayland) defaultFontPath;
         })
@@ -39,7 +37,7 @@ in
 
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     # Needed by some applications for fonts and default settings
     environment.pathsToLink = [ "/share/X11" ];

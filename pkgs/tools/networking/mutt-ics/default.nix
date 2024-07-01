@@ -14,7 +14,7 @@ with python3.pkgs; buildPythonApplication rec {
 
   meta = with lib; {
     homepage = "https://github.com/dmedvinsky/mutt-ics";
-    description = "A tool to show calendar event details in Mutt";
+    description = "Tool to show calendar event details in Mutt";
     mainProgram = "mutt-ics";
     license = licenses.mit;
     maintainers = with maintainers; [ mh182 ];

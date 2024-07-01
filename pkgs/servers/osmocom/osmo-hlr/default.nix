@@ -47,5 +47,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.agpl3Plus;
     maintainers = with lib.maintainers; [ janik ];
     platforms = lib.platforms.linux;
+    mainProgram = "osmo-hlr";
   };
 }

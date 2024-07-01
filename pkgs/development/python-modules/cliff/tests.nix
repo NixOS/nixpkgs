@@ -1,8 +1,9 @@
-{ buildPythonPackage
-, cliff
-, docutils
-, stestr
-, testscenarios
+{
+  buildPythonPackage,
+  cliff,
+  docutils,
+  stestr,
+  testscenarios,
 }:
 
 buildPythonPackage {

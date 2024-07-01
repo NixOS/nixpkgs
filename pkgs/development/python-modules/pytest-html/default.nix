@@ -1,13 +1,14 @@
-{ lib
-, buildNpmPackage
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, hatch-vcs
-, hatchling
-, jinja2
-, pytest
-, pytest-metadata
+{
+  lib,
+  buildNpmPackage,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  hatch-vcs,
+  hatchling,
+  jinja2,
+  pytest,
+  pytest-metadata,
 }:
 let
   pname = "pytest-html";
@@ -45,8 +46,14 @@ buildPythonPackage {
     hatch-vcs
     hatchling
   ];
-  buildInputs = [ pytest web-assets ];
-  propagatedBuildInputs = [ jinja2 pytest-metadata ];
+  buildInputs = [
+    pytest
+    web-assets
+  ];
+  propagatedBuildInputs = [
+    jinja2
+    pytest-metadata
+  ];
 
   env.HATCH_BUILD_NO_HOOKS = true;
 
@@ -57,9 +64,7 @@ buildPythonPackage {
   # tests require network access
   doCheck = false;
 
-  pythonImportsCheck = [
-    "pytest_html"
-  ];
+  pythonImportsCheck = [ "pytest_html" ];
 
   meta = with lib; {
     description = "Plugin for generating HTML reports";

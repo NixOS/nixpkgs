@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytablewriter
-, pytest
-, tcolorpy
-, typepy
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytablewriter,
+  pytest,
+  tcolorpy,
+  typepy,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -34,7 +35,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "pytest_md_report" ];
 
   meta = with lib; {
-    description = "A pytest plugin to make a test results report with Markdown table format";
+    description = "Pytest plugin to make a test results report with Markdown table format";
     homepage = "https://github.com/thombashi/pytest-md-report";
     changelog = "https://github.com/thombashi/pytest-md-report/releases/tag/v${version}";
     license = licenses.mit;

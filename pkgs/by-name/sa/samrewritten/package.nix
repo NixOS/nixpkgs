@@ -11,7 +11,7 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "samrewritten";
-  version = "unstable-2023-05-23";
+  version = "202008-unstable-2023-05-22";
 
   src = fetchFromGitHub {
     owner = "PaulCombal";
@@ -43,6 +43,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/PaulCombal/SamRewritten";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ ludovicopiero ];
-    platforms = lib.platforms.linux;
+    platforms = [ "x86_64-linux" ];
   };
 })

@@ -41,5 +41,5 @@ in {
     };
   };
 
-  meta.maintainers = [ maintainers.michaelpj ];
+  meta.maintainers = [ ];
 }

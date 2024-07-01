@@ -5,7 +5,7 @@
 , sbc, bluez5, udev, openssl, fftwFloat
 , soxr, speexdsp, systemd, webrtc-audio-processing_1
 , gst_all_1
-, check, libintl, meson, ninja, m4, wrapGAppsHook
+, check, libintl, meson, ninja, m4, wrapGAppsHook3
 , fetchpatch2
 
 , x11Support ? false
@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config meson ninja makeWrapper perlPackages.perl perlPackages.XMLParser m4 ]
     ++ lib.optionals stdenv.isLinux [ glib ]
     # gstreamer plugin discovery requires wrapping
-    ++ lib.optional (bluetoothSupport && advancedBluetoothCodecs) wrapGAppsHook;
+    ++ lib.optional (bluetoothSupport && advancedBluetoothCodecs) wrapGAppsHook3;
 
   propagatedBuildInputs =
     lib.optionals stdenv.isLinux [ libcap ];

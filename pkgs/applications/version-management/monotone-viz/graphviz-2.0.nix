@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional (libX11 == null) "--without-x";
 
   meta = {
-    description = "A program for visualising graphs";
+    description = "Program for visualising graphs";
     homepage = "http://www.graphviz.org/";
     branch = "2.0";
     platforms = lib.platforms.unix;

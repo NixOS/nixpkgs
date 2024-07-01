@@ -6,7 +6,7 @@ stdenv.mkDerivation {
   version = "2015-10-13";
 
   meta = {
-    description = "A strategy collectible card game";
+    description = "Strategy collectible card game";
     homepage = "https://scrolls.com/";
     # http://www.reddit.com/r/Scrolls/comments/2j3pxw/linux_client_experimental/
 

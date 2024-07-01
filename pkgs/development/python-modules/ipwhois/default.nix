@@ -1,15 +1,16 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, dnspython
-, fetchFromGitHub
-, fetchpatch
-, iana-etc
-, libredirect
-, pytestCheckHook
-, pythonOlder
-, pythonRelaxDepsHook
-, setuptools
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  dnspython,
+  fetchFromGitHub,
+  fetchpatch,
+  iana-etc,
+  libredirect,
+  pytestCheckHook,
+  pythonOlder,
+  pythonRelaxDepsHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -37,26 +38,18 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  pythonRelaxDeps = [
-    "dnspython"
-  ];
+  pythonRelaxDeps = [ "dnspython" ];
 
   nativeBuildInputs = [
     pythonRelaxDepsHook
     setuptools
   ];
 
-  propagatedBuildInputs = [
-    dnspython
-  ];
+  propagatedBuildInputs = [ dnspython ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "ipwhois"
-  ];
+  pythonImportsCheck = [ "ipwhois" ];
 
   preCheck = lib.optionalString stdenv.isLinux ''
     echo "nameserver 127.0.0.1" > resolv.conf

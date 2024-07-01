@@ -31,7 +31,7 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "The EGL External Platform interface";
+    description = "EGL External Platform interface";
     homepage = "https://github.com/NVIDIA/eglexternalplatform";
     license = licenses.mit;
     platforms = platforms.linux;

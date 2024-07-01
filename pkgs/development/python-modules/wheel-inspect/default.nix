@@ -1,17 +1,19 @@
-{ lib
-, attrs
-, buildPythonPackage
-, entry-points-txt
-, fetchFromGitHub
-, hatchling
-, headerparser
-, jsonschema
-, pythonRelaxDepsHook
-, packaging
-, pytestCheckHook
-, pythonOlder
-, readme-renderer
-, wheel-filename
+{
+  lib,
+  attrs,
+  buildPythonPackage,
+  entry-points-txt,
+  fetchFromGitHub,
+  hatchling,
+  headerparser,
+  jsonschema,
+  pythonRelaxDepsHook,
+  packaging,
+  pytestCheckHook,
+  pythonOlder,
+  readme-renderer,
+  setuptools,
+  wheel-filename,
 }:
 
 buildPythonPackage rec {
@@ -52,14 +54,14 @@ buildPythonPackage rec {
     wheel-filename
   ];
 
-  nativeCheckInputs = [
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  checkInputs = [
+    setuptools
     jsonschema
-    pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "wheel_inspect"
-  ];
+  pythonImportsCheck = [ "wheel_inspect" ];
 
   pytestFlagsArray = [
     "-W"

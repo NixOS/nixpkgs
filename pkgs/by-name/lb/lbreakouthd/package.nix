@@ -10,11 +10,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lbreakouthd";
-  version = "1.1.7";
+  version = "1.1.8";
 
   src = fetchurl {
     url = "mirror://sourceforge/lgames/lbreakouthd-${finalAttrs.version}.tar.gz";
-    hash = "sha256-ivgT8yYEFK4kEJkilj3NP4OO2mBkk2Zx6I+Elde0TkE=";
+    hash = "sha256-3WZ77KVDNitdIcXPFf0CMXtjDvEXi91Jr7mpeV09Wt4=";
   };
 
   buildInputs = [
@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://lgames.sourceforge.io/LBreakoutHD/";
-    description = "A widescreen Breakout clone";
+    description = "Widescreen Breakout clone";
     license = lib.licenses.gpl2Plus;
     mainProgram = "lbreakouthd";
     maintainers = with lib.maintainers; [ AndersonTorres ];

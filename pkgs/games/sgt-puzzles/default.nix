@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, desktop-file-utils
 , gtk3, libX11, cmake, imagemagick
-, pkg-config, perl, wrapGAppsHook, nixosTests, writeScript
+, pkg-config, perl, wrapGAppsHook3, nixosTests, writeScript
 , isMobile ? false
 }:
 
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     imagemagick
     perl
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString isMobile "-DSTYLUS_BASED";

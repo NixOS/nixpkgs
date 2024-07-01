@@ -1,27 +1,28 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, requests
-, numpy
-, pandas
-, scipy
-, statsmodels
-, patsy
-, scikit-learn
-, tqdm
-, dask
-, distributed
-, stumpy
-, cloudpickle
-, pytestCheckHook
-, pytest-xdist
-, mock
-, matplotlib
-, seaborn
-, ipython
-, notebook
-, pandas-datareader
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  requests,
+  numpy,
+  pandas,
+  scipy,
+  statsmodels,
+  patsy,
+  scikit-learn,
+  tqdm,
+  dask,
+  distributed,
+  stumpy,
+  cloudpickle,
+  pytestCheckHook,
+  pytest-xdist,
+  mock,
+  matplotlib,
+  seaborn,
+  ipython,
+  notebook,
+  pandas-datareader,
 }:
 
 buildPythonPackage rec {

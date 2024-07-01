@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, llvmPackages
-, setuptools
-, writeText
+{
+  lib,
+  buildPythonPackage,
+  llvmPackages,
+  setuptools,
+  writeText,
 }:
 
 let
@@ -22,7 +23,8 @@ let
     [options]
     packages = clang
   '';
-in buildPythonPackage {
+in
+buildPythonPackage {
   pname = "libclang";
   format = "pyproject";
 

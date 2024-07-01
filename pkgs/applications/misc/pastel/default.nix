@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = lib.optional stdenv.isDarwin Security;
 
   meta = with lib; {
-    description = "A command-line tool to generate, analyze, convert and manipulate colors";
+    description = "Command-line tool to generate, analyze, convert and manipulate colors";
     homepage = "https://github.com/sharkdp/pastel";
     changelog = "https://github.com/sharkdp/pastel/releases/tag/v${version}";
     license = with licenses; [ asl20 /* or */ mit ];

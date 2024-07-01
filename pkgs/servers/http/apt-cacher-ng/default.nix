@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ bzip2 fuse libevent xz openssl systemd tcp_wrappers zlib c-ares ];
 
   meta = with lib; {
-    description = "A caching proxy specialized for Linux distribution files";
+    description = "Caching proxy specialized for Linux distribution files";
     mainProgram = "apt-cacher-ng";
     homepage = "https://www.unix-ag.uni-kl.de/~bloch/acng/";
     license = licenses.bsdOriginal;

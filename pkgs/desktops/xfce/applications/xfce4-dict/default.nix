@@ -23,7 +23,7 @@ mkXfceDerivation {
   ];
 
   meta = with lib; {
-    description = "A Dictionary Client for the Xfce desktop environment";
+    description = "Dictionary Client for the Xfce desktop environment";
     mainProgram = "xfce4-dict";
     maintainers = with maintainers; [ ] ++ teams.xfce.members;
   };

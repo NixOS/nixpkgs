@@ -1,13 +1,14 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, click
-, fetchPypi
-, jsonpickle
-, requests
-, tabulate
-, xmltodict
-, zeroconf
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  click,
+  fetchPypi,
+  jsonpickle,
+  requests,
+  tabulate,
+  xmltodict,
+  zeroconf,
 }:
 
 buildPythonPackage rec {

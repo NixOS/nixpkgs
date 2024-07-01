@@ -1,21 +1,22 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, pythonOlder
-, rustPlatform
-, bitstring
-, cachetools
-, cffi
-, deprecation
-, iconv
-, matplotlib
-, numpy
-, scipy
-, screed
-, hypothesis
-, pytest-xdist
-, pyyaml
-, pytestCheckHook
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  pythonOlder,
+  rustPlatform,
+  bitstring,
+  cachetools,
+  cffi,
+  deprecation,
+  iconv,
+  matplotlib,
+  numpy,
+  scipy,
+  screed,
+  hypothesis,
+  pytest-xdist,
+  pyyaml,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {

@@ -23,7 +23,7 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    description = "A tool that send TCP/UDP traffic over ICMP";
+    description = "Tool that send TCP/UDP traffic over ICMP";
     homepage = "https://github.com/esrrhs/pingtunnel";
     license = licenses.mit;
     maintainers = with maintainers; [ oluceps ];

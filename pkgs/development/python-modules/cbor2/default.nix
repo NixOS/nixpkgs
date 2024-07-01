@@ -1,28 +1,29 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
 
-# build-system
-, setuptools
-, setuptools-scm
+  # build-system
+  setuptools,
+  setuptools-scm,
 
-# tests
-, hypothesis
-, pytestCheckHook
+  # tests
+  hypothesis,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "cbor2";
-  version = "5.6.2";
+  version = "5.6.3";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-t1E8LeqIaJkfrX74iZiQ68+LGZubRGHDwR160670gg0=";
+    hash = "sha256-5vCuJ1HC0zOpYOCAfAYRSU6xJFYxoWeWWsvBAFCUVdM=";
   };
 
   postPatch = ''
@@ -35,9 +36,7 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  pythonImportsCheck = [
-    "cbor2"
-  ];
+  pythonImportsCheck = [ "cbor2" ];
 
   nativeCheckInputs = [
     hypothesis

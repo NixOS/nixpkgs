@@ -8,15 +8,18 @@
   rustPlatform,
 
   cups,
+  ffmpeg,
   firefox-unwrapped,
   libcanberra-gtk3,
   libglvnd,
   libnotify,
+  libpulseaudio,
   libva,
   mesa,
   nixosTests,
   openssl,
   pciutils,
+  pipewire,
   pkg-config,
   stdenv,
   udev,
@@ -25,13 +28,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "firefoxpwa";
-  version = "2.11.1";
+  version = "2.12.1";
 
   src = fetchFromGitHub {
     owner = "filips123";
     repo = "PWAsForFirefox";
     rev = "v${version}";
-    hash = "sha256-ZD/bTziVmHtQVKejzj+fUXVazCm2PaulS2NZjTribSk=";
+    hash = "sha256-0Yyd0mJK/eDallg9ERimvZIRCOTeDkzeAVUfDeNP928=";
   };
 
   sourceRoot = "${src.name}/native";
@@ -68,11 +71,14 @@ rustPlatform.buildRustPackage rec {
       libs =
         lib.optionals stdenv.isLinux [
           cups
+          ffmpeg
           libglvnd
           libnotify
+          libpulseaudio
           libva
           mesa
           pciutils
+          pipewire
           udev
           xorg.libXScrnSaver
         ]
@@ -119,8 +125,8 @@ rustPlatform.buildRustPackage rec {
 
   passthru.tests.firefoxpwa = nixosTests.firefoxpwa;
 
-  meta = with lib; {
-    description = "A tool to install, manage and use Progressive Web Apps (PWAs) in Mozilla Firefox (native component)";
+  meta = {
+    description = "Tool to install, manage and use Progressive Web Apps (PWAs) in Mozilla Firefox (native component)";
     longDescription = ''
       Progressive Web Apps (PWAs) are web apps that use web APIs and features along
       with progressive enhancement strategy to bring a native app-like user experience
@@ -149,9 +155,9 @@ rustPlatform.buildRustPackage rec {
     '';
     homepage = "https://pwasforfirefox.filips.si/";
     changelog = "https://github.com/filips123/PWAsForFirefox/releases/tag/v${version}";
-    license = licenses.mpl20;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [
+    license = lib.licenses.mpl20;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
       adamcstephens
       camillemndn
       pasqui23

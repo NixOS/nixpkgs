@@ -19,10 +19,10 @@
 
 stdenv.mkDerivation (final: {
   pname = "quarto";
-  version = "1.4.553";
+  version = "1.4.557";
   src = fetchurl {
     url = "https://github.com/quarto-dev/quarto-cli/releases/download/v${final.version}/quarto-${final.version}-linux-amd64.tar.gz";
-    sha256 = "sha256-IrdUGx4b6XRmV6RHODeWukIObwy8XnsxyCKd3rwljJA=";
+    sha256 = "sha256-RcEkmPMcfNGDmu2bQwUHvlHgM/ySQQwDgf/NpTQMxcI=";
   };
 
   nativeBuildInputs = [

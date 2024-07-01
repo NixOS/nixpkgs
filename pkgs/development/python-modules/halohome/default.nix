@@ -1,10 +1,11 @@
-{ lib
-, aiohttp
-, bleak
-, buildPythonPackage
-, csrmesh
-, fetchFromGitHub
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  bleak,
+  buildPythonPackage,
+  csrmesh,
+  fetchFromGitHub,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -30,9 +31,7 @@ buildPythonPackage rec {
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "halohome"
-  ];
+  pythonImportsCheck = [ "halohome" ];
 
   meta = with lib; {
     description = "Python library to control Eaton HALO Home Smart Lights";

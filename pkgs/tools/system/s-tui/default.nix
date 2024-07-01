@@ -29,7 +29,7 @@ python3Packages.buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://amanusk.github.io/s-tui/";
     description = "Stress-Terminal UI monitoring tool";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     maintainers = [ ];
     broken = stdenv.isDarwin; # https://github.com/amanusk/s-tui/issues/49
     mainProgram = "s-tui";

@@ -31,7 +31,7 @@
 , sord
 , sratom
 , wafHook
-, wrapGAppsHook
+, wrapGAppsHook3
 , zita-convolver
 , zita-resampler
 , optimizationSupport ? false # Enable support for native CPU extensions
@@ -62,7 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     python3
     wafHook
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -105,7 +105,7 @@ stdenv.mkDerivation (finalAttrs: {
   env.NIX_CFLAGS_COMPILE = toString [ "-fpermissive" ];
 
   meta = with lib; {
-    description = "A virtual guitar amplifier for Linux running with JACK";
+    description = "Virtual guitar amplifier for Linux running with JACK";
     mainProgram = "guitarix";
     longDescription = ''
         guitarix is a virtual guitar amplifier for Linux running with

@@ -1,16 +1,17 @@
-{ lib
-, brotli
-, buildPythonPackage
-, cython
-, execnet
-, fetchFromGitHub
-, jinja2
-, pytestCheckHook
-, pythonOlder
-, pyzmq
-, redis
-, setuptools
-, sqlalchemy
+{
+  lib,
+  brotli,
+  buildPythonPackage,
+  cython,
+  execnet,
+  fetchFromGitHub,
+  jinja2,
+  pytestCheckHook,
+  pythonOlder,
+  pyzmq,
+  redis,
+  setuptools,
+  sqlalchemy,
 }:
 
 buildPythonPackage rec {
@@ -33,24 +34,12 @@ buildPythonPackage rec {
   ];
 
   passthru.optional-dependencies = {
-    execnet = [
-      execnet
-    ];
-    sqlalchemy = [
-      sqlalchemy
-    ];
-    redis = [
-      redis
-    ];
-    zmq = [
-      pyzmq
-    ];
-    compression = [
-      brotli
-    ];
-    jinja = [
-      jinja2
-    ];
+    execnet = [ execnet ];
+    sqlalchemy = [ sqlalchemy ];
+    redis = [ redis ];
+    zmq = [ pyzmq ];
+    compression = [ brotli ];
+    jinja = [ jinja2 ];
     all = [
       brotli
       execnet
@@ -68,9 +57,7 @@ buildPythonPackage rec {
   # Some of the tests use localhost networking.
   __darwinAllowLocalNetworking = true;
 
-  pythonImportsCheck = [
-    "logbook"
-  ];
+  pythonImportsCheck = [ "logbook" ];
 
   disabledTests = [
     # Test require Redis instance
@@ -78,7 +65,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "A logging replacement for Python";
+    description = "Logging replacement for Python";
     homepage = "https://logbook.readthedocs.io/";
     changelog = "https://github.com/getlogbook/logbook/blob/${version}/CHANGES";
     license = licenses.bsd3;

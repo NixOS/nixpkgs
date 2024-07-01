@@ -81,7 +81,17 @@ in import ../make-test-python.nix ({ pkgs, lib, ... }: {
       kernelPackages = lib.mkIf (kernelPackages != null) kernelPackages;
     };
 
-    specialisation.boot-lvm.configuration.virtualisation.rootDevice = "/dev/test_vg/test_lv";
+    specialisation.boot-lvm.configuration.virtualisation = {
+      useDefaultFilesystems = false;
+      fileSystems = {
+        "/" = {
+          device = "/dev/test_vg/test_lv";
+          fsType = "xfs";
+        };
+      };
+
+      rootDevice = "/dev/test_vg/test_lv";
+    };
   };
 
   testScript = ''
@@ -99,7 +109,7 @@ in import ../make-test-python.nix ({ pkgs, lib, ... }: {
 
     # Ensure we have successfully booted from LVM
     assert "(initrd)" in machine.succeed("systemd-analyze")  # booted with systemd in stage 1
-    assert "/dev/mapper/test_vg-test_lv on / type ext4" in machine.succeed("mount")
+    assert "/dev/mapper/test_vg-test_lv on / type xfs" in machine.succeed("mount")
     assert "hello" in machine.succeed("cat /test")
     ${extraCheck}
   '';

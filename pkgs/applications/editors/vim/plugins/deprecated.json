@@ -7,6 +7,14 @@
         "date": "2021-12-21",
         "new": "cmp-tmux"
     },
+    "fern-vim": {
+        "date": "2024-05-28",
+        "new": "vim-fern"
+    },
+    "gina-vim": {
+        "date": "2024-06-19",
+        "new": "vim-gina"
+    },
     "gist-vim": {
         "date": "2020-03-27",
         "new": "vim-gist"
@@ -47,8 +55,12 @@
         "date": "2021-09-03",
         "new": "sqlite-lua"
     },
+    "suda-vim": {
+        "date": "2024-05-12",
+        "new": "vim-suda"
+    },
     "vim-fsharp": {
-        "date": "2024-04-21",
+        "date": "2024-06-19",
         "new": "zarchive-vim-fsharp"
     },
     "vim-jade": {

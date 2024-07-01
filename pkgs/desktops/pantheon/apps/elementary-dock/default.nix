@@ -19,7 +19,7 @@
 , libdbusmenu-gtk3
 , gnome-menus
 , libgee
-, wrapGAppsHook
+, wrapGAppsHook3
 , meson
 , ninja
 , granite
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     libxml2 # xmllint
     pkg-config
     vala
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

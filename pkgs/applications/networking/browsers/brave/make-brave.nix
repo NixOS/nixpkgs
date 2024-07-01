@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, wrapGAppsHook, makeWrapper
+{ lib, stdenv, fetchurl, wrapGAppsHook3, makeWrapper
 , alsa-lib
 , at-spi2-atk
 , at-spi2-core
@@ -112,7 +112,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [
     dpkg
-    (wrapGAppsHook.override { inherit makeWrapper; })
+    (wrapGAppsHook3.override { inherit makeWrapper; })
   ];
 
   buildInputs = [

@@ -1,19 +1,20 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, gotestwaf
-, testers
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  gotestwaf,
+  testers,
 }:
 
 buildGoModule rec {
   pname = "gotestwaf";
-  version = "0.4.18";
+  version = "0.4.19";
 
   src = fetchFromGitHub {
     owner = "wallarm";
     repo = "gotestwaf";
     rev = "refs/tags/v${version}";
-    hash = "sha256-+AM+x/jKkoXLeWOhrCALhCDuoGCl5jt0BiCit885K7I=";
+    hash = "sha256-ax2HPhdaqawpFe2AZg3SVsEJLG7gEgL7632iRADpaa8=";
   };
 
   vendorHash = null;

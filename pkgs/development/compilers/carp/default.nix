@@ -52,7 +52,7 @@ haskellPackages.mkDerivation rec {
       --prefix PATH : ${clang}/bin
   '';
 
-  description = "A statically typed lisp, without a GC, for real-time applications";
+  description = "Statically typed lisp, without a GC, for real-time applications";
   homepage    = "https://github.com/carp-lang/Carp";
   license     = lib.licenses.asl20;
   maintainers = with lib.maintainers; [ jluttine ];

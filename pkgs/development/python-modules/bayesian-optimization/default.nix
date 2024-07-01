@@ -1,12 +1,13 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, fetchFromGitHub
-, scikit-learn
-, scipy
-, colorama
-, pytestCheckHook
-, pythonOlder
+{
+  stdenv,
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  scikit-learn,
+  scipy,
+  colorama,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {

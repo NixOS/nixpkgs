@@ -12,13 +12,13 @@ buildGoModule rec {
   # See https://docs.mattermost.com/upgrade/extended-support-release.html
   # When a new ESR version is available (e.g. 8.1.x -> 9.5.x), update
   # the version regex in passthru.updateScript as well.
-  version = "9.5.3";
+  version = "9.5.6";
 
   src = fetchFromGitHub {
     owner = "mattermost";
     repo = "mattermost";
     rev = "v${version}";
-    hash = "sha256-kqwRwo7eL9xfOyP54oS800L6bisVwJf9FpgTnwfmjAo=";
+    hash = "sha256-bLnvbduP6h9o82BQUNh9MyFpW/Cbl6c5o9hrPV0Z8+0=";
   };
 
   # Needed because buildGoModule does not support go workspaces yet.
@@ -34,7 +34,7 @@ buildGoModule rec {
 
   webapp = fetchurl {
     url = "https://releases.mattermost.com/${version}/mattermost-${version}-linux-amd64.tar.gz";
-    hash = "sha256-f2Zap/15TOyzCP97BGGmXimwAa1mTP42w37RToNkAsQ=";
+    hash = "sha256-ZlvO/7kdMopIHBDdFp6wSQCR+NobGdDC6PcVd1iG16E=";
   };
 
   vendorHash = "sha256-TJCtgNf56A1U0EbV5gXjTro+YudVBRWiSZoBC3nJxnE=";
@@ -69,7 +69,7 @@ buildGoModule rec {
 
   passthru = {
     updateScript = nix-update-script {
-      extraArgs = [ "--version-regex" "^v(9\.5\.([0-9.]+))" ];
+      extraArgs = [ "--version-regex" "v(9\.5\.[0-9]+)" ];
     };
     tests.mattermost = nixosTests.mattermost;
   };

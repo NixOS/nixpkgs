@@ -4,8 +4,6 @@
 , appimageTools
 , lib
 , fetchurl
-, texliveMedium
-, pandoc
 }:
 
 # Based on https://gist.github.com/msteen/96cb7df66a359b827497c5269ccbbf94 and joplin-desktop nixpkgs.
@@ -21,8 +19,8 @@ in
 appimageTools.wrapType2 rec {
   inherit pname version src;
 
-  multiArch = false; # no 32bit needed
-  extraPkgs = pkgs: (appimageTools.defaultFhsEnvArgs.multiPkgs pkgs) ++ [ texliveMedium pandoc ];
+  extraPkgs = pkgs: [ pkgs.texliveMedium pkgs.pandoc ];
+
   extraInstallCommands = ''
     install -m 444 -D ${appimageContents}/Zettlr.desktop $out/share/applications/Zettlr.desktop
     install -m 444 -D ${appimageContents}/Zettlr.png $out/share/icons/hicolor/512x512/apps/Zettlr.png
@@ -31,7 +29,7 @@ appimageTools.wrapType2 rec {
   '';
 
   meta = with lib; {
-    description = "A markdown editor for writing academic texts and taking notes";
+    description = "Markdown editor for writing academic texts and taking notes";
     homepage = "https://www.zettlr.com";
     platforms = [ "x86_64-linux" ];
     license = licenses.gpl3;

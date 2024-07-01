@@ -1,4 +1,4 @@
-{ config, lib, ... }:
+{ config, lib, pkgs, ... }:
 
 with lib;
 
@@ -17,6 +17,9 @@ in
     };
   };
   config = mkIf cfg.enable {
+    environment.systemPackages = [
+      pkgs.scion
+    ];
     services.scion = {
       scion-dispatcher.enable = true;
       scion-daemon.enable = true;

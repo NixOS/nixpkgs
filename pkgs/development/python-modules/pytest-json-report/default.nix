@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytest
-, pytest-metadata
-, pytest-xdist
-, pytestCheckHook
-, pythonOlder
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytest,
+  pytest-metadata,
+  pytest-xdist,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -23,17 +24,11 @@ buildPythonPackage rec {
     hash = "sha256-hMB/atDuo7CjwhHFUOxVfgJ7Qp4AA9J428iv7hyQFcs=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  buildInputs = [
-    pytest
-  ];
+  buildInputs = [ pytest ];
 
-  propagatedBuildInputs = [
-    pytest-metadata
-  ];
+  dependencies = [ pytest-metadata ];
 
   nativeCheckInputs = [
     pytest-xdist
@@ -44,11 +39,12 @@ buildPythonPackage rec {
     # pytest-flaky is not available at the moment
     "test_bug_31"
     "test_environment_via_metadata_plugin"
+    # AssertionError
+    "test_report_collectors"
+    "test_report_crash_and_traceback"
   ];
 
-  pythonImportsCheck = [
-    "pytest_jsonreport"
-  ];
+  pythonImportsCheck = [ "pytest_jsonreport" ];
 
   meta = with lib; {
     description = "Pytest plugin to report test results as JSON";

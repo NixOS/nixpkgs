@@ -21,11 +21,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mednafen";
-  version = "1.29.0";
+  version = "1.32.1";
 
   src = fetchurl {
     url = "https://mednafen.github.io/releases/files/mednafen-${finalAttrs.version}.tar.xz";
-    hash = "sha256-2j+88Ch3+b4PAov6XRy1npU6QEm5D+fjk4ijOG2fNi4=";
+    hash = "sha256-3n65SrZiEq53WDdlJDaKirIII0szeWYlymMFR9vIODI=";
   };
 
   outputs = [ "out" "doc" ];
@@ -70,7 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://mednafen.github.io/";
-    description = "A portable, CLI-driven, SDL+OpenGL-based, multi-system emulator";
+    description = "Portable, CLI-driven, SDL+OpenGL-based, multi-system emulator";
     longDescription = ''
       Mednafen is a portable, utilizing OpenGL and SDL,
       argument(command-line)-driven multi-system emulator. Mednafen has the

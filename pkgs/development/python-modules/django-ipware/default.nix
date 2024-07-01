@@ -1,20 +1,21 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, django
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  django,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "django-ipware";
-  version = "6.0.5";
+  version = "7.0.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-s54nQDKH1r6wUT5pQCQBfbpY0Sn9QQoQFKyKFYTnP84=";
+    hash = "sha256-2exD0r983yFv7Y1JSghN61dhpUhgpTsudDRqTzhM/0c=";
   };
 
   propagatedBuildInputs = [ django ];
@@ -26,7 +27,7 @@ buildPythonPackage rec {
   # django.core.exceptions.ImproperlyConfigured: Requested setting IPWARE_META_PRECEDENCE_ORDER, but settings are not configured. You must either define the environment variable DJANGO_SETTINGS_MODULE or call settings.configure() before accessing settings.
 
   meta = with lib; {
-    description = "A Django application to retrieve user's IP address";
+    description = "Django application to retrieve user's IP address";
     homepage = "https://github.com/un33k/django-ipware";
     changelog = "https://github.com/un33k/django-ipware/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;

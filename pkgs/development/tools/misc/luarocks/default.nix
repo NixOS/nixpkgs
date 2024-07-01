@@ -1,14 +1,20 @@
+/*
+This is a minimal/manual luarocks derivation used by `buildLuarocksPackage` to install lua packages.
+
+As a nix user, you should use the generated lua.pkgs.luarocks that contains a luarocks manifest
+which makes it recognizable to luarocks.
+Generating the manifest for luarocks_bootstrap seemed too hackish, which is why we end up
+with two "luarocks" derivations.
+
+*/
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , curl
 , makeWrapper
 , which
 , unzip
 , lua
-, file
-, nix-prefetch-git
   # for 'luarocks pack'
 , zip
 , nix-update-script
@@ -81,8 +87,7 @@ stdenv.mkDerivation (finalAttrs: {
               --suffix LUA_PATH ";" "$(echo "$out"/share/lua/*/)?/init.lua" \
               --suffix LUA_CPATH ";" "$(echo "$out"/lib/lua/*/)?.so" \
               --suffix LUA_CPATH ";" "$(echo "$out"/share/lua/*/)?/init.lua" \
-              --suffix PATH : ${lib.makeBinPath ([ unzip ] ++
-                lib.optionals (finalAttrs.pname == "luarocks-nix") [ file nix-prefetch-git ])}
+              --suffix PATH : ${lib.makeBinPath finalAttrs.propagatedBuildInputs}
         }
     done
   '';
@@ -109,9 +114,10 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = with lib; {
-    description = "A package manager for Lua";
+    description = "Package manager for Lua";
     license = licenses.mit;
     maintainers = with maintainers; [ raskin teto ];
+    mainProgram = "luarocks";
     platforms = platforms.linux ++ platforms.darwin;
     downloadPage = "http://luarocks.org/releases/";
   };

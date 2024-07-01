@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, pytestCheckHook
-, numpy
-, scipy
-, sympy
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  pytestCheckHook,
+  numpy,
+  scipy,
+  sympy,
 }:
 
 buildPythonPackage rec {
@@ -22,9 +23,15 @@ buildPythonPackage rec {
     hash = "sha256-GgnjvwAfyxnDfBGvgMFIPPbR88BWFiNGrScVORygq94=";
   };
 
-  propagatedBuildInputs = [ numpy sympy ];
+  propagatedBuildInputs = [
+    numpy
+    sympy
+  ];
 
-  nativeCheckInputs = [ pytestCheckHook scipy ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    scipy
+  ];
   pythonImportsCheck = [ "transforms3d" ];
 
   meta = with lib; {

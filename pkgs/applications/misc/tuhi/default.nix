@@ -8,7 +8,7 @@
 , glib
 , gtk3
 , gobject-introspection
-, wrapGAppsHook
+, wrapGAppsHook3
 , fetchFromGitHub
 }:
 
@@ -33,7 +33,7 @@ python3Packages.buildPythonApplication rec {
   nativeBuildInputs = [
     pkg-config meson ninja
     appstream-glib desktop-file-utils
-    wrapGAppsHook
+    wrapGAppsHook3
     gobject-introspection
   ];
   buildInputs = [

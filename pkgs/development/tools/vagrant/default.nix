@@ -113,7 +113,7 @@ in buildRubyGem rec {
   };
 
   meta = with lib; {
-    description = "A tool for building complete development environments";
+    description = "Tool for building complete development environments";
     homepage = "https://www.vagrantup.com/";
     license = licenses.bsl11;
     maintainers = with maintainers; [ tylerjl ];

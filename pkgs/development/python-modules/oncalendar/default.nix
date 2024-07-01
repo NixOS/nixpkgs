@@ -1,7 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -20,7 +21,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "oncalendar" ];
 
   meta = with lib; {
-    description = "A systemd OnCalendar expression parser and evaluator";
+    description = "Systemd OnCalendar expression parser and evaluator";
     homepage = "https://github.com/cuu508/oncalendar";
     license = licenses.bsd3;
     maintainers = with maintainers; [ phaer ];

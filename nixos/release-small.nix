@@ -98,7 +98,7 @@ in rec {
     name = "nixos-${nixos.channel.version}";
     meta = {
       description = "Release-critical builds for the NixOS channel";
-      maintainers = [ lib.maintainers.eelco ];
+      maintainers = [ ];
     };
     constituents = lib.flatten [
       [

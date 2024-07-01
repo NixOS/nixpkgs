@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "http://chromium-bsu.sourceforge.net/";
-    description = "A fast paced, arcade-style, top-scrolling space shooter";
+    description = "Fast paced, arcade-style, top-scrolling space shooter";
     mainProgram = "chromium-bsu";
     license = licenses.artistic1;
     maintainers = with maintainers; [ AndersonTorres ];

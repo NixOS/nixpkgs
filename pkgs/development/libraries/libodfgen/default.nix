@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A base library for generating ODF documents";
+    description = "Base library for generating ODF documents";
     license = licenses.mpl20;
     maintainers = with maintainers; [ raskin ];
     platforms = platforms.unix;

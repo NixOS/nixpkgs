@@ -101,7 +101,7 @@ For example, a package which requires dynamic linking and cannot be linked stati
 ```nix
 {
   meta.platforms = lib.platforms.all;
-  meta.badPlatforms = [ lib.systems.inspect.patterns.isStatic ];
+  meta.badPlatforms = [ lib.systems.inspect.platformPatterns.isStatic ];
 }
 ```
 
@@ -109,83 +109,6 @@ The [`lib.meta.availableOn`](https://github.com/NixOS/nixpkgs/blob/b03ac42b0734d
 Some packages use this to automatically detect the maximum set of features with which they can be built.
 For example, `systemd` [requires dynamic linking](https://github.com/systemd/systemd/issues/20600#issuecomment-912338965), and [has a `meta.badPlatforms` setting](https://github.com/NixOS/nixpkgs/blob/b03ac42b0734da3e7be9bf8d94433a5195734b19/pkgs/os-specific/linux/systemd/default.nix#L752) similar to the one above.
 Packages which can be built with or without `systemd` support will use `lib.meta.availableOn` to detect whether or not `systemd` is available on the [`hostPlatform`](#ssec-cross-platform-parameters) for which they are being built; if it is not available (e.g. due to a statically-linked host platform like `pkgsStatic`) this support will be disabled by default.
-
-### `tests` {#var-meta-tests}
-
-::: {.warning}
-This attribute is special in that it is not actually under the `meta` attribute set but rather under the `passthru` attribute set. This is due to how `meta` attributes work, and the fact that they are supposed to contain only metadata, not derivations.
-:::
-
-An attribute set with tests as values. A test is a derivation that builds when the test passes and fails to build otherwise.
-
-You can run these tests with:
-
-```ShellSession
-$ cd path/to/nixpkgs
-$ nix-build -A your-package.tests
-```
-
-#### Package tests {#var-meta-tests-packages}
-
-Tests that are part of the source package are often executed in the `installCheckPhase`.
-
-Prefer `passthru.tests` for tests that are introduced in nixpkgs because:
-
-* `passthru.tests` tests the 'real' package, independently from the environment in which it was built
-* we can run `passthru.tests` independently
-* `installCheckPhase` adds overhead to each build
-
-For more on how to write and run package tests, see [](#sec-package-tests).
-
-#### NixOS tests {#var-meta-tests-nixos}
-
-The NixOS tests are available as `nixosTests` in parameters of derivations. For instance, the OpenSMTPD derivation includes lines similar to:
-
-```nix
-{ /* ... , */ nixosTests }:
-{
-  # ...
-  passthru.tests = {
-    basic-functionality-and-dovecot-integration = nixosTests.opensmtpd;
-  };
-}
-```
-
-NixOS tests run in a VM, so they are slower than regular package tests. For more information see [NixOS module tests](https://nixos.org/manual/nixos/stable/#sec-nixos-tests).
-
-Alternatively, you can specify other derivations as tests. You can make use of
-the optional parameter to inject the correct package without
-relying on non-local definitions, even in the presence of `overrideAttrs`.
-Here that's `finalAttrs.finalPackage`, but you could choose a different name if
-`finalAttrs` already exists in your scope.
-
-`(mypkg.overrideAttrs f).passthru.tests` will be as expected, as long as the
-definition of `tests` does not rely on the original `mypkg` or overrides it in
-all places.
-
-```nix
-# my-package/default.nix
-{ stdenv, callPackage }:
-stdenv.mkDerivation (finalAttrs: {
-  # ...
-  passthru.tests.example = callPackage ./example.nix { my-package = finalAttrs.finalPackage; };
-})
-```
-
-```nix
-# my-package/example.nix
-{ runCommand, lib, my-package, ... }:
-runCommand "my-package-test" {
-  nativeBuildInputs = [ my-package ];
-  src = lib.sources.sourcesByRegex ./. [ ".*.in" ".*.expected" ];
-} ''
-  my-package --help
-  my-package <example.in >example.actual
-  diff -U3 --color=auto example.expected example.actual
-  mkdir $out
-''
-```
-
 
 ### `timeout` {#var-meta-timeout}
 

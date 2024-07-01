@@ -63,7 +63,7 @@ let
     ];
 
     buildPhase = ''
-      HOME=$(mktemp -d) RUSTFLAGS="-C linker=lld" wasm-pack build --target web --release
+      HOME=$(mktemp -d) wasm-pack build --target web --release
     '';
 
     installPhase = ''
@@ -73,11 +73,14 @@ let
     doCheck = false;
 
     meta = {
-      description = "A self contained toolkit for creating, editing, and previewing TPSE files";
+      description = "Self contained toolkit for creating, editing, and previewing TPSE files";
       homepage = "https://gitlab.com/UniQMG/tpsecore";
       license = lib.licenses.mit;
       maintainers = with lib.maintainers; [ huantian wackbyte ];
       platforms = lib.platforms.linux;
+      # See comment about wasm32-unknown-unknown in rustc.nix.
+      broken = lib.any (a: lib.hasAttr a stdenv.hostPlatform.gcc) [ "cpu" "float-abi" "fpu" ] ||
+        !stdenv.hostPlatform.gcc.thumb or true;
     };
   };
 

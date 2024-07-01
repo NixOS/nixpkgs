@@ -1,0 +1,13 @@
+diff --git a/src/tools/sfstools.sh b/src/tools/sfstools.sh
+index c6c41197..9a59814f 100755
+--- a/src/tools/sfstools.sh
++++ b/src/tools/sfstools.sh
+@@ -1,5 +1,6 @@
+ #!/usr/bin/env bash
+ 
+-tool=$(basename $0)
++tool="$(basename $0)"
++dir="$(dirname $0)"
+ 
+-${tool/saunafs/saunafs } "$@"
++$dir/saunafs ${tool/sfs/} "$@"

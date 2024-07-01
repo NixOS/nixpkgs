@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools
-, docutils
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  docutils,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -17,23 +18,15 @@ buildPythonPackage rec {
     hash = "sha256-GyNcDJIjQatsUwOQiS656S+QubdQRgY+BHys+w8FDEU=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [ docutils ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [
-    "restructuredtext_lint/test/test.py"
-  ];
+  pytestFlagsArray = [ "restructuredtext_lint/test/test.py" ];
 
-  pythonImportsCheck = [
-    "restructuredtext_lint"
-  ];
+  pythonImportsCheck = [ "restructuredtext_lint" ];
 
   meta = {
     description = "reStructuredText linter";

@@ -1,4 +1,17 @@
-{ lib, stdenv, fetchFromGitHub, libjpeg, zlib, cmake, perl }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, libjpeg
+, perl
+, zlib
+
+# for passthru.tests
+, cups-filters
+, pdfmixtool
+, pdfslicer
+, python3
+}:
 
 stdenv.mkDerivation rec {
   pname = "qpdf";
@@ -24,9 +37,18 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
+  passthru.tests = {
+    inherit (python3.pkgs) pikepdf;
+    inherit
+      cups-filters
+      pdfmixtool
+      pdfslicer
+    ;
+  };
+
   meta = with lib; {
     homepage = "https://qpdf.sourceforge.io/";
-    description = "A C++ library and set of programs that inspect and manipulate the structure of PDF files";
+    description = "C++ library and set of programs that inspect and manipulate the structure of PDF files";
     license = licenses.asl20; # as of 7.0.0, people may stay at artistic2
     maintainers = with maintainers; [ abbradar ];
     platforms = platforms.all;

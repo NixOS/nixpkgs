@@ -1,9 +1,10 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchurl
 , cmake
 , pkg-config
-, wrapGAppsHook
+, wrapGAppsHook3
 , makeWrapper
 , pixman
 , libpthreadstubs
@@ -37,6 +38,14 @@ stdenv.mkDerivation rec {
     forceFetchGit = true;
   };
 
+  # https://github.com/Beep6581/RawTherapee/issues/7074
+  patches = [
+    (fetchurl {
+      url = "https://github.com/Beep6581/RawTherapee/commit/6b9f45c69c1ddfc3607d3d9c1206dcf1def30295.diff";
+      hash = "sha256-3Rti9HV8N1ueUm5B9qxEZL7Lb9bBb+iy2AGKMpJ9YOM=";
+    })
+  ];
+
   postPatch = ''
     echo "set(HG_VERSION ${version})" > ReleaseInfo.cmake
     substituteInPlace tools/osx/Info.plist.in rtgui/config.h.in \
@@ -46,7 +55,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
   ] ++ lib.optionals stdenv.isDarwin [
     makeWrapper
   ];

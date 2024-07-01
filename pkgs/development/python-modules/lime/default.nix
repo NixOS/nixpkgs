@@ -1,16 +1,17 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
 
-, matplotlib
-, numpy
-, scipy
-, tqdm
-, scikit-learn
-, scikit-image
+  matplotlib,
+  numpy,
+  scipy,
+  tqdm,
+  scikit-learn,
+  scikit-image,
 
-, pytestCheckHook
-, pythonOlder
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -25,7 +26,7 @@ buildPythonPackage rec {
     hash = "sha256-dpYOTwVf61Pom1AiODuvyHtj8lusYmWYSwozPRpX94E=";
   };
 
-  propagatedBuildInputs =  [
+  propagatedBuildInputs = [
     matplotlib
     numpy
     scipy
@@ -34,9 +35,7 @@ buildPythonPackage rec {
     scikit-image
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTestPaths = [
     # touches network

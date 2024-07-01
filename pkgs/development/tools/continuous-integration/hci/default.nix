@@ -31,7 +31,10 @@ let
           makeWrapper $out/libexec/hci $out/bin/hci --prefix PATH : ${lib.escapeShellArg (makeBinPath bundledBins)}
         '';
       })
-      (addBuildTools [ makeWrapper ] (justStaticExecutables (haskellPackages.hercules-ci-cli.override overrides)));
+      (addBuildTools [ makeWrapper ]
+        # TODO: Erroneous references to GHC on aarch64-darwin: https://github.com/NixOS/nixpkgs/issues/318013
+        ((if stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64 then lib.id else haskell.lib.compose.justStaticExecutables)
+          (haskellPackages.hercules-ci-cli.override overrides)));
 in pkg // {
     meta = pkg.meta // {
       position = toString ./default.nix + ":1";

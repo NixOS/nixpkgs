@@ -81,7 +81,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    description = "A dungeon management rogue-like";
+    description = "Dungeon management rogue-like";
     mainProgram = "keeper";
     homepage = "https://keeperrl.com/";
     license = licenses.gpl2;

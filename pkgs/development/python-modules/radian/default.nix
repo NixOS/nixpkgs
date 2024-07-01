@@ -1,19 +1,20 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pyte
-, pexpect
-, ptyprocess
-, jedi
-, git
-, lineedit
-, prompt-toolkit
-, pygments
-, rchitect
-, R
-, rPackages
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pyte,
+  pexpect,
+  ptyprocess,
+  jedi,
+  git,
+  lineedit,
+  prompt-toolkit,
+  pygments,
+  rchitect,
+  R,
+  rPackages,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -39,15 +40,17 @@ buildPythonPackage rec {
     R # needed at setup time to detect R_HOME
   ];
 
-  propagatedBuildInputs = [
-    lineedit
-    prompt-toolkit
-    pygments
-    rchitect
-  ] ++ (with rPackages; [
-    reticulate
-    askpass
-  ]);
+  propagatedBuildInputs =
+    [
+      lineedit
+      prompt-toolkit
+      pygments
+      rchitect
+    ]
+    ++ (with rPackages; [
+      reticulate
+      askpass
+    ]);
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -68,7 +71,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "radian" ];
 
   meta = with lib; {
-    description = "A 21 century R console";
+    description = "21 century R console";
     mainProgram = "radian";
     homepage = "https://github.com/randy3k/radian";
     changelog = "https://github.com/randy3k/radian/blob/v${version}/CHANGELOG.md";

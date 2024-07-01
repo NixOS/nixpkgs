@@ -1,6 +1,11 @@
 import ../make-test-python.nix (
 
-  { pkgs, lib, ... }:
+  {
+    pkgs,
+    lib,
+    incus ? pkgs.incus-lts,
+    ...
+  }:
 
   let
     releases = import ../../release.nix { configuration.documentation.enable = lib.mkForce false; };
@@ -65,7 +70,10 @@ import ../make-test-python.nix (
             ];
           };
 
-          incus.enable = true;
+          incus = {
+            enable = true;
+            package = incus;
+          };
         };
         networking.nftables.enable = true;
       };

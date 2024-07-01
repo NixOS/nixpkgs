@@ -7,7 +7,7 @@
 , pkg-config
 , rustPlatform
 , webkitgtk_4_1
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 rustPlatform.buildRustPackage rec {
   pname = "rmenu";
@@ -22,7 +22,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

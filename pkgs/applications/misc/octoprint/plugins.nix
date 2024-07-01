@@ -89,7 +89,7 @@ in
     };
 
     meta = with lib; {
-      description = "Plugin to display the estimated print cost for the loaded model.";
+      description = "Plugin to display the estimated print cost for the loaded model";
       homepage = "https://github.com/OllisGit/OctoPrint-CostEstimation";
       license = licenses.agpl3Only;
       maintainers = with maintainers; [ stunkymonkey ];
@@ -301,7 +301,7 @@ in
     };
 
     meta = with lib; {
-      description = "A simple plugin that add an emergency stop buton on NavBar of OctoPrint";
+      description = "Simple plugin that add an emergency stop buton on NavBar of OctoPrint";
       homepage = "https://github.com/Sebclem/OctoPrint-SimpleEmergencyStop";
       license = licenses.agpl3Only;
       maintainers = with maintainers; [ WhittlesJr ];
@@ -320,7 +320,7 @@ in
     };
 
     meta = with lib; {
-      description = "A simple stl viewer tab for OctoPrint";
+      description = "Simple stl viewer tab for OctoPrint";
       homepage = "https://github.com/jneilliii/Octoprint-STLViewer";
       license = licenses.agpl3Only;
       maintainers = with maintainers; [ abbradar ];
@@ -341,7 +341,7 @@ in
     propagatedBuildInputs = with super; [ pillow ];
 
     meta = with lib; {
-      description = "Plugin to send status messages and receive commands via Telegram messenger.";
+      description = "Plugin to send status messages and receive commands via Telegram messenger";
       homepage = "https://github.com/fabianonline/OctoPrint-Telegram";
       license = licenses.agpl3Only;
       maintainers = with maintainers; [ stunkymonkey ];
@@ -417,7 +417,7 @@ in
     };
 
     meta = with lib; {
-      description = "A plugin for a better integration of Klipper into OctoPrint";
+      description = "Plugin for a better integration of Klipper into OctoPrint";
       homepage = "https://github.com/AliceGrey/OctoprintKlipperPlugin";
       license = licenses.agpl3Only;
       maintainers = with maintainers; [ lovesegfault ];
@@ -471,7 +471,7 @@ in
     };
 
     meta = with lib; {
-      description = "A dashboard for Octoprint";
+      description = "Dashboard for Octoprint";
       homepage = "https://github.com/StefanCohen/OctoPrint-Dashboard";
       license = licenses.agpl3Plus;
       maintainers = with maintainers; [ j0hax ];

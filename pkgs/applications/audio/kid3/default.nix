@@ -95,7 +95,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    description = "A simple and powerful audio tag editor";
+    description = "Simple and powerful audio tag editor";
     inherit mainProgram;
     homepage = "https://kid3.kde.org/";
     license = lib.licenses.lgpl2Plus;

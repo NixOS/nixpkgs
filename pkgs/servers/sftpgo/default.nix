@@ -7,16 +7,16 @@
 
 buildGoModule rec {
   pname = "sftpgo";
-  version = "2.5.6";
+  version = "2.6.2";
 
   src = fetchFromGitHub {
     owner = "drakkan";
     repo = "sftpgo";
     rev = "refs/tags/v${version}";
-    hash = "sha256-ea4DbPwi2tcRgmbNsZKKUOVkp6vjRbr679yAP7znNUc=";
+    hash = "sha256-76P4njY/Wb9l4LG+sZwiwQVrvfXCtAELju30GLi7kBE=";
   };
 
-  vendorHash = "sha256-8TBDaDBLy+82BwsaLncDknVIrauF0eop9e2ZhwcLmIs=";
+  vendorHash = "sha256-gBb+qpNFSFhCOYLxXkz3xmyx+3PvyOwLNqjT9zZQuc8=";
 
   ldflags = [
     "-s"
@@ -58,8 +58,8 @@ buildGoModule rec {
       local filesystem, encrypted local filesystem, S3 (compatible) Object Storage,
       Google Cloud Storage, Azure Blob Storage, SFTP.
     '';
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ thenonameguy yayayayaka ];
+    license = with licenses; [ agpl3Only unfreeRedistributable ]; # Software is AGPLv3, web UI is unfree
+    maintainers = with maintainers; [ thenonameguy ];
     mainProgram = "sftpgo";
   };
 }

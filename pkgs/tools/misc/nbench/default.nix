@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://www.math.utah.edu/~mayer/linux/bmark.html";
-    description = "A synthetic computing benchmark program";
+    description = "Synthetic computing benchmark program";
     platforms = platforms.unix;
     maintainers = with lib.maintainers; [ bennofs ];
     mainProgram = "nbench";

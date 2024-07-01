@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, setuptools-scm
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  setuptools-scm,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -18,19 +19,15 @@ buildPythonPackage rec {
     hash = "sha256-/8P7/vY0kb7ouUCpgGU4g0Xb77BtSeQVt6nkdcogD50=";
   };
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "sqids" ];
 
   meta = with lib; {
     homepage = "https://sqids.org/python";
-    description = "A library that lets you generate short YouTube-looking IDs from numbers";
+    description = "Library that lets you generate short YouTube-looking IDs from numbers";
     license = with licenses; mit;
     maintainers = with maintainers; [ panicgh ];
   };

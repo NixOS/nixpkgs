@@ -28,6 +28,21 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
+  postInstall = ''
+    mkdir -p "$out/lib/pkgconfig"
+    cat >"$out/lib/pkgconfig/libajantv2.pc" <<EOF
+    prefix=$out
+    libdir=\''${prefix}/lib
+    includedir=\''${prefix}/include/ajalibraries
+
+    Name: libajantv2
+    Description: Library for controlling AJA NTV2 video devices
+    Version: ${version}
+    Libs: -L\''${libdir} -lajantv2
+    Cflags: -I\''${includedir} -I\''${includedir}/ajantv2/includes
+    EOF
+  '';
+
   meta = with lib; {
     description = "AJA NTV2 Open Source Static Libs and Headers for building applications that only wish to statically link against";
     homepage = "https://github.com/aja-video/ntv2";

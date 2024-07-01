@@ -46,6 +46,6 @@ mkDerivation rec {
     mainProgram = "kalk";
     homepage = "https://invent.kde.org/plasma-mobile/kalk";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ samueldr ];
+    maintainers = with maintainers; [ ];
   };
 }

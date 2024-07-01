@@ -22,11 +22,11 @@
 
 buildDunePackage rec {
   pname = "arp";
-  version = "3.1.0";
+  version = "3.1.1";
 
   src = fetchurl {
     url = "https://github.com/mirage/${pname}/releases/download/v${version}/${pname}-${version}.tbz";
-    hash = "sha256-g/aEhpufQcyS/vCtKk0Z1sYaYNRmQFaZ9rTp9F4nq54=";
+    hash = "sha256-6jPFiene6jAPtivCugtVfP3+6k9A5gBoWzpoxoaPBvE=";
   };
 
   minimalOCamlVersion = "4.08";

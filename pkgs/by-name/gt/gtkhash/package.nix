@@ -5,7 +5,7 @@
 , ninja
 , cmake
 , pkg-config
-, wrapGAppsHook
+, wrapGAppsHook3
 , gtk3
 , glib
 , openssl
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     ninja
     cmake
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
   meta = with lib; {
-    description = "A cross-platform desktop utility for computing message digests or checksums";
+    description = "Cross-platform desktop utility for computing message digests or checksums";
     homepage = "https://gtkhash.org";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ ByteSudoer ];

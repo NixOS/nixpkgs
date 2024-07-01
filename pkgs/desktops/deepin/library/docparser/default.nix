@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   qmakeFlags = [ "VERSION=${version}" ];
 
   meta = with lib; {
-    description = "A document parser library ported from document2html";
+    description = "Document parser library ported from document2html";
     homepage = "https://github.com/linuxdeepin/docparser";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;

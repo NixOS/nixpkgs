@@ -1,19 +1,20 @@
-{ lib
-, buildPythonPackage
-, cloudpathlib
-, confection
-, fetchFromGitHub
-, packaging
-, pydantic
-, pytestCheckHook
-, pythonOlder
-, pythonRelaxDepsHook
-, requests
-, setuptools
-, smart-open
-, srsly
-, typer
-, wasabi
+{
+  lib,
+  buildPythonPackage,
+  cloudpathlib,
+  confection,
+  fetchFromGitHub,
+  packaging,
+  pydantic,
+  pytestCheckHook,
+  pythonOlder,
+  pythonRelaxDepsHook,
+  requests,
+  setuptools,
+  smart-open,
+  srsly,
+  typer,
+  wasabi,
 }:
 
 buildPythonPackage rec {
@@ -33,6 +34,7 @@ buildPythonPackage rec {
   pythonRelaxDeps = [
     "cloudpathlib"
     "smart-open"
+    "typer"
   ];
 
   nativeBuildInputs = [
@@ -54,9 +56,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "weasel" ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTests = [
     # This test requires internet access
@@ -64,7 +64,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "A small and easy workflow system";
+    description = "Small and easy workflow system";
     mainProgram = "weasel";
     homepage = "https://github.com/explosion/weasel/";
     changelog = "https://github.com/explosion/weasel/releases/tag/v${version}";

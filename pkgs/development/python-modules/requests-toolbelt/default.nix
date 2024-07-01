@@ -1,11 +1,12 @@
-{ lib
-, betamax
-, buildPythonPackage
-, fetchPypi
-, pyopenssl
-, pytestCheckHook
-, requests
-, trustme
+{
+  lib,
+  betamax,
+  buildPythonPackage,
+  fetchPypi,
+  pyopenssl,
+  pytestCheckHook,
+  requests,
+  trustme,
 }:
 
 buildPythonPackage rec {
@@ -18,9 +19,7 @@ buildPythonPackage rec {
     hash = "sha256-doGgo9BHAStb3A7jfX+PB+vnarCMrsz8OSHOI8iNW8Y=";
   };
 
-  propagatedBuildInputs = [
-    requests
-  ];
+  propagatedBuildInputs = [ requests ];
 
   nativeCheckInputs = [
     betamax
@@ -39,9 +38,7 @@ buildPythonPackage rec {
     "test_request_with_base"
   ];
 
-  pythonImportsCheck = [
-    "requests_toolbelt"
-  ];
+  pythonImportsCheck = [ "requests_toolbelt" ];
 
   meta = with lib; {
     description = "Toolbelt of useful classes and functions to be used with requests";

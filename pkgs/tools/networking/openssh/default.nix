@@ -5,11 +5,11 @@ in
 {
   openssh = common rec {
     pname = "openssh";
-    version = "9.7p1";
+    version = "9.8p1";
 
     src = fetchurl {
       url = "mirror://openbsd/OpenSSH/portable/openssh-${version}.tar.gz";
-      hash = "sha256-SQQm92bYKidj/KzY2D6j1weYdQx70q/y5X3FZg93P/0=";
+      hash = "sha256-3YvQAqN5tdSZ37BQ3R+pr4Ap6ARh9LtsUjxJlz9aOfM=";
     };
 
     extraPatches = [ ./ssh-keysign-8.5.patch ];
@@ -29,6 +29,8 @@ in
     extraPatches = let url = "https://raw.githubusercontent.com/freebsd/freebsd-ports/b3f86656fc67aa397f60747c85f7f7b967c3279d/security/openssh-portable/files/extra-patch-hpn"; in
     [
       ./ssh-keysign-8.5.patch
+      ./openssh-9.6_p1-CVE-2024-6387.patch
+      ./openssh-9.6_p1-chaff-logic.patch
 
       # HPN Patch from FreeBSD ports
       (fetchpatch {
@@ -68,6 +70,8 @@ in
 
     extraPatches = [
       ./ssh-keysign-8.5.patch
+      ./openssh-9.6_p1-CVE-2024-6387.patch
+      ./openssh-9.6_p1-chaff-logic.patch
 
       (fetchpatch {
         name = "openssh-gssapi.patch";

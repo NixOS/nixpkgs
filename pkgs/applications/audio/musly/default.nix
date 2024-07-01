@@ -18,7 +18,7 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     homepage = "https://www.musly.org";
-    description = "A fast and high-quality audio music similarity library written in C/C++";
+    description = "Fast and high-quality audio music similarity library written in C/C++";
     longDescription = ''
       Musly analyzes the the audio signal of music pieces to estimate their similarity.
       No meta-data about the music piece is included in the similarity estimation.

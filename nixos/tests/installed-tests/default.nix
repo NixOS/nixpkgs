@@ -1,5 +1,5 @@
 # NixOS tests for gnome-desktop-testing-runner using software
-# See https://wiki.gnome.org/Initiatives/GnomeGoals/InstalledTests
+# See https://github.com/NixOS/nixpkgs/issues/34987
 
 { system ? builtins.currentSystem,
   config ? {},

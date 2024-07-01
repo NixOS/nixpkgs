@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     broken = true;
-    description = "An open source crypto-currency focused on fast private transactions";
+    description = "Open source crypto-currency focused on fast private transactions";
     longDescription = ''
       PIVX is an MIT licensed, open source, blockchain-based cryptocurrency with
       ultra fast transactions, low fees, high network decentralization, and

@@ -3,7 +3,7 @@
 , meson
 , ninja
 , pkg-config
-, wrapGAppsHook
+, wrapGAppsHook3
 , desktop-file-utils
 , glib
 , gtk3
@@ -30,7 +30,7 @@ python3Packages.buildPythonApplication rec {
     meson
     ninja
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
     desktop-file-utils
     gtk3
   ];
@@ -52,7 +52,7 @@ python3Packages.buildPythonApplication rec {
 
   meta = with lib; {
     homepage = "https://github.com/ALEX11BR/ThemeChanger";
-    description = "A theme changing utility for Linux";
+    description = "Theme changing utility for Linux";
     mainProgram = "themechanger";
     longDescription = ''
       This app is a theme changing utility for Linux, BSDs, and whatnots.

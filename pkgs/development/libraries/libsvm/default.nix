@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     '';
 
   meta = with lib; {
-    description = "A library for support vector machines";
+    description = "Library for support vector machines";
     homepage = "https://www.csie.ntu.edu.tw/~cjlin/libsvm/";
     license = licenses.bsd3;
     maintainers = [ ];

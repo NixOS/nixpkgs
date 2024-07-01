@@ -1,4 +1,9 @@
-{ lib, buildPythonPackage, fetchFromGitHub, nose }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  nose,
+}:
 
 buildPythonPackage {
   version = "0.5.3-2016-09-28";
@@ -16,7 +21,7 @@ buildPythonPackage {
 
   meta = {
     homepage = "https://github.com/agramfort/tempita";
-    description = "A very small text templating language";
+    description = "Very small text templating language";
     license = lib.licenses.mit;
   };
 }

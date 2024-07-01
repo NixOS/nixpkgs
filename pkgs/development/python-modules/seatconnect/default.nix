@@ -1,14 +1,15 @@
-{ lib
-, aiohttp
-, beautifulsoup4
-, buildPythonPackage
-, cryptography
-, fetchFromGitHub
-, lxml
-, pyjwt
-, pythonOlder
-, setuptools-scm
-, xmltodict
+{
+  lib,
+  aiohttp,
+  beautifulsoup4,
+  buildPythonPackage,
+  cryptography,
+  fetchFromGitHub,
+  lxml,
+  pyjwt,
+  pythonOlder,
+  setuptools-scm,
+  xmltodict,
 }:
 
 buildPythonPackage rec {
@@ -25,9 +26,7 @@ buildPythonPackage rec {
     hash = "sha256-HITVrI0o94a61gy/TYSGFtLBYX4Rw/dK1o2/KsvHLTQ=";
   };
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
 
   propagatedBuildInputs = [
     aiohttp
@@ -41,9 +40,7 @@ buildPythonPackage rec {
   # Project only has a dummy test
   doCheck = false;
 
-  pythonImportsCheck = [
-    "seatconnect"
-  ];
+  pythonImportsCheck = [ "seatconnect" ];
 
   meta = with lib; {
     description = "Python module to communicate with Seat Connect";

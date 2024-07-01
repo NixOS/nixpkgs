@@ -19,7 +19,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/nonamescm/yex-lang";
-    description = "A functional scripting language written in rust";
+    description = "Functional scripting language written in rust";
     license = licenses.mit;
     maintainers = with maintainers; [ AndersonTorres ];
     mainProgram = "yex";

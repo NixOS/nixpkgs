@@ -2,7 +2,7 @@
 
 pythonPackages.buildPythonApplication rec {
   pname = "mopidy-spotify";
-  version = "unstable-2024-02-27";
+  version = "4.1.1-unstable-2024-02-27";
 
   src = fetchFromGitHub {
     owner = "mopidy";
@@ -22,7 +22,9 @@ pythonPackages.buildPythonApplication rec {
 
   pythonImportsCheck = [ "mopidy_spotify" ];
 
-  passthru.updateScript = unstableGitUpdater { };
+  passthru.updateScript = unstableGitUpdater {
+    tagPrefix = "v";
+  };
 
   meta = with lib; {
     homepage = "https://github.com/mopidy/mopidy-spotify";

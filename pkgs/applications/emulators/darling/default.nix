@@ -3,7 +3,6 @@
 , runCommandWith
 , writeShellScript
 , fetchFromGitHub
-, fetchpatch
 , nixosTests
 
 , freetype

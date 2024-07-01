@@ -37,7 +37,7 @@ buildPythonPackage rec {
   disabledTestPaths = [ "test/test_flake8.py" ];
 
   meta = {
-    description = "Library for retrieving information about catkin packages.";
+    description = "Library for retrieving information about catkin packages";
     homepage = "http://wiki.ros.org/catkin_pkg";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ jnsgruk ];

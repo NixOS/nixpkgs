@@ -9,13 +9,13 @@
 
 buildGoModule rec {
   pname = "grype";
-  version = "0.77.1";
+  version = "0.79.1";
 
   src = fetchFromGitHub {
     owner = "anchore";
     repo = "grype";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Qfoo05MicnQ1shbEV/Rrz9TDrMBDvWBr0U/ZqnlnLTI=";
+    hash = "sha256-Ih1xja20e3wCZ68kRA9bK8jh+pw/5KtlgeE3dDjqeE0=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
@@ -30,7 +30,7 @@ buildGoModule rec {
 
   proxyVendor = true;
 
-  vendorHash = "sha256-lAq1PRElWR0F+OfuSBpR/gnFOptFH33ObR8yd1k7oMk=";
+  vendorHash = "sha256-iSpSJwAHB/HJ3Ut1VgUBd1yCwOaM4f3ihR0J4YjMVxM=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -90,6 +90,13 @@ buildGoModule rec {
       --replace-fail "TestAllNames" "SkipAllNames"
     substituteInPlace test/cli/version_cmd_test.go \
       --replace-fail "TestVersionCmdPrintsToStdout" "SkipVersionCmdPrintsToStdout"
+    substituteInPlace grype/presenter/sarif/presenter_test.go \
+      --replace-fail "Test_SarifIsValid" "SkipTest_SarifIsValid"
+
+    # May fail on NixOS, probably due bug in how syft handles tmpfs.
+    # See https://github.com/anchore/grype/issues/1822
+    substituteInPlace grype/distro/distro_test.go \
+      --replace-fail "Test_NewDistroFromRelease_Coverage" "SkipTest_NewDistroFromRelease_Coverage"
 
     # segfault
     rm grype/db/v5/namespace/cpe/namespace_test.go
@@ -103,10 +110,9 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
+    description = "Vulnerability scanner for container images and filesystems";
     homepage = "https://github.com/anchore/grype";
     changelog = "https://github.com/anchore/grype/releases/tag/v${version}";
-    description = "Vulnerability scanner for container images and filesystems";
-    mainProgram = "grype";
     longDescription = ''
       As a vulnerability scanner grype is able to scan the contents of a
       container image or filesystem to find known vulnerabilities.
@@ -117,5 +123,6 @@ buildGoModule rec {
       jk
       kashw2
     ];
+    mainProgram = "grype";
   };
 }

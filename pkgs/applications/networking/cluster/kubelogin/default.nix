@@ -19,7 +19,7 @@ buildGoModule rec {
   ];
 
   meta = with lib; {
-    description = "A Kubernetes credential plugin implementing Azure authentication";
+    description = "Kubernetes credential plugin implementing Azure authentication";
     mainProgram = "kubelogin";
     inherit (src.meta) homepage;
     license = licenses.mit;

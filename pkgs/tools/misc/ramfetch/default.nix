@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "A tool which displays memory information";
+    description = "Tool which displays memory information";
     homepage = "https://codeberg.org/jahway603/ramfetch";
     platforms = lib.platforms.linux;
     license = lib.licenses.mit;

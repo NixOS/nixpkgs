@@ -1,17 +1,18 @@
-{ lib
-, azure-storage-blob
-, boto3
-, buildPythonPackage
-, fetchFromGitHub
-, python-dotenv
-, pythonOlder
-, requests
-, responses
-, setuptools
-, setuptools-git-versioning
-, setuptools-scm
-, unittestCheckHook
-, urllib3
+{
+  lib,
+  azure-storage-blob,
+  boto3,
+  buildPythonPackage,
+  fetchFromGitHub,
+  python-dotenv,
+  pythonOlder,
+  requests,
+  responses,
+  setuptools,
+  setuptools-git-versioning,
+  setuptools-scm,
+  unittestCheckHook,
+  urllib3,
 }:
 
 buildPythonPackage rec {

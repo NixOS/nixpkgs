@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, flit-core
-, matplotlib
-, pytest-xdist
-, pytestCheckHook
-, numpy
-, pandas
-, pythonOlder
-, scipy
-, statsmodels
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  flit-core,
+  matplotlib,
+  pytest-xdist,
+  pytestCheckHook,
+  numpy,
+  pandas,
+  pythonOlder,
+  scipy,
+  statsmodels,
 }:
 
 buildPythonPackage rec {
@@ -27,9 +28,7 @@ buildPythonPackage rec {
     hash = "sha256-aGIVcdG/XN999nYBHh3lJqGa3QVt0j8kmzaxdkULznY=";
   };
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  nativeBuildInputs = [ flit-core ];
 
   propagatedBuildInputs = [
     matplotlib
@@ -49,21 +48,21 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  disabledTests = [
-    # requires internet connection
-    "test_load_dataset_string_error"
-  ] ++ lib.optionals (!stdenv.hostPlatform.isx86) [
-    # overly strict float tolerances
-    "TestDendrogram"
-  ];
+  disabledTests =
+    [
+      # requires internet connection
+      "test_load_dataset_string_error"
+    ]
+    ++ lib.optionals (!stdenv.hostPlatform.isx86) [
+      # overly strict float tolerances
+      "TestDendrogram"
+    ];
 
   # All platforms should use Agg. Let's set it explicitly to avoid probing GUI
   # backends (leads to crashes on macOS).
-  env.MPLBACKEND="Agg";
+  env.MPLBACKEND = "Agg";
 
-  pythonImportsCheck = [
-    "seaborn"
-  ];
+  pythonImportsCheck = [ "seaborn" ];
 
   meta = with lib; {
     description = "Statistical data visualization";

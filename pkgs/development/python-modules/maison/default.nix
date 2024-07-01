@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, click
-, fetchFromGitHub
-, poetry-core
-, pydantic
-, pytestCheckHook
-, pythonOlder
-, pythonRelaxDepsHook
-, toml
+{
+  lib,
+  buildPythonPackage,
+  click,
+  fetchFromGitHub,
+  poetry-core,
+  pydantic,
+  pytestCheckHook,
+  pythonOlder,
+  pythonRelaxDepsHook,
+  toml,
 }:
 
 buildPythonPackage rec {
@@ -24,9 +25,7 @@ buildPythonPackage rec {
     hash = "sha256-2hUmk91wr5o2cV3un2nMoXDG+3GT7SaIOKY+QaZY3nw=";
   };
 
-  pythonRelaxDeps = [
-    "pydantic"
-  ];
+  pythonRelaxDeps = [ "pydantic" ];
 
   nativeBuildInputs = [
     poetry-core
@@ -39,13 +38,9 @@ buildPythonPackage rec {
     toml
   ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "maison"
-  ];
+  pythonImportsCheck = [ "maison" ];
 
   meta = with lib; {
     description = "Library to read settings from config files";

@@ -13,7 +13,7 @@
 , ninja
 , pkg-config
 , systemd
-, wrapGAppsHook
+, wrapGAppsHook3
 , xorg
 }:
 
@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
     meson
     ninja
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -51,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
   env.NIX_CFLAGS_COMPILE = "-D_POSIX_C_SOURCE";
 
   meta = {
-    description = "A fork of old GNOME Screensaver for purposes of providing an authentication prompt on wake";
+    description = "Fork of old GNOME Screensaver for purposes of providing an authentication prompt on wake";
     homepage = "https://github.com/BuddiesOfBudgie/budgie-screensaver";
     mainProgram = "budgie-screensaver";
     platforms = lib.platforms.linux;

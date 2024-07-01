@@ -42,7 +42,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/postgresml/pgcat";
-    description = "PostgreSQL pooler with sharding, load balancing and failover support.";
+    description = "PostgreSQL pooler with sharding, load balancing and failover support";
     license = with licenses; [mit];
     platforms = platforms.unix;
     maintainers = with maintainers; [cathalmullan];

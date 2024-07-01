@@ -1,34 +1,35 @@
-{ lib
-, aiofiles
-, aiohttp
-, aioshutil
-, async-timeout
-, buildPythonPackage
-, dateparser
-, fetchFromGitHub
-, ffmpeg
-, hatch-vcs
-, hatchling
-, ipython
-, orjson
-, packaging
-, pillow
-, platformdirs
-, poetry-core
-, py
-, pydantic
-, pyjwt
-, pytest-aiohttp
-, pytest-asyncio
-, pytest-benchmark
-, pytest-timeout
-, pytest-xdist
-, pytestCheckHook
-, python-dotenv
-, pythonOlder
-, pytz
-, termcolor
-, typer
+{
+  lib,
+  aiofiles,
+  aiohttp,
+  aioshutil,
+  async-timeout,
+  buildPythonPackage,
+  dateparser,
+  fetchFromGitHub,
+  ffmpeg,
+  hatch-vcs,
+  hatchling,
+  ipython,
+  orjson,
+  packaging,
+  pillow,
+  platformdirs,
+  poetry-core,
+  py,
+  pydantic,
+  pyjwt,
+  pytest-aiohttp,
+  pytest-asyncio,
+  pytest-benchmark,
+  pytest-timeout,
+  pytest-xdist,
+  pytestCheckHook,
+  python-dotenv,
+  pythonOlder,
+  pytz,
+  termcolor,
+  typer,
 }:
 
 buildPythonPackage rec {
@@ -70,10 +71,7 @@ buildPythonPackage rec {
     pyjwt
     pytz
     typer
-  ] ++ typer.optional-dependencies.all
-  ++ lib.optionals (pythonOlder "3.11") [
-    async-timeout
-  ];
+  ] ++ typer.optional-dependencies.all ++ lib.optionals (pythonOlder "3.11") [ async-timeout ];
 
   passthru.optional-dependencies = {
     shell = [
@@ -94,13 +92,9 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "pyunifiprotect"
-  ];
+  pythonImportsCheck = [ "pyunifiprotect" ];
 
-  pytestFlagsArray = [
-    "--benchmark-disable"
-  ];
+  pytestFlagsArray = [ "--benchmark-disable" ];
 
   meta = with lib; {
     description = "Library for interacting with the Unifi Protect API";

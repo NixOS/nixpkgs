@@ -8,6 +8,7 @@
 , brotli
 , fixup-yarn-lock
 , jq
+, fd
 , nodejs
 , which
 , yarn
@@ -76,7 +77,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "cli" "runner" ];
 
-  nativeBuildInputs = [ brotli fixup-yarn-lock jq which yarn ];
+  nativeBuildInputs = [ brotli fixup-yarn-lock jq which yarn fd ];
 
   buildInputs = [ nodejs ];
 
@@ -161,16 +162,16 @@ stdenv.mkDerivation rec {
     ln -s $runner/dist/peertube-runner.js $runner/bin/peertube-runner
 
     # Create static gzip and brotli files
-    find $out/client/dist -type f -regextype posix-extended -iregex '.*\.(css|eot|html|js|json|svg|webmanifest|xlf)' | while read file; do
-      gzip -9 -n -c $file > $file.gz
-      brotli --best -f $file -o $file.br
-    done
+    fd -e css -e eot -e html -e js -e json -e svg -e webmanifest -e xlf \
+      --type file --search-path $out/client/dist \
+      --exec gzip -9 -n -c {} > {}.gz \;\
+      --exec brotli --best -f {} -o {}.br
   '';
 
   passthru.tests.peertube = nixosTests.peertube;
 
   meta = with lib; {
-    description = "A free software to take back control of your videos";
+    description = "Free software to take back control of your videos";
     longDescription = ''
       PeerTube aspires to be a decentralized and free/libre alternative to video
       broadcasting services.
@@ -188,6 +189,6 @@ stdenv.mkDerivation rec {
     license = licenses.agpl3Plus;
     homepage = "https://joinpeertube.org/";
     platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
-    maintainers = with maintainers; [ immae izorkin mohe2015 stevenroose ];
+    maintainers = with maintainers; [ immae izorkin stevenroose ];
   };
 }

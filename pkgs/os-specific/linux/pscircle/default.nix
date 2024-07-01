@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     homepage = "https://gitlab.com/mildlyparallel/pscircle";
     description = "Visualize Linux processes in a form of a radial tree";
     mainProgram = "pscircle";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     maintainers = [ maintainers.ldesgoui ];
     platforms = platforms.linux;
   };
