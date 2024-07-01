@@ -1,0 +1,1089 @@
+[
+  {
+    "Name": "lsp",
+    "Description": "Generic LSP Client for Micro",
+    "Website": "https://github.com/AndCake/micro-plugin-lsp",
+    "Tags": [
+      "lsp"
+    ],
+    "Versions": [
+      {
+        "Version": "0.4.1",
+        "Url": "https://github.com/AndCake/micro-plugin-lsp/archive/v0.4.1.zip",
+        "Require": {
+          "micro": ">=2.0.10"
+        }
+      },
+      {
+        "Version": "0.4.2",
+        "Url": "https://github.com/AndCake/micro-plugin-lsp/archive/v0.4.2.zip",
+        "Require": {
+          "micro": ">=2.0.8"
+        }
+      },
+      {
+        "Version": "0.4.3",
+        "Url": "https://github.com/AndCake/micro-plugin-lsp/archive/v0.4.3.zip",
+        "Require": {
+          "micro": ">=2.0.8"
+        }
+      },
+      {
+        "Version": "0.5.0",
+        "Url": "https://github.com/AndCake/micro-plugin-lsp/archive/v0.5.0.zip",
+        "Require": {
+          "micro": ">=2.0.8"
+        }
+      },
+      {
+        "Version": "0.5.1",
+        "Url": "https://github.com/AndCake/micro-plugin-lsp/archive/v0.5.1.zip",
+        "Require": {
+          "micro": ">=2.0.8"
+        }
+      },
+      {
+        "Version": "0.5.2",
+        "Url": "https://github.com/AndCake/micro-plugin-lsp/archive/v0.5.2.zip",
+        "Require": {
+          "micro": ">=2.0.8"
+        }
+      },
+      {
+        "Version": "0.5.3",
+        "Url": "https://github.com/AndCake/micro-plugin-lsp/archive/v0.5.3.zip",
+        "Require": {
+          "micro": ">=2.0.8"
+        }
+      },
+      {
+        "Version": "0.6.0",
+        "Url": "https://github.com/AndCake/micro-plugin-lsp/archive/v0.6.0.zip",
+        "Require": {
+          "micro": ">=2.0.8"
+        }
+      },
+      {
+        "Version": "0.6.1",
+        "Url": "https://github.com/AndCake/micro-plugin-lsp/archive/v0.6.1.zip",
+        "Require": {
+          "micro": ">=2.0.8"
+        }
+      }
+    ]
+  },
+  {
+    "Name": "editorconfig",
+    "Description": "EditorConfig plugin for micro",
+    "Tags": [
+      "editorconfig",
+      "utility",
+      "format"
+    ],
+    "Website": "https://github.com/10sr/editorconfig-micro",
+    "Versions": [
+      {
+        "Version": "1.0.0",
+        "Url": "https://github.com/10sr/editorconfig-micro/archive/v1.0.0.zip",
+        "Require": {
+          "micro": ">=2.0.1"
+        }
+      },
+      {
+        "Version": "0.2.3",
+        "Url": "https://github.com/10sr/editorconfig-micro/archive/v0.2.3.zip",
+        "Require": {
+          "micro": ">=1.3.2 <2.0.0"
+        }
+      }
+    ]
+  },
+  {
+    "Name": "bounce",
+    "Description": "plugin to add nano-style 'smart home' and bounce cursor between matching brackets",
+    "Tags": [
+      "bounce",
+      "smarthome"
+    ],
+    "Versions": [
+      {
+        "Version": "1.1.2",
+        "Url": "https://github.com/deusnefum/micro-bounce/archive/v1.1.2.zip",
+        "Require": {
+          "micro": ">=2.0.0"
+        }
+      },
+      {
+        "Version": "1.1.1",
+        "Url": "https://github.com/deusnefum/micro-bounce/archive/v1.1.1.zip",
+        "Require": {
+          "micro": ">=2.0.0"
+        }
+      },
+      {
+        "Version": "1.1.0",
+        "Url": "https://github.com/deusnefum/micro-bounce/archive/v1.1.0.zip",
+        "Require": {
+          "micro": ">=2.0.0"
+        }
+      },
+      {
+        "Version": "1.0.0",
+        "Url": "https://github.com/deusnefum/micro-bounce/archive/v1.0.0.zip",
+        "Require": {
+          "micro": ">=2.0.0"
+        }
+      }
+    ]
+  },
+  {
+    "Name": "quoter",
+    "Description": "plugin to add quotes or brackets around a text selection.",
+    "Tags": [
+      "quote",
+      "autosurround"
+    ],
+    "Versions": [
+      {
+        "Version": "1.0.2",
+        "Url": "https://github.com/deusnefum/micro-quoter/archive/v1.0.2.zip",
+        "Require": {
+          "micro": ">=2.0.0"
+        }
+      },
+      {
+        "Version": "1.0.1",
+        "Url": "https://github.com/deusnefum/micro-quoter/archive/v1.0.1.zip",
+        "Require": {
+          "micro": ">=2.0.0"
+        }
+      }
+    ]
+  },
+  {
+    "Name": "sunny-day-theme",
+    "Description": "A color theme with muddy tones against a light yellow background.",
+    "Tags": [
+      "sunny-day",
+      "colors",
+      "color",
+      "themes",
+      "theme",
+      "colorschemes",
+      "colorscheme",
+      "light"
+    ],
+    "Versions": [
+      {
+        "Version": "0.1.1",
+        "Url": "https://github.com/dwwmmn/micro-sunny-day/archive/0.1.1.zip",
+        "Require": {
+          "micro": ">=1.1.3"
+        }
+      }
+    ]
+  },
+  {
+    "Name": "detectindent",
+    "Description": "Automatically detect indentation settings",
+    "Tags": [
+      "indent",
+      "detect"
+    ],
+    "Versions": [
+      {
+        "Version": "1.1.0",
+        "Url": "https://github.com/dmaluka/micro-detectindent/archive/v1.1.0.zip",
+        "Require": {
+          "micro": ">=2.0.0"
+        }
+      }
+    ]
+  },
+  {
+    "Name": "bookmark",
+    "Description": "Bookmark lines to quickly jump between saved positions",
+    "Tags": [
+      "bookmark"
+    ],
+    "Website": "https://github.com/haqk/micro-bookmark",
+    "Versions": [
+      {
+        "Version": "2.2.3",
+        "Url": "https://github.com/haqk/micro-bookmark/archive/v2.2.1.zip",
+        "Require": {
+          "micro": ">=2.0.0"
+        }
+      },
+      {
+        "Version": "2.2.2",
+        "Url": "https://github.com/haqk/micro-bookmark/archive/v2.2.1.zip",
+        "Require": {
+          "micro": ">=2.0.0"
+        }
+      },
+      {
+        "Version": "2.2.1",
+        "Url": "https://github.com/haqk/micro-bookmark/archive/v2.2.1.zip",
+        "Require": {
+          "micro": ">=2.0.0"
+        }
+      },
+      {
+        "Version": "2.2.0",
+        "Url": "https://github.com/haqk/micro-bookmark/archive/v2.2.0.zip",
+        "Require": {
+          "micro": ">=2.0.0"
+        }
+      },
+      {
+        "Version": "2.1.1",
+        "Url": "https://github.com/haqk/micro-bookmark/archive/v2.1.1.zip",
+        "Require": {
+          "micro": ">=2.0.0"
+        }
+      },
+      {
+        "Version": "2.0.0",
+        "Url": "https://github.com/haqk/micro-bookmark/archive/v2.0.0.zip",
+        "Require": {
+          "micro": ">=2.0.0"
+        }
+      }
+    ]
+  },
+  {
+    "Name": "exec",
+    "Description": "Exec is a plugin for micro that can run the code you edit and show the results directly in the editor.",
+    "Tags": [
+      "exec",
+      "run"
+    ],
+    "Versions": [
+      {
+        "Version": "1.0.1",
+        "Url": "https://github.com/IBotDEU/exec-plugin/archive/1.0.1.zip",
+        "Require": {
+          "micro": ">=1.0.3"
+        }
+      }
+    ]
+  },
+  {
+    "Name": "nordcolors",
+    "Description": "A color palette based on the Nord colorscheme",
+    "Tags": [
+      "nord",
+      "color",
+      "truecolor",
+      "16"
+    ],
+    "Website": "https://github.com/KiranWells/micro-nord-tc-colors/",
+    "Versions": [
+      {
+        "Version": "1.1.4",
+        "Url": "https://github.com/KiranWells/micro-nord-tc-colors/archive/v1.1.4.zip",
+        "Require": {
+          "micro": ">=1.1.3"
+        }
+      },
+      {
+        "Version": "1.0.0",
+        "Url": "https://github.com/KiranWells/micro-nord-tc-colors/archive/v1.0.0.zip",
+        "Require": {
+          "micro": ">=1.1.3"
+        }
+      }
+    ]
+  },
+  {
+    "Name": "emacs_select",
+    "Description": "add emacs-like selection",
+    "Tags": [
+      "select",
+      "emacs"
+    ],
+    "Versions": [
+      {
+        "Version": "1.0.0",
+        "Url": "https://github.com/kesslern/micro-emacs-select/archive/refs/tags/v1.0.0.zip",
+        "Require": {
+          "micro": ">=2.0.0"
+        }
+      }
+    ]
+  },
+  {
+    "Name": "joinLines",
+    "Description": "Plugin to join selected lines or join the following line with the current one",
+    "Tags": [
+      "join lines"
+    ],
+    "Versions": [
+      {
+        "Version": "1.1.6",
+        "Url": "https://github.com/Lisiadito/join-lines-plugin/archive/v1.1.6.zip",
+        "Require": {
+          "micro": ">=2.0.4"
+        }
+      }
+    ]
+  },
+  {
+    "Name": "splitterm",
+    "Description": "Run file or selection of a interpreted language directly in micro",
+    "Tags": [
+      "interpreter",
+      "terminal",
+      "bash",
+      "perl",
+      "python"
+    ],
+    "Website": "https://github.com/lukhof/splitterm",
+    "Versions": [
+      {
+        "Version": "1.0.0",
+        "Url": "https://github.com/lukhof/splitterm/archive/v1.0.0.zip",
+        "Require": {
+          "micro": ">=2.0.10"
+        }
+      }
+    ]
+  },
+  {
+    "Name": "jlabbrev",
+    "Description": "Julia backslash abbreviations in micro",
+    "Website": "https://github.com/MasFlam/jlabbrev",
+    "Tags": [
+      "julia",
+      "util"
+    ],
+    "Versions": [
+      {
+        "Version": "1.0.0",
+        "Url": "https://github.com/MasFlam/jlabbrev/archive/v1.0.0.zip",
+        "Require": {
+          "micro": ">=2.0"
+        }
+      },
+      {
+        "Version": "1.0.1",
+        "Url": "https://github.com/MasFlam/jlabbrev/archive/v1.0.1.zip",
+        "Require": {
+          "micro": ">=2.0"
+        }
+      }
+    ]
+  },
+  {
+    "Name": "comment",
+    "Description": "Plugin to auto comment or uncomment lines",
+    "Tags": [
+      "comment",
+      "uncomment"
+    ],
+    "Versions": [
+      {
+        "Version": "1.0.6",
+        "Url": "https://github.com/micro-editor/comment-plugin/archive/v1.0.6.zip",
+        "Require": {
+          "micro": ">=1.1.0 <2.0.0"
+        }
+      }
+    ]
+  },
+  {
+    "Name": "go",
+    "Description": "Go language support (gofmt and goimports)",
+    "Tags": [
+      "go",
+      "golang"
+    ],
+    "Website": "https://github.com/micro-editor/go-plugin",
+    "Versions": [
+      {
+        "Version": "2.0.2",
+        "Url": "https://github.com/micro-editor/go-plugin/archive/v2.0.2.zip",
+        "Require": {
+          "micro": ">=2.0.0"
+        }
+      },
+      {
+        "Version": "2.0.1",
+        "Url": "https://github.com/micro-editor/go-plugin/archive/v2.0.1.zip",
+        "Require": {
+          "micro": ">=2.0.0-1"
+        }
+      },
+      {
+        "Version": "2.0.0",
+        "Url": "https://github.com/micro-editor/go-plugin/archive/v2.0.0.zip",
+        "Require": {
+          "micro": ">=2.0.0-1"
+        }
+      },
+      {
+        "Version": "1.0.1",
+        "Url": "https://github.com/micro-editor/go-plugin/archive/v1.0.1.zip",
+        "Require": {
+          "micro": ">=1.0.3 <2.0.0-1"
+        }
+      }
+    ]
+  },
+  {
+    "Name": "filemanager",
+    "Description": "File manager for Micro",
+    "Tags": [
+      "filetree",
+      "filemanager",
+      "file",
+      "manager"
+    ],
+    "Website": "",
+    "Versions": [
+      {
+        "Version": "2.1.1",
+        "Url": "https://github.com/NicolaiSoeborg/filemanager-plugin/archive/v2.1.1.zip",
+        "Require": {
+          "micro": ">=1.3.2"
+        }
+      },
+      {
+        "Version": "3.1.0",
+        "Url": "https://github.com/NicolaiSoeborg/filemanager-plugin/archive/v3.1.0.zip",
+        "Require": {
+          "micro": ">=1.3.5"
+        }
+      },
+      {
+        "Version": "3.4.0",
+        "Url": "https://github.com/NicolaiSoeborg/filemanager-plugin/archive/v3.4.0.zip",
+        "Require": {
+          "micro": ">=1.4.1"
+        }
+      },
+      {
+        "Version": "3.5.0",
+        "Url": "https://github.com/micro-editor/updated-plugins/releases/download/v1.0.0/filemanager-3.5.0.zip",
+        "Require": {
+          "micro": ">=2.0.0-1"
+        }
+      }
+    ]
+  },
+  {
+    "Name": "manipulator",
+    "Description": "Plugin to do various kind of modifications to text in Micro",
+    "Website": "https://github.com/NicolaiSoeborg/manipulator-plugin",
+    "Tags": [
+      "text",
+      "manipulation",
+      "base64",
+      "rot13",
+      "bracket",
+      "Capital",
+      "uppercase",
+      "lowercase"
+    ],
+    "Versions": [
+      {
+        "Version": "1.4.0",
+        "Url": "https://github.com/micro-editor/updated-plugins/releases/download/v1.0.0/manipulator-1.4.0.zip",
+        "Require": {
+          "micro": ">=2.0.0-1"
+        }
+      },
+      {
+        "Version": "1.3.2",
+        "Url": "https://github.com/NicolaiSoeborg/manipulator-plugin/archive/v1.3.2.zip",
+        "Require": {
+          "micro": ">=1.0.0"
+        }
+      }
+    ]
+  },
+  {
+    "Name": "fzf",
+    "Description": "adds support to opening files via fzf",
+    "Website": "https://github.com/samdmarshall/micro-fzf-plugin",
+    "Tags": [
+      "fzf"
+    ],
+    "Versions": [
+      {
+        "Version": "1.1.1",
+        "Url": "https://github.com/micro-editor/updated-plugins/releases/download/v1.0.0/fzf-1.1.1.zip",
+        "Require": {
+          "micro": ">=2.0.0-1"
+        }
+      },
+      {
+        "Version": "1.1.0",
+        "Url": "https://github.com/micro-editor/updated-plugins/releases/download/v1.0.0/fzf-1.1.0.zip",
+        "Require": {
+          "micro": ">=2.0.0-1"
+        }
+      },
+      {
+        "Version": "1.0.5",
+        "Url": "https://github.com/samdmarshall/micro-fzf-plugin/archive/v1.0.5.zip",
+        "Require": {
+          "micro": ">=1.1.2"
+        }
+      }
+    ]
+  },
+  {
+    "Name": "crystal",
+    "Description": "adds helpful crystal tools",
+    "Tags": [
+      "crystal-lang",
+      "crystal"
+    ],
+    "Website": "https://github.com/ColinRioux/micro-crystal",
+    "Versions": [
+      {
+        "Version": "1.1.0",
+        "Url": "https://github.com/micro-editor/updated-plugins/releases/download/v1.0.0/crystal-1.1.0.zip",
+        "Require": {
+          "micro": ">=2.0.0-1"
+        }
+      },
+      {
+        "Version": "1.0.0",
+        "Url": "https://github.com/ColinRioux/micro-crystal/archive/1.0.0.zip",
+        "Require": {
+          "micro": ">=1.0.3"
+        }
+      }
+    ]
+  },
+  {
+    "Name": "fish",
+    "Description": "plugin to make scripting in fish more pleasant",
+    "Tags": [
+      "fish"
+    ],
+    "Website": "https://github.com/onodera-punpun/micro-fish-plugin",
+    "Versions": [
+      {
+        "Version": "0.2.0",
+        "Url": "https://github.com/micro-editor/updated-plugins/releases/download/v1.0.0/fish-0.2.0.zip",
+        "Require": {
+          "micro": ">=2.0.0-1"
+        }
+      },
+      {
+        "Version": "0.1.1",
+        "Url": "https://github.com/onodera-punpun/micro-fish-plugin/archive/0.1.1.zip",
+        "Require": {
+          "micro": ">=1.0.3"
+        }
+      }
+    ]
+  },
+  {
+    "Name": "misspell",
+    "Description": "plugin that corrects commonly misspelled words",
+    "Tags": [
+      "spell",
+      "check",
+      "misspell"
+    ],
+    "Website": "https://github.com/onodera-punpun/micro-misspell-plugin",
+    "Versions": [
+      {
+        "Version": "0.2.0",
+        "Url": "https://github.com/micro-editor/updated-plugins/releases/download/v1.0.0/misspell-0.2.0.zip",
+        "Require": {
+          "micro": ">=2.0.0-1"
+        }
+      },
+      {
+        "Version": "0.1.0",
+        "Url": "https://github.com/onodera-punpun/micro-misspell-plugin/archive/0.1.0.zip",
+        "Require": {
+          "micro": ">=1.0.3"
+        }
+      }
+    ]
+  },
+  {
+    "Name": "pony",
+    "Description": "plugin for the Pony Programming Language",
+    "Website": "https://github.com/Theodus/micro-pony-plugin",
+    "Tags": [
+      "pony"
+    ],
+    "Versions": [
+      {
+        "Version": "0.4.0",
+        "Url": "https://github.com/micro-editor/updated-plugins/releases/download/v1.0.0/pony-0.4.0.zip",
+        "Require": {
+          "micro": ">=2.0.0-1"
+        }
+      },
+      {
+        "Version": "0.3.0",
+        "Url": "https://github.com/theodus/micro-pony-plugin/archive/0.3.0.zip",
+        "Require": {
+          "micro": ">=1.1.3"
+        }
+      }
+    ]
+  },
+  {
+    "Name": "snippets",
+    "Description": "plugin to insert language specific code snippets.",
+    "Website": "https://github.com/micro-editor/updated-plugins/tree/master/micro-snippets-plugin",
+    "Tags": [
+      "snippet"
+    ],
+    "Versions": [
+      {
+        "Version": "0.2.0",
+        "Url": "https://github.com/micro-editor/updated-plugins/releases/download/v1.0.0/snippets-0.2.0.zip",
+        "Require": {
+          "micro": ">=2.0.0-1"
+        }
+      },
+      {
+        "Version": "0.1.4",
+        "Url": "https://github.com/tommyshem/micro-snippets-plugin/archive/v0.1.4.zip",
+        "Require": {
+          "micro": ">=1.3.4"
+        }
+      },
+      {
+        "Version": "0.1.2",
+        "Url": "https://github.com/tommyshem/micro-snippets-plugin/archive/v0.1.2.zip",
+        "Require": {
+          "micro": ">1.0.3 <1.3.4"
+        }
+      }
+    ]
+  },
+  {
+    "Name": "wc",
+    "Description": "Plugin to count words/characters in micro",
+    "Tags": [
+      "wc",
+      "word",
+      "character",
+      "count"
+    ],
+    "Versions": [
+      {
+        "Version": "1.2.1",
+        "Url": "https://github.com/adamnpeace/micro-wc-plugin/archive/1.2.1.zip",
+        "Require": {
+          "micro": ">=1.1.0"
+        }
+      }
+    ]
+  },
+  {
+    "Name": "fzfinder",
+    "Description": "The plugin allows you to integrate fzf to select and search for your project files.",
+    "Tags": [
+      "fzf",
+      "finder",
+      "file",
+      "menu"
+    ],
+    "Website": "https://github.com/muratovas/micro-fzfinder",
+    "Versions": [
+      {
+        "Version": "0.1.0",
+        "Url": "https://github.com/muratovas/micro-fzfinder/archive/v0.1.0.zip",
+        "Require": {
+          "micro": ">=2.0.0"
+        }
+      }
+    ]
+  },
+  {
+    "Name": "yosyslint",
+    "Description": "Plugin for checking the syntax of the Verilog language. Based on yosys.",
+    "Tags": [
+      "yosys",
+      "lint",
+      "verilog"
+    ],
+    "Website": "https://github.com/muratovas/micro-yosyslint",
+    "Versions": [
+      {
+        "Version": "0.0.3",
+        "Url": "https://github.com/muratovas/micro-yosyslint/archive/v0.0.3.zip",
+        "Require": {
+          "micro": ">=2.0.0"
+        }
+      },
+      {
+        "Version": "0.0.2",
+        "Url": "https://github.com/muratovas/micro-yosyslint/archive/v0.0.2.zip",
+        "Require": {
+          "micro": ">=2.0.0"
+        }
+      }
+    ]
+  },
+  {
+    "Name": "gotham-colors",
+    "Description": "A very dark colorscheme",
+    "Tags": [
+      "gotham",
+      "colors",
+      "color",
+      "themes",
+      "theme",
+      "colorschemes",
+      "colorscheme",
+      "dark"
+    ],
+    "Versions": [
+      {
+        "Version": "1.0.0",
+        "Url": "https://github.com/novln/micro-gotham-colors/archive/1.0.0.zip",
+        "Require": {
+          "micro": ">=1.1.3"
+        }
+      },
+      {
+        "Version": "1.1.0",
+        "Url": "https://github.com/novln/micro-gotham-colors/archive/1.1.0.zip",
+        "Require": {
+          "micro": ">=1.1.3"
+        }
+      }
+    ]
+  },
+  {
+    "Name": "autosave",
+    "Description": "plugin to replace the default autosave feature",
+    "Tags": [
+      "autosave"
+    ],
+    "Versions": [
+      {
+        "Version": "0.1.0",
+        "Url": "https://github.com/pennie-quinn/micro-plugin-autosave/archive/master.zip",
+        "Require": {
+          "micro": ">=1.0.3"
+        }
+      }
+    ]
+  },
+  {
+    "Name": "aspell",
+    "Description": "Spellchecking with Aspell",
+    "Tags": [
+      "spellchecking",
+      "spelling",
+      "aspell",
+      "spellchecker"
+    ],
+    "Website": "https://github.com/priner/micro-aspell-plugin",
+    "Versions": [
+      {
+        "Version": "1.3.0",
+        "Url": "https://github.com/priner/micro-aspell-plugin/archive/v1.3.0.zip",
+        "Require": {
+          "micro": ">=2.0.7"
+        }
+      },
+      {
+        "Version": "1.2.1",
+        "Url": "https://github.com/priner/micro-aspell-plugin/archive/v1.2.1.zip",
+        "Require": {
+          "micro": ">=2.0.7"
+        }
+      },
+      {
+        "Version": "1.2.0",
+        "Url": "https://github.com/priner/micro-aspell-plugin/archive/v1.2.0.zip",
+        "Require": {
+          "micro": ">=2.0.0"
+        }
+      },
+      {
+        "Version": "1.1.0",
+        "Url": "https://github.com/priner/micro-aspell-plugin/archive/v1.1.0.zip",
+        "Require": {
+          "micro": ">=2.0.0"
+        }
+      },
+      {
+        "Version": "1.0.0",
+        "Url": "https://github.com/priner/micro-aspell-plugin/archive/v1.0.0.zip",
+        "Require": {
+          "micro": ">=2.0.0"
+        }
+      }
+    ]
+  },
+  {
+    "Name": "scratch",
+    "Description": "gives access to a function to create temporary buffers",
+    "Tags": [
+      "scratch"
+    ],
+    "Versions": [
+      {
+        "Version": "1.0.0",
+        "Url": "https://github.com/samdmarshall/micro-scratch-plugin/archive/v1.0.0.zip",
+        "Require": {
+          "micro": ">=1.1.2"
+        }
+      }
+    ]
+  },
+  {
+    "Name": "ag",
+    "Description": "A search plugin using ag",
+    "Website": "https://github.com/sebkolind/micro-ag",
+    "Tags": [
+      "searching",
+      "ag"
+    ],
+    "Versions": [
+      {
+        "Version": "1.0.0",
+        "Url": "https://github.com/sebkolind/micro-ag/archive/v1.0.0.zip",
+        "Require": {
+          "micro": ">=2.0.0"
+        }
+      }
+    ]
+  },
+  {
+    "Name": "lintertypescript",
+    "Description": "A linter for Typescript (.ts & .tsx) using tsc",
+    "Website": "https://github.com/sebkolind/micro-linter-typescript",
+    "Tags": [
+      "linting",
+      "typescript"
+    ],
+    "Versions": [
+      {
+        "Version": "1.0.3",
+        "Url": "https://github.com/sebkolind/micro-linter-typescript/archive/v1.0.3.zip",
+        "Require": {
+          "micro": ">=2.0.0"
+        }
+      }
+    ]
+  },
+  {
+    "Name": "prettier",
+    "Description": "A Prettier plugin",
+    "Website": "https://github.com/sebkolind/micro-prettier",
+    "Tags": [
+      "formatting",
+      "prettier"
+    ],
+    "Versions": [
+      {
+        "Version": "1.0.0",
+        "Url": "https://github.com/sebkolind/micro-prettier/archive/v1.0.0.zip",
+        "Require": {
+          "micro": ">=2.0.0"
+        }
+      }
+    ]
+  },
+  {
+    "Name": "delve",
+    "Description": "Plugin to integrate delve golang debugger.",
+    "Tags": [
+      "delve",
+      "debug"
+    ],
+    "Website": "https://github.com/serge-v/micro-delve",
+    "Versions": [
+      {
+        "Version": "1.0.3",
+        "Url": "https://github.com/serge-v/micro-delve/archive/v1.0.3.zip",
+        "Require": {
+          "micro": ">=2.0.0"
+        }
+      }
+    ]
+  },
+  {
+    "Name": "quickfix",
+    "Description": "Plugin to speedup the edit-make-edit development cycle.",
+    "Tags": [
+      "quickfix"
+    ],
+    "Website": "https://github.com/serge-v/micro-quickfix",
+    "Versions": [
+      {
+        "Version": "2.1.2",
+        "Url": "https://github.com/serge-v/micro-quickfix/archive/v2.1.2.zip",
+        "Require": {
+          "micro": ">=2.0.0"
+        }
+      }
+    ]
+  },
+  {
+    "Name": "zigfmt",
+    "Description": "zig fmt on save and zig fmt --check linter support",
+    "Tags": [
+      "zig",
+      "ziglang"
+    ],
+    "Website": "https://github.com/squeek502/micro-zigfmt",
+    "Versions": [
+      {
+        "Version": "0.1.1",
+        "Url": "https://github.com/squeek502/micro-zigfmt/archive/v0.1.1.zip",
+        "Require": {
+          "micro": ">=2.0.0"
+        }
+      },
+      {
+        "Version": "0.1.0",
+        "Url": "https://github.com/squeek502/micro-zigfmt/archive/v0.1.0.zip",
+        "Require": {
+          "micro": ">=2.0.0"
+        }
+      }
+    ]
+  },
+  {
+    "Name": "fmt",
+    "Description": "A multi-language formatting plugin for Micro",
+    "Tags": [
+      "beautifying",
+      "beautifier",
+      "beautify",
+      "formatter",
+      "formatting",
+      "multi-language",
+      "pretty-printer",
+      "prettifier"
+    ],
+    "Versions": [
+      {
+        "Version": "3.2.0",
+        "Url": "https://github.com/sum01/fmt-micro/archive/v3.2.0.zip",
+        "Require": {
+          "micro": ">=1.3.0"
+        }
+      }
+    ]
+  },
+  {
+    "Name": "jump",
+    "Description": "Jump to any function, class or heading with F4. Go, Markdown, Python, C...",
+    "Website": "https://github.com/terokarvinen/micro-jump",
+    "Tags": [
+      "ctags",
+      "fzf",
+      "symbols",
+      "code browser",
+      "jump"
+    ],
+    "Versions": [
+      {
+        "Version": "0.0.5",
+        "Url": "https://github.com/terokarvinen/micro-jump/archive/v0.0.4.zip",
+        "Require": {
+          "micro": ">=2.0.0"
+        }
+      }
+    ]
+  },
+  {
+    "Name": "monokai-dark",
+    "Description": "A dark monokai colorscheme for micro",
+    "Tags": [
+      "colorscheme"
+    ],
+    "Versions": [
+      {
+        "Version": "0.1.0",
+        "Url": "https://github.com/theodus/micro-monokai-dark/archive/0.1.0.zip",
+        "Require": {
+          "micro": ">=1.1.3"
+        }
+      }
+    ]
+  },
+  {
+    "Name": "wakatime",
+    "Description": "Metrics, insights, and time tracking automatically generated from your programming activity",
+    "Website": "https://github.com/wakatime/micro-wakatime",
+    "Tags": [
+      "productivity",
+      "time tracking",
+      "project",
+      "git",
+      "timer"
+    ],
+    "Versions": [
+      {
+        "Version": "1.0.0",
+        "Url": "https://github.com/wakatime/micro-wakatime/archive/1.0.0.zip",
+        "Require": {
+          "micro": ">=2.0.0"
+        }
+      },
+      {
+        "Version": "1.0.1",
+        "Url": "https://github.com/wakatime/micro-wakatime/archive/1.0.1.zip",
+        "Require": {
+          "micro": ">=2.0.0"
+        }
+      },
+      {
+        "Version": "1.0.2",
+        "Url": "https://github.com/wakatime/micro-wakatime/archive/1.0.2.zip",
+        "Require": {
+          "micro": ">=2.0.0"
+        }
+      },
+      {
+        "Version": "1.0.3",
+        "Url": "https://github.com/wakatime/micro-wakatime/archive/1.0.3.zip",
+        "Require": {
+          "micro": ">=2.0.0"
+        }
+      }
+    ]
+  },
+  {
+    "Name": "acme",
+    "Description": "Acme style editing plugin",
+    "Tags": [
+      "acme",
+      "plan9"
+    ],
+    "Versions": [
+      {
+        "Version": "0.0.3",
+        "Url": "https://github.com/xxuejie/micro-acme/archive/v0.0.3.zip",
+        "Require": {
+          "micro": ">=2.0.0"
+        }
+      },
+      {
+        "Version": "0.0.2",
+        "Url": "https://github.com/xxuejie/micro-acme/archive/v0.0.2.zip",
+        "Require": {
+          "micro": ">=2.0.0"
+        }
+      },
+      {
+        "Version": "0.0.1",
+        "Url": "https://github.com/xxuejie/micro-acme/archive/v0.0.1.zip",
+        "Require": {
+          "micro": ">=2.0.0"
+        }
+      }
+    ]
+  }
+]
