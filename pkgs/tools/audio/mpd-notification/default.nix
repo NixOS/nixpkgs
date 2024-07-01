@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "mpd-notification";
-  version = "0.9.0";
+  version = "0.9.1";
 
   src = fetchFromGitHub {
     owner = "eworm-de";
     repo = "mpd-notification";
     rev = version;
-    hash = "sha256-1DG8pemlF5bURbdJwGTZqp3WVfLOwGEpfqq9q1NtwaE=";
+    hash = "sha256-8iBG1IdbERB2gOALvVBNJ3/hhiou3D/azSRkRD+u9O8=";
   };
 
   nativeBuildInputs = [

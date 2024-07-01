@@ -11,20 +11,20 @@
 
 mkYarnPackage rec {
   pname = "jellyseerr";
-  version = "1.8.1";
+  version = "1.9.2";
 
   src = fetchFromGitHub {
     owner = "Fallenbagel";
     repo = "jellyseerr";
     rev = "v${version}";
-    hash = "sha256-B8Hnpi4XwK0WrHRgj7OSVUh49oRH9SVEHdzGbnDa8p8=";
+    hash = "sha256-TXe/k/pb7idu7G1wGu6TZksnoFQ5/PN0voVlve3k1UI=";
   };
 
   packageJSON = ./package.json;
 
   offlineCache = fetchYarnDeps {
     yarnLock = "${src}/yarn.lock";
-    hash = "sha256-ME19kHlVw0Q5oCytYQCUj4Ek0+712NkqB6eozOtF6/k=";
+    hash = "sha256-2iRxguxEI+YKm8ddhRgZMvfZuUgQmCK5ER4jMCFJQMQ=";
   };
 
   nativeBuildInputs = [

@@ -80,6 +80,10 @@ stdenv.mkDerivation rec {
     "bash_cv_job_control_missing=nomissing"
     "bash_cv_sys_named_pipes=nomissing"
     "bash_cv_getcwd_malloc=yes"
+    # This check cannot be performed when cross compiling. The "yes"
+    # default is fine for static linking on Linux (weak symbols?) but
+    # not with OpenBSD, when it does clash with the regular `getenv`.
+    "bash_cv_getenv_redef=${if !(with stdenv.hostPlatform; isStatic && isOpenBSD) then "yes" else "no"}"
   ] ++ lib.optionals stdenv.hostPlatform.isCygwin [
     "--without-libintl-prefix"
     "--without-libiconv-prefix"

@@ -4552,14 +4552,14 @@ with pkgs;
   cloudflared = callPackage ../applications/networking/cloudflared {
     # https://github.com/cloudflare/cloudflared/issues/1151#issuecomment-1888819250
     buildGoModule = buildGoModule.override {
-      go = go_1_21.overrideAttrs {
+      go = go_1_22.overrideAttrs {
         pname = "cloudflare-go";
-        version = "0-unstable-2023-12-06";
+        version = "1.22.2-devel-cf";
         src = fetchFromGitHub {
           owner = "cloudflare";
           repo = "go";
-          rev = "34129e47042e214121b6bbff0ded4712debed18e";
-          sha256 = "sha256-RA9KTY4cSxIt7dyJgAFQPemc6YBgcSwc/hqB4JHPxng=";
+          rev = "ec0a014545f180b0c74dfd687698657a9e86e310";
+          sha256 = "sha256-oQQ9Jyh8TphZSCaHqaugTL7v0aeZjyOdVACz86I2KvU=";
         };
       };
     };
@@ -16443,7 +16443,9 @@ with pkgs;
 
   makeRustPlatform = callPackage ../development/compilers/rust/make-rust-platform.nix { };
 
-  buildRustCrate = callPackage ../build-support/rust/build-rust-crate { };
+  buildRustCrate = callPackage ../build-support/rust/build-rust-crate ({ } // lib.optionalAttrs (stdenv.hostPlatform.libc == null) {
+    stdenv = stdenvNoCC; # Some build targets without libc will fail to evaluate with a normal stdenv.
+  });
   buildRustCrateHelpers = callPackage ../build-support/rust/build-rust-crate/helpers.nix { };
 
   cargo2junit = callPackage ../development/tools/rust/cargo2junit { };
@@ -25143,17 +25145,17 @@ with pkgs;
   };
 
   # Steel Bank Common Lisp
-  sbcl_2_4_4 = wrapLisp {
-    pkg = callPackage ../development/compilers/sbcl { version = "2.4.4"; };
-    faslExt = "fasl";
-    flags = [ "--dynamic-space-size" "3000" ];
-  };
   sbcl_2_4_5 = wrapLisp {
     pkg = callPackage ../development/compilers/sbcl { version = "2.4.5"; };
     faslExt = "fasl";
     flags = [ "--dynamic-space-size" "3000" ];
   };
-  sbcl = sbcl_2_4_5;
+  sbcl_2_4_6 = wrapLisp {
+    pkg = callPackage ../development/compilers/sbcl { version = "2.4.6"; };
+    faslExt = "fasl";
+    flags = [ "--dynamic-space-size" "3000" ];
+  };
+  sbcl = sbcl_2_4_6;
 
   sbclPackages = recurseIntoAttrs sbcl.pkgs;
 
@@ -30109,7 +30111,7 @@ with pkgs;
   dnglab = callPackage ../tools/graphics/dnglab { };
 
   inherit (callPackage ../applications/virtualization/docker {})
-    docker_24 docker_25 docker_26;
+    docker_24 docker_25 docker_26 docker_27;
 
   docker = docker_24;
   docker-client = docker.override { clientOnly = true; };
@@ -32818,14 +32820,12 @@ with pkgs;
       avahi = avahi-compat;
       pulseSupport = config.pulseaudio or false;
       iceSupport = config.murmur.iceSupport or true;
-      protobuf = protobuf_21;
     }).murmur;
 
   mumble = (callPackages ../applications/networking/mumble {
       avahi = avahi-compat;
       jackSupport = config.mumble.jackSupport or false;
       speechdSupport = config.mumble.speechdSupport or false;
-      protobuf = protobuf_21;
     }).mumble;
 
   mumble_overlay = callPackage ../applications/networking/mumble/overlay.nix {
@@ -34944,13 +34944,9 @@ with pkgs;
   };
   neovim = wrapNeovim neovim-unwrapped { };
 
-  neovim-gtk = callPackage ../applications/editors/neovim/neovim-gtk.nix { };
-
   gnvim-unwrapped = callPackage ../applications/editors/neovim/gnvim { };
 
   gnvim = callPackage ../applications/editors/neovim/gnvim/wrapper.nix { };
-
-  neovim-remote = callPackage ../applications/editors/neovim/neovim-remote.nix { };
 
   viw = callPackage ../applications/editors/viw { };
 
