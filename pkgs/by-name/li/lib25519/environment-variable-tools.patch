@@ -1,0 +1,82 @@
+diff --git a/configure b/configure
+index 04042b2..cd45046 100755
+--- a/configure
++++ b/configure
+@@ -207,17 +207,25 @@ for arch in sorted(os.listdir('compilers')):
+   if arch == 'default' or arch == host or arch.startswith('%s+' % host):
+     allarches += [arch]
+     compilers[arch] = []
+-    with open('compilers/%s' % arch) as f:
+-      for c in f.readlines():
+-        c = c.strip()
+-        cv = compilerversion(c)
+-        if cv == None:
+-          log('skipping %s compiler %s' % (arch,c))
+-          continue
+-        compilers[arch] += [c]
+-        cv = (c+'\n'+cv).strip().replace('\n','; ')
+-        compilerversionline[arch,c] = cv
+-        log('using %s compiler %s' % (arch,cv))
++    if c := os.getenv("CC"):
++      log('using default compiler %s' % c)
++      compilers[arch] += [c]
++      cv = compilerversion(c)
++      cv = (c+'\n'+cv).strip().replace('\n','; ')
++      compilerversionline[arch,c] = cv
++      log('using %s compiler %s' % (arch,cv))
++    else:
++      with open('compilers/%s' % arch) as f:
++        for c in f.readlines():
++          c = c.strip()
++          cv = compilerversion(c)
++          if cv == None:
++            log('skipping %s compiler %s' % (arch,c))
++            continue
++          compilers[arch] += [c]
++          cv = (c+'\n'+cv).strip().replace('\n','; ')
++          compilerversionline[arch,c] = cv
++          log('using %s compiler %s' % (arch,cv))
+ 
+ with open('build/%s/allarches' % host,'w') as f:
+   for arch in allarches:
+diff --git a/scripts-build/checkinsns b/scripts-build/checkinsns
+index 54fa4df..bb0b78d 100755
+--- a/scripts-build/checkinsns
++++ b/scripts-build/checkinsns
+@@ -214,7 +214,7 @@ def doit(d):
+ 
+   try:
+     # XXX: in principle should inspect raw insns for, e.g., EVEX vs. VEX
+-    p = subprocess.Popen(['objdump','-d','-M','intel-mnemonic','-M','intel','--no-show-raw-insn']+objs,stdout=subprocess.PIPE,stderr=subprocess.STDOUT,universal_newlines=True)
++    p = subprocess.Popen([os.getenv("OBJDUMP", "objdump"),'-d','-M','intel-mnemonic','-M','intel','--no-show-raw-insn']+objs,stdout=subprocess.PIPE,stderr=subprocess.STDOUT,universal_newlines=True)
+     out,err = p.communicate()
+     if err:
+       warn('objdump error: %s' % err)
+diff --git a/scripts-build/checknamespace b/scripts-build/checknamespace
+index ae11bed..19b749e 100755
+--- a/scripts-build/checknamespace
++++ b/scripts-build/checknamespace
+@@ -35,8 +35,9 @@ def doit(d):
+   obj2D = {}
+   obj2U = {}
+ 
++
+   try:
+-    p = subprocess.Popen(['nm','-ApP']+objs,stdout=subprocess.PIPE,stderr=subprocess.STDOUT,universal_newlines=True)
++    p = subprocess.Popen([os.getenv("NM", "nm"),'-ApP']+objs,stdout=subprocess.PIPE,stderr=subprocess.STDOUT,universal_newlines=True)
+     out,err = p.communicate()
+   except Exception as e:
+     warn('nm failure: %s' % e)
+diff --git a/scripts-build/staticlib b/scripts-build/staticlib
+index 7683233..0445bc3 100755
+--- a/scripts-build/staticlib
++++ b/scripts-build/staticlib
+@@ -3,6 +3,6 @@
+ lib="$1"
+ 
+ rm -f package/lib/"$lib".a
+-ar cr package/lib/"$lib".a ofiles/*.o
+-ranlib package/lib/"$lib".a || :
++${AR:-ar} cr package/lib/"$lib".a ofiles/*.o
++${RANLIB:-ranlib} package/lib/"$lib".a || :
+ chmod 644 package/lib/"$lib".a
