@@ -75,6 +75,6 @@ stdenv.mkDerivation rec {
       binaryNativeCode
     ];
     license = with lib.licenses; [ gpl2Plus gpl3Plus bsd2 publicDomain ];
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ davisrichard437 ];
   };
 }
