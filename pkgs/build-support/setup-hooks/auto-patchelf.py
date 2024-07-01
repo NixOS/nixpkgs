@@ -11,7 +11,7 @@ from contextlib import contextmanager
 from dataclasses import dataclass
 from itertools import chain
 from pathlib import Path, PurePath
-from typing import DefaultDict, Iterator, List, Optional, Set, Tuple
+from typing import DefaultDict, Iterator, Optional
 
 from elftools.common.exceptions import ELFError  # type: ignore
 from elftools.elf.dynamic import DynamicSection  # type: ignore
@@ -38,7 +38,7 @@ def is_dynamic_executable(elf: ELFFile) -> bool:
     return bool(elf.get_section_by_name(".interp"))
 
 
-def get_dependencies(elf: ELFFile) -> List[str]:
+def get_dependencies(elf: ELFFile) -> list[str]:
     dependencies = []
     # This convoluted code is here on purpose. For some reason, using
     # elf.get_section_by_name(".dynamic") does not always return an
@@ -52,7 +52,7 @@ def get_dependencies(elf: ELFFile) -> List[str]:
     return dependencies
 
 
-def get_rpath(elf: ELFFile) -> List[str]:
+def get_rpath(elf: ELFFile) -> list[str]:
     # This convoluted code is here on purpose. For some reason, using
     # elf.get_section_by_name(".dynamic") does not always return an
     # instance of DynamicSection, but that is required to call iter_tags
@@ -119,11 +119,11 @@ def glob(path: Path, pattern: str, recursive: bool) -> Iterator[Path]:
         return [path] if path.match(pattern) else []
 
 
-cached_paths: Set[Path] = set()
-soname_cache: DefaultDict[Tuple[str, str], List[Tuple[Path, str]]] = defaultdict(list)
+cached_paths: set[Path] = set()
+soname_cache: DefaultDict[tuple[str, str], list[tuple[Path, str]]] = defaultdict(list)
 
 
-def populate_cache(initial: List[Path], recursive: bool =False) -> None:
+def populate_cache(initial: list[Path], recursive: bool =False) -> None:
     lib_dirs = list(initial)
 
     while lib_dirs:
@@ -174,7 +174,7 @@ class Dependency:
     found: bool = False     # Whether it was found somewhere
 
 
-def auto_patchelf_file(path: Path, runtime_deps: list[Path], append_rpaths: List[Path] = [], extra_args: List[str] = []) -> list[Dependency]:
+def auto_patchelf_file(path: Path, runtime_deps: list[Path], append_rpaths: list[Path] = [], extra_args: list[str] = []) -> list[Dependency]:
     try:
         with open_elf(path) as elf:
 
@@ -257,13 +257,13 @@ def auto_patchelf_file(path: Path, runtime_deps: list[Path], append_rpaths: List
 
 
 def auto_patchelf(
-        paths_to_patch: List[Path],
-        lib_dirs: List[Path],
-        runtime_deps: List[Path],
+        paths_to_patch: list[Path],
+        lib_dirs: list[Path],
+        runtime_deps: list[Path],
         recursive: bool = True,
-        ignore_missing: List[str] = [],
-        append_rpaths: List[Path] = [],
-        extra_args: List[str] = []) -> None:
+        ignore_missing: list[str] = [],
+        append_rpaths: list[Path] = [],
+        extra_args: list[str] = []) -> None:
 
     if not paths_to_patch:
         sys.exit("No paths to patch, stopping.")
