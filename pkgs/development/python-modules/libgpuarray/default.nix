@@ -1,7 +1,7 @@
 {
   stdenv,
   lib,
-  addOpenGLRunpath,
+  addDriverRunpath,
   buildPythonPackage,
   fetchFromGitHub,
   cmake,
@@ -68,7 +68,7 @@ buildPythonPackage rec {
       fixRunPath $out/lib/libgpuarray.so
     ''
     + lib.optionalString cudaSupport ''
-      addOpenGLRunpath $out/lib/libgpuarray.so
+      addDriverRunpath $out/lib/libgpuarray.so
     '';
 
   propagatedBuildInputs = [
@@ -80,7 +80,7 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     cmake
     cython_0
-  ] ++ lib.optionals cudaSupport [ addOpenGLRunpath ];
+  ] ++ lib.optionals cudaSupport [ addDriverRunpath ];
 
   buildInputs = [ nose ];
 

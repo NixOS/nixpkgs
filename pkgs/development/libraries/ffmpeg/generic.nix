@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPackages, removeReferencesTo, addOpenGLRunpath, pkg-config, perl, texinfo, yasm
+{ lib, stdenv, buildPackages, removeReferencesTo, addDriverRunpath, pkg-config, perl, texinfo, yasm
 
   # You can fetch any upstream version using this derivation by specifying version and hash
   # NOTICE: Always use this argument to override the version. Do not use overrideAttrs.
@@ -751,7 +751,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  nativeBuildInputs = [ removeReferencesTo addOpenGLRunpath perl pkg-config texinfo yasm ]
+  nativeBuildInputs = [ removeReferencesTo addDriverRunpath perl pkg-config texinfo yasm ]
   ++ optionals withCudaLLVM [ clang ];
 
   buildInputs = []
@@ -884,10 +884,10 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   # Set RUNPATH so that libnvcuvid and libcuda in /run/opengl-driver(-32)/lib can be found.
-  # See the explanation in addOpenGLRunpath.
+  # See the explanation in addDriverRunpath.
   postFixup = optionalString (stdenv.isLinux && withLib) ''
-    addOpenGLRunpath ${placeholder "lib"}/lib/libavcodec.so
-    addOpenGLRunpath ${placeholder "lib"}/lib/libavutil.so
+    addDriverRunpath ${placeholder "lib"}/lib/libavcodec.so
+    addDriverRunpath ${placeholder "lib"}/lib/libavutil.so
   ''
   # https://trac.ffmpeg.org/ticket/10809
   + optionalString (versionAtLeast version "5.0" && withVulkan && !stdenv.hostPlatform.isMinGW) ''

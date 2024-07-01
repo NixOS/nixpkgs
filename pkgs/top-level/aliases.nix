@@ -69,6 +69,8 @@ mapAliases ({
   adtool = throw "'adtool' has been removed, as it was broken and unmaintained";
   adom = throw "'adom' has been removed, as it was broken and unmaintained"; # added 2024-05-09
   advcpmv = throw "'advcpmv' has been removed, as it is not being actively maintained and break recent coreutils."; # Added 2024-03-29
+  # Post 24.11 branch-off, this should throw an error
+  addOpenGLRunpath = addDriverRunpath; # Added 2024-05-25
   aether = throw "aether has been removed from nixpkgs; upstream unmaintained, security issues"; # Added 2023-10-03
   afl = throw "afl has been removed as the upstream project was archived. Consider using 'aflplusplus'"; # Added 2024-04-21
   airfield = throw "airfield has been removed due to being unmaintained"; # Added 2023-05-19

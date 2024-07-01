@@ -5,7 +5,7 @@
 , libcxx
 , llvmPackages
 
-, addOpenGLRunpath
+, addDriverRunpath
 , patchelf
 , fixDarwinDylibNames
 
@@ -31,7 +31,7 @@ in stdenv.mkDerivation {
 
   nativeBuildInputs =
     if stdenv.isDarwin then [ fixDarwinDylibNames ]
-    else [ patchelf ] ++ lib.optionals cudaSupport [ addOpenGLRunpath ];
+    else [ patchelf ] ++ lib.optionals cudaSupport [ addDriverRunpath ];
 
   dontBuild = true;
   dontConfigure = true;
@@ -64,7 +64,7 @@ in stdenv.mkDerivation {
       echo "setting rpath for $lib..."
       patchelf --set-rpath "${rpath}:$out/lib" "$lib"
       ${lib.optionalString cudaSupport ''
-        addOpenGLRunpath "$lib"
+        addDriverRunpath "$lib"
       ''}
     done
   '' + lib.optionalString stdenv.isDarwin ''

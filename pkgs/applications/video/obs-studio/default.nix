@@ -3,7 +3,7 @@
 , stdenv
 , fetchFromGitHub
 , fetchpatch
-, addOpenGLRunpath
+, addDriverRunpath
 , cmake
 , fdk_aac
 , ffmpeg
@@ -87,7 +87,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeBuildInputs = [
-    addOpenGLRunpath
+    addDriverRunpath
     cmake
     pkg-config
     wrapGAppsHook3
@@ -181,8 +181,8 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   postFixup = lib.optionalString stdenv.isLinux ''
-    addOpenGLRunpath $out/lib/lib*.so
-    addOpenGLRunpath $out/lib/obs-plugins/*.so
+    addDriverRunpath $out/lib/lib*.so
+    addDriverRunpath $out/lib/obs-plugins/*.so
 
     # Link libcef again after patchelfing other libs
     ln -s ${libcef}/lib/* $out/lib/obs-plugins/
