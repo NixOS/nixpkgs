@@ -23,6 +23,6 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "spr";
     homepage = "https://github.com/getcord/spr";
     license = licenses.mit;
-    maintainers = with maintainers; [ sven-of-cord ];
+    maintainers = with maintainers; [ sven-of-cord spacedentist jozef-mokry flooey ];
   };
 }
