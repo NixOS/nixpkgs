@@ -91,6 +91,7 @@ rec {
     , destination ? ""
     , checkPhase ? ""
     , meta ? { }
+    , passthru ? { }
     , allowSubstitutes ? false
     , preferLocalBuild ? true
     , derivationArgs ? { }
@@ -100,7 +101,7 @@ rec {
     in
     runCommand name
       ({
-        inherit text executable checkPhase allowSubstitutes preferLocalBuild;
+        inherit text executable checkPhase passthru allowSubstitutes preferLocalBuild;
         passAsFile = [ "text" ]
           ++ derivationArgs.passAsFile or [ ];
         meta = lib.optionalAttrs (executable && matches != null)
@@ -217,6 +218,12 @@ rec {
        */
       meta ? { },
       /*
+         `stdenv.mkDerivation`'s `passthru` argument.
+
+         Type: AttrSet
+       */
+      passthru ? { },
+      /*
          The `checkPhase` to run. Defaults to `shellcheck` on supported
          platforms and `bash -n`.
 
@@ -259,7 +266,7 @@ rec {
       derivationArgs ? { },
     }:
     writeTextFile {
-      inherit name meta derivationArgs;
+      inherit name meta passthru derivationArgs;
       executable = true;
       destination = "/bin/${name}";
       allowSubstitutes = true;
@@ -362,9 +369,10 @@ rec {
     , destination ? ""   # relative path appended to $out eg "/bin/foo"
     , checkPhase ? ""    # syntax checks, e.g. for scripts
     , meta ? { }
+    , passthru ? { }
     }:
     runCommandLocal name
-      { inherit files executable checkPhase meta destination; }
+      { inherit files executable checkPhase meta passthru destination; }
       ''
         file=$out$destination
         mkdir -p "$(dirname "$file")"
