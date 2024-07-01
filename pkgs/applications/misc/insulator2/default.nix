@@ -11,8 +11,8 @@
 , perl
 , cyrus_sasl
 , stdenv
-, fixup_yarn_lock
-, yarnConfigHook
+, fixup-yarn-lock
+, yarn
 , nodejs-slim
 , cargo-tauri
 , cargo
@@ -53,6 +53,19 @@ stdenv.mkDerivation rec {
     };
   };
 
+  configurePhase = ''
+    export HOME=$(mktemp -d)
+    yarn config --offline set yarn-offline-mirror ${yarnOfflineCache}
+    fixup-yarn-lock yarn.lock
+    yarn install --offline --frozen-lockfile --ignore-scripts --no-progress --non-interactive
+    patchShebangs node_modules/
+    yarn run postinstall --offline
+  '';
+
+  preBuild = ''
+    yarn tauri build -b deb
+  '';
+
   cargoRoot = "backend/";
   buildAndTestDir = cargoRoot;
 
@@ -62,9 +75,9 @@ stdenv.mkDerivation rec {
     rustPlatform.cargoSetupHook
     cargo
     rustc
-    cargo-tauri.hook
-    fixup_yarn_lock
-    yarnConfigHook
+    cargo-tauri
+    fixup-yarn-lock
+    yarn
     nodejs-slim
     cyrus_sasl
     jq
