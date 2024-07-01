@@ -18,6 +18,16 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ makeWrapper ];
 
+  postPatch = ''
+    substituteInPlace scripts/toolchains/linux.cmake \
+      --replace-fail "aarch64-linux-gnu-as"  "aarch64-unknown-linux-gnu-as" \
+      --replace-fail "aarch64-linux-gnu-gcc" "aarch64-unknown-linux-gnu-gcc" \
+      --replace-fail "aarch64-linux-gnu-g++" "aarch64-unknown-linux-gnu-g++" \
+      --replace-fail "arm-linux-gnueabihf-as"  "armv7l-unknown-linux-gnueabihf-as" \
+      --replace-fail "arm-linux-gnueabihf-gcc" "armv7l-unknown-linux-gnueabihf-gcc" \
+      --replace-fail "arm-linux-gnueabihf-g++" "armv7l-unknown-linux-gnueabihf-g++"
+  '';
+
   installPhase = ''
       runHook preInstall
 
