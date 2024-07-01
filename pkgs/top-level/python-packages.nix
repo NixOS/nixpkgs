@@ -13407,6 +13407,8 @@ self: super: with self; {
 
   reuse = callPackage ../development/python-modules/reuse { };
 
+  re-wx = callPackage ../development/python-modules/re-wx { };
+
   rfc3339 = callPackage ../development/python-modules/rfc3339 { };
 
   rfc3339-validator = callPackage ../development/python-modules/rfc3339-validator { };
