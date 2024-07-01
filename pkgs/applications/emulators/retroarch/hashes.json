@@ -581,10 +581,10 @@
         "src": {
             "owner": "libretro",
             "repo": "nxengine-libretro",
-            "rev": "1f371e51c7a19049e00f4364cbe9c68ca08b303a",
-            "hash": "sha256-4XBNTzgN8pLyrK9KsVxTRR1I8CQaZCnVR4gMryYpWW0="
+            "rev": "11fc0892dc6b99b36ecf318006834932cd5b817a",
+            "hash": "sha256-PlU3op50yPgDUXZxSOlltMf/30JLrotpp61UHK1uKB8="
         },
-        "version": "unstable-2023-02-21"
+        "version": "unstable-2024-06-28"
     },
     "o2em": {
         "fetcher": "fetchFromGitHub",
