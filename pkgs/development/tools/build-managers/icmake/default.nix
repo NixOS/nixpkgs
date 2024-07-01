@@ -41,6 +41,6 @@ stdenv.mkDerivation rec {
     homepage = "https://fbb-git.gitlab.io/icmake/";
     license = licenses.gpl3;
     maintainers = with maintainers; [ pSub ];
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }

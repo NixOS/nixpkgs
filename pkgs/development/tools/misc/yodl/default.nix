@@ -22,7 +22,9 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     patchShebangs ./build
     patchShebangs scripts/
-    substituteInPlace INSTALL.im --replace /usr $out
+    substituteInPlace INSTALL.im \
+      --replace-fail /usr "$out" \
+      --replace-fail 'COMPILER = "gcc";' "COMPILER = \"$CC\";"
     substituteInPlace macros/rawmacros/startdoc.pl --replace /usr/bin/perl ${perl}/bin/perl
     substituteInPlace scripts/yodl2whatever.in --replace getopt ${util-linux}/bin/getopt
   '';
@@ -47,6 +49,6 @@ stdenv.mkDerivation rec {
     homepage = "https://fbb-git.gitlab.io/yodl/";
     license = licenses.gpl3;
     maintainers = with maintainers; [ pSub ];
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }
