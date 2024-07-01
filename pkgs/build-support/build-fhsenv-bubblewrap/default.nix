@@ -22,6 +22,7 @@
 , unshareUts ? false
 , unshareCgroup ? false
 , privateTmp ? false
+, requiredCapabilities ? []
 , dieWithParent ? true
 , ...
 } @ args:
@@ -122,6 +123,14 @@ let
     ${createLdConfCache}
     exec ${run} "$@"
   '';
+
+  needsDisableSandbox = (requiredCapabilities != []);
+
+  bwrap-patched = bubblewrap.overrideAttrs (oldAttrs: {
+    patches = (if oldAttrs ? patches then oldAttrs.patches else []) ++ (
+      lib.optional needsDisableSandbox ./disable_setuid_sandbox.patch
+    );
+  });
 
   indentLines = str: concatLines (map (s: "  " + s) (filter (s: s != "") (splitString "\n" str)));
   bwrapCmd = { initArgs ? "" }: ''
@@ -225,7 +234,7 @@ let
     ''}
 
     cmd=(
-      ${bubblewrap}/bin/bwrap
+      ${lib.getExe bwrap-patched}
       --dev-bind /dev /dev
       --proc /proc
       --chdir "$(pwd)"
@@ -236,6 +245,7 @@ let
       ${optionalString unshareUts "--unshare-uts"}
       ${optionalString unshareCgroup "--unshare-cgroup"}
       ${optionalString dieWithParent "--die-with-parent"}
+      ${concatStringsSep " " (map (cap: "--cap-add ''${cap}''") requiredCapabilities)}
       --ro-bind /nix /nix
       ${optionalString privateTmp "--tmpfs /tmp"}
       # Our glibc will look for the cache in its own path in `/nix/store`.
