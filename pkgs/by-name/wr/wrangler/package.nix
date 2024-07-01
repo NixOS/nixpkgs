@@ -1,7 +1,7 @@
 {
   lib,
   buildNpmPackage,
-  fetchurl,
+  fetchFromGitHub,
 }:
 
 buildNpmPackage rec {
