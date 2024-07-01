@@ -9,7 +9,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "marwaita-peppermint";
+  pname = "marwaita-red";
   version = "17.0";
 
   src = fetchFromGitHub {
