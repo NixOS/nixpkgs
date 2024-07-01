@@ -22674,8 +22674,6 @@ with pkgs;
 
   libthai = callPackage ../development/libraries/libthai { };
 
-  libtheora = callPackage ../development/libraries/libtheora { };
-
   libthreadar = callPackage ../development/libraries/libthreadar { };
 
   libticables2 = callPackage ../development/libraries/libticables2 { };
