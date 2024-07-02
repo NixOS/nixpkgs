@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     description = "Rainbow table generator used for password cracking";
     homepage = "http://project-rainbowcrack.com";
     maintainers = with lib.maintainers; [ tochiaha ];
-    license = lib.licenses.unfree;
+    license = "licenses.unfree";
     mainProgram = "rcrack";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     platforms = lib.platforms.all;
