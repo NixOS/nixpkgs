@@ -9,14 +9,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "starry";
-  version = "2.0.2";
+  version = "2.1.0";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-/ZUmMLEqlpqu+Ja/3XjFJf+OFZJCz7rp5MrQBEjwsXs=";
+    hash = "sha256-XzvRujVBHxpT2lLyxU50xWdhe/HCHxFjGA4N8hvtFo8=";
   };
 
-  cargoHash = "sha256-L6s1LkWnjht2VLwq1GOFiIosnZjFN9tDSLpPtokmj9o=";
+  cargoHash = "sha256-a/b+nd0heJH9dJELY6G6f0MN2E7sKDpeQHPHbVh6upA=";
 
   nativeBuildInputs = [
     pkg-config
