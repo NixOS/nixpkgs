@@ -179,6 +179,7 @@ stdenv.mkDerivation rec {
     IOSurface
     Metal
     NaturalLanguage
+    LocalAuthentication
     libicns
   ]);
 
