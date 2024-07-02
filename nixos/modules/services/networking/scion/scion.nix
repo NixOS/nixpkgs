@@ -8,6 +8,22 @@ in
 {
   options.services.scion = {
     enable = mkEnableOption "all of the scion components and services";
+    stateless = mkOption {
+      type = types.bool;
+      default = true;
+      description = ''
+        Setting this value to false (stateful) can lead to improved caching and
+        performance.
+
+        This option decides whether to persist the SCION path sqlite databases
+        on disk or not. Persisting this data can lead to database corruption in
+        extreme cases such as power outage, meaning SCION fails to work on the
+        next boot. This is being investigated.
+
+        If true, /run/scion-* is used for data
+        If false, use /var/lib/scion-* is used for data
+      '';
+    };
     bypassBootstrapWarning = mkOption {
       type = types.bool;
       default = false;

@@ -3,8 +3,10 @@
 with lib;
 
 let
+  globalCfg = config.services.scion;
   cfg = config.services.scion.scion-control;
   toml = pkgs.formats.toml { };
+  connectionDir = if globalCfg.stateless then "/run" else "/var/lib";
   defaultConfig = {
     general = {
       id = "cs";
@@ -12,13 +14,13 @@ let
       reconnect_to_dispatcher = true;
     };
     beacon_db = {
-      connection = "/run/scion-control/control.beacon.db";
+      connection = "${connectionDir}/scion-control/control.beacon.db";
     };
     path_db = {
-      connection = "/run/scion-control/control.path.db";
+      connection = "${connectionDir}/scion-control/control.path.db";
     };
     trust_db = {
-      connection = "/run/scion-control/control.trust.db";
+      connection = "${connectionDir}/scion-control/control.trust.db";
     };
     log.console = {
       level = "info";
@@ -62,7 +64,7 @@ in
         DynamicUser = true;
         Restart = "on-failure";
         BindPaths = [ "/dev/shm:/run/shm" ];
-        RuntimeDirectory = "scion-control";
+        ${if globalCfg.stateless then "RuntimeDirectory" else "StateDirectory"} = "scion-control";
       };
     };
   };
