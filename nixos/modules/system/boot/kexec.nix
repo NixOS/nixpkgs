@@ -5,10 +5,13 @@
     environment.systemPackages = [ pkgs.kexec-tools ];
 
     systemd.services.prepare-kexec =
-      { description = "Preparation for kexec";
+      {
+        description = "Preparation for kexec";
         wantedBy = [ "kexec.target" ];
         before = [ "systemd-kexec.service" ];
         unitConfig.DefaultDependencies = false;
+        unitConfig.ConditionPathExists = [ "|/run/next-system" "|/run/current-system" ];
+
         serviceConfig.Type = "oneshot";
         path = [ pkgs.kexec-tools ];
         script =
@@ -19,13 +22,12 @@
               exit 0
             fi
 
-            p=$(readlink -f /nix/var/nix/profiles/system)
-            if ! [[ -d $p ]]; then
-              echo "Could not find system profile for prepare-kexec"
-              exit 1
-            fi
-            echo "Loading NixOS system via kexec."
-            exec kexec --load $p/kernel --initrd=$p/initrd --append="$(cat $p/kernel-params) init=$p/init"
+            for p in /run/next-system /run/current-system; do
+              if [[ -d $p ]]; then
+                echo "Loading NixOS system via kexec."
+                exec kexec --load $p/kernel --initrd=$p/initrd --append="$(cat $p/kernel-params) init=$p/init"
+              fi
+            done
           '';
       };
   };

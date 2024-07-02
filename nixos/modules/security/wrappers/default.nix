@@ -255,7 +255,7 @@ in
         umount = mkSetuidRoot "${lib.getBin pkgs.util-linux}/bin/umount";
       };
 
-    boot.specialFileSystems.${parentWrapperDir} = {
+    fileSystems.${parentWrapperDir} = {
       fsType = "tmpfs";
       options = [ "nodev" "mode=755" "size=${config.security.wrapperDirSize}" ];
     };
