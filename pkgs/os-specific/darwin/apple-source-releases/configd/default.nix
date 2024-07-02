@@ -10,8 +10,6 @@ let
   '';
 in
 appleDerivation' stdenv {
-  meta.broken = stdenv.cc.nativeLibc;
-
   nativeBuildInputs = lib.optionals (!headersOnly) [ bootstrap_cmds ];
   buildInputs = lib.optionals (!headersOnly) [ privateHeaders launchd ppp xpc IOKit eap8021x ];
 
@@ -181,4 +179,9 @@ appleDerivation' stdenv {
     mkdir -p $out/Library/Frameworks/
     mv SystemConfiguration.fproj/SystemConfiguration.framework $out/Library/Frameworks
   '';
+
+  meta = {
+    broken = stdenv.cc.nativeLibc;
+    maintainers = with lib.maintainers; [ toonn ];
+  };
 }
