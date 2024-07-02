@@ -21025,12 +21025,6 @@
     githubId = 5837359;
     name = "Adrian Pistol";
   };
-  vigress8 = {
-    email = "vig@disroot.org";
-    github = "vigress8";
-    githubId = 150687949;
-    name = "Vigress";
-  };
   vikanezrimaya = {
     email = "vika@fireburn.ru";
     github = "vikanezrimaya";
