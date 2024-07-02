@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchurl,
-  dpkg,
+  squashfsTools,
   alsa-lib,
   atk,
   cairo,
@@ -41,7 +41,8 @@ let
 
   # Please keep the version x.y.0.z and do not update to x.y.76.z because the
   # source of the latter disappears much faster.
-  version = "8.110.76.107";
+  version = "8.119.0.201";
+  revision = "348";
 
   rpath =
     lib.makeLibraryPath [
@@ -99,12 +100,9 @@ let
   src =
     if stdenv.hostPlatform.system == "x86_64-linux" then
       fetchurl {
-        urls = [
-          "https://repo.skype.com/deb/pool/main/s/skypeforlinux/skypeforlinux_${version}_amd64.deb"
-          "https://mirror.cs.uchicago.edu/skype/pool/main/s/skypeforlinux/skypeforlinux_${version}_amd64.deb"
-          "https://web.archive.org/web/https://repo.skype.com/deb/pool/main/s/skypeforlinux/skypeforlinux_${version}_amd64.deb"
-        ];
-        sha256 = "sha256-ocXhISwEtwzPd1dOPjgIj5UQ/8sqq2gUtmZ8KZBAxKM=";
+        name = "skypeforlinux-${version}-${revision}.snap";
+        url = "https://api.snapcraft.io/api/v1/snaps/download/QRDEfjn4WJYnm0FzDKwqqRZZI77awQEV_${revision}.snap";
+        hash = "sha512-sHbLmpF+5qaKTUArHceqv91NJxNpflQE2ojO9sepQBhXacn66hluC7cGb7toQnteYKUsx00TBYs2Ugk/BkT0uA==";
       }
     else
       throw "Skype for linux is not supported on ${stdenv.hostPlatform.system}";
@@ -112,7 +110,7 @@ let
 in
 stdenv.mkDerivation {
   pname = "skypeforlinux";
-  inherit version;
+  inherit version revision;
 
   system = "x86_64-linux";
 
@@ -123,20 +121,27 @@ stdenv.mkDerivation {
     glib # For setup hook populating GSETTINGS_SCHEMA_PATH
   ];
 
-  buildInputs = [ dpkg ];
+  buildInputs = [ squashfsTools ];
 
-  dontUnpack = true;
+  unpackPhase = ''
+    runHook preUnpack
+
+    unsquashfs "$src" /meta/{'gui/*.desktop',snap.yaml} \
+        /usr/share/{doc/skypeforlinux,'icons/hicolor/*/apps/skypeforlinux.png',kservices5,pixmaps,skypeforlinux}
+    sourceRoot=squashfs-root
+
+    runHook postUnpack
+  '';
+
   installPhase = ''
-    mkdir -p $out
-    dpkg -x $src $out
-    cp -av $out/usr/* $out
-    rm -rf $out/opt $out/usr
-    rm $out/bin/skypeforlinux
+    runHook preInstall
 
-    ln -s "$out/share/skypeforlinux/skypeforlinux" "$out/bin/skypeforlinux"
+    mkdir -p "$out/bin"
+    mv meta/gui usr/share/applications
+    mv meta/snap.yaml usr/share "$out"
+    ln -s "$out/share/skypeforlinux/skypeforlinux" "$out/bin"
 
-    # Otherwise it looks "suspicious"
-    chmod -R g-w $out
+    runHook postInstall
   '';
 
   postFixup = ''
@@ -146,20 +151,20 @@ stdenv.mkDerivation {
     done
 
     # Fix the desktop link
-    substituteInPlace $out/share/applications/skypeforlinux.desktop \
-      --replace /usr/bin/ ""
-    substituteInPlace $out/share/applications/skypeforlinux-share.desktop \
-      --replace /usr/bin/ ""
-    substituteInPlace $out/share/kservices5/ServiceMenus/skypeforlinux.desktop \
-      --replace /usr/bin/ ""
+    substituteInPlace "$out/share/applications/"*.desktop \
+      --replace-fail 'Exec=skype ' 'Exec=skypeforlinux ' \
+      --replace-fail 'Icon=''${SNAP}/meta/gui/skypeforlinux.png' 'Icon=skypeforlinux'
+    substituteInPlace "$out/share/kservices5/ServiceMenus/skypeforlinux.desktop" \
+      --replace-fail 'Exec=/usr/bin/skypeforlinux ' 'Exec=skypeforlinux '
   '';
 
-  meta = with lib; {
-    description = "Linux client for skype";
+  meta = {
+    description = "Linux client for Skype";
     homepage = "https://www.skype.com";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
-    maintainers = with maintainers; [
+    changelog = "https://support.microsoft.com/en-us/skype/what-s-new-in-skype-for-windows-mac-linux-and-web-d32f674c-abb3-40a5-a0b7-ee269ca60831";
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [
       panaeon
       jraygauthier
     ];
