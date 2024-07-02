@@ -38,12 +38,39 @@ let
   '';
 
   themesEnv = pkgs.buildEnv {
-    name = "plymouth-themes";
+    name = "plymouth-with-themes";
     paths = [
       plymouth
       plymouthLogos
     ] ++ cfg.themePackages;
   };
+
+  plymouthThemes = pkgs.runCommand "plymouth-themes" {} ''
+    # Check if the actual requested theme is here
+    if [[ ! -d ${themesEnv}/share/plymouth/themes/${cfg.theme} ]]; then
+        echo "The requested theme: ${cfg.theme} is not provided by any of the packages in boot.plymouth.themePackages"
+        exit 1
+    fi
+
+    mkdir -p $out/${cfg.theme}
+    cp -r ${themesEnv}/share/plymouth/themes/${cfg.theme}/* $out/${cfg.theme}
+    # Copy more themes if the theme depends on others
+    for theme in $(grep -hRo '/share/plymouth/themes/.*$' $out | xargs -n1 basename); do
+        if [[ -d "${themesEnv}/share/plymouth/themes/$theme" ]]; then
+            if [[ ! -d "$out/$theme" ]]; then
+              echo "Adding dependent theme: $theme"
+              mkdir -p "$out/$theme"
+              cp -r "${themesEnv}/share/plymouth/themes/$theme"/* "$out/$theme"
+            fi
+        else
+          echo "Missing theme dependency: $theme"
+        fi
+    done
+    # Fixup references
+    for theme in $out/*/*.plymouth; do
+      sed -i "s,${builtins.storeDir}/.*/share/plymouth/themes,$out," "$theme"
+    done
+  '';
 
   configFile = pkgs.writeText "plymouthd.conf" ''
     [Daemon]
@@ -133,7 +160,7 @@ in
     environment.etc."plymouth/plymouthd.conf".source = configFile;
     environment.etc."plymouth/plymouthd.defaults".source = "${plymouth}/share/plymouth/plymouthd.defaults";
     environment.etc."plymouth/logo.png".source = cfg.logo;
-    environment.etc."plymouth/themes".source = "${themesEnv}/share/plymouth/themes";
+    environment.etc."plymouth/themes".source = plymouthThemes;
     # XXX: Needed because we supply a different set of plugins in initrd.
     environment.etc."plymouth/plugins".source = "${plymouth}/lib/plymouth";
 
@@ -189,33 +216,7 @@ in
           # useless in the initrd, and adds several megabytes to the closure
           rm $out/renderers/x11.so
         '';
-        "/etc/plymouth/themes".source = pkgs.runCommand "plymouth-initrd-themes" {} ''
-          # Check if the actual requested theme is here
-          if [[ ! -d ${themesEnv}/share/plymouth/themes/${cfg.theme} ]]; then
-              echo "The requested theme: ${cfg.theme} is not provided by any of the packages in boot.plymouth.themePackages"
-              exit 1
-          fi
-
-          mkdir -p $out/${cfg.theme}
-          cp -r ${themesEnv}/share/plymouth/themes/${cfg.theme}/* $out/${cfg.theme}
-          # Copy more themes if the theme depends on others
-          for theme in $(grep -hRo '/share/plymouth/themes/.*$' $out | xargs -n1 basename); do
-              if [[ -d "${themesEnv}/share/plymouth/themes/$theme" ]]; then
-                  if [[ ! -d "$out/$theme" ]]; then
-                    echo "Adding dependent theme: $theme"
-                    mkdir -p "$out/$theme"
-                    cp -r "${themesEnv}/share/plymouth/themes/$theme"/* "$out/$theme"
-                  fi
-              else
-                echo "Missing theme dependency: $theme"
-              fi
-          done
-          # Fixup references
-          for theme in $out/*/*.plymouth; do
-            sed -i "s,${builtins.storeDir}/.*/share/plymouth/themes,$out," "$theme"
-          done
-        '';
-
+        "/etc/plymouth/themes".source = plymouthThemes;
         # Fonts
         "/etc/plymouth/fonts".source = pkgs.runCommand "plymouth-initrd-fonts" {} ''
           mkdir -p $out
