@@ -389,13 +389,6 @@ final: prev: {
     '';
   };
 
-  typescript-language-server = prev.typescript-language-server.override {
-    nativeBuildInputs = [ pkgs.buildPackages.makeWrapper ];
-    postInstall = ''
-      ${pkgs.xorg.lndir}/bin/lndir ${pkgs.typescript} $out
-    '';
-  };
-
   uppy-companion = prev."@uppy/companion".override {
     name = "uppy-companion";
   };
