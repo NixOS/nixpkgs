@@ -27633,6 +27633,8 @@ with pkgs;
 
   sddm-chili-theme = libsForQt5.callPackage ../data/themes/chili-sddm { };
 
+  sddm-sugar-dark = libsForQt5.callPackage ../data/themes/sddm-sugar-dark { };
+
   sdparm = callPackage ../os-specific/linux/sdparm { };
 
   sdrangel = libsForQt5.callPackage ../applications/radio/sdrangel {
