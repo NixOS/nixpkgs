@@ -106,6 +106,7 @@ stdenv.mkDerivation rec {
       conventional music players.
     '';
     homepage = "https://www.seventhstring.com/xscribe/";
+    changelog = "https://www.seventhstring.com/xscribe/history.html";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     maintainers = with maintainers; [ iwanb ];
