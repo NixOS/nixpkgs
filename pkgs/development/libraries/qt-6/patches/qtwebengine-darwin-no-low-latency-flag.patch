@@ -1,0 +1,67 @@
+diff --git a/src/3rdparty/chromium/media/gpu/mac/vt_video_encode_accelerator_mac.cc b/src/3rdparty/chromium/media/gpu/mac/vt_video_encode_accelerator_mac.cc
+index 06e1d311a..fb4bf1881 100644
+--- a/src/3rdparty/chromium/media/gpu/mac/vt_video_encode_accelerator_mac.cc
++++ b/src/3rdparty/chromium/media/gpu/mac/vt_video_encode_accelerator_mac.cc
+@@ -34,7 +34,9 @@
+ // EnableLowLatencyRateControl flag. The flag is actually supported since 11.3,
+ // but there we see frame drops even with ample bitrate budget. Excessive frame
+ // drops were fixed in 12.0.1.
++#if 0
+ #define LOW_LATENCY_AND_SVC_AVAILABLE_VER 12.0.1
++#endif
+ 
+ namespace media {
+ 
+@@ -69,16 +71,20 @@ bool IsSVCSupported(const VideoCodec& codec) {
+ #if BUILDFLAG(ENABLE_HEVC_PARSER_AND_HW_DECODER) && defined(ARCH_CPU_ARM_FAMILY)
+   // macOS 14.0+ support SVC HEVC encoding for Apple Silicon chips only.
+   if (codec == VideoCodec::kHEVC) {
++#if 0
+     if (__builtin_available(macOS 14.0, iOS 17.0, *)) {
+       return true;
+     }
++#endif
+     return false;
+   }
+ #endif  // BUILDFLAG(ENABLE_HEVC_PARSER_AND_HW_DECODER) &&
+         // defined(ARCH_CPU_ARM_FAMILY)
++#if 0
+   if (__builtin_available(macOS LOW_LATENCY_AND_SVC_AVAILABLE_VER, *)) {
+     return codec == VideoCodec::kH264;
+   }
++#endif
+   return false;
+ }
+ 
+@@ -751,6 +757,7 @@ bool VTVideoEncodeAccelerator::CreateCompressionSession(
+   }
+ #endif
+ 
++#if 0
+   if (__builtin_available(macOS LOW_LATENCY_AND_SVC_AVAILABLE_VER, *)) {
+     if (require_low_delay_ && IsSVCSupported(codec)) {
+       encoder_keys.push_back(
+@@ -758,6 +765,7 @@ bool VTVideoEncodeAccelerator::CreateCompressionSession(
+       encoder_values.push_back(kCFBooleanTrue);
+     }
+   }
++#endif
+   base::apple::ScopedCFTypeRef<CFDictionaryRef> encoder_spec =
+       video_toolbox::DictionaryWithKeysAndValues(
+           encoder_keys.data(), encoder_values.data(), encoder_keys.size());
+@@ -870,6 +878,7 @@ bool VTVideoEncodeAccelerator::ConfigureCompressionSession(VideoCodec codec) {
+     return false;
+   }
+ 
++#if 0
+   if (__builtin_available(macOS LOW_LATENCY_AND_SVC_AVAILABLE_VER, *)) {
+     if (!session_property_setter.IsSupported(
+             kVTCompressionPropertyKey_BaseLayerFrameRateFraction)) {
+@@ -884,6 +893,7 @@ bool VTVideoEncodeAccelerator::ConfigureCompressionSession(VideoCodec codec) {
+       return false;
+     }
+   }
++#endif
+ 
+   return true;
+ }

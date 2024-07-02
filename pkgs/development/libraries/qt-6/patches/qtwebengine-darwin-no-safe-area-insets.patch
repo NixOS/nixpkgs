@@ -1,0 +1,38 @@
+diff --git a/src/3rdparty/chromium/components/remote_cocoa/app_shim/immersive_mode_controller.mm b/src/3rdparty/chromium/components/remote_cocoa/app_shim/immersive_mode_controller.mm
+index 3cff2cbcfab..7be0078c856 100644
+--- a/src/3rdparty/chromium/components/remote_cocoa/app_shim/immersive_mode_controller.mm
++++ b/src/3rdparty/chromium/components/remote_cocoa/app_shim/immersive_mode_controller.mm
+@@ -485,9 +485,11 @@ double ImmersiveModeController::GetOffscreenYOrigin() {
+ 
+   // Make sure to make it past the safe area insets, otherwise some portion
+   // of the window may still be displayed.
++#if 0
+   if (@available(macOS 12.0, *)) {
+     y += browser_window_.screen.safeAreaInsets.top;
+   }
++#endif
+ 
+   return y;
+ }
+diff --git a/src/3rdparty/chromium/ui/views/cocoa/immersive_mode_controller_unittest.mm b/src/3rdparty/chromium/ui/views/cocoa/immersive_mode_controller_unittest.mm
+index d822965b9ba..294dd2d3f7e 100644
+--- a/src/3rdparty/chromium/ui/views/cocoa/immersive_mode_controller_unittest.mm
++++ b/src/3rdparty/chromium/ui/views/cocoa/immersive_mode_controller_unittest.mm
+@@ -226,13 +226,17 @@ TEST_F(CocoaImmersiveModeControllerTest, TitlebarObserver) {
+     [titlebar_container_view
+         setFrame:NSMakeRect(0, kOverlayViewHeight + 1, kOverlayViewWidth,
+                             kOverlayViewHeight)];
++#if 0
+     if (@available(macOS 12.0, *)) {
+       EXPECT_EQ(overlay().frame.origin.y,
+                 browser().screen.frame.size.height +
+                     browser().screen.safeAreaInsets.top);
+     } else {
++#endif
+       EXPECT_EQ(overlay().frame.origin.y, browser().screen.frame.size.height);
++#if 0
+     }
++#endif
+ 
+     // Remove the clip and make sure the overlay window moves back.
+     [titlebar_container_view
