@@ -6,6 +6,7 @@
 , python3
 , darwin
 , nixosTests
+, xcbuild
 }:
 
 buildNpmPackage rec {
@@ -27,6 +28,7 @@ buildNpmPackage rec {
     python3
   ] ++ lib.optionals stdenv.isDarwin [
     darwin.cctools
+    xcbuild.xcrun
   ];
 
   makeCacheWritable = true;

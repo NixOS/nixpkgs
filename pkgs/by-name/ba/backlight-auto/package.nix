@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "backlight-auto";
     homepage = "https://len.falken.directory/backlight-auto.html";
     license = licenses.mit;
-    maintainers = [ maintainers.lf- ];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 })

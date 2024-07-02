@@ -3713,14 +3713,6 @@
     githubId = 1448923;
     name = "Christian Kauhaus";
   };
-  ckie = {
-    email = "nixpkgs-0efe364@ckie.dev";
-    github = "ckiee";
-    githubId = 25263210;
-    keys = [ { fingerprint = "539F 0655 4D35 38A5 429A  E253 13E7 9449 C052 5215"; } ];
-    name = "ckie";
-    matrix = "@ckie:ckie.dev";
-  };
   cko = {
     email = "christine.koppelt@gmail.com";
     github = "cko";
@@ -8963,13 +8955,6 @@
     githubId = 1358764;
     name = "Jamie Magee";
   };
-  janik = {
-    name = "Janik";
-    email = "janik@aq0.de";
-    matrix = "@janik0:matrix.org";
-    github = "Janik-Haag";
-    githubId = 80165193;
-  };
   jankaifer = {
     name = "Jan Kaifer";
     email = "jan@kaifer.cz";
@@ -10158,12 +10143,6 @@
     githubId = 46386452;
     name = "Jeroen Wijenbergh";
   };
-  jwoudenberg = {
-    email = "nixpkgs@jasperwoudenberg.com";
-    github = "jwoudenberg";
-    githubId = 1525551;
-    name = "Jasper Woudenberg";
-  };
   jwygoda = {
     email = "jaroslaw@wygoda.me";
     github = "jwygoda";
@@ -11347,12 +11326,6 @@
     githubId = 13804737;
     keys = [ { fingerprint = "7FE2 113A A08B 695A C8B8  DDE6 AE53 B4C2 E58E DD45"; } ];
   };
-  lf- = {
-    email = "nix-maint@lfcode.ca";
-    github = "lf-";
-    githubId = 6652840;
-    name = "Jade";
-  };
   lgcl = {
     email = "dev@lgcl.de";
     name = "Leon Vack";
@@ -11460,13 +11433,6 @@
     github = "lilyball";
     githubId = 714;
     name = "Lily Ballard";
-  };
-  lilyinstarlight = {
-    email = "lily@lily.flowers";
-    matrix = "@lily:lily.flowers";
-    github = "lilyinstarlight";
-    githubId = 298109;
-    name = "Lily Foster";
   };
   limeytexan = {
     email = "limeytexan@gmail.com";
@@ -15341,12 +15307,6 @@
     githubId = 4580157;
     name = "Patrick Hobusch";
   };
-  patka = {
-    email = "patka@patka.dev";
-    github = "patka-123";
-    githubId = 69802930;
-    name = "patka";
-  };
   patrickdag = {
     email = "patrick-nixos@failmail.dev";
     github = "PatrickDaG";
@@ -15518,12 +15478,6 @@
     github = "penguwin";
     githubId = 13225611;
     name = "Nicolas Martin";
-  };
-  pennae = {
-    name = "pennae";
-    email = "github@quasiparticle.net";
-    github = "pennae";
-    githubId = 82953136;
   };
   perchun = {
     name = "Perchun Pak";
@@ -17355,12 +17309,6 @@
     email = "roshaen09@gmail.com";
     github = "roshaen";
     githubId = 58213083;
-  };
-  rossabaker = {
-    name = "Ross A. Baker";
-    email = "ross@rossabaker.com";
-    github = "rossabaker";
-    githubId = 142698;
   };
   RossComputerGuy = {
     name = "Tristan Ross";

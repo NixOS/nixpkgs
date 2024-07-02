@@ -21,7 +21,7 @@
 , seatd
 , vulkan-loader
 , glslang
-, libliftoff_0_4
+, libliftoff
 , libdisplay-info
 , nixosTests
 
@@ -132,7 +132,7 @@ rec {
     ];
     extraBuildInputs = [
       ffmpeg
-      libliftoff_0_4
+      libliftoff
       libdisplay-info
     ];
   };

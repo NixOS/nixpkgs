@@ -53,7 +53,7 @@
 /pkgs/build-support/setup-hooks/auto-patchelf.py @layus
 /pkgs/pkgs-lib                                   @infinisil
 ## Format generators/serializers
-/pkgs/pkgs-lib/formats/libconfig                 @ckiee @h7x4
+/pkgs/pkgs-lib/formats/libconfig                 @h7x4
 /pkgs/pkgs-lib/formats/hocon                     @h7x4
 
 # pkgs/by-name
@@ -225,18 +225,15 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 /nixos/modules/services/networking/ntp @thoughtpolice
 
 # Network
-/pkgs/tools/networking/octodns @Janik-Haag
 /pkgs/tools/networking/kea/default.nix @mweinelt
 /pkgs/tools/networking/babeld/default.nix @mweinelt
 /nixos/modules/services/networking/babeld.nix @mweinelt
 /nixos/modules/services/networking/kea.nix @mweinelt
 /nixos/modules/services/networking/knot.nix @mweinelt
-nixos/modules/services/networking/networkmanager.nix @Janik-Haag
 /nixos/modules/services/monitoring/prometheus/exporters/kea.nix @mweinelt
 /nixos/tests/babeld.nix @mweinelt
 /nixos/tests/kea.nix @mweinelt
 /nixos/tests/knot.nix @mweinelt
-/nixos/tests/networking/* @Janik-Haag
 
 # Web servers
 /doc/packages/nginx.section.md @raitobezarius
@@ -322,9 +319,9 @@ pkgs/by-name/fo/forgejo/package.nix     @adamcstephens @bendlas @emilylange
 /doc/languages-frameworks/dotnet.section.md @corngood
 
 # Node.js
-/pkgs/build-support/node/build-npm-package      @lilyinstarlight @winterqt
-/pkgs/build-support/node/fetch-npm-deps         @lilyinstarlight @winterqt
-/doc/languages-frameworks/javascript.section.md @lilyinstarlight @winterqt
+/pkgs/build-support/node/build-npm-package      @winterqt
+/pkgs/build-support/node/fetch-npm-deps         @winterqt
+/doc/languages-frameworks/javascript.section.md @winterqt
 
 # environment.noXlibs option aka NoX
 /nixos/modules/config/no-x-libs.nix  @SuperSandro2000

@@ -98,6 +98,7 @@ python.pkgs.buildPythonApplication rec {
     "celery"
     "css-inline"
     "cssutils"
+    "django-compressor"
     "django-csp"
     "django-filter"
     "django-hierarkey"
