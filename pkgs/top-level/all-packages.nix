@@ -34278,8 +34278,6 @@ with pkgs;
     libjpeg_turbo = libjpeg8;
   };
 
-  skypeforlinux = callPackage ../applications/networking/instant-messengers/skypeforlinux { };
-
   SkypeExport = callPackage ../applications/networking/instant-messengers/SkypeExport { };
 
   slingshot = callPackage ../tools/misc/slingshot { };
