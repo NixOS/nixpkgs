@@ -123,6 +123,8 @@ python.pkgs.buildPythonApplication {
       --replace ${libzbar_name} ${zbar.lib}/lib/libzbar${stdenv.hostPlatform.extensions.sharedLibrary}
   '' else ''
     sed -i '/qdarkstyle/d' contrib/requirements/requirements.txt
+    chmod +w tests
+    rm tests/test_qml_types.py
   '');
 
   postInstall = lib.optionalString stdenv.isLinux ''
