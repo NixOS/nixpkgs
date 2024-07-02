@@ -1,7 +1,7 @@
 { cfg }:
 { config, lib, name, ... }:
 let
-  inherit (lib) literalExpression mkOption types;
+  inherit (lib) literalExpression mkOption removePrefix types;
 in
 {
   options = {
@@ -47,7 +47,7 @@ in
     logFormat = mkOption {
       type = types.lines;
       default = ''
-        output file ${cfg.logDir}/access-${config.hostName}.log
+        output file ${cfg.logDir}/access-${removePrefix "http://" config.hostName}.log
       '';
       defaultText = ''
         output file ''${config.services.caddy.logDir}/access-''${hostName}.log
