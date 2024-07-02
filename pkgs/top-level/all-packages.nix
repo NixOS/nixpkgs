@@ -21312,7 +21312,7 @@ with pkgs;
     icu74
   ;
 
-  icu = icu73;
+  icu = icu74;
 
   id3lib = callPackage ../development/libraries/id3lib { };
 
