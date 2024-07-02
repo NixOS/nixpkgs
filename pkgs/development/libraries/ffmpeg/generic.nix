@@ -39,7 +39,7 @@
 , withAribcaption ? withFullDeps && lib.versionAtLeast version "6.1" # ARIB STD-B24 Caption Decoder/Renderer
 , withAss ? withHeadlessDeps && stdenv.hostPlatform == stdenv.buildPlatform # (Advanced) SubStation Alpha subtitle rendering
 , withAudioToolbox ? withHeadlessDeps && stdenv.isDarwin # Apple AudioToolbox
-, withAvFoundation ? withHeadlessDeps && stdenv.isDarwin # Apple AVFoundation framework
+, withAvFoundation ? withHeadlessDeps && stdenv.isDarwin && !(lib.versionAtLeast version "7" && stdenv.hostPlatform.isx86) # Apple AVFoundation framework
 , withAvisynth ? withFullDeps # AviSynth script files reading
 , withBluray ? withFullDeps # BluRay reading
 , withBs2b ? withFullDeps # bs2b DSP library
@@ -126,8 +126,8 @@
 , withXcbShape ? withFullDeps # X11 grabbing shape rendering
 , withXcbShm ? withFullDeps # X11 grabbing shm communication
 , withXcbxfixes ? withFullDeps # X11 grabbing mouse rendering
-, withXevd ? withFullDeps && lib.versionAtLeast version "7" && stdenv.hostPlatform.isx86 # MPEG-5 EVC decoding
-, withXeve ? withFullDeps && lib.versionAtLeast version "7" && stdenv.hostPlatform.isx86 # MPEG-5 EVC encoding
+, withXevd ? withFullDeps && lib.versionAtLeast version "7" && stdenv.hostPlatform.isx86 && stdenv.cc.isGNU # MPEG-5 EVC decoding
+, withXeve ? withFullDeps && lib.versionAtLeast version "7" && stdenv.hostPlatform.isx86 && stdenv.cc.isGNU # MPEG-5 EVC encoding
 , withXlib ? withFullDeps # Xlib support
 , withXml2 ? withFullDeps # libxml2 support, for IMF and DASH demuxers
 , withXvid ? withHeadlessDeps && withGPL # Xvid encoder, native encoder exists
