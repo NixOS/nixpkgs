@@ -8,16 +8,13 @@ let
 in
 buildNodejs {
   inherit enableNpm;
-  version = "22.3.0";
-  sha256 = "0k0h4s9s2y0ms3g6xhynsqsrkl9hz001dmj6j0gpc5x5vk8mpf5z";
+  version = "22.4.0";
+  sha256 = "sha256-KStDAITy8ykT3H2k6y+8iWklJ3Kp0b/ormxLSpjKOtM=";
   patches = [
     ./disable-darwin-v8-system-instrumentation-node19.patch
     ./bypass-darwin-xcrun-node16.patch
     ./node-npm-build-npm-package-logic.patch
     ./use-correct-env-in-tests.patch
-    (fetchpatch2 {
-      url = "https://github.com/nodejs/node/commit/534c122de166cb6464b489f3e6a9a544ceb1c913.patch";
-      hash = "sha256-4q4LFsq4yU1xRwNsM1sJoNVphJCnxaVe2IyL6AeHJ/I=";
-    })
+    ./bin-sh-node-run-v22.patch
   ];
 }
