@@ -10,6 +10,7 @@
 , pycryptodomex
 , websockets
 , mutagen
+, pythonRelaxDepsHook
 , requests
 , secretstorage
 , urllib3
@@ -36,6 +37,7 @@ buildPythonPackage rec {
 
   build-system = [
     hatchling
+    pythonRelaxDepsHook
   ];
 
   dependencies = [
@@ -48,6 +50,8 @@ buildPythonPackage rec {
     urllib3
     websockets
   ];
+
+  pythonRelaxDeps = [ "requests" ];
 
   # Ensure these utilities are available in $PATH:
   # - ffmpeg: post-processing & transcoding support
