@@ -281,9 +281,41 @@ let
               hostCpuTargets = [ "${final.qemuArch}-linux-user" ];
             };
             wine = (pkgs.winePackagesFor "wine${toString final.parsed.cpu.bits}").minimal;
+
+            # Note that we do not use shell because it has weird semantics for
+            # our use case. In particular, if exec system call fails ”due to an
+            # error equivalent to the [ENOEXEC] error, the shell shall execute a
+            # command equivalent to having a shell invoked with the command name
+            # as its first operand”. That is, if the executable is a script with
+            # with hash bang that refers to an executable that it fails to run,
+            # POSIX shell should happily proceed to interpret the file as a
+            # shell script.
+            # See https://pubs.opengroup.org/onlinepubs/9699919799/utilities/V3_chap02.html#tag_18_09_01_01
+            # and also https://savannah.gnu.org/patch/?10446
+            # Instead, compile a simple C script that re-execs its arguments.
+            doexec = pkgs.writeCBin "doexec" ''
+              #include <errno.h>
+              #include <stdio.h>
+              #include <string.h>
+              #include <unistd.h>
+
+              int main(int argc, char *argv[]) {
+                if (argc < 2) {
+                  fputs("usage: exec-emulator <command> [arguments]\n", stderr);
+                  return 2;
+                }
+                char *argv0 = argv[1];
+                execvp(argv0, &argv[1]);
+                fprintf(stderr, "exec-emulator: %s: %s\n", argv0, strerror(errno));
+                return 1;
+              }
+            '';
           in
+          # Note: we guarantee that the return value is either `null` or a path
+          # to an emulator program. That is, if an emulator requires additional
+          # arguments, a wrapper should be used.
           if pkgs.stdenv.hostPlatform.canExecute final
-          then "${pkgs.runtimeShell} -c '\"$@\"' --"
+          then "${doexec}/bin/doexec"
           else if final.isWindows
           then "${wine}/bin/wine${optionalString (final.parsed.cpu.bits == 64) "64"}"
           else if final.isLinux && pkgs.stdenv.hostPlatform.isLinux && final.qemuArch != null
