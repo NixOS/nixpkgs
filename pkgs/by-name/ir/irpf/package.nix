@@ -7,27 +7,38 @@
 , makeWrapper
 , unzip
 , xdg-utils
+, writeScript
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "irpf";
-  version = "2024-1.1";
+  version = "2024-1.2";
 
   # https://www.gov.br/receitafederal/pt-br/centrais-de-conteudo/download/pgd/dirpf
   # Para outros sistemas operacionais -> Multi
   src = let
-    year = lib.head (lib.splitVersion version);
+    year = lib.head (lib.splitVersion finalAttrs.version);
   in fetchzip {
-    url = "https://downloadirpf.receita.fazenda.gov.br/irpf/${year}/irpf/arquivos/IRPF${version}.zip";
-    hash = "sha256-7Eh5XhZKs2DAQC33ICUG+mgjEU7H3jdYZSeiHNJ6I6Q=";
+    url = "https://downloadirpf.receita.fazenda.gov.br/irpf/${year}/irpf/arquivos/IRPF${finalAttrs.version}.zip";
+    hash = "sha256-gwYWNnvpGej9B1EyFswYGYXh4i4wiyOG67VN1PWX3A0=";
   };
+
+  passthru.updateScript = writeScript "update-irpf" ''
+    #!/usr/bin/env nix-shell
+    #!nix-shell -i bash -p curl pup common-updater-scripts
+
+    set -eu -o pipefail
+    #parses the html with the install links for the containers that contain the instalation files of type 'file archive, gets the version number of each version, and sorts to get the latest one on the website
+    version="$(curl -s https://www.gov.br/receitafederal/pt-br/centrais-de-conteudo/download/pgd/dirpf | pup '.rfb_container .rfb_ositem:parent-of(.fa-file-archive) attr{href}' | grep -oP "IRPF\K(\d+)-[\d.]+\d" | sort -r |  head -1)"
+    update-source-version irpf "$version"
+  '';
 
   nativeBuildInputs = [ unzip makeWrapper copyDesktopItems ];
 
   desktopItems = [
     (makeDesktopItem {
-      name = pname;
-      exec = pname;
+      name = finalAttrs.pname;
+      exec = finalAttrs.pname;
       icon = "rfb64";
       desktopName = "Imposto de Renda Pessoa Física";
       comment = "Programa Oficial da Receita para elaboração do IRPF";
@@ -38,7 +49,7 @@ stdenvNoCC.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    BASEDIR="$out/share/${pname}"
+    BASEDIR="$out/share/${finalAttrs.pname}"
     mkdir -p "$BASEDIR"
 
     cp --no-preserve=mode -r help lib lib-modulos "$BASEDIR"
@@ -46,10 +57,10 @@ stdenvNoCC.mkDerivation rec {
     install -Dm644 irpf.jar Leia-me.htm offline.png online.png pgd-updater.jar "$BASEDIR"
 
     # make xdg-open overrideable at runtime
-    makeWrapper ${jdk11}/bin/java $out/bin/${pname} \
+    makeWrapper ${jdk11}/bin/java $out/bin/${finalAttrs.pname} \
       --add-flags "-Dawt.useSystemAAFontSettings=on" \
       --add-flags "-Dswing.aatext=true" \
-      --add-flags "-jar $BASEDIR/${pname}.jar" \
+      --add-flags "-jar $BASEDIR/${finalAttrs.pname}.jar" \
       --suffix PATH : ${lib.makeBinPath [ xdg-utils ]} \
       --set _JAVA_AWT_WM_NONREPARENTING 1 \
       --set AWT_TOOLKIT MToolkit
@@ -74,4 +85,4 @@ stdenvNoCC.mkDerivation rec {
     maintainers = with maintainers; [ atila bryanasdev000 ];
     mainProgram = "irpf";
   };
-}
+})
