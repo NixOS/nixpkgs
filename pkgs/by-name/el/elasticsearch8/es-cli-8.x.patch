@@ -1,0 +1,13 @@
+diff --git a/bin/elasticsearch-cli b/bin/elasticsearch-cli
+index 8d7e65cc382..83c87aaf9bd 100644
+--- a/bin/elasticsearch-cli
++++ b/bin/elasticsearch-cli
+@@ -14,7 +14,7 @@ exec \
+   "$JAVA" \
+   $CLI_JAVA_OPTS \
+   -Dcli.name="$CLI_NAME" \
+-  -Dcli.script="$0" \
++  -Dcli.script="$SCRIPT_NAME" \
+   -Dcli.libs="$CLI_LIBS" \
+   -Des.path.home="$ES_HOME" \
+   -Des.path.conf="$ES_PATH_CONF" \
