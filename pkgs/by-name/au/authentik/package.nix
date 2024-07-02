@@ -11,13 +11,13 @@
 , makeWrapper }:
 
 let
-  version = "2024.2.2";
+  version = "2024.4.3";
 
   src = fetchFromGitHub {
     owner = "goauthentik";
     repo = "authentik";
     rev = "version/${version}";
-    hash = "sha256-2B1RgKY5tpDBdzguEyWqzg15w5x/dLS2ffjbnxbpINs=";
+    hash = "sha256-d4UsYRqHRNabhh28GZZRijmZ1pd9D/o1a4L4d7Yn39M=";
   };
 
   meta = with lib; {
@@ -32,7 +32,7 @@ let
   website = buildNpmPackage {
     pname = "authentik-website";
     inherit version src meta;
-    npmDepsHash = "sha256-paACBXG7hEQSLekxCvxNns2Tg9rN3DUgz6o3A/lAhA8=";
+    npmDepsHash = "sha256-68gB15HH3IXgo0Aob90yJ1P2FvX3PZERAfJe8vq0SIg=";
 
     NODE_ENV = "production";
     NODE_OPTIONS = "--openssl-legacy-provider";
@@ -42,11 +42,11 @@ let
     '';
 
     installPhase = ''
-      cp -r help $out
+      mkdir $out
+      cp -r build $out/help
     '';
 
     npmInstallFlags = [ "--include=dev" ];
-    npmBuildScript = "build-docs-only";
   };
 
   clientapi = stdenvNoCC.mkDerivation {
@@ -82,7 +82,7 @@ let
       ln -s ${src}/website $out/
       ln -s ${clientapi} $out/web/node_modules/@goauthentik/api
     '';
-    npmDepsHash = "sha256-Xtzs91m+qu7jTwr0tMeS74gjlZs4vufGGlplPVf9yew=";
+    npmDepsHash = "sha256-FRM1ualsgKyEUN9W6WSHGCTvfjeXaOVt9iKKkTzpDDM=";
 
     postPatch = ''
       cd web
@@ -143,6 +143,30 @@ let
         ];
       };
 
+      scim2-filter-parser = prev.buildPythonPackage rec {
+        pname = "scim2-filter-parser";
+        version = "0.5.0";
+        src = fetchFromGitHub {
+          owner = "15five";
+          repo = pname;
+          rev = version;
+          hash = "sha256-QEPTYpWlRPWO6Evyt4zoqUST4ousF67GmiOpD7WUqcI=";
+        };
+
+        postPatch = ''
+          substituteInPlace pyproject.toml \
+            --replace-fail 'poetry>=0.12' 'poetry-core>=1.0.0' \
+            --replace-fail 'poetry.masonry.api' 'poetry.core.masonry.api'
+        '';
+
+        nativeBuildInputs = [ prev.poetry-core ];
+        pyproject = true;
+
+        propagatedBuildInputs = with prev; [
+          sly
+        ];
+      };
+
       authentik-django = prev.buildPythonPackage {
         pname = "authentik-django";
         inherit version src meta;
@@ -157,9 +181,8 @@ let
             --replace-fail './media' '/var/lib/authentik/media'
           substituteInPlace pyproject.toml \
             --replace-fail 'dumb-init = "*"' "" \
-            --replace-fail 'djangorestframework-guardian' 'djangorestframework-guardian2' \
-            --replace-fail 'version = "4.9.4"' 'version = "*"' \
-            --replace-fail 'version = "<2"' 'version = "*"'
+            --replace-fail 'djangorestframework = "3.14.0"' 'djangorestframework = "*"' \
+            --replace-fail 'djangorestframework-guardian' 'djangorestframework-guardian2'
           substituteInPlace authentik/stages/email/utils.py \
             --replace-fail 'web/' '${webui}/'
         '';
@@ -190,6 +213,7 @@ let
           drf-spectacular
           duo-client
           facebook-sdk
+          fido2
           flower
           geoip2
           gunicorn
@@ -208,7 +232,9 @@ let
           pyjwt
           pyyaml
           requests-oauthlib
+          scim2-filter-parser
           sentry-sdk
+          setproctitle
           service-identity
           structlog
           swagger-spec-validator
@@ -258,7 +284,7 @@ let
 
     CGO_ENABLED = 0;
 
-    vendorHash = "sha256-UIJBCTq7AJGUDIlZtJaWCovyxlMPzj2BCJQqthybEz4=";
+    vendorHash = "sha256-YpOG5pNw5CNSubm1OkPVpSi7l+l5UdJFido2SQLtK3g=";
 
     postInstall = ''
       mv $out/bin/server $out/bin/authentik
