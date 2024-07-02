@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , nixosTests
 , php
+, writeText
 }:
 
 stdenvNoCC.mkDerivation rec {
@@ -16,25 +17,32 @@ stdenvNoCC.mkDerivation rec {
     hash = "sha256-AAOON1RdbG6JSnCc123jmIlIXHOE1PE49BV4hcASO/s=";
   };
 
-  passthru.tests = {
-    inherit (nixosTests) freshrss-sqlite freshrss-pgsql freshrss-http-auth freshrss-none-auth;
-  };
+  postPatch = ''
+    patchShebangs cli/*.php app/actualize_script.php
+  '';
+
+  # the thirdparty_extension_path can only be set by config, but should be read by an env-var.
+  overrideConfig = writeText "constants.local.php" ''
+    <?php
+      define('THIRDPARTY_EXTENSIONS_PATH', getenv('THIRDPARTY_EXTENSIONS_PATH') . '/extensions');
+  '';
 
   buildInputs = [ php ];
 
   # There's nothing to build.
   dontBuild = true;
 
-  postPatch = ''
-    patchShebangs cli/*.php app/actualize_script.php
-  '';
-
   installPhase = ''
     runHook preInstall
     mkdir -p $out
     cp -vr * $out/
+    cp $overrideConfig $out/constants.local.php
     runHook postInstall
   '';
+
+  passthru.tests = {
+    inherit (nixosTests) freshrss-sqlite freshrss-pgsql freshrss-http-auth freshrss-none-auth freshrss-extensions;
+  };
 
   meta = with lib; {
     description = "FreshRSS is a free, self-hostable RSS aggregator";
