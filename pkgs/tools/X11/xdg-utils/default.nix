@@ -3,18 +3,21 @@
 , libxslt, docbook_xml_dtd_412, docbook_xml_dtd_43, docbook_xsl, xmlto
 # runtime deps
 , resholve, bash, coreutils, dbus, file, gawk, glib, gnugrep, gnused, jq, nettools, procmail, procps, which, xdg-user-dirs
+# runtime deps only for mimiSupport
+, dmenu
 , shared-mime-info
 , perl, perlPackages
 , mimiSupport ? false
-, withXdgOpenUsePortalPatch ? true }:
+, withXdgOpenUsePortalPatch ? true
+, xdg-utils }:
 
 let
   # A much better xdg-open
   mimisrc = fetchFromGitHub {
     owner = "march-linux";
     repo = "mimi";
-    rev = "8e0070f17bcd3612ee83cb84e663e7c7fabcca3d";
-    sha256 = "15gw2nyrqmdsdin8gzxihpn77grhk9l97jp7s7pr7sl4n9ya2rpj";
+    rev = "c9ce95803e833cfa4d3321492b12745803fe1be0";
+    hash = "sha256-Z3dol8TaWuuQK5o7/Otv3eJ+CrcV8xNePNrzx8CGS/4=";
   };
 
   # Required by the common desktop detection code
@@ -128,41 +131,52 @@ let
       ''}";
     }
 
-    {
-      scripts = [ "bin/xdg-open" ];
-      interpreter = "${bash}/bin/bash";
-      inputs = commonDeps ++ [ nettools glib.bin "${placeholder "out"}/bin" ];
-      execer = [
-        "cannot:${placeholder "out"}/bin/xdg-mime"
-      ];
-      # These are desktop-specific, so we don't want xdg-utils to be able to
-      # call them when in a different setup.
-      fake.external = commonFakes ++ [
-        "cygstart"            # Cygwin
-        "dde-open"            # Deepin
-        "enlightenment_open"  # Enlightenment
-        "exo-open"            # XFCE
-        "gio"                 # GNOME (new)
-        "gnome-open"          # GNOME (very old)
-        "gvfs-open"           # GNOME (old)
-        "kde-open"            # Plasma
-        "kfmclient"           # KDE3
-        "mate-open"           # MATE
-        "mimeopen"            # alternative tool for file, pulls in perl, avoid
-        "open"                # macOS
-        "pcmanfm"             # LXDE
-        "qtxdg-mat"           # LXQT
-        "run-mailcap"         # generic
-        "rundll32.exe"        # WSL
-        "wslpath"             # WSL
-      ];
-      fix."$printf" = [ "printf" ];
-      keep = {
-        "env:$command" = true;
-        "$browser" = true;
-        "$KDE_SESSION_VERSION" = true;
-      };
-    }
+    (if mimiSupport then {
+        scripts = [ "bin/xdg-open" ];
+        interpreter = "${bash}/bin/bash";
+        inputs = [
+          gnugrep
+          coreutils
+          gawk
+          gnused
+          file
+          dmenu
+        ];
+      } else {
+        scripts = [ "bin/xdg-open" ];
+        interpreter = "${bash}/bin/bash";
+        inputs = commonDeps ++ [ nettools glib.bin "${placeholder "out"}/bin" ];
+        execer = [
+          "cannot:${placeholder "out"}/bin/xdg-mime"
+        ];
+        # These are desktop-specific, so we don't want xdg-utils to be able to
+        # call them when in a different setup.
+        fake.external = commonFakes ++ [
+          "cygstart"            # Cygwin
+          "dde-open"            # Deepin
+          "enlightenment_open"  # Enlightenment
+          "exo-open"            # XFCE
+          "gio"                 # GNOME (new)
+          "gnome-open"          # GNOME (very old)
+          "gvfs-open"           # GNOME (old)
+          "kde-open"            # Plasma
+          "kfmclient"           # KDE3
+          "mate-open"           # MATE
+          "mimeopen"            # alternative tool for file, pulls in perl, avoid
+          "open"                # macOS
+          "pcmanfm"             # LXDE
+          "qtxdg-mat"           # LXQT
+          "run-mailcap"         # generic
+          "rundll32.exe"        # WSL
+          "wslpath"             # WSL
+        ];
+        fix."$printf" = [ "printf" ];
+        keep = {
+          "env:$command" = true;
+          "$browser" = true;
+          "$KDE_SESSION_VERSION" = true;
+        };
+    })
 
     {
       scripts = [ "bin/xdg-screensaver" ];
@@ -298,11 +312,12 @@ stdenv.mkDerivation (self: {
     done
     touch $out
   '';
+  passthru.tests.mimiSupport = xdg-utils.override { mimiSupport = true; };
 
   meta = with lib; {
     homepage = "https://www.freedesktop.org/wiki/Software/xdg-utils/";
     description = "Set of command line tools that assist applications with a variety of desktop integration tasks";
-    license = if mimiSupport then licenses.gpl2Only else licenses.mit;
+    license = licenses.mit;
     maintainers = [ maintainers.eelco ];
     platforms = platforms.all;
   };
