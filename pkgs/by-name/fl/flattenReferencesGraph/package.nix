@@ -24,4 +24,8 @@ pythonPackages.buildPythonApplication {
   checkPhase = ''
     ${helpers.unittest}/bin/unittest
   '';
+
+  passthru = {
+    dev-shell = callPackage ./dev-shell.nix {};
+  };
 }

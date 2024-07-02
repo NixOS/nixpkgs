@@ -1,15 +1,17 @@
-{ pkgs ? import ./../../.. { } }:
+# Start this shell with:
+# nix-shell path/to/root/of/nixpkgs -A flattenReferencesGraph.dev-shell
+{ mkShell, callPackage, python3Packages }:
 let
-  helpers = pkgs.callPackage (import ./helpers.nix) { };
+  helpers = callPackage (import ./helpers.nix) { };
 in
-pkgs.mkShell {
-  inputsFrom = [ (pkgs.callPackage (import ./default.nix) { }) ];
+mkShell {
+  inputsFrom = [ (callPackage (import ./package.nix) { }) ];
   buildInputs = [
     helpers.format
     helpers.lint
     helpers.unittest
     # This is needed to plot graphs when DEBUG_PLOT is set to True.
-    pkgs.python3Packages.pycairo
+    python3Packages.pycairo
     # This can be used on linux to display the graphs.
     # On other platforms the image viewer needs to be set with
     # DEBUG_PLOT_IMAGE_VIEWER env var.
