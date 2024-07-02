@@ -8,12 +8,15 @@ dependencies:
 - aeson
 - base >= 4.7 && < 5
 - bytestring
+- exceptions
 - filepath
+- monad-control
 - optparse-applicative
 - sandwich
 - string-interpolate
 - text
 - unliftio
+- unliftio-core
 - vector
 - yaml
 
