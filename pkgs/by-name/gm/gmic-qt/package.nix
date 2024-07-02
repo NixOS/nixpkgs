@@ -118,7 +118,7 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (variants.${variant}) description;
     license = lib.licenses.gpl3Plus;
     mainProgram = "gmic_qt";
-    maintainers = with lib.maintainers; [ AndersonTorres lilyinstarlight ];
+    maintainers = with lib.maintainers; [ AndersonTorres ];
     platforms = lib.platforms.unix;
   };
 })

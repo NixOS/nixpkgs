@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation {
   pname = "femtolisp";
-  version = "0-unstable-2023-07-12";
+  version = "0-unstable-2024-06-18";
 
   src = fetchFromSourcehut {
     owner = "~ft";
     repo = "femtolisp";
-    rev = "b3a21a0ff408e559639f6c31e1a2ab970787567f";
-    hash = "sha256-PE/xYhfhn0xv/kJWsS07fOF2n5sXP666vy7OVaNxc7Y=";
+    rev = "ee58f398fec62d3096b0e01da51a3969ed37a32d";
+    hash = "sha256-pfPD9TNLmrqhvJS/aVVmziMVApsiU5v1nAMqU+Kduzw=";
   };
 
   strictDeps = true;

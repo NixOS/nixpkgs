@@ -258,6 +258,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://gitlab.freedesktop.org/gstreamer/gst-plugins-rs";
     license = with licenses; [ mpl20 asl20 mit lgpl21Plus ];
     platforms = platforms.unix;
-    maintainers = with maintainers; [ lilyinstarlight ];
+    maintainers = with maintainers; [ ];
   };
 })
