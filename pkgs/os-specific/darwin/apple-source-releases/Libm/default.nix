@@ -1,4 +1,4 @@
-{ appleDerivation', stdenvNoCC }:
+{ lib, appleDerivation', stdenvNoCC }:
 
 appleDerivation' stdenvNoCC {
   patches = [
@@ -15,4 +15,8 @@ appleDerivation' stdenvNoCC {
     cp Source/Intel/fenv.h $out/include
     cp Source/complex.h    $out/include
   '';
+
+  meta = {
+    maintainers = with lib.maintainers; [ toonn ];
+  };
 }
