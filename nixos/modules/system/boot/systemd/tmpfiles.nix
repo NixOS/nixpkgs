@@ -1,6 +1,7 @@
 { config, lib, pkgs, utils, ... }:
 
 with lib;
+with utils;
 
 let
   cfg = config.systemd.tmpfiles;
@@ -38,82 +39,7 @@ in
         };
       };
       default = {};
-      type = types.attrsOf (types.attrsOf (types.attrsOf (types.submodule ({ name, config, ... }: {
-        options.type = mkOption {
-          type = types.str;
-          default = name;
-          example = "d";
-          description = ''
-            The type of operation to perform on the file.
-
-            The type consists of a single letter and optionally one or more
-            modifier characters.
-
-            Please see the upstream documentation for the available types and
-            more details:
-            <https://www.freedesktop.org/software/systemd/man/tmpfiles.d>
-          '';
-        };
-        options.mode = mkOption {
-          type = types.str;
-          default = "-";
-          example = "0755";
-          description = ''
-            The file access mode to use when creating this file or directory.
-          '';
-        };
-        options.user = mkOption {
-          type = types.str;
-          default = "-";
-          example = "root";
-          description = ''
-            The user of the file.
-
-            This may either be a numeric ID or a user/group name.
-
-            If omitted or when set to `"-"`, the user and group of the user who
-            invokes systemd-tmpfiles is used.
-          '';
-        };
-        options.group = mkOption {
-          type = types.str;
-          default = "-";
-          example = "root";
-          description = ''
-            The group of the file.
-
-            This may either be a numeric ID or a user/group name.
-
-            If omitted or when set to `"-"`, the user and group of the user who
-            invokes systemd-tmpfiles is used.
-          '';
-        };
-        options.age = mkOption {
-          type = types.str;
-          default = "-";
-          example = "10d";
-          description = ''
-            Delete a file when it reaches a certain age.
-
-            If a file or directory is older than the current time minus the age
-            field, it is deleted.
-
-            If set to `"-"` no automatic clean-up is done.
-          '';
-        };
-        options.argument = mkOption {
-          type = types.str;
-          default = "";
-          example = "";
-          description = ''
-            An argument whose meaning depends on the type of operation.
-
-            Please see the upstream documentation for the meaning of this
-            parameter in different situations:
-            <https://www.freedesktop.org/software/systemd/man/tmpfiles.d>
-          '';
-        };
-      }))));
+      type = systemdUtils.types.tmpfilesSettings;
     };
 
     systemd.tmpfiles.packages = mkOption {

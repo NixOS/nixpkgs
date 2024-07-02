@@ -53,7 +53,28 @@ let
         ${concatStringsSep "\n" rules}
       '';
     };
-in {
+
+  writeTmpfilesSettings = {settings, user ? null }:
+    let
+      suffix = optionalString (user != null) "-${user}";
+    in
+    mapAttrsToList (name: paths:
+      pkgs.writeTextFile {
+        name = "nixos-user-tmpfiles.d${suffix}-settings";
+        destination = "/etc/xdg/user-tmpfiles.d/${name}${suffix}.conf";
+        text = ''
+          # This file is created automatically and should not be modified.
+          # Please change the options ‘systemd.user.tmpfiles’ instead.
+          ${(concatStrings (mapAttrsToList (path: types:
+            concatStrings (mapAttrsToList (_type: entry: ''
+              '${entry.type}' '${path}' '${entry.mode}' '${entry.user}' '${entry.group}' '${entry.age}' ${entry.argument}
+            '') types)
+          ) paths ))}
+        '';
+      }
+    ) settings;
+in
+{
   options = {
     systemd.user.extraConfig = mkOption {
       default = "";
@@ -120,6 +141,26 @@ in {
         '';
       };
 
+      settings = mkOption {
+        default = {};
+        description = ''
+          Global user rules to create, delete, and clean up volatile
+          and temporary files and directories.
+
+          Even though the service is called `*tmp*files` you can also create
+          persistent files.
+        '';
+        example = {
+          "10-mypackage" = {
+            "%h/.config/configfile".d = {
+              mode = "0755";
+              text = "example";
+            };
+          };
+        };
+        type = systemdUtils.types.tmpfilesSettings;
+      };
+
       users = mkOption {
         description = ''
           Per-user rules for creation, deletion and cleaning of volatile and
@@ -138,6 +179,26 @@ in {
                 {manpage}`tmpfiles.d(5)`
                 for the exact format.
               '';
+            };
+
+            settings = mkOption {
+              default = {};
+              description = ''
+                Per-user rules to create, delete, and clean up volatile
+                and temporary files and directories.
+
+                Even though the service is called `*tmp*files` you can also create
+                persistent files.
+              '';
+              example = {
+                "10-mypackage" = {
+                  "%h/.config/configfile".d = {
+                    mode = "0755";
+                    text = "example";
+                  };
+                };
+              };
+              type = systemdUtils.types.tmpfilesSettings;
             };
           };
         });
@@ -221,7 +282,7 @@ in {
     # enable systemd user tmpfiles
     systemd.user.services.systemd-tmpfiles-setup.wantedBy =
       optional
-        (cfg.tmpfiles.rules != [] || any (cfg': cfg'.rules != []) (attrValues cfg.tmpfiles.users))
+        (cfg.tmpfiles.rules != [] || cfg.tmpfiles.settings != {} || any (cfg': cfg'.rules != [] || cfg'.settings != {}) (attrValues cfg.tmpfiles.users))
         "basic.target";
 
     # /run/current-system/sw/etc/xdg is in systemd's $XDG_CONFIG_DIRS so we can
@@ -229,16 +290,25 @@ in {
     environment.systemPackages =
       optional
         (cfg.tmpfiles.rules != [])
-        (writeTmpfiles { inherit (cfg.tmpfiles) rules; });
+        (writeTmpfiles { inherit (cfg.tmpfiles) rules; }) ++
+      optionals
+        (cfg.tmpfiles.settings != {})
+        (writeTmpfilesSettings { inherit (cfg.tmpfiles) settings; }
+      );
 
     # /etc/profiles/per-user/$USER/etc/xdg is in systemd's $XDG_CONFIG_DIRS so
     # we can write a single user's tmpfiles.d rules there
     users.users =
       mapAttrs
         (user: cfg': {
-          packages = optional (cfg'.rules != []) (writeTmpfiles {
+          packages =
+          optional (cfg'.rules != []) (writeTmpfiles {
             inherit (cfg') rules;
             inherit user;
+          }) ++
+          optionals (cfg'.settings != {}) (writeTmpfilesSettings {
+              inherit (cfg') settings;
+              inherit user;
           });
         })
         cfg.tmpfiles.users;
