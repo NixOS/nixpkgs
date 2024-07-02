@@ -4522,7 +4522,7 @@ with pkgs;
 
   clevercsv = with python3Packages; toPythonApplication clevercsv;
 
-  clevis = callPackage ../tools/security/clevis {
+  clevis = callPackage ../by-name/cl/clevis/package.nix {
     asciidoc = asciidoc-full;
   };
 
