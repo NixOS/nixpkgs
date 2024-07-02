@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://github.com/WestberryTech/wb32-dfu-updater";
     license = licenses.asl20;
-    maintainers = [ maintainers.liketechnik ];
+    maintainers = [ ];
     mainProgram = "wb32-dfu-updater_cli";
     platforms = platforms.all;
   };
