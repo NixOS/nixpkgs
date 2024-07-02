@@ -1,0 +1,13 @@
+diff --git a/src-tauri/src/manager/downloader.rs b/src-tauri/src/manager/downloader.rs
+index 1cbe408..a4d76d8 100644
+--- a/src-tauri/src/manager/downloader.rs
++++ b/src-tauri/src/manager/downloader.rs
+@@ -31,7 +31,7 @@ pub mod updater;
+ pub fn setup(app: &AppHandle) -> Result<()> {
+     app.manage(Mutex::new(InstallState::default()));
+ 
+-    tauri_plugin_deep_link::register("ror2mm", deep_link_handler(app.clone()))?;
++    //tauri_plugin_deep_link::register("ror2mm", deep_link_handler(app.clone()))?;
+ 
+     Ok(())
+ }
