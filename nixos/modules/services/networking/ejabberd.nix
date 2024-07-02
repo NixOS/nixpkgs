@@ -11,10 +11,12 @@ let
     ${cfg.ctlConfig}
   '';
 
-  ectl = ''${cfg.package}/bin/ejabberdctl ${optionalString (cfg.configFile != null) "--config ${cfg.configFile}"} --ctl-config "${ctlcfg}" --spool "${cfg.spoolDir}" --logs "${cfg.logsDir}"'';
+  settingsFormat = pkgs.formats.yaml {};
+  configFile = settingsFormat.generate "config.yaml" cfg.settings;
+
+  ectl = ''${cfg.package}/bin/ejabberdctl --config "${cfg.configFile}" --ctl-config "${ctlcfg}" --spool "${cfg.spoolDir}" --logs "${cfg.logsDir}"'';
 
   dumps = lib.escapeShellArgs cfg.loadDumps;
-
 in {
 
   ###### interface
@@ -57,8 +59,20 @@ in {
 
       configFile = mkOption {
         type = types.nullOr types.path;
-        description = "Configuration file for ejabberd in YAML format";
-        default = null;
+        description = ''
+          **Deprecated**, please use [](#opt-services.ejabberd.settings) instead.
+
+          Configuration file for ejabberd in YAML format
+        '';
+        default = configFile;
+        defaultText = "generated from `settings.ejabberd.settings`";
+      };
+
+      settings = mkOption {
+        description = ''
+          Configuration for ejabberd. Refer to <https://docs.ejabberd.im/admin/configuration/> for details.
+        '';
+        type = settingsFormat.type;
       };
 
       ctlConfig = mkOption {
@@ -87,7 +101,11 @@ in {
   ###### implementation
 
   config = mkIf cfg.enable {
-    environment.systemPackages = [ cfg.package ];
+    warnings = mkIf (cfg.configFile != configFile) [
+      "The option `services.ejabberd.configFile` has been deprecated. Please use `services.ejabberd.settings` instead."
+    ];
+
+    environment.systemPackages = [cfg.package];
 
     users.users = optionalAttrs (cfg.user == "ejabberd") {
       ejabberd = {
