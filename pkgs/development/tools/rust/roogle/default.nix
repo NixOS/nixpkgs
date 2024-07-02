@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "1h0agialbvhhiijkdnr47y7babq432limdl6ag2rmjfs7yishn4r";
   };
 
-  cargoSha256 = "sha256-CzFfFKTmBUAafk8PkkWmUkRIyO+yEhmCfN1zsLRq4Iw=";
+  cargoHash = "sha256-CzFfFKTmBUAafk8PkkWmUkRIyO+yEhmCfN1zsLRq4Iw=";
 
   postInstall = ''
     mkdir -p $out/share/roogle

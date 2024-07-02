@@ -19,7 +19,7 @@ rustPlatform.buildRustPackage rec {
   # tests need an interactive terminal
   doCheck = false;
 
-  cargoSha256 = "sha256-ildtjaYGbrQacJOdGDVwFv+kod+vZHqukWN6ARtJqI4=";
+  cargoHash = "sha256-ildtjaYGbrQacJOdGDVwFv+kod+vZHqukWN6ARtJqI4=";
 
   buildFeatures = lib.optional withSixel "sixel";
   buildInputs = lib.optional withSixel libsixel;

@@ -19,7 +19,7 @@ in rustPlatform.buildRustPackage rec {
   version = src.version;
   src = passthru.mkSource sources.npins;
 
-  cargoSha256 = "sha256-YwMypBl+P1ygf4zUbkZlq4zPrOzf+lPOz2FLg2/xI3k=";
+  cargoHash = "sha256-YwMypBl+P1ygf4zUbkZlq4zPrOzf+lPOz2FLg2/xI3k=";
 
   buildInputs = lib.optional stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ Security SystemConfiguration ]);
   nativeBuildInputs = [ makeWrapper ];
