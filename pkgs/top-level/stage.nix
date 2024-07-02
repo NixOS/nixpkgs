@@ -176,8 +176,13 @@ let
   # following package sets are provided:
   #
   # - pkgsCross.<system> where system is a member of lib.systems.examples
+  # - pkgsLLVM
   # - pkgsMusl
   # - pkgsi686Linux
+  # - pkgsx86_64Darwin
+  # - pkgsLinux
+  # - pkgsStatic
+  # - pkgsExtraHardening
   otherPackageSets = self: super: {
     # This maps each entry in lib.systems.examples to its own package
     # set. Each of these will contain all packages cross compiled for
@@ -269,14 +274,15 @@ let
     # Prefer appendOverlays if used repeatedly.
     extend = f: self.appendOverlays [f];
 
-    # Fully static packages.
-    # Currently uses Musl on Linux (couldn’t get static glibc to work).
+    # Fully static packages without shared libraries support.
+    # Currently uses Musl on Linux.
     pkgsStatic = nixpkgsFun ({
       overlays = [ (self': super': {
         pkgsStatic = super';
       })] ++ overlays;
       crossSystem = {
         isStatic = true;
+        hasSharedLibraries = false;
         parsed =
           if stdenv.isLinux
           then makeMuslParsedPlatform stdenv.hostPlatform.parsed
