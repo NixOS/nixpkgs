@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "oxlint";
-  version = "0.2.15";
+  version = "0.4.4";
 
   src = fetchFromGitHub {
     owner = "web-infra-dev";
     repo = "oxc";
     rev = "oxlint_v${version}";
-    hash = "sha256-hEN9TLIeAfMGO/PL5OcT7+H0dmoCtH+dcIEafpQ45UU=";
+    hash = "sha256-1am5USphPVvfI+haP50nFewcunlEHLxYvTE1547EVxQ=";
   };
 
-  cargoHash = "sha256-uChoDlU0tb52pBBEqmmwhCS83pykFRpXRFSuUGquHEQ=";
+  cargoHash = "sha256-+P/rpNxFFB8BDOWOcD71MdE9z++0g/USSmJS3rHi144=";
 
   buildInputs = [
     rust-jemalloc-sys
@@ -25,7 +25,7 @@ rustPlatform.buildRustPackage rec {
     darwin.apple_sdk.frameworks.Security
   ];
 
-  cargoBuildFlags = [ "--bin=oxlint" ];
+  cargoBuildFlags = [ "--bin oxlint --features allocator" ];
   cargoTestFlags = cargoBuildFlags;
 
   meta = with lib; {
