@@ -2686,6 +2686,13 @@ with pkgs;
 
   packwiz = callPackage ../tools/games/minecraft/packwiz { };
 
+  PCBox = callPackage ../applications/emulators/pcbox { };
+
+  PCBox-with-roms = PCBox.override {
+    unfreeEnableRoms = true;
+    unfreeEnableDiscord = true;
+  };
+
   pcem = callPackage ../applications/emulators/pcem { };
 
   pcsxr = callPackage ../applications/emulators/pcsxr { };
