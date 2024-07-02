@@ -44,6 +44,8 @@
     "--skip=tests::test_announcement_relay"
     # https://radicle.zulipchat.com/#narrow/stream/369277-heartwood/topic/Flaky.20tests/near/438352360
     "--skip=tests::e2e::test_connection_crossing"
+    # https://radicle.zulipchat.com/#narrow/stream/369277-heartwood/topic/Clone.20Partial.20Fail.20Flake
+    "--skip=rad_clone_partial_fail"
   ];
 
   postInstall = ''
