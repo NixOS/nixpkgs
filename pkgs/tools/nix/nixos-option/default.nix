@@ -1,38 +1,38 @@
 { lib
-, stdenv
-, boost
-, cmake
-, pkg-config
+, runtimeShell
+, substitute
 , installShellFiles
 , nix
+, jq
 }:
 
-stdenv.mkDerivation {
+substitute {
   name = "nixos-option";
+  src = ./nixos-option.sh;
+  dir = "bin";
+  isExecutable = true;
 
-  src = ./.;
+  substitutions = [
+    "--subst-var-by" "runtimeShell" runtimeShell
+    "--subst-var-by" "nixInstantiate" "${nix}/bin/nix-instantiate"
+    "--subst-var-by" "nixosOptionNix" "${./nixos-option.nix}"
+    "--subst-var-by" "nixosOptionManpage" "${placeholder "out"}/share/man/man8/nixos-option.8"
+    "--subst-var-by" "jq" "${jq}/bin/jq"
+  ];
+
+  nativeBuildInputs = [
+    installShellFiles
+  ];
+
   postInstall = ''
     installManPage ${./nixos-option.8}
   '';
 
   strictDeps = true;
-  nativeBuildInputs = [
-    cmake
-    pkg-config
-    installShellFiles
-  ];
-  buildInputs = [
-    boost
-    nix
-  ];
-  cmakeFlags = [
-    "-DNIX_DEV_INCLUDEPATH=${nix.dev}/include/nix"
-  ];
 
-  meta = with lib; {
-    license = licenses.lgpl2Plus;
+  meta = {
+    license = lib.licenses.mit;
     mainProgram = "nixos-option";
-    maintainers = with maintainers; [ ];
-    inherit (nix.meta) platforms;
+    maintainers = [ lib.maintainers.FireyFly ];
   };
 }
