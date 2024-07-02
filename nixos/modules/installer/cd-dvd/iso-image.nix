@@ -2,7 +2,7 @@
 # configuration.  The derivation for the ISO image will be placed in
 # config.system.build.isoImage.
 
-{ config, lib, pkgs, ... }:
+{ config, lib, utils, pkgs, ... }:
 
 with lib;
 
@@ -721,7 +721,7 @@ in
     # specified on the kernel command line, created in the stage 1
     # init script.
     "/iso" = mkImageMediaOverride
-      { device = "/dev/root";
+      { device = "/dev/disk/by-label/${config.isoImage.volumeID}";
         neededForBoot = true;
         noCheck = true;
       };
@@ -730,7 +730,7 @@ in
     # image) to make this a live CD.
     "/nix/.ro-store" = mkImageMediaOverride
       { fsType = "squashfs";
-        device = "/iso/nix-store.squashfs";
+        device = "${lib.optionalString config.boot.initrd.systemd.enable "/sysroot"}/iso/nix-store.squashfs";
         options = [ "loop" ];
         neededForBoot = true;
       };
@@ -741,20 +741,13 @@ in
         neededForBoot = true;
       };
 
-    "/nix/store" = mkImageMediaOverride
-      { fsType = "overlay";
-        device = "overlay";
-        options = [
-          "lowerdir=/nix/.ro-store"
-          "upperdir=/nix/.rw-store/store"
-          "workdir=/nix/.rw-store/work"
-        ];
-        depends = [
-          "/nix/.ro-store"
-          "/nix/.rw-store/store"
-          "/nix/.rw-store/work"
-        ];
+    "/nix/store" = mkImageMediaOverride {
+      overlay = {
+        lowerdir = [ "/nix/.ro-store" ];
+        upperdir = "/nix/.rw-store/store";
+        workdir = "/nix/.rw-store/work";
       };
+    };
   };
 
   config = {
@@ -794,8 +787,7 @@ in
     # `root=/dev/disk/by-label/...' here, but UNetbootin doesn't
     # recognise that.
     boot.kernelParams =
-      [ "root=LABEL=${config.isoImage.volumeID}"
-        "boot.shell_on_fail"
+      [ "boot.shell_on_fail"
       ];
 
     fileSystems = config.lib.isoFileSystems;
@@ -803,6 +795,41 @@ in
     boot.initrd.availableKernelModules = [ "squashfs" "iso9660" "uas" "overlay" ];
 
     boot.initrd.kernelModules = [ "loop" "overlay" ];
+
+    boot.initrd.services.lvm.enable = true;
+
+    boot.initrd.systemd = {
+      enable = lib.mkDefault true;
+      emergencyAccess = lib.mkDefault true;
+
+      # Most of util-linux is not included by default.
+      initrdBin = [ config.boot.initrd.systemd.package.util-linux ];
+      services.copytoram = {
+        description = "Copy ISO contents to RAM";
+        requiredBy = [ "initrd.target" ];
+        before = [ "${utils.escapeSystemdPath "/sysroot/nix/.ro-store"}.mount" "initrd-switch-root.target" ];
+        unitConfig = {
+          RequiresMountsFor = "/sysroot/iso";
+          ConditionKernelCommandLine = "copytoram";
+        };
+        serviceConfig = {
+          Type = "oneshot";
+          RemainAfterExit = true;
+        };
+        path = [ pkgs.coreutils config.boot.initrd.systemd.package.util-linux ];
+        script = ''
+          device=$(findmnt -n -o SOURCE --target /sysroot/iso)
+          fsSize=$(blockdev --getsize64 "$device" || stat -Lc '%s' "$device")
+          mkdir -p /tmp-iso
+          mount --bind --make-private /sysroot/iso /tmp-iso
+          umount /sysroot/iso
+          mount -t tmpfs -o size="$fsSize" tmpfs /sysroot/iso
+          cp -r /tmp-iso/* /sysroot/iso/
+          umount /tmp-iso
+          rm -r /tmp-iso
+        '';
+      };
+    };
 
     # Closures to be copied to the Nix store on the CD, namely the init
     # script and the top-level system configuration directory.
