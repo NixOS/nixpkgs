@@ -204,7 +204,8 @@ in
           noDmUsed = !(dmConf.gdm.enable
                     || cfg.sddm.enable
                     || dmConf.xpra.enable
-                    || dmConf.lightdm.enable);
+                    || dmConf.lightdm.enable
+                    || cfg.ly.enable);
       in lib.mkIf noDmUsed (lib.mkDefault false);
 
     systemd.services.display-manager = {
