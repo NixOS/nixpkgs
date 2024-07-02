@@ -150,7 +150,6 @@ rec {
     echo '\documentclass{article}' > main.tex
 
     ${nvim_with_ftplugin}/bin/nvim main.tex -c "set ft?" -c quit
-    ls -l $TMPDIR
     # if the file exists, then our plugin has been loaded instead of neovim's
     [ ! -f plugin_was_loaded_too_late ]
   '';
