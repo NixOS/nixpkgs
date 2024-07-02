@@ -5,6 +5,10 @@ let
     inherit openssl;
     python = python3;
   };
+
+  gypPatches = callPackage ./gyp-patches.nix { } ++ [
+    ./gyp-patches-pre-v22-import-sys.patch
+  ];
 in
 buildNodejs {
   inherit enableNpm;
@@ -23,5 +27,5 @@ buildNodejs {
       url = "https://github.com/nodejs/node/commit/14863e80584e579fd48c55f6373878c821c7ff7e.patch";
       hash = "sha256-I7Wjc7DE059a/ZyXAvAqEGvDudPjxQqtkBafckHCFzo=";
     })
-  ];
+  ] ++ gypPatches;
 }
