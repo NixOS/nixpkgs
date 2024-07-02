@@ -3,8 +3,10 @@
 with lib;
 
 let
+  globalCfg = config.services.scion;
   cfg = config.services.scion.scion-daemon;
   toml = pkgs.formats.toml { };
+  connectionDir = if globalCfg.stateless then "/run" else "/var/lib";
   defaultConfig = {
     general = {
       id = "sd";
@@ -12,10 +14,10 @@ let
       reconnect_to_dispatcher = true;
     };
     path_db = {
-      connection = "/run/scion-daemon/sd.path.db";
+      connection = "${connectionDir}/scion-daemon/sd.path.db";
     };
     trust_db = {
-      connection = "/run/scion-daemon/sd.trust.db";
+      connection = "${connectionDir}/scion-daemon/sd.trust.db";
     };
     log.console = {
       level = "info";
@@ -57,7 +59,7 @@ in
         ExecStart = "${pkgs.scion}/bin/scion-daemon --config ${configFile}";
         Restart = "on-failure";
         DynamicUser = true;
-        RuntimeDirectory = "scion-daemon";
+        ${if globalCfg.stateless then "RuntimeDirectory" else "StateDirectory"} = "scion-daemon";
       };
     };
   };
