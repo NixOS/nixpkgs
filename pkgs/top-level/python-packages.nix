@@ -4175,8 +4175,6 @@ self: super: with self; {
 
   fastentrypoints = callPackage ../development/python-modules/fastentrypoints { };
 
-  faster-fifo = callPackage ../development/python-modules/faster-fifo { };
-
   faster-whisper = callPackage ../development/python-modules/faster-whisper { };
 
   fastimport = callPackage ../development/python-modules/fastimport { };
