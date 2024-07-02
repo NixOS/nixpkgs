@@ -1,44 +1,32 @@
-{ lib, fetchFromGitHub, python3 }:
-
-let
+{ lib, fetchFromGitHub, python3Packages }:
+python3Packages.buildPythonApplication rec {
   pname = "scons";
-  version = "4.1.0";
+  version = "4.7.0";
+
   src = fetchFromGitHub {
     owner = "Scons";
     repo = "scons";
     rev = version;
-    hash = "sha256-ldus/9ghqAMB7A+NrHiCQm7saCdIpqzufGCLxWRhYKU=";
+    hash = "sha256-7VzGuz9CAUF6MRCEpj5z1FkZD19/Ic+YBukYQocvkr0=";
   };
-in
-python3.pkgs.buildPythonApplication {
-  inherit pname version src;
 
-  outputs = [ "out" "man" ];
+  pyproject = true;
 
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "build/dist" "dist"
-  '';
+  patches = [
+    ./env.patch
+    ./no-man-pages.patch
+  ];
 
-  preConfigure = ''
-    python scripts/scons.py
-  '';
-
-  postInstall = ''
-    mkdir -pv "$man/share/man/man1"
-    mv -v "$out/"*.1 "$man/share/man/man1/"
-  '';
+  build-system = [
+    python3Packages.setuptools
+  ];
 
   setupHook = ./setup-hook.sh;
-
-  # The release tarballs don't contain any tests (runtest.py and test/*):
-  doCheck = false;
 
   passthru = {
     # expose the used python version so tools using this (and extensing scos
     # with other python modules) can use the exact same python version.
-    inherit python3;
-    python = python3;
+    inherit (python3Packages) python;
   };
 
   meta = {

@@ -38,7 +38,7 @@ let
   stdenv = gcc12Stdenv;
 
   # prevent scons from leaking in the default python version
-  scons' = scons.override { python3 = python3Packages.python; };
+  scons' = scons.override { inherit python3Packages; };
 
   tbbbind_version = "2_5";
   tbbbind = fetchurl {
