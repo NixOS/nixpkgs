@@ -20,7 +20,6 @@
 , {"@webassemblyjs/wast-refmt": "1.11.1"}
 , "alex"
 , "audiosprite"
-, "autoprefixer"
 , "aws-cdk"
 , "awesome-lint"
 , "bower"
