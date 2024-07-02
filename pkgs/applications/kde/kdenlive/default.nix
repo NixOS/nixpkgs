@@ -34,6 +34,7 @@
 , kpurpose
 , kdeclarative
 , wrapGAppsHook3
+, nixosTests
 }:
 
 let
@@ -109,6 +110,8 @@ mkDerivation {
   preFixup = ''
     qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
+
+  passthru.tests = nixosTests.kdenlive;
 
   meta = {
     homepage = "https://apps.kde.org/kdenlive/";
