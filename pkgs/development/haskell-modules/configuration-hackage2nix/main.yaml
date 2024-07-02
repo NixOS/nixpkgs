@@ -125,6 +125,9 @@ extra-packages:
   - ShellCheck == 0.9.0                 # 2024-03-21: pinned by haskell-ci
   - versions < 6                        # 2024-04-22: required by spago-0.21
   - fsnotify < 0.4                      # 2024-04-22: required by spago-0.21
+  - th-desugar == 1.16                  # 2024-06-28: preserve for GHC 9.8
+  - singletons-th == 3.3                # 2024-06-28: preserve for GHC 9.8
+  - singletons-base == 3.3              # 2024-06-28: preserve for GHC 9.8
 
 package-maintainers:
   abbradar:
