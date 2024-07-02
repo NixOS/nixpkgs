@@ -54,6 +54,9 @@ while (( "$n" < "$nParams" )); do
                 c++*) isCxx=1 ;;
             esac
             ;;
+        -target | --target=*)
+            echo "Warning: supplying the --target argument to a nix-wrapped compiler probably won't work correctly - cc-wrapper is not designed with multi-target compilers in mind. You may want to use an un-wrapped compiler instead." >&2
+            ;;
         --) # Everything else is positional args!
             # See: https://github.com/llvm/llvm-project/commit/ed1d07282cc9d8e4c25d585e03e5c8a1b6f63a74
 
