@@ -1,23 +1,26 @@
 { lib
 , stdenvNoCC
+, callPackages
 , fetchFromGitHub
+, fetchzip
+, poetry
 , buildNpmPackage
 , buildGoModule
 , runCommand
 , openapi-generator-cli
 , nodejs
-, python3
+, python312
 , codespell
 , makeWrapper }:
 
 let
-  version = "2024.4.3";
+  version = "2024.6.0";
 
   src = fetchFromGitHub {
     owner = "goauthentik";
     repo = "authentik";
     rev = "version/${version}";
-    hash = "sha256-d4UsYRqHRNabhh28GZZRijmZ1pd9D/o1a4L4d7Yn39M=";
+    hash = "sha256-eYxabUUQVeURrVAaF/Ecohzw9LJj0LZyCSM43gNvajY=";
   };
 
   meta = with lib; {
@@ -32,7 +35,7 @@ let
   website = buildNpmPackage {
     pname = "authentik-website";
     inherit version src meta;
-    npmDepsHash = "sha256-68gB15HH3IXgo0Aob90yJ1P2FvX3PZERAfJe8vq0SIg=";
+    npmDepsHash = "sha256-JM+ae+zDsMdvovd2p4IJIH89KlMeDU7HOZjFbDCyehw=";
 
     NODE_ENV = "production";
     NODE_OPTIONS = "--openssl-legacy-provider";
@@ -46,7 +49,8 @@ let
       cp -r build $out/help
     '';
 
-    npmInstallFlags = [ "--include=dev" ];
+    npmBuildScript = "build-bundled";
+    npmFlags = [ "--ignore-scripts" ];
   };
 
   clientapi = stdenvNoCC.mkDerivation {
@@ -79,10 +83,11 @@ let
     src = runCommand "authentik-webui-source" {} ''
       mkdir -p $out/web/node_modules/@goauthentik/
       cp -r ${src}/web $out/
+      ln -s ${src}/package.json $out/
       ln -s ${src}/website $out/
       ln -s ${clientapi} $out/web/node_modules/@goauthentik/api
     '';
-    npmDepsHash = "sha256-FRM1ualsgKyEUN9W6WSHGCTvfjeXaOVt9iKKkTzpDDM=";
+    npmDepsHash = "sha256-LAy2o/gs9lwbZT4NqD2GSsx7PCipnkthwnX9ICVpAWU=";
 
     postPatch = ''
       cd web
@@ -102,7 +107,7 @@ let
     npmInstallFlags = [ "--include=dev" ];
   };
 
-  python = python3.override {
+  python = python312.override {
     self = python;
     packageOverrides = final: prev: {
       django-tenants = prev.buildPythonPackage rec {
@@ -117,26 +122,76 @@ let
         format = "setuptools";
         doCheck = false; # Tests require postgres
 
-        propagatedBuildInputs = with prev; [
+        propagatedBuildInputs = with final; [
           django
           psycopg
           gunicorn
         ];
       };
 
+      django-cte = prev.buildPythonPackage rec {
+        pname = "django-cte";
+        version = "1.3.3";
+        src = fetchFromGitHub {
+          owner = "dimagi";
+          repo = pname;
+          rev = "v${version}";
+          hash = "sha256-OCENg94xHBeeE4A2838Cu3q2am2im2X4SkFSjc6DuhE=";
+        };
+        doCheck = false; # Tests require postgres
+        format = "setuptools";
+      };
+
+      django-pgactivity = prev.buildPythonPackage rec {
+        pname = "django-pgactivity";
+        version = "1.4.1";
+        src = fetchFromGitHub {
+          owner = "Opus10";
+          repo = pname;
+          rev = version;
+          hash = "sha256-VwH7fwLcoH2Z9D/OY9iieM0cRhyDKOpAzqQ+4YVE3vU=";
+        };
+        nativeBuildInputs = with prev; [
+          poetry-core
+        ];
+        propagatedBuildInputs = with final; [
+          django
+        ];
+        pyproject = true;
+      };
+
+      django-pglock = prev.buildPythonPackage rec {
+        pname = "django-pglock";
+        version = "1.5.1";
+        src = fetchFromGitHub {
+          owner = "Opus10";
+          repo = pname;
+          rev = version;
+          hash = "sha256-ZoEHDkGmrcNiMe/rbwXsEPZo3LD93cZp6zjftMKjLeg=";
+        };
+        nativeBuildInputs = with prev; [
+          poetry-core
+        ];
+        propagatedBuildInputs = with final; [
+          django
+          django-pgactivity
+        ];
+        pyproject = true;
+      };
+
       tenant-schemas-celery = prev.buildPythonPackage rec {
         pname = "tenant-schemas-celery";
-        version = "2.2.0";
+        version = "3.0.0";
         src = fetchFromGitHub {
           owner = "maciej-gol";
           repo = pname;
           rev = version;
-          hash = "sha256-OpIJobjWZE5GQGnHADioeoJo3A6DAKh0HdO10k4rsX4=";
+          hash = "sha256-3ZUXSAOBMtj72sk/VwPV24ysQK+E4l1HdwKa78xrDtg=";
         };
         format = "setuptools";
         doCheck = false;
 
-        propagatedBuildInputs = with prev; [
+        propagatedBuildInputs = with final; [
           freezegun
           more-itertools
           psycopg2
@@ -145,12 +200,11 @@ let
 
       scim2-filter-parser = prev.buildPythonPackage rec {
         pname = "scim2-filter-parser";
-        version = "0.5.0";
-        src = fetchFromGitHub {
-          owner = "15five";
-          repo = pname;
-          rev = version;
-          hash = "sha256-QEPTYpWlRPWO6Evyt4zoqUST4ousF67GmiOpD7WUqcI=";
+        version = "0.5.1";
+        # For some reason the normal fetchPypi does not work
+        src = fetchzip {
+          url = "https://files.pythonhosted.org/packages/54/df/ad9718acce76e81a93c57327356eecd23701625f240fbe03d305250399e6/scim2_filter_parser-0.5.1.tar.gz";
+          hash = "sha256-DZAdRj6qyySggsvJZC47vdvXbHrB1ra3qiYBEUiceJ4=";
         };
 
         postPatch = ''
@@ -162,7 +216,7 @@ let
         nativeBuildInputs = [ prev.poetry-core ];
         pyproject = true;
 
-        propagatedBuildInputs = with prev; [
+        propagatedBuildInputs = with final; [
           sly
         ];
       };
@@ -200,9 +254,11 @@ let
           deepmerge
           defusedxml
           django
+          django-cte
           django-filter
           django-guardian
           django-model-utils
+          django-pglock
           django-prometheus
           django-redis
           django-storages
@@ -216,12 +272,13 @@ let
           fido2
           flower
           geoip2
+          google-api-python-client
           gunicorn
-          httptools
+          jsonpatch
           kubernetes
           ldap3
           lxml
-          jsonpatch
+          msgraph-sdk
           opencontainers
           packaging
           paramiko
@@ -234,8 +291,8 @@ let
           requests-oauthlib
           scim2-filter-parser
           sentry-sdk
-          setproctitle
           service-identity
+          setproctitle
           structlog
           swagger-spec-validator
           tenant-schemas-celery
@@ -244,7 +301,6 @@ let
           ua-parser
           urllib3
           uvicorn
-          uvloop
           watchdog
           webauthn
           websockets
@@ -284,7 +340,7 @@ let
 
     CGO_ENABLED = 0;
 
-    vendorHash = "sha256-YpOG5pNw5CNSubm1OkPVpSi7l+l5UdJFido2SQLtK3g=";
+    vendorHash = "sha256-hxtyXyCfVemsjYQeo//gd68x4QO/4Vcww8i2ocsUVW8=";
 
     postInstall = ''
       mv $out/bin/server $out/bin/authentik
@@ -319,6 +375,8 @@ in stdenvNoCC.mkDerivation {
       --set PYTHONUNBUFFERED 1
     runHook postInstall
   '';
+
+  passthru.outposts = callPackages ./outposts.nix { };
 
   nativeBuildInputs = [ makeWrapper ];
 
