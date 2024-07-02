@@ -1,7 +1,7 @@
 { newScope, config, stdenv, makeWrapper
 , buildPackages
 , ed, gnugrep, coreutils, xdg-utils
-, glib, gtk3, gtk4, gnome, gsettings-desktop-schemas, gn, fetchgit
+, glib, gtk3, gtk4, adwaita-icon-theme, gsettings-desktop-schemas, gn, fetchgit
 , libva, pipewire, wayland
 , runCommand
 , lib, libkrb5
@@ -101,7 +101,7 @@ in stdenv.mkDerivation {
     gsettings-desktop-schemas glib gtk3 gtk4
 
     # needed for XDG_ICON_DIRS
-    gnome.adwaita-icon-theme
+    adwaita-icon-theme
 
     # Needed for kerberos at runtime
     libkrb5

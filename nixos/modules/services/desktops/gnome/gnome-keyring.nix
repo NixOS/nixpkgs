@@ -26,14 +26,14 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    environment.systemPackages = [ pkgs.gnome.gnome-keyring ];
+    environment.systemPackages = [ pkgs.gnome-keyring ];
 
     services.dbus.packages = [
-      pkgs.gnome.gnome-keyring
+      pkgs.gnome-keyring
       pkgs.gcr
     ];
 
-    xdg.portal.extraPortals = [ pkgs.gnome.gnome-keyring ];
+    xdg.portal.extraPortals = [ pkgs.gnome-keyring ];
 
     security.pam.services = lib.mkMerge [
       {
@@ -52,7 +52,7 @@ in
       owner = "root";
       group = "root";
       capabilities = "cap_ipc_lock=ep";
-      source = "${pkgs.gnome.gnome-keyring}/bin/gnome-keyring-daemon";
+      source = "${pkgs.gnome-keyring}/bin/gnome-keyring-daemon";
     };
   };
 }

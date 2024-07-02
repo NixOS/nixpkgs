@@ -4,7 +4,7 @@
 , python3Packages
 , gdk-pixbuf
 , glib
-, gnome
+, adwaita-icon-theme
 , gobject-introspection
 , gtk3
 , wrapGAppsHook3
@@ -38,7 +38,7 @@ python3Packages.buildPythonApplication rec {
 
   buildInputs = [
     glib
-    gnome.adwaita-icon-theme
+    adwaita-icon-theme
     gtk3
     keybinder3
     libappindicator

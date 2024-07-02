@@ -11,7 +11,7 @@
 , webkitgtk
 , makeWrapper
 , wrapGAppsHook3
-, gnome
+, adwaita-icon-theme
 , gdk-pixbuf
 }:
 
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     webkitgtk
     glib-networking
     gdk-pixbuf
-    gnome.adwaita-icon-theme
+    adwaita-icon-theme
   ];
 
   nativeBuildInputs = [
