@@ -778,6 +778,9 @@ in
 
       # Don’t link anything in this stage against CF to prevent propagating CF from prior stages to
       # the final stdenv, which happens because of the rpath hook.
+      stdenvNoCC = super.stdenvNoCC.override {
+        extraBuildInputs = [ ];
+      };
       stdenv =
         let
           stdenvNoCF = super.stdenv.override {
@@ -896,6 +899,9 @@ in
       # Don’t link anything in this stage against CF to prevent propagating CF from prior stages to
       # the final stdenv, which happens because of the rpath hook. Also don’t use a stdenv with
       # compiler-rt because it needs to be built in this stage.
+      stdenvNoCC = super.stdenvNoCC.override {
+        extraBuildInputs = [ ];
+      };
       stdenv =
         let
           stdenvNoCF = super.stdenv.override {

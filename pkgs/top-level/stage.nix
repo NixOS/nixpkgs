@@ -49,6 +49,10 @@ in
 , # The standard environment to use for building packages.
   stdenv
 
+, # `stdenv` without a C compiler. Passing in this helps avoid infinite
+  # recursions, and may eventually replace passing in the full stdenv.
+  stdenvNoCC ? stdenv.override { cc = null; hasCC = false; }
+
 , # This is used because stdenv replacement and the stdenvCross do benefit from
   # the overridden configuration provided by the user, as opposed to the normal
   # bootstrapping stdenvs.
@@ -141,7 +145,7 @@ let
     pkgs = self.pkgsHostTarget;
     targetPackages = self.pkgsTargetTarget;
 
-    inherit stdenv;
+    inherit stdenv stdenvNoCC;
   };
 
   splice = self: super: import ./splice.nix lib self (adjacentPackages != null);
