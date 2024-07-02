@@ -1,4 +1,5 @@
 { fetchFromGitHub
+, fetchpatch
 , glib
 , gobject-introspection
 , meson
@@ -37,6 +38,13 @@ stdenv.mkDerivation rec {
     # Load extensions from NEMO_EXTENSION_DIR environment variable
     # https://github.com/NixOS/nixpkgs/issues/78327
     ./load-extensions-from-env.patch
+
+    # Don't tie the interactive search box with the window's lifetime
+    # https://github.com/linuxmint/nemo/issues/3423
+    (fetchpatch {
+      url = "https://github.com/linuxmint/nemo/commit/055b47af0e1a830e556989372f3689bbd36b639d.patch";
+      hash = "sha256-cMtBz1uLGCV4nnrBITzXAV/SffI0nNcEdeujrHxAzQc=";
+    })
   ];
 
   outputs = [ "out" "dev" ];
