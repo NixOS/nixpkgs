@@ -15159,6 +15159,8 @@ self: super: with self; {
 
   tern = callPackage ../development/python-modules/tern { };
 
+  terraform-local = callPackage ../development/python-modules/terraform-local { };
+
   tesla-fleet-api = callPackage ../development/python-modules/tesla-fleet-api { };
 
   tesla-powerwall = callPackage ../development/python-modules/tesla-powerwall { };
