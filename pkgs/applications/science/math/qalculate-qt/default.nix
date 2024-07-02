@@ -8,7 +8,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "qalculate";
     repo = "qalculate-qt";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-jlzuLLEFi72ElVBJSRikrMMaHIVWKRUAWGyeqzuj7xw=";
+    hash = "sha256-suJUPeWLX+da0lQdvsDgSBRCBYmog+s4+n/w0PnPijs=";
   };
 
   nativeBuildInputs = [ qmake intltool pkg-config qttools wrapQtAppsHook ];
