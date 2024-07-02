@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform
-, pkg-config, wrapGAppsHook3, CoreServices
+{ lib
+, stdenv
+, fetchFromGitHub
+, rustPlatform
+, pkg-config
+, wrapGAppsHook3
+, CoreServices
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -34,6 +39,6 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "muso";
     homepage = "https://github.com/quebin31/muso";
     license = with licenses; [ gpl3Plus ];
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ crertel ];
   };
 }
