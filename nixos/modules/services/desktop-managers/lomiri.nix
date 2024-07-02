@@ -21,6 +21,7 @@ in {
         history-service
         libusermetrics
         lomiri
+        lomiri-clock-app
         lomiri-download-manager
         lomiri-filemanager-app
         lomiri-schemas # exposes some required dbus interfaces
