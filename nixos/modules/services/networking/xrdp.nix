@@ -40,8 +40,12 @@ let
 
     ${cfg.extraConfDirCommands}
   '';
-in
-{
+
+  portFlag = if cfg.transportMode == null then
+    "${toString cfg.port}"
+  else
+    "${cfg.transportMode}://${cfg.address}:${toString cfg.port}";
+in {
 
   ###### interface
 
@@ -56,6 +60,25 @@ in
       audio = {
         enable = mkEnableOption "audio support for xrdp sessions. So far it only works with PulseAudio sessions on the server side. No PipeWire support yet";
         package = mkPackageOption pkgs "pulseaudio-module-xrdp" {};
+      };
+
+      transportMode = mkOption {
+        type = types.enum [ null "unix" "tcp" "tcp6" "vsock" ];
+        default = null;
+        example = "tcp6";
+        description = lib.mdDoc ''
+          Specifies the transport mode on which the xrdp daemon listens. Null means all interfaces.
+        '';
+      };
+
+      address = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        example = "192.168.1.1";
+        description = lib.mdDoc ''
+          Specifies the addresses on which the xrdp daemon listens. Null means all addresses.
+          Will be cid for vsock mode.
+        '';
       };
 
       port = mkOption {
@@ -139,6 +162,12 @@ in
     })
 
     (mkIf cfg.enable {
+      assertions = [{
+        assertion = cfg.transportMode == null -> cfg.address == null;
+        message = ''
+          address can't be set without transportMode
+        '';
+      }];
 
       networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall [ cfg.port ];
 
@@ -186,7 +215,7 @@ in
             User = "xrdp";
             Group = "xrdp";
             PermissionsStartOnly = true;
-            ExecStart = "${pkgs.xrdp}/bin/xrdp --nodaemon --port ${toString cfg.port} --config ${confDir}/xrdp.ini";
+            ExecStart = "${pkgs.xrdp}/bin/xrdp --nodaemon --port ${portFlag} --config ${confDir}/xrdp.ini";
           };
         };
 
