@@ -8499,12 +8499,12 @@ final: prev:
 
   nvim-treesitter-context = buildVimPlugin {
     pname = "nvim-treesitter-context";
-    version = "2024-06-30";
+    version = "2024-07-02";
     src = fetchFromGitHub {
       owner = "nvim-treesitter";
       repo = "nvim-treesitter-context";
-      rev = "1b9c756c0cad415f0a2661c858448189dd120c15";
-      sha256 = "00nczjmmziyr91za9rq9fshg169z2f0rg2wr8l66dg9m724m7pa0";
+      rev = "a1d11bffa7e4fc9a13cacdd8ca666604b2aad59e";
+      sha256 = "16y4fmzn7067s5m25v53kzbdy01fgyjsqm90gd8jxck9mq8gz7yj";
     };
     meta.homepage = "https://github.com/nvim-treesitter/nvim-treesitter-context/";
   };
