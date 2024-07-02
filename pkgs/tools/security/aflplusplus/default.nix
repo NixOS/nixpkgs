@@ -19,13 +19,13 @@ let
   libtokencap = callPackage ./libtokencap.nix { inherit aflplusplus; };
   aflplusplus = stdenvNoCC.mkDerivation rec {
     pname = "aflplusplus";
-    version = "4.10c";
+    version = "4.20c";
 
     src = fetchFromGitHub {
       owner = "AFLplusplus";
       repo = "AFLplusplus";
       rev = "v${version}";
-      sha256 = "sha256-elghcBw2tIttQo7bkMFRCx8iNqxwY0NCz0343wc8hWA=";
+      sha256 = "sha256-bS4Zxd2CX8m6zxO/izJi7Cj34260mOaU6GWjEj+xEU8=";
     };
     enableParallelBuilding = true;
 
