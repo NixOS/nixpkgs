@@ -68,7 +68,7 @@ let
       mainProgram = "arduino-cli";
       changelog = "https://github.com/arduino/arduino-cli/releases/tag/${version}";
       license = licenses.gpl3Only;
-      maintainers = with maintainers; [ ryantm ];
+      maintainers = with maintainers; [ ryantm sfrijters ];
     };
 
   };
