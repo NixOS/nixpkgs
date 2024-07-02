@@ -2,19 +2,20 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  nix-update-script,
 }:
 buildGoModule rec {
   pname = "ddns-updater";
-  version = "2.6.0";
+  version = "2.7.0";
 
   src = fetchFromGitHub {
     owner = "qdm12";
     repo = "ddns-updater";
     rev = "v${version}";
-    hash = "sha256-NU6KXVjggsXVCKImGqbB1AXcph+ycRfkk5S4JNq0cHg=";
+    hash = "sha256-K9zD5aIM+HpLM//crjkK5PU2QEa7Git++LHNtgWE6Vk=";
   };
 
-  vendorHash = "sha256-Ibrv0m3Tz/5JbkHYmiJ9Ijo37fjHc7TP100K7ZTwO8I=";
+  vendorHash = "sha256-twv2xMyVAs0Xue8GADlJITaPek/AsCvkJbQcJmEc7ts=";
 
   ldflags = [
     "-s"
@@ -26,6 +27,8 @@ buildGoModule rec {
   postInstall = ''
     mv $out/bin/updater $out/bin/ddns-updater
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Container to update DNS records periodically with WebUI for many DNS providers";
