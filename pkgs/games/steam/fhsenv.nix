@@ -1,4 +1,4 @@
-{ lib, stdenv, writeShellScript, buildFHSEnv, steam, glxinfo-i686
+{ lib, stdenv, writeShellScript, buildFHSEnv, steam, glxinfo-i686, pkgsi686Linux
 , steam-runtime-wrapped, steam-runtime-wrapped-i686 ? null
 , extraPkgs ? pkgs: [ ] # extra packages to add to targetPkgs
 , extraLibraries ? pkgs: [ ] # extra packages to add to multiPkgs
@@ -296,7 +296,7 @@ in buildFHSEnv rec {
     exec steam ${extraArgs} "$@"
   '';
 
-  inherit privateTmp;
+  inherit privateTmp pkgsi686Linux;
 
   extraPreBwrapCmds = ''
     install -m 1777 -d /tmp/dumps
