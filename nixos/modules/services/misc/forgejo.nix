@@ -325,6 +325,18 @@ in
                 description = "Disable external SSH feature.";
               };
 
+              START_SSH_SERVER = (mkEnableOption "START_SSH_SERVER" //{
+                description = ''
+                  When enabled, use Forgejo's built-in SSH server instead of the
+                  hosts' existing SSH server ({option}`services.openssh.enable`).
+                  ::: {.note}
+                  This likely requires manually changing the value of either
+                  {option}`services.openssh.ports` or
+                  {option}`services.forgejo.settings.server.SSH_LISTEN_PORT` so they don't collide.
+                  :::
+                '';
+              });
+
               SSH_PORT = mkOption {
                 type = types.port;
                 default = 22;
@@ -655,19 +667,21 @@ in
         SystemCallFilter = [ "~@cpu-emulation @debug @keyring @mount @obsolete @privileged @setuid" "setrlimit" ];
         # cfg.secrets
         LoadCredential = map (e: "${e.env}:${e.path}") secrets;
+      } // lib.optionalAttrs (cfg.settings.server.SSH_PORT < 1024) {
+        AmbientCapabilities = "CAP_NET_BIND_SERVICE";
+        CapabilityBoundingSet = "CAP_NET_BIND_SERVICE";
+        PrivateUsers = false;
       };
 
       environment = {
         USER = cfg.user;
         HOME = cfg.stateDir;
-        # `GITEA_` prefix until https://codeberg.org/forgejo/forgejo/issues/497
-        # is resolved.
-        GITEA_WORK_DIR = cfg.stateDir;
-        GITEA_CUSTOM = cfg.customDir;
-      } // lib.listToAttrs (map (e: lib.nameValuePair e.env "%d/${e.env}") secrets);
+        FORGEJO_WORK_DIR = cfg.stateDir;
+        FORGEJO_CUSTOM = cfg.customDir;
+      };
     };
 
-    services.openssh.settings.AcceptEnv = mkIf (!cfg.settings.START_SSH_SERVER or false) "GIT_PROTOCOL";
+    services.openssh.settings.AcceptEnv = mkIf (!cfg.settings.server.START_SSH_SERVER or false) "GIT_PROTOCOL";
 
     users.users = mkIf (cfg.user == "forgejo") {
       forgejo = {
@@ -690,10 +704,8 @@ in
       environment = {
         USER = cfg.user;
         HOME = cfg.stateDir;
-        # `GITEA_` prefix until https://codeberg.org/forgejo/forgejo/issues/497
-        # is resolved.
-        GITEA_WORK_DIR = cfg.stateDir;
-        GITEA_CUSTOM = cfg.customDir;
+        FORGEJO_WORK_DIR = cfg.stateDir;
+        FORGEJO_CUSTOM = cfg.customDir;
       };
 
       serviceConfig = {
@@ -713,5 +725,5 @@ in
   };
 
   meta.doc = ./forgejo.md;
-  meta.maintainers = with lib.maintainers; [ bendlas emilylange ];
+  meta.maintainers = with lib.maintainers; [ bendlas emilylange pyrox0 ];
 }
