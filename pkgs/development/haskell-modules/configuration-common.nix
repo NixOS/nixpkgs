@@ -2963,20 +2963,6 @@ self: super: {
   # 2023-03-05: restrictive bounds on base https://github.com/diagrams/diagrams-gtk/issues/11
   diagrams-gtk = doJailbreak super.diagrams-gtk;
 
-  tomland = overrideCabal (drv: {
-    # 2023-03-13: restrictive bounds on validation-selective (>=0.1.0 && <0.2).
-    # Get rid of this in the next release: https://github.com/kowainik/tomland/commit/37f16460a6dfe4606d48b8b86c13635d409442cd
-    jailbreak = true;
-    # Fix compilation of test suite with GHC >= 9.8
-    patches = drv.patches or [ ] ++ [
-      (pkgs.fetchpatch {
-        name = "tomland-disambiguate-string-type-for-ghc-9.8.patch";
-        url = "https://github.com/kowainik/tomland/commit/0f107269b8835a8253f618b75930b11d3a3f1337.patch";
-        sha256 = "13ndlfw32xh8jz5g6lpxzn2ks8zchb3y4j1jbbm2x279pdyvvars";
-      })
-    ];
-  }) super.tomland;
-
   # libfuse3 fails to mount fuse file systems within the build environment
   libfuse3 = dontCheck super.libfuse3;
 
