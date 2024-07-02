@@ -1,0 +1,101 @@
+{ stdenv, lib, pkgs, fetchFromGitHub, writeText
+, openjdk21_headless, gradle_7, pkg-config, perl, cmake, gperf, gtk2, gtk3, libXtst
+, libXxf86vm, glib, alsa-lib, ffmpeg_4, python3, ruby, fetchurl, runCommand
+, withMedia ? true
+, withWebKit ? false
+}:
+
+let
+  pname = "openjfx-modular-sdk";
+  major = "21";
+  update = "";
+  build = "-ga";
+  repover = "${major}${update}${build}";
+  jdk = openjdk21_headless;
+  gradle = gradle_7;
+
+  icuVersionWithSep = s: "73${s}1";
+  icuPath = "download/release-${icuVersionWithSep "-"}/icu4c-${icuVersionWithSep "_"}-data-bin-l.zip";
+  icuData = fetchurl {
+    url = "https://github.com/unicode-org/icu/releases/${icuPath}";
+    hash = "sha256-QDgpjuAqDDiRcYXvj/Tr3pyLVSx3f9A+TfbGtLGCXiA=";
+  };
+  icuFakeRepository = runCommand "icu-data-repository" {} ''
+    install -Dm644 ${icuData} $out/${icuPath}
+  '';
+
+in stdenv.mkDerivation {
+  inherit pname;
+  version = "${major}${update}${build}";
+
+  src = fetchFromGitHub {
+    owner = "openjdk";
+    repo = "jfx";
+    rev = repover;
+    hash = "sha256-deNAGfnA6gwcAa64l0AWdkX+vJd3ZOfIgAifSl+/m+s=";
+  };
+
+  buildInputs = [ gtk2 gtk3 libXtst libXxf86vm glib alsa-lib ffmpeg_4 ];
+  nativeBuildInputs = [ gradle perl pkg-config cmake gperf python3 ruby ];
+
+  dontUseCmakeConfigure = true;
+
+  config = writeText "gradle.properties" ''
+    CONF = Release
+    JDK_HOME = ${jdk.home}
+    COMPILE_MEDIA = ${lib.boolToString withMedia}
+    COMPILE_WEBKIT = ${lib.boolToString withWebKit}
+    ${lib.optionalString withWebKit "icuRepositoryURL = file://${icuFakeRepository}"}
+  '';
+
+  postPatch = ''
+    # Add missing includes for gcc-13 for webkit build:
+    sed -e '1i #include <cstdio>' \
+      -i modules/javafx.web/src/main/native/Source/bmalloc/bmalloc/Heap.cpp \
+         modules/javafx.web/src/main/native/Source/bmalloc/bmalloc/IsoSharedPageInlines.h
+
+    ln -s $config gradle.properties
+  '';
+
+  mitmCache = gradle.fetchDeps {
+    inherit pname;
+    data = ./deps.json;
+  };
+
+  preBuild = ''
+    export NUMBER_OF_PROCESSORS=$NIX_BUILD_CORES
+    export NIX_CFLAGS_COMPILE="$(pkg-config --cflags glib-2.0) $NIX_CFLAGS_COMPILE"
+  '';
+
+  gradleBuildTask = "sdk";
+
+  installPhase = ''
+    cp -r build/modular-sdk $out
+  '';
+
+  stripDebugList = [ "." ];
+
+  postFixup = ''
+    # Remove references to bootstrap.
+    export openjdkOutPath='${jdk.outPath}'
+    find "$out" -name \*.so | while read lib; do
+      new_refs="$(patchelf --print-rpath "$lib" | perl -pe 's,:?\Q$ENV{openjdkOutPath}\E[^:]*,,')"
+      patchelf --set-rpath "$new_refs" "$lib"
+    done
+  '';
+
+  disallowedReferences = [ jdk gradle.jdk ];
+
+  passthru.updateDeps = gradle.updateDeps {
+    attrPath = "openjfx${major}";
+    pkg = pkgs."openjfx${major}".override { withWebKit = true; };
+  };
+
+  meta = with lib; {
+    homepage = "https://openjdk.org/projects/openjfx/";
+    license = licenses.gpl2Classpath;
+    description = "Next-generation Java client toolkit";
+    maintainers = with maintainers; [ abbradar ];
+    platforms = platforms.unix;
+  };
+}
