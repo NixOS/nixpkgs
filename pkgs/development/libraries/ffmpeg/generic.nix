@@ -931,4 +931,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with maintainers; [ atemu arthsmn jopejoe1 ];
     mainProgram = "ffmpeg";
   };
+} // lib.optionalAttrs withCudaLLVM {
+  # remove once https://github.com/NixOS/nixpkgs/issues/318674 is addressed properly
+  hardeningDisable = [ "zerocallusedregs" ];
 })

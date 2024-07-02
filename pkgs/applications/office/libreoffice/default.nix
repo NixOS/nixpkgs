@@ -274,6 +274,9 @@ in stdenv.mkDerivation (finalAttrs: {
     substituteInPlace configure.ac --replace-fail \
       'GPGMEPP_CFLAGS=-I/usr/include/gpgme++' \
       'GPGMEPP_CFLAGS=-I${gpgme.dev}/include/gpgme++'
+
+    # Fix for Python 3.12
+    substituteInPlace configure.ac --replace-fail distutils.sysconfig sysconfig
   '';
 
   nativeBuildInputs = [
