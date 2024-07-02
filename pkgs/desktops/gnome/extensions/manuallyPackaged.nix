@@ -8,6 +8,7 @@
   "gsconnect@andyholmes.github.io" = callPackage ./gsconnect { };
   "impatience@gfxmonk.net" = callPackage ./impatience { };
   "no-title-bar@jonaspoehler.de" = callPackage ./no-title-bar { };
+  "openbar@neuromorph" = callPackage ./openbar { };
   "pidgin@muffinmad" = callPackage ./pidgin-im-integration { };
   "pop-shell@system76.com" = callPackage ./pop-shell { };
   "sound-output-device-chooser@kgshank.net" = callPackage ./sound-output-device-chooser { };
