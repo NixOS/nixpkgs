@@ -54,7 +54,6 @@ Each supported language or software ecosystem has its own package set named `<la
 agda.section.md
 android.section.md
 beam.section.md
-bower.section.md
 chicken.section.md
 coq.section.md
 crystal.section.md
