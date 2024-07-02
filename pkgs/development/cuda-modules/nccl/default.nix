@@ -54,7 +54,7 @@ backendStdenv.mkDerivation (finalAttrs: {
   buildInputs =
     lib.optionals (cudaOlder "11.4") [ cudatoolkit ]
     ++ lib.optionals (cudaAtLeast "11.4") [
-      cuda_nvcc.dev # crt/host_config.h
+      cuda_nvcc # crt/host_config.h
       cuda_cudart
     ]
     # NOTE: CUDA versions in Nixpkgs only use a major and minor version. When we do comparisons

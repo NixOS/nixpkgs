@@ -57,21 +57,14 @@ effectiveStdenv.mkDerivation (finalAttrs: {
       CoreVideo
       MetalKit
     ] ++ lib.optionals cudaSupport ( with cudaPackages; [
-
-      # A temporary hack for reducing the closure size, remove once cudaPackages
-      # have stopped using lndir: https://github.com/NixOS/nixpkgs/issues/271792
-      cuda_cccl.dev # provides nv/target
-      cuda_cudart.dev
-      cuda_cudart.lib
-      cuda_cudart.static
-      libcublas.dev
-      libcublas.lib
-      libcublas.static
+      cuda_cccl # provides nv/target
+      cuda_cudart
+      libcublas
     ]);
 
   postPatch = let
     cudaOldStr = "-lcuda ";
-    cudaNewStr = "-lcuda -L${cudaPackages.cuda_cudart.lib}/lib/stubs ";
+    cudaNewStr = "-lcuda -L${cudaPackages.cuda_cudart}/lib/stubs ";
   in lib.optionalString cudaSupport ''
     substituteInPlace Makefile \
       --replace '${cudaOldStr}' '${cudaNewStr}'
