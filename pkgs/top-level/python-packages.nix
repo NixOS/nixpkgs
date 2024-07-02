@@ -4876,6 +4876,8 @@ self: super: with self; {
   git-annex-adapter =
     callPackage ../development/python-modules/git-annex-adapter { };
 
+  git-autoshare = callPackage ../development/python-modules/git-autoshare { };
+
   git-filter-repo = callPackage ../development/python-modules/git-filter-repo { };
 
   git-find-repos = callPackage ../development/python-modules/git-find-repos { };
