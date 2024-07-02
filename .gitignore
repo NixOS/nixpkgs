@@ -19,6 +19,7 @@ tags
 /doc/manual.pdf
 /source/
 .version-suffix
+.direnv
 
 .DS_Store
 .mypy_cache
