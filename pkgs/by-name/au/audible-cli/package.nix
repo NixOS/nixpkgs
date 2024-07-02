@@ -2,14 +2,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "audible-cli";
-  version = "0.3.1";
+  version = "0.3.2b3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mkb79";
     repo = "audible-cli";
     rev = "refs/tags/v${version}";
-    hash = "sha256-AYL7lcYYY7gK12Id94aHRWRlCiznnF4r+lpI5VFpAWY=";
+    hash = "sha256-gGHluJWDAE4pm0QHIx6RDHIOG1d/LGk2k2CR+OQJrWg=";
   };
 
   nativeBuildInputs = with python3Packages; [
