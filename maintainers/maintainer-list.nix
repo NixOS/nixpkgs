@@ -2036,6 +2036,12 @@
     githubId = 76545554;
     name = "Avery";
   };
+  av-gal = {
+    email = "alex.v.galvin@gmail.com";
+    github = "av-gal";
+    githubId = 32237198;
+    name = "Alex Galvin";
+  };
   avh4 = {
     email = "gruen0aermel@gmail.com";
     github = "avh4";
