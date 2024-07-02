@@ -15,6 +15,8 @@
 , python3
 , qt6Packages
 , woff2
+, ffmpeg
+, skia
 , nixosTests
 , AppKit
 , Cocoa
@@ -52,14 +54,18 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ladybird";
-  version = "0-unstable-2024-06-08";
+  version = "0-unstable-2024-07-01";
 
   src = fetchFromGitHub {
     owner = "LadybirdWebBrowser";
     repo = "ladybird";
-    rev = "2f68e361370040d8cdc75a8ed8af4239134ae481";
-    hash = "sha256-EQZTsui4lGThSi+8a6KSyL5lJnO0A8fJ8HWY4jgkpUA=";
+    rev = "bff6c0680aff5862e05c68af03a653f2250328b4";
+    hash = "sha256-uzh88o7TnAeI6EGNq4MrEYVa37wz39cr8W4KPi+/eQs=";
   };
+
+  patches = [
+    ./LibWeb-use-system-skia.patch
+  ];
 
   postPatch = ''
     sed -i '/iconutil/d' Ladybird/CMakeLists.txt
@@ -76,8 +82,8 @@ stdenv.mkDerivation (finalAttrs: {
     # expected version in the package's CMake.
 
     # Check that the versions match
-    grep -F 'set(CLDR_VERSION "${cldr_version}")' Meta/CMake/locale_data.cmake || (echo cldr_version mismatch && exit 1)
-    grep -F 'set(TZDB_VERSION "${tzdata.version}")' Meta/CMake/time_zone_data.cmake || (echo tzdata.version mismatch && exit 1)
+    grep -F 'locale_version = "${cldr_version}"' Meta/gn/secondary/Userland/Libraries/LibLocale/BUILD.gn || (echo cldr_version mismatch && exit 1)
+    grep -F 'tzdb_version = "${tzdata.version}"' Meta/gn/secondary/Userland/Libraries/LibTimeZone/BUILD.gn || (echo tzdata.version mismatch && exit 1)
     grep -F 'set(CACERT_VERSION "${cacert_version}")' Meta/CMake/ca_certificates_data.cmake || (echo cacert_version mismatch && exit 1)
 
     mkdir -p build/Caches
@@ -116,9 +122,11 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = with qt6Packages; [
+    ffmpeg
     libxcrypt
     qtbase
     qtmultimedia
+    skia
     woff2
   ] ++ lib.optionals stdenv.isDarwin [
     AppKit

@@ -1,0 +1,34 @@
+From 4a9bee1c322af60ed0f492af7e859b9e038690e7 Mon Sep 17 00:00:00 2001
+From: Francesco Gazzetta <fgaz@fgaz.me>
+Date: Tue, 2 Jul 2024 10:31:50 +0200
+Subject: [PATCH] LibWeb: use system skia
+
+---
+ Userland/Libraries/LibWeb/CMakeLists.txt | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
+
+diff --git a/Userland/Libraries/LibWeb/CMakeLists.txt b/Userland/Libraries/LibWeb/CMakeLists.txt
+index e0595537e5..b16b4d897a 100644
+--- a/Userland/Libraries/LibWeb/CMakeLists.txt
++++ b/Userland/Libraries/LibWeb/CMakeLists.txt
+@@ -753,11 +753,15 @@ set(GENERATED_SOURCES
+     Worker/WebWorkerServerEndpoint.h
+ )
+ 
+-find_package(unofficial-skia CONFIG REQUIRED)
++find_package(PkgConfig)
++pkg_check_modules(SKIA skia)
+ 
+ serenity_lib(LibWeb web)
+ 
+-target_link_libraries(LibWeb PRIVATE LibCore LibCrypto LibJS LibHTTP LibGfx LibIPC LibRegex LibSyntax LibTextCodec LibUnicode LibAudio LibMedia LibWasm LibXML LibIDL LibURL LibTLS unofficial::skia::skia)
++target_link_libraries(LibWeb PRIVATE LibCore LibCrypto LibJS LibHTTP LibGfx LibIPC LibRegex LibSyntax LibTextCodec LibUnicode LibAudio LibMedia LibWasm LibXML LibIDL LibURL LibTLS ${SKIA_LIBRARIES})
++
++target_include_directories(LibWeb PRIVATE ${SKIA_INCLUDE_DIRS})
++target_link_directories(LibWeb PRIVATE ${SKIA_LIBRARY_DIRS})
+ 
+ if (HAS_ACCELERATED_GRAPHICS)
+     target_link_libraries(LibWeb PRIVATE ${ACCEL_GFX_LIBS})
+-- 
+2.44.1
+
