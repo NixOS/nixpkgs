@@ -499,6 +499,7 @@ in {
   libinput = handleTest ./libinput.nix {};
   libreddit = handleTest ./libreddit.nix {};
   librenms = handleTest ./librenms.nix {};
+  librenms-agent = handleTest ./librenms-agent.nix {};
   libresprite = handleTest ./libresprite.nix {};
   libreswan = runTest ./libreswan.nix;
   libreswan-nat = runTest ./libreswan-nat.nix;
