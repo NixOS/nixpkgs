@@ -1780,12 +1780,6 @@
     githubId = 104313094;
     name = "Andrey Shaat";
   };
-  ashkitten = {
-    email = "ashlea@protonmail.com";
-    github = "ashkitten";
-    githubId = 9281956;
-    name = "ash lea";
-  };
   ashley = {
     email = "ashley@kira64.xyz";
     github = "kira64xyz";
