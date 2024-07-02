@@ -1,0 +1,23 @@
+diff --git a/include/pangolin/log/packetstream_tags.h b/include/pangolin/log/packetstream_tags.h
+index 13216f3d..66a5bd61 100644
+--- a/include/pangolin/log/packetstream_tags.h
++++ b/include/pangolin/log/packetstream_tags.h
+@@ -1,6 +1,7 @@
+ #pragma once
+ 
+ #include <string>
++#include <cstdint>
+ 
+ namespace pangolin {
+ 
+diff --git a/src/image/image_io_jpg.cpp b/src/image/image_io_jpg.cpp
+index cfa110a1..9b1b98df 100644
+--- a/src/image/image_io_jpg.cpp
++++ b/src/image/image_io_jpg.cpp
+@@ -1,5 +1,6 @@
+ #include <algorithm>
+ #include <fstream>
++#include <cstdint>
+ 
+ 
+ #include <pangolin/platform.h>

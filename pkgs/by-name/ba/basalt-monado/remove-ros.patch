@@ -1,0 +1,68 @@
+From f3e045d9a2634ed99703e56a63a9b1b53f510702 Mon Sep 17 00:00:00 2001
+From: Locochoco <ivanrwpf@gmail.com>
+Date: Sun, 10 Mar 2024 22:09:53 -0300
+Subject: [PATCH] remove ros
+
+---
+ CMakeLists.txt            | 3 +--
+ src/io/dataset_io.cpp     | 3 ---
+ thirdparty/CMakeLists.txt | 1 -
+ 3 files changed, 1 insertion(+), 6 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 75a1d68..9baa1e8 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -424,7 +424,6 @@ target_sources(basalt_internal
+     ${CMAKE_CURRENT_SOURCE_DIR}/include/basalt/io/dataset_io.h
+     ${CMAKE_CURRENT_SOURCE_DIR}/include/basalt/io/dataset_io_euroc.h
+     ${CMAKE_CURRENT_SOURCE_DIR}/include/basalt/io/dataset_io_kitti.h
+-    ${CMAKE_CURRENT_SOURCE_DIR}/include/basalt/io/dataset_io_rosbag.h
+     ${CMAKE_CURRENT_SOURCE_DIR}/include/basalt/io/dataset_io_uzh.h
+     ${CMAKE_CURRENT_SOURCE_DIR}/include/basalt/io/marg_data_io.h
+     ${CMAKE_CURRENT_SOURCE_DIR}/include/basalt/vi_estimator/nfr_mapper.h
+@@ -435,7 +434,7 @@ target_sources(basalt_internal
+     ${CMAKE_CURRENT_SOURCE_DIR}/src/io/dataset_io.cpp
+     ${CMAKE_CURRENT_SOURCE_DIR}/src/vi_estimator/nfr_mapper.cpp
+ )
+-target_link_libraries(basalt_internal PRIVATE rosbag apriltag opengv)
++target_link_libraries(basalt_internal PRIVATE apriltag opengv)
+ 
+ 
+ endif()
+diff --git a/src/io/dataset_io.cpp b/src/io/dataset_io.cpp
+index 0629d12..17ae036 100644
+--- a/src/io/dataset_io.cpp
++++ b/src/io/dataset_io.cpp
+@@ -36,7 +36,6 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ #include <basalt/io/dataset_io.h>
+ #include <basalt/io/dataset_io_euroc.h>
+ #include <basalt/io/dataset_io_kitti.h>
+-#include <basalt/io/dataset_io_rosbag.h>
+ #include <basalt/io/dataset_io_uzh.h>
+ 
+ namespace basalt {
+@@ -45,8 +44,6 @@ DatasetIoInterfacePtr DatasetIoFactory::getDatasetIo(const std::string &dataset_
+   if (dataset_type == "euroc") {
+     // return DatasetIoInterfacePtr();
+     return DatasetIoInterfacePtr(new EurocIO(load_mocap_as_gt));
+-  } else if (dataset_type == "bag") {
+-    return DatasetIoInterfacePtr(new RosbagIO);
+   } else if (dataset_type == "uzh") {
+     return DatasetIoInterfacePtr(new UzhIO);
+   } else if (dataset_type == "kitti") {
+diff --git a/thirdparty/CMakeLists.txt b/thirdparty/CMakeLists.txt
+index 293a1b2..d4fb1dd 100644
+--- a/thirdparty/CMakeLists.txt
++++ b/thirdparty/CMakeLists.txt
+@@ -4,7 +4,6 @@ add_library(nlohmann::json INTERFACE IMPORTED GLOBAL)
+ set_property(TARGET nlohmann::json PROPERTY INTERFACE_INCLUDE_DIRECTORIES ${CMAKE_CURRENT_SOURCE_DIR}/json/)
+ 
+ add_subdirectory(basalt-headers EXCLUDE_FROM_ALL)
+-#add_subdirectory(ros EXCLUDE_FROM_ALL)
+ add_subdirectory(apriltag EXCLUDE_FROM_ALL)
+ 
+ 
+-- 
+2.43.1
+
