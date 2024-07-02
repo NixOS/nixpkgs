@@ -33,7 +33,7 @@ stdenv.mkDerivation {
       --replace-quiet 'g++' "$CXX"
 
     # Replacing gcc via sed, would break -static-libgcc otherwise
-    sed -i -e "s/^gcc/$CC/g" build.sh
+    sed -i -e "s/^gcc/''${CC//[\/\\&$'\n']/\\&}/g" build.sh
   '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     # Darwin rebuild scripts try to make a universal2 dylib
     # - build dylib for non-hostPlatform
