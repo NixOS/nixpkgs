@@ -94,8 +94,6 @@ in
       NIX_PATH = cfg.nixPath;
     };
 
-    nix.settings.nix-path = mkIf (! cfg.channel.enable) (mkDefault "");
-
     systemd.tmpfiles.rules = lib.mkIf cfg.channel.enable [
       ''f /root/.nix-channels - - - - ${config.system.defaultChannel} nixos\n''
     ];
