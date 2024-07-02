@@ -26,6 +26,10 @@ buildPythonPackage rec {
     substituteInPlace test/test_spawn.py --replace \
                       "unittest.skipMPI('openmpi(<3.0.0)')" \
                       "unittest.skipMPI('openmpi')"
+
+    substituteInPlace test/test_dynproc.py --replace \
+                      "unittest.skipMPI('openmpi(<2.0.0)')" \
+                      "unittest.skipMPI('openmpi')" \
   '';
 
   configurePhase = "";
