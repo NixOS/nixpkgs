@@ -158,7 +158,7 @@ stdenv.mkDerivation (finalAttrs: {
     python3.pkgs.pygobject3 # for test-networkmanager-service.py
     python3.pkgs.python-dbusmock
     setxkbmap
-    xorgserver
+    xorgserver # for Xvfb
   ];
 
   doCheck = true;
