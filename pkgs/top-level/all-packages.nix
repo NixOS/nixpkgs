@@ -29364,6 +29364,10 @@ with pkgs;
   android-studio = androidStudioPackages.stable;
   android-studio-full = android-studio.full;
 
+  androidStudioForPlatformPackages = recurseIntoAttrs
+    (callPackage ../applications/editors/android-studio-for-platform { });
+  android-studio-for-platform = androidStudioForPlatformPackages.stable;
+
   antfs-cli = callPackage ../applications/misc/antfs-cli { };
 
   antimony = libsForQt5.callPackage ../applications/graphics/antimony { };
