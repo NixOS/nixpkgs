@@ -1,0 +1,114 @@
+From 1f6c55d7318e7075169004b4314708f4766ec193 Mon Sep 17 00:00:00 2001
+From: Adam Duskett <aduskett@gmail.com>
+Date: Mon, 27 Sep 2021 12:55:09 -0700
+Subject: [PATCH] add qemu-wrapper support
+
+V8's JIT infrastructure requires binaries such as mksnapshot and mkpeephole to
+be run in the host during the build. However, these binaries must have the
+same bit-width as the target (e.g. a x86_64 host targeting ARMv6 needs to
+produce a 32-bit binary). To work around this issue, cross-compile the
+binaries for the target and run them on the host with QEMU, much like
+gobject-introspection.
+
+However, for the host-variant we do not want to use a
+qemu-wrapper, so add @MAYBE_WRAPPER@ to the needed files and sed the path to
+the qemu-wrapper on target builds, and remove @MAYBE_WRAPPER@ entirely on
+host-builds.
+
+[Adam: Update for 20.9.0]
+Signed-off-by: Adam Duskett <aduskett@gmail.com>
+---
+ node.gyp                 |  6 ++++--
+ tools/v8_gypfiles/v8.gyp | 10 +++++-----
+ 2 files changed, 9 insertions(+), 7 deletions(-)
+
+diff --git a/node.gyp b/node.gyp
+index 97cdbb531d..db5cf51ce6 100644
+--- a/node.gyp
++++ b/node.gyp
+@@ -662,7 +662,7 @@
+                   'action_name': 'node_mksnapshot',
+                   'process_outputs_as_sources': 1,
+                   'inputs': [
+-                    '<(node_mksnapshot_exec)',
++                    @MAYBE_WRAPPER@ '<(node_mksnapshot_exec)',
+                     '<(node_snapshot_main)',
+                   ],
+                   'outputs': [
+@@ -682,7 +682,7 @@
+                   'action_name': 'node_mksnapshot',
+                   'process_outputs_as_sources': 1,
+                   'inputs': [
+-                    '<(node_mksnapshot_exec)',
++                    @MAYBE_WRAPPER@ '<(node_mksnapshot_exec)',
+                   ],
+                   'outputs': [
+                     '<(SHARED_INTERMEDIATE_DIR)/node_snapshot.cc',
+@@ -966,6 +966,7 @@
+           'action_name': 'node_js2c',
+           'process_outputs_as_sources': 1,
+           'inputs': [
++            @MAYBE_WRAPPER@
+             '<(node_js2c_exec)',
+             '<@(library_files)',
+             '<@(deps_files)',
+@@ -975,6 +976,7 @@
+             '<(SHARED_INTERMEDIATE_DIR)/node_javascript.cc',
+           ],
+           'action': [
++            @MAYBE_WRAPPER@
+             '<(node_js2c_exec)',
+             '<@(_outputs)',
+             'lib',
+diff --git a/tools/v8_gypfiles/v8.gyp b/tools/v8_gypfiles/v8.gyp
+index 73099a03e4..88ca91efb4 100644
+--- a/tools/v8_gypfiles/v8.gyp
++++ b/tools/v8_gypfiles/v8.gyp
+@@ -81,7 +81,7 @@
+         {
+           'action_name': 'run_torque_action',
+           'inputs': [  # Order matters.
+-            '<(PRODUCT_DIR)/<(EXECUTABLE_PREFIX)torque<(EXECUTABLE_SUFFIX)',
++            @MAYBE_WRAPPER@ '<(PRODUCT_DIR)/<(EXECUTABLE_PREFIX)torque<(EXECUTABLE_SUFFIX)',
+             '<@(torque_files)',
+           ],
+           'outputs': [
+@@ -112,7 +112,7 @@
+             '<@(torque_outputs_inc)',
+           ],
+           'action': [
+-            '<(PRODUCT_DIR)/<(EXECUTABLE_PREFIX)torque<(EXECUTABLE_SUFFIX)',
++            @MAYBE_WRAPPER@ '<(PRODUCT_DIR)/<(EXECUTABLE_PREFIX)torque<(EXECUTABLE_SUFFIX)',
+             '-o', '<(SHARED_INTERMEDIATE_DIR)/torque-generated',
+             '-v8-root', '<(V8_ROOT)',
+             '<@(torque_files_without_v8_root)',
+@@ -224,7 +224,7 @@
+         {
+           'action_name': 'generate_bytecode_builtins_list_action',
+           'inputs': [
+-            '<(PRODUCT_DIR)/<(EXECUTABLE_PREFIX)bytecode_builtins_list_generator<(EXECUTABLE_SUFFIX)',
++            @MAYBE_WRAPPER@ '<(PRODUCT_DIR)/<(EXECUTABLE_PREFIX)bytecode_builtins_list_generator<(EXECUTABLE_SUFFIX)',
+           ],
+           'outputs': [
+             '<(generate_bytecode_builtins_list_output)',
+@@ -401,7 +401,7 @@
+             ],
+           },
+           'inputs': [
+-            '<(mksnapshot_exec)',
++            @MAYBE_WRAPPER@ '<(mksnapshot_exec)',
+           ],
+           'outputs': [
+             '<(INTERMEDIATE_DIR)/snapshot.cc',
+@@ -1660,7 +1660,7 @@
+         {
+           'action_name': 'run_gen-regexp-special-case_action',
+           'inputs': [
+-            '<(PRODUCT_DIR)/<(EXECUTABLE_PREFIX)gen-regexp-special-case<(EXECUTABLE_SUFFIX)',
++            @MAYBE_WRAPPER@ '<(PRODUCT_DIR)/<(EXECUTABLE_PREFIX)gen-regexp-special-case<(EXECUTABLE_SUFFIX)',
+           ],
+           'outputs': [
+             '<(SHARED_INTERMEDIATE_DIR)/src/regexp/special-case.cc',
+-- 
+2.37.3
+
