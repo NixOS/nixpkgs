@@ -12293,8 +12293,6 @@ with pkgs;
 
   rtss = callPackage ../development/tools/misc/rtss { };
 
-  realvnc-vnc-viewer = callPackage ../tools/admin/realvnc-vnc-viewer { };
-
   re-isearch = callPackage ../applications/search/re-isearch { };
 
   reason-shell = callPackage ../applications/science/misc/reason-shell { };
