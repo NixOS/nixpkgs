@@ -4,26 +4,23 @@
 , python3
 , cargo
 , git
+, uv
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "hatch";
-  version = "1.9.7";
+  version = "1.12.0";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Gae4IXn5Tyrd2612qn5lq5DK1VqxA9U4J2N5NcnmYkw=";
+    hash = "sha256-roBHjRAxLfK0TWWck7wu1NM67N3OS3Y3gjG9+ByL9q0=";
   };
-
-  postPatch = ''
-    # Loosen hatchling runtime version dependency
-    sed -i 's/hatchling<1.22/hatchling/' pyproject.toml
-  '';
 
   nativeBuildInputs = with python3.pkgs; [
     hatchling
     hatch-vcs
+    uv
   ];
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -62,25 +59,15 @@ python3.pkgs.buildPythonApplication rec {
   disabledTests = [
     # AssertionError: assert (1980, 1, 2, 0, 0, 0) == (2020, 2, 2, 0, 0, 0)
     "test_default"
-    "test_explicit_path"
-    "test_default_auto_detection"
-    "test_editable_default"
-    "test_editable_default_extra_dependencies"
-    "test_editable_default_force_include"
-    "test_editable_default_force_include_option"
-    "test_editable_exact"
-    "test_editable_exact_extra_dependencies"
-    "test_editable_exact_force_include"
-    "test_editable_exact_force_include_option"
-    "test_editable_exact_force_include_build_data_precedence"
-    "test_editable_pth"
-    # expects sh, finds bash
-    "test_all"
-    "test_already_installed_update_flag"
-    "test_already_installed_update_prompt"
     # Loosen hatchling runtime version dependency
     "test_core"
-    "test_correct"
+    # New failing
+    "test_guess_variant"
+    "test_open"
+    "test_no_open"
+    "test_uv_env"
+    "test_pyenv"
+    "test_pypirc"
   ] ++ lib.optionals stdenv.isDarwin [
     # https://github.com/NixOS/nixpkgs/issues/209358
     "test_scripts_no_environment"

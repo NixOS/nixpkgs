@@ -5,7 +5,7 @@
 , dbus
 , libepoxy
 , fetchFromGitHub
-, freeglut
+, libglut
 , freetype
 , gtk3
 , lib
@@ -59,7 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
     curl
     dbus
     libepoxy
-    freeglut
+    libglut
     freetype
     gtk3
     libGL

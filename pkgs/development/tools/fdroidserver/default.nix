@@ -4,7 +4,6 @@
 , apksigner
 , buildPythonApplication
 , python3
-, pythonRelaxDepsHook
 , installShellFiles
 , androguard
 , babel
@@ -59,7 +58,6 @@ buildPythonApplication rec {
   '';
 
   nativeBuildInputs = [
-    pythonRelaxDepsHook
     installShellFiles
   ];
 

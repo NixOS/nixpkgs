@@ -15,7 +15,6 @@
   pytest-xdist,
   pytestCheckHook,
   pythonOlder,
-  pythonRelaxDepsHook,
   pyyaml,
   syrupy,
   tenacity,
@@ -24,7 +23,7 @@
 
 buildPythonPackage rec {
   pname = "langchain-core";
-  version = "0.2.7";
+  version = "0.2.9";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -32,8 +31,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
-    rev = "langchain-core==${version}";
-    hash = "sha256-MmWgnpOO+OWUyRUBqIKuIHG2/p8NfSlVJVbUXfF4spg=";
+    rev = "refs/tags/langchain-core==${version}";
+    hash = "sha256-/BUn/NxaE9l3VY6dPshr1JJaHTGzn9NMQhSQ2De65Jg=";
   };
 
   sourceRoot = "${src.name}/libs/core";
@@ -45,7 +44,6 @@ buildPythonPackage rec {
 
   build-system = [ poetry-core ];
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   dependencies = [
     jsonpatch

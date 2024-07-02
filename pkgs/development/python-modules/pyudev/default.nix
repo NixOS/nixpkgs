@@ -13,12 +13,12 @@
 
 buildPythonPackage rec {
   pname = "pyudev";
-  version = "0.24.1";
+  version = "0.24.3";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-deVNNyGPWsRbDaHw/ZzF5SajysPvHPrUEM96sziwFHE=";
+    hash = "sha256-LpRUJ6IWdIk7uXYyQB22ITnZHOoe6WE3zHsHrSIZj8c=";
   };
 
   postPatch = lib.optionalString stdenvNoCC.isLinux ''

@@ -24,12 +24,12 @@
 let
   self = buildPythonPackage rec {
     pname = "urllib3";
-    version = "2.2.1";
+    version = "2.2.2";
     pyproject = true;
 
     src = fetchPypi {
       inherit pname version;
-      hash = "sha256-0FcIdsYaueUg13bDisu7WwWndtP5/5ilyP1RYqREzxk=";
+      hash = "sha256-3VBUhVSaelUoM9peYGNjnQ0XfATyO8OGTkHl3F9hIWg=";
     };
 
     nativeBuildInputs = [ hatchling ];

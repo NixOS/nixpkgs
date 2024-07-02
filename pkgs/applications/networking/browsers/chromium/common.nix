@@ -199,7 +199,7 @@ let
       pciutils protobuf speechd libXdamage at-spi2-core
       pipewire
       libva
-      libdrm wayland mesa.drivers libxkbcommon
+      libdrm wayland libxkbcommon
       curl
       libepoxy
       libffi
@@ -227,7 +227,7 @@ let
       pciutils protobuf speechd libXdamage at-spi2-core
       pipewire
       libva
-      libdrm wayland mesa.drivers libxkbcommon
+      libdrm wayland libxkbcommon
       curl
       libepoxy
       libffi

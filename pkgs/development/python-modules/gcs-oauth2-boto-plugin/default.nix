@@ -11,7 +11,6 @@
   pyopenssl,
   pytestCheckHook,
   pythonOlder,
-  pythonRelaxDepsHook,
   retry-decorator,
   rsa,
   six,

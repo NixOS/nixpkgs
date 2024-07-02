@@ -62,7 +62,6 @@ buildFHSEnv {
     libdrm
     libudev0-shim
     libxkbcommon
-    mesa.drivers
     nspr
     nss
     pango

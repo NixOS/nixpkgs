@@ -5,7 +5,6 @@
   protobuf,
   pytestCheckHook,
   pythonOlder,
-  pythonRelaxDepsHook,
   setuptools,
   setuptools-scm,
   uharfbuzz,
@@ -39,7 +38,6 @@ buildPythonPackage rec {
   dependencies = [ protobuf ];
 
   nativeCheckInputs = [
-    pythonRelaxDepsHook
     pytestCheckHook
     uharfbuzz
     youseedee

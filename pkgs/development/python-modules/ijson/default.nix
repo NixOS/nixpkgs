@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "ijson";
-  version = "3.2.3";
+  version = "3.3.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-EClOm/ictxPaBbxHkL3/YWYQQy21YZZIJwdImOF0+Rc=";
+    hash = "sha256-fxcua6G+4NTI+OvWOVd7/kKd7g8/lndaBnuLrkSS2KA=";
   };
 
   build-system = [ setuptools ];

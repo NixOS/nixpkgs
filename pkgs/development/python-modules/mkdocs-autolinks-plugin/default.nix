@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "mkdocs-autolinks-plugin";
-  version = "0.7.1";
+  version = "071";
   pyproject = true;
   disabled = pythonOlder "3.8";
 
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "zachhannum";
     repo = "mkdocs-autolinks-plugin";
     # The commit messages mention version 0.7.1, but the tag is v_071.
-    rev = "e2b649eb4db23459bcec121838f27c92c81f9ce1";
+    rev = "refs/tags/v_${version}";
     hash = "sha256-mEbuB9VwK7po1TqtJfBSkItOVlI3/W3nD2LYRHgPpTA=";
   };
 

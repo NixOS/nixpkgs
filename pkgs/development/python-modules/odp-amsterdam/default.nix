@@ -5,7 +5,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   poetry-core,
-  pythonRelaxDepsHook,
   pythonOlder,
   pytest-asyncio,
   pytestCheckHook,
@@ -35,10 +34,6 @@ buildPythonPackage rec {
 
   build-system = [
     poetry-core
-  ];
-
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
   ];
 
   pythonRelaxDeps = [ "pytz" ];

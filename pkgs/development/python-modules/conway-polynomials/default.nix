@@ -2,16 +2,21 @@
   lib,
   fetchPypi,
   buildPythonPackage,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "conway-polynomials";
-  version = "0.9";
+  version = "0.10";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-btIwBgm8558BddW4VGhY7sAoVPi+MjfbjRRJzMzBxYE=";
+    pname = "conway_polynomials";
+    inherit version;
+    hash = "sha256-T2GfZPgaPrFsTibFooT+7sJ6b0qtZHZD55ryiYAa4PM=";
   };
+
+  build-system = [ setuptools ];
 
   pythonImportsCheck = [ "conway_polynomials" ];
 

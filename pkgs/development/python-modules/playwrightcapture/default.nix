@@ -12,7 +12,6 @@
   puremagic,
   pydub,
   pythonOlder,
-  pythonRelaxDepsHook,
   pytz,
   requests,
   setuptools,
@@ -44,7 +43,6 @@ buildPythonPackage rec {
 
   build-system = [ poetry-core ];
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   dependencies = [
     aiohttp

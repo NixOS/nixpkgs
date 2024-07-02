@@ -24,7 +24,6 @@ python3Packages.buildPythonApplication rec {
 
   build-system = with python3Packages; [ setuptools ];
 
-  nativeBuildInputs = with python3Packages; [ pythonRelaxDepsHook ];
 
   dependencies = with python3Packages; [
     daemonocle

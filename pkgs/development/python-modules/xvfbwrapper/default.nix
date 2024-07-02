@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  xorgserver,
+  xorg,
   mock,
 }:
 
@@ -15,7 +15,7 @@ buildPythonPackage rec {
     inherit pname version;
     sha256 = "097wxhvp01ikqpg1z3v8rqhss6f1vwr399zpz9a05d2135bsxx5w";
   };
-  propagatedBuildInputs = [ xorgserver ];
+  propagatedBuildInputs = [ xorg.xvfb ];
 
   # See: https://github.com/cgoldberg/xvfbwrapper/issues/30
   doCheck = false;

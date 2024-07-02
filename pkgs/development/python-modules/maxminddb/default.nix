@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "maxminddb";
-  version = "2.6.1";
+  version = "2.6.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-bF1ZH2JeA7CjTfDH/4FYBnY5e4M14T7OEwxuOeSjr7k=";
+    hash = "sha256-fYQtMuJiCryJS315paEAemnfLGzyeaBrlMnDkT9m8mQ=";
   };
 
   buildInputs = [ libmaxminddb ];

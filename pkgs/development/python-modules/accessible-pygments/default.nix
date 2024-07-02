@@ -3,23 +3,30 @@
   buildPythonPackage,
   fetchPypi,
   pythonOlder,
-  setuptools,
+  hatchling,
+  hatch-vcs,
+  hatch-fancy-pypi-readme,
   pygments,
 }:
 
 buildPythonPackage rec {
   pname = "accessible-pygments";
-  version = "0.0.4";
+  version = "0.0.5";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-57V6mxWVjpYBx+nrB6RAyBMoNUWiCXPyV0pfRT0OlT4=";
+    pname = "accessible_pygments";
+    inherit version;
+    hash = "sha256-QJGNPmorYZrUJMuR5Va9O9iGVEPZ8i8dzfeeM8gEaHI=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [
+    hatchling
+    hatch-vcs
+    hatch-fancy-pypi-readme
+  ];
 
   dependencies = [ pygments ];
 

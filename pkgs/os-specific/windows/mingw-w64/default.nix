@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , windows
-, fetchurl
 , autoreconfHook
 , mingw_w64_headers
 }:

@@ -23,10 +23,6 @@ let
       hash = "sha256-96hFvXs3Fcvad+PBEpS9RFMJkcD1qHqfQ+8gtVfEbnc=";
     };
 
-    nativeBuildInputs = [
-      python3.pkgs.pythonRelaxDepsHook
-    ];
-
     pythonRelaxDeps = [
       # botocore must not be relaxed
       "colorama"

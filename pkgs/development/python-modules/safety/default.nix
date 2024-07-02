@@ -3,7 +3,6 @@
   buildPythonPackage,
   pythonOlder,
   fetchPypi,
-  pythonRelaxDepsHook,
   setuptools,
   click,
   urllib3,
@@ -49,7 +48,6 @@ buildPythonPackage rec {
   '';
 
   nativeBuildInputs = [
-    pythonRelaxDepsHook
     setuptools
   ];
 

@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , fetchurl
-, freeglut
+, libglut
 , libGL
 , libGLU
 , libX11
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    freeglut
+    libglut
     libX11
     libXext
     libGL
@@ -54,14 +54,12 @@ stdenv.mkDerivation rec {
     vulkan-loader
     libxkbcommon
     libdecor
-  ] ++ lib.optional (mesa ? osmesa) mesa.osmesa;
+  ];
 
   mesonFlags = [
-    "-Degl=${if stdenv.isDarwin then "disabled" else "auto"}"
-    "-Dlibdrm=${if mesa.libdrm == null then "disabled" else "enabled"}"
-    "-Dosmesa=${if mesa ? osmesa then "enabled" else "disabled"}"
-    "-Dwayland=${if wayland.withLibraries then "enabled" else "disabled"}"
     "-Dwith-system-data-files=true"
+    "-Dgles1=disabled"
+    "-Dosmesa=disabled"
   ];
 
   meta = with lib; {

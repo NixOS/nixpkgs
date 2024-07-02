@@ -41,14 +41,14 @@ let
 in
 buildPythonPackage rec {
   pname = "cupy";
-  version = "13.0.0";
+  version = "13.2.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-LwTnhX9pKnEzYNycOwZwmAarhAT8o5ta+XIcBKKXmq4=";
+    hash = "sha256-5NvSsu1BWaXMDA+YpxCgFJUOssFu60VelWEo87O9DVE=";
   };
 
   # See https://docs.cupy.dev/en/v10.2.0/reference/environment.html. Seting both

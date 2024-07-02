@@ -10,7 +10,6 @@
   pyrdfa3,
   pytestCheckHook,
   pythonOlder,
-  pythonRelaxDepsHook,
   rdflib,
   setuptools,
   six,

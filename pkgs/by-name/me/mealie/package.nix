@@ -39,7 +39,6 @@ in pythonpkgs.buildPythonPackage rec {
 
   nativeBuildInputs = [
     pythonpkgs.poetry-core
-    pythonpkgs.pythonRelaxDepsHook
     makeWrapper
   ];
 

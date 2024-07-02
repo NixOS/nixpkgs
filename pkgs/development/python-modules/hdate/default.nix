@@ -30,7 +30,6 @@ buildPythonPackage rec {
 
   build-system = [
     pdm-backend
-    pythonRelaxDepsHook
   ];
 
   dependencies = [

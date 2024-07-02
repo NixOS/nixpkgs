@@ -6,7 +6,6 @@
 , perl
 , pkg-config
 , sage-setup
-, pythonRelaxDepsHook
 , gd
 , iml
 , libpng
@@ -103,7 +102,6 @@ buildPythonPackage rec {
     pip # needed to query installed packages
     pkg-config
     sage-setup
-    pythonRelaxDepsHook
   ];
 
   pythonRelaxDeps = [

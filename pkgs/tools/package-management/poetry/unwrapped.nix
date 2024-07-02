@@ -54,6 +54,11 @@ buildPythonPackage rec {
     installShellFiles
   ];
 
+  pythonRelaxDeps = [
+    "dulwich"
+    "keyring"
+  ];
+
   propagatedBuildInputs = [
     build
     cachecontrol

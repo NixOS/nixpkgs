@@ -2,7 +2,6 @@
 { buildPythonPackage
 , fetchFromGitHub
 , lib
-, pythonRelaxDepsHook
 
 , poetry-core
 , prettytable
@@ -24,7 +23,6 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     poetry-core
-    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [

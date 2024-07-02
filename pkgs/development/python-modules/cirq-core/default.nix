@@ -4,6 +4,7 @@
   buildPythonPackage,
   pythonOlder,
   fetchFromGitHub,
+  attrs,
   duet,
   matplotlib,
   networkx,
@@ -31,7 +32,7 @@
 
 buildPythonPackage rec {
   pname = "cirq-core";
-  version = "1.3.0";
+  version = "1.4.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.9";
@@ -40,7 +41,7 @@ buildPythonPackage rec {
     owner = "quantumlib";
     repo = "cirq";
     rev = "refs/tags/v${version}";
-    hash = "sha256-JAJJciFg3BuRha1wTKixtKWcYy3NA2mNpniPyPHTTe8=";
+    hash = "sha256-KHwVq0qVtc8E9i2lugILYNwk9awq952w0x4DM+HG7Pg=";
   };
 
   sourceRoot = "${src.name}/${pname}";
@@ -52,6 +53,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs =
     [
+      attrs
       duet
       matplotlib
       networkx

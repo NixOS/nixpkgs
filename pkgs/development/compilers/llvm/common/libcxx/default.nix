@@ -13,15 +13,11 @@
 , python3
 , fixDarwinDylibNames
 , version
-, cxxabi ? null
-, libcxxrt
+, freebsd
+, cxxabi ? if stdenv.hostPlatform.isFreeBSD then freebsd.libcxxrt else null
 , libunwind
 , enableShared ? !stdenv.hostPlatform.isStatic
 }:
-
-# note: our setup using libcxxabi instead of libcxxrt on FreeBSD diverges from
-# normal FreeBSD. This may cause issues with binary patching down the line.
-# If this becomes an issue, try adding as symlink libcxxrt.so -> libc++abi.so
 
 # external cxxabi is not supported on Darwin as the build will not link libcxx
 # properly and not re-export the cxxabi symbols into libcxx
@@ -93,6 +89,8 @@ let
     "-DLIBCXX_ENABLE_EXCEPTIONS=OFF"
   ] ++ lib.optionals (!enableShared) [
     "-DLIBCXX_ENABLE_SHARED=OFF"
+  ] ++ lib.optionals (cxxabi != null && cxxabi.libName == "cxxrt") [
+    "-DLIBCXX_ENABLE_NEW_DELETE_DEFINITIONS=ON"
   ];
 
   cmakeFlags = [

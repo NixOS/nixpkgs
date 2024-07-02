@@ -57,6 +57,11 @@ buildPythonPackage rec {
     pyyaml
   ];
 
+  disabledTests = [
+    # https://github.com/encode/django-rest-framework/issues/9422
+    "test_urlpatterns"
+  ];
+
   pythonImportsCheck = [ "rest_framework" ];
 
   meta = with lib; {

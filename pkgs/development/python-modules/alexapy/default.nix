@@ -12,7 +12,6 @@
   poetry-core,
   pyotp,
   pythonOlder,
-  pythonRelaxDepsHook,
   requests,
   simplejson,
   yarl,
@@ -36,7 +35,6 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     poetry-core
-    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [

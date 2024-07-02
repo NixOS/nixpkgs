@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "versioningit";
-  version = "3.1.0";
+  version = "3.1.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-eqxxPDGlPrNnprvC6LPejMK4bRDUXFEBr9ZRRGyxD9c=";
+    hash = "sha256-sLpYblrwi4fb4zVAgpEKHQUCw2IC1JbhrmDvO0HuKcE=";
   };
 
   postPatch = ''

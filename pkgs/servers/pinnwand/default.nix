@@ -27,7 +27,6 @@ with python3.pkgs; buildPythonApplication rec {
 
   nativeBuildInputs = [
     pdm-pep517
-    pythonRelaxDepsHook
   ];
 
   pythonRelaxDeps = [

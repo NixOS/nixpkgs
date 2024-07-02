@@ -94,7 +94,7 @@ stdenv.mkDerivation (finalAttrs: {
     # to the swrast dri driver in Mesa.
     # Can also be given at runtime to its `Xvnc` as:
     #   -dridir /nix/store/...-mesa-20.1.10-drivers/lib/dri/
-    "-DXORG_DRI_DRIVER_PATH=${mesa.drivers}/lib/dri"
+    "-DXORG_DRI_DRIVER_PATH=${mesa.driverLink}/lib/dri"
     # The build system doesn't find these files automatically.
     "-DTJPEG_JAR=${libjpeg_turbo.out}/share/java/turbojpeg.jar"
     "-DTJPEG_JNILIBRARY=${libjpeg_turbo.out}/lib/libturbojpeg.so"

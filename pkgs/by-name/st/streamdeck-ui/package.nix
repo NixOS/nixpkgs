@@ -40,7 +40,6 @@ python3Packages.buildPythonApplication rec {
 
   nativeBuildInputs = [
     python3Packages.poetry-core
-    python3Packages.pythonRelaxDepsHook
     copyDesktopItems
     qt6.wrapQtAppsHook
     wrapGAppsHook3

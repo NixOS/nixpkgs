@@ -12,15 +12,15 @@
 
 buildPythonPackage rec {
   pname = "cx-freeze";
-  version = "6.15.16";
+  version = "7.1.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
-    pname = "cx_Freeze";
+    pname = "cx_freeze";
     inherit version;
-    hash = "sha256-xjmRiG/ypTGfjw0HwDSaa74aZbXzIPi5JDiI5jyaSiI=";
+    hash = "sha256-M1wwutDj5lNlXyMJkzCEWL7cmXuvW3qZXoZB3rousoc=";
   };
 
   nativeBuildInputs = [

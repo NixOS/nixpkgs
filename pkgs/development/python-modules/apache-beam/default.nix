@@ -33,7 +33,6 @@
   pytestCheckHook,
   python,
   python-dateutil,
-  pythonRelaxDepsHook,
   pytz,
   pyyaml,
   regex,
@@ -50,14 +49,14 @@
 
 buildPythonPackage rec {
   pname = "apache-beam";
-  version = "2.54.0";
+  version = "2.56.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "apache";
     repo = "beam";
     rev = "refs/tags/v${version}";
-    hash = "sha256-DcqYBPAS+yUqTJLUem8+2OqRUzb6DoBOeRkMjmvuvws=";
+    hash = "sha256-SD+93duc3vTIlS/LPOuzXeiUSpwX+GNrqW3GTJMVgKY=";
   };
 
   patches = [
@@ -96,7 +95,6 @@ buildPythonPackage rec {
     cython
     grpcio-tools
     mypy-protobuf
-    pythonRelaxDepsHook
     setuptools
   ];
 

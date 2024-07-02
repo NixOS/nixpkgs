@@ -13,7 +13,7 @@
 
 let
   pname = "bitsandbytes";
-  version = "0.42.0";
+  version = "0.43.1";
 
   inherit (torch) cudaCapabilities cudaPackages cudaSupport;
   inherit (cudaPackages) backendStdenv cudaVersion;
@@ -54,7 +54,7 @@ buildPythonPackage {
     owner = "TimDettmers";
     repo = "bitsandbytes";
     rev = "refs/tags/${version}";
-    hash = "sha256-PZxsFJ6WpfeQqRQrRRBZfZfNY6/TfJFLBeknX24OXcU=";
+    hash = "sha256-GFbFKPdV96DXPA+PZO4h0zdBclN670fb0PGv4QPHWHU=";
   };
 
   postPatch =

@@ -26,7 +26,6 @@ python3.pkgs.buildPythonApplication rec {
 
   build-system = with python3.pkgs; [ hatchling ];
 
-  nativeBuildInputs = with python3.pkgs; [ pythonRelaxDepsHook ];
 
   propagatedBuildInputs = with python3.pkgs; [
     click

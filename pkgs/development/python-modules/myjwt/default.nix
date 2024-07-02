@@ -13,7 +13,6 @@
   pytest-mock,
   pytestCheckHook,
   pythonOlder,
-  pythonRelaxDepsHook,
   questionary,
   requests,
   requests-mock,
@@ -46,7 +45,6 @@ buildPythonPackage rec {
 
   build-system = [
     poetry-core
-    pythonRelaxDepsHook
   ];
 
   dependencies = [

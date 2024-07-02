@@ -92,8 +92,5 @@ rustPlatform.buildRustPackage rec {
     maintainers = with maintainers; [ akru andresilva FlorianFranzen RaghavSood ];
     # See Iso::from_arch in src/isa/mod.rs in cranelift-codegen-meta.
     platforms = intersectLists platforms.unix (platforms.aarch64 ++ platforms.s390x ++ platforms.riscv64 ++ platforms.x86);
-    # See comment about wasm32-unknown-unknown in rustc.nix.
-    broken = lib.any (a: lib.hasAttr a stdenv.hostPlatform.gcc) [ "cpu" "float-abi" "fpu" ] ||
-      !stdenv.hostPlatform.gcc.thumb or true;
   };
 }

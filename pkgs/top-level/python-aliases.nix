@@ -421,6 +421,7 @@ mapAliases ({
   pytest_6 = pytest; # added 2022-02-10
   pytestcov = pytest-cov; # added 2021-01-04
   pytest-ordering = throw "pytest-ordering has been removed, since it is no longer maintained and broken"; # added 2023-06-22
+  pytest-openfiles = throw "pytest-openfiles has been removed, since it is unmaintained and archived"; # added 2024-06-19
   pytest-pep8 = pytestpep8; # added 2021-01-04
   pytest-pep257 = throw "pytest-pep257 was removed, as the pep257 package was migrated into pycodestyle"; # added 2022-04-12
   pytest-pythonpath = throw "pytest-pythonpath is obsolete as of pytest 7.0.0 and has been removed"; # added 2022-03-09

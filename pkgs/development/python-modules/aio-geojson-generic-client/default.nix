@@ -9,7 +9,6 @@
   pytest-asyncio,
   pytestCheckHook,
   pythonOlder,
-  pythonRelaxDepsHook,
   pytz,
   setuptools,
 }:
@@ -31,7 +30,6 @@ buildPythonPackage rec {
   __darwinAllowLocalNetworking = true;
 
   nativeBuildInputs = [
-    pythonRelaxDepsHook
     setuptools
   ];
 

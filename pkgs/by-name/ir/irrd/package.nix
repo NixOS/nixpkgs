@@ -76,7 +76,6 @@ py.pkgs.buildPythonPackage rec {
 
   nativeBuildInputs = with python3.pkgs; [
     poetry-core
-    pythonRelaxDepsHook
   ];
 
   nativeCheckInputs = [

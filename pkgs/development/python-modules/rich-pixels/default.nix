@@ -2,13 +2,11 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
   hatchling,
   pillow,
+  rich,
   pytestCheckHook,
   pythonOlder,
-  pythonRelaxDepsHook,
-  rich,
   syrupy,
 }:
 

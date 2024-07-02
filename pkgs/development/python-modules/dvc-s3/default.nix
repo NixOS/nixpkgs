@@ -6,7 +6,6 @@
   dvc-objects,
   fetchPypi,
   flatten-dict,
-  pythonRelaxDepsHook,
   s3fs,
   setuptools-scm,
 }:
@@ -31,13 +30,7 @@ buildPythonPackage rec {
       --replace-fail "aiobotocore[boto3]" "aiobotocore"
   '';
 
-  build-system = [
-    setuptools-scm
-  ];
-
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
-  ];
+  build-system = [ setuptools-scm  ];
 
   dependencies = [
     aiobotocore

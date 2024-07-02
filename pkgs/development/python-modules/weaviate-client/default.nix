@@ -9,7 +9,6 @@
   httpx,
   pydantic,
   pythonOlder,
-  pythonRelaxDepsHook,
   setuptools-scm,
   tqdm,
   validators,
@@ -36,7 +35,6 @@ buildPythonPackage rec {
 
   build-system = [ setuptools-scm ];
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   dependencies = [
     authlib

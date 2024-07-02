@@ -109,7 +109,8 @@ stdenv.mkDerivation rec {
     "-DCLIENT=${if buildClient then "ON" else "OFF"}"
   ];
 
-  doCheck = true;
+  # Tests loop forever on Darwin for some reason
+  doCheck = !stdenv.isDarwin;
   checkTarget = "run_tests";
 
   postInstall = lib.optionalString (!buildClient) ''

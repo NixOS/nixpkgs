@@ -33,7 +33,6 @@ python.pkgs.buildPythonApplication rec {
     setuptools
     argcomplete
     installShellFiles
-    pythonRelaxDepsHook
   ];
 
   pythonRelaxDeps = true;

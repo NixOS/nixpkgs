@@ -8,11 +8,11 @@
   setuptools,
   setuptools-scm,
 
-  # propagates
-  typing-extensions,
+  # dependencies
   appdirs,
   flexcache,
   flexparser,
+  typing-extensions,
 
   # tests
   pytestCheckHook,
@@ -37,16 +37,17 @@ buildPythonPackage rec {
     hash = "sha256-zMcLC3SSl/W7+xX4ah3ZV7fN/LIGJzatqH4MNK8/fec=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     appdirs
     flexcache
     flexparser
     typing-extensions
+
     # Both uncertainties and numpy are not necessarily needed for every
     # function of pint, but needed for the pint-convert executable which we
     # necessarily distribute with this package as it is.

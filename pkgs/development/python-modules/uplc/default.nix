@@ -2,7 +2,6 @@
   lib,
   fetchFromGitHub,
   buildPythonPackage,
-  pythonRelaxDepsHook,
   # Python deps
   frozenlist2,
   python-secp256k1-cardano,
@@ -27,7 +26,6 @@ buildPythonPackage rec {
     hash = "sha256-djJMNXijMVzMVzw8NZSe3YFRGyAPqdvr0P374Za5XkU=";
   };
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   propagatedBuildInputs = [
     setuptools
