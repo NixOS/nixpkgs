@@ -2,26 +2,24 @@
 
 pythonPackages.buildPythonApplication rec {
   pname = "nagstamon";
-  version = "3.2.1";
+  version = "3.14.0";
 
   src = fetchurl {
-    url = "https://nagstamon.ifw-dresden.de/files/stable/Nagstamon-${version}.tar.gz";
-    sha256 = "1048x55g3nlyyggn6a36xmj24w4hv08llg58f4hzc0fwg074cd58";
+    url = "https://github.com/HenriWahl/Nagstamon/archive/refs/tags/v${version}.tar.gz";
+    sha256 = "sha256-9RxQ/rfvoyjSUsY4tmAkBdVQqZYi3X6PBzQYFIeenzA=";
   };
 
   # Test assumes darwin
   doCheck = false;
 
-  propagatedBuildInputs = with pythonPackages; [ configparser pyqt5 psutil requests
-     beautifulsoup4 keyring requests-kerberos kerberos lxml ];
+  build-system = with pythonPackages; [ setuptools ];
+  dependencies = with pythonPackages; [ configparser pyqt6 psutil requests
+     beautifulsoup4 keyring requests-kerberos lxml dbus-python python-dateutil pysocks ];
 
   meta = with lib; {
     description = "Status monitor for the desktop";
-    homepage = "https://nagstamon.ifw-dresden.de/";
+    homepage = "https://nagstamon.de/";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ pSub ];
-    # fails to install with:
-    # TypeError: cannot unpack non-iterable bool object
-    broken = true;
+    maintainers = with maintainers; [ pSub liberodark ];
   };
 }
