@@ -10916,68 +10916,6 @@ with self; {
     };
   };
 
-  Gnome2 = buildPerlPackage {
-    pname = "Gnome2";
-    version = "1.048";
-    src = fetchurl {
-      url = "mirror://cpan/authors/id/X/XA/XAOC/Gnome2-1.048.tar.gz";
-      hash = "sha256-ZPzDgnFKvY1XaSrDdjKMOiDGy8i81zKwB9FMv5ooLd0=";
-    };
-    buildInputs = [ ExtUtilsDepends ExtUtilsPkgConfig Glib Gnome2Canvas Gnome2VFS Gtk2 ];
-    propagatedBuildInputs = [ pkgs.gnome2.libgnomeui ];
-    meta = {
-      description = "(DEPRECATED) Perl interface to the 2.x series of the GNOME libraries";
-      homepage = "https://gtk2-perl.sourceforge.net";
-      license = with lib.licenses; [ lgpl21Plus ];
-      broken = stdenv.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/staging-next/perl534Packages.Gnome2Canvas.x86_64-darwin
-    };
-  };
-
-  Gnome2Canvas = buildPerlPackage {
-    pname = "Gnome2-Canvas";
-    version = "1.006";
-    src = fetchurl {
-      url = "mirror://cpan/authors/id/X/XA/XAOC/Gnome2-Canvas-1.006.tar.gz";
-      hash = "sha256-aQZnxziSHeLWUWtOtjlVOlceSoMQ2AMfFYZYU23lq0I=";
-    };
-    buildInputs = [ pkgs.gnome2.libgnomecanvas ];
-    propagatedBuildInputs = [ Gtk2 ];
-    doCheck = !stdenv.isDarwin;
-    meta = {
-      description = "(DEPRECATED) A structured graphics canvas";
-      license = with lib.licenses; [ lgpl2Plus ];
-    };
-  };
-
-  Gnome2VFS = buildPerlPackage {
-    pname = "Gnome2-VFS";
-    version = "1.084";
-    src = fetchurl {
-      url = "mirror://cpan/authors/id/X/XA/XAOC/Gnome2-VFS-1.084.tar.gz";
-      hash = "sha256-PI2Mlca2XCN9ueiJx57bK7gIvzfAhKvfu9mFn+93h8w=";
-    };
-    propagatedBuildInputs = [ pkgs.gnome2.gnome_vfs Glib ];
-    meta = {
-      description = "(DEPRECATED) Perl interface to the 2.x series of the GNOME VFS";
-      license = with lib.licenses; [ lgpl21Plus ];
-    };
-  };
-
-  Gnome2Wnck = buildPerlPackage {
-    pname = "Gnome2-Wnck";
-    version = "0.18";
-    src = fetchurl {
-      url = "mirror://cpan/authors/id/X/XA/XAOC/Gnome2-Wnck-0.18.tar.gz";
-      hash = "sha256-RL7OyLLX9B8ngKc7CSJp/bec1JJluuDI/zkQN8RWSjU=";
-    };
-    buildInputs = [ pkgs.libwnck2 pkgs.glib pkgs.gtk2 ];
-    propagatedBuildInputs = [ Gtk2 ];
-    meta = {
-      description = "(DEPRECATED) Perl interface to the Window Navigator";
-      license = with lib.licenses; [ lgpl21Plus ];
-    };
-  };
-
   GnuPG = buildPerlPackage {
     pname = "GnuPG";
     version = "0.19";

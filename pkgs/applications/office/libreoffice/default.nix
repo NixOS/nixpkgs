@@ -87,7 +87,7 @@
 , glm
 , gst_all_1
 , gdb
-, gnome
+, adwaita-icon-theme
 , glib
 , ncurses
 , libepoxy
@@ -274,6 +274,9 @@ in stdenv.mkDerivation (finalAttrs: {
     substituteInPlace configure.ac --replace-fail \
       'GPGMEPP_CFLAGS=-I/usr/include/gpgme++' \
       'GPGMEPP_CFLAGS=-I${gpgme.dev}/include/gpgme++'
+
+    # Fix for Python 3.12
+    substituteInPlace configure.ac --replace-fail distutils.sysconfig sysconfig
   '';
 
   nativeBuildInputs = [
@@ -317,7 +320,7 @@ in stdenv.mkDerivation (finalAttrs: {
     gettext
     glib
     glm
-    gnome.adwaita-icon-theme
+    adwaita-icon-theme
     gperf
     gpgme
     graphite2

@@ -23,7 +23,7 @@
 
 buildPythonPackage rec {
   pname = "keras";
-  version = "3.4.0";
+  version = "3.4.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -32,7 +32,7 @@ buildPythonPackage rec {
     owner = "keras-team";
     repo = "keras";
     rev = "refs/tags/v${version}";
-    hash = "sha256-P/TRczWi/prv5D0/I6yLChIDfc6QdGcRSaF4Dd1Iowk=";
+    hash = "sha256-Pp84wTvcrWnxuksYUrzs9amapwBC8yU1PA0PE5dRl6k=";
   };
 
   build-system = [

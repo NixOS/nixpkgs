@@ -1,4 +1,6 @@
-{ stdenv, lib, callPackage, fetchurl, fetchpatch, nixosTests, buildMozillaMach }:
+{ stdenv, lib, callPackage, fetchurl, fetchpatch, nixosTests, buildMozillaMach
+, python311
+}:
 
 {
   firefox = buildMozillaMach rec {
@@ -92,7 +94,7 @@
     };
   };
 
-  firefox-esr-115 = buildMozillaMach rec {
+  firefox-esr-115 = (buildMozillaMach rec {
     pname = "firefox-esr-115";
     version = "115.12.0esr";
     applicationName = "Mozilla Firefox ESR";
@@ -119,5 +121,6 @@
       versionPrefix = "115";
       versionSuffix = "esr";
     };
-  };
+  })
+   .override { python3 = python311; };
 }

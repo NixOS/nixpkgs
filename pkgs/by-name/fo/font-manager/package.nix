@@ -14,7 +14,7 @@
 , vala
 , gsettings-desktop-schemas
 , gtk3
-, gnome
+, adwaita-icon-theme
 , desktop-file-utils
 , nix-update-script
 , wrapGAppsHook3
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
     sqlite
     gsettings-desktop-schemas # for font settings
     gtk3
-    gnome.adwaita-icon-theme
+    adwaita-icon-theme
   ] ++ lib.optionals withWebkit [
     glib-networking # for SSL so that Google Fonts can load
     libsoup

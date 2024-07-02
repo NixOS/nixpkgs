@@ -723,7 +723,7 @@ let
                 disable_interactive = true;
               }; }
               { name = "kwallet"; enable = cfg.kwallet.enable; control = "optional"; modulePath = "${cfg.kwallet.package}/lib/security/pam_kwallet5.so"; }
-              { name = "gnome_keyring"; enable = cfg.enableGnomeKeyring; control = "optional"; modulePath = "${pkgs.gnome.gnome-keyring}/lib/security/pam_gnome_keyring.so"; }
+              { name = "gnome_keyring"; enable = cfg.enableGnomeKeyring; control = "optional"; modulePath = "${pkgs.gnome-keyring}/lib/security/pam_gnome_keyring.so"; }
               { name = "intune"; enable = config.services.intune.enable; control = "optional"; modulePath = "${pkgs.intune-portal}/lib/security/pam_intune.so"; }
               { name = "gnupg"; enable = cfg.gnupg.enable; control = "optional"; modulePath = "${pkgs.pam_gnupg}/lib/security/pam_gnupg.so"; settings = {
                 store-only = cfg.gnupg.storeOnly;
@@ -789,7 +789,7 @@ let
           { name = "krb5"; enable = config.security.pam.krb5.enable; control = "sufficient"; modulePath = "${pam_krb5}/lib/security/pam_krb5.so"; settings = {
             use_first_pass = true;
           }; }
-          { name = "gnome_keyring"; enable = cfg.enableGnomeKeyring; control = "optional"; modulePath = "${pkgs.gnome.gnome-keyring}/lib/security/pam_gnome_keyring.so"; settings = {
+          { name = "gnome_keyring"; enable = cfg.enableGnomeKeyring; control = "optional"; modulePath = "${pkgs.gnome-keyring}/lib/security/pam_gnome_keyring.so"; settings = {
             use_authtok = true;
           }; }
         ];
@@ -858,7 +858,7 @@ let
             debug = true;
           }; }
           { name = "kwallet"; enable = cfg.kwallet.enable; control = "optional"; modulePath = "${cfg.kwallet.package}/lib/security/pam_kwallet5.so"; }
-          { name = "gnome_keyring"; enable = cfg.enableGnomeKeyring; control = "optional"; modulePath = "${pkgs.gnome.gnome-keyring}/lib/security/pam_gnome_keyring.so"; settings = {
+          { name = "gnome_keyring"; enable = cfg.enableGnomeKeyring; control = "optional"; modulePath = "${pkgs.gnome-keyring}/lib/security/pam_gnome_keyring.so"; settings = {
             auto_start = true;
           }; }
           { name = "gnupg"; enable = cfg.gnupg.enable; control = "optional"; modulePath = "${pkgs.pam_gnupg}/lib/security/pam_gnupg.so"; settings = {

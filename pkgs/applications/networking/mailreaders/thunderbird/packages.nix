@@ -1,4 +1,4 @@
-{ stdenv, lib, buildMozillaMach, callPackage, fetchurl, fetchpatch, nixosTests, icu, fetchpatch2, config }:
+{ stdenv, lib, buildMozillaMach, callPackage, fetchurl, fetchpatch, nixosTests, icu73, fetchpatch2, config }:
 
 rec {
   thunderbird = thunderbird-115;
@@ -40,7 +40,7 @@ rec {
 
     pgoSupport = false; # console.warn: feeds: "downloadFeed: network connection unavailable"
 
-    icu = icu.overrideAttrs (attrs: {
+    icu73 = icu73.overrideAttrs (attrs: {
       # standardize vtzone output
       # Work around ICU-22132 https://unicode-org.atlassian.net/browse/ICU-22132
       # https://bugzilla.mozilla.org/show_bug.cgi?id=1790071

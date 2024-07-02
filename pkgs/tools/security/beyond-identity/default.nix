@@ -1,12 +1,12 @@
 { lib, stdenv, fetchurl, dpkg, buildFHSEnv
 , glibc, glib, openssl, tpm2-tss
-, gtk3, gnome, polkit, polkit_gnome
+, gtk3, gnome-keyring, polkit, polkit_gnome
 }:
 
 let
   pname = "beyond-identity";
   version = "2.97.0-0";
-  libPath = lib.makeLibraryPath ([ glib glibc openssl tpm2-tss gtk3 gnome.gnome-keyring polkit polkit_gnome ]);
+  libPath = lib.makeLibraryPath ([ glib glibc openssl tpm2-tss gtk3 gnome-keyring polkit polkit_gnome ]);
   meta = with lib; {
     description = "Passwordless MFA identities for workforces, customers, and developers";
     homepage = "https://www.beyondidentity.com";
@@ -73,7 +73,7 @@ in buildFHSEnv {
    targetPkgs = pkgs: [
      beyond-identity
      glib glibc openssl tpm2-tss
-     gtk3 gnome.gnome-keyring
+     gtk3 gnome-keyring
      polkit polkit_gnome
    ];
 

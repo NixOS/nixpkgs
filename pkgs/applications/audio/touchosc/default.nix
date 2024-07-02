@@ -18,7 +18,7 @@
 , libXrender
 , libXxf86vm
 , libglvnd
-, gnome
+, zenity
 }:
 
 let
@@ -39,7 +39,7 @@ let
   ];
 
   runBinDeps = [
-    gnome.zenity
+    zenity
   ];
 in
 

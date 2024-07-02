@@ -13,6 +13,7 @@
 , glib
 , gtk4
 , gnome
+, adwaita-icon-theme
 , gsettings-desktop-schemas
 , desktop-file-utils
 , xvfb-run
@@ -70,7 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeCheckInputs = [
-    gnome.adwaita-icon-theme
+    adwaita-icon-theme
   ] ++ lib.optionals (!stdenv.isDarwin) [
     xvfb-run
   ];
