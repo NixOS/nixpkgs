@@ -73,7 +73,7 @@ makeScopeWithSplicing' {
     lib.attrsets.removeAttrs set [ "extend" "override" "overrideScope" "overrideScope'" "overrideDerivation" ]
     // { __attrsFailEvaluation = true; };
 
-in (noExtraAttrs (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdParty // kdeGear // mauiPackages // qt5 // {
+in (noExtraAttrs (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdParty // kdeGear // mauiPackages // qt5 // rec {
 
   inherit kdeFrameworks plasmaMobileGear plasma5 kdeGear mauiPackages qt5;
 
@@ -173,6 +173,10 @@ in (noExtraAttrs (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdP
   libqofono = callPackage ../development/libraries/libqofono { };
 
   libqtav = callPackage ../development/libraries/libqtav { };
+
+  libqtpas = callPackage ../development/compilers/fpc/libqtpas.nix { };
+
+  libqt5pas = libqtpas;
 
   libquotient = callPackage ../development/libraries/libquotient { };
 
