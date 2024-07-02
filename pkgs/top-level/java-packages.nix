@@ -16,11 +16,7 @@ in {
 
   compiler = let
 
-    gnomeArgs = {
-      inherit (gnome2) GConf gnome_vfs;
-    };
-
-    bootstrapArgs = gnomeArgs // {
+    bootstrapArgs = {
       openjfx = openjfx11; /* need this despite next line :-( */
       enableJavaFX = false;
       headless = true;
@@ -62,7 +58,7 @@ in {
       in openjdk // { headless = openjdk; };
 
     mkOpenjdkLinuxOnly = path-linux: args: let
-      openjdk = callPackage path-linux  (gnomeArgs // args);
+      openjdk = callPackage path-linux (args);
     in assert stdenv.isLinux; openjdk // {
       headless = openjdk.override { headless = true; };
     };
