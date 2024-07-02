@@ -1,0 +1,61 @@
+diff --git a/configure b/configure
+index 36fcf67..7d28dc5 100755
+--- a/configure
++++ b/configure
+@@ -138,24 +138,28 @@ def compilerversion(c):
+   except:
+     pass
+ 
+-firstcompiler = None
+-
+-with open('compilers/default') as f:
+-  for c in f.readlines():
+-    c = c.strip()
+-    cv = compilerversion(c)
+-    if cv == None:
+-      log('skipping default compiler %s' % c)
+-      continue
+-    log('using default compiler %s' % c)
+-    firstcompiler = c
+-    break
+-
+-if firstcompiler is None:
+-  raise ValueError('did not find a working compiler')
++if c := os.getenv("CC"):
++  firstcompiler = c
++  log('using default compiler %s' % c)
++else:
++  firstcompiler = None
++
++  with open('compilers/default') as f:
++    for c in f.readlines():
++      c = c.strip()
++      cv = compilerversion(c)
++      if cv == None:
++        log('skipping default compiler %s' % c)
++        continue
++      log('using default compiler %s' % c)
++      firstcompiler = c
++      break
++
++  if firstcompiler is None:
++    raise ValueError('did not find a working compiler')
+ 
+ with open('build/%s/scripts/cdcompile' % host,'w') as f:
+   f.write('#!/bin/sh\n')
+   f.write('\n')
+   f.write('cd "$1"; shift\n')
+   f.write('exec %s "$@"\n' % firstcompiler)
+diff --git a/scripts-build/staticlib b/scripts-build/staticlib
+index 7b2fc92..a6bbe41 100755
+--- a/scripts-build/staticlib
++++ b/scripts-build/staticlib
+@@ -4,6 +4,6 @@ lib="$1"
+ shift
+ 
+ rm -f package/lib/"$lib".a
+-ar cr package/lib/"$lib".a "$@"
+-ranlib package/lib/"$lib".a || :
++${AR:-ar} cr package/lib/"$lib".a "$@"
++${RANLIB:-ranlib} package/lib/"$lib".a || :
+ chmod 644 package/lib/"$lib".a
