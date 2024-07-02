@@ -1,52 +1,66 @@
 { lib
+, babel
+, better-exceptions
 , buildPythonApplication
-, fetchPypi
 , copyDesktopItems
-, gobject-introspection
-, poetry-core
-, wrapGAppsHook3
-, gtksourceview4
-, pango
+, defusedxml
+, dulwich
+, fetchPypi
 , gaphas
 , generic
-, jedi
-, pycairo
-, pygobject3
-, tinycss2
+, gobject-introspection
 , gtk3
+, gtksourceview5
+, jedi
+, libadwaita
 , librsvg
 , makeDesktopItem
+, pango
+, pillow
+, poetry-core
+, pycairo
+, pydot
+, pygobject3
 , python
+, tinycss2
+, wrapGAppsHook4
 }:
 
 buildPythonApplication rec {
   pname = "gaphor";
-  version = "2.8.2";
+  version = "2.25.1";
 
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-+qqsSLjdY2I19fxdfkOEQ9DhTTHccUDll4O5yqtLiz0=";
+    sha256 = "sha256-9PNgU1/9RL6QXba0gn4zHCAtSV3iY0HOY1Rf6bkyzxY=";
   };
 
   nativeBuildInputs = [
     copyDesktopItems
     gobject-introspection
     poetry-core
-    wrapGAppsHook3
+    wrapGAppsHook4
   ];
 
   buildInputs = [
-    gtksourceview4
+    gtksourceview5
     pango
   ];
 
   propagatedBuildInputs = [
+    babel
+    better-exceptions
+    defusedxml
+    dulwich
     gaphas
     generic
     jedi
+    libadwaita
+    pillow
     pycairo
+    pydot
     pygobject3
     tinycss2
   ];
