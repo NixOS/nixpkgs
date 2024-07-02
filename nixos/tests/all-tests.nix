@@ -240,6 +240,7 @@ in {
   custom-ca = handleTest ./custom-ca.nix {};
   croc = handleTest ./croc.nix {};
   darling = handleTest ./darling.nix {};
+  darling-dmg = runTest ./darling-dmg.nix;
   dae = handleTest ./dae.nix {};
   davis = handleTest ./davis.nix {};
   db-rest = handleTest ./db-rest.nix {};
