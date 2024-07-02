@@ -24,7 +24,7 @@ pnpmConfigHook() {
 
     echo "Installing dependencies"
 
-    pnpm install --offline --frozen-lockfile --ignore-script
+    pnpm install --offline --frozen-lockfile --ignore-script $extraPnpmInstallFlags
 
     echo "Patching scripts"
 
