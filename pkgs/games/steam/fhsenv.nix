@@ -83,7 +83,7 @@ in buildFHSEnv rec {
   targetPkgs = pkgs: with pkgs; [
     steam
     # License agreement
-    gnome.zenity
+    zenity
   ] ++ commonTargetPkgs pkgs;
 
   multiPkgs = pkgs: with pkgs; [

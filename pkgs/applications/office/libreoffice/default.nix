@@ -87,7 +87,7 @@
 , glm
 , gst_all_1
 , gdb
-, gnome
+, adwaita-icon-theme
 , glib
 , ncurses
 , libepoxy
@@ -320,7 +320,7 @@ in stdenv.mkDerivation (finalAttrs: {
     gettext
     glib
     glm
-    gnome.adwaita-icon-theme
+    adwaita-icon-theme
     gperf
     gpgme
     graphite2
