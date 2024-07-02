@@ -9453,8 +9453,6 @@ with pkgs;
 
   keyfuzz = callPackage ../tools/inputmethods/keyfuzz { };
 
-  keymapp = callPackage ../applications/misc/keymapp { };
-
   keyscope = callPackage ../tools/security/keyscope {
     inherit (darwin.apple_sdk.frameworks) DiskArbitration Foundation IOKit Security;
   };
@@ -25247,39 +25245,26 @@ with pkgs;
 
   apacheHttpdPackagesFor = apacheHttpd: self: let callPackage = newScope self; in {
     inherit apacheHttpd;
-
     mod_auth_mellon = callPackage ../servers/http/apache-modules/mod_auth_mellon { };
-
-    # Redwax collection
     mod_ca = callPackage ../servers/http/apache-modules/mod_ca { };
     mod_crl = callPackage ../servers/http/apache-modules/mod_crl { };
-    mod_csr = callPackage ../servers/http/apache-modules/mod_csr { };
     mod_cspnonce = callPackage ../servers/http/apache-modules/mod_cspnonce { };
-    mod_ocsp = callPackage ../servers/http/apache-modules/mod_ocsp{ };
-    mod_scep = callPackage ../servers/http/apache-modules/mod_scep { };
-    mod_pkcs12 = callPackage ../servers/http/apache-modules/mod_pkcs12 { };
-    mod_spkac= callPackage ../servers/http/apache-modules/mod_spkac { };
-    mod_timestamp = callPackage ../servers/http/apache-modules/mod_timestamp { };
-
+    mod_csr = callPackage ../servers/http/apache-modules/mod_csr { };
     mod_dnssd = callPackage ../servers/http/apache-modules/mod_dnssd { };
-
-
-    mod_perl = callPackage ../servers/http/apache-modules/mod_perl { };
-
     mod_fastcgi = callPackage ../servers/http/apache-modules/mod_fastcgi { };
-
-    mod_python = callPackage ../servers/http/apache-modules/mod_python { };
-
-    mod_tile = callPackage ../servers/http/apache-modules/mod_tile { };
-
-    mod_wsgi3 = callPackage ../servers/http/apache-modules/mod_wsgi { };
-
     mod_itk = callPackage ../servers/http/apache-modules/mod_itk { };
-
+    mod_jk = callPackage ../servers/http/apache-modules/mod_jk { };
     mod_mbtiles = callPackage ../servers/http/apache-modules/mod_mbtiles { };
-
+    mod_ocsp = callPackage ../servers/http/apache-modules/mod_ocsp { };
+    mod_perl = callPackage ../servers/http/apache-modules/mod_perl { };
+    mod_pkcs12 = callPackage ../servers/http/apache-modules/mod_pkcs12 { };
+    mod_python = callPackage ../servers/http/apache-modules/mod_python { };
+    mod_scep = callPackage ../servers/http/apache-modules/mod_scep { };
+    mod_spkac = callPackage ../servers/http/apache-modules/mod_spkac { };
+    mod_tile = callPackage ../servers/http/apache-modules/mod_tile { };
+    mod_timestamp = callPackage ../servers/http/apache-modules/mod_timestamp { };
+    mod_wsgi3 = callPackage ../servers/http/apache-modules/mod_wsgi { };
     php = pkgs.php.override { inherit apacheHttpd; };
-
     subversion = pkgs.subversion.override { httpServer = true; inherit apacheHttpd; };
   } // lib.optionalAttrs config.allowAliases {
     mod_evasive = throw "mod_evasive is not supported on Apache httpd 2.4";
@@ -25961,8 +25946,6 @@ with pkgs;
   };
 
   pulseeffects-legacy = callPackage ../applications/audio/pulseeffects-legacy { };
-
-  tomcat_connectors = callPackage ../servers/http/apache-modules/tomcat-connectors { };
 
   tomcat-native = callPackage ../servers/http/tomcat/tomcat-native.nix { };
 
@@ -27656,6 +27639,8 @@ with pkgs;
   schedtool = callPackage ../os-specific/linux/schedtool { };
 
   sddm-chili-theme = libsForQt5.callPackage ../data/themes/chili-sddm { };
+
+  sddm-sugar-dark = libsForQt5.callPackage ../data/themes/sddm-sugar-dark { };
 
   sdparm = callPackage ../os-specific/linux/sdparm { };
 
@@ -29387,6 +29372,10 @@ with pkgs;
     (callPackage ../applications/editors/android-studio { });
   android-studio = androidStudioPackages.stable;
   android-studio-full = android-studio.full;
+
+  androidStudioForPlatformPackages = recurseIntoAttrs
+    (callPackage ../applications/editors/android-studio-for-platform { });
+  android-studio-for-platform = androidStudioForPlatformPackages.stable;
 
   antfs-cli = callPackage ../applications/misc/antfs-cli { };
 
