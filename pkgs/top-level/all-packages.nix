@@ -38875,6 +38875,10 @@ with pkgs;
 
   dcp9020cdw-cupswrapper = (callPackage ../misc/cups/drivers/brother/dcp9020cdw { }).cupswrapper;
 
+  dcpl2550dw-drv = (callPackage ../misc/cups/drivers/brother/dcpl2550dw { }).driver;
+
+  dcpl2550dw-cupswrapper = (callPackage ../misc/cups/drivers/brother/dcpl2550dw { }).cupswrapper;
+
   cups-brother-hl1110 = pkgsi686Linux.callPackage ../misc/cups/drivers/hl1110 { };
 
   cups-brother-hl1210w = pkgsi686Linux.callPackage ../misc/cups/drivers/hl1210w { };
