@@ -16,13 +16,13 @@
 
 buildGoModule rec {
   pname = "opensnitch";
-  version = "1.6.5.1";
+  version = "1.6.6";
 
   src = fetchFromGitHub {
     owner = "evilsocket";
     repo = "opensnitch";
     rev = "refs/tags/v${version}";
-    hash = "sha256-IVrAAHzLS7A7cYhRk+IUx8/5TGKeqC7M/7iXOpPe2ZA=";
+    hash = "sha256-pJPpkXRp7cby6Mvc7IzxH9u6MY4PcrRPkimTw3je6iI=";
   };
 
   postPatch = ''
