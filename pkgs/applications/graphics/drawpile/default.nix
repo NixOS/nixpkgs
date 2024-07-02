@@ -2,10 +2,14 @@
 , lib
 , mkDerivation
 , fetchFromGitHub
+, cargo
 , extra-cmake-modules
+, rustc
+, rustPlatform
 
 # common deps
 , karchive
+, qtwebsockets
 
 # client deps
 , qtbase
@@ -20,7 +24,6 @@
 , kdnssd
 , libvpx
 , miniupnpc
-, qtx11extras # kis
 
 # optional server deps
 , libmicrohttpd
@@ -33,10 +36,10 @@
 , buildServer ? true
 , buildServerGui ? true # if false builds a headless server
 , buildExtraTools ? false
-, enableKisTablet ? false # enable improved graphics tablet support
 }:
 
-with lib;
+assert lib.assertMsg (buildClient || buildServer || buildExtraTools)
+  "You must specify at least one of buildClient, buildServer, or buildExtraTools.";
 
 let
   clientDeps = [
@@ -57,54 +60,57 @@ let
     # optional:
     libmicrohttpd # HTTP admin api
     libsodium # ext-auth support
-  ] ++ optional withSystemd systemd;
-
-  kisDeps = [
-    qtx11extras
-  ];
-
-  boolToFlag = bool:
-    if bool then "ON" else "OFF";
+  ] ++ lib.optional withSystemd systemd;
 
 in mkDerivation rec {
   pname = "drawpile";
-  version = "2.1.20";
+  version = "2.2.1";
 
   src = fetchFromGitHub {
     owner = "drawpile";
     repo = "drawpile";
     rev = version;
-    sha256 = "sha256-HjGsaa2BYRNxaQP9e8Z7BkVlIKByC/ta92boGbYHRWQ=";
+    sha256 = "sha256-NS1aQlWpn3f+SW0oUjlYwHtOS9ZgbjFTrE9grjK5REM=";
   };
 
-  nativeBuildInputs = [ extra-cmake-modules ];
+  cargoDeps = rustPlatform.fetchCargoTarball {
+    inherit src;
+    hash = "sha256-V36yiwraXK7qlJd1r8EtEA4ULxlgvMEmpn/ka3m9GjA=";
+  };
+
+  nativeBuildInputs = [
+    cargo
+    extra-cmake-modules
+    rustc
+    rustPlatform.cargoSetupHook
+  ];
 
   buildInputs = [
     karchive
+    qtwebsockets
   ]
-  ++ optionals buildClient      clientDeps
-  ++ optionals buildServer      serverDeps
-  ++ optionals enableKisTablet  kisDeps;
+  ++ lib.optionals buildClient clientDeps
+  ++ lib.optionals buildServer serverDeps;
 
   cmakeFlags = [
-    "-Wno-dev"
-    "-DINITSYS=systemd"
-    "-DCLIENT=${boolToFlag buildClient}"
-    "-DSERVER=${boolToFlag buildServer}"
-    "-DSERVERGUI=${boolToFlag buildServerGui}"
-    "-DTOOLS=${boolToFlag buildExtraTools}"
-    "-DKIS_TABLET=${boolToFlag enableKisTablet}"
+    (lib.cmakeFeature "INITSYS" (lib.optionalString withSystemd "systemd"))
+    (lib.cmakeBool "CLIENT" buildClient)
+    (lib.cmakeBool "SERVER" buildServer)
+    (lib.cmakeBool "SERVERGUI" buildServerGui)
+    (lib.cmakeBool "TOOLS" buildExtraTools)
   ];
 
   meta = {
     description = "Collaborative drawing program that allows multiple users to sketch on the same canvas simultaneously";
-    mainProgram = "drawpile-srv";
     homepage = "https://drawpile.net/";
     downloadPage = "https://drawpile.net/download/";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ fgaz ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ fgaz ];
+    platforms = lib.platforms.unix;
     broken = stdenv.isDarwin;
+  } // lib.optionalAttrs buildServer {
+    mainProgram = "drawpile-srv";
+  } // lib.optionalAttrs buildClient {
+    mainProgram = "drawpile";
   };
 }
-
