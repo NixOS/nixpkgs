@@ -481,7 +481,7 @@ index 734f194..5b05077 100644
  		g_object_unref (settings);
  
 diff --git a/src/libedataserver/e-oauth2-service-yahoo.c b/src/libedataserver/e-oauth2-service-yahoo.c
-index c8bbd3a..e71e36a 100644
+index 3a9ce9c..f96b840 100644
 --- a/src/libedataserver/e-oauth2-service-yahoo.c
 +++ b/src/libedataserver/e-oauth2-service-yahoo.c
 @@ -67,7 +67,18 @@ eos_yahoo_read_settings (EOAuth2Service *service,
