@@ -82,6 +82,8 @@ impure-cmds // appleSourcePackages // chooseLibs // {
     extraBuildInputs = [];
   };
 
+  bartender = callPackage ../os-specific/darwin/bartender { };
+
   binutils-unwrapped = callPackage ../os-specific/darwin/binutils {
     inherit (pkgs) binutils-unwrapped;
     inherit (pkgs.llvmPackages) llvm clang-unwrapped;
@@ -143,6 +145,8 @@ impure-cmds // appleSourcePackages // chooseLibs // {
     name = "darwin-check-reexports-hook";
     propagatedBuildInputs = [ pkgs.darwin.print-reexports ];
   } ../os-specific/darwin/print-reexports/setup-hook.sh;
+
+  installBinaryPackage = callPackage ../os-specific/darwin/install-binary-package { };
 
   sigtool = callPackage ../os-specific/darwin/sigtool { };
 
