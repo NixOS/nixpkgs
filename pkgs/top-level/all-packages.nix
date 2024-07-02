@@ -13171,8 +13171,6 @@ with pkgs;
 
   staticjinja = with python3.pkgs; toPythonApplication staticjinja;
 
-  stevenblack-blocklist  = callPackage ../tools/networking/stevenblack-blocklist { };
-
   stress = callPackage ../tools/system/stress { };
 
   stress-ng = callPackage ../tools/system/stress-ng { };
