@@ -101,9 +101,6 @@ self: super: {
   # https://mail.haskell.org/pipermail/haskell-cafe/2022-October/135613.html
   language-javascript_0_7_0_0 = dontCheck super.language-javascript_0_7_0_0;
 
-  # Tests depend on `parseTime` which is no longer available
-  hourglass = dontCheck super.hourglass;
-
   # Needs to match ghc version
   ghc-tags = doDistribute self.ghc-tags_1_5;
 

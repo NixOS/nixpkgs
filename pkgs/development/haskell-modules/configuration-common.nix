@@ -246,6 +246,20 @@ self: super: {
     };
   }) super.leveldb-haskell;
 
+  # 2024-06-23: Hourglass is archived and had its last commit 6 years ago.
+  # Patch is needed to add support for time 1.10, which is only used in the tests
+  # https://github.com/vincenthz/hs-hourglass/pull/56
+  # Jailbreak is needed because a hackage revision added the (correct) time <1.10 bound.
+  hourglass = doJailbreak
+    (appendPatches [
+      (pkgs.fetchpatch {
+        name = "hourglass-pr-56.patch";
+        url =
+          "https://github.com/vincenthz/hs-hourglass/commit/cfc2a4b01f9993b1b51432f0a95fa6730d9a558a.patch";
+        sha256 = "sha256-gntZf7RkaR4qzrhjrXSC69jE44SknPDBmfs4z9rVa5Q=";
+      })
+    ] super.hourglass);
+
   # Arion's test suite needs a Nixpkgs, which is cumbersome to do from Nixpkgs
   # itself. For instance, pkgs.path has dirty sources and puts a huge .git in the
   # store. Testing is done upstream.
@@ -1864,8 +1878,6 @@ self: super: {
   # 2022-06-19: Disable checks because of https://github.com/reflex-frp/reflex/issues/475
   reflex = doJailbreak (dontCheck super.reflex);
 
-  # 2024-03-02: hspec <2.11, primitive <0.8 - https://github.com/reflex-frp/reflex-vty/pull/80
-  reflex-vty = assert super.reflex-vty.version == "0.5.2.0"; doJailbreak super.reflex-vty;
   # 2024-03-02: vty <5.39 - https://github.com/reflex-frp/reflex-ghci/pull/33
   reflex-ghci = assert super.reflex-ghci.version == "0.2.0.1"; doJailbreak super.reflex-ghci;
 
@@ -2048,28 +2060,6 @@ self: super: {
 
   # test suite doesn't compile anymore due to changed hunit/tasty APIs
   fullstop = dontCheck super.fullstop;
-
-  crypton-x509 =
-    lib.pipe
-      super.crypton-x509
-      [
-        # Mistype in a dependency in a test.
-        # https://github.com/kazu-yamamoto/crypton-certificate/pull/3
-        (appendPatch
-          (fetchpatch {
-            name = "crypton-x509-rename-dep.patch";
-            url = "https://github.com/kazu-yamamoto/crypton-certificate/commit/5281ff115a18621407b41f9560fd6cd65c602fcc.patch";
-            hash = "sha256-pLzuq+baSDn+MWhtYIIBOrE1Js+tp3UsaEZy5MhWAjY=";
-            relative = "x509";
-          })
-        )
-        # There is a revision in crypton-x509, so the above patch won't
-        # apply because of line endings in revised .cabal files.
-        (overrideCabal {
-           editedCabalFile = null;
-           revision = null;
-        })
-      ];
 
   # * doctests don't work without cabal
   #   https://github.com/noinia/hgeometry/issues/132
@@ -2302,12 +2292,12 @@ self: super: {
   gi-gtk-declarative = doJailbreak super.gi-gtk-declarative;
   gi-gtk-declarative-app-simple = doJailbreak super.gi-gtk-declarative-app-simple;
 
-  gi-gtk_4 = self.gi-gtk_4_0_8;
-  gi-gtk_4_0_8 = doDistribute (super.gi-gtk_4_0_8.override {
+  gi-gtk_4 = self.gi-gtk_4_0_9;
+  gi-gtk_4_0_9 = doDistribute (super.gi-gtk_4_0_9.override {
     gi-gdk = self.gi-gdk_4;
   });
-  gi-gdk_4 = self.gi-gdk_4_0_7;
-  gi-gdk_4_0_7 = doDistribute super.gi-gdk_4_0_7;
+  gi-gdk_4 = self.gi-gdk_4_0_8;
+  gi-gdk_4_0_8 = doDistribute super.gi-gdk_4_0_8;
   # GSK is only used for GTK 4.
   gi-gsk = super.gi-gsk.override {
     gi-gdk = self.gi-gdk_4;
@@ -2860,6 +2850,21 @@ self: super: {
   # base <4.14
   decimal-literals = doJailbreak super.decimal-literals;
 
+  # 2024-06-22: hevm ghc96 fixes
+  hevm = lib.pipe super.hevm [
+    (appendPatch (fetchpatch {
+      url = "https://github.com/ethereum/hevm/compare/02c072f...hellwolf:hevm:c29d3a7.patch";
+      hash = "sha256-cL26HD77vXsiKqo5G6PXgK0q19MUGMwaNium5x93CBI=";
+    }))
+    (overrideCabal (old: {
+      postPatch = old.postPatch or "" + ''
+        sed -i 's/^ *brick .*,/brick,/' hevm.cabal
+        sed -i 's/^ *vty .*,/vty,/' hevm.cabal
+      '';
+    }))
+    doJailbreak
+  ];
+
   # multiple bounds too strict
   snaplet-sqlite-simple = doJailbreak super.snaplet-sqlite-simple;
 
@@ -3024,7 +3029,7 @@ self: super: {
     libraryToolDepends = (drv.libraryToolDepends or []) ++ [pkgs.buildPackages.git];
   }) super.kmonad;
 
-  ghc-syntax-highlighter_0_0_11_0 = super.ghc-syntax-highlighter_0_0_11_0.overrideScope(self: super: {
+  ghc-syntax-highlighter_0_0_12_0 = super.ghc-syntax-highlighter_0_0_12_0.overrideScope(self: super: {
     ghc-lib-parser = self.ghc-lib-parser_9_10_1_20240511;
   });
 
@@ -3126,8 +3131,8 @@ self: super: {
   cornelis = dontCheck super.cornelis;
 
   cabal-gild = super.cabal-gild.overrideScope (self: super: {
-    tasty = super.tasty_1_5;
-    tasty-quickcheck = super.tasty-quickcheck_0_10_3;
+    tasty = super.tasty_1_5_1;
+    tasty-quickcheck = super.tasty-quickcheck_0_11;
   });
 
   # Fixes build on some platforms: https://github.com/obsidiansystems/commutative-semigroups/pull/18
