@@ -23,13 +23,13 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "gitbutler";
-  version = "0.12.2";
+  version = "0.12.6";
 
   src = fetchFromGitHub {
     owner = "gitbutlerapp";
     repo = "gitbutler";
     rev = "release/${version}";
-    hash = "sha256-m2hvcnY2h4DYtM4ME+dxmwnmUh768CHSoAq5VsKl6Sk=";
+    hash = "sha256-meQFSbsQN26uGl0mj5FPXlu/GlHO6SY2ku+xKdfvfQY=";
   };
 
   # deactivate the upstream updater in tauri configuration
@@ -49,7 +49,7 @@ rustPlatform.buildRustPackage rec {
 
   pnpmDeps = pnpm_9.fetchDeps {
     inherit pname version src;
-    hash = "sha256-+4SPDvhpvR1bjwTcyLO3HeBuZGL3P03OaEnOvcX9t9c=";
+    hash = "sha256-HKsb+96YklgPoqc7bA6fMuRQzWFGmKSBOcF5I0BO3oQ=";
   };
 
   nativeBuildInputs = [
