@@ -10460,8 +10460,6 @@ with pkgs;
 
   megacli = callPackage ../tools/misc/megacli { };
 
-  megatools = callPackage ../tools/networking/megatools { };
-
   memo = callPackage ../applications/misc/memo { };
 
   mencal = callPackage ../applications/misc/mencal { } ;
