@@ -17432,6 +17432,12 @@
     githubId = 61306;
     name = "Rene Treffer";
   };
+  rubenhoenle = {
+    email = "git@hoenle.xyz";
+    github = "rubenhoenle";
+    githubId = 56157634;
+    name = "Ruben Hönle";
+  };
   ruby0b = {
     github = "ruby0b";
     githubId = 106119328;
