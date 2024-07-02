@@ -1,25 +1,28 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
+{
+  lib,
+  cmake,
+  fetchFromGitHub,
+  stdenv,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "toml11";
-  version = "3.7.1";
+  version = "4.0.2";
 
   src = fetchFromGitHub {
     owner = "ToruNiina";
     repo = "toml11";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-HnhXBvIjo1JXhp+hUQvjs83t5IBVbNN6o3ZGhB4WESQ=";
+    hash = "sha256-hW/aUYaUo4kth5pA7XaQq/OhPJ+3tT/nwM/wy2sQyR0=";
   };
 
   nativeBuildInputs = [
     cmake
   ];
 
-  meta = with lib; {
+  strictDeps = true;
+
+  meta = {
     homepage = "https://github.com/ToruNiina/toml11";
     description = "TOML for Modern C++";
     longDescription = ''
@@ -39,9 +42,9 @@ stdenv.mkDerivation (finalAttrs: {
       - It correctly handles UTF-8 sequences, with or without BOM, both on posix
         and Windows.
     '';
-    license = licenses.mit;
-    maintainers = with maintainers; [ AndersonTorres ];
-    platforms = platforms.unix ++ platforms.windows;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ AndersonTorres ];
+    platforms = with lib.platforms; unix ++ windows;
   };
 })
 # TODO [ AndersonTorres ]: tests
