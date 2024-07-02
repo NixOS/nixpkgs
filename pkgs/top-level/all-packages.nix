@@ -1614,6 +1614,8 @@ with pkgs;
 
   aide = callPackage ../tools/security/aide { };
 
+  aider = callPackage ../tools/llm/aider { };
+
   ain = callPackage ../tools/networking/ain { };
 
   aioblescan = with python3Packages; toPythonApplication aioblescan;
