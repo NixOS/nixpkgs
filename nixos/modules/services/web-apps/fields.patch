@@ -1,0 +1,20 @@
+diff --git a/internal/handlers/pg/msg_findandmodify.go b/internal/handlers/pg/msg_findandmodify.go
+index 9942272..def0732 100644
+--- a/internal/handlers/pg/msg_findandmodify.go
++++ b/internal/handlers/pg/msg_findandmodify.go
+@@ -43,7 +43,6 @@ func (h *Handler) MsgFindAndModify(ctx context.Context, msg *wire.OpMsg) (*wire.
+ 	unimplementedFields := []string{
+ 		"arrayFilters",
+ 		"let",
+-		"fields",
+ 	}
+ 	if err := common.Unimplemented(document, unimplementedFields...); err != nil {
+ 		return nil, err
+@@ -53,6 +52,7 @@ func (h *Handler) MsgFindAndModify(ctx context.Context, msg *wire.OpMsg) (*wire.
+ 		"bypassDocumentValidation",
+ 		"writeConcern",
+ 		"collation",
++		"fields",
+ 		"hint",
+ 	}
+ 	common.Ignored(document, h.L, ignoredFields...)
