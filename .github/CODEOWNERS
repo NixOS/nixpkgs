@@ -108,6 +108,9 @@ nixos/modules/installer/tools/nix-fallback-paths.nix  @raitobezarius
 # NixOS QEMU virtualisation
 /nixos/virtualisation/qemu-vm.nix           @raitobezarius
 
+# ACME
+/nixos/modules/security/acme                @arianvp @flokli @aanderse # no merge permission: @m1cr0man @emilazy
+
 # Systemd
 /nixos/modules/system/boot/systemd.nix      @NixOS/systemd
 /nixos/modules/system/boot/systemd          @NixOS/systemd
