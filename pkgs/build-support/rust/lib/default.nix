@@ -23,7 +23,9 @@ rec {
 
     ccForHost = "${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc";
     cxxForHost = "${stdenv.cc}/bin/${stdenv.cc.targetPrefix}c++";
-    linkerForHost = if shouldUseLLD stdenv.targetPlatform
+    linkerForHost = if stdenv.targetPlatform.isWasi
+      then "${pkgsBuildHost.llvmPackages.bintools-unwrapped}/bin/${stdenv.cc.targetPrefix}wasm-ld"
+      else if shouldUseLLD stdenv.targetPlatform
       && !stdenv.cc.bintools.isLLVM
       then "${pkgsBuildHost.llvmPackages.bintools}/bin/${stdenv.cc.targetPrefix}ld.lld"
       else ccForHost;

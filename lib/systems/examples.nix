@@ -353,6 +353,7 @@ rec {
 
   wasi32 = {
     config = "wasm32-unknown-wasi";
+    rustc.config = "wasm32-wasi";
     useLLVM = true;
   };
 
