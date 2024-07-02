@@ -1656,7 +1656,16 @@ won't take effect until you reboot the system.
             die();
         }
         Ok(users) => {
-            for (uid, name, _) in users {
+            for (uid, name, user_dbus_path) in users {
+                let gid: u32 = dbus_conn
+                    .with_proxy(
+                        "org.freedesktop.login1",
+                        &user_dbus_path,
+                        Duration::from_millis(5000),
+                    )
+                    .get("org.freedesktop.login1.User", "GID")
+                    .with_context(|| format!("Failed to get GID for {name}"))?;
+
                 eprintln!("reloading user units for {}...", name);
                 let myself = Path::new("/proc/self/exe")
                     .canonicalize()
@@ -1664,10 +1673,12 @@ won't take effect until you reboot the system.
 
                 std::process::Command::new(&myself)
                     .uid(uid)
+                    .gid(gid)
                     .env("XDG_RUNTIME_DIR", format!("/run/user/{}", uid))
                     .env("__NIXOS_SWITCH_TO_CONFIGURATION_PARENT_EXE", &myself)
                     .spawn()
-                    .map(|mut child| _ = child.wait())
+                    .with_context(|| format!("Failed to spawn user activation for {name}"))?
+                    .wait()
                     .with_context(|| format!("Failed to run user activation for {name}"))?;
             }
         }
@@ -1854,7 +1865,7 @@ won't take effect until you reboot the system.
             // A unit in auto-restart substate is a failure *if* it previously failed to start
             let unit_object_path = systemd
                 .get_unit(&unit)
-                .context("Failed to get unit info for {unit}")?;
+                .with_context(|| format!("Failed to get unit info for {unit}"))?;
             let exec_main_status: i32 = dbus_conn
                 .with_proxy(
                     "org.freedesktop.systemd1",
@@ -1862,7 +1873,7 @@ won't take effect until you reboot the system.
                     Duration::from_millis(5000),
                 )
                 .get("org.freedesktop.systemd1.Service", "ExecMainStatus")
-                .context("Failed to get ExecMainStatus for {unit}")?;
+                .with_context(|| format!("Failed to get ExecMainStatus for {unit}"))?;
 
             if exec_main_status != 0 {
                 failed_units.push(unit);
