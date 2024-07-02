@@ -32,7 +32,7 @@ callPackage ../base.nix rec {
   ];
 
   extraPostPatch = ''
-    export clang_version=`clang -v 2>&1 | grep "clang version " | grep -E -o "[0-9.-]+"`
+    export clang_version=`clang -v 2>&1 | grep "clang version " | grep -E -o "[0-9]+" | head -1`
   '';
 
   checkTargets = [ "check-${targetName}" ];

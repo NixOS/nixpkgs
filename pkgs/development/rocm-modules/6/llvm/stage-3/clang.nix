@@ -23,7 +23,7 @@ wrapCCWith rec {
     installPhase = ''
       runHook preInstall
 
-      clang_version=`${clang-unwrapped}/bin/clang -v 2>&1 | grep "clang version " | grep -E -o "[0-9.-]+"`
+      clang_version=`${clang-unwrapped}/bin/clang -v 2>&1 | grep "clang version" | grep -E -o "[0-9]+" | head -1`
       mkdir -p $out/{bin,include/c++/v1,lib/{cmake,clang/$clang_version/{include,lib}},libexec,share}
 
       for path in ${llvm} ${clang-unwrapped} ${lld} ${libc} ${libunwind} ${libcxxabi} ${libcxx} ${compiler-rt}; do
@@ -59,7 +59,7 @@ wrapCCWith rec {
   ];
 
   extraBuildCommands = ''
-    clang_version=`${cc}/bin/clang -v 2>&1 | grep "clang version " | grep -E -o "[0-9.-]+"`
+    clang_version=`${cc}/bin/clang -v 2>&1 | grep "clang version " | grep -E -o "[0-9]+" | head -1`
     mkdir -p $out/resource-root
     ln -s ${cc}/lib/clang/$clang_version/{include,lib} $out/resource-root
 

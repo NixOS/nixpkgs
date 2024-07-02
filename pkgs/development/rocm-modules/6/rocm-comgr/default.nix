@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , rocmUpdateScript
 , cmake
 , rocm-cmake
@@ -15,16 +16,16 @@ let
     else throw "Unsupported ROCm LLVM platform";
 in stdenv.mkDerivation (finalAttrs: {
   pname = "rocm-comgr";
-  version = "6.0.2";
+  version = "6.1.2";
 
   src = fetchFromGitHub {
     owner = "ROCm";
-    repo = "ROCm-CompilerSupport";
+    repo = "llvm-project";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-9HuNU/k+kPJMlzqOTM20gm6SAOWJe9tpAZXEj4erdmI=";
+    hash = "sha256-+pe3e65Ri5zOOYvoSUiN0Rto/Ss8OyRfqxRifToAO7g=";
   };
 
-  sourceRoot = "${finalAttrs.src.name}/lib/comgr";
+  sourceRoot = "${finalAttrs.src.name}/amd/comgr";
 
   nativeBuildInputs = [
     cmake
@@ -34,6 +35,30 @@ in stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     rocm-device-libs
     libxml2
+  ];
+
+  patches = [
+    (fetchpatch {
+      name = "extend-comgr-isa-compatibility.patch";
+      url = "https://github.com/GZGavinZhao/ROCm-CompilerSupport/commit/ae653fb884fb1e3b4d9fd79fb727b3b027ca69ac.patch";
+      stripLen = 3;
+      extraPrefix = "";
+      hash = "sha256-cEzIKEDHaJXrQnnnt2rohPqlfoBM8czr7qz+HIQdkro=";
+    })
+    (fetchpatch {
+      name = "add-offload-bundler-apis.patch";
+      url = "https://github.com/GZGavinZhao/rocm-llvm-project/commit/f589e773857bc7115ac20a6cc606e94dd1123357.patch";
+      stripLen = 3;
+      extraPrefix = "";
+      hash = "sha256-DcbpCIKqfZJ//BbZ2Lx2ZXYAEkCvTIlFna8ceSWF1IA=";
+    })
+    (fetchpatch {
+      name = "split-get_bundle_entry_ids.patch";
+      url = "https://github.com/GZGavinZhao/rocm-llvm-project/commit/e773c2c90cfaa2ead378127538a58129ba0708b0.patch";
+      stripLen = 3;
+      extraPrefix = "";
+      hash = "sha256-a7hFT+IsNhpzuYoIPuXc2qmh3sgvafXz4Rvn9dA0Xoc=";
+    })
   ];
 
   cmakeFlags = [ "-DLLVM_TARGETS_TO_BUILD=AMDGPU;X86" ];

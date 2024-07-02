@@ -41,11 +41,16 @@ stdenv.mkDerivation (finalAttrs: {
     clang-tools-extra
   ];
 
-  buildInputs = [ openmp ];
+  buildInputs = lib.optionals (buildTests || buildExamples) [
+    openmp
+  ];
 
   cmakeFlags = [
     "-DCMAKE_C_COMPILER=hipcc"
     "-DCMAKE_CXX_COMPILER=hipcc"
+    "-DBUILD_DEV=OFF"
+  ] ++ lib.optionals (!buildTests && !buildExamples) [
+    "-DINSTANCES_ONLY=ON"
   ] ++ lib.optionals (gpuTargets != [ ]) [
     "-DGPU_TARGETS=${lib.concatStringsSep ";" gpuTargets}"
     "-DAMDGPU_TARGETS=${lib.concatStringsSep ";" gpuTargets}"
@@ -53,18 +58,22 @@ stdenv.mkDerivation (finalAttrs: {
     "-DGOOGLETEST_DIR=${gtest.src}" # Custom linker names
   ];
 
-  # No flags to build selectively it seems...
-  postPatch = lib.optionalString (!buildTests) ''
-    substituteInPlace CMakeLists.txt \
-      --replace "add_subdirectory(test)" ""
-  '' + lib.optionalString (!buildExamples) ''
-    substituteInPlace CMakeLists.txt \
-      --replace "add_subdirectory(example)" ""
-  '' + ''
-    substituteInPlace CMakeLists.txt \
-      --replace "add_subdirectory(profiler)" ""
-  ''
-  ;
+  env = {
+    OFFLOAD_BUNDLER_COMPRESS = "1";
+  };
+
+  # # No flags to build selectively it seems...
+  # postPatch = lib.optionalString (!buildTests) ''
+  #   substituteInPlace CMakeLists.txt \
+  #     --replace "add_subdirectory(test)" ""
+  # '' + lib.optionalString (!buildExamples) ''
+  #   substituteInPlace CMakeLists.txt \
+  #     --replace "add_subdirectory(example)" ""
+  # '' + ''
+  #   substituteInPlace CMakeLists.txt \
+  #     --replace "add_subdirectory(profiler)" ""
+  # ''
+  # ;
 
   postInstall = lib.optionalString buildTests ''
     mkdir -p $test/bin
