@@ -1,8 +1,25 @@
-{ stdenv, lib, fetchurl, makeWrapper, writeText
-, fpc, gtk2, glib, pango, atk, gdk-pixbuf
-, libXi, xorgproto, libX11, libXext
-, gdb, gnumake, binutils
-, withQt ? false, qtbase ? null, libqt5pas ? null, wrapQtAppsHook ? null
+{ stdenv
+, lib
+, fetchurl
+, makeWrapper
+, writeText
+, fpc
+, gtk2
+, glib
+, pango
+, atk
+, gdk-pixbuf
+, libXi
+, xorgproto
+, libX11
+, libXext
+, gdb
+, gnumake
+, binutils
+, withQt ? false
+, qtbase ? null
+, libqtpas ? null
+, wrapQtAppsHook ? null
 }:
 
 # TODO:
@@ -11,13 +28,17 @@
 let
   version = "3.2-0";
 
+  qtVersion = lib.versions.major qtbase.version;
+
   # as of 2.0.10 a suffix is being added. That may or may not disappear and then
   # come back, so just leave this here.
   majorMinorPatch = v:
     builtins.concatStringsSep "." (lib.take 2 (lib.splitVersion v));
 
-  overrides = writeText "revision.inc" (lib.concatStringsSep "\n" (lib.mapAttrsToList (k: v:
-    "const ${k} = '${v}';") {
+  overrides = writeText "revision.inc" (lib.concatStringsSep "\n" (lib.mapAttrsToList
+    (k: v:
+      "const ${k} = '${v}';")
+    {
       # this is technically the SVN revision but as we don't have that replace
       # it with the version instead of showing "Unknown"
       RevisionStr = version;
@@ -38,12 +59,20 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [
+    atk
+    fpc
+    gdk-pixbuf
+    glib
     # we need gtk2 unconditionally as that is the default target when building applications with lazarus
-    fpc gtk2 glib libXi xorgproto
-    libX11 libXext pango atk
-    stdenv.cc gdk-pixbuf
+    gtk2
+    libX11
+    libXext
+    libXi
+    pango
+    stdenv.cc
+    xorgproto
   ]
-  ++ lib.optionals withQt [ libqt5pas qtbase ];
+  ++ lib.optionals withQt [ libqtpas qtbase ];
 
   # Disable parallel build, errors:
   #  Fatal: (1018) Compilation aborted
@@ -62,7 +91,7 @@ stdenv.mkDerivation rec {
     "bigide"
   ];
 
-  LCL_PLATFORM = if withQt then "qt5" else "gtk2";
+  LCL_PLATFORM = if withQt then "qt${qtVersion}" else "gtk2";
 
   NIX_LDFLAGS = lib.concatStringsSep " " ([
     "-L${stdenv.cc.cc.lib}/lib"
@@ -80,8 +109,8 @@ stdenv.mkDerivation rec {
     "-lpango-1.0"
   ]
   ++ lib.optionals withQt [
-    "-L${lib.getLib libqt5pas}/lib"
-    "-lQt5Pas"
+    "-L${lib.getLib libqtpas}/lib"
+    "-lQt${qtVersion}Pas"
   ]);
 
   preBuild = ''
@@ -91,21 +120,24 @@ stdenv.mkDerivation rec {
       --replace '/usr/fpcsrc' "$out/share/fpcsrc"
   '';
 
-  postInstall = let
-    ldFlags = ''$(echo "$NIX_LDFLAGS" | sed -re 's/-rpath [^ ]+//g')'';
-  in ''
-    wrapProgram $out/bin/startlazarus \
-      --prefix NIX_LDFLAGS ' ' "${ldFlags}" \
-      --prefix NIX_LDFLAGS_${binutils.suffixSalt} ' ' "${ldFlags}" \
-      --prefix LCL_PLATFORM ' ' "$LCL_PLATFORM" \
-      --prefix PATH ':' "${lib.makeBinPath [ fpc gdb gnumake binutils ]}"
-  '';
+  postInstall =
+    let
+      ldFlags = ''$(echo "$NIX_LDFLAGS" | sed -re 's/-rpath [^ ]+//g')'';
+    in
+    ''
+      wrapProgram $out/bin/startlazarus \
+        --prefix NIX_LDFLAGS ' ' "${ldFlags}" \
+        --prefix NIX_LDFLAGS_${binutils.suffixSalt} ' ' "${ldFlags}" \
+        --prefix LCL_PLATFORM ' ' "$LCL_PLATFORM" \
+        --prefix PATH ':' "${lib.makeBinPath [ fpc gdb gnumake binutils ]}"
+    '';
 
   meta = with lib; {
     description = "Graphical IDE for the FreePascal language";
     homepage = "https://www.lazarus.freepascal.org";
-    license = licenses.gpl2Plus ;
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ raskin ];
     platforms = platforms.linux;
+    mainProgram = "lazarus-ide";
   };
 }
