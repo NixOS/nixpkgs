@@ -163,5 +163,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with maintainers; [ fgaz ];
     platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
     mainProgram = "Ladybird";
+    # use of undeclared identifier 'NSBezelStyleAccessoryBarAction'
+    broken = stdenv.isDarwin;
   };
 })
