@@ -129,8 +129,11 @@ nixos/modules/installer/tools/nix-fallback-paths.nix  @raitobezarius
 /pkgs/common-updater/scripts/update-source-version    @jtojnar
 
 # Python-related code and docs
-/doc/languages-frameworks/python.section.md                 @mweinelt
-/pkgs/development/interpreters/python/hooks
+/doc/languages-frameworks/python.section.md   @mweinelt @natsukium
+/maintainers/scripts/update-python-libraries            @natsukium
+/pkgs/development/interpreters/python                   @natsukium
+/pkgs/top-level/python-packages.nix                     @natsukium
+/pkgs/top-level/release-python.nix                      @natsukium
 
 # Haskell
 /doc/languages-frameworks/haskell.section.md  @sternenseemann @maralorn @ncfavier
