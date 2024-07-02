@@ -319,9 +319,9 @@ pkgs/by-name/fo/forgejo/package.nix     @adamcstephens @bendlas @emilylange
 /doc/languages-frameworks/dotnet.section.md @corngood
 
 # Node.js
-/pkgs/build-support/node/build-npm-package      @lilyinstarlight @winterqt
-/pkgs/build-support/node/fetch-npm-deps         @lilyinstarlight @winterqt
-/doc/languages-frameworks/javascript.section.md @lilyinstarlight @winterqt
+/pkgs/build-support/node/build-npm-package      @winterqt
+/pkgs/build-support/node/fetch-npm-deps         @winterqt
+/doc/languages-frameworks/javascript.section.md @winterqt
 
 # environment.noXlibs option aka NoX
 /nixos/modules/config/no-x-libs.nix  @SuperSandro2000
