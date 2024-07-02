@@ -1,19 +1,22 @@
 { lib
 , stdenv
 , darwin
-, fetchurl
+, fetchurl, zstd
 , makeWrapper
 , pkg-config
-, poppler_utils
-, gitMinimal
+, rustPlatform
+, runCommand
+, cargo
+, fontconfig
+, gentium
 , harfbuzz
 , icu
-, fontconfig
-, lua
+, jq
 , libiconv
+, lua
 , makeFontsConf
-, gentium
-, runCommand
+, poppler_utils
+, rustc
 , sile
 }:
 
@@ -21,7 +24,6 @@ let
   luaEnv = lua.withPackages(ps: with ps; [
     cassowary
     cldr
-    cosmo
     fluent
     linenoise
     loadkit
@@ -42,56 +44,67 @@ let
   ] ++ lib.optionals (lib.versionOlder lua.luaversion "5.3") [
     compat53
   ]);
-in
 
-stdenv.mkDerivation (finalAttrs: {
+  in stdenv.mkDerivation (finalAttrs: {
   pname = "sile";
-  version = "0.14.17";
+  version = "0.15.4";
 
   src = fetchurl {
-    url = "https://github.com/sile-typesetter/sile/releases/download/v${finalAttrs.version}/sile-${finalAttrs.version}.tar.xz";
-    sha256 = "sha256-f4m+3s7au1FoJQrZ3YDAntKJyOiMPQ11bS0dku4GXgQ=";
+    url = "https://github.com/sile-typesetter/sile/releases/download/v${finalAttrs.version}/sile-${finalAttrs.version}.tar.zst";
+    sha256 = "sha256-Ndg3s4LvSTNIm66haSZLlBQ9oVOOcc28ZAwvdcOeI1g=";
   };
 
-  configureFlags = [
-    "--with-system-luarocks"
-    "--with-manual"
+  nativeBuildInputs = [
+    makeWrapper
+    pkg-config
+    rustPlatform.cargoSetupHook
+    jq
+    cargo
+    rustc
+    zstd
   ];
 
-  nativeBuildInputs = [
-    gitMinimal
-    pkg-config
-    makeWrapper
-  ];
+  cargoDeps = rustPlatform.fetchCargoTarball {
+    inherit (finalAttrs) src;
+    dontConfigure = true;
+    hash = "sha256-FD2otvk92/99AT3BEmfbID8j8MFIicshcocPZalPTHQ=";
+  };
+
   buildInputs = [
     luaEnv
     harfbuzz
     icu
     fontconfig
     libiconv
-  ]
-  ++ lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.AppKit
-  ;
-  passthru = {
-    # So it will be easier to inspect this environment, in comparison to others
-    inherit luaEnv;
-    # Copied from Makefile.am
-    tests.test = lib.optionalAttrs (!(stdenv.isDarwin && stdenv.isAarch64)) (
-      runCommand "sile-test"
-        {
-          nativeBuildInputs = [ poppler_utils sile ];
-          inherit (finalAttrs) FONTCONFIG_FILE;
-        } ''
-        output=$(mktemp -t selfcheck-XXXXXX.pdf)
-        echo "<sile>foo</sile>" | sile -o $output -
-        pdfinfo $output | grep "SILE v${finalAttrs.version}" > $out
-      '');
-  };
+  ] ++ lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.AppKit
+  ];
+
+  configureFlags = [
+    # Build SILE's internal VM against headers from the Nix supplied Lua
+    "--with-system-lua-sources"
+    # Nix will supply all the Lua dependencies, so stop the build system from
+    # bundling vendored copies of them.
+    "--with-system-luarocks"
+    # The automake check target uses pdfinfo to confirm the output of a test
+    # run, and uses autotools to discover it. Nix builds have to that test
+    # because it is run from the source directory with a binary already built
+    # with system paths, so it can't be checked under Nix until after install.
+    # After install the Makefile isn't available of course, so we have our own
+    # copy of it with a hard coded path to `pdfinfo`. By specifying some binary
+    # here we skip the configure time test for `pdfinfo`, by using `false` we
+    # make sure that if it is expected during build time we would fail to build
+    # since we only provide it at test time.
+    "PDFINFO=false"
+    # We're using Cargo to build a shared library skipping some libtool bits
+    # that Nix mistakenly assumes are relevant and thinks it needs to cleanup.
+    "RANLIB=:"
+  ] ++ lib.optionals (!lua.pkgs.isLuaJIT) [
+    "--without-luajit"
+  ];
 
   postPatch = ''
-    patchShebangs build-aux/*.sh
-  '' + lib.optionalString stdenv.isDarwin ''
-    sed -i -e 's|@import AppKit;|#import <AppKit/AppKit.h>|' src/macfonts.m
+    patchShebangs build-aux/*.sh build-aux/git-version-gen
   '';
 
   NIX_LDFLAGS = lib.optionalString stdenv.isDarwin "-framework AppKit";
@@ -109,6 +122,21 @@ stdenv.mkDerivation (finalAttrs: {
       --replace "ASSERT(ht && ht->table && iter);" "ASSERT(ht && iter);"
   '';
 
+  passthru = {
+    # So it will be easier to inspect this environment, in comparison to others
+    inherit luaEnv;
+    # Copied from Makefile.am
+    tests.test = lib.optionalAttrs (!(stdenv.isDarwin && stdenv.isAarch64)) (
+      runCommand "sile-test" {
+          nativeBuildInputs = [ poppler_utils sile ];
+          inherit (finalAttrs) FONTCONFIG_FILE;
+        } ''
+        output=$(mktemp -t selfcheck-XXXXXX.pdf)
+        echo "<sile>foo</sile>" | sile -o $output -
+        pdfinfo $output | grep "SILE v${finalAttrs.version}" > $out
+      '');
+  };
+
   # remove forbidden references to $TMPDIR
   preFixup = lib.optionalString stdenv.isLinux ''
     for f in "$out"/bin/*; do
@@ -121,6 +149,7 @@ stdenv.mkDerivation (finalAttrs: {
   outputs = [ "out" "doc" "man" "dev" ];
 
   meta = with lib; {
+    mainProgram = "sile";
     description = "Typesetting system";
     longDescription = ''
       SILE is a typesetting system; its job is to produce beautiful
@@ -137,6 +166,5 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = platforms.unix;
     maintainers = with maintainers; [ doronbehar alerque ];
     license = licenses.mit;
-    mainProgram = "sile";
   };
 })
