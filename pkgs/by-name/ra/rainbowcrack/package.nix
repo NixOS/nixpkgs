@@ -2,8 +2,8 @@
   lib,
   stdenv,
   fetchurl,
-  unzip,
   alglib,
+  unzip,
 }:
 
 stdenv.mkDerivation rec {
