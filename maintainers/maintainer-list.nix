@@ -3751,6 +3751,12 @@
     githubId = 848609;
     name = "Michael Bishop";
   };
+  clevor = {
+    email = "myclevorname@gmail.com";
+    github = "myclevorname";
+    githubId = 140354451;
+    name = "Samuel Connelly";
+  };
   clkamp = {
     email = "c@lkamp.de";
     github = "clkamp";
