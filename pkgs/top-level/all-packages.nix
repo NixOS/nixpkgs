@@ -30824,13 +30824,11 @@ with pkgs;
 
   firefox = wrapFirefox firefox-unwrapped { };
   firefox-beta = wrapFirefox firefox-beta-unwrapped {
-    nameSuffix = "-beta";
     desktopName = "Firefox Beta";
     wmClass = "firefox-beta";
     icon = "firefox-beta";
   };
   firefox-devedition = wrapFirefox firefox-devedition-unwrapped {
-    nameSuffix = "-devedition";
     desktopName = "Firefox Developer Edition";
     wmClass = "firefox-devedition";
     icon = "firefox-devedition";
@@ -30840,7 +30838,6 @@ with pkgs;
 
   firefox-esr = firefox-esr-115;
   firefox-esr-115 = wrapFirefox firefox-esr-115-unwrapped {
-    nameSuffix = "-esr";
     desktopName = "Firefox ESR";
     wmClass = "firefox-esr";
     icon = "firefox-esr";
