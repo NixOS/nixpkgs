@@ -1,0 +1,12 @@
+diff --git a/package.json b/package.json
+index b083704..60e7514 100644
+--- a/package.json
++++ b/package.json
+@@ -4,7 +4,6 @@
+   "description": "Refactor your thinking",
+   "homepage": "https://b3log.org/siyuan",
+   "main": "./electron/main.js",
+-  "packageManager": "pnpm@9.0.2",
+   "scripts": {
+     "lint": "eslint . --fix --cache",
+     "dev": "webpack --mode development",
