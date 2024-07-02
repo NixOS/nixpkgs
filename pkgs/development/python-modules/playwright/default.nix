@@ -6,13 +6,14 @@
   git,
   greenlet,
   fetchFromGitHub,
+  nixosTests,
   pyee,
+  playwright-driver,
   python,
   pythonOlder,
+  pythonRelaxDepsHook,
   setuptools,
   setuptools-scm,
-  playwright-driver,
-  pythonRelaxDepsHook,
 }:
 
 let
@@ -75,7 +76,10 @@ buildPythonPackage rec {
     pythonRelaxDepsHook
   ] ++ lib.optionals stdenv.isLinux [ auditwheel ];
 
-  pythonRelaxDeps = [ "pyee" ];
+  pythonRelaxDeps = [
+    "pyee"
+    "greenlet"
+  ];
 
   propagatedBuildInputs = [
     greenlet
@@ -96,6 +100,7 @@ buildPythonPackage rec {
     tests = {
       driver = playwright-driver;
       browsers = playwright-driver.browsers;
+      inherit (nixosTests) playwright-python;
     };
     updateScript = ./update.sh;
   };
@@ -108,6 +113,7 @@ buildPythonPackage rec {
     maintainers = with maintainers; [
       techknowlogick
       yrd
+      phaer
     ];
     platforms = [
       "x86_64-linux"
