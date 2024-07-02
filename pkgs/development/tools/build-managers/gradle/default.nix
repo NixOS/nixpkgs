@@ -198,9 +198,10 @@ rec {
           files = [
             (mitm-cache.setupHook)
             (substituteAll {
-              src = /${build-support}/setup-hook.sh;
+              src = "${build-support}/setup-hook.sh";
               # jdk used for keytool
               inherit (gradle) jdk;
+              init_script = "${build-support}/init-build.gradle";
             })
           ];
         }))
@@ -209,8 +210,8 @@ rec {
       ];
 
       passthru = {
-        fetchDeps = import /${build-support}/fetch-deps.nix { inherit lib mitm-cache; };
-        updateDeps = callPackage /${build-support}/update-deps.nix { };
+        fetchDeps = import "${build-support}/fetch-deps.nix" { inherit lib mitm-cache; };
+        updateDeps = callPackage "${build-support}/update-deps.nix" { };
         inherit (gradle) jdk;
       };
 
