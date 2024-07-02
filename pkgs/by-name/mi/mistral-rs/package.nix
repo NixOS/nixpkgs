@@ -80,26 +80,22 @@ in
 
 rustPlatform.buildRustPackage rec {
   pname = "mistral-rs";
-  version = "0.1.18";
+  version = "0.1.24";
 
   src = fetchFromGitHub {
     owner = "EricLBuehler";
     repo = "mistral.rs";
     rev = "refs/tags/v${version}";
-    hash = "sha256-lMDFWNv9b0UfckqLmyWRVwnqmGe6nxYsUHzoi2+oG84=";
+    hash = "sha256-oBVgA46GuXPgs+Y6AmqDNRfvPD+n2FO1czp2Gbl3BNg=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "candle-core-0.6.0" = "sha256-DxGBWf2H7MamrbboTJ4zHy1HeE8ZVT7QvE3sTYrRxBc=";
+      "candle-core-0.6.0" = "sha256-vDKBTfVWAaSU/JxHe9UvskOpd/ngMV3sKFLcYcOMBJs=";
       "range-checked-0.1.0" = "sha256-S+zcF13TjwQPFWZLIbUDkvEeaYdaxCOtDLtI+JRvum8=";
     };
   };
-
-  postPatch = ''
-    ln -s ${./Cargo.lock} Cargo.lock
-  '';
 
   nativeBuildInputs = [
     pkg-config
@@ -129,7 +125,7 @@ rustPlatform.buildRustPackage rec {
       SWAGGER_UI_DOWNLOAD_URL =
         let
           # When updating:
-          # - Look for the version of `utopia-swagger-ui` at:
+          # - Look for the version of `utoipa-swagger-ui` at:
           #   https://github.com/EricLBuehler/mistral.rs/blob/v<MISTRAL-RS-VERSION>/mistralrs-server/Cargo.toml
           # - Look at the corresponding version of `swagger-ui` at:
           #   https://github.com/juhaku/utoipa/blob/utoipa-swagger-ui-<UTOPIA-SWAGGER-UI-VERSION>/utoipa-swagger-ui/build.rs#L21-L22
