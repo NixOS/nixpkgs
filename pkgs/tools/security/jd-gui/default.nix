@@ -51,6 +51,8 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ jdk gradle copyDesktopItems ];
 
+  __darwinAllowLocalNetworking = true;
+
   mitmCache = gradle.fetchDeps {
     inherit pname;
     data = ./deps.json;
