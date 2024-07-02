@@ -1,6 +1,7 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
+, stdenv
 , nix-update-script
 }:
 
@@ -19,7 +20,7 @@ buildGoModule rec {
 
   ldflags = [ "-s" "-w" ];
 
-  hardeningEnable = [ "pie" ];
+  hardeningEnable = lib.optionals (!stdenv.isDarwin) [ "pie" ];
 
   passthru.updateScript = nix-update-script { };
 
