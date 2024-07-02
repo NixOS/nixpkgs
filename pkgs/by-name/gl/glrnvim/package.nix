@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   rustPlatform,
+  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -17,6 +18,11 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoHash = "sha256-cHEse+pXwgPTL8GJyY4s1mhWXGTY8Fnn2rFpA5SNerY=";
+
+  buildInputs = lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+    DiskArbitration
+    Foundation
+  ]);
 
   postInstall = ''
     install -Dm644 glrnvim.desktop -t $out/share/applications
