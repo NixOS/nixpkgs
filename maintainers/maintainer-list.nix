@@ -14,6 +14,37 @@
      keys = [{
        fingerprint = "AAAA BBBB CCCC DDDD EEEE  FFFF 0000 1111 2222 3333";
      }];
+
+     # Default null; should be a free-form string explaining why the maintainer
+     # became inactive.
+     #
+     # The most immediate use of this attribute is to mark maintainers that are
+     # not contributing to Nixpkgs from a long amount of time.
+     # Nonetheless it can be used to mark any *long term inactivity*, including
+     # but not limited to:
+     #
+     # - Sabbatical leave
+     # - Retirement
+     # - Intimate issues
+     # - Force majeure
+     #
+     # In principle, a third person can set this attribute. For the sake of a
+     # good etiquette, in such case at least one contact attempt should be
+     # issued and carried out before effectively committing it to the codebase.
+     #
+     # This attribute can be employed to many useful activities, including but
+     # not limited to:
+     #
+     # - Treewide automation
+     #   - Removal of inactive maintainers from packages
+     #   - Orphaning alerts
+     # - Filter automatic notifications
+     #
+     inactivityReason = ''
+       Real life issues: I want to take the Hunter Exam this year.
+
+       Registered at 2024-06-19 by Theresia.
+     '';
    };
    ```
 
@@ -26,6 +57,7 @@
    - `github` is your GitHub handle (as it appears in the URL of your profile page, `https://github.com/<userhandle>`),
    - `githubId` is your GitHub user ID, which can be found at `https://api.github.com/users/<userhandle>`,
    - `keys` is a list of your PGP/GPG key fingerprints.
+   - `inactivityReason` is an optional string attribute, explained above.
 
    Specifying a GitHub account ensures that you automatically:
    - get invited to the @NixOS/nixpkgs-maintainers team ;
@@ -366,6 +398,12 @@
     github = "abbradar";
     githubId = 1174810;
     name = "Nikolay Amiantov";
+    inactivityReason = ''
+      Self-imposed retirement. Details at:
+      https://github.com/NixOS/nixpkgs/issues/88867#issuecomment-2106134035
+
+      Registered at 2024-06-19 by AndersonTorres.
+    '';
   };
   abdiramen = {
     email = "abdirahman.osmanthus@gmail.com";
@@ -3730,6 +3768,11 @@
     github = "cko";
     githubId = 68239;
     name = "Christine Koppelt";
+    inactivityReason = ''
+      No new activity since at least 2019-12-11.
+
+      Registered at 2024-06-19 by AndersonTorres.
+    '';
   };
   clacke = {
     email = "claes.wallin@greatsinodevelopment.com";
@@ -4084,6 +4127,11 @@
     github = "cpages";
     githubId = 411324;
     name = "Carles Pagès";
+    inactivityReason = ''
+      No new activity since at least 2021-01-16.
+
+      Registered at 2024-06-19 by AndersonTorres.
+    '';
   };
   cpcloud = {
     name = "Phillip Cloud";
@@ -6301,6 +6349,11 @@
     githubId = 857308;
     name = "Ellie Hermaszewska";
     keys = [ { fingerprint = "FC1D 3E4F CBCA 80DF E870  6397 C811 6E3A 0C1C A76A"; } ];
+    inactivityReason = ''
+      No new activity since at least 2016-11-30.
+
+      Registered at 2024-06-19 by AndersonTorres.
+    '';
   };
   exploitoverload = {
     email = "nix@exploitoverload.com";
@@ -11678,6 +11731,11 @@
     github = "lovek323";
     githubId = 265084;
     name = "Jason O'Conal";
+    inactivityReason = ''
+      No new activity since at least 2022-12-12.
+
+      Registered at 2024-06-19 by AndersonTorres.
+    '';
   };
   lovesegfault = {
     email = "meurerbernardo@gmail.com";
@@ -16676,6 +16734,11 @@
     github = "rasendubi";
     githubId = 1366419;
     name = "Alexey Shmalko";
+    inactivityReason = ''
+      No new activity since at least 2020-03-10.
+
+      Registered at 2024-06-19 by AndersonTorres.
+    '';
   };
   raskin = {
     email = "7c6f434c@mail.ru";
@@ -21116,6 +21179,11 @@
     github = "viric";
     githubId = 66664;
     name = "Lluís Batlle i Rossell";
+    inactivityReason = ''
+      No new activity since at least 2018-07-22.
+
+      Registered at 2024-06-19 by AndersonTorres.
+    '';
   };
   virusdave = {
     email = "dave.nicponski@gmail.com";
@@ -21255,6 +21323,11 @@
     github = "vrthra";
     githubId = 70410;
     name = "Rahul Gopinath";
+    inactivityReason = ''
+      No new activity since at least 2017-04-10.
+
+      Registered at 2024-06-19 by AndersonTorres.
+    '';
   };
   vskilet = {
     email = "victor@sene.ovh";
@@ -21285,6 +21358,11 @@
     github = "vyp";
     githubId = 3889405;
     name = "vyp";
+    inactivityReason = ''
+      No new activity since at least 2021-08-05.
+
+      Registered at 2024-06-19 by AndersonTorres.
+    '';
   };
   wackbyte = {
     name = "wackbyte";

@@ -28,5 +28,9 @@ in {
       });
       default = [];
     };
+    inactivityReason = lib.mkOption {
+      type = types.nullOr types.str;
+      default = null;
+    };
   };
 }
