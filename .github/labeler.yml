@@ -34,9 +34,9 @@
         - nixos/modules/services/editors/emacs.nix
         - nixos/modules/services/editors/emacs.xml
         - nixos/tests/emacs-daemon.nix
+        - pkgs/applications/editors/emacs/build-support/**/*
         - pkgs/applications/editors/emacs/elisp-packages/**/*
         - pkgs/applications/editors/emacs/**/*
-        - pkgs/build-support/emacs/**/*
         - pkgs/top-level/emacs-packages.nix
 
 "6.topic: Enlightenment DE":

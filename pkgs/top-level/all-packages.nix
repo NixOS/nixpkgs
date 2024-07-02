@@ -1288,7 +1288,10 @@ with pkgs;
 
   mpsolve = libsForQt5.callPackage ../applications/science/math/mpsolve { };
 
-  nixBufferBuilders = import ../build-support/emacs/buffer.nix { inherit lib writeText; inherit (emacs.pkgs) inherit-local; };
+  nixBufferBuilders = import ../applications/editors/emacs/build-support/buffer.nix {
+    inherit lib writeText;
+    inherit (emacs.pkgs) inherit-local;
+  };
 
   nix-gitignore = callPackage ../build-support/nix-gitignore { };
 
