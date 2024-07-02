@@ -13,11 +13,11 @@
 stdenv.mkDerivation (finalAttrs: {
   inherit pname version;
 
-  src = rec {
+  src = {
     "x86_64-linux" = fetchurl rec {
       name = "VNC-Viewer-${finalAttrs.version}-Linux-x64.rpm";
       url = "https://downloads.realvnc.com/download/file/viewer.files/${name}";
-      sha256 = "sha256-Ull9iNi8NxB12YwEThWE0P9k1xOV2LZnebuRrVH/zwI=";
+      hash = "sha256-KJZbH3mfxuyUslkYvB/RKquEsB7ayJSv6yNqfLmAsGI=";
     };
   }.${stdenv.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
