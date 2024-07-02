@@ -5214,9 +5214,11 @@ self: super: with self; {
   # built-in for pypi
   greenlet = if isPyPy then null else callPackage ../development/python-modules/greenlet { };
 
-  grequests = callPackage ../development/python-modules/grequests { };
-
   gremlinpython = callPackage ../development/python-modules/gremlinpython { };
+
+  grep-ast = callPackage ../development/python-modules/grep-ast { };
+
+  grequests = callPackage ../development/python-modules/grequests { };
 
   greynoise = callPackage ../development/python-modules/greynoise { };
 
