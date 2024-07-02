@@ -7660,9 +7660,11 @@ with pkgs;
   };
   elasticsearch = elasticsearch7;
 
-  elasticsearchPlugins = recurseIntoAttrs (
-    callPackage ../servers/search/elasticsearch/plugins.nix {}
+  elasticsearch7Plugins = recurseIntoAttrs (
+    callPackage ../servers/search/elasticsearch/plugins.nix { elasticsearch = elasticsearch7; }
   );
+
+  elasticsearchPlugins = elasticsearch7Plugins;
 
   embree = callPackage ../development/libraries/embree { };
   embree2 = callPackage ../development/libraries/embree/2.x.nix { };
