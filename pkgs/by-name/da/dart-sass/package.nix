@@ -1,12 +1,13 @@
-{ lib
-, fetchFromGitHub
-, buildDartApplication
-, buf
-, protoc-gen-dart
-, testers
-, dart-sass
-, runCommand
-, writeText
+{
+  lib,
+  fetchFromGitHub,
+  buildDartApplication,
+  buf,
+  protoc-gen-dart,
+  testers,
+  dart-sass,
+  runCommand,
+  writeText,
 }:
 
 let
@@ -21,13 +22,13 @@ let
 in
 buildDartApplication rec {
   pname = "dart-sass";
-  version = "1.77.4";
+  version = "1.77.6";
 
   src = fetchFromGitHub {
     owner = "sass";
     repo = pname;
     rev = version;
-    hash = "sha256-xHOZDeK6xYnfrb6yih6jzRDZLRvyp0EeKZynEq3A4aI=";
+    hash = "sha256-GiZbx60HtyFTsargh0UVhjzOwlw3VWkhUEaX0s2ehos=";
   };
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
@@ -45,14 +46,6 @@ buildDartApplication rec {
 
   dartCompileFlags = [ "--define=version=${version}" ];
 
-  meta = with lib; {
-    homepage = "https://github.com/sass/dart-sass";
-    description = "Reference implementation of Sass, written in Dart";
-    mainProgram = "sass";
-    license = licenses.mit;
-    maintainers = with maintainers; [ lelgenio ];
-  };
-
   passthru = {
     inherit embedded-protocol-version embedded-protocol;
     updateScript = ./update.sh;
@@ -67,21 +60,31 @@ buildDartApplication rec {
         expected = writeText "expected" ''
           body h1{color:#123}
         '';
-        actual = runCommand "actual"
-          {
-            nativeBuildInputs = [ dart-sass ];
-            base = writeText "base" ''
-              body {
-                $color: #123;
-                h1 {
-                  color: $color;
+        actual =
+          runCommand "actual"
+            {
+              nativeBuildInputs = [ dart-sass ];
+              base = writeText "base" ''
+                body {
+                  $color: #123;
+                  h1 {
+                    color: $color;
+                  }
                 }
-              }
+              '';
+            }
+            ''
+              dart-sass --style=compressed $base > $out
             '';
-          } ''
-          dart-sass --style=compressed $base > $out
-        '';
       };
     };
+  };
+
+  meta = {
+    homepage = "https://github.com/sass/dart-sass";
+    description = "Reference implementation of Sass, written in Dart";
+    mainProgram = "sass";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ lelgenio ];
   };
 }
