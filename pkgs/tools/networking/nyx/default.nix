@@ -13,6 +13,11 @@ buildPythonApplication rec {
 
   propagatedBuildInputs = [ stem ];
 
+  postPatch = ''
+    # py 3.11 compat fix https://github.com/torproject/nyx/issues/63#issuecomment-1557355542
+    find -type f -exec sed -i 's/getargspec/getfullargspec/g' {} \;
+  '';
+
   # ./run_tests.py returns `TypeError: testFailure() takes exactly 1 argument`
   doCheck = false;
 
