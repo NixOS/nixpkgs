@@ -28605,8 +28605,6 @@ with pkgs;
 
   marwaita-manjaro = callPackage ../data/themes/marwaita-manjaro { };
 
-  marwaita-peppermint = callPackage ../data/themes/marwaita-peppermint { };
-
   marwaita-pop_os = callPackage ../data/themes/marwaita-pop_os { };
 
   marwaita-ubuntu = callPackage ../data/themes/marwaita-ubuntu { };
