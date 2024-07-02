@@ -126,6 +126,7 @@ let
     # until these llama-cpp binaries can have their runpath patched
     "--suffix LD_LIBRARY_PATH : '${addDriverRunpath.driverLink}/lib'"
   ] ++ lib.optionals enableRocm [
+    "--suffix LD_LIBRARY_PATH : '${rocmPath}'"
     "--set-default HIP_PATH '${rocmPath}'"
   ];
   wrapperArgs = builtins.concatStringsSep " " wrapperOptions;
