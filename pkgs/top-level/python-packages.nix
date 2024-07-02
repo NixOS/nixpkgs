@@ -4821,6 +4821,10 @@ self: super: with self; {
 
   georss-wa-dfes-client = callPackage ../development/python-modules/georss-wa-dfes-client { };
 
+  gepetto-viewer-corba = callPackage ../development/python-modules/gepetto-viewer-corba { };
+
+  gepetto-viewer-unwrapped = callPackage ../development/python-modules/gepetto-viewer-unwrapped { };
+
   gerbonara = callPackage ../development/python-modules/gerbonara { };
 
   getjump = callPackage ../development/python-modules/getjump { };
@@ -9199,6 +9203,10 @@ self: super: with self; {
   omnikinverter = callPackage ../development/python-modules/omnikinverter { };
 
   omnilogic = callPackage ../development/python-modules/omnilogic { };
+
+  omniorb = toPythonModule (pkgs.omniorb.override { python3Packages = self; });
+
+  omniorbpy = callPackage ../development/python-modules/omniorbpy { };
 
   omorfi = callPackage ../development/python-modules/omorfi { };
 
