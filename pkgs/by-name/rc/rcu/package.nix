@@ -21,7 +21,7 @@ python3Packages.buildPythonApplication rec {
   src = let
     src-tarball = requireFile {
       name = "rcu-d${version}-source.tar.gz";
-      sha256 = "1njsfj4pfqh4c9gppkdlkkfba31v186wjz3zm94adhhpdwzx2ybb";
+      sha256 = "15559537bjrviq5n87yz4q6n3y3l3bwip8rxg34zf0w9zmr4zmqn";
       url = "http://www.davisr.me/projects/rcu/";
     };
   in runCommand "${src-tarball.name}-unpacked" {} ''
