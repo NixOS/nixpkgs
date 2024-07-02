@@ -28601,8 +28601,6 @@ with pkgs;
 
   martian-mono = callPackage ../data/fonts/martian-mono { };
 
-  marwaita = callPackage ../data/themes/marwaita { };
-
   marwaita-manjaro = callPackage ../data/themes/marwaita-manjaro { };
 
   marwaita-peppermint = callPackage ../data/themes/marwaita-peppermint { };
