@@ -8,13 +8,13 @@
 }:
 let
   pname = "slskd";
-  version = "0.19.5";
+  version = "0.21.1";
 
   src = fetchFromGitHub {
     owner = "slskd";
     repo = "slskd";
     rev = version;
-    sha256 = "sha256-Vm+nA3yKiCMpQ41GTQF6Iuat89QrUtstQdHmX/DyU9g=";
+    sha256 = "sha256-ic631e4pyby6EibUkxIGc/uQnVuPY9RFZ9hWvw3u1zk=";
   };
 
   meta = with lib; {
@@ -32,7 +32,7 @@ let
     src = "${src}/src/web";
     npmFlags = [ "--legacy-peer-deps" ];
     nodejs = nodejs_18;
-    npmDepsHash = "sha256-E1J4fYcY1N+UmN4Ch4Ss6ty+nYlmrv3ngvCJ8YCjPfI=";
+    npmDepsHash = "sha256-06qQ1y870TrkXhkHYADjnWVhdyiLWEqdDt3qrJ1BBFo=";
     installPhase = ''
       cp -r build $out
     '';
@@ -43,8 +43,8 @@ in buildDotnetModule {
 
   runtimeDeps = [ mono ];
 
-  dotnet-sdk = dotnetCorePackages.sdk_7_0;
-  dotnet-runtime = dotnetCorePackages.aspnetcore_7_0;
+  dotnet-sdk = dotnetCorePackages.sdk_8_0;
+  dotnet-runtime = dotnetCorePackages.aspnetcore_8_0;
 
   projectFile = "slskd.sln";
 
