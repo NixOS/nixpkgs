@@ -1,7 +1,25 @@
-diff -urN a/src/wl/sys/wl_linux.c b/src/wl/sys/wl_linux.c
---- a/src/wl/sys/wl_linux.c	2015-01-06 12:33:42.981659618 +0100
-+++ b/src/wl/sys/wl_linux.c	2015-01-06 12:34:05.647395418 +0100
-@@ -2157,8 +2157,8 @@
+From 507d93e3651d78c1df8bd185b0703872d0c2585b Mon Sep 17 00:00:00 2001
+From: aszlig <aszlig@redmoonstudios.org>
+Date: Mon, 1 Aug 2016 21:00:02 +0200
+Subject: [PATCH 03/16] linuxPackages.broadcom_sta: fix NULL pointer deref
+
+The patch is from the following Gentoo bug:
+
+https://bugs.gentoo.org/show_bug.cgi?id=523326#c24
+
+Built successfully against Linux 3.18.36, 4.4.16 and 4.7.0.
+
+Signed-off-by: aszlig <aszlig@redmoonstudios.org>
+Cc: @phreedom, @vcunat
+---
+ src/wl/sys/wl_linux.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/wl/sys/wl_linux.c b/src/wl/sys/wl_linux.c
+index 14922c0..65d7a22 100644
+--- a/src/wl/sys/wl_linux.c
++++ b/src/wl/sys/wl_linux.c
+@@ -2167,8 +2167,8 @@ wl_start(struct sk_buff *skb, struct net_device *dev)
  	wlif = WL_DEV_IF(dev);
  	wl = WL_INFO(dev);
  
@@ -11,3 +29,6 @@ diff -urN a/src/wl/sys/wl_linux.c b/src/wl/sys/wl_linux.c
  
  		TXQ_LOCK(wl);
  
+-- 
+2.45.1
+

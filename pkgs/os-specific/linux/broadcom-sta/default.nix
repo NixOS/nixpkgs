@@ -24,7 +24,6 @@ stdenv.mkDerivation {
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
   patches = [
-    ./i686-build-failure.patch
     ./license.patch
     ./linux-4.7.patch
     # source: https://git.archlinux.org/svntogit/community.git/tree/trunk/004-linux48.patch?h=packages/broadcom-wl-dkms

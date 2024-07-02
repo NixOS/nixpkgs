@@ -1,7 +1,17 @@
-diff -u -r a/src/shared/linux_osl.c b/src/shared/linux_osl.c
---- a/src/shared/linux_osl.c	2022-05-24 20:51:15.662604980 +0000
-+++ b/src/shared/linux_osl.c	2022-05-24 21:13:38.264472425 +0000
-@@ -599,6 +599,8 @@
+From 6c66b0eaaa3e6ebaa84891298715b71f7b2f0b1c Mon Sep 17 00:00:00 2001
+From: X9VoiD <oscar.silvestrexx@gmail.com>
+Date: Mon, 13 Jun 2022 17:38:18 +0800
+Subject: [PATCH 13/16] linuxPackages.broadcom_sta: fix build for kernel 5.18+
+
+---
+ src/shared/linux_osl.c | 21 +++++++++++++++++++++
+ 1 file changed, 21 insertions(+)
+
+diff --git a/src/shared/linux_osl.c b/src/shared/linux_osl.c
+index dcfc075..5a25b82 100644
+--- a/src/shared/linux_osl.c
++++ b/src/shared/linux_osl.c
+@@ -599,6 +599,8 @@ osl_dma_alloc_consistent(osl_t *osh, uint size, uint16 align_bits, uint *alloced
  	va = kmalloc(size, GFP_ATOMIC | __GFP_ZERO);
  	if (va)
  		*pap = (ulong)__virt_to_phys(va);
@@ -10,7 +20,7 @@ diff -u -r a/src/shared/linux_osl.c b/src/shared/linux_osl.c
  #else
  	va = pci_alloc_consistent(osh->pdev, size, (dma_addr_t*)pap);
  #endif
-@@ -612,6 +614,8 @@
+@@ -612,6 +614,8 @@ osl_dma_free_consistent(osl_t *osh, void *va, uint size, ulong pa)
  
  #ifdef __ARM_ARCH_7A__
  	kfree(va);
@@ -19,7 +29,7 @@ diff -u -r a/src/shared/linux_osl.c b/src/shared/linux_osl.c
  #else
  	pci_free_consistent(osh->pdev, size, va, (dma_addr_t)pa);
  #endif
-@@ -623,7 +627,11 @@
+@@ -623,7 +627,11 @@ osl_dma_map(osl_t *osh, void *va, uint size, int direction, void *p, hnddma_seg_
  	int dir;
  
  	ASSERT((osh && (osh->magic == OS_HANDLE_MAGIC)));
@@ -31,7 +41,7 @@ diff -u -r a/src/shared/linux_osl.c b/src/shared/linux_osl.c
  
  #if defined(__ARM_ARCH_7A__) && defined(BCMDMASGLISTOSL)
  	if (dmah != NULL) {
-@@ -641,7 +649,11 @@
+@@ -641,7 +649,11 @@ osl_dma_map(osl_t *osh, void *va, uint size, int direction, void *p, hnddma_seg_
  				ASSERT(totsegs + nsegs <= MAX_DMA_SEGS);
  				sg->page_link = 0;
  				sg_set_buf(sg, PKTDATA(osh, skb), PKTLEN(osh, skb));
@@ -43,7 +53,7 @@ diff -u -r a/src/shared/linux_osl.c b/src/shared/linux_osl.c
  			}
  			totsegs += nsegs;
  			totlen += PKTLEN(osh, skb);
-@@ -656,7 +668,11 @@
+@@ -656,7 +668,11 @@ osl_dma_map(osl_t *osh, void *va, uint size, int direction, void *p, hnddma_seg_
  	}
  #endif 
  
@@ -55,7 +65,7 @@ diff -u -r a/src/shared/linux_osl.c b/src/shared/linux_osl.c
  }
  
  void BCMFASTPATH
-@@ -665,8 +681,13 @@
+@@ -665,8 +681,13 @@ osl_dma_unmap(osl_t *osh, uint pa, uint size, int direction)
  	int dir;
  
  	ASSERT((osh && (osh->magic == OS_HANDLE_MAGIC)));
@@ -69,3 +79,6 @@ diff -u -r a/src/shared/linux_osl.c b/src/shared/linux_osl.c
  }
  
  #if defined(BCMDBG_ASSERT)
+-- 
+2.45.1
+
