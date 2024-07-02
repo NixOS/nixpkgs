@@ -127,6 +127,6 @@ stdenv.mkDerivation rec {
     mainProgram = "powerprofilesctl";
     platforms = platforms.linux;
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ mvnetbiz picnoir ];
+    maintainers = with maintainers; [ mvnetbiz picnoir lyndeno ];
   };
 }
