@@ -36,11 +36,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-initial-setup";
-  version = "46.2";
+  version = "46.3";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-initial-setup/${lib.versions.major finalAttrs.version}/gnome-initial-setup-${finalAttrs.version}.tar.xz";
-    hash = "sha256-bHktiSrbYLDeC33oglwUlD0c0nmvT5x2So9UEbYKjyc=";
+    hash = "sha256-o/AQgp9NTI1J+Dqxz6uCG2GyeA6eC15Wicfv8/hE7T4=";
   };
 
   patches = [
@@ -89,8 +89,6 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dparental_controls=disabled"
     "-Dvendor-conf-file=${./vendor.conf}"
   ];
-
-  PKG_CONFIG_SYSTEMD_SYSUSERSDIR = "${placeholder "out"}/lib/sysusers.d";
 
   passthru = {
     updateScript = gnome.updateScript {
