@@ -19,16 +19,16 @@
 buildGo122Module rec {
   pname = "lxd-unwrapped-lts";
   # major/minor are used in updateScript to pin to LTS
-  version = "5.21.0";
+  version = "5.21.1";
 
   src = fetchFromGitHub {
     owner = "canonical";
     repo = "lxd";
     rev = "refs/tags/lxd-${version}";
-    hash = "sha256-PqYlFnyEzdkGZhZwuDhWjPLIH5Ee5qUaVePTheMO/ls=";
+    hash = "sha256-6php6dThpyADOY+2PZ38WxK2jPKd61D0OCwTKjAhAUg=";
   };
 
-  vendorHash = "sha256-E+707xNqOMd46n+FU4m6AKt33ZklfiAM5SeA4kZBUxw=";
+  vendorHash = "sha256-iGW2FQjuqANadFuMHa+2VXiUgoU0VFBJYUyh0pMIdWY=";
 
   postPatch = ''
     substituteInPlace shared/usbid/load.go \
