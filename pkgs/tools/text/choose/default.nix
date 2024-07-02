@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-yW1quDyQn2xhrlhhPj9DKq7g8LlYKvEKDFj3xSagRTU=";
   };
 
-  cargoSha256 = "sha256-0INC0LFzlnFnt5pCiU4xePxU8a6GiU1L8bg7zcuFl2k=";
+  cargoHash = "sha256-0INC0LFzlnFnt5pCiU4xePxU8a6GiU1L8bg7zcuFl2k=";
 
   meta = with lib; {
     description = "Human-friendly and fast alternative to cut and (sometimes) awk";

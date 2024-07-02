@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-+kjDNQKlaoI5fQ5FqYF6IPCKeE92WKxIhVCKafqfE0o=";
   };
 
-  cargoSha256 = "sha256-DJpWBset6SW7Ahg60+Tu1VpH34LcVOyrEs9suKyTE9g=";
+  cargoHash = "sha256-DJpWBset6SW7Ahg60+Tu1VpH34LcVOyrEs9suKyTE9g=";
 
   meta = with lib; {
     description = "Interactive batteries viewer";

@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-jkOkkcMFK1RLY8Hn/bMMuMZtyGwnwGdm0os8QKhcWqo=";
   };
 
-  cargoSha256 = "sha256-qwhOJxFYRJC51dKB1pi/WVJs7H955jM6KmKbxsAScDI=";
+  cargoHash = "sha256-qwhOJxFYRJC51dKB1pi/WVJs7H955jM6KmKbxsAScDI=";
 
   postInstall = ''
     rm $out/bin/benchmark $out/bin/identify

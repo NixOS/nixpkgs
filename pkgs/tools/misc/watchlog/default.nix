@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-UNywUEhhJy2cJIwl/S9hRReoBfkzvNoN0c4mxp7PuG0=";
   };
 
-  cargoSha256 = "sha256-HBlfSgR96XIUBj2ZyHi1qaEKP8jG9kcrxJmhIGWjfUE=";
+  cargoHash = "sha256-HBlfSgR96XIUBj2ZyHi1qaEKP8jG9kcrxJmhIGWjfUE=";
 
   meta = {
     description = "Easier monitoring of live logs";
