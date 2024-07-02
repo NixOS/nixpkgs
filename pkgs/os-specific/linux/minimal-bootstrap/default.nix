@@ -4,13 +4,14 @@
 , hostPlatform
 , fetchurl
 , checkMeta
+, stage0-posix
 }:
 
 lib.makeScope
   # Prevent using top-level attrs to protect against introducing dependency on
   # non-bootstrap packages by mistake. Any top-level inputs must be explicitly
   # declared here.
-  (extra: lib.callPackageWith ({ inherit lib config buildPlatform hostPlatform fetchurl checkMeta; } // extra))
+  (extra: lib.callPackageWith ({ inherit lib config buildPlatform hostPlatform fetchurl checkMeta stage0-posix; } // extra))
   (self: with self; {
 
     bash_2_05 = callPackage ./bash/2.nix { tinycc = tinycc-mes; };
@@ -177,10 +178,6 @@ lib.makeScope
       gnumake = gnumake-musl;
     };
 
-    stage0-posix = callPackage ./stage0-posix { };
-
-    inherit (self.stage0-posix) kaem m2libc mescc-tools mescc-tools-extra;
-
     tinycc-bootstrappable = lib.recurseIntoAttrs (callPackage ./tinycc/bootstrappable.nix { });
     tinycc-mes = lib.recurseIntoAttrs (callPackage ./tinycc/mes.nix { });
     tinycc-musl = lib.recurseIntoAttrs (callPackage ./tinycc/musl.nix {
@@ -197,7 +194,7 @@ lib.makeScope
 
     inherit (callPackage ./utils.nix { }) derivationWithMeta writeTextFile writeText;
 
-    test = kaem.runCommand "minimal-bootstrap-test" {} ''
+    test = stage0-posix.kaem.runCommand "minimal-bootstrap-test" {} ''
       echo ${bash.tests.get-version}
       echo ${bash_2_05.tests.get-version}
       echo ${binutils.tests.get-version}

@@ -1,5 +1,5 @@
 { lib
-, derivationWithMeta
+, minimal-bootstrap
 , writeText
 , kaem
 , kaem-unwrapped
@@ -11,7 +11,7 @@
 
 # Once mescc-tools-extra is available we can install kaem at /bin/kaem
 # to make it findable in environments
-derivationWithMeta {
+minimal-bootstrap.derivationWithMeta {
   inherit version kaem-unwrapped;
   pname = "kaem";
   builder = kaem-unwrapped;
@@ -28,7 +28,7 @@ derivationWithMeta {
   PATH = lib.makeBinPath [ mescc-tools-extra ];
 
   passthru.runCommand = name: env: buildCommand:
-    derivationWithMeta ({
+    minimal-bootstrap.derivationWithMeta ({
       inherit name;
 
       builder = "${kaem}/bin/kaem";
