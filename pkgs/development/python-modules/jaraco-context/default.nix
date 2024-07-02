@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "jaraco-context";
-  version = "4.3.0";
+  version = "5.3.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "jaraco";
     repo = "jaraco.context";
     rev = "refs/tags/v${version}";
-    hash = "sha256-YdbkpKv7k62uyhmjKoxeA9uf5BWnRD/rK+z46FJN4xk=";
+    hash = "sha256-Caj51qBLHbuiey023iLc+N2M8QiJKH8G/Pzu1v3AToU=";
   };
 
   pythonNamespaces = [ "jaraco" ];
