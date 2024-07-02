@@ -23,7 +23,7 @@ entity.
 
 With {command}`nixos-taskserver` the client certificate is created
 along with the UUID of the user, so it handles all of the credentials needed
-in order to setup the Taskwarrior client to work with a Taskserver.
+in order to setup the Taskwarrior2 client to work with a Taskserver.
 
 ## The nixos-taskserver tool {#module-services-taskserver-nixos-taskserver-tool}
 
@@ -49,7 +49,7 @@ command, documentation for each subcommand can be shown by using the
 ## Declarative/automatic CA management {#module-services-taskserver-declarative-ca-management}
 
 Everything is done according to what you specify in the module options,
-however in order to set up a Taskwarrior client for synchronisation with a
+however in order to set up a Taskwarrior2 client for synchronisation with a
 Taskserver instance, you have to transfer the keys and certificates to the
 client machine.
 
