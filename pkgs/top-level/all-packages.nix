@@ -34829,7 +34829,11 @@ with pkgs;
 
   vimiv-qt = callPackage ../applications/graphics/vimiv-qt { };
 
-  macvim = callPackage ../applications/editors/vim/macvim-configurable.nix { stdenv = clangStdenv; };
+  macvim = let
+    macvimUtils = callPackage ../applications/editors/vim/macvim-configurable.nix { };
+  in macvimUtils.makeCustomizable (callPackage ../applications/editors/vim/macvim.nix {
+    stdenv = clangStdenv;
+  });
 
   vim-full = vimUtils.makeCustomizable (callPackage ../applications/editors/vim/full.nix {
     inherit (darwin.apple_sdk.frameworks) CoreServices Cocoa Foundation CoreData;
