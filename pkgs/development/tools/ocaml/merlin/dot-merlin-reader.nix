@@ -3,8 +3,6 @@
 buildDunePackage rec {
   pname = "dot-merlin-reader";
 
-  duneVersion = "3";
-
   inherit (merlin) version src;
 
   minimalOCamlVersion = "4.06";
