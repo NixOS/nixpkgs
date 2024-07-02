@@ -122,7 +122,7 @@ in {
   config = mkMerge [
 
     (mkIf pcmPlugin {
-      sound.extraConfig = ''
+      hardware.alsa.extraConfig = ''
         pcm_type.jack {
           libs.native = ${pkgs.alsa-plugins}/lib/alsa-lib/libasound_module_pcm_jack.so ;
           ${lib.optionalString enable32BitAlsaPlugins
@@ -139,7 +139,7 @@ in {
     (mkIf loopback {
       boot.kernelModules = [ "snd-aloop" ];
       boot.kernelParams = [ "snd-aloop.index=${toString cfg.loopback.index}" ];
-      sound.extraConfig = cfg.loopback.config;
+      hardware.alsa.extraConfig = cfg.loopback.config;
     })
 
     (mkIf cfg.jackd.enable {

@@ -1,11 +1,8 @@
 # ALSA sound support.
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
-
-  inherit (pkgs) alsa-utils;
+  cfg = config.hardware.alsa;
 
   pulseaudioEnabled = config.hardware.pulseaudio.enable;
 
@@ -13,33 +10,28 @@ in
 
 {
   imports = [
-    (mkRenamedOptionModule [ "sound" "enableMediaKeys" ] [ "sound" "mediaKeys" "enable" ])
+    (lib.mkRenamedOptionModule [ "sound" "enable" ] [ "hardware" "alsa" "enable" ])
+    (lib.mkRenamedOptionModule [ "sound" "enableOSSEmulation" ] [ "hardware" "alsa" "enableOSSEmulation" ])
+    (lib.mkRenamedOptionModule [ "sound" "extraConfig" ] [ "hardware" "alsa" "extraConfig" ])
+    (lib.mkRenamedOptionModule [ "sound" "enableMediaKeys" ] [ "hardware" "alsa" "mediaKeys" "enable" ])
+    (lib.mkRenamedOptionModule [ "sound" "mediaKeys" "enable" ] [ "hardware" "alsa" "mediaKeys" "enable" ])
+    (lib.mkRenamedOptionModule [ "sound" "mediaKeys" "volumeStep" ] [ "hardware" "alsa" "mediaKeys" "volumeStep" ])
   ];
 
   ###### interface
 
   options = {
 
-    sound = {
+    hardware.alsa = {
 
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-        description = ''
-          Whether to enable ALSA sound.
-        '';
-      };
+      enable = lib.mkEnableOption "ALSA sound";
 
-      enableOSSEmulation = mkOption {
-        type = types.bool;
-        default = false;
-        description = ''
-          Whether to enable ALSA OSS emulation (with certain cards sound mixing may not work!).
-        '';
-      };
+      enableOSSEmulation = lib.mkEnableOption "ALSA OSS emulation (with certain cards sound mixing may not work!)";
 
-      extraConfig = mkOption {
-        type = types.lines;
+      package = lib.mkPackageOption pkgs "alsa-utils" { };
+
+      extraConfig = lib.mkOption {
+        type = lib.types.lines;
         default = "";
         example = ''
           defaults.pcm.!card 3
@@ -51,8 +43,8 @@ in
 
       mediaKeys = {
 
-        enable = mkOption {
-          type = types.bool;
+        enable = lib.mkOption {
+          type = lib.types.bool;
           default = false;
           description = ''
             Whether to enable volume and capture control with keyboard media keys.
@@ -66,8 +58,8 @@ in
           '';
         };
 
-        volumeStep = mkOption {
-          type = types.str;
+        volumeStep = lib.mkOption {
+          type = lib.types.str;
           default = "1";
           example = "1%";
           description = ''
@@ -86,17 +78,17 @@ in
 
   ###### implementation
 
-  config = mkIf config.sound.enable {
+  config = lib.mkIf cfg.enable {
 
-    environment.systemPackages = [ alsa-utils ];
+    environment.systemPackages = [ cfg.package ];
 
-    environment.etc = mkIf (!pulseaudioEnabled && config.sound.extraConfig != "")
-      { "asound.conf".text = config.sound.extraConfig; };
+    environment.etc = lib.mkIf (!pulseaudioEnabled && cfg.extraConfig != "")
+      { "asound.conf".text = cfg.extraConfig; };
 
     # ALSA provides a udev rule for restoring volume settings.
-    services.udev.packages = [ alsa-utils ];
+    services.udev.packages = [ cfg.package ];
 
-    boot.kernelModules = optional config.sound.enableOSSEmulation "snd_pcm_oss";
+    boot.kernelModules = lib.optional cfg.enableOSSEmulation "snd_pcm_oss";
 
     systemd.services.alsa-store =
       { description = "Store Sound Card State";
@@ -107,25 +99,25 @@ in
           Type = "oneshot";
           RemainAfterExit = true;
           ExecStartPre = "${pkgs.coreutils}/bin/mkdir -p /var/lib/alsa";
-          ExecStart = "${alsa-utils}/sbin/alsactl restore --ignore";
-          ExecStop = "${alsa-utils}/sbin/alsactl store --ignore";
+          ExecStart = "${cfg.package}/sbin/alsactl restore --ignore";
+          ExecStop = "${cfg.package}/sbin/alsactl store --ignore";
         };
       };
 
-    services.actkbd = mkIf config.sound.mediaKeys.enable {
+    services.actkbd = lib.mkIf cfg.mediaKeys.enable {
       enable = true;
       bindings = [
         # "Mute" media key
-        { keys = [ 113 ]; events = [ "key" ];       command = "${alsa-utils}/bin/amixer -q set Master toggle"; }
+        { keys = [ 113 ]; events = [ "key" ];       command = "${cfg.package}/bin/amixer -q set Master toggle"; }
 
         # "Lower Volume" media key
-        { keys = [ 114 ]; events = [ "key" "rep" ]; command = "${alsa-utils}/bin/amixer -q set Master ${config.sound.mediaKeys.volumeStep}- unmute"; }
+        { keys = [ 114 ]; events = [ "key" "rep" ]; command = "${cfg.package}/bin/amixer -q set Master ${cfg.mediaKeys.volumeStep}- unmute"; }
 
         # "Raise Volume" media key
-        { keys = [ 115 ]; events = [ "key" "rep" ]; command = "${alsa-utils}/bin/amixer -q set Master ${config.sound.mediaKeys.volumeStep}+ unmute"; }
+        { keys = [ 115 ]; events = [ "key" "rep" ]; command = "${cfg.package}/bin/amixer -q set Master ${cfg.mediaKeys.volumeStep}+ unmute"; }
 
         # "Mic Mute" media key
-        { keys = [ 190 ]; events = [ "key" ];       command = "${alsa-utils}/bin/amixer -q set Capture toggle"; }
+        { keys = [ 190 ]; events = [ "key" ];       command = "${cfg.package}/bin/amixer -q set Capture toggle"; }
       ];
     };
 

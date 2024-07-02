@@ -221,7 +221,7 @@ in {
 
       environment.systemPackages = [ overriddenPackage ];
 
-      sound.enable = true;
+      hardware.alsa.enable = true;
 
       environment.etc = {
         "asound.conf".source = alsaConf;

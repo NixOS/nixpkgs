@@ -322,6 +322,10 @@ in {
   config = mkIf cfg.enable {
     assertions = [
       {
+        assertion = cfg.audio.enable -> !config.hardware.alsa.enable;
+        message = "PipeWire-based ALSA emulation doesn't use the standalone ALSA service. Set `hardware.alsa.enable` to false";
+      }
+      {
         assertion = cfg.audio.enable -> !config.hardware.pulseaudio.enable;
         message = "Using PipeWire as the sound server conflicts with PulseAudio. This option requires `hardware.pulseaudio.enable` to be set to false";
       }

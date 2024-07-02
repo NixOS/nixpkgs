@@ -2,7 +2,7 @@
 
 Common configuration for headless machines (e.g., Amazon EC2 instances).
 
-Disables [sound](#opt-sound.enable),
+Disables [ALSA](#opt-hardware.alsa.enable),
 [vesa](#opt-boot.vesa), serial consoles,
 [emergency mode](#opt-systemd.enableEmergencyMode),
 [grub splash images](#opt-boot.loader.grub.splashImage)
