@@ -1116,6 +1116,12 @@
     github = "AmeerTaweel";
     githubId = 20538273;
   };
+  amerino = {
+    name = "Alberto Merino";
+    email = "amerinor01@gmail.com";
+    github = "amerinor01";
+    githubId = 22280447;
+  };
   amesgen = {
     email = "amesgen@amesgen.de";
     github = "amesgen";
