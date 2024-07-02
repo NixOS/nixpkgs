@@ -111,8 +111,7 @@ let
     inherit (config.boot.initrd) compressor compressorArgs prepend;
     inherit (cfg) strip;
 
-    contents = map (path: { object = path; symlink = ""; }) (subtractLists cfg.suppressedStorePaths cfg.storePaths)
-      ++ mapAttrsToList (_: v: { object = v.source; symlink = v.target; }) (filterAttrs (_: v: v.enable) cfg.contents);
+    contents = lib.filter ({ source, ... }: !lib.elem source cfg.suppressedStorePaths) cfg.storePaths;
   };
 
 in {
@@ -171,7 +170,7 @@ in {
       description = ''
         Store paths to copy into the initrd as well.
       '';
-      type = with types; listOf (oneOf [ singleLineStr package ]);
+      type = utils.systemdUtils.types.initrdStorePath;
       default = [];
     };
 
@@ -460,6 +459,7 @@ in {
         "${cfg.package}/lib/systemd/systemd-sulogin-shell"
         "${cfg.package}/lib/systemd/systemd-sysctl"
         "${cfg.package}/lib/systemd/systemd-bsod"
+        "${cfg.package}/lib/systemd/systemd-sysroot-fstab-check"
 
         # generators
         "${cfg.package}/lib/systemd/system-generators/systemd-debug-generator"
@@ -486,7 +486,8 @@ in {
         # fido2 support
         "${cfg.package}/lib/cryptsetup/libcryptsetup-token-systemd-fido2.so"
         "${pkgs.libfido2}/lib/libfido2.so.1"
-      ] ++ jobScripts;
+      ] ++ jobScripts
+      ++ map (c: builtins.removeAttrs c ["text"]) (builtins.attrValues cfg.contents);
 
       targets.initrd.aliases = ["default.target"];
       units =
