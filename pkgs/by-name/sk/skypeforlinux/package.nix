@@ -3,6 +3,7 @@
   stdenv,
   fetchurl,
   squashfsTools,
+  writeScript,
   alsa-lib,
   atk,
   cairo,
@@ -156,6 +157,28 @@ stdenv.mkDerivation {
       --replace-fail 'Icon=''${SNAP}/meta/gui/skypeforlinux.png' 'Icon=skypeforlinux'
     substituteInPlace "$out/share/kservices5/ServiceMenus/skypeforlinux.desktop" \
       --replace-fail 'Exec=/usr/bin/skypeforlinux ' 'Exec=skypeforlinux '
+  '';
+
+  passthru.updateScript = writeScript "update-skypeforlinux" ''
+    #!/usr/bin/env nix-shell
+    #!nix-shell -i bash -p common-updater-scripts curl jq
+
+    set -eu -o pipefail
+
+    data=$(curl -H 'X-Ubuntu-Series: 16' \
+      'https://api.snapcraft.io/api/v1/snaps/details/skype?channel=stable&fields=download_sha512,revision,version')
+
+    version=$(jq -r .version <<<"$data")
+
+    if [[ "x$UPDATE_NIX_OLD_VERSION" != "x$version" ]]; then
+
+        revision=$(jq -r .revision <<<"$data")
+        hash=$(nix hash to-sri "sha512:$(jq -r .download_sha512 <<<"$data")")
+
+        update-source-version "$UPDATE_NIX_ATTR_PATH" "$version" "$hash"
+        update-source-version --ignore-same-hash --version-key=revision "$UPDATE_NIX_ATTR_PATH" "$revision" "$hash"
+
+    fi
   '';
 
   meta = {
