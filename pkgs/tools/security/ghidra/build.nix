@@ -164,6 +164,7 @@ stdenv.mkDerivation (finalAttrs: {
       genericName = "Ghidra Software Reverse Engineering Suite";
       categories = [ "Development" ];
       terminal = false;
+      startupWMClass = "ghidra-Ghidra";
     })
   ];
 
