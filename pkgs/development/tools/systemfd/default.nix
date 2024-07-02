@@ -19,7 +19,7 @@ rustPlatform.buildRustPackage {
     sha256 = "sha256-HUJgYPD4C9fMUYKpzmIy9gDT6HAZDWw1JLMKLgzRQTY=";
   };
 
-  cargoSha256 = "sha256-UhfE9Q5E79rN2mjkNB5IAN/J0fbpoy9CmM6ojHQcFP0=";
+  cargoHash = "sha256-UhfE9Q5E79rN2mjkNB5IAN/J0fbpoy9CmM6ojHQcFP0=";
 
   meta = {
     description = "Convenient helper for passing sockets into another process";
