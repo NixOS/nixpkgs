@@ -75,7 +75,7 @@ for (uuid, versions) in uuid_to_versions.items():
     os.makedirs(out_path / path)
 
     # Copy some files to the minimal repo unchanged
-    for f in ["Compat.toml", "Deps.toml"]:
+    for f in ["Compat.toml", "Deps.toml", "WeakCompat.toml", "WeakDeps.toml"]:
       if (registry_path / path / f).exists():
         shutil.copy2(registry_path / path / f, out_path / path)
 
