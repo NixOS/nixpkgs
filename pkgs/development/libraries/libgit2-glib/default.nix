@@ -13,6 +13,7 @@
 , libgit2
 , glib
 , python3
+, fetchpatch2
 }:
 
 stdenv.mkDerivation rec {
@@ -25,6 +26,14 @@ stdenv.mkDerivation rec {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "EzHa2oOPTh9ZGyZFnUQSajJd52LcPNJhU6Ma+9/hgZA=";
   };
+
+  patches = [
+    (fetchpatch2 {
+      name = "support-libgit2-1.8.patch";
+      url = "https://github.com/GNOME/libgit2-glib/pull/4/commits/304a8c3fae1784d665e92c1ce2143c66d7ecf47f.patch";
+      hash = "sha256-OICFr9gt98rv1qlCdVSXJO0a55l8rIMffoXrGKYuN8E=";
+    })
+  ];
 
   nativeBuildInputs = [
     meson
