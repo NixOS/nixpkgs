@@ -6,6 +6,7 @@
   git,
   greenlet,
   fetchFromGitHub,
+  nodejs,
   pyee,
   python,
   pythonOlder,
@@ -21,7 +22,7 @@ in
 buildPythonPackage rec {
   pname = "playwright";
   # run ./pkgs/development/python-modules/playwright/update.sh to update
-  version = "1.42.0";
+  version = "1.44.0";
   pyproject = true;
   disabled = pythonOlder "3.7";
 
@@ -29,7 +30,7 @@ buildPythonPackage rec {
     owner = "microsoft";
     repo = "playwright-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-GfaZ6wMbJShyTTcV9uulmsL8OI/OA+YDMvS2s3ePnjs=";
+    hash = "sha256-RM04I1QiyJhPvKdAdy8w2GmOOR+BWilxrZ5QUrwxBWA=";
   };
 
   patches = [
@@ -63,9 +64,13 @@ buildPythonPackage rec {
     substituteInPlace setup.py \
       --replace "self._download_and_extract_local_driver(base_wheel_bundles)" ""
 
+    # Set the correct nodejs path
+    substituteInPlace playwright/_impl/_driver.py \
+      --replace-fail "@nodejs@" "${nodejs}/bin/node"
+
     # Set the correct driver path with the help of a patch in patches
     substituteInPlace playwright/_impl/_driver.py \
-      --replace "@driver@" "${driver}/bin/playwright"
+      --replace-fail "@driver@" "${driver}/cli.js"
   '';
 
   nativeBuildInputs = [
