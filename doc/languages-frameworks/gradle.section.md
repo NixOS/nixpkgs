@@ -1,9 +1,9 @@
 # Gradle {#gradle}
 
-Gradle is a popular build tool for Java/Kotlin. Unfortunately, despite
-its ubiquity, it has many poor design decisions. Because Gradle itself
-doesn't offer reproducible builds in any meaningful way, nixpkgs has a
-man-in-the-middle-proxy designed for intercepting Gradle web requests.
+Gradle is a popular build tool for Java/Kotlin. Gradle itself doesn't
+currently provide tools to make dependency resolution reproducible, so
+nixpkgs has a proxy designed for intercepting Gradle web requests to
+record dependencies so they can be restored in a reproducible fashion.
 
 ## Building a Gradle package {#building-a-gradle-package}
 
