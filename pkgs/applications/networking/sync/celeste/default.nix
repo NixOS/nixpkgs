@@ -2,7 +2,7 @@
 , stdenv
 , rustPlatform
 , fetchFromGitHub
-, substituteAll
+, darwin
 , just
 , pkg-config
 , wrapGAppsHook4
@@ -66,7 +66,14 @@ rustPlatform.buildRustPackage rec {
     libadwaita
     librclone
     pango
+  ] ++ lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.Foundation
+    darwin.apple_sdk.frameworks.Security
   ];
+
+  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.isDarwin [
+    "-Wno-error=incompatible-function-pointer-types"
+  ]);
 
   preFixup = ''
     gappsWrapperArgs+=(
