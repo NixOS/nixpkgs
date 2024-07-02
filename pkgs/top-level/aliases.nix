@@ -1333,6 +1333,7 @@ mapAliases ({
   ### T ###
 
   tangogps = foxtrotgps; # Added 2020-01-26
+  taskspooler = ts;
   taplo-cli = taplo; # Added 2022-07-30
   taplo-lsp = taplo; # Added 2022-07-30
   taro = taproot-assets; # Added 2023-07-04
