@@ -13,7 +13,7 @@ let
     description = "Visual editor for open FPGA boards";
     homepage = "https://github.com/FPGAwars/icestudio";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ imadnyc jleightcap ];
+    maintainers = with maintainers; [ imadnyc jleightcap amerino ];
     mainProgram = "icestudio";
     platforms = ["x86_64-linux"];
   };
