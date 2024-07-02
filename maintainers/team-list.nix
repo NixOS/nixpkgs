@@ -709,10 +709,7 @@ with lib.maintainers;
   };
 
   node = {
-    members = [
-      lilyinstarlight
-      winter
-    ];
+    members = [ winter ];
     scope = "Maintain Node.js runtimes and build tooling.";
     shortName = "Node.js";
     enableFeatureFreezePing = true;
