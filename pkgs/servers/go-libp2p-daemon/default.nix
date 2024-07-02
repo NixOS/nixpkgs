@@ -16,9 +16,6 @@ buildGoModule rec {
   doCheck = false;
 
   meta = with lib; {
-    # Won't build with Go >1.20 because of outdated quic-go dependency and interface mismatches on update.
-    # https://github.com/libp2p/go-libp2p-daemon/issues/291
-    broken = true;
     description = "Libp2p-backed daemon wrapping the functionalities of go-libp2p for use in other languages";
     homepage = "https://github.com/libp2p/go-libp2p-daemon";
     license = licenses.mit;
