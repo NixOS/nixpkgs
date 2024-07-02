@@ -1,17 +1,19 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, runtimeShell
 , cacert
 , cmake
 , cmakerc
+, curl
 , fmt
 , git
 , gzip
-, makeWrapper
 , meson
 , ninja
 , openssh
 , python3
+, unzip
 , zip
 , zstd
 , extraRuntimeDeps ? []
@@ -30,7 +32,6 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     ninja
-    makeWrapper
   ];
 
   buildInputs = [
@@ -47,23 +48,53 @@ stdenv.mkDerivation (finalAttrs: {
     "-DVCPKG_DEPENDENCY_CMAKERC=ON"
   ];
 
-  postFixup = let
+
+  # vcpkg needs two directories to write to that is independent of installation directory.
+  passAsFile = [ "vcpkgWrapper" ];
+  vcpkgWrapper = let
     # These are the most common binaries used by vcpkg
     # Extra binaries can be added via overlay when needed
     runtimeDeps = [
       cacert
       cmake
+      curl
       git
       gzip
       meson
       ninja
       openssh
       python3
+      unzip
       zip
       zstd
     ] ++ extraRuntimeDeps;
+    setEnvvar = k: v: ''${k}=''${${k}-"${v}"}'';
   in ''
-    wrapProgram $out/bin/vcpkg --prefix PATH ${lib.makeBinPath runtimeDeps}
+    #!${runtimeShell}
+
+    NIX_VCPKG_WRITABLE_PATH=''${NIX_VCPKG_WRITABLE_PATH:-''${XDG_CACHE_HOME+"$XDG_CACHE_HOME/vcpkg"}}
+    NIX_VCPKG_WRITABLE_PATH=''${NIX_VCPKG_WRITABLE_PATH:-''${HOME+"$HOME/.vcpkg/root"}}
+    NIX_VCPKG_WRITABLE_PATH=''${NIX_VCPKG_WRITABLE_PATH:-''${TMP}}
+    NIX_VCPKG_WRITABLE_PATH=''${NIX_VCPKG_WRITABLE_PATH:-'/tmp'}
+
+    ${setEnvvar "NIX_VCPKG_DOWNLOADS_ROOT" "$NIX_VCPKG_WRITABLE_PATH/downloads"}
+    ${setEnvvar "NIX_VCPKG_BUILDTREES_ROOT" "$NIX_VCPKG_WRITABLE_PATH/buildtrees"}
+    ${setEnvvar "NIX_VCPKG_PACKAGES_ROOT" "$NIX_VCPKG_WRITABLE_PATH/packages"}
+    ${setEnvvar "NIX_VCPKG_INSTALL_ROOT" "$NIX_VCPKG_WRITABLE_PATH/installed"}
+
+    export PATH="${lib.makeBinPath runtimeDeps}''${PATH:+":$PATH"}"
+
+    exec -a "$0" "${placeholder "out"}/bin/.vcpkg-wrapped" \
+      --x-downloads-root="$NIX_VCPKG_DOWNLOADS_ROOT" \
+      --x-buildtrees-root="$NIX_VCPKG_BUILDTREES_ROOT" \
+      --x-packages-root="$NIX_VCPKG_PACKAGES_ROOT" \
+      --x-install-root="$NIX_VCPKG_INSTALL_ROOT" \
+      "$@"
+  '';
+
+  postFixup = ''
+    mv "$out/bin/vcpkg" "$out/bin/.vcpkg-wrapped"
+    install -Dm555 "$vcpkgWrapperPath" "$out/bin/vcpkg"
   '';
 
   meta = {
