@@ -1196,6 +1196,12 @@
     githubId = 754494;
     name = "Anders Asheim Hennum";
   };
+  andershus = {
+    email = "anders.husebo@eviny.no";
+    github = "andershus";
+    githubId = 93526270;
+    name = "Anders Husebø";
+  };
   andersk = {
     email = "andersk@mit.edu";
     github = "andersk";
