@@ -39861,7 +39861,7 @@ with pkgs;
     buildGoModule = buildGo122Module;
   };
 
-  vnote = libsForQt5.callPackage ../applications/office/vnote { };
+  vnote = qt6Packages.callPackage ../applications/office/vnote { };
 
   sshportal = callPackage ../servers/sshportal { };
 
