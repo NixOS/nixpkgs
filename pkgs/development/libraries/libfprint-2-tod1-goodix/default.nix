@@ -25,6 +25,7 @@ stdenv.mkDerivation {
   '';
 
   passthru.driverPath = "/lib/libfprint-2/tod-1";
+  passthru.needsLibfprint_1_90 = true;  # https://gitlab.freedesktop.org/libfprint/libfprint/-/issues/484
 
   meta = with lib; {
     description = "Goodix driver module for libfprint-2-tod Touch OEM Driver";
