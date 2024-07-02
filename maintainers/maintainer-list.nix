@@ -1115,6 +1115,12 @@
     github = "AmeerTaweel";
     githubId = 20538273;
   };
+  amerino = {
+    name = "Alberto Merino";
+    email = "amerinor01@gmail.com";
+    github = "amerinor01";
+    githubId = 22280447;
+  };
   amesgen = {
     email = "amesgen@amesgen.de";
     github = "amesgen";
@@ -1195,6 +1201,12 @@
     github = "andehen";
     githubId = 754494;
     name = "Anders Asheim Hennum";
+  };
+  andershus = {
+    email = "anders.husebo@eviny.no";
+    github = "andershus";
+    githubId = 93526270;
+    name = "Anders Husebø";
   };
   andersk = {
     email = "andersk@mit.edu";
@@ -3750,6 +3762,12 @@
     github = "cleverca22";
     githubId = 848609;
     name = "Michael Bishop";
+  };
+  clevor = {
+    email = "myclevorname@gmail.com";
+    github = "myclevorname";
+    githubId = 140354451;
+    name = "Samuel Connelly";
   };
   clkamp = {
     email = "c@lkamp.de";
@@ -7130,6 +7148,12 @@
     github = "gbtb";
     githubId = 37017396;
     name = "gbtb";
+  };
+  gcleroux = {
+    email = "guillaume@cleroux.dev";
+    github = "gcleroux";
+    githubId = 73357644;
+    name = "Guillaume Cléroux";
   };
   gdamjan = {
     email = "gdamjan@gmail.com";

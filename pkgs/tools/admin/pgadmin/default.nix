@@ -15,14 +15,14 @@
 
 let
   pname = "pgadmin";
-  version = "8.8";
-  yarnHash = "sha256-dBgbgZrjF1rNyN1Hp1nKiT6C6FVbYdbEZQgYbRKVsYI=";
+  version = "8.9";
+  yarnHash = "sha256-UEQ5gcc4n/XMW5kNol2gLiXUb9Ys75YMzWDXDiDIC9I=";
 
   src = fetchFromGitHub {
     owner = "pgadmin-org";
     repo = "pgadmin4";
     rev = "REL-${lib.versions.major version}_${lib.versions.minor version}";
-    hash = "sha256-203tuxtYOn1fD1m8BGL6rt5lDDr5V38ybPy+iwmZpkk=";
+    hash = "sha256-qxbY4gIXpp5U8RkzdYZUKJ7aTXvuXPGOGTKX41k1iyE=";
   };
 
   # keep the scope, as it is used throughout the derivation and tests
@@ -77,7 +77,7 @@ pythonPackages.buildPythonApplication rec {
     sed 's|*|0|g' -i requirements.txt
     # remove packageManager from package.json so we can work without corepack
     substituteInPlace web/package.json \
-      --replace-fail "\"packageManager\": \"yarn@3.6.4\"" "\"\": \"\""
+      --replace-fail "\"packageManager\": \"yarn@3.8.2\"" "\"\": \"\""
     substituteInPlace pkg/pip/setup_pip.py \
       --replace-fail "req = req.replace('psycopg[c]', 'psycopg[binary]')" "req = req"
     ${lib.optionalString (!server-mode) ''
