@@ -3,6 +3,7 @@
 with lib;
 
 let
+  globalCfg = config.services.scion;
   cfg = config.services.scion.scion-router;
   toml = pkgs.formats.toml { };
   defaultConfig = {
@@ -42,7 +43,7 @@ in
         ExecStart = "${pkgs.scion}/bin/scion-router --config ${configFile}";
         Restart = "on-failure";
         DynamicUser = true;
-        RuntimeDirectory = "scion-router";
+        ${if globalCfg.stateless then "RuntimeDirectory" else "StateDirectory"} = "scion-router";
       };
     };
   };
