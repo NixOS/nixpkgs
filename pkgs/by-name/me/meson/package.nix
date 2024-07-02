@@ -13,6 +13,7 @@
 , python3
 , substituteAll
 , zlib
+, fetchpatch
 }:
 
 let
@@ -70,6 +71,13 @@ python3.pkgs.buildPythonApplication rec {
 
     # This edge case is explicitly part of meson but is wrong for nix
     ./007-freebsd-pkgconfig-path.patch
+
+    # Fix meson's detection for zig's linker
+    (fetchpatch {
+      name = "linker-support-zig-cc.patch";
+      url = "https://github.com/mesonbuild/meson/pull/12293.patch";
+      hash = "sha256-dDOmSRBKl/gs7I3kmLXIyQk3zsOdlaYov72pPSel4+I=";
+    })
   ];
 
   buildInputs = lib.optionals (python3.pythonOlder "3.9") [
