@@ -115,6 +115,7 @@ let
     "format"
     "fortify"
     "fortify3"
+    "hardbackedgecfi"
     "pic"
     "pie"
     "relro"

@@ -114,7 +114,8 @@ stdenv.mkDerivation ({
       lib.optional (isAarch64 && isLinux) ./0001-aarch64-math-vector.h-add-NVCC-include-guard.patch
     )
     ++ lib.optional stdenv.hostPlatform.isMusl ./fix-rpc-types-musl-conflicts.patch
-    ++ lib.optional stdenv.buildPlatform.isDarwin ./darwin-cross-build.patch;
+    ++ lib.optional stdenv.buildPlatform.isDarwin ./darwin-cross-build.patch
+    ++ lib.optional (enableCET != false) ./2.39-revert-cet-default-disable.patch;
 
   postPatch =
     ''

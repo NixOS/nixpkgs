@@ -292,10 +292,12 @@ let
           pkgsExtraHardening = super';
           stdenv = super'.withDefaultHardeningFlags (
             super'.stdenv.cc.defaultHardeningFlags ++ [
+              "hardbackedgecfi"
               "stackclashprotection"
               "trivialautovarinit"
             ]
           ) super'.stdenv;
+          glibc = super'.glibc.override { enableCET = if stdenv.hostPlatform.isx86_64 then "permissive" else false; };
         })
       ] ++ overlays;
     };
