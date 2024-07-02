@@ -114,7 +114,7 @@ stdenv.mkDerivation rec {
     "-DSWIG_PYTHON=ON"
   ] ++ lib.optionals (qt != null) [
     "-DMOD_QT${lib.versions.major qt.qtbase.version}=ON"
-  ] ++ lib.optionals enableGlaxnimate [
+  ] ++ lib.optionals (qt != null && enableGlaxnimate) [
     "-DMOD_GLAXNIMATE${if lib.versions.major qt.qtbase.version == "5" then "" else "_QT6"}=ON"
   ];
 
