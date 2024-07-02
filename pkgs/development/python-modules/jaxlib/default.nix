@@ -77,7 +77,9 @@ let
     # however even with that fix applied, it doesn't work for everyone:
     # https://github.com/NixOS/nixpkgs/pull/184395#issuecomment-1207287129
     # NOTE: We always build with NCCL; if it is unsupported, then our build is broken.
-    broken = effectiveStdenv.isDarwin || nccl.meta.unsupported;
+
+    # FIXME: Bazel fetch is not reproducible (see #321920).
+    broken = true;
   };
 
   # These are necessary at build time and run time.
