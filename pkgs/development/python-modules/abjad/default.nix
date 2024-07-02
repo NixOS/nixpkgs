@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  ply,
-  roman,
-  uqbar,
-  pythonOlder,
-  pytestCheckHook,
-  lilypond,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, ply
+, roman
+, uqbar
+, pythonOlder
+, pytestCheckHook
+, lilypond
+, typing-extensions
 }:
 
 buildPythonPackage rec {
@@ -26,6 +26,7 @@ buildPythonPackage rec {
     ply
     roman
     uqbar
+    typing-extensions
   ];
 
   buildInputs = [ lilypond ];
@@ -34,12 +35,12 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace abjad/io.py \
-      --replace 'lilypond_path = self.get_lilypond_path()' \
+      --replace-fail 'lilypond_path = self.get_lilypond_path()' \
                 'lilypond_path = "${lilypond}/bin/lilypond"'
     # general invocations of binary for IO purposes
 
     substituteInPlace abjad/configuration.py \
-      --replace '["lilypond"' '["${lilypond}/bin/lilypond"'
+      --replace-fail '["lilypond"' '["${lilypond}/bin/lilypond"'
     # get_lilypond_version_string
   '';
 
