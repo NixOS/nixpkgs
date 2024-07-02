@@ -6887,6 +6887,8 @@ self: super: with self; {
     inherit (self) python libxml2;
   })).py;
 
+  libyaz0 = callPackage ../development/python-modules/libyaz0 { };
+
   liccheck = callPackage ../development/python-modules/liccheck { };
 
   license-expression = callPackage ../development/python-modules/license-expression { };
@@ -7281,6 +7283,8 @@ self: super: with self; {
   mapbox-earcut = callPackage ../development/python-modules/mapbox-earcut { };
 
   mapclassify = callPackage ../development/python-modules/mapclassify { };
+
+  mapfile-parser = callPackage ../development/python-modules/mapfile-parser { };
 
   mariadb = callPackage ../development/python-modules/mariadb { };
 
@@ -13115,6 +13119,8 @@ self: super: with self; {
   qmk-dotty-dict = callPackage ../development/python-modules/qmk-dotty-dict { };
 
   r2pipe = callPackage ../development/python-modules/r2pipe { };
+
+  rabbitizer = callPackage ../development/python-modules/rabbitizer { };
 
   rachiopy = callPackage ../development/python-modules/rachiopy { };
 

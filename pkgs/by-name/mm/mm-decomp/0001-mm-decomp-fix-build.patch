@@ -1,0 +1,26 @@
+From 6cdc749fb7d9b91011188444807e3494a988188a Mon Sep 17 00:00:00 2001
+From: qubitnano <146656568+qubitnano@users.noreply.github.com>
+Date: Tue, 21 May 2024 23:45:48 -0400
+Subject: [PATCH] mm-decomp: fix build
+
+Patch line 1115 to fix building per upstream instructions
+---
+ tools/disasm/disasm.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tools/disasm/disasm.py b/tools/disasm/disasm.py
+index 78d66d337..f97cd17e2 100755
+--- a/tools/disasm/disasm.py
++++ b/tools/disasm/disasm.py
+@@ -1112,7 +1112,7 @@ def asm_header(section_name: str):
+ def getImmOverride(insn: rabbitizer.Instruction):
+     if insn.isBranch():
+         return f".L{insn.getBranchOffset() + insn.vram:08X}"
+-    elif insn.isJump():
++    elif insn.isJumpWithAddress():
+         return proper_name(insn.getInstrIndexAsVram(), in_data=False, is_symbol=True)
+ 
+     elif insn.uniqueId == rabbitizer.InstrId.cpu_ori:
+-- 
+2.44.0
+
