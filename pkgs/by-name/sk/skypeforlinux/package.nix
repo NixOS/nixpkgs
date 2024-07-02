@@ -1,7 +1,41 @@
-{ lib, stdenv, fetchurl, dpkg
-, alsa-lib, atk, cairo, cups, curl, dbus, expat, fontconfig, freetype, gdk-pixbuf, glib, glibc, gnome-keyring
-, gtk3, libappindicator-gtk3, libnotify, libpulseaudio, libsecret, libv4l, nspr, nss, pango, systemd, wrapGAppsHook3, xorg
-, at-spi2-atk, libuuid, at-spi2-core, libdrm, mesa, libxkbcommon, libxshmfence }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  dpkg,
+  alsa-lib,
+  atk,
+  cairo,
+  cups,
+  curl,
+  dbus,
+  expat,
+  fontconfig,
+  freetype,
+  gdk-pixbuf,
+  glib,
+  glibc,
+  gnome-keyring,
+  gtk3,
+  libappindicator-gtk3,
+  libnotify,
+  libpulseaudio,
+  libsecret,
+  libv4l,
+  nspr,
+  nss,
+  pango,
+  systemd,
+  wrapGAppsHook3,
+  xorg,
+  at-spi2-atk,
+  libuuid,
+  at-spi2-core,
+  libdrm,
+  mesa,
+  libxkbcommon,
+  libxshmfence,
+}:
 
 let
 
@@ -9,56 +43,58 @@ let
   # source of the latter disappears much faster.
   version = "8.110.76.107";
 
-  rpath = lib.makeLibraryPath [
-    alsa-lib
-    atk
-    at-spi2-atk
-    at-spi2-core
-    cairo
-    cups
-    curl
-    dbus
-    expat
-    fontconfig
-    freetype
-    glib
-    glibc
-    libsecret
-    libuuid
+  rpath =
+    lib.makeLibraryPath [
+      alsa-lib
+      atk
+      at-spi2-atk
+      at-spi2-core
+      cairo
+      cups
+      curl
+      dbus
+      expat
+      fontconfig
+      freetype
+      glib
+      glibc
+      libsecret
+      libuuid
 
-    gdk-pixbuf
-    gtk3
-    libappindicator-gtk3
+      gdk-pixbuf
+      gtk3
+      libappindicator-gtk3
 
-    gnome-keyring
+      gnome-keyring
 
-    libnotify
-    libpulseaudio
-    nspr
-    nss
-    pango
-    stdenv.cc.cc
-    systemd
+      libnotify
+      libpulseaudio
+      nspr
+      nss
+      pango
+      stdenv.cc.cc
+      systemd
 
-    libv4l
-    libdrm
-    mesa
-    libxkbcommon
-    libxshmfence
-    xorg.libxkbfile
-    xorg.libX11
-    xorg.libXcomposite
-    xorg.libXcursor
-    xorg.libXdamage
-    xorg.libXext
-    xorg.libXfixes
-    xorg.libXi
-    xorg.libXrandr
-    xorg.libXrender
-    xorg.libXtst
-    xorg.libXScrnSaver
-    xorg.libxcb
-  ] + ":${stdenv.cc.cc.lib}/lib64";
+      libv4l
+      libdrm
+      mesa
+      libxkbcommon
+      libxshmfence
+      xorg.libxkbfile
+      xorg.libX11
+      xorg.libXcomposite
+      xorg.libXcursor
+      xorg.libXdamage
+      xorg.libXext
+      xorg.libXfixes
+      xorg.libXi
+      xorg.libXrandr
+      xorg.libXrender
+      xorg.libXtst
+      xorg.libXScrnSaver
+      xorg.libxcb
+    ]
+    + ":${stdenv.cc.cc.lib}/lib64";
 
   src =
     if stdenv.hostPlatform.system == "x86_64-linux" then
@@ -73,7 +109,8 @@ let
     else
       throw "Skype for linux is not supported on ${stdenv.hostPlatform.system}";
 
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "skypeforlinux";
   inherit version;
 
@@ -122,7 +159,10 @@ in stdenv.mkDerivation {
     homepage = "https://www.skype.com";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
-    maintainers = with maintainers; [ panaeon jraygauthier ];
+    maintainers = with maintainers; [
+      panaeon
+      jraygauthier
+    ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "skypeforlinux";
   };
