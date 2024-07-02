@@ -120,6 +120,8 @@ stdenv.mkDerivation (finalAttrs: {
     qtbase
     qtmultimedia
     woff2
+  ] ++ lib.optional stdenv.isLinux [
+    qtwayland
   ] ++ lib.optionals stdenv.isDarwin [
     AppKit
     Cocoa
