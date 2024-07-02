@@ -643,7 +643,7 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.python.org";
     changelog = let
       majorMinor = versions.majorMinor version;
-      dashedVersion = replaceStrings [ "." "a" ] [ "-" "-alpha-" ] version;
+      dashedVersion = replaceStrings [ "." "a" "b" ] [ "-" "-alpha-" "-beta-" ] version;
     in
       if sourceVersion.suffix == "" then
         "https://docs.python.org/release/${version}/whatsnew/changelog.html"
