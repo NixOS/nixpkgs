@@ -4,6 +4,8 @@
   fetchFromGitHub,
   setuptools,
   pytestCheckHook,
+  python,
+  packaging,
 }:
 
 buildPythonPackage {
@@ -25,6 +27,8 @@ buildPythonPackage {
   nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "yapsy" ];
+
+  propagatedBuildInputs = [ packaging ];
 
   meta = with lib; {
     homepage = "https://yapsy.sourceforge.net/";
