@@ -9107,6 +9107,12 @@
     github = "jceb";
     githubId = 101593;
   };
+  jcelerier = {
+    name = "Jean-Michaël Celerier";
+    email = "jeanmichael.celerier@gmail.com";
+    github = "jcelerier";
+    githubId = 2772730;
+  };
   jchw = {
     email = "johnwchadwick@gmail.com";
     github = "jchv";
