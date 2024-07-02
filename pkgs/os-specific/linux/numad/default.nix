@@ -2,19 +2,14 @@
 
 stdenv.mkDerivation rec {
   pname = "numad";
-  version = "0.5";
+  version = "1.0.0";
 
   src = fetchgit {
     url = "https://pagure.io/numad.git";
-    rev = "334278ff3d774d105939743436d7378a189e8693";
-    sha256 = "sha256-6nrbfooUI1ufJhsPf68li5584oKQcznXQlxfpStuX5I=";
+    rev = "3399d89305b6560e27e70aff4ad9fb403dedf947";
+    sha256 = "sha256-USEffVcakaAbilqijJmpro92ujvxbglcXxyBlntMxaI=";
   };
 
-  hardeningDisable = [ "format" ];
-
-  patches = [
-    ./numad-linker-flags.patch
-  ];
   postPatch = ''
     substituteInPlace Makefile --replace "install -m" "install -Dm"
   '';
