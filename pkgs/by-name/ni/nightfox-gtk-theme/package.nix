@@ -1,35 +1,51 @@
-{ lib
-, stdenvNoCC
-, fetchFromGitHub
-, gnome-themes-extra
-, gtk-engine-murrine
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  gnome,
+  sassc,
+  gnome-themes-extra,
+  gtk-engine-murrine,
+  colorVariants ? [] # default: install all icons
 }:
 
-stdenvNoCC.mkDerivation {
+let
   pname = "nightfox-gtk-theme";
-  version = "unstable-2023-05-28";
+  colorVariantList = [
+    "dark"
+    "light"
+  ];
+
+in
+lib.checkListOfEnum "${pname}: colorVariants" colorVariantList colorVariants
+
+stdenvNoCC.mkDerivation {
+  inherit pname;
+  version = "0-unstable-2024-06-27";
 
   src = fetchFromGitHub {
     owner = "Fausto-Korpsvart";
     repo = "Nightfox-GTK-Theme";
-    rev = "a8b01a28f2d1d9dd57d98d3708602b0d72340338";
-    hash = "sha256-GrlKYCqO9vgRbPdPhugPBg2rYtDxzbQwRPtTBIyIyx4=";
+    rev = "ef4e6e1fa3efe2a5d838d61191776abfe4d87766";
+    hash = "sha256-RsDEHauz9jQs1rqsoKbL/s0Vst3GzJXyGsE3uFtLjCY=";
   };
 
-  propagatedUserEnvPkgs = [
-    gtk-engine-murrine
-  ];
+  propagatedUserEnvPkgs = [ gtk-engine-murrine ];
 
-  buildInputs = [
-    gnome-themes-extra
-  ];
+  nativeBuildInputs = [ gnome.gnome-shell sassc ];
+  buildInputs = [ gnome-themes-extra ];
 
   dontBuild = true;
+
+  postPatch = ''
+    patchShebangs themes/install.sh
+  '';
 
   installPhase = ''
     runHook preInstall
     mkdir -p $out/share/themes
-    cp -a themes/* $out/share/themes
+    cd themes
+    ./install.sh -n Nightfox -c ${lib.concatStringsSep " " (if colorVariants != [] then colorVariants else colorVariantList)} --tweaks macos -d "$out/share/themes"
     runHook postInstall
   '';
 
