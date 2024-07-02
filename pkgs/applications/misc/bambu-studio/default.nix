@@ -2,6 +2,7 @@
   stdenv,
   lib,
   openexr,
+  opencv,
   jemalloc,
   c-blosc,
   binutils,
@@ -46,6 +47,7 @@
   withSystemd ? stdenv.isLinux,
 }:
 let
+  opencv_gtk = opencv.override (old : { enableGtk2 = true; });
   opencascade-occt = opencascade-occt_7_6;
   wxGTK31' = wxGTK31.overrideAttrs (old: {
     configureFlags = old.configureFlags ++ [
@@ -66,13 +68,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "bambu-studio";
-  version = "01.09.00.70";
+  version = "01.09.03.50";
 
   src = fetchFromGitHub {
     owner = "bambulab";
     repo = "BambuStudio";
     rev = "v${version}";
-    hash = "sha256-RBctBhKo7mjxsP7OJhGfoU1eIiGVuMiAqwwSU+gsMds=";
+    hash = "sha256-B8p2FNe5vuDNo6Uw3bjYyPykXe0mUOLvWkTBYmRBKUo=";
   };
 
   nativeBuildInputs = [
@@ -108,6 +110,7 @@ stdenv.mkDerivation rec {
     mpfr
     nlopt
     opencascade-occt
+    opencv_gtk
     openvdb_tbb_2021_8
     pcre
     tbb_2021_11
@@ -121,6 +124,8 @@ stdenv.mkDerivation rec {
     ./0001-not-for-upstream-CMakeLists-Link-against-webkit2gtk-.patch
     # Fix build with cgal-5.6.1+
     ./meshboolean-const.patch
+    # Workaround for https://github.com/bambulab/BambuStudio/pull/4172
+    ./4172.patch
   ];
 
   doCheck = true;
