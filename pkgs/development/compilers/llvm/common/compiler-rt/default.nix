@@ -12,6 +12,7 @@
 , python3
 , xcbuild
 , libllvm
+, libcxx
 , linuxHeaders
 , libxcrypt
 
@@ -82,15 +83,24 @@ stdenv.mkDerivation ({
     "-DCMAKE_ASM_COMPILER_TARGET=${stdenv.hostPlatform.config}"
   ] ++ lib.optionals (haveLibc && stdenv.hostPlatform.libc == "glibc") [
     "-DSANITIZER_COMMON_CFLAGS=-I${libxcrypt}/include"
-  ] ++ lib.optionals ((useLLVM || bareMetal || isMusl || isAarch64) && (lib.versions.major release_version == "13")) [
+  ] ++ lib.optionals (useLLVM && haveLibc && stdenv.cc.libcxx == libcxx) [
+    "-DSANITIZER_CXX_ABI=libcxxabi"
+    "-DSANITIZER_CXX_ABI_LIBNAME=libcxxabi"
+    "-DCOMPILER_RT_USE_BUILTINS_LIBRARY=ON"
+  ] ++ lib.optionals (((useLLVM && !haveLibc) || bareMetal || isMusl || isAarch64) && (lib.versions.major release_version == "13")) [
     "-DCOMPILER_RT_BUILD_LIBFUZZER=OFF"
-  ] ++ lib.optionals (useLLVM || bareMetal || isMusl || isDarwinStatic) [
+  ] ++ lib.optionals (useLLVM && haveLibc) [
+    "-DCOMPILER_RT_BUILD_SANITIZERS=ON"
+  ] ++ lib.optionals ((useLLVM && !haveLibc) || bareMetal || isMusl || isDarwinStatic) [
     "-DCOMPILER_RT_BUILD_SANITIZERS=OFF"
+  ] ++ lib.optionals (useLLVM || bareMetal || isMusl || isDarwinStatic) [
     "-DCOMPILER_RT_BUILD_XRAY=OFF"
     "-DCOMPILER_RT_BUILD_LIBFUZZER=OFF"
     "-DCOMPILER_RT_BUILD_MEMPROF=OFF"
     "-DCOMPILER_RT_BUILD_ORC=OFF" # may be possible to build with musl if necessary
-  ] ++ lib.optionals (useLLVM || bareMetal) [
+  ] ++ lib.optionals (useLLVM && haveLibc) [
+    "-DCOMPILER_RT_BUILD_PROFILE=ON"
+  ] ++ lib.optionals ((useLLVM && !haveLibc) || bareMetal) [
      "-DCOMPILER_RT_BUILD_PROFILE=OFF"
   ] ++ lib.optionals ((useLLVM && !haveLibc) || bareMetal || isDarwinStatic) [
     "-DCMAKE_CXX_COMPILER_WORKS=ON"
