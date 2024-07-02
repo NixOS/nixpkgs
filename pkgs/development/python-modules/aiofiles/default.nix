@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "aiofiles";
-  version = "23.2.1";
+  version = "24.1.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "Tinche";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-EbRQD/AoTMWAlPOMWmD0UdFjRyjt5MUBkJtcydUCdHM=";
+    hash = "sha256-uDKDMSNbMIlAaifpEBh1+q2bdZNUia8pPb30IOIgOAE=";
   };
 
   nativeBuildInputs = [ hatchling ];
