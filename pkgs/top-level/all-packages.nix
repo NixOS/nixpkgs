@@ -9030,7 +9030,7 @@ with pkgs;
 
   idle3tools = callPackage ../tools/system/idle3tools { };
 
-  ifcopenshell = with python3Packages; toPythonApplication ifcopenshell;
+  ifcopenshell = callPackage ../development/libraries/ifcopenshell {};
 
   iftop = callPackage ../tools/networking/iftop { };
 

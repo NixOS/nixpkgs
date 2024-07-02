@@ -4,106 +4,114 @@
 , testers
 , buildPythonPackage
 , fetchFromGitHub
-, gcc10
-, cmake
-, cgal
-, boost179
-, gmp
-, icu
-, swig
-, mpfr
-, pcre
-, opencascade-occt_7_6
-, opencollada
-, libxml2
-, hdf5
-, zlib
-, libaec
 , python3
+, ifcopenshell
 # python deps
-, setuptools
-, mathutils
-, shapely
-, numpy
-, isodate
-, python-dateutil
-, lark
+, python3Packages
+# , setuptools
+# , build
+# , mathutils
+# , shapely
+# , numpy
+# , isodate
+# , python-dateutil
+# , lark
+# , wheel
 }:
-let
-  opencascade-occt = opencascade-occt_7_6;
-in
 buildPythonPackage rec {
   pname = "ifcopenshell";
   version = "0.7.0";
-  format = "other";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner  = "IfcOpenShell";
     repo   = "IfcOpenShell";
-    rev = "refs/tags/v${version}";
+    rev = "refs/tags/ifcopenshell-python-0.7.9";
     fetchSubmodules = true;
     sha256 = "sha256-DtA8KeWipPfOnztKG/lrgLZeOCUG3nWR9oW7OST7koc=";
   };
 
-  nativeBuildInputs = [ gcc10 cmake setuptools ];
+  nativeBuildInputs = [ python3 ];
+  propagatedBuildInputs = with python3Packages; [ wheel build setuptools ];
+  # build-system = [
+  #   setuptools
+  # ];
+
   pythonImportsCheck = [ "ifcopenshell" ];
 
   buildInputs = [
     # ifcopenshell needs stdc++
-    stdenv.cc.cc.lib
-    boost179
-    cgal
-    gmp
-    icu
-    mpfr
-    pcre
-    libxml2
-    hdf5
-    opencascade-occt
+    # stdenv.cc.cc.lib
+    # boost179
+    # cgal
+    # gmp
+    # icu
+    # mpfr
+    # pcre
+    # libxml2
+    # hdf5
+    # opencascade-occt
+    # libaec
+    ifcopenshell
     python3
-    libaec
   ];
 
-  dependencies = [
-    mathutils
-    shapely
-    numpy
-    isodate
-    python-dateutil
-    lark
-  ];
+  # dependencies = [
+  #   mathutils
+  #   shapely
+  #   numpy
+  #   isodate
+  #   python-dateutil
+  #   lark
+  # ];
 
   preConfigure = ''
-    cd cmake
+    cd src/ifcopenshell-python
+    # The build process is here: https://github.com/IfcOpenShell/IfcOpenShell/blob/v0.8.0/src/ifcopenshell-python/Makefile#L131
+    # but we'd have to patch the copied pyproject.toml anyway, as the version is incorrect (even after their `make dist` btw), and the `where = ["dist"]` does not apply to us.
+    cat << EOF > pyproject.toml
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+[project]
+name = "ifcopenshell"
+version = "0.7.9"
+authors = [
+  { name="Dion Moult", email="dion@thinkmoult.com" },
+]
+description = "Python bindings, utility functions, and high-level API for IfcOpenShell"
+readme = "README.md"
+requires-python = ">=3.6,<3.12"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: GNU Lesser General Public License v3 or later (LGPLv3+)",
+]
+[project.optional-dependencies]
+geometry = ["mathutils", "shapely"]
+date = ["isodate"]
+[project.urls]
+"Homepage" = "http://ifcopenshell.org"
+"Bug Tracker" = "https://github.com/ifcopenshell/ifcopenshell/issues"
+[tool.setuptools.packages.find]
+include = ["ifcopenshell*"]
+[tool.setuptools.package-data]
+ifcopenshell = ["*.pyd", "*.so", "*.json"]
+"ifcopenshell.util" = ["*.json", "schema/*.ifc"]
+EOF
+    # NOTE: the following is directly inspired by https://github.com/IfcOpenShell/IfcOpenShell/blob/v0.8.0/src/ifcopenshell-python/Makefile#L131
+    # TODO find a better way to find it or suggest upstream improvement ;-)
+    cp -v ${ifcopenshell.out}/lib/python3.11/site-packages/ifcopenshell/ifcopenshell_wrapper.py ./ifcopenshell/
+    cp -v ${ifcopenshell.out}/lib/python3.11/site-packages/ifcopenshell/_ifcopenshell_wrapper.so ./ifcopenshell/
+	# distutils cannot access anything outside the cwd, so hackishly swap out the README.md
+	cp README.md ../README.bak
+	cp ../../README.md README.md
+	# sed "s/999999//" pyproject.toml
+	# python -m build
   '';
-
-  postInstall = ''
-    echo Installing pyproject.toml
-    cp -v $src/src/ifcopenshell-python/pyproject.toml $out/lib/python3.11/site-packages/ifcopenshell/pyproject.toml
-  '';
-
-  PYTHONUSERBASE=".";
-  cmakeFlags = [
-    "-DUSERSPACE_PYTHON_PREFIX=ON"
-    "-DBUILD_IFCPYTHON=ON"
-    "-DOCC_INCLUDE_DIR=${opencascade-occt}/include/opencascade"
-    "-DOCC_LIBRARY_DIR=${opencascade-occt}/lib"
-    "-DOPENCOLLADA_INCLUDE_DIR=${opencollada}/include/opencollada"
-    "-DOPENCOLLADA_LIBRARY_DIR=${opencollada}/lib/opencollada"
-    "-DSWIG_EXECUTABLE=${swig}/bin/swig"
-    "-DLIBXML2_INCLUDE_DIR=${libxml2.dev}/include/libxml2"
-    "-DLIBXML2_LIBRARIES=${libxml2.out}/lib/libxml2${stdenv.hostPlatform.extensions.sharedLibrary}"
-    "-DGMP_LIBRARY_DIR=${gmp.out}/lib/"
-    "-DMPFR_LIBRARY_DIR=${mpfr.out}/lib/"
-    # HDF5 support is currently not optional, see https://github.com/IfcOpenShell/IfcOpenShell/issues/1815
-    "-DHDF5_SUPPORT=ON"
-    "-DHDF5_INCLUDE_DIR=${hdf5.dev}/include/"
-    "-DHDF5_LIBRARIES=${hdf5.out}/lib/libhdf5_cpp.so;${hdf5.out}/lib/libhdf5.so;${zlib.out}/lib/libz.so;${libaec.out}/lib/libaec.so;" # /usr/lib64/libsz.so;"
-  ];
 
   meta = with lib; {
     broken = stdenv.isDarwin;
-    description = "Open source IFC library and geometry engine";
+    description = "Open source IFC library and geometry engine, python bindings.";
     homepage = "http://ifcopenshell.org/";
     license = licenses.lgpl3;
     maintainers = with maintainers; [ fehnomenal ];
