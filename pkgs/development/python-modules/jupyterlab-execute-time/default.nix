@@ -22,7 +22,7 @@ buildPythonPackage rec {
       --replace '"jupyterlab~=4.0.0"' ""
   '';
 
-  nativeBuildInputs = [
+  dependencies = [
     jupyterlab
     jupyter-packaging
   ];
@@ -32,10 +32,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "jupyterlab_execute_time" ];
 
-  meta = with lib; {
-    description = "A JupyterLab extension for displaying cell timings";
+  meta = {
+    description = "JupyterLab extension for displaying cell timings";
     homepage = "https://github.com/deshaw/jupyterlab-execute-time";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ vglfr ];
+    license = lib.licenses.bsd3;
+    maintainers = [ lib.maintainers.vglfr ];
   };
 }
