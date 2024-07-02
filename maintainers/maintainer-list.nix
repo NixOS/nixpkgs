@@ -10158,12 +10158,6 @@
     githubId = 46386452;
     name = "Jeroen Wijenbergh";
   };
-  jwoudenberg = {
-    email = "nixpkgs@jasperwoudenberg.com";
-    github = "jwoudenberg";
-    githubId = 1525551;
-    name = "Jasper Woudenberg";
-  };
   jwygoda = {
     email = "jaroslaw@wygoda.me";
     github = "jwygoda";
@@ -11346,12 +11340,6 @@
     github = "LEXUGE";
     githubId = 13804737;
     keys = [ { fingerprint = "7FE2 113A A08B 695A C8B8  DDE6 AE53 B4C2 E58E DD45"; } ];
-  };
-  lf- = {
-    email = "nix-maint@lfcode.ca";
-    github = "lf-";
-    githubId = 6652840;
-    name = "Jade";
   };
   lgcl = {
     email = "dev@lgcl.de";
@@ -12961,7 +12949,7 @@
     name = "Merlin Humml";
   };
   mguentner = {
-    email = "code@klandest.in";
+    email = "code@mguentner.de";
     github = "mguentner";
     githubId = 668926;
     name = "Maximilian Güntner";
@@ -15341,12 +15329,6 @@
     githubId = 4580157;
     name = "Patrick Hobusch";
   };
-  patka = {
-    email = "patka@patka.dev";
-    github = "patka-123";
-    githubId = 69802930;
-    name = "patka";
-  };
   patrickdag = {
     email = "patrick-nixos@failmail.dev";
     github = "PatrickDaG";
@@ -15518,12 +15500,6 @@
     github = "penguwin";
     githubId = 13225611;
     name = "Nicolas Martin";
-  };
-  pennae = {
-    name = "pennae";
-    email = "github@quasiparticle.net";
-    github = "pennae";
-    githubId = 82953136;
   };
   perchun = {
     name = "Perchun Pak";
@@ -17355,12 +17331,6 @@
     email = "roshaen09@gmail.com";
     github = "roshaen";
     githubId = 58213083;
-  };
-  rossabaker = {
-    name = "Ross A. Baker";
-    email = "ross@rossabaker.com";
-    github = "rossabaker";
-    githubId = 142698;
   };
   RossComputerGuy = {
     name = "Tristan Ross";
@@ -22014,6 +21984,12 @@
     github = "ydlr";
     githubId = 58453832;
     keys = [ { fingerprint = "FD0A C425 9EF5 4084 F99F 9B47 2ACC 9749 7C68 FAD4"; } ];
+  };
+  yelite = {
+    name = "Lite Ye";
+    email = "yelite958@gmail.com";
+    github = "yelite";
+    githubId = 3517225;
   };
   YellowOnion = {
     name = "Daniel Hill";

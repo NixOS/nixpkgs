@@ -839,7 +839,7 @@ with pkgs;
 
   dockerTools = callPackage ../build-support/docker {
     writePython3 = buildPackages.writers.writePython3;
-  } // { __attrsFailEvaluation = true; };
+  };
 
   fakeNss = callPackage ../build-support/fake-nss { };
 
@@ -16012,8 +16012,7 @@ with pkgs;
   openjdk = jdk;
   openjdk_headless = jdk_headless;
 
-  graalvmCEPackages =
-    recurseIntoAttrs (callPackage ../development/compilers/graalvm/community-edition { });
+  graalvmCEPackages = callPackage ../development/compilers/graalvm/community-edition { };
   graalvm-ce = graalvmCEPackages.graalvm-ce;
   buildGraalvmNativeImage = (callPackage ../build-support/build-graalvm-native-image {
     graalvmDrv = graalvm-ce;
@@ -16640,8 +16639,6 @@ with pkgs;
   };
 
   cauwugo = callPackage ../development/tools/rust/cauwugo { };
-
-  crate2nix = callPackage ../development/tools/rust/crate2nix { };
 
   critcmp = callPackage ../development/tools/rust/critcmp { };
 
@@ -21967,9 +21964,6 @@ with pkgs;
   libgig = callPackage ../development/libraries/libgig { };
 
   libglibutil = callPackage ../development/libraries/libglibutil { };
-
-  libgnome-keyring = callPackage ../development/libraries/libgnome-keyring { };
-  libgnome-keyring3 = gnome.libgnome-keyring;
 
   libgnome-games-support = callPackage ../development/libraries/libgnome-games-support { };
   libgnome-games-support_2_0 = callPackage ../development/libraries/libgnome-games-support/2.0.nix { };
@@ -31969,23 +31963,10 @@ with pkgs;
 
   kondo = callPackage ../applications/misc/kondo { };
 
-  kotatogram-desktop = libsForQt5.callPackage ../applications/networking/instant-messengers/telegram/kotatogram-desktop {
-    inherit (darwin.apple_sdk_11_0.frameworks) Cocoa CoreFoundation CoreServices CoreText CoreGraphics
-      CoreMedia OpenGL AudioUnit ApplicationServices Foundation AGL Security SystemConfiguration
-      Carbon AudioToolbox VideoToolbox VideoDecodeAcceleration AVFoundation CoreAudio CoreVideo
-      CoreMediaIO QuartzCore AppKit CoreWLAN WebKit IOKit GSS MediaPlayer IOSurface Metal MetalKit;
-
+  kotatogram-desktop = kdePackages.callPackage ../applications/networking/instant-messengers/telegram/kotatogram-desktop {
     stdenv = if stdenv.isDarwin
-      then overrideSDK llvmPackages_14.stdenv "11.0"
+      then overrideSDK stdenv "11.0"
       else stdenv;
-
-    # telegram-desktop has random crashes when jemalloc is built with gcc.
-    # Apparently, it triggers some bug due to usage of gcc's builtin
-    # functions like __builtin_ffsl by jemalloc when it's built with gcc.
-    jemalloc = (jemalloc.override { stdenv = clangStdenv; }).overrideAttrs {
-      # no idea how to fix the tests :(
-      doCheck = false;
-    };
   };
 
   kotatogram-desktop-with-webkit = callPackage ../applications/networking/instant-messengers/telegram/kotatogram-desktop/with-webkit.nix { };
@@ -38025,8 +38006,6 @@ with pkgs;
   p4est-dbg = callPackage ../development/libraries/science/math/p4est {
     p4est-sc = p4est-sc-dbg;
   };
-
-  petsc = callPackage ../development/libraries/science/math/petsc { };
 
   parmetis = callPackage ../development/libraries/science/math/parmetis { };
 
