@@ -33,8 +33,8 @@ cargoCheckHook() {
 
     (
         set -x
-        cargo test \
-              -j $NIX_BUILD_CORES \
+        runInJobserver cargo test ---- \
+              -j $NIX_BUILD_CORES ---- \
               ${argstr} -- \
               --test-threads=${threads} \
               ${checkFlags} \
