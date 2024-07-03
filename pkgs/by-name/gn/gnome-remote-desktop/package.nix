@@ -1,6 +1,7 @@
 {
   asciidoc,
   cairo,
+  dbus,
   fdk_aac,
   fetchurl,
   freerdp3,
@@ -12,13 +13,17 @@
   libdrm,
   libei,
   libepoxy,
+  libgudev,
   libnotify,
   libopus,
   libsecret,
   libxkbcommon,
+  mesa,
   meson,
+  mutter,
   ninja,
   nv-codec-headers-11,
+  openssl,
   pipewire,
   pkg-config,
   polkit,
@@ -26,6 +31,7 @@
   stdenv,
   systemd,
   tpm2-tss,
+  wireplumber,
   wrapGAppsHook3,
 }:
 
@@ -37,6 +43,17 @@ stdenv.mkDerivation rec {
     url = "mirror://gnome/sources/gnome-remote-desktop/${lib.versions.major version}/gnome-remote-desktop-${version}.tar.xz";
     hash = "sha256-iqVXdXV7KZ3r5Bfhaebij+y/GM5hHtF2+g1lCrU0R3Y=";
   };
+
+  postPatch = ''
+    patchShebangs \
+      tests/prepare-test-environment.sh \
+      tests/run-vnc-tests.py
+
+    substituteInPlace tests/prepare-test-environment.sh \
+      --replace-fail \
+        dbus_run_session=\$\{DBUS_RUN_SESSION_BIN:-dbus-run-session\} \
+        'dbus_run_session="dbus-run-session --config-file=${dbus}/share/dbus-1/session.conf"'
+  '';
 
   nativeBuildInputs = [
     asciidoc
@@ -66,7 +83,7 @@ stdenv.mkDerivation rec {
     polkit # For polkit-gobject
     systemd
     tpm2-tss
-  ];
+  ] ++ lib.optional doCheck checkInputs;
 
   mesonFlags = [
     "-Dconf_dir=/etc/gnome-remote-desktop"
@@ -74,9 +91,19 @@ stdenv.mkDerivation rec {
     "-Dsystemd_system_unit_dir=${placeholder "out"}/lib/systemd/system"
     "-Dsystemd_sysusers_dir=${placeholder "out"}/lib/sysusers.d"
     "-Dsystemd_tmpfiles_dir=${placeholder "out"}/lib/tmpfiles.d"
-    "-Dtests=false" # Too deep of a rabbit hole.
     # TODO: investigate who should be fixed here.
     "-Dc_args=-I${freerdp3}/include/winpr3"
+  ];
+
+  doCheck = true;
+
+  checkInputs = [
+    dbus # for dbus-run-session
+    libgudev
+    mesa # for gbm
+    mutter
+    openssl
+    wireplumber
   ];
 
   passthru = {
