@@ -10387,6 +10387,8 @@ self: super: with self; {
 
   py65 = callPackage ../development/python-modules/py65 { };
 
+  py7zr = callPackage ../development/python-modules/py7zr { };
+
   pyabpoa = toPythonModule (pkgs.abpoa.override {
     enablePython = true;
     python3Packages = self;
