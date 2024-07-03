@@ -144,15 +144,6 @@ self: super: {
       })
     super.ascii-numbers;
 
-  # Fix ghc-9.6.x build errors.
-  libmpd = appendPatch
-    # https://github.com/vimus/libmpd-haskell/pull/138
-    (pkgs.fetchpatch { url = "https://github.com/vimus/libmpd-haskell/compare/95d3b3bab5858d6d1f0e079d0ab7c2d182336acb...5737096a339edc265a663f51ad9d29baee262694.patch";
-                       name = "vimus-libmpd-haskell-pull-138.patch";
-                       sha256 = "sha256-CvvylXyRmoCoRJP2MzRwL0SBbrEzDGqAjXS+4LsLutQ=";
-                     })
-    super.libmpd;
-
   # Apply patch from PR with mtl-2.3 fix.
   ConfigFile = overrideCabal (drv: {
     editedCabalFile = null;
