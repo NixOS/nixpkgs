@@ -36,7 +36,7 @@ in
   postBuild = ''
     rm -fr packages/vitest-pool-workers
     NODE_ENV="production" pnpm run build
-    # pnpm --offline deploy --frozen-lockfile  --ignore-script  --filter=bash-language-server server-deploy
+    # pnpm --offline deploy --frozen-lockfile --ignore-script --filter=bash-language-server server-deploy
   '';
 
   # this was taken from a previous script which was generated somehow
@@ -49,14 +49,14 @@ in
         esac
 
         if [ -z "$NODE_PATH" ]; then
-          export NODE_PATH="WRANGLER_PATH/lib/node_modules:WRANGLER_PATH/lib/packages/wrangler/node_modules"
+            export NODE_PATH="WRANGLER_PATH/lib/node_modules:WRANGLER_PATH/lib/packages/wrangler/node_modules"
         else
-          export NODE_PATH="WRANGLER_PATH/lib/node_modules:WRANGLER_PATH/lib/packages/wrangler/node_modules:$NODE_PATH"
+            export NODE_PATH="WRANGLER_PATH/lib/node_modules:WRANGLER_PATH/lib/packages/wrangler/node_modules:$NODE_PATH"
         fi
         if [ -x "$basedir/node" ]; then
-          exec "$basedir/node"  "WRANGLER_PATH/lib/packages/wrangler/bin/wrangler.js" "$@"
+            exec "$basedir/node" "WRANGLER_PATH/lib/packages/wrangler/bin/wrangler.js" "$@"
         else
-          exec node  "WRANGLER_PATH/lib/packages/wrangler/bin/wrangler.js" "$@"
+            exec node "WRANGLER_PATH/lib/packages/wrangler/bin/wrangler.js" "$@"
         fi
       '';
 
