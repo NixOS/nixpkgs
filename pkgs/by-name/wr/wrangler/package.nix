@@ -5,8 +5,6 @@
   fetchFromGitHub,
   pnpm_9,
   nodejs,
-  npmHooks,
-  writeScriptBin,
 }:
 let
   srcHash = "sha256-/4iIkvSn85fkRggmIha2kRlW0MEwvzy0ZAmIb8+LpZQ=";
