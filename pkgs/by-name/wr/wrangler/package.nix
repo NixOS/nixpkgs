@@ -8,8 +8,11 @@
   npmHooks,
   writeScriptBin,
 }:
-
-stdenv.mkDerivation (finalAttrs: {
+let
+  srcHash = "sha256-/4iIkvSn85fkRggmIha2kRlW0MEwvzy0ZAmIb8+LpZQ=";
+  pnpmDepsHash = "0";
+in
+  stdenv.mkDerivation (finalAttrs: {
   pname = "wrangler";
   version = "3.62.0";
 
@@ -17,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "cloudflare";
     repo = "workers-sdk";
     rev = "wrangler@${finalAttrs.version}";
-    hash = "sha256-/4iIkvSn85fkRggmIha2kRlW0MEwvzy0ZAmIb8+LpZQ=";
+    hash = "${srcHash}"
   };
 
   nativeBuildInputs = [
@@ -27,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   pnpmDeps = pnpm_9.fetchDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-aTTaiGXm1WYwmy+ljUC9yO3qtvN20SA+24T83dWYrI0=";
+    hash = "${pnpmDepsHash}";
   };
 
   # @cloudflare/vitest-pool-workers wanted to run a server as part of the build process
