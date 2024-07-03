@@ -1,5 +1,5 @@
 #! /usr/bin/env nix-shell
-#! nix-shell -i bash -p gnused nix nodejs
+#! nix-shell -i bash -p nodejs gnused nix
 
 set -euo pipefail
 pushd "$(dirname "${BASH_SOURCE[0]}")"
