@@ -25,19 +25,16 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mesonlsp";
-  version = "4.2.2";
+  version = "4.3.0";
 
   src = fetchFromGitHub {
     owner = "JCWasmx86";
     repo = "mesonlsp";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-pN8MCqrRfVpmM8KWa7HPTghoegplM4bP/HRVJVs05iE=";
+    hash = "sha256-4DwXhe/7zu49NH1M8/tY/fUjUVt4cvQaIO1+K7fh9fU=";
   };
 
-  patches = [
-    ./disable-tests-that-require-network-access.patch
-    ./simplify-the-format-header-polyfill.patch
-  ];
+  patches = [ ./disable-tests-that-require-network-access.patch ];
 
   nativeBuildInputs = [
     gtest
