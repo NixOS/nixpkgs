@@ -2,6 +2,7 @@
 
 let
   inherit (lib)
+    addErrorContext
     all
     any
     attrByPath
@@ -265,9 +266,9 @@ let
               let
                 optText = showOption (prefix ++ firstDef.prefix);
                 defText =
-                  builtins.addErrorContext
+                  addErrorContext
                     "while evaluating the error message for definitions for `${optText}', which is an option that does not exist"
-                    (builtins.addErrorContext
+                    (addErrorContext
                       "while evaluating a definition from `${firstDef.file}'"
                       ( showDefs [ firstDef ])
                     );
@@ -503,8 +504,8 @@ let
       # not their values.  The values are forwarding the result of the
       # evaluation of the option.
       context = name: ''while evaluating the module argument `${name}' in "${key}":'';
-      extraArgs = builtins.mapAttrs (name: _:
-        builtins.addErrorContext (context name)
+      extraArgs = mapAttrs (name: _:
+        addErrorContext (context name)
           (args.${name} or config._module.args.${name})
       ) (lib.functionArgs f);
 
@@ -806,7 +807,7 @@ let
           "The type `types.${opt.type.name}' of option `${showOption loc}' defined in ${showFiles opt.declarations} is deprecated. ${opt.type.deprecationMessage}";
 
     in warnDeprecation opt //
-      { value = builtins.addErrorContext "while evaluating the option `${showOption loc}':" value;
+      { value = addErrorContext "while evaluating the option `${showOption loc}':" value;
         inherit (res.defsFinal') highestPrio;
         definitions = map (def: def.value) res.defsFinal;
         files = map (def: def.file) res.defsFinal;
@@ -822,7 +823,7 @@ let
       let
         # Process mkMerge and mkIf properties.
         defs' = concatMap (m:
-          map (value: { inherit (m) file; inherit value; }) (builtins.addErrorContext "while evaluating definitions from `${m.file}':" (dischargeProperties m.value))
+          map (value: { inherit (m) file; inherit value; }) (addErrorContext "while evaluating definitions from `${m.file}':" (dischargeProperties m.value))
         ) defs;
 
         # Process mkOverride properties.
