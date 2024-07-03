@@ -3465,8 +3465,6 @@ with pkgs;
 
   bkyml = callPackage ../tools/misc/bkyml { };
 
-  blackmagic-desktop-video = callPackage ../tools/video/blackmagic-desktop-video { };
-
   blocksat-cli = with python3Packages; toPythonApplication blocksat-cli;
 
   bmap-tools = callPackage ../tools/misc/bmap-tools { };

@@ -53,6 +53,16 @@ stdenv.mkDerivation rec {
       url = "https://github.com/389ds/389-ds-base/commit/1fe029c495cc9f069c989cfbb09d449a078c56e2.patch";
       hash = "sha256-b0HSaDjuEUKERIXKg8np+lZDdZNmrCTAXybJzF+0hq0=";
     })
+    (fetchpatch {
+      name = "CVE-2024-2199.patch";
+      url = "https://git.rockylinux.org/staging/rpms/389-ds-base/-/raw/dae373bd6b4e7d6f35a096e6f27be1c3bf1e48ac/SOURCES/0004-CVE-2024-2199.patch";
+      hash = "sha256-grANphTafCoa9NQy+FowwPhGQnvuCbfGnSpQ1Wp69Vg=";
+    })
+    (fetchpatch {
+      name = "CVE-2024-3657.patch";
+      url = "https://git.rockylinux.org/staging/rpms/389-ds-base/-/raw/dae373bd6b4e7d6f35a096e6f27be1c3bf1e48ac/SOURCES/0005-CVE-2024-3657.patch";
+      hash = "sha256-CuiCXQp3PMiYERzFk7oH3T91yQ1dP/gtLNWF0eqGAQ4=";
+    })
   ];
 
   cargoDeps = rustPlatform.fetchCargoTarball {
