@@ -73,8 +73,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [ curl tzdata ];
 
+  outputs = [ "out" "include" ];
+  outputInclude = "include";
+
   cmakeFlags = [
     "-DD_FLAGS=-d-version=TZDatabaseDir;-d-version=LibcurlPath;-J${pathConfig}"
+    "-DINCLUDE_INSTALL_DIR=${placeholder "include"}/include/d"
   ];
 
   postConfigure = ''
