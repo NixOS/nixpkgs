@@ -90192,24 +90192,6 @@ in
     bypassCache = true;
     reconstructLock = true;
   };
-  uglify-js = nodeEnv.buildNodePackage {
-    name = "uglify-js";
-    packageName = "uglify-js";
-    version = "3.18.0";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/uglify-js/-/uglify-js-3.18.0.tgz";
-      sha512 = "SyVVbcNBCk0dzr9XL/R/ySrmYf0s372K6/hFklzgcp2lBFyXtw4I7BOdDjlLhE1aVqaI/SHWXWmYdlZxuyF38A==";
-    };
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "JavaScript parser, mangler/compressor and beautifier toolkit";
-      homepage = "https://github.com/mishoo/UglifyJS#readme";
-      license = "BSD-2-Clause";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
   undollar = nodeEnv.buildNodePackage {
     name = "undollar";
     packageName = "undollar";

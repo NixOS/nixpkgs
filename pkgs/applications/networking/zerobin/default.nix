@@ -1,7 +1,7 @@
 { lib
 , python3Packages
 , fetchFromGitHub
-, nodePackages
+, uglify-js
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -20,7 +20,7 @@ python3Packages.buildPythonApplication rec {
   nativeBuildInputs = [
     python3Packages.doit
     python3Packages.pyscss
-    nodePackages.uglify-js
+    uglify-js
   ];
 
   propagatedBuildInputs = with python3Packages; [

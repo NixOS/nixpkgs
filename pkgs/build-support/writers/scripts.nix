@@ -485,7 +485,7 @@ rec {
   # returns an executable
   #
   # Example:
-  #   writeJS "example" { libraries = [ pkgs.nodePackages.uglify-js ]; } ''
+  #   writeJS "example" { libraries = [ pkgs.uglify-js ]; } ''
   #     var UglifyJS = require("uglify-js");
   #     var code = "function add(first, second) { return first + second; }";
   #     var result = UglifyJS.minify(code);
