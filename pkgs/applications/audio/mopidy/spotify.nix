@@ -6,9 +6,10 @@
   unstableGitUpdater,
 }:
 
-pythonPackages.buildPythonApplication rec {
+pythonPackages.buildPythonApplication {
   pname = "mopidy-spotify";
   version = "4.1.1-unstable-2024-02-27";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mopidy";
@@ -17,21 +18,23 @@ pythonPackages.buildPythonApplication rec {
     hash = "sha256-RkXDzAbOOll3uCNZ2mFRnjqMkT/NkXOGjywLRTC9i60=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ pythonPackages.setuptools ];
+
+  dependencies = [
     mopidy
     pythonPackages.responses
   ];
 
-  nativeBuildInputs = [ pythonPackages.pytestCheckHook ];
+  nativeCheckInputs = [ pythonPackages.pytestCheckHook ];
 
   pythonImportsCheck = [ "mopidy_spotify" ];
 
   passthru.updateScript = unstableGitUpdater { tagPrefix = "v"; };
 
-  meta = with lib; {
-    homepage = "https://github.com/mopidy/mopidy-spotify";
+  meta = {
     description = "Mopidy extension for playing music from Spotify";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ getchoo ];
+    homepage = "https://github.com/mopidy/mopidy-spotify";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ getchoo ];
   };
 }
