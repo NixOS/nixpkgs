@@ -132,6 +132,8 @@ let
 
     generatedConfig = luaLib.generateLuarocksConfig {
       externalDeps = lib.unique (self.externalDeps ++ externalDepsGenerated);
+      local_cache = "";
+
       # Filter out the lua derivation itself from the Lua module dependency
       # closure, as it doesn't have a rock tree :)
       # luaLib.hasLuaModule
