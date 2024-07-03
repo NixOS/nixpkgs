@@ -87,6 +87,7 @@ runCommand yazi-unwrapped.name
   ''
     mkdir -p $out/bin
     ln -s ${yazi-unwrapped}/share $out/share
+    ln -s ${yazi-unwrapped}/bin/ya $out/bin/ya
     makeWrapper ${yazi-unwrapped}/bin/yazi $out/bin/yazi \
       --prefix PATH : ${lib.makeBinPath runtimePaths} \
       ${lib.optionalString (configHome != null) "--set YAZI_CONFIG_HOME ${configHome}"}
