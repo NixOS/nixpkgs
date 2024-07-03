@@ -9,11 +9,27 @@
 , lttng-ust
 , ocl-icd
 , python3
+, runCommand
+, makeWrapper
 }:
 
 let
   llvmPackages = llvmPackages_16;
   clang = llvmPackages.clangUseLLVM;
+  # Workaround to make sure libclang finds libgcc.a and libgcc_s.so when
+  # invoked from within libpocl
+  clangWrapped = runCommand "clang-pocl" { nativeBuildInputs = [ makeWrapper ]; } ''
+    mkdir -p $out/bin
+    cp -r ${clang}/bin/* $out/bin/
+    LIBGCC_DIR=$(dirname $(find ${stdenv.cc.cc}/lib/ -name libgcc.a))
+    for F in ${clang}/bin/ld*; do
+      BASENAME=$(basename "$F")
+      rm -f $out/bin/$BASENAME
+      makeWrapper ${clang}/bin/$BASENAME $out/bin/$BASENAME \
+        --add-flags "-L$LIBGCC_DIR" \
+        --add-flags "-L${stdenv.cc.cc.lib}/lib"
+    done
+  '';
 in stdenv.mkDerivation (finalAttrs: {
   pname = "pocl";
   version = "4.0";
@@ -32,13 +48,14 @@ in stdenv.mkDerivation (finalAttrs: {
     "-DENABLE_POCL_BUILDING=OFF"
     "-DPOCL_ICD_ABSOLUTE_PATH=ON"
     "-DENABLE_ICD=ON"
-    "-DCLANG=${clang}/bin/clang"
-    "-DCLANGXX=${clang}/bin/clang++"
+    "-DCLANG=${clangWrapped}/bin/clang"
+    "-DCLANGXX=${clangWrapped}/bin/clang++"
   ];
 
   nativeBuildInputs = [
-    cmake pkg-config
-    clang
+    cmake
+    pkg-config
+    clangWrapped
     python3
   ];
 
@@ -56,7 +73,10 @@ in stdenv.mkDerivation (finalAttrs: {
     description = "A portable open source (MIT-licensed) implementation of the OpenCL standard";
     homepage = "http://portablecl.org";
     license = licenses.mit;
-    maintainers = with maintainers; [ jansol ];
+    maintainers = with maintainers; [
+      jansol
+      xddxdd
+    ];
     platforms = platforms.linux ++ platforms.darwin;
   };
 })
