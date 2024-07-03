@@ -58,20 +58,15 @@
 
 stdenv.mkDerivation rec {
   pname = "dolphin-emu";
-  version = "5.0-21460";
+  version = "2407";
 
   src = fetchFromGitHub {
     owner = "dolphin-emu";
     repo = "dolphin";
-    rev = "a9544510468740b77cf06ef28daaa65fe247fd32";
-    hash = "sha256-mhD7Uaqi8GzHdR7Y81TspvCnrZH2evWuWFgXMQ2c8g0=";
+    rev = "b92e354389bb7c0bd114a8631b8af110d3cb3a14";
+    hash = "sha256-8W4KyIj+rhDkWnQogjpzlEJVo3HJenfpWKimSyMGN7c=";
     fetchSubmodules = true;
   };
-
-  patches = [
-    # TODO: Remove when merged https://github.com/dolphin-emu/dolphin/pull/12736
-    ./find-minizip-ng.patch
-  ];
 
   strictDeps = true;
 
@@ -167,11 +162,11 @@ stdenv.mkDerivation rec {
     tests.version = testers.testVersion {
       package = dolphin-emu;
       command = "dolphin-emu-nogui --version";
-      version = if stdenv.hostPlatform.isDarwin then "Dolphin 5.0" else version;
+      inherit version;
     };
 
     updateScript = writeShellScript "dolphin-update-script" ''
-      set -eou pipefail
+      set -euo pipefail
       export PATH=${lib.makeBinPath [ curl jq common-updater-scripts ]}
 
       json="$(curl -s https://dolphin-emu.org/update/latest/beta)"
