@@ -61,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   # I'm sure this is suboptimal but it seems to work. Points:
   # - when build is run in the original repo, no specific executable seems to be generated; you run the resulting build with pnpm run start
-  # - this means we need to add a dedicated script - perhaps it is possible to create this frok the workers-sdk dir, but I don't know how to do this
+  # - this means we need to add a dedicated script - perhaps it is possible to create this from the workers-sdk dir, but I don't know how to do this
   # - the build process builds a version of miniflare which is used by wrangler; for this reason, the miniflare package is copied also
   # - pnpm stores all content in the top-level node_modules directory, but it is linked to from a node_modules directory inside wrangler
   # - as they are linked via symlinks, the relative location of them on the filesystem should be maintained
