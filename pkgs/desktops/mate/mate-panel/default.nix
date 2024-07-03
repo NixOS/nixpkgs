@@ -5,7 +5,6 @@
 , gettext
 , itstool
 , glib
-, gnome
 , gtk-layer-shell
 , gtk3
 , libmateweather
@@ -13,6 +12,7 @@
 , librsvg
 , libxml2
 , dconf
+, dconf-editor
 , mate-desktop
 , mate-menus
 , hicolor-icon-theme
@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
     gtk3
     # See https://github.com/mate-desktop/mate-panel/issues/1402
     # This is propagated for mate_panel_applet_settings_new and applet's wrapGAppsHook3
-    gnome.dconf-editor
+    dconf-editor
   ];
 
   # Needed for Wayland support.

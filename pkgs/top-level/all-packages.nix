@@ -839,7 +839,7 @@ with pkgs;
 
   dockerTools = callPackage ../build-support/docker {
     writePython3 = buildPackages.writers.writePython3;
-  } // { __attrsFailEvaluation = true; };
+  };
 
   fakeNss = callPackage ../build-support/fake-nss { };
 
@@ -1641,7 +1641,6 @@ with pkgs;
   aj-snapshot  = callPackage ../applications/audio/aj-snapshot { };
 
   ajour = callPackage ../tools/games/ajour {
-    inherit (gnome) zenity;
     inherit (plasma5Packages) kdialog;
   };
 
@@ -1688,10 +1687,6 @@ with pkgs;
   basez = callPackage ../tools/misc/basez { };
 
   btc-rpc-explorer = callPackage ../tools/misc/btc-rpc-explorer { };
-
-  butler = callPackage ../by-name/bu/butler/package.nix {
-    inherit (darwin.apple_sdk.frameworks) Cocoa;
-  };
 
   carbon-now-cli = callPackage ../tools/typesetting/carbon-now-cli { };
 
@@ -2774,9 +2769,7 @@ with pkgs;
 
   vice = callPackage ../applications/emulators/vice { };
 
-  winetricks = callPackage ../applications/emulators/wine/winetricks.nix {
-    inherit (gnome) zenity;
-  };
+  winetricks = callPackage ../applications/emulators/wine/winetricks.nix { };
 
   xcpc = callPackage ../applications/emulators/xcpc { };
 
@@ -3474,8 +3467,6 @@ with pkgs;
   bkt = callPackage ../tools/misc/bkt {  };
 
   bkyml = callPackage ../tools/misc/bkyml { };
-
-  blackmagic-desktop-video = callPackage ../tools/video/blackmagic-desktop-video { };
 
   blocksat-cli = with python3Packages; toPythonApplication blocksat-cli;
 
@@ -6756,9 +6747,7 @@ with pkgs;
     libsbsms_2_3_0
   ;
 
-  libskk = callPackage ../development/libraries/libskk {
-    inherit (gnome) gnome-common;
-  };
+  libskk = callPackage ../development/libraries/libskk { };
 
   m17-cxx-demod = callPackage ../applications/radio/m17-cxx-demod { };
 
@@ -9468,8 +9457,6 @@ with pkgs;
 
   keyfuzz = callPackage ../tools/inputmethods/keyfuzz { };
 
-  keymapp = callPackage ../applications/misc/keymapp { };
-
   keyscope = callPackage ../tools/security/keyscope {
     inherit (darwin.apple_sdk.frameworks) DiskArbitration Foundation IOKit Security;
   };
@@ -10140,9 +10127,7 @@ with pkgs;
 
   libite = callPackage ../development/libraries/libite { };
 
-  liblangtag = callPackage ../development/libraries/liblangtag {
-    inherit (gnome) gnome-common;
-  };
+  liblangtag = callPackage ../development/libraries/liblangtag { };
 
   liblouis = callPackage ../development/libraries/liblouis { };
 
@@ -16011,8 +15996,7 @@ with pkgs;
   openjdk = jdk;
   openjdk_headless = jdk_headless;
 
-  graalvmCEPackages =
-    recurseIntoAttrs (callPackage ../development/compilers/graalvm/community-edition { });
+  graalvmCEPackages = callPackage ../development/compilers/graalvm/community-edition { };
   graalvm-ce = graalvmCEPackages.graalvm-ce;
   buildGraalvmNativeImage = (callPackage ../build-support/build-graalvm-native-image {
     graalvmDrv = graalvm-ce;
@@ -21965,9 +21949,6 @@ with pkgs;
 
   libglibutil = callPackage ../development/libraries/libglibutil { };
 
-  libgnome-keyring = callPackage ../development/libraries/libgnome-keyring { };
-  libgnome-keyring3 = gnome.libgnome-keyring;
-
   libgnome-games-support = callPackage ../development/libraries/libgnome-games-support { };
   libgnome-games-support_2_0 = callPackage ../development/libraries/libgnome-games-support/2.0.nix { };
 
@@ -25250,39 +25231,26 @@ with pkgs;
 
   apacheHttpdPackagesFor = apacheHttpd: self: let callPackage = newScope self; in {
     inherit apacheHttpd;
-
     mod_auth_mellon = callPackage ../servers/http/apache-modules/mod_auth_mellon { };
-
-    # Redwax collection
     mod_ca = callPackage ../servers/http/apache-modules/mod_ca { };
     mod_crl = callPackage ../servers/http/apache-modules/mod_crl { };
-    mod_csr = callPackage ../servers/http/apache-modules/mod_csr { };
     mod_cspnonce = callPackage ../servers/http/apache-modules/mod_cspnonce { };
-    mod_ocsp = callPackage ../servers/http/apache-modules/mod_ocsp{ };
-    mod_scep = callPackage ../servers/http/apache-modules/mod_scep { };
-    mod_pkcs12 = callPackage ../servers/http/apache-modules/mod_pkcs12 { };
-    mod_spkac= callPackage ../servers/http/apache-modules/mod_spkac { };
-    mod_timestamp = callPackage ../servers/http/apache-modules/mod_timestamp { };
-
+    mod_csr = callPackage ../servers/http/apache-modules/mod_csr { };
     mod_dnssd = callPackage ../servers/http/apache-modules/mod_dnssd { };
-
-
-    mod_perl = callPackage ../servers/http/apache-modules/mod_perl { };
-
     mod_fastcgi = callPackage ../servers/http/apache-modules/mod_fastcgi { };
-
-    mod_python = callPackage ../servers/http/apache-modules/mod_python { };
-
-    mod_tile = callPackage ../servers/http/apache-modules/mod_tile { };
-
-    mod_wsgi3 = callPackage ../servers/http/apache-modules/mod_wsgi { };
-
     mod_itk = callPackage ../servers/http/apache-modules/mod_itk { };
-
+    mod_jk = callPackage ../servers/http/apache-modules/mod_jk { };
     mod_mbtiles = callPackage ../servers/http/apache-modules/mod_mbtiles { };
-
+    mod_ocsp = callPackage ../servers/http/apache-modules/mod_ocsp { };
+    mod_perl = callPackage ../servers/http/apache-modules/mod_perl { };
+    mod_pkcs12 = callPackage ../servers/http/apache-modules/mod_pkcs12 { };
+    mod_python = callPackage ../servers/http/apache-modules/mod_python { };
+    mod_scep = callPackage ../servers/http/apache-modules/mod_scep { };
+    mod_spkac = callPackage ../servers/http/apache-modules/mod_spkac { };
+    mod_tile = callPackage ../servers/http/apache-modules/mod_tile { };
+    mod_timestamp = callPackage ../servers/http/apache-modules/mod_timestamp { };
+    mod_wsgi3 = callPackage ../servers/http/apache-modules/mod_wsgi { };
     php = pkgs.php.override { inherit apacheHttpd; };
-
     subversion = pkgs.subversion.override { httpServer = true; inherit apacheHttpd; };
   } // lib.optionalAttrs config.allowAliases {
     mod_evasive = throw "mod_evasive is not supported on Apache httpd 2.4";
@@ -25502,6 +25470,7 @@ with pkgs;
   freeradius = callPackage ../servers/freeradius { };
 
   freshrss = callPackage ../servers/web-apps/freshrss { };
+  freshrss-extensions = recurseIntoAttrs (callPackage ../servers/web-apps/freshrss/extensions { });
 
   freeswitch = callPackage ../servers/sip/freeswitch {
     inherit (darwin.apple_sdk.frameworks) SystemConfiguration;
@@ -25963,8 +25932,6 @@ with pkgs;
   };
 
   pulseeffects-legacy = callPackage ../applications/audio/pulseeffects-legacy { };
-
-  tomcat_connectors = callPackage ../servers/http/apache-modules/tomcat-connectors { };
 
   tomcat-native = callPackage ../servers/http/tomcat/tomcat-native.nix { };
 
@@ -27661,6 +27628,8 @@ with pkgs;
 
   sddm-chili-theme = libsForQt5.callPackage ../data/themes/chili-sddm { };
 
+  sddm-sugar-dark = libsForQt5.callPackage ../data/themes/sddm-sugar-dark { };
+
   sdparm = callPackage ../os-specific/linux/sdparm { };
 
   sdrangel = libsForQt5.callPackage ../applications/radio/sdrangel {
@@ -28497,7 +28466,6 @@ with pkgs;
   kopia = callPackage ../tools/backup/kopia { };
 
   kora-icon-theme = callPackage ../data/icons/kora-icon-theme {
-    inherit (gnome) adwaita-icon-theme;
     inherit (libsForQt5.kdeFrameworks) breeze-icons;
   };
 
@@ -28738,7 +28706,6 @@ with pkgs;
   };
 
   numix-icon-theme = callPackage ../data/icons/numix-icon-theme {
-    inherit (gnome) adwaita-icon-theme;
     inherit (plasma5Packages) breeze-icons;
   };
 
@@ -28845,9 +28812,7 @@ with pkgs;
 
   pop-gtk-theme = callPackage ../data/themes/pop-gtk { };
 
-  pop-icon-theme = callPackage ../data/icons/pop-icon-theme {
-    inherit (gnome) adwaita-icon-theme;
-  };
+  pop-icon-theme = callPackage ../data/icons/pop-icon-theme { };
 
   powerline-fonts = callPackage ../data/fonts/powerline-fonts { };
 
@@ -29005,9 +28970,7 @@ with pkgs;
 
   recursive = callPackage ../data/fonts/recursive { };
 
-  reversal-icon-theme = callPackage ../data/icons/reversal-icon-theme {
-    inherit (gnome) adwaita-icon-theme;
-  };
+  reversal-icon-theme = callPackage ../data/icons/reversal-icon-theme { };
 
   rubik = callPackage ../data/fonts/rubik { };
 
@@ -29091,7 +29054,6 @@ with pkgs;
   the-neue-black = callPackage ../data/fonts/the-neue-black { };
 
   tela-circle-icon-theme = callPackage ../data/icons/tela-circle-icon-theme {
-    inherit (gnome) adwaita-icon-theme;
     inherit (libsForQt5) breeze-icons;
   };
 
@@ -29399,6 +29361,10 @@ with pkgs;
   android-studio = androidStudioPackages.stable;
   android-studio-full = android-studio.full;
 
+  androidStudioForPlatformPackages = recurseIntoAttrs
+    (callPackage ../applications/editors/android-studio-for-platform { });
+  android-studio-for-platform = androidStudioForPlatformPackages.stable;
+
   antfs-cli = callPackage ../applications/misc/antfs-cli { };
 
   antimony = libsForQt5.callPackage ../applications/graphics/antimony { };
@@ -29585,8 +29551,6 @@ with pkgs;
   };
 
   awesomebump = libsForQt5.callPackage ../applications/graphics/awesomebump { };
-
-  inherit (gnome) baobab;
 
   badwolf = callPackage ../applications/networking/browsers/badwolf { };
 
@@ -29925,10 +29889,6 @@ with pkgs;
 
   coreth = callPackage ../applications/networking/coreth { };
 
-  coriander = callPackage ../applications/video/coriander {
-    inherit (gnome2) libgnomeui GConf;
-  };
-
   cpeditor = libsForQt5.callPackage ../applications/editors/cpeditor { };
 
   csa = callPackage ../applications/audio/csa { };
@@ -30188,9 +30148,7 @@ with pkgs;
 
   dvd-slideshow = callPackage ../applications/video/dvd-slideshow { };
 
-  dvdstyler = callPackage ../applications/video/dvdstyler {
-    inherit (gnome2) libgnomeui;
-  };
+  dvdstyler = callPackage ../applications/video/dvdstyler { };
 
   dyff = callPackage ../development/tools/dyff { };
 
@@ -30315,8 +30273,6 @@ with pkgs;
 
   epgstation = callPackage ../applications/video/epgstation { };
 
-  inherit (gnome) epiphany;
-
   ephemeral = callPackage ../applications/networking/browsers/ephemeral { };
 
   epic5 = callPackage ../applications/networking/irc/epic5 { };
@@ -30404,8 +30360,6 @@ with pkgs;
 
   keeweb = callPackage ../applications/misc/keeweb { };
 
-  inherit (gnome) evince;
-  evolution-data-server = gnome.evolution-data-server;
   evolution-data-server-gtk4 = evolution-data-server.override { withGtk3 = false; withGtk4 = true; };
   evolution-ews = callPackage ../applications/networking/mailreaders/evolution/evolution-ews { };
   evolution = callPackage ../applications/networking/mailreaders/evolution/evolution { };
@@ -30742,8 +30696,6 @@ with pkgs;
 
   gthumb = callPackage ../applications/graphics/gthumb { };
 
-  inherit (gnome) gucharmap;
-
   guitarix = callPackage ../applications/audio/guitarix {
     fftw = fftwSinglePrec;
   };
@@ -30850,7 +30802,6 @@ with pkgs;
   };
 
   firefox-bin-unwrapped = callPackage ../applications/networking/browsers/firefox-bin {
-    inherit (gnome) adwaita-icon-theme;
     channel = "release";
     generated = import ../applications/networking/browsers/firefox-bin/release_sources.nix;
   };
@@ -30860,7 +30811,6 @@ with pkgs;
   };
 
   firefox-beta-bin-unwrapped = firefox-bin-unwrapped.override {
-    inherit (gnome) adwaita-icon-theme;
     channel = "beta";
     generated = import ../applications/networking/browsers/firefox-bin/beta_sources.nix;
   };
@@ -30871,7 +30821,6 @@ with pkgs;
   };
 
   firefox-devedition-bin-unwrapped = callPackage ../applications/networking/browsers/firefox-bin {
-    inherit (gnome) adwaita-icon-theme;
     channel = "developer-edition";
     generated = import ../applications/networking/browsers/firefox-bin/developer-edition_sources.nix;
   };
@@ -31020,8 +30969,6 @@ with pkgs;
 
   gitolite = callPackage ../applications/version-management/gitolite { };
 
-  inherit (gnome) gitg;
-
   gmrun = callPackage ../applications/misc/gmrun { };
 
   gnucash = callPackage ../applications/office/gnucash { };
@@ -31099,8 +31046,8 @@ with pkgs;
 
   metacubexd = callPackage ../by-name/me/metacubexd/package.nix {
     pnpm = callPackage ../development/tools/pnpm/generic.nix {
-      version = "9.1.4";
-      hash = "sha256-MKGAGsTnI3ee/tE6IfTDn562yfu0ztEBvOBrQiWT18k=";
+      version = "9.4.0";
+      hash = "sha256-tv0L/aVV5+WErX5WswxosB1aBPnuk5ifS5PKhHPEnHQ=";
     };
   };
 
@@ -31203,9 +31150,7 @@ with pkgs;
 
   gnomecast = callPackage ../applications/video/gnomecast { };
 
-  gnome-recipes = callPackage ../applications/misc/gnome-recipes {
-    inherit (gnome) gnome-autoar;
-  };
+  gnome-recipes = callPackage ../applications/misc/gnome-recipes { };
 
   gollum = callPackage ../applications/misc/gollum { };
 
@@ -31966,23 +31911,10 @@ with pkgs;
 
   kondo = callPackage ../applications/misc/kondo { };
 
-  kotatogram-desktop = libsForQt5.callPackage ../applications/networking/instant-messengers/telegram/kotatogram-desktop {
-    inherit (darwin.apple_sdk_11_0.frameworks) Cocoa CoreFoundation CoreServices CoreText CoreGraphics
-      CoreMedia OpenGL AudioUnit ApplicationServices Foundation AGL Security SystemConfiguration
-      Carbon AudioToolbox VideoToolbox VideoDecodeAcceleration AVFoundation CoreAudio CoreVideo
-      CoreMediaIO QuartzCore AppKit CoreWLAN WebKit IOKit GSS MediaPlayer IOSurface Metal MetalKit;
-
+  kotatogram-desktop = kdePackages.callPackage ../applications/networking/instant-messengers/telegram/kotatogram-desktop {
     stdenv = if stdenv.isDarwin
-      then overrideSDK llvmPackages_14.stdenv "11.0"
+      then overrideSDK stdenv "11.0"
       else stdenv;
-
-    # telegram-desktop has random crashes when jemalloc is built with gcc.
-    # Apparently, it triggers some bug due to usage of gcc's builtin
-    # functions like __builtin_ffsl by jemalloc when it's built with gcc.
-    jemalloc = (jemalloc.override { stdenv = clangStdenv; }).overrideAttrs {
-      # no idea how to fix the tests :(
-      doCheck = false;
-    };
   };
 
   kotatogram-desktop-with-webkit = callPackage ../applications/networking/instant-messengers/telegram/kotatogram-desktop/with-webkit.nix { };
@@ -32500,9 +32432,7 @@ with pkgs;
 
   merkaartor = libsForQt5.callPackage ../applications/misc/merkaartor { };
 
-  mepo = callPackage ../applications/misc/mepo {
-    inherit (gnome) zenity;
-  };
+  mepo = callPackage ../applications/misc/mepo { };
 
   meshcentral = callPackage ../tools/admin/meshcentral { };
 
@@ -33761,7 +33691,6 @@ with pkgs;
   quiterss = libsForQt5.callPackage ../applications/networking/newsreaders/quiterss { };
 
   quodlibet = callPackage ../applications/audio/quodlibet {
-    inherit (gnome) adwaita-icon-theme;
     kakasi = null;
     keybinder3 = null;
     libappindicator-gtk3 = null;
@@ -33973,9 +33902,7 @@ with pkgs;
 
   rusty-psn-gui = rusty-psn.override { withGui = true; };
 
-  rymcast = callPackage ../applications/audio/rymcast {
-    inherit (gnome) zenity;
-  };
+  rymcast = callPackage ../applications/audio/rymcast { };
 
   rymdport = callPackage ../applications/networking/rymdport {
     inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
@@ -34055,8 +33982,6 @@ with pkgs;
   shutter = callPackage ../applications/graphics/shutter { };
 
   sic-image-cli = callPackage ../tools/graphics/sic-image-cli { };
-
-  simple-scan = gnome.simple-scan;
 
   sioyek = libsForQt5.callPackage ../applications/misc/sioyek { };
 
@@ -34355,7 +34280,6 @@ with pkgs;
   surf = callPackage ../applications/networking/browsers/surf { gtk = gtk2; };
 
   surge = callPackage ../applications/audio/surge {
-    inherit (gnome) zenity;
     git = gitMinimal;
   };
 
@@ -34584,7 +34508,6 @@ with pkgs;
     desktopName = "Thunderbird";
   };
   thunderbird-bin-unwrapped = callPackage ../applications/networking/mailreaders/thunderbird-bin {
-    inherit (gnome) adwaita-icon-theme;
     generated = import ../applications/networking/mailreaders/thunderbird-bin/release_sources.nix;
   };
 
@@ -34879,9 +34802,7 @@ with pkgs;
     inherit (darwin.apple_sdk_11_0.frameworks) Carbon CoreServices OpenCL;
   };
 
-  verbiste = callPackage ../applications/misc/verbiste {
-    inherit (gnome2) libgnomeui;
-  };
+  verbiste = callPackage ../applications/misc/verbiste { };
 
   veusz = libsForQt5.callPackage ../applications/graphics/veusz { };
 
@@ -34891,7 +34812,11 @@ with pkgs;
 
   vimiv-qt = callPackage ../applications/graphics/vimiv-qt { };
 
-  macvim = callPackage ../applications/editors/vim/macvim-configurable.nix { stdenv = clangStdenv; };
+  macvim = let
+    macvimUtils = callPackage ../applications/editors/vim/macvim-configurable.nix { };
+  in macvimUtils.makeCustomizable (callPackage ../applications/editors/vim/macvim.nix {
+    stdenv = clangStdenv;
+  });
 
   vim-full = vimUtils.makeCustomizable (callPackage ../applications/editors/vim/full.nix {
     inherit (darwin.apple_sdk.frameworks) CoreServices Cocoa Foundation CoreData;
@@ -35597,8 +35522,6 @@ with pkgs;
 
   yeetgif = callPackage ../applications/graphics/yeetgif { };
 
-  inherit (gnome) yelp;
-
   yelp-tools = callPackage ../development/misc/yelp-tools { };
 
   yewtube = callPackage ../applications/misc/yewtube { };
@@ -35722,7 +35645,6 @@ with pkgs;
 
   alfis = callPackage ../applications/blockchains/alfis {
     inherit (darwin.apple_sdk.frameworks) Cocoa Security WebKit;
-    inherit (gnome) zenity;
   };
   alfis-nogui = alfis.override {
     withGui = false;
@@ -36563,10 +36485,6 @@ with pkgs;
   };
 
   graphwar = callPackage ../games/graphwar { };
-
-  gtetrinet = callPackage ../games/gtetrinet {
-    inherit (gnome2) GConf libgnome libgnomeui;
-  };
 
   gtypist = callPackage ../games/gtypist { };
 
@@ -37473,8 +37391,6 @@ with pkgs;
 
   latte-dock = libsForQt5.callPackage ../applications/misc/latte-dock { };
 
-  gnome-themes-extra = gnome.gnome-themes-extra;
-
   xrandr-invert-colors = callPackage ../applications/misc/xrandr-invert-colors { };
 
   ### SCIENCE/CHEMISTY
@@ -38022,8 +37938,6 @@ with pkgs;
   p4est-dbg = callPackage ../development/libraries/science/math/p4est {
     p4est-sc = p4est-sc-dbg;
   };
-
-  petsc = callPackage ../development/libraries/science/math/petsc { };
 
   parmetis = callPackage ../development/libraries/science/math/parmetis { };
 
@@ -40304,8 +40218,6 @@ with pkgs;
   spdlog = callPackage ../development/libraries/spdlog { };
 
   dart = callPackage ../development/compilers/dart { };
-
-  dart-sass = callPackage ../development/tools/misc/dart-sass { };
 
   pub2nix = recurseIntoAttrs (callPackage ../build-support/dart/pub2nix { });
 

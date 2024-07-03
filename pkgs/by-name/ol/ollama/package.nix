@@ -7,6 +7,7 @@
 , overrideCC
 , makeWrapper
 , stdenv
+, addDriverRunpath
 
 , cmake
 , gcc12
@@ -14,8 +15,8 @@
 , libdrm
 , rocmPackages
 , cudaPackages
-, linuxPackages
 , darwin
+, autoAddDriverRunpath
 
 , nixosTests
 , testers
@@ -118,16 +119,17 @@ let
     appleFrameworks.MetalPerformanceShaders
   ];
 
-  runtimeLibs = lib.optionals enableRocm [
-    rocmPath
-  ] ++ lib.optionals enableCuda [
-    linuxPackages.nvidia_x11
-  ];
-  wrapperOptions = builtins.concatStringsSep " " ([
-    "--suffix LD_LIBRARY_PATH : '/run/opengl-driver/lib:${lib.makeLibraryPath runtimeLibs}'"
+  wrapperOptions = [
+    # ollama embeds llama-cpp binaries which actually run the ai models
+    # these llama-cpp binaries are unaffected by the ollama binary's DT_RUNPATH
+    # LD_LIBRARY_PATH is temporarily required to use the gpu
+    # until these llama-cpp binaries can have their runpath patched
+    "--suffix LD_LIBRARY_PATH : '${addDriverRunpath.driverLink}/lib'"
   ] ++ lib.optionals enableRocm [
+    "--suffix LD_LIBRARY_PATH : '${rocmPath}'"
     "--set-default HIP_PATH '${rocmPath}'"
-  ]);
+  ];
+  wrapperArgs = builtins.concatStringsSep " " wrapperOptions;
 
 
   goBuild =
@@ -153,6 +155,7 @@ goBuild ((lib.optionalAttrs enableRocm {
     rocmPackages.llvm.bintools
   ] ++ lib.optionals (enableRocm || enableCuda) [
     makeWrapper
+    autoAddDriverRunpath
   ] ++ lib.optionals stdenv.isDarwin
     metalFrameworks;
 
@@ -188,8 +191,7 @@ goBuild ((lib.optionalAttrs enableRocm {
     mv "$out/bin/app" "$out/bin/.ollama-app"
   '' + lib.optionalString (enableRocm || enableCuda) ''
     # expose runtime libraries necessary to use the gpu
-    mv "$out/bin/ollama" "$out/bin/.ollama-unwrapped"
-    makeWrapper "$out/bin/.ollama-unwrapped" "$out/bin/ollama" ${wrapperOptions}
+    wrapProgram "$out/bin/ollama" ${wrapperArgs}
   '';
 
   ldflags = [

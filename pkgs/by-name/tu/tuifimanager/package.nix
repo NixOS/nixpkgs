@@ -3,7 +3,7 @@
 , python3
 , fetchFromGitHub
 , kdePackages
-, gnome
+, gnome-themes-extra
 , qt6
 , makeWrapper
 , x11Support ? stdenv.isLinux
@@ -52,7 +52,7 @@ python3.pkgs.buildPythonApplication rec {
   postFixup = let
     # fix missing 'adwaita' warning missing with ncurses tui
     # see: https://github.com/NixOS/nixpkgs/issues/60918
-    theme = gnome.gnome-themes-extra;
+    theme = gnome-themes-extra;
   in
     lib.optionalString enableDragAndDrop ''
       wrapProgram $out/bin/tuifi \

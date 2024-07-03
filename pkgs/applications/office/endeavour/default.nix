@@ -6,7 +6,7 @@
 , pkg-config
 , wrapGAppsHook4
 , gettext
-, gnome
+, adwaita-icon-theme
 , glib
 , gtk4
 , wayland
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     libpeas
     gnome-online-accounts
     gsettings-desktop-schemas
-    gnome.adwaita-icon-theme
+    adwaita-icon-theme
 
     # Plug-ins
     evolution-data-server-gtk4 # eds

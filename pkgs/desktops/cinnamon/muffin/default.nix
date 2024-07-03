@@ -8,7 +8,6 @@
 , desktop-file-utils
 , egl-wayland
 , glib
-, gnome
 , gobject-introspection
 , graphene
 , gtk3
@@ -36,6 +35,7 @@
 , wrapGAppsHook3
 , xorgserver
 , xwayland
+, zenity
 }:
 
 stdenv.mkDerivation rec {
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
   patches = [
     (substituteAll {
       src = ./fix-paths.patch;
-      zenity = gnome.zenity;
+      inherit zenity;
     })
   ];
 

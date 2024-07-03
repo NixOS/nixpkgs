@@ -10,12 +10,8 @@
 , libdecor
 , libnotify
 , dejavu_fonts
-, gnome
+, zenity
 }:
-
-let
-  inherit (gnome) zenity;
-in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "trigger-control";
