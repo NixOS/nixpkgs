@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   pname = "direvent";
-  version = "5.3";
+  version = "5.4";
 
   src = fetchurl {
     url = "mirror://gnu/direvent/direvent-${version}.tar.gz";
-    sha256 = "sha256-lAWop32kn+krvkrxi/kl/5H20zdMELfXAKAxusuUxJc=";
+    sha256 = "sha256-HbvGGSqrZ+NFclFIYD1XDGooKDgMlkIVdir5FSTXlbo=";
   };
 
   meta = with lib; {
