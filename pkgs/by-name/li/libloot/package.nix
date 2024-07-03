@@ -2,6 +2,7 @@
 , stdenv
 , fetchFromGitHub
 , fetchurl
+, callPackage
 , boost
 , cmake
 , doxygen
@@ -28,10 +29,7 @@ let
     hash = "sha256-itWYxzrXluDYKAsILOvYKmMNc+c808cAV5OKZQG7pdc=";
   };
 
-  testing-plugins = fetchurl {
-    url = "https://github.com/Ortham/testing-plugins/archive/1.5.0.tar.gz";
-    hash = "sha256-mMkJT7DwFSsa96YgaVAgf33cZgLNRO1n6/cGA+9JB5E=";
-  };
+  testing-plugins = callPackage ./testing-plugins.nix { };
 
   # TODO use pkgs.spdlog
   # It currently fails because ${pkgs.spdlog.dev}/include/spdlog/fmt/bundled/* is missing.
@@ -45,147 +43,11 @@ let
     hash = "sha256-B+vpNSrsVfGy2FXIdRvvy5gbQtRgIzZSftz9G/rpofw=";
   };
 
-  esplugin = rustPlatform.buildRustPackage rec {
-    pname = "esplugin";
-    version = "4.1.0";
+  esplugin = callPackage ./esplugin { };
 
-    src = fetchFromGitHub {
-      owner = "Ortham";
-      repo = pname;
-      rev = version;
-      hash = "sha256-jIqXwEIYBJgKXEwolLIbdzy9arJPte8xklzAWVjBjfo=";
-    };
+  libloadorder = callPackage ./libloadorder { };
 
-    cargoLock = {
-      lockFile = ./esplugin-Cargo.lock;
-    };
-
-    postPatch = ''
-      ln -s ${cargoLock.lockFile} Cargo.lock
-    '';
-
-    # needed to build ffi/include
-    cargoBuildFlags = [ "--all" "--all-features" ];
-
-    preCheck = ''
-      tmp=$(mktemp -dp .)
-      tar -C "$tmp" -xzf ${testing-plugins}
-      ln -s "$tmp"/* testing-plugins
-    '';
-
-    # libloot expects esplugin.hpp not esplugin.h
-    postInstall = ''
-      install -Dm 644 ffi/include/esplugin.h $out/include/esplugin.hpp
-    '';
-
-    meta = with lib; {
-      description = "A free software library for reading Elder Scrolls plugin (.esp/.esm/.esl) files";
-      homepage = "https://github.com/Ortham/esplugin";
-      license = licenses.gpl3Plus;
-      maintainers = [ maintainers.schnusch ];
-    };
-  };
-
-  libloadorder = rustPlatform.buildRustPackage rec {
-    pname = "libloadorder";
-    version = "15.0.1";
-
-    src = fetchFromGitHub {
-      owner = "Ortham";
-      repo = pname;
-      rev = version;
-      hash = "sha256-Cp29h48z0iE3zrcRktDwbIZwx4tVfUzmpkR1pjEmM+w=";
-    };
-
-    cargoLock = {
-      lockFile = ./libloadorder-Cargo.lock;
-    };
-
-    postPatch = ''
-      ln -s ${cargoLock.lockFile} Cargo.lock
-    '';
-
-    cargoBuildFlags = [ "--all" "--all-features" ];
-
-    preCheck = ''
-      tmp=$(mktemp -dp .)
-      tar -C "$tmp" -xzf ${testing-plugins}
-      ln -s "$tmp"/* testing-plugins
-    '';
-
-    # libloot expects libloadorder.hpp not libloadorder.h
-    postInstall = ''
-      install -Dm 644 ffi/include/libloadorder.h $out/include/libloadorder.hpp
-    '';
-
-    meta = with lib; {
-      description = "A cross-platform library for manipulating the load order and active status of plugins for the Elder Scrolls and Fallout games";
-      homepage = "https://github.com/Ortham/libloadorder";
-      license = licenses.gpl3Plus;
-      maintainers = [ maintainers.schnusch ];
-    };
-  };
-
-  loot-condition-interpreter = rustPlatform.buildRustPackage rec {
-    pname = "loot-condition-interpreter";
-    version = "3.1.0";
-
-    src = fetchFromGitHub {
-      owner = "loot";
-      repo = pname;
-      rev = version;
-      hash = "sha256-hPDIx/Tc1JsiF0dcsQlrQJRfzLSFQbbUls0Q/dkwVwg=";
-    };
-
-    cargoLock = {
-      lockFile = ./loot-condition-interpreter-Cargo.lock;
-    };
-
-    postPatch = ''
-      ln -s ${cargoLock.lockFile} Cargo.lock
-    '';
-
-    cargoBuildFlags = [ "--package" "loot-condition-interpreter-ffi" "--all-features" ];
-
-    preCheck = ''
-      tmp=$(mktemp -dp .)
-      tar -C "$tmp" -xzf ${testing-plugins}
-      (cd tests && ln -rs "../$tmp"/* testing-plugins)
-
-      tmp=$(mktemp -dp .)
-      ${p7zip}/bin/7z x -o"$tmp" ${fetchurl {
-        url = "https://github.com/loot/libloot/releases/download/0.18.2/libloot-0.18.2-0-gb1a9e31_0.18.2-win32.7z";
-        hash = "sha256-sy2DvQcyy4Yd6bgFEN/dq2yoNpxMP3A6aT3GZ64yUss=";
-      }}
-      (cd tests && ln -s "../$tmp"/* libloot_win32)
-
-      tmp=$(mktemp -dp .)
-      ${p7zip}/bin/7z x -o"$tmp" ${fetchurl {
-        url = "https://github.com/loot/libloot/releases/download/0.18.2/libloot-0.18.2-0-gb1a9e31_0.18.2-win64.7z";
-        hash = "sha256-gRkRQ5XmzPPYm3QZQY45CebX5koNWU7eVuB8Ojls3nM=";
-      }}
-      (cd tests && ln -s "../$tmp"/* libloot_win64)
-    '';
-
-    checkFlags = [
-      # We don't want to download, extract, and then fix-up another archive
-      # for those two tests.
-      "--skip=function::version::tests::constructors::version_read_file_version_should_return_none_if_there_is_no_version_info"
-      "--skip=function::version::tests::constructors::version_read_product_version_should_return_none_if_there_is_no_version_info"
-    ];
-
-    # FIXME
-    postInstall = ''
-      cp -r ffi/include $out/include
-    '';
-
-    meta = with lib; {
-      description = "A library for parsing and evaluating LOOT's metadata condition strings";
-      homepage = "https://github.com/loot/loot-condition-interpreter";
-      license = licenses.mit;
-      maintainers = [ maintainers.schnusch ];
-    };
-  };
+  loot-condition-interpreter = callPackage ./loot-condition-interpreter { };
 
 in
 
