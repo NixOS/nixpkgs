@@ -2,7 +2,7 @@
   lib,
   stdenv,
   stdenvNoCC,
-  crossLibcStdenv,
+  stdenvNoLibc,
   stdenvLibcMinimal,
   runCommand,
   rsync,
@@ -22,7 +22,7 @@ lib.makeOverridable (
       if attrs.noCC or false then
         stdenvNoCC
       else if attrs.noLibc or false then
-        crossLibcStdenv
+        stdenvNoLibc
       else if attrs.libcMinimal or false then
         stdenvLibcMinimal
       else

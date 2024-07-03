@@ -1,6 +1,6 @@
 {
   lib,
-  crossLibcStdenv,
+  stdenvNoLibc,
   mkDerivation,
   bsdSetupHook,
   openbsdSetupHook,
@@ -63,7 +63,7 @@ mkDerivation {
   # Suppress lld >= 16 undefined version errors
   # https://github.com/freebsd/freebsd-src/commit/2ba84b4bcdd6012e8cfbf8a0d060a4438623a638
   env.NIX_LDFLAGS = lib.optionalString (
-    crossLibcStdenv.hostPlatform.linker == "lld"
+    stdenvNoLibc.hostPlatform.linker == "lld"
   ) "--undefined-version";
 
   makeFlags = [
