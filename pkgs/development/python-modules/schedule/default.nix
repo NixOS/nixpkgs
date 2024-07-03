@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  mock,
   pythonOlder,
 }:
 
@@ -17,8 +16,6 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-Ff6cdf5f2blifz8ZzA7xQgUI+fmkb0XNB2nvde3l8Lc=";
   };
-
-  buildInputs = [ mock ];
 
   preCheck = ''
     # https://github.com/dbader/schedule/issues/488
