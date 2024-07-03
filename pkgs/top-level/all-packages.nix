@@ -32097,8 +32097,6 @@ with pkgs;
 
   lxdvdrip = callPackage ../applications/video/lxdvdrip { };
 
-  handbrake = callPackage ../applications/video/handbrake { };
-
   handlr = callPackage ../tools/misc/handlr { };
 
   jftui = callPackage ../applications/video/jftui { };
