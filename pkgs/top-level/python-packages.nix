@@ -6565,6 +6565,13 @@ self: super: with self; {
 
   hpccm = callPackage ../development/python-modules/hpccm { };
 
+  hpp-bezier-com-traj = toPythonModule (
+    pkgs.hpp-bezier-com-traj.override {
+      pythonSupport = true;
+      python3Packages = self;
+    }
+  );
+
   hpp-centroidal-dynamics = toPythonModule (
     pkgs.hpp-centroidal-dynamics.override {
       pythonSupport = true;
