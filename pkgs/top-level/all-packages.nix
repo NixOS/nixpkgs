@@ -1058,6 +1058,8 @@ with pkgs;
 
   pricehist = python3Packages.callPackage ../tools/misc/pricehist { };
 
+  py7zr = with python3Packages; toPythonApplication py7zr;
+
   q = callPackage ../tools/networking/q { };
 
   qFlipper = libsForQt5.callPackage ../tools/misc/qflipper { };
