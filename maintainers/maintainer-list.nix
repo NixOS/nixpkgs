@@ -12005,6 +12005,12 @@
     github = "itslychee";
     name = "Lychee";
   };
+  lyndeno = {
+    name = "Lyndon Sanche";
+    email = "lsanche@lyndeno.ca";
+    github = "Lyndeno";
+    githubId = 13490857;
+  };
   lynty = {
     email = "ltdong93+nix@gmail.com";
     github = "Lynty";
