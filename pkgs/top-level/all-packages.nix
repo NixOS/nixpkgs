@@ -4191,12 +4191,17 @@ with pkgs;
 
   bchunk = callPackage ../tools/cd-dvd/bchunk { };
 
-  inherit (callPackages ../misc/logging/beats/7.x.nix { })
+  inherit (callPackages ../misc/logging/beats { })
     auditbeat7
+    auditbeat8
     filebeat7
+    filebeat8
     heartbeat7
+    heartbeat8
     metricbeat7
-    packetbeat7;
+    metricbeat8
+    packetbeat7
+    packetbeat8;
 
   auditbeat = auditbeat7;
   filebeat = filebeat7;
