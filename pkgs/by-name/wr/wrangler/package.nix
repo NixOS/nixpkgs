@@ -68,7 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
     mkdir -p $out/bin $out/lib $out/lib/packages/wrangler
-    rm -rf node_modules/typescript node_modules/eslint
+    rm -rf node_modules/typescript node_modules/eslint node_modules/.bin/eslint
     cp -r node_modules $out/lib
     cp -r packages/wrangler/bin $out/lib/packages/wrangler
     cp -r packages/wrangler/wrangler-dist $out/lib/packages/wrangler
