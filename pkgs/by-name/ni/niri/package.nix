@@ -1,6 +1,7 @@
 { lib
 , rustPlatform
 , fetchFromGitHub
+, nix-update-script
 , pkg-config
 , libxkbcommon
 , pango
@@ -75,6 +76,8 @@ rustPlatform.buildRustPackage rec {
     install -Dm0644 resources/niri-portals.conf -t $out/share/xdg-desktop-portal
     install -Dm0644 resources/niri{-shutdown.target,.service} -t $out/share/systemd/user
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Scrollable-tiling Wayland compositor";
