@@ -94,6 +94,8 @@ checkConfigOutput '^true$' config.result ./module-argument-default.nix
 # gvariant
 checkConfigOutput '^true$' config.assertion ./gvariant.nix
 
+checkConfigOutput '"ok"' config.result ./specialArgs-lib.nix
+
 # https://github.com/NixOS/nixpkgs/pull/131205
 # We currently throw this error already in `config`, but throwing in `config.wrong1` would be acceptable.
 checkConfigError 'It seems as if you.re trying to declare an option by placing it into .config. rather than .options.' config.wrong1 ./error-mkOption-in-config.nix

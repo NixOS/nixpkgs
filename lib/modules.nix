@@ -485,10 +485,10 @@ let
         config = addFreeformType (removeAttrs m ["_class" "_file" "key" "disabledModules" "require" "imports" "freeformType"]);
       };
 
-  applyModuleArgsIfFunction = key: f: args@{ config, options, lib, ... }:
+  applyModuleArgsIfFunction = key: f: args@{ config, ... }:
     if isFunction f then applyModuleArgs key f args else f;
 
-  applyModuleArgs = key: f: args@{ config, options, lib, ... }:
+  applyModuleArgs = key: f: args@{ config, ... }:
     let
       # Module arguments are resolved in a strict manner when attribute set
       # deconstruction is used.  As the arguments are now defined with the
