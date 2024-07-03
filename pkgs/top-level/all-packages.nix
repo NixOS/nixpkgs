@@ -9555,7 +9555,7 @@ with pkgs;
   last-resort = callPackage ../data/fonts/last-resort { };
 
   ligo =
-    let ocaml_p = ocaml-ng.ocamlPackages_4_14_janeStreet_0_15; in
+    let ocaml_p = ocaml-ng.ocamlPackages_4_14; in
     callPackage ../development/compilers/ligo {
     coq = coq_8_13.override {
       customOCamlPackages = ocaml_p;
