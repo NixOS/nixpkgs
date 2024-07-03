@@ -68,10 +68,10 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
     mkdir -p $out/bin $out/lib $out/lib/packages/wrangler
-    cp -r node_modules $out/lib
+    #cp -r node_modules $out/lib
     cp -r packages/wrangler/bin $out/lib/packages/wrangler
     cp -r packages/wrangler/wrangler-dist $out/lib/packages/wrangler
-    #cp -r packages/wrangler/node_modules $out/lib/packages/wrangler
+    cp -r packages/wrangler/node_modules $out/lib/packages/wrangler
     cp -r packages/miniflare $out/lib/packages/wrangler
     cp $wranglerScript $out/bin/wrangler
     chmod a+x $out/bin/wrangler
