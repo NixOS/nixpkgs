@@ -40,7 +40,7 @@ in stdenv.mkDerivation (finalAttrs: {
     owner = "pocl";
     repo = "pocl";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-NHR9yrI6Odb/s/OBnEVifdcLEXvwqzAMZWpGViv2cJg=";
+    hash = "sha256-NHR9yrI6Odb/s/OBnEVifdcLEXvwqzAMZWpGViv2cJg=";
   };
 
   cmakeFlags = [
@@ -76,14 +76,15 @@ in stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "A portable open source (MIT-licensed) implementation of the OpenCL standard";
     homepage = "http://portablecl.org";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    changelog = "https://github.com/pocl/pocl/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       jansol
       xddxdd
     ];
-    platforms = platforms.linux ++ platforms.darwin;
+    platforms = lib.platforms.unix;
   };
 })
