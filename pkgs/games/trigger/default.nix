@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
     description = "Fast-paced single-player racing game";
     mainProgram = "trigger-rally";
     homepage = "http://trigger-rally.sourceforge.net/";
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [viric];
     platforms = with lib.platforms; linux;
   };

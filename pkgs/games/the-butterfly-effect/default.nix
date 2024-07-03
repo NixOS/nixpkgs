@@ -35,6 +35,6 @@ mkDerivation rec {
     homepage = "http://the-butterfly-effect.org/";
     maintainers = [ maintainers.raskin ];
     platforms = platforms.linux;
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
   };
 }
