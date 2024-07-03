@@ -1,8 +1,8 @@
-{ lib, stdenv, fetchFromGitHub, nix, rustPlatform, CoreServices, installShellFiles }:
-
-rustPlatform.buildRustPackage rec {
-  pname = "mdbook";
+{ lib, stdenv, fetchFromGitHub, nix, rustPlatform, CoreServices, installShellFiles }: let
   version = "0.4.37";
+in rustPlatform.buildRustPackage {
+  inherit version;
+  pname = "mdbook";
 
   src = fetchFromGitHub {
     owner = "rust-lang";
@@ -30,12 +30,12 @@ rustPlatform.buildRustPackage rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Create books from MarkDown";
     mainProgram = "mdbook";
     homepage = "https://github.com/rust-lang/mdBook";
     changelog = "https://github.com/rust-lang/mdBook/blob/v${version}/CHANGELOG.md";
-    license = [ licenses.mpl20 ];
-    maintainers = with maintainers; [ havvy Frostman matthiasbeyer ];
+    license = [ lib.licenses.mpl20 ];
+    maintainers = with lib.maintainers; [ havvy Frostman matthiasbeyer ];
   };
 }
