@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
         if [ -z "$NODE_PATH" ]; then
           export NODE_PATH="WRANGLER_PATH/lib/node_modules:WRANGLER_PATH/lib/packages/wrangler/node_modules"
         else
-          export NODE_PATH="WRANGLER_PATH/lib/node_modules:WRANGLER_PATH/lib/packages/wrangler/node_modules:$NODE_PATH"
+          export NODE_PATH="WRANGLER_PATH/packages:WRANGLER_PATH/lib/node_modules:WRANGLER_PATH/lib/packages/wrangler/node_modules:$NODE_PATH"
         fi
         if [ -x "$basedir/node" ]; then
           exec "$basedir/node"  "WRANGLER_PATH/lib/packages/wrangler/bin/wrangler.js" "$@"
