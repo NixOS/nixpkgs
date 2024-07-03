@@ -10,7 +10,7 @@
 }:
 let
   srcHash = "sha256-/4iIkvSn85fkRggmIha2kRlW0MEwvzy0ZAmIb8+LpZQ=";
-  pnpmDepsHash = "sha256-/4iIkvSn85fkRggmIha2kRlW0MEwvzy0ZAmIb8+LpZQ=";
+  pnpmDepsHash = "sha256-aTTaiGXm1WYwmy+ljUC9yO3qtvN20SA+24T83dWYrI0=";
 in
   stdenv.mkDerivation (finalAttrs: {
   pname = "wrangler";
