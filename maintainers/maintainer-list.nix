@@ -5114,6 +5114,12 @@
     githubId = 56017218;
     keys = [ { fingerprint = "E6F4 BFB4 8DE3 893F 68FC  A15F FF5F 4B30 A41B BAC8"; } ];
   };
+  Djabx = {
+    email = "alexandre@badez.eu";
+    github = "Djabx";
+    githubId = 69534;
+    name = "Alexandre Badez";
+  };
   djacu = {
     email = "daniel.n.baker@gmail.com";
     github = "djacu";

@@ -353,4 +353,6 @@ in
       ) (attrNames cfg.configs);
     }
   );
+
+  meta.maintainers = with lib.maintainers; [ Djabx ];
 }
