@@ -5,6 +5,9 @@
 , pyarrow
 , pyarrow-hotfix
 , openssl
+, stdenv
+, darwin
+, libiconv
 , pkg-config
 , pytestCheckHook
 , pytest-benchmark
@@ -34,7 +37,13 @@ buildPythonPackage rec {
     pyarrow-hotfix
   ];
 
-  buildInputs = [ openssl ];
+  buildInputs = [
+    openssl
+  ] ++ lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.Security
+    darwin.apple_sdk.frameworks.SystemConfiguration
+    libiconv
+  ];
 
   nativeBuildInputs = [
     pkg-config # openssl-sys needs this
