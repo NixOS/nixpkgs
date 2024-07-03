@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ raskin ];
     platforms = platforms.linux;
     hydraPlatforms = []; # disabled from hydra because it's so big
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     mainProgram = "fgfs";
   };
 }
