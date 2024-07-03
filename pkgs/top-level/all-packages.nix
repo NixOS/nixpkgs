@@ -30648,7 +30648,7 @@ with pkgs;
   };
 
   greetd = recurseIntoAttrs {
-    dlm = callPackage ../applications/display-managers/greetd/dlm.nix { };
+    dlm = callPackage ../applications/display-managers/greetd/dlm { };
     greetd = callPackage ../applications/display-managers/greetd { };
     gtkgreet = callPackage ../applications/display-managers/greetd/gtkgreet.nix { };
     regreet = callPackage ../applications/display-managers/greetd/regreet.nix { };

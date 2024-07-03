@@ -9,12 +9,17 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromSourcehut {
     owner = "~kennylevinsen";
-    repo = pname;
+    repo = "dlm";
     rev = "6b0e11c4f453b1a4d7a32019227539a980b7ce66";
-    sha256 = "1r3w7my0g3v2ya317qnvjx8wnagjahpj7yx72a65hf2pjbf5x42p";
+    hash = "sha256-V5Be3JJXOFiMEqf7Iy9U8inLUZfb4hOG8mKPB3w9fOQ=";
   };
 
-  cargoSha256 = "01a8k60qnx2pgxb2adgw30c2hjb60w6230khm5hyqgmp7z4rm8k8";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "greet_proto-0.2.0" = "sha256-91TsxEvMfVGpPIS9slHP1YHM2DKxpO4v/CP5iGphIyY=";
+    };
+  };
 
   meta = with lib; {
     description = "Stupid simple graphical login manager";
