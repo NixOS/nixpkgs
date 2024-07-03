@@ -9,7 +9,9 @@
 , libiconv ? null, ncurses
 
 , # GHC can be built with system libffi or a bundled one.
-  libffi ? null
+  # we explicitly use libffi-3.3 here because 3.4 removes a flag that causes
+  # problems for ghc-8.10.7's RTS. See #324384.
+  libffi_3_3 ? null
 
 , useLLVM ? !(stdenv.targetPlatform.isx86
               || stdenv.targetPlatform.isPower
@@ -119,7 +121,7 @@ let
 
   # Splicer will pull out correct variations
   libDeps = platform: lib.optional enableTerminfo ncurses
-    ++ [libffi]
+    ++ [libffi_3_3]
     ++ lib.optional (!enableIntegerSimple) gmp
     ++ lib.optional (platform.libc != "glibc" && !targetPlatform.isWindows) libiconv;
 
@@ -334,10 +336,10 @@ stdenv.mkDerivation (rec {
   configureFlags = [
     "--datadir=$doc/share/doc/ghc"
     "--with-curses-includes=${ncurses.dev}/include" "--with-curses-libraries=${ncurses.out}/lib"
-  ] ++ lib.optionals (libffi != null) [
+  ] ++ lib.optionals (libffi_3_3 != null) [
     "--with-system-libffi"
-    "--with-ffi-includes=${targetPackages.libffi.dev}/include"
-    "--with-ffi-libraries=${targetPackages.libffi.out}/lib"
+    "--with-ffi-includes=${targetPackages.libffi_3_3.dev}/include"
+    "--with-ffi-libraries=${targetPackages.libffi_3_3.out}/lib"
   ] ++ lib.optionals (targetPlatform == hostPlatform && !enableIntegerSimple) [
     "--with-gmp-includes=${targetPackages.gmp.dev}/include"
     "--with-gmp-libraries=${targetPackages.gmp.out}/lib"
