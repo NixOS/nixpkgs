@@ -16,6 +16,7 @@ let
     foldl'
     functionArgs
     getAttrFromPath
+    genericClosure
     head
     id
     imap1
@@ -35,9 +36,14 @@ let
     optionalString
     recursiveUpdate
     reverseList sort
+    seq
     setAttrByPath
+    substring
     throwIfNot
+    trace
+    typeOf
     types
+    unsafeGetAttrPos
     warn
     warnIf
     zipAttrs
@@ -304,7 +310,7 @@ let
             else throw baseMsg
         else null;
 
-      checked = builtins.seq checkUnmatched;
+      checked = seq checkUnmatched;
 
       extendModules = extendArgs@{
         modules ? [],
@@ -421,7 +427,7 @@ let
           moduleKey = file: m:
             if isString m
             then
-              if builtins.substring 0 1 m == "/"
+              if substring 0 1 m == "/"
               then m
               else toString modulesPath + "/" + m
 
@@ -439,11 +445,11 @@ let
 
             else if isAttrs m
             then throw "Module `${file}` contains a disabledModules item that is an attribute set, presumably a module, that does not have a `key` attribute. This means that the module system doesn't have any means to identify the module that should be disabled. Make sure that you've put the correct value in disabledModules: a string path relative to modulesPath, a path value, or an attribute set with a `key` attribute."
-            else throw "Each disabledModules item must be a path, string, or a attribute set with a key attribute, or a value supported by toString. However, one of the disabledModules items in `${toString file}` is none of that, but is of type ${builtins.typeOf m}.";
+            else throw "Each disabledModules item must be a path, string, or a attribute set with a key attribute, or a value supported by toString. However, one of the disabledModules items in `${toString file}` is none of that, but is of type ${typeOf m}.";
 
           disabledKeys = concatMap ({ file, disabled }: map (moduleKey file) disabled) disabled;
           keyFilter = filter (attrs: ! elem attrs.key disabledKeys);
-        in map (attrs: attrs.module) (builtins.genericClosure {
+        in map (attrs: attrs.module) (genericClosure {
           startSet = keyFilter modules;
           operator = attrs: keyFilter attrs.modules;
         });
@@ -555,14 +561,14 @@ let
             (module: let subtree = module.options; in
               if !(isAttrs subtree) then
                 throw ''
-                  An option declaration for `${builtins.concatStringsSep "." prefix}' has type
-                  `${builtins.typeOf subtree}' rather than an attribute set.
+                  An option declaration for `${concatStringsSep "." prefix}' has type
+                  `${typeOf subtree}' rather than an attribute set.
                   Did you mean to define this outside of `options'?
                 ''
               else
                 mapAttrs
                   (n: option:
-                    [{ inherit (module) _file; pos = builtins.unsafeGetAttrPos n subtree; options = option; }]
+                    [{ inherit (module) _file; pos = unsafeGetAttrPos n subtree; options = option; }]
                   )
                   subtree
               )
@@ -577,11 +583,11 @@ let
               #       The implementation of this check used to be tied to a superficially similar check for
               #       options, so maybe that's why this is here.
               isAttrs c.config || throw ''
-                In module `${c.file}', you're trying to define a value of type `${builtins.typeOf c.config}'
+                In module `${c.file}', you're trying to define a value of type `${typeOf c.config}'
                 rather than an attribute set for the option
-                `${builtins.concatStringsSep "." prefix}'!
+                `${concatStringsSep "." prefix}'!
 
-                This usually happens if `${builtins.concatStringsSep "." prefix}' has option
+                This usually happens if `${concatStringsSep "." prefix}' has option
                 definitions inside that are not matched. Please check how to properly define
                 this option by e.g. referring to `man 5 configuration.nix'!
               ''
@@ -1127,7 +1133,7 @@ let
     inherit from to;
     visible = false;
     warn = true;
-    use = builtins.trace "Obsolete option `${showOption from}' is used. It was renamed to `${showOption to}'.";
+    use = trace "Obsolete option `${showOption from}' is used. It was renamed to `${showOption to}'.";
   };
 
   mkRenamedOptionModuleWith = {
