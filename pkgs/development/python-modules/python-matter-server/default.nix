@@ -55,7 +55,7 @@ in
 
 buildPythonPackage rec {
   pname = "python-matter-server";
-  version = "6.1.2";
+  version = "6.2.2";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -64,7 +64,7 @@ buildPythonPackage rec {
     owner = "home-assistant-libs";
     repo = "python-matter-server";
     rev = "refs/tags/${version}";
-    hash = "sha256-J0Y7+cNRpHxCLYoOMd/W8WxvDQzJdqfbcaD779tSPqM=";
+    hash = "sha256-20heZrdSuKfiRuKKnDyguSC5bbV/9qBcu6E/5vcV1iU=";
   };
 
   patches = [
