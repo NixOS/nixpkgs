@@ -50,6 +50,8 @@ in stdenv.mkDerivation (finalAttrs: {
     "-DENABLE_ICD=ON"
     "-DCLANG=${clangWrapped}/bin/clang"
     "-DCLANGXX=${clangWrapped}/bin/clang++"
+    "-DENABLE_REMOTE_CLIENT=ON"
+    "-DENABLE_REMOTE_SERVER=ON"
   ];
 
   nativeBuildInputs = [
