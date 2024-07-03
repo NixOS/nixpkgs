@@ -1,6 +1,7 @@
 {
   lib,
   fetchPypi,
+  fetchpatch,
   buildPythonPackage,
   pythonOlder,
 
@@ -36,6 +37,14 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-ial13jVtBgjnTx9JNEL7Osu7eoW3OeB0RguwNAAUs5w=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "drop-usage-known-bad-actor-cdn.patch";
+      url = "https://github.com/astropy/astropy/commit/d329cb38e49584ad0ff5244fd2fff74cfa1f92f1.patch";
+      hash = "sha256-+DbDwYeyR+mMDLRB4jiyol/5WO0LwqSCCEwjgflxoTk=";
+    })
+  ];
 
   nativeBuildInputs = [
     astropy-extension-helpers
