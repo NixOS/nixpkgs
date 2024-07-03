@@ -5,7 +5,7 @@
 , cmake
 , pkg-config
 , hwloc
-, llvmPackages_16
+, llvmPackages_18
 , lttng-ust
 , ocl-icd
 , python3
@@ -14,7 +14,7 @@
 }:
 
 let
-  llvmPackages = llvmPackages_16;
+  llvmPackages = llvmPackages_18;
   clang = llvmPackages.clangUseLLVM;
   # Workaround to make sure libclang finds libgcc.a and libgcc_s.so when
   # invoked from within libpocl
@@ -32,13 +32,13 @@ let
   '';
 in stdenv.mkDerivation (finalAttrs: {
   pname = "pocl";
-  version = "4.0";
+  version = "6.0";
 
   src = fetchFromGitHub {
     owner = "pocl";
     repo = "pocl";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-Uo4Np4io1s/NMK+twX36PLBFP0j5j/0NkkBvS2Zv9ng=";
+    sha256 = "sha256-NHR9yrI6Odb/s/OBnEVifdcLEXvwqzAMZWpGViv2cJg=";
   };
 
   cmakeFlags = [
