@@ -4510,6 +4510,8 @@ self: super: with self; {
 
   fluent-logger = callPackage ../development/python-modules/fluent-logger { };
 
+  fluent-pygments = callPackage ../development/python-modules/python-fluent/fluent-pygments.nix { };
+
   fluent-runtime = callPackage ../development/python-modules/python-fluent/fluent-runtime.nix { };
 
   fluent-syntax = callPackage ../development/python-modules/python-fluent/fluent-syntax.nix { };
