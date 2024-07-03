@@ -5,18 +5,24 @@
   pytestCheckHook,
   pytest-asyncio,
   nix-update-script,
+  setuptools,
+  wheel,
 }:
 
 buildPythonPackage rec {
   pname = "result";
-  version = "0.16.1";
-  format = "setuptools";
+  version = "0.17.0";
+  pyproject = true;
+  build-system = [
+    setuptools
+    wheel
+  ];
 
   src = fetchFromGitHub {
     owner = "rustedpy";
     repo = "result";
     rev = "v${version}";
-    hash = "sha256-7BvFIQbl4Udd9GTpbMrAqP0P1BGn/C1CHQ3QUCEMXPs=";
+    hash = "sha256-o+7qKxGQCeMUnsmEReggvf+XwQWFHRCYArYk3DxCa50=";
   };
 
   postPatch = ''

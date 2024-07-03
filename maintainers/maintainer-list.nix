@@ -4750,12 +4750,6 @@
     github = "deinferno";
     githubId = 14363193;
   };
-  delan = {
-    name = "Delan Azabani";
-    email = "delan@azabani.com";
-    github = "delan";
-    githubId = 465303;
-  };
   delehef = {
     name = "Franklin Delehelle";
     email = "nix@odena.eu";
@@ -12004,6 +11998,12 @@
     githubId = 82718618;
     github = "itslychee";
     name = "Lychee";
+  };
+  lyndeno = {
+    name = "Lyndon Sanche";
+    email = "lsanche@lyndeno.ca";
+    github = "Lyndeno";
+    githubId = 13490857;
   };
   lynty = {
     email = "ltdong93+nix@gmail.com";

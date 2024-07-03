@@ -91186,72 +91186,6 @@ in
     bypassCache = true;
     reconstructLock = true;
   };
-  vscode-css-languageserver-bin = nodeEnv.buildNodePackage {
-    name = "vscode-css-languageserver-bin";
-    packageName = "vscode-css-languageserver-bin";
-    version = "1.4.0";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/vscode-css-languageserver-bin/-/vscode-css-languageserver-bin-1.4.0.tgz";
-      sha512 = "KWrF5f4RYYe8RBDfqb1c0Sdf9xPS2Ly/Z/T18H+uUOMw2QyzIrkxv4bMKy5GFfPm4479k6Ln4ji4UHqSmhGf3g==";
-    };
-    dependencies = [
-      sources."vscode-css-languageservice-3.0.13"
-      sources."vscode-jsonrpc-8.2.0"
-      sources."vscode-languageserver-4.4.2"
-      sources."vscode-languageserver-protocol-3.17.5"
-      sources."vscode-languageserver-protocol-foldingprovider-2.0.1"
-      sources."vscode-languageserver-types-3.17.5"
-      sources."vscode-nls-4.1.2"
-      sources."vscode-uri-1.0.8"
-    ];
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "Binary version published on npm of vscode-css-languageserver extracted from VSCode tree";
-      homepage = "https://github.com/vscode-langservers/vscode-css-languageserver-bin#readme";
-      license = "MIT";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
-  vscode-html-languageserver-bin = nodeEnv.buildNodePackage {
-    name = "vscode-html-languageserver-bin";
-    packageName = "vscode-html-languageserver-bin";
-    version = "1.4.0";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/vscode-html-languageserver-bin/-/vscode-html-languageserver-bin-1.4.0.tgz";
-      sha512 = "rDnpvASQwf1dlRaGiu8edo5WlAr4dM3/r/dcPCH4O6UD4+eShhdC1E8IyiSisnJU6bRk+4mDTCgA6cyhGJY2xA==";
-    };
-    dependencies = [
-      sources."typescript-2.9.2"
-      (sources."vscode-css-languageservice-3.0.13" // {
-        dependencies = [
-          sources."vscode-nls-4.1.2"
-        ];
-      })
-      (sources."vscode-html-languageservice-2.1.12" // {
-        dependencies = [
-          sources."vscode-nls-4.1.2"
-        ];
-      })
-      sources."vscode-jsonrpc-8.2.0"
-      sources."vscode-languageserver-4.4.2"
-      sources."vscode-languageserver-protocol-3.17.5"
-      sources."vscode-languageserver-protocol-foldingprovider-2.0.1"
-      sources."vscode-languageserver-types-3.17.5"
-      sources."vscode-nls-3.2.5"
-      sources."vscode-uri-1.0.8"
-    ];
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "Binary version published on npm of vscode-html-languageserver extracted from VSCode tree";
-      homepage = "https://github.com/vscode-langservers/vscode-html-languageserver-bin#readme";
-      license = "MIT";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
   vscode-json-languageserver = nodeEnv.buildNodePackage {
     name = "vscode-json-languageserver";
     packageName = "vscode-json-languageserver";
@@ -91290,57 +91224,6 @@ in
     buildInputs = globalBuildInputs;
     meta = {
       description = "JSON language server";
-      license = "MIT";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
-  vscode-json-languageserver-bin = nodeEnv.buildNodePackage {
-    name = "vscode-json-languageserver-bin";
-    packageName = "vscode-json-languageserver-bin";
-    version = "1.0.1";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/vscode-json-languageserver-bin/-/vscode-json-languageserver-bin-1.0.1.tgz";
-      sha512 = "WU+Ks0OEo1c4pgFUA4gIockhzlRqWqSRL2NXHOCtYhJnuIqfrNgSyECZC+nCMyn/CnzpPuQQjzC74GWlIRXnZQ==";
-    };
-    dependencies = [
-      sources."agent-base-4.3.0"
-      sources."debug-3.1.0"
-      sources."es6-promise-4.2.8"
-      sources."es6-promisify-5.0.0"
-      sources."http-proxy-agent-2.1.0"
-      sources."https-proxy-agent-2.2.4"
-      sources."jsonc-parser-1.0.3"
-      sources."ms-2.0.0"
-      (sources."request-light-0.2.5" // {
-        dependencies = [
-          sources."vscode-nls-4.1.2"
-        ];
-      })
-      (sources."vscode-json-languageservice-3.11.0" // {
-        dependencies = [
-          sources."jsonc-parser-3.2.1"
-          sources."vscode-nls-5.2.0"
-          sources."vscode-uri-2.1.2"
-        ];
-      })
-      sources."vscode-jsonrpc-3.5.0"
-      sources."vscode-languageserver-3.5.1"
-      (sources."vscode-languageserver-protocol-3.5.1" // {
-        dependencies = [
-          sources."vscode-languageserver-types-3.5.0"
-        ];
-      })
-      sources."vscode-languageserver-textdocument-1.0.11"
-      sources."vscode-languageserver-types-3.16.0-next.2"
-      sources."vscode-nls-2.0.2"
-      sources."vscode-uri-1.0.8"
-    ];
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "JSON language server";
-      homepage = "https://github.com/vscode-langservers/vscode-json-languageserver-bin#readme";
       license = "MIT";
     };
     production = true;
