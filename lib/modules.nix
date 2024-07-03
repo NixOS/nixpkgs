@@ -22,6 +22,7 @@ let
     isAttrs
     isBool
     isFunction
+    isInOldestRelease
     isList
     isString
     length
@@ -35,8 +36,11 @@ let
     recursiveUpdate
     reverseList sort
     setAttrByPath
+    throwIfNot
     types
+    warn
     warnIf
+    zipAttrs
     zipAttrsWith
     ;
   inherit (lib.options)
@@ -91,8 +95,8 @@ let
                 }:
     let
       withWarnings = x:
-        lib.warnIf (evalModulesArgs?args) "The args argument to evalModules is deprecated. Please set config._module.args instead."
-        lib.warnIf (evalModulesArgs?check) "The check argument to evalModules is deprecated. Please set config._module.check instead."
+        warnIf (evalModulesArgs?args) "The args argument to evalModules is deprecated. Please set config._module.args instead."
+        warnIf (evalModulesArgs?check) "The check argument to evalModules is deprecated. Please set config._module.check instead."
         x;
 
       legacyModules =
@@ -314,7 +318,7 @@ let
             prefix = extendArgs.prefix or evalModulesArgs.prefix or [];
           });
 
-      type = lib.types.submoduleWith {
+      type = types.submoduleWith {
         inherit modules specialArgs class;
       };
 
@@ -346,8 +350,8 @@ let
           else
             throw (
               "Could not load a value as a module, because it is of type ${lib.strings.escapeNixString m._type}"
-              + lib.optionalString (fallbackFile != unknownModule) ", in file ${toString fallbackFile}."
-              + lib.optionalString (m._type == "configuration") " If you do intend to import this configuration, please only import the modules that make up the configuration. You may have to create a `let` binding, file or attribute to give yourself access to the relevant modules.\nWhile loading a configuration into the module system is a very sensible idea, it can not be done cleanly in practice."
+              + optionalString (fallbackFile != unknownModule) ", in file ${toString fallbackFile}."
+              + optionalString (m._type == "configuration") " If you do intend to import this configuration, please only import the modules that make up the configuration. You may have to create a `let` binding, file or attribute to give yourself access to the relevant modules.\nWhile loading a configuration into the module system is a very sensible idea, it can not be done cleanly in practice."
                # Extended explanation: That's because a finalized configuration is more than just a set of modules. For instance, it has its own `specialArgs` that, by the nature of `specialArgs` can't be loaded through `imports` or the the `modules` argument. So instead, we have to ask you to extract the relevant modules and use those instead. This way, we keep the module system comparatively simple, and hopefully avoid a bad surprise down the line.
             )
         else if isList m then
@@ -477,7 +481,7 @@ let
         }
     else
       # shorthand syntax
-      lib.throwIfNot (isAttrs m) "module ${file} (${key}) does not look like a module."
+      throwIfNot (isAttrs m) "module ${file} (${key}) does not look like a module."
       { _file = toString m._file or file;
         _class = m._class or null;
         key = toString m.key or key;
@@ -549,7 +553,7 @@ let
           (n: concatLists)
           (map
             (module: let subtree = module.options; in
-              if !(builtins.isAttrs subtree) then
+              if !(isAttrs subtree) then
                 throw ''
                   An option declaration for `${builtins.concatStringsSep "." prefix}' has type
                   `${builtins.typeOf subtree}' rather than an attribute set.
@@ -567,7 +571,7 @@ let
       # The root of any module definition must be an attrset.
       checkedConfigs =
         assert
-          lib.all
+          all
             (c:
               # TODO: I have my doubts that this error would occur when option definitions are not matched.
               #       The implementation of this check used to be tied to a superficially similar check for
@@ -669,7 +673,7 @@ let
                 let
                   nonOptions = filter (m: !isOption m.options) decls;
                 in
-                throw "The option `${showOption loc}' in module `${(lib.head optionDecls)._file}' would be a parent of the following options, but its type `${(lib.head optionDecls).options.type.description or "<no description>"}' does not support nested options.\n${
+                throw "The option `${showOption loc}' in module `${(head optionDecls)._file}' would be a parent of the following options, but its type `${(head optionDecls).options.type.description or "<no description>"}' does not support nested options.\n${
                   showRawDecls loc nonOptions
                 }"
           else
@@ -974,12 +978,12 @@ let
   mergeAttrDefinitionsWithPrio = opt:
         let
             defsByAttr =
-              lib.zipAttrs (
-                lib.concatLists (
-                  lib.concatMap
+              zipAttrs (
+                concatLists (
+                  concatMap
                     ({ value, ... }@def:
                       map
-                        (lib.mapAttrsToList (k: value: { ${k} = def // { inherit value; }; }))
+                        (mapAttrsToList (k: value: { ${k} = def // { inherit value; }; }))
                         (pushDownProperties value)
                     )
                     opt.definitionsWithLocations
@@ -987,9 +991,9 @@ let
               );
         in
           assert opt.type.name == "attrsOf" || opt.type.name == "lazyAttrsOf";
-          lib.mapAttrs
+          mapAttrs
                 (k: v:
-                  let merging = lib.mergeDefinitions (opt.loc ++ [k]) opt.type.nestedTypes.elemType v;
+                  let merging = mergeDefinitions (opt.loc ++ [k]) opt.type.nestedTypes.elemType v;
                   in {
                     value = merging.mergedValue;
                     inherit (merging.defsFinal') highestPrio;
@@ -1025,9 +1029,9 @@ let
   mkForce = mkOverride 50;
   mkVMOverride = mkOverride 10; # used by ‘nixos-rebuild build-vm’
 
-  defaultPriority = lib.warnIf (lib.isInOldestRelease 2305) "lib.modules.defaultPriority is deprecated, please use lib.modules.defaultOverridePriority instead." defaultOverridePriority;
+  defaultPriority = warnIf (isInOldestRelease 2305) "lib.modules.defaultPriority is deprecated, please use lib.modules.defaultOverridePriority instead." defaultOverridePriority;
 
-  mkFixStrictness = lib.warn "lib.mkFixStrictness has no effect and will be removed. It returns its argument unmodified, so you can just remove any calls." id;
+  mkFixStrictness = warn "lib.mkFixStrictness has no effect and will be removed. It returns its argument unmodified, so you can just remove any calls." id;
 
   mkOrder = priority: content:
     { _type = "order";
@@ -1141,8 +1145,8 @@ let
   }: doRename {
     inherit from to;
     visible = false;
-    warn = lib.isInOldestRelease sinceRelease;
-    use = lib.warnIf (lib.isInOldestRelease sinceRelease)
+    warn = isInOldestRelease sinceRelease;
+    use = warnIf (isInOldestRelease sinceRelease)
       "Obsolete option `${showOption from}' is used. It was renamed to `${showOption to}'.";
   };
 
@@ -1374,8 +1378,8 @@ let
     config = lib.importTOML file;
   };
 
-  private = lib.mapAttrs
-    (k: lib.warn "External use of `lib.modules.${k}` is deprecated. If your use case isn't covered by non-deprecated functions, we'd like to know more and perhaps support your use case well, instead of providing access to these low level functions. In this case please open an issue in https://github.com/nixos/nixpkgs/issues/.")
+  private = mapAttrs
+    (k: warn "External use of `lib.modules.${k}` is deprecated. If your use case isn't covered by non-deprecated functions, we'd like to know more and perhaps support your use case well, instead of providing access to these low level functions. In this case please open an issue in https://github.com/nixos/nixpkgs/issues/.")
     {
       inherit
         applyModuleArgsIfFunction
