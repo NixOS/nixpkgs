@@ -13,8 +13,7 @@ yarnBuildHook() {
             for Nodejs related tools.
     fi
 
-    yarn --offline "$yarnBuildScript" \
-        $yarnBuildFlags "${yarnBuildFlagsArray[@]}"
+    yarn --offline "$yarnBuildScript" $yarnBuildFlags
 
     echo "finished yarnBuildHook"
     runHook postBuild
