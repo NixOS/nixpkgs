@@ -3,6 +3,7 @@
   lib,
   fetchFromGitHub,
   cmake,
+  extra-cmake-modules,
   pkg-config,
   makeWrapper,
   freetype,
@@ -19,10 +20,13 @@
   discord-gamesdk,
   libpcap,
   libslirp,
+  wayland,
+  wayland-scanner,
 
   enableDynarec ? with stdenv.hostPlatform; isx86 || isAarch,
   enableNewDynarec ? enableDynarec && stdenv.hostPlatform.isAarch,
   enableVncRenderer ? false,
+  enableWayland ? stdenv.isLinux,
   unfreeEnableDiscord ? false,
   unfreeEnableRoms ? false,
 }:
@@ -43,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     makeWrapper
     qt5.wrapQtAppsHook
-  ];
+  ] ++ lib.optionals enableWayland [ extra-cmake-modules wayland-scanner ];
 
   buildInputs = [
     freetype
@@ -58,7 +62,9 @@ stdenv.mkDerivation (finalAttrs: {
     libslirp
     qt5.qtbase
     qt5.qttools
-  ] ++ lib.optional stdenv.isLinux alsa-lib ++ lib.optional enableVncRenderer libvncserver;
+  ] ++ lib.optional stdenv.isLinux alsa-lib
+    ++ lib.optional enableWayland wayland
+    ++ lib.optional enableVncRenderer libvncserver;
 
   cmakeFlags =
     lib.optional stdenv.isDarwin "-DCMAKE_MACOSX_BUNDLE=OFF"
