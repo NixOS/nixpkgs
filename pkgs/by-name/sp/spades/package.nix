@@ -69,6 +69,6 @@ stdenv.mkDerivation (finalAttrs: {
       "x86_64-darwin"
     ];
     maintainers = with lib.maintainers; [ bzizou ];
-    broken = stdenv.hostPlatform.isMusl;
+    broken = stdenv.hostPlatform.isMusl && stdenv.isDarwin;
   };
 })
