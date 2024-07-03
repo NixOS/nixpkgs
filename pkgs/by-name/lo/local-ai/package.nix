@@ -515,7 +515,13 @@ let
     postFixup =
       let
         LD_LIBRARY_PATH = [ ]
-          ++ lib.optionals with_cublas [ (lib.getLib libcublas) cuda_cudart addDriverRunpath.driverLink ]
+          ++ lib.optionals with_cublas [
+          # driverLink has to be first to avoid loading the stub version of libcuda.so
+          # https://github.com/NixOS/nixpkgs/issues/320145#issuecomment-2190319327
+          addDriverRunpath.driverLink
+          (lib.getLib libcublas)
+          cuda_cudart
+        ]
           ++ lib.optionals with_clblas [ clblast ocl-icd ]
           ++ lib.optionals with_openblas [ openblas ]
           ++ lib.optionals with_tts [ piper-phonemize ];
