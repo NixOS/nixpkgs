@@ -4127,6 +4127,12 @@
     githubId = 34543609;
     name = "creator54";
   };
+  crertel = {
+    email = "chris@kedagital.com";
+    github = "crertel";
+    githubId = 1707779;
+    name = "Chris Ertel";
+  };
   crinklywrappr = {
     email = "crinklywrappr@pm.me";
     name = "Daniel Fitzpatrick";
@@ -5394,6 +5400,11 @@
     github = "dschrempf";
     githubId = 5596239;
     keys = [ { fingerprint = "62BC E2BD 49DF ECC7 35C7  E153 875F 2BCF 163F 1B29"; } ];
+  };
+  dseelp = {
+    name = "dsee";
+    github = "DSeeLP";
+    githubId = 46624152;
   };
   dsferruzza = {
     email = "david.sferruzza@gmail.com";
@@ -16755,6 +16766,12 @@
     github = "r-burns";
     githubId = 52847440;
     name = "Ryan Burns";
+  };
+  rcoeurjoly = {
+    email = "rolandcoeurjoly@gmail.com";
+    github = "RCoeurjoly";
+    githubId = 16906199;
+    name = "Roland Coeurjoly";
   };
   rconybea = {
     email = "n1xpkgs@hushmail.com";

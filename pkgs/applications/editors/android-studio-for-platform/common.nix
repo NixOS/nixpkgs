@@ -12,7 +12,7 @@
 , gnugrep
 , gnused
 , gnutar
-, gtk2, gnome_vfs, glib, GConf
+, gtk2, glib
 , gzip
 , fontsConf
 , fontconfig
@@ -107,9 +107,7 @@ let
 
           # For GTKLookAndFeel
           gtk2
-          gnome_vfs
           glib
-          GConf
 
           # For Soong sync
           e2fsprogs
