@@ -32,6 +32,6 @@ pythonPackages.buildPythonApplication rec {
     homepage = "https://github.com/mopidy/mopidy-spotify";
     description = "Mopidy extension for playing music from Spotify";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ getchoo ];
   };
 }
