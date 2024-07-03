@@ -42,13 +42,13 @@ mkDerivation rec {
 
   KMODDIR = "${builtins.placeholder "out"}/kernel";
 
-  meta = with lib; {
+  meta = {
     description = "GPU firmware for FreeBSD drm-kmod";
     platforms = lib.platforms.freebsd;
     license =
-      lib.optional withAmd licenses.unfreeRedistributableFirmware
+      lib.optional withAmd lib.licenses.unfreeRedistributableFirmware
       # Intel license prohibits modification. this will wrap firmware files in an ELF
-      ++ lib.optional withIntel licenses.unfree;
-    sourceProvenance = [ sourceTypes.binaryFirmware ];
+      ++ lib.optional withIntel lib.licenses.unfree;
+    sourceProvenance = [ lib.sourceTypes.binaryFirmware ];
   };
 }

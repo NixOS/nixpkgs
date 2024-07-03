@@ -14,10 +14,10 @@ mkDerivation {
 
   MK_TESTS = "no";
 
-  meta = with lib; {
+  meta = {
     description = "FreeBSD syslog daemon";
-    maintainers = with maintainers; [ artemist ];
-    platforms = platforms.freebsd;
-    license = licenses.bsd2;
+    maintainers = with lib.maintainers; [ artemist ];
+    platforms = lib.platforms.freebsd;
+    license = lib.licenses.bsd2;
   };
 }

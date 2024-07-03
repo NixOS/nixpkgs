@@ -39,9 +39,9 @@ mkDerivation {
     "debug"
   ];
 
-  meta = with lib; {
-    platforms = platforms.freebsd;
-    license = with licenses; [
+  meta = {
+    platforms = lib.platforms.freebsd;
+    license = with lib.licenses; [
       cddl
       bsd2
     ];
