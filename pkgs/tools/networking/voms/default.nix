@@ -18,9 +18,9 @@
 , externalEtc ? "/etc"
 }:
 
-stdenv.mkDerivation rec{
-  pname = "voms-unstable";
-  version = "2022-06-14";
+stdenv.mkDerivation {
+  pname = "voms";
+  version = "2.1.0-rc2-unstable-2022-06-14";
 
   src = fetchFromGitHub {
     owner = "italiangrid";
