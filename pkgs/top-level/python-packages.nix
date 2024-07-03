@@ -10841,6 +10841,8 @@ self: super: with self; {
 
   pypoolstation = callPackage ../development/python-modules/pypoolstation { };
 
+  pyppmd = callPackage ../development/python-modules/pyppmd { };
+
   pyrail = callPackage ../development/python-modules/pyrail { };
 
   pyrdfa3 = callPackage ../development/python-modules/pyrdfa3 { };
