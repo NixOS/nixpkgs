@@ -4,6 +4,7 @@
 , jdk8
 , jre
 , ant
+, stripJavaArchivesHook
 , makeWrapper
 , makeDesktopItem
 , copyDesktopItems
@@ -41,6 +42,7 @@ in stdenv.mkDerivation {
   nativeBuildInputs = [
     jdk8
     ant
+    stripJavaArchivesHook
     makeWrapper
     copyDesktopItems
   ];
@@ -71,7 +73,6 @@ in stdenv.mkDerivation {
     cp -r build/game/* $out/share/domination/
 
     # Reimplement the two launchers mentioned in Unix_shortcutSpec.xml with makeWrapper
-    mkdir -p $out/bin
     makeWrapper ${jre}/bin/java $out/bin/domination \
       --chdir "$out/share/domination" \
       --add-flags "-jar $out/share/domination/Domination.jar"
@@ -81,6 +82,11 @@ in stdenv.mkDerivation {
 
     install -Dm644 build/game/resources/icon.png $out/share/pixmaps/domination.png
     runHook postInstall
+  '';
+
+  preFixup = ''
+    # remove extra metadata files for jar files which break stripJavaArchivesHook
+    find $out/share/domination/lib -type f -name '._*.jar' -delete
   '';
 
   passthru.tests = {
@@ -101,7 +107,8 @@ in stdenv.mkDerivation {
       fromSource
       binaryBytecode  # source bundles dependencies as jars
     ];
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
+    mainProgram = "domination";
     maintainers = with maintainers; [ fgaz ];
     platforms = platforms.all;
   };

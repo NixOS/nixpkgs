@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Telescope is a w3m-like browser for Gemini";
-    homepage = "https://telescope.omarpolo.com/";
+    homepage = "https://www.telescope-browser.org/";
     license = licenses.isc;
     maintainers = with maintainers; [ heph2 ];
     platforms = platforms.unix;

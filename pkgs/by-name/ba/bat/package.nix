@@ -75,6 +75,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/sharkdp/bat/raw/v${version}/CHANGELOG.md";
     license = with licenses; [ asl20 /* or */ mit ];
     mainProgram = "bat";
-    maintainers = with maintainers; [ dywedir lilyball zowoq SuperSandro2000 ];
+    maintainers = with maintainers; [ dywedir zowoq SuperSandro2000 ];
   };
 }

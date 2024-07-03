@@ -44,7 +44,7 @@ in
       sessionPath = mkOption {
         default = [];
         type = types.listOf types.package;
-        example = literalExpression "[ pkgs.gnome.gpaste ]";
+        example = literalExpression "[ pkgs.gpaste ]";
         description = ''
           Additional list of packages to be added to the session search path.
           Useful for GSettings-conditional autostart.
@@ -207,7 +207,7 @@ in
         desktop-file-utils
         glib # for gsettings program
         gnome-menus
-        gnome.adwaita-icon-theme
+        adwaita-icon-theme
         gtk3.out # for gtk-launch program
         onboard
         orca # elementary/greeter#668
@@ -284,11 +284,11 @@ in
     })
 
     (mkIf serviceCfg.apps.enable {
-      programs.evince.enable = mkDefault (notExcluded pkgs.gnome.evince);
-      programs.file-roller.enable = mkDefault (notExcluded pkgs.gnome.file-roller);
+      programs.evince.enable = mkDefault (notExcluded pkgs.evince);
+      programs.file-roller.enable = mkDefault (notExcluded pkgs.file-roller);
 
       environment.systemPackages = utils.removePackagesByName ([
-        pkgs.gnome.gnome-font-viewer
+        pkgs.gnome-font-viewer
       ] ++ (with pkgs.pantheon; [
         elementary-calculator
         elementary-calendar

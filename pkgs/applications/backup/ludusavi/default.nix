@@ -17,7 +17,7 @@
 , libxkbcommon
 , vulkan-loader
 , wayland
-, gnome
+, zenity
 , libsForQt5
 }:
 
@@ -85,7 +85,7 @@ rustPlatform.buildRustPackage rec {
     in
     ''
       patchelf --set-rpath "${libPath}" "$out/bin/ludusavi"
-      wrapProgram $out/bin/ludusavi --prefix PATH : ${lib.makeBinPath [ gnome.zenity libsForQt5.kdialog ]}
+      wrapProgram $out/bin/ludusavi --prefix PATH : ${lib.makeBinPath [ zenity libsForQt5.kdialog ]}
     '';
 
 

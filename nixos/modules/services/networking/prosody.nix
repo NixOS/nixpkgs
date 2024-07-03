@@ -716,6 +716,17 @@ in
         description = "Additional prosody configuration";
       };
 
+      log = mkOption {
+        type = types.lines;
+        default = ''"*syslog"'';
+        description = "Logging configuration. See [](https://prosody.im/doc/logging) for more details";
+        example = ''
+          {
+            { min = "warn"; to = "*syslog"; };
+          }
+        '';
+      };
+
     };
   };
 
@@ -764,7 +775,7 @@ in
 
       pidfile = "/run/prosody/prosody.pid"
 
-      log = "*syslog"
+      log = ${cfg.log}
 
       data_path = "${cfg.dataDir}"
       plugin_paths = {

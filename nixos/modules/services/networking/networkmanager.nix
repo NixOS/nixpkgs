@@ -127,7 +127,7 @@ in
 {
 
   meta = {
-    maintainers = teams.freedesktop.members ++ [ lib.maintainers.janik ];
+    maintainers = teams.freedesktop.members;
   };
 
   ###### interface

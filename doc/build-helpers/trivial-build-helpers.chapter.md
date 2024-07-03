@@ -468,7 +468,7 @@ This is for consistency with the convention of software packages placing executa
 
 The created file is marked as executable.
 The file's contents will be put into `/nix/store/<store path>/bin/<name>`.
-The store path will include the the name, and it will be a directory.
+The store path will include the name, and it will be a directory.
 
 ::: {.example #ex-writeScriptBin}
 # Usage of `writeScriptBin`
