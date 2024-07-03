@@ -10400,6 +10400,8 @@ self: super: with self; {
 
   pyatome = callPackage ../development/python-modules/pyatome { };
 
+  pybcj = callPackage ../development/python-modules/pybcj { };
+
   pycketcasts = callPackage ../development/python-modules/pycketcasts { };
 
   pycomm3 = callPackage ../development/python-modules/pycomm3 { };
