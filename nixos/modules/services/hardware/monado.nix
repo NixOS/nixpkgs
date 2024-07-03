@@ -8,6 +8,7 @@ let
 
   cfg = config.services.monado;
 
+  package = cfg.package.override {withUltraleap = cfg.enableUltraleap;};
 in
 {
   options.services.monado = {
@@ -29,6 +30,8 @@ in
 
     highPriority = mkEnableOption "high priority capability for monado-service"
       // mkOption { default = true; };
+
+    enableUltraleap = mkEnableOption "Ultraleap hand tracking Monado driver and system service";
   };
 
   config = mkIf cfg.enable {
@@ -38,10 +41,14 @@ in
       group = "root";
       # cap_sys_nice needed for asynchronous reprojection
       capabilities = "cap_sys_nice+eip";
-      source = lib.getExe' cfg.package "monado-service";
+      source = lib.getExe' package "monado-service";
     };
 
     services.udev.packages = with pkgs; [ xr-hardware ];
+
+    services.ultraleap = mkIf cfg.enableUltraleap {
+      enable = mkDefault true;
+    };
 
     systemd.user = {
       services.monado = {
@@ -63,11 +70,11 @@ in
           ExecStart =
             if cfg.highPriority
             then "${config.security.wrapperDir}/monado-service"
-            else lib.getExe' cfg.package "monado-service";
+            else lib.getExe' package "monado-service";
           Restart = "no";
         };
 
-        restartTriggers = [ cfg.package ];
+        restartTriggers = [ package ];
       };
 
       sockets.monado = {
@@ -84,17 +91,17 @@ in
           FlushPending = true;
         };
 
-        restartTriggers = [ cfg.package ];
+        restartTriggers = [ package ];
 
         wantedBy = [ "sockets.target" ];
       };
     };
 
-    environment.systemPackages = [ cfg.package ];
+    environment.systemPackages = [ package ];
     environment.pathsToLink = [ "/share/openxr" ];
 
     environment.etc."xdg/openxr/1/active_runtime.json" = mkIf cfg.defaultRuntime {
-      source = "${cfg.package}/share/openxr/1/openxr_monado.json";
+      source = "${package}/share/openxr/1/openxr_monado.json";
     };
   };
 
