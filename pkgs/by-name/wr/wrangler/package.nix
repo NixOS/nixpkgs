@@ -48,9 +48,9 @@ stdenv.mkDerivation (finalAttrs: {
         esac
 
         if [ -z "$NODE_PATH" ]; then
-          export NODE_PATH="WRANGLER_PATH/packages:WRANGLER_PATH/lib/node_modules:WRANGLER_PATH/lib/packages/wrangler/node_modules"
+          export NODE_PATH="WRANGLER_PATH/lib/node_modules:WRANGLER_PATH/lib/packages/wrangler/node_modules"
         else
-          export NODE_PATH="WRANGLER_PATH/packages:WRANGLER_PATH/lib/node_modules:WRANGLER_PATH/lib/packages/wrangler/node_modules:$NODE_PATH"
+          export NODE_PATH="WRANGLER_PATH/lib/node_modules:WRANGLER_PATH/lib/packages/wrangler/node_modules:$NODE_PATH"
         fi
         if [ -x "$basedir/node" ]; then
           exec "$basedir/node"  "WRANGLER_PATH/lib/packages/wrangler/bin/wrangler.js" "$@"
@@ -62,7 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
   # I'm sure this is suboptimal but it seems to work. Points:
   # - when build is run in the original repo, no specific executable seems to be generated; you run the resulting build with pnpm run start
   # - this means we need to add a dedicated script - perhaps it is possible to create this frok the workers-sdk dir, but I don't know how to do this
-  # - the bulid process builds a version of miniflare which is used by wrangler; for this reason, the miniflare package is copied also
+  # - the build process builds a version of miniflare which is used by wrangler; for this reason, the miniflare package is copied also
   # - pnpm stores all content in the top-level node_modules directory, but it is linked to from a node_modules directory inside wrangler
   # - as they are linked via symlinks, the relative location of them on the filesystem should be maintained
   installPhase = ''
@@ -73,7 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
     cp -r packages/wrangler/bin $out/lib/packages/wrangler
     cp -r packages/wrangler/wrangler-dist $out/lib/packages/wrangler
     cp -r packages/wrangler/node_modules $out/lib/packages/wrangler
-    cp -r packages/miniflare $out/lib/packages/wrangler
+    cp -r packages/miniflare $out/lib/packages/
     cp $wranglerScript $out/bin/wrangler
     chmod a+x $out/bin/wrangler
     substituteInPlace $out/bin/wrangler --replace-warn /bin/sh ${pkgs.bash}/bin/sh
