@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "1fdnnx7d18gj4rkv1dc6q379dqabl66zks9i0rjarjwcci8m30d9";
   };
 
-  cargoSha256 = "1xlbfzmy0wjyz3jpr17r4ma4i79d9b32yqwwi10vrcjzr7vsyhmx";
+  cargoHash = "sha256-vUKv98lfsrxBiJxjL8ZKLZ1IVCX5hHzl+F5y4Ot3i/Y=";
   cargoBuildFlags = [ "-p" pname ];
 
   # error[E0793]: reference to packed field is unaligned

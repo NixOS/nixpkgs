@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [ gtk3 ];
 
-  cargoSha256 = "13ihwrckpsb4j1ai923vh151frw0yriwg9yylj9lk0ycps51y1sn";
+  cargoHash = "sha256-Vgcfir7Mg0mTpN6nx2P2gGcXSoB7iBRVkGTpO1nmMI4=";
 
   meta = with lib; {
     description = "Search through over 1000 different LaTeX symbols by sketching. A desktop version of detexify";

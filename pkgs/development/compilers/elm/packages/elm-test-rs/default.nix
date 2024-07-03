@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage rec {
     CoreServices
   ]);
 
-  cargoSha256 = "sha256:1dpdlzv96kpc25yf5jgsz9qldghyw35x382qpxhkadkn5dryzjvd";
+  cargoHash = "sha256-bcvvcyt2NjVhv1ig0cvgHr5Gcfr6yeJ8EexOk/an7bY=";
 
   # Tests perform networking and therefore can't work in sandbox
   doCheck = false;
