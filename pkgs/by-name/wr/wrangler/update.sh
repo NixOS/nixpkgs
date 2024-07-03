@@ -17,6 +17,6 @@ sed -i 's#version = "[^"]*"#version = "'"$version"'"#' package.nix
 store_name="wrangler_$version.tar.gz"
 sha256=$(nix-prefetch-url --quiet --unpack --name "$store_name" "$url")
 src_hash=$(nix-hash --to-sri --type sha256 "$sha256")
-sed -i 's#hash = "[^"]*"#hash = "'"$src_hash"'"#' package.nix
+sed -i 's#srcHash = "[^"]*"#srcHash = "'"$src_hash"'"#' package.nix
 
 popd
