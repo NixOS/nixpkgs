@@ -1,32 +1,32 @@
 {
-  stdenv,
-  lib,
-  fetchurl,
-  cairo,
-  meson,
-  ninja,
-  pkg-config,
-  python3,
   asciidoc,
-  wrapGAppsHook3,
+  cairo,
+  fdk_aac,
+  fetchurl,
+  freerdp3,
+  fuse3,
+  gdk-pixbuf,
   glib,
+  gnome,
+  lib,
+  libdrm,
   libei,
   libepoxy,
-  libdrm,
-  nv-codec-headers-11,
-  pipewire,
-  systemd,
-  libsecret,
   libnotify,
   libopus,
+  libsecret,
   libxkbcommon,
-  gdk-pixbuf,
-  freerdp3,
-  fdk_aac,
-  tpm2-tss,
-  fuse3,
-  gnome,
+  meson,
+  ninja,
+  nv-codec-headers-11,
+  pipewire,
+  pkg-config,
   polkit,
+  python3,
+  stdenv,
+  systemd,
+  tpm2-tss,
+  wrapGAppsHook3,
 }:
 
 stdenv.mkDerivation rec {
@@ -39,33 +39,33 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
+    asciidoc
     meson
     ninja
     pkg-config
     python3
-    asciidoc
     wrapGAppsHook3
   ];
 
   buildInputs = [
     cairo
-    freerdp3
     fdk_aac
-    tpm2-tss
+    freerdp3
     fuse3
     gdk-pixbuf # For libnotify
     glib
+    libdrm
     libei
     libepoxy
-    libdrm
-    nv-codec-headers-11
     libnotify
     libopus
     libsecret
     libxkbcommon
+    nv-codec-headers-11
     pipewire
-    systemd
     polkit # For polkit-gobject
+    systemd
+    tpm2-tss
   ];
 
   mesonFlags = [
