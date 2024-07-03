@@ -18,11 +18,11 @@ prefetched_url=$(nix-prefetch-url --quiet --unpack --name "$store_name" "$url")
 src_hash=$(nix hash to-sri --type sha256 "$prefetched_url")
 sed -i 's#srcHash = "[^"]*"#srcHash = "'"$src_hash"'"#' package.nix
 
-pnpm_hash=$(nix-build -E "with import <nixpkgs> {}; callPackage ./package.nix {}" 2>&1 | grep "got: " | awk '{print $NF}')
-if [[ "${pnpm_hash}" == "" ]]; then
-    echo "pnpm_hash already up to date!"
+pnpm_deps_hash=$(nix-build -E "with import <nixpkgs> {}; callPackage ./package.nix {}" 2>&1 | grep "got: " | awk '{print $NF}' | xargs)
+if [[ "${pnpm_deps_hash}" == "" ]]; then
+    echo "pnpm_deps_hash already up to date!"
     exit 0
 fi
-sed -i 's#pnpmHash = "[^"]*"#pnpmHash = "'"$pnpm_hash"'"#' package.nix
+sed -E -i "s#(pnpmDepsHash = \")[^\"]*(\";)#\1${pnpm_deps_hash}\2#" package.nix
 
 popd
