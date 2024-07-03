@@ -14,6 +14,7 @@ let
     elem
     filter
     foldl'
+    functionArgs
     getAttrFromPath
     head
     id
@@ -507,7 +508,7 @@ let
       extraArgs = mapAttrs (name: _:
         addErrorContext (context name)
           (args.${name} or config._module.args.${name})
-      ) (lib.functionArgs f);
+      ) (functionArgs f);
 
       # Note: we append in the opposite order such that we can add an error
       # context on the explicit arguments of "args" too. This update
