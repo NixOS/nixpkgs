@@ -20,7 +20,7 @@ in
     owner = "cloudflare";
     repo = "workers-sdk";
     rev = "wrangler@${finalAttrs.version}";
-    hash = "${srcHash}"
+    hash = "${srcHash}";
   };
 
   nativeBuildInputs = [
