@@ -20,6 +20,7 @@ There is no uniform interface for build helpers.
 build-helpers/fetchers.chapter.md
 build-helpers/trivial-build-helpers.chapter.md
 build-helpers/testers.chapter.md
+build-helpers/dev-shell-tools.chapter.md
 build-helpers/special.md
 build-helpers/images.md
 hooks/index.md

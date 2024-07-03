@@ -837,6 +837,8 @@ with pkgs;
 
   grsync = callPackage ../applications/misc/grsync { };
 
+  devShellTools = callPackage ../build-support/dev-shell-tools { };
+
   dockerTools = callPackage ../build-support/docker {
     writePython3 = buildPackages.writers.writePython3;
   };
@@ -28603,6 +28605,10 @@ with pkgs;
   martian-mono = callPackage ../data/fonts/martian-mono { };
 
   marwaita = callPackage ../data/themes/marwaita { };
+
+  marwaita-icons = callPackage ../by-name/ma/marwaita-icons/package.nix {
+    inherit (kdePackages) breeze-icons;
+  };
 
   marwaita-manjaro = callPackage ../data/themes/marwaita-manjaro { };
 
