@@ -4,7 +4,7 @@
 , ncurses
 , notmuch
 , scdoc
-, python3
+, python3Packages
 , w3m
 , dante
 , gawk
@@ -26,7 +26,7 @@ buildGoModule rec {
 
   nativeBuildInputs = [
     scdoc
-    python3.pkgs.wrapPython
+    python3Packages.wrapPython
   ];
 
   patches = [
@@ -45,10 +45,10 @@ buildGoModule rec {
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
   pythonPath = [
-    python3.pkgs.vobject
+    python3Packages.vobject
   ];
 
-  buildInputs = [ python3 notmuch gawk ];
+  buildInputs = [ python3Packages.python notmuch gawk ];
 
   installPhase = ''
     runHook preInstall
