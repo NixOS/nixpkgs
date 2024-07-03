@@ -17396,6 +17396,24 @@ self: super: with self; {
     callPackage ../development/python-modules/tree-sitter-embedded-template
       { };
 
+  tree-sitter-grammars = lib.recurseIntoAttrs (
+    lib.mapAttrs
+      (
+        name: grammarDrv:
+        callPackage ../development/python-modules/tree-sitter-grammars { inherit name grammarDrv; }
+      )
+      (
+        # Filtering grammars not compatible with current py-tree-sitter version
+        lib.filterAttrs (
+          name: value:
+          !(builtins.elem name [
+            "tree-sitter-sql"
+            "tree-sitter-templ"
+          ])
+        ) pkgs.tree-sitter.builtGrammars
+      )
+  );
+
   tree-sitter-html = callPackage ../development/python-modules/tree-sitter-html { };
 
   tree-sitter-javascript = callPackage ../development/python-modules/tree-sitter-javascript { };
