@@ -1,19 +1,20 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, cmake
-, pkg-config
-, hwloc
-, llvmPackages
-, libxml2 # required for statically linked llvm
-, spirv-llvm-translator
-, spirv-tools
-, lttng-ust
-, ocl-icd
-, python3
-, runCommand
-, makeWrapper
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  cmake,
+  pkg-config,
+  hwloc,
+  llvmPackages,
+  libxml2, # required for statically linked llvm
+  spirv-llvm-translator,
+  spirv-tools,
+  lttng-ust,
+  ocl-icd,
+  python3,
+  runCommand,
+  makeWrapper,
 }:
 
 let
@@ -32,7 +33,8 @@ let
         --add-flags "-L${stdenv.cc.cc.lib}/lib"
     done
   '';
-in stdenv.mkDerivation (finalAttrs: {
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "pocl";
   version = "6.0";
 
