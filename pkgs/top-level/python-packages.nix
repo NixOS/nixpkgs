@@ -10710,6 +10710,8 @@ self: super: with self; {
 
   pyatome = callPackage ../development/python-modules/pyatome { };
 
+  pybcj = callPackage ../development/python-modules/pybcj { };
+
   pycketcasts = callPackage ../development/python-modules/pycketcasts { };
 
   pycolorecho = callPackage ../development/python-modules/pycolorecho { };
