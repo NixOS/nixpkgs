@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
     homepage = "https://onlinesupport.fujixerox.com";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
-    maintainers = with maintainers; [ delan ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.linux;
   };
 }
