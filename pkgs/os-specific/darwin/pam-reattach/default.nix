@@ -15,12 +15,7 @@ stdenv.mkDerivation rec {
   };
 
   cmakeFlags = [
-    "-DCMAKE_OSX_ARCHITECTURES=${
-      if stdenv.hostPlatform.system == "x86_64-darwin" then
-        "x86_64"
-      else
-        "arm64"
-    }"
+    "-DCMAKE_OSX_ARCHITECTURES=${stdenv.hostPlatform.darwinArch}"
     "-DENABLE_CLI=ON"
   ] ++ lib.optional sdkOlderThan11 "-DCMAKE_LIBRARY_PATH=${darwin.apple_sdk.sdk}/usr/lib";
 
