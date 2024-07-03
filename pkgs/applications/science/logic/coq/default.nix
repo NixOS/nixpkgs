@@ -11,7 +11,7 @@
 , ocamlPackages_4_14
 , ncurses
 , buildIde ? null # default is true for Coq < 8.14 and false for Coq >= 8.14
-, glib, gnome, wrapGAppsHook3, makeDesktopItem, copyDesktopItems
+, glib, adwaita-icon-theme, wrapGAppsHook3, makeDesktopItem, copyDesktopItems
 , csdp ? null
 , version, coq-version ? null
 }@args:
@@ -154,7 +154,7 @@ self = stdenv.mkDerivation {
   buildInputs = [ ncurses ]
     ++ optionals buildIde
       (if coqAtLeast "8.10"
-       then [ ocamlPackages.lablgtk3-sourceview3 glib gnome.adwaita-icon-theme ]
+       then [ ocamlPackages.lablgtk3-sourceview3 glib adwaita-icon-theme ]
        else [ ocamlPackages.lablgtk ])
   ;
 

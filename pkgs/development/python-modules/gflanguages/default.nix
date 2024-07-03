@@ -14,13 +14,13 @@
 
 buildPythonPackage rec {
   pname = "gflanguages";
-  version = "0.6.1";
+  version = "0.6.2";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-mlRNzrAgeEt1/VbQEXWIxCD9NkULMOnkFsALO5H+1SY=";
+    hash = "sha256-v93mXDwHT/8Tau78ApLUR+dQCpL9jmRQp0BT5y/sfq4=";
   };
 
   pyproject = true;

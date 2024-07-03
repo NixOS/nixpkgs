@@ -68,6 +68,6 @@ in symlinkJoin {
       If you want to add a new package that provides wordlist/s the convention
       is to copy it to {file}`$out/share/wordlists/myNewWordlist`.
     '';
-    maintainers = with maintainers; [ janik pamplemousse h7x4 ];
+    maintainers = with maintainers; [ pamplemousse h7x4 ];
   };
 }

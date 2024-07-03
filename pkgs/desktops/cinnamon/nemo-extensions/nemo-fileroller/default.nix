@@ -7,7 +7,7 @@
 , glib
 , gtk3
 , nemo
-, gnome
+, file-roller
 , cinnamon-translations
 }:
 
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace src/nemo-fileroller.c \
-      --replace "file-roller" "${lib.getExe gnome.file-roller}" \
+      --replace "file-roller" "${lib.getExe file-roller}" \
       --replace "GNOMELOCALEDIR" "${cinnamon-translations}/share/locale"
   '';
 

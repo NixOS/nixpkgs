@@ -155,7 +155,7 @@ in
             gdm # for gnome-login.session
             config.services.displayManager.sessionData.desktops
             pkgs.gnome.gnome-control-center # for accessibility icon
-            pkgs.gnome.adwaita-icon-theme
+            pkgs.adwaita-icon-theme
             pkgs.hicolor-icon-theme # empty icon theme as a base
           ];
         } // optionalAttrs (xSessionWrapper != null) {
@@ -183,7 +183,7 @@ in
 
     # Otherwise GDM will not be able to start correctly and display Wayland sessions
     systemd.packages = with pkgs.gnome; [ gdm gnome-session gnome-shell ];
-    environment.systemPackages = [ pkgs.gnome.adwaita-icon-theme ];
+    environment.systemPackages = [ pkgs.adwaita-icon-theme ];
 
     # We dont use the upstream gdm service
     # it has to be disabled since the gdm package has it

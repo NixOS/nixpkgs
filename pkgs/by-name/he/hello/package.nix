@@ -4,6 +4,7 @@
 , fetchurl
 , nixos
 , testers
+, versionCheckHook
 , hello
 }:
 
@@ -19,6 +20,9 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = true;
 
   doInstallCheck = true;
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
 
   # Give hello some install checks for testing purpose.
   postInstallCheck = ''
