@@ -67,6 +67,8 @@ stdenv.mkDerivation (finalAttrs: {
     qt5.qttools
   ];
 
+  strictDeps = true;
+
   # Because we think it is better to use only lowercase letters!
   # But sometimes we come across case-insensitive filesystems...
   postInstall = ''
