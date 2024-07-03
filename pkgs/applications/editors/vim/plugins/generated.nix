@@ -2840,12 +2840,12 @@ final: prev:
 
   cyberdream-nvim = buildVimPlugin {
     pname = "cyberdream.nvim";
-    version = "2024-06-29";
+    version = "2024-07-03";
     src = fetchFromGitHub {
       owner = "scottmckendry";
       repo = "cyberdream.nvim";
-      rev = "852cede7e655b86e3d51562ebfb886e1b635d68a";
-      sha256 = "0d084jr4dyj5h9bx35av0kf18x5ana9r2zi74rqkrvg0hz6jnjxp";
+      rev = "998e6562cea3f86af74c489eeaf005ae82657886";
+      sha256 = "0azwqlw14ipailh6xdlvflzlc6d2r7gn0syba5rs3cd42pdgk01f";
     };
     meta.homepage = "https://github.com/scottmckendry/cyberdream.nvim/";
   };
@@ -5233,12 +5233,12 @@ final: prev:
 
   kanagawa-nvim = buildVimPlugin {
     pname = "kanagawa.nvim";
-    version = "2024-06-30";
+    version = "2024-07-03";
     src = fetchFromGitHub {
       owner = "rebelot";
       repo = "kanagawa.nvim";
-      rev = "b4110528b4a12c295efd3ae222882469b2b44d4a";
-      sha256 = "14yi0j8p2dyicz4510khiffq8fs917pcphcsdk9895xq24k5qfz8";
+      rev = "e5f7b8a804360f0a48e40d0083a97193ee4fcc87";
+      sha256 = "1066495w73a11kdpm8iah3k0pjf766ylf21jk8gjid73byl2lz0n";
     };
     meta.homepage = "https://github.com/rebelot/kanagawa.nvim/";
   };
@@ -11286,8 +11286,8 @@ final: prev:
     src = fetchFromGitHub {
       owner = "folke";
       repo = "tokyonight.nvim";
-      rev = "d0f2b6bd67ba27b74245d77cc9a3da48a4638f48";
-      sha256 = "05zv9428b64nl86z34c4l485yfwcm01155xxr1l6l9sysp73nsjg";
+      rev = "c8177ab6fe216f121cc0c4f59e7f1ce59670ce41";
+      sha256 = "00sm68wswk2gc2sgaww6x9klbdiz69sx18a9zm9r2if41ymabyzc";
     };
     meta.homepage = "https://github.com/folke/tokyonight.nvim/";
   };
