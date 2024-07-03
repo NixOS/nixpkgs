@@ -21,8 +21,8 @@ stdenv.mkDerivation rec {
   patches = [
     (fetchpatch2 {
       name = "CVE-2024-39844.patch";
-      url = "https://people.znc.in/~darthgandalf/dir/ymQgfvwiG54pPFqyv1U0pcvvj5PLz5.txt";
-      hash = "sha256-+WPlErDI4AR3UZL3P8IitFop1MBEa97pro57pr0/TZw=";
+      url = "https://github.com/znc/znc/commit/8cbf8d628174ddf23da680f3f117dc54da0eb06e.patch";
+      hash = "sha256-JeKirXReiCiNDUS9XodI0oHASg2mPDvQYtV6P4L0mHM=";
     })
   ];
 
