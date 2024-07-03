@@ -7,7 +7,7 @@
   fetchurl,
   lib,
   lndir,
-  markForCudatoolkitRootHook,
+  markForCudatoolkitRoot,
   flags,
   stdenv,
   # Builder-specific arguments
@@ -200,7 +200,7 @@ backendStdenv.mkDerivation (finalAttrs: {
       # directory to the rpath of all ELF binaries.
       # Check e.g. with `patchelf --print-rpath path/to/my/binary
       autoAddDriverRunpath
-      markForCudatoolkitRootHook
+      markForCudatoolkitRoot
     ]
     # autoAddCudaCompatRunpath depends on cuda_compat and would cause
     # infinite recursion if applied to `cuda_compat` itself (beside the fact
