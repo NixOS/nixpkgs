@@ -5,7 +5,10 @@
 , cmake
 , pkg-config
 , hwloc
-, llvmPackages_18
+, llvmPackages
+, libxml2 # required for statically linked llvm
+, spirv-llvm-translator
+, spirv-tools
 , lttng-ust
 , ocl-icd
 , python3
@@ -14,7 +17,6 @@
 }:
 
 let
-  llvmPackages = llvmPackages_18;
   clang = llvmPackages.clangUseLLVM;
   # Workaround to make sure libclang finds libgcc.a and libgcc_s.so when
   # invoked from within libpocl
@@ -44,7 +46,7 @@ in stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     "-DKERNELLIB_HOST_CPU_VARIANTS=distro"
     # avoid the runtime linker pulling in a different llvm e.g. from graphics drivers
-    "-DLLVM_STATIC=ON"
+    "-DSTATIC_LLVM=ON"
     "-DENABLE_POCL_BUILDING=OFF"
     "-DPOCL_ICD_ABSOLUTE_PATH=ON"
     "-DENABLE_ICD=ON"
@@ -63,10 +65,13 @@ in stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     hwloc
+    libxml2
     llvmPackages.llvm
     llvmPackages.libclang
     lttng-ust
     ocl-icd
+    spirv-tools
+    spirv-llvm-translator
   ];
 
   passthru.updateScript = nix-update-script { };
