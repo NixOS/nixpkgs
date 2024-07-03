@@ -23,6 +23,6 @@ if [[ "${pnpm_deps_hash}" == "" ]]; then
     echo "pnpm_deps_hash already up to date!"
     exit 0
 fi
-sed -E -i "s#(pnpmDepsHash = \")[^\"]*(\";)#\1${pnpm_deps_hash}\2#" package.nix
+sed -i 's#pnpmDepsHash = "[^"]*"#pnpmDepsHash = "'"$pnpm_deps_hash"'"#' package.nix
 
 popd
