@@ -7,8 +7,8 @@
 # be nice to add the native GUI (and/or the GTK GUI) as an option too, but that
 # requires invoking the Xcode build system, which is non-trivial for now.
 
-{ stdenv
-, lib
+{ lib
+, stdenv
 , fetchFromGitHub
 , fetchpatch
   # For tests
@@ -59,10 +59,7 @@
 , libdvdcss
 , libbluray
   # Darwin-specific
-, AudioToolbox
-, Foundation
-, libobjc
-, VideoToolbox
+, darwin
   # GTK
   # NOTE: 2019-07-19: The gtk3 package has a transitive dependency on dbus,
   # which in turn depends on systemd. systemd is not supported on Darwin, so
@@ -266,7 +263,11 @@ let
       udev
     ]
     ++ optional useFdk fdk_aac
-    ++ optionals stdenv.isDarwin [ AudioToolbox Foundation libobjc VideoToolbox ]
+    ++ optionals stdenv.isDarwin
+      ([ darwin.libobjc ]
+       ++ (with darwin.apple_sdk.frameworks; [
+         AudioToolbox Foundation VideoToolbox
+       ]))
     # NOTE: 2018-12-27: Handbrake supports nv-codec-headers for Linux only,
     # look at ./make/configure.py search "enable_nvenc"
     ++ optional stdenv.isLinux nv-codec-headers;
