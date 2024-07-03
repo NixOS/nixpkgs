@@ -10,7 +10,7 @@
 }:
 let
   srcHash = "sha256-/4iIkvSn85fkRggmIha2kRlW0MEwvzy0ZAmIb8+LpZQ=";
-  pnpmDepsHash = "0";
+  pnpmDepsHash = "sha256-00000000000000000000000000000000000000000000";
 in
   stdenv.mkDerivation (finalAttrs: {
   pname = "wrangler";
