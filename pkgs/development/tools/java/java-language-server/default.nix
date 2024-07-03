@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub
-, jdk, maven
+, jdk_headless, maven
 , makeWrapper
 }:
 
@@ -26,7 +26,7 @@ maven.buildMavenPackage rec {
   mvnParameters = "-DskipTests";
   mvnHash = "sha256-2uthmSjFQ43N5lgV11DsxuGce+ZptZsmRLTgjDo0M2w=";
 
-  nativeBuildInputs = [ jdk makeWrapper ];
+  nativeBuildInputs = [ jdk_headless makeWrapper ];
 
   dontConfigure = true;
   preBuild = ''
