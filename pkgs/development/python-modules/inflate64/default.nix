@@ -10,7 +10,7 @@ buildPythonPackage rec {
   pname = "inflate64";
   version = "1.0.0";
 
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -24,11 +24,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "inflate64" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://codeberg.org/miurahr/inflate64";
     description = "Compress and decompress with Enhanced Deflate compression algorithm";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ ByteSudoer ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ ByteSudoer ];
   };
 
 }
