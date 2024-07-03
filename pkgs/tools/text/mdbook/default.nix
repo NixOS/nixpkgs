@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, nix, rustPlatform, CoreServices, installShellFiles }: let
+{ lib, stdenv, fetchFromGitHub, nix, rustPlatform, darwin, CoreServices ? darwin.apple_sdk.frameworks.CoreServices, installShellFiles }: let
   version = "0.4.40";
 in rustPlatform.buildRustPackage {
   inherit version;
