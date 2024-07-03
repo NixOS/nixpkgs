@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "python-technove";
-  version = "1.2.3";
+  version = "1.3.0";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
