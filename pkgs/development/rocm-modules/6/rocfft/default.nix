@@ -5,7 +5,7 @@
 , rocmUpdateScript
 , cmake
 , clr
-, python3
+, python311
 , rocm-cmake
 , sqlite
 , boost
@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     clr
-    python3
+    python311
     rocm-cmake
   ];
 
@@ -100,7 +100,7 @@ stdenv.mkDerivation (finalAttrs: {
         boost
         finalAttrs.finalPackage
         openmp
-        (python3.withPackages (ps: with ps; [
+        (python311.withPackages (ps: with ps; [
           pandas
           scipy
         ]))

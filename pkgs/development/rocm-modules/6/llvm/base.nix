@@ -17,7 +17,7 @@
 , mpfr
 , zlib
 , ncurses
-, python3Packages
+, python311Packages
 , buildDocs ? true
 , buildMan ? true
 , buildTests ? true
@@ -86,11 +86,11 @@ in stdenv.mkDerivation (finalAttrs: {
     cmake
     ninja
     git
-    python3Packages.python
+    python311Packages.python
   ] ++ lib.optionals (buildDocs || buildMan) [
     doxygen
     sphinx
-    python3Packages.recommonmark
+    python311Packages.recommonmark
   ] ++ lib.optionals (buildTests && !finalAttrs.passthru.isLLVM) [
     lit
   ] ++ extraNativeBuildInputs;

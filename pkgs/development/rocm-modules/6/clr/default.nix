@@ -21,7 +21,7 @@
 , libGL
 , libxml2
 , libX11
-, python3Packages
+, python311Packages
 }:
 
 let
@@ -65,8 +65,8 @@ in stdenv.mkDerivation (finalAttrs: {
     makeWrapper
     cmake'
     perl
-    python3Packages.python
-    python3Packages.cppheaderparser
+    python311Packages.python
+    python311Packages.cppheaderparser
   ];
 
   buildInputs = [

@@ -4,7 +4,7 @@
 , symlinkJoin
 , fetchFromGitHub
 , cudaPackages
-, python3Packages
+, python311Packages
 , elfutils
 , boost179
 , opencv
@@ -34,7 +34,7 @@ in rec {
     stdenv = llvm.rocmClangStdenv;
   };
 
-  rocm-smi = python3Packages.callPackage ./rocm-smi {
+  rocm-smi = python311Packages.callPackage ./rocm-smi {
     inherit rocmUpdateScript;
     stdenv = llvm.rocmClangStdenv;
   };
@@ -77,7 +77,7 @@ in rec {
     # stdenv = llvm.rocmClangStdenv;
   };
 
-  rocm-docs-core = python3Packages.callPackage ./rocm-docs-core { inherit stdenv; };
+  rocm-docs-core = python311Packages.callPackage ./rocm-docs-core { inherit stdenv; };
 
   hip-common = callPackage ./hip-common {
     inherit rocmUpdateScript;
@@ -187,7 +187,7 @@ in rec {
     stdenv = llvm.rocmClangStdenv;
   };
 
-  tensile = python3Packages.callPackage ./tensile {
+  tensile = python311Packages.callPackage ./tensile {
     inherit rocmUpdateScript rocminfo;
     stdenv = llvm.rocmClangStdenv;
   };

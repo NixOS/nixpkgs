@@ -4,7 +4,7 @@
 , clang-unwrapped
 , mlir
 , graphviz
-, python3Packages
+, python311Packages
 }:
 
 callPackage ../base.nix rec {
@@ -14,7 +14,7 @@ callPackage ../base.nix rec {
 
   extraNativeBuildInputs = [
     graphviz
-    python3Packages.sphinx-markdown-tables
+    python311Packages.sphinx-markdown-tables
   ];
 
   extraBuildInputs = [ mlir ];

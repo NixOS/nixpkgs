@@ -7,7 +7,7 @@
 , lua5_3
 , graphviz
 , gtest
-, python3Packages
+, python311Packages
 }:
 
 callPackage ../base.nix rec {
@@ -15,7 +15,7 @@ callPackage ../base.nix rec {
   buildTests = false; # FIXME: Bad pathing for clang executable in tests, using relative path most likely
   targetName = "lldb";
   targetDir = targetName;
-  extraNativeBuildInputs = [ python3Packages.sphinx-automodapi ];
+  extraNativeBuildInputs = [ python311Packages.sphinx-automodapi ];
 
   extraBuildInputs = [
     xz

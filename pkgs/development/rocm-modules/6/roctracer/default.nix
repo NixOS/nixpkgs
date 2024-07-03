@@ -11,7 +11,7 @@
 , gcc-unwrapped
 , libbacktrace
 , rocm-runtime
-, python3Packages
+, python311Packages
 , buildDocs ? false # Nothing seems to be generated, so not making the output
 , buildTests ? false
 }:
@@ -46,8 +46,8 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     libxml2
     libbacktrace
-    python3Packages.python
-    python3Packages.cppheaderparser
+    python311Packages.python
+    python311Packages.cppheaderparser
   ];
 
   cmakeFlags = [

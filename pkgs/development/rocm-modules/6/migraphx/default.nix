@@ -26,7 +26,7 @@
 , sphinx
 , docutils
 , ghostscript
-, python3Packages
+, python311Packages
 , buildDocs ? false
 , buildTests ? false
 , gpuTargets ? clr.gpuTargets
@@ -71,15 +71,15 @@ in stdenv.mkDerivation (finalAttrs: {
     rocm-cmake
     clr
     clang-tools-extra
-    python3Packages.python
+    python311Packages.python
   ] ++ lib.optionals buildDocs [
     latex
     doxygen
     sphinx
     docutils
     ghostscript
-    python3Packages.sphinx-rtd-theme
-    python3Packages.breathe
+    python311Packages.sphinx-rtd-theme
+    python311Packages.breathe
   ];
 
   buildInputs = [
@@ -96,8 +96,8 @@ in stdenv.mkDerivation (finalAttrs: {
     oneDNN_2
     blaze
     cppcheck
-    python3Packages.pybind11
-    python3Packages.onnx
+    python311Packages.pybind11
+    python311Packages.onnx
   ];
 
   cmakeFlags = [

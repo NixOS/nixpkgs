@@ -28,7 +28,7 @@
 , gtest
 , rocm-comgr
 , roctracer
-, python3Packages
+, python311Packages
 , buildDocs ? false # Needs internet because of rocm-docs-core
 , buildTests ? false
 }:
@@ -156,9 +156,9 @@ in stdenv.mkDerivation (finalAttrs: {
     doxygen
     sphinx
     rocm-docs-core
-    python3Packages.sphinx-rtd-theme
-    python3Packages.breathe
-    python3Packages.myst-parser
+    python311Packages.sphinx-rtd-theme
+    python311Packages.breathe
+    python311Packages.myst-parser
   ] ++ lib.optionals buildTests [
     gtest
     zlib

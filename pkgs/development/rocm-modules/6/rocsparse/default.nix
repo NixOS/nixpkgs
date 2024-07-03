@@ -11,7 +11,7 @@
 , git
 , gtest
 , boost
-, python3Packages
+, python311Packages
 , buildTests ? false
 , buildBenchmarks ? false # Seems to depend on tests
 , gpuTargets ? [ ]
@@ -49,8 +49,8 @@ stdenv.mkDerivation (finalAttrs: {
   ] ++ lib.optionals (buildTests || buildBenchmarks) [
     gtest
     boost
-    python3Packages.python
-    python3Packages.pyyaml
+    python311Packages.python
+    python311Packages.pyyaml
   ];
 
   cmakeFlags = [
@@ -65,7 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
   ] ++ lib.optionals (buildTests || buildBenchmarks) [
     "-DBUILD_CLIENTS_TESTS=ON"
     "-DCMAKE_MATRICES_DIR=/build/source/matrices"
-    "-Dpython=python3"
+    "-Dpython=python311"
   ] ++ lib.optionals buildBenchmarks [
     "-DBUILD_CLIENTS_BENCHMARKS=ON"
   ];

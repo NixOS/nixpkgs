@@ -13,7 +13,7 @@
 , ncurses
 , expat
 , rocdbgapi
-, python3
+, python311
 , babeltrace
 , sourceHighlight
 }:
@@ -43,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
     ncurses
     expat
     rocdbgapi
-    python3
+    python311
     babeltrace
     sourceHighlight
   ];
@@ -56,7 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-iconv-path=${glibc.bin}"
     "--enable-tui"
     "--with-babeltrace"
-    "--with-python=python3"
+    "--with-python=python311"
     "--with-system-zlib"
     "--enable-64-bit-bfd"
     "--with-gmp=${gmp.dev}"

@@ -9,7 +9,7 @@
 , clr
 , openmp
 , boost
-, python3Packages
+, python311Packages
 , buildDocs ? false # Needs internet
 , useOpenCL ? false
 , useCPU ? false
@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
     clr
   ] ++ lib.optionals buildDocs [
     rocm-docs-core
-    python3Packages.python
+    python311Packages.python
   ];
 
   buildInputs = [
@@ -68,7 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   postBuild = lib.optionalString buildDocs ''
-    python3 -m sphinx -T -E -b html -d _build/doctrees -D language=en ../docs _build/html
+    python311 -m sphinx -T -E -b html -d _build/doctrees -D language=en ../docs _build/html
   '';
 
   passthru.updateScript = rocmUpdateScript {

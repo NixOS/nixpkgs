@@ -6,7 +6,7 @@
 , rocm-cmake
 , rocm-runtime
 , busybox
-, python3
+, python311
 , gnugrep
   # rocminfo requires that the calling user have a password and be in
   # the video group. If we let rocm_agent_enumerator rely upon
@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [ rocm-runtime ];
-  propagatedBuildInputs = [ python3 ];
+  propagatedBuildInputs = [ python311 ];
   cmakeFlags = [ "-DROCRTST_BLD_TYPE=Release" ];
 
   prePatch = ''

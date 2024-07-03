@@ -7,7 +7,7 @@
 , cmake
 , rocm-cmake
 , clr
-, python3
+, python311
 , tensile
 , msgpack
 , libxml2
@@ -15,7 +15,7 @@
 , gfortran
 , openmp
 , amd-blis
-, python3Packages
+, python311Packages
 , buildTensile ? true
 , buildTests ? false
 , buildBenchmarks ? false
@@ -68,12 +68,12 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    python3
+    python311
   ] ++ lib.optionals buildTensile [
     msgpack
     libxml2
-    python3Packages.msgpack
-    python3Packages.joblib
+    python311Packages.msgpack
+    python311Packages.joblib
   ] ++ lib.optionals buildTests [
     gtest
   ] ++ lib.optionals (buildTests || buildBenchmarks) [
@@ -81,13 +81,13 @@ stdenv.mkDerivation (finalAttrs: {
     openmp
     amd-blis
   ] ++ lib.optionals (buildTensile || buildTests || buildBenchmarks) [
-    python3Packages.pyyaml
+    python311Packages.pyyaml
   ];
 
   cmakeFlags = [
     (lib.cmakeFeature "CMAKE_C_COMPILER" "hipcc")
     (lib.cmakeFeature "CMAKE_CXX_COMPILER" "hipcc")
-    (lib.cmakeFeature "python" "python3")
+    (lib.cmakeFeature "python" "python311")
     (lib.cmakeFeature "AMDGPU_TARGETS" (lib.concatStringsSep ";" gpuTargets))
     (lib.cmakeBool "BUILD_WITH_TENSILE" buildTensile)
     (lib.cmakeBool "ROCM_SYMLINK_LIBS" false)

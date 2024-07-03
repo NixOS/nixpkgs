@@ -13,7 +13,7 @@
 , zstd
 , zlib
 , ncurses
-, python3Packages
+, python311Packages
 , buildRockCompiler ? false
 , buildTests ? false # `argument of type 'NoneType' is not iterable`
 }:
@@ -53,8 +53,8 @@ in stdenv.mkDerivation (finalAttrs: {
     rocm-cmake
     ninja
     clr
-    python3Packages.python
-    python3Packages.tomli
+    python311Packages.python
+    python311Packages.tomli
   ];
 
   buildInputs = [

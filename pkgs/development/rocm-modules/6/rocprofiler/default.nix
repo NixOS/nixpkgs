@@ -21,7 +21,7 @@
 , mpi
 , systemd
 , gtest
-, python3Packages
+, python311Packages
 , gpuTargets ? clr.gpuTargets
 }:
 
@@ -73,11 +73,11 @@ in stdenv.mkDerivation (finalAttrs: {
     cmake
     clang
     clr
-    python3Packages.lxml
-    python3Packages.cppheaderparser
-    python3Packages.pyyaml
-    python3Packages.barectf
-    python3Packages.pandas
+    python311Packages.lxml
+    python311Packages.cppheaderparser
+    python311Packages.pyyaml
+    python311Packages.barectf
+    python311Packages.pandas
   ];
 
   buildInputs = [
