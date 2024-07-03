@@ -15,6 +15,7 @@ buildNodejs {
     ./bypass-darwin-xcrun-node16.patch
     ./node-npm-build-npm-package-logic.patch
     ./use-correct-env-in-tests.patch
+    ./bin-sh-node-run-v22.patch
     (fetchpatch2 {
       # Fixes OpenSSL 3.0.14 compatibility in tests.
       # See https://github.com/nodejs/node/pull/53373
