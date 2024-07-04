@@ -1,65 +1,66 @@
-{ stdenv
-, lib
-, pkg-config
-, fetchFromGitLab
-, gitUpdater
-, ffmpeg_6
+{
+  stdenv,
+  lib,
+  pkg-config,
+  fetchFromGitLab,
+  gitUpdater,
+  ffmpeg_6,
 
   # for daemon
-, autoreconfHook
-, perl # for pod2man
-, alsa-lib
-, asio
-, dbus
-, sdbus-cpp
-, fmt
-, gmp
-, gnutls
-, http-parser
-, jack
-, jsoncpp
-, libarchive
-, libgit2
-, libnatpmp
-, libpulseaudio
-, libupnp
-, yaml-cpp
-, msgpack-cxx
-, openssl
-, restinio
-, secp256k1
-, speex
-, udev
-, webrtc-audio-processing
-, zlib
+  autoreconfHook,
+  perl, # for pod2man
+  alsa-lib,
+  asio,
+  dbus,
+  sdbus-cpp,
+  fmt,
+  gmp,
+  gnutls,
+  http-parser,
+  jack,
+  jsoncpp,
+  libarchive,
+  libgit2,
+  libnatpmp,
+  libpulseaudio,
+  libupnp,
+  yaml-cpp,
+  msgpack-cxx,
+  openssl,
+  restinio,
+  secp256k1,
+  speex,
+  udev,
+  webrtc-audio-processing,
+  zlib,
 
   # for client
-, cmake
-, git
-, networkmanager # for libnm
-, python3
-, qttools # for translations
-, wrapQtAppsHook
-, libnotify
-, qt5compat
-, qtbase
-, qtdeclarative
-, qrencode
-, qtmultimedia
-, qtnetworkauth
-, qtpositioning
-, qtsvg
-, qtwebengine
-, qtwebchannel
-, wrapGAppsHook3
-, withWebengine ? true
+  cmake,
+  git,
+  networkmanager, # for libnm
+  python3,
+  qttools, # for translations
+  wrapQtAppsHook,
+  libnotify,
+  qt5compat,
+  qtbase,
+  qtdeclarative,
+  qrencode,
+  qtmultimedia,
+  qtnetworkauth,
+  qtpositioning,
+  qtsvg,
+  qtwebengine,
+  qtwebchannel,
+  wrapGAppsHook3,
+  withWebengine ? true,
 
   # for pjsip
-, fetchFromGitHub
-, pjsip
+  fetchFromGitHub,
+  pjsip,
 
   # for opendht
-, opendht
+  opendht,
 }:
 
 stdenv.mkDerivation rec {
@@ -106,25 +107,24 @@ stdenv.mkDerivation rec {
       "--disable-resample"
       "--disable-libwebrtc"
       "--with-gnutls=yes"
-    ]
-    ++ lib.optionals stdenv.isLinux [
-      "--enable-epoll"
-    ];
+    ] ++ lib.optionals stdenv.isLinux [ "--enable-epoll" ];
 
     buildInputs = old.buildInputs ++ [ gnutls ];
   });
 
-  opendht-jami = (opendht.overrideAttrs {
-    src = fetchFromGitHub {
-      owner = "savoirfairelinux";
-      repo = "opendht";
-      rev = "f2cee8e9ce24746caa7dee1847829c526d340284";
-      hash = "sha256-ZnIrlybF3MCiXxxv80tRzCJ5CJ54S42prGUjq1suJNA=";
-    };
-  }).override {
-    enableProxyServerAndClient = true;
-    enablePushNotifications = true;
-  };
+  opendht-jami =
+    (opendht.overrideAttrs {
+      src = fetchFromGitHub {
+        owner = "savoirfairelinux";
+        repo = "opendht";
+        rev = "f2cee8e9ce24746caa7dee1847829c526d340284";
+        hash = "sha256-ZnIrlybF3MCiXxxv80tRzCJ5CJ54S42prGUjq1suJNA=";
+      };
+    }).override
+      {
+        enableProxyServerAndClient = true;
+        enablePushNotifications = true;
+      };
 
   dhtnet = stdenv.mkDerivation {
     pname = "dhtnet";
@@ -265,13 +265,9 @@ stdenv.mkDerivation rec {
     qtpositioning
     qtsvg
     qtwebchannel
-  ] ++ lib.optionals withWebengine [
-    qtwebengine
-  ];
+  ] ++ lib.optionals withWebengine [ qtwebengine ];
 
-  cmakeFlags = lib.optionals (!withWebengine) [
-    "-DWITH_WEBENGINE=false"
-  ];
+  cmakeFlags = lib.optionals (!withWebengine) [ "-DWITH_WEBENGINE=false" ];
 
   qtWrapperArgs = [
     # With wayland the titlebar is not themed and the wmclass is wrong.
@@ -282,9 +278,7 @@ stdenv.mkDerivation rec {
     qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
-  passthru.updateScript = gitUpdater {
-    rev-prefix = "stable/";
-  };
+  passthru.updateScript = gitUpdater { rev-prefix = "stable/"; };
 
   meta = with lib; {
     homepage = "https://jami.net/";
