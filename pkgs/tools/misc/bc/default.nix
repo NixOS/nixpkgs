@@ -51,5 +51,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.gnu.org/software/bc/";
     license = licenses.gpl3Plus;
     platforms = platforms.all;
+    mainProgram = "bc";
   };
 }
