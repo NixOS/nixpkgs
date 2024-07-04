@@ -40185,8 +40185,6 @@ with pkgs;
     buildGoModule = buildGo122Module;
   };
 
-  vnote = qt6Packages.callPackage ../applications/office/vnote { };
-
   sshportal = callPackage ../servers/sshportal { };
 
   ssh-audit = callPackage ../tools/security/ssh-audit { };
