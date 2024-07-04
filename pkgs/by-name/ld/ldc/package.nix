@@ -15,6 +15,7 @@
 , callPackage
 , makeWrapper
 , runCommand
+, writeText
 , targetPackages
 
 , ldcBootstrap ? callPackage ./bootstrap.nix { }
@@ -145,5 +146,36 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "ldc2";
     maintainers = with maintainers; [ lionello jtbx ];
     platforms = [ "x86_64-linux" "i686-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
+  };
+
+  passthru.tests = let
+    ldc = finalAttrs.finalPackage;
+    helloWorld = stdenv.mkDerivation (finalAttrs: {
+      name = "ldc-hello-world";
+      src = writeText "hello_world.d" ''
+        module hello_world;
+        import std.stdio;
+        void main() {
+          writeln("Hello, world!");
+        }
+      '';
+      dontUnpack = true;
+      buildInputs = [ ldc ];
+      dFlags = [];
+      buildPhase = ''
+        ldc2 ${lib.escapeShellArgs finalAttrs.dFlags} -of=test $src
+      '';
+      installPhase = ''
+        mkdir -p $out/bin
+        mv test $out/bin
+      '';
+    });
+  in {
+    # Without -shared, built binaries should not contain
+    # references to the compiler binaries.
+    no-references-to-compiler = helloWorld.overrideAttrs {
+      disallowedReferences = [ ldc ];
+      dFlags = ["-g"];
+    };
   };
 })
