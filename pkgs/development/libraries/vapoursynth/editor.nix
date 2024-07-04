@@ -37,7 +37,7 @@ let
       description = "Cross-platform editor for VapourSynth scripts";
       homepage = "https://github.com/YomikoR/VapourSynth-Editor";
       license = licenses.mit;
-      maintainers = with maintainers; [ tadeokondrak ];
+      maintainers = with maintainers; [ ];
       platforms = platforms.all;
     };
   };
