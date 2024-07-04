@@ -1,17 +1,19 @@
-{ fetchFromGitHub
-, lib
-, libiconv
-, llvmPackages
-, MacOSX-SDK
-, makeBinaryWrapper
-, nix-update-script
-, Security
-, which
+{
+  fetchFromGitHub,
+  lib,
+  libiconv,
+  llvmPackages,
+  MacOSX-SDK,
+  makeBinaryWrapper,
+  nix-update-script,
+  Security,
+  which,
 }:
 
 let
   inherit (llvmPackages) stdenv;
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "odin";
   version = "dev-2024-07";
 
@@ -22,25 +24,26 @@ in stdenv.mkDerivation rec {
     hash = "sha256-FeiVTLwgP0x1EZqqiYkGbKALhZWC4xE6a/3PPcEElAc=";
   };
 
-  postPatch = lib.optionalString stdenv.isDarwin ''
-    substituteInPlace src/linker.cpp \
-        --replace-fail '/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk' ${MacOSX-SDK}
-    '' + ''
-    substituteInPlace build_odin.sh \
-        --replace-fail '-framework System' '-lSystem'
-    patchShebangs build_odin.sh
-  '';
+  postPatch =
+    lib.optionalString stdenv.isDarwin ''
+      substituteInPlace src/linker.cpp \
+          --replace-fail '/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk' ${MacOSX-SDK}
+    ''
+    + ''
+      substituteInPlace build_odin.sh \
+          --replace-fail '-framework System' '-lSystem'
+      patchShebangs build_odin.sh
+    '';
 
   LLVM_CONFIG = "${llvmPackages.llvm.dev}/bin/llvm-config";
 
   dontConfigure = true;
 
-  buildFlags = [
-    "release"
-  ];
+  buildFlags = [ "release" ];
 
   nativeBuildInputs = [
-    makeBinaryWrapper which
+    makeBinaryWrapper
+    which
   ];
 
   buildInputs = lib.optionals stdenv.isDarwin [
@@ -60,18 +63,23 @@ in stdenv.mkDerivation rec {
     cp -r vendor $out/share/vendor
 
     wrapProgram $out/bin/odin \
-      --prefix PATH : ${lib.makeBinPath (with llvmPackages; [
-        bintools
-        llvm
-        clang
-        lld
-      ])} \
+      --prefix PATH : ${
+        lib.makeBinPath (
+          with llvmPackages;
+          [
+            bintools
+            llvm
+            clang
+            lld
+          ]
+        )
+      } \
       --set-default ODIN_ROOT $out/share
 
     runHook postInstall
   '';
 
-  passthru.updateScript = nix-update-script {};
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Fast, concise, readable, pragmatic and open sourced programming language";
@@ -79,7 +87,11 @@ in stdenv.mkDerivation rec {
     homepage = "https://odin-lang.org/";
     license = lib.licenses.bsd3;
     mainProgram = "odin";
-    maintainers = with lib.maintainers; [ astavie luc65r znaniye ];
+    maintainers = with lib.maintainers; [
+      astavie
+      luc65r
+      znaniye
+    ];
     platforms = lib.platforms.unix;
   };
 }
