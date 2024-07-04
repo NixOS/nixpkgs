@@ -27,6 +27,7 @@ derivation (
     hardeningUnsupportedFlags = [
       "fortify3"
       "shadowstack"
+      "ibt"
       "pacret"
       "stackclashprotection"
       "trivialautovarinit"

@@ -434,6 +434,7 @@ in
                 hardeningUnsupportedFlags = [
                   "fortify3"
                   "shadowstack"
+                  "ibt"
                   "stackclashprotection"
                   "zerocallusedregs"
                 ];
