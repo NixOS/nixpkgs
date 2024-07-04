@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, buildPackages, perl, which, ncurses }:
+{ lib, stdenv, fetchFromGitHub, buildPackages, perl, which, ncurses, nukeReferences }:
 
 let
   dialect = with lib; last (splitString "-" stdenv.hostPlatform.system);
@@ -6,27 +6,27 @@ in
 
 stdenv.mkDerivation rec {
   pname = "lsof";
-  version = "4.98.0";
+  version = "4.99.3";
 
   src = fetchFromGitHub {
     owner = "lsof-org";
     repo = "lsof";
     rev = version;
-    sha256 = "sha256-DQLY0a0sOCZFEJA4Y4b18OcWZw47RyqKZ0mVG0CDVTI=";
+    hash = "sha256-XW3l+E9D8hgI9jGJGKkIAKa8O9m0JHgZhEASqg4gYuw=";
   };
 
-  patches = [
-    ./no-build-info.patch
-  ];
-
-  postPatch = lib.optionalString stdenv.hostPlatform.isMusl ''
-    substituteInPlace dialects/linux/dlsof.h --replace "defined(__UCLIBC__)" 1
+  postPatch = ''
+    patchShebangs --build lib/dialects/*/Mksrc
+    # Do not re-build version.h in every 'make' to allow nuke-refs below.
+    # We remove phony 'FRC' target that forces rebuilds:
+    #   'version.h: FRC ...' is translated to 'version.h: ...'.
+    sed -i lib/dialects/*/Makefile -e 's/version.h:\s*FRC/version.h:/'
   '' + lib.optionalString stdenv.isDarwin ''
     sed -i 's|lcurses|lncurses|g' Configure
   '';
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
-  nativeBuildInputs = [ perl which ];
+  nativeBuildInputs = [ nukeReferences perl which ];
   buildInputs = [ ncurses ];
 
   # Stop build scripts from searching global include paths
@@ -37,6 +37,10 @@ stdenv.mkDerivation rec {
     for filepath in $(find dialects/${dialect} -type f); do
       sed -i "s,/usr/include,$LSOF_INCLUDE,g" $filepath
     done
+
+    # Wipe out development-only flags from CFLAGS embedding
+    make version.h
+    nuke-refs version.h
   '';
 
   installPhase = ''
@@ -51,7 +55,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/lsof-org/lsof";
-    description = "A tool to list open files";
+    description = "Tool to list open files";
+    mainProgram = "lsof";
     longDescription = ''
       List open files. Can show what process has opened some file,
       socket (IPv6/IPv4/UNIX local), or partition (by opening a file

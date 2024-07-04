@@ -150,7 +150,7 @@ in
     icon = "vs${executableName}";
     startupNotify = true;
     categories = [ "Utility" "TextEditor" "Development" "IDE" ];
-    mimeTypes = [ "x-scheme-handler/vscode" ];
+    mimeTypes = [ "x-scheme-handler/vs${executableName}" ];
     keywords = [ "vscode" ];
     noDisplay = true;
   };
@@ -165,7 +165,7 @@ in
     autoPatchelfHook
     asar
     # override doesn't preserve splicing https://github.com/NixOS/nixpkgs/issues/132651
-    (buildPackages.wrapGAppsHook.override { inherit (buildPackages) makeWrapper; })
+    (buildPackages.wrapGAppsHook3.override { inherit (buildPackages) makeWrapper; })
   ];
 
   dontBuild = true;
@@ -247,7 +247,11 @@ in
   );
 
   postFixup = lib.optionalString stdenv.isLinux ''
-    patchelf --add-needed ${libglvnd}/lib/libGLESv2.so.2 $out/lib/vscode/${executableName}
+    patchelf \
+      --add-needed ${libglvnd}/lib/libGLESv2.so.2 \
+      --add-needed ${libglvnd}/lib/libGL.so.1 \
+      --add-needed ${libglvnd}/lib/libEGL.so.1 \
+      $out/lib/vscode/${executableName}
   '';
 
   inherit meta;

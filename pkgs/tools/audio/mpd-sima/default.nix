@@ -29,10 +29,11 @@ buildPythonApplication rec {
   '';
 
   meta = with lib; {
-    description = "An autoqueuing mpd client";
+    description = "Autoqueuing mpd client";
     homepage = "https://kaliko.me/mpd-sima/";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = with lib.maintainers; [ apfelkuchen6 ];
+    mainProgram = "mpd-sima";
   };
 }

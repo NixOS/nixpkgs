@@ -29,6 +29,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "DNS name resolution for containers";
+    mainProgram = "dnsname";
     homepage = "https://github.com/containers/dnsname";
     license = licenses.asl20;
     platforms = platforms.linux;

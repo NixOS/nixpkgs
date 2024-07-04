@@ -1,7 +1,7 @@
 # Getdns and Stubby are released together, see https://getdnsapi.net/releases/
 
 { lib, stdenv, fetchurl, cmake, darwin, doxygen, libidn2, libyaml, openssl
-, systemd, unbound, yq, nimPackages }:
+, systemd, unbound, yq }:
 let
   metaCommon = with lib; {
     maintainers = with maintainers; [ leenaars ehmry ];
@@ -34,11 +34,9 @@ in rec {
 
     postInstall = "rm -r $out/share/doc";
 
-    passthru.tests.nim = nimPackages.getdns;
-
     meta = with lib;
       metaCommon // {
-        description = "A modern asynchronous DNS API";
+        description = "Modern asynchronous DNS API";
         longDescription = ''
           getdns is an implementation of a modern asynchronous DNS API; the
           specification was originally edited by Paul Hoffman. It is intended to make all
@@ -79,7 +77,8 @@ in rec {
 
     meta = with lib;
       metaCommon // {
-        description = "A local DNS Privacy stub resolver (using DNS-over-TLS)";
+        description = "Local DNS Privacy stub resolver (using DNS-over-TLS)";
+        mainProgram = "stubby";
         longDescription = ''
           Stubby is an application that acts as a local DNS Privacy stub
           resolver (using RFC 7858, aka DNS-over-TLS). Stubby encrypts DNS
@@ -87,7 +86,7 @@ in rec {
           Privacy resolver increasing end user privacy. Stubby is developed by
           the getdns team.
         '';
-        homepage = "https://dnsprivacy.org/wiki/x/JYAT";
+        homepage = "https://dnsprivacy.org/dns_privacy_daemon_-_stubby/";
       };
   };
 

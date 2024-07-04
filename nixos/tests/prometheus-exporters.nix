@@ -218,9 +218,60 @@ let
         services.dnsmasq.enable = true;
       };
       exporterTest = ''
+        wait_for_unit("dnsmasq.service")
+        wait_for_open_port(53)
+        wait_for_file("/var/lib/dnsmasq/dnsmasq.leases")
         wait_for_unit("prometheus-dnsmasq-exporter.service")
         wait_for_open_port(9153)
         succeed("curl -sSf http://localhost:9153/metrics | grep 'dnsmasq_leases 0'")
+      '';
+    };
+
+    dnssec = {
+      exporterConfig = {
+        enable = true;
+        configuration = {
+          records = [
+            {
+              zone = "example.com";
+              record = "@";
+              type = "SOA";
+            }
+          ];
+        };
+        resolvers = [ "127.0.0.1:53" ];
+      };
+      metricProvider = {
+        services.knot = {
+          enable = true;
+          settingsFile = pkgs.writeText "knot.conf" ''
+            server:
+              listen: 127.0.0.1@53
+            template:
+              - id: default
+                storage: ${pkgs.buildEnv {
+                  name = "zones";
+                  paths = [(pkgs.writeTextDir "example.com.zone" ''
+                    @ SOA ns1.example.com. noc.example.com. 2024032401 86400 7200 3600000 172800
+                    @       NS      ns1
+                    ns1     A       192.168.0.1
+                  '')];
+                }}
+                zonefile-load: difference
+                zonefile-sync: -1
+            zone:
+              - domain: example.com
+                file: example.com.zone
+                dnssec-signing: on
+          '';
+        };
+      };
+      exporterTest = ''
+        wait_for_unit("knot.service")
+        wait_for_open_port(53)
+        wait_for_unit("prometheus-dnssec-exporter.service")
+        wait_for_open_port(9204)
+        succeed("curl -sSf http://localhost:9204/metrics | grep 'example.com'")
       '';
     };
 
@@ -415,54 +466,6 @@ let
       '';
     };
 
-    kea = let
-      controlSocketPathV4 = "/run/kea/dhcp4.sock";
-      controlSocketPathV6 = "/run/kea/dhcp6.sock";
-    in
-    {
-      exporterConfig = {
-        enable = true;
-        controlSocketPaths = [
-          controlSocketPathV4
-          controlSocketPathV6
-        ];
-      };
-      metricProvider = {
-        services.kea = {
-          dhcp4 = {
-            enable = true;
-            settings = {
-              control-socket = {
-                socket-type = "unix";
-                socket-name = controlSocketPathV4;
-              };
-            };
-          };
-          dhcp6 = {
-            enable = true;
-            settings = {
-              control-socket = {
-                socket-type = "unix";
-                socket-name = controlSocketPathV6;
-              };
-            };
-          };
-        };
-      };
-
-      exporterTest = ''
-        wait_for_unit("kea-dhcp4-server.service")
-        wait_for_unit("kea-dhcp6-server.service")
-        wait_for_file("${controlSocketPathV4}")
-        wait_for_file("${controlSocketPathV6}")
-        wait_for_unit("prometheus-kea-exporter.service")
-        wait_for_open_port(9547)
-        succeed(
-            "curl --fail localhost:9547/metrics | grep 'packets_received_total'"
-        )
-      '';
-    };
-
     knot = {
       exporterConfig = {
         enable = true;
@@ -471,7 +474,7 @@ let
         services.knot = {
           enable = true;
           extraArgs = [ "-v" ];
-          extraConfig = ''
+          settingsFile = pkgs.writeText "knot.conf" ''
             server:
               listen: 127.0.0.1@53
 
@@ -512,7 +515,7 @@ let
         wait_for_unit("knot.service")
         wait_for_unit("prometheus-knot-exporter.service")
         wait_for_open_port(9433)
-        succeed("curl -sSf 'localhost:9433' | grep 'knot_server_zone_count 1.0'")
+        succeed("curl -sSf 'localhost:9433' | grep '2\.019031301'")
       '';
     };
 
@@ -791,6 +794,7 @@ let
     nginx = {
       exporterConfig = {
         enable = true;
+        constLabels = [ "foo=bar" ];
       };
       metricProvider = {
         services.nginx = {
@@ -803,7 +807,7 @@ let
         wait_for_unit("nginx.service")
         wait_for_unit("prometheus-nginx-exporter.service")
         wait_for_open_port(9113)
-        succeed("curl -sSf http://localhost:9113/metrics | grep 'nginx_up 1'")
+        succeed("curl -sSf http://localhost:9113/metrics | grep 'nginx_up{foo=\"bar\"} 1'")
       '';
     };
 
@@ -903,7 +907,7 @@ let
               attrs = {
                 objectClass = [ "olcDatabaseConfig" "olcMdbConfig" ];
                 olcDatabase = "{1}mdb";
-                olcDbDirectory = "/var/db/openldap";
+                olcDbDirectory = "/var/lib/openldap/db";
                 olcSuffix = "dc=example";
                 olcRootDN = {
                   # cn=root,dc=example
@@ -941,35 +945,10 @@ let
       '';
     };
 
-    openvpn = {
-      exporterConfig = {
-        enable = true;
-        group = "openvpn";
-        statusPaths = [ "/run/openvpn-test" ];
-      };
-      metricProvider = {
-        users.groups.openvpn = { };
-        services.openvpn.servers.test = {
-          config = ''
-            dev tun
-            status /run/openvpn-test
-            status-version 3
-          '';
-          up = "chmod g+r /run/openvpn-test";
-        };
-        systemd.services."openvpn-test".serviceConfig.Group = "openvpn";
-      };
-      exporterTest = ''
-        wait_for_unit("openvpn-test.service")
-        wait_for_unit("prometheus-openvpn-exporter.service")
-        succeed("curl -sSf http://localhost:9176/metrics | grep 'openvpn_up{.*} 1'")
-      '';
-    };
-
     pgbouncer = {
       exporterConfig = {
         enable = true;
-        connectionString = "postgres://admin:@localhost:6432/pgbouncer?sslmode=disable";
+        connectionStringFile = pkgs.writeText "connection.conf" "postgres://admin:@localhost:6432/pgbouncer?sslmode=disable";
       };
 
       metricProvider = {
@@ -1034,6 +1013,50 @@ let
         wait_for_unit("phpfpm-php-fpm-exporter.service")
         wait_for_unit("prometheus-php-fpm-exporter.service")
         succeed("curl -sSf http://localhost:9253/metrics | grep 'phpfpm_up{.*} 1'")
+      '';
+    };
+
+    ping = {
+      exporterConfig = {
+        enable = true;
+
+        settings = {
+          targets = [ {
+            "localhost" = {
+              alias = "local machine";
+              env = "prod";
+              type = "domain";
+            };
+          } {
+            "127.0.0.1" = {
+              alias = "local machine";
+              type = "v4";
+            };
+          } {
+            "::1" = {
+              alias = "local machine";
+              type = "v6";
+            };
+          } {
+            "google.com" = {};
+          } ];
+          dns = {};
+          ping = {
+            interval = "2s";
+            timeout = "3s";
+            history-size = 42;
+            payload-size = 56;
+          };
+          log = {
+            level = "warn";
+          };
+        };
+      };
+
+      exporterTest = ''
+        wait_for_unit("prometheus-ping-exporter.service")
+        wait_for_open_port(9427)
+        succeed("curl -sSf http://localhost:9427/metrics | grep 'ping_up{.*} 1'")
       '';
     };
 
@@ -1156,6 +1179,39 @@ let
         wait_until_succeeds("curl -sSf localhost:9121/metrics | grep 'redis_up 1'")
       '';
     };
+
+    restic =
+      let
+        repository = "rest:http://127.0.0.1:8000";
+        passwordFile = pkgs.writeText "restic-test-password" "test-password";
+      in
+      {
+        exporterConfig = {
+          enable = true;
+          inherit repository passwordFile;
+        };
+        metricProvider = {
+          services.restic.server = {
+            enable = true;
+            extraFlags = [ "--no-auth" ];
+          };
+          environment.systemPackages = [ pkgs.restic ];
+        };
+        exporterTest = ''
+          # prometheus-restic-exporter.service fails without initialised repository
+          systemctl("stop prometheus-restic-exporter.service")
+
+          # Initialise the repository
+          wait_for_unit("restic-rest-server.service")
+          wait_for_open_port(8000)
+          succeed("restic init --repo ${repository} --password-file ${passwordFile}")
+
+          systemctl("start prometheus-restic-exporter.service")
+          wait_for_unit("prometheus-restic-exporter.service")
+          wait_for_open_port(9753)
+          wait_until_succeeds("curl -sSf localhost:9753/metrics | grep 'restic_check_success 1.0'")
+        '';
+      };
 
     rspamd = {
       exporterConfig = {
@@ -1318,12 +1374,12 @@ let
         wait_for_open_port(9374)
         wait_until_succeeds(
             "curl -sSf localhost:9374/metrics | grep '{}' | grep -v ' 0$'".format(
-                'smokeping_requests_total{host="127.0.0.1",ip="127.0.0.1"} '
+                'smokeping_requests_total{host="127.0.0.1",ip="127.0.0.1",source=""} '
             )
         )
         wait_until_succeeds(
             "curl -sSf localhost:9374/metrics | grep '{}'".format(
-                'smokeping_response_ttl{host="127.0.0.1",ip="127.0.0.1"}'
+                'smokeping_response_ttl{host="127.0.0.1",ip="127.0.0.1",source=""}'
             )
         )
       '';
@@ -1332,9 +1388,11 @@ let
     snmp = {
       exporterConfig = {
         enable = true;
-        configuration.default = {
-          version = 2;
-          auth.community = "public";
+        configuration = {
+          auths.public_v2 = {
+            community = "public";
+            version = 2;
+          };
         };
       };
       exporterTest = ''
@@ -1662,7 +1720,12 @@ mapAttrs
       testScript = ''
         ${nodeName}.start()
         ${concatStringsSep "\n" (map (line:
-          if (builtins.substring 0 1 line == " " || builtins.substring 0 1 line == ")")
+          if builtins.any (b: b) [
+            (builtins.match "^[[:space:]]*$" line != null)
+            (builtins.substring 0 1 line == "#")
+            (builtins.substring 0 1 line == " ")
+            (builtins.substring 0 1 line == ")")
+          ]
           then line
           else "${nodeName}.${line}"
         ) (splitString "\n" (removeSuffix "\n" testConfig.exporterTest)))}

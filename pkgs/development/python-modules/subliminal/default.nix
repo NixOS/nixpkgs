@@ -1,24 +1,25 @@
-{ lib
-, appdirs
-, babelfish
-, beautifulsoup4
-, buildPythonPackage
-, chardet
-, click
-, dogpile-cache
-, enzyme
-, fetchFromGitHub
-, guessit
-, pysrt
-, pytestCheckHook
-, pythonOlder
-, pytz
-, rarfile
-, requests
-, six
-, stevedore
-, sympy
-, vcrpy
+{
+  lib,
+  appdirs,
+  babelfish,
+  beautifulsoup4,
+  buildPythonPackage,
+  chardet,
+  click,
+  dogpile-cache,
+  enzyme,
+  fetchFromGitHub,
+  guessit,
+  pysrt,
+  pytestCheckHook,
+  pythonOlder,
+  pytz,
+  rarfile,
+  requests,
+  six,
+  stevedore,
+  sympy,
+  vcrpy,
 }:
 
 buildPythonPackage rec {
@@ -63,9 +64,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "subliminal"
-  ];
+  pythonImportsCheck = [ "subliminal" ];
 
   disabledTests = [
     # Tests rewuire network access
@@ -90,6 +89,11 @@ buildPythonPackage rec {
     homepage = "https://github.com/Diaoul/subliminal";
     changelog = "https://github.com/Diaoul/subliminal/blob/${version}/HISTORY.rst";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ doronbehar ];
+    # Too many tests fail ever since a certain python-updates merge, see:
+    # https://github.com/Diaoul/subliminal/issues/1062 . Disabling tests
+    # alltogether may produce a not completly failing executable, but that
+    # executable apparently isn't able to download subtitles at all.
+    broken = true;
   };
 }

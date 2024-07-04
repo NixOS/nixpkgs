@@ -23,10 +23,10 @@ stdenv.mkDerivation (finalAttrs: {
     else "cpu"
   );
 
-  version = "5.7.0";
+  version = "5.7.1";
 
   src = fetchFromGitHub {
-    owner = "GPUOpen-ProfessionalCompute-Libraries";
+    owner = "ROCm";
     repo = "rpp";
     rev = "rocm-${finalAttrs.version}";
     hash = "sha256-s6ODmxPBLpR5f8VALaW6F0p0rZSxSd2LH2+60SEfLCk=";
@@ -79,10 +79,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "Comprehensive high-performance computer vision library for AMD processors";
-    homepage = "https://github.com/GPUOpen-ProfessionalCompute-Libraries/rpp";
+    homepage = "https://github.com/ROCm/rpp";
     license = with licenses; [ mit ];
     maintainers = teams.rocm.members;
     platforms = platforms.linux;
-    broken = versions.minor finalAttrs.version != versions.minor stdenv.cc.version;
+    broken = versions.minor finalAttrs.version != versions.minor stdenv.cc.version || versionAtLeast finalAttrs.version "6.0.0";
   };
 })

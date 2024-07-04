@@ -224,7 +224,7 @@ let
     '' + attrs.postFixup or "";
 
     # Python packages built through cross-compilation are always for the host platform.
-    disallowedReferences = lib.optionals (python.stdenv.hostPlatform != python.stdenv.buildPlatform) [ python.pythonForBuild ];
+    disallowedReferences = lib.optionals (python.stdenv.hostPlatform != python.stdenv.buildPlatform) [ python.pythonOnBuildForHost ];
 
     outputs = outputs ++ lib.optional withDistOutput "dist";
 

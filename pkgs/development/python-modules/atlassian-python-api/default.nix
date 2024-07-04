@@ -1,18 +1,23 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, deprecated
-, oauthlib
-, requests
-, requests-oauthlib
-, six
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  beautifulsoup4,
+  deprecated,
+  jmespath,
+  lxml,
+  oauthlib,
+  requests,
+  requests-kerberos,
+  requests-oauthlib,
+  six,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "atlassian-python-api";
-  version = "3.41.1";
+  version = "3.41.13";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -21,24 +26,24 @@ buildPythonPackage rec {
     owner = "atlassian-api";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-DSIJOp5c/bqOOIZylhUGyIwIco5isA3ytCRR51WfTyI=";
+    hash = "sha256-ldSiO9exbF89KDaspj3kIzAZzOfr/6ohlOyQ5mBxo/U=";
   };
 
   propagatedBuildInputs = [
+    beautifulsoup4
     deprecated
+    jmespath
+    lxml
     oauthlib
     requests
+    requests-kerberos
     requests-oauthlib
     six
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "atlassian"
-  ];
+  pythonImportsCheck = [ "atlassian" ];
 
   meta = with lib; {
     description = "Python Atlassian REST API Wrapper";

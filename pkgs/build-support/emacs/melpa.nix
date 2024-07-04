@@ -3,45 +3,16 @@
 
 { lib, stdenv, fetchFromGitHub, emacs, texinfo, writeText, gcc }:
 
-with lib;
-
-{ /*
-    pname: Nix package name without special symbols and without version or
-    "emacs-" prefix.
-  */
-  pname
-  /*
-    ename: Original Emacs package name, possibly containing special symbols.
-  */
-, ename ? null
-, version
-, recipe
-, meta ? {}
-, ...
-}@args:
-
 let
-
-  defaultMeta = {
-    homepage = args.src.meta.homepage or "https://melpa.org/#/${pname}";
-  };
-
-in
-
-import ./generic.nix { inherit lib stdenv emacs texinfo writeText gcc; } ({
-
-  ename =
-    if ename == null
-    then pname
-    else ename;
+  genericBuild = import ./generic.nix { inherit lib stdenv emacs texinfo writeText gcc; };
 
   packageBuild = stdenv.mkDerivation {
     name = "package-build";
     src = fetchFromGitHub {
       owner = "melpa";
       repo = "package-build";
-      rev = "c3c535e93d9dc92acd21ebc4b15016b5c3b90e7d";
-      sha256 = "17z0wbqdd6fspbj43yq8biff6wfggk74xgnaf1xx6ynsp1i74is5";
+      rev = "c48aa078c01b4f07b804270c4583a0a58ffea1c0";
+      sha256 = "sha256-MzPj375upIiYXdQR+wWXv3A1zMqbSrZlH0taLuxx/1M=";
     };
 
     patches = [ ./package-build-dont-use-mtime.patch ];
@@ -55,8 +26,50 @@ import ./generic.nix { inherit lib stdenv emacs texinfo writeText gcc; } ({
     ";
   };
 
+in
+
+{ /*
+    pname: Nix package name without special symbols and without version or
+    "emacs-" prefix.
+  */
+  pname
+  /*
+    ename: Original Emacs package name, possibly containing special symbols.
+    Default: pname
+  */
+, ename ? pname
+, version
+  /*
+    commit: Optional package history commit.
+    Default: src.rev or "unknown"
+    This will be written into the generated package but it is not needed during
+    the build process.
+  */
+, commit ? (args.src.rev or "unknown")
+  /*
+    files: Optional recipe property specifying the files used to build the package.
+    If null, do not set it in recipe, keeping the default upstream behaviour.
+    Default: null
+  */
+, files ? null
+  /*
+    recipe: Optional MELPA recipe.
+    Default: a minimally functional recipe
+  */
+, recipe ? (writeText "${pname}-recipe" ''
+    (${ename} :fetcher git :url ""
+              ${lib.optionalString (files != null) ":files ${files}"})
+  '')
+, meta ? {}
+, ...
+}@args:
+
+genericBuild ({
+
   elpa2nix = ./elpa2nix.el;
   melpa2nix = ./melpa2nix.el;
+
+  inherit packageBuild commit ename recipe;
 
   preUnpack = ''
     mkdir -p "$NIX_BUILD_TOP/recipes"
@@ -104,7 +117,9 @@ import ./generic.nix { inherit lib stdenv emacs texinfo writeText gcc; } ({
     runHook postInstall
   '';
 
-  meta = defaultMeta // meta;
+  meta = {
+    homepage = args.src.meta.homepage or "https://melpa.org/#/${pname}";
+  } // meta;
 }
 
 // removeAttrs args [ "meta" ])

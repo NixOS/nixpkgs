@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, wrapGAppsHook
+, wrapGAppsHook3
 , desktop-file-utils
 , glib
 , gtk3
@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     python3
     vala
-    wrapGAppsHook
+    wrapGAppsHook3
     desktop-file-utils
   ];
 
@@ -49,7 +49,8 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = with lib; {
-    description = "A small GTK app for presenting keybinding hints";
+    description = "Small GTK app for presenting keybinding hints";
+    mainProgram = "remontoire";
     homepage = "https://github.com/regolith-linux/remontoire";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;

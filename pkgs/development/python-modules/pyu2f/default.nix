@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, six
-, mock
-, pyfakefs
-, pytest-forked
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  six,
+  mock,
+  pyfakefs,
+  pytest-forked,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -20,9 +21,25 @@ buildPythonPackage rec {
     sha256 = "0mx7bn1p3n0fxyxa82wg3c719hby7vqkxv57fhf7zvhlg2zfnr0v";
   };
 
-  propagatedBuildInputs = [
-    six
-  ];
+  propagatedBuildInputs = [ six ];
+
+  postPatch = ''
+    for path in \
+      customauthenticator_test.py \
+      hardware_test.py \
+      hidtransport_test.py \
+      localauthenticator_test.py \
+      model_test.py \
+      u2f_test.py \
+      util_test.py \
+      hid/macos_test.py; \
+    do
+      # https://docs.python.org/3/whatsnew/3.12.html#id3
+      substituteInPlace pyu2f/tests/$path \
+        --replace "assertEquals" "assertEqual" \
+        --replace "assertRaisesRegexp" "assertRaisesRegex"
+    done
+  '';
 
   nativeCheckInputs = [
     mock

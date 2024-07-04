@@ -14,6 +14,7 @@
 , icu
 , gnuradio
 , thrift
+, gnuradioAtLeast
 }:
 
 mkDerivation rec {
@@ -25,7 +26,7 @@ mkDerivation rec {
     rev = "2162103226f3dae43c8c2ab23b79483b84346665";
     sha256 = "1vackka34722d8pcspfwj0j6gc9ic7dqq64sgkrpjm94sh3bmb0b";
   };
-  disabledForGRafter = "3.9";
+  disabled = gnuradioAtLeast "3.9";
 
   nativeBuildInputs = [
     cmake
@@ -52,6 +53,7 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "Gnuradio block for ais";
+    mainProgram = "ais_rx";
     homepage = "https://github.com/bistromath/gr-ais";
     license = licenses.gpl3Plus;
     platforms = platforms.unix;

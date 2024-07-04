@@ -17,13 +17,13 @@
 }:
 
 let
-  pythonEnv = python3.pythonForBuild.withPackages (ps: with ps; [
+  pythonEnv = python3.pythonOnBuildForHost.withPackages (ps: with ps; [
     setuptools
   ]);
 in
 stdenv.mkDerivation rec {
   pname = "gusb";
-  version = "0.4.7";
+  version = "0.4.9";
 
   outputs = [ "bin" "out" "dev" "devdoc" ];
 
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     owner = "hughsie";
     repo = "libgusb";
     rev = "refs/tags/${version}";
-    hash = "sha256-E0H3MqNxYXP40wKMcI1cwLKWGVOnPNazbH6K3TbzpCQ=";
+    hash = "sha256-piIPNLc3deToyQaajXFvM+CKh9ni8mb0P3kb+2RoJOs=";
   };
 
   patches = [
@@ -82,6 +82,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "GLib libusb wrapper";
+    mainProgram = "gusbcmd";
     homepage = "https://github.com/hughsie/libgusb";
     license = licenses.lgpl21;
     maintainers = [ maintainers.marcweber ];

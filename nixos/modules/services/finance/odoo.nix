@@ -9,26 +9,21 @@ in
 {
   options = {
     services.odoo = {
-      enable = mkEnableOption (lib.mdDoc "odoo");
+      enable = mkEnableOption "odoo, an open source ERP and CRM system";
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.odoo;
-        defaultText = literalExpression "pkgs.odoo";
-        description = lib.mdDoc "Odoo package to use.";
-      };
+      package = mkPackageOption pkgs "odoo" { };
 
       addons = mkOption {
         type = with types; listOf package;
         default = [];
         example = literalExpression "[ pkgs.odoo_enterprise ]";
-        description = lib.mdDoc "Odoo addons.";
+        description = "Odoo addons.";
       };
 
       settings = mkOption {
         type = format.type;
         default = {};
-        description = lib.mdDoc ''
+        description = ''
           Odoo configuration settings. For more details see <https://www.odoo.com/documentation/15.0/administration/install/deploy.html>
         '';
         example = literalExpression ''
@@ -41,7 +36,7 @@ in
 
       domain = mkOption {
         type = with types; nullOr str;
-        description = lib.mdDoc "Domain to host Odoo with nginx";
+        description = "Domain to host Odoo with nginx";
         default = null;
       };
     };
@@ -121,7 +116,7 @@ in
       ensureDatabases = [ "odoo" ];
       ensureUsers = [{
         name = "odoo";
-        ensurePermissions = { "DATABASE odoo" = "ALL PRIVILEGES"; };
+        ensureDBOwnership = true;
       }];
     };
   });

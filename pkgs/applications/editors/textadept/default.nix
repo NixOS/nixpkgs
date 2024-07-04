@@ -1,6 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, fetchurl, cmake, qtbase, wrapQtAppsHook }:
+{ lib, stdenv, fetchFromGitHub, fetchurl, cmake
+, withQt ? true, qtbase, wrapQtAppsHook
+, withCurses ? false, ncurses
+}:
 stdenv.mkDerivation rec {
-  version = "12.0";
+  version = "12.4";
   pname = "textadept";
 
   src = fetchFromGitHub {
@@ -8,15 +11,19 @@ stdenv.mkDerivation rec {
     owner = "orbitalquark";
     repo = "textadept";
     rev = "textadept_${version}";
-    sha256 = "sha256-KziVN0Fl/IvSnIJKK5s7UikXi3iP5mTauP0YxffKy9c=";
+    sha256 = "sha256-nPgpQeBq5Stv2o0Ke4W2Ltnx6qLe5TIC5a8HSYVkmfI=";
   };
 
-  nativeBuildInputs = [ cmake wrapQtAppsHook ];
-  buildInputs = [ qtbase ];
+  nativeBuildInputs = [ cmake ]
+  ++ lib.optionals withQt [ wrapQtAppsHook ];
 
-  cmakeFlags = [
-    "CMAKE_INSTALL_PREFIX=build/install"
-  ];
+  buildInputs =
+     lib.optionals withQt [ qtbase ]
+  ++ lib.optionals withCurses ncurses;
+
+  cmakeFlags =
+     lib.optional withQt [ "-DQT=ON" ]
+  ++ lib.optional withCurses [ "-DCURSES=ON" "-DQT=OFF"];
 
   preConfigure = ''
     mkdir -p $PWD/build/_deps
@@ -27,10 +34,11 @@ stdenv.mkDerivation rec {
     ) (import ./deps.nix));
 
   meta = with lib; {
-    description = "An extensible text editor based on Scintilla with Lua scripting.";
+    description = "Extensible text editor based on Scintilla with Lua scripting";
     homepage = "http://foicica.com/textadept";
     license = licenses.mit;
-    maintainers = with maintainers; [ raskin mirrexagon patricksjackson ];
+    maintainers = with maintainers; [ raskin mirrexagon arcuru ];
     platforms = platforms.linux;
+    mainProgram = "textadept";
   };
 }

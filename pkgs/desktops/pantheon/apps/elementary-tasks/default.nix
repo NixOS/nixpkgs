@@ -7,7 +7,7 @@
 , pkg-config
 , python3
 , vala
-, wrapGAppsHook
+, wrapGAppsHook3
 , clutter-gtk
 , evolution-data-server
 , granite
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     pkg-config
     python3
     vala
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

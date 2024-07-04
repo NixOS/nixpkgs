@@ -1,7 +1,9 @@
 { lib
 , mkDerivation
 , fetchurl
+, fetchpatch
 , cmake
+, flatbuffers
 , gettext
 , pkg-config
 , libdigidocpp
@@ -16,18 +18,26 @@
 
 mkDerivation rec {
   pname = "qdigidoc";
-  version = "4.2.12";
+  version = "4.5.1";
 
   src = fetchurl {
     url =
       "https://github.com/open-eid/DigiDoc4-Client/releases/download/v${version}/qdigidoc4-${version}.tar.gz";
-    hash = "sha256-6bso1qvhVhbBfrcTq4S+aHtHli7X2A926N4r45ztq4E=";
+    hash = "sha256-grhSuexp5yd/s8h5AdmdSLBmQY85l9HKZ15oTTvC6PI=";
   };
 
   tsl = fetchurl {
     url = "https://ec.europa.eu/tools/lotl/eu-lotl-pivot-300.xml";
     sha256 = "1cikz36w9phgczcqnwk4k3mx3kk919wy2327jksmfa4cjfjq4a8d";
   };
+
+  patches = [
+    # https://github.com/open-eid/DigiDoc4-Client/pull/1251
+    (fetchpatch {
+      url = "https://github.com/open-eid/DigiDoc4-Client/commit/30281d14c5fb5582832eafbc254b56f8d685227d.patch";
+      hash = "sha256-nv23NbPUogOhS8No3SMIrAcPChl+d1HkxnePpCKIoUw=";
+    })
+  ];
 
   nativeBuildInputs = [ cmake gettext pkg-config qttools ];
 
@@ -37,6 +47,7 @@ mkDerivation rec {
   '';
 
   buildInputs = [
+    flatbuffers
     libdigidocpp
     opensc
     openldap
@@ -58,9 +69,10 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "Qt-based UI for signing and verifying DigiDoc documents";
+    mainProgram = "qdigidoc4";
     homepage = "https://www.id.ee/";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ mmahut yana ];
+    maintainers = with maintainers; [ flokli mmahut yana ];
   };
 }

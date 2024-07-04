@@ -1,4 +1,4 @@
-{ stdenv, fetchYarnDeps, fixup_yarn_lock, callPackage, nodejs }:
+{ stdenv, fetchYarnDeps, fixup-yarn-lock, callPackage, nodejs }:
 let
   common = callPackage ./common.nix { };
 in
@@ -14,7 +14,7 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [
-    fixup_yarn_lock
+    fixup-yarn-lock
     nodejs
     nodejs.pkgs.yarn
   ];
@@ -24,7 +24,7 @@ stdenv.mkDerivation {
 
     export HOME=$(mktemp -d)
     yarn config --offline set yarn-offline-mirror "$yarnOfflineCache"
-    fixup_yarn_lock yarn.lock
+    fixup-yarn-lock yarn.lock
     command -v yarn
     yarn install --frozen-lockfile --offline --no-progress --non-interactive
     patchShebangs node_modules/

@@ -1,25 +1,28 @@
-{ lib
-, branca
-, buildPythonPackage
-, fetchFromGitHub
-, geopandas
-, jinja2
-, nbconvert
-, numpy
-, pandas
-, pillow
-, pytestCheckHook
-, pythonOlder
-, requests
-, selenium
-, setuptools-scm
-, xyzservices
+{
+  lib,
+  branca,
+  buildPythonPackage,
+  fetchFromGitHub,
+  geopandas,
+  jinja2,
+  nbconvert,
+  numpy,
+  pandas,
+  pillow,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  selenium,
+  setuptools,
+  setuptools-scm,
+  wheel,
+  xyzservices,
 }:
 
 buildPythonPackage rec {
   pname = "folium";
-  version = "0.14.0";
-  format = "setuptools";
+  version = "0.16.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -27,13 +30,13 @@ buildPythonPackage rec {
     owner = "python-visualization";
     repo = "folium";
     rev = "refs/tags/v${version}";
-    hash = "sha256-zxLFj5AeTVAxE0En7ZlbBdJEm3WrcPv23MgOhyfNi14=";
+    hash = "sha256-ADDqjZUQVI4K/Bf38905g1K9TD2/e1RYvYWddvFtdrU=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   nativeBuildInputs = [
+    setuptools
     setuptools-scm
+    wheel
   ];
 
   propagatedBuildInputs = [
@@ -41,6 +44,7 @@ buildPythonPackage rec {
     jinja2
     numpy
     requests
+    xyzservices
   ];
 
   nativeCheckInputs = [
@@ -50,7 +54,6 @@ buildPythonPackage rec {
     pillow
     pytestCheckHook
     selenium
-    xyzservices
   ];
 
   disabledTests = [
@@ -64,15 +67,12 @@ buildPythonPackage rec {
     "test_valid_png"
   ];
 
-  pythonImportsCheck = [
-    "folium"
-  ];
+  pythonImportsCheck = [ "folium" ];
 
   meta = {
     description = "Make beautiful maps with Leaflet.js & Python";
     homepage = "https://github.com/python-visualization/folium";
     changelog = "https://github.com/python-visualization/folium/blob/v${version}/CHANGES.txt";
     license = with lib.licenses; [ mit ];
-    maintainers = with lib.maintainers; [ fridh ];
   };
 }

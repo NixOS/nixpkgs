@@ -1,8 +1,15 @@
-{ lib, buildPythonPackage, fetchFromGitHub, sphinx, packaging }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  sphinx,
+  packaging,
+}:
 
 buildPythonPackage rec {
   pname = "pallets-sphinx-themes";
   version = "2.1.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "pallets";
@@ -11,7 +18,10 @@ buildPythonPackage rec {
     sha256 = "sha256-Z03rsqkwF2rYaqRZflf5qc5EdHPIEcEcB1ftYIm5DQs=";
   };
 
-  propagatedBuildInputs = [ packaging sphinx ];
+  propagatedBuildInputs = [
+    packaging
+    sphinx
+  ];
 
   pythonImportsCheck = [ "pallets_sphinx_themes" ];
 

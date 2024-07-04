@@ -10,10 +10,10 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocm-thunk";
-  version = "5.7.0";
+  version = "5.7.1";
 
   src = fetchFromGitHub {
-    owner = "RadeonOpenCompute";
+    owner = "ROCm";
     repo = "ROCT-Thunk-Interface";
     rev = "rocm-${finalAttrs.version}";
     hash = "sha256-jAMBks2/JaXiA45B3qvLHY8fPeFcr1GHT5Jieuduqhw=";
@@ -45,10 +45,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "Radeon open compute thunk interface";
-    homepage = "https://github.com/RadeonOpenCompute/ROCT-Thunk-Interface";
+    homepage = "https://github.com/ROCm/ROCT-Thunk-Interface";
     license = with licenses; [ bsd2 mit ];
     maintainers = with maintainers; [ lovesegfault ] ++ teams.rocm.members;
     platforms = platforms.linux;
-    broken = versions.minor finalAttrs.version != versions.minor stdenv.cc.version;
+    broken = versions.minor finalAttrs.version != versions.minor stdenv.cc.version || versionAtLeast finalAttrs.version "6.0.0";
   };
 })

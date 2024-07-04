@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "azpainter";
-  version = "3.0.6";
+  version = "3.0.8";
 
   src = fetchFromGitLab {
     owner = "azelpg";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-/shmLdZ4mCBZAeUuqJtCiUjeI8B5f/8dIGPqmXMjZ1I=";
+    hash = "sha256-NiQYX/Dcl/t30Jx08DKr6EP5ODS00pyEGKh/qiNT5t4=";
   };
 
   nativeBuildInputs = [
@@ -44,5 +44,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ dtzWill ];
     platforms = with platforms; linux ++ darwin;
+    mainProgram = "azpainter";
   };
 }

@@ -19,12 +19,12 @@ let
 in
 {
   options.services.dex = {
-    enable = mkEnableOption (lib.mdDoc "the OpenID Connect and OAuth2 identity provider");
+    enable = mkEnableOption "the OpenID Connect and OAuth2 identity provider";
 
     environmentFile = mkOption {
       type = types.nullOr types.path;
       default = null;
-      description = lib.mdDoc ''
+      description = ''
         Environment file (see `systemd.exec(5)`
         "EnvironmentFile=" section for the syntax) to define variables for dex.
         This option can be used to safely include secret keys into the dex configuration.
@@ -56,7 +56,7 @@ in
           ];
         }
       '';
-      description = lib.mdDoc ''
+      description = ''
         The available options can be found in
         [the example configuration](https://github.com/dexidp/dex/blob/v${pkgs.dex-oidc.version}/config.yaml.dist).
 
@@ -108,8 +108,7 @@ in
         ProtectClock = true;
         ProtectHome = true;
         ProtectHostname = true;
-        # Would re-mount paths ignored by temporary root
-        #ProtectSystem = "strict";
+        ProtectSystem = "strict";
         ProtectControlGroups = true;
         ProtectKernelLogs = true;
         ProtectKernelModules = true;
@@ -121,9 +120,7 @@ in
         RestrictSUIDSGID = true;
         SystemCallArchitectures = "native";
         SystemCallFilter = [ "@system-service" "~@privileged @setuid @keyring" ];
-        TemporaryFileSystem = "/:ro";
-        # Does not work well with the temporary root
-        #UMask = "0066";
+        UMask = "0066";
       } // optionalAttrs (cfg.environmentFile != null) {
         EnvironmentFile = cfg.environmentFile;
       };

@@ -1,3 +1,4 @@
+{ lib }:
 # We provide three paths to get the credentials into the builder's
 # environment:
 #

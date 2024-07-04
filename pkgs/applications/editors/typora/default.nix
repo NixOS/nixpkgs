@@ -22,10 +22,10 @@
 
 let
   pname = "typora";
-  version = "1.7.5";
+  version = "1.9.3";
   src = fetchurl {
     url = "https://download.typora.io/linux/typora_${version}_amd64.deb";
-    hash = "sha256-4Q+fx1kNu98+nxnI/7hLhE6zOdNsaAiAnW6xVd+hZOI=";
+    hash = "sha256-3rR/CvFFjRPkz27mm1Wt5hwgRUnLL7lpLFKA2moILx8=";
   };
 
   typoraBase = stdenv.mkDerivation {
@@ -95,10 +95,11 @@ in stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    description = "A markdown editor, a markdown reader";
+    description = "Markdown editor, a markdown reader";
     homepage = "https://typora.io/";
     license = licenses.unfree;
     maintainers = with maintainers; [ npulidomateo ];
     platforms = [ "x86_64-linux" ];
+    mainProgram = "typora";
   };
 }

@@ -1,8 +1,16 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k, pyusb, pyserial }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPy3k,
+  pyusb,
+  pyserial,
+}:
 
 buildPythonPackage rec {
   pname = "facedancer";
   version = "2019.3.2";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -11,7 +19,10 @@ buildPythonPackage rec {
 
   disabled = !isPy3k;
 
-  propagatedBuildInputs = [ pyusb pyserial ];
+  propagatedBuildInputs = [
+    pyusb
+    pyserial
+  ];
 
   preBuild = ''
     echo "$version" > VERSION

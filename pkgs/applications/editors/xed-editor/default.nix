@@ -12,21 +12,27 @@
 , python3
 , meson
 , ninja
-, wrapGAppsHook
+, wrapGAppsHook3
 , intltool
 , itstool
 }:
 
 stdenv.mkDerivation rec {
   pname = "xed-editor";
-  version = "3.4.3";
+  version = "3.6.3";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "xed";
     rev = version;
-    sha256 = "sha256-nc8YS1PcmtM37TJpGl691SlxJliyI2gSGJtNzkWbk9A=";
+    sha256 = "sha256-xsNqzicI11dM/DjY00pXaPpQdHA0ltP23g34fMWUoUA=";
   };
+
+  patches = [
+    # We patch gobject-introspection and meson to store absolute paths to libraries in typelibs
+    # but that requires the install_dir is an absolute path.
+    ./correct-gir-lib-path.patch
+  ];
 
   nativeBuildInputs = [
     meson
@@ -35,7 +41,7 @@ stdenv.mkDerivation rec {
     itstool
     ninja
     python3
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -64,5 +70,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Only;
     platforms = platforms.linux;
     maintainers = with maintainers; [ tu-maurice bobby285271 ];
+    mainProgram = "xed";
   };
 }

@@ -10,7 +10,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   buildInputs = [ sndio ]
-    ++ lib.optional (!stdenv.isDarwin && !stdenv.targetPlatform.isBSD)
+    ++ lib.optional (!stdenv.isDarwin && !stdenv.hostPlatform.isBSD)
     libbsd;
 
   outputs = [ "out" "man" ];
@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
   preBuild = ''
     makeFlagsArray+=("PREFIX=$out")
   '' + lib.optionalString
-    (!stdenv.isDarwin && !stdenv.targetPlatform.isBSD) ''
+    (!stdenv.isDarwin && !stdenv.hostPlatform.isBSD) ''
       makeFlagsArray+=(LDADD="-lsndio -lbsd")
 
       # Fix warning about implicit declaration of function 'strlcpy'
@@ -27,10 +27,11 @@ stdenv.mkDerivation (finalAttrs: {
     '';
 
   meta = with lib; {
-    description = "The aucatctl utility sends MIDI messages to control sndiod and/or aucat volumes";
+    description = "Utility that allows to send MIDI messages to control sndiod and/or aucat volumes";
     homepage = "http://www.sndio.org";
     license = licenses.isc;
     maintainers = with maintainers; [ sna ];
     platforms = platforms.unix;
+    mainProgram = "aucatctl";
   };
 })

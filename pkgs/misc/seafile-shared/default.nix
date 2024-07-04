@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation rec {
   pname = "seafile-shared";
-  version = "9.0.3";
+  version = "9.0.6";
 
   src = fetchFromGitHub {
     owner = "haiwen";
     repo = "seafile";
     rev = "v${version}";
-    sha256 = "sha256-g8MQFhDBBUuEDGsJ14rHGsaGEznOtCMVOv+5kljXByY=";
+    sha256 = "sha256-ig22Rw9VWPqOsJS1Wxy69OjdMRcxh2fOyqMHBEky/Uo=";
   };
 
   nativeBuildInputs = [

@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "below";
-  version = "0.6.3";
+  version = "0.8.1";
 
   src = fetchFromGitHub {
     owner = "facebookincubator";
     repo = "below";
     rev = "v${version}";
-    sha256 = "sha256-d5a/M2XEw2E2iydopzedqZ/XfQU7KQyTC5NrPTeeNLg=";
+    sha256 = "sha256-87Fdx3Jqi3dNWM5DZl+UYs031qn2DoiiWd3IysT/glQ=";
   };
 
-  cargoSha256 = "sha256-EoRCmEe9SAySZCm+QhaR4ngik4Arnm4SZjgDM5fSRmk=";
+  cargoHash = "sha256-y2fNypA0MrCdUI/K6QrZWw/5mkYafj2s6jrGHU2zGXw=";
 
   prePatch = ''sed -i "s,ExecStart=.*/bin,ExecStart=$out/bin," etc/below.service'';
   postInstall = ''
@@ -40,7 +40,7 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     platforms = platforms.linux;
     maintainers = with maintainers; [ globin ];
-    description = "A time traveling resource monitor for modern Linux systems";
+    description = "Time traveling resource monitor for modern Linux systems";
     license = licenses.asl20;
     homepage = "https://github.com/facebookincubator/below";
     mainProgram = "below";

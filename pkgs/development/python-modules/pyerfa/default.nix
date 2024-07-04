@@ -1,50 +1,41 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, fetchpatch
-, jinja2
-, oldest-supported-numpy
-, setuptools-scm
-, wheel
-, liberfa
-, packaging
-, numpy
-, pytestCheckHook
-, pytest-doctestplus
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  jinja2,
+  setuptools,
+  setuptools-scm,
+  liberfa,
+  packaging,
+  numpy,
+  pytestCheckHook,
+  pytest-doctestplus,
 }:
 
 buildPythonPackage rec {
   pname = "pyerfa";
-  format = "pyproject";
-  version = "2.0.0.3";
+  version = "2.0.1.4";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-13+7+lg1DBlMy5nl2TqgXTwrFNWq2LZi2Txq2f/0Hzk=";
+    hash = "sha256-rLimcTIy6jXAS8bkCsTkYd/MgX05XvKjyAUcGjMkndM=";
   };
 
-  patches = [
-    # Sort of helps maybe for https://github.com/liberfa/pyerfa/issues/112
-    (fetchpatch {
-      url = "https://github.com/liberfa/pyerfa/commit/4866342b94c5e7344711146f1186a4c3e7534da8.patch";
-      hash = "sha256-uPFFdLYfRweQdeEApBAw6Ulqh31NTQwwmnaU+x/M+C0=";
-    })
-  ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "numpy>=2.0.0rc1" "numpy"
+  '';
 
-  nativeBuildInputs = [
+  build-system = [
     jinja2
-    oldest-supported-numpy
     packaging
+    setuptools
     setuptools-scm
-    wheel
   ];
 
-  propagatedBuildInputs = [
-    numpy
-  ];
-  buildInputs = [
-    liberfa
-  ];
+  dependencies = [ numpy ];
+  buildInputs = [ liberfa ];
 
   preBuild = ''
     export PYERFA_USE_SYSTEM_LIBERFA=1
@@ -62,19 +53,17 @@ buildPythonPackage rec {
   preCheck = ''
     cd $out
   '';
-  pythonImportsCheck = [
-    "erfa"
-  ];
+  pythonImportsCheck = [ "erfa" ];
 
   meta = with lib; {
     description = "Python bindings for ERFA routines";
     longDescription = ''
-        PyERFA is the Python wrapper for the ERFA library (Essential Routines
-        for Fundamental Astronomy), a C library containing key algorithms for
-        astronomy, which is based on the SOFA library published by the
-        International Astronomical Union (IAU). All C routines are wrapped as
-        Numpy universal functions, so that they can be called with scalar or
-        array inputs.
+      PyERFA is the Python wrapper for the ERFA library (Essential Routines
+      for Fundamental Astronomy), a C library containing key algorithms for
+      astronomy, which is based on the SOFA library published by the
+      International Astronomical Union (IAU). All C routines are wrapped as
+      Numpy universal functions, so that they can be called with scalar or
+      array inputs.
     '';
     homepage = "https://github.com/liberfa/pyerfa";
     license = licenses.bsd3;

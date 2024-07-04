@@ -2,12 +2,12 @@
 , stdenv
 , fetchurl
 , fetchFromGitHub
-, fetchpatch
 , pkg-config
 , cmake
 , extra-cmake-modules
 , cairo
 , pango
+, expat
 , fribidi
 , fmt
 , wayland
@@ -19,7 +19,6 @@
 , enchant
 , gdk-pixbuf
 , libGL
-, libevent
 , libuuid
 , libselinux
 , libXdmcp
@@ -29,6 +28,7 @@
 , libdatrie
 , xcbutilkeysyms
 , pcre
+, xcbutil
 , xcbutilwm
 , xcb-imdkit
 , libxkbfile
@@ -43,13 +43,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "fcitx5";
-  version = "5.1.1";
+  version = "5.1.10";
 
   src = fetchFromGitHub {
     owner = "fcitx";
     repo = pname;
     rev = version;
-    hash = "sha256-R8stzpfQttBZFFSu8ikUz/2eL+b98/X672uVFsha9H0=";
+    hash = "sha256-rMtCzFe3imF/uY0kXM2ivyt11r5qNTNab7GkWzdeC/g=";
   };
 
   prePatch = ''
@@ -63,6 +63,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    expat
     fmt
     isocodes
     cairo
@@ -77,13 +78,13 @@ stdenv.mkDerivation rec {
     wayland-protocols
     json_c
     libGL
-    libevent
     libuuid
     libselinux
     libsepol
     libXdmcp
     libxkbcommon
     pcre
+    xcbutil
     xcbutilwm
     xcbutilkeysyms
     xcb-imdkit

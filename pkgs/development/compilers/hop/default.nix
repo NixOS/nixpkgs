@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A multi-tier programming language for the Web 2.0 and the so-called diffuse Web";
+    description = "Multi-tier programming language for the Web 2.0 and the so-called diffuse Web";
     homepage = "http://hop.inria.fr/";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;

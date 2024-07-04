@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "deck";
-  version = "1.27.1";
+  version = "1.38.1";
 
   src = fetchFromGitHub {
     owner = "Kong";
     repo = "deck";
     rev = "v${version}";
-    hash = "sha256-9eMcbmRCr92ebJsPTyDFnwGn3gsRpR7aAkzV6Qfntgo=";
+    hash = "sha256-9n8XAeSZn2HD8Vg2B8YmBUQ+VPBglgjN+QjrSOgn65Y=";
   };
 
   nativeBuildInputs = [ installShellFiles ];
@@ -21,7 +21,7 @@ buildGoModule rec {
   ];
 
   proxyVendor = true; # darwin/linux hash mismatch
-  vendorHash = "sha256-ikgD17+lnKpxCzrIkOXOq332X48qEdSWXIIRoq76fB4=";
+  vendorHash = "sha256-2lR2/jHOFmKm3s+EPNRFLlgJHIs+33YDt1YeHBWRin0=";
 
   postInstall = ''
     installShellCompletion --cmd deck \
@@ -31,7 +31,7 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    description = "A configuration management and drift detection tool for Kong";
+    description = "Configuration management and drift detection tool for Kong";
     homepage = "https://github.com/Kong/deck";
     license = licenses.asl20;
     maintainers = with maintainers; [ liyangau ];

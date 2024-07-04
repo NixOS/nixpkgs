@@ -28,7 +28,7 @@ buildGoModule rec {
     ++ lib.optionals stdenv.isLinux [ libnfnetlink libnetfilter_queue ];
 
   meta = with lib; {
-    description = "A man in the middle tool";
+    description = "Man in the middle tool";
     longDescription = ''
       BetterCAP is a powerful, flexible and portable tool created to perform various
       types of MITM attacks against a network, manipulate HTTP, HTTPS and TCP traffic
@@ -37,5 +37,6 @@ buildGoModule rec {
     homepage = "https://www.bettercap.org/";
     license = with licenses; [ gpl3Only ];
     maintainers = with maintainers; [ y0no ];
+    mainProgram = "bettercap";
   };
 }

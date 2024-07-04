@@ -26,8 +26,9 @@ stdenv.mkDerivation {
       can update LDAP entries with a text editor.
     '';
     homepage = "http://www.lichteblau.com/ldapvi/";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ ];
     platforms = lib.platforms.linux;
+    mainProgram = "ldapvi";
   };
 }

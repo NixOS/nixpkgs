@@ -1,14 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, multipledispatch
-, numpy
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  multipledispatch,
+  numpy,
 }:
 
 buildPythonPackage rec {
   pname = "pyrr";
   version = "unstable-2022-07-22";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "adamlwgriffiths";
@@ -17,7 +19,10 @@ buildPythonPackage rec {
     hash = "sha256-u9O52MQskZRzw0rBH6uPdXdikWLJe7wyBZGNKIFA4BA=";
   };
 
-  propagatedBuildInputs = [ multipledispatch numpy ];
+  propagatedBuildInputs = [
+    multipledispatch
+    numpy
+  ];
 
   meta = with lib; {
     description = "3D mathematical functions using NumPy";

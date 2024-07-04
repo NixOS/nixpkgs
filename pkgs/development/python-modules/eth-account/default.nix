@@ -1,21 +1,23 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, bitarray
-, eth-abi
-, eth-keyfile
-, eth-keys
-, eth-rlp
-, eth-utils
-, websockets
-, hexbytes
-, pythonOlder
-, rlp
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  bitarray,
+  eth-abi,
+  eth-keyfile,
+  eth-keys,
+  eth-rlp,
+  eth-utils,
+  websockets,
+  hexbytes,
+  pythonOlder,
+  rlp,
 }:
 
 buildPythonPackage rec {
   pname = "eth-account";
   version = "0.9.0";
+  format = "setuptools";
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {

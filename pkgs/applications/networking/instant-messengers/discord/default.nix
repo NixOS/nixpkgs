@@ -1,57 +1,58 @@
 { branch ? "stable", callPackage, fetchurl, lib, stdenv }:
 let
-  versions = if stdenv.isLinux then {
-    stable = "0.0.31";
-    ptb = "0.0.49";
-    canary = "0.0.170";
-    development = "0.0.234";
-  } else {
-    stable = "0.0.280";
-    ptb = "0.0.80";
-    canary = "0.0.315";
-    development = "0.0.8797";
-  };
+  versions =
+    if stdenv.isLinux then {
+      stable = "0.0.58";
+      ptb = "0.0.92";
+      canary = "0.0.438";
+      development = "0.0.21";
+    } else {
+      stable = "0.0.309";
+      ptb = "0.0.121";
+      canary = "0.0.547";
+      development = "0.0.43";
+    };
   version = versions.${branch};
   srcs = rec {
     x86_64-linux = {
       stable = fetchurl {
         url = "https://dl.discordapp.net/apps/linux/${version}/discord-${version}.tar.gz";
-        hash = "sha256-toWwiMsEFsGaOYaPZziSmZtpzxGd9m+2MtxTrJwqFbw=";
+        hash = "sha256-YkyniFgkD4GMxUya+/Ke5fxosZKHKyc4+cAx3HI4w8c=";
       };
       ptb = fetchurl {
         url = "https://dl-ptb.discordapp.net/apps/linux/${version}/discord-ptb-${version}.tar.gz";
-        hash = "sha256-o8cDoBe6A0wBjVLjp4JXrv3QsG7TZ/Kj4+T5lj6WHdY=";
+        hash = "sha256-1HbTRWl1w9cu7D4NNFGVbHk1hvRmMywH+q2qA4+nokc=";
       };
       canary = fetchurl {
         url = "https://dl-canary.discordapp.net/apps/linux/${version}/discord-canary-${version}.tar.gz";
-        hash = "sha256-Lw+qLAAwyoDBKDPOBA9HR79gcnqwTshFq6GMpFS0tXA=";
+        hash = "sha256-z2SsI1vmaW1HjBDkJEH468xPuyAqigOIbRDtaL4Lgxc=";
       };
       development = fetchurl {
         url = "https://dl-development.discordapp.net/apps/linux/${version}/discord-development-${version}.tar.gz";
-        hash = "sha256-R5UwgpXgb32mEohTzyRVXmumcgPl8UPan3UjmLFLxLo=";
+        hash = "sha256-LgRrQ2z0/mx9Xvkb7hOrhmOqaETiBITgJDO9vce/wtk=";
       };
     };
     x86_64-darwin = {
       stable = fetchurl {
         url = "https://dl.discordapp.net/apps/osx/${version}/Discord.dmg";
-        hash = "sha256-SUbpzd8RIf+e+so/dXZh5OkjCvWRC+EyqgeIg4u32Hg=";
+        hash = "sha256-9Tfn+dxvhgNjSdfj8Irb/5VU3kn39DX6hdKkppJ6HeU=";
       };
       ptb = fetchurl {
         url = "https://dl-ptb.discordapp.net/apps/osx/${version}/DiscordPTB.dmg";
-        hash = "sha256-IvrCjiZ5Oa616+U8C2ihg8THj7ePV2A8+82wUWqWoPY=";
+        hash = "sha256-3Lk+kPZcBqznIELVMdA6dRpCOaOuRrchmfHv/EAyyOQ=";
       };
       canary = fetchurl {
         url = "https://dl-canary.discordapp.net/apps/osx/${version}/DiscordCanary.dmg";
-        hash = "sha256-m43SijSBxcAvYAlSFpQKIFILUm4AgSQ5F4XyQJyftts=";
+        hash = "sha256-ec2XF3023bQn/85i1xO8tTuYuprtsaL9exqRiZam36A=";
       };
       development = fetchurl {
         url = "https://dl-development.discordapp.net/apps/osx/${version}/DiscordDevelopment.dmg";
-        hash = "sha256-ra0El4Y7SqanY6ZBbHE1Y+pqel4OD7nXKKfg/vndULo=";
+        hash = "sha256-PZS7LHJExi+fb7G4CnIFk4KQx9/cL4ALXwzOcLx4sWU=";
       };
     };
     aarch64-darwin = x86_64-darwin;
   };
-  src = srcs.${stdenv.hostPlatform.system}.${branch};
+  src = srcs.${stdenv.hostPlatform.system}.${branch} or (throw "${stdenv.hostPlatform.system} not supported on ${branch}");
 
   meta = with lib; {
     description = "All-in-one cross-platform voice and text chat for gamers";
@@ -59,7 +60,7 @@ let
     downloadPage = "https://discordapp.com/download";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
-    maintainers = with maintainers; [ MP2E Scrumplex artturin infinidoge jopejoe1 ];
+    maintainers = with maintainers; [ Scrumplex artturin infinidoge jopejoe1 ];
     platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-darwin" ];
     mainProgram = "discord";
   };
@@ -68,14 +69,12 @@ let
     then ./linux.nix
     else ./darwin.nix;
 
-  openasar = callPackage ./openasar.nix { };
-
   packages = (
     builtins.mapAttrs
       (_: value:
         callPackage package (value
           // {
-          inherit src version openasar branch;
+          inherit src version branch;
           meta = meta // { mainProgram = value.binaryName; };
         }))
       {

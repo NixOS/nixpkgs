@@ -37,12 +37,12 @@ stdenv.mkDerivation rec {
   '') ];
 
   postFixup = lib.optionalString (!withOffensive) ''
-    rm -f $out/share/fortunes/men-women*
+    rm $out/share/games/fortunes/men-women*
   '';
 
   meta = with lib; {
     mainProgram = "fortune";
-    description = "A program that displays a pseudorandom message from a database of quotations";
+    description = "Program that displays a pseudorandom message from a database of quotations";
     license = licenses.bsdOriginal;
     platforms = platforms.unix;
     maintainers = with maintainers; [ vonfry ];

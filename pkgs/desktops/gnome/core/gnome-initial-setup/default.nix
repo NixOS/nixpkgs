@@ -2,6 +2,7 @@
 , lib
 , fetchurl
 , substituteAll
+, dconf
 , gettext
 , meson
 , ninja
@@ -15,14 +16,11 @@
 , geocode-glib_2
 , glib
 , gnome-desktop
-, gnome-online-accounts
-, gtk3
 , gtk4
 , libgweather
 , json-glib
 , krb5
 , libpwquality
-, librest_1_0
 , libsecret
 , networkmanager
 , pango
@@ -32,27 +30,29 @@
 , libadwaita
 , libnma-gtk4
 , tzdata
-, libgnomekbd
+, gnome-tecla
 , gsettings-desktop-schemas
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-initial-setup";
-  version = "44.0";
+  version = "46.2";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "WTz8bcj4KphnG5TANbl9vojvVucIeAsq0dIyTk0Eu/8=";
+    url = "mirror://gnome/sources/gnome-initial-setup/${lib.versions.major finalAttrs.version}/gnome-initial-setup-${finalAttrs.version}.tar.xz";
+    hash = "sha256-bHktiSrbYLDeC33oglwUlD0c0nmvT5x2So9UEbYKjyc=";
   };
 
   patches = [
     (substituteAll {
       src = ./0001-fix-paths.patch;
-      inherit tzdata libgnomekbd;
+      inherit tzdata;
+      tecla = gnome-tecla;
     })
   ];
 
   nativeBuildInputs = [
+    dconf
     gettext
     meson
     ninja
@@ -69,9 +69,7 @@ stdenv.mkDerivation rec {
     geocode-glib_2
     glib
     gnome-desktop
-    gnome-online-accounts
     gsettings-desktop-schemas
-    gtk3
     gtk4
     json-glib
     krb5
@@ -79,7 +77,6 @@ stdenv.mkDerivation rec {
     libadwaita
     libnma-gtk4
     libpwquality
-    librest_1_0
     libsecret
     networkmanager
     pango
@@ -97,8 +94,8 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
-      attrPath = "gnome.${pname}";
+      packageName = "gnome-initial-setup";
+      attrPath = "gnome.gnome-initial-setup";
     };
   };
 
@@ -109,4 +106,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     maintainers = teams.gnome.members;
   };
-}
+})

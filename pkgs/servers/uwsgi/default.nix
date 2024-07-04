@@ -24,13 +24,13 @@ let
   };
 
   pythonPlugin = pkg : lib.nameValuePair "python${if pkg.isPy2 then "2" else "3"}" {
-    interpreter = pkg.pythonForBuild.interpreter;
+    interpreter = pkg.pythonOnBuildForHost.interpreter;
     path = "plugins/python";
     inputs = [ pkg ncurses ];
     install = ''
       install -Dm644 uwsgidecorators.py $out/${pkg.sitePackages}/uwsgidecorators.py
-      ${pkg.pythonForBuild.executable} -m compileall $out/${pkg.sitePackages}/
-      ${pkg.pythonForBuild.executable} -O -m compileall $out/${pkg.sitePackages}/
+      ${pkg.pythonOnBuildForHost.executable} -m compileall $out/${pkg.sitePackages}/
+      ${pkg.pythonOnBuildForHost.executable} -O -m compileall $out/${pkg.sitePackages}/
     '';
   };
 
@@ -71,13 +71,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "uwsgi";
-  version = "2.0.22";
+  version = "2.0.26";
 
   src = fetchFromGitHub {
     owner = "unbit";
     repo = "uwsgi";
     rev = finalAttrs.version;
-    hash = "sha256-pfy3EDXq3KVY2mC3BMAp/87IUiP4NhdTWZo+zVBJ+Pc=";
+    hash = "sha256-3nmmVNNDvQ1RzaD5BQFrScHHnmUtMwjo3wodEGIJCvI=";
   };
 
   patches = [
@@ -163,10 +163,11 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "A fast, self-healing and developer/sysadmin-friendly application container server coded in pure C";
+    description = "Fast, self-healing and developer/sysadmin-friendly application container server coded in pure C";
     homepage = "https://uwsgi-docs.readthedocs.org/en/latest/";
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ abbradar schneefux globin ];
     platforms = lib.platforms.unix;
+    mainProgram = "uwsgi";
   };
 })

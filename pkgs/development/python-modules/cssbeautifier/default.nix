@@ -1,34 +1,44 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools
-, jsbeautifier
+{
+  lib,
+  buildPythonPackage,
+  editorconfig,
+  fetchPypi,
+  jsbeautifier,
+  pythonOlder,
+  setuptools,
+  six,
 }:
 
 buildPythonPackage rec {
   pname = "cssbeautifier";
-  version = "1.14.9";
-  format = "pyproject";
+  version = "1.15.1";
+  pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-LaQyRy9oFw64VK/5exaiRyH1CQ7javLjEZlZConn9x8=";
+    hash = "sha256-n3BkNirt1VnFXu7Pa2vtZeBfM0iNy+OQRPBAPCbhwAY=";
   };
 
-  nativeBuildInputs = [
-    setuptools
+  nativeBuildInputs = [ setuptools ];
+
+  propagatedBuildInputs = [
+    editorconfig
+    jsbeautifier
+    six
   ];
 
-  propagatedBuildInputs = [ jsbeautifier ];
-
-  # has no tests
+  # Module has no tests
   doCheck = false;
 
   pythonImportsCheck = [ "cssbeautifier" ];
 
   meta = with lib; {
     description = "CSS unobfuscator and beautifier";
-    homepage = "https://pypi.org/project/cssbeautifier/";
+    mainProgram = "css-beautify";
+    homepage = "https://github.com/beautifier/js-beautify";
+    changelog = "https://github.com/beautifier/js-beautify/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ traxys ];
   };

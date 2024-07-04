@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, nodejs
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  nodejs,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -30,9 +31,7 @@ buildPythonPackage rec {
     rm -rf pscript_legacy
   '';
 
-  pythonImportsCheck = [
-    "pscript"
-  ];
+  pythonImportsCheck = [ "pscript" ];
 
   meta = with lib; {
     description = "Python to JavaScript compiler";

@@ -1,14 +1,16 @@
-{ buildPythonPackage
-, fetchFromGitHub
-, writeText
-, lib
-, attrs
-, six
-, okonomiyaki
+{
+  buildPythonPackage,
+  fetchFromGitHub,
+  writeText,
+  lib,
+  attrs,
+  six,
+  okonomiyaki,
 }:
 
 let
   version = "0.8.2";
+  format = "setuptools";
 
   versionFile = writeText "simplesat_ver" ''
     version = '${version}'
@@ -18,12 +20,16 @@ let
     msi_version = '${version}.000'
     version_info = (${lib.versions.major version}, ${lib.versions.minor version}, ${lib.versions.patch version}, 'final', 0)
   '';
-
-in buildPythonPackage rec {
+in
+buildPythonPackage rec {
   pname = "simplesat";
   inherit version;
 
-  propagatedBuildInputs = [ attrs six okonomiyaki ];
+  propagatedBuildInputs = [
+    attrs
+    six
+    okonomiyaki
+  ];
 
   src = fetchFromGitHub {
     owner = "enthought";

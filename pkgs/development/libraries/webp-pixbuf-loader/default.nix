@@ -15,13 +15,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "webp-pixbuf-loader";
-  version = "0.2.2";
+  version = "0.2.6";
 
   src = fetchFromGitHub {
     owner = "aruiz";
     repo = "webp-pixbuf-loader";
     rev = version;
-    sha256 = "sha256-TdZK2OTwetLVmmhN7RZlq2NV6EukH1Wk5Iwer2W/aHc=";
+    sha256 = "sha256-2GDH5+YCwb2mPdMfEscmWDOzdGnWRcppE+4rcDCZog4=";
   };
 
   nativeBuildInputs = [
@@ -52,6 +52,9 @@ stdenv.mkDerivation rec {
     GDK_PIXBUF_MODULEDIR="$out/${moduleDir}" \
     gdk-pixbuf-query-loaders --update-cache
 
+    # gdk-pixbuf disables the thumbnailer in cross-builds (https://gitlab.gnome.org/GNOME/gdk-pixbuf/-/commit/fc37708313a5fc52083cf10c9326f3509d67701f)
+    # and therefore makeWrapper will fail because 'gdk-pixbuf-thumbnailer' the executable does not exist.
+  '' + lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
     # It assumes gdk-pixbuf-thumbnailer can find the webp loader in the loaders.cache referenced by environment variable, breaking containment.
     # So we replace it with a wrapped executable.
     mkdir -p "$out/bin"

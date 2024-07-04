@@ -1,26 +1,24 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, numpy
-, cython
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  numpy,
+  cython,
 }:
 
 buildPythonPackage rec {
   pname = "pyworld";
   version = "0.3.4";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-EGxw7np9jJukiNgCLyAzcGkppA8CZCVrjofaWquYMDo=";
   };
 
-  nativeBuildInputs = [
-    cython
-  ];
+  nativeBuildInputs = [ cython ];
 
-  propagatedBuildInputs = [
-    numpy
-  ];
+  propagatedBuildInputs = [ numpy ];
 
   pythonImportsCheck = [ "pyworld" ];
 

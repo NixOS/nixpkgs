@@ -1,16 +1,22 @@
-{ lib
-, buildPythonPackage
-, coverage
-, fetchPypi
-, isPyPy
-, isPy311
-, python
-, stdenv
+{
+  lib,
+  buildPythonPackage,
+  coverage,
+  fetchPypi,
+  isPyPy,
+  isPy311,
+  python,
+  pythonAtLeast,
+  stdenv,
 }:
 
 buildPythonPackage rec {
   pname = "nose3";
   version = "1.3.8";
+  format = "setuptools";
+
+  # https://github.com/jayvdb/nose3/issues/5
+  disabled = pythonAtLeast "3.12";
 
   src = fetchPypi {
     inherit pname version;
@@ -24,7 +30,7 @@ buildPythonPackage rec {
   doCheck = !isPyPy && !stdenv.isDarwin && !isPy311;
 
   checkPhase = ''
-    ${python.pythonForBuild.interpreter} selftest.py
+    ${python.pythonOnBuildForHost.interpreter} selftest.py
   '';
 
   meta = with lib; {

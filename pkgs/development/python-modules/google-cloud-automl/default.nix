@@ -1,30 +1,34 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, google-api-core
-, google-cloud-storage
-, google-cloud-testutils
-, libcst
-, mock
-, pandas
-, proto-plus
-, protobuf
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  google-api-core,
+  google-cloud-storage,
+  google-cloud-testutils,
+  libcst,
+  mock,
+  pandas,
+  proto-plus,
+  protobuf,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-automl";
-  version = "2.11.2";
-  format = "setuptools";
+  version = "2.13.3";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-w4kzOe8az6zcMLoNYbfkvC5Aq5zCbSNw6+PHYZkEZqI=";
+    hash = "sha256-iRqQgurt6xe8W7ck/BULdwLGhNdCD58irj98X8YRxxo=";
   };
+
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     google-api-core
@@ -33,15 +37,9 @@ buildPythonPackage rec {
   ] ++ google-api-core.optional-dependencies.grpc;
 
   passthru.optional-dependencies = {
-    libcst = [
-      libcst
-    ];
-    pandas = [
-      pandas
-    ];
-    storage = [
-      google-cloud-storage
-    ];
+    libcst = [ libcst ];
+    pandas = [ pandas ];
+    storage = [ google-cloud-storage ];
   };
 
   nativeCheckInputs = [
@@ -58,14 +56,11 @@ buildPythonPackage rec {
     rm -r google
   '';
 
-  disabledTestPaths = [
-    # requires credentials
-    "tests/system/gapic/v1beta1/test_system_tables_client_v1.py"
-  ];
-
   disabledTests = [
-    # requires credentials
+    # Test requires credentials
     "test_prediction_client_client_info"
+    # Test requires project ID
+    "test_list_models"
   ];
 
   pythonImportsCheck = [
@@ -76,8 +71,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Cloud AutoML API client library";
-    homepage = "https://github.com/googleapis/python-automl";
-    changelog = "https://github.com/googleapis/python-automl/blob/v${version}/CHANGELOG.md";
+    homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-automl";
+    changelog = "https://github.com/googleapis/google-cloud-python/tree/google-cloud-automl-v${version}/packages/google-cloud-automl";
     license = licenses.asl20;
     maintainers = with maintainers; [ ];
   };

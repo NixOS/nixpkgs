@@ -34,6 +34,7 @@ let
      */
   ]) (builtins.attrNames sharedLibDeps) ++ [
     "--with-intl=system-icu"
+    "--openssl-use-def-ca-store"
   ];
 
   copyLibHeaders =
@@ -51,6 +52,12 @@ let
     };
 
     strictDeps = true;
+
+    env = lib.optionalAttrs (stdenv.isDarwin && stdenv.isx86_64) {
+      # Make sure libc++ uses `posix_memalign` instead of `aligned_alloc` on x86_64-darwin.
+      # Otherwise, nodejs would require the 11.0 SDK and macOS 10.15+.
+      NIX_CFLAGS_COMPILE = "-D__ENVIRONMENT_MAC_OS_X_VERSION_MIN_REQUIRED__=101300";
+    };
 
     CC_host = "cc";
     CXX_host = "c++";
@@ -199,7 +206,7 @@ let
       homepage = "https://nodejs.org";
       changelog = "https://github.com/nodejs/node/releases/tag/v${version}";
       license = licenses.mit;
-      maintainers = with maintainers; [ goibhniu gilligan cko marsam ];
+      maintainers = with maintainers; [ goibhniu cko aduh95 ];
       platforms = platforms.linux ++ platforms.darwin;
       mainProgram = "node";
       knownVulnerabilities = optional (versionOlder version "18") "This NodeJS release has reached its end of life. See https://nodejs.org/en/about/releases/.";

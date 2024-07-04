@@ -1,8 +1,13 @@
-{ lib, buildPythonPackage, fetchPypi }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+}:
 
 buildPythonPackage rec {
   pname = "python-periphery";
   version = "2.4.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

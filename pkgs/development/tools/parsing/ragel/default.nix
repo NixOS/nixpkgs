@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fig2dev, tex, ghostscript, colm
+{ lib, stdenv, fetchurl, fig2dev, texliveSmall, ghostscript, colm
 , build-manual ? false
 }:
 
@@ -13,7 +13,7 @@ let
         inherit sha256;
       };
 
-      buildInputs = lib.optionals build-manual [ fig2dev ghostscript tex ];
+      buildInputs = lib.optionals build-manual [ fig2dev ghostscript texliveSmall ];
 
       preConfigure = lib.optionalString build-manual ''
         sed -i "s/build_manual=no/build_manual=yes/g" DIST
@@ -30,6 +30,7 @@ let
       meta = with lib; {
         homepage = "https://www.colm.net/open-source/ragel/";
         description = "State machine compiler";
+        mainProgram = "ragel";
         inherit broken license;
         platforms = platforms.unix;
         maintainers = with maintainers; [ pSub ];

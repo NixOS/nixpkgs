@@ -27,5 +27,6 @@ stdenv.mkDerivation rec {
     description = "eMail query-command to use vCards in mutt and Vim";
     license = licenses.mit;
     maintainers = with maintainers; [ ma27 ];
+    mainProgram = "vcs_query";
   };
 }

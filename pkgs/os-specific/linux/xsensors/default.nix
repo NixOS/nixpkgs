@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     ./replace-deprecated-gtk.patch
   ];
   meta = with lib; {
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ ];
   };

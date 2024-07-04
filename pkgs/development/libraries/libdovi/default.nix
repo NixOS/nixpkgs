@@ -5,17 +5,15 @@
 , rust
 , stdenv
 }:
-let
-  rustTargetPlatformSpec = rust.toRustTargetSpec stdenv.hostPlatform;
-in
+
 rustPlatform.buildRustPackage rec {
   pname = "libdovi";
-  version = "3.1.2";
+  version = "3.3.0";
 
   src = fetchCrate {
     pname = "dolby_vision";
     inherit version;
-    hash = "sha256-eLmGswgxtmqGc9f8l/9qvwSm+8bi06q+Ryvo7Oyr7s0=";
+    hash = "sha256-224fX+9klmWVoakU+XM7HrGa4iP4xsBJtn+686cH0qc=";
   };
 
   cargoLock.lockFile = ./Cargo.lock;
@@ -28,19 +26,19 @@ rustPlatform.buildRustPackage rec {
 
   buildPhase = ''
     runHook preBuild
-    cargo cbuild -j $NIX_BUILD_CORES --release --frozen --prefix=${placeholder "out"} --target ${rustTargetPlatformSpec}
+    ${rust.envVars.setEnv} cargo cbuild -j $NIX_BUILD_CORES --release --frozen --prefix=${placeholder "out"} --target ${stdenv.hostPlatform.rust.rustcTarget}
     runHook postBuild
   '';
 
   installPhase = ''
     runHook preInstall
-    cargo cinstall -j $NIX_BUILD_CORES --release --frozen --prefix=${placeholder "out"} --target ${rustTargetPlatformSpec}
+    ${rust.envVars.setEnv} cargo cinstall -j $NIX_BUILD_CORES --release --frozen --prefix=${placeholder "out"} --target ${stdenv.hostPlatform.rust.rustcTarget}
     runHook postInstall
   '';
 
   checkPhase = ''
     runHook preCheck
-    cargo ctest -j $NIX_BUILD_CORES --release --frozen --prefix=${placeholder "out"} --target ${rustTargetPlatformSpec}
+    ${rust.envVars.setEnv} cargo ctest -j $NIX_BUILD_CORES --release --frozen --prefix=${placeholder "out"} --target ${stdenv.hostPlatform.rust.rustcTarget}
     runHook postCheck
   '';
 

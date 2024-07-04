@@ -13,7 +13,7 @@ in
 
   options = {
     services.xserver.windowManager.fvwm3 = {
-      enable = mkEnableOption (lib.mdDoc "Fvwm3 window manager");
+      enable = mkEnableOption "Fvwm3 window manager";
     };
   };
 

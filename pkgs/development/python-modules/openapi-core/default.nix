@@ -1,35 +1,38 @@
-{ lib
-, aiohttp
-, asgiref
-, buildPythonPackage
-, django
-, djangorestframework
-, falcon
-, fetchFromGitHub
-, flask
-, httpx
-, isodate
-, jsonschema
-, jsonschema-spec
-, more-itertools
-, openapi-schema-validator
-, openapi-spec-validator
-, parse
-, poetry-core
-, pytest-aiohttp
-, pytestCheckHook
-, pythonOlder
-, responses
-, requests
-, starlette
-, webob
-, werkzeug
+{
+  lib,
+  aiohttp,
+  aioitertools,
+  asgiref,
+  buildPythonPackage,
+  django,
+  falcon,
+  fastapi,
+  fetchFromGitHub,
+  flask,
+  httpx,
+  isodate,
+  jsonschema,
+  jsonschema-spec,
+  more-itertools,
+  multidict,
+  openapi-schema-validator,
+  openapi-spec-validator,
+  parse,
+  poetry-core,
+  pytest-aiohttp,
+  pytest7CheckHook,
+  pythonOlder,
+  responses,
+  requests,
+  starlette,
+  webob,
+  werkzeug,
 }:
 
 buildPythonPackage rec {
   pname = "openapi-core";
-  version = "0.18.0";
-  format = "pyproject";
+  version = "0.19.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -37,16 +40,14 @@ buildPythonPackage rec {
     owner = "p1c2u";
     repo = "openapi-core";
     rev = "refs/tags/${version}";
-    hash = "sha256-2OcGaZQwzgxcwrXinmJjFc91620Ri0O79c8WZWfDdlQ=";
+    hash = "sha256-+YYcSNX717JjVHMk4Seb145iq9/rQZEVQn27Ulk1A3E=";
   };
 
   postPatch = ''
     sed -i "/--cov/d" pyproject.toml
   '';
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     isodate
@@ -63,21 +64,15 @@ buildPythonPackage rec {
   passthru.optional-dependencies = {
     aiohttp = [
       aiohttp
+      multidict
     ];
-    django = [
-      django
-    ];
-    falcon = [
-      falcon
-    ];
-    flask = [
-      flask
-    ];
-    requests = [
-      requests
-    ];
+    django = [ django ];
+    falcon = [ falcon ];
+    fastapi = [ fastapi ];
+    flask = [ flask ];
+    requests = [ requests ];
     starlette = [
-      httpx
+      aioitertools
       starlette
     ];
   };
@@ -85,11 +80,17 @@ buildPythonPackage rec {
   __darwinAllowLocalNetworking = true;
 
   nativeCheckInputs = [
+    httpx
     pytest-aiohttp
-    pytestCheckHook
+    pytest7CheckHook
     responses
     webob
   ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
+
+  pytestFlagsArray = [
+    "-W"
+    "ignore::DeprecationWarning"
+  ];
 
   disabledTestPaths = [
     # Requires secrets and additional configuration
@@ -104,7 +105,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Client-side and server-side support for the OpenAPI Specification v3";
-    homepage = "https://github.com/p1c2u/openapi-core";
+    homepage = "https://github.com/python-openapi/openapi-core";
     license = licenses.bsd3;
     maintainers = with maintainers; [ dotlambda ];
   };

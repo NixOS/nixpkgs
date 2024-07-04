@@ -26,11 +26,11 @@ let
 in
 {
   options.services.osquery = {
-    enable = mkEnableOption (mdDoc "osqueryd daemon");
+    enable = mkEnableOption "osqueryd daemon";
 
     settings = mkOption {
       default = { };
-      description = mdDoc ''
+      description = ''
         Configuration to be written to the osqueryd JSON configuration file.
         To understand the configuration format, refer to https://osquery.readthedocs.io/en/stable/deployment/configuration/#configuration-components.
       '';
@@ -42,7 +42,7 @@ in
 
     flags = mkOption {
       default = { };
-      description = mdDoc ''
+      description = ''
         Attribute set of flag names and values to be written to the osqueryd flagfile.
         For more information, refer to https://osquery.readthedocs.io/en/stable/installation/cli-flags.
       '';
@@ -56,19 +56,19 @@ in
             database_path = mkOption {
               default = "/var/lib/osquery/osquery.db";
               readOnly = true;
-              description = mdDoc "Path used for the database file.";
+              description = "Path used for the database file.";
               type = path;
             };
             logger_path = mkOption {
               default = "/var/log/osquery";
               readOnly = true;
-              description = mdDoc "Base directory used for logging.";
+              description = "Base directory used for logging.";
               type = path;
             };
             pidfile = mkOption {
               default = "/run/osquery/osqueryd.pid";
               readOnly = true;
-              description = mdDoc "Path used for pid file.";
+              description = "Path used for pid file.";
               type = path;
             };
           };
@@ -90,8 +90,10 @@ in
       };
       wantedBy = [ "multi-user.target" ];
     };
-    systemd.tmpfiles.rules = [
-      "d ${dirname (cfg.flags.pidfile)} 0755 root root -"
-    ];
+    systemd.tmpfiles.settings."10-osquery".${dirname (cfg.flags.pidfile)}.d = {
+      user = "root";
+      group = "root";
+      mode = "0755";
+    };
   };
 }

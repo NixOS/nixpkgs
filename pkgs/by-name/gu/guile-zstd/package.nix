@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   doCheck = !stdenv.isDarwin;
 
   meta = with lib; {
-    description = "A GNU Guile library providing bindings to zstd";
+    description = "GNU Guile library providing bindings to zstd";
     homepage = "https://notabug.org/guile-zstd/guile-zstd";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ foo-dogsquared ];

@@ -17,6 +17,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Make JSON greppable!";
+    mainProgram = "gron";
     longDescription = ''
       gron transforms JSON into discrete assignments to make it easier to grep
       for what you want and see the absolute 'path' to it. It eases the

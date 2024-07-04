@@ -12,18 +12,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "tiny";
-  version = "0.11.0";
+  version = "0.12.0";
 
   src = fetchFromGitHub {
     owner = "osa1";
-    repo = pname;
+    repo = "tiny";
     rev = "v${version}";
-    hash = "sha256-oOaLQh9gJlurHi9awoRh4wQnXwkuOGJLnGQA6di6k1Q=";
+    hash = "sha256-VlKhOHNggT+FbMvE/N2JQOJf0uB1N69HHdP09u89qSk=";
   };
 
-  cargoPatches = [ ./Cargo.lock.patch ];
-
-  cargoHash = "sha256-wUBScLNRNAdDZ+HpQjYiExgPJnE9cxviooHePbJI13Q=";
+  cargoHash = "sha256-AhQCfLCoJU7o8s+XL3hDOPmZi9QjOxXSA9uglA1KSuY=";
 
   nativeBuildInputs = lib.optional stdenv.isLinux pkg-config;
   buildInputs = lib.optionals dbusSupport [ dbus ]
@@ -32,16 +30,12 @@ rustPlatform.buildRustPackage rec {
 
   buildFeatures = lib.optional notificationSupport "desktop-notifications";
 
-  checkFlags = [
-    # flaky test
-    "--skip=tests::config::parsing_tab_configs"
-  ];
-
   meta = with lib; {
-    description = "A console IRC client";
+    description = "Console IRC client";
     homepage = "https://github.com/osa1/tiny";
-    changelog = "https://github.com/osa1/tiny/raw/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/osa1/tiny/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ Br1ght0ne vyp ];
+    mainProgram = "tiny";
   };
 }

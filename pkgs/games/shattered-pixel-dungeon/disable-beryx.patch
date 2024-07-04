@@ -38,10 +38,3 @@ index 97f35f7..afd5116 100644
  
  dependencies {
      implementation project(':core')
-@@ -123,4 +124,4 @@ dependencies {
- 
-     implementation project(':services:updates:githubUpdates')
-     implementation project(':services:news:shatteredNews')
--}
-\ No newline at end of file
-+}

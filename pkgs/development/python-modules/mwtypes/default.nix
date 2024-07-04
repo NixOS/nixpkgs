@@ -1,14 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, jsonable
-, nose
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  jsonable,
+  nose,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "mwtypes";
   version = "0.3.2";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -30,7 +32,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "mwtypes" ];
 
   meta = with lib; {
-    description = "A set of classes for working with MediaWiki data types.";
+    description = "Set of classes for working with MediaWiki data types";
     homepage = "https://github.com/mediawiki-utilities/python-mwtypes";
     license = licenses.mit;
     maintainers = with maintainers; [ GaetanLepage ];

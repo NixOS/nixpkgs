@@ -10,17 +10,17 @@ let
   allSpecs = {
     x86_64-linux = {
       system = "linux64";
-      sha256 = upstream-info.sha256_linux;
+      hash = upstream-info.hash_linux;
     };
 
     x86_64-darwin = {
       system = "mac-x64";
-      sha256 = upstream-info.sha256_darwin;
+      hash = upstream-info.hash_darwin;
     };
 
     aarch64-darwin = {
       system = "mac-arm64";
-      sha256 = upstream-info.sha256_darwin_aarch64;
+      hash = upstream-info.hash_darwin_aarch64;
     };
   };
 
@@ -41,8 +41,8 @@ in stdenv.mkDerivation rec {
   version = upstream-info.version;
 
   src = fetchurl {
-    url = "https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/${version}/${spec.system}/chromedriver-${spec.system}.zip";
-    sha256 = spec.sha256;
+    url = "https://storage.googleapis.com/chrome-for-testing-public/${version}/${spec.system}/chromedriver-${spec.system}.zip";
+    hash = spec.hash;
   };
 
   nativeBuildInputs = [ unzip makeWrapper ];
@@ -60,7 +60,7 @@ in stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://chromedriver.chromium.org/";
-    description = "A WebDriver server for running Selenium tests on Chrome";
+    description = "WebDriver server for running Selenium tests on Chrome";
     longDescription = ''
       WebDriver is an open source tool for automated testing of webapps across
       many browsers. It provides capabilities for navigating to web pages, user
@@ -69,7 +69,7 @@ in stdenv.mkDerivation rec {
     '';
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.bsd3;
-    maintainers = with maintainers; [ goibhniu marsam primeos ];
+    maintainers = with maintainers; [ goibhniu primeos ];
     # Note from primeos: By updating Chromium I also update Google Chrome and
     # ChromeDriver.
     platforms = attrNames allSpecs;

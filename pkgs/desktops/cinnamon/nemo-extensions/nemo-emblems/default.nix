@@ -1,6 +1,7 @@
 { python3
 , lib
 , fetchFromGitHub
+, cinnamon-translations
 }:
 
 let
@@ -17,6 +18,9 @@ python3.pkgs.buildPythonApplication rec {
   postPatch = ''
     substituteInPlace setup.py \
       --replace "/usr/share" "share"
+
+    substituteInPlace nemo-extension/nemo-emblems.py \
+      --replace "/usr/share/locale" "${cinnamon-translations}/share/locale"
   '';
 
   meta = with lib; {

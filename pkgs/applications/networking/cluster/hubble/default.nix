@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "hubble";
-  version = "0.12.1";
+  version = "0.13.5";
 
   src = fetchFromGitHub {
     owner = "cilium";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-YJrL4fLJnTkfzZQp4MzPZL8ZZOGhFbHUzOpvaA5JrOA=";
+    sha256 = "sha256-0NApMqLjeYOMxEI8tY2zLxccuSD5nHUGNsya+26ghDY=";
   };
 
   vendorHash = null;
@@ -40,6 +40,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Network, Service & Security Observability for Kubernetes using eBPF";
+    mainProgram = "hubble";
     license = licenses.asl20;
     homepage = "https://github.com/cilium/hubble/";
     maintainers = with maintainers; [ humancalico bryanasdev000 ];

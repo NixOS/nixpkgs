@@ -1,33 +1,57 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, cython
-, certifi
-, CFNetwork
-, cmake
-, CoreFoundation
-, libcxxabi
-, openssl
-, Security
-, pytestCheckHook
-, pytest-asyncio
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  cython_0,
+  certifi,
+  CFNetwork,
+  cmake,
+  CoreFoundation,
+  openssl,
+  Security,
+  pytestCheckHook,
+  pytest-asyncio,
 }:
 
 buildPythonPackage rec {
   pname = "uamqp";
-  version = "1.6.4";
+  version = "1.6.8";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "Azure";
     repo = "azure-uamqp-python";
-    rev = "refs/tags/v.${version}";
-    hash = "sha256-OjZTroaBuUB/dakl5gAYigJkim9EFiCwUEBo7z35vhQ=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-L4E7nnsVZ/VrOM0t4KtztU9ALmtGfi1vDzUi0ogtZOc=";
   };
 
-  patches = lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
-    ./darwin-azure-c-shared-utility-corefoundation.patch
-  ];
+  patches =
+    lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
+      ./darwin-azure-c-shared-utility-corefoundation.patch
+    ]
+    ++ [
+      (fetchpatch {
+        name = "CVE-2024-25110.patch";
+        url = "https://github.com/Azure/azure-uamqp-c/commit/30865c9ccedaa32ddb036e87a8ebb52c3f18f695.patch";
+        stripLen = 1;
+        extraPrefix = "src/vendor/azure-uamqp-c/";
+        hash = "sha256-igzZqTLUUyuNcpCUbYHI4RXmWxg+7EC/yyD4DBurR2M=";
+      })
+      (fetchpatch {
+        name = "CVE-2024-27099.patch";
+        url = "https://github.com/Azure/azure-uamqp-c/commit/2ca42b6e4e098af2d17e487814a91d05f6ae4987.patch";
+        stripLen = 1;
+        extraPrefix = "src/vendor/azure-uamqp-c/";
+        # other files are just tests which aren't run from the python
+        # builder anyway
+        includes = [ "src/vendor/azure-uamqp-c/src/link.c" ];
+        hash = "sha256-EqDfG1xAz5CG8MssSSrz8Yrje5qwF8ri1Kdw+UUu5ms=";
+      })
+      # Fix incompatible function pointer conversion error with clang 16.
+      ./clang-fix-incompatible-function-pointer-conversion.patch
+    ];
 
   postPatch = lib.optionalString (stdenv.isDarwin && !stdenv.isx86_64) ''
     # force darwin aarch64 to use openssl instead of applessl, removing
@@ -47,24 +71,18 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     cmake
-    cython
+    cython_0
   ];
 
-  buildInputs = [
-    openssl
-  ] ++ lib.optionals stdenv.isDarwin [
-    CoreFoundation
-    CFNetwork
-    Security
-  ];
+  buildInputs =
+    [ openssl ]
+    ++ lib.optionals stdenv.isDarwin [
+      CoreFoundation
+      CFNetwork
+      Security
+    ];
 
-  propagatedBuildInputs = [
-    certifi
-  ];
-
-  LDFLAGS = lib.optionals stdenv.isDarwin [
-    "-L${lib.getLib libcxxabi}/lib"
-  ];
+  propagatedBuildInputs = [ certifi ];
 
   dontUseCmakeConfigure = true;
 
@@ -78,12 +96,10 @@ buildPythonPackage rec {
     pytest-asyncio
   ];
 
-  pythonImportsCheck = [
-    "uamqp"
-  ];
+  pythonImportsCheck = [ "uamqp" ];
 
   meta = with lib; {
-    description = "An AMQP 1.0 client library for Python";
+    description = "AMQP 1.0 client library for Python";
     homepage = "https://github.com/Azure/azure-uamqp-python";
     license = licenses.mit;
     maintainers = with maintainers; [ maxwilson ];

@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, nose
-, pytestCheckHook
-, pythonOlder
-, six
-, sqlalchemy
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  nose,
+  pytestCheckHook,
+  pythonOlder,
+  six,
+  sqlalchemy,
 }:
 
 buildPythonPackage rec {
@@ -32,9 +33,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "sqlalchemy_mixins"
-  ];
+  pythonImportsCheck = [ "sqlalchemy_mixins" ];
 
   meta = with lib; {
     description = "Python mixins for SQLAlchemy ORM";

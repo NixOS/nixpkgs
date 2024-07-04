@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools
-, spacy
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  spacy,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -11,10 +12,13 @@ buildPythonPackage rec {
   version = "1.0.5";
   format = "setuptools";
 
-  src = fetchPypi {
-    pname = "spacy_lookups_data";
-    inherit version;
-    hash = "sha256-b5NcgfFFvcyE/GEV9kh2QoXH/z6P8kYpUEaBTpba1jw=";
+  disabled = pythonOlder "3.6";
+
+  src = fetchFromGitHub {
+    owner = "explosion";
+    repo = "spacy-lookups-data";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-6sKZ+GgCjLWYnV96nub4xEUFh1qpPQpbnoxyOVrvcD0=";
   };
 
   nativeCheckInputs = [

@@ -1,5 +1,8 @@
 { lib, stdenv, fetchurl, ocaml, findlib, ocamlbuild }:
 
+lib.throwIf (lib.versionAtLeast ocaml.version "5.0")
+  "ocamlify is not available for OCaml ${ocaml.version}"
+
 stdenv.mkDerivation rec {
   pname = "ocamlify";
   version = "0.0.2";

@@ -1,26 +1,25 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonRelaxDepsHook
-, setuptools-scm
-, python-vagrant
-, docker
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonRelaxDepsHook,
+  setuptools-scm,
+  python-vagrant,
+  docker,
 }:
 
 buildPythonPackage rec {
   pname = "molecule-plugins";
-  version = "23.5.0";
+  version = "23.5.3";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-8T6gR7hlDIkmBLgbdjgryAu0riXqULI/MOgf2dWAKv8=";
+    hash = "sha256-orFDfVMtc24/vG23pp7FM+IzSyEV/5JFoLJ3LtlzjSM=";
   };
 
   # reverse the dependency
-  pythonRemoveDeps = [
-    "molecule"
-  ];
+  pythonRemoveDeps = [ "molecule" ];
 
   nativeBuildInputs = [
     pythonRelaxDepsHook
@@ -28,12 +27,8 @@ buildPythonPackage rec {
   ];
 
   passthru.optional-dependencies = {
-    docker = [
-      docker
-    ];
-    vagrant = [
-      python-vagrant
-    ];
+    docker = [ docker ];
+    vagrant = [ python-vagrant ];
   };
 
   pythonImportsCheck = [ "molecule_plugins" ];

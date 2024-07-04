@@ -27,10 +27,11 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "A tool to exploit the hash length extension attack in various hashing algorithms";
+    description = "Tool to exploit the hash length extension attack in various hashing algorithms";
     homepage = "https://github.com/bwall/HashPump";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ t4ccer ];
     platforms = lib.platforms.linux;
+    mainProgram = "hashpump";
   };
 })

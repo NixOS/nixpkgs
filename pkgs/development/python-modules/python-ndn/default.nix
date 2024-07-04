@@ -1,17 +1,18 @@
-{ lib
-, aenum
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, lark
-, poetry-core
-, poetry-dynamic-versioning
-, pycryptodomex
-, pygtrie
-, pytestCheckHook
-, pythonRelaxDepsHook
-, pythonOlder
-, setuptools
+{
+  lib,
+  aenum,
+  aiohttp,
+  buildPythonPackage,
+  fetchFromGitHub,
+  lark,
+  poetry-core,
+  poetry-dynamic-versioning,
+  pycryptodomex,
+  pygtrie,
+  pytestCheckHook,
+  pythonRelaxDepsHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -23,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "named-data";
     repo = pname;
-    rev = "v${version}";
+    rev = "refs/tags/v${version}";
     hash = "sha256-ArTP4LQu7VNjI/N13gMTc1SDiNmW5l4GdLYOk8JEfKg=";
   };
 
@@ -44,21 +45,17 @@ buildPythonPackage rec {
     aiohttp
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonRelaxDeps = [
-    "lark"
-  ];
+  pythonRelaxDeps = [ "lark" ];
 
-  pythonImportChecks = [ "ndn" ];
+  pythonImportsCheck = [ "ndn" ];
 
   meta = with lib; {
-    description = "An NDN client library with AsyncIO support";
+    description = "NDN client library with AsyncIO support";
     homepage = "https://github.com/named-data/python-ndn";
     changelog = "https://github.com/named-data/python-ndn/blob/${src.rev}/CHANGELOG.rst";
     license = licenses.asl20;
-    maintainers = with maintainers; [ janik ];
+    maintainers = with maintainers; [ ];
   };
 }

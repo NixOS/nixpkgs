@@ -2,8 +2,11 @@
 , stdenv
 , callPackage
 , fetchFromGitHub
+, davix
 , cmake
 , cppunit
+, gtest
+, makeWrapper
 , pkg-config
 , curl
 , fuse
@@ -13,6 +16,7 @@
 , libxml2
 , openssl
 , readline
+, scitokens-cpp
 , systemd
 , voms
 , zlib
@@ -21,21 +25,23 @@
   # If not null, the builder will
   # move "$out/etc" to "$out/etc.orig" and symlink "$out/etc" to externalEtc.
 , externalEtc ? "/etc"
+, removeReferencesTo
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xrootd";
-  version = "5.5.5";
+  version = "5.6.6";
 
   src = fetchFromGitHub {
     owner = "xrootd";
     repo = "xrootd";
     rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-SLmxv8opN7z4V07S9kLGo8HG7Ql62iZQLtf3zGemwA8=";
+    hash = "sha256-vSZKTsDMY5bhfniFOQ11VA30gjfb4Y8tCC7JNjNw8Y0=";
   };
 
-  outputs = [ "bin" "out" "dev" "man" ];
+  outputs = [ "bin" "out" "dev" "man" ]
+  ++ lib.optional (externalEtc != null) "etc";
 
   passthru.fetchxrd = callPackage ./fetchxrd.nix { xrootd = finalAttrs.finalPackage; };
   passthru.tests =
@@ -55,10 +61,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
+    makeWrapper
     pkg-config
+    removeReferencesTo
   ];
 
   buildInputs = [
+    davix
     curl
     libkrb5
     libuuid
@@ -66,7 +75,11 @@ stdenv.mkDerivation (finalAttrs: {
     libxml2
     openssl
     readline
+    scitokens-cpp
     zlib
+  ]
+  ++ lib.optionals (!stdenv.isDarwin) [
+    # https://github.com/xrootd/xrootd/blob/5b5a1f6957def2816b77ec773c7e1bfb3f1cfc5b/cmake/XRootDFindLibs.cmake#L58
     fuse
   ]
   ++ lib.optionals stdenv.isLinux [
@@ -74,11 +87,16 @@ stdenv.mkDerivation (finalAttrs: {
     voms
   ]
   ++ lib.optionals enableTestRunner [
+    gtest
     cppunit
   ];
 
   preConfigure = ''
     patchShebangs genversion.sh
+    substituteInPlace cmake/XRootDConfig.cmake.in \
+      --replace-fail "@PACKAGE_CMAKE_INSTALL_" "@CMAKE_INSTALL_FULL_"
+  '' + lib.optionalString stdenv.isDarwin ''
+    sed -i cmake/XRootDOSDefs.cmake -e '/set( MacOSX TRUE )/ainclude( GNUInstallDirs )'
   '';
 
   # https://github.com/xrootd/xrootd/blob/master/packaging/rhel/xrootd.spec.in#L665-L675=
@@ -92,19 +110,37 @@ stdenv.mkDerivation (finalAttrs: {
     install -m 644 -t "$out/etc/xrootd/client.plugins.d" ../packaging/common/client-plugin.conf.example
     mkdir -p "$out/etc/logrotate.d"
     install -m 644 -T ../packaging/common/xrootd.logrotate "$out/etc/logrotate.d/xrootd"
+  ''
+  # Leaving those in bin/ leads to a cyclic reference between $dev and $bin
+  # This happens since https://github.com/xrootd/xrootd/commit/fe268eb622e2192d54a4230cea54c41660bd5788
+  # So far, this xrootd-config script does not seem necessary in $bin
+  + ''
+    moveToOutput "bin/xrootd-config" "$dev"
+    moveToOutput "bin/.xrootd-config-wrapped" "$dev"
   '' + lib.optionalString stdenv.isLinux ''
     mkdir -p "$out/lib/systemd/system"
     install -m 644 -t "$out/lib/systemd/system" ../packaging/common/*.service ../packaging/common/*.socket
   '';
 
-  cmakeFlags = lib.optionals enableTestRunner [
+  cmakeFlags = [
+    "-DXRootD_VERSION_STRING=${finalAttrs.version}"
+  ] ++ lib.optionals enableTestRunner [
+    "-DFORCE_ENABLED=TRUE"
+    "-DENABLE_DAVIX=TRUE"
+    "-DENABLE_FUSE=${if (!stdenv.isDarwin) then "TRUE" else "FALSE"}" # not supported
+    "-DENABLE_MACAROONS=OFF"
+    "-DENABLE_PYTHON=FALSE" # built separately
+    "-DENABLE_SCITOKENS=TRUE"
     "-DENABLE_TESTS=TRUE"
+    "-DENABLE_VOMS=${if stdenv.isLinux then "TRUE" else "FALSE"}"
   ];
 
   postFixup = lib.optionalString (externalEtc != null) ''
-    mv "$out"/etc{,.orig}
+    moveToOutput etc "$etc"
     ln -s ${lib.escapeShellArg externalEtc} "$out/etc"
   '';
+
+  dontPatchELF = true; # shrinking rpath will cause runtime failures in dlopen
 
   meta = with lib; {
     description = "High performance, scalable fault tolerant data access";

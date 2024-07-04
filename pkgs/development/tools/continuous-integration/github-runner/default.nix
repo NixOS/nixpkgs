@@ -1,5 +1,4 @@
-{ autoPatchelfHook
-, autoSignDarwinBinariesHook
+{ autoSignDarwinBinariesHook
 , buildDotnetModule
 , dotnetCorePackages
 , fetchFromGitHub
@@ -15,22 +14,21 @@
 , runtimeShell
   # List of Node.js runtimes the package should support
 , nodeRuntimes ? [ "node20" ]
-, nodejs_16
 , nodejs_20
 }:
 
 # Node.js runtimes supported by upstream
-assert builtins.all (x: builtins.elem x [ "node16" "node20" ]) nodeRuntimes;
+assert builtins.all (x: builtins.elem x [ "node20" ]) nodeRuntimes;
 
 buildDotnetModule rec {
   pname = "github-runner";
-  version = "2.310.2";
+  version = "2.317.0";
 
   src = fetchFromGitHub {
     owner = "actions";
     repo = "runner";
     rev = "v${version}";
-    hash = "sha256-cOHA4VjccIJmCgCxRrBFzBFnh4SGQ3LpcTvtGuogHQU=";
+    hash = "sha256-+VwEH4hmEjeYFWm7TOndD5SOJwsyPZEhKkCSyl7x8cE=";
     leaveDotGit = true;
     postFetch = ''
       git -C $out rev-parse --short HEAD > $out/.git-revision
@@ -81,6 +79,14 @@ buildDotnetModule rec {
       url = "https://github.com/actions/runner/commit/5ff0ce1.patch";
       hash = "sha256-2Vg3cKZK3cE/OcPDZkdN2Ro2WgvduYTTwvNGxwCfXas=";
     })
+  ] ++ lib.optionals (nodeRuntimes == [ "node20" ]) [
+    # If the package is built without Node 16, make Node 20 the default internal version
+    # https://github.com/actions/runner/pull/2844
+    (fetchpatch {
+      name = "internal-node-20.patch";
+      url = "https://github.com/actions/runner/commit/acdc6ed.patch";
+      hash = "sha256-3/6yhhJPr9OMWBFc5/NU/DRtn76aTYvjsjQo2u9ZqnU=";
+    })
   ];
 
   postPatch = ''
@@ -107,8 +113,6 @@ buildDotnetModule rec {
   nativeBuildInputs = [
     which
     git
-  ] ++ lib.optionals stdenv.isLinux [
-    autoPatchelfHook
   ] ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
     autoSignDarwinBinariesHook
   ];
@@ -152,6 +156,11 @@ buildDotnetModule rec {
       "UseExternalsRuntimeTrimmedPackage"
       "UseExternalsTrimmedPackage"
       "ValidateHash"
+    ]
+    ++ map (x: "GitHub.Runner.Common.Tests.Listener.SelfUpdaterV2L0.${x}") [
+      "TestSelfUpdateAsync_DownloadRetry"
+      "TestSelfUpdateAsync_ValidateHash"
+      "TestSelfUpdateAsync"
     ]
     ++ map (x: "GitHub.Runner.Common.Tests.Worker.ActionManagerL0.PrepareActions_${x}") [
       "CompositeActionWithActionfile_CompositeContainerNested"
@@ -202,8 +211,6 @@ buildDotnetModule rec {
 
   preCheck = ''
     mkdir -p _layout/externals
-  '' + lib.optionalString (lib.elem "node16" nodeRuntimes) ''
-    ln -s ${nodejs_16} _layout/externals/node16
   '' + lib.optionalString (lib.elem "node20" nodeRuntimes) ''
     ln -s ${nodejs_20} _layout/externals/node20
   '';
@@ -242,8 +249,6 @@ buildDotnetModule rec {
     # externals/node$version. As opposed to the official releases, we don't
     # link the Alpine Node flavors.
     mkdir -p $out/lib/externals
-  '' + lib.optionalString (lib.elem "node16" nodeRuntimes) ''
-    ln -s ${nodejs_16} $out/lib/externals/node16
   '' + lib.optionalString (lib.elem "node20" nodeRuntimes) ''
     ln -s ${nodejs_20} $out/lib/externals/node20
   '' + ''

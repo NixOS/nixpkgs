@@ -3,29 +3,30 @@
 , fetchFromGitHub
 , fetchYarnDeps
 , makeWrapper
+, prefetch-yarn-deps
+, fixup-yarn-lock
 , nodejs
 , yarn
-, yarn2nix-moretea
 , nixosTests
 }:
 
 stdenv.mkDerivation rec {
   pname = "outline";
-  version = "0.71.0";
+  version = "0.77.2";
 
   src = fetchFromGitHub {
     owner = "outline";
     repo = "outline";
     rev = "v${version}";
-    hash = "sha256-vwYq5b+cMYf/gnpCwLEpErYKqYw/RwcvyBjhp+5+bTY=";
+    hash = "sha256-Ri2qN7nR79Y1tsUsga/92nS7EuP/nqaUG2FiYJQNAr4=";
   };
 
-  nativeBuildInputs = [ makeWrapper yarn2nix-moretea.fixup_yarn_lock ];
+  nativeBuildInputs = [ makeWrapper prefetch-yarn-deps fixup-yarn-lock ];
   buildInputs = [ yarn nodejs ];
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = "${src}/yarn.lock";
-    hash = "sha256-j9iaxXfMlG9dT6fvYgPQg6Y0QvCRiBU1peO0YgsGHOY=";
+    hash = "sha256-wxXnvi58mBfAQiMSxhXWK7sYLvr8nfQ+u6kMYnRWI3s=";
   };
 
   configurePhase = ''
@@ -37,7 +38,7 @@ stdenv.mkDerivation rec {
     export NODE_OPTIONS=--openssl-legacy-provider
 
     yarn config --offline set yarn-offline-mirror $yarnOfflineCache
-    fixup_yarn_lock yarn.lock
+    fixup-yarn-lock yarn.lock
 
     yarn install --offline \
       --frozen-lockfile \
@@ -63,7 +64,8 @@ stdenv.mkDerivation rec {
     makeWrapper ${nodejs}/bin/node $out/bin/outline-server \
       --add-flags $build/server/index.js \
       --set NODE_ENV production \
-      --set NODE_PATH $node_modules
+      --set NODE_PATH $node_modules \
+      --prefix PATH : ${lib.makeBinPath [ nodejs ]} # required to run migrations
 
     runHook postInstall
   '';
@@ -73,7 +75,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "The fastest wiki and knowledge base for growing teams. Beautiful, feature rich, and markdown compatible";
+    description = "Fastest wiki and knowledge base for growing teams. Beautiful, feature rich, and markdown compatible";
     homepage = "https://www.getoutline.com/";
     changelog = "https://github.com/outline/outline/releases";
     license = licenses.bsl11;

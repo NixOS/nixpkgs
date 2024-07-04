@@ -9,9 +9,10 @@
 stdenvNoCC.mkDerivation (finalAttrs: {
   inherit pname version meta;
 
-  src = fetchurl {
-    url = "https://downloads.realvnc.com/download/file/viewer.files/VNC-Viewer-${finalAttrs.version}-MacOSX-universal.dmg";
-    sha256 = "0k72fdnx1zmyi9z5n3lazc7s70gcddxq0s73akp0al0y9hzq9prh";
+  src = fetchurl rec {
+      name = "VNC-Viewer-${finalAttrs.version}-MacOSX-universal.dmg";
+      url = "https://downloads.realvnc.com/download/file/viewer.files/${name}";
+      sha256 = "0k72fdnx1zmyi9z5n3lazc7s70gcddxq0s73akp0al0y9hzq9prh";
   };
   sourceRoot = ".";
 

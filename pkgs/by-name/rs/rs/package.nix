@@ -16,6 +16,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
+  patches = [
+    # add an implementation of reallocarray() from openbsd (not available on darwin)
+    ./macos-reallocarray.patch
+  ];
+
   buildInputs = [ libbsd ];
 
   buildPhase = ''
@@ -38,6 +43,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "http://www.mirbsd.org/htman/i386/man1/rs.htm";
     description = "Reshape a data array from standard input";
+    mainProgram = "rs";
     longDescription = ''
       rs reads the standard input, interpreting each line as a row of blank-
       separated entries in an array, transforms the array according to the op-
@@ -62,5 +68,6 @@ stdenv.mkDerivation rec {
     license = licenses.bsd3;
     maintainers = with maintainers; [ AndersonTorres ];
     platforms = platforms.unix;
+    broken = stdenv.isx86_64 && stdenv.isDarwin; # missing strtonum()
   };
 }

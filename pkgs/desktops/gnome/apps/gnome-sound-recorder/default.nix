@@ -4,7 +4,7 @@
 , pkg-config
 , gettext
 , gobject-introspection
-, wrapGAppsHook
+, wrapGAppsHook4
 , gjs
 , glib
 , gtk4
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     gobject-introspection
-    wrapGAppsHook
+    wrapGAppsHook4
     python3
     desktop-file-utils
   ];
@@ -53,6 +53,8 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     chmod +x build-aux/meson_post_install.py
+    substituteInPlace build-aux/meson_post_install.py \
+      --replace-fail 'gtk-update-icon-cache' 'gtk4-update-icon-cache'
     patchShebangs build-aux/meson_post_install.py
   '';
 
@@ -64,8 +66,9 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "A simple and modern sound recorder";
-    homepage = "https://wiki.gnome.org/Apps/SoundRecorder";
+    description = "Simple and modern sound recorder";
+    mainProgram = "gnome-sound-recorder";
+    homepage = "https://gitlab.gnome.org/World/vocalis";
     license = licenses.gpl2Plus;
     maintainers = teams.gnome.members;
     platforms = platforms.linux;

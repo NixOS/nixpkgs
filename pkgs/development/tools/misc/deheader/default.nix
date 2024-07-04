@@ -51,6 +51,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Tool to find and optionally remove unneeded includes in C or C++ source files";
+    mainProgram = "deheader";
     longDescription = ''
       This tool takes a list of C or C++ sourcefiles and generates a report
       on which #includes can be omitted from them -- the test, for each foo.c

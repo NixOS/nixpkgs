@@ -4,16 +4,16 @@
 , writeShellScript, curl, nix-update
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
 
   pname = "steam-runtime";
   # from https://repo.steampowered.com/steamrt-images-scout/snapshots/latest-steam-client-general-availability/VERSION.txt
-  version = "0.20220601.1";
+  version = "0.20240415.84615";
 
   src = fetchurl {
-    url = "https://repo.steampowered.com/steamrt-images-scout/snapshots/${version}/steam-runtime.tar.xz";
-    sha256 = "sha256-uYauNtbUlvrnATGks7hWy1zt4Y7AEeADrCr1eVylPbY=";
-    name = "scout-runtime-${version}.tar.gz";
+    url = "https://repo.steampowered.com/steamrt-images-scout/snapshots/${finalAttrs.version}/steam-runtime.tar.xz";
+    hash = "sha256-C8foNnIVA+O4YwuCrIf9N6Lr/GlApPVgZsYgi+3OZUE=";
+    name = "scout-runtime-${finalAttrs.version}.tar.gz";
   };
 
   buildCommand = ''
@@ -24,14 +24,14 @@ stdenv.mkDerivation rec {
   passthru = {
     updateScript = writeShellScript "update.sh" ''
       version=$(${curl}/bin/curl https://repo.steampowered.com/steamrt-images-scout/snapshots/latest-steam-client-general-availability/VERSION.txt)
-      ${nix-update}/bin/nix-update --version "$version" steamPackages.steam-runtime
+      ${lib.getExe nix-update} --version "$version" steamPackages.steam-runtime
     '';
   };
 
-  meta = with lib; {
-    description = "The official runtime used by Steam";
+  meta = {
+    description = "Official runtime used by Steam";
     homepage = "https://github.com/ValveSoftware/steam-runtime";
-    license = licenses.unfreeRedistributable; # Includes NVIDIA CG toolkit
-    maintainers = with maintainers; [ hrdinka abbradar ];
+    license = lib.licenses.unfreeRedistributable; # Includes NVIDIA CG toolkit
+    maintainers = with lib.maintainers; [ hrdinka abbradar ];
   };
-}
+})

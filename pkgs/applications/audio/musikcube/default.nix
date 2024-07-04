@@ -2,7 +2,6 @@
 , cmake
 , curl
 , fetchFromGitHub
-, fetchpatch
 , ffmpeg
 , gnutls
 , lame
@@ -88,7 +87,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Terminal-based music player, library, and streaming audio server";
     homepage = "https://musikcube.com/";
-    maintainers = with lib.maintainers; [ aanderse srapenne afh ];
+    maintainers = with lib.maintainers; [ aanderse afh ];
     license = lib.licenses.bsd3;
     platforms = lib.platforms.all;
   };

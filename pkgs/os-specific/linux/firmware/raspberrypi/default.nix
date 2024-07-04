@@ -3,13 +3,13 @@
 stdenvNoCC.mkDerivation rec {
   # NOTE: this should be updated with linux_rpi
   pname = "raspberrypi-firmware";
-  version = "1.20230405";
+  version = "1.20240529";
 
   src = fetchFromGitHub {
     owner = "raspberrypi";
     repo = "firmware";
     rev = version;
-    hash = "sha256-UtUd1MbsrDFxd/1C3eOAMDKPZMx+kSMFYOJP+Kc6IU8=";
+    hash = "sha256-KsCo7ZG6vKstxRyFljZtbQvnDSqiAPdUza32xTY/tlA=";
   };
 
   installPhase = ''

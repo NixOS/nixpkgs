@@ -11,33 +11,33 @@ in
 {
   options = {
     services.polaris = {
-      enable = mkEnableOption (lib.mdDoc "Polaris Music Server");
+      enable = mkEnableOption "Polaris Music Server";
 
-      package = mkPackageOptionMD pkgs "polaris" { };
+      package = mkPackageOption pkgs "polaris" { };
 
       user = mkOption {
         type = types.str;
         default = "polaris";
-        description = lib.mdDoc "User account under which Polaris runs.";
+        description = "User account under which Polaris runs.";
       };
 
       group = mkOption {
         type = types.str;
         default = "polaris";
-        description = lib.mdDoc "Group under which Polaris is run.";
+        description = "Group under which Polaris is run.";
       };
 
       extraGroups = mkOption {
         type = types.listOf types.str;
         default = [];
-        description = lib.mdDoc "Polaris' auxiliary groups.";
+        description = "Polaris' auxiliary groups.";
         example = literalExpression ''["media" "music"]'';
       };
 
       port = mkOption {
         type = types.port;
         default = 5050;
-        description = lib.mdDoc ''
+        description = ''
           The port which the Polaris REST api and web UI should listen to.
           Note: polaris is hardcoded to listen to the hostname "0.0.0.0".
         '';
@@ -46,7 +46,7 @@ in
       settings = mkOption {
         type = settingsFormat.type;
         default = {};
-        description = lib.mdDoc ''
+        description = ''
           Contents for the TOML Polaris config, applied each start.
           Although poorly documented, an example may be found here:
           [test-config.toml](https://github.com/agersant/polaris/blob/374d0ca56fc0a466d797a4b252e2078607476797/test-data/config.toml)
@@ -73,7 +73,7 @@ in
       openFirewall = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Open the configured port in the firewall.
         '';
       };

@@ -1,17 +1,18 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, ifaddr
-, poetry-core
-, pythonOlder
-, requests
-, six
-, websocket-client
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  ifaddr,
+  poetry-core,
+  pythonOlder,
+  requests,
+  six,
+  websocket-client,
 }:
 
 buildPythonPackage rec {
   pname = "roonapi";
-  version = "0.1.4";
+  version = "0.1.6";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -20,12 +21,10 @@ buildPythonPackage rec {
     owner = "pavoni";
     repo = "pyroon";
     rev = version;
-    hash = "sha256-TXIKa5DB5+511fQuHAQwPWqw7vQPP+s1X3U7BgEfzzE=";
+    hash = "sha256-6wQsaZ50J2xIPXzICglg5pf8U0r4tL8iqcbdwjZadwU=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     ifaddr
@@ -37,9 +36,7 @@ buildPythonPackage rec {
   # Tests require access to the Roon API
   doCheck = false;
 
-  pythonImportsCheck = [
-    "roonapi"
-  ];
+  pythonImportsCheck = [ "roonapi" ];
 
   meta = with lib; {
     description = "Python library to interface with the Roon API";

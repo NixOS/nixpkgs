@@ -2,7 +2,7 @@
 
 let
   pname = "joplin-desktop";
-  version = "2.12.18";
+  version = "2.14.17";
 
   inherit (stdenv.hostPlatform) system;
   throwSystem = throw "Unsupported system: ${system}";
@@ -16,9 +16,9 @@ let
   src = fetchurl {
     url = "https://github.com/laurent22/joplin/releases/download/v${version}/Joplin-${version}${suffix}";
     sha256 = {
-      x86_64-linux = "1fwcqgqni7d9x0prdy3p8ccc5lzgn57rhph4498vs1q40kyq8823";
-      x86_64-darwin = "sha256-atd7nkefLvilTq39nTLbXQhm1zzBCHOLL7MRJwlTSMk=";
-      aarch64-darwin = "sha256-xiWXD+ULSVJ80uruYz0uRFkDRT1QOUd6FSWDKK9yLMc=";
+      x86_64-linux = "sha256-u4wEchyljurmwVZsRnmUBITZUR6SxDxyGczZjXNsJkg=";
+      x86_64-darwin = "sha256-KjNwAnJZGX/DvHDPw15vGlSbJ47s6YT59EalARt1mx4=";
+      aarch64-darwin = "sha256-OYpsHPI+7riMVNAp2JpBlmdFdJUSNqNvBmeYHDw6yzY=";
     }.${system} or throwSystem;
   };
 
@@ -27,7 +27,8 @@ let
   };
 
   meta = with lib; {
-    description = "An open source note taking and to-do application with synchronisation capabilities";
+    description = "Open source note taking and to-do application with synchronisation capabilities";
+    mainProgram = "joplin-desktop";
     longDescription = ''
       Joplin is a free, open source note taking and to-do application, which can
       handle a large number of notes organised into notebooks. The notes are
@@ -48,10 +49,7 @@ let
       export LC_ALL=C.UTF-8
     '';
 
-    multiArch = false; # no 32bit needed
-    extraPkgs = appimageTools.defaultFhsEnvArgs.multiPkgs;
     extraInstallCommands = ''
-      mv $out/bin/{${pname}-${version},${pname}}
       source "${makeWrapper}/nix-support/setup-hook"
       wrapProgram $out/bin/${pname} \
         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform=wayland --enable-features=WaylandWindowDecorations}}"

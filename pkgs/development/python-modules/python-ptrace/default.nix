@@ -1,26 +1,29 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, six
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "python-ptrace";
-  version = "0.9.8";
+  version = "0.9.9";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1e3bc6223f626aaacde8a7979732691c11b13012e702fee9ae16c87f71633eaa";
+    hash = "sha256-Vrv+9E6vOne+SBOMyldnzfRx6CeP4Umfm3LxUZB/Jc8=";
   };
+
+  nativeBuildInputs = [ setuptools ];
 
   # requires distorm, which is optionally
   doCheck = false;
 
-  propagatedBuildInputs = [ six ];
-
   meta = with lib; {
     description = "Python binding of ptrace library";
     homepage = "https://github.com/vstinner/python-ptrace";
+    changelog = "https://github.com/vstinner/python-ptrace/blob/${version}/doc/changelog.rst";
     license = licenses.gpl2;
     maintainers = with maintainers; [ mic92 ];
   };

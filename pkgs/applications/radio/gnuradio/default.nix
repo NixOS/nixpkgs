@@ -1,6 +1,5 @@
 { lib, stdenv
 , fetchFromGitHub
-, fetchpatch
 , cmake
 # Remove gcc and python references
 , removeReferencesTo
@@ -45,11 +44,11 @@
 # If one wishes to use a different src or name for a very custom build
 , overrideSrc ? {}
 , pname ? "gnuradio"
-, version ? "3.10.7.0"
+, version ? "3.10.10.0"
 }:
 
 let
-  sourceSha256 = "sha256-7fIQMcx90wI4mAZmR26/rkBKPKhNxgu3oWpJTV3C+Ek=";
+  sourceSha256 = "sha256-pEVWhXDjOevrduDbZQbiDbODZY8PpsGY4O8yxrwlCcs=";
   featuresInfo = {
     # Needed always
     basic = {
@@ -157,6 +156,7 @@ let
       pythonRuntime = with python.pkgs; [
         scipy
         pyqtgraph
+        pyqt5
       ];
     };
     gr-analog = {
@@ -291,12 +291,6 @@ stdenv.mkDerivation (finalAttrs: (shared // {
   patches = [
     # Not accepted upstream, see https://github.com/gnuradio/gnuradio/pull/5227
     ./modtool-newmod-permissions.patch
-    # https://github.com/gnuradio/gnuradio/pull/6808
-    (fetchpatch {
-      name = "gnuradio-fmt10.1.patch";
-      url = "https://github.com/gnuradio/gnuradio/commit/9357c17721a27cc0aae3fe809af140c84e492f37.patch";
-      hash = "sha256-w3b22PTqoORyYQ3RKRG+2htQWbITzQiOdSDyuejUtHQ=";
-    })
   ];
   passthru = shared.passthru // {
     # Deps that are potentially overridden and are used inside GR plugins - the same version must

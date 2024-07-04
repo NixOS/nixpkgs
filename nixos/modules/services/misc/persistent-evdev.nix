@@ -11,12 +11,12 @@ let
 in
 {
   options.services.persistent-evdev = {
-    enable = lib.mkEnableOption (lib.mdDoc "virtual input devices that persist even if the backing device is hotplugged");
+    enable = lib.mkEnableOption "virtual input devices that persist even if the backing device is hotplugged";
 
     devices = lib.mkOption {
       default = {};
       type = with lib.types; attrsOf str;
-      description = lib.mdDoc ''
+      description = ''
         A set of virtual proxy device labels with backing physical device ids.
 
         Physical devices should already exist in {file}`/dev/input/by-id/`.

@@ -50,7 +50,7 @@ in
     boot.initrd.network.enable = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         Add network connectivity support to initrd. The network may be
         configured using the `ip` kernel parameter,
         as described in [the kernel documentation](https://www.kernel.org/doc/Documentation/filesystems/nfs/nfsroot.txt).
@@ -69,7 +69,7 @@ in
       type = types.bool;
       default = !config.boot.initrd.systemd.enable;
       defaultText = "!config.boot.initrd.systemd.enable";
-      description = lib.mdDoc ''
+      description = ''
         Whether to clear the configuration of the interfaces that were set up in
         the initrd right before stage 2 takes over. Stage 2 will do the regular network
         configuration based on the NixOS networking options.
@@ -80,10 +80,10 @@ in
     };
 
     boot.initrd.network.udhcpc.enable = mkOption {
-      default = config.networking.useDHCP;
+      default = config.networking.useDHCP && !config.boot.initrd.systemd.enable;
       defaultText = "networking.useDHCP";
       type = types.bool;
-      description = lib.mdDoc ''
+      description = ''
         Enables the udhcpc service during stage 1 of the boot process. This
         defaults to {option}`networking.useDHCP`. Therefore, this useful if
         useDHCP is off but the initramfs should do dhcp.
@@ -93,7 +93,7 @@ in
     boot.initrd.network.udhcpc.extraArgs = mkOption {
       default = [];
       type = types.listOf types.str;
-      description = lib.mdDoc ''
+      description = ''
         Additional command-line arguments passed verbatim to
         udhcpc if {option}`boot.initrd.network.enable` and
         {option}`boot.initrd.network.udhcpc.enable` are enabled.
@@ -103,7 +103,7 @@ in
     boot.initrd.network.postCommands = mkOption {
       default = "";
       type = types.lines;
-      description = lib.mdDoc ''
+      description = ''
         Shell commands to be executed after stage 1 of the
         boot has initialised the network.
       '';
@@ -116,11 +116,11 @@ in
 
     boot.initrd.kernelModules = [ "af_packet" ];
 
-    boot.initrd.extraUtilsCommands = ''
+    boot.initrd.extraUtilsCommands = mkIf (!config.boot.initrd.systemd.enable) ''
       copy_bin_and_libs ${pkgs.klibc}/lib/klibc/bin.static/ipconfig
     '';
 
-    boot.initrd.preLVMCommands = mkBefore (
+    boot.initrd.preLVMCommands = mkIf (!config.boot.initrd.systemd.enable) (mkBefore (
       # Search for interface definitions in command line.
       ''
         ifaces=""
@@ -138,7 +138,7 @@ in
         # Bring up all interfaces.
         for iface in ${dhcpIfShellExpr}; do
           echo "bringing up network interface $iface..."
-          ip link set "$iface" up && ifaces="$ifaces $iface"
+          ip link set dev "$iface" up && ifaces="$ifaces $iface"
         done
 
         # Acquire DHCP leases.
@@ -148,12 +148,12 @@ in
         done
       ''
 
-      + cfg.postCommands);
+      + cfg.postCommands));
 
-    boot.initrd.postMountCommands = mkIf cfg.flushBeforeStage2 ''
+    boot.initrd.postMountCommands = mkIf (cfg.flushBeforeStage2 && !config.boot.initrd.systemd.enable) ''
       for iface in $ifaces; do
-        ip address flush "$iface"
-        ip link set "$iface" down
+        ip address flush dev "$iface"
+        ip link set dev "$iface" down
       done
     '';
 

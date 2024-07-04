@@ -2,6 +2,7 @@
 , stdenv
 , callPackage
 , fetchFromGitHub
+, fetchpatch
 
 , useMinimalFeatures ? false
 , useTiledb ? (!useMinimalFeatures) && !(stdenv.isDarwin && stdenv.isx86_64)
@@ -14,7 +15,9 @@
 , useHDF ? (!useMinimalFeatures)
 , useNetCDF ? (!useMinimalFeatures)
 , useArmadillo ? (!useMinimalFeatures)
+, useJava ? (!useMinimalFeatures)
 
+, ant
 , bison
 , cmake
 , gtest
@@ -36,6 +39,7 @@
 , libgeotiff
 , geos
 , giflib
+, jdk
 , libheif
 , dav1d
 , libaom
@@ -75,15 +79,23 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "gdal";
-  version = "3.7.2";
+  pname = "gdal" + lib.optionalString useMinimalFeatures "-minimal";
+  version = "3.9.0";
 
   src = fetchFromGitHub {
     owner = "OSGeo";
     repo = "gdal";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-/7Egbg4Cg5Gqsy+CEMVbs2NCWbdJteDNWelBsrQSUj4=";
+    hash = "sha256-xEekgF9GzsPYkwk7Nny9b1DMLTxBqTSdudYxaz4jl/c=";
   };
+
+  patches = [
+    # HDF5: add support for libhdf5 >= 1.14.4.2 when built with Float16
+    (fetchpatch {
+      url = "https://github.com/OSGeo/gdal/commit/16ade8253f26200246abb5ab24d17e18216e7a11.patch";
+      sha256 = "sha256-N6YqfcOUWeaJXVE9RUo1dzulxqIY5Q/UygPnZHau3Lc=";
+    })
+  ];
 
   nativeBuildInputs = [
     bison
@@ -94,7 +106,7 @@ stdenv.mkDerivation (finalAttrs: {
     python3.pkgs.setuptools
     python3.pkgs.wrapPython
     swig
-  ];
+  ] ++ lib.optionals useJava [ ant jdk ];
 
   cmakeFlags = [
     "-DGDAL_USE_INTERNAL_LIBS=OFF"
@@ -110,6 +122,10 @@ stdenv.mkDerivation (finalAttrs: {
     "-DCMAKE_BUILD_WITH_INSTALL_NAME_DIR=ON"
   ] ++ lib.optionals (!useTiledb) [
     "-DGDAL_USE_TILEDB=OFF"
+  ] ++ lib.optionals (!useJava) [
+    # This is not strictly needed as the Java bindings wouldn't build anyway if
+    # ant/jdk were not available.
+    "-DBUILD_JAVA_BINDINGS=OFF"
   ];
 
   buildInputs =
@@ -144,7 +160,8 @@ stdenv.mkDerivation (finalAttrs: {
         openexr
         xercesc
       ] ++ arrowDeps);
-    in [
+    in
+    [
       c-blosc
       brunsli
       cfitsio
@@ -178,20 +195,25 @@ stdenv.mkDerivation (finalAttrs: {
       python3
       python3.pkgs.numpy
     ] ++ tileDbDeps
-      ++ libHeifDeps
-      ++ libJxlDeps
-      ++ mysqlDeps
-      ++ postgresDeps
-      ++ popplerDeps
-      ++ arrowDeps
-      ++ hdfDeps
-      ++ netCdfDeps
-      ++ armadilloDeps
-      ++ darwinDeps
-      ++ nonDarwinDeps;
+    ++ libHeifDeps
+    ++ libJxlDeps
+    ++ mysqlDeps
+    ++ postgresDeps
+    ++ popplerDeps
+    ++ arrowDeps
+    ++ hdfDeps
+    ++ netCdfDeps
+    ++ armadilloDeps
+    ++ darwinDeps
+    ++ nonDarwinDeps;
 
+  pythonPath = [ python3.pkgs.numpy ];
   postInstall = ''
-    wrapPythonPrograms
+    wrapPythonProgramsIn "$out/bin" "$out $pythonPath"
+  '' + lib.optionalString useJava ''
+    cd $out/lib
+    ln -s ./jni/libgdalalljni${stdenv.hostPlatform.extensions.sharedLibrary}
+    cd -
   '';
 
   enableParallelBuilding = true;
@@ -207,14 +229,18 @@ stdenv.mkDerivation (finalAttrs: {
     export GDAL_DOWNLOAD_TEST_DATA=OFF
     # allows to skip tests that fail because of file handle leak
     # the issue was not investigated
-    # https://github.com/OSGeo/gdal/blob/v3.7.0/autotest/gdrivers/bag.py#L61
-    export BUILD_NAME=fedora
+    # https://github.com/OSGeo/gdal/blob/v3.9.0/autotest/gdrivers/bag.py#L54
+    export CI=1
   '';
   nativeInstallCheckInputs = with python3.pkgs; [
     pytestCheckHook
+    pytest-benchmark
     pytest-env
     filelock
     lxml
+  ];
+  pytestFlagsArray = [
+    "--benchmark-disable"
   ];
   disabledTestPaths = [
     # tests that attempt to make network requests
@@ -233,6 +259,12 @@ stdenv.mkDerivation (finalAttrs: {
     "test_sentinel2_zipped"
     # tries to call unwrapped executable
     "test_SetPROJAuxDbPaths"
+    # fixed and renamed in 3.8.0RC1
+    # https://github.com/OSGeo/gdal/commit/c8b471ca1e6318866ff668d2b57bb6f076e3ae29
+    "test_visoss_6"
+    # failing with PROJ 9.3.1
+    # https://github.com/OSGeo/gdal/issues/8908
+    "test_osr_esri_28"
   ] ++ lib.optionals (!stdenv.isx86_64) [
     # likely precision-related expecting x87 behaviour
     "test_jp2openjpeg_22"
@@ -248,9 +280,7 @@ stdenv.mkDerivation (finalAttrs: {
     popd # autotest
   '';
 
-  passthru.tests = {
-    gdal = callPackage ./tests.nix { gdal = finalAttrs.finalPackage; };
-  };
+  passthru.tests = callPackage ./tests.nix { gdal = finalAttrs.finalPackage; };
 
   __darwinAllowLocalNetworking = true;
 

@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "http://hsqldb.org";
-    description = "A relational, embedable database management system written in Java and a set of related tools";
+    description = "Relational, embedable database management system written in Java and a set of related tools";
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     platforms = platforms.unix;
     license = licenses.bsd3;

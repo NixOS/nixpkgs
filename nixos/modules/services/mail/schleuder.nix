@@ -18,10 +18,10 @@ let
 in
 {
   options.services.schleuder = {
-    enable = lib.mkEnableOption (lib.mdDoc "Schleuder secure remailer");
-    enablePostfix = lib.mkEnableOption (lib.mdDoc "automatic postfix integration") // { default = true; };
+    enable = lib.mkEnableOption "Schleuder secure remailer";
+    enablePostfix = lib.mkEnableOption "automatic postfix integration" // { default = true; };
     lists = lib.mkOption {
-      description = lib.mdDoc ''
+      description = ''
         List of list addresses that should be handled by Schleuder.
 
         Note that this is only handled by the postfix integration, and
@@ -42,7 +42,7 @@ in
       };
     */
     settings = lib.mkOption {
-      description = lib.mdDoc ''
+      description = ''
         Settings for schleuder.yml.
 
         Check the [example configuration](https://0xacab.org/schleuder/schleuder/blob/master/etc/schleuder.yml) for possible values.
@@ -51,7 +51,7 @@ in
         freeformType = settingsFormat.type;
         options.keyserver = lib.mkOption {
           type = lib.types.str;
-          description = lib.mdDoc ''
+          description = ''
             Key server from which to fetch and update keys.
 
             Note that NixOS uses a different default from upstream, since the upstream default sks-keyservers.net is deprecated.
@@ -62,12 +62,12 @@ in
       default = { };
     };
     extraSettingsFile = lib.mkOption {
-      description = lib.mdDoc "YAML file to merge into the schleuder config at runtime. This can be used for secrets such as API keys.";
+      description = "YAML file to merge into the schleuder config at runtime. This can be used for secrets such as API keys.";
       type = lib.types.nullOr lib.types.path;
       default = null;
     };
     listDefaults = lib.mkOption {
-      description = lib.mdDoc ''
+      description = ''
         Default settings for lists (list-defaults.yml).
 
         Check the [example configuration](https://0xacab.org/schleuder/schleuder/-/blob/master/etc/list-defaults.yml) for possible values.

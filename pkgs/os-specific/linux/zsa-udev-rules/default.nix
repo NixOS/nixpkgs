@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "zsa-udev-rules";
-  version = "unstable-2022-10-26";
+  version = "unstable-2023-11-30";
 
   src = fetchFromGitHub {
     owner = "zsa";
     repo = "wally";
-    rev = "623a50d0e0b90486e42ad8ad42b0a7313f7a37b3";
-    hash = "sha256-meR2V7T4hrJFXFPLENHoAgmOILxxynDBk0BLqzsAZvQ=";
+    rev = "a6648f6b543b703e3902faf5c08e997e0d58c909";
+    hash = "sha256-j9n3VoX+UngX12DF28rtNh+oy80Th1BINPQqk053lvE=";
   };
 
   # Only copies udevs rules

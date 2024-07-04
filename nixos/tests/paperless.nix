@@ -17,12 +17,13 @@ import ./make-test-python.nix ({ lib, ... }: {
         ensureDatabases = [ "paperless" ];
         ensureUsers = [
           { name = config.services.paperless.user;
-            ensurePermissions = { "DATABASE \"paperless\"" = "ALL PRIVILEGES"; };
+            ensureDBOwnership = true;
           }
         ];
       };
-      services.paperless.extraConfig = {
+      services.paperless.settings = {
         PAPERLESS_DBHOST = "/run/postgresql";
+        PAPERLESS_OCR_LANGUAGE = "deu";
       };
     };
   }; in self;

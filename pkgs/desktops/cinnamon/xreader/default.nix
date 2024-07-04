@@ -1,13 +1,13 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, fetchpatch
 , glib
 , gobject-introspection
 , intltool
 , shared-mime-info
 , gtk3
-, wrapGAppsHook
+, wrapGAppsHook3
+, libarchive
 , libxml2
 , xapp
 , meson
@@ -27,27 +27,18 @@
 
 stdenv.mkDerivation rec {
   pname = "xreader";
-  version = "3.8.2";
+  version = "4.2.1";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    sha256 = "sha256-2zqlfoN4L+V237cQ3PVh49YaZfNKGiLqh2JIiGJE340=";
+    sha256 = "sha256-+q0fZA72m5T5ZB6bYWPWdQGxLpwjNp5Vak2TzaGwGWQ=";
   };
-
-  patches = [
-    # Fix build with meson 1.2, can be dropped on next bump
-    # https://github.com/linuxmint/xreader/issues/612
-    (fetchpatch {
-      url = "https://github.com/linuxmint/xreader/commit/06b18a884c8cf3257ea1f053a82784da078999ed.patch";
-      sha256 = "sha256-+LXEW3OkfhkIcbxtvfQYjdaC18O8imOx22t91ad/XZw=";
-    })
-  ];
 
   nativeBuildInputs = [
     shared-mime-info
-    wrapGAppsHook
+    wrapGAppsHook3
     meson
     ninja
     pkg-config
@@ -64,6 +55,7 @@ stdenv.mkDerivation rec {
     gtk3
     xapp
     cairo
+    libarchive
     libxml2
     libsecret
     poppler
@@ -75,7 +67,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A document viewer capable of displaying multiple and single page
+    description = "Document viewer capable of displaying multiple and single page
 document formats like PDF and Postscript";
     homepage = "https://github.com/linuxmint/xreader";
     license = licenses.gpl2Plus;

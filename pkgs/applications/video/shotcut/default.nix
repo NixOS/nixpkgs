@@ -1,6 +1,8 @@
 { lib
 , fetchFromGitHub
-, mkDerivation
+, stdenv
+, wrapQtAppsHook
+, substituteAll
 , SDL2
 , frei0r
 , ladspaPlugins
@@ -8,70 +10,61 @@
 , mlt
 , jack1
 , pkg-config
+, fftw
 , qtbase
-, qtmultimedia
-, qtx11extras
-, qtwebsockets
-, qtquickcontrols2
-, qtgraphicaleffects
-, qmake
 , qttools
+, qtmultimedia
+, qtcharts
+, cmake
+, Cocoa
 , gitUpdater
 }:
-
-assert lib.versionAtLeast mlt.version "6.24.0";
-
-mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "shotcut";
-  version = "21.09.20";
+  version = "24.06.26";
 
   src = fetchFromGitHub {
     owner = "mltframework";
     repo = "shotcut";
-    rev = "v${version}";
-    sha256 = "1y46n5gmlayfl46l0vhg5g5dbbc0sg909mxb68sia0clkaas8xrh";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-9eQF3s4BAUK81/94z7cMkd2NWdNLVMraP08qsDmuAI8=";
   };
 
-  nativeBuildInputs = [ pkg-config qmake ];
+  nativeBuildInputs = [ pkg-config cmake wrapQtAppsHook ];
   buildInputs = [
     SDL2
     frei0r
     ladspaPlugins
     gettext
     mlt
+    fftw
     qtbase
+    qttools
     qtmultimedia
-    qtx11extras
-    qtwebsockets
-    qtquickcontrols2
-    qtgraphicaleffects
+    qtcharts
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    Cocoa
   ];
 
-  env.NIX_CFLAGS_COMPILE = "-I${mlt.dev}/include/mlt++ -I${mlt.dev}/include/mlt";
-  qmakeFlags = [
-    "QMAKE_LRELEASE=${lib.getDev qttools}/bin/lrelease"
-    "SHOTCUT_VERSION=${version}"
-    "DEFINES+=SHOTCUT_NOUPGRADE"
+  env.NIX_CFLAGS_COMPILE = "-DSHOTCUT_NOUPGRADE";
+  cmakeFlags = [
+    "-DSHOTCUT_VERSION=${finalAttrs.version}"
   ];
 
-  prePatch = ''
-    sed 's_shotcutPath, "melt[^"]*"_"${mlt}/bin/melt"_' -i src/jobs/meltjob.cpp
-    sed 's_shotcutPath, "ffmpeg"_"${mlt.ffmpeg}/bin/ffmpeg"_' -i src/jobs/ffmpegjob.cpp
-    sed 's_qApp->applicationDirPath(), "ffmpeg"_"${mlt.ffmpeg}/bin/ffmpeg"_' -i src/docks/encodedock.cpp
-    NICE=$(type -P nice)
-    sed "s_/usr/bin/nice_''${NICE}_" -i src/jobs/meltjob.cpp src/jobs/ffmpegjob.cpp
-  '';
+  patches = [
+    (substituteAll { inherit mlt; src = ./fix-mlt-ffmpeg-path.patch; })
+  ];
 
   qtWrapperArgs = [
-    "--prefix FREI0R_PATH : ${frei0r}/lib/frei0r-1"
-    "--prefix LADSPA_PATH : ${ladspaPlugins}/lib/ladspa"
-    "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ jack1 SDL2 ]}"
-    "--prefix PATH : ${mlt}/bin"
+    "--set FREI0R_PATH ${frei0r}/lib/frei0r-1"
+    "--set LADSPA_PATH ${ladspaPlugins}/lib/ladspa"
+    "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath ([SDL2] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [jack1])}"
   ];
 
-  postInstall = ''
-    mkdir -p $out/share/shotcut
-    cp -r src/qml $out/share/shotcut/
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    mkdir $out/Applications $out/bin
+    mv $out/Shotcut.app $out/Applications/Shotcut.app
+    ln -s $out/Applications/Shotcut.app/Contents/MacOS/Shotcut $out/bin/shotcut
   '';
 
   passthru.updateScript = gitUpdater {
@@ -79,7 +72,7 @@ mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "A free, open source, cross-platform video editor";
+    description = "Free, open source, cross-platform video editor";
     longDescription = ''
       An official binary for Shotcut, which includes all the
       dependencies pinned to specific versions, is provided on
@@ -92,6 +85,7 @@ mkDerivation rec {
     homepage = "https://shotcut.org";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ goibhniu woffs peti ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
+    mainProgram = "shotcut";
   };
-}
+})

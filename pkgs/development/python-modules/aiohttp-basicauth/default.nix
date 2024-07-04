@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, aiohttp
-, pytestCheckHook
-, pytest-asyncio
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  aiohttp,
+  pytestCheckHook,
+  pytest-asyncio,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -12,7 +13,7 @@ buildPythonPackage rec {
   version = "1.0.0";
   format = "setuptools";
 
-  disable = pythonOlder "3.6";
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "romis2012";
@@ -21,9 +22,7 @@ buildPythonPackage rec {
     hash = "sha256-UaRzauHmBHYwXFqRwDn1py79BScqq5j5SWALM4dQBP4=";
   };
 
-  propagatedBuildInputs = [
-    aiohttp
-  ];
+  propagatedBuildInputs = [ aiohttp ];
 
   nativeCheckInputs = [
     pytestCheckHook

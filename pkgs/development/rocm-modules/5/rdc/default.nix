@@ -11,15 +11,14 @@
 , openssl
 , doxygen
 , graphviz
-, texlive
+, texliveSmall
 , gtest
 , buildDocs ? true
 , buildTests ? false
 }:
 
 let
-  latex = lib.optionalAttrs buildDocs texlive.combine {
-    inherit (texlive) scheme-small
+  latex = lib.optionalAttrs buildDocs (texliveSmall.withPackages (ps: with ps; [
     changepage
     latexmk
     varwidth
@@ -37,11 +36,11 @@ let
     etoc
     helvetic
     wasy
-    courier;
-  };
+    courier
+  ]));
 in stdenv.mkDerivation (finalAttrs: {
   pname = "rdc";
-  version = "5.7.0";
+  version = "5.7.1";
 
   outputs = [
     "out"
@@ -52,7 +51,7 @@ in stdenv.mkDerivation (finalAttrs: {
   ];
 
   src = fetchFromGitHub {
-    owner = "RadeonOpenCompute";
+    owner = "ROCm";
     repo = "rdc";
     rev = "rocm-${finalAttrs.version}";
     hash = "sha256-xZD/WI/LfNtKK9j6ZjuU0OTTFZz3G4atyD5mVcSsQ8A=";
@@ -116,11 +115,11 @@ in stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "Simplifies administration and addresses infrastructure challenges in cluster and datacenter environments";
-    homepage = "https://github.com/RadeonOpenCompute/rdc";
+    homepage = "https://github.com/ROCm/rdc";
     license = with licenses; [ mit ];
     maintainers = teams.rocm.members;
     platforms = platforms.linux;
-    # broken = versions.minor finalAttrs.version != versions.minor rocm-smi.version;
+    # broken = versions.minor finalAttrs.version != versions.minor rocm-smi.version || versionAtLeast finalAttrs.version "6.0.0";
     broken = true; # Too many errors, unsure how to fix
   };
 })

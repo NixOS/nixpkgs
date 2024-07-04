@@ -11,11 +11,11 @@
 
 stdenv.mkDerivation rec {
   pname = "couchdb";
-  version = "3.3.2";
+  version = "3.3.3";
 
   src = fetchurl {
     url = "mirror://apache/couchdb/source/${version}/apache-${pname}-${version}.tar.gz";
-    hash = "sha256-PWgj1C0Qzw1PhsnE/lnJkyyJ1oV4/LbEtCeNx2kwjao=";
+    hash = "sha256-eiAHtfZz1L4iolyaER2QZpGdhy3bkTWn3OwBIimb054=";
   };
 
   postPatch = ''
@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "A database that uses JSON for documents, JavaScript for MapReduce queries, and regular HTTP for an API";
+    description = "Database that uses JSON for documents, JavaScript for MapReduce queries, and regular HTTP for an API";
     homepage = "https://couchdb.apache.org";
     license = licenses.asl20;
     platforms = platforms.all;

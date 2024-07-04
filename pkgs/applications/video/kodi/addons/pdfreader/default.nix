@@ -15,7 +15,7 @@ buildKodiAddon rec {
 
   meta = with lib; {
     homepage = "https://forum.kodi.tv/showthread.php?tid=187421";
-    description = "A comic book reader";
+    description = "Comic book reader";
     license = licenses.gpl2Plus;
     maintainers = teams.kodi.members;
   };

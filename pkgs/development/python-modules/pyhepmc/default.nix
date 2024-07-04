@@ -1,20 +1,21 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, cmake
-, setuptools
-, setuptools-scm
-, numpy
-, pybind11
-, wheel
-, pytestCheckHook
-, pythonOlder
-, graphviz
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  cmake,
+  setuptools,
+  setuptools-scm,
+  numpy,
+  pybind11,
+  wheel,
+  pytestCheckHook,
+  pythonOlder,
+  graphviz,
 }:
 
 buildPythonPackage rec {
   pname = "pyhepmc";
-  version = "2.12.0";
+  version = "2.13.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -23,7 +24,7 @@ buildPythonPackage rec {
     owner = "scikit-hep";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-po1ad02dpY69RRhaRApskH6tdOaSIsCl5PgpjsAzyKo=";
+    hash = "sha256-M18Bq6WrAINpgPx5+uh8dufPBxIklRHpbBWUYMC8v10=";
     fetchSubmodules = true;
   };
 
@@ -34,17 +35,12 @@ buildPythonPackage rec {
     wheel
   ];
 
-  buildInputs = [
-    pybind11
-  ];
+  buildInputs = [ pybind11 ];
 
-  propagatedBuildInputs = [
-    numpy
-  ];
+  propagatedBuildInputs = [ numpy ];
 
   dontUseCmakeConfigure = true;
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
   CMAKE_ARGS = [ "-DEXTERNAL_PYBIND11=ON" ];
 
   preBuild = ''
@@ -66,4 +62,3 @@ buildPythonPackage rec {
     maintainers = with maintainers; [ veprbl ];
   };
 }
-

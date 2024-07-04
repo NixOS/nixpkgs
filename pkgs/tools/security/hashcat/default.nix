@@ -21,8 +21,10 @@ stdenv.mkDerivation rec {
   };
 
   postPatch = ''
+     # MACOSX_DEPLOYMENT_TARGET is defined by the enviroment
      # Remove hardcoded paths on darwin
     substituteInPlace src/Makefile \
+      --replace "export MACOSX_DEPLOYMENT_TARGET" "#export MACOSX_DEPLOYMENT_TARGET" \
       --replace "/usr/bin/ar" "ar" \
       --replace "/usr/bin/sed" "sed" \
       --replace '-i ""' '-i'
@@ -75,6 +77,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Fast password cracker";
+    mainProgram = "hashcat";
     homepage    = "https://hashcat.net/hashcat/";
     license     = licenses.mit;
     platforms   = platforms.unix;

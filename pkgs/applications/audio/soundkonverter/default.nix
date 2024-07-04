@@ -74,9 +74,11 @@ mkDerivation rec {
     wrapProgram $out/bin/soundkonverter --prefix PATH : ${lib.makeBinPath runtimeDeps }
     '';
   meta = {
+    homepage = "https://github.com/dfaust/soundkonverter";
     license = lib.licenses.gpl2;
     maintainers = [ lib.maintainers.schmittlauch ];
     description = "Audio file converter, CD ripper and Replay Gain tool";
+    mainProgram = "soundkonverter";
     longDescription = ''
       soundKonverter is a frontend to various audio converters.
 

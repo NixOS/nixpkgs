@@ -1,35 +1,44 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, msgpack
-, numpy
-, pandas
-, pydantic
-, pymongo
-, pytestCheckHook
-, pythonOlder
-, ruamel-yaml
-, tqdm
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  msgpack,
+  numpy,
+  pandas,
+  pydantic,
+  pymongo,
+  pytestCheckHook,
+  pythonOlder,
+  ruamel-yaml,
+  setuptools,
+  setuptools-scm,
+  torch,
+  tqdm,
 }:
 
 buildPythonPackage rec {
   pname = "monty";
-  version = "2023.4.10";
-  format = "setuptools";
+  version = "2024.5.24";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "materialsvirtuallab";
-    repo = pname;
+    repo = "monty";
     rev = "refs/tags/v${version}";
-    hash = "sha256-9of56ErJ03hU+KqxUjR4IiyU4XLJoothSwODlzSWv9Y=";
+    hash = "sha256-c2RG38lsYWtwdCzrRTH/l9o4k6UPUOFC+wwV9zjoDvk=";
   };
 
   postPatch = ''
     substituteInPlace tests/test_os.py \
       --replace 'self.assertEqual("/usr/bin/find", which("/usr/bin/find"))' '#'
   '';
+
+  nativeBuildInputs = [
+    setuptools
+    setuptools-scm
+  ];
 
   propagatedBuildInputs = [
     msgpack
@@ -43,11 +52,10 @@ buildPythonPackage rec {
     pydantic
     pymongo
     pytestCheckHook
+    torch
   ];
 
-  pythonImportsCheck = [
-    "monty"
-  ];
+  pythonImportsCheck = [ "monty" ];
 
   disabledTests = [
     # Test file was removed and re-added after 2022.9.9

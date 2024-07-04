@@ -1,34 +1,35 @@
-{ lib
-, buildPythonPackage
-, pythonRelaxDepsHook
-, fetchFromGitHub
-, attrdict
-, beautifulsoup4
-, cython
-, fire
-, fonttools
-, lmdb
-, lxml
-, numpy
-, opencv4
-, openpyxl
-, pdf2docx
-, pillow
-, premailer
-, pyclipper
-, pymupdf
-, python-docx
-, rapidfuzz
-, scikit-image
-, shapely
-, tqdm
-, paddlepaddle
-, lanms-neo
-, polygon3
+{
+  lib,
+  buildPythonPackage,
+  pythonRelaxDepsHook,
+  fetchFromGitHub,
+  attrdict,
+  beautifulsoup4,
+  cython,
+  fire,
+  fonttools,
+  lmdb,
+  lxml,
+  numpy,
+  opencv4,
+  openpyxl,
+  pdf2docx,
+  pillow,
+  premailer,
+  pyclipper,
+  pymupdf,
+  python-docx,
+  rapidfuzz,
+  scikit-image,
+  shapely,
+  tqdm,
+  paddlepaddle,
+  lanms-neo,
+  polygon3,
 }:
 
 let
-  version = "2.7.0";
+  version = "2.7.1";
 in
 buildPythonPackage {
   pname = "paddleocr";
@@ -39,7 +40,7 @@ buildPythonPackage {
     owner = "PaddlePaddle";
     repo = "PaddleOCR";
     rev = "v${version}";
-    hash = "sha256-r7Y666KpY855NCSinCBBUz9PXHfZ56+oZW1/0ISpWe4=";
+    hash = "sha256-5Dt4UL+7dwJNjcNnCVi3o8bLCt7/m/M6oh1vPu9rza8=";
   };
 
   patches = [
@@ -106,6 +107,10 @@ buildPythonPackage {
     '';
     changelog = "https://github.com/PaddlePaddle/PaddleOCR/releases/tag/v${version}";
     maintainers = with maintainers; [ happysalada ];
-    platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-darwin" ];
+    platforms = [
+      "x86_64-linux"
+      "x86_64-darwin"
+      "aarch64-darwin"
+    ];
   };
 }

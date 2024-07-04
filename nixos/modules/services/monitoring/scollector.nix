@@ -35,24 +35,17 @@ in {
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether to run scollector.
         '';
       };
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.scollector;
-        defaultText = literalExpression "pkgs.scollector";
-        description = lib.mdDoc ''
-          scollector binary to use.
-        '';
-      };
+      package = mkPackageOption pkgs "scollector" { };
 
       user = mkOption {
         type = types.str;
         default = "scollector";
-        description = lib.mdDoc ''
+        description = ''
           User account under which scollector runs.
         '';
       };
@@ -60,7 +53,7 @@ in {
       group = mkOption {
         type = types.str;
         default = "scollector";
-        description = lib.mdDoc ''
+        description = ''
           Group account under which scollector runs.
         '';
       };
@@ -68,7 +61,7 @@ in {
       bosunHost = mkOption {
         type = types.str;
         default = "localhost:8070";
-        description = lib.mdDoc ''
+        description = ''
           Host and port of the bosun server that will store the collected
           data.
         '';
@@ -78,7 +71,7 @@ in {
         type = with types; attrsOf (listOf path);
         default = {};
         example = literalExpression ''{ "0" = [ "''${postgresStats}/bin/collect-stats" ]; }'';
-        description = lib.mdDoc ''
+        description = ''
           An attribute set mapping the frequency of collection to a list of
           binaries that should be executed at that frequency. You can use "0"
           to run a binary forever.
@@ -89,7 +82,7 @@ in {
         type = with types; listOf str;
         default = [];
         example = [ "-d" ];
-        description = lib.mdDoc ''
+        description = ''
           Extra scollector command line options
         '';
       };
@@ -97,7 +90,7 @@ in {
       extraConfig = mkOption {
         type = types.lines;
         default = "";
-        description = lib.mdDoc ''
+        description = ''
           Extra scollector configuration added to the end of scollector.toml
         '';
       };

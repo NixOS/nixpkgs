@@ -35,7 +35,7 @@ melpaBuild {
   passthru.updateScript = unstableGitUpdater { };
 
   meta = {
-    description = "A major mode for editing LIGO source code";
+    description = "Major mode for editing LIGO source code";
     homepage = "https://gitlab.com/ligolang/ligo";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ];

@@ -136,10 +136,10 @@ in stdenv.mkDerivation {
   doCheck = false;
 
   meta = with lib; {
-    description = "A package manager for OCaml";
+    description = "Package manager for OCaml";
     homepage = "https://opam.ocaml.org/";
     changelog = "https://github.com/ocaml/opam/raw/${version}/CHANGES";
-    maintainers = [ maintainers.henrytill maintainers.marsam ];
+    maintainers = [ ];
     license = licenses.lgpl21Only;
     platforms = platforms.all;
   };

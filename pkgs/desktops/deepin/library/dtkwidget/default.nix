@@ -19,14 +19,19 @@
 
 stdenv.mkDerivation rec {
   pname = "dtkwidget";
-  version = "5.6.10";
+  version = "5.6.29";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "sha256-PhVK/lUFrDW1bn9lUhLuKWLAVj7E7+/YC5USShrg3ds=";
+    hash = "sha256-eFEigOJGw5gTi0G13/rtnqoaeTdnO0aSLfZlRwHg3yE=";
   };
+
+  patches = [
+    ./fix-pkgconfig-path.patch
+    ./fix-pri-path.patch
+  ];
 
   postPatch = ''
     substituteInPlace src/widgets/dapplication.cpp \
@@ -56,18 +61,24 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ dtkgui ];
 
   cmakeFlags = [
-    "-DDVERSION=${version}"
+    "-DDTK_VERSION=${version}"
     "-DBUILD_DOCS=ON"
-    "-DQCH_INSTALL_DESTINATION=${qtbase.qtDocPrefix}"
-    "-DMKSPECS_INSTALL_DIR=${placeholder "out"}/mkspecs/modules"
-    "-DCMAKE_INSTALL_LIBDIR=lib"
-    "-DCMAKE_INSTALL_INCLUDEDIR=include"
+    "-DMKSPECS_INSTALL_DIR=${placeholder "dev"}/mkspecs/modules"
+    "-DQCH_INSTALL_DESTINATION=${placeholder "doc"}/${qtbase.qtDocPrefix}"
   ];
 
   preConfigure = ''
     # qt.qpa.plugin: Could not find the Qt platform plugin "minimal"
     # A workaround is to set QT_PLUGIN_PATH explicitly
     export QT_PLUGIN_PATH=${qtbase.bin}/${qtbase.qtPluginPrefix}
+  '';
+
+  outputs = [ "out" "dev" "doc" ];
+
+  postFixup = ''
+    for binary in $out/lib/dtk5/DWidget/bin/*; do
+        wrapQtApp $binary
+    done
   '';
 
   meta = with lib; {

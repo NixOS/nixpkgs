@@ -88,10 +88,17 @@ const isGitUrl = pattern => {
 }
 
 const downloadPkg = (pkg, verbose) => {
-	const [ name, spec ] = pkg.key.split('@', 2);
-	if (spec.startsWith('file:')) {
-		console.info(`ignoring relative file:path dependency "${spec}"`)
+	const fileMarker = '@file:'
+	const split = pkg.key.split(fileMarker)
+	if (split.length == 2) {
+		console.info(`ignoring lockfile entry "${split[0]}" which points at path "${split[1]}"`)
 		return
+	} else if (split.length > 2) {
+		throw new Error(`The lockfile entry key "${pkg.key}" contains "${fileMarker}" more than once. Processing is not implemented.`)
+	}
+
+	if (pkg.resolved === undefined) {
+		throw new Error(`The lockfile entry with key "${pkg.key}" cannot be downloaded because it is missing the "resolved" attribute, which should contain the URL to download from. The lockfile might be invalid.`)
 	}
 
 	const [ url, hash ] = pkg.resolved.split('#')
@@ -133,19 +140,10 @@ const performParallel = tasks => {
 
 const prefetchYarnDeps = async (lockContents, verbose) => {
 	const lockData = lockfile.parse(lockContents)
-	const tasks = Object.values(
+	await performParallel(
 		Object.entries(lockData.object)
-		.map(([key, value]) => {
-			return { key, ...value }
-		})
-		.reduce((out, pkg) => {
-			out[pkg.resolved] = pkg
-			return out
-		}, {})
+		.map(([key, value]) => () => downloadPkg({ key, ...value }, verbose))
 	)
-		.map(pkg => () => downloadPkg(pkg, verbose))
-
-	await performParallel(tasks)
 	await fs.promises.writeFile('yarn.lock', lockContents)
 	if (verbose) console.log('Done')
 }

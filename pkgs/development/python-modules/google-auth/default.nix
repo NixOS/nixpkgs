@@ -1,48 +1,48 @@
-{ lib
-, stdenv
-, aiohttp
-, aioresponses
-, buildPythonPackage
-, cachetools
-, cryptography
-, fetchPypi
-, flask
-, freezegun
-, grpcio
-, mock
-, oauth2client
-, pyasn1-modules
-, pyopenssl
-, pytest-asyncio
-, pytest-localserver
-, pytestCheckHook
-, pythonOlder
-, pyu2f
-, requests
-, responses
-, rsa
-, six
-, urllib3
+{
+  lib,
+  stdenv,
+  aiohttp,
+  aioresponses,
+  buildPythonPackage,
+  cachetools,
+  cryptography,
+  fetchPypi,
+  flask,
+  freezegun,
+  grpcio,
+  mock,
+  oauth2client,
+  pyasn1-modules,
+  pyopenssl,
+  pytest-asyncio,
+  pytest-localserver,
+  pytestCheckHook,
+  pythonOlder,
+  pyu2f,
+  requests,
+  responses,
+  rsa,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "google-auth";
-  version = "2.21.0";
-  format = "setuptools";
+  version = "2.29.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-so6ASOV3J+fPDlvY5ydrISrvR2ZUoJURNUqoJ1O0XGY=";
+    hash = "sha256-Zy3/My0HMidVD/x0V4aKxCGNbFALFV/mzBfSsTYCw2A=";
   };
+
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     cachetools
     pyasn1-modules
     rsa
-    six
-    urllib3
   ];
 
   passthru.optional-dependencies = {
@@ -55,31 +55,29 @@ buildPythonPackage rec {
       pyopenssl
     ];
     pyopenssl = [
+      cryptography
       pyopenssl
     ];
-    reauth = [
-      pyu2f
-    ];
-    requests = [
-      requests
-    ];
+    reauth = [ pyu2f ];
+    requests = [ requests ];
   };
 
-  nativeCheckInputs = [
-    aioresponses
-    flask
-    freezegun
-    grpcio
-    mock
-    oauth2client
-    pytest-asyncio
-    pytest-localserver
-    pytestCheckHook
-    responses
-  ] ++ passthru.optional-dependencies.aiohttp
-  # `cryptography` is still required on `aarch64-darwin` for `tests/crypt/*`
-  ++ (if (stdenv.isDarwin && stdenv.isAarch64) then [ cryptography ] else passthru.optional-dependencies.enterprise_cert)
-  ++ passthru.optional-dependencies.reauth;
+  nativeCheckInputs =
+    [
+      aioresponses
+      flask
+      freezegun
+      grpcio
+      mock
+      oauth2client
+      pytest-asyncio
+      pytest-localserver
+      pytestCheckHook
+      responses
+    ]
+    ++ passthru.optional-dependencies.aiohttp
+    ++ passthru.optional-dependencies.enterprise_cert
+    ++ passthru.optional-dependencies.reauth;
 
   pythonImportsCheck = [
     "google.auth"

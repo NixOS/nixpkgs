@@ -1,14 +1,16 @@
-{ lib
-, buildPythonPackage
-, pythonAtLeast
-, fetchFromGitHub
-, fetchpatch
-, libuv
+{
+  lib,
+  buildPythonPackage,
+  pythonAtLeast,
+  fetchFromGitHub,
+  fetchpatch,
+  libuv,
 }:
 
 buildPythonPackage rec {
   pname = "pyuv";
   version = "1.4.0";
+  format = "setuptools";
   disabled = pythonAtLeast "3.12";
 
   src = fetchFromGitHub {

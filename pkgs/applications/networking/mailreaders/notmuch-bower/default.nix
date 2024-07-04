@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, mercury, pandoc, ncurses, gpgme }:
+{ lib, stdenv, fetchFromGitHub, mercury, pandoc, ncurses, gpgme, coreutils, file }:
 
 stdenv.mkDerivation rec {
   pname = "notmuch-bower";
@@ -12,6 +12,10 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ mercury pandoc ];
+  postPatch = ''
+    substituteInPlace src/compose.m --replace 'shell_quoted("base64' 'shell_quoted("${coreutils}/bin/base64'
+    substituteInPlace src/detect_mime_type.m --replace 'shell_quoted("file' 'shell_quoted("${file}/bin/file'
+  '';
 
   buildInputs = [ ncurses gpgme ];
 
@@ -30,7 +34,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/wangp/bower";
-    description = "A curses terminal client for the Notmuch email system";
+    description = "Curses terminal client for the Notmuch email system";
+    mainProgram = "bower";
     maintainers = with maintainers; [ jgart ];
     license = licenses.gpl3Plus;
     platforms = platforms.linux;

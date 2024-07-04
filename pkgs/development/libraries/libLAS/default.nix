@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch, boost, cmake, gdal, libgeotiff, libtiff, LASzip2, fixDarwinDylibNames }:
+{ lib, stdenv, fetchurl, fetchpatch, boost, cmake, libgeotiff, libtiff, laszip_2, fixDarwinDylibNames }:
 
 stdenv.mkDerivation rec {
   pname = "libLAS";
@@ -25,17 +25,23 @@ stdenv.mkDerivation rec {
       url = "https://github.com/libLAS/libLAS/commit/0d3b8d75f371a6b7c605bbe5293091cb64a7e2d3.patch";
       hash = "sha256-gtNIazR+l1h+Xef+4qQc7EVi+Nlht3F8CrwkINothtA=";
     })
+    # remove on update. fix compile error in apps/las2col.c
+    # https://github.com/libLAS/libLAS/pull/151
+    (fetchpatch {
+      name = "fflush-x2-is-not-an-fsync.patch";
+      url = "https://github.com/libLAS/libLAS/commit/e789d43df4500da0c12d2f6d3ac1d031ed835493.patch";
+      hash = "sha256-0zI0NvOt9C5BPrfAbgU1N1kj3rZFB7rf0KRj7yemyWI=";
+    })
   ];
 
   nativeBuildInputs = [ cmake ] ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
-  buildInputs = [ boost gdal libgeotiff libtiff LASzip2 ];
+  buildInputs = [ boost libgeotiff libtiff laszip_2 ];
 
   cmakeFlags = [
-    "-DGDAL_CONFIG=${gdal}/bin/gdal-config"
     "-DWITH_LASZIP=ON"
     # libLAS is currently not compatible with LASzip 3,
     # see https://github.com/libLAS/libLAS/issues/144.
-    "-DLASZIP_INCLUDE_DIR=${LASzip2}/include"
+    "-DLASZIP_INCLUDE_DIR=${laszip_2}/include"
     "-DCMAKE_EXE_LINKER_FLAGS=-pthread"
   ];
 

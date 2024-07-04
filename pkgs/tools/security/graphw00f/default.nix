@@ -5,14 +5,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "graphw00f";
-  version = "1.1.8";
+  version = "1.1.17";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "dolevf";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-stTCUHt9UCu1QuxDPB8a26LsrHNttyoVd0tmS7e2t2Y=";
+    hash = "sha256-VeTFwn4PANGoW2Cb/IJ1KJb4YkjjDpaU7DLv0YwRwDU=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -30,6 +30,7 @@ python3.pkgs.buildPythonApplication rec {
   '';
   meta = with lib; {
     description = "GraphQL Server Engine Fingerprinting utility";
+    mainProgram = "graphw00f";
     homepage = "https://github.com/dolevf/graphw00f";
     license = licenses.bsd3;
     maintainers = with maintainers; [ fab ];

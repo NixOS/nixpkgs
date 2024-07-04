@@ -15,10 +15,10 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocgdb";
-  version = "5.7.0";
+  version = "5.7.1";
 
   src = fetchFromGitHub {
-    owner = "ROCm-Developer-Tools";
+    owner = "ROCm";
     repo = "ROCgdb";
     rev = "rocm-${finalAttrs.version}";
     hash = "sha256-TlT7vvTrVd7P6ilVnWIG5VIrjTleFgDezK/mudBV+xE=";
@@ -50,9 +50,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "ROCm source-level debugger for Linux, based on GDB";
-    homepage = "https://github.com/ROCm-Developer-Tools/ROCgdb";
+    homepage = "https://github.com/ROCm/ROCgdb";
     license = with licenses; [ gpl2 gpl3 bsd3 ];
     maintainers = teams.rocm.members;
     platforms = platforms.linux;
+    broken = versionAtLeast finalAttrs.version "6.0.0";
   };
 })

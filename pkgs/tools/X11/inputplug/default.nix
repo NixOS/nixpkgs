@@ -34,6 +34,7 @@ rustPlatform.buildRustPackage rec {
     # `daemon(3)` is deprecated on macOS and `pidfile-rs` needs updating
     broken = stdenv.isDarwin;
     maintainers = with maintainers; [ jecaro ];
+    mainProgram = "inputplug";
   };
 }
 

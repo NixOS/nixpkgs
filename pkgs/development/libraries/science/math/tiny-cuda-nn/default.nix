@@ -11,13 +11,18 @@
   which,
 }: let
   inherit (lib) lists strings;
-  inherit (cudaPackages) backendStdenv cudaFlags;
+  inherit (cudaPackages) backendStdenv flags;
 
   cuda-common-redist = with cudaPackages; [
-    cuda_cudart # cuda_runtime.h
-    libcublas # cublas_v2.h
-    libcusolver # cusolverDn.h
-    libcusparse # cusparse.h
+    cuda_cudart.dev # cuda_runtime.h
+    cuda_cudart.lib
+    cuda_cccl.dev # <nv/target>
+    libcublas.dev # cublas_v2.h
+    libcublas.lib
+    libcusolver.dev # cusolverDn.h
+    libcusolver.lib
+    libcusparse.dev # cusparse.h
+    libcusparse.lib
   ];
 
   cuda-native-redist = symlinkJoin {
@@ -84,9 +89,7 @@ in
     doCheck = false;
 
     preConfigure = ''
-      export TCNN_CUDA_ARCHITECTURES="${
-        strings.concatStringsSep ";" (lists.map cudaFlags.dropDot cudaFlags.cudaCapabilities)
-      }"
+      export TCNN_CUDA_ARCHITECTURES="${flags.cmakeCudaArchitecturesString}"
       export CUDA_HOME="${cuda-native-redist}"
       export LIBRARY_PATH="${cuda-native-redist}/lib/stubs:$LIBRARY_PATH"
       export CC="${backendStdenv.cc}/bin/cc"

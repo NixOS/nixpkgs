@@ -15,11 +15,11 @@
 
 buildPythonPackage rec {
   pname = "tensile";
-  version = "5.7.0";
+  version = "5.7.1";
   format = "pyproject";
 
   src = fetchFromGitHub {
-    owner = "ROCmSoftwarePlatform";
+    owner = "ROCm";
     repo = "Tensile";
     rev = "rocm-${version}";
     hash = "sha256-CyPGiM/53duJc/oNtOsl6JSsl9uOOYm5R7O6YXaVOm4=";
@@ -56,10 +56,10 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "GEMMs and tensor contractions";
-    homepage = "https://github.com/ROCmSoftwarePlatform/Tensile";
+    homepage = "https://github.com/ROCm/Tensile";
     license = with licenses; [ mit ];
     maintainers = teams.rocm.members;
     platforms = platforms.linux;
-    broken = versions.minor version != versions.minor stdenv.cc.version;
+    broken = versions.minor version != versions.minor stdenv.cc.version || versionAtLeast version "6.0.0";
   };
 }

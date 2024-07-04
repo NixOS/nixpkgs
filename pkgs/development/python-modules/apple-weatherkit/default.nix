@@ -1,15 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, aiohttp
-, pythonOlder
-, pyjwt
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  aiohttp,
+  aiohttp-retry,
+  pythonOlder,
+  pyjwt,
 }:
 
 buildPythonPackage rec {
   pname = "apple-weatherkit";
-  version = "1.0.4";
+  version = "1.1.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.11";
@@ -18,24 +20,21 @@ buildPythonPackage rec {
     owner = "tjhorner";
     repo = "python-weatherkit";
     rev = "refs/tags/v${version}";
-    hash = "sha256-G/0hyK2rjdSSnVnvAUGyDvsfNMHVgAD7NHfNFmdBCNA=";
+    hash = "sha256-w3KinicaF01I6fIidI7XYHpB8eq52RTUw/BMLrx6Grk=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     aiohttp
+    aiohttp-retry
     pyjwt
   ] ++ pyjwt.optional-dependencies.crypto;
 
   # Module has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "apple_weatherkit"
-  ];
+  pythonImportsCheck = [ "apple_weatherkit" ];
 
   meta = with lib; {
     description = "Python library for Apple WeatherKit";

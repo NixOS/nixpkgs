@@ -1,51 +1,56 @@
-{ lib
-, anyio
-, buildPythonPackage
-, certifi
-, fetchFromGitHub
-, h11
-, h2
-, pproxy
-, pytest-asyncio
-, pytest-httpbin
-, pytest-trio
-, pytestCheckHook
-, pythonOlder
-, sniffio
-, socksio
-# for passthru.tests
-, httpx
-, httpx-socks
+{
+  lib,
+  anyio,
+  buildPythonPackage,
+  certifi,
+  fetchFromGitHub,
+  hatchling,
+  hatch-fancy-pypi-readme,
+  h11,
+  h2,
+  pproxy,
+  pytest-asyncio,
+  pytest-httpbin,
+  pytest-trio,
+  pytestCheckHook,
+  pythonOlder,
+  socksio,
+  trio,
+  # for passthru.tests
+  httpx,
+  httpx-socks,
+  respx,
 }:
 
 buildPythonPackage rec {
   pname = "httpcore";
-  version = "0.17.2";
-  format = "setuptools";
+  version = "1.0.5";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "encode";
-    repo = pname;
+    repo = "httpcore";
     rev = "refs/tags/${version}";
-    hash = "sha256-qAoORhzBbjXxgtzTqbAxWBxrohzfwDWm5mxxrgeXt48=";
+    hash = "sha256-05jYLrBiPRg1qQEz8mRvYJKHFsfneh7z9yHIXuYYa5o=";
   };
 
+  nativeBuildInputs = [
+    hatchling
+    hatch-fancy-pypi-readme
+  ];
+
   propagatedBuildInputs = [
-    anyio
     certifi
     h11
-    sniffio
   ];
 
   passthru.optional-dependencies = {
-    http2 = [
-      h2
-    ];
-    socks = [
-      socksio
-    ];
+    asyncio = [ anyio ];
+    http2 = [ h2 ];
+    socks = [ socksio ];
+    trio = [ trio ];
   };
 
   nativeCheckInputs = [
@@ -54,32 +59,19 @@ buildPythonPackage rec {
     pytest-httpbin
     pytest-trio
     pytestCheckHook
-  ] ++ passthru.optional-dependencies.http2
-    ++ passthru.optional-dependencies.socks;
+  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
-  pythonImportsCheck = [
-    "httpcore"
-  ];
-
-  preCheck = ''
-    # remove upstreams pytest flags which cause:
-    # httpcore.ConnectError: TLS/SSL connection has been closed (EOF) (_ssl.c:997)
-    rm setup.cfg
-  '';
-
-  pytestFlagsArray = [
-    "--asyncio-mode=strict"
-  ];
+  pythonImportsCheck = [ "httpcore" ];
 
   __darwinAllowLocalNetworking = true;
 
   passthru.tests = {
-    inherit httpx httpx-socks;
+    inherit httpx httpx-socks respx;
   };
 
   meta = with lib; {
-    changelog = "https://github.com/encode/httpcore/releases/tag/${version}";
-    description = "A minimal low-level HTTP client";
+    changelog = "https://github.com/encode/httpcore/blob/${version}/CHANGELOG.md";
+    description = "Minimal low-level HTTP client";
     homepage = "https://github.com/encode/httpcore";
     license = licenses.bsd3;
     maintainers = with maintainers; [ ris ];

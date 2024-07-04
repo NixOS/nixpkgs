@@ -1,17 +1,18 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, hatch-vcs
-, hatchling
-, importlib-resources
-, pytestCheckHook
-, pythonOlder
-, referencing
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  hatch-vcs,
+  hatchling,
+  importlib-resources,
+  pytestCheckHook,
+  pythonOlder,
+  referencing,
 }:
 
 buildPythonPackage rec {
   pname = "jsonschema-specifications";
-  version = "2023.7.1";
+  version = "2023.12.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -19,7 +20,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "jsonschema_specifications";
     inherit version;
-    hash = "sha256-yRpQQE6Iofa6QGNneOLuCPbiTFYT/kxTrCRXilp/crs=";
+    hash = "sha256-SKdnh7PnD17VPxFg0rgfWG5MptFUjF3nCF0WgmdHZMw=";
   };
 
   nativeBuildInputs = [
@@ -29,17 +30,11 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     referencing
-  ] ++ lib.optionals (pythonOlder "3.9") [
-    importlib-resources
-  ];
+  ] ++ lib.optionals (pythonOlder "3.9") [ importlib-resources ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "jsonschema_specifications"
-  ];
+  pythonImportsCheck = [ "jsonschema_specifications" ];
 
   meta = with lib; {
     description = "Support files exposing JSON from the JSON Schema specifications";

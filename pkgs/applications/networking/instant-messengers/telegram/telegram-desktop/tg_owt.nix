@@ -4,18 +4,18 @@
 , openh264, usrsctp, libevent, libvpx
 , libX11, libXtst, libXcomposite, libXdamage, libXext, libXrender, libXrandr, libXi
 , glib, abseil-cpp, pcre, util-linuxMinimal, libselinux, libsepol, pipewire
-, mesa, libepoxy, libglvnd, unstableGitUpdater
+, mesa, libepoxy, libglvnd, unstableGitUpdater, darwin
 }:
 
 stdenv.mkDerivation {
   pname = "tg_owt";
-  version = "unstable-2023-08-15";
+  version = "0-unstable-2024-06-15";
 
   src = fetchFromGitHub {
     owner = "desktop-app";
     repo = "tg_owt";
-    rev = "0532942ac6176a66ef184fb728a4cbb02958fc0b";
-    sha256 = "sha256-FcRXxu0Nc8qHQl8PoA92MeuhpV+vgl658uILEpmDy3A=";
+    rev = "c9cc4390ab951f2cbc103ff783a11f398b27660b";
+    sha256 = "sha256-FfWmSYaeryTDbsGJT3R7YK1oiyJcrR7YKKBOF+9PmpY=";
     fetchSubmodules = true;
   };
 
@@ -24,12 +24,28 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ pkg-config cmake ninja yasm ];
 
   buildInputs = [
-    libjpeg libopus ffmpeg alsa-lib libpulseaudio protobuf
-    openh264 usrsctp libevent libvpx
+    libjpeg libopus ffmpeg protobuf openh264 usrsctp libevent libvpx abseil-cpp
+  ] ++ lib.optionals stdenv.isLinux [
     libX11 libXtst libXcomposite libXdamage libXext libXrender libXrandr libXi
-    glib abseil-cpp pcre util-linuxMinimal libselinux libsepol pipewire
+    glib pcre util-linuxMinimal libselinux libsepol pipewire alsa-lib libpulseaudio
     mesa libepoxy libglvnd
-  ];
+  ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+    Cocoa
+    AppKit
+    IOKit
+    IOSurface
+    Foundation
+    AVFoundation
+    CoreMedia
+    VideoToolbox
+    CoreGraphics
+    CoreVideo
+    OpenGL
+    Metal
+    MetalKit
+    CoreFoundation
+    ApplicationServices
+  ]);
 
   patches = [
     # GCC 12 Fix

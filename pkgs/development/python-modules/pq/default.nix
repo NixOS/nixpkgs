@@ -1,12 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy27
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPy27,
 }:
 
 buildPythonPackage rec {
   pname = "pq";
   version = "1.9.1";
+  format = "setuptools";
   disabled = isPy27;
 
   src = fetchPypi {

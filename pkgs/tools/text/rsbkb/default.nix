@@ -6,16 +6,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rsbkb";
-  version = "1.2";
+  version = "1.4";
 
   src = fetchFromGitHub {
     owner = "trou";
     repo = "rsbkb";
     rev = "release-${version}";
-    hash = "sha256-Y6YTjEbefNUPcl6rNYWVZLGZYTUPr5pvfLabS+zDWqA=";
+    hash = "sha256-c5+Q/y2tZfhXQIAs1W67/xfB+qz1Xn33tKXRGDAi3qs=";
   };
 
-  cargoHash = "sha256-RMX+ZdPaqtqRJvhHFJJrPZnBGwQwZSCXNg1oNo+v2+8=";
+  cargoHash = "sha256-kGxYH3frBcmvBCFeF2oxAS4FALcmnRyCH1fi0NF0wSo=";
 
   # Setup symlinks for all the utilities,
   # busybox style

@@ -1,20 +1,22 @@
-{ buildPythonPackage
-, callPackage
-, factory-boy
-, fetchFromGitHub
-, lib
-, wagtail
+{
+  buildPythonPackage,
+  callPackage,
+  factory-boy,
+  fetchFromGitHub,
+  lib,
+  wagtail,
 }:
 
 buildPythonPackage rec {
   pname = "wagtail-factories";
-  version = "4.1.0";
+  version = "4.2.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     repo = pname;
     owner = "wagtail";
-    rev = "refs/tags/v${version}";
-    sha256 = "sha256-xNLHJ/8IZt3pzHAzr9swcL6GcIQyIjIFfoeHUW1i76U=";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-jo8VwrmxHBJnORmuR6eTLrf/eupNL2vhXcw81EzfTxM=";
   };
 
   propagatedBuildInputs = [

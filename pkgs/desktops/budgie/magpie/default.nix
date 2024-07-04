@@ -35,7 +35,7 @@
 , meson
 , xorgserver
 , python3
-, wrapGAppsHook
+, wrapGAppsHook3
 , gi-docgen
 , sysprof
 , libsysprof-capture
@@ -70,7 +70,6 @@ stdenv.mkDerivation (finalAttrs: {
     "-Degl_device=true"
     "-Dprofiler=true"
     "-Ddocs=true"
-    "-Dwith_shared_components=true"
   ];
 
   propagatedBuildInputs = [
@@ -91,7 +90,7 @@ stdenv.mkDerivation (finalAttrs: {
     xvfb-run
     pkg-config
     python3
-    wrapGAppsHook
+    wrapGAppsHook3
     gi-docgen
     xorgserver
   ];
@@ -126,6 +125,10 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs src/backends/native/gen-default-modes.py
     # Magpie does not install any .desktop files
     substituteInPlace scripts/mesonPostInstall.sh --replace "update-desktop-database" "# update-desktop-database"
+
+    # https://gitlab.gnome.org/GNOME/mutter/-/merge_requests/3187
+    substituteInPlace meson.build \
+      --replace "dependency('sysprof-4')" "dependency('sysprof-6')"
   '';
 
   postFixup = ''
@@ -153,11 +156,11 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Softish fork of Mutter 43.x";
     homepage = "https://github.com/BuddiesOfBudgie/magpie";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ federicoschonborn ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = lib.teams.budgie.members;
+    platforms = lib.platforms.linux;
   };
 })

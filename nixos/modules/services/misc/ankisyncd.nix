@@ -22,35 +22,36 @@ let
 in
   {
     options.services.ankisyncd = {
-      enable = mkEnableOption (lib.mdDoc "ankisyncd");
+      enable = mkEnableOption "ankisyncd, a standalone unofficial anky sync server";
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.ankisyncd;
-        defaultText = literalExpression "pkgs.ankisyncd";
-        description = lib.mdDoc "The package to use for the ankisyncd command.";
-      };
+      package = mkPackageOption pkgs "ankisyncd" { };
 
       host = mkOption {
         type = types.str;
         default = "localhost";
-        description = lib.mdDoc "ankisyncd host";
+        description = "ankisyncd host";
       };
 
       port = mkOption {
         type = types.port;
         default = 27701;
-        description = lib.mdDoc "ankisyncd port";
+        description = "ankisyncd port";
       };
 
       openFirewall = mkOption {
         default = false;
         type = types.bool;
-        description = lib.mdDoc "Whether to open the firewall for the specified port.";
+        description = "Whether to open the firewall for the specified port.";
       };
     };
 
     config = mkIf cfg.enable {
+      warnings = [
+        ''
+        `services.ankisyncd` has been replaced by `services.anki-sync-server` and will be removed after
+        24.05 because anki-sync-server(-rs and python) are not maintained.
+        ''
+      ];
       networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall [ cfg.port ];
 
       systemd.services.ankisyncd = {

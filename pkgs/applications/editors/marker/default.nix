@@ -5,7 +5,7 @@
 , meson
 , ninja
 , pkg-config
-, wrapGAppsHook
+, wrapGAppsHook3
 , gtk3
 , gtksourceview
 , gtkspell3
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -52,5 +52,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     changelog = "https://github.com/fabiocolacio/Marker/releases/tag/${version}";
+    mainProgram = "marker";
   };
 }

@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "obs-text-pthread";
-  version = "2.0.2";
+  version = "2.0.4";
 
   src = fetchFromGitHub {
     owner = "norihiro";
     repo = "obs-text-pthread";
     rev = version;
-    sha256 = "sha256-HN8tSagxmk6FusDrp7d0fi15ardFgUCZBiYkeBqUI34=";
+    sha256 = "sha256-3Y++zpy5TEp8AtyRw+1fZDEFY9AuN7JpUNqUhM7h04U=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];

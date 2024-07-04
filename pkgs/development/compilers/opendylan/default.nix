@@ -36,7 +36,7 @@ stdenv.mkDerivation {
 
   meta = {
     homepage = "https://opendylan.org";
-    description = "A multi-paradigm functional and object-oriented programming language";
+    description = "Multi-paradigm functional and object-oriented programming language";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
     broken = true; # last successful build 2020-12-11

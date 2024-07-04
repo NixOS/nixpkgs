@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub, fetchurl, makeWrapper, runCommand }:
+{ lib, buildGoModule, fetchFromGitHub, makeWrapper, runCommand }:
 
 let
   version = "1.3.8";
@@ -17,6 +17,7 @@ let
     description = "Scalable & friendly temporary file upload system";
     maintainers = with maintainers; [ freezeboy ];
     license = licenses.mit;
+    mainProgram = "plik";
   };
 
   postPatch = ''

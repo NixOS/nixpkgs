@@ -1,6 +1,5 @@
 { lib
 , fetchFromGitLab
-, fetchpatch
 , meson
 , gobject-introspection
 , pkg-config
@@ -68,10 +67,11 @@ python3.pkgs.buildPythonApplication rec {
   '';
 
   meta = with lib; {
-    description = "A Reddit app, built with Python, GTK and Handy; Created with mobile Linux in mind";
+    description = "Reddit app, built with Python, GTK and Handy; Created with mobile Linux in mind";
     maintainers = with maintainers; [ dasj19 ];
     homepage = "https://gitlab.gnome.org/World/giara";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
+    mainProgram = "giara";
   };
 }

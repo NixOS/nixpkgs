@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchurl
+, updateAutotoolsGnuConfigScriptsHook
 , guileSupport ? false, guile
 # avoid guile depend on bootstrap to prevent dependency cycles
 , inBootstrap ? false
@@ -31,7 +32,7 @@ stdenv.mkDerivation rec {
     ./0002-remove-impure-dirs.patch
   ];
 
-  nativeBuildInputs = lib.optionals guileEnabled [ pkg-config ];
+  nativeBuildInputs = [ updateAutotoolsGnuConfigScriptsHook ] ++ lib.optionals guileEnabled [ pkg-config ];
   buildInputs = lib.optionals guileEnabled [ guile ];
 
   configureFlags = lib.optional guileEnabled "--with-guile"
@@ -54,7 +55,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "A tool to control the generation of non-source files from sources";
+    description = "Tool to control the generation of non-source files from sources";
     longDescription = ''
       Make is a tool which controls the generation of executables and
       other non-source files of a program from the program's source files.

@@ -81,9 +81,9 @@ let
                 , # `class`:
                   # A nominal type for modules. When set and non-null, this adds a check to
                   # make sure that only compatible modules are imported.
-                  # This would be remove in the future, Prefer _module.args option instead.
                   class ? null
-                , args ? {}
+                , # This would be remove in the future, Prefer _module.args option instead.
+                  args ? {}
                 , # This would be remove in the future, Prefer _module.check option instead.
                   check ? true
                 }:
@@ -136,7 +136,7 @@ let
             # TODO: Change the type of this option to a submodule with a
             # freeformType, so that individual arguments can be documented
             # separately
-            description = lib.mdDoc ''
+            description = ''
               Additional arguments passed to each module in addition to ones
               like `lib`, `config`,
               and `pkgs`, `modulesPath`.
@@ -187,14 +187,14 @@ let
             type = types.bool;
             internal = true;
             default = true;
-            description = lib.mdDoc "Whether to check whether all option definitions have matching declarations.";
+            description = "Whether to check whether all option definitions have matching declarations.";
           };
 
           _module.freeformType = mkOption {
             type = types.nullOr types.optionType;
             internal = true;
             default = null;
-            description = lib.mdDoc ''
+            description = ''
               If set, merge all definitions that don't have an associated option
               together using this type. The result then gets combined with the
               values of all declared options to produce the final `
@@ -209,7 +209,7 @@ let
           _module.specialArgs = mkOption {
             readOnly = true;
             internal = true;
-            description = lib.mdDoc ''
+            description = ''
               Externally provided module arguments that can't be modified from
               within a configuration, but can be used in module imports.
             '';
@@ -275,6 +275,8 @@ let
                 "The option `${optText}' does not exist. Definition values:${defText}";
           in
             if attrNames options == [ "_module" ]
+              # No options were declared at all (`_module` is built in)
+              # but we do have unmatched definitions, and no freeformType (earlier conditions)
               then
                 let
                   optionName = showOption prefix;
@@ -1254,7 +1256,78 @@ let
       (opt.highestPrio or defaultOverridePriority)
       (f opt.value);
 
-  doRename = { from, to, visible, warn, use, withPriority ? true }:
+  /*
+    Return a module that help declares an option that has been renamed.
+    When a value is defined for the old option, it is forwarded to the `to` option.
+   */
+  doRename = {
+    # List of strings representing the attribute path of the old option.
+    from,
+    # List of strings representing the attribute path of the new option.
+    to,
+    # Boolean, whether the old option is to be included in documentation.
+    visible,
+    # Whether to warn when a value is defined for the old option.
+    # NOTE: This requires the NixOS assertions module to be imported, so
+    #        - this generally does not work in submodules
+    #        - this may or may not work outside NixOS
+    warn,
+    # A function that is applied to the option value, to form the value
+    # of the old `from` option.
+    #
+    # For example, the identity function can be passed, to return the option value unchanged.
+    # ```nix
+    # use = x: x;
+    # ```
+    #
+    # To add a warning, you can pass the partially applied `warn` function.
+    # ```nix
+    # use = lib.warn "Obsolete option `${opt.old}' is used. Use `${opt.to}' instead.";
+    # ```
+    use,
+    # Legacy option, enabled by default: whether to preserve the priority of definitions in `old`.
+    withPriority ? true,
+    # A boolean that defines the `mkIf` condition for `to`.
+    # If the condition evaluates to `true`, and the `to` path points into an
+    # `attrsOf (submodule ...)`, then `doRename` would cause an empty module to
+    # be created, even if the `from` option is undefined.
+    # By setting this to an expression that may return `false`, you can inhibit
+    # this undesired behavior.
+    #
+    # Example:
+    #
+    # ```nix
+    # { config, lib, ... }:
+    # let
+    #   inherit (lib) mkOption mkEnableOption types doRename;
+    # in
+    # {
+    #   options = {
+    #
+    #     # Old service
+    #     services.foo.enable = mkEnableOption "foo";
+    #
+    #     # New multi-instance service
+    #     services.foos = mkOption {
+    #       type = types.attrsOf (types.submodule …);
+    #     };
+    #   };
+    #   imports = [
+    #     (doRename {
+    #       from = [ "services" "foo" "bar" ];
+    #       to = [ "services" "foos" "" "bar" ];
+    #       visible = true;
+    #       warn = false;
+    #       use = x: x;
+    #       withPriority = true;
+    #       # Only define services.foos."" if needed. (It's not just about `bar`)
+    #       condition = config.services.foo.enable;
+    #     })
+    #   ];
+    # }
+    # ```
+    condition ? true
+  }:
     { config, options, ... }:
     let
       fromOpt = getAttrFromPath from options;
@@ -1270,7 +1343,7 @@ let
       } // optionalAttrs (toType != null) {
         type = toType;
       });
-      config = mkMerge [
+      config = mkIf condition (mkMerge [
         (optionalAttrs (options ? warnings) {
           warnings = optional (warn && fromOpt.isDefined)
             "The option `${showOption from}' defined in ${showFiles fromOpt.files} has been renamed to `${showOption to}'.";
@@ -1278,7 +1351,7 @@ let
         (if withPriority
           then mkAliasAndWrapDefsWithPriority (setAttrByPath to) fromOpt
           else mkAliasAndWrapDefinitions (setAttrByPath to) fromOpt)
-      ];
+      ]);
     };
 
   /* Use this function to import a JSON file as NixOS configuration.
@@ -1305,7 +1378,6 @@ let
       inherit
         applyModuleArgsIfFunction
         dischargeProperties
-        evalOptionValue
         mergeModules
         mergeModules'
         pushDownProperties
@@ -1326,6 +1398,7 @@ private //
     defaultPriority
     doRename
     evalModules
+    evalOptionValue  # for use by lib.types
     filterOverrides
     filterOverrides'
     fixMergeModules

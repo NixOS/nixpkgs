@@ -1,8 +1,15 @@
-{ buildPythonPackage, fetchPypi, libmysqlclient, lib, pythonOlder }:
+{
+  buildPythonPackage,
+  fetchPypi,
+  libmysqlclient,
+  lib,
+  pythonOlder,
+}:
 
 buildPythonPackage rec {
   pname = "mariadb";
   version = "1.1.4";
+  format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
@@ -12,9 +19,7 @@ buildPythonPackage rec {
     extension = "zip";
   };
 
-  nativeBuildInputs = [
-    libmysqlclient
-  ];
+  nativeBuildInputs = [ libmysqlclient ];
 
   # Requires a running MariaDB instance
   doCheck = false;

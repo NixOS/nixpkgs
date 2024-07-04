@@ -7,39 +7,36 @@
 , libmpc
 , mpfr
 , stdenv
+, darwin
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "scryer-prolog";
-  version = "0.9.2";
+  version = "0.9.4";
 
   src = fetchFromGitHub {
     owner = "mthom";
     repo = "scryer-prolog";
     rev = "v${version}";
-    hash = "sha256-68wtRFkJh8OIdauSIyJ29en399TLnaRaRxw+5bkykxk=";
+    hash = "sha256-0c0MsjrHRitg+5VEHB9/iSuiqcPztF+2inDZa9fQpwU=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "dashu-0.3.1" = "sha256-bovPjLs98oj8/e/X/9GIYCzArzGfshjoeHU7IHdnq30=";
-      "libffi-3.2.0" = "sha256-GcNcXJCfiJp/7X5FXQJ/St0SmsPlCyeM8/s9FR+VE+M=";
-      "modular-bitfield-0.11.2" = "sha256-vcx+xt5owZVWOlKwudAr0EB1zlLLL5pVfWokw034BQI=";
-      "num-modular-0.5.2" = "sha256-G4Kr3BMbXprC6tbG3mY/fOi2sQzaepOTeC4vDiOKWUM=";
-    };
-  };
+  cargoSha256 = "sha256-q8s6HAJhKnMhsgZk5plR+ar3CpLKNqjrD14roDWLwfo=";
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ openssl gmp libmpc mpfr ];
+
+  buildInputs = [ openssl gmp libmpc mpfr ]
+                ++ lib.optionals stdenv.isDarwin [
+                  darwin.apple_sdk.frameworks.SystemConfiguration
+                ];
 
   CARGO_FEATURE_USE_SYSTEM_LIBS = true;
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
-    description = "A modern Prolog implementation written mostly in Rust";
+    description = "Modern Prolog implementation written mostly in Rust";
+    mainProgram = "scryer-prolog";
     homepage = "https://github.com/mthom/scryer-prolog";
     license = with licenses; [ bsd3 ];
-    maintainers = with maintainers; [ malbarbo ];
+    maintainers = with maintainers; [ malbarbo wkral ];
   };
 }

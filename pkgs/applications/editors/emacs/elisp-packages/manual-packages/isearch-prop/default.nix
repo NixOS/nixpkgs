@@ -6,7 +6,7 @@
 
 trivialBuild {
   pname = "isearch-prop";
-  version = "0.pre+unstable=2019-05-01";
+  version = "0-unstable-2019-05-01";
 
   src = fetchFromGitHub {
     owner = "emacsmirror";

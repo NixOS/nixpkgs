@@ -1,9 +1,10 @@
-{ lib
-, aiohttp
-, attrs
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  attrs,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -28,9 +29,7 @@ buildPythonPackage rec {
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "eternalegypt"
-  ];
+  pythonImportsCheck = [ "eternalegypt" ];
 
   meta = with lib; {
     description = "Python API for Netgear LTE modems";

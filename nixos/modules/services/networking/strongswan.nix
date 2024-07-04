@@ -51,13 +51,13 @@ let
 in
 {
   options.services.strongswan = {
-    enable = mkEnableOption (lib.mdDoc "strongSwan");
+    enable = mkEnableOption "strongSwan";
 
     secrets = mkOption {
       type = types.listOf types.str;
       default = [];
       example = [ "/run/keys/ipsec-foo.secret" ];
-      description = lib.mdDoc ''
+      description = ''
         A list of paths to IPSec secret files. These
         files will be included into the main ipsec.secrets file with
         the `include` directive. It is safer if these
@@ -69,7 +69,7 @@ in
       type = types.attrsOf types.str;
       default = {};
       example = { cachecrls = "yes"; strictcrlpolicy = "yes"; };
-      description = lib.mdDoc ''
+      description = ''
         A set of options for the ‘config setup’ section of the
         {file}`ipsec.conf` file. Defines general
         configuration parameters.
@@ -94,7 +94,7 @@ in
           };
         }
       '';
-      description = lib.mdDoc ''
+      description = ''
         A set of connections and their options for the ‘conn xxx’
         sections of the {file}`ipsec.conf` file.
       '';
@@ -110,7 +110,7 @@ in
           crluri = "http://crl2.strongswan.org/strongswan.crl";
         };
       };
-      description = lib.mdDoc ''
+      description = ''
         A set of CAs (certification authorities) and their options for
         the ‘ca xxx’ sections of the {file}`ipsec.conf`
         file.
@@ -120,7 +120,7 @@ in
     managePlugins = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         If set to true, this option will disable automatic plugin loading and
         then tell strongSwan to enable the plugins specified in the
         {option}`enabledPlugins` option.
@@ -130,7 +130,7 @@ in
     enabledPlugins = mkOption {
       type = types.listOf types.str;
       default = [];
-      description = lib.mdDoc ''
+      description = ''
         A list of additional plugins to enable if
         {option}`managePlugins` is true.
       '';
@@ -153,6 +153,7 @@ in
       description = "strongSwan IPSec Service";
       wantedBy = [ "multi-user.target" ];
       path = with pkgs; [ kmod iproute2 iptables util-linux ]; # XXX Linux
+      wants = [ "network-online.target" ];
       after = [ "network-online.target" ];
       environment = {
         STRONGSWAN_CONF = strongswanConf { inherit setup connections ca secretsFile managePlugins enabledPlugins; };

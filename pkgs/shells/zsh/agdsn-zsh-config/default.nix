@@ -2,13 +2,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "agdsn-zsh-config";
-  version = "0.7.1";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "agdsn";
     repo = "agdsn-zsh-config";
     rev = "v${version}";
-    sha256 = "sha256-79bD3YQcpNTKYvEoKu22gqOKvNH7eZPGS/iU+/4IbAU=";
+    sha256 = "sha256-8POQPk/hsJBMJ/ZJe9XzVj7Rd7C2+QnpzgYbUR0s3Fc=";
   };
 
   dontBuild = true;
@@ -25,7 +25,7 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A modified version of the Grml Zsh configuration specialised for the needs of system administration";
+    description = "Modified version of the Grml Zsh configuration specialised for the needs of system administration";
     homepage = "https://github.com/agdsn/agdsn-zsh-config";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;

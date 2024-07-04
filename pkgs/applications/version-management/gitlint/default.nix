@@ -17,8 +17,6 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-4SGkkC4LjZXTDXwK6jMOIKXR1qX76CasOwSqv8XUrjs=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   # Upstream splitted the project into gitlint and gitlint-core to
   # simplify the dependency handling
   sourceRoot = "${src.name}/gitlint-core";
@@ -49,5 +47,6 @@ python3.pkgs.buildPythonApplication rec {
     changelog = "https://github.com/jorisroovers/gitlint/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ ethancedwards8 fab ];
+    mainProgram = "gitlint";
   };
 }

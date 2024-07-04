@@ -2,7 +2,7 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "kile-wl";
-  version = "unstable-2023-07-23";
+  version = "2.1-unstable-2023-07-23";
 
   src = fetchFromGitLab {
     owner = "snakedye";
@@ -13,6 +13,7 @@ rustPlatform.buildRustPackage rec {
 
   passthru.updateScript = unstableGitUpdater {
     url = "https://gitlab.com/snakedye/kile.git";
+    tagPrefix = "v";
   };
 
   cargoLock = {
@@ -23,11 +24,11 @@ rustPlatform.buildRustPackage rec {
   };
 
   meta = with lib; {
-    description = "A tiling layout generator for river";
+    description = "Tiling layout generator for river";
     homepage = "https://gitlab.com/snakedye/kile";
     license = licenses.mit;
     platforms = platforms.linux; # It's meant for river, a wayland compositor
-    maintainers = with maintainers; [ fortuneteller2k ];
+    maintainers = with maintainers; [ moni ];
     mainProgram = "kile";
   };
 }

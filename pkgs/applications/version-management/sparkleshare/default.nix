@@ -49,6 +49,9 @@ stdenv.mkDerivation rec {
   ];
 
   patchPhase = ''
+    # SparkleShare's default desktop file falls back to flatpak.
+    sed -ie "s_^Exec=.*_Exec=$out/bin/sparkleshare_" SparkleShare/Linux/SparkleShare.Autostart.desktop
+
     # Nix will manage the icon cache.
     echo '#!/bin/sh' >scripts/post-install.sh
   '';
@@ -87,5 +90,6 @@ stdenv.mkDerivation rec {
     homepage = "https://sparkleshare.org";
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ kevincox ];
+    mainProgram = "sparkleshare";
   };
 }

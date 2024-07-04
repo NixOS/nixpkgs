@@ -3,7 +3,6 @@
 rec {
   titaniumsdk = let
     titaniumSdkFile = if tiVersion == "8.2.1.GA" then ./titaniumsdk-8.2.nix
-      else if tiVersion == "7.5.1.GA" then ./titaniumsdk-7.5.nix
       else if tiVersion == "8.3.2.GA" then ./titaniumsdk-8.3.nix
       else throw "Titanium version not supported: "+tiVersion;
     in

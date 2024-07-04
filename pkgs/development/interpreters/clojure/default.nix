@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "clojure";
-  version = "1.11.1.1413";
+  version = "1.11.3.1463";
 
   src = fetchurl {
     # https://github.com/clojure/brew-install/releases
     url = "https://github.com/clojure/brew-install/releases/download/${finalAttrs.version}/clojure-tools-${finalAttrs.version}.tar.gz";
-    hash = "sha256-k8Olo63KUcWFgGNBmr9myD2/JOoV4f2S95v35mI4H+A=";
+    hash = "sha256-26QZ3j54XztpW2WJ1xg0Gc+OwrsvmfK4iv0GsLV8FIc=";
   };
 
   nativeBuildInputs = [
@@ -75,7 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.jdk = jdk;
 
   meta = with lib; {
-    description = "A Lisp dialect for the JVM";
+    description = "Lisp dialect for the JVM";
     homepage = "https://clojure.org/";
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.epl10;

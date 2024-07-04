@@ -21,5 +21,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/imsnif/diskonaut";
     license = licenses.mit;
     maintainers = with maintainers; [ evanjs figsoda ];
+    mainProgram = "diskonaut";
   };
 }

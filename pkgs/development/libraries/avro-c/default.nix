@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "avro-c";
-  version = "1.11.2";
+  version = "1.11.3";
 
   src = fetchurl {
     url = "mirror://apache/avro/avro-${version}/c/avro-c-${version}.tar.gz";
-    sha256 = "sha256-nx+ZqXsmcS0tQ/5+ck8Z19vdXO81R4uuRqGSDfIEV/U=";
+    sha256 = "sha256-chfKrPt9XzRhF2ZHOmbC4nm8e/rxuimMfwSzsvulc2U=";
   };
 
   postPatch = ''
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ jansson snappy xz zlib ];
 
   meta = with lib; {
-    description = "A C library which implements parts of the Avro Specification";
+    description = "C library which implements parts of the Avro Specification";
     homepage = "https://avro.apache.org/";
     license = licenses.asl20;
     maintainers = with maintainers; [ lblasc ];

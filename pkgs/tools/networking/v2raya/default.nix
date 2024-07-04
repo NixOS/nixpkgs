@@ -11,13 +11,13 @@
 }:
 let
   pname = "v2raya";
-  version = "2.0.5";
+  version = "2.2.5.1";
 
   src = fetchFromGitHub {
     owner = "v2rayA";
     repo = "v2rayA";
     rev = "v${version}";
-    hash = "sha256-oMH4FutgI5mLz2sxDdPFUyDd80xT32r51HEQYhhnvcU=";
+    hash = "sha256-aicKjirUHNeCCxfW9aaPI+X5DTQ0RdZnCxIQRU+GdCM=";
     postFetch = "sed -i -e 's/npmmirror/yarnpkg/g' $out/gui/yarn.lock";
   };
   guiSrc = "${src}/gui";
@@ -30,17 +30,20 @@ let
 
     offlineCache = fetchYarnDeps {
       yarnLock = "${guiSrc}/yarn.lock";
-      sha256 = "sha256-hVtETKhG9kX/4a4uO/aQ9sN2eTF6aAYaKDSHJIa0eWQ=";
+      sha256 = "sha256-AZIYkW2u1l9IaDpR9xiKNpc0sGAarLKwHf5kGnzdpKw=";
     };
 
     buildPhase = ''
-      export NODE_OPTIONS=--openssl-legacy-provider
+      runHook preBuild
       OUTPUT_DIR=$out yarn --offline build
+      runHook postBuild
     '';
 
     configurePhase = ''
+      runHook preConfigure
       cp -r $node_modules node_modules
       chmod +w node_modules
+      runHook postConfigure
     '';
 
     distPhase = "true";
@@ -59,7 +62,7 @@ buildGoModule {
   inherit pname version;
 
   src = "${src}/service";
-  vendorHash = "sha256-nI+nqftJybAGcHCTMVjYPuLHxqE/kyjUzkspnkzUi+g=";
+  vendorHash = "sha256-/4l13TbE1WEX1xYfyzEwygFsNtT6weoYDll4ejvCyIg=";
 
   ldflags = [
     "-s"
@@ -86,11 +89,11 @@ buildGoModule {
   '';
 
   meta = with lib; {
-    description = "A Linux web GUI client of Project V which supports V2Ray, Xray, SS, SSR, Trojan and Pingtunnel";
+    description = "Linux web GUI client of Project V which supports V2Ray, Xray, SS, SSR, Trojan and Pingtunnel";
     homepage = "https://github.com/v2rayA/v2rayA";
     mainProgram = "v2rayA";
     license = licenses.agpl3Only;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ elliot ];
+    maintainers = with maintainers; [ ChaosAttractor ];
   };
 }

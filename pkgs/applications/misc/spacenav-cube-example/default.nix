@@ -19,9 +19,10 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     homepage = "https://spacenav.sourceforge.net/";
-    description = "An example application to test the spacenavd driver";
+    description = "Example application to test the spacenavd driver";
     license = licenses.bsd3;
     platforms = platforms.unix;
     maintainers = with maintainers; [ sohalt ];
+    mainProgram = "spacenav-cube-example";
   };
 }

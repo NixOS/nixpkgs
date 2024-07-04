@@ -13,15 +13,33 @@
   };
 
   # copy the config for nixos-rebuild
-  system.activationScripts.config = ''
+  system.activationScripts.config = let
+    config = pkgs.substituteAll {
+      src = ./lxd-virtual-machine-image-inner.nix;
+      stateVersion = lib.trivial.release;
+    };
+  in ''
     if [ ! -e /etc/nixos/configuration.nix ]; then
-      mkdir -p /etc/nixos
-      cat ${./lxd-virtual-machine-image-inner.nix} > /etc/nixos/configuration.nix
-      ${lib.getExe pkgs.gnused} 's|../../../modules/virtualisation/lxd-virtual-machine.nix|<nixpkgs/nixos/modules/virtualisation/lxd-virtual-machine.nix>|g' -i /etc/nixos/configuration.nix
+      install -m 0644 -D ${config} /etc/nixos/configuration.nix
     fi
   '';
 
   # Network
-  networking.useDHCP = false;
-  networking.interfaces.enp5s0.useDHCP = true;
+  networking = {
+    dhcpcd.enable = false;
+    useDHCP = false;
+    useHostResolvConf = false;
+  };
+
+  systemd.network = {
+    enable = true;
+    networks."50-enp5s0" = {
+      matchConfig.Name = "enp5s0";
+      networkConfig = {
+        DHCP = "ipv4";
+        IPv6AcceptRA = true;
+      };
+      linkConfig.RequiredForOnline = "routable";
+    };
+  };
 }

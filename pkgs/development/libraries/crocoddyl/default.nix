@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , cmake
 , example-robot-data
 , pinocchio
@@ -11,14 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "crocoddyl";
-  version = "2.0.1";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "loco-3d";
     repo = finalAttrs.pname;
     rev = "v${finalAttrs.version}";
-    fetchSubmodules = true;
-    hash = "sha256-h7rzLSvmWOZCP8rvmUEhFeMEiPhojfbvkt+fNKpgoXo=";
+    hash = "sha256-SVV9sleDXLm2QJmNgL25XLHC3y5bfKab4GSlE8jbT8w=";
   };
 
   strictDeps = true;
@@ -51,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
   pythonImportsCheck = [
     "crocoddyl"
   ];
-  checkInputs = lib.optionals (pythonSupport) [
+  checkInputs = lib.optionals pythonSupport [
     python3Packages.scipy
   ];
 

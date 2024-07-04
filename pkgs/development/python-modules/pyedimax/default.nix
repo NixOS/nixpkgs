@@ -1,28 +1,37 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  requests,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pyedimax";
   version = "0.2.1";
+  pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1i3gr5vygqh2ryg67sl13aaql7nvf3nbybrg54628r4g7911b5rk";
+    hash = "sha256-M5cVQjqPZCQMKS8vv+xw2x6KlRqB6mOezwLi53fJb8Q=";
   };
 
-  propagatedBuildInputs = [ requests ];
+  build-system = [ setuptools ];
 
-  # Project has no tests
+  dependencies = [ requests ];
+
+  # Module has no tests
   doCheck = false;
+
   pythonImportsCheck = [ "pyedimax" ];
 
   meta = with lib; {
     description = "Python library for interfacing with the Edimax smart plugs";
     homepage = "https://github.com/andreipop2005/pyedimax";
-    license = with licenses; [ mit ];
+    license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
 }

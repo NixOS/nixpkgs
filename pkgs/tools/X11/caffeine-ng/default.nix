@@ -13,7 +13,7 @@
 , xautolock
 , xscreensaver
 , xfce
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -29,7 +29,7 @@ python3Packages.buildPythonApplication rec {
     sha256 = "sha256-uYzLRZ+6ZgIwhSuJWRBpLYHgonX7sFXgUZid0V26V0Q=";
   };
 
-  nativeBuildInputs = [ gobject-introspection meson ninja pkg-config wrapGAppsHook ];
+  nativeBuildInputs = [ gobject-introspection meson ninja pkg-config wrapGAppsHook3 ];
 
   buildInputs = [
     libayatana-appindicator

@@ -1,13 +1,13 @@
 { lib, stdenv, fetchurl, writeText }:
 
-import ./versions.nix ({ version, sha256, ... }:
+import ./versions.nix ({ version, hash, ... }:
   stdenv.mkDerivation rec {
     pname = "zabbix-web";
     inherit version;
 
     src = fetchurl {
       url = "https://cdn.zabbix.com/zabbix/sources/stable/${lib.versions.majorMinor version}/zabbix-${version}.tar.gz";
-      inherit sha256;
+      inherit hash;
     };
 
     phpConfig = writeText "zabbix.conf.php" ''
@@ -23,9 +23,9 @@ import ./versions.nix ({ version, sha256, ... }:
     '';
 
     meta = with lib; {
-      description = "An enterprise-class open source distributed monitoring solution (web frontend)";
+      description = "Enterprise-class open source distributed monitoring solution (web frontend)";
       homepage = "https://www.zabbix.com/";
-      license = licenses.gpl2;
+      license = licenses.gpl2Plus;
       maintainers = [ maintainers.mmahut ];
       platforms = platforms.linux;
     };

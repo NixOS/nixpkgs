@@ -23,7 +23,7 @@
 , polkit-qt
 , polkit
 , wrapQtAppsHook
-, wrapGAppsHook
+, wrapGAppsHook3
 , lucenepp
 , boost
 , taglib
@@ -38,17 +38,18 @@
 , pcre
 , udisks2
 , libisoburn
+, gsettings-qt
 }:
 
 stdenv.mkDerivation rec {
   pname = "dde-file-manager";
-  version = "6.0.23";
+  version = "6.0.51";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    hash = "sha256-H+pCWZ1jj5p3gOKXYyLxSmjCMv5/BPIz5A25JGGzrR8=";
+    hash = "sha256-MvrOhdejQPK693wFlqkERuwYM88ALtFNnbyu7H3TI4Q=";
   };
 
   nativeBuildInputs = [
@@ -56,33 +57,37 @@ stdenv.mkDerivation rec {
     qttools
     pkg-config
     wrapQtAppsHook
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
   dontWrapGApps = true;
+
+  patches = [
+    ./patch_check_v23_interface.diff
+  ];
 
   postPatch = ''
     patchShebangs .
 
     substituteInPlace src/plugins/filemanager/dfmplugin-vault/utils/vaultdefine.h \
-      --replace "/usr/bin/deepin-compressor" "deepin-compressor"
+      --replace-fail "/usr/bin/deepin-compressor" "deepin-compressor"
 
     substituteInPlace src/plugins/filemanager/dfmplugin-avfsbrowser/utils/avfsutils.cpp \
-      --replace "/usr/bin/mountavfs" "mountavfs" \
-      --replace "/usr/bin/umountavfs" "umountavfs"
+      --replace-fail "/usr/bin/mountavfs" "mountavfs" \
+      --replace-fail "/usr/bin/umountavfs" "umountavfs"
 
     substituteInPlace src/plugins/common/core/dfmplugin-menu/{extendmenuscene/extendmenu/dcustomactionparser.cpp,oemmenuscene/oemmenu.cpp} \
-      --replace "/usr" "$out"
+      --replace-fail "/usr" "$out"
 
     substituteInPlace src/tools/upgrade/dialog/processdialog.cpp \
-      --replace "/usr/bin/dde-file-manager" "dde-file-manager" \
-      --replace "/usr/bin/dde-desktop" "dde-desktop"
+      --replace-fail "/usr/bin/dde-file-manager" "dde-file-manager" \
+      --replace-fail "/usr/bin/dde-desktop" "dde-desktop"
 
     substituteInPlace src/dfm-base/file/local/localfilehandler.cpp \
-      --replace "/usr/lib/deepin-daemon" "/run/current-system/sw/lib/deepin-daemon"
+      --replace-fail "/usr/lib/deepin-daemon" "/run/current-system/sw/lib/deepin-daemon"
 
     substituteInPlace src/plugins/desktop/ddplugin-background/backgroundservice.cpp \
       src/plugins/desktop/ddplugin-wallpapersetting/wallpapersettings.cpp \
-      --replace "/usr/share/backgrounds" "/run/current-system/sw/share/backgrounds"
+      --replace-fail "/usr/share/backgrounds" "/run/current-system/sw/share/backgrounds"
 
     find . -type f -regex ".*\\.\\(service\\|policy\\|desktop\\)" -exec sed -i -e "s|/usr/|$out/|g" {} \;
   '';
@@ -115,11 +120,13 @@ stdenv.mkDerivation rec {
     pcre
     udisks2
     libisoburn
+    gsettings-qt
   ];
 
   cmakeFlags = [
     "-DVERSION=${version}"
-    "-DDEEPIN_OS_VERSION=20"
+    "-DNIX_DEEPIN_VERSION=23"
+    "-DSYSTEMD_USER_UNIT_DIR=${placeholder "out"}/lib/systemd/user"
   ];
 
   enableParallelBuilding = true;

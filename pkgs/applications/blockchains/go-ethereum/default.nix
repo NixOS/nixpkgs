@@ -9,16 +9,17 @@ let
 
 in buildGoModule rec {
   pname = "go-ethereum";
-  version = "1.13.0";
+  version = "1.14.5";
 
   src = fetchFromGitHub {
     owner = "ethereum";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-tomzF0jM1tcxnnBHLfNWcR1XGECxU8Q/SQAWQBRAFW8=";
+    sha256 = "sha256-IY0BKoDRMVRZTIysdUgqhTFQx0Pz+kl61vbPbhSdT8k=";
   };
 
-  vendorHash = "sha256-VX2S7yjdcconPd8wisV+Cl6FVuEUGU7smIBKfTxpUVY=";
+  proxyVendor = true;
+  vendorHash = "sha256-vzxtoLlD1RjmKBpMPqcH/AAzk2l/NifpRl4Sp4qBYLg=";
 
   doCheck = false;
 
@@ -32,12 +33,13 @@ in buildGoModule rec {
   subPackages = [
     "cmd/abidump"
     "cmd/abigen"
+    "cmd/blsync"
     "cmd/bootnode"
     "cmd/clef"
     "cmd/devp2p"
+    "cmd/era"
     "cmd/ethkey"
     "cmd/evm"
-    "cmd/faucet"
     "cmd/geth"
     "cmd/p2psim"
     "cmd/rlpdump"

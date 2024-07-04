@@ -5,7 +5,6 @@
 , fetchurl
 , git
 , cctools
-, developer_cmds
 , DarwinTools
 , makeWrapper
 , CoreServices
@@ -38,16 +37,16 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "mysql-shell";
-  version = "8.0.34";
+  version = "8.0.37";
 
   srcs = [
     (fetchurl {
-      url = "https://cdn.mysql.com//Downloads/MySQL-${lib.versions.majorMinor finalAttrs.version}/mysql-${finalAttrs.version}.tar.gz";
-      hash = "sha256-5l0Do8QmGLX7+ZBCrtMyCUAumyeqYsfIdD/9R4jY2x0=";
+      url = "https://dev.mysql.com/get/Downloads/MySQL-${lib.versions.majorMinor finalAttrs.version}/mysql-${finalAttrs.version}.tar.gz";
+      hash = "sha256-4GOgkazZ7EC7BfLATfZPiZan5OJuiDu2UChJ1fa0pho=";
     })
     (fetchurl {
-      url = "https://cdn.mysql.com//Downloads/MySQL-Shell/mysql-shell-${finalAttrs.version}-src.tar.gz";
-      hash = "sha256-QY1PmhGw3PhqZ79+H/Xbb9uOvmrBlFQRS7idnV5OXF0=";
+      url = "https://dev.mysql.com/get/Downloads/MySQL-Shell/mysql-shell-${finalAttrs.version}-src.tar.gz";
+      hash = "sha256-UtZ7/Ip5h9CXKy3lkSt8/TXJgbPPUO73rMSIFPfX0Is=";
     })
   ];
 
@@ -66,7 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ pkg-config cmake git bison makeWrapper ]
     ++ lib.optionals (!stdenv.isDarwin) [ rpcsvc-proto ]
-    ++ lib.optionals stdenv.isDarwin [ cctools developer_cmds DarwinTools ];
+    ++ lib.optionals stdenv.isDarwin [ cctools DarwinTools ];
 
   buildInputs = [
     boost
@@ -96,7 +95,7 @@ stdenv.mkDerivation (finalAttrs: {
     # Build MySQL
     echo "Building mysqlclient mysqlxclient"
 
-    cmake -DWITH_BOOST=system -DWITH_SYSTEM_LIBS=ON -DWITH_ROUTER=OFF -DWITH_UNIT_TESTS=OFF \
+    cmake -DWITH_SYSTEM_LIBS=ON -DWITH_BOOST=system -DWITH_FIDO=system -DWITH_ROUTER=OFF -DWITH_UNIT_TESTS=OFF \
       -DFORCE_UNSUPPORTED_COMPILER=1 -S ../mysql -B ../mysql/build
 
     cmake --build ../mysql/build --parallel ''${NIX_BUILD_CORES:-1} --target mysqlclient mysqlxclient
@@ -119,7 +118,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     homepage = "https://dev.mysql.com/doc/mysql-shell/${lib.versions.majorMinor finalAttrs.version}/en/";
-    description = "A new command line scriptable shell for MySQL";
+    description = "New command line scriptable shell for MySQL";
     license = licenses.gpl2;
     maintainers = with maintainers; [ aaronjheng ];
     mainProgram = "mysqlsh";

@@ -18,5 +18,6 @@ buildGoModule {
     homepage = "https://github.com/cloverstd/tcping";
     license = licenses.mit;
     maintainers = with maintainers; [ bcdarwin ];
+    mainProgram = "tcping";
   };
 }

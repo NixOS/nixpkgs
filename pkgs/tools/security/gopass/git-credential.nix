@@ -7,16 +7,16 @@
 
 buildGoModule rec {
   pname = "git-credential-gopass";
-  version = "1.15.8";
+  version = "1.15.13";
 
   src = fetchFromGitHub {
     owner = "gopasspw";
     repo = "git-credential-gopass";
     rev = "v${version}";
-    hash = "sha256-gp/5ZBAxngQKRmr924f7ZQ4GX3uYHz2ULw1Gn+d7vug=";
+    hash = "sha256-X2i0w5sJXteCI1F1PAtIzElAD51I/nk1DPkBlQV5fxs=";
   };
 
-  vendorHash = "sha256-IXY8w5TLXA3SIT2Jyjqt+pPtZ35zQnG0wY08OB1spDw=";
+  vendorHash = "sha256-s1Zouw1619DbGjnZY26N6En91lzDaeDRZmul/te2z7M=";
 
   subPackages = [ "." ];
 

@@ -9,7 +9,7 @@ let
         type = types.listOf types.str;
         default = [ "*" ];
         example = [ "*" "-0123:0456" ];
-        description = lib.mdDoc ''
+        description = ''
           Device identifiers, as shown by {manpage}`keyd(1)`.
         '';
       };
@@ -30,7 +30,7 @@ let
             l = "right";
           };
         };
-        description = lib.mdDoc ''
+        description = ''
           Configuration, except `ids` section, that is written to {file}`/etc/keyd/<keyboard>.conf`.
           Appropriate names can be used to write non-alpha keys, for example "equal" instead of "=" sign (see <https://github.com/NixOS/nixpkgs/issues/236622>).
           See <https://github.com/rvaiya/keyd> how to configure.
@@ -44,7 +44,7 @@ let
           [control+shift]
           h = left
         '';
-        description = lib.mdDoc ''
+        description = ''
           Extra configuration that is appended to the end of the file.
           **Do not** write `ids` section here, use a separate option for it.
           You can use this option to define compound layers that must always be defined after the layer they are comprised.
@@ -62,7 +62,7 @@ in
   ];
 
   options.services.keyd = {
-    enable = mkEnableOption (lib.mdDoc "keyd, a key remapping daemon");
+    enable = mkEnableOption "keyd, a key remapping daemon";
 
     keyboards = mkOption {
       type = types.attrsOf (types.submodule keyboardOptions);
@@ -87,7 +87,7 @@ in
           };
         }
       '';
-      description = mdDoc ''
+      description = ''
         Configuration for one or more device IDs. Corresponding files in the /etc/keyd/ directory are created according to the name of the keys (like `default` or `externalKeyboard`).
       '';
     };
@@ -143,7 +143,7 @@ in
         RuntimeDirectory = "keyd";
 
         # Hardening
-        CapabilityBoundingSet = "";
+        CapabilityBoundingSet = [ "CAP_SYS_NICE" ];
         DeviceAllow = [
           "char-input rw"
           "/dev/uinput rw"
@@ -152,7 +152,7 @@ in
         PrivateNetwork = true;
         ProtectHome = true;
         ProtectHostname = true;
-        PrivateUsers = true;
+        PrivateUsers = false;
         PrivateMounts = true;
         PrivateTmp = true;
         RestrictNamespaces = true;
@@ -165,9 +165,9 @@ in
         LockPersonality = true;
         ProtectProc = "invisible";
         SystemCallFilter = [
+          "nice"
           "@system-service"
           "~@privileged"
-          "~@resources"
         ];
         RestrictAddressFamilies = [ "AF_UNIX" ];
         RestrictSUIDSGID = true;

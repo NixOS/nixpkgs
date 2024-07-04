@@ -6,16 +6,16 @@ let
 in
 {
   meta = {
-    maintainers = [ maintainers.rizary ];
+    maintainers = [ maintainers.rizary maintainers.zimbatm ];
   };
   options = {
     services.nar-serve = {
-      enable = mkEnableOption (lib.mdDoc "Serve NAR file contents via HTTP");
+      enable = mkEnableOption "serving NAR file contents via HTTP";
 
       port = mkOption {
         type = types.port;
         default = 8383;
-        description = lib.mdDoc ''
+        description = ''
           Port number where nar-serve will listen on.
         '';
       };
@@ -23,7 +23,7 @@ in
       cacheURL = mkOption {
         type = types.str;
         default = "https://cache.nixos.org/";
-        description = lib.mdDoc ''
+        description = ''
           Binary cache URL to connect to.
 
           The URL format is compatible with the nix remote url style, such as:

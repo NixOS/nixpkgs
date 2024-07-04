@@ -1,8 +1,13 @@
-{ lib, buildPecl, fetchFromGitHub }:
+{
+  lib,
+  buildPecl,
+  fetchFromGitHub,
+}:
 
 let
-  version = "1.0.0RC2";
-in buildPecl {
+  version = "1.0.3";
+in
+buildPecl rec {
   inherit version;
   pname = "opentelemetry";
 
@@ -10,10 +15,12 @@ in buildPecl {
     owner = "open-telemetry";
     repo = "opentelemetry-php-instrumentation";
     rev = version;
-    hash = "sha256-sCsJ4ZmQXTTG+ZxDzw3b6Su/8QUAVZv7vV6SuLBET+0=";
+    hash = "sha256-KqLbKnAHxXbldNYVN7eMQ7NdZmPecu0UKHQdlUm7Ur0=";
   };
 
-  sourceRoot = "source/ext";
+  sourceRoot = "${src.name}/ext";
+
+  env.NIX_CFLAGS_COMPILE = "-Wno-parentheses-equality";
 
   doCheck = true;
 

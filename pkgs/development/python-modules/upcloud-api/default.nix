@@ -1,14 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, requests
-, pytestCheckHook
-, responses
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  requests,
+  pytestCheckHook,
+  responses,
 }:
 
 buildPythonPackage rec {
   pname = "upcloud-api";
   version = "2.5.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "UpCloudLtd";
@@ -17,9 +19,7 @@ buildPythonPackage rec {
     hash = "sha256-fMsI0aZ8jA08rrNPm8HmfYz/a3HLUExvvXIeDGPh2e8=";
   };
 
-  propagatedBuildInputs = [
-    requests
-  ];
+  propagatedBuildInputs = [ requests ];
 
   nativeCheckInputs = [
     pytestCheckHook

@@ -7,15 +7,17 @@ mkCoqDerivation rec {
 
   useDune = true;
 
-  release."0.1.7+8.16".sha256 = "sha256-ZBxwrnnCmT5q4C7ocQ+M+aSJQNnEjeN2HFw4bzPozYs=";
-  release."0.1.7+8.17".sha256 = "sha256-f671wzGQannGjRbmBRHFKXz24BTPX7oVeHUxnv4Vd6Y=";
-  release."0.1.7+8.18".sha256 = "sha256-J+bRIzjdIPRu7DvAGVBKB43O3UJliTo8XQ87OTzsFyc=";
+  release."0.1.8+8.16".sha256 = "sha256-dEEAK5IXGjHB8D/fYJRQG/oCotoXJuWLxXB0GQlY2eo=";
+  release."0.1.9+8.17".sha256 = "sha256-BCsVRKSE9txeKgDfTsu7hQ6MebC+dX2AAqDF9iL7bYE=";
+  release."0.1.9+8.18".sha256 = "sha256-elAXvkyqw/R/EziGn+QdPn42t5rqTVVW08BXGP3HimY=";
+  release."0.1.9+8.19".sha256 = "sha256-0bk0o25aYkrRf5zaWZnNJqqoBZ6u8nSV9QDIWCeFEco=";
 
   inherit version;
   defaultVersion = with lib.versions; lib.switch coq.coq-version [
-    { case = isEq "8.16"; out = "0.1.7+8.16"; }
-    { case = isEq "8.17"; out = "0.1.7+8.17"; }
-    { case = isEq "8.18"; out = "0.1.7+8.18"; }
+    { case = isEq "8.16"; out = "0.1.8+8.16"; }
+    { case = isEq "8.17"; out = "0.1.9+8.17"; }
+    { case = isEq "8.18"; out = "0.1.9+8.18"; }
+    { case = isEq "8.19"; out = "0.1.9+8.19"; }
   ] null;
 
   nativeBuildInputs = [ makeWrapper ];
@@ -34,7 +36,7 @@ mkCoqDerivation rec {
     description = "Language Server Protocol and VS Code Extension for Coq";
     homepage = "https://github.com/ejgallego/coq-lsp";
     changelog = "https://github.com/ejgallego/coq-lsp/blob/${defaultVersion}/CHANGES.md";
-    maintainers = with maintainers; [ alizter marsam ];
+    maintainers = with maintainers; [ alizter ];
     license = licenses.lgpl21Only;
   };
 }

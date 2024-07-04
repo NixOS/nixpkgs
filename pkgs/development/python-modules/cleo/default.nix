@@ -1,24 +1,25 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, crashtest
-, poetry-core
-, pytest-mock
-, pytestCheckHook
-, pythonRelaxDepsHook
-, rapidfuzz
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  crashtest,
+  poetry-core,
+  pytest-mock,
+  pytestCheckHook,
+  pythonRelaxDepsHook,
+  rapidfuzz,
 }:
 
 buildPythonPackage rec {
   pname = "cleo";
-  version = "2.0.1";
+  version = "2.1.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "python-poetry";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-y9PYlGSPLpZl9Ad2AFuDKIopH0LRETLp35aiZtLcXzM=";
+    hash = "sha256-reo/7aPFU5uvZ1YPRTJDRmcMSMFru8e5ss5YmjSe3QU=";
   };
 
   nativeBuildInputs = [
@@ -26,9 +27,7 @@ buildPythonPackage rec {
     pythonRelaxDepsHook
   ];
 
-  pythonRelaxDeps = [
-    "rapidfuzz"
-  ];
+  pythonRelaxDeps = [ "rapidfuzz" ];
 
   propagatedBuildInputs = [
     crashtest

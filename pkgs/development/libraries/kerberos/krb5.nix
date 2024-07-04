@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, pkg-config, perl, bison, bootstrap_cmds
-, openssl, openldap, libedit, keyutils, libverto
+, openssl, openldap, libedit, keyutils, libverto, darwin
 
 # for passthru.tests
 , bind
@@ -14,6 +14,7 @@
 # This is called "staticOnly" because krb5 does not support
 # builting both static and shared, see below.
 , staticOnly ? false
+, withLdap ? false
 , withVerto ? false
 }:
 
@@ -25,13 +26,16 @@
 let
   libOnly = type == "lib";
 in
+
+assert withLdap -> !libOnly;
+
 stdenv.mkDerivation rec {
   pname = "${type}krb5";
-  version = "1.20.1";
+  version = "1.21.2";
 
   src = fetchurl {
     url = "https://kerberos.org/dist/krb5/${lib.versions.majorMinor version}/krb5-${version}.tar.gz";
-    sha256 = "sha256-cErtSbGetacXizSyhzYg7CmdsIdS1qhXT5XUGHmriFE=";
+    hash = "sha256-lWCUGp2EPAJDpxsXp6xv4xx867W845g9t55Srn6FBJE=";
   };
 
   outputs = [ "out" "dev" ];
@@ -40,8 +44,9 @@ stdenv.mkDerivation rec {
     # krb5's ./configure does not allow passing --enable-shared and --enable-static at the same time.
     # See https://bbs.archlinux.org/viewtopic.php?pid=1576737#p1576737
     ++ lib.optionals staticOnly [ "--enable-static" "--disable-shared" ]
+    ++ lib.optional withLdap "--with-ldap"
     ++ lib.optional withVerto "--with-system-verto"
-    ++ lib.optional stdenv.isFreeBSD ''WARN_CFLAGS=""''
+    ++ lib.optional stdenv.isFreeBSD ''WARN_CFLAGS=''
     ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform)
        [ "krb5_cv_attr_constructor_destructor=yes,yes"
          "ac_cv_func_regcomp=yes"
@@ -55,14 +60,25 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ openssl ]
     ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.libc != "bionic" && !(stdenv.hostPlatform.useLLVM or false)) [ keyutils ]
-    ++ lib.optionals (!libOnly) [ openldap libedit ]
+    ++ lib.optionals (!libOnly) [ libedit ]
+    ++ lib.optionals withLdap [ openldap ]
     ++ lib.optionals withVerto [ libverto ];
+
+  propagatedBuildInputs = lib.optionals stdenv.isDarwin (with darwin.apple_sdk; [
+    libs.xpc
+    frameworks.Kerberos
+  ]);
 
   sourceRoot = "krb5-${version}/src";
 
   postPatch = ''
     substituteInPlace config/shlib.conf \
         --replace "'ld " "'${stdenv.cc.targetPrefix}ld "
+  ''
+  # this could be accomplished by updateAutotoolsGnuConfigScriptsHook, but that causes infinite recursion
+  # necessary for FreeBSD code path in configure
+  + ''
+    substituteInPlace ./config/config.guess --replace-fail /usr/bin/uname uname
   '';
 
   libFolders = [ "util" "include" "lib" "build-tools" ];

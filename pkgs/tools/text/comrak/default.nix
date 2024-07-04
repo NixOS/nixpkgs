@@ -2,19 +2,20 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "comrak";
-  version = "0.19.0";
+  version = "0.23.0";
 
   src = fetchFromGitHub {
     owner = "kivikakk";
     repo = pname;
     rev = version;
-    sha256 = "sha256-eyLgAVo4U0a1JByJsoWOnKGhDcaOhul145KeOOkmHq8=";
+    sha256 = "sha256-RUwJxoD6H0CgS7xyfzMLdoy19p/FuOg82EbocZh7vWs=";
   };
 
-  cargoSha256 = "sha256-Q9VmiC07UxstwRPertTteeHX34zTo58a2wPkQtSwUPU=";
+  cargoHash = "sha256-rbGl7jQABZu4aMpzlv49uMuKmw7U+9zLS6pAJIJajR8=";
 
   meta = with lib; {
-    description = "A CommonMark-compatible GitHub Flavored Markdown parser and formatter";
+    description = "CommonMark-compatible GitHub Flavored Markdown parser and formatter";
+    mainProgram = "comrak";
     homepage = "https://github.com/kivikakk/comrak";
     changelog = "https://github.com/kivikakk/comrak/blob/${version}/changelog.txt";
     license = licenses.bsd2;

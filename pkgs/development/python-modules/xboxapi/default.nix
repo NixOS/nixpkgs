@@ -1,13 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, requests
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  requests,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "xboxapi";
   version = "2.0.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "mKeRix";

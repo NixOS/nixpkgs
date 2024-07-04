@@ -4,6 +4,8 @@ stdenv.mkDerivation {
   pname = "minizip";
   inherit (zlib) src version;
 
+  patchFlags = [ "-p3" ];
+
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [ zlib ];
 

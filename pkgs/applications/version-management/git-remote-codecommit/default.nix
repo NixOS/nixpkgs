@@ -35,5 +35,6 @@ buildPythonApplication rec {
     maintainers = [ lib.maintainers.zaninime ];
     homepage = "https://github.com/awslabs/git-remote-codecommit";
     license = lib.licenses.asl20;
+    mainProgram = "git-remote-codecommit";
   };
 }

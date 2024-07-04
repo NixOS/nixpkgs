@@ -31,11 +31,11 @@ with lib; let
 in {
   options = {
     security.ipa = {
-      enable = mkEnableOption (lib.mdDoc "FreeIPA domain integration");
+      enable = mkEnableOption "FreeIPA domain integration";
 
       certificate = mkOption {
         type = types.package;
-        description = lib.mdDoc ''
+        description = ''
           IPA server CA certificate.
 
           Use `nix-prefetch-url http://$server/ipa/config/ca.crt` to
@@ -52,64 +52,76 @@ in {
       domain = mkOption {
         type = types.str;
         example = "example.com";
-        description = lib.mdDoc "Domain of the IPA server.";
+        description = "Domain of the IPA server.";
       };
 
       realm = mkOption {
         type = types.str;
         example = "EXAMPLE.COM";
-        description = lib.mdDoc "Kerberos realm.";
+        description = "Kerberos realm.";
       };
 
       server = mkOption {
         type = types.str;
         example = "ipa.example.com";
-        description = lib.mdDoc "IPA Server hostname.";
+        description = "IPA Server hostname.";
       };
 
       basedn = mkOption {
         type = types.str;
         example = "dc=example,dc=com";
-        description = lib.mdDoc "Base DN to use when performing LDAP operations.";
+        description = "Base DN to use when performing LDAP operations.";
       };
 
       offlinePasswords = mkOption {
         type = types.bool;
         default = true;
-        description = lib.mdDoc "Whether to store offline passwords when the server is down.";
+        description = "Whether to store offline passwords when the server is down.";
       };
 
       cacheCredentials = mkOption {
         type = types.bool;
         default = true;
-        description = lib.mdDoc "Whether to cache credentials.";
+        description = "Whether to cache credentials.";
+      };
+
+      ipaHostname = mkOption {
+        type = types.str;
+        example = "myworkstation.example.com";
+        default = if config.networking.domain != null then config.networking.fqdn
+                  else "${config.networking.hostName}.${cfg.domain}";
+        defaultText = literalExpression ''
+          if config.networking.domain != null then config.networking.fqdn
+          else "''${networking.hostName}.''${security.ipa.domain}"
+        '';
+        description = "Fully-qualified hostname used to identify this host in the IPA domain.";
       };
 
       ifpAllowedUids = mkOption {
         type = types.listOf types.str;
         default = ["root"];
-        description = lib.mdDoc "A list of users allowed to access the ifp dbus interface.";
+        description = "A list of users allowed to access the ifp dbus interface.";
       };
 
       dyndns = {
         enable = mkOption {
           type = types.bool;
           default = true;
-          description = lib.mdDoc "Whether to enable FreeIPA automatic hostname updates.";
+          description = "Whether to enable FreeIPA automatic hostname updates.";
         };
 
         interface = mkOption {
           type = types.str;
           example = "eth0";
           default = "*";
-          description = lib.mdDoc "Network interface to perform hostname updates through.";
+          description = "Network interface to perform hostname updates through.";
         };
       };
 
       chromiumSupport = mkOption {
         type = types.bool;
         default = true;
-        description = lib.mdDoc "Whether to whitelist the FreeIPA domain in Chromium.";
+        description = "Whether to whitelist the FreeIPA domain in Chromium.";
       };
     };
   };
@@ -117,8 +129,8 @@ in {
   config = mkIf cfg.enable {
     assertions = [
       {
-        assertion = !config.krb5.enable;
-        message = "krb5 must be disabled through `krb5.enable` for FreeIPA integration to work.";
+        assertion = !config.security.krb5.enable;
+        message = "krb5 must be disabled through `security.krb5.enable` for FreeIPA integration to work.";
       }
       {
         assertion = !config.users.ldap.enable;
@@ -181,25 +193,33 @@ in {
       '';
     };
 
-    system.activationScripts.ipa = stringAfter ["etc"] ''
-      # libcurl requires a hard copy of the certificate
-      if ! ${pkgs.diffutils}/bin/diff ${cfg.certificate} /etc/ipa/ca.crt > /dev/null 2>&1; then
-        rm -f /etc/ipa/ca.crt
-        cp ${cfg.certificate} /etc/ipa/ca.crt
-      fi
+    systemd.services."ipa-activation" = {
+      wantedBy = [ "sysinit.target" ];
+      before = [ "sysinit.target" "shutdown.target" ];
+      conflicts = [ "shutdown.target" ];
+      unitConfig.DefaultDependencies = false;
+      serviceConfig.Type = "oneshot";
+      serviceConfig.RemainAfterExit = true;
+      script = ''
+        # libcurl requires a hard copy of the certificate
+        if ! ${pkgs.diffutils}/bin/diff ${cfg.certificate} /etc/ipa/ca.crt > /dev/null 2>&1; then
+          rm -f /etc/ipa/ca.crt
+          cp ${cfg.certificate} /etc/ipa/ca.crt
+        fi
 
-      if [ ! -f /etc/krb5.keytab ]; then
-        cat <<EOF
+        if [ ! -f /etc/krb5.keytab ]; then
+          cat <<EOF
 
-          In order to complete FreeIPA integration, please join the domain by completing the following steps:
-          1. Authenticate as an IPA user authorized to join new hosts, e.g. kinit admin@${cfg.realm}
-          2. Join the domain and obtain the keytab file: ipa-join
-          3. Install the keytab file: sudo install -m 600 krb5.keytab /etc/
-          4. Restart sssd systemd service: sudo systemctl restart sssd
+            In order to complete FreeIPA integration, please join the domain by completing the following steps:
+            1. Authenticate as an IPA user authorized to join new hosts, e.g. kinit admin@${cfg.realm}
+            2. Join the domain and obtain the keytab file: ipa-join
+            3. Install the keytab file: sudo install -m 600 krb5.keytab /etc/
+            4. Restart sssd systemd service: sudo systemctl restart sssd
 
-      EOF
-      fi
-    '';
+        EOF
+        fi
+      '';
+    };
 
     services.sssd.config = ''
       [domain/${cfg.domain}]
@@ -210,7 +230,7 @@ in {
 
       ipa_domain = ${cfg.domain}
       ipa_server = _srv_, ${cfg.server}
-      ipa_hostname = ${config.networking.hostName}.${cfg.domain}
+      ipa_hostname = ${cfg.ipaHostname}
 
       cache_credentials = ${pyBool cfg.cacheCredentials}
       krb5_store_password_if_offline = ${pyBool cfg.offlinePasswords}
@@ -224,7 +244,6 @@ in {
       ldap_user_extra_attrs = mail:mail, sn:sn, givenname:givenname, telephoneNumber:telephoneNumber, lock:nsaccountlock
 
       [sssd]
-      debug_level = 65510
       services = nss, sudo, pam, ssh, ifp
       domains = ${cfg.domain}
 
@@ -236,7 +255,6 @@ in {
       pam_verbosity = 3
 
       [sudo]
-      debug_level = 65510
 
       [autofs]
 

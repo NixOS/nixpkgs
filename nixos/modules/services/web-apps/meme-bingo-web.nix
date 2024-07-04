@@ -1,27 +1,22 @@
 { config, lib, pkgs, ... }:
 
 let
-  inherit (lib) mkEnableOption mkIf mkOption mdDoc types literalExpression;
+  inherit (lib) mkEnableOption mkPackageOption mkIf mkOption types literalExpression;
 
   cfg = config.services.meme-bingo-web;
 in {
   options = {
     services.meme-bingo-web = {
-      enable = mkEnableOption (mdDoc ''
-        A web app for the meme bingo, rendered entirely on the web server and made interactive with forms.
+      enable = mkEnableOption ''
+        a web app for the meme bingo, rendered entirely on the web server and made interactive with forms.
 
-        Note: The application's author suppose to run meme-bingo-web behind a reverse proxy for SSL and HTTP/3.
-      '');
+        Note: The application's author suppose to run meme-bingo-web behind a reverse proxy for SSL and HTTP/3
+      '';
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.meme-bingo-web;
-        defaultText = literalExpression "pkgs.meme-bingo-web";
-        description = mdDoc "meme-bingo-web package to use.";
-      };
+      package = mkPackageOption pkgs "meme-bingo-web" { };
 
       baseUrl = mkOption {
-        description = mdDoc ''
+        description = ''
           URL to be used for the HTML <base> element on all HTML routes.
         '';
         type = types.str;
@@ -29,7 +24,7 @@ in {
         example = "https://bingo.example.com/";
       };
       port = mkOption {
-        description = mdDoc ''
+        description = ''
           Port to be used for the web server.
         '';
         type = types.port;

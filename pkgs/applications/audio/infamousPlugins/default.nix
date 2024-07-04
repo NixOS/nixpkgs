@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://ssj71.github.io/infamousPlugins";
-    description = "A collection of open-source LV2 plugins";
+    description = "Collection of open-source LV2 plugins";
     longDescription = ''
       These are audio plugins in the LV2 format, developed for linux. Most are suitable for live use.
       This collection contains:
@@ -47,5 +47,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     maintainers = [ maintainers.magnetophon ];
     platforms = platforms.linux;
+    mainProgram = "infamous-rule";
   };
 }

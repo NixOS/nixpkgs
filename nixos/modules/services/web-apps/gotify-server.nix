@@ -7,11 +7,11 @@ let
 in {
   options = {
     services.gotify = {
-      enable = mkEnableOption (lib.mdDoc "Gotify webserver");
+      enable = mkEnableOption "Gotify webserver";
 
       port = mkOption {
         type = types.port;
-        description = lib.mdDoc ''
+        description = ''
           Port the server listens to.
         '';
       };
@@ -19,7 +19,7 @@ in {
       stateDirectoryName = mkOption {
         type = types.str;
         default = "gotify-server";
-        description = lib.mdDoc ''
+        description = ''
           The name of the directory below {file}`/var/lib` where
           gotify stores its runtime data.
         '';

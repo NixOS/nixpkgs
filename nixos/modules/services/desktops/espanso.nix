@@ -6,19 +6,24 @@ in {
   meta = { maintainers = with lib.maintainers; [ numkem ]; };
 
   options = {
-    services.espanso = { enable = options.mkEnableOption (lib.mdDoc "Espanso"); };
+    services.espanso = {
+      enable = mkEnableOption "Espanso";
+      package = mkPackageOption pkgs "espanso" {
+        example = "pkgs.espanso-wayland";
+      };
+    };
   };
 
   config = mkIf cfg.enable {
     systemd.user.services.espanso = {
       description = "Espanso daemon";
       serviceConfig = {
-        ExecStart = "${pkgs.espanso}/bin/espanso daemon";
+        ExecStart = "${lib.getExe cfg.package} daemon";
         Restart = "on-failure";
       };
       wantedBy = [ "default.target" ];
     };
 
-    environment.systemPackages = [ pkgs.espanso ];
+    environment.systemPackages = [ cfg.package ];
   };
 }

@@ -1,18 +1,20 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, cryptography
-, decorator
-, invoke
-, mock
-, paramiko
-, pytestCheckHook
-, pytest-relaxed
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  cryptography,
+  decorator,
+  invoke,
+  mock,
+  paramiko,
+  pytestCheckHook,
+  pytest-relaxed,
 }:
 
 buildPythonPackage rec {
   pname = "fabric";
   version = "3.2.2";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -25,9 +27,18 @@ buildPythonPackage rec {
         --replace ', "pathlib2"' ' '
   '';
 
-  propagatedBuildInputs = [ invoke paramiko cryptography decorator ];
+  propagatedBuildInputs = [
+    invoke
+    paramiko
+    cryptography
+    decorator
+  ];
 
-  nativeCheckInputs = [ pytestCheckHook pytest-relaxed mock ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-relaxed
+    mock
+  ];
 
   # ==================================== ERRORS ====================================
   # ________________________ ERROR collecting test session _________________________
@@ -39,6 +50,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Pythonic remote execution";
+    mainProgram = "fab";
     homepage = "https://www.fabfile.org/";
     license = licenses.bsd2;
     maintainers = [ ];

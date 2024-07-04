@@ -9,49 +9,49 @@
 let
 
   pname = "1password";
-  version = if channel == "stable" then "8.10.18" else "8.10.18-19.BETA";
+  version = if channel == "stable" then "8.10.33" else "8.10.34-10.BETA";
 
   sources = {
     stable = {
       x86_64-linux = {
         url = "https://downloads.1password.com/linux/tar/stable/x86_64/1password-${version}.x64.tar.gz";
-        hash = "sha256-3oK8Jzz4+TY4IW8oAenzHo7KQeP58iZ+on5PNliBn7I=";
+        hash = "sha256-njSvRi/sA7l5+XxfCpv3FY9SmCv5oPix9l2EZewZg1M=";
       };
       aarch64-linux = {
         url = "https://downloads.1password.com/linux/tar/stable/aarch64/1password-${version}.arm64.tar.gz";
-        hash = "sha256-OsmgHPlAt9K7ytXMM8BANGcKcD3U1OLd2MLfOS4lc6Q=";
+        hash = "sha256-g4RMTlBQvJQaPD/6scYjpe7NWrL6gkjvh5b9LubTWaE=";
       };
       x86_64-darwin = {
         url = "https://downloads.1password.com/mac/1Password-${version}-x86_64.zip";
-        hash = "sha256-wozym2QOLLUf4F+MwdIZfwN+VHkNewB+ZJZEkVNnb/c=";
+        hash = "sha256-YzAYMk3SR+paIQYAZCx840u/k77soy17F15owpqRAU0=";
       };
       aarch64-darwin = {
         url = "https://downloads.1password.com/mac/1Password-${version}-aarch64.zip";
-        hash = "sha256-v1FZIsvFyIx81BORgDtZBP9jTRY6/0p537trOGf8mcM=";
+        hash = "sha256-FlJnPMIv7mWh3dSACq01f16mB9EkVD2LOg3IIpvjwdY=";
       };
     };
     beta = {
       x86_64-linux = {
         url = "https://downloads.1password.com/linux/tar/beta/x86_64/1password-${version}.x64.tar.gz";
-        hash = "sha256-siQ6w1byDkfNrbkvjLWmQRbJ5nVZZv24vg0RFWaRHmE=";
+        hash = "sha256-eX7D8D5KErFIQtyvg4oT+lR3A7sfRFpDMT7duigZTz0=";
       };
       aarch64-linux = {
         url = "https://downloads.1password.com/linux/tar/beta/aarch64/1password-${version}.arm64.tar.gz";
-        hash = "sha256-WX6NzBXBSBf/hIl1kTIuUvCnEZ1+B0NBHfKvMeIZOw4=";
+        hash = "sha256-dajdeU8TtD9Dbnp2MFedAl8tuQr275cUqGAnm/VF+OE=";
       };
       x86_64-darwin = {
         url = "https://downloads.1password.com/mac/1Password-${version}-x86_64.zip";
-        hash = "sha256-HQRw1OGIT/cVjDk4PGa8x4QdYHQxtqMePsUh+cpyysM=";
+        hash = "sha256-Dm8v7B8qDSBe1i7OJKQFn7YDPkw3Qj8YVtQkaQmdKuc=";
       };
       aarch64-darwin = {
         url = "https://downloads.1password.com/mac/1Password-${version}-aarch64.zip";
-        hash = "sha256-1KcTgmxDhbvB6gzTqF3bhu5toCSjskGjCflrBSNYzk4=";
+        hash = "sha256-QSxJoVPlOQU7hbvbuVcB/kf5umRjJQuygMkXq6lE1CQ=";
       };
     };
   };
 
   src = fetchurl {
-    inherit (sources.${channel}.${stdenv.system}) url hash;
+    inherit (sources.${channel}.${stdenv.system} or (throw "unsupported system ${stdenv.hostPlatform.system}")) url hash;
   };
 
   meta = with lib; {
@@ -59,7 +59,7 @@ let
     homepage = "https://1password.com/";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
-    maintainers = with maintainers; [ timstott savannidgerinel amaxine sebtm ];
+    maintainers = with maintainers; [ timstott savannidgerinel sebtm ];
     platforms = builtins.attrNames sources.${channel};
     mainProgram = "1password";
   };

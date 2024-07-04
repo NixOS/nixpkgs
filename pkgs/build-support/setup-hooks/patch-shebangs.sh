@@ -72,7 +72,10 @@ patchShebangs() {
     while IFS= read -r -d $'\0' f; do
         isScript "$f" || continue
 
-        read -r oldInterpreterLine < "$f"
+        # read exits unclean if the shebang does not end with a newline, but still assigns the variable.
+        # So if read returns errno != 0, we check if the assigned variable is non-empty and continue.
+        read -r oldInterpreterLine < "$f" || [ "$oldInterpreterLine" ]
+
         read -r oldPath arg0 args <<< "${oldInterpreterLine:2}"
 
         if [[ -z "${pathName:-}" ]]; then

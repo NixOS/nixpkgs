@@ -1,28 +1,27 @@
-{ buildPythonPackage
-, fetchPypi
-, setuptools
-, h2
-, lib
-, pyjwt
-, pyopenssl
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  h2,
+  pyjwt,
+  pyopenssl,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "aioapns";
-  version = "3.0";
-  format = "pyproject";
+  version = "3.2";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-MiFjd9HYaTugjP66O24Tgk92bC91GQHggvy1sdQIu+0=";
+    hash = "sha256-QPayQogW97saMmaPUP5x0CiXd6Qptg/OROigi5ASNQg=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     h2
@@ -36,8 +35,9 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "aioapns" ];
 
   meta = with lib; {
-    description = "An efficient APNs Client Library for Python/asyncio";
+    description = "Efficient APNs Client Library";
     homepage = "https://github.com/Fatal1ty/aioapns";
+    changelog = "https://github.com/Fatal1ty/aioapns/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ ];
   };

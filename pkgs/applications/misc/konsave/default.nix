@@ -19,6 +19,7 @@ python3Packages.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Save Linux Customization";
+    mainProgram = "konsave";
     maintainers = with maintainers; [ MoritzBoehme ];
     homepage = "https://github.com/Prayag2/konsave";
     license = licenses.gpl3;

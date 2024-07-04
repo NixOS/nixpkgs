@@ -2,21 +2,16 @@
 
 buildGoModule rec {
   pname = "quorum";
-  version = "23.4.0";
+  version = "24.4.1";
 
   src = fetchFromGitHub {
     owner = "Consensys";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-N8MlDHo6LQ/m9xFUeOCm6bqDtjnCc86i/s4ebFLjUT0=";
+    hash = "sha256-pW8I4ivcKo6dsa8rQVKU6nUZuKxaki/7cMDKwEsSzNw=";
   };
 
-  vendorHash = "sha256-dTYKGFqVaAnspvKhfBU10bpSzhtQHGTm6KxnNKUVAIg=";
-
-  patches = [
-    # Add missing requirements
-    ./go.mod.patch
-  ];
+  vendorHash = "sha256-YK2zpQz4pAFyA+aHOn6Nx0htl5SJ2HNC+TDV1RdLQJk=";
 
   subPackages = [
     "cmd/geth"
@@ -26,10 +21,10 @@ buildGoModule rec {
   ldflags = [ "-s" "-w" ];
 
   meta = with lib; {
-    description = "A permissioned implementation of Ethereum supporting data privacy";
+    description = "Permissioned implementation of Ethereum supporting data privacy";
     homepage = "https://consensys.net/quorum/";
     license = licenses.lgpl3;
     maintainers = with maintainers; [ mmahut ];
-    platforms = [ "x86_64-linux" "x86_64-darwin" ];
+    platforms = platforms.linux;
   };
 }

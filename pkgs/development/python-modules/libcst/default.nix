@@ -1,20 +1,22 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, cargo
-, hypothesis
-, libiconv
-, pytestCheckHook
-, python
-, pythonOlder
-, pyyaml
-, rustPlatform
-, rustc
-, setuptools-rust
-, setuptools-scm
-, typing-extensions
-, typing-inspect
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  cargo,
+  hypothesis,
+  libiconv,
+  pytestCheckHook,
+  python,
+  pythonOlder,
+  pyyaml,
+  rustPlatform,
+  rustc,
+  setuptools-rust,
+  setuptools-scm,
+  typing-extensions,
+  typing-inspect,
 }:
 
 buildPythonPackage rec {
@@ -40,13 +42,20 @@ buildPythonPackage rec {
 
   cargoRoot = "native";
 
+  patches = [
+    # https://github.com/Instagram/LibCST/pull/1042
+    (fetchpatch {
+      name = "remove-distutils.patch";
+      url = "https://github.com/Instagram/LibCST/commit/a6834aa0e6eb78e41549fd1087d7ba60ca4dd237.patch";
+      hash = "sha256-lyIXJhm4UMwdCOso6McDslIvtK7Ar8sF5Zy7qo1nicQ=";
+    })
+  ];
+
   postPatch = ''
     # avoid infinite recursion by not formatting the release files
     substituteInPlace libcst/codegen/generate.py \
       --replace '"ufmt"' '"true"'
   '';
-
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [
     setuptools-rust
@@ -85,15 +94,17 @@ buildPythonPackage rec {
     "test_codemod_formatter_error_input"
   ];
 
-  pythonImportsCheck = [
-    "libcst"
-  ];
+  pythonImportsCheck = [ "libcst" ];
 
   meta = with lib; {
     description = "Concrete Syntax Tree (CST) parser and serializer library for Python";
     homepage = "https://github.com/Instagram/libcst";
     changelog = "https://github.com/Instagram/LibCST/blob/v${version}/CHANGELOG.md";
-    license = with licenses; [ mit asl20 psfl ];
+    license = with licenses; [
+      mit
+      asl20
+      psfl
+    ];
     maintainers = with maintainers; [ ];
   };
 }

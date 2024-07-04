@@ -1,14 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, nose
-, dbus
-, dbus-python
-, pygobject3
-, bluez
-, networkmanager
-, setuptools-scm
-, runCommand
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  nose,
+  dbus,
+  gobject-introspection,
+  dbus-python,
+  pygobject3,
+  bluez,
+  networkmanager,
+  setuptools-scm,
+  runCommand,
 }:
 
 let
@@ -18,29 +20,26 @@ let
     mkdir -p "$out/bin"
     ln -s "${bluez.test}/test/pbap-client" "$out/bin/pbap-client"
   '';
-in buildPythonPackage rec {
+in
+buildPythonPackage rec {
   pname = "python-dbusmock";
-  version = "0.28.7";
+  version = "0.31.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "martinpitt";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-AxRgoXPiFFFHQSj5/jU55hwWzHtutfjmD2IKGxYwd0A=";
+    hash = "sha256-DdV78o089Jkc7mSsGvlJgVpv8kPpMILo7lC6EbLxkxg=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+  nativeBuildInputs = [ setuptools-scm ];
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
-
-  propagatedBuildInputs = [
-    dbus-python
-  ];
+  propagatedBuildInputs = [ dbus-python ];
 
   nativeCheckInputs = [
     dbus
+    gobject-introspection
     pygobject3
     bluez
     pbap-client

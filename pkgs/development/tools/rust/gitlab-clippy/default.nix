@@ -25,6 +25,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     homepage = "https://gitlab.com/dlalic/gitlab-clippy";
     description = "Convert clippy warnings into GitLab Code Quality report";
+    mainProgram = "gitlab-clippy";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ wucke13 ];
   };

@@ -1,7 +1,7 @@
 { fetchFromGitHub
 , lib
 , stdenvNoCC
-, gnome
+, adwaita-icon-theme
 , gnome-icon-theme
 , hicolor-icon-theme
 , gtk3
@@ -11,17 +11,17 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "mint-x-icons";
-  version = "1.6.5";
+  version = "1.6.9";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    hash = "sha256-Z07475Uiv4GKCOrKhDBXPZVBGpxdjN7vn2y0rRAZVm0=";
+    hash = "sha256-J5Osy+VosyBhwiiwELMtjDTf3/J6DpuQ4c9DO06fo+4=";
   };
 
   propagatedBuildInputs = [
-    gnome.adwaita-icon-theme
+    adwaita-icon-theme
     gnome-icon-theme
     hicolor-icon-theme
     humanity-icon-theme

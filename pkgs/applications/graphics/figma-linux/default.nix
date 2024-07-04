@@ -4,20 +4,26 @@
 , fetchurl
 , autoPatchelfHook
 , dpkg
-, wrapGAppsHook
+, makeWrapper
+, wrapGAppsHook3
 , ...
 }:
 with lib;
 stdenv.mkDerivation (finalAttrs: {
   pname = "figma-linux";
-  version = "0.10.0";
+  version = "0.11.4";
 
   src = fetchurl {
     url = "https://github.com/Figma-Linux/figma-linux/releases/download/v${finalAttrs.version}/figma-linux_${finalAttrs.version}_linux_amd64.deb";
-    sha256 = "sha256-+xiXEwSSxpt1/Eu9g57/L+Il/Av+a/mgGBQl/4LKR74=";
+    hash = "sha256-ukUsNgWOtIRe54vsmRdI62syjIPwSsgNV7kITCw0YUQ=";
   };
 
-  nativeBuildInputs = [ autoPatchelfHook dpkg wrapGAppsHook ];
+  nativeBuildInputs = [
+    autoPatchelfHook
+    dpkg
+    makeWrapper
+    wrapGAppsHook3
+  ];
 
   buildInputs = with pkgs;[
     alsa-lib
@@ -52,6 +58,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   sourceRoot = ".";
 
+  # Instead of double wrapping the binary, simply pass the `gappsWrapperArgs`
+  # to `makeWrapper` directly
+  dontWrapGApps = true;
+
   installPhase = ''
     runHook preInstall
 
@@ -59,6 +69,10 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/bin && ln -s $out/lib/figma-linux $_/figma-linux
 
     cp -r usr/* $out
+
+    wrapProgramShell $out/bin/figma-linux \
+      "''${gappsWrapperArgs[@]}" \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--enable-features=UseOzonePlatform --ozone-platform=wayland}}"
 
     runHook postInstall
   '';
@@ -69,10 +83,11 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "unofficial Electron-based Figma desktop app for Linux";
+    description = "Unofficial Electron-based Figma desktop app for Linux";
     homepage = "https://github.com/Figma-Linux/figma-linux";
     platforms = [ "x86_64-linux" ];
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ ercao kashw2 ];
+    mainProgram = "figma-linux";
   };
 })

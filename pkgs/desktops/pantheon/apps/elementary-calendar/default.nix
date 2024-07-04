@@ -7,7 +7,7 @@
 , pkg-config
 , python3
 , vala
-, wrapGAppsHook
+, wrapGAppsHook3
 , clutter
 , evolution-data-server
 , folks
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     pkg-config
     python3
     vala
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

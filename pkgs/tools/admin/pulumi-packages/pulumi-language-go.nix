@@ -8,7 +8,7 @@ buildGoModule rec {
 
   sourceRoot = "${src.name}/sdk/go/pulumi-language-go";
 
-  vendorHash = "sha256-6/umLzw7HMplP/cJknBsWmiwAnc+YM4tIz4Zl2QMTOQ=";
+  vendorHash = "sha256-eHsTEb4Vff2bfADScLSkZiotSSnT1q0bexlUMaWgqbg=";
 
   ldflags = [
     "-s"
@@ -21,6 +21,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Golang language host plugin for Pulumi";
+    mainProgram = "pulumi-language-go";
     homepage = "https://github.com/pulumi/pulumi/tree/master/sdk/go";
     license = licenses.asl20;
   };

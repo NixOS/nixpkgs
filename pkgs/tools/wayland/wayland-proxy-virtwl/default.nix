@@ -8,17 +8,16 @@
 
 ocamlPackages.buildDunePackage rec {
   pname = "wayland-proxy-virtwl";
-  version = "unstable-2023-08-13";
+  version = "0-unstable-2024-06-17";
 
   src = fetchFromGitHub {
     owner = "talex5";
     repo = pname;
-    rev = "050c49a377808105b895e81e7e498f35cc151e58";
-    sha256 = "sha256-6YJv3CCED6LUSPFwYQyHUFkkvOWZGPNHVzw60b5F8+c=";
+    rev = "1c0cd6d4f13454f0c72148b4c4a1c1e3b728205e";
+    sha256 = "sha256-E9UTq9sNBdg+ANO8b9Nga/JBD+Tt9O5QV5NQmbY6GLE=";
   };
 
-  minimalOCamlVersion = "4.12";
-  duneVersion = "3";
+  minimalOCamlVersion = "5.0";
 
   nativeBuildInputs = [
     pkg-config
@@ -26,11 +25,11 @@ ocamlPackages.buildDunePackage rec {
 
   buildInputs = [ libdrm ] ++ (with ocamlPackages; [
     dune-configurator
+    eio_main
     ppx_cstruct
     wayland
     cmdliner
     logs
-    cstruct-lwt
     ppx_cstruct
   ]);
 

@@ -1,32 +1,28 @@
-{ mkDerivation, fetchurl, makeWrapper, lib, php }:
+{
+  fetchFromGitHub,
+  lib,
+  php,
+}:
 
-mkDerivation (finalAttrs: {
+php.buildComposerProject (finalAttrs: {
   pname = "grumphp";
-  version = "1.15.0";
+  version = "2.6.0";
 
-  src = fetchurl {
-    url = "https://github.com/phpro/grumphp/releases/download/v${finalAttrs.version}/grumphp.phar";
-    sha256 = "sha256-EqzJb7DYZb7PnebErLVI/EZLxj0m26cniZlsu1feif0=";
+  src = fetchFromGitHub {
+    owner = "phpro";
+    repo = "grumphp";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-W4LNzdgWxXDPL46/C8SX99lpRMp/xL5q5v6vX3H80XU=";
   };
 
-  dontUnpack = true;
+  vendorHash = "sha256-bpIG3P1BdsYNI59xANaihmjsT7WDKiss3mhi/brA0Mc=";
 
-  nativeBuildInputs = [ makeWrapper ];
-
-  installPhase = ''
-    runHook preInstall
-    mkdir -p $out/bin
-    install -D $src $out/libexec/grumphp/grumphp.phar
-    makeWrapper ${php}/bin/php $out/bin/grumphp \
-      --add-flags "$out/libexec/grumphp/grumphp.phar"
-    runHook postInstall
-  '';
-
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/phpro/grumphp/releases/tag/v${finalAttrs.version}";
-    description = "A PHP code-quality tool";
+    description = "PHP code-quality tool";
     homepage = "https://github.com/phpro/grumphp";
-    license = licenses.mit;
-    maintainers = teams.php.members;
+    license = lib.licenses.mit;
+    mainProgram = "grumphp";
+    maintainers = lib.teams.php.members;
   };
 })

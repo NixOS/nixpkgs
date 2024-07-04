@@ -1,25 +1,26 @@
-{ lib
-, buildPythonPackage
-, docutils
-, fetchFromGitHub
-, packaging
-, pdm-backend
-, platformdirs
-, pydantic
-, pytestCheckHook
-, pythonOlder
-, sphinx
-, sphinx-autodoc-typehints
-, sphinx-rtd-theme
-, sphinxHook
-, tabulate
-, tomli
+{
+  lib,
+  buildPythonPackage,
+  docutils,
+  fetchFromGitHub,
+  packaging,
+  pdm-backend,
+  platformdirs,
+  pydantic,
+  pytestCheckHook,
+  pythonOlder,
+  sphinx,
+  sphinx-autodoc-typehints,
+  sphinx-rtd-theme,
+  sphinxHook,
+  tabulate,
+  tomli,
 }:
 
 buildPythonPackage rec {
   pname = "pytoolconfig";
-  version = "1.2.6";
-  format = "pyproject";
+  version = "1.3.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -27,7 +28,7 @@ buildPythonPackage rec {
     owner = "bagel897";
     repo = "pytoolconfig";
     rev = "refs/tags/v${version}";
-    hash = "sha256-KmmaxFJbvdOGG9T9iiHKnJpFzZiLVkPJki+qHPxPTdY=";
+    hash = "sha256-h21SDgVsnCDZQf5GS7sFE19L/p+OlAFZGEYKc0RHn30=";
   };
 
   outputs = [
@@ -47,33 +48,18 @@ buildPythonPackage rec {
     sphinxHook
   ] ++ passthru.optional-dependencies.doc;
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace "packaging>=22.0" "packaging"
-  '';
-
-  propagatedBuildInputs = [
-    packaging
-  ] ++ lib.optionals (pythonOlder "3.11") [
-    tomli
-  ];
+  propagatedBuildInputs = [ packaging ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
   passthru.optional-dependencies = {
-    validation = [
-      pydantic
-    ];
-    global = [
-      platformdirs
-    ];
+    validation = [ pydantic ];
+    global = [ platformdirs ];
     doc = [
       sphinx
       tabulate
     ];
   };
 
-  pythonImportsCheck = [
-    "pytoolconfig"
-  ];
+  pythonImportsCheck = [ "pytoolconfig" ];
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -84,6 +70,9 @@ buildPythonPackage rec {
     homepage = "https://github.com/bagel897/pytoolconfig";
     changelog = "https://github.com/bagel897/pytoolconfig/releases/tag/v${version}";
     license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ fab hexa ];
+    maintainers = with maintainers; [
+      fab
+      hexa
+    ];
   };
 }

@@ -1,21 +1,23 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, scikit-learn
-, numpy
-, scipy
-, jinja2
-, pytestCheckHook
-, networkx
-, matplotlib
-, igraph
-, plotly
-, ipywidgets
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  scikit-learn,
+  numpy,
+  scipy,
+  jinja2,
+  pytestCheckHook,
+  networkx,
+  matplotlib,
+  igraph,
+  plotly,
+  ipywidgets,
 }:
 
 buildPythonPackage rec {
   pname = "kmapper";
   version = "2.0.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "scikit-tda";

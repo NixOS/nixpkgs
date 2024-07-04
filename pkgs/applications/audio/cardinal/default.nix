@@ -1,5 +1,4 @@
 { stdenv
-, fetchFromGitHub
 , fetchurl
 , cmake
 , dbus
@@ -27,11 +26,11 @@
 
 stdenv.mkDerivation rec {
   pname = "cardinal";
-  version = "23.09";
+  version = "24.05";
 
   src = fetchurl {
     url = "https://github.com/DISTRHO/Cardinal/releases/download/${version}/cardinal+deps-${version}.tar.xz";
-    hash = "sha256-q42ry47y4tTkUbejv6iN5jXcadXSSTPQ3omhMUevfqU=";
+    hash = "sha256-ZUJI5utUtST+idlL7WKBIs850EpK98cnmO47g8/iZcI=";
   };
 
   prePatch = ''

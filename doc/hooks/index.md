@@ -25,11 +25,11 @@ perl.section.md
 pkg-config.section.md
 postgresql-test-hook.section.md
 python.section.md
-qt-4.section.md
 scons.section.md
 tetex-tex-live.section.md
 unzip.section.md
 validatePkgConfig.section.md
+versionCheckHook.section.md
 waf.section.md
 zig.section.md
 xcbuild.section.md

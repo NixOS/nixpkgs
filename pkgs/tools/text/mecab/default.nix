@@ -1,13 +1,14 @@
-{ lib, stdenv, fetchurl, mecab-ipadic }:
+{ lib, stdenv, fetchurl, mecab-ipadic, libiconv }:
 
 let
-  mecab-base = import ./base.nix { inherit fetchurl; };
+  mecab-base = import ./base.nix { inherit fetchurl libiconv; };
 in
 stdenv.mkDerivation (finalAttrs: ((mecab-base finalAttrs) // {
   pname = "mecab";
 
   postInstall = ''
-    sed -i 's|^dicdir = .*$|dicdir = ${mecab-ipadic}|' "$out/etc/mecabrc"
+    mkdir -p $out/lib/mecab/dic
+    ln -s ${mecab-ipadic} $out/lib/mecab/dic/ipadic
   '';
 
   meta = with lib; {
@@ -16,6 +17,6 @@ stdenv.mkDerivation (finalAttrs: ((mecab-base finalAttrs) // {
     license = licenses.bsd3;
     platforms = platforms.unix;
     mainProgram = "mecab";
-    maintainers = with maintainers; [ auntie paveloom ];
+    maintainers = with maintainers; [ auntie ];
   };
 }))

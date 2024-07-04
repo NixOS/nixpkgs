@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchpatch, kernel, udev, autoconf, automake, libtool, hwdata, kernelOlder }:
+{ lib, stdenv, kernel, udev, autoconf, automake, libtool, hwdata, kernelOlder }:
 
 stdenv.mkDerivation {
   name = "usbip-${kernel.name}";

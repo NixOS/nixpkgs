@@ -34,10 +34,11 @@ buildGoModule {
   '';
 
   meta = with lib; {
-    description = "A daemon for keeping the system timezone up-to-date based on the current location";
+    description = "Daemon for keeping the system timezone up-to-date based on the current location";
     homepage = "https://github.com/Stebalien/localtime";
     maintainers = with maintainers; [ lovesegfault ];
     platforms = platforms.linux;
     license = licenses.gpl3;
+    mainProgram = "localtimed";
   };
 }

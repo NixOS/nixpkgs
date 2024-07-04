@@ -1,12 +1,14 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 
 , SDL2
 , cmake
 , curl
 , discord-rpc
 , duktape
+, expat
 , flac
 , fontconfig
 , freetype
@@ -28,48 +30,48 @@
 }:
 
 let
-  openrct2-version = "0.4.5";
+  openrct2-version = "0.4.11";
 
   # Those versions MUST match the pinned versions within the CMakeLists.txt
   # file. The REPLAYS repository from the CMakeLists.txt is not necessary.
-  objects-version = "1.3.11";
-  openmsx-version = "1.3.0";
-  opensfx-version = "1.0.3";
-  title-sequences-version = "0.4.0";
+  objects-version = "1.4.4";
+  openmsx-version = "1.5";
+  opensfx-version = "1.0.5";
+  title-sequences-version = "0.4.6";
 
   openrct2-src = fetchFromGitHub {
     owner = "OpenRCT2";
     repo = "OpenRCT2";
     rev = "v${openrct2-version}";
-    sha256 = "sha256-TMtaEqui3gUd+j3LwF7VsHiBtbYZMu6Rvo1aMkkU9LY=";
+    hash = "sha256-zaaVieU/hulc2G/F19diJug3xuj3ejn5ihnmKfkBDcQ=";
   };
 
   objects-src = fetchFromGitHub {
     owner = "OpenRCT2";
     repo = "objects";
     rev = "v${objects-version}";
-    sha256 = "sha256-fA2Kz4GALu6IP7ulbwpAFt3dz6NCPgyB0CWy5uOLBQY=";
+    hash = "sha256-wKxWp/DSKkxCEI0lp4X8F9LxQsUKZfLk2CgajQ+y84k=";
   };
 
   openmsx-src = fetchFromGitHub {
     owner = "OpenRCT2";
     repo = "OpenMusic";
     rev = "v${openmsx-version}";
-    sha256 = "sha256-bp+uwTy2ZFMCK8Dq4YVACpQSwo8v1te+NQGwdqViIjU=";
+    hash = "sha256-p/wlvQFfu3R+jIuCcRbTMvxt0VKGGwJw0NDIsf6URWI=";
   };
 
   opensfx-src = fetchFromGitHub {
     owner = "OpenRCT2";
     repo = "OpenSoundEffects";
     rev = "v${opensfx-version}";
-    sha256 = "sha256-AMuCpq1Hszi2Vikto/cX9g81LwBDskaRMTLxNzU0/Gk=";
+    hash = "sha256-ucADnMLGm36eAo+NiioxEzeMqtu7YbGF9wsydK1mmoE=";
   };
 
   title-sequences-src = fetchFromGitHub {
     owner = "OpenRCT2";
     repo = "title-sequences";
     rev = "v${title-sequences-version}";
-    sha256 = "sha256-anqCZkhYoaxPu3MYCYSsFFngOmPp2wnx2MGb0hj6W5U=";
+    hash = "sha256-HWp2ecClNM/7O3oaydVipOnEsYNP/bZnZFS+SDidPi0=";
   };
 in
 stdenv.mkDerivation {
@@ -77,6 +79,19 @@ stdenv.mkDerivation {
   version = openrct2-version;
 
   src = openrct2-src;
+
+  patches = [
+    # https://github.com/OpenRCT2/OpenRCT2/pull/21043
+    #
+    # Basically <https://github.com/OpenRCT2/OpenRCT2/pull/19785> has broken
+    # OpenRCT2 - at least with older maps, as were used for testing - as stated
+    # in <https://github.com/NixOS/nixpkgs/issues/263025>.
+    (fetchpatch {
+      name = "remove-openrct2-music.patch";
+      url = "https://github.com/OpenRCT2/OpenRCT2/commit/9ea13848be0b974336c34e6eb119c49ba42a907c.patch";
+      hash = "sha256-2PPRqUZf4+ys89mdzp5nvdtdv00V9Vzj3v/95rmlf1c=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -88,6 +103,7 @@ stdenv.mkDerivation {
     curl
     discord-rpc
     duktape
+    expat
     flac
     fontconfig
     freetype

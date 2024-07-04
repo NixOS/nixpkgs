@@ -1,0 +1,32 @@
+diff --git a/test/lit.cfg b/test/lit.cfg
+index 118c979..b69fecc 100644
+--- a/test/lit.cfg
++++ b/test/lit.cfg
+@@ -207,13 +207,8 @@ def is_preload_disabled():
+     if is_windows:
+         return True
+     elif sys.platform == 'darwin':
+-        command = ['csrutil', 'status']
+-        pattern = re.compile(r'System Integrity Protection status:\s+enabled')
+-        try:
+-            output = subprocess.check_output(command, stderr=subprocess.STDOUT)
+-            return any(pattern.match(line) for line in output.decode('utf-8').splitlines())
+-        except (OSError, subprocess.CalledProcessError):
+-            return False
++        # csrutil(8) isn't available in the Nix build sandbox.
++        return True
+     else:
+         return False
+ 
+@@ -221,6 +216,11 @@ def is_preload_disabled():
+ if not is_preload_disabled():
+     config.available_features.add('preload')
+ 
++# Preserve the variables required for the Nix toolchain wrappers.
++for var, value in os.environ.items():
++    if var.startswith('NIX_'):
++        config.environment[var] = value
++
+ print(config.substitutions)
+ print(config.environment)
+ print(config.available_features)

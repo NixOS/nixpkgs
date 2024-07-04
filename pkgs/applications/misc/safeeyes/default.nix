@@ -11,22 +11,26 @@
 , testers
 , xprintidle
 , xprop
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 with python3.pkgs;
 
 buildPythonApplication rec {
   pname = "safeeyes";
-  version = "2.1.6";
+  version = "2.1.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-tvsBTf6+zKBzB5aL+LUcEvE4jmVHnnoY0L4xoKMJ0vM=";
+    hash = "sha256-Z1c1DVwCwPiOPvCYNsoXJBMfVzIQA+/6wStV8BShahc=";
   };
 
+  postPatch = ''
+    substituteInPlace setup.py --replace "root_dir = sys.prefix" "root_dir = '/'"
+  '';
+
   nativeBuildInputs = [
-    wrapGAppsHook
+    wrapGAppsHook3
     gobject-introspection
   ];
 
@@ -49,9 +53,7 @@ buildPythonApplication rec {
   dontWrapGApps = true;
 
   postInstall = ''
-    mkdir -p $out/share/applications
-    cp -r safeeyes/platform/icons $out/share/icons/
-    cp safeeyes/platform/io.github.slgobinath.SafeEyes.desktop $out/share/applications/io.github.slgobinath.SafeEyes.desktop
+    mv $out/lib/python*/site-packages/share $out/share
   '';
 
   preFixup = ''

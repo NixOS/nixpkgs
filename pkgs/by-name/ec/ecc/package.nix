@@ -53,18 +53,18 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "ecc";
-  version = "1.0.11";
+  version = "1.0.12";
 
   src = fetchFromGitHub {
     owner = "eunomia-bpf";
     repo = "eunomia-bpf";
     rev = "v${version}";
-    hash = "sha256-UiwS+osyC3gtbQH0bWNsx1p3xYr993/FAZ5d5NKnaBM=";
+    hash = "sha256-EK/SZ9LNAk88JpHJEoxw12NHje6QdCqO/vT2TfkWlb0=";
   };
 
   sourceRoot = "${src.name}/compiler/cmd";
 
-  cargoHash = "sha256-j2HPSmU/JARfw2mE1IiXFT/dcdxxnp+agC2DN0Kc5nw=";
+  cargoHash = "sha256-ymBEzFsMTxKSdJRYoDY3AC0QpgtcMlU0fQV03emCxQc=";
 
   nativeBuildInputs = [
     pkg-config
@@ -116,7 +116,8 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     homepage = "https://eunomia.dev";
-    description = "the eBPF compile toolchain for eunomia-bpf";
+    description = "EBPF compile toolchain for eunomia-bpf";
+    mainProgram = "ecc-rs";
     maintainers = with maintainers; [ oluceps ];
     platforms = platforms.linux;
     license = licenses.mit;

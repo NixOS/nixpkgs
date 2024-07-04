@@ -6,11 +6,11 @@
 
 stdenv.mkDerivation rec {
   pname = "pspp";
-  version = "1.6.2";
+  version = "2.0.1";
 
   src = fetchurl {
     url = "mirror://gnu/pspp/${pname}-${version}.tar.gz";
-    sha256 = "sha256-cylMovWy9/xBu/i3jFiIyAdfQ8YJf9SCq7BPhasIR7Y=";
+    sha256 = "sha256-jtuw8J6M+AEMrZ4FWeAjDX/FquRyHHVsNQVU3zMCTAA=";
   };
 
   nativeBuildInputs = [ pkg-config texinfo python3 makeWrapper ];
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://www.gnu.org/software/pspp/";
-    description = "A free replacement for SPSS, a program for statistical analysis of sampled data";
+    description = "Free replacement for SPSS, a program for statistical analysis of sampled data";
     license = lib.licenses.gpl3Plus;
 
     longDescription = ''

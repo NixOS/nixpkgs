@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A pluggable, (mostly) language-agnostic ecosystem for building tools that work with code";
+    description = "Pluggable, (mostly) language-agnostic ecosystem for building tools that work with code";
     longDescription = ''
     The Kythe project was founded to provide and support tools and standards
       that encourage interoperability among programs that manipulate source

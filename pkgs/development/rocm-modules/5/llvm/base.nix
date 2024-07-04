@@ -1,5 +1,6 @@
 { lib
 , stdenv
+, gcc12Stdenv
 , fetchFromGitHub
 , rocmUpdateScript
 , pkg-config
@@ -44,6 +45,13 @@
 , isBroken ? false
 }:
 
+let stdenv' = stdenv; in
+let stdenv =
+      if stdenv'.cc.cc.isGNU or false && lib.versionAtLeast stdenv'.cc.cc.version "13.0"
+      then gcc12Stdenv
+      else stdenv';
+in
+
 let
   llvmNativeTarget =
     if stdenv.isx86_64 then "X86"
@@ -53,7 +61,7 @@ let
   llvmTargetsToBuild' = [ "AMDGPU" ] ++ builtins.map inferNativeTarget llvmTargetsToBuild;
 in stdenv.mkDerivation (finalAttrs: {
   pname = "rocm-llvm-${targetName}";
-  version = "5.7.0";
+  version = "5.7.1";
 
   outputs = [
     "out"
@@ -67,10 +75,10 @@ in stdenv.mkDerivation (finalAttrs: {
   patches = extraPatches;
 
   src = fetchFromGitHub {
-    owner = "RadeonOpenCompute";
+    owner = "ROCm";
     repo = "llvm-project";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-oJIXALwxo130jl8b6yCFw+a2kMBlny5/0ubiqF6MOWY=";
+    hash = "sha256-0+lJnDiMntxCYbZBCSWvHOcKXexFfEzRfb49QbfOmK8=";
   };
 
   nativeBuildInputs = [
@@ -158,10 +166,10 @@ in stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "ROCm fork of the LLVM compiler infrastructure";
-    homepage = "https://github.com/RadeonOpenCompute/llvm-project";
+    homepage = "https://github.com/ROCm/llvm-project";
     license = with licenses; [ ncsa ] ++ extraLicenses;
     maintainers = with maintainers; [ acowley lovesegfault ] ++ teams.rocm.members;
     platforms = platforms.linux;
-    broken = isBroken;
+    broken = isBroken || versionAtLeast finalAttrs.version "6.0.0";
   };
 })

@@ -2,6 +2,7 @@
 , lib
 , fetchFromGitHub
 , qmake
+, pkg-config
 , qtbase
 , qtquickcontrols2
 , qtwebsockets
@@ -10,22 +11,27 @@
 , wrapQtAppsHook
 , makeDesktopItem
 , copyDesktopItems
+
+, withVLC ? true , libvlc
+, withMPV ? true , mpv-unwrapped
 }:
 
 mkDerivation rec {
   pname = "anilibria-winmaclinux";
-  version = "1.2.10";
+  version = "1.2.17";
 
   src = fetchFromGitHub {
     owner = "anilibria";
     repo = "anilibria-winmaclinux";
     rev = version;
-    sha256 = "sha256-mCDw8V/Uzewm32rj+mkkm5atS5nJAFJ3ry1boTn+gqI=";
+    hash = "sha256-Ij4F5UCt1YOB4MLTlUTAiTt2zN4TkJuf5v6sWb9pJ6k=";
   };
 
-  sourceRoot = "source/src";
+  sourceRoot = "${src.name}/src";
 
-  qmakeFlags = [ "PREFIX=${placeholder "out"}" ];
+  qmakeFlags = [ "PREFIX=${placeholder "out"}" ]
+    ++ lib.optionals withVLC [ "CONFIG+=unixvlc" ]
+    ++ lib.optionals withMPV [ "CONFIG+=unixmpv" ];
 
   patches = [
     ./0001-fix-installation-paths.patch
@@ -49,6 +55,7 @@ mkDerivation rec {
 
   nativeBuildInputs = [
     qmake
+    pkg-config
     wrapQtAppsHook
     copyDesktopItems
   ];
@@ -64,7 +71,9 @@ mkDerivation rec {
     gst-plugins-base
     gst-libav
     gstreamer
-  ]);
+  ])
+  ++ lib.optionals withVLC [ libvlc ]
+  ++ lib.optionals withMPV [ mpv-unwrapped.dev ];
 
   desktopItems = [
     (makeDesktopItem (rec {

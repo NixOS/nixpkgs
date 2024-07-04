@@ -4,27 +4,33 @@
 , rustPlatform
 , darwin
 , pandoc
+, pkg-config
+, openssl
 , installShellFiles
 , copyDesktopItems
 , makeDesktopItem
 , nix-update-script
+, testers
+, writeText
+, runCommand
+, fend
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "fend";
-  version = "1.2.2";
+  version = "1.4.9";
 
   src = fetchFromGitHub {
     owner = "printfn";
-    repo = pname;
+    repo = "fend";
     rev = "v${version}";
-    sha256 = "sha256-9O+2vCi3CagpIU5pZPA8tLVhyC7KHn93trYdNhsT4n4=";
+    hash = "sha256-ZfDoDOHQlvuPSX6OWQOX7HdeSVUfAlOpHVwcNPDEeU8=";
   };
 
-  cargoHash = "sha256-mRIwmZwO/uqfUJ12ZYKZFPoefvo055Tp+DrfKsoP9q4=";
+  cargoHash = "sha256-Xwf3Mxvso9mb1YYTuKMzLhtJNX5b2dmGi05TZ111cMc=";
 
-  nativeBuildInputs = [ pandoc installShellFiles copyDesktopItems ];
-  buildInputs = lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ];
+  nativeBuildInputs = [ pandoc installShellFiles pkg-config copyDesktopItems ];
+  buildInputs = [ pkg-config openssl ] ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ];
 
   postBuild = ''
     patchShebangs --build ./documentation/build.sh
@@ -42,7 +48,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   postInstall = ''
-    install -D -m 444 $src/icon/fend-icon-256.png $out/share/icons/hicolor/256x256/apps/fend.png
+    install -D -m 444 $src/icon/icon.svg $out/share/icons/hicolor/scalable/apps/fend.svg
   '';
 
   desktopItems = [
@@ -58,11 +64,26 @@ rustPlatform.buildRustPackage rec {
     })
   ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    updateScript = nix-update-script { };
+    tests = {
+      version = testers.testVersion { package = fend; };
+      units = testers.testEqualContents {
+        assertion = "fend does simple math and unit conversions";
+        expected = writeText "expected" ''
+          36 kph
+        '';
+        actual = runCommand "actual" { } ''
+          ${lib.getExe fend} '(100 meters) / (10 seconds) to kph' > $out
+        '';
+      };
+    };
+  };
 
   meta = with lib; {
     description = "Arbitrary-precision unit-aware calculator";
     homepage = "https://github.com/printfn/fend";
+    changelog = "https://github.com/printfn/fend/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ djanatyn liff ];
     mainProgram = "fend";

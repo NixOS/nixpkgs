@@ -9,12 +9,12 @@ with python3Packages;
 
 buildPythonApplication rec {
   pname = "vit";
-  version = "2.2.0";
+  version = "2.3.2";
   disabled = lib.versionOlder python.version "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-6GbIc5giuecxUqswyaAJw675R1M8BvelyyRNFcTqKW8=";
+    sha256 = "sha256-qDfY6GWnDQ44Sh540xQzDwANEI+mLjpy2a7G3sfKIzw=";
   };
 
   propagatedBuildInputs = [
@@ -33,6 +33,7 @@ buildPythonApplication rec {
   meta = with lib; {
     homepage = "https://github.com/scottkosty/vit";
     description = "Visual Interactive Taskwarrior";
+    mainProgram = "vit";
     maintainers = with maintainers; [ dtzWill arcnmx ];
     platforms = platforms.all;
     license = licenses.mit;

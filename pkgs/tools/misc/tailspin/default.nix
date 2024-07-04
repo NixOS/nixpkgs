@@ -5,23 +5,23 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "tailspin";
-  version = "1.5.1";
+  version = "3.0.1";
 
   src = fetchFromGitHub {
     owner = "bensadeh";
     repo = "tailspin";
-    rev = "refs/tags/${version}";
-    hash = "sha256-Uqo47g0AXyRNFb1RmVVJzdFI2g1Oakx85Sg+zIN5B2A=";
+    rev = version;
+    hash = "sha256-Aqm7Nt+rAu8A2216JCuID1eIpWSdKpoKjILYovr7bYw=";
   };
 
-  cargoHash = "sha256-0ROLrdS3oBZuh+nXW9mTS2Jn/D+iLAUaYqhKvmKAPTo=";
+  cargoHash = "sha256-uTUowYoLEywGNzPyxq53Si5GSrh/F9kUFIDjw/wfdAQ=";
 
   meta = with lib; {
-    description = "A log file highlighter";
+    description = "Log file highlighter";
     homepage = "https://github.com/bensadeh/tailspin";
     changelog = "https://github.com/bensadeh/tailspin/blob/${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ dit7ya ];
-    mainProgram = "spin";
+    mainProgram = "tspin";
   };
 }

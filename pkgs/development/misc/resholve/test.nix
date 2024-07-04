@@ -3,7 +3,6 @@
 , callPackage
 , resholve
 , shunit2
-, fetchFromGitHub
 , coreutils
 , gnused
 , gnugrep
@@ -25,6 +24,39 @@
 , rlwrap
 , gnutar
 , bc
+# override testing
+, esh
+, getconf
+, libarchive
+, locale
+, mount
+, ncurses
+, nixos-install-tools
+, nixos-rebuild
+, procps
+, ps
+# known consumers
+, aaxtomp3
+, arch-install-scripts
+, bashup-events32
+, dgoss
+, git-ftp
+, ix
+, lesspipe
+, locate-dominating-file
+, mons
+, msmtp
+, nix-direnv
+, pdf2odt
+, pdfmm
+, rancid
+, s0ix-selftest-tool
+, unix-privesc-check
+, wgnord
+, wsl-vpnkit
+, xdg-utils
+, yadm
+, zxfer
 }:
 
 let
@@ -121,13 +153,17 @@ rec {
   cli = stdenv.mkDerivation {
     name = "resholve-test";
     src = rSrc;
+
+    dontBuild = true;
+
     installPhase = ''
       mkdir $out
       cp *.ansi $out/
     '';
+
     doCheck = true;
     buildInputs = [ resholve ];
-    nativeCheckInputs = [ coreutils bats python27 ];
+    nativeCheckInputs = [ coreutils bats ];
     # LOGLEVEL="DEBUG";
 
     # default path
@@ -186,4 +222,71 @@ rec {
     echo "Hello"
     file .
   '';
+  # spot-check lore overrides
+  loreOverrides = resholve.writeScriptBin "verify-overrides" {
+    inputs = [
+      coreutils
+      esh
+      getconf
+      libarchive
+      locale
+      mount
+      ncurses
+      procps
+      ps
+    ] ++ lib.optionals stdenv.isLinux [
+      nixos-install-tools
+      nixos-rebuild
+    ];
+    interpreter = "none";
+    execer = [
+      "cannot:${esh}/bin/esh"
+    ];
+    fix = {
+      mount = true;
+    };
+  } (''
+    env b2sum fake args
+    b2sum fake args
+    esh fake args
+    getconf fake args
+    bsdtar fake args
+    locale fake args
+    mount fake args
+    reset fake args
+    tput fake args
+    tset fake args
+    ps fake args
+    top fake args
+  '' + lib.optionalString stdenv.isLinux ''
+    nixos-generate-config fake args
+    nixos-rebuild fake args
+  '');
+
+  # ensure known consumers in nixpkgs keep working
+  inherit aaxtomp3;
+  inherit bashup-events32;
+  inherit bats;
+  inherit git-ftp;
+  inherit ix;
+  inherit lesspipe;
+  inherit locate-dominating-file;
+  inherit mons;
+  inherit msmtp;
+  inherit nix-direnv;
+  inherit pdf2odt;
+  inherit pdfmm;
+  inherit shunit2;
+  inherit xdg-utils;
+  inherit yadm;
+} // lib.optionalAttrs stdenv.isLinux {
+  inherit arch-install-scripts;
+  inherit dgoss;
+  inherit rancid;
+  inherit unix-privesc-check;
+  inherit wgnord;
+  inherit wsl-vpnkit;
+  inherit zxfer;
+} // lib.optionalAttrs (stdenv.isLinux && (stdenv.isi686 || stdenv.isx86_64)) {
+  inherit s0ix-selftest-tool;
 }

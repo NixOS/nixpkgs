@@ -40,7 +40,8 @@ gccStdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with lib; {
-    description = "TrueCrack is a brute-force password cracker for TrueCrypt volumes. It works on Linux and it is optimized for Nvidia Cuda technology.";
+    description = "Brute-force password cracker for TrueCrypt volumes, optimized for Nvidia Cuda technology";
+    mainProgram = "truecrack";
     homepage = "https://gitlab.com/kalilinux/packages/truecrack";
     broken = cudaSupport;
     license = licenses.gpl3Plus;

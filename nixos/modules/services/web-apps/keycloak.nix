@@ -11,6 +11,7 @@ let
     mkChangedOptionModule
     mkRenamedOptionModule
     mkRemovedOptionModule
+    mkPackageOption
     concatStringsSep
     mapAttrsToList
     escapeShellArg
@@ -24,7 +25,6 @@ let
     maintainers
     catAttrs
     collect
-    splitString
     hasPrefix
     ;
 
@@ -99,7 +99,7 @@ in
         type = bool;
         default = false;
         example = true;
-        description = lib.mdDoc ''
+        description = ''
           Whether to enable the Keycloak identity and access management
           server.
         '';
@@ -110,7 +110,7 @@ in
         default = null;
         example = "/run/keys/ssl_cert";
         apply = assertStringPath "sslCertificate";
-        description = lib.mdDoc ''
+        description = ''
           The path to a PEM formatted certificate to use for TLS/SSL
           connections.
         '';
@@ -121,7 +121,7 @@ in
         default = null;
         example = "/run/keys/ssl_key";
         apply = assertStringPath "sslCertificateKey";
-        description = lib.mdDoc ''
+        description = ''
           The path to a PEM formatted private key to use for TLS/SSL
           connections.
         '';
@@ -130,7 +130,7 @@ in
       plugins = lib.mkOption {
         type = lib.types.listOf lib.types.path;
         default = [ ];
-        description = lib.mdDoc ''
+        description = ''
           Keycloak plugin jar, ear files or derivations containing
           them. Packaged plugins are available through
           `pkgs.keycloak.plugins`.
@@ -142,7 +142,7 @@ in
           type = enum [ "mysql" "mariadb" "postgresql" ];
           default = "postgresql";
           example = "mariadb";
-          description = lib.mdDoc ''
+          description = ''
             The type of database Keycloak should connect to.
           '';
         };
@@ -150,7 +150,7 @@ in
         host = mkOption {
           type = str;
           default = "localhost";
-          description = lib.mdDoc ''
+          description = ''
             Hostname of the database to connect to.
           '';
         };
@@ -167,7 +167,7 @@ in
             type = port;
             default = dbPorts.${cfg.database.type};
             defaultText = literalMD "default port of selected database";
-            description = lib.mdDoc ''
+            description = ''
               Port of the database to connect to.
             '';
           };
@@ -176,7 +176,7 @@ in
           type = bool;
           default = cfg.database.host != "localhost";
           defaultText = literalExpression ''config.${opt.database.host} != "localhost"'';
-          description = lib.mdDoc ''
+          description = ''
             Whether the database connection should be secured by SSL /
             TLS.
           '';
@@ -185,7 +185,7 @@ in
         caCert = mkOption {
           type = nullOr path;
           default = null;
-          description = lib.mdDoc ''
+          description = ''
             The SSL / TLS CA certificate that verifies the identity of the
             database server.
 
@@ -200,7 +200,7 @@ in
         createLocally = mkOption {
           type = bool;
           default = true;
-          description = lib.mdDoc ''
+          description = ''
             Whether a database should be automatically created on the
             local host. Set this to false if you plan on provisioning a
             local database yourself. This has no effect if
@@ -211,7 +211,7 @@ in
         name = mkOption {
           type = str;
           default = "keycloak";
-          description = lib.mdDoc ''
+          description = ''
             Database name to use when connecting to an external or
             manually provisioned database; has no effect when a local
             database is automatically provisioned.
@@ -225,7 +225,7 @@ in
         username = mkOption {
           type = str;
           default = "keycloak";
-          description = lib.mdDoc ''
+          description = ''
             Username to use when connecting to an external or manually
             provisioned database; has no effect when a local database is
             automatically provisioned.
@@ -240,25 +240,18 @@ in
           type = path;
           example = "/run/keys/db_password";
           apply = assertStringPath "passwordFile";
-          description = lib.mdDoc ''
+          description = ''
             The path to a file containing the database password.
           '';
         };
       };
 
-      package = mkOption {
-        type = package;
-        default = pkgs.keycloak;
-        defaultText = literalExpression "pkgs.keycloak";
-        description = lib.mdDoc ''
-          Keycloak package to use.
-        '';
-      };
+      package = mkPackageOption pkgs "keycloak" { };
 
       initialAdminPassword = mkOption {
         type = str;
         default = "changeme";
-        description = lib.mdDoc ''
+        description = ''
           Initial password set for the `admin`
           user. The password is not stored safely and should be changed
           immediately in the admin panel.
@@ -268,7 +261,7 @@ in
       themes = mkOption {
         type = attrsOf package;
         default = { };
-        description = lib.mdDoc ''
+        description = ''
           Additional theme packages for Keycloak. Each theme is linked into
           subdirectory with a corresponding attribute name.
 
@@ -288,7 +281,7 @@ in
               type = str;
               default = "0.0.0.0";
               example = "127.0.0.1";
-              description = lib.mdDoc ''
+              description = ''
                 On which address Keycloak should accept new connections.
               '';
             };
@@ -297,7 +290,7 @@ in
               type = port;
               default = 80;
               example = 8080;
-              description = lib.mdDoc ''
+              description = ''
                 On which port Keycloak should listen for new HTTP connections.
               '';
             };
@@ -306,7 +299,7 @@ in
               type = port;
               default = 443;
               example = 8443;
-              description = lib.mdDoc ''
+              description = ''
                 On which port Keycloak should listen for new HTTPS connections.
               '';
             };
@@ -316,7 +309,7 @@ in
               default = "/";
               example = "/auth";
               apply = x: if !(hasPrefix "/") x then "/" + x else x;
-              description = lib.mdDoc ''
+              description = ''
                 The path relative to `/` for serving
                 resources.
 
@@ -335,9 +328,9 @@ in
             };
 
             hostname = mkOption {
-              type = str;
+              type = nullOr str;
               example = "keycloak.example.com";
-              description = lib.mdDoc ''
+              description = ''
                 The hostname part of the public URL used as base for
                 all frontend requests.
 
@@ -346,16 +339,13 @@ in
               '';
             };
 
-            hostname-strict-backchannel = mkOption {
+            hostname-backchannel-dynamic = mkOption {
               type = bool;
               default = false;
               example = true;
-              description = lib.mdDoc ''
-                Whether Keycloak should force all requests to go
-                through the frontend URL. By default, Keycloak allows
-                backend requests to instead use its local hostname or
-                IP address and may also advertise it to clients
-                through its OpenID Connect Discovery endpoint.
+              description = ''
+                Enables dynamic resolving of backchannel URLs,
+                including hostname, scheme, port and context path.
 
                 See <https://www.keycloak.org/server/hostname>
                 for more information about hostname configuration.
@@ -366,7 +356,7 @@ in
               type = enum [ "edge" "reencrypt" "passthrough" "none" ];
               default = "none";
               example = "edge";
-              description = lib.mdDoc ''
+              description = ''
                 The proxy address forwarding mode if the server is
                 behind a reverse proxy.
 
@@ -395,7 +385,7 @@ in
           }
         '';
 
-        description = lib.mdDoc ''
+        description = ''
           Configuration options corresponding to parameters set in
           {file}`conf/keycloak.conf`.
 
@@ -457,7 +447,7 @@ in
 
       keycloakConfig = lib.generators.toKeyValue {
         mkKeyValue = lib.flip lib.generators.mkKeyValueDefault "=" {
-          mkValueString = v: with builtins;
+          mkValueString = v:
             if isInt v then toString v
             else if isString v then v
             else if true == v then "true"
@@ -472,7 +462,8 @@ in
       confFile = pkgs.writeText "keycloak.conf" (keycloakConfig filteredConfig);
       keycloakBuild = cfg.package.override {
         inherit confFile;
-        plugins = cfg.package.enabledPlugins ++ cfg.plugins;
+        plugins = cfg.package.enabledPlugins ++ cfg.plugins ++
+                  (with cfg.package.plugins; [quarkus-systemd-notify quarkus-systemd-notify-deployment]);
       };
     in
     mkIf cfg.enable
@@ -485,6 +476,26 @@ in
           {
             assertion = createLocalPostgreSQL -> config.services.postgresql.settings.standard_conforming_strings or true;
             message = "Setting up a local PostgreSQL db for Keycloak requires `standard_conforming_strings` turned on to work reliably";
+          }
+          {
+            assertion = cfg.settings.hostname != null || ! cfg.settings.hostname-strict or true;
+            message = "Setting the Keycloak hostname is required, see `services.keycloak.settings.hostname`";
+          }
+          {
+            assertion = cfg.settings.hostname-url or null == null;
+            message = ''
+              The option `services.keycloak.settings.hostname-url' has been removed.
+              Set `services.keycloak.settings.hostname' instead.
+              See [New Hostname options](https://www.keycloak.org/docs/25.0.0/upgrading/#new-hostname-options) for details.
+            '';
+          }
+          {
+            assertion = cfg.settings.hostname-strict-backchannel or null == null;
+            message = ''
+              The option `services.keycloak.settings.hostname-strict-backchannel' has been removed.
+              Set `services.keycloak.settings.hostname-backchannel-dynamic' instead.
+              See [New Hostname options](https://www.keycloak.org/docs/25.0.0/upgrading/#new-hostname-options) for details.
+            '';
           }
         ];
 
@@ -636,6 +647,8 @@ in
               RuntimeDirectory = "keycloak";
               RuntimeDirectoryMode = "0700";
               AmbientCapabilities = "CAP_NET_BIND_SERVICE";
+              Type = "notify";  # Requires quarkus-systemd-notify plugin
+              NotifyAccess = "all";
             };
             script = ''
               set -o errexit -o pipefail -o nounset -o errtrace
@@ -661,7 +674,7 @@ in
             '' + ''
               export KEYCLOAK_ADMIN=admin
               export KEYCLOAK_ADMIN_PASSWORD=${escapeShellArg cfg.initialAdminPassword}
-              kc.sh start --optimized
+              kc.sh --verbose start --optimized
             '';
           };
 

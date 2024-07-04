@@ -22,10 +22,11 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A shell script that uploads images to imgur";
+    description = "Shell script that uploads images to imgur";
     license = licenses.mit;
     platforms = platforms.all;
     maintainers = with maintainers; [ abbradar ];
     homepage = "https://github.com/ram-on/imgurbash2";
+    mainProgram = "imgurbash2";
   };
 }

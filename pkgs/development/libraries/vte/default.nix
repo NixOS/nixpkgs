@@ -20,23 +20,26 @@
 , gperf
 , pango
 , pcre2
+, cairo
 , fribidi
-, zlib
+, lz4
 , icu
 , systemd
 , systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd
 , nixosTests
+, blackbox-terminal
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "vte";
-  version = "0.72.2";
+  version = "0.76.3";
 
-  outputs = [ "out" "dev" "devdoc" ];
+  outputs = [ "out" "dev" ]
+    ++ lib.optional (gtkVersion != null) "devdoc";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-95Zv0YWmmB9TlkFitxz+9+YGSVFV1vWCe3KqDdZ0HJ4=";
+    url = "mirror://gnome/sources/vte/${lib.versions.majorMinor finalAttrs.version}/vte-${finalAttrs.version}.tar.xz";
+    hash = "sha256-9njpTAVvN3/QAhIUrf9UUMsXLpoIsWCREYHd/3t9XWA=";
   };
 
   patches = [
@@ -46,7 +49,7 @@ stdenv.mkDerivation rec {
     (fetchpatch {
       name = "0001-Add-W_EXITCODE-macro-for-non-glibc-systems.patch";
       url = "https://git.alpinelinux.org/aports/plain/community/vte3/fix-W_EXITCODE.patch?id=4d35c076ce77bfac7655f60c4c3e4c86933ab7dd";
-      sha256 = "FkVyhsM0mRUzZmS2Gh172oqwcfXv6PyD6IEgjBhy2uU=";
+      hash = "sha256-FkVyhsM0mRUzZmS2Gh172oqwcfXv6PyD6IEgjBhy2uU=";
     })
   ];
 
@@ -64,40 +67,42 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    cairo
     fribidi
     gnutls
+    pango # duplicated with propagatedBuildInputs to support gtkVersion == null
     pcre2
-    zlib
+    lz4
     icu
   ] ++ lib.optionals systemdSupport [
     systemd
   ];
 
-  propagatedBuildInputs = assert (gtkVersion == "3" || gtkVersion == "4"); [
-    # Required by vte-2.91.pc.
-    (if gtkVersion == "3" then gtk3 else gtk4)
+  # Required by vte-2.91.pc.
+  propagatedBuildInputs = lib.optionals (gtkVersion != null) [
+    (assert (gtkVersion == "3" || gtkVersion == "4");
+    if gtkVersion == "3" then gtk3 else gtk4)
     glib
     pango
   ];
 
   mesonFlags = [
     "-Ddocs=true"
+    (lib.mesonBool "gtk3" (gtkVersion == "3"))
+    (lib.mesonBool "gtk4" (gtkVersion == "4"))
   ] ++ lib.optionals (!systemdSupport) [
     "-D_systemd=false"
-  ] ++ lib.optionals (gtkVersion == "4") [
-    "-Dgtk3=false"
-    "-Dgtk4=true"
   ] ++ lib.optionals stdenv.isDarwin [
     # -Bsymbolic-functions is not supported on darwin
     "-D_b_symbolic_functions=false"
   ];
 
   # error: argument unused during compilation: '-pie' [-Werror,-Wunused-command-line-argument]
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isMusl "-Wno-unused-command-line-argument";
+  env.NIX_CFLAGS_COMPILE = toString (lib.optional stdenv.hostPlatform.isMusl "-Wno-unused-command-line-argument"
+    ++ lib.optional stdenv.cc.isClang "-Wno-cast-function-type-strict");
 
   postPatch = ''
     patchShebangs perf/*
-    patchShebangs src/box_drawing_generate.sh
     patchShebangs src/parser-seq.py
     patchShebangs src/modes.py
   '';
@@ -109,17 +114,18 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = "vte";
       versionPolicy = "odd-unstable";
     };
     tests = {
       inherit (nixosTests.terminal-emulators) gnome-terminal lxterminal mlterm roxterm sakura stupidterm terminator termite xfce4-terminal;
+      blackbox-terminal = blackbox-terminal.override { sixelSupport = true; };
     };
   };
 
   meta = with lib; {
     homepage = "https://www.gnome.org/";
-    description = "A library implementing a terminal emulator widget for GTK";
+    description = "Library implementing a terminal emulator widget for GTK";
     longDescription = ''
       VTE is a library (libvte) implementing a terminal emulator widget for
       GTK, and a minimal sample application (vte) using that.  Vte is
@@ -132,4 +138,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ astsmtl antono ] ++ teams.gnome.members;
     platforms = platforms.unix;
   };
-}
+})

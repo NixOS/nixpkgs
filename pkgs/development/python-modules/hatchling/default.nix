@@ -1,32 +1,33 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
 
-# runtime
-, editables
-, packaging
-, pathspec
-, pluggy
-, tomli
-, trove-classifiers
+  # runtime
+  editables,
+  packaging,
+  pathspec,
+  pluggy,
+  tomli,
+  trove-classifiers,
 
-# tests
-, build
-, python
-, requests
-, virtualenv
+  # tests
+  build,
+  python,
+  requests,
+  virtualenv,
 }:
 
 buildPythonPackage rec {
   pname = "hatchling";
-  version = "1.18.0";
+  version = "1.24.2";
   format = "pyproject";
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-UOmcMRDOCvw/e9ut/xxxwXdY5HZzHCdgeUDPpmhkico=";
+    hash = "sha256-Qd3CfNsl2573tovvB1+CnITLNJqhv/gkB5fQElEFR7A=";
   };
 
   # listed in backend/pyproject.toml
@@ -36,9 +37,7 @@ buildPythonPackage rec {
     pathspec
     pluggy
     trove-classifiers
-  ] ++ lib.optionals (pythonOlder "3.11") [
-    tomli
-  ];
+  ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
   pythonImportsCheck = [
     "hatchling"
@@ -67,9 +66,13 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Modern, extensible Python build backend";
+    mainProgram = "hatchling";
     homepage = "https://hatch.pypa.io/latest/";
     changelog = "https://github.com/pypa/hatch/releases/tag/hatchling-v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ hexa ofek ];
+    maintainers = with maintainers; [
+      hexa
+      ofek
+    ];
   };
 }

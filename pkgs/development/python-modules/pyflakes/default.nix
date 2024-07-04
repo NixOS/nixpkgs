@@ -1,42 +1,38 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, fetchpatch, isPy311
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  setuptools,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pyflakes";
-  version = "3.0.1";
+  version = "3.2.0";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
-  format = "setuptools";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-7IsnamtgvYDe/tJa3X5DmIHBnmSFCv2bNGKD1BZf0P0=";
+  src = fetchFromGitHub {
+    owner = "PyCQA";
+    repo = "pyflakes";
+    rev = version;
+    hash = "sha256-ouCkkm9OrYob00uLTilqgWsTWfHhzaiZp7sa2C5liqk=";
   };
 
-  patches = lib.optional isPy311 # could be made unconditional on rebuild
-    (fetchpatch {
-      name = "tests-py311.patch";
-      url = "https://github.com/PyCQA/pyflakes/commit/836631f2f73d45baa4021453d89fc9fd6f52be58.diff";
-      hash = "sha256-xlgql+bN0HsGnTMkwax3ZG/5wrbkUl/kQkjlr3lsgRw=";
-    })
-  ;
+  nativeBuildInputs = [ setuptools ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "pyflakes" ];
 
   meta = with lib; {
     homepage = "https://github.com/PyCQA/pyflakes";
-    changelog = "https://github.com/PyCQA/pyflakes/blob/${version}/NEWS.rst";
-    description = "A simple program which checks Python source files for errors";
+    changelog = "https://github.com/PyCQA/pyflakes/blob/${src.rev}/NEWS.rst";
+    description = "Simple program which checks Python source files for errors";
+    mainProgram = "pyflakes";
     license = licenses.mit;
     maintainers = with maintainers; [ dotlambda ];
   };

@@ -6,35 +6,24 @@
 , makeWrapper
 , alsa-lib
 , curl
-, egl-wayland
 , libao
-, libdecor
-, libevdev
-, libffi
-, libGL
 , libpulseaudio
-, libX11
-, libXext
-, libxkbcommon
 , libzip
-, mesa
+, lua
 , miniupnpc
-, udev
-, vulkan-headers
+, SDL2
 , vulkan-loader
-, wayland
-, zlib
 }:
 
 stdenv.mkDerivation rec {
   pname = "flycast";
-  version = "2.1";
+  version = "2.3.2";
 
   src = fetchFromGitHub {
     owner = "flyinghead";
     repo = "flycast";
-    rev = "V${version}";
-    sha256 = "sha256-PRInOqg9OpaUVLwSj1lOxDtjpVaYehkRsp0jLrVKPyY=";
+    rev = "v${version}";
+    sha256 = "sha256-YFLSUaEikwLPglHh3t8sHiKHRn5cchKzzkJlZDdgVsU=";
     fetchSubmodules = true;
   };
 
@@ -47,23 +36,16 @@ stdenv.mkDerivation rec {
   buildInputs = [
     alsa-lib
     curl
-    egl-wayland
     libao
-    libdecor
-    libevdev
-    libffi
-    libGL
     libpulseaudio
-    libX11
-    libXext
-    libxkbcommon
     libzip
-    mesa # for libgbm
+    lua
     miniupnpc
-    udev
-    vulkan-headers
-    wayland
-    zlib
+    SDL2
+  ];
+
+  cmakeFlags = [
+    "-DUSE_HOST_SDL=ON"
   ];
 
   postFixup = ''
@@ -73,9 +55,10 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/flyinghead/flycast";
     changelog = "https://github.com/flyinghead/flycast/releases/tag/v${version}";
-    description = "A multi-platform Sega Dreamcast, Naomi and Atomiswave emulator";
+    description = "Multi-platform Sega Dreamcast, Naomi and Atomiswave emulator";
+    mainProgram = "flycast";
     license = licenses.gpl2Only;
     platforms = platforms.unix;
-    maintainers = [ maintainers.ivar ];
+    maintainers = [ ];
   };
 }

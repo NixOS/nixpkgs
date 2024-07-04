@@ -80,6 +80,7 @@ stdenv.mkDerivation rec {
   postInstall = ''
     mkdir -p $out/share/timidity/;
     cp ${./timidity.cfg} $out/share/timidity/timidity.cfg
+    substituteAllInPlace $out/share/timidity/timidity.cfg
     tar --strip-components=1 -xf $instruments -C $out/share/timidity/
   '';
   # This fixup step is unnecessary and fails on Darwin
@@ -87,9 +88,10 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://sourceforge.net/projects/timidity/";
-    license = licenses.gpl2;
-    description = "A software MIDI renderer";
+    license = licenses.gpl2Plus;
+    description = "Software MIDI renderer";
     maintainers = [ maintainers.marcweber ];
     platforms = platforms.unix;
+    mainProgram = "timidity";
   };
 }

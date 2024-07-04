@@ -3,6 +3,7 @@
 , callPackage
 , lib
 , fetchFromGitHub
+, fetchPypi
 , python3
 , substituteAll
 , nix-update-script
@@ -16,6 +17,41 @@ let
     self = py;
     packageOverrides = lib.foldr lib.composeExtensions (self: super: { }) (
       [
+        (
+          # Due to flask > 2.3 the login will not work
+          self: super: {
+            werkzeug = super.werkzeug.overridePythonAttrs (oldAttrs: rec {
+              version = "2.2.3";
+              format = "setuptools";
+              src = fetchPypi {
+                pname = "Werkzeug";
+                inherit version;
+                hash = "sha256-LhzMlBfU2jWLnebxdOOsCUOR6h1PvvLWZ4ZdgZ39Cv4=";
+              };
+              doCheck = false;
+            });
+            flask = super.flask.overridePythonAttrs (oldAttrs: rec {
+              version = "2.2.5";
+              format = "setuptools";
+              src = fetchPypi {
+                pname = "Flask";
+                inherit version;
+                hash = "sha256-7e6bCn/yZiG9WowQ/0hK4oc3okENmbC7mmhQx/uXeqA=";
+              };
+            });
+
+            netaddr = super.netaddr.overridePythonAttrs (oldAttrs: rec {
+              version = "0.9.0";
+
+              src = fetchPypi {
+                pname = "netaddr";
+                inherit version;
+                hash = "sha256-e0b6mxotcf1d6eSjeE7zOXAKU6CMgEDwi69fEZTaASg=";
+              };
+            });
+          }
+        )
+
         # Built-in dependency
         (
           self: super: {
@@ -80,13 +116,13 @@ let
           self: super: {
             octoprint = self.buildPythonPackage rec {
               pname = "OctoPrint";
-              version = "1.9.3";
+              version = "1.10.2";
 
               src = fetchFromGitHub {
                 owner = "OctoPrint";
                 repo = "OctoPrint";
                 rev = version;
-                hash = "sha256-SYN/BrcukHMDwk70XGu/pO45fSPr/KOEyd4wxtz2Fo0=";
+                hash = "sha256-vISMps2v18A7MkF24SyIcK5yOQsTxBQLnKybVd8R2FU=";
               };
 
               propagatedBuildInputs = with self; [
@@ -114,7 +150,6 @@ let
                 netifaces
                 octoprint-filecheck
                 octoprint-firmwarecheck
-                octoprint-pisupport
                 passlib
                 pathvalidate
                 pkginfo
@@ -139,9 +174,11 @@ let
                 zeroconf
                 zipstream-ng
                 class-doc
-                pydantic
+                pydantic_1
               ] ++ lib.optionals stdenv.isDarwin [
                 py.pkgs.appdirs
+              ] ++ lib.optionals (!stdenv.isDarwin) [
+                octoprint-pisupport
               ];
 
               nativeCheckInputs = with self; [
@@ -219,7 +256,8 @@ let
 
               meta = with lib; {
                 homepage = "https://octoprint.org/";
-                description = "The snappy web interface for your 3D printer";
+                description = "Snappy web interface for your 3D printer";
+                mainProgram = "octoprint";
                 license = licenses.agpl3Only;
                 maintainers = with maintainers; [ abbradar gebner WhittlesJr gador ];
               };

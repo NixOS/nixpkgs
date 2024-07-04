@@ -14,7 +14,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocprim";
-  version = "5.7.0";
+  version = "5.7.1";
 
   outputs = [
     "out"
@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   src = fetchFromGitHub {
-    owner = "ROCmSoftwarePlatform";
+    owner = "ROCm";
     repo = "rocPRIM";
     rev = "rocm-${finalAttrs.version}";
     hash = "sha256-+ukFWsWv3RhS+Z6tmR4TRT8QTYEDuAEk12F9Gv1eXGU=";
@@ -77,10 +77,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "ROCm parallel primitives";
-    homepage = "https://github.com/ROCmSoftwarePlatform/rocPRIM";
+    homepage = "https://github.com/ROCm/rocPRIM";
     license = with licenses; [ mit ];
     maintainers = teams.rocm.members;
     platforms = platforms.linux;
-    broken = versions.minor finalAttrs.version != versions.minor stdenv.cc.version;
+    broken = versions.minor finalAttrs.version != versions.minor stdenv.cc.version || versionAtLeast finalAttrs.version "6.0.0";
   };
 })

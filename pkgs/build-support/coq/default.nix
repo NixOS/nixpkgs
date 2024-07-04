@@ -1,10 +1,33 @@
 { lib, stdenv, coqPackages, coq, which, fetchzip }@args:
-let lib = import ./extra-lib.nix {inherit (args) lib;}; in
-with builtins; with lib;
+
 let
+  lib = import ./extra-lib.nix {
+    inherit (args) lib;
+  };
+
+  inherit (lib)
+    concatStringsSep
+    flip
+    foldl
+    isFunction
+    isString
+    optional
+    optionalAttrs
+    optionals
+    optionalString
+    pred
+    remove
+    switch
+    versions
+    ;
+
+  inherit (lib.attrsets) removeAttrs;
+  inherit (lib.strings) match;
+
   isGitHubDomain = d: match "^github.*" d != null;
   isGitLabDomain = d: match "^gitlab.*" d != null;
 in
+
 { pname,
   version ? null,
   fetcher ? null,
@@ -115,10 +138,9 @@ stdenv.mkDerivation (removeAttrs ({
   '';
   installPhase = ''
     runHook preInstall
-    dune install ${opam-name} --prefix=$out
-    mv $out/lib/coq $out/lib/TEMPORARY
+    dune install --prefix=$out --libdir $OCAMLFIND_DESTDIR ${opam-name}
     mkdir $out/lib/coq/
-    mv $out/lib/TEMPORARY $out/lib/coq/${coq.coq-version}
+    mv $OCAMLFIND_DESTDIR/coq $out/lib/coq/${coq.coq-version}
     runHook postInstall
   '';
 })

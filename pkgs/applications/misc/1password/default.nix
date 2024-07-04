@@ -2,22 +2,22 @@
 
 let
   inherit (stdenv.hostPlatform) system;
-  fetch = srcPlatform: sha256: extension:
+  fetch = srcPlatform: hash: extension:
     let
       args = {
         url = "https://cache.agilebits.com/dist/1P/op2/pkg/v${version}/op_${srcPlatform}_v${version}.${extension}";
-        inherit sha256;
+        inherit hash;
       } // lib.optionalAttrs (extension == "zip") { stripRoot = false; };
     in
     if extension == "zip" then fetchzip args else fetchurl args;
 
   pname = "1password-cli";
-  version = "2.21.0";
+  version = "2.29.0";
   sources = rec {
-    aarch64-linux = fetch "linux_arm64" "sha256-pXGBlduNOvxpPMd/BObHVXXGQ0ZTlIkqZ3jYyoGXnqA=" "zip";
-    i686-linux = fetch "linux_386" "sha256-iePA4nzwBtAlYWybmQdV7Zvvnv+jPqrndB4aabf/JMM=" "zip";
-    x86_64-linux = fetch "linux_amd64" "sha256-wevv0KYe01ZL70zL4BNti/oCcAzNJ3EO97QIU1BYQRE=" "zip";
-    aarch64-darwin = fetch "apple_universal" "sha256-AViR53q1/jZtzpFZ7FaBwoZAGuXsGHfULEIuIrTqgSs=" "pkg";
+    aarch64-linux = fetch "linux_arm64" "sha256-sBbdkoacGI/gawM4YH+BBCLDhC2B+cE4iKVGHBhwkic=" "zip";
+    i686-linux = fetch "linux_386" "sha256-TTd5juT0Aqp1+OfunXcuk0KbL6HIHQV31+1Q1e0GYMY=" "zip";
+    x86_64-linux = fetch "linux_amd64" "sha256-Bb6fNoeNxlbDfwt7Jr8BaKCmFUwSdsLQdVoCmQCNmLA=" "zip";
+    aarch64-darwin = fetch "apple_universal" "sha256-/ryklZnGhrgJggDIa8HmuDsHAXkdrWeXKCQGGVwUAAo=" "pkg";
     x86_64-darwin = aarch64-darwin;
   };
   platforms = builtins.attrNames sources;
@@ -63,6 +63,8 @@ stdenv.mkDerivation {
     $out/bin/${mainProgram} --version
   '';
 
+  passthru.updateScript = ./update.sh;
+
   passthru.tests.version = testers.testVersion {
     package = _1password;
   };
@@ -71,7 +73,7 @@ stdenv.mkDerivation {
     description = "1Password command-line tool";
     homepage = "https://developer.1password.com/docs/cli/";
     downloadPage = "https://app-updates.agilebits.com/product_history/CLI2";
-    maintainers = with maintainers; [ joelburget marsam ];
+    maintainers = with maintainers; [ joelburget ];
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     inherit mainProgram platforms;

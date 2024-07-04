@@ -1,40 +1,38 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, setuptools
-, typing-extensions
-, orjson
-, msgpack
-, pyyaml
-, tomli-w
-, tomli
-, pytestCheckHook
-, ciso8601
-, pendulum
-, pytest-mock
+{
+  lib,
+  buildPythonPackage,
+  ciso8601,
+  fetchFromGitHub,
+  msgpack,
+  orjson,
+  pendulum,
+  pytest-mock,
+  pytestCheckHook,
+  pythonOlder,
+  pyyaml,
+  setuptools,
+  tomli,
+  tomli-w,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "mashumaro";
-  version = "3.9.1";
-  format = "pyproject";
-  disabled = pythonOlder "3.7";
+  version = "3.13";
+  pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "Fatal1ty";
-    repo = pname;
+    repo = "mashumaro";
     rev = "refs/tags/v${version}";
-    hash = "sha256-VDB6313lvKuLJFOnuzEaiiRLUBOvbdjfowgl3nvG8Y0=";
+    hash = "sha256-ETK1rHKlByQkqibejiZmXF6c4eIiMazLa8XY2OH30q4=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  propagatedBuildInputs = [
-    typing-extensions
-  ];
+  propagatedBuildInputs = [ typing-extensions ];
 
   passthru.optional-dependencies = {
     orjson = [ orjson ];
@@ -50,12 +48,10 @@ buildPythonPackage rec {
     pytestCheckHook
   ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
 
-  pythonImportsCheck = [
-    "mashumaro"
-  ];
+  pythonImportsCheck = [ "mashumaro" ];
 
   meta = with lib; {
-    description = "Fast and well tested serialization library on top of dataclasses";
+    description = "Serialization library on top of dataclasses";
     homepage = "https://github.com/Fatal1ty/mashumaro";
     changelog = "https://github.com/Fatal1ty/mashumaro/releases/tag/v${version}";
     license = licenses.asl20;

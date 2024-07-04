@@ -38,6 +38,6 @@ appleDerivation' (if headersOnly then stdenvNoCC else stdenv) {
   meta = with lib; {
     maintainers = with maintainers; [ copumpkin ];
     platforms   = platforms.darwin;
-    license     = licenses.apsl20;
+    license     = licenses.apple-psl20;
   };
 }

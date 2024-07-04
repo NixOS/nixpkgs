@@ -1,12 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, django
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  django,
 }:
 
 buildPythonPackage rec {
   pname = "django-colorful";
   version = "1.3";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -24,5 +26,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/charettes/django-colorful";
     license = licenses.mit;
   };
-
 }

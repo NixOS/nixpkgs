@@ -1,13 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, nose
-, six
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  nose,
+  six,
 }:
 
 buildPythonPackage rec {
   pname = "scales";
   version = "1.0.9";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -25,5 +27,4 @@ buildPythonPackage rec {
     homepage = "https://www.github.com/Cue/scales";
     license = licenses.asl20;
   };
-
 }

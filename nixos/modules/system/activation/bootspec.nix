@@ -11,6 +11,7 @@
 let
   cfg = config.boot.bootspec;
   children = lib.mapAttrs (childName: childConfig: childConfig.configuration.system.build.toplevel) config.specialisation;
+  hasAtLeastOneInitrdSecret = lib.length (lib.attrNames config.boot.initrd.secrets) > 0;
   schemas = {
     v1 = rec {
       filename = "boot.json";
@@ -27,6 +28,7 @@ let
               label = "${config.system.nixos.distroName} ${config.system.nixos.codeName} ${config.system.nixos.label} (Linux ${config.boot.kernelPackages.kernel.modDirVersion})";
             } // lib.optionalAttrs config.boot.initrd.enable {
               initrd = "${config.system.build.initialRamdisk}/${config.system.boot.loader.initrdFile}";
+            } // lib.optionalAttrs hasAtLeastOneInitrdSecret {
               initrdSecrets = "${config.system.build.initialRamdiskSecretAppender}/bin/append-initrd-secrets";
             };
           }));
@@ -75,19 +77,18 @@ let
 in
 {
   options.boot.bootspec = {
-    enable = lib.mkEnableOption (lib.mdDoc "the generation of RFC-0125 bootspec in $system/boot.json, e.g. /run/current-system/boot.json")
+    enable = lib.mkEnableOption "the generation of RFC-0125 bootspec in $system/boot.json, e.g. /run/current-system/boot.json"
       // { default = true; internal = true; };
-    enableValidation = lib.mkEnableOption (lib.mdDoc ''the validation of bootspec documents for each build.
+    enableValidation = lib.mkEnableOption ''the validation of bootspec documents for each build.
       This will introduce Go in the build-time closure as we are relying on [Cuelang](https://cuelang.org/) for schema validation.
-      Enable this option if you want to ascertain that your documents are correct.
-      ''
-    );
+      Enable this option if you want to ascertain that your documents are correct
+      '';
 
     extensions = lib.mkOption {
       # NOTE(RaitoBezarius): this is not enough to validate: extensions."osRelease" = drv; those are picked up by cue validation.
       type = lib.types.attrsOf lib.types.anything; # <namespace>: { ...namespace-specific fields }
       default = { };
-      description = lib.mdDoc ''
+      description = ''
         User-defined data that extends the bootspec document.
 
         To reduce incompatibility and prevent names from clashing

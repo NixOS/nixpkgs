@@ -22,5 +22,6 @@ buildGoModule rec {
     license = licenses.mit;
     platforms = platforms.linux;
     maintainers = with maintainers; [ mvs ];
+    mainProgram = "kappanhang";
   };
 }

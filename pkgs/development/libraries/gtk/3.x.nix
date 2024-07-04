@@ -64,7 +64,7 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gtk+3";
-  version = "3.24.38";
+  version = "3.24.42";
 
   outputs = [ "out" "dev" ] ++ lib.optional withIntrospection "devdoc";
   outputBin = "dev";
@@ -78,7 +78,7 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (finalAttrs) version;
   in fetchurl {
     url = "mirror://gnome/sources/gtk+/${lib.versions.majorMinor version}/gtk+-${version}.tar.xz";
-    sha256 = "sha256-zhHezwGLJb3YUFVEpPhyQoVOyIvgVNmt5fOiBETdjuc=";
+    sha256 = "sha256-UPifYVCS1N0Bu9dZcZ+L04Dl8Un2/XipRyXi3hEjd+I=";
   };
 
   patches = [
@@ -242,7 +242,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = with lib; {
-    description = "A multi-platform toolkit for creating graphical user interfaces";
+    description = "Multi-platform toolkit for creating graphical user interfaces";
     longDescription = ''
       GTK is a highly usable, feature rich toolkit for creating
       graphical user interfaces which boasts cross platform
@@ -264,6 +264,6 @@ stdenv.mkDerivation (finalAttrs: {
       "gtk+-x11-3.0"
     ];
     platforms = platforms.all;
-    changelog = "https://gitlab.gnome.org/GNOME/gtk/-/raw/${version}/NEWS";
+    changelog = "https://gitlab.gnome.org/GNOME/gtk/-/raw/${finalAttrs.version}/NEWS";
   };
 })

@@ -1,81 +1,75 @@
-{ lib
-, buildPythonPackage
-, fetchpatch
-, fetchPypi
-, cmake
-, numpy
-, scikit-build
-, setuptools
-, setuptools-scm
-, wheel
-, pybind11
-, pydantic
-, pytestCheckHook
-, rich
-, scipy
-, zlib
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  cmake,
+  scikit-build,
+  setuptools,
+  setuptools-scm,
+  pybind11,
+
+  zlib,
+
+  # dependencies
+  numpy,
+  packaging,
+  pydantic,
+  rich,
+
+  # checks
+  awkward,
+  pytestCheckHook,
+  scipy,
 }:
 
 buildPythonPackage rec {
   pname = "correctionlib";
-  version = "2.2.2";
-  format = "pyproject";
+  version = "2.6.1";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-h3eggtPLSF/8ShQ5xzowZW1KSlcI/YBsPu3lsSyzHkw=";
+  src = fetchFromGitHub {
+    owner = "cms-nanoAOD";
+    repo = "correctionlib";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-mfNSETMjhLoa3MK7zPggz568j1T6ay42cKa1GGKKfT8=";
+    fetchSubmodules = true;
   };
 
-  patches = [
-    (fetchpatch {
-      name = "ci-maintenance.patch";
-      url = "https://github.com/cms-nanoAOD/correctionlib/commit/924031637b040f6e8e4930c46a9f7560c59db23d.patch";
-      hash = "sha256-jq3ojMsO2Ex9om8tVpEY9uwwelXPzgQ+KCPN0bgda8w=";
-      includes = [ "pyproject.toml" ];
-    })
-    (fetchpatch {
-      name = "clean-up-build-dependencies.patch";
-      url = "https://github.com/cms-nanoAOD/correctionlib/commit/c4fd64ca0e5ce806890e8f0ae8e792dcc4537d38.patch";
-      hash = "sha256-8ID2jEnmfYmPxWMtRviBc3t1W4p3Y+lAzijFtYBEtyk=";
-    })
-  ];
-
-  nativeBuildInputs = [
+  build-system = [
     cmake
-    numpy
     scikit-build
     setuptools
     setuptools-scm
-    wheel
     pybind11
   ];
 
-  buildInputs = [
-    zlib
-  ];
+  buildInputs = [ zlib ];
 
-  propagatedBuildInputs = [
+  dependencies = [
+    numpy
+    packaging
     pydantic
     rich
   ];
 
   dontUseCmakeConfigure = true;
 
-  env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   nativeCheckInputs = [
+    awkward
     pytestCheckHook
     scipy
   ];
 
-  pythonImportsCheck = [
-    "correctionlib"
-  ];
+  pythonImportsCheck = [ "correctionlib" ];
 
-  meta = with lib; {
+  meta = {
     description = "Provides a well-structured JSON data format for a wide variety of ad-hoc correction factors encountered in a typical HEP analysis";
+    mainProgram = "correction";
     homepage = "https://cms-nanoaod.github.io/correctionlib/";
-    license = with licenses; [ bsd3 ];
-    maintainers = with maintainers; [ veprbl ];
+    changelog = "https://github.com/cms-nanoAOD/correctionlib/releases/tag/v${version}";
+    license = with lib.licenses; [ bsd3 ];
+    maintainers = with lib.maintainers; [ veprbl ];
   };
 }

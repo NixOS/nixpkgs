@@ -1,54 +1,57 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-
-# build
-, setuptools-scm
-
-# propagates
-, azure-storage-blob
-, boto3
-, requests
-
-# tests
-, responses
-, unittestCheckHook
+{
+  lib,
+  azure-storage-blob,
+  boto3,
+  buildPythonPackage,
+  fetchFromGitHub,
+  python-dotenv,
+  pythonOlder,
+  requests,
+  responses,
+  setuptools,
+  setuptools-git-versioning,
+  setuptools-scm,
+  unittestCheckHook,
+  urllib3,
 }:
+
 buildPythonPackage rec {
   pname = "sapi-python-client";
-  version = "0.5.0";
-  format = "setuptools";
+  version = "0.8.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "keboola";
-    repo = pname;
+    repo = "sapi-python-client";
     rev = "refs/tags/${version}";
-    hash = "sha256-79v9quhzeNRXcm6Z7BhD76lTZtw+Z0T1yK3zhrdreXw=";
+    hash = "sha256-Xc4VD91Nhnj0UyWHpdwEaETJVH8Ue6/kuiKEMaiSR0g=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "urllib3<2.0.0" "urllib3"
+  '';
 
   nativeBuildInputs = [
+    setuptools
+    setuptools-git-versioning
     setuptools-scm
   ];
 
   propagatedBuildInputs = [
     azure-storage-blob
     boto3
+    python-dotenv
     requests
+    responses
+    urllib3
   ];
 
   # Requires API token and an active Keboola bucket
   # ValueError: Root URL is required.
   doCheck = false;
-
-  nativeCheckInputs = [
-    unittestCheckHook
-    responses
-  ];
 
   pythonImportsCheck = [
     "kbcstorage"

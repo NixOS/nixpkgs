@@ -1,31 +1,32 @@
-{ lib
-, attrs
-, buildPythonPackage
-, fetchFromGitHub
-, hypothesis
-, pythonOlder
-, jbig2dec
-, deprecation
-, lxml
-, mupdf
-, packaging
-, pillow
-, psutil
-, pybind11
-, pytest-xdist
-, pytestCheckHook
-, python-dateutil
-, python-xmp-toolkit
-, qpdf
-, setuptools
-, substituteAll
-, wheel
+{
+  lib,
+  attrs,
+  buildPythonPackage,
+  fetchFromGitHub,
+  hypothesis,
+  pythonOlder,
+  jbig2dec,
+  deprecated,
+  lxml,
+  mupdf-headless,
+  numpy,
+  packaging,
+  pillow,
+  psutil,
+  pybind11,
+  pytest-xdist,
+  pytestCheckHook,
+  python-dateutil,
+  python-xmp-toolkit,
+  qpdf,
+  setuptools,
+  substituteAll,
 }:
 
 buildPythonPackage rec {
   pname = "pikepdf";
-  version = "8.3.0";
-  format = "pyproject";
+  version = "8.14.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -39,14 +40,14 @@ buildPythonPackage rec {
     postFetch = ''
       rm "$out/.git_archival.txt"
     '';
-    hash = "sha256-d76s4iJFwhzWSySXTS53PQQuWfWIboIRecEyjzobsME=";
+    hash = "sha256-3ORvbhO3eLu/NIE0Lwdf93QtUHUmyMf7LmdMBJpkYIg=";
   };
 
   patches = [
     (substituteAll {
       src = ./paths.patch;
-      jbig2dec = "${lib.getBin jbig2dec}/bin/jbig2dec";
-      mudraw = "${lib.getBin mupdf}/bin/mudraw";
+      jbig2dec = lib.getExe' jbig2dec "jbig2dec";
+      mutool = lib.getExe' mupdf-headless "mutool";
     })
   ];
 
@@ -55,19 +56,17 @@ buildPythonPackage rec {
       --replace "shims_enabled = not cflags_defined" "shims_enabled = False"
   '';
 
-  buildInputs = [
-    qpdf
-  ];
+  buildInputs = [ qpdf ];
 
   nativeBuildInputs = [
     pybind11
     setuptools
-    wheel
   ];
 
   nativeCheckInputs = [
     attrs
     hypothesis
+    numpy
     pytest-xdist
     psutil
     pytestCheckHook
@@ -76,7 +75,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    deprecation
+    deprecated
     lxml
     packaging
     pillow
@@ -88,7 +87,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/pikepdf/pikepdf";
     description = "Read and write PDFs with Python, powered by qpdf";
     license = licenses.mpl20;
-    maintainers = with maintainers; [ kiwi dotlambda ];
+    maintainers = with maintainers; [ dotlambda ];
     changelog = "https://github.com/pikepdf/pikepdf/blob/${src.rev}/docs/releasenotes/version${lib.versions.major version}.rst";
   };
 }

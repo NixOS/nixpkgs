@@ -32,7 +32,7 @@ let
     else throw "Unsupported ROCm LLVM platform";
 in stdenv.mkDerivation (finalAttrs: {
   pname = "rocmlir${suffix}";
-  version = "5.7.0";
+  version = "5.7.1";
 
   outputs = [
     "out"
@@ -41,7 +41,7 @@ in stdenv.mkDerivation (finalAttrs: {
   ];
 
   src = fetchFromGitHub {
-    owner = "ROCmSoftwarePlatform";
+    owner = "ROCm";
     repo = "rocMLIR";
     rev = "rocm-${finalAttrs.version}";
     hash = "sha256-vPi4UVljohVAfnwDVQqeOVaJPa6v8aV5uBOtqLddTtc=";
@@ -121,10 +121,10 @@ in stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "MLIR-based convolution and GEMM kernel generator";
-    homepage = "https://github.com/ROCmSoftwarePlatform/rocMLIR";
+    homepage = "https://github.com/ROCm/rocMLIR";
     license = with licenses; [ asl20 ];
     maintainers = teams.rocm.members;
     platforms = platforms.linux;
-    broken = versions.minor finalAttrs.version != versions.minor stdenv.cc.version;
+    broken = versions.minor finalAttrs.version != versions.minor stdenv.cc.version || versionAtLeast finalAttrs.version "6.0.0";
   };
 })

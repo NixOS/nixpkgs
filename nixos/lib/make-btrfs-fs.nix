@@ -15,6 +15,8 @@
 , volumeLabel
 , uuid ? "44444444-4444-4444-8888-888888888888"
 , btrfs-progs
+, libfaketime
+, fakeroot
 }:
 
 let
@@ -23,7 +25,7 @@ in
 pkgs.stdenv.mkDerivation {
   name = "btrfs-fs.img${lib.optionalString compressImage ".zst"}";
 
-  nativeBuildInputs = [ btrfs-progs ] ++ lib.optional compressImage zstd;
+  nativeBuildInputs = [ btrfs-progs libfaketime fakeroot ] ++ lib.optional compressImage zstd;
 
   buildCommand =
     ''
@@ -50,7 +52,7 @@ pkgs.stdenv.mkDerivation {
       cp ${sdClosureInfo}/registration ./rootImage/nix-path-registration
 
       touch $img
-      mkfs.btrfs -L ${volumeLabel} -U ${uuid} -r ./rootImage --shrink $img
+      faketime -f "1970-01-01 00:00:01" fakeroot mkfs.btrfs -L ${volumeLabel} -U ${uuid} -r ./rootImage --shrink $img
 
       if ! btrfs check $img; then
         echo "--- 'btrfs check' failed for BTRFS image ---"

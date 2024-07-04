@@ -4,31 +4,31 @@
 , fetchYarnDeps
 , makeWrapper
 , nodejs
-, prefetch-yarn-deps
+, fixup-yarn-lock
 , yarn
 , chromium
 }:
 
 stdenv.mkDerivation rec {
   pname = "mermaid-cli";
-  version = "10.4.0";
+  version = "10.9.0";
 
   src = fetchFromGitHub {
     owner = "mermaid-js";
     repo = "mermaid-cli";
     rev = version;
-    hash = "sha256-mzBN/Hg/03+jYyoAHvjx33HC46ZA6dtHmiSnaExCRR0=";
+    hash = "sha256-o9QaJsJlfqsAguYGHAdf8aqZWbOgDJs+0KVQAVtRlA0=";
   };
 
   offlineCache = fetchYarnDeps {
     yarnLock = "${src}/yarn.lock";
-    hash = "sha256-RQsRGzkuPgGVuEpF5lzv26XKMPLX2NrsjVkGMMkCbO4=";
+    hash = "sha256-SfRzn5FxO+Ls+ne7ay3tySNLr+awEJ9fo/nwcAY11qA=";
   };
 
   nativeBuildInputs  = [
     makeWrapper
     nodejs
-    prefetch-yarn-deps
+    fixup-yarn-lock
     yarn
   ];
 
@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
     cp -r . "$out/lib/node_modules/@mermaid-js/mermaid-cli"
 
     makeWrapper "${nodejs}/bin/node" "$out/bin/mmdc" \
-  '' + lib.optionalString (lib.meta.availableOn stdenv.targetPlatform chromium) ''
+  '' + lib.optionalString (lib.meta.availableOn stdenv.hostPlatform chromium) ''
       --set PUPPETEER_EXECUTABLE_PATH '${lib.getExe chromium}' \
   '' + ''
       --add-flags "$out/lib/node_modules/@mermaid-js/mermaid-cli/src/cli.js"

@@ -1,6 +1,8 @@
-{ lib, stdenv, fetchurl, fetchpatch, python3Packages, makeWrapper, gettext, installShellFiles
+{ lib, stdenv, fetchurl, python3Packages, makeWrapper, gettext, installShellFiles
 , re2Support ? true
-, rustSupport ? stdenv.hostPlatform.isLinux, cargo, rustPlatform, rustc
+# depends on rust-cpython which won't support python312
+# https://github.com/dgrunwald/rust-cpython/commit/e815555629e557be084813045ca1ddebc2f76ef9
+, rustSupport ? (stdenv.hostPlatform.isLinux && python3Packages.pythonOlder "3.12"), cargo, rustPlatform, rustc
 , fullBuild ? false
 , gitSupport ? fullBuild
 , guiSupport ? fullBuild, tk
@@ -21,11 +23,11 @@ let
 
   self = python3Packages.buildPythonApplication rec {
     pname = "mercurial${lib.optionalString fullBuild "-full"}";
-    version = "6.5.2";
+    version = "6.6.3";
 
     src = fetchurl {
       url = "https://mercurial-scm.org/release/mercurial-${version}.tar.gz";
-      sha256 = "sha256-r8OdcGeXZZPIMyuOl6Eq/Tk7VQN8X7nDyrGkLHVg9go=";
+      hash = "sha256-911qSnWCOht9cTpJZ+yi9Zb0ZuWPxrwG1yZCky/X4wc=";
     };
 
     format = "other";
@@ -35,7 +37,7 @@ let
     cargoDeps = if rustSupport then rustPlatform.fetchCargoTarball {
       inherit src;
       name = "mercurial-${version}";
-      sha256 = "sha256-dcyHmLkRadNK30Vv0XsCEaZGTIcF/L29lLe58ggB3Lg=";
+      sha256 = "sha256-G5tzwoIGOgpVI35rYXDeelnBgTbAiq7BDcXCHQzqSrs=";
       sourceRoot = "mercurial-${version}/rust";
     } else null;
     cargoRoot = if rustSupport then "rust" else null;
@@ -43,7 +45,7 @@ let
     propagatedBuildInputs = lib.optional re2Support fb-re2
       ++ lib.optional gitSupport pygit2
       ++ lib.optional highlightSupport pygments;
-    nativeBuildInputs = [ makeWrapper gettext installShellFiles ]
+    nativeBuildInputs = [ makeWrapper gettext installShellFiles python3Packages.setuptools ]
       ++ lib.optionals rustSupport [
            rustPlatform.cargoSetupHook
            cargo
@@ -60,7 +62,7 @@ let
       cp contrib/hgk $out/bin
       cat >> $out/etc/mercurial/hgrc << EOF
       [extensions]
-      hgk=$out/lib/${python.libPrefix}/site-packages/hgext/hgk.py
+      hgk=$out/${python.sitePackages}/hgext/hgk.py
       EOF
       # setting HG so that hgk can be run itself as well (not only hg view)
       WRAP_TK=" --set TK_LIBRARY ${tk}/lib/${tk.libPrefix}
@@ -87,13 +89,14 @@ let
     };
 
     meta = with lib; {
-      description = "A fast, lightweight SCM system for very large distributed projects";
+      description = "Fast, lightweight SCM system for very large distributed projects";
       homepage = "https://www.mercurial-scm.org";
       downloadPage = "https://www.mercurial-scm.org/release/";
       changelog = "https://wiki.mercurial-scm.org/Release${versions.majorMinor version}";
       license = licenses.gpl2Plus;
       maintainers = with maintainers; [ eelco lukegb pacien techknowlogick ];
       platforms = platforms.unix;
+      mainProgram = "hg";
     };
   };
 

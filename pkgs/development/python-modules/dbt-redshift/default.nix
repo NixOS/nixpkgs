@@ -1,37 +1,42 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, agate
-, boto3
-, dbt-core
-, dbt-postgres
-, pytestCheckHook
-, pythonRelaxDepsHook
-, redshift-connector
+{
+  lib,
+  agate,
+  boto3,
+  buildPythonPackage,
+  dbt-core,
+  dbt-postgres,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
+  pythonRelaxDepsHook,
+  redshift-connector,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "dbt-redshift";
-  version = "1.5.8";
-  format = "setuptools";
+  version = "1.7.7";
+  pyproject = true;
+
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "dbt-labs";
-    repo = pname;
+    repo = "dbt-redshift";
     rev = "refs/tags/v${version}";
-    hash = "sha256-T7cNszIroOT8TNfOzZpdJDR1+5ybhkXvyvvM5zokVgo=";
+    hash = "sha256-DKqJ/8hEPe9O9YrAjrTL2Gh1lj6QrdtHtd7aarZ7GkQ=";
   };
-
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
-  ];
 
   pythonRelaxDeps = [
     "boto3"
     "redshift-connector"
   ];
 
-  propagatedBuildInputs = [
+  nativeBuildInputs = [ pythonRelaxDepsHook ];
+
+  build-system = [ setuptools ];
+
+  dependencies = [
     agate
     boto3
     dbt-core
@@ -39,17 +44,11 @@ buildPythonPackage rec {
     redshift-connector
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [
-    "tests/unit"
-  ];
+  pytestFlagsArray = [ "tests/unit" ];
 
-  pythonImportsCheck = [
-    "dbt.adapters.redshift"
-  ];
+  pythonImportsCheck = [ "dbt.adapters.redshift" ];
 
   meta = with lib; {
     description = "Plugin enabling dbt to work with Amazon Redshift";

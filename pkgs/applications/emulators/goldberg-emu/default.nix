@@ -19,6 +19,11 @@ stdenv.mkDerivation rec {
   # It attempts to install windows-only libraries which we never build
   patches = [ ./dont-install-unsupported.patch ];
 
+  postPatch = ''
+    # Fix gcc-13 build failure due to missing <string> include.
+    sed -e '1i #include <string>' -i dll/settings.h
+  '';
+
   nativeBuildInputs = [ cmake ];
   buildInputs = [ protobuf ];
 
@@ -48,6 +53,6 @@ stdenv.mkDerivation rec {
     mainProgram = "lobby_connect";
     license = licenses.lgpl3Only;
     platforms = platforms.unix;
-    maintainers = [ maintainers.ivar ];
+    maintainers = [ ];
   };
 }

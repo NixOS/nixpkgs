@@ -12,7 +12,7 @@
 , libiconv
 , sqlite
 , postgresql
-, mariadb
+, libmysqlclient
 , zlib
 }:
 
@@ -42,7 +42,7 @@ rustPlatform.buildRustPackage rec {
     ++ optional (stdenv.isDarwin && mysqlSupport) libiconv
     ++ optional sqliteSupport sqlite
     ++ optional postgresqlSupport postgresql
-    ++ optionals mysqlSupport [ mariadb zlib ];
+    ++ optionals mysqlSupport [ libmysqlclient zlib ];
 
   buildNoDefaultFeatures = true;
   buildFeatures = optional sqliteSupport "sqlite"

@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A simple terminal-based open source Spritz-alike";
+    description = "Simple terminal-based open source Spritz-alike";
     longDescription = ''
       Speedread is a command line filter that shows input text as a
       per-word rapid serial visual presentation aligned on optimal
@@ -29,5 +29,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     platforms = platforms.unix;
     maintainers = [ maintainers.oxij ];
+    mainProgram = "speedread";
   };
 }

@@ -5,16 +5,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "turtle-build";
-  version = "0.4.6";
+  version = "0.4.8";
 
   src = fetchFromGitHub {
     owner = "raviqqe";
     repo = "turtle-build";
     rev = "v${version}";
-    hash = "sha256-7XorSt2LFWYNdvCot+I7Uh6S1mhRbD7PkWkvYdIbjKs=";
+    hash = "sha256-PDpiLPMyBZzj2nBy76cSC4ab/kyaoZC/Gd2HSaRVHUM=";
   };
 
-  cargoHash = "sha256-TebXKOgBdf/ZFITQu5OuusytDJKEkGzRD7fLhk1uh8Y=";
+  cargoHash = "sha256-Z9PCnFrUgvF9anfShfU9U7iYISDpzAuJudLq/wN4ONU=";
 
   meta = with lib; {
     description = "Ninja-compatible build system for high-level programming languages written in Rust";

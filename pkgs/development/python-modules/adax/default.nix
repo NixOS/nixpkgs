@@ -1,14 +1,15 @@
-{ lib
-, aiohttp
-, async-timeout
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  async-timeout,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "adax";
-  version = "0.3.0";
+  version = "0.4.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -17,7 +18,7 @@ buildPythonPackage rec {
     owner = "Danielhiversen";
     repo = "pyadax";
     rev = "refs/tags/${version}";
-    hash = "sha256-y4c1RBy/UxmKP7+mHXi86XJ2/RXGrqkj94I2Q699EJU=";
+    hash = "sha256-wmcZtiML02i1XfqpFzni2WDrxutTvP5laVvTAGtNg0Y=";
   };
 
   propagatedBuildInputs = [
@@ -28,9 +29,7 @@ buildPythonPackage rec {
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "adax"
-  ];
+  pythonImportsCheck = [ "adax" ];
 
   meta = with lib; {
     description = "Python module to communicate with Adax";

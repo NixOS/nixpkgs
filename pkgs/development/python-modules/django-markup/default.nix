@@ -1,41 +1,43 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, django
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  django,
 
-# optionals
-, bleach
-, docutils
-, markdown
-, pygments
-, python-creole
-, smartypants
-, textile
+  # optionals
+  bleach,
+  docutils,
+  markdown,
+  pygments,
+  python-creole,
+  smartypants,
+  textile,
 
-# tests
-, pytest-django
-, pytestCheckHook
+  # tests
+  pytest-django,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "django-markup";
-  version = "1.7.2";
-  format = "setuptools";
+  version = "1.8.1";
+  pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "bartTC";
     repo = "django-markup";
     rev = "refs/tags/v${version}";
-    hash = "sha256-NvGlvrXOwDrwHhbFHrWf7Kz9sEzTTyq84/Z6jjRNy8Q=";
+    hash = "sha256-Hhcp4wVJEcYV1lEZ2jWf7nOlt5m4lVAfC6VmKIdxf4c=";
   };
 
   postPatch = ''
     sed -i "/--cov/d" pyproject.toml
   '';
 
-  buildInputs = [
-    django
-  ];
+  buildInputs = [ django ];
 
   passthru.optional-dependencies = {
     all_filter_dependencies = [
@@ -49,9 +51,7 @@ buildPythonPackage rec {
     ];
   };
 
-  pythonImportsCheck = [
-    "django_markup"
-  ];
+  pythonImportsCheck = [ "django_markup" ];
 
   nativeCheckInputs = [
     pytest-django
@@ -61,7 +61,7 @@ buildPythonPackage rec {
   env.DJANGO_SETTINGS_MODULE = "django_markup.tests";
 
   meta = with lib; {
-    description = "Generic Django application to convert text with specific markup to html.";
+    description = "Generic Django application to convert text with specific markup to html";
     homepage = "https://github.com/bartTC/django-markup";
     changelog = "https://github.com/bartTC/django-markup/blob/v${version}/CHANGELOG.rst";
     license = licenses.mit;

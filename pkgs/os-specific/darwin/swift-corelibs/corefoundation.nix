@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, fetchurl, makeSetupHook, cmake, ninja, pkg-config, launchd, libdispatch, python3, libxml2, objc4, icu }:
+{ lib, stdenv, fetchFromGitHub, fetchurl, makeSetupHook, cmake, pkg-config, launchd, libdispatch, python3Minimal, libxml2, objc4, icu }:
 
 let
   # 10.12 adds a new sysdir.h that our version of CF in the main derivation depends on, but
@@ -21,7 +21,7 @@ stdenv.mkDerivation {
     sha256 = "17kpql0f27xxz4jjw84vpas5f5sn4vdqwv10g151rc3rswbwln1z";
   };
 
-  nativeBuildInputs = [ cmake ninja pkg-config python3 ];
+  nativeBuildInputs = [ cmake pkg-config python3Minimal ];
   buildInputs = [ (lib.getDev launchd) libdispatch libxml2 objc4 icu ];
 
   patches = [

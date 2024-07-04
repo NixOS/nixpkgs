@@ -1,22 +1,23 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, python
-, buildPythonPackage
-, pythonRelaxDepsHook
-, imagemagick
-, pip
-, pytestCheckHook
-, pymupdf
-, fire
-, fonttools
-, numpy
-, opencv4
-, tkinter
-, python-docx
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  python,
+  buildPythonPackage,
+  pythonRelaxDepsHook,
+  imagemagick,
+  pip,
+  pytestCheckHook,
+  pymupdf,
+  fire,
+  fonttools,
+  numpy,
+  opencv4,
+  tkinter,
+  python-docx,
 }:
 let
-  version = "0.5.6";
+  version = "0.5.8";
 in
 buildPythonPackage {
   pname = "pdf2docx";
@@ -26,8 +27,8 @@ buildPythonPackage {
   src = fetchFromGitHub {
     owner = "dothinking";
     repo = "pdf2docx";
-    rev = "v${version}";
-    hash = "sha256-NrT4GURQIJbqnHstfJrPzwLXT9c2oGBi4QJ6eGIFwu4=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-tMITDm2NkxWS+H/hhd2LlaPbyuI86ZKaALqqHJqb8V0=";
   };
 
   nativeBuildInputs = [
@@ -61,13 +62,17 @@ buildPythonPackage {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [ "-v" "./test/test.py::TestConversion" ];
+  pytestFlagsArray = [
+    "-v"
+    "./test/test.py::TestConversion"
+  ];
 
   # Test fails due to "RuntimeError: cannot find builtin font with name 'Arial'":
   disabledTests = [ "test_unnamed_fonts" ];
 
   meta = with lib; {
     description = "Convert PDF to DOCX";
+    mainProgram = "pdf2docx";
     homepage = "https://github.com/dothinking/pdf2docx";
     changelog = "https://github.com/dothinking/pdf2docx/releases/tag/v${version}";
     license = licenses.gpl3Only;

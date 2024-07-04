@@ -29,5 +29,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     platforms = platforms.unix;
     maintainers = with maintainers; [ ftrvxmtrx ];
+    mainProgram = "chuck";
   };
 }

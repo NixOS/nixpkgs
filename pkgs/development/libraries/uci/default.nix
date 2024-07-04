@@ -17,9 +17,10 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     description = "OpenWrt Unified Configuration Interface";
+    mainProgram = "uci";
     homepage = "https://git.openwrt.org/?p=project/uci.git;a=summary";
     license = licenses.lgpl21Only;
     platforms = platforms.all;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ mkg20001 ];
   };
 }

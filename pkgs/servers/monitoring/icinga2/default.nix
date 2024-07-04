@@ -1,4 +1,4 @@
-{ stdenv, runCommand, lib, fetchFromGitHub, fetchpatch, cmake, flex, bison, systemd
+{ stdenv, runCommand, lib, fetchFromGitHub, cmake, flex, bison, systemd
 , boost, openssl, patchelf, mariadb-connector-c, postgresql, zlib, tzdata
 # Databases
 , withMysql ? true, withPostgresql ? false
@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "icinga2${nameSuffix}";
-  version = "2.14.0";
+  version = "2.14.2";
 
   src = fetchFromGitHub {
     owner = "icinga";
     repo = "icinga2";
     rev = "v${version}";
-    sha256 = "sha256-MrNfkbbmID27Ht2sDSklrPvRvCmewOuOOBIFnHJz1zE=";
+    sha256 = "sha256-vUtLGkTLGObx3zbfRTboNVsl9AmpAkHc+IhWhnKupSM=";
   };
 
   patches = [
@@ -92,6 +92,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.icinga.com";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ das_j ];
+    maintainers = lib.teams.helsinki-systems.members;
   };
 }

@@ -1,14 +1,16 @@
-{ buildPythonPackage
-, lib
-, fetchPypi
-, pytest
-, u-msgpack-python
-, six
+{
+  buildPythonPackage,
+  lib,
+  fetchPypi,
+  pytest,
+  u-msgpack-python,
+  six,
 }:
 
 buildPythonPackage rec {
   pname = "pytest-expect";
   version = "1.1.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -16,7 +18,10 @@ buildPythonPackage rec {
   };
 
   buildInputs = [ pytest ];
-  propagatedBuildInputs = [ u-msgpack-python six ];
+  propagatedBuildInputs = [
+    u-msgpack-python
+    six
+  ];
 
   # Tests in neither the archive nor the repo
   doCheck = false;

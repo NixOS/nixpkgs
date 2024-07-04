@@ -1,25 +1,27 @@
-{ lib
-, asgiref
-, buildPythonPackage
-, fetchFromGitHub
-, flask
-, hiro
-, limits
-, ordered-set
-, pymemcache
-, pymongo
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
-, redis
-, rich
-, typing-extensions
+{
+  lib,
+  asgiref,
+  buildPythonPackage,
+  fetchFromGitHub,
+  flask,
+  hiro,
+  limits,
+  ordered-set,
+  pymemcache,
+  pymongo,
+  pytest-mock,
+  pytestCheckHook,
+  pythonOlder,
+  redis,
+  rich,
+  setuptools,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "flask-limiter";
-  version = "3.3.1";
-  format = "setuptools";
+  version = "3.7.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -27,7 +29,7 @@ buildPythonPackage rec {
     owner = "alisaifee";
     repo = "flask-limiter";
     rev = "refs/tags/${version}";
-    hash = "sha256-UtmMd180bwFm426YevARq6r7DL182dI7dGAUPFKLWuM=";
+    hash = "sha256-W40zuQ/xkoV35DXehwMUJwbX0grJMfRXawiPfpRKL/g=";
   };
 
   postPatch = ''
@@ -36,6 +38,8 @@ buildPythonPackage rec {
     # flask-restful is unmaintained and breaks regularly, don't depend on it
     sed -i "/import flask_restful/d" tests/test_views.py
   '';
+
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     flask
@@ -80,9 +84,7 @@ buildPythonPackage rec {
     "tests/test_storage.py"
   ];
 
-  pythonImportsCheck = [
-    "flask_limiter"
-  ];
+  pythonImportsCheck = [ "flask_limiter" ];
 
   meta = with lib; {
     description = "Rate limiting for flask applications";

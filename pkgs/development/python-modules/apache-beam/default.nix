@@ -1,60 +1,63 @@
-{ buildPythonPackage
-, cloudpickle
-, crcmod
-, cython
-, dill
-, fastavro
-, fasteners
-, fetchFromGitHub
-, fetchpatch
-, freezegun
-, grpcio
-, grpcio-tools
-, hdfs
-, httplib2
-, hypothesis
-, lib
-, mock
-, mypy-protobuf
-, numpy
-, objsize
-, orjson
-, pandas
-, parameterized
-, proto-plus
-, protobuf
-, psycopg2
-, pyarrow
-, pydot
-, pyhamcrest
-, pymongo
-, pytest-xdist
-, pytestCheckHook
-, python
-, python-dateutil
-, pythonRelaxDepsHook
-, pytz
-, pyyaml
-, regex
-, requests
-, requests-mock
-, scikit-learn
-, sqlalchemy
-, tenacity
-, testcontainers
-, typing-extensions
-, zstandard
+{
+  buildPythonPackage,
+  cloudpickle,
+  crcmod,
+  cython,
+  dill,
+  fastavro,
+  fasteners,
+  fetchFromGitHub,
+  fetchpatch,
+  freezegun,
+  grpcio,
+  grpcio-tools,
+  hdfs,
+  httplib2,
+  hypothesis,
+  lib,
+  mock,
+  mypy-protobuf,
+  numpy,
+  objsize,
+  orjson,
+  pandas,
+  parameterized,
+  proto-plus,
+  protobuf,
+  psycopg2,
+  pyarrow,
+  pydot,
+  pyhamcrest,
+  pymongo,
+  pytest-xdist,
+  pytestCheckHook,
+  python,
+  python-dateutil,
+  pythonRelaxDepsHook,
+  pytz,
+  pyyaml,
+  regex,
+  requests,
+  requests-mock,
+  scikit-learn,
+  setuptools,
+  sqlalchemy,
+  tenacity,
+  testcontainers,
+  typing-extensions,
+  zstandard,
 }:
 
 buildPythonPackage rec {
   pname = "apache-beam";
-  version = "2.45.0";
+  version = "2.54.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "apache";
     repo = "beam";
     rev = "refs/tags/v${version}";
-    hash = "sha256-e+6Vt+SlOxi16udsdx7WFoDWYupuXhggpoEZPe4tPr0=";
+    hash = "sha256-DcqYBPAS+yUqTJLUem8+2OqRUzb6DoBOeRkMjmvuvws=";
   };
 
   patches = [
@@ -94,6 +97,7 @@ buildPythonPackage rec {
     grpcio-tools
     mypy-protobuf
     pythonRelaxDepsHook
+    setuptools
   ];
 
   propagatedBuildInputs = [
@@ -123,9 +127,7 @@ buildPythonPackage rec {
 
   enableParallelBuilding = true;
 
-  pythonImportsCheck = [
-    "apache_beam"
-  ];
+  pythonImportsCheck = [ "apache_beam" ];
 
   checkInputs = [
     freezegun
@@ -147,7 +149,7 @@ buildPythonPackage rec {
 
   # Make sure we're running the tests for the actually installed
   # package, so that cython's .so files are available.
-  preCheck = "cd $out/lib/${python.libPrefix}/site-packages";
+  preCheck = "cd $out/${python.sitePackages}";
 
   disabledTestPaths = [
     # Fails with

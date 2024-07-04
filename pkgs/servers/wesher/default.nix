@@ -26,5 +26,6 @@ buildGoModule rec {
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ tylerjl ];
     platforms   = platforms.linux;
+    mainProgram = "wesher";
   };
 }

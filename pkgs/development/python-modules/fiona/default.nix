@@ -1,27 +1,29 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, cython
-, gdal
-, setuptools
-, wheel
-, attrs
-, certifi
-, click
-, click-plugins
-, cligj
-, munch
-, shapely
-, boto3
-, pytestCheckHook
-, pytz
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  cython,
+  gdal,
+  oldest-supported-numpy,
+  setuptools,
+  wheel,
+  attrs,
+  certifi,
+  click,
+  click-plugins,
+  cligj,
+  munch,
+  shapely,
+  boto3,
+  pytestCheckHook,
+  pytz,
 }:
 
 buildPythonPackage rec {
   pname = "fiona";
-  version = "1.9.4.post1";
-  format = "pyproject";
+  version = "1.9.6";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -29,28 +31,18 @@ buildPythonPackage rec {
     owner = "Toblerity";
     repo = "Fiona";
     rev = "refs/tags/${version}";
-    hash = "sha256-CeGdWAmWteVtL0BoBQ1sB/+1AWkmxogtK99bL5Fpdbw=";
+    hash = "sha256-MboM3IwGF8cuz+jMQ3QVZFAHjpspQ6kVJincq7OEkCM=";
   };
-
-  postPatch = ''
-    # Remove after https://github.com/Toblerity/Fiona/pull/1225 is released
-    sed -i '/"oldest-supported-numpy"/d' pyproject.toml
-
-    # Remove after https://github.com/Toblerity/Fiona/pull/1281 is released,
-    # after which cython also needs to be updated to cython_3
-    sed -i 's/Cython~=/Cython>=/' pyproject.toml
-  '';
 
   nativeBuildInputs = [
     cython
     gdal # for gdal-config
+    oldest-supported-numpy
     setuptools
     wheel
   ];
 
-  buildInputs = [
-    gdal
-  ];
+  buildInputs = [ gdal ];
 
   propagatedBuildInputs = [
     attrs
@@ -91,15 +83,14 @@ buildPythonPackage rec {
     "test_append_memoryfile_drivers"
   ];
 
-  pythonImportsCheck = [
-    "fiona"
-  ];
+  pythonImportsCheck = [ "fiona" ];
 
   doInstallCheck = true;
 
   meta = with lib; {
     changelog = "https://github.com/Toblerity/Fiona/blob/${src.rev}/CHANGES.txt";
     description = "OGR's neat, nimble, no-nonsense API for Python";
+    mainProgram = "fio";
     homepage = "https://fiona.readthedocs.io/";
     license = licenses.bsd3;
     maintainers = teams.geospatial.members;

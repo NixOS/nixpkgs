@@ -39,7 +39,7 @@ mkDerivation rec {
   description = "Linter for Nix(pkgs), based on hnix";
   homepage = "https://github.com/Synthetica9/nix-linter";
   license = lib.licenses.bsd3;
-  maintainers = [ lib.maintainers.marsam ];
+  maintainers = [ ];
 
   # doesn't build on ghc92
   hydraPlatforms = lib.platforms.none;

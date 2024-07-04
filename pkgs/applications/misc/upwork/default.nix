@@ -1,4 +1,4 @@
-{ lib, stdenv, requireFile, dpkg, wrapGAppsHook, autoPatchelfHook
+{ lib, stdenv, requireFile, dpkg, wrapGAppsHook3, autoPatchelfHook
 , alsa-lib, atk, at-spi2-atk, at-spi2-core, cairo, cups, dbus, expat, fontconfig, freetype
 , gdk-pixbuf, glib, gtk3, libcxx, libdrm, libnotify, libpulseaudio, libuuid, libX11, libxcb
 , libXcomposite, libXcursor, libXdamage, libXext, libXfixes, libXi, libXrandr, libXrender
@@ -6,17 +6,17 @@
 
 stdenv.mkDerivation rec {
   pname = "upwork";
-  version = "5.8.0.31";
+  version = "5.8.0.33";
 
   src = requireFile {
     name = "${pname}_${version}_amd64.deb";
     url = "https://www.upwork.com/ab/downloads/os/linux/";
-    sha256 = "sha256-tQV6v0U6xxqBl7nQaBhXSrc9iv+7SPHfABTiJJQDnPI=";
+    sha256 = "sha256-MU0usTAfNNMN8OYmS6dWU6Xk2o5dg5J0V7OQiv3dLug=";
   };
 
   nativeBuildInputs = [
     dpkg
-    wrapGAppsHook
+    wrapGAppsHook3
     autoPatchelfHook
   ];
 
@@ -63,6 +63,6 @@ stdenv.mkDerivation rec {
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ zakkor wolfangaukang ];
+    maintainers = with maintainers; [ zakkor ];
   };
 }

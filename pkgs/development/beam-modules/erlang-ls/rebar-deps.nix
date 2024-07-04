@@ -138,12 +138,11 @@ let
     };
     erlfmt = builder {
       name = "erlfmt";
-      version = "git";
-      src = fetchFromGitHub {
-        owner = "gomoripeti";
-        repo = "erlfmt";
-        rev = "d4422d1fd79a73ef534c2bcbe5b5da4da5338833";
-        sha256 = "07jp4g6a41w7318lh8ndsvgivkj0ahz3spnrsnx4cqkdb97yjaid";
+      version = "1.3.0";
+      src = fetchHex {
+        pkg = "erlfmt";
+        version = "1.3.0";
+        sha256 = "sha256-KoSqHrovT8190x1cV+neK8JwXdoY2kVT8n33EUz6oFI=";
       };
       beamDeps = [ ];
     };

@@ -21,11 +21,11 @@ let
     options = {
       measurement = mkOption {
         type = types.str;
-        description = mdDoc "Name of the measurement";
+        description = "Name of the measurement";
       };
       topic = mkOption {
         type = types.str;
-        description = mdDoc "MQTT topic to subscribe to.";
+        description = "MQTT topic to subscribe to.";
       };
       fields = mkOption {
         type = types.submodule {
@@ -33,21 +33,21 @@ let
             value = mkOption {
               type = types.str;
               default = "$.payload";
-              description = mdDoc "Value to be picked up";
+              description = "Value to be picked up";
             };
             type = mkOption {
               type = with types; nullOr str;
               default = null;
-              description = mdDoc "Type to be picked up";
+              description = "Type to be picked up";
             };
           };
         };
-        description = mdDoc "Field selector.";
+        description = "Field selector.";
       };
       tags = mkOption {
         type = with types; attrsOf str;
         default = {};
-        description = mdDoc "Tags applied";
+        description = "Tags applied";
       };
     };
   };
@@ -124,12 +124,13 @@ let
 in {
   options = {
     services.mqtt2influxdb = {
-      enable = mkEnableOption (mdDoc "BigClown MQTT to InfluxDB bridge.");
+      enable = mkEnableOption "BigClown MQTT to InfluxDB bridge";
+      package = mkPackageOption pkgs ["python3Packages" "mqtt2influxdb"] {};
       environmentFiles = mkOption {
         type = types.listOf types.path;
         default = [];
         example = [ "/run/keys/mqtt2influxdb.env" ];
-        description = mdDoc ''
+        description = ''
           File to load as environment file. Environment variables from this file
           will be interpolated into the config file using envsubst with this
           syntax: `$ENVIRONMENT` or `''${VARIABLE}`.
@@ -140,22 +141,22 @@ in {
         host = mkOption {
           type = types.str;
           default = "127.0.0.1";
-          description = mdDoc "Host where MQTT server is running.";
+          description = "Host where MQTT server is running.";
         };
         port = mkOption {
           type = types.port;
           default = 1883;
-          description = mdDoc "MQTT server port.";
+          description = "MQTT server port.";
         };
         username = mkOption {
           type = with types; nullOr str;
           default = null;
-          description = mdDoc "Username used to connect to the MQTT server.";
+          description = "Username used to connect to the MQTT server.";
         };
         password = mkOption {
           type = with types; nullOr str;
           default = null;
-          description = mdDoc ''
+          description = ''
             MQTT password.
 
             It is highly suggested to use here replacement through
@@ -166,43 +167,43 @@ in {
         cafile = mkOption {
           type = with types; nullOr path;
           default = null;
-          description = mdDoc "Certification Authority file for MQTT";
+          description = "Certification Authority file for MQTT";
         };
         certfile = mkOption {
           type = with types; nullOr path;
           default = null;
-          description = mdDoc "Certificate file for MQTT";
+          description = "Certificate file for MQTT";
         };
         keyfile = mkOption {
           type = with types; nullOr path;
           default = null;
-          description = mdDoc "Key file for MQTT";
+          description = "Key file for MQTT";
         };
       };
       influxdb = {
         host = mkOption {
           type = types.str;
           default = "127.0.0.1";
-          description = mdDoc "Host where InfluxDB server is running.";
+          description = "Host where InfluxDB server is running.";
         };
         port = mkOption {
           type = types.port;
           default = 8086;
-          description = mdDoc "InfluxDB server port";
+          description = "InfluxDB server port";
         };
         database = mkOption {
           type = types.str;
-          description = mdDoc "Name of the InfluxDB database.";
+          description = "Name of the InfluxDB database.";
         };
         username = mkOption {
           type = with types; nullOr str;
           default = null;
-          description = mdDoc "Username for InfluxDB login.";
+          description = "Username for InfluxDB login.";
         };
         password = mkOption {
           type = with types; nullOr str;
           default = null;
-          description = mdDoc ''
+          description = ''
             Password for InfluxDB login.
 
             It is highly suggested to use here replacement through
@@ -213,18 +214,18 @@ in {
         ssl = mkOption {
           type = types.bool;
           default = false;
-          description = mdDoc "Use SSL to connect to the InfluxDB server.";
+          description = "Use SSL to connect to the InfluxDB server.";
         };
         verify_ssl = mkOption {
           type = types.bool;
           default = true;
-          description = mdDoc "Verify SSL certificate when connecting to the InfluxDB server.";
+          description = "Verify SSL certificate when connecting to the InfluxDB server.";
         };
       };
       points = mkOption {
         type = types.listOf pointType;
         default = defaultPoints;
-        description = mdDoc "Points to bridge from MQTT to InfluxDB.";
+        description = "Points to bridge from MQTT to InfluxDB.";
       };
     };
   };
@@ -245,7 +246,7 @@ in {
       '';
       serviceConfig = {
         EnvironmentFile = cfg.environmentFiles;
-        ExecStart = "${cfg.package}/bin/mqtt2influxdb -dc ${finalConfig}";
+        ExecStart = "${lib.getExe cfg.package} -dc ${finalConfig}";
         RuntimeDirectory = "mqtt2influxdb";
       };
     };

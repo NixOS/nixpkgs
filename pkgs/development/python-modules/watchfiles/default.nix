@@ -1,20 +1,19 @@
-{ lib
-, stdenv
-, anyio
-, buildPythonPackage
-, cargo
-, fetchFromGitHub
-, rustPlatform
-, rustc
-, setuptools-rust
-, pythonOlder
-, dirty-equals
-, pytest-mock
-, pytest-timeout
-, pytestCheckHook
-, python
-, CoreServices
-, libiconv
+{
+  lib,
+  stdenv,
+  anyio,
+  buildPythonPackage,
+  cargo,
+  fetchFromGitHub,
+  rustPlatform,
+  rustc,
+  pythonOlder,
+  dirty-equals,
+  pytest-mock,
+  pytest-timeout,
+  pytestCheckHook,
+  CoreServices,
+  libiconv,
 }:
 
 buildPythonPackage rec {
@@ -49,9 +48,7 @@ buildPythonPackage rec {
     rustc
   ];
 
-  propagatedBuildInputs = [
-    anyio
-  ];
+  propagatedBuildInputs = [ anyio ];
 
   # Tests need these permissions in order to use the FSEvents API on macOS.
   sandboxProfile = ''
@@ -73,12 +70,16 @@ buildPythonPackage rec {
     rm -rf watchfiles
   '';
 
-  pythonImportsCheck = [
-    "watchfiles"
+  disabledTests = [
+    #  BaseExceptionGroup: unhandled errors in a TaskGroup (1 sub-exception)
+    "test_awatch_interrupt_raise"
   ];
+
+  pythonImportsCheck = [ "watchfiles" ];
 
   meta = with lib; {
     description = "File watching and code reload";
+    mainProgram = "watchfiles";
     homepage = "https://watchfiles.helpmanual.io/";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];

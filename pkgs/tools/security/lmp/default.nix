@@ -21,5 +21,6 @@ buildGoModule rec {
     homepage = "https://github.com/0xInfection/LogMePwn";
     license = with licenses; [ gpl3Only ];
     maintainers = with maintainers; [ fab ];
+    mainProgram = "lmp";
   };
 }

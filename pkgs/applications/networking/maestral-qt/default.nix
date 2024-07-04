@@ -1,25 +1,32 @@
 { lib
 , fetchFromGitHub
 , python3
-, qt6
+, qtbase
+, qtsvg
+, qtwayland
 , nixosTests
+, wrapQtAppsHook
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "maestral-qt";
-  version = "1.8.0";
+  version = "1.9.3";
+  pyproject = true;
+
   disabled = python3.pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "SamSchott";
     repo = "maestral-qt";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Ys7XrvV4qzq4Q9llua2WgU013Ui0+x+uMwLNIv6xxCw=";
+    hash = "sha256-7Lt0Neobtofd1JDoz8BhGn+nFKaMLbM/6z0QQmtEKpA=";
   };
 
-  format = "pyproject";
+  build-system = with python3.pkgs; [
+    setuptools
+  ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  dependencies = with python3.pkgs; [
     click
     markdown2
     maestral
@@ -28,12 +35,13 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   buildInputs = [
-    qt6.qtbase
-    qt6.qtsvg  # Needed for the systray icon
+    qtwayland
+    qtbase
+    qtsvg  # Needed for the systray icon
   ];
 
   nativeBuildInputs = [
-    qt6.wrapQtAppsHook
+    wrapQtAppsHook
   ];
 
   dontWrapQtApps = true;

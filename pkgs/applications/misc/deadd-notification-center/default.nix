@@ -43,15 +43,22 @@ in mkDerivation rec {
   # Test suite does nothing.
   doCheck = false;
 
-  # Add systemd user unit.
+  postPatch = ''
+    substituteInPlace src/NotificationCenter.hs \
+      --replace '/etc/xdg/deadd/deadd.css' "$out/etc/deadd.css"
+  '';
+
+  # Add systemd user unit and install default style.
   postInstall = ''
     mkdir -p $out/lib/systemd/user
+    install -Dm644 style.css $out/etc/deadd.css
     echo "${systemd-service}" > $out/lib/systemd/user/deadd-notification-center.service
   '';
 
-  description = "A haskell-written notification center for users that like a desktop with style";
+  description = "Haskell-written notification center for users that like a desktop with style";
   homepage = "https://github.com/phuhl/linux_notification_center";
   license = lib.licenses.bsd3;
   maintainers = with lib.maintainers; [ melkor333 sna ];
   platforms = lib.platforms.linux;
+  mainProgram = "deadd-notification-center";
 }

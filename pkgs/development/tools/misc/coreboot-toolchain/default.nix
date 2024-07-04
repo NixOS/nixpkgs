@@ -17,14 +17,14 @@ let
     , withAda ? true
     }:
 
-    stdenvNoCC.mkDerivation {
+    stdenvNoCC.mkDerivation (finalAttrs: {
       pname = "coreboot-toolchain-${arch}";
-      version = "4.21";
+      version = "24.05";
 
       src = fetchgit {
         url = "https://review.coreboot.org/coreboot";
-        rev = "c1386ef6128922f49f93de5690ccd130a26eecf2";
-        hash = "sha256-tFGyI170vbhRgJZDix69DfOD5nIY8T4chSP+qTt3kC8=";
+        rev = finalAttrs.version;
+        hash = "sha256-jTfMFvl3sG3BIVVkpZ81BQ20Bs+2ESE6RMh0fW86rKE=";
         fetchSubmodules = false;
         leaveDotGit = true;
         postFetch = ''
@@ -63,10 +63,10 @@ let
         homepage = "https://www.coreboot.org";
         description = "coreboot toolchain for ${arch} targets";
         license = with licenses; [ bsd2 bsd3 gpl2 lgpl2Plus gpl3Plus ];
-        maintainers = with maintainers; [ felixsinger ];
+        maintainers = with maintainers; [ felixsinger jmbaur ];
         platforms = platforms.linux;
       };
-    }
+    })
   );
 in
 

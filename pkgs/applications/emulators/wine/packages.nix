@@ -8,7 +8,7 @@ let
 in with src; {
   wine32 = pkgsi686Linux.callPackage ./base.nix {
     pname = "wine";
-    inherit src version supportFlags patches moltenvk;
+    inherit src version supportFlags patches moltenvk wineRelease;
     pkgArches = [ pkgsi686Linux ];
     geckos = [ gecko32 ];
     mingwGccs = with pkgsCross; [ mingw32.buildPackages.gcc ];
@@ -17,7 +17,7 @@ in with src; {
   };
   wine64 = callPackage ./base.nix {
     pname = "wine64";
-    inherit src version supportFlags patches moltenvk;
+    inherit src version supportFlags patches moltenvk wineRelease;
     pkgArches = [ pkgs ];
     mingwGccs = with pkgsCross; [ mingwW64.buildPackages.gcc ];
     geckos = [ gecko64 ];
@@ -28,7 +28,7 @@ in with src; {
   };
   wineWow = callPackage ./base.nix {
     pname = "wine-wow";
-    inherit src version supportFlags patches moltenvk;
+    inherit src version supportFlags patches moltenvk wineRelease;
     stdenv = stdenv_32bit;
     pkgArches = [ pkgs pkgsi686Linux ];
     geckos = [ gecko32 gecko64 ];
@@ -44,7 +44,8 @@ in with src; {
   };
   wineWow64 = callPackage ./base.nix {
     pname = "wine-wow64";
-    inherit src version supportFlags patches moltenvk;
+    inherit src version patches moltenvk wineRelease;
+    supportFlags = supportFlags // { mingwSupport = true; };  # Required because we request "--enable-archs=x86_64"
     pkgArches = [ pkgs ];
     mingwGccs = with pkgsCross; [ mingw32.buildPackages.gcc mingwW64.buildPackages.gcc ];
     geckos = [ gecko64 ];

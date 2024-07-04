@@ -1,20 +1,22 @@
-{ lib
-, buildPythonPackage
-, boto3
-, cachecontrol
-, fetchFromGitHub
-, iso3166
-, python-dateutil
-, requests
-, responses
-, polyline
-, pytestCheckHook
-, uritemplate
+{
+  lib,
+  buildPythonPackage,
+  boto3,
+  cachecontrol,
+  fetchFromGitHub,
+  iso3166,
+  python-dateutil,
+  requests,
+  responses,
+  polyline,
+  pytestCheckHook,
+  uritemplate,
 }:
 
 buildPythonPackage rec {
   pname = "mapbox";
   version = "0.18.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "mapbox";
@@ -23,8 +25,19 @@ buildPythonPackage rec {
     sha256 = "123wsa4j11ps5pkjgylbmw4gnzh2vi22swgmvy50w26glkszh075";
   };
 
-  propagatedBuildInputs = [ boto3 cachecontrol iso3166 python-dateutil requests polyline uritemplate ];
-  nativeCheckInputs = [ pytestCheckHook responses ];
+  propagatedBuildInputs = [
+    boto3
+    cachecontrol
+    iso3166
+    python-dateutil
+    requests
+    polyline
+    uritemplate
+  ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    responses
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/mapbox/mapbox-sdk-py";

@@ -3,6 +3,7 @@
 , avahi, libgphoto2, libieee1284, libjpeg, libpng, libtiff, libusb1, libv4l, net-snmp
 , curl, systemd, libxml2, poppler, gawk
 , sane-drivers
+, nixosTests
 
 # List of { src name backend } attibute sets - see installFirmware below:
 , extraFirmware ? []
@@ -37,9 +38,6 @@ stdenv.mkDerivation {
       url = "https://raw.githubusercontent.com/void-linux/void-packages/4b97cd2fb4ec38712544438c2491b6d7d5ab334a/srcpkgs/sane/patches/sane-desc-cross.patch";
       sha256 = "sha256-y6BOXnOJBSTqvRp6LwAucqaqv+OLLyhCS/tXfLpnAPI=";
     })
-    # generate hwdb entries for scanners handled by other backends like epkowa
-    # https://gitlab.com/sane-project/backends/-/issues/619
-    ./sane-desc-generate-entries-unsupported-scanners.patch
   ];
 
   postPatch = ''
@@ -109,7 +107,7 @@ stdenv.mkDerivation {
   in ''
     mkdir -p $out/etc/udev/rules.d/ $out/etc/udev/hwdb.d
     ./tools/sane-desc -m udev+hwdb -s doc/descriptions:doc/descriptions-external > $out/etc/udev/rules.d/49-libsane.rules
-    ./tools/sane-desc -m udev+hwdb -s doc/descriptions -m hwdb > $out/etc/udev/hwdb.d/20-sane.hwdb
+    ./tools/sane-desc -m udev+hwdb -s doc/descriptions:doc/descriptions-external -m hwdb > $out/etc/udev/hwdb.d/20-sane.hwdb
     # the created 49-libsane references /bin/sh
     substituteInPlace $out/etc/udev/rules.d/49-libsane.rules \
       --replace "RUN+=\"/bin/sh" "RUN+=\"${runtimeShell}"
@@ -131,6 +129,10 @@ stdenv.mkDerivation {
   # parallel install creates a bad symlink at $out/lib/sane/libsane.so.1 which prevents finding plugins
   # https://github.com/NixOS/nixpkgs/issues/224569
   enableParallelInstalling = false;
+
+  passthru.tests = {
+    inherit (nixosTests) sane;
+  };
 
   meta = with lib; {
     description = "SANE (Scanner Access Now Easy) backends";

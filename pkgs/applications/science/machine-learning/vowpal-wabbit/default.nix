@@ -18,6 +18,15 @@ stdenv.mkDerivation rec {
       url = "https://github.com/VowpalWabbit/vowpal_wabbit/commit/0cb410dfc885ca1ecafd1f8a962b481574fb3b82.patch";
       sha256 = "sha256-bX3eJ+vMTEMAo3EiESQTDryBP0h2GtnMa/Fz0rTeaNY=";
     })
+
+    # Fix gcc-13 build:
+    #   https://github.com/VowpalWabbit/vowpal_wabbit/pull/4657
+    (fetchpatch {
+      name = "gcc-13.patch";
+      url = "https://github.com/VowpalWabbit/vowpal_wabbit/commit/a541d85a66088d2b74fa2562d32fecb68af33c58.patch";
+      includes = [ "vowpalwabbit/core/include/vw/core/named_labels.h" ];
+      hash = "sha256-JAuLDe5JtlE7/043RSIKM20Qr77rmuE0rVg/DGc95MY=";
+    })
   ];
 
   nativeBuildInputs = [ cmake ];

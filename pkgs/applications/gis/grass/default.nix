@@ -3,7 +3,7 @@
 , callPackage
 , fetchFromGitHub
 , makeWrapper
-, wrapGAppsHook
+, wrapGAppsHook3
 
 , bison
 , blas
@@ -23,7 +23,6 @@
 , pkg-config
 , postgresql
 , proj
-, proj-datumgrid
 , python3Packages
 , readline
 , sqlite
@@ -34,18 +33,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "grass";
-  version = "8.3.0";
+  version = "8.3.2";
 
   src = fetchFromGitHub {
     owner = "OSGeo";
     repo = "grass";
     rev = finalAttrs.version;
-    hash = "sha256-YHQtvp/AYMWme46yIc4lE/izjqVePnPxn3GY5RRfPq4=";
+    hash = "sha256-loeg+7h676d2WdYOMcJFyzeEZcxjBynir6Hz0J/GBns=";
   };
 
   nativeBuildInputs = [
     makeWrapper
-    wrapGAppsHook
+    wrapGAppsHook3
 
     bison
     flex
@@ -54,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
     libmysqlclient # for `mysql_config`
     netcdf # for `nc-config`
     pkg-config
-  ] ++ (with python3Packages; [ python-dateutil numpy wxPython_4_2 ]);
+  ] ++ (with python3Packages; [ python-dateutil numpy wxpython ]);
 
   buildInputs = [
     blas
@@ -71,7 +70,6 @@ stdenv.mkDerivation (finalAttrs: {
     pdal
     postgresql
     proj
-    proj-datumgrid
     readline
     sqlite
     wxGTK32
@@ -81,18 +79,18 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  # On Darwin the installer tries to symlink the help files into a system
-  # directory
-  patches = [ ./no_symbolic_links.patch ];
+  patches = lib.optionals stdenv.isDarwin [
+    # Fix conversion of const char* to unsigned int.
+    ./clang-integer-conversion.patch
+  ];
 
   # Correct mysql_config query
-  patchPhase = ''
+  postPatch = ''
       substituteInPlace configure --replace "--libmysqld-libs" "--libs"
   '';
 
   configureFlags = [
     "--with-blas"
-    "--with-fftw"
     "--with-geos"
     # It complains about missing libmysqld but doesn't really seem to need it
     "--with-mysql"
@@ -106,11 +104,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-proj-share=${proj}/share/proj"
     "--with-pthread"
     "--with-readline"
-    "--with-wxwidgets"
-    "--with-zstd"
     "--without-opengl"
-  ] ++ lib.optionals stdenv.isLinux [
-    "--with-pdal"
   ] ++ lib.optionals stdenv.isDarwin [
     "--without-cairo"
     "--without-freetype"
@@ -151,5 +145,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.gpl2Plus;
     maintainers = with maintainers; teams.geospatial.members ++ [ mpickering ];
     platforms = platforms.all;
+    mainProgram = "grass";
   };
 })

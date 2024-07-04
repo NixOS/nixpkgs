@@ -15,6 +15,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Reformat HCL <-> JSON <-> YAML";
+    mainProgram = "refmt";
     homepage = "https://github.com/rjeczalik/refmt";
     license = licenses.agpl3Only;
     maintainers = with lib.maintainers; [ deemp ];

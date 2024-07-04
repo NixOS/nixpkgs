@@ -1,32 +1,92 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, texinfo, libXext, xorgproto, libX11
-, libXpm, libXt, libXcursor, alsa-lib, cmake, zlib, libpng, libvorbis
-, libXxf86dga, libXxf86misc
-, libXxf86vm, openal, libGLU, libGL, libjpeg, flac
-, libXi, libXfixes, freetype, libopus, libtheora
-, physfs, enet, pkg-config, gtk3, pcre, libpulseaudio, libpthreadstubs
+{ lib
+, alsa-lib
+, cmake
+, enet
+, fetchFromGitHub
+, flac
+, freetype
+, gtk3
+, libGL
+, libGLU
+, libjpeg
+, libopus
+, libpng
+, libpthreadstubs
+, libpulseaudio
+, libtheora
+, libvorbis
+, libwebp
+, libX11
+, libXcursor
 , libXdmcp
+, libXext
+, libXfixes
+, libXi
+, libXpm
+, libXt
+, libXxf86dga
+, libXxf86misc
+, libXxf86vm
+, openal
+, pcre
+, physfs
+, pkg-config
+, stdenv
+, texinfo
+, xorgproto
+, zlib
 }:
 
 stdenv.mkDerivation rec {
   pname = "allegro";
-  version = "5.2.8.0";
+  version = "5.2.9.1";
 
   src = fetchFromGitHub {
     owner = "liballeg";
     repo = "allegro5";
     rev = version;
-    sha256 = "sha256-uNcaeTelFNfg+YjPYc7nK4TrFDxJsEuPhsF8x1cvIYQ=";
+    sha256 = "sha256-n2OCmZmAqeXjtnCTqJgQ5q4j8/lnPfH+5tpWKIFKle0=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
+
   buildInputs = [
-    texinfo zlib libpng libvorbis openal libGLU libGL
-    libjpeg flac enet libtheora freetype physfs libopus
-    gtk3 pcre
+    enet
+    flac
+    freetype
+    gtk3
+    libGL
+    libGLU
+    libjpeg
+    libopus
+    libpng
+    libtheora
+    libvorbis
+    libwebp
+    openal
+    pcre
+    physfs
+    texinfo
+    zlib
   ] ++ lib.optionals stdenv.isLinux [
-    libXext xorgproto libX11 libXpm libXt libXcursor alsa-lib
-    libXxf86dga libXxf86misc libXxf86vm libXi libXfixes
-    libXdmcp libpulseaudio libpthreadstubs
+    alsa-lib
+    libpthreadstubs
+    libpulseaudio
+    libX11
+    libXcursor
+    libXdmcp
+    libXext
+    libXfixes
+    libXi
+    libXpm
+    libXt
+    libXxf86dga
+    libXxf86misc
+    libXxf86vm
+    xorgproto
   ];
 
   postPatch = ''
@@ -38,7 +98,7 @@ stdenv.mkDerivation rec {
   cmakeFlags = [ "-DCMAKE_SKIP_RPATH=ON" ];
 
   meta = with lib; {
-    description = "A game programming library";
+    description = "Game programming library";
     homepage = "https://liballeg.org/";
     license = licenses.zlib;
     maintainers = [ maintainers.raskin ];

@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -10,7 +11,7 @@ buildPythonPackage rec {
   version = "1.2.0";
   pyproject = true;
 
-  disable = pythonOlder "3.6";
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "to-mc";
@@ -19,9 +20,7 @@ buildPythonPackage rec {
     hash = "sha256-PO8sRGFQ1Dt/UYJuFH6Y3EaQVaS+4DJlOQtvF8ZmBWQ=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   doCheck = false; # Package does not contain tests
   pythonImportsCheck = [ "checksumdir" ];

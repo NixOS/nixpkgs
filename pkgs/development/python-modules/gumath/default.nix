@@ -1,15 +1,16 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchpatch
-, python
-, numba
-, ndtypes
-, xnd
-, libndtypes
-, libxnd
-, libgumath
-, isPy27
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchpatch,
+  python,
+  numba,
+  ndtypes,
+  xnd,
+  libndtypes,
+  libxnd,
+  libgumath,
+  isPy27,
 }:
 
 buildPythonPackage {
@@ -34,12 +35,15 @@ buildPythonPackage {
 
   nativeCheckInputs = [ numba ];
 
-  propagatedBuildInputs = [ ndtypes xnd ];
+  propagatedBuildInputs = [
+    ndtypes
+    xnd
+  ];
 
   postPatch = ''
     substituteInPlace setup.py \
       --replace 'add_include_dirs = [".", "libgumath", "ndtypes/python/ndtypes", "xnd/python/xnd"] + INCLUDES' \
-                'add_include_dirs = [".", "${libndtypes}/include", "${libxnd}/include", "${libgumath}/include"]' \
+                'add_include_dirs = [".", "${libndtypes.dev}/include", "${libxnd}/include", "${libgumath}/include"]' \
       --replace 'add_library_dirs = ["libgumath", "ndtypes/libndtypes", "xnd/libxnd"] + LIBS' \
                 'add_library_dirs = ["${libndtypes}/lib", "${libxnd}/lib", "${libgumath}/lib"]' \
       --replace 'add_runtime_library_dirs = ["$ORIGIN"]' \
@@ -60,4 +64,3 @@ buildPythonPackage {
     popd
   '';
 }
-

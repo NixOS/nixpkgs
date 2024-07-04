@@ -1,12 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pyserial
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pyserial,
 }:
 
 buildPythonPackage rec {
   pname = "binho-host-adapter";
   version = "0.1.6";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

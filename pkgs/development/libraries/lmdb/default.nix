@@ -2,14 +2,14 @@
 
 stdenv.mkDerivation rec {
   pname = "lmdb";
-  version = "0.9.31";
+  version = "0.9.33";
 
   src = fetchFromGitLab {
     domain = "git.openldap.org";
     owner = "openldap";
     repo = "openldap";
     rev = "LMDB_${version}";
-    sha256 = "sha256-SBbo7MX3NST+OFPDtQshevIYrIsZD9bOkSsH91inMBw=";
+    sha256 = "sha256-5IBoJ3jaNXao5zVzb0LDM8RGid4s8DGQpjVqrVPLpXQ=";
   };
 
   postUnpack = "sourceRoot=\${sourceRoot}/libraries/liblmdb";
@@ -66,6 +66,7 @@ stdenv.mkDerivation rec {
       limited to the size of the virtual address space.
     '';
     homepage = "https://symas.com/lmdb/";
+    changelog = "https://git.openldap.org/openldap/openldap/-/blob/LMDB_${version}/libraries/liblmdb/CHANGES";
     maintainers = with maintainers; [ jb55 vcunat ];
     license = licenses.openldap;
     platforms = platforms.all;

@@ -225,6 +225,9 @@ Arguments:
   This use case makes little sense for files that are already in the store.
   This should be a separate abstraction as e.g. `pkgs.drvLayout` instead, which could have a similar interface but be specific to derivations.
   Additional capabilities could be supported that can't be done at evaluation time, such as renaming files, creating new directories, setting executable bits, etc.
+- (+) An API for filtering/transforming Nix store paths could be much more powerful,
+  because it's not limited to just what is possible at evaluation time with `builtins.path`.
+  Operations such as moving and adding files would be supported.
 
 ### Single files
 
@@ -235,11 +238,30 @@ Arguments:
   And it would be unclear how the library should behave if the one file wouldn't be added to the store:
   `toSource { root = ./file.nix; fileset = <empty>; }` has no reasonable result because returing an empty store path wouldn't match the file type, and there's no way to have an empty file store path, whatever that would mean.
 
-## To update in the future
+### `fileFilter` takes a path
 
-Here's a list of places in the library that need to be updated in the future:
-- > The file set library is currently somewhat limited but is being expanded to include more functions over time.
+The `fileFilter` function takes a path, and not a file set, as its second argument.
 
-  in [the manual](../../doc/functions/fileset.section.md)
-- If/Once a function to convert `lib.sources` values into file sets exists, the `_coerce` and `toSource` functions should be updated to mention that function in the error when such a value is passed
-- If/Once a function exists that can optionally include a path depending on whether it exists, the error message for the path not existing in `_coerce` should mention the new function
+- (-) Makes it harder to compose functions, since the file set type, the return value, can't be passed to the function itself like `fileFilter predicate fileset`
+  - (+) It's still possible to use `intersection` to filter on file sets: `intersection fileset (fileFilter predicate ./.)`
+    - (-) This does need an extra `./.` argument that's not obvious
+      - (+) This could always be `/.` or the project directory, `intersection` will make it lazy
+- (+) In the future this will allow `fileFilter` to support a predicate property like `subpath` and/or `components` in a reproducible way.
+  This wouldn't be possible if it took a file set, because file sets don't have a predictable absolute path.
+  - (-) What about the base path?
+    - (+) That can change depending on which files are included, so if it's used for `fileFilter`
+      it would change the `subpath`/`components` value depending on which files are included.
+- (+) If necessary, this restriction can be relaxed later, the opposite wouldn't be possible
+
+### Strict path existence checking
+
+Coercing paths that don't exist to file sets always gives an error.
+
+- (-) Sometimes you want to remove a file that may not always exist using `difference ./. ./does-not-exist`,
+  but this does not work because coercion of `./does-not-exist` fails,
+  even though its existence would have no influence on the result.
+  - (+) This is dangerous, because you wouldn't be protected against typos anymore.
+    E.g. when trying to prevent `./secret` from being imported, a typo like `difference ./. ./sercet` would import it regardless.
+  - (+) `difference ./. (maybeMissing ./does-not-exist)` can be used to do this more explicitly.
+  - (+) `difference ./. (difference ./foo ./foo/bar)` should report an error when `./foo/bar` does not exist ("double negation"). Unfortunately, the current internal representation does not lend itself to a behavior where both `difference x ./does-not-exists` and double negation are handled and checked correctly.
+    This could be fixed, but would require significant changes to the internal representation that are not worth the effort and the risk of introducing implicit behavior.

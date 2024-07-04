@@ -11,21 +11,14 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = mdDoc ''
+        description = ''
           Enable `automatic-timezoned`, simple daemon for keeping the system
           timezone up-to-date based on the current location. It uses geoclue2 to
           determine the current location and systemd-timedated to actually set
           the timezone.
         '';
       };
-      package = mkOption {
-        type = types.package;
-        default = pkgs.automatic-timezoned;
-        defaultText = literalExpression "pkgs.automatic-timezoned";
-        description = mdDoc ''
-          Which `automatic-timezoned` package to use.
-        '';
-      };
+      package = mkPackageOption pkgs "automatic-timezoned" { };
     };
   };
 
@@ -57,7 +50,7 @@ in
         serviceConfig = {
           Type = "exec";
           User = "automatic-timezoned";
-          ExecStart = "${cfg.package}/bin/automatic-timezoned --zoneinfo-path=${pkgs.tzdata}/share/zoneinfo/zone1970.tab";
+          ExecStart = "${cfg.package}/bin/automatic-timezoned";
         };
         wantedBy = [ "default.target" ];
       };

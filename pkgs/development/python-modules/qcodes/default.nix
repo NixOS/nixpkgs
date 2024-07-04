@@ -1,81 +1,90 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, setuptools
-, versioningit
-, wheel
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
 
-  # mandatory
-, broadbean
-, h5netcdf
-, h5py
-, importlib-metadata
-, ipywidgets
-, ipykernel
-, jsonschema
-, matplotlib
-, numpy
-, opencensus
-, opencensus-ext-azure
-, packaging
-, pandas
-, pyvisa
-, ruamel-yaml
-, tabulate
-, typing-extensions
-, tqdm
-, uncertainties
-, websockets
-, wrapt
-, xarray
-, ipython
-, pillow
-, rsa
+  # build-system
+  setuptools,
+  versioningit,
+  wheel,
 
-  # optional
-, qcodes-loop
-, slack-sdk
+  # dependencies
+  broadbean,
+  cf-xarray,
+  dask,
+  h5netcdf,
+  h5py,
+  ipykernel,
+  ipython,
+  ipywidgets,
+  jsonschema,
+  matplotlib,
+  numpy,
+  opentelemetry-api,
+  packaging,
+  pandas,
+  pillow,
+  pyarrow,
+  pyvisa,
+  ruamel-yaml,
+  tabulate,
+  tqdm,
+  typing-extensions,
+  uncertainties,
+  websockets,
+  wrapt,
+  xarray,
+  importlib-metadata,
 
-  # test
-, pip
-, pytestCheckHook
-, deepdiff
-, hypothesis
-, lxml
-, pytest-asyncio
-, pytest-mock
-, pytest-rerunfailures
-, pytest-xdist
-, pyvisa-sim
-, sphinx
+  # optional-dependencies
+  jinja2,
+  nbsphinx,
+  pyvisa-sim,
+  scipy,
+  sphinx,
+  sphinx-issues,
+  sphinx-rtd-theme,
+  towncrier,
+  opencensus,
+  opencensus-ext-azure,
+
+  # checks
+  deepdiff,
+  hypothesis,
+  lxml,
+  pip,
+  pytest-asyncio,
+  pytest-mock,
+  pytest-rerunfailures,
+  pytest-xdist,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "qcodes";
-  version = "0.39.1";
-  format = "pyproject";
+  version = "0.45.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-2gJ/WeynabiGB1Z66+qaUbf6/1wogf/XjIE2mCAXUZY=";
+  src = fetchFromGitHub {
+    owner = "microsoft";
+    repo = "Qcodes";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-H91CpvxGQW0X+m/jlqXMc1RdI9w62lt5jgYOxZ2iPQg=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'versioningit ~=' 'versioningit >='
-  '';
-
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     versioningit
     wheel
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     broadbean
+    cf-xarray
+    dask
     h5netcdf
     h5py
     ipykernel
@@ -84,13 +93,12 @@ buildPythonPackage rec {
     jsonschema
     matplotlib
     numpy
-    opencensus
-    opencensus-ext-azure
+    opentelemetry-api
     packaging
     pandas
     pillow
+    pyarrow
     pyvisa
-    rsa
     ruamel-yaml
     tabulate
     tqdm
@@ -99,20 +107,35 @@ buildPythonPackage rec {
     websockets
     wrapt
     xarray
-  ] ++ lib.optionals (pythonOlder "3.10") [
-    importlib-metadata
-  ];
+  ] ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
 
-  passthru.optional-dependencies = {
-    loop = [
-      qcodes-loop
+  optional-dependencies = {
+    docs = [
+      # autodocsumm
+      jinja2
+      nbsphinx
+      pyvisa-sim
+      # qcodes-loop
+      scipy
+      sphinx
+      # sphinx-favicon
+      sphinx-issues
+      # sphinx-jsonschema
+      sphinx-rtd-theme
+      # sphinxcontrib-towncrier
+      towncrier
     ];
-    slack = [
-      slack-sdk
+    loop = [
+      # qcodes-loop
+    ];
+    opencensus = [
+      opencensus
+      opencensus-ext-azure
+    ];
+    zurichinstruments = [
+      # zhinst-qcodes
     ];
   };
-
-  __darwinAllowLocalNetworking = true;
 
   nativeCheckInputs = [
     deepdiff
@@ -128,41 +151,61 @@ buildPythonPackage rec {
     sphinx
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   pytestFlagsArray = [
+    "-v"
+    "-n"
+    "$NIX_BUILD_CORES"
     # Follow upstream with settings
+    "-m 'not serial'"
+    "--hypothesis-profile ci"
     "--durations=20"
   ];
 
   disabledTestPaths = [
     # Test depends on qcodes-loop, causing a cyclic dependency
-    "qcodes/tests/dataset/measurement/test_load_legacy_data.py"
+    "tests/dataset/measurement/test_load_legacy_data.py"
+    # TypeError
+    "tests/dataset/test_dataset_basic.py"
   ];
 
   disabledTests = [
     # Tests are time-sensitive and power-consuming
-    # Those tests fails repeatably
+    # Those tests fails repeatably and are flaky
     "test_access_channels_by_slice"
+    "test_aggregator"
+    "test_datasaver"
     "test_do1d_additional_setpoints_shape"
     "test_dond_1d_additional_setpoints_shape"
     "test_field_limits"
     "test_get_array_in_scalar_param_data"
     "test_get_parameter_data"
     "test_ramp_safely"
+
+    # more flaky tests
+    # https://github.com/microsoft/Qcodes/issues/5551
+    "test_query_close_once_at_init"
+    "test_step_ramp"
   ];
 
-  pythonImportsCheck = [
-    "qcodes"
-  ];
+  pythonImportsCheck = [ "qcodes" ];
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail 'default-version = "0.0"' 'default-version = "${version}"'
+  '';
 
   postInstall = ''
     export HOME="$TMPDIR"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Python-based data acquisition framework";
-    homepage = "https://qcodes.github.io/Qcodes/";
     changelog = "https://github.com/QCoDeS/Qcodes/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ evilmav ];
+    downloadPage = "https://github.com/QCoDeS/Qcodes";
+    homepage = "https://qcodes.github.io/Qcodes/";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ evilmav ];
   };
 }

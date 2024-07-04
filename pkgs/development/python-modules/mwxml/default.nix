@@ -1,16 +1,18 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, jsonschema
-, mwcli
-, mwtypes
-, nose
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  jsonschema,
+  mwcli,
+  mwtypes,
+  nose,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "mwxml";
   version = "0.3.3";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -28,14 +30,13 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  disabledTests = [
-    "test_page_with_discussion"
-  ];
+  disabledTests = [ "test_page_with_discussion" ];
 
   pythonImportsCheck = [ "mwxml" ];
 
   meta = with lib; {
-    description = "A set of utilities for processing MediaWiki XML dump data";
+    description = "Set of utilities for processing MediaWiki XML dump data";
+    mainProgram = "mwxml";
     homepage = "https://github.com/mediawiki-utilities/python-mwxml";
     license = licenses.mit;
     maintainers = with maintainers; [ GaetanLepage ];

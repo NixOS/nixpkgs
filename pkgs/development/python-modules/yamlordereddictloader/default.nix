@@ -1,12 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pyyaml
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pyyaml,
 }:
 
 buildPythonPackage rec {
   pname = "yamlordereddictloader";
   version = "0.4.2";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -24,6 +26,6 @@ buildPythonPackage rec {
     description = "YAML loader and dump for PyYAML allowing to keep keys order";
     homepage = "https://github.com/fmenabe/python-yamlordereddictloader";
     license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+    maintainers = with maintainers; [ ];
   };
 }

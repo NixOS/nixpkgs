@@ -54,6 +54,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://www.rosegardenmusic.com/";
     description = "Music composition and editing environment";
+    mainProgram = "rosegarden";
     longDescription = ''
       Rosegarden is a music composition and editing environment based around
       a MIDI sequencer that features a rich understanding of music notation

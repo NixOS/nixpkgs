@@ -1,0 +1,28 @@
+diff --git a/test/devices_tests/datetime_test.py b/test/devices_tests/datetime_test.py
+index af06abc6..2145fcc1 100644
+--- a/test/devices_tests/datetime_test.py
++++ b/test/devices_tests/datetime_test.py
+@@ -12,11 +12,6 @@ from xknx.telegram.apci import GroupValueRead, GroupValueResponse, GroupValueWri
+ class TestDateTime:
+     """Test class for DateTime object."""
+ 
+-    # pylint: disable=attribute-defined-outside-init
+-    def teardown_method(self):
+-        """Cancel broadcast_task."""
+-        self.datetime.__del__()
+-
+     #
+     # SET Time
+     #
+diff --git a/test/io_tests/secure_session_test.py b/test/io_tests/secure_session_test.py
+index cd2dc1d0..ca90e2d9 100644
+--- a/test/io_tests/secure_session_test.py
++++ b/test/io_tests/secure_session_test.py
+@@ -65,7 +65,6 @@ class TestSecureSession:
+ 
+     def teardown_method(self):
+         """Cancel keepalive task."""
+-        self.session.stop()
+         self.patch_serial_number.stop()
+         self.patch_message_tag.stop()
+ 

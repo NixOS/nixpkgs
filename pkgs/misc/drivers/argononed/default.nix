@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://gitlab.com/DarkElvenAngel/argononed";
-    description = "A replacement daemon for the Argon One Raspberry Pi case";
+    description = "Replacement daemon for the Argon One Raspberry Pi case";
     license = licenses.mit;
     platforms = platforms.linux;
     maintainers = [ maintainers.misterio77 ];

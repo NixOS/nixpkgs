@@ -1,46 +1,58 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, bentoml
-, hatch-fancy-pypi-readme
-, hatch-vcs
-, hatchling
-, httpx
-, openllm-core
-, soundfile
-, transformers
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  bentoml,
+  hatch-fancy-pypi-readme,
+  hatch-vcs,
+  hatchling,
+  anyio,
+  distro,
+  httpx,
+  httpx-auth,
+  openllm-core,
+  soundfile,
+  transformers,
 }:
 
 buildPythonPackage rec {
   inherit (openllm-core) src version;
   pname = "openllm-client";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
-  sourceRoot = "source/openllm-client";
+  sourceRoot = "${src.name}/openllm-client";
 
-  nativeBuildInputs = [
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "hatchling==1.18.0" "hatchling" \
+      --replace-fail "hatch-vcs==0.3.0" "hatch-vcs" \
+      --replace-fail "hatch-fancy-pypi-readme==23.1.0" "hatch-fancy-pypi-readme"
+  '';
+
+  build-system = [
     hatch-fancy-pypi-readme
     hatch-vcs
     hatchling
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
+    anyio
+    distro
     httpx
     openllm-core
   ];
 
-  passthru.optional-dependencies = {
-    grpc = [
-      bentoml
-    ] ++ bentoml.optional-dependencies.grpc;
+  optional-dependencies = {
+    grpc = [ bentoml ] ++ bentoml.optional-dependencies.grpc;
+    auth = [ httpx-auth ];
     agents = [
       transformers
       # diffusers
       soundfile
-    ] ++ transformers.agents;
-    full = passthru.optional-dependencies.grpc ++ passthru.optional-dependencies.agents;
+    ] ++ transformers.optional-dependencies.agents;
+    full = optional-dependencies.grpc ++ optional-dependencies.agents;
   };
 
   # there is no tests

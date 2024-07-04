@@ -6,7 +6,7 @@
 , rocm-cmake
 , clr
 , clblast
-, texlive
+, texliveSmall
 , doxygen
 , sphinx
 , openblas
@@ -17,8 +17,7 @@
 }:
 
 let
-  latex = lib.optionalAttrs buildDocs texlive.combine {
-    inherit (texlive) scheme-small
+  latex = lib.optionalAttrs buildDocs (texliveSmall.withPackages (ps: with ps; [
     latexmk
     tex-gyre
     fncychap
@@ -28,8 +27,8 @@ let
     needspace
     tabulary
     varwidth
-    titlesec;
-  };
+    titlesec
+  ]));
 in stdenv.mkDerivation (finalAttrs: {
   pname = "miopengemm";
   version = "5.5.0";
@@ -44,6 +43,7 @@ in stdenv.mkDerivation (finalAttrs: {
     "benchmark"
   ];
 
+  # Deprecated? https://github.com/ROCmSoftwarePlatform/MIOpenGEMM/issues/62
   src = fetchFromGitHub {
     owner = "ROCmSoftwarePlatform";
     repo = "MIOpenGEMM";
@@ -121,6 +121,6 @@ in stdenv.mkDerivation (finalAttrs: {
     platforms = platforms.linux;
     # They are not making tags or releases, this may break other derivations in the future
     # Use version major instead of minor, 6.0 will HOPEFULLY have a release or tag
-    broken = versions.major finalAttrs.version != versions.major stdenv.cc.version;
+    broken = versions.major finalAttrs.version != versions.major stdenv.cc.version || versionAtLeast finalAttrs.version "6.0.0";
   };
 })

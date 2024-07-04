@@ -1,17 +1,19 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pyexcel-io
-, odfpy
-, nose
-, pyexcel
-, pyexcel-xls
-, psutil
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pyexcel-io,
+  odfpy,
+  nose,
+  pyexcel,
+  pyexcel-xls,
+  psutil,
 }:
 
 buildPythonPackage rec {
   pname = "pyexcel-ods";
   version = "0.6.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

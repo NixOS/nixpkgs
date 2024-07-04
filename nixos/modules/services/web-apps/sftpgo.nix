@@ -20,22 +20,15 @@ in
     enable = mkOption {
       type = types.bool;
       default = false;
-      description = mdDoc "sftpgo";
+      description = "sftpgo";
     };
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.sftpgo;
-      defaultText = literalExpression "pkgs.sftpgo";
-      description = mdDoc ''
-        Which SFTPGo package to use.
-      '';
-    };
+    package = mkPackageOption pkgs "sftpgo" { };
 
     extraArgs = mkOption {
       type = with types; listOf str;
       default = [];
-      description = mdDoc ''
+      description = ''
         Additional command line arguments to pass to the sftpgo daemon.
       '';
       example = [ "--log-level" "info" ];
@@ -44,7 +37,7 @@ in
     dataDir = mkOption {
       type = types.str;
       default = "/var/lib/sftpgo";
-      description = mdDoc ''
+      description = ''
         The directory where SFTPGo stores its data files.
       '';
     };
@@ -52,7 +45,7 @@ in
     user = mkOption {
       type = types.str;
       default = defaultUser;
-      description = mdDoc ''
+      description = ''
         User account name under which SFTPGo runs.
       '';
     };
@@ -60,7 +53,7 @@ in
     group = mkOption {
       type = types.str;
       default = defaultUser;
-      description = mdDoc ''
+      description = ''
         Group name under which SFTPGo runs.
       '';
     };
@@ -68,7 +61,7 @@ in
     loadDataFile = mkOption {
       default = null;
       type = with types; nullOr path;
-      description = mdDoc ''
+      description = ''
         Path to a json file containing users and folders to load (or update) on startup.
         Check the [documentation](https://github.com/drakkan/sftpgo/blob/main/docs/full-configuration.md)
         for the `--loaddata-from` command line argument for more info.
@@ -77,7 +70,7 @@ in
 
     settings = mkOption {
       default = {};
-      description = mdDoc ''
+      description = ''
         The primary sftpgo configuration. See the
         [configuration reference](https://github.com/drakkan/sftpgo/blob/main/docs/full-configuration.md)
         for possible values.
@@ -87,7 +80,7 @@ in
         options = {
           httpd.bindings = mkOption {
             default = [];
-            description = mdDoc ''
+            description = ''
               Configure listen addresses and ports for httpd.
             '';
             type = types.listOf (types.submodule {
@@ -96,7 +89,7 @@ in
                 address = mkOption {
                   type = types.str;
                   default = "127.0.0.1";
-                  description = mdDoc ''
+                  description = ''
                     Network listen address. Leave blank to listen on all available network interfaces.
                     On *NIX you can specify an absolute path to listen on a Unix-domain socket.
                   '';
@@ -105,7 +98,7 @@ in
                 port = mkOption {
                   type = types.port;
                   default = 8080;
-                  description = mdDoc ''
+                  description = ''
                     The port for serving HTTP(S) requests.
 
                     Setting the port to `0` disables listening on this interface binding.
@@ -115,7 +108,7 @@ in
                 enable_web_admin = mkOption {
                   type = types.bool;
                   default = true;
-                  description = mdDoc ''
+                  description = ''
                     Enable the built-in web admin for this interface binding.
                   '';
                 };
@@ -123,7 +116,7 @@ in
                 enable_web_client = mkOption {
                   type = types.bool;
                   default = true;
-                  description = mdDoc ''
+                  description = ''
                     Enable the built-in web client for this interface binding.
                   '';
                 };
@@ -133,7 +126,7 @@ in
 
           ftpd.bindings = mkOption {
             default = [];
-            description = mdDoc ''
+            description = ''
               Configure listen addresses and ports for ftpd.
             '';
             type = types.listOf (types.submodule {
@@ -142,7 +135,7 @@ in
                 address = mkOption {
                   type = types.str;
                   default = "127.0.0.1";
-                  description = mdDoc ''
+                  description = ''
                     Network listen address. Leave blank to listen on all available network interfaces.
                     On *NIX you can specify an absolute path to listen on a Unix-domain socket.
                   '';
@@ -151,7 +144,7 @@ in
                 port = mkOption {
                   type = types.port;
                   default = 0;
-                  description = mdDoc ''
+                  description = ''
                     The port for serving FTP requests.
 
                     Setting the port to `0` disables listening on this interface binding.
@@ -163,7 +156,7 @@ in
 
           sftpd.bindings = mkOption {
             default = [];
-            description = mdDoc ''
+            description = ''
               Configure listen addresses and ports for sftpd.
             '';
             type = types.listOf (types.submodule {
@@ -172,7 +165,7 @@ in
                 address = mkOption {
                   type = types.str;
                   default = "127.0.0.1";
-                  description = mdDoc ''
+                  description = ''
                     Network listen address. Leave blank to listen on all available network interfaces.
                     On *NIX you can specify an absolute path to listen on a Unix-domain socket.
                   '';
@@ -181,7 +174,7 @@ in
                 port = mkOption {
                   type = types.port;
                   default = 0;
-                  description = mdDoc ''
+                  description = ''
                     The port for serving SFTP requests.
 
                     Setting the port to `0` disables listening on this interface binding.
@@ -193,7 +186,7 @@ in
 
           webdavd.bindings = mkOption {
             default = [];
-            description = mdDoc ''
+            description = ''
               Configure listen addresses and ports for webdavd.
             '';
             type = types.listOf (types.submodule {
@@ -202,7 +195,7 @@ in
                 address = mkOption {
                   type = types.str;
                   default = "127.0.0.1";
-                  description = mdDoc ''
+                  description = ''
                     Network listen address. Leave blank to listen on all available network interfaces.
                     On *NIX you can specify an absolute path to listen on a Unix-domain socket.
                   '';
@@ -211,7 +204,7 @@ in
                 port = mkOption {
                   type = types.port;
                   default = 0;
-                  description = mdDoc ''
+                  description = ''
                     The port for serving WebDAV requests.
 
                     Setting the port to `0` disables listening on this interface binding.
@@ -223,7 +216,7 @@ in
 
           smtp = mkOption {
             default = {};
-            description = mdDoc ''
+            description = ''
               SMTP configuration section.
             '';
             type = types.submodule {
@@ -232,7 +225,7 @@ in
                 host = mkOption {
                   type = types.str;
                   default = "";
-                  description = mdDoc ''
+                  description = ''
                     Location of SMTP email server. Leave empty to disable email sending capabilities.
                   '';
                 };
@@ -240,13 +233,13 @@ in
                 port = mkOption {
                   type = types.port;
                   default = 465;
-                  description = mdDoc "Port of the SMTP Server.";
+                  description = "Port of the SMTP Server.";
                 };
 
                 encryption = mkOption {
                   type = types.enum [ 0 1 2 ];
                   default = 1;
-                  description = mdDoc ''
+                  description = ''
                     Encryption scheme:
                     - `0`: No encryption
                     - `1`: TLS
@@ -257,7 +250,7 @@ in
                 auth_type = mkOption {
                   type = types.enum [ 0 1 2 ];
                   default = 0;
-                  description = mdDoc ''
+                  description = ''
                     - `0`: Plain
                     - `1`: Login
                     - `2`: CRAM-MD5
@@ -267,13 +260,13 @@ in
                 user = mkOption {
                   type = types.str;
                   default = "sftpgo";
-                  description = mdDoc "SMTP username.";
+                  description = "SMTP username.";
                 };
 
                 from = mkOption {
                   type = types.str;
                   default = "SFTPGo <sftpgo@example.com>";
-                  description = mdDoc ''
+                  description = ''
                     From address.
                   '';
                 };

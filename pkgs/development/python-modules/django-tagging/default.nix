@@ -1,8 +1,13 @@
-{ buildPythonPackage, fetchPypi, django }:
+{
+  buildPythonPackage,
+  fetchPypi,
+  django,
+}:
 
 buildPythonPackage rec {
   pname = "django-tagging";
   version = "0.5.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -15,7 +20,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ django ];
 
   meta = {
-    description = "A generic tagging application for Django projects";
+    description = "Generic tagging application for Django projects";
     homepage = "https://github.com/Fantomas42/django-tagging";
   };
 }

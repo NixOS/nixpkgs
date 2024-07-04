@@ -1,11 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   version = "0.2.0";
+  format = "setuptools";
   pname = "ifaddr";
 
   src = fetchPypi {
@@ -13,9 +15,7 @@ buildPythonPackage rec {
     hash = "sha256-zAy/yqv3ZdRFlYJfuWqZuxLHlxa3O0QzDqOO4rDErtQ=";
   };
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "ifaddr" ];
 

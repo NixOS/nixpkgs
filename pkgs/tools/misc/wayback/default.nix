@@ -24,7 +24,7 @@ buildGoModule rec {
   ];
 
   meta = with lib; {
-    description = "An archiving tool with an IM-style interface";
+    description = "Archiving tool with an IM-style interface";
     homepage = "https://docs.wabarc.eu.org";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ _2gn ];

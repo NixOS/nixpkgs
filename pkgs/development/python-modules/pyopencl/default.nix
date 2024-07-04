@@ -1,37 +1,37 @@
-{ lib
-, stdenv
-, fetchPypi
-, buildPythonPackage
-, appdirs
-, cffi
-, decorator
-, mako
-, mesa_drivers
-, numpy
-, ocl-icd
-, oldest-supported-numpy
-, opencl-headers
-, platformdirs
-, pybind11
-, pytest
-, pytestCheckHook
-, pytools
-, setuptools
-, six
-, wheel
+{
+  lib,
+  stdenv,
+  fetchPypi,
+  buildPythonPackage,
+  appdirs,
+  cffi,
+  decorator,
+  mako,
+  mesa_drivers,
+  numpy,
+  ocl-icd,
+  oldest-supported-numpy,
+  opencl-headers,
+  platformdirs,
+  pybind11,
+  pytestCheckHook,
+  pytools,
+  setuptools,
+  six,
+  wheel,
 }:
 
 let
-  os-specific-buildInputs =
-    if stdenv.isDarwin then [ mesa_drivers.dev ] else [ ocl-icd ];
-in buildPythonPackage rec {
+  os-specific-buildInputs = if stdenv.isDarwin then [ mesa_drivers.dev ] else [ ocl-icd ];
+in
+buildPythonPackage rec {
   pname = "pyopencl";
-  version = "2023.1.4";
+  version = "2024.1";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-IgF078qQDp1d5a7yqht3pvJVBQHekrA1qRATrq5NTF4=";
+    hash = "sha256-7NVy7pQK2L2hY5w6e+tog0/JqYrX6z9uAarE99nUusE=";
   };
 
   nativeBuildInputs = [
@@ -40,7 +40,10 @@ in buildPythonPackage rec {
     wheel
   ];
 
-  buildInputs = [ opencl-headers pybind11 ] ++ os-specific-buildInputs;
+  buildInputs = [
+    opencl-headers
+    pybind11
+  ] ++ os-specific-buildInputs;
 
   propagatedBuildInputs = [
     appdirs
@@ -68,6 +71,5 @@ in buildPythonPackage rec {
     description = "Python wrapper for OpenCL";
     homepage = "https://github.com/pyopencl/pyopencl";
     license = licenses.mit;
-    maintainers = [ maintainers.fridh ];
   };
 }

@@ -21,14 +21,14 @@ assert lib.asserts.assertMsg (usePipewire != usePulseaudio) "You need to enable 
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "jamesdsp";
-  version = "2.6.1";
+  version = "2.7.0";
 
   src = fetchFromGitHub {
     owner = "Audio4Linux";
     repo = "JDSP4Linux";
     fetchSubmodules = true;
     rev = finalAttrs.version;
-    hash = "sha256-XYJl94/PstWG5qaBQ2rXc/nG9bDeP3Q62zDYHmZvPaw=";
+    hash = "sha256-eVndqIqJ3DRceuFMT++g2riXq0CL5r+TWbvzvaYIfZ8=";
   };
 
   nativeBuildInputs = [
@@ -79,7 +79,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     broken = (stdenv.isLinux && stdenv.isAarch64);
-    description = "An audio effect processor for PipeWire clients";
+    description = "Audio effect processor for PipeWire clients";
+    mainProgram = "jamesdsp";
     homepage = "https://github.com/Audio4Linux/JDSP4Linux";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ pasqui23 rewine ];

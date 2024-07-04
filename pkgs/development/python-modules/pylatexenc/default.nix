@@ -1,12 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pylatexenc";
   version = "2.10";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "phfaist";

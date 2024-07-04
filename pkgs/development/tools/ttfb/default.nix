@@ -1,40 +1,36 @@
 { darwin
 , fetchCrate
 , lib
-, openssl
-, pkg-config
 , rustPlatform
 , stdenv
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "ttfb";
-  version = "1.7.0";
+  version = "1.12.0";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-GxjG8pyE2rY0h1dpAo+HRUbP31I5Pm4h1fAb6R7V+qU=";
+    hash = "sha256-Cdup65w31wF1RZu0g4/msHfLESrNTcuCU5kxkk0gnW8=";
   };
 
-  cargoHash = "sha256-YdbVtVKt0bKb1R5IQxf9J/0ZA3ZHH+oZ8ryX6f4cGsY=";
+  buildInputs = lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.Security
+  ];
+
+  cargoHash = "sha256-U8CG0GqnUwya+ZK0qXtOFZ/MbbqSvB5egX7XJKtl88g=";
 
   # The bin feature activates all dependencies of the binary. Otherwise,
   # only the library is build.
   buildFeatures = [ "bin" ];
 
-  nativeBuildInputs = [ pkg-config ];
-
-  buildInputs = [
-    openssl
-  ] ++ lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.Security
-  ];
-
   meta = {
     description = "CLI-Tool to measure the TTFB (time to first byte) of HTTP(S) requests";
+    mainProgram = "ttfb";
     longDescription = ''
-      This crate measures the times of DNS lookup, TCP connect, TLS handshake, and HTTP's TTFB
-      for a given IP or domain.
+      ttfb measure the TTFB (time to first byte) of HTTP(S) requests. This includes data
+      of intermediate steps, such as the relative and absolute timings of DNS lookup, TCP
+      connect, and TLS handshake.
     '';
     homepage = "https://github.com/phip1611/ttfb";
     changelog = "https://github.com/phip1611/ttfb/blob/v${version}/CHANGELOG.md";

@@ -5,35 +5,36 @@
 , substituteAll
 , acm
 , markdown-mode
-, posframe
 , git
 , go
 , gopls
 , pyright
 , ruff
 , tempel
+, writeScript
 , writeText
-, unstableGitUpdater
 }:
 
 let
-  rev = "6f93deb32ebb3799dfedd896a17a0428a9b461bb";
+  rev = "9e88e660d717ba597d9fe9366cf4278674734410";
   python = python3.withPackages (ps: with ps; [
     epc
     orjson
+    paramiko
+    rapidfuzz
     sexpdata
     six
   ]);
 in
 melpaBuild {
   pname = "lsp-bridge";
-  version = "20230607.135"; # 1:35 UTC
+  version = "20240629.1404";
 
   src = fetchFromGitHub {
     owner = "manateelazycat";
     repo = "lsp-bridge";
     inherit rev;
-    hash = "sha256-4AKKsU+yuLA9qv6mhYPpjBJ8wrbGPMuzN98JXcVPAHg=";
+    hash = "sha256-qpetTKZDQjoofp8ggothYALQBpwLjuNxCq46Pe4oZZA=";
   };
 
   commit = rev;
@@ -50,7 +51,6 @@ melpaBuild {
   packageRequires = [
     acm
     markdown-mode
-    posframe
   ];
 
   checkInputs = [
@@ -88,10 +88,27 @@ melpaBuild {
     runHook postCheck
   '';
 
-  passthru.updateScript = unstableGitUpdater { };
+  __darwinAllowLocalNetworking = true;
+
+  passthru.updateScript = writeScript "update.sh" ''
+    #!/usr/bin/env nix-shell
+    #!nix-shell -i bash -p common-updater-scripts coreutils git gnused
+    set -eu -o pipefail
+
+    tmpdir="$(mktemp -d)"
+    git clone --depth=1 https://github.com/manateelazycat/lsp-bridge.git "$tmpdir"
+
+    pushd "$tmpdir"
+    commit=$(git show -s --pretty='format:%H')
+    # Based on: https://github.com/melpa/melpa/blob/2d8716906a0c9e18d6c979d8450bf1d15dd785eb/package-build/package-build.el#L523-L533
+    version=$(TZ=UTC git show -s --pretty='format:%cd' --date='format-local:%Y%m%d.%H%M' | sed 's|\.0*|.|')
+    popd
+
+    update-source-version emacsPackages.lsp-bridge $version --rev="$commit"
+  '';
 
   meta = with lib; {
-    description = "A blazingly fast LSP client for Emacs";
+    description = "Blazingly fast LSP client for Emacs";
     homepage = "https://github.com/manateelazycat/lsp-bridge";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ fxttr kira-bruneau ];

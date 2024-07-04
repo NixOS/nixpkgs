@@ -1,62 +1,70 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, audioSupport ? true
-, darwin
-, alsa-lib
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  audioSupport ? true,
+  darwin,
+  alsa-lib,
 
-# passthru.tests.run
-, runCommand
-, uiua
+  # passthru.tests.run
+  runCommand,
+  uiua,
 }:
 
+let
+  inherit (darwin.apple_sdk.frameworks) AppKit AudioUnit CoreServices;
+in
 rustPlatform.buildRustPackage rec {
   pname = "uiua";
-  version = "0.0.20";
+  version = "0.11.1";
 
   src = fetchFromGitHub {
     owner = "uiua-lang";
     repo = "uiua";
-    rev = "refs/tags/${version}";
-    hash = "sha256-fFsMN+4ORB//Ch+wrRRMeZKXvW8ta5m66Vy3I3uyHO8=";
+    rev = version;
+    hash = "sha256-bK5Z6aoyZti46GLulpdxGPxHM+EfEVQgeAUY6fRc7YY=";
   };
 
-  cargoHash = "sha256-old+U0sJWnp8wTiZBjcQ7+mv+6N15cpyyTDEjTUnghk=";
+  cargoHash = "sha256-iq5V+FGOcK2opmA4ot0KF9ZToYWC82gRsRyVqftuFPA=";
 
-  nativeBuildInputs = lib.optionals stdenv.isDarwin [
-    rustPlatform.bindgenHook
-  ] ++ lib.optionals audioSupport [
-    pkg-config
-  ];
+  nativeBuildInputs =
+    lib.optionals stdenv.isDarwin [ rustPlatform.bindgenHook ]
+    ++ lib.optionals audioSupport [ pkg-config ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.CoreServices
-  ] ++ lib.optionals (audioSupport && stdenv.isDarwin) [
-    darwin.apple_sdk.frameworks.AudioUnit
-  ] ++ lib.optionals (audioSupport && stdenv.isLinux) [
-    alsa-lib
-  ];
+  buildInputs =
+    lib.optionals stdenv.isDarwin [
+      AppKit
+      CoreServices
+    ]
+    ++ lib.optionals (audioSupport && stdenv.isDarwin) [ AudioUnit ]
+    ++ lib.optionals (audioSupport && stdenv.isLinux) [ alsa-lib ];
 
   buildFeatures = lib.optional audioSupport "audio";
 
-  passthru.tests.run = runCommand "uiua-test-run" {nativeBuildInputs = [uiua];} ''
-    uiua init;
+  passthru.updateScript = ./update.sh;
+  passthru.tests.run = runCommand "uiua-test-run" { nativeBuildInputs = [ uiua ]; } ''
+    uiua init
     diff -U3 --color=auto <(uiua run main.ua) <(echo '"Hello, World!"')
-    touch $out;
+    touch $out
   '';
 
-  meta = with lib; {
-    description = "A stack-oriented array programming language with a focus on simplicity, beauty, and tacit code";
+  meta = {
+    changelog = "https://github.com/uiua-lang/uiua/blob/${src.rev}/changelog.md";
+    description = "Stack-oriented array programming language with a focus on simplicity, beauty, and tacit code";
     longDescription = ''
       Uiua combines the stack-oriented and array-oriented paradigms in a single
       language. Combining these already terse paradigms results in code with a very
       high information density and little syntactic noise.
     '';
     homepage = "https://www.uiua.org/";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "uiua";
-    maintainers = with maintainers; [ cafkafk tomasajt ];
+    maintainers = with lib.maintainers; [
+      cafkafk
+      tomasajt
+      defelo
+    ];
   };
 }

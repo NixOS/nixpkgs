@@ -2,22 +2,22 @@
 
 stdenvNoCC.mkDerivation {
   pname = "raspberrypi-wireless-firmware";
-  version = "unstable-2023-05-04";
+  version = "unstable-2024-02-26";
 
   srcs = [
     (fetchFromGitHub {
       name = "bluez-firmware";
       owner = "RPi-Distro";
       repo = "bluez-firmware";
-      rev = "9556b08ace2a1735127894642cc8ea6529c04c90";
-      hash = "sha256-gKGK0XzNrws5REkKg/JP6SZx3KsJduu53SfH3Dichkc=";
+      rev = "78d6a07730e2d20c035899521ab67726dc028e1c";
+      hash = "sha256-KakKnOBeWxh0exu44beZ7cbr5ni4RA9vkWYb9sGMb8Q=";
     })
     (fetchFromGitHub {
       name = "firmware-nonfree";
       owner = "RPi-Distro";
       repo = "firmware-nonfree";
-      rev = "2b465a10b04555b7f45b3acb85959c594922a3ce";
-      hash = "sha256-9UgB8f2AaxG7S5Px46jOP9wUeO1VXKB0uJiPWh32oDI=";
+      rev = "223ccf3a3ddb11b3ea829749fbbba4d65b380897";
+      hash = "sha256-BGq0+cr+xBRwQM/LqiQuRWuZpQsKM5jfcrNCqWMuVzM=";
     })
   ];
 
@@ -35,16 +35,14 @@ stdenvNoCC.mkDerivation {
     cp -rv "$NIX_BUILD_TOP/firmware-nonfree/debian/config/brcm80211/." "$out/lib/firmware/"
 
     # Bluetooth firmware
-    cp -rv "$NIX_BUILD_TOP/bluez-firmware/broadcom/." "$out/lib/firmware/brcm"
+    cp -rv "$NIX_BUILD_TOP/bluez-firmware/debian/firmware/broadcom/." "$out/lib/firmware/brcm"
 
-    # brcmfmac43455-stdio.bin is a symlink to the non-existent path: ../cypress/cyfmac43455-stdio.bin.
+    # brcmfmac43455-sdio.bin is a symlink to the non-existent path: ../cypress/cyfmac43455-sdio.bin.
     # See https://github.com/RPi-Distro/firmware-nonfree/issues/26
     ln -s "./cyfmac43455-sdio-standard.bin" "$out/lib/firmware/cypress/cyfmac43455-sdio.bin"
 
     pushd $out/lib/firmware/brcm &>/dev/null
     # Symlinks for Zero 2W
-    ln -s "./brcmfmac43436-sdio.bin" "$out/lib/firmware/brcm/brcmfmac43430b0-sdio.raspberrypi,model-zero-2-w.bin"
-    ln -s "./brcmfmac43436-sdio.txt" "$out/lib/firmware/brcm/brcmfmac43430b0-sdio.raspberrypi,model-zero-2-w.txt"
     ln -s "./brcmfmac43436-sdio.clm_blob" "$out/lib/firmware/brcm/brcmfmac43430b0-sdio.clm_blob"
     popd &>/dev/null
 

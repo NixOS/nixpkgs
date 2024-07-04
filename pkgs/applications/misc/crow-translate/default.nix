@@ -17,11 +17,11 @@
 
 stdenv.mkDerivation rec {
   pname = "crow-translate";
-  version = "2.10.10";
+  version = "2.11.1";
 
   src = fetchzip {
     url = "https://github.com/${pname}/${pname}/releases/download/${version}/${pname}-${version}-source.tar.gz";
-    hash = "sha256-PvfruCqmTBFLWLeIL9NV6+H2AifXcY97ImHzD1zEs28=";
+    hash = "sha256-1rq1pF4tOaZNEaHflxlBuHta80EzD9m3O99geR1EPxE=";
   };
 
   postPatch = ''
@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "A simple and lightweight translator that allows to translate and speak text using Google, Yandex and Bing";
+    description = "Simple and lightweight translator that allows to translate and speak text using Google, Yandex and Bing";
     homepage = "https://crow-translate.github.io/";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ sikmir ];

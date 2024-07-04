@@ -1,28 +1,27 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 
-# build-system
-, poetry-core
+  # build-system
+  poetry-core,
 
-# tests
-, pytestCheckHook
-, pyyaml
+  # tests
+  pytestCheckHook,
+  pyyaml,
 }:
 
 buildPythonPackage rec {
   pname = "tomlkit";
-  version = "0.12.1";
+  version = "0.12.4";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-OOH/jtuZEnPsn2GBJEpqORrDDp9QmOdTVkDqa+l6fIY=";
+    hash = "sha256-fKHPwSIygGUXqFFQR7pmoZNp5x7fJDnQ9YJPkQMrbMM=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   nativeCheckInputs = [
     pyyaml

@@ -6,16 +6,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "game-rs";
-  version = "0.1.3";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "amanse";
     repo = "game-rs";
     rev = "v${version}";
-    hash = "sha256-M9/hFItoCL8fSrc0dFNn43unqkIaD179OGUdbXL6/Rs=";
+    hash = "sha256-FuZl2yNre5jNSfHqF3tjiGwg5mRKbYer2FOPpLy0OrA=";
   };
 
-  cargoHash = "sha256-aq58sFK4/Zd8S4dOWjag+g5PmTeaVAK3FS3fW/YlCLs=";
+  cargoHash = "sha256-fNC8Aff09nTSbtxZg5qEKtvFyKFLRVjaokWiZihZCgM=";
 
   buildFeatures = [ "nixos" ];
 

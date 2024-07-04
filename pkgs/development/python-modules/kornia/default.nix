@@ -1,14 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, packaging
-, torch
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  packaging,
+  torch,
+  kornia-rs,
 }:
 
 buildPythonPackage rec {
   pname = "kornia";
-  version = "0.7.0";
+  version = "0.7.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -17,10 +19,11 @@ buildPythonPackage rec {
     owner = pname;
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-XcQXKn4F3DIgn+XQcN5ZcGZLehd/IPBgLuGzIkPSxZg=";
+    hash = "sha256-DmXttvKoLqny0mt3SUonidNxDkNX7N0LdTxy/H32R/4=";
   };
 
   propagatedBuildInputs = [
+    kornia-rs
     packaging
     torch
   ];
@@ -39,11 +42,10 @@ buildPythonPackage rec {
     "kornia.metrics"
     "kornia.morphology"
     "kornia.tracking"
-    "kornia.testing"
     "kornia.utils"
   ];
 
-  doCheck = false;  # tests hang with no single test clearly responsible
+  doCheck = false; # tests hang with no single test clearly responsible
 
   meta = with lib; {
     homepage = "https://kornia.github.io/kornia";

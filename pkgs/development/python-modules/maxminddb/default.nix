@@ -1,35 +1,30 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchPypi
-, libmaxminddb
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchPypi,
+  libmaxminddb,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "maxminddb";
-  version = "2.4.0";
+  version = "2.6.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-geVOU0CL1QJlDllpzLoWeAr2WewdscRLLJl+QzCl7ZY=";
+    hash = "sha256-bF1ZH2JeA7CjTfDH/4FYBnY5e4M14T7OEwxuOeSjr7k=";
   };
 
-  buildInputs = [
-    libmaxminddb
-  ];
+  buildInputs = [ libmaxminddb ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "maxminddb"
-  ];
+  pythonImportsCheck = [ "maxminddb" ];
 
   # The multiprocessing tests fail on Darwin because multiprocessing uses spawn instead of fork,
   # resulting in an exception when it can’t pickle the `lookup` local function.

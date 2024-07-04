@@ -1,11 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
 
 buildPythonPackage rec {
   pname = "speaklater3";
   version = "1.4";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake, lua, pkg-config, rsync,
+{ lib, stdenv, fetchFromGitHub, cmake, lua, pkg-config, rsync,
   asciidoc, libxml2, docbook_xml_dtd_45, docbook_xsl, libxslt, xnu }:
 
 stdenv.mkDerivation rec {
@@ -32,7 +32,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/axkibe/lsyncd";
-    description = "A utility that synchronizes local directories with remote targets";
+    description = "Utility that synchronizes local directories with remote targets";
+    mainProgram = "lsyncd";
     license = licenses.gpl2Plus;
     platforms = platforms.all;
     maintainers = with maintainers; [ bobvanderlinden ];

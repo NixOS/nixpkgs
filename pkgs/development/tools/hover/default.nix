@@ -37,7 +37,7 @@ let
     inherit pname version;
 
     meta = with lib; {
-      description = "A build tool to run Flutter applications on desktop";
+      description = "Build tool to run Flutter applications on desktop";
       homepage = "https://github.com/go-flutter-desktop/hover";
       license = licenses.bsd3;
       platforms = platforms.linux;
@@ -85,7 +85,7 @@ let
 
 in
 buildFHSEnv rec {
-  name = pname;
+  inherit pname version;
   targetPkgs = pkgs: [
     binutils
     dejavu_fonts

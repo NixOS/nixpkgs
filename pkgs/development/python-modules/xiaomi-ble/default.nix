@@ -1,44 +1,47 @@
-{ lib
-, bleak
-, bleak-retry-connector
-, bluetooth-data-tools
-, bluetooth-sensor-state-data
-, buildPythonPackage
-, cryptography
-, fetchFromGitHub
-, home-assistant-bluetooth
-, poetry-core
-, pycryptodomex
-, pytestCheckHook
-, pythonOlder
-, sensor-state-data
+{
+  lib,
+  bleak,
+  bleak-retry-connector,
+  bluetooth-data-tools,
+  bluetooth-sensor-state-data,
+  buildPythonPackage,
+  cryptography,
+  fetchFromGitHub,
+  home-assistant-bluetooth,
+  poetry-core,
+  pycryptodomex,
+  pytestCheckHook,
+  pythonOlder,
+  pythonRelaxDepsHook,
+  sensor-state-data,
 }:
 
 buildPythonPackage rec {
   pname = "xiaomi-ble";
-  version = "0.21.1";
-  format = "pyproject";
+  version = "0.30.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "Bluetooth-Devices";
-    repo = pname;
+    repo = "xiaomi-ble";
     rev = "refs/tags/v${version}";
-    hash = "sha256-5AzqsCWDgGhJ1EgJrbA8QHjP/Y14cIdSA0GKwZMrxX0=";
+    hash = "sha256-1YeT525L6SsybiA+k5vPx5D2yvYdcuxfhpUMlZCX2Jo=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace " --cov=xiaomi_ble --cov-report=term-missing:skip-covered" "" \
-      --replace 'pycryptodomex = ">=3.18.0"' 'pycryptodomex = ">=3.17.0"'
+      --replace-fail " --cov=xiaomi_ble --cov-report=term-missing:skip-covered" ""
   '';
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  nativeBuildInputs = [ pythonRelaxDepsHook ];
+
+  pythonRelaxDeps = [ "pycryptodomex" ];
+
+  dependencies = [
     bleak
     bleak-retry-connector
     bluetooth-data-tools
@@ -49,13 +52,9 @@ buildPythonPackage rec {
     sensor-state-data
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "xiaomi_ble"
-  ];
+  pythonImportsCheck = [ "xiaomi_ble" ];
 
   meta = with lib; {
     description = "Library for Xiaomi BLE devices";

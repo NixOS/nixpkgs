@@ -4,14 +4,13 @@
 , pythonOlder
 , fetchFromGitHub
 , installShellFiles
-, pythonRelaxDepsHook
 , build
 , cachecontrol
 , cleo
 , crashtest
 , dulwich
+, fastjsonschema
 , installer
-, jsonschema
 , keyring
 , packaging
 , pexpect
@@ -29,38 +28,30 @@
 , xattr
 , tomli
 , importlib-metadata
-, cachy
 , deepdiff
-, flatdict
 , pytestCheckHook
 , httpretty
 , pytest-mock
 , pytest-xdist
-, pythonAtLeast
+, darwin
 }:
 
 buildPythonPackage rec {
   pname = "poetry";
-  version = "1.6.1";
-  format = "pyproject";
+  version = "1.8.3";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "python-poetry";
-    repo = pname;
+    repo = "poetry";
     rev = "refs/tags/${version}";
-    hash = "sha256-/OvYT4Vix1t5Yx/Tx0z3E9L9qJ4OdI4maQqUVl8H524=";
+    hash = "sha256-PPHt9GG5XJzrhnuAS8L+0Pa3El3RNCdEbXbLnHopDWg=";
   };
 
   nativeBuildInputs = [
     installShellFiles
-    pythonRelaxDepsHook
-  ];
-
-  pythonRelaxDeps = [
-    # only pinned to avoid dependency on Rust
-    "jsonschema"
   ];
 
   propagatedBuildInputs = [
@@ -69,8 +60,8 @@ buildPythonPackage rec {
     cleo
     crashtest
     dulwich
+    fastjsonschema
     installer
-    jsonschema
     keyring
     packaging
     pexpect
@@ -101,13 +92,13 @@ buildPythonPackage rec {
   '';
 
   nativeCheckInputs = [
-    cachy
     deepdiff
-    flatdict
     pytestCheckHook
     httpretty
     pytest-mock
     pytest-xdist
+  ] ++ lib.optionals stdenv.isDarwin [
+    darwin.ps
   ];
 
   preCheck = (''
@@ -122,29 +113,14 @@ buildPythonPackage rec {
   '';
 
   disabledTests = [
-    "test_installer_with_pypi_repository"
-    # touches network
-    "git"
-    "solver"
-    "load"
-    "vcs"
-    "prereleases_if_they_are_compatible"
-    "test_builder_setup_generation_runs_with_pip_editable"
-    "test_executor"
-    # requires git history to work correctly
-    "default_with_excluded_data"
-    # toml ordering has changed
-    "lock"
-    # fs permission errors
     "test_builder_should_execute_build_scripts"
-    # poetry.installation.chef.ChefBuildError: Backend 'poetry.core.masonry.api' is not available.
-    "test_prepare_sdist"
-    "test_prepare_directory"
-    "test_prepare_directory_with_extensions"
-    "test_prepare_directory_editable"
-  ] ++ lib.optionals (pythonAtLeast "3.10") [
-    # RuntimeError: 'auto_spec' might be a typo; use unsafe=True if this is intended
-    "test_info_setup_complex_pep517_error"
+    "test_env_system_packages_are_relative_to_lib"
+    "test_executor_known_hashes"
+    "test_install_warning_corrupt_root"
+  ];
+
+  pytestFlagsArray = [
+    "-m 'not network'"
   ];
 
   # Allow for package to use pep420's native namespaces
@@ -163,5 +139,6 @@ buildPythonPackage rec {
     description = "Python dependency management and packaging made easy";
     license = licenses.mit;
     maintainers = with maintainers; [ jakewaksbaum dotlambda ];
+    mainProgram = "poetry";
   };
 }

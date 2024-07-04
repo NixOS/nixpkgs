@@ -1,59 +1,77 @@
 { lib
 , stdenv
-, fetchurl
+, fetchFromGitHub
 , pkg-config
 , openssl
 , check
 , pcsclite
 , PCSC
 , gengetopt
+, help2man
 , cmake
-, withApplePCSC ? stdenv.isDarwin
-, gitUpdater
+, zlib
+, nix-update-script
 , testers
-, yubico-piv-tool
+, withApplePCSC ? stdenv.isDarwin
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "yubico-piv-tool";
-  version = "2.3.1";
+  version = "2.5.2";
 
-  src = fetchurl {
-    url = "https://developers.yubico.com/yubico-piv-tool/Releases/yubico-piv-tool-${version}.tar.gz";
-    hash = "sha256-2ona/YthhapjU0Z1P53bKa8pvEq9kt2B832dZWC11k4=";
+  outputs = [ "out" "dev" "man" ];
+
+  src = fetchFromGitHub {
+    owner = "Yubico";
+    repo = "yubico-piv-tool";
+    rev = "refs/tags/yubico-piv-tool-${finalAttrs.version}";
+    hash = "sha256-SBVYr6OcWqT+WKOZgIeZ1TmqCbcGAjbq/HaWIwPduFw=";
   };
 
   postPatch = ''
-    substituteInPlace CMakeLists.txt --replace "-Werror" ""
+    substituteInPlace CMakeLists.txt --replace-fail "-Werror" ""
   '';
 
-  nativeBuildInputs = [ pkg-config cmake gengetopt ];
-  buildInputs = [ openssl check ]
-    ++ (if withApplePCSC then [ PCSC ] else [ pcsclite ]);
-
-  cmakeFlags = [
-    "-DGENERATE_MAN_PAGES=OFF" # Use the man page generated at release time
-    "-DCMAKE_INSTALL_BINDIR=bin"
-    "-DCMAKE_INSTALL_INCLUDEDIR=include"
-    "-DCMAKE_INSTALL_MANDIR=share/man"
-    "-DCMAKE_INSTALL_LIBDIR=lib"
+  nativeBuildInputs = [
+    pkg-config
+    cmake
+    gengetopt
+    help2man
   ];
 
-  configureFlags = [ "--with-backend=${if withApplePCSC then "macscard" else "pcsc"}" ];
+  buildInputs = [
+    openssl
+    zlib.dev
+  ]
+  ++ (if withApplePCSC then [ PCSC ] else [ pcsclite ]);
+
+  cmakeFlags = [
+    (lib.cmakeBool "GENERATE_MAN_PAGES" true)
+    (lib.cmakeFeature "BACKEND" (if withApplePCSC then "macscard" else "pcsc"))
+    (lib.cmakeFeature "CMAKE_INSTALL_BINDIR" "bin")
+    (lib.cmakeFeature "CMAKE_INSTALL_INCLUDEDIR" "include")
+    (lib.cmakeFeature "CMAKE_INSTALL_LIBDIR" "lib")
+    (lib.cmakeFeature "CMAKE_INSTALL_MANDIR" "share/man")
+  ];
+
+  doCheck = true;
+
+  nativeCheckInputs = [ check ];
 
   passthru = {
-    updateScript = gitUpdater {
-      url = "https://github.com/Yubico/yubico-piv-tool.git";
-      rev-prefix = "yubico-piv-tool-";
+    updateScript = nix-update-script {
+      extraArgs = [ "--version-regex" "yubico-piv-tool-([0-9.]+)$" ];
     };
-    tests.version = testers.testVersion {
-      inherit version;
-      package = yubico-piv-tool;
-      command = "yubico-piv-tool --version";
+    tests = {
+      pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+      version = testers.testVersion {
+        package = finalAttrs.finalPackage;
+        command = "yubico-piv-tool --version";
+      };
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://developers.yubico.com/yubico-piv-tool/";
     changelog = "https://developers.yubico.com/yubico-piv-tool/Release_Notes.html";
     description = ''
@@ -67,8 +85,10 @@ stdenv.mkDerivation rec {
       certificates, and create certificate requests, and other operations.
       A shared library and a command-line tool is included.
     '';
-    license = licenses.bsd2;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ viraptor anthonyroussel ];
+    license = lib.licenses.bsd2;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ viraptor anthonyroussel ];
+    mainProgram = "yubico-piv-tool";
+    pkgConfigModules = [ "ykcs11" "ykpiv" ];
   };
-}
+})

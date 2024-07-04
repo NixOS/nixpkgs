@@ -8,11 +8,11 @@
 stdenv.mkDerivation rec {
 
   pname = "omniorb";
-  version = "4.3.0";
+  version = "4.3.2";
 
   src = fetchurl {
     url = "mirror://sourceforge/project/omniorb/omniORB/omniORB-${version}/omniORB-${version}.tar.bz2";
-    hash = "sha256-l2BFojQfTpqFBosh9L2SiZMpKTPu7O/qNy2wngIZ6t0=";
+    hash = "sha256-HHRTMNAZBK/Xoe0KWJa5puU6waS4ZKSFA7k8fuy/H6g=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -21,8 +21,23 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
   hardeningDisable = [ "format" ];
 
+  # Transform omniidl_be into a PEP420 namespace to allow other projects to define
+  # their omniidl backends. Especially useful for omniorbpy, the python backend.
+  postInstall = ''
+    rm $out/${python3.sitePackages}/omniidl_be/__init__.py
+    rm $out/${python3.sitePackages}/omniidl_be/__pycache__/__init__.*.pyc
+  '';
+
+  # Ensure postInstall didn't break cxx backend
+  # Same as 'pythonImportsCheck = ["omniidl_be.cxx"];', but outside buildPythonPackage
+  doInstallCheck = true;
+  postInstallCheck = ''
+    export PYTHONPATH=$out/${python3.sitePackages}:$PYTHONPATH
+    ${lib.getExe python3} -c "import omniidl_be.cxx"
+  '';
+
   meta = with lib; {
-    description = "A robust high performance CORBA ORB for C++ and Python";
+    description = "Robust high performance CORBA ORB for C++ and Python";
     longDescription = ''
       omniORB is a robust high performance CORBA ORB for C++ and Python.
       It is freely available under the terms of the GNU Lesser General Public License

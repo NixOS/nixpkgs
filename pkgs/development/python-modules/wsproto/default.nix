@@ -1,14 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, h11
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  h11,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "wsproto";
   version = "1.2.0";
+  format = "setuptools";
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {

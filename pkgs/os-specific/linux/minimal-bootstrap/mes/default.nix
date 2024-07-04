@@ -2,22 +2,21 @@
 , fetchurl
 , callPackage
 , kaem
-, m2libc
 , mescc-tools
 }:
 
 # Maintenance note:
 # Build steps have been adapted from build-aux/bootstrap.sh.in
 # as well as the live-bootstrap project
-# https://github.com/fosslinux/live-bootstrap/blob/1bc4296091c51f53a5598050c8956d16e945b0f5/sysa/mes-0.24.2/mes-0.24.2.kaem
+# https://github.com/fosslinux/live-bootstrap/blob/737bf61a26152fb82510a2797f0d712de918aa78/sysa/mes-0.25/mes-0.25.kaem
 
 let
   pname = "mes";
-  version = "0.24.2";
+  version = "0.25";
 
   src = fetchurl {
     url = "mirror://gnu/mes/mes-${version}.tar.gz";
-    sha256 = "0vp8v88zszh1imm3dvdfi3m8cywshdj7xcrsq4cgmss69s2y1nkx";
+    hash = "sha256-MlJQs1Z+2SA7pwFhyDWvAQeec+vtl7S1u3fKUAuCiUA=";
   };
 
   nyacc = callPackage ./nyacc.nix { inherit nyacc; };
@@ -68,11 +67,6 @@ let
     cp mes/module/srfi/srfi-9-struct.mes mes/module/srfi/srfi-9.mes
     cp mes/module/srfi/srfi-9/gnu-struct.mes mes/module/srfi/srfi-9/gnu.mes
 
-    # Fixes to support newer M2-Planet
-    catm x86_defs.M1 ${m2libc}/x86/x86_defs.M1 lib/m2/x86/x86_defs.M1
-    cp x86_defs.M1 lib/m2/x86/x86_defs.M1
-    rm x86_defs.M1
-
     # Remove environment impurities
     __GUILE_LOAD_PATH="\"''${MES_PREFIX}/mes/module:''${MES_PREFIX}/module:${nyacc.guilePath}\""
     boot0_scm=mes/module/mes/boot-0.scm
@@ -109,9 +103,7 @@ let
     cp ''${mescc_in} ''${bin}/bin/mescc.scm
 
     # Build mes-m2
-    mes_cpu=x86
-    stage0_cpu=x86
-    kaem --verbose --strict --file kaem.run
+    kaem --verbose --strict --file kaem.x86
     cp bin/mes-m2 ''${bin}/bin/mes-m2
     chmod 555 ''${bin}/bin/mes-m2
   '';
@@ -232,6 +224,6 @@ let
       ${lib.concatMapStringsSep " " (getRes ".o") (map compile mes_SOURCES)}
   '';
 in {
-  inherit srcPost srcPrefix nyacc;
+  inherit src srcPost srcPrefix nyacc;
   inherit compiler libs;
 }

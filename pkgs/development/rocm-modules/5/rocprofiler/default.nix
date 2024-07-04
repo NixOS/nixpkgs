@@ -2,11 +2,16 @@
 , stdenv
 , fetchFromGitHub
 , rocmUpdateScript
+, symlinkJoin
+, substituteAll
 , cmake
 , clang
 , clr
+, rocm-core
 , rocm-thunk
+, rocm-device-libs
 , roctracer
+, rocdbgapi
 , rocm-smi
 , hsa-amd-aqlprofile-bin
 , numactl
@@ -14,33 +19,52 @@
 , libxml2
 , elfutils
 , mpi
+, systemd
 , gtest
 , python3Packages
-, gpuTargets ? [
-  "gfx900"
-  "gfx906"
-  "gfx908"
-  "gfx90a"
-  "gfx940"
-  "gfx941"
-  "gfx942"
-  "gfx1030"
-  "gfx1100"
-  "gfx1101"
-  "gfx1102"
-]
+, gpuTargets ? clr.gpuTargets
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+let
+  rocmtoolkit-merged = symlinkJoin {
+    name = "rocmtoolkit-merged";
+
+    paths = [
+      rocm-core
+      rocm-thunk
+      rocm-device-libs
+      roctracer
+      rocdbgapi
+      rocm-smi
+      hsa-amd-aqlprofile-bin
+      clr
+    ];
+
+    postBuild = ''
+      rm -rf $out/nix-support
+    '';
+  };
+in stdenv.mkDerivation (finalAttrs: {
   pname = "rocprofiler";
-  version = "5.7.0";
+  version = "5.7.1";
 
   src = fetchFromGitHub {
-    owner = "ROCm-Developer-Tools";
+    owner = "ROCm";
     repo = "rocprofiler";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-ue/2uiLbhOv/5XY4cIJuZ8DUMRhniYgxolq9xMwO1FY=";
+    hash = "sha256-1s/7C9y+73ADLF/17Vepw0pZNVtYnKoP24GdwKc9X2Y=";
   };
+
+  patches = [
+    # These just simply won't build
+    ./0000-dont-install-tests-hsaco.patch
+
+    # Fix bad paths
+    (substituteAll {
+      src = ./0001-fix-shell-scripts.patch;
+      rocmtoolkit_merged = rocmtoolkit-merged;
+    })
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -53,20 +77,19 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    rocm-thunk
-    rocm-smi
-    hsa-amd-aqlprofile-bin
     numactl
     libpciaccess
     libxml2
     elfutils
     mpi
+    systemd
     gtest
   ];
 
+  propagatedBuildInputs = [ rocmtoolkit-merged ];
+
   cmakeFlags = [
     "-DCMAKE_MODULE_PATH=${clr}/lib/cmake/hip"
-    "-DPROF_API_HEADER_PATH=${roctracer.src}/inc/ext"
     "-DHIP_ROOT_DIR=${clr}"
     "-DGPU_TARGETS=${lib.concatStringsSep ";" gpuTargets}"
     # Manually define CMAKE_INSTALL_<DIR>
@@ -79,16 +102,21 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     patchShebangs .
 
-    # Cannot find ROCm device library, pointless
-    substituteInPlace CMakeLists.txt \
-      --replace "add_subdirectory(tests-v2)" "" \
-      --replace "add_subdirectory(samples)" ""
+    substituteInPlace tests-v2/featuretests/profiler/CMakeLists.txt \
+      --replace "--build-id=sha1" "--build-id=sha1 --rocm-path=${clr} --rocm-device-lib-path=${rocm-device-libs}/amdgcn/bitcode"
+
+    substituteInPlace test/CMakeLists.txt \
+      --replace "\''${ROCM_ROOT_DIR}/amdgcn/bitcode" "${rocm-device-libs}/amdgcn/bitcode"
   '';
 
-  postBuild = ''
-    # HSACO aren't being built for some reason
-    substituteInPlace test/cmake_install.cmake \
-      --replace "file(INSTALL DESTINATION \"\''${CMAKE_INSTALL_PREFIX}/share/rocprofiler/tests-v1\" TYPE FILE FILES \"" "message(\""
+  postInstall = ''
+    # Why do these not already have the executable bit set?
+    chmod +x $out/lib/rocprofiler/librocprof-tool.so
+    chmod +x $out/share/rocprofiler/tests-v1/test/ocl/SimpleConvolution
+
+    # Why do these have the executable bit set?
+    chmod -x $out/libexec/rocprofiler/counters/basic_counters.xml
+    chmod -x $out/libexec/rocprofiler/counters/derived_counters.xml
   '';
 
   passthru.updateScript = rocmUpdateScript {
@@ -99,10 +127,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "Profiling with perf-counters and derived metrics";
-    homepage = "https://github.com/ROCm-Developer-Tools/rocprofiler";
+    homepage = "https://github.com/ROCm/rocprofiler";
     license = with licenses; [ mit ]; # mitx11
     maintainers = teams.rocm.members;
     platforms = platforms.linux;
-    broken = versions.minor finalAttrs.version != versions.minor clr.version;
+    broken = versions.minor finalAttrs.version != versions.minor clr.version || versionAtLeast finalAttrs.version "6.0.0";
   };
 })

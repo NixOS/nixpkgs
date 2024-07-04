@@ -1,36 +1,44 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, fetchpatch
-, pytest
-, pytest-asyncio
-, pytestCheckHook
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  pythonAtLeast,
+  pythonOlder,
+  fetchPypi,
+  pytest,
+  pytest-asyncio,
+  pytestCheckHook,
+  setuptools,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "pytest-mock";
-  version = "3.11.1";
+  version = "3.14.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
-  format = "setuptools";
-
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-f2sSVgKsbXQ+Ujrgv6ceGml6L1U0BkUoxv+EwvfC/H8=";
+    hash = "sha256-JxklWh7+zq28BW1r8989HFAVUw+0DPNHwPmvrIhBC9A=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
-
-  buildInputs = [
-    pytest
+  nativeBuildInputs = [
+    setuptools
+    setuptools-scm
   ];
+
+  buildInputs = [ pytest ];
 
   nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
+  ];
+
+  disabledTests = lib.optionals (pythonAtLeast "3.11") [
+    # Regression in 3.11.7 and 3.12.1; https://github.com/pytest-dev/pytest-mock/issues/401
+    "test_failure_message_with_name"
+    "test_failure_message_with_no_name"
   ];
 
   pythonImportsCheck = [ "pytest_mock" ];

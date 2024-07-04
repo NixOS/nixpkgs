@@ -1,13 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, hypothesis
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  hypothesis,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "wcag-contrast-ratio";
   version = "0.9";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -19,9 +21,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [
-    "test.py"
-  ];
+  pytestFlagsArray = [ "test.py" ];
 
   pythonImportsCheck = [ "wcag_contrast_ratio" ];
 

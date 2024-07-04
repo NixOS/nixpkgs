@@ -1,14 +1,24 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+
+  # build-system
+  hatchling,
+  hatch-vcs,
+
+  # tests
+  numpy,
+  pandas,
+  pytest-asyncio,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "param";
-  version = "1.13.0";
-  format = "setuptools";
+  version = "2.1.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -16,22 +26,27 @@ buildPythonPackage rec {
     owner = "holoviz";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-5b3UTzb7OXBwcyYyDVCGLUpWxNOYZ3cv8Gfw+x7jsBI=";
+    hash = "sha256-9264KfRDuHsvDyIpGKs2VTPcTZOZIFLKe7xuplkfzf4=";
   };
 
+  nativeBuildInputs = [
+    hatchling
+    hatch-vcs
+  ];
+
   nativeCheckInputs = [
+    numpy
+    pandas
+    pytest-asyncio
     pytestCheckHook
   ];
 
-  postPatch = ''
-    # Version is not set properly
-    substituteInPlace setup.py \
-      --replace 'version=get_setup_version("param"),' 'version="${version}",'
-  '';
-
-  pythonImportsCheck = [
-    "param"
+  pytestFlagsArray = [
+    "-W"
+    "ignore::DeprecationWarning"
   ];
+
+  pythonImportsCheck = [ "param" ];
 
   meta = with lib; {
     description = "Declarative Python programming using Parameters";

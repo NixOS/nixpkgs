@@ -18,5 +18,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ matthiasbeyer ];
     platforms = platforms.unix;
+    mainProgram = "tasksh";
   };
 }

@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, fastprogress
-, fastcore
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  fastprogress,
+  fastcore,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -17,7 +18,10 @@ buildPythonPackage rec {
     sha256 = "sha256-IFB+246JQGofvXd15uKj2BpN1jPdUGsOnPDhYT6DHWo=";
   };
 
-  propagatedBuildInputs = [ fastprogress fastcore ];
+  propagatedBuildInputs = [
+    fastprogress
+    fastcore
+  ];
 
   # no real tests
   doCheck = false;

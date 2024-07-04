@@ -1,27 +1,31 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, google-api-core
-, google-cloud-testutils
-, mock
-, proto-plus
-, protobuf
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  google-api-core,
+  google-cloud-testutils,
+  mock,
+  proto-plus,
+  protobuf,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-dlp";
-  version = "3.12.3";
-  format = "setuptools";
+  version = "3.18.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-c4gPKov6YASVdvuU2FaYqiNn0yrJAbdieP5Qt1ZjRAs=";
+    hash = "sha256-R0CMx16DmMfc6Tw/YqPthYKyDxJcyODdMxAVrj62L34=";
   };
+
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     google-api-core
@@ -39,6 +43,7 @@ buildPythonPackage rec {
   disabledTests = [
     # Test requires credentials
     "test_inspect_content"
+    "test_list_dlp_jobs"
   ];
 
   pythonImportsCheck = [

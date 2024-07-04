@@ -1,10 +1,10 @@
 { lib, stdenv, targetPackages
 
 # Build time
-, fetchurl, fetchpatch, pkg-config, perl, texinfo, setupDebugInfoDirs, buildPackages
+, fetchurl, pkg-config, perl, texinfo, setupDebugInfoDirs, buildPackages
 
 # Run time
-, ncurses, readline, gmp, mpfr, expat, libipt, zlib, zstd, dejagnu, sourceHighlight, libiconv
+, ncurses, readline, gmp, mpfr, expat, libipt, zlib, zstd, xz, dejagnu, sourceHighlight, libiconv
 
 , pythonSupport ? stdenv.hostPlatform == stdenv.buildPlatform && !stdenv.hostPlatform.isCygwin, python3 ? null
 , enableDebuginfod ? lib.meta.availableOn stdenv.hostPlatform elfutils, elfutils
@@ -30,11 +30,11 @@ assert pythonSupport -> python3 != null;
 
 stdenv.mkDerivation rec {
   pname = targetPrefix + basename + lib.optionalString hostCpuOnly "-host-cpu-only";
-  version = "13.2";
+  version = "14.2";
 
   src = fetchurl {
     url = "mirror://gnu/gdb/${basename}-${version}.tar.xz";
-    hash = "sha256-/Vvrt74YM6vbbgI8L0mKNUSYKB350FUj2JFbq+uJPwo=";
+    hash = "sha256-LU3YBh2N7RK2xj9V5FNEiB6CJhBfTSqbI0BA76XOd3I=";
   };
 
   postPatch = lib.optionalString stdenv.isDarwin ''
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config texinfo perl setupDebugInfoDirs ];
 
-  buildInputs = [ ncurses readline gmp mpfr expat libipt zlib zstd guile sourceHighlight ]
+  buildInputs = [ ncurses readline gmp mpfr expat libipt zlib zstd xz guile sourceHighlight ]
     ++ lib.optional pythonSupport python3
     ++ lib.optional doCheck dejagnu
     ++ lib.optional enableDebuginfod (elfutils.override { enableDebuginfod = true; })
@@ -140,7 +140,9 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "The GNU Project debugger";
+    mainProgram = "gdb";
+
+    description = "GNU Project debugger";
 
     longDescription = ''
       GDB, the GNU Project debugger, allows you to see what is going

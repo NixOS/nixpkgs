@@ -2,31 +2,30 @@
 , stdenv
 , fetchFromGitHub
 , rustPlatform
-, openssl
+, libiconv
 , pkg-config
 , installShellFiles
-, darwin
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "tuxmux";
-  version = "0.1.0";
+  version = "0.2.1";
 
   src = fetchFromGitHub {
     owner = "edeneast";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-QySDC/aEU9Fo0UbRUNvgBQLfESYzENGfS8Tl/ycn1YY=";
+    hash = "sha256-HujdIT55NmXpHDa0a4EmB30va8bNdZ/MHu7+SwF9Nvc=";
   };
 
-  cargoHash = "sha256-MlLTaN+KMeF0A1hh0oujLYWqjwrbmoNzoRoXjeCUf7I=";
+  cargoHash = "sha256-ceXeYa8MGGc0I8Q/r4GVsR71St/hlNc75a20BN0Haas=";
 
-  buildInputs = [ openssl ] ++ (lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ]);
+  buildInputs = [ libiconv ];
   nativeBuildInputs = [ pkg-config installShellFiles ];
 
   postInstall = ''
-    installShellCompletion $releaseDir/../completions/tm.{bash,fish}
-    installShellCompletion --zsh $releaseDir/../completions/_tm
+    installShellCompletion $releaseDir/../completions/tux.{bash,fish}
+    installShellCompletion --zsh $releaseDir/../completions/_tux
 
     installManPage $releaseDir/../man/*
   '';
@@ -34,8 +33,8 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "Tmux session manager";
     homepage = "https://github.com/edeneast/tuxmux";
-    license = licenses.apsl20;
+    license = licenses.asl20;
     maintainers = with maintainers; [ edeneast ];
-    mainProgram = "tm";
+    mainProgram = "tux";
   };
 }

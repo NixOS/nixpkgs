@@ -9,14 +9,19 @@ stdenv.mkDerivation rec {
     sha256 = "05yxrp44ky2kg6qknk1ih0kvwkgbn9fbz77r3vci7agslh5wjm8g";
   };
 
+  makeFlags = [
+    "CC:=$(CC)"
+    "SBINDIR=${placeholder "out"}/sbin"
+    "MANDIR=${placeholder "out"}/share/man/man8"
+  ];
+
   preInstall = ''
     mkdir -p $out/sbin $out/share/man/man8
-    makeFlagsArray=(SBINDIR=$out/sbin MANDIR=$out/share/man/man8)
   '';
 
   meta = with lib; {
     homepage = "https://sourceforge.net/projects/mingetty";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.linux;
   };
 }

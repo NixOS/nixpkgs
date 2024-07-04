@@ -8,4 +8,5 @@ installing.chapter.md
 changing-config.chapter.md
 upgrading.chapter.md
 building-nixos.chapter.md
+building-images-via-systemd-repart.chapter.md
 ```

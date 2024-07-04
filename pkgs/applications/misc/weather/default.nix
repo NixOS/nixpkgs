@@ -1,12 +1,12 @@
 { lib, stdenv, fetchurl, python3, installShellFiles }:
 
 stdenv.mkDerivation rec {
-  version = "2.4.4";
+  version = "2.5.0";
   pname = "weather";
 
   src = fetchurl {
     url = "http://fungi.yuggoth.org/weather/src/${pname}-${version}.tar.xz";
-    sha256 = "sha256-uBwcntmLmIAztbIOHEDx0Y0/kcoJqAHqBOM2yBiRHrU=";
+    sha256 = "sha256-wn3cpgfrlqntMIiVFh4317DrbGgQ4YRnFz3KHXacTw4=";
   };
 
   nativeBuildInputs = [
@@ -41,6 +41,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "http://fungi.yuggoth.org/weather";
     description = "Quick access to current weather conditions and forecasts";
+    mainProgram = "weather";
     license = licenses.isc;
     maintainers = [ maintainers.matthiasbeyer ];
     platforms = platforms.unix;

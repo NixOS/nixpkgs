@@ -1,24 +1,28 @@
-{ lib, buildPythonPackage, fetchFromGitHub, isPy27
-, setuptools-scm
-, more-itertools
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  isPy27,
+  setuptools-scm,
+  more-itertools,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "jaraco-classes";
-  version = "3.1.1";
+  version = "3.3.1";
+  format = "pyproject";
+
   disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "jaraco";
     repo = "jaraco.classes";
-    rev = "v${version}";
-    sha256 = "0wzrcsxi9gb65inayg0drm08iaw37jm1lqxhz3860i6pwjh503pr";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-ds84jNEx/2/BnMTbLMvXf/nxKSqyCBM7B7S0NNYagVE=";
   };
 
   pythonNamespaces = [ "jaraco" ];
-
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [ setuptools-scm ];
 

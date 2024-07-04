@@ -123,7 +123,7 @@ let
       build = configEvaled.config.system.build;
       kernelTarget = configEvaled.pkgs.stdenv.hostPlatform.linux-kernel.target;
     in
-      pkgs.symlinkJoin {
+      configEvaled.pkgs.symlinkJoin {
         name = "netboot";
         paths = [
           build.netbootRamdisk
@@ -174,6 +174,12 @@ in rec {
   iso_plasma5 = forMatchingSystems supportedSystems (system: makeIso {
     module = ./modules/installer/cd-dvd/installation-cd-graphical-calamares-plasma5.nix;
     type = "plasma5";
+    inherit system;
+  });
+
+  iso_plasma6 = forMatchingSystems supportedSystems (system: makeIso {
+    module = ./modules/installer/cd-dvd/installation-cd-graphical-calamares-plasma6.nix;
+    type = "plasma6";
     inherit system;
   });
 
@@ -328,6 +334,21 @@ in rec {
 
   );
 
+  lxdContainerImageSquashfs = forMatchingSystems [ "x86_64-linux" "aarch64-linux" ] (system:
+
+    with import ./.. { inherit system; };
+
+    hydraJob ((import lib/eval-config.nix {
+      inherit system;
+      modules =
+        [ configuration
+          versionModule
+          ./maintainers/scripts/lxd/lxd-container-image.nix
+        ];
+    }).config.system.build.squashfs)
+
+  );
+
   # Metadata for the lxd image
   lxdContainerMeta = forMatchingSystems [ "x86_64-linux" "aarch64-linux" ] (system:
 
@@ -383,7 +404,7 @@ in rec {
         modules = singleton ({ ... }:
           { fileSystems."/".device  = mkDefault "/dev/sda1";
             boot.loader.grub.device = mkDefault "/dev/sda";
-            system.stateVersion = mkDefault "18.03";
+            system.stateVersion = mkDefault lib.trivial.release;
           });
       }).config.system.build.toplevel;
       preferLocalBuild = true;
@@ -420,7 +441,7 @@ in rec {
 
     kde = makeClosure ({ ... }:
       { services.xserver.enable = true;
-        services.xserver.displayManager.sddm.enable = true;
+        services.displayManager.sddm.enable = true;
         services.xserver.desktopManager.plasma5.enable = true;
       });
 

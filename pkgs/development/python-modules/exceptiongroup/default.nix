@@ -1,15 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, flit-scm
-, pytestCheckHook
-, pythonOlder
-, pythonAtLeast
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  flit-scm,
+  pytestCheckHook,
+  pythonOlder,
+  pythonAtLeast,
 }:
 
 buildPythonPackage rec {
   pname = "exceptiongroup";
-  version = "1.1.2";
+  version = "1.2.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -18,24 +19,26 @@ buildPythonPackage rec {
     owner = "agronholm";
     repo = "exceptiongroup";
     rev = version;
-    hash = "sha256-19taP6adzmO4zH2As1OTXeYNFj6KwjhxBr09X+SrZRk=";
+    hash = "sha256-iGeaRVJeFAWfJpwr7N4kST7d8YxpX3WgDqQemlR0cLU=";
   };
 
-  nativeBuildInputs = [
-    flit-scm
-  ];
-
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+  nativeBuildInputs = [ flit-scm ];
 
   doCheck = pythonAtLeast "3.11"; # infinite recursion with pytest
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "exceptiongroup"
-  ];
+  disabledTests =
+    if pythonAtLeast "3.12" then
+      [
+        # https://github.com/agronholm/exceptiongroup/issues/116
+        "test_deep_split"
+        "test_deep_subgroup"
+      ]
+    else
+      null;
+
+  pythonImportsCheck = [ "exceptiongroup" ];
 
   meta = with lib; {
     description = "Backport of PEP 654 (exception groups)";

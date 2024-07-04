@@ -1,36 +1,33 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, djangorestframework
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  djangorestframework,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "djangorestframework-dataclasses";
-  version = "1.3.0";
+  version = "1.3.1";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "oxan";
     repo = "djangorestframework-dataclasses";
     rev = "refs/tags/v${version}";
-    hash = "sha256-aUz+f8Q7RwQsoRpjq1AAmNtDzTA6KKxyc+MtBJEfyL8=";
+    hash = "sha256-12EdSaGpsX0qDXgJ2QWYj6qAUbsrITQjWowk+gJFwwY=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   postPatch = ''
     patchShebangs manage.py
   '';
 
-  propagatedBuildInputs = [
-    djangorestframework
-  ];
+  propagatedBuildInputs = [ djangorestframework ];
 
   checkPhase = ''
-   ./manage.py test
+    ./manage.py test
   '';
 
   pythonImportsCheck = [ "rest_framework_dataclasses" ];

@@ -1,41 +1,40 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, cython
-, setuptools-scm
-, pytestCheckHook
-, ApplicationServices
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  cython,
+  setuptools,
+  setuptools-scm,
+  pytestCheckHook,
+  ApplicationServices,
 }:
 
 buildPythonPackage rec {
   pname = "uharfbuzz";
-  version = "0.37.0";
-  format = "setuptools";
+  version = "0.39.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
     owner = "harfbuzz";
     repo = "uharfbuzz";
-    rev = "v${version}";
+    rev = "refs/tags/v${version}";
     fetchSubmodules = true;
-    hash = "sha256-CZp+/5fG5IBawnIZLeO9lXke8rodqRcSf+ofyF584mc=";
+    hash = "sha256-I4fCaomq26FdkpiJdj+zyrbdqdynnD2hIutYTuTFvQs=";
   };
-
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [
     cython
+    setuptools
     setuptools-scm
   ];
 
   buildInputs = lib.optionals stdenv.isDarwin [ ApplicationServices ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "uharfbuzz" ];
 

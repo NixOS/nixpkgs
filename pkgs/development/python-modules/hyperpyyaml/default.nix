@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pyyaml
-, ruamel-yaml
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pyyaml,
+  ruamel-yaml,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -23,9 +24,7 @@ buildPythonPackage rec {
     ruamel-yaml
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "hyperpyyaml" ];
 

@@ -1,4 +1,12 @@
-{ lib, buildPythonPackage, fetchFromGitHub, django, pytest, pytest-django, python }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  django,
+  pytest,
+  pytest-django,
+  python,
+}:
 
 buildPythonPackage rec {
   pname = "django-picklefield";
@@ -26,7 +34,7 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    description = "A pickled object field for Django";
+    description = "Pickled object field for Django";
     homepage = "https://github.com/gintas/django-picklefield";
     license = licenses.mit;
     maintainers = with maintainers; [ ];

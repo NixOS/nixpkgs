@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "fh";
-  version = "0.1.7";
+  version = "0.1.10";
 
   src = fetchFromGitHub {
     owner = "DeterminateSystems";
     repo = "fh";
     rev = "v${version}";
-    hash = "sha256-gyxlVSraZIVAyOaJk90fub4b8g1w4KXwqa1ecNAC7xA=";
+    hash = "sha256-fRaKydMSwd1zl6ptBKvn5ej2pqtI8xi9dioFmR8QA+g=";
   };
 
-  cargoHash = "sha256-Tm/O9H0l37h+2zb4dgO6Z6CaYye8O+zVMrsUpWJ9okI=";
+  cargoHash = "sha256-iOP5llFtySG8Z2Mj7stt6fYpQWqiQqJuftuYBrbkmyU=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -42,8 +42,10 @@ rustPlatform.buildRustPackage rec {
       --zsh <($out/bin/fh completion zsh)
   '';
 
+  __darwinAllowLocalNetworking = true;
+
   meta = with lib; {
-    description = "The official FlakeHub CLI";
+    description = "Official FlakeHub CLI";
     homepage = "https://github.com/DeterminateSystems/fh";
     changelog = "https://github.com/DeterminateSystems/fh/releases/tag/${src.rev}";
     license = licenses.asl20;

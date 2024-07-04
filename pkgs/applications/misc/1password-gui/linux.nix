@@ -5,7 +5,7 @@
 , src
 , meta
 , makeShellWrapper
-, wrapGAppsHook
+, wrapGAppsHook3
 , alsa-lib
 , at-spi2-atk
 , at-spi2-core
@@ -49,7 +49,7 @@ let
 in stdenv.mkDerivation {
   inherit pname version src meta;
 
-  nativeBuildInputs = [ makeShellWrapper wrapGAppsHook ];
+  nativeBuildInputs = [ makeShellWrapper wrapGAppsHook3 ];
   buildInputs = [ glib ];
 
   dontConfigure = true;
@@ -110,8 +110,8 @@ in stdenv.mkDerivation {
       cp -a resources/icons $out/share
 
       interp="$(cat $NIX_CC/nix-support/dynamic-linker)"
-      patchelf --set-interpreter $interp $out/share/1password/{1password,1Password-BrowserSupport,1Password-HIDHelper,1Password-KeyringHelper,1Password-LastPass-Exporter,op-ssh-sign}
-      patchelf --set-rpath ${rpath}:$out/share/1password $out/share/1password/{1password,1Password-BrowserSupport,1Password-HIDHelper,1Password-KeyringHelper,1Password-LastPass-Exporter,op-ssh-sign}
+      patchelf --set-interpreter $interp $out/share/1password/{1password,1Password-BrowserSupport,1Password-LastPass-Exporter,op-ssh-sign}
+      patchelf --set-rpath ${rpath}:$out/share/1password $out/share/1password/{1password,1Password-BrowserSupport,1Password-LastPass-Exporter,op-ssh-sign}
       for file in $(find $out -type f -name \*.so\* ); do
         patchelf --set-rpath ${rpath}:$out/share/1password $file
       done

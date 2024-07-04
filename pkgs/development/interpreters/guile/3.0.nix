@@ -26,11 +26,11 @@ let
 in
 builder rec {
   pname = "guile";
-  version = "3.0.9";
+  version = "3.0.10";
 
   src = fetchurl {
     url = "mirror://gnu/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-GiYlrHKyNm6VeS8/51j9Lfd1tARKkKSpeHMm5mwNdQ0=";
+    sha256 = "sha256-vXFoUX/VJjM0RtT3q4FlJ5JWNAlPvTcyLhfiuNjnY4g=";
   };
 
   outputs = [ "out" "dev" "info" ];
@@ -103,9 +103,6 @@ builder rec {
     # See below.
     "--without-threads"
   ]
-  # Disable JIT on Apple Silicon, as it is not yet supported
-  # https://debbugs.gnu.org/cgi/bugreport.cgi?bug=44505";
-  ++ lib.optional (stdenv.isDarwin && stdenv.isAarch64) "--enable-jit=no"
   # At least on x86_64-darwin '-flto' autodetection is not correct:
   #  https://github.com/NixOS/nixpkgs/pull/160051#issuecomment-1046193028
   ++ lib.optional (stdenv.isDarwin) "--disable-lto";
@@ -130,6 +127,9 @@ builder rec {
   # On Linuxes+Hydra the tests are flaky; feel free to investigate deeper.
   doCheck = false;
   doInstallCheck = doCheck;
+
+  # In procedure bytevector-u8-ref: Argument 2 out of range
+  dontStrip = stdenv.isDarwin;
 
   setupHook = ./setup-hook-3.0.sh;
 
@@ -163,7 +163,7 @@ builder rec {
       foreign function call interface, and powerful string processing.
     '';
     license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ ludo lovek323 vrthra ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.all;
   };
 }

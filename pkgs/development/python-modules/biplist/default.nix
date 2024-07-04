@@ -1,21 +1,21 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "biplist";
   version = "1.0.3";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
     sha256 = "1im45a9z7ryrfyp1v6i39qia5qagw6i1mhif0hl0praz9iv4j1ac";
   };
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTests = [
     # Failing tests

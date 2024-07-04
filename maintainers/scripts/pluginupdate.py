@@ -1,7 +1,7 @@
 # python library used to update plugins:
 # - pkgs/applications/editors/vim/plugins/update.py
 # - pkgs/applications/editors/kakoune/plugins/update.py
-# - maintainers/scripts/update-luarocks-packages
+# - pkgs/development/lua-modules/updater/updater.py
 
 # format:
 # $ nix run nixpkgs#black maintainers/scripts/pluginupdate.py
@@ -17,6 +17,7 @@ import http
 import json
 import logging
 import os
+import re
 import subprocess
 import sys
 import time
@@ -26,7 +27,7 @@ import urllib.parse
 import urllib.request
 import xml.etree.ElementTree as ET
 from dataclasses import asdict, dataclass
-from datetime import datetime
+from datetime import UTC, datetime
 from functools import wraps
 from multiprocessing.dummy import Pool
 from pathlib import Path
@@ -107,7 +108,7 @@ class Repo:
 
     @property
     def name(self):
-        return self.uri.split("/")[-1]
+        return self.uri.strip("/").split("/")[-1]
 
     @property
     def branch(self):
@@ -192,6 +193,11 @@ class RepoGitHub(Repo):
         with urllib.request.urlopen(commit_req, timeout=10) as req:
             self._check_for_redirect(commit_url, req)
             xml = req.read()
+
+            # Filter out illegal XML characters
+            illegal_xml_regex = re.compile(b"[\x00-\x08\x0B-\x0C\x0E-\x1F\x7F]")
+            xml = illegal_xml_regex.sub(b"", xml)
+
             root = ET.fromstring(xml)
             latest_entry = root.find(ATOM_ENTRY)
             assert latest_entry is not None, f"No commits found in repository {self}"
@@ -468,6 +474,7 @@ class Editor:
             "--input-names",
             "-i",
             dest="input_file",
+            type=Path,
             default=self.default_in,
             help="A list of plugins in the form owner/repo",
         )
@@ -476,6 +483,7 @@ class Editor:
             "-o",
             dest="outfile",
             default=self.default_out,
+            type=Path,
             help="Filename to save generated nix code",
         )
         common.add_argument(
@@ -780,14 +788,25 @@ def update_plugins(editor: Editor, args):
     fetch_config = FetchConfig(args.proc, args.github_token)
     update = editor.get_update(args.input_file, args.outfile, fetch_config)
 
+    start_time = time.time()
     redirects = update()
+    duration = time.time() - start_time
+    print(f"The plugin update took {duration}s.")
     editor.rewrite_input(fetch_config, args.input_file, editor.deprecated, redirects)
 
     autocommit = not args.no_commit
 
     if autocommit:
-        editor.nixpkgs_repo = git.Repo(editor.root, search_parent_directories=True)
-        commit(editor.nixpkgs_repo, f"{editor.attr_path}: update", [args.outfile])
+        try:
+            repo = git.Repo(os.getcwd())
+            updated = datetime.now(tz=UTC).strftime('%Y-%m-%d')
+            print(args.outfile)
+            commit(repo,
+                   f"{editor.attr_path}: update on {updated}", [args.outfile]
+                   )
+        except git.InvalidGitRepositoryError as e:
+            print(f"Not in a git repository: {e}", file=sys.stderr)
+            sys.exit(1)
 
     if redirects:
         update()

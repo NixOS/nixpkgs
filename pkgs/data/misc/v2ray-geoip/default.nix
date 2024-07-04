@@ -8,18 +8,18 @@
 }:
 
 let
-  generator = pkgsBuildBuild.buildGoModule {
+  generator = pkgsBuildBuild.buildGoModule rec {
     pname = "v2ray-geoip";
-    version = "unstable-2023-03-27";
+    version = "202403140037";
 
     src = fetchFromGitHub {
       owner = "v2fly";
       repo = "geoip";
-      rev = "9321a7f5e301a957228eba44845144b4555b6658";
-      hash = "sha256-S30XEgzA9Vrq7I7REfO/WN/PKpcjcI7KZnrL4uw/Chs=";
+      rev = version;
+      hash = "sha256-nqobjgeDvD5RYvCVVd14XC/tb/+SVfvdQUFZ3gfeDrI=";
     };
 
-    vendorHash = "sha256-bAXeA1pDIUuEvzTLydUIX6S6fm6j7CUQmBG+7xvxUcc=";
+    vendorHash = "sha256-cuKcrYAzjIt6Z4wYg5R6JeL413NDwTub2fZndXEKdTo=";
 
     meta = with lib; {
       description = "GeoIP for V2Ray";

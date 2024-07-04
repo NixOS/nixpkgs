@@ -1,7 +1,8 @@
-{ lib
-, nixosTests
-, vscode-utils
-, useLocalExtensions ? false
+{
+  lib,
+  nixosTests,
+  vscode-utils,
+  useLocalExtensions ? false,
 }:
 # Note that useLocalExtensions requires that vscode-server is not running
 # on host. If it is, you'll need to remove $HOME/.vscode-server,
@@ -84,7 +85,7 @@ buildVscodeMarketplaceExtension {
     name = "remote-ssh";
     publisher = "ms-vscode-remote";
     version = "0.78.0";
-    sha256 = "sha256-vd+9d86Z8429QpQVCZm8gtiJDcMpD++aiFVwvCrPg5w=";
+    hash = "sha256-vd+9d86Z8429QpQVCZm8gtiJDcMpD++aiFVwvCrPg5w=";
   };
 
   postPatch = ''
@@ -92,10 +93,12 @@ buildVscodeMarketplaceExtension {
       --replace '# Start the server\n' '${patch}'
   '';
 
-  passthru.tests = { inherit (nixosTests) vscode-remote-ssh; };
+  passthru.tests = {
+    inherit (nixosTests) vscode-remote-ssh;
+  };
 
   meta = {
-    description = "Use any remote machine with a SSH server as your development environment.";
+    description = "Use any remote machine with a SSH server as your development environment";
     license = lib.licenses.unfree;
     maintainers = [ lib.maintainers.tbenst ];
   };

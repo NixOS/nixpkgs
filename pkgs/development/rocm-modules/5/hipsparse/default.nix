@@ -18,7 +18,7 @@
 # This can also use cuSPARSE as a backend instead of rocSPARSE
 stdenv.mkDerivation (finalAttrs: {
   pname = "hipsparse";
-  version = "5.7.0";
+  version = "5.7.1";
 
   outputs = [
     "out"
@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   src = fetchFromGitHub {
-    owner = "ROCmSoftwarePlatform";
+    owner = "ROCm";
     repo = "hipSPARSE";
     rev = "rocm-${finalAttrs.version}";
     hash = "sha256-txigaOoZMI/v+EQLgGlj2O0IHfE7EpgjL0cyv49nKzo=";
@@ -127,10 +127,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "ROCm SPARSE marshalling library";
-    homepage = "https://github.com/ROCmSoftwarePlatform/hipSPARSE";
+    homepage = "https://github.com/ROCm/hipSPARSE";
     license = with licenses; [ mit ];
     maintainers = teams.rocm.members;
     platforms = platforms.linux;
-    broken = versions.minor finalAttrs.version != versions.minor stdenv.cc.version;
+    broken = versions.minor finalAttrs.version != versions.minor stdenv.cc.version || versionAtLeast finalAttrs.version "6.0.0";
   };
 })

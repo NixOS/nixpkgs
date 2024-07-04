@@ -1,57 +1,52 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
 
-# build-system
-, poetry-core
+  # build-system
+  poetry-core,
 
-# propagates
-, importlib-resources
-, jsonschema
-, jsonschema-spec
-, lazy-object-proxy
-, openapi-schema-validator
+  # propagates
+  importlib-resources,
+  jsonschema,
+  jsonschema-path,
+  lazy-object-proxy,
+  openapi-schema-validator,
 
-# tests
-, pytestCheckHook
+  # tests
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "openapi-spec-validator";
-  version = "0.6.0";
-  format = "pyproject";
+  version = "0.7.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   # no tests via pypi sdist
   src = fetchFromGitHub {
-    owner = "p1c2u";
+    owner = "python-openapi";
     repo = "openapi-spec-validator";
     rev = "refs/tags/${version}";
-    hash = "sha256-sGr4dH6Twyi4OeCAXZiboN75dYZ6wJ0pWMzV9zOfee0=";
+    hash = "sha256-X0ePdHQeBSWjsCFQgCoNloQZRhKbvPBE43aavBppvmg=";
   };
 
   postPatch = ''
     sed -i '/--cov/d' pyproject.toml
   '';
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     jsonschema
-    jsonschema-spec
+    jsonschema-path
     lazy-object-proxy
     openapi-schema-validator
-  ] ++ lib.optionals (pythonOlder "3.9") [
-    importlib-resources
-  ];
+  ] ++ lib.optionals (pythonOlder "3.9") [ importlib-resources ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTests = [
     # network access
@@ -68,8 +63,8 @@ buildPythonPackage rec {
   meta = with lib; {
     changelog = "https://github.com/p1c2u/openapi-spec-validator/releases/tag/${version}";
     description = "Validates OpenAPI Specs against the OpenAPI 2.0 (aka Swagger) and OpenAPI 3.0.0 specification";
+    mainProgram = "openapi-spec-validator";
     homepage = "https://github.com/p1c2u/openapi-spec-validator";
     license = licenses.asl20;
-    maintainers = with maintainers; [ rvl ];
   };
 }

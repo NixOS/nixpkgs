@@ -13,5 +13,6 @@ bundlerApp {
     license     = licenses.mit;
     maintainers = with maintainers; [ shamilton ];
     platforms   = platforms.unix;
+    mainProgram = "haste";
   };
 }

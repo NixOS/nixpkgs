@@ -1,0 +1,67 @@
+diff --git a/Makefile b/Makefile
+index 4d07160..4ae2a7d 100644
+--- a/Makefile
++++ b/Makefile
+@@ -150,9 +150,11 @@ edk2: build_edk2
+ 	cp $(EDK2_BUILDLOC)/refind.efi ./refind/refind_$(FILENAME_CODE).efi
+ 	cp $(EDK2_BUILDLOC)/gptsync.efi ./gptsync/gptsync_$(FILENAME_CODE).efi
+ ifneq ($(OMIT_SBAT), 1)
+-	$(OBJCOPY) --set-section-alignment '.sbat=512' --add-section .sbat=$(REFIND_SBAT_CSV) \
++	$(OBJCOPY) --preserve-dates --set-section-alignment '.sbat=512' \
++		--add-section .sbat=$(REFIND_SBAT_CSV) \
+ 		--adjust-section-vma .sbat+10000000 ./refind/refind_$(FILENAME_CODE).efi
+-	$(OBJCOPY) --set-section-alignment '.sbat=512' --add-section .sbat=$(REFIND_SBAT_CSV) \
++	$(OBJCOPY) --preserve-dates --set-section-alignment '.sbat=512' \
++		--add-section .sbat=$(REFIND_SBAT_CSV) \
+ 		--adjust-section-vma .sbat+10000000 ./gptsync/gptsync_$(FILENAME_CODE).efi
+ endif
+ 
+@@ -173,7 +175,8 @@ else
+ 	for BASENAME in $(EDK2_DRIVER_BASENAMES) ; do \
+ 		echo "Copying $$BASENAME""_$(FILENAME_CODE).efi" ; \
+ 		cp "$(EDK2_BUILDLOC)/$$BASENAME.efi" ./drivers_$(FILENAME_CODE)/$$BASENAME\_$(FILENAME_CODE).efi ; \
+-		$(OBJCOPY) --set-section-alignment '.sbat=512' --add-section .sbat=$(REFIND_SBAT_CSV) \
++		$(OBJCOPY) --preserve-dates --set-section-alignment '.sbat=512' \
++		    --add-section .sbat=$(REFIND_SBAT_CSV) \
+ 		    --adjust-section-vma .sbat+10000000 ./drivers_$(FILENAME_CODE)/$$BASENAME\_$(FILENAME_CODE).efi ; \
+ 	done
+ endif
+diff --git a/filesystems/Make.gnuefi b/filesystems/Make.gnuefi
+index 70e4ad6..2329659 100644
+--- a/filesystems/Make.gnuefi
++++ b/filesystems/Make.gnuefi
+@@ -38,7 +38,7 @@ $(TARGET): $(SHLIB_TARGET)
+ 	           -j .rel -j .rela -j .rel.* -j .rela.* -j .rel* -j .rela* \
+ 		   -j .reloc --strip-unneeded $(FORMAT_DRIVER) $< $@
+ ifneq ($(OMIT_SBAT), 1)
+-		   $(OBJCOPY) --add-section .sbat=$(SRCDIR)/../$(REFIND_SBAT_CSV) \
++		   $(OBJCOPY) --preserve-dates --add-section .sbat=$(SRCDIR)/../$(REFIND_SBAT_CSV) \
+ 		   --adjust-section-vma .sbat+10000000 $@
+ endif
+ 	chmod a-x $(TARGET)
+diff --git a/gptsync/Make.gnuefi b/gptsync/Make.gnuefi
+index b6c0763..49aff13 100644
+--- a/gptsync/Make.gnuefi
++++ b/gptsync/Make.gnuefi
+@@ -35,7 +35,7 @@ $(TARGET): $(SHLIB_TARGET)
+ 	           -j .rel -j .rela -j .rel.* -j .rela.* -j .rel* -j .rela* \
+ 		   -j .reloc --strip-unneeded  $(FORMAT) $< $@
+ ifneq ($(OMIT_SBAT), 1)
+-	$(OBJCOPY) --add-section .sbat=../$(REFIND_SBAT_CSV) \
++	$(OBJCOPY) --preserve-dates --add-section .sbat=../$(REFIND_SBAT_CSV) \
+ 		   --adjust-section-vma .sbat+10000000 $@
+ endif
+ 	chmod a-x $(TARGET)
+diff --git a/refind/Makefile b/refind/Makefile
+index 73be8e5..880bd22 100644
+--- a/refind/Makefile
++++ b/refind/Makefile
+@@ -54,7 +54,7 @@ $(TARGET): $(SHLIB_TARGET)
+ 		   -j .rel -j .rela -j .rel.* -j .rela.* -j .rel* -j .rela* \
+ 		   -j .reloc --strip-unneeded $(FORMAT) $< $@
+ ifneq ($(OMIT_SBAT), 1)
+-	    $(OBJCOPY) --add-section .sbat=$(SRCDIR)/../$(REFIND_SBAT_CSV) \
++	    $(OBJCOPY) --preserve-dates --add-section .sbat=$(SRCDIR)/../$(REFIND_SBAT_CSV) \
+ 		       --adjust-section-vma .sbat+10000000 $@
+ endif
+ 	chmod a-x $(TARGET)

@@ -18,6 +18,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ libnl protobuf protobufc ];
   enableParallelBuilding = true;
 
+  env.NIX_CFLAGS_COMPILE = toString [ "-Wno-error" ];
+
   preBuild = ''
     makeFlagsArray+=(USER_DEFINES='-DNEWUIDMAP_PATH=${shadow}/bin/newuidmap -DNEWGIDMAP_PATH=${shadow}/bin/newgidmap')
   '';
@@ -30,11 +32,12 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A light-weight process isolation tool, making use of Linux namespaces and seccomp-bpf syscall filters";
+    description = "Light-weight process isolation tool, making use of Linux namespaces and seccomp-bpf syscall filters";
     homepage    = "https://nsjail.dev/";
     changelog   = "https://github.com/google/nsjail/releases/tag/${version}";
     license     = licenses.asl20;
     maintainers = with maintainers; [ arturcygan bosu c0bw3b ];
     platforms   = platforms.linux;
+    mainProgram = "nsjail";
   };
 }

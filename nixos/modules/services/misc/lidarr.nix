@@ -8,25 +8,20 @@ in
 {
   options = {
     services.lidarr = {
-      enable = mkEnableOption (lib.mdDoc "Lidarr");
+      enable = mkEnableOption "Lidarr, a Usenet/BitTorrent music downloader";
 
       dataDir = mkOption {
         type = types.str;
         default = "/var/lib/lidarr/.config/Lidarr";
-        description = lib.mdDoc "The directory where Lidarr stores its data files.";
+        description = "The directory where Lidarr stores its data files.";
       };
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.lidarr;
-        defaultText = literalExpression "pkgs.lidarr";
-        description = lib.mdDoc "The Lidarr package to use";
-      };
+      package = mkPackageOption pkgs "lidarr" { };
 
       openFirewall = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Open ports in the firewall for Lidarr
         '';
       };
@@ -34,7 +29,7 @@ in
       user = mkOption {
         type = types.str;
         default = "lidarr";
-        description = lib.mdDoc ''
+        description = ''
           User account under which Lidarr runs.
         '';
       };
@@ -42,7 +37,7 @@ in
       group = mkOption {
         type = types.str;
         default = "lidarr";
-        description = lib.mdDoc ''
+        description = ''
           Group under which Lidarr runs.
         '';
       };
@@ -50,9 +45,10 @@ in
   };
 
   config = mkIf cfg.enable {
-    systemd.tmpfiles.rules = [
-      "d '${cfg.dataDir}' 0700 ${cfg.user} ${cfg.group} - -"
-    ];
+    systemd.tmpfiles.settings."10-lidarr".${cfg.dataDir}.d = {
+      inherit (cfg) user group;
+      mode = "0700";
+    };
 
     systemd.services.lidarr = {
       description = "Lidarr";

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch, libwpg, libwpd, lcms, pkg-config, librevenge, icu, boost, cppunit }:
+{ lib, stdenv, fetchurl, libwpg, libwpd, lcms, pkg-config, librevenge, icu, boost, cppunit }:
 
 stdenv.mkDerivation rec {
   pname = "libcdr";
@@ -18,8 +18,8 @@ stdenv.mkDerivation rec {
   CXXFLAGS="--std=gnu++0x"; # For c++11 constants in lcms2.h
 
   meta = {
-    description = "A library providing ability to interpret and import Corel Draw drawings into various applications";
-    homepage = "http://www.freedesktop.org/wiki/Software/libcdr";
+    description = "Library providing ability to interpret and import Corel Draw drawings into various applications";
+    homepage = "https://wiki.documentfoundation.org/DLP/Libraries/libcdr";
     platforms = lib.platforms.all;
     license = lib.licenses.mpl20;
   };

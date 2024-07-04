@@ -1,32 +1,32 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, async-timeout
-, pythonOlder
+{
+  lib,
+  async-timeout,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "aiopulse";
-  version = "0.4.4";
-  format = "setuptools";
+  version = "0.4.5";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-JbdJbkzd55KeM3Sf1ExvMuHRKNu5VAvGG4y+wkMS0Wo=";
+    hash = "sha256-yrltqnePNnNwsVGkfXgtrtL/FuazRvmoVL4L0H4j4Bg=";
   };
 
-  propagatedBuildInputs = [
-    async-timeout
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  # tests are not present
+  propagatedBuildInputs = [ async-timeout ];
+
+  # Tests are not present
   doCheck = false;
 
-  pythonImportsCheck = [
-    "aiopulse"
-  ];
+  pythonImportsCheck = [ "aiopulse" ];
 
   meta = with lib; {
     description = "Python Rollease Acmeda Automate Pulse hub protocol implementation";

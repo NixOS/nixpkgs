@@ -1,33 +1,34 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, installShellFiles
-, pbr
-, openstackdocstheme
-, oslo-config
-, oslo-log
-, oslo-serialization
-, oslo-utils
-, prettytable
-, requests
-, simplejson
-, sphinx
-, sphinxcontrib-programoutput
-, babel
-, osc-lib
-, python-keystoneclient
-, debtcollector
-, callPackage
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  installShellFiles,
+  pbr,
+  openstackdocstheme,
+  oslo-config,
+  oslo-log,
+  oslo-serialization,
+  oslo-utils,
+  prettytable,
+  requests,
+  simplejson,
+  sphinx,
+  sphinxcontrib-programoutput,
+  babel,
+  osc-lib,
+  python-keystoneclient,
+  debtcollector,
+  callPackage,
 }:
 
 buildPythonPackage rec {
   pname = "python-manilaclient";
-  version = "4.6.0";
+  version = "4.9.0";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-JFdpPX2lVSGN/jVsKMOOKrPm51fwpD476TnQo/0AYWQ=";
+    hash = "sha256-Q7ADjuGQh5C88WqT5II+NMYLYFwTip/bzZinca/xqFY=";
   };
 
   nativeBuildInputs = [
@@ -65,12 +66,11 @@ buildPythonPackage rec {
     tests = callPackage ./tests.nix { };
   };
 
-  pythonImportsCheck = [
-    "manilaclient"
-  ];
+  pythonImportsCheck = [ "manilaclient" ];
 
   meta = with lib; {
     description = "Client library for OpenStack Manila API";
+    mainProgram = "manila";
     homepage = "https://github.com/openstack/python-manilaclient";
     license = licenses.asl20;
     maintainers = teams.openstack.members;

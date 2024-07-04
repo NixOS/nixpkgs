@@ -11,23 +11,33 @@
 , CoreFoundation
 , Security
 , SystemConfiguration
+, nix-update-script
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "sqlx-cli";
-  version = "0.7.1";
+  version = "0.7.4";
 
   src = fetchFromGitHub {
     owner = "launchbadge";
     repo = "sqlx";
     rev = "v${version}";
-    hash = "sha256-567/uJPQhrNqDqBF/PqklXm2avSjvtQsddjChwUKUCI=";
+    hash = "sha256-q1o2pNKfvenpRwiYgIKkOYNcajgIhrhCjFC7bbEyLE4=";
   };
 
-  cargoHash = "sha256-X7fLbih1s3sxn8vb2kQeFUKDK2DlC+sjm9ZTwj3FD1Y=";
+  cargoHash = "sha256-sMyK1v4pJmmlN47mvgUkpLBjcpmT346VSp984IpvVWY=";
+
+  buildNoDefaultFeatures = true;
+  buildFeatures = [
+    "native-tls"
+    "postgres"
+    "sqlite"
+    "mysql"
+    "completions"
+  ];
 
   doCheck = false;
-  cargoBuildFlags = [ "--package sqlx-cli --no-default-features --features native-tls,postgres,sqlite,mysql,completions" ];
+  cargoBuildFlags = [ "--package sqlx-cli" ];
 
   nativeBuildInputs = [
     installShellFiles
@@ -56,6 +66,8 @@ rustPlatform.buildRustPackage rec {
     package = sqlx-cli;
     command = "sqlx --version";
   };
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description =

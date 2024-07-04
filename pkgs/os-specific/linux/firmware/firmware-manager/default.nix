@@ -8,7 +8,7 @@
 , openssl
 , udev
 , gtk3
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 stdenv.mkDerivation rec {
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     rustc
     pkg-config
     rustPlatform.cargoSetupHook
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -53,7 +53,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Graphical frontend for firmware management";
     homepage = "https://github.com/pop-os/firmware-manager";
-    license = lib.licenses.gpl3;
+    license = with lib.licenses; [ gpl3Plus cc0 ];
+    mainProgram = "com.system76.FirmwareManager";
     maintainers = [ lib.maintainers.shlevy ];
     platforms = lib.platforms.linux;
   };

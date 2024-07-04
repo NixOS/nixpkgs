@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation rec {
   pname = "glib-networking";
-  version = "2.76.1";
+  version = "2.80.0";
 
   outputs = [ "out" "installedTests" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "XGmKmZTd5R79+xAmpWaYoiHWJQ6J3FDrzd2nuBSApCs=";
+    hash = "sha256-2PTxqrITF5rjNRYXtZ2rXea8yeeFAh7uF4mY69S7Os8=";
   };
 
   patches = [
@@ -35,6 +35,12 @@ stdenv.mkDerivation rec {
     })
 
     ./installed-tests-path.patch
+
+    # pkcs11 tests provide a relative path that gnutls of course isn't able to
+    # load, resulting in test failures
+    # https://gitlab.gnome.org/GNOME/glib-networking/-/blob/2.78.1/tls/tests/certificate.c#L926
+    # https://gitlab.gnome.org/GNOME/glib-networking/-/blob/2.78.1/tls/tests/connection.c#L3380
+    ./disable-pkcs11-tests.patch
   ];
 
   strictDeps = true;

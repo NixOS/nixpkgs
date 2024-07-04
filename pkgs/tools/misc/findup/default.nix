@@ -18,12 +18,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ zig_0_10.hook ];
 
-  passthru.tests.version = testers.testVersion { package = finalAttrs.findup; };
+  passthru.tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
 
   meta = {
     homepage = "https://github.com/booniepepper/findup";
     description = "Search parent directories for sentinel files";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ booniepepper ];
+    mainProgram = "findup";
   };
 })

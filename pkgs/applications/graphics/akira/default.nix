@@ -9,8 +9,7 @@
 , pkg-config
 , python3
 , vala
-, vala-lint
-, wrapGAppsHook
+, wrapGAppsHook3
 , cairo
 , glib
 , goocanvas3
@@ -41,8 +40,7 @@ stdenv.mkDerivation rec {
     pkg-config
     python3
     vala
-    vala-lint
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

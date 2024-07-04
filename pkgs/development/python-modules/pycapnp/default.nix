@@ -1,16 +1,18 @@
-{ lib
-, buildPythonPackage
-, capnproto
-, cython
-, fetchFromGitHub
-, isPy27
-, isPyPy
-, pkgconfig
+{
+  lib,
+  buildPythonPackage,
+  capnproto,
+  cython,
+  fetchFromGitHub,
+  isPy27,
+  isPyPy,
+  pkgconfig,
 }:
 
 buildPythonPackage rec {
   pname = "pycapnp";
   version = "1.1.0";
+  format = "setuptools";
   disabled = isPyPy || isPy27;
 
   src = fetchFromGitHub {
@@ -20,7 +22,10 @@ buildPythonPackage rec {
     sha256 = "1xi6df93ggkpmwckwbi356v7m32zv5qry8s45hvsps66dz438kmi";
   };
 
-  nativeBuildInputs = [ cython pkgconfig ];
+  nativeBuildInputs = [
+    cython
+    pkgconfig
+  ];
 
   buildInputs = [ capnproto ];
 

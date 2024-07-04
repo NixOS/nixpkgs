@@ -1,8 +1,13 @@
-{ buildPythonPackage, fetchPypi, lib }:
+{
+  buildPythonPackage,
+  fetchPypi,
+  lib,
+}:
 
 buildPythonPackage rec {
   pname = "python-ly";
   version = "0.9.7";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

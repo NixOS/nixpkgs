@@ -14,7 +14,7 @@
 , pkg-config
 , proj
 , python3
-, wrapGAppsHook
+, wrapGAppsHook3
 , wxGTK32
 }:
 
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     perl
     pkg-config
     python3
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

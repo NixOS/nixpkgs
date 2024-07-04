@@ -1,15 +1,15 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, autoreconfHook
+{ lib, stdenv, fetchFromGitHub, gitUpdater, pkg-config, autoreconfHook
 , libX11, pam, libgcrypt, libXrender, imlib2 }:
 
 stdenv.mkDerivation rec {
   pname = "alock";
-  version = "unstable-2017-07-20";
+  version = "2.5.1";
 
   src = fetchFromGitHub {
     owner = "Arkq";
     repo = "alock";
-    rev = "2035e1d4a2293432f5503e82d10f899232eb0f38";
-    sha256 = "sha256-Rm00ytSfEv5Wljz4f/4bbyrK3sCV/oRUwz4DKx0pya8=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-xfPhsXZrTlEqea75SvacDfjM9o21MTudrqfNN9xtdcg=";
   };
 
   PAM_DEFAULT_SERVICE = "login";
@@ -27,9 +27,15 @@ stdenv.mkDerivation rec {
     pam libgcrypt libXrender imlib2
   ];
 
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "v";
+    allowedVersions = "\\.";
+  };
+
   meta = with lib; {
     homepage = "https://github.com/Arkq/alock";
     description = "Simple screen lock application for X server";
+    mainProgram = "alock";
     longDescription = ''
       alock locks the X server until the user enters a password
       via the keyboard. If the authentication was successful

@@ -18,7 +18,7 @@
 # Can also use cuSOLVER
 stdenv.mkDerivation (finalAttrs: {
   pname = "hipsolver";
-  version = "5.7.0";
+  version = "5.7.1";
 
   outputs = [
     "out"
@@ -31,10 +31,10 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   src = fetchFromGitHub {
-    owner = "ROCmSoftwarePlatform";
+    owner = "ROCm";
     repo = "hipSOLVER";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-I9Xjkilo+baeM1CRXjLAbj/vrg8r5/E2yEImhHGSyf8=";
+    hash = "sha256-5b6kPj9yvXvP7f7AyHDTYRoM/EhQZvwkVCfDflFJugc=";
   };
 
   nativeBuildInputs = [
@@ -91,10 +91,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "ROCm SOLVER marshalling library";
-    homepage = "https://github.com/ROCmSoftwarePlatform/hipSOLVER";
+    homepage = "https://github.com/ROCm/hipSOLVER";
     license = with licenses; [ mit ];
     maintainers = teams.rocm.members;
     platforms = platforms.linux;
-    broken = versions.minor finalAttrs.version != versions.minor stdenv.cc.version;
+    broken = versions.minor finalAttrs.version != versions.minor stdenv.cc.version || versionAtLeast finalAttrs.version "6.0.0";
   };
 })

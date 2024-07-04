@@ -1,60 +1,32 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, cmake
-, ninja
-, cython
-, rapidfuzz-capi
-, scikit-build
-, setuptools
-, wheel
-, jarowinkler-cpp
-, hypothesis
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  setuptools,
+  rapidfuzz,
+  hypothesis,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "jarowinkler";
-  version = "1.2.3";
-  format = "pyproject";
+  version = "2.0.1";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
+
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "maxbachmann";
     repo = "JaroWinkler";
     rev = "refs/tags/v${version}";
-    hash = "sha256-j+ZabVsiVitNkTPhGjDg72XogjvPaL453lTW45ITm90=";
+    hash = "sha256-B3upTBNqMyi+CH7Zx04wceEXjGJnr6S3BIl87AQkfbo=";
   };
 
-  # We cannot use Cython version 3.0.0 because the code in jarowinkler has not
-  # been adapted for https://github.com/cython/cython/issues/4280 yet
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'scikit-build==' 'scikit-build>=' \
-      --replace 'Cython==3.0.0a11' 'Cython'
-  '';
+  nativeBuildInputs = [ setuptools ];
 
-  nativeBuildInputs = [
-    cmake
-    cython
-    ninja
-    rapidfuzz-capi
-    scikit-build
-    setuptools
-    wheel
-  ];
-
-  buildInputs = [
-    jarowinkler-cpp
-  ];
-
-  preBuild = ''
-    export JAROWINKLER_BUILD_EXTENSION=1
-  '';
-
-  dontUseCmakeConfigure = true;
+  propagatedBuildInputs = [ rapidfuzz ];
 
   nativeCheckInputs = [
     hypothesis

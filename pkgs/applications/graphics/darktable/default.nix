@@ -4,13 +4,12 @@
 , libsoup
 , graphicsmagick
 , json-glib
-, wrapGAppsHook
+, wrapGAppsHook3
 , cairo
 , cmake
 , ninja
 , curl
 , perl
-, llvmPackages_13
 , desktop-file-utils
 , exiv2
 , glib
@@ -39,7 +38,7 @@
 , colord-gtk
 , libwebp
 , libsecret
-, gnome
+, adwaita-icon-theme
 , SDL2
 , ocl-icd
 , pcre
@@ -57,17 +56,15 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "4.4.2";
+  version = "4.8.0";
   pname = "darktable";
 
   src = fetchurl {
     url = "https://github.com/darktable-org/darktable/releases/download/release-${version}/darktable-${version}.tar.xz";
-    sha256 = "c11d28434fdf2e9ce572b9b1f9bc4e64dcebf6148e25080b4c32eb51916cfa98";
+    sha256 = "sha256-QZhJ6QFScOQHXyNBxrVTLT0czMz6jxlZLLLqOtF/klU=";
   };
 
-  nativeBuildInputs = [ cmake ninja llvmPackages_13.llvm pkg-config intltool perl desktop-file-utils wrapGAppsHook ]
-    # LLVM Clang C compiler version 11.1.0 is too old and is unsupported. Version 12+ is required.
-    ++ lib.optionals stdenv.isDarwin [ llvmPackages_13.clang ];
+  nativeBuildInputs = [ cmake ninja llvmPackages.llvm pkg-config intltool perl desktop-file-utils wrapGAppsHook3 ];
 
   buildInputs = [
     cairo
@@ -97,7 +94,7 @@ stdenv.mkDerivation rec {
     libwebp
     libsecret
     SDL2
-    gnome.adwaita-icon-theme
+    adwaita-icon-theme
     osm-gps-map
     pcre
     isocodes

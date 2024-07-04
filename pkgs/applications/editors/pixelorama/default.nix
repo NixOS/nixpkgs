@@ -26,13 +26,13 @@ let
     else throw "unsupported platform";
 in stdenv.mkDerivation (finalAttrs: {
   pname = "pixelorama";
-  version = "0.11.2";
+  version = "0.11.4";
 
   src = fetchFromGitHub {
     owner = "Orama-Interactive";
     repo = "Pixelorama";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-jSgSKxW7cxSoSwBytoaQtLwbkYm2udjmaZTHbN1jJwQ=";
+    sha256 = "sha256-VEQjZ9kDqXz1hoT4PrsBtzoi1TYWyN+YcPMyf9qJMRE=";
   };
 
   nativeBuildInputs = [
@@ -85,10 +85,11 @@ in stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     homepage = "https://orama-interactive.itch.io/pixelorama";
-    description = "A free & open-source 2D sprite editor, made with the Godot Engine!";
+    description = "Free & open-source 2D sprite editor, made with the Godot Engine!";
     changelog = "https://github.com/Orama-Interactive/Pixelorama/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = licenses.mit;
     platforms = [ "i686-linux" "x86_64-linux" ];
     maintainers = with maintainers; [ felschr ];
+    mainProgram = "pixelorama";
   };
 })

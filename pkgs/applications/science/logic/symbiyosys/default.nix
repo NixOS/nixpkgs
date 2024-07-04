@@ -55,7 +55,7 @@ stdenv.mkDerivation {
     description = "Tooling for Yosys-based verification flows";
     homepage    = "https://symbiyosys.readthedocs.io/";
     license     = lib.licenses.isc;
-    maintainers = with lib.maintainers; [ thoughtpolice emily ];
+    maintainers = with lib.maintainers; [ thoughtpolice ];
     mainProgram = "sby";
     platforms   = lib.platforms.all;
   };

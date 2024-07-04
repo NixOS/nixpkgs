@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tau-hydrogen";
-  version = "1.0.11";
+  version = "1.0.16";
 
   src = fetchFromGitHub {
     owner = "tau-OS";
     repo = "tau-hydrogen";
     rev = finalAttrs.version;
-    hash = "sha256-ECrRWWS/Am0lfCIJw/BVZg53oLw79Im8d8KgAYxE+pw=";
+    hash = "sha256-nnQ0lkHtkOjJhF4NSMqjt0deddYjMnHHlANlHoZS2wY=";
   };
 
   nativeBuildInputs = [
@@ -27,10 +27,10 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   meta = with lib; {
-    description = "The GTK icon theme for tauOS";
+    description = "GTK icon theme for tauOS";
     homepage = "https://github.com/tau-OS/tau-hydrogen";
     license = licenses.gpl3Only;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ ashvith-shetty ];
+    maintainers = [ ];
   };
 })

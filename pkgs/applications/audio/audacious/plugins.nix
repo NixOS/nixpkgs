@@ -41,6 +41,7 @@
 , qtmultimedia
 , qtx11extras
 , soxr
+, vgmstream
 , wavpack
 }:
 
@@ -108,6 +109,10 @@ stdenv.mkDerivation rec {
   ];
 
   dontWrapQtApps = true;
+
+  postInstall = ''
+    ln -s ${vgmstream.override { buildAudaciousPlugin = true; }}/lib/audacious/Input/* $out/lib/audacious/Input
+  '';
 
   meta = audacious.meta // {
     description = "Plugins for Audacious music player";

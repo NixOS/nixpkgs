@@ -5,7 +5,7 @@
 , pkg-config
 , rustPlatform
 , rustc
-, wrapGAppsHook
+, wrapGAppsHook3
 , gdk-pixbuf
 , gtk3
 , libsoup_3
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     pkg-config
     rustPlatform.cargoSetupHook
     rustc
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

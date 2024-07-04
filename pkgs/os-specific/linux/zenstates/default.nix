@@ -44,6 +44,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Linux utility for Ryzen processors and motherboards";
+    mainProgram = "zenstates";
     homepage = "https://github.com/r4m0n/ZenStates-Linux";
     license = licenses.mit;
     maintainers = with maintainers; [ savannidgerinel ];

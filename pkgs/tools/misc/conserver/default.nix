@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://www.conserver.com/";
-    description = "An application that allows multiple users to watch a serial console at the same time";
+    description = "Application that allows multiple users to watch a serial console at the same time";
     license = licenses.bsd3;
     platforms = platforms.unix;
     maintainers = with maintainers; [ sarcasticadmin ];

@@ -5,8 +5,8 @@ let
 in
 {
   options.services.twingate = {
-    enable = lib.mkEnableOption (lib.mdDoc "Twingate Client daemon");
-    package = lib.mkPackageOptionMD pkgs "twingate" { };
+    enable = lib.mkEnableOption "Twingate Client daemon";
+    package = lib.mkPackageOption pkgs "twingate" { };
   };
 
   config = lib.mkIf cfg.enable {

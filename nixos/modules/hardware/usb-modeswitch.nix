@@ -11,7 +11,7 @@ with lib;
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Enable this option to support certain USB WLAN and WWAN adapters.
 
           These network adapters initial present themselves as Flash Drives containing their drivers.

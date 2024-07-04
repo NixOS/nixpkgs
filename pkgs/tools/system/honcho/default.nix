@@ -29,10 +29,11 @@ python3Packages.buildPythonApplication rec {
   '';
 
   meta = with lib; {
-    description = "A Python clone of Foreman, a tool for managing Procfile-based applications";
+    description = "Python clone of Foreman, a tool for managing Procfile-based applications";
     license = licenses.mit;
     homepage = "https://github.com/nickstenning/honcho";
     maintainers = with maintainers; [ benley ];
     platforms = platforms.unix;
+    mainProgram = "honcho";
   };
 }

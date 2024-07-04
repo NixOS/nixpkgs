@@ -30,7 +30,6 @@ stdenv.mkDerivation rec {
     })
   ];
 
-
   # fix for case-sensitive filesystems
   # https://github.com/MCredstoner2004/ImageLOL/issues/1
   postPatch = ''
@@ -46,13 +45,14 @@ stdenv.mkDerivation rec {
     cp ./ImageLOL $out/bin
   '';
 
-  cmakeFlags = lib.optional (stdenv.isDarwin && stdenv.isAarch64) "-DPNG_ARM_NEON=off";
+  cmakeFlags = [ (lib.cmakeFeature "CMAKE_C_FLAGS" "-std=gnu90") ] ++ lib.optional (stdenv.isDarwin && stdenv.isAarch64) "-DPNG_ARM_NEON=off";
 
   meta = with lib; {
     homepage = "https://github.com/MCredstoner2004/ImageLOL";
     description = "Simple program to store a file into a PNG image";
     license = licenses.mit;
-    maintainers = [ maintainers.ivar ];
+    maintainers = [ ];
     platforms = platforms.unix;
+    mainProgram = "ImageLOL";
   };
 }

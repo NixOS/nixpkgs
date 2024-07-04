@@ -1,15 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, isPy3k
-, pexpect
-, notebook
-, nix
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  isPy3k,
+  pexpect,
+  notebook,
+  nix,
 }:
 
 buildPythonPackage rec {
   pname = "nix-kernel";
   version = "unstable-2020-04-26";
+  format = "setuptools";
 
   disabled = !isPy3k;
 

@@ -13,13 +13,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "xmrig-proxy";
-  version = "6.20.0";
+  version = "6.21.1";
 
   src = fetchFromGitHub {
     owner = "xmrig";
     repo = "xmrig-proxy";
     rev = "v${version}";
-    hash = "sha256-RliH4cr96lsigtoJiq5ymkIY8rbXG4xYmhWDAwZpSY0=";
+    hash = "sha256-70SYdO3uyPINanAoARd2lDwyiuc2f/gg4QuoDgoXjjs=";
   };
 
   postPatch = ''
@@ -53,6 +53,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Monero (XMR) Stratum protocol proxy";
+    mainProgram = "xmrig-proxy";
     homepage = "https://github.com/xmrig/xmrig-proxy";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ aij ];

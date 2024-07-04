@@ -1,35 +1,36 @@
-{ lib
-, python3
-, fetchFromGitHub
-, fetchPypi
-}:
+{ lib, python3, fetchFromGitHub }:
 
 let
-  python = python3.override {
-    packageOverrides = self: super: {
+  newPackageOverrides =
+    self: super: {
       poetry = self.callPackage ./unwrapped.nix { };
 
-      # version overrides required by poetry and its plugins
-      deepdiff = super.deepdiff.overridePythonAttrs (old: rec {
-        doCheck = false;
-      });
+      # The versions of Poetry and poetry-core need to match exactly,
+      # and poetry-core in nixpkgs requires a staging cycle to be updated,
+      # so apply an override here.
+      #
+      # We keep the override around even when the versions match, as
+      # it's likely to become relevant again after the next Poetry update.
       poetry-core = super.poetry-core.overridePythonAttrs (old: rec {
-        version = "1.7.0";
+        version = "1.9.0";
         src = fetchFromGitHub {
           owner = "python-poetry";
           repo = "poetry-core";
-          rev = version;
-          hash = "sha256-OfY2zc+5CgOrgbiPVnvMdT4h1S7Aek8S7iThl6azmsk=";
+          rev = "refs/tags/${version}";
+          hash = "sha256-vvwKbzGlvv2LTbXfJxQVM3nUXFGntgJxsku6cbRxCzw=";
         };
-        patches = [ ];
       });
     } // (plugins self);
-  };
+  python = python3.override (old: {
+    packageOverrides = lib.composeManyExtensions
+      ((if old ? packageOverrides then [ old.packageOverrides ] else [ ]) ++ [ newPackageOverrides ]);
+  });
 
   plugins = ps: with ps; {
     poetry-audit-plugin = callPackage ./plugins/poetry-audit-plugin.nix { };
     poetry-plugin-export = callPackage ./plugins/poetry-plugin-export.nix { };
     poetry-plugin-up = callPackage ./plugins/poetry-plugin-up.nix { };
+    poetry-plugin-poeblix = callPackage ./plugins/poetry-plugin-poeblix.nix { };
   };
 
   # selector is a function mapping pythonPackages to a list of plugins

@@ -8,7 +8,7 @@
 
 trivialBuild rec {
   pname = "evil-markdown";
-  version = "0.pre+unstable=2021-07-21";
+  version = "0-unstable-2021-07-21";
 
   src = fetchFromGitHub {
     owner = "Somelauw";

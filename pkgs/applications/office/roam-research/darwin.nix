@@ -24,11 +24,12 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A note-taking tool for networked thought";
+    description = "Note-taking tool for networked thought";
     homepage = "https://roamresearch.com/";
     maintainers = with lib.maintainers; [ dbalan ];
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     platforms = [ "x86_64-darwin" "aarch64-darwin" ];
+    mainProgram = "roam-research";
   };
 }

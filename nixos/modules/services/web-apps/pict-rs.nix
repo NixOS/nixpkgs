@@ -12,20 +12,14 @@ in
   meta.doc = ./pict-rs.md;
 
   options.services.pict-rs = {
-    enable = lib.mkEnableOption (lib.mdDoc "pict-rs server");
+    enable = lib.mkEnableOption "pict-rs server";
 
-    package = mkOption {
-      type = types.package;
-      example = lib.literalExpression "pkgs.pict-rs";
-      description = lib.mdDoc ''
-        pict-rs package to use.
-      '';
-    };
+    package = lib.mkPackageOption pkgs "pict-rs" { };
 
     dataDir = mkOption {
       type = types.path;
       default = "/var/lib/pict-rs";
-      description = lib.mdDoc ''
+      description = ''
         The directory where to store the uploaded images & database.
       '';
     };
@@ -33,7 +27,7 @@ in
     repoPath = mkOption {
       type = types.nullOr (types.path);
       default = null;
-      description = lib.mdDoc ''
+      description = ''
         The directory where to store the database.
         This option takes precedence over dataDir.
       '';
@@ -42,7 +36,7 @@ in
     storePath = mkOption {
       type = types.nullOr (types.path);
       default = null;
-      description = lib.mdDoc ''
+      description = ''
         The directory where to store the uploaded images.
         This option takes precedence over dataDir.
       '';
@@ -51,7 +45,7 @@ in
     address = mkOption {
       type = types.str;
       default = "127.0.0.1";
-      description = lib.mdDoc ''
+      description = ''
         The IPv4 address to deploy the service to.
       '';
     };
@@ -59,7 +53,7 @@ in
     port = mkOption {
       type = types.port;
       default = 8080;
-      description = lib.mdDoc ''
+      description = ''
         The port which to bind the service to.
       '';
     };

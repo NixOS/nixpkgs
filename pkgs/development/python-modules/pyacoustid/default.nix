@@ -1,21 +1,26 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, requests
-, audioread
-, pkgs
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  requests,
+  audioread,
+  pkgs,
 }:
 
 buildPythonPackage rec {
   pname = "pyacoustid";
   version = "1.3.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
     sha256 = "sha256-X09IcZHBnruQgnCxt7UpfxMtozKxVouWqRRXTAee0Xc=";
   };
 
-  propagatedBuildInputs = [ requests audioread ];
+  propagatedBuildInputs = [
+    requests
+    audioread
+  ];
 
   postPatch = ''
     sed -i \

@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "dde-device-formatter";
-  version = "0.0.1.15";
+  version = "0.0.1.16";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    hash = "sha256-M0XKvo/Qph09GIlqXTdYyPWilWyQhvFAF3c9Yf1Z9m0=";
+    hash = "sha256-l2D+j+u5Q6G45KTM7eg1QNEakEPtEJ0tzlDlQO5/08I=";
   };
 
   postPatch = ''
@@ -54,7 +54,8 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A simple graphical interface for creating file system in a block device";
+    description = "Simple graphical interface for creating file system in a block device";
+    mainProgram = "dde-device-formatter";
     homepage = "https://github.com/linuxdeepin/dde-device-formatter";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;

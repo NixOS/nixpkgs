@@ -54,7 +54,7 @@ if [ ! -e /proc/1 ]; then
 fi
 
 
-if [ "${IN_NIXOS_SYSTEMD_STAGE1:-}" = true ]; then
+if [ "${IN_NIXOS_SYSTEMD_STAGE1:-}" = true ] || [ ! -c /dev/kmsg ] ; then
     echo "booting system configuration ${systemConfig}"
 else
     echo "booting system configuration $systemConfig" > /dev/kmsg

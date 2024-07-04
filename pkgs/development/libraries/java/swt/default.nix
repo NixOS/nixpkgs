@@ -1,6 +1,6 @@
 { lib
 , stdenv
-, canonicalize-jars-hook
+, stripJavaArchivesHook
 , fetchzip
 , pkg-config
 , atk
@@ -11,7 +11,6 @@
 , libGLU
 , libXt
 , libXtst
-, gnome2
 }:
 
 let
@@ -58,7 +57,7 @@ in stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    canonicalize-jars-hook
+    stripJavaArchivesHook
     pkg-config
   ];
   buildInputs = [
@@ -68,9 +67,6 @@ in stdenv.mkDerivation rec {
     libGL
     libGLU
     libXtst
-    gnome2.gnome_vfs
-    gnome2.libgnome
-    gnome2.libgnomeui
   ] ++ lib.optionals (lib.hasPrefix "8u" jdk.version) [
     libXt
   ];

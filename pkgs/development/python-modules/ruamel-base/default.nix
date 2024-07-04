@@ -1,11 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
 
 buildPythonPackage rec {
   pname = "ruamel-base";
   version = "1.0.0";
+  format = "setuptools";
 
   src = fetchPypi {
     pname = "ruamel.base";

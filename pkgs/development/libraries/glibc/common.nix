@@ -36,16 +36,16 @@
 , withLinuxHeaders ? false
 , profilingLibraries ? false
 , withGd ? false
-, withLibcrypt ? false
+, enableCET ? false
 , extraBuildInputs ? []
 , extraNativeBuildInputs ? []
 , ...
 } @ args:
 
 let
-  version = "2.37";
-  patchSuffix = "-8";
-  sha256 = "sha256-Ilfv8RGhgV109GhW2q9AsBnB5VMVbGnUi6DL/Bu5GkM=";
+  version = "2.39";
+  patchSuffix = "-52";
+  sha256 = "sha256-93vUfPgXDFc2Wue/hmlsEYrbOxINMlnGTFAtPcHi2SY=";
 in
 
 assert withLinuxHeaders -> linuxHeaders != null;
@@ -59,14 +59,18 @@ stdenv.mkDerivation ({
   patches =
     [
       /* No tarballs for stable upstream branch, only https://sourceware.org/git/glibc.git and using git would complicate bootstrapping.
-          $ git fetch --all -p && git checkout origin/release/2.36/master && git describe
-          glibc-2.37-8-g590d0e089b
-          $ git show --minimal --reverse glibc-2.37.. | gzip -9n --rsyncable - > 2.37-master.patch.gz
+          $ git fetch --all -p && git checkout origin/release/2.39/master && git describe
+          glibc-2.39-52-gf8e4623421
+          $ git show --minimal --reverse glibc-2.39.. ':!ADVISORIES' > 2.39-master.patch
 
          To compare the archive contents zdiff can be used.
-          $ zdiff -u 2.37-master.patch.gz ../nixpkgs/pkgs/development/libraries/glibc/2.37-master.patch.gz
+          $ diff -u 2.39-master.patch ../nixpkgs/pkgs/development/libraries/glibc/2.39-master.patch
+
+         Please note that each commit has changes to the file ADVISORIES excluded since
+         that conflicts with the directory advisories/ making cross-builds from
+         hosts with case-insensitive file-systems impossible.
        */
-      ./2.37-master.patch.gz
+      ./2.39-master.patch
 
       /* Allow NixOS and Nix to handle the locale-archive. */
       ./nix-locale-archive.patch
@@ -89,13 +93,26 @@ stdenv.mkDerivation ({
 
       ./0001-Revert-Remove-all-usage-of-BASH-or-BASH-in-installed.patch
 
-      /* Patch derived from archlinux (at the time of adding they're at 2.37),
-         https://github.com/archlinux/svntogit-packages/blob/packages/glibc/trunk/reenable_DT_HASH.patch
+      /* Patch derived from archlinux,
+         https://gitlab.archlinux.org/archlinux/packaging/packages/glibc/-/blob/e54d98e2d1aae4930ecad9404ef12234922d9dfd/reenable_DT_HASH.patch
 
-        See https://github.com/NixOS/nixpkgs/pull/188492#issuecomment-1233802991 for context.
+         See also https://github.com/ValveSoftware/Proton/issues/6051
+         & https://github.com/NixOS/nixpkgs/pull/188492#issuecomment-1233802991
       */
       ./reenable_DT_HASH.patch
     ]
+    /* NVCC does not support ARM intrinsics. Since <math.h> is pulled in by almost
+       every HPC piece of software, without this patch CUDA compilation on ARM
+       is effectively broken. See
+       https://forums.developer.nvidia.com/t/nvcc-fails-to-build-with-arm-neon-instructions-cpp-vs-cu/248355/2.
+    */
+    ++ (
+      let
+        isAarch64 = stdenv.buildPlatform.isAarch64 || stdenv.hostPlatform.isAarch64;
+        isLinux = stdenv.buildPlatform.isLinux || stdenv.hostPlatform.isLinux;
+      in
+      lib.optional (isAarch64 && isLinux) ./0001-aarch64-math-vector.h-add-NVCC-include-guard.patch
+    )
     ++ lib.optional stdenv.hostPlatform.isMusl ./fix-rpc-types-musl-conflicts.patch
     ++ lib.optional stdenv.buildPlatform.isDarwin ./darwin-cross-build.patch;
 
@@ -135,15 +152,16 @@ stdenv.mkDerivation ({
       "--enable-bind-now"
       (lib.withFeatureAs withLinuxHeaders "headers" "${linuxHeaders}/include")
       (lib.enableFeature profilingLibraries "profile")
+      "--enable-fortify-source"
     ] ++ lib.optionals (stdenv.hostPlatform.isx86 || stdenv.hostPlatform.isAarch64) [
       # This feature is currently supported on
       # i386, x86_64 and x32 with binutils 2.29 or later,
       # and on aarch64 with binutils 2.30 or later.
       # https://sourceware.org/glibc/wiki/PortStatus
       "--enable-static-pie"
-    ] ++ lib.optionals stdenv.hostPlatform.isx86 [
+    ] ++ lib.optionals (enableCET != false) [
       # Enable Intel Control-flow Enforcement Technology (CET) support
-      "--enable-cet"
+      "--enable-cet${if builtins.isString enableCET then "=${enableCET}"  else ""}"
     ] ++ lib.optionals withLinuxHeaders [
       "--enable-kernel=3.10.0" # RHEL 7 and derivatives, seems oldest still supported kernel
     ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
@@ -158,8 +176,7 @@ stdenv.mkDerivation ({
       # so the glibc does not depend on its compiler store path
       "libc_cv_as_needed=no"
     ]
-    ++ lib.optional withGd "--with-gd"
-    ++ lib.optional (!withLibcrypt) "--disable-crypt";
+    ++ lib.optional withGd "--with-gd";
 
   makeFlags = (args.makeFlags or []) ++ [
     "OBJCOPY=${stdenv.cc.targetPrefix}objcopy"
@@ -196,7 +213,7 @@ stdenv.mkDerivation ({
   passthru = { inherit version; minorRelease = version; };
 }
 
-// (removeAttrs args [ "withLinuxHeaders" "withGd" "postInstall" "makeFlags" ]) //
+// (removeAttrs args [ "withLinuxHeaders" "withGd" "enableCET" "postInstall" "makeFlags" ]) //
 
 {
   src = fetchurl {
@@ -261,7 +278,7 @@ stdenv.mkDerivation ({
 
   meta = with lib; {
     homepage = "https://www.gnu.org/software/libc/";
-    description = "The GNU C Library";
+    description = "GNU C Library";
 
     longDescription =
       '' Any Unix-like operating system needs a C library: the library which
@@ -274,7 +291,7 @@ stdenv.mkDerivation ({
 
     license = licenses.lgpl2Plus;
 
-    maintainers = with maintainers; [ eelco ma27 ];
+    maintainers = with maintainers; [ eelco ma27 connorbaker ];
     platforms = platforms.linux;
   } // (args.meta or {});
 })

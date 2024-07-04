@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "der-ascii";
-  version = "0.1.0";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1my93m1rx08kn2yms6k8w43byr8k61r1nra4b082j8b393wwxkqc";
+    sha256 = "sha256-LgxGSZQNxwx08mK9G8mSuBFTOd3pC1mvz3Wz7Y+6XR4=";
   };
   vendorHash = null;
 

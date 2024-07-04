@@ -1,8 +1,17 @@
-{ lib, buildPythonPackage, fetchFromGitHub, python-slugify, jinja2, setuptools, coverage }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  python-slugify,
+  jinja2,
+  setuptools,
+  coverage,
+}:
 
 buildPythonPackage rec {
   pname = "python-nvd3";
   version = "0.15.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "areski";
@@ -11,7 +20,11 @@ buildPythonPackage rec {
     sha256 = "1vjnicszcc9j0rgb58104fk9sry5xad1xli64jana9bkx42c6x1v";
   };
 
-  propagatedBuildInputs = [ python-slugify jinja2 setuptools ];
+  propagatedBuildInputs = [
+    python-slugify
+    jinja2
+    setuptools
+  ];
   nativeCheckInputs = [ coverage ];
 
   checkPhase = ''
@@ -21,6 +34,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://github.com/areski/python-nvd3";
     description = "Python Wrapper for NVD3 - It's time for beautiful charts";
+    mainProgram = "nvd3";
     license = licenses.mit;
     maintainers = [ maintainers.ivan-tkatchev ];
   };

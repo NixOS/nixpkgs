@@ -1,14 +1,15 @@
-{ lib
-, anyio
-, buildPythonPackage
-, fetchFromGitHub
-, paho-mqtt
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, setuptools-scm
-, typing-extensions
-, wheel
+{
+  lib,
+  anyio,
+  buildPythonPackage,
+  fetchFromGitHub,
+  paho-mqtt,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  setuptools-scm,
+  typing-extensions,
+  wheel,
 }:
 
 buildPythonPackage rec {
@@ -25,28 +26,20 @@ buildPythonPackage rec {
     hash = "sha256-f3JqocjOEwNjo6Uv17ij6oEdrjb6Z2wTzdhdVhx46iM=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   nativeBuildInputs = [
     setuptools
     setuptools-scm
     wheel
   ];
 
-  propagatedBuildInputs = [
-    paho-mqtt
-  ] ++ lib.optionals (pythonOlder "3.10") [
-    typing-extensions
-  ];
+  propagatedBuildInputs = [ paho-mqtt ] ++ lib.optionals (pythonOlder "3.10") [ typing-extensions ];
 
   nativeCheckInputs = [
     anyio
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "asyncio_mqtt"
-  ];
+  pythonImportsCheck = [ "asyncio_mqtt" ];
 
   disabledTests = [
     # Tests require network access
@@ -64,6 +57,9 @@ buildPythonPackage rec {
     "test_client_will"
     "test_multiple_messages_generators"
   ];
+
+  # newer version are packaged as aiomqtt
+  passthru.skipBulkUpdate = true;
 
   meta = with lib; {
     description = "Idomatic asyncio wrapper around paho-mqtt";

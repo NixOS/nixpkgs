@@ -10,14 +10,15 @@ import ./make-test-python.nix ({ pkgs, lib, ...} : {
       enable = true;
       settings.db.host = "/run/postgresql";
       settings.db.user = "wiki-js";
+      settings.db.db = "wiki-js";
       settings.logLevel = "debug";
     };
     services.postgresql = {
       enable = true;
-      ensureDatabases = [ "wiki" ];
+      ensureDatabases = [ "wiki-js" ];
       ensureUsers = [
         { name = "wiki-js";
-          ensurePermissions."DATABASE wiki" = "ALL PRIVILEGES";
+          ensureDBOwnership = true;
         }
       ];
     };

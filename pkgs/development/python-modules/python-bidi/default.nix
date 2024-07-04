@@ -1,8 +1,14 @@
-{ lib, buildPythonPackage, fetchPypi, six }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  six,
+}:
 
 buildPythonPackage rec {
   pname = "python-bidi";
   version = "0.4.2";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -14,6 +20,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://github.com/MeirKriheli/python-bidi";
     description = "Pure python implementation of the BiDi layout algorithm";
+    mainProgram = "pybidi";
     platforms = platforms.unix;
     maintainers = with maintainers; [ freezeboy ];
   };

@@ -15,24 +15,24 @@ in {
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc "Whether to enable rss2email.";
+        description = "Whether to enable rss2email.";
       };
 
       to = mkOption {
         type = types.str;
-        description = lib.mdDoc "Mail address to which to send emails";
+        description = "Mail address to which to send emails";
       };
 
       interval = mkOption {
         type = types.str;
         default = "12h";
-        description = lib.mdDoc "How often to check the feeds, in systemd interval format";
+        description = "How often to check the feeds, in systemd interval format";
       };
 
       config = mkOption {
         type = with types; attrsOf (oneOf [ str int bool ]);
         default = {};
-        description = lib.mdDoc ''
+        description = ''
           The configuration to give rss2email.
 
           Default will use system-wide `sendmail` to send the
@@ -49,18 +49,18 @@ in {
       };
 
       feeds = mkOption {
-        description = lib.mdDoc "The feeds to watch.";
+        description = "The feeds to watch.";
         type = types.attrsOf (types.submodule {
           options = {
             url = mkOption {
               type = types.str;
-              description = lib.mdDoc "The URL at which to fetch the feed.";
+              description = "The URL at which to fetch the feed.";
             };
 
             to = mkOption {
               type = with types; nullOr str;
               default = null;
-              description = lib.mdDoc ''
+              description = ''
                 Email address to which to send feed items.
 
                 If `null`, this will not be set in the
@@ -95,9 +95,11 @@ in {
 
     services.rss2email.config.to = cfg.to;
 
-    systemd.tmpfiles.rules = [
-      "d /var/rss2email 0700 rss2email rss2email - -"
-    ];
+    systemd.tmpfiles.settings."10-rss2email"."/var/rss2email".d = {
+      user = "rss2email";
+      group = "rss2email";
+      mode = "0700";
+    };
 
     systemd.services.rss2email = let
       conf = pkgs.writeText "rss2email.cfg" (lib.generators.toINI {} ({

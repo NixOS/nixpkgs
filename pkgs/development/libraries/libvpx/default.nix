@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, perl, yasm
+{ lib, stdenv, fetchFromGitHub, perl, yasm
 , vp8DecoderSupport ? true # VP8 decoder
 , vp8EncoderSupport ? true # VP8 encoder
 , vp9DecoderSupport ? true # VP9 decoder
@@ -54,12 +54,26 @@ let
     else if stdenv.hostPlatform.osxMinVersion == "10.5"  then "9"
     else "8";
 
+  cpu =
+    /**/ if stdenv.hostPlatform.isArmv7 then "armv7"
+    else if stdenv.hostPlatform.isAarch64 then "arm64"
+    else if stdenv.hostPlatform.isx86_32 then "x86"
+    else stdenv.hostPlatform.parsed.cpu.name;
+
   kernel =
     # Build system doesn't understand BSD, so pretend to be Linux.
     /**/ if stdenv.isBSD then "linux"
     else if stdenv.isDarwin then "darwin${darwinVersion}"
     else stdenv.hostPlatform.parsed.kernel.name;
 
+  isGeneric =
+    /**/ (stdenv.hostPlatform.isPower && stdenv.hostPlatform.isLittleEndian)
+    || stdenv.hostPlatform.parsed.cpu.name == "armv6l";
+
+  target =
+    /**/ if (stdenv.isBSD || stdenv.hostPlatform != stdenv.buildPlatform) then
+      (if isGeneric then "generic-gnu" else "${cpu}-${kernel}-gcc")
+    else null;
 in
 
 assert vp8DecoderSupport || vp8EncoderSupport || vp9DecoderSupport || vp9EncoderSupport;
@@ -75,26 +89,14 @@ assert isCygwin -> unitTestsSupport && webmIOSupport && libyuvSupport;
 
 stdenv.mkDerivation rec {
   pname = "libvpx";
-  version = "1.13.0";
+  version = "1.14.0";
 
   src = fetchFromGitHub {
     owner = "webmproject";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-IH+ZWbBUlU5fbciYe+dNGnTFFCte2BXxAlLcvmzdAeY=";
+    hash = "sha256-duU1exUg7JiKCtZfNxyb/y40hxsXeTIMShf9YounTWA=";
   };
-
-  patches = [
-    (fetchpatch {
-      # https://www.openwall.com/lists/oss-security/2023/09/28/5
-      name = "CVE-2023-5217.patch";
-      url = "https://github.com/webmproject/libvpx/commit/3fbd1dca6a4d2dad332a2110d646e4ffef36d590.patch";
-      hash = "sha256-1hHUd/dNGm8dmdYYN60j1aOgC2pdIIq7vqJZ7mTXfps=";
-      includes = [
-        "vp8/encoder/onyx_if.c"
-      ];
-    })
-  ];
 
   postPatch = ''
     patchShebangs --build \
@@ -175,8 +177,8 @@ stdenv.mkDerivation rec {
     (enableFeature (experimentalSpatialSvcSupport ||
                     experimentalFpMbStatsSupport ||
                     experimentalEmulateHardwareSupport) "experimental")
-  ] ++ optionals (stdenv.isBSD || stdenv.hostPlatform != stdenv.buildPlatform) [
-    "--force-target=${stdenv.hostPlatform.parsed.cpu.name}-${kernel}-gcc"
+  ] ++ optionals (target != null) [
+    "--target=${target}"
     (lib.optionalString stdenv.hostPlatform.isCygwin "--enable-static-msvcrt")
   ] # Experimental features
     ++ optional experimentalSpatialSvcSupport "--enable-spatial-svc"

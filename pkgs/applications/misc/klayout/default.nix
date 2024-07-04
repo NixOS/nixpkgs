@@ -43,6 +43,9 @@ mkDerivation rec {
   postBuild = ''
     mkdir $out/bin
     mv $out/lib/klayout $out/bin/
+
+    install -Dm444 etc/klayout.desktop -t $out/share/applications
+    install -Dm444 etc/logo.png $out/share/icons/hicolor/256x256/apps/klayout.png
   '';
 
   env.NIX_CFLAGS_COMPILE = toString [ "-Wno-parentheses" ];
@@ -55,6 +58,7 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "High performance layout viewer and editor with support for GDS and OASIS";
+    mainProgram = "klayout";
     license = with licenses; [ gpl2Plus ];
     homepage = "https://www.klayout.de/";
     changelog = "https://www.klayout.de/development.html#${version}";

@@ -1,10 +1,11 @@
-{ lib
-, beautifulsoup4
-, buildPythonPackage
-, fetchFromGitHub
-, python-dateutil
-, pythonOlder
-, requests
+{
+  lib,
+  beautifulsoup4,
+  buildPythonPackage,
+  fetchFromGitHub,
+  python-dateutil,
+  pythonOlder,
+  requests,
 }:
 
 buildPythonPackage rec {
@@ -36,12 +37,11 @@ buildPythonPackage rec {
   # Test require network access
   doCheck = false;
 
-  pythonImportsCheck = [
-    "socid_extractor"
-  ];
+  pythonImportsCheck = [ "socid_extractor" ];
 
   meta = with lib; {
     description = "Python module to extract details from personal pages";
+    mainProgram = "socid_extractor";
     homepage = "https://github.com/soxoj/socid-extractor";
     changelog = "https://github.com/soxoj/socid-extractor/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ gpl3Only ];

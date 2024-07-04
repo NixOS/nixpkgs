@@ -10,7 +10,7 @@
 , libsecret
 , makeDesktopItem
 , webkitgtk
-, wrapGAppsHook
+, wrapGAppsHook3
 , writeScript
 }:
 let
@@ -27,16 +27,16 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "PortfolioPerformance";
-  version = "0.65.4";
+  version = "0.69.0";
 
   src = fetchurl {
     url = "https://github.com/buchen/portfolio/releases/download/${version}/PortfolioPerformance-${version}-linux.gtk.x86_64.tar.gz";
-    hash = "sha256-2+1lwaO2+kq/EjJoA4EvGCMLH6iErR9KtWINLoO17+w=";
+    hash = "sha256-5U1MGZ/CWI0m1utXCak6qWEHIFwMvZSqRt4qrUPCqVo=";
   };
 
   nativeBuildInputs = [
     autoPatchelfHook
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -69,11 +69,11 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A simple tool to calculate the overall performance of an investment portfolio";
+    description = "Simple tool to calculate the overall performance of an investment portfolio";
     homepage = "https://www.portfolio-performance.info/";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.epl10;
-    maintainers = with maintainers; [ elohmeier oyren shawn8901 ];
+    maintainers = with maintainers; [ kilianar oyren shawn8901 ];
     mainProgram = "portfolio";
     platforms = [ "x86_64-linux" ];
   };

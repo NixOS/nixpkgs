@@ -23,7 +23,6 @@
 let
   phpPackage = php82.withExtensions ({ enabled, all }: enabled ++ [ all.memcached ]);
 in phpPackage.buildComposerProject rec {
-  name = pname + "-" + version;
   pname = "librenms";
   version = "23.9.1";
 
@@ -46,7 +45,7 @@ in phpPackage.buildComposerProject rec {
       redis
       setuptools
       psutil
-      command_runner
+      command-runner
     ]))
   ];
 
@@ -107,7 +106,7 @@ in phpPackage.buildComposerProject rec {
   };
 
   meta = with lib; {
-    description = "A auto-discovering PHP/MySQL/SNMP based network monitoring";
+    description = "Auto-discovering PHP/MySQL/SNMP based network monitoring";
     homepage    = "https://www.librenms.org/";
     license     = licenses.gpl3Only;
     maintainers = teams.wdz.members;

@@ -2,39 +2,46 @@
 , stdenv
 , acl
 , e2fsprogs
+, fetchFromGitHub
 , libb2
 , lz4
 , openssh
 , openssl
-, python3Packages
+, python3
 , xxHash
 , zstd
 , installShellFiles
 , nixosTests
-, fetchPypi
 }:
 
-python3Packages.buildPythonApplication rec {
+let
+  python = python3;
+in
+python.pkgs.buildPythonApplication rec {
   pname = "borgbackup";
-  version = "1.2.6";
-  format = "pyproject";
+  version = "1.2.8";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-t6b48IYDnu7HkHC5FPPGUe1/NhLJZTdK+RDSd8eiE50=";
+  src = fetchFromGitHub {
+    owner = "borgbackup";
+    repo = "borg";
+    rev = "refs/tags/${version}";
+    hash = "sha256-+FHqOVuHlY9QUjCrYVnrMBZPMFH9Z2U7eZ6eUSINSrw=";
   };
 
   postPatch = ''
     # sandbox does not support setuid/setgid/sticky bits
     substituteInPlace src/borg/testsuite/archiver.py \
-      --replace "0o4755" "0o0755"
+      --replace-fail "0o4755" "0o0755"
   '';
 
-  nativeBuildInputs = with python3Packages; [
+  build-system = with python.pkgs; [
     cython
     setuptools-scm
     pkgconfig
+  ];
 
+  nativeBuildInputs = with python.pkgs; [
     # docs
     sphinxHook
     guzzle-sphinx-theme
@@ -55,7 +62,7 @@ python3Packages.buildPythonApplication rec {
     acl
   ];
 
-  propagatedBuildInputs = with python3Packages; [
+  dependencies = with python.pkgs; [
     msgpack
     packaging
     (if stdenv.isLinux then pyfuse3 else llfuse)
@@ -72,7 +79,7 @@ python3Packages.buildPythonApplication rec {
       --zsh scripts/shell_completions/zsh/_borg
   '';
 
-  nativeCheckInputs = with python3Packages; [
+  nativeCheckInputs = with python.pkgs; [
     e2fsprogs
     py
     python-dateutil
@@ -115,7 +122,7 @@ python3Packages.buildPythonApplication rec {
   outputs = [ "out" "doc" "man" ];
 
   meta = with lib; {
-    changelog = "https://github.com/borgbackup/borg/blob/${version}/docs/changes.rst";
+    changelog = "https://github.com/borgbackup/borg/blob/${src.rev}/docs/changes.rst";
     description = "Deduplicating archiver with compression and encryption";
     homepage = "https://www.borgbackup.org";
     license = licenses.bsd3;

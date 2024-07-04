@@ -1,7 +1,8 @@
-{ lib
-, fetchzip
-, stdenvNoCC
-, makeWrapper
+{
+  lib,
+  fetchzip,
+  stdenvNoCC,
+  makeWrapper,
 }:
 
 stdenvNoCC.mkDerivation rec {
@@ -17,9 +18,7 @@ stdenvNoCC.mkDerivation rec {
   dontConfigure = true;
   dontBuild = true;
 
-  nativeBuildInputs = [
-    makeWrapper
-  ];
+  nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
     runHook preInstall
@@ -41,6 +40,6 @@ stdenvNoCC.mkDerivation rec {
     license = licenses.mit;
     platforms = platforms.darwin;
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    maintainers = with maintainers; [ ivar ];
+    maintainers = with maintainers; [ matteopacini ];
   };
 }

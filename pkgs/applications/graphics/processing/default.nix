@@ -1,6 +1,6 @@
-{ lib, stdenv, fetchFromGitHub, fetchurl, ant, unzip, makeWrapper, jdk, javaPackages, rsync, ffmpeg, batik, gsettings-desktop-schemas, xorg, wrapGAppsHook }:
+{ lib, stdenv, fetchFromGitHub, fetchurl, ant, unzip, makeWrapper, jdk, jogl, rsync, ffmpeg, batik, stripJavaArchivesHook, wrapGAppsHook3, libGL }:
 let
-  buildNumber = "1292";
+  buildNumber = "1293";
   vaqua = fetchurl {
     name = "VAqua9.jar";
     url = "https://violetlib.org/release/vaqua/9/VAqua9.jar";
@@ -43,26 +43,28 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "processing";
-  version = "4.2";
+  version = "4.3";
 
   src = fetchFromGitHub {
     owner = "processing";
     repo = "processing4";
     rev = "processing-${buildNumber}-${version}";
-    sha256 = "sha256-wdluhrtliLN4T2dcmwvUWZhOARC3Lst7+hWWwZjafmU=";
+    sha256 = "sha256-SzQemZ6iZ9o89/doV8YMv7DmyPSDyckJl3oyxJyfrm0=";
   };
 
-  nativeBuildInputs = [ ant unzip makeWrapper wrapGAppsHook ];
-  buildInputs = [ jdk javaPackages.jogl_2_4_0 ant rsync ffmpeg batik ];
+  nativeBuildInputs = [ ant unzip makeWrapper stripJavaArchivesHook wrapGAppsHook3 ];
+  buildInputs = [ jdk jogl ant rsync ffmpeg batik ];
 
   dontWrapGApps = true;
 
   buildPhase = ''
+    runHook preBuild
+
     echo "tarring jdk"
-    tar --checkpoint=10000 -czf build/linux/jdk-17.0.6-${arch}.tgz ${jdk}
+    tar --checkpoint=10000 -czf build/linux/jdk-17.0.8-${arch}.tgz ${jdk}
     cp ${ant}/lib/ant/lib/{ant.jar,ant-launcher.jar} app/lib/
     mkdir -p core/library
-    ln -s ${javaPackages.jogl_2_4_0}/share/java/* core/library/
+    ln -s ${jogl}/share/java/* core/library/
     ln -s ${vaqua} app/lib/VAqua9.jar
     ln -s ${flatlaf} app/lib/flatlaf.jar
     ln -s ${lsp4j} java/mode/org.eclipse.lsp4j.jar
@@ -78,23 +80,33 @@ stdenv.mkDerivation rec {
     cd build
     ant build
     cd ..
+
+    runHook postBuild
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/
+    mkdir -p $out/share/applications/
+    cp -dp build/linux/${pname}.desktop $out/share/applications/
     cp -dpr build/linux/work $out/share/${pname}
     rmdir $out/share/${pname}/java
     ln -s ${jdk} $out/share/${pname}/java
     makeWrapper $out/share/${pname}/processing $out/bin/processing \
       ''${gappsWrapperArgs[@]} \
+      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libGL ]}" \
       --prefix _JAVA_OPTIONS " " -Dawt.useSystemAAFontSettings=lcd
     makeWrapper $out/share/${pname}/processing-java $out/bin/processing-java \
       ''${gappsWrapperArgs[@]} \
+      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libGL ]}" \
       --prefix _JAVA_OPTIONS " " -Dawt.useSystemAAFontSettings=lcd
+
+    runHook postInstall
   '';
 
   meta = with lib; {
-    description = "A language and IDE for electronic arts";
+    description = "Language and IDE for electronic arts";
     homepage = "https://processing.org";
     license = with licenses; [ gpl2Only lgpl21Only ];
     platforms = platforms.linux;

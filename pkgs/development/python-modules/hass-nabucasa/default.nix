@@ -1,47 +1,55 @@
-{ lib
-, acme
-, aiohttp
-, atomicwrites-homeassistant
-, attrs
-, buildPythonPackage
-, fetchFromGitHub
-, pycognito
-, pytest-aiohttp
-, pytest-timeout
-, pytestCheckHook
-, pythonOlder
-, snitun
-, syrupy
-, xmltodict
+{
+  lib,
+  acme,
+  aiohttp,
+  atomicwrites-homeassistant,
+  attrs,
+  buildPythonPackage,
+  ciso8601,
+  cryptography,
+  fetchFromGitHub,
+  pycognito,
+  pyjwt,
+  pytest-aiohttp,
+  pytest-timeout,
+  pytestCheckHook,
+  pythonOlder,
+  pythonRelaxDepsHook,
+  setuptools,
+  snitun,
+  syrupy,
+  xmltodict,
 }:
 
 buildPythonPackage rec {
   pname = "hass-nabucasa";
-  version = "0.71.0";
-  format = "setuptools";
+  version = "0.81.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "nabucasa";
-    repo = pname;
+    repo = "hass-nabucasa";
     rev = "refs/tags/${version}";
-    hash = "sha256-2v8LEVYY7PEzcIMaXcy9h+8O2KrU0zTKyZb2IrO35JQ=";
+    hash = "sha256-/sY/JijBCcGcbMjoX0yuhFIWvU+TFVN8sRxBx+CDVVs=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "acme==" "acme>=" \
-      --replace "pycognito==" "pycognito>=" \
-      --replace "snitun==" "snitun>=" \
-  '';
+  pythonRelaxDeps = [ "acme" ];
 
-  propagatedBuildInputs = [
+  nativeBuildInputs = [ pythonRelaxDepsHook ];
+
+  build-system = [ setuptools ];
+
+  dependencies = [
     acme
     aiohttp
     atomicwrites-homeassistant
     attrs
+    ciso8601
+    cryptography
     pycognito
+    pyjwt
     snitun
   ];
 
@@ -53,13 +61,11 @@ buildPythonPackage rec {
     xmltodict
   ];
 
-  pythonImportsCheck = [
-    "hass_nabucasa"
-  ];
+  pythonImportsCheck = [ "hass_nabucasa" ];
 
   meta = with lib; {
-    homepage = "https://github.com/NabuCasa/hass-nabucasa";
     description = "Python module for the Home Assistant cloud integration";
+    homepage = "https://github.com/NabuCasa/hass-nabucasa";
     changelog = "https://github.com/NabuCasa/hass-nabucasa/releases/tag/${version}";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ Scriptkiddi ];

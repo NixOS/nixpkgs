@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ stdenv
+, lib
 , meson
 , ninja
 , sysprof
@@ -15,11 +16,9 @@ stdenv.mkDerivation rec {
   ];
 
   mesonFlags = [
-    "-Dagent=false"
     "-Dsysprofd=none"
     "-Dgtk=false"
     "-Dlibsysprof=false"
-    "-Dlibunwind=false"
     "-Dhelp=false"
     "-Dtools=false"
     "-Dtests=false"

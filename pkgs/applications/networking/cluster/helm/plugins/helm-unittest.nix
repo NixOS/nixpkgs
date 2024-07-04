@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "helm-unittest";
-  version = "0.3.3";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-11rgARUfTbr8FkmR2lI4uoIqzi9cRuVPalUOsxsnO3E=";
+    hash = "sha256-YWzjv1/I+LX3AMeQenI36AsNJkZ6IzbMhM/f5/Kxs2M=";
   };
 
-  vendorHash = "sha256-E9HSP8c/rGG+PLbnT8V5GflpnFItCeXyeLGiqDj4tRI=";
+  vendorHash = "sha256-A2izHBh58yPd2XPm4GKVosPtahUtQ35GbyBdr/L13CQ=";
 
   # NOTE: Remove the install and upgrade hooks.
   postPatch = ''

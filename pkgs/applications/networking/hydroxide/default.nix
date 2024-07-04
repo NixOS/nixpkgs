@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub, fetchpatch }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "hydroxide";
@@ -18,9 +18,10 @@ buildGoModule rec {
   subPackages = [ "cmd/hydroxide" ];
 
   meta = with lib; {
-    description = "A third-party, open-source ProtonMail bridge";
+    description = "Third-party, open-source ProtonMail bridge";
     homepage = "https://github.com/emersion/hydroxide";
     license = licenses.mit;
     maintainers = with maintainers; [ Br1ght0ne ];
+    mainProgram = "hydroxide";
   };
 }

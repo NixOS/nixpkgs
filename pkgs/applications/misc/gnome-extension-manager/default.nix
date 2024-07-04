@@ -7,6 +7,7 @@
 , ninja
 , gettext
 , gtk4
+, appstream
 , appstream-glib
 , desktop-file-utils
 , gobject-introspection
@@ -16,32 +17,30 @@
 , libsoup_3
 , glib
 , libbacktrace
-, python3
 , text-engine
 }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-extension-manager";
-  version = "0.4.2";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "mjakeman";
     repo = "extension-manager";
     rev = "v${version}";
-    hash = "sha256-AQdYZsOaTk+EX1bi/kDI2GcVfu7ZKIyrFpNf/fRcJmo=";
+    hash = "sha256-PWpnLtzQDF2Is63CY9bNzYSo+MiA2oxzJi7B4nQZ7v8=";
   };
 
   nativeBuildInputs = [
+    appstream
     appstream-glib
     desktop-file-utils
     gettext
     glib
     gobject-introspection
-    libadwaita
     meson
     ninja
     pkg-config
-    python3
     wrapGAppsHook4
   ];
 
@@ -49,9 +48,15 @@ stdenv.mkDerivation rec {
     blueprint-compiler
     gtk4
     json-glib
+    libadwaita
     libsoup_3
     libbacktrace
     text-engine
+  ];
+
+  mesonFlags = [
+    (lib.mesonOption "package" "Nix")
+    (lib.mesonOption "distributor" "nixpkgs")
   ];
 
   meta = with lib; {
@@ -59,8 +64,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/mjakeman/extension-manager";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
+    mainProgram = "extension-manager";
     maintainers = with maintainers; [ foo-dogsquared ];
-    # never built on aarch64-linux since first introduction in nixpkgs
-    broken = stdenv.isLinux && stdenv.isAarch64;
   };
 }

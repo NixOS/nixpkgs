@@ -2,23 +2,24 @@
 
 buildGoModule rec {
   pname = "gitlab-elasticsearch-indexer";
-  version = "4.3.9";
+  version = "5.0.0";
 
   # nixpkgs-update: no auto update
   src = fetchFromGitLab {
     owner = "gitlab-org";
     repo = "gitlab-elasticsearch-indexer";
     rev = "v${version}";
-    sha256 = "sha256-/jo44MlLWZCSUWFW2rJSqugNYZCXEs5pfj0f6fZs4zg=";
+    sha256 = "sha256-856lRCW4+FIiXjOzMkfoYws6SMIKXWVtvr+867QEjCk=";
   };
 
-  vendorHash = "sha256-TQ6E5eckZNVL6zzaS9m0izWnQitqfpc4MAEoQOVasnA=";
+  vendorHash = "sha256-2XdbTqNGt97jQUJmE06D6M/VxF9+vJAwMM/fF8MP2oo=";
 
   buildInputs = [ icu ];
   nativeBuildInputs = [ pkg-config ];
 
   meta = with lib; {
-    description = "Indexes Git repositories into Elasticsearch for GitLab.";
+    description = "Indexes Git repositories into Elasticsearch for GitLab";
+    mainProgram = "gitlab-elasticsearch-indexer";
     license = licenses.mit;
     maintainers = with maintainers; [ xanderio yayayayaka ];
   };

@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "obs-transition-table";
-  version = "0.2.6";
+  version = "0.2.7";
 
   src = fetchFromGitHub {
     owner = "exeldro";
     repo = "obs-transition-table";
     rev = version;
-    sha256 = "sha256-Is2XWMPhqd/rd6cXc40eSZTvSRpbroTBzM4SPfHOWPg=";
+    sha256 = "sha256-rGF7hugC5ybpZBAIIXDiy3YDooMawf/yYX2YucQm2/U=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Plugin for OBS Studio to add a Transition Table to the tools menu.";
+    description = "Plugin for OBS Studio to add a Transition Table to the tools menu";
     homepage = "https://github.com/exeldro/obs-transition-table";
     maintainers = with maintainers; [ flexiondotorg ];
     license = licenses.gpl2Plus;

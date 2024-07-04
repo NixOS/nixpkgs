@@ -66,9 +66,6 @@ let
       ${optionalString (cfg.adminUsers != null) "admin_users = ${cfg.adminUsers}"}
       ${optionalString (cfg.statsUsers != null) "stats_users = ${cfg.statsUsers}"}
 
-      # linux
-      pidfile = /run/pgbouncer/pgbouncer.pid
-
       # extra
       ${cfg.extraConfig}
     '';
@@ -80,21 +77,14 @@ in {
 
     # NixOS settings
 
-    enable = mkEnableOption (lib.mdDoc "PostgreSQL connection pooler");
+    enable = mkEnableOption "PostgreSQL connection pooler";
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.pgbouncer;
-      defaultText = literalExpression "pkgs.pgbouncer";
-      description = lib.mdDoc ''
-        The pgbouncer package to use.
-      '';
-    };
+    package = mkPackageOption pkgs "pgbouncer" { };
 
     openFirewall = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         Whether to automatically open the specified TCP port in the firewall.
       '';
     };
@@ -103,10 +93,9 @@ in {
 
     logFile = mkOption {
       type = types.nullOr types.str;
-      default = "pgbouncer.log";
-      description = lib.mdDoc ''
-        Specifies the log file.
-        Either this or syslog has to be specified.
+      default = null;
+      description = ''
+        Specifies a log file in addition to journald.
       '';
     };
 
@@ -114,7 +103,7 @@ in {
       type = types.nullOr types.commas;
       example = "*";
       default = null;
-      description = lib.mdDoc ''
+      description = ''
         Specifies a list (comma-separated) of addresses where to listen for TCP connections.
         You may also use * meaning “listen on all addresses”.
         When not set, only Unix socket connections are accepted.
@@ -126,7 +115,7 @@ in {
     listenPort = mkOption {
       type = types.port;
       default = 6432;
-      description = lib.mdDoc ''
+      description = ''
         Which port to listen on. Applies to both TCP and Unix sockets.
       '';
     };
@@ -134,7 +123,7 @@ in {
     poolMode = mkOption {
       type = types.enum [ "session" "transaction" "statement" ];
       default = "session";
-      description = lib.mdDoc ''
+      description = ''
         Specifies when a server connection can be reused by other clients.
 
         session
@@ -150,7 +139,7 @@ in {
     maxClientConn = mkOption {
       type = types.int;
       default = 100;
-      description = lib.mdDoc ''
+      description = ''
         Maximum number of client connections allowed.
 
         When this setting is increased, then the file descriptor limits in the operating system
@@ -171,7 +160,7 @@ in {
     defaultPoolSize = mkOption {
       type = types.int;
       default = 20;
-      description = lib.mdDoc ''
+      description = ''
         How many server connections to allow per user/database pair.
         Can be overridden in the per-database configuration.
       '';
@@ -180,7 +169,7 @@ in {
     maxDbConnections = mkOption {
       type = types.int;
       default = 0;
-      description = lib.mdDoc ''
+      description = ''
         Do not allow more than this many server connections per database (regardless of user).
         This considers the PgBouncer database that the client has connected to,
         not the PostgreSQL database of the outgoing connection.
@@ -200,7 +189,7 @@ in {
     maxUserConnections = mkOption {
       type = types.int;
       default = 0;
-      description = lib.mdDoc ''
+      description = ''
         Do not allow more than this many server connections per user (regardless of database).
         This considers the PgBouncer user that is associated with a pool,
         which is either the user specified for the server connection
@@ -222,7 +211,7 @@ in {
       type = types.nullOr types.commas;
       example = "extra_float_digits";
       default = null;
-      description = lib.mdDoc ''
+      description = ''
         By default, PgBouncer allows only parameters it can keep track of in startup packets:
         client_encoding, datestyle, timezone and standard_conforming_strings.
 
@@ -247,7 +236,7 @@ in {
         bardb = "host=localhost dbname=bazdb";
         foodb  = "host=host1.example.com port=5432";
       };
-      description = lib.mdDoc ''
+      description = ''
         Detailed information about PostgreSQL database definitions:
         <https://www.pgbouncer.org/config.html#section-databases>
       '';
@@ -260,7 +249,7 @@ in {
       example = {
         user1 = "pool_mode=session";
       };
-      description = lib.mdDoc ''
+      description = ''
         Optional.
 
         Detailed information about PostgreSQL user definitions:
@@ -276,7 +265,7 @@ in {
         "1" = "host=host1.example.com";
         "2" = "host=/tmp/pgbouncer-2 port=5555";
       };
-      description = lib.mdDoc ''
+      description = ''
         Optional.
 
         Detailed information about PostgreSQL database definitions:
@@ -288,7 +277,7 @@ in {
     authType = mkOption {
       type = types.enum [ "cert" "md5" "scram-sha-256" "plain" "trust" "any" "hba" "pam" ];
       default = "md5";
-      description = lib.mdDoc ''
+      description = ''
         How to authenticate users.
 
         cert
@@ -323,7 +312,7 @@ in {
       type = types.nullOr types.path;
       default = null;
       example = "/secrets/pgbouncer_hba";
-      description = lib.mdDoc ''
+      description = ''
         HBA configuration file to use when authType is hba.
 
         See HBA file format details:
@@ -335,7 +324,7 @@ in {
       type = types.nullOr types.path;
       default = null;
       example = "/secrets/pgbouncer_authfile";
-      description = lib.mdDoc ''
+      description = ''
         The name of the file to load user names and passwords from.
 
         See section Authentication file format details:
@@ -350,7 +339,7 @@ in {
       type = types.nullOr types.str;
       default = null;
       example = "pgbouncer";
-      description = lib.mdDoc ''
+      description = ''
         If authUser is set, then any user not specified in authFile will be queried
         through the authQuery query from pg_shadow in the database, using authUser.
         The password of authUser will be taken from authFile.
@@ -365,7 +354,7 @@ in {
       type = types.nullOr types.str;
       default = null;
       example = "SELECT usename, passwd FROM pg_shadow WHERE usename=$1";
-      description = lib.mdDoc ''
+      description = ''
         Query to load user's password from database.
 
         Direct access to pg_shadow requires admin rights.
@@ -380,7 +369,7 @@ in {
       type = types.nullOr types.str;
       default = null;
       example = "authdb";
-      description = lib.mdDoc ''
+      description = ''
         Database name in the [database] section to be used for authentication purposes.
         This option can be either global or overriden in the connection string if this parameter is specified.
       '';
@@ -393,7 +382,7 @@ in {
           sslmode = mkOption {
             type = types.enum [ "disable" "allow" "prefer" "require" "verify-ca" "verify-full" ];
             default = "disable";
-            description = lib.mdDoc ''
+            description = ''
               TLS mode to use for connections from clients.
               TLS connections are disabled by default.
 
@@ -420,22 +409,22 @@ in {
           certFile = mkOption {
             type = types.path;
             example = "/secrets/pgbouncer.key";
-            description = lib.mdDoc "Path to certificate for private key. Clients can validate it";
+            description = "Path to certificate for private key. Clients can validate it";
           };
           keyFile = mkOption {
             type = types.path;
             example = "/secrets/pgbouncer.crt";
-            description = lib.mdDoc "Path to private key for PgBouncer to accept client connections";
+            description = "Path to private key for PgBouncer to accept client connections";
           };
           caFile = mkOption {
             type = types.path;
             example = "/secrets/pgbouncer.crt";
-            description = lib.mdDoc "Path to root certificate file to validate client certificates";
+            description = "Path to root certificate file to validate client certificates";
           };
         };
       });
       default = null;
-      description = lib.mdDoc ''
+      description = ''
         <https://www.pgbouncer.org/config.html#tls-settings>
       '';
     };
@@ -446,7 +435,7 @@ in {
           sslmode = mkOption {
             type = types.enum [ "disable" "allow" "prefer" "require" "verify-ca" "verify-full" ];
             default = "disable";
-            description = lib.mdDoc ''
+            description = ''
               TLS mode to use for connections to PostgreSQL servers.
               TLS connections are disabled by default.
 
@@ -472,22 +461,22 @@ in {
           certFile = mkOption {
             type = types.path;
             example = "/secrets/pgbouncer_server.key";
-            description = lib.mdDoc "Certificate for private key. PostgreSQL server can validate it.";
+            description = "Certificate for private key. PostgreSQL server can validate it.";
           };
           keyFile = mkOption {
             type = types.path;
             example = "/secrets/pgbouncer_server.crt";
-            description = lib.mdDoc "Private key for PgBouncer to authenticate against PostgreSQL server.";
+            description = "Private key for PgBouncer to authenticate against PostgreSQL server.";
           };
           caFile = mkOption {
             type = types.path;
             example = "/secrets/pgbouncer_server.crt";
-            description = lib.mdDoc "Root certificate file to validate PostgreSQL server certificates.";
+            description = "Root certificate file to validate PostgreSQL server certificates.";
           };
         };
       });
       default = null;
-      description = lib.mdDoc ''
+      description = ''
         <https://www.pgbouncer.org/config.html#tls-settings>
       '';
     };
@@ -499,28 +488,28 @@ in {
           enable = mkOption {
             type = types.bool;
             default = false;
-            description = lib.mdDoc ''
+            description = ''
               Toggles syslog on/off.
             '';
           };
           syslogIdent = mkOption {
             type = types.str;
             default = "pgbouncer";
-            description = lib.mdDoc ''
+            description = ''
               Under what name to send logs to syslog.
             '';
           };
           syslogFacility = mkOption {
             type = types.enum [ "auth" "authpriv" "daemon" "user" "local0" "local1" "local2" "local3" "local4" "local5" "local6" "local7" ];
             default = "daemon";
-            description = lib.mdDoc ''
+            description = ''
               Under what facility to send logs to syslog.
             '';
           };
         };
       });
       default = null;
-      description = lib.mdDoc ''
+      description = ''
         <https://www.pgbouncer.org/config.html#log-settings>
       '';
     };
@@ -528,7 +517,7 @@ in {
     verbose = lib.mkOption {
       type = lib.types.int;
       default = 0;
-      description = lib.mdDoc ''
+      description = ''
         Increase verbosity. Mirrors the “-v” switch on the command line.
       '';
     };
@@ -537,7 +526,7 @@ in {
     adminUsers = mkOption {
       type = types.nullOr types.commas;
       default = null;
-      description = lib.mdDoc ''
+      description = ''
         Comma-separated list of database users that are allowed to connect and run all commands on the console.
         Ignored when authType is any, in which case any user name is allowed in as admin.
       '';
@@ -546,7 +535,7 @@ in {
     statsUsers = mkOption {
       type = types.nullOr types.commas;
       default = null;
-      description = lib.mdDoc ''
+      description = ''
         Comma-separated list of database users that are allowed to connect and run read-only queries on the console.
         That means all SHOW commands except SHOW FDS.
       '';
@@ -556,7 +545,7 @@ in {
     openFilesLimit = lib.mkOption {
       type = lib.types.int;
       default = 65536;
-      description = lib.mdDoc ''
+      description = ''
         Maximum number of open files.
       '';
     };
@@ -564,7 +553,7 @@ in {
     user = mkOption {
       type = types.str;
       default = "pgbouncer";
-      description = lib.mdDoc ''
+      description = ''
         The user pgbouncer is run as.
       '';
     };
@@ -572,7 +561,7 @@ in {
     group = mkOption {
       type = types.str;
       default = "pgbouncer";
-      description = lib.mdDoc ''
+      description = ''
         The group pgbouncer is run as.
       '';
     };
@@ -580,7 +569,7 @@ in {
     homeDir = mkOption {
       type = types.path;
       default = "/var/lib/pgbouncer";
-      description = lib.mdDoc ''
+      description = ''
         Specifies the home directory.
       '';
     };
@@ -588,7 +577,7 @@ in {
     # Extra settings
     extraConfig = mkOption {
       type = types.lines;
-      description = lib.mdDoc ''
+      description = ''
         Any additional text to be appended to config.ini
          <https://www.pgbouncer.org/config.html>.
       '';
@@ -608,22 +597,21 @@ in {
 
     systemd.services.pgbouncer = {
       description = "PgBouncer - PostgreSQL connection pooler";
-      wants    = [ "postgresql.service" ];
-      after    = [ "postgresql.service" ];
+      wants    = [ "network-online.target" ] ++ lib.optional config.services.postgresql.enable "postgresql.service";
+      after    = [ "network-online.target" ] ++ lib.optional config.services.postgresql.enable "postgresql.service";
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
-        Type = "forking";
+        Type = "notify";
         User = cfg.user;
         Group = cfg.group;
-        ExecStart = "${pkgs.pgbouncer}/bin/pgbouncer -d ${confFile}";
+        ExecStart = "${lib.getExe pkgs.pgbouncer} ${confFile}";
         ExecReload = "${pkgs.coreutils}/bin/kill -SIGHUP $MAINPID";
         RuntimeDirectory = "pgbouncer";
-        PIDFile = "/run/pgbouncer/pgbouncer.pid";
         LimitNOFILE = cfg.openFilesLimit;
       };
     };
 
-    networking.firewall.allowedTCPPorts = optional cfg.openFirewall cfg.port;
+    networking.firewall.allowedTCPPorts = optional cfg.openFirewall cfg.listenPort;
 
   };
 

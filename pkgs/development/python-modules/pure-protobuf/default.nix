@@ -1,44 +1,50 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, setuptools-scm
-, toml
-, pytestCheckHook
-, pytest-benchmark
-, hatch-vcs
-, hatchling
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  poetry-core,
+  poetry-dynamic-versioning,
+  typing-extensions,
+  pytestCheckHook,
+  pytest-benchmark,
+  pytest-cov,
+  pydantic,
 }:
 
 buildPythonPackage rec {
   pname = "pure-protobuf";
-  version = "2.3.0";
+  version = "3.1.0";
 
   format = "pyproject";
-  disabled = pythonOlder "3.7";
+  # < 3.10 requires get-annotations which isn't packaged yet
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "eigenein";
     repo = "protobuf";
     rev = "refs/tags/${version}";
-    hash = "sha256-nJ3F8dUrqMeWqTV9ErGqrMvofJwBKwNUDfxWIqFh4nY=";
+    hash = "sha256-JXC68iEX5VepIe4qpugvY0Qb3JlM5mPGHnUVWvb1TDA=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
-  nativeBuildInputs = [
-    hatch-vcs
-    hatchling
+  build-system = [
+    poetry-core
+    poetry-dynamic-versioning
+    typing-extensions
   ];
 
-  checkInputs = [
+  dependencies = [ typing-extensions ];
+
+  nativeCheckInputs = [
+    pydantic
     pytestCheckHook
     pytest-benchmark
+    pytest-cov
   ];
 
-  pythonImportsCheck = [
-    "pure_protobuf"
-  ];
+  pytestFlagsArray = [ "--benchmark-disable" ];
+
+  pythonImportsCheck = [ "pure_protobuf" ];
 
   meta = with lib; {
     description = "Python implementation of Protocol Buffers with dataclass-based schemas";

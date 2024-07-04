@@ -11,9 +11,10 @@
 rustPlatform.buildRustPackage rec {
   pname = "nushell_plugin_gstat";
   inherit (nushell) version src;
-  cargoHash = "sha256-6luY3SIRRd9vaY9KIJcj8Q974FW0LtAvRjVpdpzkdLo=";
+  cargoHash = "sha256-stbW+XJvVOMcf93BpcaD1/yFwPioLKvxVQe6kRlJuJ4=";
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ pkg-config ]
+    ++ lib.optionals stdenv.cc.isClang [ rustPlatform.bindgenHook ];
   buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [ Security ];
   cargoBuildFlags = [ "--package nu_plugin_gstat" ];
 
@@ -27,9 +28,10 @@ rustPlatform.buildRustPackage rec {
   };
 
   meta = with lib; {
-    description = "A git status plugin for Nushell";
+    description = "Git status plugin for Nushell";
+    mainProgram = "nu_plugin_gstat";
     homepage = "https://github.com/nushell/nushell/tree/${version}/crates/nu_plugin_gstat";
-    license = licenses.mpl20;
+    license = licenses.mit;
     maintainers = with maintainers; [ mrkkrp aidalgol ];
     platforms = with platforms; all;
   };

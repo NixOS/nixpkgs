@@ -1,21 +1,22 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fixtures
-, pytestCheckHook
-, pythonOlder
-, pyxdg
-, requests
-, requests-mock
-, setuptools
-, tomli
-, urllib3
-, wheel
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fixtures,
+  pytestCheckHook,
+  pythonOlder,
+  pyxdg,
+  requests,
+  requests-mock,
+  rich,
+  setuptools,
+  tomli,
+  urllib3,
 }:
 
 buildPythonPackage rec {
   pname = "podman";
-  version = "4.7.0";
+  version = "5.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -24,17 +25,15 @@ buildPythonPackage rec {
     owner = "containers";
     repo = "podman-py";
     rev = "refs/tags/v${version}";
-    hash = "sha256-0p3o1pTqD5Y2JmyLcGS/OCb3HmRu5iqeFqoPlwAkNfY=";
+    hash = "sha256-3tbhTg060/K4ejT/xjItSu9zf05LR/d0vkg4XDsspEE=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-    wheel
-  ];
+  build-system = [ setuptools ];
 
   propagatedBuildInputs = [
     pyxdg
     requests
+    rich
     tomli
     urllib3
   ];
@@ -49,9 +48,7 @@ buildPythonPackage rec {
     export HOME=$(mktemp -d)
   '';
 
-  pythonImportsCheck = [
-    "podman"
-  ];
+  pythonImportsCheck = [ "podman" ];
 
   disabledTests = [
     # Integration tests require a running container setup
@@ -72,5 +69,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/containers/podman-py/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "podman";
   };
 }

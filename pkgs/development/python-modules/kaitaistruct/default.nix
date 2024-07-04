@@ -1,9 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, fetchFromGitHub
-, brotli
-, lz4
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  fetchFromGitHub,
+  brotli,
+  lz4,
+  setuptools,
 }:
 
 let
@@ -17,6 +19,7 @@ in
 buildPythonPackage rec {
   pname = "kaitaistruct";
   version = "0.10";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -28,13 +31,14 @@ buildPythonPackage rec {
     sed '32ipackages = kaitai/compress' -i setup.cfg
   '';
 
+  build-system = [ setuptools ];
+
   propagatedBuildInputs = [
     brotli
     lz4
   ];
 
-  # no tests
-  dontCheck = true;
+  doCheck = false; # no tests in upstream
 
   pythonImportsCheck = [
     "kaitaistruct"

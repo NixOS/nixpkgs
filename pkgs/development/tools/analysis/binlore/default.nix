@@ -30,8 +30,8 @@ let
   src = fetchFromGitHub {
     owner = "abathur";
     repo = "binlore";
-    rev = "v0.2.0";
-    hash = "sha256-bBJky7Km+mieHTqoMz3mda3KaKxr9ipYpfQqn/4w8J0=";
+    rev = "v0.3.0";
+    hash = "sha256-4Fs6HThfDhKRskuDJx2+hucl8crMRm10K6949JdIwPY=";
   };
   /*
   binlore has one one more yallbacks responsible for

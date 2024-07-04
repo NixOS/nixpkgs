@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "gvproxy";
-  version = "0.7.1";
+  version = "0.7.3";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "gvisor-tap-vsock";
     rev = "v${version}";
-    hash = "sha256-FEYQ/WRplfUCruJigri4w8F1PS7aNq+m9aZ4/FoIxr4=";
+    hash = "sha256-7j/0VuiHjazsPnyQ4NbmvXX1O/NbeB9l6HfmTRZyAW8=";
   };
 
   vendorHash = null;

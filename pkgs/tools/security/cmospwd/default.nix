@@ -12,6 +12,8 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-8pbSl5eUsKa3JrgK/JLk0FnGXcJhKksJN3wWiDPYYvQ=";
   };
 
+  makeFlags = [ "CC:=$(CC)" ];
+
   preConfigure = ''
     cd src
 
@@ -29,9 +31,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "Decrypt password stored in cmos used to access BIOS SETUP";
+    mainProgram = "cmospwd";
     homepage = "https://www.cgsecurity.org/wiki/CmosPwd";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ t4ccer ];
-    platforms = platforms.linux;
+    platforms = [ "x86_64-linux" ];
   };
 })

@@ -43,28 +43,28 @@ index ef517adb..6ab095f0 100644
  
    return res;
 diff --git a/src/builder-source-archive.c b/src/builder-source-archive.c
-index 3c694e57..0de62318 100644
+index ed66d5b..9ca9486 100644
 --- a/src/builder-source-archive.c
 +++ b/src/builder-source-archive.c
-@@ -443,7 +443,7 @@ tar (GFile   *dir,
+@@ -484,7 +484,7 @@ tar (GFile   *dir,
    va_list ap;
- 
+
    va_start (ap, error);
 -  res = flatpak_spawn (dir, NULL, 0, error, "tar", ap);
 +  res = flatpak_spawn (dir, NULL, 0, error, "@tar@", ap);
    va_end (ap);
- 
+
    return res;
-@@ -458,7 +458,7 @@ unzip (GFile   *dir,
-   va_list ap;
- 
-   va_start (ap, error);
--  res = flatpak_spawn (dir, NULL, 0, error, "unzip", ap);
-+  res = flatpak_spawn (dir, NULL, 0, error, "@unzip@", ap);
-   va_end (ap);
- 
-   return res;
-@@ -483,7 +483,7 @@ unrpm (GFile   *dir,
+@@ -496,7 +496,7 @@ unzip (GFile       *dir,
+        GError     **error)
+ {
+   gboolean res;
+-  const char *argv[] = { "unzip", "-q", zip_path, NULL };
++  const char *argv[] = { "@unzip@", "-q", zip_path, NULL };
+
+   res = flatpak_spawnv (dir, NULL, 0, error, argv, NULL);
+
+@@ -522,7 +522,7 @@ unrpm (GFile   *dir,
         GError **error)
  {
    gboolean res;
@@ -73,14 +73,14 @@ index 3c694e57..0de62318 100644
        "sh", /* shell's $0 */
        rpm_path, /* shell's $1 */
        NULL };
-@@ -631,7 +631,7 @@ git (GFile   *dir,
+@@ -677,7 +677,7 @@ git (GFile   *dir,
    va_list ap;
- 
+
    va_start (ap, error);
 -  res = flatpak_spawn (dir, NULL, 0, error, "git", ap);
 +  res = flatpak_spawn (dir, NULL, 0, error, "@git@", ap);
    va_end (ap);
- 
+
    return res;
 diff --git a/src/builder-source-bzr.c b/src/builder-source-bzr.c
 index ceeec94a..8abe6f53 100644

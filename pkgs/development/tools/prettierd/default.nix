@@ -8,18 +8,18 @@
 }:
 mkYarnPackage rec {
   pname = "prettierd";
-  version = "0.25.1";
+  version = "0.25.3";
 
   src = fetchFromGitHub {
     owner = "fsouza";
     repo = "prettierd";
     rev = "v${version}";
-    hash = "sha256-aoRfZ9SJazz0ir1fyHypn3aYqK9DJOLLVPMuFcOm/20=";
+    hash = "sha256-3lvFZ5/p+1kPnHIR2PlQtCY3SVo1rs8IuBigLaabxAE=";
   };
 
   offlineCache = fetchYarnDeps {
     yarnLock = src + "/yarn.lock";
-    hash = "sha256-HsWsRIONRNY9akZ2LXlWcPhH6N5qCKnesaDX1gQp+NU=";
+    hash = "sha256-Ti2b102pzUKB6Xy3LwZ7DlrnW0cRscgNLTUIAKz+6Us=";
   };
 
   packageJSON = ./package.json;

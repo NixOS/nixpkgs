@@ -1,18 +1,19 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, loguru
-, pydantic
-, poetry-core
-, pythonOlder
-, requests
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchFromGitHub,
+  loguru,
+  pydantic,
+  poetry-core,
+  pythonOlder,
+  requests,
 }:
 
 buildPythonPackage rec {
   pname = "pyaussiebb";
-  version = "0.0.18";
-  format = "pyproject";
+  version = "0.1.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 
@@ -20,12 +21,10 @@ buildPythonPackage rec {
     owner = "yaleman";
     repo = "aussiebb";
     rev = "refs/tags/v${version}";
-    hash = "sha256-tEdddVsLFCHRvyLCctDakioiop2xWaJlfGE16P1ukHc=";
+    hash = "sha256-XNf9vYMlTLqhYIVNw9GjPcXpOm5EYCcC4aGukR8g3zc=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     aiohttp
@@ -42,9 +41,7 @@ buildPythonPackage rec {
   # Tests require credentials and requests-testing
   doCheck = false;
 
-  pythonImportsCheck = [
-    "aussiebb"
-  ];
+  pythonImportsCheck = [ "aussiebb" ];
 
   meta = with lib; {
     description = "Module for interacting with the Aussie Broadband APIs";

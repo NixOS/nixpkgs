@@ -1,23 +1,22 @@
 { IOKit
 , buildGoModule
 , fetchFromGitHub
-, fetchpatch
 , lib
 , stdenv
 }:
 
 buildGoModule rec {
   pname = "avalanchego";
-  version = "1.10.11";
+  version = "1.11.8";
 
   src = fetchFromGitHub {
     owner = "ava-labs";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-6eebc8+SsonTngOIM5C+cxqzhFSLK5wLB/sBhVQuTQ4=";
+    hash = "sha256-lb0kjPvpjqHQ+DUdrQmaSIaxEdwsOq29RTe3zL25NQc=";
   };
 
-  vendorHash = "sha256-sBoH/0SQtHO/fgyfve4bpy74GIS8qWr6KcIQyOnkgkI=";
+  vendorHash = "sha256-CN+2+aOOPF7gouvp7lCfRIKA1quNCcrvzHg8lF6J4f8=";
   # go mod vendor has a bug, see: https://github.com/golang/go/issues/57529
   proxyVendor = true;
 
@@ -41,5 +40,6 @@ buildGoModule rec {
     changelog = "https://github.com/ava-labs/avalanchego/releases/tag/v${version}";
     license = licenses.bsd3;
     maintainers = with maintainers; [ urandom qjoly ];
+    mainProgram = "avalanchego";
   };
 }

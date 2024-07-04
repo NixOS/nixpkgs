@@ -1,10 +1,12 @@
 { lib
 , buildNpmPackage
 , copyDesktopItems
-, electron_22
+, electron
 , buildGoModule
 , esbuild
 , fetchFromGitHub
+, jq
+, deltachat-rpc-server
 , libdeltachat
 , makeDesktopItem
 , makeWrapper
@@ -15,17 +17,19 @@
 , sqlcipher
 , stdenv
 , CoreServices
+, testers
+, deltachat-desktop
 }:
 
 let
   esbuild' = esbuild.override {
     buildGoModule = args: buildGoModule (args // rec {
-      version = "0.14.54";
+      version = "0.19.8";
       src = fetchFromGitHub {
         owner = "evanw";
         repo = "esbuild";
         rev = "v${version}";
-        hash = "sha256-qCtpy69ROCspRgPKmCV0YY/EOSWiNU/xwDblU0bQp4w=";
+        hash = "sha256-f13YbgHFQk71g7twwQ2nSOGA0RG0YYM01opv6txRMuw=";
       };
       vendorHash = "sha256-+BfxCyg0KkDQpHt/wycy/8CTG6YBA/VJvJFhhzUnSiQ=";
     });
@@ -33,18 +37,26 @@ let
 in
 buildNpmPackage rec {
   pname = "deltachat-desktop";
-  version = "1.40.4";
+  version = "1.46.1";
 
   src = fetchFromGitHub {
     owner = "deltachat";
     repo = "deltachat-desktop";
     rev = "v${version}";
-    hash = "sha256-cNCM0McWBmHUUutMDa/Cy0qOxhx4NJnhjrW++HRl/nU=";
+    hash = "sha256-90/Wmh0h75i3kvqj3Wo+A3KlKW8LLDWfPza2gDrDY6E=";
   };
 
-  npmDepsHash = "sha256-CoWa0l2If+SGqD47nP91qsvUlTzOEWP5or5zNUdV7P0=";
+  npmDepsHash = "sha256-UzWxMd+DYH5A8Zo1rzi8oIsoKbmzsVbGpr3uWtc02rY=";
+
+  postPatch = ''
+    test \
+      $(jq -r '.packages."node_modules/@deltachat/jsonrpc-client".version' package-lock.json) \
+      = $(pkg-config --modversion deltachat) \
+      || (echo "error: libdeltachat version does not match jsonrpc-client" && exit 1)
+  '';
 
   nativeBuildInputs = [
+    jq
     makeWrapper
     pkg-config
     python3
@@ -53,6 +65,7 @@ buildNpmPackage rec {
   ];
 
   buildInputs = [
+    deltachat-rpc-server
     libdeltachat
   ] ++ lib.optionals stdenv.isDarwin [
     CoreServices
@@ -66,7 +79,8 @@ buildNpmPackage rec {
   };
 
   preBuild = ''
-    rm -r node_modules/deltachat-node/node/prebuilds
+    rm node_modules/@deltachat/stdio-rpc-server-*/deltachat-rpc-server
+    ln -s ${lib.getExe deltachat-rpc-server} node_modules/@deltachat/stdio-rpc-server-linux-*
   '';
 
   npmBuildScript = "build4production";
@@ -82,6 +96,9 @@ buildNpmPackage rec {
     awk '!/^#/ && NF' build/packageignore_list \
       | xargs -I {} sh -c "rm -rf $out/lib/node_modules/deltachat-desktop/{}" || true
 
+    # required for electron to import index.js as a module
+    cp package.json $out/lib/node_modules/deltachat-desktop
+
     install -D build/icon.png \
       $out/share/icons/hicolor/scalable/apps/deltachat.png
 
@@ -92,7 +109,7 @@ buildNpmPackage rec {
         $out/lib/node_modules/deltachat-desktop/html-dist/fonts
     done
 
-    makeWrapper ${electron_22}/bin/electron $out/bin/deltachat \
+    makeWrapper ${lib.getExe electron} $out/bin/deltachat \
       --set LD_PRELOAD ${sqlcipher}/lib/libsqlcipher${stdenv.hostPlatform.extensions.sharedLibrary} \
       --add-flags $out/lib/node_modules/deltachat-desktop
 
@@ -115,6 +132,12 @@ buildNpmPackage rec {
       "x-scheme-handler/mailto"
     ];
   });
+
+  passthru.tests = {
+    version = testers.testVersion {
+      package = deltachat-desktop;
+    };
+  };
 
   meta = with lib; {
     description = "Email-based instant messaging for Desktop";

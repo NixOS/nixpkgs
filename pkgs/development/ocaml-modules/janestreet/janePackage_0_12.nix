@@ -1,11 +1,9 @@
 { lib, fetchFromGitHub, buildDunePackage, defaultVersion ? "0.12.0" }:
 
-{ pname, version ? defaultVersion, hash, ...}@args:
+{ pname, version ? defaultVersion, duneVersion ? "3", hash, ...}@args:
 
 buildDunePackage (args // {
-  inherit version;
-
-  duneVersion = "1";
+  inherit version duneVersion;
 
   minimalOCamlVersion = "4.07";
 

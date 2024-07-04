@@ -1,15 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, msrest
-, msrestazure
-, azure-common
-, azure-mgmt-nspkg
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  msrest,
+  msrestazure,
+  azure-common,
+  azure-mgmt-nspkg,
 }:
 
 buildPythonPackage rec {
   pname = "azure-mgmt-machinelearningcompute";
   version = "0.4.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

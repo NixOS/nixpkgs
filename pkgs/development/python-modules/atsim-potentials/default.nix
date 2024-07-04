@@ -1,35 +1,36 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, configparser
-, pyparsing
-, pytestCheckHook
-, future
-, openpyxl
-, wrapt
-, scipy
-, cexprtk
-, deepdiff
-, sympy
+{
+  lib,
+  buildPythonPackage,
+  pythonAtLeast,
+  fetchFromGitHub,
+  setuptools,
+  configparser,
+  pyparsing,
+  pytestCheckHook,
+  future,
+  openpyxl,
+  wrapt,
+  scipy,
+  cexprtk,
+  deepdiff,
+  sympy,
 }:
 
 buildPythonPackage rec {
-  version = "0.4.1";
   pname = "atsim-potentials";
+  version = "0.4.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mjdrushton";
-    repo = pname;
+    repo = "atsim-potentials";
     rev = "refs/tags/${version}";
     hash = "sha256-G7lNqwEUwAT0f7M2nUTCxpXOAl6FWKlh7tcsvbur1eM=";
   };
 
-  postPatch = ''
-    # Remove conflicting openpyxl dependency version check
-    sed -i '/openpyxl==2.6.4/d' setup.py
-  '';
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     cexprtk
     configparser
     future
@@ -45,10 +46,21 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  # these files try to import `distutils` removed in Python 3.12
+  disabledTestPaths = lib.optionals (pythonAtLeast "3.12") [
+    "tests/config/test_configuration_eam.py"
+    "tests/config/test_configuration_eam_fs.py"
+    "tests/config/test_configuration_pair.py"
+    "tests/test_dlpoly_writeTABEAM.py"
+    "tests/test_documentation_examples.py"
+    "tests/test_eam_adp_writer.py"
+    "tests/test_gulp_writer.py"
+    "tests/test_lammpsWriteEAM.py"
+  ];
+
   disabledTests = [
     # Missing lammps executable
     "eam_tabulate_example2TestCase"
-    "test_pymath"
   ];
 
   pythonImportsCheck = [ "atsim.potentials" ];
@@ -56,6 +68,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://github.com/mjdrushton/atsim-potentials";
     description = "Provides tools for working with pair and embedded atom method potential models including tabulation routines for DL_POLY and LAMMPS";
+    mainProgram = "potable";
     license = licenses.mit;
     maintainers = [ ];
   };

@@ -15,8 +15,14 @@ stdenv.mkDerivation  rec {
   nativeBuildInputs = [ pkg-config wafHook python3 ];
   buildInputs = [ cairo fftw gtkmm2 lv2 lvtk ];
 
+  postPatch = ''
+    # U was removed in python 3.11 because it had no effect
+    substituteInPlace waflib/*.py \
+      --replace "m='rU" "m='r"
+  '';
+
   meta = with lib; {
-    description = "An LV2 port of the internal modules found in Alsa Modular Synth";
+    description = "LV2 port of the internal modules found in Alsa Modular Synth";
     homepage = "https://github.com/blablack/ams-lv2";
     license = licenses.gpl3;
     maintainers = [ maintainers.goibhniu ];

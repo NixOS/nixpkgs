@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -19,16 +20,12 @@ buildPythonPackage rec {
     hash = "sha256-MZeLwU1gODqH752y/nc9WkUArl48pyq9Vun7tX620No=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   # Module has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "exitcode"
-  ];
+  pythonImportsCheck = [ "exitcode" ];
 
   meta = with lib; {
     description = "Preferred system exit codes as defined by sysexits.h";

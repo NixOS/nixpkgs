@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook ];
 
   meta = with lib; {
-    description = "A daemon that routes multicast using IGMP forwarding";
+    description = "Daemon that routes multicast using IGMP forwarding";
     homepage = "https://github.com/pali/igmpproxy/";
     changelog = "https://github.com/pali/igmpproxy/releases/tag/${version}";
     license = licenses.gpl2Plus;
@@ -22,5 +22,6 @@ stdenv.mkDerivation rec {
     # The maintainer is using this on linux, but if you test it on other platforms
     # please add them here!
     platforms = platforms.linux;
+    mainProgram = "igmpproxy";
   };
 }

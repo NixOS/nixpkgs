@@ -29,7 +29,7 @@ python3Packages.buildPythonApplication rec {
   doCheck = false;
 
   meta = {
-    description = "A FUSE filesystem that fully integrates with git";
+    description = "FUSE filesystem that fully integrates with git";
     longDescription = ''
       A git remote repository's branch can be mounted locally,
       and any subsequent changes made to the files will be
@@ -39,5 +39,6 @@ python3Packages.buildPythonApplication rec {
     license = lib.licenses.asl20;
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.robbinch ];
+    mainProgram = "gitfs";
   };
 }

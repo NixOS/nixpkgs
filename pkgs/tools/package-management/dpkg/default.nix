@@ -18,12 +18,12 @@
 
 stdenv.mkDerivation rec {
   pname = "dpkg";
-  version = "1.22.0";
+  version = "1.22.5";
 
   src = fetchgit {
     url = "https://git.launchpad.net/ubuntu/+source/dpkg";
     rev = "applied/${version}";
-    hash = "sha256-q+kP0PuQyGKuKahA1/TwtJG380a/sNR433xZhxvGO9M=";
+    hash = "sha256-Rm3DacQF/0yAVtDaixPzE8IZ2Y+RZneCCVBCoYM64K4=";
   };
 
   configureFlags = [
@@ -90,7 +90,7 @@ stdenv.mkDerivation rec {
   setupHook = ./setup-hook.sh;
 
   meta = with lib; {
-    description = "The Debian package manager";
+    description = "Debian package manager";
     homepage = "https://wiki.debian.org/Teams/Dpkg";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;

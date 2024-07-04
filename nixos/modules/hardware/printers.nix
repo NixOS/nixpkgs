@@ -2,18 +2,23 @@
 with lib;
 let
   cfg = config.hardware.printers;
-  ppdOptionsString = options: optionalString (options != {})
-    (concatStringsSep " "
-      (mapAttrsToList (name: value: "-o '${name}'='${value}'") options)
-    );
-  ensurePrinter = p: ''
-    ${pkgs.cups}/bin/lpadmin -p '${p.name}' -E \
-      ${optionalString (p.location != null) "-L '${p.location}'"} \
-      ${optionalString (p.description != null) "-D '${p.description}'"} \
-      -v '${p.deviceUri}' \
-      -m '${p.model}' \
-      ${ppdOptionsString p.ppdOptions}
+
+  ensurePrinter = p: let
+    args = cli.toGNUCommandLineShell {} ({
+      p = p.name;
+      v = p.deviceUri;
+      m = p.model;
+    } // optionalAttrs (p.location != null) {
+      L = p.location;
+    } // optionalAttrs (p.description != null) {
+      D = p.description;
+    } // optionalAttrs (p.ppdOptions != {}) {
+      o = mapAttrsToList (name: value: "${name}=${value}") p.ppdOptions;
+    });
+  in ''
+    ${pkgs.cups}/bin/lpadmin ${args} -E
   '';
+
   ensureDefaultPrinter = name: ''
     ${pkgs.cups}/bin/lpadmin -d '${name}'
   '';
@@ -30,12 +35,12 @@ in {
       ensureDefaultPrinter = mkOption {
         type = types.nullOr printerName;
         default = null;
-        description = lib.mdDoc ''
+        description = ''
           Ensures the named printer is the default CUPS printer / printer queue.
         '';
       };
       ensurePrinters = mkOption {
-        description = lib.mdDoc ''
+        description = ''
           Will regularly ensure that the given CUPS printers are configured as declared here.
           If a printer's options are manually changed afterwards, they will be overwritten eventually.
           This option will never delete any printer, even if removed from this list.
@@ -49,7 +54,7 @@ in {
             name = mkOption {
               type = printerName;
               example = "BrotherHL_Workroom";
-              description = lib.mdDoc ''
+              description = ''
                 Name of the printer / printer queue.
                 May contain any printable characters except "/", "#", and space.
               '';
@@ -58,7 +63,7 @@ in {
               type = types.nullOr types.str;
               default = null;
               example = "Workroom";
-              description = lib.mdDoc ''
+              description = ''
                 Optional human-readable location.
               '';
             };
@@ -66,7 +71,7 @@ in {
               type = types.nullOr types.str;
               default = null;
               example = "Brother HL-5140";
-              description = lib.mdDoc ''
+              description = ''
                 Optional human-readable description.
               '';
             };
@@ -76,7 +81,7 @@ in {
                 "ipp://printserver.local/printers/BrotherHL_Workroom"
                 "usb://HP/DESKJET%20940C?serial=CN16E6C364BH"
               '';
-              description = lib.mdDoc ''
+              description = ''
                 How to reach the printer.
                 {command}`lpinfo -v` shows a list of supported device URIs and schemes.
               '';
@@ -86,7 +91,7 @@ in {
               example = literalExpression ''
                 "gutenprint.''${lib.versions.majorMinor (lib.getVersion pkgs.gutenprint)}://brother-hl-5140/expert"
               '';
-              description = lib.mdDoc ''
+              description = ''
                 Location of the ppd driver file for the printer.
                 {command}`lpinfo -m` shows a list of supported models.
               '';
@@ -98,7 +103,7 @@ in {
                 Duplex = "DuplexNoTumble";
               };
               default = {};
-              description = lib.mdDoc ''
+              description = ''
                 Sets PPD options for the printer.
                 {command}`lpoptions [-p printername] -l` shows supported PPD options for the given printer.
               '';

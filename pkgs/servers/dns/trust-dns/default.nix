@@ -7,15 +7,15 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "trust-dns";
-  version = "0.23.0";
+  version = "0.24.1";
 
   src = fetchFromGitHub {
-    owner = "bluejekyll";
-    repo = "trust-dns";
+    owner = "hickory-dns";
+    repo = "hickory-dns";
     rev = "v${version}";
-    sha256 = "sha256-CfFEhZEk1Z7VG0n8EvyQwHvZIOEES5GKpm5tMeqhRVY=";
+    hash = "sha256-szq21RuRmkhAfHlzhGQYpwjiIRkavFCPETOt+6TxhP4=";
   };
-  cargoHash = "sha256-jmow/jtdbuKFovXWA5xbgM67iJmkwP35hiOivIJ5JdM=";
+  cargoHash = "sha256-zGn5vHwsHgpkgOr30QiyScqnfXjH55LQIVtxoUUox64=";
 
   buildInputs = [ openssl ];
   nativeBuildInputs = [ pkg-config ];
@@ -24,10 +24,11 @@ rustPlatform.buildRustPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "A Rust based DNS client, server, and resolver";
+    description = "Rust based DNS client, server, and resolver";
     homepage = "https://trust-dns.org/";
     maintainers = with maintainers; [ colinsane ];
     platforms = platforms.linux;
     license = with licenses; [ asl20 mit ];
+    mainProgram = "hickory-dns";
   };
 }

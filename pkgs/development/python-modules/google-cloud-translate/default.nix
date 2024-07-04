@@ -1,28 +1,32 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, google-api-core
-, google-cloud-core
-, google-cloud-testutils
-, mock
-, proto-plus
-, protobuf
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  google-api-core,
+  google-cloud-core,
+  google-cloud-testutils,
+  mock,
+  proto-plus,
+  protobuf,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-translate";
-  version = "3.12.0";
-  format = "setuptools";
+  version = "3.15.3";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-l0I8HDv2FBAvHUJ4F1oDxSPltKzWSLAKNAfQIwKqzNk=";
+    hash = "sha256-7Vh6HmDPhHw7Gt1rKCVuLRci+nOkKFM09excqTPmFvI=";
   };
+
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     google-api-core
@@ -34,8 +38,8 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     google-cloud-testutils
     mock
-    pytestCheckHook
     pytest-asyncio
+    pytestCheckHook
   ];
 
   preCheck = ''
@@ -48,6 +52,11 @@ buildPythonPackage rec {
     "google.cloud.translate_v2"
     "google.cloud.translate_v3"
     "google.cloud.translate_v3beta1"
+  ];
+
+  disabledTests = [
+    # Tests require PROJECT_ID
+    "test_list_glossaries"
   ];
 
   meta = with lib; {

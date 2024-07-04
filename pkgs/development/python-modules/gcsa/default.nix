@@ -1,22 +1,23 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, pytestCheckHook
-, pyfakefs
-, tzlocal
-, google-api-python-client
-, google-auth-httplib2
-, google-auth-oauthlib
-, python-dateutil
-, beautiful-date
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  pytestCheckHook,
+  pyfakefs,
+  tzlocal,
+  google-api-python-client,
+  google-auth-httplib2,
+  google-auth-oauthlib,
+  python-dateutil,
+  beautiful-date,
 }:
 
 buildPythonPackage rec {
   pname = "gcsa";
   version = "2.1.0";
   format = "setuptools";
-  disable = pythonOlder "3.6";
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "kuzmoyev";
@@ -34,7 +35,10 @@ buildPythonPackage rec {
     beautiful-date
   ];
 
-  nativeCheckInputs = [ pytestCheckHook pyfakefs ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    pyfakefs
+  ];
   pythonImportsCheck = [ "gcsa" ];
 
   meta = with lib; {

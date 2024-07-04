@@ -1,16 +1,20 @@
 { alsa-lib
+, libuuid
 , cups
 , dpkg
 , fetchurl
-, gjs
 , glib
+, libssh2
 , gtk3
 , lib
 , libayatana-appindicator
 , libdrm
 , libgcrypt
 , libkrb5
+, libnotify
 , mesa # for libgbm
+, libpulseaudio
+, libGL
 , nss
 , xorg
 , systemd
@@ -18,19 +22,20 @@
 , vips
 , at-spi2-core
 , autoPatchelfHook
-, wrapGAppsHook
-, makeWrapper
+, makeShellWrapper
+, wrapGAppsHook3
+, commandLineArgs ? ""
 }:
 
 let
   sources = import ./sources.nix;
   srcs = {
     x86_64-linux = fetchurl {
-      url = "https://dldir1.qq.com/qqfile/qq/QQNT/${sources.urlhash}/linuxqq_${sources.version}_amd64.deb";
+      url = sources.amd64_url;
       hash = sources.amd64_hash;
     };
     aarch64-linux = fetchurl {
-      url = "https://dldir1.qq.com/qqfile/qq/QQNT/${sources.urlhash}/linuxqq_${sources.version}_arm64.deb";
+      url = sources.arm64_url;
       hash = sources.arm64_hash;
     };
   };
@@ -43,8 +48,8 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [
     autoPatchelfHook
-    # makeBinaryWrapper not support shell wrapper specifically for `NIXOS_OZONE_WL`.
-    (wrapGAppsHook.override { inherit makeWrapper; })
+    makeShellWrapper
+    wrapGAppsHook3
     dpkg
   ];
 
@@ -55,6 +60,7 @@ stdenv.mkDerivation {
     glib
     gtk3
     libdrm
+    libpulseaudio
     libgcrypt
     libkrb5
     mesa
@@ -62,6 +68,8 @@ stdenv.mkDerivation {
     vips
     xorg.libXdamage
   ];
+
+  dontWrapGApps = true;
 
   runtimeDependencies = map lib.getLib [
     systemd
@@ -76,7 +84,13 @@ stdenv.mkDerivation {
     substituteInPlace $out/share/applications/qq.desktop \
       --replace "/opt/QQ/qq" "$out/bin/qq" \
       --replace "/usr/share" "$out/share"
-    ln -s $out/opt/QQ/qq $out/bin/qq
+    makeShellWrapper $out/opt/QQ/qq $out/bin/qq \
+      --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH" \
+      --prefix LD_PRELOAD : "${lib.makeLibraryPath [ libssh2 ]}/libssh2.so.1" \
+      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libGL libuuid]}" \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
+      --add-flags ${lib.escapeShellArg commandLineArgs} \
+      "''${gappsWrapperArgs[@]}"
 
     # Remove bundled libraries
     rm -r $out/opt/QQ/resources/app/sharp-lib
@@ -88,14 +102,10 @@ stdenv.mkDerivation {
     ln -s ${libayatana-appindicator}/lib/libayatana-appindicator3.so \
       $out/opt/QQ/libappindicator3.so
 
-    runHook postInstall
-  '';
+    ln -s ${libnotify}/lib/libnotify.so \
+      $out/opt/QQ/libnotify.so
 
-  preFixup = ''
-    gappsWrapperArgs+=(
-      --prefix PATH : "${lib.makeBinPath [ gjs ]}"
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
-    )
+    runHook postInstall
   '';
 
   passthru.updateScript = ./update.sh;
@@ -106,6 +116,6 @@ stdenv.mkDerivation {
     platforms = [ "x86_64-linux" "aarch64-linux" ];
     license = licenses.unfree;
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    maintainers = with lib.maintainers; [ fee1-dead ];
+    maintainers = with lib.maintainers; [ fee1-dead bot-wxt1221 ];
   };
 }

@@ -2,21 +2,21 @@
 
 buildNpmPackage rec {
   pname = "percollate";
-  version = "4.0.2";
+  version = "4.2.1";
 
   src = fetchFromGitHub {
     owner = "danburzo";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-QLbLg/zdDCZsRKgC4vR0OT//JHaapGmX33l7jIqUc1M=";
+    hash = "sha256-vGBGw9dUOSvSqM4WN53bb2LRduLjR6fW99C0ScdMVXk=";
   };
 
-  npmDepsHash = "sha256-Hxhgjdiz0zC/UlFXK8vvKZFI963Wi2Wx6iHWegr6f10=";
+  npmDepsHash = "sha256-Qne4XjUmJS5e6x380CFY3Kd7/5coXHMxniMfqYIHQcQ=";
 
   dontNpmBuild = true;
 
   # Dev dependencies include an unnecessary Java dependency (epubchecker)
-  # https://github.com/danburzo/percollate/blob/v4.0.2/package.json#L40
+  # https://github.com/danburzo/percollate/blob/v4.2.1/package.json#L40
   npmInstallFlags = [ "--omit=dev" ];
 
   nativeBuildInputs = [ makeWrapper ];
@@ -35,7 +35,7 @@ buildNpmPackage rec {
   '';
 
   meta = with lib; {
-    description = "A command-line tool to turn web pages into readable PDF, EPUB, HTML, or Markdown docs";
+    description = "Command-line tool to turn web pages into readable PDF, EPUB, HTML, or Markdown docs";
     homepage = "https://github.com/danburzo/percollate";
     license = licenses.mit;
     maintainers = [ maintainers.austinbutler ];

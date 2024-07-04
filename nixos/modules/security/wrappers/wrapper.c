@@ -172,6 +172,13 @@ static int make_caps_ambient(const char *self_path) {
 int main(int argc, char **argv) {
     ASSERT(argc >= 1);
 
+    // argv[0] goes into a lot of places, to a far greater degree than other elements
+    // of argv. glibc has had buffer overflows relating to argv[0], eg CVE-2023-6246.
+    // Since we expect the wrappers to be invoked from either $PATH or /run/wrappers/bin,
+    // there should be no reason to pass any particularly large values here, so we can
+    // be strict for strictness' sake.
+    ASSERT(strlen(argv[0]) < 512);
+
     int debug = getenv(wrapper_debug) != NULL;
 
     // Drop insecure environment variables explicitly

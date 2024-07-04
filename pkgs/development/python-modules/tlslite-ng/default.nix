@@ -1,12 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, ecdsa
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  ecdsa,
 }:
 
 buildPythonPackage rec {
   pname = "tlslite-ng";
   version = "0.7.6";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -16,10 +18,9 @@ buildPythonPackage rec {
   buildInputs = [ ecdsa ];
 
   meta = with lib; {
-    description = "Pure python implementation of SSL and TLS.";
+    description = "Pure python implementation of SSL and TLS";
     homepage = "https://pypi.python.org/pypi/tlslite-ng";
     license = licenses.lgpl2;
     maintainers = [ ];
   };
-
 }

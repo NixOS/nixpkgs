@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "crd2pulumi";
-  version = "1.2.5";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "pulumi";
     repo = "crd2pulumi";
     rev = "v${version}";
-    sha256 = "sha256-Km9zL9QQgQjmIaAILzJy8oSd9GyZn/MnmBYTRMFtXlE=";
+    sha256 = "sha256-PfgFDYZS5zKywQH6f5L8mFmEagxcEQ74Ht7D22hSYHY=";
   };
 
-  vendorHash = "sha256-iWFZ20U4S2utIqhoXgLtT4pp5e9h8IpbveIKHPe0AAw=";
+  vendorHash = "sha256-k6YJhYY2P/D8Vbsp5PExKrcGXBv2GsIkqb3m6KeYm6g=";
 
   ldflags = [ "-s" "-w" "-X github.com/pulumi/crd2pulumi/gen.Version=${src.rev}" ];
 
@@ -19,6 +19,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Generate typed CustomResources from a Kubernetes CustomResourceDefinition";
+    mainProgram = "crd2pulumi";
     homepage = "https://github.com/pulumi/crd2pulumi";
     license = licenses.asl20;
     maintainers = with maintainers; [ flokli ];

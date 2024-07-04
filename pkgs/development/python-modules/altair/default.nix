@@ -1,29 +1,30 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
 
-# Runtime dependencies
-, hatchling
-, toolz
-, numpy
-, jsonschema
-, typing-extensions
-, pandas
-, jinja2
-, packaging
+  # Runtime dependencies
+  hatchling,
+  toolz,
+  numpy,
+  jsonschema,
+  typing-extensions,
+  pandas,
+  jinja2,
+  packaging,
 
-# Build, dev and test dependencies
-, anywidget
-, ipython
-, pytestCheckHook
-, vega_datasets
-, sphinx
+  # Build, dev and test dependencies
+  anywidget,
+  ipython,
+  pytestCheckHook,
+  vega-datasets,
+  sphinx,
 }:
 
 buildPythonPackage rec {
   pname = "altair";
-  version = "5.1.2";
+  version = "5.2.0";
   format = "pyproject";
   disabled = pythonOlder "3.8";
 
@@ -31,12 +32,10 @@ buildPythonPackage rec {
     owner = "altair-viz";
     repo = "altair";
     rev = "refs/tags/v${version}";
-    hash = "sha256-30M+rt5IfD4hvK5CwaW8HfQacDBPjowff/f9o7iido0=";
+    hash = "sha256-uTG+V0SQgAQtMjvrVvKVKgIBT9qO+26EPRxQCEXj/gc=";
   };
 
-  nativeBuildInputs = [
-    hatchling
-  ];
+  nativeBuildInputs = [ hatchling ];
 
   propagatedBuildInputs = [
     jinja2
@@ -51,7 +50,7 @@ buildPythonPackage rec {
     anywidget
     ipython
     sphinx
-    vega_datasets
+    vega-datasets
     pytestCheckHook
   ];
 
@@ -69,11 +68,14 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "A declarative statistical visualization library for Python.";
+    description = "Declarative statistical visualization library for Python";
     homepage = "https://altair-viz.github.io";
     downloadPage = "https://github.com/altair-viz/altair";
     changelog = "https://altair-viz.github.io/releases/changes.html";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ teh vinetos ];
+    maintainers = with maintainers; [
+      teh
+      vinetos
+    ];
   };
 }

@@ -1,27 +1,26 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, installShellFiles
-, qovery-cli
-, testers
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  qovery-cli,
+  testers,
 }:
 
 buildGoModule rec {
   pname = "qovery-cli";
-  version = "0.73.0";
+  version = "0.94.17";
 
   src = fetchFromGitHub {
     owner = "Qovery";
     repo = "qovery-cli";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Iu1ZgcjNDIYbgQMzt88vOyYKrKujMY196MV6O//Pg6E=";
+    hash = "sha256-d3ZHnQtQoDnUgNvPpKhV1Wg6pIIM0rQ/kfb4VbBGSsU=";
   };
 
-  vendorHash = "sha256-QMuaM4u8y90WCbC/V6StPGK9uOm52LVQrLakgm3viP8=";
+  vendorHash = "sha256-maeoEs6He4Qb4EOYCx44Ly8713NFn/5qWgNjb1s2ajw=";
 
-  nativeBuildInputs = [
-    installShellFiles
-  ];
+  nativeBuildInputs = [ installShellFiles ];
 
   postInstall = ''
     installShellCompletion --cmd ${pname} \
@@ -41,5 +40,6 @@ buildGoModule rec {
     changelog = "https://github.com/Qovery/qovery-cli/releases/tag/v${version}";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];
+    mainProgram = "qovery-cli";
   };
 }

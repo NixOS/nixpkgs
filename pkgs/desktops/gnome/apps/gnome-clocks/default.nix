@@ -9,11 +9,9 @@
 , itstool
 , desktop-file-utils
 , vala
-, gobject-introspection
 , libxml2
 , gtk4
 , glib
-, gsound
 , sound-theme-freedesktop
 , gsettings-desktop-schemas
 , gnome-desktop
@@ -27,11 +25,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-clocks";
-  version = "44.0";
+  version = "46.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-clocks/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "F9epc2XLjxoCOh1491AfM1Mhf6dXfXOv59DKHjtPODg=";
+    hash = "sha256-6qPFeM3O+XVOZotWJnCbc/NSZxAjX0tyB20v9JpPmcc=";
   };
 
   nativeBuildInputs = [
@@ -44,10 +42,6 @@ stdenv.mkDerivation rec {
     wrapGAppsHook4
     desktop-file-utils
     libxml2
-    gobject-introspection # for finding vapi files
-    # error: Package `...' not found in specified Vala API directories or GObject-Introspection GIR directories
-    # TODO: the vala setuphook should look for vala filess in targetOffset instead of hostOffset
-    gsound
   ];
 
   buildInputs = [
@@ -59,7 +53,6 @@ stdenv.mkDerivation rec {
     geocode-glib_2
     geoclue2
     libgweather
-    gsound
     libadwaita
   ];
 
@@ -80,8 +73,9 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    homepage = "https://wiki.gnome.org/Apps/Clocks";
+    homepage = "https://apps.gnome.org/Clocks/";
     description = "Clock application designed for GNOME 3";
+    mainProgram = "gnome-clocks";
     maintainers = teams.gnome.members;
     license = licenses.gpl2Plus;
     platforms = platforms.unix;

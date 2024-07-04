@@ -16,18 +16,14 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-rVJAaeg27SdM8cTx12rKLIGEYtXUhLHXUYpT78oVNlo=";
 
-  # Cargo.lock is outdated.
-  preConfigure = ''
-    cargo update --offline
-  '';
-
   postInstall = "make PREFIX=$out copy-data";
 
   meta = with lib; {
-    description = "A cli program for produce fake datas.";
+    description = "CLI program for produce fake datas";
     homepage = "https://github.com/mothsart/pouf";
     changelog = "https://github.com/mothsart/pouf/releases/tag/${version}";
     maintainers = with maintainers; [ mothsart ];
     license = with licenses; [ mit ];
+    mainProgram = "pouf";
   };
 }

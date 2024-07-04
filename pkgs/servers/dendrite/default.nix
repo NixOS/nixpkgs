@@ -1,18 +1,25 @@
-{ lib, buildGoModule, fetchFromGitHub, nix-update-script
-, nixosTests, postgresql, postgresqlTestHook }:
+{ lib
+, stdenv
+, buildGoModule
+, fetchFromGitHub
+, nix-update-script
+, nixosTests
+, postgresql
+, postgresqlTestHook
+}:
 
 buildGoModule rec {
   pname = "matrix-dendrite";
-  version = "0.13.3";
+  version = "0.13.7";
 
   src = fetchFromGitHub {
     owner = "matrix-org";
     repo = "dendrite";
     rev = "v${version}";
-    hash = "sha256-wM9ayB3L9pc3696Ze5hVZPKGwrB5fD+64Wf8DUIjf1k=";
+    hash = "sha256-A6rQ8zqpV6SBpiALIPMF1nZtGvUtzoiTE2Rioh3T1WA=";
   };
 
-  vendorHash = "sha256-COljILLiAFoX8IShpAmLrxkw6yw7YQE4lpe8IR92j6g=";
+  vendorHash = "sha256-ByRCI4MuU8/ilbeNNOXSsTlBVHL5MkxLHItEGeGC9MQ=";
 
   subPackages = [
     # The server
@@ -44,6 +51,9 @@ buildGoModule rec {
     rm roomserver/internal/input/input_test.go
   '';
 
+  # PostgreSQL's request for a shared memory segment exceeded your kernel's SHMALL parameter
+  doCheck = !stdenv.isDarwin;
+
   passthru.tests = {
     inherit (nixosTests) dendrite;
   };
@@ -53,7 +63,7 @@ buildGoModule rec {
 
   meta = with lib; {
     homepage = "https://matrix-org.github.io/dendrite";
-    description = "A second-generation Matrix homeserver written in Go";
+    description = "Second-generation Matrix homeserver written in Go";
     changelog = "https://github.com/matrix-org/dendrite/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = teams.matrix.members;

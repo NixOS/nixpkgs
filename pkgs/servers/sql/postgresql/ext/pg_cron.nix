@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "pg_cron";
-  version = "1.6.1";
+  version = "1.6.2";
 
   buildInputs = [ postgresql ];
 
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     owner  = "citusdata";
     repo   = pname;
     rev    = "v${version}";
-    hash   = "sha256-GvxlaSfsqOiF1mrGo9jVv/K3xVInutkRN3AJHXKUBHQ=";
+    hash   = "sha256-/dD1gX0+RRsBFIjSV9TVk+ppPw0Jrzssl+rRZ2qAp4w=";
   };
 
   installPhase = ''

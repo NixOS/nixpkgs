@@ -33,10 +33,11 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A viewer for Microsoft HTML Help files";
+    description = "Viewer for Microsoft HTML Help files";
     homepage = "https://github.com/rzvncj/xCHM";
     license = licenses.gpl2;
     maintainers = with maintainers; [ sikmir ];
     platforms = platforms.linux;
+    mainProgram = "xchm";
   };
 }

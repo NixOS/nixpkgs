@@ -20,11 +20,11 @@
 
 stdenv.mkDerivation rec {
   pname = "vintagestory";
-  version = "1.18.12";
+  version = "1.19.8";
 
   src = fetchurl {
     url = "https://cdn.vintagestory.at/gamefiles/stable/vs_client_linux-x64_${version}.tar.gz";
-    hash = "sha256-akeW03+IdRvt3Fs3gF6TcYv9gD33DHPtpmiiMa0b92k=";
+    hash = "sha256-R6J+ACYDQpOzJZFBizsQGOexR7lMyeoZqz9TnWxfwyM=";
   };
 
 
@@ -83,7 +83,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "An in-development indie sandbox game about innovation and exploration";
+    description = "In-development indie sandbox game about innovation and exploration";
     homepage = "https://www.vintagestory.at/";
     license = licenses.unfree;
     maintainers = with maintainers; [ artturin gigglesquid ];

@@ -181,7 +181,7 @@ let
       ] else null;
 
     meta = {
-      description = "A game in which you build and maintain factories";
+      description = "Game in which you build and maintain factories";
       longDescription = ''
         Factorio is a game in which you build and maintain factories.
 
@@ -199,6 +199,7 @@ let
       license = lib.licenses.unfree;
       maintainers = with lib.maintainers; [ Baughn elitak erictapen priegger lukegb ];
       platforms = [ "x86_64-linux" ];
+      mainProgram = "factorio";
     };
   };
 

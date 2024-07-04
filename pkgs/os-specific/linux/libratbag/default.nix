@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, meson, ninja, pkg-config
+{ lib, stdenv, fetchFromGitHub, meson, ninja, pkg-config, wrapGAppsNoGuiHook, gobject-introspection
 , glib, systemd, udev, libevdev, gitMinimal, check, valgrind, swig, python3
 , json-glib, libunistring }:
 
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    meson ninja pkg-config gitMinimal swig check valgrind
+    meson ninja pkg-config gitMinimal swig check valgrind wrapGAppsNoGuiHook gobject-introspection
   ];
 
   buildInputs = [

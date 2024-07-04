@@ -72,7 +72,7 @@ let
 
     meta = with lib; {
       homepage = "https://www.barebox.org";
-      description = "The Swiss Army Knive for bare metal";
+      description = "Swiss Army Knive for bare metal";
       license = licenses.gpl2;
       maintainers = with maintainers; [ emantor ];
     } // extraMeta;

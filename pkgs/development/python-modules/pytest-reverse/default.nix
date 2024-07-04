@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, pytest
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  pytest,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -12,7 +13,7 @@ buildPythonPackage rec {
   version = "1.7.0";
   format = "pyproject";
 
-  disable = pythonOlder "3.7";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "adamchainz";
@@ -21,9 +22,7 @@ buildPythonPackage rec {
     hash = "sha256-r0aSbUgArHQkpaXUvMT6oyOxEliQRtSGuDt4IILzhH4=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   buildInputs = [ pytest ];
 

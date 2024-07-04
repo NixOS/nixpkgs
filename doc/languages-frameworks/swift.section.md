@@ -32,7 +32,7 @@ look for the following directories:
   (If not targeting macOS, replace `macosx` with the Xcode platform name.)
 - On other platforms: `lib/swift/linux/x86_64`
   (Where `linux` and `x86_64` are from lowercase `uname -sm`.)
-- For convenience, Nixpkgs also adds simply `lib/swift` to the search path.
+- For convenience, Nixpkgs also adds `lib/swift` to the search path.
   This can save a bit of work packaging Swift modules, because many Nix builds
   will produce output for just one target any way.
 
@@ -112,18 +112,22 @@ stdenv.mkDerivation rec {
 If you'd like to build a different configuration than `release`:
 
 ```nix
-swiftpmBuildConfig = "debug";
+{
+  swiftpmBuildConfig = "debug";
+}
 ```
 
 It is also possible to provide additional flags to `swift build`:
 
 ```nix
-swiftpmFlags = [ "--disable-dead-strip" ];
+{
+  swiftpmFlags = [ "--disable-dead-strip" ];
+}
 ```
 
 The default `buildPhase` already passes `-j` for parallel building.
 
-If these two customization options are insufficient, simply provide your own
+If these two customization options are insufficient, provide your own
 `buildPhase` that invokes `swift build`.
 
 ### Running tests {#ssec-swiftpm-running-tests}
@@ -132,7 +136,9 @@ Including `swiftpm` in your `nativeBuildInputs` also provides a default
 `checkPhase`, but it must be enabled with:
 
 ```nix
-doCheck = true;
+{
+  doCheck = true;
+}
 ```
 
 This essentially runs: `swift test -c release`
@@ -147,13 +153,15 @@ them, we need to make them writable.
 A special function `swiftpmMakeMutable` is available to replace the symlink
 with a writable copy:
 
-```
-configurePhase = generated.configure ++ ''
-  # Replace the dependency symlink with a writable copy.
-  swiftpmMakeMutable swift-crypto
-  # Now apply a patch.
-  patch -p1 -d .build/checkouts/swift-crypto -i ${./some-fix.patch}
-'';
+```nix
+{
+  configurePhase = generated.configure ++ ''
+    # Replace the dependency symlink with a writable copy.
+    swiftpmMakeMutable swift-crypto
+    # Now apply a patch.
+    patch -p1 -d .build/checkouts/swift-crypto -i ${./some-fix.patch}
+  '';
+}
 ```
 
 ## Considerations for custom build tools {#ssec-swift-considerations-for-custom-build-tools}

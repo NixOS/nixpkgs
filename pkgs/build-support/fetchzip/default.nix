@@ -5,7 +5,7 @@
 # (e.g. due to minor changes in the compression algorithm, or changes
 # in timestamps).
 
-{ lib, fetchurl, unzip, glibcLocalesUtf8 }:
+{ lib, fetchurl, withUnzip ? true, unzip, glibcLocalesUtf8 }:
 
 { name ? "source"
 , url ? ""
@@ -24,7 +24,7 @@
 # the rest are given to fetchurl as is
 , ... } @ args:
 
-assert (extraPostFetch != "") -> lib.warn "use 'postFetch' instead of 'extraPostFetch' with 'fetchzip' and 'fetchFromGitHub'." true;
+assert (extraPostFetch != "") -> lib.warn "use 'postFetch' instead of 'extraPostFetch' with 'fetchzip' and 'fetchFromGitHub' or 'fetchFromGitLab'." true;
 
 let
   tmpFilename =
@@ -42,7 +42,7 @@ fetchurl ({
   # Have to pull in glibcLocalesUtf8 for unzip in setup-hook.sh to handle
   # UTF-8 aware locale:
   #   https://github.com/NixOS/nixpkgs/issues/176225#issuecomment-1146617263
-  nativeBuildInputs = [ unzip glibcLocalesUtf8 ] ++ nativeBuildInputs;
+  nativeBuildInputs = lib.optionals withUnzip [ unzip glibcLocalesUtf8 ] ++ nativeBuildInputs;
 
   postFetch =
     ''

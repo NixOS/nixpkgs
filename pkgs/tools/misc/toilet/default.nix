@@ -22,5 +22,6 @@ stdenv.mkDerivation rec {
     license = licenses.wtfpl;
     maintainers = with maintainers; [ pSub ];
     platforms = platforms.all;
+    mainProgram = "toilet";
   };
 }

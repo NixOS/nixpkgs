@@ -1,4 +1,12 @@
-{ lib, buildPythonPackage, fetchFromGitHub, pygobject3, dbus, hatchling, pytestCheckHook }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pygobject3,
+  dbus,
+  hatchling,
+  pytestCheckHook,
+}:
 
 buildPythonPackage rec {
   pname = "dasbus";
@@ -14,12 +22,15 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ hatchling ];
   propagatedBuildInputs = [ pygobject3 ];
-  nativeCheckInputs = [ dbus pytestCheckHook ];
+  nativeCheckInputs = [
+    dbus
+    pytestCheckHook
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/rhinstaller/dasbus";
     description = "DBus library in Python3";
     license = licenses.lgpl21Only;
-    maintainers = with maintainers; [ fortuneteller2k ];
+    maintainers = with maintainers; [ moni ];
   };
 }

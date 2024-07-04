@@ -8,7 +8,6 @@ buildDunePackage rec {
   inherit (mirage-runtime) version src;
 
   minimalOCamlVersion = "4.08";
-  duneVersion = "3";
 
   outputs = [ "out" "dev" ];
 
@@ -35,6 +34,6 @@ buildDunePackage rec {
   '';
 
   meta = mirage-runtime.meta // {
-    description = "The MirageOS library operating system";
+    description = "MirageOS library operating system";
   };
 }

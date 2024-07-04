@@ -2,7 +2,7 @@
 
 [Subversion](https://subversion.apache.org/) is a centralized
 version-control system. It can use a [variety of
-protocols](http://svnbook.red-bean.com/en/1.7/svn-book.html#svn.serverconfig.choosing)
+protocols](https://svnbook.red-bean.com/en/1.7/svn-book.html#svn.serverconfig.choosing)
 for communication between client and server.
 
 ## Subversion inside Apache HTTP {#module-services-subversion-apache-httpd}
@@ -14,16 +14,18 @@ for communication.
 
 For more information on the general setup, please refer to the [the
 appropriate section of the Subversion
-book](http://svnbook.red-bean.com/en/1.7/svn-book.html#svn.serverconfig.httpd).
+book](https://svnbook.red-bean.com/en/1.7/svn-book.html#svn.serverconfig.httpd).
 
 To configure, include in `/etc/nixos/configuration.nix` code to activate
 Apache HTTP, setting [](#opt-services.httpd.adminAddr)
 appropriately:
 
 ```nix
-services.httpd.enable = true;
-services.httpd.adminAddr = ...;
-networking.firewall.allowedTCPPorts = [ 80 443 ];
+{
+  services.httpd.enable = true;
+  services.httpd.adminAddr = "...";
+  networking.firewall.allowedTCPPorts = [ 80 443 ];
+}
 ```
 
 For a simple Subversion server with basic authentication, configure the
@@ -34,25 +36,28 @@ the `.authz` file describing access permission, and `AuthUserFile` to
 the password file.
 
 ```nix
-services.httpd.extraModules = [
-    # note that order is *super* important here
-    { name = "dav_svn"; path = "${pkgs.apacheHttpdPackages.subversion}/modules/mod_dav_svn.so"; }
-    { name = "authz_svn"; path = "${pkgs.apacheHttpdPackages.subversion}/modules/mod_authz_svn.so"; }
-  ];
-  services.httpd.virtualHosts = {
-    "svn" = {
-       hostName = HOSTNAME;
-       documentRoot = DOCUMENTROOT;
-       locations."/svn".extraConfig = ''
-           DAV svn
-           SVNParentPath REPO_PARENT
-           AuthzSVNAccessFile ACCESS_FILE
-           AuthName "SVN Repositories"
-           AuthType Basic
-           AuthUserFile PASSWORD_FILE
-           Require valid-user
-      '';
-    }
+{
+  services.httpd.extraModules = [
+      # note that order is *super* important here
+      { name = "dav_svn"; path = "${pkgs.apacheHttpdPackages.subversion}/modules/mod_dav_svn.so"; }
+      { name = "authz_svn"; path = "${pkgs.apacheHttpdPackages.subversion}/modules/mod_authz_svn.so"; }
+    ];
+    services.httpd.virtualHosts = {
+      "svn" = {
+         hostName = HOSTNAME;
+         documentRoot = DOCUMENTROOT;
+         locations."/svn".extraConfig = ''
+             DAV svn
+             SVNParentPath REPO_PARENT
+             AuthzSVNAccessFile ACCESS_FILE
+             AuthName "SVN Repositories"
+             AuthType Basic
+             AuthUserFile PASSWORD_FILE
+             Require valid-user
+        '';
+      };
+    };
+}
 ```
 
 The key `"svn"` is just a symbolic name identifying the virtual host.
@@ -90,7 +95,7 @@ $ htpasswd -s PASSWORD_FILE USER_NAME
 The file describing access permissions `ACCESS_FILE` will look something
 like the following:
 
-```nix
+```
 [/]
 * = r
 

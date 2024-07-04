@@ -1,4 +1,5 @@
 { fetchFromGitHub
+, bash
 , json_c
 , keyutils
 , lib
@@ -15,23 +16,23 @@
 , withDocs ? stdenv.hostPlatform.canExecute stdenv.buildPlatform
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libnvme";
-  version = "1.4";
+  version = "1.9";
 
   outputs = [ "out" ] ++ lib.optionals withDocs [ "man" ];
 
   src = fetchFromGitHub {
     owner = "linux-nvme";
     repo = "libnvme";
-    rev = "v${version}";
-    sha256 = "sha256-8DlEQ4LH6UhIHr0znJGqkuCosLHqA6hkJjmiCawNE1k=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-nXzYbj4BDxFii30yR+aTgqjQfyYMFiAIcV/OHI2y5Ws=";
   };
 
   postPatch = ''
-    patchShebangs meson-vcs-tag.sh
-    chmod +x doc/kernel-doc-check
-    patchShebangs doc/kernel-doc doc/kernel-doc-check doc/list-man-pages.sh
+    patchShebangs scripts
+    substituteInPlace test/sysfs/sysfs-tree-diff.sh \
+      --replace-fail /bin/bash ${bash}/bin/bash
   '';
 
   nativeBuildInputs = [
@@ -39,7 +40,7 @@ stdenv.mkDerivation rec {
     ninja
     perl # for kernel-doc
     pkg-config
-    python3.pythonForBuild
+    python3.pythonOnBuildForHost
     swig
   ];
 
@@ -53,6 +54,7 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [
     "-Ddocs=man"
+    (lib.mesonBool "tests" finalAttrs.finalPackage.doCheck)
     (lib.mesonBool "docs-build" withDocs)
   ];
 
@@ -60,13 +62,14 @@ stdenv.mkDerivation rec {
     export KBUILD_BUILD_TIMESTAMP="$(date -u -d @$SOURCE_DATE_EPOCH)"
   '';
 
-  doCheck = true;
+  # mocked ioctl conflicts with the musl one: https://github.com/NixOS/nixpkgs/pull/263768#issuecomment-1782877974
+  doCheck = !stdenv.hostPlatform.isMusl;
 
   meta = with lib; {
     description = "C Library for NVM Express on Linux";
     homepage = "https://github.com/linux-nvme/libnvme";
-    maintainers = [ maintainers.fogti ];
+    maintainers = with maintainers; [ vifino ];
     license = with licenses; [ lgpl21Plus ];
     platforms = platforms.linux;
   };
-}
+})

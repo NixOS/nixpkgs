@@ -1,18 +1,20 @@
-{ lib
-, isPy27
-, buildPythonPackage
-, fetchFromGitHub
-, matplotlib
-, numpy
-, scipy
-, scikit-learn
-, pyaml
-, pytestCheckHook
+{
+  lib,
+  isPy27,
+  buildPythonPackage,
+  fetchFromGitHub,
+  matplotlib,
+  numpy,
+  scipy,
+  scikit-learn,
+  pyaml,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "scikit-optimize";
   version = "0.9.0";
+  format = "setuptools";
   disabled = isPy27;
 
   src = fetchFromGitHub {
@@ -30,9 +32,7 @@ buildPythonPackage rec {
     pyaml
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     description = "Sequential model-based optimization toolbox";

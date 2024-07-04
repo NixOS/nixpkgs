@@ -18,34 +18,28 @@ in
 
     services.heartbeat = {
 
-      enable = mkEnableOption (lib.mdDoc "heartbeat");
+      enable = mkEnableOption "heartbeat, uptime monitoring";
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.heartbeat;
-        defaultText = literalExpression "pkgs.heartbeat";
-        example = literalExpression "pkgs.heartbeat7";
-        description = lib.mdDoc ''
-          The heartbeat package to use.
-        '';
+      package = mkPackageOption pkgs "heartbeat" {
+        example = "heartbeat7";
       };
 
       name = mkOption {
         type = types.str;
         default = "heartbeat";
-        description = lib.mdDoc "Name of the beat";
+        description = "Name of the beat";
       };
 
       tags = mkOption {
         type = types.listOf types.str;
         default = [];
-        description = lib.mdDoc "Tags to place on the shipped log messages";
+        description = "Tags to place on the shipped log messages";
       };
 
       stateDir = mkOption {
         type = types.str;
         default = "/var/lib/heartbeat";
-        description = lib.mdDoc "The state directory. heartbeat's own logs and other data are stored here.";
+        description = "The state directory. heartbeat's own logs and other data are stored here.";
       };
 
       extraConfig = mkOption {
@@ -56,7 +50,7 @@ in
             urls: ["http://localhost:9200"]
             schedule: '@every 10s'
         '';
-        description = lib.mdDoc "Any other configuration options you want to add";
+        description = "Any other configuration options you want to add";
       };
 
     };

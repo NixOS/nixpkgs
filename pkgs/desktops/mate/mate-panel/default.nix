@@ -5,25 +5,31 @@
 , gettext
 , itstool
 , glib
+, gtk-layer-shell
+, gtk3
+, libmateweather
 , libwnck
 , librsvg
 , libxml2
 , dconf
-, gtk3
-, mate
+, dconf-editor
+, mate-desktop
+, mate-menus
 , hicolor-icon-theme
+, wayland
 , gobject-introspection
-, wrapGAppsHook
+, wrapGAppsHook3
+, marco
 , mateUpdateScript
 }:
 
 stdenv.mkDerivation rec {
   pname = "mate-panel";
-  version = "1.26.3";
+  version = "1.28.2";
 
   src = fetchurl {
     url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "8z8Q1SdFC6fpjMcKslWsSBMwqp5m28x8URtrqhcd4Ck=";
+    sha256 = "Z4pD6DeqJxhJQgT93xm7kGzwfl2A/S4d3nRfJtKtujM=";
   };
 
   nativeBuildInputs = [
@@ -31,21 +37,32 @@ stdenv.mkDerivation rec {
     gettext
     itstool
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
-    glib
+    gtk-layer-shell
+    libmateweather
     libwnck
     librsvg
     libxml2
-    gtk3
     dconf
-    mate.libmateweather
-    mate.mate-desktop
-    mate.mate-menus
+    mate-desktop
+    mate-menus
     hicolor-icon-theme
+    wayland
   ];
+
+  propagatedBuildInputs = [
+    glib
+    gtk3
+    # See https://github.com/mate-desktop/mate-panel/issues/1402
+    # This is propagated for mate_panel_applet_settings_new and applet's wrapGAppsHook3
+    dconf-editor
+  ];
+
+  # Needed for Wayland support.
+  configureFlags = [ "--with-in-process-applets=all" ];
 
   env.NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
 
@@ -57,7 +74,7 @@ stdenv.mkDerivation rec {
   preFixup = ''
     gappsWrapperArgs+=(
       # Workspace switcher settings, works only when passed after gtk3 schemas in the wrapper for some reason
-      --prefix XDG_DATA_DIRS : "${glib.getSchemaDataDirPath mate.marco}"
+      --prefix XDG_DATA_DIRS : "${glib.getSchemaDataDirPath marco}"
     )
   '';
 
@@ -66,7 +83,7 @@ stdenv.mkDerivation rec {
   passthru.updateScript = mateUpdateScript { inherit pname; };
 
   meta = with lib; {
-    description = "The MATE panel";
+    description = "MATE panel";
     homepage = "https://github.com/mate-desktop/mate-panel";
     license = with licenses; [ gpl2Plus lgpl2Plus fdl11Plus ];
     platforms = platforms.unix;

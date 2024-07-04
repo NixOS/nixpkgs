@@ -9,8 +9,6 @@ buildDunePackage {
     src
     ;
 
-  duneVersion = "3";
-
   buildInputs = [ ppx_sexp_conv ppx_here ];
 
   propagatedBuildInputs = [
@@ -25,6 +23,6 @@ buildDunePackage {
   ];
 
   meta = conduit.meta // {
-    description = "A network connection establishment library for Async";
+    description = "Network connection establishment library for Async";
   };
 }

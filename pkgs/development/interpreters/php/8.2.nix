@@ -2,10 +2,9 @@
 
 let
   base = callPackage ./generic.nix (_args // {
-    version = "8.2.11";
-    hash = "sha256-OBktrv+r9K9sQnvxesH4JWXZx1IuDb0yIVFilEQ0sos=";
+    version = "8.2.20";
+    hash = "sha256-Xexvphx7nEeqHXZma+ZR8mQu0rz2zYY4xX41cc4qrGE=";
   });
-
 in
 base.withExtensions ({ all, ... }: with all; ([
   bcmath

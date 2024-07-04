@@ -3,7 +3,7 @@
 }:
 
 let
-  version = "2.0.9";
+  version = "2.0.10";
 
   # Make sure we override python, so the correct version is chosen
   boostPython = boost.override { enablePython = true; inherit python; };
@@ -16,7 +16,7 @@ in stdenv.mkDerivation {
     owner = "arvidn";
     repo = "libtorrent";
     rev = "v${version}";
-    sha256 = "sha256-kUpeofullQ70uK/YZUD0ikHCquFTGwev7MxBYj0oHeU=";
+    sha256 = "sha256-JrAYtoS8wNmmhbgnprD7vNz1N64ekIryjK77rAKTyaQ=";
     fetchSubmodules = true;
   };
 
@@ -42,6 +42,11 @@ in stdenv.mkDerivation {
     moveToOutput "lib/${python.libPrefix}" "$python"
   '';
 
+  postFixup = ''
+    substituteInPlace "$dev/lib/cmake/LibtorrentRasterbar/LibtorrentRasterbarTargets-release.cmake" \
+      --replace "\''${_IMPORT_PREFIX}/lib" "$out/lib"
+  '';
+
   outputs = [ "out" "dev" "python" ];
 
   cmakeFlags = [
@@ -50,7 +55,7 @@ in stdenv.mkDerivation {
 
   meta = with lib; {
     homepage = "https://libtorrent.org/";
-    description = "A C++ BitTorrent implementation focusing on efficiency and scalability";
+    description = "C++ BitTorrent implementation focusing on efficiency and scalability";
     license = licenses.bsd3;
     maintainers = [ ];
     platforms = platforms.unix;

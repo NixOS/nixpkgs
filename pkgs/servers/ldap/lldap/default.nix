@@ -1,13 +1,10 @@
 { binaryen
 , fetchFromGitHub
-, fetchpatch
-, fetchzip
 , lib
 , lldap
 , nixosTests
 , rustPlatform
 , rustc
-, rustc-wasm32
 , stdenv
 , wasm-bindgen-cli
 , wasm-pack
@@ -48,11 +45,11 @@ let
     pname = commonDerivationAttrs.pname + "-frontend";
 
     nativeBuildInputs = [
-      wasm-pack wasm-bindgen-84 binaryen which rustc-wasm32 rustc-wasm32.llvmPackages.lld
+      wasm-pack wasm-bindgen-84 binaryen which rustc rustc.llvmPackages.lld
     ];
 
     buildPhase = ''
-      HOME=`pwd` RUSTFLAGS="-C linker=lld" ./app/build.sh
+      HOME=`pwd` ./app/build.sh
     '';
 
     installPhase = ''
@@ -83,12 +80,15 @@ in rustPlatform.buildRustPackage (commonDerivationAttrs // {
   };
 
   meta = with lib; {
-    description = "A lightweight authentication server that provides an opinionated, simplified LDAP interface for authentication";
+    description = "Lightweight authentication server that provides an opinionated, simplified LDAP interface for authentication";
     homepage = "https://github.com/lldap/lldap";
     changelog = "https://github.com/lldap/lldap/blob/v${lldap.version}/CHANGELOG.md";
     license = licenses.gpl3Only;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ emilylange bendlas ];
+    # See comment about wasm32-unknown-unknown in rustc.nix.
+    broken = lib.any (a: lib.hasAttr a stdenv.hostPlatform.gcc) [ "cpu" "float-abi" "fpu" ] ||
+      !stdenv.hostPlatform.gcc.thumb or true;
+    maintainers = with maintainers; [ bendlas ];
     mainProgram = "lldap";
   };
 })

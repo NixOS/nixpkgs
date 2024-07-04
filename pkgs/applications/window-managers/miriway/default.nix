@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "miriway";
-  version = "unstable-2023-08-30";
+  version = "0-unstable-2024-05-17";
 
   src = fetchFromGitHub {
     owner = "Miriway";
     repo = "Miriway";
-    rev = "2c9a0599e1a9b37f2a73a245eacce307a3e5b883";
-    hash = "sha256-VCLl4GyUmzcC/OEfxXV0bI/6lxLP9eIAAOIjANEI1d8=";
+    rev = "5be8f60326181b22e111f02918ae5778cf1a89b0";
+    hash = "sha256-dHY0bfVfRpiBY5rPnhmu3aHXx1l9jQhXBtcBbej2JFk=";
   };
 
   strictDeps = true;

@@ -1,31 +1,35 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, jax
-, jaxlib
-, multipledispatch
-, numpy
-, tqdm
-, funsor
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
+  setuptools,
+  jax,
+  jaxlib,
+  multipledispatch,
+  numpy,
+  tqdm,
+  funsor,
+  pytestCheckHook,
 # TODO: uncomment when tensorflow-probability gets fixed.
 # , tensorflow-probability
 }:
 
 buildPythonPackage rec {
   pname = "numpyro";
-  version = "0.13.2";
-  format = "setuptools";
+  version = "0.15.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit version pname;
-    hash = "sha256-Um8LFVGAlMeOaN9uMwycHJzqEnTaxp8FYXIk+m2VTug=";
+    hash = "sha256-4WyfR8wx4qollYSgtslEMSCB0zypJAYCJjKtWEsOYA0=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     jax
     jaxlib
     multipledispatch
@@ -40,9 +44,7 @@ buildPythonPackage rec {
     # tensorflow-probability
   ];
 
-  pythonImportsCheck = [
-    "numpyro"
-  ];
+  pythonImportsCheck = [ "numpyro" ];
 
   disabledTests = [
     # AssertionError due to tolerance issues
@@ -65,9 +67,7 @@ buildPythonPackage rec {
   ];
 
   # TODO: remove when tensorflow-probability gets fixed.
-  disabledTestPaths = [
-    "test/test_distributions.py"
-  ];
+  disabledTestPaths = [ "test/test_distributions.py" ];
 
   meta = with lib; {
     description = "Library for probabilistic programming with NumPy";

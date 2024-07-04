@@ -6,27 +6,27 @@
 , libnotify
 , pango
 , python3Packages
-, wrapGAppsHook
+, wrapGAppsHook3
 , youtube-dl
 , glib
 , ffmpeg
-, aria
+, aria2
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "tartube";
-  version = "2.4.221";
+  version = "2.5.0";
 
   src = fetchFromGitHub {
     owner = "axcore";
     repo = "tartube";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-A5p4olnXak22410DOKIPpZ6MQGR5aS2ARWO+083bSuQ=";
+    sha256 = "sha256-IcJDh8Q9K6SROZWVi98R1N2kSdgwJczScLdJFKy2FIU=";
   };
 
   nativeBuildInputs = [
     gobject-introspection
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   strictDeps = false;
@@ -40,7 +40,7 @@ python3Packages.buildPythonApplication rec {
     playsound
     ffmpeg
     matplotlib
-    aria
+    aria2
   ];
 
   buildInputs = [
@@ -69,10 +69,11 @@ python3Packages.buildPythonApplication rec {
   ];
 
   meta = with lib; {
-    description = "A GUI front-end for youtube-dl";
+    description = "GUI front-end for youtube-dl";
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ mkg20001 luc65r ];
     homepage = "https://tartube.sourceforge.io/";
+    mainProgram = "tartube";
   };
 }

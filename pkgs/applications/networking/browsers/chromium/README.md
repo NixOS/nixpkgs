@@ -1,26 +1,18 @@
 # Maintainers
 
 - Note: We could always use more contributors, testers, etc. E.g.:
-  - A dedicated maintainer for the NixOS stable channel
+  - Dedicated maintainers for the NixOS stable channel
   - PRs with cleanups, improvements, fixes, etc. (but please try to make reviews
     as easy as possible)
   - People who handle stale issues/PRs
-- Primary maintainer (responsible for all updates): @primeos
-- Testers (test all stable channel updates)
-  - `nixos-unstable`:
-    - `x86_64`: @danielfullmer
-    - `aarch64`: @thefloweringash
-  - Stable channel:
-    - `x86_64`: @Frostman
+
 - Other relevant packages:
-  - `chromiumBeta` and `chromiumDev`: For testing purposes only (not build on
-    Hydra). We use these channels for testing and to fix build errors in advance
-    so that `chromium` updates are trivial and can be merged fast.
-  - `google-chrome`, `google-chrome-beta`, `google-chrome-dev`: Updated via
-    Chromium's `upstream-info.nix`
-  - `ungoogled-chromium`: @squalus
+  - `google-chrome`: Updated via Chromium's `upstream-info.nix`.
+  - `ungoogled-chromium`: A patch set for Chromium, that has its own entry in Chromium's `upstream-info.nix`.
   - `chromedriver`: Updated via Chromium's `upstream-info.nix` and not built
-    from source.
+    from source. Must match Chromium's major version.
+  - `electron-source`: Various version of electron that are built from source using Chromium's
+    `-unwrapped` derivation, due to electron being based on Chromium.
 
 # Upstream links
 
@@ -38,16 +30,6 @@ Simply run `./pkgs/applications/networking/browsers/chromium/update.py` to
 update `upstream-info.nix`. After updates it is important to test at least
 `nixosTests.chromium` (or basic manual testing) and `google-chrome` (which
 reuses `upstream-info.nix`).
-
-Note: Due to the script downloading many large tarballs it might be
-necessary to adjust the available tmpfs size (it defaults to 10% of the
-systems memory)
-
-```nix
-services.logind.extraConfig = ''
-  RuntimeDirectorySize=4G
-'';
-```
 
 Note: The source tarball is often only available a few hours after the release
 was announced. The CI/CD status can be tracked here:

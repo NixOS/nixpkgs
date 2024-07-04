@@ -1,7 +1,9 @@
 { stdenv
 , lib
+, bash
 , cmake
 , cfitsio
+, coreutils
 , libusb1
 , zlib
 , boost
@@ -21,7 +23,9 @@
 , src
 , autoPatchelfHook
 }:
-
+let
+  libusb-with-fxload = libusb1.override { withExamples = true;};
+in
 stdenv.mkDerivation rec {
   pname = "indi-firmware";
 
@@ -39,10 +43,12 @@ stdenv.mkDerivation rec {
     "-DCMAKE_INSTALL_LIBDIR=lib"
     "-DUDEVRULES_INSTALL_DIR=lib/udev/rules.d"
     "-DRULES_INSTALL_DIR=lib/udev/rules.d"
-    "-DFIRMWARE_INSTALL_DIR=\${CMAKE_INSTALL_PREFIX}/lib/firmware"
+    "-DFIRMWARE_INSTALL_DIR=lib/firmware"
+    "-DQHY_FIRMWARE_INSTALL_DIR=\${CMAKE_INSTALL_PREFIX}/lib/firmware/qhy"
     "-DCONF_DIR=etc"
     "-DBUILD_LIBS=1"
     "-DWITH_PENTAX=off"
+    "-DWITH_AHP_XC=off"
   ];
 
   postPatch = ''
@@ -52,8 +58,17 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  postFixup = ''
-    rm $out/lib/udev/rules.d/99-fli.rules
+  postFixup = lib.optionalString stdenv.isLinux ''
+    for f in $out/lib/udev/rules.d/*.rules
+    do
+      substituteInPlace "$f" --replace "/sbin/fxload" "${libusb-with-fxload}/sbin/fxload" \
+                             --replace "/bin/sleep" "${coreutils}/bin/sleep" \
+                             --replace "/bin/cat" "${coreutils}/bin/cat" \
+                             --replace "/bin/echo" "${coreutils}/bin/echo" \
+                             --replace "/bin/sh" "${bash}/bin/sh" \
+                             --replace "/lib/firmware/" "$out/lib/firmware/"
+      sed -e 's|-D $env{DEVNAME}|-p $env{BUSNUM},$env{DEVNUM}|' -i "$f"
+    done
   '';
 
   meta = with lib; {

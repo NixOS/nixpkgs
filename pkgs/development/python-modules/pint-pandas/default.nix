@@ -1,13 +1,14 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, setuptools-scm
-, wheel
-, pint
-, pandas
-, pytestCheckHook
+{
+  stdenv,
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  setuptools-scm,
+  wheel,
+  pint,
+  pandas,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -22,8 +23,6 @@ buildPythonPackage rec {
     hash = "sha256-FuH6wksSCkkL2AyQN46hwTnfeAZFwkWRl6KEEhsxmUY=";
   };
 
-  env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   nativeBuildInputs = [
     setuptools
     setuptools-scm
@@ -35,9 +34,7 @@ buildPythonPackage rec {
     pandas
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     broken = stdenv.isDarwin;

@@ -1,17 +1,19 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
 }:
 
 buildPythonPackage rec {
   pname = "pytun";
-  version = "2.3.0";
+  version = "2.4.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "montag451";
     repo = "pytun";
-    sha256 = "1cqq8aci38058fjh4a0xf21wac177fw576p2yjl2b8jd9rnsqbl5";
+    sha256 = "sha256-DZ7CoLi6LPhuc55HF9dtek+/N4A29ecnZn7bk7jweuI=";
   };
 
   # Test directory contains examples, not tests.

@@ -1,23 +1,34 @@
-{ lib, buildPythonPackage, fetchPypi, setuptools-scm
-, inflect, more-itertools, six, pytest
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools-scm,
+  inflect,
+  more-itertools,
+  six,
+  pytest,
 }:
 
 buildPythonPackage rec {
   pname = "jaraco-itertools";
-  version = "6.2.1";
+  version = "6.4.1";
   format = "pyproject";
 
   src = fetchPypi {
     pname = "jaraco.itertools";
     inherit version;
-    hash = "sha256-YJjts3xrgCPzeU1CWIoTv3WyygK0D/l5XIRry+DBtGw=";
+    hash = "sha256-MU/OVi67RepIIqmLvXsi5f6sfVEY28Gk8ess0Ea/+kc=";
   };
 
   pythonNamespaces = [ "jaraco" ];
 
   nativeBuildInputs = [ setuptools-scm ];
 
-  propagatedBuildInputs = [ inflect more-itertools six ];
+  propagatedBuildInputs = [
+    inflect
+    more-itertools
+    six
+  ];
   nativeCheckInputs = [ pytest ];
 
   # tests no longer available through pypi

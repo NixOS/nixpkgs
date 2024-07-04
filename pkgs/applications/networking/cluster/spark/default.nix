@@ -3,62 +3,53 @@
 , fetchzip
 , makeWrapper
 , jdk8
-, python3Packages
-, extraPythonPackages ? [ ]
+, python3
 , coreutils
-, hadoopSupport ? true
 , hadoop
 , RSupport ? true
 , R
+, nixosTests
 }:
 
 let
-  spark = { pname, version, hash, extraMeta ? {} }:
-    stdenv.mkDerivation rec {
-      inherit pname version;
-      jdk = if hadoopSupport then hadoop.jdk else jdk8;
+  spark = { pname, version, hash, extraMeta ? {}, pysparkPython ? python3 }:
+    stdenv.mkDerivation (finalAttrs: {
+      inherit pname version hash hadoop R pysparkPython;
+      inherit (finalAttrs.hadoop) jdk;
       src = fetchzip {
-        url = "mirror://apache/spark/${pname}-${version}/${pname}-${version}-bin-without-hadoop.tgz";
-        inherit hash;
+        url = with finalAttrs; "mirror://apache/spark/${pname}-${version}/${pname}-${version}-bin-without-hadoop.tgz";
+        inherit (finalAttrs) hash;
       };
       nativeBuildInputs = [ makeWrapper ];
-      buildInputs = [ jdk python3Packages.python ]
-        ++ extraPythonPackages
-        ++ lib.optional RSupport R;
+      buildInputs = with finalAttrs; [ jdk pysparkPython ]
+        ++ lib.optional RSupport finalAttrs.R;
 
-      untarDir = "${pname}-${version}";
       installPhase = ''
-        mkdir -p $out/{lib/${untarDir}/conf,bin,/share/java}
-        mv * $out/lib/${untarDir}
-
-        cp $out/lib/${untarDir}/conf/log4j.properties{.template,} || \
-          cp $out/lib/${untarDir}/conf/log4j2.properties{.template,}
-
-        cat > $out/lib/${untarDir}/conf/spark-env.sh <<- EOF
-        export JAVA_HOME="${jdk}"
-        export SPARK_HOME="$out/lib/${untarDir}"
-      '' + lib.optionalString hadoopSupport ''
-        export SPARK_DIST_CLASSPATH=$(${hadoop}/bin/hadoop classpath)
-      '' + ''
-        export PYSPARK_PYTHON="${python3Packages.python}/bin/${python3Packages.python.executable}"
-        export PYTHONPATH="\$PYTHONPATH:$PYTHONPATH"
-        ${lib.optionalString RSupport ''
-          export SPARKR_R_SHELL="${R}/bin/R"
-          export PATH="\$PATH:${R}/bin"''}
-        EOF
-
-        for n in $(find $out/lib/${untarDir}/bin -type f ! -name "*.*"); do
-          makeWrapper "$n" "$out/bin/$(basename $n)"
-          substituteInPlace "$n" --replace dirname ${coreutils.out}/bin/dirname
+        mkdir -p "$out/opt"
+        mv * $out/
+        for n in $(find $out/bin -type f -executable ! -name "find-spark-home"); do
+          wrapProgram "$n" --set JAVA_HOME "${finalAttrs.jdk}" \
+            --run "[ -z $SPARK_DIST_CLASSPATH ] && export SPARK_DIST_CLASSPATH=$(${finalAttrs.hadoop}/bin/hadoop classpath)" \
+            ${lib.optionalString RSupport ''--set SPARKR_R_SHELL "${finalAttrs.R}/bin/R"''} \
+            --prefix PATH : "${
+              lib.makeBinPath (
+                [ finalAttrs.pysparkPython ] ++
+                (lib.optionals RSupport [ finalAttrs.R ])
+              )}"
         done
-        for n in $(find $out/lib/${untarDir}/sbin -type f); do
-          # Spark deprecated scripts with "slave" in the name.
-          # This line adds forward compatibility with the nixos spark module for
-          # older versions of spark that don't have the new "worker" scripts.
-          ln -s "$n" $(echo "$n" | sed -r 's/slave(s?).sh$/worker\1.sh/g') || true
-        done
-        ln -s $out/lib/${untarDir}/lib/spark-assembly-*.jar $out/share/java
+        ln -s ${finalAttrs.hadoop} "$out/opt/hadoop"
+        ${lib.optionalString RSupport ''ln -s ${finalAttrs.R} "$out/opt/R"''}
       '';
+
+      passthru = {
+        tests = nixosTests.spark.default.passthru.override {
+          sparkPackage = finalAttrs.finalPackage;
+        };
+        # Add python packages to PYSPARK_PYTHON
+        withPythonPackages = f: finalAttrs.finalPackage.overrideAttrs (old: {
+          pysparkPython = old.pysparkPython.withPackages f;
+        });
+      };
 
       meta = {
         description = "Apache Spark is a fast and general engine for large-scale data processing";
@@ -68,24 +59,25 @@ let
         platforms = lib.platforms.all;
         maintainers = with lib.maintainers; [ thoughtpolice offline kamilchm illustris ];
       } // extraMeta;
-    };
+    });
 in
 {
+  # A note on EOL and removing old versions:
+  # According to spark's versioning policy (https://spark.apache.org/versioning-policy.html),
+  # minor releases are generally maintained with bugfixes for 18 months. But it doesn't
+  # make sense to remove a given minor version the moment it crosses this threshold.
+  # For example, spark 3.3.0 was released on 2022-06-09. It would have to be removed on 2023-12-09 if
+  # we strictly adhere to the EOL timeline, despite 3.3.4 being released one day before (2023-12-08).
+  # A better policy is to keep these versions around, and clean up EOL versions just before
+  # a new NixOS release.
+  spark_3_5 = spark rec {
+    pname = "spark";
+    version = "3.5.1";
+    hash = "sha256-ez6Hm8Ss3nl4mxOHyh67ugYH81/thNRMCja6MQ+9Tpg=";
+  };
   spark_3_4 = spark rec {
     pname = "spark";
-    version = "3.4.0";
-    hash = "sha256-0y80dRYzb6Ceu6MlGQHtpMdzOob/TBg6kf8dtF6KyCk=";
-  };
-  spark_3_3 = spark rec {
-    pname = "spark";
-    version = "3.3.2";
-    hash = "sha256-AeKe2QN+mhUJgZRSIgbi/DttAWlDgwC1kl9p7syEvbo=";
-    extraMeta.knownVulnerabilities = [ "CVE-2023-22946" ];
-  };
-  spark_3_2 = spark rec {
-    pname = "spark";
-    version = "3.2.4";
-    hash = "sha256-xL4W+dTWbvmmncq3/8iXmhp24rp5SftvoRfkTyxCI8E=";
-    extraMeta.knownVulnerabilities = [ "CVE-2023-22946" ];
+    version = "3.4.3";
+    hash = "sha256-ifeytk08oaEyiEawwWbUWWuoynGTJNvnrkOW/CjeaSk=";
   };
 }

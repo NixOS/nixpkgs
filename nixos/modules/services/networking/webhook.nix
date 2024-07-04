@@ -14,13 +14,13 @@ let
       id = mkOption {
         type = types.str;
         default = name;
-        description = mdDoc ''
+        description = ''
           The ID of your hook. This value is used to create the HTTP endpoint (`protocol://yourserver:port/prefix/''${id}`).
         '';
       };
       execute-command = mkOption {
         type = types.str;
-        description = mdDoc "The command that should be executed when the hook is triggered.";
+        description = "The command that should be executed when the hook is triggered.";
       };
     };
   });
@@ -31,16 +31,16 @@ let
 in {
   options = {
     services.webhook = {
-      enable = mkEnableOption (mdDoc ''
+      enable = mkEnableOption ''
         [Webhook](https://github.com/adnanh/webhook), a server written in Go that allows you to create HTTP endpoints (hooks),
         which execute configured commands for any person or service that knows the URL
-      '');
+      '';
 
-      package = mkPackageOptionMD pkgs "webhook" {};
+      package = mkPackageOption pkgs "webhook" {};
       user = mkOption {
         type = types.str;
         default = defaultUser;
-        description = mdDoc ''
+        description = ''
           Webhook will be run under this user.
 
           If set, you must create this user yourself!
@@ -49,7 +49,7 @@ in {
       group = mkOption {
         type = types.str;
         default = defaultUser;
-        description = mdDoc ''
+        description = ''
           Webhook will be run under this group.
 
           If set, you must create this group yourself!
@@ -58,7 +58,7 @@ in {
       ip = mkOption {
         type = types.str;
         default = "0.0.0.0";
-        description = mdDoc ''
+        description = ''
           The IP webhook should serve hooks on.
 
           The default means it can be reached on any interface if `openFirewall = true`.
@@ -67,12 +67,12 @@ in {
       port = mkOption {
         type = types.port;
         default = 9000;
-        description = mdDoc "The port webhook should be reachable from.";
+        description = "The port webhook should be reachable from.";
       };
       openFirewall = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Open the configured port in the firewall for external ingress traffic.
           Preferably the Webhook server is instead put behind a reverse proxy.
         '';
@@ -81,7 +81,7 @@ in {
         type = types.bool;
         default = cfg.hooksTemplated != {};
         defaultText = literalExpression "hooksTemplated != {}";
-        description = mdDoc ''
+        description = ''
           Enable the generated hooks file to be parsed as a Go template.
           See [the documentation](https://github.com/adnanh/webhook/blob/master/docs/Templates.md) for more information.
         '';
@@ -89,7 +89,7 @@ in {
       urlPrefix = mkOption {
         type = types.str;
         default = "hooks";
-        description = mdDoc ''
+        description = ''
           The URL path prefix to use for served hooks (`protocol://yourserver:port/''${prefix}/hook-id`).
         '';
       };
@@ -106,7 +106,7 @@ in {
             command-working-directory = "/var/webhook";
           };
         };
-        description = mdDoc ''
+        description = ''
           The actual configuration of which hooks will be served.
 
           Read more on the [project homepage] and on the [hook definition] page.
@@ -128,7 +128,7 @@ in {
             }
           '';
         };
-        description = mdDoc ''
+        description = ''
           Same as {option}`hooks`, but these hooks are specified as literal strings instead of Nix values,
           and hence can include [template syntax](https://github.com/adnanh/webhook/blob/master/docs/Templates.md)
           which might not be representable as JSON.
@@ -140,13 +140,13 @@ in {
       verbose = mkOption {
         type = types.bool;
         default = true;
-        description = mdDoc "Whether to show verbose output.";
+        description = "Whether to show verbose output.";
       };
       extraArgs = mkOption {
         type = types.listOf types.str;
         default = [];
         example = [ "-secure" ];
-        description = mdDoc ''
+        description = ''
           These are arguments passed to the webhook command in the systemd service.
           You can find the available arguments and options in the [documentation][parameters].
 
@@ -156,7 +156,7 @@ in {
       environment = mkOption {
         type = types.attrsOf types.str;
         default = {};
-        description = mdDoc "Extra environment variables passed to webhook.";
+        description = "Extra environment variables passed to webhook.";
       };
     };
   };

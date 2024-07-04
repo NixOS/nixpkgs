@@ -1,36 +1,81 @@
-{ lib, fetchFromGitHub, python3Packages }:
+{
+  lib,
+  fetchFromGitHub,
+  python3Packages,
+}:
 
 python3Packages.buildPythonPackage rec {
   pname = "opsdroid";
-  version = "0.25.0";
+  version = "0.30.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "opsdroid";
     repo = "opsdroid";
-    rev = "v${version}";
-    sha256 = "0f32jf2rds9543akysxinf3hsgzr0w880xwcrcm1r2r0nhp8b8s5";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-7H44wdhJD4Z6OP1sUmSGlepuvx+LlwKLq7iR8cwqR24=";
   };
 
-  disabled = !python3Packages.isPy3k;
+  build-system = with python3Packages; [ setuptools ];
 
-  # tests folder is not included in release
-  doCheck = false;
-
-  propagatedBuildInputs = with python3Packages; [
-    click babel opsdroid_get_image_size slackclient webexteamssdk bleach
-    parse emoji puremagic yamale nbformat websockets pycron nbconvert
-    aiohttp matrix-api-async aioredis aiosqlite arrow pyyaml motor regex
-    mattermostdriver setuptools voluptuous ibm-watson tailer multidict
-    watchgod get-video-properties appdirs bitstring matrix-nio
-  ] ++ matrix-nio.optional-dependencies.e2e;
+  dependencies =
+    with python3Packages;
+    [
+      aiohttp
+      aiohttp-middlewares
+      aioredis
+      aiosqlite
+      appdirs
+      arrow
+      babel
+      bitstring
+      bleach
+      # botbuilder-core, connector for teams
+      certifi
+      click
+      # dialogflow, connector for Dialogflow
+      dnspython
+      emoji
+      get-video-properties
+      ibm-watson
+      matrix-nio
+      mattermostdriver
+      motor
+      multidict
+      nbconvert
+      nbformat
+      opsdroid-get-image-size
+      parse
+      puremagic
+      pycron
+      python-olm
+      pyyaml
+      regex
+      rich
+      slack-sdk
+      tailer
+      voluptuous
+      watchgod
+      webexteamssdk
+      wrapt
+    ]
+    ++ matrix-nio.optional-dependencies.e2e;
 
   passthru.python = python3Packages.python;
 
+  # Tests are not included in releases
+  doCheck = false;
+
   meta = with lib; {
-    description = "An open source chat-ops bot framework";
+    description = "Open source chat-ops bot framework";
     homepage = "https://opsdroid.dev";
-    maintainers = with maintainers; [ globin willibutz ];
+    changelog = "https://github.com/opsdroid/opsdroid/releases/tag/v${version}";
     license = licenses.asl20;
+    maintainers = with maintainers; [
+      globin
+      willibutz
+    ];
     platforms = platforms.unix;
+    mainProgram = "opsdroid";
   };
 }

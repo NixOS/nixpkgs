@@ -28,7 +28,8 @@ buildPythonApplication rec {
       program arguments are specified it shows the current date, time and
       timezone.
     '';
-    maintainers = [ maintainers.infinisil ];
+    maintainers = [ ];
     license = licenses.gpl3;
+    mainProgram = "pdd";
   };
 }

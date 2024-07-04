@@ -5,6 +5,7 @@
 , fetchpatch
 , gdbm
 , glib
+, gst_all_1
 , gsettings-desktop-schemas
 , gtk-vnc
 , gtk3
@@ -29,7 +30,7 @@
 , spice-protocol
 , spiceSupport ? true
 , vte
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 with lib;
@@ -60,10 +61,12 @@ stdenv.mkDerivation rec {
     pkg-config
     python3
     shared-mime-info
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
+    gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-good
     bash-completion
     glib
     gsettings-desktop-schemas
@@ -97,14 +100,14 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "A viewer for remote virtual machines";
+    description = "Viewer for remote virtual machines";
     maintainers = with maintainers; [ raskin atemu ];
     platforms = with platforms; linux ++ darwin;
     license = licenses.gpl2;
   };
   passthru = {
     updateInfo = {
-      downloadPage = "http://virt-manager.org/download.html";
+      downloadPage = "https://virt-manager.org/download.html";
     };
   };
 }

@@ -1,12 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, python
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  python,
 }:
 
 buildPythonPackage rec {
   pname = "defusedxml";
   version = "0.7.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

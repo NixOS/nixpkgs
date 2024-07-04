@@ -5,13 +5,14 @@
 , cargo
 , fetchFromGitHub
 , fetchYarnDeps
-, fixup_yarn_lock
 , installShellFiles
 , lame
 , mpv-unwrapped
 , ninja
+, nixosTests
 , nodejs
 , nodejs-slim
+, fixup-yarn-lock
 , protobuf
 , python3
 , qt6
@@ -27,29 +28,29 @@
 
 let
   pname = "anki";
-  version = "2.1.66";
-  rev = "70506aeb99d4afbe73321feaf75a2fabaa011d55";
+  version = "24.04";
+  rev = "429bc9e14cefb597646a0e1beac6ef140f226b6f";
 
   src = fetchFromGitHub {
     owner = "ankitects";
     repo = "anki";
     rev = version;
-    hash = "sha256-eE64i/jTMvipakbQXzKu/dN+dyim7E4M+eP3d9GZhII=";
+    hash = "sha256-H/Y6ZEJ7meprk4SWIPkoABs6AV1CzbK2l22jEnMSvyk=";
     fetchSubmodules = true;
   };
 
-  cargoDeps = rustPlatform.importCargoLock {
+  cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "csv-1.1.6" = "sha256-w728ffOVkI+IfK6FbmkGhr0CjuyqgJnPB1kutMJIUYg=";
       "linkcheck-0.4.1" = "sha256-S93J1cDzMlzDjcvz/WABmv8CEC6x78E+f7nzhsN7NkE=";
       "percent-encoding-iri-2.2.0" = "sha256-kCBeS1PNExyJd4jWfDfctxq6iTdAq69jtxFQgCCQ8kQ=";
     };
   };
+  cargoDeps = rustPlatform.importCargoLock cargoLock;
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = "${src}/yarn.lock";
-    hash = "sha256-3DUiwGTg7Nzd+bPJlc8aUW8bYrl7BF+CcjqkF6nW0qc=";
+    hash = "sha256-7yBN6si1Q+xvyosP7YnOw9ZfGcLZdy5ukXXFvvI20Js=";
   };
 
   anki-build-python = python3.withPackages (ps: with ps; [
@@ -100,15 +101,15 @@ let
     inherit version src yarnOfflineCache;
 
     nativeBuildInputs = [
-      fixup_yarn_lock
       nodejs-slim
+      fixup-yarn-lock
       yarn
     ];
 
     configurePhase = ''
       export HOME=$NIX_BUILD_TOP
       yarn config --offline set yarn-offline-mirror $yarnOfflineCache
-      fixup_yarn_lock yarn.lock
+      fixup-yarn-lock yarn.lock
       yarn install --offline --frozen-lockfile --ignore-scripts --no-progress --non-interactive
       patchShebangs node_modules/
     '';
@@ -121,13 +122,13 @@ in
 python3.pkgs.buildPythonApplication {
   inherit pname version;
 
-  outputs = [ "doc" "man" "out" ];
+  outputs = [ "out" "doc" "man" ];
 
   inherit src;
 
   patches = [
-    ./patches/gl-fixup.patch
-    ./patches/no-update-check.patch
+    ./patches/disable-auto-update.patch
+    ./patches/remove-the-gl-library-workaround.patch
     ./patches/skip-formatting-python-code.patch
   ];
 
@@ -135,8 +136,8 @@ python3.pkgs.buildPythonApplication {
 
   nativeBuildInputs = [
     fakeGit
-    fixup_yarn_lock
     offlineYarn
+    fixup-yarn-lock
 
     cargo
     installShellFiles
@@ -148,26 +149,30 @@ python3.pkgs.buildPythonApplication {
 
   buildInputs = [
     qt6.qtbase
+    qt6.qtsvg
   ] ++ lib.optional stdenv.isLinux qt6.qtwayland;
 
   propagatedBuildInputs = with python3.pkgs; [
     # This rather long list came from running:
-    #    grep --no-filename -oE "^[^ =]*" python/{requirements.base.txt,requirements.bundle.txt,requirements.qt6_4.txt} | \
+    #    grep --no-filename -oE "^[^ =]*" python/{requirements.base.txt,requirements.bundle.txt,requirements.qt6_lin.txt} | \
     #      sort | uniq | grep -v "^#$"
     # in their repo at the git tag for this version
     # There's probably a more elegant way, but the above extracted all the
     # names, without version numbers, of their python dependencies. The hope is
     # that nixpkgs versions are "close enough"
     # I then removed the ones the check phase failed on (pythonCatchConflictsPhase)
+    attrs
     beautifulsoup4
+    blinker
+    build
     certifi
     charset-normalizer
     click
     colorama
     decorator
-    distro
     flask
     flask-cors
+    google-api-python-client
     idna
     importlib-metadata
     itsdangerous
@@ -176,21 +181,27 @@ python3.pkgs.buildPythonApplication {
     markdown
     markupsafe
     orjson
-    pep517
-    pyparsing
+    packaging
+    pip
+    pip-system-certs
+    pip-tools
+    protobuf
+    pyproject-hooks
     pyqt6
     pyqt6-sip
     pyqt6-webengine
     pyrsistent
     pysocks
-    python3.pkgs.protobuf
     requests
     send2trash
-    six
+    setuptools
     soupsieve
+    tomli
     urllib3
     waitress
     werkzeug
+    wheel
+    wrapt
     zipp
   ] ++ lib.optionals stdenv.isDarwin [
     AVKit
@@ -232,7 +243,7 @@ python3.pkgs.buildPythonApplication {
 
     export HOME=$NIX_BUILD_TOP
     yarn config --offline set yarn-offline-mirror $yarnOfflineCache
-    fixup_yarn_lock yarn.lock
+    fixup-yarn-lock yarn.lock
 
     patchShebangs ./ninja
     PIP_USER=1 ./ninja build wheels
@@ -266,8 +277,15 @@ python3.pkgs.buildPythonApplication {
     )
   '';
 
+  passthru = {
+    # cargoLock is reused in anki-sync-server
+    inherit cargoLock;
+    tests.anki-sync-server = nixosTests.anki-sync-server;
+  };
+
   meta = with lib; {
     description = "Spaced repetition flashcard program";
+    mainProgram = "anki";
     longDescription = ''
       Anki is a program which makes remembering things easy. Because it is a lot
       more efficient than traditional study methods, you can either greatly
@@ -283,7 +301,7 @@ python3.pkgs.buildPythonApplication {
     homepage = "https://apps.ankiweb.net";
     license = licenses.agpl3Plus;
     platforms = platforms.mesaPlatforms;
-    maintainers = with maintainers; [ euank oxij paveloom ];
+    maintainers = with maintainers; [ euank oxij ];
     # Reported to crash at launch on darwin (as of 2.1.65)
     broken = stdenv.isDarwin;
   };

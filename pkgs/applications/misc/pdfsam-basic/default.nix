@@ -1,12 +1,12 @@
-{ lib, stdenv, makeDesktopItem, fetchurl, jdk19, wrapGAppsHook, glib }:
+{ lib, stdenv, makeDesktopItem, fetchurl, jdk21, wrapGAppsHook3, glib }:
 
 stdenv.mkDerivation rec {
   pname = "pdfsam-basic";
-  version = "5.0.3";
+  version = "5.2.3";
 
   src = fetchurl {
     url = "https://github.com/torakiki/pdfsam/releases/download/v${version}/pdfsam_${version}-1_amd64.deb";
-    hash = "sha256-NST5d5dzO26ifKStbgD7qNbumUMQhfUFNE472LR1z5k=";
+    hash = "sha256-ai1UHMeLvCba6WV6f6dGc53CxPP7bJaPgo8Tm7ddkOM=";
   };
 
   unpackPhase = ''
@@ -14,11 +14,11 @@ stdenv.mkDerivation rec {
     tar xvf data.tar.gz
   '';
 
-  nativeBuildInputs = [ wrapGAppsHook ];
+  nativeBuildInputs = [ wrapGAppsHook3 ];
   buildInputs = [ glib ];
 
   preFixup = ''
-    gappsWrapperArgs+=(--set JAVA_HOME "${jdk19}" --set PDFSAM_JAVA_PATH "${jdk19}")
+    gappsWrapperArgs+=(--set JAVA_HOME "${jdk21}" --set PDFSAM_JAVA_PATH "${jdk21}")
   '';
 
   installPhase = ''
@@ -42,6 +42,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/torakiki/pdfsam";
     description = "Multi-platform software designed to extract pages, split, merge, mix and rotate PDF files";
+    mainProgram = "pdfsam-basic";
     sourceProvenance = with sourceTypes; [
       binaryBytecode
       binaryNativeCode

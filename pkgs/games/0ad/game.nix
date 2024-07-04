@@ -55,7 +55,24 @@ stdenv.mkDerivation rec {
     "-L${nvidia-texture-tools.lib}/lib/static"
   ];
 
-  patches = [ ./rootdir_env.patch ];
+  patches = [
+    ./rootdir_env.patch
+
+    # Fix build with libxml v2.12
+    # FIXME: Remove with next package update
+    (fetchpatch {
+      name = "libxml-2.12-fix.patch";
+      url = "https://github.com/0ad/0ad/commit/d242631245edb66816ef9960bdb2c61b68e56cec.patch";
+      hash = "sha256-Ik8ThkewB7wyTPTI7Y6k88SqpWUulXK698tevfSBr6I=";
+    })
+    # Fix build with GCC 13
+    # FIXME: Remove with next package update
+    (fetchpatch {
+      name = "gcc-13-fix.patch";
+      url = "https://github.com/0ad/0ad/commit/093e1eb23519ab4a4633a999a555a58e4fd5343e.patch";
+      hash = "sha256-NuWO64narU1JID/F3cj7lJKjo96XR7gSW0w8I3/hhuw=";
+    })
+  ];
 
   configurePhase = ''
     # Delete shipped libraries which we don't need.
@@ -100,7 +117,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A free, open-source game of ancient warfare";
+    description = "Free, open-source game of ancient warfare";
     homepage = "https://play0ad.com/";
     license = with licenses; [
       gpl2 lgpl21 mit cc-by-sa-30
@@ -108,5 +125,6 @@ stdenv.mkDerivation rec {
     ];
     maintainers = with maintainers; [ chvp ];
     platforms = subtractLists platforms.i686 platforms.linux;
+    mainProgram = "0ad";
   };
 }

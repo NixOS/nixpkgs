@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, meson, ninja, vala, gobject-introspection, pkg-config, gnome, gtk3, wrapGAppsHook
+{ lib, stdenv, fetchurl, meson, ninja, vala, pkg-config, gnome, adwaita-icon-theme, gtk3, wrapGAppsHook3
 , librsvg, gettext, itstool, python3, libxml2, libgnome-games-support, libgee, desktop-file-utils }:
 
 stdenv.mkDerivation rec {
@@ -10,12 +10,11 @@ stdenv.mkDerivation rec {
     sha256 = "NQLps/ccs7LnEcDmAZGH/rzCvKh349RW3KtwD3vjEnI=";
   };
 
-  # gobject-introspection for finding vapi files
   nativeBuildInputs = [
-    meson ninja vala gobject-introspection pkg-config gettext itstool python3
-    libxml2 wrapGAppsHook desktop-file-utils
+    meson ninja vala pkg-config gettext itstool python3
+    libxml2 wrapGAppsHook3 desktop-file-utils
   ];
-  buildInputs = [ gtk3 librsvg gnome.adwaita-icon-theme libgnome-games-support libgee ];
+  buildInputs = [ gtk3 librsvg adwaita-icon-theme libgnome-games-support libgee ];
 
   postPatch = ''
     chmod +x build-aux/meson_post_install.py
@@ -30,8 +29,9 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    homepage = "https://wiki.gnome.org/Apps/Mines";
+    homepage = "https://gitlab.gnome.org/GNOME/gnome-mines";
     description = "Clear hidden mines from a minefield";
+    mainProgram = "gnome-mines";
     maintainers = teams.gnome.members;
     license = licenses.gpl3;
     platforms = platforms.unix;

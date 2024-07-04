@@ -3,13 +3,13 @@
 stdenv.mkDerivation rec {
 
   pname = "cwm";
-  version = "7.1";
+  version = "7.4";
 
   src = fetchFromGitHub {
     owner = "leahneukirchen";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-lkjsxGMXOrnu4cUiV/TO7yzd9FzM297MhaFKauqmiHo=";
+    hash = "sha256-L3u4mH2UH2pTHhSPVr5dUi94b9DheslkIWL6EgQ05yA=";
   };
 
   strictDeps = true;
@@ -20,10 +20,11 @@ stdenv.mkDerivation rec {
   prePatch = ''sed -i "s@/usr/local@$out@" Makefile'';
 
   meta = with lib; {
-    description = "A lightweight and efficient window manager for X11";
+    description = "Lightweight and efficient window manager for X11";
     homepage    = "https://github.com/leahneukirchen/cwm";
     maintainers = with maintainers; [ _0x4A6F mkf ];
     license     = licenses.isc;
     platforms   = platforms.linux;
+    mainProgram = "cwm";
   };
 }

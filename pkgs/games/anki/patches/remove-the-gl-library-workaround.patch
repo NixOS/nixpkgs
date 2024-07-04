@@ -1,0 +1,17 @@
+diff --git a/qt/aqt/__init__.py b/qt/aqt/__init__.py
+index b6d24080b..5e5faac7b 100644
+--- a/qt/aqt/__init__.py
++++ b/qt/aqt/__init__.py
+@@ -413,11 +413,5 @@ def setupGL(pm: aqt.profiles.ProfileManager) -> None:
+     # RHI errors are emitted multiple times so make sure we only handle them once
+     driver_failed = False
+
+-    # work around pyqt loading wrong GL library
+-    if is_lin and not sys.platform.startswith("freebsd"):
+-        import ctypes
+-
+-        ctypes.CDLL("libGL.so.1", ctypes.RTLD_GLOBAL)
+-
+     # catch opengl errors
+     def msgHandler(category: Any, ctx: Any, msg: Any) -> None:
+         if category == QtMsgType.QtDebugMsg:

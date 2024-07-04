@@ -23,18 +23,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "vulkan-validation-layers";
-  version = "1.3.261";
-
-  # If we were to use "dev" here instead of headers, the setupHook would be
-  # placed in that output instead of "out".
-  outputs = ["out" "headers"];
-  outputInclude = "headers";
+  version = "1.3.283.0";
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "Vulkan-ValidationLayers";
-    rev = "v${version}";
-    hash = "sha256-4kE3pkyYu6hnbv19fHhON+hI2HU4vLm31tNlp5fhndM=";
+    rev = "vulkan-sdk-${version}";
+    hash = "sha256-OT9VfGg3+NBVV6SCGZ+Hu9FAxGJXXT45yvt2sHDIFTA=";
   };
 
   nativeBuildInputs = [
@@ -81,7 +76,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "The official Khronos Vulkan validation layers";
+    description = "Official Khronos Vulkan validation layers";
     homepage    = "https://github.com/KhronosGroup/Vulkan-ValidationLayers";
     platforms   = platforms.linux;
     license     = licenses.asl20;

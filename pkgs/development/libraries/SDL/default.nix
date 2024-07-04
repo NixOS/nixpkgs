@@ -1,10 +1,10 @@
 { lib, stdenv, config, fetchurl, fetchpatch, pkg-config, audiofile, libcap, libiconv
-, libGLSupported ? lib.elem stdenv.hostPlatform.system lib.platforms.mesaPlatforms
+, libGLSupported ? lib.meta.availableOn stdenv.hostPlatform libGL
 , openglSupport ? libGLSupported, libGL, libGLU
 , alsaSupport ? stdenv.isLinux && !stdenv.hostPlatform.isAndroid, alsa-lib
 , x11Support ? !stdenv.isCygwin && !stdenv.hostPlatform.isAndroid
 , libXext, libICE, libXrandr
-, pulseaudioSupport ? config.pulseaudio or stdenv.isLinux && !stdenv.hostPlatform.isAndroid, libpulseaudio
+, pulseaudioSupport ? config.pulseaudio or stdenv.isLinux && !stdenv.hostPlatform.isAndroid && lib.meta.availableOn stdenv.hostPlatform libpulseaudio, libpulseaudio
 , OpenGL, GLUT, CoreAudio, CoreServices, AudioUnit, Kernel, Cocoa
 }:
 
@@ -30,9 +30,6 @@ stdenv.mkDerivation rec {
     url    = "https://www.libsdl.org/release/${pname}-${version}.tar.gz";
     sha256 = "005d993xcac8236fpvd1iawkz4wqjybkpn8dbwaliqz5jfkidlyn";
   };
-
-  # make: *** No rule to make target 'build/*.lo', needed by 'build/libSDL.la'.  Stop.
-  postPatch = "patchShebangs ./configure";
 
   outputs = [ "out" "dev" ];
   outputBin = "dev"; # sdl-config
@@ -129,7 +126,8 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with lib; {
-    description = "A cross-platform multimedia library";
+    description = "Cross-platform multimedia library";
+    mainProgram = "sdl-config";
     homepage    = "http://www.libsdl.org/";
     maintainers = with maintainers; [ lovek323 ];
     platforms   = platforms.unix;

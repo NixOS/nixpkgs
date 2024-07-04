@@ -1,16 +1,19 @@
-{ lib
-, buildPythonPackage
-, fetchpatch
-, fetchPypi
-, ipywidgets
-, notebook
-, pandas
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchpatch,
+  fetchPypi,
+  ipywidgets,
+  looseversion,
+  notebook,
+  pandas,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "qgrid";
   version = "1.3.1";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -26,15 +29,19 @@ buildPythonPackage rec {
     })
   ];
 
-  propagatedBuildInputs = [
+  postPatch = ''
+    substituteInPlace qgrid/grid.py \
+      --replace-fail "from distutils.version import LooseVersion" "from looseversion import LooseVersion"
+  '';
+
+  dependencies = [
     ipywidgets
+    looseversion
     notebook
     pandas
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   # Those tests are also failing upstream
   disabledTests = [
@@ -42,14 +49,16 @@ buildPythonPackage rec {
     "test_edit_multi_index_df"
     "test_multi_index"
     "test_period_object_column"
+    # probably incompatible with pandas>=2.1
+    "test_add_row_button"
   ];
 
   pythonImportsCheck = [ "qgrid" ];
 
-  meta = with lib; {
-    description = "An interactive grid for sorting, filtering, and editing DataFrames in Jupyter notebooks";
+  meta = {
+    description = "Interactive grid for sorting, filtering, and editing DataFrames in Jupyter notebooks";
     homepage = "https://github.com/quantopian/qgrid";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ GaetanLepage ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ GaetanLepage ];
   };
 }

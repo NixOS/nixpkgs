@@ -16,22 +16,29 @@
 , lib
 , stdenv
 , systemd
-, wrapGAppsHook
+, wrapGAppsHook3
 , xapp
 , xorg
 , libexecinfo
 , pango
 }:
 
+let
+  pythonEnv = python3.withPackages (pp: with pp; [
+    pp.xapp # don't omit `pp.`, see #213561
+    pygobject3
+    setproctitle
+  ]);
+in
 stdenv.mkDerivation rec {
   pname = "cinnamon-session";
-  version = "5.8.1";
+  version = "6.2.0";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    hash = "sha256-NVoP1KYh/z96NKMi9LjL4RgkjJg32oSy5WHJ91+70DI=";
+    hash = "sha256-2KQJNUc/uvbXnqqV0Yt3cltTHNbCo+wK67NXlid02Sk=";
   };
 
   patches = [
@@ -40,6 +47,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     # meson.build
+    cinnamon-desktop
     gtk3
     glib
     libcanberra
@@ -57,18 +65,17 @@ stdenv.mkDerivation rec {
     xorg.xtrans
 
     # other (not meson.build)
-
-    cinnamon-desktop
     cinnamon-settings-daemon
     dbus-glib
     glib
     gsettings-desktop-schemas
+    pythonEnv # for cinnamon-session-quit
   ];
 
   nativeBuildInputs = [
     meson
     ninja
-    wrapGAppsHook
+    wrapGAppsHook3
     libexecinfo
     python3
     pkg-config
@@ -81,8 +88,10 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    chmod +x data/meson_install_schemas.py # patchShebangs requires executable file
-    patchShebangs data/meson_install_schemas.py
+    # patchShebangs requires executable file
+    chmod +x data/meson_install_schemas.py cinnamon-session-quit/cinnamon-session-quit.py
+    patchShebangs --build data/meson_install_schemas.py
+    patchShebangs --host cinnamon-session-quit/cinnamon-session-quit.py
   '';
 
   preFixup = ''
@@ -94,7 +103,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/linuxmint/cinnamon-session";
-    description = "The Cinnamon session manager";
+    description = "Cinnamon session manager";
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = teams.cinnamon.members;

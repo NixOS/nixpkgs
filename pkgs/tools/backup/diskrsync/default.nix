@@ -23,6 +23,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Rsync for block devices and disk images";
+    mainProgram = "diskrsync";
     homepage = "https://github.com/dop251/diskrsync";
     license = licenses.mit;
     maintainers = with maintainers; [ jluttine ];

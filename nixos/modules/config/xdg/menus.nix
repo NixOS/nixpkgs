@@ -10,7 +10,7 @@ with lib;
     xdg.menus.enable = mkOption {
       type = types.bool;
       default = true;
-      description = lib.mdDoc ''
+      description = ''
         Whether to install files to support the
         [XDG Desktop Menu specification](https://specifications.freedesktop.org/menu-spec/menu-spec-latest.html).
       '';

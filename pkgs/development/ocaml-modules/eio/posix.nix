@@ -1,4 +1,6 @@
 { buildDunePackage
+, lib
+, stdenv
 , dune-configurator
 , eio
 , fmt
@@ -8,12 +10,15 @@
 
 buildDunePackage {
   pname = "eio_posix";
-  inherit (eio) meta src version;
+  inherit (eio) meta src patches version;
 
   minimalOCamlVersion = "5.0";
-  duneVersion = "3";
 
   dontStrip = true;
+
+  env = lib.optionalAttrs stdenv.isDarwin {
+    NIX_CFLAGS_COMPILE = "-Wno-implicit-function-declaration";
+  };
 
   buildInputs = [
     dune-configurator

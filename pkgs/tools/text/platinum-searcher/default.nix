@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "the_platinum_searcher";
-  version = "2.1.5";
+  version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "monochromegane";
     repo = "the_platinum_searcher";
     rev = "v${version}";
-    hash = "sha256-AJsFLleZf5yhLY5UZnaQUBQYntzBLXFh6jU2UtKg8/g=";
+    hash = "sha256-FNHlALFwMbajaHWOehdSFeQmvZSuCZLdqGqLZ7DF+pI=";
   };
 
   vendorHash = "sha256-GIjPgu0e+duN5MeWcRaF5xUFCkqe2aZJCwGbLUMko08=";
@@ -25,7 +25,8 @@ buildGoModule rec {
 
   meta = with lib; {
     homepage = "https://github.com/monochromegane/the_platinum_searcher";
-    description = "A code search tool similar to ack and the_silver_searcher(ag)";
+    description = "Code search tool similar to ack and the_silver_searcher(ag)";
+    mainProgram = "pt";
     license = licenses.mit;
   };
 }

@@ -1,13 +1,14 @@
-{ lib
-, attrs
-, buildPythonPackage
-, click
-, commoncode
-, dockerfile-parse
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-, setuptools-scm
+{
+  lib,
+  attrs,
+  buildPythonPackage,
+  click,
+  commoncode,
+  dockerfile-parse,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
@@ -24,8 +25,6 @@ buildPythonPackage rec {
     hash = "sha256-J9glnfs6l36/IQoIvE8a+Cw4B8x/6r5UeAU8+T/OiQg=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   dontConfigure = true;
 
   postPatch = ''
@@ -34,9 +33,7 @@ buildPythonPackage rec {
       --replace ">=3.7.*" ">=3.7"
   '';
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
 
   propagatedBuildInputs = [
     attrs
@@ -45,13 +42,9 @@ buildPythonPackage rec {
     commoncode
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "container_inspector"
-  ];
+  pythonImportsCheck = [ "container_inspector" ];
 
   meta = with lib; {
     description = "Suite of analysis utilities and command line tools for container images";

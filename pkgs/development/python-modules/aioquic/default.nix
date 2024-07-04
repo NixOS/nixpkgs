@@ -1,43 +1,45 @@
-{ lib
-, buildPythonPackage
-, certifi
-, fetchPypi
-, openssl
-, pylsqpack
-, pyopenssl
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  certifi,
+  cryptography,
+  fetchPypi,
+  openssl,
+  pylsqpack,
+  pyopenssl,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  service-identity,
 }:
 
 buildPythonPackage rec {
   pname = "aioquic";
-  version = "0.9.21";
-  format = "setuptools";
+  version = "1.1.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ecfsBjGOeFYnZlyk6HI63zR7ciW30AbjMtJXWh9RbvU=";
+    hash = "sha256-p5HFeYuutCoS+ij9Mn2gTQjxh5XpOIkXi0svSf6Lv0M=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     certifi
+    cryptography
     pylsqpack
     pyopenssl
+    service-identity
   ];
 
-  buildInputs = [
-    openssl
-  ];
+  buildInputs = [ openssl ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "aioquic"
-  ];
+  pythonImportsCheck = [ "aioquic" ];
 
   __darwinAllowLocalNetworking = true;
 

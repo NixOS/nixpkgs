@@ -15,21 +15,21 @@ in {
 
     services.uhub = mkOption {
       default = { };
-      description = lib.mdDoc "Uhub ADC hub instances";
+      description = "Uhub ADC hub instances";
       type = types.attrsOf (types.submodule {
         options = {
 
-          enable = mkEnableOption (lib.mdDoc "hub instance") // { default = true; };
+          enable = mkEnableOption "hub instance" // { default = true; };
 
           enableTLS = mkOption {
             type = types.bool;
             default = false;
-            description = lib.mdDoc "Whether to enable TLS support.";
+            description = "Whether to enable TLS support.";
           };
 
           settings = mkOption {
             inherit (settingsFormat) type;
-            description = lib.mdDoc ''
+            description = ''
               Configuration of uhub.
               See https://www.uhub.org/doc/config.php for a list of options.
             '';
@@ -44,7 +44,7 @@ in {
           };
 
           plugins = mkOption {
-            description = lib.mdDoc "Uhub plugin configuration.";
+            description = "Uhub plugin configuration.";
             type = with types;
               listOf (submodule {
                 options = {
@@ -52,10 +52,10 @@ in {
                     type = path;
                     example = literalExpression
                       "$${pkgs.uhub}/plugins/mod_auth_sqlite.so";
-                    description = lib.mdDoc "Path to plugin file.";
+                    description = "Path to plugin file.";
                   };
                   settings = mkOption {
-                    description = lib.mdDoc "Settings specific to this plugin.";
+                    description = "Settings specific to this plugin.";
                     type = with types; attrsOf str;
                     example = { file = "/etc/uhub/users.db"; };
                   };

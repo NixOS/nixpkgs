@@ -1,31 +1,38 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, fetchpatch
-, capstone
-, cmsis-pack-manager
-, colorama
-, intelhex
-, intervaltree
-, natsort
-, prettytable
-, pyelftools
-, pylink-square
-, pyusb
-, pyyaml
-, typing-extensions
-, stdenv
-, hidapi
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  fetchpatch,
+  capstone_4,
+  cmsis-pack-manager,
+  colorama,
+  importlib-metadata,
+  importlib-resources,
+  intelhex,
+  intervaltree,
+  lark,
+  natsort,
+  prettytable,
+  pyelftools,
+  pylink-square,
+  pyusb,
+  pyyaml,
+  setuptools,
+  setuptools-scm,
+  typing-extensions,
+  stdenv,
+  hidapi,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pyocd";
-  version = "0.34.3";
+  version = "0.36.0";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "2zDr6fnA2MCTT/hNVvk7u3gugMo+nUF2E2VsOPhJXH4=";
+    hash = "sha256-k3eCrMna/wVNUPt8b3iM2UqE+A8LhfJarKuZ3Jgihkg=";
   };
 
   patches = [
@@ -37,12 +44,25 @@ buildPythonPackage rec {
     })
   ];
 
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace "libusb-package>=1.0,<2.0" ""
+  '';
+
+  nativeBuildInputs = [
+    setuptools
+    setuptools-scm
+  ];
+
   propagatedBuildInputs = [
-    capstone
+    capstone_4
     cmsis-pack-manager
     colorama
+    importlib-metadata
+    importlib-resources
     intelhex
     intervaltree
+    lark
     natsort
     prettytable
     pyelftools
@@ -50,24 +70,21 @@ buildPythonPackage rec {
     pyusb
     pyyaml
     typing-extensions
-  ] ++ lib.optionals (!stdenv.isLinux) [
-    hidapi
-  ];
-
-  nativeCheckInputs = [ pytestCheckHook ];
+  ] ++ lib.optionals (!stdenv.isLinux) [ hidapi ];
 
   pythonImportsCheck = [ "pyocd" ];
 
-  postPatch = ''
-    substituteInPlace setup.cfg \
-        --replace "libusb-package>=1.0,<2.0" "" \
-        --replace "pylink-square>=0.11.1,<1.0" "pylink-square>=0.11.1,<2.0"
-  '';
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
+    changelog = "https://github.com/pyocd/pyOCD/releases/tag/v${version}";
     description = "Python library for programming and debugging Arm Cortex-M microcontrollers";
-    homepage = "https://pyocd.io/";
+    downloadPage = "https://github.com/pyocd/pyOCD";
+    homepage = "https://pyocd.io";
     license = licenses.asl20;
-    maintainers = with maintainers; [ frogamic sbruder ];
+    maintainers = with maintainers; [
+      frogamic
+      sbruder
+    ];
   };
 }

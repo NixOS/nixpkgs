@@ -44,9 +44,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     homepage = "https://github.com/bmc0/dsp";
-    description = "An audio processing program with an interactive mode";
+    description = "Audio processing program with an interactive mode";
     license = licenses.isc;
     maintainers = with maintainers; [ aaronjheng ];
     platforms = platforms.linux;
+    mainProgram = "dsp";
   };
 })

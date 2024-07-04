@@ -26,6 +26,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "NetBIOS scanner written in Rust";
+    mainProgram = "nbtscanner";
     homepage = "https://github.com/jonkgrimes/nbtscanner";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];

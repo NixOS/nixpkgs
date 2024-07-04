@@ -1,5 +1,5 @@
 diff --git a/psycopg/psycopg/pq/_pq_ctypes.py b/psycopg/psycopg/pq/_pq_ctypes.py
-index 4f9d00fb..24b90ef6 100644
+index 9ca1d129..02929ab6 100644
 --- a/psycopg/psycopg/pq/_pq_ctypes.py
 +++ b/psycopg/psycopg/pq/_pq_ctypes.py
 @@ -11,14 +11,10 @@ from ctypes import Structure, CFUNCTYPE, POINTER
@@ -30,17 +30,26 @@ index 4f9d00fb..24b90ef6 100644
      fdopen = libc.fdopen
      fdopen.argtypes = (c_int, c_char_p)
 diff --git a/tests/fix_pq.py b/tests/fix_pq.py
-index 6811a26c..c1829c82 100644
+index 917dfc91..505f2d65 100644
 --- a/tests/fix_pq.py
 +++ b/tests/fix_pq.py
-@@ -51,9 +51,7 @@ def libpq():
-         from psycopg.pq.misc import find_libpq_full_path
- 
-         # Not available when testing the binary package
+@@ -47,18 +47,7 @@ def pytest_runtest_setup(item):
+ @pytest.fixture
+ def libpq():
+     """Return a ctypes wrapper to access the libpq."""
+-    try:
+-        from psycopg.pq.misc import find_libpq_full_path
+-
+-        # Not available when testing the binary package
 -        libname = find_libpq_full_path()
 -        assert libname, "libpq libname not found"
--        return ctypes.pydll.LoadLibrary(libname)
-+        return ctypes.pydll.LoadLibrary("@libpq@")
-     except Exception as e:
-         if pq.__impl__ == "binary":
-             pytest.skip(f"can't load libpq for testing: {e}")
+-        return ctypes.cdll.LoadLibrary(libname)
+-    except Exception as e:
+-        if pq.__impl__ == "binary":
+-            pytest.skip(f"can't load libpq for testing: {e}")
+-        else:
+-            raise
++    return ctypes.cdll.LoadLibrary("@libpq@")
+ 
+ 
+ @pytest.fixture

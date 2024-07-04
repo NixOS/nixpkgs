@@ -5,19 +5,19 @@
 
 buildNpmPackage rec {
   pname = "reveal-md";
-  version = "5.5.1";
+  version = "6.1.2";
 
   src = fetchFromGitHub {
     owner = "webpro";
     repo = "reveal-md";
     rev = version;
-    hash = "sha256-BlUZsETMdOmnz+OFGQhQ9aLHxIIAZ12X1ipy3u59zxo=";
+    hash = "sha256-MPNxQpof36XHg3Zl7fHkyCXnoDOcRvMiMiPH29GEWqE=";
   };
 
-  npmDepsHash = "sha256-xaDBB16egGi8zThHRrhcN8TVf6Nqkx8fkbxWqvJwJb4=";
+  npmDepsHash = "sha256-535tauun6ysPDC096ttPpvJZ+RSZ75aY8mVKj8mnMJI=";
 
   env = {
-    PUPPETEER_SKIP_CHROMIUM_DOWNLOAD = true;
+    PUPPETEER_SKIP_DOWNLOAD = true;
   };
 
   dontNpmBuild = true;
@@ -34,6 +34,7 @@ buildNpmPackage rec {
 
   meta = {
     description = "Get beautiful reveal.js presentations from your Markdown files";
+    mainProgram = "reveal-md";
     homepage = "https://github.com/webpro/reveal-md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sagikazarmark ];

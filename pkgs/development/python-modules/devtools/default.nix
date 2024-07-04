@@ -1,18 +1,19 @@
-{ lib
-, asttokens
-, buildPythonPackage
-, executing
-, hatchling
-, fetchFromGitHub
-, pygments
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  asttokens,
+  buildPythonPackage,
+  executing,
+  hatchling,
+  fetchFromGitHub,
+  pygments,
+  pytest-mock,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "devtools";
-  version = "0.11.0";
+  version = "0.12.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -21,12 +22,10 @@ buildPythonPackage rec {
     owner = "samuelcolvin";
     repo = "python-${pname}";
     rev = "refs/tags/v${version}";
-    hash = "sha256-ogogXZnuSFkWktCin+cyefjqIbGFRBVIeOrZJAa3hOE=";
+    hash = "sha256-1HFbNswdKa/9cQX0Gf6lLW1V5Kt/N4X6/5kQDdzp1Wo=";
   };
 
-  nativeBuildInputs = [
-    hatchling
-  ];
+  nativeBuildInputs = [ hatchling ];
 
   propagatedBuildInputs = [
     asttokens
@@ -37,11 +36,6 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     pytest-mock
-  ];
-
-  pytestFlagsArray = [
-    # pytest.PytestRemovedIn8Warning: Passing None has been deprecated.
-    "-W ignore::pytest.PytestRemovedIn8Warning"
   ];
 
   disabledTests = [
@@ -58,9 +52,7 @@ buildPythonPackage rec {
     "tests/test_insert_assert.py"
   ];
 
-  pythonImportsCheck = [
-    "devtools"
-  ];
+  pythonImportsCheck = [ "devtools" ];
 
   meta = with lib; {
     description = "Python's missing debug print command and other development tools";

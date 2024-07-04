@@ -1,25 +1,27 @@
-{ lib
-, aiohttp
-, aiohttp-retry
-, aiounittest
-, buildPythonPackage
-, cryptography
-, django
-, fetchFromGitHub
-, mock
-, multidict
-, pyngrok
-, pyjwt
-, pytestCheckHook
-, pythonOlder
-, pytz
-, requests
+{
+  lib,
+  aiohttp,
+  aiohttp-retry,
+  aiounittest,
+  buildPythonPackage,
+  cryptography,
+  django,
+  fetchFromGitHub,
+  mock,
+  multidict,
+  pyngrok,
+  pyjwt,
+  pytestCheckHook,
+  pythonOlder,
+  pytz,
+  requests,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "twilio";
-  version = "8.9.1";
-  format = "setuptools";
+  version = "9.2.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -27,10 +29,12 @@ buildPythonPackage rec {
     owner = "twilio";
     repo = "twilio-python";
     rev = "refs/tags/${version}";
-    hash = "sha256-F+0nYZIvZVH0QuEkuiV2lwA62r6T/amWFWg7rfBqddU=";
+    hash = "sha256-lCa9dV8rYyGRff+uOKIT0eq5PRItGRuedgY7IrRZ714=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     aiohttp
     aiohttp-retry
     pyjwt
@@ -38,6 +42,9 @@ buildPythonPackage rec {
     pytz
     requests
   ];
+
+  # aiounittest is not supported on 3.12
+  doCheck = pythonOlder "3.12";
 
   nativeCheckInputs = [
     aiounittest
@@ -60,9 +67,7 @@ buildPythonPackage rec {
     "tests/cluster/test_cluster.py"
   ];
 
-  pythonImportsCheck = [
-    "twilio"
-  ];
+  pythonImportsCheck = [ "twilio" ];
 
   meta = with lib; {
     description = "Twilio API client and TwiML generator";

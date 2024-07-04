@@ -8,15 +8,14 @@
 , rocm-comgr
 , rocm-runtime
 , hwdata
-, texlive
+, texliveSmall
 , doxygen
 , graphviz
 , buildDocs ? true
 }:
 
 let
-  latex = lib.optionalAttrs buildDocs texlive.combine {
-    inherit (texlive) scheme-small
+  latex = lib.optionalAttrs buildDocs (texliveSmall.withPackages (ps: with ps; [
     changepage
     latexmk
     varwidth
@@ -34,11 +33,11 @@ let
     etoc
     helvetic
     wasy
-    courier;
-  };
+    courier
+  ]));
 in stdenv.mkDerivation (finalAttrs: {
   pname = "rocdbgapi";
-  version = "5.7.0";
+  version = "5.7.1";
 
   outputs = [
     "out"
@@ -47,7 +46,7 @@ in stdenv.mkDerivation (finalAttrs: {
   ];
 
   src = fetchFromGitHub {
-    owner = "ROCm-Developer-Tools";
+    owner = "ROCm";
     repo = "ROCdbgapi";
     rev = "rocm-${finalAttrs.version}";
     hash = "sha256-qMXvgcS61lgcylz62ErYq8fhpYIR31skQEeKUryuP1w=";
@@ -103,10 +102,10 @@ in stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "Debugger support for control of execution and inspection state";
-    homepage = "https://github.com/ROCm-Developer-Tools/ROCdbgapi";
+    homepage = "https://github.com/ROCm/ROCdbgapi";
     license = with licenses; [ mit ];
     maintainers = teams.rocm.members;
     platforms = platforms.linux;
-    broken = versions.minor finalAttrs.version != versions.minor stdenv.cc.version;
+    broken = versions.minor finalAttrs.version != versions.minor stdenv.cc.version || versionAtLeast finalAttrs.version "6.0.0";
   };
 })

@@ -1,36 +1,41 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonRelaxDepsHook,
 
-# build deps
-, poetry-core
+  # build deps
+  poetry-core,
 
-# propagates
-, cbor2
-, python-dateutil
-, pyyaml
-, tomlkit
-, u-msgpack-python
+  # propagates
+  cbor2,
+  python-dateutil,
+  pyyaml,
+  tomlkit,
+  u-msgpack-python,
 
-# tested using
-, pytestCheckHook
+  # tested using
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "remarshal";
-  version = "0.17.0";
+  version = "0.17.1";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "dbohdan";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-FytVq9p7Yo0lS5rHj0crPIpHFjxolW8esSPkj2wLfaI=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-2WxMh5P/8NvElymnMU3JzQU0P4DMXFF6j15OxLaS+VA=";
   };
 
   nativeBuildInputs = [
     poetry-core
+    pythonRelaxDepsHook
   ];
+
+  pythonRelaxDeps = [ "pytest" ];
 
   propagatedBuildInputs = [
     cbor2
@@ -40,9 +45,7 @@ buildPythonPackage rec {
     u-msgpack-python
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     changelog = "https://github.com/remarshal-project/remarshal/releases/tag/v${version}";

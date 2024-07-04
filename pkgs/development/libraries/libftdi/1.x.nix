@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     "-DPYTHON_BINDINGS=${onOff pythonSupport}"
     "-DDOCUMENTATION=${onOff docSupport}"
   ] ++ lib.optionals pythonSupport [
-    "-DPYTHON_EXECUTABLE=${python3.pythonForBuild.interpreter}"
+    "-DPYTHON_EXECUTABLE=${python3.pythonOnBuildForHost.interpreter}"
     "-DPYTHON_LIBRARY=${python3}/lib/libpython${python3.pythonVersion}${stdenv.hostPlatform.extensions.sharedLibrary}"
   ];
 
@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A library to talk to FTDI chips using libusb";
+    description = "Library to talk to FTDI chips using libusb";
     homepage = "https://www.intra2net.com/en/developer/libftdi/";
     license = with licenses; [ lgpl2Only gpl2Only ];
     platforms = platforms.all;

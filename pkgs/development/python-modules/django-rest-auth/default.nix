@@ -1,17 +1,19 @@
-{ lib
- , buildPythonPackage
-, fetchFromGitHub
-, django
-, django-allauth
-, djangorestframework
-, drf-jwt
-, responses
-, six
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  django,
+  django-allauth,
+  djangorestframework,
+  drf-jwt,
+  responses,
+  six,
 }:
 
 buildPythonPackage rec {
   pname = "django-rest-auth";
   version = "0.9.5";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "Tivix";

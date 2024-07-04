@@ -1,15 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, nose2
-, msgpack
-, cbor2
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  nose2,
+  msgpack,
+  cbor2,
 }:
 
 buildPythonPackage rec {
   pname = "persist-queue";
   version = "0.8.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

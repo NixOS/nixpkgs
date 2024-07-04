@@ -1,8 +1,12 @@
-{ lib, stdenv, runtimeShell, fetchFromGitHub, fetchpatch, ocaml, findlib, num, camlp5, camlp-streams }:
+{ lib, stdenv, runtimeShell, fetchFromGitHub, fetchpatch, ocaml, findlib, num, zarith, camlp5, camlp-streams }:
 
 let
+  use_zarith = lib.versionAtLeast ocaml.version "4.14";
   load_num =
-    lib.optionalString (num != null) ''
+    if use_zarith then ''
+      -I ${zarith}/lib/ocaml/${ocaml.version}/site-lib/zarith \
+      -I ${zarith}/lib/ocaml/${ocaml.version}/site-lib/stublibs \
+    '' else lib.optionalString (num != null) ''
       -I ${num}/lib/ocaml/${ocaml.version}/site-lib/num \
       -I ${num}/lib/ocaml/${ocaml.version}/site-lib/top-num \
       -I ${num}/lib/ocaml/${ocaml.version}/site-lib/stublibs \
@@ -12,26 +16,25 @@ let
     ''
       #!${runtimeShell}
       cd $out/lib/hol_light
+      export OCAMLPATH="''${OCAMLPATH-}''${OCAMLPATH:+:}${camlp5}/lib/ocaml/${ocaml.version}/site-lib/"
       exec ${ocaml}/bin/ocaml \
         -I \`${camlp5}/bin/camlp5 -where\` \
         ${load_num} \
-        -I ${camlp-streams}/lib/ocaml/${ocaml.version}/site-lib/camlp-streams camlp_streams.cma
+        -I ${findlib}/lib/ocaml/${ocaml.version}/site-lib/ \
+        -I ${camlp-streams}/lib/ocaml/${ocaml.version}/site-lib/camlp-streams camlp_streams.cma \
         -init make.ml
     '';
 in
 
-lib.throwIf (lib.versionAtLeast ocaml.version "5.0")
-  "hol_light is not available for OCaml ${ocaml.version}"
-
 stdenv.mkDerivation {
   pname = "hol_light";
-  version = "unstable-2023-07-21";
+  version = "unstable-2024-05-10";
 
   src = fetchFromGitHub {
     owner = "jrh13";
     repo = "hol-light";
-    rev = "29b3e114f5c166584f4fbcfd1e1f9b13a25b7349";
-    hash = "sha256-Z5/4dCfLRwLMHBmth3xMdFW1M6NzUT/aPEEwSz1/S2E=";
+    rev = "d8366986e22555c4e4c8ff49667d646d15c35f14";
+    hash = "sha256-dN9X7yQlFof759I5lxxL4DxDe8V3XAhCRaryO9NabY4=";
   };
 
   patches = [
@@ -44,7 +47,10 @@ stdenv.mkDerivation {
   strictDeps = true;
 
   nativeBuildInputs = [ ocaml findlib camlp5 ];
-  propagatedBuildInputs = [ camlp-streams num ];
+  propagatedBuildInputs = [
+    camlp-streams
+    (if use_zarith then zarith else num)
+  ];
 
   installPhase = ''
     mkdir -p "$out/lib/hol_light" "$out/bin"

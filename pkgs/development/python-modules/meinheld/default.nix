@@ -1,8 +1,14 @@
-{ lib, fetchPypi, buildPythonPackage, greenlet }:
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  greenlet,
+}:
 
 buildPythonPackage rec {
   pname = "meinheld";
   version = "1.0.2";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -20,9 +26,7 @@ buildPythonPackage rec {
   # No tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "meinheld"
-  ];
+  pythonImportsCheck = [ "meinheld" ];
 
   meta = with lib; {
     description = "High performance asynchronous Python WSGI Web Server";

@@ -54,7 +54,7 @@ in
       enable = mkOption {
         type = types.bool;
         default = true;
-        description = lib.mdDoc ''
+        description = ''
           Whether to enable Nix.
           Disabling Nix makes the system hard to modify and the Nix programs and configuration will not be made available by NixOS itself.
         '';
@@ -64,7 +64,7 @@ in
         type = types.package;
         default = pkgs.nix;
         defaultText = literalExpression "pkgs.nix";
-        description = lib.mdDoc ''
+        description = ''
           This option specifies the Nix package instance to use throughout the system.
         '';
       };
@@ -73,7 +73,7 @@ in
         type = types.enum [ "other" "batch" "idle" ];
         default = "other";
         example = "batch";
-        description = lib.mdDoc ''
+        description = ''
           Nix daemon process CPU scheduling policy. This policy propagates to
           build processes. `other` is the default scheduling
           policy for regular tasks. The `batch` policy is
@@ -103,7 +103,7 @@ in
         type = types.enum [ "best-effort" "idle" ];
         default = "best-effort";
         example = "idle";
-        description = lib.mdDoc ''
+        description = ''
           Nix daemon process I/O scheduling class. This class propagates to
           build processes. `best-effort` is the default
           class for regular tasks. The `idle` class is for
@@ -126,7 +126,7 @@ in
         type = types.int;
         default = 4;
         example = 1;
-        description = lib.mdDoc ''
+        description = ''
           Nix daemon process I/O scheduling priority. This priority propagates
           to build processes. The supported priorities depend on the
           scheduling policy: With idle, priorities are not used in scheduling
@@ -140,12 +140,12 @@ in
         type = types.attrs;
         internal = true;
         default = { };
-        description = lib.mdDoc "Environment variables used by Nix.";
+        description = "Environment variables used by Nix.";
       };
 
       nrBuildUsers = mkOption {
         type = types.int;
-        description = lib.mdDoc ''
+        description = ''
           Number of `nixbld` user accounts created to
           perform secure concurrent builds.  If you receive an error
           message saying that “all build users are currently in use”,
@@ -164,7 +164,7 @@ in
         nixPackage
         pkgs.nix-info
       ]
-      ++ optional (config.programs.bash.enableCompletion) pkgs.nix-bash-completions;
+      ++ optional (config.programs.bash.completion.enable) pkgs.nix-bash-completions;
 
     systemd.packages = [ nixPackage ];
 
@@ -247,12 +247,7 @@ in
 
     users.users = nixbldUsers;
 
-    services.xserver.displayManager.hiddenUsers = attrNames nixbldUsers;
-
-    system.activationScripts.nix = stringAfter [ "etc" "users" ]
-      ''
-        install -m 0755 -d /nix/var/nix/{gcroots,profiles}/per-user
-      '';
+    services.displayManager.hiddenUsers = attrNames nixbldUsers;
 
     # Legacy configuration conversion.
     nix.settings = mkMerge [

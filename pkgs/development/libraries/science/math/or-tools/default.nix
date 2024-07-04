@@ -2,6 +2,7 @@
 , bzip2
 , cbc
 , cmake
+, DarwinTools # sw_vers
 , eigen
 , ensureNewerSourcesForZipFilesHook
 , fetchFromGitHub
@@ -63,16 +64,18 @@ stdenv.mkDerivation rec {
     "-DFETCH_PYTHON_DEPS=OFF"
     "-DUSE_GLPK=ON"
     "-DUSE_SCIP=OFF"
-    "-DPython3_EXECUTABLE=${python.pythonForBuild.interpreter}"
+    "-DPython3_EXECUTABLE=${python.pythonOnBuildForHost.interpreter}"
   ] ++ lib.optionals stdenv.isDarwin [ "-DCMAKE_MACOSX_RPATH=OFF" ];
   nativeBuildInputs = [
     cmake
     ensureNewerSourcesForZipFilesHook
     pkg-config
-    python.pythonForBuild
+    python.pythonOnBuildForHost
     swig4
     unzip
-  ] ++ (with python.pythonForBuild.pkgs; [
+  ] ++ lib.optionals stdenv.isDarwin [
+    DarwinTools
+  ] ++ (with python.pythonOnBuildForHost.pkgs; [
     pip
     mypy-protobuf
   ]);
@@ -120,6 +123,7 @@ stdenv.mkDerivation rec {
     description = ''
       Google's software suite for combinatorial optimization.
     '';
+    mainProgram = "fzn-ortools";
     maintainers = with maintainers; [ andersk ];
     platforms = with platforms; linux ++ darwin;
   };

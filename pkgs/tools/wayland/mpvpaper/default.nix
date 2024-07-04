@@ -2,7 +2,6 @@
 , lib
 , meson
 , ninja
-, wlroots
 , wayland
 , wayland-protocols
 , wayland-scanner
@@ -17,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "mpvpaper";
-  version = "1.3";
+  version = "1.6";
 
   src = fetchFromGitHub {
     owner = "GhostNaN";
     repo = pname;
     rev = version;
-    sha256 = "sha256-0LjIwOY2hBUb0nziD3HLP2Ek5+8v3ntssRFD9eQgWkc=";
+    sha256 = "sha256-/A2C6T7gP+VGON3Peaz2Y4rNC63UT+zYr4RNM2gdLUY=";
   };
 
   strictDeps = true;
@@ -37,7 +36,6 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    wlroots
     wayland
     wayland-protocols
     egl-wayland
@@ -57,7 +55,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A video wallpaper program for wlroots based wayland compositors";
+    description = "Video wallpaper program for wlroots based wayland compositors";
     homepage = "https://github.com/GhostNaN/mpvpaper";
     license = licenses.gpl3Only;
     platforms = platforms.linux;

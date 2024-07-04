@@ -13,15 +13,32 @@
   };
 
   # copy the config for nixos-rebuild
-  system.activationScripts.config = ''
+  system.activationScripts.config = let
+    config = pkgs.substituteAll {
+      src = ./lxd-container-image-inner.nix;
+      stateVersion = lib.trivial.release;
+    };
+  in ''
     if [ ! -e /etc/nixos/configuration.nix ]; then
-      mkdir -p /etc/nixos
-      cat ${./lxd-container-image-inner.nix} > /etc/nixos/configuration.nix
-      ${lib.getExe pkgs.gnused} 's|../../../modules/virtualisation/lxc-container.nix|<nixpkgs/nixos/modules/virtualisation/lxc-container.nix>|g' -i /etc/nixos/configuration.nix
+      install -m 0644 -D ${config} /etc/nixos/configuration.nix
     fi
   '';
 
-  # Network
-  networking.useDHCP = false;
-  networking.interfaces.eth0.useDHCP = true;
+  networking = {
+    dhcpcd.enable = false;
+    useDHCP = false;
+    useHostResolvConf = false;
+  };
+
+  systemd.network = {
+    enable = true;
+    networks."50-eth0" = {
+      matchConfig.Name = "eth0";
+      networkConfig = {
+        DHCP = "ipv4";
+        IPv6AcceptRA = true;
+      };
+      linkConfig.RequiredForOnline = "routable";
+    };
+  };
 }

@@ -1,24 +1,23 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytest
-, pytestCheckHook
-, pexpect
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytest,
+  pytestCheckHook,
+  pexpect,
 }:
 
 buildPythonPackage rec {
   pname = "pytest-timeout";
-  version = "2.1.0";
+  version = "2.3.1";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-wHygdATGEvirviIpSyPDaOLlEEtSHBeQGVVh834aw9k=";
+    hash = "sha256-Ejl3KRJcbsvaygEDW55SOdTblzUjIK8VWz9d4bpRZdk=";
   };
 
-  buildInputs = [
-    pytest
-  ];
+  buildInputs = [ pytest ];
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -31,13 +30,9 @@ buildPythonPackage rec {
     "test_suppresses_timeout_when_debugger_is_entered"
   ];
 
-  pytestFlagsArray = [
-    "-ra"
-  ];
+  pytestFlagsArray = [ "-ra" ];
 
-  pythonImportsCheck = [
-    "pytest_timeout"
-  ];
+  pythonImportsCheck = [ "pytest_timeout" ];
 
   meta = with lib; {
     description = "Pytest plugin to abort hanging tests";

@@ -1,6 +1,6 @@
 { lib, stdenv
 , fetchurl
-, fetchpatch
+, substituteAll
 , meson
 , nasm
 , ninja
@@ -10,12 +10,15 @@
 , orc
 , bzip2
 , gettext
+, libGL
 , libv4l
 , libdv
 , libavc1394
 , libiec61883
 , libvpx
+, libdrm
 , speex
+, opencore-amr
 , flac
 , taglib
 , libshout
@@ -23,9 +26,10 @@
 , gdk-pixbuf
 , aalib
 , libcaca
-, libsoup
+, libsoup_3
 , libpulseaudio
 , libintl
+, libxml2
 , Cocoa
 , lame
 , mpg123
@@ -37,11 +41,13 @@
 , enableJack ? true, libjack2
 , enableX11 ? stdenv.isLinux, xorg
 , ncurses
+, enableWayland ? stdenv.isLinux
 , wayland
 , wayland-protocols
 , libgudev
 , wavpack
 , glib
+, openssl
 # Checks meson.is_cross_build(), so even canExecute isn't enough.
 , enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform, hotdoc
 }:
@@ -52,23 +58,20 @@ assert raspiCameraSupport -> (stdenv.isLinux && stdenv.isAarch32);
 
 stdenv.mkDerivation rec {
   pname = "gst-plugins-good";
-  version = "1.22.5";
+  version = "1.24.3";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
-    hash = "sha256-tnsxMTpUxpKbgpadQdPP3y9Y21c/tfSR5rul2ErqB3g=";
+    hash = "sha256-FQ+RTmHcBWALaLiMoQPHzCJxMBWOOJ6p6hWfQFCi67A=";
   };
 
-  # TODO: Patch is conditional to spare rebuilds during the current staging-next cycle and should be removed during the next bump
-  patches = lib.optionals qt5Support [
-    # Needed until https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/5083 is merged and released
-    (fetchpatch {
-      name = "gst-plugins-good-fix-qt5-without-viv-fb.patch";
-      url = "https://gitlab.freedesktop.org/gstreamer/gstreamer/-/commit/03d8ef0b7c6e70eb936de0514831c1aafc763dcf.diff";
-      hash = "sha256-17XU/W/TMPg5669O1EBXByAN/VwFu/0idTg5ze3M/D4=";
-      stripLen = 2;
+  patches = [
+    # dlopen libsoup_3 with an absolute path
+    (substituteAll {
+      src = ./souploader.diff;
+      nixLibSoup3Path = "${lib.getLib libsoup_3}/lib";
     })
   ];
 
@@ -90,10 +93,11 @@ stdenv.mkDerivation rec {
     hotdoc
   ] ++ lib.optionals qt5Support (with qt5; [
     qtbase
+    qttools
   ]) ++ lib.optionals qt6Support (with qt6; [
     qtbase
     qttools
-  ]) ++ lib.optionals stdenv.isLinux [
+  ]) ++ lib.optionals enableWayland [
     wayland-protocols
   ];
 
@@ -104,26 +108,31 @@ stdenv.mkDerivation rec {
     libdv
     libvpx
     speex
+    opencore-amr
     flac
     taglib
     cairo
     gdk-pixbuf
     aalib
     libcaca
-    libsoup
+    libsoup_3
     libshout
+    libxml2
     lame
     mpg123
     twolame
     libintl
     ncurses
     wavpack
+    openssl
   ] ++ lib.optionals raspiCameraSupport [
     libraspberrypi
   ] ++ lib.optionals enableX11 [
     xorg.libXext
     xorg.libXfixes
     xorg.libXdamage
+    xorg.libXtst
+    xorg.libXi
   ] ++ lib.optionals gtkSupport [
     # for gtksink
     gtk3
@@ -139,11 +148,14 @@ stdenv.mkDerivation rec {
   ]) ++ lib.optionals stdenv.isDarwin [
     Cocoa
   ] ++ lib.optionals stdenv.isLinux [
+    libdrm
+    libGL
     libv4l
     libpulseaudio
     libavc1394
     libiec61883
     libgudev
+  ] ++ lib.optionals enableWayland [
     wayland
   ] ++ lib.optionals enableJack [
     libjack2
@@ -203,6 +215,6 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.lgpl2Plus;
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ matthewbauer lilyinstarlight ];
+    maintainers = with maintainers; [ matthewbauer ];
   };
 }

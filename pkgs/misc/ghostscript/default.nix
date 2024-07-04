@@ -43,11 +43,11 @@ let
     srcs = [
       (fetchurl {
         url = "mirror://sourceforge/gs-fonts/ghostscript-fonts-std-8.11.tar.gz";
-        sha256 = "00f4l10xd826kak51wsmaz69szzm2wp8a41jasr4jblz25bg7dhf";
+        hash = "sha256-DrbzVhGfLkmyVjIQhS4X9X+dzFdV81Cmmkag1kGgxAE=";
       })
       (fetchurl {
         url = "mirror://gnu/ghostscript/gnu-gs-fonts-other-6.0.tar.gz";
-        sha256 = "1cxaah3r52qq152bbkiyj2f7dx1rf38vsihlhjmrvzlr8v6cqil1";
+        hash = "sha256-gUbMzEaZ/p2rhBRGvdFwOfR2nJA+zrVECRiLkgdUqrM=";
       })
       # ... add other fonts here
     ];
@@ -61,11 +61,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "ghostscript${lib.optionalString x11Support "-with-X"}";
-  version = "10.01.2";
+  version = "10.03.1";
 
   src = fetchurl {
     url = "https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs${lib.replaceStrings ["."] [""] version}/ghostscript-${version}.tar.xz";
-    hash = "sha512-7iDw4S9VOj0EV45xoNRd7+vHERfOTcLBQEOYW/5zSK1/iy/pj8m09bk17LMuUNw0C+Z9bvWBkFQuxtD52h3jgA==";
+    hash = "sha256-FXIS7clrjMxAlHXc4uSYM/tEJ/FQxFUlje2WMsEGq+4=";
   };
 
   patches = [
@@ -122,7 +122,10 @@ stdenv.mkDerivation rec {
   doCheck = false;
 
   # don't build/install statically linked bin/gs
-  buildFlags = [ "so" ];
+  buildFlags = [ "so" ]
+    # without -headerpad, the following error occurs on Darwin when compiling with X11 support (as of 10.02.0)
+    # error: install_name_tool: changing install names or rpaths can't be redone for: [...]libgs.dylib.10 (the program must be relinked, and you may need to use -headerpad or -headerpad_max_install_names)
+    ++ lib.optional (x11Support && stdenv.isDarwin) "LDFLAGS=-headerpad_max_install_names";
   installTargets = [ "soinstall" ];
 
   postInstall = ''
@@ -185,7 +188,7 @@ stdenv.mkDerivation rec {
       operations in the PostScript language, and (iii) a wide variety
       of output drivers for various file formats and printers.
     '';
-    license = lib.licenses.agpl3;
+    license = lib.licenses.agpl3Plus;
     platforms = lib.platforms.all;
     maintainers = [ lib.maintainers.viric ];
     mainProgram = "gs";

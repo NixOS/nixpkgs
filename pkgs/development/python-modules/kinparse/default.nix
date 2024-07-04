@@ -1,14 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytest
-, future
-, pyparsing
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytest,
+  future,
+  pyparsing,
 }:
 
 buildPythonPackage {
   pname = "kinparse";
   version = "unstable-2019-12-18";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "xesscorp";
@@ -20,9 +22,7 @@ buildPythonPackage {
   doCheck = true;
   pythonImportsCheck = [ "kinparse" ];
 
-  nativeCheckInputs = [
-    pytest
-  ];
+  nativeCheckInputs = [ pytest ];
 
   propagatedBuildInputs = [
     future
@@ -30,7 +30,8 @@ buildPythonPackage {
   ];
 
   meta = with lib; {
-    description = "A Parser for KiCad EESCHEMA netlists";
+    description = "Parser for KiCad EESCHEMA netlists";
+    mainProgram = "kinparse";
     homepage = "https://github.com/xesscorp/kinparse";
     license = licenses.mit;
     maintainers = with maintainers; [ matthuszagh ];

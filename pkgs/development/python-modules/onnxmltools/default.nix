@@ -1,29 +1,30 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, numpy
-, onnx
-, skl2onnx
-# native check inputs
-, pytestCheckHook
-, pandas
-, xgboost
-, onnxruntime
-, scikit-learn
-, pyspark
-, lightgbm
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  numpy,
+  onnx,
+  skl2onnx,
+  # native check inputs
+  pytestCheckHook,
+  pandas,
+  xgboost,
+  onnxruntime,
+  scikit-learn,
+  pyspark,
+  lightgbm,
 }:
 
 buildPythonPackage rec {
   pname = "onnxmltools";
-  version = "1.11.2";
+  version = "1.12.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "onnx";
     repo = "onnxmltools";
-    rev = "v${version}";
-    hash = "sha256-uLFAGtCDLdMd0SMoonMXFE0kGHuDpwp6IrIbD0t8l4M=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-/UKGo56riLnATcn7kA++QoFkkILVGYBwqRZZ+PYB1/0=";
   };
 
   propagatedBuildInputs = [

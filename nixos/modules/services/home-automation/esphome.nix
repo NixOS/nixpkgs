@@ -7,7 +7,6 @@ let
     mkEnableOption
     mkIf
     mkOption
-    mdDoc
     types
     ;
 
@@ -24,49 +23,50 @@ in
   meta.maintainers = with maintainers; [ oddlama ];
 
   options.services.esphome = {
-    enable = mkEnableOption (mdDoc "esphome");
+    enable = mkEnableOption "esphome, for making custom firmwares for ESP32/ESP8266";
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.esphome;
-      defaultText = literalExpression "pkgs.esphome";
-      description = mdDoc "The package to use for the esphome command.";
-    };
+    package = lib.mkPackageOption pkgs "esphome" { };
 
     enableUnixSocket = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc "Listen on a unix socket `/run/esphome/esphome.sock` instead of the TCP port.";
+      description = "Listen on a unix socket `/run/esphome/esphome.sock` instead of the TCP port.";
     };
 
     address = mkOption {
       type = types.str;
       default = "localhost";
-      description = mdDoc "esphome address";
+      description = "esphome address";
     };
 
     port = mkOption {
       type = types.port;
       default = 6052;
-      description = mdDoc "esphome port";
+      description = "esphome port";
     };
 
     openFirewall = mkOption {
       default = false;
       type = types.bool;
-      description = mdDoc "Whether to open the firewall for the specified port.";
+      description = "Whether to open the firewall for the specified port.";
     };
 
     allowedDevices = mkOption {
       default = ["char-ttyS" "char-ttyUSB"];
       example = ["/dev/serial/by-id/usb-Silicon_Labs_CP2102_USB_to_UART_Bridge_Controller_0001-if00-port0"];
-      description = lib.mdDoc ''
+      description = ''
         A list of device nodes to which {command}`esphome` has access to.
         Refer to DeviceAllow in systemd.resource-control(5) for more information.
         Beware that if a device is referred to by an absolute path instead of a device category,
         it will only allow devices that already are plugged in when the service is started.
       '';
       type = types.listOf types.str;
+    };
+
+    usePing = mkOption {
+      default = false;
+      type = types.bool;
+      description = "Use ping to check online status of devices instead of mDNS";
     };
   };
 
@@ -79,8 +79,10 @@ in
       wantedBy = ["multi-user.target"];
       path = [cfg.package];
 
-      # platformio fails to determine the home directory when using DynamicUser
-      environment.PLATFORMIO_CORE_DIR = "${stateDir}/.platformio";
+      environment = {
+        # platformio fails to determine the home directory when using DynamicUser
+        PLATFORMIO_CORE_DIR = "${stateDir}/.platformio";
+      } // lib.optionalAttrs cfg.usePing { ESPHOME_DASHBOARD_USE_PING = "true"; };
 
       serviceConfig = {
         ExecStart = "${cfg.package}/bin/esphome dashboard ${esphomeParams} ${stateDir}";
@@ -107,12 +109,12 @@ in
         ProtectClock = true;
         ProtectControlGroups = true;
         ProtectHome = true;
-        ProtectHostname = true;
-        ProtectKernelLogs = true;
+        ProtectHostname = false; # breaks bwrap
+        ProtectKernelLogs = false; # breaks bwrap
         ProtectKernelModules = true;
-        ProtectKernelTunables = true;
+        ProtectKernelTunables = false; # breaks bwrap
         ProtectProc = "invisible";
-        ProcSubset = "pid";
+        ProcSubset = "all"; # Using "pid" breaks bwrap
         ProtectSystem = "strict";
         #RemoveIPC = true; # Implied by DynamicUser
         RestrictAddressFamilies = [

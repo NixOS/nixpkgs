@@ -1,14 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonRelaxDepsHook
-, docopt
-, para
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonRelaxDepsHook,
+  docopt,
+  para,
 }:
 
 buildPythonPackage rec {
   pname = "mwcli";
   version = "0.0.3";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -16,13 +18,9 @@ buildPythonPackage rec {
   };
 
   # Prevent circular dependency
-  pythonRemoveDeps = [
-    "mwxml"
-  ];
+  pythonRemoveDeps = [ "mwxml" ];
 
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
-  ];
+  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   propagatedBuildInputs = [
     docopt
@@ -33,7 +31,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "A set of helper functions and classes for mediawiki-utilities command-line utilities";
+    description = "Set of helper functions and classes for mediawiki-utilities command-line utilities";
     homepage = "https://github.com/mediawiki-utilities/python-mwcli";
     license = licenses.mit;
     maintainers = with maintainers; [ GaetanLepage ];

@@ -1,54 +1,62 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, poetry-core
-, numpy
-, pandas
-, pydateinfer
-, python-dateutil
-, scipy
-, type-infer
-, dataclasses-json
-, colorlog
-, pydantic
-, nltk-data
-, symlinkJoin
+{
+  lib,
+  buildPythonPackage,
+  colorlog,
+  dataclasses-json,
+  fetchPypi,
+  nltk-data,
+  numpy,
+  pandas,
+  poetry-core,
+  pydantic,
+  pydateinfer,
+  python-dateutil,
+  pythonOlder,
+  pythonRelaxDepsHook,
+  scipy,
+  symlinkJoin,
+  type-infer,
 }:
 let
   testNltkData = symlinkJoin {
     name = "nltk-test-data";
-    paths = [ nltk-data.punkt nltk-data.stopwords ];
+    paths = [
+      nltk-data.punkt
+      nltk-data.stopwords
+    ];
   };
 in
 buildPythonPackage rec {
   pname = "dataprep-ml";
-  version = "0.0.18";
+  version = "24.5.1.2";
   pyproject = true;
 
-  disable = pythonOlder "3.8";
+  disabled = pythonOlder "3.8";
 
   # using PyPI as github repo does not contain tags or release branches
   src = fetchPypi {
     pname = "dataprep_ml";
     inherit version;
-    hash = "sha256-nIqyRwv62j8x5Fy7ILMLWxw6yJmkkNRE1zyUlfvRYTI=";
+    hash = "sha256-pZhHlNcQJLBww7ur2Z6Yb2IdbRsBtjzQAzfa4UzGKt4=";
   };
+
+  pythonRelaxDeps = [ "pydantic" ];
 
   nativeBuildInputs = [
     poetry-core
+    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [
+    colorlog
+    dataclasses-json
     numpy
     pandas
+    pydantic
     pydateinfer
     python-dateutil
     scipy
     type-infer
-    dataclasses-json
-    colorlog
-    pydantic
   ];
 
   # PyPI tarball has no tests

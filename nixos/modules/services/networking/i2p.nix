@@ -5,9 +5,10 @@ with lib;
 let
   cfg = config.services.i2p;
   homeDir = "/var/lib/i2p";
-in {
+in
+{
   ###### interface
-  options.services.i2p.enable = mkEnableOption (lib.mdDoc "I2P router");
+  options.services.i2p.enable = mkEnableOption "I2P router";
 
   ###### implementation
   config = mkIf cfg.enable {
@@ -27,7 +28,7 @@ in {
         User = "i2p";
         WorkingDirectory = homeDir;
         Restart = "on-abort";
-        ExecStart = "${pkgs.i2p}/bin/i2prouter-plain";
+        ExecStart = "${pkgs.i2p}/bin/i2prouter";
       };
     };
   };

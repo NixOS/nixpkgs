@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "zsh-forgit";
-  version = "23.09.0";
+  version = "24.02.0";
 
   src = fetchFromGitHub {
     owner = "wfxr";
     repo = "forgit";
     rev = version;
-    sha256 = "sha256-WvJxjEzF3vi+YPVSH3QdDyp3oxNypMoB71TAJ7D8hOQ=";
+    sha256 = "sha256-DoOtrnEJwSxkCZtsVek+3w9RZH7j7LTvdleBC88xyfI=";
   };
 
   strictDeps = true;
@@ -48,7 +48,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/wfxr/forgit";
-    description = "A utility tool powered by fzf for using git interactively";
+    description = "Utility tool powered by fzf for using git interactively";
+    mainProgram = "git-forgit";
     license = licenses.mit;
     maintainers = with maintainers; [ deejayem ];
     platforms = platforms.all;

@@ -8,21 +8,21 @@
 , libsodium
 , libxml2
 , pkg-config
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 stdenv.mkDerivation rec {
   pname = "gnunet-gtk";
-  version = "0.19.0";
+  version = "0.21.0";
 
   src = fetchurl {
-    url = "mirror://gnu/gnunet/${pname}-${version}.tar.gz";
-    sha256 = "sha256-MwAWs1rHXYlRUcAWX8LnCLTwEOSI68aA0s7uZGgYR3w=";
+    url = "mirror://gnu/gnunet/gnunet-gtk-${version}.tar.gz";
+    hash = "sha256-vQFtKFI57YG64WpKVngx1kq687hI+f1kpP9ooK53/aw=";
   };
 
   nativeBuildInputs= [
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -38,7 +38,11 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--with-gnunet=${gnunet}" ];
 
-  patchPhase = "patchShebangs pixmaps/icon-theme-installer";
+  postPatch = "patchShebangs pixmaps/icon-theme-installer";
+
+  postInstall = ''
+    ln -s $out/share/gnunet-gtk/gnunet_logo.png $out/share/gnunet/gnunet-logo-color.png
+  '';
 
   meta = gnunet.meta // {
     description = "GNUnet GTK User Interface";

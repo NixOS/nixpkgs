@@ -1,9 +1,11 @@
 { stdenv
 , lib
 , fetchFromGitHub
+, bash
 , cmake
 , cfitsio
 , libusb1
+, kmod
 , zlib
 , boost
 , libev
@@ -13,17 +15,18 @@
 , gsl
 , fftw
 , gtest
+, indi-full
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "indilib";
-  version = "2.0.3";
+  version = "2.0.8";
 
   src = fetchFromGitHub {
     owner = "indilib";
     repo = "indi";
-    rev = "v${version}";
-    hash = "sha256-YhUwRbpmEybezvopbqFj7M1EE3pufkNrN8yi/zbnJ3U=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-qdPQMC8HCMdcbHyO8B0OFiefO+jM1ytA2dYNymE0Xuc=";
   };
 
   nativeBuildInputs = [
@@ -46,7 +49,7 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DCMAKE_INSTALL_LIBDIR=lib"
     "-DUDEVRULES_INSTALL_DIR=lib/udev/rules.d"
-  ] ++ lib.optional doCheck [
+  ] ++ lib.optional finalAttrs.finalPackage.doCheck [
     "-DINDI_BUILD_UNITTESTS=ON"
     "-DINDI_BUILD_INTEGTESTS=ON"
   ];
@@ -58,12 +61,27 @@ stdenv.mkDerivation rec {
   # Socket address collisions between tests
   enableParallelChecking = false;
 
+  postFixup = lib.optionalString stdenv.isLinux ''
+    for f in $out/lib/udev/rules.d/*.rules
+    do
+      substituteInPlace $f --replace "/bin/sh" "${bash}/bin/sh" \
+                           --replace "/sbin/modprobe" "${kmod}/sbin/modprobe"
+    done
+  '';
+
+  passthru.tests = {
+    # make sure 3rd party drivers compile with this indilib
+    indi-full = indi-full.override {
+      indilib = finalAttrs.finalPackage;
+    };
+  };
+
   meta = with lib; {
     homepage = "https://www.indilib.org/";
     description = "Implementation of the INDI protocol for POSIX operating systems";
-    changelog = "https://github.com/indilib/indi/releases/tag/v${version}";
+    changelog = "https://github.com/indilib/indi/releases/tag/v${finalAttrs.version}";
     license = licenses.lgpl2Plus;
     maintainers = with maintainers; [ hjones2199 sheepforce ];
     platforms = platforms.unix;
   };
-}
+})

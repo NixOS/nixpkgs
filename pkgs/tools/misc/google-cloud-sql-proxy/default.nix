@@ -5,22 +5,22 @@
 
 buildGoModule rec {
   pname = "google-cloud-sql-proxy";
-  version = "2.7.0";
+  version = "2.11.4";
 
   src = fetchFromGitHub {
     owner = "GoogleCloudPlatform";
     repo = "cloud-sql-proxy";
     rev = "v${version}";
-    hash = "sha256-4PB9Eaqb8teF+gmiHD2VAIFnxqiK2Nb0u+xSNAM8iMs=";
+    hash = "sha256-eM1sS9+L3Z7qCQl+HPcdfoSSdcCKvaz5zwQM4k55hZY=";
   };
 
   subPackages = [ "." ];
 
-  vendorHash = "sha256-LaI7IdSyB7ETTjqIcIPDf3noEbvwlN3+KqrkSm8B6m8=";
+  vendorHash = "sha256-/cHQ1vElE+QCxQo6s3Isf2USFP0LWJH3YdcbUfGuuVw=";
 
-  preCheck = ''
-    buildFlagsArray+="-short"
-  '';
+  checkFlags = [
+    "-short"
+  ];
 
   meta = with lib; {
     description = "Utility for ensuring secure connections to Google Cloud SQL instances";

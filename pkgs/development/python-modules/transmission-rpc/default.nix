@@ -1,19 +1,20 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pytestCheckHook
-, pythonOlder
-, python-dotenv
-, pytz
-, requests
-, typing-extensions
-, yarl
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  pytestCheckHook,
+  pythonOlder,
+  python-dotenv,
+  pytz,
+  requests,
+  typing-extensions,
+  yarl,
 }:
 
 buildPythonPackage rec {
   pname = "transmission-rpc";
-  version = "7.0.1";
+  version = "7.0.3";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -22,12 +23,10 @@ buildPythonPackage rec {
     owner = "Trim21";
     repo = "transmission-rpc";
     rev = "refs/tags/v${version}";
-    hash = "sha256-wBTx4gy6c6TMtc2m+xibEzCgYJJiMMZ16+pq3H06hgs=";
+    hash = "sha256-HthWeFInolNEs7RNA773DJjhGvl1rfDhvhO8WwRwuuY=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     requests
@@ -41,9 +40,7 @@ buildPythonPackage rec {
     yarl
   ];
 
-  pythonImportsCheck = [
-    "transmission_rpc"
-  ];
+  pythonImportsCheck = [ "transmission_rpc" ];
 
   disabledTests = [
     # Tests require a running Transmission instance

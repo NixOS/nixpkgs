@@ -1,27 +1,31 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, google-api-core
-, google-cloud-testutils
-, mock
-, proto-plus
-, protobuf
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  google-api-core,
+  google-cloud-testutils,
+  mock,
+  proto-plus,
+  protobuf,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-trace";
-  version = "1.11.2";
-  format = "setuptools";
+  version = "1.13.3";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-pn2ofYfcHBxAw7IK5lKqf1AGj8e+DU8W++9XVFPZ5Ws=";
+    hash = "sha256-NqwuM94NsBf/0vY9jWTct1vpETzPpN5JYvRzfv1srIA=";
   };
+
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     google-api-core
@@ -50,8 +54,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Cloud Trace API client library";
-    homepage = "https://github.com/googleapis/python-trace";
-    changelog = "https://github.com/googleapis/python-trace/blob/v${version}/CHANGELOG.md";
+    homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-trace";
+    changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-trace-v${version}/packages/google-cloud-trace/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ ];
   };

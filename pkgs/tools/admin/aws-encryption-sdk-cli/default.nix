@@ -1,38 +1,65 @@
 { lib
-, python3Packages
+, python3
 , fetchPypi
 , nix-update-script
 , testers
 , aws-encryption-sdk-cli
 }:
 
-python3Packages.buildPythonApplication rec {
+let
+  localPython = python3.override {
+    self = localPython;
+    packageOverrides = final: prev: {
+      urllib3 = prev.urllib3.overridePythonAttrs (prev: rec {
+        pyproject = true;
+        version = "1.26.18";
+        nativeBuildInputs = with final; [ setuptools ];
+        src = prev.src.override {
+          inherit version;
+          hash = "sha256-+OzBu6VmdBNFfFKauVW/jGe0XbeZ0VkGYmFxnjKFgKA=";
+        };
+      });
+    };
+  };
+in
+
+localPython.pkgs.buildPythonApplication rec {
   pname = "aws-encryption-sdk-cli";
   version = "4.1.0";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-OCbt0OkDVfpzUIogbsKzaPAle2L6l6N3cmZoS2hEaSM=";
   };
 
-  propagatedBuildInputs = with python3Packages; [
+  build-system = with localPython.pkgs; [
+    setuptools
+  ];
+
+  dependencies = with localPython.pkgs; [
     attrs
     aws-encryption-sdk
     base64io
+    urllib3
+    setuptools # for pkg_resources
   ];
 
   doCheck = true;
 
-  nativeCheckInputs = with python3Packages; [
+  nativeCheckInputs = with localPython.pkgs; [
     mock
     pytest-mock
-    pytestCheckHook
+    pytest7CheckHook
   ];
 
   disabledTestPaths = [
     # requires networking
     "test/integration"
   ];
+
+  # Upstream did not adapt to pytest 8 yet.
+  pytestFlagsArray = [ "-W" "ignore::pytest.PytestRemovedIn8Warning" ];
 
   passthru = {
     updateScript = nix-update-script { };

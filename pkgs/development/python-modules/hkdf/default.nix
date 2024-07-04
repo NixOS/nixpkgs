@@ -1,12 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, nose
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  nose,
 }:
 
 buildPythonPackage rec {
   pname = "hkdf";
   version = "0.0.3";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -27,5 +29,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/casebeer/python-hkdf";
     license = licenses.bsd2;
   };
-
 }

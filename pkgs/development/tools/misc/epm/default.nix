@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ rpm ];
 
   meta = with lib; {
-    description = "The ESP Package Manager generates distribution archives for a variety of platforms";
+    description = "ESP Package Manager generates distribution archives for a variety of platforms";
     homepage = "https://jimjag.github.io/epm/";
     license = licenses.asl20;
     maintainers = with maintainers; [ pSub ];

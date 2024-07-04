@@ -1,29 +1,28 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, python
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  python,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "regex";
-  version = "2023.8.8";
+  version = "2023.12.25";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-/L3F8rDxzQ9qVs20b+QdLM4eZE47aIMvPu68X7D3cS4=";
+    hash = "sha256-KRcaoSjaaa/fS95BLVvtwzXyyo/P5EiQOFd9BfFhgeU=";
   };
 
   checkPhase = ''
     ${python.interpreter} -m unittest
   '';
 
-  pythonImportsCheck = [
-    "regex"
-  ];
+  pythonImportsCheck = [ "regex" ];
 
   meta = with lib; {
     description = "Alternative regular expression module, to replace re";

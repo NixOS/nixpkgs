@@ -5,7 +5,7 @@
 
 buildGoModule rec {
   pname = "keybase";
-  version = "6.2.2";
+  version = "6.2.8";
 
   modRoot = "go";
   subPackages = [ "kbnm" "keybase" ];
@@ -16,9 +16,9 @@ buildGoModule rec {
     owner = "keybase";
     repo = "client";
     rev = "v${version}";
-    hash = "sha256-1vJCuAkJmehFcVYLwp3UIlQiGji7mHVczCBtXq9Fl68=";
+    hash = "sha256-k/AMJNXS/gabJMjXdrQltxxc1Bez4VIR/l8RXXpiPWw=";
   };
-  vendorHash = "sha256-tXEEVEfjoKub2A4m7F3hDc5ABJ+R+axwX1+1j7e3BAM=";
+  vendorHash = "sha256-DNTJtgZ2jDuEu4XqxbPTHLh+NR0vU2hcNNcD4amIDk4=";
 
   patches = [
     (substituteAll {
@@ -34,9 +34,9 @@ buildGoModule rec {
 
   meta = with lib; {
     homepage = "https://www.keybase.io/";
-    description = "The Keybase official command-line utility and service";
+    description = "Keybase official command-line utility and service";
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ avaq carlsverre np rvolosatovs Br1ght0ne shofius ];
+    maintainers = with maintainers; [ avaq np rvolosatovs Br1ght0ne shofius ];
     license = licenses.bsd3;
   };
 }

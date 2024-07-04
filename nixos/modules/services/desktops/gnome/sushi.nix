@@ -2,21 +2,11 @@
 
 { config, lib, pkgs, ... }:
 
-with lib;
-
 {
 
   meta = {
-    maintainers = teams.gnome.members;
+    maintainers = lib.teams.gnome.members;
   };
-
-  imports = [
-    # Added 2021-05-07
-    (mkRenamedOptionModule
-      [ "services" "gnome3" "sushi" "enable" ]
-      [ "services" "gnome" "sushi" "enable" ]
-    )
-  ];
 
   ###### interface
 
@@ -24,10 +14,10 @@ with lib;
 
     services.gnome.sushi = {
 
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether to enable Sushi, a quick previewer for nautilus.
         '';
       };
@@ -39,11 +29,11 @@ with lib;
 
   ###### implementation
 
-  config = mkIf config.services.gnome.sushi.enable {
+  config = lib.mkIf config.services.gnome.sushi.enable {
 
-    environment.systemPackages = [ pkgs.gnome.sushi ];
+    environment.systemPackages = [ pkgs.sushi ];
 
-    services.dbus.packages = [ pkgs.gnome.sushi ];
+    services.dbus.packages = [ pkgs.sushi ];
 
   };
 

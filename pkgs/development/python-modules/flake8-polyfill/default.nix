@@ -1,25 +1,25 @@
-{ lib
-, buildPythonPackage
-, fetchpatch
-, fetchPypi
-, flake8
-, mock
-, pep8
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchpatch,
+  fetchPypi,
+  flake8,
+  mock,
+  pep8,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "flake8-polyfill";
   version = "1.0.2";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
     sha256 = "1nlf1mkqw856vi6782qcglqhaacb23khk9wkcgn55npnjxshhjz4";
   };
 
-  propagatedBuildInputs = [
-    flake8
-  ];
+  propagatedBuildInputs = [ flake8 ];
 
   nativeCheckInputs = [
     mock
@@ -42,9 +42,7 @@ buildPythonPackage rec {
       --replace pytest 'tool:pytest'
   '';
 
-  pythonImportsCheck = [
-    "flake8_polyfill"
-  ];
+  pythonImportsCheck = [ "flake8_polyfill" ];
 
   meta = with lib; {
     homepage = "https://gitlab.com/pycqa/flake8-polyfill";

@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonRelaxDepsHook
-, setuptools-scm
-# install requirements
-, fido2
-, keyring
-, cryptography
-# test requirements
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonRelaxDepsHook,
+  setuptools-scm,
+  # install requirements
+  fido2,
+  keyring,
+  cryptography,
+  # test requirements
+  pytestCheckHook,
 }:
 
 let
@@ -25,6 +26,7 @@ in
 buildPythonPackage rec {
   pname = "ctap-keyring-device";
   version = "1.0.6";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit version pname;

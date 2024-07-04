@@ -1,23 +1,24 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
 
-# build dependencies
-, setuptools
-, setuptools-scm
+  # build dependencies
+  setuptools,
+  setuptools-scm,
 
-# dependencies
-, django
+  # dependencies
+  django,
 
-# tests
-, elasticsearch
-, geopy
-, nose
-, pysolr
-, python-dateutil
-, requests
-, whoosh
+  # tests
+  elasticsearch,
+  geopy,
+  nose,
+  pysolr,
+  python-dateutil,
+  requests,
+  whoosh,
 }:
 
 buildPythonPackage rec {
@@ -42,14 +43,10 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  buildInputs = [
-    django
-  ];
+  buildInputs = [ django ];
 
   passthru.optional-dependencies = {
-    elasticsearch = [
-      elasticsearch
-    ];
+    elasticsearch = [ elasticsearch ];
   };
 
   doCheck = lib.versionOlder django.version "4";
@@ -61,8 +58,7 @@ buildPythonPackage rec {
     python-dateutil
     requests
     whoosh
-  ]
-  ++ passthru.optional-dependencies.elasticsearch;
+  ] ++ passthru.optional-dependencies.elasticsearch;
 
   checkPhase = ''
     runHook preCheck

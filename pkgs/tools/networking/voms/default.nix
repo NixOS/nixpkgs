@@ -13,7 +13,8 @@
 , zlib
   # Configuration overridable with .override
   # If not null, the builder will
-  # move "$out/etc" to "$out/etc.orig" and symlink "$out/etc" to externalEtc.
+  # create a new output "etc", move "$out/etc" to "$etc/etc"
+  # and symlink "$out/etc" to externalEtc.
 , externalEtc ? "/etc"
 }:
 
@@ -46,7 +47,8 @@ stdenv.mkDerivation rec{
     zlib
   ];
 
-  outputs = [ "bin" "out" "dev" "man" ];
+  outputs = [ "bin" "out" "dev" "man" ]
+    ++ lib.optional (externalEtc != null) "etc";
 
   preAutoreconf = ''
     mkdir -p aux src/autogen
@@ -65,17 +67,16 @@ stdenv.mkDerivation rec{
 
   configureFlags = [
     "--with-gsoap-wsdl2h=${gsoap}/bin/wsdl2h"
+    "--sysconfdir=${placeholder "out"}/etc"
   ];
 
-  postFixup = ''
-    ${lib.optionalString (externalEtc != null) ''
-      mv "$out"/etc{,.orig}
-      ln -s ${lib.escapeShellArg externalEtc} "$out/etc"
-    ''}
+  postFixup = lib.optionalString (externalEtc != null) ''
+    moveToOutput etc "$etc"
+    ln -s ${lib.escapeShellArg externalEtc} "$out/etc"
   '';
 
   meta = with lib; {
-    description = "The C/C++ VOMS server, client and APIs v2.x";
+    description = "C/C++ VOMS server, client and APIs v2.x";
     homepage = "https://italiangrid.github.io/voms/";
     changelog = "https://github.com/italiangrid/voms/blob/master/ChangeLog";
     license = licenses.asl20;

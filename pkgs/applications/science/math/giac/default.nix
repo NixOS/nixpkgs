@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, fetchpatch, texlive, bison, flex, lapack, blas
+{ stdenv, lib, fetchurl, fetchpatch, texliveSmall, bison, flex, lapack, blas
 , autoreconfHook, gmp, mpfr, pari, ntl, gsl, mpfi, ecm, glpk, nauty
 , buildPackages, readline, gettext, libpng, libao, gfortran, perl
 , enableGUI ? false, libGL, libGLU, xorg, fltk
@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [
-    autoreconfHook texlive.combined.scheme-small bison flex
+    autoreconfHook texliveSmall bison flex
   ];
 
   # perl is only needed for patchShebangs fixup.
@@ -125,7 +125,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A free computer algebra system (CAS)";
+    description = "Free computer algebra system (CAS)";
     homepage = "https://www-fourier.ujf-grenoble.fr/~parisse/giac.html";
     license = licenses.gpl3Plus;
     platforms = platforms.linux ++ (optionals (!enableGUI) platforms.darwin);

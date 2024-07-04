@@ -8,7 +8,7 @@ let
 in {
   options = {
     services.networkaudiod = {
-      enable = mkEnableOption (lib.mdDoc "Networkaudiod (NAA)");
+      enable = mkEnableOption "Networkaudiod (NAA)";
     };
   };
 

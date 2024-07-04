@@ -12,13 +12,13 @@ assert (!blas.isILP64) && (!lapack.isILP64);
 
 stdenv.mkDerivation rec {
   pname = "ipopt";
-  version = "3.14.12";
+  version = "3.14.16";
 
   src = fetchFromGitHub {
     owner = "coin-or";
     repo = "Ipopt";
     rev = "releases/${version}";
-    sha256 = "sha256-cyV3tgmZz5AExxxdGJ12r+PPXn7v2AEhxb9icBxolS8=";
+    sha256 = "sha256-ZuiZZMq7NzOm6CCJgMBgEWs8PEfM3pVr2yOWbS42l8U=";
   };
 
   CXXDEFS = [ "-DHAVE_RAND" "-DHAVE_CSTRING" "-DHAVE_CSTDIO" ];
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with lib; {
-    description = "A software package for large-scale nonlinear optimization";
+    description = "Software package for large-scale nonlinear optimization";
     homepage = "https://projects.coin-or.org/Ipopt";
     license = licenses.epl10;
     platforms = platforms.unix;

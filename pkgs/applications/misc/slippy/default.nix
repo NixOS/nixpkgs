@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "slippy";
-  version = "0.1.0";
+  version = "0.1.1";
 
   src = fetchFromGitHub {
     owner = "axodotdev";
     repo = "slippy";
     rev = "v${version}";
-    hash = "sha256-oxXmfvdnYmmKXvKHpJC23cvHaVdh5cpfQ1q5GPLskfY=";
+    hash = "sha256-7Uvo5+saxwTMQjfDliyOYC6j6LbpMf/FiONfX38xepI=";
   };
 
-  cargoHash = "sha256-4MMTWhyi2/n9ESX2KJFERsXQHyGZunvArbYQmKiV7Eg=";
+  cargoHash = "sha256-6nB+rHBJU9qhA7azz2ynaBw1UJdwE+T7pgpoPzhD5Bk=";
 
   # the dependency css-minify contains both README.md and Readme.md,
   # which causes a hash mismatch on systems with a case-insensitive filesystem
@@ -59,5 +59,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/axodotdev/slippy/releases/tag/${src.rev}";
     license = with licenses; [ asl20 mit ];
     maintainers = with maintainers; [ figsoda ];
+    mainProgram = "slippy";
   };
 }

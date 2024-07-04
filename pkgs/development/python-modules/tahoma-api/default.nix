@@ -1,12 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  requests,
 }:
 
 buildPythonPackage rec {
   pname = "tahoma-api";
   version = "0.0.17";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "philklei";

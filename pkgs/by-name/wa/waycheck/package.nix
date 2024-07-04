@@ -7,26 +7,26 @@
 , qt6
 , wayland
 , glib
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "waycheck";
-  version = "1.0.0";
+  version = "1.2.1";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "serebit";
     repo = "waycheck";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-oGpiFwbPBQHF0wRHliltU8B+QmClcoFfbjpAYzOFPqs=";
+    hash = "sha256-82jOYWhgD9JNDn24eCAeMm63R5BTy20lQVpiAwhDIOk=";
   };
 
   nativeBuildInputs = [
     meson
     ninja
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
     qt6.wrapQtAppsHook
   ];
 
@@ -38,21 +38,22 @@ stdenv.mkDerivation (finalAttrs: {
 
   dontWrapGApps = true;
 
+  postPatch = ''
+    substituteInPlace scripts/mesonPostInstall.sh \
+      --replace-fail "#!/usr/bin/env sh" "#!${stdenv.shell}" \
+      --replace-fail "update-desktop-database -q" "update-desktop-database $out/share/applications"
+  '';
+
   preFixup = ''
     qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
-  preInstall = ''
-    substituteInPlace ../scripts/mesonPostInstall.sh \
-      --replace "update-desktop-database -q" "update-desktop-database $out/share/applications"
-  '';
-
-  meta = with lib; {
+  meta = {
     description = "Simple GUI that displays the protocols implemented by a Wayland compositor";
     homepage = "https://gitlab.freedesktop.org/serebit/waycheck";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ julienmalka federicoschonborn ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ julienmalka ];
     mainProgram = "waycheck";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 })

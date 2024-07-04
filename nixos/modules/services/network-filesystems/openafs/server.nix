@@ -5,7 +5,7 @@ with import ./lib.nix { inherit config lib pkgs; };
 
 let
   inherit (lib) concatStringsSep literalExpression mkIf mkOption mkEnableOption
-  optionalString types;
+  mkPackageOption optionalString types;
 
   bosConfig = pkgs.writeText "BosConfig" (''
     restrictmode 1
@@ -71,7 +71,7 @@ in {
       enable = mkOption {
         default = false;
         type = types.bool;
-        description = lib.mdDoc ''
+        description = ''
           Whether to enable the OpenAFS server. An OpenAFS server needs a
           complex setup. So, be aware that enabling this service and setting
           some options does not give you a turn-key-ready solution. You need
@@ -85,61 +85,56 @@ in {
       advertisedAddresses = mkOption {
         type = types.listOf types.str;
         default = [];
-        description = lib.mdDoc "List of IP addresses this server is advertised under. See NetInfo(5)";
+        description = "List of IP addresses this server is advertised under. See NetInfo(5)";
       };
 
       cellName = mkOption {
         default = "";
         type = types.str;
-        description = lib.mdDoc "Cell name, this server will serve.";
+        description = "Cell name, this server will serve.";
         example = "grand.central.org";
       };
 
       cellServDB = mkOption {
         default = [];
         type = with types; listOf (submodule [ { options = cellServDBConfig;} ]);
-        description = lib.mdDoc "Definition of all cell-local database server machines.";
+        description = "Definition of all cell-local database server machines.";
       };
 
-      package = mkOption {
-        default = pkgs.openafs;
-        defaultText = literalExpression "pkgs.openafs";
-        type = types.package;
-        description = lib.mdDoc "OpenAFS package for the server binaries";
-      };
+      package = mkPackageOption pkgs "openafs" { };
 
       roles = {
         fileserver = {
           enable = mkOption {
             default = true;
             type = types.bool;
-            description = lib.mdDoc "Fileserver role, serves files and volumes from its local storage.";
+            description = "Fileserver role, serves files and volumes from its local storage.";
           };
 
           fileserverArgs = mkOption {
             default = "-vattachpar 128 -vhashsize 11 -L -rxpck 400 -cb 1000000";
             type = types.str;
-            description = lib.mdDoc "Arguments to the dafileserver process. See its man page.";
+            description = "Arguments to the dafileserver process. See its man page.";
           };
 
           volserverArgs = mkOption {
             default = "";
             type = types.str;
-            description = lib.mdDoc "Arguments to the davolserver process. See its man page.";
+            description = "Arguments to the davolserver process. See its man page.";
             example = "-sync never";
           };
 
           salvageserverArgs = mkOption {
             default = "";
             type = types.str;
-            description = lib.mdDoc "Arguments to the salvageserver process. See its man page.";
+            description = "Arguments to the salvageserver process. See its man page.";
             example = "-showlog";
           };
 
           salvagerArgs = mkOption {
             default = "";
             type = types.str;
-            description = lib.mdDoc "Arguments to the dasalvager process. See its man page.";
+            description = "Arguments to the dasalvager process. See its man page.";
             example = "-showlog -showmounts";
           };
         };
@@ -148,7 +143,7 @@ in {
           enable = mkOption {
             default = true;
             type = types.bool;
-            description = lib.mdDoc ''
+            description = ''
               Database server role, maintains the Volume Location Database,
               Protection Database (and Backup Database, see
               `backup` role). There can be multiple
@@ -163,45 +158,45 @@ in {
           vlserverArgs = mkOption {
             default = "";
             type = types.str;
-            description = lib.mdDoc "Arguments to the vlserver process. See its man page.";
+            description = "Arguments to the vlserver process. See its man page.";
             example = "-rxbind";
           };
 
           ptserverArgs = mkOption {
             default = "";
             type = types.str;
-            description = lib.mdDoc "Arguments to the ptserver process. See its man page.";
+            description = "Arguments to the ptserver process. See its man page.";
             example = "-restricted -default_access S---- S-M---";
           };
         };
 
         backup = {
-          enable = mkEnableOption (lib.mdDoc ''
-            Backup server role. When using OpenAFS built-in buserver, use in conjunction with the
+          enable = mkEnableOption ''
+            the backup server role. When using OpenAFS built-in buserver, use in conjunction with the
             `database` role to maintain the Backup
             Database. Normally only used in conjunction with tape storage
             or IBM's Tivoli Storage Manager.
 
             For a modern backup server, enable this role and see
-            {option}`enableFabs`.
-          '');
+            {option}`enableFabs`
+          '';
 
-          enableFabs = mkEnableOption (lib.mdDoc ''
+          enableFabs = mkEnableOption ''
             FABS, the flexible AFS backup system. It stores volumes as dump files, relying on other
-            pre-existing backup solutions for handling them.
-          '');
+            pre-existing backup solutions for handling them
+          '';
 
           buserverArgs = mkOption {
             default = "";
             type = types.str;
-            description = lib.mdDoc "Arguments to the buserver process. See its man page.";
+            description = "Arguments to the buserver process. See its man page.";
             example = "-p 8";
           };
 
           cellServDB = mkOption {
             default = [];
             type = with types; listOf (submodule [ { options = cellServDBConfig;} ]);
-            description = lib.mdDoc ''
+            description = ''
               Definition of all cell-local backup database server machines.
               Use this when your cell uses less backup database servers than
               other database server machines.
@@ -211,7 +206,7 @@ in {
           fabsArgs = mkOption {
             default = "";
             type = types.str;
-            description = lib.mdDoc ''
+            description = ''
               Arguments to the fabsys process. See
               {manpage}`fabsys_server(1)` and
               {manpage}`fabsys_config(1)`.
@@ -221,7 +216,7 @@ in {
           fabsExtraConfig = mkOption {
             default = {};
             type = types.attrs;
-            description = lib.mdDoc ''
+            description = ''
               Additional configuration parameters for the FABS backup server.
             '';
             example = literalExpression ''
@@ -237,7 +232,7 @@ in {
       dottedPrincipals= mkOption {
         default = false;
         type = types.bool;
-        description = lib.mdDoc ''
+        description = ''
           If enabled, allow principal names containing (.) dots. Enabling
           this has security implications!
         '';
@@ -246,7 +241,7 @@ in {
       udpPacketSize = mkOption {
         default = 1310720;
         type = types.int;
-        description = lib.mdDoc ''
+        description = ''
           UDP packet size to use in Bytes. Higher values can speed up
           communications. The default of 1 MB is a sufficient in most
           cases. Make sure to increase the kernel's UDP buffer size

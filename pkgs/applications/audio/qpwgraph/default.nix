@@ -1,26 +1,36 @@
-{ lib, mkDerivation, fetchFromGitLab
-, cmake, pkg-config
-, alsa-lib, pipewire
+{ lib
+, stdenv
+, fetchFromGitLab
+, cmake
+, pkg-config
+, wrapQtAppsHook
+, qtbase
+, qtsvg
+, qtwayland
+, alsa-lib
+, pipewire
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "qpwgraph";
-  version = "0.5.3";
+  version = "0.7.4";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "rncbc";
     repo = "qpwgraph";
-    rev = "v${version}";
-    sha256 = "sha256-50KaVpNB5/CTLs2bRbXEinYM23AZxZO/ForrVPFDN8U=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-1YExpvhCHIdRqFCvOmiG3G7k/qs7q1ITwtZXGMc/SRk=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [ cmake pkg-config wrapQtAppsHook ];
 
-  buildInputs = [ alsa-lib pipewire ];
+  buildInputs = [ qtbase qtsvg qtwayland alsa-lib pipewire ];
+
+  cmakeFlags = [ "-DCONFIG_WAYLAND=ON" ];
 
   meta = with lib; {
-    description = "Qt graph manager for PipeWire, similar to QjackCtl.";
+    description = "Qt graph manager for PipeWire, similar to QjackCtl";
     longDescription = ''
       qpwgraph is a graph manager dedicated for PipeWire,
       using the Qt C++ framework, based and pretty much like
@@ -30,5 +40,6 @@ mkDerivation rec {
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ kanashimia exi Scrumplex ];
+    mainProgram = "qpwgraph";
   };
-}
+})

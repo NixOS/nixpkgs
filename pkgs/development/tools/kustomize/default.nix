@@ -2,7 +2,7 @@
 
 buildGoModule rec {
   pname = "kustomize";
-  version = "5.1.1";
+  version = "5.4.2";
 
   ldflags = let t = "sigs.k8s.io/kustomize/api/provenance"; in
     [
@@ -15,13 +15,13 @@ buildGoModule rec {
     owner = "kubernetes-sigs";
     repo = pname;
     rev = "kustomize/v${version}";
-    hash = "sha256-XtpMws2o3h19PsRJXKg+y5/Zk3bc6mJ4O1LLZ40ioTM=";
+    hash = "sha256-cNmDhKRi4pk26vADFMXN6SocdPF1EIYf4wT4fQYgPVc=";
   };
 
   # avoid finding test and development commands
   modRoot = "kustomize";
   proxyVendor = true;
-  vendorHash = "sha256-/XyxZHhlxD0CpaDAuJbLkOHysLXo1+ThTcexqtNdVIs=";
+  vendorHash = "sha256-Nbc3zdVD8KIL80TqdcVNFMowfFsKKIPsEpkwq5fvWAI=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -34,6 +34,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Customization of kubernetes YAML configurations";
+    mainProgram = "kustomize";
     longDescription = ''
       kustomize lets you customize raw, template-free YAML files for
       multiple purposes, leaving the original YAML untouched and usable

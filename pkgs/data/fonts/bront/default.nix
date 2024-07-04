@@ -19,7 +19,7 @@ stdenvNoCC.mkDerivation {
     description = "Bront Fonts";
     longDescription = "Ubuntu Mono Bront and DejaVu Sans Mono Bront fonts.";
     homepage = "https://github.com/chrismwendt/bront";
-    license = licenses.free;
+    license = with licenses; [ bitstreamVera ufl ];
     platforms = platforms.all;
     maintainers = [ maintainers.grburst ];
   };

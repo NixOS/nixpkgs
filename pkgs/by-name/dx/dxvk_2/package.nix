@@ -1,36 +1,36 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkgsBuildHost
-, glslang
-, meson
-, ninja
-, windows
-, spirv-headers
-, vulkan-headers
-, SDL2
-, glfw
-, gitUpdater
-, sdl2Support ? true
-, glfwSupport ? false
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkgsBuildHost,
+  glslang,
+  meson,
+  ninja,
+  windows,
+  spirv-headers,
+  vulkan-headers,
+  SDL2,
+  glfw,
+  gitUpdater,
+  sdl2Support ? true,
+  glfwSupport ? false,
 }:
 
 # SDL2 and GLFW support are mutually exclusive.
 assert !sdl2Support || !glfwSupport;
 
 let
-  isCross = stdenv.hostPlatform != stdenv.targetPlatform;
   isWindows = stdenv.hostPlatform.uname.system == "Windows";
 in
-stdenv.mkDerivation (finalAttrs:  {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dxvk";
-  version = "2.3";
+  version = "2.3.1";
 
   src = fetchFromGitHub {
     owner = "doitsujin";
     repo = "dxvk";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-RU+B0XfphD5HHW/vSzqHLUaGS3E31d5sOLp3lMmrCB8=";
+    hash = "sha256-lUzD1NHFLO4UqOg/BUr7PnYMJCMr1KBh3VNx8etbt8c=";
     fetchSubmodules = true; # Needed for the DirectX headers and libdisplay-info
   };
 
@@ -39,8 +39,18 @@ stdenv.mkDerivation (finalAttrs:  {
       --replace "/usr/bin/env python3" "${lib.getBin pkgsBuildHost.python3}/bin/python3"
   '';
 
-  nativeBuildInputs = [ glslang meson ninja ];
-  buildInputs = [ spirv-headers vulkan-headers ]
+  strictDeps = true;
+
+  nativeBuildInputs = [
+    glslang
+    meson
+    ninja
+  ];
+  buildInputs =
+    [
+      spirv-headers
+      vulkan-headers
+    ]
     ++ lib.optionals (!isWindows && sdl2Support) [ SDL2 ]
     ++ lib.optionals (!isWindows && glfwSupport) [ glfw ]
     ++ lib.optionals isWindows [ windows.pthreads ];
@@ -51,23 +61,18 @@ stdenv.mkDerivation (finalAttrs:  {
     mkdir -p include/spirv/include include/vulkan/include
   '';
 
-  mesonFlags =
-    let
-      arch = if stdenv.is32bit then "32" else "64";
-    in
-    [
-      "--buildtype" "release"
-      "--prefix" "${placeholder "out"}"
-    ]
-    ++ lib.optionals isCross [ "--cross-file" "build-win${arch}.txt" ]
-    ++ lib.optional glfwSupport "-Ddxvk_native_wsi=glfw";
+  mesonBuildType = "release";
 
-  doCheck = !isCross;
+  mesonFlags = lib.optionals glfwSupport [ "-Ddxvk_native_wsi=glfw" ];
+
+  doCheck = true;
 
   passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
+  __structuredAttrs = true;
+
   meta = {
-    description = "A Vulkan-based translation layer for Direct3D 9/10/11";
+    description = "Vulkan-based translation layer for Direct3D 9/10/11";
     homepage = "https://github.com/doitsujin/dxvk";
     changelog = "https://github.com/doitsujin/dxvk/releases";
     maintainers = [ lib.maintainers.reckenrode ];

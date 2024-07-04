@@ -7,43 +7,38 @@ in
 {
   # interface
   options.services.corosync = {
-    enable = mkEnableOption (lib.mdDoc "corosync");
+    enable = mkEnableOption "corosync";
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.corosync;
-      defaultText = literalExpression "pkgs.corosync";
-      description = lib.mdDoc "Package that should be used for corosync.";
-    };
+    package = mkPackageOption pkgs "corosync" { };
 
     clusterName = mkOption {
       type = types.str;
       default = "nixcluster";
-      description = lib.mdDoc "Name of the corosync cluster.";
+      description = "Name of the corosync cluster.";
     };
 
     extraOptions = mkOption {
       type = with types; listOf str;
       default = [];
-      description = lib.mdDoc "Additional options with which to start corosync.";
+      description = "Additional options with which to start corosync.";
     };
 
     nodelist = mkOption {
-      description = lib.mdDoc "Corosync nodelist: all cluster members.";
+      description = "Corosync nodelist: all cluster members.";
       default = [];
       type = with types; listOf (submodule {
         options = {
           nodeid = mkOption {
             type = int;
-            description = lib.mdDoc "Node ID number";
+            description = "Node ID number";
           };
           name = mkOption {
             type = str;
-            description = lib.mdDoc "Node name";
+            description = "Node name";
           };
           ring_addrs = mkOption {
             type = listOf str;
-            description = lib.mdDoc "List of addresses, one for each ring.";
+            description = "List of addresses, one for each ring.";
           };
         };
       });
