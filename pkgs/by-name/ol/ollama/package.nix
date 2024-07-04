@@ -167,8 +167,7 @@ goBuild {
   ] ++ lib.optionals (enableRocm || enableCuda) [
     makeWrapper
     autoAddDriverRunpath
-  ] ++ lib.optionals stdenv.isDarwin
-    metalFrameworks;
+  ];
 
   buildInputs = lib.optionals enableRocm
     (rocmLibs ++ [ libdrm ])
