@@ -2466,7 +2466,6 @@ dont-distribute-packages:
  - kevin
  - key-vault
  - keyring
- - keysafe
  - keystore
  - keyvaluehash
  - keyword-args
