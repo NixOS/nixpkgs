@@ -39,12 +39,12 @@ let
     inherit (str) merge;
   };
 
-  elixirValue = let
+  elixirValue = (types.fix (final: {
     elixirValue' = with types;
-      nullOr (oneOf [ bool int float str (attrsOf elixirValue') (listOf elixirValue') ]) // {
+      nullOr (oneOf [ bool int float str (attrsOf final.elixirValue') (listOf final.elixirValue') ]) // {
         description = "Elixir value";
       };
-  in elixirValue';
+  })).elixirValue';
 
   frontend = {
     options = {
