@@ -16,7 +16,7 @@
   fmt,
   gmp,
   gnutls,
-  http-parser,
+  llhttp,
   jack,
   jsoncpp,
   libarchive,
@@ -65,25 +65,25 @@
 
 stdenv.mkDerivation rec {
   pname = "jami";
-  version = "20240529.0";
+  version = "20240627.0";
 
   src = fetchFromGitLab {
     domain = "git.jami.net";
     owner = "savoirfairelinux";
     repo = "jami-client-qt";
     rev = "stable/${version}";
-    hash = "sha256-v2GFvgHHJ2EMoayZ+//OZ0U+P1fh5Mgp5fAoqtZts7U=";
+    hash = "sha256-aePF1c99ju9y7JEgC+F2BPfpSAZlLd5OI5Jm6i9VlQQ=";
     fetchSubmodules = true;
   };
 
   pjsip-jami = pjsip.overrideAttrs (old: rec {
-    version = "797f1a38cc1066acc4adc9561aa1288afabe72d5";
+    version = "8fc165b833eea6e3c88d67a541385424b129fd3f";
 
     src = fetchFromGitHub {
       owner = "savoirfairelinux";
       repo = "pjproject";
       rev = version;
-      hash = "sha256-lTDbJF09R2G+EIkMj1YyKa4XokH9LlcIG+RhRJhzUes=";
+      hash = "sha256-uA6ZJYUgAu3cK4CKCGtqaI0KPM/0szExPS2pCOflz5A=";
     };
 
     configureFlags = [
@@ -117,8 +117,8 @@ stdenv.mkDerivation rec {
       src = fetchFromGitHub {
         owner = "savoirfairelinux";
         repo = "opendht";
-        rev = "f2cee8e9ce24746caa7dee1847829c526d340284";
-        hash = "sha256-ZnIrlybF3MCiXxxv80tRzCJ5CJ54S42prGUjq1suJNA=";
+        rev = "074e05cc3254d5d73b0d96ee772a6e01bb3113e5";
+        hash = "sha256-WuaURlC7eDDxvnM3YuyU9CNrwnE4WBQUIEw3z/0zjN8=";
       };
     }).override
       {
@@ -147,7 +147,7 @@ stdenv.mkDerivation rec {
       asio
       fmt
       gnutls
-      http-parser
+      llhttp
       jsoncpp
       libupnp
       msgpack-cxx
@@ -194,7 +194,7 @@ stdenv.mkDerivation rec {
       ffmpeg_6
       gmp
       gnutls
-      http-parser
+      llhttp
       jack
       jsoncpp
       libarchive
