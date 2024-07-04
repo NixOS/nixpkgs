@@ -5,6 +5,7 @@
   fetchFromGitLab,
   fetchpatch,
   gitUpdater,
+  nixosTests,
   cmake,
   content-hub,
   intltool,
@@ -112,6 +113,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     updateScript = gitUpdater { rev-prefix = "v"; };
+    tests.vm = nixosTests.teleports;
   };
 
   meta = {
