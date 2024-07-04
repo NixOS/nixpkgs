@@ -1,19 +1,21 @@
 { stdenv, fetchFromGitHub, lib
 , cmake, pkg-config, openjdk
 , libuuid, python3
+, glfw
 , silice, yosys, nextpnr, verilator
 , dfu-util, icestorm, trellis
+, unstableGitUpdater
 }:
 
 stdenv.mkDerivation rec {
   pname = "silice";
-  version = "unstable-2022-08-05";
+  version = "0-unstable-2024-06-23";
 
   src = fetchFromGitHub {
     owner = "sylefeb";
     repo = pname;
-    rev = "e26662ac757151e5dd8c60c45291b44906b1299f";
-    sha256 = "sha256-Q1JdgDlEErutZh0OfxYy5C4aVijFKlf6Hm5Iv+1jsj4=";
+    rev = "5ba9ef0d03b3c8d4a43efe10acfb51c97d3679ef";
+    sha256 = "sha256-LrLUaCpwzaxH02TGyEfARIumPi0s2REc1g79fSxJjFc=";
     fetchSubmodules = true;
   };
 
@@ -21,12 +23,16 @@ stdenv.mkDerivation rec {
     cmake
     pkg-config
     openjdk
+    glfw
   ];
   buildInputs = [
     libuuid
   ];
   propagatedBuildInputs = [
-    (python3.withPackages (p: with p; [ edalize ]))
+    (python3.withPackages (p: [
+      p.edalize
+      p.termcolor
+    ]))
   ];
 
   postPatch = ''
@@ -77,6 +83,8 @@ stdenv.mkDerivation rec {
       blinky = testProject "blinky";
       pipeline_sort = testProject "pipeline_sort";
     };
+
+  passthru.updateScript = unstableGitUpdater { };
 
   meta = with lib; {
     description = "Open source language that simplifies prototyping and writing algorithms on FPGA architectures";
