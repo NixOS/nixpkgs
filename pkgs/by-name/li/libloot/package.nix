@@ -58,13 +58,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "libloot";
-  version = "0.22.4";
+  version = "0.23.0";
 
   src = fetchFromGitHub {
     owner = "loot";
     repo = pname;
     rev = version;
-    hash = "sha256-ZpF4DKNXmIULD9cXPTfTIGjFuFobpo51blvl9bAxIJg=";
+    hash = "sha256-k+YO/jqtdXgwIg0bPXQ7tKAdaiJORZbyHcQgBX/5KAY=";
   };
 
   patches = [ ./remove-external-projects.patch ];

@@ -16,16 +16,16 @@ in
 
 rustPlatform.buildRustPackage rec {
   pname = "loot-condition-interpreter";
-  version = "4.0.0";
+  version = "4.0.1";
 
   src = fetchFromGitHub {
     owner = "loot";
     repo = pname;
     rev = version;
-    hash = "sha256-LmWrRiFDaDk+eRm6yanyogsEmhVqlUbnE51HSbcSfcc=";
+    hash = "sha256-sFdtpf+TaKfAbvK5oplb77uAIRdcLw3XfGYYVZ37XAM=";
   };
 
-  cargoHash = "sha256-ynqtjfmfHQbHhUJLnYYdC7EeL/oXZ7jEnjHUKba5Oxs=";
+  cargoHash = "sha256-h0Lm/jzCzD19JrJYk5yp8XvbhFNO3LKGbS7WPyw0GDk=";
 
   nativeBuildInputs = [
     rust-cbindgen

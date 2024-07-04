@@ -14,16 +14,16 @@ in
 
 rustPlatform.buildRustPackage rec {
   pname = "libloadorder";
-  version = "16.0.0";
+  version = "17.0.1";
 
   src = fetchFromGitHub {
     owner = "Ortham";
     repo = pname;
     rev = version;
-    hash = "sha256-aqBmcAQodvVpF6lumow5wGqdsaF4ICE0KLU059EjGSQ=";
+    hash = "sha256-m8tDQJJFKxdnXrXZ85qUE6AT0UD94kUCRTbBj4QokWA=";
   };
 
-  cargoHash = "sha256-JBhJLFyKiv6H2+gIGNMw9/ATMkX9bNJ8AdkItuuk2P4=";
+  cargoHash = "sha256-/oLrjvQj/KTIJc52hUaZ0wRF+BUZQDiMuw5AxutSXIs=";
 
   nativeBuildInputs = [
     rust-cbindgen

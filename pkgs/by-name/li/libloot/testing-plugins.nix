@@ -3,6 +3,6 @@
 fetchFromGitHub {
   owner = "Ortham";
   repo = "testing-plugins";
-  rev = "1.5.0";
-  hash = "sha256-AquicOtXSlAv3Ful3F5wnAxIWwYHh1GEZDE6dC9njVs=";
+  rev = "1.6.2";
+  hash = "sha256-3Aa98EwqpuGA3YlsRF8luWzXVEFO/rs6JXisXdLyIK4=";
 }

@@ -13,16 +13,16 @@ in
 
 rustPlatform.buildRustPackage rec {
   pname = "esplugin";
-  version = "5.0.1";
+  version = "6.0.0";
 
   src = fetchFromGitHub {
     owner = "Ortham";
     repo = pname;
     rev = version;
-    hash = "sha256-e52QAD9gjkdGMhEERzdX7cOls7I+CD9lX6LCwxASN2I=";
+    hash = "sha256-VlzQUNQ9rfv3ivDoV6+2XnoTR0nDwNJo2gxfibq3juw=";
   };
 
-  cargoHash = "sha256-ZKQCN+kl5TYtfgxvbt3dRjgBtfDUqXNc7AKm9CGppO4=";
+  cargoHash = "sha256-6G8N/0CdASfqTiHeoTD5pgUOzUJEmIivirqJewC0KuE=";
 
   nativeBuildInputs = [
     rust-cbindgen
@@ -39,9 +39,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   preCheck = ''
-    # testing-plugins needs to be writable
-    cp -r ${testing-plugins} testing-plugins
-    chmod -R u+w testing-plugins
+    ln -s ${testing-plugins} testing-plugins
   '';
 
   # libloot expects esplugin.hpp not esplugin.h
