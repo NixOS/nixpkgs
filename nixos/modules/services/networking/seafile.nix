@@ -29,8 +29,8 @@ let
 
   seafRoot = "/var/lib/seafile"; # hardcode it due to dynamicuser
   ccnetDir = "${seafRoot}/ccnet";
-  dataDir = "${seafRoot}/data";
   seahubDir = "${seafRoot}/seahub";
+  defaultUser = "seafile";
 
 in
 {
@@ -118,11 +118,39 @@ in
       type = types.str;
       description = ''
         Seafile Seahub Admin Account initial password.
-        Should be change via Seahub web front-end.
+        Should be changed via Seahub web front-end.
       '';
     };
 
     seafilePackage = mkPackageOption pkgs "seafile-server" { };
+
+    user = mkOption {
+      type = types.str;
+      default = defaultUser;
+      description = "User account under which seafile runs.";
+    };
+
+    group = mkOption {
+      type = types.str;
+      default = defaultUser;
+      description = "Group under which seafile runs.";
+    };
+
+    dataDir = mkOption {
+      type = types.nullOr types.path;
+      default = null;
+      defaultText = "${seafRoot}/data";
+      description = "Path in which to store user data";
+    };
+
+    gcDates = mkOption {
+      type = types.listOf types.str;
+      default = [ ];
+      example = [ "Sun 03:00:00" ];
+      description = ''
+        When to run garbage collection on stored data blocks.
+      '';
+    };
 
     seahubExtraConf = mkOption {
       default = "";
@@ -143,6 +171,17 @@ in
     environment.etc."seafile/seafile.conf".source = seafileConf;
     environment.etc."seafile/seahub_settings.py".source = seahubSettings;
 
+    users.users = lib.optionalAttrs (cfg.user == defaultUser) {
+      "${defaultUser}" = {
+        group = cfg.group;
+        isSystemUser = true;
+      };
+    };
+
+    users.groups = lib.optionalAttrs (cfg.group == defaultUser) {
+      "${defaultUser}" = {};
+    };
+
     systemd.targets.seafile = {
       wantedBy = [ "multi-user.target" ];
       description = "Seafile components";
@@ -154,6 +193,8 @@ in
           ProtectHome = true;
           PrivateUsers = true;
           PrivateDevices = true;
+          PrivateTmp = true;
+          ProtectSystem = "strict";
           ProtectClock = true;
           ProtectHostname = true;
           ProtectProc = "invisible";
@@ -162,30 +203,35 @@ in
           ProtectKernelLogs = true;
           ProtectControlGroups = true;
           RestrictNamespaces = true;
+          RemoveIPC = true;
           LockPersonality = true;
           RestrictRealtime = true;
           RestrictSUIDSGID = true;
+          NoNewPrivileges = true;
           MemoryDenyWriteExecute = true;
           SystemCallArchitectures = "native";
           RestrictAddressFamilies = [ "AF_UNIX" "AF_INET" ];
         };
+        dataDir = if (!builtins.isNull cfg.dataDir) then cfg.dataDir else "${seafRoot}/data";
+        optionalDataDir = lib.lists.optional (!builtins.isNull cfg.dataDir) cfg.dataDir;
       in
       {
         seaf-server = {
           description = "Seafile server";
           partOf = [ "seafile.target" ];
           after = [ "network.target" ];
+          unitConfig.RequiresMountsFor = optionalDataDir;
           wantedBy = [ "seafile.target" ];
           restartTriggers = [ ccnetConf seafileConf ];
           path = [ pkgs.sqlite ];
           serviceConfig = securityOptions // {
-            User = "seafile";
-            Group = "seafile";
-            DynamicUser = true;
+            User = cfg.user;
+            Group = cfg.group;
             StateDirectory = "seafile";
             RuntimeDirectory = "seafile";
             LogsDirectory = "seafile";
             ConfigurationDirectory = "seafile";
+            ReadWritePaths = optionalDataDir;
             ExecStart = ''
               ${cfg.seafilePackage}/bin/seaf-server \
               --foreground \
@@ -237,6 +283,7 @@ in
           partOf = [ "seafile.target" ];
           after = [ "network.target" "seaf-server.service" ];
           requires = [ "seaf-server.service" ];
+          unitConfig.RequiresMountsFor = optionalDataDir;
           restartTriggers = [ seahubSettings ];
           environment = {
             PYTHONPATH = "${pkgs.seahub.pythonPath}:${pkgs.seahub}/thirdpart:${pkgs.seahub}";
@@ -248,13 +295,13 @@ in
             SEAHUB_LOG_DIR = "/var/log/seafile";
           };
           serviceConfig = securityOptions // {
-            User = "seafile";
-            Group = "seafile";
-            DynamicUser = true;
+            User = cfg.user;
+            Group = cfg.group;
             RuntimeDirectory = "seahub";
             StateDirectory = "seafile";
             LogsDirectory = "seafile";
             ConfigurationDirectory = "seafile";
+            ReadWritePaths = optionalDataDir;
             ExecStart = ''
               ${pkgs.seahub.python.pkgs.gunicorn}/bin/gunicorn seahub.wsgi:application \
               --name seahub \
@@ -293,6 +340,52 @@ in
             fi
           '';
         };
+
+        seaf-gc = {
+          description = "Seafile storage garbage collection";
+          conflicts = [ "seaf-server.service" "seahub.service" ];
+          after = [ "seaf-server.service" "seahub.service" ];
+          unitConfig.RequiresMountsFor = optionalDataDir;
+          onSuccess = [ "seaf-server.service" "seahub.service" ];
+          onFailure = [ "seaf-server.service" "seahub.service" ];
+          startAt = cfg.gcDates;
+          serviceConfig = securityOptions // {
+            User = cfg.user;
+            Group = cfg.group;
+            StateDirectory = "seafile";
+            RuntimeDirectory = "seafile";
+            LogsDirectory = "seafile";
+            ConfigurationDirectory = "seafile";
+            ReadWritePaths = optionalDataDir;
+            Type = "oneshot";
+          };
+          script = ''
+            if [ ! -f "${seafRoot}/server-setup" ]; then
+                echo "Server not setup yet, GC not needed" >&2
+                exit
+            fi
+
+            # checking for pending upgrades
+            installedMajor=$(cat "${seafRoot}/server-setup" | cut -d"-" -f1 | cut -d"." -f1)
+            installedMinor=$(cat "${seafRoot}/server-setup" | cut -d"-" -f1 | cut -d"." -f2)
+            pkgMajor=$(echo "${cfg.seafilePackage.version}" | cut -d"." -f1)
+            pkgMinor=$(echo "${cfg.seafilePackage.version}" | cut -d"." -f2)
+
+            if [[ $installedMajor != $pkgMajor || $installedMinor != $pkgMinor ]]; then
+                echo "Server not upgraded yet" >&2
+                exit
+            fi
+
+            # Clean up user-deleted blocks and libraries
+            ${cfg.seafilePackage}/bin/seafserv-gc \
+              -F /etc/seafile \
+              -c ${ccnetDir} \
+              -d ${dataDir} \
+              --rm-fs
+          '';
+        };
       };
   };
+
+  meta.maintainers = with maintainers; [ greizgh schmittlauch ];
 }
