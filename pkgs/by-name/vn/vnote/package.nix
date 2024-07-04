@@ -2,13 +2,7 @@
 , stdenv
 , fetchFromGitHub
 , cmake
-, qtbase
-, qtwebengine
-, qtsvg
-, qttools
-, qt5compat
-, qtwayland
-, wrapQtAppsHook
+, qt6
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -25,16 +19,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
-    wrapQtAppsHook
+    qt6.wrapQtAppsHook
   ];
 
   buildInputs = [
-    qtbase
-    qtwebengine
-    qtsvg
-    qttools
-    qt5compat
-    qtwayland
+    qt6.qtbase
+    qt6.qtwebengine
+    qt6.qtsvg
+    qt6.qttools
+    qt6.qt5compat
+    qt6.qtwayland
   ];
 
   meta = {
