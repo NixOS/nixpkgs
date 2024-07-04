@@ -75,7 +75,7 @@ let
     ];
   };
 
-  docstubs = stdenvNoCC.mkDerivation {
+  pyright-docstubs = stdenvNoCC.mkDerivation {
     name = "docstubs";
     inherit src;
     buildInputs = [ docify ];
@@ -98,14 +98,15 @@ buildNpmPackage rec {
 
   postPatch = ''
     chmod +w ../../
-    mkdir ../../docstubs
-    ln -s ${docstubs}/stubs ../../docstubs
+    ln -s ${pyright-docstubs}/ ../../docstubs
     ln -s ${pyright-root}/node_modules ../../node_modules
     chmod +w ../pyright-internal
     ln -s ${pyright-internal}/node_modules ../pyright-internal/node_modules
   '';
 
   postInstall = ''
+    # unlink $out/lib/node_modules/basedpyright/dist/typeshed-fallback
+    # ln -s ${pyright-docstubs} $out/lib/node_modules/basedpyright/dist/typeshed-fallback
     mv "$out/bin/pyright" "$out/bin/basedpyright"
     mv "$out/bin/pyright-langserver" "$out/bin/basedpyright-langserver"
   '';
