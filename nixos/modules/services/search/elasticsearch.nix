@@ -93,7 +93,7 @@ in
     extraConfig = mkOption {
       description = "Extra configuration for elasticsearch.";
       default = "";
-      type = types.str;
+      type = types.lines;
       example = ''
         node.name: "elasticsearch"
         node.master: true
