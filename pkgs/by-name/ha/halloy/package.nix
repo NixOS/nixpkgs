@@ -6,7 +6,10 @@
   copyDesktopItems,
   makeDesktopItem,
   libxkbcommon,
+<<<<<<< HEAD
   makeWrapper,
+=======
+>>>>>>> 8cb786adbe12 (Merge pull request #324598 from r-ryantm/auto-update/ldc)
   openssl,
   pkg-config,
   rustPlatform,
@@ -37,7 +40,10 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [
     copyDesktopItems
+<<<<<<< HEAD
     makeWrapper
+=======
+>>>>>>> 8cb786adbe12 (Merge pull request #324598 from r-ryantm/auto-update/ldc)
     pkg-config
   ];
 
@@ -104,6 +110,7 @@ rustPlatform.buildRustPackage rec {
   postInstall = ''
     install -Dm644 assets/linux/icons/hicolor/128x128/apps/org.squidowl.halloy.png \
       $out/share/icons/hicolor/128x128/apps/org.squidowl.halloy.png
+<<<<<<< HEAD
   '' + lib.optionalString stdenv.isDarwin ''
     APP_DIR="$out/Applications/Halloy.app/Contents"
 
@@ -115,6 +122,8 @@ rustPlatform.buildRustPackage rec {
       --replace-fail "{{ BUILD }}" "${version}-nixpkgs"
 
     makeWrapper "$out/bin/halloy" "$APP_DIR/MacOS/halloy"
+=======
+>>>>>>> 8cb786adbe12 (Merge pull request #324598 from r-ryantm/auto-update/ldc)
   '';
 
   meta = with lib; {
@@ -122,7 +131,11 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/squidowl/halloy";
     changelog = "https://github.com/squidowl/halloy/blob/${version}/CHANGELOG.md";
     license = licenses.gpl3Only;
+<<<<<<< HEAD
     maintainers = with maintainers; [ fab iivusly ];
+=======
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 8cb786adbe12 (Merge pull request #324598 from r-ryantm/auto-update/ldc)
     mainProgram = "halloy";
   };
 }

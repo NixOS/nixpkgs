@@ -13,7 +13,11 @@ mavenWithJdk.buildMavenPackage rec {
     hash = "sha256-F+o94Oh9qxVdfgwdmyOv+WZl1BjQuzhQWaVrAgScgIU=";
   };
 
+<<<<<<< HEAD
   mvnHash = "sha256-woOSkF5TuzaJ84EndryMoXTMbbK/V/BShM1k+WB8D/c=";
+=======
+  mvnHash = "sha256-zqXbLnLmTZHzwH+vgGASR7Jsz1t173DmQMIe2R6B6Ic=";
+>>>>>>> 8cb786adbe12 (Merge pull request #324598 from r-ryantm/auto-update/ldc)
 
   nativeBuildInputs = [ makeWrapper ];
 

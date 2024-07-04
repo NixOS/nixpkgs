@@ -11,7 +11,11 @@ maven.buildMavenPackage rec {
     hash = "sha256-F/tMRD+nWn/fRPX7cTan371zlOTxh7oR98wREmokULo=";
   };
 
+<<<<<<< HEAD
   mvnHash = "sha256-6EX+y7/lGdB5LgW9MIER+KgvtPjvMCDjgq89f1g2GlY=";
+=======
+  mvnHash = "sha256-b0nkp23gv4kejac/xrvm3xWo3Z8if7zveNUHBg7ZBm4=";
+>>>>>>> 8cb786adbe12 (Merge pull request #324598 from r-ryantm/auto-update/ldc)
   mvnParameters = "compile assembly:single -Dmaven.test.skip=true";
 
   nativeBuildInputs = [ makeWrapper ];
@@ -20,7 +24,11 @@ maven.buildMavenPackage rec {
     runHook preInstall
 
     mkdir -p $out/{bin,lib}
+<<<<<<< HEAD
     cp target/gol-tool-${version}-jar-with-dependencies.jar $out/lib/gol-tool.jar
+=======
+    cp /build/source/target/gol-tool-${version}-jar-with-dependencies.jar $out/lib/gol-tool.jar
+>>>>>>> 8cb786adbe12 (Merge pull request #324598 from r-ryantm/auto-update/ldc)
 
     makeWrapper ${jre}/bin/java $out/bin/gol \
       --add-flags "-cp $out/lib/gol-tool.jar" \

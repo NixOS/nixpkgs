@@ -619,6 +619,7 @@ rec {
     fakeRootCommands = ''
       mkdir -p ./home/alice
       chown 1000 ./home/alice
+<<<<<<< HEAD
       ln -s ${pkgs.hello.overrideAttrs (finalAttrs: prevAttrs: {
         # A unique `hello` to make sure that it isn't included via another mechanism by accident.
         configureFlags = prevAttrs.configureFlags or [] ++ [ " --program-prefix=layeredImageWithFakeRootCommands-" ];
@@ -627,6 +628,12 @@ rec {
         meta = prevAttrs.meta // {
           mainProgram = "layeredImageWithFakeRootCommands-hello";
         };
+=======
+      ln -s ${pkgs.hello.overrideAttrs (o: {
+        # A unique `hello` to make sure that it isn't included via another mechanism by accident.
+        configureFlags = o.configureFlags or [] ++ [ " --program-prefix=layeredImageWithFakeRootCommands-" ];
+        doCheck = false;
+>>>>>>> 8cb786adbe12 (Merge pull request #324598 from r-ryantm/auto-update/ldc)
       })} ./hello
     '';
   };

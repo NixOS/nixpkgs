@@ -49,7 +49,11 @@ maven.buildMavenPackage {
 
   pname = "commafeed";
 
+<<<<<<< HEAD
   mvnHash = "sha256-LDZv3CBc/FpVMKmZ+kqfBdkTbqZcJMRqeXN35t4rwJI=";
+=======
+  mvnHash = "sha256-YnEDJf4GeyiXxOh8tZZTZdLOJrisG6lmShXU97ueGNE=";
+>>>>>>> 8cb786adbe12 (Merge pull request #324598 from r-ryantm/auto-update/ldc)
 
   mvnParameters = lib.escapeShellArgs [
     "-Dskip.installnodenpm"
