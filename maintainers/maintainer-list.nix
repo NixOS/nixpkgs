@@ -20170,6 +20170,12 @@
     githubId = 2845239;
     name = "Tim Put";
   };
+  timschumi = {
+    email = "timschumi@gmx.de";
+    github = "timschumi";
+    githubId = 16820960;
+    name = "Tim Schumacher";
+  };
   timstott = {
     email = "stott.timothy@gmail.com";
     github = "timstott";
