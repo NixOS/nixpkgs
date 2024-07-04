@@ -408,12 +408,12 @@
 
   codesnap-nvim =
     let
-      version = "1.4.0";
+      version = "1.4.1";
       src = fetchFromGitHub {
         owner = "mistricky";
         repo = "codesnap.nvim";
         rev = "refs/tags/v${version}";
-        hash = "sha256-fBeojxvi++3ShqxvFQ5/sv8WbpVrN7+XRPZWWrbpEL4=";
+        hash = "sha256-KttvOfMieO+lBEgvkrBztWg7pUm/gFxYaTVXAQv15IM=";
       };
       codesnap-lib = rustPlatform.buildRustPackage {
         pname = "codesnap-lib";
@@ -421,7 +421,7 @@
 
         sourceRoot = "${src.name}/generator";
 
-        cargoHash = "sha256-lDy+FUph4CognY0oN7qhFsbnoC3gxguwq5YVtsiP1lo=";
+        cargoHash = "sha256-IZtWfyDZEaFSuj3uXBhBuGPi4IN1Dwt0ZkMSoxAum5c=";
 
         nativeBuildInputs = [
           pkg-config
@@ -453,7 +453,10 @@
       doInstallCheck = true;
       nvimRequireCheck = "codesnap";
 
-      meta.homepage = "https://github.com/mistricky/codesnap.nvim/";
+      meta = {
+        homepage = "https://github.com/mistricky/codesnap.nvim/";
+        changelog = "https://github.com/mistricky/codesnap.nvim/releases/tag/v${version}";
+      };
     };
 
   command-t = super.command-t.overrideAttrs {
