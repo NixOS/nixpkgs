@@ -40,11 +40,8 @@
 , xz
 
   # Used in passthru
-, common-updater-scripts
 , dolphin-emu
-, jq
 , testers
-, writeShellScript
 
   # Darwin-only dependencies
 , CoreBluetooth
@@ -63,7 +60,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "dolphin-emu";
     repo = "dolphin";
-    rev = "b92e354389bb7c0bd114a8631b8af110d3cb3a14";
+    rev = "refs/tags/${version}";
     hash = "sha256-8W4KyIj+rhDkWnQogjpzlEJVo3HJenfpWKimSyMGN7c=";
     fetchSubmodules = true;
   };
@@ -164,16 +161,6 @@ stdenv.mkDerivation rec {
       command = "dolphin-emu-nogui --version";
       inherit version;
     };
-
-    updateScript = writeShellScript "dolphin-update-script" ''
-      set -euo pipefail
-      export PATH=${lib.makeBinPath [ curl jq common-updater-scripts ]}
-
-      json="$(curl -s https://dolphin-emu.org/update/latest/beta)"
-      version="$(jq -r '.shortrev' <<< "$json")"
-      rev="$(jq -r '.hash' <<< "$json")"
-      update-source-version dolphin-emu "$version" --rev="$rev"
-    '';
   };
 
   meta = with lib; {
