@@ -21,9 +21,11 @@ python3Packages.buildPythonApplication rec {
 
   nativeBuildInputs = [
     wrapGAppsHook3
-  ] ++ (with python3Packages; [
+  ];
+
+  build-system = with python3Packages; [
     setuptools
-  ]);
+  ];
 
   buildInputs = [
     gtk3
@@ -31,7 +33,7 @@ python3Packages.buildPythonApplication rec {
     libhandy
   ];
 
-  propagatedBuildInputs = with python3Packages; [
+  dependencies = with python3Packages; [
     pygobject3
     pikepdf
     img2pdf
@@ -42,19 +44,19 @@ python3Packages.buildPythonApplication rec {
   # incompatible with wrapGAppsHook3
   strictDeps = false;
   dontWrapGApps = true;
-  preFixup = ''
-    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
-  '';
+  makeWrapperArgs = [
+    "\${gappsWrapperArgs[@]}"
+  ];
 
   doCheck = false; # no tests
 
-  meta = with lib; {
+  meta = {
     inherit (src.meta) homepage;
-    description = "Merge or split pdf documents and rotate, crop and rearrange their pages using an interactive and intuitive graphical interface";
+    description = "Merge or split pdf documents and rotate, crop and rearrange their pages using a graphical interface";
     mainProgram = "pdfarranger";
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ symphorien ];
-    license = licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ symphorien ];
+    license = lib.licenses.gpl3Plus;
     changelog = "https://github.com/pdfarranger/pdfarranger/releases/tag/${version}";
   };
 }
