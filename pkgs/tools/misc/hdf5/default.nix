@@ -82,7 +82,7 @@ stdenv.mkDerivation rec {
     ++ lib.optionals threadsafe [ "-DDHDF5_ENABLE_THREADSAFE:BOOL=ON" "-DHDF5_BUILD_HL_LIB=OFF" ]
     # broken in nixpkgs since around 1.14.3 -> 1.14.4.3
     # https://github.com/HDFGroup/hdf5/issues/4208#issuecomment-2098698567
-    ++ lib.optional (stdenv.isDarwin && stdenv.isx86_64) "DHDF5_ENABLE_NONSTANDARD_FEATURE_FLOAT16=OFF"
+    ++ lib.optional (stdenv.isDarwin && stdenv.isx86_64) "-DHDF5_ENABLE_NONSTANDARD_FEATURE_FLOAT16=OFF"
   ;
 
   postInstall = ''
