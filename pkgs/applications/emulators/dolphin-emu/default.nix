@@ -40,7 +40,6 @@
 , xz
 
   # Used in passthru
-, dolphin-emu
 , testers
 
   # Darwin-only dependencies
@@ -53,14 +52,14 @@
 , VideoToolbox
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dolphin-emu";
   version = "2407";
 
   src = fetchFromGitHub {
     owner = "dolphin-emu";
     repo = "dolphin";
-    rev = "refs/tags/${version}";
+    rev = "refs/tags/${finalAttrs.version}";
     hash = "sha256-8W4KyIj+rhDkWnQogjpzlEJVo3HJenfpWKimSyMGN7c=";
     fetchSubmodules = true;
   };
@@ -125,8 +124,8 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DDISTRIBUTOR=NixOS"
-    "-DDOLPHIN_WC_REVISION=${src.rev}"
-    "-DDOLPHIN_WC_DESCRIBE=${version}"
+    "-DDOLPHIN_WC_REVISION=${finalAttrs.src.rev}"
+    "-DDOLPHIN_WC_DESCRIBE=${finalAttrs.version}"
     "-DDOLPHIN_WC_BRANCH=master"
   ] ++ lib.optionals stdenv.isDarwin [
     "-DOSX_USE_DEFAULT_SEARCH_PATH=True"
@@ -157,9 +156,9 @@ stdenv.mkDerivation rec {
 
   passthru = {
     tests.version = testers.testVersion {
-      package = dolphin-emu;
+      package = finalAttrs.finalPackage;
       command = "dolphin-emu-nogui --version";
-      inherit version;
+      inherit (finalAttrs) version;
     };
   };
 
@@ -172,4 +171,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     maintainers = with maintainers; [ pbsds ];
   };
-}
+})
