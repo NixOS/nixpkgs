@@ -554,7 +554,7 @@ in python.pkgs.buildPythonApplication rec {
     (fetchpatch2 {
       # https://github.com/home-assistant/core/pull/121135
       url = "https://github.com/home-assistant/core/commit/b6a23fad3537e0baa026b2a7eb5bff8a4246780b.patch";
-      hash = "sha256-eXUc8PRAHgX2JJ4VuTuu1/UB14H6x3LyFNwjLCfADaY=";
+      hash = "sha256-ISggWmExe66KNWTCfNqyk/BngC44n3V7GTLQRyNXVAs=";
     })
   ];
 
