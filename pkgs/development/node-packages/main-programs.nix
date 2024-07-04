@@ -52,11 +52,7 @@
   remod-cli = "remod";
   teck-programmer = "teck-firmware-upgrade";
   typescript-language-server = "typescript-language-server";
-  uglify-js = "uglifyjs";
   undollar = "$";
-  vscode-css-languageserver-bin = "css-languageserver";
-  vscode-html-languageserver-bin = "html-languageserver";
-  vscode-json-languageserver-bin = "json-languageserver";
   vscode-json-languageserver = "vscode-json-languageserver";
   webtorrent-cli = "webtorrent";
 }
