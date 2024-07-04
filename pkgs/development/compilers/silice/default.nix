@@ -2,18 +2,18 @@
 , cmake, pkg-config, openjdk
 , libuuid, python3
 , glfw
-, silice, yosys, nextpnr, verilator
+, yosys, nextpnr, verilator
 , dfu-util, icestorm, trellis
 , unstableGitUpdater
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "silice";
   version = "0-unstable-2024-06-23";
 
   src = fetchFromGitHub {
     owner = "sylefeb";
-    repo = pname;
+    repo = "silice";
     rev = "5ba9ef0d03b3c8d4a43efe10acfb51c97d3679ef";
     sha256 = "sha256-LrLUaCpwzaxH02TGyEfARIumPi0s2REc1g79fSxJjFc=";
     fetchSubmodules = true;
@@ -42,13 +42,18 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     make install
     mkdir -p $out
     cp -ar ../{bin,frameworks,lib} $out/
+
+    runHook postInstall
   '';
 
   passthru.tests =
     let
+      silice = finalAttrs.finalPackage;
       testProject = project: stdenv.mkDerivation {
         name = "${silice.name}-test-${project}";
         nativeBuildInputs = [
@@ -60,18 +65,24 @@ stdenv.mkDerivation rec {
           icestorm
           trellis
         ];
-        src = "${src}/projects";
+        src = "${silice.src}/projects";
         sourceRoot = "projects/${project}";
         buildPhase = ''
-          targets=$(cut -d " " -f 2 configs | tr -d '\r')
-          for target in $targets ; do
+          targets=()
+          for target in $(cat configs | tr -d '\r') ; do
+            [[ $target != Makefile* ]] || continue
             make $target ARGS="--no_program"
+            targets+=($target)
           done
+          if test "''${#targets[@]}" -eq 0; then
+            >&2 echo "ERROR: no target found!"
+            false
+          fi
         '';
         installPhase = ''
           mkdir $out
-          for target in $targets ; do
-            cp -r BUILD_$target $out/
+          for target in "''${targets[@]}" ; do
+            [[ $target != Makefile* ]] || continue
           done
         '';
       };
@@ -86,10 +97,15 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = unstableGitUpdater { };
 
-  meta = with lib; {
+  meta = {
     description = "Open source language that simplifies prototyping and writing algorithms on FPGA architectures";
     homepage = "https://github.com/sylefeb/Silice";
-    license = licenses.bsd2;
-    maintainers = [ maintainers.astro ];
+    license = lib.licenses.bsd2;
+    mainProgram = "silice";
+    maintainers = with lib.maintainers; [
+      astro
+      pbsds
+    ];
+    platforms = lib.platforms.all;
   };
-}
+})
