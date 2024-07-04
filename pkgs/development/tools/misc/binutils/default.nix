@@ -16,6 +16,7 @@ in
 , perl
 , substitute
 , zlib
+, CoreServices
 
 , enableGold ? withGold stdenv.targetPlatform
 , enableGoldDefault ? false
@@ -87,6 +88,10 @@ stdenv.mkDerivation (finalAttrs: {
     # not need to know binutils' BINDIR at all. It's an absolute path
     # where libraries are stored.
     ./plugins-no-BINDIR.patch
+
+    # ld64 needs `-undefined dynamic_lookup` to link `libctf-nobfd.dylib`, but the Darwin
+    # version detection in `libtool.m4` fails to detect the Darwin version correctly.
+    ./0001-libtool.m4-update-macos-version-detection-block.patch
   ]
   ++ lib.optional targetPlatform.isiOS ./support-ios.patch
   # Adds AVR-specific options to "size" for compatibility with Atmel's downstream distribution
@@ -120,7 +125,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals targetPlatform.isVc4 [ flex ]
   ;
 
-  buildInputs = [ zlib gettext ];
+  buildInputs = [ zlib gettext ] ++ lib.optionals buildPlatform.isDarwin [ CoreServices ];
 
   inherit noSysDirs;
 
