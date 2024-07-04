@@ -17539,5 +17539,17 @@ final: prev:
     meta.homepage = "https://github.com/jhradilek/vim-snippets/";
   };
 
+  supermaven-nvim = buildVimPlugin {
+    pname = "supermaven-nvim";
+    version = "2024-07-01";
+    src = fetchFromGitHub {
+      owner = "supermaven-inc";
+      repo = "supermaven-nvim";
+      rev = "c7ab94a6bcde96c79ff51afd6a1494606bb6f10b";
+      sha256 = "sha256-TeRWReHeEqP5I3tgfJdMDmHvL83NDCENRMcQrKbPiqg=";
+    };
+    meta.homepage = "https://github.com/supermaven-inc/supermaven-nvim/";
+  };
+
 
 }

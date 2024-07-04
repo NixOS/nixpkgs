@@ -80762,24 +80762,6 @@ in
     bypassCache = true;
     reconstructLock = true;
   };
-  lv_font_conv = nodeEnv.buildNodePackage {
-    name = "lv_font_conv";
-    packageName = "lv_font_conv";
-    version = "1.5.3";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/lv_font_conv/-/lv_font_conv-1.5.3.tgz";
-      sha512 = "0xJQThBOw2iptFccSXrKDIUTQAwr/2zhKjCI1lATIRgZo8uvYRTmenKafW9yTw6G0y5AyW00tqGpUtYuTuBIbQ==";
-    };
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "Rasterize vector fonts for embedded use. Supports subsettings & merge.";
-      homepage = "https://github.com/lvgl/lv_font_conv#readme";
-      license = "MIT";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
   madoko = nodeEnv.buildNodePackage {
     name = "madoko";
     packageName = "madoko";
@@ -90187,24 +90169,6 @@ in
     meta = {
       description = "Language Server Protocol (LSP) implementation for TypeScript using tsserver";
       license = "Apache-2.0";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
-  uglify-js = nodeEnv.buildNodePackage {
-    name = "uglify-js";
-    packageName = "uglify-js";
-    version = "3.18.0";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/uglify-js/-/uglify-js-3.18.0.tgz";
-      sha512 = "SyVVbcNBCk0dzr9XL/R/ySrmYf0s372K6/hFklzgcp2lBFyXtw4I7BOdDjlLhE1aVqaI/SHWXWmYdlZxuyF38A==";
-    };
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "JavaScript parser, mangler/compressor and beautifier toolkit";
-      homepage = "https://github.com/mishoo/UglifyJS#readme";
-      license = "BSD-2-Clause";
     };
     production = true;
     bypassCache = true;

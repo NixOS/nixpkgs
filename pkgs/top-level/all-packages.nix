@@ -9552,7 +9552,7 @@ with pkgs;
   last-resort = callPackage ../data/fonts/last-resort { };
 
   ligo =
-    let ocaml_p = ocaml-ng.ocamlPackages_4_14_janeStreet_0_15; in
+    let ocaml_p = ocaml-ng.ocamlPackages_4_14; in
     callPackage ../development/compilers/ligo {
     coq = coq_8_13.override {
       customOCamlPackages = ocaml_p;
@@ -24982,6 +24982,7 @@ with pkgs;
   mockobjects = callPackage ../development/libraries/java/mockobjects { };
 
   saxonb = saxonb_8_8;
+  saxon-he = saxon_12-he;
 
   inherit (callPackages ../development/libraries/java/saxon {
     jre = jre_headless;
@@ -24991,7 +24992,8 @@ with pkgs;
     saxonb_8_8
     saxonb_9_1
     saxon_9-he
-    saxon-he;
+    saxon_11-he
+    saxon_12-he;
 
   smack = callPackage ../development/libraries/java/smack { };
 
@@ -30251,7 +30253,7 @@ with pkgs;
 
   em = callPackage ../applications/editors/em { };
 
-  inherit (recurseIntoAttrs (darwin.apple_sdk_11_0.callPackage ../applications/editors/emacs { }))
+  inherit (recurseIntoAttrs (callPackage ../applications/editors/emacs { }))
     emacs28
     emacs28-gtk2
     emacs28-gtk3
