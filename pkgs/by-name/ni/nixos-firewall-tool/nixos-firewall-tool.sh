@@ -2,10 +2,19 @@
 
 set -euo pipefail
 
+# Detect if iptables or nftables-based firewall is used.
+if [[ -e /etc/systemd/system/firewall.service ]]; then
+    BACKEND=iptables
+elif [[ -e /etc/systemd/system/nftables.service ]]; then
+    BACKEND=nftables
+else
+    echo "nixos-firewall-tool: cannot detect firewall backend" >&2
+    exit 1
+fi
+
 ip46tables() {
   iptables -w "$@"
   ip6tables -w "$@"
-
 }
 
 show_help() {
@@ -36,13 +45,34 @@ case $1 in
     protocol="$2"
     port="$3"
 
-    ip46tables -I nixos-fw -p "$protocol" --dport "$port" -j nixos-fw-accept
+    case $BACKEND in
+        iptables)
+            ip46tables -I nixos-fw -p "$protocol" --dport "$port" -j nixos-fw-accept
+            ;;
+        nftables)
+            nft add element inet nixos-fw "temp-ports" "{ $protocol . $port }"
+            ;;
+    esac
   ;;
   "show")
-    ip46tables --numeric --list nixos-fw
+    case $BACKEND in
+        iptables)
+            ip46tables --numeric --list nixos-fw
+            ;;
+        nftables)
+            nft list table inet nixos-fw
+            ;;
+    esac
   ;;
   "reset")
-    systemctl restart firewall.service
+    case $BACKEND in
+        iptables)
+            systemctl restart firewall.service
+            ;;
+        nftables)
+            nft flush set inet nixos-fw "temp-ports"
+            ;;
+    esac
   ;;
   -h|--help|help)
     show_help
