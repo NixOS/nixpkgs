@@ -52,8 +52,8 @@ buildPythonPackage rec {
       versionTag = lib.replaceStrings [ "." ] [ "_" ] version;
     in
     fetchFromGitHub {
-      owner = pname;
-      repo = pname;
+      owner = "rdkit";
+      repo = "rdkit";
       rev = "Release_${versionTag}";
       hash = "sha256-C9W4hYRO0CRqp3g1sDbVvBWef0ZFxNg5Y9abHI+ixn0=";
     };
@@ -85,9 +85,13 @@ buildPythonPackage rec {
     boost'
     cairo
     catch2_3
+    coordgenlibs
+    eigen
+    inchi
+    maeparser
   ] ++ lib.optionals (stdenv.system == "x86_64-darwin") [ memorymappingHook ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     numpy
     pandas
     pillow
@@ -95,45 +99,28 @@ buildPythonPackage rec {
 
   hardeningDisable = [ "format" ]; # required by yaehmop
 
-  dontUseSetuptoolsBuild = true;
-  dontUsePipInstall = true;
-  dontUseSetuptoolsCheck = true;
-
-  preConfigure = ''
-    # Since we can't expand with bash in cmakeFlags
-    appendToVar cmakeFlags "-DPYTHON_NUMPY_INCLUDE_PATH=$(${python}/bin/python -c 'import numpy; print(numpy.get_include())')"
-    appendToVar cmakeFlags "-DFREESASA_DIR=$PWD/External/FreeSASA/freesasa"
-    appendToVar cmakeFlags "-DFREESASA_SRC_DIR=$PWD/External/FreeSASA/freesasa"
-    appendToVar cmakeFlags "-DAVALONTOOLS_DIR=$PWD/External/AvalonTools/avalon"
-  '';
-
   cmakeFlags = [
-    "-DINCHI_LIBRARY=${inchi}/lib/libinchi.so"
-    "-DINCHI_LIBRARIES=${inchi}/lib/libinchi.so"
-    "-DINCHI_INCLUDE_DIR=${inchi}/include/inchi"
-    "-DEIGEN3_INCLUDE_DIR=${eigen}/include/eigen3"
-    "-DRDK_INSTALL_INTREE=OFF"
-    "-DRDK_INSTALL_STATIC_LIBS=OFF"
-    "-DRDK_BUILD_INCHI_SUPPORT=ON"
-    "-DRDK_BUILD_AVALON_SUPPORT=ON"
-    "-DRDK_BUILD_FREESASA_SUPPORT=ON"
-    "-DRDK_BUILD_YAEHMOP_SUPPORT=ON"
-    "-DRDK_BUILD_MAEPARSER_SUPPORT=ON"
-    "-DMAEPARSER_DIR=${maeparser}"
-    "-DRDK_BUILD_COORDGEN_SUPPORT=ON"
-    "-DCOORDGEN_DIR=${coordgenlibs}"
-    "-DRDK_USE_URF=OFF"
-    "-DRDK_USE_FLEXBISON=OFF"
-    "-DRDK_BUILD_CAIRO_SUPPORT=ON"
-    "-DRDK_BUILD_THREADSAFE_SSS=ON"
-    "-DRDK_TEST_MULTITHREADED=ON"
-    "-DRDK_BUILD_CPP_TESTS=ON"
-    "-DRDK_TEST_MULTITHREADED=ON"
-    "-DPYTHON_EXECUTABLE=${python}/bin/python"
-    "-DBOOST_ROOT=${boost}"
-    "-DBoost_NO_SYSTEM_PATHS=ON"
-    "-DBoost_NO_BOOST_CMAKE=TRUE"
-    "-DCMAKE_SKIP_BUILD_RPATH=ON" # fails to find libs in pythonImportsCheckPhase otherwise
+    (lib.cmakeBool "Boost_NO_BOOST_CMAKE" true)
+    (lib.cmakeBool "Boost_NO_SYSTEM_PATHS" true)
+    (lib.cmakeBool "CMAKE_SKIP_BUILD_RPATH" true) # fails to find libs in pythonImportsCheckPhase otherwise
+    (lib.cmakeBool "RDK_BUILD_AVALON_SUPPORT" true)
+    (lib.cmakeBool "RDK_BUILD_CAIRO_SUPPORT" true)
+    (lib.cmakeBool "RDK_BUILD_COORDGEN_SUPPORT" true)
+    (lib.cmakeBool "RDK_BUILD_CPP_TESTS" true)
+    (lib.cmakeBool "RDK_BUILD_FREESASA_SUPPORT" true)
+    (lib.cmakeBool "RDK_BUILD_INCHI_SUPPORT" true)
+    (lib.cmakeBool "RDK_BUILD_MAEPARSER_SUPPORT" true)
+    (lib.cmakeBool "RDK_BUILD_THREADSAFE_SSS" true)
+    (lib.cmakeBool "RDK_BUILD_YAEHMOP_SUPPORT" true)
+    (lib.cmakeBool "RDK_INSTALL_INTREE" false)
+    (lib.cmakeBool "RDK_INSTALL_STATIC_LIBS" false)
+    (lib.cmakeBool "RDK_TEST_MULTITHREADED" true)
+    (lib.cmakeBool "RDK_TEST_MULTITHREADED" true)
+    (lib.cmakeBool "RDK_USE_FLEXBISON" false)
+    (lib.cmakeBool "RDK_USE_URF" false)
+    (lib.cmakeFeature "AVALONTOOLS_DIR" "avalon")
+    (lib.cmakeFeature "FREESASA_SRC_DIR" "freesasa")
+    (lib.cmakeFeature "INCHI_INCLUDE_DIR" "${inchi}/include/inchi")
   ];
 
   checkPhase = ''
