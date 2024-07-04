@@ -9,12 +9,14 @@
   kasa-crypt,
   orjson,
   poetry-core,
+  ptpython,
   pydantic,
   pytest-asyncio,
   pytest-freezer,
   pytest-mock,
   pytestCheckHook,
   pythonOlder,
+  rich,
   voluptuous,
 }:
 
@@ -23,7 +25,7 @@ buildPythonPackage rec {
   version = "0.7.0.3";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "python-kasa";
@@ -51,6 +53,10 @@ buildPythonPackage rec {
   ];
 
   passthru.optional-dependencies = {
+    shell = [
+      ptpython
+      rich
+    ];
     speedups = [
       kasa-crypt
       orjson
@@ -68,10 +74,10 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python API for TP-Link Kasa Smarthome products";
-    mainProgram = "kasa";
     homepage = "https://python-kasa.readthedocs.io/";
     changelog = "https://github.com/python-kasa/python-kasa/blob/${version}/CHANGELOG.md";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "kasa";
   };
 }
