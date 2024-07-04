@@ -1,13 +1,17 @@
-{ lib, stdenvNoCC, fetchFromGitHub }:
+{
+  fetchFromGitHub,
+  lib,
+  stdenvNoCC,
+}:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "betterdiscordctl";
   version = "2.0.1";
 
   src = fetchFromGitHub {
     owner = "bb010g";
     repo = "betterdiscordctl";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "0p321rfcihz2779sdd6qfgpxgk5yd53d33vq5pvb50dbdgxww0bc";
   };
 
@@ -19,9 +23,8 @@ stdenvNoCC.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p "$out/bin" "$out/share/doc/betterdiscordctl"
-    install -Dm744 betterdiscordctl $out/bin/betterdiscordctl
-    install -Dm644 README.md $out/share/doc/betterdiscordctl/README.md
+    install -Dm 755 -t "$out/bin" -- betterdiscordctl
+    install -Dm 644 -t "$out/share/doc/betterdiscordctl" -- README.md
 
     runHook postInstall
   '';
@@ -29,15 +32,19 @@ stdenvNoCC.mkDerivation rec {
   doInstallCheck = true;
 
   installCheckPhase = ''
-    $out/bin/betterdiscordctl --version
+    runHook preInstallCheck
+
+    "$out/bin/betterdiscordctl" --version
+
+    runHook postInstallCheck
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/bb010g/betterdiscordctl";
     description = "Utility for managing BetterDiscord on Linux";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "betterdiscordctl";
-    maintainers = with maintainers; [ bb010g ];
-    platforms = platforms.linux;
+    maintainers = [ lib.maintainers.bb010g ];
+    platforms = lib.platforms.linux;
   };
-}
+})
