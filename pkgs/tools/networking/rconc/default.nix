@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-6Bff9NnG1ZEQhntzH5Iq0XEbJBKdwcb0BOn8nCkeWTY=";
   };
 
-  cargoSha256 = "sha256-rSN/wm52ZhJ8JUEUC51Xv5eIpwvOR3LvTdFjGl64VVk=";
+  cargoHash = "sha256-rSN/wm52ZhJ8JUEUC51Xv5eIpwvOR3LvTdFjGl64VVk=";
 
   meta = with lib; {
     description = "Simple cross-platform RCON client written in rust";

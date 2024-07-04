@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-rhG/EK68PWvQYoZdjhk0w7oNmh/QiTaAt4/WgEkgxEA=";
   };
 
-  cargoSha256 = "sha256-YXQohmDmkClziaLkL2N4cGURZ0tewyt7BuNY4hS+a4w=";
+  cargoHash = "sha256-YXQohmDmkClziaLkL2N4cGURZ0tewyt7BuNY4hS+a4w=";
 
   # tests assume the authors macbook, and thus fail
   doCheck = false;

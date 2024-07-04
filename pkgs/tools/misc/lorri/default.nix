@@ -17,7 +17,7 @@ let
   version = "1.6.0";
   gitRev = "1.6.0";
   sha256 = "sha256-peelMKv9GOTPdyb1iifzlFikeayTchqaYCgeXyR5EgM=";
-  cargoSha256 = "sha256-UFAmTYnCqsQxBnCm1zMu+BcWIZMuuxvpF7poLlzC6Kg=";
+  cargoHash = "sha256-UFAmTYnCqsQxBnCm1zMu+BcWIZMuuxvpF7poLlzC6Kg=";
 
 in (rustPlatform.buildRustPackage rec {
   pname = "lorri";
@@ -32,7 +32,7 @@ in (rustPlatform.buildRustPackage rec {
 
   outputs = [ "out" "man" "doc" ];
 
-  inherit cargoSha256;
+  inherit cargoHash;
   doCheck = false;
 
   BUILD_REV_COUNT = src.revCount or 1;

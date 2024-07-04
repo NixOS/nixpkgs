@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-2pLHnTn0gJKz4gfrR6h85LHOaZPrhIGYzQeci4Dzz2E=";
   };
 
-  cargoSha256 = "sha256-OXMz1qu4/LDeQbwe7shhn2Eee15xKmBpWSsP0IbjoGM=";
+  cargoHash = "sha256-OXMz1qu4/LDeQbwe7shhn2Eee15xKmBpWSsP0IbjoGM=";
 
   nativeBuildInputs = [
     addDriverRunpath
