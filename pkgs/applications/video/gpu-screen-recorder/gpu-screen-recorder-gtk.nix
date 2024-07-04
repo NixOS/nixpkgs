@@ -9,6 +9,7 @@
 , gpu-screen-recorder
 , libglvnd
 , wrapGAppsHook3
+, wrapperDir ? "/run/wrappers/bin"
 }:
 
 stdenv.mkDerivation {
@@ -37,11 +38,16 @@ stdenv.mkDerivation {
     ./build.sh
   '';
 
-  installPhase = ''
+  installPhase = let
+    gpu-screen-recorder-wrapped = gpu-screen-recorder.override {
+      inherit wrapperDir;
+    };
+  in ''
     install -Dt $out/bin/ gpu-screen-recorder-gtk
     install -Dt $out/share/applications/ gpu-screen-recorder-gtk.desktop
 
-    gappsWrapperArgs+=(--prefix PATH : ${lib.makeBinPath [ gpu-screen-recorder ]})
+    gappsWrapperArgs+=(--prefix PATH : ${wrapperDir})
+    gappsWrapperArgs+=(--suffix PATH : ${lib.makeBinPath [ gpu-screen-recorder-wrapped ]})
     # we also append /run/opengl-driver/lib as it otherwise fails to find libcuda.
     gappsWrapperArgs+=(--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libglvnd ]}:/run/opengl-driver/lib)
   '';
