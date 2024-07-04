@@ -2509,6 +2509,8 @@ self: super: with self; {
 
   convertdate = callPackage ../development/python-modules/convertdate { };
 
+  convertertools = callPackage ../development/python-modules/convertertools { };
+
   cookiecutter = callPackage ../development/python-modules/cookiecutter { };
 
   cookies = callPackage ../development/python-modules/cookies { };
