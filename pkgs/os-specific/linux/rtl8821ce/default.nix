@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, kernel
-, bc
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  kernel,
+  bc,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rtl8821ce";
   version = "${kernel.version}-unstable-2024-03-26";
 
@@ -34,12 +35,16 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Realtek rtl8821ce driver";
     homepage = "https://github.com/tomaspinho/rtl8821ce";
-    license = licenses.gpl2Only;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ hhm defelo ];
-    broken = stdenv.isAarch64 || ((lib.versions.majorMinor kernel.version) == "5.4" && kernel.isHardened);
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
+      hhm
+      defelo
+    ];
+    broken =
+      stdenv.isAarch64 || ((lib.versions.majorMinor kernel.version) == "5.4" && kernel.isHardened);
   };
-}
+})
