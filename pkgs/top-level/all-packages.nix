@@ -12983,8 +12983,6 @@ with pkgs;
 
   solvespace = callPackage ../applications/graphics/solvespace { };
 
-  sonarr = callPackage ../servers/sonarr { };
-
   sonata = callPackage ../applications/audio/sonata { };
 
   sony-headphones-client = callPackage ../applications/audio/sony-headphones-client { };
@@ -33831,8 +33829,6 @@ with pkgs;
   };
 
   rednotebook = python3Packages.callPackage ../applications/editors/rednotebook { };
-
-  remnote = callPackage ../applications/misc/remnote { };
 
   remotebox = callPackage ../applications/virtualization/remotebox { };
 

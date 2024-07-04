@@ -1,7 +1,7 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
-, nix-update-script
+, unstableGitUpdater
 }:
 
 buildGoModule {
@@ -21,7 +21,9 @@ buildGoModule {
   # There are no tests available for this package.
   doCheck = false;
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = unstableGitUpdater {
+    tagPrefix = "v";
+  };
 
   meta = with lib; {
     description = "Simple image glitcher suitable for producing lockscreens";
