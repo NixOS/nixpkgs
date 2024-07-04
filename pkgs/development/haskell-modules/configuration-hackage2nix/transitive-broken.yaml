@@ -4041,7 +4041,6 @@ dont-distribute-packages:
  - typed-streams
  - typedflow
  - typelevel
- - typesafe-precure
  - typescript-docs
  - typson-beam
  - typson-esqueleto
