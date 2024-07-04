@@ -3085,4 +3085,12 @@ self: super: {
     hash = "sha256-JxraFWzErJT4EhELa3PWBGHaLT9OLgEPNSnxwpdpHd0=";
   }) (doJailbreak super.argon2); # Unmaintained
 
+  # Apply patch to use v.4.0.2
+  push-notify-apn = appendPatch (
+    fetchpatch {
+      url = "https://github.com/digitallyinduced/push-notify-apn/commit/e54d40516f1b8f912a74df75256bb6bacc931943.patch";
+      hash = "sha256-gH03Z/eDXUeIiAO+hIFxclekBHFAnukd+fgUl39g5cw";
+    }
+  ) super.push-notify-apn;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
