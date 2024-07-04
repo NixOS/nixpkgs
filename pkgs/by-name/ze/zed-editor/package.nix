@@ -113,6 +113,10 @@ rustPlatform.buildRustPackage rec {
       ]
     );
 
+  cargoBuildFlags = [
+    "--package=zed"
+    "--package=cli"
+  ];
   buildFeatures = [ "gpui/runtime_shaders" ];
 
   env = {
@@ -129,8 +133,8 @@ rustPlatform.buildRustPackage rec {
   gpu-lib = if withGLES then libglvnd else vulkan-loader;
 
   postFixup = lib.optionalString stdenv.isLinux ''
-    patchelf --add-rpath ${gpu-lib}/lib $out/bin/*
-    patchelf --add-rpath ${wayland}/lib $out/bin/*
+    patchelf --add-rpath ${gpu-lib}/lib $out/libexec/*
+    patchelf --add-rpath ${wayland}/lib $out/libexec/*
   '';
 
   checkFlags = lib.optionals stdenv.hostPlatform.isLinux [
@@ -138,7 +142,13 @@ rustPlatform.buildRustPackage rec {
     "--skip=test_open_paths_action"
   ];
 
-  postInstall = ''
+  installPhase = ''
+    runHook preInstall
+
+    mkdir -p $out/bin $out/libexec
+    cp target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/zed $out/libexec/zed-editor
+    cp target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/cli $out/bin/zed
+
     install -D ${src}/crates/zed/resources/app-icon@2x.png $out/share/icons/hicolor/1024x1024@2x/apps/zed.png
     install -D ${src}/crates/zed/resources/app-icon.png $out/share/icons/hicolor/512x512/apps/zed.png
 
@@ -151,6 +161,8 @@ rustPlatform.buildRustPackage rec {
       mkdir -p "$out/share/applications"
       ${lib.getExe envsubst} < "crates/zed/resources/zed.desktop.in" > "$out/share/applications/zed.desktop"
     )
+
+    runHook postInstall
   '';
 
   passthru.updateScript = nix-update-script {
