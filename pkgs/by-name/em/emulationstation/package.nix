@@ -59,7 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/share/emulationstation/
     cp -r ../resources $out/share/emulationstation/
 
-    runHook preInstall
+    runHook postInstall
   '';
 
   # es-core/src/resources/ResourceManager.cpp: resources are searched at the
