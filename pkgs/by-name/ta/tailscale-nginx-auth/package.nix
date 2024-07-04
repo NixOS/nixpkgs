@@ -2,11 +2,18 @@
 
 buildGoModule {
   pname = "tailscale-nginx-auth";
-  inherit (tailscale) version src vendorHash ldflags;
+  inherit (tailscale) version src vendorHash;
 
   CGO_ENABLED = 0;
 
   subPackages = [ "cmd/nginx-auth" ];
+
+  ldflags = [
+    "-w"
+    "-s"
+    "-X tailscale.com/version.longStamp=${tailscale.version}"
+    "-X tailscale.com/version.shortStamp=${tailscale.version}"
+  ];
 
   postInstall = lib.optionalString stdenv.isLinux ''
     mv $out/bin/nginx-auth $out/bin/tailscale.nginx-auth
