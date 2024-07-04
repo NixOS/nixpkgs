@@ -84,6 +84,13 @@ in
 
     networking.nftables.tables."nixos-fw".family = "inet";
     networking.nftables.tables."nixos-fw".content = ''
+        set temp-ports {
+          comment "Temporarily opened ports"
+          type inet_proto . inet_service
+          flags interval
+          auto-merge
+        }
+
         ${optionalString (cfg.checkReversePath != false) ''
           chain rpfilter {
             type filter hook prerouting priority mangle + 10; policy drop;
@@ -149,6 +156,8 @@ in
               ${optionalString (udpSet != "") "${ifaceExpr} udp dport { ${udpSet} } accept"}
             ''
           ) cfg.allInterfaces)}
+
+          meta l4proto . th dport @temp-ports accept
 
           ${optionalString cfg.allowPing ''
             icmp type echo-request ${optionalString (cfg.pingLimit != null) "limit rate ${cfg.pingLimit}"} accept comment "allow ping"
