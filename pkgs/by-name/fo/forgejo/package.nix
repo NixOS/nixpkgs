@@ -65,12 +65,6 @@ buildGoModule rec {
 
   patches = [
     ./static-root-path.patch
-    # Fix TestAddRecursiveExclude go test.
-    # This will be part of the upcoming v7.0.5 release at which point this needs to be removed again.
-    (fetchpatch {
-      url = "https://codeberg.org/forgejo/forgejo/commit/f01dc4b271f54201e60a7c795d784813eac3f7ce.patch";
-      sha256  = "sha256-1lPLVHBad+Fmk+6EFXKuMnmDUl5BkEYJuMkTPfdrCgU=";
-    })
   ];
 
   postPatch = ''
