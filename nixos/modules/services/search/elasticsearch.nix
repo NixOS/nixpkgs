@@ -157,6 +157,18 @@ in
       default = true;
     };
 
+    user = mkOption {
+      type = types.str;
+      default = "elasticsearch";
+      description = "User account under which Elasticsearch runs.";
+    };
+
+    group = mkOption {
+      type = types.str;
+      default = "elasticsearch";
+      description = "Group account under which Elasticsearch runs.";
+    };
+
   };
 
   ###### implementation
@@ -175,7 +187,8 @@ in
       };
       serviceConfig = {
         ExecStart = "${cfg.package}/bin/elasticsearch ${toString cfg.extraCmdLineOptions}";
-        User = "elasticsearch";
+        User = cfg.user;
+        Group = cfg.group;
         PermissionsStartOnly = true;
         LimitNOFILE = "1024000";
         Restart = "always";
@@ -230,12 +243,16 @@ in
     environment.systemPackages = [ cfg.package ];
 
     users = {
-      groups.elasticsearch.gid = config.ids.gids.elasticsearch;
-      users.elasticsearch = {
-        uid = config.ids.uids.elasticsearch;
-        description = "Elasticsearch daemon user";
-        home = cfg.dataDir;
-        group = "elasticsearch";
+      groups = optionalAttrs (cfg.group == "elasticsearch") {
+        elasticsearch.gid = config.ids.gids.elasticsearch;
+      };
+      users = optionalAttrs (cfg.user == "elasticsearch") {
+        elasticsearch = {
+          uid = config.ids.uids.elasticsearch;
+          description = "Elasticsearch daemon user";
+          home = cfg.dataDir;
+          group = cfg.group;
+        };
       };
     };
   };
