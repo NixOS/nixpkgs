@@ -119,10 +119,12 @@ let
           "VNetHeader"
           "User"
           "Group"
+          "KeepCarrier"
         ])
         (assertValueOneOf "MultiQueue" boolValues)
         (assertValueOneOf "PacketInfo" boolValues)
         (assertValueOneOf "VNetHeader" boolValues)
+        (assertValueOneOf "KeepCarrier" boolValues)
       ];
 
       # See https://www.freedesktop.org/software/systemd/man/latest/systemd.netdev.html#%5BIPVTAP%5D%20Section%20Options
