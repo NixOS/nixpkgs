@@ -30,8 +30,8 @@ let
     yaehmop = fetchFromGitHub {
       owner = "greglandrum";
       repo = "yaehmop";
-      rev = "v2023.03.1";
-      hash = "sha256-K9//cDN69U4sLETfIZq9NUaBE3RXOReH53qfiCzutqM=";
+      rev = "v2024.03.1";
+      hash = "sha256-rhR7Ev+9Fk/Ks7R2x2SjWu1L/48a4zHDHUBohx1Dw/M=";
     };
     freesasa = fetchFromGitHub {
       owner = "mittinatten";
@@ -40,10 +40,11 @@ let
       hash = "sha256-7E+imvfDAJFnXQRWb5hNaSu+Xrf9NXeIKc9fl+o3yHQ=";
     };
   };
+  boost' = boost.override { enableNumpy = true; };
 in
 buildPythonPackage rec {
   pname = "rdkit";
-  version = "2023.09.5";
+  version = "2024.03.6";
   pyproject = false;
 
   src =
@@ -54,7 +55,7 @@ buildPythonPackage rec {
       owner = pname;
       repo = pname;
       rev = "Release_${versionTag}";
-      hash = "sha256-ZYNAHNBHQPx8rBJSvEWFEpdSpYyXcoqJ+nBA7tpHwQs=";
+      hash = "sha256-C9W4hYRO0CRqp3g1sDbVvBWef0ZFxNg5Y9abHI+ixn0=";
     };
 
   unpackPhase = ''
@@ -81,7 +82,7 @@ buildPythonPackage rec {
   nativeBuildInputs = [ cmake ];
 
   buildInputs = [
-    boost
+    boost'
     cairo
     catch2_3
   ] ++ lib.optionals (stdenv.system == "x86_64-darwin") [ memorymappingHook ];
