@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -145,7 +150,7 @@ in
       example = lib.literalExpression "[ pkgs.elasticsearchPlugins.discovery-ec2 ]";
     };
 
-    restartIfChanged  = mkOption {
+    restartIfChanged = mkOption {
       type = types.bool;
       description = ''
         Automatically restart the service on config change.
