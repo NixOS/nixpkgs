@@ -1,8 +1,8 @@
-{
-  lib,
-  extractDarwinApp,
-  fetchzip,
-  stdenv,
+{ lib
+, extractDarwinApp
+, fetchzip
+, stdenv
+,
 }:
 let
   specs = {
@@ -17,11 +17,11 @@ let
       version = "1171203";
     };
   };
-  spec = specs.${stdenv.hostPlatform.system} or ({
-      arch = "";
-      sha25 = "";
-      version = "";
-  });
+  spec = specs.${stdenv.hostPlatform.system} or {
+    arch = "";
+    sha25 = "";
+    version = "";
+  };
 in
 extractDarwinApp rec {
   appName = "Chromium";
@@ -35,11 +35,11 @@ extractDarwinApp rec {
 
   wrapBinary = true;
   packageMeta = {
-      description = "An open source web browser from Google";
-      platforms = builtins.attrNames specs;
-      license = lib.licenses.bsd3;
-      maintainers = with lib.maintainers; [
-        michaelCTS
-      ];
+    description = "An open source web browser from Google";
+    platforms = builtins.attrNames specs;
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [
+      michaelCTS
+    ];
   };
 }
