@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "airgradient";
-  version = "0.6.0";
+  version = "0.6.1";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "airgradienthq";
     repo = "python-airgradient";
     rev = "refs/tags/v${version}";
-    hash = "sha256-1miNMT4AiOEci/jfZJswaF/Dee0bCNH7CLiKoR443q0=";
+    hash = "sha256-1f5sFpuQgmmAFKdunpuuDuKm9CK1K8iXBV/q2qJoe/o=";
   };
 
   postPatch = ''
