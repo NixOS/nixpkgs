@@ -23,7 +23,7 @@ Check for any minor version changes.
 
 let
 
-  srcs = import ./srcs.nix { inherit lib fetchgit fetchFromGitHub; } // { __attrsFailEvaluation = true; };
+  srcs = import ./srcs.nix { inherit lib fetchgit fetchFromGitHub; };
 
   qtCompatVersion = srcs.qtbase.version;
 
