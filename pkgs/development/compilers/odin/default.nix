@@ -93,5 +93,6 @@ stdenv.mkDerivation rec {
       znaniye
     ];
     platforms = lib.platforms.unix;
+    broken = stdenv.hostPlatform.isMusl;
   };
 }
