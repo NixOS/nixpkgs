@@ -133,7 +133,6 @@ let
   ];
   wrapperArgs = builtins.concatStringsSep " " wrapperOptions;
 
-
   goBuild =
     if enableCuda then
       buildGoModule.override { stdenv = overrideCC stdenv gcc12; }
@@ -141,13 +140,23 @@ let
       buildGoModule;
   inherit (lib) licenses platforms maintainers;
 in
-goBuild ((lib.optionalAttrs enableRocm {
-  ROCM_PATH = rocmPath;
-  CLBlast_DIR = "${clblast}/lib/cmake/CLBlast";
-}) // (lib.optionalAttrs enableCuda {
-  CUDA_LIB_DIR = "${cudaSharedLibs}/lib";
-}) // {
+goBuild {
   inherit pname version src vendorHash;
+
+  patches = [
+    # disable uses of `git` in the `go generate` script
+    # ollama's build script assumes the source is a git repo, but nix removes the git directory
+    # this also disables necessary patches contained in `ollama/llm/patches/`
+    # those patches are added to `llamacppPatches`, and reapplied here in the patch phase
+    ./disable-git.patch
+    # disable a check that unnecessarily exits compilation during rocm builds
+    # since `rocmPath` is in `LD_LIBRARY_PATH`, ollama uses rocm correctly
+    ./disable-lib-check.patch
+  ] ++ llamacppPatches;
+  postPatch = ''
+    # replace inaccurate version number with actual release version
+    substituteInPlace version/version.go --replace-fail 0.0.0 '${version}'
+  '';
 
   nativeBuildInputs = [
     cmake
@@ -170,32 +179,16 @@ goBuild ((lib.optionalAttrs enableRocm {
   ] ++ lib.optionals stdenv.isDarwin
     metalFrameworks;
 
-  patches = [
-    # disable uses of `git` in the `go generate` script
-    # ollama's build script assumes the source is a git repo, but nix removes the git directory
-    # this also disables necessary patches contained in `ollama/llm/patches/`
-    # those patches are added to `llamacppPatches`, and reapplied here in the patch phase
-    ./disable-git.patch
-    # disable a check that unnecessarily exits compilation during rocm builds
-    # since `rocmPath` is in `LD_LIBRARY_PATH`, ollama uses rocm correctly
-    ./disable-lib-check.patch
-  ] ++ llamacppPatches;
-  postPatch = ''
-    # replace inaccurate version number with actual release version
-    substituteInPlace version/version.go --replace-fail 0.0.0 '${version}'
-  '';
+  env = lib.optionalAttrs enableRocm {
+    ROCM_PATH = "${rocmPath}";
+    CLBlast_DIR = "${clblast}/lib/cmake/CLBlast";
+  } // lib.optionalAttrs enableCuda { CUDA_LIB_DIR = "${cudaSharedLibs}/lib"; } ;
+
   preBuild = ''
     # disable uses of `git`, since nix removes the git directory
     export OLLAMA_SKIP_PATCHING=true
     # build llama.cpp libraries for ollama
     go generate ./...
-  '';
-  postFixup = ''
-    # the app doesn't appear functional at the moment, so hide it
-    mv "$out/bin/app" "$out/bin/.ollama-app"
-  '' + lib.optionalString (enableRocm || enableCuda) ''
-    # expose runtime libraries necessary to use the gpu
-    wrapProgram "$out/bin/ollama" ${wrapperArgs}
   '';
 
   ldflags = [
@@ -204,6 +197,14 @@ goBuild ((lib.optionalAttrs enableRocm {
     "-X=github.com/ollama/ollama/version.Version=${version}"
     "-X=github.com/ollama/ollama/server.mode=release"
   ];
+
+  postFixup = ''
+    # the app doesn't appear functional at the moment, so hide it
+    mv "$out/bin/app" "$out/bin/.ollama-app"
+  '' + lib.optionalString (enableRocm || enableCuda) ''
+    # expose runtime libraries necessary to use the gpu
+    wrapProgram "$out/bin/ollama" ${wrapperArgs}
+  '';
 
   passthru.tests = {
     inherit ollama;
@@ -229,4 +230,4 @@ goBuild ((lib.optionalAttrs enableRocm {
     mainProgram = "ollama";
     maintainers = with maintainers; [ abysssol dit7ya elohmeier roydubnium ];
   };
-})
+}
