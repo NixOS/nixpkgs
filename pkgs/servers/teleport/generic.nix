@@ -27,7 +27,7 @@
 , version
 , hash
 , vendorHash
-, extPatches ? null
+, extPatches ? []
 , cargoHash ? null
 , cargoLock ? null
 , yarnHash
@@ -136,6 +136,7 @@ buildGoModule rec {
   patches = extPatches ++ [
     ./0001-fix-add-nix-path-to-exec-env.patch
     ./rdpclient.patch
+    ./tsh.patch
   ];
 
   # Reduce closure size for client machines
