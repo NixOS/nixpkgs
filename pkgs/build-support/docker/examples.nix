@@ -620,6 +620,7 @@ rec {
       mkdir -p ./home/alice
       chown 1000 ./home/alice
 <<<<<<< HEAD
+<<<<<<< HEAD
       ln -s ${pkgs.hello.overrideAttrs (finalAttrs: prevAttrs: {
         # A unique `hello` to make sure that it isn't included via another mechanism by accident.
         configureFlags = prevAttrs.configureFlags or [] ++ [ " --program-prefix=layeredImageWithFakeRootCommands-" ];
@@ -629,11 +630,26 @@ rec {
           mainProgram = "layeredImageWithFakeRootCommands-hello";
         };
 =======
+=======
+>>>>>>> c7fabb43cb21 (Merge pull request #323329 from iivusly/halloy-darwin)
       ln -s ${pkgs.hello.overrideAttrs (o: {
         # A unique `hello` to make sure that it isn't included via another mechanism by accident.
         configureFlags = o.configureFlags or [] ++ [ " --program-prefix=layeredImageWithFakeRootCommands-" ];
         doCheck = false;
+<<<<<<< HEAD
 >>>>>>> 8cb786adbe12 (Merge pull request #324598 from r-ryantm/auto-update/ldc)
+=======
+=======
+      ln -s ${pkgs.hello.overrideAttrs (finalAttrs: prevAttrs: {
+        # A unique `hello` to make sure that it isn't included via another mechanism by accident.
+        configureFlags = prevAttrs.configureFlags or [] ++ [ " --program-prefix=layeredImageWithFakeRootCommands-" ];
+        doCheck = false;
+        versionCheckProgram = "${builtins.placeholder "out"}/bin/${finalAttrs.meta.mainProgram}";
+        meta = prevAttrs.meta // {
+          mainProgram = "layeredImageWithFakeRootCommands-hello";
+        };
+>>>>>>> 528945994acf (Merge pull request #323329 from iivusly/halloy-darwin)
+>>>>>>> c7fabb43cb21 (Merge pull request #323329 from iivusly/halloy-darwin)
       })} ./hello
     '';
   };

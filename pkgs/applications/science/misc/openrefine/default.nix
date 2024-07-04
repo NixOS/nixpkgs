@@ -57,10 +57,17 @@ in maven'.buildMavenPackage {
   '';
   mvnParameters = "-pl !packaging";
 <<<<<<< HEAD
+<<<<<<< HEAD
   mvnHash = "sha256-FD4g0Mshz39N1h8MDAk907PhF5TguWTZ7AXKECHuhzQ=";
 =======
   mvnHash = "sha256-0qsKUMV9M0ZaddR5ust8VikSrsutdxVNNezKqR+F/6M=";
 >>>>>>> 8cb786adbe12 (Merge pull request #324598 from r-ryantm/auto-update/ldc)
+=======
+  mvnHash = "sha256-0qsKUMV9M0ZaddR5ust8VikSrsutdxVNNezKqR+F/6M=";
+=======
+  mvnHash = "sha256-FD4g0Mshz39N1h8MDAk907PhF5TguWTZ7AXKECHuhzQ=";
+>>>>>>> 528945994acf (Merge pull request #323329 from iivusly/halloy-darwin)
+>>>>>>> c7fabb43cb21 (Merge pull request #323329 from iivusly/halloy-darwin)
 
   nativeBuildInputs = [ makeWrapper ];
 

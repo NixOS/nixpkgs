@@ -12,12 +12,21 @@ maven.buildMavenPackage rec {
   };
 
 <<<<<<< HEAD
+<<<<<<< HEAD
   mvnHash = "sha256-lEcAq0H8Uacv02ItjVGfxvtRip5206HtpREBrQDzBDo=";
 
   mvnParameters = "-DskipTests";
 =======
   mvnHash = "sha256-yqMAEjaNHxm/c/cbApiMjkN7V6Gx/crs1LPbD0k0cgk=";
 >>>>>>> 8cb786adbe12 (Merge pull request #324598 from r-ryantm/auto-update/ldc)
+=======
+  mvnHash = "sha256-yqMAEjaNHxm/c/cbApiMjkN7V6Gx/crs1LPbD0k0cgk=";
+=======
+  mvnHash = "sha256-lEcAq0H8Uacv02ItjVGfxvtRip5206HtpREBrQDzBDo=";
+
+  mvnParameters = "-DskipTests";
+>>>>>>> 528945994acf (Merge pull request #323329 from iivusly/halloy-darwin)
+>>>>>>> c7fabb43cb21 (Merge pull request #323329 from iivusly/halloy-darwin)
 
   nativeBuildInputs = [ makeWrapper ];
 

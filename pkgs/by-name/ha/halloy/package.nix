@@ -7,9 +7,15 @@
   makeDesktopItem,
   libxkbcommon,
 <<<<<<< HEAD
+<<<<<<< HEAD
   makeWrapper,
 =======
 >>>>>>> 8cb786adbe12 (Merge pull request #324598 from r-ryantm/auto-update/ldc)
+=======
+=======
+  makeWrapper,
+>>>>>>> 528945994acf (Merge pull request #323329 from iivusly/halloy-darwin)
+>>>>>>> c7fabb43cb21 (Merge pull request #323329 from iivusly/halloy-darwin)
   openssl,
   pkg-config,
   rustPlatform,
@@ -41,9 +47,15 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [
     copyDesktopItems
 <<<<<<< HEAD
+<<<<<<< HEAD
     makeWrapper
 =======
 >>>>>>> 8cb786adbe12 (Merge pull request #324598 from r-ryantm/auto-update/ldc)
+=======
+=======
+    makeWrapper
+>>>>>>> 528945994acf (Merge pull request #323329 from iivusly/halloy-darwin)
+>>>>>>> c7fabb43cb21 (Merge pull request #323329 from iivusly/halloy-darwin)
     pkg-config
   ];
 
@@ -111,6 +123,10 @@ rustPlatform.buildRustPackage rec {
     install -Dm644 assets/linux/icons/hicolor/128x128/apps/org.squidowl.halloy.png \
       $out/share/icons/hicolor/128x128/apps/org.squidowl.halloy.png
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+=======
+>>>>>>> c7fabb43cb21 (Merge pull request #323329 from iivusly/halloy-darwin)
   '' + lib.optionalString stdenv.isDarwin ''
     APP_DIR="$out/Applications/Halloy.app/Contents"
 
@@ -122,8 +138,12 @@ rustPlatform.buildRustPackage rec {
       --replace-fail "{{ BUILD }}" "${version}-nixpkgs"
 
     makeWrapper "$out/bin/halloy" "$APP_DIR/MacOS/halloy"
+<<<<<<< HEAD
 =======
 >>>>>>> 8cb786adbe12 (Merge pull request #324598 from r-ryantm/auto-update/ldc)
+=======
+>>>>>>> 528945994acf (Merge pull request #323329 from iivusly/halloy-darwin)
+>>>>>>> c7fabb43cb21 (Merge pull request #323329 from iivusly/halloy-darwin)
   '';
 
   meta = with lib; {
@@ -132,10 +152,17 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/squidowl/halloy/blob/${version}/CHANGELOG.md";
     license = licenses.gpl3Only;
 <<<<<<< HEAD
+<<<<<<< HEAD
     maintainers = with maintainers; [ fab iivusly ];
 =======
     maintainers = with maintainers; [ fab ];
 >>>>>>> 8cb786adbe12 (Merge pull request #324598 from r-ryantm/auto-update/ldc)
+=======
+    maintainers = with maintainers; [ fab ];
+=======
+    maintainers = with maintainers; [ fab iivusly ];
+>>>>>>> 528945994acf (Merge pull request #323329 from iivusly/halloy-darwin)
+>>>>>>> c7fabb43cb21 (Merge pull request #323329 from iivusly/halloy-darwin)
     mainProgram = "halloy";
   };
 }

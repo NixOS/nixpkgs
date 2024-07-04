@@ -26,10 +26,17 @@ mavenJdk17.buildMavenPackage rec {
     hash = "sha256-7T9n23qMl4IJQL7yWLXKvRzYcMeXDUwkY8MBFc2t3Rw=";
   };
 <<<<<<< HEAD
+<<<<<<< HEAD
   mvnHash = "sha256-FpfHtGIfo84z6v9/nzc47+JeIM43MR9mWhVOPSi0xhM=";
 =======
   mvnHash = "sha256-bsJlsIXIIVzZyVgEF/SN+GgpZt6v0u800arO1c5QYHk=";
 >>>>>>> 8cb786adbe12 (Merge pull request #324598 from r-ryantm/auto-update/ldc)
+=======
+  mvnHash = "sha256-bsJlsIXIIVzZyVgEF/SN+GgpZt6v0u800arO1c5QYHk=";
+=======
+  mvnHash = "sha256-FpfHtGIfo84z6v9/nzc47+JeIM43MR9mWhVOPSi0xhM=";
+>>>>>>> 528945994acf (Merge pull request #323329 from iivusly/halloy-darwin)
+>>>>>>> c7fabb43cb21 (Merge pull request #323329 from iivusly/halloy-darwin)
 
   desktop = makeDesktopItem {
     name = "RuneLite";

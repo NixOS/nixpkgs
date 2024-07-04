@@ -10,18 +10,31 @@
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "apache-maven";
 <<<<<<< HEAD
+<<<<<<< HEAD
   version = "3.9.8";
 
   src = fetchurl {
     url = "mirror://apache/maven/maven-3/${finalAttrs.version}/binaries/apache-maven-${finalAttrs.version}-bin.tar.gz";
     hash = "sha256-BnZyYpB1t0Dj0Kko4hAh3WFaUyh6821MzKROh+CB0QI=";
 =======
+=======
+>>>>>>> c7fabb43cb21 (Merge pull request #323329 from iivusly/halloy-darwin)
   version = "3.9.6";
 
   src = fetchurl {
     url = "mirror://apache/maven/maven-3/${finalAttrs.version}/binaries/apache-maven-${finalAttrs.version}-bin.tar.gz";
     hash = "sha256-bu3SyuNibWrTpcnuMkvSZYU9ZCl/B/AzQwdVvQ4MOks=";
+<<<<<<< HEAD
 >>>>>>> 8cb786adbe12 (Merge pull request #324598 from r-ryantm/auto-update/ldc)
+=======
+=======
+  version = "3.9.8";
+
+  src = fetchurl {
+    url = "mirror://apache/maven/maven-3/${finalAttrs.version}/binaries/apache-maven-${finalAttrs.version}-bin.tar.gz";
+    hash = "sha256-BnZyYpB1t0Dj0Kko4hAh3WFaUyh6821MzKROh+CB0QI=";
+>>>>>>> 528945994acf (Merge pull request #323329 from iivusly/halloy-darwin)
+>>>>>>> c7fabb43cb21 (Merge pull request #323329 from iivusly/halloy-darwin)
   };
 
   sourceRoot = ".";

@@ -29,10 +29,17 @@ mavenJdk8.buildMavenPackage rec {
   };
 
 <<<<<<< HEAD
+<<<<<<< HEAD
   mvnHash = "sha256-es8M7gV2z1V9VpWOxanJwQyiemabiUw3n4heJB8Q75A=";
 =======
   mvnHash = "sha256-Qbx1cNKFtSEnzhFImtCz2psYts2yhTDKzjmBBZavWwU=";
 >>>>>>> 8cb786adbe12 (Merge pull request #324598 from r-ryantm/auto-update/ldc)
+=======
+  mvnHash = "sha256-Qbx1cNKFtSEnzhFImtCz2psYts2yhTDKzjmBBZavWwU=";
+=======
+  mvnHash = "sha256-es8M7gV2z1V9VpWOxanJwQyiemabiUw3n4heJB8Q75A=";
+>>>>>>> 528945994acf (Merge pull request #323329 from iivusly/halloy-darwin)
+>>>>>>> c7fabb43cb21 (Merge pull request #323329 from iivusly/halloy-darwin)
 
   nativeBuildInputs = [ jdk8 makeWrapper ];
 
