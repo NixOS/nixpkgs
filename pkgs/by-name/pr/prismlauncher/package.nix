@@ -8,7 +8,7 @@
   gamemode,
   glfw,
   glfw-wayland-minecraft,
-  glxinfo,
+  mesa-demos,
   jdk8,
   jdk17,
   jdk21,
@@ -124,7 +124,7 @@ symlinkJoin {
         ++ additionalLibs;
 
       runtimePrograms = [
-        glxinfo
+        mesa-demos
         pciutils # need lspci
         xorg.xrandr # needed for LWJGL [2.9.2, 3) https://github.com/LWJGL/lwjgl/issues/128
       ] ++ additionalPrograms;
