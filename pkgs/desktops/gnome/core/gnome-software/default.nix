@@ -28,6 +28,7 @@
 , libxmlb
 , malcontent
 , json-glib
+, glib-networking
 , libsecret
 , valgrind-light
 , docbook-xsl-nons
@@ -78,6 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     gtk4
     glib
+    glib-networking
     packagekit
     appstream
     libsoup_3
