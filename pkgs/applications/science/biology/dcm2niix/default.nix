@@ -2,45 +2,54 @@
 , stdenv
 , fetchFromGitHub
 , substituteAll
+, makeBinaryWrapper
 , cmake
 , openjpeg
+, pigz
 , yaml-cpp
+, zlib
 , batchVersion ? false
 , withJpegLs ? true
 , withOpenJpeg ? true
-, withCloudflareZlib ? true
+, withPigz ? false
+, withCloudflareZlib ? false
 }:
 
 let
   cloudflareZlib = fetchFromGitHub {
-    owner = "ningfei";
+    owner = "cloudflare";
     repo = "zlib";
-    # HEAD revision of the gcc.amd64 branch on 2023-03-28. Reminder to update
+    # HEAD revision of the gcc.amd64 branch on 2024-07-04. Reminder to update
     # whenever bumping package version.
-    rev = "f49b13c3380cf9677ae9a93641ebc6f770899def";
-    sha256 = "sha256-8HNFUGx2uuEb8UrGUiqkN+uVDX83YIisT2uO1Z7GCxc=";
+    rev = "92530568d2c128b4432467b76a3b54d93d6350bd";
+    hash = "sha256-rkbh1I+ZL97F0vATVcuo/mk9ZGJxKMhP4dj9Mz3dtys=";
   };
 in
-stdenv.mkDerivation rec {
-  version = "1.0.20230411";
+stdenv.mkDerivation (finalAttrs: {
+  version = "1.0.20240202";
   pname = "dcm2niix";
 
   src = fetchFromGitHub {
     owner = "rordenlab";
     repo = "dcm2niix";
-    rev = "v${version}";
-    sha256 = "sha256-kOVEoqrk4l6sH8iDVx1QmOYP5tCufxsWnCnn9BibZ08=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-vJUPv/6KNCsU8UjwfktHdTlsweG7+UGgAEZeESfBkD8=";
   };
 
-  patches = lib.optionals withCloudflareZlib [
+  patches = [
+    ./dont-use-git.patch
+  ] ++ lib.optionals withCloudflareZlib [
     (substituteAll {
       src = ./dont-fetch-external-libs.patch;
       inherit cloudflareZlib;
     })
   ];
 
-  nativeBuildInputs = [ cmake ];
-  buildInputs = lib.optionals batchVersion [ yaml-cpp ]
+  nativeBuildInputs = [
+    cmake
+    makeBinaryWrapper
+  ];
+  buildInputs = [ zlib ] ++ lib.optionals batchVersion [ yaml-cpp ]
     ++ lib.optionals withOpenJpeg [ openjpeg openjpeg.dev ];
 
   cmakeFlags = lib.optionals batchVersion [
@@ -53,17 +62,24 @@ stdenv.mkDerivation rec {
     "-DOpenJPEG_DIR=${openjpeg}/lib/${openjpeg.pname}-${lib.versions.majorMinor openjpeg.version}"
   ] ++ lib.optionals withCloudflareZlib [
     "-DZLIB_IMPLEMENTATION=Cloudflare"
+  ] ++ lib.optionals (!withCloudflareZlib) [
+    "-DZLIB_IMPLEMENTATION=System"
   ];
 
-  meta = with lib; {
+  postInstall = lib.optionalString withPigz ''
+    wrapProgram $out/bin/dcm2niix --set PATH "${lib.makeBinPath [ pigz ]}"
+  '';
+
+  meta = {
     description = "DICOM to NIfTI converter";
     mainProgram = "dcm2niix";
     longDescription = ''
       dcm2niix is designed to convert neuroimaging data from the DICOM format to the NIfTI format.
     '';
     homepage = "https://www.nitrc.org/projects/dcm2nii";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ ashgillman rbreslow ];
-    platforms = platforms.all;
+    changelog = "https://github.com/rordenlab/dcm2niix/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ ashgillman rbreslow ];
+    platforms = lib.platforms.all;
   };
-}
+})
