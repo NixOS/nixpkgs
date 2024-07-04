@@ -2280,13 +2280,6 @@ self: super: {
   # https://github.com/merijn/paramtree/issues/4
   paramtree = dontCheck super.paramtree;
 
-  # https://github.com/haskell-gi/haskell-gi/issues/431
-  haskell-gi = appendPatch (fetchpatch {
-      url = "https://github.com/haskell-gi/haskell-gi/pull/430/commits/9ee545ad5028e5de8e1e1d96bbba2b9dbab47480.diff";
-      hash = "sha256-kh32mZ7EdlOsg7HQILB7Y/EkHIqG/mozbnd/kbP+WDk=";
-    })
-    super.haskell-gi;
-
   # Too strict version bounds on haskell-gi
   # https://github.com/owickstrom/gi-gtk-declarative/issues/100
   gi-gtk-declarative = doJailbreak super.gi-gtk-declarative;
