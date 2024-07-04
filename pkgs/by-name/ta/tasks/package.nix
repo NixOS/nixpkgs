@@ -21,7 +21,7 @@
 }:
 
 rustPlatform.buildRustPackage rec {
-  pname = "cosmic-tasks";
+  pname = "tasks";
   version = "0.1.0";
 
   src = fetchFromGitHub {
