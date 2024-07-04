@@ -28,7 +28,7 @@ mavenJdk8.buildMavenPackage rec {
     sha256 = "sha256-z38I61JR4oiAkImkbwcvXoK5QsdoR986dDrOzhHsCeY=";
   };
 
-  mvnHash = "sha256-Qbx1cNKFtSEnzhFImtCz2psYts2yhTDKzjmBBZavWwU=";
+  mvnHash = "sha256-es8M7gV2z1V9VpWOxanJwQyiemabiUw3n4heJB8Q75A=";
 
   nativeBuildInputs = [ jdk8 makeWrapper ];
 
