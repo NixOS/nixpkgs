@@ -438,4 +438,68 @@ rec {
         ${extenderName} = f: makeExtensibleWithCustomName extenderName (extends f rattrs);
       }
     );
+
+  /**
+    Convert to an extending function (overlay).
+
+    `toExtension` is the `toFunction` for extending functions (a.k.a. extensions or overlays).
+    It converts a non-function or a single-argument function to an extending function,
+    while returning a double-argument function as-is.
+
+    That is, it takes one of `x`, `prev: x`, or `final: prev: x`,
+    and returns `final: prev: x`, where `x` is not a function.
+
+    This function is extracted from the implementation of
+    the fixed-point arguments support of `stdenv.mkDerivation`.
+    It bridges the gap between `<pkg>.overrideAttrs`
+    before and after the overlay-style support,
+    as well as `config.packageOverrides` and `config.overlays` in `pkgs`.
+
+    # Inputs
+
+    `f`
+    : The function or non-function to convert to an extending function.
+
+    # Type
+
+    ```
+    toExtension ::: (a | a -> a | a -> a -> a) -> a -> a -> a
+    a = AttrSet & !Function
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.fixedPoints.toExtension` usage example
+
+    ```nix
+    fix (final: { a = 0; c = final.a; })
+    => { a = 0; c = 0; };
+
+    fix (extends (toExtension { a = 1; b = 2; }) (final: { a = 0; c = final.a; }))
+    => { a = 1; b = 2; c = 1; };
+
+    fix (extends (toExtension (prev: { a = 1; b = prev.a; })) (final: { a = 0; c = final.a; }))
+    => { a = 1; b = 0; c = 1; };
+
+    fix (extends (toExtension (final: prev: { a = 1; b = prev.a; c = final.a + 1 })) (final: { a = 0; c = final.a; }))
+    => { a = 1; b = 0; c = 2; };
+    ```
+    :::
+  */
+  toExtension =
+    f:
+    if lib.isFunction f then
+      final: prev:
+      let
+        fPrev = f prev;
+      in
+      if lib.isFunction fPrev then
+        # f is (final: prev: { ... })
+        f final prev
+      else
+        # f is (prev: { ... })
+        fPrev
+    else
+      # f is { ... }
+      final: prev: f;
 }

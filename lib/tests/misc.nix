@@ -45,6 +45,7 @@ let
     const
     escapeXML
     evalModules
+    extends
     filter
     fix
     fold
@@ -102,6 +103,7 @@ let
     take
     testAllTrue
     toBaseDigits
+    toExtension
     toHexString
     fromHexString
     toInt
@@ -1237,6 +1239,21 @@ runTests {
   testFix = {
     expr = fix (x: {a = if x ? a then "a" else "b";});
     expected = {a = "a";};
+  };
+
+  testToExtension = {
+    expr = [
+      (fix (final: { a = 0; c = final.a; }))
+      (fix (extends (toExtension { a = 1; b = 2; }) (final: { a = 0; c = final.a; })))
+      (fix (extends (toExtension (prev: { a = 1; b = prev.a; })) (final: { a = 0; c = final.a; })))
+      (fix (extends (toExtension (final: prev: { a = 1; b = prev.a; c = final.a + 1; })) (final: { a = 0; c = final.a; })))
+    ];
+    expected = [
+      { a = 0; c = 0; }
+      { a = 1; b = 2; c = 1; }
+      { a = 1; b = 0; c = 1; }
+      { a = 1; b = 0; c = 2; }
+    ];
   };
 
 # GENERATORS
