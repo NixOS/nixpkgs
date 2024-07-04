@@ -53,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://git.kernel.org/pub/scm/utils/dtc/dtc.git/patch/?id=3fbfdd08afd2a7a25b27433f6f5678c0fe694721";
       hash = "sha256-skK8m1s4xkK6x9AqzxiEK+1uMEmS27dBI1CdEXNFTfU=";
     })
-  ];
+  ] ++ (lib.optional stdenv.hostPlatform.isStatic ./fixstatic.patch);
 
   env.SETUPTOOLS_SCM_PRETEND_VERSION = finalAttrs.version;
 
