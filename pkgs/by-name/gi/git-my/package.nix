@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "List remote branches if they're merged and/or available locally";
     homepage = "https://github.com/davidosomething/git-my";
     license = lib.licenses.free;
-    maintainers = [ lib.maintainers.bb010g ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
     mainProgram = "git-my";
   };
