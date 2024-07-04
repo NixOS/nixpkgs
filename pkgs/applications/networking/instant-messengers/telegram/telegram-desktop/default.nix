@@ -59,16 +59,15 @@ let
       cxxStandard = "20";
     };
   };
-  mainProgram = if stdenv.isLinux then "telegram-desktop" else "Telegram";
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "telegram-desktop";
   version = "5.2.2";
 
   src = fetchFromGitHub {
     owner = "telegramdesktop";
     repo = "tdesktop";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
     hash = "sha256-rvd4Ei4MpWiilHCV291UrJkHaUcwth9AWc3PSqjj+EI=";
   };
@@ -200,19 +199,19 @@ stdenv.mkDerivation rec {
 
   installPhase = lib.optionalString stdenv.isDarwin ''
     mkdir -p $out/Applications
-    cp -r ${mainProgram}.app $out/Applications
-    ln -s $out/{Applications/${mainProgram}.app/Contents/MacOS,bin}
+    cp -r ${finalAttrs.meta.mainProgram}.app $out/Applications
+    ln -s $out/{Applications/${finalAttrs.meta.mainProgram}.app/Contents/MacOS,bin}
   '';
 
   postFixup = lib.optionalString stdenv.isLinux ''
     # This is necessary to run Telegram in a pure environment.
     # We also use gappsWrapperArgs from wrapGAppsHook.
-    wrapProgram $out/bin/${mainProgram} \
+    wrapProgram $out/bin/${finalAttrs.meta.mainProgram} \
       "''${gappsWrapperArgs[@]}" \
       "''${qtWrapperArgs[@]}" \
       --suffix PATH : ${lib.makeBinPath [ xdg-utils ]}
   '' + lib.optionalString stdenv.isDarwin ''
-    wrapQtApp $out/Applications/${mainProgram}.app/Contents/MacOS/${mainProgram}
+    wrapQtApp $out/Applications/${finalAttrs.meta.mainProgram}.app/Contents/MacOS/${finalAttrs.meta.mainProgram}
   '';
 
   passthru = {
@@ -231,6 +230,6 @@ stdenv.mkDerivation rec {
     homepage = "https://desktop.telegram.org/";
     changelog = "https://github.com/telegramdesktop/tdesktop/releases/tag/v${version}";
     maintainers = with maintainers; [ nickcao ];
-    inherit mainProgram;
+    mainProgram = if stdenv.hostPlatform.isLinux then "telegram-desktop" else "Telegram";
   };
-}
+})
