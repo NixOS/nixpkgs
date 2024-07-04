@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "pex";
-  version = "2.6.2";
+  version = "2.7.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-moH0BtoVAbyGJHh9kvKSUoArgsp/IFhG6+J2NOO+FRQ=";
+    hash = "sha256-tL+Roe2GHSVm6tIxIWXI6ek8rOMN8Ak2+Xe5ebn497E=";
   };
 
   build-system = [ hatchling ];
