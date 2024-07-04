@@ -50,9 +50,12 @@ stdenv.mkDerivation {
     libXfixes
   ];
 
+  patches = [
+    ./0001-Don-t-install-systemd-unit-files-using-absolute-path.patch
+  ];
+
   mesonFlags = [
-    # FIXME: systemd unit file gets installed to absolute path.
-    "-Dsystemd=false"
+    "-Dsystemd=true"
 
     # FIXME: Capabilities can not be set if not running the build with root permissions.
     "-Dcapabilities=false"
