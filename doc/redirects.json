@@ -123,6 +123,12 @@
   "ex-modularServiceCompliance-nixos": [
     "index.html#ex-modularServiceCompliance-nixos"
   ],
+  "ex-nixpkgs-pure-cross": [
+    "index.html#ex-nixpkgs-pure-cross"
+  ],
+  "ex-nixpkgs-pure-native": [
+    "index.html#ex-nixpkgs-pure-native"
+  ],
   "ex-pkgs-replace-vars": [
     "index.html#ex-pkgs-replace-vars",
     "index.html#ex-pkgs-substituteAll",
@@ -505,6 +511,33 @@
   ],
   "chap-overlays": [
     "index.html#chap-overlays"
+  ],
+  "sec-nixpkgs-arguments": [
+    "index.html#sec-nixpkgs-arguments"
+  ],
+  "sec-nixpkgs-arguments-config": [
+    "index.html#sec-nixpkgs-arguments-config"
+  ],
+  "sec-nixpkgs-arguments-cross": [
+    "index.html#sec-nixpkgs-arguments-cross"
+  ],
+  "sec-nixpkgs-arguments-crossOverlays": [
+    "index.html#sec-nixpkgs-arguments-crossOverlays"
+  ],
+  "sec-nixpkgs-arguments-native": [
+    "index.html#sec-nixpkgs-arguments-native"
+  ],
+  "sec-nixpkgs-arguments-overlays": [
+    "index.html#sec-nixpkgs-arguments-overlays"
+  ],
+  "sec-nixpkgs-arguments-platforms": [
+    "index.html#sec-nixpkgs-arguments-platforms"
+  ],
+  "sec-nixpkgs-arguments-systems-legacy": [
+    "index.html#sec-nixpkgs-arguments-systems-legacy"
+  ],
+  "sec-nixpkgs-function": [
+    "index.html#sec-nixpkgs-function"
   ],
   "sec-nixpkgs-release-26.11": [
     "release-notes.html#sec-nixpkgs-release-26.11"

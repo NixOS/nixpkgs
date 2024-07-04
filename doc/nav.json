@@ -40,6 +40,10 @@
           "file": "using/platform-support.chapter.md"
         },
         {
+          "id": "as-a-function",
+          "file": "using/as-a-function.chapter.md"
+        },
+        {
           "id": "configuration",
           "file": "using/configuration.chapter.md"
         },
