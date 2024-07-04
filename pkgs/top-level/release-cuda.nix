@@ -12,6 +12,22 @@
         $ hydra-eval-jobs pkgs/top-level/release-cuda.nix -I .
 */
 
+let
+  ensureList = x: if builtins.isList x then x else [ x ];
+  allowUnfreePredicate =
+    p:
+    builtins.all (
+      license:
+      license.free
+      || license.redistributable
+      || builtins.elem license.shortName [
+        "CUDA EULA"
+        "cuDNN EULA"
+        "NVidia OptiX EULA"
+      ]
+    ) (ensureList p.meta.license);
+in
+
 {
   # The platforms for which we build Nixpkgs.
   supportedSystems ? [
@@ -22,8 +38,8 @@
   # Attributes passed to nixpkgs.
   nixpkgsArgs ? {
     config = {
+      inherit allowUnfreePredicate;
       "${variant}Support" = true;
-      allowUnfree = true;
       inHydra = true;
     };
   },
