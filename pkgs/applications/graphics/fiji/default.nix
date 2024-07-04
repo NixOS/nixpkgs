@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   version = "20240614-2117";
 
   src = fetchurl {
-    url = "https://downloads.imagej.net/${pname}/archive/${version}/${pname}-nojre.zip";
+    url = "https://downloads.imagej.net/fiji/archive/${version}/fiji-nojre.zip";
     sha256 = "sha256-OCNnN8CYniNEIfKRHRBoJ3Fo+u5AwXoPJAzUCc4P+f0=";
   };
 
