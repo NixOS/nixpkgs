@@ -4,16 +4,19 @@ attrs @
 { pname
 , version
 , url ? "https://www.nuget.org/api/v2/package/${pname}/${version}"
+, hash ? ""
 , sha256 ? ""
 , md5 ? ""
 , ...
 }:
 if md5 != "" then
-  throw "fetchnuget does not support md5 anymore, please use sha256"
+  throw "fetchnuget does not support md5 anymore, please use sha256/hash"
+else if hash != "" && sha256 != "" then
+  throw "multiple hashes passed to fetchNuGet"
 else
   buildDotnetPackage ({
     src = fetchurl {
-      inherit url sha256;
+      inherit url sha256 hash;
       name = "${pname}.${version}.zip";
     };
 
