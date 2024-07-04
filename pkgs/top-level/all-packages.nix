@@ -9744,8 +9744,6 @@ with pkgs;
 
   md2gemini = with python3.pkgs; toPythonApplication md2gemini;
 
-  mdbook = callPackage ../tools/text/mdbook { };
-
   mdbook-emojicodes = callPackage ../tools/text/mdbook-emojicodes { };
 
   mdbook-epub = callPackage ../tools/text/mdbook-epub {
