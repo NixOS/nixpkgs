@@ -6,7 +6,7 @@
   lxml,
   matplotlib,
   pytestCheckHook,
-  nose,
+  pynose,
 }:
 
 buildPythonPackage rec {
@@ -30,7 +30,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-    nose
+    pynose
   ];
 
   pythonImportsCheck = [ "svgutils" ];

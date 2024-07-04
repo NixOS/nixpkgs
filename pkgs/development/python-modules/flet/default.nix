@@ -34,6 +34,10 @@ buildPythonPackage rec {
     poetry-core
   ];
 
+  makeWrapperArgs = [
+    "--prefix" "PYTHONPATH" ":" "$PYTHONPATH"
+  ];
+
   pythonRelaxDeps = [
     "cookiecutter"
     "packaging"

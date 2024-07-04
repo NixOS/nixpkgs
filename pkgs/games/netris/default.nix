@@ -26,7 +26,7 @@ stdenv.mkDerivation {
   meta = with lib; {
     description = "Free networked version of T*tris";
     mainProgram = "netris";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ patryk27 ];
     platforms = platforms.linux;
   };

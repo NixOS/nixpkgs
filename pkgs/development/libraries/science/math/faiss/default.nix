@@ -33,19 +33,15 @@ let
 
   stdenv = if cudaSupport then backendStdenv else inputs.stdenv;
 
-  cudaJoined = symlinkJoin {
-    name = "cuda-packages-unsplit";
-    paths = with cudaPackages; [
-      cuda_cudart # cuda_runtime.h
-      libcublas
-      libcurand
-      cuda_cccl
-    ] ++ lib.optionals (cudaPackages ? cuda_profiler_api) [
-      cuda_profiler_api # cuda_profiler_api.h
-    ] ++ lib.optionals (!(cudaPackages ? cuda_profiler_api)) [
-      cuda_nvprof # cuda_profiler_api.h
-    ];
-  };
+  cudaComponents = with cudaPackages; [
+    cuda_cudart # cuda_runtime.h
+    libcublas
+    libcurand
+    cuda_cccl
+
+    # cuda_profiler_api.h
+    (cudaPackages.cuda_profiler_api or cudaPackages.cuda_nvprof)
+  ];
 in
 stdenv.mkDerivation {
   inherit pname version;
@@ -68,9 +64,7 @@ stdenv.mkDerivation {
     pythonPackages.wheel
   ] ++ lib.optionals stdenv.cc.isClang [
     llvmPackages.openmp
-  ] ++ lib.optionals cudaSupport [
-    cudaJoined
-  ];
+  ] ++ lib.optionals cudaSupport cudaComponents;
 
   propagatedBuildInputs = lib.optionals pythonSupport [
     pythonPackages.numpy
@@ -93,7 +87,6 @@ stdenv.mkDerivation {
     "-DFAISS_OPT_LEVEL=${optLevel}"
   ] ++ lib.optionals cudaSupport [
     "-DCMAKE_CUDA_ARCHITECTURES=${flags.cmakeCudaArchitecturesString}"
-    "-DCUDAToolkit_INCLUDE_DIR=${cudaJoined}/include"
   ];
 
   buildFlags = [

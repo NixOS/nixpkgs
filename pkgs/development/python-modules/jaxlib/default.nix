@@ -55,7 +55,6 @@ let
   inherit (cudaPackages)
     cudaFlags
     cudaVersion
-    cudnn
     nccl
     ;
 
@@ -68,30 +67,39 @@ let
   effectiveStdenv = if cudaSupport then cudaPackages.backendStdenv else inputs.stdenv;
 
   meta = with lib; {
-    description = "JAX is Autograd and XLA, brought together for high-performance machine learning research";
+    description = "Source-built JAX backend. JAX is Autograd and XLA, brought together for high-performance machine learning research";
     homepage = "https://github.com/google/jax";
     license = licenses.asl20;
     maintainers = with maintainers; [ ndl ];
-    platforms = platforms.unix;
+
+    # Make this platforms.unix once Darwin is supported.
+    # The top-level jaxlib now falls back to jaxlib-bin on unsupported platforms.
     # aarch64-darwin is broken because of https://github.com/bazelbuild/rules_cc/pull/136
     # however even with that fix applied, it doesn't work for everyone:
     # https://github.com/NixOS/nixpkgs/pull/184395#issuecomment-1207287129
-    # NOTE: We always build with NCCL; if it is unsupported, then our build is broken.
-    broken = effectiveStdenv.isDarwin || nccl.meta.unsupported;
+    platforms = platforms.linux;
+  };
+
+  # Bazel wants a merged cudnn at configuration time
+  cudnnMerged = symlinkJoin {
+    name = "cudnn-merged";
+    paths = with cudaPackages; [
+      (lib.getDev cudnn)
+      (lib.getLib cudnn)
+    ];
   };
 
   # These are necessary at build time and run time.
   cuda_libs_joined = symlinkJoin {
     name = "cuda-joined";
     paths = with cudaPackages; [
-      cuda_cudart.lib # libcudart.so
-      cuda_cudart.static # libcudart_static.a
-      cuda_cupti.lib # libcupti.so
-      libcublas.lib # libcublas.so
-      libcufft.lib # libcufft.so
-      libcurand.lib # libcurand.so
-      libcusolver.lib # libcusolver.so
-      libcusparse.lib # libcusparse.so
+      (lib.getLib cuda_cudart) # libcudart.so
+      (lib.getLib cuda_cupti) # libcupti.so
+      (lib.getLib libcublas) # libcublas.so
+      (lib.getLib libcufft) # libcufft.so
+      (lib.getLib libcurand) # libcurand.so
+      (lib.getLib libcusolver) # libcusolver.so
+      (lib.getLib libcusparse) # libcusparse.so
     ];
   };
   # These are only necessary at build time.
@@ -101,20 +109,23 @@ let
       cuda_libs_joined
 
       # Binaries
-      cudaPackages.cuda_nvcc.bin # nvcc
+      (lib.getBin cuda_nvcc) # nvcc
+
+      # Archives
+      (lib.getOutput "static" cuda_cudart) # libcudart_static.a
 
       # Headers
-      cuda_cccl.dev # block_load.cuh
-      cuda_cudart.dev # cuda.h
-      cuda_cupti.dev # cupti.h
-      cuda_nvcc.dev # See https://github.com/google/jax/issues/19811
-      cuda_nvml_dev # nvml.h
-      cuda_nvtx.dev # nvToolsExt.h
-      libcublas.dev # cublas_api.h
-      libcufft.dev # cufft.h
-      libcurand.dev # curand.h
-      libcusolver.dev # cusolver_common.h
-      libcusparse.dev # cusparse.h
+      (lib.getDev cuda_cccl) # block_load.cuh
+      (lib.getDev cuda_cudart) # cuda.h
+      (lib.getDev cuda_cupti) # cupti.h
+      (lib.getDev cuda_nvcc) # See https://github.com/google/jax/issues/19811
+      (lib.getDev cuda_nvml_dev) # nvml.h
+      (lib.getDev cuda_nvtx) # nvToolsExt.h
+      (lib.getDev libcublas) # cublas_api.h
+      (lib.getDev libcufft) # cufft.h
+      (lib.getDev libcurand) # curand.h
+      (lib.getDev libcusolver) # cusolver_common.h
+      (lib.getDev libcusparse) # cusparse.h
     ];
   };
 
@@ -308,10 +319,10 @@ let
       + lib.optionalString cudaSupport ''
         build --config=cuda
         build --action_env CUDA_TOOLKIT_PATH="${cuda_build_deps_joined}"
-        build --action_env CUDNN_INSTALL_PATH="${cudnn}"
-        build --action_env TF_CUDA_PATHS="${cuda_build_deps_joined},${cudnn},${nccl}"
+        build --action_env CUDNN_INSTALL_PATH="${cudnnMerged}"
+        build --action_env TF_CUDA_PATHS="${cuda_build_deps_joined},${cudnnMerged},${lib.getDev nccl}"
         build --action_env TF_CUDA_VERSION="${lib.versions.majorMinor cudaVersion}"
-        build --action_env TF_CUDNN_VERSION="${lib.versions.major cudnn.version}"
+        build --action_env TF_CUDNN_VERSION="${lib.versions.major cudaPackages.cudnn.version}"
         build:cuda --action_env TF_CUDA_COMPUTE_CAPABILITIES="${builtins.concatStringsSep "," cudaFlags.realArches}"
       ''
       +
@@ -438,13 +449,13 @@ buildPythonPackage {
   # for more info.
   postInstall = lib.optionalString cudaSupport ''
     mkdir -p $out/bin
-    ln -s ${cudaPackages.cuda_nvcc.bin}/bin/ptxas $out/bin/ptxas
+    ln -s ${lib.getExe' cudaPackages.cuda_nvcc "ptxas"} $out/bin/ptxas
 
     find $out -type f \( -name '*.so' -or -name '*.so.*' \) | while read lib; do
       patchelf --add-rpath "${
         lib.makeLibraryPath [
           cuda_libs_joined
-          cudnn
+          (lib.getLib cudaPackages.cudnn)
           nccl
         ]
       }" "$lib"
