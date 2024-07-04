@@ -9623,15 +9623,23 @@ with pkgs;
 
   loganalyzer = libsForQt5.callPackage ../development/tools/loganalyzer { };
 
-  logstash7 = callPackage ../tools/misc/logstash/7.x.nix {
+  logstash7 = (callPackage ../tools/misc/logstash {
     # https://www.elastic.co/support/matrix#logstash-and-jvm
     jre = jdk11_headless;
-  };
-  logstash7-oss = callPackage ../tools/misc/logstash/7.x.nix {
+  }).logstash7;
+
+  logstash7-oss = callPackage ../tools/misc/logstash {
     enableUnfree = false;
     # https://www.elastic.co/support/matrix#logstash-and-jvm
     jre = jdk11_headless;
   };
+
+  logstash8 = (callPackage ../tools/misc/logstash {}).logstash8;
+
+  logstash8-oss = (callPackage ../tools/misc/logstash {
+    enableUnfree = false;
+  }).logstash8;
+
   logstash = logstash7;
 
   logstash-contrib = callPackage ../tools/misc/logstash/contrib.nix { };
