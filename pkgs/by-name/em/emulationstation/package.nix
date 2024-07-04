@@ -22,6 +22,13 @@ in
 stdenv.mkDerivation {
   inherit (sources.emulationstation) pname version src;
 
+  postUnpack = ''
+    pushd $sourceRoot/external/pugixml
+    cp --verbose --archive ${sources.pugixml.src}/* .
+    chmod --recursive 744 .
+    popd
+  '';
+
   nativeBuildInputs = [
     SDL2
     cmake

@@ -12,8 +12,22 @@
         owner = "RetroPie";
         repo = "EmulationStation";
         rev = "v${self.version}";
-        fetchSubmodules = true;
-        hash = "sha256-J5h/578FVe4DXJx/AvpRnCIUpqBeFtmvFhUDYH5SErQ=";
+        hash = "sha256-f2gRkp+3Pp2qnvg2RBzaHPpzhAnwx0+5x1Pe3kD90xE=";
+      };
+    };
+  in
+    self;
+
+  pugixml = let
+    self = {
+      pname = "pugixml";
+      version = "1.8.1";
+
+      src = fetchFromGitHub {
+        owner = "zeux";
+        repo = "pugixml";
+        rev = "v${self.version}";
+        hash = "sha256-LbjTN1hnIbqI79C+gCdwuDG0+B/5yXf7hg0Q+cDFIf4=";
       };
     };
   in
