@@ -40,6 +40,7 @@ let
     "1.5.0"
     "1.6.2"
     "1.7.0"
+    "2.0.2"
   ];
 
   # Manifests :: { redistrib, feature }
