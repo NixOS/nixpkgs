@@ -5,6 +5,7 @@
 , esbuild
 , deno
 , fetchurl
+, fetchpatch
 , dart-sass
 , rWrapper
 , rPackages
@@ -27,6 +28,16 @@ stdenv.mkDerivation (final: {
 
   nativeBuildInputs = [
     makeWrapper
+  ];
+
+  patches = [
+    (fetchpatch {
+      name = "drop-usage-known-bad-actor-cdn.patch";
+      url = "https://github.com/quarto-dev/quarto-cli/commit/9f02884fec462e16b82bdf0acc632246b2f40201.patch";
+      relative = "src/resources";
+      extraPrefix = "share/";
+      hash = "sha256-RUIaQCqi3fWn1UIxcMi6/6vh4ANuL44uOnC/bnsHT/k=";
+    })
   ];
 
   postPatch = ''
