@@ -27470,7 +27470,7 @@ with pkgs;
 
   octomap = callPackage ../development/libraries/octomap { };
 
-  odin = callPackage ../development/compilers/odin {
+  odin = callPackage ../by-name/od/odin/package.nix {
     inherit (pkgs.darwin.apple_sdk_11_0) MacOSX-SDK;
     inherit (pkgs.darwin.apple_sdk_11_0.frameworks) Security;
     llvmPackages = llvmPackages_18;
