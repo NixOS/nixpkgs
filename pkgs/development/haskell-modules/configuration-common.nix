@@ -2300,22 +2300,6 @@ self: super: {
     gi-gtk = self.gi-gtk_4;
   };
 
-  # Missing dependency on gi-cairo
-  # https://github.com/haskell-gi/haskell-gi/pull/420
-  gi-vte =
-    overrideCabal
-      (oldAttrs: {
-        # This is implemented as a sed expression instead of pulling a patch
-        # from upstream because the gi-vte repo doesn't actually contain a
-        # gi-vte.cabal file.  The gi-vte.cabal file is generated from metadata
-        # in the repo.
-        postPatch = (oldAttrs.postPatch or "") + ''
-          sed -i 's/\(gi-gtk == .*\),/\1, gi-cairo == 1.0.*,/' ./gi-vte.cabal
-        '';
-        buildDepends = (oldAttrs.buildDepends or []) ++ [self.gi-cairo];
-      })
-      super.gi-vte;
-
   # 2023-04-09: haskell-ci needs Cabal-syntax 3.10
   # 2023-07-03: allow lattices-2.2, waiting on https://github.com/haskell-CI/haskell-ci/pull/664
   # 2024-03-21: pins specific version of ShellCheck
