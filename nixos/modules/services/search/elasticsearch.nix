@@ -16,7 +16,7 @@ let
     http.port: ${toString cfg.port}
     transport.port: ${toString cfg.tcp_port}
 
-    ${cfg.extraConf}
+    ${cfg.extraConfig}
   '';
 
   configDir = cfg.dataDir + "/config";
@@ -40,6 +40,13 @@ let
 
 in
 {
+
+  imports = [
+    (mkRenamedOptionModule
+      [ "services" "elasticsearch" "extraConf" ]
+      [ "services" "elasticsearch" "extraConfig" ]
+    )
+  ];
 
   ###### interface
 
@@ -82,7 +89,7 @@ in
       type = types.bool;
     };
 
-    extraConf = mkOption {
+    extraConfig = mkOption {
       description = "Extra configuration for elasticsearch.";
       default = "";
       type = types.str;
