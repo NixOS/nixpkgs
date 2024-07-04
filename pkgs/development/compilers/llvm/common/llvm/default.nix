@@ -342,6 +342,7 @@ stdenv.mkDerivation (rec {
     "-DLLVM_HOST_TRIPLE=${stdenv.hostPlatform.config}"
     "-DLLVM_DEFAULT_TARGET_TRIPLE=${stdenv.hostPlatform.config}"
     "-DLLVM_ENABLE_DUMP=ON"
+    (lib.cmakeBool "LLVM_ENABLE_LIBCXX" (isDarwin || stdenv.targetPlatform.useLLVM or false))
     (lib.cmakeBool "LLVM_ENABLE_TERMINFO" enableTerminfo)
   ] ++ optionals (!doCheck) [
     "-DLLVM_INCLUDE_TESTS=OFF"
@@ -363,7 +364,6 @@ stdenv.mkDerivation (rec {
   ] ++ optionals (enableGoldPlugin) [
     "-DLLVM_BINUTILS_INCDIR=${libbfd.dev}/include"
   ] ++ optionals isDarwin [
-    "-DLLVM_ENABLE_LIBCXX=ON"
     "-DCAN_TARGET_i386=false"
   ] ++ optionals ((stdenv.hostPlatform != stdenv.buildPlatform) && !(stdenv.buildPlatform.canExecute stdenv.hostPlatform)) [
     "-DCMAKE_CROSSCOMPILING=True"
