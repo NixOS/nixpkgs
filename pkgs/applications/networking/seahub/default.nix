@@ -52,7 +52,7 @@ python3.pkgs.buildPythonApplication rec {
     markdown
     bleach
 
-    (seafile-server.override { inherit python3; })
+    (python3.pkgs.toPythonModule (seafile-server.override { inherit python3; }))
   ];
 
   postPatch = ''
@@ -67,7 +67,7 @@ python3.pkgs.buildPythonApplication rec {
 
   passthru = {
     inherit python3;
-    pythonPath = "${python3.pkgs.makePythonPath propagatedBuildInputs}:${seafile-server}/${python3.sitePackages}";
+    pythonPath = python3.pkgs.makePythonPath propagatedBuildInputs;
     tests = {
       inherit (nixosTests) seafile;
     };
