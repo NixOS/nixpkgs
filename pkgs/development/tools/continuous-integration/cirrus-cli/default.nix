@@ -12,7 +12,7 @@ buildGoModule rec {
     owner = "cirruslabs";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-IVhO8F5KhwCDJ4cm/Iu9vSuAKAF3l1vIjIqSzfYn9Ck=";
+    hash = "sha256-IVhO8F5KhwCDJ4cm/Iu9vSuAKAF3l1vIjIqSzfYn9Ck=";
   };
 
   vendorHash = "sha256-R5H48idKHTTECEffpQIZgj9xMlHgHCL5OFbe3ZAda/o=";
