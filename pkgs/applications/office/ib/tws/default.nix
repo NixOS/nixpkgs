@@ -85,6 +85,7 @@ stdenv.mkDerivation rec {
     '';
 
   meta = with lib; {
+    broken = true;
     description = "Trader Work Station of Interactive Brokers";
     homepage = "https://www.interactivebrokers.com";
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
