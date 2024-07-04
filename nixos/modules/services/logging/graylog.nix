@@ -15,6 +15,7 @@ let
     message_journal_dir = ${cfg.messageJournalDir}
     mongodb_uri = ${cfg.mongodbUri}
     plugin_dir = /var/lib/graylog/plugins
+    data_dir = ${cfg.dataDir}
 
     ${cfg.extraConfig}
   '';
@@ -91,6 +92,12 @@ in
         type = types.listOf types.str;
         example = literalExpression ''[ "http://node1:9200" "http://user:password@node2:19200" ]'';
         description = "List of valid URIs of the http ports of your elastic nodes. If one or more of your elasticsearch hosts require authentication, include the credentials in each node URI that requires authentication";
+      };
+
+      dataDir = mkOption {
+        type = types.str;
+        default = "/var/lib/graylog/data";
+        description = "Directory used to store Graylog server state.";
       };
 
       messageJournalDir = mkOption {
