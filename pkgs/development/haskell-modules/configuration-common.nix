@@ -1365,11 +1365,7 @@ self: super: {
     pkgs.postgresqlTestHook
   ] super.users-postgresql-simple;
 
-  # Need https://github.com/obsidiansystems/gargoyle/pull/45
-  gargoyle = doJailbreak super.gargoyle;
-  gargoyle-postgresql = doJailbreak super.gargoyle-postgresql;
-  gargoyle-postgresql-nix = doJailbreak (addBuildTool [pkgs.postgresql] super.gargoyle-postgresql-nix);
-  gargoyle-postgresql-connect = doJailbreak super.gargoyle-postgresql-connect;
+  gargoyle-postgresql-nix = addBuildTool [pkgs.postgresql] super.gargoyle-postgresql-nix;
 
   # PortMidi needs an environment variable to have ALSA find its plugins:
   # https://github.com/NixOS/nixpkgs/issues/6860
@@ -2091,13 +2087,7 @@ self: super: {
   # Need https://github.com/obsidiansystems/cli-extras/pull/12 and more
   cli-extras = doJailbreak super.cli-extras;
 
-  # https://github.com/obsidiansystems/cli-git/pull/7 turned into a flat patch
   cli-git = lib.pipe super.cli-git [
-    (appendPatch (fetchpatch {
-      url = "https://github.com/obsidiansystems/cli-git/commit/be378a97e2f46522174231b77c952f759df3fad6.patch";
-      sha256 = "sha256-6RrhqkKpnb+FTHxccHNx6pdC7ClfqcJ2eoo+W7h+JUo=";
-      excludes = [ ".github/**" ];
-    }))
     doJailbreak
     (addBuildTool pkgs.git)
   ];
@@ -2108,11 +2098,7 @@ self: super: {
     pkgs.nix-prefetch-git
   ] (doJailbreak super.cli-nix);
 
-  # https://github.com/obsidiansystems/nix-thunk/pull/51/
-  nix-thunk = appendPatch (fetchpatch {
-    url = "https://github.com/obsidiansystems/nix-thunk/commit/c3dc3e799e8ce7756330f98b9f73f59c4b7a5502.patch";
-    sha256 = "sha256-C1ii1FXiCPFfw5NzyQZ0cEG6kIYGohVsnHycpYEJ24Q=";
-  }) (doJailbreak super.nix-thunk);
+  nix-thunk = doJailbreak super.nix-thunk;
 
   # list `modbus` in librarySystemDepends, correct to `libmodbus`
   libmodbus = doJailbreak (addExtraLibrary pkgs.libmodbus super.libmodbus);
@@ -2279,13 +2265,6 @@ self: super: {
   # Tests are flaky on busy machines, upstream doesn't intend to fix
   # https://github.com/merijn/paramtree/issues/4
   paramtree = dontCheck super.paramtree;
-
-  # https://github.com/haskell-gi/haskell-gi/issues/431
-  haskell-gi = appendPatch (fetchpatch {
-      url = "https://github.com/haskell-gi/haskell-gi/pull/430/commits/9ee545ad5028e5de8e1e1d96bbba2b9dbab47480.diff";
-      hash = "sha256-kh32mZ7EdlOsg7HQILB7Y/EkHIqG/mozbnd/kbP+WDk=";
-    })
-    super.haskell-gi;
 
   # Too strict version bounds on haskell-gi
   # https://github.com/owickstrom/gi-gtk-declarative/issues/100
@@ -2637,30 +2616,12 @@ self: super: {
   # 2022-03-16: Upstream stopped updating bounds https://github.com/haskell-hvr/base-noprelude/pull/15
   base-noprelude = doJailbreak super.base-noprelude;
 
-  # 2025-05-05: Bounds need to be loosened https://github.com/obsidiansystems/dependent-sum-aeson-orphans/pull/13
-  dependent-monoidal-map = appendPatch (fetchpatch {
-    url = "https://github.com/obsidiansystems/dependent-monoidal-map/commit/3f8be15fa9bd2796d1c917e9f0979b4d6c62cf91.patch";
-    hash = "sha256-QKDUh4jO8xZrThrkjTVNnkoVY+GejxOhpXOVA4+n1H8=";
-  }) super.dependent-monoidal-map;
-
-  # 2025-05-05: Bounds need to be loosened https://github.com/obsidiansystems/dependent-sum-aeson-orphans/pull/13
-  dependent-sum-aeson-orphans = appendPatch (fetchpatch {
-    url = "https://github.com/obsidiansystems/dependent-sum-aeson-orphans/commit/9b4698154303a9865d7d68a2f01d280a8a39f108.patch";
-    hash = "sha256-Pzjl2yp01XsYWcyhpLnsuccg7bOACgv+RpafauUox8c=";
-  }) super.dependent-sum-aeson-orphans;
-
   # https://github.com/obsidiansystems/dependent-sum/pull/73
   dependent-sum-template = appendPatch (fetchpatch {
     url = "https://github.com/obsidiansystems/dependent-sum/commit/619727ba1792e39a68d23c62e75a923672e87a54.patch";
     hash = "sha256-SyD1/KrX1KUjrR82fvI+BRcqLC2Q3AbvSeKNrdGstjg=";
     relative = "dependent-sum-template";
   }) super.dependent-sum-template;
-
-  aeson-gadt-th = appendPatch (fetchpatch {
-    url = "https://github.com/obsidiansystems/aeson-gadt-th/commit/8f6922a6440019dece637d73d70766c473bcd6c0.patch";
-    hash = "sha256-564DhfiubwNV8nAj8L5DzsWn4MdzqqaYYNmOSPUa7ys=";
-    excludes = [ ".github/**" ];
-  }) super.aeson-gadt-th;
 
   # Too strict bounds on chell: https://github.com/fpco/haskell-filesystem/issues/24
   system-fileio = doJailbreak super.system-fileio;
@@ -3129,12 +3090,6 @@ self: super: {
 
   # Too strict bounds on text. Can be removed after https://github.com/alx741/currencies/pull/3 is merged
   currencies = doJailbreak super.currencies;
-
-  # https://github.com/awakesecurity/proto3-wire/pull/104
-  proto3-wire = appendPatch (pkgs.fetchpatch {
-    url = "https://github.com/awakesecurity/proto3-wire/commit/c1cadeb5fca2e82c5b28e2811c01f5b37eb21ed8.patch";
-    hash = "sha256-tFOWpjGmZANC7H82QapZ36raaNWuZ6F3BgjxnfTXpMs=";
-  }) super.proto3-wire;
 
   argon2 = appendPatch (fetchpatch {
     # https://github.com/haskell-hvr/argon2/pull/20
