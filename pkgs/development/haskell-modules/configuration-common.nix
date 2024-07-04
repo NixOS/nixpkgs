@@ -3066,6 +3066,10 @@ self: super: {
     tasty-quickcheck = super.tasty-quickcheck_0_11;
   });
 
+  lzma = doJailbreak (super.lzma.overrideScope (self: super: {
+    tasty = super.tasty_1_5_1;
+  }));
+
   # Fixes build on some platforms: https://github.com/obsidiansystems/commutative-semigroups/pull/18
   commutative-semigroups = appendPatch (fetchpatch {
     url = "https://github.com/obsidiansystems/commutative-semigroups/commit/e031495dd24ae73ffb808eca34e993f5df8e8d76.patch";
