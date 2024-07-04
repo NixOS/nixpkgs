@@ -817,46 +817,63 @@ let
       };
 
   # Merge definitions of a value of a given type.
-  mergeDefinitions = loc: type: defs: rec {
-    defsFinal' =
-      let
-        # Process mkMerge and mkIf properties.
-        defs' = concatMap (m:
-          map (value: { inherit (m) file; inherit value; }) (builtins.addErrorContext "while evaluating definitions from `${m.file}':" (dischargeProperties m.value))
-        ) defs;
+  mergeDefinitions = loc: type: defs: let
+    # Process mkMerge and mkIf properties.
+    defs' = concatMap (m:
+      map (value: { inherit (m) file; inherit value; }) (builtins.addErrorContext "while evaluating definitions from `${m.file}':" (dischargeProperties m.value))
+    ) defs;
+    getPrio = def: if lib.elem def.value._type or "" [ "override" "overrideWith" ] then def.value.priority else defaultOverridePriority;
+    highestPrioBelow = thresh: foldl' (prio: def: let p = getPrio def; in if p <= thresh then prio else (min p prio)) 9999 defs';
+    highestPrio = highestPrioBelow (-1);
+    filterOverrides = prio: let
+      strip = def: if def.value._type or "" == "override" then def // { value = def.value.content; } else def;
+    in {
+      values = concatMap (def: if getPrio def == prio then [(strip def)] else []) defs';
+      highestPrio = prio;
+    };
+    mergedForPrio = prio: rec {
+      defsFinal' =
+        let
+          # Process mkOverride properties.
+          defs'' = filterOverrides prio;
 
-        # Process mkOverride properties.
-        defs'' = filterOverrides' defs';
+          # Process mkOverrideWith
+          defs''' = let
+            p = highestPrioBelow prio;
+            mergedBelow = mergedForPrio p;
+            mapOverrideWith = def: def // { value = def.value.fn mergedBelow.mergedValue; };
+          in map (def: if def.value._type or "" == "overrideWith" then mapOverrideWith def else def) defs''.values;
 
-        # Sort mkOrder properties.
-        defs''' =
-          # Avoid sorting if we don't have to.
-          if any (def: def.value._type or "" == "order") defs''.values
-          then sortProperties defs''.values
-          else defs''.values;
-      in {
-        values = defs''';
-        inherit (defs'') highestPrio;
-      };
-    defsFinal = defsFinal'.values;
+          # Sort mkOrder properties.
+          defs'''' =
+            # Avoid sorting if we don't have to.
+            if any (def: def.value._type or "" == "order") defs'''
+            then sortProperties defs'''
+            else defs''';
+        in {
+          values = defs'''';
+          inherit (defs'') highestPrio;
+        };
+      defsFinal = defsFinal'.values;
 
-    # Type-check the remaining definitions, and merge them. Or throw if no definitions.
-    mergedValue =
-      if isDefined then
-        if all (def: type.check def.value) defsFinal then type.merge loc defsFinal
-        else let allInvalid = filter (def: ! type.check def.value) defsFinal;
-        in throw "A definition for option `${showOption loc}' is not of type `${type.description}'. Definition values:${showDefs allInvalid}"
-      else
-        # (nixos-option detects this specific error message and gives it special
-        # handling.  If changed here, please change it there too.)
-        throw "The option `${showOption loc}' is used but not defined.";
+      # Type-check the remaining definitions, and merge them. Or throw if no definitions.
+      mergedValue =
+        if isDefined then
+          if all (def: type.check def.value) defsFinal then type.merge loc defsFinal
+          else let allInvalid = filter (def: ! type.check def.value) defsFinal;
+          in throw "A definition for option `${showOption loc}' is not of type `${type.description}'. Definition values:${showDefs allInvalid}"
+        else
+          # (nixos-option detects this specific error message and gives it special
+          # handling.  If changed here, please change it there too.)
+          throw "The option `${showOption loc}' is used but not defined.";
 
-    isDefined = defsFinal != [];
+      isDefined = defsFinal != [];
 
-    optionalValue =
-      if isDefined then { value = mergedValue; }
-      else {};
-  };
+      optionalValue =
+        if isDefined then { value = mergedValue; }
+        else {};
+    };
+  in mergedForPrio highestPrio;
 
   /* Given a config set, expand mkMerge properties, and push down the
      other properties into the children.  The result is a list of
@@ -1016,11 +1033,17 @@ let
       inherit priority content;
     };
 
+  mkOverrideWith = priority: fn:
+    { _type = "overrideWith";
+      inherit priority fn;
+    };
+
   mkOptionDefault = mkOverride 1500; # priority of option defaults
   mkDefault = mkOverride 1000; # used in config sections of non-user modules to set a default
   defaultOverridePriority = 100;
   mkImageMediaOverride = mkOverride 60; # image media profiles can be derived by inclusion into host config, hence needing to override host config, but do allow user to mkForce
   mkForce = mkOverride 50;
+  mkForceWith = mkOverrideWith 50;
   mkVMOverride = mkOverride 10; # used by ‘nixos-rebuild build-vm’
 
   defaultPriority = lib.warnIf (lib.isInOldestRelease 2305) "lib.modules.defaultPriority is deprecated, please use lib.modules.defaultOverridePriority instead." defaultOverridePriority;
@@ -1422,6 +1445,7 @@ private //
     mkDerivedConfig
     mkFixStrictness
     mkForce
+    mkForceWith
     mkIf
     mkImageMediaOverride
     mkMerge
@@ -1429,6 +1453,7 @@ private //
     mkOptionDefault
     mkOrder
     mkOverride
+    mkOverrideWith
     mkRemovedOptionModule
     mkRenamedOptionModule
     mkRenamedOptionModuleWith
