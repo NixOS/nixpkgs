@@ -2,6 +2,7 @@
 , stdenv
 , python3Packages
 , fetchFromGitHub
+, gitUpdater
 , resvg
 }:
 
@@ -80,6 +81,10 @@ in python3Packages.buildPythonApplication rec {
   pythonImportsCheck = [ "gerbolyze" ];
 
   nativeCheckInputs = [ python3Packages.pytestCheckHook resvg svg-flatten ];
+
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "v";
+  };
 
   meta = with lib; {
     description = "Directly render SVG overlays into Gerber and Excellon files";
