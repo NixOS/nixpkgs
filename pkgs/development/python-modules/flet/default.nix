@@ -36,6 +36,10 @@ buildPythonPackage rec {
     pythonRelaxDepsHook
   ];
 
+  makeWrapperArgs = [
+    "--prefix" "PYTHONPATH" ":" "$PYTHONPATH"
+  ];
+
   pythonRelaxDeps = [
     "cookiecutter"
     "packaging"
