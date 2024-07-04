@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
     homepage    = "http://www.vapoursynth.com/";
     license     = licenses.lgpl21;
     platforms   = platforms.x86_64;
-    maintainers = with maintainers; [ rnhmjoj sbruder tadeokondrak ];
+    maintainers = with maintainers; [ rnhmjoj sbruder ];
     mainProgram = "vspipe";
   };
 }
