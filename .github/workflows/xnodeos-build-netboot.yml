@@ -43,3 +43,5 @@ jobs:
           source: "result/ipxe,result/kernel,result/initrd"
           target: /public/latest/${{GITHUB_REF_NAME}}/netboot
           strip_components: 1
+          tar_dereference: true
+          overwrite: true

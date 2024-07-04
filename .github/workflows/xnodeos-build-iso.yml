@@ -32,3 +32,5 @@ jobs:
           source: result/iso/nixos.iso
           target: /public/${{GITHUB_REF_NAME}}/iso
           strip_components: 2
+          tar_dereference: true
+          overwrite: true

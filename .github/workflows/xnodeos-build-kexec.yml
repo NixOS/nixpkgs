@@ -33,3 +33,5 @@ jobs:
           source: result/tarball/nixos-system-x86_64-linux.tar.xz
           target: /public/latest/${{GITHUB_REF_NAME}}/kexec
           strip_components: 2
+          tar_dereference: true
+          overwrite: true
