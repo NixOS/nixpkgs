@@ -75,7 +75,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://apps.gnome.org/Clocks/";
-    description = "Clock application designed for GNOME 3";
+    description = "A simple and elegant clock application for GNOME";
+    longDescription = ''
+      A simple and elegant clock application. It includes world clocks, alarms,
+      a stopwatch, and timers.
+
+      - Show the time in different cities around the world
+      - Set alarms to wake you up
+      - Measure elapsed time with an accurate stopwatch
+      - Set timers to properly cook your food
+    '';
     mainProgram = "gnome-clocks";
     maintainers = lib.teams.gnome.members;
     license = lib.licenses.gpl2Plus;
