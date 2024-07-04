@@ -149,7 +149,7 @@ stdenv.mkDerivation (finalAttrs: {
       the operating systems on which it is implemented.
     '';
     license = lib.licenses.epl10;
-    maintainers = [ lib.maintainers.bb010g ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 })
