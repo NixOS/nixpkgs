@@ -67,16 +67,17 @@ let
   effectiveStdenv = if cudaSupport then cudaPackages.backendStdenv else inputs.stdenv;
 
   meta = with lib; {
-    description = "JAX is Autograd and XLA, brought together for high-performance machine learning research";
+    description = "Source-built JAX backend. JAX is Autograd and XLA, brought together for high-performance machine learning research";
     homepage = "https://github.com/google/jax";
     license = licenses.asl20;
     maintainers = with maintainers; [ ndl ];
-    platforms = platforms.unix;
+
+    # Make this platforms.unix once Darwin is supported.
+    # The top-level jaxlib now falls back to jaxlib-bin on unsupported platforms.
     # aarch64-darwin is broken because of https://github.com/bazelbuild/rules_cc/pull/136
     # however even with that fix applied, it doesn't work for everyone:
     # https://github.com/NixOS/nixpkgs/pull/184395#issuecomment-1207287129
-    # NOTE: We always build with NCCL; if it is unsupported, then our build is broken.
-    broken = effectiveStdenv.isDarwin || nccl.meta.unsupported;
+    platforms = platforms.linux;
   };
 
   # Bazel wants a merged cudnn at configuration time

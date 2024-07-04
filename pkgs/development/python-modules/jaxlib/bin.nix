@@ -225,7 +225,7 @@ buildPythonPackage {
   inherit (jaxlib-build) pythonImportsCheck;
 
   meta = with lib; {
-    description = "XLA library for JAX";
+    description = "Prebuilt jaxlib backend from PyPi";
     homepage = "https://github.com/google/jax";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.asl20;
