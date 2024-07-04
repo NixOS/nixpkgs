@@ -2278,13 +2278,6 @@
     githubId = 19501722;
     keys = [ { fingerprint = "C593 27B5 9D0F 2622 23F6  1D03 C1C0 F299 52BC F558"; } ];
   };
-  bb010g = {
-    email = "me@bb010g.com";
-    matrix = "@bb010g:matrix.org";
-    github = "bb010g";
-    githubId = 340132;
-    name = "Brayden Banks";
-  };
   bb2020 = {
     github = "bb2020";
     githubId = 19290397;
@@ -17579,6 +17572,12 @@
     github = "ryanccn";
     githubId = 70191398;
     name = "Ryan Cao";
+  };
+  ryand56 = {
+    email = "git@ryand.ca";
+    github = "ryand56";
+    githubId = 22267679;
+    name = "Ryan Omasta";
   };
   ryane = {
     email = "ryanesc@gmail.com";

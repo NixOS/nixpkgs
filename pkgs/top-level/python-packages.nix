@@ -6127,13 +6127,14 @@ self: super: with self; {
     IOKit = pkgs.darwin.apple_sdk_11_0.IOKit;
   };
 
-  jaxlib = self.jaxlib-build;
+  # Use the -bin on macOS since the source build doesn't support it (see #323154)
+  jaxlib = if jaxlib-build.meta.unsupported then jaxlib-bin else jaxlib-build;
 
-  jaxlibWithCuda = self.jaxlib-build.override {
+  jaxlibWithCuda = self.jaxlib.override {
     cudaSupport = true;
   };
 
-  jaxlibWithoutCuda = self.jaxlib-build.override {
+  jaxlibWithoutCuda = self.jaxlib.override {
     cudaSupport = false;
   };
 
