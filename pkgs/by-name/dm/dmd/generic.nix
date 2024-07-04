@@ -211,6 +211,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     description = "Official reference compiler for the D language";
     homepage = "https://dlang.org/";
+    changelog = "https://dlang.org/changelog/${finalAttrs.version}.html";
     # Everything is now Boost licensed, even the backend.
     # https://github.com/dlang/dmd/pull/6680
     license = licenses.boost;
