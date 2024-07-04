@@ -13,7 +13,7 @@ let
     };
     x86_64-darwin = {
       arch = "Mac";
-      sha256 = "sha256-Dje78MSnczxHIzJG7xXkTUqF/nsdSOAvpKhGU/rxoTg=";
+      sha256 = "sha256-YVUPCu7+lpKksITsBncif2fqoo08iJ/+dCwnoftHpm8=";
       version = "1171203";
     };
   };
