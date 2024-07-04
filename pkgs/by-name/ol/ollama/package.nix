@@ -103,12 +103,12 @@ let
     paths = rocmLibs ++ [ rocmClang ];
   };
 
-  cudaToolkit = buildEnv {
-    name = "cuda-merged";
+  # Only used to copy the DSOs into payloads (redundant with Nix, only increases the closure size):
+  # https://github.com/ollama/ollama/blob/4d71c559b21ec9207a328b824ce534bdbaf59f2d/llm/generate/gen_linux.sh#L188-L205
+  cudaSharedLibs = buildEnv {
+    name = "cuda-shared-libs";
     paths = [
-      (lib.getBin (cudaPackages.cuda_nvcc.__spliced.buildHost or cudaPackages.cuda_nvcc))
       (lib.getLib cudaPackages.cuda_cudart)
-      (lib.getOutput "static" cudaPackages.cuda_cudart)
       (lib.getLib cudaPackages.libcublas)
     ];
   };
@@ -145,7 +145,7 @@ goBuild ((lib.optionalAttrs enableRocm {
   ROCM_PATH = rocmPath;
   CLBlast_DIR = "${clblast}/lib/cmake/CLBlast";
 }) // (lib.optionalAttrs enableCuda {
-  CUDA_LIB_DIR = "${cudaToolkit}/lib";
+  CUDA_LIB_DIR = "${cudaSharedLibs}/lib";
 }) // {
   inherit pname version src vendorHash;
 
