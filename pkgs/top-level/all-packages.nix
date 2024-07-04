@@ -1075,14 +1075,14 @@ with pkgs;
 
   fetchpatch = callPackage ../build-support/fetchpatch {
     # 0.3.4 would change hashes: https://github.com/NixOS/nixpkgs/issues/25154
-    patchutils = buildPackages.patchutils_0_3_3;
+    patchutils = __splicedPackages.patchutils_0_3_3;
   } // {
     tests = pkgs.tests.fetchpatch;
     version = 1;
   };
 
   fetchpatch2 = callPackage ../build-support/fetchpatch {
-    patchutils = buildPackages.patchutils_0_4_2;
+    patchutils = __splicedPackages.patchutils_0_4_2;
   } // {
     tests = pkgs.tests.fetchpatch2;
     version = 2;
@@ -5818,7 +5818,7 @@ with pkgs;
 
   monetdb = callPackage ../servers/sql/monetdb { };
 
-  monado = callPackage ../applications/graphics/monado {
+  monado = callPackage ../by-name/mo/monado/package.nix {
     inherit (gst_all_1) gstreamer gst-plugins-base;
   };
 
@@ -6800,6 +6800,8 @@ with pkgs;
     mozc = callPackage ../tools/inputmethods/ibus-engines/ibus-mozc { };
 
     openbangla-keyboard = libsForQt5.callPackage ../applications/misc/openbangla-keyboard { withIbusSupport = true; };
+
+    pinyin = callPackage ../tools/inputmethods/ibus-engines/ibus-pinyin { };
 
     rime = callPackage ../tools/inputmethods/ibus-engines/ibus-rime { };
 
@@ -9448,7 +9450,7 @@ with pkgs;
     # 2. the rest are added from here: https://github.com/keybase/client/blob/68bb8c893c5214040d86ea36f2f86fbb7fac8d39/go/chat/attachments/preview_darwin.go#L7
     #      #cgo LDFLAGS: -framework AVFoundation -framework CoreFoundation -framework ImageIO -framework CoreMedia  -framework Foundation -framework CoreGraphics -lobjc
     #    with the exception of CoreFoundation, due to the warning in https://github.com/NixOS/nixpkgs/blob/master/pkgs/os-specific/darwin/apple-sdk/frameworks.nix#L25
-    inherit (darwin.apple_sdk_11_0.frameworks) AVFoundation AudioToolbox ImageIO CoreMedia Foundation CoreGraphics MediaToolbox;
+    inherit (darwin.apple_sdk_11_0.frameworks) AppKit AVFoundation AudioToolbox ImageIO CoreMedia Foundation CoreGraphics MediaToolbox;
   };
 
   kbfs = callPackage ../tools/security/keybase/kbfs.nix { };
@@ -9552,7 +9554,7 @@ with pkgs;
   last-resort = callPackage ../data/fonts/last-resort { };
 
   ligo =
-    let ocaml_p = ocaml-ng.ocamlPackages_4_14_janeStreet_0_15; in
+    let ocaml_p = ocaml-ng.ocamlPackages_4_14; in
     callPackage ../development/compilers/ligo {
     coq = coq_8_13.override {
       customOCamlPackages = ocaml_p;
@@ -24962,6 +24964,7 @@ with pkgs;
   mockobjects = callPackage ../development/libraries/java/mockobjects { };
 
   saxonb = saxonb_8_8;
+  saxon-he = saxon_12-he;
 
   inherit (callPackages ../development/libraries/java/saxon {
     jre = jre_headless;
@@ -24971,7 +24974,8 @@ with pkgs;
     saxonb_8_8
     saxonb_9_1
     saxon_9-he
-    saxon-he;
+    saxon_11-he
+    saxon_12-he;
 
   smack = callPackage ../development/libraries/java/smack { };
 

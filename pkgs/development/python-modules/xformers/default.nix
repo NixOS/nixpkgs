@@ -66,11 +66,11 @@ buildPythonPackage {
     [
       # flash-attn build
       cuda_cudart # cuda_runtime_api.h
-      libcusparse.dev # cusparse.h
-      cuda_cccl.dev # nv/target
-      libcublas.dev # cublas_v2.h
-      libcusolver.dev # cusolverDn.h
-      libcurand.dev # curand_kernel.h
+      libcusparse # cusparse.h
+      cuda_cccl # nv/target
+      libcublas # cublas_v2.h
+      libcusolver # cusolverDn.h
+      libcurand # curand_kernel.h
     ]
   );
 
