@@ -7,13 +7,13 @@
 
 buildLua {
   pname = "memo";
-  version = "0-unstable-2023-10-31";
+  version = "0-unstable-2024-07-02";
 
   src = fetchFromGitHub {
     owner = "po5";
     repo = "memo";
-    rev = "6f2b036ef860e130ea584657389e0a7ceb4d954f";
-    hash = "sha256-m8ikXuw7PM4Btg8w7ufLneKA4fnYjMyfVJYueZILMw8=";
+    rev = "43ad5bc37d4ac63a00dd2a8f15b9028789467da7";
+    hash = "sha256-nHJ1x5R4Rw2YjB3Li3ZFbI3ZdLSqddJFzJlni4NjpH0=";
   };
 
   passthru.updateScript = unstableGitUpdater { };
