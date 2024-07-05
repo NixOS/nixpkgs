@@ -45,6 +45,16 @@ in mkLicense lset) ({
     free = false;
   };
 
+  adobeUtopia = {
+    spdxId = "Adobe-Utopia";
+    fullName = "Adobe Utopia Font License";
+    # permission to use and share is granted, but not explicitly to improve, but
+    # trademark and attribution only have to appear in "unmodified copies", which
+    # could mean that modified copies are allowed. Fedora allows this license.
+    # https://docs.fedoraproject.org/en-US/legal/allowed-licenses/#_allowed_font_licenses
+    free = true;
+  };
+
   afl20 = {
     spdxId = "AFL-2.0";
     fullName = "Academic Free License v2.0";
@@ -132,6 +142,11 @@ in mkLicense lset) ({
   asl20-llvm = {
     spdxId = "Apache-2.0 WITH LLVM-exception";
     fullName = "Apache License 2.0 with LLVM Exceptions";
+  };
+
+  bitstreamCharter = {
+    spdxId = "Bitstream-Charter";
+    fullName = "Bitstream Charter Font License";
   };
 
   bitstreamVera = {
@@ -222,6 +237,11 @@ in mkLicense lset) ({
   bsdProtection = {
     spdxId = "BSD-Protection";
     fullName = "BSD Protection License";
+  };
+
+  bsdSourceCode = {
+    spdx = "BSD-Source-Code";
+    fullName = "BSD Source Code Attribution";
   };
 
   bsl11 = {
@@ -391,6 +411,11 @@ in mkLicense lset) ({
   cecill-c = {
     spdxId = "CECILL-C";
     fullName  = "CeCILL-C Free Software License Agreement";
+  };
+
+  cronyx = {
+    spdxId = "Cronyx";
+    fullName = "Cronyx License";
   };
 
   cpal10 = {
@@ -628,6 +653,11 @@ in mkLicense lset) ({
     fullName = "Historic Permission Notice and Disclaimer";
   };
 
+  hpndDocSell = {
+    spdxId = "HPND-doc-sell";
+    fullName = "Historical Permission Notice and Disclaimer - documentation sell variant";
+  };
+
   hpndSellVariant = {
     fullName = "Historical Permission Notice and Disclaimer - sell variant";
     spdxId = "HPND-sell-variant";
@@ -641,7 +671,7 @@ in mkLicense lset) ({
   # Intel's license, seems free
   iasl = {
     spdxId = "Intel-ACPI";
-    fullName = "iASL";
+    fullName = "Intel ACPI Software License Agreement";
     url = "https://old.calculate-linux.org/packages/licenses/iASL";
   };
 
@@ -850,19 +880,32 @@ in mkLicense lset) ({
     fullName = "Lucent Public License v1.02";
   };
 
+  lucidaBitmapFonts = {
+    spxId = "Lucida-Bitmap-Fonts";
+    fullName = "Lucida Bitmap Fonts License";
+    # We consider this as free which is debatable, however
+    # > use […] in individual and commercial software
+    # usage in software implies redistribution
+    # > Users are granted […] to use the trademark […] if the fonts […] are not modified […].
+    # inplies that modification is allowed
+    # Other Opinions:
+    # - SPDX Lists the license (meaning it is free according to their inclusion policy)
+    # - Fedora and other Linux Distributions allow this License:
+    # - https://docs.fedoraproject.org/en-US/legal/allowed-licenses/#_allowed_font_licenses (accessed 2024-06-27)
+    free = true;
+  };
+
   miros = {
     spdxId = "MirOS";
     fullName = "MirOS License";
     url = "https://opensource.org/licenses/MirOS";
   };
 
-  # spdx.org does not (yet) differentiate between the X11 and Expat versions
-  # for details see https://en.wikipedia.org/wiki/MIT_License#Various_versions
   mit = {
     spdxId = "MIT";
     fullName = "MIT License";
   };
-  # https://spdx.org/licenses/MIT-feh.html
+
   mit-feh = {
     spdxId = "MIT-feh";
     fullName = "feh License";
@@ -871,6 +914,11 @@ in mkLicense lset) ({
   mitAdvertising = {
     spdxId = "MIT-advertising";
     fullName = "Enlightenment License (e16)";
+  };
+
+  mitOpenGroup = {
+    spdxId = "MIT-open-group";
+    fullName = "MIT Open Group variant";
   };
 
   mit0 = {
@@ -952,6 +1000,11 @@ in mkLicense lset) ({
   nposl3 = {
     spdxId = "NPOSL-3.0";
     fullName = "Non-Profit Open Software License 3.0";
+  };
+
+  ntp = {
+    spdxId = "NTP";
+    fullName = "NTP License";
   };
 
   nvidiaCuda = {
@@ -1064,7 +1117,7 @@ in mkLicense lset) ({
   };
 
   purdueBsd = {
-    fullName = " Purdue BSD-Style License"; # also know as lsof license
+    fullName = "Purdue BSD-Style License"; # also known as lsof license
     url = "https://enterprise.dejacode.com/licenses/public/purdue-bsd";
   };
 
@@ -1272,6 +1325,11 @@ in mkLicense lset) ({
   x11 = {
     spdxId = "X11";
     fullName = "X11 License";
+  };
+
+  x11DistributeModifications = {
+    spdxId = "X11-distribute-modifications-variant";
+    fullName = "X11 License Distribution Modification Variant";
   };
 
   xfig = {
