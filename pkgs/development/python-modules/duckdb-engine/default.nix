@@ -9,6 +9,7 @@
   pandas,
   poetry-core,
   pytest-remotedata,
+  snapshottest,
   sqlalchemy,
   typing-extensions,
 }:
@@ -44,6 +45,7 @@ buildPythonPackage rec {
     hypothesis
     pandas
     pytest-remotedata
+    snapshottest
     typing-extensions
   ];
 
