@@ -22313,6 +22313,12 @@
     githubId = 250877;
     name = "Elmar Athmer";
   };
+  zazedd = {
+    name = "Leonardo Santos";
+    email = "leomendesantos@gmail.com";
+    github = "zazedd";
+    githubId = 93401987;
+  };
   zbioe = {
     name = "Iury Fukuda";
     email = "zbioe@protonmail.com";
