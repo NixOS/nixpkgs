@@ -3,34 +3,33 @@
   asn1crypto,
   buildPythonPackage,
   fetchFromGitHub,
+  hatchling,
   importlib-metadata,
   pytest-mock,
   pytestCheckHook,
   pythonOlder,
-  setuptools,
-  wheel,
+  versioningit,
 }:
 
 buildPythonPackage rec {
   pname = "scramp";
-  version = "1.4.4";
-  format = "pyproject";
+  version = "1.4.5";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "tlocke";
     repo = "scramp";
-    rev = version;
-    hash = "sha256-WOyv1fLSXG7p+WKs2QSwlsh8FSK/lxp6I1hPY0VIkKo=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-KpododRJ+CYRGBR7Sr5cVBhJvUwh9YmPERd/DAJqEcY=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-    wheel
-  ];
+  build-system = [ hatchling ];
 
-  propagatedBuildInputs = [ asn1crypto ] ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
+  nativeBuildInputs = [ versioningit ];
+
+  dependencies = [ asn1crypto ] ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
 
   nativeCheckInputs = [
     pytest-mock
