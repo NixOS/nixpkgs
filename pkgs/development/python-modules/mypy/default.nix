@@ -3,6 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  gitUpdater,
   pythonAtLeast,
   pythonOlder,
 
@@ -41,6 +42,9 @@ buildPythonPackage rec {
     repo = "mypy";
     rev = "refs/tags/v${version}";
     hash = "sha256-NCnc4C/YFKHN/kT7RTFCYs/yC00Kt1E7mWCoQuUjxG8=";
+  };
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "v";
   };
 
   build-system = [
