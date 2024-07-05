@@ -3128,6 +3128,12 @@
     githubId = 7435854;
     name = "Victor Calvert";
   };
+  camcalaquian = {
+    email = "camcalaquian@gmail.com";
+    github = "camcalaquian";
+    githubId = 36902555;
+    name = "Carl Calaquian";
+  };
   camelpunch = {
     email = "me@andrewbruce.net";
     github = "camelpunch";
