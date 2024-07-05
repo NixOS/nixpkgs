@@ -139,6 +139,8 @@ let
             "--clone-url ${service.cloneUrl}"
             ++ optional (service.preGetSourcesScript != null)
             "--pre-get-sources-script ${service.preGetSourcesScript}"
+            ++ optional (service.postGetSourcesScript != null)
+            "--post-get-sources-script ${service.postGetSourcesScript}"
             ++ optional (service.preBuildScript != null)
             "--pre-build-script ${service.preBuildScript}"
             ++ optional (service.postBuildScript != null)
@@ -500,6 +502,13 @@ in {
             default = null;
             description = ''
               Runner-specific command script executed before code is pulled.
+            '';
+          };
+          postGetSourcesScript = mkOption {
+            type = types.nullOr types.path;
+            default = null;
+            description = ''
+              Runner-specific command script executed after code is pulled.
             '';
           };
           preBuildScript = mkOption {
