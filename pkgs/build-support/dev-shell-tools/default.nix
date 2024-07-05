@@ -31,10 +31,14 @@ rec {
         in if lib.elem name (drvAttrs.passAsFile or [])
         then
           let
-            nameHash = builtins.convertHash {
-              hash = "sha256:" + builtins.hashString "sha256" name;
-              toHashFormat = "nix32";
-            };
+            nameHash =
+              if builtins?convertHash
+              then builtins.convertHash {
+                hash = "sha256:" + builtins.hashString "sha256" name;
+                toHashFormat = "nix32";
+              }
+              else
+                builtins.hashString "sha256" name;
             basename = ".attr-${nameHash}";
           in
             lib.nameValuePair "${name}Path" "${
