@@ -9,16 +9,16 @@
 }:
 buildGoModule rec {
   pname = "kcl";
-  version = "0.8.9";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "kcl-lang";
     repo = "cli";
     rev = "v${version}";
-    hash = "sha256-slU3n7YCV5VfvXArzlcITb9epdu/gyXlAWq9KLjGdJA=";
+    hash = "sha256-zkVUTCUn4dNEN0j/IWV4LBF3BMWjaeUC0Ku8rMZFo8M=";
   };
 
-  vendorHash = "sha256-Xv8Tfq9Kb1xGFCWZQwBFDX9xZW9j99td/DUb7jBtkpE=";
+  vendorHash = "sha256-9YevhWL1sdrwjG7vhDfBf/o60OK/CvccSd0KibAiiyk=";
 
   ldflags = [
     "-w -s"
