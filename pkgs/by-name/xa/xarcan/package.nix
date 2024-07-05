@@ -39,13 +39,13 @@
 
 stdenv.mkDerivation (finalPackages: {
   pname = "xarcan";
-  version = "0-unstable-2024-05-11";
+  version = "0-unstable-2024-05-23";
 
   src = fetchFromGitHub {
     owner = "letoram";
     repo = "xarcan";
-    rev = "ecc4d0a6408dfeb19934e3bfd4c382b0862c03b4";
-    hash = "sha256-PmaoeemQpin5NN8I6JYOumP+PrzkyTYrqAyxxwBO9K0=";
+    rev = "ebb46609315d95fb286009310de11b03f7333022";
+    hash = "sha256-XXA5c/yV6QaPiz1LHWkb+Tm6Wmead8EndkSk3onvrcs=";
   };
 
   nativeBuildInputs = [
