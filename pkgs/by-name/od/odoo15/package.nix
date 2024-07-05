@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, fetchzip, python310, rtlcss, wkhtmltopdf
+{ lib, fetchFromGitHub, fetchzip, python310, rtlcss, wkhtmltopdf
 , nixosTests }:
 
 let

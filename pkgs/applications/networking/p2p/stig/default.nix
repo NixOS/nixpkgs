@@ -1,5 +1,4 @@
 { lib
-, stdenv
 , fetchFromGitHub
 , python310Packages
 , testers
