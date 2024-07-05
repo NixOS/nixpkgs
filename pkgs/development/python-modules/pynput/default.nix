@@ -3,6 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  gitUpdater,
 
   # build-system
   setuptools,
@@ -29,6 +30,9 @@ buildPythonPackage rec {
     repo = "pynput";
     rev = "refs/tags/v${version}";
     hash = "sha256-gRq4LS9NvPL98N0Jk09Z0GfoHS09o3zM284BEWS+NW4=";
+  };
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "v";
   };
 
   postPatch = ''
