@@ -4,7 +4,7 @@
   fetchFromGitHub,
   setuptools,
   nbformat,
-  nose,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -19,20 +19,17 @@ buildPythonPackage rec {
     hash = "sha256-Uqs/SO/AculHCFYcbjW08kLQX5GSU/eAwkN2iy/vhLM=";
   };
 
+  patches = [ ./pytest-compatibility.patch ];
+
   nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [ nbformat ];
 
-  nativeCheckInputs = [ nose ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  checkPhase = ''
-    runHook preCheck
-
+  postCheck = ''
     patchShebangs .
-    nosetests -v
     PATH=$PATH:$out/bin ./cli_tests.sh
-
-    runHook postCheck
   '';
 
   pythonImportsCheck = [ "nbmerge" ];
