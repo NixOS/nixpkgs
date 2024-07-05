@@ -3,7 +3,6 @@
   inputs = {
     nixpkgs.url = "github:openmesh-network/xnodepkgs/dev";
     nixos-generators.url = "github:nix-community/nixos-generators";
-    xnodepkgs.url = "github:harrys522/my-nix-pkgs";
   };
   outputs = inputs:
     let
