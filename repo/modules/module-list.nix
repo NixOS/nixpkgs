@@ -1,0 +1,1 @@
+./services/xnode/admin.nix

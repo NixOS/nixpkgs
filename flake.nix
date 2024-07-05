@@ -1,23 +1,22 @@
 {
   description = "Xnode OS";
   inputs = {
-    nixpkgs.url = "flake:nixpkgs/nixpkgs-unstable";
+    nixpkgs.url = "github:openmesh-network/xnodepkgs/dev";
     nixos-generators.url = "github:nix-community/nixos-generators";
     xnodepkgs.url = "github:harrys522/my-nix-pkgs";
   };
   outputs = inputs:
     let
-      xnode =  import ./xnode.nix;
       flakeContext = {
-        inherit xnode;
         inherit inputs;
       };
     in
     {
       packages = {
         x86_64-linux = {
-          iso = import ./packages/iso.nix flakeContext;
-          netboot = import ./packages/netboot.nix flakeContext;
+          iso = import ./systems/iso.nix flakeContext;
+          netboot = import ./systems/netboot.nix flakeContext;
+          kexec = import ./systems/kexec.nix flakeContext;
         };
       };
     };
