@@ -31,7 +31,7 @@ jobs:
           username: opnm
           key: ${{secrets.BOOT_OPNM_SH_DEPLOY_KEY}}
           source: result/tarball/nixos-system-x86_64-linux.tar.xz
-          target: /mnt/boot-opnm-sh/public/latest/${{GITHUB_REF_NAME}}/kexec
+          target: /mnt/boot-opnm-sh/public/latest/${{github.ref_name}}/kexec
           strip_components: 2
           tar_dereference: true
           overwrite: true
