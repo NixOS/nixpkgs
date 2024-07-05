@@ -145,7 +145,23 @@ in buildPythonPackage rec {
     hash = "sha256-xUj77yKz3IQ3gd/G32pI4OhL3LoN1zS7eFg0/0nZp5I=";
   };
 
-  patches = lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
+  patches = [
+    (fetchpatch {
+      name = "CVE-2024-31580.patch";
+      url = "https://github.com/pytorch/pytorch/commit/b5c3a17c2c207ebefcb85043f0cf94be9b2fef81.patch";
+      hash = "sha256-UR9PesE+t7ekVh4cJlrCgFULLFgqZjWhgr3jFP+vuEQ=";
+    })
+    (fetchpatch {
+      name = "CVE-2024-31583.patch";
+      url = "https://github.com/pytorch/pytorch/commit/9c7071b0e324f9fb68ab881283d6b8d388a4bcd2.patch";
+      hash = "sha256-TtiB9d8VQ5dXXOHyq4N45uFW5csmxHsF6naPH4IrKlc=";
+    })
+    (fetchpatch {
+      name = "CVE-2024-31584.patch";
+      url = "https://github.com/pytorch/pytorch/commit/7c35874ad664e74c8e4252d67521f3986eadb0e6.patch";
+      hash = "sha256-4IsdRfL0B+Rown4xqra8taqqOXf8NKCtSN9sPrOPQV8=";
+    })
+  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
     # pthreadpool added support for Grand Central Dispatch in April
     # 2020. However, this relies on functionality (DISPATCH_APPLY_AUTO)
     # that is available starting with macOS 10.13. However, our current
