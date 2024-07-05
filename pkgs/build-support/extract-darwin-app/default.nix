@@ -8,8 +8,6 @@
   *
   * It makes the assumption that the bundle passed to src is:
   *  - an archive with a single folder: $appName.app
-  *  - a .dmg (pass the isDmg attribute)
-  *  - a folder containing a Contents/ folder e.g `src = ./AnApp.app`
   *
   * Information about the bundles can be found:
   * - https://en.wikipedia.org/wiki/Bundle_(macOS)
@@ -43,16 +41,9 @@ stdenv.mkDerivation
     binDir="$appDir"/Contents/MacOS
 
     mkdir -p $out/bin
-    if [[ -d Contents/ ]] ; then
-      # .dmg uses sourceRoot, which means PWD is already in the sourceRoot
-      # Passing a .app folder also means we've already cd'ed into the folder
-      mkdir -p $appDir
-      cp -r Contents $appDir
-    else
-      # expects a .app folder in the source folder
-      mkdir $out/Applications
-      cp -r ${appName}.app/ $appDir
-    fi
+    # expects a .app folder in the source folder
+    mkdir $out/Applications
+    cp -r ${appName}.app/ $appDir
 
     # Make application available in bin/
     makeWrapper $binDir/${binaryName} $out/bin/${pname}
