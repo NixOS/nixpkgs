@@ -12,6 +12,7 @@
 , stdenv
 , pkgsBuildTarget
 , pkgsHostTarget
+, buildPackages
 , targetPackages
 , fetchpatch
 
@@ -65,8 +66,14 @@
   enableShared ? with stdenv.targetPlatform; !isWindows && !useiOSPrebuilt && !isStatic && !isGhcjs
 
 , # Whether to build terminfo.
+  # FIXME(@sternenseemann): This actually doesn't influence what hadrian does,
+  # just what buildInputs etc. looks like. It would be best if we could actually
+  # tell it what to do like it was possible with make.
   enableTerminfo ? !(stdenv.targetPlatform.isWindows
-                     || stdenv.targetPlatform.isGhcjs)
+                     || stdenv.targetPlatform.isGhcjs
+                     # terminfo can't be built for cross
+                     || (stdenv.buildPlatform != stdenv.hostPlatform)
+                     || (stdenv.hostPlatform != stdenv.targetPlatform))
 
 , # Libdw.c only supports x86_64, i686 and s390x as of 2022-08-04
   enableDwarf ? (stdenv.targetPlatform.isx86 ||
@@ -214,17 +221,30 @@
 , #  Whether to build sphinx documentation.
   # TODO(@sternenseemann): Hadrian ignores the --docs flag if finalStage = Stage1
   enableDocs ? (
-    # Docs disabled if we are building on musl because it's a large task to keep
-    # all `sphinx` dependencies building in this environment.
-    !stdenv.buildPlatform.isMusl
+    # Docs disabled if we are building on musl or cross-building because it's a
+    # large task to keep all `sphinx` dependencies building in this environment.
+    (stdenv.buildPlatform == stdenv.hostPlatform && stdenv.targetPlatform == stdenv.hostPlatform)
+    && !stdenv.buildPlatform.isMusl
   )
 
 , # Whether to disable the large address space allocator
   # necessary fix for iOS: https://www.reddit.com/r/haskell/comments/4ttdz1/building_an_osxi386_to_iosarm64_cross_compiler/d5qvd67/
   disableLargeAddressSpace ? stdenv.targetPlatform.isiOS
+
+, # Whether to build an unregisterised version of GHC.
+  # GHC will normally auto-detect whether it can do a registered build, but this
+  # option will force it to do an unregistered build when set to true.
+  # See https://gitlab.haskell.org/ghc/ghc/-/wikis/building/unregisterised
+  enableUnregisterised ? false
 }:
 
 assert !enableNativeBignum -> gmp != null;
+
+# GHC does not support building when all 3 platforms are different.
+assert stdenv.buildPlatform == stdenv.hostPlatform || stdenv.hostPlatform == stdenv.targetPlatform;
+
+# It is currently impossible to cross-compile GHC with Hadrian.
+assert stdenv.buildPlatform == stdenv.hostPlatform;
 
 let
   inherit (stdenv) buildPlatform hostPlatform targetPlatform;
@@ -265,7 +285,9 @@ let
      else pkgsBuildTarget.targetPackages.stdenv.cc)
   ] ++ lib.optional useLLVM buildTargetLlvmPackages.llvm;
 
+  buildCC = buildPackages.stdenv.cc;
   targetCC = builtins.head toolsForTarget;
+  installCC = pkgsHostTarget.targetPackages.stdenv.cc;
 
   # toolPath calculates the absolute path to the name tool associated with a
   # given `stdenv.cc` derivation, i.e. it picks the correct derivation to take
@@ -318,6 +340,13 @@ let
     (lib.optionalString enableNativeBignum "-native-bignum")
   ];
 
+  targetLibffi = if hostPlatform != targetPlatform
+    then targetPackages.libffi
+    else pkgsHostTarget.libffi;
+
+  # Our Cabal compiler name
+  haskellCompilerName = "ghc-${version}";
+
 in
 
 # C compiler, bintools and LLVM are used at build time, but will also leak into
@@ -348,6 +377,10 @@ stdenv.mkDerivation ({
     for env in $(env | grep '^TARGET_' | sed -E 's|\+?=.*||'); do
       export "''${env#TARGET_}=''${!env}"
     done
+    # No need for absolute paths since these tools only need to work during the build
+    export CC_STAGE0="$CC_FOR_BUILD"
+    export LD_STAGE0="$LD_FOR_BUILD"
+    export AR_STAGE0="$AR_FOR_BUILD"
     # GHC is a bit confused on its cross terminology, as these would normally be
     # the *host* tools.
     export CC="${toolPath "cc" targetCC}"
@@ -435,11 +468,10 @@ stdenv.mkDerivation ({
   # `--with` flags for libraries needed for RTS linker
   configureFlags = [
     "--datadir=$doc/share/doc/ghc"
-    "--with-curses-includes=${ncurses.dev}/include" "--with-curses-libraries=${ncurses.out}/lib"
   ] ++ lib.optionals (libffi != null && !targetPlatform.isGhcjs) [
     "--with-system-libffi"
-    "--with-ffi-includes=${targetPackages.libffi.dev}/include"
-    "--with-ffi-libraries=${targetPackages.libffi.out}/lib"
+    "--with-ffi-includes=${targetLibffi.dev}/include"
+    "--with-ffi-libraries=${targetLibffi.out}/lib"
   ] ++ lib.optionals (targetPlatform == hostPlatform && !enableNativeBignum) [
     "--with-gmp-includes=${targetPackages.gmp.dev}/include"
     "--with-gmp-libraries=${targetPackages.gmp.out}/lib"
@@ -464,6 +496,8 @@ stdenv.mkDerivation ({
     # https://gitlab.haskell.org/ghc/ghc/-/issues/23188
     # https://github.com/haskell/cabal/issues/8882
     "fp_cv_prog_ar_supports_dash_l=no"
+  ] ++ lib.optionals enableUnregisterised [
+    "--enable-unregisterised"
   ];
 
   # Make sure we never relax`$PATH` and hooks support for compatibility.
@@ -486,6 +520,12 @@ stdenv.mkDerivation ({
 
   # For building runtime libs
   depsBuildTarget = toolsForTarget;
+  # Used by the STAGE0 compiler to build stage1
+  depsBuildBuild = [
+    buildCC
+    # stage0 builds terminfo unconditionally, so we always need ncurses
+    ncurses
+  ];
 
   buildInputs = [ perl bash ] ++ (libDeps hostPlatform);
 
@@ -555,18 +595,23 @@ stdenv.mkDerivation ({
     # leave bindist directory
     popd
 
+    # Make the installed GHC use the host platform's tools.
+    sed -i $out/lib/${targetPrefix}${haskellCompilerName}/lib/settings \
+      -e "s!$CC!${installCC}/bin/${installCC.targetPrefix}cc!g" \
+      -e "s!$CXX!${installCC}/bin/${installCC.targetPrefix}c++!g" \
+      -e "s!$LD!${installCC.bintools}/bin/${installCC.bintools.targetPrefix}ld${lib.optionalString useLdGold ".gold"}!g" \
+      -e "s!$AR!${installCC.bintools.bintools}/bin/${installCC.bintools.targetPrefix}ar!g" \
+      -e "s!$RANLIB!${installCC.bintools.bintools}/bin/${installCC.bintools.targetPrefix}ranlib!g"
+
     # Install the bash completion file.
     install -Dm 644 utils/completion/ghc.bash $out/share/bash-completion/completions/${targetPrefix}ghc
   '';
 
   passthru = {
-    inherit bootPkgs targetPrefix;
+    inherit bootPkgs targetPrefix haskellCompilerName;
 
     inherit llvmPackages;
     inherit enableShared;
-
-    # Our Cabal compiler name
-    haskellCompilerName = "ghc-${version}";
 
     # Expose hadrian used for bootstrapping, for debugging purposes
     inherit hadrian;
@@ -583,7 +628,8 @@ stdenv.mkDerivation ({
       guibou
     ] ++ lib.teams.haskell.members;
     timeout = 24 * 3600;
-    inherit (ghc.meta) license platforms;
+    platforms = lib.platforms.all;
+    inherit (ghc.meta) license;
   };
 
   dontStrip = targetPlatform.useAndroidPrebuilt || targetPlatform.isWasm;
