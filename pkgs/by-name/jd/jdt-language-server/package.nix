@@ -29,8 +29,8 @@ stdenv.mkDerivation (finalAttrs: {
     # than in the original package. In addition, hard-code the path to the jdk
     # in the wrapper, instead of searching for it in PATH at runtime.
     substituteInPlace bin/jdtls.py \
-      --replace "jdtls_base_path = Path(__file__).parent.parent" "jdtls_base_path = Path(\"$out/share/java/jdtls/\")" \
-      --replace "java_executable = get_java_executable(known_args.validate_java_version)" "java_executable = '${lib.getExe jdk}'"
+      --replace-fail "jdtls_base_path = Path(__file__).parent.parent" "jdtls_base_path = Path(\"$out/share/java/jdtls/\")" \
+      --replace-fail "java_executable = get_java_executable(known_args)" "java_executable = '${lib.getExe jdk}'"
   '';
 
   installPhase =
