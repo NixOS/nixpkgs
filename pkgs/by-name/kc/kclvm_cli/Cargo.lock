@@ -4,4 +4,4 @@ version = 3
 
 [[package]]
 name = "kclvm_cli"
-version = "0.8.7"
+version = "0.9.0"
