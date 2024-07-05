@@ -1,8 +1,7 @@
 { lib
-, extractDarwinApp
 , fetchzip
 , stdenv
-,
+, makeWrapper
 }:
 let
   specs = {
@@ -22,10 +21,9 @@ let
     sha25 = "";
     version = "";
   };
-in
-extractDarwinApp rec {
   appName = "Chromium";
-  binaryName = appName;
+in
+stdenv.mkDerivation rec {
   pname = "chromium-bin";
   version = spec.version;
   src = fetchzip {
@@ -33,12 +31,31 @@ extractDarwinApp rec {
     sha256 = spec.sha256;
   };
 
-  packageMeta = {
+  nativeBuildInputs = [ makeWrapper ];
+
+  installPhase = ''
+    appDir="$out/Applications/${appName}.app"
+    binDir="$appDir"/Contents/MacOS
+
+    mkdir -p $out/bin
+    # expects a .app folder in the source folder
+    mkdir $out/Applications
+    cp -r ${appName}.app/ $appDir
+
+    # Make application available in bin/
+    makeWrapper $binDir/${appName} $out/bin/${pname}
+  '';
+
+  meta = {
     description = "An open source web browser from Google";
-    platforms = builtins.attrNames specs;
     license = lib.licenses.bsd3;
+    platforms = builtins.attrNames specs;
+    mainProgram = appName;
     maintainers = with lib.maintainers; [
       michaelCTS
     ];
+    name = pname;
+    hydraPlatforms = [ ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
 }

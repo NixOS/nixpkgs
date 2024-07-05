@@ -1148,7 +1148,6 @@ with pkgs;
 
   makePkgconfigItem = callPackage ../build-support/make-pkgconfigitem { };
 
-  extractDarwinApp = callPackage ../build-support/extract-darwin-app { };
   makeDarwinBundle = callPackage ../build-support/make-darwin-bundle { };
 
   makeAutostartItem = callPackage ../build-support/make-startupitem { };
