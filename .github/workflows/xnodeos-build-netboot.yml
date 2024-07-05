@@ -41,7 +41,7 @@ jobs:
           username: opnm
           key: ${{secrets.BOOT_OPNM_SH_DEPLOY_KEY}}
           source: "result/ipxe,result/kernel,result/initrd"
-          target: /public/latest/${{GITHUB_REF_NAME}}/netboot
+          target: /mnt/boot-opnm-sh/public/latest/${{GITHUB_REF_NAME}}/netboot
           strip_components: 1
           tar_dereference: true
           overwrite: true
