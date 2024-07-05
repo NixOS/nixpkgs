@@ -28,7 +28,9 @@ rec {
         then lib.nameValuePair "${name}Path" "${writeText "pass-as-text-${name}" str}"
         else lib.nameValuePair name str
       )
-      drvAttrs;
+      (removeAttrs drvAttrs [
+        "args"
+      ]);
 
   derivationOutputEnv = { outputList, outputMap }:
     # A mapping from output name to the nix store path where they should end up

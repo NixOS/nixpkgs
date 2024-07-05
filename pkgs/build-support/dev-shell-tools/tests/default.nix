@@ -66,6 +66,7 @@ in
         aPackageAttrSet = hello;
         anOutPath = hello.outPath;
         anAnAlternateOutput = zlib.dev;
+        args = [ "args must not be added to the environment" "Nix doesn't do it." ];
 
         passAsFile = [ "bar" ];
         bar = ''
@@ -107,6 +108,10 @@ in
       installPhase = "touch $out";
 
       checkPhase = ''
+        fail() {
+          echo "$@" >&2
+          exit 1
+        }
         checkAttr() {
           echo checking attribute $1...
           if [[ "$2" != "$3" ]]; then
@@ -124,6 +129,8 @@ in
               (removeAttrs
                 result
                 [
+                  "args"
+
                   # Nix puts it in workdir, which is not a concept for
                   # unstructuredDerivationInputEnv, so we have to put it in the
                   # store instead. This means the full path won't match.
@@ -141,7 +148,9 @@ in
           # [[ "$(basename $exampleBarPathString)" = "$(basename $barPath)" ]]
         )
 
-        touch $out
+        ''${args:+fail "args should not be set by Nix. We don't expect it to and unstructuredDerivationInputEnv removes it."}
       '';
-    } // drvAttrs);
+    } // removeAttrs drvAttrs [
+      "args"
+    ]);
 }
