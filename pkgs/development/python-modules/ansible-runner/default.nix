@@ -8,8 +8,8 @@
   importlib-metadata,
   mock,
   openssh,
+  packaging,
   pexpect,
-  psutil,
   pytest-mock,
   pytest-timeout,
   pytest-xdist,
@@ -19,7 +19,6 @@
   pyyaml,
   setuptools,
   setuptools-scm,
-  six,
 }:
 
 buildPythonPackage rec {
@@ -27,12 +26,17 @@ buildPythonPackage rec {
   version = "2.4.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-gtArJUiDDzelNRe2XII8SvNxBpQGx9ITtckEHUXgxbY=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace '"setuptools>=45, <=69.0.2", "setuptools-scm[toml]>=6.2, <=8.0.4"' '"setuptools", "setuptools-scm"'
+  '';
 
   build-system = [
     setuptools
@@ -40,12 +44,10 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
-    ansible-core
-    psutil
+    packaging
     pexpect
     python-daemon
     pyyaml
-    six
   ] ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
 
   nativeCheckInputs = [
