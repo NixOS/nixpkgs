@@ -7,6 +7,7 @@
 , libarchive
 , libpcap
 , libsForQt5
+, qt6
 , libslirp
 , pkg-config
 , stdenv
@@ -16,7 +17,8 @@
 }:
 
 let
-  inherit (libsForQt5)
+  qt = if stdenv.isLinux then libsForQt5 else qt6;
+  inherit (qt)
     qtbase
     qtmultimedia
     wrapQtAppsHook;
@@ -46,15 +48,25 @@ stdenv.mkDerivation (finalAttrs: {
     libGL
     qtbase
     qtmultimedia
-    wayland
     zstd
+  ] ++ lib.optionals stdenv.isLinux [
+    wayland
   ];
 
   strictDeps = true;
 
-  qtWrapperArgs = [
+  qtWrapperArgs = lib.optionals stdenv.isLinux [
     "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libpcap ]}"
+  ] ++ lib.optionals stdenv.isDarwin [
+    "--prefix DYLD_LIBRARY_PATH : ${lib.makeLibraryPath [ libpcap ]}"
   ];
+
+  installPhase = lib.optionalString stdenv.isDarwin ''
+    runHook preInstall
+    mkdir -p $out/Applications
+    cp -r melonDS.app $out/Applications/
+    runHook postInstall
+ '';
 
   passthru = {
     updateScript = unstableGitUpdater { };
@@ -88,6 +100,6 @@ stdenv.mkDerivation (finalAttrs: {
       benley
       shamilton
     ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 })
