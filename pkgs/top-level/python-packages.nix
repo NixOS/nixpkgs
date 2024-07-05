@@ -2043,6 +2043,8 @@ self: super: with self; {
 
   coqpit = callPackage ../development/python-modules/coqpit { };
 
+  cpe = callPackage ../development/python-modules/cpe { };
+
   cerberus = callPackage ../development/python-modules/cerberus { };
 
   cert-chain-resolver = callPackage ../development/python-modules/cert-chain-resolver { };
