@@ -13350,7 +13350,7 @@ with pkgs;
 
   inherit (callPackages ../servers/teleport {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security AppKit;
-  }) teleport_14 teleport_15 teleport;
+  }) teleport_14 teleport_15 teleport_16 teleport;
 
   telepresence = callPackage ../tools/networking/telepresence {
     pythonPackages = python3Packages;
@@ -28601,13 +28601,9 @@ with pkgs;
 
   martian-mono = callPackage ../data/fonts/martian-mono { };
 
-  marwaita = callPackage ../data/themes/marwaita { };
-
   marwaita-icons = callPackage ../by-name/ma/marwaita-icons/package.nix {
     inherit (kdePackages) breeze-icons;
   };
-
-  marwaita-manjaro = callPackage ../data/themes/marwaita-manjaro { };
 
   marwaita-peppermint = callPackage ../data/themes/marwaita-peppermint { };
 
