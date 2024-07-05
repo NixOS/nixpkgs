@@ -28,10 +28,6 @@
 , version
 , /** a nix path or derivation to be used as mkDerivation.src */
   src
-, /** Whether to use makeWrapper for the binary.
-    * For some packages symbolic links just don't work
-    */
-  wrapBinary ? false
 , /** The meta attribute passed to mkDerivation */
   packageMeta ? { }
 }:
@@ -40,7 +36,7 @@ stdenv.mkDerivation
   # the unpack phase requires only one folder
 {
   inherit pname version src;
-  nativeBuildInputs = (lib.optional wrapBinary makeWrapper) ++ [ undmg ];
+  nativeBuildInputs = [ makeWrapper undmg ];
 
   installPhase = ''
     appDir="$out/Applications/${appName}.app"
@@ -59,11 +55,7 @@ stdenv.mkDerivation
     fi
 
     # Make application available in bin/
-    if [[ "${toString wrapBinary}" = "1" ]] ; then
-      makeWrapper $binDir/${binaryName} $out/bin/${pname}
-    else
-      ln -s $binDir/${binaryName} $out/bin
-    fi
+    makeWrapper $binDir/${binaryName} $out/bin/${pname}
   '';
 
   meta = {

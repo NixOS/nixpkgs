@@ -33,7 +33,6 @@ extractDarwinApp rec {
     sha256 = spec.sha256;
   };
 
-  wrapBinary = true;
   packageMeta = {
     description = "An open source web browser from Google";
     platforms = builtins.attrNames specs;
