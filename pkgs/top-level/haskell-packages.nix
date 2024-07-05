@@ -229,7 +229,7 @@ in {
       buildTargetLlvmPackages = pkgsBuildTarget.llvmPackages_12;
       llvmPackages = pkgs.llvmPackages_12;
     };
-    ghc948 = callPackage ../development/compilers/ghc/9.4.8.fixme.nix {
+    ghc948 = callPackage ../development/compilers/ghc/9.4.8.nix {
       bootPkgs =
         # Building with 9.2 is broken due to
         # https://gitlab.haskell.org/ghc/ghc/-/issues/21914
@@ -568,7 +568,7 @@ in {
       buildHaskellPackages = ghc.bootPkgs;
       ghc = bh.compiler.ghcjs810;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.10.x.nix { };
-      packageSetConfig = callPackage ../development/haskell-modules/configuration-ghcjs.nix { };
+      packageSetConfig = callPackage ../development/haskell-modules/configuration-ghcjs-8.x.nix { };
     };
 
     # The integer-simple attribute set contains package sets for all the GHC compilers

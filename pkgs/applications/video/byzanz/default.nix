@@ -3,7 +3,7 @@
 , wrapGAppsHook3
 , cairo
 , glib
-, gnome
+, gnome-common
 , gst_all_1
 , gtk3
 , intltool
@@ -37,7 +37,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ pkg-config intltool ];
   buildInputs = [
     which
-    gnome.gnome-common
+    gnome-common
     glib
     libtool
     cairo

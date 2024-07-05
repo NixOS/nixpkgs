@@ -55,7 +55,7 @@ buildNpmPackage rec {
       # Add xdg-utils to path via suffix, per PR #181171
       makeWrapper '${lib.getExe electron}' $out/bin/webcord \
         --suffix PATH : "${binPath}" \
-        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
+        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime}}" \
         --add-flags $out/lib/node_modules/webcord/
 
       runHook postInstall

@@ -7,7 +7,7 @@
 , callPackage
 , callPackages
 
-, gnome
+, adwaita-icon-theme
 , dconf
 , gtk3
 , wxGTK32
@@ -197,7 +197,7 @@ stdenv.mkDerivation rec {
   makeWrapperArgs = with passthru.libraries; [
     "--prefix XDG_DATA_DIRS : ${base}/share"
     "--prefix XDG_DATA_DIRS : ${hicolor-icon-theme}/share"
-    "--prefix XDG_DATA_DIRS : ${gnome.adwaita-icon-theme}/share"
+    "--prefix XDG_DATA_DIRS : ${adwaita-icon-theme}/share"
     "--prefix XDG_DATA_DIRS : ${gtk3}/share/gsettings-schemas/${gtk3.name}"
     "--prefix XDG_DATA_DIRS : ${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}"
     # wrapGAppsHook3 did these two as well, no idea if it matters...

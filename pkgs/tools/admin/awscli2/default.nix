@@ -57,21 +57,21 @@ let
   };
 
 in
-with py.pkgs; buildPythonApplication rec {
+py.pkgs.buildPythonApplication rec {
   pname = "awscli2";
-  version = "2.15.62"; # N.B: if you change this, check if overrides are still up-to-date
+  version = "2.17.0"; # N.B: if you change this, check if overrides are still up-to-date
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-cli";
     rev = "refs/tags/${version}";
-    hash = "sha256-hhjxhdrU4FFJWNcq4JiKpSSDr6YxKbUDGIuBoixryWU=";
+    hash = "sha256-7XBdS33aoU3utAkKR0WSD2PXpx+2awd4hnFZhzRVdh8=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail 'awscrt>=0.19.18,<=0.19.19' 'awscrt>=0.19.18' \
+      --replace-fail 'awscrt>=0.19.18,<=0.20.11' 'awscrt>=0.19.18' \
       --replace-fail 'cryptography>=3.3.2,<40.0.2' 'cryptography>=3.3.2' \
       --replace-fail 'distro>=1.5.0,<1.9.0' 'distro>=1.5.0' \
       --replace-fail 'docutils>=0.10,<0.20' 'docutils>=0.10' \
@@ -86,12 +86,15 @@ with py.pkgs; buildPythonApplication rec {
     sed -i '/pip>=/d' requirements/bootstrap.txt
   '';
 
-  build-system = [
+  nativeBuildInputs = [
     installShellFiles
+  ];
+
+  build-system = with py.pkgs; [
     flit-core
   ];
 
-  dependencies = [
+  dependencies = with py.pkgs; [
     awscrt
     bcdoc
     botocore
@@ -99,9 +102,7 @@ with py.pkgs; buildPythonApplication rec {
     cryptography
     distro
     docutils
-    groff
     jmespath
-    less
     prompt-toolkit
     python-dateutil
     pyyaml
@@ -109,7 +110,12 @@ with py.pkgs; buildPythonApplication rec {
     urllib3
   ];
 
-  nativeCheckInputs = [
+  propagatedBuildInputs = [
+    groff
+    less
+  ];
+
+  nativeCheckInputs = with py.pkgs; [
     jsonschema
     mock
     pytestCheckHook

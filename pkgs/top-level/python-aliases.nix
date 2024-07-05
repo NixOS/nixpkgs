@@ -132,6 +132,7 @@ mapAliases ({
   django_hijack_admin = django-hijack-admin; # added 2023-05-16
   django-hijack-admin = throw "django-hijack-admin has been removed, since it is no longer compatible to django-hijack"; # added 2023-06-21
   django_modelcluster = django-modelcluster; # added 2022-04-02
+  django-mysql = throw "django-mysql has been removed, since it was an unused leaf package"; # added 2024-07-02
   django_nose = django-nose; # added 2023-07-25
   django-nose = throw "django-nose has been removed since it has not been maintained and there are no dependent packages"; # added 2024-05-21
   django_reversion = django-reversion; # added 2022-06-18
@@ -160,6 +161,7 @@ mapAliases ({
   face_recognition_models = face-recognition-models; # added 2022-10-15
   factory_boy = factory-boy; # added 2023-10-08
   fake_factory = throw "fake_factory has been removed because it is unused and deprecated by upstream since 2016."; # added 2022-05-30
+  faster-fifo = throw "faster-fifo has been removed since it was an unused leaf package"; # added 2024-07-02
   fastnlo_toolkit = fastnlo-toolkit; # added 2024-01-03
   fastpair = throw "fastpair is unmaintained upstream and has therefore been removed"; # added 2024-05-01
   faulthandler = throw "faulthandler is built into ${python.executable}"; # added 2021-07-12
@@ -226,6 +228,7 @@ mapAliases ({
   hglib = python-hglib; # added 2023-10-13
   homeassistant-bring-api = bring-api; # added 2024-04-11
   homeassistant-pyozw = throw "homeassistant-pyozw has been removed, as it was packaged for home-assistant which has removed it as a dependency."; # added 2024-01-05
+  htmllaundry = throw "htmllaundry has been removed because it is abandoned"; # added 2024-06-04
   HTSeq = htseq; # added 2023-02-19
   hyperkitty = throw "Please use pkgs.mailmanPackages.hyperkitty"; # added 2022-04-29
   ihatemoney = throw "ihatemoney was removed because it is no longer maintained downstream"; # added 2023-04-08
@@ -365,6 +368,7 @@ mapAliases ({
   pychef = throw "pychef has been removed because it's been archived upstream and abandoned since 2017."; # added 2022-11-14
   PyChromecast = pychromecast; # added 2023-02-19
   pycryptodome-test-vectors = throw "pycryptodome-test-vectors has been removed because it is an internal package to pycryptodome"; # added 2022-05-28
+  pyfftw = throw "pyfftw has been removed because it is unmaintained and broken."; # Added 2024-06-17
   pyflunearyou = pyoutbreaksnearme; # added 2023-02-11
   pyialarmxr = pyialarmxr-homeassistant; # added 2022-06-07
   pyialarmxr-homeassistant = throw "The package was removed together with the component support in home-assistant 2022.7.0"; # added 2022-07-07
@@ -502,6 +506,7 @@ mapAliases ({
   sharkiqpy = sharkiq; # added 2022-05-21
   shouldbe = throw "shouldbe was removed, because it was disabled on all python version since 3.8 and last updated in 2019."; # added 2024-05-12
   sip_4 = sip4; # added 2024-01-07
+  slackclient = slack-sdk; # added 2024-06-27
   ssh-mitm = throw "ssh-mitm was removed in favor of the top-level ssh-mitm"; # added 2023-05-09
   smart_open = smart-open; # added 2021-03-14
   smmap2 = throw "smmap2 has been deprecated, use smmap instead."; # added 2020-03-14

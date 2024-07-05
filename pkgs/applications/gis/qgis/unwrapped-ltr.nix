@@ -77,14 +77,14 @@ let
     urllib3
   ];
 in mkDerivation rec {
-  version = "3.34.7";
+  version = "3.34.8";
   pname = "qgis-ltr-unwrapped";
 
   src = fetchFromGitHub {
     owner = "qgis";
     repo = "QGIS";
     rev = "final-${lib.replaceStrings [ "." ] [ "_" ] version}";
-    hash = "sha256-6fIBmIoCVo0AtkjC4Vn3jMjz93gZmvkFAgo+KnasyXo=";
+    hash = "sha256-UeyGx+C7szXv++hXFV006Xk4oSKfSj4teJIwaD4ODVk=";
   };
 
   passthru = {
@@ -147,9 +147,7 @@ in mkDerivation rec {
 
   # Add path to Qt platform plugins
   # (offscreen is needed by "${APIS_SRC_DIR}/generate_console_pap.py")
-  preBuild = ''
-    export QT_QPA_PLATFORM_PLUGIN_PATH=${qtbase.bin}/lib/qt-${qtbase.version}/plugins/platforms
-  '';
+  env.QT_QPA_PLATFORM_PLUGIN_PATH="${qtbase}/${qtbase.qtPluginPrefix}/platforms";
 
   cmakeFlags = [
     "-DCMAKE_BUILD_TYPE=Release"
@@ -164,7 +162,7 @@ in mkDerivation rec {
     );
 
   qtWrapperArgs = [
-    "--set QT_QPA_PLATFORM_PLUGIN_PATH ${qtbase.bin}/lib/qt-${qtbase.version}/plugins/platforms"
+    "--set QT_QPA_PLATFORM_PLUGIN_PATH ${qtbase}/${qtbase.qtPluginPrefix}/platforms"
   ];
 
   dontWrapGApps = true; # wrapper params passed below

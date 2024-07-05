@@ -15,7 +15,7 @@ rtl8189es.overrideAttrs (drv: rec {
   meta = with lib; {
     description = "Driver for Realtek rtl8189fs";
     homepage = "https://github.com/jwrdegoede/rtl8189ES_linux/tree/rtl8189fs";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     platforms = platforms.linux;
     maintainers = with maintainers; [ puffnfresh ];
   };

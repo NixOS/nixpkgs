@@ -6,11 +6,9 @@
   pythonOlder,
   duckdb,
   hypothesis,
-  ipython-sql,
   pandas,
   poetry-core,
   pytest-remotedata,
-  snapshottest,
   sqlalchemy,
   typing-extensions,
 }:
@@ -40,19 +38,12 @@ buildPythonPackage rec {
     export HOME="$(mktemp -d)"
   '';
 
-  disabledTests = [
-    # test should be skipped based on sqlalchemy version but isn't and fails
-    "test_commit"
-  ];
-
   nativeCheckInputs = [ pytestCheckHook ];
 
   checkInputs = [
     hypothesis
-    ipython-sql
     pandas
     pytest-remotedata
-    snapshottest
     typing-extensions
   ];
 

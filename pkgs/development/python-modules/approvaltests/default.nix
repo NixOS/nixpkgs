@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "approvaltests";
-  version = "12.2.0";
+  version = "12.2.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     owner = "approvals";
     repo = "ApprovalTests.Python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-ePItKdDnKX3283EiK8hOqwFDxi3ULByHEQj9XOKMsWM=";
+    hash = "sha256-Hd0cEAL5RGmAhob1oZwOVC+eXOxc9OTeUnrTTNCpL2E=";
   };
 
   build-system = [ setuptools ];

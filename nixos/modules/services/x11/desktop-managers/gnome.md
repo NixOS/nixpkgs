@@ -114,7 +114,7 @@ in `dconf-editor`
 ## Shell Extensions {#sec-gnome-shell-extensions}
 
 Most Shell extensions are packaged under the `gnomeExtensions` attribute.
-Some packages that include Shell extensions, like `gnome.gpaste`, don’t have their extension decoupled under this attribute.
+Some packages that include Shell extensions, like `gpaste`, don’t have their extension decoupled under this attribute.
 
 You can install them like any other package:
 

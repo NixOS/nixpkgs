@@ -47,7 +47,7 @@
 , libGLU
 , libGL
 , bsh
-, CoinMP
+, coinmp
 , libwps
 , libabw
 , libargon2
@@ -86,7 +86,7 @@
 , glm
 , gst_all_1
 , gdb
-, gnome
+, adwaita-icon-theme
 , glib
 , ncurses
 , libepoxy
@@ -97,7 +97,7 @@
 , libetonyek
 , liborcus
 , libpng
-, langs ? [ "ar" "ca" "cs" "da" "de" "en-GB" "en-US" "eo" "es" "fi" "fr" "hu" "it" "ja" "nl" "pl" "pt" "pt-BR" "ro" "ru" "sl" "tr" "uk" "zh-CN" ]
+, langs ? [ "ar" "ca" "cs" "da" "de" "en-GB" "en-US" "eo" "es" "fi" "fr" "hu" "it" "ja" "nl" "pl" "pt" "pt-BR" "ro" "ru" "sk" "sl" "tr" "uk" "zh-CN" ]
 , withHelp ? true
 , kdeIntegration ? false
 , qtbase ? null
@@ -288,7 +288,7 @@ in stdenv.mkDerivation (finalAttrs: {
     # See: https://www.mail-archive.com/libreoffice@lists.freedesktop.org/msg334080.html
     (libpng.override { apngSupport = false; })
     perlPackages.ArchiveZip
-    CoinMP
+    coinmp
     perlPackages.IOCompress
     abseil-cpp
     ant
@@ -311,7 +311,7 @@ in stdenv.mkDerivation (finalAttrs: {
     gettext
     glib
     glm
-    gnome.adwaita-icon-theme
+    adwaita-icon-theme
     gperf
     gpgme
     graphite2

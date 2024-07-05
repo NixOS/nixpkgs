@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "curl-cffi";
-  version = "0.7.0";
+  version = "0.7.0b4";
 
   src = fetchFromGitHub {
     owner = "yifeikong";

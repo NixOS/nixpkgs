@@ -1,8 +1,10 @@
 { stdenv
+, edid-decode
 , fetchFromGitHub
 , meson
 , pkg-config
 , ninja
+, cmake
 , xorg
 , libdrm
 , libei
@@ -18,15 +20,13 @@
 , SDL2
 , pipewire
 , pixman
+, python3
 , libinput
 , glslang
 , hwdata
-, openvr
 , stb
 , wlroots
-, libliftoff
 , libdecor
-, libdisplay-info
 , lib
 , makeBinaryWrapper
 , patchelfUnstable
@@ -44,20 +44,17 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gamescope";
-  version = "3.14.18";
+  version = "3.14.22";
 
   src = fetchFromGitHub {
     owner = "ValveSoftware";
     repo = "gamescope";
     rev = "refs/tags/${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-XcefR0wiDHQY7wMX+LQTEntffi2RdMW8m2HNQMz035A=";
+    hash = "sha256-/muitEE3LCU6Xnjbpczb/zy2JRvUbBPT5L13T/v3MvE=";
   };
 
   patches = [
-    # Unvendor dependencies
-    ./use-pkgconfig.patch
-
     # Make it look for shaders in the right place
     ./shaders-path.patch
   ];
@@ -66,6 +63,8 @@ stdenv.mkDerivation (finalAttrs: {
   # so `placeholder "out"` ends up pointing to the wrong place
   postPatch = ''
     substituteInPlace src/reshade_effect_manager.cpp --replace "@out@" "$out"
+    # Patching shebangs in the main `libdisplay-info` build
+    patchShebangs subprojects/libdisplay-info/tool/gen-search-table.py
   '';
 
   mesonFlags = [
@@ -86,6 +85,12 @@ stdenv.mkDerivation (finalAttrs: {
     meson
     pkg-config
     ninja
+    # For `libdisplay-info`
+    python3
+    hwdata
+    edid-decode
+    # For OpenVR
+    cmake
   ] ++ lib.optionals enableExecutable [
     makeBinaryWrapper
     glslang
@@ -98,7 +103,6 @@ stdenv.mkDerivation (finalAttrs: {
     wayland
     wayland-protocols
     vulkan-loader
-    openvr
     glm
   ] ++ lib.optionals enableWsi [
     vulkan-headers
@@ -116,7 +120,6 @@ stdenv.mkDerivation (finalAttrs: {
     libavif
     libdrm
     libei
-    libliftoff
     SDL2
     libdecor
     libinput
@@ -125,7 +128,6 @@ stdenv.mkDerivation (finalAttrs: {
     pixman
     libcap
     stb
-    libdisplay-info
   ]);
 
   postInstall = lib.optionalString enableExecutable ''

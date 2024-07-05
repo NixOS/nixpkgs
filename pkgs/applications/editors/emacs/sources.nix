@@ -93,6 +93,12 @@ in
         url = "https://gitweb.gentoo.org/proj/emacs-patches.git/plain/emacs/28.2/12_all_org-remote-unsafe.patch?id=af40e12cb742510e5d40a06ffc6dfca97e340dd6";
         hash = "sha256-b6WU1o3PfDV/6BTPfPNUFny6oERJCNsDrvflxX3Yvek=";
       })
+
+      # security fix from Emacs 29.4
+      (fetchpatch {
+        url = "https://git.savannah.gnu.org/cgit/emacs.git/patch/?id=c645e1d8205f0f0663ec4a2d27575b238c646c7c";
+        hash = "sha256-G+gGQx5w3KuWMotR1n/sYYL8WyAABYW3fUPeffMMs38=";
+      })
     ];
   });
 

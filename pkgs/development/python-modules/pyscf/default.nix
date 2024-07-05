@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "pyscf";
-  version = "2.6.0";
+  version = "2.6.2";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "pyscf";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-y1RQKxFfhOC6+vUMJiXexaZeYZhav5t30XP7jooJ//0=";
+    hash = "sha256-gudkKhC5Cpd6ZM9mJ1SfemqmwDqhDmpAfYE8XGFpzmA=";
   };
 
   # setup.py calls Cmake and passes the arguments in CMAKE_CONFIGURE_ARGS to cmake.

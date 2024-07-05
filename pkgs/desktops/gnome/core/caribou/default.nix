@@ -64,7 +64,7 @@ in stdenv.mkDerivation rec {
     mainProgram = "caribou-preferences";
     homepage = "https://gitlab.gnome.org/Archive/caribou";
     license = licenses.lgpl21;
-    maintainers = teams.gnome.members;
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 }

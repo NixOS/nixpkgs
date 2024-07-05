@@ -39,12 +39,13 @@ in
         DB_DATABASE = "firefly";
         DB_USERNAME = "firefly";
         DB_PASSWORD_FILE = "/etc/postgres-pass";
+        PGSQL_SCHEMA = "firefly";
       };
     };
 
     services.postgresql = {
       enable = true;
-      package = pkgs.postgresql_15;
+      package = pkgs.postgresql_16;
       authentication = ''
         local all postgres peer
         local firefly firefly password
@@ -52,6 +53,7 @@ in
       initialScript = pkgs.writeText "firefly-init.sql" ''
         CREATE USER "firefly" WITH LOGIN PASSWORD '${db-pass}';
         CREATE DATABASE "firefly" WITH OWNER "firefly";
+        \c firefly
         CREATE SCHEMA AUTHORIZATION firefly;
       '';
     };

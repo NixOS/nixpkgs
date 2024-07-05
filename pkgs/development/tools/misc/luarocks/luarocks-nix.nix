@@ -1,11 +1,11 @@
-{ luarocks
+{ luarocks_bootstrap
 , fetchFromGitHub
 , unstableGitUpdater
 , nurl
 , file
 }:
 
-luarocks.overrideAttrs (old: {
+luarocks_bootstrap.overrideAttrs (old: {
   pname = "luarocks-nix";
   version = "0-unstable-2024-04-29";
 

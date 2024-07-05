@@ -25,7 +25,7 @@
 
 buildPythonPackage rec {
   pname = "beanhub-cli";
-  version = "1.1.3";
+  version = "1.2.2";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -34,7 +34,7 @@ buildPythonPackage rec {
     owner = "LaunchPlatform";
     repo = "beanhub-cli";
     rev = "refs/tags/${version}";
-    hash = "sha256-vYBbaUVJAs+aIp6aQpJb62DEDxe/sQTzgOkjPq6ADoc=";
+    hash = "sha256-ZN384KN6+pkDDsCk825sr+LsArQ5Vaf09ASLN8IemhM=";
   };
 
   build-system = [ poetry-core ];

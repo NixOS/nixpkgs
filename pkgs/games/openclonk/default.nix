@@ -55,7 +55,7 @@ in stdenv.mkDerivation rec {
     homepage = "https://www.openclonk.org";
     license = if enableSoundtrack then licenses.unfreeRedistributable else licenses.isc;
     mainProgram = "openclonk";
-    maintainers = with maintainers; [ lheckemann ];
+    maintainers = with maintainers; [ ];
     platforms = [ "x86_64-linux" "i686-linux" ];
   };
 }

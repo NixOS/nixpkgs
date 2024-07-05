@@ -45,7 +45,6 @@ buildPythonPackage rec {
     homepage = "https://gitlab.com/kraxel/virt-firmware";
     license = licenses.gpl2;
     maintainers = with maintainers; [
-      lheckemann
       raitobezarius
     ];
   };

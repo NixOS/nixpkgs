@@ -12,7 +12,7 @@
 , freetype
 , gdk-pixbuf
 , glib
-, gnome
+, adwaita-icon-theme
 , gsettings-desktop-schemas
 , gtk3
 , gtk4
@@ -120,7 +120,7 @@ stdenv.mkDerivation {
     glib gsettings-desktop-schemas gtk3 gtk4
 
     # needed for XDG_ICON_DIRS
-    gnome.adwaita-icon-theme
+    adwaita-icon-theme
   ];
 
   unpackPhase = "dpkg-deb --fsys-tarfile $src | tar -x --no-same-permissions --no-same-owner";

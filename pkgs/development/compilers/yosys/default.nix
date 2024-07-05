@@ -1,6 +1,5 @@
 { stdenv
 , lib
-, abc-verifier
 , bash
 , bison
 , boost
@@ -77,13 +76,27 @@ let
 
 in stdenv.mkDerivation (finalAttrs: {
   pname   = "yosys";
-  version = "0.38";
+  version = "0.42";
 
   src = fetchFromGitHub {
     owner = "YosysHQ";
     repo  = "yosys";
     rev   = "refs/tags/${finalAttrs.pname}-${finalAttrs.version}";
-    hash  = "sha256-mzMBhnIEgToez6mGFOvO7zBA+rNivZ9OnLQsjBBDamA=";
+    hash  = "sha256-P0peg81wxCG0Bw2EJEX5WuDYU7GmRqgRw2SyWK/CGNI=";
+    fetchSubmodules = true;
+    leaveDotGit = true;
+    postFetch = ''
+      # set up git hashes as if we used the tarball
+
+      pushd $out
+      git rev-parse HEAD > .gitcommit
+      cd $out/abc
+      git rev-parse HEAD > .gitcommit
+      popd
+
+      # remove .git now that we are through with it
+      find "$out" -name .git -print0 | xargs -0 rm -rf
+    '';
   };
 
   enableParallelBuilding = true;
@@ -109,25 +122,13 @@ in stdenv.mkDerivation (finalAttrs: {
     substituteInPlace ./Makefile \
       --replace-fail 'echo UNKNOWN' 'echo ${builtins.substring 0 10 finalAttrs.src.rev}'
 
-    # https://github.com/YosysHQ/yosys/pull/4199
-    substituteInPlace ./tests/various/clk2fflogic_effects.sh \
-      --replace-fail 'tail +3' 'tail -n +3'
-
     chmod +x ./misc/yosys-config.in
     patchShebangs tests ./misc/yosys-config.in
   '';
 
-  preBuild = let
-    shortAbcRev = builtins.substring 0 7 abc-verifier.rev;
-  in ''
+  preBuild = ''
     chmod -R u+w .
     make config-${if stdenv.cc.isClang or false then "clang" else "gcc"}
-    echo 'ABCEXTERNAL = ${abc-verifier}/bin/abc' >> Makefile.conf
-
-    if ! grep -q "ABCREV = ${shortAbcRev}" Makefile; then
-      echo "ERROR: yosys isn't compatible with the provided abc (${shortAbcRev}), failing."
-      exit 1
-    fi
 
     if ! grep -q "YOSYS_VER := $version" Makefile; then
       echo "ERROR: yosys version in Makefile isn't equivalent to version of the nix package (allegedly ${finalAttrs.version}), failing."
@@ -150,16 +151,6 @@ in stdenv.mkDerivation (finalAttrs: {
   doCheck = true;
   nativeCheckInputs = [ verilog ];
 
-  # Internally, yosys knows to use the specified hardcoded ABCEXTERNAL binary.
-  # But other tools (like mcy or symbiyosys) can't know how yosys was built, so
-  # they just assume that 'yosys-abc' is available -- but it's not installed
-  # when using ABCEXTERNAL
-  #
-  # add a symlink to fake things so that both variants work the same way. this
-  # is also needed at build time for the test suite.
-  postBuild   = "ln -sfv ${abc-verifier}/bin/abc ./yosys-abc";
-  postInstall = "ln -sfv ${abc-verifier}/bin/abc $out/bin/yosys-abc";
-
   setupHook = ./setup-hook.sh;
 
   passthru = {
@@ -171,6 +162,6 @@ in stdenv.mkDerivation (finalAttrs: {
     homepage    = "https://yosyshq.net/yosys/";
     license     = licenses.isc;
     platforms   = platforms.all;
-    maintainers = with maintainers; [ shell thoughtpolice emily Luflosi ];
+    maintainers = with maintainers; [ shell thoughtpolice Luflosi ];
   };
 })

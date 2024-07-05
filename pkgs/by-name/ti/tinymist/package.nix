@@ -7,19 +7,22 @@
 , zlib
 , stdenv
 , darwin
+, nix-update-script
+, testers
+, tinymist
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "tinymist";
   # Please update the corresponding vscode extension when updating
   # this derivation.
-  version = "0.11.10";
+  version = "0.11.13";
 
   src = fetchFromGitHub {
     owner = "Myriad-Dreamin";
     repo = "tinymist";
     rev = "refs/tags/v${version}";
-    hash = "sha256-lmT0da517dVaXGeObyCXZyte8DNBh+/vaqV7hA+SJR4=";
+    hash = "sha256-aAeDeW1EiF8NqsIAQ39RaTHq6wC39QeMptvwTJ3/ZWc=";
   };
 
   cargoLock = {
@@ -49,6 +52,14 @@ rustPlatform.buildRustPackage rec {
   checkFlags = [
     "--skip=e2e"
   ];
+
+  passthru = {
+    updateScript = nix-update-script { };
+    tests.version = testers.testVersion {
+      command = "${meta.mainProgram} -V";
+      package = tinymist;
+    };
+  };
 
   meta = {
     changelog = "https://github.com/Myriad-Dreamin/tinymist/blob/${src.rev}/CHANGELOG.md";

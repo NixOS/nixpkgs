@@ -1,11 +1,11 @@
 { stdenv, substituteAll, lib, buildGoModule, fetchFromGitHub
-, AVFoundation, AudioToolbox, ImageIO, CoreMedia
+, AppKit, AVFoundation, AudioToolbox, ImageIO, CoreMedia
 , Foundation, CoreGraphics, MediaToolbox, gnupg
 }:
 
 buildGoModule rec {
   pname = "keybase";
-  version = "6.2.8";
+  version = "6.3.1";
 
   modRoot = "go";
   subPackages = [ "kbnm" "keybase" ];
@@ -16,9 +16,9 @@ buildGoModule rec {
     owner = "keybase";
     repo = "client";
     rev = "v${version}";
-    hash = "sha256-k/AMJNXS/gabJMjXdrQltxxc1Bez4VIR/l8RXXpiPWw=";
+    hash = "sha256-kmKqVtHS0DaVa0of+QEUc2aEhWP1dNmzb/L01zaIoe8=";
   };
-  vendorHash = "sha256-DNTJtgZ2jDuEu4XqxbPTHLh+NR0vU2hcNNcD4amIDk4=";
+  vendorHash = "sha256-KHahkGzkXr6xp0XY9MyEeeiHnmphaNYi9dPBQ476+us=";
 
   patches = [
     (substituteAll {
@@ -28,7 +28,7 @@ buildGoModule rec {
     })
   ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [ AVFoundation AudioToolbox ImageIO CoreMedia Foundation CoreGraphics MediaToolbox ];
+  buildInputs = lib.optionals stdenv.isDarwin [ AppKit AVFoundation AudioToolbox ImageIO CoreMedia Foundation CoreGraphics MediaToolbox ];
   tags = [ "production" ];
   ldflags = [ "-s" "-w" ];
 

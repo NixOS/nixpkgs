@@ -210,7 +210,7 @@ stdenv.mkDerivation (rec {
   '') +
     # This test fails with a `dysmutil` crash; have not yet dug into what's
     # going on here (TODO(@rrbutani)).
-  ''
+    lib.optionalString (lib.versionOlder release_version "19") ''
     rm test/tools/dsymutil/ARM/obfuscated.test
   '')) +
     # FileSystem permissions tests fail with various special bits

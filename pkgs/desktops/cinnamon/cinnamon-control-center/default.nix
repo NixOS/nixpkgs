@@ -35,13 +35,13 @@
 
 stdenv.mkDerivation rec {
   pname = "cinnamon-control-center";
-  version = "6.0.1";
+  version = "6.2.0";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    hash = "sha256-AYnI+k6CzpWUutusCSDR5KhOmv5FWoChotAbCJXTh4I=";
+    hash = "sha256-Blod69RzPTE3DztRo0PK0MKCE+vq0HWrcJcC/1e8eRI=";
   };
 
   buildInputs = [
@@ -83,8 +83,6 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     # use locales from cinnamon-translations
     "--localedir=${cinnamon-translations}/share/locale"
-    # https://github.com/linuxmint/cinnamon-control-center/issues/326
-    "-Donlineaccounts=false"
   ];
 
   nativeBuildInputs = [

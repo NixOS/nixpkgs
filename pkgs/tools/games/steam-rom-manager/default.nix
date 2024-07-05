@@ -2,11 +2,11 @@
 
 appimageTools.wrapType2 rec {
   name = "steam-rom-manager";
-  version = "2.5.9";
+  version = "2.5.16";
 
   src = fetchurl {
     url = "https://github.com/SteamGridDB/steam-rom-manager/releases/download/v${version}/Steam-ROM-Manager-${version}.AppImage";
-    sha256 = "sha256-jBRDlCOPamTwjE4x6J6MoN1EQBmILJ+yPMez/0f6F9c=";
+    sha256 = "sha256-u9nLeb9wRreUi2oVlNVj9F1nKj3KxrkqfTJBohOOk18=";
   };
 
   extraInstallCommands = let

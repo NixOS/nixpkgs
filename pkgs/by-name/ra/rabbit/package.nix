@@ -5,14 +5,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "rabbit";
-  version = "1.0.2";
+  version = "1.0.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "natarajan-chidambaram";
     repo = "RABBIT";
     rev = "refs/tags/${version}";
-    hash = "sha256-5ItoWjPpAbQFM6+B+1CvZe5r5rZXQ8pWj7gRIKGX8ZA=";
+    hash = "sha256-ykvI5qW4toNYKAnrk3ADwat1gAUazbDGGKZEZAvKngQ=";
   };
 
   pythonRelaxDeps = true;
@@ -27,10 +27,12 @@ python3.pkgs.buildPythonApplication rec {
     numpy
     pandas
     pip
+    python-dateutil
     requests
     scikit-learn
     scipy
     tqdm
+    urllib3
     xgboost
   ];
 

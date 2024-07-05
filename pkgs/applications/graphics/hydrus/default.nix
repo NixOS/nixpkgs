@@ -14,14 +14,14 @@
 
 python3Packages.buildPythonPackage rec {
   pname = "hydrus";
-  version = "578";
+  version = "580";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "hydrusnetwork";
     repo = "hydrus";
     rev = "refs/tags/v${version}";
-    hash = "sha256-u2SXhL57iNVjRFqerzc/TByB9ArAJx81mxOjTBVBMkg=";
+    hash = "sha256-QdRItwbgVYgA6PU9Ybimk+/sBe1CHV79ssTrIturVpg=";
   };
 
   nativeBuildInputs = [
@@ -60,6 +60,7 @@ python3Packages.buildPythonPackage rec {
     lz4
     numpy
     opencv4
+    olefile
     pillow
     pillow-heif
     psutil
@@ -74,6 +75,7 @@ python3Packages.buildPythonPackage rec {
     pyyaml
     qtpy
     requests
+    show-in-file-manager
     send2trash
     service-identity
     twisted

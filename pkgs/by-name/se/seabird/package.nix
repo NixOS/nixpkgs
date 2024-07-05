@@ -27,13 +27,13 @@ buildGo122Module rec {
 
   nativeBuildInputs = [
     copyDesktopItems
+    gobject-introspection
     libxml2
     pkg-config
     wrapGAppsHook4
   ];
 
   buildInputs = [
-    gobject-introspection
     gtk4
     gtksourceview5
     libadwaita
@@ -41,6 +41,8 @@ buildGo122Module rec {
   ];
 
   ldflags = [ "-s" "-w" ];
+
+  enableParallelBuilding = true;
 
   postPatch = ''
     substituteInPlace main.go --replace-fail 'version = "dev"' 'version = "${version}"'

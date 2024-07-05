@@ -13,16 +13,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "ntpd-rs";
-  version = "1.1.2";
+  version = "1.1.3";
 
   src = fetchFromGitHub {
     owner = "pendulum-project";
     repo = "ntpd-rs";
     rev = "v${version}";
-    hash = "sha256-0ykJruuyD1Z/QcmrogodNlMZp05ocXIo3wdygB/AnT0=";
+    hash = "sha256-7b0IZLTt9ROEhp9bOBOvNQmS+iuQjgSrdwL1Nxy46t4=";
   };
 
-  cargoHash = "sha256-Badq3GYr7BoF8VNGGtKTT4/ksuds1zBcSxx5O3vLbzg=";
+  cargoHash = "sha256-FgRVWo27gdIzUNNTqgu7oHwrKSaWDA+sgL8kGak0otA=";
 
   buildInputs = lib.optionals stdenv.isDarwin [ Security ];
   nativeBuildInputs = [
@@ -38,6 +38,10 @@ rustPlatform.buildRustPackage rec {
   postBuild = ''
     source utils/generate-man.sh
   '';
+
+  # tests don't compile for 1.1.3
+  # https://github.com/pendulum-project/ntpd-rs/actions/runs/9712796372/job/26808251482
+  doCheck = false;
 
   checkFlags = [
     # doesn't find the testca

@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "xdg-desktop-portal-xapp";
-  version = "1.0.6";
+  version = "1.0.7";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "xdg-desktop-portal-xapp";
     rev = version;
-    hash = "sha256-ujfXZfBXr3T4e8+bIfkvdvBnEQfW7oPByaiXg/SBwJY=";
+    hash = "sha256-1Q00aEWl/mk37NcBJPgg443V1IXmNaJcSlilzvAJ1QQ=";
   };
 
   nativeBuildInputs = [

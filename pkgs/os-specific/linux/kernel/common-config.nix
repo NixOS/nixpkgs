@@ -327,6 +327,10 @@ let
       INET_RAW_DIAG     = mkDefault module;
       INET_DIAG_DESTROY = mkDefault yes;
 
+      # IPsec over TCP
+      INET_ESPINTCP  = whenAtLeast "5.8" yes;
+      INET6_ESPINTCP = whenAtLeast "5.8" yes;
+
       # enable multipath-tcp
       MPTCP           = whenAtLeast "5.6" yes;
       MPTCP_IPV6      = whenAtLeast "5.6" yes;
@@ -435,7 +439,7 @@ let
       DRM_GMA500             = whenAtLeast "5.12" module;
       DRM_GMA600             = whenOlder "5.13" yes;
       DRM_GMA3600            = whenOlder "5.12" yes;
-      DRM_VMWGFX_FBCON       = whenOlder "6.2" yes;
+      DRM_VMWGFX_FBCON       = whenOlder "6.1" yes;
       # (experimental) amdgpu support for verde and newer chipsets
       DRM_AMDGPU_SI = yes;
       # (stable) amdgpu support for bonaire and newer chipsets
@@ -617,8 +621,8 @@ let
       F2FS_FS_COMPRESSION = whenAtLeast "5.6" yes;
       UDF_FS              = module;
 
-      NFSD_V2_ACL            = whenOlder "5.15" yes;
-      NFSD_V3                = whenOlder "5.15" yes;
+      NFSD_V2_ACL            = whenOlder "5.10" yes;
+      NFSD_V3                = whenOlder "5.10" yes;
       NFSD_V3_ACL            = yes;
       NFSD_V4                = yes;
       NFSD_V4_SECURITY_LABEL = yes;

@@ -55,6 +55,7 @@ let
         PIDFile = "/run/${appName}.pid";
         Type = "notify";
         NotifyAccess = "all"; #may not do anything...
+        Slice = "system-samba.slice";
       };
       unitConfig.RequiresMountsFor = "/var/lib/samba";
 
@@ -201,14 +202,10 @@ in
               message   = "If samba.nsswins is enabled, then samba.enableWinbindd must also be enabled";
             }
           ];
-        # Always provide a smb.conf to shut up programs like smbclient and smbspool.
-        environment.etc."samba/smb.conf".source = mkOptionDefault (
-          if cfg.enable then configFile
-          else pkgs.writeText "smb-dummy.conf" "# Samba is disabled."
-        );
       }
 
       (mkIf cfg.enable {
+        environment.etc."samba/smb.conf".source = configFile;
 
         system.nssModules = optional cfg.nsswins samba;
         system.nssDatabases.hosts = optional cfg.nsswins "wins";
@@ -220,6 +217,11 @@ in
             wants = [ "network-online.target" ];
             wantedBy = [ "multi-user.target" ];
           };
+
+          slices.system-samba = {
+            description = "Samba slice";
+          };
+
           # Refer to https://github.com/samba-team/samba/tree/master/packaging/systemd
           # for correct use with systemd
           services = {

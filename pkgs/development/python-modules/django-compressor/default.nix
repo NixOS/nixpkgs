@@ -26,13 +26,13 @@
 
 buildPythonPackage rec {
   pname = "django-compressor";
-  version = "4.4";
+  version = "4.5";
   pyproject = true;
 
   src = fetchPypi {
     pname = "django_compressor";
     inherit version;
-    hash = "sha256-GwrMnPup9pvDjnxB2psNcKILyVWHtkP/75YJz0YGT2c=";
+    hash = "sha256-nZjJBbdBvmywmtgowdIqn/kkTdCII+KSavjd0YccPGU=";
   };
 
   build-system = [

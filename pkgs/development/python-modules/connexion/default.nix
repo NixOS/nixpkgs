@@ -95,6 +95,5 @@ buildPythonPackage rec {
     homepage = "https://github.com/spec-first/connexion";
     changelog = "https://github.com/spec-first/connexion/releases/tag/${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ elohmeier ];
   };
 }

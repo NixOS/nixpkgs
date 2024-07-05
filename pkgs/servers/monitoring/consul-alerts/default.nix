@@ -1,20 +1,23 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "consul-alerts";
   version = "0.6.0";
-  rev = "v${version}";
-
-  goPackagePath = "github.com/AcalephStorage/consul-alerts";
-
-  goDeps = ./deps.nix;
 
   src = fetchFromGitHub {
-    inherit rev;
+    rev = "v${version}";
     owner = "AcalephStorage";
     repo = "consul-alerts";
     sha256 = "0836zicv76sd6ljhbbii1mrzh65pch10w3gfa128iynaviksbgn5";
   };
+
+  postPatch = ''
+    go mod init github.com/AcalephStorage/consul-alerts
+  '';
+
+  vendorHash = null;
+
+  doCheck = false;
 
   meta = with lib; {
     mainProgram = "consul-alerts";

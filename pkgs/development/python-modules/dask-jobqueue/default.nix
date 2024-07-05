@@ -1,5 +1,4 @@
 {
-  stdenv,
   lib,
   buildPythonPackage,
   cryptography,
@@ -79,7 +78,6 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "dask_jobqueue" ];
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
     description = "Deploy Dask on job schedulers like PBS, SLURM, and SGE";
     homepage = "https://github.com/dask/dask-jobqueue";
     license = licenses.bsd3;

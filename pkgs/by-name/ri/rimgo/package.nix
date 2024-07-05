@@ -6,17 +6,17 @@
 }:
 buildGoModule rec {
   pname = "rimgo";
-  version = "1.2.3";
+  version = "1.2.6";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "rimgo";
     repo = "rimgo";
     rev = "v${version}";
-    hash = "sha256-nokXM+lnTiaWKwglmFYLBpnGHJn1yFok76tqb0nulVA=";
+    hash = "sha256-PBzbCiRIDrtKH3j6jxmylPpwafR5qgRYDHgYP1m/+Ok=";
   };
 
-  vendorHash = "sha256-wDTSqfp1Bb1Jb9XX3A3/p5VUcjr5utpe6l/3pXfZpsg=";
+  vendorHash = "sha256-nk1Pl9K62RjmBUgTlbp3u6cCoiEwpUHavfT3Oy0iyGU=";
 
   nativeBuildInputs = [ tailwindcss ];
 

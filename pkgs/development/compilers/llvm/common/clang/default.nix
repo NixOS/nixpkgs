@@ -93,6 +93,8 @@ let
 
       mkdir -p $lib/lib/clang
       mv $lib/lib/17 $lib/lib/clang/17
+    '') + (lib.optionalString (lib.versionAtLeast release_version "19") ''
+      mv $out/lib/clang $lib/lib/clang
     '') + ''
 
       # Move libclang to 'lib' output
@@ -196,7 +198,7 @@ let
       '';
     })
   // (lib.optionalAttrs (lib.versionAtLeast release_version "15") {
-    env = lib.optionalAttrs (stdenv.buildPlatform != stdenv.hostPlatform) {
+    env = lib.optionalAttrs (stdenv.buildPlatform != stdenv.hostPlatform && !stdenv.hostPlatform.useLLVM) {
       # The following warning is triggered with (at least) gcc >=
       # 12, but appears to occur only for cross compiles.
       NIX_CFLAGS_COMPILE = "-Wno-maybe-uninitialized";

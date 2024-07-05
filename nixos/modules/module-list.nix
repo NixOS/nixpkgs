@@ -59,7 +59,6 @@
   ./hardware/cpu/intel-microcode.nix
   ./hardware/cpu/intel-sgx.nix
   ./hardware/cpu/x86-msr.nix
-  ./hardware/decklink.nix
   ./hardware/device-tree.nix
   ./hardware/digitalbitbox.nix
   ./hardware/flipperzero.nix
@@ -67,6 +66,7 @@
   ./hardware/gkraken.nix
   ./hardware/glasgow.nix
   ./hardware/gpgsmartcards.nix
+  ./hardware/graphics.nix
   ./hardware/hackrf.nix
   ./hardware/i2c.nix
   ./hardware/infiniband.nix
@@ -84,7 +84,6 @@
   ./hardware/new-lg4ff.nix
   ./hardware/nitrokey.nix
   ./hardware/onlykey/default.nix
-  ./hardware/opengl.nix
   ./hardware/openrazer.nix
   ./hardware/opentabletdriver.nix
   ./hardware/pcmcia.nix
@@ -103,7 +102,6 @@
   ./hardware/uni-sync.nix
   ./hardware/usb-modeswitch.nix
   ./hardware/usb-storage.nix
-  ./hardware/video/amdgpu-pro.nix
   ./hardware/video/bumblebee.nix
   ./hardware/video/capture/mwprocapture.nix
   ./hardware/video/displaylink.nix
@@ -111,6 +109,7 @@
   ./hardware/video/nvidia.nix
   ./hardware/video/switcheroo-control.nix
   ./hardware/video/uvcvideo/default.nix
+  ./hardware/video/virtualbox.nix
   ./hardware/video/webcam/facetimehd.nix
   ./hardware/video/webcam/ipu6.nix
   ./hardware/wooting.nix
@@ -181,6 +180,7 @@
   ./programs/dublin-traceroute.nix
   ./programs/ecryptfs.nix
   ./programs/environment.nix
+  ./programs/envision.nix
   ./programs/evince.nix
   ./programs/extra-container.nix
   ./programs/fcast-receiver.nix
@@ -243,6 +243,7 @@
   ./programs/nh.nix
   ./programs/nix-index.nix
   ./programs/nix-ld.nix
+  ./programs/nix-required-mounts.nix
   ./programs/nm-applet.nix
   ./programs/nncp.nix
   ./programs/noisetorch.nix
@@ -477,6 +478,7 @@
   ./services/desktops/bamf.nix
   ./services/desktops/blueman.nix
   ./services/desktops/cpupower-gui.nix
+  ./services/desktops/deepin/deepin-anything.nix
   ./services/desktops/deepin/dde-api.nix
   ./services/desktops/deepin/app-services.nix
   ./services/desktops/deepin/dde-daemon.nix
@@ -485,6 +487,7 @@
   ./services/desktops/espanso.nix
   ./services/desktops/flatpak.nix
   ./services/desktops/geoclue2.nix
+  ./services/desktops/playerctld.nix
   ./services/desktops/gnome/at-spi2-core.nix
   ./services/desktops/gnome/evolution-data-server.nix
   ./services/desktops/gnome/glib-networking.nix
@@ -549,6 +552,7 @@
   ./services/games/xonotic.nix
   ./services/hardware/acpid.nix
   ./services/hardware/actkbd.nix
+  ./services/hardware/amdgpu.nix
   ./services/hardware/amdvlk.nix
   ./services/hardware/argonone.nix
   ./services/hardware/asusd.nix
@@ -879,6 +883,7 @@
   ./services/monitoring/osquery.nix
   ./services/monitoring/parsedmarc.nix
   ./services/monitoring/prometheus/alertmanager-irc-relay.nix
+  ./services/monitoring/prometheus/alertmanager-webhook-logger.nix
   ./services/monitoring/prometheus/alertmanager.nix
   ./services/monitoring/prometheus/default.nix
   ./services/monitoring/prometheus/exporters.nix
@@ -1222,6 +1227,7 @@
   ./services/networking/vsftpd.nix
   ./services/networking/wasabibackend.nix
   ./services/networking/websockify.nix
+  ./services/networking/wg-access-server.nix
   ./services/networking/wg-netmanager.nix
   ./services/networking/webhook.nix
   ./services/networking/wg-quick.nix
@@ -1316,6 +1322,7 @@
   ./services/system/zram-generator.nix
   ./services/torrent/deluge.nix
   ./services/torrent/flexget.nix
+  ./services/torrent/flood.nix
   ./services/torrent/magnetico.nix
   ./services/torrent/opentracker.nix
   ./services/torrent/peerflix.nix

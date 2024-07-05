@@ -230,7 +230,7 @@ in {
 
         # morph-browser has a separate VM test, there isn't anything new we could test here
 
-        # Keep it running, we're using it to check content-hub communication from LSS
+        machine.send_key("alt-f4")
 
     # LSS provides DE settings
     with subtest("system settings open"):
@@ -282,9 +282,7 @@ in {
         # Testing any more would require more applications & setup, the fact that it's already being attempted is a good sign
         machine.send_key("esc")
 
-        machine.send_key("alt-f4") # LSS
-        machine.sleep(2) # focus is slow to switch to second window, closing it *really* helps with OCR afterwards
-        machine.send_key("alt-f4") # Morph
+        machine.send_key("alt-f4")
 
     # The ayatana indicators are an important part of the experience, and they hold the only graphical way of exiting the session.
     # There's a test app we could use that also displays their contents, but it's abit inconsistent.

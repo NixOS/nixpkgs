@@ -13,6 +13,7 @@
 , gtk3
 , gtksourceview4
 , gnome
+, adwaita-icon-theme
 , gsettings-desktop-schemas
 }:
 
@@ -44,7 +45,7 @@ python3.pkgs.buildPythonApplication rec {
     gtk3
     gtksourceview4
     gsettings-desktop-schemas
-    gnome.adwaita-icon-theme
+    adwaita-icon-theme
   ];
 
   pythonPath = with python3.pkgs; [

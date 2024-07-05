@@ -1,6 +1,7 @@
 {
   autoPatchelfHook,
   copyDesktopItems,
+  fetchurl,
   fetchzip,
   lib,
   libGL,
@@ -79,6 +80,10 @@ stdenv.mkDerivation (finalAttrs: {
       comment = description;
       desktopName = name;
       genericName = name;
+      icon = fetchurl {
+        url = "https://www.geeks3d.com/furmark/i/20240220-furmark-logo-02.png";
+        hash = "sha256-EqhWQgTEmF/2AcqDxgGtr2m5SMYup28hPEhI6ssFw7g=";
+      };
       categories = [
         "System"
         "Monitor"

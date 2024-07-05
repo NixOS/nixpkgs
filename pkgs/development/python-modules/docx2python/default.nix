@@ -34,7 +34,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/ShayHill/docx2python";
     description = "Extract docx headers, footers, (formatted) text, footnotes, endnotes, properties, and images";
     changelog = "https://github.com/ShayHill/docx2python/blob/${src.rev}/CHANGELOG.md";
-    maintainers = [ maintainers.ivar ];
+    maintainers = [ ];
     license = licenses.mit;
   };
 }

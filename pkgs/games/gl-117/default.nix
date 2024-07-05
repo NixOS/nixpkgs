@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     mainProgram = "gl-117";
     homepage = "https://sourceforge.net/projects/gl-117";
     maintainers = with maintainers; [ raskin ];
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.linux;
   };
 }

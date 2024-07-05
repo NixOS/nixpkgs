@@ -762,6 +762,8 @@ Before and after running `make`, the hooks `preBuild` and `postBuild` are called
 
 The check phase checks whether the package was built correctly by running its test suite. The default `checkPhase` calls `make $checkTarget`, but only if the [`doCheck` variable](#var-stdenv-doCheck) is enabled.
 
+It is highly recommended, for packages' sources that are not distributed with any tests, to at least use [`versionCheckHook`](#versioncheckhook) to test that the resulting executable is basically functional.
+
 #### Variables controlling the check phase {#variables-controlling-the-check-phase}
 
 ##### `doCheck` {#var-stdenv-doCheck}

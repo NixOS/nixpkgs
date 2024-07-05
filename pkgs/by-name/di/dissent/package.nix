@@ -1,16 +1,10 @@
 { buildGoModule
-, cairo
 , fetchFromGitHub
-, gdk-pixbuf
-, glib
 , gobject-introspection
-, graphene
 , gst_all_1
-, gtk4
 , lib
 , libadwaita
 , libcanberra-gtk3
-, pango
 , pkg-config
 , sound-theme-freedesktop
 , wrapGAppsHook4
@@ -18,13 +12,13 @@
 
 buildGoModule rec {
   pname = "dissent";
-  version = "0.0.24";
+  version = "0.0.25";
 
   src = fetchFromGitHub {
     owner = "diamondburned";
     repo = "dissent";
     rev = "v${version}";
-    hash = "sha256-XoppHkKQhWZbqVIViGIV0e0W/NhZW0v6ufmXlVtmzvI=";
+    hash = "sha256-ysI7zgducK52XbSzsaCnffSC9BRd/aaybMif/GkkhcI=";
   };
 
   nativeBuildInputs = [
@@ -34,34 +28,31 @@ buildGoModule rec {
   ];
 
   buildInputs = [
-    cairo
-    gdk-pixbuf
-    glib
-    graphene
-    gtk4
-    pango
     # Optional according to upstream but required for sound and video
     gst_all_1.gst-plugins-bad
     gst_all_1.gst-plugins-base
     gst_all_1.gst-plugins-good
     gst_all_1.gst-plugins-ugly
     gst_all_1.gstreamer
+    libadwaita
     libcanberra-gtk3
     sound-theme-freedesktop
-    libadwaita
   ];
 
   postInstall = ''
     install -D -m 444 -t $out/share/applications nix/so.libdb.dissent.desktop
-    install -D -m 444 internal/icons/hicolor/scalable/apps/so.libdb.dissent.svg $out/share/icons/hicolor/scalable/apps/so.libdb.dissent.svg
+    install -D -m 444 -t $out/share/icons/hicolor/scalable/apps internal/icons/hicolor/scalable/apps/so.libdb.dissent.svg
+    install -D -m 444 -t $out/share/icons/hicolor/symbolic/apps internal/icons/symbolic/apps/so.libdb.dissent-symbolic.svg
+    install -D -m 444 -t $out/share/metainfo so.libdb.dissent.metainfo.xml
+    install -D -m 444 -t $out/share/dbus-1/services nix/so.libdb.dissent.service
   '';
 
-  vendorHash = "sha256-8/k9auM7+rceV26f3pNjEK1trzzAM530CX008pLZ1OA=";
+  vendorHash = "sha256-qBgj3h+WKWxVahRXyO/w2zGY4UCVkjP7XKFk/9GOFqs=";
 
   meta = with lib; {
-    description = "GTK4 Discord client in Go, attempt #4 (formerly gtkcord4)";
+    description = "A third-party Discord client designed for a smooth, native experience (formerly gtkcord4)";
     homepage = "https://github.com/diamondburned/dissent";
-    license = licenses.gpl3Only;
+    license = with licenses; [ gpl3Plus cc0 ];
     mainProgram = "dissent";
     maintainers = with maintainers; [ hmenke urandom aleksana ];
   };

@@ -6,14 +6,14 @@ let
   # NOTE: When updating these, please also take a look at the changes done to
   # kernel config in the xanmod version commit
   ltsVariant = {
-    version = "6.6.32";
-    hash = "sha256-DdBkfDq+bed1WdaAtxX16xjZO10jjqJ74ccY9Wq6ryM=";
+    version = "6.6.36";
+    hash = "sha256-8L8e5iP4pvIvgqHmQYhFRCbgLvuFOXr7nkBe0VnuCzw=";
     variant = "lts";
   };
 
   mainVariant = {
-    version = "6.8.11";
-    hash = "sha256-nEAUw7qFXab7J6x8coSsoB2meeOX4TQver2WztkFJJI=";
+    version = "6.9.7";
+    hash = "sha256-hmVcwC1PHjyCw43IpJ99y72qFXSX5lbbh6+1TqdXzag=";
     variant = "main";
   };
 
@@ -46,6 +46,14 @@ let
       HZ = freeform "250";
       HZ_250 = yes;
       HZ_1000 = no;
+
+      # RCU_BOOST and RCU_EXP_KTHREAD
+      RCU_EXPERT = yes;
+      RCU_FANOUT = freeform "64";
+      RCU_FANOUT_LEAF = freeform "16";
+      RCU_BOOST = yes;
+      RCU_BOOST_DELAY = freeform "0";
+      RCU_EXP_KTHREAD = yes;
     };
 
     extraMeta = {

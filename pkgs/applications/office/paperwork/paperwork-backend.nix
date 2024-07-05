@@ -1,7 +1,6 @@
 { buildPythonPackage
 , lib
 , fetchFromGitLab
-, fetchpatch
 , pyenchant
 , scikit-learn
 , pypillowfight
@@ -34,13 +33,6 @@ buildPythonPackage rec {
   sourceRoot = "${src.name}/paperwork-backend";
 
   patches = [
-    # fixes building with recent scipy
-    # remove on next release
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/World/OpenPaperwork/paperwork/-/commit/abcebfe9714644d4e259e53b10e0e9417b5b864f.patch";
-      hash = "sha256-YjVpphThW5Livs+PZJZDSgJvhLSXhZ1bnlWMwfY4HTg=";
-    })
-
     # disables a flaky test https://gitlab.gnome.org/World/OpenPaperwork/paperwork/-/issues/1035#note_1493700
     ./flaky_test.patch
   ];

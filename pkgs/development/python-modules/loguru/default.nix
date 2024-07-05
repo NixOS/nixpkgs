@@ -7,6 +7,7 @@
   freezegun,
   pytestCheckHook,
   pythonOlder,
+  pytest-xdist
 }:
 
 buildPythonPackage rec {
@@ -25,6 +26,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+    pytest-xdist # massive speedup, not tested by upstream
     colorama
     freezegun
   ];
@@ -38,6 +40,8 @@ buildPythonPackage rec {
       # fails on some machine configurations
       # AssertionError: assert '' != ''
       "test_file_buffering"
+      # Slow test
+      "test_time_rotation"
     ]
     ++ lib.optionals stdenv.isDarwin [
       "test_rotation_and_retention"

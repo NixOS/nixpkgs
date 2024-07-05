@@ -7,19 +7,19 @@
 }:
 let
   pname = "open-webui";
-  version = "0.3.4";
+  version = "0.3.7";
 
   src = fetchFromGitHub {
     owner = "open-webui";
     repo = "open-webui";
     rev = "v${version}";
-    hash = "sha256-HO7kvJB4GDdAtb0jq8XPU94sP8QbyYlxAmhpLAshMng=";
+    hash = "sha256-tsJILQ+CuVy8LYSixYNJAwSIZtRegrXXvGzvyf7Knd0=";
   };
 
   frontend = buildNpmPackage {
     inherit pname version src;
 
-    npmDepsHash = "sha256-EZvFslntBjpxsjXYyfPGNa2SmYth56cjy8zg+fmiCGo=";
+    npmDepsHash = "sha256-fB5gvC2sLfH2dJJi+CYyF7PRg+GhZDavhKgeRStaR7I=";
 
     # Disabling `pyodide:fetch` as it downloads packages during `buildPhase`
     # Until this is solved, running python packages from the browser will not work.
@@ -59,14 +59,14 @@ python3.pkgs.buildPythonApplication rec {
     "opencv-python-headless"
     # using `psycopg2` instead
     "psycopg2-binary"
-    # package request: https://github.com/NixOS/nixpkgs/issues/317065
-    "rapidocr-onnxruntime"
   ];
 
   dependencies = with python3.pkgs; [
     aiohttp
+    anthropic
     apscheduler
     argon2-cffi
+    authlib
     bcrypt
     beautifulsoup4
     black
@@ -87,6 +87,7 @@ python3.pkgs.buildPythonApplication rec {
     langchain-community
     langfuse
     markdown
+    openai
     opencv4
     openpyxl
     pandas
@@ -96,6 +97,7 @@ python3.pkgs.buildPythonApplication rec {
     psycopg2
     pydub
     pyjwt
+    pymongo
     pymysql
     pypandoc
     pypdf
@@ -106,8 +108,11 @@ python3.pkgs.buildPythonApplication rec {
     pytube
     pyxlsb
     rank-bm25
+    rapidocr-onnxruntime
+    redis
     requests
     sentence-transformers
+    sqlalchemy
     unstructured
     uvicorn
     validators

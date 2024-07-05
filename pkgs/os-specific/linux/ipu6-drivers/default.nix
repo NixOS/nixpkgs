@@ -44,7 +44,7 @@ stdenv.mkDerivation {
   meta = {
     homepage = "https://github.com/intel/ipu6-drivers";
     description = "IPU6 kernel driver";
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ ];
     platforms = [ "x86_64-linux" ];
     # requires 6.1.7 https://github.com/intel/ipu6-drivers/pull/84

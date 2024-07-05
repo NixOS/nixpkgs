@@ -1,0 +1,52 @@
+Submodule Telegram/lib_base contains modified content
+diff --git a/Telegram/lib_base/base/platform/mac/base_battery_saving_mac.mm b/Telegram/lib_base/base/platform/mac/base_battery_saving_mac.mm
+index 7ce90d3..dac3c2c 100644
+--- a/Telegram/lib_base/base/platform/mac/base_battery_saving_mac.mm
++++ b/Telegram/lib_base/base/platform/mac/base_battery_saving_mac.mm
+@@ -138,6 +138,7 @@ BatterySaving::BatterySaving(Fn<void()> changedCallback) {
+ 	_observer = [[LowPowerModeObserver alloc] initWithCallback:std::move(wrapped)];
+ 
+ 	NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
++#if 0
+ 	if (@available(macOS 12.0, *)) {
+ 		[center
+ 			addObserver: _observer
+@@ -145,6 +146,7 @@ BatterySaving::BatterySaving(Fn<void()> changedCallback) {
+ 			name: NSProcessInfoPowerStateDidChangeNotification
+ 			object: nil];
+ 	}
++#endif
+ 	[center
+ 		addObserver: _observer
+ 		selector: @selector(powerStateChanged:)
+@@ -178,11 +180,13 @@ std::optional<bool> BatterySaving::enabled() const {
+ 		return std::nullopt;
+ 	}
+ 	NSProcessInfo *info = [NSProcessInfo processInfo];
++#if 0
+ 	if (@available(macOS 12.0, *)) {
+ 		if ([info isLowPowerModeEnabled]) {
+ 			return true;
+ 		}
+ 	}
++#endif
+ 	const auto state = DetectBatteryState();
+ 	if (!state.has || !state.draining) {
+ 		return false;
+Submodule Telegram/lib_webview contains modified content
+diff --git a/Telegram/lib_webview/webview/platform/mac/webview_mac.mm b/Telegram/lib_webview/webview/platform/mac/webview_mac.mm
+index 657c5a4..4bfc097 100644
+--- a/Telegram/lib_webview/webview/platform/mac/webview_mac.mm
++++ b/Telegram/lib_webview/webview/platform/mac/webview_mac.mm
+@@ -317,9 +317,11 @@ Instance::Instance(Config config) {
+ 	_dataRequestHandler = std::move(config.dataRequestHandler);
+ 	[configuration setURLSchemeHandler:_handler forURLScheme:stdToNS(kDataUrlScheme)];
+ 	_webview = [[WKWebView alloc] initWithFrame:NSZeroRect configuration:configuration];
++#if 0
+ 	if (@available(macOS 13.3, *)) {
+ 		_webview.inspectable = config.debug ? YES : NO;
+ 	}
++#endif
+ 	[_manager addScriptMessageHandler:_handler name:@"external"];
+ 	[_webview setNavigationDelegate:_handler];
+ 	[_webview setUIDelegate:_handler];

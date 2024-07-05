@@ -189,6 +189,6 @@ stdenv.mkDerivation rec {
     license = licenses.agpl3Plus;
     homepage = "https://joinpeertube.org/";
     platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
-    maintainers = with maintainers; [ immae izorkin mohe2015 stevenroose ];
+    maintainers = with maintainers; [ immae izorkin stevenroose ];
   };
 }

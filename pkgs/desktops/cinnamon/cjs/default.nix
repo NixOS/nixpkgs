@@ -6,8 +6,10 @@
 , cairo
 , glib
 , readline
-, spidermonkey_102
+, libsysprof-capture
+, spidermonkey_115
 , meson
+, mesonEmulatorHook
 , dbus
 , ninja
 , which
@@ -16,13 +18,13 @@
 
 stdenv.mkDerivation rec {
   pname = "cjs";
-  version = "6.0.0";
+  version = "6.2.0";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "cjs";
     rev = version;
-    hash = "sha256-oSqEAZWEVb8NxFTScl8s5Mb04tCGDyVVslYW00s4YYk=";
+    hash = "sha256-/74E10txRjwN9RkjVB8M0MPYakJ659yJWanc4DC09wg=";
   };
 
   outputs = [ "out" "dev" ];
@@ -33,21 +35,24 @@ stdenv.mkDerivation rec {
     pkg-config
     which # for locale detection
     libxml2 # for xml-stripblanks
+    dbus # for dbus-run-session
     gobject-introspection
+  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    mesonEmulatorHook
   ];
 
   buildInputs = [
     cairo
     readline
-    spidermonkey_102
-    dbus # for dbus-run-session
+    libsysprof-capture
+    spidermonkey_115
   ];
 
   propagatedBuildInputs = [
     glib
   ];
 
-  mesonFlags = [
+  mesonFlags = lib.optionals stdenv.hostPlatform.isMusl [
     "-Dprofiler=disabled"
   ];
 

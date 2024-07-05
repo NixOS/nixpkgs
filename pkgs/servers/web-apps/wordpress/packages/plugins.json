@@ -7,8 +7,8 @@
   },
   "akismet": {
     "path": "akismet/tags/5.3.2",
-    "rev": "3055719",
-    "sha256": "1298r4mqv4ndyizgmsln06d4cgr04kw3wpdsl6y7ym7lriy207qw",
+    "rev": "3095776",
+    "sha256": "0qjn2v4hq9259pbncambxzlqywvwgcc9nbz8nqi6rj1m3za4vpyv",
     "version": "5.3.2"
   },
   "antispam-bee": {
@@ -24,10 +24,10 @@
     "version": "2.21.08.31"
   },
   "breeze": {
-    "path": "breeze/tags/2.1.7",
-    "rev": "3074984",
-    "sha256": "13alrv92p70ccg8xjybfzzikv35ff24zkc3dxlbrlr62ikczyyy0",
-    "version": "2.1.7"
+    "path": "breeze/tags/2.1.9",
+    "rev": "3097827",
+    "sha256": "1az7p8zbcxl50swir8jqbcfp07ibkn225x0rc69sc38shsl7aaqv",
+    "version": "2.1.9"
   },
   "co-authors-plus": {
     "path": "co-authors-plus/tags/3.6.1",
@@ -60,16 +60,16 @@
     "version": "1.4.0"
   },
   "gutenberg": {
-    "path": "gutenberg/tags/18.3.0",
-    "rev": "3083588",
-    "sha256": "0dl6hdi38988zpcl69avy1p8s93djlzk6f56ra490lvzlmf4g73z",
-    "version": "18.3.0"
+    "path": "gutenberg/tags/18.5.0",
+    "rev": "3098391",
+    "sha256": "16hxrm1pp44jnbnzg6rsx2wm6rbfcfyrxvaam41qvf5s9kdnds0j",
+    "version": "18.5.0"
   },
   "hcaptcha-for-forms-and-more": {
-    "path": "hcaptcha-for-forms-and-more/tags/4.1.1",
-    "rev": "3081325",
-    "sha256": "1sw42qpy3qqz48a86fd5dc71iq6s1q44v5mgq7fa49makkn5fd4r",
-    "version": "4.1.1"
+    "path": "hcaptcha-for-forms-and-more/tags/4.2.1",
+    "rev": "3098902",
+    "sha256": "0asfkd63zy6cpg3f8lg3l3cdfnlxsg6lnw2sqbcn267jdijqal51",
+    "version": "4.2.1"
   },
   "hello-dolly": {
     "path": "hello-dolly/tags/1.7.2",
@@ -79,15 +79,15 @@
   },
   "hkdev-maintenance-mode": {
     "path": "hkdev-maintenance-mode/trunk",
-    "rev": "3054874",
-    "sha256": "0p2qj6w0gy0pl0mq4x9f53r3y0rkr47039mb7l9rg6rgs41baa9m",
+    "rev": "3098579",
+    "sha256": "1l8h3f4fmgjjnvk81vf35jmhdsnfc8j2gi3gqrb8mr2q3dbf9fkn",
     "version": "3.0.2"
   },
   "jetpack": {
-    "path": "jetpack/tags/13.4.1",
-    "rev": "3084434",
-    "sha256": "17fg162f5nqf87xi0bii9xsgc19vfd9hrf86b82c4m6sgb80rf2p",
-    "version": "13.4.1"
+    "path": "jetpack/tags/13.5",
+    "rev": "3098116",
+    "sha256": "12m9jyrxfpq7v7ydgp2kvn7s28s6gx0mzc9fihd1fddinvyjihqs",
+    "version": "13.5"
   },
   "jetpack-lite": {
     "path": "jetpack-lite/tags/3.0.3",
@@ -102,28 +102,28 @@
     "version": "5.2.6"
   },
   "login-lockdown": {
-    "path": "login-lockdown/tags/2.09",
-    "rev": "3059559",
-    "sha256": "0rvxzb1bfssfsngkf3mkqb0h3vivyjnsw822s7fwkavhklm6cfjx",
-    "version": "2.09"
+    "path": "login-lockdown/tags/2.10",
+    "rev": "3088782",
+    "sha256": "1zm6xfq2xmb4bqb3j272j4majywfa5zqs4ms7lwygmb3s74980bm",
+    "version": "2.10"
   },
   "mailpoet": {
-    "path": "mailpoet/tags/4.50.0",
-    "rev": "3083197",
-    "sha256": "01z2r87jw94ap9ha8kz1l999pczpa6985j4z0nq44b20672p62gv",
-    "version": "4.50.0"
+    "path": "mailpoet/tags/4.51.1",
+    "rev": "3097471",
+    "sha256": "0107v98nkaqlar5igxcllrvm10ac2zrn0j5j03xwk48b933y9d7h",
+    "version": "4.51.1"
   },
   "merge-minify-refresh": {
     "path": "merge-minify-refresh/trunk",
-    "rev": "3007859",
-    "sha256": "1f9ppjkpza5h6z23ma7x9lrpqsq5qxc0n8zfffs44njf086n7k4f",
-    "version": "2.7"
+    "rev": "3089082",
+    "sha256": "04li9jl0b6mf16n7619jnls20wd9ix0ggpsqkpm5s11jpwbnc9n6",
+    "version": "2.8"
   },
   "opengraph": {
-    "path": "opengraph/tags/1.11.2",
-    "rev": "3065435",
-    "sha256": "1s78pf57s37rljd5qjddjyhbff2kw7h9y11k0nk9a6rj3l1zx9hl",
-    "version": "1.11.2"
+    "path": "opengraph/tags/1.11.3",
+    "rev": "3097574",
+    "sha256": "1g9lv3ffbcf2bcbwjfczry4wjzrmvpbilymhs15vx2ysjhh7jqgv",
+    "version": "1.11.3"
   },
   "simple-login-captcha": {
     "path": "simple-login-captcha/tags/1.3.6",
@@ -157,8 +157,8 @@
   },
   "webp-converter-for-media": {
     "path": "webp-converter-for-media/tags/5.12.5",
-    "rev": "3071153",
-    "sha256": "03a53ssvbxhdi3j14vpzf3w4fzljk5hzy29d3g2mxrgbcbjcjrs1",
+    "rev": "3096305",
+    "sha256": "0v8a06na42la16gq6m1mfjglnggdxpy9qnfc20xr0wi2qv5xnwf8",
     "version": "5.12.5"
   },
   "webp-express": {
@@ -168,16 +168,16 @@
     "version": "0.25.9"
   },
   "wordpress-seo": {
-    "path": "wordpress-seo/tags/22.6",
-    "rev": "3079171",
-    "sha256": "105646vkdvnrwa6kbk8vhvp40l5rg5dnd0rs21qg7byw7xv61nzs",
-    "version": "22.6"
+    "path": "wordpress-seo/tags/22.8",
+    "rev": "3093688",
+    "sha256": "14by3h0wk4xjh78pgsvwb9j791viky5w8h78frw905d3azhv8jnj",
+    "version": "22.8"
   },
   "worker": {
-    "path": "worker/tags/4.9.19",
-    "rev": "3019262",
-    "sha256": "1pfn7bvdqv0cy10nbkdqw9m0b0nys6grw3jry41nr9ffbajbx4kx",
-    "version": "4.9.19"
+    "path": "worker/tags/4.9.20",
+    "rev": "3087053",
+    "sha256": "0krm85iyk25s2fy7z16z0k9cjvhw31y5w6wfjbsl7cfz0q3ld6j5",
+    "version": "4.9.20"
   },
   "wp-change-email-sender": {
     "path": "wp-change-email-sender/tags/2.0",
@@ -186,10 +186,10 @@
     "version": "2.0"
   },
   "wp-fastest-cache": {
-    "path": "wp-fastest-cache/tags/1.2.6",
-    "rev": "3081800",
-    "sha256": "0pp8di9jaj13k0qdpcnwx825nzx8cd9h336li8swg3jbr3sppvl7",
-    "version": "1.2.6"
+    "path": "wp-fastest-cache/tags/1.2.7",
+    "rev": "3091143",
+    "sha256": "1drmm1badk8wgqs0r3pl47fl5hsc883llcaxgsppyv4x1mzvnwi2",
+    "version": "1.2.7"
   },
   "wp-gdpr-compliance": {
     "path": "wp-gdpr-compliance/tags/2.0.22",
@@ -204,16 +204,16 @@
     "version": "4.0.1"
   },
   "wp-statistics": {
-    "path": "wp-statistics/tags/14.6.4",
-    "rev": "3081064",
-    "sha256": "03834h6vcczcbmw7h3db6bk39qr9yipgsn8q9mwa43rq7h7b7pvh",
-    "version": "14.6.4"
+    "path": "wp-statistics/tags/14.7.2",
+    "rev": "3096387",
+    "sha256": "15gccsdw8g1d3np6xl7bzq89ydx0qkv1qxzj62r0cglzlnphli8b",
+    "version": "14.7.2"
   },
   "wp-swiper": {
     "path": "wp-swiper/trunk",
-    "rev": "3045384",
-    "sha256": "1m8gmab211pnhibpwviqsxm9pgzb2si2y41myksmxnbsvnnfmj7j",
-    "version": "1.1.6"
+    "rev": "3093150",
+    "sha256": "1apbl3vgb996n2la15iyv0z9xfn0axcjkn721fxvi2l0bar9kmcy",
+    "version": "1.1.10"
   },
   "wp-user-avatars": {
     "path": "wp-user-avatars/trunk",

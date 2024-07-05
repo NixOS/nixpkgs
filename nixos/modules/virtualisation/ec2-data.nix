@@ -35,9 +35,8 @@ with lib;
                 echo "obtaining SSH key..."
                 mkdir -m 0700 -p /root/.ssh
                 if [ -s /etc/ec2-metadata/public-keys-0-openssh-key ]; then
-                    cat /etc/ec2-metadata/public-keys-0-openssh-key >> /root/.ssh/authorized_keys
+                    (umask 177; cat /etc/ec2-metadata/public-keys-0-openssh-key >> /root/.ssh/authorized_keys)
                     echo "new key added to authorized_keys"
-                    chmod 600 /root/.ssh/authorized_keys
                 fi
             fi
 

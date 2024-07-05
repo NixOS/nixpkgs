@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   pname = "morgen";
-  version = "3.4.4";
+  version = "3.5.1";
 
   src = fetchurl {
     url = "https://dl.todesktop.com/210203cqcj00tw1/versions/${version}/linux/deb";
-    hash = "sha256-l4wHCapIvD3kZk1DqLNWDLjwg6j7g0+qMB/KuMzH+pQ=";
+    hash = "sha256-YvgVCviqAuGlT61ANktztzqRYBtROsVrScGMxY6IeEs=";
   };
 
   nativeBuildInputs = [
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
     mainProgram = "morgen";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
-    maintainers = with maintainers; [ justanotherariel wolfangaukang ];
+    maintainers = with maintainers; [ justanotherariel ];
     platforms = [ "x86_64-linux" ];
   };
 }

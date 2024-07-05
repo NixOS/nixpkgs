@@ -1,16 +1,23 @@
-{ fetchurl, lib, stdenv, writeText, jdk, makeWrapper, nixosTests }:
-
+{
+  fetchurl,
+  lib,
+  stdenv,
+  writeText,
+  jdk,
+  makeWrapper,
+  nixosTests,
+}:
 stdenv.mkDerivation rec {
   pname = "soapui";
-  version = "5.7.0";
+  version = "5.7.2";
 
   src = fetchurl {
-    url = "https://s3.amazonaws.com/downloads.eviware/soapuios/${version}/SoapUI-${version}-linux-bin.tar.gz";
-    sha256 = "sha256-qzhy4yHmOk13dFUd2KEZhXtWY86QwyjJgYxx9GGoN80=";
+    url = "https://dl.eviware.com/soapuios/${version}/SoapUI-${version}-linux-bin.tar.gz";
+    sha256 = "sha256-pT0ZANVC7Sv7zxMDPY86aclIUGZeazOZadiVVsmEjtw=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ jdk ];
+  nativeBuildInputs = [makeWrapper];
+  buildInputs = [jdk];
 
   installPhase = ''
     runHook preInstall
@@ -46,15 +53,15 @@ stdenv.mkDerivation rec {
     '')
   ];
 
-  passthru.tests = { inherit (nixosTests) soapui; };
+  passthru.tests = {inherit (nixosTests) soapui;};
 
   meta = with lib; {
     description = "Most Advanced REST & SOAP Testing Tool in the World";
     homepage = "https://www.soapui.org/";
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
+    sourceProvenance = with sourceTypes; [binaryBytecode];
     license = "SoapUI End User License Agreement";
-    maintainers = with maintainers; [ gerschtli ];
-    platforms = platforms.all;
+    maintainers = with maintainers; [gerschtli];
+    platforms = platforms.linux; # we don't fetch the dmg yet
     mainProgram = "soapui";
   };
 }

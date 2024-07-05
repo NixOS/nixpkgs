@@ -16,7 +16,7 @@ in
 
 {
   meta = {
-    maintainers = with lib.maintainers; [thubrecht patrickdag];
+    maintainers = with lib.maintainers; [patrickdag];
     doc = ./server.md;
   };
 
@@ -31,7 +31,7 @@ in
   options.services.netbird.server = {
     enable = mkEnableOption "Netbird Server stack, comprising the dashboard, management API and signal service";
 
-    enableNginx = mkEnableOption "Nginx reverse-proxy for the netbird server services.";
+    enableNginx = mkEnableOption "Nginx reverse-proxy for the netbird server services";
 
     domain = mkOption {
       type = str;

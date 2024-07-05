@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Turn-based strategy artillery game similar to Worms";
     homepage = "https://hedgewars.org/";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     longDescription = ''
        Each player controls a team of several hedgehogs. During the course of
        the game, players take turns with one of their hedgehogs. They then use

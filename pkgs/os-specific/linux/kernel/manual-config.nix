@@ -1,5 +1,5 @@
 { lib, stdenv, buildPackages, runCommand, nettools, bc, bison, flex, perl, rsync, gmp, libmpc, mpfr, openssl
-, libelf, cpio, elfutils, zstd, python3Minimal, zlib, pahole, kmod, ubootTools
+, cpio, elfutils, zstd, python3Minimal, zlib, pahole, kmod, ubootTools
 , fetchpatch
 , rustc, rust-bindgen, rustPlatform
 }:
@@ -120,7 +120,7 @@ let
       moduleBuildDependencies = [
         pahole
         perl
-        libelf
+        elfutils
         # module makefiles often run uname commands to find out the kernel version
         (buildPackages.deterministic-uname.override { inherit modDirVersion; })
       ]
@@ -142,13 +142,24 @@ let
       inherit src;
 
       depsBuildBuild = [ buildPackages.stdenv.cc ];
-      nativeBuildInputs = [ perl bc nettools openssl rsync gmp libmpc mpfr zstd python3Minimal kmod ]
-                          ++ optional  needsUbootTools ubootTools
-                          ++ optional  (lib.versionOlder version "5.8") libelf
-                          ++ optionals (lib.versionAtLeast version "4.16") [ bison flex ]
-                          ++ optionals (lib.versionAtLeast version "5.2")  [ cpio pahole zlib ]
-                          ++ optional  (lib.versionAtLeast version "5.8")  elfutils
-                          ++ optionals withRust [ rustc rust-bindgen ];
+      nativeBuildInputs = [
+        bison
+        flex
+        perl
+        bc
+        nettools
+        openssl
+        rsync
+        gmp
+        libmpc
+        mpfr
+        elfutils
+        zstd
+        python3Minimal
+        kmod
+      ] ++ optional  needsUbootTools ubootTools
+        ++ optionals (lib.versionAtLeast version "5.2")  [ cpio pahole zlib ]
+        ++ optionals withRust [ rustc rust-bindgen ];
 
       RUST_LIB_SRC = lib.optionalString withRust rustPlatform.rustLibSrc;
 
@@ -171,12 +182,6 @@ let
       postPatch = ''
         # Ensure that depmod gets resolved through PATH
         sed -i Makefile -e 's|= /sbin/depmod|= depmod|'
-
-        # Don't include a (random) NT_GNU_BUILD_ID, to make the build more deterministic.
-        # This way kernels can be bit-by-bit reproducible depending on settings
-        # (e.g. MODULE_SIG and SECURITY_LOCKDOWN_LSM need to be disabled).
-        # See also https://kernelnewbies.org/BuildId
-        sed -i Makefile -e 's|--build-id=[^ ]*|--build-id=none|'
 
         # Some linux-hardened patches now remove certain files in the scripts directory, so the file may not exist.
         [[ -f scripts/ld-version.sh ]] && patchShebangs scripts/ld-version.sh
@@ -405,9 +410,6 @@ let
       } // extraMeta;
     };
 in
-
-assert lib.versionOlder version "5.8" -> libelf != null;
-assert lib.versionAtLeast version "5.8" -> elfutils != null;
 
 stdenv.mkDerivation ((drvAttrs config stdenv.hostPlatform.linux-kernel kernelPatches configfile) // {
   inherit pname version;

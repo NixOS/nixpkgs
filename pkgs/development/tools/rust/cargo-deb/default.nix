@@ -7,16 +7,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-deb";
-  version = "2.2.0";
+  version = "2.4.0";
 
   src = fetchFromGitHub {
     owner = "kornelski";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-KVHci8h30cAZZffRA3e0gb1uAMv2UDiC9HkiqNaqSS4=";
+    hash = "sha256-fJJMbibX/i/l1Qc/V4+loHJ+G/+nnstB0a1dlXkJjk0=";
   };
 
-  cargoHash = "sha256-swRiR+YeQVT7mMzJHQtCI4wcG9z44r34YDv8WmEPr08=";
+  cargoHash = "sha256-SelvLaI+vG4PzBcxphBpeFM0nRtaQoTHvuS/8P8/Cig=";
 
   nativeBuildInputs = [
     makeWrapper

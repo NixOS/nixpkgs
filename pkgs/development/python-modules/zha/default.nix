@@ -27,7 +27,7 @@
 
 buildPythonPackage rec {
   pname = "zha";
-  version = "0.0.8";
+  version = "0.0.15";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -36,7 +36,7 @@ buildPythonPackage rec {
     owner = "zigpy";
     repo = "zha";
     rev = "refs/tags/${version}";
-    hash = "sha256-xOaqwgL8NqB3pHNa6U/wextntI5aMivHLaIhSRqvgRU=";
+    hash = "sha256-k4Wqxv7WJGDDGXA80qW+RUICTUcgLsWJNiV+zsOkfuM=";
   };
 
   postPatch = ''
@@ -47,8 +47,10 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [
     "bellows"
+    "pyserial-asyncio-fast"
     "universal-silabs-flasher"
     "zha-quirks"
+    "zigpy"
   ];
 
   nativeBuildInputs = [ pythonRelaxDepsHook ];

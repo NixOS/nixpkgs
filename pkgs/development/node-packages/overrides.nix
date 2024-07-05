@@ -40,14 +40,6 @@ final: prev: {
     };
   };
 
-  bash-language-server = prev.bash-language-server.override {
-    nativeBuildInputs = [ pkgs.buildPackages.makeWrapper ];
-    postInstall = ''
-      wrapProgram "$out/bin/bash-language-server" \
-        --prefix PATH : ${lib.makeBinPath [ pkgs.shellcheck ]}
-    '';
-  };
-
   bower2nix = prev.bower2nix.override {
     nativeBuildInputs = [ pkgs.buildPackages.makeWrapper ];
     postInstall = ''
@@ -222,25 +214,6 @@ final: prev: {
     in ''
       ${lib.concatStringsSep "\n" (map (patch: "patch -d $out/lib/node_modules/node2nix -p1 < ${patch}") patches)}
       wrapProgram "$out/bin/node2nix" --prefix PATH : ${lib.makeBinPath [ pkgs.nix ]}
-    '';
-  };
-
-  pnpm = prev.pnpm.override {
-    nativeBuildInputs = [ pkgs.buildPackages.makeWrapper ];
-
-    preRebuild = ''
-      sed 's/"link:/"file:/g' --in-place package.json
-    '';
-
-    postInstall = let
-      pnpmLibPath = lib.makeBinPath [
-        nodejs.passthru.python
-        nodejs
-      ];
-    in ''
-      for prog in $out/bin/*; do
-        wrapProgram "$prog" --prefix PATH : ${pnpmLibPath}
-      done
     '';
   };
 
@@ -455,11 +428,6 @@ final: prev: {
         };
       };
   };
-
-  volar = final."@volar/vue-language-server".override ({ meta, ... }: {
-    name = "volar";
-    meta = meta // { mainProgram = "vue-language-server"; };
-  });
 
   wavedrom-cli = prev.wavedrom-cli.override {
     nativeBuildInputs = [ pkgs.pkg-config final.node-pre-gyp ];

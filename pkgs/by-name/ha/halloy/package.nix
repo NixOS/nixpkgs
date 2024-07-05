@@ -6,6 +6,7 @@
   copyDesktopItems,
   makeDesktopItem,
   libxkbcommon,
+  makeWrapper,
   openssl,
   pkg-config,
   rustPlatform,
@@ -36,6 +37,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [
     copyDesktopItems
+    makeWrapper
     pkg-config
   ];
 
@@ -102,6 +104,17 @@ rustPlatform.buildRustPackage rec {
   postInstall = ''
     install -Dm644 assets/linux/icons/hicolor/128x128/apps/org.squidowl.halloy.png \
       $out/share/icons/hicolor/128x128/apps/org.squidowl.halloy.png
+  '' + lib.optionalString stdenv.isDarwin ''
+    APP_DIR="$out/Applications/Halloy.app/Contents"
+
+    mkdir -p "$APP_DIR/MacOS"
+    cp -r ${src}/assets/macos/Halloy.app/Contents/* "$APP_DIR"
+
+    substituteInPlace "$APP_DIR/Info.plist" \
+      --replace-fail "{{ VERSION }}" "${version}" \
+      --replace-fail "{{ BUILD }}" "${version}-nixpkgs"
+
+    makeWrapper "$out/bin/halloy" "$APP_DIR/MacOS/halloy"
   '';
 
   meta = with lib; {
@@ -109,7 +122,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/squidowl/halloy";
     changelog = "https://github.com/squidowl/halloy/blob/${version}/CHANGELOG.md";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [ fab iivusly ];
     mainProgram = "halloy";
   };
 }

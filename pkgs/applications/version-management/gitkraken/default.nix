@@ -1,5 +1,5 @@
 { lib, stdenv, libXcomposite, libgnome-keyring, makeWrapper, udev, curlWithGnuTls, alsa-lib
-, libXfixes, atk, gtk3, libXrender, pango, gnome, cairo, freetype, fontconfig
+, libXfixes, atk, gtk3, libXrender, pango, adwaita-icon-theme, cairo, freetype, fontconfig
 , libX11, libXi, libxcb, libXext, libXcursor, glib, libXScrnSaver, libxkbfile, libXtst
 , nss, nspr, cups, fetchzip, expat, gdk-pixbuf, libXdamage, libXrandr, dbus
 , makeDesktopItem, openssl, wrapGAppsHook3, makeShellWrapper, at-spi2-atk, at-spi2-core, libuuid
@@ -107,7 +107,7 @@ let
     }) ];
 
     nativeBuildInputs = [ copyDesktopItems (wrapGAppsHook3.override { makeWrapper = makeShellWrapper; }) ];
-    buildInputs = [ gtk3 gnome.adwaita-icon-theme ];
+    buildInputs = [ gtk3 adwaita-icon-theme ];
 
     # avoid double-wrapping
     dontWrapGApps = true;
@@ -161,13 +161,15 @@ let
   darwin = stdenv.mkDerivation {
     inherit pname version src meta;
 
-    nativeBuildInputs = [ unzip ];
+    nativeBuildInputs = [ unzip makeWrapper ];
 
     installPhase = ''
       runHook preInstall
 
-      mkdir -p $out/Applications/GitKraken.app
+      mkdir -p $out/Applications/GitKraken.app $out/bin
       cp -R . $out/Applications/GitKraken.app
+
+      makeWrapper $out/Applications/GitKraken.app/Contents/MacOS/GitKraken $out/bin/gitkraken
 
       runHook postInstall
     '';

@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "urwid";
-  version = "2.6.12";
+  version = "2.6.14";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     owner = "urwid";
     repo = "urwid";
     rev = "refs/tags/${version}";
-    hash = "sha256-JGX9v/x8c7ayHnxVjC7u4YLs3OvZmTzPNFUfqGCeIRQ=";
+    hash = "sha256-UDYIAAAKmdqtTzV8yn1zkEH0PvOUmVXodxF1ZyubgE0=";
   };
 
   postPatch = ''

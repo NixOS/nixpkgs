@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "thriftpy2";
-  version = "0.5.0";
+  version = "0.5.1";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "Thriftpy";
     repo = "thriftpy2";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Pjy9OPwFfKaw+XVl7IbbAKPz050TlqI4+yLqSITOkSY=";
+    hash = "sha256-F/h2XhzLA89CwgorKhrvKrajFbT9maiF3RBkulQQ9bk=";
   };
 
   build-system = [ setuptools ];

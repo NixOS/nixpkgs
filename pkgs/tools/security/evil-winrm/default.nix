@@ -42,6 +42,5 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/Hackplayers/evil-winrm";
     changelog = "https://github.com/Hackplayers/evil-winrm/blob/v${version}/CHANGELOG.md";
     license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ elohmeier ];
   };
 }

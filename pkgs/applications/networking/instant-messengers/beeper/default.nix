@@ -11,7 +11,6 @@
 let
   pname = "beeper";
   version = "3.106.2";
-  name = "${pname}-${version}";
   src = fetchurl {
     url = "https://download.todesktop.com/2003241lzgn20jd/beeper-3.106.2-build-240604xwl5q01pr-x86_64.AppImage";
     hash = "sha256-WbAWJJzk58UVmRN3RHmU/V6zPiLWAb7m7hns4gmP55M=";
@@ -25,7 +24,7 @@ let
   };
 in
 stdenvNoCC.mkDerivation rec {
-  inherit name pname version;
+  inherit pname version;
 
   src = appimage;
 

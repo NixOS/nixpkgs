@@ -10,7 +10,7 @@ rec {
       , tiniRev, tiniHash
       , buildxSupport ? true, composeSupport ? true, sbomSupport ? false
       # package dependencies
-      , stdenv, fetchFromGitHub, fetchpatch, buildGoPackage
+      , stdenv, fetchFromGitHub, fetchpatch, buildGoModule
       , makeWrapper, installShellFiles, pkg-config, glibc
       , go-md2man, go, containerd, runc, tini, libtool
       , sqlite, iproute2, docker-buildx, docker-compose, docker-sbom
@@ -23,7 +23,7 @@ rec {
       , withSeccomp ? stdenv.isLinux, libseccomp
     }:
   let
-    docker-runc = runc.overrideAttrs (oldAttrs: {
+    docker-runc = runc.overrideAttrs {
       pname = "docker-runc";
       inherit version;
 
@@ -36,7 +36,7 @@ rec {
 
       # docker/runc already include these patches / are not applicable
       patches = [];
-    });
+    };
 
     docker-containerd = containerd.overrideAttrs (oldAttrs: {
       pname = "docker-containerd";
@@ -53,7 +53,7 @@ rec {
         ++ lib.optionals withSeccomp [ libseccomp ];
     });
 
-    docker-tini = tini.overrideAttrs (oldAttrs: {
+    docker-tini = tini.overrideAttrs {
       pname = "docker-init";
       inherit version;
 
@@ -70,7 +70,7 @@ rec {
       buildInputs = [ glibc glibc.static ];
 
       env.NIX_CFLAGS_COMPILE = "-DMINIMAL=ON";
-    });
+    };
 
     moby-src = fetchFromGitHub {
       owner = "moby";
@@ -79,13 +79,13 @@ rec {
       hash = mobyHash;
     };
 
-    moby = buildGoPackage (lib.optionalAttrs stdenv.isLinux rec {
+    moby = buildGoModule (lib.optionalAttrs stdenv.isLinux rec {
       pname = "moby";
       inherit version;
 
       src = moby-src;
 
-      goPackagePath = "github.com/docker/docker";
+      vendorHash = null;
 
       nativeBuildInputs = [ makeWrapper pkg-config go-md2man go libtool installShellFiles ];
       buildInputs = [ sqlite ]
@@ -126,16 +126,13 @@ rec {
       buildPhase = ''
         export GOCACHE="$TMPDIR/go-cache"
         # build engine
-        cd ./go/src/${goPackagePath}
         export AUTO_GOPATH=1
         export DOCKER_GITCOMMIT="${cliRev}"
         export VERSION="${version}"
         ./hack/make.sh dynbinary
-        cd -
       '';
 
       installPhase = ''
-        cd ./go/src/${goPackagePath}
         install -Dm755 ./bundles/dynbinary-daemon/dockerd $out/libexec/docker/dockerd
         install -Dm755 ./bundles/dynbinary-daemon/docker-proxy $out/libexec/docker/docker-proxy
 
@@ -149,7 +146,7 @@ rec {
 
         # systemd
         install -Dm644 ./contrib/init/systemd/docker.service $out/etc/systemd/system/docker.service
-        substituteInPlace $out/etc/systemd/system/docker.service --replace /usr/bin/dockerd $out/bin/dockerd
+        substituteInPlace $out/etc/systemd/system/docker.service --replace-fail /usr/bin/dockerd $out/bin/dockerd
         install -Dm644 ./contrib/init/systemd/docker.socket $out/etc/systemd/system/docker.socket
 
         # rootless Docker
@@ -169,7 +166,7 @@ rec {
       ++ lib.optional sbomSupport docker-sbom;
     pluginsRef = symlinkJoin { name = "docker-plugins"; paths = plugins; };
   in
-  buildGoPackage (lib.optionalAttrs (!clientOnly) {
+  buildGoModule (lib.optionalAttrs (!clientOnly) {
     # allow overrides of docker components
     # TODO: move packages out of the let...in into top-level to allow proper overrides
     inherit docker-runc docker-containerd docker-tini moby;
@@ -184,7 +181,7 @@ rec {
       hash = cliHash;
     };
 
-    goPackagePath = "github.com/docker/cli";
+    vendorHash = null;
 
     nativeBuildInputs = [
       makeWrapper pkg-config go-md2man go libtool installShellFiles
@@ -197,9 +194,9 @@ rec {
 
     postPatch = ''
       patchShebangs man scripts/build/
-      substituteInPlace ./scripts/build/.variables --replace "set -eu" ""
+      substituteInPlace ./scripts/build/.variables --replace-fail "set -eu" ""
     '' + lib.optionalString (plugins != []) ''
-      substituteInPlace ./cli-plugins/manager/manager_unix.go --replace /usr/libexec/docker/cli-plugins \
+      substituteInPlace ./cli-plugins/manager/manager_unix.go --replace-fail /usr/libexec/docker/cli-plugins \
           "${pluginsRef}/libexec/docker/cli-plugins"
     '';
 
@@ -207,7 +204,6 @@ rec {
     buildPhase = ''
       export GOCACHE="$TMPDIR/go-cache"
 
-      cd ./go/src/${goPackagePath}
       # Mimic AUTO_GOPATH
       mkdir -p .gopath/src/github.com/docker/
       ln -sf $PWD .gopath/src/github.com/docker/cli
@@ -215,17 +211,14 @@ rec {
       export GITCOMMIT="${cliRev}"
       export VERSION="${version}"
       export BUILDTIME="1970-01-01T00:00:00Z"
-      source ./scripts/build/.variables
-      export CGO_ENABLED=1
-      go build -tags pkcs11 --ldflags "$GO_LDFLAGS" github.com/docker/cli/cmd/docker
-      cd -
+      make dynbinary
+
     '';
 
     outputs = ["out"] ++ lib.optional (lib.versionOlder version "23") "man";
 
     installPhase = ''
-      cd ./go/src/${goPackagePath}
-      install -Dm755 ./docker $out/libexec/docker/docker
+      install -Dm755 ./build/docker $out/libexec/docker/docker
 
       makeWrapper $out/libexec/docker/docker $out/bin/docker \
         --prefix PATH : "$out/libexec/docker:$extraPath"
@@ -308,15 +301,29 @@ rec {
   };
 
   docker_26 = callPackage dockerGen rec {
-    version = "26.1.3";
+    version = "26.1.4";
     cliRev = "v${version}";
-    cliHash = "sha256-xE+g9Gtza4oAIlGUzDmjrqJa42bEkpbKbL2fsFlYzpY=";
+    cliHash = "sha256-7yCR49Un1i1kB+66IKt/8lgwKNkUjtVh52DH9OY8Pw4=";
     mobyRev = "v${version}";
-    mobyHash = "sha256-s4hOvYV2+wDNKs4iFw6OflK+nemvqNhmfFURzhWaUzY=";
+    mobyHash = "sha256-0WwlpUECvmNq6DBm7U7rjzYfGKF7pxsfs9+x5uVPV0k=";
     runcRev = "v1.1.12";
     runcHash = "sha256-N77CU5XiGYIdwQNPFyluXjseTeaYuNJ//OsEUS0g/v0=";
     containerdRev = "v1.7.15";
     containerdHash = "sha256-qLrPLGxsUmgEscrhyl+1rJ0k7c9ibKnpMpsJPD4xDZU=";
+    tiniRev = "v0.19.0";
+    tiniHash = "sha256-ZDKu/8yE5G0RYFJdhgmCdN3obJNyRWv6K/Gd17zc1sI=";
+  };
+
+  docker_27 = callPackage dockerGen rec {
+    version = "27.0.3";
+    cliRev = "v${version}";
+    cliHash = "sha256-fpjSnUq3T6WZO/FLeT377FWxwevbULob9dPiSBxZdHI=";
+    mobyRev = "v${version}";
+    mobyHash = "sha256-v5uhFQPbBIpfnKtAkmbq4w+TbaG01tqTSWNBE3NvPKU=";
+    runcRev = "v1.1.13";
+    runcHash = "sha256-RQsM8Q7HogDVGbNpen3wxXNGR9lfqmNhkXTRoC+LBk8=";
+    containerdRev = "v1.7.18";
+    containerdHash = "sha256-IlK5IwniaBhqMgxQzV8btQcbdJkNEQeUMoh6aOsBOHQ=";
     tiniRev = "v0.19.0";
     tiniHash = "sha256-ZDKu/8yE5G0RYFJdhgmCdN3obJNyRWv6K/Gd17zc1sI=";
   };

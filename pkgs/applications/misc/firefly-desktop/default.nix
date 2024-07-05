@@ -27,7 +27,7 @@ in appimageTools.wrapType2 {
     description = "IOTA's New Wallet";
     homepage = "https://firefly.iota.org";
     license = licenses.asl20;
-    maintainers = with maintainers; [ wolfangaukang ];
+    maintainers = [ ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "firefly-desktop";
   };

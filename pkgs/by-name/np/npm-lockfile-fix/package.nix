@@ -26,8 +26,9 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Add missing integrity and resolved fields to a package-lock.json file";
+    homepage = "https://github.com/jeslie0/npm-lockfile-fix";
     mainProgram = "npm-lockfile-fix";
     license = lib.licenses.mit;
-    maintainers = [ maintainers.lucasew ];
+    maintainers = with maintainers; [ lucasew felschr ];
   };
 }

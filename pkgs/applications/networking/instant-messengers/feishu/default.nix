@@ -176,10 +176,10 @@ stdenv.mkDerivation {
     # Wrap feishu and vulcan
     # Feishu is the main executable, vulcan is the builtin browser
     for executable in $out/opt/bytedance/feishu/{feishu,vulcan/vulcan}; do
+      # FIXME: Add back NIXOS_OZONE_WL support once upstream fixes the crash on native Wayland (see #318035)
       wrapProgram $executable \
         --prefix XDG_DATA_DIRS    :  "$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH" \
         --prefix LD_LIBRARY_PATH  :  ${rpath}:$out/opt/bytedance/feishu:${addOpenGLRunpath.driverLink}/share \
-        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
         ${lib.optionalString (commandLineArgs!="") "--add-flags ${lib.escapeShellArg commandLineArgs}"}
     done
 

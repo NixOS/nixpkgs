@@ -5,14 +5,48 @@ let
   cfg = config.services.freshrss;
 
   poolName = "freshrss";
+
+  extension-env = pkgs.buildEnv {
+    name = "freshrss-extensions";
+    paths = cfg.extensions;
+  };
+  env-vars = {
+    DATA_PATH = cfg.dataDir;
+    THIRDPARTY_EXTENSIONS_PATH = "${extension-env}/share/freshrss/";
+  };
 in
 {
   meta.maintainers = with maintainers; [ etu stunkymonkey mattchrist ];
 
   options.services.freshrss = {
-    enable = mkEnableOption "FreshRSS feed reader";
+    enable = mkEnableOption "FreshRSS RSS aggregator and reader with php-fpm backend.";
 
     package = mkPackageOption pkgs "freshrss" { };
+
+    extensions = mkOption {
+      type = types.listOf types.package;
+      default = [ ];
+      defaultText = literalExpression "[]";
+      example = literalExpression ''
+        with freshrss-extensions; [
+          youtube
+        ] ++ [
+          (freshrss-extensions.buildFreshRssExtension {
+            FreshRssExtUniqueId = "ReadingTime";
+            pname = "reading-time";
+            version = "1.5";
+            src = pkgs.fetchFromGitLab {
+              domain = "framagit.org";
+              owner = "Lapineige";
+              repo = "FreshRSS_Extension-ReadingTime";
+              rev = "fb6e9e944ef6c5299fa56ffddbe04c41e5a34ebf";
+             hash = "sha256-C5cRfaphx4Qz2xg2z+v5qRji8WVSIpvzMbethTdSqsk=";
+           };
+          })
+        ]
+      '';
+      description = "Additional extensions to be used.";
+    };
 
     defaultUser = mkOption {
       type = types.str;
@@ -108,7 +142,7 @@ in
       type = types.str;
       default = poolName;
       description = ''
-        Name of the phpfpm pool to use and setup. If not specified, a pool will be created
+        Name of the php-fpm pool to use and setup. If not specified, a pool will be created
         with default values.
       '';
     };
@@ -214,9 +248,7 @@ in
             "pm.max_spare_servers" = 5;
             "catch_workers_output" = true;
           };
-          phpEnv = {
-            DATA_PATH = "${cfg.dataDir}";
-          };
+          phpEnv = env-vars;
         };
       };
 
@@ -259,9 +291,7 @@ in
             RemainAfterExit = true;
           };
           restartIfChanged = true;
-          environment = {
-            DATA_PATH = cfg.dataDir;
-          };
+          environment = env-vars;
 
           script =
             let
@@ -293,9 +323,7 @@ in
         description = "FreshRSS feed updater";
         after = [ "freshrss-config.service" ];
         startAt = "*:0/5";
-        environment = {
-          DATA_PATH = cfg.dataDir;
-        };
+        environment = env-vars;
         serviceConfig = defaultServiceConfig // {
           ExecStart = "${cfg.package}/app/actualize_script.php";
         };

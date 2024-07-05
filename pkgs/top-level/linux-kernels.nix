@@ -204,6 +204,7 @@ in {
         kernelPatches.bridge_stp_helper
         kernelPatches.request_key_helper
         kernelPatches.rust_1_77-6_9
+        kernelPatches.rust_1_78
       ];
     };
 
@@ -215,7 +216,6 @@ in {
         kernelPatches = [
           kernelPatches.bridge_stp_helper
           kernelPatches.request_key_helper
-          kernelPatches.rust_1_78
         ];
       };
       latest = packageAliases.linux_latest.kernel;
@@ -318,8 +318,6 @@ in {
 
     akvcam = callPackage ../os-specific/linux/akvcam { };
 
-    amdgpu-pro = callPackage ../os-specific/linux/amdgpu-pro { };
-
     apfs = callPackage ../os-specific/linux/apfs { };
 
     ax99100 = callPackage ../os-specific/linux/ax99100 {};
@@ -339,11 +337,13 @@ in {
 
     cpupower = callPackage ../os-specific/linux/cpupower { };
 
+    deepin-anything-module = callPackage ../os-specific/linux/deepin-anything-module { };
+
     ddcci-driver = callPackage ../os-specific/linux/ddcci { };
 
     dddvb = callPackage ../os-specific/linux/dddvb { };
 
-    decklink = callPackage ../os-specific/linux/decklink { };
+    decklink = throw "The decklink kernel module has been removed due to being unmaintained"; # Module removed on 2024-07-02
 
     digimend = callPackage ../os-specific/linux/digimend { };
 
@@ -605,6 +605,7 @@ in {
     rtl8723bs = throw "rtl8723bs was added in mainline kernel version 4.12"; # Added 2023-06-14
     vm-tools = self.mm-tools;
     xmm7360-pci = throw "Support for the XMM7360 WWAN card was added to the iosm kmod in mainline kernel version 5.18";
+    amdgpu-pro = throw "amdgpu-pro was removed due to lack of maintenance"; # Added 2024-06-16
   });
 
   hardenedPackagesFor = kernel: overrides: packagesFor (hardenedKernelFor kernel overrides);

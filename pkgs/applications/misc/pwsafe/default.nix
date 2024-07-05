@@ -97,7 +97,7 @@ stdenv.mkDerivation rec {
   installFlags = [ "PREFIX=${placeholder "out"}" ];
 
   passthru.updateScript = gitUpdater {
-    ignoredVersions = "^([^1]|1[^.])"; # ignore anything other than 1.x
+    allowedVersions = "^1\\.";
     url = src.gitRepoUrl;
   };
 

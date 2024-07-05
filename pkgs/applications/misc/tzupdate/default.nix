@@ -1,24 +1,28 @@
-{ lib, python3, fetchPypi }:
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+}:
 
-let
-  inherit (python3.pkgs) buildPythonApplication requests;
-in
-buildPythonApplication rec {
+rustPlatform.buildRustPackage rec {
   pname = "tzupdate";
-  version = "2.1.0";
+  version = "3.1.0";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "5b55795c390e4ccc90e649c8cc387447daaf30a21d68f7196b49824cbcba8adc";
+  src = fetchFromGitHub {
+    owner = "cdown";
+    repo = "tzupdate";
+    rev = version;
+    hash = "sha256-eod4yFzX7pATNQmG7jU+r9mnC9nprJ55ufMXpKjw/YI=";
   };
 
-  propagatedBuildInputs = [ requests ];
+  cargoHash = "sha256-5+lp5xlwJxFDqzVxptJPX7z0iLoMkgdwHxvRVIXHF7Y=";
 
   meta = with lib; {
-    description = "Update timezone information based on geoip";
-    mainProgram = "tzupdate";
+    description = "Set the system timezone based on IP geolocation";
     homepage = "https://github.com/cdown/tzupdate";
-    maintainers = [ ];
-    license = licenses.unlicense;
+    license = licenses.mit;
+    maintainers = with maintainers; [ camillemndn ];
+    platforms = platforms.linux;
+    mainProgram = "tzupdate";
   };
 }

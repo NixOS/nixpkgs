@@ -11,7 +11,7 @@ let
       config_dir = "/etc/scion";
     };
   };
-  configFile = toml.generate "scion-router.toml" (defaultConfig // cfg.settings);
+  configFile = toml.generate "scion-router.toml" (recursiveUpdate defaultConfig cfg.settings);
 in
 {
   options.services.scion.scion-router = {
@@ -42,7 +42,7 @@ in
         ExecStart = "${pkgs.scion}/bin/scion-router --config ${configFile}";
         Restart = "on-failure";
         DynamicUser = true;
-        StateDirectory = "scion-router";
+        RuntimeDirectory = "scion-router";
       };
     };
   };

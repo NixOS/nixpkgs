@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation rec {
   pname = "pipectl";
-  version = "0.4.2";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "Ferdi265";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-Ixch5iyeIjx+hSvln8L0N8pXG7ordpsFVroqZPUzAG0=";
+    hash = "sha256-uBKHGR4kv62EMOIT/K+WbvFtdJ0V5IbsxjwQvhUu9f8=";
   };
 
   nativeBuildInputs = [ cmake scdoc ];

@@ -3,6 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
   pytestCheckHook,
   pythonOlder,
   setuptools,
@@ -28,6 +29,20 @@ buildPythonPackage rec {
     rev = "refs/tags/v${version}";
     hash = "sha256-FBhPcae8bnNnsfr14I1p22VhoOf9USF9DAcrAqx+zso=";
   };
+
+  patches = [
+    # GDAL 3.9 compat for boolean array in shp
+    (fetchpatch {
+      url = "https://github.com/geopandas/geopandas/commit/f1be60532bed31cb410ce4db2da6b733bc8713c9.patch";
+      sha256 = "sha256-DZhC7sSOki0XTcojSRvVVSlsnYnxCw/Ee7vHBmDCsbA=";
+    })
+
+    # GDAL 3.9 compat for boolean array in shp for fiona
+    (fetchpatch {
+      url = "https://github.com/geopandas/geopandas/commit/1e08422d8aee4877752047a8a08f41e3a67188f2.patch";
+      sha256 = "sha256-SpNqe7jL1rA79YhhSUfEzt30plt56Tux5v1h7IHp31I=";
+    })
+  ];
 
   build-system = [ setuptools ];
 

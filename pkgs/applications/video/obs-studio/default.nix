@@ -48,8 +48,6 @@
 , nlohmann_json
 , websocketpp
 , asio
-, decklinkSupport ? false
-, blackmagic-desktop-video
 , libdatachannel
 , libvpl
 , qrcodegencpp
@@ -167,8 +165,6 @@ stdenv.mkDerivation (finalAttrs: {
       xorg.libX11
       libvlc
       libGL
-    ] ++ optionals decklinkSupport [
-      blackmagic-desktop-video
     ];
   in ''
     # Remove libcef before patchelf, otherwise it will fail

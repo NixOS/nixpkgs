@@ -141,9 +141,7 @@ in buildDotnetModule rec {
   src = ./.;
 
   projectFile = "src/project.sln";
-  # File generated with `nix-build -A package.passthru.fetch-deps`.
-  # To run fetch-deps when this file does not yet exist, set nugetDeps to null
-  nugetDeps = ./deps.nix;
+  nugetDeps = ./deps.nix; # see "Generating and updating NuGet dependencies" section for details
 
   projectReferences = [ referencedProject ]; # `referencedProject` must contain `nupkg` in the folder structure.
 
@@ -196,7 +194,7 @@ This helper has the same arguments as `buildDotnetModule`, with a few difference
 
 * `pname` and `version` are required, and will be used to find the NuGet package of the tool
 * `nugetName` can be used to override the NuGet package name that will be downloaded, if it's different from `pname`
-* `nugetSha256` is the hash of the fetched NuGet package. Set this to `lib.fakeHash256` for the first build, and it will error out, giving you the proper hash. Also remember to update it during version updates (it will not error out if you just change the version while having a fetched package in `/nix/store`)
+* `nugetHash` is the hash of the fetched NuGet package. `nugetSha256` is also supported, but not recommended. Set this to `lib.fakeHash` for the first build, and it will error out, giving you the proper hash. Also remember to update it during version updates (it will not error out if you just change the version while having a fetched package in `/nix/store`)
 * `dotnet-runtime` is set to `dotnet-sdk` by default. When changing this, remember that .NET tools fetched from NuGet require an SDK.
 
 Here is an example of packaging `pbm`, an unfree binary without source available:
@@ -207,7 +205,7 @@ buildDotnetGlobalTool {
   pname = "pbm";
   version = "1.3.1";
 
-  nugetSha256 = "sha256-ZG2HFyKYhVNVYd2kRlkbAjZJq88OADe3yjxmLuxXDUo=";
+  nugetHash = "sha256-ZG2HFyKYhVNVYd2kRlkbAjZJq88OADe3yjxmLuxXDUo=";
 
   meta = {
     homepage = "https://cmd.petabridge.com/index.html";
@@ -219,6 +217,12 @@ buildDotnetGlobalTool {
 ```
 ## Generating and updating NuGet dependencies {#generating-and-updating-nuget-dependencies}
 
+When writing a new expression, you can use the generated `fetch-deps` script to initialise the lockfile.
+After creating a blank `deps.nix` and pointing `nugetDeps` to it,
+build the script with `nix-build -A package.fetch-deps` and then run the result.
+(When the root attr is your package, it's simply `nix-build -A fetch-deps`.)
+
+There is also a manual method:
 First, restore the packages to the `out` directory, ensure you have cloned
 the upstream repository and you are inside it.
 
@@ -237,15 +241,15 @@ $ nuget-to-nix out > deps.nix
 Which `nuget-to-nix` will generate an output similar to below
 ```nix
 { fetchNuGet }: [
-  (fetchNuGet { pname = "FosterFramework"; version = "0.1.15-alpha"; sha256 = "0pzsdfbsfx28xfqljcwy100xhbs6wyx0z1d5qxgmv3l60di9xkll"; })
-  (fetchNuGet { pname = "Microsoft.AspNetCore.App.Runtime.linux-x64"; version = "8.0.1"; sha256 = "1gjz379y61ag9whi78qxx09bwkwcznkx2mzypgycibxk61g11da1"; })
-  (fetchNuGet { pname = "Microsoft.NET.ILLink.Tasks"; version = "8.0.1"; sha256 = "1drbgqdcvbpisjn8mqfgba1pwb6yri80qc4mfvyczqwrcsj5k2ja"; })
-  (fetchNuGet { pname = "Microsoft.NETCore.App.Runtime.linux-x64"; version = "8.0.1"; sha256 = "1g5b30f4l8a1zjjr3b8pk9mcqxkxqwa86362f84646xaj4iw3a4d"; })
-  (fetchNuGet { pname = "SharpGLTF.Core"; version = "1.0.0-alpha0031"; sha256 = "0ln78mkhbcxqvwnf944hbgg24vbsva2jpih6q3x82d3h7rl1pkh6"; })
-  (fetchNuGet { pname = "SharpGLTF.Runtime"; version = "1.0.0-alpha0031"; sha256 = "0lvb3asi3v0n718qf9y367km7qpkb9wci38y880nqvifpzllw0jg"; })
-  (fetchNuGet { pname = "Sledge.Formats"; version = "1.2.2"; sha256 = "1y0l66m9rym0p1y4ifjlmg3j9lsmhkvbh38frh40rpvf1axn2dyh"; })
-  (fetchNuGet { pname = "Sledge.Formats.Map"; version = "1.1.5"; sha256 = "1bww60hv9xcyxpvkzz5q3ybafdxxkw6knhv97phvpkw84pd0jil6"; })
-  (fetchNuGet { pname = "System.Numerics.Vectors"; version = "4.5.0"; sha256 = "1kzrj37yzawf1b19jq0253rcs8hsq1l2q8g69d7ipnhzb0h97m59"; })
+  (fetchNuGet { pname = "FosterFramework"; version = "0.1.15-alpha"; hash = "sha256-lM6eYgOGjl1fx6WFD7rnRi/YAQieM0mx60h0p5dr+l8="; })
+  (fetchNuGet { pname = "Microsoft.AspNetCore.App.Runtime.linux-x64"; version = "8.0.1"; hash = "sha256-QbUQXjCzr8j8u/5X0af9jE++EugdoxMhT08F49MZX74="; })
+  (fetchNuGet { pname = "Microsoft.NET.ILLink.Tasks"; version = "8.0.1"; hash = "sha256-SopZpGaZ48/8dpUwDFDM3ix+g1rP4Yqs1PGuzRp+K7c="; })
+  (fetchNuGet { pname = "Microsoft.NETCore.App.Runtime.linux-x64"; version = "8.0.1"; hash = "sha256-jajBI5GqG2IIcsIMgxTHfXbMapoXrZGl/EEhShwYq7w="; })
+  (fetchNuGet { pname = "SharpGLTF.Core"; version = "1.0.0-alpha0031"; hash = "sha256-Bs4baD5wNIH6wAbGK4Xaem0i3luQkOQs37izBWdFx1I="; })
+  (fetchNuGet { pname = "SharpGLTF.Runtime"; version = "1.0.0-alpha0031"; hash = "sha256-TwJO6b8ubmwBQh6NyHha8+JT5zHDJ4dROBbsEbUaa1M="; })
+  (fetchNuGet { pname = "Sledge.Formats"; version = "1.2.2"; hash = "sha256-0Ddhuwpu3wwIzA4NuPaEVdMkx6tUukh8uKD6nKoxFPg="; })
+  (fetchNuGet { pname = "Sledge.Formats.Map"; version = "1.1.5"; hash = "sha256-hkYJ2iWIz7vhPWlDOw2fvTenlh+4/D/37Z71tCEwnK8="; })
+  (fetchNuGet { pname = "System.Numerics.Vectors"; version = "4.5.0"; hash = "sha256-qdSTIFgf2htPS+YhLGjAGiLN8igCYJnCCo6r78+Q+c8="; })
 ]
 ```
 
@@ -254,6 +258,5 @@ Finally, you move the `deps.nix` file to the appropriate location to be used by 
 If you ever need to update the dependencies of a package, you instead do
 
 * `nix-build -A package.fetch-deps` to generate the update script for `package`
-* Run `./result deps.nix` to regenerate the lockfile to `deps.nix`, keep in mind if a location isn't provided, it will write to a temporary path instead
-* Finally, move the file where needed and look at its contents to confirm it has updated the dependencies.
-
+* Run `./result` to regenerate the lockfile to the path passed for `nugetDeps` (keep in mind if it can't be resolved to a local path, the script will write to `$1` or a temporary path instead)
+* Finally, ensure the correct file was written and the derivation can be built.

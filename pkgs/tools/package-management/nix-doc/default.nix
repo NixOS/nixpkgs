@@ -51,7 +51,7 @@ rustPlatform.buildRustPackage rec {
     longDescription = "An interactive Nix documentation tool providing a CLI for function search, a Nix plugin for docs in the REPL, and a ctags implementation for Nix script";
     homepage = "https://github.com/lf-/nix-doc";
     license = licenses.lgpl3Plus;
-    maintainers = [ maintainers.lf- ];
+    maintainers = [ ];
     platforms = platforms.unix;
     mainProgram = "nix-doc";
   };

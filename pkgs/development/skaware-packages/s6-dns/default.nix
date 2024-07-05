@@ -2,8 +2,8 @@
 
 skawarePackages.buildPackage {
   pname = "s6-dns";
-  version = "2.3.7.1";
-  sha256 = "zwJYV07H1itlTgwq14r0x9Z6xMnLN/eBSA9ZflSzD20=";
+  version = "2.3.7.2";
+  sha256 = "au4yu2jQH1EJ9x4xooMhPGaM08Dnn7nkaebKu1gHnys=";
 
   description = "Suite of DNS client programs and libraries for Unix systems";
 

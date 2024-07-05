@@ -46,6 +46,8 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "prefix=${placeholder "out"}" ];
 
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-error=implicit-function-declaration";
+
   postInstall = ''
     wrapProgram "$out/bin/sc-im" --prefix PATH : "${lib.makeBinPath [ gnuplot ]}"
   '';

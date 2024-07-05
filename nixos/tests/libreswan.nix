@@ -3,7 +3,7 @@
 # Eve can eavesdrop the plaintext traffic between Alice and Bob, but once they
 # enable the secure tunnel Eve's spying becomes ineffective.
 
-import ./make-test-python.nix ({ lib, pkgs, ... }:
+{ lib, pkgs, ... }:
 
 let
 
@@ -133,4 +133,4 @@ in
           eve.sleep(1)
           eve.fail("grep rhubarb /tmp/log")
     '';
-})
+}

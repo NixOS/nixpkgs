@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "wayback";
-  version = "0.19.1";
+  version = "0.20.1";
 
   src = fetchFromGitHub {
     owner = "wabarc";
     repo = "wayback";
     rev = "v${version}";
-    hash = "sha256-LIWCT0/5T52VQQK4Dy6EFmFlJ02MkfvKddN/O/5zpZc=";
+    hash = "sha256-GnirEgJHgZVzxkFFVDU9795kgvMTitnH+xWd7ooNf7Y=";
   };
 
-  vendorHash = "sha256-TC4uwJswpD5oKqF/rpXqU/h+k0jErwhguT/LkdBA83Y=";
+  vendorHash = "sha256-vk9c+U8mKwT03dHV9labvCOM2Ip1vk7AeiTleEBuNP4=";
 
   doCheck = false;
 

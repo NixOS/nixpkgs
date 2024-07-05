@@ -54,7 +54,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/adrienverge/yamllint/blob/v${version}/CHANGELOG.rst";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [
-      jonringer
       mikefaille
     ];
   };

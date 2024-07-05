@@ -17,6 +17,8 @@ buildDartApplication rec {
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
 
+  passthru.updateScript = ./update.sh;
+
   meta = with lib; {
     description = "Protobuf plugin for generating Dart code";
     mainProgram = "protoc-gen-dart";

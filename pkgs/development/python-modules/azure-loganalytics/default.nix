@@ -33,7 +33,6 @@ buildPythonPackage rec {
     license = licenses.mit;
     maintainers = with maintainers; [
       maxwilson
-      jonringer
     ];
   };
 }

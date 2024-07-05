@@ -59,6 +59,6 @@ stdenv.mkDerivation {
     ];
     homepage = "https://wiki.qt.io/Qt_for_Python";
     maintainers = with maintainers; [ gebner ];
-    broken = stdenv.isDarwin || pythonAtLeast "3.12";
+    broken = pythonAtLeast "3.12";
   };
 }

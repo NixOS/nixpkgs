@@ -82,7 +82,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Set of libraries and drivers for fast packet processing";
     homepage = "http://dpdk.org/";
-    license = with licenses; [ lgpl21 gpl2 bsd2 ];
+    license = with licenses; [ lgpl21 gpl2Only bsd2 ];
     platforms =  platforms.linux;
     maintainers = with maintainers; [ magenbluten orivej mic92 zhaofengli ];
   };

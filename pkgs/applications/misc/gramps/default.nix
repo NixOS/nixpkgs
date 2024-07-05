@@ -69,7 +69,7 @@ buildPythonApplication rec {
   ;
 
   propagatedBuildInputs = with pythonPackages; [
-    bsddb3
+    berkeleydb
     pyicu
     pygobject3
     pycairo

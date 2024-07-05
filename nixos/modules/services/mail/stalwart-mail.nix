@@ -9,11 +9,27 @@ let
   dataDir = "/var/lib/stalwart-mail";
   useLegacyStorage = versionOlder config.system.stateVersion "24.11";
 
+  parsePorts = listeners: let
+    parseAddresses = listeners: lib.flatten(lib.mapAttrsToList (name: value: value.bind) listeners);
+    splitAddress = addr: strings.splitString ":" addr;
+    extractPort = addr: strings.toInt(builtins.foldl' (a: b: b) "" (splitAddress addr));
+  in
+    builtins.map(address: extractPort address) (parseAddresses listeners);
+
 in {
   options.services.stalwart-mail = {
     enable = mkEnableOption "the Stalwart all-in-one email server";
 
     package = mkPackageOption pkgs "stalwart-mail" { };
+
+    openFirewall = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Whether to open TCP firewall ports, which are specified in
+        {option}`services.stalwart-mail.settings.listener` on all interfaces.
+      '';
+    };
 
     settings = mkOption {
       inherit (configFormat) type;
@@ -37,8 +53,6 @@ in {
         ansi = mkDefault false;  # no colour markers to journald
         enable = mkDefault true;
       };
-      queue.path = mkDefault "${dataDir}/queue";
-      report.path = mkDefault "${dataDir}/reports";
       store = if useLegacyStorage then {
         # structured data in SQLite, blobs on filesystem
         db.type = mkDefault "sqlite";
@@ -62,6 +76,9 @@ in {
       resolver.public-suffix = lib.mkDefault [
         "file://${pkgs.publicsuffix-list}/share/publicsuffix/public_suffix_list.dat"
       ];
+      config.resource = {
+        spam-filter = lib.mkDefault "file://${cfg.package}/etc/stalwart/spamfilter.toml";
+      };
     };
 
     # This service stores a potentially large amount of data.
@@ -83,9 +100,9 @@ in {
         after = [ "local-fs.target" "network.target" ];
 
         preStart = if useLegacyStorage then ''
-          mkdir -p ${dataDir}/{queue,reports,data/blobs}
+          mkdir -p ${dataDir}/data/blobs
         '' else ''
-          mkdir -p ${dataDir}/{queue,reports,db}
+          mkdir -p ${dataDir}/db
         '';
 
         serviceConfig = {
@@ -137,6 +154,11 @@ in {
 
     # Make admin commands available in the shell
     environment.systemPackages = [ cfg.package ];
+
+    networking.firewall = mkIf (cfg.openFirewall
+      && (builtins.hasAttr "listener" cfg.settings.server)) {
+      allowedTCPPorts = parsePorts cfg.settings.server.listener;
+    };
   };
 
   meta = {

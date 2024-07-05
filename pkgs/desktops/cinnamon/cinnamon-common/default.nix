@@ -9,7 +9,6 @@
 , cjs
 , evolution-data-server
 , fetchFromGitHub
-, fetchpatch
 , gdk-pixbuf
 , gettext
 , libgnomekbd
@@ -72,25 +71,18 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "cinnamon-common";
-  version = "6.0.4";
+  version = "6.2.3";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "cinnamon";
     rev = version;
-    hash = "sha256-I0GJv2lcl5JlKPIiWoKMXTf4OLkznS5MpiOIvZ76bJQ=";
+    hash = "sha256-u5QsUFRXPVsk9T7tVmuOpTaAxdMIJs5yPVcWM1olXz8=";
   };
 
   patches = [
     ./use-sane-install-dir.patch
     ./libdir.patch
-
-    # Switch to GNOME Online Accounts GTK
-    (fetchpatch {
-      url = "https://github.com/linuxmint/cinnamon/commit/d22f889c376734f0ca5d904885c2772e790fbadc.patch";
-      includes = [ "files/usr/share/cinnamon/cinnamon-settings/cinnamon-settings.py" ];
-      hash = "sha256-xutJqxtzk3/BUQGZY/tnBkRyAfZZY7AckaGC6b7Sfn8=";
-    })
   ];
 
   buildInputs = [
@@ -160,16 +152,18 @@ stdenv.mkDerivation rec {
       {} +
 
     pushd ./files/usr/share/cinnamon/cinnamon-settings
-      substituteInPlace ./bin/capi.py                     --replace '"/usr/lib"' '"${cinnamon-control-center}/lib"'
-      substituteInPlace ./bin/SettingsWidgets.py          --replace "/usr/share/sounds" "/run/current-system/sw/share/sounds"
-      substituteInPlace ./bin/Spices.py                   --replace "subprocess.run(['/usr/bin/" "subprocess.run(['" \
-                                                          --replace 'subprocess.run(["/usr/bin/' 'subprocess.run(["' \
-                                                          --replace "msgfmt" "${gettext}/bin/msgfmt"
-      substituteInPlace ./modules/cs_info.py              --replace "lspci" "${pciutils}/bin/lspci"
-      substituteInPlace ./modules/cs_themes.py            --replace "$out/share/cinnamon/styles.d" "/run/current-system/sw/share/cinnamon/styles.d"
+      substituteInPlace ./bin/capi.py                     --replace-fail '"/usr/lib"' '"${cinnamon-control-center}/lib"'
+      substituteInPlace ./bin/SettingsWidgets.py          --replace-fail "/usr/share/sounds" "/run/current-system/sw/share/sounds"
+      substituteInPlace ./bin/Spices.py                   --replace-fail "subprocess.run(['/usr/bin/" "subprocess.run(['" \
+                                                          --replace-fail 'subprocess.run(["/usr/bin/' 'subprocess.run(["' \
+                                                          --replace-fail "msgfmt" "${gettext}/bin/msgfmt"
+      substituteInPlace ./modules/cs_info.py              --replace-fail "lspci" "${pciutils}/bin/lspci"
+      substituteInPlace ./modules/cs_keyboard.py          --replace-fail "/usr/bin/cinnamon-dbus-command" "$out/bin/cinnamon-dbus-command"
+      substituteInPlace ./modules/cs_themes.py            --replace-fail "$out/share/cinnamon/styles.d" "/run/current-system/sw/share/cinnamon/styles.d"
     popd
 
-    sed "s| cinnamon-session| ${cinnamon-session}/bin/cinnamon-session|g" -i ./files/usr/bin/cinnamon-session-{cinnamon,cinnamon2d}
+    substituteInPlace ./files/usr/bin/cinnamon-session-{cinnamon,cinnamon2d} \
+      --replace-fail "exec cinnamon-session" "exec ${cinnamon-session}/bin/cinnamon-session"
 
     patchShebangs src/data-to-c.pl
   '';
@@ -177,17 +171,6 @@ stdenv.mkDerivation rec {
   postInstall = ''
     # Use locales from cinnamon-translations.
     ln -s ${cinnamon-translations}/share/locale $out/share/locale
-
-    # Do not install online accounts module, with a -Donlineaccounts=false c-c-c
-    # this just shows an empty page.
-    rm -f $out/share/cinnamon/cinnamon-settings/modules/cs_online_accounts.py
-
-    # g-o-a-gtk already provides its own desktop item.
-    rm -f $out/share/applications/cinnamon-settings-online-accounts.desktop
-
-    # Actually removes Adwaita and HighContrast from Cinnamon styles with mint-artwork 1.8.2.
-    # https://github.com/linuxmint/cinnamon/commit/13b1ad104e88197f6c4e2d02ab2674c07254b8e8
-    rm -r $out/share/cinnamon/styles.d
   '';
 
   preFixup = ''

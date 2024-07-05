@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchurl
-, makeBinaryWrapper
 , makeDesktopItem
 , wrapGAppsHook3
 , copyDesktopItems
@@ -15,6 +14,7 @@
 , alsa-lib
 , wayland
 , libpulseaudio
+, gobject-introspection
 }:
 
 let
@@ -49,42 +49,51 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeBuildInputs = [
-    makeBinaryWrapper
+    gobject-introspection
     wrapGAppsHook3
     copyDesktopItems
     imagemagick
   ];
 
-  installPhase =
-    let
-      libpath = lib.makeLibraryPath ([
-        libGL
-        glfw
-        openal
-        libglvnd
-      ] ++ lib.optionals stdenv.isLinux [
-        xorg.libX11
-        xorg.libXxf86vm
-        xorg.libXext
-        xorg.libXcursor
-        xorg.libXrandr
-        xorg.libXtst
-        libpulseaudio
-        wayland
-        alsa-lib
-      ]);
-    in
-    ''
-      runHook preInstall
-      mkdir -p $out/{bin,lib/hmcl}
-      cp $src $out/lib/hmcl/hmcl.jar
-      magick ${icon} hmcl.png
-      install -Dm644 hmcl-1.png $out/share/icons/hicolor/32x32/apps/hmcl.png
-      makeBinaryWrapper ${jre}/bin/java $out/bin/hmcl \
-        --add-flags "-jar $out/lib/hmcl/hmcl.jar" \
-        --set LD_LIBRARY_PATH ${libpath}
-      runHook postInstall
-    '';
+  installPhase = ''
+    runHook preInstall
+
+    mkdir -p $out/{bin,lib/hmcl}
+    cp $src $out/lib/hmcl/hmcl.jar
+    magick ${icon} hmcl.png
+    install -Dm644 hmcl-1.png $out/share/icons/hicolor/32x32/apps/hmcl.png
+
+    runHook postInstall
+  '';
+
+    fixupPhase =
+      let
+        libpath = lib.makeLibraryPath ([
+          libGL
+          glfw
+          openal
+          libglvnd
+        ] ++ lib.optionals stdenv.isLinux [
+          xorg.libX11
+          xorg.libXxf86vm
+          xorg.libXext
+          xorg.libXcursor
+          xorg.libXrandr
+          xorg.libXtst
+          libpulseaudio
+          wayland
+          alsa-lib
+        ]);
+      in ''
+        runHook preFixup
+
+        makeBinaryWrapper ${jre}/bin/java $out/bin/hmcl \
+          --add-flags "-jar $out/lib/hmcl/hmcl.jar" \
+          --set LD_LIBRARY_PATH ${libpath} \
+          ''${gappsWrapperArgs[@]}
+
+        runHook postFixup
+      '';
 
   meta = with lib; {
     homepage = "https://hmcl.huangyuhui.net";

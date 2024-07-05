@@ -1,7 +1,7 @@
 { lib, fetchurl, gettext, wrapGAppsHook3
 
 # Native dependencies
-, python3, gtk3, gobject-introspection, gnome
+, python3, gtk3, gobject-introspection, adwaita-icon-theme
 , gtksourceview4
 , glib-networking
 
@@ -31,7 +31,8 @@ python3.pkgs.buildPythonApplication rec {
   format = "pyproject";
 
   buildInputs = [
-    gtk3 gnome.adwaita-icon-theme
+    gtk3
+    adwaita-icon-theme
     gtksourceview4
     glib-networking
   ] ++ lib.optionals enableJingle [ farstream gstreamer gst-plugins-base gst-libav gst-plugins-good libnice ]

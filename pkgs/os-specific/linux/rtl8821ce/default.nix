@@ -1,19 +1,20 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, kernel
-, bc
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  kernel,
+  bc,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rtl8821ce";
-  version = "${kernel.version}-unstable-2024-01-20";
+  version = "${kernel.version}-unstable-2024-03-26";
 
   src = fetchFromGitHub {
     owner = "tomaspinho";
     repo = "rtl8821ce";
-    rev = "66983b69120a13699acf40a12979317f29012111";
-    hash = "sha256-Zxb9cOgP67QdCeTNEme0tAsBqd9j/2k+gcE1QKkUQU4=";
+    rev = "f119398d868b1a3395f40c1df2e08b57b2c882cd";
+    hash = "sha256-EfpKa5ZRBVM5T8EVim3cVX1PP1UM9CyG6tN5Br8zYww=";
   };
 
   hardeningDisable = [ "pic" ];
@@ -34,12 +35,16 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Realtek rtl8821ce driver";
     homepage = "https://github.com/tomaspinho/rtl8821ce";
-    license = licenses.gpl2Only;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ hhm ivar ];
-    broken = stdenv.isAarch64 || ((lib.versions.majorMinor kernel.version) == "5.4" && kernel.isHardened);
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
+      hhm
+      defelo
+    ];
+    broken =
+      stdenv.isAarch64 || ((lib.versions.majorMinor kernel.version) == "5.4" && kernel.isHardened);
   };
-}
+})

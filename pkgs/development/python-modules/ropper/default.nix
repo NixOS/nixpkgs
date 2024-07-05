@@ -1,5 +1,4 @@
 {
-  stdenv,
   lib,
   buildPythonPackage,
   fetchFromGitHub,
@@ -38,6 +37,5 @@ buildPythonPackage rec {
     homepage = "https://scoding.de/ropper/";
     license = licenses.bsd3;
     maintainers = with maintainers; [ bennofs ];
-    broken = stdenv.isDarwin;
   };
 }

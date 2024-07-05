@@ -378,11 +378,6 @@ dont-distribute-packages:
  - SourceGraph
  - SpacePrivateers
  - SpinCounter
- - Spock
- - Spock-api-server
- - Spock-digestive
- - Spock-lucid
- - Spock-worker
  - StockholmAlignment
  - Strafunski-Sdf2Haskell
  - SybWidget
@@ -670,7 +665,6 @@ dont-distribute-packages:
  - bip32
  - birch-beer
  - bird
- - bisc
  - biscuit-servant
  - bishbosh
  - bit-array
@@ -2424,7 +2418,6 @@ dont-distribute-packages:
  - json-query
  - json-rpc-client
  - json-schema
- - json-sop
  - json-spec-elm
  - json-spec-elm-servant
  - json-spec-openapi
@@ -3575,8 +3568,6 @@ dont-distribute-packages:
  - secrm
  - sednaDBXML
  - seitz-symbol
- - selda-json
- - selda-sqlite
  - selenium-server
  - semantic-source
  - semantic-version

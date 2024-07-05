@@ -2,7 +2,6 @@
   lib,
   mkKdeDerivation,
   fetchurl,
-  kcrash,
   qtdeclarative,
   qtsvg,
   qtwayland,
@@ -18,7 +17,6 @@ mkKdeDerivation rec {
   };
 
   extraBuildInputs = [
-    kcrash
     qtdeclarative
     qtsvg
     qtwayland

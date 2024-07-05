@@ -90,7 +90,7 @@ let
       ++ lib.optionals mediaSupport [ ffmpeg ]
   );
 
-  version = "13.0.15";
+  version = "13.5";
 
   sources = {
     x86_64-linux = fetchurl {
@@ -102,7 +102,7 @@ let
         "https://tor.eff.org/dist/mullvadbrowser/${version}/mullvad-browser-linux-x86_64-${version}.tar.xz"
         "https://tor.calyxinstitute.org/dist/mullvadbrowser/${version}/mullvad-browser-linux-x86_64-${version}.tar.xz"
       ];
-      hash = "sha256-TypPevAkp1G7GPzBTRUv3N4UJydAqfllNekTsYfiisQ=";
+      hash = "sha256-Wz1gYK1CqfK4aa7K2PR8wKx7VcvALquYKA2vetUAdeU=";
     };
   };
 
@@ -144,6 +144,14 @@ stdenv.mkDerivation rec {
     genericName = "Web Browser";
     comment = meta.description;
     categories = [ "Network" "WebBrowser" "Security" ];
+    mimeTypes = [
+      "text/html"
+      "text/xml"
+      "application/xhtml+xml"
+      "application/vnd.mozilla.xul+xml"
+      "x-scheme-handler/http"
+      "x-scheme-handler/https"
+    ];
   })];
 
   buildPhase = ''

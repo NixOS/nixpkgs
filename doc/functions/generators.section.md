@@ -54,4 +54,4 @@ merge:"diff3"
 Nix store paths can be converted to strings by enclosing a derivation attribute like so: `"${drv}"`.
 :::
 
-Detailed documentation for each generator can be found in `lib/generators.nix`.
+Detailed documentation for each generator can be found [here](#sec-functions-library-generators)

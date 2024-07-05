@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "aiowebostv";
-  version = "0.4.0";
+  version = "0.4.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "home-assistant-libs";
     repo = "aiowebostv";
     rev = "refs/tags/v${version}";
-    hash = "sha256-VUznW+rMCZF1LbrQmEaOgdcX3YCm6Tf7yWlB8KNrjxU=";
+    hash = "sha256-pjHm+oCwbiD2dtkl30yATIVP85R72xEk/cmA+a5b05c=";
   };
 
   nativeBuildInputs = [ setuptools ];

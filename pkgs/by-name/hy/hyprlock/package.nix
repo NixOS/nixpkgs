@@ -17,7 +17,7 @@
   pango,
   libdrm,
   mesa,
-  nix-update-script,
+  unstableGitUpdater,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -55,7 +55,9 @@ stdenv.mkDerivation (finalAttrs: {
     wayland-protocols
   ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = unstableGitUpdater {
+    tagPrefix = "v";
+  };
 
   meta = {
     description = "Hyprland's GPU-accelerated screen locking utility";

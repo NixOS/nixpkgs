@@ -1,6 +1,7 @@
-{ lib, rustPlatform, fetchgit
+{ lib, rustPlatform, fetchgit, fetchpatch
 , pkg-config, protobuf, python3, wayland-scanner
 , libcap, libdrm, libepoxy, minijail, virglrenderer, wayland, wayland-protocols
+, pkgsCross
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -13,6 +14,15 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-y/vHU8i9YNbzSHla853z/2w914mVMFOryyaHE1uxlvM=";
     fetchSubmodules = true;
   };
+
+  patches = [
+    (fetchpatch {
+      name = "musl.patch";
+      url = "https://chromium.googlesource.com/chromiumos/platform/crosvm/+/128e591037c0be0362ed814d0b5583aa65ff09e1%5E%21/?format=TEXT";
+      decode = "base64 -d";
+      hash = "sha256-p5VzHRb0l0vCJNe48cRl/uBYHwTQMEykMcBOMzL3yaY=";
+    })
+  ];
 
   separateDebugInfo = true;
 
@@ -35,7 +45,12 @@ rustPlatform.buildRustPackage rec {
 
   buildFeatures = [ "virgl_renderer" ];
 
-  passthru.updateScript = ./update.py;
+  passthru = {
+    updateScript = ./update.py;
+    tests = {
+      musl = pkgsCross.musl64.crosvm;
+    };
+  };
 
   meta = with lib; {
     description = "Secure virtual machine monitor for KVM";

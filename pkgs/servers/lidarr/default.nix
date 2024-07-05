@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, mono, libmediainfo, sqlite, curl, chromaprint, makeWrapper, icu, dotnet-runtime, openssl, nixosTests }:
+{ lib, stdenv, fetchurl, mono, libmediainfo, sqlite, curl, chromaprint, makeWrapper, icu, dotnet-runtime, openssl, nixosTests, zlib }:
 
 let
   os = if stdenv.isDarwin then "osx" else "linux";
@@ -8,13 +8,13 @@ let
     x86_64-darwin = "x64";
   }."${stdenv.hostPlatform.system}" or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   hash = {
-    x64-linux_hash = "sha256-tc7ODqFifTI7+FhCNmUBAv0s324T4yH4AHIVy64N3/I=";
-    arm64-linux_hash = "sha256-hmS7m1w07n+1+Eia+hA8oK8fJr+lWyqVq1FGjyRYwaQ=";
-    x64-osx_hash = "sha256-+t3cEFlk5Agkb14hx1H3WQfpKniJkPImWoRn6swuoOE=";
+    x64-linux_hash = "sha256-ulWg9BhDr/RFE4sfXGf+i9W0KpOYKjtk49qBeIwI9dU=";
+    arm64-linux_hash = "sha256-iSXXx89I7Pj2nAuapHwJtIblj+TDrd/k9OiBK8QExSg=";
+    x64-osx_hash = "sha256-xjnDePaxQWRNo1VmH1sbp0Xtvbac3nu0+fiMg0wMddg=";
   }."${arch}-${os}_hash";
 in stdenv.mkDerivation rec {
   pname = "lidarr";
-  version = "2.2.5.4141";
+  version = "2.3.3.4204";
 
   src = fetchurl {
     url = "https://github.com/lidarr/Lidarr/releases/download/v${version}/Lidarr.master.${version}.${os}-core-${arch}.tar.gz";
@@ -31,7 +31,7 @@ in stdenv.mkDerivation rec {
     makeWrapper "${dotnet-runtime}/bin/dotnet" $out/bin/Lidarr \
       --add-flags "$out/share/${pname}-${version}/Lidarr.dll" \
       --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [
-        curl sqlite libmediainfo icu  openssl ]}
+        curl sqlite libmediainfo icu  openssl zlib ]}
 
     runHook postInstall
   '';

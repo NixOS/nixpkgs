@@ -2,7 +2,7 @@
 , python310
 , fetchFromGitHub
 , gdk-pixbuf
-, gnome
+, adwaita-icon-theme
 , gpsbabel
 , glib-networking
 , glibcLocales
@@ -55,7 +55,7 @@ in python.pkgs.buildPythonApplication rec {
     gtk3
     webkitgtk
     glib-networking
-    gnome.adwaita-icon-theme
+    adwaita-icon-theme
     gdk-pixbuf
   ];
 

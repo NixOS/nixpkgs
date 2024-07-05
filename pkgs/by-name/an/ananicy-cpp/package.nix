@@ -33,6 +33,7 @@ clangStdenv.mkDerivation rec {
       url = "https://gitlab.com/ananicy-cpp/ananicy-cpp/-/commit/6ea2dccceec39b6c4913f617dad81d859aa20f24.patch";
       hash = "sha256-C+7x/VpVwewXEPwibi7GxGfjuhDkhcjTyGbZHlYL2Bs=";
     })
+    ./match-wrappers.patch
   ];
 
   strictDeps = true;
@@ -75,11 +76,12 @@ clangStdenv.mkDerivation rec {
   meta = {
     homepage = "https://gitlab.com/ananicy-cpp/ananicy-cpp";
     description = "Rewrite of ananicy in c++ for lower cpu and memory usage";
-    license = lib.licenses.gpl3Only;
+    license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
       artturin
       johnrtitor
+      diniamo
     ];
     mainProgram = "ananicy-cpp";
   };

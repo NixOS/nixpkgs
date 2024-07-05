@@ -2,19 +2,24 @@
   lib,
   buildGo122Module,
   fetchFromGitHub,
+  darwin,
+  stdenv,
 }:
 buildGo122Module rec {
   pname = "gptscript";
-  version = "0.5.0";
+  version = "0.8.2";
 
   src = fetchFromGitHub {
     owner = "gptscript-ai";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-teZQhGYKJ5Ma5by3Wug5B1hAV1tox94MF586ZeEXp6o=";
+    hash = "sha256-BqGoIDFquVMGMkKe2IO3Se4IeqgVSqjv00gfhJf8evs=";
   };
 
-  vendorHash = "sha256-0irUcEomQzo9+vFJEk28apLNuJdsX1RHEqB7T88X7Ks=";
+  vendorHash = "sha256-oI2agy8FOyoNl0zQzvXMsHY5tG1QNvkQf+n2GVGyNz8=";
+
+  propagatedBuildInputs = with darwin;
+    lib.optionals stdenv.isDarwin [Security];
 
   ldflags = [
     "-s"
@@ -26,9 +31,9 @@ buildGo122Module rec {
   doCheck = false;
 
   meta = with lib; {
-    homepage = "https://gptscript.ai";
+    homepage = "https://github.com/gptscript-ai/gptscript";
     changelog = "https://github.com/gptscript-ai/gptscript/releases/tag/v{version}";
-    description = "Natural Language Programming";
+    description = "Build AI assistants that interact with your systems";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ jamiemagee ];
     mainProgram = "gptscript";

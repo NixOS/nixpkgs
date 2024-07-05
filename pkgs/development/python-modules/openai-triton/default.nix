@@ -1,10 +1,10 @@
 {
   lib,
   config,
+  addDriverRunpath,
   buildPythonPackage,
   fetchFromGitHub,
   fetchpatch,
-  addOpenGLRunpath,
   setuptools,
   pytestCheckHook,
   pythonRelaxDepsHook,
@@ -57,6 +57,52 @@ buildPythonPackage rec {
       ./0001-ptxas-disable-version-key-for-non-cuda-targets.patch
     ];
 
+  postPatch =
+    let
+      quote = x: ''"${x}"'';
+      subs.ldFlags =
+        let
+          # Bash was getting weird without linting,
+          # but basically upstream contains [cc, ..., "-lcuda", ...]
+          # and we replace it with [..., "-lcuda", "-L/run/opengl-driver/lib", "-L$stubs", ...]
+          old = [ "-lcuda" ];
+          new = [
+            "-lcuda"
+            "-L${addDriverRunpath.driverLink}"
+            "-L${cudaPackages.cuda_cudart}/lib/stubs/"
+          ];
+        in
+        {
+          oldStr = lib.concatMapStringsSep ", " quote old;
+          newStr = lib.concatMapStringsSep ", " quote new;
+        };
+    in
+    ''
+      # Use our `cmakeFlags` instead and avoid downloading dependencies
+      substituteInPlace python/setup.py \
+        --replace "= get_thirdparty_packages(triton_cache_path)" "= os.environ[\"cmakeFlags\"].split()"
+
+      # Already defined in llvm, when built with -DLLVM_INSTALL_UTILS
+      substituteInPlace bin/CMakeLists.txt \
+        --replace "add_subdirectory(FileCheck)" ""
+
+      # Don't fetch googletest
+      substituteInPlace unittest/CMakeLists.txt \
+        --replace "include (\''${CMAKE_CURRENT_SOURCE_DIR}/googletest.cmake)" ""\
+        --replace "include(GoogleTest)" "find_package(GTest REQUIRED)"
+
+      cat << \EOF > python/triton/common/build.py
+
+      def libcuda_dirs():
+          return [ "${addDriverRunpath.driverLink}/lib" ]
+      EOF
+    ''
+    + lib.optionalString cudaSupport ''
+      # Use our linker flags
+      substituteInPlace python/triton/common/build.py \
+        --replace '${subs.ldFlags.oldStr}' '${subs.ldFlags.newStr}'
+    '';
+
   nativeBuildInputs = [
     setuptools
     pythonRelaxDepsHook
@@ -86,42 +132,6 @@ buildPythonPackage rec {
     # https://github.com/NixOS/nixpkgs/pull/286763/#discussion_r1480392652
     setuptools
   ];
-
-  postPatch =
-    let
-      # Bash was getting weird without linting,
-      # but basically upstream contains [cc, ..., "-lcuda", ...]
-      # and we replace it with [..., "-lcuda", "-L/run/opengl-driver/lib", "-L$stubs", ...]
-      old = [ "-lcuda" ];
-      new = [
-        "-lcuda"
-        "-L${addOpenGLRunpath.driverLink}"
-        "-L${cudaPackages.cuda_cudart}/lib/stubs/"
-      ];
-
-      quote = x: ''"${x}"'';
-      oldStr = lib.concatMapStringsSep ", " quote old;
-      newStr = lib.concatMapStringsSep ", " quote new;
-    in
-    ''
-      # Use our `cmakeFlags` instead and avoid downloading dependencies
-      substituteInPlace python/setup.py \
-        --replace "= get_thirdparty_packages(triton_cache_path)" "= os.environ[\"cmakeFlags\"].split()"
-
-      # Already defined in llvm, when built with -DLLVM_INSTALL_UTILS
-      substituteInPlace bin/CMakeLists.txt \
-        --replace "add_subdirectory(FileCheck)" ""
-
-      # Don't fetch googletest
-      substituteInPlace unittest/CMakeLists.txt \
-        --replace "include (\''${CMAKE_CURRENT_SOURCE_DIR}/googletest.cmake)" ""\
-        --replace "include(GoogleTest)" "find_package(GTest REQUIRED)"
-    ''
-    + lib.optionalString cudaSupport ''
-      # Use our linker flags
-      substituteInPlace python/triton/common/build.py \
-        --replace '${oldStr}' '${newStr}'
-    '';
 
   # Avoid GLIBCXX mismatch with other cuda-enabled python packages
   preConfigure =

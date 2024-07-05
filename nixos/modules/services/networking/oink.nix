@@ -77,6 +77,7 @@ in
   config = mkIf cfg.enable {
     systemd.services.oink = {
       description = "Dynamic DNS client for Porkbun";
+      after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
       script = "${cfg.package}/bin/oink -c ${oinkConfig}";
     };

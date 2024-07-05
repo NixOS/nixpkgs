@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "amarok";
-  version = "3.0.0";
+  version = "3.0.1";
 
   src = fetchurl {
     url = "mirror://kde/stable/amarok/${finalAttrs.version}/amarok-${finalAttrs.version}.tar.xz";
-    sha256 = "sha256-FKh2eDBfrXagodrKVVpndf+mQuXrvMzs2R9JcJOZLBw=";
+    sha256 = "sha256-S+zyrp3cvoYRA+ZCFDaireIvU4yxw2ANTmZ/cb6ljys=";
   };
 
   outputs = [ "out" "doc" ];

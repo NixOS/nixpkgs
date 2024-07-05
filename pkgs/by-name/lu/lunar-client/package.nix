@@ -6,11 +6,11 @@
 
 appimageTools.wrapType2 rec {
   pname = "lunar-client";
-  version = "3.2.9";
+  version = "3.2.11";
 
   src = fetchurl {
     url = "https://launcherupdates.lunarclientcdn.com/Lunar%20Client-${version}.AppImage";
-    hash = "sha512-7D7rGYJc6q5cPlgDjWkd76TwJ4QPSf99buoeJOfhP/e/clnWvfmLHK6CaAPAPDnOjijMuAEM9XkDYH8U5tlvMQ==";
+    hash = "sha512-qRucW9x4LMmTb8pw0zY1EKXkPfjdahCi2PN/bfdB8CYA4wZp0bfZNaGtPpI/BKPlnR/nfpypEdnHsoqlL9KiCg==";
   };
 
   extraInstallCommands =
@@ -33,7 +33,7 @@ appimageTools.wrapType2 rec {
     homepage = "https://www.lunarclient.com/";
     license = with licenses; [ unfree ];
     mainProgram = "lunar-client";
-    maintainers = with maintainers; [ zyansheep Technical27 surfaceflinger ];
+    maintainers = with maintainers; [ Technical27 surfaceflinger ];
     platforms = [ "x86_64-linux" ];
   };
 }

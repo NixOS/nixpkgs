@@ -5,6 +5,7 @@
 , cudaSupport ? opencv.cudaSupport or false
 
 # build
+, scons
 , addOpenGLRunpath
 , autoPatchelfHook
 , cmake
@@ -25,7 +26,7 @@
 , protobuf
 , pugixml
 , snappy
-, tbb
+, tbb_2021_5
 , cudaPackages
 }:
 
@@ -35,6 +36,9 @@ let
   ;
 
   stdenv = gcc12Stdenv;
+
+  # prevent scons from leaking in the default python version
+  scons' = scons.override { python3 = python3Packages.python; };
 
   tbbbind_version = "2_5";
   tbbbind = fetchurl {
@@ -54,14 +58,14 @@ in
 
 stdenv.mkDerivation rec {
   pname = "openvino";
-  version = "2024.1.0";
+  version = "2024.2.0";
 
   src = fetchFromGitHub {
     owner = "openvinotoolkit";
     repo = "openvino";
     rev = "refs/tags/${version}";
     fetchSubmodules = true;
-    hash = "sha256-OOSxXpLjmhOgKvrSO6SmY7xLhJSzGXT8w/Y4FnfwTqU=";
+    hash = "sha256-HiKKvmqgbwW625An+Su0EOHqVrP18yvG2aOzrS0jWr4=";
   };
 
   outputs = [
@@ -78,6 +82,7 @@ stdenv.mkDerivation rec {
     patchelf
     pkg-config
     python
+    scons'
     shellcheck
   ] ++ lib.optionals cudaSupport [
     cudaPackages.cuda_nvcc
@@ -91,7 +96,9 @@ stdenv.mkDerivation rec {
     popd
   '';
 
-  dontUseCmakeBuildDir = true;
+  dontUseSconsCheck = true;
+  dontUseSconsBuild = true;
+  dontUseSconsInstall = true;
 
   cmakeFlags = [
     "-Wno-dev"
@@ -109,7 +116,7 @@ stdenv.mkDerivation rec {
     (cmakeBool "ENABLE_SAMPLES" false)
 
     # features
-    (cmakeBool "ENABLE_INTEL_CPU" true)
+    (cmakeBool "ENABLE_INTEL_CPU" stdenv.isx86_64)
     (cmakeBool "ENABLE_JS" false)
     (cmakeBool "ENABLE_LTO" true)
     (cmakeBool "ENABLE_ONEDNN_FOR_GPU" false)
@@ -125,8 +132,6 @@ stdenv.mkDerivation rec {
     (cmakeBool "ENABLE_SYSTEM_TBB" true)
   ];
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isAarch64 "-Wno-narrowing";
-
   autoPatchelfIgnoreMissingDeps = [
     "libngraph_backend.so"
   ];
@@ -140,7 +145,7 @@ stdenv.mkDerivation rec {
     opencv.cxxdev
     pugixml
     snappy
-    tbb
+    tbb_2021_5
   ] ++ lib.optionals cudaSupport [
     cudaPackages.cuda_cudart
   ];
@@ -172,8 +177,7 @@ stdenv.mkDerivation rec {
     homepage = "https://docs.openvinotoolkit.org/";
     license = with licenses; [ asl20 ];
     platforms = platforms.all;
-    broken = (stdenv.isLinux && stdenv.isAarch64) # requires scons, then fails with *** Source directory cannot be under variant directory.
-      || stdenv.isDarwin; # Cannot find macos sdk
+    broken = stdenv.isDarwin; # Cannot find macos sdk
     maintainers = with maintainers; [ tfmoraes ];
   };
 }

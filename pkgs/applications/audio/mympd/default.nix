@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mympd";
-  version = "15.0.2";
+  version = "16.0.0";
 
   src = fetchFromGitHub {
     owner = "jcorporation";
     repo = "myMPD";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-Yz6gL87Vc8iFTRgKhyUgLL1ool+oinvwq2W9OjFl/OQ=";
+    sha256 = "sha256-LYD1qjSlwv9wGBrZUaYz6Zcvl2n6cLi2aGycr4ZJWdY=";
   };
 
   nativeBuildInputs = [

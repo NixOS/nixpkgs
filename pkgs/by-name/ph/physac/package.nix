@@ -5,7 +5,7 @@
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
-  name = "physac";
+  pname = "physac";
   version = "2.5-unstable-2023-12-11";
 
   src = fetchFromGitHub {

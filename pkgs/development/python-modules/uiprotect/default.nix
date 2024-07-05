@@ -35,14 +35,14 @@
 
 buildPythonPackage rec {
   pname = "uiprotect";
-  version = "1.1.0";
+  version = "1.7.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "uilibs";
     repo = "uiprotect";
     rev = "refs/tags/v${version}";
-    hash = "sha256-TWErGEQot99x48Ti9rBxaq9qcrZiT/W0irdR+UxC1XI=";
+    hash = "sha256-gr+P7V0vsmWha/Di3BGORjssCLz0lsufawzMZKOMYt0=";
   };
 
   postPatch = ''

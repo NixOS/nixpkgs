@@ -40,6 +40,6 @@ buildPythonPackage rec {
     description = "ProtonVPN core component to access Linux's keyring";
     homepage = "https://github.com/ProtonVPN/python-proton-keyring-linux";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ wolfangaukang ];
+    maintainers = [ ];
   };
 }

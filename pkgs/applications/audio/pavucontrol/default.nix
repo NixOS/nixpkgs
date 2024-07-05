@@ -8,7 +8,7 @@
 , libsigcxx
 , libcanberra-gtk3
 , json-glib
-, gnome
+, adwaita-icon-theme
 , wrapGAppsHook3
 }:
 
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     libsigcxx
     libcanberra-gtk3
     json-glib
-    gnome.adwaita-icon-theme
+    adwaita-icon-theme
   ];
 
   nativeBuildInputs = [ pkg-config intltool wrapGAppsHook3 ];

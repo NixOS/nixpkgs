@@ -28,17 +28,17 @@ buildPythonPackage rec {
     })
   ];
 
-  nativeBuildInputs = [ flit-core ];
+  build-system = [ flit-core ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "ptyprocess" ];
 
-  meta = with lib; {
+  meta = {
     description = "Run a subprocess in a pseudo terminal";
     homepage = "https://github.com/pexpect/ptyprocess";
     changelog = "https://github.com/pexpect/ptyprocess/releases/tag/${version}";
-    license = licenses.isc;
-    maintainers = with maintainers; [ ];
+    license = lib.licenses.isc;
+    maintainers = with lib.maintainers; [ getchoo ];
   };
 }

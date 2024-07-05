@@ -1,6 +1,7 @@
 {
   lib,
   buildPythonPackage,
+  cachecontrol,
   feedparser,
   fetchFromGitHub,
   gitpython,
@@ -14,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "mkdocs-rss-plugin";
-  version = "1.13.0";
+  version = "1.15.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -23,7 +24,7 @@ buildPythonPackage rec {
     owner = "Guts";
     repo = "mkdocs-rss-plugin";
     rev = "refs/tags/${version}";
-    hash = "sha256-CUgUiLVrKI+i9F+Bc0a4r2jaW7e65JHGxOi8xGhZxWI=";
+    hash = "sha256-sGm6uWlZeW65uorfTK8pk8ZT2AE9nmsZhe+UYVrSr+8=";
   };
 
   postPatch = ''
@@ -33,6 +34,7 @@ buildPythonPackage rec {
   build-system = [ setuptools ];
 
   dependencies = [
+    cachecontrol
     gitpython
     mkdocs
   ];
@@ -49,7 +51,7 @@ buildPythonPackage rec {
   disabledTests = [
     # Tests require network access
     "test_plugin_config_through_mkdocs"
-    "test_remote_image_ok"
+    "test_remote_image"
   ];
 
   disabledTestPaths = [

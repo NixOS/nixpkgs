@@ -34,5 +34,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.romildo ];
+    mainProgram = "gcal";
   };
 }
