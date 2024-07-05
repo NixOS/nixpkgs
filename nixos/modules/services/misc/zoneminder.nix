@@ -202,7 +202,7 @@ in {
     ];
 
     services = {
-      fcgiwrap.zoneminder = lib.mkIf useNginx {
+      fcgiwrap.instances.zoneminder = lib.mkIf useNginx {
         process.prefork = cfg.cameras;
         process.user = user;
         process.group = group;
@@ -255,7 +255,7 @@ in {
                   fastcgi_param HTTP_PROXY "";
                   fastcgi_intercept_errors on;
 
-                  fastcgi_pass unix:${config.services.fcgiwrap.zoneminder.socket.address};
+                  fastcgi_pass unix:${config.services.fcgiwrap.instances.zoneminder.socket.address};
                 }
 
                 location /cache/ {
