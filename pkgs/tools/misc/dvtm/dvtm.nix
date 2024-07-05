@@ -23,7 +23,7 @@ stdenv.mkDerivation {
     description = "Dynamic virtual terminal manager";
     homepage = "http://www.brain-dump.org/projects/dvtm";
     license = licenses.mit;
-    maintainers = [ maintainers.vrthra ];
+    maintainers = [ ];
     platforms = platforms.unix;
   };
 }

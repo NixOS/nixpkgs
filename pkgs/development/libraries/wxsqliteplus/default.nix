@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     mainProgram = "wxsqliteplus";
     homepage = "https://github.com/guanlisheng/wxsqliteplus";
     license = licenses.gpl3Plus;
-    maintainers = [ maintainers.vrthra ];
+    maintainers = [ ];
     platforms = platforms.unix;
   };
 }

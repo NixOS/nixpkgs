@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     description = "Emulation of ACME";
     homepage = "http://wily.sourceforge.net";
     license = licenses.artistic1;
-    maintainers = [ maintainers.vrthra ];
+    maintainers = [ ];
     platforms = platforms.unix;
     mainProgram = "wily";
   };
