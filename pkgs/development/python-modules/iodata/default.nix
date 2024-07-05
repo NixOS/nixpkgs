@@ -2,30 +2,31 @@
   buildPythonPackage,
   lib,
   fetchFromGitHub,
+  setuptools,
+  setuptools-scm,
   numpy,
   scipy,
   attrs,
-  cython,
-  nose,
 }:
 
 buildPythonPackage rec {
   pname = "iodata";
-  version = "1.0.0a2";
-  format = "setuptools";
+  version = "1.0.0a4";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "theochem";
     repo = pname;
-    rev = version;
-    hash = "sha256-GFTCYE19Re7WLhV8eU+0i8OMp/Tsms/Xj9DRTcgjcz4=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-ld6V+/8lg4Du6+mHU5XuXXyMpWwyepXurerScg/bf2Q=";
   };
 
-  nativeBuildInputs = [
-    cython
-    nose
+  build-system = [
+    setuptools
+    setuptools-scm
   ];
-  propagatedBuildInputs = [
+
+  dependencies = [
     numpy
     scipy
     attrs
