@@ -60,12 +60,12 @@ buildPythonPackage rec {
     boto3
     botocore
     cryptography
-    requests
-    xmltodict
-    werkzeug
-    python-dateutil
-    responses
     jinja2
+    python-dateutil
+    requests
+    responses
+    werkzeug
+    xmltodict
   ];
 
   optional-dependencies = {
@@ -164,11 +164,11 @@ buildPythonPackage rec {
     "tests/test_cognitoidp/test_cognitoidp.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Allows your tests to easily mock out AWS Services";
     homepage = "https://github.com/getmoto/moto";
     changelog = "https://github.com/getmoto/moto/blob/${version}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = [ ];
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.onny ];
   };
 }
