@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
     homepage = "https://bleep.build/";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.mit;
-    description = "Blazing fast scala build tool";
+    description = "Bleeping fast scala build tool";
     mainProgram = "bleep";
     platforms = [ "x86_64-linux" "x86_64-apple-darwin" "arm64-apple-darwin" ];
     maintainers = with maintainers; [ kristianan ];
