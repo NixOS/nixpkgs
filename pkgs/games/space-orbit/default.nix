@@ -41,7 +41,7 @@ EOF
     broken = stdenv.isDarwin;
     description = "Space combat simulator";
     mainProgram = "space-orbit";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.all;
   };
 }

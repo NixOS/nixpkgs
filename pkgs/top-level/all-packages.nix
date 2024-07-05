@@ -1229,8 +1229,6 @@ with pkgs;
 
   libredirect = callPackage ../build-support/libredirect { };
 
-  livecaptions = callPackage ../applications/misc/livecaptions { };
-
   madonctl = callPackage ../applications/misc/madonctl { };
 
   copyDesktopItems = makeSetupHook {
@@ -2349,8 +2347,6 @@ with pkgs;
 
   git-mit = callPackage ../applications/version-management/git-mit { };
 
-  git-my = callPackage ../applications/version-management/git-my { };
-
   git-machete = python3Packages.callPackage ../applications/version-management/git-machete { };
 
   git-nomad = callPackage ../applications/version-management/git-nomad { };
@@ -3331,8 +3327,6 @@ with pkgs;
   bashblog = callPackage ../tools/text/bashblog { };
 
   berglas = callPackage ../tools/admin/berglas { };
-
-  betterdiscordctl = callPackage ../tools/misc/betterdiscordctl { };
 
   betterdiscord-installer = callPackage ../tools/misc/betterdiscord-installer { };
 
@@ -5922,8 +5916,6 @@ with pkgs;
 
   nsz = with python3.pkgs; toPythonApplication nsz;
 
-  nwipe = callPackage ../tools/security/nwipe { };
-
   nx2elf = callPackage ../tools/compression/nx2elf { };
 
   nx-libs = callPackage ../tools/X11/nx-libs { };
@@ -7652,7 +7644,7 @@ with pkgs;
   easeprobe = callPackage ../tools/misc/easeprobe { };
 
   emscripten = callPackage ../development/compilers/emscripten {
-    llvmPackages = llvmPackages_17;
+    llvmPackages = llvmPackages_18;
   };
 
   emscriptenPackages = recurseIntoAttrs (callPackage ./emscripten-packages.nix { });
@@ -12680,6 +12672,8 @@ with pkgs;
 
   seehecht = callPackage ../tools/text/seehecht { };
 
+  segger-jlink-headless = callPackage ../by-name/se/segger-jlink/package.nix { headless = true; };
+
   selectdefaultapplication = libsForQt5.callPackage ../applications/misc/selectdefaultapplication { };
 
   semantic-release = callPackage ../development/tools/semantic-release {
@@ -12987,8 +12981,6 @@ with pkgs;
   snapshot = callPackage ../applications/graphics/snapshot { };
 
   solvespace = callPackage ../applications/graphics/solvespace { };
-
-  sonarr = callPackage ../servers/sonarr { };
 
   sonata = callPackage ../applications/audio/sonata { };
 
@@ -24980,8 +24972,7 @@ with pkgs;
 
   smack = callPackage ../development/libraries/java/smack { };
 
-  swt = callPackage ../development/libraries/java/swt { };
-  swt_jdk8 = callPackage ../development/libraries/java/swt {
+  swt_jdk8 = callPackage ../by-name/sw/swt/package.nix {
     jdk = jdk8;
   };
 
@@ -27454,7 +27445,7 @@ with pkgs;
 
   octomap = callPackage ../development/libraries/octomap { };
 
-  odin = callPackage ../development/compilers/odin {
+  odin = callPackage ../by-name/od/odin/package.nix {
     inherit (pkgs.darwin.apple_sdk_11_0) MacOSX-SDK;
     inherit (pkgs.darwin.apple_sdk_11_0.frameworks) Security;
     llvmPackages = llvmPackages_18;
@@ -30236,7 +30227,7 @@ with pkgs;
 
   em = callPackage ../applications/editors/em { };
 
-  inherit (recurseIntoAttrs (darwin.apple_sdk_11_0.callPackage ../applications/editors/emacs { }))
+  inherit (recurseIntoAttrs (callPackage ../applications/editors/emacs { }))
     emacs28
     emacs28-gtk2
     emacs28-gtk3
@@ -32571,13 +32562,6 @@ with pkgs;
 
   moonlight-embedded = callPackage ../applications/misc/moonlight-embedded { };
 
-  moonlight-qt = libsForQt5.callPackage ../applications/misc/moonlight-qt {
-    stdenv = if stdenv.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
-    SDL2 = buildPackages.SDL2.override {
-      drmSupport = stdenv.isLinux;
-    };
-  };
-
   mooSpace = callPackage ../applications/audio/mooSpace { };
 
   mop = callPackage ../applications/misc/mop { };
@@ -33817,8 +33801,6 @@ with pkgs;
   };
 
   rednotebook = python3Packages.callPackage ../applications/editors/rednotebook { };
-
-  remnote = callPackage ../applications/misc/remnote { };
 
   remotebox = callPackage ../applications/virtualization/remotebox { };
 

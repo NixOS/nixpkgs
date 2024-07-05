@@ -83,9 +83,13 @@ let
     "-DLIBCXX_HAS_MUSL_LIBC=1"
   ] ++ lib.optionals (lib.versionAtLeast release_version "18" && !useLLVM && stdenv.hostPlatform.libc == "glibc" && !stdenv.hostPlatform.isStatic) [
     "-DLIBCXX_ADDITIONAL_LIBRARIES=gcc_s"
+  ] ++ lib.optionals (lib.versionAtLeast release_version "18" && stdenv.hostPlatform.isFreeBSD) [
+    # Name and documentation claim this is for libc++abi, but its man effect is adding `-lunwind`
+    # to the libc++.so linker script. We want FreeBSD's so-called libgcc instead of libunwind.
+    "-DLIBCXXABI_USE_LLVM_UNWINDER=OFF"
   ] ++ lib.optionals useLLVM [
     "-DLIBCXX_USE_COMPILER_RT=ON"
-  ] ++ lib.optionals (useLLVM && lib.versionAtLeast release_version "16") [
+  ] ++ lib.optionals (useLLVM && !stdenv.hostPlatform.isFreeBSD && lib.versionAtLeast release_version "16") [
     "-DLIBCXX_ADDITIONAL_LIBRARIES=unwind"
   ] ++ lib.optionals stdenv.hostPlatform.isWasm [
     "-DLIBCXX_ENABLE_THREADS=OFF"
@@ -122,7 +126,7 @@ stdenv.mkDerivation (rec {
     ++ lib.optional (cxxabi != null) lndir;
 
   buildInputs = [ cxxabi ]
-    ++ lib.optionals (useLLVM && !stdenv.hostPlatform.isWasm) [ libunwind ];
+    ++ lib.optionals (useLLVM && !stdenv.hostPlatform.isWasm && !stdenv.hostPlatform.isFreeBSD) [ libunwind ];
 
   # libc++.so is a linker script which expands to multiple libraries,
   # libc++.so.1 and libc++abi.so or the external cxxabi. ld-wrapper doesn't

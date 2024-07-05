@@ -377,7 +377,6 @@ stdenv'.mkDerivation (finalAttrs: {
       fpletz
       globin
       ma27
-      tadeokondrak
     ];
     platforms = lib.platforms.unix;
   };
