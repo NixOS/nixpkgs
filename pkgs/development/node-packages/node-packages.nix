@@ -85051,6 +85051,28 @@ in
     bypassCache = true;
     reconstructLock = true;
   };
+  prettier-plugin-go-template = nodeEnv.buildNodePackage {
+    name = "prettier-plugin-go-template";
+    packageName = "prettier-plugin-go-template";
+    version = "0.0.15";
+    src = fetchurl {
+      url = "https://registry.npmjs.org/prettier-plugin-go-template/-/prettier-plugin-go-template-0.0.15.tgz";
+      sha512 = "WqU92E1NokWYNZ9mLE6ijoRg6LtIGdLMePt2C7UBDjXeDH9okcRI3zRqtnWR4s5AloiqyvZ66jNBAa9tmRY5EQ==";
+    };
+    dependencies = [
+      sources."prettier-3.3.2"
+      sources."ulid-2.3.0"
+    ];
+    buildInputs = globalBuildInputs;
+    meta = {
+      description = "Prettier plugin for formatting Go & GoHugo templates.";
+      homepage = "https://github.com/NiklasPor/prettier-plugin-go-template#readme";
+      license = "MIT";
+    };
+    production = true;
+    bypassCache = true;
+    reconstructLock = true;
+  };
   prettier-plugin-toml = nodeEnv.buildNodePackage {
     name = "prettier-plugin-toml";
     packageName = "prettier-plugin-toml";

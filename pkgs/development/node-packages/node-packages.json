@@ -176,6 +176,7 @@
 , "postcss-cli"
 , "prebuild-install"
 , "prettier"
+, "prettier-plugin-go-template"
 , "prettier-plugin-toml"
 , "prisma"
 , "@prisma/language-server"
