@@ -683,6 +683,12 @@
     githubId = 79667753;
     keys = [ { fingerprint = "B0D7 2955 235F 6AB5 ACFA  1619 8C7F F5BB 1ADE F191"; } ];
   };
+  ailsaa = {
+    email = "n2nmeow@protonmail.com";
+    name = "Ailsa Sun";
+    github = "ailsa-sun";
+    githubId = 135079815;
+  }
   aimpizza = {
     email = "rickomo.us@gmail.com";
     name = "Rick Omonsky";
