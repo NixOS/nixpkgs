@@ -149,8 +149,12 @@ in
         )
 
         ''${args:+fail "args should not be set by Nix. We don't expect it to and unstructuredDerivationInputEnv removes it."}
+        if [[ "''${builder:-x}" == x ]]; then
+          fail "builder should be set by Nix. We don't remove it in unstructuredDerivationInputEnv."
+        fi
       '';
     } // removeAttrs drvAttrs [
+      # This would break the derivation. Instead, we have a check in the derivation to make sure Nix doesn't set it.
       "args"
     ]);
 }
