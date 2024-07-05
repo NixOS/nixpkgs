@@ -1,0 +1,190 @@
+From 8e46d3e37f81bf13f3f62a14fb603feb2e37229d Mon Sep 17 00:00:00 2001
+From: John Titor <50095635+JohnRTitor@users.noreply.github.com>
+Date: Fri, 10 May 2024 23:25:58 +0530
+Subject: [PATCH] Fix builds with Ninja 12 and remove a 5 year old workaround.
+
+Co-authored-by: Jussi Pakkanen <jpakkane@gmail.com>
+Co-authored-by: Masum Reza <masumrezarock100@gmail.com>
+---
+ run_project_tests.py           |  3 +--
+ run_tests.py                   | 35 ++++++++++------------------------
+ unittests/baseplatformtests.py | 34 +++++++++++++++++++++++++++------
+ 3 files changed, 39 insertions(+), 33 deletions(-)
+
+diff --git a/run_project_tests.py b/run_project_tests.py
+index a14741364..222e12f74 100755
+--- a/run_project_tests.py
++++ b/run_project_tests.py
+@@ -45,7 +45,7 @@ from mesonbuild.coredata import backendlist, version as meson_version
+ from mesonbuild.modules.python import PythonExternalProgram
+ from run_tests import (
+     get_fake_options, run_configure, get_meson_script, get_backend_commands,
+-    get_backend_args_for_dir, Backend, ensure_backend_detects_changes,
++    get_backend_args_for_dir, Backend,
+     guess_backend, handle_meson_skip_test,
+ )
+ 
+@@ -720,7 +720,6 @@ def _run_test(test: TestDef,
+ 
+     # Touch the meson.build file to force a regenerate
+     def force_regenerate() -> None:
+-        ensure_backend_detects_changes(backend)
+         os.utime(str(test.path / 'meson.build'))
+ 
+     # just test building
+diff --git a/run_tests.py b/run_tests.py
+index 207653219..0c51f3d69 100755
+--- a/run_tests.py
++++ b/run_tests.py
+@@ -39,29 +39,27 @@ from mesonbuild.mesonlib import OptionKey, setup_vsenv
+ if T.TYPE_CHECKING:
+     from mesonbuild.coredata import SharedCMDOptions
+ 
+-NINJA_1_9_OR_NEWER = False
++NINJA_1_12_OR_NEWER = False
+ NINJA_CMD = None
+ # If we're on CI, detecting ninja for every subprocess unit test that we run is slow
+ # Optimize this by respecting $NINJA and skipping detection, then exporting it on
+ # first run.
+ try:
+-    NINJA_1_9_OR_NEWER = bool(int(os.environ['NINJA_1_9_OR_NEWER']))
++    NINJA_1_12_OR_NEWER = bool(int(os.environ['NINJA_1_12_OR_NEWER']))
+     NINJA_CMD = [os.environ['NINJA']]
+ except (KeyError, ValueError):
+-    # Look for 1.9 to see if https://github.com/ninja-build/ninja/issues/1219
+-    # is fixed
+-    NINJA_CMD = detect_ninja('1.9')
++    # Look for 1.12, which removes -w dupbuild=err
++    NINJA_CMD = detect_ninja('1.12')
+     if NINJA_CMD is not None:
+-        NINJA_1_9_OR_NEWER = True
++        NINJA_1_12_OR_NEWER = True
+     else:
+-        mlog.warning('Found ninja <1.9, tests will run slower', once=True)
+         NINJA_CMD = detect_ninja()
+ 
+ if NINJA_CMD is not None:
+-    os.environ['NINJA_1_9_OR_NEWER'] = str(int(NINJA_1_9_OR_NEWER))
++    os.environ['NINJA_1_12_OR_NEWER'] = str(int(NINJA_1_12_OR_NEWER))
+     os.environ['NINJA'] = NINJA_CMD[0]
+ else:
+-    raise RuntimeError('Could not find Ninja v1.7 or newer')
++    raise RuntimeError('Could not find Ninja.')
+ 
+ # Emulate running meson with -X utf8 by making sure all open() calls have a
+ # sane encoding. This should be a python default, but PEP 540 considered it not
+@@ -271,7 +269,9 @@ def get_backend_commands(backend: Backend, debug: bool = False) -> \
+         test_cmd = cmd + ['-target', 'RUN_TESTS']
+     elif backend is Backend.ninja:
+         global NINJA_CMD
+-        cmd = NINJA_CMD + ['-w', 'dupbuild=err', '-d', 'explain']
++        cmd = NINJA_CMD + ['-d', 'explain']
++        if not NINJA_1_12_OR_NEWER:
++            cmd += ['-w', 'dupbuild=err']
+         if debug:
+             cmd += ['-v']
+         clean_cmd = cmd + ['clean']
+@@ -282,21 +282,6 @@ def get_backend_commands(backend: Backend, debug: bool = False) -> \
+         raise AssertionError(f'Unknown backend: {backend!r}')
+     return cmd, clean_cmd, test_cmd, install_cmd, uninstall_cmd
+ 
+-def ensure_backend_detects_changes(backend: Backend) -> None:
+-    global NINJA_1_9_OR_NEWER
+-    if backend is not Backend.ninja:
+-        return
+-    need_workaround = False
+-    # We're using ninja >= 1.9 which has QuLogic's patch for sub-1s resolution
+-    # timestamps
+-    if not NINJA_1_9_OR_NEWER:
+-        mlog.warning('Don\'t have ninja >= 1.9, enabling timestamp resolution workaround', once=True)
+-        need_workaround = True
+-    # Increase the difference between build.ninja's timestamp and the timestamp
+-    # of whatever you changed: https://github.com/ninja-build/ninja/issues/371
+-    if need_workaround:
+-        time.sleep(1)
+-
+ def run_mtest_inprocess(commandlist: T.List[str]) -> T.Tuple[int, str, str]:
+     out = StringIO()
+     with mock.patch.object(sys, 'stdout', out), mock.patch.object(sys, 'stderr', out):
+diff --git a/unittests/baseplatformtests.py b/unittests/baseplatformtests.py
+index 6125ed933..226b2e11e 100644
+--- a/unittests/baseplatformtests.py
++++ b/unittests/baseplatformtests.py
+@@ -1,6 +1,8 @@
+ # SPDX-License-Identifier: Apache-2.0
+ # Copyright 2016-2021 The Meson development team
++# Copyright © 2024 Intel Corporation
+ 
++from __future__ import annotations
+ from pathlib import PurePath
+ from unittest import mock, TestCase, SkipTest
+ import json
+@@ -9,6 +11,7 @@ import os
+ import re
+ import subprocess
+ import sys
++import shutil
+ import tempfile
+ import typing as T
+ 
+@@ -28,7 +31,7 @@ import mesonbuild.modules.pkgconfig
+ 
+ 
+ from run_tests import (
+-    Backend, ensure_backend_detects_changes, get_backend_commands,
++    Backend, get_backend_commands,
+     get_builddir_target_args, get_meson_script, run_configure_inprocess,
+     run_mtest_inprocess, handle_meson_skip_test,
+ )
+@@ -286,11 +289,11 @@ class BasePlatformTests(TestCase):
+         '''
+         return self.build(target=target, override_envvars=override_envvars)
+ 
+-    def setconf(self, arg, will_build=True):
+-        if not isinstance(arg, list):
++    def setconf(self, arg: T.Sequence[str], will_build: bool = True) -> None:
++        if isinstance(arg, str):
+             arg = [arg]
+-        if will_build:
+-            ensure_backend_detects_changes(self.backend)
++        else:
++            arg = list(arg)
+         self._run(self.mconf_command + arg + [self.builddir])
+ 
+     def getconf(self, optname: str):
+@@ -304,7 +307,6 @@ class BasePlatformTests(TestCase):
+         windows_proof_rmtree(self.builddir)
+ 
+     def utime(self, f):
+-        ensure_backend_detects_changes(self.backend)
+         os.utime(f)
+ 
+     def get_compdb(self):
+@@ -492,3 +494,23 @@ class BasePlatformTests(TestCase):
+ 
+     def assertLength(self, val, length):
+         assert len(val) == length, f'{val} is not length {length}'
++
++    def copy_srcdir(self, srcdir: str) -> str:
++        """Copies a source tree and returns that copy.
++
++        ensures that the copied tree is deleted after running.
++
++        :param srcdir: The locaiton of the source tree to copy
++        :return: The location of the copy
++        """
++        dest = tempfile.mkdtemp()
++        self.addCleanup(windows_proof_rmtree, dest)
++
++        # shutil.copytree expects the destinatin directory to not exist, Once
++        # python 3.8 is required the `dirs_exist_ok` parameter negates the need
++        # for this
++        dest = os.path.join(dest, 'subdir')
++
++        shutil.copytree(srcdir, dest)
++
++        return dest
+\ No newline at end of file
+-- 
+2.44.0
+

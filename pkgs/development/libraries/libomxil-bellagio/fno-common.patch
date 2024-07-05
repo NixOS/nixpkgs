@@ -1,0 +1,32 @@
+Fix build faiure on gcc-10 (defaults to -fno-common).
+--- a/src/omx_reference_resource_manager.c
++++ b/src/omx_reference_resource_manager.c
+@@ -30,6 +30,11 @@
+ #include "base/omx_base_component.h"
+ #include "queue.h"
+ 
++int globalIndex;
++NameIndexType *listOfcomponentRegistered;
++ComponentListType **globalComponentList;
++ComponentListType **globalWaitingComponentList;
++
+ /**
+  * This is the static base pointer of the list
+  */
+--- a/src/omx_reference_resource_manager.h
++++ b/src/omx_reference_resource_manager.h
+@@ -49,10 +49,10 @@ struct NameIndexType {
+ };
+ 
+ 
+-int globalIndex;
+-NameIndexType *listOfcomponentRegistered;
+-ComponentListType **globalComponentList;
+-ComponentListType **globalWaitingComponentList;
++extern int globalIndex;
++extern NameIndexType *listOfcomponentRegistered;
++extern ComponentListType **globalComponentList;
++extern ComponentListType **globalWaitingComponentList;
+ 
+ OMX_ERRORTYPE RM_RegisterComponent(char *name, int max_components);
+ OMX_ERRORTYPE addElemToList(ComponentListType **list, OMX_COMPONENTTYPE *openmaxStandComp, int index, OMX_BOOL bIsWaiting);

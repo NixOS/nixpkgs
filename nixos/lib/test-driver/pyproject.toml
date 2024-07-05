@@ -1,0 +1,47 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "nixos-test-driver"
+version = "0.0.0"
+
+[project.scripts]
+nixos-test-driver = "test_driver:main"
+generate-driver-symbols = "test_driver:generate_driver_symbols"
+
+[tool.setuptools.packages]
+find = {}
+
+[tool.setuptools.package-data]
+test_driver = ["py.typed"]
+
+[tool.ruff]
+line-length = 88
+
+lint.select = ["E", "F", "I", "U", "N"]
+lint.ignore = ["E501"]
+
+# xxx: we can import https://pypi.org/project/types-colorama/ here
+[[tool.mypy.overrides]]
+module = "colorama.*"
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = "ptpython.*"
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = "junit_xml.*"
+ignore_missing_imports = true
+
+[tool.black]
+line-length = 88
+target-version = ['py39']
+include = '\.pyi?$'
+
+[tool.mypy]
+warn_redundant_casts = true
+disallow_untyped_calls = true
+disallow_untyped_defs = true
+no_implicit_optional = true

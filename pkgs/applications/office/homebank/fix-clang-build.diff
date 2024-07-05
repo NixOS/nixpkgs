@@ -1,0 +1,23 @@
+C Standard says in 6.8.1:
+
+    labeled-statement:
+      identifier : statement
+      case constant-expression : statement
+      default : statement
+
+Notably, only expressions and no declarations are allowed. A common workaround for this
+is adding an empty statement.
+
+diff --git a/src/rep-budget.c b/src/rep-budget.c
+index eb5cce6..61e2e77 100644
+--- a/src/rep-budget.c
++++ b/src/rep-budget.c
+@@ -255,7 +255,7 @@ gint tmpmode;
+ 	}
+ 	else
+ 	{
+-libname:
++libname: ;
+ 	gchar *name;
+ 	
+ 		gtk_tree_model_get(model, iter, 

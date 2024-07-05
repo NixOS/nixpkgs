@@ -1,0 +1,79 @@
+diff --git a/src/xminicom b/src/xminicom
+index a59aa08..cef153b 100755
+--- a/src/xminicom
++++ b/src/xminicom
+@@ -7,57 +7,39 @@
+ #
+ # version	$Id: xminicom,v 1.4 2008-06-09 20:48:35 al-guest Exp $
+
+-findcmd()
+-{
+-  IFS=:
+-  for i in $PATH
+-  do
+-	if [ -x $i\/$1 ]
+-	then
+-		result=$i\/$1
+-		IFS=
+-		return 0
+-	fi
+-  done
+-  result=
+-  IFS=
+-  return 1
++findcmd() {
++  result=$(command -v $1)
+ }
+
+-if findcmd x-terminal-emulator
+-then
++if findcmd x-terminal-emulator ; then
+   exec $result -T minicom -e "if ! minicom -m -c on $*; then echo Press ENTER to continue...; read; fi"
+   exit 1
+ fi
+
+-if findcmd color_xterm
+-then
++if findcmd konsole ; then
++  exec $result -T minicom -geometry 80x25 -e minicom -m -c on "$@"
++  exit 1
++fi
++
++if findcmd gnome-terminal ; then
++  exec $result -T minicom -geometry 80x25 -e "if ! minicom -m -c on $*; then echo Press ENTER to continue...; read; fi"
++  exit 1
++fi
++
++if findcmd color_xterm ; then
+   exec $result -T minicom -bg black -fg grey -n minicom -geometry 80x25 -e "if ! minicom -m -c on $*; then echo Press ENTER to continue...; read; fi"
+   exit 1
+ fi
+
+-if findcmd rxvt
+-then
++if findcmd rxvt ; then
+   exec $result -bg black -fg grey -n minicom -T minicom -sl 0 -geometry 80x25 -e "if ! minicom -m -c on $*; then echo Press ENTER to continue...; read; fi"
+   exit 1
+ fi
+
+-if findcmd kterm
+-then
++if findcmd xterm ; then
+   exec $result -T minicom -n minicom -geometry 80x25 -e "if ! minicom -m -c on $*; then echo Press ENTER to continue...; read; fi"
+   exit 1
+ fi
+
+-if findcmd xterm
+-then
+-  if [ -f /etc/debian_version ]
+-  then
+-  exec $result -T minicom -n minicom -bg black -fg grey -geometry 80x25 -e "if ! minicom -m -c on $*; then echo Press ENTER to continue...; read; fi"
+-  else
+-  exec $result -T minicom -n minicom -geometry 80x25 -e "if ! minicom -m -c on $*; then echo Press ENTER to continue...; read; fi"
+-  fi
+-  exit 1
+-fi
+-
+-echo "xminicom: rxvt, color_xterm or xterm NOT found!" 1>&2
++echo "xminicom: konsole, gnome-terminal, rxvt, color_xterm or xterm NOT found!" 1>&2
+ exit 1

@@ -1,0 +1,69 @@
+diff --git a/data/80-udisks2.rules b/data/80-udisks2.rules
+index ca802cce..bfd1c29e 100644
+--- a/data/80-udisks2.rules
++++ b/data/80-udisks2.rules
+@@ -17,9 +17,9 @@ ENV{DM_UDEV_DISABLE_OTHER_RULES_FLAG}=="?*", GOTO="udisks_probe_end"
+ #
+ # TODO: file bug against mdadm(8) to have --export-prefix option that can be used with e.g. UDISKS_MD_MEMBER
+ #
+-SUBSYSTEM=="block", ENV{ID_FS_USAGE}=="raid", ENV{ID_FS_TYPE}=="linux_raid_member", ENV{UDISKS_MD_MEMBER_LEVEL}=="", IMPORT{program}="/bin/sh -c '/sbin/mdadm --examine --export $tempnode | /bin/sed s/^MD_/UDISKS_MD_MEMBER_/g'"
++SUBSYSTEM=="block", ENV{ID_FS_USAGE}=="raid", ENV{ID_FS_TYPE}=="linux_raid_member", ENV{UDISKS_MD_MEMBER_LEVEL}=="", IMPORT{program}="@sh@ -c '@mdadm@ --examine --export $tempnode | @sed@ s/^MD_/UDISKS_MD_MEMBER_/g'"
+
+-SUBSYSTEM=="block", KERNEL=="md*", ENV{DEVTYPE}!="partition", IMPORT{program}="/bin/sh -c '/sbin/mdadm --detail --export $tempnode | /bin/sed s/^MD_/UDISKS_MD_/g'"
++SUBSYSTEM=="block", KERNEL=="md*", ENV{DEVTYPE}!="partition", IMPORT{program}="@sh@ -c '@mdadm@ --detail --export $tempnode | @sed@ s/^MD_/UDISKS_MD_/g'"
+
+ LABEL="udisks_probe_end"
+
+diff --git a/src/tests/test.c b/src/tests/test.c
+index 3ddbdf2c..a87f960a 100644
+--- a/src/tests/test.c
++++ b/src/tests/test.c
+@@ -71,7 +71,7 @@ test_spawned_job_successful (void)
+ {
+   UDisksSpawnedJob *job;
+
+-  job = udisks_spawned_job_new ("/bin/true", NULL, getuid (), geteuid (), NULL, NULL);
++  job = udisks_spawned_job_new ("@true@", NULL, getuid (), geteuid (), NULL, NULL);
+   udisks_spawned_job_start (job);
+   _g_assert_signal_received (job, "completed", G_CALLBACK (on_completed_expect_success), NULL);
+   g_object_unref (job);
+@@ -84,10 +84,10 @@ test_spawned_job_failure (void)
+ {
+   UDisksSpawnedJob *job;
+
+-  job = udisks_spawned_job_new ("/bin/false", NULL, getuid (), geteuid (), NULL, NULL);
++  job = udisks_spawned_job_new ("@false@", NULL, getuid (), geteuid (), NULL, NULL);
+   udisks_spawned_job_start (job);
+   _g_assert_signal_received (job, "completed", G_CALLBACK (on_completed_expect_failure),
+-                             (gpointer) "Command-line `/bin/false' exited with non-zero exit status 1: ");
++                             (gpointer) "Command-line `@false@' exited with non-zero exit status 1: ");
+   g_object_unref (job);
+ }
+
+@@ -119,7 +119,7 @@ test_spawned_job_cancelled_at_start (void)
+
+   cancellable = g_cancellable_new ();
+   g_cancellable_cancel (cancellable);
+-  job = udisks_spawned_job_new ("/bin/true", NULL, getuid (), geteuid (), NULL, cancellable);
++  job = udisks_spawned_job_new ("@true@", NULL, getuid (), geteuid (), NULL, cancellable);
+   udisks_spawned_job_start (job);
+   _g_assert_signal_received (job, "completed", G_CALLBACK (on_completed_expect_failure),
+                              (gpointer) "Operation was cancelled (g-io-error-quark, 19)");
+@@ -144,7 +144,7 @@ test_spawned_job_cancelled_midway (void)
+   GCancellable *cancellable;
+
+   cancellable = g_cancellable_new ();
+-  job = udisks_spawned_job_new ("/bin/sleep 0.5", NULL, getuid (), geteuid (), NULL, cancellable);
++  job = udisks_spawned_job_new ("@sleep@ 0.5", NULL, getuid (), geteuid (), NULL, cancellable);
+   udisks_spawned_job_start (job);
+   g_timeout_add (10, on_timeout, cancellable); /* 10 msec */
+   _g_assert_signal_received (job, "completed", G_CALLBACK (on_completed_expect_failure),
+@@ -197,7 +197,7 @@ test_spawned_job_premature_termination (void)
+ {
+   UDisksSpawnedJob *job;
+
+-  job = udisks_spawned_job_new ("/bin/sleep 1000", NULL, getuid (), geteuid (), NULL, NULL /* GCancellable */);
++  job = udisks_spawned_job_new ("@sleep@ 1000", NULL, getuid (), geteuid (), NULL, NULL /* GCancellable */);
+   udisks_spawned_job_start (job);
+   g_object_unref (job);
+ }

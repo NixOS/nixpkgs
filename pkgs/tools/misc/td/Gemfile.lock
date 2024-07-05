@@ -1,0 +1,40 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    fluent-logger (0.8.0)
+      msgpack (>= 1.0.0, < 2)
+    hirb (0.7.3)
+    httpclient (2.8.3)
+    msgpack (1.2.6)
+    parallel (1.13.0)
+    ruby-progressbar (1.10.0)
+    rubyzip (1.2.2)
+    td (0.16.4)
+      hirb (>= 0.4.5)
+      msgpack
+      parallel (~> 1.8)
+      ruby-progressbar (~> 1.7)
+      rubyzip (>= 1.2.1)
+      td-client (>= 1.0.6, < 2)
+      td-logger (>= 0.3.21, < 2)
+      yajl-ruby (~> 1.1)
+      zip-zip (~> 0.3)
+    td-client (1.0.6)
+      httpclient (>= 2.7)
+      msgpack (>= 0.5.6, < 2)
+    td-logger (0.3.27)
+      fluent-logger (>= 0.5.0, < 2.0)
+      msgpack (>= 0.5.6, < 2.0)
+      td-client (>= 0.8.66, < 2.0)
+    yajl-ruby (1.4.1)
+    zip-zip (0.3)
+      rubyzip (>= 1.0.0)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  td
+
+BUNDLED WITH
+   2.1.4

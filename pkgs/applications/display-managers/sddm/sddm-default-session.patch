@@ -1,0 +1,71 @@
+diff --git a/src/common/Configuration.h b/src/common/Configuration.h
+index 54bcace..49cf5cb 100644
+--- a/src/common/Configuration.h
++++ b/src/common/Configuration.h
+@@ -48,6 +48,8 @@ namespace SDDM {
+         Entry(InputMethod,         QString,     QStringLiteral("qtvirtualkeyboard"),                   _S("Input method module"));
+         Entry(Namespaces,          QStringList, QStringList(),                                  _S("Comma-separated list of Linux namespaces for user session to enter"));
+         Entry(GreeterEnvironment,  QStringList, QStringList(),                                  _S("Comma-separated list of environment variables to be set"));
++        Entry(DefaultSession,      QString,     QString(),                                      _S("System-wide default session"));
++
+         //  Name   Entries (but it's a regular class again)
+         Section(Theme,
+             Entry(ThemeDir,            QString,     _S(DATA_INSTALL_DIR "/themes"),             _S("Theme directory path"));
+diff --git a/src/greeter/SessionModel.cpp b/src/greeter/SessionModel.cpp
+index d8698b7..df3e3c4 100644
+--- a/src/greeter/SessionModel.cpp
++++ b/src/greeter/SessionModel.cpp
+@@ -49,6 +49,7 @@ namespace SDDM {
+         if (dri_active)
+             populate(Session::WaylandSession, mainConfig.Wayland.SessionDir.get());
+         populate(Session::X11Session, mainConfig.X11.SessionDir.get());
++        selectDefaultSession();
+         endResetModel();
+
+         // refresh everytime a file is changed, added or removed
+@@ -62,6 +63,7 @@ namespace SDDM {
+             if (dri_active)
+                 populate(Session::WaylandSession, mainConfig.Wayland.SessionDir.get());
+             populate(Session::X11Session, mainConfig.X11.SessionDir.get());
++            selectDefaultSession();
+             endResetModel();
+         });
+         watcher->addPaths(mainConfig.Wayland.SessionDir.get());
+@@ -164,11 +166,25 @@ namespace SDDM {
+                 delete si;
+             }
+         }
++    }
++
++    void SessionModel::selectDefaultSession() {
++        d->lastIndex = 0;
++
+         // find out index of the last session
+         for (int i = 0; i < d->sessions.size(); ++i) {
+             if (d->sessions.at(i)->fileName() == stateConfig.Last.Session.get()) {
+                 d->lastIndex = i;
+-                break;
++                return;
++            }
++        }
++
++        // Otherwise, fallback to system-wide default session.
++        auto defaultSession = mainConfig.DefaultSession.get();
++        for (int i = 0; i < d->sessions.size(); ++i) {
++            if (QFileInfo(d->sessions.at(i)->fileName()).fileName() == defaultSession) {
++                d->lastIndex = i;
++                return;
+             }
+         }
+     }
+diff --git a/src/greeter/SessionModel.h b/src/greeter/SessionModel.h
+index 8f4d539..02f77ce 100644
+--- a/src/greeter/SessionModel.h
++++ b/src/greeter/SessionModel.h
+@@ -59,6 +59,7 @@ namespace SDDM {
+         SessionModelPrivate *d { nullptr };
+
+         void populate(Session::Type type, const QStringList &dirPaths);
++        void selectDefaultSession();
+     };
+ }
