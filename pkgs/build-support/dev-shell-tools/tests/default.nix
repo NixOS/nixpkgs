@@ -5,7 +5,8 @@
   stdenv,
   hello,
   writeText,
-  runCommand, zlib,
+  zlib,
+  nixosTests,
 }:
 let
   inherit (lib)
@@ -15,7 +16,12 @@ let
     mapAttrsToList
     ;
 in
-{
+lib.recurseIntoAttrs {
+
+  nixos = lib.recurseIntoAttrs {
+    inherit (nixosTests) docker-tools-nix-shell;
+  };
+
   # nix-build -A tests.devShellTools.valueToString
   valueToString =
     let inherit (devShellTools) valueToString; in
