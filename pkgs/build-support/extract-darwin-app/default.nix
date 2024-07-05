@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , makeWrapper
-, undmg
 }:
 
 /** A function to make a derivation from a darwin bundle
@@ -34,7 +33,7 @@ stdenv.mkDerivation
   # the unpack phase requires only one folder
 {
   inherit pname version src;
-  nativeBuildInputs = [ makeWrapper undmg ];
+  nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
     appDir="$out/Applications/${appName}.app"
