@@ -13,15 +13,17 @@
 }:
 
 let
-  versions = import ./versions.nix;
+  source = import ./source.nix;
 
-  version = versions.version;
+  inherit (source)
+    version
+    vendorHash;
 
   src = fetchFromGitHub {
     owner = "axllent";
     repo = "mailpit";
     rev = "v${version}";
-    hash = versions.hash;
+    hash = source.hash;
   };
 
   # Separate derivation, because if we mix this in buildGoModule, the separate
@@ -33,7 +35,7 @@ let
 
     npmDeps = fetchNpmDeps {
       inherit src;
-      hash = versions.npmDepsHash;
+      hash = source.npmDepsHash;
     };
 
     env = lib.optionalAttrs (stdenv.isDarwin && stdenv.isx86_64) {
@@ -62,9 +64,7 @@ in
 
 buildGoModule {
   pname = "mailpit";
-  inherit src version;
-
-  vendorHash = versions.vendorHash;
+  inherit src version vendorHash;
 
   CGO_ENABLED = 0;
 
