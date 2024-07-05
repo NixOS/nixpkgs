@@ -34,16 +34,9 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
-    appDir="$out/Applications/${appName}.app"
-    binDir="$appDir"/Contents/MacOS
-
-    mkdir -p $out/bin
-    # expects a .app folder in the source folder
-    mkdir $out/Applications
-    cp -r ${appName}.app/ $appDir
-
-    # Make application available in bin/
-    makeWrapper $binDir/${appName} $out/bin/${pname}
+    mkdir -p "$out/bin" "$out/Applications"
+    mv -t "$out/Applications/" "${appName}.app/"
+    makeWrapper "$out/Applications/${appName}.app/Contents/MacOS/${appName}" "$out/bin/${pname}"
   '';
 
   meta = {
