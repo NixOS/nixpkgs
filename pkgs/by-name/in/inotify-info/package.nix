@@ -5,23 +5,21 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "inotify-info";
-  version = "0.0.1";
+  version = "0.0.3";
 
   src = fetchFromGitHub {
     owner = "mikesart";
     repo = "inotify-info";
     rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-fsUvIXWnP6Iy9Db0wDG+ntSw6mUt0MQOTJA5vFxhH+U=";
+    hash = "sha256-mxZpJMmSCgm5uV5/wknVb1PdxRIF/b2k+6rdOh4b8zA=";
   };
 
-  installPhase = ''
-    runHook preInstall
-    install -Dm755 _release/inotify-info $out/bin/inotify-info
-    runHook postInstall
-  '';
+  buildFlags = ["INOTIFYINFO_VERSION=v${finalAttrs.version}"];
+
+  installFlags = ["PREFIX=$$out"];
 
   meta = with lib; {
-    description = "Easily track down the number of inotify watches, instances, and which files are being watched.";
+    description = "Easily track down the number of inotify watches, instances, and which files are being watched";
     homepage = "https://github.com/mikesart/inotify-info";
     license = licenses.mit;
     mainProgram = "inotify-info";
