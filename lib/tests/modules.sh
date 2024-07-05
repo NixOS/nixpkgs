@@ -72,6 +72,9 @@ checkConfigError() {
     fi
 }
 
+# doRenames works with priorities on nested options
+checkConfigOutput '^1234$' config.new.foo ./doRenames-nested-option-priorities.nix
+
 # Shorthand meta attribute does not duplicate the config
 checkConfigOutput '^"one two"$' config.result ./shorthand-meta.nix
 
