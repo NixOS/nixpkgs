@@ -84,7 +84,7 @@ in stdenv.mkDerivation rec {
     homepage = "https://mupdf.com";
     description = "Lightweight PDF, XPS, and E-book viewer and toolkit written in portable C";
     license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ vrthra fpletz ];
+    maintainers = with maintainers; [ fpletz ];
     platforms = platforms.unix;
     knownVulnerabilities = [
       "CVE-2020-26519: denial of service when parsing JBIG2"

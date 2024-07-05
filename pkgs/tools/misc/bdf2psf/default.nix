@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
       Font converter to generate console fonts from BDF source fonts
     '';
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ rnhmjoj vrthra ];
+    maintainers = with maintainers; [ rnhmjoj  ];
     platforms = platforms.all;
     mainProgram = "bdf2psf";
   };
