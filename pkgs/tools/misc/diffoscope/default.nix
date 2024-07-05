@@ -96,11 +96,11 @@ in
 # Note: when upgrading this package, please run the list-missing-tools.sh script as described below!
 python.pkgs.buildPythonApplication rec {
   pname = "diffoscope";
-  version = "271";
+  version = "273";
 
   src = fetchurl {
     url = "https://diffoscope.org/archive/diffoscope-${version}.tar.bz2";
-    hash = "sha256-YwNaYj0daYbs3rN/EcPz5LihJjZ6JZb33FSS6u98Gss=";
+    hash = "sha256-TccR/Vxq6Zf9tEvknLWewPVvJqo8pVSIi1+KxKMASq4=";
   };
 
   outputs = [
@@ -110,7 +110,6 @@ python.pkgs.buildPythonApplication rec {
 
   patches = [
     ./ignore_links.patch
-    ./openssh-no-dsa.patch # https://salsa.debian.org/reproducible-builds/diffoscope/-/merge_requests/139
   ];
 
   postPatch = ''
