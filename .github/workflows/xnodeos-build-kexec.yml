@@ -24,3 +24,14 @@ jobs:
         with:
           name: xnodeos-kexec-system-x86_64-linux.tar.xz
           path: result/tarball/nixos-system-x86_64-linux.tar.xz
+      - name: Upload Result to boot.opnm.sh
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: boot.opnm.sh
+          username: opnm
+          key: ${{secrets.BOOT_OPNM_SH_DEPLOY_KEY}}
+          source: result/tarball/nixos-system-x86_64-linux.tar.xz
+          target: /mnt/boot-opnm-sh/public/latest/${{GITHUB_REF_NAME}}/kexec
+          strip_components: 2
+          tar_dereference: true
+          overwrite: true

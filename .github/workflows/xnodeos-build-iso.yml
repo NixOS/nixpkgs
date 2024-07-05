@@ -23,3 +23,14 @@ jobs:
         with:
           name: XnodeOS-x86_64.iso
           path: result/iso/nixos.iso
+      - name: Upload Result to boot.opnm.sh
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: boot.opnm.sh
+          username: opnm
+          key: ${{secrets.BOOT_OPNM_SH_DEPLOY_KEY}}
+          source: result/iso/nixos.iso
+          target: /mnt/boot-opnm-sh/public/${{GITHUB_REF_NAME}}/iso
+          strip_components: 2
+          tar_dereference: true
+          overwrite: true

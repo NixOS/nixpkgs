@@ -34,3 +34,14 @@ jobs:
         with:
           name: initrd
           path: result/initrd
+      - name: Upload Result to boot.opnm.sh
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: boot.opnm.sh
+          username: opnm
+          key: ${{secrets.BOOT_OPNM_SH_DEPLOY_KEY}}
+          source: "result/ipxe,result/kernel,result/initrd"
+          target: /mnt/boot-opnm-sh/public/latest/${{GITHUB_REF_NAME}}/netboot
+          strip_components: 1
+          tar_dereference: true
+          overwrite: true
