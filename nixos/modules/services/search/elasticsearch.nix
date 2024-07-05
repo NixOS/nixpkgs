@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -16,7 +21,7 @@ let
     http.port: ${toString cfg.port}
     transport.port: ${toString cfg.tcp_port}
 
-    ${cfg.extraConf}
+    ${cfg.extraConfig}
   '';
 
   configDir = cfg.dataDir + "/config";
@@ -41,14 +46,17 @@ let
 in
 {
 
+  imports = [
+    (mkRenamedOptionModule
+      [ "services" "elasticsearch" "extraConf" ]
+      [ "services" "elasticsearch" "extraConfig" ]
+    )
+  ];
+
   ###### interface
 
   options.services.elasticsearch = {
-    enable = mkOption {
-      description = "Whether to enable elasticsearch.";
-      default = false;
-      type = types.bool;
-    };
+    enable = mkEnableOption "Elasticsearch";
 
     package = mkPackageOption pkgs "elasticsearch" { };
 
@@ -67,7 +75,7 @@ in
     tcp_port = mkOption {
       description = "Elasticsearch port for the node to node communication.";
       default = 9300;
-      type = types.int;
+      type = types.port;
     };
 
     cluster_name = mkOption {
@@ -82,10 +90,10 @@ in
       type = types.bool;
     };
 
-    extraConf = mkOption {
+    extraConfig = mkOption {
       description = "Extra configuration for elasticsearch.";
       default = "";
-      type = types.str;
+      type = types.lines;
       example = ''
         node.name: "elasticsearch"
         node.master: true
@@ -138,7 +146,7 @@ in
       example = lib.literalExpression "[ pkgs.elasticsearchPlugins.discovery-ec2 ]";
     };
 
-    restartIfChanged  = mkOption {
+    restartIfChanged = mkOption {
       type = types.bool;
       description = ''
         Automatically restart the service on config change.
@@ -147,6 +155,18 @@ in
         and the possibility of unexpected behavior caused by inconsistent versions across a cluster when disabling this option.
       '';
       default = true;
+    };
+
+    user = mkOption {
+      type = types.str;
+      default = "elasticsearch";
+      description = "User account under which Elasticsearch runs.";
+    };
+
+    group = mkOption {
+      type = types.str;
+      default = "elasticsearch";
+      description = "Group account under which Elasticsearch runs.";
     };
 
   };
@@ -167,7 +187,8 @@ in
       };
       serviceConfig = {
         ExecStart = "${cfg.package}/bin/elasticsearch ${toString cfg.extraCmdLineOptions}";
-        User = "elasticsearch";
+        User = cfg.user;
+        Group = cfg.group;
         PermissionsStartOnly = true;
         LimitNOFILE = "1024000";
         Restart = "always";
@@ -222,12 +243,16 @@ in
     environment.systemPackages = [ cfg.package ];
 
     users = {
-      groups.elasticsearch.gid = config.ids.gids.elasticsearch;
-      users.elasticsearch = {
-        uid = config.ids.uids.elasticsearch;
-        description = "Elasticsearch daemon user";
-        home = cfg.dataDir;
-        group = "elasticsearch";
+      groups = optionalAttrs (cfg.group == "elasticsearch") {
+        elasticsearch.gid = config.ids.gids.elasticsearch;
+      };
+      users = optionalAttrs (cfg.user == "elasticsearch") {
+        elasticsearch = {
+          uid = config.ids.uids.elasticsearch;
+          description = "Elasticsearch daemon user";
+          home = cfg.dataDir;
+          group = cfg.group;
+        };
       };
     };
   };
