@@ -9,13 +9,13 @@
 
 buildGoModule rec {
   pname = "piv-agent";
-  version = "0.21.1";
+  version = "0.21.2";
 
   src = fetchFromGitHub {
     owner = "smlx";
     repo = "piv-agent";
     rev = "v${version}";
-    hash = "sha256-M6klwP85Ujd/DtWh4AwCVrqk6GYqxdz0DrnKKbmdtX4=";
+    hash = "sha256-nHxtQaQ5Lc0QAJrWU6fUWViDwOKkxVyj9/B6XZ+Y0zw=";
   };
 
   vendorHash = "sha256-L5HuTYA01w3LUtSy7OVxG6QN5uQZ8LVYyrBcJQTkIUA=";
