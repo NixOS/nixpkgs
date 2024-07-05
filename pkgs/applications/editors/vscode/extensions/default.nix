@@ -860,7 +860,7 @@ let
             description = "Soothing pastel theme for VSCode";
             license = lib.licenses.mit;
             downloadPage = "https://marketplace.visualstudio.com/items?itemName=Catppuccin.catppuccin-vsc";
-            maintainers = [ lib.maintainers.nullx76 ];
+            maintainers = [ ];
           };
         };
         catppuccin-vsc-icons = buildVscodeMarketplaceExtension {
@@ -3078,7 +3078,7 @@ let
           description = "direnv support for Visual Studio Code";
           license = lib.licenses.bsd0;
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=mkhl.direnv";
-          maintainers = [ lib.maintainers.nullx76 ];
+          maintainers = [ ];
         };
       };
 

@@ -89,7 +89,6 @@ buildGoModule rec {
     maintainers = with maintainers; [
       yorickvp
       ivan
-      nullx76
       leona
       shawn8901
     ];
