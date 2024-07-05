@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     description = "An open source web browser from Google";
     license = lib.licenses.bsd3;
     platforms = builtins.attrNames specs;
-    mainProgram = appName;
+    mainProgram = pname;
     maintainers = with lib.maintainers; [
       michaelCTS
     ];
