@@ -47,7 +47,6 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [
       michaelCTS
     ];
-    name = pname;
     hydraPlatforms = [ ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
