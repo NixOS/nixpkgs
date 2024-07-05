@@ -1,17 +1,17 @@
-{ lib
-, stdenv
-, borgbackup
-, coreutils
-, python3Packages
-, fetchpatch
-, fetchPypi
-, systemd
-, enableSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
-, installShellFiles
-, borgmatic
-, testers
+{
+  borgbackup,
+  borgmatic,
+  coreutils,
+  enableSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
+  fetchPypi,
+  fetchpatch,
+  installShellFiles,
+  lib,
+  python3Packages,
+  stdenv,
+  systemd,
+  testers,
 }:
-
 python3Packages.buildPythonApplication rec {
   pname = "borgmatic";
   version = "1.8.11";
@@ -44,13 +44,13 @@ python3Packages.buildPythonApplication rec {
     colorama
     jsonschema
     packaging
-    ruamel-yaml
     requests
+    ruamel-yaml
     setuptools
   ];
 
   passthru.optional-dependencies = {
-    apprise = with python3Packages; [ apprise ];
+    apprise = [ python3Packages.apprise ];
   };
 
   postInstall = ''
@@ -72,11 +72,11 @@ python3Packages.buildPythonApplication rec {
 
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     description = "Simple, configuration-driven backup software for servers and workstations";
     homepage = "https://torsion.org/borgmatic/";
-    license = licenses.gpl3Plus;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ imlonghao ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ imlonghao ];
   };
 }
