@@ -1,5 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, buildPythonPackage, pytest, pytestCheckHook
-, setuptools, python3, sphinx }:
+{ lib, fetchFromGitHub, buildPythonPackage, pytest, setuptools, sphinx }:
 
 buildPythonPackage rec {
   pname = "cpe";
