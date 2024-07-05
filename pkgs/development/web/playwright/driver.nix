@@ -6,6 +6,8 @@
 , jq
 , nodejs
 , fetchurl
+, linkFarm
+, callPackage
 , makeFontsConf
 , makeWrapper
 , runCommand
@@ -16,29 +18,29 @@ let
   inherit (stdenv.hostPlatform) system;
 
   throwSystem = throw "Unsupported system: ${system}";
+  suffix = {
+    x86_64-linux = "linux";
+    aarch64-linux = "linux-arm64";
+    x86_64-darwin = "mac";
+    aarch64-darwin = "mac-arm64";
+  }.${system} or throwSystem;
 
   driver = stdenv.mkDerivation (finalAttrs:
     let
-      suffix = {
-        x86_64-linux = "linux";
-        aarch64-linux = "linux-arm64";
-        x86_64-darwin = "mac";
-        aarch64-darwin = "mac-arm64";
-      }.${system} or throwSystem;
       filename = "playwright-${finalAttrs.version}-${suffix}.zip";
     in
     {
     pname = "playwright-driver";
     # run ./pkgs/development/python-modules/playwright/update.sh to update
-    version = "1.40.0";
+    version = "1.42.1";
 
     src = fetchurl {
       url = "https://playwright.azureedge.net/builds/driver/${filename}";
       sha256 = {
-        x86_64-linux = "0y9n23r4yfcgm4a50rfgicl91vrllak0d8h26yagh6h8hl0r3nhh";
-        aarch64-linux = "0zd456klidi4sg7wahfrdbs2bwiq3q6ngxd4iv3vi9f9w9nq2p2k";
-        x86_64-darwin = "0yaiwg9821w9nszzkrp5skzf5792nahvfqnr4axk84dcngslxvmk";
-        aarch64-darwin = "1b1jmv6l97ss8c4sc3n1xckn05fpq3fihjbjxr2qz6i9dsy3xj57";
+        x86_64-linux = "15fcqlrc3zwavywh8p6052wg454hfhqihai1ykb7bjmd23rzc2fs";
+        aarch64-linux = "11ihi1v6jxx9hvss3djvdc4mzz0hv5mihlkl07craz3nyhshbmm0";
+        x86_64-darwin = "1ilajmxkvx0zl4yx7zm1in6bi4ypdg1d1mingz7jv39d17cdm89k";
+        aarch64-darwin = "1i6gkbkkav68brj306pvk1pl0ajkrd59ils6qlsg70vqs4pp6vxy";
       }.${system} or throwSystem;
     };
 
@@ -70,6 +72,8 @@ let
 
     passthru = {
       inherit filename;
+      browsersJSON = (lib.importJSON ./browsers.json).browsers;
+
       browsers = {
         x86_64-linux = browsers-linux { };
         aarch64-linux = browsers-linux { };
@@ -104,33 +108,34 @@ let
     meta.platforms = lib.platforms.darwin;
   };
 
-  browsers-linux = { withChromium ? true }: let
-    fontconfig = makeFontsConf {
-      fontDirectories = [];
-    };
+  browsers-linux = {
+    withChromium ? true,
+    withFirefox ? true,
+    withWebkit ? true,
+    withFfmpeg ? true
+  }: let
+    browsers =
+      lib.optionals withChromium ["chromium"]
+      ++ lib.optionals withFirefox ["firefox"]
+      ++ lib.optionals withWebkit ["webkit"]
+      ++ lib.optionals withFfmpeg ["ffmpeg"];
+    inherit (stdenv.hostPlatform) system;
+    throwSystem = throw "Unsupported system: ${system}";
   in
-    runCommand ("playwright-browsers"
-    + lib.optionalString withChromium "-chromium")
-  {
-    nativeBuildInputs = [
-      makeWrapper
-      jq
-    ];
-  } (''
-    BROWSERS_JSON=${driver}/package/browsers.json
-  '' + lib.optionalString withChromium ''
-    CHROMIUM_REVISION=$(jq -r '.browsers[] | select(.name == "chromium").revision' $BROWSERS_JSON)
-    mkdir -p $out/chromium-$CHROMIUM_REVISION/chrome-linux
-
-    # See here for the Chrome options:
-    # https://github.com/NixOS/nixpkgs/issues/136207#issuecomment-908637738
-    makeWrapper ${chromium}/bin/chromium $out/chromium-$CHROMIUM_REVISION/chrome-linux/chrome \
-      --set SSL_CERT_FILE /etc/ssl/certs/ca-bundle.crt \
-      --set FONTCONFIG_FILE ${fontconfig}
-  '' + ''
-    FFMPEG_REVISION=$(jq -r '.browsers[] | select(.name == "ffmpeg").revision' $BROWSERS_JSON)
-    mkdir -p $out/ffmpeg-$FFMPEG_REVISION
-    ln -s ${ffmpeg}/bin/ffmpeg $out/ffmpeg-$FFMPEG_REVISION/ffmpeg-linux
-  '');
+    linkFarm
+      "playwright-browsers"
+      (lib.listToAttrs
+        (map
+          (name: let
+            value = driver.passthru.browsersJSON.${name};
+          in lib.nameValuePair
+            # TODO check platform for revisionOverrides
+            "${name}-${value.revision}"
+            (callPackage ./${name}.nix {
+              inherit suffix system throwSystem;
+              inherit (value) revision;
+            })
+          )
+          browsers));
 in
   driver
