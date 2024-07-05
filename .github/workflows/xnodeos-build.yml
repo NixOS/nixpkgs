@@ -1,0 +1,52 @@
+---
+
+on:
+  push:
+    branches:
+      - main
+      - dev
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+    strategy:
+      matrix:
+        format: [ iso, kexec, netboot ]
+        architecture: [ x86_64 ]
+    steps:
+      - name: Git checkout
+        uses: actions/checkout@v3
+      - name: Install Nix
+        uses: cachix/install-nix-action@v22
+        with:
+          nix_path: nixpkgs=channel:nixos-unstable
+      - run: make ${{ matrix.format }}
+      - name: Archive ${{ matrix.format }} ${{ matrix.architecture }} outputs as build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: XnodeOS-${{ matrix.architecture }}-${{ matrix.format }}
+          path: result/
+  publish:
+    runs-on: ubuntu-22.04
+    needs: build
+    strategy:
+      matrix:
+        format: [ iso, kexec, netboot ]
+        architecture: [ x86_64 ]
+    steps:
+      - name: Download release artifact for ${{ matrix.format }} ${{ matrix.architecture }}
+        uses: actions/download-artifact@v4
+        with:
+          name: XnodeOS-${{ matrix.architecture }}-${{ matrix.format }}
+          path: dist
+      - name: Upload Result to boot.opnm.sh
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: boot.opnm.sh
+          username: opnm
+          key: ${{secrets.BOOT_OPNM_SH_DEPLOY_KEY}}
+          source: dist/*
+          target: /mnt/boot-opnm-sh/public/${{ github.ref_name }}/${{ matrix.format }}
+          strip_components: 1
+          tar_dereference: true
+          overwrite: true
