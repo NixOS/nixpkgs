@@ -128,17 +128,12 @@ stdenv.mkDerivation {
   ++ lib.optional (lib.versionAtLeast kernel.version "5.8") libpfm
   ++ lib.optional (lib.versionAtLeast kernel.version "6.0") python3.pkgs.setuptools;
 
-  env.NIX_CFLAGS_COMPILE = toString ([
+  env.NIX_CFLAGS_COMPILE = toString [
     "-Wno-error=cpp"
     "-Wno-error=bool-compare"
     "-Wno-error=deprecated-declarations"
     "-Wno-error=stringop-truncation"
-  ] ++ lib.optionals (stdenv.cc.isGNU && lib.versions.major stdenv.cc.version == "13") [
-    # Workaround gcc bug that causes enev simplest `perf top` runs to
-    # crash: https://gcc.gnu.org/PR111009.
-    # Can be removed once gcc-13 is updated past 13.2.0.
-    "-O1"
-  ]);
+  ];
 
   doCheck = false; # requires "sparse"
 

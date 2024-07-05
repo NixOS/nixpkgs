@@ -1,4 +1,4 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, utils, ... }:
 
 with lib;
 
@@ -54,7 +54,11 @@ in
         Type = "simple";
         User = cfg.user;
         Group = cfg.group;
-        ExecStart = "${cfg.package}/bin/NzbDrone -nobrowser -data='${cfg.dataDir}'";
+        ExecStart = utils.escapeSystemdExecArgs [
+          (lib.getExe cfg.package)
+          "-nobrowser"
+          "-data=${cfg.dataDir}"
+        ];
         Restart = "on-failure";
       };
     };

@@ -66,7 +66,7 @@ let
 
     # TODO: For consistency, all builtins should also be available from a sub-library;
     # these are the only ones that are currently not
-    inherit (builtins) addErrorContext isPath trace;
+    inherit (builtins) addErrorContext isPath trace typeOf unsafeGetAttrPos;
     inherit (self.trivial) id const pipe concat or and xor bitAnd bitOr bitXor
       bitNot boolToString mergeAttrs flip mapNullable inNixShell isFloat min max
       importJSON importTOML warn warnIf warnIfNot throwIf throwIfNot checkListOfEnum

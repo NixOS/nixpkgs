@@ -36,7 +36,6 @@
 , enableSDL2 ? true
 , SDL2
 , gitUpdater
-, enableGlaxnimate ? true
 , libarchive
 }:
 
@@ -96,12 +95,11 @@ stdenv.mkDerivation rec {
     qt.qtbase
     qt.qtsvg
     (qt.qt5compat or null)
+    libarchive
   ] ++ lib.optionals enableSDL1 [
     SDL
   ] ++ lib.optionals enableSDL2 [
     SDL2
-  ] ++ lib.optionals enableGlaxnimate [
-    libarchive
   ];
 
   outputs = [ "out" "dev" ];
@@ -114,7 +112,6 @@ stdenv.mkDerivation rec {
     "-DSWIG_PYTHON=ON"
   ] ++ lib.optionals (qt != null) [
     "-DMOD_QT${lib.versions.major qt.qtbase.version}=ON"
-  ] ++ lib.optionals (qt != null && enableGlaxnimate) [
     "-DMOD_GLAXNIMATE${if lib.versions.major qt.qtbase.version == "5" then "" else "_QT6"}=ON"
   ];
 

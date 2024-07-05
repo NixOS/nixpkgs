@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "yanic";
-  version = "1.5.2";
+  version = "1.6.1";
 
   src = fetchFromGitHub {
     owner = "FreifunkBremen";
     repo = "yanic";
     rev = "v${version}";
-    sha256 = "sha256-UxTlo8HkC5iTfcfTAlhSkRQo8QJhI03JDSSItuE7BCE=";
+    sha256 = "sha256-tXngAnq30xBxR1dpVbE4kMNhvX2Rt5D22EBytB6qHUI=";
   };
 
-  vendorHash = "sha256-D9V53/+C/+iv1U4kVrYWzJ8iD0MA1QcR8f5ifejFhLo=";
+  vendorHash = "sha256-6UiiajKLzW5e7y0F6GMYDZP6xTyOiccLIKlwvOY7LRo=";
 
   ldflags = [ "-s" "-w" ];
 

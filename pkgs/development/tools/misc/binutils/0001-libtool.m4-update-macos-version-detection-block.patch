@@ -1,47 +1,24 @@
-From 33a8dc728eb5da3e1d3439c96810d1f6b2660b89 Mon Sep 17 00:00:00 2001
-From: Andrew Childs <andrew.childs@bibo.com.ph>
-Date: Tue, 22 Feb 2022 12:24:46 +0900
+From 368f26bfece3899a8c992cfec66427266918ab80 Mon Sep 17 00:00:00 2001
+From: Randy Eckenrode <randy@largeandhighquality.com>
+Date: Thu, 4 Jul 2024 12:20:34 -0400
 Subject: [PATCH] libtool.m4: update macos version detection block
 
-Includes upstream change
-9e8c882517082fe5755f2524d23efb02f1522490
 ---
- libtool.m4 | 21 ++++++++-------------
- 1 file changed, 8 insertions(+), 13 deletions(-)
+ libtool.m4 | 1 +
+ 1 file changed, 1 insertion(+)
 
 diff --git a/libtool.m4 b/libtool.m4
-index 7a711249304..f452efb4300 100644
+index e36fdd3c0e2..dd4725f8cd1 100644
 --- a/libtool.m4
 +++ b/libtool.m4
-@@ -996,20 +996,15 @@ _LT_EOF
-     ])
-     case $host_os in
-     rhapsody* | darwin1.[[012]])
--      _lt_dar_allow_undefined='${wl}-undefined ${wl}suppress' ;;
-+      _lt_dar_allow_undefined='$wl-undefined ${wl}suppress' ;;
-     darwin1.*)
--      _lt_dar_allow_undefined='${wl}-flat_namespace ${wl}-undefined ${wl}suppress' ;;
--    darwin*) # darwin 5.x on
--      # if running on 10.5 or later, the deployment target defaults
--      # to the OS version, if on x86, and 10.4, the deployment
--      # target defaults to 10.4. Don't you love it?
--      case ${MACOSX_DEPLOYMENT_TARGET-10.0},$host in
--	10.0,*86*-darwin8*|10.0,*-darwin[[91]]*)
--	  _lt_dar_allow_undefined='${wl}-undefined ${wl}dynamic_lookup' ;;
--	10.[[012]][[,.]]*)
--	  _lt_dar_allow_undefined='${wl}-flat_namespace ${wl}-undefined ${wl}suppress' ;;
--	10.*)
--	  _lt_dar_allow_undefined='${wl}-undefined ${wl}dynamic_lookup' ;;
-+      _lt_dar_allow_undefined='$wl-flat_namespace $wl-undefined ${wl}suppress' ;;
-+    darwin*)
-+      case $MACOSX_DEPLOYMENT_TARGET,$host in
-+        10.[[012]],*|,*powerpc*-darwin[[5-8]]*)
-+          _lt_dar_allow_undefined='$wl-flat_namespace $wl-undefined ${wl}suppress' ;;
-+        *)
-+          _lt_dar_allow_undefined='$wl-undefined ${wl}dynamic_lookup' ;;
-       esac
+@@ -1011,6 +1011,7 @@ _LT_EOF
+ 	  _lt_dar_allow_undefined='${wl}-flat_namespace ${wl}-undefined ${wl}suppress'
+ 	  ;;
+ 	*)
++	  _lt_dar_allow_undefined='${wl}-flat_namespace ${wl}-undefined ${wl}dynamic_lookup'
+ 	  ;;
+      esac
      ;;
-   esac
 -- 
-2.34.1
+2.45.1
 

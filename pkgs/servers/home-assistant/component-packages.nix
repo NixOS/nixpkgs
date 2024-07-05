@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2024.7.0";
+  version = "2024.7.1";
   components = {
     "3_day_blinds" = ps: with ps; [
     ];
@@ -687,7 +687,7 @@
     "command_line" = ps: with ps; [
     ];
     "compensation" = ps: with ps; [
-      numpy
+      numpy_1
     ];
     "concord232" = ps: with ps; [
     ]; # missing inputs: concord232
@@ -784,7 +784,7 @@
       home-assistant-intents
       ifaddr
       mutagen
-      numpy
+      numpy_1
       pillow
       psutil-home-assistant
       pynacl
@@ -2133,7 +2133,7 @@
       pyipp
     ];
     "iqvia" = ps: with ps; [
-      numpy
+      numpy_1
       pyiqvia
     ];
     "irish_rail_transport" = ps: with ps; [
@@ -4294,7 +4294,7 @@
     ]; # missing inputs: stookwijzer
     "stream" = ps: with ps; [
       ha-av
-      numpy
+      numpy_1
       pyturbojpeg
     ];
     "streamlabswater" = ps: with ps; [
@@ -4465,7 +4465,7 @@
     "template" = ps: with ps; [
     ];
     "tensorflow" = ps: with ps; [
-      numpy
+      numpy_1
       pillow
       pycocotools
       tensorflow
@@ -4697,7 +4697,7 @@
     "travisci" = ps: with ps; [
     ]; # missing inputs: TravisPy
     "trend" = ps: with ps; [
-      numpy
+      numpy_1
     ];
     "tts" = ps: with ps; [
       ha-ffmpeg

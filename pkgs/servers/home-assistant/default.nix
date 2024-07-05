@@ -3,7 +3,6 @@
 , callPackage
 , fetchFromGitHub
 , fetchPypi
-, fetchpatch2
 , python312
 , substituteAll
 , ffmpeg-headless
@@ -486,7 +485,7 @@ let
   extraBuildInputs = extraPackages python.pkgs;
 
   # Don't forget to run update-component-packages.py after updating
-  hassVersion = "2024.7.0";
+  hassVersion = "2024.7.1";
 
 in python.pkgs.buildPythonApplication rec {
   pname = "homeassistant";
@@ -504,13 +503,13 @@ in python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = "refs/tags/${version}";
-    hash = "sha256-0+h8Ml/EuEqfTh+TXyrCw07GpyyL84NlgJwPbLc/8XU=";
+    hash = "sha256-y3VYxlPit9LuC+9F+fQoJs3WD9LsvrMZMiSCqbzkgmk=";
   };
 
   # Secondary source is pypi sdist for translations
   sdist = fetchPypi {
     inherit pname version;
-    hash = "sha256-bxA6iJ90SYM8HOexyq5biKzTlQvU+V2UGtrKMR2+KWQ=";
+    hash = "sha256-pFsv0guypnRPeZOg2WrG2HL27W903iANHkvdQ8dCJHo=";
   };
 
   build-system = with python.pkgs; [
@@ -549,12 +548,6 @@ in python.pkgs.buildPythonApplication rec {
     (substituteAll {
       src = ./patches/ffmpeg-path.patch;
       ffmpeg = "${lib.getBin ffmpeg-headless}/bin/ffmpeg";
-    })
-
-    (fetchpatch2 {
-      # https://github.com/home-assistant/core/pull/121135
-      url = "https://github.com/home-assistant/core/commit/b6a23fad3537e0baa026b2a7eb5bff8a4246780b.patch";
-      hash = "sha256-ISggWmExe66KNWTCfNqyk/BngC44n3V7GTLQRyNXVAs=";
     })
   ];
 

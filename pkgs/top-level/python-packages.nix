@@ -5632,6 +5632,8 @@ self: super: with self; {
 
   huawei-lte-api = callPackage ../development/python-modules/huawei-lte-api { };
 
+  huepy = callPackage ../development/python-modules/huepy { };
+
   huey = callPackage ../development/python-modules/huey { };
 
   hug = callPackage ../development/python-modules/hug { };
@@ -6215,6 +6217,8 @@ self: super: with self; {
   jsbeautifier = callPackage ../development/python-modules/jsbeautifier { };
 
   jschema-to-python = callPackage ../development/python-modules/jschema-to-python { };
+
+  jschon = callPackage ../development/python-modules/jschon { };
 
   jsmin = callPackage ../development/python-modules/jsmin { };
 
@@ -12367,6 +12371,8 @@ self: super: with self; {
   pytest-rerunfailures = callPackage ../development/python-modules/pytest-rerunfailures { };
 
   pytest-resource-path = callPackage ../development/python-modules/pytest-resource-path { };
+
+  pytest-responses = callPackage ../development/python-modules/pytest-responses { };
 
   pytest-runner = callPackage ../development/python-modules/pytest-runner { };
 

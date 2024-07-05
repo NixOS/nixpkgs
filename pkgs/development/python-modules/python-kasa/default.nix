@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "python-kasa";
-  version = "0.7.0.2";
+  version = "0.7.0.3";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     owner = "python-kasa";
     repo = "python-kasa";
     rev = "refs/tags/${version}";
-    hash = "sha256-Ah2SmKHinpjPMNl1cn2I5FouxhVvg56tg70dOM7C444=";
+    hash = "sha256-jbyc4YeUKjioUFXL5SVdgeUlSIiOCJ7D0cZRWPiKZII=";
   };
 
   build-system = [ poetry-core ];

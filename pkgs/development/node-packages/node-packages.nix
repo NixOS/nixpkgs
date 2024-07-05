@@ -90174,24 +90174,6 @@ in
     bypassCache = true;
     reconstructLock = true;
   };
-  undollar = nodeEnv.buildNodePackage {
-    name = "undollar";
-    packageName = "undollar";
-    version = "1.0.0";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/undollar/-/undollar-1.0.0.tgz";
-      sha512 = "nV0/O+9yV/We9a0ZwH8LTXW9Aqit2em7zMpHetUk/kXxw6ongHs4D8PyPPryYGx5/w8iHqu6dJ+qJjHtA7SfUw==";
-    };
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "undollar strips the dollar sign from the beginning of the terminal command you just copied from StackOverflow when you were searching for what arguments to pass to `tar` (`xzf`? `xvfJ`? Or was it `xvf`? You never seem to remember).";
-      homepage = "https://github.com/ImFeelingDucky/undollar#readme";
-      license = "MIT";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
   unified-language-server = nodeEnv.buildNodePackage {
     name = "unified-language-server";
     packageName = "unified-language-server";

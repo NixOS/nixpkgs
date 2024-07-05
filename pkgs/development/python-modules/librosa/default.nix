@@ -3,6 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch2,
 
   # build-system
   setuptools,
@@ -46,6 +47,15 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [ setuptools ];
+
+  patches = [
+    (fetchpatch2 {
+      # https://github.com/librosa/librosa/issues/1849
+      name = "librosa-scipy-1.14-compat.patch";
+      url = "https://github.com/librosa/librosa/commit/d0a12c87cdff715ffb8ac1c7383bba1031aa71e4.patch";
+      hash = "sha256-NHuGo4U1FRikb5OIkycQBvuZ+0OdG/VykTcuhXkLUug=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace setup.cfg \

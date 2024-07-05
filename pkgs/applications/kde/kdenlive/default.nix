@@ -1,4 +1,5 @@
 { mkDerivation
+, substituteAll
 , lib
 , extra-cmake-modules
 , breeze-icons
@@ -83,23 +84,25 @@ mkDerivation {
     wrapGAppsHook3
     glaxnimate
   ];
+
   # Both MLT and FFMpeg paths must be set or Kdenlive will complain that it
   # doesn't find them. See:
   # https://github.com/NixOS/nixpkgs/issues/83885
-  patches = [ ./dependency-paths.patch ./dependency-paths-glaxnimate.patch ];
-
-  # Needed to replace @glaxnimate@ by its path
-  env = {
-    inherit mediainfo glaxnimate;
-    ffmpeg = ffmpeg-full;
-    mlt = mlt-full;
-  };
+  patches = [
+    (
+      substituteAll {
+        src = ./dependency-paths.patch;
+        inherit mediainfo glaxnimate;
+        ffmpeg = ffmpeg-full;
+        mlt = mlt-full;
+      }
+    )
+  ];
 
   postPatch =
     # Module Qt5::Concurrent must be included in `find_package` before it is used.
     ''
       sed -i CMakeLists.txt -e '/find_package(Qt5 REQUIRED/ s|)| Concurrent)|'
-      substituteAllInPlace src/kdenlivesettings.kcfg
     '';
 
   dontWrapGApps = true;

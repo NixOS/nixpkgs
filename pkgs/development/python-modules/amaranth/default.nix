@@ -4,6 +4,7 @@
   pythonOlder,
   fetchFromGitHub,
   pdm-backend,
+  jschon,
   pyvcd,
   jinja2,
   importlib-resources,
@@ -37,6 +38,7 @@ buildPythonPackage rec {
 
   dependencies =
     [
+      jschon
       jinja2
       pyvcd
     ]

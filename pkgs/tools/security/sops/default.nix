@@ -1,24 +1,26 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, nix-update-script }:
 
 buildGoModule rec {
   pname = "sops";
-  version = "3.8.1";
+  version = "3.9.0";
 
   src = fetchFromGitHub {
     owner = "getsops";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-4K09wLV1+TvYTtvha6YyGhjlhEldWL1eVazNwcEhi3Q=";
+    hash = "sha256-Q1e3iRIne9/bCLxKdhzP3vt3oxuHJAuG273HdeHZ3so=";
   };
 
-  vendorHash = "sha256-iRgLspYhwSVuL0yarPdjXCKfjK7TGDZeQCOcIYtNvzA=";
+  vendorHash = "sha256-3vzKQZTg38/UGVJ/M1jLALCgor7wztsLKVuMqY3adtI=";
 
   subPackages = [ "cmd/sops" ];
 
   ldflags = [ "-s" "-w" "-X github.com/getsops/sops/v3/version.Version=${version}" ];
 
+  passthru.updateScript = nix-update-script { };
+
   meta = with lib; {
-    homepage = "https://github.com/getsops/sops";
+    homepage = "https://getsops.io/";
     description = "Simple and flexible tool for managing secrets";
     changelog = "https://github.com/getsops/sops/blob/v${version}/CHANGELOG.rst";
     mainProgram = "sops";

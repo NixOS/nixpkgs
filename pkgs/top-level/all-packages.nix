@@ -1229,8 +1229,6 @@ with pkgs;
 
   libredirect = callPackage ../build-support/libredirect { };
 
-  livecaptions = callPackage ../applications/misc/livecaptions { };
-
   madonctl = callPackage ../applications/misc/madonctl { };
 
   copyDesktopItems = makeSetupHook {
@@ -5918,8 +5916,6 @@ with pkgs;
   nsync = callPackage ../development/libraries/nsync { };
 
   nsz = with python3.pkgs; toPythonApplication nsz;
-
-  nwipe = callPackage ../tools/security/nwipe { };
 
   nx2elf = callPackage ../tools/compression/nx2elf { };
 
@@ -12983,8 +12979,6 @@ with pkgs;
 
   solvespace = callPackage ../applications/graphics/solvespace { };
 
-  sonarr = callPackage ../servers/sonarr { };
-
   sonata = callPackage ../applications/audio/sonata { };
 
   sony-headphones-client = callPackage ../applications/audio/sony-headphones-client { };
@@ -13356,7 +13350,7 @@ with pkgs;
 
   inherit (callPackages ../servers/teleport {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security AppKit;
-  }) teleport_14 teleport_15 teleport;
+  }) teleport_14 teleport_15 teleport_16 teleport;
 
   telepresence = callPackage ../tools/networking/telepresence {
     pythonPackages = python3Packages;
@@ -17968,11 +17962,13 @@ with pkgs;
 
   binutils-unwrapped = callPackage ../development/tools/misc/binutils {
     autoreconfHook = autoreconfHook269;
+    inherit (darwin.apple_sdk.frameworks) CoreServices;
     # FHS sys dirs presumably only have stuff for the build platform
     noSysDirs = (stdenv.targetPlatform != stdenv.hostPlatform) || noSysDirs;
   };
   binutils-unwrapped-all-targets = callPackage ../development/tools/misc/binutils {
     autoreconfHook = if targetPlatform.isiOS then autoreconfHook269 else autoreconfHook;
+    inherit (darwin.apple_sdk.frameworks) CoreServices;
     # FHS sys dirs presumably only have stuff for the build platform
     noSysDirs = (stdenv.targetPlatform != stdenv.hostPlatform) || noSysDirs;
     withAllTargets = true;
@@ -20787,7 +20783,7 @@ with pkgs;
   glfw-wayland-minecraft = callPackage ../development/libraries/glfw/3.x-wayland-minecraft.nix {};
   glfw2 = callPackage ../development/libraries/glfw/2.x.nix { };
   glfw3 = callPackage ../development/libraries/glfw/3.x.nix {
-    inherit (darwin.apple_sdk.frameworks) Carbon Cocoa Kernel OpenGL;
+    inherit (darwin.apple_sdk.frameworks) Carbon Cocoa Kernel;
   };
 
   glibc = callPackage ../development/libraries/glibc {
@@ -27466,7 +27462,7 @@ with pkgs;
 
   octomap = callPackage ../development/libraries/octomap { };
 
-  odin = callPackage ../development/compilers/odin {
+  odin = callPackage ../by-name/od/odin/package.nix {
     inherit (pkgs.darwin.apple_sdk_11_0) MacOSX-SDK;
     inherit (pkgs.darwin.apple_sdk_11_0.frameworks) Security;
     llvmPackages = llvmPackages_18;
@@ -28601,15 +28597,9 @@ with pkgs;
 
   martian-mono = callPackage ../data/fonts/martian-mono { };
 
-  marwaita = callPackage ../data/themes/marwaita { };
-
   marwaita-icons = callPackage ../by-name/ma/marwaita-icons/package.nix {
     inherit (kdePackages) breeze-icons;
   };
-
-  marwaita-manjaro = callPackage ../data/themes/marwaita-manjaro { };
-
-  marwaita-peppermint = callPackage ../data/themes/marwaita-peppermint { };
 
   marwaita-pop_os = callPackage ../data/themes/marwaita-pop_os { };
 
@@ -32581,13 +32571,6 @@ with pkgs;
 
   moonlight-embedded = callPackage ../applications/misc/moonlight-embedded { };
 
-  moonlight-qt = libsForQt5.callPackage ../applications/misc/moonlight-qt {
-    stdenv = if stdenv.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
-    SDL2 = buildPackages.SDL2.override {
-      drmSupport = stdenv.isLinux;
-    };
-  };
-
   mooSpace = callPackage ../applications/audio/mooSpace { };
 
   mop = callPackage ../applications/misc/mop { };
@@ -33827,8 +33810,6 @@ with pkgs;
   };
 
   rednotebook = python3Packages.callPackage ../applications/editors/rednotebook { };
-
-  remnote = callPackage ../applications/misc/remnote { };
 
   remotebox = callPackage ../applications/virtualization/remotebox { };
 
@@ -39868,8 +39849,6 @@ with pkgs;
   vcluster = callPackage ../applications/networking/cluster/vcluster {
     buildGoModule = buildGo122Module;
   };
-
-  vnote = libsForQt5.callPackage ../applications/office/vnote { };
 
   sshportal = callPackage ../servers/sshportal { };
 

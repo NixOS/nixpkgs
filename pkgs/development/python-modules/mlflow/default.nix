@@ -2,6 +2,7 @@
   lib,
   alembic,
   buildPythonPackage,
+  cachetools,
   click,
   cloudpickle,
   databricks-cli,
@@ -17,6 +18,8 @@
   markdown,
   matplotlib,
   numpy,
+  opentelemetry-api,
+  opentelemetry-sdk,
   packaging,
   pandas,
   prometheus-flask-exporter,
@@ -63,6 +66,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     alembic
+    cachetools
     click
     cloudpickle
     databricks-cli
@@ -77,12 +81,14 @@ buildPythonPackage rec {
     markdown
     matplotlib
     numpy
+    opentelemetry-api
+    opentelemetry-sdk
     packaging
     pandas
     prometheus-flask-exporter
     protobuf
-    python-dateutil
     pyarrow
+    python-dateutil
     pytz
     pyyaml
     querystring-parser

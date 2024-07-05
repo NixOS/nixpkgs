@@ -860,7 +860,7 @@ let
             description = "Soothing pastel theme for VSCode";
             license = lib.licenses.mit;
             downloadPage = "https://marketplace.visualstudio.com/items?itemName=Catppuccin.catppuccin-vsc";
-            maintainers = [ lib.maintainers.nullx76 ];
+            maintainers = [ ];
           };
         };
         catppuccin-vsc-icons = buildVscodeMarketplaceExtension {
@@ -3078,7 +3078,7 @@ let
           description = "direnv support for Visual Studio Code";
           license = lib.licenses.bsd0;
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=mkhl.direnv";
-          maintainers = [ lib.maintainers.nullx76 ];
+          maintainers = [ ];
         };
       };
 
@@ -3397,8 +3397,8 @@ let
         mktplcRef = {
           name = "remote-containers";
           publisher = "ms-vscode-remote";
-          version = "0.347.0";
-          hash = "sha256-E9H1nPWG5JuzBxbYc/yWd8Y3azEWrd9whGirl0GK7kU=";
+          version = "0.376.0";
+          hash = "sha256-fJ8ZcwGFWXzJZ8UgnzTxR+842vjiU0qCjV/zWzbq/KQ=";
         };
         meta = {
           description = "Open any folder or repository inside a Docker container";
