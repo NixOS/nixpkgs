@@ -1,7 +1,6 @@
 { lib
 , fetchFromGitHub
 , rustPlatform
-, stdenv
 }:
 
 rustPlatform.buildRustPackage rec {

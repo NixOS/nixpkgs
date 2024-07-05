@@ -1,5 +1,4 @@
 { lib
-, stdenv
 , symlinkJoin
 , callPackage
 , fetchFromGitHub

@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, python3Packages, git }:
+{ lib, fetchFromGitHub, python3Packages, git }:
 
 python3Packages.buildPythonApplication {
   pname = "git-bars";

@@ -1,5 +1,4 @@
 { lib
-, stdenv
 , qtModule, python3, qtbase, qtsvg }:
 
 qtModule {

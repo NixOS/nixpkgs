@@ -1,5 +1,4 @@
 { lib
-, stdenv
 , mkDerivation
 , fetchFromGitHub
 , makeDesktopItem
