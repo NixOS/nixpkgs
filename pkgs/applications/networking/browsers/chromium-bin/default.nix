@@ -40,7 +40,9 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "An open source web browser from Google";
+    description = "An open source web browser from Google (binary release)";
+    downloadPage = "https://commondatastorage.googleapis.com/chromium-browser-snapshots/index.html";
+    homepage = "https://www.chromium.org/Home/";
     license = lib.licenses.bsd3;
     platforms = builtins.attrNames specs;
     mainProgram = pname;
