@@ -8049,6 +8049,12 @@
     name = "Nova Witterick";
     keys = [ { fingerprint = "4304 6B43 8D83 078E 3DF7  10D6 DEB0 E15C 6D2A 5A7C"; } ];
   };
+  heywoodlh = {
+    email = "nixpkgs@heywoodlh.io";
+    github = "heywoodlh";
+    githubId = 18178614;
+    name = "Spencer Heywood";
+  };
   hh = {
     email = "hh@m-labs.hk";
     github = "HarryMakes";
@@ -19524,13 +19530,6 @@
     github = "t4sm5n";
     githubId = 28858039;
     name = "Tuomas Mäkinen";
-  };
-  tadeokondrak = {
-    email = "me@tadeo.ca";
-    github = "tadeokondrak";
-    githubId = 4098453;
-    name = "Tadeo Kondrak";
-    keys = [ { fingerprint = "0F2B C0C7 E77C 5B42 AC5B  4C18 FBE6 07FC C495 16D3"; } ];
   };
   tadfisher = {
     email = "tadfisher@gmail.com";

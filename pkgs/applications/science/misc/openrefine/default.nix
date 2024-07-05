@@ -56,7 +56,7 @@ in maven'.buildMavenPackage {
     cp -r ${npmPkg} main/webapp/modules/core/3rdparty
   '';
   mvnParameters = "-pl !packaging";
-  mvnHash = "sha256-0qsKUMV9M0ZaddR5ust8VikSrsutdxVNNezKqR+F/6M=";
+  mvnHash = "sha256-FD4g0Mshz39N1h8MDAk907PhF5TguWTZ7AXKECHuhzQ=";
 
   nativeBuildInputs = [ makeWrapper ];
 
