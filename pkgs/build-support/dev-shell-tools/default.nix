@@ -25,7 +25,7 @@ rec {
       (name: value:
         let str = valueToString value;
         in if lib.elem name (drvAttrs.passAsFile or [])
-        then lib.nameValuePair "${name}Path" (writeText "pass-as-text-${name}" str)
+        then lib.nameValuePair "${name}Path" "${writeText "pass-as-text-${name}" str}"
         else lib.nameValuePair name str
       )
       drvAttrs;
