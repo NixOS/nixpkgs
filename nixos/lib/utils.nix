@@ -18,6 +18,7 @@ let
     isAttrs
     isDerivation
     isFloat
+    isInOldestRelease
     isInt
     isList
     isPath
@@ -30,6 +31,7 @@ let
     replaceStrings
     stringToCharacters
     types
+    warnIf
     ;
 
   inherit (lib.strings) toJSON normalizePath escapeC;
@@ -207,11 +209,17 @@ utils = rec {
          ]
        }
   */
-  genJqSecretsReplacementSnippet = genJqSecretsReplacementSnippet' "_secret";
+  genJqSecretsReplacementSnippet = warnIf (isInOldestRelease 2411)
+    "utils.genJqSecretsReplacementSnippet is deprecated since it does not support structured secrets.  Use utils.genJqStructuredSecretsReplacementSnippet instead.  If your secret is a string, do not forget to manually quote it."
+    genJqSecretsReplacementSnippet' { quote = true; } "_secret";
 
-  # Like genJqSecretsReplacementSnippet, but allows the name of the
-  # attr which identifies the secret to be changed.
-  genJqSecretsReplacementSnippet' = attr: set: output:
+  # Like genJqSecretsReplacementSnippet, but allows the secret to be any valid JSON value.
+  genJqStructuredSecretsReplacementSnippet = genJqSecretsReplacementSnippet' { } "_secret";
+
+  # Like genJqSecretsReplacementSnippet, but
+  #   - allows the name of the attr which identifies the secret to be changed
+  #   - and can optionally quote the content of the secret file.
+  genJqSecretsReplacementSnippet' = { quote ? false }: attr: set: output:
     let
       secrets = recursiveGetAttrWithJqPrefix set attr;
       stringOrDefault = str: def: if str == "" then def else str;
@@ -236,7 +244,7 @@ utils = rec {
     + escapeShellArg (stringOrDefault
           (concatStringsSep
             " | "
-            (imap1 (index: name: ''${name} = $ENV.secret${toString index}'')
+            (imap1 (index: name: ''${name} = ($ENV.secret${toString index} ${optionalString (!quote) "| fromjson"})'')
                    (attrNames secrets)))
           ".")
     + ''
