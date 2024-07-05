@@ -7,6 +7,8 @@
   numpy,
   scipy,
   attrs,
+  pytest-xdist,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -33,7 +35,11 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [ "iodata" ];
-  doCheck = false; # Requires roberto or nose and a lenghtly setup to find the cython modules
+
+  nativeCheckInputs = [
+    pytest-xdist
+    pytestCheckHook
+  ];
 
   meta = with lib; {
     description = "Python library for reading, writing, and converting computational chemistry file formats and generating input files";
