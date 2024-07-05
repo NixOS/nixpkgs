@@ -1,18 +1,19 @@
-{ lib
-, SDL2
-, cmake
-, extra-cmake-modules
-, fetchFromGitHub
-, libGL
-, libarchive
-, libpcap
-, qt6
-, libslirp
-, pkg-config
-, stdenv
-, unstableGitUpdater
-, wayland
-, zstd
+{
+  lib,
+  SDL2,
+  cmake,
+  extra-cmake-modules,
+  fetchFromGitHub,
+  libGL,
+  libarchive,
+  libpcap,
+  libslirp,
+  pkg-config,
+  qt6,
+  stdenv,
+  unstableGitUpdater,
+  wayland,
+  zstd,
 }:
 
 let
