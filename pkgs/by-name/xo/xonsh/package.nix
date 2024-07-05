@@ -111,7 +111,7 @@ let
       changelog = "https://github.com/xonsh/xonsh/raw/main/CHANGELOG.rst";
       license = with lib.licenses; [ bsd3 ];
       mainProgram = "xonsh";
-      maintainers = with lib.maintainers; [ AndersonTorres samlukeyes123 ];
+      maintainers = with lib.maintainers; [ samlukeyes123 ];
     };
   };
 in
