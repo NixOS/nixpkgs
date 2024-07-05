@@ -1,7 +1,7 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, pkg-config, autoreconfHook
+{ lib, stdenv, fetchFromGitHub, pkg-config, autoreconfHook
 , gnutls, c-ares, libxml2, sqlite, zlib, libssh2
 , cppunit, sphinx
-, Security
+, Security, nixosTests
 }:
 
 stdenv.mkDerivation rec {
@@ -38,12 +38,16 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  passthru.tests = {
+    aria2 = nixosTests.aria2;
+  };
+
   meta = with lib; {
     homepage = "https://aria2.github.io";
-    description = "A lightweight, multi-protocol, multi-source, command-line download utility";
+    description = "Lightweight, multi-protocol, multi-source, command-line download utility";
     mainProgram = "aria2c";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ Br1ght0ne koral ];
+    maintainers = with maintainers; [ Br1ght0ne koral timhae ];
   };
 }

@@ -1,22 +1,23 @@
-{ lib
-, azure-storage-blob
-, boto3
-, buildPythonPackage
-, fetchFromGitHub
-, python-dotenv
-, pythonOlder
-, requests
-, responses
-, setuptools
-, setuptools-git-versioning
-, setuptools-scm
-, unittestCheckHook
-, urllib3
+{
+  lib,
+  azure-storage-blob,
+  boto3,
+  buildPythonPackage,
+  fetchFromGitHub,
+  python-dotenv,
+  pythonOlder,
+  requests,
+  responses,
+  setuptools,
+  setuptools-git-versioning,
+  setuptools-scm,
+  unittestCheckHook,
+  urllib3,
 }:
 
 buildPythonPackage rec {
   pname = "sapi-python-client";
-  version = "0.7.2";
+  version = "0.8.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -25,7 +26,7 @@ buildPythonPackage rec {
     owner = "keboola";
     repo = "sapi-python-client";
     rev = "refs/tags/${version}";
-    hash = "sha256-uZo2kEq7zIMGRlhX36kZyihQPZegw5XgVzgVQQOmpc4=";
+    hash = "sha256-Xc4VD91Nhnj0UyWHpdwEaETJVH8Ue6/kuiKEMaiSR0g=";
   };
 
   postPatch = ''

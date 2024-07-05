@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     homepage = "https://c9x.me/compile/";
-    description = "A small compiler backend written in C";
+    description = "Small compiler backend written in C";
     maintainers = with maintainers; [ fgaz ];
     license = licenses.mit;
     platforms = platforms.all;

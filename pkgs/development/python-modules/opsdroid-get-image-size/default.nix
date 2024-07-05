@@ -1,7 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -15,9 +16,7 @@ buildPythonPackage rec {
     hash = "sha256-Cp2tvsdCZ+/86DF7FRNwx5diGcUWLYcFwQns7nYXkog=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   # test data not included on pypi
   doCheck = false;
@@ -26,6 +25,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Get image width and height given a file path using minimal dependencies";
+    mainProgram = "get-image-size";
     license = licenses.mit;
     homepage = "https://github.com/opsdroid/image_size";
     maintainers = with maintainers; [ globin ];

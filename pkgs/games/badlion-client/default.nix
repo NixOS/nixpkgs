@@ -15,7 +15,6 @@ in
     inherit pname version src;
 
     extraInstallCommands = ''
-      mv $out/bin/{${pname}-${version},${pname}}
       install -Dm444 ${appimageContents}/BadlionClient.desktop $out/share/applications/BadlionClient.desktop
       install -Dm444 ${appimageContents}/BadlionClient.png $out/share/pixmaps/BadlionClient.png
       substituteInPlace $out/share/applications/BadlionClient.desktop \
@@ -23,7 +22,7 @@ in
     '';
 
     meta = with lib; {
-      description = "The Most Complete All-In-One Mod Library for Minecraft with 100+ Mods, FPS Improvements, and more";
+      description = "Most Complete All-In-One Mod Library for Minecraft with 100+ Mods, FPS Improvements, and more";
       homepage = "https://client.badlion.net";
       license = with licenses; [ unfree ];
       maintainers = with maintainers; [];

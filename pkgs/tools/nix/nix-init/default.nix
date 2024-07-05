@@ -88,6 +88,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Command line tool to generate Nix packages from URLs";
+    mainProgram = "nix-init";
     homepage = "https://github.com/nix-community/nix-init";
     changelog = "https://github.com/nix-community/nix-init/blob/${src.rev}/CHANGELOG.md";
     license = licenses.mpl20;

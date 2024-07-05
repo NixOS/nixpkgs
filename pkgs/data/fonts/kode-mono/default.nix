@@ -18,7 +18,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   meta = with lib; {
-    description = "A custom-designed typeface explicitly created for the developer community";
+    description = "Custom-designed typeface explicitly created for the developer community";
     homepage = "https://kodemono.com/";
     changelog = "https://github.com/isaozler/kode-mono/blob/main/CHANGELOG.md";
     license = licenses.ofl;

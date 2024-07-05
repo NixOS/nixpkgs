@@ -6,6 +6,7 @@
 , ninja
 , pkg-config
 , gnome
+, adwaita-icon-theme
 , glib
 , gtk3
 , gsettings-desktop-schemas
@@ -67,7 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
     gnome-desktop
     json-glib
     xorg.xtrans
-    gnome.adwaita-icon-theme
+    adwaita-icon-theme
     gnome.gnome-settings-daemon
     gsettings-desktop-schemas
     systemd
@@ -95,7 +96,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Session manager for Budgie";
     homepage = "https://github.com/BuddiesOfBudgie/budgie-session";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [federicoschonborn];
+    maintainers = lib.teams.budgie.members;
     platforms = lib.platforms.linux;
   };
 })

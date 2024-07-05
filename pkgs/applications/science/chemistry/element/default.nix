@@ -14,7 +14,8 @@ buildGoModule rec {
   vendorHash = "sha256-A4g2rQTaYrA4/0rqldUv7iuibzNINEvx9StUnaN2/Yg=";
 
   meta = with lib; {
-    description = "The periodic table on the command line";
+    description = "Periodic table on the command line";
+    mainProgram = "element";
     homepage = "https://github.com/gennaro-tedesco/element";
     license = licenses.asl20;
     maintainers = [ maintainers.j0hax ];

@@ -11,7 +11,7 @@ in {
 
   options = {
     services.sonic-server = {
-      enable = lib.mkEnableOption (lib.mdDoc "Sonic Search Index");
+      enable = lib.mkEnableOption "Sonic Search Index";
 
       package = lib.mkPackageOption pkgs "sonic-server" { };
 
@@ -25,7 +25,7 @@ in {
           server.log_level = "debug";
           channel.inet = "[::1]:1491";
         };
-        description = lib.mdDoc ''
+        description = ''
           Sonic Server configuration options.
 
           Refer to

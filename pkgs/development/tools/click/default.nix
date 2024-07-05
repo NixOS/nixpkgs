@@ -13,7 +13,7 @@
 , getopt
 , setuptools
 , pygobject3
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 buildPythonApplication {
@@ -57,7 +57,7 @@ buildPythonApplication {
     gobject-introspection
     vala
     getopt
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   # Tests were omitted for time constraint reasons
@@ -83,7 +83,7 @@ buildPythonApplication {
   ];
 
   meta = {
-    description = "A tool to build click packages. Mainly used for Ubuntu Touch.";
+    description = "Tool to build click packages. Mainly used for Ubuntu Touch";
     homepage = "https://gitlab.com/ubports/development/core/click";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ ilyakooo0 OPNA2608 ];

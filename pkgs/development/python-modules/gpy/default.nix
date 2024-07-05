@@ -1,20 +1,21 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, pytestCheckHook
-, setuptools
-, numpy
-, scipy
-, six
-, paramz
-, matplotlib
-, cython
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  pytestCheckHook,
+  setuptools,
+  numpy,
+  scipy,
+  six,
+  paramz,
+  matplotlib,
+  cython,
 }:
 
 buildPythonPackage rec {
-  pname = "GPy";
+  pname = "gpy";
   version = "1.13.0";
   pyproject = true;
 

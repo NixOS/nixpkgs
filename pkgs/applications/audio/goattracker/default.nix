@@ -58,7 +58,7 @@ in stdenv.mkDerivation (finalAttrs: {
 
     convert goattrk2.bmp goattracker.png
     install -Dm644 goattracker.png $out/share/icons/hicolor/32x32/apps/goattracker.png
-    install -Dm644 ../linux/goattracker.1 -t $out/share/man/man1/goattracker.1
+    ${lib.optionalString (!isStereo) "install -Dm644 ../linux/goattracker.1 $out/share/man/man1/goattracker.1"}
 
     runHook postInstall
   '';
@@ -66,7 +66,7 @@ in stdenv.mkDerivation (finalAttrs: {
   desktopItems = [ desktopItem ];
 
   meta = {
-    description = "A crossplatform music editor for creating Commodore 64 music. Uses reSID library by Dag Lem and supports alternatively HardSID & CatWeasel devices"
+    description = "Crossplatform music editor for creating Commodore 64 music. Uses reSID library by Dag Lem and supports alternatively HardSID & CatWeasel devices"
       + lib.optionalString isStereo " - Stereo version";
     homepage = "https://cadaver.github.io/tools.html";
     downloadPage = "https://sourceforge.net/projects/goattracker2/";

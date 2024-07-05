@@ -61,11 +61,12 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A real-time pitch and formant tracking software";
+    description = "Real-time pitch and formant tracking software";
+    mainProgram = "in-formant";
     homepage = "https://github.com/in-formant/in-formant";
     license = licenses.asl20;
     # currently broken on i686-linux and aarch64-linux due to other nixpkgs dependencies
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ ckie ];
+    maintainers = with maintainers; [ ];
   };
 }

@@ -1,17 +1,21 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, rustPlatform
-, quil
-, pytest-asyncio
-, pytestCheckHook
-, syrupy
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  quil,
+  rustPlatform,
+  darwin,
+  libiconv,
+  syrupy,
 }:
 
 buildPythonPackage rec {
   pname = "qcs-sdk-python";
-  version = "0.16.3";
+  version = "0.17.7";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -20,25 +24,29 @@ buildPythonPackage rec {
     owner = "rigetti";
     repo = "qcs-sdk-rust";
     rev = "python/v${version}";
-    hash = "sha256-Q2PCARxaWqgVVnr2O+zhGcNHghC4gr31bxkv6+Rf/EQ=";
+    hash = "sha256-6Rh5gQH+ObpWGR9rYJfkXnGfG1GjKLn+ckiR7RhKzoE=";
   };
 
   cargoDeps = rustPlatform.importCargoLock {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "quil-rs-0.22.5" = "sha256-HUp41mOBjyAavhjFO5IJXHh2dVPcpFuDJ03nyRRuCCk=";
+      "quil-rs-0.25.1" = "sha256-zC4DEjCN6y9XeZlzmXHSTbVTpFQ4Srozix89IHDhHXc=";
     };
   };
 
   buildAndTestSubdir = "crates/python";
 
-  nativeBuildInputs = [
+  build-system = [
     rustPlatform.cargoSetupHook
     rustPlatform.maturinBuildHook
   ];
 
-  propagatedBuildInputs = [
-    quil
+  dependencies = [ quil ];
+
+  buildInputs = lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.Security
+    darwin.apple_sdk.frameworks.SystemConfiguration
+    libiconv
   ];
 
   nativeCheckInputs = [

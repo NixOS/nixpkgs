@@ -50,6 +50,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Minimalistic libc subset for initramfs usage";
+    mainProgram = "klcc";
     homepage = "https://kernel.org/pub/linux/libs/klibc/";
     maintainers = with lib.maintainers; [ fpletz ];
     license = lib.licenses.bsd3;

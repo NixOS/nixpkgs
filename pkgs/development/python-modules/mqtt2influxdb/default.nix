@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, influxdb
-, jsonpath-ng
-, paho-mqtt
-, py-expression-eval
-, pyaml
-, pycron
-, schema
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  influxdb,
+  jsonpath-ng,
+  paho-mqtt,
+  py-expression-eval,
+  pyaml,
+  pycron,
+  schema,
 }:
 buildPythonPackage rec {
   pname = "mqtt2influxdb";
@@ -36,6 +37,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://github.com/hardwario/bch-mqtt2influxdb";
     description = "Flexible MQTT to InfluxDB Bridge";
+    mainProgram = "mqtt2influxdb";
     platforms = platforms.linux;
     license = licenses.mit;
     maintainers = with maintainers; [ cynerd ];

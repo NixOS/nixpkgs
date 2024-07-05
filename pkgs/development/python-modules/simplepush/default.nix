@@ -1,11 +1,12 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, cryptography
-, fetchFromGitHub
-, pythonOlder
-, requests
-, setuptools
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  cryptography,
+  fetchFromGitHub,
+  pythonOlder,
+  requests,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -22,9 +23,7 @@ buildPythonPackage rec {
     hash = "sha256-DvDPihhx1rzJN6iQP5rHluplJ1AaN0b/glcd+tZCues=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     aiohttp
@@ -35,9 +34,7 @@ buildPythonPackage rec {
   # Module has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "simplepush"
-  ];
+  pythonImportsCheck = [ "simplepush" ];
 
   meta = with lib; {
     description = "Module to send push notifications via Simplepush";

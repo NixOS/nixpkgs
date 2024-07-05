@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://palcal.sourceforge.net/";
     description = "Command-line calendar program that can keep track of events";
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [viric];
     platforms = with lib.platforms; linux;
   };

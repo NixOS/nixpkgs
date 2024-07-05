@@ -26,17 +26,23 @@ in
 localPython.pkgs.buildPythonApplication rec {
   pname = "aws-encryption-sdk-cli";
   version = "4.1.0";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-OCbt0OkDVfpzUIogbsKzaPAle2L6l6N3cmZoS2hEaSM=";
   };
 
-  propagatedBuildInputs = with localPython.pkgs; [
+  build-system = with localPython.pkgs; [
+    setuptools
+  ];
+
+  dependencies = with localPython.pkgs; [
     attrs
     aws-encryption-sdk
     base64io
     urllib3
+    setuptools # for pkg_resources
   ];
 
   doCheck = true;
@@ -44,13 +50,16 @@ localPython.pkgs.buildPythonApplication rec {
   nativeCheckInputs = with localPython.pkgs; [
     mock
     pytest-mock
-    pytestCheckHook
+    pytest7CheckHook
   ];
 
   disabledTestPaths = [
     # requires networking
     "test/integration"
   ];
+
+  # Upstream did not adapt to pytest 8 yet.
+  pytestFlagsArray = [ "-W" "ignore::pytest.PytestRemovedIn8Warning" ];
 
   passthru = {
     updateScript = nix-update-script { };

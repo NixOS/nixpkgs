@@ -1,15 +1,16 @@
-{ lib
-, arrow
-, buildPythonPackage
-, fetchFromGitHub
-, pint
-, pydantic
-, pythonOlder
-, pytz
-, requests
-, responses
-, setuptools
-, setuptools-scm
+{
+  lib,
+  arrow,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pint,
+  pydantic,
+  pythonOlder,
+  pytz,
+  requests,
+  responses,
+  setuptools,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
@@ -43,9 +44,7 @@ buildPythonPackage rec {
   # Tests require network access, testing strava API
   doCheck = false;
 
-  pythonImportsCheck = [
-    "stravalib"
-  ];
+  pythonImportsCheck = [ "stravalib" ];
 
   meta = with lib; {
     description = "Python library for interacting with Strava v3 REST API";

@@ -28,7 +28,7 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ pkg-config ];
 
   meta = with lib; {
-    description = "A tool that brings mailing list style code reviews to Github PRs";
+    description = "Tool that brings mailing list style code reviews to Github PRs";
     homepage = "https://github.com/danobi/prr";
     license = licenses.gpl2Only;
     mainProgram = "prr";

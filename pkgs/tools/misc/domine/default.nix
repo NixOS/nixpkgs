@@ -12,4 +12,5 @@ buildDartApplication rec {
   };
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
+  meta.mainProgram = "domine";
 }

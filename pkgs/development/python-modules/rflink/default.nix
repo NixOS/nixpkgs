@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, async-timeout
-, docopt
-, pyserial
-, pyserial-asyncio
-, setuptools
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  async-timeout,
+  docopt,
+  pyserial,
+  pyserial-asyncio,
+  setuptools,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -32,18 +33,14 @@ buildPythonPackage rec {
     setuptools
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   postPatch = ''
     substituteInPlace setup.py \
       --replace "version=version_from_git()" "version='${version}'"
   '';
 
-  pythonImportsCheck = [
-    "rflink.protocol"
-  ];
+  pythonImportsCheck = [ "rflink.protocol" ];
 
   meta = with lib; {
     description = "Library and CLI tools for interacting with RFlink 433MHz transceiver";

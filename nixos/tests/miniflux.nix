@@ -76,7 +76,7 @@ in
       systemd.services.postgresql.postStart = lib.mkAfter ''
         $PSQL -tAd miniflux -c 'CREATE EXTENSION hstore;'
       '';
-      networking.firewall.allowedTCPPorts = [ config.services.postgresql.port ];
+      networking.firewall.allowedTCPPorts = [ config.services.postgresql.settings.port ];
     };
     externalDb = { ... }: {
       security.apparmor.enable = true;

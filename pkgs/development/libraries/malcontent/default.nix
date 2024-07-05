@@ -1,6 +1,5 @@
 { lib, stdenv
 , fetchFromGitLab
-, fetchpatch
 , meson
 , ninja
 , pkg-config
@@ -19,7 +18,7 @@
 
 stdenv.mkDerivation rec {
   pname = "malcontent";
-  version = "0.11.1";
+  version = "0.12.0";
 
   outputs = [ "bin" "out" "lib" "pam" "dev" "man" "installedTests" ];
 
@@ -28,7 +27,7 @@ stdenv.mkDerivation rec {
     owner = "pwithnall";
     repo = "malcontent";
     rev = version;
-    hash = "sha256-NZwVCnQrEG2gecUjuWe1+cyWFR3OdYJCmj87V14Uwjw=";
+    hash = "sha256-UK/WVqDMkwIqkTFFjzh7PRCA/Ej8Iyu33FasnAEApRs=";
   };
 
   patches = [
@@ -96,6 +95,7 @@ stdenv.mkDerivation rec {
     outputsToInstall = [ "bin" "out" "man" ];
 
     description = "Parental controls library";
+    mainProgram = "malcontent-client";
     homepage = "https://gitlab.freedesktop.org/pwithnall/malcontent";
     license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ jtojnar ];

@@ -32,6 +32,7 @@ python3Packages.buildPythonApplication rec {
   meta = with lib; {
     homepage = "https://github.com/jonathanj/eliottree";
     description = "Render Eliot logs as an ASCII tree";
+    mainProgram = "eliot-tree";
     license = licenses.mit;
     maintainers = [ maintainers.dpausp ];
   };

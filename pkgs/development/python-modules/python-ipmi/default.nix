@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, future
-, mock
-, pytestCheckHook
-, pythonOlder
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  future,
+  mock,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -27,25 +28,20 @@ buildPythonPackage rec {
       --replace-fail "version=version," "version='${version}',"
   '';
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  propagatedBuildInputs = [
-    future
-  ];
+  propagatedBuildInputs = [ future ];
 
   nativeCheckInputs = [
     mock
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "pyipmi"
-  ];
+  pythonImportsCheck = [ "pyipmi" ];
 
   meta = with lib; {
     description = "Python IPMI Library";
+    mainProgram = "ipmitool.py";
     homepage = "https://github.com/kontron/python-ipmi";
     license = with licenses; [ lgpl2Plus ];
     maintainers = with maintainers; [ fab ];

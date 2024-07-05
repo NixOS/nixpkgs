@@ -99,6 +99,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Fast and feature-rich Java heap analyzer";
+    mainProgram = "eclipse-mat";
     longDescription = ''
       The Eclipse Memory Analyzer is a tool that helps you find memory
       leaks and reduce memory consumption. Use the Memory Analyzer to

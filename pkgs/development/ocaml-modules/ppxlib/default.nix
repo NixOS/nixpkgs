@@ -3,7 +3,7 @@
   if lib.versionAtLeast ocaml.version "4.07"
   then if lib.versionAtLeast ocaml.version "4.08"
   then if lib.versionAtLeast ocaml.version "4.11"
-  then "0.30.0" else "0.24.0" else "0.15.0" else "0.13.0"
+  then "0.32.1" else "0.24.0" else "0.15.0" else "0.13.0"
 , ocaml-compiler-libs, ocaml-migrate-parsetree, ppx_derivers, stdio
 , stdlib-shims, ocaml-migrate-parsetree-2
 }:
@@ -12,13 +12,12 @@ let param = {
   "0.8.1" = {
     sha256 = "sha256-pct57oO7qAMEtlvEfymFOCvviWaLG0b5/7NzTC8vdSE=";
     max_version = "4.10";
-    useDune2 = false;
     OMP = [ ocaml-migrate-parsetree ];
   };
   "0.13.0" = {
     sha256 = "sha256-geHz0whQDg5/YQjVsN2iuHlkClwh7z3Eqb2QOBzuOdk=";
+    min_version = "4.07";
     max_version = "4.11";
-    useDune2 = false;
     OMP = [ ocaml-migrate-parsetree ];
   };
   "0.15.0" = {
@@ -64,6 +63,10 @@ let param = {
     sha256 = "sha256-3UpjvenSm0mBDgTXZTk3yTLxd6lByg4ZgratU6xEIRA=";
     min_version = "4.07";
   };
+  "0.32.1" = {
+    sha256 = "sha256-nbrYvLHItPPfP1i8pgpe0j2GUx8No0tBlshr1YXAnX8=";
+    min_version = "4.07";
+  };
 }."${version}"; in
 
 if param ? max_version && lib.versionAtLeast ocaml.version param.max_version
@@ -74,8 +77,6 @@ else
 buildDunePackage rec {
   pname = "ppxlib";
   inherit version;
-
-  duneVersion = if param.useDune2 or true then "3" else "1";
 
   src = fetchurl {
     url = "https://github.com/ocaml-ppx/ppxlib/releases/download/${version}/ppxlib-${version}.tbz";

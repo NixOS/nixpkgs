@@ -21,6 +21,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Swiss Army Knife for Pulumi Development";
+    mainProgram = "pulumictl";
     homepage = "https://github.com/pulumi/pulumictl";
     license = licenses.asl20;
     maintainers = with maintainers; [ vincentbernat ];

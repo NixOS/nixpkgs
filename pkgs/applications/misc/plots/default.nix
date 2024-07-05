@@ -3,7 +3,7 @@
 , python3Packages
 , gobject-introspection
 , libadwaita
-, wrapGAppsHook
+, wrapGAppsHook4
 , lmmath
 }:
 
@@ -18,7 +18,7 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-GjNpaorxkkhZsqrKq4kO5nqF5+4I4tmSc023AZpY8Sw=";
   };
 
-  nativeBuildInputs = [ gobject-introspection wrapGAppsHook ];
+  nativeBuildInputs = [ gobject-introspection wrapGAppsHook4 ];
   buildInputs = [ libadwaita ];
 
   propagatedBuildInputs = with python3Packages; [
@@ -56,6 +56,7 @@ python3Packages.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Graph plotting app for GNOME";
+    mainProgram = "plots";
     longDescription = ''
       Plots is a graph plotting app for GNOME.
       Plots makes it easy to visualise mathematical formulae.

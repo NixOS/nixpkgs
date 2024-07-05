@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "squid";
-  version = "6.7";
+  version = "6.8";
 
   src = fetchurl {
     url = "http://www.squid-cache.org/Versions/v6/${finalAttrs.pname}-${finalAttrs.version}.tar.xz";
-    hash = "sha256-4U2qTq5Bkl0a4/COZEOaaqowEb3O1oZii43ml9WrhCg=";
+    hash = "sha256-EcxWULUYCdmUg8z64kdEouUc0WGZ9f8MkX6E/OaVhw8=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = with lib; {
-    description = "A caching proxy for the Web supporting HTTP, HTTPS, FTP, and more";
+    description = "Caching proxy for the Web supporting HTTP, HTTPS, FTP, and more";
     homepage = "http://www.squid-cache.org";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;

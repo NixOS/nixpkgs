@@ -12,13 +12,13 @@ in
 {
   options = {
     services.frp = {
-      enable = mkEnableOption (mdDoc "frp");
+      enable = mkEnableOption "frp";
 
       package = mkPackageOption pkgs "frp" { };
 
       role = mkOption {
         type = types.enum [ "server" "client" ];
-        description = mdDoc ''
+        description = ''
           The frp consists of `client` and `server`. The server is usually
           deployed on the machine with a public IP address, and
           the client is usually deployed on the machine
@@ -29,7 +29,7 @@ in
       settings = mkOption {
         type = settingsFormat.type;
         default = { };
-        description = mdDoc ''
+        description = ''
           Frp configuration, for configuration options
           see the example of [client](https://github.com/fatedier/frp/blob/dev/conf/frpc_full_example.toml)
           or [server](https://github.com/fatedier/frp/blob/dev/conf/frps_full_example.toml) on github.

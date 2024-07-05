@@ -1,18 +1,19 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pymongo
-, isPy27
-, six
-, blinker
-, nose
-, pillow
-, coverage
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pymongo,
+  isPy27,
+  six,
+  blinker,
+  nose,
+  pillow,
+  coverage,
 }:
 
 buildPythonPackage rec {
   pname = "mongoengine";
-  version = "0.27.0";
+  version = "0.28.2";
   format = "setuptools";
   disabled = isPy27;
 
@@ -20,7 +21,7 @@ buildPythonPackage rec {
     owner = "MongoEngine";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-UCd7RpsSNDKh3vgVRYrFYWYVLQuK7WI0n/Moukhq5dM=";
+    hash = "sha256-5wcviRqUTOKqaeusHxS4Er3LD1BpTMW02Tip3d4zAPM=";
   };
 
   propagatedBuildInputs = [

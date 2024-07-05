@@ -28,24 +28,24 @@ in
   options = {
     services.clamav = {
       daemon = {
-        enable = mkEnableOption (lib.mdDoc "ClamAV clamd daemon");
+        enable = mkEnableOption "ClamAV clamd daemon";
 
         settings = mkOption {
           type = with types; attrsOf (oneOf [ bool int str (listOf str) ]);
           default = { };
-          description = lib.mdDoc ''
+          description = ''
             ClamAV configuration. Refer to <https://linux.die.net/man/5/clamd.conf>,
             for details on supported values.
           '';
         };
       };
       updater = {
-        enable = mkEnableOption (lib.mdDoc "ClamAV freshclam updater");
+        enable = mkEnableOption "ClamAV freshclam updater";
 
         frequency = mkOption {
           type = types.int;
           default = 12;
-          description = lib.mdDoc ''
+          description = ''
             Number of database checks per day.
           '';
         };
@@ -53,7 +53,7 @@ in
         interval = mkOption {
           type = types.str;
           default = "hourly";
-          description = lib.mdDoc ''
+          description = ''
             How often freshclam is invoked. See systemd.time(7) for more
             information about the format.
           '';
@@ -62,19 +62,19 @@ in
         settings = mkOption {
           type = with types; attrsOf (oneOf [ bool int str (listOf str) ]);
           default = { };
-          description = lib.mdDoc ''
+          description = ''
             freshclam configuration. Refer to <https://linux.die.net/man/5/freshclam.conf>,
             for details on supported values.
           '';
         };
       };
       fangfrisch = {
-        enable = mkEnableOption (lib.mdDoc "ClamAV fangfrisch updater");
+        enable = mkEnableOption "ClamAV fangfrisch updater";
 
         interval = mkOption {
           type = types.str;
           default = "hourly";
-          description = lib.mdDoc ''
+          description = ''
             How often freshclam is invoked. See systemd.time(7) for more
             information about the format.
           '';
@@ -91,7 +91,7 @@ in
               customer_id = "your customer_id";
             };
           };
-          description = lib.mdDoc ''
+          description = ''
             fangfrisch configuration. Refer to <https://rseichter.github.io/fangfrisch/#_configuration>,
             for details on supported values.
             Note that by default urlhaus and sanesecurity are enabled.
@@ -100,12 +100,12 @@ in
       };
 
       scanner = {
-        enable = mkEnableOption (lib.mdDoc "ClamAV scanner");
+        enable = mkEnableOption "ClamAV scanner";
 
         interval = mkOption {
           type = types.str;
           default = "*-*-* 04:00:00";
-          description = lib.mdDoc ''
+          description = ''
             How often clamdscan is invoked. See systemd.time(7) for more
             information about the format.
             By default this runs using 10 cores at most, be sure to run it at a time of low traffic.
@@ -115,7 +115,7 @@ in
         scanDirectories = mkOption {
           type = with types; listOf str;
           default = [ "/home" "/var/lib" "/tmp" "/etc" "/var/tmp" ];
-          description = lib.mdDoc ''
+          description = ''
             List of directories to scan.
             The default includes everything I could think of that is valid for nixos. Feel free to contribute a PR to add to the default if you see something missing.
           '';

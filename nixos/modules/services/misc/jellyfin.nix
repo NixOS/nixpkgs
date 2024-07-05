@@ -160,5 +160,5 @@ in
 
   };
 
-  meta.maintainers = with maintainers; [ minijackson nu-nu-ko ];
+  meta.maintainers = with maintainers; [ minijackson fsnkty ];
 }

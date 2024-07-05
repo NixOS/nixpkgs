@@ -3,6 +3,7 @@
 , borgbackup
 , coreutils
 , python3Packages
+, fetchpatch
 , fetchPypi
 , systemd
 , enableSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
@@ -13,12 +14,20 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "borgmatic";
-  version = "1.8.8";
+  version = "1.8.11";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-dPWp8SH4//HJlCrF6YRaMb32idox1E0/Gd8qc/GmP4c=";
+    sha256 = "sha256-Sgj15etVx8nnk0AZv+GzWscSqfqdC7+1wBE6gF/0aL0=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "prevent-network-access-in-tests.patch";
+      url = "https://projects.torsion.org/borgmatic-collective/borgmatic/pulls/869.patch";
+      hash = "sha256-jOo3LjgvJtyTaRKZX1wfnKNdw975hVekBkKfK4mJFAc=";
+    })
+  ];
 
   nativeCheckInputs = with python3Packages; [ flexmock pytestCheckHook pytest-cov ] ++ passthru.optional-dependencies.apprise;
 

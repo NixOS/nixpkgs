@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, oyaml
-, packaging
-, paramiko
-, pexpect
-, pythonOlder
-, requests
-, six
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  oyaml,
+  packaging,
+  paramiko,
+  pexpect,
+  pythonOlder,
+  requests,
+  six,
 }:
 
 buildPythonPackage rec {
@@ -36,9 +37,7 @@ buildPythonPackage rec {
   # Tests require a local VM
   doCheck = false;
 
-  pythonImportsCheck = [
-    "fortiosapi"
-  ];
+  pythonImportsCheck = [ "fortiosapi" ];
 
   meta = with lib; {
     description = "Python module to work with Fortigate/Fortios devices";

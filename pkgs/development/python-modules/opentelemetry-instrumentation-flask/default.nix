@@ -1,34 +1,37 @@
-{ buildPythonPackage
-, flask
-, hatchling
-, opentelemetry-api
-, opentelemetry-instrumentation
-, opentelemetry-instrumentation-wsgi
-, opentelemetry-semantic-conventions
-, opentelemetry-test-utils
-, opentelemetry-util-http
-, pytestCheckHook
-, pythonOlder
+{
+  buildPythonPackage,
+  flask,
+  hatchling,
+  opentelemetry-api,
+  opentelemetry-instrumentation,
+  opentelemetry-instrumentation-wsgi,
+  opentelemetry-semantic-conventions,
+  opentelemetry-test-utils,
+  opentelemetry-util-http,
+  packaging,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage {
   inherit (opentelemetry-instrumentation) version src;
   pname = "opentelemetry-instrumentation-flask";
-  disabled = pythonOlder "3.7";
+  pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   sourceRoot = "${opentelemetry-instrumentation.src.name}/instrumentation/opentelemetry-instrumentation-flask";
 
-  format = "pyproject";
+  build-system = [ hatchling ];
 
-  nativeBuildInputs = [ hatchling ];
-
-  propagatedBuildInputs = [
+  dependencies = [
     flask
     opentelemetry-api
     opentelemetry-instrumentation
     opentelemetry-instrumentation-wsgi
     opentelemetry-semantic-conventions
     opentelemetry-util-http
+    packaging
   ];
 
   nativeCheckInputs = [

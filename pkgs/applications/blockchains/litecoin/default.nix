@@ -56,7 +56,7 @@ mkDerivation rec {
 
   meta = with lib; {
     broken = (stdenv.isLinux && stdenv.isAarch64) || stdenv.isDarwin;
-    description = "A lite version of Bitcoin using scrypt as a proof-of-work algorithm";
+    description = "Lite version of Bitcoin using scrypt as a proof-of-work algorithm";
     longDescription= ''
       Litecoin is a peer-to-peer Internet currency that enables instant payments
       to anyone in the world. It is based on the Bitcoin protocol but differs

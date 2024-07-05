@@ -32,7 +32,7 @@ buildGoModule rec {
   passthru.tests.version = testers.testVersion { package = woodpecker-plugin-git; };
 
   meta = with lib; {
-    description = "Woodpecker plugin for cloning Git repositories.";
+    description = "Woodpecker plugin for cloning Git repositories";
     homepage = "https://woodpecker-ci.org/";
     changelog = "https://github.com/woodpecker-ci/plugin-git/releases/tag/${version}";
     license = licenses.asl20;

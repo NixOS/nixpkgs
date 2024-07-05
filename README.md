@@ -1,9 +1,10 @@
 <p align="center">
-  <a href="https://nixos.org#gh-light-mode-only">
-    <img src="https://raw.githubusercontent.com/NixOS/nixos-homepage/master/logo/nixos-hires.png" width="500px" alt="NixOS logo"/>
-  </a>
-  <a href="https://nixos.org#gh-dark-mode-only">
-    <img src="https://raw.githubusercontent.com/NixOS/nixos-artwork/master/logo/nixos-white.png" width="500px" alt="NixOS logo"/>
+  <a href="https://nixos.org">
+    <picture>
+      <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/NixOS/nixos-homepage/main/public/logo/nixos-hires.png">
+      <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/NixOS/nixos-artwork/master/logo/nixos-white.png">
+      <img src="https://raw.githubusercontent.com/NixOS/nixos-homepage/main/public/logo/nixos-hires.png" width="500px" alt="NixOS logo">
+    </picture>
   </a>
 </p>
 
@@ -13,7 +14,7 @@
 </p>
 
 [Nixpkgs](https://github.com/nixos/nixpkgs) is a collection of over
-80,000 software packages that can be installed with the
+100,000 software packages that can be installed with the
 [Nix](https://nixos.org/nix/) package manager. It also implements
 [NixOS](https://nixos.org/nixos/), a purely-functional Linux distribution.
 
@@ -28,8 +29,8 @@
 * [Discourse Forum](https://discourse.nixos.org/)
 * [Matrix Chat](https://matrix.to/#/#community:nixos.org)
 * [NixOS Weekly](https://weekly.nixos.org/)
-* [Community-maintained wiki](https://nixos.wiki/)
-* [Community-maintained list of ways to get in touch](https://nixos.wiki/wiki/Get_In_Touch#Chat) (Discord, Telegram, IRC, etc.)
+* [Official wiki](https://wiki.nixos.org/)
+* [Community-maintained list of ways to get in touch](https://wiki.nixos.org/wiki/Get_In_Touch#Chat) (Discord, Telegram, IRC, etc.)
 
 # Other Project Repositories
 
@@ -51,9 +52,9 @@ Nixpkgs and NixOS are built and tested by our continuous integration
 system, [Hydra](https://hydra.nixos.org/).
 
 * [Continuous package builds for unstable/master](https://hydra.nixos.org/jobset/nixos/trunk-combined)
-* [Continuous package builds for the NixOS 23.11 release](https://hydra.nixos.org/jobset/nixos/release-23.11)
+* [Continuous package builds for the NixOS 24.05 release](https://hydra.nixos.org/jobset/nixos/release-24.05)
 * [Tests for unstable/master](https://hydra.nixos.org/job/nixos/trunk-combined/tested#tabs-constituents)
-* [Tests for the NixOS 23.11 release](https://hydra.nixos.org/job/nixos/release-23.11/tested#tabs-constituents)
+* [Tests for the NixOS 24.05 release](https://hydra.nixos.org/job/nixos/release-24.05/tested#tabs-constituents)
 
 Artifacts successfully built with Hydra are published to cache at
 https://cache.nixos.org/. When successful build and test criteria are

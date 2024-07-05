@@ -24,10 +24,10 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = {
-    maintainers = [ lib.maintainers.lheckemann ];
-    description = "A free OpenSource 2D MMORPG client";
+    maintainers = [ ];
+    description = "Free OpenSource 2D MMORPG client";
     homepage = "https://manaplus.org/";
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Plus;
     broken = stdenv.isDarwin;
   };
 }

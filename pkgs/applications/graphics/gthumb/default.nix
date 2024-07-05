@@ -5,6 +5,7 @@
 , pkg-config
 , meson
 , ninja
+, adwaita-icon-theme
 , exiv2
 , libheif
 , libjpeg
@@ -26,7 +27,7 @@
 , bison
 , flex
 , clutter-gtk
-, wrapGAppsHook
+, wrapGAppsHook3
 , shared-mime-info
 , python3
 , desktop-file-utils
@@ -35,11 +36,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gthumb";
-  version = "3.12.5";
+  version = "3.12.6";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-9jhd9F/oxyYuw0nhP4FRLpDpl5jdI3eTLkKR1jNZ86s=";
+    sha256 = "sha256-YIdwxsjnMHOh1AS2W9G3YeGsXcJecBMP8HJIj6kvXDM=";
   };
 
   nativeBuildInputs = [
@@ -51,14 +52,14 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     python3
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
     clutter-gtk
     exiv2
     glib
-    gnome.adwaita-icon-theme
+    adwaita-icon-theme
     gsettings-desktop-schemas
     gst_all_1.gst-plugins-base
     (gst_all_1.gst-plugins-good.override { gtkSupport = true; })
@@ -107,8 +108,9 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    homepage = "https://wiki.gnome.org/Apps/Gthumb";
+    homepage = "https://gitlab.gnome.org/GNOME/gthumb";
     description = "Image browser and viewer for GNOME";
+    mainProgram = "gthumb";
     platforms = platforms.linux;
     license = licenses.gpl2Plus;
     maintainers = [ maintainers.mimame ];

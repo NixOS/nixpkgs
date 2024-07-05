@@ -1,39 +1,40 @@
-{ lib
-, aiohttp
-, apscheduler
-, azure-identity
-, azure-keyvault-secrets
-, backoff
-, buildPythonPackage
-, click
-, fastapi
-, fastapi-sso
-, fetchFromGitHub
-, google-cloud-kms
-, gunicorn
-, importlib-metadata
-, jinja2
-, openai
-, orjson
-, poetry-core
-, prisma
-, pyjwt
-, python-dotenv
-, python-multipart
-, pythonOlder
-, pyyaml
-, requests
-, resend
-, rq
-, streamlit
-, tiktoken
-, tokenizers
-, uvicorn
+{
+  lib,
+  aiohttp,
+  apscheduler,
+  azure-identity,
+  azure-keyvault-secrets,
+  backoff,
+  buildPythonPackage,
+  click,
+  fastapi,
+  fastapi-sso,
+  fetchFromGitHub,
+  google-cloud-kms,
+  gunicorn,
+  importlib-metadata,
+  jinja2,
+  openai,
+  orjson,
+  poetry-core,
+  prisma,
+  pyjwt,
+  python-dotenv,
+  python-multipart,
+  pythonOlder,
+  pyyaml,
+  requests,
+  resend,
+  rq,
+  streamlit,
+  tiktoken,
+  tokenizers,
+  uvicorn,
 }:
 
 buildPythonPackage rec {
   pname = "litellm";
-  version = "1.28.11";
+  version = "1.40.6";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -42,18 +43,16 @@ buildPythonPackage rec {
     owner = "BerriAI";
     repo = "litellm";
     rev = "refs/tags/v${version}";
-    hash = "sha256-6RhJjrPS62f+qoNFQ8qRelZmA8Er9Myz8CF1c/fhBTc=";
+    hash = "sha256-mXrLhgOETrkwHYSJSmEPvFwZiO0kx9FmXlTJN2WZ8WI=";
   };
 
   postPatch = ''
     rm -rf dist
   '';
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     click
     importlib-metadata
@@ -97,6 +96,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Use any LLM as a drop in replacement for gpt-3.5-turbo. Use Azure, OpenAI, Cohere, Anthropic, Ollama, VLLM, Sagemaker, HuggingFace, Replicate (100+ LLMs)";
+    mainProgram = "litellm";
     homepage = "https://github.com/BerriAI/litellm";
     changelog = "https://github.com/BerriAI/litellm/releases/tag/v${version}";
     license = licenses.mit;

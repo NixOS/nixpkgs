@@ -18,7 +18,7 @@ let
   };
 in with lib; {
   options.services.zeronet = {
-    enable = mkEnableOption (lib.mdDoc "zeronet");
+    enable = mkEnableOption "zeronet";
 
     package = mkPackageOption pkgs "zeronet" { };
 
@@ -27,7 +27,7 @@ in with lib; {
       default = {};
       example = literalExpression "{ global.tor = enable; }";
 
-      description = lib.mdDoc ''
+      description = ''
         {file}`zeronet.conf` configuration. Refer to
         <https://zeronet.readthedocs.io/en/latest/faq/#is-it-possible-to-use-a-configuration-file>
         for details on supported values;
@@ -37,7 +37,7 @@ in with lib; {
     port = mkOption {
       type = types.port;
       default = 43110;
-      description = lib.mdDoc "Optional zeronet web UI port.";
+      description = "Optional zeronet web UI port.";
     };
 
     fileserverPort = mkOption {
@@ -45,19 +45,19 @@ in with lib; {
       # read-only config file and crashes
       type = types.port;
       default = 12261;
-      description = lib.mdDoc "Zeronet fileserver port.";
+      description = "Zeronet fileserver port.";
     };
 
     tor = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc "Use TOR for zeronet traffic where possible.";
+      description = "Use TOR for zeronet traffic where possible.";
     };
 
     torAlways = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc "Use TOR for all zeronet traffic.";
+      description = "Use TOR for all zeronet traffic.";
     };
   };
 

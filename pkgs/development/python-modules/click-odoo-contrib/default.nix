@@ -1,12 +1,13 @@
-{ buildPythonPackage
-, click-odoo
-, fetchPypi
-, importlib-resources
-, lib
-, manifestoo-core
-, nix-update-script
-, pythonOlder
-, setuptools-scm
+{
+  buildPythonPackage,
+  click-odoo,
+  fetchPypi,
+  importlib-resources,
+  lib,
+  manifestoo-core,
+  nix-update-script,
+  pythonOlder,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
@@ -19,9 +20,7 @@ buildPythonPackage rec {
     hash = "sha256-3gusvy3d6kgmyBY+bmXB6lbWk7qxJIuHALZtug1WLzo=";
   };
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
 
   propagatedBuildInputs = [
     click-odoo

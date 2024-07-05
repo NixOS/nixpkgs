@@ -27,7 +27,7 @@ buildDunePackage rec {
   doCheck = true;
 
   meta = {
-    description = "A library to normalize an KOI8-{U,R} input to Unicode";
+    description = "Library to normalize an KOI8-{U,R} input to Unicode";
     homepage = "https://github.com/mirage/coin";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ];

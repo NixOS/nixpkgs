@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "http://www.jedrea.com/chmlib";
     license = licenses.lgpl2;
-    description = "A library for dealing with Microsoft ITSS/CHM format files";
+    description = "Library for dealing with Microsoft ITSS/CHM format files";
     platforms = platforms.unix;
   };
 }

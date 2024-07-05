@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pyexcel-io
-, odfpy
-, nose
-, pyexcel
-, pyexcel-xls
-, psutil
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pyexcel-io,
+  odfpy,
+  nose,
+  pyexcel,
+  pyexcel-xls,
+  psutil,
 }:
 
 buildPythonPackage rec {

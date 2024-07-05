@@ -1,12 +1,13 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, agate
-, openpyxl
-, xlrd
-, olefile
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  agate,
+  openpyxl,
+  xlrd,
+  olefile,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -28,13 +29,9 @@ buildPythonPackage rec {
     olefile
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "agate"
-  ];
+  pythonImportsCheck = [ "agate" ];
 
   meta = with lib; {
     description = "Adds read support for excel files to agate";

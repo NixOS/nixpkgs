@@ -23,6 +23,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Part of the `crate_universe` collection of tools which use Cargo to generate build targets for Bazel";
+    mainProgram = "cargo-bazel";
     homepage = "https://github.com/bazelbuild/rules_rust";
     license = licenses.asl20;
     maintainers = with maintainers; [ rickvanprim ];

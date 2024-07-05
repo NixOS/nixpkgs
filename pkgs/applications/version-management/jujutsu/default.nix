@@ -11,7 +11,6 @@
 , libssh2
 , libgit2
 , zstd
-, fetchpatch
 , installShellFiles
 , nix-update-script
 , testers
@@ -20,19 +19,19 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "jujutsu";
-  version = "0.14.0";
+  version = "0.18.0";
 
   src = fetchFromGitHub {
     owner = "martinvonz";
     repo = "jj";
     rev = "v${version}";
-    hash = "sha256-xnGnervyXPfZyQTYsPu09fj+QvbEZ6rDJ4fYHBeF/RY=";
+    hash = "sha256-5KKF85RNCPPaXMxBb7m2XC3EaEo+UcEhBdfMEzNPsAg=";
   };
 
-  cargoHash = "sha256-wuZ0zthaemzyDn5J2au2L2k0QJnzbrCRjSBIPivEbnQ=";
+  cargoHash = "sha256-MiJuen3Lo7nPaAK30cENw3ACAdoYbHDoiGS05dk5m6U=";
 
   cargoBuildFlags = [ "--bin" "jj" ]; # don't install the fake editors
-  useNextest = true; # nextest is the upstream integration framework
+  useNextest = false; # nextest is the upstream integration framework, but is problematic for test skipping
   ZSTD_SYS_USE_PKG_CONFIG = "1";    # disable vendored zlib
   LIBSSH2_SYS_USE_PKG_CONFIG = "1"; # disable vendored libssh2
 
@@ -63,6 +62,11 @@ rustPlatform.buildRustPackage rec {
       --zsh <($out/bin/jj util completion zsh)
   '';
 
+  checkFlags = [
+    # signing tests spin up an ssh-agent and do git checkouts
+    "--skip=test_ssh_signing"
+  ];
+
   passthru = {
     updateScript = nix-update-script { };
     tests = {
@@ -74,7 +78,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   meta = with lib; {
-    description = "A Git-compatible DVCS that is both simple and powerful";
+    description = "Git-compatible DVCS that is both simple and powerful";
     homepage = "https://github.com/martinvonz/jj";
     changelog = "https://github.com/martinvonz/jj/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;

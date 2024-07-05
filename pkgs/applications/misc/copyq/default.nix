@@ -1,10 +1,8 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch2
 , cmake
 , ninja
-, extra-cmake-modules
 , qtbase
 , qtsvg
 , qttools
@@ -14,32 +12,24 @@
 , qtwayland
 , wayland
 , wrapQtAppsHook
+, kdePackages
 }:
 
 stdenv.mkDerivation rec {
   pname = "CopyQ";
-  version = "7.1.0";
+  version = "9.0.0";
 
   src = fetchFromGitHub {
     owner = "hluk";
     repo = "CopyQ";
     rev = "v${version}";
-    hash = "sha256-aAmpFKIIFZLPWUaOcf4V1d/wVQ7xRcnXFsqFjROsabg=";
+    hash = "sha256-Dxiytspqs4+bcnUM+B3lO8iQp9rrCvMfI+WMFMCtM7g=";
   };
-
-  patches = [
-    # itemfakevim: fix build with qt 6.6.0
-    # https://github.com/hluk/CopyQ/pull/2508
-    (fetchpatch2 {
-      url = "https://github.com/hluk/CopyQ/commit/a20bfff0d78296b334ff8cabb047ab5d842b7311.patch";
-      hash = "sha256-F/6cQ8+O1Ttd4EFFxQas5ES6U+qxWdmYqUWRQLsVMa4=";
-    })
-  ];
 
   nativeBuildInputs = [
     cmake
     ninja
-    extra-cmake-modules
+    kdePackages.extra-cmake-modules
     wrapQtAppsHook
   ];
 
@@ -52,6 +42,9 @@ stdenv.mkDerivation rec {
     libXtst
     qtwayland
     wayland
+    kdePackages.kconfig
+    kdePackages.kstatusnotifieritem
+    kdePackages.knotifications
   ];
 
   postPatch = ''

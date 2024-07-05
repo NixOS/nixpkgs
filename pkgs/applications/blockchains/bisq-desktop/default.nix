@@ -9,7 +9,7 @@
 , dpkg
 , writeScript
 , bash
-, strip-nondeterminism
+, stripJavaArchivesHook
 , tor
 , zip
 , xz
@@ -38,11 +38,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "bisq-desktop";
-  version = "1.9.14";
+  version = "1.9.17";
 
   src = fetchurl {
     url = "https://github.com/bisq-network/bisq/releases/download/v${version}/Bisq-64bit-${version}.deb";
-    sha256 = "0xbq94qbp59523xjp80bly38aisfwkfi0y9hmyhf8xlw084b82kz";
+    sha256 = "1wqzgxsm9p6lh0bmvw0byaxx1r5v64d024jf1pg9mykb1dnnx0wy";
   };
 
   nativeBuildInputs = [
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     dpkg
     imagemagick
     makeWrapper
-    strip-nondeterminism
+    stripJavaArchivesHook
     xz
     zip
     findutils
@@ -89,7 +89,6 @@ stdenv.mkDerivation rec {
     tar --sort=name --mtime="@$SOURCE_DATE_EPOCH" -cJf native/linux/x64/tor.tar.xz tor
     tor_jar_file=$(find ./opt/bisq/lib/app -name "tor-binary-linux64-*.jar")
     zip -r $tor_jar_file native
-    strip-nondeterminism ./opt/bisq/lib/app/*.jar
   '';
 
   installPhase = ''
@@ -116,7 +115,7 @@ stdenv.mkDerivation rec {
   passthru.updateScript = ./update.sh;
 
   meta = with lib; {
-    description = "A decentralized bitcoin exchange network";
+    description = "Decentralized bitcoin exchange network";
     homepage = "https://bisq.network";
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.mit;

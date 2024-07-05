@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "http://comicneue.com/";
-    description = "A casual type face: Make your lemonade stand look like a fortune 500 company";
+    description = "Casual type face: Make your lemonade stand look like a fortune 500 company";
     longDescription = ''
       ComicNeue is inspired by Comic Sans but more regular. It was
       designed by Craig Rozynski. It is available in two variants:

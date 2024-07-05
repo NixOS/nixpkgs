@@ -6,7 +6,7 @@
 , pkg-config
 , qttools
 , wrapQtAppsHook
-, wrapGAppsHook
+, wrapGAppsHook3
 , qtbase
 , dtkwidget
 , qt5integration
@@ -25,13 +25,13 @@
 
 stdenv.mkDerivation rec {
   pname = "dde-session-shell";
-  version = "6.0.10";
+  version = "6.0.20";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    hash = "sha256-h4X3RZe7+CxVeFmk/7+7K4d/2D1+jhECKQaxl4TsuvM=";
+    hash = "sha256-RPVGjCg7U0nWxqesoSNDtEzh/+OYDSsX31YU+LLllVM=";
   };
 
   postPatch = ''
@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
     pkg-config
     qttools
     wrapQtAppsHook
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
   dontWrapGApps = true;
 

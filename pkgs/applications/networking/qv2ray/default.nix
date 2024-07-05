@@ -70,7 +70,7 @@ mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "An GUI frontend to v2ray";
+    description = "GUI frontend to v2ray";
     homepage = "https://github.com/Qv2ray/Qv2ray";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ poscat rewine ];

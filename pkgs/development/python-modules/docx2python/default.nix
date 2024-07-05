@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, poetry-core
-, lxml
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  poetry-core,
+  lxml,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -21,13 +22,9 @@ buildPythonPackage rec {
     hash = "sha256-SavRYnNbESRQh9Elk8qCt/qdI2x+sYZJFMYy+Gojg2k=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
-  propagatedBuildInputs = [
-    lxml
-  ];
+  propagatedBuildInputs = [ lxml ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -37,7 +34,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/ShayHill/docx2python";
     description = "Extract docx headers, footers, (formatted) text, footnotes, endnotes, properties, and images";
     changelog = "https://github.com/ShayHill/docx2python/blob/${src.rev}/CHANGELOG.md";
-    maintainers = [ maintainers.ivar ];
+    maintainers = [ ];
     license = licenses.mit;
   };
 }

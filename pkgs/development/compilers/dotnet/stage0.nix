@@ -25,8 +25,6 @@ let
 
   patchNupkgs = pkgsBuildHost.callPackage ./patch-nupkgs.nix {};
 
-  signAppHost = callPackage ./sign-apphost.nix {};
-
   deps = mkNugetDeps {
     name = "dotnet-vmr-deps";
     sourceFile = depsFile;
@@ -51,17 +49,20 @@ let
         -s //Project -t elem -n Import \
         -i \$prev -t attr -n Project -v "${./patch-restored-packages.proj}" \
         src/*/Directory.Build.targets
-    '' + lib.optionalString stdenv.isDarwin ''
-      xmlstarlet ed \
-        --inplace \
-        -s //Project -t elem -n Import \
-        -i \$prev -t attr -n Project -v "${signAppHost}" \
-        src/runtime/Directory.Build.targets
     '';
 
     postConfigure = old.postConfigure or "" + ''
       [[ ! -v prebuiltPackages ]] || ln -sf "$prebuiltPackages"/* prereqs/packages/prebuilt/
     '';
+
+    buildFlags =
+      old.buildFlags
+      ++ lib.optionals (lib.versionAtLeast old.version "9") [
+        # We need to set this as long as we have something in deps.nix. Currently
+        # that's the portable ilasm/ildasm which aren't in the centos sourcebuilt
+        # artifacts.
+        "-p:SkipErrorOnPrebuilts=true"
+      ];
 
     passthru = old.passthru or {} // { fetch-deps =
       let

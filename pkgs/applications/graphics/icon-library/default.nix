@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchurl
-, fetchpatch
 , wrapGAppsHook4
 , cargo
 , desktop-file-utils
@@ -19,11 +18,11 @@
 
 stdenv.mkDerivation rec {
   pname = "icon-library";
-  version = "0.0.18";
+  version = "0.0.19";
 
   src = fetchurl {
-    url = "https://gitlab.gnome.org/World/design/icon-library/uploads/874b27fcf34662d9686f670d406142c2/icon-library-${version}.tar.xz";
-    hash = "sha256-qCGwTePA817mulFjyRZKw+Fw1S77+QTtA7WH+KocL48=";
+    url = "https://gitlab.gnome.org/World/design/icon-library/uploads/7725604ce39be278abe7c47288085919/icon-library-${version}.tar.xz";
+    hash = "sha256-nWGTYoSa0/fxnD0Mb2132LkeB1oa/gj/oIXBbI+FDw8=";
   };
 
   nativeBuildInputs = [
@@ -48,6 +47,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://gitlab.gnome.org/World/design/icon-library";
     description = "Symbolic icons for your apps";
+    mainProgram = "icon-library";
     maintainers = with maintainers; [ qyliss ];
     license = licenses.gpl3Plus;
     platforms = platforms.unix;

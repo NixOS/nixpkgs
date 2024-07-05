@@ -1,5 +1,4 @@
 { lib, rustPlatform, fetchFromGitHub
-, fetchpatch
 , fuse
 , pkg-config
 }:
@@ -41,9 +40,10 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Caching filesystem written in Rust";
+    mainProgram = "catfs";
     homepage = "https://github.com/kahing/catfs";
     license = licenses.asl20;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ jonringer ];
+    maintainers = with maintainers; [ ];
   };
 }

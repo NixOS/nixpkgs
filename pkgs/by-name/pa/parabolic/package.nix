@@ -16,13 +16,13 @@
 
 buildDotnetModule rec {
   pname = "parabolic";
-  version = "2023.12.0";
+  version = "2024.5.0";
 
   src = fetchFromGitHub {
     owner = "NickvisionApps";
     repo = "Parabolic";
     rev = version;
-    hash = "sha256-mbGByw/wgovo81l2LDtDE5p+Mh6aJ5DOcZCNzVfmAtA=";
+    hash = "sha256-awbCn7W7RUSuEByXxLGrsmYjmxCrwywhhrMJq/iM1Uc=";
     fetchSubmodules = true;
   };
 

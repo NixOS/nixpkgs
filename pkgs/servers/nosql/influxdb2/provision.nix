@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A small utility to help provisioning influxdb2";
+    description = "Small utility to help provisioning influxdb2";
     homepage = "https://github.com/oddlama/influxdb2-provision";
     license = licenses.mit;
     maintainers = with maintainers; [oddlama];

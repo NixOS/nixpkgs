@@ -24,8 +24,8 @@ let
     # Take all the rules_ deps, bazel_ deps and their transitive dependencies,
     # but none of the platform-specific binaries, as they are large and useless.
     requiredDepNamePredicate = name:
-      null == builtins.match ".*(macos|osx|linux|win|apple|android|maven).*" name
-      && null != builtins.match "(platforms|com_google_|protobuf|rules_|bazel_).*" name ;
+      null == builtins.match ".*(macos|osx|linux|win|android|maven).*" name
+      && null != builtins.match "(platforms|com_google_|protobuf|rules_|bazel_|apple_support).*" name;
   };
 
   mergedDistDir = symlinkJoin {
@@ -73,11 +73,6 @@ let
     '' + lib.optionalString (stdenv.isDarwin) ''
         --cxxopt=-x --cxxopt=c++ \
         --host_cxxopt=-x --host_cxxopt=c++ \
-    '' + lib.optionalString (stdenv.cc.isClang && stdenv ? cc.libcxx.cxxabi.libName) ''
-        --linkopt=-Wl,-l${stdenv.cc.libcxx.cxxabi.libName} \
-        --linkopt=-L${stdenv.cc.libcxx.cxxabi}/lib \
-        --host_linkopt=-Wl,-l${stdenv.cc.libcxx.cxxabi.libName} \
-        --host_linkopt=-L${stdenv.cc.libcxx.cxxabi}/lib \
     '' + lib.optionalString (stdenv.isDarwin && Foundation != null) ''
         --linkopt=-Wl,-F${Foundation}/Library/Frameworks \
         --linkopt=-L${darwin.libobjc}/lib \

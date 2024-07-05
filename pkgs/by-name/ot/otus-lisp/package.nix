@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
   makeFlags = [ "PREFIX=$(out)" ];
 
   meta = {
-    description = "A purely functional dialect of Lisp";
+    description = "Purely functional dialect of Lisp";
     homepage = "https://yuriy-chumak.github.io/ol/";
     license = with lib.licenses; [ mit lgpl3Only ]; # dual licensed
     platforms = lib.platforms.unix;

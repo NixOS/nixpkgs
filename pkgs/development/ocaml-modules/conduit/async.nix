@@ -23,6 +23,6 @@ buildDunePackage {
   ];
 
   meta = conduit.meta // {
-    description = "A network connection establishment library for Async";
+    description = "Network connection establishment library for Async";
   };
 }

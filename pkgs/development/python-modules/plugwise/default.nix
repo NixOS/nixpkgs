@@ -1,27 +1,28 @@
- { lib
-, aiohttp
-, async-timeout
-, buildPythonPackage
-, crcmod
-, defusedxml
-, fetchFromGitHub
-, freezegun
-, jsonpickle
-, munch
-, pyserial
-, pytest-aiohttp
-, pytest-asyncio
-, pytestCheckHook
-, python-dateutil
-, pythonOlder
-, semver
-, setuptools
-, wheel
+{
+  lib,
+  aiohttp,
+  async-timeout,
+  buildPythonPackage,
+  crcmod,
+  defusedxml,
+  fetchFromGitHub,
+  freezegun,
+  jsonpickle,
+  munch,
+  pyserial,
+  pytest-aiohttp,
+  pytest-asyncio,
+  pytestCheckHook,
+  python-dateutil,
+  pythonOlder,
+  semver,
+  setuptools,
+  wheel,
 }:
 
 buildPythonPackage rec {
   pname = "plugwise";
-  version = "0.37.1";
+  version = "0.38.3";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -30,21 +31,22 @@ buildPythonPackage rec {
     owner = "plugwise";
     repo = "python-plugwise";
     rev = "refs/tags/v${version}";
-    hash = "sha256-6o0g3il4GV6E8avp9V2YrkaVPf2z37asdJOxf6Phbmc=";
+    hash = "sha256-DFHKycFWtR8moLyGaiDVqnrlg+ydgR8/UVgkUpzqAuY=";
   };
 
   postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace "setuptools~=68.0" "setuptools" \
-      --replace "wheel~=0.40.0" "wheel"
+    # setuptools
+    sed -i -e "s/~=[0-9.]*//" pyproject.toml
+    # wheel
+    sed -i -e "s/~=[0-9.]*//" pyproject.toml
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     wheel
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     async-timeout
     crcmod
@@ -63,9 +65,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "plugwise"
-  ];
+  pythonImportsCheck = [ "plugwise" ];
 
   __darwinAllowLocalNetworking = true;
 

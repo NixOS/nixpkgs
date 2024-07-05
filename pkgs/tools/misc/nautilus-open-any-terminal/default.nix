@@ -4,12 +4,13 @@
 , dconf
 , fetchFromGitHub
 , glib
-, gnome
+, nautilus
+, nautilus-python
 , gobject-introspection
 , gsettings-desktop-schemas
 , gtk3
 , python3
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 python3.pkgs.buildPythonPackage rec {
@@ -30,15 +31,15 @@ python3.pkgs.buildPythonPackage rec {
     glib
     gobject-introspection
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
     python3.pkgs.setuptools
   ];
 
   buildInputs = [
     dbus
     dconf
-    gnome.nautilus
-    gnome.nautilus-python
+    nautilus
+    nautilus-python
     gsettings-desktop-schemas
     gtk3
     python3.pkgs.pygobject3

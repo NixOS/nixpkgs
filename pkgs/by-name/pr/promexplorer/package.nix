@@ -12,7 +12,7 @@ buildNimPackage (finalAttrs: {
   lockFile = ./lock.json;
 
   meta = with lib; {
-    description = "A simple tool to explore prometheus exporter metrics";
+    description = "Simple tool to explore prometheus exporter metrics";
     homepage = "https://github.com/marcusramberg/promexplorer";
     license = licenses.mit;
     platforms = platforms.unix;

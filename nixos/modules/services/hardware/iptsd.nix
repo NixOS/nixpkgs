@@ -6,11 +6,11 @@ let
   configFile = format.generate "iptsd.conf" cfg.config;
 in {
   options.services.iptsd = {
-    enable = lib.mkEnableOption (lib.mdDoc "the userspace daemon for Intel Precise Touch & Stylus");
+    enable = lib.mkEnableOption "the userspace daemon for Intel Precise Touch & Stylus";
 
     config = lib.mkOption {
       default = { };
-      description = lib.mdDoc ''
+      description = ''
         Configuration for IPTSD. See the
         [reference configuration](https://github.com/linux-surface/iptsd/blob/master/etc/iptsd.conf)
         for available options and defaults.
@@ -21,19 +21,19 @@ in {
           Touch = {
             DisableOnPalm = lib.mkOption {
               default = false;
-              description = lib.mdDoc "Ignore all touch inputs if a palm was registered on the display.";
+              description = "Ignore all touch inputs if a palm was registered on the display.";
               type = lib.types.bool;
             };
             DisableOnStylus = lib.mkOption {
               default = false;
-              description = lib.mdDoc "Ignore all touch inputs if a stylus is in proximity.";
+              description = "Ignore all touch inputs if a stylus is in proximity.";
               type = lib.types.bool;
             };
           };
           Stylus = {
             Disable = lib.mkOption {
               default = false;
-              description = lib.mdDoc "Disables the stylus. No stylus data will be processed.";
+              description = "Disables the stylus. No stylus data will be processed.";
               type = lib.types.bool;
             };
           };

@@ -1,13 +1,14 @@
-{ lib
-, aiomisc-pytest
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, pythonRelaxDepsHook
-, pytestCheckHook
-, pamqp
-, yarl
-, poetry-core
+{
+  lib,
+  aiomisc-pytest,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  pythonRelaxDepsHook,
+  pytestCheckHook,
+  pamqp,
+  yarl,
+  poetry-core,
 }:
 
 buildPythonPackage rec {
@@ -29,22 +30,16 @@ buildPythonPackage rec {
     pythonRelaxDepsHook
   ];
 
-  pythonRelaxDeps = [
-    "pamqp"
-  ];
+  pythonRelaxDeps = [ "pamqp" ];
 
   propagatedBuildInputs = [
     pamqp
     yarl
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  checkInputs = [
-    aiomisc-pytest
-  ];
+  checkInputs = [ aiomisc-pytest ];
 
   # Tests attempt to connect to a RabbitMQ server
   disabledTestPaths = [
@@ -52,9 +47,7 @@ buildPythonPackage rec {
     "tests/test_connection.py"
   ];
 
-  pythonImportsCheck = [
-    "aiormq"
-  ];
+  pythonImportsCheck = [ "aiormq" ];
 
   meta = with lib; {
     description = "AMQP 0.9.1 asynchronous client library";

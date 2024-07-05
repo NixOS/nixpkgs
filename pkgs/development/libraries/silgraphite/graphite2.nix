@@ -53,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = with lib; {
-    description = "An advanced font engine";
+    description = "Advanced font engine";
     homepage = "https://graphite.sil.org/";
     license = licenses.lgpl21;
     maintainers = [ maintainers.raskin ];

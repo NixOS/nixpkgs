@@ -74,6 +74,7 @@ stdenv.mkDerivation {
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.asl20;
     description = "Command-line tool to interact with the Scala language";
+    mainProgram = "scala-cli";
     maintainers = [ maintainers.kubukoz ];
     inherit platforms;
   };

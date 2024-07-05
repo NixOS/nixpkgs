@@ -1,7 +1,16 @@
-{ lib, fetchFromGitHub, fetchpatch, buildPythonPackage, isPy3k, flask, mock, unittestCheckHook }:
+{
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  buildPythonPackage,
+  isPy3k,
+  flask,
+  mock,
+  unittestCheckHook,
+}:
 
 buildPythonPackage rec {
-  pname = "Flask-SeaSurf";
+  pname = "flask-seasurf";
   version = "1.1.1";
   disabled = !isPy3k;
 
@@ -36,7 +45,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "flask_seasurf" ];
 
   meta = with lib; {
-    description = "A Flask extension for preventing cross-site request forgery";
+    description = "Flask extension for preventing cross-site request forgery";
     homepage = "https://github.com/maxcountryman/flask-seasurf";
     license = licenses.bsd3;
     maintainers = with maintainers; [ zhaofengli ];

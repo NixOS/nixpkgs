@@ -83,8 +83,12 @@ let
       ;
 
     perlEnv = perl.withPackages (p: [ p.NeovimExt p.Appcpanminus ]);
+
+    pname = "neovim";
+    version = lib.getVersion neovim-unwrapped;
   in {
-      name = "neovim-${lib.getVersion neovim-unwrapped}${extraName}";
+      name = "${pname}-${version}${extraName}";
+      inherit pname version;
 
       __structuredAttrs = true;
       dontUnpack = true;
@@ -99,7 +103,7 @@ let
       postBuild = lib.optionalString stdenv.isLinux ''
         rm $out/share/applications/nvim.desktop
         substitute ${neovim-unwrapped}/share/applications/nvim.desktop $out/share/applications/nvim.desktop \
-          --replace 'Name=Neovim' 'Name=Neovim wrapper'
+          --replace-warn 'Name=Neovim' 'Name=Neovim wrapper'
       ''
       + lib.optionalString finalAttrs.withPython3 ''
         makeWrapper ${python3Env.interpreter} $out/bin/nvim-python3 --unset PYTHONPATH --unset PYTHONSAFEPATH

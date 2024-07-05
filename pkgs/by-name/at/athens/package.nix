@@ -6,16 +6,16 @@
 }:
 buildGoModule rec {
   pname = "athens";
-  version = "0.13.1";
+  version = "0.14.1";
 
   src = fetchFromGitHub {
     owner = "gomods";
     repo = "athens";
     rev = "v${version}";
-    hash = "sha256-tyheAQ+j1mkkkJr0yTyzWwoEFMcTfkJN+qFbb6Zcs+s=";
+    hash = "sha256-vpg5EcQSxVFjDFKa4oHwF5fNHhLWtj3ZMi2wbMZNn/8=";
   };
 
-  vendorHash = "sha256-8+PdkanodNZW/xeFf+tDm3Ej7DRSpBBtiT/CqjnWthw=";
+  vendorHash = "sha256-LajNPzGbWqW+9aqiquk2LvSUjKwi1gbDY4cKXmn3PWk=";
 
   CGO_ENABLED = "0";
   ldflags = [ "-s" "-w" "-X github.com/gomods/athens/pkg/build.version=${version}" ];
@@ -33,7 +33,7 @@ buildGoModule rec {
   };
 
   meta = with lib; {
-    description = "A Go module datastore and proxy";
+    description = "Go module datastore and proxy";
     homepage = "https://github.com/gomods/athens";
     changelog = "https://github.com/gomods/athens/releases/tag/v${version}";
     license = licenses.mit;

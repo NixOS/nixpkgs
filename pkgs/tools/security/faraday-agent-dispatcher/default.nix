@@ -5,31 +5,34 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "faraday-agent-dispatcher";
-  version = "3.2.1";
+  version = "3.4.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "infobyte";
     repo = "faraday_agent_dispatcher";
     rev = "refs/tags/${version}";
-    hash = "sha256-OO9Rxm7jMfQAyyO5plLDWXbfYmPR2egewOMlrhHQTEw=";
+    hash = "sha256-Qr3ZGU4y7f6yHD78ecdv7a6IBFDpT+/4Yez0n/MenN0=";
   };
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace '"pytest-runner",' ""
+      --replace-fail '"pytest-runner",' ""
   '';
 
   pythonRelaxDeps = [
     "python-socketio"
   ];
 
-  nativeBuildInputs = with python3.pkgs; [
-    pythonRelaxDepsHook
+  build-system = with python3.pkgs; [
     setuptools-scm
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  nativeBuildInputs = with python3.pkgs; [
+    pythonRelaxDepsHook
+  ];
+
+  dependencies = with python3.pkgs; [
     aiohttp
     click
     faraday-agent-parameters-types
@@ -73,7 +76,8 @@ python3.pkgs.buildPythonApplication rec {
     description = "Tool to send result from tools to the Faraday Platform";
     homepage = "https://github.com/infobyte/faraday_agent_dispatcher";
     changelog = "https://github.com/infobyte/faraday_agent_dispatcher/releases/tag/${version}";
-    license = with licenses; [ gpl3Only ];
+    license = licenses.gpl3Only;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "faraday-dispatcher";
   };
 }

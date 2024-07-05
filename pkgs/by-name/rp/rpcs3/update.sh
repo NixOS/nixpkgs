@@ -4,7 +4,7 @@
 set -eou pipefail
 
 ROOT="$(dirname "$(readlink -f "$0")")"
-if [[ ! "$(basename $ROOT)" == "rpcs3" || ! -f "$ROOT/default.nix" ]]; then
+if [[ ! "$(basename $ROOT)" == "rpcs3" || ! -f "$ROOT/package.nix" ]]; then
     echo "ERROR: Not in the rpcs3 folder"
     exit 1
 fi

@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, cryptography
-, fetchPypi
-, pythonOlder
-, poetry-core
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  cryptography,
+  fetchPypi,
+  pythonOlder,
+  poetry-core,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -24,16 +25,12 @@ buildPythonPackage rec {
     setuptools
   ];
 
-  propagatedBuildInputs = [
-    cryptography
-  ];
+  propagatedBuildInputs = [ cryptography ];
 
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "lc7001"
-  ];
+  pythonImportsCheck = [ "lc7001" ];
 
   meta = with lib; {
     description = "Python module for interacting with Legrand LC7001";

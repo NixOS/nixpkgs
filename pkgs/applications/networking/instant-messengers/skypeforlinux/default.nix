@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, dpkg
-, alsa-lib, atk, cairo, cups, curl, dbus, expat, fontconfig, freetype, gdk-pixbuf, glib, glibc, gnome
-, gtk3, libappindicator-gtk3, libnotify, libpulseaudio, libsecret, libv4l, nspr, nss, pango, systemd, wrapGAppsHook, xorg
+, alsa-lib, atk, cairo, cups, curl, dbus, expat, fontconfig, freetype, gdk-pixbuf, glib, glibc, gnome-keyring
+, gtk3, libappindicator-gtk3, libnotify, libpulseaudio, libsecret, libv4l, nspr, nss, pango, systemd, wrapGAppsHook3, xorg
 , at-spi2-atk, libuuid, at-spi2-core, libdrm, mesa, libxkbcommon, libxshmfence }:
 
 let
@@ -30,7 +30,7 @@ let
     gtk3
     libappindicator-gtk3
 
-    gnome.gnome-keyring
+    gnome-keyring
 
     libnotify
     libpulseaudio
@@ -82,7 +82,7 @@ in stdenv.mkDerivation {
   inherit src;
 
   nativeBuildInputs = [
-    wrapGAppsHook
+    wrapGAppsHook3
     glib # For setup hook populating GSETTINGS_SCHEMA_PATH
   ];
 

@@ -10,13 +10,13 @@
 
 buildDotnetModule rec {
   pname = "knossosnet";
-  version = "1.0.0";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "KnossosNET";
     repo = "Knossos.NET";
     rev = "v${version}";
-    hash = "sha256-Wq4WeRf+ELTxZhQyQf6XAOPmbJwX06qQ5GxRnnK3lyI=";
+    hash = "sha256-4GVbwBykagSMGF3TxyZeoRb7Km+yLEMFOO8fCkH3U5A=";
   };
 
   patches = [ ./targetframework.patch ];
@@ -28,7 +28,7 @@ buildDotnetModule rec {
 
   meta = with lib; {
     homepage = "https://github.com/KnossosNET/Knossos.NET";
-    description = "A multi-platform launcher for Freespace 2 Open";
+    description = "Multi-platform launcher for Freespace 2 Open";
     license = licenses.gpl3Only;
     mainProgram = "Knossos.NET";
     maintainers = with maintainers; [ cdombroski ];

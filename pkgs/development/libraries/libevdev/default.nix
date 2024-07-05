@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch, python3 }:
+{ lib, stdenv, fetchurl, python3 }:
 
 stdenv.mkDerivation rec {
   pname = "libevdev";

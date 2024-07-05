@@ -22,4 +22,10 @@ mkKdeDerivation {
 
   extraNativeBuildInputs = [qttools shared-mime-info];
   extraBuildInputs = [kaccounts-integration accounts-qt xz mariadb];
+
+  # Hardcoded as a QString, which is UTF-16 so Nix can't pick it up automatically
+  postFixup = ''
+    mkdir -p $out/nix-support
+    echo "${mariadb}" > $out/nix-support/depends
+  '';
 }

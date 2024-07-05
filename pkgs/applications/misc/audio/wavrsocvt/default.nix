@@ -20,6 +20,7 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     description = "Convert .wav files into sound files for Lego NXT brick";
+    mainProgram = "wavrsocvt";
     longDescription = ''
       wavrsocvt is a command-line utility which can be used from a
       terminal window or script to convert .wav files into sound

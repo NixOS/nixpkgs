@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, flask
-, python3-openid
-, isPy3k
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  flask,
+  python3-openid,
+  isPy3k,
 }:
 
 buildPythonPackage rec {

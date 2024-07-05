@@ -43,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://thebeez.home.xs4all.nl/4tH/index.html";
-    description = "A portable Forth compiler";
+    description = "Portable Forth compiler";
     license = lib.licenses.lgpl3Plus;
     mainProgram = "4th";
     maintainers = with lib.maintainers; [ AndersonTorres ];

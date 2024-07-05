@@ -8,7 +8,7 @@
 , swift-corelibs-libdispatch
 # deadbeef can use either gtk2 or gtk3
 , gtk2Support ? false, gtk2
-, gtk3Support ? true, gtk3, gsettings-desktop-schemas, wrapGAppsHook
+, gtk3Support ? true, gtk3, gsettings-desktop-schemas, wrapGAppsHook3
 # input plugins
 , vorbisSupport ? true, libvorbis
 , mp123Support ? true, libmad
@@ -112,7 +112,7 @@ in clangStdenv.mkDerivation {
     libtool
     pkg-config
   ] ++ optionals gtk3Support [
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   enableParallelBuilding = true;
@@ -130,6 +130,7 @@ in clangStdenv.mkDerivation {
 
   meta = with lib; {
     description = "Ultimate Music Player for GNU/Linux";
+    mainProgram = "deadbeef";
     homepage = "http://deadbeef.sourceforge.net/";
     downloadPage = "https://github.com/DeaDBeeF-Player/deadbeef";
     license = licenses.gpl2;

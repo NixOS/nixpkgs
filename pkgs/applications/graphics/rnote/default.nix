@@ -27,13 +27,13 @@
 
 stdenv.mkDerivation rec {
   pname = "rnote";
-  version = "0.10.0";
+  version = "0.10.2";
 
   src = fetchFromGitHub {
     owner = "flxzt";
     repo = "rnote";
     rev = "v${version}";
-    hash = "sha256-PMg83eWcC21yNiRYdTS6/j9gerTctnDPHXIM4PWktrU=";
+    hash = "sha256-SqT8bJfJM+d5fewso3C22M4Qo7wY2g2QmEot/gCpwT4=";
   };
 
   cargoDeps = rustPlatform.importCargoLock {
@@ -93,5 +93,7 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ dotlambda gepbird yrd ];
     platforms = platforms.unix;
+    # compiler error since 2023-11-17
+    broken = stdenv.isDarwin;
   };
 }

@@ -1,13 +1,14 @@
 {callPackage}: {
+  accessibility-inspector = callPackage ./accessibility-inspector {};
   akonadi = callPackage ./akonadi {};
   akonadi-calendar = callPackage ./akonadi-calendar {};
   akonadi-calendar-tools = callPackage ./akonadi-calendar-tools {};
-  akonadiconsole = callPackage ./akonadiconsole {};
   akonadi-contacts = callPackage ./akonadi-contacts {};
   akonadi-import-wizard = callPackage ./akonadi-import-wizard {};
   akonadi-mime = callPackage ./akonadi-mime {};
   akonadi-notes = callPackage ./akonadi-notes {};
   akonadi-search = callPackage ./akonadi-search {};
+  akonadiconsole = callPackage ./akonadiconsole {};
   akregator = callPackage ./akregator {};
   alligator = callPackage ./alligator {};
   analitza = callPackage ./analitza {};
@@ -15,6 +16,7 @@
   arianna = callPackage ./arianna {};
   ark = callPackage ./ark {};
   artikulate = callPackage ./artikulate {};
+  audex = callPackage ./audex {};
   audiocd-kio = callPackage ./audiocd-kio {};
   audiotube = callPackage ./audiotube {};
   baloo-widgets = callPackage ./baloo-widgets {};
@@ -34,6 +36,7 @@
   falkon = callPackage ./falkon {};
   ffmpegthumbs = callPackage ./ffmpegthumbs {};
   filelight = callPackage ./filelight {};
+  francis = callPackage ./francis {};
   ghostwriter = callPackage ./ghostwriter {};
   granatier = callPackage ./granatier {};
   grantlee-editor = callPackage ./grantlee-editor {};
@@ -51,6 +54,7 @@
   kalarm = callPackage ./kalarm {};
   kalgebra = callPackage ./kalgebra {};
   kalk = callPackage ./kalk {};
+  kalm = callPackage ./kalm {};
   kalzium = callPackage ./kalzium {};
   kamera = callPackage ./kamera {};
   kamoso = callPackage ./kamoso {};
@@ -73,23 +77,23 @@
   kclock = callPackage ./kclock {};
   kcolorchooser = callPackage ./kcolorchooser {};
   kcron = callPackage ./kcron {};
-  kdebugsettings = callPackage ./kdebugsettings {};
-  kdeconnect-kde = callPackage ./kdeconnect-kde {};
   kde-dev-scripts = callPackage ./kde-dev-scripts {};
   kde-dev-utils = callPackage ./kde-dev-utils {};
+  kde-inotify-survey = callPackage ./kde-inotify-survey {};
+  kdebugsettings = callPackage ./kdebugsettings {};
+  kdeconnect-kde = callPackage ./kdeconnect-kde {};
   kdeedu-data = callPackage ./kdeedu-data {};
   kdegraphics-mobipocket = callPackage ./kdegraphics-mobipocket {};
   kdegraphics-thumbnailers = callPackage ./kdegraphics-thumbnailers {};
-  kde-inotify-survey = callPackage ./kde-inotify-survey {};
   kdenetwork-filesharing = callPackage ./kdenetwork-filesharing {};
   kdenlive = callPackage ./kdenlive {};
   kdepim-addons = callPackage ./kdepim-addons {};
   kdepim-runtime = callPackage ./kdepim-runtime {};
   kdesdk-kio = callPackage ./kdesdk-kio {};
   kdesdk-thumbnailers = callPackage ./kdesdk-thumbnailers {};
-  kdevelop = callPackage ./kdevelop {};
   kdev-php = callPackage ./kdev-php {};
   kdev-python = callPackage ./kdev-python {};
+  kdevelop = callPackage ./kdevelop {};
   kdf = callPackage ./kdf {};
   kdialog = callPackage ./kdialog {};
   kdiamond = callPackage ./kdiamond {};
@@ -112,7 +116,6 @@
   kimap = callPackage ./kimap {};
   kio-admin = callPackage ./kio-admin {};
   kio-extras = callPackage ./kio-extras {};
-  kio-extras-kf5 = callPackage ./kio-extras-kf5 {};
   kio-gdrive = callPackage ./kio-gdrive {};
   kio-zeroconf = callPackage ./kio-zeroconf {};
   kipi-plugins = callPackage ./kipi-plugins {};
@@ -226,9 +229,9 @@
   parley = callPackage ./parley {};
   partitionmanager = callPackage ./partitionmanager {};
   picmi = callPackage ./picmi {};
-  pimcommon = callPackage ./pimcommon {};
   pim-data-exporter = callPackage ./pim-data-exporter {};
   pim-sieve-editor = callPackage ./pim-sieve-editor {};
+  pimcommon = callPackage ./pimcommon {};
   plasmatube = callPackage ./plasmatube {};
   poxml = callPackage ./poxml {};
   qmlkonsole = callPackage ./qmlkonsole {};
@@ -236,6 +239,7 @@
   signon-kwallet-extension = callPackage ./signon-kwallet-extension {};
   skanlite = callPackage ./skanlite {};
   skanpage = callPackage ./skanpage {};
+  skladnik = callPackage ./skladnik {};
   spectacle = callPackage ./spectacle {};
   step = callPackage ./step {};
   svgpart = callPackage ./svgpart {};

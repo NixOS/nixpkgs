@@ -83,6 +83,7 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     description = "Fast-DDS IDL code generator tool";
+    mainProgram = "fastddsgen";
     homepage = "https://github.com/eProsima/Fast-DDS-Gen";
     license = licenses.asl20;
     longDescription = ''

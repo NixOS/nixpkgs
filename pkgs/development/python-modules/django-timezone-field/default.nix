@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, poetry-core
-, django
-, djangorestframework
-, pytz
-, pytest
-, pytest-lazy-fixture
-, python
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  poetry-core,
+  django,
+  djangorestframework,
+  pytz,
+  pytest,
+  pytest-lazy-fixture,
+  python,
 }:
 
 buildPythonPackage rec {
@@ -24,9 +25,7 @@ buildPythonPackage rec {
     hash = "sha256-FAYO8OEE/h4rsbC4Oc57ylWV7TqQ6DOd6/2M+mb/AsM=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     django
@@ -34,9 +33,7 @@ buildPythonPackage rec {
     pytz
   ];
 
-  pythonImportsCheck = [
-    "timezone_field"
-  ];
+  pythonImportsCheck = [ "timezone_field" ];
 
   # Uses pytest.lazy_fixture directly which is broken in pytest-lazy-fixture
   # https://github.com/TvoroG/pytest-lazy-fixture/issues/22

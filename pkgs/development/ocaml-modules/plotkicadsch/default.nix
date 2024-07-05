@@ -1,6 +1,5 @@
 { lib
 , buildDunePackage
-, fetchFromGitHub
 , substituteAll
 , base64
 , cmdliner
@@ -43,7 +42,7 @@ buildDunePackage rec {
   ];
 
   meta = with lib; {
-    description = "A tool to export Kicad Sch files to SVG pictures";
+    description = "Tool to export Kicad Sch files to SVG pictures";
     homepage = "https://github.com/jnavila/plotkicadsch";
     license = licenses.isc;
     maintainers = with maintainers; [ leungbk ];

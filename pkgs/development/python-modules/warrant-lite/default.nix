@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, boto3
-, envs
-, python-jose
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  boto3,
+  envs,
+  python-jose,
+  requests,
 }:
 
 buildPythonPackage rec {
@@ -36,9 +37,7 @@ buildPythonPackage rec {
   # Tests require credentials
   doCheck = false;
 
-  pythonImportsCheck = [
-    "warrant_lite"
-  ];
+  pythonImportsCheck = [ "warrant_lite" ];
 
   meta = with lib; {
     description = "Module for process SRP requests for AWS Cognito";

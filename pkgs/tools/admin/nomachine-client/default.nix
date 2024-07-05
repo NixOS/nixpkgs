@@ -81,6 +81,7 @@ in
     meta = with lib; {
       description = "NoMachine remote desktop client (nxplayer)";
       homepage = "https://www.nomachine.com/";
+      mainProgram = "nxplayer";
       sourceProvenance = with sourceTypes; [ binaryNativeCode ];
       license = {
         fullName = "NoMachine 7 End-User License Agreement";

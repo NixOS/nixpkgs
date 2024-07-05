@@ -1,14 +1,15 @@
-{ lib
-, anyio
-, buildPythonPackage
-, fetchFromGitHub
-, paho-mqtt
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, setuptools-scm
-, typing-extensions
-, wheel
+{
+  lib,
+  anyio,
+  buildPythonPackage,
+  fetchFromGitHub,
+  paho-mqtt,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  setuptools-scm,
+  typing-extensions,
+  wheel,
 }:
 
 buildPythonPackage rec {
@@ -31,20 +32,14 @@ buildPythonPackage rec {
     wheel
   ];
 
-  propagatedBuildInputs = [
-    paho-mqtt
-  ] ++ lib.optionals (pythonOlder "3.10") [
-    typing-extensions
-  ];
+  propagatedBuildInputs = [ paho-mqtt ] ++ lib.optionals (pythonOlder "3.10") [ typing-extensions ];
 
   nativeCheckInputs = [
     anyio
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "asyncio_mqtt"
-  ];
+  pythonImportsCheck = [ "asyncio_mqtt" ];
 
   disabledTests = [
     # Tests require network access

@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = lib.optionals stdenv.isDarwin [ Foundation ];
 
   meta = with lib; {
-    description = "A simple CLI pomodoro timer using desktop notifications written in Rust";
+    description = "Simple CLI pomodoro timer using desktop notifications written in Rust";
     homepage = "https://github.com/SanderJSA/Pomodoro";
     license = licenses.mit;
     maintainers = with maintainers; [ annaaurora ];

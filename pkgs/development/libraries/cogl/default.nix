@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchurl
-, fetchpatch
 , pkg-config
 , libGL
 , glib
@@ -105,7 +104,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "A small open source library for using 3D graphics hardware for rendering";
+    description = "Small open source library for using 3D graphics hardware for rendering";
     maintainers = with maintainers; [ lovek323 ];
 
     longDescription = ''

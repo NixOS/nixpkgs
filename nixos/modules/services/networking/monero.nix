@@ -50,12 +50,12 @@ in
 
     services.monero = {
 
-      enable = mkEnableOption (lib.mdDoc "Monero node daemon");
+      enable = mkEnableOption "Monero node daemon";
 
       dataDir = mkOption {
         type = types.str;
         default = "/var/lib/monero";
-        description = lib.mdDoc ''
+        description = ''
           The directory where Monero stores its data files.
         '';
       };
@@ -63,7 +63,7 @@ in
       mining.enable = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether to mine monero.
         '';
       };
@@ -71,7 +71,7 @@ in
       mining.address = mkOption {
         type = types.str;
         default = "";
-        description = lib.mdDoc ''
+        description = ''
           Monero address where to send mining rewards.
         '';
       };
@@ -79,7 +79,7 @@ in
       mining.threads = mkOption {
         type = types.addCheck types.int (x: x>=0);
         default = 0;
-        description = lib.mdDoc ''
+        description = ''
           Number of threads used for mining.
           Set to `0` to use all available.
         '';
@@ -88,7 +88,7 @@ in
       rpc.user = mkOption {
         type = types.nullOr types.str;
         default = null;
-        description = lib.mdDoc ''
+        description = ''
           User name for RPC connections.
         '';
       };
@@ -96,7 +96,7 @@ in
       rpc.password = mkOption {
         type = types.nullOr types.str;
         default = null;
-        description = lib.mdDoc ''
+        description = ''
           Password for RPC connections.
         '';
       };
@@ -104,7 +104,7 @@ in
       rpc.address = mkOption {
         type = types.str;
         default = "127.0.0.1";
-        description = lib.mdDoc ''
+        description = ''
           IP address the RPC server will bind to.
         '';
       };
@@ -112,7 +112,7 @@ in
       rpc.port = mkOption {
         type = types.port;
         default = 18081;
-        description = lib.mdDoc ''
+        description = ''
           Port the RPC server will bind to.
         '';
       };
@@ -120,7 +120,7 @@ in
       rpc.restricted = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether to restrict RPC to view only commands.
         '';
       };
@@ -128,7 +128,7 @@ in
       limits.upload = mkOption {
         type = types.addCheck types.int (x: x>=-1);
         default = -1;
-        description = lib.mdDoc ''
+        description = ''
           Limit of the upload rate in kB/s.
           Set to `-1` to leave unlimited.
         '';
@@ -137,7 +137,7 @@ in
       limits.download = mkOption {
         type = types.addCheck types.int (x: x>=-1);
         default = -1;
-        description = lib.mdDoc ''
+        description = ''
           Limit of the download rate in kB/s.
           Set to `-1` to leave unlimited.
         '';
@@ -146,7 +146,7 @@ in
       limits.threads = mkOption {
         type = types.addCheck types.int (x: x>=0);
         default = 0;
-        description = lib.mdDoc ''
+        description = ''
           Maximum number of threads used for a parallel job.
           Set to `0` to leave unlimited.
         '';
@@ -155,7 +155,7 @@ in
       limits.syncSize = mkOption {
         type = types.addCheck types.int (x: x>=0);
         default = 0;
-        description = lib.mdDoc ''
+        description = ''
           Maximum number of blocks to sync at once.
           Set to `0` for adaptive.
         '';
@@ -164,7 +164,7 @@ in
       extraNodes = mkOption {
         type = types.listOf types.str;
         default = [ ];
-        description = lib.mdDoc ''
+        description = ''
           List of additional peer IP addresses to add to the local list.
         '';
       };
@@ -172,7 +172,7 @@ in
       priorityNodes = mkOption {
         type = types.listOf types.str;
         default = [ ];
-        description = lib.mdDoc ''
+        description = ''
           List of peer IP addresses to connect to and
           attempt to keep the connection open.
         '';
@@ -181,7 +181,7 @@ in
       exclusiveNodes = mkOption {
         type = types.listOf types.str;
         default = [ ];
-        description = lib.mdDoc ''
+        description = ''
           List of peer IP addresses to connect to *only*.
           If given the other peer options will be ignored.
         '';
@@ -190,7 +190,7 @@ in
       extraConfig = mkOption {
         type = types.lines;
         default = "";
-        description = lib.mdDoc ''
+        description = ''
           Extra lines to be added verbatim to monerod configuration.
         '';
       };

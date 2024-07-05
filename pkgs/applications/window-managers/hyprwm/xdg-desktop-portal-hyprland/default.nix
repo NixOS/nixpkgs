@@ -24,13 +24,13 @@
 }:
 stdenv.mkDerivation (self: {
   pname = "xdg-desktop-portal-hyprland";
-  version = "1.3.1";
+  version = "1.3.2";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "xdg-desktop-portal-hyprland";
     rev = "v${self.version}";
-    hash = "sha256-wP611tGIWBA4IXShWbah7TxqdbvhfcfT2vnXalX/qzk=";
+    hash = "sha256-KsX7sAwkEFpXiwyjt0HGTnnrUU58wW1jlzj5IA/LRz8=";
   };
 
   nativeBuildInputs = [
@@ -70,6 +70,7 @@ stdenv.mkDerivation (self: {
   meta = with lib; {
     homepage = "https://github.com/hyprwm/xdg-desktop-portal-hyprland";
     description = "xdg-desktop-portal backend for Hyprland";
+    mainProgram = "hyprland-share-picker";
     license = licenses.bsd3;
     maintainers = with maintainers; [ fufexan ];
     platforms = platforms.linux;

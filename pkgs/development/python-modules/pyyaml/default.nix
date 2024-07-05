@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, cython
-, setuptools
-, libyaml
-, python
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  cython_0,
+  setuptools,
+  libyaml,
+  python,
 }:
 
 buildPythonPackage rec {
@@ -24,7 +25,7 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
-    cython
+    cython_0
     setuptools
   ];
 
@@ -39,7 +40,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "yaml" ];
 
   meta = with lib; {
-    description = "The next generation YAML parser and emitter for Python";
+    description = "Next generation YAML parser and emitter for Python";
     homepage = "https://github.com/yaml/pyyaml";
     license = licenses.mit;
     maintainers = with maintainers; [ dotlambda ];

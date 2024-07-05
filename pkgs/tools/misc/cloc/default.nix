@@ -51,9 +51,9 @@ in stdenv.mkDerivation {
   '';
 
   meta = {
-    description = "A program that counts lines of source code";
+    description = "Program that counts lines of source code";
     homepage = "https://github.com/AlDanial/cloc";
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ rycee ];
     mainProgram = "cloc";

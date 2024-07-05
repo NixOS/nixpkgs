@@ -1,12 +1,12 @@
 {lib, stdenv, fetchurl, cyrus_sasl, libevent, nixosTests }:
 
 stdenv.mkDerivation rec {
-  version = "1.6.23";
+  version = "1.6.26";
   pname = "memcached";
 
   src = fetchurl {
     url = "https://memcached.org/files/${pname}-${version}.tar.gz";
-    sha256 = "sha256-hbAzSQT0QClqaFzP2nXw9FF7+JIquO+m0MSzySw1TUw=";
+    sha256 = "sha256-yTnHhZo8HPYDA+ndCAxjrEo4fuKEbVlc1SY6PcrNwvc=";
   };
 
   configureFlags = [
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional stdenv.isDarwin "-Wno-error");
 
   meta = with lib; {
-    description = "A distributed memory object caching system";
+    description = "Distributed memory object caching system";
     homepage = "http://memcached.org/";
     license = licenses.bsd3;
     maintainers = [ maintainers.coconnor ];

@@ -2,6 +2,7 @@
 , stdenv
 , fetchurl
 , fetchFromGitLab
+, fetchpatch
 , cairo
 , cmake
 , boost
@@ -54,6 +55,15 @@ stdenv.mkDerivation (finalAttrs: rec {
     url = "https://poppler.freedesktop.org/poppler-${version}.tar.xz";
     hash = "sha256-GRh6P90F8z59YExHmcGD3lygEYZAyIs3DdzzE2NDIi4=";
   };
+
+  patches = [
+    (fetchpatch {
+      # https://access.redhat.com/security/cve/CVE-2024-6239
+      name = "CVE-2024-6239.patch";
+      url = "https://gitlab.freedesktop.org/poppler/poppler/-/commit/0554731052d1a97745cb179ab0d45620589dd9c4.patch";
+      hash = "sha256-I78wJ4l1DSh+x/e00ZL8uvrGdBH+ufp+EDm0A1XWyCU=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -138,7 +148,7 @@ stdenv.mkDerivation (finalAttrs: rec {
   meta = with lib; {
     homepage = "https://poppler.freedesktop.org/";
     changelog = "https://gitlab.freedesktop.org/poppler/poppler/-/blob/poppler-${version}/NEWS";
-    description = "A PDF rendering library";
+    description = "PDF rendering library";
     longDescription = ''
       Poppler is a PDF rendering library based on the xpdf-3.0 code base. In
       addition it provides a number of tools that can be installed separately.

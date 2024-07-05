@@ -1,10 +1,11 @@
-{ lib
-, blockdiag
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, seqdiag
-, sphinx
+{
+  lib,
+  blockdiag,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  seqdiag,
+  sphinx,
 }:
 
 buildPythonPackage rec {
@@ -25,9 +26,7 @@ buildPythonPackage rec {
     sphinx
   ];
 
-  pythonImportsCheck = [
-    "sphinxcontrib.seqdiag"
-  ];
+  pythonImportsCheck = [ "sphinxcontrib.seqdiag" ];
 
   pythonNamespaces = [ "sphinxcontrib" ];
 

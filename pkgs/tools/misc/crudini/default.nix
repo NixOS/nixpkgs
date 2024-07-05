@@ -1,6 +1,5 @@
 { lib
 , fetchFromGitHub
-, fetchpatch
 , python3Packages
 , help2man
 , installShellFiles
@@ -51,7 +50,7 @@ python3Packages.buildPythonApplication rec {
   '';
 
   meta = with lib; {
-    description = "A utility for manipulating ini files ";
+    description = "Utility for manipulating ini files ";
     homepage = "https://www.pixelbeat.org/programs/crudini/";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ peterhoeg ];

@@ -1,7 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, nmap
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  nmap,
 }:
 
 buildPythonPackage rec {
@@ -14,9 +15,7 @@ buildPythonPackage rec {
     hash = "sha256-91r2uR3Y47DDH4adsyFj9iraaGlF5bfCX4S8D3+tO2Q=";
   };
 
-  propagatedBuildInputs = [
-    nmap
-  ];
+  propagatedBuildInputs = [ nmap ];
 
   postPatch = ''
     substituteInPlace setup.cfg \
@@ -26,9 +25,7 @@ buildPythonPackage rec {
   # Tests requires sudo and performs scans
   doCheck = false;
 
-  pythonImportsCheck = [
-    "nmap"
-  ];
+  pythonImportsCheck = [ "nmap" ];
 
   meta = with lib; {
     description = "Python library which helps in using nmap";

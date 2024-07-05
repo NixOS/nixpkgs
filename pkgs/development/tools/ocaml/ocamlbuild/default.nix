@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A build system with builtin rules to easily build most OCaml projects";
+    description = "Build system with builtin rules to easily build most OCaml projects";
     homepage = "https://github.com/ocaml/ocamlbuild/";
     license = licenses.lgpl2;
     maintainers = with maintainers; [ vbgl ];

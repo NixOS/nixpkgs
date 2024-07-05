@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "fortify3" ];
 
   meta = with lib; {
-    description = "The advanced PC speaker beeper";
+    description = "Advanced PC speaker beeper";
     homepage = "https://github.com/spkr-beep/beep";
     license = licenses.gpl2Only;
     platforms = platforms.linux;

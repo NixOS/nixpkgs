@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage rec {
   cargoSha256 = "1p6008vxm2pi9v31qhsq7zysanal6rcvcl8553373bkqlfd7w5c4";
 
   meta = with lib; {
-    description = "A simple, user-friendly alternative to sort | uniq";
+    description = "Simple, user-friendly alternative to sort | uniq";
     homepage = "https://github.com/lostutils/uq";
     license = licenses.mit;
     maintainers = with maintainers; [ doronbehar matthiasbeyer ];

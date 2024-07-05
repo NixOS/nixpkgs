@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage rec {
     description = "Scriptable, curses-based, digital habit tracker";
     homepage = "https://github.com/NerdyPepper/dijo";
     license = licenses.mit;
-    maintainers = with maintainers; [ infinisil ];
+    maintainers = [ ];
     mainProgram = "dijo";
   };
 }

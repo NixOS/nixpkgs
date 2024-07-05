@@ -7,10 +7,10 @@
 , ninja
 , vala
 , pkg-config
-, gnome
+, adwaita-icon-theme
 , libchamplain
 , gdl
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 stdenv.mkDerivation rec {
@@ -37,13 +37,13 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     vala
-    wrapGAppsHook # Fix error: GLib-GIO-ERROR **: No GSettings schemas are installed on the system
+    wrapGAppsHook3 # Fix error: GLib-GIO-ERROR **: No GSettings schemas are installed on the system
   ];
 
   buildInputs = [
     gdl
     libchamplain
-    gnome.adwaita-icon-theme
+    adwaita-icon-theme
     libxml2
   ];
 
@@ -52,6 +52,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://blog.sarine.nl/tag/gpxviewer/";
     description = "Simple tool to visualize tracks and waypoints stored in a gpx file";
+    mainProgram = "gpx-viewer";
     changelog = "https://github.com/DaveDavenport/gpx-viewer/blob/${src.rev}/NEWS";
     platforms = with platforms; linux;
     license = licenses.gpl2Plus;

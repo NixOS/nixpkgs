@@ -72,4 +72,11 @@
     leaveDotGit = true;
     fetchSubmodules = true;
   };
+
+  dumb-http-signed-tag = testers.invalidateFetcherByDrvHash fetchgit {
+    name = "dumb-http-signed-tag-source";
+    url = "https://git.scottworley.com/pub/git/pinch";
+    rev = "v3.0.14";
+    sha256 = "sha256-bd0Lx75Gd1pcBJtwz5WGki7XoYSpqhinCT3a77wpY2c=";
+  };
 }

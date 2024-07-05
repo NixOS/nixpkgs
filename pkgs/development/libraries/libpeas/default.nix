@@ -13,7 +13,7 @@
 , gobject-introspection
 , python3
 , ncurses
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 stdenv.mkDerivation rec {
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     gettext
     gi-docgen
     gobject-introspection
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -82,8 +82,9 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "A GObject-based plugins engine";
-    homepage = "https://wiki.gnome.org/Projects/Libpeas";
+    description = "GObject-based plugins engine";
+    mainProgram = "peas-demo";
+    homepage = "https://gitlab.gnome.org/GNOME/libpeas";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
     maintainers = teams.gnome.members;

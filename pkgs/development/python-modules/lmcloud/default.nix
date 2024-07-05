@@ -1,17 +1,18 @@
-{ lib
-, authlib
-, bleak
-, buildPythonPackage
-, fetchFromGitHub
-, httpx
-, pythonOlder
-, setuptools
-, websockets
+{
+  lib,
+  authlib,
+  bleak,
+  buildPythonPackage,
+  fetchFromGitHub,
+  httpx,
+  pythonOlder,
+  setuptools,
+  websockets,
 }:
 
 buildPythonPackage rec {
   pname = "lmcloud";
-  version = "0.4.35";
+  version = "1.1.11";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -20,14 +21,12 @@ buildPythonPackage rec {
     owner = "zweckj";
     repo = "lmcloud";
     rev = "refs/tags/v${version}";
-    hash = "sha256-TUve21yamtEmEceK/V1w7IZjnMgKConMfSY/GlqFpp8=";
+    hash = "sha256-NuqWzlTkarrLXgYV4Zzwlb++rV+6cpG97YZnDwi0m98=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     authlib
     bleak
     httpx
@@ -37,9 +36,7 @@ buildPythonPackage rec {
   # Module has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "lmcloud"
-  ];
+  pythonImportsCheck = [ "lmcloud" ];
 
   meta = with lib; {
     description = "Library to interface with La Marzocco's cloud";

@@ -7,14 +7,14 @@
 
 beamPackages.mixRelease rec {
   pname = "pleroma";
-  version = "2.6.2";
+  version = "2.6.3";
 
   src = fetchFromGitLab {
     domain = "git.pleroma.social";
     owner = "pleroma";
     repo = "pleroma";
     rev = "v${version}";
-    sha256 = "sha256-KVB6e/B6DJbylpfR8QTZJ1GOJrAqF6shqoU/zIndi1U=";
+    sha256 = "sha256-ZiupcCu6ES/G9rsdNo5+JXOIPhb4CHT2YhKThWiLisw=";
   };
 
   patches = [
@@ -163,8 +163,8 @@ beamPackages.mixRelease rec {
   meta = with lib; {
     description = "ActivityPub microblogging server";
     homepage = "https://git.pleroma.social/pleroma/pleroma";
-    license = licenses.agpl3;
-    maintainers = with maintainers; [ picnoir yuka kloenk yayayayaka ];
+    license = licenses.agpl3Only;
+    maintainers = with maintainers; [ picnoir kloenk yayayayaka ];
     platforms = platforms.unix;
   };
 }

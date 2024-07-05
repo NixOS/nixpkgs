@@ -18,7 +18,7 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "The Libertinus font family";
+    description = "Libertinus font family";
     longDescription = ''
       The Libertinus font project began as a fork of the Linux Libertine and
       Linux Biolinum fonts. The original impetus was to add an OpenType math

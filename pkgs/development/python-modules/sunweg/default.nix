@@ -1,35 +1,39 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
+  python-dateutil,
+  requests,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "sunweg";
-  version = "2.1.0";
-  format = "setuptools";
+  version = "3.0.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "rokam";
-    repo = pname;
+    repo = "sunweg";
     rev = "refs/tags/${version}";
-    hash = "sha256-E5dwFfFzOMyYLAqoTdp22/qIS3+IXD6jkVUVZIumk6Y=";
+    hash = "sha256-9VzDOl393+jm6Nf40X4ZPMBbRc6KOwOQkpTNoqBsw1M=";
   };
 
+  nativeBuildInputs = [ setuptools ];
+
   propagatedBuildInputs = [
+    python-dateutil
     requests
   ];
 
   # Module has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "sunweg"
-  ];
+  pythonImportsCheck = [ "sunweg" ];
 
   meta = with lib; {
     description = "Module to access the WEG solar energy platform";

@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, importlib-metadata
-, logilab-common
-, pip
-, six
-, pytestCheckHook
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  importlib-metadata,
+  logilab-common,
+  pip,
+  six,
+  pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -30,9 +31,7 @@ buildPythonPackage rec {
     six
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   preCheck = ''
     # avoid ModuleNotFoundError: No module named 'logilab.common' due to namespace
@@ -54,4 +53,3 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ ];
   };
 }
-

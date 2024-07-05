@@ -46,7 +46,7 @@ mkDerivation rec {
   meta = with lib; {
     broken = stdenv.isDarwin;
     homepage = "http://www.glassechidna.com.au/products/heimdall/";
-    description = "A cross-platform tool suite to flash firmware onto Samsung Galaxy S devices";
+    description = "Cross-platform tool suite to flash firmware onto Samsung Galaxy S devices";
     license = licenses.mit;
     maintainers = with maintainers; [ peterhoeg ];
     platforms = platforms.unix;

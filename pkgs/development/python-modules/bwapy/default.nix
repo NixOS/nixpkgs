@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, pythonAtLeast
-, pythonOlder
-, fetchPypi
-, bwa
-, cffi
-, zlib
+{
+  lib,
+  buildPythonPackage,
+  pythonAtLeast,
+  pythonOlder,
+  fetchPypi,
+  bwa,
+  cffi,
+  zlib,
 }:
 
 buildPythonPackage rec {
@@ -29,7 +30,10 @@ buildPythonPackage rec {
       --replace 'setuptools>=49.2.0' 'setuptools'
   '';
 
-  buildInputs = [ zlib bwa ];
+  buildInputs = [
+    zlib
+    bwa
+  ];
 
   propagatedBuildInputs = [ cffi ];
 
@@ -40,6 +44,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://github.com/ACEnglish/bwapy";
     description = "Python bindings to bwa mem aligner";
+    mainProgram = "bwamempy";
     license = licenses.mpl20;
     maintainers = with maintainers; [ ris ];
   };

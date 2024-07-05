@@ -1,2 +1,2 @@
 source 'https://rubygems.org'
-gem 'pdk', '3.0.1'
+gem 'pdk', '3.2.0'

@@ -1,11 +1,12 @@
-{ lib
-, bcrypt
-, buildPythonPackage
-, dvc-objects
-, fetchPypi
-, pythonRelaxDepsHook
-, setuptools-scm
-, sshfs
+{
+  lib,
+  bcrypt,
+  buildPythonPackage,
+  dvc-objects,
+  fetchPypi,
+  pythonRelaxDepsHook,
+  setuptools-scm,
+  sshfs,
 }:
 
 buildPythonPackage rec {

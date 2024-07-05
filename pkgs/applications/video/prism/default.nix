@@ -14,7 +14,7 @@ buildGoModule rec {
   vendorHash = "sha256-uKtVifw4dxJdVvHxytL+9qjXHEdTyiz8U8n/95MObdY=";
 
   meta = with lib; {
-    description = "An RTMP stream recaster/splitter";
+    description = "RTMP stream recaster/splitter";
     homepage = "https://github.com/muesli/prism";
     license = licenses.mit;
     maintainers = with maintainers; [ paperdigits ];

@@ -106,7 +106,7 @@ in phpPackage.buildComposerProject rec {
   };
 
   meta = with lib; {
-    description = "A auto-discovering PHP/MySQL/SNMP based network monitoring";
+    description = "Auto-discovering PHP/MySQL/SNMP based network monitoring";
     homepage    = "https://www.librenms.org/";
     license     = licenses.gpl3Only;
     maintainers = teams.wdz.members;

@@ -16,7 +16,7 @@ pythonPackages.buildPythonApplication rec {
 
   meta = with lib; {
     homepage = "https://github.com/dirkgroenen/mopidy-mopify";
-    description = "A mopidy webclient based on the Spotify webbased interface";
+    description = "Mopidy webclient based on the Spotify webbased interface";
     license = licenses.gpl3;
     maintainers = [ maintainers.Gonzih ];
   };

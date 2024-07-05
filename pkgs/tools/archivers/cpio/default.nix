@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://www.gnu.org/software/cpio/";
-    description = "A program to create or extract from cpio archives";
+    description = "Program to create or extract from cpio archives";
     license = licenses.gpl3;
     platforms = platforms.all;
     priority = 6; # resolves collision with gnutar's "libexec/rmt"

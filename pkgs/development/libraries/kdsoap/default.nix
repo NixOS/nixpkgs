@@ -33,7 +33,7 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A Qt-based client-side and server-side SOAP component";
+    description = "Qt-based client-side and server-side SOAP component";
     longDescription = ''
       KD Soap is a Qt-based client-side and server-side SOAP component.
 

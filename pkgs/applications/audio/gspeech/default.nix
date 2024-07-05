@@ -2,7 +2,7 @@
 , fetchFromGitHub
 , python3
 , gtk3
-, wrapGAppsHook
+, wrapGAppsHook3
 , glibcLocales
 , gobject-introspection
 , gettext
@@ -30,7 +30,7 @@ python3.pkgs.buildPythonApplication rec {
   };
 
   nativeBuildInputs = [
-    wrapGAppsHook
+    wrapGAppsHook3
     gobject-introspection
     pango
     gdk-pixbuf
@@ -68,7 +68,7 @@ python3.pkgs.buildPythonApplication rec {
   strictDeps = false;
 
   meta = with lib; {
-    description = "A minimal GUI for the Text To Speech 'Svox Pico'. Read clipboard or selected text in different languages and manage it : pause, stop, replay";
+    description = "Minimal GUI for the Text To Speech 'Svox Pico'. Read clipboard or selected text in different languages and manage it : pause, stop, replay";
     homepage = "https://github.com/mothsART/gSpeech";
     maintainers = with maintainers; [ mothsart ];
     license = licenses.gpl3;

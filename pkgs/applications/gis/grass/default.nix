@@ -3,7 +3,7 @@
 , callPackage
 , fetchFromGitHub
 , makeWrapper
-, wrapGAppsHook
+, wrapGAppsHook3
 
 , bison
 , blas
@@ -23,7 +23,6 @@
 , pkg-config
 , postgresql
 , proj
-, proj-datumgrid
 , python3Packages
 , readline
 , sqlite
@@ -45,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     makeWrapper
-    wrapGAppsHook
+    wrapGAppsHook3
 
     bison
     flex
@@ -71,7 +70,6 @@ stdenv.mkDerivation (finalAttrs: {
     pdal
     postgresql
     proj
-    proj-datumgrid
     readline
     sqlite
     wxGTK32

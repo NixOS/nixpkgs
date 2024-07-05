@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  requests,
 }:
 
 buildPythonPackage rec {
@@ -17,16 +18,12 @@ buildPythonPackage rec {
     hash = "sha256-Oko3Ivj95vajNWjQTQK18i5B/DIBngjw2HLlzYqLv2Y=";
   };
 
-  propagatedBuildInputs = [
-    requests
-  ];
+  propagatedBuildInputs = [ requests ];
 
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "wavinsentio"
-  ];
+  pythonImportsCheck = [ "wavinsentio" ];
 
   meta = with lib; {
     description = "Python module to interact with the Wavin Sentio underfloor heating system";

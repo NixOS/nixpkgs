@@ -6,8 +6,6 @@
   cmake,
   makeBinaryWrapper,
   cosmic-icons,
-  glib,
-  gtk3,
   just,
   pkg-config,
   libglvnd,
@@ -23,32 +21,38 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cosmic-edit";
-  version = "0-unstable-2024-01-19";
+  version = "unstable-2024-03-30";
 
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = pname;
-    rev = "b97eb0603bf6c7e168fc6e17aa779af1f105b9ee";
-    hash = "sha256-oprqM3QTewC/L/KOQ4uT81dPLqjP+Kp+wxgkY8l1Nc8=";
+    rev = "cd1b32218078979aa9a944b3a32f9b96996764a1";
+    hash = "sha256-54DwcI/pwN6nRnHC6GeDYVJXNgS+xBQTnRrKV2YMGUA=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "accesskit-0.11.0" = "sha256-xVhe6adUb8VmwIKKjHxwCwOo5Y1p3Or3ylcJJdLDrrE=";
+      "accesskit-0.12.2" = "sha256-ksaYMGT/oug7isQY8/1WD97XDUsX2ShBdabUzxWffYw=";
       "atomicwrites-0.4.2" = "sha256-QZSuGPrJXh+svMeFWqAXoqZQxLq/WfIiamqvjJNVhxA=";
-      "cosmic-config-0.1.0" = "sha256-PR6u2DT+HneMSFszfg0sZK7oLwsOX4YtpUP88KWHy68=";
-      "cosmic-syntax-theme-0.1.0" = "sha256-9Vf2s5Ry2hco80EbXOuVLwvOWygRiuaRD4tTImWooSg=";
-      "cosmic-text-0.10.0" = "sha256-WxT0LPXu17jb0XpuCu2PjlGTV1a0K1HMhl6WpciKMkM=";
-      "glyphon-0.4.1" = "sha256-mwJXi63LTBIVFrFcywr/NeOJKfMjQaQkNl3CSdEgrZc=";
-      "sctk-adwaita-0.5.4" = "sha256-yK0F2w/0nxyKrSiHZbx7+aPNY2vlFs7s8nu/COp2KqQ=";
-      "softbuffer-0.3.3" = "sha256-eKYFVr6C1+X6ulidHIu9SP591rJxStxwL9uMiqnXx4k=";
-      "smithay-client-toolkit-0.16.1" = "sha256-z7EZThbh7YmKzAACv181zaEZmWxTrMkFRzP0nfsHK6c=";
-      "systemicons-0.7.0" = "sha256-zzAI+6mnpQOh+3mX7/sJ+w4a7uX27RduQ99PNxLNF78=";
+      "clipboard_macos-0.1.0" = "sha256-PEH+aCpjDCEIj8s39nIeWxb7qu3u9IfriGqf0pYObMk=";
+      "cosmic-config-0.1.0" = "sha256-x/xWMR5w2oEbghTSa8iCi24DA2s99+tcnga8K6jS6HQ=";
+      "cosmic-files-0.1.0" = "sha256-4uwqRzkttmPQlqkX6xLjxyXRcqUhchCjAzZH9wmR+Tk=";
+      "cosmic-syntax-theme-0.1.0" = "sha256-BNb9wrryD5FJImboD3TTdPRIfiBqPpItqwGdT1ZiNng=";
+      "cosmic-text-0.11.2" = "sha256-gUIQFHPaFTmtUfgpVvsGTnw2UKIBx9gl0K67KPuynWs=";
+      "d3d12-0.19.0" = "sha256-usrxQXWLGJDjmIdw1LBXtBvX+CchZDvE8fHC0LjvhD4=";
+      "glyphon-0.5.0" = "sha256-j1HrbEpUBqazWqNfJhpyjWuxYAxkvbXzRKeSouUoPWg=";
+      "smithay-clipboard-0.8.0" = "sha256-OZOGbdzkgRIeDFrAENXE7g62eQTs60Je6lYVr0WudlE=";
+      "softbuffer-0.4.1" = "sha256-a0bUFz6O8CWRweNt/OxTvflnPYwO5nm6vsyc/WcXyNg=";
       "taffy-0.3.11" = "sha256-SCx9GEIJjWdoNVyq+RZAGn0N71qraKZxf9ZWhvyzLaI=";
-      "winit-0.28.6" = "sha256-FhW6d2XnXCGJUMoT9EMQew9/OPXiehy/JraeCiVd76M=";
+      "winit-0.29.10" = "sha256-ScTII2AzK3SC8MVeASZ9jhVWsEaGrSQ2BnApTxgfxK4=";
     };
   };
+
+  # COSMIC applications now uses vergen for the About page
+  # Update the COMMIT_DATE to match when the commit was made
+  env.VERGEN_GIT_COMMIT_DATE = "2024-03-30";
+  env.VERGEN_GIT_SHA = src.rev;
 
   postPatch = ''
     substituteInPlace justfile --replace '#!/usr/bin/env' "#!$(command -v env)"
@@ -57,13 +61,12 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ just pkg-config makeBinaryWrapper ];
   buildInputs = [
     libxkbcommon
-    glib
-    gtk3
     xorg.libX11
     libinput
     libglvnd
     fontconfig
     freetype
+    mesa
     wayland
     vulkan-loader
   ];
@@ -94,13 +97,14 @@ rustPlatform.buildRustPackage rec {
     wrapProgram "$out/bin/${pname}" \
       --suffix XDG_DATA_DIRS : "${cosmic-icons}/share" \
       --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [
-        xorg.libX11 xorg.libXcursor xorg.libXi xorg.libXrandr vulkan-loader mesa.drivers
+        xorg.libX11 xorg.libXcursor xorg.libXi xorg.libXrandr vulkan-loader libxkbcommon mesa.drivers wayland
       ]}
   '';
 
   meta = with lib; {
     homepage = "https://github.com/pop-os/cosmic-edit";
     description = "Text Editor for the COSMIC Desktop Environment";
+    mainProgram = "cosmic-edit";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ ahoneybun nyanbinary ];
     platforms = platforms.linux;

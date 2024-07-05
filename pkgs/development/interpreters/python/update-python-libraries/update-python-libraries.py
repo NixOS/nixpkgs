@@ -215,7 +215,11 @@ def _get_latest_version_pypi(attr_path, package, extension, current_version, tar
     url = "{}/{}/json".format(INDEX, package)
     json = _fetch_page(url)
 
-    versions = json["releases"].keys()
+    versions = {
+        version
+        for version, releases in json["releases"].items()
+        if not all(release["yanked"] for release in releases)
+    }
     version = _determine_latest_version(current_version, target, versions)
 
     try:
@@ -280,7 +284,7 @@ def _get_latest_version_github(attr_path, package, extension, current_version, t
     if _get_attr_value(f"{attr_path}.src.leaveDotGit"):
         git_fetcher_args.append("--leave-dotGit")
 
-    if git_fetcher_args:
+    if git_fetcher_args or _get_attr_value(f"{attr_path}.src.fetcher").endswith("nix-prefetch-git"):
         algorithm = "sha256"
         cmd = [
             "nix-prefetch-git",

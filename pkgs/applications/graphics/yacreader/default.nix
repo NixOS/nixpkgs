@@ -19,7 +19,7 @@ mkDerivation rec {
   propagatedBuildInputs = [ qtquickcontrols2 qtgraphicaleffects qtdeclarative ];
 
   meta = {
-    description = "A comic reader for cross-platform reading and managing your digital comic collection";
+    description = "Comic reader for cross-platform reading and managing your digital comic collection";
     homepage = "http://www.yacreader.com";
     license = lib.licenses.gpl3;
     mainProgram = "YACReader";

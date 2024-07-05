@@ -73,7 +73,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     homepage = "https://www.fail2ban.org/";
-    description = "A program that scans log files for repeated failing login attempts and bans IP addresses";
+    description = "Program that scans log files for repeated failing login attempts and bans IP addresses";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ eelco lovek323 ];
   };

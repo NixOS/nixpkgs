@@ -1,18 +1,19 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, flask
-, flask-sqlalchemy
-, flit-core
-, marshmallow
-, marshmallow-sqlalchemy
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  flask,
+  flask-sqlalchemy,
+  flit-core,
+  marshmallow,
+  marshmallow-sqlalchemy,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "flask-marshmallow";
-  version = "1.2.0";
+  version = "1.2.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -21,12 +22,10 @@ buildPythonPackage rec {
     owner = "marshmallow-code";
     repo = "flask-marshmallow";
     rev = "refs/tags/${version}";
-    hash = "sha256-QoktZcyVJXkHr8fCVYt3ZkYq52nxCsZu+AgaDyrZHWs=";
+    hash = "sha256-GQLkt/CJf/QI8emvlW8xSRziGnncwfMSxBccW0Bb8I0=";
   };
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  nativeBuildInputs = [ flit-core ];
 
   propagatedBuildInputs = [
     flask
@@ -40,13 +39,9 @@ buildPythonPackage rec {
     ];
   };
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ] ++ passthru.optional-dependencies.sqlalchemy;
+  nativeCheckInputs = [ pytestCheckHook ] ++ passthru.optional-dependencies.sqlalchemy;
 
-  pythonImportsCheck = [
-    "flask_marshmallow"
-  ];
+  pythonImportsCheck = [ "flask_marshmallow" ];
 
   pytestFlagsArray = [
     "-W"

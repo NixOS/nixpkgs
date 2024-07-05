@@ -47,6 +47,9 @@ stdenv.mkDerivation rec {
     hash = "sha256-DYie6ufgZNqg7ohlIed3Bo+sqLKHOxWXTwAkea2guLk=";
   };
 
+
+  outputs = [ "out" "dev" ];
+
   nativeBuildInputs = [
     cmake
     gfortran
@@ -60,6 +63,7 @@ stdenv.mkDerivation rec {
     libxc
     hdf5
     umpire
+    mpi
     spglib
     spfft
     spla
@@ -80,7 +84,7 @@ stdenv.mkDerivation rec {
   ] ++ lib.optional stdenv.isDarwin llvmPackages.openmp
   ;
 
-  propagatedBuildInputs = [ mpi ];
+  propagatedBuildInputs = [ (lib.getBin mpi) ];
 
   CXXFLAGS = [
     # GCC 13: error: 'uintptr_t' in namespace 'std' does not name a type

@@ -8,4 +8,5 @@ mkKdeDerivation {
 
   extraNativeBuildInputs = [pkg-config];
   extraBuildInputs = [gpgme];
+  meta.mainProgram = "kgpg";
 }

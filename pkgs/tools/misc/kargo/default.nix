@@ -30,7 +30,7 @@ buildPythonApplication rec {
 
   meta = with lib; {
     homepage = "https://github.com/kubespray/kargo-cli";
-    description = "A tool helps to deploy a kubernetes cluster with Ansible";
+    description = "Tool helps to deploy a kubernetes cluster with Ansible";
     platforms = platforms.all;
     license = licenses.gpl3;
     maintainers = with maintainers; [ ];

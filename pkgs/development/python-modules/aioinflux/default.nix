@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, aiohttp
-, ciso8601
-, pandas
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  aiohttp,
+  ciso8601,
+  pandas,
 }:
 
 buildPythonPackage rec {
@@ -16,7 +17,11 @@ buildPythonPackage rec {
     sha256 = "1jy5mcg9wdz546s9wdwsgkxhm2ac4dmphd9vz243db39j1m0a3bj";
   };
 
-  propagatedBuildInputs = [ aiohttp ciso8601 pandas ];
+  propagatedBuildInputs = [
+    aiohttp
+    ciso8601
+    pandas
+  ];
 
   # Tests require InfluxDB server
   doCheck = false;
@@ -27,6 +32,9 @@ buildPythonPackage rec {
     description = "Asynchronous Python client for InfluxDB";
     homepage = "https://github.com/gusutabopb/aioinflux";
     license = licenses.mit;
-    maintainers = with maintainers; [ liamdiprose lopsided98 ];
+    maintainers = with maintainers; [
+      liamdiprose
+      lopsided98
+    ];
   };
 }

@@ -13,15 +13,11 @@ let
 
   kernel-name = config.boot.kernelPackages.kernel.name or "kernel";
 
-  modulesTree = config.system.modulesTree.override { name = kernel-name + "-modules"; };
-  firmware = config.hardware.firmware;
-
-
   # Determine the set of modules that we need to mount the root FS.
   modulesClosure = pkgs.makeModulesClosure {
     rootModules = config.boot.initrd.availableKernelModules ++ config.boot.initrd.kernelModules;
-    kernel = modulesTree;
-    firmware = firmware;
+    kernel = config.system.modulesTree;
+    firmware = config.hardware.firmware;
     allowMissing = false;
   };
 
@@ -448,7 +444,7 @@ in
       type = types.str;
       default = "";
       example = "/dev/sda3";
-      description = lib.mdDoc ''
+      description = ''
         Device for manual resume attempt during boot. This should be used primarily
         if you want to resume from file. If left empty, the swap partitions are used.
         Specify here the device where the file resides.
@@ -461,7 +457,7 @@ in
       type = types.bool;
       default = !config.boot.isContainer;
       defaultText = literalExpression "!config.boot.isContainer";
-      description = lib.mdDoc ''
+      description = ''
         Whether to enable the NixOS initial RAM disk (initrd). This may be
         needed to perform some initialisation tasks (like mounting
         network/encrypted file systems) before continuing the boot process.
@@ -475,11 +471,11 @@ in
           options = {
             source = mkOption {
               type = types.package;
-              description = lib.mdDoc "The object to make available inside the initrd.";
+              description = "The object to make available inside the initrd.";
             };
           };
         });
-      description = lib.mdDoc ''
+      description = ''
         Extra files to link and copy in to the initrd.
       '';
     };
@@ -487,7 +483,7 @@ in
     boot.initrd.prepend = mkOption {
       default = [ ];
       type = types.listOf types.str;
-      description = lib.mdDoc ''
+      description = ''
         Other initrd files to prepend to the final initrd we are building.
       '';
     };
@@ -495,7 +491,7 @@ in
     boot.initrd.checkJournalingFS = mkOption {
       default = true;
       type = types.bool;
-      description = lib.mdDoc ''
+      description = ''
         Whether to run {command}`fsck` on journaling filesystems such as ext3.
       '';
     };
@@ -503,7 +499,7 @@ in
     boot.initrd.preLVMCommands = mkOption {
       default = "";
       type = types.lines;
-      description = lib.mdDoc ''
+      description = ''
         Shell commands to be executed immediately before LVM discovery.
       '';
     };
@@ -511,7 +507,7 @@ in
     boot.initrd.preDeviceCommands = mkOption {
       default = "";
       type = types.lines;
-      description = lib.mdDoc ''
+      description = ''
         Shell commands to be executed before udev is started to create
         device nodes.
       '';
@@ -520,7 +516,7 @@ in
     boot.initrd.postDeviceCommands = mkOption {
       default = "";
       type = types.lines;
-      description = lib.mdDoc ''
+      description = ''
         Shell commands to be executed immediately after stage 1 of the
         boot has loaded kernel modules and created device nodes in
         {file}`/dev`.
@@ -530,7 +526,7 @@ in
     boot.initrd.postResumeCommands = mkOption {
       default = "";
       type = types.lines;
-      description = lib.mdDoc ''
+      description = ''
         Shell commands to be executed immediately after attempting to resume.
       '';
     };
@@ -538,7 +534,7 @@ in
     boot.initrd.postMountCommands = mkOption {
       default = "";
       type = types.lines;
-      description = lib.mdDoc ''
+      description = ''
         Shell commands to be executed immediately after the stage 1
         filesystems have been mounted.
       '';
@@ -547,7 +543,7 @@ in
     boot.initrd.preFailCommands = mkOption {
       default = "";
       type = types.lines;
-      description = lib.mdDoc ''
+      description = ''
         Shell commands to be executed before the failure prompt is shown.
       '';
     };
@@ -556,7 +552,7 @@ in
       internal = true;
       default = "";
       type = types.lines;
-      description = lib.mdDoc ''
+      description = ''
         Shell commands to be executed in the builder of the
         extra-utils derivation.  This can be used to provide
         additional utilities in the initial ramdisk.
@@ -567,7 +563,7 @@ in
       internal = true;
       default = "";
       type = types.lines;
-      description = lib.mdDoc ''
+      description = ''
         Shell commands to be executed in the builder of the
         extra-utils derivation after patchelf has done its
         job.  This can be used to test additional utilities
@@ -579,7 +575,7 @@ in
       internal = true;
       default = "";
       type = types.lines;
-      description = lib.mdDoc ''
+      description = ''
         Shell commands to be executed in the builder of the
         udev-rules derivation.  This can be used to add
         additional udev rules in the initial ramdisk.
@@ -594,7 +590,7 @@ in
       );
       defaultText = literalMD "`zstd` if the kernel supports it (5.9+), `gzip` if not";
       type = types.either types.str (types.functionTo types.str);
-      description = lib.mdDoc ''
+      description = ''
         The compressor to use on the initrd image. May be any of:
 
         - The name of one of the predefined compressors, see {file}`pkgs/build-support/kernel/initrd-compressor-meta.nix` for the definitions.
@@ -609,14 +605,13 @@ in
     boot.initrd.compressorArgs = mkOption {
       default = null;
       type = types.nullOr (types.listOf types.str);
-      description = lib.mdDoc "Arguments to pass to the compressor for the initrd image, or null to use the compressor's defaults.";
+      description = "Arguments to pass to the compressor for the initrd image, or null to use the compressor's defaults.";
     };
 
     boot.initrd.secrets = mkOption
       { default = {};
         type = types.attrsOf (types.nullOr types.path);
-        description =
-          lib.mdDoc ''
+        description = ''
             Secrets to append to the initrd. The attribute name is the
             path the secret should have inside the initrd, the value
             is the path it should be copied from (or null for the same
@@ -643,8 +638,7 @@ in
     boot.initrd.verbose = mkOption {
       default = true;
       type = types.bool;
-      description =
-        lib.mdDoc ''
+      description = ''
           Verbosity of the initrd. Please note that disabling verbosity removes
           only the mandatory messages generated by the NixOS scripts. For a
           completely silent boot, you might also want to set the two following
@@ -659,8 +653,7 @@ in
       { internal = true;
         default = false;
         type = types.bool;
-        description =
-          lib.mdDoc ''
+        description = ''
             Whether the bootloader setup runs append-initrd-secrets.
             If not, any needed secrets must be copied into the initrd
             and thus added to the store.
@@ -672,7 +665,7 @@ in
         options.neededForBoot = mkOption {
           default = false;
           type = types.bool;
-          description = lib.mdDoc ''
+          description = ''
             If set, this file system will be mounted in the initial ramdisk.
             Note that the file system will always be mounted in the initial
             ramdisk if its mount point is one of the following:
@@ -688,7 +681,7 @@ in
 
   config = mkIf config.boot.initrd.enable {
     assertions = [
-      { assertion = any (fs: fs.mountPoint == "/") fileSystems;
+      { assertion = !config.boot.initrd.systemd.enable -> any (fs: fs.mountPoint == "/") fileSystems;
         message = "The ‘fileSystems’ option does not specify your root file system.";
       }
       { assertion = let inherit (config.boot) resumeDevice; in

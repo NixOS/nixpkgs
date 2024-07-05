@@ -11,13 +11,13 @@ in
 
   options = {
     services.zrepl = {
-      enable = mkEnableOption (lib.mdDoc "zrepl");
+      enable = mkEnableOption "zrepl";
 
       package = mkPackageOption pkgs "zrepl" { };
 
       settings = mkOption {
         default = { };
-        description = lib.mdDoc ''
+        description = ''
           Configuration for zrepl. See <https://zrepl.github.io/configuration.html>
           for more information.
         '';

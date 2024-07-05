@@ -43,7 +43,7 @@ rustPlatform.buildRustPackage rec {
       "Open Source HTTP Reverse Proxy built in Rust for Immutable Infrastructures";
     homepage = "https://www.sozu.io";
     changelog = "https://github.com/sozu-proxy/sozu/releases/tag/${version}";
-    license = licenses.agpl3;
+    license = licenses.agpl3Only;
     maintainers = with maintainers; [ Br1ght0ne gaelreyrol ];
     mainProgram = "sozu";
     # error[E0432]: unresolved import `std::arch::x86_64`

@@ -3,10 +3,11 @@ let
   pname = "caprine";
   version = "2.59.1";
   metaCommon = with lib; {
-    description = "An elegant Facebook Messenger desktop app";
+    description = "Elegant Facebook Messenger desktop app";
     homepage = "https://sindresorhus.com/caprine";
     license = licenses.mit;
     maintainers = with maintainers; [ ShamrockLee ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
   };
   x86_64-appimage = callPackage ./build-from-appimage.nix {
     inherit pname version metaCommon;

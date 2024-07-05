@@ -50,11 +50,11 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "A program to configure the Linux IP packet filtering ruleset";
+    description = "Program to configure the Linux IP packet filtering ruleset";
     homepage = "https://www.netfilter.org/projects/iptables/index.html";
     platforms = platforms.linux;
     maintainers = with maintainers; [ fpletz ];
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     downloadPage = "https://www.netfilter.org/projects/iptables/files/";
   };
 }

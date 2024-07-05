@@ -29,11 +29,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "genymotion";
-  version = "3.6.0";
+  version = "3.7.1";
   src = fetchurl {
     url = "https://dl.genymotion.com/releases/genymotion-${version}/genymotion-${version}-linux_x64.bin";
     name = "genymotion-${version}-linux_x64.bin";
-    sha256 = "sha256-CS1A9udt47bhgnYJqqkCG3z4XaPVHmz417VTsY2ccOA=";
+    sha256 = "sha256-nWQZcYN2rxmN7J1OYkM+Oa2UIHztdAJ/eGY5MxNDX90=";
   };
 
   nativeBuildInputs = [ makeWrapper which xdg-utils ];
@@ -66,7 +66,8 @@ stdenv.mkDerivation rec {
       patchInterpreter "$1"
       wrapProgram "$out/libexec/genymotion/$1" \
         --set "LD_LIBRARY_PATH" "${libPath}" \
-        --unset "QML2_IMPORT_PATH"
+        --unset "QML2_IMPORT_PATH" \
+        --unset "QT_PLUGIN_PATH"
     }
 
     patchTool() {
@@ -77,8 +78,8 @@ stdenv.mkDerivation rec {
 
     patchExecutable genymotion
     patchExecutable player
-    patchExecutable qemu/x86_64/bin/qemu-img
-    patchExecutable qemu/x86_64/bin/qemu-system-x86_64
+    patchInterpreter qemu/x86_64/bin/qemu-img
+    patchInterpreter qemu/x86_64/bin/qemu-system-x86_64
 
     patchTool adb
     patchTool aapt

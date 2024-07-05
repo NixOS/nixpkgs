@@ -6,7 +6,7 @@
 , python3
 , rustPlatform
 , lib
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -27,7 +27,7 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [
     pkg-config
     python3 # needed for Rust xcb package
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -43,6 +43,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Break timer that forces you to take a break";
+    mainProgram = "break-time";
     homepage    = "https://github.com/cdepillabout/break-time";
     license     = with licenses; [ mit ];
     maintainers = with maintainers; [ cdepillabout ];

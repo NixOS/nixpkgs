@@ -12,6 +12,7 @@ in
 runCommand "${alsa-lib.pname}-${alsa-lib.version}" {
   meta = with lib; {
     description = "wrapper to ease access to ALSA plugins";
+    mainProgram = "aserver";
     platforms = platforms.linux;
     maintainers = with maintainers; [ gm6k ];
   };

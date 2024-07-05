@@ -1,15 +1,21 @@
-{ lib, fetchPypi, fetchpatch, python, buildPythonPackage
-, mpi, mpiCheckPhaseHook, openssh
+{
+  lib,
+  fetchPypi,
+  python,
+  buildPythonPackage,
+  mpi,
+  mpiCheckPhaseHook,
+  openssh,
 }:
 
 buildPythonPackage rec {
   pname = "mpi4py";
-  version = "3.1.5";
+  version = "3.1.6";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-pwbnbbklUTXC+10e9Uy097DkrZ4zy62n3idiYgXyoVM=";
+    hash = "sha256-yPpiXg+SsILvlVv7UvGfpmkdKSc9fXETXSlaoUPe5ss=";
   };
 
   passthru = {
@@ -42,7 +48,10 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  nativeCheckInputs = [ openssh mpiCheckPhaseHook ];
+  nativeCheckInputs = [
+    openssh
+    mpiCheckPhaseHook
+  ];
 
   meta = with lib; {
     description = "Python bindings for the Message Passing Interface standard";

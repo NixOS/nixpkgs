@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , cmake
 , pkg-config
-, wrapGAppsHook
+, wrapGAppsHook3
 
 , curl
 , freetype
@@ -21,19 +21,19 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "principia";
-  version = "2024.02.29";
+  version = "2024.06.28";
 
   src = fetchFromGitHub {
     owner = "Bithack";
     repo = "principia";
     rev = finalAttrs.version;
-    hash = "sha256-L37H261IGCcH2K7RhX8iTdHRkle83vKhgpyssRmSKN0=";
+    hash = "sha256-S7p/Jcpp42vsdKGFgxLb2IeePB0ktKuMQLJzvXyZilg=";
   };
 
   nativeBuildInputs = [
     cmake
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -59,6 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     changelog = "https://principia-web.se/wiki/Changelog#${lib.replaceStrings ["."] ["-"] finalAttrs.version}";
     description = "Physics-based sandbox game";
+    mainProgram = "principia";
     homepage = "https://principia-web.se/";
     downloadPage = "https://principia-web.se/download";
     license = licenses.bsd3;

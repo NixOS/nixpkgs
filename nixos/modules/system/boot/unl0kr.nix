@@ -5,8 +5,8 @@ let
 in
 {
   options.boot.initrd.unl0kr = {
-    enable = lib.mkEnableOption (lib.mdDoc "unl0kr in initrd") // {
-      description = lib.mdDoc ''
+    enable = lib.mkEnableOption "unl0kr in initrd" // {
+      description = ''
         Whether to enable the unl0kr on-screen keyboard in initrd to unlock LUKS.
       '';
     };

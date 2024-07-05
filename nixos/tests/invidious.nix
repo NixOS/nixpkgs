@@ -18,7 +18,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
           host invidious invidious samenet scram-sha-256
         '';
       };
-      networking.firewall.allowedTCPPorts = [ config.services.postgresql.port ];
+      networking.firewall.allowedTCPPorts = [ config.services.postgresql.settings.port ];
     };
     machine = { config, lib, pkgs, ... }: {
       services.invidious = {

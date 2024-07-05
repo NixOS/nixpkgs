@@ -7,7 +7,6 @@
 , copyDesktopItems
 , ffmpeg
 , glibc
-, gnome
 , jq
 , lib
 , libmediainfo
@@ -20,6 +19,7 @@
 , vapoursynth
 , xdg-utils
 , xorg
+, zenity
 }:
 let
   mpvForSVP = callPackage ./mpv.nix { };
@@ -42,7 +42,7 @@ let
     fakeLsof
     ffmpeg.bin
     glibc
-    gnome.zenity
+    zenity
     libmediainfo
     libsForQt5.qtbase
     libsForQt5.qtwayland
@@ -137,7 +137,7 @@ stdenv.mkDerivation {
   ];
 
   meta = with lib; {
-    description = "SmoothVideo Project 4 (SVP4) converts any video to 60 fps (and even higher) and performs this in real time right in your favorite video player.";
+    description = "SmoothVideo Project 4 (SVP4) converts any video to 60 fps (and even higher) and performs this in real time right in your favorite video player";
     homepage = "https://www.svp-team.com/wiki/SVP:Linux";
     platforms = [ "x86_64-linux" ];
     license = licenses.unfree;

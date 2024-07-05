@@ -1,5 +1,4 @@
 { fetchFromGitHub
-, fetchpatch
 , stdenv
 , lib
 , pkg-config

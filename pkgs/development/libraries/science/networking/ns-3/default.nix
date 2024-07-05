@@ -1,5 +1,4 @@
 { stdenv
-, breakpointHook
 , fetchFromGitLab
 , python
 , libxml2
@@ -79,7 +78,7 @@ stdenv.mkDerivation rec {
     sqlite.dev
     gsl
     boost
-    root
+    root # provides cppyy
     glib.out
     glib.dev
     libpcap
@@ -134,7 +133,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "http://www.nsnam.org";
     license = licenses.gpl3;
-    description = "A discrete time event network simulator";
+    description = "Discrete time event network simulator";
     platforms = with platforms; unix;
     maintainers = with maintainers; [ teto rgrunbla ];
     # never built on aarch64-darwin since first introduction in nixpkgs

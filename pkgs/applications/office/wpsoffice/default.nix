@@ -1,6 +1,5 @@
 { lib
 , stdenv
-, fetchurl
 , dpkg
 , autoPatchelfHook
 , alsa-lib
@@ -20,6 +19,7 @@
 , curl
 , coreutils
 , cacert
+, libjpeg
 , useChineseVersion ? false
 }:
 let
@@ -49,6 +49,7 @@ stdenv.mkDerivation rec {
 
       nativeBuildInputs = [ curl coreutils ];
 
+      impureEnvVars = lib.fetchers.proxyImpureEnvVars;
       SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
     } ''
     timestamp10=$(date '+%s')
@@ -72,6 +73,7 @@ stdenv.mkDerivation rec {
     alsa-lib
     at-spi2-core
     libtool
+    libjpeg
     libxkbcommon
     nspr
     mesa
@@ -120,6 +122,9 @@ stdenv.mkDerivation rec {
   preFixup = ''
     # The following libraries need libtiff.so.5, but nixpkgs provides libtiff.so.6
     patchelf --replace-needed libtiff.so.5 libtiff.so $out/opt/kingsoft/wps-office/office6/{libpdfmain.so,libqpdfpaint.so,qt/plugins/imageformats/libqtiff.so,addons/pdfbatchcompression/libpdfbatchcompressionapp.so}
+    patchelf --add-needed libtiff.so $out/opt/kingsoft/wps-office/office6/libwpsmain.so
+    # Fix: Wrong JPEG library version: library is 62, caller expects 80
+    patchelf --add-needed libjpeg.so $out/opt/kingsoft/wps-office/office6/libwpsmain.so
     # dlopen dependency
     patchelf --add-needed libudev.so.1 $out/opt/kingsoft/wps-office/office6/addons/cef/libcef.so
   '';

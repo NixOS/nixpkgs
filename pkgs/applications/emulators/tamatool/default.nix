@@ -69,7 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = with lib; {
-    description = "A cross-platform Tamagotchi P1 explorer";
+    description = "Cross-platform Tamagotchi P1 explorer";
     homepage = "https://github.com/jcrona/tamatool";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ fgaz ];

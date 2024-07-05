@@ -12,11 +12,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libfilezilla";
-  version = "0.46.0";
+  version = "0.47.0";
 
   src = fetchurl {
     url = "https://download.filezilla-project.org/${pname}/${pname}-${version}.tar.xz";
-    hash = "sha256-OHr1xNSENIKl+/GD0B3ZYZtLha+g1olcXuyzpgEvrCE=";
+    hash = "sha256-YYpYa2E773EKYzxCv92mFmbLsPyKkq1JA2HQvJHFg0E=";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://lib.filezilla-project.org/";
-    description = "A modern C++ library, offering some basic functionality to build high-performing, platform-independent programs";
+    description = "Modern C++ library, offering some basic functionality to build high-performing, platform-independent programs";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ pSub ];
     platforms = lib.platforms.unix;

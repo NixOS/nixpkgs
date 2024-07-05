@@ -1,16 +1,16 @@
 src: version:
-{ lib, fetchYarnDeps, nodejs_18, prefetch-yarn-deps, stdenv }: stdenv.mkDerivation {
+{ lib, fetchYarnDeps, nodejs_18, fixup-yarn-lock, stdenv }: stdenv.mkDerivation {
   name = "mealie-frontend";
   inherit version;
   src = "${src}/frontend";
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = "${src}/frontend/yarn.lock";
-    hash = "sha256-zQUD/PQWzp2Q6fiVmLicvSusXffu6s9q3x/aAUnCN38=";
+    hash = "sha256-a2kIOQHaMzaMWId6+SSYN+SPQM2Ipa+F1ztFZgo3R6A=";
   };
 
   nativeBuildInputs = [
-    prefetch-yarn-deps
+    fixup-yarn-lock
     nodejs_18
     nodejs_18.pkgs.yarn
   ];

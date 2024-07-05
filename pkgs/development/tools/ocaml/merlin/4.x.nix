@@ -23,6 +23,7 @@ let
     "4.13.1" = "4.7-413";
     "4.14.0" = "4.14-414";
     "4.14.1" = "4.14-414";
+    "4.14.2" = "4.14-414";
     "5.0.0" = "4.14-500";
     "5.1.0" = "4.14-501";
     "5.1.1" = "4.14-501";
@@ -86,7 +87,7 @@ buildDunePackage {
   '';
 
   meta = with lib; {
-    description = "An editor-independent tool to ease the development of programs in OCaml";
+    description = "Editor-independent tool to ease the development of programs in OCaml";
     homepage = "https://github.com/ocaml/merlin";
     license = licenses.mit;
     maintainers = [ maintainers.vbgl maintainers.sternenseemann ];

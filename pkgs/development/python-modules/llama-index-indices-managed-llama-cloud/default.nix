@@ -1,28 +1,38 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, llama-index-core
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  poetry-core,
+  llama-index-core,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "llama-index-indices-managed-llama-cloud";
-
-  inherit (llama-index-core) version src meta;
-
+  version = "0.1.6";
   pyproject = true;
 
-  sourceRoot = "${src.name}/llama-index-integrations/indices/${pname}";
+  disabled = pythonOlder "3.8";
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  src = fetchPypi {
+    pname = "llama_index_indices_managed_llama_cloud";
+    inherit version;
+    hash = "sha256-dLOw6ev500jTBU+fwMZXAxrM65NRwxEWrY1aeuRyn1w=";
+  };
 
-  propagatedBuildInputs = [
-    llama-index-core
-  ];
+  build-system = [ poetry-core ];
 
-  pythonImportsCheck = [
-    "llama_index.indices.managed.llama_cloud"
-  ];
+  dependencies = [ llama-index-core ];
+
+  # Tests are only available in the mono repo
+  doCheck = false;
+
+  pythonImportsCheck = [ "llama_index.indices.managed.llama_cloud" ];
+
+  meta = with lib; {
+    description = "LlamaCloud Index and Retriever";
+    homepage = "https://github.com/run-llama/llama_index/tree/main/llama-index-integrations/indices/llama-index-indices-managed-llama-cloud";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+  };
 }

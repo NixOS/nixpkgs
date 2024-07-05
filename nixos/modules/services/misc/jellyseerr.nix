@@ -8,18 +8,19 @@ in
   meta.maintainers = [ maintainers.camillemndn ];
 
   options.services.jellyseerr = {
-    enable = mkEnableOption (mdDoc ''Jellyseerr, a requests manager for Jellyfin'');
+    enable = mkEnableOption ''Jellyseerr, a requests manager for Jellyfin'';
+    package = mkPackageOption pkgs "jellyseerr" { };
 
     openFirewall = mkOption {
       type = types.bool;
       default = false;
-      description = mdDoc ''Open port in the firewall for the Jellyseerr web interface.'';
+      description = ''Open port in the firewall for the Jellyseerr web interface.'';
     };
 
     port = mkOption {
       type = types.port;
       default = 5055;
-      description = mdDoc ''The port which the Jellyseerr web UI should listen to.'';
+      description = ''The port which the Jellyseerr web UI should listen to.'';
     };
   };
 
@@ -32,10 +33,10 @@ in
       serviceConfig = {
         Type = "exec";
         StateDirectory = "jellyseerr";
-        WorkingDirectory = "${pkgs.jellyseerr}/libexec/jellyseerr/deps/jellyseerr";
+        WorkingDirectory = "${cfg.package}/libexec/jellyseerr/deps/jellyseerr";
         DynamicUser = true;
-        ExecStart = "${pkgs.jellyseerr}/bin/jellyseerr";
-        BindPaths = [ "/var/lib/jellyseerr/:${pkgs.jellyseerr}/libexec/jellyseerr/deps/jellyseerr/config/" ];
+        ExecStart = lib.getExe cfg.package;
+        BindPaths = [ "/var/lib/jellyseerr/:${cfg.package}/libexec/jellyseerr/deps/jellyseerr/config/" ];
         Restart = "on-failure";
         ProtectHome = true;
         ProtectSystem = "strict";

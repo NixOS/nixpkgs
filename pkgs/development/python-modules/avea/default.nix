@@ -1,7 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, bluepy
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  bluepy,
 }:
 
 buildPythonPackage rec {
@@ -16,9 +17,7 @@ buildPythonPackage rec {
     sha256 = "1dirf0zdf4hb941w1dvh97vsvcy4h3w9r8jwdgr1ggmhdf9kfx4v";
   };
 
-  propagatedBuildInputs = [
-    bluepy
-  ];
+  propagatedBuildInputs = [ bluepy ];
 
   # no tests are present
   doCheck = false;

@@ -4,7 +4,7 @@
 import ./make-test-python.nix ({ pkgs, lib, ...} : {
   name = "ipv6";
   meta = with pkgs.lib.maintainers; {
-    maintainers = [ eelco ];
+    maintainers = [ ];
   };
 
   nodes =

@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, blessed
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  blessed,
 }:
 
 buildPythonPackage rec {
@@ -17,9 +18,7 @@ buildPythonPackage rec {
     hash = "sha256-JRRgjg8pp3Xb0bERFWEhnOg9U8+kuqL+QQH6uE/Vbxs=";
   };
 
-  propagatedBuildInputs = [
-    blessed
-  ];
+  propagatedBuildInputs = [ blessed ];
 
   meta = with lib; {
     homepage = "https://github.com/FedericoCeratto/dashing";

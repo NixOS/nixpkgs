@@ -1,4 +1,9 @@
-{ buildPecl, lib, fetchFromGitHub, libmaxminddb }:
+{
+  buildPecl,
+  lib,
+  fetchFromGitHub,
+  libmaxminddb,
+}:
 let
   pname = "maxminddb";
   version = "1.11.1";

@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = {
-    description = "A threading support library for Windows 7 and above";
+    description = "Threading support library for Windows 7 and above";
     homepage = "https://github.com/lhmouse/mcfgthread/wiki";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ wegank ];

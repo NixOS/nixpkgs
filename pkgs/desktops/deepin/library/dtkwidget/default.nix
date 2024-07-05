@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, fetchpatch
 , cmake
 , pkg-config
 , qttools
@@ -20,13 +19,13 @@
 
 stdenv.mkDerivation rec {
   pname = "dtkwidget";
-  version = "5.6.17";
+  version = "5.6.29";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    hash = "sha256-oFmM0e7ht3lCL50pwS/v/BLFmT2jymQaUZ4SmLdxvMo=";
+    hash = "sha256-eFEigOJGw5gTi0G13/rtnqoaeTdnO0aSLfZlRwHg3yE=";
   };
 
   patches = [
@@ -66,7 +65,6 @@ stdenv.mkDerivation rec {
     "-DBUILD_DOCS=ON"
     "-DMKSPECS_INSTALL_DIR=${placeholder "dev"}/mkspecs/modules"
     "-DQCH_INSTALL_DESTINATION=${placeholder "doc"}/${qtbase.qtDocPrefix}"
-    "-DCMAKE_INSTALL_LIBEXECDIR=${placeholder "dev"}/libexec"
   ];
 
   preConfigure = ''
@@ -76,6 +74,12 @@ stdenv.mkDerivation rec {
   '';
 
   outputs = [ "out" "dev" "doc" ];
+
+  postFixup = ''
+    for binary in $out/lib/dtk5/DWidget/bin/*; do
+        wrapQtApp $binary
+    done
+  '';
 
   meta = with lib; {
     description = "Deepin graphical user interface library";

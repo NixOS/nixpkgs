@@ -122,9 +122,6 @@ qtModule {
   hardeningDisable = [ "format" ];
 
   patches = [
-    # removes macOS 12+ dependencies
-    ../patches/qtwebengine-darwin-no-low-latency-flag.patch
-    ../patches/qtwebengine-darwin-no-copy-certificate-chain.patch
     # Don't assume /usr/share/X11, and also respect the XKB_CONFIG_ROOT
     # environment variable, since NixOS relies on it working.
     # See https://github.com/NixOS/nixpkgs/issues/226484 for more context.
@@ -314,10 +311,12 @@ qtModule {
   '';
 
   meta = with lib; {
-    description = "A web engine based on the Chromium web browser";
+    description = "Web engine based on the Chromium web browser";
     platforms = [ "x86_64-darwin" "aarch64-darwin" "aarch64-linux" "armv7a-linux" "armv7l-linux" "x86_64-linux" ];
     # This build takes a long time; particularly on slow architectures
     # 1 hour on 32x3.6GHz -> maybe 12 hours on 4x2.4GHz
     timeout = 24 * 3600;
+    # Not compatible with macOS 11 without massive patching
+    broken = stdenv.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinMinVersion "12";
   };
 }

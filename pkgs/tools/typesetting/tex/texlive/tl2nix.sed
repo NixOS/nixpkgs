@@ -23,6 +23,12 @@ $a}
   # extract revision
   s/^revision ([0-9]*)$/  revision = \1;/p
 
+  # extract short description
+  /^shortdesc (.+)$/{
+    s/"/\\"/g # escape quotes
+    s/^shortdesc (.+)/  shortdesc = "\1";/p
+  }
+
   # extract hashes of *.tar.xz
   s/^containerchecksum (.*)/  sha512.run = "\1";/p
   s/^doccontainerchecksum (.*)/  sha512.doc = "\1";/p
@@ -47,7 +53,8 @@ $a}
     s/"bsd4"/"bsdOriginal"/g
     s/"collection"/"free"/g   # used for collections of individual packages with distinct licenses. As TeXlive only contains free software, we can use "free" as a catchall
     s/"fdl"/"fdl13Only"/g
-    s/"gpl1?"/"gpl1Only"/g
+    s/"gpl"/"gpl1Only"/g
+    s/"gpl([1-3])"/"gpl\1Only"/g
     s/"gpl2\+"/"gpl2Plus"/g
     s/"gpl3\+"/"gpl3Plus"/g
     s/"lgpl"/"lgpl2"/g
@@ -76,6 +83,22 @@ $a}
       N; /^\ndepend /b next-dep
 
     # close the list
+    i\  ];
+    D # restart cycle from the current line
+  }
+
+  # extract font maps
+  /^execute add.*Map /{
+    # open a list
+    i\  fontMaps = [
+
+    # loop through following map lines
+    :next-map
+      s/^\n?execute add(.*Map .*)$/    "\1"/p # print map
+      s/^.*$//                              # clear pattern space
+      N; /^\nexecute add.*Map /b next-map
+
+    # close the string
     i\  ];
     D # restart cycle from the current line
   }
@@ -129,9 +152,36 @@ $a}
   # extract postaction scripts (right now, at most one per package, so a string suffices)
   s/^postaction script file=(.*)$/  postactionScript = "\1";/p
 
-  # extract hyphenation patterns and formats
-  # (this may create duplicate lines, use uniq to remove them)
-  /^execute\sAddHyphen/i\  hasHyphens = true;
+  # extract hyphenation patterns
+  /^execute\sAddHyphen\s/{
+    # open a list
+    i\  hyphenPatterns = [
+
+    # create one attribute set per hyphenation pattern
+
+    # plain keys: name, lefthyphenmin, righthyphenmin, file, file_patterns, file_exceptions, comment
+    # optionally double quoted key: luaspecial, comment
+    # comma-separated lists: databases, synonyms
+    :next-hyphen
+      s/(^|\n)execute\sAddHyphen/    {/
+      s/\s+luaspecial="([^"]+)"/\n      luaspecial = "\1";/
+      s/\s+(name|lefthyphenmin|righthyphenmin|file|file_patterns|file_exceptions|luaspecial|comment)=([^ \t\n]*)/\n      \1 = "\2";/g
+      s/\s+(databases|synonyms)=([^ \t\n]+)/\n      \1 = [ "\2" ];/g
+      s/$/\n    }/
+
+      :split-hyphens
+        s/"([^,]+),([^"]+)" ]/"\1" "\2" ]/;
+        t split-hyphens   # repeat until there are no commas
+
+      p
+      s/^.*$// # clear pattern space
+      N
+      /^\nexecute\sAddHyphen\s/b next-hyphen
+
+    # close the list
+    i\  ];
+    D # restart cycle from the current line
+  }
 
   # extract format details
   /^execute\sAddFormat\s/{

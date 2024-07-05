@@ -1,5 +1,6 @@
 { lib
 , stdenv
+, buildPackages
 , runCommand
 , fetchurl
 , perl
@@ -20,8 +21,6 @@
 , wayland
 , wayland-protocols
 , libwebp
-, libwpe
-, libwpe-fdo
 , enchant2
 , xorg
 , libxkbcommon
@@ -48,14 +47,16 @@
 , libintl
 , lcms2
 , libmanette
-, openjpeg
 , geoclue2
+, flite
+, openssl
 , sqlite
 , gst-plugins-base
 , gst-plugins-bad
 , woff2
 , bubblewrap
 , libseccomp
+, libbacktrace
 , systemd
 , xdg-dbus-proxy
 , substituteAll
@@ -63,6 +64,7 @@
 , unifdef
 , addOpenGLRunpath
 , enableGeoLocation ? true
+, enableExperimental ? false
 , withLibsecret ? true
 , systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd
 , testers
@@ -70,7 +72,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "webkitgtk";
-  version = "2.42.5";
+  version = "2.44.2";
   name = "${finalAttrs.pname}-${finalAttrs.version}+abi=${if lib.versionAtLeast gtk3.version "4.0" then "6.0" else "4.${if lib.versions.major libsoup.version == "2" then "0" else "1"}"}";
 
   outputs = [ "out" "dev" "devdoc" ];
@@ -81,7 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://webkitgtk.org/releases/webkitgtk-${finalAttrs.version}.tar.xz";
-    hash = "sha256-tkJ4wfILjP2/tf9XPDfYcaunSh2ybZs5906JU/5h50k=";
+    hash = "sha256-Uj9CyP8kgyrdF2Mfbqr+j5MDr+MW7xp+GES5Uqf3Uhs=";
   };
 
   patches = lib.optionals stdenv.isLinux [
@@ -89,13 +91,6 @@ stdenv.mkDerivation (finalAttrs: {
       src = ./fix-bubblewrap-paths.patch;
       inherit (builtins) storeDir;
       inherit (addOpenGLRunpath) driverLink;
-    })
-
-    # Hardcode path to WPE backend
-    # https://github.com/NixOS/nixpkgs/issues/110468
-    (substituteAll {
-      src = ./fdo-backend-path.patch;
-      wpebackend_fdo = libwpe-fdo;
     })
   ];
 
@@ -122,8 +117,6 @@ stdenv.mkDerivation (finalAttrs: {
     gi-docgen
     glib # for gdbus-codegen
     unifdef
-  ] ++ lib.optionals stdenv.isLinux [
-    wayland # for wayland-scanner
   ];
 
   buildInputs = [
@@ -150,17 +143,12 @@ stdenv.mkDerivation (finalAttrs: {
     libxkbcommon
     libxml2
     libxslt
+    libbacktrace
     nettle
-    openjpeg
     p11-kit
     sqlite
     woff2
-  ] ++ (with xorg; [
-    libXdamage
-    libXdmcp
-    libXt
-    libXtst
-  ]) ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.isDarwin [
     libedit
     readline
   ] ++ lib.optional (stdenv.isDarwin && !stdenv.isAarch64) (
@@ -175,16 +163,17 @@ stdenv.mkDerivation (finalAttrs: {
     libseccomp
     libmanette
     wayland
-    libwpe
-    libwpe-fdo
+    xorg.libX11
   ] ++ lib.optionals systemdSupport [
     systemd
   ] ++ lib.optionals enableGeoLocation [
     geoclue2
+  ] ++ lib.optionals enableExperimental [
+    flite
+    openssl
   ] ++ lib.optionals withLibsecret [
     libsecret
   ] ++ lib.optionals (lib.versionAtLeast gtk3.version "4.0") [
-    xorg.libXcomposite
     wayland-protocols
   ];
 
@@ -201,11 +190,13 @@ stdenv.mkDerivation (finalAttrs: {
     "-DUSE_LIBHYPHEN=OFF"
     "-DUSE_SOUP2=${cmakeBool (lib.versions.major libsoup.version == "2")}"
     "-DUSE_LIBSECRET=${cmakeBool withLibsecret}"
+    "-DENABLE_EXPERIMENTAL_FEATURES=${cmakeBool enableExperimental}"
   ] ++ lib.optionals stdenv.isLinux [
     # Have to be explicitly specified when cross.
     # https://github.com/WebKit/WebKit/commit/a84036c6d1d66d723f217a4c29eee76f2039a353
     "-DBWRAP_EXECUTABLE=${lib.getExe bubblewrap}"
     "-DDBUS_PROXY_EXECUTABLE=${lib.getExe xdg-dbus-proxy}"
+    "-DWAYLAND_SCANNER=${buildPackages.wayland-scanner}/bin/wayland-scanner"
   ] ++ lib.optionals stdenv.isDarwin [
     "-DENABLE_GAMEPAD=OFF"
     "-DENABLE_GTKDOC=OFF"
@@ -214,8 +205,8 @@ stdenv.mkDerivation (finalAttrs: {
     "-DENABLE_X11_TARGET=OFF"
     "-DUSE_APPLE_ICU=OFF"
     "-DUSE_OPENGL_OR_ES=OFF"
-  ] ++ lib.optionals (lib.versionAtLeast gtk3.version "4.0") [
-    "-DUSE_GTK4=ON"
+  ] ++ lib.optionals (lib.versionOlder gtk3.version "4.0") [
+    "-DUSE_GTK4=OFF"
   ] ++ lib.optionals (!systemdSupport) [
     "-DENABLE_JOURNALD_LOG=OFF"
   ];
@@ -235,6 +226,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "Web content rendering engine, GTK port";
+    mainProgram = "WebKitWebDriver";
     homepage = "https://webkitgtk.org/";
     license = licenses.bsd2;
     pkgConfigModules = [

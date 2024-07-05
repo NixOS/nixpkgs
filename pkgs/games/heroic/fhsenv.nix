@@ -20,7 +20,7 @@ buildFHSEnv {
     gamemode
     curl
     gawk
-    gnome.zenity
+    zenity
     plasma5Packages.kdialog
     mangohud
     nettools

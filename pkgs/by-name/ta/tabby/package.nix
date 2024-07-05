@@ -2,6 +2,7 @@
 , lib
 , rustPlatform
 , fetchFromGitHub
+, nix-update-script
 , stdenv
 
 , git
@@ -11,6 +12,7 @@
 
 , llama-cpp
 
+, autoAddDriverRunpath
 , cudaSupport ? config.cudaSupport
 , cudaPackages ? { }
 
@@ -30,7 +32,7 @@ let
   # https://github.com/NixOS/nixpkgs/blob/master/pkgs/tools/misc/ollama/default.nix
 
   pname = "tabby";
-  version = "0.8.3";
+  version = "0.11.1";
 
 
   availableAccelerations = flatten [
@@ -76,7 +78,7 @@ let
   # to use a specific device type as it is relying on llama-cpp only being
   # built to use one type of device.
   #
-  # See: https://github.com/TabbyML/tabby/blob/v0.8.3/crates/llama-cpp-bindings/include/engine.h#L20
+  # See: https://github.com/TabbyML/tabby/blob/v0.11.1/crates/llama-cpp-bindings/include/engine.h#L20
   #
   llamaccpPackage = llama-cpp.override {
     rocmSupport = enableRocm;
@@ -97,8 +99,6 @@ let
   cudaBuildInputs = [ llamaccpPackage ];
   rocmBuildInputs = [ llamaccpPackage ];
 
-  LLAMA_CPP_LIB = "${llamaccpPackage.outPath}/lib";
-
 in
 rustPlatform.buildRustPackage {
   inherit pname version;
@@ -108,15 +108,17 @@ rustPlatform.buildRustPackage {
     owner = "TabbyML";
     repo = "tabby";
     rev = "v${version}";
-    hash = "sha256-+5Q5XKfh7+g24y2hBqJC/jNEoRytDdcRdn838xc7c8w=";
+    hash = "sha256-OgAE526aW3mVqf6fVmBmL5/B4gH9B54QLEITQk9Kgsg=";
     fetchSubmodules = true;
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
+      "apalis-0.5.1" = "sha256-hGvVuSy32lSTR5DJdiyf8q1sXbIeuLSGrtyq6m2QlUQ=";
       "tree-sitter-c-0.20.6" = "sha256-Etl4s29YSOxiqPo4Z49N6zIYqNpIsdk/Qd0jR8jdvW4=";
       "tree-sitter-cpp-0.20.3" = "sha256-UrQ48CoUMSHmlHzOMu22c9N4hxJtHL2ZYRabYjf5byA=";
+      "tree-sitter-solidity-0.0.3" = "sha256-b+LthCf+g19sjKeNgXZmUV0RNi94O3u0WmXfgKRpaE0=";
     };
   };
 
@@ -137,9 +139,7 @@ rustPlatform.buildRustPackage {
     protobuf
     git
   ] ++ optionals enableCuda [
-    # TODO: Replace with autoAddDriverRunpath
-    # once https://github.com/NixOS/nixpkgs/pull/275241 has been merged
-    cudaPackages.autoAddOpenGLRunpathHook
+    autoAddDriverRunpath
   ];
 
   buildInputs = [ openssl ]
@@ -148,16 +148,14 @@ rustPlatform.buildRustPackage {
   ++ optionals enableRocm rocmBuildInputs
   ;
 
-  env = lib.mergeAttrsList [
-    { inherit LLAMA_CPP_LIB; }
-    # Work around https://github.com/NixOS/nixpkgs/issues/166205
-    (lib.optionalAttrs stdenv.cc.isClang { NIX_LDFLAGS = "-l${stdenv.cc.libcxx.cxxabi.libName}"; })
-  ];
+  env.LLAMA_CPP_LIB = "${lib.getLib llamaccpPackage}/lib";
   patches = [ ./0001-nix-build-use-nix-native-llama-cpp-package.patch ];
 
   # Fails with:
   # file cannot create directory: /var/empty/local/lib64/cmake/Llama
   doCheck = false;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     homepage = "https://github.com/TabbyML/tabby";

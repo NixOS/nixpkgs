@@ -53,6 +53,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "FEBio Suite Solver";
+    mainProgram = "FEBioStudio";
     license = with licenses; [ mit ];
     homepage = "https://febio.org/";
     platforms = platforms.unix;

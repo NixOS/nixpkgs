@@ -16,7 +16,7 @@ in
 
     environment.sessionVariables = mkOption {
       default = {};
-      description = lib.mdDoc ''
+      description = ''
         A set of environment variables used in the global environment.
         These variables will be set by PAM early in the login process.
 
@@ -38,7 +38,7 @@ in
     environment.profileRelativeSessionVariables = mkOption {
       type = types.attrsOf (types.listOf types.str);
       example = { PATH = [ "/bin" ]; MANPATH = [ "/man" "/share/man" ]; };
-      description = lib.mdDoc ''
+      description = ''
         Attribute set of environment variable used in the global
         environment. These variables will be set by PAM early in the
         login process.

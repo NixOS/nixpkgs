@@ -1,10 +1,11 @@
 { lib, stdenv, fetchurl
+, fetchpatch
 , makeWrapper
 , makeDesktopItem
 , copyDesktopItems
 , fetchFromGitHub
 , gradle
-, jdk
+, jdk17
 , perl
 
 # for arc
@@ -40,6 +41,7 @@ let
   version = "146";
   buildVersion = makeBuildVersion version;
 
+  jdk = jdk17;
   gradleWithJdk = gradle.override { java = jdk; };
 
   selectedGlew = if enableWayland then glew-egl else glew;
@@ -81,6 +83,19 @@ let
 
   patches = [
     ./0001-fix-include-path-for-SDL2-on-linux.patch
+    # Fix build with gradle 8.8, remove on next Arc release
+    (fetchpatch {
+      url = "https://github.com/Anuken/Arc/commit/2a91c51bf45d700091e397fd0b62384763901ae6.patch";
+      hash = "sha256-sSD78GmF14vBvNe+ajUJ4uIc4p857shTP/UkAK6Pyyg=";
+      extraPrefix = "Arc/";
+      stripLen = 1;
+    })
+    (fetchpatch {
+      url = "https://github.com/Anuken/Arc/commit/d7f8ea858c425410dbd43374271a703d4443b432.patch";
+      hash = "sha256-5LPgBOV0r/dUtpyxitTu3/9tMIqjeIKfGVJi3MEr7fQ=";
+      extraPrefix = "Arc/";
+      stripLen = 1;
+    })
   ];
 
   unpackPhase = ''
@@ -97,6 +112,7 @@ let
     desktopName = "Mindustry";
     exec = "mindustry";
     icon = "mindustry";
+    categories = [ "Game" ];
   };
 
   cleanupMindustrySrc = ''
@@ -238,7 +254,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://mindustrygame.github.io/";
     downloadPage = "https://github.com/Anuken/Mindustry/releases";
-    description = "A sandbox tower defense game";
+    description = "Sandbox tower defense game";
     sourceProvenance = with sourceTypes; [
       fromSource
       binaryBytecode  # deps

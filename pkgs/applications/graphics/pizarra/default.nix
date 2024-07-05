@@ -9,7 +9,7 @@
 , glib
 , librsvg
 , gdk-pixbuf
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -26,7 +26,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-btvMUKADGHlXLmeKF1K9Js44SljZ0MejGId8aDwPhVU=";
 
-  nativeBuildInputs = [ wrapGAppsHook pkg-config gdk-pixbuf ];
+  nativeBuildInputs = [ wrapGAppsHook3 pkg-config gdk-pixbuf ];
 
   buildInputs = [ gtk3-x11 atk glib librsvg ];
 
@@ -40,7 +40,8 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "A simple blackboard written in GTK";
+    description = "Simple blackboard written in GTK";
+    mainProgram = "pizarra";
     longDescription = ''
       A simple endless blackboard.
       Contains various features, such as:

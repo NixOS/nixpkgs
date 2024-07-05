@@ -15,6 +15,5 @@
 @@ -3,4 +3,5 @@ option('introspection', type : 'boolean', value : true, description : 'generate
  option('tests', type : 'boolean', value : true, description : 'enable tests')
  option('stemmer', type : 'boolean', value : false, description : 'enable stemmer support')
- option('cli', type : 'boolean', value : true, description : 'build and install the xb-tool CLI')
- option('zstd', type : 'boolean', value : true, description : 'enable zstd support')
 +option('installed_test_prefix', type: 'string', value: '', description: 'Prefix for installed tests')
+ option('cli', type : 'boolean', value : true, description : 'build and install the xb-tool CLI')

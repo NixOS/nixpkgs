@@ -43,7 +43,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "A CLI utility for displaying current network utilization";
+    description = "CLI utility for displaying current network utilization";
     longDescription = ''
       bandwhich sniffs a given network interface and records IP packet size, cross
       referencing it with the /proc filesystem on linux or lsof on MacOS. It is

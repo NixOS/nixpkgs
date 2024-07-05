@@ -72,5 +72,6 @@ stdenv.mkDerivation ({
   meta = ({
     inherit (graalvm-ce.meta) homepage license sourceProvenance maintainers platforms;
     description = "High-Performance Polyglot VM (Product: ${product})";
+    mainProgram = "js";
   } // (args.meta or { }));
 } // extraArgs)

@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "A simple tool written in bash to memorize stuff";
+    description = "Simple tool written in bash to memorize stuff";
     longDescription = ''
       A simple tool written in bash to memorize stuff.
       Memo organizes is structured through topics which are folders in ~/memo.

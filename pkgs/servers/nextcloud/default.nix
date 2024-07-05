@@ -1,7 +1,6 @@
 { lib, stdenvNoCC, fetchurl, nixosTests
-, nextcloud27Packages
 , nextcloud28Packages
-, nextcloud26Packages
+, nextcloud29Packages
 }:
 
 let
@@ -42,22 +41,16 @@ let
     };
   };
 in {
-  nextcloud26 = generic {
-    version = "26.0.12";
-    hash = "sha256-fuTAIAJB9pRfMd0Ewh19FmY0Vj4MuH1iMkkS1BiTI0w=";
-    packages = nextcloud26Packages;
-  };
-
-  nextcloud27 = generic {
-    version = "27.1.7";
-    hash = "sha256-hEPi0bsojcQU+q0Kb+/i41uznt0359pcXzTexsDdG+s=";
-    packages = nextcloud27Packages;
-  };
-
   nextcloud28 = generic {
-    version = "28.0.3";
-    hash = "sha256-ntQTwN4W9bAzzu/8ypnA1h/GmNvrjbhRrJrfnu+VGQY=";
+    version = "28.0.7";
+    hash = "sha256-WOh1S4Ip/UTr1ykmQlaRlbi2R4xArBCaoIbIa1yrp9k=";
     packages = nextcloud28Packages;
+  };
+
+  nextcloud29 = generic {
+    version = "29.0.3";
+    hash = "sha256-pZludkwSCSf4hE2PWyjHNrji8ygLEgvhOivXcxzbf9Q=";
+    packages = nextcloud29Packages;
   };
 
   # tip: get the sha with:

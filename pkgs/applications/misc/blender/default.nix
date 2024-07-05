@@ -7,16 +7,18 @@
   SDL,
   addOpenGLRunpath,
   alembic,
+  blender,
   boost,
+  brotli,
   callPackage,
   cmake,
   colladaSupport ? true,
   config,
   cudaPackages,
   cudaSupport ? config.cudaSupport,
+  darwin,
   dbus,
   embree,
-  fetchpatch,
   fetchurl,
   fetchzip,
   ffmpeg,
@@ -52,6 +54,7 @@
   libxkbcommon,
   llvmPackages,
   makeWrapper,
+  materialx,
   mesa,
   ocl-icd,
   openal,
@@ -68,10 +71,11 @@
   pkg-config,
   potrace,
   pugixml,
-  python310Packages, # must use instead of python3.pkgs, see https://github.com/NixOS/nixpkgs/issues/211340
+  python311Packages, # must use instead of python3.pkgs, see https://github.com/NixOS/nixpkgs/issues/211340
   rocmPackages, # comes with a significantly larger closure size
   runCommand,
   spaceNavSupport ? stdenv.isLinux,
+  sse2neon,
   stdenv,
   tbb,
   wayland,
@@ -82,8 +86,9 @@
 }:
 
 let
-  python3Packages = python310Packages;
+  python3Packages = python311Packages;
   python3 = python3Packages.python;
+  pyPkgsOpenusd = python3Packages.openusd.override { withOsl = false; };
 
   libdecor' = libdecor.overrideAttrs (old: {
     # Blender uses private APIs, need to patch to expose them
@@ -99,20 +104,14 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "blender";
-  version = "4.0.2";
+  version = "4.1.1";
 
   src = fetchurl {
     url = "https://download.blender.org/source/${finalAttrs.pname}-${finalAttrs.version}.tar.xz";
-    hash = "sha256-qqDnKdp1kc+/RXcq92NFl32qp7EaCvNdmPkxPiRgd6M=";
+    hash = "sha256-T7s69k0/hN9ccQN0hFQibBiFwawu1Tc9DOoegOgsCEg=";
   };
 
-  patches = [
-    ./draco.patch
-    (fetchpatch {
-      url = "https://projects.blender.org/blender/blender/commit/cf4365e555a759d5b3225bce77858374cb07faad.diff";
-      hash = "sha256-Nypd04yFSHYa7RBa8kNmoApqJrU4qpaOle3tkj44d4g=";
-    })
-  ] ++ lib.optional stdenv.isDarwin ./darwin.patch;
+  patches = [ ./draco.patch ] ++ lib.optional stdenv.isDarwin ./darwin.patch;
 
   postPatch =
     (
@@ -120,15 +119,14 @@ stdenv.mkDerivation (finalAttrs: {
         ''
           : > build_files/cmake/platform/platform_apple_xcode.cmake
           substituteInPlace source/creator/CMakeLists.txt \
-            --replace '${"$"}{LIBDIR}/python' \
-                      '${python3}'
-          substituteInPlace build_files/cmake/platform/platform_apple.cmake \
-            --replace '${"$"}{LIBDIR}/python' \
+            --replace-fail '${"$"}{LIBDIR}/python' \
                       '${python3}' \
-            --replace '${"$"}{LIBDIR}/opencollada' \
-                      '${opencollada}' \
-            --replace '${"$"}{PYTHON_LIBPATH}/site-packages/numpy' \
-                      '${python3Packages.numpy}/${python3.sitePackages}/numpy'
+            --replace-fail '${"$"}{LIBDIR}/materialx/' '${materialx}/'
+          substituteInPlace build_files/cmake/platform/platform_apple.cmake \
+            --replace-fail '${"$"}{LIBDIR}/brotli/lib/libbrotlicommon-static.a' \
+                      '${lib.getLib brotli}/lib/libbrotlicommon.dylib' \
+            --replace-fail '${"$"}{LIBDIR}/brotli/lib/libbrotlidec-static.a' \
+                      '${lib.getLib brotli}/lib/libbrotlidec.dylib'
         ''
       else
         ''
@@ -156,6 +154,7 @@ stdenv.mkDerivation (finalAttrs: {
       "-DWITH_FFTW3=ON"
       "-DWITH_IMAGE_OPENJPEG=ON"
       "-DWITH_INSTALL_PORTABLE=OFF"
+      "-DMaterialX_DIR=${materialx}/lib/cmake/MaterialX"
       "-DWITH_MOD_OCEANSIM=ON"
       "-DWITH_OPENCOLLADA=${if colladaSupport then "ON" else "OFF"}"
       "-DWITH_OPENCOLORIO=ON"
@@ -166,10 +165,11 @@ stdenv.mkDerivation (finalAttrs: {
       "-DWITH_PYTHON_INSTALL_REQUESTS=OFF"
       "-DWITH_SDL=OFF"
       "-DWITH_TBB=ON"
+      "-DWITH_USD=ON"
 
       # Blender supplies its own FindAlembic.cmake (incompatible with the Alembic-supplied config file)
       "-DALEMBIC_INCLUDE_DIR=${lib.getDev alembic}/include"
-      "-DALEMBIC_LIBRARY=${lib.getLib alembic}/lib/libAlembic.so"
+      "-DALEMBIC_LIBRARY=${lib.getLib alembic}/lib/libAlembic${stdenv.hostPlatform.extensions.sharedLibrary}"
     ]
     ++ lib.optionals waylandSupport [
       "-DWITH_GHOST_WAYLAND=ON"
@@ -177,11 +177,12 @@ stdenv.mkDerivation (finalAttrs: {
       "-DWITH_GHOST_WAYLAND_DYNLOAD=OFF"
       "-DWITH_GHOST_WAYLAND_LIBDECOR=ON"
     ]
-    ++ lib.optionals stdenv.hostPlatform.isAarch64 [ "-DWITH_CYCLES_EMBREE=OFF" ]
+    ++ lib.optionals (stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux) [ "-DWITH_CYCLES_EMBREE=OFF" ]
     ++ lib.optionals stdenv.isDarwin [
       "-DLIBDIR=/does-not-exist"
-      "-DWITH_CYCLES_OSL=OFF" # requires LLVM
-      "-DWITH_OPENVDB=OFF" # OpenVDB currently doesn't build on darwin
+      "-DWITH_CYCLES_OSL=OFF" # causes segfault on aarch64-darwin
+      "-DSSE2NEON_INCLUDE_DIR=${sse2neon}/lib"
+      "-DWITH_USD=OFF" # currently fails on darwin
     ]
     ++ lib.optional stdenv.cc.isClang "-DPYTHON_LINKFLAGS=" # Clang doesn't support "-export-dynamic"
     ++ lib.optional jackaudioSupport "-DWITH_JACK=ON"
@@ -224,12 +225,14 @@ stdenv.mkDerivation (finalAttrs: {
       libsndfile
       libtiff
       libwebp
+      materialx
       opencolorio
       openexr
       openimageio
       openjpeg
       openpgl
       (opensubdiv.override { inherit cudaSupport; })
+      openvdb
       potrace
       pugixml
       python3
@@ -237,9 +240,9 @@ stdenv.mkDerivation (finalAttrs: {
       zlib
       zstd
     ]
-    ++ lib.optionals (!stdenv.isAarch64) [
+    ++ lib.optionals (!stdenv.isAarch64 && stdenv.isLinux) [
       embree
-      openimagedenoise
+      (openimagedenoise.override { inherit cudaSupport; })
     ]
     ++ (
       if (!stdenv.isDarwin) then
@@ -252,8 +255,8 @@ stdenv.mkDerivation (finalAttrs: {
           libXrender
           libXxf86vm
           openal
-          openvdb # OpenVDB currently doesn't build on darwin
           openxr-loader
+          pyPkgsOpenusd
         ]
       else
         [
@@ -263,7 +266,11 @@ stdenv.mkDerivation (finalAttrs: {
           OpenAL
           OpenGL
           SDL
+          brotli
+          embree
           llvmPackages.openmp
+          (openimagedenoise.override { inherit cudaSupport; })
+          sse2neon
         ]
     )
     ++ lib.optionals cudaSupport [ cudaPackages.cuda_cudart ]
@@ -284,10 +291,12 @@ stdenv.mkDerivation (finalAttrs: {
       ps = python3Packages;
     in
     [
+      materialx
       ps.numpy
       ps.requests
       ps.zstandard
-    ];
+    ]
+    ++ lib.optionals (!stdenv.isDarwin) [ pyPkgsOpenusd ];
 
   blenderExecutable =
     placeholder "out"
@@ -298,8 +307,10 @@ stdenv.mkDerivation (finalAttrs: {
       mkdir $out/Applications
       mv $out/Blender.app $out/Applications
     ''
-    + ''
+    + lib.optionalString stdenv.isLinux ''
       mv $out/share/blender/${lib.versions.majorMinor finalAttrs.version}/python{,-ext}
+    ''
+    + ''
       buildPythonPath "$pythonPath"
       wrapProgram $blenderExecutable \
         --prefix PATH : $program_PATH \
@@ -314,6 +325,9 @@ stdenv.mkDerivation (finalAttrs: {
       isELF "$program" || continue
       addOpenGLRunpath "$program"
     done
+  ''
+  + lib.optionalString stdenv.isDarwin ''
+    makeWrapper $out/Applications/Blender.app/Contents/MacOS/Blender $out/bin/blender
   '';
 
   passthru = {
@@ -330,15 +344,13 @@ stdenv.mkDerivation (finalAttrs: {
     tests = {
       render = runCommand "${finalAttrs.pname}-test" { } ''
         set -euo pipefail
-
         export LIBGL_DRIVERS_PATH=${mesa.drivers}/lib/dri
         export __EGL_VENDOR_LIBRARY_FILENAMES=${mesa.drivers}/share/glvnd/egl_vendor.d/50_mesa.json
-
         cat <<'PYTHON' > scene-config.py
         import bpy
         bpy.context.scene.eevee.taa_render_samples = 32
         bpy.context.scene.cycles.samples = 32
-        if ${if stdenv.isAarch64 then "True" else "False"}:
+        if ${if (stdenv.isAarch64 && stdenv.isLinux) then "True" else "False"}:
             bpy.context.scene.cycles.use_denoising = False
         bpy.context.scene.render.resolution_x = 100
         bpy.context.scene.render.resolution_y = 100
@@ -350,7 +362,7 @@ stdenv.mkDerivation (finalAttrs: {
         for engine in BLENDER_EEVEE CYCLES; do
           echo "Rendering with $engine..."
           # Beware that argument order matters
-          ${finalAttrs.finalPackage}/bin/blender \
+          ${lib.getExe finalAttrs.finalPackage} \
             --background \
             -noaudio \
             --factory-startup \
@@ -361,6 +373,20 @@ stdenv.mkDerivation (finalAttrs: {
             --render-frame 1
         done
       '';
+      tester-cudaAvailable = cudaPackages.writeGpuTestPython { } ''
+        import subprocess
+        subprocess.run([${
+          lib.concatMapStringsSep ", " (x: ''"${x}"'') [
+            (lib.getExe (blender.override { cudaSupport = true; }))
+            "--background"
+            "-noaudio"
+            "--python-exit-code"
+            "1"
+            "--python"
+            "${./test-cuda.py}"
+          ]
+        }], check=True)  # noqa: E501
+      '';
     };
   };
 
@@ -370,13 +396,16 @@ stdenv.mkDerivation (finalAttrs: {
     # They comment two licenses: GPLv2 and Blender License, but they
     # say: "We've decided to cancel the BL offering for an indefinite period."
     # OptiX, enabled with cudaSupport, is non-free.
-    license = with lib.licenses; [ gpl2Plus ] ++ lib.optional cudaSupport unfree;
+    license = with lib.licenses; [ gpl2Plus ] ++ lib.optional cudaSupport (unfree // { shortName = "NVidia OptiX EULA"; });
+
     platforms = [
       "aarch64-linux"
       "x86_64-darwin"
       "x86_64-linux"
+      "aarch64-darwin"
     ];
-    broken = stdenv.isDarwin;
+    # the current apple sdk is too old (currently 11_0) and fails to build "metal" on x86_64-darwin
+    broken = stdenv.hostPlatform.system == "x86_64-darwin";
     maintainers = with lib.maintainers; [
       goibhniu
       veprbl

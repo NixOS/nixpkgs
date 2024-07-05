@@ -24,6 +24,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "NOAA APT satellite imagery decoding library";
+    mainProgram = "aptdec";
     homepage = "https://github.com/Xerbo/aptdec";
     license = licenses.gpl2;
     maintainers = with maintainers; [ alexwinter ];

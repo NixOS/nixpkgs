@@ -53,7 +53,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "http://www.insilmaril.de/vym/";
-    description = "A mind-mapping software";
+    description = "Mind-mapping software";
+    mainProgram = "vym";
     longDescription = ''
       VYM (View Your Mind) is a tool to generate and manipulate maps which show
       your thoughts. Such maps can help you to improve your creativity and

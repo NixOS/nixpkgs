@@ -14,6 +14,10 @@ stdenv.mkDerivation rec {
 
   postPatch = lib.optionalString stdenv.cc.isClang ''
     substituteInPlace Makefile --replace "-fno-guess-branch-probability" ""
+
+    for f in $(find -name "*.h" -or -name "*.cpp"); do
+        substituteInPlace "$f" --replace-quiet "log2" "_log2"
+    done
   '';
 
   buildFlags = [ "CC=${stdenv.cc.targetPrefix}cc" "CXX=${stdenv.cc.targetPrefix}c++" ];
@@ -21,7 +25,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ gmp mpir cddlib ];
 
   meta = {
-    description = "A software package for computing Gröbner fans and tropical varieties";
+    description = "Software package for computing Gröbner fans and tropical varieties";
     license = lib.licenses.gpl2 ;
     maintainers = [lib.maintainers.raskin];
     platforms = lib.platforms.unix;

@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, requests
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  requests,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -19,16 +20,12 @@ buildPythonPackage rec {
     sha256 = "sha256-lQ/7tH74MllwFe2kF5OcYSb4rQd+yJU1W6ztG4Z6Y0U=";
   };
 
-  propagatedBuildInputs = [
-    requests
-  ];
+  propagatedBuildInputs = [ requests ];
 
   # Project has no tests, only two test file for manual interaction
   doCheck = false;
 
-  pythonImportsCheck = [
-    "pythonegardia"
-  ];
+  pythonImportsCheck = [ "pythonegardia" ];
 
   meta = with lib; {
     description = "Python interface with Egardia/Woonveilig alarms";

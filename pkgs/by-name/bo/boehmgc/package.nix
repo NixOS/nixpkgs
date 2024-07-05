@@ -2,7 +2,7 @@
 , stdenv
 , fetchFromGitHub
 , autoreconfHook
-# doc: https://github.com/ivmai/bdwgc/blob/v8.2.4/doc/README.macros (LARGE_CONFIG)
+# doc: https://github.com/ivmai/bdwgc/blob/v8.2.6/doc/README.macros (LARGE_CONFIG)
 , enableLargeConfig ? false
 , enableMmap ? true
 , enableStatic ? false
@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "boehm-gc";
-  version = "8.2.4";
+  version = "8.2.6";
 
   src = fetchFromGitHub {
     owner = "ivmai";
     repo = "bdwgc";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-KHijT4BBKfDvTpHpwognN+3ZXoC6JabBTFSYFyOUT9o=";
+    hash = "sha256-y6hU5qU4qO9VvQvKNH9dvReCrf3+Ih2HHbF6IS1V3WQ=";
   };
 
   outputs = [ "out" "dev" "doc" ];
@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
   # not fix the problem the test failure will be a reminder to
   # extend the set of versions requiring the workaround).
   makeFlags = lib.optionals (stdenv.hostPlatform.isPower64 &&
-                  finalAttrs.version == "8.2.4")
+                  finalAttrs.version == "8.2.6")
     [
       # do not use /proc primitives to track dirty bits; see:
       # https://github.com/ivmai/bdwgc/issues/479#issuecomment-1279687537
@@ -50,8 +50,9 @@ stdenv.mkDerivation (finalAttrs: {
       "CFLAGS_EXTRA=-DNO_SOFT_VDB"
     ];
 
-  # `gctest` fails under emulation on aarch64-darwin
-  doCheck = !(stdenv.isDarwin && stdenv.isx86_64);
+  # `gctest` fails under x86_64 emulation on aarch64-darwin
+  # and also on aarch64-linux (qemu-user)
+  doCheck = !((stdenv.isDarwin && stdenv.isx86_64) || (stdenv.isLinux && stdenv.isAarch64));
 
   enableParallelBuilding = true;
 
@@ -59,7 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://hboehm.info/gc/";
-    description = "The Boehm-Demers-Weiser conservative garbage collector for C and C++";
+    description = "Boehm-Demers-Weiser conservative garbage collector for C and C++";
     longDescription = ''
       The Boehm-Demers-Weiser conservative garbage collector can be used as a
       garbage collecting replacement for C malloc or C++ new.  It allows you

@@ -69,9 +69,11 @@ So instead it is preferable to use the same generic parameter name `libbar`
 and override its value in [`pkgs/top-level/all-packages.nix`](../top-level/all-packages.nix):
 
 ```nix
-libfoo = callPackage ../by-name/so/some-package/package.nix {
-  libbar = libbar_2;
-};
+{
+  libfoo = callPackage ../by-name/so/some-package/package.nix {
+    libbar = libbar_2;
+  };
+}
 ```
 
 ## Manual migration guidelines
@@ -108,13 +110,13 @@ There's some limitations as to which packages can be defined using this structur
 
 ## Validation
 
-CI performs [certain checks](../test/nixpkgs-check-by-name/README.md#validity-checks) on the `pkgs/by-name` structure.
-This is done using the [`nixpkgs-check-by-name` tool](../test/nixpkgs-check-by-name).
+CI performs [certain checks](https://github.com/NixOS/nixpkgs-check-by-name?tab=readme-ov-file#validity-checks) on the `pkgs/by-name` structure.
+This is done using the [`nixpkgs-check-by-name` tool](https://github.com/NixOS/nixpkgs-check-by-name).
 
 You can locally emulate the CI check using
 
 ```
-$ ./pkgs/test/nixpkgs-check-by-name/scripts/run-local.sh master
+$ ./maintainers/scripts/check-by-name.sh master
 ```
 
 See [here](../../.github/workflows/check-by-name.yml) for more info.
@@ -132,13 +134,16 @@ but if you try to move the package to `pkgs/by-name`, it will fail check 2.
 This is often the case for packages with multiple versions, such as
 
 ```nix
+{
   foo_1 = callPackage ../tools/foo/1.nix { };
   foo_2 = callPackage ../tools/foo/2.nix { };
+}
 ```
 
 The best way to resolve this is to not use `callPackage` directly, such that check 1 doesn't trigger.
 This can be done by using `inherit` on a local package set:
 ```nix
+{
   inherit
     ({
       foo_1 = callPackage ../tools/foo/1.nix { };
@@ -147,6 +152,7 @@ This can be done by using `inherit` on a local package set:
     foo_1
     foo_2
     ;
+}
 ```
 
 While this may seem pointless, this can in fact help with future package set refactorings,
@@ -157,8 +163,10 @@ because it establishes a clear connection between related attributes.
 This is not required, but the above solution also allows refactoring the definitions into a separate file:
 
 ```nix
+{
   inherit (import ../tools/foo pkgs)
     foo_1 foo_2;
+}
 ```
 
 ```nix
@@ -173,8 +181,10 @@ Alternatively using [`callPackages`](https://nixos.org/manual/nixpkgs/unstable/#
 if `callPackage` isn't used underneath and you want the same `.override` arguments for all attributes:
 
 ```nix
+{
   inherit (callPackages ../tools/foo { })
     foo_1 foo_2;
+}
 ```
 
 ```nix
@@ -192,9 +202,11 @@ if `callPackage` isn't used underneath and you want the same `.override` argumen
 This is not required, but the above solution also allows exposing the package set as an attribute:
 
 ```nix
+{
   foo-versions = import ../tools/foo pkgs;
   # Or using callPackages
   # foo-versions = callPackages ../tools/foo { };
 
   inherit (foo-versions) foo_1 foo_2;
+}
 ```

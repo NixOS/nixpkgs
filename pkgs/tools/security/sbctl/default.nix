@@ -38,6 +38,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Secure Boot key manager";
+    mainProgram = "sbctl";
     homepage = "https://github.com/Foxboron/sbctl";
     license = licenses.mit;
     maintainers = with maintainers; [ raitobezarius ];

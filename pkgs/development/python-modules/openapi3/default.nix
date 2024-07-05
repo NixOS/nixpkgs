@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, requests
-, pyyaml
-, setuptools
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
+  requests,
+  pyyaml,
+  setuptools,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -19,26 +20,20 @@ buildPythonPackage rec {
     hash = "sha256-ohpJBXPYnKaa2ny+WFrbL8pJZCV/bzod9THxKBVFXSw=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     requests
     pyyaml
   ];
 
-  nativeCheckinputs = [
-    pytestCheckHook
-  ];
+  nativeCheckinputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-   "openapi3"
-  ];
+  pythonImportsCheck = [ "openapi3" ];
 
   meta = with lib; {
     changelog = "https://github.com/Dorthu/openapi3/releases/tag/${version}";
-    description = "A Python3 OpenAPI 3 Spec Parser";
+    description = "Python3 OpenAPI 3 Spec Parser";
     homepage = "https://github.com/Dorthu/openapi3";
     license = licenses.bsd3;
     maintainers = with maintainers; [ techknowlogick ];

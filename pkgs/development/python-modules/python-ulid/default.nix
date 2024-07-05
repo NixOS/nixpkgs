@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, hatch-fancy-pypi-readme
-, hatch-vcs
-, hatchling
-, freezegun
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  hatch-fancy-pypi-readme,
+  hatch-vcs,
+  hatchling,
+  freezegun,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -38,6 +39,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "ULID implementation for Python";
+    mainProgram = "ulid";
     homepage = "https://github.com/mdomke/python-ulid";
     changelog = "https://github.com/mdomke/python-ulid/blob/${src.rev}/CHANGELOG.rst";
     license = licenses.mit;

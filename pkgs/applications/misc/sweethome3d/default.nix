@@ -1,10 +1,12 @@
 { lib
 , stdenv
+, fetchzip
 , fetchurl
 , makeWrapper
 , makeDesktopItem
 , jdk
 , ant
+, stripJavaArchivesHook
 , gtk3
 , gsettings-desktop-schemas
 , p7zip
@@ -50,8 +52,11 @@ let
       find . -name '*.so' | xargs strings | { grep '/nix/store' || :; } >> ./.jar-paths
     '';
 
-    nativeBuildInputs = [ makeWrapper unzip autoPatchelfHook ];
+    nativeBuildInputs = [ makeWrapper autoPatchelfHook stripJavaArchivesHook ];
     buildInputs = [ ant jdk p7zip gtk3 gsettings-desktop-schemas libXxf86vm ];
+
+    # upstream targets Java 7 by default
+    env.ANT_ARGS = "-DappletClassSource=8 -DappletClassTarget=8 -DclassSource=8 -DclassTarget=8";
 
     buildPhase = ''
       runHook preBuild
@@ -100,20 +105,17 @@ let
       mainProgram = exec;
     };
   };
-
-  d2u = lib.replaceStrings ["."] ["_"];
-
 in {
 
   application = mkSweetHome3D rec {
     pname = lib.toLower module + "-application";
-    version = "7.2";
+    version = "7.3";
     module = "SweetHome3D";
     description = "Design and visualize your future home";
     license = lib.licenses.gpl2Plus;
-    src = fetchurl {
+    src = fetchzip {
       url = "mirror://sourceforge/sweethome3d/${module}-${version}-src.zip";
-      sha256 = "sha256-Io3HfussfSy6CLHE0JCAk0gjBAla/u+pS1Gan8BxozY=";
+      hash = "sha256-adMQzQE+xAZpMJyQFm01A+AfvcB5YHsJvk+533BUf1Q=";
     };
     desktopName = "Sweet Home 3D";
     icons = {

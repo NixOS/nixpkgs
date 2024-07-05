@@ -1,14 +1,15 @@
-{ lib
-, behave
-, buildPythonPackage
-, fetchPypi
-, lxml
-, mock
-, pyparsing
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, typing-extensions
+{
+  lib,
+  behave,
+  buildPythonPackage,
+  fetchPypi,
+  lxml,
+  mock,
+  pyparsing,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
@@ -23,9 +24,7 @@ buildPythonPackage rec {
     hash = "sha256-WCm3IhQc8at5rt8MNNn+mSSyl2RYTA8hZOsrAtzfF8k=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     lxml
@@ -43,9 +42,7 @@ buildPythonPackage rec {
     behave --format progress --stop --tags=-wip
   '';
 
-  pythonImportsCheck = [
-    "docx"
-  ];
+  pythonImportsCheck = [ "docx" ];
 
   disabledTests = [
     # https://github.com/python-openxml/python-docx/issues/1302

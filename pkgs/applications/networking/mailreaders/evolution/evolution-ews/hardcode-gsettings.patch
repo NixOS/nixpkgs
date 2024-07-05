@@ -1,8 +1,8 @@
 diff --git a/src/EWS/calendar/e-cal-backend-ews-utils.c b/src/EWS/calendar/e-cal-backend-ews-utils.c
-index b7c65ae..b334198 100644
+index 87b02c6..3fabca6 100644
 --- a/src/EWS/calendar/e-cal-backend-ews-utils.c
 +++ b/src/EWS/calendar/e-cal-backend-ews-utils.c
-@@ -2425,7 +2425,19 @@ e_cal_backend_ews_get_configured_evolution_icaltimezone (void)
+@@ -2484,7 +2484,19 @@ e_cal_backend_ews_get_configured_evolution_icaltimezone (void)
  		if (schema) {
  			GSettings *settings;
  
@@ -24,10 +24,10 @@ index b7c65ae..b334198 100644
  			if (g_settings_get_boolean (settings, "use-system-timezone"))
  				location = e_cal_util_get_system_timezone_location ();
 diff --git a/src/EWS/camel/camel-ews-utils.c b/src/EWS/camel/camel-ews-utils.c
-index dbd9adb..a2372a4 100644
+index 44a20d6..90d5729 100644
 --- a/src/EWS/camel/camel-ews-utils.c
 +++ b/src/EWS/camel/camel-ews-utils.c
-@@ -1553,7 +1553,18 @@ ews_utils_save_category_changes (GHashTable *old_categories, /* gchar *guid ~> C
+@@ -1554,7 +1554,18 @@ ews_utils_save_category_changes (GHashTable *old_categories, /* gchar *guid ~> C
  
  	evo_labels = g_ptr_array_new_full (5, g_free);
  

@@ -1,22 +1,23 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, hatch-jupyter-builder
-, hatchling
-, jupyterlab
-, nbformat
-, colorama
-, pygments
-, tornado
-, requests
-, gitpython
-, jupyter-server
-, jupyter-server-mathjax
-, jinja2
-, git
-, pytest-tornado
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
+  hatch-jupyter-builder,
+  hatchling,
+  jupyterlab,
+  nbformat,
+  colorama,
+  pygments,
+  tornado,
+  requests,
+  gitpython,
+  jupyter-server,
+  jupyter-server-mathjax,
+  jinja2,
+  git,
+  pytest-tornado,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -30,6 +31,12 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-8adgwLAMG6m0lFwWzpJXfzk/tR0YTzUbdoW6boUCCY4=";
   };
+
+  patches = [
+    # this fixes the webserver (nbdiff-web) when jupyter-server >=2.13 is used
+    # see https://github.com/jupyter/nbdime/issues/749
+    ./749.patch
+  ];
 
   nativeBuildInputs = [
     hatch-jupyter-builder
@@ -70,9 +77,7 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  pythonImportsCheck = [
-    "nbdime"
-  ];
+  pythonImportsCheck = [ "nbdime" ];
 
   meta = with lib; {
     homepage = "https://github.com/jupyter/nbdime";

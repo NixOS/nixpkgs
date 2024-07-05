@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, keepkey
-, setuptools
-, libagent
-, wheel
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  keepkey,
+  setuptools,
+  libagent,
+  wheel,
 }:
 
 buildPythonPackage rec {
@@ -19,7 +20,10 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    keepkey libagent setuptools wheel
+    keepkey
+    libagent
+    setuptools
+    wheel
   ];
 
   doCheck = false;
@@ -29,6 +33,10 @@ buildPythonPackage rec {
     description = "Using KeepKey as hardware-based SSH/PGP agent";
     homepage = "https://github.com/romanz/trezor-agent";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ hkjn np mmahut ];
+    maintainers = with maintainers; [
+      hkjn
+      np
+      mmahut
+    ];
   };
 }

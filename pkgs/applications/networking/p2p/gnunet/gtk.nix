@@ -8,21 +8,21 @@
 , libsodium
 , libxml2
 , pkg-config
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 stdenv.mkDerivation rec {
   pname = "gnunet-gtk";
-  version = "0.20.0";
+  version = "0.21.0";
 
   src = fetchurl {
-    url = "mirror://gnu/gnunet/${pname}-${version}.tar.gz";
-    sha256 = "sha256-6ZHlDIKrTmr/aRz4k5FtRVxZ7B9Hlh2w42QT4YRsVi0=";
+    url = "mirror://gnu/gnunet/gnunet-gtk-${version}.tar.gz";
+    hash = "sha256-vQFtKFI57YG64WpKVngx1kq687hI+f1kpP9ooK53/aw=";
   };
 
   nativeBuildInputs= [
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

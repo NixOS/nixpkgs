@@ -40,6 +40,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Utilities library for Linphone";
+    mainProgram = "bctoolbox_tester";
     homepage = "https://gitlab.linphone.org/BC/public/bctoolbox";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ raskin jluttine ];

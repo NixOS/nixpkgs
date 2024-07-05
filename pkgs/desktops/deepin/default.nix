@@ -23,6 +23,13 @@ let
     image-editor = callPackage ./library/image-editor { };
     udisks2-qt5 = callPackage ./library/udisks2-qt5 { };
     util-dfm = callPackage ./library/util-dfm { };
+    dtk6core = callPackage ./library/dtk6core { };
+    dtk6gui = callPackage ./library/dtk6gui { };
+    dtk6widget = callPackage ./library/dtk6widget { };
+    dtk6declarative = callPackage ./library/dtk6declarative { };
+    dtk6systemsettings = callPackage ./library/dtk6systemsettings { };
+    qt6platform-plugins = callPackage ./library/qt6platform-plugins { };
+    qt6integration = callPackage ./library/qt6integration { };
 
     #### CORE
     deepin-kwin = callPackage ./core/deepin-kwin { };
@@ -44,6 +51,8 @@ let
     dpa-ext-gnomekeyring = callPackage ./core/dpa-ext-gnomekeyring { };
     dde-gsettings-schemas = callPackage ./core/dde-gsettings-schemas { };
     dde-widgets = callPackage ./core/dde-widgets { };
+    dde-shell = callPackage ./core/dde-shell { };
+    dde-grand-search = callPackage ./core/dde-grand-search { };
 
     #### Dtk Application
     deepin-album = callPackage ./apps/deepin-album { };
@@ -66,9 +75,6 @@ let
     deepin-screensaver = callPackage ./apps/deepin-screensaver { };
 
     #### Go Packages
-    go-lib = callPackage ./go-package/go-lib { };
-    go-gir-generator = callPackage ./go-package/go-gir-generator { };
-    go-dbus-factory = callPackage ./go-package/go-dbus-factory { };
     dde-api = callPackage ./go-package/dde-api { };
     dde-daemon = callPackage ./go-package/dde-daemon { };
     deepin-pw-check = callPackage ./go-package/deepin-pw-check { };
@@ -78,6 +84,7 @@ let
     #### TOOLS
     dde-device-formatter = callPackage ./tools/dde-device-formatter { };
     deepin-gettext-tools = callPackage ./tools/deepin-gettext-tools { };
+    deepin-anything = callPackage ./tools/deepin-anything { };
 
     #### ARTWORK
     dde-account-faces = callPackage ./artwork/dde-account-faces { };
@@ -93,6 +100,9 @@ let
   } // lib.optionalAttrs config.allowAliases {
     dde-kwin = throw "The 'deepin.dde-kwin' package was removed as it is outdated and no longer relevant."; # added 2023-09-27
     dde-launcher = throw "The 'deepin.dde-launcher' is no longer maintained. Please use 'deepin.dde-launchpad' instead."; # added 2023-11-23
+    go-lib = throw "Then 'deepin.go-lib' package was removed, use 'go mod' to manage it"; # added 2024-05-31
+    go-gir-generator = throw "Then 'deepin.go-gir-generator' package was removed, use 'go mod' to manage it"; # added 2024-05-31
+    go-dbus-factory = throw "Then 'deepin.go-dbus-factory' package was removed, use 'go mod' to manage it"; # added 2024-05-31
   };
 in
 lib.makeScope libsForQt5.newScope packages

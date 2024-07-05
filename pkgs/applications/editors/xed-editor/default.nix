@@ -12,20 +12,20 @@
 , python3
 , meson
 , ninja
-, wrapGAppsHook
+, wrapGAppsHook3
 , intltool
 , itstool
 }:
 
 stdenv.mkDerivation rec {
   pname = "xed-editor";
-  version = "3.4.5";
+  version = "3.6.3";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "xed";
     rev = version;
-    sha256 = "sha256-MXRxzmRo/dRhp5Llib9ng1gzWW8uvzqTMjUVK8a3eJ8=";
+    sha256 = "sha256-xsNqzicI11dM/DjY00pXaPpQdHA0ltP23g34fMWUoUA=";
   };
 
   patches = [
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     itstool
     ninja
     python3
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

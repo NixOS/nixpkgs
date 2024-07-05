@@ -32,10 +32,10 @@ let
 in {
 
   options.services.apache-kafka = {
-    enable = mkEnableOption (lib.mdDoc "Apache Kafka event streaming broker");
+    enable = mkEnableOption "Apache Kafka event streaming broker";
 
     settings = mkOption {
-      description = lib.mdDoc ''
+      description = ''
         [Kafka broker configuration](https://kafka.apache.org/documentation.html#brokerconfigs)
         {file}`server.properties`.
 
@@ -51,13 +51,13 @@ in {
 
         options = {
           "broker.id" = mkOption {
-            description = lib.mdDoc "Broker ID. -1 or null to auto-allocate in zookeeper mode.";
+            description = "Broker ID. -1 or null to auto-allocate in zookeeper mode.";
             default = null;
             type = with types; nullOr int;
           };
 
           "log.dirs" = mkOption {
-            description = lib.mdDoc "Log file directories.";
+            description = "Log file directories.";
             # Deliberaly leave out old default and use the rewrite opportunity
             # to have users choose a safer value -- /tmp might be volatile and is a
             # slightly scary default choice.
@@ -66,7 +66,7 @@ in {
           };
 
           "listeners" = mkOption {
-            description = lib.mdDoc ''
+            description = ''
               Kafka Listener List.
               See [listeners](https://kafka.apache.org/documentation/#brokerconfigs_listeners).
             '';
@@ -78,7 +78,7 @@ in {
     };
 
     clusterId = mkOption {
-      description = lib.mdDoc ''
+      description = ''
         KRaft mode ClusterId used for formatting log directories. Can be generated with `kafka-storage.sh random-uuid`
       '';
       type = with types; nullOr str;
@@ -86,7 +86,7 @@ in {
     };
 
     configFiles.serverProperties = mkOption {
-      description = lib.mdDoc ''
+      description = ''
         Kafka server.properties configuration file path.
         Defaults to the rendered `settings`.
       '';
@@ -94,14 +94,14 @@ in {
     };
 
     configFiles.log4jProperties = mkOption {
-      description = lib.mdDoc "Kafka log4j property configuration file path";
+      description = "Kafka log4j property configuration file path";
       type = types.path;
       default = pkgs.writeText "log4j.properties" cfg.log4jProperties;
       defaultText = ''pkgs.writeText "log4j.properties" cfg.log4jProperties'';
     };
 
     formatLogDirs = mkOption {
-      description = lib.mdDoc ''
+      description = ''
         Whether to format log dirs in KRaft mode if all log dirs are
         unformatted, ie. they contain no meta.properties.
       '';
@@ -110,7 +110,7 @@ in {
     };
 
     formatLogDirsIgnoreFormatted = mkOption {
-      description = lib.mdDoc ''
+      description = ''
         Whether to ignore already formatted log dirs when formatting log dirs,
         instead of failing. Useful when replacing or adding disks.
       '';
@@ -119,7 +119,7 @@ in {
     };
 
     log4jProperties = mkOption {
-      description = lib.mdDoc "Kafka log4j property configuration.";
+      description = "Kafka log4j property configuration.";
       default = ''
         log4j.rootLogger=INFO, stdout
 
@@ -131,7 +131,7 @@ in {
     };
 
     jvmOptions = mkOption {
-      description = lib.mdDoc "Extra command line options for the JVM running Kafka.";
+      description = "Extra command line options for the JVM running Kafka.";
       default = [];
       type = types.listOf types.str;
       example = [
@@ -144,7 +144,7 @@ in {
     package = mkPackageOption pkgs "apacheKafka" { };
 
     jre = mkOption {
-      description = lib.mdDoc "The JRE with which to run Kafka";
+      description = "The JRE with which to run Kafka";
       default = cfg.package.passthru.jre;
       defaultText = literalExpression "pkgs.apacheKafka.passthru.jre";
       type = types.package;

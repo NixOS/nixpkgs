@@ -1,19 +1,36 @@
-{ lib, fetchPypi, buildPythonPackage, pythonOlder, routerFeatures
-, janus, ncclient, paramiko, pyyaml, sanic }:
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  pythonOlder,
+  routerFeatures,
+  janus,
+  ncclient,
+  paramiko,
+  pyyaml,
+  sanic,
+}:
 
 let
   # The `routerFeatures` flag optionally brings in some somewhat heavy
   # dependencies, in order to enable interacting with routers
-  opts = if routerFeatures then {
-      prePatch = ''
-        substituteInPlace ./setup.py --replace "extra_deps = []" "extra_deps = router_feature_deps"
-      '';
-      extraBuildInputs = [ janus ncclient paramiko ];
-    } else {
-      prePatch = "";
-      extraBuildInputs = [];
-    };
-
+  opts =
+    if routerFeatures then
+      {
+        prePatch = ''
+          substituteInPlace ./setup.py --replace "extra_deps = []" "extra_deps = router_feature_deps"
+        '';
+        extraBuildInputs = [
+          janus
+          ncclient
+          paramiko
+        ];
+      }
+    else
+      {
+        prePatch = "";
+        extraBuildInputs = [ ];
+      };
 in
 
 buildPythonPackage rec {
@@ -32,15 +49,17 @@ buildPythonPackage rec {
   # No useful tests
   doCheck = false;
 
-  propagatedBuildInputs = [ pyyaml sanic ] ++ opts.extraBuildInputs;
+  propagatedBuildInputs = [
+    pyyaml
+    sanic
+  ] ++ opts.extraBuildInputs;
 
   prePatch = opts.prePatch;
 
   meta = with lib; {
-    description = "A server framework for web apps with an Elm frontend";
+    description = "Server framework for web apps with an Elm frontend";
     homepage = "https://github.com/ensoft/entrance";
     license = licenses.mit;
     maintainers = with maintainers; [ simonchatts ];
   };
 }
-

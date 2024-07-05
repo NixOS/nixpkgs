@@ -79,7 +79,7 @@ stdenv.mkDerivation {
 
   meta = {
     homepage = "https://www.swi-prolog.org";
-    description = "A Prolog compiler and interpreter";
+    description = "Prolog compiler and interpreter";
     license = lib.licenses.bsd2;
     mainProgram = "swipl";
     platforms = lib.platforms.linux ++ lib.optionals (!withGui) lib.platforms.darwin;

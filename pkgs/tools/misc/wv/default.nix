@@ -1,16 +1,18 @@
-{ lib, stdenv, fetchurl, zlib, imagemagick, libpng, glib, pkg-config, libgsf
+{ lib, stdenv, fetchFromGitHub, zlib, imagemagick, libpng, glib, pkg-config, libgsf
 , libxml2, bzip2
 , autoreconfHook
 , buildPackages
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "wv";
   version = "1.2.9";
 
-  src = fetchurl {
-    url = "http://www.abisource.com/downloads/${pname}/${version}/${pname}-${version}.tar.gz";
-    sha256 = "17f16lkdv1c3amaz2hagiicih59ynpp4786k1m2qa1sw68xhswsc";
+  src = fetchFromGitHub {
+    owner = "AbiWord";
+    repo = "wv";
+    rev = "wv-${builtins.replaceStrings ["."] ["-"] finalAttrs.version}";
+    hash = "sha256-xcC+/M1EzFqQFeF5Dw9qd8VIy7r8JdKMp2X/GHkFiPA=";
   };
 
   nativeBuildInputs = [ pkg-config autoreconfHook ];
@@ -30,8 +32,9 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
+    homepage = "https://github.com/AbiWord/wv";
     description = "Converter from Microsoft Word formats to human-editable ones";
     platforms = lib.platforms.unix;
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Plus;
   };
-}
+})

@@ -31,7 +31,8 @@ stdenv.mkDerivation (attrs: {
   '';
 
   meta = with lib; {
-    description = "A package manager for the .NET platform";
+    description = "Package manager for the .NET platform";
+    mainProgram = "nuget";
     homepage = "https://www.mono-project.com/";
     longDescription = ''
       NuGet is the package manager for the .NET platform.

@@ -73,6 +73,6 @@ buildDunePackage rec {
     description = "Jsonrpc protocol implementation in OCaml";
     license = licenses.isc;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ marsam ];
+    maintainers = with maintainers; [ ];
   };
 }

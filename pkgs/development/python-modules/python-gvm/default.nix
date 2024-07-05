@@ -1,19 +1,21 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, defusedxml
-, fetchFromGitHub
-, lxml
-, paramiko
-, poetry-core
-, pontos
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  defusedxml,
+  fetchFromGitHub,
+  lxml,
+  paramiko,
+  poetry-core,
+  pontos,
+  pytestCheckHook,
+  pythonOlder,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "python-gvm";
-  version = "24.1.0";
+  version = "24.6.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -22,17 +24,16 @@ buildPythonPackage rec {
     owner = "greenbone";
     repo = "python-gvm";
     rev = "refs/tags/v${version}";
-    hash = "sha256-1MJajawm/QdioZM+/efnXOAFcuDOk/xJ1acPrxKp700=";
+    hash = "sha256-4Wa8O6kt4FsQk6VvE1dCdl9hQReO3YCf/4hTGcGaQxE=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     defusedxml
     lxml
     paramiko
+    typing-extensions
   ];
 
   nativeCheckInputs = [
@@ -44,13 +45,9 @@ buildPythonPackage rec {
     # No running SSH available
     "test_connect_error"
     "test_feed_xml_error"
-  ] ++ lib.optionals stdenv.isDarwin [
-    "test_feed_xml_error"
-  ];
+  ] ++ lib.optionals stdenv.isDarwin [ "test_feed_xml_error" ];
 
-  pythonImportsCheck = [
-    "gvm"
-  ];
+  pythonImportsCheck = [ "gvm" ];
 
   meta = with lib; {
     description = "Collection of APIs that help with remote controlling a Greenbone Security Manager";

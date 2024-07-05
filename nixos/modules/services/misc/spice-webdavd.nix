@@ -7,7 +7,7 @@ in
 {
   options = {
     services.spice-webdavd = {
-      enable = mkEnableOption (lib.mdDoc "the spice guest webdav proxy daemon");
+      enable = mkEnableOption "the spice guest webdav proxy daemon";
 
       package = mkPackageOption pkgs "phodav" { };
     };

@@ -12,13 +12,13 @@ SystemConfiguration
 
 rustPlatform.buildRustPackage rec {
   pname = "trunk";
-  version = "0.18.8";
+  version = "0.20.2";
 
   src = fetchFromGitHub {
-    owner = "thedodd";
+    owner = "trunk-rs";
     repo = "trunk";
     rev = "v${version}";
-    hash = "sha256-cx14IVqsu1SQezs8T1HFZ75+MPWkvf5RcvGCodW5G4A=";
+    hash = "sha256-hyjv3UJWIfJjdGtju4T6ufhz97F76uib/B9kyBHsC64=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -28,33 +28,13 @@ rustPlatform.buildRustPackage rec {
   # requires network
   checkFlags = [ "--skip=tools::tests::download_and_install_binaries" ];
 
-  cargoHash = "sha256-zMkRCNFrfkUvq6oz/7GtaWNw9YS5NygBUYzoOAoQl40=";
-
-  # the dependency css-minify contains both README.md and Readme.md,
-  # which causes a hash mismatch on systems with a case-insensitive filesystem
-  # this removes the readme files and updates cargo's checksum file accordingly
-  depsExtraArgs = {
-    nativeBuildInputs = [
-      jq
-      moreutils
-    ];
-
-    postBuild = ''
-      pushd $name/css-minify
-
-      rm -f README.md Readme.md
-      jq 'del(.files."README.md") | del(.files."Readme.md")' \
-        .cargo-checksum.json -c \
-        | sponge .cargo-checksum.json
-
-      popd
-    '';
-  };
+  cargoHash = "sha256-BI/jA5/7/QP62EtOXXRkbsJILsHbVacZY/bKZGcXk34=";
 
   meta = with lib; {
-    homepage = "https://github.com/thedodd/trunk";
+    homepage = "https://github.com/trunk-rs/trunk";
     description = "Build, bundle & ship your Rust WASM application to the web";
-    maintainers = with maintainers; [ freezeboy ];
+    mainProgram = "trunk";
+    maintainers = with maintainers; [ freezeboy ctron ];
     license = with licenses; [ asl20 ];
   };
 }

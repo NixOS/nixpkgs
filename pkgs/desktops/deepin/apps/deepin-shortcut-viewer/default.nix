@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "deepin-shortcut-viewer";
-  version = "5.0.7";
+  version = "5.0.9";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "sha256-r/ZhA9yiPnJNTrBkVOvaTqfRvGO/NTod5tiQCquG5Gw=";
+    sha256 = "sha256-A4LFi0KcqChjgYrO90paMBAivv02TsRjYQ26I0k71x0=";
   };
 
   nativeBuildInputs = [
@@ -43,6 +43,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Deepin Shortcut Viewer";
+    mainProgram = "deepin-shortcut-viewer";
     homepage = "https://github.com/linuxdeepin/deepin-shortcut-viewer";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;

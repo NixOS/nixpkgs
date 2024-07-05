@@ -14,19 +14,16 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "jasper";
-  version = "4.2.1";
+  version = "4.2.4";
 
   src = fetchFromGitHub {
     owner = "jasper-software";
     repo = "jasper";
     rev = "version-${finalAttrs.version}";
-    hash = "sha256-SE3zB+8zZuuT+W6QYTuQhM+dBgYuFzYK4a7QaquGB60=";
+    hash = "sha256-YliWVuNEtq/Rgra+WnorSOFoAYwYmPmPRv0r734FJ1c=";
   };
 
-  # Splitting outputs going bad on Darwin
-  outputs = if stdenv.isDarwin
-            then [ "out" ]
-            else [ "out" "dev" "doc" "lib" "man" ];
+  outputs = [ "out" "dev" "doc" "lib" "man" ];
 
   nativeBuildInputs = [
     cmake

@@ -103,8 +103,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://w1.fi/hostapd/";
-    description = "A user space daemon for access point and authentication servers";
-    license = licenses.gpl2;
+    description = "User space daemon for access point and authentication servers";
+    license = licenses.bsd3;
     maintainers = with maintainers; [ ];
     platforms = platforms.linux;
   };

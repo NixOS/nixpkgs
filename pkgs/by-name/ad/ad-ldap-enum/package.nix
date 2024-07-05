@@ -39,7 +39,7 @@ stdenvNoCC.mkDerivation {
   '';
 
   meta = with lib; {
-    description = "An LDAP based Active Directory user and group enumeration tool";
+    description = "LDAP based Active Directory user and group enumeration tool";
     homepage = "https://github.com/CroweCybersecurity/ad-ldap-enum";
     license = licenses.mit;
     maintainers = with maintainers; [ h7x4 ];

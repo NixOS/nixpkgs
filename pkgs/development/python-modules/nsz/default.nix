@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pycryptodome
-, pythonOlder
-, enlighten
-, zstandard
-, withGUI ? true
-, kivy
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pycryptodome,
+  pythonOlder,
+  enlighten,
+  zstandard,
+  withGUI ? true,
+  kivy,
 }:
 
 buildPythonPackage rec {
@@ -36,6 +37,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://github.com/nicoboss/nsz";
     description = "Homebrew compatible NSP/XCI compressor/decompressor";
+    mainProgram = "nsz";
     changelog = "https://github.com/nicoboss/nsz/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ eyjhb ];

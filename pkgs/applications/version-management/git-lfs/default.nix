@@ -54,7 +54,7 @@ buildGoModule rec {
     homepage = "https://git-lfs.github.com/";
     changelog = "https://github.com/git-lfs/git-lfs/raw/v${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ twey marsam ];
+    maintainers = with maintainers; [ twey ];
     mainProgram = "git-lfs";
   };
 }

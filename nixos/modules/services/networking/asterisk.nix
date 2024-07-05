@@ -59,7 +59,7 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether to enable the Asterisk PBX server.
         '';
       };
@@ -72,7 +72,7 @@ in
           verbose=3
           debug=3
         '';
-        description = lib.mdDoc ''
+        description = ''
           Extra configuration options appended to the default
           `asterisk.conf` file.
         '';
@@ -127,7 +127,7 @@ in
               ''';
             }
         '';
-        description = lib.mdDoc ''
+        description = ''
           Sets the content of config files (typically ending with
           `.conf`) in the Asterisk configuration directory.
 
@@ -148,7 +148,7 @@ in
         default = [ "ari.conf" "acl.conf" "agents.conf" "amd.conf" "calendar.conf" "cdr.conf" "cdr_syslog.conf" "cdr_custom.conf" "cel.conf" "cel_custom.conf" "cli_aliases.conf" "confbridge.conf" "dundi.conf" "features.conf" "hep.conf" "iax.conf" "pjsip.conf" "pjsip_wizard.conf" "phone.conf" "phoneprov.conf" "queues.conf" "res_config_sqlite3.conf" "res_parking.conf" "statsd.conf" "udptl.conf" "unistim.conf" ];
         type = types.listOf types.str;
         example = [ "sip.conf" "dundi.conf" ];
-        description = lib.mdDoc ''Sets these config files to the default content. The default value for
+        description = ''Sets these config files to the default content. The default value for
           this option contains all necesscary files to avoid errors at startup.
           This does not override settings via {option}`services.asterisk.confFiles`.
         '';
@@ -159,7 +159,7 @@ in
         type = types.listOf types.str;
         example =
           [ "-vvvddd" "-e" "1024" ];
-        description = lib.mdDoc ''
+        description = ''
           Additional command line arguments to pass to Asterisk.
         '';
       };

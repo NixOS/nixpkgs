@@ -32,7 +32,7 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "An Adwaita style extra icons theme for Gnome Shell";
+    description = "Adwaita style extra icons theme for Gnome Shell";
     homepage = "https://github.com/somepaulo/MoreWaita";
     license = with licenses; [ gpl3Only ];
     platforms = platforms.linux;

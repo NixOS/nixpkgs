@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "rshim-user-space";
-  version = "2.0.12";
+  version = "2.0.32";
 
   src = fetchFromGitHub {
     owner = "Mellanox";
     repo = pname;
     rev = "rshim-${version}";
-    hash = "sha256-jR9Q1i2p4weKuGPTAylNIVglgcZH0UtvXBVVCEquxu8=";
+    hash = "sha256-GF7cKIf72EYRBRb6d3IWONE7YJwohTLKF1RGdDMTG6c=";
   };
 
   nativeBuildInputs = [
@@ -35,6 +35,10 @@ stdenv.mkDerivation rec {
     libusb1
     fuse
   ];
+
+  prePatch = ''
+    patchShebangs scripts/bfb-install
+  '';
 
   strictDeps = true;
 
@@ -62,7 +66,7 @@ stdenv.mkDerivation rec {
       target and provides a way to access the internal rshim registers.
     '';
     homepage = "https://github.com/Mellanox/rshim-user-space";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     platforms = platforms.linux;
     maintainers = with maintainers; [ nikstur ];
   };

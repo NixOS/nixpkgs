@@ -23,14 +23,14 @@ let
 in
 {
   options.services.self-deploy = {
-    enable = lib.mkEnableOption (lib.mdDoc "self-deploy");
+    enable = lib.mkEnableOption "self-deploy";
 
     nixFile = lib.mkOption {
       type = lib.types.path;
 
       default = "/default.nix";
 
-      description = lib.mdDoc ''
+      description = ''
         Path to nix file in repository. Leading '/' refers to root of
         git repository.
       '';
@@ -41,7 +41,7 @@ in
 
       default = null;
 
-      description = lib.mdDoc ''
+      description = ''
         Attribute of `nixFile` that builds the current system.
       '';
     };
@@ -51,7 +51,7 @@ in
 
       default = { };
 
-      description = lib.mdDoc ''
+      description = ''
         Arguments to `nix-build` passed as `--argstr` or `--arg` depending on
         the type.
       '';
@@ -62,7 +62,7 @@ in
 
       default = "switch";
 
-      description = lib.mdDoc ''
+      description = ''
         The `switch-to-configuration` subcommand used.
       '';
     };
@@ -70,7 +70,7 @@ in
     repository = lib.mkOption {
       type = with lib.types; oneOf [ path str ];
 
-      description = lib.mdDoc ''
+      description = ''
         The repository to fetch from. Must be properly formatted for git.
 
         If this value is set to a path (must begin with `/`) then it's
@@ -88,7 +88,7 @@ in
 
       default = null;
 
-      description = lib.mdDoc ''
+      description = ''
         Path to SSH private key used to fetch private repositories over
         SSH.
       '';
@@ -99,7 +99,7 @@ in
 
       default = "master";
 
-      description = lib.mdDoc ''
+      description = ''
         Branch to track
 
         Technically speaking any ref can be specified here, as this is
@@ -113,7 +113,7 @@ in
 
       default = "hourly";
 
-      description = lib.mdDoc ''
+      description = ''
         The schedule on which to run the `self-deploy` service. Format
         specified by `systemd.time 7`.
 

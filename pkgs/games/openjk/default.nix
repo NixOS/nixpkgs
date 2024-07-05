@@ -31,14 +31,14 @@ let
     categories = [ "Game" ];
   };
 in stdenv.mkDerivation {
-  pname = "OpenJK";
-  version = "0-unstable-2024-02-20";
+  pname = "openjk";
+  version = "0-unstable-2024-04-07";
 
   src = fetchFromGitHub {
     owner = "JACoders";
     repo = "OpenJK";
-    rev = "1e8a7998ca2fe434daebb41d586ac3cd5296433a";
-    sha256 = "sha256-TKJNaz+oWNYyReFZVefg1frPXyd3Yl96JDklp1qY1to=";
+    rev = "2815211a87ccb8de1b0ee090d429a63f47e0ac7a";
+    hash = "sha256-F3JF6jFgyMinIZ7dZAJ0ugGrJFianh2b6dX5A4iEnns=";
   };
 
   dontAddPrefix = true;
@@ -84,9 +84,9 @@ in stdenv.mkDerivation {
   passthru.updateScript = unstableGitUpdater { };
 
   meta = with lib; {
-    description = "An open-source engine for Star Wars Jedi Academy game";
+    description = "Open-source engine for Star Wars Jedi Academy game";
     homepage = "https://github.com/JACoders/OpenJK";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     platforms = platforms.linux;
     maintainers = with maintainers; [ tgunnoe ];
   };

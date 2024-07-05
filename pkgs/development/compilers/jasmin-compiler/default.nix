@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "jasmin-compiler";
-  version = "2023.06.2";
+  version = "2023.06.4";
 
   src = fetchurl {
     url = "https://github.com/jasmin-lang/jasmin/releases/download/v${version}/jasmin-compiler-v${version}.tar.bz2";
-    hash = "sha256-I3+MP2Q7ENOdQdvvCqcyD+I8ImF6c+9HQDpY6QUWuY8=";
+    hash = "sha256-b1lrVbXJQeg+7tI7JcR9JTuiel/b/mctU1caT/y/4SA=";
   };
 
   sourceRoot = "jasmin-compiler-v${version}/compiler";
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "A workbench for high-assurance and high-speed cryptography";
+    description = "Workbench for high-assurance and high-speed cryptography";
     homepage = "https://github.com/jasmin-lang/jasmin/";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.vbgl ];

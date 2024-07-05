@@ -1,10 +1,11 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, editorconfig
-, pytestCheckHook
-, pythonOlder
-, six
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  editorconfig,
+  pytestCheckHook,
+  pythonOlder,
+  six,
 }:
 
 buildPythonPackage rec {
@@ -24,20 +25,15 @@ buildPythonPackage rec {
     six
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "jsbeautifier"
-  ];
+  pythonImportsCheck = [ "jsbeautifier" ];
 
-  pytestFlagsArray = [
-    "jsbeautifier/tests/testindentation.py"
-  ];
+  pytestFlagsArray = [ "jsbeautifier/tests/testindentation.py" ];
 
   meta = with lib; {
     description = "JavaScript unobfuscator and beautifier";
+    mainProgram = "js-beautify";
     homepage = "http://jsbeautifier.org";
     changelog = "https://github.com/beautify-web/js-beautify/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;

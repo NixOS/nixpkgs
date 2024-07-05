@@ -27,6 +27,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Minimal Markdown Documentation";
+    mainProgram = "mmdoc";
     homepage = "https://github.com/ryantm/mmdoc";
     license = licenses.cc0;
     maintainers = with maintainers; [ ryantm ];

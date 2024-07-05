@@ -1,16 +1,18 @@
 { buildDunePackage, ounit2, randomconv, mirage-crypto, mirage-crypto-rng
-, cstruct, sexplib0, zarith, eqaf, gmp }:
+, cstruct, sexplib0, zarith, eqaf-cstruct, gmp }:
 
 buildDunePackage rec {
   pname = "mirage-crypto-pk";
 
   inherit (mirage-crypto) version src;
 
-  duneVersion = "3";
+  postPatch = ''
+    substituteInPlace pk/dune --replace-warn eqaf.cstruct eqaf-cstruct
+  '';
 
   buildInputs = [ gmp ];
   propagatedBuildInputs = [ cstruct mirage-crypto mirage-crypto-rng
-                            zarith eqaf sexplib0 ];
+                            zarith eqaf-cstruct sexplib0 ];
 
   doCheck = true;
   checkInputs = [ ounit2 randomconv ];

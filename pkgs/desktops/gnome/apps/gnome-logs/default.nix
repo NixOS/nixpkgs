@@ -22,11 +22,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-logs";
-  version = "45.beta";
+  version = "45.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-logs/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "nbxJ/7J90jQuji/UmK8ltUENsjkQ/I7/XmiTrHa7jK4=";
+    hash = "sha256-sooG6lyYvRfyhztQfwhbDKDemBATZhH08u6wmGFOzlI=";
   };
 
   nativeBuildInputs = [
@@ -67,8 +67,9 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    homepage = "https://wiki.gnome.org/Apps/Logs";
-    description = "A log viewer for the systemd journal";
+    homepage = "https://apps.gnome.org/Logs/";
+    description = "Log viewer for the systemd journal";
+    mainProgram = "gnome-logs";
     maintainers = teams.gnome.members;
     license = licenses.gpl3Plus;
     platforms = platforms.linux;

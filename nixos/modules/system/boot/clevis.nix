@@ -12,14 +12,14 @@ in
   meta.doc = ./clevis.md;
 
   options = {
-    boot.initrd.clevis.enable = mkEnableOption (lib.mdDoc "Clevis in initrd");
+    boot.initrd.clevis.enable = mkEnableOption "Clevis in initrd";
 
 
     boot.initrd.clevis.package = mkOption {
       type = types.package;
       default = pkgs.clevis;
       defaultText = "pkgs.clevis";
-      description = lib.mdDoc "Clevis package";
+      description = "Clevis package";
     };
 
     boot.initrd.clevis.devices = mkOption {
@@ -27,7 +27,7 @@ in
       default = { };
       type = types.attrsOf (types.submodule ({
         options.secretFile = mkOption {
-          description = lib.mdDoc "Clevis JWE file used to decrypt the device at boot, in concert with the chosen pin (one of TPM2, Tang server, or SSS).";
+          description = "Clevis JWE file used to decrypt the device at boot, in concert with the chosen pin (one of TPM2, Tang server, or SSS).";
           type = types.path;
         };
       }));
@@ -48,7 +48,7 @@ in
 
     assertions = (attrValues (mapAttrs
       (device: _: {
-        assertion = (any (fs: fs.device == device && (elem fs.fsType supportedFs)) config.system.build.fileSystems) || (hasAttr device config.boot.initrd.luks.devices);
+        assertion = (any (fs: fs.device == device && (elem fs.fsType supportedFs) || (fs.fsType == "zfs" && hasPrefix "${device}/" fs.device)) config.system.build.fileSystems) || (hasAttr device config.boot.initrd.luks.devices);
         message = ''
           No filesystem or LUKS device with the name ${device} is declared in your configuration.'';
       })

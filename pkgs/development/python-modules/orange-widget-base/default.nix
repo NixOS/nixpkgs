@@ -1,17 +1,18 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchPypi
-, pyqt5
-, pyqtwebengine
-, matplotlib
-, orange-canvas-core
-, pyqtgraph
-, typing-extensions
-, qt5
-, pytestCheckHook
-, pytest-qt
-, appnope
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchPypi,
+  pyqt5,
+  pyqtwebengine,
+  matplotlib,
+  orange-canvas-core,
+  pyqtgraph,
+  typing-extensions,
+  qt5,
+  pytestCheckHook,
+  pytest-qt,
+  appnope,
 }:
 
 buildPythonPackage rec {
@@ -31,9 +32,7 @@ buildPythonPackage rec {
     pyqtgraph
     pyqtwebengine
     typing-extensions
-  ] ++ lib.optionals stdenv.isDarwin [
-    appnope
-  ];
+  ] ++ lib.optionals stdenv.isDarwin [ appnope ];
 
   pythonImportsCheck = [ "orangewidget" ];
 

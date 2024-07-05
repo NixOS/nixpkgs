@@ -1,24 +1,24 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools-scm
-, requests
-, pyjwt
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  poetry-core,
+  requests,
+  pyjwt,
 }:
 
 buildPythonPackage rec {
   pname = "pyixapi";
-  version = "0.2.1";
-  format = "setuptools";
+  version = "0.2.3";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-c5a8Ldbzgh8gXuCDYbKk9zR6AoiBF3Y/VQvGlSwXpR4=";
+    hash = "sha256-qkgPBIYv9xzGa29RiPAU3zNhcyutTUX1Vkmpd9YdeJU=";
   };
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ poetry-core ];
+
   propagatedBuildInputs = [
     requests
     pyjwt

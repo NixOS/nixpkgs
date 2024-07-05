@@ -8,13 +8,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "deepin-icon-theme";
-  version = "2023.11.28";
+  version = "2024.04.16";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    hash = "sha256-kCWJAmJa0VmhnuegE+acj82Ojl4Z5D8g7/q2PzppJwg=";
+    hash = "sha256-IUiKGHsFGJawWnwfckS8ZeB2WOxDyDlre4oekJuCKcc=";
   };
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];

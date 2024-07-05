@@ -1,4 +1,11 @@
-{ lib, buildNpmPackage, fetchFromGitHub, gitUpdater, nodejs, python3 }:
+{
+  lib,
+  buildNpmPackage,
+  fetchFromGitHub,
+  gitUpdater,
+  nodejs,
+  python3,
+}:
 
 buildNpmPackage rec {
   pname = "webtorrent-mpv-hook";
@@ -10,14 +17,12 @@ buildNpmPackage rec {
     rev = "v${version}";
     hash = "sha256-/dMtXcIyfAs++Zgz2CxRW0tkzn5QjS+WVGChlCyrU0U=";
   };
-  passthru.updateScript = gitUpdater {
-    rev-prefix = "v";
-  };
+  passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
   postPatch = ''
-    substituteInPlace src/webtorrent.ts --replace "node_path: 'node'" "node_path: '${nodejs}/bin/node'"
+    substituteInPlace src/webtorrent.ts --replace-fail "node_path: 'node'" "node_path: '${lib.getExe nodejs}'"
     # This executable is just for telling non-Nix users how to install
-    substituteInPlace package.json --replace '"bin": "build/bin.mjs",' ""
+    substituteInPlace package.json --replace-fail '"bin": "build/bin.mjs",' ""
     rm -rf src/bin.ts
   '';
 

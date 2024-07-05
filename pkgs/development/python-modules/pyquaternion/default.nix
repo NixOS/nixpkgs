@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, numpy
-, nose
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  numpy,
+  nose,
 }:
 
 buildPythonPackage rec {
@@ -27,7 +28,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "pyquaternion" ];
 
   meta = with lib; {
-    description = "Library for representing and using quaternions.";
+    description = "Library for representing and using quaternions";
     homepage = "http://kieranwynn.github.io/pyquaternion/";
     license = licenses.mit;
     maintainers = with maintainers; [ lucasew ];

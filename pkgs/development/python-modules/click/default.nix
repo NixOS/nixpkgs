@@ -1,16 +1,17 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, importlib-metadata
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  importlib-metadata,
+  pytestCheckHook,
 
   # large-rebuild downstream dependencies and applications
-, flask
-, black
-, magic-wormhole
-, mitmproxy
-, typer
+  flask,
+  black,
+  magic-wormhole,
+  mitmproxy,
+  typer,
 }:
 
 buildPythonPackage rec {
@@ -27,13 +28,9 @@ buildPythonPackage rec {
     hash = "sha256-8YqIKRyw5MegnRwAO7YTCZateEFQFTH2PHpE8gTPTow=";
   };
 
-  propagatedBuildInputs = lib.optionals (pythonOlder "3.8") [
-    importlib-metadata
-  ];
+  propagatedBuildInputs = lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTests = [
     # test fails with filename normalization on zfs
@@ -41,7 +38,13 @@ buildPythonPackage rec {
   ];
 
   passthru.tests = {
-    inherit black flask magic-wormhole mitmproxy typer;
+    inherit
+      black
+      flask
+      magic-wormhole
+      mitmproxy
+      typer
+      ;
   };
 
   meta = with lib; {

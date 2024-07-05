@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage rec {
   passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
-    description = "A server application to run tox node written in pure Rust";
+    description = "Server application to run tox node written in pure Rust";
     homepage = "https://github.com/tox-rs/tox";
     license = [ licenses.gpl3Plus ];
     platforms = platforms.linux;

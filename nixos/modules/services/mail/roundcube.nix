@@ -7,14 +7,14 @@ let
   fpm = config.services.phpfpm.pools.roundcube;
   localDB = cfg.database.host == "localhost";
   user = cfg.database.username;
-  phpWithPspell = pkgs.php81.withExtensions ({ enabled, all }: [ all.pspell ] ++ enabled);
+  phpWithPspell = pkgs.php83.withExtensions ({ enabled, all }: [ all.pspell ] ++ enabled);
 in
 {
   options.services.roundcube = {
     enable = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         Whether to enable roundcube.
 
         Also enables nginx virtual host management.
@@ -26,7 +26,7 @@ in
     hostName = mkOption {
       type = types.str;
       example = "webmail.example.com";
-      description = lib.mdDoc "Hostname to use for the nginx vhost";
+      description = "Hostname to use for the nginx vhost";
     };
 
     package = mkPackageOption pkgs "roundcube" {
@@ -37,7 +37,7 @@ in
       username = mkOption {
         type = types.str;
         default = "roundcube";
-        description = lib.mdDoc ''
+        description = ''
           Username for the postgresql connection.
           If `database.host` is set to `localhost`, a unix user and group of the same name will be created as well.
         '';
@@ -45,7 +45,7 @@ in
       host = mkOption {
         type = types.str;
         default = "localhost";
-        description = lib.mdDoc ''
+        description = ''
           Host of the postgresql server. If this is not set to
           `localhost`, you have to create the
           postgresql user and database yourself, with appropriate
@@ -54,12 +54,12 @@ in
       };
       password = mkOption {
         type = types.str;
-        description = lib.mdDoc "Password for the postgresql connection. Do not use: the password will be stored world readable in the store; use `passwordFile` instead.";
+        description = "Password for the postgresql connection. Do not use: the password will be stored world readable in the store; use `passwordFile` instead.";
         default = "";
       };
       passwordFile = mkOption {
         type = types.str;
-        description = lib.mdDoc ''
+        description = ''
           Password file for the postgresql connection.
           Must be formatted according to PostgreSQL .pgpass standard (see https://www.postgresql.org/docs/current/libpq-pgpass.html)
           but only one line, no comments and readable by user `nginx`.
@@ -69,14 +69,14 @@ in
       dbname = mkOption {
         type = types.str;
         default = "roundcube";
-        description = lib.mdDoc "Name of the postgresql database";
+        description = "Name of the postgresql database";
       };
     };
 
     plugins = mkOption {
       type = types.listOf types.str;
       default = [];
-      description = lib.mdDoc ''
+      description = ''
         List of roundcube plugins to enable. Currently, only those directly shipped with Roundcube are supported.
       '';
     };
@@ -85,7 +85,7 @@ in
       type = types.listOf types.package;
       default = [];
       example = literalExpression "with pkgs.aspellDicts; [ en fr de ]";
-      description = lib.mdDoc ''
+      description = ''
         List of aspell dictionaries for spell checking. If empty, spell checking is disabled.
       '';
     };
@@ -93,7 +93,7 @@ in
     maxAttachmentSize = mkOption {
       type = types.int;
       default = 18;
-      description = lib.mdDoc ''
+      description = ''
         The maximum attachment size in MB.
 
         Note: Since roundcube only uses 70% of max upload values configured in php
@@ -105,13 +105,13 @@ in
     configureNginx = lib.mkOption {
       type = lib.types.bool;
       default = true;
-      description = lib.mdDoc "Configure nginx as a reverse proxy for roundcube.";
+      description = "Configure nginx as a reverse proxy for roundcube.";
     };
 
     extraConfig = mkOption {
       type = types.lines;
       default = "";
-      description = lib.mdDoc "Extra configuration for roundcube webmail instance";
+      description = "Extra configuration for roundcube webmail instance";
     };
   };
 
@@ -247,14 +247,15 @@ in
       (mkIf (cfg.database.host == "localhost") {
         requires = [ "postgresql.service" ];
         after = [ "postgresql.service" ];
-        path = [ config.services.postgresql.package ];
       })
       {
         wants = [ "network-online.target" ];
         after = [ "network-online.target" ];
         wantedBy = [ "multi-user.target" ];
+
+        path = [ config.services.postgresql.package ];
         script = let
-          psql = "${lib.optionalString (!localDB) "PGPASSFILE=${cfg.database.passwordFile}"} ${pkgs.postgresql}/bin/psql ${lib.optionalString (!localDB) "-h ${cfg.database.host} -U ${cfg.database.username} "} ${cfg.database.dbname}";
+          psql = "${lib.optionalString (!localDB) "PGPASSFILE=${cfg.database.passwordFile}"} psql ${lib.optionalString (!localDB) "-h ${cfg.database.host} -U ${cfg.database.username} "} ${cfg.database.dbname}";
         in
         ''
           version="$(${psql} -t <<< "select value from system where name = 'roundcube-version';" || true)"

@@ -1,4 +1,13 @@
-{ lib, fetchurl, fetchpatch, buildPythonPackage, python, isPyPy, pythonAtLeast, sip-module ? "sip" }:
+{
+  lib,
+  fetchurl,
+  fetchpatch,
+  buildPythonPackage,
+  python,
+  isPyPy,
+  pythonAtLeast,
+  sip-module ? "sip",
+}:
 
 buildPythonPackage rec {
   pname = sip-module;
@@ -30,15 +39,22 @@ buildPythonPackage rec {
 
   enableParallelBuilding = true;
 
-  pythonImportsCheck = [ sip-module "sipconfig" ];
+  pythonImportsCheck = [
+    sip-module
+    "sipconfig"
+  ];
 
   doCheck = true;
 
   meta = with lib; {
     description = "Creates C++ bindings for Python modules";
-    homepage    = "https://riverbankcomputing.com/";
-    license     = licenses.gpl2Plus;
-    maintainers = with maintainers; [ lovek323 sander ];
-    platforms   = platforms.all;
+    mainProgram = "sip";
+    homepage = "https://riverbankcomputing.com/";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [
+      lovek323
+      sander
+    ];
+    platforms = platforms.all;
   };
 }

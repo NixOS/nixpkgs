@@ -1,7 +1,7 @@
 # python library used to update plugins:
 # - pkgs/applications/editors/vim/plugins/update.py
 # - pkgs/applications/editors/kakoune/plugins/update.py
-# - maintainers/scripts/update-luarocks-packages
+# - pkgs/development/lua-modules/updater/updater.py
 
 # format:
 # $ nix run nixpkgs#black maintainers/scripts/pluginupdate.py
@@ -108,7 +108,7 @@ class Repo:
 
     @property
     def name(self):
-        return self.uri.split("/")[-1]
+        return self.uri.strip("/").split("/")[-1]
 
     @property
     def branch(self):
@@ -788,7 +788,10 @@ def update_plugins(editor: Editor, args):
     fetch_config = FetchConfig(args.proc, args.github_token)
     update = editor.get_update(args.input_file, args.outfile, fetch_config)
 
+    start_time = time.time()
     redirects = update()
+    duration = time.time() - start_time
+    print(f"The plugin update took {duration}s.")
     editor.rewrite_input(fetch_config, args.input_file, editor.deprecated, redirects)
 
     autocommit = not args.no_commit

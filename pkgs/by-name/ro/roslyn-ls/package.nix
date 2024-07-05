@@ -11,18 +11,18 @@ in
 buildDotnetModule rec {
   inherit pname dotnet-sdk dotnet-runtime;
 
-  vsVersion = "2.17.7";
+  vsVersion = "2.22.2";
   src = fetchFromGitHub {
     owner = "dotnet";
     repo = "roslyn";
     rev = "VSCode-CSharp-${vsVersion}";
-    hash = "sha256-afsYOMoM4I/CdP6IwThJpGl9M2xx/eDeuOj9CTk2fFI=";
+    hash = "sha256-j7PXgYjISlPBbhUEEIxkDlOx7TMYPHtC3KH2DViWxJ8=";
   };
 
   # versioned independently from vscode-csharp
   # "roslyn" in here:
   # https://github.com/dotnet/vscode-csharp/blob/main/package.json
-  version = "4.10.0-2.24102.11";
+  version = "4.10.0-2.24124.2";
   projectFile = "src/Features/LanguageServer/${project}/${project}.csproj";
   useDotnetFromEnv = true;
   nugetDeps = ./deps.nix;
@@ -36,9 +36,14 @@ buildDotnetModule rec {
 
     substituteInPlace $projectFile \
       --replace-fail \
-        '<RuntimeIdentifiers>win-x64;win-x86;win-arm64;linux-x64;linux-arm64;alpine-x64;alpine-arm64;osx-x64;osx-arm64</RuntimeIdentifiers>' \
-        '<RuntimeIdentifiers>linux-x64;linux-arm64;osx-x64;osx-arm64</RuntimeIdentifiers>'
+        '>win-x64;win-x86;win-arm64;linux-x64;linux-arm64;linux-musl-x64;linux-musl-arm64;osx-x64;osx-arm64</RuntimeIdentifiers>' \
+        '>linux-x64;linux-arm64;osx-x64;osx-arm64</RuntimeIdentifiers>'
   '';
+
+  dotnetFlags = [
+    # this removes the Microsoft.WindowsDesktop.App.Ref dependency
+    "-p:EnableWindowsTargeting=false"
+  ];
 
   # two problems solved here:
   # 1. --no-build removed -> BuildHost project within roslyn is running Build target during publish
@@ -61,7 +66,9 @@ buildDotnetModule rec {
           --configuration Release \
           --no-self-contained \
           --output "$out/lib/$pname" \
-          --runtime ${rid}
+          --runtime ${rid} \
+          ''${dotnetInstallFlags[@]}  \
+          ''${dotnetFlags[@]}
 
       runHook postInstall
     '';
@@ -73,7 +80,7 @@ buildDotnetModule rec {
 
   meta = {
     homepage = "https://github.com/dotnet/vscode-csharp";
-    description = "The language server behind C# Dev Kit for Visual Studio Code";
+    description = "Language server behind C# Dev Kit for Visual Studio Code";
     changelog = "https://github.com/dotnet/vscode-csharp/releases/tag/v${vsVersion}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ konradmalik ];

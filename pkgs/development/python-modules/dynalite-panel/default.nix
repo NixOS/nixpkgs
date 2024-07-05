@@ -1,16 +1,14 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "dynalite-panel";
   version = "0.0.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.4";
 
   src = fetchPypi {
     inherit pname version;
@@ -22,9 +20,7 @@ buildPythonPackage rec {
       --replace "~=" ">="
   '';
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   pythonImportsCheck = [ "dynalite_panel" ];
 

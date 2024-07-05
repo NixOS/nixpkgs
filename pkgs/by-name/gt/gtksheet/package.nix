@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   meta = {
-    description = "A spreadsheet widget for GTK+";
+    description = "Spreadsheet widget for GTK+";
     homepage = "https://fpaquet.github.io/gtksheet/";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ wegank ];

@@ -9,14 +9,19 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "geos";
-  version = "3.12.1";
+  version = "3.12.2";
 
   src = fetchurl {
     url = "https://download.osgeo.org/geos/${finalAttrs.pname}-${finalAttrs.version}.tar.bz2";
-    hash = "sha256-1up+SSIktRGT6CRP4+wXxNRNB3fzwyyk+xcRQFSaDQM=";
+    hash = "sha256-NMd3C/AJDuiEiK+Ydn0I53nxJPozQ34Kq+yKvUYJ/sY=";
   };
 
   nativeBuildInputs = [ cmake ];
+
+  # https://github.com/libgeos/geos/issues/930
+  cmakeFlags = lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
+    "-DCMAKE_CTEST_ARGUMENTS=--exclude-regex;unit-geom-Envelope"
+  ];
 
   doCheck = true;
 

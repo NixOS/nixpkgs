@@ -49,6 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "Framebuffer-based disk unlocker for the initramfs based on LVGL";
+    mainProgram = "unl0kr";
     homepage = "https://gitlab.com/cherrypicker/unl0kr";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ tomfitzhenry ];

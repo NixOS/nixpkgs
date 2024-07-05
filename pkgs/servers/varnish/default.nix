@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch, pcre, pcre2, jemalloc, libunwind, libxslt, groff, ncurses, pkg-config, readline, libedit
+{ lib, stdenv, fetchurl, pcre, pcre2, jemalloc, libunwind, libxslt, groff, ncurses, pkg-config, readline, libedit
 , coreutils, python3, makeWrapper, nixosTests }:
 
 let
@@ -53,12 +53,17 @@ in
 {
   # EOL (LTS) TBA
   varnish60 = common {
-    version = "6.0.12";
-    hash = "sha256-OHzr06uzQ3MGWsDibm8r2iFAxBCotSA+EV9aZysr1qU=";
+    version = "6.0.13";
+    hash = "sha256-DcpilfnGnUenIIWYxBU4XFkMZoY+vUK/6wijZ7eIqbo=";
   };
   # EOL 2024-09-15
   varnish74 = common {
-    version = "7.4.2";
-    hash = "sha256-bT0DxnUU5rtOhYTkCjgfUecIYH05M3pj3ErkIGHZpG8=";
+    version = "7.4.3";
+    hash = "sha256-655DUH+Dbu8uMoAtRt08+S7KPVR7pLZA/aWbQHzbG4g=";
+  };
+  # EOL 2025-03-15
+  varnish75 = common {
+    version = "7.5.0";
+    hash = "sha256-/KYbmDE54arGHEVG0SoaOrmAfbsdgxRXHjFIyT/3K10=";
   };
 }

@@ -1,17 +1,18 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, wheel
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  wheel,
 
-, psycopg
-, aiosqlite
-, asyncmy
+  psycopg,
+  aiosqlite,
+  asyncmy,
 
-# test
-, pytest-asyncio
+  # test
+  pytest-asyncio,
 
-, pytestCheckHook
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -37,25 +38,23 @@ buildPythonPackage rec {
   '';
 
   passthru.optional-dependencies = {
-    postgres = [
-      psycopg
-    ] ++ psycopg.optional-dependencies.pool;
-    mysql = [
-      asyncmy
-    ];
-    sqlite = [
-      aiosqlite
-    ];
+    postgres = [ psycopg ] ++ psycopg.optional-dependencies.pool;
+    mysql = [ asyncmy ];
+    sqlite = [ aiosqlite ];
   };
 
-  nativeCheckInputs = [
-    pytestCheckHook
-    pytest-asyncio
-  ] ++ (with passthru.optional-dependencies; [postgres mysql sqlite]);
+  nativeCheckInputs =
+    [
+      pytestCheckHook
+      pytest-asyncio
+    ]
+    ++ (with passthru.optional-dependencies; [
+      postgres
+      mysql
+      sqlite
+    ]);
 
-  pythonImportsCheck = [
-    "mayim"
-  ];
+  pythonImportsCheck = [ "mayim" ];
 
   meta = with lib; {
     description = "Asynchronous SQL hydrator";

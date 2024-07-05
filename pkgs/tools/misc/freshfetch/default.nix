@@ -39,7 +39,7 @@ rustPlatform.buildRustPackage rec {
   ];
 
   meta = with lib; {
-    description = "A fresh take on neofetch";
+    description = "Fresh take on neofetch";
     homepage = "https://github.com/k4rakara/freshfetch";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda ];

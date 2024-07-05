@@ -1,14 +1,15 @@
-{ lib
-, aiohttp
-, aresponses
-, buildPythonPackage
-, fetchFromGitHub
-, inflection
-, pyjwt
-, pytest-asyncio
-, pytestCheckHook
-, python-dateutil
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  aresponses,
+  buildPythonPackage,
+  fetchFromGitHub,
+  inflection,
+  pyjwt,
+  pytest-asyncio,
+  pytestCheckHook,
+  python-dateutil,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -43,9 +44,7 @@ buildPythonPackage rec {
       --replace "pyjwt~=2.1.0" "pyjwt>=2.1.0"
   '';
 
-  pythonImportsCheck = [
-    "smarttub"
-  ];
+  pythonImportsCheck = [ "smarttub" ];
 
   meta = with lib; {
     description = "Python API for SmartTub enabled hot tubs";

@@ -2,7 +2,7 @@
 , withLinuxHeaders ? true
 , profilingLibraries ? false
 , withGd ? false
-, withLibcrypt? false
+, enableCET ? if stdenv.hostPlatform.isx86_64 then "permissive" else false
 , pkgsBuildBuild
 , libgcc
 }:
@@ -16,7 +16,7 @@ let
 in
 
 (callPackage ./common.nix { inherit stdenv; } {
-  inherit withLinuxHeaders withGd profilingLibraries withLibcrypt;
+  inherit withLinuxHeaders withGd profilingLibraries enableCET;
   pname = "glibc" + lib.optionalString withGd "-gd" + lib.optionalString (stdenv.cc.isGNU && libgcc==null) "-nolibgcc";
 }).overrideAttrs(previousAttrs: {
 
@@ -182,6 +182,6 @@ in
         inherit libgcc;
       };
 
-  meta = (previousAttrs.meta or {}) // { description = "The GNU C Library"; };
+  meta = (previousAttrs.meta or {}) // { description = "GNU C Library"; };
 })
 

@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "sqlcipher";
-  version = "4.5.6";
+  version = "4.6.0";
 
   src = fetchFromGitHub {
     owner = "sqlcipher";
     repo = "sqlcipher";
     rev = "v${version}";
-    hash = "sha256-tfDjl1l1vMWZsxFNEPK9jOrUN260/3k2kX6rVHPCZ0k=";
+    hash = "sha256-ds+0ckQiHikNMr4Xf/wCWwQySpadGgnccENd6u6gIzQ=";
   };
 
   nativeBuildInputs = [
@@ -60,6 +60,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     changelog = "https://github.com/sqlcipher/sqlcipher/blob/v${version}/CHANGELOG.md";
     description = "SQLite extension that provides 256 bit AES encryption of database files";
+    mainProgram = "sqlcipher";
     homepage = "https://www.zetetic.net/sqlcipher/";
     license = licenses.bsd3;
     maintainers = with maintainers; [ ];

@@ -1,45 +1,52 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, poetry-core
-, langchain-core
-, lxml
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  langchain-core,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "langchain-text-splitters";
-  version = "0.0.1";
+  version = "0.2.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
 
-  src = fetchPypi {
-    pname = "langchain_text_splitters";
-    inherit version;
-    hash = "sha256-rEWfqYeZ9RF61UJakzCyGWEyHjC8GaKi+fdh3a3WKqE=";
+  src = fetchFromGitHub {
+    owner = "langchain-ai";
+    repo = "langchain";
+    rev = "refs/tags/langchain-text-splitters==${version}";
+    hash = "sha256-5le+P+7iGjrTetnTHiJilqtc7G7kJbZnEsUgFyF2aQ8=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
+  sourceRoot = "${src.name}/libs/text-splitters";
+
+  build-system = [ poetry-core ];
+
+  dependencies = [ langchain-core ];
+
+  pythonImportsCheck = [ "langchain_text_splitters" ];
+
+  nativeCheckInputs = [
+    pytest-asyncio
+    pytestCheckHook
   ];
 
-  propagatedBuildInputs = [
-    langchain-core
-    lxml
-  ];
+  pytestFlagsArray = [ "tests/unit_tests" ];
 
-  # PyPI source does not have tests
-  doCheck = false;
+  passthru = {
+    inherit (langchain-core) updateScript;
+  };
 
-  pythonImportsCheck = [
-    "langchain_text_splitters"
-  ];
-
-  meta = with lib; {
+  meta = {
     description = "Build context-aware reasoning applications";
     homepage = "https://github.com/langchain-ai/langchain/tree/master/libs/text-splitters";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/langchain-ai/langchain/releases/tag/${src.rev}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

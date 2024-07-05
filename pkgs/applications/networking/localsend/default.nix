@@ -7,13 +7,14 @@
 , pkg-config
 , libayatana-appindicator
 , undmg
+, makeBinaryWrapper
 }:
 
 let
   pname = "localsend";
   version = "1.14.0";
 
-  linux = flutter313.buildFlutterApplication {
+  linux = flutter313.buildFlutterApplication rec {
     inherit pname version;
 
     src = fetchFromGitHub {
@@ -23,7 +24,7 @@ let
       hash = "sha256-CO0uFcZnOfE31EZxRUpgtod3+1lyXPpbytHB45DEM98=";
     };
 
-    sourceRoot = "source/app";
+    sourceRoot = "${src.name}/app";
 
     pubspecLock = lib.importJSON ./pubspec.lock.json;
 
@@ -59,7 +60,7 @@ let
 
     passthru.updateScript = ./update.sh;
 
-    meta = meta // {
+    meta = metaCommon // {
       mainProgram = "localsend_app";
     };
   };
@@ -72,23 +73,24 @@ let
       hash = "sha256-L7V48QoOA0cjx45n+9Xav/zzCzCsZB3TBip0WGusMXg=";
     };
 
-    nativeBuildInputs = [ undmg ];
+    nativeBuildInputs = [ undmg makeBinaryWrapper ];
 
     sourceRoot = ".";
 
     installPhase = ''
       mkdir -p $out/Applications
       cp -r *.app $out/Applications
+      makeBinaryWrapper $out/Applications/LocalSend.app/Contents/MacOS/LocalSend $out/bin/localsend
     '';
 
-    meta = meta // {
+    meta = metaCommon // {
       sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
       platforms = [ "x86_64-darwin" "aarch64-darwin" ];
     };
   };
 
-  meta = with lib; {
-    description = "An open source cross-platform alternative to AirDrop";
+  metaCommon = with lib; {
+    description = "Open source cross-platform alternative to AirDrop";
     homepage = "https://localsend.org/";
     license = licenses.mit;
     mainProgram = "localsend";

@@ -60,6 +60,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Stateless Master Password Manager";
+    mainProgram = "qMasterPassword";
     longDescription = ''
       Access all your passwords using only a single master password. But in
       contrast to other managers it does not store any passwords: Unique
@@ -70,7 +71,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/bkueng/qMasterPassword";
     license = licenses.gpl3;
-    maintainers = with lib.maintainers; [ tadeokondrak teutat3s ];
+    maintainers = with lib.maintainers; [ teutat3s ];
     platforms = platforms.all;
   };
 }

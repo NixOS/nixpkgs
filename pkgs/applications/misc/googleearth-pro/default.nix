@@ -114,12 +114,12 @@ mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A world sphere viewer";
+    description = "World sphere viewer";
     homepage = "https://www.google.com/earth/";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
-    maintainers = with maintainers; [ friedelino shamilton ];
+    maintainers = with maintainers; [ shamilton ];
     platforms = platforms.linux;
-    knownVulnerabilities = [ "Includes vulnerable bundled libraries." ];
+    knownVulnerabilities = [ "Includes vulnerable versions of bundled libraries: openssl, ffmpeg, gdal, and proj." ];
   };
 }

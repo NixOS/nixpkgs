@@ -27,13 +27,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "aws-sdk-cpp";
-  version = "1.11.207";
+  version = "1.11.336";
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-sdk-cpp";
     rev = version;
-    sha256 = "sha256-IsPDQJo+TZ2noLefroiWl/Jx8fXmrmY73WHNRO41sik=";
+    hash = "sha256-hetXtXM8HG6V3rAuyf+w+DtlxEcpsyaroZsw0nIJoAw=";
   };
 
   postPatch = ''
@@ -143,7 +143,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "A C++ interface for Amazon Web Services";
+    description = "C++ interface for Amazon Web Services";
     homepage = "https://github.com/aws/aws-sdk-cpp";
     license = licenses.asl20;
     platforms = platforms.unix;

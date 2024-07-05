@@ -1,12 +1,13 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, cryptography
-, fetchFromGitHub
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, stdiomask
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  cryptography,
+  fetchFromGitHub,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  stdiomask,
 }:
 
 buildPythonPackage rec {
@@ -45,12 +46,11 @@ buildPythonPackage rec {
     export HOME=$(mktemp -d)
   '';
 
-  pythonImportsCheck = [
-    "subarulink"
-  ];
+  pythonImportsCheck = [ "subarulink" ];
 
   meta = with lib; {
     description = "Python module for interacting with STARLINK-enabled vehicle";
+    mainProgram = "subarulink";
     homepage = "https://github.com/G-Two/subarulink";
     changelog = "https://github.com/G-Two/subarulink/releases/tag/v${version}";
     license = with licenses; [ asl20 ];

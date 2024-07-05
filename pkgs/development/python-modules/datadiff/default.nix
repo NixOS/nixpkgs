@@ -1,7 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -19,9 +20,7 @@ buildPythonPackage rec {
   # Tests are not part of the PyPI releases
   doCheck = false;
 
-  pythonImportsCheck = [
-    "datadiff"
-  ];
+  pythonImportsCheck = [ "datadiff" ];
 
   meta = with lib; {
     description = "Library to provide human-readable diffs of Python data structures";

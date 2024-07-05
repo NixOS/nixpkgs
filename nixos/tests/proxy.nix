@@ -12,7 +12,7 @@ let
 in {
   name = "proxy";
   meta = with pkgs.lib.maintainers; {
-    maintainers = [ eelco ];
+    maintainers = [ ];
   };
 
   nodes = {

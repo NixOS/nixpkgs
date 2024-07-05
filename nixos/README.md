@@ -48,7 +48,7 @@ Reviewing process:
   - Description, default and example should be provided.
 - Ensure that option changes are backward compatible.
   - `mkRenamedOptionModuleWith` provides a way to make renamed option backward compatible.
-  - Use `lib.versionAtLeast config.system.stateVersion "23.11"` on backward incompatible changes which may corrupt, change or update the state stored on existing setups.
+  - Use `lib.versionAtLeast config.system.stateVersion "24.05"` on backward incompatible changes which may corrupt, change or update the state stored on existing setups.
 - Ensure that removed options are declared with `mkRemovedOptionModule`.
 - Ensure that changes that are not backward compatible are mentioned in release notes.
 - Ensure that documentations affected by the change is updated.

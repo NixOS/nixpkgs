@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, dill
-, coverage
-, coveralls
-, mock
-, nose
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  dill,
+  coverage,
+  coveralls,
+  mock,
+  nose,
 }:
 
 buildPythonPackage rec {
@@ -36,9 +37,7 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
-  pythonImportsCheck = [
-    "expiringdict"
-  ];
+  pythonImportsCheck = [ "expiringdict" ];
 
   meta = with lib; {
     description = "Dictionary with auto-expiring values for caching purposes";

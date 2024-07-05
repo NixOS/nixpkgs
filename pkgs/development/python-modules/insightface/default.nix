@@ -1,29 +1,31 @@
-{ lib
-, albumentations
-, buildPythonPackage
-, cython
-, easydict
-, fetchPypi
-, insightface
-, matplotlib
-, mxnet
-, numpy
-, onnx
-, onnxruntime
-, opencv4
-, prettytable
-, pythonOlder
-, scikit-image
-, scikit-learn
-, tensorboard
-, testers
-, tqdm
+{
+  lib,
+  albumentations,
+  buildPythonPackage,
+  cython,
+  easydict,
+  fetchPypi,
+  insightface,
+  matplotlib,
+  mxnet,
+  numpy,
+  onnx,
+  onnxruntime,
+  opencv4,
+  prettytable,
+  pythonOlder,
+  scikit-image,
+  scikit-learn,
+  tensorboard,
+  testers,
+  tqdm,
+  stdenv,
 }:
 
 buildPythonPackage rec {
   pname = "insightface";
   version = "0.7.3";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -32,11 +34,9 @@ buildPythonPackage rec {
     hash = "sha256-8ZH3GWEuuzcBj0GTaBRQBUTND4bm/NZ2wCPzVMZo3fc=";
   };
 
-  nativeBuildInputs = [
-    cython
-  ];
+  build-system = [ cython ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     easydict
     matplotlib
     mxnet
@@ -68,10 +68,13 @@ buildPythonPackage rec {
 
   doCheck = false; # Upstream has no tests
 
-  meta = with lib; {
+  meta = {
     description = "State-of-the-art 2D and 3D Face Analysis Project";
+    mainProgram = "insightface-cli";
     homepage = "https://github.com/deepinsight/insightface";
-    license = licenses.mit;
-    maintainers = with maintainers; [ oddlama ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ oddlama ];
+    # terminate called after throwing an instance of 'onnxruntime::OnnxRuntimeException'
+    broken = stdenv.system == "aarch64-linux";
   };
 }

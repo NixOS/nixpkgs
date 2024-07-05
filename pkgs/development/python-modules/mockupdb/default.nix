@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pymongo
-, pythonOlder
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pymongo,
+  pythonOlder,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -18,17 +19,11 @@ buildPythonPackage rec {
     hash = "sha256-020OW2RF/5FB400BL6K13+WJhHqh4+y413QHSWKvlE4=";
   };
 
-  propagatedBuildInputs = [
-    pymongo
-  ];
+  propagatedBuildInputs = [ pymongo ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "mockupdb"
-  ];
+  pythonImportsCheck = [ "mockupdb" ];
 
   disabledTests = [
     # AssertionError: expected to receive Request(), got nothing

@@ -45,6 +45,7 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "Delta Chat client using Kirigami framework";
+    mainProgram = "kdeltachat";
     homepage = "https://git.sr.ht/~link2xt/kdeltachat";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ dotlambda ];

@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonAtLeast
-, pythonOlder
-, setuptools
-, backports-zoneinfo
-, python-dateutil
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonAtLeast,
+  pythonOlder,
+  setuptools,
+  backports-zoneinfo,
+  python-dateutil,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -23,19 +24,13 @@ buildPythonPackage rec {
     hash = "sha256-SjenPLLr4JoWK5HAokwgW+bw3mfAZiuDb1N7Za5wtrw=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     python-dateutil
-  ] ++ lib.optionals (pythonOlder "3.9") [
-    backports-zoneinfo
-  ];
+  ] ++ lib.optionals (pythonOlder "3.9") [ backports-zoneinfo ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTests = lib.optionals (pythonAtLeast "3.9") [
     # https://github.com/adamchainz/time-machine/issues/405
@@ -47,9 +42,7 @@ buildPythonPackage rec {
     "test_move_to_datetime_with_tzinfo_zoneinfo"
   ];
 
-  pythonImportsCheck = [
-    "time_machine"
-  ];
+  pythonImportsCheck = [ "time_machine" ];
 
   meta = with lib; {
     changelog = "https://github.com/adamchainz/time-machine/blob/${src.rev}/CHANGELOG.rst";

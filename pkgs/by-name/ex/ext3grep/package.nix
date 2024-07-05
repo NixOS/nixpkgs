@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   meta = with lib; {
-    description = "A tool to investigate an ext3 file system for deleted content and possibly recover it";
+    description = "Tool to investigate an ext3 file system for deleted content and possibly recover it";
     mainProgram = "ext3grep";
     homepage = "https://code.google.com/archive/p/ext3grep/";
     maintainers = with maintainers; [ d3vil0p3r ];

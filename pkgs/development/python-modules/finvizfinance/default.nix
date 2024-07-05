@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, beautifulsoup4
-, datetime
-, lxml
-, pandas
-, pytest-mock
-, pytestCheckHook
-, requests
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  beautifulsoup4,
+  datetime,
+  lxml,
+  pandas,
+  pytest-mock,
+  pytestCheckHook,
+  requests,
 }:
 
 buildPythonPackage rec {
@@ -43,9 +44,7 @@ buildPythonPackage rec {
     requests
   ];
 
-  pythonImportsCheck = [
-    "finvizfinance"
-  ];
+  pythonImportsCheck = [ "finvizfinance" ];
 
   disabledTests = [
     # Tests require network access
@@ -68,4 +67,3 @@ buildPythonPackage rec {
     maintainers = with maintainers; [ icyrockcom ];
   };
 }
-

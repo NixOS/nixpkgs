@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, azure-common
-, azure-mgmt-core
-, azure-mgmt-nspkg
-, msrestazure
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  azure-common,
+  azure-mgmt-core,
+  azure-mgmt-nspkg,
+  msrestazure,
 }:
 
 buildPythonPackage rec {
@@ -23,7 +24,7 @@ buildPythonPackage rec {
     azure-common
     azure-mgmt-core
     azure-mgmt-nspkg
- ];
+  ];
 
   pythonNamespaces = [ "azure.mgmt" ];
 

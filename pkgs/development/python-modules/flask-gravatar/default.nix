@@ -1,17 +1,18 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, fetchpatch
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  fetchpatch,
 
-# build-system
-, setuptools
+  # build-system
+  setuptools,
 
-# dependencies
-, flask
+  # dependencies
+  flask,
 
-# tests
-, pytestCheckHook
-, pygments
+  # tests
+  pytestCheckHook,
+  pygments,
 }:
 
 buildPythonPackage rec {
@@ -44,22 +45,16 @@ buildPythonPackage rec {
      --replace "--cov=flask_gravatar --cov-report=term-missing" ""
   '';
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  propagatedBuildInputs = [
-    flask
-  ];
+  propagatedBuildInputs = [ flask ];
 
   nativeCheckInputs = [
     pytestCheckHook
     pygments
   ];
 
-  pythonImportsCheck = [
-    "flask_gravatar"
-  ];
+  pythonImportsCheck = [ "flask_gravatar" ];
 
   meta = with lib; {
     homepage = "https://github.com/zzzsochi/Flask-Gravatar";

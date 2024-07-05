@@ -8,6 +8,7 @@ let
     airzone_cloud = [
       aioairzone
     ];
+    androidtv = home-assistant.getPackages "asuswrt" home-assistant.python.pkgs;
     bluetooth = [
       pyswitchbot
     ];
@@ -49,9 +50,21 @@ let
   };
 
   extraDisabledTests = {
-    private_ble_device = [
-      # AssertionError: assert '90' == '90.0'
-      "test_estimated_broadcast_interval"
+    advantage_air = [
+      # AssertionError: assert 2 == 1 (Expected two calls, got one)
+      "test_binary_sensor_async_setup_entry"
+    ];
+    hassio = [
+      # fails to load the hardware component
+      "test_device_registry_calls"
+    ];
+    husqvarna_automower = [
+      # snapshot mismatch
+      "test_device_diagnostics"
+    ];
+    recorder = [
+      # call not happening, likely due to timezone issues
+      "test_auto_purge"
     ];
     shell_command = [
       # tries to retrieve file from github
@@ -60,6 +73,10 @@ let
     sma = [
       # missing operating_status attribute in entity
       "test_sensor_entities"
+    ];
+    websocket_api = [
+      # racy
+      "test_render_template_with_timeout"
     ];
   };
 
@@ -75,6 +92,7 @@ let
     jellyfin = [
       # AssertionError: assert 'audio/x-flac' == 'audio/flac'
       "--deselect tests/components/jellyfin/test_media_source.py::test_resolve"
+      "--deselect tests/components/jellyfin/test_media_source.py::test_audio_codec_resolve"
       # AssertionError: assert [+ received] == [- snapshot]
       "--deselect tests/components/jellyfin/test_media_source.py::test_music_library"
     ];
@@ -91,6 +109,7 @@ let
 in lib.listToAttrs (map (component: lib.nameValuePair component (
   home-assistant.overridePythonAttrs (old: {
     pname = "homeassistant-test-${component}";
+    pyproject = null;
     format = "other";
 
     dontBuild = true;

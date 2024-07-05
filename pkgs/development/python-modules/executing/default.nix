@@ -1,18 +1,19 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonAtLeast
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonAtLeast,
+  pythonOlder,
 
-# build-system
-, setuptools
-, setuptools-scm
+  # build-system
+  setuptools,
+  setuptools-scm,
 
-# tests
-, asttokens
-, littleutils
-, rich
-, pytestCheckHook
+  # tests
+  asttokens,
+  littleutils,
+  rich,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -38,18 +39,14 @@ buildPythonPackage rec {
     asttokens
     littleutils
     pytestCheckHook
-  ] ++ lib.optionals (pythonAtLeast "3.11") [
-    rich
-  ];
+  ] ++ lib.optionals (pythonAtLeast "3.11") [ rich ];
 
   disabledTests = [
     # requires ipython, which causes a circular dependency
     "test_two_statement_lookups"
   ];
 
-  pythonImportsCheck = [
-    "executing"
-  ];
+  pythonImportsCheck = [ "executing" ];
 
   meta = with lib; {
     description = "Get information about what a frame is currently doing, particularly the AST node being executed";

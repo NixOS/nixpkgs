@@ -1,51 +1,59 @@
-{ lib
-, callPackage
-, fetchPypi
-, buildPythonPackage
-, pythonRelaxDepsHook
-, torch
-, pythonOlder
-, spacy
-, spacy-alignments
-, srsly
-, transformers
+{
+  lib,
+  callPackage,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  setuptools,
+  cython,
+  pythonRelaxDepsHook,
+  spacy,
+  numpy,
+  transformers,
+  torch,
+  srsly,
+  spacy-alignments,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "spacy-transformers";
-  version = "1.3.4";
-  format = "setuptools";
+  version = "1.3.5";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-N2StqGUqOYS9mW/DAeSntNg3kii+UPdTUHDV7g1Hvus=";
+  src = fetchFromGitHub {
+    owner = "explosion";
+    repo = "spacy-transformers";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-+KCRbjY4P52SWawU1NoMoe+HOV7iujFkwqVe87fWVTE=";
   };
 
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
+  build-system = [
+    setuptools
+    cython
   ];
 
-  propagatedBuildInputs = [
-    torch
+  nativeBuildInputs = [ pythonRelaxDepsHook ];
+
+  dependencies = [
     spacy
-    spacy-alignments
-    srsly
+    numpy
     transformers
+    torch
+    srsly
+    spacy-alignments
   ];
 
-  pythonRelaxDeps = [
-    "spacy"
-    "transformers"
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  pythonRelaxDeps = [ "transformers" ];
 
   # Test fails due to missing arguments for trfs2arrays().
   doCheck = false;
 
-  pythonImportsCheck = [
-    "spacy_transformers"
-  ];
+  pythonImportsCheck = [ "spacy_transformers" ];
 
   passthru.tests.annotation = callPackage ./annotation-test { };
 
@@ -54,6 +62,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/explosion/spacy-transformers";
     changelog = "https://github.com/explosion/spacy-transformers/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ nickcao ];
   };
 }

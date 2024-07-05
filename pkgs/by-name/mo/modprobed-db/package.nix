@@ -9,7 +9,7 @@
 }:
 let
   pname = "modprobed-db";
-  version = "2.46";
+  version = "2.47";
 in
 stdenv.mkDerivation {
   inherit pname version;
@@ -18,7 +18,7 @@ stdenv.mkDerivation {
     owner = "graysky2";
     repo = "modprobed-db";
     rev = "v${version}";
-    hash = "sha256-GQME5CAZsGVHSPowKQMyUR7OjHeFZi/5YcWFUT9L/AQ=";
+    hash = "sha256-r/2ZENricRE03eyFnWDnfPNAz2863/9HKlF6a2xOkc0=";
   };
 
   strictDeps = true;

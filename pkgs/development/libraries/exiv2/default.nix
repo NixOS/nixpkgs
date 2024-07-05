@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , cmake
 , doxygen
 , gettext
@@ -97,7 +96,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://exiv2.org";
-    description = "A library and command-line utility to manage image metadata";
+    description = "Library and command-line utility to manage image metadata";
+    mainProgram = "exiv2";
     platforms = platforms.all;
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ wegank ];

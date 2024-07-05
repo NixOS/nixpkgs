@@ -62,7 +62,7 @@ let
     if type == "gem" then
       fetchurl {
         urls = map (
-          remote: "${remote}/gems/${gemName}-${version}.gem"
+          remote: "${remote}/gems/${gemName}-${suffix}.gem"
         ) (attrs.source.remotes or [ "https://rubygems.org" ]);
         inherit (attrs.source) sha256;
       }
@@ -80,6 +80,8 @@ let
   suffix =
     if type == "git" then
       builtins.substring 0 12 attrs.source.rev
+    else if platform != "ruby" then
+      "${version}-${platform}"
     else
       version;
 

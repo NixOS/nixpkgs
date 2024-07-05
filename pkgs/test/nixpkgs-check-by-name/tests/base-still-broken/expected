@@ -1,3 +1,0 @@
-pkgs/by-name/bar: This is a file, but it should be a directory.
-The base branch is broken and still has above problems with this PR, which need to be fixed first.
-Consider reverting the PR that introduced these problems in order to prevent more failures of unrelated PRs.

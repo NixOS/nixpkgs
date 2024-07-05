@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/team-charls/charls";
-    description = "A JPEG-LS library implementation in C++";
+    description = "JPEG-LS library implementation in C++";
     maintainers = with maintainers; [ bcdarwin ];
     license = licenses.bsd3;
     platforms = platforms.unix;

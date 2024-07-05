@@ -1,7 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -24,6 +25,9 @@ buildPythonPackage rec {
     description = "Reference implementation of BIP-0039";
     homepage = "https://github.com/trezor/python-mnemonic";
     license = licenses.mit;
-    maintainers = with maintainers; [ np prusnak ];
+    maintainers = with maintainers; [
+      np
+      prusnak
+    ];
   };
 }

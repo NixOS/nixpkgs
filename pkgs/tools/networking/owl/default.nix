@@ -16,10 +16,10 @@ stdenv.mkDerivation rec {
   buildInputs = [ libev libnl libpcap ];
 
   meta = with lib; {
-    description = "An open Apple Wireless Direct Link (AWDL) implementation written in C";
+    description = "Open Apple Wireless Direct Link (AWDL) implementation written in C";
     homepage = "https://owlink.org/";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ wolfangaukang ];
+    maintainers = [ ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "owl";
   };

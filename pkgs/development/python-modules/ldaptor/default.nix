@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, twisted
-, passlib
-, pyparsing
-, service-identity
-, six
-, zope-interface
-, pythonOlder
-, python
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  twisted,
+  passlib,
+  pyparsing,
+  service-identity,
+  six,
+  zope-interface,
+  pythonOlder,
+  python,
 }:
 
 buildPythonPackage rec {
@@ -30,9 +31,7 @@ buildPythonPackage rec {
     zope-interface
   ] ++ twisted.optional-dependencies.tls;
 
-  nativeCheckInputs = [
-    twisted
-  ];
+  nativeCheckInputs = [ twisted ];
 
   # Test creates an excessive amount of temporary files (order of millions).
   # Cleaning up those files already took over 15 hours already on my zfs
@@ -44,7 +43,7 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    description = "A Pure-Python Twisted library for LDAP";
+    description = "Pure-Python Twisted library for LDAP";
     homepage = "https://github.com/twisted/ldaptor";
     license = licenses.mit;
     maintainers = with maintainers; [ ];

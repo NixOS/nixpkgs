@@ -1,39 +1,41 @@
 { lib
 , stdenv
 , buildNpmPackage
-, nodejs_18
+, nodejs_20
 , fetchFromGitHub
 , python3
 , darwin
 , nixosTests
+, xcbuild
 }:
 
 buildNpmPackage rec {
   pname = "bitwarden-cli";
-  version = "2024.2.0";
+  version = "2024.6.1";
 
   src = fetchFromGitHub {
     owner = "bitwarden";
     repo = "clients";
     rev = "cli-v${version}";
-    hash = "sha256-nCjcwe+7Riml/J0hAVv/t6/oHIDPhwFD5A3iQ/LNR5Y=";
+    hash = "sha256-LKeJKA4/Vd80y48RdZTUh10bY38AoQ5G5oK6S77fSJI=";
   };
 
-  nodejs = nodejs_18;
+  nodejs = nodejs_20;
 
-  npmDepsHash = "sha256-GJl9pVwFWEg9yku9IXLcu2XMJZz+ZoQOxCf1TrW715Y=";
+  npmDepsHash = "sha256-rwzyKaCW3LAOqw6BEu8DLS0Ad5hB6cH1OnjWzbSEgVI=";
 
   nativeBuildInputs = [
     python3
   ] ++ lib.optionals stdenv.isDarwin [
     darwin.cctools
+    xcbuild.xcrun
   ];
 
   makeCacheWritable = true;
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
 
-  npmBuildScript = "build:prod";
+  npmBuildScript = "build:oss:prod";
 
   npmWorkspace = "apps/cli";
 
@@ -45,7 +47,7 @@ buildNpmPackage rec {
 
   meta = with lib; {
     changelog = "https://github.com/bitwarden/clients/releases/tag/${src.rev}";
-    description = "A secure and free password manager for all of your devices";
+    description = "Secure and free password manager for all of your devices";
     homepage = "https://bitwarden.com";
     license = lib.licenses.gpl3Only;
     mainProgram = "bw";

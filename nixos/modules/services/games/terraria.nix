@@ -36,7 +36,7 @@ in
       enable = mkOption {
         type        = types.bool;
         default     = false;
-        description = lib.mdDoc ''
+        description = ''
           If enabled, starts a Terraria server. The server can be connected to via `tmux -S ''${config.${opt.dataDir}}/terraria.sock attach`
           for administration by users who are a part of the `terraria` group (use `C-b d` shortcut to detach again).
         '';
@@ -45,7 +45,7 @@ in
       port = mkOption {
         type        = types.port;
         default     = 7777;
-        description = lib.mdDoc ''
+        description = ''
           Specifies the port to listen on.
         '';
       };
@@ -53,7 +53,7 @@ in
       maxPlayers = mkOption {
         type        = types.ints.u8;
         default     = 255;
-        description = lib.mdDoc ''
+        description = ''
           Sets the max number of players (between 1 and 255).
         '';
       };
@@ -61,7 +61,7 @@ in
       password = mkOption {
         type        = types.nullOr types.str;
         default     = null;
-        description = lib.mdDoc ''
+        description = ''
           Sets the server password. Leave `null` for no password.
         '';
       };
@@ -69,7 +69,7 @@ in
       messageOfTheDay = mkOption {
         type        = types.nullOr types.str;
         default     = null;
-        description = lib.mdDoc ''
+        description = ''
           Set the server message of the day text.
         '';
       };
@@ -77,7 +77,7 @@ in
       worldPath = mkOption {
         type        = types.nullOr types.path;
         default     = null;
-        description = lib.mdDoc ''
+        description = ''
           The path to the world file (`.wld`) which should be loaded.
           If no world exists at this path, one will be created with the size
           specified by `autoCreatedWorldSize`.
@@ -87,7 +87,7 @@ in
       autoCreatedWorldSize = mkOption {
         type        = types.enum [ "small" "medium" "large" ];
         default     = "medium";
-        description = lib.mdDoc ''
+        description = ''
           Specifies the size of the auto-created world if `worldPath` does not
           point to an existing world.
         '';
@@ -96,7 +96,7 @@ in
       banListPath = mkOption {
         type        = types.nullOr types.path;
         default     = null;
-        description = lib.mdDoc ''
+        description = ''
           The path to the ban list.
         '';
       };
@@ -104,26 +104,26 @@ in
       secure = mkOption {
         type        = types.bool;
         default     = false;
-        description = lib.mdDoc "Adds additional cheat protection to the server.";
+        description = "Adds additional cheat protection to the server.";
       };
 
       noUPnP = mkOption {
         type        = types.bool;
         default     = false;
-        description = lib.mdDoc "Disables automatic Universal Plug and Play.";
+        description = "Disables automatic Universal Plug and Play.";
       };
 
       openFirewall = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc "Whether to open ports in the firewall";
+        description = "Whether to open ports in the firewall";
       };
 
       dataDir = mkOption {
         type        = types.str;
         default     = "/var/lib/terraria";
         example     = "/srv/terraria";
-        description = lib.mdDoc "Path to variable state data directory for terraria.";
+        description = "Path to variable state data directory for terraria.";
       };
     };
   };
@@ -148,16 +148,13 @@ in
 
       serviceConfig = {
         User    = "terraria";
+        Group = "terraria";
         Type = "forking";
         GuessMainPID = true;
+        UMask = 007;
         ExecStart = "${getBin pkgs.tmux}/bin/tmux -S ${cfg.dataDir}/terraria.sock new -d ${pkgs.terraria-server}/bin/TerrariaServer ${concatStringsSep " " flags}";
         ExecStop = "${stopScript} $MAINPID";
       };
-
-      postStart = ''
-        ${pkgs.coreutils}/bin/chmod 660 ${cfg.dataDir}/terraria.sock
-        ${pkgs.coreutils}/bin/chgrp terraria ${cfg.dataDir}/terraria.sock
-      '';
     };
 
     networking.firewall = mkIf cfg.openFirewall {

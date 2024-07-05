@@ -1,24 +1,25 @@
-{ lib
-, awesomeversion
-, buildPythonPackage
-, envoy-utils
-, fetchFromGitHub
-, httpx
-, lxml
-, orjson
-, poetry-core
-, pyjwt
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, respx
-, syrupy
-, tenacity
+{
+  lib,
+  awesomeversion,
+  buildPythonPackage,
+  envoy-utils,
+  fetchFromGitHub,
+  httpx,
+  lxml,
+  orjson,
+  poetry-core,
+  pyjwt,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  respx,
+  syrupy,
+  tenacity,
 }:
 
 buildPythonPackage rec {
   pname = "pyenphase";
-  version = "1.19.1";
+  version = "1.20.5";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -27,19 +28,17 @@ buildPythonPackage rec {
     owner = "pyenphase";
     repo = "pyenphase";
     rev = "refs/tags/v${version}";
-    hash = "sha256-2dKBqGIT4D4QUMixg4ZCxWXjE2zcXoji5i2v+vAPhL4=";
+    hash = "sha256-eP+tKpcRHHeRQEXMSIItgsUkv5SjQXnMsQbQMm50cpM=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace " --cov=pyenphase --cov-report=term-missing:skip-covered" ""
+      --replace-fail " --cov=pyenphase --cov-report=term-missing:skip-covered" ""
   '';
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     awesomeversion
     envoy-utils
     httpx
@@ -61,9 +60,7 @@ buildPythonPackage rec {
     "test_with_7_x_firmware"
   ];
 
-  pythonImportsCheck = [
-    "pyenphase"
-  ];
+  pythonImportsCheck = [ "pyenphase" ];
 
   meta = with lib; {
     description = "Library to control enphase envoy";

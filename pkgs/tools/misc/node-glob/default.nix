@@ -20,7 +20,7 @@ buildNpmPackage rec {
 
   meta = {
     changelog = "https://github.com/isaacs/node-glob/blob/${src.rev}/changelog.md";
-    description = "A little globber for Node.js";
+    description = "Little globber for Node.js";
     homepage = "https://github.com/isaacs/node-glob";
     license = lib.licenses.isc;
     mainProgram = "glob";

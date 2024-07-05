@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://www.davidviner.com/dlx.html?name=DLX+Simulator";
-    description = "An DLX simulator written in C";
+    description = "DLX simulator written in C";
     license = licenses.gpl2Only;
     platforms = platforms.linux;
   };

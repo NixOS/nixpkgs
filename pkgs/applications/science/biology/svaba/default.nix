@@ -36,6 +36,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     broken = (stdenv.isLinux && stdenv.isAarch64);
     description = "Structural variant and INDEL caller for DNA sequencing data, using genome-wide local assembly";
+    mainProgram = "svaba";
     license = licenses.gpl3;
     homepage = "https://github.com/walaj/svaba";
     maintainers = with maintainers; [ scalavision ];

@@ -25,14 +25,14 @@ let
 
   regexLocation = cfg: regexEscape (stripLocation cfg);
 
-  mkFastcgiPass = cfg: ''
+  mkFastcgiPass = name: cfg: ''
     ${if cfg.nginx.location == "/" then ''
       fastcgi_param PATH_INFO $uri;
     '' else ''
       fastcgi_split_path_info ^(${regexLocation cfg})(/.+)$;
       fastcgi_param PATH_INFO $fastcgi_path_info;
     ''
-    }fastcgi_pass unix:${config.services.fcgiwrap.socketAddress};
+    }fastcgi_pass unix:${config.services.fcgiwrap."cgit-${name}".socket.address};
   '';
 
   cgitrcLine = name: value: "${name}=${
@@ -72,54 +72,40 @@ let
     ${cfg.extraConfig}
   '';
 
-  mkCgitReposDir = cfg:
-    if cfg.scanPath != null then
-      cfg.scanPath
-    else
-      pkgs.runCommand "cgit-repos" {
-        preferLocalBuild = true;
-        allowSubstitutes = false;
-      } ''
-        mkdir -p "$out"
-        ${
-          concatStrings (
-            mapAttrsToList
-              (name: value: ''
-                ln -s ${escapeShellArg value.path} "$out"/${escapeShellArg name}
-              '')
-              cfg.repos
-          )
-        }
-      '';
+  fcgiwrapUnitName = name: "fcgiwrap-cgit-${name}";
+  fcgiwrapRuntimeDir = name: "/run/${fcgiwrapUnitName name}";
+  gitProjectRoot = name: cfg: if cfg.scanPath != null
+    then cfg.scanPath
+    else "${fcgiwrapRuntimeDir name}/repos";
 
 in
 {
   options = {
     services.cgit = mkOption {
-      description = mdDoc "Configure cgit instances.";
+      description = "Configure cgit instances.";
       default = {};
       type = types.attrsOf (types.submodule ({ config, ... }: {
         options = {
-          enable = mkEnableOption (mdDoc "cgit");
+          enable = mkEnableOption "cgit";
 
           package = mkPackageOption pkgs "cgit" {};
 
           nginx.virtualHost = mkOption {
-            description = mdDoc "VirtualHost to serve cgit on, defaults to the attribute name.";
+            description = "VirtualHost to serve cgit on, defaults to the attribute name.";
             type = types.str;
             default = config._module.args.name;
             example = "git.example.com";
           };
 
           nginx.location = mkOption {
-            description = mdDoc "Location to serve cgit under.";
+            description = "Location to serve cgit under.";
             type = types.str;
             default = "/";
             example = "/git/";
           };
 
           repos = mkOption {
-            description = mdDoc "cgit repository settings, see cgitrc(5)";
+            description = "cgit repository settings, see cgitrc(5)";
             type = with types; attrsOf (attrsOf settingType);
             default = {};
             example = {
@@ -131,14 +117,14 @@ in
           };
 
           scanPath = mkOption {
-            description = mdDoc "A path which will be scanned for repositories.";
+            description = "A path which will be scanned for repositories.";
             type = types.nullOr types.path;
             default = null;
             example = "/var/lib/git";
           };
 
           settings = mkOption {
-            description = mdDoc "cgit configuration, see cgitrc(5)";
+            description = "cgit configuration, see cgitrc(5)";
             type = types.attrsOf settingType;
             default = {};
             example = literalExpression ''
@@ -150,9 +136,21 @@ in
           };
 
           extraConfig = mkOption {
-            description = mdDoc "These lines go to the end of cgitrc verbatim.";
+            description = "These lines go to the end of cgitrc verbatim.";
             type = types.lines;
             default = "";
+          };
+
+          user = mkOption {
+            description = "User to run the cgit service as.";
+            type = types.str;
+            default = "cgit";
+          };
+
+          group = mkOption {
+            description = "Group to run the cgit service as.";
+            type = types.str;
+            default = "cgit";
           };
         };
       }));
@@ -165,18 +163,46 @@ in
       message = "Exactly one of services.cgit.${vhost}.scanPath or services.cgit.${vhost}.repos must be set.";
     }) cfgs;
 
-    services.fcgiwrap.enable = true;
+    users = mkMerge (flip mapAttrsToList cfgs (_: cfg: {
+      users.${cfg.user} = {
+        isSystemUser = true;
+        inherit (cfg) group;
+      };
+      groups.${cfg.group} = { };
+    }));
+
+    services.fcgiwrap = flip mapAttrs' cfgs (name: cfg:
+      nameValuePair "cgit-${name}" {
+        process = { inherit (cfg) user group; };
+        socket = { inherit (config.services.nginx) user group; };
+      }
+    );
+
+    systemd.services = flip mapAttrs' cfgs (name: cfg:
+      nameValuePair (fcgiwrapUnitName name)
+      (mkIf (cfg.repos != { }) {
+        serviceConfig.RuntimeDirectory = fcgiwrapUnitName name;
+        preStart = ''
+          GIT_PROJECT_ROOT=${escapeShellArg (gitProjectRoot name cfg)}
+          mkdir -p "$GIT_PROJECT_ROOT"
+          cd "$GIT_PROJECT_ROOT"
+          ${concatLines (flip mapAttrsToList cfg.repos (name: repo: ''
+            ln -s ${escapeShellArg repo.path} ${escapeShellArg name}
+          ''))}
+        '';
+      }
+    ));
 
     services.nginx.enable = true;
 
-    services.nginx.virtualHosts = mkMerge (mapAttrsToList (_: cfg: {
+    services.nginx.virtualHosts = mkMerge (mapAttrsToList (name: cfg: {
       ${cfg.nginx.virtualHost} = {
         locations = (
           genAttrs'
             [ "cgit.css" "cgit.png" "favicon.ico" "robots.txt" ]
-            (name: nameValuePair "= ${stripLocation cfg}/${name}" {
+            (fileName: nameValuePair "= ${stripLocation cfg}/${fileName}" {
               extraConfig = ''
-                alias ${cfg.package}/cgit/${name};
+                alias ${cfg.package}/cgit/${fileName};
               '';
             })
         ) // {
@@ -184,10 +210,10 @@ in
             fastcgiParams = rec {
               SCRIPT_FILENAME = "${pkgs.git}/libexec/git-core/git-http-backend";
               GIT_HTTP_EXPORT_ALL = "1";
-              GIT_PROJECT_ROOT = mkCgitReposDir cfg;
+              GIT_PROJECT_ROOT = gitProjectRoot name cfg;
               HOME = GIT_PROJECT_ROOT;
             };
-            extraConfig = mkFastcgiPass cfg;
+            extraConfig = mkFastcgiPass name cfg;
           };
           "${stripLocation cfg}/" = {
             fastcgiParams = {
@@ -196,7 +222,7 @@ in
               HTTP_HOST = "$server_name";
               CGIT_CONFIG = mkCgitrc cfg;
             };
-            extraConfig = mkFastcgiPass cfg;
+            extraConfig = mkFastcgiPass name cfg;
           };
         };
       };

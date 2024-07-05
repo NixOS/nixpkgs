@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, linear-operator
-, scikit-learn
-, setuptools
-, setuptools-scm
-, wheel
-, torch
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  linear-operator,
+  scikit-learn,
+  setuptools,
+  setuptools-scm,
+  wheel,
+  torch,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -34,9 +35,7 @@ buildPythonPackage rec {
     torch
   ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "gpytorch" ];
 
@@ -51,7 +50,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "A highly efficient and modular implementation of Gaussian Processes, with GPU acceleration";
+    description = "Highly efficient and modular implementation of Gaussian Processes, with GPU acceleration";
     homepage = "https://gpytorch.ai";
     license = licenses.mit;
     maintainers = with maintainers; [ veprbl ];

@@ -98,7 +98,7 @@ in
     enable = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         Whether or not to enable the unifi-video service.
       '';
     };
@@ -108,13 +108,13 @@ in
     unifiVideoPackage = mkPackageOption pkgs "unifi-video" { };
 
     mongodbPackage = mkPackageOption pkgs "mongodb" {
-      default = "mongodb-4_4";
+      default = "mongodb-5_0";
     };
 
     logDir = mkOption {
       type = types.str;
       default = "${stateDir}/logs";
-      description = lib.mdDoc ''
+      description = ''
         Where to store the logs.
       '';
     };
@@ -122,7 +122,7 @@ in
     dataDir = mkOption {
       type = types.str;
       default = "${stateDir}/data";
-      description = lib.mdDoc ''
+      description = ''
         Where to store the database and other data.
       '';
     };
@@ -130,7 +130,7 @@ in
     openFirewall = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         Whether or not to open the required ports on the firewall.
       '';
     };
@@ -139,7 +139,7 @@ in
       type = types.nullOr types.int;
       default = 1024;
       example = 4096;
-      description = lib.mdDoc ''
+      description = ''
         Set the maximum heap size for the JVM in MB.
       '';
     };
@@ -148,7 +148,7 @@ in
       type = types.path;
       default = "${cfg.dataDir}/unifi-video.pid";
       defaultText = literalExpression ''"''${config.${opt.dataDir}}/unifi-video.pid"'';
-      description = lib.mdDoc "Location of unifi-video pid file.";
+      description = "Location of unifi-video pid file.";
     };
 
   };

@@ -6,10 +6,9 @@
 , cctools
 , IOKit
 , lib
-, fetchpatch
-, makeBinaryWrapper
 , nixosTests
 , enableLocalIcons ? false
+, nix-update-script
 }:
 let
   dashboardIcons = fetchFromGitHub {
@@ -28,30 +27,16 @@ let
 in
 buildNpmPackage rec {
   pname = "homepage-dashboard";
-  version = "0.8.8";
+  version = "0.9.2";
 
   src = fetchFromGitHub {
     owner = "gethomepage";
     repo = "homepage";
     rev = "v${version}";
-    hash = "sha256-QPMjf+VpsjvIrjjhDuZqd8VLl2Uu5Wop286Yn8XeRWk=";
+    hash = "sha256-4nSlL4m0SL3B7+lI/BGt1aY1UE46la7/4NU4BaJ7EwQ=";
   };
 
-  npmDepsHash = "sha256-u15lDdXnV3xlXAC9WQQKLIeV/AgtRM1sFNsacw3j6kU=";
-
-  # This project is primarily designed to be consumed through Docker.
-  # By default it logs to stdout, and also to a directory. This makes
-  # little sense here where all the logs will be collated in the
-  # systemd journal anyway, so the patch removes the file logging.
-  # This patch has been suggested upstream, but the contribution won't
-  # be accepted until it gets at least 10 upvotes, per their policy:
-  # https://github.com/gethomepage/homepage/discussions/3067
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/gethomepage/homepage/commit/3be28a2c8b68f2404e4083e7f32eebbccdc4d293.patch";
-      hash = "sha256-5fUOXiHBZ4gdPeOHe1NIaBLaHJTDImsRjSwtueQOEXY=";
-    })
-  ];
+  npmDepsHash = "sha256-jYZUVwrOxoAbfHHSBkN5IlYhC6yZVVwRoZErkbYrjUs=";
 
   preBuild = ''
     mkdir -p config
@@ -99,12 +84,16 @@ buildNpmPackage rec {
 
   doDist = false;
 
-  passthru.tests = {
-    inherit (nixosTests) homepage-dashboard;
+  passthru = {
+    tests = {
+      inherit (nixosTests) homepage-dashboard;
+    };
+    updateScript = nix-update-script { };
   };
 
   meta = {
-    description = "A highly customisable dashboard with Docker and service API integrations.";
+    description = "Highly customisable dashboard with Docker and service API integrations";
+    changelog = "https://github.com/gethomepage/homepage/releases/tag/v${version}";
     mainProgram = "homepage";
     homepage = "https://gethomepage.dev";
     license = lib.licenses.gpl3;

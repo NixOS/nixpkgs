@@ -1,9 +1,0 @@
-- Because pkgs/by-name/no/nonDerivation exists, the attribute `pkgs.nonDerivation` must be defined like
-
-    nonDerivation = callPackage ./pkgs/by-name/no/nonDerivation/package.nix { /* ... */ };
-
-  However, in this PR, the first `callPackage` argument is the wrong path. See the definition in all-packages.nix:2:
-
-    nonDerivation = callPackage ./someDrv.nix { /* ... */ };
-
-This PR introduces the problems listed above. Please fix them before merging, otherwise the base branch would break.

@@ -37,6 +37,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Commandline app to create and edit releases on Github (and upload artifacts)";
+    mainProgram = "github-release";
     longDescription = ''
       A small commandline app written in Go that allows you to easily create and
       delete releases of your projects on Github.

@@ -18,7 +18,7 @@ libsForQt5.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://kgeotag.kde.org/";
-    description = "A stand-alone photo geotagging program";
+    description = "Stand-alone photo geotagging program";
     changelog = "https://invent.kde.org/graphics/kgeotag/-/blob/master/CHANGELOG.rst";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ cimm ];

@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 
 , cmake
 , qttools
@@ -70,6 +69,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://mediaelch.de/mediaelch/";
     description = "Media Manager for Kodi";
+    mainProgram = "MediaElch";
     license = licenses.lgpl3Only;
     maintainers = with maintainers; [ stunkymonkey ];
     platforms = platforms.linux;

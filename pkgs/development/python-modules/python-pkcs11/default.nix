@@ -1,10 +1,11 @@
-{ lib
-, asn1crypto
-, buildPythonPackage
-, cached-property
-, cython
-, fetchFromGitHub
-, setuptools-scm
+{
+  lib,
+  asn1crypto,
+  buildPythonPackage,
+  cached-property,
+  cython,
+  fetchFromGitHub,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {

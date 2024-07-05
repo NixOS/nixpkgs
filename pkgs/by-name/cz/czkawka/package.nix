@@ -10,6 +10,7 @@
 , gobject-introspection
 , gtk4
 , pango
+, overrideSDK
 , pkg-config
 , rustPlatform
 , testers
@@ -28,8 +29,12 @@ let
     hash = "sha256-SOWtLmehh1F8SoDQ+9d7Fyosgzya5ZztCv8IcJZ4J94=";
   };
   cargoHash = "sha256-GOX7V6NLEMP06nMeRZINwcWCaHwK6T3nkRKl4e25DPg=";
+
+  buildRustPackage' = rustPlatform.buildRustPackage.override {
+    stdenv = if stdenv.isDarwin then overrideSDK stdenv "11.0" else stdenv;
+  };
 in
-rustPlatform.buildRustPackage {
+buildRustPackage' {
   inherit pname version src cargoHash;
 
   nativeBuildInputs = [
@@ -45,9 +50,10 @@ rustPlatform.buildRustPackage {
     glib
     gtk4
     pango
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.Foundation
-  ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin (with darwin.apple_sdk.frameworks; [
+    Foundation
+    AppKit
+  ]);
 
   nativeCheckInputs = [
     xvfb-run
@@ -79,7 +85,7 @@ rustPlatform.buildRustPackage {
 
   meta = {
     changelog = "https://github.com/qarmin/czkawka/raw/${version}/Changelog.md";
-    description = "A simple, fast and easy to use app to remove unnecessary files from your computer";
+    description = "Simple, fast and easy to use app to remove unnecessary files from your computer";
     homepage = "https://github.com/qarmin/czkawka";
     license = with lib.licenses; [ mit ];
     mainProgram = "czkawka_gui";

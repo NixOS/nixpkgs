@@ -23,6 +23,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Old school comic web server";
+    mainProgram = "phylactery";
     homepage = "https://git.sr.ht/~cnx/phylactery";
     license = licenses.agpl3Plus;
     maintainers = with maintainers; [ McSinyx ];

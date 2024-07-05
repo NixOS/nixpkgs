@@ -1,16 +1,16 @@
-{ lib
-, buildPythonPackage
-, colorama
-, fetchFromGitHub
-, networkx
-, numpy
-, pydicom
-, pytest-lazy-fixture
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, typeguard
-, versioneer
+{
+  lib,
+  buildPythonPackage,
+  colorama,
+  fetchFromGitHub,
+  networkx,
+  numpy,
+  pytest-lazy-fixture,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  typeguard,
+  versioneer,
 }:
 
 buildPythonPackage rec {
@@ -61,11 +61,12 @@ buildPythonPackage rec {
     "monai.deploy.core"
     # "monai.deploy.operators" should be imported as well but
     # requires some "optional" dependencies
-    # like highdicom (which is not packaged yet) and pydicom
+    # like highdicom and pydicom
   ];
 
   meta = with lib; {
     description = "Framework and tools to design, develop and verify AI applications in healthcare imaging";
+    mainProgram = "monai-deploy";
     homepage = "https://monai.io/deploy.html";
     changelog = "https://github.com/Project-MONAI/monai-deploy-app-sdk/blob/main/docs/source/release_notes/v${version}.md";
     license = licenses.asl20;

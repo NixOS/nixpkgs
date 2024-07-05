@@ -3,7 +3,7 @@
 , glib, libxml2, librsvg, libsndfile, aubio
 , gtk3, gtksourceview, evince, fluidsynth, rubberband
 , autoreconfHook, gtk-doc
-, portaudio, portmidi, fftw, wrapGAppsHook }:
+, portaudio, portmidi, fftw, wrapGAppsHook3 }:
 
 stdenv.mkDerivation rec {
   pname = "denemo";
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     autoreconfHook
     gtk-doc
-    wrapGAppsHook
+    wrapGAppsHook3
     intltool
     gettext
     pkg-config

@@ -52,6 +52,8 @@ rustPlatform.buildRustPackage rec {
     "--skip=pager_more"
     "--skip=pager_most"
     "--skip=pager_overwrite"
+    # Fails if the filesystem performs UTF-8 validation (such as ZFS with utf8only=on)
+    "--skip=file_with_invalid_utf8_filename"
   ];
 
   doInstallCheck = true;
@@ -68,11 +70,11 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "A cat(1) clone with syntax highlighting and Git integration";
+    description = "Cat(1) clone with syntax highlighting and Git integration";
     homepage = "https://github.com/sharkdp/bat";
     changelog = "https://github.com/sharkdp/bat/raw/v${version}/CHANGELOG.md";
     license = with licenses; [ asl20 /* or */ mit ];
     mainProgram = "bat";
-    maintainers = with maintainers; [ dywedir lilyball zowoq SuperSandro2000 ];
+    maintainers = with maintainers; [ dywedir zowoq SuperSandro2000 ];
   };
 }

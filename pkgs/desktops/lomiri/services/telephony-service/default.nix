@@ -2,7 +2,6 @@
 , lib
 , fetchFromGitLab
 , fetchpatch
-, fetchpatch2
 , gitUpdater
 , nixosTests
 , ayatana-indicator-messages
@@ -14,13 +13,12 @@
 , dconf
 , gettext
 , glib
-, gnome
+, gnome-keyring
 , history-service
 , libnotify
 , libphonenumber
 , libpulseaudio
 , libusermetrics
-, lomiri-ui-toolkit
 , lomiri-url-dispatcher
 , makeWrapper
 , pkg-config
@@ -116,7 +114,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeCheckInputs = [
     dbus-test-runner
     dconf
-    gnome.gnome-keyring
+    gnome-keyring
     telepathy-mission-control
     xvfb-run
   ];
@@ -176,6 +174,10 @@ stdenv.mkDerivation (finalAttrs: {
       sed -i $out/lib/systemd/user/"$service".service \
         -e '/ofono-setup.service/d'
     done
+
+    # Parses the call & SMS indicator desktop files & tries to find its own executable in PATH
+    wrapProgram $out/bin/telephony-service-indicator \
+      --prefix PATH : "$out/bin"
   '';
 
   passthru = {
@@ -193,5 +195,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.gpl3Only;
     maintainers = teams.lomiri.members;
     platforms = platforms.linux;
+    # Completely broken until https://github.com/NixOS/nixpkgs/pull/314043 is merged
+    broken = true;
   };
 })

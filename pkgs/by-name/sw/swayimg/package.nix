@@ -26,13 +26,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "swayimg";
-  version = "2.1";
+  version = "2.2";
 
   src = fetchFromGitHub {
     owner = "artemsen";
     repo = "swayimg";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-+ntunT1FbgGcxpKGTcs7G7FYmoAobu/p/8ATIoBzfKE=";
+    hash = "sha256-CTl1hlRE4MnA6WdQaR4VG5G/wop/9xK7thRiCY7teYU=";
   };
 
   strictDeps = true;
@@ -74,7 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     homepage = "https://github.com/artemsen/swayimg";
     description = "Image viewer for Sway/Wayland";
-    changelog = "https://github.com/artemsen/swayimg/releases/tag/v${version}";
+    changelog = "https://github.com/artemsen/swayimg/releases/tag/v${finalAttrs.version}";
     license = licenses.mit;
     maintainers = with maintainers; [ matthewcroughan ];
     platforms = platforms.linux;

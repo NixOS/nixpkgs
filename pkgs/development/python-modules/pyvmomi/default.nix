@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, lxml
-, requests
-, six
-, pyopenssl
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  lxml,
+  requests,
+  six,
+  pyopenssl,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {

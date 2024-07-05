@@ -84,7 +84,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://www.openorienteering.org/apps/mapper/";
-    description = "An orienteering mapmaking program";
+    description = "Orienteering mapmaking program";
     changelog = "https://github.com/OpenOrienteering/mapper/releases/tag/v${version}";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ mpickering sikmir ];

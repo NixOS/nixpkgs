@@ -20,6 +20,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Like awk, but for JSON";
+    mainProgram = "jsawk";
     homepage = "https://github.com/micha/jsawk";
     license = lib.licenses.publicDomain;
     maintainers = with lib.maintainers; [ puffnfresh ];

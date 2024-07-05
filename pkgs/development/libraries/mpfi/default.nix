@@ -19,13 +19,13 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-aj/QmJ38ifsW36JFQcbp55aIQRvOpiqLHwEh/aFXsgo=";
   };
 
-  sourceRoot = "source/mpfi";
+  sourceRoot = "${src.name}/mpfi";
 
   nativeBuildInputs = [ autoreconfHook texinfo ];
   buildInputs = [ mpfr ];
 
   meta = {
-    description = "A multiple precision interval arithmetic library based on MPFR";
+    description = "Multiple precision interval arithmetic library based on MPFR";
     homepage = "http://perso.ens-lyon.fr/nathalie.revol/software.html";
     license = lib.licenses.lgpl21Plus;
     maintainers = [lib.maintainers.raskin];

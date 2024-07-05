@@ -19,14 +19,14 @@ in
 
     services.filebeat = {
 
-      enable = mkEnableOption (lib.mdDoc "filebeat");
+      enable = mkEnableOption "filebeat";
 
       package = mkPackageOption pkgs "filebeat" {
         example = "filebeat7";
       };
 
       inputs = mkOption {
-        description = lib.mdDoc ''
+        description = ''
           Inputs specify how Filebeat locates and processes input data.
 
           This is like `services.filebeat.settings.filebeat.inputs`,
@@ -48,7 +48,7 @@ in
             type = mkOption {
               type = types.str;
               default = name;
-              description = lib.mdDoc ''
+              description = ''
                 The input type.
 
                 Look for the value after `type:` on
@@ -72,7 +72,7 @@ in
       };
 
       modules = mkOption {
-        description = lib.mdDoc ''
+        description = ''
           Filebeat modules provide a quick way to get started
           processing common log formats. They contain default
           configurations, Elasticsearch ingest pipeline definitions,
@@ -98,7 +98,7 @@ in
             module = mkOption {
               type = types.str;
               default = name;
-              description = lib.mdDoc ''
+              description = ''
                 The name of the module.
 
                 Look for the value after `module:` on
@@ -134,7 +134,7 @@ in
               type = with types; listOf str;
               default = [ "127.0.0.1:9200" ];
               example = [ "myEShost:9200" ];
-              description = lib.mdDoc ''
+              description = ''
                 The list of Elasticsearch nodes to connect to.
 
                 The events are distributed to these nodes in round
@@ -154,7 +154,7 @@ in
                 type = types.listOf json.type;
                 default = [];
                 internal = true;
-                description = lib.mdDoc ''
+                description = ''
                   Inputs specify how Filebeat locates and processes
                   input data. Use [](#opt-services.filebeat.inputs) instead.
 
@@ -165,7 +165,7 @@ in
                 type = types.listOf json.type;
                 default = [];
                 internal = true;
-                description = lib.mdDoc ''
+                description = ''
                   Filebeat modules provide a quick way to get started
                   processing common log formats. They contain default
                   configurations, Elasticsearch ingest pipeline
@@ -194,7 +194,7 @@ in
           };
         '';
 
-        description = lib.mdDoc ''
+        description = ''
           Configuration for filebeat. See
           <https://www.elastic.co/guide/en/beats/filebeat/current/filebeat-reference-yml.html>
           for supported values.

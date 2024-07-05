@@ -17,9 +17,9 @@ in
   meta.maintainers = with lib.maintainers; [ leonm1 ];
 
   options.services.matter-server = with types; {
-    enable = mkEnableOption (lib.mdDoc "Matter-server");
+    enable = mkEnableOption "Matter-server";
 
-    package = mkPackageOptionMD pkgs "python-matter-server" { };
+    package = mkPackageOption pkgs "python-matter-server" { };
 
     port = mkOption {
       type = types.port;

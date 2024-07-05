@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://openimageio.org";
-    description = "A library and tools for reading and writing images";
+    description = "Library and tools for reading and writing images";
     license = licenses.bsd3;
     maintainers = with maintainers; [ goibhniu ];
     platforms = platforms.unix;

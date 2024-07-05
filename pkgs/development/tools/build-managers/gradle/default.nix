@@ -26,17 +26,26 @@ rec {
       ]
     }:
 
-    { lib, stdenv, fetchurl, makeWrapper, unzip, ncurses5, ncurses6,
+    { lib
+    , stdenv
+    , fetchurl
+    , makeWrapper
+    , unzip
+    , ncurses5
+    , ncurses6
+    , testers
+    , runCommand
+    , writeText
 
-      # The JDK/JRE used for running Gradle.
-      java ? defaultJava,
+    # The JDK/JRE used for running Gradle.
+    , java ? defaultJava
 
-      # Additional JDK/JREs to be registered as toolchains.
-      # See https://docs.gradle.org/current/userguide/toolchains.html
-      javaToolchains ? [ ]
+    # Additional JDK/JREs to be registered as toolchains.
+    # See https://docs.gradle.org/current/userguide/toolchains.html
+    , javaToolchains ? [ ]
     }:
 
-    stdenv.mkDerivation rec {
+    stdenv.mkDerivation (finalAttrs: {
       pname = "gradle";
       inherit version;
 
@@ -99,6 +108,29 @@ rec {
         echo ${ncurses6} >> $out/nix-support/manual-runtime-dependencies
       '';
 
+      passthru.tests = {
+        version = testers.testVersion {
+          package = finalAttrs.finalPackage;
+          command = ''
+            env GRADLE_USER_HOME=$TMPDIR/gradle org.gradle.native.dir=$TMPDIR/native \
+              gradle --version
+          '';
+        };
+
+        java-application = testers.testEqualContents {
+          assertion = "can build and run a trivial Java application";
+          expected = writeText "expected" "hello\n";
+          actual = runCommand "actual" {
+            nativeBuildInputs = [ finalAttrs.finalPackage ];
+            src = ./tests/java-application;
+          } ''
+            cp -a $src/* .
+            env GRADLE_USER_HOME=$TMPDIR/gradle org.gradle.native.dir=$TMPDIR/native \
+              gradle run --no-daemon --quiet --console plain > $out
+          '';
+        };
+      };
+
       meta = with lib; {
         inherit platforms;
         description = "Enterprise-grade build system";
@@ -121,16 +153,16 @@ rec {
         maintainers = with maintainers; [ lorenzleutgeb liff ];
         mainProgram = "gradle";
       };
-    };
+    });
 
   # NOTE: Default JDKs that are hardcoded below must be LTS versions
   # and respect the compatibility matrix at
   # https://docs.gradle.org/current/userguide/compatibility.html
 
   gradle_8 = gen {
-    version = "8.6";
-    nativeVersion = "0.22-milestone-25";
-    hash = "sha256-ljHVPPPnS/pyaJOu4fiZT+5OBgxAEzWUbbohVvRA8kw=";
+    version = "8.8";
+    nativeVersion = "0.22-milestone-26";
+    hash = "sha256-pLQVhgH4Y2ze6rCb12r7ZAAwu1sUSq/iYaXorwJ9xhI=";
     defaultJava = jdk21;
   };
 

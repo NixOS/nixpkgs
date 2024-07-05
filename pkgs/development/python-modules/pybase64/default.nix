@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -17,16 +18,13 @@ buildPythonPackage rec {
     hash = "sha256-Mu+ZPFWCHayavXZ+5GVqUBOy7YvxElyruufoTSuZEDg=";
   };
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "pybase64"
-  ];
+  pythonImportsCheck = [ "pybase64" ];
 
   meta = with lib; {
     description = "Fast Base64 encoding/decoding";
+    mainProgram = "pybase64";
     homepage = "https://github.com/mayeut/pybase64";
     changelog = "https://github.com/mayeut/pybase64/releases/tag/v${version}";
     license = licenses.bsd2;

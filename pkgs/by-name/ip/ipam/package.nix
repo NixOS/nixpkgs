@@ -32,11 +32,11 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    description = "A cli based IPAM written in Go with PowerDNS support";
+    description = "Cli based IPAM written in Go with PowerDNS support";
     homepage = "https://ipam.lauka.net/";
     changelog = "https://codeberg.org/lauralani/ipam/releases/tag/v${version}";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ janik ];
+    maintainers = with maintainers; [ ];
     mainProgram = "ipam";
   };
 }

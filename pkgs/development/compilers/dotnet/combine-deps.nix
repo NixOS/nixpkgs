@@ -4,11 +4,22 @@
   otherRids,
   pkgs ? import ../../../.. {}
 }:
-with pkgs.lib;
 let
   inherit (pkgs) writeText;
 
+  inherit (pkgs.lib)
+    concatMap
+    concatMapStringsSep
+    generators
+    optionals
+    replaceStrings
+    sortOn
+    strings
+    unique
+    ;
+
   fns = map (file: import file) list;
+
   packages = unique
     (concatMap (fn: fn { fetchNuGet = package: package; }) fns);
 
@@ -27,7 +38,7 @@ let
     (map (changePackageRid package) otherRids);
 
   allPackages =
-    sortOn (package: [ package.pname package.version package ])
+    sortOn (package: [ package.pname package.version ])
     (concatMap expandPackage packages);
 
   fetchExpr = package:

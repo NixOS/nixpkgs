@@ -18,8 +18,8 @@ in
 
 {
   options.virtualisation.virtualbox.host = {
-    enable = mkEnableOption (lib.mdDoc "VirtualBox") // {
-      description = lib.mdDoc ''
+    enable = mkEnableOption "VirtualBox" // {
+      description = ''
         Whether to enable VirtualBox.
 
         ::: {.note}
@@ -29,8 +29,8 @@ in
       '';
     };
 
-    enableExtensionPack = mkEnableOption (lib.mdDoc "VirtualBox extension pack") // {
-      description = lib.mdDoc ''
+    enableExtensionPack = mkEnableOption "VirtualBox extension pack" // {
+      description = ''
         Whether to install the Oracle Extension Pack for VirtualBox.
 
         ::: {.important}
@@ -45,7 +45,7 @@ in
     addNetworkInterface = mkOption {
       type = types.bool;
       default = true;
-      description = lib.mdDoc ''
+      description = ''
         Automatically set up a vboxnet0 host-only network interface.
       '';
     };
@@ -53,7 +53,7 @@ in
     enableHardening = mkOption {
       type = types.bool;
       default = true;
-      description = lib.mdDoc ''
+      description = ''
         Enable hardened VirtualBox, which ensures that only the binaries in the
         system path get access to the devices exposed by the kernel modules
         instead of all users in the vboxusers group.
@@ -68,7 +68,7 @@ in
     headless = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         Use VirtualBox installation without GUI and Qt dependency. Useful to enable on servers
         and when virtual machines are controlled only via SSH.
       '';
@@ -77,7 +77,7 @@ in
     enableWebService = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         Build VirtualBox web service tool (vboxwebsrv) to allow managing VMs via other webpage frontend tools. Useful for headless servers.
       '';
     };
@@ -85,11 +85,11 @@ in
     enableKvm = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         Enable KVM support for VirtualBox. This increases compatibility with Linux kernel versions, because the VirtualBox kernel modules
         are not required.
 
-        This option is incompatible with `enableHardening` and `addNetworkInterface`.
+        This option is incompatible with `addNetworkInterface`.
 
         Note: This is experimental. Please check https://github.com/cyberus-technology/virtualbox-kvm/issues.
       '';
@@ -134,20 +134,8 @@ in
     assertions = [
       {
         assertion = !cfg.addNetworkInterface;
-        message = "VirtualBox KVM only supports standard NAT networking for VMs. Please turn off virtualisation.virtualbox.host.addNetworkInferface.";
+        message = "VirtualBox KVM only supports standard NAT networking for VMs. Please turn off virtualisation.virtualbox.host.addNetworkInterface.";
       }
-
-      {
-        assertion = !cfg.enableHardening;
-        message = "VirtualBox KVM is not compatible with hardening: Please turn off virtualisation.virtualbox.host.enableHardening.";
-      }
-    ];
-
-    warnings = [
-      ''
-        KVM support in VirtualBox is experimental. Not all security features are available yet.
-        See: https://github.com/cyberus-technology/virtualbox-kvm/issues/12
-      ''
     ];
   }) (mkIf (!cfg.enableKvm) {
     boot.kernelModules = [ "vboxdrv" "vboxnetadp" "vboxnetflt" ];

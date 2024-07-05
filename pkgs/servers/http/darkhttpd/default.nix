@@ -26,6 +26,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Small and secure static webserver";
+    mainProgram = "darkhttpd";
     homepage = "https://unix4lyfe.org/darkhttpd/";
     license = licenses.bsd3;
     maintainers = with maintainers; [ bobvanderlinden ];

@@ -58,7 +58,7 @@ stdenvNoCC.mkDerivation rec {
   meta = with lib; {
     description = "Convenience script to run a virtualized X-Server";
     platforms = platforms.linux;
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     maintainers = [ maintainers.artturin ];
     mainProgram = "xvfb-run";
   };

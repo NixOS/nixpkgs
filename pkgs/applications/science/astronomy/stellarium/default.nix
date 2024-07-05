@@ -4,7 +4,7 @@
 , fetchpatch
 , cmake
 , perl
-, wrapGAppsHook
+, wrapGAppsHook3
 , wrapQtAppsHook
 , qtbase
 , qtcharts
@@ -24,13 +24,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "stellarium";
-  version = "23.4";
+  version = "24.2";
 
   src = fetchFromGitHub {
     owner = "Stellarium";
     repo = "stellarium";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-rDqDs6sFaZQbqJcCRhY5w8sFM2mYHHvw0Ud2Niimg4Y=";
+    hash = "sha256-tqyLwlf8hugixZSsFCZPTtchO3VXk3m/nX1kuDoLOAY=";
   };
 
   patches = [
@@ -52,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     perl
-    wrapGAppsHook
+    wrapGAppsHook3
     wrapQtAppsHook
     qttools
   ];
@@ -95,6 +95,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta =  {
     description = "Free open-source planetarium";
+    mainProgram = "stellarium";
     homepage = "https://stellarium.org/";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;

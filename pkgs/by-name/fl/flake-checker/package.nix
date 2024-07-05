@@ -7,16 +7,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "flake-checker";
-  version = "0.1.17";
+  version = "0.1.20";
 
   src = fetchFromGitHub {
     owner = "DeterminateSystems";
     repo = "flake-checker";
     rev = "v${version}";
-    hash = "sha256-DSqyM+TY+nNi84hfzXx7F4hpwjX3/SL5mA2pKlY/454=";
+    hash = "sha256-Oq+HZzB0mWhixLl8jGcBRWrlOETLhath75ndeJdcN1g=";
   };
 
-  cargoHash = "sha256-dN1wSLNU+5CR6pngMpIsrKY+4rwkNy7UAcROTBv2GB0=";
+  cargoHash = "sha256-/Y3ihHwOHHmLnS1TcG1SCtUU4LORkCtGp1+t5Ow5j6E=";
 
   buildInputs = lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
     Security

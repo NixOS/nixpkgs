@@ -1,25 +1,26 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, numpy
-, scikit-learn
-, pybind11
-, setuptools-scm
-, cython
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  numpy,
+  scikit-learn,
+  pybind11,
+  setuptools-scm,
+  cython,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "hmmlearn";
-  version = "0.3.0";
+  version = "0.3.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-0TqR6jaV34gUZePTYTLX7vToTUg/S6U4pLRuJLXqEA8=";
+    hash = "sha256-7a9IX9seqI2prGQrIAbGPZlQ3RXU0TL3IFMF04Pm90U=";
   };
 
   buildInputs = [
@@ -33,13 +34,9 @@ buildPythonPackage rec {
     scikit-learn
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "hmmlearn"
-  ];
+  pythonImportsCheck = [ "hmmlearn" ];
 
   pytestFlagsArray = [
     "--pyargs"

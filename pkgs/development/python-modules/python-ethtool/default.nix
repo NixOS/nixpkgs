@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pkg-config
-, libnl
-, nettools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pkg-config,
+  libnl,
+  nettools,
 }:
 
 buildPythonPackage rec {
@@ -30,6 +31,5 @@ buildPythonPackage rec {
     description = "Python bindings for the ethtool kernel interface";
     homepage = "https://github.com/fedora-python/python-ethtool";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ elohmeier ];
   };
 }

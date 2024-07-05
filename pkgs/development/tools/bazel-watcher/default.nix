@@ -2,7 +2,7 @@
 , bazel_5
 , fetchFromGitHub
 , git
-, go
+, go_1_21
 , python3
 , lib, stdenv
 }:
@@ -29,16 +29,16 @@ let
 in
 buildBazelPackage rec {
   pname = "bazel-watcher";
-  version = "0.24.0";
+  version = "0.25.2";
 
   src = fetchFromGitHub {
     owner = "bazelbuild";
     repo = "bazel-watcher";
     rev = "v${version}";
-    hash = "sha256-ebNHAYKyE3226KiCc2/VSz1OSITuPwuYlAIS3JrWzj0=";
+    hash = "sha256-lreGKA0DZiOd1bJq8NNQ+80cyDwiughoXCkKu1RaZmc=";
   };
 
-  nativeBuildInputs = [ go git python3 ];
+  nativeBuildInputs = [ go_1_21 git python3 ];
   removeRulesCC = false;
 
   bazel = bazel_5;

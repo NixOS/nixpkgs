@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch, makeWrapper, glibcLocales, mono, nuget, unzip, dotnetCorePackages, writeText, roslyn }:
+{ lib, stdenv, fetchurl, makeWrapper, glibcLocales, mono, nuget, unzip, dotnetCorePackages, writeText, roslyn }:
 
 let
 
@@ -150,6 +150,7 @@ EOF
 
   meta = with lib; {
     description = "Mono version of Microsoft Build Engine, the build platform for .NET, and Visual Studio";
+    mainProgram = "msbuild";
     homepage = "https://github.com/mono/msbuild";
     sourceProvenance = with sourceTypes; [
       fromSource

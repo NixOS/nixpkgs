@@ -1,5 +1,5 @@
 diff --git a/src/modules/locale/Config.cpp b/src/modules/locale/Config.cpp
-index 2357019a7..75b547430 100644
+index 54ff5eb64..1a2b98c9c 100644
 --- a/src/modules/locale/Config.cpp
 +++ b/src/modules/locale/Config.cpp
 @@ -48,7 +48,7 @@ loadLocales( const QString& localeGenPath )

@@ -1,4 +1,9 @@
-{ buildPythonPackage, lib, fetchPypi, requests }:
+{
+  buildPythonPackage,
+  lib,
+  fetchPypi,
+  requests,
+}:
 
 buildPythonPackage rec {
   pname = "pyepsg";
@@ -20,5 +25,4 @@ buildPythonPackage rec {
     homepage = "https://pyepsg.readthedocs.io/en/latest/";
     maintainers = with maintainers; [ mredaelli ];
   };
-
 }

@@ -23,11 +23,6 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-AhQCfLCoJU7o8s+XL3hDOPmZi9QjOxXSA9uglA1KSuY=";
 
-  # Cargo.lock is outdated
-  preConfigure = ''
-    cargo metadata --offline
-  '';
-
   nativeBuildInputs = lib.optional stdenv.isLinux pkg-config;
   buildInputs = lib.optionals dbusSupport [ dbus ]
                 ++ lib.optionals useOpenSSL [ openssl ]
@@ -36,7 +31,7 @@ rustPlatform.buildRustPackage rec {
   buildFeatures = lib.optional notificationSupport "desktop-notifications";
 
   meta = with lib; {
-    description = "A console IRC client";
+    description = "Console IRC client";
     homepage = "https://github.com/osa1/tiny";
     changelog = "https://github.com/osa1/tiny/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;

@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "3.3.17";
 
   meta = {
-    description = "A tool for a smooth, stress-free SVN to Git migration";
+    description = "Tool for a smooth, stress-free SVN to Git migration";
     longDescription = "Create writable Git mirror of a local or remote Subversion repository and use both Subversion and Git as long as you like. You may also do a fast one-time import from Subversion to Git.";
     homepage = "https://subgit.com";
     license = lib.licenses.unfree;

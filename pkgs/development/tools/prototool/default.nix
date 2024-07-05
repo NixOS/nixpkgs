@@ -28,7 +28,8 @@ buildGoModule rec {
   meta = with lib; {
     homepage = "https://github.com/uber/prototool";
     description = "Your Swiss Army Knife for Protocol Buffers";
-    maintainers = [ maintainers.marsam ];
+    mainProgram = "prototool";
+    maintainers = [ ];
     license = licenses.mit;
   };
 }

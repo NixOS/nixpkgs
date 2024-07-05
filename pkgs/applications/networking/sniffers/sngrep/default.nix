@@ -3,7 +3,6 @@
 , autoconf
 , automake
 , fetchFromGitHub
-, fetchpatch
 , libpcap
 , ncurses
 , openssl
@@ -12,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "sngrep";
-  version = "1.8.0";
+  version = "1.8.1";
 
   src = fetchFromGitHub {
     owner = "irontec";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-9ccp5Pxhs7jOQuWHCmU9yvzLKeOAN8lEaieCIvnXJRA=";
+    sha256 = "sha256-EbB5Ok/8RUoNzkgoWIhHTRvlq9Vv2KVx6Hu8ejrLkMc=";
   };
 
   nativeBuildInputs = [
@@ -48,7 +47,8 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = with lib; {
-    description = "A tool for displaying SIP calls message flows from terminal";
+    description = "Tool for displaying SIP calls message flows from terminal";
+    mainProgram = "sngrep";
     homepage = "https://github.com/irontec/sngrep";
     license = licenses.gpl3Plus;
     platforms = platforms.unix;

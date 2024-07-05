@@ -1,8 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  importlib-metadata,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -17,17 +20,13 @@ buildPythonPackage rec {
     hash = "sha256-SVLKT6JeFUpF7gYkq3B7Lm9b9SG2qa6Ekp8i8xM0Xh0=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  dependencies = lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
 
-  pythonImportsCheck = [
-    "chameleon"
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  pythonImportsCheck = [ "chameleon" ];
 
   meta = with lib; {
     changelog = "https://github.com/malthe/chameleon/blob/${version}/CHANGES.rst";
@@ -37,5 +36,4 @@ buildPythonPackage rec {
     license = licenses.bsd0;
     maintainers = with maintainers; [ domenkozar ];
   };
-
 }

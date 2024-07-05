@@ -1,9 +1,11 @@
-{ buildPythonPackage
-, exempi
-, fetchFromGitHub
-, mock
-, pytz
-, lib, stdenv
+{
+  buildPythonPackage,
+  exempi,
+  fetchFromGitHub,
+  mock,
+  pytz,
+  lib,
+  stdenv,
 }:
 
 buildPythonPackage {
@@ -44,6 +46,6 @@ buildPythonPackage {
     homepage = "https://github.com/python-xmp-toolkit/python-xmp-toolkit";
     description = "Python XMP Toolkit for working with metadata";
     license = licenses.bsd3;
-    maintainers = [ maintainers.kiwi ];
+    maintainers = [ ];
   };
 }

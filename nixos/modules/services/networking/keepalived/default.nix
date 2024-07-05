@@ -148,7 +148,7 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether to enable Keepalived.
         '';
       };
@@ -156,7 +156,7 @@ in
       openFirewall = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether to automatically allow VRRP and AH packets in the firewall.
         '';
       };
@@ -164,7 +164,7 @@ in
       enableScriptSecurity = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Don't run scripts configured to be run as root if any part of the path is writable by a non-root user.
         '';
       };
@@ -174,7 +174,7 @@ in
         enable = mkOption {
           type = types.bool;
           default = false;
-          description = lib.mdDoc ''
+          description = ''
             Whether to enable the builtin AgentX subagent.
           '';
         };
@@ -182,7 +182,7 @@ in
         socket = mkOption {
           type = types.nullOr types.str;
           default = null;
-          description = lib.mdDoc ''
+          description = ''
             Socket to use for connecting to SNMP master agent. If this value is
             set to null, keepalived's default will be used, which is
             unix:/var/agentx/master, unless using a network namespace, when the
@@ -193,7 +193,7 @@ in
         enableKeepalived = mkOption {
           type = types.bool;
           default = false;
-          description = lib.mdDoc ''
+          description = ''
             Enable SNMP handling of vrrp element of KEEPALIVED MIB.
           '';
         };
@@ -201,7 +201,7 @@ in
         enableChecker = mkOption {
           type = types.bool;
           default = false;
-          description = lib.mdDoc ''
+          description = ''
             Enable SNMP handling of checker element of KEEPALIVED MIB.
           '';
         };
@@ -209,7 +209,7 @@ in
         enableRfc = mkOption {
           type = types.bool;
           default = false;
-          description = lib.mdDoc ''
+          description = ''
             Enable SNMP handling of RFC2787 and RFC6527 VRRP MIBs.
           '';
         };
@@ -217,7 +217,7 @@ in
         enableRfcV2 = mkOption {
           type = types.bool;
           default = false;
-          description = lib.mdDoc ''
+          description = ''
             Enable SNMP handling of RFC2787 VRRP MIB.
           '';
         };
@@ -225,7 +225,7 @@ in
         enableRfcV3 = mkOption {
           type = types.bool;
           default = false;
-          description = lib.mdDoc ''
+          description = ''
             Enable SNMP handling of RFC6527 VRRP MIB.
           '';
         };
@@ -233,7 +233,7 @@ in
         enableTraps = mkOption {
           type = types.bool;
           default = false;
-          description = lib.mdDoc ''
+          description = ''
             Enable SNMP traps.
           '';
         };
@@ -245,7 +245,7 @@ in
           inherit lib;
         }));
         default = {};
-        description = lib.mdDoc "Declarative vrrp script config";
+        description = "Declarative vrrp script config";
       };
 
       vrrpInstances = mkOption {
@@ -253,13 +253,13 @@ in
           inherit lib;
         }));
         default = {};
-        description = lib.mdDoc "Declarative vhost config";
+        description = "Declarative vhost config";
       };
 
       extraGlobalDefs = mkOption {
         type = types.lines;
         default = "";
-        description = lib.mdDoc ''
+        description = ''
           Extra lines to be added verbatim to the 'global_defs' block of the
           configuration file
         '';
@@ -268,7 +268,7 @@ in
       extraConfig = mkOption {
         type = types.lines;
         default = "";
-        description = lib.mdDoc ''
+        description = ''
           Extra lines to be added verbatim to the configuration file.
         '';
       };
@@ -277,7 +277,7 @@ in
         type = types.nullOr types.path;
         default = null;
         example = "/run/keys/keepalived.env";
-        description = lib.mdDoc ''
+        description = ''
           Environment variables from this file will be interpolated into the
           final config file using envsubst with this syntax: `$ENVIRONMENT`
           or `''${VARIABLE}`.

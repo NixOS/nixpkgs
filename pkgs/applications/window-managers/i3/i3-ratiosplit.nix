@@ -18,6 +18,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Resize newly created windows";
+    mainProgram = "i3-ratiosplit";
     homepage = "https://github.com/333fred/i3-ratiosplit";
     license = licenses.mit;
     maintainers = with maintainers; [ svrana ];

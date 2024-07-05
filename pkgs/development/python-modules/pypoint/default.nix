@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, authlib
-, httpx
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  authlib,
+  httpx,
 }:
 
 buildPythonPackage rec {
@@ -25,9 +26,7 @@ buildPythonPackage rec {
   # upstream has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "pypoint"
-  ];
+  pythonImportsCheck = [ "pypoint" ];
 
   meta = with lib; {
     description = "Python module for communicating with Minut Point";

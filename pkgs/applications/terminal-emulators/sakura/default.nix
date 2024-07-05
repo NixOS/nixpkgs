@@ -54,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://www.pleyades.net/david/projects/sakura";
-    description = "A terminal emulator based on GTK and VTE";
+    description = "Terminal emulator based on GTK and VTE";
     longDescription = ''
       sakura is a terminal emulator based on GTK and VTE. It's a terminal
       emulator with few dependencies, so you don't need a full GNOME desktop

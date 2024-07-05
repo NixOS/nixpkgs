@@ -78,7 +78,7 @@ buildPythonApplication rec {
 
   meta = with lib; {
     mainProgram = "linode-cli";
-    description = "The Linode Command Line Interface";
+    description = "Linode Command Line Interface";
     homepage = "https://github.com/linode/linode-cli";
     license = licenses.bsd3;
     maintainers = with maintainers; [ ryantm techknowlogick ];

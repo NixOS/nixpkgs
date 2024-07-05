@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, zope-testrunner
-, unittestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  zope-testrunner,
+  unittestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -21,13 +22,9 @@ buildPythonPackage rec {
     zope-testrunner
   ];
 
-  unittestFlagsArray = [
-    "src/zope/i18nmessageid"
-  ];
+  unittestFlagsArray = [ "src/zope/i18nmessageid" ];
 
-  pythonImportsCheck = [
-    "zope.i18nmessageid"
-  ];
+  pythonImportsCheck = [ "zope.i18nmessageid" ];
 
   meta = with lib; {
     homepage = "https://github.com/zopefoundation/zope.i18nmessageid";

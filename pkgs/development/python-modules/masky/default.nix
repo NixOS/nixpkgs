@@ -1,12 +1,13 @@
-{ lib
-, asn1crypto
-, buildPythonPackage
-, colorama
-, cryptography
-, fetchFromGitHub
-, impacket
-, pyasn1
-, pythonOlder
+{
+  lib,
+  asn1crypto,
+  buildPythonPackage,
+  colorama,
+  cryptography,
+  fetchFromGitHub,
+  impacket,
+  pyasn1,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -34,12 +35,11 @@ buildPythonPackage rec {
   # Module has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "masky"
-  ];
+  pythonImportsCheck = [ "masky" ];
 
   meta = with lib; {
     description = "Library to remotely dump domain credentials";
+    mainProgram = "masky";
     homepage = "https://github.com/Z4kSec/Masky";
     changelog = "https://github.com/Z4kSec/Masky/releases/tag/v${version}";
     license = licenses.mit;

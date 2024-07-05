@@ -1,18 +1,19 @@
-{ lib
-, buildPythonPackage
-, isPy3k
-, fetchPypi
-, fixtures
-, jsonpatch
-, netaddr
-, prettytable
-, python-dateutil
-, pytestCheckHook
-, requests
-, requests-mock
-, six
-, sphinx
-, testtools
+{
+  lib,
+  buildPythonPackage,
+  isPy3k,
+  fetchPypi,
+  fixtures,
+  jsonpatch,
+  netaddr,
+  prettytable,
+  python-dateutil,
+  pytestCheckHook,
+  requests,
+  requests-mock,
+  six,
+  sphinx,
+  testtools,
 }:
 
 buildPythonPackage rec {

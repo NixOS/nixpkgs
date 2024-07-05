@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, setuptools
-, wheel
-, wsproto
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  setuptools,
+  wheel,
+  wsproto,
 }:
 
 buildPythonPackage rec {
@@ -24,17 +25,11 @@ buildPythonPackage rec {
     wheel
   ];
 
-  propagatedBuildInputs = [
-    wsproto
-  ];
+  propagatedBuildInputs = [ wsproto ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "simple_websocket"
-  ];
+  pythonImportsCheck = [ "simple_websocket" ];
 
   meta = with lib; {
     description = "Simple WebSocket server and client for Python";

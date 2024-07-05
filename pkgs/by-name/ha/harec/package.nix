@@ -1,17 +1,20 @@
-{ lib
-, stdenv
-, fetchFromSourcehut
-, qbe
-, gitUpdater
+{
+  fetchFromSourcehut,
+  gitUpdater,
+  lib,
+  qbe,
+  stdenv,
 }:
 let
   platform = lib.toLower stdenv.hostPlatform.uname.system;
   arch = stdenv.hostPlatform.uname.processor;
-  qbePlatform = {
-    x86_64 = "amd64_sysv";
-    aarch64 = "arm64";
-    riscv64 = "rv64";
-  }.${arch};
+  qbePlatform =
+    {
+      x86_64 = "amd64_sysv";
+      aarch64 = "arm64";
+      riscv64 = "rv64";
+    }
+    .${arch};
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "harec";
@@ -24,13 +27,9 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-NOfoCT/wKZ3CXYzXZq7plXcun+MXQicfzBOmetXN7Qs=";
   };
 
-  nativeBuildInputs = [
-    qbe
-  ];
+  nativeBuildInputs = [ qbe ];
 
-  buildInputs = [
-    qbe
-  ];
+  buildInputs = [ qbe ];
 
   makeFlags = [
     "PREFIX=${builtins.placeholder "out"}"
@@ -54,6 +53,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     updateScript = gitUpdater { };
+    # To be kept in sync with the hare package.
+    inherit qbe;
   };
 
   meta = {
@@ -65,7 +66,8 @@ stdenv.mkDerivation (finalAttrs: {
     # The upstream developers do not like proprietary operating systems; see
     # https://harelang.org/platforms/
     # UPDATE: https://github.com/hshq/harelang provides a MacOS port
-    platforms = with lib.platforms;
+    platforms =
+      with lib.platforms;
       lib.intersectLists (freebsd ++ openbsd ++ linux) (aarch64 ++ x86_64 ++ riscv64);
     badPlatforms = lib.platforms.darwin;
   };

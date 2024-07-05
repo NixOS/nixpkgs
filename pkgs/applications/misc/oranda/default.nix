@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "oranda";
-  version = "0.6.2";
+  version = "0.6.3";
 
   src = fetchFromGitHub {
     owner = "axodotdev";
     repo = "oranda";
     rev = "v${version}";
-    hash = "sha256-BOMAkmJ2i/zqp6v49xeIF+EfZob8yXohPh86ERwp5OU=";
+    hash = "sha256-PECM0HLomMzNWnERgvYSfSh+XQAjGLxybZAJcaAzEBo=";
   };
 
-  cargoHash = "sha256-SjXPfrO/YiOb1gOw75nAstKFipeIvLV6yl/sy+BZqE4=";
+  cargoHash = "sha256-qO48oR3RtyCbhdGn+VZPceZX/RMqS+5LacSASYRboMo=";
 
   nativeBuildInputs = [
     pkg-config

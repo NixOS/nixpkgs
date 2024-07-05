@@ -35,7 +35,7 @@ rustPlatform.buildRustPackage {
   passthru.updateScript = ./update.sh;
 
   meta = {
-    description = "A C API for Rust's regular expression library";
+    description = "C API for Rust's regular expression library";
     homepage = "https://crates.io/crates/rure";
     license = [
       lib.licenses.mit

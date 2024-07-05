@@ -1,6 +1,6 @@
-{ lib, stdenv, fetchurl, apacheAnt, jdk, unzip }:
+{ lib, stdenvNoCC, fetchurl, apacheAnt, jdk, unzip }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "axis2";
   version = "1.8.2";
 

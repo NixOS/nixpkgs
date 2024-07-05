@@ -1,27 +1,40 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitLab,
+  pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pypng";
-  version = "0.0.21";
-  format = "pyproject";
+  version = "0.20220715.0";
+  pyproject = true;
 
-  src = fetchFromGitHub {
+  src = fetchFromGitLab {
     owner = "drj11";
     repo = "pypng";
     rev = "refs/tags/${pname}-${version}";
-    hash = "sha256-JU1GCSTm2s6Kczn6aRcF5DizPJVpizNtnAMJxTBi9vo=";
+    hash = "sha256-tTnsGCAmHexDWm/T5xpHpcBaQcBEqMfTFaoOAeC+pDs=";
   };
 
-  nativeBuildInputs = [
-    setuptools
+  nativeBuildInputs = [ setuptools ];
+
+  patches = [
+    # pngsuite is imported by code/test_png.py but is not defined in
+    # setup.cfg, so it isn't built - this adds it to py_modules
+    ./setup-cfg-pngsuite.patch
   ];
 
-  pythonImportsCheck = [ "png" ];
+  # allow tests to use the binaries produced by this package
+  preCheck = ''
+    export PATH="$out/bin:$PATH"
+  '';
+
+  pythonImportsCheck = [
+    "png"
+    "pngsuite"
+  ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

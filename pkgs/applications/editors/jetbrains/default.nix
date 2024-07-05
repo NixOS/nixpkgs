@@ -1,3 +1,10 @@
+let
+  # `ides.json` is handwritten and contains information that doesn't change across updates, like maintainers and other metadata
+  # `versions.json` contains everything generated/needed by the update script version numbers, build numbers and tarball hashes
+  ideInfo = builtins.fromJSON (builtins.readFile ./bin/ides.json);
+  versions = builtins.fromJSON (builtins.readFile ./bin/versions.json);
+in
+
 { lib
 , stdenv
 , callPackage
@@ -30,10 +37,6 @@
 let
   inherit (stdenv.hostPlatform) system;
 
-  # `ides.json` is handwritten and contains information that doesn't change across updates, like maintainers and other metadata
-  # `versions.json` contains everything generated/needed by the update script version numbers, build numbers and tarball hashes
-  ideInfo = lib.importJSON ./bin/ides.json;
-  versions = lib.importJSON ./bin/versions.json;
   products = versions.${system} or (throw "Unsupported system: ${system}");
 
   package = if stdenv.isDarwin then ./bin/darwin.nix else ./bin/linux.nix;
@@ -100,10 +103,12 @@ rec {
   clion = (mkJetBrainsProduct {
     pname = "clion";
     extraBuildInputs = lib.optionals (stdenv.isLinux) [
+      fontconfig
       python3
       stdenv.cc.cc
       openssl
       libxcrypt-legacy
+      lttng-ust_2_12
       musl
     ] ++ lib.optionals (stdenv.isLinux && stdenv.isAarch64) [
       expat
@@ -111,6 +116,17 @@ rec {
       xz
     ];
   }).overrideAttrs (attrs: {
+    postInstall = (attrs.postInstall or "") + lib.optionalString (stdenv.isLinux) ''
+      (
+        cd $out/clion
+
+        for dir in plugins/clion-radler/DotFiles/linux-*; do
+          rm -rf $dir/dotnet
+          ln -s ${dotnet-sdk_7} $dir/dotnet
+        done
+      )
+    '';
+
     postFixup = (attrs.postFixup or "") + lib.optionalString (stdenv.isLinux) ''
       (
         cd $out/clion
@@ -141,7 +157,10 @@ rec {
     extraBuildInputs = [ libgcc libr stdenv.cc.cc ];
   };
 
-  gateway = mkJetBrainsProduct { pname = "gateway"; };
+  gateway = mkJetBrainsProduct {
+    pname = "gateway";
+    extraBuildInputs = [ libgcc ];
+  };
 
   goland = (mkJetBrainsProduct {
     pname = "goland";
@@ -188,7 +207,12 @@ rec {
         libxcrypt
         lttng-ust_2_12
         musl
+      ]++ lib.optionals (stdenv.isLinux && stdenv.isAarch64) [
+        expat
+        libxml2
+        xz
       ];
+
     }).overrideAttrs (attrs: {
       postInstall = (attrs.postInstall or "") + lib.optionalString (stdenv.isLinux) ''
         (
@@ -240,14 +264,14 @@ rec {
           --replace-needed libssl.so.10 libssl.so \
           --replace-needed libcrypto.so.10 libcrypto.so
 
-        interp="$(cat $NIX_CC/nix-support/dynamic-linker)"
-        patchelf --set-interpreter $interp $PWD/plugins/intellij-rust/bin/linux/*/intellij-rust-native-helper
         chmod +x $PWD/plugins/intellij-rust/bin/linux/*/intellij-rust-native-helper
       )
     '';
   });
 
   webstorm = mkJetBrainsProduct { pname = "webstorm"; extraBuildInputs = [ stdenv.cc.cc musl ]; };
+
+  writerside = mkJetBrainsProduct { pname = "writerside"; extraBuildInputs = [ stdenv.cc.cc musl ]; };
 
   plugins = callPackage ./plugins { } // { __attrsFailEvaluation = true; };
 

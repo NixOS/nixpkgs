@@ -19,6 +19,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Search through over 1000 different LaTeX symbols by sketching. A desktop version of detexify";
+    mainProgram = "tex-match";
     homepage = "https://tex-match.zoey.fyi/";
     license = licenses.mit;
     maintainers = [ maintainers.bootstrap-prime ];

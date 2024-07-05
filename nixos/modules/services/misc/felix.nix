@@ -17,25 +17,25 @@ in
 
     services.felix = {
 
-      enable = mkEnableOption (lib.mdDoc "the Apache Felix OSGi service");
+      enable = mkEnableOption "the Apache Felix OSGi service";
 
       bundles = mkOption {
         type = types.listOf types.package;
         default = [ pkgs.felix_remoteshell ];
         defaultText = literalExpression "[ pkgs.felix_remoteshell ]";
-        description = lib.mdDoc "List of bundles that should be activated on startup";
+        description = "List of bundles that should be activated on startup";
       };
 
       user = mkOption {
         type = types.str;
         default = "osgi";
-        description = lib.mdDoc "User account under which Apache Felix runs.";
+        description = "User account under which Apache Felix runs.";
       };
 
       group = mkOption {
         type = types.str;
         default = "osgi";
-        description = lib.mdDoc "Group account under which Apache Felix runs.";
+        description = "Group account under which Apache Felix runs.";
       };
 
     };

@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, future
-, six
-, numpy
-, scipy
-, matplotlib
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  future,
+  six,
+  numpy,
+  scipy,
+  matplotlib,
 }:
 
 buildPythonPackage rec {
@@ -27,9 +28,7 @@ buildPythonPackage rec {
     matplotlib
   ];
 
-  pythonImportsCheck = [
-    "mir_eval"
-  ];
+  pythonImportsCheck = [ "mir_eval" ];
 
   meta = with lib; {
     description = "Common metrics for common audio/music processing tasks";

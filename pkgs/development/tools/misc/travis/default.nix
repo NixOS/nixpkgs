@@ -9,6 +9,7 @@ bundlerEnv {
 
   meta = with lib; {
     description = "CLI and Ruby client library for Travis CI";
+    mainProgram = "travis";
     homepage    = "https://github.com/travis-ci/travis.rb";
     license     = licenses.mit;
     maintainers = with maintainers; [ zimbatm nicknovitski ];

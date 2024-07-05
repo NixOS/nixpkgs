@@ -7,19 +7,16 @@
 
 stdenv.mkDerivation rec {
   pname = "lzip";
-  version = "1.24";
+  version = "1.24.1";
   outputs = [ "out" "man" "info" ];
 
   src = fetchurl {
     url = "mirror://savannah/lzip/${pname}-${version}.tar.gz";
-    sha256 = "sha256-1CZZIpsQ4GbutugetnPN2JO2cuUS0mcZwtlZdVVspWw=";
+    hash = "sha256-MMnLagYF9HnElsN262KaSLChaW0WfjweCQxd76SBsWI=";
   };
 
   patches = lib.optionals stdenv.hostPlatform.isMinGW [
     ./mingw-install-exe-file.patch
-    # https://lists.nongnu.org/archive/html/lzip-bug/2024-02/msg00015.html
-    # patch provided by upstream, to be removed in the next release
-    ./mingw-mkdir-one-argument.patch
   ];
 
   configureFlags = [
@@ -36,7 +33,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://www.nongnu.org/lzip/lzip.html";
-    description = "A lossless data compressor based on the LZMA algorithm";
+    description = "Lossless data compressor based on the LZMA algorithm";
     license = lib.licenses.gpl2Plus;
     maintainers = with maintainers; [ vlaci ];
     platforms = lib.platforms.all;

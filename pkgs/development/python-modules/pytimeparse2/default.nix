@@ -1,4 +1,9 @@
-{ lib, fetchFromGitHub, buildPythonPackage, dateutils }:
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  dateutils,
+}:
 
 buildPythonPackage rec {
   pname = "pytimeparse2";
@@ -25,7 +30,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "pytimeparse2" ];
 
   meta = with lib; {
-    description = "A pytimeparse based project with the aim of optimizing functionality and providing stable support";
+    description = "Pytimeparse based project with the aim of optimizing functionality and providing stable support";
     homepage = "https://github.com/onegreyonewhite/pytimeparse2";
     license = licenses.mit;
     maintainers = with maintainers; [ gador ];

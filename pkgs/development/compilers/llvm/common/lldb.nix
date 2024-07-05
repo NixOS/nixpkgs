@@ -174,7 +174,7 @@ stdenv.mkDerivation (rec {
 
   meta = llvm_meta // {
     homepage = "https://lldb.llvm.org/";
-    description = "A next-generation high-performance debugger";
+    description = "Next-generation high-performance debugger";
     longDescription = ''
       LLDB is a next generation, high-performance debugger. It is built as a set
       of reusable components which highly leverage existing libraries in the

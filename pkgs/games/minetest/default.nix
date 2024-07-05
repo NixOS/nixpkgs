@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, gitUpdater
 , cmake
 , irrlichtmt
 , coreutils
@@ -127,6 +128,11 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/Applications
     mv $out/minetest.app $out/Applications
   '';
+
+  passthru.updateScript = gitUpdater {
+    allowedVersions = "\\.";
+    ignoredVersions = "-android$";
+  };
 
   meta = with lib; {
     homepage = "https://minetest.net/";

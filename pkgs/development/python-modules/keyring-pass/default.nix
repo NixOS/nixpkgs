@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, gnupg
-, keyring
-, pass
-, poetry-core
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  gnupg,
+  keyring,
+  pass,
+  poetry-core,
+  pythonOlder,
 }:
 buildPythonPackage rec {
   pname = "keyring-pass";
@@ -26,9 +27,7 @@ buildPythonPackage rec {
       --replace 'pass_binary = "pass"' 'pass_binary = "${lib.getExe pass}"'
   '';
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   nativeCheckInputs = [
     keyring
@@ -65,9 +64,7 @@ buildPythonPackage rec {
     keyring del test-service test-username
   '';
 
-  pythonImportsCheck = [
-    "keyring_pass"
-  ];
+  pythonImportsCheck = [ "keyring_pass" ];
 
   meta = {
     description = "Password Store (pass) backend for python's keyring";

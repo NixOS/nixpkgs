@@ -36,6 +36,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "build2 project dependency manager";
+    mainProgram = "bdep";
     # https://build2.org/bdep/doc/bdep.xhtml
     longDescription = ''
       The build2 project dependency manager is used to manage the dependencies

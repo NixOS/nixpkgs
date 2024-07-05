@@ -7,14 +7,14 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "folder-color-switcher";
-  version = "1.6.2";
+  version = "1.6.3";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     # They don't really do tags, this is just a named commit.
-    rev = "18102c72ba072cd83ccee69e9051e87e93cab01a";
-    sha256 = "sha256-o2+KfHwPvoqDMBa9C/Sm/grDf0GWcjx2OtT4rhnCk5Q=";
+    rev = "35aa5b9839935fc3415ba6b7c77171459e7325fa";
+    sha256 = "sha256-2ItjQ3CO1kG2QdAEqNxlrZ1AOfHmUBCE99kLalU7AUc=";
   };
 
   nativeBuildInputs = [
@@ -41,12 +41,9 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  preFixup = ''
-    # For Gdk.cairo_surface_create_from_pixbuf()
-    # TypeError: Couldn't find foreign struct converter for 'cairo.Surface'
-    buildPythonPath ${python3.pkgs.pycairo}
-    patchPythonScript $out/share/nemo-python/extensions/nemo-folder-color-switcher.py
-  '';
+  # For Gdk.cairo_surface_create_from_pixbuf()
+  # TypeError: Couldn't find foreign struct converter for 'cairo.Surface'
+  passthru.nemoPythonExtensionDeps = [ python3.pkgs.pycairo ];
 
   meta = with lib; {
     homepage = "https://github.com/linuxmint/folder-color-switcher";

@@ -8,6 +8,8 @@
 , libXdmcp
 , conf ? null
 , patches ? [ ]
+# update script dependencies
+, gitUpdater
 }:
 
 stdenv.mkDerivation rec {
@@ -36,11 +38,13 @@ stdenv.mkDerivation rec {
 
   installFlags = [ "PREFIX=$(out)" ];
 
+  passthru.updateScript = gitUpdater {};
+
   meta = with lib; {
     homepage = "https://tools.suckless.org/slstatus/";
     description = "status monitor for window managers that use WM_NAME like dwm";
     license = licenses.isc;
-    maintainers = with maintainers; [ oxzi ];
+    maintainers = with maintainers; [ oxzi qusic ];
     platforms = platforms.linux;
     mainProgram = "slstatus";
   };

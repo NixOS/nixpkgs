@@ -1,18 +1,19 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
 
-# build-system
-, poetry-core
+  # build-system
+  poetry-core,
 
-# runtime
-, click
-, peewee
+  # runtime
+  click,
+  peewee,
 
-# tests
-, psycopg2
-, pytestCheckHook
+  # tests
+  psycopg2,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -33,18 +34,14 @@ buildPythonPackage rec {
     sed -i '/addopts/d' pyproject.toml
   '';
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     peewee
     click
   ];
 
-  pythonImportsCheck = [
-    "peewee_migrate"
-  ];
+  pythonImportsCheck = [ "peewee_migrate" ];
 
   nativeCheckInputs = [
     psycopg2

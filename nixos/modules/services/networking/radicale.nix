@@ -25,10 +25,10 @@ let
 
 in {
   options.services.radicale = {
-    enable = mkEnableOption (lib.mdDoc "Radicale CalDAV and CardDAV server");
+    enable = mkEnableOption "Radicale CalDAV and CardDAV server";
 
     package = mkOption {
-      description = lib.mdDoc "Radicale package to use.";
+      description = "Radicale package to use.";
       # Default cannot be pkgs.radicale because non-null values suppress
       # warnings about incompatible configuration and storage formats.
       type = with types; nullOr package // { inherit (package) description; };
@@ -39,7 +39,7 @@ in {
     config = mkOption {
       type = types.str;
       default = "";
-      description = lib.mdDoc ''
+      description = ''
         Radicale configuration, this will set the service
         configuration file.
         This option is mutually exclusive with {option}`settings`.
@@ -50,7 +50,7 @@ in {
     settings = mkOption {
       type = format.type;
       default = { };
-      description = lib.mdDoc ''
+      description = ''
         Configuration for Radicale. See
         <https://radicale.org/3.0.html#documentation/configuration>.
         This option is mutually exclusive with {option}`config`.
@@ -72,7 +72,7 @@ in {
 
     rights = mkOption {
       type = format.type;
-      description = lib.mdDoc ''
+      description = ''
         Configuration for Radicale's rights file. See
         <https://radicale.org/3.0.html#documentation/authentication-and-rights>.
         This option only works in conjunction with {option}`settings`.
@@ -102,7 +102,7 @@ in {
     extraArgs = mkOption {
       type = types.listOf types.str;
       default = [];
-      description = lib.mdDoc "Extra arguments passed to the Radicale daemon.";
+      description = "Extra arguments passed to the Radicale daemon.";
     };
   };
 
@@ -200,5 +200,5 @@ in {
     };
   };
 
-  meta.maintainers = with lib.maintainers; [ infinisil dotlambda ];
+  meta.maintainers = with lib.maintainers; [ dotlambda ];
 }

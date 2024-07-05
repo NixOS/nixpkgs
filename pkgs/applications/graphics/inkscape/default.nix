@@ -3,6 +3,7 @@
 , boehmgc
 , boost
 , cairo
+, callPackage
 , cmake
 , desktopToDarwinBundle
 , fetchurl
@@ -40,7 +41,7 @@
 , potrace
 , python3
 , substituteAll
-, wrapGAppsHook
+, wrapGAppsHook3
 , libepoxy
 , zlib
 }:
@@ -119,7 +120,7 @@ stdenv.mkDerivation rec {
     python3Env
     glib # for setup hook
     gdk-pixbuf # for setup hook
-    wrapGAppsHook
+    wrapGAppsHook3
     gobject-introspection
   ] ++ (with perlPackages; [
     perl
@@ -171,6 +172,8 @@ stdenv.mkDerivation rec {
       ln -s $f $out/lib/$(basename $f)
     done
   '';
+
+  passthru.tests.ps2pdf-plugin = callPackage ./test-ps2pdf-plugin.nix { };
 
   meta = with lib; {
     description = "Vector graphics editor";

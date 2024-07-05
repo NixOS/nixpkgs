@@ -178,6 +178,14 @@ in {
             "docker load --input='${examples.bashUncompressed}'",
             "docker rmi ${examples.bashUncompressed.imageName}",
         )
+        docker.succeed(
+            "docker load --input='${examples.bashLayeredUncompressed}'",
+            "docker rmi ${examples.bashLayeredUncompressed.imageName}",
+        )
+        docker.succeed(
+            "docker load --input='${examples.bashLayeredZstdCompressed}'",
+            "docker rmi ${examples.bashLayeredZstdCompressed.imageName}",
+        )
 
     with subtest(
         "Check if the nix store is correctly initialized by listing "

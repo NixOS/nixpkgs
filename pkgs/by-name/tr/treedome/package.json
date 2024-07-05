@@ -12,6 +12,7 @@
     "prettier-format": "prettier --config .prettierrc 'src/**/*.ts*' --write"
   },
   "dependencies": {
+    "@column-resizer/react": "^1.3.0",
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
     "@fontsource/noto-sans": "^5.0.8",

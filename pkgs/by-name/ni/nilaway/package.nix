@@ -5,16 +5,18 @@
 
 buildGoModule rec {
   pname = "nilaway";
-  version = "unstable-2023-11-17";
+  version = "0-unstable-2024-06-29";
 
   src = fetchFromGitHub {
     owner = "uber-go";
     repo = "nilaway";
-    rev = "a267567c6ffff900df0c3394d031ee70079ec8df";
-    hash = "sha256-Ro1nSTEZcE9u4Ol6CSLBTiPrh72Ly9UcrXyvffzPfow=";
+    rev = "e90288479601315af13b7fdd3ccd6b50c53a8e7c";
+    hash = "sha256-6bArrCcAZc8DWJlDxKKmlHAbcEuU68HgqJTK9s7ZGig=";
   };
 
-  vendorHash = "sha256-kbVjkWW5D8jp5QFYGiyRuGFArRsQukJIR8xwaUUIUBs=";
+  vendorHash = "sha256-rLyU2HdlkDFh+MBIVnbEIIlVR7/mq9heZWzN7GRw0Dc=";
+
+  excludedPackages = [ "tools" ];
 
   ldflags = [ "-s" "-w" ];
 

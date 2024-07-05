@@ -1,15 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pytestCheckHook
-, pythonOlder
-, pythonRelaxDepsHook
-, pytz
-, requests
-, requests-mock
-, typing-extensions
-, urllib3
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  pytestCheckHook,
+  pythonOlder,
+  pythonRelaxDepsHook,
+  pytz,
+  requests,
+  requests-mock,
+  typing-extensions,
+  urllib3,
 }:
 
 buildPythonPackage rec {
@@ -31,9 +32,7 @@ buildPythonPackage rec {
     pythonRelaxDepsHook
   ];
 
-  pythonRelaxDeps = [
-    "urllib3"
-  ];
+  pythonRelaxDeps = [ "urllib3" ];
 
   propagatedBuildInputs = [
     pytz
@@ -47,9 +46,7 @@ buildPythonPackage rec {
     requests-mock
   ];
 
-  pythonImportsCheck = [
-    "meteofrance_api"
-  ];
+  pythonImportsCheck = [ "meteofrance_api" ];
 
   disabledTests = [
     # Tests require network access
@@ -69,6 +66,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Module to access information from the Meteo-France API";
+    mainProgram = "meteofrance-api";
     homepage = "https://github.com/hacf-fr/meteofrance-api";
     changelog = "https://github.com/hacf-fr/meteofrance-api/releases/tag/v${version}";
     license = licenses.mit;

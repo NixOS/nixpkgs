@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "kubestroyer";
-  version = "0.2";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "Rolix44";
     repo = "Kubestroyer";
     rev = "refs/tags/v${version}";
-    hash = "sha256-M/abb2IT0mXwj8lAitr18VtIgC4NvapPywBwcUWr9i8=";
+    hash = "sha256-A4kx0Xx3p9rP8OKRLPe9AfX+rqGggtvPb7Hsg+lLkSI=";
   };
 
-  vendorHash = "sha256-x0lIi4QUuYn0kv0HV4h8k61kRu10LCyELudisqUdTAg=";
+  vendorHash = "sha256-V6qEvMsX7tdhooW116+0ayT6RYkdjDbz6QwWb8rC4ig=";
 
   ldflags = [
     "-s"

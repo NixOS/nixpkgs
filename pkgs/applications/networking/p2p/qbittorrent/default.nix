@@ -10,7 +10,7 @@
 , qtbase
 , qtsvg
 , qttools
-, wrapGAppsHook
+, wrapGAppsHook3
 , wrapQtAppsHook
 
 , guiSupport ? true
@@ -30,19 +30,19 @@ stdenv.mkDerivation rec {
   pname = "qbittorrent"
     + lib.optionalString (guiSupport && qtVersion == "5") "-qt5"
     + lib.optionalString (!guiSupport) "-nox";
-  version = "4.6.3";
+  version = "4.6.5";
 
   src = fetchFromGitHub {
     owner = "qbittorrent";
     repo = "qBittorrent";
     rev = "release-${version}";
-    hash = "sha256-4RVJ7xQY9zcB8+RUr80P9xKUXGxt0ATSzYmRDfZIowU=";
+    hash = "sha256-umJObvPv4VjdAZdQEuhqFCRvi1eZQViu1IO88oeTTq8=";
   };
 
   nativeBuildInputs = [
     cmake
     ninja
-    wrapGAppsHook
+    wrapGAppsHook3
     wrapQtAppsHook
   ];
 

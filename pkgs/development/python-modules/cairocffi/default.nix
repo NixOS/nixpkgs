@@ -1,22 +1,23 @@
 # FIXME: make gdk-pixbuf dependency optional
-{ stdenv
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, lib
-, substituteAll
-, makeFontsConf
-, freefont_ttf
-, pikepdf
-, pytestCheckHook
-, cairo
-, cffi
-, flit-core
-, numpy
-, withXcffib ? false
-, xcffib
-, glib
-, gdk-pixbuf
+{
+  stdenv,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
+  lib,
+  substituteAll,
+  makeFontsConf,
+  freefont_ttf,
+  pikepdf,
+  pytestCheckHook,
+  cairo,
+  cffi,
+  flit-core,
+  numpy,
+  withXcffib ? false,
+  xcffib,
+  glib,
+  gdk-pixbuf,
 }:
 
 buildPythonPackage rec {
@@ -43,12 +44,12 @@ buildPythonPackage rec {
     ./fix_test_scaled_font.patch
   ];
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  nativeBuildInputs = [ flit-core ];
 
-  propagatedBuildInputs = [ cairo cffi ]
-    ++ lib.optional withXcffib xcffib;
+  propagatedBuildInputs = [
+    cairo
+    cffi
+  ] ++ lib.optional withXcffib xcffib;
 
   nativeCheckInputs = [
     numpy
@@ -56,9 +57,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "cairocffi"
-  ];
+  pythonImportsCheck = [ "cairocffi" ];
 
   meta = with lib; {
     changelog = "https://github.com/Kozea/cairocffi/blob/v${version}/NEWS.rst";

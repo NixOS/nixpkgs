@@ -1,5 +1,11 @@
 import ./common-hadrian.nix {
-  version = "9.9.20231121";
-  rev = "955520c6c4f07187b6d5e4770ecf681cc78374f2";
-  sha256 = "0pv77khciv513aw64pfac5p60xn5z90rxl84dcalj6knmbhm8dqy";
+  version = "9.11.20240410";
+  rev = "1b1a92bd25c3f7249cf922c5dbf4415d2de44a36";
+  sha256 = "sha256-2HdhxhVrKn8c/ZOGYoYThqXpod2OPiGXgH+mAV69Ip0=";
+  # The STM benchmark contains chanbench.hs and ChanBench.hs causing a hash
+  # mismatch on case insensitive filesystems. See also
+  # https://gitlab.haskell.org/ghc/packages/stm/-/issues/2
+  postFetch = ''
+    rm -rf "$out/libraries/stm/bench"
+  '';
 }

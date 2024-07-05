@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "quickjs-ng";
-  version = "0.3.0";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "quickjs-ng";
     repo = "quickjs";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-4nFc9xdxrfRWeOY9VNQAI4Ph7G1GMnw06XZiO6xA72o=";
+    hash = "sha256-4CC7IxA5t+L99H4Rvkx0xkXFHuqNP3HTmS46JEuy7Vs=";
   };
 
   outputs = [ "bin" "out" "dev" "doc" "info" ];
@@ -28,6 +28,10 @@ stdenv.mkDerivation (finalAttrs: {
     "-DBUILD_SHARED_LIBS=ON"
     (lib.cmakeBool "BUILD_STATIC_QJS_EXE" stdenv.hostPlatform.isStatic)
   ];
+
+  env.NIX_CFLAGS_COMPILE = toString (lib.optionals (stdenv.isLinux && stdenv.isAarch64) [
+    "-Wno-error=stringop-overflow"
+  ]);
 
   postInstall = ''
     (cd ../doc
@@ -43,10 +47,10 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = with lib; {
-    description = "A mighty JavaScript engine";
+    description = "Mighty JavaScript engine";
     homepage = "https://github.com/quickjs-ng/quickjs";
     license = licenses.mit;
-    maintainers = with maintainers; [ marsam ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.all;
     mainProgram = "qjs";
   };

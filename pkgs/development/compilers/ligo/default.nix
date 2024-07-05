@@ -15,37 +15,20 @@
 
 ocamlPackages.buildDunePackage rec {
   pname = "ligo";
-  version = "1.0.0";
+  version = "1.7.1";
   src = fetchFromGitLab {
     owner = "ligolang";
     repo = "ligo";
     rev = version;
-    sha256 = "sha256-tHIIA1JE7mzDIf2v9IEZt1pjVQEA89zjTsmqhzTn3Wc=";
+    hash = "sha256-pBoLgS/9MLMrc98niI+o2JoJ3gpvhyRY2o9GmVc5hIA=";
     fetchSubmodules = true;
   };
-
-  postPatch = ''
-    substituteInPlace "vendors/tezos-ligo/dune-project" \
-      --replace \
-        "(using ctypes 0.1)" \
-        "(using ctypes 0.3)" \
-      --replace \
-        "(lang dune 3.0)" \
-        "(lang dune 3.7)"
-
-    substituteInPlace "src/coq/dune" \
-      --replace \
-        "(name ligo_coq)" \
-        "(name ligo_coq)(mode vo)"
-  '';
 
   # The build picks this up for ligo --version
   LIGO_VERSION = version;
 
   # This is a hack to work around the hack used in the dune files
   OPAM_SWITCH_PREFIX = "${tezos-rust-libs}";
-
-  strictDeps = true;
 
   nativeBuildInputs = [
     ocaml-crunch
@@ -68,6 +51,7 @@ ocamlPackages.buildDunePackage rec {
     ocamlgraph
     bisect_ppx
     decompress
+    fileutils
     ppx_deriving
     ppx_deriving_yojson
     ppx_yojson_conv
@@ -112,7 +96,7 @@ ocamlPackages.buildDunePackage rec {
     bls12-381
     bls12-381-signature
     ptime
-    mtime_1
+    mtime
     lwt_log
     secp256k1-internal
     resto
@@ -126,6 +110,7 @@ ocamlPackages.buildDunePackage rec {
     simple-diff
     seqes
     stdint
+    tezt
   ] ++ lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.Security
   ];
@@ -140,7 +125,8 @@ ocamlPackages.buildDunePackage rec {
   meta = with lib; {
     homepage = "https://ligolang.org/";
     downloadPage = "https://ligolang.org/docs/intro/installation";
-    description = "A friendly Smart Contract Language for Tezos";
+    description = "Friendly Smart Contract Language for Tezos";
+    mainProgram = "ligo";
     license = licenses.mit;
     platforms = ocamlPackages.ocaml.meta.platforms;
     broken = stdenv.isLinux && stdenv.isAarch64;

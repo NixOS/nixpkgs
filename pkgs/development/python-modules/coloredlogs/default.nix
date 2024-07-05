@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, humanfriendly
-, verboselogs
-, capturer
-, pytestCheckHook
-, mock
-, util-linux
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  humanfriendly,
+  verboselogs,
+  capturer,
+  pytestCheckHook,
+  mock,
+  util-linux,
 }:
 
 buildPythonPackage rec {
@@ -22,9 +23,7 @@ buildPythonPackage rec {
     hash = "sha256-TodI2Wh8M0qMM2K5jzqlLmUKILa5+5qq4ByLttmAA7E=";
   };
 
-  propagatedBuildInputs = [
-    humanfriendly
-  ];
+  propagatedBuildInputs = [ humanfriendly ];
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -52,6 +51,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Colored stream handler for Python's logging module";
+    mainProgram = "coloredlogs";
     homepage = "https://github.com/xolox/python-coloredlogs";
     license = licenses.mit;
     maintainers = with maintainers; [ eyjhb ];

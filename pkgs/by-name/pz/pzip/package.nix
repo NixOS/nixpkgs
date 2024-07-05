@@ -24,7 +24,7 @@ buildGoModule rec {
   ldflags = [ "-s" "-w" ];
 
   meta = with lib; {
-    description = "A fast concurrent zip archiver and extractor";
+    description = "Fast concurrent zip archiver and extractor";
     homepage = "https://github.com/ybirader/pzip";
     changelog = "https://github.com/ybirader/pzip/releases/tag/${src.rev}";
     license = licenses.asl20;

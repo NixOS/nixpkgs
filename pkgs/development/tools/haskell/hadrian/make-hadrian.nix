@@ -32,10 +32,6 @@
   # Contents of a non-default UserSettings.hs to use when building hadrian, if any.
   # Should be a string or null.
 , userSettings ? null
-  # Whether to pass --hyperlinked-source to haddock or not. This is a custom
-  # workaround as we wait for this to be configurable via userSettings or similar.
-  # https://gitlab.haskell.org/ghc/ghc/-/issues/23625
-, enableHyperlinkedSource ? false
 }:
 
 let
@@ -50,7 +46,7 @@ let
 in
 
 callPackage' ./hadrian.nix ({
-  inherit userSettings enableHyperlinkedSource;
+  inherit userSettings;
 } // lib.optionalAttrs (lib.versionAtLeast ghcVersion "9.9") {
   # Starting with GHC 9.9 development, additional in tree packages are required
   # to build hadrian. (Hackage-released conditional dependencies are handled

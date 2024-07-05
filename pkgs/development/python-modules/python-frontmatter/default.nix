@@ -1,4 +1,12 @@
-{ lib, fetchFromGitHub, buildPythonPackage, pyyaml, six, pytest, pyaml }:
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  pyyaml,
+  six,
+  pytest,
+  pyaml,
+}:
 
 buildPythonPackage rec {
   pname = "python-frontmatter";
@@ -21,9 +29,7 @@ buildPythonPackage rec {
   # tries to import test.test, which conflicts with module
   # exported by python interpreter
   doCheck = false;
-  nativeCheckInputs = [
-    pytest
-  ];
+  nativeCheckInputs = [ pytest ];
 
   pythonImportsCheck = [ "frontmatter" ];
 

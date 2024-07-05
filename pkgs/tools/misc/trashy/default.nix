@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "A simple, fast, and featureful alternative to rm and trash-cli";
+    description = "Simple, fast, and featureful alternative to rm and trash-cli";
     homepage = "https://github.com/oberblastmeister/trashy";
     changelog = "https://github.com/oberblastmeister/trashy/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ asl20 /* or */ mit ];

@@ -1,23 +1,24 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, setuptools
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "myuplink";
-  version = "0.5.0";
+  version = "0.6.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "pajzo";
     repo = "myuplink";
     rev = "refs/tags/${version}";
-    hash = "sha256-UJGRQqgtbYBwfjys2sYiC3dx8Doesu34EBys5Y++qBY=";
+    hash = "sha256-QIFTM4RQR3C67q+sBUCPhUyXylzplNAppHjzvU7i2YU=";
   };
 
   postPatch = ''
@@ -25,17 +26,11 @@ buildPythonPackage rec {
       --replace-fail "%%VERSION_NO%%" "${version}"
   '';
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
-    aiohttp
-  ];
+  dependencies = [ aiohttp ];
 
-  pythonImportsCheck = [
-    "myuplink"
-  ];
+  pythonImportsCheck = [ "myuplink" ];
 
   meta = with lib; {
     description = "Module to interact with the myUplink API";
