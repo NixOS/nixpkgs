@@ -6,7 +6,6 @@
 , libGL
 , libarchive
 , libpcap
-, libsForQt5
 , qt6
 , libslirp
 , pkg-config
@@ -17,8 +16,7 @@
 }:
 
 let
-  qt = if stdenv.isLinux then libsForQt5 else qt6;
-  inherit (qt)
+  inherit (qt6)
     qtbase
     qtmultimedia
     wrapQtAppsHook;
@@ -51,6 +49,10 @@ stdenv.mkDerivation (finalAttrs: {
     zstd
   ] ++ lib.optionals stdenv.isLinux [
     wayland
+  ];
+
+  cmakeFlags = [
+    (lib.cmakeBool "USE_QT6" true)
   ];
 
   strictDeps = true;
