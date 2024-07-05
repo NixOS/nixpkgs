@@ -243,8 +243,6 @@ in {
 
     ast = callPackage ../development/php-packages/ast { };
 
-    blackfire = callPackage ../development/tools/misc/blackfire/php-probe.nix { };
-
     couchbase = callPackage ../development/php-packages/couchbase { };
 
     datadog_trace = callPackage ../development/php-packages/datadog_trace {
@@ -355,6 +353,8 @@ in {
     yaml = callPackage ../development/php-packages/yaml { };
 
     zstd = callPackage ../development/php-packages/zstd { };
+  }  // lib.optionalAttrs (!(lib.versionAtLeast php.version "8.4")) {
+    blackfire = callPackage ../development/tools/misc/blackfire/php-probe.nix { };
   } // lib.optionalAttrs config.allowAliases {
     php-spx = throw "php-spx is deprecated, use spx instead";
   } // (
