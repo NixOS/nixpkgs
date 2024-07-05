@@ -64,5 +64,6 @@ python3Packages.buildPythonApplication rec {
     description = "A sleek and powerful Git GUI";
     license = licenses.gpl2;
     maintainers = [ maintainers.bobvanderlinden ];
+    mainProgram = "git-cola";
   };
 }
