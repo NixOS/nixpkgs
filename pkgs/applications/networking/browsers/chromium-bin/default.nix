@@ -21,7 +21,6 @@ let
     sha25 = "";
     version = "";
   };
-  appName = "Chromium";
 in
 stdenv.mkDerivation rec {
   pname = "chromium-bin";
@@ -35,8 +34,8 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p "$out/bin" "$out/Applications"
-    mv -t "$out/Applications/" "${appName}.app/"
-    makeWrapper "$out/Applications/${appName}.app/Contents/MacOS/${appName}" "$out/bin/${pname}"
+    mv -t "$out/Applications/" "Chromium.app/"
+    makeWrapper "$out/Applications/Chromium.app/Contents/MacOS/Chromium" "$out/bin/${pname}"
   '';
 
   meta = {
