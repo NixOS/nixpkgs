@@ -67,7 +67,7 @@ let
       description = "Arduino from the command line";
       mainProgram = "arduino-cli";
       changelog = "https://github.com/arduino/arduino-cli/releases/tag/${version}";
-      license = licenses.gpl3Only;
+      license = [ licenses.gpl3Only licenses.asl20 ];
       maintainers = with maintainers; [ ryantm sfrijters ];
     };
 
