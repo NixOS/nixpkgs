@@ -3,7 +3,6 @@
 , callPackage
 , fetchFromGitHub
 , fetchPypi
-, fetchpatch2
 , python312
 , substituteAll
 , ffmpeg-headless
@@ -551,11 +550,8 @@ in python.pkgs.buildPythonApplication rec {
       ffmpeg = "${lib.getBin ffmpeg-headless}/bin/ffmpeg";
     })
 
-    (fetchpatch2 {
-      # https://github.com/home-assistant/core/pull/121135
-      url = "https://github.com/home-assistant/core/commit/b6a23fad3537e0baa026b2a7eb5bff8a4246780b.patch";
-      hash = "sha256-ISggWmExe66KNWTCfNqyk/BngC44n3V7GTLQRyNXVAs=";
-    })
+    # https://github.com/home-assistant/core/pull/121135
+    ./patches/august-pathlib-import.patch
   ];
 
   postPatch = ''
