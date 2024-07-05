@@ -2,19 +2,12 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  isPy3k,
-  beautifulsoup4,
-  bottle,
-  chardet,
+  click,
+  gnupg,
   python-dateutil,
-  google-api-python-client,
-  google-auth-oauthlib,
-  lxml,
-  oauth2client,
-  ply,
-  pytest,
-  python-magic,
-  requests,
+  pythonOlder,
+  pytestCheckHook,
+  regex,
 }:
 
 buildPythonPackage rec {
@@ -22,34 +15,43 @@ buildPythonPackage rec {
   format = "setuptools";
   pname = "beancount";
 
-  disabled = !isPy3k;
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-z2aGhpx+o+78CU7hPthmv196K7DGHk1PXfPjX4Rs/98=";
   };
 
-  # Tests require files not included in the PyPI archive.
-  doCheck = false;
-
-  propagatedBuildInputs = [
-    beautifulsoup4
-    bottle
-    chardet
-    python-dateutil
-    google-api-python-client
-    google-auth-oauthlib
-    lxml
-    oauth2client
-    ply
-    python-magic
-    requests
-    # pytest really is a runtime dependency
-    # https://github.com/beancount/beancount/blob/v2/setup.py#L81-L82
-    pytest
+  patches = [
+    ./subprocess_python.patch
   ];
 
-  meta = with lib; {
+  nativeCheckInputs = [
+    pytestCheckHook
+    gnupg
+  ];
+
+  disabledTests = [
+    "test_hash_parser_source_files" # AssertionError: False is not true
+    "test_export_basic" # ValueError: Failed to find the root directory.
+    "test_example_files" # ValueError: Failed to find the root directory.
+    # for all tests below: AssertionError 2 != 0
+    "test_linked_explicit_link"
+    "test_linked_lineno_only"
+    "test_linked_multiple_files"
+  ];
+
+  preCheck = ''
+    cd $out
+  '';
+
+  dependencies = [
+    click
+    python-dateutil
+    regex
+  ];
+
+  meta = {
     homepage = "https://github.com/beancount/beancount";
     description = "Double-entry bookkeeping computer language";
     longDescription = ''
@@ -57,7 +59,7 @@ buildPythonPackage rec {
       financial transaction records in a text file, read them in memory,
       generate a variety of reports from them, and provides a web interface.
     '';
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ bhipple ];
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ bhipple ];
   };
 }
