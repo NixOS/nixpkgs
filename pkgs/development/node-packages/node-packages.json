@@ -249,7 +249,6 @@
 , "ts-node"
 , "ttf2eot"
 , "typescript-language-server"
-, "undollar"
 , "unified-language-server"
 , "vega-cli"
 , "vega-lite"

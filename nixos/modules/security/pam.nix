@@ -7,6 +7,13 @@ with lib;
 
 let
 
+  moduleSettingsType = with types; attrsOf (nullOr (oneOf [ bool str int pathInStore ]));
+  moduleSettingsDescription = ''
+    Boolean values render just the key if true, and nothing if false.
+    Null values are ignored.
+    All other values are rendered as key-value pairs.
+  '';
+
   mkRulesTypeOption = type: mkOption {
     # These options are experimental and subject to breaking changes without notice.
     description = ''
@@ -71,12 +78,12 @@ let
           '';
         };
         settings = mkOption {
-          type = with types; attrsOf (nullOr (oneOf [ bool str int pathInStore ]));
+          type = moduleSettingsType;
           default = {};
           description = ''
             Settings to add as `module-arguments`.
 
-            Boolean values render just the key if true, and nothing if false. Null values are ignored. All other values are rendered as key-value pairs.
+            ${moduleSettingsDescription}
           '';
         };
       };
@@ -660,11 +667,7 @@ let
           (let p11 = config.security.pam.p11; in { name = "p11"; enable = cfg.p11Auth; control = p11.control; modulePath = "${pkgs.pam_p11}/lib/security/pam_p11.so"; args = [
             "${pkgs.opensc}/lib/opensc-pkcs11.so"
           ]; })
-          (let u2f = config.security.pam.u2f; in { name = "u2f"; enable = cfg.u2fAuth; control = u2f.control; modulePath = "${pkgs.pam_u2f}/lib/security/pam_u2f.so"; settings = {
-            inherit (u2f) debug interactive cue origin;
-            authfile = u2f.authFile;
-            appid = u2f.appId;
-          }; })
+          (let u2f = config.security.pam.u2f; in { name = "u2f"; enable = cfg.u2fAuth; control = u2f.control; modulePath = "${pkgs.pam_u2f}/lib/security/pam_u2f.so"; inherit (u2f) settings; })
           (let ussh = config.security.pam.ussh; in { name = "ussh"; enable = config.security.pam.ussh.enable && cfg.usshAuth; control = ussh.control; modulePath = "${pkgs.pam_ussh}/lib/security/pam_ussh.so"; settings = {
             ca_file = ussh.caFile;
             authorized_principals = ussh.authorizedPrincipals;
@@ -952,6 +955,12 @@ in
   imports = [
     (mkRenamedOptionModule [ "security" "pam" "enableU2F" ] [ "security" "pam" "u2f" "enable" ])
     (mkRenamedOptionModule [ "security" "pam" "enableSSHAgentAuth" ] [ "security" "pam" "sshAgentAuth" "enable" ])
+    (mkRenamedOptionModule [ "security" "pam" "u2f" "authFile" ] [ "security" "pam" "u2f" "settings" "authfile" ])
+    (mkRenamedOptionModule [ "security" "pam" "u2f" "appId" ] [ "security" "pam" "u2f" "settings" "appid" ])
+    (mkRenamedOptionModule [ "security" "pam" "u2f" "origin" ] [ "security" "pam" "u2f" "settings" "origin" ])
+    (mkRenamedOptionModule [ "security" "pam" "u2f" "debug" ] [ "security" "pam" "u2f" "settings" "debug" ])
+    (mkRenamedOptionModule [ "security" "pam" "u2f" "interactive" ] [ "security" "pam" "u2f" "settings" "interactive" ])
+    (mkRenamedOptionModule [ "security" "pam" "u2f" "cue" ] [ "security" "pam" "u2f" "settings" "cue" ])
   ];
 
   ###### interface
@@ -1144,57 +1153,6 @@ in
         '';
       };
 
-      authFile = mkOption {
-        default = null;
-        type = with types; nullOr path;
-        description = ''
-          By default `pam-u2f` module reads the keys from
-          {file}`$XDG_CONFIG_HOME/Yubico/u2f_keys` (or
-          {file}`$HOME/.config/Yubico/u2f_keys` if XDG variable is
-          not set).
-
-          If you want to change auth file locations or centralize database (for
-          example use {file}`/etc/u2f-mappings`) you can set this
-          option.
-
-          File format is:
-          `username:first_keyHandle,first_public_key: second_keyHandle,second_public_key`
-          This file can be generated using {command}`pamu2fcfg` command.
-
-          More information can be found [here](https://developers.yubico.com/pam-u2f/).
-        '';
-      };
-
-      appId = mkOption {
-        default = null;
-        type = with types; nullOr str;
-        description = ''
-            By default `pam-u2f` module sets the application
-            ID to `pam://$HOSTNAME`.
-
-            When using {command}`pamu2fcfg`, you can specify your
-            application ID with the `-i` flag.
-
-            More information can be found [here](https://developers.yubico.com/pam-u2f/Manuals/pam_u2f.8.html)
-        '';
-      };
-
-      origin = mkOption {
-        default = null;
-        type = with types; nullOr str;
-        description = ''
-            By default `pam-u2f` module sets the origin
-            to `pam://$HOSTNAME`.
-            Setting origin to an host independent value will allow you to
-            reuse credentials across machines
-
-            When using {command}`pamu2fcfg`, you can specify your
-            application ID with the `-o` flag.
-
-            More information can be found [here](https://developers.yubico.com/pam-u2f/Manuals/pam_u2f.8.html)
-        '';
-      };
-
       control = mkOption {
         default = "sufficient";
         type = types.enum [ "required" "requisite" "sufficient" "optional" ];
@@ -1209,33 +1167,104 @@ in
         '';
       };
 
-      debug = mkOption {
-        default = false;
-        type = types.bool;
-        description = ''
-          Debug output to stderr.
-        '';
-      };
+      settings = mkOption {
+        type = types.submodule {
+          freeformType = moduleSettingsType;
 
-      interactive = mkOption {
-        default = false;
-        type = types.bool;
-        description = ''
-          Set to prompt a message and wait before testing the presence of a U2F device.
-          Recommended if your device doesn’t have a tactile trigger.
-        '';
-      };
+          options = {
+            authfile = mkOption {
+              default = null;
+              type = with types; nullOr path;
+              description = ''
+                By default `pam-u2f` module reads the keys from
+                {file}`$XDG_CONFIG_HOME/Yubico/u2f_keys` (or
+                {file}`$HOME/.config/Yubico/u2f_keys` if XDG variable is
+                not set).
 
-      cue = mkOption {
-        default = false;
-        type = types.bool;
-        description = ''
-          By default `pam-u2f` module does not inform user
-          that he needs to use the u2f device, it just waits without a prompt.
+                If you want to change auth file locations or centralize database (for
+                example use {file}`/etc/u2f-mappings`) you can set this
+                option.
 
-          If you set this option to `true`,
-          `cue` option is added to `pam-u2f`
-          module and reminder message will be displayed.
+                File format is:
+                `username:first_keyHandle,first_public_key: second_keyHandle,second_public_key`
+                This file can be generated using {command}`pamu2fcfg` command.
+
+                More information can be found [here](https://developers.yubico.com/pam-u2f/).
+              '';
+            };
+
+            appid = mkOption {
+              default = null;
+              type = with types; nullOr str;
+              description = ''
+                  By default `pam-u2f` module sets the application
+                  ID to `pam://$HOSTNAME`.
+
+                  When using {command}`pamu2fcfg`, you can specify your
+                  application ID with the `-i` flag.
+
+                  More information can be found [here](https://developers.yubico.com/pam-u2f/Manuals/pam_u2f.8.html)
+              '';
+            };
+
+            origin = mkOption {
+              default = null;
+              type = with types; nullOr str;
+              description = ''
+                  By default `pam-u2f` module sets the origin
+                  to `pam://$HOSTNAME`.
+                  Setting origin to an host independent value will allow you to
+                  reuse credentials across machines
+
+                  When using {command}`pamu2fcfg`, you can specify your
+                  application ID with the `-o` flag.
+
+                  More information can be found [here](https://developers.yubico.com/pam-u2f/Manuals/pam_u2f.8.html)
+              '';
+            };
+
+            debug = mkOption {
+              default = false;
+              type = types.bool;
+              description = ''
+                Debug output to stderr.
+              '';
+            };
+
+            interactive = mkOption {
+              default = false;
+              type = types.bool;
+              description = ''
+                Set to prompt a message and wait before testing the presence of a U2F device.
+                Recommended if your device doesn’t have a tactile trigger.
+              '';
+            };
+
+            cue = mkOption {
+              default = false;
+              type = types.bool;
+              description = ''
+                By default `pam-u2f` module does not inform user
+                that he needs to use the u2f device, it just waits without a prompt.
+
+                If you set this option to `true`,
+                `cue` option is added to `pam-u2f`
+                module and reminder message will be displayed.
+              '';
+            };
+          };
+        };
+        default = { };
+        example = {
+          authfile = "/etc/u2f_keys";
+          authpending_file = "";
+          userpresence = 0;
+          pinverification = 1;
+        };
+        description = ''
+          Options to pass to the PAM module.
+
+          ${moduleSettingsDescription}
         '';
       };
     };
