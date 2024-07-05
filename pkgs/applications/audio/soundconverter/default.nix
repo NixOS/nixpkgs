@@ -109,6 +109,9 @@ python3Packages.buildPythonApplication rec {
     '';
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ jakubgs ];
+    maintainers = with lib.maintainers; [
+      jakubgs
+      aleksana
+    ];
   };
 }
