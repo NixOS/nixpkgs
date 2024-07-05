@@ -34,10 +34,8 @@
   wrapBinary ? false
 , /** The meta attribute passed to mkDerivation */
   packageMeta ? { }
-, /** Can use a custom function e.g stdenvNoCC.mkDerivation */
-  derivationFunction ? stdenv.mkDerivation
 }:
-derivationFunction
+stdenv.mkDerivation
   # .dmg extracts have multiple folders
   # the unpack phase requires only one folder
 {
