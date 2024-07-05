@@ -221,6 +221,7 @@ in stdenv.mkDerivation (finalAttrs: rec {
     license = licenses.bsd3;
     maintainers = [ maintainers.jwiegley maintainers.jvanbruegge ];
     platforms = platforms.unix;
+    broken = stdenv.isDarwin;
   };
 
   passthru.withComponents = f:
