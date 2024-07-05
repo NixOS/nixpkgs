@@ -1190,16 +1190,9 @@ rec {
         # https://github.com/NixOS/nix/blob/2.8.0/src/libstore/globals.hh#L464-L465
         sandboxBuildDir = "/build";
 
-        # https://github.com/NixOS/nix/blob/2.8.0/src/libstore/build/local-derivation-goal.cc#L992-L1004
-        drvEnv = lib.mapAttrs' (name: value:
-          let str = valueToString value;
-          in if lib.elem name (drv.drvAttrs.passAsFile or [])
-          then lib.nameValuePair "${name}Path" (writeText "pass-as-text-${name}" str)
-          else lib.nameValuePair name str
-        ) drv.drvAttrs //
-          # A mapping from output name to the nix store path where they should end up
-          # https://github.com/NixOS/nix/blob/2.8.0/src/libexpr/primops.cc#L1253
-          lib.genAttrs drv.outputs (output: builtins.unsafeDiscardStringContext drv.${output}.outPath);
+        drvEnv =
+          devShellTools.unstructuredDerivationInputEnv { inherit (drv) drvAttrs; }
+          // devShellTools.derivationOutputEnv { outputList = drv.outputs; outputMap = drv; };
 
         # Environment variables set in the image
         envVars = {
