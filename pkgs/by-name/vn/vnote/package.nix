@@ -1,34 +1,34 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, qmake
-, qtbase
-, qtwebengine
-, qtx11extras
-, wrapQtAppsHook
+, cmake
+, qt6
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vnote";
-  version = "3.17.0";
+  version = "3.18.0";
 
   src = fetchFromGitHub {
     owner = "vnotex";
     repo = "vnote";
     rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-NUVu6tKXrrwAoT4BgxX05mmGSC9yx20lwvXzd4y19Zs=";
+    hash = "sha256-OpQjMngSEnmtTMLXLllDlIzucdSLSqdFU4ZtPb7ytvQ=";
   };
 
   nativeBuildInputs = [
-    qmake
-    wrapQtAppsHook
+    cmake
+    qt6.wrapQtAppsHook
   ];
 
   buildInputs = [
-    qtbase
-    qtwebengine
-    qtx11extras
+    qt6.qtbase
+    qt6.qtwebengine
+    qt6.qtsvg
+    qt6.qttools
+    qt6.qt5compat
+    qt6.qtwayland
   ];
 
   meta = {
