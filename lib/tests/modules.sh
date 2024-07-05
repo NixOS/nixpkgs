@@ -37,6 +37,7 @@ reportFailure() {
 }
 
 checkConfigOutput() {
+    local callPosition="${callPosition:-${BASH_SOURCE[1]}:${BASH_LINENO[0]}}"
     local outputContains=$1
     shift
     if evalConfig "$@" 2>/dev/null | grep -E --silent "$outputContains" ; then
@@ -44,22 +45,29 @@ checkConfigOutput() {
     else
         echo 2>&1 "error: Expected result matching '$outputContains', while evaluating"
         reportFailure "$@"
+        echo 2>&1 "test case: $callPosition"
+        echo 2>&1
     fi
 }
 
 checkConfigError() {
+    local callPosition="${callPosition:-${BASH_SOURCE[1]}:${BASH_LINENO[0]}}"
     local errorContains=$1
     local err=""
     shift
     if err="$(evalConfig "$@" 2>&1 >/dev/null)"; then
         echo 2>&1 "error: Expected error code, got exit code 0, while evaluating"
         reportFailure "$@"
+        echo 2>&1 "test case: $callPosition"
+        echo 2>&1
     else
         if echo "$err" | grep -zP --silent "$errorContains" ; then
             ((++pass))
         else
             echo 2>&1 "error: Expected error matching '$errorContains', while evaluating"
             reportFailure "$@"
+            echo 2>&1 "test case: $callPosition"
+            echo 2>&1
         fi
     fi
 }
