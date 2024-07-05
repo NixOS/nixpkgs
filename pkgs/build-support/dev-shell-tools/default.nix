@@ -1,6 +1,6 @@
 {
   lib,
-  writeText,
+  writeTextFile,
 }:
 let
   inherit (builtins) typeOf;
@@ -29,7 +29,21 @@ rec {
       (name: value:
         let str = valueToString value;
         in if lib.elem name (drvAttrs.passAsFile or [])
-        then lib.nameValuePair "${name}Path" "${writeText "pass-as-text-${name}" str}"
+        then
+          let
+            nameHash = builtins.convertHash {
+              hash = "sha256:" + builtins.hashString "sha256" name;
+              toHashFormat = "nix32";
+            };
+            basename = ".attr-${nameHash}";
+          in
+            lib.nameValuePair "${name}Path" "${
+              writeTextFile {
+                name = "shell-passAsFile-${name}";
+                text = str;
+                destination = "/${basename}";
+              }
+            }/${basename}"
         else lib.nameValuePair name str
       )
       (removeAttrs drvAttrs [

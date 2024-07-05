@@ -143,9 +143,7 @@ in
 
           diff $exampleBarPathString $barPath
 
-          # TODO nice to have, as `cp $barPath foo/` preserves the basename:
-          #      this is usually a mistake, so not that big a deal perhaps
-          # [[ "$(basename $exampleBarPathString)" = "$(basename $barPath)" ]]
+          [[ "$(basename $exampleBarPathString)" = "$(basename $barPath)" ]]
         )
 
         ''${args:+fail "args should not be set by Nix. We don't expect it to and unstructuredDerivationInputEnv removes it."}
