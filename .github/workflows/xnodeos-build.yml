@@ -46,7 +46,7 @@ jobs:
           username: opnm
           key: ${{secrets.BOOT_OPNM_SH_DEPLOY_KEY}}
           source: dist/*
-          target: /mnt/boot-opnm-sh/public/${{ github.ref_name }}/${{ matrix.format }}
+          target: /mnt/boot-opnm-sh/public/v1/latest/${{ github.ref_name }}/${{ matrix.format }}
           strip_components: 1
           tar_dereference: true
           overwrite: true
