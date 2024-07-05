@@ -152,14 +152,16 @@ rustPlatform.buildRustPackage rec {
     install -D ${src}/crates/zed/resources/app-icon@2x.png $out/share/icons/hicolor/1024x1024@2x/apps/zed.png
     install -D ${src}/crates/zed/resources/app-icon.png $out/share/icons/hicolor/512x512/apps/zed.png
 
-    # extracted from https://github.com/zed-industries/zed/blob/v0.141.2/script/bundle-linux
+    # extracted from https://github.com/zed-industries/zed/blob/v0.141.2/script/bundle-linux (envsubst)
+    # and https://github.com/zed-industries/zed/blob/v0.141.2/script/install.sh (final desktop file name)
     (
       export DO_STARTUP_NOTIFY="true"
       export APP_CLI="zed"
       export APP_ICON="zed"
       export APP_NAME="Zed"
+      export APP_ARGS="%U"
       mkdir -p "$out/share/applications"
-      ${lib.getExe envsubst} < "crates/zed/resources/zed.desktop.in" > "$out/share/applications/zed.desktop"
+      ${lib.getExe envsubst} < "crates/zed/resources/zed.desktop.in" > "$out/share/applications/dev.zed.Zed.desktop"
     )
 
     runHook postInstall
