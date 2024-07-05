@@ -30,7 +30,6 @@
 }:
 
 let
-  pname = "ollama";
   # don't forget to invalidate all hashes each update
   version = "0.2.1";
 
@@ -131,17 +130,16 @@ let
     "--suffix LD_LIBRARY_PATH : '${rocmPath}/lib'"
     "--set-default HIP_PATH '${rocmPath}'"
   ];
-  wrapperArgs = builtins.concatStringsSep " " wrapperOptions;
 
   goBuild =
     if enableCuda then
       buildGoModule.override { stdenv = overrideCC stdenv gcc12; }
     else
       buildGoModule;
-  inherit (lib) licenses platforms maintainers;
 in
 goBuild {
-  inherit pname version src vendorHash;
+  inherit version src vendorHash;
+  pname = "ollama";
 
   patches = [
     # disable uses of `git` in the `go generate` script
@@ -202,7 +200,7 @@ goBuild {
     mv "$out/bin/app" "$out/bin/.ollama-app"
   '' + lib.optionalString (enableRocm || enableCuda) ''
     # expose runtime libraries necessary to use the gpu
-    wrapProgram "$out/bin/ollama" ${wrapperArgs}
+    wrapProgram "$out/bin/ollama" ${builtins.concatStringsSep " " wrapperOptions}
   '';
 
   passthru.tests = {
@@ -222,11 +220,11 @@ goBuild {
       + lib.optionalString cudaRequested ", using CUDA for NVIDIA GPU acceleration";
     homepage = "https://github.com/ollama/ollama";
     changelog = "https://github.com/ollama/ollama/releases/tag/v${version}";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     platforms =
-      if (rocmRequested || cudaRequested) then platforms.linux
-      else platforms.unix;
+      if (rocmRequested || cudaRequested) then lib.platforms.linux
+      else lib.platforms.unix;
     mainProgram = "ollama";
-    maintainers = with maintainers; [ abysssol dit7ya elohmeier roydubnium ];
+    maintainers = with lib.maintainers; [ abysssol dit7ya elohmeier roydubnium ];
   };
 }
