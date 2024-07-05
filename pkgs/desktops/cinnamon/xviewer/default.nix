@@ -20,20 +20,20 @@
 , ninja
 , pkg-config
 , python3
-, wrapGAppsHook
+, wrapGAppsHook3
 , xapp
 , yelp-tools
 }:
 
 stdenv.mkDerivation rec {
   pname = "xviewer";
-  version = "3.4.1";
+  version = "3.4.5";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    sha256 = "sha256-HVxCBqaKtsEGhGAB+dBCOnjAjLZHv0XqTifPrvoYdj8=";
+    sha256 = "sha256-J6KDkGPbcRBofsJVmd+1IEapSfSd3ftjz0AggvBI8ck=";
   };
 
   nativeBuildInputs = [
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     python3
-    wrapGAppsHook
+    wrapGAppsHook3
     yelp-tools
   ];
 
@@ -65,7 +65,8 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A generic image viewer from Linux Mint";
+    description = "Generic image viewer from Linux Mint";
+    mainProgram = "xviewer";
     homepage = "https://github.com/linuxmint/xviewer";
     license = licenses.gpl2Only;
     platforms = platforms.linux;

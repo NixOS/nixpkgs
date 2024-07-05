@@ -8,100 +8,93 @@ in
 
 {
   options.services.gollum = {
-    enable = mkEnableOption (lib.mdDoc "Gollum service");
+    enable = mkEnableOption "Gollum, a git-powered wiki service";
 
     address = mkOption {
       type = types.str;
       default = "0.0.0.0";
-      description = lib.mdDoc "IP address on which the web server will listen.";
+      description = "IP address on which the web server will listen.";
     };
 
     port = mkOption {
       type = types.port;
       default = 4567;
-      description = lib.mdDoc "Port on which the web server will run.";
+      description = "Port on which the web server will run.";
     };
 
     extraConfig = mkOption {
       type = types.lines;
       default = "";
-      description = lib.mdDoc "Content of the configuration file";
+      description = "Content of the configuration file";
     };
 
     mathjax = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc "Enable support for math rendering using MathJax";
+      description = "Enable support for math rendering using MathJax";
     };
 
     allowUploads = mkOption {
       type = types.nullOr (types.enum [ "dir" "page" ]);
       default = null;
-      description = lib.mdDoc "Enable uploads of external files";
+      description = "Enable uploads of external files";
     };
 
     user-icons = mkOption {
       type = types.nullOr (types.enum [ "gravatar" "identicon" ]);
       default = null;
-      description = lib.mdDoc "Enable specific user icons for history view";
+      description = "Enable specific user icons for history view";
     };
 
     emoji = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc "Parse and interpret emoji tags";
+      description = "Parse and interpret emoji tags";
     };
 
     h1-title = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc "Use the first h1 as page title";
+      description = "Use the first h1 as page title";
     };
 
     no-edit = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc "Disable editing pages";
+      description = "Disable editing pages";
     };
 
     local-time = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc "Use the browser's local timezone instead of the server's for displaying dates.";
+      description = "Use the browser's local timezone instead of the server's for displaying dates.";
     };
 
     branch = mkOption {
       type = types.str;
       default = "master";
       example = "develop";
-      description = lib.mdDoc "Git branch to serve";
+      description = "Git branch to serve";
     };
 
     stateDir = mkOption {
       type = types.path;
       default = "/var/lib/gollum";
-      description = lib.mdDoc "Specifies the path of the repository directory. If it does not exist, Gollum will create it on startup.";
+      description = "Specifies the path of the repository directory. If it does not exist, Gollum will create it on startup.";
     };
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.gollum;
-      defaultText = literalExpression "pkgs.gollum";
-      description = lib.mdDoc ''
-        The package used in the service
-      '';
-    };
+    package = mkPackageOption pkgs "gollum" { };
 
     user = mkOption {
       type = types.str;
       default = "gollum";
-      description = lib.mdDoc "Specifies the owner of the wiki directory";
+      description = "Specifies the owner of the wiki directory";
     };
 
     group = mkOption {
       type = types.str;
       default = "gollum";
-      description = lib.mdDoc "Specifies the owner group of the wiki directory";
+      description = "Specifies the owner group of the wiki directory";
     };
   };
 
@@ -117,7 +110,7 @@ in
     users.groups."${cfg.group}" = { };
 
     systemd.tmpfiles.rules = [
-      "d '${cfg.stateDir}' - ${config.users.users.gollum.name} ${config.users.groups.gollum.name} - -"
+      "d '${cfg.stateDir}' - ${cfg.user} ${cfg.group} - -"
     ];
 
     systemd.services.gollum = {
@@ -154,5 +147,5 @@ in
     };
   };
 
-  meta.maintainers = with lib.maintainers; [ erictapen bbenno joscha ];
+  meta.maintainers = with lib.maintainers; [ erictapen bbenno ];
 }

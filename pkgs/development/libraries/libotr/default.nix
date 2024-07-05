@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, libgcrypt, autoreconfHook }:
+{ lib, stdenv, fetchurl, pkgsHostTarget, libgcrypt, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   pname = "libotr";
@@ -13,7 +13,10 @@ stdenv.mkDerivation rec {
 
   outputs = [ "bin" "out" "dev" ];
 
-  nativeBuildInputs = [ autoreconfHook ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkgsHostTarget.libgcrypt.dev # for libgcrypt-config
+  ];
   propagatedBuildInputs = [ libgcrypt ];
 
   meta = with lib; {

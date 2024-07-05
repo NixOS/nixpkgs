@@ -1,8 +1,14 @@
-{ lib, buildPythonPackage, fetchPypi, requests }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  requests,
+}:
 
 buildPythonPackage rec {
   pname = "openidc-client";
   version = "0.6.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -13,7 +19,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "A CLI python OpenID Connect client with token caching and management";
+    description = "CLI python OpenID Connect client with token caching and management";
     homepage = "https://github.com/puiterwijk";
     license = licenses.mit;
     maintainers = with maintainers; [ disassembler ];

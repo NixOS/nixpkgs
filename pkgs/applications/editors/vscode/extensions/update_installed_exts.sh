@@ -1,5 +1,5 @@
 #! /usr/bin/env nix-shell
-#! nix-shell -i bash -p curl jq unzip
+#! nix-shell -i bash -p cacert curl jq unzip
 # shellcheck shell=bash
 set -eu -o pipefail
 

@@ -1,25 +1,25 @@
 { stdenvNoCC, fetchurl, unzip, lib }:
 
-{ pname, version, zipHash, meta ? {}, passthru ? {}, ... }@args:
-let plat = stdenvNoCC.targetPlatform.system; in stdenvNoCC.mkDerivation ({
-  inherit pname version;
+{ pname, versionPrefix ? "", version, zipHash, meta ? {}, passthru ? {}, ... }@args:
+let plat = stdenvNoCC.hostPlatform.system; in stdenvNoCC.mkDerivation ({
+  inherit pname versionPrefix version;
 
   src = if lib.isAttrs zipHash then
     fetchurl {
-      name = "${pname}-${version}-${plat}.zip";
-      hash = zipHash.${plat} or (throw "unsupported system");
-      url = "https://grafana.com/api/plugins/${pname}/versions/${version}/download" + {
+      name = "${pname}-${versionPrefix}${version}-${plat}.zip";
+      hash = zipHash.${plat} or (throw "Unsupported system: ${plat}");
+      url = "https://grafana.com/api/plugins/${pname}/versions/${versionPrefix}${version}/download" + {
         x86_64-linux = "?os=linux&arch=amd64";
         aarch64-linux = "?os=linux&arch=arm64";
         x86_64-darwin = "?os=darwin&arch=amd64";
         aarch64-darwin = "?os=darwin&arch=arm64";
-      }.${plat} or (throw "unknown system");
+      }.${plat} or (throw "Unsupported system: ${plat}");
     }
   else
     fetchurl {
-      name = "${pname}-${version}.zip";
+      name = "${pname}-${versionPrefix}${version}.zip";
       hash = zipHash;
-      url = "https://grafana.com/api/plugins/${pname}/versions/${version}/download";
+      url = "https://grafana.com/api/plugins/${pname}/versions/${versionPrefix}${version}/download";
     }
   ;
 
@@ -38,4 +38,4 @@ let plat = stdenvNoCC.targetPlatform.system; in stdenvNoCC.mkDerivation ({
   meta = {
     homepage = "https://grafana.com/grafana/plugins/${pname}";
   } // meta;
-} // (builtins.removeAttrs args [ "zipHash" "pname" "version" "sha256" "meta" ]))
+} // (builtins.removeAttrs args [ "zipHash" "pname" "versionPrefix" "version" "sha256" "meta" ]))

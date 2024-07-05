@@ -26,12 +26,12 @@ in {
 
     services.mopidy = {
 
-      enable = mkEnableOption (lib.mdDoc "Mopidy, a music player daemon");
+      enable = mkEnableOption "Mopidy, a music player daemon";
 
       dataDir = mkOption {
         default = "/var/lib/mopidy";
         type = types.str;
-        description = lib.mdDoc ''
+        description = ''
           The directory where Mopidy stores its state.
         '';
       };
@@ -40,7 +40,7 @@ in {
         default = [];
         type = types.listOf types.package;
         example = literalExpression "[ pkgs.mopidy-spotify ]";
-        description = lib.mdDoc ''
+        description = ''
           Mopidy extensions that should be loaded by the service.
         '';
       };
@@ -48,7 +48,7 @@ in {
       configuration = mkOption {
         default = "";
         type = types.lines;
-        description = lib.mdDoc ''
+        description = ''
           The configuration that Mopidy should use.
         '';
       };
@@ -56,7 +56,7 @@ in {
       extraConfigFiles = mkOption {
         default = [];
         type = types.listOf types.str;
-        description = lib.mdDoc ''
+        description = ''
           Extra config file read by Mopidy when the service starts.
           Later files in the list overrides earlier configuration.
         '';
@@ -70,13 +70,15 @@ in {
 
   config = mkIf cfg.enable {
 
-    systemd.tmpfiles.rules = [
-      "d '${cfg.dataDir}' - mopidy mopidy - -"
-    ];
+    systemd.tmpfiles.settings."10-mopidy".${cfg.dataDir}.d = {
+      user = "mopidy";
+      group = "mopidy";
+    };
 
     systemd.services.mopidy = {
       wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" "sound.target" ];
+      after = [ "network-online.target" "sound.target" ];
+      wants = [ "network-online.target" ];
       description = "mopidy music player daemon";
       serviceConfig = {
         ExecStart = "${mopidyEnv}/bin/mopidy --config ${concatStringsSep ":" ([mopidyConf] ++ cfg.extraConfigFiles)}";

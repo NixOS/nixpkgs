@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   installFlags = [ "PREFIX=$(out)" "sbin=$(out)/bin" ];
 
   meta = with lib; {
-    description = "A small 'net top' tool, grouping bandwidth by process";
+    description = "Small 'net top' tool, grouping bandwidth by process";
     longDescription = ''
       NetHogs is a small 'net top' tool. Instead of breaking the traffic down
       per protocol or per subnet, like most tools do, it groups bandwidth by
@@ -32,5 +32,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/raboof/nethogs#readme";
     platforms = platforms.linux;
     maintainers = [ maintainers.rycee ];
+    mainProgram = "nethogs";
   };
 }

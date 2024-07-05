@@ -9,17 +9,15 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "todoman";
-  version = "4.1.0";
-  format = "setuptools";
+  version = "4.4.0";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "pimutils";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-MItFZ+4Q7UKeIWHl8KFiWOLNgFcfb0h1YWjPd+g48Wg=";
+    hash = "sha256-5tQaNT6QVN9mxa9t6OvMux4ZGy4flUqszTAwet2QL0w=";
   };
-
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [
     installShellFiles
@@ -48,18 +46,14 @@ python3.pkgs.buildPythonApplication rec {
     hypothesis
     pytestCheckHook
     glibcLocales
+    pytest-cov
   ];
 
   LC_ALL = "en_US.UTF-8";
 
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace " --cov=todoman --cov-report=term-missing" ""
-  '';
-
   postInstall = ''
     installShellCompletion --bash contrib/completion/bash/_todo
-    substituteInPlace contrib/completion/zsh/_todo --replace "jq " "${jq}/bin/jq "
+    substituteInPlace contrib/completion/zsh/_todo --replace "jq " "${lib.getExe jq} "
     installShellCompletion --zsh contrib/completion/zsh/_todo
   '';
 
@@ -67,7 +61,6 @@ python3.pkgs.buildPythonApplication rec {
     # Testing of the CLI part and output
     "test_color_due_dates"
     "test_color_flag"
-    "test_datetime_serialization"  # Will be fixed in versions after 4.1.0
     "test_default_command"
     "test_main"
     "test_missing_cache_dir"
@@ -81,7 +74,7 @@ python3.pkgs.buildPythonApplication rec {
     "todoman"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/pimutils/todoman";
     description = "Standards-based task manager based on iCalendar";
     longDescription = ''
@@ -95,8 +88,9 @@ python3.pkgs.buildPythonApplication rec {
       now.
       Unsupported fields may not be shown but are never deleted or altered.
     '';
-    changelog = "https://github.com/pimutils/todoman/raw/v${version}/CHANGELOG.rst";
-    license = licenses.isc;
-    maintainers = with maintainers; [ leenaars ];
+    changelog = "https://todoman.readthedocs.io/en/stable/changelog.html#v${builtins.replaceStrings ["."] ["-"] version}";
+    license = lib.licenses.isc;
+    maintainers = with lib.maintainers; [ leenaars antonmosich ];
+    mainProgram = "todo";
   };
 }

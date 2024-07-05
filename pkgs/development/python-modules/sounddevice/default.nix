@@ -1,25 +1,31 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchPypi
-, isPy27
-, cffi
-, numpy
-, portaudio
-, substituteAll
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchPypi,
+  isPy27,
+  cffi,
+  numpy,
+  portaudio,
+  substituteAll,
 }:
 
 buildPythonPackage rec {
   pname = "sounddevice";
-  version = "0.4.6";
+  version = "0.4.7";
+  format = "setuptools";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Mja3jxXwQVvfAGpiDO8HPQwFIoUdZvSpYe1tjrFIL+k=";
+    hash = "sha256-abOGgY1QotUYYH1LlzRC6NUkdgx81si4vgPYyY/EvOc=";
   };
 
-  propagatedBuildInputs = [ cffi numpy portaudio ];
+  propagatedBuildInputs = [
+    cffi
+    numpy
+    portaudio
+  ];
 
   # No tests included nor upstream available.
   doCheck = false;
@@ -37,6 +43,5 @@ buildPythonPackage rec {
     description = "Play and Record Sound with Python";
     homepage = "http://python-sounddevice.rtfd.org/";
     license = with lib.licenses; [ mit ];
-    maintainers = with lib.maintainers; [ fridh ];
   };
 }

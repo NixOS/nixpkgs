@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , python3
-, fetchPypi
+, fetchFromGitHub
 , installShellFiles
 }:
 
@@ -24,40 +24,61 @@ let
 
 in buildPythonApplication rec {
   pname = "pipenv";
-  version = "2023.2.4";
+  version = "2023.10.24";
+  format = "pyproject";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-GKPrpRnjbVnw1af5xCvSaFIeS5t7PRvWrc8TFWkyMnU=";
+  src = fetchFromGitHub {
+    owner = "pypa";
+    repo = "pipenv";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-b1EqCrgGygdG08zzastgcYGnXDKoEYNvm5xjDLzlAXo=";
   };
 
-  LC_ALL = "en_US.UTF-8";
+  env.LC_ALL = "en_US.UTF-8";
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [
+    installShellFiles
+    setuptools
+    wheel
+  ];
 
   postPatch = ''
     # pipenv invokes python in a subprocess to create a virtualenv
     # and to call setup.py.
     # It would use sys.executable, which in our case points to a python that
     # does not have the required dependencies.
-    substituteInPlace pipenv/core.py \
+    substituteInPlace pipenv/utils/virtualenv.py \
       --replace "sys.executable" "'${pythonEnv.interpreter}'"
   '';
 
   propagatedBuildInputs = runtimeDeps python3.pkgs;
+
+  preCheck = ''
+    export HOME="$TMPDIR"
+  '';
+
+  nativeCheckInputs = [
+    mock
+    pytestCheckHook
+    pytest-xdist
+    pytz
+    requests
+  ];
+
+  disabledTests = [
+    "test_convert_deps_to_pip"
+    "test_download_file"
+  ];
+
+  disabledTestPaths = [
+    "tests/integration"
+  ];
 
   postInstall = ''
     installShellCompletion --cmd pipenv \
       --bash <(_PIPENV_COMPLETE=bash_source $out/bin/pipenv) \
       --zsh <(_PIPENV_COMPLETE=zsh_source $out/bin/pipenv) \
       --fish <(_PIPENV_COMPLETE=fish_source $out/bin/pipenv)
-  '';
-
-  doCheck = true;
-  checkPhase = ''
-    export HOME=$(mktemp -d)
-    cp -r --no-preserve=mode ${wheel.src} $HOME/wheel-src
-    $out/bin/pipenv install $HOME/wheel-src
   '';
 
   meta = with lib; {

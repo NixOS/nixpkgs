@@ -3,12 +3,12 @@
 stdenv.mkDerivation rec {
   pname = "poco";
 
-  version = "1.12.4";
+  version = "1.13.3";
 
   src = fetchFromGitHub {
     owner = "pocoproject";
     repo = "poco";
-    sha256 = "sha256-gQ97fkoTGI6yuMPjEsITfapH9FSQieR8rcrPR1nExxc=";
+    sha256 = "sha256-ryBQjzg1DyYd/LBZzjHxq8m/7ZXRSKNNGRkIII0eHK0=";
     rev = "poco-${version}-release";
   };
 
@@ -22,8 +22,8 @@ stdenv.mkDerivation rec {
   MYSQL_DIR = libmysqlclient;
   MYSQL_INCLUDE_DIR = "${MYSQL_DIR}/include/mysql";
 
-  cmakeFlags = [
-    "-DPOCO_UNBUNDLED=ON"
+  configureFlags = [
+    "--unbundled"
   ];
 
   postFixup = ''

@@ -1,8 +1,14 @@
-{ buildPythonPackage, fetchFromGitHub, pytestCheckHook, lib }:
+{
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  lib,
+}:
 
 buildPythonPackage rec {
   pname = "leb128";
   version = "1.0.5";
+  format = "setuptools";
 
   # fetchPypi doesn't include files required for tests
   src = fetchFromGitHub {
@@ -16,7 +22,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "leb128" ];
 
   meta = with lib; {
-    description = "A utility to encode and decode Little Endian Base 128";
+    description = "Utility to encode and decode Little Endian Base 128";
     homepage = "https://github.com/mohanson/leb128";
     license = licenses.mit;
     maintainers = with maintainers; [ urlordjames ];

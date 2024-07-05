@@ -1,45 +1,32 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, hatchling
-, protobuf
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  hatchling,
+  opentelemetry-api,
+  protobuf,
+  pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
+  inherit (opentelemetry-api) version src;
   pname = "opentelemetry-proto";
-  version = "1.18.0";
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
-  src = fetchFromGitHub {
-    owner = "open-telemetry";
-    repo = "opentelemetry-python";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-6iB+QlBUqRvIJ9p38NYgP4icW2rYs1P3bNCxI95cOvs=";
-    sparseCheckout = [ "/${pname}" ];
-  } + "/${pname}";
+  disabled = pythonOlder "3.8";
 
-  format = "pyproject";
+  sourceRoot = "${opentelemetry-api.src.name}/opentelemetry-proto";
 
-  nativeBuildInputs = [
-    hatchling
-  ];
+  build-system = [ hatchling ];
 
-  propagatedBuildInputs = [
-    protobuf
-  ];
+  dependencies = [ protobuf ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "opentelemetry.proto" ];
 
-  meta = with lib; {
+  meta = opentelemetry-api.meta // {
     homepage = "https://github.com/open-telemetry/opentelemetry-python/tree/main/opentelemetry-proto";
     description = "OpenTelemetry Python Proto";
-    license = licenses.asl20;
-    maintainers = teams.deshaw.members;
   };
 }

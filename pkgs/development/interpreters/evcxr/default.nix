@@ -3,16 +3,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "evcxr";
-  version = "0.15.0";
+  version = "0.17.0";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "evcxr";
     rev = "v${version}";
-    sha256 = "sha256-s8zM1vxEeJYcRek1rqUmrBfvB2zCAF3iLG8UVA7WABI=";
+    sha256 = "sha256-6gSJJ3ptqpYydjg+xf5Pz3iTk0D+bkC6N79OeiKxPHY=";
   };
 
-  cargoSha256 = "sha256-wMo5Fq6aMiE6kg8mZoz1T3KPwKSdJcej83MB+/GRM5w=";
+  cargoHash = "sha256-MRoEFP7VXBNBe6/e3ezPnzhKACwqTApGH9c0T4ycvg4=";
 
   RUST_SRC_PATH = "${rustPlatform.rustLibSrc}";
 
@@ -40,7 +40,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "An evaluation context for Rust";
+    description = "Evaluation context for Rust";
     homepage = "https://github.com/google/evcxr";
     license = licenses.asl20;
     maintainers = with maintainers; [ protoben ma27 ];

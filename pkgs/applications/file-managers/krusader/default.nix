@@ -3,7 +3,7 @@
 , fetchurl
 , extra-cmake-modules
 , kdoctools
-, wrapGAppsHook
+, wrapGAppsHook3
 , karchive
 , kconfig
 , kcrash
@@ -15,17 +15,22 @@
 
 mkDerivation rec {
   pname = "krusader";
-  version = "2.7.2";
+  version = "2.8.1";
 
   src = fetchurl {
     url = "mirror://kde/stable/${pname}/${version}/${pname}-${version}.tar.xz";
-    hash = "sha256-QaOaQ7PELdHR7K6obfMMr/agYf7MHWb2CFmyo8qXYQk=";
+    hash = "sha256-N78gRRnQqxukCWSvAnQbwijxHpfyjExRjKBdNY3xgoM=";
   };
+
+  patches = [
+    # Fix compilation error due to forceful header include
+    ./compat-fix.patch
+  ];
 
   nativeBuildInputs = [
     extra-cmake-modules
     kdoctools
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   propagatedBuildInputs = [
@@ -42,6 +47,7 @@ mkDerivation rec {
     homepage = "http://www.krusader.org";
     description = "Norton/Total Commander clone for KDE";
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ sander turion ];
+    maintainers = with maintainers; [ sander ];
+    mainProgram = "krusader";
   };
 }

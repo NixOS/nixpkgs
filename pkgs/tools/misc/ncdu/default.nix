@@ -1,32 +1,48 @@
-{ lib, stdenv, fetchurl, zig, ncurses }:
+{ lib
+, stdenv
+, fetchurl
+, ncurses
+, zig
+, installShellFiles
+, testers
+, pie ? stdenv.isDarwin
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ncdu";
-  version = "2.2.2";
+  version = "2.4";
 
   src = fetchurl {
-    url = "https://dev.yorhel.nl/download/${pname}-${version}.tar.gz";
-    hash = "sha256-kNkgAk51Ixi0aXds5X4Ds8cC1JMprZglruqzbDur+ZM=";
+    url = "https://dev.yorhel.nl/download/ncdu-${finalAttrs.version}.tar.gz";
+    hash = "sha256-Sj0AAjCc9qfOp5GTjayb7N7OTVKdDW3I2RtztOaFVQk=";
   };
-
-  XDG_CACHE_HOME="Cache"; # FIXME This should be set in stdenv
 
   nativeBuildInputs = [
-    zig
+    zig.hook
+    installShellFiles
   ];
 
-  buildInputs = [ ncurses ];
+  buildInputs = [
+    ncurses
+  ];
 
-  PREFIX = placeholder "out";
+  zigBuildFlags = lib.optional pie "-Dpie=true";
 
-  # Avoid CPU feature impurity, see https://github.com/NixOS/nixpkgs/issues/169461
-  ZIG_FLAGS = "-Drelease-safe -Dcpu=baseline";
+  postInstall = ''
+    installManPage ncdu.1
+  '';
 
-  meta = with lib; {
-    description = "Disk usage analyzer with an ncurses interface";
-    homepage = "https://dev.yorhel.nl/ncdu";
-    license = licenses.mit;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ pSub SuperSandro2000 rodrgz ];
+  passthru.tests.version = testers.testVersion {
+    package = finalAttrs.finalPackage;
   };
-}
+
+  meta = {
+    homepage = "https://dev.yorhel.nl/ncdu";
+    description = "Disk usage analyzer with an ncurses interface";
+    changelog = "https://dev.yorhel.nl/ncdu/changes2";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ pSub rodrgz ];
+    inherit (zig.meta) platforms;
+    mainProgram = "ncdu";
+  };
+})

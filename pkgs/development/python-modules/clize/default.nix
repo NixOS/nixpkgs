@@ -1,33 +1,32 @@
-{ lib
-, attrs
-, buildPythonPackage
-, docutils
-, fetchPypi
-, od
-, pygments
-, pytestCheckHook
-, pythonOlder
-, python-dateutil
-, repeated-test
-, setuptools-scm
-, sigtools
+{
+  lib,
+  attrs,
+  buildPythonPackage,
+  docutils,
+  fetchPypi,
+  od,
+  pygments,
+  pytestCheckHook,
+  pythonOlder,
+  python-dateutil,
+  repeated-test,
+  setuptools-scm,
+  sigtools,
 }:
 
 buildPythonPackage rec {
   pname = "clize";
-  version = "5.0.0";
+  version = "5.0.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-/cFpEvAN/Movd38xaE53Y+D9EYg/SFyHeqtlVUo1D0I=";
+    hash = "sha256-BH9aRHNgJxirG4VnKn4VMDOHF41agcJ13EKd+sHstRA=";
   };
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
 
   propagatedBuildInputs = [
     attrs
@@ -37,9 +36,7 @@ buildPythonPackage rec {
   ];
 
   passthru.optional-dependencies = {
-    datetime = [
-      python-dateutil
-    ];
+    datetime = [ python-dateutil ];
   };
 
   nativeCheckInputs = [
@@ -49,9 +46,7 @@ buildPythonPackage rec {
     repeated-test
   ];
 
-  pythonImportsCheck = [
-    "clize"
-  ];
+  pythonImportsCheck = [ "clize" ];
 
   meta = with lib; {
     description = "Command-line argument parsing for Python";

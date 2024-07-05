@@ -1,17 +1,18 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, netifaces
-, pycryptodome
-, pytest-asyncio
-, pytestCheckHook
+{
+  stdenv,
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  netifaces,
+  pycryptodome,
+  pytest-asyncio,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "greeclimate";
-  version = "1.4.1";
+  version = "1.4.6";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -20,7 +21,7 @@ buildPythonPackage rec {
     owner = "cmroche";
     repo = "greeclimate";
     rev = "refs/tags/v${version}";
-    hash = "sha256-M4oxFi/PpqhJgZX/wM+9rSrraIZcqzubbxnihfK0W2E=";
+    hash = "sha256-yoCbFLtyPEtELp2ptpBBdJTE7yyMqUeMRWT3wfKk5JM=";
   };
 
   propagatedBuildInputs = [

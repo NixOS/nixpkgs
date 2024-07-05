@@ -8,7 +8,6 @@
 , openssl
 , bash
 , nixosTests
-, writeTextDir
 }:
 
 stdenv.mkDerivation rec {
@@ -79,7 +78,7 @@ stdenv.mkDerivation rec {
     license = with licenses; [
       bsdOriginal
       publicDomain
-      gpl2
+      gpl2Only
       lgpl2
     ];
     platforms = platforms.linux;

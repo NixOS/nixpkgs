@@ -12,15 +12,16 @@
 , bzip2
 , xz
 , zstd
+, gitUpdater
 }:
 
 stdenv.mkDerivation rec {
   pname = "kbd";
-  version = "2.5.1";
+  version = "2.6.4";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/kbd/${pname}-${version}.tar.xz";
-    sha256 = "sha256-zN9FI4emOAlz0pJzY+nLuTn6IGiRWm+Tf/nSRSICRoM=";
+    sha256 = "sha256-UZ+NCHrsyn4KM80IS++SwGbrGXMWZmU9zHDJ1xqkCSY=";
   };
 
   # vlock is moved into its own output, since it depends on pam. This
@@ -79,7 +80,14 @@ stdenv.mkDerivation rec {
   passthru.tests = {
     inherit (nixosTests) keymap kbd-setfont-decompress kbd-update-search-paths-patch;
   };
-  passthru.gzip = gzip;
+  passthru = {
+    gzip = gzip;
+    updateScript = gitUpdater {
+       # No nicer place to find latest release.
+       url = "https://github.com/legionus/kbd.git";
+       rev-prefix = "v";
+    };
+  };
 
   meta = with lib; {
     homepage = "https://kbd-project.org/";

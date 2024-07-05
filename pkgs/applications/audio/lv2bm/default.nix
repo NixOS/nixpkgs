@@ -20,9 +20,10 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/portalmod/lv2bm";
-    description = "A benchmark tool for LV2 plugins";
+    description = "Benchmark tool for LV2 plugins";
     license = licenses.gpl3;
     maintainers = [ maintainers.magnetophon ];
     platforms = platforms.linux;
+    mainProgram = "lv2bm";
   };
 }

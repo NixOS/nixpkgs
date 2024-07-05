@@ -4,18 +4,18 @@
 { lib, stdenv, fetchFromGitHub, cmake, gtest }:
 stdenv.mkDerivation rec {
   pname = "easyloggingpp";
-  version = "9.97.0";
+  version = "9.97.1";
   src = fetchFromGitHub {
     owner = "amrayn";
     repo = "easyloggingpp";
     rev = "v${version}";
-    sha256 = "sha256-sFWmZMnucMuvpwDzuowni21KiD3bx0lH1Ts+yhusOYs=";
+    sha256 = "sha256-R4NdwsUywgJoK5E/OdZXFds6iBKOsMa0E+2PDdQbV6E=";
   };
 
   nativeBuildInputs = [cmake];
   buildInputs = [gtest];
   cmakeFlags = [ "-Dtest=ON" ];
-  env.NIX_CFLAGS_COMPILE = "-std=c++11" +
+  env.NIX_CFLAGS_COMPILE = "-std=c++14" +
     lib.optionalString stdenv.isLinux " -pthread";
   postInstall = ''
     mkdir -p $out/include

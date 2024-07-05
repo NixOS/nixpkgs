@@ -8,18 +8,18 @@
 }:
 mkYarnPackage rec {
   pname = "prettierd";
-  version = "0.23.4";
+  version = "0.25.3";
 
   src = fetchFromGitHub {
     owner = "fsouza";
     repo = "prettierd";
     rev = "v${version}";
-    hash = "sha256-GTukjkA/53N9ICdfCJr5HAqhdL5T0pth6zAk8Fu/cis=";
+    hash = "sha256-3lvFZ5/p+1kPnHIR2PlQtCY3SVo1rs8IuBigLaabxAE=";
   };
 
   offlineCache = fetchYarnDeps {
     yarnLock = src + "/yarn.lock";
-    hash = "sha256-32wMwkVgO5DQuROWnujVGNeCAUq1D6jJurecsD2ROOU=";
+    hash = "sha256-Ti2b102pzUKB6Xy3LwZ7DlrnW0cRscgNLTUIAKz+6Us=";
   };
 
   packageJSON = ./package.json;
@@ -41,6 +41,7 @@ mkYarnPackage rec {
   doDist = false;
 
   meta = with lib; {
+    mainProgram = "prettierd";
     description = "Prettier, as a daemon, for improved formatting speed";
     homepage = "https://github.com/fsouza/prettierd";
     license = licenses.isc;

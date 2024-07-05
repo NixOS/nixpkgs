@@ -1,48 +1,40 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, backoff
-, hatchling
-, opentelemetry-exporter-otlp-proto-grpc
-, opentelemetry-exporter-otlp-proto-http
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  hatchling,
+  opentelemetry-api,
+  opentelemetry-exporter-otlp-proto-grpc,
+  opentelemetry-exporter-otlp-proto-http,
+  opentelemetry-test-utils,
+  pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
+  inherit (opentelemetry-api) version src;
   pname = "opentelemetry-exporter-otlp";
-  version = "1.18.0";
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
-  src = fetchFromGitHub {
-    owner = "open-telemetry";
-    repo = "opentelemetry-python";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-ph9ahT6M8UBvuUJjk6nug68Ou/D7XuuXkfnKHEdD8x8=";
-    sparseCheckout = [ "/exporter/${pname}" ];
-  } + "/exporter/${pname}";
+  disabled = pythonOlder "3.8";
 
-  format = "pyproject";
+  sourceRoot = "${opentelemetry-api.src.name}/exporter/opentelemetry-exporter-otlp";
 
-  nativeBuildInputs = [
-    hatchling
-  ];
+  build-system = [ hatchling ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     opentelemetry-exporter-otlp-proto-grpc
     opentelemetry-exporter-otlp-proto-http
   ];
 
   nativeCheckInputs = [
+    opentelemetry-test-utils
     pytestCheckHook
   ];
 
   pythonImportsCheck = [ "opentelemetry.exporter.otlp" ];
 
-  meta = with lib; {
+  meta = opentelemetry-api.meta // {
     homepage = "https://github.com/open-telemetry/opentelemetry-python/tree/main/exporter/opentelemetry-exporter-otlp";
     description = "OpenTelemetry Collector Exporters";
-    license = licenses.asl20;
-    maintainers = teams.deshaw.members;
   };
 }

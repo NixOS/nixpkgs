@@ -7,13 +7,15 @@
 , pkg-config
 , lib
 , stdenv
-, wrapGAppsHook
+, wrapGAppsHook3
 , libxml2
 , gtk3
 , gvfs
 , cinnamon-desktop
 , xapp
 , libexif
+, json-glib
+, gtk-layer-shell
 , exempi
 , intltool
 , shared-mime-info
@@ -23,19 +25,26 @@
 
 stdenv.mkDerivation rec {
   pname = "nemo";
-  version = "5.8.4";
+  version = "6.2.2";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    sha256 = "sha256-WjgQXQe8iCzkc4pmeTIx6mSlsg88xy3FTPMokJWo3fg=";
+    sha256 = "sha256-afK+iJ/WUtcs8Upid4AkbAZAIs/wimHFlXm717U0LHc=";
   };
 
   patches = [
     # Load extensions from NEMO_EXTENSION_DIR environment variable
     # https://github.com/NixOS/nixpkgs/issues/78327
     ./load-extensions-from-env.patch
+
+    # Don't tie the interactive search box with the window's lifetime
+    # https://github.com/linuxmint/nemo/issues/3423
+    (fetchpatch {
+      url = "https://github.com/linuxmint/nemo/commit/055b47af0e1a830e556989372f3689bbd36b639d.patch";
+      hash = "sha256-cMtBz1uLGCV4nnrBITzXAV/SffI0nNcEdeujrHxAzQc=";
+    })
   ];
 
   outputs = [ "out" "dev" ];
@@ -49,23 +58,34 @@ stdenv.mkDerivation rec {
     libexif
     exempi
     gvfs
-    gobject-introspection
     libgsf
+    json-glib
+    gtk-layer-shell
   ];
 
   nativeBuildInputs = [
     meson
     pkg-config
     ninja
-    wrapGAppsHook
+    wrapGAppsHook3
     intltool
     shared-mime-info
+    gobject-introspection
   ];
 
   mesonFlags = [
     # use locales from cinnamon-translations
     "--localedir=${cinnamon-translations}/share/locale"
+    # enabled by default in Mint packaging (see debian/rules)
+    "-Dgtk_layer_shell=true"
   ];
+
+  postInstall = ''
+    # This fixes open as root and handles nemo-with-extensions well.
+    # https://github.com/NixOS/nixpkgs/issues/297570
+    substituteInPlace $out/share/polkit-1/actions/org.nemo.root.policy \
+      --replace-fail "$out/bin/nemo" "/run/current-system/sw/bin/nemo"
+  '';
 
   preFixup = ''
     # Used for some non-fd.o icons (e.g. xapp-text-case-symbolic)

@@ -1,26 +1,37 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, filelock
-, pytest
-, mypy
-, setuptools-scm
+{
+  lib,
+  attrs,
+  buildPythonPackage,
+  fetchPypi,
+  filelock,
+  pytest,
+  mypy,
+  setuptools,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "pytest-mypy";
   version = "0.10.3";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-+EWPZCMj8Toso+LmFQn3dnlmtSe02K3M1QMsPntP09s=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
+  nativeBuildInputs = [
+    setuptools
+    setuptools-scm
+  ];
 
   buildInputs = [ pytest ];
 
-  propagatedBuildInputs = [ mypy filelock ];
+  propagatedBuildInputs = [
+    attrs
+    mypy
+    filelock
+  ];
 
   # does not contain tests
   doCheck = false;
@@ -30,6 +41,6 @@ buildPythonPackage rec {
     description = "Mypy static type checker plugin for Pytest";
     homepage = "https://github.com/dbader/pytest-mypy";
     license = licenses.mit;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = with lib.maintainers; [ sigmanificient ];
   };
 }

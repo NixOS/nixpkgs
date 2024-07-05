@@ -1,16 +1,18 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools
-, six
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  six,
 }:
 
 buildPythonPackage rec {
-  pname = "Genshi";
+  pname = "genshi";
   version = "0.7.7";
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "Genshi";
+    inherit version;
     hash = "sha256-wQBSCGLNaQhdEO4ah+kSief1n2s9m9Yiv1iygE5rmqs=";
   };
 
@@ -19,7 +21,8 @@ buildPythonPackage rec {
   doCheck = false;
 
   propagatedBuildInputs = [
-    setuptools six
+    setuptools
+    six
   ];
 
   meta = with lib; {

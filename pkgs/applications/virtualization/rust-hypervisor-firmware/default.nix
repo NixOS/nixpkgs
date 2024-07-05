@@ -1,13 +1,11 @@
 { lib
 , fetchFromGitHub
-, makeRustPlatform
 , hostPlatform
-, targetPlatform
 , lld
 }:
 
 let
-  arch = targetPlatform.qemuArch;
+  arch = hostPlatform.qemuArch;
 
   target = ./. + "/${arch}-unknown-none.json";
 
@@ -19,8 +17,8 @@ let
   cross = import ../../../.. {
     system = hostPlatform.system;
     crossSystem = lib.systems.examples."${arch}-embedded" // {
-      rustc.config = "${arch}-unknown-none";
-      rustc.platform = lib.importJSON target;
+      rust.rustcTarget = "${arch}-unknown-none";
+      rust.platform = lib.importJSON target;
     };
   };
 
@@ -58,9 +56,10 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/cloud-hypervisor/rust-hypervisor-firmware";
-    description = "A simple firmware that is designed to be launched from anything that supports loading ELF binaries and running them with the PVH booting standard";
+    description = "Simple firmware that is designed to be launched from anything that supports loading ELF binaries and running them with the PVH booting standard";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ astro ];
     platforms = [ "x86_64-none" ];
+    mainProgram = "hypervisor-fw";
   };
 }

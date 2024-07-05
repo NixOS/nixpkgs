@@ -6,11 +6,11 @@
 
 stdenv.mkDerivation rec {
   pname = "valgrind";
-  version = "3.21.0";
+  version = "3.23.0";
 
   src = fetchurl {
     url = "https://sourceware.org/pub/${pname}/${pname}-${version}.tar.bz2";
-    hash = "sha256-EM4WGLs+M/rRbreVUrCj4SEXYkSKDX/OEcimJDuayXE=";
+    hash = "sha256-xcNKM4BFe5t1YG34kBAuffLHArlCDC6++VQPi11WJk0=";
   };
 
   patches = [
@@ -28,18 +28,19 @@ stdenv.mkDerivation rec {
     })
     # Fix build on armv7l.
     # https://bugs.kde.org/show_bug.cgi?id=454346
-    (fetchpatch {
-      url = "https://bugsfiles.kde.org/attachment.cgi?id=149172";
-      sha256 = "sha256-4MASLsEK8wcshboR4YOc6mIt7AvAgDPvqIZyHqlvTEs=";
-    })
-    (fetchpatch {
-      url = "https://bugsfiles.kde.org/attachment.cgi?id=149173";
-      sha256 = "sha256-jX9hD4utWRebbXMJYZ5mu9jecvdrNP05E5J+PnKRTyQ=";
-    })
-    (fetchpatch {
-      url = "https://bugsfiles.kde.org/attachment.cgi?id=149174";
-      sha256 = "sha256-f1YIFIhWhXYVw3/UNEWewDak2mvbAd3aGzK4B+wTlys=";
-    })
+    #   Applied on 3.22.0. Does not apply on 3.23.0.
+    #(fetchpatch {
+    #  url = "https://bugsfiles.kde.org/attachment.cgi?id=149172";
+    #  sha256 = "sha256-4MASLsEK8wcshboR4YOc6mIt7AvAgDPvqIZyHqlvTEs=";
+    #})
+    #(fetchpatch {
+    #  url = "https://bugsfiles.kde.org/attachment.cgi?id=149173";
+    #  sha256 = "sha256-jX9hD4utWRebbXMJYZ5mu9jecvdrNP05E5J+PnKRTyQ=";
+    #})
+    #(fetchpatch {
+    #  url = "https://bugsfiles.kde.org/attachment.cgi?id=149174";
+    #  sha256 = "sha256-f1YIFIhWhXYVw3/UNEWewDak2mvbAd3aGzK4B+wTlys=";
+    #})
   ];
 
   outputs = [ "out" "dev" "man" "doc" ];
@@ -58,7 +59,7 @@ stdenv.mkDerivation rec {
 
   preConfigure = lib.optionalString stdenv.isFreeBSD ''
     substituteInPlace configure --replace '`uname -r`' \
-        ${toString stdenv.hostPlatform.parsed.kernel.version}.0
+        ${toString stdenv.hostPlatform.parsed.kernel.version}.0-
   '' + lib.optionalString stdenv.isDarwin (
     let OSRELEASE = ''
       $(awk -F '"' '/#define OSRELEASE/{ print $2 }' \
@@ -131,6 +132,7 @@ stdenv.mkDerivation rec {
     platforms = with lib.platforms; lib.intersectLists
       (x86 ++ power ++ s390x ++ armv7 ++ aarch64 ++ mips)
       (darwin ++ freebsd ++ illumos ++ linux);
-    broken = stdenv.isDarwin || stdenv.hostPlatform.isStatic; # https://hydra.nixos.org/build/128521440/nixlog/2
+    badPlatforms = [ lib.systems.inspect.platformPatterns.isStatic ];
+    broken = stdenv.isDarwin; # https://hydra.nixos.org/build/128521440/nixlog/2
   };
 }

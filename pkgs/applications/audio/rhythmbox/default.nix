@@ -4,7 +4,6 @@
 , pkg-config
 , meson
 , ninja
-, fetchFromGitLab
 , python3
 , vala
 , glib
@@ -27,7 +26,7 @@
 , tdb
 , json-glib
 , itstool
-, wrapGAppsHook
+, wrapGAppsHook3
 , desktop-file-utils
 , gst_all_1
 , gst_plugins ? with gst_all_1; [ gst-plugins-good gst-plugins-ugly ]
@@ -50,8 +49,9 @@ stdenv.mkDerivation rec {
     vala
     glib
     itstool
-    wrapGAppsHook
+    wrapGAppsHook3
     desktop-file-utils
+    gobject-introspection
   ];
 
   buildInputs = [
@@ -72,7 +72,6 @@ stdenv.mkDerivation rec {
     brasero
     grilo
 
-    gobject-introspection
     python3.pkgs.pygobject3
 
     gst_all_1.gstreamer
@@ -101,7 +100,7 @@ stdenv.mkDerivation rec {
 
   preFixup = ''
     gappsWrapperArgs+=(
-      --prefix PYTHONPATH : "${python3.pkgs.pygobject3}/${python3.sitePackages}:$out/lib/rhythmbox/plugins/"
+      --prefix PYTHONPATH : "$out/lib/rhythmbox/plugins/"
     )
   '';
 
@@ -113,8 +112,8 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    homepage = "https://wiki.gnome.org/Apps/Rhythmbox";
-    description = "A music playing application for GNOME";
+    homepage = "https://gitlab.gnome.org/GNOME/rhythmbox";
+    description = "Music playing application for GNOME";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = [ maintainers.rasendubi ];

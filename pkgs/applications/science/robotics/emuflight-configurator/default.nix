@@ -1,5 +1,5 @@
 {lib, stdenv, fetchurl, unzip, makeDesktopItem, copyDesktopItems, nwjs
-, wrapGAppsHook, gsettings-desktop-schemas, gtk3 }:
+, wrapGAppsHook3, gsettings-desktop-schemas, gtk3 }:
 
 stdenv.mkDerivation rec {
   pname = "emuflight-configurator";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-e4HNg5yr9V5LyT0hYP6gzw0tZm4dLidJg5MQtH3L3JI=";
   };
 
-  nativeBuildInputs = [ wrapGAppsHook unzip copyDesktopItems ];
+  nativeBuildInputs = [ wrapGAppsHook3 unzip copyDesktopItems ];
 
   buildInputs = [ gsettings-desktop-schemas gtk3 ];
 
@@ -35,7 +35,8 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "The Emuflight flight control system configuration tool";
+    description = "Emuflight flight control system configuration tool";
+    mainProgram = "emuflight-configurator";
     longDescription = ''
       A crossplatform configuration tool for the Emuflight flight control system.
       Various types of aircraft are supported by the tool and by Emuflight, e.g.

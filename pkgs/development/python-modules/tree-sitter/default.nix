@@ -1,40 +1,54 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, wheel
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  tree-sitter-python,
+  tree-sitter-rust,
+  tree-sitter-html,
+  tree-sitter-javascript,
+  tree-sitter-json,
 }:
 
 buildPythonPackage rec {
   pname = "tree-sitter";
-  version = "0.20.1";
-  format = "pyproject";
+  version = "0.22.3";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    pname = "tree_sitter";
-    inherit version;
-    hash = "sha256-6T8ILFRdZkm8+11oHtJV6wBKbOIpiJcaEo9AaS/uxg0=";
+  src = fetchFromGitHub {
+    owner = "tree-sitter";
+    repo = "py-tree-sitter";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-4lxE8oDFE0X7YAnB72PKIaHIqovWSM5QnFo0grPAtKU=";
+    fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [
-    setuptools
-    wheel
+  build-system = [ setuptools ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+    tree-sitter-python
+    tree-sitter-rust
+    tree-sitter-html
+    tree-sitter-javascript
+    tree-sitter-json
   ];
 
-  # PyPI tarball doesn't contains tests and source has additional requirements
-  doCheck = false;
+  pythonImportsCheck = [ "tree_sitter" ];
 
-  pythonImportsCheck = [
-    "tree_sitter"
-  ];
+  preCheck = ''
+    # https://github.com/NixOS/nixpkgs/issues/255262#issuecomment-1721265871
+    rm -r tree_sitter
+  '';
 
   meta = with lib; {
     description = "Python bindings to the Tree-sitter parsing library";
     homepage = "https://github.com/tree-sitter/py-tree-sitter";
+    changelog = "https://github.com/tree-sitter/py-tree-sitter/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

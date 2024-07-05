@@ -66,6 +66,7 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     description = "BNF wrangling and railroad diagrams";
+    mainProgram = "kgt";
     longDescription = ''
       KGT: Kate's Grammar Tool
 

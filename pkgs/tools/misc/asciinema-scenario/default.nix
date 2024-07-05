@@ -19,5 +19,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/garbas/asciinema-scenario/";
     maintainers = with maintainers; [ garbas ];
     license = with licenses; [ mit ];
+    mainProgram = "asciinema-scenario";
   };
 }

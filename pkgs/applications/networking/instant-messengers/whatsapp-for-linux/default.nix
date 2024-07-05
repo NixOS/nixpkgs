@@ -21,25 +21,25 @@
 , pcre2
 , pkg-config
 , webkitgtk
-, wrapGAppsHook
+, wrapGAppsHook3
 , xorg
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "whatsapp-for-linux";
-  version = "1.6.3";
+  version = "1.6.5";
 
   src = fetchFromGitHub {
     owner = "eneshecan";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-YmiEzemoGLwCUVfnuTmruSkI0oBg7yNuodWmXTMGh8g=";
+    repo = "whatsapp-for-linux";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-hUIyn6BhAPoszBTHKa4qSj6IRa+8cUS0Gis/qjDDnyk=";
   };
 
   nativeBuildInputs = [
     cmake
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -68,11 +68,12 @@ stdenv.mkDerivation rec {
     xorg.libXtst
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/eneshecan/whatsapp-for-linux";
     description = "Whatsapp desktop messaging app";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ bartuka ];
+    mainProgram = "whatsapp-for-linux";
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ bartuka ];
     platforms = [ "x86_64-linux" ];
   };
-}
+})

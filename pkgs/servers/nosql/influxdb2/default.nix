@@ -1,6 +1,7 @@
 { buildGoModule
 , fetchFromGitHub
 , fetchurl
+, fetchpatch
 , go-bindata
 , lib
 , perl
@@ -8,26 +9,24 @@
 , rustPlatform
 , stdenv
 , libiconv
+, nixosTests
 }:
 
 let
-  version = "2.5.1";
-  # Despite the name, this is not a rolling release. This is the
-  # version of the UI assets for 2.5.1, as specified in
-  # scripts/fetch-ui-assets.sh in the 2.5.1 tag of influxdb.
-  ui_version = "OSS-2022-09-16";
-  libflux_version = "0.188.1";
+  version = "2.7.6";
+  ui_version = "OSS-v2.7.1";
+  libflux_version = "0.194.5";
 
   src = fetchFromGitHub {
     owner = "influxdata";
     repo = "influxdb";
     rev = "v${version}";
-    sha256 = "sha256-AKyuFBja06BuWYliqIGKOb4PIc5G8S9S+cf/dLrEATY=";
+    hash = "sha256-0gqFUIV0ETdVuVmC+SwoKsO6OkoT/s+qKO1f8fkaZj4=";
   };
 
   ui = fetchurl {
     url = "https://github.com/influxdata/ui/releases/download/${ui_version}/build.tar.gz";
-    sha256 = "sha256-YKDp1jLyo4n+YTeMaWl8dhN4Lr3H8FXV7stJ3p3zFe8=";
+    hash = "sha256-0k59SKvt9pFt3WSd5PRUThbfbctt2RYtaxaxoyLICm8=";
   };
 
   flux = rustPlatform.buildRustPackage {
@@ -37,10 +36,22 @@ let
       owner = "influxdata";
       repo = "flux";
       rev = "v${libflux_version}";
-      sha256 = "sha256-Xmh7V/o1Gje62kcnTeB9h/fySljhfu+tjbyvryvIGRc=";
+      hash = "sha256-XHT/+JMu5q1cPjZT2x/OKEPgxFJcnjrQKqn8w9/Mb3s=";
     };
-    sourceRoot = "source/libflux";
-    cargoSha256 = "sha256-9rPW0lgi3lXJARa1KXgSY8LVJsoFjppok5ODGlqYeYw=";
+    patches = [
+      # Fix build on Rust 1.78 (included after v0.195.0)
+      (fetchpatch {
+        name = "fix-build-on-rust-1.78.patch";
+        url = "https://github.com/influxdata/flux/commit/68c831c40b396f0274f6a9f97d77707c39970b02.patch";
+        stripLen = 2;
+        extraPrefix = "";
+        excludes = [ ];
+        hash = "sha256-6LOTgbOCfETNTmshyXgtDZf9y4t/2iqRuVPkz9dYPHc=";
+      })
+      ./fix-unsigned-char.patch
+    ];
+    sourceRoot = "${src.name}/libflux";
+    cargoHash = "sha256-O+t4f4P5291BuyARH6Xf3LejMFEQEBv+qKtyjHRhclA=";
     nativeBuildInputs = [ rustPlatform.bindgenHook ];
     buildInputs = lib.optional stdenv.isDarwin libiconv;
     pkgcfg = ''
@@ -68,7 +79,7 @@ in buildGoModule {
 
   nativeBuildInputs = [ go-bindata pkg-config perl ];
 
-  vendorSha256 = "sha256-02x+HsWkng7OnKVSfkQR8LL1Qk42Bdrw0IMtBpS7xQc=";
+  vendorHash = "sha256-3Vf8BCrOwliXrH+gmZ4RJ1YBEbqL0Szx2prW3ie9CNg=";
   subPackages = [ "cmd/influxd" "cmd/telemetryd" ];
 
   PKG_CONFIG_PATH = "${flux}/pkgconfig";
@@ -107,10 +118,12 @@ in buildGoModule {
 
   ldflags = [ "-X main.commit=v${version}" "-X main.version=${version}" ];
 
+  passthru.tests = { inherit (nixosTests) influxdb2; };
+
   meta = with lib; {
-    description = "An open-source distributed time series database";
+    description = "Open-source distributed time series database";
     license = licenses.mit;
     homepage = "https://influxdata.com/";
-    maintainers = with maintainers; [ abbradar danderson ];
+    maintainers = with maintainers; [ abbradar ];
   };
 }

@@ -43,6 +43,7 @@ stdenv.mkDerivation rec {
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license     = licenses.unfreeRedistributable;
     platforms   = platforms.linux;
-    maintainers = with maintainers; [ domenkozar thoughtpolice cwoac jwoudenberg ];
+    maintainers = with maintainers; [ domenkozar thoughtpolice cwoac ];
+    mainProgram = "rslsync";
   };
 }

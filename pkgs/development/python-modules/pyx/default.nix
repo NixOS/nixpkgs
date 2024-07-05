@@ -1,12 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy3k
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPy3k,
 }:
 
 buildPythonPackage rec {
   pname = "pyx";
   version = "0.16";
+  format = "setuptools";
   disabled = !isPy3k;
 
   src = fetchPypi {

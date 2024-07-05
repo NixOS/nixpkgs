@@ -1,25 +1,33 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
 
 buildGoModule rec {
   pname = "jwt-hack";
-  version = "1.1.2";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "hahwul";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-K0ZtEi0zAKRlIGvorrXmtmkcMvyLIXWPnVMQANZbClk=";
+    repo = "jwt-hack";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-IHR+ItI4ToINLpkVc7yrgpNTS17nD02G6x3pNMEfIW4=";
   };
 
-  vendorSha256 = "sha256-VYh3oRy8bmtXf6AnLNi/M2kA6t+crW3AXBiGovpdt8U=";
+  vendorHash = "sha256-YEH+epSvyy1j0s8AIJ5+BdF47H7KqgBRC4t81noOkjo=";
+
+  ldflags = [
+    "-w"
+    "-s"
+  ];
 
   meta = with lib; {
     description = "Tool for attacking JWT";
     homepage = "https://github.com/hahwul/jwt-hack";
+    changelog = "https://github.com/hahwul/jwt-hack/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "jwt-hack";
   };
 }

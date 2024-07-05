@@ -26,10 +26,10 @@ let
     or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
   hash = {
-    x64-linux_hash = "sha256-aEcinTJlO++rTeyqGJea0TWtleH6fyooA8RhT0Qj24c=";
-    arm64-linux_hash = "sha256-9Gyk09zAGzahP8FCGxj037vaK8h++3M5R2Qqop99Gs4=";
-    x64-osx_hash = "sha256-c87eOZBz+RtbIi+dlXKKVMyPI8JqYDuiaL4xOkDRFn0=";
-    arm64-osx_hash = "sha256-zSHgLXRDB6UA7V0LFgLq9ChqB40IHIJJxRqAYyVFlB8=";
+    x64-linux_hash = "sha256-LMAY1UIwvB+ne4rpwLKaYO6QGTwdiS3YBndr73zIzvQ=";
+    arm64-linux_hash = "sha256-by3PSYdN7TPjA0Cx4pfzIbpZ/YVU1agfcuvuZh6mbfU=";
+    x64-osx_hash = "sha256-/YqdlVktgbBUNdm+mAD053pf6wCMXYt6gQP+iTQdKqw=";
+    arm64-osx_hash = "sha256-2RRQGNTztK14KDFRqgpagNCWTizHVNY67psaxFfyDZ4=";
   }."${arch}-${os}_hash";
 
   libPath = {
@@ -40,7 +40,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "recyclarr";
-  version = "5.1.0";
+  version = "7.0.0";
 
   src = fetchurl {
     url = "https://github.com/recyclarr/recyclarr/releases/download/v${version}/recyclarr-${os}-${arch}.tar.xz";
@@ -83,6 +83,7 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/recyclarr/recyclarr/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ josephst ];
+    mainProgram = "recyclarr";
     platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
   };
 }

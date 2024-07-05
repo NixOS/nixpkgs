@@ -23,14 +23,14 @@ in
   imports = [ (mkRemovedOptionModule [ "services" "thelounge" "private" ] "The option was renamed to `services.thelounge.public` to follow upstream changes.") ];
 
   options.services.thelounge = {
-    enable = mkEnableOption (lib.mdDoc "The Lounge web IRC client");
+    enable = mkEnableOption "The Lounge web IRC client";
 
-    package = mkPackageOptionMD pkgs "thelounge" { };
+    package = mkPackageOption pkgs "thelounge" { };
 
     public = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         Make your The Lounge instance public.
         Setting this to `false` will require you to configure user
         accounts by using the ({command}`thelounge`) command or by adding
@@ -42,7 +42,7 @@ in
     port = mkOption {
       type = types.port;
       default = 9000;
-      description = lib.mdDoc "TCP port to listen on for http connections.";
+      description = "TCP port to listen on for http connections.";
     };
 
     extraConfig = mkOption {
@@ -58,7 +58,7 @@ in
           };
         }
       '';
-      description = lib.mdDoc ''
+      description = ''
         The Lounge's {file}`config.js` contents as attribute set (will be
         converted to JSON to generate the configuration file).
 
@@ -73,7 +73,7 @@ in
       default = [ ];
       type = types.listOf types.package;
       example = literalExpression "[ pkgs.theLoungePlugins.themes.solarized ]";
-      description = lib.mdDoc ''
+      description = ''
         The Lounge plugins to install. Plugins can be found in
         `pkgs.theLoungePlugins.plugins` and `pkgs.theLoungePlugins.themes`.
       '';

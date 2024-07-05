@@ -9,12 +9,22 @@
 , prefix ? ../../..
 }:
 
-with pkgs;
-
 let
-  inherit (lib) hasPrefix removePrefix;
+  inherit (pkgs) buildPackages runCommand docbook_xsl_ns;
 
-  lib = pkgs.lib;
+  inherit (pkgs.lib)
+    hasPrefix
+    removePrefix
+    flip
+    foldr
+    types
+    mkOption
+    escapeShellArg
+    concatMapStringsSep
+    sourceFilesBySuffices
+    ;
+
+  common = import ./common.nix;
 
   manpageUrls = pkgs.path + "/doc/manpage-urls.json";
 
@@ -25,7 +35,7 @@ let
   # E.g. if some `options` came from modules in ${pkgs.customModules}/nix,
   # you'd need to include `extraSources = [ pkgs.customModules ]`
   prefixesToStrip = map (p: "${toString p}/") ([ prefix ] ++ extraSources);
-  stripAnyPrefixes = lib.flip (lib.foldr lib.removePrefix) prefixesToStrip;
+  stripAnyPrefixes = flip (foldr removePrefix) prefixesToStrip;
 
   optionsDoc = buildPackages.nixosOptionsDoc {
     inherit options revision baseOptionsJSON warningsAreErrors;
@@ -40,8 +50,8 @@ let
   testOptionsDoc = let
       eval = nixos-lib.evalTest {
         # Avoid evaluating a NixOS config prototype.
-        config.node.type = lib.types.deferredModule;
-        options._module.args = lib.mkOption { internal = true; };
+        config.node.type = types.deferredModule;
+        options._module.args = mkOption { internal = true; };
       };
     in buildPackages.nixosOptionsDoc {
       inherit (eval) options;
@@ -63,23 +73,28 @@ let
       optionIdPrefix = "test-opt-";
     };
 
+  testDriverMachineDocstrings = pkgs.callPackage
+    ../../../nixos/lib/test-driver/nixos-test-driver-docstrings.nix {};
+
   prepareManualFromMD = ''
     cp -r --no-preserve=all $inputs/* .
 
     substituteInPlace ./manual.md \
-      --replace '@NIXOS_VERSION@' "${version}"
+      --replace-fail '@NIXOS_VERSION@' "${version}"
     substituteInPlace ./configuration/configuration.md \
-      --replace \
+      --replace-fail \
           '@MODULE_CHAPTERS@' \
-          ${lib.escapeShellArg (lib.concatMapStringsSep "\n" (p: "${p.value}") config.meta.doc)}
+          ${escapeShellArg (concatMapStringsSep "\n" (p: "${p.value}") config.meta.doc)}
     substituteInPlace ./nixos-options.md \
-      --replace \
+      --replace-fail \
         '@NIXOS_OPTIONS_JSON@' \
-        ${optionsDoc.optionsJSON}/share/doc/nixos/options.json
+        ${optionsDoc.optionsJSON}/${common.outputPath}/options.json
     substituteInPlace ./development/writing-nixos-tests.section.md \
-      --replace \
+      --replace-fail \
         '@NIXOS_TEST_OPTIONS_JSON@' \
-        ${testOptionsDoc.optionsJSON}/share/doc/nixos/options.json
+        ${testOptionsDoc.optionsJSON}/${common.outputPath}/options.json
+    sed -e '/@PYTHON_MACHINE_METHODS@/ {' -e 'r ${testDriverMachineDocstrings}/machine-methods.md' -e 'd' -e '}' \
+      -i ./development/writing-nixos-tests.section.md
   '';
 
 in rec {
@@ -88,34 +103,37 @@ in rec {
   # Generate the NixOS manual.
   manualHTML = runCommand "nixos-manual-html"
     { nativeBuildInputs = [ buildPackages.nixos-render-docs ];
-      inputs = lib.sourceFilesBySuffices ./. [ ".md" ];
+      inputs = sourceFilesBySuffices ./. [ ".md" ];
       meta.description = "The NixOS manual in HTML format";
       allowedReferences = ["out"];
     }
     ''
       # Generate the HTML manual.
-      dst=$out/share/doc/nixos
+      dst=$out/${common.outputPath}
       mkdir -p $dst
 
       cp ${../../../doc/style.css} $dst/style.css
-      cp ${../../../doc/overrides.css} $dst/overrides.css
+      cp ${../../../doc/anchor.min.js} $dst/anchor.min.js
+      cp ${../../../doc/anchor-use.js} $dst/anchor-use.js
+
       cp -r ${pkgs.documentation-highlighter} $dst/highlightjs
 
       ${prepareManualFromMD}
 
       nixos-render-docs -j $NIX_BUILD_CORES manual html \
         --manpage-urls ${manpageUrls} \
-        --revision ${lib.escapeShellArg revision} \
-        --generator "nixos-render-docs ${lib.version}" \
+        --revision ${escapeShellArg revision} \
+        --generator "nixos-render-docs ${pkgs.lib.version}" \
         --stylesheet style.css \
-        --stylesheet overrides.css \
         --stylesheet highlightjs/mono-blue.css \
         --script ./highlightjs/highlight.pack.js \
         --script ./highlightjs/loader.js \
+        --script ./anchor.min.js \
+        --script ./anchor-use.js \
         --toc-depth 1 \
         --chunk-toc-depth 1 \
         ./manual.md \
-        $dst/index.html
+        $dst/${common.indexPath}
 
       mkdir -p $out/nix-support
       echo "nix-build out $out" >> $out/nix-support/hydra-build-products
@@ -126,7 +144,7 @@ in rec {
   manual = manualHTML;
 
   # Index page of the NixOS manual.
-  manualHTMLIndex = "${manualHTML}/share/doc/nixos/index.html";
+  manualHTMLIndex = "${manualHTML}/${common.outputPath}/${common.indexPath}";
 
   manualEpub = runCommand "nixos-manual-epub"
     { nativeBuildInputs = [ buildPackages.libxml2.bin buildPackages.libxslt.bin buildPackages.zip ];
@@ -137,7 +155,7 @@ in rec {
               xml:id="book-nixos-manual">
           <info>
             <title>NixOS Manual</title>
-            <subtitle>Version ${lib.version}</subtitle>
+            <subtitle>Version ${pkgs.lib.version}</subtitle>
           </info>
           <chapter>
             <title>Temporarily unavailable</title>
@@ -157,7 +175,7 @@ in rec {
     }
     ''
       # Generate the epub manual.
-      dst=$out/share/doc/nixos
+      dst=$out/${common.outputPath}
 
       xsltproc \
         --param chapter.autolabel 0 \
@@ -177,8 +195,8 @@ in rec {
     '';
 
 
-  # Generate the NixOS manpages.
-  manpages = runCommand "nixos-manpages"
+  # Generate the `man configuration.nix` package
+  nixos-configuration-reference-manpage = runCommand "nixos-configuration-reference-manpage"
     { nativeBuildInputs = [
         buildPackages.installShellFiles
         buildPackages.nixos-render-docs
@@ -187,12 +205,10 @@ in rec {
     }
     ''
       # Generate manpages.
-      mkdir -p $out/share/man/man8
-      installManPage ${./manpages}/*
       mkdir -p $out/share/man/man5
       nixos-render-docs -j $NIX_BUILD_CORES options manpage \
-        --revision ${lib.escapeShellArg revision} \
-        ${optionsJSON}/share/doc/nixos/options.json \
+        --revision ${escapeShellArg revision} \
+        ${optionsJSON}/${common.outputPath}/options.json \
         $out/share/man/man5/configuration.nix.5
     '';
 

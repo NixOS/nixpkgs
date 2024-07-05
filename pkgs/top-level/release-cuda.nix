@@ -18,10 +18,15 @@
   nixpkgsArgs ? { config = { allowUnfree = true; inHydra = true; }; }
 }:
 
-with import ./release-lib.nix {inherit supportedSystems nixpkgsArgs; };
-with lib;
-
 let
+  release-lib = import ./release-lib.nix {
+    inherit supportedSystems nixpkgsArgs;
+  };
+
+  inherit (release-lib) linux mapTestOn packagePlatforms pkgs;
+
+  inherit (release-lib.lib) genAttrs;
+
   # Package sets to evaluate
   packageSets = [
     "cudaPackages_10_0"

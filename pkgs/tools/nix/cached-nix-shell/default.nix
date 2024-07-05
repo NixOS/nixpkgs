@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, nix, openssl, pkg-config, ronn, rustPlatform }:
+{ lib, fetchFromGitHub, nix, ronn, rustPlatform }:
 
 let
   blake3-src = fetchFromGitHub {
@@ -38,6 +38,7 @@ in rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Instant startup time for nix-shell";
+    mainProgram = "cached-nix-shell";
     homepage = "https://github.com/xzfc/cached-nix-shell";
     license = with licenses; [ unlicense /* or */ mit ];
     maintainers = with maintainers; [ xzfc ];

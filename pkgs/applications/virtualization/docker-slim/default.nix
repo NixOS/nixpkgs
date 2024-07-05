@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "docker-slim";
-  version = "1.40.2";
+  version = "1.40.11";
 
   src = fetchFromGitHub {
     owner = "slimtoolkit";
     repo = "slim";
     rev = version;
-    hash = "sha256-byB7GTw0hHY4dp3CkMCl6ga/Zn82+K6qmyWy6ezCLoE=";
+    hash = "sha256-X+1euWp4W53axbiBpL82bUPfod/JNhGVGWgOqKyhz6A=";
   };
 
   vendorHash = null;
@@ -17,11 +17,15 @@ buildGoModule rec {
 
   nativeBuildInputs = [ makeBinaryWrapper ];
 
+  preBuild = ''
+    go generate ./...
+  '';
+
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/docker-slim/docker-slim/pkg/version.appVersionTag=${version}"
-    "-X github.com/docker-slim/docker-slim/pkg/version.appVersionRev=${src.rev}"
+    "-X github.com/slimtoolkit/slim/pkg/version.appVersionTag=${version}"
+    "-X github.com/slimtoolkit/slim/pkg/version.appVersionRev=${src.rev}"
   ];
 
   # docker-slim tries to create its state dir next to the binary (inside the nix
@@ -35,6 +39,6 @@ buildGoModule rec {
     homepage = "https://slimtoolkit.org/";
     changelog = "https://github.com/slimtoolkit/slim/raw/${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ Br1ght0ne marsam mbrgm ];
+    maintainers = with maintainers; [ Br1ght0ne mbrgm ];
   };
 }

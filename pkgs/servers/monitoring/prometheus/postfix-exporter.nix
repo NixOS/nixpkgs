@@ -18,7 +18,7 @@ buildGoModule rec {
     sha256 = "sha256-63ze51Qbjm+3CV1OFGFa9cS4ucZ+gMKaJyBF2b//CfM=";
   };
 
-  vendorSha256 = "sha256-a4Lk4wh4mvXEjLgFksZIVVtbp+zTUyjtLVuk7vuot2k=";
+  vendorHash = "sha256-a4Lk4wh4mvXEjLgFksZIVVtbp+zTUyjtLVuk7vuot2k=";
 
   ldflags = [ "-s" "-w" ];
 
@@ -35,7 +35,8 @@ buildGoModule rec {
 
   meta = with lib; {
     inherit (src.meta) homepage;
-    description = "A Prometheus exporter for Postfix";
+    description = "Prometheus exporter for Postfix";
+    mainProgram = "postfix_exporter";
     license = licenses.asl20;
     maintainers = with maintainers; [ willibutz globin ];
   };

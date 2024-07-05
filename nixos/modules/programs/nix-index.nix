@@ -3,24 +3,19 @@ let
   cfg = config.programs.nix-index;
 in {
   options.programs.nix-index = with lib; {
-    enable = mkEnableOption (lib.mdDoc "nix-index, a file database for nixpkgs");
+    enable = mkEnableOption "nix-index, a file database for nixpkgs";
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.nix-index;
-      defaultText = literalExpression "pkgs.nix-index";
-      description = lib.mdDoc "Package providing the `nix-index` tool.";
-    };
+    package = mkPackageOption pkgs "nix-index" { };
 
-    enableBashIntegration = mkEnableOption (lib.mdDoc "Bash integration") // {
+    enableBashIntegration = mkEnableOption "Bash integration" // {
       default = true;
     };
 
-    enableZshIntegration = mkEnableOption (lib.mdDoc "Zsh integration") // {
+    enableZshIntegration = mkEnableOption "Zsh integration" // {
       default = true;
     };
 
-    enableFishIntegration = mkEnableOption (lib.mdDoc "Fish integration") // {
+    enableFishIntegration = mkEnableOption "Fish integration" // {
       default = true;
     };
   };

@@ -10,10 +10,16 @@ NIXPKGS_ROOT=$(realpath "$NIXPKGS_ROOT")
 instantiateClean() {
     nix-instantiate --eval --strict -E "with import ./. {}; $1" | cut -d\" -f2
 }
-fetchNewSha() {
+fetchNewHash() {
     set +eo pipefail
-    nix-build -A "$1" 2>&1 >/dev/null | grep "got:" | cut -d':' -f2 | sed 's| ||g'
+    HASH="$(nix-build -A "$1" 2>&1 >/dev/null | grep "got:" | cut -d':' -f2 | sed 's| ||g')"
     set -eo pipefail
+    if [ -z "$HASH" ]; then
+      echo "Could not generate hash" >&2
+      exit 1
+    else
+      echo "$HASH"
+    fi
 }
 replace() {
     sed -i "s@$1@$2@g" "$3"
@@ -49,7 +55,7 @@ replace "$OLD_VERSION" "$NEW_VERSION" "$DRV_DIR/sources.nix"
 OLD_SRC_HASH="$(instantiateClean authelia.src.outputHash)"
 echo "Old src hash $OLD_SRC_HASH"
 replace "$OLD_SRC_HASH" "$TMP_HASH" "$DRV_DIR/sources.nix"
-NEW_SRC_HASH="$(fetchNewSha authelia.src)"
+NEW_SRC_HASH="$(fetchNewHash authelia.src)"
 echo "New src hash $NEW_SRC_HASH"
 replace "$TMP_HASH" "$NEW_SRC_HASH" "$DRV_DIR/sources.nix"
 
@@ -61,18 +67,18 @@ clean_up() {
 }
 trap clean_up EXIT
 
-# OLD_PWD=$PWD
-# cd $WEB_DIR
-# OUT=$(nix-build -E "with import $NIXPKGS_ROOT {}; authelia.src" --no-out-link)
-# cp -r $OUT/web/package.json .
-# npm install --package-lock-only --legacy-peer-deps --ignore-scripts
-# mv package-lock.json "$DRV_DIR/"
+OLD_PWD=$PWD
+cd $WEB_DIR
+OUT=$(nix-build -E "with import $NIXPKGS_ROOT {}; authelia.src" --no-out-link)
+cp -r $OUT/web/package.json .
+npm install --package-lock-only --legacy-peer-deps --ignore-scripts
+mv package-lock.json "$DRV_DIR/"
+cd $OLD_PWD
 
-# cd $OLD_PWD
 OLD_NPM_DEPS_HASH="$(instantiateClean authelia.web.npmDepsHash)"
 echo "Old npm deps hash $OLD_NPM_DEPS_HASH"
 replace "$OLD_NPM_DEPS_HASH" "$TMP_HASH" "$DRV_DIR/sources.nix"
-NEW_NPM_DEPS_HASH="$(fetchNewSha authelia.web)"
+NEW_NPM_DEPS_HASH="$(fetchNewHash authelia.web)"
 echo "New npm deps hash $NEW_NPM_DEPS_HASH"
 replace "$TMP_HASH" "$NEW_NPM_DEPS_HASH" "$DRV_DIR/sources.nix"
 clean_up
@@ -80,6 +86,6 @@ clean_up
 OLD_GO_VENDOR_HASH="$(instantiateClean authelia.vendorHash)"
 echo "Old go vendor hash $OLD_GO_VENDOR_HASH"
 replace "$OLD_GO_VENDOR_HASH" "$TMP_HASH" "$DRV_DIR/sources.nix"
-NEW_GO_VENDOR_HASH="$(fetchNewSha authelia.go-modules)"
+NEW_GO_VENDOR_HASH="$(fetchNewHash authelia.goModules)"
 echo "New go vendor hash $NEW_GO_VENDOR_HASH"
 replace "$TMP_HASH" "$NEW_GO_VENDOR_HASH" "$DRV_DIR/sources.nix"

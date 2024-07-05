@@ -22,7 +22,7 @@ let
   desktopItem = makeDesktopItem {
     name = "ssb-patchwork";
     exec = "${binary}/bin/ssb-patchwork";
-    icon = "ssb-patchwork.png";
+    icon = "ssb-patchwork";
     comment = "Client for the decentralized social network Secure Scuttlebutt";
     desktopName = "Patchwork";
     genericName = "Patchwork";
@@ -41,13 +41,14 @@ in
     '';
 
     meta = with lib; {
-      description = "A decentralized messaging and sharing app built on top of Secure Scuttlebutt (SSB)";
+      description = "Decentralized messaging and sharing app built on top of Secure Scuttlebutt (SSB)";
       longDescription = ''
         sea-slang for gossip - a scuttlebutt is basically a watercooler on a ship.
       '';
       homepage = "https://www.scuttlebutt.nz/";
-      license = licenses.agpl3;
-      maintainers = with maintainers; [ asymmetric ninjatrappeur cyplo ];
+      license = licenses.agpl3Only;
+      maintainers = with maintainers; [ asymmetric picnoir cyplo ];
+      mainProgram = "ssb-patchwork";
       platforms = [ "x86_64-linux" ];
     };
   }

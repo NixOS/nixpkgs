@@ -1,51 +1,42 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, hatchling
-, opentelemetry-instrumentation
-, opentelemetry-sdk
-, opentelemetry-semantic-conventions
-, opentelemetry-test-utils
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  hatchling,
+  opentelemetry-instrumentation,
+  opentelemetry-test-utils,
+  pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
+  inherit (opentelemetry-instrumentation) version src;
   pname = "opentelemetry-util-http";
-  version = "0.39b0";
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
-  src = fetchFromGitHub {
-    owner = "open-telemetry";
-    repo = "opentelemetry-python-contrib";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-C20/M5wimQec/8tTKx7+jkIYgfgNPtU9lkPKliIM3Uk=";
-    sparseCheckout = [ "/util/${pname}" ];
-  } + "/util/${pname}";
+  disabled = pythonOlder "3.8";
 
-  format = "pyproject";
+  sourceRoot = "${opentelemetry-instrumentation.src.name}/util/opentelemetry-util-http";
 
-  nativeBuildInputs = [
-    hatchling
-  ];
-
-  propagatedBuildInputs = [
-    opentelemetry-instrumentation
-    opentelemetry-sdk
-    opentelemetry-semantic-conventions
-  ];
+  build-system = [ hatchling ];
 
   nativeCheckInputs = [
+    opentelemetry-instrumentation
     opentelemetry-test-utils
     pytestCheckHook
   ];
 
+  # https://github.com/open-telemetry/opentelemetry-python-contrib/issues/1940
+  disabledTests = [
+    "test_nonstandard_method"
+    "test_nonstandard_method_allowed"
+  ];
+
   pythonImportsCheck = [ "opentelemetry.util.http" ];
 
-  meta = with lib; {
+  __darwinAllowLocalNetworking = true;
+
+  meta = opentelemetry-instrumentation.meta // {
     homepage = "https://github.com/open-telemetry/opentelemetry-python-contrib/tree/main/util/opentelemetry-util-http";
     description = "Web util for OpenTelemetry";
-    license = licenses.asl20;
-    maintainers = teams.deshaw.members;
   };
 }

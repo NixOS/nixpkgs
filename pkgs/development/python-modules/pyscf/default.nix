@@ -1,32 +1,33 @@
-{ buildPythonPackage
-, lib
-, fetchFromGitHub
-, cmake
-, blas
-, libcint
-, libxc
-, xcfun
-, cppe
-, h5py
-, numpy
-, scipy
-, nose
-, nose-exclude
+{
+  buildPythonPackage,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  blas,
+  libcint,
+  libxc,
+  xcfun,
+  cppe,
+  h5py,
+  numpy,
+  scipy,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pyscf";
-  version = "2.2.0";
+  version = "2.6.2";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "pyscf";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-3ylFz5j176hBQLklLmVKltE8whynzojsoBEWjEL2M14=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-gudkKhC5Cpd6ZM9mJ1SfemqmwDqhDmpAfYE8XGFpzmA=";
   };
 
   # setup.py calls Cmake and passes the arguments in CMAKE_CONFIGURE_ARGS to cmake.
-  nativeBuildInputs = [ cmake ];
+  build-system = [ cmake ];
   dontUseCmakeConfigure = true;
   preConfigure = ''
     export CMAKE_CONFIGURE_ARGS="-DBUILD_LIBCINT=0 -DBUILD_LIBXC=0 -DBUILD_XCFUN=0"
@@ -40,15 +41,14 @@ buildPythonPackage rec {
     xcfun
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     cppe
     h5py
     numpy
     scipy
   ];
 
-  nativeCheckInputs = [ nose nose-exclude ];
-
+  nativeCheckInputs = [ pytestCheckHook ];
   pythonImportsCheck = [ "pyscf" ];
   preCheck = ''
     # Set config used by tests to ensure reproducibility
@@ -57,55 +57,53 @@ buildPythonPackage rec {
     ulimit -s 20000
     export PYSCF_CONFIG_FILE=$(pwd)/pyscf/pyscf_config.py
   '';
-  # As defined for the PySCF CI at https://github.com/pyscf/pyscf/blob/master/.github/workflows/run_tests.sh
-  # minus some additionally numerically instable tests, that are sensitive to BLAS, FFTW, etc.
-  checkPhase = ''
-    runHook preCheck
 
-    nosetests pyscf/ -v \
-      --exclude-dir=examples --exclude-dir=pyscf/pbc/grad \
-      --exclude-dir=pyscf/x2c \
-      --exclude-dir=pyscf/adc \
-      --exclude-dir=pyscf/pbc/tdscf \
-      -e test_bz \
-      -e h2o_vdz \
-      -e test_mc2step_4o4e \
-      -e test_ks_noimport \
-      -e test_jk_hermi0 \
-      -e test_j_kpts \
-      -e test_k_kpts \
-      -e test_lda \
-      -e high_cost \
-      -e skip \
-      -e call_in_background \
-      -e libxc_cam_beta_bug \
-      -e test_finite_diff_rks_eph \
-      -e test_finite_diff_uks_eph \
-      -e test_pipek \
-      -e test_n3_cis_ewald \
-      -e test_veff \
-      -I test_kuccsd_supercell_vs_kpts\.py \
-      -I test_kccsd_ghf\.py \
-      -I test_h_.*\.py \
-      --exclude-test=pyscf/pbc/gw/test/test_kgw_slow_supercell.DiamondTestSupercell3 \
-      --exclude-test=pyscf/pbc/gw/test/test_kgw_slow_supercell.DiamondKSTestSupercell3 \
-      --exclude-test=pyscf/pbc/gw/test/test_kgw_slow.DiamondTestSupercell3 \
-      --exclude-test=pyscf/pbc/gw/test/test_kgw_slow.DiamondKSTestSupercell3 \
-      --exclude-test=pyscf/pbc/tdscf/test/test_krhf_slow_supercell.DiamondTestSupercell3 \
-      --exclude-test=pyscf/pbc/tdscf/test/test_kproxy_hf.DiamondTestSupercell3 \
-      --exclude-test=pyscf/pbc/tdscf/test/test_kproxy_ks.DiamondTestSupercell3 \
-      --exclude-test=pyscf/pbc/tdscf/test/test_kproxy_supercell_hf.DiamondTestSupercell3 \
-      --exclude-test=pyscf/pbc/tdscf/test/test_kproxy_supercell_ks.DiamondTestSupercell3 \
-      -I .*_slow.*py -I .*_kproxy_.*py -I test_proxy.py tdscf/*_slow.py gw/*_slow.py
+  # Numerically slightly off tests
+  disabledTests = [
+    "test_tdhf_singlet"
+    "test_ab_hf"
+    "test_ea"
+    "test_bz"
+    "h2o_vdz"
+    "test_mc2step_4o4e"
+    "test_ks_noimport"
+    "test_jk_hermi0"
+    "test_j_kpts"
+    "test_k_kpts"
+    "test_lda"
+    "high_cost"
+    "skip"
+    "call_in_background"
+    "libxc_cam_beta_bug"
+    "test_finite_diff_rks_eph"
+    "test_finite_diff_uks_eph"
+    "test_finite_diff_roks_grad"
+    "test_finite_diff_df_roks_grad"
+    "test_frac_particles"
+    "test_nosymm_sa4_newton"
+    "test_pipek"
+    "test_n3_cis_ewald"
+    "test_veff"
+    "test_collinear_kgks_gga"
+    "test_libxc_gga_deriv4"
+  ];
 
-    runHook postCheck
-  '';
+  pytestFlagsArray = [
+    "--ignore=pyscf/pbc/tdscf"
+    "--ignore=pyscf/pbc/gw"
+    "--ignore-glob=*_slow.*py"
+    "--ignore-glob=*_kproxy_.*py"
+    "--ignore-glob=test_proxy.py"
+  ];
 
   meta = with lib; {
     description = "Python-based simulations of chemistry framework";
     homepage = "https://github.com/pyscf/pyscf";
     license = licenses.asl20;
-    platforms = [ "x86_64-linux" "x86_64-darwin" ];
+    platforms = [
+      "x86_64-linux"
+      "x86_64-darwin"
+    ];
     maintainers = [ maintainers.sheepforce ];
   };
 }

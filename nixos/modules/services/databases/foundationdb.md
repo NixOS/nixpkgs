@@ -15,9 +15,11 @@ key-value store.
 
 To enable FoundationDB, add the following to your
 {file}`configuration.nix`:
-```
-services.foundationdb.enable = true;
-services.foundationdb.package = pkgs.foundationdb71; # FoundationDB 7.1.x
+```nix
+{
+  services.foundationdb.enable = true;
+  services.foundationdb.package = pkgs.foundationdb71; # FoundationDB 7.1.x
+}
 ```
 
 The {option}`services.foundationdb.package` option is required, and
@@ -109,8 +111,10 @@ default configuration. See below for more on scaling to increase this.
 FoundationDB stores all data for all server processes under
 {file}`/var/lib/foundationdb`. You can override this using
 {option}`services.foundationdb.dataDir`, e.g.
-```
-services.foundationdb.dataDir = "/data/fdb";
+```nix
+{
+  services.foundationdb.dataDir = "/data/fdb";
+}
 ```
 
 Similarly, logs are stored under {file}`/var/log/foundationdb`
@@ -265,8 +269,10 @@ directories.
 For example, to create backups in {command}`/opt/fdb-backups`, first
 set up the paths in the module options:
 
-```
-services.foundationdb.extraReadWritePaths = [ "/opt/fdb-backups" ];
+```nix
+{
+  services.foundationdb.extraReadWritePaths = [ "/opt/fdb-backups" ];
+}
 ```
 
 Restart the FoundationDB service, and it will now be able to write to this

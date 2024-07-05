@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch, libpcap }:
+{ lib, stdenv, fetchurl, libpcap }:
 
 stdenv.mkDerivation rec {
   pname = "cdpr";
@@ -34,5 +34,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
     maintainers = [ maintainers.sgo ];
+    mainProgram = "cdpr";
   };
 }

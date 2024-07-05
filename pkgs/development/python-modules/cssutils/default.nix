@@ -1,41 +1,33 @@
-{ lib
-, buildPythonPackage
-, pythonAtLeast
-, pythonOlder
-, fetchpatch
-, fetchPypi
-, setuptools
-, setuptools-scm
-, importlib-metadata
-, cssselect
-, jaraco-test
-, lxml
-, mock
-, pytestCheckHook
-, importlib-resources
+{
+  lib,
+  buildPythonPackage,
+  pythonAtLeast,
+  pythonOlder,
+  fetchFromGitHub,
+  setuptools-scm,
+  cssselect,
+  jaraco-test,
+  lxml,
+  mock,
+  pytestCheckHook,
+  importlib-resources,
 }:
 
 buildPythonPackage rec {
   pname = "cssutils";
-  version = "2.7.1";
+  version = "2.10.2";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
-  format = "pyproject";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-NA7P2YNdId+PmFAPDfzqCu5By04Z7Lws+U8KbTbXy2w=";
+  src = fetchFromGitHub {
+    owner = "jaraco";
+    repo = "cssutils";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-1sAn6pFwWsnYS1eHQmyDNGTo6kdhL1vJBwUptADvHyo=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-    setuptools-scm
-  ];
-
-  propagatedBuildInputs = lib.optionals (pythonOlder "3.8") [
-    importlib-metadata
-  ];
+  build-system = [ setuptools-scm ];
 
   nativeCheckInputs = [
     cssselect
@@ -43,13 +35,10 @@ buildPythonPackage rec {
     lxml
     mock
     pytestCheckHook
-  ] ++ lib.optionals (pythonOlder "3.9") [
-    importlib-resources
-  ];
+  ] ++ lib.optionals (pythonOlder "3.9") [ importlib-resources ];
 
   disabledTests = [
     # access network
-    "test_parseUrl"
     "encutils"
     "website.logging"
   ];
@@ -57,9 +46,9 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "cssutils" ];
 
   meta = with lib; {
-    description = "A CSS Cascading Style Sheets library for Python";
+    description = "CSS Cascading Style Sheets library for Python";
     homepage = "https://github.com/jaraco/cssutils";
-    changelog = "https://github.com/jaraco/cssutils/blob/v${version}/CHANGES.rst";
+    changelog = "https://github.com/jaraco/cssutils/blob/${src.rev}/NEWS.rst";
     license = licenses.lgpl3Plus;
     maintainers = with maintainers; [ dotlambda ];
   };

@@ -1,5 +1,9 @@
 { lib, stdenv, fetchFromGitHub, buildDunePackage, ocaml, findlib, cppo }:
 
+if lib.versionAtLeast ocaml.version "5.2"
+then throw "ppx_tools is not available for OCaml ${ocaml.version}"
+else
+
 let param =
   let v6_6 = {
     version = "6.6";
@@ -35,6 +39,7 @@ let param =
   "4.13" = v6_6;
   "4.14" = v6_6;
   "5.0" = v6_6;
+  "5.1" = v6_6;
 }.${ocaml.meta.branch};
 in
 
@@ -57,7 +62,6 @@ then
   buildDunePackage {
     inherit pname src meta;
     inherit (param) version buildInputs nativeBuildInputs;
-    duneVersion = "3";
   }
 else
   stdenv.mkDerivation {

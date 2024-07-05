@@ -8,13 +8,13 @@ in
 {
   options = {
     services.openvscode-server = {
-      enable = lib.mkEnableOption (lib.mdDoc "openvscode-server");
+      enable = lib.mkEnableOption "openvscode-server";
 
-      package = lib.mkPackageOptionMD pkgs "openvscode-server" { };
+      package = lib.mkPackageOption pkgs "openvscode-server" { };
 
       extraPackages = lib.mkOption {
         default = [ ];
-        description = lib.mdDoc ''
+        description = ''
           Additional packages to add to the openvscode-server {env}`PATH`.
         '';
         example = lib.literalExpression "[ pkgs.go ]";
@@ -23,7 +23,7 @@ in
 
       extraEnvironment = lib.mkOption {
         type = lib.types.attrsOf lib.types.str;
-        description = lib.mdDoc ''
+        description = ''
           Additional environment variables to pass to openvscode-server.
         '';
         default = { };
@@ -32,7 +32,7 @@ in
 
       extraArguments = lib.mkOption {
         default = [ ];
-        description = lib.mdDoc ''
+        description = ''
           Additional arguments to pass to openvscode-server.
         '';
         example = lib.literalExpression ''[ "--log=info" ]'';
@@ -41,7 +41,7 @@ in
 
       host = lib.mkOption {
         default = "localhost";
-        description = lib.mdDoc ''
+        description = ''
           The host name or IP address the server should listen to.
         '';
         type = lib.types.str;
@@ -49,7 +49,7 @@ in
 
       port = lib.mkOption {
         default = 3000;
-        description = lib.mdDoc ''
+        description = ''
           The port the server should listen to. If 0 is passed a random free port is picked. If a range in the format num-num is passed, a free port from the range (end inclusive) is selected.
         '';
         type = lib.types.port;
@@ -58,7 +58,7 @@ in
       user = lib.mkOption {
         default = defaultUser;
         example = "yourUser";
-        description = lib.mdDoc ''
+        description = ''
           The user to run openvscode-server as.
           By default, a user named `${defaultUser}` will be created.
         '';
@@ -68,7 +68,7 @@ in
       group = lib.mkOption {
         default = defaultGroup;
         example = "yourGroup";
-        description = lib.mdDoc ''
+        description = ''
           The group to run openvscode-server under.
           By default, a group named `${defaultGroup}` will be created.
         '';
@@ -77,7 +77,7 @@ in
 
       extraGroups = lib.mkOption {
         default = [ ];
-        description = lib.mdDoc ''
+        description = ''
           An array of additional groups for the `${defaultUser}` user.
         '';
         example = [ "docker" ];
@@ -86,7 +86,7 @@ in
 
       withoutConnectionToken = lib.mkOption {
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Run without a connection token. Only use this if the connection is secured by other means.
         '';
         example = true;
@@ -96,7 +96,7 @@ in
       socketPath = lib.mkOption {
         default = null;
         example = "/run/openvscode/socket";
-        description = lib.mdDoc ''
+        description = ''
           The path to a socket file for the server to listen to.
         '';
         type = lib.types.nullOr lib.types.str;
@@ -104,7 +104,7 @@ in
 
       userDataDir = lib.mkOption {
         default = null;
-        description = lib.mdDoc ''
+        description = ''
           Specifies the directory that user data is kept in. Can be used to open multiple distinct instances of Code.
         '';
         type = lib.types.nullOr lib.types.str;
@@ -112,7 +112,7 @@ in
 
       serverDataDir = lib.mkOption {
         default = null;
-        description = lib.mdDoc ''
+        description = ''
           Specifies the directory that server data is kept in.
         '';
         type = lib.types.nullOr lib.types.str;
@@ -120,7 +120,7 @@ in
 
       extensionsDir = lib.mkOption {
         default = null;
-        description = lib.mdDoc ''
+        description = ''
           Set the root path for extensions.
         '';
         type = lib.types.nullOr lib.types.str;
@@ -129,7 +129,7 @@ in
       telemetryLevel = lib.mkOption {
         default = null;
         example = "crash";
-        description = lib.mdDoc ''
+        description = ''
           Sets the initial telemetry level. Valid levels are: 'off', 'crash', 'error' and 'all'.
         '';
         type = lib.types.nullOr (lib.types.enum [ "off" "crash" "error" "all" ]);
@@ -138,7 +138,7 @@ in
       connectionToken = lib.mkOption {
         default = null;
         example = "secret-token";
-        description = lib.mdDoc ''
+        description = ''
           A secret that must be included with all requests.
         '';
         type = lib.types.nullOr lib.types.str;
@@ -146,7 +146,7 @@ in
 
       connectionTokenFile = lib.mkOption {
         default = null;
-        description = lib.mdDoc ''
+        description = ''
           Path to a file that contains the connection token.
         '';
         type = lib.types.nullOr lib.types.str;
@@ -159,6 +159,7 @@ in
     systemd.services.openvscode-server = {
       description = "OpenVSCode server";
       wantedBy = [ "multi-user.target" ];
+      wants = [ "network-online.target" ];
       after = [ "network-online.target" ];
       path = cfg.extraPackages;
       environment = cfg.extraEnvironment;

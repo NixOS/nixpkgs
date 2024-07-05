@@ -34,7 +34,7 @@ buildPythonApplication rec {
 
     cat >test-runner <<EOF
     #!/bin/sh
-    ${python.pythonForBuild.interpreter} nix_run_setup test
+    ${python.pythonOnBuildForHost.interpreter} nix_run_setup test
     EOF
     chmod +x test-runner
     wrapQtApp test-runner --prefix PYTHONPATH : $PYTHONPATH
@@ -46,7 +46,7 @@ buildPythonApplication rec {
   '';
 
   meta = with lib; {
-    description = "The FLExible Network Tester";
+    description = "FLExible Network Tester";
     homepage = "https://flent.org";
     license = licenses.gpl3;
 

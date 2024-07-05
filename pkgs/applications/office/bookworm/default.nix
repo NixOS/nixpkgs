@@ -24,7 +24,7 @@
 , unzip
 , vala
 , webkitgtk
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 stdenv.mkDerivation rec {
@@ -43,14 +43,14 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     vala
-    wrapGAppsHook
+    wrapGAppsHook3
+    gobject-introspection
   ];
 
   buildInputs = [
     appstream
     desktop-file-utils
     glib
-    gobject-introspection
     gtk3
     html2text
     libgee
@@ -81,7 +81,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A simple, focused eBook reader";
+    description = "Simple, focused eBook reader";
+    mainProgram = "com.github.babluboy.bookworm";
     longDescription = ''
       Read the books you love without having to worry about different format complexities like epub, pdf, mobi, cbr, etc.
     '';

@@ -2,6 +2,7 @@
 , bzip2
 , cbc
 , cmake
+, DarwinTools # sw_vers
 , eigen
 , ensureNewerSourcesForZipFilesHook
 , fetchFromGitHub
@@ -45,6 +46,9 @@ stdenv.mkDerivation rec {
       url = "https://github.com/google/or-tools/commit/edd1544375bd55f79168db315151a48faa548fa0.patch";
       hash = "sha256-S//1YM3IoRCp3Ghg8zMF0XXgIpVmaw4gH8cVb9eUbqM=";
     })
+    # Don't use non-existent member of string_view. Partial patch from commit
+    # https://github.com/google/or-tools/commit/c5a2fa1eb673bf652cb9ad4f5049d054b8166e17.patch
+    ./fix-stringview-compile.patch
   ];
 
   # or-tools normally attempts to build Protobuf for the build platform when
@@ -60,16 +64,18 @@ stdenv.mkDerivation rec {
     "-DFETCH_PYTHON_DEPS=OFF"
     "-DUSE_GLPK=ON"
     "-DUSE_SCIP=OFF"
-    "-DPython3_EXECUTABLE=${python.pythonForBuild.interpreter}"
+    "-DPython3_EXECUTABLE=${python.pythonOnBuildForHost.interpreter}"
   ] ++ lib.optionals stdenv.isDarwin [ "-DCMAKE_MACOSX_RPATH=OFF" ];
   nativeBuildInputs = [
     cmake
     ensureNewerSourcesForZipFilesHook
     pkg-config
-    python.pythonForBuild
+    python.pythonOnBuildForHost
     swig4
     unzip
-  ] ++ (with python.pythonForBuild.pkgs; [
+  ] ++ lib.optionals stdenv.isDarwin [
+    DarwinTools
+  ] ++ (with python.pythonOnBuildForHost.pkgs; [
     pip
     mypy-protobuf
   ]);
@@ -88,7 +94,7 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [
     abseil-cpp
     protobuf
-    python.pkgs.protobuf
+    (python.pkgs.protobuf.override { protobuf = protobuf; })
     python.pkgs.numpy
   ];
   nativeCheckInputs = [
@@ -117,6 +123,7 @@ stdenv.mkDerivation rec {
     description = ''
       Google's software suite for combinatorial optimization.
     '';
+    mainProgram = "fzn-ortools";
     maintainers = with maintainers; [ andersk ];
     platforms = with platforms; linux ++ darwin;
   };

@@ -1,22 +1,23 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonRelaxDepsHook
-, bleach
-, bokeh
-, param
-, pyviz-comms
-, markdown
-, pyct
-, requests
-, setuptools
-, tqdm
-, typing-extensions
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonRelaxDepsHook,
+  bleach,
+  bokeh,
+  param,
+  pyviz-comms,
+  markdown,
+  pyct,
+  requests,
+  setuptools,
+  tqdm,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "panel";
-  version = "0.14.4";
+  version = "1.4.4";
 
   format = "wheel";
 
@@ -25,16 +26,14 @@ buildPythonPackage rec {
   # tries to fetch even more artifacts
   src = fetchPypi {
     inherit pname version format;
-    hash = "sha256-3U/PL8cnbNPw3xEM56YZesQEDXTE79yMCSsjdxwfUU0=";
+    hash = "sha256-tJu5Z2VnsMBzC/aTSMBXJHCAgRrsVjZN1Pz7qA5eCaA=";
+    dist = "py3";
+    python = "py3";
   };
 
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
-  ];
+  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
-  pythonRelaxDeps = [
-    "bokeh"
-  ];
+  pythonRelaxDeps = [ "bokeh" ];
 
   propagatedBuildInputs = [
     bleach
@@ -49,18 +48,17 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  pythonImportsCheck = [
-    "panel"
-  ];
+  pythonImportsCheck = [ "panel" ];
 
   # infinite recursion in test dependencies (hvplot)
   doCheck = false;
 
   meta = with lib; {
-    description = "A high level dashboarding library for python visualization libraries";
+    description = "High level dashboarding library for python visualization libraries";
+    mainProgram = "panel";
     homepage = "https://github.com/holoviz/panel";
     changelog = "https://github.com/holoviz/panel/releases/tag/v${version}";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [ ];
   };
 }

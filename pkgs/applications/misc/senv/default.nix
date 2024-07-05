@@ -11,7 +11,7 @@ buildGoModule rec {
     sha256 = "sha256-TjlIX8FPNiPDQo41pIt04cki/orc+v30pV3o2bQQhAQ=";
   };
 
-  vendorSha256 = "sha256-zOWX0AiLAs1FtOn+VtRexfn6oOmJT1PoTPHkcpwvxRY=";
+  vendorHash = "sha256-zOWX0AiLAs1FtOn+VtRexfn6oOmJT1PoTPHkcpwvxRY=";
 
   subPackages = [ "." ];
 
@@ -21,5 +21,6 @@ buildGoModule rec {
     license = licenses.mit;
     maintainers = with maintainers; [ SuperSandro2000 ];
     broken = stdenv.isDarwin; # needs golang.org/x/sys bump
+    mainProgram = "senv";
   };
 }

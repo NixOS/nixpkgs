@@ -6,7 +6,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libupnp";
-  version = "1.14.17";
+  version = "1.14.18";
 
   outputs = [ "out" "dev" ];
 
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     owner = "pupnp";
     repo = "pupnp";
     rev = "release-${version}";
-    sha256 = "sha256-vb540oqDn6Y+oD0LriOJckYYkI/zcHkEVc8mL/+9bps=";
+    sha256 = "sha256-eQKtZioZjI53J1fsoer032pzqebbK5IabOnkAXwBPos=";
   };
 
   nativeBuildInputs = [
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "An open source UPnP development kit for Linux";
+    description = "Open source UPnP development kit for Linux";
 
     longDescription = ''
       The Linux SDK for UPnP Devices (libupnp) provides developers

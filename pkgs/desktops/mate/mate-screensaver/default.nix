@@ -8,27 +8,29 @@
 , libXScrnSaver
 , libnotify
 , libxml2
+, mate-desktop
+, mate-menus
+, mate-panel
 , pam
 , systemd
-, mate
-, wrapGAppsHook
+, wrapGAppsHook3
 , mateUpdateScript
 }:
 
 stdenv.mkDerivation rec {
   pname = "mate-screensaver";
-  version = "1.26.2";
+  version = "1.28.0";
 
   src = fetchurl {
     url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "2pcAziQUW9VdJJJ+7P5tMdClLq6G5WOyxlBUs1al/34=";
+    sha256 = "ag8kqPhKL5XhARSrU+Y/1KymiKVf3FA+1lDgpBDj6nA=";
   };
 
   nativeBuildInputs = [
     pkg-config
     gettext
     libxml2 # provides xmllint
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -36,11 +38,11 @@ stdenv.mkDerivation rec {
     dbus-glib
     libXScrnSaver
     libnotify
+    mate-desktop
+    mate-menus
+    mate-panel
     pam
     systemd
-    mate.mate-desktop
-    mate.mate-menus
-    mate.mate-panel
   ];
 
   configureFlags = [ "--without-console-kit" ];

@@ -1,46 +1,48 @@
-{ lib
-, aiolimiter
-, apscheduler
-, beautifulsoup4
-, buildPythonPackage
-, cachetools
-, cryptography
-, fetchFromGitHub
-, flaky
-, httpx
-, pytest-asyncio
-, pytest-timeout
-, pytest-xdist
-, pytestCheckHook
-, pythonOlder
-, pytz
-, tornado
+{
+  lib,
+  aiolimiter,
+  apscheduler,
+  beautifulsoup4,
+  buildPythonPackage,
+  cachetools,
+  cryptography,
+  fetchFromGitHub,
+  flaky,
+  httpx,
+  pytest-asyncio,
+  pytest-timeout,
+  pytest-xdist,
+  pytestCheckHook,
+  pythonOlder,
+  pytz,
+  setuptools,
+  tornado,
 }:
 
 buildPythonPackage rec {
   pname = "python-telegram-bot";
-  version = "20.2";
-  format = "setuptools";
+  version = "21.3";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = "python-telegram-bot";
+    repo = "python-telegram-bot";
     rev = "refs/tags/v${version}";
-    hash = "sha256-OdjTlVUjlw+5K/kvL1Yx+7c/lIE52udUo6Ux18M9xmE=";
+    hash = "sha256-eyIRZkt1ea2L20ryogKrmSx/+xL2fhNXcf3vUnuS9vo=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     aiolimiter
     apscheduler
     cachetools
     cryptography
     httpx
     pytz
-  ]
-  ++ httpx.optional-dependencies.socks
-  ++ httpx.optional-dependencies.http2;
+  ] ++ httpx.optional-dependencies.socks ++ httpx.optional-dependencies.http2;
 
   nativeCheckInputs = [
     beautifulsoup4
@@ -52,9 +54,7 @@ buildPythonPackage rec {
     tornado
   ];
 
-  pythonImportsCheck = [
-    "telegram"
-  ];
+  pythonImportsCheck = [ "telegram" ];
 
   disabledTests = [
     # Tests require network access
@@ -122,6 +122,9 @@ buildPythonPackage rec {
     homepage = "https://python-telegram-bot.org";
     changelog = "https://github.com/python-telegram-bot/python-telegram-bot/blob/v${version}/CHANGES.rst";
     license = licenses.lgpl3Only;
-    maintainers = with maintainers; [ veprbl pingiun ];
+    maintainers = with maintainers; [
+      veprbl
+      pingiun
+    ];
   };
 }

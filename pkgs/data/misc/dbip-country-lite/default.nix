@@ -1,16 +1,15 @@
 { lib
 , stdenvNoCC
 , fetchurl
-, dbip-country-lite
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "dbip-country-lite";
-  version = "2023-07";
+  version = "2024-07";
 
   src = fetchurl {
-    url = "https://download.db-ip.com/free/dbip-country-lite-${version}.mmdb.gz";
-    hash = "sha256-WVsyhopYbBlCWDq9UoPe1rcGU3pBYsXkqNWbaQXzRFA=";
+    url = "https://download.db-ip.com/free/dbip-country-lite-${finalAttrs.version}.mmdb.gz";
+    hash = "sha256-MEhxTByiRoyxQ6DAKUhJKnG+ISvJN0Q5K4o/DoXkxtk=";
   };
 
   dontUnpack = true;
@@ -24,13 +23,13 @@ stdenvNoCC.mkDerivation rec {
     runHook postBuild
   '';
 
-  passthru.mmdb = "${dbip-country-lite}/share/dbip/dbip-country-lite.mmdb";
+  passthru.mmdb = "${finalAttrs.finalPackage}/share/dbip/dbip-country-lite.mmdb";
 
   meta = with lib; {
-    description = "The free IP to Country Lite database by DB-IP";
+    description = "Free IP to Country Lite database by DB-IP";
     homepage = "https://db-ip.com/db/download/ip-to-country-lite";
     license = licenses.cc-by-40;
     maintainers = with maintainers; [ nickcao ];
     platforms = platforms.all;
   };
-}
+})

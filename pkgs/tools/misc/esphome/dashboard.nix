@@ -5,12 +5,13 @@
 
 buildPythonPackage rec {
   pname = "esphome-dashboard";
-  version = "20230621.0";
+  version = "20240620.0";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-e5nAhtM5Yc2KNmH6a041o6i6SnVCbaONulBe1ZCF0+w=";
+    pname = "esphome_dashboard";
+    inherit version;
+    hash = "sha256-lx3i8Z2PUefyibCNiQ4zPEwfgXr6r/TVa9TBF0YE5fA=";
   };
 
   # no tests

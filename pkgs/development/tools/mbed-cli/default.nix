@@ -4,11 +4,11 @@ with python3Packages;
 
 buildPythonApplication rec {
   pname = "mbed-cli";
-  version = "1.9.1";
+  version = "1.10.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1228plh55id03qywsw0ai88ypdpbh9iz18jfcyhn21pci7mj77fv";
+    sha256 = "sha256-X+hNVM8fsy0VFTqFr1pPKWRimacBenTcY4y+PBJpvlI=";
   };
 
   nativeCheckInputs = [

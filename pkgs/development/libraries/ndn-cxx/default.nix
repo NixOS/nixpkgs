@@ -6,7 +6,7 @@
 , python3
 , python3Packages
 , wafHook
-, boost
+, boost179
 , openssl
 , sqlite
 }:
@@ -24,12 +24,12 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ doxygen pkg-config python3 python3Packages.sphinx wafHook ];
 
-  buildInputs = [ boost openssl sqlite ];
+  buildInputs = [ boost179 openssl sqlite ];
 
   wafConfigureFlags = [
     "--with-openssl=${openssl.dev}"
-    "--boost-includes=${boost.dev}/include"
-    "--boost-libs=${boost.out}/lib"
+    "--boost-includes=${boost179.dev}/include"
+    "--boost-libs=${boost179.out}/lib"
     "--with-tests"
   ];
 
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://named-data.net/";
-    description = "A Named Data Networking (NDN) or Content Centric Networking (CCN) abstraction";
+    description = "Named Data Networking (NDN) or Content Centric Networking (CCN) abstraction";
     longDescription = ''
       ndn-cxx is a C++ library, implementing Named Data Networking (NDN)
       primitives that can be used to implement various NDN applications.

@@ -1,12 +1,14 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , python3
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "maigret";
   version = "0.4.4";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "soxoj";
@@ -15,7 +17,17 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-Z8SnA7Z5+oKW0AOaNf+c/zR30lrPFmXaxxKkbnDXNNs=";
   };
 
+  patches = [
+    # https://github.com/soxoj/maigret/pull/1117
+    (fetchpatch {
+      name = "pytest-7.3-compatibility.patch";
+      url = "https://github.com/soxoj/maigret/commit/ecb33de9e6eec12b6b45a1152199177f32c85be2.patch";
+      hash = "sha256-nFx3j1Q37YLtYhb0QS34UgZFgAc5Z/RVgbO9o1n1ONE=";
+    })
+  ];
+
   nativeBuildInputs = [ python3.pkgs.pythonRelaxDepsHook ];
+
   propagatedBuildInputs = with python3.pkgs; [
     aiodns
     aiohttp
@@ -56,6 +68,8 @@ python3.pkgs.buildPythonApplication rec {
     xmind
     yarl
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   nativeCheckInputs = with python3.pkgs; [
     pytest-httpserver

@@ -1,22 +1,27 @@
-{ lib, stdenv, fetchFromGitHub, meson, ninja, pkg-config, yaml-cpp, systemd
+{ lib, stdenv, fetchFromGitHub, fetchpatch, meson, ninja, pkg-config, yaml-cpp, systemd
 , python3Packages, asciidoc, libxslt, docbook_xml_dtd_45, docbook_xsl
 , libxml2, docbook5
 }:
 
 stdenv.mkDerivation rec {
   pname = "ip2unix";
-  version = "2.1.4";
+  version = "2.2.1";
 
   src = fetchFromGitHub {
     owner = "nixcloud";
     repo = "ip2unix";
     rev = "v${version}";
-    sha256 = "1pl8ayadxb0zzh5s26yschkjhr1xffbzzv347m88f9y0jv34d24r";
+    hash = "sha256-+p5wQbX35LAjZ4vIE4AhI4M6gQ7gVviqf9jJDAr9xg8";
   };
 
-  postPatch = ''
-    sed '1i#include <array>' -i src/dynports/dynports.cc # gcc12
-  '';
+  patches = [
+    # https://github.com/nixcloud/ip2unix/pull/35
+    # fix out of range string_view access
+    (fetchpatch {
+      url = "https://github.com/nixcloud/ip2unix/commit/050ddf76b4b925f27e255fbb820b0700407ceb2b.patch";
+      hash = "sha256-5vaLmZmwuiMGV4KnVhuDSnXG1a390aBU51TShwpaMLs=";
+    })
+  ];
 
   nativeBuildInputs = [
     meson ninja pkg-config asciidoc libxslt.bin docbook_xml_dtd_45 docbook_xsl
@@ -46,5 +51,6 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     license = lib.licenses.lgpl3;
     maintainers = [ lib.maintainers.aszlig ];
+    mainProgram = "ip2unix";
   };
 }

@@ -1,26 +1,28 @@
-{ lib
-, absl-py
-, buildPythonPackage
-, chex
-, fetchFromGitHub
-, jaxlib
-, numpy
-, callPackage
-, pythonOlder
+{
+  lib,
+  absl-py,
+  buildPythonPackage,
+  flit-core,
+  chex,
+  fetchFromGitHub,
+  jaxlib,
+  numpy,
+  callPackage,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "optax";
-  version = "0.1.5";
-  format = "setuptools";
+  version = "0.2.2";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "deepmind";
-    repo = pname;
+    repo = "optax";
     rev = "refs/tags/v${version}";
-    hash = "sha256-vhPpynKq0dboSt+fQ4lvVv9ytDXnZKRrc7lF03Mm39g=";
+    hash = "sha256-sBiKUuQR89mttc9Njrh1aeUJOYdlcF7Nlj3/+Y7OMb4=";
   };
 
   outputs = [
@@ -28,9 +30,9 @@ buildPythonPackage rec {
     "testsout"
   ];
 
-  buildInputs = [
-    jaxlib
-  ];
+  nativeBuildInputs = [ flit-core ];
+
+  buildInputs = [ jaxlib ];
 
   propagatedBuildInputs = [
     absl-py
@@ -43,9 +45,7 @@ buildPythonPackage rec {
     cp -R examples $testsout/examples
   '';
 
-  pythonImportsCheck = [
-    "optax"
-  ];
+  pythonImportsCheck = [ "optax" ];
 
   # check in passthru.tests.pytest to escape infinite recursion with flax
   doCheck = false;

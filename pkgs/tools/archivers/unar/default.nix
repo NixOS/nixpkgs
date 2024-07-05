@@ -54,11 +54,7 @@ stdenv.mkDerivation rec {
     "-target unar"
     "-target lsar"
     "-configuration Release"
-    "MACOSX_DEPLOYMENT_TARGET=10.12"
-    # Fix "ld: file not found: /nix/store/*-clang-7.1.0/lib/arc/libarclite_macosx." error
-    # Disabling ARC may leak memory, however since this program is generally not used for
-    # long periods of time, it shouldn't be an issue
-    "CLANG_LINK_OBJC_RUNTIME=NO"
+    "MACOSX_DEPLOYMENT_TARGET=${stdenv.hostPlatform.darwinMinVersion}"
   ];
 
   makefile = lib.optionalString (!stdenv.isDarwin) "Makefile.linux";
@@ -67,7 +63,7 @@ stdenv.mkDerivation rec {
 
   dontConfigure = true;
 
-  sourceRoot = "./source/XADMaster";
+  sourceRoot = "${src.name}/XADMaster";
 
   installPhase = ''
     runHook preInstall
@@ -83,7 +79,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://theunarchiver.com";
-    description = "An archive unpacker program";
+    description = "Archive unpacker program";
     longDescription = ''
       The Unarchiver is an archive unpacker program with support for the popular
       zip, RAR, 7z, tar, gzip, bzip2, LZMA, XZ, CAB, MSI, NSIS, EXE, ISO, BIN,
@@ -92,7 +88,8 @@ stdenv.mkDerivation rec {
       ADF, DMS, LZX, PowerPacker, LBR, Squeeze, Crunch, and other old formats.
     '';
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ peterhoeg thiagokokada ];
+    maintainers = with maintainers; [ peterhoeg ];
+    mainProgram = "unar";
     platforms = platforms.unix;
   };
 }

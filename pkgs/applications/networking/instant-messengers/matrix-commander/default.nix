@@ -12,17 +12,18 @@
 , dbus-python
 , pyxdg
 , python-olm
+, emoji
 }:
 
 buildPythonApplication rec {
   pname = "matrix-commander";
-  version = "6.0.1";
+  version = "7.6.2";
 
   src = fetchFromGitHub {
     owner = "8go";
     repo = "matrix-commander";
     rev = "v${version}";
-    sha256 = "sha256-NSoMGUQjy4TQXdzZcQfO2rUQDsuSzQnoGDpqFiLQHVQ=";
+    hash = "sha256-BiQShJHCTvEdkhp21uxxCTxBZ1eezuWE6btMc/wkPlc=";
   };
 
   format = "pyproject";
@@ -49,10 +50,12 @@ buildPythonApplication rec {
     dbus-python
     pyxdg
     python-olm
+    emoji
   ] ++ matrix-nio.optional-dependencies.e2e;
 
   meta = with lib; {
     description = "Simple but convenient CLI-based Matrix client app for sending and receiving";
+    mainProgram = "matrix-commander";
     homepage = "https://github.com/8go/matrix-commander";
     license = licenses.gpl3Plus;
     platforms = platforms.unix;

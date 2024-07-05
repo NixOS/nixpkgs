@@ -1,17 +1,14 @@
-{ lib, buildDotnetModule, fetchFromGitHub, dotnetCorePackages, stdenv }:
+{ lib, buildDotnetModule, fetchFromGitHub, dotnetCorePackages }:
 
-let
-  inherit (dotnetCorePackages) combinePackages sdk_6_0 sdk_7_0;
-in
 buildDotnetModule rec {
   pname = "fsautocomplete";
-  version = "0.60.1";
+  version = "0.73.2";
 
   src = fetchFromGitHub {
     owner = "fsharp";
     repo = "FsAutoComplete";
     rev = "v${version}";
-    sha256 = "sha256-8tXwAuljW1dJVX3jg2K5LmN+Is8sneM4OFm9n+Dkt+I=";
+    hash = "sha256-iiV/Tw3gOteARrOEbLjPA/jGawoxJVBZg6GvF9p9HHA=";
   };
 
   nugetDeps = ./deps.nix;
@@ -23,11 +20,8 @@ buildDotnetModule rec {
       --replace TargetFrameworks TargetFramework \
   '';
 
-  dotnet-sdk = combinePackages [
-    sdk_7_0
-    sdk_6_0
-  ];
-  dotnet-runtime = sdk_6_0;
+  dotnet-sdk = with dotnetCorePackages; combinePackages [ sdk_6_0 sdk_7_0 sdk_8_0_2xx ];
+  dotnet-runtime = dotnetCorePackages.sdk_8_0_2xx;
 
   projectFile = "src/FsAutoComplete/FsAutoComplete.fsproj";
   executables = [ "fsautocomplete" ];
@@ -35,11 +29,12 @@ buildDotnetModule rec {
   useDotnetFromEnv = true;
 
   meta = with lib; {
-    description = "The FsAutoComplete project (FSAC) provides a backend service for rich editing or intellisense features for editors.";
+    description = "FsAutoComplete project (FSAC) provides a backend service for rich editing or intellisense features for editors";
+    mainProgram = "fsautocomplete";
     homepage = "https://github.com/fsharp/FsAutoComplete";
     changelog = "https://github.com/fsharp/FsAutoComplete/releases/tag/v${version}";
     license = licenses.asl20;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ gbtb mdarocha ];
   };
 }

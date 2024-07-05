@@ -1,14 +1,23 @@
-{ lib, stdenv, meson, ninja, fetchFromGitHub, which, python3, fetchpatch
-, libiconv }:
+{
+  lib,
+  stdenv,
+  meson,
+  ninja,
+  fetchFromGitHub,
+  which,
+  python3,
+  fetchpatch,
+  libiconv,
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ksh";
   version = "2020.0.0";
 
   src = fetchFromGitHub {
-    owner  = "att";
-    repo   = "ast";
-    rev    = version;
+    owner = "att";
+    repo = "ast";
+    rev = finalAttrs.version;
     sha256 = "0cdxz0nhpq03gb9rd76fn0x1yzs2c8q289b7vcxnzlsrz1imz65j";
   };
 
@@ -19,13 +28,18 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ meson ninja which python3 ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    which
+    python3
+  ];
 
   buildInputs = [ libiconv ];
 
   strictDeps = true;
 
-  meta = with lib; {
+  meta = {
     description = "KornShell Command And Programming Language";
     longDescription = ''
       The KornShell language was designed and developed by David G. Korn at
@@ -34,12 +48,12 @@ stdenv.mkDerivation rec {
       many different computers and workstations on which it is implemented.
     '';
     homepage = "https://github.com/att/ast";
-    license = licenses.cpl10;
-    maintainers = with maintainers; [ ];
-    platforms = platforms.all;
+    license = lib.licenses.cpl10;
+    maintainers = with lib.maintainers; [ sigmanificient ];
+    platforms = lib.platforms.all;
   };
 
   passthru = {
     shellPath = "/bin/ksh";
   };
-}
+})

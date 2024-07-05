@@ -8,6 +8,7 @@ import xml.sax.saxutils as xml
 from abc import abstractmethod
 from collections.abc import Mapping, Sequence
 from markdown_it.token import Token
+from pathlib import Path
 from typing import Any, Generic, Optional
 from urllib.parse import quote
 
@@ -16,10 +17,9 @@ from . import md
 from . import parallel
 from .asciidoc import AsciiDocRenderer, asciidoc_escape
 from .commonmark import CommonMarkRenderer
-from .docbook import DocBookRenderer, make_xml_id
 from .html import HTMLRenderer
 from .manpage import ManpageRenderer, man_escape
-from .manual_structure import XrefTarget
+from .manual_structure import make_xml_id, XrefTarget
 from .md import Converter, md_escape, md_make_code
 from .types import OptionLoc, Option, RenderedOption
 
@@ -183,100 +183,6 @@ class OptionDocsRestrictions:
     def example_open(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         raise RuntimeError("md token not supported in options doc", token)
 
-class OptionsDocBookRenderer(OptionDocsRestrictions, DocBookRenderer):
-    # TODO keep optionsDocBook diff small. remove soon if rendering is still good.
-    def ordered_list_open(self, token: Token, tokens: Sequence[Token], i: int) -> str:
-        token.meta['compact'] = False
-        return super().ordered_list_open(token, tokens, i)
-    def bullet_list_open(self, token: Token, tokens: Sequence[Token], i: int) -> str:
-        token.meta['compact'] = False
-        return super().bullet_list_open(token, tokens, i)
-
-class DocBookConverter(BaseConverter[OptionsDocBookRenderer]):
-    __option_block_separator__ = ""
-
-    def __init__(self, manpage_urls: Mapping[str, str],
-                 revision: str,
-                 document_type: str,
-                 varlist_id: str,
-                 id_prefix: str):
-        super().__init__(revision)
-        self._renderer = OptionsDocBookRenderer(manpage_urls)
-        self._document_type = document_type
-        self._varlist_id = varlist_id
-        self._id_prefix = id_prefix
-
-    def _parallel_render_prepare(self) -> Any:
-        return (self._renderer._manpage_urls, self._revision, self._document_type,
-                self._varlist_id, self._id_prefix)
-    @classmethod
-    def _parallel_render_init_worker(cls, a: Any) -> DocBookConverter:
-        return cls(*a)
-
-    def _related_packages_header(self) -> list[str]:
-        return [
-            "<para>",
-            "  <emphasis>Related packages:</emphasis>",
-            "</para>",
-        ]
-
-    def _decl_def_header(self, header: str) -> list[str]:
-        return [
-            f"<para><emphasis>{header}:</emphasis></para>",
-            "<simplelist>"
-        ]
-
-    def _decl_def_entry(self, href: Optional[str], name: str) -> list[str]:
-        if href is not None:
-            href = " xlink:href=" + xml.quoteattr(href)
-        return [
-            f"<member><filename{href}>",
-            xml.escape(name),
-            "</filename></member>"
-        ]
-
-    def _decl_def_footer(self) -> list[str]:
-        return [ "</simplelist>" ]
-
-    def finalize(self, *, fragment: bool = False) -> str:
-        result = []
-
-        if not fragment:
-            result.append('<?xml version="1.0" encoding="UTF-8"?>')
-        if self._document_type == 'appendix':
-            result += [
-                '<appendix xmlns="http://docbook.org/ns/docbook"',
-                '          xml:id="appendix-configuration-options">',
-                '  <title>Configuration Options</title>',
-            ]
-        result += [
-            '<variablelist xmlns:xlink="http://www.w3.org/1999/xlink"',
-            '               xmlns:nixos="tag:nixos.org"',
-            '               xmlns="http://docbook.org/ns/docbook"',
-            f'              xml:id="{self._varlist_id}">',
-        ]
-
-        for (name, opt) in self._sorted_options():
-            id = make_xml_id(self._id_prefix + name)
-            result += [
-                "<varlistentry>",
-                # NOTE adding extra spaces here introduces spaces into xref link expansions
-                (f"<term xlink:href={xml.quoteattr('#' + id)} xml:id={xml.quoteattr(id)}>" +
-                 f"<option>{xml.escape(name)}</option></term>"),
-                "<listitem>"
-            ]
-            result += opt.lines
-            result += [
-                "</listitem>",
-                "</varlistentry>"
-            ]
-
-        result.append("</variablelist>")
-        if self._document_type == 'appendix':
-            result.append("</appendix>")
-
-        return "\n".join(result)
-
 class OptionsManpageRenderer(OptionDocsRestrictions, ManpageRenderer):
     pass
 
@@ -287,18 +193,27 @@ class ManpageConverter(BaseConverter[OptionsManpageRenderer]):
     _links_in_last_description: Optional[list[str]] = None
 
     def __init__(self, revision: str,
+                 header: list[str] | None,
+                 footer: list[str] | None,
                  *,
                  # only for parallel rendering
                  _options_by_id: Optional[dict[str, str]] = None):
         super().__init__(revision)
         self._options_by_id = _options_by_id or {}
         self._renderer = OptionsManpageRenderer({}, self._options_by_id)
+        self._header = header
+        self._footer = footer
 
     def _parallel_render_prepare(self) -> Any:
-        return (self._revision, { '_options_by_id': self._options_by_id })
+        return (
+            self._revision,
+            self._header,
+            self._footer,
+            { '_options_by_id': self._options_by_id },
+        )
     @classmethod
     def _parallel_render_init_worker(cls, a: Any) -> ManpageConverter:
-        return cls(a[0], **a[1])
+        return cls(a[0], a[1], a[2], **a[3])
 
     def _render_option(self, name: str, option: dict[str, Any]) -> RenderedOption:
         links = self._renderer.link_footnotes = []
@@ -342,26 +257,29 @@ class ManpageConverter(BaseConverter[OptionsManpageRenderer]):
     def finalize(self) -> str:
         result = []
 
-        result += [
-            r'''.TH "CONFIGURATION\&.NIX" "5" "01/01/1980" "NixOS" "NixOS Reference Pages"''',
-            r'''.\" disable hyphenation''',
-            r'''.nh''',
-            r'''.\" disable justification (adjust text to left margin only)''',
-            r'''.ad l''',
-            r'''.\" enable line breaks after slashes''',
-            r'''.cflags 4 /''',
-            r'''.SH "NAME"''',
-            self._render('{file}`configuration.nix` - NixOS system configuration specification'),
-            r'''.SH "DESCRIPTION"''',
-            r'''.PP''',
-            self._render('The file {file}`/etc/nixos/configuration.nix` contains the '
-                        'declarative specification of your NixOS system configuration. '
-                        'The command {command}`nixos-rebuild` takes this file and '
-                        'realises the system configuration specified therein.'),
-            r'''.SH "OPTIONS"''',
-            r'''.PP''',
-            self._render('You can use the following options in {file}`configuration.nix`.'),
-        ]
+        if self._header is not None:
+            result += self._header
+        else:
+            result += [
+                r'''.TH "CONFIGURATION\&.NIX" "5" "01/01/1980" "NixOS" "NixOS Reference Pages"''',
+                r'''.\" disable hyphenation''',
+                r'''.nh''',
+                r'''.\" disable justification (adjust text to left margin only)''',
+                r'''.ad l''',
+                r'''.\" enable line breaks after slashes''',
+                r'''.cflags 4 /''',
+                r'''.SH "NAME"''',
+                self._render('{file}`configuration.nix` - NixOS system configuration specification'),
+                r'''.SH "DESCRIPTION"''',
+                r'''.PP''',
+                self._render('The file {file}`/etc/nixos/configuration.nix` contains the '
+                            'declarative specification of your NixOS system configuration. '
+                            'The command {command}`nixos-rebuild` takes this file and '
+                            'realises the system configuration specified therein.'),
+                r'''.SH "OPTIONS"''',
+                r'''.PP''',
+                self._render('You can use the following options in {file}`configuration.nix`.'),
+            ]
 
         for (name, opt) in self._sorted_options():
             result += [
@@ -383,11 +301,14 @@ class ManpageConverter(BaseConverter[OptionsManpageRenderer]):
 
             result.append(".RE")
 
-        result += [
-            r'''.SH "AUTHORS"''',
-            r'''.PP''',
-            r'''Eelco Dolstra and the Nixpkgs/NixOS contributors''',
-        ]
+        if self._footer is not None:
+            result += self._footer
+        else:
+            result += [
+                r'''.SH "AUTHORS"''',
+                r'''.PP''',
+                r'''Eelco Dolstra and the Nixpkgs/NixOS contributors''',
+            ]
 
         return "\n".join(result)
 
@@ -480,8 +401,8 @@ class OptionsHTMLRenderer(OptionDocsRestrictions, HTMLRenderer):
         token.meta['compact'] = False
         return super().bullet_list_open(token, tokens, i)
     def fence(self, token: Token, tokens: Sequence[Token], i: int) -> str:
-        # TODO use token.info. docbook doesn't so we can't yet.
-        return f'<pre class="programlisting">{html.escape(token.content)}</pre>'
+        info = f" {html.escape(token.info, True)}" if token.info != "" else ""
+        return f'<pre><code class="programlisting{info}">{html.escape(token.content)}</code></pre>'
 
 class HTMLConverter(BaseConverter[OptionsHTMLRenderer]):
     __option_block_separator__ = ""
@@ -562,17 +483,10 @@ class HTMLConverter(BaseConverter[OptionsHTMLRenderer]):
 
         return "\n".join(result)
 
-def _build_cli_db(p: argparse.ArgumentParser) -> None:
-    p.add_argument('--manpage-urls', required=True)
-    p.add_argument('--revision', required=True)
-    p.add_argument('--document-type', required=True)
-    p.add_argument('--varlist-id', required=True)
-    p.add_argument('--id-prefix', required=True)
-    p.add_argument("infile")
-    p.add_argument("outfile")
-
 def _build_cli_manpage(p: argparse.ArgumentParser) -> None:
     p.add_argument('--revision', required=True)
+    p.add_argument("--header", type=Path)
+    p.add_argument("--footer", type=Path)
     p.add_argument("infile")
     p.add_argument("outfile")
 
@@ -588,22 +502,23 @@ def _build_cli_asciidoc(p: argparse.ArgumentParser) -> None:
     p.add_argument("infile")
     p.add_argument("outfile")
 
-def _run_cli_db(args: argparse.Namespace) -> None:
-    with open(args.manpage_urls, 'r') as manpage_urls:
-        md = DocBookConverter(
-            json.load(manpage_urls),
-            revision = args.revision,
-            document_type = args.document_type,
-            varlist_id = args.varlist_id,
-            id_prefix = args.id_prefix)
-
-        with open(args.infile, 'r') as f:
-            md.add_options(json.load(f))
-        with open(args.outfile, 'w') as f:
-            f.write(md.finalize())
-
 def _run_cli_manpage(args: argparse.Namespace) -> None:
-    md = ManpageConverter(revision = args.revision)
+    header = None
+    footer = None
+
+    if args.header is not None:
+        with args.header.open() as f:
+            header = f.read().splitlines()
+
+    if args.footer is not None:
+        with args.footer.open() as f:
+            footer = f.read().splitlines()
+
+    md = ManpageConverter(
+        revision = args.revision,
+        header = header,
+        footer = footer,
+    )
 
     with open(args.infile, 'r') as f:
         md.add_options(json.load(f))
@@ -630,15 +545,12 @@ def _run_cli_asciidoc(args: argparse.Namespace) -> None:
 
 def build_cli(p: argparse.ArgumentParser) -> None:
     formats = p.add_subparsers(dest='format', required=True)
-    _build_cli_db(formats.add_parser('docbook'))
     _build_cli_manpage(formats.add_parser('manpage'))
     _build_cli_commonmark(formats.add_parser('commonmark'))
     _build_cli_asciidoc(formats.add_parser('asciidoc'))
 
 def run_cli(args: argparse.Namespace) -> None:
-    if args.format == 'docbook':
-        _run_cli_db(args)
-    elif args.format == 'manpage':
+    if args.format == 'manpage':
         _run_cli_manpage(args)
     elif args.format == 'commonmark':
         _run_cli_commonmark(args)

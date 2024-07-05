@@ -22,10 +22,11 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "A little spectrogram/audiogram/sonogram/whatever for JACK";
+    description = "Little spectrogram/audiogram/sonogram/whatever for JACK";
     homepage = "http://sed.free.fr/spectrojack";
     license = lib.licenses.publicDomain;
     maintainers = with lib.maintainers; [ sleexyz ];
     platforms = with lib.platforms; linux;
+    mainProgram = "spectrojack";
   };
 }

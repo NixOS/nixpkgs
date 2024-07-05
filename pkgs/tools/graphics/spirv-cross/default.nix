@@ -2,23 +2,29 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "spirv-cross";
-  version = "1.3.250.0";
+  version = "1.3.283.0";
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "SPIRV-Cross";
-    rev = "sdk-${finalAttrs.version}";
-    hash = "sha256-H4UkR/EiBWpdhdPHNBrdRkl4eN8kD9gEOzpnwfFSdpI=";
+    rev = "vulkan-sdk-${finalAttrs.version}";
+    hash = "sha256-UEXKzx1NXCInOnI96Z1hfrpyoWdb3BOGEKstX1gVzIo=";
   };
 
   nativeBuildInputs = [ cmake python3 ];
 
+  postFixup = ''
+    substituteInPlace $out/lib/pkgconfig/*.pc \
+      --replace '=''${prefix}//' '=/'
+  '';
+
   meta = with lib; {
-    description = "A tool designed for parsing and converting SPIR-V to other shader languages";
+    description = "Tool designed for parsing and converting SPIR-V to other shader languages";
     homepage = "https://github.com/KhronosGroup/SPIRV-Cross";
-    changelog = "https://github.com/KhronosGroup/SPIRV-Cross/releases/tag/${version}";
+    changelog = "https://github.com/KhronosGroup/SPIRV-Cross/releases/tag/${finalAttrs.version}";
     platforms = platforms.all;
     license = licenses.asl20;
     maintainers = with maintainers; [ Flakebi ];
+    mainProgram = "spirv-cross";
   };
 })

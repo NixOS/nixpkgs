@@ -1,38 +1,39 @@
 { lib
+, mkDerivation
 , fetchFromGitHub
-# Haskell deps
-, mkDerivation, aeson, base, base16-bytestring, binary, brick, bytestring
-, containers, data-dword, data-has, directory, exceptions, extra, filepath
-, hashable, hevm, hpack, html-entities, lens, ListLike, MonadRandom, mtl
-, optparse-applicative, process, random, semver, tasty, tasty-hunit
-, tasty-quickcheck, text, transformers, unix, unliftio, unordered-containers
-, vector, vector-instances, vty, yaml
+, haskellPackages
+, slither-analyzer
 }:
+
 mkDerivation rec {
   pname = "echidna";
-  version = "2.0.5";
+  version = "2.2.2";
 
   src = fetchFromGitHub {
     owner = "crytic";
     repo = "echidna";
     rev = "v${version}";
-    sha256 = "sha256-8bChe+qA4DowfuwsR5wLckb56fXi102g8vL2gAH/kYE=";
+    sha256 = "sha256-l1ILdO+xb0zx/TFM6Am9j5hq1RnIMNf2HU6YvslAj0w=";
   };
 
   isLibrary = true;
   isExecutable = true;
-  libraryHaskellDepends = [
-    aeson base base16-bytestring binary brick bytestring containers data-dword
-    data-has directory exceptions extra filepath hashable hevm html-entities
-    lens ListLike MonadRandom mtl optparse-applicative process random semver
-    text transformers unix unliftio unordered-containers vector vector-instances
-    vty yaml
+
+  libraryToolDepends = with haskellPackages; [
+    haskellPackages.hpack
   ];
-  libraryToolDepends = [ hpack ];
-  executableHaskellDepends = libraryHaskellDepends;
-  testHaskellDepends = [
-    tasty tasty-hunit tasty-quickcheck
-  ];
+
+  executableHaskellDepends = with haskellPackages; [ aeson base base16-bytestring binary bytestring code-page
+  containers data-bword data-dword deepseq directory exceptions extra filepath hashable hevm html-conduit html-entities
+  http-conduit ListLike MonadRandom mtl optics optics-core optparse-applicative process random rosezipper semver split
+  strip-ansi-escape text time transformers unliftio utf8-string vector wai-extra warp with-utf8 word-wrap xml-conduit
+  yaml ];
+
+  # Note: there is also a runtime dependency of slither-analyzer, let's include it also.
+  executableSystemDepends = [ slither-analyzer ];
+
+  testHaskellDepends = with haskellPackages; [ tasty tasty-hunit tasty-quickcheck ];
+
   preConfigure = ''
     hpack
     # re-enable dynamic build for Linux
@@ -46,7 +47,7 @@ mkDerivation rec {
   description = "Ethereum smart contract fuzzer";
   homepage = "https://github.com/crytic/echidna";
   license = lib.licenses.agpl3Plus;
-  maintainers = with lib.maintainers; [ arturcygan ];
+  maintainers = with lib.maintainers; [ arturcygan hellwolf ];
   platforms = lib.platforms.unix;
   mainProgram = "echidna-test";
 }

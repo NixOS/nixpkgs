@@ -1,13 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, wcwidth
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  wcwidth,
 }:
 
 buildPythonPackage rec {
   pname = "pyte";
   version = "0.8.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "selectel";

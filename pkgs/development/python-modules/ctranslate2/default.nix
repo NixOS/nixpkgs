@@ -1,21 +1,22 @@
-{ lib
-, buildPythonPackage
+{
+  lib,
+  buildPythonPackage,
 
-# build-system
-, pybind11
-, setuptools
+  # build-system
+  pybind11,
+  setuptools,
 
-# dependencies
-, ctranslate2-cpp
-, numpy
-, pyyaml
+  # dependencies
+  ctranslate2-cpp,
+  numpy,
+  pyyaml,
 
-# tests
-, pytestCheckHook
-, tensorflow
-, torch
-, transformers
-, wurlitzer
+  # tests
+  pytestCheckHook,
+  tensorflow-bin,
+  torch,
+  transformers,
+  wurlitzer,
 }:
 
 buildPythonPackage rec {
@@ -23,16 +24,14 @@ buildPythonPackage rec {
   format = "setuptools";
 
   # https://github.com/OpenNMT/CTranslate2/tree/master/python
-  sourceRoot = "source/python";
+  sourceRoot = "${src.name}/python";
 
   nativeBuildInputs = [
     pybind11
     setuptools
   ];
 
-  buildInputs = [
-    ctranslate2-cpp
-  ];
+  buildInputs = [ ctranslate2-cpp ];
 
   propagatedBuildInputs = [
     numpy
@@ -49,7 +48,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-    tensorflow
+    tensorflow-bin
     torch
     transformers
     wurlitzer

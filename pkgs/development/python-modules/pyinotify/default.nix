@@ -1,11 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
 
 buildPythonPackage rec {
   pname = "pyinotify";
   version = "0.9.6";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -21,5 +23,4 @@ buildPythonPackage rec {
     license = licenses.mit;
     platforms = platforms.linux;
   };
-
 }

@@ -1,33 +1,40 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools
-, django
-, pytest-django
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  setuptools,
+  setuptools-scm,
+
+  # non-propagates
+  django,
+
+  # tests
+  pytest-django,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "django-bootstrap3";
-  version = "23.1";
+  version = "24.2";
   format = "pyproject";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-cJW3xmqJ87rreOoCh5nr15XSlzn8hgJGBCLnwqGUrTA=";
+  src = fetchFromGitHub {
+    owner = "zostera";
+    repo = "django-bootstrap3";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-5nBJ5vfsoGoaG1s3K1hCHcSnGf51ZirYYg+uJGsBmG8=";
   };
 
   nativeBuildInputs = [
     setuptools
+    setuptools-scm
   ];
 
-  buildInputs = [
-    django
-  ];
+  buildInputs = [ django ];
 
-  pythonImportsCheck = [
-    "bootstrap3"
-  ];
+  pythonImportsCheck = [ "bootstrap3" ];
 
   nativeCheckInputs = [
     pytest-django
@@ -39,10 +46,8 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Bootstrap 3 integration for Django";
     homepage = "https://github.com/zostera/django-bootstrap3";
-    changelog = "https://github.com/zostera/django-bootstrap3/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/zostera/django-bootstrap3/blob/v${version}/CHANGELOG.md";
     license = licenses.bsd3;
     maintainers = with maintainers; [ hexa ];
   };
 }
-
-

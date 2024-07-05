@@ -213,7 +213,6 @@ rec {
   bluefield2 = {
     gcc = {
       arch = "armv8-a+fp+simd+crc+crypto";
-      cpu = "cortex-a72";
     };
   };
 
@@ -536,11 +535,9 @@ rec {
       name = "riscv-multiplatform";
       target = "Image";
       autoModules = true;
+      preferBuiltin = true;
       baseConfig = "defconfig";
       DTB = true;
-      extraConfig = ''
-        SERIAL_OF_PLATFORM y
-      '';
     };
   };
 

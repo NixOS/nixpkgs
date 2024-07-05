@@ -25,6 +25,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Incoming webhook server that executes shell commands";
+    mainProgram = "webhook";
     homepage = "https://github.com/adnanh/webhook";
     license = licenses.mit;
     maintainers = with maintainers; [ azahi ];

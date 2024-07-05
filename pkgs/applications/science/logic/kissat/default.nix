@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "kissat";
-  version = "3.0.0";
+  version = "3.1.1";
 
   src = fetchFromGitHub {
     owner = "arminbiere";
     repo = "kissat";
     rev = "rel-${version}";
-    sha256 = "sha256-C1lvkyYgFNhV7jGVLlrpJ5zZ8SFHg8g+iW1lDczhpBM=";
+    sha256 = "sha256-zK20/vhbVihrxmd52DjByDUO99pBAr8SlJtQpX5fmwY=";
   };
 
   outputs = [ "out" "dev" "lib" ];
@@ -39,7 +39,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A 'keep it simple and clean bare metal SAT solver' written in C";
+    description = "'keep it simple and clean bare metal SAT solver' written in C";
+    mainProgram = "kissat";
     longDescription = ''
       Kissat is a "keep it simple and clean bare metal SAT solver" written in C.
       It is a port of CaDiCaL back to C with improved data structures,
@@ -48,6 +49,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ shnarazk ];
     platforms = platforms.unix;
     license = licenses.mit;
-    homepage = "http://fmv.jku.at/kissat";
+    homepage = "https://fmv.jku.at/kissat";
   };
 }

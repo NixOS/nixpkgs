@@ -5,23 +5,18 @@ with lib;
 let
   cfg = config.services.jicofo;
 
-  # HOCON is a JSON superset that some jitsi-meet components use for configuration
-  toHOCON = x: if isAttrs x && x ? __hocon_envvar then ("\${" + x.__hocon_envvar + "}")
-    else if isAttrs x && x ? __hocon_unquoted_string then x.__hocon_unquoted_string
-    else if isAttrs x then "{${ concatStringsSep "," (mapAttrsToList (k: v: ''"${k}":${toHOCON v}'') x) }}"
-    else if isList x then "[${ concatMapStringsSep "," toHOCON x }]"
-    else builtins.toJSON x;
+  format = pkgs.formats.hocon { };
 
-  configFile = pkgs.writeText "jicofo.conf" (toHOCON cfg.config);
+  configFile = format.generate "jicofo.conf" cfg.config;
 in
 {
   options.services.jicofo = with types; {
-    enable = mkEnableOption (lib.mdDoc "Jitsi Conference Focus - component of Jitsi Meet");
+    enable = mkEnableOption "Jitsi Conference Focus - component of Jitsi Meet";
 
     xmppHost = mkOption {
       type = str;
       example = "localhost";
-      description = lib.mdDoc ''
+      description = ''
         Hostname of the XMPP server to connect to.
       '';
     };
@@ -29,7 +24,7 @@ in
     xmppDomain = mkOption {
       type = nullOr str;
       example = "meet.example.org";
-      description = lib.mdDoc ''
+      description = ''
         Domain name of the XMMP server to which to connect as a component.
 
         If null, {option}`xmppHost` is used.
@@ -39,7 +34,7 @@ in
     componentPasswordFile = mkOption {
       type = str;
       example = "/run/keys/jicofo-component";
-      description = lib.mdDoc ''
+      description = ''
         Path to file containing component secret.
       '';
     };
@@ -47,7 +42,7 @@ in
     userName = mkOption {
       type = str;
       default = "focus";
-      description = lib.mdDoc ''
+      description = ''
         User part of the JID for XMPP user connection.
       '';
     };
@@ -55,7 +50,7 @@ in
     userDomain = mkOption {
       type = str;
       example = "auth.meet.example.org";
-      description = lib.mdDoc ''
+      description = ''
         Domain part of the JID for XMPP user connection.
       '';
     };
@@ -63,7 +58,7 @@ in
     userPasswordFile = mkOption {
       type = str;
       example = "/run/keys/jicofo-user";
-      description = lib.mdDoc ''
+      description = ''
         Path to file containing password for XMPP user connection.
       '';
     };
@@ -71,20 +66,20 @@ in
     bridgeMuc = mkOption {
       type = str;
       example = "jvbbrewery@internal.meet.example.org";
-      description = lib.mdDoc ''
+      description = ''
         JID of the internal MUC used to communicate with Videobridges.
       '';
     };
 
     config = mkOption {
-      type = (pkgs.formats.json {}).type;
+      type = format.type;
       default = { };
       example = literalExpression ''
         {
           jicofo.bridge.max-bridge-participants = 42;
         }
       '';
-      description = lib.mdDoc ''
+      description = ''
         Contents of the {file}`jicofo.conf` configuration file.
       '';
     };
@@ -99,7 +94,7 @@ in
             hostname = cfg.xmppHost;
             username = cfg.userName;
             domain = cfg.userDomain;
-            password = { __hocon_envvar = "JICOFO_AUTH_PASS"; };
+            password = format.lib.mkSubstitution "JICOFO_AUTH_PASS";
             xmpp-domain = if cfg.xmppDomain == null then cfg.xmppHost else cfg.xmppDomain;
           };
           service = client;

@@ -4,10 +4,10 @@
 , python3Packages
 , gdk-pixbuf
 , glib
-, gnome
+, adwaita-icon-theme
 , gobject-introspection
 , gtk3
-, wrapGAppsHook
+, wrapGAppsHook3
 , webkitgtk
 , libnotify
 , keybinder3
@@ -21,24 +21,24 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "ulauncher";
-  version = "5.15.0";
+  version = "5.15.7";
 
   src = fetchurl {
     url = "https://github.com/Ulauncher/Ulauncher/releases/download/${version}/ulauncher_${version}.tar.gz";
-    sha256 = "sha256-1Qo6ffMtVRtZDPCHvHEl7T0dPdDUxP4TP2hkSVSdQpo";
+    hash = "sha256-YgOw3Gyy/o8qorWAnAlQrAZ2ZTnyP3PagLs2Qkdg788=";
   };
 
   nativeBuildInputs = with python3Packages; [
-    distutils_extra
+    distutils-extra
     gobject-introspection
     intltool
-    wrapGAppsHook
+    wrapGAppsHook3
     gdk-pixbuf
   ];
 
   buildInputs = [
     glib
-    gnome.adwaita-icon-theme
+    adwaita-icon-theme
     gtk3
     keybinder3
     libappindicator
@@ -57,6 +57,7 @@ python3Packages.buildPythonApplication rec {
     pyxdg
     pycairo
     requests
+    semver
     websocket-client
   ];
 
@@ -76,7 +77,7 @@ python3Packages.buildPythonApplication rec {
     substituteInPlace setup.py --subst-var out
     patchShebangs bin/ulauncher-toggle
     substituteInPlace bin/ulauncher-toggle \
-      --replace wmctrl ${wmctrl}/bin/wmctrl
+      --replace-fail wmctrl ${wmctrl}/bin/wmctrl
   '';
 
   # https://github.com/Ulauncher/Ulauncher/issues/390
@@ -116,10 +117,10 @@ python3Packages.buildPythonApplication rec {
 
 
   meta = with lib; {
-    description = "A fast application launcher for Linux, written in Python, using GTK";
+    description = "Fast application launcher for Linux, written in Python, using GTK";
     homepage = "https://ulauncher.io/";
     license = licenses.gpl3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ aaronjanse ];
+    maintainers = with maintainers; [ aaronjanse sebtm ];
   };
 }

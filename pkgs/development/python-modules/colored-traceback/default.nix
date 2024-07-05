@@ -1,12 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pygments
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pygments,
 }:
 
 buildPythonPackage rec {
   pname = "colored-traceback";
   version = "0.3.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

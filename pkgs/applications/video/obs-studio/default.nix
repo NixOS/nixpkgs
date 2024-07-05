@@ -2,10 +2,11 @@
 , lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , addOpenGLRunpath
 , cmake
 , fdk_aac
-, ffmpeg_4
+, ffmpeg
 , jansson
 , libjack2
 , libxkbcommon
@@ -21,11 +22,12 @@
 , xorg
 , pkg-config
 , libvlc
+, libGL
 , mbedtls
-, wrapGAppsHook
+, wrapGAppsHook3
 , scriptingSupport ? true
 , luajit
-, swig
+, swig4
 , python3
 , alsaSupport ? stdenv.isLinux
 , alsa-lib
@@ -34,6 +36,7 @@
 , libcef
 , pciutils
 , pipewireSupport ? stdenv.isLinux
+, withFdk ? true
 , pipewire
 , libdrm
 , libajantv2
@@ -42,43 +45,57 @@
 , srt
 , qtwayland
 , wrapQtAppsHook
+, nlohmann_json
+, websocketpp
+, asio
+, libdatachannel
+, libvpl
+, qrcodegencpp
+, nix-update-script
 }:
 
 let
   inherit (lib) optional optionals;
-
 in
-stdenv.mkDerivation rec {
+
+stdenv.mkDerivation (finalAttrs: {
   pname = "obs-studio";
-  version = "29.0.2";
+  version = "30.1.2";
 
   src = fetchFromGitHub {
     owner = "obsproject";
-    repo = "obs-studio";
-    rev = version;
-    sha256 = "sha256-TIUSjyPEsKRNTSLQXuLJGEgD989hJ5GhOsqJ4nkKVsY=";
+    repo = finalAttrs.pname;
+    rev = finalAttrs.version;
+    sha256 = "sha256-M4IINBoYrgkM37ykb4boHyWP8AxwMX0b7IAeeNIw9Qo=";
     fetchSubmodules = true;
   };
 
   patches = [
     # Lets obs-browser build against CEF 90.1.0+
     ./Enable-file-access-and-universal-access-for-file-URL.patch
-    ./Provide-runtime-plugin-destination-as-relative-path.patch
+    ./fix-nix-plugin-path.patch
+
+    # Fix libobs.pc for plugins on non-x86 systems
+    (fetchpatch {
+      name = "fix-arm64-cmake.patch";
+      url = "https://git.alpinelinux.org/aports/plain/community/obs-studio/broken-config.patch?id=a92887564dcc65e07b6be8a6224fda730259ae2b";
+      hash = "sha256-yRSw4VWDwMwysDB3Hw/tsmTjEQUhipvrVRQcZkbtuoI=";
+      includes = [ "*/CompilerConfig.cmake" ];
+    })
   ];
 
   nativeBuildInputs = [
     addOpenGLRunpath
     cmake
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
     wrapQtAppsHook
   ]
-  ++ optional scriptingSupport swig;
+  ++ optional scriptingSupport swig4;
 
   buildInputs = [
     curl
-    fdk_aac
-    ffmpeg_4
+    ffmpeg
     jansson
     libcef
     libjack2
@@ -99,41 +116,62 @@ stdenv.mkDerivation rec {
     libva
     srt
     qtwayland
+    nlohmann_json
+    websocketpp
+    asio
+    libdatachannel
+    libvpl
+    qrcodegencpp
   ]
   ++ optionals scriptingSupport [ luajit python3 ]
   ++ optional alsaSupport alsa-lib
   ++ optional pulseaudioSupport libpulseaudio
-  ++ optionals pipewireSupport [ pipewire libdrm ];
+  ++ optionals pipewireSupport [ pipewire libdrm ]
+  ++ optional withFdk fdk_aac;
 
   # Copied from the obs-linuxbrowser
   postUnpack = ''
     mkdir -p cef/Release cef/Resources cef/libcef_dll_wrapper/
     for i in ${libcef}/share/cef/*; do
-      cp -r $i cef/Release/
-      cp -r $i cef/Resources/
+      ln -s $i cef/Release/
+      ln -s $i cef/Resources/
     done
-    cp -r ${libcef}/lib/libcef.so cef/Release/
-    cp -r ${libcef}/lib/libcef_dll_wrapper.a cef/libcef_dll_wrapper/
-    cp -r ${libcef}/include cef/
+    ln -s ${libcef}/lib/libcef.so cef/Release/
+    ln -s ${libcef}/lib/libcef_dll_wrapper.a cef/libcef_dll_wrapper/
+    ln -s ${libcef}/include cef/
   '';
 
-  # obs attempts to dlopen libobs-opengl, it fails unless we make sure
-  # DL_OPENGL is an explicit path. Not sure if there's a better way
-  # to handle this.
   cmakeFlags = [
-    "-DCMAKE_CXX_FLAGS=-DDL_OPENGL=\\\"$(out)/lib/libobs-opengl.so\\\""
-    "-DOBS_VERSION_OVERRIDE=${version}"
+    "-DOBS_VERSION_OVERRIDE=${finalAttrs.version}"
     "-Wno-dev" # kill dev warnings that are useless for packaging
     # Add support for browser source
     "-DBUILD_BROWSER=ON"
     "-DCEF_ROOT_DIR=../../cef"
     "-DENABLE_JACK=ON"
+    (lib.cmakeBool "ENABLE_QSV11" stdenv.hostPlatform.isx86_64)
+    (lib.cmakeBool "ENABLE_LIBFDK" withFdk)
+    (lib.cmakeBool "ENABLE_ALSA" alsaSupport)
+    (lib.cmakeBool "ENABLE_PULSEAUDIO" pulseaudioSupport)
+    (lib.cmakeBool "ENABLE_PIPEWIRE" pipewireSupport)
+  ];
+
+  env.NIX_CFLAGS_COMPILE = toString [
+    "-Wno-error=sign-compare" # https://github.com/obsproject/obs-studio/issues/10200
   ];
 
   dontWrapGApps = true;
-  preFixup = ''
+  preFixup = let
+    wrapperLibraries = [
+      xorg.libX11
+      libvlc
+      libGL
+    ];
+  in ''
+    # Remove libcef before patchelf, otherwise it will fail
+    rm $out/lib/obs-plugins/libcef.so
+
     qtWrapperArgs+=(
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ xorg.libX11 libvlc ]}"
+      --prefix LD_LIBRARY_PATH : "$out/lib:${lib.makeLibraryPath wrapperLibraries}"
       ''${gappsWrapperArgs[@]}
     )
   '';
@@ -141,7 +179,12 @@ stdenv.mkDerivation rec {
   postFixup = lib.optionalString stdenv.isLinux ''
     addOpenGLRunpath $out/lib/lib*.so
     addOpenGLRunpath $out/lib/obs-plugins/*.so
+
+    # Link libcef again after patchelfing other libs
+    ln -s ${libcef}/lib/* $out/lib/obs-plugins/
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Free and open source software for video recording and live streaming";
@@ -151,9 +194,9 @@ stdenv.mkDerivation rec {
       video content, efficiently
     '';
     homepage = "https://obsproject.com";
-    maintainers = with maintainers; [ jb55 MP2E V miangraham ];
-    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ eclairevoyant jb55 materus fpletz ];
+    license = with licenses; [ gpl2Plus ] ++ optional withFdk fraunhofer-fdk;
     platforms = [ "x86_64-linux" "i686-linux" "aarch64-linux" ];
     mainProgram = "obs";
   };
-}
+})

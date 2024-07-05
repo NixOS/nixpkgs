@@ -1,21 +1,22 @@
-{ lib
-, aiosmtpd
-, buildPythonPackage
-, fetchPypi
-, werkzeug
-, pythonOlder
+{
+  lib,
+  aiosmtpd,
+  buildPythonPackage,
+  fetchPypi,
+  werkzeug,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pytest-localserver";
-  version = "0.7.1";
+  version = "0.8.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-53tGVVy0OJMdIZxUvPn1lTwEB9ZFQ2pgK1cwur/T/js=";
+    hash = "sha256-ZlacNP7zGldQsW7/0c0SiKepC1kVXQBef5FqzNPe5PE=";
   };
 
   propagatedBuildInputs = [
@@ -26,9 +27,7 @@ buildPythonPackage rec {
   # all tests access network: does not work in sandbox
   doCheck = false;
 
-  pythonImportsCheck = [
-    "pytest_localserver"
-  ];
+  pythonImportsCheck = [ "pytest_localserver" ];
 
   meta = with lib; {
     description = "Plugin for the pytest testing framework to test server connections locally";

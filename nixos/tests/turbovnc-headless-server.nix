@@ -24,11 +24,14 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
     };
 
     # So that we can ssh into the VM, see e.g.
-    # http://blog.patapon.info/nixos-local-vm/#accessing-the-vm-with-ssh
+    # https://nixos.org/manual/nixos/stable/#sec-nixos-test-port-forwarding
     services.openssh.enable = true;
-    services.openssh.settings.PermitRootLogin = "yes";
-    users.extraUsers.root.password = "";
     users.mutableUsers = false;
+    # `test-instrumentation.nix` already sets an empty root password.
+    # The following have to all be set to allow an empty SSH login password.
+    services.openssh.settings.PermitRootLogin = "yes";
+    services.openssh.settings.PermitEmptyPasswords = "yes";
+    security.pam.services.sshd.allowNullPassword = true; # the default `UsePam yes` makes this necessary
   };
 
   testScript = ''
@@ -124,7 +127,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
         machine.wait_until_succeeds("test -f /tmp/glxgears-should-fail.stderr")
         wait_until_terminated_or_succeeds(
             termination_check_shell_command="pidof glxgears",
-            success_check_shell_command="grep 'libGL error: failed to load driver: swrast' /tmp/glxgears-should-fail.stderr",
+            success_check_shell_command="grep 'MESA-LOADER: failed to open swrast' /tmp/glxgears-should-fail.stderr",
             get_detail_message_fn=lambda: "Contents of /tmp/glxgears-should-fail.stderr:\n"
             + machine.succeed("cat /tmp/glxgears-should-fail.stderr"),
         )

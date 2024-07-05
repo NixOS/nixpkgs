@@ -1,27 +1,34 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, six
-, nose
-, coverage
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  six,
+  pynose,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "aadict";
   version = "0.2.3";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "013pn9ii6mkql6khgdvsd1gi7zmya418fhclm5fp7dfvann2hwx7";
+    hash = "sha256-p3MorFXbtXNdqZRBhwJRvv4TX2h6twenoXhWE2OydwQ=";
   };
 
-  propagatedBuildInputs = [ six ];
-  nativeCheckInputs = [ nose coverage ];
+  build-system = [ setuptools ];
+
+  dependencies = [ six ];
+
+  nativeCheckInputs = [ pynose ];
+
+  pythonImportsCheck = [ "aadict" ];
 
   meta = with lib; {
+    description = "Auto-attribute dict (and a couple of other useful dict functions)";
     homepage = "https://github.com/metagriffin/aadict";
-    description = "An auto-attribute dict (and a couple of other useful dict functions).";
+    license = licenses.gpl3Plus;
     maintainers = with maintainers; [ glittershark ];
-    license = licenses.gpl3;
   };
 }

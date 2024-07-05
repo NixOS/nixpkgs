@@ -368,20 +368,20 @@ std::string describeError(const Error & e) { return "«error: " + e.msg() + "»"
 void describeDerivation(Context & ctx, Out & out, Value v)
 {
     // Copy-pasted from nix/src/nix/repl.cc  :(
+    out << "«derivation ";
     Bindings::iterator i = v.attrs->find(ctx.state.sDrvPath);
-    PathSet pathset;
-    try {
-        Path drvPath = i != v.attrs->end() ? ctx.state.coerceToPath(i->pos, *i->value, pathset, "while evaluating the drvPath of a derivation") : "???";
-        out << "«derivation " << drvPath << "»";
-    } catch (Error & e) {
-        out << describeError(e);
-    }
+    nix::NixStringContext strContext;
+    if (i != v.attrs->end())
+        out << ctx.state.store->printStorePath(ctx.state.coerceToStorePath(i->pos, *i->value, strContext, "while evaluating the drvPath of a derivation"));
+    else
+        out << "???";
+    out << "»";
 }
 
 Value parseAndEval(EvalState & state, const std::string & expression, const std::string & path)
 {
     Value v{};
-    state.eval(state.parseExprFromString(expression, absPath(path)), v);
+    state.eval(state.parseExprFromString(expression, nix::SourcePath(nix::CanonPath::fromCwd(path))), v);
     return v;
 }
 

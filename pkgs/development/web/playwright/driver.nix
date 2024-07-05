@@ -5,12 +5,12 @@
 , git
 , jq
 , nodejs
-, fetchFromGitHub
 , fetchurl
 , makeFontsConf
 , makeWrapper
 , runCommand
 , unzip
+, cacert
 }:
 let
   inherit (stdenv.hostPlatform) system;
@@ -30,15 +30,15 @@ let
     {
     pname = "playwright-driver";
     # run ./pkgs/development/python-modules/playwright/update.sh to update
-    version = "1.34.3";
+    version = "1.40.0";
 
     src = fetchurl {
       url = "https://playwright.azureedge.net/builds/driver/${filename}";
       sha256 = {
-        x86_64-linux = "1xh05v3yqa8gkwayhl4nffgjcnlakpyyi17hwzh0wqzrbwwn0cs8";
-        aarch64-linux = "18jxbmhiqda5pzrv6b3n7xi14xg4zvlh6sn7hc3b3hckl77vl933";
-        x86_64-darwin = "0fy5nxbvp1kxplavj832gxiznjqpvl0ww869hsfj0h1fibhly7cy";
-        aarch64-darwin = "11msl4pnmr8cmlw32xq2qvfz3g3fy0azvq134a47c0fnpj2gd5zl";
+        x86_64-linux = "0y9n23r4yfcgm4a50rfgicl91vrllak0d8h26yagh6h8hl0r3nhh";
+        aarch64-linux = "0zd456klidi4sg7wahfrdbs2bwiq3q6ngxd4iv3vi9f9w9nq2p2k";
+        x86_64-darwin = "0yaiwg9821w9nszzkrp5skzf5792nahvfqnr4axk84dcngslxvmk";
+        aarch64-darwin = "1b1jmv6l97ss8c4sc3n1xckn05fpq3fihjbjxr2qz6i9dsy3xj57";
       }.${system} or throwSystem;
     };
 
@@ -78,6 +78,7 @@ let
       }.${system} or throwSystem;
       browsers-chromium = browsers-linux {};
     };
+    meta.mainProgram = "playwright";
   });
 
   browsers-mac = stdenv.mkDerivation {
@@ -85,6 +86,10 @@ let
     inherit (driver) version;
 
     dontUnpack = true;
+
+    nativeBuildInputs = [
+      cacert
+    ];
 
     installPhase = ''
       runHook preInstall

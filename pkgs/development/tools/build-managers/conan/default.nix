@@ -3,21 +3,26 @@
 , fetchFromGitHub
 , git
 , pkg-config
+, xcbuild
 , python3
 , zlib
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "conan";
-  version = "2.0.5";
+  version = "2.0.17";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "conan-io";
     repo = "conan";
     rev = "refs/tags/${version}";
-    hash = "sha256-+ohUOQ9WBER/X0TDklf/qZCm9LhM1I1QRmED4FnkweM=";
+    hash = "sha256-liCeGe0WBW+tOjW81cqrFUiOEWYhlqsBVgns6SxjPNM=";
   };
+
+  nativeBuildInputs = with python3.pkgs; [
+    pythonRelaxDepsHook
+  ];
 
   propagatedBuildInputs = with python3.pkgs; [
     bottle
@@ -45,6 +50,8 @@ python3.pkgs.buildPythonApplication rec {
     git
     pkg-config
     zlib
+  ] ++ lib.optionals (stdenv.isDarwin) [
+    xcbuild.xcrun
   ] ++ (with python3.pkgs; [
     mock
     parameterized
@@ -100,6 +107,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Decentralized and portable C/C++ package manager";
+    mainProgram = "conan";
     homepage = "https://conan.io";
     changelog = "https://github.com/conan-io/conan/releases/tag/${version}";
     license = licenses.mit;

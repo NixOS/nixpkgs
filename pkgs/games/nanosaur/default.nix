@@ -1,14 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, SDL2, cmake, makeWrapper }:
+{ lib, stdenv, fetchFromGitHub, SDL2, cmake, makeWrapper, unstableGitUpdater }:
 
 stdenv.mkDerivation rec {
   pname = "nanosaur";
-  version = "unstable-2021-12-03";
+  version = "1.4.4-unstable-2024-04-06";
 
   src = fetchFromGitHub {
     owner = "jorio";
     repo = pname;
-    rev = "b567a3e6d7fd1cbc43800cfaa1bd82f31c6d9fae";
-    sha256 = "sha256-P/o6uSwUV6O8u8XNXN9YyA8XlgEUkqGj3SC+oD2/GKQ=";
+    rev = "4f2612f81697a0852f63fa2ea1ac80892f8a5a9c";
+    hash = "sha256-MQmlZbsQSREAIqKXyIIOF6Psa1rqY/iUsBHpeKGekBI=";
     fetchSubmodules = true;
   };
 
@@ -20,8 +20,6 @@ stdenv.mkDerivation rec {
     SDL2
   ];
 
-  cmakeFlags = [ "-DCMAKE_BUILD_TYPE=Release" ];
-
   installPhase = ''
     runHook preInstall
     mkdir -p "$out/bin"
@@ -29,13 +27,15 @@ stdenv.mkDerivation rec {
     mv Data ReadMe.txt "$out/share/Nanosaur/"
     install -Dm755 {.,$out/bin}/Nanosaur
     wrapProgram $out/bin/Nanosaur --chdir "$out/share/Nanosaur"
-    install -Dm644 $src/packaging/nanosaur.desktop $out/share/applications/nanosaur.desktop
-    install -Dm644 $src/packaging/nanosaur-desktopicon.png $out/share/pixmaps/nanosaur-desktopicon.png
+    install -Dm644 $src/packaging/io.jor.nanosaur.desktop $out/share/applications/nanosaur.desktop
+    install -Dm644 $src/packaging/io.jor.nanosaur.png $out/share/pixmaps/nanosaur-desktopicon.png
     runHook postInstall
   '';
 
+  passthru.updateScript = unstableGitUpdater { };
+
   meta = with lib; {
-    description = "A port of Nanosaur, a 1998 Macintosh game by Pangea Software, for modern operating systems";
+    description = "Port of Nanosaur, a 1998 Macintosh game by Pangea Software, for modern operating systems";
     longDescription = ''
       Nanosaur is a 1998 Macintosh game by Pangea Software.
       In it, you’re a cybernetic dinosaur from the future who’s sent back in time 20 minutes before a giant asteroid hits the Earth.
@@ -43,6 +43,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/jorio/Nanosaur";
     license = licenses.cc-by-sa-40;
+    mainProgram = "Nanosaur";
     maintainers = with maintainers; [ lux ];
     platforms = platforms.linux;
   };

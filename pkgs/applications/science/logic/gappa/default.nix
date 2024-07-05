@@ -17,6 +17,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "http://gappa.gforge.inria.fr/";
     description = "Verifying and formally proving properties on numerical programs dealing with floating-point or fixed-point arithmetic";
+    mainProgram = "gappa";
     license = with lib.licenses; [ cecill20 gpl2 ];
     maintainers = with lib.maintainers; [ vbgl ];
     platforms = lib.platforms.all;

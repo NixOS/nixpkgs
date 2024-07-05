@@ -7,7 +7,7 @@
 , cacert }:
 
 let
-  version = "0.3.1";
+  version = "1.0.0";
   withSubprojects = stdenv.mkDerivation {
     name = "sources-with-subprojects";
 
@@ -15,7 +15,7 @@ let
       owner = "vivictorg";
       repo = "vivictpp";
       rev = "v${version}";
-      hash = "sha256-6YfYeUrM7cq8hnOPMq0Uq/HToFBDri0N/r0SU0LeT/Y=";
+      hash = "sha256-dCtMjemEjXe63ELAfQhzJl3GecqWLcjL2y5Htn6hYgU=";
     };
 
     nativeBuildInputs = [
@@ -33,7 +33,7 @@ let
     '';
 
     outputHashMode = "recursive";
-    outputHash = "sha256-lIm2Bwy61St9d1e6QSm5ZpSIDR9ucaQKBPHATTDEgW4=";
+    outputHash = "sha256-a7NBQJt5T+KwP8Djc8TQiVLNZF8UcXlXrv2G/dZ54aM=";
   };
 in stdenv.mkDerivation rec {
   pname = "vivictpp";
@@ -64,10 +64,11 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "An easy to use tool for subjective comparison of the visual quality of different encodings of the same video source";
+    description = "Easy to use tool for subjective comparison of the visual quality of different encodings of the same video source";
     homepage = "https://github.com/vivictorg/vivictpp";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
     maintainers = with maintainers; [ tilpner ];
+    mainProgram = "vivictpp";
   };
 }

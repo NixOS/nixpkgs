@@ -25,6 +25,6 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/akheron/jansson/raw/v${version}/CHANGES";
     license = licenses.mit;
     platforms = platforms.all;
-    maintainers = [ maintainers.marsam ];
+    maintainers = [ ];
   };
 }

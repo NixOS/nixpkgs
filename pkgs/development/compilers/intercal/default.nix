@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "The original esoteric programming language";
+    description = "Original esoteric programming language";
     longDescription = ''
       INTERCAL, an abbreviation for "Compiler Language With No
       Pronounceable Acronym", is a famously esoterical programming

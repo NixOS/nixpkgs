@@ -1,42 +1,55 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, setuptools-scm
-, pyasn1
-, pyasn1-modules
-, cryptography
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  setuptools,
+  setuptools-scm,
+  pyasn1,
+  pyasn1-modules,
+  cryptography,
+  joblib,
+  gitpython,
+  sqlalchemy,
+  pygount,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "edk2-pytool-library";
-  version = "0.15.3";
-  format = "pyproject";
+  version = "0.21.8";
+  pyproject = true;
+
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "tianocore";
     repo = "edk2-pytool-library";
-    rev = "v${version}";
-    hash = "sha256-PWjevYUts0dQMBmABpU8neuTqDlglTCCQmuvnVndfto=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-ffKteff4Xsg9kxJukVlSnwmKowRN35bMfDJo/9mV6s8=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     pyasn1
     pyasn1-modules
     cryptography
+    joblib
+    gitpython
+    sqlalchemy
+    pygount
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
+  disabledTests = [
+    # requires network access
+    "test_basic_parse"
+  ];
 
   pythonImportsCheck = [ "edk2toollib" ];
 
@@ -46,5 +59,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/tianocore/edk2-pytool-library/releases/tag/v${version}";
     license = licenses.bsd2Patent;
     maintainers = with maintainers; [ nickcao ];
+    platforms = platforms.linux;
   };
 }

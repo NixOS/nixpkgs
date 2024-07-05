@@ -73,7 +73,12 @@ stdenv.mkDerivation {
     ./patches/9.06-font-width.patch
   ]) ++ [
     ./patches/256-color-resources.patch
-  ]++ optional stdenv.isDarwin ./patches/makefile-phony.patch;
+  ] ++ optional (perlSupport && versionAtLeast perl.version "5.38") (fetchpatch {
+    name = "perl538-locale-c.patch";
+    url = "https://github.com/exg/rxvt-unicode/commit/16634bc8dd5fc4af62faf899687dfa8f27768d15.patch";
+    excludes = [ "Changes" ];
+    sha256 = "sha256-JVqzYi3tcWIN2j5JByZSztImKqbbbB3lnfAwUXrumHM=";
+  }) ++ optional stdenv.isDarwin ./patches/makefile-phony.patch;
 
   configureFlags = [
     "--with-terminfo=${placeholder "terminfo"}/share/terminfo"

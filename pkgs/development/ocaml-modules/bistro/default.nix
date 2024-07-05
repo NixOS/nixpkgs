@@ -1,6 +1,4 @@
 { lib
-, ocaml
-, fetchpatch
 , fetchFromGitHub
 , buildDunePackage
 , base64
@@ -28,6 +26,8 @@ buildDunePackage rec {
     rev = "d363bd2d8257babbcb6db15bd83fd6465df7c268";
     sha256 = "0g11324j1s2631zzf7zxc8s0nqd4fwvcni0kbvfpfxg96gy2wwfm";
   };
+
+  patches = [ ./janestreet-0.16.patch ];
 
   propagatedBuildInputs = [
     base64

@@ -1,41 +1,54 @@
-{ lib, stdenv, fetchFromGitHub, cmake, gtest }:
-stdenv.mkDerivation rec {
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, cmake
+, doctest
+}:
+
+stdenv.mkDerivation (finalAttrs: {
   pname = "xsimd";
-  version = "9.0.1";
+  version = "13.0.0";
   src = fetchFromGitHub {
     owner = "xtensor-stack";
     repo = "xsimd";
-    rev = version;
-    sha256 = "sha256-onALN6agtrHWigtFlCeefD9CiRZI4Y690XTzy2UDnrk=";
+    rev = finalAttrs.version;
+    hash = "sha256-qElJYW5QDj3s59L3NgZj5zkhnUMzIP2mBa1sPks3/CE=";
   };
+  patches = [
+    # Fix of https://github.com/xtensor-stack/xsimd/pull/1024 for
+    # https://github.com/xtensor-stack/xsimd/issues/456 and
+    # https://github.com/xtensor-stack/xsimd/issues/807,
+    (fetchpatch {
+      url = "https://github.com/xtensor-stack/xsimd/commit/c8a87ed6e04b6782f48f94713adfb0cad6c11ddf.patch";
+      hash = "sha256-2/FvBGdqTPcayD7rdHPSzL+F8IYKAfMW0WBJ0cW9EZ0=";
+    })
+  ] ++ lib.optionals stdenv.isDarwin [
+    # https://github.com/xtensor-stack/xsimd/issues/1030
+    ./disable-test_error_gamma.patch
+  ];
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [
+    cmake
+  ];
 
-  cmakeFlags = [ "-DBUILD_TESTS=ON" ];
+  cmakeFlags = [
+    # Always build the tests, even if not running them, because testing whether
+    # they can be built is a test in itself.
+    "-DBUILD_TESTS=ON"
+  ];
 
   doCheck = true;
-  nativeCheckInputs = [ gtest ];
+  nativeCheckInputs = [
+    doctest
+  ];
   checkTarget = "xtest";
-  GTEST_FILTER =
-    let
-      # Upstream Issue: https://github.com/xtensor-stack/xsimd/issues/456
-      filteredTests = lib.optionals stdenv.hostPlatform.isDarwin [
-        "error_gamma_test/*"
-      ];
-    in
-    "-${builtins.concatStringsSep ":" filteredTests}";
-
-  # https://github.com/xtensor-stack/xsimd/issues/748
-  postPatch = ''
-    substituteInPlace xsimd.pc.in \
-      --replace '$'{prefix}/@CMAKE_INSTALL_LIBDIR@ @CMAKE_INSTALL_FULL_LIBDIR@
-  '';
 
   meta = with lib; {
     description = "C++ wrappers for SIMD intrinsics";
     homepage = "https://github.com/xtensor-stack/xsimd";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ tobim ];
+    maintainers = with maintainers; [ tobim doronbehar ];
     platforms = platforms.all;
   };
-}
+})

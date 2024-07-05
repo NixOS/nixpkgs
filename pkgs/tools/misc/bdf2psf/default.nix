@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "bdf2psf";
-  version = "1.221";
+  version = "1.227";
 
   src = fetchurl {
     url = "mirror://debian/pool/main/c/console-setup/bdf2psf_${version}_all.deb";
-    sha256 = "XaNAF5+TM1F0qyX/PEwRoiEvO8qmPuMWs+mkWSaHNGg=";
+    sha256 = "sha256-EJnxgz+ZKMtl6eIpIPYdXeMAnV/gydgklC/7yG2THpM=";
   };
 
   nativeBuildInputs = [ dpkg ];
@@ -37,5 +37,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ rnhmjoj vrthra ];
     platforms = platforms.all;
+    mainProgram = "bdf2psf";
   };
 }

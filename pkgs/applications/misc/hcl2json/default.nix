@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "hcl2json";
-  version = "0.5.0";
+  version = "0.6.3";
 
   src = fetchFromGitHub {
     owner = "tmccombs";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-kmg483HidFL9mP6jXisLN5VR0dd0xzPXSwqTR8tOCrM=";
+    sha256 = "sha256-RBzx6TxkR6GwMGHIpkJeswZ3zV4hRf38rTGUO6u2OI4=";
   };
 
-  vendorHash = "sha256-ejbCY5S/aeY5Sp+5A20y5kUDY0yxgnMUxtr3UPvtic0=";
+  vendorHash = "sha256-G/2bSFCXbph0bVjmWmcFgv4i/pCOQHhYxsVRVkpHPo4=";
 
   subPackages = [ "." ];
 
@@ -22,6 +22,7 @@ buildGoModule rec {
     description = "Convert hcl2 to json";
     homepage = "https://github.com/tmccombs/hcl2json";
     license = licenses.asl20;
-    maintainers = with maintainers; [ jonringer ];
+    maintainers = with maintainers; [ ];
+    mainProgram = "hcl2json";
   };
 }

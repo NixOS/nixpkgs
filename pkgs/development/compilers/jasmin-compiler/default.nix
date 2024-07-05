@@ -2,20 +2,14 @@
 
 stdenv.mkDerivation rec {
   pname = "jasmin-compiler";
-  version = "2023.06.0";
+  version = "2023.06.4";
 
   src = fetchurl {
     url = "https://github.com/jasmin-lang/jasmin/releases/download/v${version}/jasmin-compiler-v${version}.tar.bz2";
-    hash = "sha256-yQBQGDNZQhNATs62nqWsgl/HzQCH24EHPp87B3I0Dxo=";
+    hash = "sha256-b1lrVbXJQeg+7tI7JcR9JTuiel/b/mctU1caT/y/4SA=";
   };
 
   sourceRoot = "jasmin-compiler-v${version}/compiler";
-
-  # Released tarball contains extraneous `dune` files
-  # See https://github.com/jasmin-lang/jasmin/pull/495
-  preBuild = ''
-    rm -rf tests
-  '';
 
   nativeBuildInputs = with ocamlPackages; [ ocaml findlib dune_3 menhir camlidl cmdliner ];
 
@@ -45,7 +39,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "A workbench for high-assurance and high-speed cryptography";
+    description = "Workbench for high-assurance and high-speed cryptography";
     homepage = "https://github.com/jasmin-lang/jasmin/";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.vbgl ];

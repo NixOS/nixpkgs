@@ -60,7 +60,7 @@ in {
     enable = mkOption {
       default = true;
       type = types.bool;
-      description = lib.mdDoc ''
+      description = ''
         Enable or disable the amazon-init service.
       '';
     };
@@ -84,4 +84,5 @@ in {
       };
     };
   };
+  meta.maintainers = with maintainers; [ arianvp ];
 }

@@ -1,12 +1,12 @@
 { lib
 , stdenv
-, fetchFromGitLab
-, gitUpdater
+, fetchurl
+, directoryListingUpdater
 , meson
 , ninja
 , pkg-config
 , python3
-, wrapGAppsHook
+, wrapGAppsHook4
 , libadwaita
 , libhandy
 , libxkbcommon
@@ -34,18 +34,14 @@
 , nixosTests
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "phosh";
-  version = "0.27.0";
+  version = "0.39.0";
 
-  src = fetchFromGitLab {
-    domain = "gitlab.gnome.org";
-    group = "World";
-    owner = "Phosh";
-    repo = pname;
-    rev = "v${version}";
-    fetchSubmodules = true; # including gvc and libcall-ui which are designated as subprojects
-    sha256 = "sha256-dnSYeXn3aPwvxeIjjk+PsnOVKyuGlxXMXGWDdrRrIM0=";
+  src = fetchurl {
+    # Release tarball which includes subprojects gvc and libcall-ui
+    url = with finalAttrs; "https://sources.phosh.mobi/releases/${pname}/${pname}-${version}.tar.xz";
+    hash = "sha256-n1ZegSJAUr1Lbn0+Mx64vHhl4bwSJEdnO1xN/QdEKlw=";
   };
 
   nativeBuildInputs = [
@@ -54,7 +50,7 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     python3
-    wrapGAppsHook
+    wrapGAppsHook4
   ];
 
   buildInputs = [
@@ -94,7 +90,10 @@ stdenv.mkDerivation rec {
     "-Dsystemd=true"
     "-Dcompositor=${phoc}/bin/phoc"
     # https://github.com/NixOS/nixpkgs/issues/36468
+    # https://gitlab.gnome.org/World/Phosh/phosh/-/merge_requests/1363
     "-Dc_args=-I${glib.dev}/include/gio-unix-2.0"
+    # Save some time building if tests are disabled
+    "-Dtests=${lib.boolToString finalAttrs.finalPackage.doCheck}"
   ];
 
   checkPhase = ''
@@ -114,29 +113,19 @@ stdenv.mkDerivation rec {
     )
   '';
 
-  postFixup = ''
-    mkdir -p $out/share/wayland-sessions
-    ln -s $out/share/applications/sm.puri.Phosh.desktop $out/share/wayland-sessions/
-  '';
-
   passthru = {
-    providedSessions = [
-      "sm.puri.Phosh"
-    ];
-
+    providedSessions = [ "phosh" ];
     tests.phosh = nixosTests.phosh;
-
-    updateScript = gitUpdater {
-      rev-prefix = "v";
-    };
+    updateScript = directoryListingUpdater { };
   };
 
   meta = with lib; {
-    description = "A pure Wayland shell prototype for GNOME on mobile devices";
+    description = "Pure Wayland shell prototype for GNOME on mobile devices";
     homepage = "https://gitlab.gnome.org/World/Phosh/phosh";
-    changelog = "https://gitlab.gnome.org/World/Phosh/phosh/-/blob/v${version}/debian/changelog";
+    changelog = "https://gitlab.gnome.org/World/Phosh/phosh/-/blob/v${finalAttrs.version}/debian/changelog";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ masipcat tomfitzhenry zhaofengli ];
+    maintainers = with maintainers; [ masipcat zhaofengli ];
     platforms = platforms.linux;
+    mainProgram = "phosh-session";
   };
-}
+})

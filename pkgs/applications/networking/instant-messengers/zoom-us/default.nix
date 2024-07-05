@@ -48,23 +48,23 @@ let
   # and often with different versions.  We write them on three lines
   # like this (rather than using {}) so that the updater script can
   # find where to edit them.
-  versions.aarch64-darwin = "5.15.3.20121";
-  versions.x86_64-darwin = "5.15.3.20121";
-  versions.x86_64-linux = "5.15.3.4839";
+  versions.aarch64-darwin = "6.1.0.35886";
+  versions.x86_64-darwin = "6.1.0.35886";
+  versions.x86_64-linux = "6.1.0.198";
 
   srcs = {
     aarch64-darwin = fetchurl {
       url = "https://zoom.us/client/${versions.aarch64-darwin}/zoomusInstallerFull.pkg?archType=arm64";
       name = "zoomusInstallerFull.pkg";
-      hash = "sha256-FEgLtKhjODZGuwzOWUK//TilXM3Gvka7B5E48eyrBuw=";
+      hash = "sha256-jAH/3r2AM8WAzfHE8CvKBrr53sM/9DH624C+EiJIdXs=";
     };
     x86_64-darwin = fetchurl {
       url = "https://zoom.us/client/${versions.x86_64-darwin}/zoomusInstallerFull.pkg";
-      hash = "sha256-q4//skfKwAuPqPxJedVACbSQQiTKmc8J24t7mCY6c/w=";
+      hash = "sha256-nKJPZQbyVG+P974hP4+4eAtupEQOf5Kl64Zp+jV/Ka0=";
     };
     x86_64-linux = fetchurl {
       url = "https://zoom.us/client/${versions.x86_64-linux}/zoom_x86_64.pkg.tar.xz";
-      hash = "sha256-4r1jayWHg+5Oerksj7DSc5xV15l7miA0a+CgPDUkpa0=";
+      hash = "sha256-R4f0dnwqkODFeo8mPBecAI/AGQLwYkcNtJq6UVXCPfI=";
     };
   };
 
@@ -151,7 +151,9 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  postFixup = lib.optionalString stdenv.isLinux ''
+  postFixup =  lib.optionalString stdenv.isDarwin ''
+    makeWrapper $out/Applications/zoom.us.app/Contents/MacOS/zoom.us $out/bin/zoom
+  '' + lib.optionalString stdenv.isLinux ''
     # Desktop File
     substituteInPlace $out/share/applications/Zoom.desktop \
         --replace "Exec=/usr/bin/zoom" "Exec=$out/bin/zoom"
@@ -179,7 +181,7 @@ stdenv.mkDerivation rec {
       --prefix PATH : ${lib.makeBinPath [ coreutils glib.dev pciutils procps util-linux ]} \
       --prefix LD_LIBRARY_PATH ":" ${libs}
 
-    # Backwards compatiblity: we used to call it zoom-us
+    # Backwards compatibility: we used to call it zoom-us
     ln -s $out/bin/{zoom,zoom-us}
   '';
 
@@ -195,5 +197,6 @@ stdenv.mkDerivation rec {
     license = licenses.unfree;
     platforms = builtins.attrNames srcs;
     maintainers = with maintainers; [ danbst tadfisher ];
+    mainProgram = "zoom";
   };
 }

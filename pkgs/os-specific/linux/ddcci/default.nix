@@ -2,22 +2,22 @@
 
 stdenv.mkDerivation rec {
   pname = "ddcci-driver";
-  version = "0.4.3";
+  version = "0.4.4";
   name = "${pname}-${kernel.version}-${version}";
 
   src = fetchFromGitLab {
     owner = "${pname}-linux";
     repo = "${pname}-linux";
     rev = "v${version}";
-    hash = "sha256-1Z6V/AorD4aslLKaaCZpmkD2OiQnmpu3iroOPlNPtLE=";
+    hash = "sha256-4pCfXJcteWwU6cK8OOSph4XlhKTk289QqLxsSWY7cac=";
   };
 
   patches = [
-    # https://gitlab.com/ddcci-driver-linux/ddcci-driver-linux/-/merge_requests/12
+    # See https://gitlab.com/ddcci-driver-linux/ddcci-driver-linux/-/merge_requests/15
     (fetchpatch {
-      name = "kernel-6.2-6.3.patch";
-      url = "https://gitlab.com/ddcci-driver-linux/ddcci-driver-linux/-/commit/1ef6079679acc455f75057dd7097b5b494a241dc.patch";
-      hash = "sha256-2C2leS20egGY3J2tq96gsUQXYw13wBJ3ZWrdIXxmEYs=";
+      name = "fix-build-with-linux68.patch";
+      url = "https://gitlab.com/ddcci-driver-linux/ddcci-driver-linux/-/commit/3eb20df68a545d07b8501f13fa9d20e9c6f577ed.patch";
+      hash = "sha256-Y1ktYaJTd9DtT/mwDqtjt/YasW9cVm0wI43wsQhl7Bg=";
     })
   ];
 
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     description = "Kernel module driver for DDC/CI monitors";
     homepage = "https://gitlab.com/ddcci-driver-linux/ddcci-driver-linux";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ kiike ];
     platforms = platforms.linux;
     broken = kernel.kernelOlder "5.1";
   };

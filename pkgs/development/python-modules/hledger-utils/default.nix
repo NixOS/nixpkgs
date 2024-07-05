@@ -1,23 +1,24 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitLab
-, setuptools
-, setuptools-scm
-, unittestCheckHook
-, hledger
-, perl
-, rich
-, pandas
-, scipy
-, psutil
-, matplotlib
-, drawilleplot
-, asteval
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitLab,
+  setuptools,
+  setuptools-scm,
+  unittestCheckHook,
+  hledger,
+  perl,
+  rich,
+  pandas,
+  scipy,
+  psutil,
+  matplotlib,
+  drawilleplot,
+  asteval,
 }:
 
 buildPythonPackage rec {
   pname = "hledger-utils";
-  version = "1.13.2";
+  version = "1.14.0";
 
   format = "pyproject";
 
@@ -25,10 +26,8 @@ buildPythonPackage rec {
     owner = "nobodyinperson";
     repo = "hledger-utils";
     rev = "refs/tags/v${version}";
-    hash = "sha256-E++gHvXspPodLW2hEESKjg+R5aV39UJpDP8JYQX9iBw=";
+    hash = "sha256-Qu4nUcAGTACmLhwc7fkLxITOyFnUHv85qMhtViFumVs=";
   };
-
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [
     setuptools
@@ -45,9 +44,7 @@ buildPythonPackage rec {
     asteval
   ];
 
-  checkInputs = [
-    unittestCheckHook
-  ];
+  checkInputs = [ unittestCheckHook ];
 
   nativeCheckInputs = [
     hledger
@@ -61,7 +58,11 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Utilities extending hledger";
     homepage = "https://gitlab.com/nobodyinperson/hledger-utils";
-    license = with licenses; [cc0 cc-by-40 gpl3];
+    license = with licenses; [
+      cc0
+      cc-by-40
+      gpl3
+    ];
     maintainers = with maintainers; [ nobbz ];
     platforms = platforms.all;
   };

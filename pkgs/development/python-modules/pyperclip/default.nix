@@ -1,12 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, stdenv
-, python
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  stdenv,
+  python,
 }:
 
 buildPythonPackage rec {
   version = "1.8.2";
+  format = "setuptools";
   pname = "pyperclip";
 
   src = fetchPypi {

@@ -1,15 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, mock
-, pytestCheckHook
-, pyyaml
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  mock,
+  pytestCheckHook,
+  pyyaml,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "configargparse";
-  version = "1.5.5";
+  version = "1.7";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -18,13 +19,11 @@ buildPythonPackage rec {
     owner = "bw2";
     repo = "ConfigArgParse";
     rev = "refs/tags/${version}";
-    hash = "sha256-nhsbgyoIsYyrW20j4X4RosMJU/B+j7Z5YbebmZCLW4I=";
+    hash = "sha256-m77MY0IZ1AJkd4/Y7ltApvdF9y17Lgn92WZPYTCU9tA=";
   };
 
   passthru.optional-dependencies = {
-    yaml = [
-      pyyaml
-    ];
+    yaml = [ pyyaml ];
   };
 
   nativeCheckInputs = [
@@ -32,12 +31,10 @@ buildPythonPackage rec {
     mock
   ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
-  pythonImportsCheck = [
-    "configargparse"
-  ];
+  pythonImportsCheck = [ "configargparse" ];
 
   meta = with lib; {
-    description = "A drop-in replacement for argparse";
+    description = "Drop-in replacement for argparse";
     homepage = "https://github.com/bw2/ConfigArgParse";
     changelog = "https://github.com/bw2/ConfigArgParse/releases/tag/${version}";
     license = licenses.mit;

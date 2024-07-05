@@ -1,37 +1,34 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, flatten-dict
-, funcy
-, matplotlib
-, tabulate
-, pytestCheckHook
-, pytest-mock
-, pytest-test-utils
-, pythonOlder
-, setuptools-scm
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  flatten-dict,
+  funcy,
+  matplotlib,
+  tabulate,
+  pytestCheckHook,
+  pytest-mock,
+  pytest-test-utils,
+  pythonOlder,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "dvc-render";
-  version = "0.5.3";
-  format = "pyproject";
+  version = "1.0.2";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "iterative";
-    repo = pname;
+    repo = "dvc-render";
     rev = "refs/tags/${version}";
-    hash = "sha256-4nqImAYk4pYXSuE2/znzwjtf0349bydqi4iN69wG080=";
+    hash = "sha256-V4QVZu4PSOW9poT6YUWbgTjJpIJ8YUtGDAE4Ijgm5Ac=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  build-system = [ setuptools-scm ];
 
   passthru.optional-dependencies = {
     table = [
@@ -49,17 +46,11 @@ buildPythonPackage rec {
     pytestCheckHook
     pytest-mock
     pytest-test-utils
-  ]
-  ++ passthru.optional-dependencies.table
-  ++ passthru.optional-dependencies.markdown;
+  ] ++ passthru.optional-dependencies.table ++ passthru.optional-dependencies.markdown;
 
-  disabledTestPaths = lib.optionals stdenv.isDarwin [
-    "tests/test_vega.py"
-  ];
+  disabledTestPaths = lib.optionals stdenv.isDarwin [ "tests/test_vega.py" ];
 
-  pythonImportsCheck = [
-    "dvc_render"
-  ];
+  pythonImportsCheck = [ "dvc_render" ];
 
   meta = with lib; {
     description = "Library for rendering DVC plots";

@@ -5,12 +5,12 @@
 
 buildDunePackage rec {
   pname = "js_of_ocaml-compiler";
-  version = "5.3.0";
+  version = "5.8.2";
   minimalOCamlVersion = "4.08";
 
   src = fetchurl {
     url = "https://github.com/ocsigen/js_of_ocaml/releases/download/${version}/js_of_ocaml-${version}.tbz";
-    hash = "sha256-vp497rmOXSjxvLLZhHwE0ohfwH7VjM2LCKpLZijNZNI=";
+    hash = "sha256-ciAZS9L5sU2VgVOlogZ1A1nXtJ3hL+iNdFDThc7L8Eo=";
   };
 
   nativeBuildInputs = [ menhir ];

@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "jless";
-  version = "0.8.0";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "PaulJuliusMartinez";
     repo = "jless";
     rev = "v${version}";
-    sha256 = "sha256-NB/s29M46mVhTsJWFYnBgJjSjUVbfdmuz69VdpVuR7c=";
+    hash = "sha256-76oFPUWROX389U8DeMjle/GkdItu+0eYxZkt1c6l0V4=";
   };
 
-  cargoSha256 = "sha256-cPj9cTRhWK/YU8Cae63p4Vm5ohB1IfGL5fu7yyFGSXA=";
+  cargoHash = "sha256-sas94liAOSIirIJGdexdApXic2gWIBDT4uJFRM3qMw0=";
 
   nativeBuildInputs = lib.optionals stdenv.isLinux [ python3 ];
 
@@ -20,9 +20,11 @@ rustPlatform.buildRustPackage rec {
     ++ lib.optionals stdenv.isLinux [ libxcb ];
 
   meta = with lib; {
-    description = "A command-line pager for JSON data";
+    description = "Command-line pager for JSON data";
+    mainProgram = "jless";
     homepage = "https://jless.io";
+    changelog = "https://github.com/PaulJuliusMartinez/jless/blob/${src.rev}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ jfchevrette ];
+    maintainers = with maintainers; [ figsoda jfchevrette ];
   };
 }

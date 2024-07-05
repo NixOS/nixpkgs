@@ -1,20 +1,21 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, pkg-config
 , cmake
+, pkg-config
 , python3
+, gitUpdater
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "zxing-cpp";
-  version = "1.4.0";
+  version = "2.2.1";
 
   src = fetchFromGitHub {
-    owner = "nu-book";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-MTu8tvJXpo6+Z0aSIZ27nmerNtNBOwnL/jDkGedIiM8=";
+    owner = "zxing-cpp";
+    repo = "zxing-cpp";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-teFspdATn9M7Z1vSr/7PdJx/xAv+TVai8rIekxqpBZk=";
   };
 
   nativeBuildInputs = [
@@ -27,23 +28,17 @@ stdenv.mkDerivation rec {
     "-DBUILD_BLACKBOX_TESTS=OFF"
   ];
 
-  # https://github.com/nu-book/zxing-cpp/issues/335
-  postPatch = ''
-    substituteInPlace CMakeLists.txt \
-      --replace 'configure_file(zxing.pc.in' \
-                'include(GNUInstallDirs)
-                 configure_file(zxing.pc.in'
-    substituteInPlace zxing.pc.in \
-      --replace '$'{exec_prefix}/@CMAKE_INSTALL_LIBDIR@ @CMAKE_INSTALL_FULL_LIBDIR@ \
-      --replace '$'{prefix}/@CMAKE_INSTALL_INCLUDEDIR@ @CMAKE_INSTALL_FULL_INCLUDEDIR@
-  '';
-
-  passthru.tests = {
-    inherit (python3.pkgs) zxing_cpp;
+  passthru = {
+    tests = {
+      inherit (python3.pkgs) zxing-cpp;
+    };
+    updateScript = gitUpdater {
+      rev-prefix = "v";
+    };
   };
 
-  meta = with lib; {
-    homepage = "https://github.com/nu-book/zxing-cpp";
+  meta = {
+    homepage = "https://github.com/zxing-cpp/zxing-cpp";
     description = "C++ port of zxing (a Java barcode image processing library)";
     longDescription = ''
       ZXing-C++ ("zebra crossing") is an open-source, multi-format 1D/2D barcode
@@ -54,8 +49,8 @@ stdenv.mkDerivation rec {
       and performance. It can both read and write barcodes in a number of
       formats.
     '';
-    license = licenses.asl20;
-    maintainers = with maintainers; [ AndersonTorres ];
-    platforms = with platforms; unix;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ AndersonTorres lukegb ];
+    platforms = lib.platforms.unix;
   };
-}
+})

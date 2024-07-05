@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, autoreconfHook, docbook_xsl, ffmpeg-full, glib, gtk3
-, intltool, libxslt, pkg-config, sox, wrapGAppsHook }:
+, intltool, libxslt, pkg-config, sox, wrapGAppsHook3 }:
 
 stdenv.mkDerivation rec {
   pname = "imagination";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     intltool
     libxslt
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [ ffmpeg-full glib gtk3 sox ];
@@ -41,5 +41,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ austinbutler ];
     platforms = platforms.linux;
+    mainProgram = "imagination";
   };
 }

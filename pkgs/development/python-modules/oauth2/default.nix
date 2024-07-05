@@ -1,14 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, httplib2
-, mock
-, coverage
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  httplib2,
+  mock,
+  coverage,
 }:
 
 buildPythonPackage rec {
   pname = "oauth2";
   version = "1.9.0.post1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -16,7 +18,10 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [ httplib2 ];
-  buildInputs = [ mock coverage ];
+  buildInputs = [
+    mock
+    coverage
+  ];
 
   # ServerNotFoundError: Unable to find the server at oauth-sandbox.sevengoslings.net
   doCheck = false;
@@ -28,5 +33,4 @@ buildPythonPackage rec {
     maintainers = with maintainers; [ ];
     platforms = platforms.unix;
   };
-
 }

@@ -11,13 +11,13 @@ assert systemdSupport -> stdenv.isLinux;
 
 stdenv.mkDerivation rec {
   pname = "htop";
-  version = "3.2.2";
+  version = "3.3.0";
 
   src = fetchFromGitHub {
     owner = "htop-dev";
     repo = pname;
     rev = version;
-    sha256 = "sha256-OrlNE1A71q4XAauYNfumV1Ev1wBpFIBxPiw7aF++yjM=";
+    hash = "sha256-qDhQkzY2zj2yxbgFUXwE0MGEgAFOsAhnapUuetO9WTw=";
   };
 
   nativeBuildInputs = [ autoreconfHook ]
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
       "--enable-capabilities"
       "--enable-delayacct"
     ]
-    ++ lib.optional sensorsSupport "--with-sensors"
+    ++ lib.optional sensorsSupport "--enable-sensors"
   ;
 
   postFixup =
@@ -49,11 +49,12 @@ stdenv.mkDerivation rec {
     '';
 
   meta = with lib; {
-    description = "An interactive process viewer";
+    description = "Interactive process viewer";
     homepage = "https://htop.dev";
     license = licenses.gpl2Only;
     platforms = platforms.all;
     maintainers = with maintainers; [ rob relrod SuperSandro2000 ];
     changelog = "https://github.com/htop-dev/htop/blob/${version}/ChangeLog";
+    mainProgram = "htop";
   };
 }

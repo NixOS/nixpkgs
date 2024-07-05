@@ -40,7 +40,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/artoh/kitupiikki";
-    description = "An accounting tool suitable for Finnish associations and small business";
+    description = "Accounting tool suitable for Finnish associations and small business";
+    mainProgram = "kitsas";
     maintainers = with maintainers; [ gspia ];
     license = licenses.gpl3Plus;
     platforms = platforms.unix;

@@ -11,6 +11,11 @@ stdenv.mkDerivation {
     hash = "sha256-Li/c5uf9rfpuU+hduuSm7EmhVwIIkS72dqzmN+0cE3A=";
   };
 
+  postPatch = ''
+    substituteInPlace contacts.m \
+      --replace "int peopleSort" "long peopleSort"
+  '';
+
   nativeBuildInputs = [ xcbuildHook ];
   buildInputs = [ Foundation AddressBook ];
 
@@ -22,7 +27,7 @@ stdenv.mkDerivation {
   meta = with lib; {
     description = "Access contacts from the Mac address book from command-line";
     homepage = "http://www.gnufoo.org/contacts/contacts.html";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     maintainers = with maintainers; [ jwiegley ];
     platforms = platforms.darwin;
     hydraPlatforms = platforms.darwin;

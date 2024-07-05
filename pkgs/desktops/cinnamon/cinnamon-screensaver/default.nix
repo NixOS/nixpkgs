@@ -15,11 +15,10 @@
 , libgnomekbd
 , gnome
 , libtool
-, wrapGAppsHook
+, wrapGAppsHook3
 , gobject-introspection
 , python3
 , pam
-, accountsservice
 , cairo
 , xapp
 , xdotool
@@ -29,18 +28,18 @@
 
 stdenv.mkDerivation rec {
   pname = "cinnamon-screensaver";
-  version = "5.8.1";
+  version = "6.2.0";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    hash = "sha256-d7h9OJ39HVQNCHNr13M1ybDFoU3Xnd1PEczGLHZU/lU=";
+    hash = "sha256-hXgDTQnOlskzyOogvk7BQ9iJ3oXRtgUUX5bXtgD+gFo=";
   };
 
   nativeBuildInputs = [
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
     gettext
     intltool
     dbus # for meson.build
@@ -48,11 +47,11 @@ stdenv.mkDerivation rec {
     libtool
     meson
     ninja
+    gobject-introspection
   ];
 
   buildInputs = [
     # from meson.build
-    gobject-introspection
     gtk3
     glib
 
@@ -70,7 +69,6 @@ stdenv.mkDerivation rec {
     xapp
     xdotool
     pam
-    accountsservice
     cairo
     cinnamon-desktop
     cinnamon-common
@@ -100,7 +98,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/linuxmint/cinnamon-screensaver";
-    description = "The Cinnamon screen locker and screensaver program";
+    description = "Cinnamon screen locker and screensaver program";
     license = [ licenses.gpl2 licenses.lgpl2 ];
     platforms = platforms.linux;
     maintainers = teams.cinnamon.members;

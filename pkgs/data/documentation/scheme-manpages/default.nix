@@ -2,13 +2,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "scheme-manpages";
-  version = "unstable-2023-06-04";
+  version = "0-unstable-2024-02-11";
 
   src = fetchFromGitHub {
     owner = "schemedoc";
     repo = "manpages";
-    rev = "d5fce963985df270cb99d020169b4f28122e6415";
-    hash = "sha256-snODSEtH1K/X0MakJWcPM40cqLUA+0cbBkhAHuisCyI=";
+    rev = "1ef440525db569799774c83634d28bfa630358da";
+    hash = "sha256-ZBovG9i0qKD6dP4qcLP1T1fke0hC8MmRjZRzxuojd60=";
   };
 
   dontBuild = true;
@@ -24,7 +24,7 @@ stdenvNoCC.mkDerivation rec {
     description = "Unix manual pages for R6RS and R7RS";
     homepage = "https://github.com/schemedoc/manpages";
     license = licenses.mit;
-    maintainers = [ maintainers.marsam ];
+    maintainers = [ ];
     platforms = platforms.all;
   };
 }

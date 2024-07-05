@@ -12,27 +12,36 @@
 , ninja
 , pkg-config
 , python3
-, systemd
+, substituteAll
+, systemdMinimal
 , usbutils
 , vala
 , which
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "umockdev";
-  version = "0.17.17";
+  version = "0.18.2";
 
   outputs = [ "bin" "out" "dev" "devdoc" ];
 
   src = fetchurl {
-    url = "https://github.com/martinpitt/umockdev/releases/download/${version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-IOYhseRYsyADz+qZc5tngkuGZShUqLzjPiYSTjR/32w=";
+    url = "https://github.com/martinpitt/umockdev/releases/download/${finalAttrs.version}/umockdev-${finalAttrs.version}.tar.xz";
+    hash = "sha256-1HKV6IA8bWfgdgMcIlgeP470aIAj1I925ed2qM7IkHM=";
   };
 
   patches = [
     # Hardcode absolute paths to libraries so that consumers
     # do not need to set LD_LIBRARY_PATH themselves.
     ./hardcode-paths.patch
+
+    # Replace references to udevadm with an absolute paths, so programs using
+    # umockdev will just work without having to provide it in their test environment
+    # $PATH.
+    (substituteAll {
+      src = ./substitute-udevadm.patch;
+      udevadm = "${systemdMinimal}/bin/udevadm";
+    })
   ];
 
   nativeBuildInputs = [
@@ -49,16 +58,21 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     glib
-    systemd
-    libgudev
+    systemdMinimal
     libpcap
+  ];
+
+  checkInputs = lib.optionals finalAttrs.passthru.withGudev [
+    libgudev
   ];
 
   nativeCheckInputs = [
     python3
-    which
     usbutils
+    which
   ];
+
+  strictDeps = true;
 
   mesonFlags = [
     "-Dgtk_doc=true"
@@ -81,12 +95,25 @@ stdenv.mkDerivation rec {
     ln -s "$PWD/libumockdev-preload.so.0" "$out/lib/libumockdev-preload.so.0"
   '';
 
+  passthru = {
+    # libgudev is needed for an optional test but it itself relies on umockdev for testing.
+    withGudev = false;
+
+    tests = {
+      withGudev = finalAttrs.finalPackage.overrideAttrs (attrs: {
+        passthru = attrs.passthru // {
+          withGudev = true;
+        };
+      });
+    };
+  };
+
   meta = with lib; {
     homepage = "https://github.com/martinpitt/umockdev";
-    changelog = "https://github.com/martinpitt/umockdev/releases/tag/${version}";
+    changelog = "https://github.com/martinpitt/umockdev/releases/tag/${finalAttrs.version}";
     description = "Mock hardware devices for creating unit tests";
     license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ flokli ];
     platforms = with platforms; linux;
   };
-}
+})

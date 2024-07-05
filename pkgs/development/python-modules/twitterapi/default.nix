@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, requests
-, requests-oauthlib
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  requests,
+  requests-oauthlib,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -28,9 +29,7 @@ buildPythonPackage rec {
   # Tests are interacting with the Twitter API
   doCheck = false;
 
-  pythonImportsCheck = [
-    "TwitterAPI"
-  ];
+  pythonImportsCheck = [ "TwitterAPI" ];
 
   meta = with lib; {
     description = "Python wrapper for Twitter's REST and Streaming APIs";

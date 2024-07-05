@@ -1,14 +1,14 @@
-{ lib, fetchFromGitHub, installShellFiles, python3Packages }:
+{ lib, fetchFromGitHub, installShellFiles, nix-update-script, python3Packages }:
 
 python3Packages.buildPythonApplication rec {
   pname = "trash-cli";
-  version = "0.23.2.13.2";
+  version = "0.24.5.26";
 
   src = fetchFromGitHub {
     owner = "andreafrancia";
     repo = "trash-cli";
     rev = version;
-    hash = "sha256-TJEi7HKIrfOdb+LLRt2DN5gWdFzUeo6isb59lFLK4bQ=";
+    hash = "sha256-ltuMnxtG4jTTSZd6ZHWl8wI0oQMMFqW0HAPetZMfGtc=";
   };
 
   propagatedBuildInputs = with python3Packages; [ psutil six ];
@@ -55,6 +55,8 @@ python3Packages.buildPythonApplication rec {
         --zsh  <("$out/bin/$bin" --print-completion zsh)
     done
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     homepage = "https://github.com/andreafrancia/trash-cli";

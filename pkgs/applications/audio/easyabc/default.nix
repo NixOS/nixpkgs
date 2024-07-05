@@ -1,7 +1,23 @@
-{ lib, fetchFromGitHub, substituteAll, makeWrapper, python39, fluidsynth, soundfont-fluid, wrapGAppsHook, abcmidi, abcm2ps, ghostscript }:
+{ lib, fetchFromGitHub, fetchPypi, substituteAll, python39, fluidsynth, soundfont-fluid, wrapGAppsHook3, abcmidi, abcm2ps, ghostscript }:
 
-# requires python39 due to https://stackoverflow.com/a/71902541 https://github.com/jwdj/EasyABC/issues/52
-python39.pkgs.buildPythonApplication {
+let
+  # requires python39 due to https://stackoverflow.com/a/71902541 https://github.com/jwdj/EasyABC/issues/52
+  python = python39.override {
+    self = python;
+    packageOverrides = self: super: {
+      # currently broken with 4.2.1
+      # https://github.com/jwdj/EasyABC/issues/75
+      wxpython = super.wxpython.overrideAttrs (args: rec {
+        version = "4.2.0";
+        src = fetchPypi {
+          inherit version;
+          pname = "wxPython";
+          hash = "sha256-ZjzrxFCdfl0RNRiGX+J093+VQ0xdV7w4btWNZc7thsc=";
+        };
+      });
+    };
+  };
+in python.pkgs.buildPythonApplication {
   pname = "easyabc";
   version = "1.3.8.6";
 
@@ -12,11 +28,11 @@ python39.pkgs.buildPythonApplication {
     hash = "sha256-leC3A4HQMeJNeZXArb3YAYr2mddGPcws618NrRh2Q1Y=";
   };
 
-  nativeBuildInputs = [ wrapGAppsHook ];
+  nativeBuildInputs = [ wrapGAppsHook3 ];
 
-  propagatedBuildInputs = with python39.pkgs; [
-    cx_Freeze
-    wxPython_4_2
+  propagatedBuildInputs = with python.pkgs; [
+    cx-freeze
+    wxpython
     pygame
   ];
 
@@ -48,7 +64,7 @@ python39.pkgs.buildPythonApplication {
     ln -s ${abcmidi}/bin/abc2abc $out/share/easyabc/bin/abc2abc
     ln -s ${abcm2ps}/bin/abcm2ps $out/share/easyabc/bin/abcm2ps
 
-    makeWrapper ${python39.interpreter} $out/bin/easyabc \
+    makeWrapper ${python.interpreter} $out/bin/easyabc \
       --set PYTHONPATH "$PYTHONPATH:$out/share/easyabc" \
       --add-flags "-O $out/share/easyabc/easy_abc.py"
 
@@ -57,6 +73,7 @@ python39.pkgs.buildPythonApplication {
 
   meta = {
     description = "ABC music notation editor";
+    mainProgram = "easyabc";
     homepage = "https://easyabc.sourceforge.net/";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;

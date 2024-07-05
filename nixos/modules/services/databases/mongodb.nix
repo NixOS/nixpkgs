@@ -29,63 +29,56 @@ in
 
     services.mongodb = {
 
-      enable = mkEnableOption (lib.mdDoc "the MongoDB server");
+      enable = mkEnableOption "the MongoDB server";
 
-      package = mkOption {
-        default = pkgs.mongodb;
-        defaultText = literalExpression "pkgs.mongodb";
-        type = types.package;
-        description = lib.mdDoc ''
-          Which MongoDB derivation to use.
-        '';
-      };
+      package = mkPackageOption pkgs "mongodb" { };
 
       user = mkOption {
         type = types.str;
         default = "mongodb";
-        description = lib.mdDoc "User account under which MongoDB runs";
+        description = "User account under which MongoDB runs";
       };
 
       bind_ip = mkOption {
         type = types.str;
         default = "127.0.0.1";
-        description = lib.mdDoc "IP to bind to";
+        description = "IP to bind to";
       };
 
       quiet = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc "quieter output";
+        description = "quieter output";
       };
 
       enableAuth = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc "Enable client authentication. Creates a default superuser with username root!";
+        description = "Enable client authentication. Creates a default superuser with username root!";
       };
 
       initialRootPassword = mkOption {
         type = types.nullOr types.str;
         default = null;
-        description = lib.mdDoc "Password for the root user if auth is enabled.";
+        description = "Password for the root user if auth is enabled.";
       };
 
       dbpath = mkOption {
         type = types.str;
         default = "/var/db/mongodb";
-        description = lib.mdDoc "Location where MongoDB stores its files";
+        description = "Location where MongoDB stores its files";
       };
 
       pidFile = mkOption {
         type = types.str;
         default = "/run/mongodb.pid";
-        description = lib.mdDoc "Location of MongoDB pid file";
+        description = "Location of MongoDB pid file";
       };
 
       replSetName = mkOption {
         type = types.str;
         default = "";
-        description = lib.mdDoc ''
+        description = ''
           If this instance is part of a replica set, set its name here.
           Otherwise, leave empty to run as single node.
         '';
@@ -97,13 +90,13 @@ in
         example = ''
           storage.journal.enabled: false
         '';
-        description = lib.mdDoc "MongoDB extra configuration in YAML format";
+        description = "MongoDB extra configuration in YAML format";
       };
 
       initialScript = mkOption {
         type = types.nullOr types.path;
         default = null;
-        description = lib.mdDoc ''
+        description = ''
           A file containing MongoDB statements to execute on first startup.
         '';
       };

@@ -10,8 +10,8 @@ let
       type = with types; nullOr str;
       default = null;
       example = "30s";
-      description = lib.mdDoc ''
-        Timeout for establishing a new TCP connection to your origin server. This excludes the time taken to establish TLS, which is controlled by [https://developers.cloudflare.com/cloudflare-one/connections/connect-apps/configuration/local-management/ingress/#tlstimeout](tlsTimeout).
+      description = ''
+        Timeout for establishing a new TCP connection to your origin server. This excludes the time taken to establish TLS, which is controlled by [tlsTimeout](https://developers.cloudflare.com/cloudflare-one/connections/connect-apps/configuration/local-management/ingress/#tlstimeout).
       '';
     };
 
@@ -19,7 +19,7 @@ let
       type = with types; nullOr str;
       default = null;
       example = "10s";
-      description = lib.mdDoc ''
+      description = ''
         Timeout for completing a TLS handshake to your origin server, if you have chosen to connect Tunnel to an HTTPS server.
       '';
     };
@@ -28,7 +28,7 @@ let
       type = with types; nullOr str;
       default = null;
       example = "30s";
-      description = lib.mdDoc ''
+      description = ''
         The timeout after which a TCP keepalive packet is sent on a connection between Tunnel and the origin server.
       '';
     };
@@ -37,7 +37,7 @@ let
       type = with types; nullOr bool;
       default = null;
       example = false;
-      description = lib.mdDoc ''
+      description = ''
         Disable the “happy eyeballs” algorithm for IPv4/IPv6 fallback if your local network has misconfigured one of the protocols.
       '';
     };
@@ -46,7 +46,7 @@ let
       type = with types; nullOr int;
       default = null;
       example = 100;
-      description = lib.mdDoc ''
+      description = ''
         Maximum number of idle keepalive connections between Tunnel and your origin. This does not restrict the total number of concurrent connections.
       '';
     };
@@ -55,7 +55,7 @@ let
       type = with types; nullOr str;
       default = null;
       example = "1m30s";
-      description = lib.mdDoc ''
+      description = ''
         Timeout after which an idle keepalive connection can be discarded.
       '';
     };
@@ -64,7 +64,7 @@ let
       type = with types; nullOr str;
       default = null;
       example = "";
-      description = lib.mdDoc ''
+      description = ''
         Sets the HTTP `Host` header on requests sent to the local service.
       '';
     };
@@ -73,7 +73,7 @@ let
       type = with types; nullOr str;
       default = null;
       example = "";
-      description = lib.mdDoc ''
+      description = ''
         Hostname that `cloudflared` should expect from your origin server certificate.
       '';
     };
@@ -82,7 +82,7 @@ let
       type = with types; nullOr (either str path);
       default = null;
       example = "";
-      description = lib.mdDoc ''
+      description = ''
         Path to the certificate authority (CA) for the certificate of your origin. This option should be used only if your certificate is not signed by Cloudflare.
       '';
     };
@@ -91,7 +91,7 @@ let
       type = with types; nullOr bool;
       default = null;
       example = false;
-      description = lib.mdDoc ''
+      description = ''
         Disables TLS verification of the certificate presented by your origin. Will allow any certificate from the origin to be accepted.
       '';
     };
@@ -100,7 +100,7 @@ let
       type = with types; nullOr bool;
       default = null;
       example = false;
-      description = lib.mdDoc ''
+      description = ''
         Disables chunked transfer encoding. Useful if you are running a WSGI server.
       '';
     };
@@ -109,7 +109,7 @@ let
       type = with types; nullOr str;
       default = null;
       example = "127.0.0.1";
-      description = lib.mdDoc ''
+      description = ''
         `cloudflared` starts a proxy server to translate HTTP traffic into TCP when proxying, for example, SSH or RDP. This configures the listen address for that proxy.
       '';
     };
@@ -118,7 +118,7 @@ let
       type = with types; nullOr int;
       default = null;
       example = 0;
-      description = lib.mdDoc ''
+      description = ''
         `cloudflared` starts a proxy server to translate HTTP traffic into TCP when proxying, for example, SSH or RDP. This configures the listen port for that proxy. If set to zero, an unused port will randomly be chosen.
       '';
     };
@@ -127,40 +127,35 @@ let
       type = with types; nullOr (enum [ "" "socks" ]);
       default = null;
       example = "";
-      description = lib.mdDoc ''
+      description = ''
         `cloudflared` starts a proxy server to translate HTTP traffic into TCP when proxying, for example, SSH or RDP. This configures what type of proxy will be started. Valid options are:
 
         - `""` for the regular proxy
-        - `"socks"` for a SOCKS5 proxy. Refer to the [https://developers.cloudflare.com/cloudflare-one/tutorials/kubectl/](tutorial on connecting through Cloudflare Access using kubectl) for more information.
+        - `"socks"` for a SOCKS5 proxy. Refer to the [tutorial on connecting through Cloudflare Access using kubectl](https://developers.cloudflare.com/cloudflare-one/tutorials/kubectl/) for more information.
       '';
     };
   };
 in
 {
   options.services.cloudflared = {
-    enable = mkEnableOption (lib.mdDoc "Cloudflare Tunnel client daemon (formerly Argo Tunnel)");
+    enable = mkEnableOption "Cloudflare Tunnel client daemon (formerly Argo Tunnel)";
 
     user = mkOption {
       type = types.str;
       default = "cloudflared";
-      description = lib.mdDoc "User account under which Cloudflared runs.";
+      description = "User account under which Cloudflared runs.";
     };
 
     group = mkOption {
       type = types.str;
       default = "cloudflared";
-      description = lib.mdDoc "Group under which cloudflared runs.";
+      description = "Group under which cloudflared runs.";
     };
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.cloudflared;
-      defaultText = "pkgs.cloudflared";
-      description = lib.mdDoc "The package to use for Cloudflared.";
-    };
+    package = mkPackageOption pkgs "cloudflared" { };
 
     tunnels = mkOption {
-      description = lib.mdDoc ''
+      description = ''
         Cloudflare tunnels.
       '';
       type = types.attrsOf (types.submodule ({ name, ... }: {
@@ -169,10 +164,10 @@ in
 
           credentialsFile = mkOption {
             type = types.str;
-            description = lib.mdDoc ''
+            description = ''
               Credential file.
 
-              See [https://developers.cloudflare.com/cloudflare-one/connections/connect-apps/install-and-setup/tunnel-useful-terms/#credentials-file](Credentials file).
+              See [Credentials file](https://developers.cloudflare.com/cloudflare-one/connections/connect-apps/install-and-setup/tunnel-useful-terms/#credentials-file).
             '';
           };
 
@@ -180,17 +175,17 @@ in
             enabled = mkOption {
               type = with types; nullOr bool;
               default = null;
-              description = lib.mdDoc ''
+              description = ''
                 Enable warp routing.
 
-                See [https://developers.cloudflare.com/cloudflare-one/tutorials/warp-to-tunnel/](Connect from WARP to a private network on Cloudflare using Cloudflare Tunnel).
+                See [Connect from WARP to a private network on Cloudflare using Cloudflare Tunnel](https://developers.cloudflare.com/cloudflare-one/tutorials/warp-to-tunnel/).
               '';
             };
           };
 
           default = mkOption {
             type = types.str;
-            description = lib.mdDoc ''
+            description = ''
               Catch-all service if no ingress matches.
 
               See `service`.
@@ -206,10 +201,10 @@ in
                 service = mkOption {
                   type = with types; nullOr str;
                   default = null;
-                  description = lib.mdDoc ''
+                  description = ''
                     Service to pass the traffic.
 
-                    See [https://developers.cloudflare.com/cloudflare-one/connections/connect-apps/configuration/local-management/ingress/#supported-protocols](Supported protocols).
+                    See [Supported protocols](https://developers.cloudflare.com/cloudflare-one/connections/connect-apps/configuration/local-management/ingress/#supported-protocols).
                   '';
                   example = "http://localhost:80, tcp://localhost:8000, unix:/home/production/echo.sock, hello_world or http_status:404";
                 };
@@ -217,7 +212,7 @@ in
                 path = mkOption {
                   type = with types; nullOr str;
                   default = null;
-                  description = lib.mdDoc ''
+                  description = ''
                     Path filter.
 
                     If not specified, all paths will be matched.
@@ -228,10 +223,10 @@ in
               };
             })));
             default = { };
-            description = lib.mdDoc ''
+            description = ''
               Ingress rules.
 
-              See [https://developers.cloudflare.com/cloudflare-one/connections/connect-apps/configuration/local-management/ingress/](Ingress rules).
+              See [Ingress rules](https://developers.cloudflare.com/cloudflare-one/connections/connect-apps/configuration/local-management/ingress/).
             '';
             example = {
               "*.domain.com" = "http://localhost:80";
@@ -281,9 +276,11 @@ in
             ingressesSet = filterIngressSet tunnel.ingress;
             ingressesStr = filterIngressStr tunnel.ingress;
 
-            fullConfig = {
+            fullConfig = filterConfig {
               tunnel = name;
               "credentials-file" = tunnel.credentialsFile;
+              warp-routing = filterConfig tunnel.warp-routing;
+              originRequest = filterConfig tunnel.originRequest;
               ingress =
                 (map
                   (key: {
@@ -299,6 +296,7 @@ in
                   (attrNames ingressesStr))
                 ++ [{ service = tunnel.default; }];
             };
+
             mkConfigFile = pkgs.writeText "cloudflared.yml" (builtins.toJSON fullConfig);
           in
           nameValuePair "cloudflared-tunnel-${name}" ({
@@ -327,5 +325,5 @@ in
     };
   };
 
-  meta.maintainers = with maintainers; [ bbigras ];
+  meta.maintainers = with maintainers; [ bbigras anpin ];
 }

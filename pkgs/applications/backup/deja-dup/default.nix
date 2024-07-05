@@ -20,16 +20,16 @@
 , duplicity
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "deja-dup";
-  version = "44.2";
+  version = "45.2";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "deja-dup";
-    rev = version;
-    hash = "sha256-TnyH2tIvzG1B2hbDPyFyaTArfuMJaP6GKw6yahwsQ1Q=";
+    rev = finalAttrs.version;
+    hash = "sha256-nscswpWX6UB1zuv6TXcT3YE1wkREJYDGQrEPryyUYUM=";
   };
 
   patches = [
@@ -65,15 +65,16 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A simple backup tool";
+    description = "Simple backup tool";
     longDescription = ''
       Déjà Dup is a simple backup tool. It hides the complexity \
       of backing up the Right Way (encrypted, off-site, and regular) \
       and uses duplicity as the backend.
     '';
-    homepage = "https://wiki.gnome.org/Apps/DejaDup";
+    homepage = "https://apps.gnome.org/DejaDup/";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ jtojnar ];
     platforms = platforms.linux;
+    mainProgram = "deja-dup";
   };
-}
+})

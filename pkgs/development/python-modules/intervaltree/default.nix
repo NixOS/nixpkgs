@@ -1,8 +1,15 @@
-{ lib, buildPythonPackage, fetchPypi
-, python, pytest, sortedcontainers }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  python,
+  pytest,
+  sortedcontainers,
+}:
 
 buildPythonPackage rec {
   version = "3.1.0";
+  format = "setuptools";
   pname = "intervaltree";
 
   src = fetchPypi {
@@ -23,8 +30,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Editable interval tree data structure for Python 2 and 3";
-    homepage =  "https://github.com/chaimleib/intervaltree";
+    homepage = "https://github.com/chaimleib/intervaltree";
     license = [ licenses.asl20 ];
-    maintainers =  [ maintainers.bennofs ];
+    maintainers = [ maintainers.bennofs ];
   };
 }

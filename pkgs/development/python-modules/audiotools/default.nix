@@ -1,15 +1,20 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, stdenv
-, AudioToolbox
-, AudioUnit
-, CoreServices
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  stdenv,
+  AudioToolbox,
+  AudioUnit,
+  CoreServices,
 }:
 
 buildPythonPackage rec {
   pname = "audiotools";
   version = "3.1.1";
+  pyproject = true;
+
+  build-system = [ setuptools ];
 
   buildInputs = lib.optionals stdenv.isDarwin [
     AudioToolbox

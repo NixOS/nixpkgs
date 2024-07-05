@@ -1,37 +1,39 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, grpcio
-, protobuf
-, pythonOlder
-, pythonRelaxDepsHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  grpcio,
+  protobuf,
+  pythonOlder,
+  pythonRelaxDepsHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "grpcio-testing";
-  version = "1.54.2";
-  format = "setuptools";
+  version = "1.62.2";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-qCMOjSfe7eGIWyomTLiLrLrt/GekmLdlMO2VnPihgI0=";
+    hash = "sha256-dNGeGQnpQbGmvvf71fnvMwWZ9nb7BrsGB8hFDtVVnfI=";
   };
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "'grpcio>={version}'.format(version=grpc_version.VERSION)" "'grpcio'"
+      --replace-fail '"grpcio>={version}".format(version=grpc_version.VERSION)' '"grpcio"'
   '';
+
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     grpcio
     protobuf
   ];
 
-  pythonImportsCheck = [
-    "grpc_testing"
-  ];
+  pythonImportsCheck = [ "grpc_testing" ];
 
   # Module has no tests
   doCheck = false;

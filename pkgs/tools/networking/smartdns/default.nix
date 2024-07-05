@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "smartdns";
-  version = "42";
+  version = "46";
 
   src = fetchFromGitHub {
     owner = "pymumu";
     repo = pname;
     rev = "Release${version}";
-    hash = "sha256-FVHOjW5SEShxTPPd4IuEfPV6vvqr0RepV976eJmxqwM=";
+    hash = "sha256-7JNP8vacYENBbbCxBtSpVu9j5vCBVBsQ/OeVPoRxlE4=";
   };
 
   buildInputs = [ openssl ];
@@ -24,7 +24,10 @@ stdenv.mkDerivation rec {
   installFlags = [ "SYSCONFDIR=${placeholder "out"}/etc" ];
 
   passthru.tests = {
-    version = testers.testVersion { package = smartdns; };
+    version = testers.testVersion {
+      package = smartdns;
+      command = "smartdns -v";
+    };
   };
 
   meta = with lib; {
@@ -39,5 +42,6 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.lexuge ];
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
+    mainProgram = "smartdns";
   };
 }

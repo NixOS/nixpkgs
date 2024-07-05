@@ -10,8 +10,8 @@
 , glib-networking
 , webkitgtk
 , makeWrapper
-, wrapGAppsHook
-, gnome
+, wrapGAppsHook3
+, adwaita-icon-theme
 , gdk-pixbuf
 }:
 
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     webkitgtk
     glib-networking
     gdk-pixbuf
-    gnome.adwaita-icon-theme
+    adwaita-icon-theme
   ];
 
   nativeBuildInputs = [
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     pkg-config
     wayland
     makeWrapper
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   depsBuildsBuild = [
@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A small single “window” launcher for the WebKit WPE port";
+    description = "Small single “window” launcher for the WebKit WPE port";
     license = licenses.mit;
     maintainers = [ maintainers.matthewbauer ];
     platforms = platforms.linux;

@@ -9,6 +9,7 @@
 , kio
 , kirigami2
 , mauikit
+, mauikit-documents
 , mauikit-filebrowsing
 , mauikit-texteditor
 , qtmultimedia
@@ -32,6 +33,7 @@ mkDerivation {
     kio
     kirigami2
     mauikit
+    mauikit-documents
     mauikit-filebrowsing
     mauikit-texteditor
     qtmultimedia
@@ -41,6 +43,7 @@ mkDerivation {
 
   meta = with lib; {
     description = "Document and EBook collection manager";
+    mainProgram = "shelf";
     homepage = "https://invent.kde.org/maui/shelf";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ onny ];

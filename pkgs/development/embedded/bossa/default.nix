@@ -5,6 +5,7 @@
 , libX11
 , readline
 , darwin
+, fetchpatch
 }:
 
 let
@@ -30,6 +31,15 @@ stdenv.mkDerivation rec {
     rev = version;
     sha256 = "sha256-8M3MU/+Y1L6SaQ1yoC9Z27A/gGruZdopLnL1z7h7YJw=";
   };
+
+  patches = [
+    (fetchpatch {
+      # Required for building on Darwin with clang >=15.
+      name = "pr-172-fix.patch";
+      url = "https://github.com/shumatech/BOSSA/commit/6e54973c3c758674c3d04b5e2cf12e097006f6a3.patch";
+      hash = "sha256-2lp6Ej3IfofztC1n/yHLjabn0MH4BA/CM3dsnAw8klA=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace Makefile \
@@ -60,7 +70,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A flash programming utility for Atmel's SAM family of flash-based ARM microcontrollers";
+    description = "Flash programming utility for Atmel's SAM family of flash-based ARM microcontrollers";
     longDescription = ''
       BOSSA is a flash programming utility for Atmel's SAM family of
       flash-based ARM microcontrollers. The motivation behind BOSSA is

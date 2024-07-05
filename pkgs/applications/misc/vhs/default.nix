@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "vhs";
-  version = "0.5.0";
+  version = "0.7.2";
 
   src = fetchFromGitHub {
     owner = "charmbracelet";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-d7oHPe1R0KZaVTTxmed27VZ2PphiQfy7CXYhVKHWUhE=";
+    hash = "sha256-CWurSAxEXAquWXEOyBWBF6JN9Pesm5hBS3jVNv56dvE=";
   };
 
-  vendorHash = "sha256-jrXdbxH5hJrd5yyVsTOeIYJciJ6wVTydkD6aSuWYKPQ=";
+  vendorHash = "sha256-Kh5Sy7URmhsyBF35I0TaDdpSLD96MnkwIS+96+tSyO0=";
 
   nativeBuildInputs = [ installShellFiles makeWrapper ];
 
@@ -28,7 +28,8 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    description = "A tool for generating terminal GIFs with code";
+    description = "Tool for generating terminal GIFs with code";
+    mainProgram = "vhs";
     homepage = "https://github.com/charmbracelet/vhs";
     changelog = "https://github.com/charmbracelet/vhs/releases/tag/v${version}";
     license = licenses.mit;

@@ -1,36 +1,27 @@
-{ lib
-, apptools
-, buildPythonPackage
-, fetchPypi
-, fetchpatch
-, ipython
-, pytestCheckHook
-, pythonAtLeast
-, pythonOlder
-, setuptools
-, traits
+{
+  lib,
+  apptools,
+  buildPythonPackage,
+  fetchPypi,
+  ipython,
+  pytestCheckHook,
+  pythonAtLeast,
+  pythonOlder,
+  setuptools,
+  traits,
 }:
 
 buildPythonPackage rec {
   pname = "envisage";
-  version = "6.1.0";
-  format = "setuptools";
+  version = "7.0.3";
+  format = "pyproject";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-AATsUNcYLB4vtyvuooAMDZx8p5fayijb6yJoUKTCW40=";
+    hash = "sha256-97GviL86j/8qmsbja7SN6pkp4/YSIEz+lK7WKwMWyeM=";
   };
-
-  patches = [
-    # TODO: remove on next release
-    (fetchpatch {
-      name = "fix-mistake-in-menu-group-specification.patch";
-      url = "https://github.com/enthought/envisage/commit/f23ea3864a5f6ffca665d47dec755992e062029b.patch";
-      hash = "sha256-l4CWB4jRkSmoTDoV8CtP2w87Io2cLINKfOSaSPy7cXE=";
-    })
-  ];
 
   # for the optional dependency ipykernel, only versions < 6 are
   # supported, so it's not included in the tests, and not propagated
@@ -55,9 +46,7 @@ buildPythonPackage rec {
     "envisage/tests/test_egg_plugin_manager.py"
   ];
 
-  pythonImportsCheck = [
-    "envisage"
-  ];
+  pythonImportsCheck = [ "envisage" ];
 
   meta = with lib; {
     description = "Framework for building applications whose functionalities can be extended by adding plug-ins";

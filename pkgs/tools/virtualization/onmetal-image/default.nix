@@ -34,6 +34,7 @@ buildGoModule rec {
     description = "Onmetal OCI Image Specification, Library and Tooling";
     homepage = "https://github.com/onmetal/onmetal-image";
     license = licenses.asl20;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
+    mainProgram = "onmetal-image";
   };
 }

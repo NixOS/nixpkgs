@@ -1,4 +1,4 @@
-{ fetchurl, lib, stdenv, smartmontools, autoreconfHook, gettext, gtkmm3, pkg-config, wrapGAppsHook, pcre-cpp, gnome }:
+{ fetchurl, lib, stdenv, smartmontools, autoreconfHook, gettext, gtkmm3, pkg-config, wrapGAppsHook3, pcre-cpp, adwaita-icon-theme }:
 
 stdenv.mkDerivation rec {
   pname = "gsmartcontrol";
@@ -17,8 +17,8 @@ stdenv.mkDerivation rec {
     substituteInPlace data/org.gsmartcontrol.policy --replace "/usr/sbin" $out/bin
   '';
 
-  nativeBuildInputs = [ autoreconfHook gettext pkg-config wrapGAppsHook ];
-  buildInputs = [ gtkmm3 pcre-cpp gnome.adwaita-icon-theme ];
+  nativeBuildInputs = [ autoreconfHook gettext pkg-config wrapGAppsHook3 ];
+  buildInputs = [ gtkmm3 pcre-cpp adwaita-icon-theme ];
 
   enableParallelBuilding = true;
 

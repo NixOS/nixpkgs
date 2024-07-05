@@ -17,14 +17,16 @@ in
 (stdenv.mkDerivation ({
   name = "chicken-${name}";
   propagatedBuildInputs = buildInputs;
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ chicken makeWrapper ];
   buildInputs = [ chicken ];
+
+  strictDeps = true;
 
   CSC_OPTIONS = lib.concatStringsSep " " cscOptions;
 
   buildPhase = ''
     runHook preBuild
-    chicken-install -cached -no-install ${lib.escapeShellArgs chickenInstallFlags}
+    chicken-install -cached -no-install -host ${lib.escapeShellArgs chickenInstallFlags}
     runHook postBuild
   '';
 
@@ -33,7 +35,7 @@ in
 
     export CHICKEN_INSTALL_PREFIX=$out
     export CHICKEN_INSTALL_REPOSITORY=$out/lib/chicken/${toString chicken.binaryVersion}
-    chicken-install -cached ${lib.escapeShellArgs chickenInstallFlags}
+    chicken-install -cached -host ${lib.escapeShellArgs chickenInstallFlags}
 
     for f in $out/bin/*
     do

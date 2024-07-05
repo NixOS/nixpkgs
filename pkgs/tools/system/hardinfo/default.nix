@@ -43,8 +43,9 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "http://hardinfo.org/";
     description = "Display information about your hardware and operating system";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     maintainers = with maintainers; [ bjornfor ];
     platforms = [ "x86_64-linux" "i686-linux" ]; # ARMv7 and AArch64 are unsupported
+    mainProgram = "hardinfo";
   };
 }

@@ -1,31 +1,32 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, fastprogress
-, fastcore
-, fastdownload
-, torch
-, torchvision
-, matplotlib
-, pillow
-, scikit-learn
-, scipy
-, spacy
-, pandas
-, requests
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  fastprogress,
+  fastcore,
+  fastdownload,
+  torch,
+  torchvision,
+  matplotlib,
+  pillow,
+  scikit-learn,
+  scipy,
+  spacy,
+  pandas,
+  requests,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "fastai";
-  version = "2.7.12";
+  version = "2.7.15";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-5ayA/0bdgHDGcKNI8xpkyF6hqR3DIMIQZIjzQzMoKRY=";
+    hash = "sha256-8swg/RjN9exzjMVtKdVN51iH1IrRX501z1DDjTqFaSM=";
   };
 
   propagatedBuildInputs = [
@@ -47,7 +48,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/fastai/fastai";
-    description = "The fastai deep learning library";
+    description = "Fastai deep learning library";
+    mainProgram = "configure_accelerate";
     changelog = "https://github.com/fastai/fastai/blob/${version}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ rxiao ];

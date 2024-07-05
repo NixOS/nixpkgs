@@ -1,28 +1,30 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, nose
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitLab,
+  flit-core,
+  unittestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "colored";
-  version = "1.4.4";
-  format = "setuptools";
+  version = "2.2.3";
+  format = "pyproject";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-BP9NTdUUJ0/juZohu1L7lvJojAHpP7p77zciHny1bOA=";
+  src = fetchFromGitLab {
+    owner = "dslackw";
+    repo = "colored";
+    rev = "refs/tags/${version}";
+    hash = "sha256-4APFAIN+cmPPd6qbqVC9iU4YntNEjoPbJXZywG1hsBY=";
   };
 
-  nativeCheckInputs = [ nose ];
+  nativeBuildInputs = [ flit-core ];
 
-  checkPhase = ''
-    nosetests
-  '';
+  nativeCheckInputs = [ unittestCheckHook ];
 
-  pythonImportsCheck = [
-    "colored"
-  ];
+  unittestFlagsArray = [ "unittests" ];
+
+  pythonImportsCheck = [ "colored" ];
 
   meta = with lib; {
     description = "Simple library for color and formatting to terminal";

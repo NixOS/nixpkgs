@@ -1,17 +1,18 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, pythonOlder
-, boost
-, numpy
-, pytestCheckHook
-, pytest-benchmark
-, setuptools-scm
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  pythonOlder,
+  boost,
+  numpy,
+  pytestCheckHook,
+  pytest-benchmark,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "boost-histogram";
-  version = "1.3.2";
+  version = "1.4.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -19,20 +20,14 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "boost_histogram";
     inherit version;
-    hash = "sha256-4XXvvBBUonvFP7vpVHLKyeqTmZyR0GEYQNd2uZWI1Ro=";
+    hash = "sha256-lxRvc19GfVBpdqBH8/I3zlmECpUv0jH19DH4l/sAbN0=";
   };
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
 
-  buildInputs = [
-    boost
-  ];
+  buildInputs = [ boost ];
 
-  propagatedBuildInputs = [
-    numpy
-  ];
+  propagatedBuildInputs = [ numpy ];
 
   nativeCheckInputs = [
     pytestCheckHook

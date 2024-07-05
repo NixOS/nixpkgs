@@ -1,12 +1,12 @@
-{ lib, stdenv, fetchurl, ant, jdk, hdf4, hdf5, makeDesktopItem, copyDesktopItems }:
+{ lib, stdenv, fetchurl, ant, jdk, hdf4, hdf5, makeDesktopItem, copyDesktopItems, strip-nondeterminism, stripJavaArchivesHook }:
 
 stdenv.mkDerivation rec {
   pname = "hdfview";
-  version = "3.3.0";
+  version = "3.3.1";
 
   src = fetchurl {
     url = "https://support.hdfgroup.org/ftp/HDF5/releases/HDF-JAVA/${pname}-${version}/src/${pname}-${version}.tar.gz";
-    sha256 = "sha256-CRYWGGHCH6jdNUtEW0jv9aU9gKXAs4PnnrZLexCOJDA=";
+    sha256 = "sha256-WcGYceMOB8gCycJSW4KdApy2gIBgTnE/d0PxGZClUqg=";
   };
 
   patches = [
@@ -14,12 +14,16 @@ stdenv.mkDerivation rec {
     ./0001-Hardcode-isUbuntu-false-to-avoid-hostname-dependency.patch
     # Disable signing on macOS
     ./disable-mac-signing.patch
+    # Remove timestamp comment from generated versions.properties file
+    ./remove-properties-timestamp.patch
   ];
 
   nativeBuildInputs = [
     ant
     jdk
     copyDesktopItems
+    strip-nondeterminism
+    stripJavaArchivesHook
   ];
 
   HDFLIBS = (hdf4.override { javaSupport = true; }).out;
@@ -64,11 +68,17 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+  preFixup = ''
+    # Remove build timestamp from javadoc files
+    find $out/lib/app{,/mods}/doc/javadocs -name "*.html" -exec strip-nondeterminism --type javadoc {} +
+  '';
+
   meta = {
     description = "A visual tool for browsing and editing HDF4 and HDF5 files";
     license = lib.licenses.free; # BSD-like
-    homepage = "https://portal.hdfgroup.org/display/HDFVIEW/HDFView";
+    homepage = "https://www.hdfgroup.org/downloads/hdfview";
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     maintainers = with lib.maintainers; [ jiegec ];
+    mainProgram = "HDFView";
   };
 }

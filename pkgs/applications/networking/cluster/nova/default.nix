@@ -2,21 +2,22 @@
 
 buildGoModule rec {
   pname = "nova";
-  version = "3.6.4";
+  version = "3.9.0";
 
   src = fetchFromGitHub {
     owner = "FairwindsOps";
     repo = pname;
-    rev = version;
-    hash = "sha256-6gTrBogMvM7X6PFthG+c8N9wXoNHwp0wHjGVKjiHJJY=";
+    rev = "v${version}";
+    hash = "sha256-9ccWH0bh67LCwzKmyaE32j+qeKfNauclSMjpRwdblH8=";
   };
 
-  vendorHash = "sha256-YvYfSb2ZC86S2osFRG7Ep9nrgYJV0tB8fBgZQZ07t2U=";
+  vendorHash = "sha256-Vt2yUYm2i1NHzW7GxDRqBpaFS4dLfODNEMPO+CTwrLY=";
 
   ldflags = [ "-X main.version=${version}" "-s" "-w" ];
 
   meta = with lib; {
     description = "Find outdated or deprecated Helm charts running in your cluster";
+    mainProgram = "nova";
     longDescription = ''
       Nova scans your cluster for installed Helm charts, then
       cross-checks them against all known Helm repositories. If it

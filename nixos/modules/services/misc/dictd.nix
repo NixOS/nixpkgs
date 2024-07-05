@@ -17,7 +17,7 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether to enable the DICT.org dictionary server.
         '';
       };
@@ -27,7 +27,7 @@ in
         default = with pkgs.dictdDBs; [ wiktionary wordnet ];
         defaultText = literalExpression "with pkgs.dictdDBs; [ wiktionary wordnet ]";
         example = literalExpression "[ pkgs.dictdDBs.nld2eng ]";
-        description = lib.mdDoc "List of databases to make available.";
+        description = "List of databases to make available.";
       };
 
     };
@@ -62,6 +62,9 @@ in
       description = "DICT.org Dictionary Server";
       wantedBy = [ "multi-user.target" ];
       environment = { LOCALE_ARCHIVE = "/run/current-system/sw/lib/locale/locale-archive"; };
+      # Work around the fact that dictd doesn't handle SIGTERM; it terminates
+      # with code 143 instead of exiting with code 0.
+      serviceConfig.SuccessExitStatus = [ 143 ];
       serviceConfig.Type = "forking";
       script = "${pkgs.dict}/sbin/dictd -s -c ${dictdb}/share/dictd/dictd.conf --locale en_US.UTF-8";
     };

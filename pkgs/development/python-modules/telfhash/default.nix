@@ -1,15 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, capstone
-, packaging
-, pyelftools
-, tlsh
-, nose
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  capstone,
+  packaging,
+  pyelftools,
+  tlsh,
+  nose,
 }:
 buildPythonPackage rec {
   pname = "telfhash";
   version = "0.9.8";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "trendmicro";
@@ -32,20 +34,17 @@ buildPythonPackage rec {
     packaging
   ];
 
-  nativeCheckInputs = [
-    nose
-  ];
+  nativeCheckInputs = [ nose ];
 
   checkPhase = ''
     nosetests
   '';
 
-  pythonImportsCheck = [
-    "telfhash"
-  ];
+  pythonImportsCheck = [ "telfhash" ];
 
   meta = with lib; {
     description = "Symbol hash for ELF files";
+    mainProgram = "telfhash";
     homepage = "https://github.com/trendmicro/telfhash";
     license = licenses.asl20;
     maintainers = [ ];

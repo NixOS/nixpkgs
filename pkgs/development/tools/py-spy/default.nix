@@ -50,6 +50,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Sampling profiler for Python programs";
+    mainProgram = "py-spy";
     homepage = "https://github.com/benfred/py-spy";
     changelog = "https://github.com/benfred/py-spy/releases/tag/v${version}";
     license = licenses.mit;

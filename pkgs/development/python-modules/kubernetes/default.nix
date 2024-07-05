@@ -1,31 +1,29 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-
-# propgatedBuildInputs
-, adal
-, certifi
-, google-auth
-, python-dateutil
-, pyyaml
-, requests
-, requests-oauthlib
-, setuptools
-, six
-, urllib3
-, websocket-client
-
-# tests
-, pytestCheckHook
-, mock
+{
+  lib,
+  stdenv,
+  adal,
+  buildPythonPackage,
+  certifi,
+  fetchFromGitHub,
+  google-auth,
+  mock,
+  pytestCheckHook,
+  python-dateutil,
+  pythonOlder,
+  pythonRelaxDepsHook,
+  pyyaml,
+  requests,
+  requests-oauthlib,
+  setuptools,
+  six,
+  urllib3,
+  websocket-client,
 }:
 
 buildPythonPackage rec {
   pname = "kubernetes";
-  version = "26.1.0";
-  format = "setuptools";
+  version = "29.0.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 
@@ -33,31 +31,43 @@ buildPythonPackage rec {
     owner = "kubernetes-client";
     repo = "python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-2QkQGZ4Dho2PykH90ijosWWBzhQoCHoWhRL3ruOiDBg=";
+    hash = "sha256-KChfiXYnJTeIW6O7GaK/fMxU2quIvbjc4gB4aZBeTtI=";
   };
 
-  propagatedBuildInputs = [
-    adal
+  postPatch = ''
+    substituteInPlace kubernetes/base/config/kube_config_test.py \
+      --replace-fail "assertEquals" "assertEqual"
+  '';
+
+  pythonRelaxDeps = [ "urllib3" ];
+
+  build-system = [
+    pythonRelaxDepsHook
+    setuptools
+  ];
+
+  dependencies = [
     certifi
     google-auth
     python-dateutil
     pyyaml
     requests
     requests-oauthlib
-    setuptools
     six
     urllib3
     websocket-client
   ];
 
-  pythonImportsCheck = [
-    "kubernetes"
-  ];
+  passthru.optional-dependencies = {
+    adal = [ adal ];
+  };
+
+  pythonImportsCheck = [ "kubernetes" ];
 
   nativeCheckInputs = [
     mock
     pytestCheckHook
-  ];
+  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
   disabledTests = lib.optionals stdenv.isDarwin [
     # AssertionError: <class 'urllib3.poolmanager.ProxyManager'> != <class 'urllib3.poolmanager.Poolmanager'>
@@ -67,7 +77,8 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Kubernetes Python client";
     homepage = "https://github.com/kubernetes-client/python";
+    changelog = "https://github.com/kubernetes-client/python/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ lsix SuperSandro2000 ];
+    maintainers = with maintainers; [ lsix ];
   };
 }

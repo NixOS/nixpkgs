@@ -1,37 +1,39 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-# install dependencies
-, pytest
-, vcrpy
-, attrs
-# test dependencies
-, pytestCheckHook
-, pytest-httpbin
-, pytest-mock
-, requests
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  # install dependencies
+  pytest,
+  vcrpy,
+  # test dependencies
+  hatchling,
+  pytestCheckHook,
+  pytest-httpbin,
+  pytest-mock,
+  requests,
 }:
 
 buildPythonPackage rec {
   pname = "pytest-recording";
-  version = "0.12.2";
+  version = "0.13.1";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "kiwicom";
     repo = "pytest-recording";
-    rev = "v${version}";
-    hash = "sha256-nivwxaW8AIrBtPkzPJYfxlPxWn2NuYcaMry/IrBnnl0=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-HyV1wWYS/8p45mZxgA1XSChLCTYq5iOzBRqKXyZpwgo=";
   };
 
   buildInputs = [
+    hatchling
     pytest
   ];
 
-  propagatedBuildInputs = [
-    vcrpy
-    attrs
-  ];
+  propagatedBuildInputs = [ vcrpy ];
+
+  __darwinAllowLocalNetworking = true;
 
   checkInputs = [
     pytestCheckHook
@@ -40,23 +42,19 @@ buildPythonPackage rec {
     requests
   ];
 
-  disabledTests = [
-    "test_block_network_with_allowed_hosts"
-  ] ++ lib.optionals stdenv.isDarwin [
-    # Missing socket.AF_NETLINK
-    "test_other_socket"
-  ];
+  disabledTests =
+    [ "test_block_network_with_allowed_hosts" ]
+    ++ lib.optionals stdenv.isDarwin [
+      # Missing socket.AF_NETLINK
+      "test_other_socket"
+    ];
 
-  pytestFlagsArray = [
-    "tests"
-  ];
+  pytestFlagsArray = [ "tests" ];
 
-  pythonImportsCheck = [
-    "pytest_recording"
-  ];
+  pythonImportsCheck = [ "pytest_recording" ];
 
   meta = with lib; {
-    description = "A pytest plugin that allows you recording of network interactions via VCR.py";
+    description = "Pytest plugin that allows you recording of network interactions via VCR.py";
     homepage = "https://github.com/kiwicom/pytest-recording";
     license = licenses.mit;
     maintainers = with maintainers; [ jbgosselin ];

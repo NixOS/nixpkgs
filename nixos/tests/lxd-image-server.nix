@@ -8,8 +8,8 @@ let
     };
   };
 
-  lxd-image-metadata = lxd-image.lxdMeta.${pkgs.stdenv.hostPlatform.system};
-  lxd-image-rootfs = lxd-image.lxdImage.${pkgs.stdenv.hostPlatform.system};
+  lxd-image-metadata = lxd-image.lxdContainerMeta.${pkgs.stdenv.hostPlatform.system};
+  lxd-image-rootfs = lxd-image.lxdContainerImage.${pkgs.stdenv.hostPlatform.system};
 
 in {
   name = "lxd-image-server";
@@ -61,14 +61,14 @@ in {
     machine.wait_for_unit("lxd.service")
     machine.wait_for_file("/var/lib/lxd/unix.socket")
 
-    # It takes additional second for lxd to settle
-    machine.sleep(1)
+    # Wait for lxd to settle
+    machine.succeed("lxd waitready")
 
     # lxd expects the pool's directory to already exist
     machine.succeed("mkdir /var/lxd-pool")
 
     machine.succeed(
-        "cat ${./common/lxd/config.yaml} | lxd init --preseed"
+        "lxd init --minimal"
     )
 
     machine.succeed(

@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "codespell";
-  version = "2.2.5";
+  version = "2.3.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "codespell-project";
     repo = "codespell";
     rev = "v${version}";
-    sha256 = "sha256-Cu1bbLzVOAvPNzTavaMUfW2SCnQHc9mOM+IHAgVHhT4=";
+    sha256 = "sha256-X3Pueu0E7Q57sbKSXqCZki4/PUb1WyWk/Zmj+lhVTM8=";
   };
 
   postPatch = ''
@@ -33,23 +33,20 @@ python3.pkgs.buildPythonApplication rec {
     pytest-dependency
   ];
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   preCheck = ''
     export ASPELL_CONF="dict-dir ${aspellDicts.en}/lib/aspell"
   '';
 
   disabledTests = [
     # tries to run not fully installed script
-    "test_command"
-    # error 'dateset' should not be in aspell dictionaries (en, en_GB, en_US, en_CA, en_AU) for dictionary /build/source/codespell_lib/tests/../data/dictionary.txt
-    "test_dictionary_formatting"
+    "test_basic"
   ];
 
   pythonImportsCheck = [ "codespell_lib" ];
 
   meta = with lib; {
     description = "Fix common misspellings in source code";
+    mainProgram = "codespell";
     homepage = "https://github.com/codespell-project/codespell";
     license = with licenses; [ gpl2Only cc-by-sa-30 ];
     maintainers = with maintainers; [ johnazoidberg SuperSandro2000 ];

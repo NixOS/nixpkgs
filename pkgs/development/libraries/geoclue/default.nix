@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitLab
-, fetchpatch
 , intltool
 , meson
 , mesonEmulatorHook
@@ -19,7 +18,7 @@
 , avahi
 , glib-networking
 , python3
-, wrapGAppsHook
+, wrapGAppsHook3
 , gobject-introspection
 , vala
 , withDemoAgent ? false
@@ -48,7 +47,7 @@ stdenv.mkDerivation rec {
     intltool
     meson
     ninja
-    wrapGAppsHook
+    wrapGAppsHook3
     python3
     vala
     gobject-introspection
@@ -65,7 +64,6 @@ stdenv.mkDerivation rec {
     json-glib
     libsoup_3
     avahi
-    gobject-introspection
   ] ++ lib.optionals withDemoAgent [
     libnotify gdk-pixbuf
   ] ++ lib.optionals (!stdenv.isDarwin) [

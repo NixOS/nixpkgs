@@ -1,17 +1,23 @@
-{ stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, glib
-, vips
-, cffi
-, pkgconfig  # from pythonPackages
-, pkg-config  # from pkgs
-, lib }:
+{
+  stdenv,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  pytestCheckHook,
+  glib,
+  vips,
+  cffi,
+  pkgconfig, # from pythonPackages
+  pkg-config, # from pkgs
+  lib,
+}:
 
 buildPythonPackage rec {
   pname = "pyvips";
   version = "2.2.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "libvips";
@@ -20,11 +26,21 @@ buildPythonPackage rec {
     hash = "sha256-9S7h3bkm+QP78cpemYS7l3c8t+wXsJ5MUAP2T50R/Mc=";
   };
 
-  nativeBuildInputs = [ pkgconfig pkg-config ];
+  nativeBuildInputs = [
+    pkgconfig
+    pkg-config
+  ];
 
-  buildInputs = [ glib vips ];
+  buildInputs = [
+    glib
+    vips
+  ];
 
   propagatedBuildInputs = [ cffi ];
+
+  env = lib.optionalAttrs stdenv.cc.isClang {
+    NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-function-pointer-types";
+  };
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -39,9 +55,13 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "pyvips" ];
 
   meta = with lib; {
-    description = "A python wrapper for libvips";
+    description = "Python wrapper for libvips";
     homepage = "https://github.com/libvips/pyvips";
+    changelog = "https://github.com/libvips/pyvips/blob/v${version}/CHANGELOG.rst";
     license = licenses.mit;
-    maintainers = with maintainers; [ ccellado anthonyroussel ];
+    maintainers = with maintainers; [
+      ccellado
+      anthonyroussel
+    ];
   };
 }

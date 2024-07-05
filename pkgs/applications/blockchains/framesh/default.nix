@@ -1,11 +1,11 @@
-{ lib, fetchurl, appimageTools }:
+{ lib, fetchurl, appimageTools, makeWrapper }:
 
 let
   pname = "framesh";
-  version = "0.6.6";
+  version = "0.6.9";
   src = fetchurl {
     url = "https://github.com/floating/frame/releases/download/v${version}/Frame-${version}.AppImage";
-    sha256 = "sha256-5LLnITQP9m2lMdnB/rrK/M+p3AA3rYZ9GOrDdCFA/r4=";
+    hash = "sha256-SsQIAg5DttvNJk1z+GJq4+e0Qa/j+VEKPV2bPA6+V8A=";
   };
 
   appimageContents = appimageTools.extractType2 {
@@ -16,10 +16,14 @@ appimageTools.wrapType2 {
   inherit pname version src;
 
   extraInstallCommands = ''
-    ln -s $out/bin/${pname}-${version} $out/bin/${pname}
     install -m 444 -D ${appimageContents}/frame.desktop $out/share/applications/frame.desktop
     install -m 444 -D ${appimageContents}/frame.png \
       $out/share/icons/hicolor/512x512/apps/frame.png
+
+    source "${makeWrapper}/nix-support/setup-hook"
+    wrapProgram "$out/bin/${pname}" \
+       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform=wayland --enable-features=WaylandWindowDecorations}}"
+
     substituteInPlace $out/share/applications/frame.desktop \
       --replace 'Exec=AppRun' 'Exec=${pname}'
   '';

@@ -1,13 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy27
-, m2r
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPy27,
+  m2r,
 }:
 
 buildPythonPackage rec {
   pname = "chromaprint";
   version = "0.5";
+  format = "setuptools";
 
   disabled = isPy27;
 
@@ -27,6 +29,9 @@ buildPythonPackage rec {
     description = "Facilitate effortless color terminal output";
     homepage = "https://pypi.org/project/${pname}/";
     license = licenses.mit;
-    maintainers = with maintainers; [ dschrempf peterhoeg ];
+    maintainers = with maintainers; [
+      dschrempf
+      peterhoeg
+    ];
   };
 }

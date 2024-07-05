@@ -1,16 +1,20 @@
-{ buildPythonPackage,
+{
+  buildPythonPackage,
   fetchFromGitHub,
   fetchpatch,
   isPy27,
   libopus,
-  nose,
-  lib, stdenv,
+  pynose,
+  lib,
+  stdenv,
   substituteAll,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "opuslib";
   version = "3.0.3";
+  pyproject = true;
 
   disabled = isPy27;
 
@@ -40,7 +44,9 @@ buildPythonPackage rec {
     })
   ];
 
-  nativeCheckInputs = [ nose ];
+  build-system = [ setuptools ];
+
+  nativeCheckInputs = [ pynose ];
 
   meta = with lib; {
     description = "Python bindings to the libopus, IETF low-delay audio codec";

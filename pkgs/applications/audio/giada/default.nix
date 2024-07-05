@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , cmake
 , pkg-config
 , fltk
@@ -22,27 +21,17 @@
 , nlohmann_json
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "giada";
-  version = "0.24.0";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "monocasual";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-pKzc+RRW3o5vYaiGqW9/VjYZZJvr6cg1kdjP9qRkHwM=";
+    repo = "giada";
+    rev = finalAttrs.version;
+    hash = "sha256-vTOUS9mI4B3yRNnM2dNCH7jgMuD3ztdhe1FMgXUIt58=";
     fetchSubmodules = true;
   };
-
-  patches = [
-    # Remove when updating to the next release, this PR is already merged
-    # Fix fmt type error: https://github.com/monocasual/giada/pull/635
-    (fetchpatch {
-      name = "fix-fmt-type-error.patch";
-      url = "https://github.com/monocasual/giada/commit/032af4334f6d2bb7e77a49e7aef5b4c4d696df9a.patch";
-      hash = "sha256-QuxETvBWzA1v2ifyNzlNMGfQ6XhYQF03sGZA9rBx1xU=";
-    })
-  ];
 
   env.NIX_CFLAGS_COMPILE = toString [
     "-w"
@@ -51,7 +40,6 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DCMAKE_INSTALL_BINDIR=bin"
-    "-DCMAKE_BUILD_TYPE=Release"
   ];
 
   nativeBuildInputs = [
@@ -78,11 +66,12 @@ stdenv.mkDerivation rec {
     libXrandr
   ];
 
-  meta = with lib; {
-    description = "A free, minimal, hardcore audio tool for DJs, live performers and electronic musicians";
+  meta = {
+    description = "Free, minimal, hardcore audio tool for DJs, live performers and electronic musicians";
+    mainProgram = "giada";
     homepage = "https://giadamusic.com/";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ kashw2 ];
+    platforms = lib.platforms.all;
   };
-}
+})

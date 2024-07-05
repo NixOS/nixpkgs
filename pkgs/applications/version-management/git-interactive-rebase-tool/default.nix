@@ -2,35 +2,29 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "git-interactive-rebase-tool";
-  version = "2.2.1";
+  version = "2.4.1";
 
   src = fetchFromGitHub {
     owner = "MitMaro";
     repo = pname;
     rev = version;
-    sha256 = "sha256-KqItunxh24jAkvsAMnByS+dhm+wyUqmdF96qEDs/5mI=";
+    hash = "sha256-NlnESZua4OP7rhMoER/VgBST9THqISQ0LCG1ZakNTqs=";
   };
 
-  cargoSha256 = "sha256-510kNtcSsuXADMmSqu2t0HsnPUS/Jedsfvjnh2k+vDs=";
+  cargoHash = "sha256-9pUUKxPpyoX9f10ZiLWsol2rv66WzQqwa6VubRTrT9Y=";
 
   buildInputs = lib.optionals stdenv.isDarwin [ libiconv Security ];
 
-  checkFlags = [
-    "--skip=external_editor::tests::edit_success"
-    "--skip=external_editor::tests::editor_non_zero_exit"
-    "--skip=external_editor::tests::empty_edit_abort_rebase"
-    "--skip=external_editor::tests::empty_edit_error"
-    "--skip=external_editor::tests::empty_edit_noop"
-    "--skip=external_editor::tests::empty_edit_re_edit_rebase_file"
-    "--skip=external_editor::tests::empty_edit_undo_and_edit"
-  ];
+  # Compilation during tests fails if this env var is not set.
+  preCheck = "export GIRT_BUILD_GIT_HASH=${version}";
+  postCheck = "unset GIRT_BUILD_GIT_HASH";
 
   meta = with lib; {
     homepage = "https://github.com/MitMaro/git-interactive-rebase-tool";
     description = "Native cross platform full feature terminal based sequence editor for git interactive rebase";
     changelog = "https://github.com/MitMaro/git-interactive-rebase-tool/releases/tag/${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ masaeedu SuperSandro2000 zowoq ];
+    maintainers = with maintainers; [ SuperSandro2000 zowoq ma27 ];
     mainProgram = "interactive-rebase-tool";
   };
 }

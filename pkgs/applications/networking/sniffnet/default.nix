@@ -15,16 +15,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "sniffnet";
-  version = "1.2.1";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "gyulyvgc";
     repo = "sniffnet";
     rev = "refs/tags/v${version}";
-    hash = "sha256-IJfXQ/d1amm6rCdArWoHXFhN9s//7hYoWMt66mv4Bbw=";
+    hash = "sha256-3OvzMzlaSwT7fOJATi+2QsSWln+SLkXNr2kYlQGClwA=";
   };
 
-  cargoHash = "sha256-FMpTHm8eEXnVfMMY1iUkJPnRRK10u9l8tCaemM6L1gE=";
+  cargoHash = "sha256-PdlST5n8YaKkByPOvFAg5CqRxVkqRgLeVHW6CJOKioY=";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -50,6 +50,16 @@ rustPlatform.buildRustPackage rec {
     "--skip=secondary_threads::check_updates::tests::fetch_latest_release_from_github"
   ];
 
+  postInstall = ''
+    for res in $(ls resources/packaging/linux/graphics | sed -e 's/sniffnet_//g' -e 's/x.*//g'); do
+      install -Dm444 resources/packaging/linux/graphics/sniffnet_''${res}x''${res}.png \
+        $out/share/icons/hicolor/''${res}x''${res}/apps/sniffnet.png
+    done
+    install -Dm444 resources/packaging/linux/sniffnet.desktop -t $out/share/applications
+    substituteInPlace $out/share/applications/sniffnet.desktop \
+      --replace 'Exec=/usr/bin/sniffnet' 'Exec=sniffnet'
+  '';
+
   postFixup = lib.optionalString stdenv.isLinux ''
     patchelf $out/bin/sniffnet \
       --add-rpath ${lib.makeLibraryPath [ vulkan-loader xorg.libX11 ]}
@@ -61,5 +71,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/gyulyvgc/sniffnet/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ mit /* or */ asl20 ];
     maintainers = with maintainers; [ figsoda ];
+    mainProgram = "sniffnet";
   };
 }

@@ -5,22 +5,22 @@
 , stdenv
 , yarn
 , nodejs
-, git
-, fixup_yarn_lock
+, nixosTests
+, fixup-yarn-lock
 }:
 
 buildGoModule rec {
   pname = "alice-lg";
-  version = "6.0.0";
+  version = "6.1.0";
 
   src = fetchFromGitHub {
     owner = "alice-lg";
     repo = "alice-lg";
     rev = version;
-    hash = "sha256-BdhbHAFqyQc8UbVm6eakbVmLS5QgXhr06oxoc6vYtsM=";
+    hash = "sha256-BbwTLHDtpa8HCECIiy+UxyQiLf9iAD2GzE0azXk7QGU=";
   };
 
-  vendorSha256 = "sha256-SNF46uUTRCaa9qeGCfkHBjyo4BWOlpRaTDq+Uha08y8=";
+  vendorHash = "sha256-8N5E1CW5Z7HujwXRsZLv7y4uNOJkjj155kmX9PCjajQ=";
 
   passthru.ui = stdenv.mkDerivation {
     pname = "alice-lg-ui";
@@ -29,10 +29,10 @@ buildGoModule rec {
 
     yarnOfflineCache = fetchYarnDeps {
       yarnLock = src + "/ui/yarn.lock";
-      hash = "sha256-NeK9IM8E2IH09SVH9lMlV3taCmqwlroo4xzmv4Q01jI=";
+      hash = "sha256-PwByNIegKYTOT8Yg3nDMDFZiLRVkbX07z99YaDiBsIY=";
     };
 
-    nativeBuildInputs = [ nodejs yarn git ];
+    nativeBuildInputs = [ nodejs yarn fixup-yarn-lock ];
     configurePhase = ''
       runHook preConfigure
 
@@ -43,7 +43,7 @@ buildGoModule rec {
       yarn config --offline set yarn-offline-mirror $yarnOfflineCache
 
       # Fixup "resolved"-entries in yarn.lock to match our offline cache
-      ${fixup_yarn_lock}/bin/fixup_yarn_lock yarn.lock
+      fixup-yarn-lock yarn.lock
 
       yarn install --offline --frozen-lockfile --ignore-scripts --no-progress --non-interactive
       patchShebangs node_modules/
@@ -74,11 +74,14 @@ buildGoModule rec {
   subPackages = [ "cmd/alice-lg" ];
   doCheck = false;
 
+  passthru.tests = nixosTests.alice-lg;
+
   meta = with lib; {
     homepage = "https://github.com/alice-lg/alice-lg";
-    description = "A looking-glass for BGP sessions";
+    description = "Looking-glass for BGP sessions";
     changelog = "https://github.com/alice-lg/alice-lg/blob/main/CHANGELOG.md";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ janik ];
+    maintainers = with maintainers; [ ];
+    mainProgram = "alice-lg";
   };
 }

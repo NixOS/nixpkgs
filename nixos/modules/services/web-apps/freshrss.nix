@@ -5,43 +5,73 @@ let
   cfg = config.services.freshrss;
 
   poolName = "freshrss";
+
+  extension-env = pkgs.buildEnv {
+    name = "freshrss-extensions";
+    paths = cfg.extensions;
+  };
+  env-vars = {
+    DATA_PATH = cfg.dataDir;
+    THIRDPARTY_EXTENSIONS_PATH = "${extension-env}/share/freshrss/";
+  };
 in
 {
-  meta.maintainers = with maintainers; [ etu stunkymonkey ];
+  meta.maintainers = with maintainers; [ etu stunkymonkey mattchrist ];
 
   options.services.freshrss = {
-    enable = mkEnableOption (mdDoc "FreshRSS feed reader");
+    enable = mkEnableOption "FreshRSS RSS aggregator and reader with php-fpm backend.";
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.freshrss;
-      defaultText = lib.literalExpression "pkgs.freshrss";
-      description = mdDoc "Which FreshRSS package to use.";
+    package = mkPackageOption pkgs "freshrss" { };
+
+    extensions = mkOption {
+      type = types.listOf types.package;
+      default = [ ];
+      defaultText = literalExpression "[]";
+      example = literalExpression ''
+        with freshrss-extensions; [
+          youtube
+        ] ++ [
+          (freshrss-extensions.buildFreshRssExtension {
+            FreshRssExtUniqueId = "ReadingTime";
+            pname = "reading-time";
+            version = "1.5";
+            src = pkgs.fetchFromGitLab {
+              domain = "framagit.org";
+              owner = "Lapineige";
+              repo = "FreshRSS_Extension-ReadingTime";
+              rev = "fb6e9e944ef6c5299fa56ffddbe04c41e5a34ebf";
+             hash = "sha256-C5cRfaphx4Qz2xg2z+v5qRji8WVSIpvzMbethTdSqsk=";
+           };
+          })
+        ]
+      '';
+      description = "Additional extensions to be used.";
     };
 
     defaultUser = mkOption {
       type = types.str;
       default = "admin";
-      description = mdDoc "Default username for FreshRSS.";
+      description = "Default username for FreshRSS.";
       example = "eva";
     };
 
     passwordFile = mkOption {
-      type = types.path;
-      description = mdDoc "Password for the defaultUser for FreshRSS.";
+      type = types.nullOr types.path;
+      default = null;
+      description = "Password for the defaultUser for FreshRSS.";
       example = "/run/secrets/freshrss";
     };
 
     baseUrl = mkOption {
       type = types.str;
-      description = mdDoc "Default URL for FreshRSS.";
+      description = "Default URL for FreshRSS.";
       example = "https://freshrss.example.com";
     };
 
     language = mkOption {
       type = types.str;
       default = "en";
-      description = mdDoc "Default language for FreshRSS.";
+      description = "Default language for FreshRSS.";
       example = "de";
     };
 
@@ -49,46 +79,46 @@ in
       type = mkOption {
         type = types.enum [ "sqlite" "pgsql" "mysql" ];
         default = "sqlite";
-        description = mdDoc "Database type.";
+        description = "Database type.";
         example = "pgsql";
       };
 
       host = mkOption {
         type = types.nullOr types.str;
         default = "localhost";
-        description = mdDoc "Database host for FreshRSS.";
+        description = "Database host for FreshRSS.";
       };
 
       port = mkOption {
         type = types.nullOr types.port;
         default = null;
-        description = mdDoc "Database port for FreshRSS.";
+        description = "Database port for FreshRSS.";
         example = 3306;
       };
 
       user = mkOption {
         type = types.nullOr types.str;
         default = "freshrss";
-        description = mdDoc "Database user for FreshRSS.";
+        description = "Database user for FreshRSS.";
       };
 
       passFile = mkOption {
         type = types.nullOr types.path;
         default = null;
-        description = mdDoc "Database password file for FreshRSS.";
+        description = "Database password file for FreshRSS.";
         example = "/run/secrets/freshrss";
       };
 
       name = mkOption {
         type = types.nullOr types.str;
         default = "freshrss";
-        description = mdDoc "Database name for FreshRSS.";
+        description = "Database name for FreshRSS.";
       };
 
       tableprefix = mkOption {
         type = types.nullOr types.str;
         default = null;
-        description = mdDoc "Database table prefix for FreshRSS.";
+        description = "Database table prefix for FreshRSS.";
         example = "freshrss";
       };
     };
@@ -96,14 +126,14 @@ in
     dataDir = mkOption {
       type = types.str;
       default = "/var/lib/freshrss";
-      description = mdDoc "Default data folder for FreshRSS.";
+      description = "Default data folder for FreshRSS.";
       example = "/mnt/freshrss";
     };
 
     virtualHost = mkOption {
       type = types.nullOr types.str;
       default = "freshrss";
-      description = mdDoc ''
+      description = ''
         Name of the nginx virtualhost to use and setup. If null, do not setup any virtualhost.
       '';
     };
@@ -111,8 +141,8 @@ in
     pool = mkOption {
       type = types.str;
       default = poolName;
-      description = mdDoc ''
-        Name of the phpfpm pool to use and setup. If not specified, a pool will be created
+      description = ''
+        Name of the php-fpm pool to use and setup. If not specified, a pool will be created
         with default values.
       '';
     };
@@ -120,7 +150,13 @@ in
     user = mkOption {
       type = types.str;
       default = "freshrss";
-      description = lib.mdDoc "User under which Freshrss runs.";
+      description = "User under which FreshRSS runs.";
+    };
+
+    authType = mkOption {
+      type = types.enum [ "form" "http_auth" "none" ];
+      default = "form";
+      description = "Authentication type for FreshRSS.";
     };
   };
 
@@ -160,6 +196,14 @@ in
       };
     in
     mkIf cfg.enable {
+      assertions = mkIf (cfg.authType == "form") [
+        {
+          assertion = cfg.passwordFile != null;
+          message = ''
+            `passwordFile` must be supplied when using "form" authentication!
+          '';
+        }
+      ];
       # Set up a Nginx virtual host.
       services.nginx = mkIf (cfg.virtualHost != null) {
         enable = true;
@@ -204,9 +248,7 @@ in
             "pm.max_spare_servers" = 5;
             "catch_workers_output" = true;
           };
-          phpEnv = {
-            FRESHRSS_DATA_PATH = "${cfg.dataDir}";
-          };
+          phpEnv = env-vars;
         };
       };
 
@@ -218,16 +260,17 @@ in
       };
       users.groups."${cfg.user}" = { };
 
-      systemd.tmpfiles.rules = [
-        "d '${cfg.dataDir}' - ${cfg.user} ${config.users.users.${cfg.user}.group} - -"
-      ];
+      systemd.tmpfiles.settings."10-freshrss".${cfg.dataDir}.d = {
+        inherit (cfg) user;
+        group = config.users.users.${cfg.user}.group;
+      };
 
       systemd.services.freshrss-config =
         let
           settingsFlags = concatStringsSep " \\\n    "
             (mapAttrsToList (k: v: "${k} ${toString v}") {
               "--default_user" = ''"${cfg.defaultUser}"'';
-              "--auth_type" = ''"form"'';
+              "--auth_type" = ''"${cfg.authType}"'';
               "--base_url" = ''"${cfg.baseUrl}"'';
               "--language" = ''"${cfg.language}"'';
               "--db-type" = ''"${cfg.database.type}"'';
@@ -244,42 +287,44 @@ in
         {
           description = "Set up the state directory for FreshRSS before use";
           wantedBy = [ "multi-user.target" ];
-          serviceConfig = defaultServiceConfig //{
-            Type = "oneshot";
-            User = "freshrss";
-            Group = "freshrss";
-            StateDirectory = "freshrss";
-            WorkingDirectory = cfg.package;
+          serviceConfig = defaultServiceConfig // {
+            RemainAfterExit = true;
           };
-          environment = {
-            FRESHRSS_DATA_PATH = cfg.dataDir;
-          };
+          restartIfChanged = true;
+          environment = env-vars;
 
-          script = ''
-            # do installation or reconfigure
-            if test -f ${cfg.dataDir}/config.php; then
-              # reconfigure with settings
-              ./cli/reconfigure.php ${settingsFlags}
-              ./cli/update-user.php --user ${cfg.defaultUser} --password "$(cat ${cfg.passwordFile})"
-            else
-              # check correct folders in data folder
-              ./cli/prepare.php
-              # install with settings
-              ./cli/do-install.php ${settingsFlags}
-              ./cli/create-user.php --user ${cfg.defaultUser} --password "$(cat ${cfg.passwordFile})"
-            fi
-          '';
+          script =
+            let
+              userScriptArgs = ''--user ${cfg.defaultUser} ${optionalString (cfg.authType == "form") ''--password "$(cat ${cfg.passwordFile})"''}'';
+              updateUserScript = optionalString (cfg.authType == "form" || cfg.authType == "none") ''
+                ./cli/update-user.php ${userScriptArgs}
+              '';
+              createUserScript = optionalString (cfg.authType == "form" || cfg.authType == "none") ''
+                ./cli/create-user.php ${userScriptArgs}
+              '';
+            in
+            ''
+              # do installation or reconfigure
+              if test -f ${cfg.dataDir}/config.php; then
+                # reconfigure with settings
+                ./cli/reconfigure.php ${settingsFlags}
+                ${updateUserScript}
+              else
+                # check correct folders in data folder
+                ./cli/prepare.php
+                # install with settings
+                ./cli/do-install.php ${settingsFlags}
+                ${createUserScript}
+              fi
+            '';
         };
 
       systemd.services.freshrss-updater = {
         description = "FreshRSS feed updater";
         after = [ "freshrss-config.service" ];
-        wantedBy = [ "multi-user.target" ];
         startAt = "*:0/5";
-        environment = {
-          FRESHRSS_DATA_PATH = cfg.dataDir;
-        };
-        serviceConfig = defaultServiceConfig //{
+        environment = env-vars;
+        serviceConfig = defaultServiceConfig // {
           ExecStart = "${cfg.package}/app/actualize_script.php";
         };
       };

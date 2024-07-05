@@ -1,24 +1,27 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, python-dateutil
-, typing-extensions
-, pytestCheckHook
-, pytest-mock
-, pytz
-, simplejson
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  flit-core,
+  python-dateutil,
+  types-python-dateutil,
+  pytestCheckHook,
+  pytest-mock,
+  pytz,
+  simplejson,
 }:
 
 buildPythonPackage rec {
   pname = "arrow";
-  version = "1.2.3";
+  version = "1.3.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-OTSzDKG58pI3bZ2xWxlEYIjRLsWGKbw/DaKP1V+2M6E=";
+    hash = "sha256-1FQGF2SMtfiVcw8a2MgqZfLa0BZvV7dfPKVHWcTWeoU=";
   };
 
   postPatch = ''
@@ -26,8 +29,12 @@ buildPythonPackage rec {
     sed -i "/addopts/d" tox.ini
   '';
 
-  propagatedBuildInputs = [ python-dateutil ]
-    ++ lib.optionals (pythonOlder "3.8") [ typing-extensions ];
+  nativeBuildInputs = [ flit-core ];
+
+  propagatedBuildInputs = [
+    python-dateutil
+    types-python-dateutil
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -37,9 +44,7 @@ buildPythonPackage rec {
   ];
 
   # ParserError: Could not parse timezone expression "America/Nuuk"
-  disabledTests = [
-    "test_parse_tz_name_zzz"
-  ];
+  disabledTests = [ "test_parse_tz_name_zzz" ];
 
   pythonImportsCheck = [ "arrow" ];
 

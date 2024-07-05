@@ -1,18 +1,21 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, flit-core
-, httpx
-, pytest-asyncio
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  fetchpatch,
+  flit-core,
+  dos2unix,
+  httpx,
+  pytest-asyncio,
+  pytest-mock,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "zeversolarlocal";
   version = "1.1.0";
-  format = "flit";
+  format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
@@ -23,16 +26,29 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     flit-core
+    dos2unix
   ];
 
-  propagatedBuildInputs = [
-    httpx
-  ];
+  propagatedBuildInputs = [ httpx ];
 
   nativeCheckInputs = [
     pytest-asyncio
     pytest-mock
     pytestCheckHook
+  ];
+
+  # the patch below won't apply unless we fix the line endings
+  prePatch = ''
+    dos2unix pyproject.toml
+  '';
+
+  patches = [
+    # Raise the flit-core limit
+    # https://github.com/sander76/zeversolarlocal/pull/4
+    (fetchpatch {
+      url = "https://github.com/sander76/zeversolarlocal/commit/bff072ea046de07eced77bc79eb8e90dfef1f53f.patch";
+      hash = "sha256-tzFCwPzhAfwVfN5mLY/DMwRv7zGzx3ScBe+kKzkYcvo=";
+    })
   ];
 
   postPatch = ''
@@ -45,9 +61,7 @@ buildPythonPackage rec {
     "test_httpx_timeout"
   ];
 
-  pythonImportsCheck = [
-    "zeversolarlocal"
-  ];
+  pythonImportsCheck = [ "zeversolarlocal" ];
 
   meta = with lib; {
     description = "Python module to interact with Zeversolar inverters";

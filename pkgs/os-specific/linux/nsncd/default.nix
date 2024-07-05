@@ -7,25 +7,32 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "nsncd";
-  version = "unstable-2022-11-14";
+  version = "unstable-2024-03-18";
 
   src = fetchFromGitHub {
-    owner = "nix-community";
+    owner = "twosigma";
     repo = "nsncd";
-    rev = "47e580f1db99603df6e212a2e62f18cc970cef40";
-    hash = "sha256-Nv3MYZcuYgD66BAGs3Tg37s086HAGsaDBFvELqQF3Tk=";
+    rev =  "7605e330d5a313a8656e6fcaf1c10cd6b5cdd427";
+    hash = "sha256-Bd7qE9MP5coBCkr70TdoJfwYhQpdrn/zmN4KoARcaMI=";
   };
 
-  cargoSha256 = "sha256-c1L6nEUBHw1YegmoRrI3WU/bF80Nzbz13hsGlNyBR9o=";
+  cargoHash = "sha256-i1rmc5wxtc631hZy2oM4d6r7od0w8GrG7+/pdM6Gqco=";
+  checkFlags = [
+    # Relies on the test environment to be able to resolve "localhost"
+    # on IPv4. That's not the case in the Nix sandbox somehow. Works
+    # when running cargo test impurely on a (NixOS|Debian) machine.
+    "--skip=ffi::test_gethostbyname2_r"
+  ];
 
   meta = with lib; {
-    description = "the name service non-caching daemon";
+    description = "Name service non-caching daemon";
+    mainProgram = "nsncd";
     longDescription = ''
       nsncd is a nscd-compatible daemon that proxies lookups, without caching.
     '';
     homepage = "https://github.com/twosigma/nsncd";
     license = licenses.asl20;
-    maintainers = with maintainers; [ flokli ninjatrappeur ];
+    maintainers = with maintainers; [ flokli picnoir ];
     # never built on aarch64-darwin, x86_64-darwin since first introduction in nixpkgs
     broken = stdenv.isDarwin;
   };

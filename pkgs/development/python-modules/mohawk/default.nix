@@ -1,8 +1,17 @@
-{ lib, buildPythonPackage, fetchPypi, mock, nose, pytest, six }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  mock,
+  nose,
+  pytest,
+  six,
+}:
 
 buildPythonPackage rec {
   pname = "mohawk";
   version = "1.1.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -11,14 +20,18 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ six ];
 
-  nativeCheckInputs = [ mock nose pytest ];
+  nativeCheckInputs = [
+    mock
+    nose
+    pytest
+  ];
 
   checkPhase = ''
     pytest mohawk/tests.py
   '';
 
   meta = {
-    description = "Python library for Hawk HTTP authorization.";
+    description = "Python library for Hawk HTTP authorization";
     homepage = "https://github.com/kumar303/mohawk";
     license = lib.licenses.mpl20;
     maintainers = [ ];

@@ -1,11 +1,9 @@
 { lib
 , stdenv
 , fetchurl
-, fetchpatch
 
 # dependencies
 , cyrus_sasl
-, db
 , groff
 , libsodium
 , libtool
@@ -19,11 +17,11 @@
 
 stdenv.mkDerivation rec {
   pname = "openldap";
-  version = "2.6.4";
+  version = "2.6.7";
 
   src = fetchurl {
     url = "https://www.openldap.org/software/download/OpenLDAP/openldap-release/${pname}-${version}.tgz";
-    hash = "sha256-1RcE5QF4QwwGzz2KoXTaZrrfVZdHpH2SC7VLLUqkCZE=";
+    hash = "sha256-zXdfYlyUTteKPaGKA7A7CO6nPIqryXtBuzNumhCVSTA=";
   };
 
   # TODO: separate "out" and "bin"
@@ -46,7 +44,6 @@ stdenv.mkDerivation rec {
     (cyrus_sasl.override {
       inherit openssl;
     })
-    db
     libsodium
     libtool
     openssl
@@ -99,6 +96,14 @@ stdenv.mkDerivation rec {
   preCheck = ''
     substituteInPlace tests/scripts/all \
       --replace "/bin/rm" "rm"
+
+    # skip flaky tests
+    rm -f tests/scripts/test063-delta-multiprovider
+
+    # https://bugs.openldap.org/show_bug.cgi?id=10009
+    # can probably be re-added once https://github.com/cyrusimap/cyrus-sasl/pull/772
+    # has made it to a release
+    rm -f tests/scripts/test076-authid-rewrite
   '';
 
   doCheck = true;
@@ -128,9 +133,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://www.openldap.org/";
-    description = "An open source implementation of the Lightweight Directory Access Protocol";
+    description = "Open source implementation of the Lightweight Directory Access Protocol";
     license = licenses.openldap;
-    maintainers = with maintainers; [ ajs124 das_j hexa ];
+    maintainers = with maintainers; [ hexa ] ++ teams.helsinki-systems.members;
     platforms = platforms.unix;
   };
 }

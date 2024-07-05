@@ -22,7 +22,7 @@ mkDerivation rec {
   # c++11 and above is needed for building with Qt 5.9+
   env.NIX_CFLAGS_COMPILE = toString [ "-std=c++14" ];
 
-  sourceRoot = "source/src";
+  sourceRoot = "${src.name}/src";
 
   postPatch = ''
     substituteInPlace xxdiff.pro --replace ../bin ./bin
@@ -43,6 +43,7 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "Graphical file and directories comparator and merge tool";
+    mainProgram = "xxdiff";
     homepage = "http://furius.ca/xxdiff/";
     license = licenses.gpl2;
     maintainers = with maintainers; [ pSub raskin ];

@@ -6,12 +6,15 @@
 , xorg # for lndir
 , runCommand
 , substituteAll
-# For Emulating wrapGAppsHook
+# For Emulating wrapGAppsHook3
 , gsettings-desktop-schemas
 , hicolor-icon-theme
 , dconf
 , librsvg
 , gdk-pixbuf
+# some scripts need these when used in conjuction with firejail
+, coreutils
+, gnugrep
 # Configuration options for the wrapper
 , extraMakeWrapperArgs ? []
 , dbusVerify ? stdenv.isLinux
@@ -19,7 +22,9 @@
 }:
 
 let
-  inherit (unwrapped.srcs.primary) major minor;
+  inherit (unwrapped) version;
+  major = lib.versions.major version;
+  minor = lib.versions.minor version;
 
   makeWrapperArgs = builtins.concatStringsSep " " ([
     "--set" "GDK_PIXBUF_MODULE_FILE" "${librsvg}/${gdk-pixbuf.moduleDir}.cache"
@@ -30,6 +35,7 @@ let
     "--prefix" "XDG_DATA_DIRS" ":" "${hicolor-icon-theme}/share"
     "--prefix" "GST_PLUGIN_SYSTEM_PATH_1_0" ":"
       "${lib.makeSearchPath "lib/girepository-1.0" unwrapped.gst_packages}"
+    "--suffix" "PATH" ":" "${lib.makeBinPath [ coreutils gnugrep ]}"
   ] ++ lib.optionals unwrapped.kdeIntegration [
     "--prefix" "QT_PLUGIN_PATH" ":" "${
       lib.makeSearchPath

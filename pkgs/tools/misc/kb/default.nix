@@ -41,7 +41,7 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   meta = with lib; {
-    description = "A minimalist command line knowledge base manager";
+    description = "Minimalist command line knowledge base manager";
     longDescription = ''
       kb is a text-oriented minimalist command line knowledge base manager. kb
       can be considered a quick note collection and access tool oriented toward
@@ -54,5 +54,6 @@ python3.pkgs.buildPythonApplication rec {
     changelog = "https://github.com/gnebbia/kb/blob/v${version}/CHANGELOG.md";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ wesleyjrz ];
+    mainProgram = "kb";
   };
 }

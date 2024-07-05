@@ -13,13 +13,13 @@ assert enablePython -> python != null;
 
 stdenv.mkDerivation rec {
   pname = "elinks";
-  version = "0.16.1.1";
+  version = "0.17.0";
 
   src = fetchFromGitHub {
     owner = "rkd77";
-    repo = "felinks";
+    repo = "elinks";
     rev = "v${version}";
-    sha256 = "sha256-u6QGhfi+uWeIzSUFuYHAH3Xu0Fky0yw2h4NOKgYFLsM=";
+    hash = "sha256-JeUiMHAqSZxxBe8DplzmzHzsY6KqoBqba0y8GDwaR0Y=";
   };
 
   buildInputs = [
@@ -54,8 +54,9 @@ stdenv.mkDerivation rec {
     ;
 
   meta = with lib; {
-    description = "Full-featured text-mode web browser (package based on the fork felinks)";
-    homepage = "https://github.com/rkd77/felinks";
+    description = "Full-featured text-mode web browser";
+    mainProgram = "elinks";
+    homepage = "https://github.com/rkd77/elinks";
     license = licenses.gpl2;
     platforms = with platforms; linux ++ darwin;
     maintainers = with maintainers; [ iblech gebner ];

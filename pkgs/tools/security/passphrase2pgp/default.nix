@@ -11,7 +11,7 @@ buildGoModule rec {
     hash = "sha256-it1XYzLiteL0oq4SZp5E3s6oSkFKi3ZY0Lt+P0gmNag=";
   };
 
-  vendorSha256 = "sha256-2H9YRVCaari47ppSkcQYg/P4Dzb4k5PLjKAtfp39NR8=";
+  vendorHash = "sha256-2H9YRVCaari47ppSkcQYg/P4Dzb4k5PLjKAtfp39NR8=";
 
   postInstall = ''
     mkdir -p $out/share/doc/$name
@@ -30,6 +30,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Predictable, passphrase-based PGP key generator";
+    mainProgram = "passphrase2pgp";
     homepage = "https://github.com/skeeto/passphrase2pgp";
     license = licenses.unlicense;
     maintainers = with maintainers; [ kaction ];

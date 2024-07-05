@@ -11,12 +11,13 @@ buildGoModule {
     sha256 = "sha256-uHU15NbHK7SYgNS3VK21H/OqDo/JyyTZdXw3i9lsgLY=";
   };
 
-  vendorSha256 = "sha256-g0+9l83Fc0XPzsZAKjLBrjD+tv2+Fot57hcilqAhOZk=";
+  vendorHash = "sha256-g0+9l83Fc0XPzsZAKjLBrjD+tv2+Fot57hcilqAhOZk=";
 
   subPackages = [ "." ];
 
   meta = with lib; {
     description = "Swagger generator for twirp";
+    mainProgram = "protoc-gen-twirp_swagger";
     homepage = "https://github.com/elliots/protoc-gen-twirp_swagger";
     license = licenses.bsd3;
     maintainers = with maintainers; [ jojosch ];

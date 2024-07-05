@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   pname = "rethinkdb";
-  version = "2.4.3";
+  version = "2.4.4";
 
   src = fetchurl {
     url = "https://download.rethinkdb.com/repository/raw/dist/${pname}-${version}.tgz";
-    hash = "sha256-w3iMeicPu0nj2kV4e2vlAHY8GQ+wWeObfe+UVPmkZ08=";
+    hash = "sha256-UJEjdgK2KDDbLLParKarNGMjI3QeZxDC8N5NhPRCcR8=";
   };
 
   postPatch = ''
@@ -44,7 +44,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "An open-source distributed database built with love";
+    description = "Open-source distributed database built with love";
+    mainProgram = "rethinkdb";
     longDescription = ''
       RethinkDB is built to store JSON documents, and scale to
       multiple machines with very little effort. It has a pleasant

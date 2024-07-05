@@ -2,16 +2,16 @@
 
 buildNpmPackage rec {
   pname = "vscode-langservers-extracted";
-  version = "4.7.0";
+  version = "4.10.0";
 
   src = fetchFromGitHub {
     owner = "hrsh7th";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-RLRDEHfEJ2ckn0HTMu0WbMK/o9W20Xwm+XI6kCq57u8=";
+    hash = "sha256-3m9+HZY24xdlLcFKY/5DfvftqprwLJk0vve2ZO1aEWk=";
   };
 
-  npmDepsHash = "sha256-DhajWr+O0zgJALr7I/Nc5GmkOsa9QXfAQpZCaULV47M=";
+  npmDepsHash = "sha256-XGlFtmikUrnnWXsAYzTqw2K7Y2O0bUtYug0xXFIASBQ=";
 
   buildPhase =
     let

@@ -40,7 +40,8 @@ stdenv.mkDerivation {
 
   meta = {
     homepage = "https://github.com/MeanEYE/Disk-Indicator";
-    description = "A program that will turn a LED into a hard disk indicator";
+    description = "Program that will turn a LED into a hard disk indicator";
+    mainProgram = "disk_indicator";
     longDescription = ''
       Small program for Linux that will turn your Scroll, Caps or Num Lock LED
       or LED on your ThinkPad laptop into a hard disk activity indicator.

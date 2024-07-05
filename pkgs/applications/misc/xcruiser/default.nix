@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, gccmakedep, imake, libXt, libXaw, libXpm, libXext }:
+{ lib, stdenv, fetchurl, gccmakedep, imake, libXt, libXaw, libXpm, libXext, copyDesktopItems, makeDesktopItem }:
 
 stdenv.mkDerivation rec {
   pname = "xcruiser";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "1r8whva38xizqdh7jmn6wcmfmsndc67pkw22wzfzr6rq0vf6hywi";
   };
 
-  nativeBuildInputs = [ gccmakedep imake ];
+  nativeBuildInputs = [ gccmakedep imake copyDesktopItems ];
   buildInputs = [ libXt libXaw libXpm libXext ];
 
   makeFlags = [
@@ -17,6 +17,16 @@ stdenv.mkDerivation rec {
     "CONFDIR=${placeholder "out"}/etc/X11"
     "LIBDIR=${placeholder "out"}/lib/X11"
     "XAPPLOADDIR=${placeholder "out"}/etc/X11/app-defaults"
+  ];
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = "XCruiser";
+      exec = "xcruiser";
+      desktopName = "XCruiser";
+      comment = "filesystem visualization utility";
+      categories = [ "Utility" ];
+    })
   ];
 
   meta = with lib; {
@@ -30,5 +40,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     maintainers = with maintainers; [ ehmry ];
     platforms = with platforms; linux;
+    mainProgram = "xcruiser";
   };
 }

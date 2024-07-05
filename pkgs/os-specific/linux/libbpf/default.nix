@@ -4,18 +4,23 @@
 , stdenv
 , zlib
 , lib
+
+# for passthru.tests
+, knot-dns
 , nixosTests
+, systemd
+, tracee
 }:
 
 stdenv.mkDerivation rec {
   pname = "libbpf";
-  version = "1.2.0";
+  version = "1.4.2";
 
   src = fetchFromGitHub {
     owner = "libbpf";
     repo = "libbpf";
     rev = "v${version}";
-    sha256 = "sha256-NimK4pdYcai21hZHdP1mBX1MOlNY61iDJ+PDYwpRuVE=";
+    sha256 = "sha256-PlGr/qZbKnaY37wikdmX/iYtP11WHShn1I7vACUgLG0=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -25,7 +30,9 @@ stdenv.mkDerivation rec {
   makeFlags = [ "PREFIX=$(out)" "-C src" ];
 
   passthru.tests = {
+    inherit knot-dns tracee;
     bpf = nixosTests.bpf;
+    systemd = systemd.override { withLibBPF = true; };
   };
 
   postInstall = ''
@@ -40,7 +47,7 @@ stdenv.mkDerivation rec {
   # outputs = [ "out" "dev" ];
 
   meta = with lib; {
-    description = "Upstream mirror of libbpf";
+    description = "Library for loading eBPF programs and reading and manipulating eBPF objects from user-space";
     homepage = "https://github.com/libbpf/libbpf";
     license = with licenses; [ lgpl21 /* or */ bsd2 ];
     maintainers = with maintainers; [ thoughtpolice vcunat saschagrunert martinetd ];

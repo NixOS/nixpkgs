@@ -2,14 +2,14 @@
 
 stdenv.mkDerivation rec {
   pname = "dual-function-keys";
-  version = "1.4.0";
+  version = "1.5.0";
 
   src = fetchFromGitLab {
     group = "interception";
     owner = "linux/plugins";
     repo = pname;
     rev = version;
-    sha256 = "sha256-xlplbkeptXMBlRnSsc5NgGJfT8aoZxTRgTwTOd7aiWg=";
+    hash = "sha256-m/oEczUNKqj0gs/zMOIBxoQaffNg+YyPINMXArkATJ4=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -26,9 +26,10 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://gitlab.com/interception/linux/plugins/dual-function-keys";
-    description = "Tap for one key, hold for another.";
+    description = "Tap for one key, hold for another";
     license = licenses.mit;
     maintainers = with maintainers; [ svend ];
     platforms = platforms.linux;
+    mainProgram = "dual-function-keys";
   };
 }

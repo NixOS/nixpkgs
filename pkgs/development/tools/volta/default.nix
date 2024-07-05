@@ -39,13 +39,16 @@ rustPlatform.buildRustPackage rec {
       --zsh <($out/bin/volta completions zsh)
   '';
   meta = with lib; {
-    description = "The Hassle-Free JavaScript Tool Manager";
+    description = "Hassle-Free JavaScript Tool Manager";
     longDescription = ''
       With Volta, you can select a Node engine once and then stop worrying
       about it. You can switch between projects and stop having to manually
       switch between Nodes. You can install npm package binaries in your
       toolchain without having to periodically reinstall them or figure out why
       they’ve stopped working.
+
+      Note: Volta cannot be used on NixOS out of the box because it downloads
+      Node binaries that assume shared libraries are in FHS standard locations.
     '';
     homepage = "https://volta.sh/";
     changelog = "https://github.com/volta-cli/volta/blob/main/RELEASES.md";

@@ -1,34 +1,33 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-, duckdb
-, hypothesis
-, ipython-sql
-, poetry-core
-, snapshottest
-, sqlalchemy
-, typing-extensions
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
+  duckdb,
+  hypothesis,
+  pandas,
+  poetry-core,
+  pytest-remotedata,
+  sqlalchemy,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "duckdb-engine";
-  version = "0.7.3";
-  format = "pyproject";
+  version = "0.12.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     repo = "duckdb_engine";
     owner = "Mause";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Z9m1+Bc/csWKdPDuwf82xX0qOiD1Y5LBgJjUlLntAO8=";
+    hash = "sha256-+l6sRZHJnLfei1LR8WHqpC+0+91VLYKXn2e0w9+QRyk=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     duckdb
@@ -39,25 +38,21 @@ buildPythonPackage rec {
     export HOME="$(mktemp -d)"
   '';
 
-  disabledTests = [
-    # this test tries to download the httpfs extension
-    "test_preload_extension"
-    # test should be skipped based on sqlalchemy version but isn't and fails
-    "test_commit"
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
+  checkInputs = [
     hypothesis
-    ipython-sql
-    # TODO(cpcloud): include pandas here when it supports sqlalchemy 2.0
-    snapshottest
+    pandas
+    pytest-remotedata
     typing-extensions
   ];
 
-  pythonImportsCheck = [
-    "duckdb_engine"
+  pytestFlagsArray = [
+    "-m"
+    "'not remote_data'"
   ];
+
+  pythonImportsCheck = [ "duckdb_engine" ];
 
   meta = with lib; {
     description = "SQLAlchemy driver for duckdb";

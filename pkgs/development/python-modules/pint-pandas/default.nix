@@ -1,11 +1,14 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, pint
-, pandas
-, pytestCheckHook
+{
+  stdenv,
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  setuptools-scm,
+  wheel,
+  pint,
+  pandas,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -22,6 +25,8 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     setuptools
+    setuptools-scm
+    wheel
   ];
 
   propagatedBuildInputs = [
@@ -29,9 +34,7 @@ buildPythonPackage rec {
     pandas
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     broken = stdenv.isDarwin;

@@ -1,11 +1,9 @@
-{ lib, appimageTools, fetchurl, makeDesktopItem
-}:
+{ lib, appimageTools, fetchurl, makeDesktopItem }:
 
 let
   pname = "MyCrypto";
   version = "1.7.17";
   sha256 = "20eb48989b5ae5e60e438eff6830ac79a0d89ac26dff058097260e747e866444"; # Taken from release's checksums.txt.gpg
-  name = "${pname}-${version}";
 
   src = fetchurl {
     url = "https://github.com/mycryptohq/mycrypto/releases/download/${version}/linux-x86-64_${version}_MyCrypto.AppImage";
@@ -13,7 +11,7 @@ let
   };
 
   appimageContents = appimageTools.extractType2 {
-    inherit name src;
+    inherit pname version src;
   };
 
   desktopItem = makeDesktopItem {
@@ -25,15 +23,10 @@ let
     categories = [ "Finance" ];
   };
 
-in appimageTools.wrapType2 rec {
-  inherit name src;
-
-  multiArch = false; # no p32bit needed
-  extraPkgs = appimageTools.defaultFhsEnvArgs.multiPkgs;
+in appimageTools.wrapType2 {
+  inherit pname version src;
 
   extraInstallCommands = ''
-    mv $out/bin/{${name},${pname}}
-
     mkdir -p $out/share
     cp -rt $out/share ${desktopItem}/share/applications ${appimageContents}/usr/share/icons
     chmod -R +w $out/share
@@ -41,7 +34,7 @@ in appimageTools.wrapType2 rec {
   '';
 
   meta = with lib; {
-    description = "A free, open-source interface for interacting with the blockchain";
+    description = "Free, open-source interface for interacting with the blockchain";
     longDescription = ''
       MyCrypto is an open-source, client-side tool for generating ether wallets,
       handling ERC-20 tokens, and interacting with the blockchain more easily.
@@ -49,6 +42,7 @@ in appimageTools.wrapType2 rec {
     homepage = "https://mycrypto.com";
     license = licenses.mit;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ oxalica ];
+    maintainers = [ ];
+    mainProgram = "MyCrypto";
   };
 }

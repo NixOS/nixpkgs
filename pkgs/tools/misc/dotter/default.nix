@@ -5,33 +5,43 @@
 , rustPlatform
 , CoreServices
 , which
+, installShellFiles
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "dotter";
-  version = "0.12.15";
+  version = "0.13.2";
 
   src = fetchFromGitHub {
     owner = "SuperCuber";
     repo = "dotter";
     rev = "v${version}";
-    hash = "sha256-quMEwg/B4ey6zoxDZO2ce3/s1FX5xxmJfyAlt4YvFqE=";
+    hash = "sha256-IV3wvmRiRtzu5UhIlL1BnL8hy+fQHQA9Mfiy6dIsjdw=";
   };
 
-  cargoHash = "sha256-D8H95dE+th1mMzlLmd+fqU5VdlxdOSBHKSjvh21JhnE=";
+  cargoHash = "sha256-jNHq1cH3I29b6LIoO2ApLDTYzFGGSua1lACvYCBpbQQ=";
 
   buildInputs = lib.optionals stdenv.isDarwin [ CoreServices ];
 
-  nativeCheckInputs = [ which ];
+  nativeCheckInputs = [ which installShellFiles ];
+
+  postInstall = ''
+    installShellCompletion --cmd dotter \
+      --bash <($out/bin/dotter gen-completions --shell bash) \
+      --fish <($out/bin/dotter gen-completions --shell fish) \
+      --zsh <($out/bin/dotter gen-completions --shell zsh)
+  '';
 
   passthru = {
     updateScript = nix-update-script { };
   };
 
+
   meta = with lib; {
-    description = "A dotfile manager and templater written in rust 🦀";
+    description = "Dotfile manager and templater written in rust 🦀";
     homepage = "https://github.com/SuperCuber/dotter";
     license = licenses.unlicense;
     maintainers = with maintainers; [ linsui ];
+    mainProgram = "dotter";
   };
 }

@@ -33,7 +33,6 @@ maven.buildMavenPackage rec {
   nativeBuildInputs = [
     makeWrapper
     git
-    maven
 
     # springframework boot gets angry about 1970 sources
     # fix from https://github.com/nix-community/mavenix/issues/25
@@ -60,6 +59,7 @@ maven.buildMavenPackage rec {
   meta = with lib; {
     homepage = "https://schemaspy.org";
     description = "Document your database simply and easily";
+    mainProgram = "schemaspy";
     license = licenses.lgpl3Plus;
     maintainers = with maintainers; [ jraygauthier ];
   };

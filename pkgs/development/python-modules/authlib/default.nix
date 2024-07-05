@@ -1,23 +1,24 @@
-{ lib
-, buildPythonPackage
-, cachelib
-, cryptography
-, fetchFromGitHub
-, flask
-, flask-sqlalchemy
-, httpx
-, mock
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, requests
-, starlette
-, werkzeug
+{
+  lib,
+  buildPythonPackage,
+  cachelib,
+  cryptography,
+  fetchFromGitHub,
+  flask,
+  flask-sqlalchemy,
+  httpx,
+  mock,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  starlette,
+  werkzeug,
 }:
 
 buildPythonPackage rec {
   pname = "authlib";
-  version = "1.2.0";
+  version = "1.3.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -26,7 +27,7 @@ buildPythonPackage rec {
     owner = "lepture";
     repo = "authlib";
     rev = "refs/tags/v${version}";
-    hash = "sha256-OYfvfPnpWE9g7L9cFXUD95B/9+OZy55ZVbmFhFgguUg=";
+    hash = "sha256-5AZca4APi2gLwj/AHtXOPzIFnJkCmK9mDV0bAAvIx8A=";
   };
 
   propagatedBuildInputs = [
@@ -46,9 +47,8 @@ buildPythonPackage rec {
     werkzeug
   ];
 
-  pythonImportsCheck = [
-    "authlib"
-  ];
+  pythonImportsCheck = [ "authlib" ];
+
   disabledTestPaths = [
     # Django tests require a running instance
     "tests/django/"
@@ -60,7 +60,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library for building OAuth and OpenID Connect servers";
     homepage = "https://github.com/lepture/authlib";
-    changelog = "https://github.com/lepture/authlib/releases/tag/v${version}";
+    changelog = "https://github.com/lepture/authlib/blob/v${version}/docs/changelog.rst";
     license = licenses.bsd3;
     maintainers = with maintainers; [ flokli ];
   };

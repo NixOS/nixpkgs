@@ -1,30 +1,45 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, coreapi
-, django
-, django-guardian
-, pythonOlder
-, pytest-django
-, pytestCheckHook
-, pytz
-, pyyaml
-, uritemplate
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+
+  # build-system
+  setuptools,
+
+  # dependencies
+  django,
+  pytz,
+
+  # tests
+  coreapi,
+  coreschema,
+  django-guardian,
+  inflection,
+  psycopg2,
+  pytestCheckHook,
+  pytest-django,
+  pyyaml,
 }:
 
 buildPythonPackage rec {
   pname = "djangorestframework";
-  version = "3.14.0";
+  version = "3.15.1";
+  format = "setuptools";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "encode";
     repo = "django-rest-framework";
     rev = version;
-    hash = "sha256-Fnj0n3NS3SetOlwSmGkLE979vNJnYE6i6xwVBslpNz4=";
+    hash = "sha256-G914NvxRmKGkxrozoWNUIoI74YkYRbeNcQwIG4iSeXU=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     django
     pytz
   ];
@@ -35,17 +50,20 @@ buildPythonPackage rec {
 
     # optional tests
     coreapi
+    coreschema
     django-guardian
+    inflection
+    psycopg2
     pyyaml
-    uritemplate
   ];
 
   pythonImportsCheck = [ "rest_framework" ];
 
   meta = with lib; {
+    changelog = "https://github.com/encode/django-rest-framework/releases/tag/3.15.1";
     description = "Web APIs for Django, made easy";
     homepage = "https://www.django-rest-framework.org/";
-    maintainers = with maintainers; [ desiderius SuperSandro2000 ];
+    maintainers = with maintainers; [ desiderius ];
     license = licenses.bsd2;
   };
 }

@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, varnish, docutils, removeReferencesTo }:
 let
-  common = { version, sha256, extraNativeBuildInputs ? [] }:
+  common = { version, hash, extraNativeBuildInputs ? [] }:
     stdenv.mkDerivation rec {
       pname = "${varnish.name}-modules";
       inherit version;
@@ -9,7 +9,7 @@ let
         owner = "varnish";
         repo = "varnish-modules";
         rev = version;
-        inherit sha256;
+        inherit hash;
       };
 
       nativeBuildInputs = [
@@ -39,14 +39,14 @@ in
 {
   modules15 = common {
     version = "0.15.1";
-    sha256 = "1lwgjhgr5yw0d17kbqwlaj5pkn70wvaqqjpa1i0n459nx5cf5pqj";
+    hash = "1lwgjhgr5yw0d17kbqwlaj5pkn70wvaqqjpa1i0n459nx5cf5pqj";
   };
-  modules20 = common {
-    version = "0.20.0";
-    sha256 = "sha256-3eH3qCa24rWqYXsTTDmm/9LjBMxcxUuozuRzZ3e8cUo=";
+  modules23 = common {
+    version = "0.23.0";
+    hash = "sha256-Dd1pLMmRC59iRRpReDeQJ8Sv00ojb8InvaMrb+iRv4I=";
   };
-  modules22 = common {
-    version = "0.22.0";
-    sha256 = "sha256-eoa6i6AuOS4pxQKA/lbJnwFc39cRiLqnBSpPM4Oitrc=";
+  modules24 = common {
+    version = "0.24.0";
+    hash = "sha256-2MfcrhhkBz9GyQxEWzjipdn1CBEqnCvC3t1G2YSauak=";
   };
 }

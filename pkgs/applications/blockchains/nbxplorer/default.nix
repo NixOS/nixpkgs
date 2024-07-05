@@ -6,19 +6,20 @@
 
 buildDotnetModule rec {
   pname = "nbxplorer";
-  version = "2.3.65";
+  version = "2.5.2";
 
   src = fetchFromGitHub {
     owner = "dgarage";
     repo = "NBXplorer";
     rev = "v${version}";
-    sha256 = "sha256-7m9gf+enOtE5VWuBNLFf11ofLGBRAYWvmkrekUVQQaQ=";
+    sha256 = "sha256-zfL+VoDfICUtw02KeRghaq3XPOa/YnSh8orhqmo3Auo=";
   };
 
   projectFile = "NBXplorer/NBXplorer.csproj";
   nugetDeps = ./deps.nix;
 
-  dotnet-runtime = dotnetCorePackages.aspnetcore_6_0;
+  dotnet-sdk = dotnetCorePackages.sdk_8_0;
+  dotnet-runtime = dotnetCorePackages.aspnetcore_8_0;
 
   # macOS has a case-insensitive filesystem, so these two can be the same file
   postFixup = ''
@@ -30,5 +31,6 @@ buildDotnetModule rec {
     maintainers = with maintainers; [ kcalvinalvin erikarvstedt ];
     license = licenses.mit;
     platforms = platforms.linux ++ platforms.darwin;
+    mainProgram = "nbxplorer";
   };
 }

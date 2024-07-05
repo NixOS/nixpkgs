@@ -1,16 +1,16 @@
-From 41e32c41f781261726722628122c924abb532575 Mon Sep 17 00:00:00 2001
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Nick Cao <nickcao@nichi.co>
 Date: Fri, 14 Apr 2023 21:43:04 +0800
-Subject: [PATCH 2/6] qtbase: qmake: fix mkspecs for darwin
+Subject: [PATCH] qtbase: qmake: fix mkspecs for darwin
 
 ---
  mkspecs/common/mac.conf               |   2 +-
- mkspecs/features/mac/default_post.prf | 263 --------------------------
+ mkspecs/features/mac/default_post.prf | 264 --------------------------
  mkspecs/features/mac/default_pre.prf  |  58 ------
  mkspecs/features/mac/sdk.mk           |  27 ---
  mkspecs/features/mac/sdk.prf          |  61 ------
  mkspecs/features/mac/toolchain.prf    |   5 -
- 6 files changed, 1 insertion(+), 415 deletions(-)
+ 6 files changed, 1 insertion(+), 416 deletions(-)
 
 diff --git a/mkspecs/common/mac.conf b/mkspecs/common/mac.conf
 index 61bea952b22..9909dae7260 100644
@@ -26,7 +26,7 @@ index 61bea952b22..9909dae7260 100644
  
  QMAKE_LFLAGS_REL_RPATH  =
 diff --git a/mkspecs/features/mac/default_post.prf b/mkspecs/features/mac/default_post.prf
-index 4acf3b19d5c..aadfce875e2 100644
+index 0b64a586b93..3b40328304d 100644
 --- a/mkspecs/features/mac/default_post.prf
 +++ b/mkspecs/features/mac/default_post.prf
 @@ -1,9 +1,5 @@
@@ -39,12 +39,13 @@ index 4acf3b19d5c..aadfce875e2 100644
  contains(TEMPLATE, .*app) {
      !macx-xcode:if(isEmpty(BUILDS)|build_pass) {
          # Detect changes to the platform SDK
-@@ -15,37 +11,6 @@ contains(TEMPLATE, .*app) {
+@@ -15,270 +11,10 @@ contains(TEMPLATE, .*app) {
  
          QMAKE_EXTRA_INCLUDES += $$shell_quote($$PWD/sdk.mk)
      }
 -
 -    # Detect incompatible SDK versions
+-    # The CMake equivalent is in cmake/QtPublicAppleHelpers.cmake.
 -
 -    isEmpty(QT_MAC_SDK_VERSION_MIN): \
 -        QT_MAC_SDK_VERSION_MIN = $$QT_MAC_SDK_VERSION
@@ -77,9 +78,6 @@ index 4acf3b19d5c..aadfce875e2 100644
  }
  
  !no_objective_c:CONFIG += objective_c
-@@ -73,234 +38,6 @@ qt {
-     }
- }
  
 -# Add the same default rpaths as Xcode does for new projects.
 -# This is especially important for iOS/tvOS/watchOS where no other option is possible.
@@ -485,6 +483,3 @@ index df191eb13c4..e69de29bb2d 100644
 -sdk: load(sdk)
 -
 -load(toolchain)
--- 
-2.39.2
-

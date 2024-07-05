@@ -1,17 +1,18 @@
-{ gnustep, lib, fetchFromGitHub, fetchpatch, makeWrapper, python3, lndir, libxcrypt
+{ gnustep, lib, fetchFromGitHub, makeWrapper, python3, lndir, libxcrypt
 , openssl, openldap, sope, libmemcached, curl, libsodium, libytnef, libzip, pkg-config, nixosTests
 , oath-toolkit
 , enableActiveSync ? false
 , libwbxml }:
 gnustep.stdenv.mkDerivation rec {
-  pname = "SOGo";
-  version = "5.8.0";
+  pname = "sogo";
+  version = "5.10.0";
 
+  # always update the sope package as well, when updating sogo
   src = fetchFromGitHub {
-    owner = "inverse-inc";
+    owner = "Alinto";
     repo = pname;
     rev = "SOGo-${version}";
-    hash = "sha256-lHUEV5yYLs3oc8Arl3KX8G/OEAoLmS7pRLCGsRAJAr4=";
+    hash = "sha256-ZmpOI1zk/TkRNFmwTXugVb9IvxYSP4LgNrApSytdI7s=";
   };
 
   nativeBuildInputs = [ gnustep.make makeWrapper python3 pkg-config ];
@@ -44,6 +45,8 @@ gnustep.stdenv.mkDerivation rec {
     "--enable-mfa"
   ];
 
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types -Wno-error=int-conversion -Wno-error=implicit-int -Wno-error=return-type";
+
   preFixup = ''
     # Create gnustep.conf
     mkdir -p $out/share/GNUstep
@@ -70,11 +73,11 @@ gnustep.stdenv.mkDerivation rec {
   passthru.tests.sogo = nixosTests.sogo;
 
   meta = with lib; {
-    description = "A very fast and scalable modern collaboration suite (groupware)";
+    description = "Very fast and scalable modern collaboration suite (groupware)";
     license = with licenses; [ gpl2Only lgpl21Only ];
     homepage = "https://sogo.nu/";
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ajs124 das_j ];
+    maintainers = with maintainers; [];
   };
 }
 

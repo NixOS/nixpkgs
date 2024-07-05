@@ -1,25 +1,29 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, flit-core
-, pythonOlder
-, docutils
-, jinja2
-, markdown-it-py
-, mdit-py-plugins
-, pyyaml
-, sphinx
-, typing-extensions
-, beautifulsoup4
-, pytest-param-files
-, pytest-regressions
-, sphinx-pytest
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  flit-core,
+  pythonOlder,
+  defusedxml,
+  docutils,
+  jinja2,
+  markdown-it-py,
+  mdit-py-plugins,
+  pyyaml,
+  sphinx,
+  typing-extensions,
+  beautifulsoup4,
+  pytest-param-files,
+  pytest-regressions,
+  sphinx-pytest,
+  pytestCheckHook,
+  pythonRelaxDepsHook,
 }:
 
 buildPythonPackage rec {
   pname = "myst-parser";
-  version = "1.0.0";
+  version = "2.0.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -28,10 +32,21 @@ buildPythonPackage rec {
     owner = "executablebooks";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-Kewd6/4yawpRuyCe8Na0BGUMo59tr2fc97VlGbVJ8mI=";
+    hash = "sha256-1BW7Z+0rs5Up+VZ3vDygnhLzE9Y2BqEMnTnflboweu0=";
   };
 
-  nativeBuildInputs = [ flit-core ];
+  patches = [
+    (fetchpatch {
+      name = "myst-parser-sphinx7.2-compat.patch";
+      url = "https://github.com/executablebooks/MyST-Parser/commit/4f670fc04c438b57a9d4014be74e9a62cc0deba4.patch";
+      hash = "sha256-FCvFSsD7qQwqWjSW7R4Gx+E2jaGkifSZqaRbAglt9Yw=";
+    })
+  ];
+
+  nativeBuildInputs = [
+    flit-core
+    pythonRelaxDepsHook
+  ];
 
   propagatedBuildInputs = [
     docutils
@@ -45,15 +60,16 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     beautifulsoup4
+    defusedxml
     pytest-param-files
     pytest-regressions
     sphinx-pytest
     pytestCheckHook
   ] ++ markdown-it-py.optional-dependencies.linkify;
 
-  pythonImportsCheck = [
-    "myst_parser"
-  ];
+  pythonImportsCheck = [ "myst_parser" ];
+
+  pythonRelaxDeps = [ "docutils" ];
 
   disabledTests = [
     # AssertionError due to different files
@@ -63,6 +79,9 @@ buildPythonPackage rec {
     "test_fieldlist_extension"
     # docutils 0.19 expectation mismatches
     "test_docutils_roles"
+    # sphinx 7.0 expectation mismatches
+    "test_heading_slug_func"
+    "test_references_singlehtml"
     # sphinx 6.0 expectation mismatches
     "test_sphinx_directives"
     # sphinx 5.3 expectation mismatches

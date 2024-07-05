@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, isPy3k
-, flask
-, werkzeug
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  flask,
+  werkzeug,
 }:
 
 buildPythonPackage rec {
   pname = "flask-reverse-proxy-fix";
   version = "0.2.1";
+  format = "setuptools";
 
   # master fixes flask import syntax and has no major changes
   # new release requested: https://github.com/sublee/flask-silk/pull/6
@@ -16,14 +17,16 @@ buildPythonPackage rec {
     owner = "antarctica";
     repo = "flask-reverse-proxy-fix";
     rev = "v${version}";
-    sha256 = "1jbr67cmnryn0igv05qkvqjwrwj2rsajvvjnv3cdkm9bkgb4h5k5";
+    hash = "sha256-ZRZI1psr1dnY2FbuLZXOQvLMJd4TF7BfBNZnW9kxeck=";
   };
-
-  disabled = !isPy3k;
 
   postPatch = ''
     sed -i 's@werkzeug.contrib.fixers@werkzeug.middleware.proxy_fix@g' flask_reverse_proxy_fix/middleware/__init__.py
   '';
+
+  # This is needed so that setup.py does not add "devNone" to the version,
+  # after which setuptools throws an error for an invalid version.
+  env.CI_COMMIT_TAG = "v${version}";
 
   propagatedBuildInputs = [
     flask

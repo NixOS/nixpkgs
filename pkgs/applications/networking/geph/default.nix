@@ -2,21 +2,27 @@
 , stdenvNoCC
 , rustPlatform
 , fetchFromGitHub
-, buildNpmPackage
+, buildGoModule
+, makeWrapper
+, nodejs
+, pnpm
+, cacert
+, esbuild
+, jq
+, moreutils
 , perl
 , pkg-config
 , glib
 , webkitgtk
-, libappindicator-gtk3
 , libayatana-appindicator
 , cairo
 , openssl
 }:
 
 let
-  version = "4.7.8";
+  version = "4.11.0";
   geph-meta = with lib; {
-    description = "A modular Internet censorship circumvention system designed specifically to deal with national filtering.";
+    description = "Modular Internet censorship circumvention system designed specifically to deal with national filtering";
     homepage = "https://geph.io";
     platforms = platforms.linux;
     maintainers = with maintainers; [ penalty1083 ];
@@ -31,10 +37,10 @@ in
       owner = "geph-official";
       repo = pname;
       rev = "v${version}";
-      hash = "sha256-DVGbLyFgraQMSIUAqDehF8DqbnvcaeWbuLVgiSQY3KE=";
+      hash = "sha256-6zii8WxJp++yqTkxejNDta7IW+SG0uPgmnWqX5Oa9PU=";
     };
 
-    cargoHash = "sha256-uBq6rjUnKEscwhu60HEZffLvuXcArz+AiR52org+qKw=";
+    cargoHash = "sha256-WI525ufJxuepRZHyx8tO4K+7WZuM/NlTVNqVMJH6avg=";
 
     nativeBuildInputs = [ perl ];
 
@@ -43,66 +49,79 @@ in
     };
   };
 
-  gui = stdenvNoCC.mkDerivation rec {
+  gui = stdenvNoCC.mkDerivation (finalAttrs: {
     pname = "geph-gui";
     inherit version;
 
     src = fetchFromGitHub {
       owner = "geph-official";
       repo = "gephgui-pkg";
-      rev = "85a55bfc2f4314d9c49608f252080696b1f8e2a9";
-      hash = "sha256-id/sfaQsF480kUXg//O5rBIciuuhDuXY19FQe1E3OQs=";
+      rev = "3a6d2fa85603e9ac3d5d6286685d8a8ca792a508";
+      hash = "sha256-SE1TwYvR3+zwdPxlanq4hovmJsOdCJQzWfSJ6sSyJ5k=";
       fetchSubmodules = true;
     };
 
-    gephgui = buildNpmPackage {
-      pname = "gephgui";
-      inherit version src;
-
-      sourceRoot = "source/gephgui-wry/gephgui";
-
-      postPatch = "ln -s ${./package-lock.json} ./package-lock.json";
-
-      npmDepsHash = "sha256-5y6zpMF4M56DiWVhMvjJGsYpVdlJSoWoWyPgLc7hJoo=";
-
-      installPhase = ''
-        runHook preInstall
-
-        mkdir -p $out
-        mv dist $out
-
-        runHook postInstall
-      '';
-    };
-
-    gephgui-wry = rustPlatform.buildRustPackage rec {
+    gephgui-wry = rustPlatform.buildRustPackage {
       pname = "gephgui-wry";
-      inherit version src;
+      inherit (finalAttrs) version src;
 
-      sourceRoot = "source/gephgui-wry";
+      sourceRoot = "${finalAttrs.src.name}/gephgui-wry";
 
-      cargoHash = "sha256-lidlUUfHXKPUlICdaVv/SFlyyWsZ7cYHyTJ3kkMn3L4=";
+      cargoLock = {
+        lockFile = ./Cargo.lock;
+        outputHashes = {
+          "tao-0.5.2" = "sha256-HyQyPRoAHUcgtYgaAW7uqrwEMQ45V+xVSxmlAZJfhv0=";
+          "wry-0.12.2" = "sha256-kTMXvignEF3FlzL0iSlF6zn1YTOCpyRUDN8EHpUS+yI=";
+        };
+      };
 
-      nativeBuildInputs = [ pkg-config ];
+      pnpmDeps = pnpm.fetchDeps {
+        inherit (finalAttrs) pname version src;
+        sourceRoot = "${finalAttrs.src.name}/gephgui-wry/gephgui";
+        hash = "sha256-0MGlsLEgugQ1wEz07ROIwkanTa8PSKwIaxNahyS1014=";
+      };
+
+      nativeBuildInputs = [
+        pkg-config
+        pnpm.configHook
+        makeWrapper
+        nodejs
+      ];
 
       buildInputs = [
         glib
         webkitgtk
-        libappindicator-gtk3
         libayatana-appindicator
         cairo
         openssl
       ];
 
+      ESBUILD_BINARY_PATH = "${lib.getExe (esbuild.override {
+        buildGoModule = args: buildGoModule (args // rec {
+          version = "0.15.10";
+          src = fetchFromGitHub {
+            owner = "evanw";
+            repo = "esbuild";
+            rev = "v${version}";
+            hash = "sha256-DebmLtgPrla+1UcvOHMnWmxa/ZqrugeRRKXIiJ9LYDk=";
+          };
+          vendorHash = "sha256-+BfxCyg0KkDQpHt/wycy/8CTG6YBA/VJvJFhhzUnSiQ=";
+        });
+      })}";
+
+      pnpmRoot = "gephgui";
+
       preBuild = ''
-        ln -s ${gephgui}/dist ./gephgui
+        pushd gephgui
+        pnpm build
+        popd
       '';
     };
 
     dontBuild = true;
 
     installPhase = ''
-      install -Dt $out/bin ${gephgui-wry}/bin/gephgui-wry
+      install -Dt $out/bin ${finalAttrs.gephgui-wry}/bin/gephgui-wry
       install -d $out/share/icons/hicolor
       for i in '16' '32' '64' '128' '256'
       do
@@ -118,5 +137,5 @@ in
     meta = geph-meta // {
       license = with lib.licenses; [ unfree ];
     };
-  };
+  });
 }

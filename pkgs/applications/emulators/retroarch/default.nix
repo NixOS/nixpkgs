@@ -2,24 +2,21 @@
 , stdenv
 , nixosTests
 , enableNvidiaCgToolkit ? false
-, withAssets ? false
-, withCoreInfo ? false
 , withGamemode ? stdenv.isLinux
 , withVulkan ? stdenv.isLinux
 , withWayland ? stdenv.isLinux
 , alsa-lib
 , dbus
 , fetchFromGitHub
-, fetchpatch
 , ffmpeg_4
 , flac
 , freetype
 , gamemode
+, gitUpdater
 , libdrm
 , libGL
 , libGLU
 , libpulseaudio
-, libretro-core-info
 , libv4l
 , libX11
 , libXdmcp
@@ -34,10 +31,8 @@
 , pkg-config
 , python3
 , qtbase
-, retroarch-assets
 , SDL2
 , spirv-tools
-, substituteAll
 , udev
 , vulkan-loader
 , wayland
@@ -52,18 +47,14 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "retroarch-bare";
-  version = "1.15.0";
+  version = "1.19.1";
 
   src = fetchFromGitHub {
     owner = "libretro";
     repo = "RetroArch";
-    hash = "sha256-kJOR3p3fKqGM8a5rgDPkz43uuf5AtS5fVnvr3tJgWbc=";
+    hash = "sha256-NVe5dhH3w7RL1C7Z736L5fdi/+aO+Ah9Dpa4u4kn0JY=";
     rev = "v${version}";
   };
-
-  patches = [
-    ./use-default-values-for-libretro_info_path-assets_directory.patch
-  ];
 
   nativeBuildInputs = [ pkg-config wrapQtAppsHook ] ++
     lib.optional withWayland wayland ++
@@ -109,14 +100,8 @@ stdenv.mkDerivation rec {
     "--enable-systemmbedtls"
     "--disable-builtinzlib"
     "--disable-builtinflac"
-  ] ++
-  lib.optionals withAssets [
     "--disable-update_assets"
-    "--with-assets_dir=${retroarch-assets}/share"
-  ] ++
-  lib.optionals withCoreInfo [
     "--disable-update_core_info"
-    "--with-core_info_dir=${libretro-core-info}/share"
   ] ++
   lib.optionals stdenv.isLinux [
     "--enable-dbus"
@@ -138,7 +123,12 @@ stdenv.mkDerivation rec {
     rm $out/share/man/man6/retroarch-cg2glsl.6*
   '';
 
-  passthru.tests = nixosTests.retroarch;
+  passthru = {
+    tests = nixosTests.retroarch;
+    updateScript = gitUpdater {
+      rev-prefix = "v";
+    };
+  };
 
   meta = with lib; {
     homepage = "https://libretro.com";

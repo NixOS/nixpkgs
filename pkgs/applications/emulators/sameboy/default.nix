@@ -1,19 +1,19 @@
-{ lib, stdenv, fetchFromGitHub, gtk3, rgbds, SDL2, wrapGAppsHook, glib }:
+{ lib, stdenv, fetchFromGitHub, gtk3, rgbds, SDL2, wrapGAppsHook3, glib }:
 
 stdenv.mkDerivation rec {
   pname = "sameboy";
-  version = "0.15.8";
+  version = "0.16.6";
 
   src = fetchFromGitHub {
     owner = "LIJI32";
     repo = "SameBoy";
     rev = "v${version}";
-    sha256 = "sha256-SBK+aYekEJreD0XBvYaU12eIKmm9JNYIpPt1XhUtH4c=";
+    sha256 = "sha256-URth/0hMfxnBJpfA1k+UU9/jJzfte2UXeLv5JnBDGUs=";
   };
 
   enableParallelBuilding = true;
-  # glib and wrapGAppsHook are needed to make the Open ROM menu work.
-  nativeBuildInputs = [ rgbds glib wrapGAppsHook ];
+  # glib and wrapGAppsHook3 are needed to make the Open ROM menu work.
+  nativeBuildInputs = [ rgbds glib wrapGAppsHook3 ];
   buildInputs = [ SDL2 ];
 
   makeFlags = [
@@ -30,6 +30,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://sameboy.github.io";
     description = "Game Boy, Game Boy Color, and Super Game Boy emulator";
+    mainProgram = "sameboy";
 
     longDescription = ''
       SameBoy is a user friendly Game Boy, Game Boy Color and Super

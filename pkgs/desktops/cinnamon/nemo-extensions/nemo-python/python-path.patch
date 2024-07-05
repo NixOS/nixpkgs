@@ -7,7 +7,7 @@ index 8d2acdb..ee24143 100644
  	
  	debug("Sanitize the python search path");
 -	PyRun_SimpleString("import sys; sys.path = [path for path in sys.path if path]");
-+	PyRun_SimpleString("import sys; sys.path = [path for path in sys.path if path]; sys.path.append('@env@')");
++	PyRun_SimpleString("import sys; import os; sys.path = [path for path in sys.path if path]; sys.path += os.getenv(\"NEMO_PYTHON_SEARCH_PATH\").split(os.pathsep)");
  	if (PyErr_Occurred())
  	{
  		PyErr_Print();

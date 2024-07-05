@@ -1,34 +1,29 @@
-{ lib
-, callPackage
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, asgiref
-, hatchling
-, opentelemetry-api
-, opentelemetry-sdk
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  asgiref,
+  hatchling,
+  opentelemetry-api,
+  opentelemetry-instrumentation,
+  opentelemetry-sdk,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
+  inherit (opentelemetry-api) src;
   pname = "opentelemetry-test-utils";
-  version = "1.18.0";
-  disabled = pythonOlder "3.7";
+  # This package is in the same repository as `opentelemetry-api`,
+  # but its version is synchronized with `opentelemetry-instrumentation` in another repository.
+  version = opentelemetry-instrumentation.version;
+  pyproject = true;
 
-  src = fetchFromGitHub {
-    owner = "open-telemetry";
-    repo = "opentelemetry-python";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-WRcKTE3eVqOSQUi5gZ3du+RGw8CrMazXHrctdrjgzHo=";
-    sparseCheckout = [ "/tests/${pname}" ];
-  } + "/tests/${pname}";
+  disabled = pythonOlder "3.8";
 
-  format = "pyproject";
+  sourceRoot = "${opentelemetry-api.src.name}/tests/opentelemetry-test-utils";
 
-  nativeBuildInputs = [
-    hatchling
-  ];
+  build-system = [ hatchling ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     asgiref
     opentelemetry-api
     opentelemetry-sdk
@@ -36,10 +31,8 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "opentelemetry.test" ];
 
-  meta = with lib; {
+  meta = opentelemetry-api.meta // {
     homepage = "https://github.com/open-telemetry/opentelemetry-python/tree/main/tests/opentelemetry-test-utils";
     description = "Test utilities for OpenTelemetry unit tests";
-    license = licenses.asl20;
-    maintainers = teams.deshaw.members;
   };
 }

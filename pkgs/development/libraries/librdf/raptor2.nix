@@ -35,13 +35,21 @@ stdenv.mkDerivation rec {
       url = "https://github.com/dajobe/raptor/commit/fa1ef9a27d8762f5588ac2e92554a188e73dee9f.diff";
       sha256 = "sha256-zXIbrYGgC9oTpiD0WUikT4vRdc9b6bsyfnDkwUSlqao=";
     })
+    # pull upstream fix for libxml2-2.11 API compatibility:
+    #   https://github.com/dajobe/raptor/pull/58
+    (fetchpatch {
+      name = "libxml2-2.11.patch";
+      url = "https://github.com/dajobe/raptor/commit/4dbc4c1da2a033c497d84a1291c46f416a9cac51.patch";
+      hash = "sha256-fHfvncGymzMtxjwtakCNSr/Lem12UPIHAAcAac648w4=";
+    })
   ];
 
   nativeBuildInputs = [ pkg-config cmake perl bison flex ];
   buildInputs = [ libxml2 libxslt ];
 
   meta = {
-    description = "The RDF Parser Toolkit";
+    description = "RDF Parser Toolkit";
+    mainProgram = "rapper";
     homepage = "https://librdf.org/raptor";
     license = with lib.licenses; [ lgpl21 asl20 ];
     maintainers = with lib.maintainers; [ marcweber ];

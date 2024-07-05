@@ -38,14 +38,15 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
+  cmakeBuildType = "RelWithDebInfo";
+
   cmakeFlags = [
-    "-DCMAKE_BUILD_TYPE=RelWithDebInfo"
     "-DENABLE_DIST=ON"
     "-DTARANTOOL_VERSION=${version}.builtByNix" # expects the commit hash as well
   ];
 
   meta = with lib; {
-    description = "An in-memory computing platform consisting of a database and an application server";
+    description = "In-memory computing platform consisting of a database and an application server";
     homepage = "https://www.tarantool.io/";
     license = licenses.bsd2;
     mainProgram = "tarantool";

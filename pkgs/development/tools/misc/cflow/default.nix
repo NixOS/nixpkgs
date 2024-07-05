@@ -26,6 +26,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Tool to analyze the control flow of C programs";
+    mainProgram = "cflow";
 
     longDescription = ''
       GNU cflow analyzes a collection of C source files and prints a

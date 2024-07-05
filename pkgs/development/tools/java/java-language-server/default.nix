@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub
-, jdk, maven
+, jdk_headless, maven
 , makeWrapper
 }:
 
@@ -12,21 +12,20 @@ let
 in
 maven.buildMavenPackage rec {
   pname = "java-language-server";
-  version = "0.2.38";
+  version = "0.2.46";
 
   src = fetchFromGitHub {
     owner = "georgewfraser";
     repo = pname;
     # commit hash is used as owner sometimes forgets to set tags. See https://github.com/georgewfraser/java-language-server/issues/104
-    rev = "1dfdc54d1f1e57646a0ec9c0b3f4a4f094bd9f17";
-    sha256 = "sha256-zkbl/SLg09XK2ZhJNzWEtvFCQBRQ62273M/2+4HV1Lk=";
+    rev = "d7f4303cd233cdad84daffbb871dd4512a2c8da2";
+    sha256 = "sha256-BIcfwz+pLQarnK8XBPwDN2nrdvK8xqUo0XFXk8ZV/h0=";
   };
 
   mvnFetchExtraArgs.dontConfigure = true;
-  mvnParameters = "-DskipTests";
-  mvnHash = "sha256-bzYBSrCS9Kp+qnVO60h915Or1VWabphwLEu6lcBULuc=";
+  mvnHash = "sha256-2uthmSjFQ43N5lgV11DsxuGce+ZptZsmRLTgjDo0M2w=";
 
-  nativeBuildInputs = [ maven jdk makeWrapper ];
+  nativeBuildInputs = [ jdk_headless makeWrapper ];
 
   dontConfigure = true;
   preBuild = ''
@@ -38,6 +37,8 @@ maven.buildMavenPackage rec {
       --no-man-pages \
       --compress 2
   '';
+
+  doCheck = false;
 
   installPhase = ''
     runHook preInstall
@@ -52,10 +53,10 @@ maven.buildMavenPackage rec {
   '';
 
   meta = with lib; {
-    description = "A Java language server based on v3.0 of the protocol and implemented using the Java compiler API";
+    description = "Java language server based on v3.0 of the protocol and implemented using the Java compiler API";
+    mainProgram = "java-language-server";
     homepage = "https://github.com/georgewfraser/java-language-server";
     license = licenses.mit;
     maintainers = with maintainers; [ hqurve ];
-    platforms = platforms.all;
   };
 }

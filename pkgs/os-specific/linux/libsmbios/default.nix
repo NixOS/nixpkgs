@@ -35,11 +35,14 @@ stdenv.mkDerivation rec {
     cp -a out/public-include/smbios_c $out/include/
   '';
 
-  preFixup = ''rm -rf "$(pwd)" ''; # Hack to avoid TMPDIR in RPATHs
+  # remove forbidden reference to $TMPDIR
+  preFixup = ''
+    patchelf --shrink-rpath --allowed-rpath-prefixes "$NIX_STORE" "$out/sbin/smbios-sys-info-lite"
+  '';
 
   meta = with lib; {
     homepage = "https://github.com/dell/libsmbios";
-    description = "A library to obtain BIOS information";
+    description = "Library to obtain BIOS information";
     license = with licenses; [ osl21 gpl2Plus ];
     maintainers = with maintainers; [ ];
     platforms = [ "i686-linux" "x86_64-linux" ];

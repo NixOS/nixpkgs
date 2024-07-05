@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, callPackage
-, fetchFromGitHub
-, gmp
+{
+  lib,
+  buildPythonPackage,
+  callPackage,
+  fetchFromGitHub,
+  gmp,
 }:
 
 let
@@ -10,14 +11,14 @@ let
 in
 buildPythonPackage rec {
   pname = "pycryptodome";
-  version = "3.17.0";
+  version = "3.20.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "Legrandin";
     repo = "pycryptodome";
-    rev = "v${version}";
-    hash = "sha256-xsfd+dbaNOPuD0ulvpLPBPtcFgmJqX1VuunwNMcqh+Q=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-RPaBUj/BJCO+10maGDmugeEXxaIrlk2UHIvkbrQVM8c=";
   };
 
   postPatch = ''
@@ -25,18 +26,18 @@ buildPythonPackage rec {
       --replace 'load_lib("gmp"' 'load_lib("${gmp}/lib/libgmp.so.10"'
   '';
 
-  nativeCheckInputs = [
-    test-vectors
-  ];
+  nativeCheckInputs = [ test-vectors ];
 
-  pythonImportsCheck = [
-    "Crypto"
-  ];
+  pythonImportsCheck = [ "Crypto" ];
 
   meta = with lib; {
     description = "Self-contained cryptographic library";
     homepage = "https://github.com/Legrandin/pycryptodome";
-    license = with licenses; [ bsd2 /* and */ asl20 ];
+    changelog = "https://github.com/Legrandin/pycryptodome/blob/v${version}/Changelog.rst";
+    license = with licenses; [
+      bsd2 # and
+      asl20
+    ];
     maintainers = with maintainers; [ fab ];
   };
 }

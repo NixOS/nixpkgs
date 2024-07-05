@@ -1,13 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, defusedxml
-, pytest
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  defusedxml,
+  pytest,
 }:
 
 buildPythonPackage rec {
   pname = "odfpy";
   version = "1.4.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

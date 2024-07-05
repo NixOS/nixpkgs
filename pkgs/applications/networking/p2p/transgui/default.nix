@@ -1,24 +1,17 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, makeDesktopItem, fetchpatch, unzip
-, fpc, lazarus, libX11, glib, gtk2, gdk-pixbuf, pango, atk, cairo, openssl }:
+{ lib, stdenv, fetchFromGitHub, pkg-config, makeDesktopItem, unzip
+, fpc, lazarus, libX11, glib, gtk2, gdk-pixbuf, pango, atk, cairo, openssl
+, unstableGitUpdater }:
 
 stdenv.mkDerivation rec {
   pname = "transgui";
-  version = "unstable-2022-02-02";
+  version = "5.18.0-unstable-2024-02-26";
 
   src = fetchFromGitHub {
     owner = "transmission-remote-gui";
     repo = "transgui";
-    rev = "0e2c2a07c1b21b1704c0a4945a111a8aa1050a1a";
-    sha256 = "1x9wzii3q9zanpik4xc99jqsfrqch8vjmlx12jrvczxcfy51b1ba";
+    rev = "25df397d92fbd53b970ef72a6ffd9f644458f935";
+    hash = "sha256-jQIe2vTDeJM/lhl6alNhEPOqXjyd18x+Kg29+le/dks=";
   };
-
-  patches = [
-    # TDDO: remove when transgui updates for transmission-daemon v3 rpc protocol
-    (fetchpatch {
-      url = "https://github.com/transmission-remote-gui/transgui/commit/9275c3fb877dd753a1940d1b900630cdc09a0cc2.patch";
-      sha256 = "0w2x7gcxp5kqczdz7ckfqhdz9hhkm62k8gcws54d6km7x9vc1023";
-    })
-  ];
 
   nativeBuildInputs = [ pkg-config unzip ];
   buildInputs = [
@@ -66,6 +59,10 @@ stdenv.mkDerivation rec {
     mkdir -p "$out/share/transgui"
     cp -r "./lang" "$out/share/transgui"
   '';
+
+  passthru.updateScript = unstableGitUpdater {
+    tagPrefix = "v";
+  };
 
   meta = {
     description = "A cross platform front-end for the Transmission BitTorrent client";

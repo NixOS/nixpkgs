@@ -13,11 +13,11 @@
 
 buildOctavePackage rec {
   pname = "ltfat";
-  version = "2.5.0";
+  version = "2.6.0";
 
   src = fetchurl {
     url = "https://github.com/ltfat/ltfat/releases/download/v${version}/${pname}-${version}-of.tar.gz";
-    sha256 = "sha256-8AqEDEfgYwftKUj8ynFQzBa3G3zTdhNtsZ2bW16DV7Q=";
+    sha256 = "sha256-FMDZ8XFhLG7KDoUjtXvafekg6tSltwBaO0+//jMzJj4=";
   };
 
   buildInputs = [

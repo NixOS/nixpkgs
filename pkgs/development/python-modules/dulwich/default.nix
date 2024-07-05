@@ -1,34 +1,43 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, certifi
-, fastimport
-, fetchPypi
-, gevent
-, geventhttpclient
-, git
-, glibcLocales
-, gnupg
-, gpgme
-, paramiko
-, pytestCheckHook
-, pythonOlder
-, urllib3
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  certifi,
+  fastimport,
+  fetchFromGitHub,
+  gevent,
+  geventhttpclient,
+  git,
+  glibcLocales,
+  gnupg,
+  gpgme,
+  paramiko,
+  pytest-xdist,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  setuptools-rust,
+  urllib3,
 }:
 
 buildPythonPackage rec {
-  version = "0.21.5";
+  version = "0.21.7";
   pname = "dulwich";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-cJVeTiSd3abjSkY2uQ906THlWPmTsXxSVw+mFEuZMQM=";
+  src = fetchFromGitHub {
+    owner = "jelmer";
+    repo = "dulwich";
+    rev = "refs/tags/${pname}-${version}";
+    hash = "sha256-iP+6KtaQ8tfOobovSLSJZogS/XWW0LuHgE2oV8uQW/8=";
   };
 
-  LC_ALL = "en_US.UTF-8";
+  build-system = [
+    setuptools
+    setuptools-rust
+  ];
 
   propagatedBuildInputs = [
     certifi
@@ -36,27 +45,26 @@ buildPythonPackage rec {
   ];
 
   passthru.optional-dependencies = {
-    fastimport = [
-      fastimport
-    ];
+    fastimport = [ fastimport ];
     pgp = [
       gpgme
       gnupg
     ];
-    paramiko = [
-      paramiko
-    ];
+    paramiko = [ paramiko ];
   };
 
-  nativeCheckInputs = [
-    gevent
-    geventhttpclient
-    git
-    glibcLocales
-    pytestCheckHook
-  ] ++ passthru.optional-dependencies.fastimport
-  ++ passthru.optional-dependencies.pgp
-  ++ passthru.optional-dependencies.paramiko;
+  nativeCheckInputs =
+    [
+      gevent
+      geventhttpclient
+      git
+      glibcLocales
+      pytest-xdist
+      pytestCheckHook
+    ]
+    ++ passthru.optional-dependencies.fastimport
+    ++ passthru.optional-dependencies.pgp
+    ++ passthru.optional-dependencies.paramiko;
 
   doCheck = !stdenv.isDarwin;
 
@@ -67,16 +75,18 @@ buildPythonPackage rec {
     "test_cyrillic"
     # OSError: [Errno 84] Invalid or incomplete multibyte or wide character: b'/build/tmpfseetobk/test/\xc0'
     "test_commit_no_encode_decode"
+    # https://github.com/jelmer/dulwich/issues/1279
+    "test_init_connector"
   ];
 
   disabledTestPaths = [
     # missing test inputs
     "dulwich/contrib/test_swift_smoke.py"
+    # flaky on high core count >4
+    "dulwich/tests/compat/test_client.py"
   ];
 
-  pythonImportsCheck = [
-    "dulwich"
-  ];
+  pythonImportsCheck = [ "dulwich" ];
 
   meta = with lib; {
     description = "Implementation of the Git file formats and protocols";
@@ -85,8 +95,11 @@ buildPythonPackage rec {
       does not depend on Git itself. All functionality is available in pure Python.
     '';
     homepage = "https://www.dulwich.io/";
-    changelog = "https://github.com/dulwich/dulwich/blob/dulwich-${version}/NEWS";
-    license = with licenses; [ asl20 gpl2Plus ];
+    changelog = "https://github.com/jelmer/dulwich/blob/dulwich-${version}/NEWS";
+    license = with licenses; [
+      asl20
+      gpl2Plus
+    ];
     maintainers = with maintainers; [ koral ];
   };
 }

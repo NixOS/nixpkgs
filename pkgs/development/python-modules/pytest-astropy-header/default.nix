@@ -1,12 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, fetchpatch
-, pytest
-, pytest-cov
-, pytestCheckHook
-, numpy
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytest,
+  pytestCheckHook,
+  numpy,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
@@ -19,13 +18,9 @@ buildPythonPackage rec {
     sha256 = "77891101c94b75a8ca305453b879b318ab6001b370df02be2c0b6d1bb322db10";
   };
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
 
-  buildInputs = [
-    pytest
-  ];
+  buildInputs = [ pytest ];
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -36,6 +31,6 @@ buildPythonPackage rec {
     description = "Plugin to add diagnostic information to the header of the test output";
     homepage = "https://astropy.org";
     license = licenses.bsd3;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [ ];
   };
 }

@@ -71,12 +71,13 @@ stdenv.mkDerivation {
     '';
 
   meta = with lib; {
-    description = "The music player for music lovers";
+    description = "Music player for music lovers";
     changelog = "https://community.roonlabs.com/c/roon/software-release-notes/18";
     homepage = "https://roonlabs.com";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     maintainers = with maintainers; [ lovesegfault ];
     platforms = [ "aarch64-linux" "x86_64-linux" ];
+    mainProgram = "RoonBridge";
   };
 }

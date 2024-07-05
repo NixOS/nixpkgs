@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitLab
-, fetchpatch2
 , meson
 , ninja
 , pkg-config
@@ -18,13 +17,13 @@
 , libmbim
 , libqrtr-glib
 , buildPackages
-, withIntrospection ? stdenv.hostPlatform.emulatorAvailable buildPackages
+, withIntrospection ? lib.meta.availableOn stdenv.hostPlatform gobject-introspection && stdenv.hostPlatform.emulatorAvailable buildPackages
 , withMan ? stdenv.buildPlatform.canExecute stdenv.hostPlatform
 }:
 
 stdenv.mkDerivation rec {
   pname = "libqmi";
-  version = "1.32.2";
+  version = "1.34.0";
 
   outputs = [ "out" "dev" ]
     ++ lib.optional withIntrospection "devdoc";
@@ -34,17 +33,8 @@ stdenv.mkDerivation rec {
     owner = "mobile-broadband";
     repo = "libqmi";
     rev = version;
-    hash = "sha256-XIbeWgkPiJL8hN8Rb6KFt5Q5sG3KsiEQr0EnhwmI6h8=";
+    hash = "sha256-l9ev9ZOWicVNZ/Wj//KNd3NHcefIrLVriqJhEpwWvtQ=";
   };
-
-  patches = [
-    # Fix pkg-config file missing qrtr in Requires.
-    # https://gitlab.freedesktop.org/mobile-broadband/libqmi/-/issues/99
-    (fetchpatch2 {
-      url = "https://gitlab.freedesktop.org/mobile-broadband/libqmi/-/commit/7d08150910974c6bd2c29f887c2c6d4a3526e085.patch";
-      hash = "sha256-LFrlm2ZqLqewLGO2FxL5kFYbZ7HaxdxvVHsFHYSgZ4Y=";
-    })
-  ];
 
   nativeBuildInputs = [
     meson

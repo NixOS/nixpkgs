@@ -11,7 +11,7 @@ buildGoModule rec {
     sha256 = "sha256-4MUgyUKyycsreAMVtyKJFpQOHvI6JJSn7TUZtbQANyc=";
   };
 
-  vendorSha256 = "sha256-3x7yJenJ2BHdqVPaBaqfFVeOSJZ/VRNF/TTfSsw+2os=";
+  vendorHash = "sha256-3x7yJenJ2BHdqVPaBaqfFVeOSJZ/VRNF/TTfSsw+2os=";
 
   doCheck = false;
 
@@ -24,7 +24,7 @@ buildGoModule rec {
   ldflags = [ "-s" "-w" "-X main.VERSION=${version}" ];
 
   meta = with lib; {
-    description = "A command line interface for Buildkite";
+    description = "Command line interface for Buildkite";
     homepage = "https://github.com/buildkite/cli";
     license = licenses.mit;
     maintainers = with maintainers; [ groodt ];

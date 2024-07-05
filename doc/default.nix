@@ -2,6 +2,9 @@
 let
   inherit (pkgs) lib;
   inherit (lib) hasPrefix removePrefix;
+  fs = lib.fileset;
+
+  common = import ./common.nix;
 
   lib-docs = import ./doc-support/lib-function-docs.nix {
     inherit pkgs nixpkgs;
@@ -17,8 +20,14 @@ let
       { name = "options"; description = "NixOS / nixpkgs option handling"; }
       { name = "path"; description = "path functions"; }
       { name = "filesystem"; description = "filesystem functions"; }
+      { name = "fileset"; description = "file set functions"; }
       { name = "sources"; description = "source filtering functions"; }
       { name = "cli"; description = "command-line serialization functions"; }
+      { name = "generators"; description = "functions that create file formats from nix data structures"; }
+      { name = "gvariant"; description = "GVariant formatted string serialization functions"; }
+      { name = "customisation"; description = "Functions to customise (derivation-related) functions, derivatons, or attribute sets"; }
+      { name = "meta"; description = "functions for derivation metadata"; }
+      { name = "derivations"; description = "miscellaneous derivation-specific functions"; }
     ];
   };
 
@@ -92,19 +101,37 @@ in pkgs.stdenv.mkDerivation {
     nixos-render-docs
   ];
 
-  src = ./.;
+  src = fs.toSource {
+    root = ./.;
+    fileset = fs.unions [
+      (fs.fileFilter (file:
+        file.hasExt "md"
+        || file.hasExt "md.in"
+      ) ./.)
+      ./style.css
+      ./anchor-use.js
+      ./anchor.min.js
+      ./manpage-urls.json
+    ];
+  };
 
   postPatch = ''
     ln -s ${optionsDoc.optionsJSON}/share/doc/nixos/options.json ./config-options.json
   '';
 
+  pythonInterpreterTable = pkgs.callPackage ./doc-support/python-interpreter-table.nix {};
+
+  passAsFile = [ "pythonInterpreterTable" ];
+
   buildPhase = ''
+    substituteInPlace ./languages-frameworks/python.section.md --subst-var-by python-interpreter-table "$(<"$pythonInterpreterTablePath")"
+
     cat \
       ./functions/library.md.in \
       ${lib-docs}/index.md \
       > ./functions/library.md
     substitute ./manual.md.in ./manual.md \
-      --replace '@MANUAL_VERSION@' '${pkgs.lib.version}'
+      --replace-fail '@MANUAL_VERSION@' '${pkgs.lib.version}'
 
     mkdir -p out/media
 
@@ -115,16 +142,17 @@ in pkgs.stdenv.mkDerivation {
       ${pkgs.documentation-highlighter}/mono-blue.css \
       ${pkgs.documentation-highlighter}/loader.js
 
-    cp -t out ./overrides.css ./style.css
+    cp -t out ./style.css ./anchor.min.js ./anchor-use.js
 
     nixos-render-docs manual html \
       --manpage-urls ./manpage-urls.json \
       --revision ${pkgs.lib.trivial.revisionWithDefault (pkgs.rev or "master")} \
       --stylesheet style.css \
-      --stylesheet overrides.css \
       --stylesheet highlightjs/mono-blue.css \
       --script ./highlightjs/highlight.pack.js \
       --script ./highlightjs/loader.js \
+      --script ./anchor.min.js \
+      --script ./anchor-use.js \
       --toc-depth 1 \
       --section-toc-depth 1 \
       manual.md \
@@ -132,15 +160,37 @@ in pkgs.stdenv.mkDerivation {
   '';
 
   installPhase = ''
-    dest="$out/share/doc/nixpkgs"
+    dest="$out/${common.outputPath}"
     mkdir -p "$(dirname "$dest")"
     mv out "$dest"
-    mv "$dest/index.html" "$dest/manual.html"
+    mv "$dest/index.html" "$dest/${common.indexPath}"
 
     cp ${epub} "$dest/nixpkgs-manual.epub"
 
     mkdir -p $out/nix-support/
-    echo "doc manual $dest manual.html" >> $out/nix-support/hydra-build-products
+    echo "doc manual $dest ${common.indexPath}" >> $out/nix-support/hydra-build-products
     echo "doc manual $dest nixpkgs-manual.epub" >> $out/nix-support/hydra-build-products
   '';
+
+  passthru.tests.manpage-urls = with pkgs; testers.invalidateFetcherByDrvHash
+    ({ name ? "manual_check-manpage-urls"
+     , script
+     , urlsFile
+     }: runCommand name {
+      nativeBuildInputs = [
+        cacert
+        (python3.withPackages (p: with p; [
+          aiohttp
+          rich
+          structlog
+        ]))
+      ];
+      outputHash = "sha256-47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=";  # Empty output
+    } ''
+      python3 ${script} ${urlsFile}
+      touch $out
+    '') {
+      script = ./tests/manpage-urls.py;
+      urlsFile = ./manpage-urls.json;
+    };
 }

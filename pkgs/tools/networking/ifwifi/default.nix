@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, makeWrapper, darwin, networkmanager, iw, Security }:
+{ lib, stdenv, fetchFromGitHub, rustPlatform, makeWrapper, networkmanager, iw, Security }:
 
 rustPlatform.buildRustPackage rec {
   pname = "ifwifi";
@@ -30,7 +30,8 @@ rustPlatform.buildRustPackage rec {
   doCheck = true;
 
   meta = with lib; {
-    description = "A simple wrapper over nmcli using wifiscanner made in rust";
+    description = "Simple wrapper over nmcli using wifiscanner made in rust";
+    mainProgram = "ifwifi";
     longDescription = ''
       In the author's words:
 

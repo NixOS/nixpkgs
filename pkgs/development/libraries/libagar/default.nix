@@ -3,10 +3,14 @@
 , libsndfile, portaudio, libmysqlclient, fontconfig
 }:
 
-let srcs = import ./srcs.nix { inherit fetchurl; }; in
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libagar";
-  inherit (srcs) version src;
+  version = "1.5.0";
+
+  src = fetchurl {
+    url = "http://stable.hypertriton.com/agar/agar-${finalAttrs.version}.tar.gz";
+    sha256 = "001wcqk5z67qg0raw9zlwmv62drxiwqykvsbk10q2mrc6knjsd42";
+  };
 
   preConfigure = ''
     substituteInPlace configure.in \
@@ -40,4 +44,4 @@ stdenv.mkDerivation {
     maintainers = with maintainers; [ ramkromberg ];
     platforms = with platforms; linux;
   };
-}
+})

@@ -1,16 +1,18 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy3k
-, chardet
-, lml
-, pyexcel-io
-, texttable
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPy3k,
+  chardet,
+  lml,
+  pyexcel-io,
+  texttable,
 }:
 
 buildPythonPackage rec {
   pname = "pyexcel";
   version = "0.7.0";
+  format = "setuptools";
 
   disabled = !isPy3k;
 
@@ -26,9 +28,7 @@ buildPythonPackage rec {
     texttable
   ];
 
-  pythonImportsCheck = [
-    "pyexcel"
-  ];
+  pythonImportsCheck = [ "pyexcel" ];
 
   # Tests depend on pyexcel-xls & co. causing circular dependency.
   # https://github.com/pyexcel/pyexcel/blob/dev/tests/requirements.txt

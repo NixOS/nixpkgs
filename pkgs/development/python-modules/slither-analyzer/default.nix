@@ -1,21 +1,25 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, crytic-compile
-, fetchFromGitHub
-, makeWrapper
-, packaging
-, prettytable
-, pythonOlder
-, setuptools
-, solc
-, withSolc ? false
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  crytic-compile,
+  fetchFromGitHub,
+  makeWrapper,
+  packaging,
+  prettytable,
+  pythonOlder,
+  setuptools-scm,
+  solc,
+  web3,
+  withSolc ? false,
+  testers,
+  slither-analyzer,
 }:
 
 buildPythonPackage rec {
   pname = "slither-analyzer";
-  version = "0.9.2";
-  format = "setuptools";
+  version = "0.10.2";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -23,18 +27,19 @@ buildPythonPackage rec {
     owner = "crytic";
     repo = "slither";
     rev = "refs/tags/${version}";
-    hash = "sha256-Co3BFdLmSIMqlZVEPJHYH/Cf7oKYSZ+Ktbnd5RZGmfE=";
+    hash = "sha256-KmbmljtmMtrJxgSMJjQ8fdk6RpEXcAVBuo24EsyMV8k=";
   };
 
   nativeBuildInputs = [
     makeWrapper
+    setuptools-scm
   ];
 
   propagatedBuildInputs = [
     crytic-compile
     packaging
     prettytable
-    setuptools
+    web3
   ];
 
   postFixup = lib.optionalString withSolc ''
@@ -42,8 +47,42 @@ buildPythonPackage rec {
       --prefix PATH : "${lib.makeBinPath [ solc ]}"
   '';
 
-  # No Python tests
-  doCheck = false;
+  # required for pythonImportsCheck
+  postInstall = ''
+    export HOME="$TEMP"
+  '';
+
+  pythonImportsCheck = [
+    "slither"
+    "slither.all_exceptions"
+    "slither.analyses"
+    "slither.core"
+    "slither.detectors"
+    "slither.exceptions"
+    "slither.formatters"
+    "slither.printers"
+    "slither.slither"
+    "slither.slithir"
+    "slither.solc_parsing"
+    "slither.utils"
+    "slither.visitors"
+    "slither.vyper_parsing"
+  ];
+
+  # Test if the binary works during the build phase.
+  checkPhase = ''
+    runHook preCheck
+
+    HOME="$TEMP" $out/bin/slither --version
+
+    runHook postCheck
+  '';
+
+  passthru.tests.version = testers.testVersion {
+    package = slither-analyzer;
+    command = "HOME=$TMPDIR slither --version";
+    version = "${version}";
+  };
 
   meta = with lib; {
     description = "Static Analyzer for Solidity";
@@ -55,6 +94,11 @@ buildPythonPackage rec {
     homepage = "https://github.com/trailofbits/slither";
     changelog = "https://github.com/crytic/slither/releases/tag/${version}";
     license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ arturcygan fab ];
+    mainProgram = "slither";
+    maintainers = with maintainers; [
+      arturcygan
+      fab
+      hellwolf
+    ];
   };
 }

@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "sratom";
-  version = "0.6.14";
+  version = "0.6.16";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "https://download.drobilla.net/${pname}-${version}.tar.xz";
-    hash = "sha256-mYL69A24Ou3Zs4UOSZ/s1oUri0um3t5RQBNlXP+soeY=";
+    hash = "sha256-ccFXmRGD5T0FVTk7tCccdcm19dq3Sl7yLyCLsi3jIsQ=";
   };
 
   strictDeps = true;
@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://drobilla.net/software/sratom";
-    description = "A library for serialising LV2 atoms to/from RDF";
+    description = "Library for serialising LV2 atoms to/from RDF";
     license = licenses.mit;
     maintainers = [ maintainers.goibhniu ];
     platforms = platforms.unix;

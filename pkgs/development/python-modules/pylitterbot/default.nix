@@ -1,38 +1,39 @@
-{ lib
-, aiohttp
-, aioresponses
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, poetry-dynamic-versioning
-, pyjwt
-, pytest-aiohttp
-, pytest-freezegun
-, pytestCheckHook
-, pythonOlder
-, deepdiff
+{
+  lib,
+  aiohttp,
+  aioresponses,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  poetry-dynamic-versioning,
+  pyjwt,
+  pytest-aiohttp,
+  pytest-freezegun,
+  pytestCheckHook,
+  pythonOlder,
+  deepdiff,
 }:
 
 buildPythonPackage rec {
   pname = "pylitterbot";
-  version = "2023.4.2";
-  format = "pyproject";
+  version = "2023.5.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "natekspencer";
-    repo = pname;
+    repo = "pylitterbot";
     rev = "refs/tags/v${version}";
-    hash = "sha256-zB/LJGEPJ3uZEoVQiLQUCWqLo9YLXN6vge3RhIwA5D4=";
+    hash = "sha256-MSQdX2PKQohmPGqtRZnUmCCVgKgaf4+cHAUItiPv7pY=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     poetry-core
     poetry-dynamic-versioning
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     deepdiff
     pyjwt
@@ -45,9 +46,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "pylitterbot"
-  ];
+  pythonImportsCheck = [ "pylitterbot" ];
 
   meta = with lib; {
     description = "Modulefor controlling a Litter-Robot";

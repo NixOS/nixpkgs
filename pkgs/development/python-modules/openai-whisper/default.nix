@@ -1,74 +1,59 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, substituteAll
-, cudaSupport ? false
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  buildPythonPackage,
+  substituteAll,
 
-# runtime
-, ffmpeg
+  # build-system
+  setuptools,
 
-# propagates
-, numpy
-, torch
-, torchWithCuda
-, tqdm
-, more-itertools
-, transformers
-, ffmpeg-python
-, numba
-, openai-triton
-, scipy
-, tiktoken
+  # runtime
+  ffmpeg-headless,
 
-# tests
-, pytestCheckHook
+  # propagates
+  more-itertools,
+  numba,
+  numpy,
+  openai-triton,
+  tiktoken,
+  torch,
+  tqdm,
+
+  # tests
+  pytestCheckHook,
+  scipy,
 }:
 
 buildPythonPackage rec {
   pname = "whisper";
-  version = "20230314";
-  format = "setuptools";
+  version = "20231117";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "openai";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-qQCELjRFeRCT1k1CBc3netRtFvt+an/EbkrgnmiX/mc=";
+    hash = "sha256-MJ1XjB/GuYUiECCuuHS0NWHvvs+ko0oTvLuDI7zLNiY=";
   };
 
   patches = [
     (substituteAll {
       src = ./ffmpeg-path.patch;
-      inherit ffmpeg;
+      ffmpeg = ffmpeg-headless;
     })
   ];
 
-  propagatedBuildInputs = [
-    numpy
-    tqdm
-    more-itertools
-    transformers
-    ffmpeg-python
-    numba
-    scipy
-    tiktoken
-  ] ++ lib.optionals (!cudaSupport) [
-    torch
-  ] ++ lib.optionals (cudaSupport) [
-    openai-triton
-    torchWithCuda
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  postPatch = ''
-    substituteInPlace requirements.txt \
-      --replace "tiktoken==0.3.1" "tiktoken>=0.3.1"
-  ''
-  # openai-triton is only needed for CUDA support.
-  # triton needs CUDA to be build.
-  # -> by making it optional, we can build whisper without unfree packages enabled
-  + lib.optionalString (!cudaSupport) ''
-    sed -i '/if sys.platform.startswith("linux") and platform.machine() == "x86_64":/{N;d}' setup.py
-  '';
+  propagatedBuildInputs = [
+    more-itertools
+    numba
+    numpy
+    tiktoken
+    torch
+    tqdm
+  ] ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform openai-triton) [ openai-triton ];
 
   preCheck = ''
     export HOME=$TMPDIR
@@ -76,11 +61,11 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+    scipy
   ];
 
   disabledTests = [
     # requires network access to download models
-    "test_tokenizer"
     "test_transcribe"
     # requires NVIDIA drivers
     "test_dtw_cuda_equivalence"
@@ -88,10 +73,14 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    changelog = "https://github.com/openai/whisper/blob/v$[version}/CHANGELOG.md";
+    changelog = "https://github.com/openai/whisper/blob/v${version}/CHANGELOG.md";
     description = "General-purpose speech recognition model";
+    mainProgram = "whisper";
     homepage = "https://github.com/openai/whisper";
     license = licenses.mit;
-    maintainers = with maintainers; [ hexa MayNiklas ];
+    maintainers = with maintainers; [
+      hexa
+      MayNiklas
+    ];
   };
 }

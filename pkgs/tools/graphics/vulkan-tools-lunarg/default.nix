@@ -5,6 +5,7 @@
 , python3
 , jq
 , expat
+, jsoncpp
 , libX11
 , libXdmcp
 , libXrandr
@@ -15,61 +16,53 @@
 , which
 , xcbutilkeysyms
 , xcbutilwm
+, valijson
 , vulkan-headers
 , vulkan-loader
-, symlinkJoin
-, vulkan-validation-layers
+, vulkan-utility-libraries
 , writeText
+, libsForQt5
 }:
 
 stdenv.mkDerivation rec {
   pname = "vulkan-tools-lunarg";
-  version = "1.3.250";
+  version = "1.3.283.0";
 
   src = fetchFromGitHub {
    owner = "LunarG";
    repo = "VulkanTools";
-   rev = "v${version}";
-   hash = "sha256-oI2ITvciuE/f8ojFpIwcH+HnYCasz43nKkER3wJxX+c=";
-   fetchSubmodules = true;
+   rev = "vulkan-sdk-${version}";
+   hash = "sha256-kRioHGrk6zsBIsnvusq6usAQqxQmCMmGk+O3ckkGEG4=";
  };
 
-  nativeBuildInputs = [ cmake python3 jq which pkg-config ];
+  nativeBuildInputs = [ cmake python3 jq which pkg-config libsForQt5.qt5.wrapQtAppsHook ];
 
   buildInputs = [
     expat
+    jsoncpp
     libX11
     libXdmcp
     libXrandr
     libffi
     libxcb
+    valijson
+    vulkan-headers
+    vulkan-loader
+    vulkan-utility-libraries
     wayland
     xcbutilkeysyms
     xcbutilwm
+    libsForQt5.qt5.qtbase
+    libsForQt5.qt5.qtwayland
   ];
 
   cmakeFlags = [
     "-DVULKAN_HEADERS_INSTALL_DIR=${vulkan-headers}"
-    "-DVULKAN_LOADER_INSTALL_DIR=${vulkan-loader}"
-    "-DVULKAN_VALIDATIONLAYERS_INSTALL_DIR=${
-      symlinkJoin {
-        name = "vulkan-validation-layers-merged";
-        paths = [ vulkan-validation-layers.headers vulkan-validation-layers ];
-      }
-    }"
-    # Hide dev warnings that are useless for packaging
-    "-Wno-dev"
   ];
 
   preConfigure = ''
-    # We need to run this update script which generates some source files,
-    # Remove the line in it which calls 'git submodule update' though.
-    # Also patch the scripts in ./scripts
-    update=update_external_sources.sh
-    patchShebangs $update
     patchShebangs scripts/*
-    sed -i '/^git /d' $update
-    ./$update
+    substituteInPlace via/CMakeLists.txt --replace "jsoncpp_static" "jsoncpp"
   '';
 
   # Include absolute paths to layer libraries in their associated
@@ -80,21 +73,6 @@ stdenv.mkDerivation rec {
       mv tmp.json "$f"
     done
   '';
-
-  patches = [
-    # Redefine an internal macro removed in vulkan-validation-layers
-    # FIXME: remove when fixed upstream
-    ./add-missing-macro-definition.patch
-
-    # Skip QNX-specific extension causing build failures
-    # FIXME: remove when fixed upstream
-    ./skip-qnx-extension.patch
-
-    ./gtest.patch
-  ];
-
-  # Same as vulkan-validation-layers
-  dontPatchELF = true;
 
   # Help vulkan-loader find the validation layers
   setupHook = writeText "setup-hook" ''

@@ -1,4 +1,9 @@
-{ lib, buildPythonPackage, fetchFromGitHub, sphinx }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  sphinx,
+}:
 
 buildPythonPackage rec {
   pname = "sphinxcontrib-log-cabinet";
@@ -17,6 +22,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "sphinxcontrib.log_cabinet" ];
 
   doCheck = false; # no tests
+
+  pythonNamespaces = [ "sphinxcontrib" ];
 
   meta = with lib; {
     homepage = "https://github.com/davidism/sphinxcontrib-log-cabinet";

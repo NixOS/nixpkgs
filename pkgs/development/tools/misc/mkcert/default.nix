@@ -11,7 +11,7 @@ buildGoModule rec {
     sha256 = "sha256-FMAXjRL+kJ/hwGmaWBy8ecON+JCMgRytfpryeLWsSVc=";
   };
 
-  vendorSha256 = "sha256-DdA7s+N5S1ivwUgZ+M2W/HCp/7neeoqRQL0umn3m6Do=";
+  vendorHash = "sha256-DdA7s+N5S1ivwUgZ+M2W/HCp/7neeoqRQL0umn3m6Do=";
 
   doCheck = false;
 
@@ -21,8 +21,9 @@ buildGoModule rec {
 
   meta = with lib; {
     homepage = "https://github.com/FiloSottile/mkcert";
-    description = "A simple tool for making locally-trusted development certificates";
+    description = "Simple tool for making locally-trusted development certificates";
+    mainProgram = "mkcert";
     license = licenses.bsd3;
-    maintainers = [ maintainers.marsam ];
+    maintainers = [ ];
   };
 }

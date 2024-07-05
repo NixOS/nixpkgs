@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, perl, perlPackages, makeWrapper
+{ lib, stdenv, fetchFromGitea, perl, perlPackages, makeWrapper
 , ps, dnsutils # dig is recommended for multiple categories
 , withRecommends ? false # Install (almost) all recommended tools (see --recommends)
 , withRecommendedSystemPrograms ? withRecommends, util-linuxMinimal, dmidecode
@@ -22,13 +22,14 @@ let
     ++ recommendedDisplayInformationPrograms;
 in stdenv.mkDerivation rec {
   pname = "inxi";
-  version = "3.3.04-1";
+  version = "3.3.34-1";
 
-  src = fetchFromGitHub {
+  src = fetchFromGitea {
+    domain = "codeberg.org";
     owner = "smxi";
     repo = "inxi";
     rev = version;
-    sha256 = "sha256-/EutIHQGLiRcRD/r8LJYG7oJBb7EAhR5cn6QiC7zMOc=";
+    hash = "sha256-CAZxQmESCBQ2kpDAbUIkky/eY8KLBsfCJvhOiZjV6Po=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -45,7 +46,7 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A full featured CLI system information tool";
+    description = "Full featured CLI system information tool";
     longDescription = ''
       inxi is a command line system information script built for console and
       IRC. It is also used a debugging tool for forum technical support to
@@ -58,5 +59,6 @@ in stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
     maintainers = with maintainers; [ ];
+    mainProgram = "inxi";
   };
 }

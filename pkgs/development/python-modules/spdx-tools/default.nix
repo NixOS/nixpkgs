@@ -1,43 +1,66 @@
-{ lib
-, buildPythonPackage
-, click
-, fetchPypi
-, pyyaml
-, rdflib
-, ply
-, xmltodict
-, pytestCheckHook
-, pythonOlder
-, uritools
+{
+  lib,
+  beartype,
+  buildPythonPackage,
+  click,
+  fetchFromGitHub,
+  license-expression,
+  ply,
+  pytestCheckHook,
+  pythonOlder,
+  pyyaml,
+  rdflib,
+  semantic-version,
+  setuptools,
+  setuptools-scm,
+  uritools,
+  xmltodict,
 }:
 
 buildPythonPackage rec {
   pname = "spdx-tools";
-  version = "0.7.1";
-  format = "setuptools";
+  version = "0.8.2";
+  format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-l15tu6iPEFqKyyKr9T/pDw6dVjWiubH+SHeB6WliOxc=";
+  src = fetchFromGitHub {
+    owner = "spdx";
+    repo = "tools-python";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-KB+tfuz0ZnoQcMX3H+IZXjcmPZ4x2ecl8ofz1/3r0/8=";
   };
 
+  nativeBuildInputs = [
+    setuptools
+    setuptools-scm
+  ];
+
   propagatedBuildInputs = [
+    beartype
     click
+    license-expression
     ply
     pyyaml
     rdflib
+    semantic-version
     uritools
     xmltodict
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  pythonImportsCheck = [ "spdx_tools.spdx" ];
+
+  disabledTestPaths = [
+    # Test depends on the currently not packaged pyshacl module
+    "tests/spdx3/validation/json_ld/test_shacl_validation.py"
   ];
 
-  pythonImportsCheck = [
-    "spdx"
+  disabledTests = [
+    # Missing files
+    "test_spdx2_convert_to_spdx3"
+    "test_json_writer"
   ];
 
   meta = with lib; {
@@ -45,6 +68,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/spdx/tools-python";
     changelog = "https://github.com/spdx/tools-python/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = [ ];
+    maintainers = with maintainers; [ fab ];
   };
 }

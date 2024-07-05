@@ -14,12 +14,13 @@ buildGoModule rec {
     sha256 = "sha256-rqhdxOQmZCRtq+IZygKLleb5GoKP2akyEc3rbGcnZmw=";
   };
 
-  vendorSha256 = "sha256-yLtISEJWIKqCuZtQxReu/Vykw5etqgLpuXqOdtwBkqU=";
+  vendorHash = "sha256-yLtISEJWIKqCuZtQxReu/Vykw5etqgLpuXqOdtwBkqU=";
 
   doCheck = true;
 
   meta = with lib; {
     description = "Tool to scan for CRLF vulnerability";
+    mainProgram = "crlfuzz";
     homepage = "https://github.com/dwisiswant0/crlfuzz";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];

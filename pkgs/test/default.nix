@@ -3,27 +3,102 @@
 with pkgs;
 
 {
-  cc-wrapper = callPackage ./cc-wrapper { };
-  cc-wrapper-gcc = callPackage ./cc-wrapper { stdenv = gccStdenv; };
-  cc-wrapper-gcc7 = callPackage ./cc-wrapper { stdenv = gcc7Stdenv; };
-  cc-wrapper-gcc8 = callPackage ./cc-wrapper { stdenv = gcc8Stdenv; };
-  cc-wrapper-gcc9 = callPackage ./cc-wrapper { stdenv = gcc9Stdenv; };
-  cc-wrapper-clang = callPackage ./cc-wrapper { stdenv = llvmPackages.stdenv; };
-  cc-wrapper-libcxx = callPackage ./cc-wrapper { stdenv = llvmPackages.libcxxStdenv; };
-  cc-wrapper-clang-5 = callPackage ./cc-wrapper { stdenv = llvmPackages_5.stdenv; };
-  cc-wrapper-libcxx-5 = callPackage ./cc-wrapper { stdenv = llvmPackages_5.libcxxStdenv; };
-  cc-wrapper-clang-6 = callPackage ./cc-wrapper { stdenv = llvmPackages_6.stdenv; };
-  cc-wrapper-libcxx-6 = callPackage ./cc-wrapper { stdenv = llvmPackages_6.libcxxStdenv; };
-  cc-wrapper-clang-7 = callPackage ./cc-wrapper { stdenv = llvmPackages_7.stdenv; };
-  cc-wrapper-libcxx-7 = callPackage ./cc-wrapper { stdenv = llvmPackages_7.libcxxStdenv; };
-  cc-wrapper-clang-8 = callPackage ./cc-wrapper { stdenv = llvmPackages_8.stdenv; };
-  cc-wrapper-libcxx-8 = callPackage ./cc-wrapper { stdenv = llvmPackages_8.libcxxStdenv; };
-  cc-wrapper-clang-9 = callPackage ./cc-wrapper { stdenv = llvmPackages_9.stdenv; };
-  cc-wrapper-libcxx-9 = callPackage ./cc-wrapper { stdenv = llvmPackages_9.libcxxStdenv; };
+  cc-wrapper = with builtins; let
+    pkgNames = (attrNames pkgs);
+    llvmTests = let
+      pkgSets = lib.pipe pkgNames [
+        (filter (lib.hasPrefix "llvmPackages"))
+        (filter (n: n != "rocmPackages.llvm"))
+        # Are throw aliases.
+        (filter (n: n != "llvmPackages_rocm"))
+        (filter (n: n != "llvmPackages_latest"))
+        (filter (n: n != "llvmPackages_git"))
+        (filter (n: n != "llvmPackages_6"))
+        (filter (n: n != "llvmPackages_7"))
+        (filter (n: n != "llvmPackages_8"))
+        (filter (n: n != "llvmPackages_9"))
+        (filter (n: n != "llvmPackages_10"))
+        (filter (n: n != "llvmPackages_11"))
+      ];
+      tests = lib.genAttrs pkgSets (name: recurseIntoAttrs {
+        clang = callPackage ./cc-wrapper { stdenv = pkgs.${name}.stdenv; };
+        libcxx = callPackage ./cc-wrapper { stdenv = pkgs.${name}.libcxxStdenv; };
+      });
+    in
+      tests;
+    gccTests = let
+      pkgSets = lib.pipe (attrNames pkgs) ([
+        (filter (lib.hasPrefix "gcc"))
+        (filter (lib.hasSuffix "Stdenv"))
+        (filter (n: n != "gccCrossLibcStdenv"))
+      ] ++ lib.optionals (!(
+        (stdenv.buildPlatform.isLinux && stdenv.buildPlatform.isx86_64) &&
+        (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64)
+      )) [
+        (filter (n: !lib.hasSuffix "MultiStdenv" n))
+      ]);
+    in lib.genAttrs pkgSets (name: callPackage ./cc-wrapper { stdenv = pkgs.${name}; });
+  in recurseIntoAttrs {
+    default = callPackage ./cc-wrapper { };
+
+    supported = stdenv.mkDerivation {
+      name = "cc-wrapper-supported";
+      builtGCC =
+        let
+          inherit (lib) filterAttrs;
+          sets = lib.pipe gccTests ([
+            (filterAttrs (_: v: lib.meta.availableOn stdenv.hostPlatform v.stdenv.cc))
+            # Broken
+            (filterAttrs (n: _: n != "gcc49Stdenv"))
+            (filterAttrs (n: _: n != "gccMultiStdenv"))
+          ] ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+            # fails with things like
+            # ld: warning: ld: warning: object file (trunctfsf2_s.o) was built for newer macOS version (11.0) than being linked (10.5)
+            # ld: warning: ld: warning: could not create compact unwind for ___fixunstfdi: register 20 saved somewhere other than in frame
+            (filterAttrs (n: _: n != "gcc11Stdenv"))
+          ]);
+        in
+        toJSON sets;
+
+      builtLLVM =
+        let
+          inherit (lib) filterAttrs;
+          sets = lib.pipe llvmTests ([
+            (filterAttrs (_: v: lib.meta.availableOn stdenv.hostPlatform v.clang.stdenv.cc))
+            (filterAttrs (_: v: lib.meta.availableOn stdenv.hostPlatform v.libcxx.stdenv.cc))
+
+            # libcxxStdenv broken
+            # fix in https://github.com/NixOS/nixpkgs/pull/216273
+          ] ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+            (filterAttrs (n: _: n != "llvmPackages_9"))
+          ]);
+        in
+        toJSON sets;
+        buildCommand = ''
+          touch $out
+        '';
+    };
+
+    llvmTests = recurseIntoAttrs llvmTests;
+    inherit gccTests;
+  };
+
+  devShellTools = callPackage ../build-support/dev-shell-tools/tests { };
+
   stdenv-inputs = callPackage ./stdenv-inputs { };
   stdenv = callPackage ./stdenv { };
 
+  hardeningFlags = recurseIntoAttrs (callPackage ./cc-wrapper/hardening.nix {});
+  hardeningFlags-gcc = recurseIntoAttrs (callPackage ./cc-wrapper/hardening.nix {
+    stdenv = gccStdenv;
+  });
+  hardeningFlags-clang = recurseIntoAttrs (callPackage ./cc-wrapper/hardening.nix {
+    stdenv = llvmPackages.stdenv;
+  });
+
   config = callPackage ./config.nix { };
+
+  top-level = callPackage ./top-level { };
 
   haskell = callPackage ./haskell { };
 
@@ -33,13 +108,18 @@ with pkgs;
   cc-multilib-clang = callPackage ./cc-wrapper/multilib.nix { stdenv = clangMultiStdenv; };
 
   fetchurl = callPackages ../build-support/fetchurl/tests.nix { };
+  fetchtorrent = callPackages ../build-support/fetchtorrent/tests.nix { };
   fetchpatch = callPackages ../build-support/fetchpatch/tests.nix { };
   fetchpatch2 = callPackages ../build-support/fetchpatch/tests.nix { fetchpatch = fetchpatch2; };
+  fetchDebianPatch = callPackages ../build-support/fetchdebianpatch/tests.nix { };
   fetchzip = callPackages ../build-support/fetchzip/tests.nix { };
   fetchgit = callPackages ../build-support/fetchgit/tests.nix { };
   fetchFirefoxAddon = callPackages ../build-support/fetchfirefoxaddon/tests.nix { };
+  fetchPypiLegacy = callPackages ../build-support/fetchpypilegacy/tests.nix { };
 
   install-shell-files = callPackage ./install-shell-files {};
+
+  checkpointBuildTools = callPackage ./checkpointBuild {};
 
   kernel-config = callPackage ./kernel.nix {};
 
@@ -47,11 +127,11 @@ with pkgs;
 
   macOSSierraShared = callPackage ./macos-sierra-shared {};
 
-  cross = callPackage ./cross {};
+  cross = callPackage ./cross {} // { __attrsFailEvaluation = true; };
 
   php = recurseIntoAttrs (callPackages ./php {});
 
-  pkg-config = recurseIntoAttrs (callPackage ../top-level/pkg-config/tests.nix { });
+  pkg-config = recurseIntoAttrs (callPackage ../top-level/pkg-config/tests.nix { }) // { __recurseIntoDerivationForReleaseJobs = true; };
 
   buildRustCrate = callPackage ../build-support/rust/build-rust-crate/test { };
   importCargoLock = callPackage ../build-support/rust/test/import-cargo-lock { };
@@ -66,15 +146,7 @@ with pkgs;
 
   cuda = callPackage ./cuda { };
 
-  trivial-builders = recurseIntoAttrs {
-    writeStringReferencesToFile = callPackage ../build-support/trivial-builders/test/writeStringReferencesToFile.nix {};
-    writeTextFile = callPackage ../build-support/trivial-builders/test/write-text-file.nix {};
-    writeShellScript = callPackage ../build-support/trivial-builders/test/write-shell-script.nix {};
-    references = callPackage ../build-support/trivial-builders/test/references.nix {};
-    overriding = callPackage ../build-support/trivial-builders/test-overriding.nix {};
-    concat = callPackage ../build-support/trivial-builders/test/concat-test.nix {};
-    linkFarm = callPackage ../build-support/trivial-builders/test/link-farm.nix {};
-  };
+  trivial-builders = callPackage ../build-support/trivial-builders/test/default.nix {};
 
   writers = callPackage ../build-support/writers/test.nix {};
 
@@ -101,4 +173,14 @@ with pkgs;
   };
 
   pkgs-lib = recurseIntoAttrs (import ../pkgs-lib/tests { inherit pkgs; });
+
+  buildFHSEnv = recurseIntoAttrs (callPackages ./buildFHSEnv { });
+
+  nixpkgs-check-by-name = throw "tests.nixpkgs-check-by-name is now specified in a separate repository: https://github.com/NixOS/nixpkgs-check-by-name";
+
+  auto-patchelf-hook = callPackage ./auto-patchelf-hook { };
+
+  systemd = callPackage ./systemd { };
+
+  substitute = recurseIntoAttrs (callPackage ./substitute { });
 }

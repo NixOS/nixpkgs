@@ -1,47 +1,56 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchPypi
-, jaraco_functools
-, jaraco_text
-, more-itertools
-, portend
-, pypytools
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
-, requests
-, requests-toolbelt
-, requests-unixsocket
-, setuptools-scm
-, setuptools-scm-git-archive
-, six
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchPypi,
+  jaraco-functools,
+  jaraco-text,
+  more-itertools,
+  portend,
+  pypytools,
+  pytest-mock,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  requests-toolbelt,
+  requests-unixsocket,
+  setuptools-scm,
+  six,
 }:
 
 buildPythonPackage rec {
   pname = "cheroot";
-  version = "9.0.0";
+  version = "10.0.1";
+  format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-PUetnuGey+wUS0dYOZA2aS/b9npAuW7vH7FFQ2ez0zg=";
+    hash = "sha256-4LgveXZY0muGE+yOtWPDsI5r1qeSHp1Qib0Rda0bF0A=";
   };
 
-  nativeBuildInputs = [
-    setuptools-scm
-    setuptools-scm-git-archive
-  ];
+  # remove setuptools-scm-git-archive dependency
+  # https://github.com/cherrypy/cheroot/commit/f0c51af263e20f332c6f675aa90ec6705ae4f5d1
+  # there is a difference between the github source and the pypi tarball source,
+  # and it is not easy to apply patches.
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace '"setuptools_scm_git_archive>=1.1",' ""
+    substituteInPlace setup.cfg \
+      --replace "setuptools_scm_git_archive>=1.0" ""
+  '';
+
+  nativeBuildInputs = [ setuptools-scm ];
 
   propagatedBuildInputs = [
-    jaraco_functools
+    jaraco-functools
     more-itertools
     six
   ];
 
   nativeCheckInputs = [
-    jaraco_text
+    jaraco-text
     portend
     pypytools
     pytest-mock
@@ -62,14 +71,16 @@ buildPythonPackage rec {
     rm pytest.ini
   '';
 
-  disabledTests = [
-    "tls" # touches network
-    "peercreds_unix_sock" # test urls no longer allowed
-  ] ++ lib.optionals stdenv.isDarwin [
-    "http_over_https_error"
-    "bind_addr_unix"
-    "test_ssl_env"
-  ];
+  disabledTests =
+    [
+      "tls" # touches network
+      "peercreds_unix_sock" # test urls no longer allowed
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      "http_over_https_error"
+      "bind_addr_unix"
+      "test_ssl_env"
+    ];
 
   disabledTestPaths = [
     # avoid attempting to use 3 packages not available on nixpkgs
@@ -79,15 +90,14 @@ buildPythonPackage rec {
     "cheroot/test/test_ssl.py"
   ];
 
-  pythonImportsCheck = [
-    "cheroot"
-  ];
+  pythonImportsCheck = [ "cheroot" ];
 
   # Some of the tests use localhost networking.
   __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
     description = "High-performance, pure-Python HTTP";
+    mainProgram = "cheroot";
     homepage = "https://github.com/cherrypy/cheroot";
     license = licenses.mit;
     maintainers = with maintainers; [ ];

@@ -1,13 +1,13 @@
-{ jdk8, jdk11, jdk17 }:
+{ jdk11, jdk17, jdk21 }:
 
 rec {
   gen =
 
-    { version, nativeVersion, sha256,
+    { version, nativeVersion, hash,
 
       # The default JDK/JRE that will be used for derived Gradle packages.
       # A current LTS version of a JDK is a good choice.
-      defaultJava ? jdk8,
+      defaultJava,
 
       # The platforms supported by this Gradle package.
       # Gradle Native-Platform ships some binaries that
@@ -26,22 +26,31 @@ rec {
       ]
     }:
 
-    { lib, stdenv, fetchurl, makeWrapper, unzip, ncurses5, ncurses6,
+    { lib
+    , stdenv
+    , fetchurl
+    , makeWrapper
+    , unzip
+    , ncurses5
+    , ncurses6
+    , testers
+    , runCommand
+    , writeText
 
-      # The JDK/JRE used for running Gradle.
-      java ? defaultJava,
+    # The JDK/JRE used for running Gradle.
+    , java ? defaultJava
 
-      # Additional JDK/JREs to be registered as toolchains.
-      # See https://docs.gradle.org/current/userguide/toolchains.html
-      javaToolchains ? [ ]
+    # Additional JDK/JREs to be registered as toolchains.
+    # See https://docs.gradle.org/current/userguide/toolchains.html
+    , javaToolchains ? [ ]
     }:
 
-    stdenv.mkDerivation rec {
+    stdenv.mkDerivation (finalAttrs: {
       pname = "gradle";
       inherit version;
 
       src = fetchurl {
-        inherit sha256;
+        inherit hash;
         url =
           "https://services.gradle.org/distributions/gradle-${version}-bin.zip";
       };
@@ -99,6 +108,29 @@ rec {
         echo ${ncurses6} >> $out/nix-support/manual-runtime-dependencies
       '';
 
+      passthru.tests = {
+        version = testers.testVersion {
+          package = finalAttrs.finalPackage;
+          command = ''
+            env GRADLE_USER_HOME=$TMPDIR/gradle org.gradle.native.dir=$TMPDIR/native \
+              gradle --version
+          '';
+        };
+
+        java-application = testers.testEqualContents {
+          assertion = "can build and run a trivial Java application";
+          expected = writeText "expected" "hello\n";
+          actual = runCommand "actual" {
+            nativeBuildInputs = [ finalAttrs.finalPackage ];
+            src = ./tests/java-application;
+          } ''
+            cp -a $src/* .
+            env GRADLE_USER_HOME=$TMPDIR/gradle org.gradle.native.dir=$TMPDIR/native \
+              gradle run --no-daemon --quiet --console plain > $out
+          '';
+        };
+      };
+
       meta = with lib; {
         inherit platforms;
         description = "Enterprise-grade build system";
@@ -119,31 +151,32 @@ rec {
         ];
         license = licenses.asl20;
         maintainers = with maintainers; [ lorenzleutgeb liff ];
+        mainProgram = "gradle";
       };
-    };
+    });
 
   # NOTE: Default JDKs that are hardcoded below must be LTS versions
   # and respect the compatibility matrix at
   # https://docs.gradle.org/current/userguide/compatibility.html
 
   gradle_8 = gen {
-    version = "8.0.1";
-    nativeVersion = "0.22-milestone-24";
-    sha256 = "02g9i1mrpdydj8d6395cv6a4ny9fw3z7sjzr7n6l6a9zx65masqv";
-    defaultJava = jdk17;
+    version = "8.8";
+    nativeVersion = "0.22-milestone-26";
+    hash = "sha256-pLQVhgH4Y2ze6rCb12r7ZAAwu1sUSq/iYaXorwJ9xhI=";
+    defaultJava = jdk21;
   };
 
   gradle_7 = gen {
-    version = "7.6.1";
-    nativeVersion = "0.22-milestone-24";
-    sha256 = "11qz1xjfihnlvsblqqnd49kmvjq86pzqcylj6k1zdvxl4dd60iv1";
+    version = "7.6.4";
+    nativeVersion = "0.22-milestone-25";
+    hash = "sha256-vtHaM8yg9VerE2kcd/OLtnOIEZ5HlNET4FEDm4Cvm7E=";
     defaultJava = jdk17;
   };
 
   gradle_6 = gen {
     version = "6.9.4";
     nativeVersion = "0.22-milestone-20";
-    sha256 = "16iqh4bn7ndch51h2lgkdqyyhnd91fdfjx55fa3z3scdacl0491y";
+    hash = "sha256-PiQCKFON6fGHcqV06ZoLqVnoPW7zUQFDgazZYxeBOJo=";
     defaultJava = jdk11;
   };
 }

@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "unpackerr";
-  version = "0.11.2";
+  version = "0.13.1";
 
   src = fetchFromGitHub {
     owner = "davidnewhall";
     repo = "unpackerr";
     rev = "v${version}";
-    sha256 = "sha256-Jxg1gaMTJ/BbL8TQfPcyt1hYnT/LcL4j+m+jSeh5QyA=";
+    sha256 = "sha256-K6ZDRDtxeqtjToElix1qVgclHaEeOY0W6hOwehFNIgo=";
   };
 
-  vendorHash = "sha256-yXFIBWOF72nXmT8+OSvF1aKBhCMBloLmGTfvNbV9ir4=";
+  vendorHash = "sha256-1OSZzs/hUvauRIE5lzlXPIS2EkHm4aNK1iddjKCb6zA=";
 
   buildInputs = lib.optionals stdenv.isDarwin [ Cocoa WebKit ];
 
@@ -22,5 +22,6 @@ buildGoModule rec {
     homepage = "https://github.com/davidnewhall/unpackerr";
     maintainers = with maintainers; [ nullx76 ];
     license = licenses.mit;
+    mainProgram = "unpackerr";
   };
 }

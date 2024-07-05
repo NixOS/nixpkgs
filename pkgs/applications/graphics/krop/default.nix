@@ -19,6 +19,7 @@ python3Packages.buildPythonApplication rec {
   ];
   buildInputs = [
     libsForQt5.poppler
+    libsForQt5.qtwayland
   ];
 
   nativeBuildInputs = [ qt5.wrapQtAppsHook ];
@@ -36,6 +37,7 @@ python3Packages.buildPythonApplication rec {
   meta = {
     homepage = "http://arminstraub.com/software/krop";
     description = "Graphical tool to crop the pages of PDF files";
+    mainProgram = "krop";
     longDescription = ''
     Krop is a tool that allows you to optimise your PDF files, and remove
     sections of the page you do not want.  A unique feature of krop, at least to my

@@ -1,13 +1,15 @@
 { config, pkgs, lib, ... }:
-with lib;
 
 let
+  inherit (lib) literalMD mkEnableOption mkIf mkOption types;
   cfg = config.services.quake3-server;
+
   configFile = pkgs.writeText "q3ds-extra.cfg" ''
     set net_port ${builtins.toString cfg.port}
 
     ${cfg.extraConfig}
   '';
+
   defaultBaseq3 = pkgs.requireFile rec {
     name = "baseq3";
     hashMode = "recursive";
@@ -25,6 +27,7 @@ let
       $services.quake3-server.baseq3/.q3a/
     '';
   };
+
   home = pkgs.runCommand "quake3-home" {} ''
       mkdir -p $out/.q3a/baseq3
 
@@ -37,12 +40,13 @@ let
 in {
   options = {
     services.quake3-server = {
-      enable = mkEnableOption (lib.mdDoc "Quake 3 dedicated server");
+      enable = mkEnableOption "Quake 3 dedicated server";
+      package = lib.mkPackageOption pkgs "ioquake3" { };
 
       port = mkOption {
         type = types.port;
         default = 27960;
-        description = lib.mdDoc ''
+        description = ''
           UDP Port the server should listen on.
         '';
       };
@@ -50,7 +54,7 @@ in {
       openFirewall = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Open the firewall.
         '';
       };
@@ -62,7 +66,7 @@ in {
           seta rconPassword "superSecret"      // sets RCON password for remote console
           seta sv_hostname "My Quake 3 server"      // name that appears in server list
         '';
-        description = lib.mdDoc ''
+        description = ''
           Extra configuration options. Note that options changed via RCON will not be persisted. To list all possible
           options, use "cvarlist 1" via RCON.
         '';
@@ -73,7 +77,7 @@ in {
         default = defaultBaseq3;
         defaultText = literalMD "Manually downloaded Quake 3 installation directory.";
         example = "/var/lib/q3ds";
-        description = lib.mdDoc ''
+        description = ''
           Path to the baseq3 files (pak*.pk3). If this is on the nix store (type = package) all .pk3 files should be saved
           in the top-level directory. If this is on another filesystem (e.g /var/lib/baseq3) the .pk3 files are searched in
           $baseq3/.q3a/baseq3/
@@ -103,10 +107,10 @@ in {
         ReadOnlyPaths = if baseq3InStore then home else cfg.baseq3;
         ExecStartPre = optionalString (!baseq3InStore) "+${pkgs.coreutils}/bin/cp ${configFile} ${cfg.baseq3}/.q3a/baseq3/nix.cfg";
 
-        ExecStart = "${pkgs.ioquake3}/ioq3ded.x86_64 +exec nix.cfg";
+        ExecStart = "${cfg.package}/bin/ioq3ded +exec nix.cfg";
       };
     };
   };
 
-  meta.maintainers = with maintainers; [ f4814n ];
+  meta.maintainers = with lib.maintainers; [ f4814n ];
 }

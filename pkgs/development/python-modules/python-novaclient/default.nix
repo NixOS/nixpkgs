@@ -1,30 +1,31 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, ddt
-, iso8601
-, keystoneauth1
-, openssl
-, oslo-i18n
-, oslo-serialization
-, pbr
-, prettytable
-, pythonOlder
-, requests-mock
-, stestr
-, testscenarios
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  ddt,
+  iso8601,
+  keystoneauth1,
+  openssl,
+  oslo-i18n,
+  oslo-serialization,
+  pbr,
+  prettytable,
+  pythonOlder,
+  requests-mock,
+  stestr,
+  testscenarios,
 }:
 
 buildPythonPackage rec {
   pname = "python-novaclient";
-  version = "18.3.0";
+  version = "18.6.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-UPdYfHorJSj3NQWBf5Q3rFwdBNV26b4mTS3u/9t0WnY=";
+    hash = "sha256-VzwQqkILCJjTX7FG7di7AFgGv/8BMa4rWjDKIqyJR3s=";
   };
 
   propagatedBuildInputs = [
@@ -46,6 +47,8 @@ buildPythonPackage rec {
 
   checkPhase = ''
     stestr run -e <(echo "
+    novaclient.tests.unit.test_shell.ParserTest.test_ambiguous_option
+    novaclient.tests.unit.test_shell.ParserTest.test_not_really_ambiguous_option
     novaclient.tests.unit.test_shell.ShellTest.test_osprofiler
     novaclient.tests.unit.test_shell.ShellTestKeystoneV3.test_osprofiler
     ")
@@ -55,6 +58,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Client library for OpenStack Compute API";
+    mainProgram = "nova";
     homepage = "https://github.com/openstack/python-novaclient";
     license = licenses.asl20;
     maintainers = teams.openstack.members;

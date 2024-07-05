@@ -29,11 +29,16 @@ stdenv.mkDerivation rec {
     tar -xzf ${modelData} -C $sourceRoot/data
   '';
 
+  strictDeps = true;
+
   nativeBuildInputs = [
     autoreconfHook
+    pkg-config
+  ];
+
+  buildInputs = [
     glib
     db
-    pkg-config
   ];
 
   meta = with lib; {

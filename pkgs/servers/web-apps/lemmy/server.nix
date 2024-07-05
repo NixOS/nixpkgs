@@ -6,6 +6,7 @@
 , postgresql
 , libiconv
 , Security
+, SystemConfiguration
 , protobuf
 , rustfmt
 , nixosTests
@@ -22,7 +23,7 @@ rustPlatform.buildRustPackage rec {
     owner = "LemmyNet";
     repo = "lemmy";
     rev = version;
-    sha256 = pinData.serverSha256;
+    hash = pinData.serverHash;
     fetchSubmodules = true;
   };
 
@@ -30,10 +31,10 @@ rustPlatform.buildRustPackage rec {
     echo 'pub const VERSION: &str = "${version}";' > crates/utils/src/version.rs
   '';
 
-  cargoSha256 = pinData.serverCargoSha256;
+  cargoHash = pinData.serverCargoHash;
 
   buildInputs = [ postgresql ]
-    ++ lib.optionals stdenv.isDarwin [ libiconv Security ];
+    ++ lib.optionals stdenv.isDarwin [ libiconv Security SystemConfiguration ];
 
   # Using OPENSSL_NO_VENDOR is not an option on darwin
   # As of version 0.10.35 rust-openssl looks for openssl on darwin
@@ -46,6 +47,11 @@ rustPlatform.buildRustPackage rec {
   PROTOC_INCLUDE = "${protobuf}/include";
   nativeBuildInputs = [ protobuf rustfmt ];
 
+  checkFlags = [
+    # test requires database access
+    "--skip=session_middleware::tests::test_session_auth"
+  ];
+
   passthru.updateScript = ./update.py;
   passthru.tests.lemmy-server = nixosTests.lemmy;
 
@@ -53,7 +59,7 @@ rustPlatform.buildRustPackage rec {
     description = "🐀 Building a federated alternative to reddit in rust";
     homepage = "https://join-lemmy.org/";
     license = licenses.agpl3Only;
-    maintainers = with maintainers; [ happysalada billewanick adisbladis ];
+    maintainers = with maintainers; [ happysalada billewanick ];
     mainProgram = "lemmy_server";
   };
 }

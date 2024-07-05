@@ -1,12 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pillow
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pillow,
 }:
 
 buildPythonPackage rec {
   pname = "colorthief";
   version = "0.2.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "fengsp";
@@ -15,9 +17,7 @@ buildPythonPackage rec {
     sha256 = "0lzpflal1iqbj4k7hayss5z024qf2sn8c3wxw03a0mgxg06ca2hm";
   };
 
-  propagatedBuildInputs = [
-    pillow
-  ];
+  propagatedBuildInputs = [ pillow ];
 
   # no tests implemented
   doCheck = false;

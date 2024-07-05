@@ -11,7 +11,6 @@
 , libxkbcommon
 , libGL
 , libX11
-, webkitgtk
  }:
 
 stdenv.mkDerivation rec {
@@ -48,7 +47,7 @@ stdenv.mkDerivation rec {
     description = "Freedesktop.org backend for WPE WebKit";
     license = licenses.bsd2;
     homepage = "https://wpewebkit.org";
-    maintainers = webkitgtk.meta.maintainers ++ (with maintainers; [ matthewbauer ]);
+    maintainers = with maintainers; [ matthewbauer ];
     platforms = platforms.linux;
   };
 }

@@ -19,7 +19,7 @@ buildGoModule rec {
     sha256 = "sha256-YXa4vErt3YnomTKAXCv8yUVhcc0ST47n9waW5E8QZzY=";
   };
 
-  vendorSha256 = "sha256-OL6I95IpyTIc8wCwD9nWxVUTrmZH6COhsd/YwNTyvN0=";
+  vendorHash = "sha256-OL6I95IpyTIc8wCwD9nWxVUTrmZH6COhsd/YwNTyvN0=";
 
   ldflags = [ "-s" "-w" ];
 
@@ -47,6 +47,7 @@ buildGoModule rec {
   meta = with lib; {
     homepage = "https://github.com/usbarmory/interlock";
     description = "File encryption tool and an HSM frontend";
+    mainProgram = "interlock";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
   };

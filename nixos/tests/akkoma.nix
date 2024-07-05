@@ -31,13 +31,13 @@ let
 
     export REQUESTS_CA_BUNDLE="/etc/ssl/certs/ca-certificates.crt"
 
-    echo '${userPassword}' | ${pkgs.toot}/bin/toot login_cli -i "akkoma.nixos.test" -e "jamy@nixos.test"
-    echo "y" | ${pkgs.toot}/bin/toot post "hello world Jamy here"
-    echo "y" | ${pkgs.toot}/bin/toot timeline | grep -F -q "hello world Jamy here"
+    ${pkgs.toot}/bin/toot login_cli -i "akkoma.nixos.test" -e "jamy@nixos.test" -p '${userPassword}'
+    ${pkgs.toot}/bin/toot post "hello world Jamy here"
+    ${pkgs.toot}/bin/toot timeline -1 | grep -F -q "hello world Jamy here"
 
     # Test file upload
     echo "y" | ${pkgs.toot}/bin/toot upload <(dd if=/dev/zero bs=1024 count=1024 status=none) \
-      | grep -F -q "https://akkoma.nixos.test/media"
+      | grep -F -q "https://akkoma.nixos.test:443/media"
   '';
 
   checkFe = pkgs.writers.writeBashBin "checkFe" ''
@@ -90,6 +90,9 @@ in
 
             "Pleroma.Web.Endpoint" = {
               url.host = "akkoma.nixos.test";
+            };
+            "Pleroma.Upload" = {
+              base_url = "https://akkoma.nixos.test:443/media/";
             };
           };
         };

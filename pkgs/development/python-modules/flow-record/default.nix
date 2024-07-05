@@ -1,73 +1,60 @@
-{ lib
-, buildPythonPackage
-, elasticsearch
-, fastavro
-, fetchFromGitHub
-, lz4
-, msgpack
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, setuptools-scm
-, wheel
-, zstandard
+{
+  lib,
+  buildPythonPackage,
+  elasticsearch,
+  fastavro,
+  fetchFromGitHub,
+  lz4,
+  msgpack,
+  pytest7CheckHook,
+  pythonOlder,
+  setuptools,
+  setuptools-scm,
+  zstandard,
 }:
 
 buildPythonPackage rec {
   pname = "flow-record";
-  version = "3.10";
-  format = "pyproject";
+  version = "3.15";
+  pyproject = true;
 
-  disabled = pythonOlder "3.10";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "flow.record";
     rev = "refs/tags/${version}";
-    hash = "sha256-pOEK53+rIwzTxDEla1xoWo/xgy+eN0nxR0MeW7VQFds=";
+    hash = "sha256-j5N66p7feB9Ae+Fu5RhVzh8XCHiq55jJMg0Fe+C6Jvg=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
-    wheel
   ];
 
-  propagatedBuildInputs = [
-    msgpack
-  ];
+  dependencies = [ msgpack ];
 
   passthru.optional-dependencies = {
     compression = [
       lz4
       zstandard
     ];
-    elastic = [
-      elasticsearch
-    ];
-    avro = [
-      fastavro
-    ] ++ fastavro.optional-dependencies.snappy;
+    elastic = [ elasticsearch ];
+    avro = [ fastavro ] ++ fastavro.optional-dependencies.snappy;
   };
 
   nativeCheckInputs = [
-    pytestCheckHook
+    pytest7CheckHook
   ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
-  pythonImportsCheck = [
-    "flow.record"
-  ];
+  pythonImportsCheck = [ "flow.record" ];
 
   disabledTestPaths = [
     # Test requires rdump
     "tests/test_rdump.py"
   ];
 
-  disabledTests = [
-    "test_rdump_fieldtype_path_json"
-  ];
+  disabledTests = [ "test_rdump_fieldtype_path_json" ];
 
   meta = with lib; {
     description = "Library for defining and creating structured data";

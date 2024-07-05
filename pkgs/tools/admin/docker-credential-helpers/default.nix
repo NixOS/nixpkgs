@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "docker-credential-helpers";
-  version = "0.7.0";
+  version = "0.8.2";
 
   src = fetchFromGitHub {
     owner = "docker";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-KtDWrtd88s4Al3iWxIYE+YlhZTzf8/YDVYE2AwxH8ho=";
+    sha256 = "sha256-LFXSfb4JnlacSZVnIf+5/A+KefARYadEGDzGtcSDJBw=";
   };
 
-  vendorSha256 = null;
+  vendorHash = null;
 
   nativeBuildInputs = lib.optionals stdenv.isLinux [ pkg-config ];
 
@@ -46,7 +46,7 @@ buildGoModule rec {
     description = "Suite of programs to use native stores to keep Docker credentials safe";
     homepage = "https://github.com/docker/docker-credential-helpers";
     license = licenses.mit;
-    maintainers = with maintainers; [ marsam ];
+    maintainers = with maintainers; [ ];
   } // lib.optionalAttrs stdenv.isDarwin {
     mainProgram = "docker-credential-osxkeychain";
   };

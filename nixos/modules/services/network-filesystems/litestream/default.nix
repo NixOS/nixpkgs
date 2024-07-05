@@ -8,17 +8,12 @@ let
 in
 {
   options.services.litestream = {
-    enable = mkEnableOption (lib.mdDoc "litestream");
+    enable = mkEnableOption "litestream";
 
-    package = mkOption {
-      description = lib.mdDoc "Package to use.";
-      default = pkgs.litestream;
-      defaultText = literalExpression "pkgs.litestream";
-      type = types.package;
-    };
+    package = mkPackageOption pkgs "litestream" { };
 
     settings = mkOption {
-      description = lib.mdDoc ''
+      description = ''
         See the [documentation](https://litestream.io/reference/config/).
       '';
       type = settingsFormat.type;
@@ -40,7 +35,7 @@ in
       type = types.nullOr types.path;
       default = null;
       example = "/run/secrets/litestream";
-      description = lib.mdDoc ''
+      description = ''
         Environment file as defined in {manpage}`systemd.exec(5)`.
 
         Secrets may be passed to the service without adding them to the

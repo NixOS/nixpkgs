@@ -1,15 +1,16 @@
-{ lib
-, buildPythonPackage
-, docopt
-, fetchFromGitHub
-, jdk11
-, psutil
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  docopt,
+  fetchFromGitHub,
+  jdk11,
+  psutil,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "adb-enhanced";
-  version = "2.5.21";
+  version = "2.5.24";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -18,7 +19,7 @@ buildPythonPackage rec {
     owner = "ashishb";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-kisP2RXpQa5uc53M3wcqN+1xgE/MGa2dVYzHnr1dgX8=";
+    hash = "sha256-0HxeL6VGM+HTiAxs3NFRcEFbmH9q+0/pJdGyF1hl4hU=";
   };
 
   propagatedBuildInputs = [
@@ -34,9 +35,7 @@ buildPythonPackage rec {
   # Disable tests because they require a dedicated Android emulator
   doCheck = false;
 
-  pythonImportsCheck = [
-    "adbe"
-  ];
+  pythonImportsCheck = [ "adbe" ];
 
   meta = with lib; {
     description = "Tool for Android testing and development";

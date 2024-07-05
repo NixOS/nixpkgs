@@ -1,18 +1,20 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, ipython
-, u-msgpack-python
-, numpy
-, tornado
-, pyzmq
-, pyngrok
-, pillow
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  ipython,
+  u-msgpack-python,
+  numpy,
+  tornado,
+  pyzmq,
+  pyngrok,
+  pillow,
 }:
 
 buildPythonPackage rec {
   pname = "meshcat";
   version = "0.3.2";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -41,6 +43,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://github.com/rdeits/meshcat-python";
     description = "WebGL-based 3D visualizer for Python";
+    mainProgram = "meshcat-server";
     license = licenses.mit;
     maintainers = with maintainers; [ wegank ];
   };

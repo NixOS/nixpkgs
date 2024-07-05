@@ -1,6 +1,12 @@
-{ gccStdenv, lib, git, openssl, autoconf, pkgs, makeStaticLibraries, gcc, coreutils, gnused, gnugrep,
+{ gccStdenv, lib, pkgs,
+  git, openssl, autoconf, gcc, coreutils, gnused, gnugrep,
+  makeStaticLibraries,
   src, version, git-version,
-  gambit-support, optimizationSetting ? "-O1", gambit-params ? pkgs.gambit-support.stable-params }:
+  stampYmd ? 0, stampHms ? 0,
+  gambit-support,
+  optimizationSetting ? "-O1",
+  gambit-params ? pkgs.gambit-support.stable-params,
+  rev ? git-version }:
 
 # Note that according to a benchmark run by Marc Feeley on May 2018,
 # clang is 10x (with default settings) to 15% (with -O2) slower than GCC at compiling
@@ -25,7 +31,13 @@ gccStdenv.mkDerivation rec {
   inherit src version git-version;
   bootstrap = gambit-support.gambit-bootstrap;
 
+  passthru = {
+    inherit src version git-version rev stampYmd stampHms optimizationSetting openssl;
+  };
+
+
   nativeBuildInputs = [ git autoconf ];
+
   # TODO: if/when we can get all the library packages we depend on to have static versions,
   # we could use something like (makeStaticLibraries openssl) to enable creation
   # of statically linked binaries by gsc.
@@ -39,11 +51,16 @@ gccStdenv.mkDerivation rec {
     "--enable-targets=${gambit-params.targets}"
     "--enable-single-host"
     "--enable-c-opt=${optimizationSetting}"
+    "--enable-c-opt-rts=-O2"
     "--enable-gcc-opts"
+    "--enable-trust-c-tco"
     "--enable-shared"
     "--enable-absolute-shared-libs" # Yes, NixOS will want an absolute path, and fix it.
     "--enable-openssl"
+    "--enable-dynamic-clib"
+    #"--enable-default-compile-options='(compactness 9)'" # Make life easier on the JS backend
     "--enable-default-runtime-options=${gambit-params.defaultRuntimeOptions}"
+    # "--enable-rtlib-debug" # used by Geiser, but only on recent-enough gambit, and messes js runtime
     # "--enable-debug" # Nope: enables plenty of good stuff, but also the costly console.log
     # "--enable-multiple-versions" # Nope, NixOS already does version multiplexing
     # "--enable-guide"
@@ -58,9 +75,13 @@ gccStdenv.mkDerivation rec {
     # "--enable-coverage"
     # "--enable-inline-jumps"
     # "--enable-char-size=1" # default is 4
-  ] ++
-    # due not enable poll on darwin due to https://github.com/gambit/gambit/issues/498
-    lib.optional (!gccStdenv.isDarwin) "--enable-poll";
+    # "--enable-march=native" # Nope, makes it not work on machines older than the builder
+  ] ++ gambit-params.extraOptions
+    # TODO: pick an appropriate architecture to optimize on on x86-64?
+    # https://gcc.gnu.org/onlinedocs/gcc-4.8.4/gcc/i386-and-x86-64-Options.html#i386-and-x86-64-Options
+    # ++ lib.optional pkgs.stdenv.isx86_64 "--enable-march=core-avx2"
+    # Do not enable poll on darwin due to https://github.com/gambit/gambit/issues/498
+    ++ lib.optional (!gccStdenv.isDarwin) "--enable-poll";
 
   configurePhase = ''
     export CC=${gccStdenv.cc}/bin/${gccStdenv.cc.targetPrefix}gcc \
@@ -71,31 +92,35 @@ gccStdenv.mkDerivation rec {
            XMKMF=${coreutils}/bin/false
     unset CFLAGS LDFLAGS LIBS CPPFLAGS CXXFLAGS
 
-    ${gambit-params.fix-stamp git-version}
+    ${gambit-params.fixStamp git-version stampYmd stampHms}
 
     ./configure --prefix=$out/gambit ${builtins.concatStringsSep " " configureFlags}
 
     # OS-specific paths are hardcoded in ./configure
     substituteInPlace config.status \
-      --replace "/usr/local/opt/openssl@1.1" "${lib.getLib openssl}" \
-      --replace "/usr/local/opt/openssl" "${lib.getLib openssl}"
+      ${lib.optionalString (gccStdenv.isDarwin && !gambit-params.stable)
+         ''--replace "/usr/local/opt/openssl@1.1" "${lib.getLib openssl}"''} \
+        --replace "/usr/local/opt/openssl" "${lib.getLib openssl}"
 
     ./config.status
   '';
 
   buildPhase = ''
-    # Make bootstrap compiler, from release bootstrap
+    # The MAKEFLAGS setting is a workaround for https://github.com/gambit/gambit/issues/833
+    export MAKEFLAGS="--output-sync=recurse"
+    echo "Make bootstrap compiler, from release bootstrap"
     mkdir -p boot
     cp -rp ${bootstrap}/gambit/. boot/.
     chmod -R u+w boot
     cd boot
     cp ../gsc/makefile.in ../gsc/*.scm gsc/
+    echo > include/stamp.h # No stamp needed for the bootstrap compiler
     ./configure
     for i in lib gsi gsc ; do (cd $i ; make -j$NIX_BUILD_CORES) ; done
     cd ..
     cp boot/gsc/gsc gsc-boot
 
-    # Now use the bootstrap compiler to build the real thing!
+    echo "Now use the bootstrap compiler to build the real thing!"
     make -j$NIX_BUILD_CORES from-scratch
     ${lib.optionalString gambit-params.modules "make -j$NIX_BUILD_CORES modules"}
   '';
@@ -107,6 +132,7 @@ gccStdenv.mkDerivation rec {
   '';
 
   doCheck = true;
+  dontStrip = true;
 
   meta = gambit-support.meta;
 }

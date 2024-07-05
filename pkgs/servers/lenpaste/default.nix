@@ -12,7 +12,7 @@ buildGoModule rec {
     sha256 = "sha256-d+FjfEbInlxUllWIoVLwQRdRWjxBLTpNHYn+oYU3fBc=";
   };
 
-  vendorSha256 = "sha256-PL0dysBn1+1BpZWFW/EUFJtqkabt+XN00YkAz8Yf2LQ=";
+  vendorHash = "sha256-PL0dysBn1+1BpZWFW/EUFJtqkabt+XN00YkAz8Yf2LQ=";
 
   ldflags = [
     "-w"
@@ -27,9 +27,10 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    description = "A web service that allows you to share notes anonymously, an alternative to pastebin.com";
+    description = "Web service that allows you to share notes anonymously, an alternative to pastebin.com";
     homepage = "https://git.lcomrade.su/root/lenpaste";
     license = licenses.agpl3Plus;
     maintainers = with maintainers; [ vector1dev ];
+    mainProgram = "lenpaste";
   };
 }

@@ -37,5 +37,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     maintainers = [ maintainers.marcweber ];
     platforms = platforms.linux;
+    mainProgram = "alchemy";
   };
 }

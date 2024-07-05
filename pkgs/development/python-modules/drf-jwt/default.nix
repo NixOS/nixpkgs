@@ -1,13 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pyjwt
-, djangorestframework
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pyjwt,
+  djangorestframework,
 }:
 
 buildPythonPackage rec {
   pname = "drf-jwt";
   version = "1.19.2";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "Styria-Digital";
@@ -19,8 +21,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     pyjwt
     djangorestframework
-  ]
-  ++ pyjwt.optional-dependencies.crypto;
+  ] ++ pyjwt.optional-dependencies.crypto;
 
   # requires setting up a django instance
   doCheck = false;

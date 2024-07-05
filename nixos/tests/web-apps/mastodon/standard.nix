@@ -34,17 +34,15 @@ in
         pki.certificateFiles = [ "${cert pkgs}/cert.pem" ];
       };
 
-      services.redis.servers.mastodon = {
-        enable = true;
-        bind = "127.0.0.1";
-        port = 31637;
-      };
+      # TODO remove once https://github.com/NixOS/nixpkgs/pull/266270 is resolved.
+      services.postgresql.package = pkgs.postgresql_14;
 
       services.mastodon = {
         enable = true;
         configureNginx = true;
         localDomain = "mastodon.local";
         enableUnixSocket = false;
+        streamingProcesses = 2;
         smtp = {
           createLocally = false;
           fromAddress = "mastodon@mastodon.local";
@@ -85,6 +83,7 @@ in
     extraInit = ''
       server.wait_for_unit("nginx.service")
       server.wait_for_open_port(443)
+      server.wait_for_unit("redis-mastodon.service")
       server.wait_for_unit("postgresql.service")
       server.wait_for_open_port(5432)
     '';

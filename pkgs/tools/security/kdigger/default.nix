@@ -23,7 +23,7 @@ buildGoModule rec {
       find "$out" -name .git -print0 | xargs -0 rm -rf
     '';
   };
-  vendorSha256 = "sha256-rDJFowbOj77n/sBoDgFEF+2PgghxufvIgzbMqrHehws=";
+  vendorHash = "sha256-rDJFowbOj77n/sBoDgFEF+2PgghxufvIgzbMqrHehws=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -60,7 +60,8 @@ buildGoModule rec {
   meta = with lib; {
     homepage = "https://github.com/quarkslab/kdigger";
     changelog = "https://github.com/quarkslab/kdigger/releases/tag/v${version}";
-    description = "An in-pod context discovery tool for Kubernetes penetration testing";
+    description = "In-pod context discovery tool for Kubernetes penetration testing";
+    mainProgram = "kdigger";
     longDescription = ''
       kdigger, short for "Kubernetes digger", is a context discovery tool for
       Kubernetes penetration testing. This tool is a compilation of various

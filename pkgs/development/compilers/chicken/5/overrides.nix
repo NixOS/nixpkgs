@@ -36,11 +36,30 @@ in
     // (addToPropagatedBuildInputs (with chickenEggs; [ srfi-1 srfi-13 ]) old);
   cmark = addToBuildInputs pkgs.cmark;
   dbus = addToBuildInputsWithPkgConfig pkgs.dbus;
-  epoxy = addToPropagatedBuildInputsWithPkgConfig pkgs.libepoxy;
+  epoxy = old:
+    (addToPropagatedBuildInputsWithPkgConfig pkgs.libepoxy old)
+    // lib.optionalAttrs stdenv.cc.isClang {
+      env.NIX_CFLAGS_COMPILE = toString [
+        "-Wno-error=incompatible-function-pointer-types"
+        "-Wno-error=int-conversion"
+      ];
+    };
   espeak = addToBuildInputsWithPkgConfig pkgs.espeak-ng;
   exif = addToBuildInputsWithPkgConfig pkgs.libexif;
-  expat = addToBuildInputsWithPkgConfig pkgs.expat;
-  ezxdisp = addToBuildInputsWithPkgConfig pkgs.xorg.libX11;
+  expat = old:
+    (addToBuildInputsWithPkgConfig pkgs.expat old)
+    // lib.optionalAttrs stdenv.cc.isClang {
+      env.NIX_CFLAGS_COMPILE = toString [
+        "-Wno-error=incompatible-function-pointer-types"
+      ];
+    };
+  ezxdisp = old:
+    (addToBuildInputsWithPkgConfig pkgs.xorg.libX11 old)
+    // lib.optionalAttrs stdenv.cc.isClang {
+      env.NIX_CFLAGS_COMPILE = toString [
+        "-Wno-error=implicit-function-declaration"
+      ];
+    };
   freetype = addToBuildInputsWithPkgConfig pkgs.freetype;
   fuse = addToBuildInputsWithPkgConfig pkgs.fuse;
   gl-utils = addPkgConfig;
@@ -54,7 +73,17 @@ in
     // lib.optionalAttrs stdenv.isDarwin (addToCscOptions "-L -linotify" old);
   leveldb = addToBuildInputs pkgs.leveldb;
   magic = addToBuildInputs pkgs.file;
-  mdh = addToBuildInputs pkgs.pcre;
+  mdh = old:
+    (addToBuildInputs pkgs.pcre old)
+    // lib.optionalAttrs stdenv.cc.isClang {
+      env.NIX_CFLAGS_COMPILE = toString [
+        "-Wno-error=implicit-function-declaration"
+        "-Wno-error=implicit-int"
+      ];
+    };
+  # missing dependency in upstream egg
+  mistie = addToPropagatedBuildInputs (with chickenEggs; [ srfi-1 ]);
+  mosquitto = addToPropagatedBuildInputs ([ pkgs.mosquitto ]);
   nanomsg = addToBuildInputs pkgs.nanomsg;
   ncurses = addToBuildInputsWithPkgConfig [ pkgs.ncurses ];
   opencl = addToBuildInputs ([ pkgs.opencl-headers pkgs.ocl-icd ]
@@ -62,14 +91,26 @@ in
   openssl = addToBuildInputs pkgs.openssl;
   plot = addToBuildInputs pkgs.plotutils;
   postgresql = addToBuildInputsWithPkgConfig pkgs.postgresql;
-  rocksdb = addToBuildInputs pkgs.rocksdb;
+  rocksdb = addToBuildInputs pkgs.rocksdb_8_3;
   scheme2c-compatibility = old:
     addToNativeBuildInputs (lib.optionals (stdenv.system == "x86_64-darwin") [ pkgs.memorymappingHook ])
       (addPkgConfig old);
-  sdl-base = addToBuildInputs pkgs.SDL;
-  sdl2 = addToPropagatedBuildInputsWithPkgConfig pkgs.SDL2;
-  sdl2-image = addToBuildInputs pkgs.SDL2_image;
-  sdl2-ttf = addToBuildInputs pkgs.SDL2_ttf;
+  sdl-base = old:
+    ((addToPropagatedBuildInputsWithPkgConfig pkgs.SDL old) //
+      # needed for sdl-config to be in PATH
+      (addToNativeBuildInputs pkgs.SDL old));
+  sdl2 = old:
+    ((addToPropagatedBuildInputsWithPkgConfig pkgs.SDL2 old) //
+      # needed for sdl2-config to be in PATH
+      (addToNativeBuildInputs pkgs.SDL2 old));
+  sdl2-image = old:
+    ((addToPropagatedBuildInputsWithPkgConfig pkgs.SDL2_image old) //
+      # needed for sdl2-config to be in PATH
+      (addToNativeBuildInputs pkgs.SDL2 old));
+  sdl2-ttf = old:
+    ((addToPropagatedBuildInputsWithPkgConfig pkgs.SDL2_ttf old) //
+      # needed for sdl2-config to be in PATH
+      (addToNativeBuildInputs pkgs.SDL2 old));
   soil = addToPropagatedBuildInputsWithPkgConfig pkgs.libepoxy;
   sqlite3 = addToBuildInputs pkgs.sqlite;
   stemmer = old:
@@ -78,7 +119,10 @@ in
   stfl = old:
     (addToBuildInputs [ pkgs.ncurses pkgs.stfl ] old)
     // (addToCscOptions "-L -lncurses" old);
-  taglib = addToBuildInputs [ pkgs.zlib pkgs.taglib ];
+  taglib = old:
+    (addToBuildInputs [ pkgs.zlib pkgs.taglib ] old) // (
+      # needed for tablib-config to be in PATH
+      addToNativeBuildInputs pkgs.taglib old);
   uuid-lib = addToBuildInputs pkgs.libuuid;
   ws-client = addToBuildInputs pkgs.zlib;
   xlib = addToPropagatedBuildInputs pkgs.xorg.libX11;

@@ -1,36 +1,40 @@
-{ lib
-, babel
-, buildPythonPackage
-, cssselect
-, fetchFromGitHub
-, glibcLocales
-, isodate
-, leather
-, lxml
-, nose
-, parsedatetime
-, pyicu
-, python-slugify
-, pytimeparse
-, pythonOlder
-, pytz
+{
+  lib,
+  babel,
+  buildPythonPackage,
+  cssselect,
+  fetchFromGitHub,
+  glibcLocales,
+  isodate,
+  leather,
+  lxml,
+  parsedatetime,
+  pyicu,
+  pynose,
+  python-slugify,
+  pythonOlder,
+  pytimeparse,
+  pytz,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "agate";
-  version = "1.7.1";
-  format = "setuptools";
+  version = "1.9.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "wireservice";
-    repo = pname;
+    repo = "agate";
     rev = "refs/tags/${version}";
-    hash = "sha256-7Ew9bgeheymCL8xXSW5li0LdFvGYb/7gPxmC4w6tHvM=";
+    hash = "sha256-I7jvZA/m06kUuUcfglySaroDbJ5wbgiF2lb84EFPmpw=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     babel
     isodate
     leather
@@ -43,7 +47,7 @@ buildPythonPackage rec {
     cssselect
     glibcLocales
     lxml
-    nose
+    pynose
     pyicu
     pytz
   ];
@@ -52,9 +56,7 @@ buildPythonPackage rec {
     LC_ALL="en_US.UTF-8" nosetests tests
   '';
 
-  pythonImportsCheck = [
-    "agate"
-  ];
+  pythonImportsCheck = [ "agate" ];
 
   meta = with lib; {
     description = "Python data analysis library that is optimized for humans instead of machines";

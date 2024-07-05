@@ -1,15 +1,15 @@
 { buildGoModule, fetchFromGitHub, lib, symlinkJoin }:
 let
-  generic = { modRoot, vendorSha256 }:
+  generic = { modRoot, vendorHash }:
     buildGoModule rec {
       pname = "bird-lg-${modRoot}";
-      version = "1.3.1";
+      version = "1.3.5";
 
       src = fetchFromGitHub {
         owner = "xddxdd";
         repo = "bird-lg-go";
         rev = "v${version}";
-        hash = "sha256-ROMwgsKroxd9qkKX8ZoOuazBrnZytcTAPT9hR/v6a04=";
+        hash = "sha256-lWpTIuN+wCSDBHmpRIfVG8Z1Qx1s55MnJomQPjczB5k=";
       };
 
       doDist = false;
@@ -19,7 +19,7 @@ let
         "-w"
       ];
 
-      inherit modRoot vendorSha256;
+      inherit modRoot vendorHash;
 
       meta = with lib; {
         description = "Bird Looking Glass";
@@ -35,12 +35,12 @@ let
 
   bird-lg-frontend = generic {
     modRoot = "frontend";
-    vendorSha256 = "sha256-yyH6McVzU0Qiod3yP5pGlF36fJQlf4g52wfDAem6KWs=";
+    vendorHash = "sha256-+M9Mlqck2E/ETW+NXsKwIeWlmZAaBU07fgDhKUU9PAI=";
   };
 
   bird-lg-proxy = generic {
     modRoot = "proxy";
-    vendorSha256 = "sha256-JfHvDIVKQ7jdPocuh6AOwSQmP+a0/hXYrt5Ap/pEjug=";
+    vendorHash = "sha256-nBTLQUX68f98D0RTlyX0gnvhQ+bu8d3Vv67J/YoXJxs=";
   };
 in
 symlinkJoin {

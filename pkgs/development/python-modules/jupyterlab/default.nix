@@ -1,58 +1,54 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, ipython
-, packaging
-, tornado
-, jupyter-core
-, jupyterlab_server
-, jupyter-server
-, jupyter-server-ydoc
-, notebook
-, jinja2
-, tomli
-, pythonOlder
-, jupyter-packaging
-, pythonRelaxDepsHook
-, nbclassic
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  hatch-jupyter-builder,
+  hatchling,
+  async-lru,
+  httpx,
+  packaging,
+  tornado,
+  ipykernel,
+  jupyter-core,
+  jupyter-lsp,
+  jupyterlab-server,
+  jupyter-server,
+  notebook-shim,
+  jinja2,
+  tomli,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "jupyterlab";
-  version = "3.6.3";
-  format = "setuptools";
+  version = "4.2.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Nz6c+4py7dKUvhTxZmJWOiIM7PD7Jt56qxr5optom4I=";
+    hash = "sha256-oQ+3EIWmkAggxi1DMkAFBGQC/8jw/eaWED43I4qDlQc=";
   };
 
-  nativeBuildInputs = [
-    jupyter-packaging
-    pythonRelaxDepsHook
+  build-system = [
+    hatch-jupyter-builder
+    hatchling
   ];
 
-  pythonRelaxDeps = [
-    "jupyter-ydoc"
-    "jupyter-server-ydoc"
-  ];
-
-  propagatedBuildInputs = [
-    ipython
+  dependencies = [
+    async-lru
+    httpx
     packaging
     tornado
+    ipykernel
     jupyter-core
-    jupyterlab_server
+    jupyter-lsp
+    jupyterlab-server
     jupyter-server
-    jupyter-server-ydoc
-    nbclassic
-    notebook
+    notebook-shim
     jinja2
-  ] ++ lib.optionals (pythonOlder "3.11") [
-    tomli
-  ];
+  ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
   makeWrapperArgs = [
     "--set"
@@ -63,15 +59,14 @@ buildPythonPackage rec {
   # Depends on npm
   doCheck = false;
 
-  pythonImportsCheck = [
-    "jupyterlab"
-  ];
+  pythonImportsCheck = [ "jupyterlab" ];
 
   meta = with lib; {
-    changelog = "https://github.com/jupyterlab/jupyterlab/releases/tag/v${version}";
+    changelog = "https://github.com/jupyterlab/jupyterlab/blob/v${version}/CHANGELOG.md";
     description = "Jupyter lab environment notebook server extension";
-    license = with licenses; [ bsd3 ];
+    license = licenses.bsd3;
     homepage = "https://jupyter.org/";
-    maintainers = with maintainers; [ zimbatm costrouc ];
+    maintainers = lib.teams.jupyter.members;
+    mainProgram = "jupyter-lab";
   };
 }

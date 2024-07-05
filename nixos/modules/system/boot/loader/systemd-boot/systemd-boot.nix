@@ -7,70 +7,100 @@ let
 
   efi = config.boot.loader.efi;
 
-  python3 = pkgs.python3.withPackages (ps: [ ps.packaging ]);
-
-  systemdBootBuilder = pkgs.substituteAll {
-    src = ./systemd-boot-builder.py;
-
-    isExecutable = true;
-
-    inherit python3;
-
-    systemd = config.systemd.package;
-
-    nix = config.nix.package.out;
-
-    timeout = optionalString (config.boot.loader.timeout != null) config.boot.loader.timeout;
-
-    editor = if cfg.editor then "True" else "False";
-
-    configurationLimit = if cfg.configurationLimit == null then 0 else cfg.configurationLimit;
-
-    inherit (cfg) consoleMode graceful;
-
-    inherit (efi) efiSysMountPoint canTouchEfiVariables;
-
-    inherit (config.system.nixos) distroName;
-
-    memtest86 = optionalString cfg.memtest86.enable pkgs.memtest86-efi;
-
-    netbootxyz = optionalString cfg.netbootxyz.enable pkgs.netbootxyz-efi;
-
-    copyExtraFiles = pkgs.writeShellScript "copy-extra-files" ''
-      empty_file=$(${pkgs.coreutils}/bin/mktemp)
-
-      ${concatStrings (mapAttrsToList (n: v: ''
-        ${pkgs.coreutils}/bin/install -Dp "${v}" "${efi.efiSysMountPoint}/"${escapeShellArg n}
-        ${pkgs.coreutils}/bin/install -D $empty_file "${efi.efiSysMountPoint}/efi/nixos/.extra-files/"${escapeShellArg n}
-      '') cfg.extraFiles)}
-
-      ${concatStrings (mapAttrsToList (n: v: ''
-        ${pkgs.coreutils}/bin/install -Dp "${pkgs.writeText n v}" "${efi.efiSysMountPoint}/loader/entries/"${escapeShellArg n}
-        ${pkgs.coreutils}/bin/install -D $empty_file "${efi.efiSysMountPoint}/efi/nixos/.extra-files/loader/entries/"${escapeShellArg n}
-      '') cfg.extraEntries)}
-    '';
-  };
-
-  checkedSystemdBootBuilder = pkgs.runCommand "systemd-boot" {
-    nativeBuildInputs = [ pkgs.mypy python3 ];
+  # We check the source code in a derivation that does not depend on the
+  # system configuration so that most users don't have to redo the check and require
+  # the necessary dependencies.
+  checkedSource = pkgs.runCommand "systemd-boot" {
+    preferLocalBuild = true;
   } ''
-    install -m755 ${systemdBootBuilder} $out
-    mypy \
+    install -m755 -D ${./systemd-boot-builder.py} $out
+    ${lib.getExe pkgs.buildPackages.mypy} \
       --no-implicit-optional \
       --disallow-untyped-calls \
       --disallow-untyped-defs \
       $out
   '';
 
+  systemdBootBuilder = pkgs.substituteAll rec {
+    src = checkedSource;
+
+    isExecutable = true;
+
+    inherit (pkgs) python3;
+
+    systemd = config.systemd.package;
+
+    bootspecTools = pkgs.bootspec;
+
+    nix = config.nix.package.out;
+
+    timeout = optionalString (config.boot.loader.timeout != null) config.boot.loader.timeout;
+
+    configurationLimit = if cfg.configurationLimit == null then 0 else cfg.configurationLimit;
+
+    inherit (cfg) consoleMode graceful editor;
+
+    inherit (efi) efiSysMountPoint canTouchEfiVariables;
+
+    bootMountPoint = if cfg.xbootldrMountPoint != null
+      then cfg.xbootldrMountPoint
+      else efi.efiSysMountPoint;
+
+    nixosDir = "/EFI/nixos";
+
+    inherit (config.system.nixos) distroName;
+
+    memtest86 = optionalString cfg.memtest86.enable pkgs.memtest86plus;
+
+    netbootxyz = optionalString cfg.netbootxyz.enable pkgs.netbootxyz-efi;
+
+    checkMountpoints = pkgs.writeShellScript "check-mountpoints" ''
+      fail() {
+        echo "$1 = '$2' is not a mounted partition. Is the path configured correctly?" >&2
+        exit 1
+      }
+      ${pkgs.util-linuxMinimal}/bin/findmnt ${efiSysMountPoint} > /dev/null || fail efiSysMountPoint ${efiSysMountPoint}
+      ${lib.optionalString
+        (cfg.xbootldrMountPoint != null)
+        "${pkgs.util-linuxMinimal}/bin/findmnt ${cfg.xbootldrMountPoint} > /dev/null || fail xbootldrMountPoint ${cfg.xbootldrMountPoint}"}
+    '';
+
+    copyExtraFiles = pkgs.writeShellScript "copy-extra-files" ''
+      empty_file=$(${pkgs.coreutils}/bin/mktemp)
+
+      ${concatStrings (mapAttrsToList (n: v: ''
+        ${pkgs.coreutils}/bin/install -Dp "${v}" "${bootMountPoint}/"${escapeShellArg n}
+        ${pkgs.coreutils}/bin/install -D $empty_file "${bootMountPoint}/${nixosDir}/.extra-files/"${escapeShellArg n}
+      '') cfg.extraFiles)}
+
+      ${concatStrings (mapAttrsToList (n: v: ''
+        ${pkgs.coreutils}/bin/install -Dp "${pkgs.writeText n v}" "${bootMountPoint}/loader/entries/"${escapeShellArg n}
+        ${pkgs.coreutils}/bin/install -D $empty_file "${bootMountPoint}/${nixosDir}/.extra-files/loader/entries/"${escapeShellArg n}
+      '') cfg.extraEntries)}
+    '';
+  };
+
   finalSystemdBootBuilder = pkgs.writeScript "install-systemd-boot.sh" ''
     #!${pkgs.runtimeShell}
-    ${checkedSystemdBootBuilder} "$@"
+    ${systemdBootBuilder} "$@"
     ${cfg.extraInstallCommands}
   '';
 in {
 
+  meta.maintainers = with lib.maintainers; [ julienmalka ];
+
   imports =
     [ (mkRenamedOptionModule [ "boot" "loader" "gummiboot" "enable" ] [ "boot" "loader" "systemd-boot" "enable" ])
+      (lib.mkChangedOptionModule
+        [ "boot" "loader" "systemd-boot" "memtest86" "entryFilename" ]
+        [ "boot" "loader" "systemd-boot" "memtest86" "sortKey" ]
+        (config: lib.strings.removeSuffix ".conf" config.boot.loader.systemd-boot.memtest86.entryFilename)
+      )
+      (lib.mkChangedOptionModule
+        [ "boot" "loader" "systemd-boot" "netbootxyz" "entryFilename" ]
+        [ "boot" "loader" "systemd-boot" "netbootxyz" "sortKey" ]
+        (config: lib.strings.removeSuffix ".conf" config.boot.loader.systemd-boot.netbootxyz.entryFilename)
+      )
     ];
 
   options.boot.loader.systemd-boot = {
@@ -79,7 +109,40 @@ in {
 
       type = types.bool;
 
-      description = lib.mdDoc "Whether to enable the systemd-boot (formerly gummiboot) EFI boot manager";
+      description = ''
+        Whether to enable the systemd-boot (formerly gummiboot) EFI boot manager.
+        For more information about systemd-boot:
+        https://www.freedesktop.org/wiki/Software/systemd/systemd-boot/
+      '';
+    };
+
+    sortKey = mkOption {
+      default = "nixos";
+      type = lib.types.str;
+      description = ''
+        The sort key used for the NixOS bootloader entries.
+        This key determines sorting relative to non-NixOS entries.
+        See also https://uapi-group.org/specifications/specs/boot_loader_specification/#sorting
+
+        This option can also be used to control the sorting of NixOS specialisations.
+
+        By default, specialisations inherit the sort key of their parent generation
+        and will have the same value for both the sort-key and the version (i.e. the generation number),
+        systemd-boot will therefore sort them based on their file name, meaning that
+        in your boot menu you will have each main generation directly followed by
+        its specialisations sorted alphabetically by their names.
+
+        If you want a different ordering for a specialisation, you can override
+        its sort-key which will cause the specialisation to be uncoupled from its
+        parent generation. It will then be sorted by its new sort-key just like
+        any other boot entry.
+
+        The sort-key is stored in the generation's bootspec, which means that
+        generations keep their sort-keys even if the original definition of the
+        generation was removed from the NixOS configuration.
+        It also means that updating the sort-key will only affect new generations,
+        while old ones will keep the sort-key that they were originally built with.
+      '';
     };
 
     editor = mkOption {
@@ -87,7 +150,7 @@ in {
 
       type = types.bool;
 
-      description = lib.mdDoc ''
+      description = ''
         Whether to allow editing the kernel command-line before
         boot. It is recommended to set this to false, as it allows
         gaining root access by passing init=/bin/sh as a kernel
@@ -96,16 +159,28 @@ in {
       '';
     };
 
+    xbootldrMountPoint = mkOption {
+      default = null;
+      type = types.nullOr types.str;
+      description = ''
+        Where the XBOOTLDR partition is mounted.
+
+        If set, this partition will be used as $BOOT to store boot loader entries and extra files
+        instead of the EFI partition. As per the bootloader specification, it is recommended that
+        the EFI and XBOOTLDR partitions be mounted at `/efi` and `/boot`, respectively.
+      '';
+    };
+
     configurationLimit = mkOption {
       default = null;
       example = 120;
       type = types.nullOr types.int;
-      description = lib.mdDoc ''
+      description = ''
         Maximum number of latest generations in the boot menu.
         Useful to prevent boot partition running out of disk space.
 
         `null` means no limit i.e. all generations
-        that were not garbage collected yet.
+        that have not been garbage collected yet.
       '';
     };
 
@@ -117,7 +192,7 @@ in {
         sed -i "s|@INIT@|$init_value|g" /boot/custom/config_with_placeholder.conf
       '';
       type = types.lines;
-      description = lib.mdDoc ''
+      description = ''
         Additional shell commands inserted in the bootloader installer
         script after generating menu entries. It can be used to expand
         on extra boot entries that cannot incorporate certain pieces of
@@ -130,7 +205,7 @@ in {
 
       type = types.enum [ "0" "1" "2" "auto" "max" "keep" ];
 
-      description = lib.mdDoc ''
+      description = ''
         The resolution of the console. The following values are valid:
 
         - `"0"`: Standard UEFI 80x25 mode
@@ -146,21 +221,21 @@ in {
       enable = mkOption {
         default = false;
         type = types.bool;
-        description = lib.mdDoc ''
-          Make MemTest86 available from the systemd-boot menu. MemTest86 is a
-          program for testing memory.  MemTest86 is an unfree program, so
-          this requires `allowUnfree` to be set to
-          `true`.
+        description = ''
+          Make Memtest86+ available from the systemd-boot menu. Memtest86+ is a
+          program for testing memory.
         '';
       };
 
-      entryFilename = mkOption {
-        default = "memtest86.conf";
+      sortKey = mkOption {
+        default = "o_memtest86";
         type = types.str;
-        description = lib.mdDoc ''
-          `systemd-boot` orders the menu entries by the config file names,
+        description = ''
+          `systemd-boot` orders the menu entries by their sort keys,
           so if you want something to appear after all the NixOS entries,
           it should start with {file}`o` or onwards.
+
+          See also {option}`boot.loader.systemd-boot.sortKey`.
         '';
       };
     };
@@ -169,7 +244,7 @@ in {
       enable = mkOption {
         default = false;
         type = types.bool;
-        description = lib.mdDoc ''
+        description = ''
           Make `netboot.xyz` available from the
           `systemd-boot` menu. `netboot.xyz`
           is a menu system that allows you to boot OS installers and
@@ -177,13 +252,15 @@ in {
         '';
       };
 
-      entryFilename = mkOption {
-        default = "o_netbootxyz.conf";
+      sortKey = mkOption {
+        default = "o_netbootxyz";
         type = types.str;
-        description = lib.mdDoc ''
-          `systemd-boot` orders the menu entries by the config file names,
+        description = ''
+          `systemd-boot` orders the menu entries by their sort keys,
           so if you want something to appear after all the NixOS entries,
           it should start with {file}`o` or onwards.
+
+          See also {option}`boot.loader.systemd-boot.sortKey`.
         '';
       };
     };
@@ -193,19 +270,21 @@ in {
       default = {};
       example = literalExpression ''
         { "memtest86.conf" = '''
-          title MemTest86
-          efi /efi/memtest86/memtest86.efi
+          title Memtest86+
+          efi /efi/memtest86/memtest.efi
+          sort-key z_memtest
         '''; }
       '';
-      description = lib.mdDoc ''
+      description = ''
         Any additional entries you want added to the `systemd-boot` menu.
-        These entries will be copied to {file}`/boot/loader/entries`.
+        These entries will be copied to {file}`$BOOT/loader/entries`.
         Each attribute name denotes the destination file name,
         and the corresponding attribute value is the contents of the entry.
 
-        `systemd-boot` orders the menu entries by the config file names,
-        so if you want something to appear after all the NixOS entries,
-        it should start with {file}`o` or onwards.
+        To control the ordering of the entry in the boot menu, use the sort-key
+        field, see
+        https://uapi-group.org/specifications/specs/boot_loader_specification/#sorting
+        and {option}`boot.loader.systemd-boot.sortKey`.
       '';
     };
 
@@ -213,12 +292,12 @@ in {
       type = types.attrsOf types.path;
       default = {};
       example = literalExpression ''
-        { "efi/memtest86/memtest86.efi" = "''${pkgs.memtest86-efi}/BOOTX64.efi"; }
+        { "efi/memtest86/memtest.efi" = "''${pkgs.memtest86plus}/memtest.efi"; }
       '';
-      description = lib.mdDoc ''
-        A set of files to be copied to {file}`/boot`.
+      description = ''
+        A set of files to be copied to {file}`$BOOT`.
         Each attribute name denotes the destination file name in
-        {file}`/boot`, while the corresponding
+        {file}`$BOOT`, while the corresponding
         attribute value specifies the source file.
       '';
     };
@@ -228,7 +307,7 @@ in {
 
       type = types.bool;
 
-      description = lib.mdDoc ''
+      description = ''
         Invoke `bootctl install` with the `--graceful` option,
         which ignores errors when EFI variables cannot be written or when the EFI System Partition
         cannot be found. Currently only applies to random seed operations.
@@ -242,6 +321,18 @@ in {
 
   config = mkIf cfg.enable {
     assertions = [
+      {
+        assertion = (hasPrefix "/" efi.efiSysMountPoint);
+        message = "The ESP mount point '${toString efi.efiSysMountPoint}' must be an absolute path";
+      }
+      {
+        assertion = cfg.xbootldrMountPoint == null || (hasPrefix "/" cfg.xbootldrMountPoint);
+        message = "The XBOOTLDR mount point '${toString cfg.xbootldrMountPoint}' must be an absolute path";
+      }
+      {
+        assertion = cfg.xbootldrMountPoint != efi.efiSysMountPoint;
+        message = "The XBOOTLDR mount point '${toString cfg.xbootldrMountPoint}' cannot be the same as the ESP mount point '${toString efi.efiSysMountPoint}'";
+      }
       {
         assertion = (config.boot.kernelPackages.kernel.features or { efiBootStub = true; }) ? efiBootStub;
         message = "This kernel does not support the EFI boot stub";
@@ -276,11 +367,8 @@ in {
     boot.loader.supportsInitrdSecrets = true;
 
     boot.loader.systemd-boot.extraFiles = mkMerge [
-      # TODO: This is hard-coded to use the 64-bit EFI app, but it could probably
-      # be updated to use the 32-bit EFI app on 32-bit systems.  The 32-bit EFI
-      # app filename is BOOTIA32.efi.
       (mkIf cfg.memtest86.enable {
-        "efi/memtest86/BOOTX64.efi" = "${pkgs.memtest86-efi}/BOOTX64.efi";
+        "efi/memtest86/memtest.efi" = "${pkgs.memtest86plus.efi}";
       })
       (mkIf cfg.netbootxyz.enable {
         "efi/netbootxyz/netboot.xyz.efi" = "${pkgs.netbootxyz-efi}";
@@ -289,18 +377,24 @@ in {
 
     boot.loader.systemd-boot.extraEntries = mkMerge [
       (mkIf cfg.memtest86.enable {
-        "${cfg.memtest86.entryFilename}" = ''
-          title  MemTest86
-          efi    /efi/memtest86/BOOTX64.efi
+        "memtest86.conf" = ''
+          title  Memtest86+
+          efi    /efi/memtest86/memtest.efi
+          sort-key ${cfg.memtest86.sortKey}
         '';
       })
       (mkIf cfg.netbootxyz.enable {
-        "${cfg.netbootxyz.entryFilename}" = ''
+        "netbootxyz.conf" = ''
           title  netboot.xyz
           efi    /efi/netbootxyz/netboot.xyz.efi
+          sort-key ${cfg.netbootxyz.sortKey}
         '';
       })
     ];
+
+    boot.bootspec.extensions."org.nixos.systemd-boot" = {
+      inherit (config.boot.loader.systemd-boot) sortKey;
+    };
 
     system = {
       build.installBootLoader = finalSystemdBootBuilder;

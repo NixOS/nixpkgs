@@ -3,24 +3,25 @@
 , fetchFromGitHub
 , stdenv
 , Security
+, SystemConfiguration
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-spellcheck";
-  version = "0.12.4";
+  version = "0.14.0";
 
   src = fetchFromGitHub {
     owner = "drahnr";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-h9114HFWIsJn95pJ3QoDokNgAkE6KFjDt5Rt85vT7zw=";
+    hash = "sha256-NrtPV2bd9BuA1nnniIcth85gJQmFGy9LHdajqmW8j4Q=";
   };
 
-  cargoSha256 = "sha256-hYCDpSKi7HlqwdnMnfnKw46VpO+bhsV11kIu/4yMaBw=";
+  cargoHash = "sha256-mxx4G77ldPfVorNa1LGTcA0Idwmrcl8S/ze+UUoLHhI=";
 
   nativeBuildInputs = [ rustPlatform.bindgenHook ];
 
-  buildInputs = lib.optional stdenv.isDarwin Security;
+  buildInputs = lib.optionals stdenv.isDarwin [ Security SystemConfiguration ];
 
   preCheck = "HOME=$(mktemp -d)";
 
@@ -30,9 +31,10 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Checks rust documentation for spelling and grammar mistakes";
+    mainProgram = "cargo-spellcheck";
     homepage = "https://github.com/drahnr/cargo-spellcheck";
     changelog = "https://github.com/drahnr/cargo-spellcheck/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ asl20 /* or */ mit ];
-    maintainers = with maintainers; [ newam ];
+    maintainers = with maintainers; [ newam matthiasbeyer ];
   };
 }

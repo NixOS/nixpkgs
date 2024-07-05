@@ -2,18 +2,18 @@
 , gdk-pixbuf, glib, gtk3, lib, xorg
 , libglvnd, libjack2, ffmpeg
 , libxkbcommon, xdg-utils, zlib, pulseaudio
-, wrapGAppsHook, makeWrapper }:
+, wrapGAppsHook3, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "bitwig-studio";
-  version = "3.3.7";
+  version = "3.3.11";
 
   src = fetchurl {
     url = "https://downloads.bitwig.com/stable/${version}/${pname}-${version}.deb";
-    sha256 = "13jr45kzv0xjhhqk30qpq793349qyx8jpas4kl6i6bk3xfrd3fbz";
+    sha256 = "sha256-cF8gVPjM0KUcKOW09uFccp4/lzbUmZcBkVOwr/A/8Yw=";
   };
 
-  nativeBuildInputs = [ dpkg makeWrapper wrapGAppsHook ];
+  nativeBuildInputs = [ dpkg makeWrapper wrapGAppsHook3 ];
 
   unpackCmd = ''
     mkdir -p root
@@ -36,11 +36,8 @@ stdenv.mkDerivation rec {
     cp -r opt/bitwig-studio $out/libexec
     ln -s $out/libexec/bitwig-studio $out/bin/bitwig-studio
     cp -r usr/share $out/share
-    substitute usr/share/applications/bitwig-studio.desktop \
-      $out/share/applications/bitwig-studio.desktop \
-      --replace /usr/bin/bitwig-studio $out/bin/bitwig-studio
 
-      runHook postInstall
+    runHook postInstall
   '';
 
   postFixup = ''
@@ -60,11 +57,10 @@ stdenv.mkDerivation rec {
         --prefix PATH : "${lib.makeBinPath [ ffmpeg ]}" \
         --suffix PATH : "${lib.makeBinPath [ xdg-utils ]}"
     done
-
   '';
 
   meta = with lib; {
-    description = "A digital audio workstation";
+    description = "Digital audio workstation";
     longDescription = ''
       Bitwig Studio is a multi-platform music-creation system for
       production, performance and DJing, with a focus on flexible

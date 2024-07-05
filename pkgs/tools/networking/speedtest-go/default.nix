@@ -1,17 +1,17 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
-
 buildGoModule rec {
   pname = "speedtest-go";
-  version = "1.6.3";
+  version = "1.7.7";
 
   src = fetchFromGitHub {
     owner = "showwin";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-xZq7wiD0H6W7BeOQoTkWVmFM1dV24clJUibNaW0lLwk=";
+    hash = "sha256-8LMbaa3D1ODjySx69U0CGWphG8CQswWlQsqW6mXPy6o=";
   };
 
   vendorHash = "sha256-wQqAX7YuxxTiMWmV9LRoXunGMMzs12UyHbf4VvbQF1E=";
@@ -26,6 +26,10 @@ buildGoModule rec {
     homepage = "https://github.com/showwin/speedtest-go";
     changelog = "https://github.com/showwin/speedtest-go/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ aleksana ];
+    maintainers = with maintainers; [
+      aleksana
+      luftmensch-luftmensch
+    ];
+    mainProgram = "speedtest-go";
   };
 }

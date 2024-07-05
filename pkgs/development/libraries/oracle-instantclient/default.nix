@@ -143,7 +143,7 @@ stdenv.mkDerivation {
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.unfree;
     platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" ];
-    maintainers = with maintainers; [ flokli dylanmtaylor ];
+    maintainers = with maintainers; [ dylanmtaylor ];
     hydraPlatforms = [ ];
   };
 }

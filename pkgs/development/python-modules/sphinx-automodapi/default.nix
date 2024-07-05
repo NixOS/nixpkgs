@@ -1,28 +1,36 @@
-{ lib
-, buildPythonPackage
-, cython
-, fetchFromGitHub
-, fetchurl
-, gcc
-, graphviz
-, pytestCheckHook
-, pythonOlder
-, sphinx
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchurl,
+  pythonOlder,
+  setuptools-scm,
+  git,
+  sphinx,
+  pytestCheckHook,
+  cython,
+  gcc,
+  graphviz,
 }:
 
 buildPythonPackage rec {
   pname = "sphinx-automodapi";
-  version = "0.14.1";
-  format = "setuptools";
-
+  version = "0.17.0";
+  pyproject = true;
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "astropy";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-olD9LIyFCNEu287wQIRqoabfrdcdyZpNc69jq/e1304=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-Suu81pWUIwIgp/iTaYambuYRTkC7njP6n5RWZscugnk=";
+    leaveDotGit = true;
   };
+
+  nativeBuildInputs = [
+    setuptools-scm
+    git
+  ];
 
   propagatedBuildInputs = [ sphinx ];
 
@@ -34,11 +42,8 @@ buildPythonPackage rec {
   };
 
   postPatch = ''
-    substituteInPlace "sphinx_automodapi/tests/helpers.py" \
-      --replace '[0]), None)' "[0]), (None, '${testInventory}'))"
-
-    substituteInPlace "sphinx_automodapi/tests/test_cases.py" \
-      --replace '[0]), None)' "[0]), (None, '${testInventory}'))"
+    substituteInPlace sphinx_automodapi/tests/{helpers,test_cases}.py \
+      --replace ", None)" ", (None, '${testInventory}'))"
   '';
 
   nativeCheckInputs = [

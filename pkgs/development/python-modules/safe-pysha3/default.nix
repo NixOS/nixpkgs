@@ -1,8 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, python
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -16,9 +16,13 @@ buildPythonPackage rec {
     hash = "sha256-5CkUax7dGYssqTSiBGplZWxdMbDsiUu9YFUSf03q/xc=";
   };
 
-  pythonImportsCheck = [
-    "sha3"
-  ];
+  # AttributeError: 'Keccak_224Tests' object has no attribute 'failIf'.
+  postPatch = ''
+    substituteInPlace tests.py \
+      --replace "failIf" "assertFalse"
+  '';
+
+  pythonImportsCheck = [ "sha3" ];
 
   meta = {
     changelog = "https://github.com/5afe/pysha3/releases/tag/v${version}";

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkg-config, perl, nixosTests
+{ lib, stdenv, fetchurl, darwin, pkg-config, perl, nixosTests
 , brotliSupport ? false, brotli
 , c-aresSupport ? false, c-aresMinimal
 , gnutlsSupport ? false, gnutls
@@ -15,6 +15,7 @@
   ), libkrb5
 , http2Support ? true, nghttp2
 , http3Support ? false, nghttp3, ngtcp2
+, websocketSupport ? false
 , idnSupport ? false, libidn2
 , ldapSupport ? false, openldap
 , opensslSupport ? zlibSupport, openssl
@@ -32,6 +33,7 @@
 , haskellPackages
 , ocamlPackages
 , phpExtensions
+, pkgsStatic
 , python3
 , tests
 , testers
@@ -47,19 +49,28 @@ assert !((lib.count (x: x) [ gnutlsSupport opensslSupport wolfsslSupport rustlsS
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "curl";
-  version = "8.1.1";
+  version = "8.8.0";
 
   src = fetchurl {
     urls = [
-      "https://curl.haxx.se/download/curl-${finalAttrs.version}.tar.bz2"
-      "https://github.com/curl/curl/releases/download/curl-${finalAttrs.version}/curl-${finalAttrs.version}.tar.bz2"
+      "https://curl.haxx.se/download/curl-${finalAttrs.version}.tar.xz"
+      "https://github.com/curl/curl/releases/download/curl-${builtins.replaceStrings [ "." ] [ "_" ] finalAttrs.version}/curl-${finalAttrs.version}.tar.xz"
     ];
-    hash = "sha256-UdKvcieZE7XUyrH+Hzi5RM9wkEyIvuJGtb1XWETnA1o=";
+    hash = "sha256-D1i7lfwzDIpG7rPfVwGw2Qydm/zEK9HNCHkdElUdRAA=";
   };
 
-  patches = [
-    ./7.79.1-darwin-no-systemconfiguration.patch
+  patches = lib.optionals (lib.versionOlder finalAttrs.version "8.7.2") [
+    # https://github.com/curl/curl/pull/13219
+    # https://github.com/newsboat/newsboat/issues/2728
+    ./8.7.1-compression-fix.patch
   ];
+
+  # this could be accomplished by updateAutotoolsGnuConfigScriptsHook, but that causes infinite recursion
+  # necessary for FreeBSD code path in configure
+  postPatch = ''
+    substituteInPlace ./config.guess --replace-fail /usr/bin/uname uname
+    patchShebangs scripts
+  '';
 
   outputs = [ "bin" "dev" "out" "man" "devdoc" ];
   separateDebugInfo = stdenv.isLinux;
@@ -90,12 +101,22 @@ stdenv.mkDerivation (finalAttrs: {
     optional wolfsslSupport wolfssl ++
     optional rustlsSupport rustls-ffi ++
     optional zlibSupport zlib ++
-    optional zstdSupport zstd;
+    optional zstdSupport zstd ++
+    optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+      CoreFoundation
+      CoreServices
+      SystemConfiguration
+    ]);
 
   # for the second line see https://curl.haxx.se/mail/tracker-2014-03/0087.html
   preConfigure = ''
     sed -e 's|/usr/bin|/no-such-path|g' -i.bak configure
     rm src/tool_hugehelp.c
+  '' + lib.optionalString (pslSupport && stdenv.hostPlatform.isStatic) ''
+    # curl doesn't understand that libpsl2 has deps because it doesn't use
+    # pkg-config.
+    # https://github.com/curl/curl/pull/12919
+    configureFlagsArray+=("LIBS=-lidn2 -lunistring")
   '';
 
   configureFlags = [
@@ -104,6 +125,7 @@ stdenv.mkDerivation (finalAttrs: {
       (lib.enableFeature c-aresSupport "ares")
       (lib.enableFeature ldapSupport "ldap")
       (lib.enableFeature ldapSupport "ldaps")
+      (lib.enableFeature websocketSupport "websockets")
       # --with-ca-fallback is only supported for openssl and gnutls https://github.com/curl/curl/blame/curl-8_0_1/acinclude.m4#L1640
       (lib.withFeature (opensslSupport || gnutlsSupport) "ca-fallback")
       (lib.withFeature http3Support "nghttp3")
@@ -111,6 +133,7 @@ stdenv.mkDerivation (finalAttrs: {
       (lib.withFeature rtmpSupport "librtmp")
       (lib.withFeature rustlsSupport "rustls")
       (lib.withFeature zstdSupport "zstd")
+      (lib.withFeature pslSupport "libpsl")
       (lib.withFeatureAs brotliSupport "brotli" (lib.getDev brotli))
       (lib.withFeatureAs gnutlsSupport "gnutls" (lib.getDev gnutls))
       (lib.withFeatureAs idnSupport "libidn2" (lib.getDev libidn2))
@@ -171,7 +194,6 @@ stdenv.mkDerivation (finalAttrs: {
     inherit opensslSupport openssl;
     tests = {
       withCheck = finalAttrs.finalPackage.overrideAttrs (_: { doCheck = true; });
-      fetchpatch = tests.fetchpatch.simple.override { fetchpatch = (fetchpatch.override { fetchurl = useThisCurl fetchurl; }) // { version = 1; }; };
       curlpp = useThisCurl curlpp;
       coeurl = useThisCurl coeurl;
       haskell-curl = useThisCurl haskellPackages.curl;
@@ -183,18 +205,23 @@ stdenv.mkDerivation (finalAttrs: {
       # nginx-http3 = useThisCurl nixosTests.nginx-http3;
       nginx-http3 = nixosTests.nginx-http3;
       pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+    } // lib.optionalAttrs (stdenv.hostPlatform.system != "x86_64-darwin") {
+      static = pkgsStatic.curl;
+    } // lib.optionalAttrs (!stdenv.isDarwin) {
+      fetchpatch = tests.fetchpatch.simple.override { fetchpatch = (fetchpatch.override { fetchurl = useThisCurl fetchurl; }) // { version = 1; }; };
     };
   };
 
   meta = with lib; {
     changelog = "https://curl.se/changes.html#${lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
-    description = "A command line tool for transferring files with URL syntax";
+    description = "Command line tool for transferring files with URL syntax";
     homepage    = "https://curl.se/";
     license = licenses.curl;
     maintainers = with maintainers; [ lovek323 ];
     platforms = platforms.all;
     # Fails to link against static brotli or gss
-    broken = stdenv.hostPlatform.isStatic && (brotliSupport || gssSupport);
+    broken = (stdenv.hostPlatform.isStatic && (brotliSupport || gssSupport || stdenv.hostPlatform.system == "x86_64-darwin")) || rustlsSupport;
     pkgConfigModules = [ "libcurl" ];
+    mainProgram = "curl";
   };
 })

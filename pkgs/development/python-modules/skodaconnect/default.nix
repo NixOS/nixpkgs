@@ -1,34 +1,31 @@
-{ lib
-, aiohttp
-, beautifulsoup4
-, buildPythonPackage
-, cryptography
-, fetchFromGitHub
-, lxml
-, pyjwt
-, pythonOlder
-, setuptools-scm
+{
+  lib,
+  aiohttp,
+  beautifulsoup4,
+  buildPythonPackage,
+  cryptography,
+  fetchFromGitHub,
+  flit-core,
+  lxml,
+  pyjwt,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "skodaconnect";
-  version = "1.3.6";
-  format = "setuptools";
+  version = "1.3.11";
+  pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "lendy007";
-    repo = pname;
+    repo = "skodaconnect";
     rev = "refs/tags/${version}";
-    hash = "sha256-gV/+mt6XxY1UcA1H8zM4pG1ugrDo0m876e3XG1yV32A=";
+    hash = "sha256-Cy2sXj8+t8lIqrKmI9Aa7tNEIvRArynU/02ajJ+tYHg=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ flit-core ];
 
   propagatedBuildInputs = [
     aiohttp
@@ -38,19 +35,10 @@ buildPythonPackage rec {
     pyjwt
   ];
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "'pytest>=5,<6'," ""
-    substituteInPlace requirements.txt \
-      --replace "pytest-asyncio" ""
-  '';
-
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "skodaconnect"
-  ];
+  pythonImportsCheck = [ "skodaconnect" ];
 
   meta = with lib; {
     description = "Python module to communicate with Skoda Connect";

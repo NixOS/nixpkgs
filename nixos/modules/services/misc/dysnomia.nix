@@ -87,52 +87,52 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc "Whether to enable Dysnomia";
+        description = "Whether to enable Dysnomia";
       };
 
       enableAuthentication = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc "Whether to publish privacy-sensitive authentication credentials";
+        description = "Whether to publish privacy-sensitive authentication credentials";
       };
 
       package = mkOption {
         type = types.path;
-        description = lib.mdDoc "The Dysnomia package";
+        description = "The Dysnomia package";
       };
 
       properties = mkOption {
-        description = lib.mdDoc "An attribute set in which each attribute represents a machine property. Optionally, these values can be shell substitutions.";
+        description = "An attribute set in which each attribute represents a machine property. Optionally, these values can be shell substitutions.";
         default = {};
         type = types.attrs;
       };
 
       containers = mkOption {
-        description = lib.mdDoc "An attribute set in which each key represents a container and each value an attribute set providing its configuration properties";
+        description = "An attribute set in which each key represents a container and each value an attribute set providing its configuration properties";
         default = {};
         type = types.attrsOf types.attrs;
       };
 
       components = mkOption {
-        description = lib.mdDoc "An attribute set in which each key represents a container and each value an attribute set in which each key represents a component and each value a derivation constructing its initial state";
+        description = "An attribute set in which each key represents a container and each value an attribute set in which each key represents a component and each value a derivation constructing its initial state";
         default = {};
         type = types.attrsOf types.attrs;
       };
 
       extraContainerProperties = mkOption {
-        description = lib.mdDoc "An attribute set providing additional container settings in addition to the default properties";
+        description = "An attribute set providing additional container settings in addition to the default properties";
         default = {};
         type = types.attrs;
       };
 
       extraContainerPaths = mkOption {
-        description = lib.mdDoc "A list of paths containing additional container configurations that are added to the search folders";
+        description = "A list of paths containing additional container configurations that are added to the search folders";
         default = [];
         type = types.listOf types.path;
       };
 
       extraModulePaths = mkOption {
-        description = lib.mdDoc "A list of paths containing additional modules that are added to the search folders";
+        description = "A list of paths containing additional modules that are added to the search folders";
         default = [];
         type = types.listOf types.path;
       };
@@ -140,7 +140,7 @@ in
       enableLegacyModules = mkOption {
         type = types.bool;
         default = true;
-        description = lib.mdDoc "Whether to enable Dysnomia legacy process and wrapper modules";
+        description = "Whether to enable Dysnomia legacy process and wrapper modules";
       };
     };
   };
@@ -223,7 +223,7 @@ in
       ejabberdUser = config.services.ejabberd.user;
     }; }
     // lib.optionalAttrs (config.services.mysql.enable) { mysql-database = {
-        mysqlPort = config.services.mysql.port;
+        mysqlPort = config.services.mysql.settings.mysqld.port;
         mysqlSocket = "/run/mysqld/mysqld.sock";
       } // lib.optionalAttrs cfg.enableAuthentication {
         mysqlUsername = "root";

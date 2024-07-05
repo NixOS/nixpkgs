@@ -8,19 +8,26 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "bazarr";
-  version = "1.2.3";
+  version = "1.4.3";
 
   sourceRoot = ".";
 
   src = fetchurl {
     url = "https://github.com/morpheus65535/bazarr/releases/download/v${version}/bazarr.zip";
-    sha256 = "sha256-6yLXsdw3wdxrCqNsNrbcjqfqgRR1Nuyyxw6osYQl8uY=";
+    sha256 = "sha256-tmTdmUfRBRlB14juNxUo65Re+9agUBX0BBSuNu3pSC0=";
   };
 
   nativeBuildInputs = [ unzip makeWrapper ];
 
   buildInputs = [
-    (python3.withPackages (ps: [ ps.lxml ps.numpy ps.gevent ps.gevent-websocket ps.pillow ]))
+    (python3.withPackages (ps: [
+      ps.lxml
+      ps.numpy
+      ps.gevent
+      ps.gevent-websocket
+      ps.pillow
+      ps.setuptools
+    ]))
   ] ++ runtimeProgDeps;
 
   installPhase = ''
@@ -51,6 +58,7 @@ stdenv.mkDerivation rec {
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ d-xo ];
+    mainProgram = "bazarr";
     platforms = platforms.all;
   };
 }

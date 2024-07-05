@@ -1,41 +1,59 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, gobject-introspection
-, gtk3
-, gtksourceview4
-, wrapGAppsHook
-, nest-asyncio
-, pycairo
-, py-desmume
-, pygtkspellcheck
-, setuptools
-, skytemple-files
-, skytemple-icons
+{
+  buildPythonPackage,
+  explorerscript,
+  fetchFromGitHub,
+  gobject-introspection,
+  gtk3,
+  gtksourceview4,
+  importlib-metadata,
+  lib,
+  ndspy,
+  nest-asyncio,
+  pmdsky-debug-py,
+  pycairo,
+  pygobject3,
+  pygtkspellcheck,
+  pythonOlder,
+  range-typed-integers,
+  skytemple-files,
+  skytemple-icons,
+  skytemple-ssb-emulator,
+  wrapGAppsHook3,
 }:
 
 buildPythonPackage rec {
   pname = "skytemple-ssb-debugger";
-  version = "1.4.4";
+  version = "1.6.4";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "SkyTemple";
     repo = pname;
     rev = version;
-    hash = "sha256-/LBz0PCQI3QOAmOZk6Jynqi/+NN0w8gbY/S3YckRZ68=";
+    hash = "sha256-whnwFwPYPGF+UtjrzRKgXJNPsUGvmE+HHKJcPf0qcuA=";
   };
 
-  buildInputs = [ gobject-introspection gtk3 gtksourceview4 ];
-  nativeBuildInputs = [ gobject-introspection wrapGAppsHook ];
+  buildInputs = [
+    gtk3
+    gtksourceview4
+  ];
+  nativeBuildInputs = [
+    gobject-introspection
+    wrapGAppsHook3
+  ];
   propagatedBuildInputs = [
+    explorerscript
+    ndspy
     nest-asyncio
+    pmdsky-debug-py
     pycairo
-    py-desmume
+    pygobject3
     pygtkspellcheck
-    setuptools
+    range-typed-integers
     skytemple-files
     skytemple-icons
-  ];
+    skytemple-ssb-emulator
+  ] ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
 
   doCheck = false; # requires Pokémon Mystery Dungeon ROM
   pythonImportsCheck = [ "skytemple_ssb_debugger" ];
@@ -43,7 +61,8 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://github.com/SkyTemple/skytemple-ssb-debugger";
     description = "Script Engine Debugger for Pokémon Mystery Dungeon Explorers of Sky";
+    mainProgram = "skytemple-ssb-debugger";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ xfix ];
+    maintainers = with maintainers; [ marius851000 ];
   };
 }

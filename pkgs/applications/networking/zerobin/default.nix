@@ -1,7 +1,7 @@
 { lib
 , python3Packages
 , fetchFromGitHub
-, nodePackages
+, uglify-js
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -20,7 +20,7 @@ python3Packages.buildPythonApplication rec {
   nativeBuildInputs = [
     python3Packages.doit
     python3Packages.pyscss
-    nodePackages.uglify-js
+    uglify-js
   ];
 
   propagatedBuildInputs = with python3Packages; [
@@ -59,7 +59,7 @@ python3Packages.buildPythonApplication rec {
   pythonImportsCheck = [ "zerobin" ];
 
   meta = with lib; {
-    description = "A client side encrypted pastebin";
+    description = "Client side encrypted pastebin";
     homepage = "https://0bin.net/";
     license = licenses.wtfpl;
     platforms = platforms.all;

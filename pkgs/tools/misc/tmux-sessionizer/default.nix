@@ -5,28 +5,44 @@
 , openssl
 , pkg-config
 , Security
+, testers
+, tmux-sessionizer
 }:
+let
 
-rustPlatform.buildRustPackage rec {
-  pname = "tmux-sessionizer";
-  version = "0.2.1";
+  name = "tmux-sessionizer";
+  version = "0.4.2";
+
+in
+rustPlatform.buildRustPackage {
+  pname = name;
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "jrmoulton";
-    repo = pname;
+    repo = name;
     rev = "v${version}";
-    sha256 = "sha256-fV+LBs+jbcOjArUfygEXkyxg/xGhI35YduUkx4AyQhk=";
+    hash = "sha256-n6DXqsq3TsNob/fEqeOwNTVLPAvCr7CDN9qtXAiOMWQ=";
   };
 
-  cargoHash = "sha256-Bg4C4r3h/kaMsAqzit9JVuAe7vYrRB9W5OLOWPgCJHc=";
+  cargoHash = "sha256-e2U6x7HFoFbZxtJvY/ZpgEWagIrdRxPVZw2rP5aDIqg=";
+
+  passthru.tests.version = testers.testVersion {
+    package = tmux-sessionizer;
+    version = version;
+  };
+
+  # Needed to get openssl-sys to use pkg-config.
+  OPENSSL_NO_VENDOR = 1;
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [ Security ];
 
   meta = with lib; {
-    description = "The fastest way to manage projects as tmux sessions";
+    description = "Fastest way to manage projects as tmux sessions";
     homepage = "https://github.com/jrmoulton/tmux-sessionizer";
     license = licenses.mit;
-    maintainers = with maintainers; [ vinnymeller ];
+    maintainers = with maintainers; [ vinnymeller mrcjkb ];
+    mainProgram = "tms";
   };
 }

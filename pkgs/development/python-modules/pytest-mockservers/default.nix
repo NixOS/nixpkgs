@@ -1,12 +1,14 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, poetry-core
-, aiohttp
-, pytest
-, pytest-asyncio
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  fetchpatch,
+  poetry-core,
+  aiohttp,
+  pytest,
+  pytest-asyncio,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -19,37 +21,35 @@ buildPythonPackage rec {
     owner = "Gr1N";
     repo = pname;
     rev = version;
-    sha256 = "0xql0fnw7m2zn103601gqbpyd761kzvgjj2iz9hjsv56nr4z1g9i";
+    hash = "sha256-Mb3wSbambC1h+lFI+fafwZzm78IvADNAsF/Uw60DFHc=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace "poetry.masonry.api" "poetry.core.masonry.api"
-  '';
-
-  nativeBuildInputs = [
-    poetry-core
+  patches = [
+    # https://github.com/Gr1N/pytest-mockservers/pull/75
+    (fetchpatch {
+      name = "use-poetry-core.patch";
+      url = "https://github.com/Gr1N/pytest-mockservers/commit/c7731186a4e12851ab1c15ab56e652bb48ed59c4.patch";
+      hash = "sha256-/5X3xjJwt2gs3t6f/6n1QZ+CTBq/5+cQE+MgNWyz+Hs=";
+    })
   ];
 
-  buildInputs = [
-    pytest
-  ];
+  nativeBuildInputs = [ poetry-core ];
+
+  buildInputs = [ pytest ];
 
   propagatedBuildInputs = [
     aiohttp
     pytest-asyncio
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  __darwinAllowLocalNetworking = true;
 
-  pythonImportsCheck = [
-    "pytest_mockservers"
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  pythonImportsCheck = [ "pytest_mockservers" ];
 
   meta = with lib; {
-    description = "A set of fixtures to test your requests to HTTP/UDP servers";
+    description = "Set of fixtures to test your requests to HTTP/UDP servers";
     homepage = "https://github.com/Gr1N/pytest-mockservers";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];

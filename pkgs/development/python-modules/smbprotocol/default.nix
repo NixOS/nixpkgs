@@ -1,26 +1,27 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, cryptography
-, fetchFromGitHub
-, pyspnego
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  cryptography,
+  fetchFromGitHub,
+  pyspnego,
+  pytest-mock,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "smbprotocol";
-  version = "1.10.1";
+  version = "1.12.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "jborean93";
-    repo = pname;
+    repo = "smbprotocol";
     rev = "refs/tags/v${version}";
-    hash = "sha256-8T091yF/Hu60aaUr6IDZt2cLxz1sXUbMewSqW1Ch0Vo=";
+    hash = "sha256-1huM+/WDrVJsB4ARh6fB6rLFOe9IqSQWr/A78FAk/Ag=";
   };
 
   propagatedBuildInputs = [
@@ -43,9 +44,7 @@ buildPythonPackage rec {
     "test_recv_"
   ];
 
-  pythonImportsCheck = [
-    "smbprotocol"
-  ];
+  pythonImportsCheck = [ "smbprotocol" ];
 
   meta = with lib; {
     description = "Python SMBv2 and v3 Client";

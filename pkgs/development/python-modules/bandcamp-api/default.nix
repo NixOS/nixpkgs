@@ -1,29 +1,25 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, beautifulsoup4
-, demjson3
-, html5lib
-, lxml
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  beautifulsoup4,
+  demjson3,
+  html5lib,
+  lxml,
+  requests,
 }:
 
 buildPythonPackage rec {
   pname = "bandcamp-api";
-  version = "0.1.15";
+  version = "0.2.3";
 
   format = "setuptools";
 
   src = fetchPypi {
     pname = "bandcamp_api";
     inherit version;
-    hash = "sha256-4pnUiAsOLX1BBQjOhUkjSyHnGyQ3rx3JAFFYgEMLpG4=";
+    hash = "sha256-7/WXMo7fCDMHATp4hEB8b7fNJWisUv06hbP+O878Phs=";
   };
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace bs4 beautifulsoup4
-  '';
 
   propagatedBuildInputs = [
     beautifulsoup4

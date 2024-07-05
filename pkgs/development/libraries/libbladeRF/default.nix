@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, fetchpatch, pkg-config, cmake, git, doxygen, help2man, ncurses, tecla
+{ stdenv, lib, fetchFromGitHub, pkg-config, cmake, git, doxygen, help2man, ncurses, tecla
 , libusb1, udev }:
 
 stdenv.mkDerivation rec {
@@ -34,6 +34,10 @@ stdenv.mkDerivation rec {
     "-DINSTALL_UDEV_RULES=ON"
     "-DBLADERF_GROUP=bladerf"
   ];
+
+  env = lib.optionalAttrs stdenv.cc.isClang {
+    NIX_CFLAGS_COMPILE = "-Wno-error=unused-but-set-variable";
+  };
 
   hardeningDisable = [ "fortify" ];
 

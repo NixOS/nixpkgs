@@ -1,73 +1,68 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, python
-, cython
-, setuptools
-, substituteAll
-, numpy
-, pandas
-, cramjam
-, fsspec
-, thrift
-, python-lzo
-, pytestCheckHook
-, pythonOlder
-, packaging
+{
+  lib,
+  buildPythonPackage,
+  cramjam,
+  cython,
+  fetchFromGitHub,
+  fsspec,
+  git,
+  numpy,
+  oldest-supported-numpy,
+  packaging,
+  pandas,
+  pytestCheckHook,
+  python-lzo,
+  python,
+  pythonOlder,
+  setuptools-scm,
+  setuptools,
+  wheel,
 }:
 
 buildPythonPackage rec {
   pname = "fastparquet";
-  version = "2023.4.0";
-  format = "pyproject";
+  version = "2024.5.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "dask";
-    repo = pname;
-    rev = version;
-    hash = "sha256-1hWiwXjTgflQlmy0Dk2phUa1cgYBvvH99tb0TdUmDRI=";
+    repo = "fastparquet";
+    rev = "refs/tags/${version}";
+    hash = "sha256-YiaVkpPzH8ZmTiEtCom9xLbKzByIt7Ilig/WlmGrYH4=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "numpy>=2.0.0rc1" "oldest-supported-numpy"
+  '';
+
+  build-system = [
+    setuptools
+    setuptools-scm
+    wheel
+  ];
 
   nativeBuildInputs = [
     cython
-    setuptools
+    git
+    oldest-supported-numpy
   ];
 
-  patches = [
-    (substituteAll {
-      src = ./version.patch;
-      inherit version;
-    })
-  ];
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "'pytest-runner'," "" \
-      --replace "oldest-supported-numpy" "numpy"
-
-    sed -i '/"git", "status"/d' setup.py
-  '';
-
-  propagatedBuildInputs = [
+  dependencies = [
     cramjam
     fsspec
     numpy
-    pandas
-    thrift
     packaging
+    pandas
   ];
 
   passthru.optional-dependencies = {
-    lzo = [
-      python-lzo
-    ];
+    lzo = [ python-lzo ];
   };
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   # Workaround https://github.com/NixOS/nixpkgs/issues/123561
   preCheck = ''
@@ -81,14 +76,13 @@ buildPythonPackage rec {
     rm "$fastparquet_test"
   '';
 
-  pythonImportsCheck = [
-    "fastparquet"
-  ];
+  pythonImportsCheck = [ "fastparquet" ];
 
   meta = with lib; {
-    description = "A python implementation of the parquet format";
+    description = "Implementation of the parquet format";
     homepage = "https://github.com/dask/fastparquet";
-    license = with licenses; [ asl20 ];
+    changelog = "https://github.com/dask/fastparquet/blob/${version}/docs/source/releasenotes.rst";
+    license = licenses.asl20;
     maintainers = with maintainers; [ veprbl ];
   };
 }

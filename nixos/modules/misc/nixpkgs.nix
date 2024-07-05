@@ -112,7 +112,7 @@ in
       '';
       type = pkgsType;
       example = literalExpression "import <nixpkgs> {}";
-      description = lib.mdDoc ''
+      description = ''
         If set, the pkgs argument to all NixOS modules is the value of
         this option, extended with `nixpkgs.overlays`, if
         that is also set. Either `nixpkgs.crossSystem` or
@@ -152,12 +152,11 @@ in
           { allowBroken = true; allowUnfree = true; }
         '';
       type = configType;
-      description = lib.mdDoc ''
-        The configuration of the Nix Packages collection.  (For
-        details, see the Nixpkgs documentation.)  It allows you to set
-        package configuration options.
+      description = ''
+        Global configuration for Nixpkgs.
+        The complete list of [Nixpkgs configuration options](https://nixos.org/manual/nixpkgs/unstable/#sec-config-options-reference) is in the [Nixpkgs manual section on global configuration](https://nixos.org/manual/nixpkgs/unstable/#chap-packageconfig).
 
-        Ignored when `nixpkgs.pkgs` is set.
+        Ignored when {option}`nixpkgs.pkgs` is set.
       '';
     };
 
@@ -175,29 +174,25 @@ in
           ]
         '';
       type = types.listOf overlayType;
-      description = lib.mdDoc ''
-        List of overlays to use with the Nix Packages collection.
-        (For details, see the Nixpkgs documentation.)  It allows
-        you to override packages globally. Each function in the list
-        takes as an argument the *original* Nixpkgs.
-        The first argument should be used for finding dependencies, and
-        the second should be used for overriding recipes.
+      description = ''
+        List of overlays to apply to Nixpkgs.
+        This option allows modifying the Nixpkgs package set accessed through the `pkgs` module argument.
 
-        If `nixpkgs.pkgs` is set, overlays specified here
-        will be applied after the overlays that were already present
-        in `nixpkgs.pkgs`.
+        For details, see the [Overlays chapter in the Nixpkgs manual](https://nixos.org/manual/nixpkgs/stable/#chap-overlays).
+
+        If the {option}`nixpkgs.pkgs` option is set, overlays specified using `nixpkgs.overlays` will be applied after the overlays that were already included in `nixpkgs.pkgs`.
       '';
     };
 
     hostPlatform = mkOption {
       type = types.either types.str types.attrs; # TODO utilize lib.systems.parsedPlatform
-      example = { system = "aarch64-linux"; config = "aarch64-unknown-linux-gnu"; };
+      example = { system = "aarch64-linux"; };
       # Make sure that the final value has all fields for sake of other modules
       # referring to this. TODO make `lib.systems` itself use the module system.
       apply = lib.systems.elaborate;
       defaultText = literalExpression
         ''(import "''${nixos}/../lib").lib.systems.examples.aarch64-multiplatform'';
-      description = lib.mdDoc ''
+      description = ''
         Specifies the platform where the NixOS configuration will run.
 
         To cross-compile, set also `nixpkgs.buildPlatform`.
@@ -209,13 +204,17 @@ in
     buildPlatform = mkOption {
       type = types.either types.str types.attrs; # TODO utilize lib.systems.parsedPlatform
       default = cfg.hostPlatform;
-      example = { system = "x86_64-linux"; config = "x86_64-unknown-linux-gnu"; };
+      example = { system = "x86_64-linux"; };
       # Make sure that the final value has all fields for sake of other modules
       # referring to this.
-      apply = lib.systems.elaborate;
+      apply = inputBuildPlatform:
+        let elaborated = lib.systems.elaborate inputBuildPlatform;
+        in if lib.systems.equals elaborated cfg.hostPlatform
+          then cfg.hostPlatform  # make identical, so that `==` equality works; see https://github.com/NixOS/nixpkgs/issues/278001
+          else elaborated;
       defaultText = literalExpression
         ''config.nixpkgs.hostPlatform'';
-      description = lib.mdDoc ''
+      description = ''
         Specifies the platform on which NixOS should be built.
         By default, NixOS is built on the system where it runs, but you can
         change where it's built. Setting this option will cause NixOS to be
@@ -232,13 +231,13 @@ in
     localSystem = mkOption {
       type = types.attrs; # TODO utilize lib.systems.parsedPlatform
       default = { inherit (cfg) system; };
-      example = { system = "aarch64-linux"; config = "aarch64-unknown-linux-gnu"; };
+      example = { system = "aarch64-linux"; };
       # Make sure that the final value has all fields for sake of other modules
       # referring to this. TODO make `lib.systems` itself use the module system.
       apply = lib.systems.elaborate;
       defaultText = literalExpression
         ''(import "''${nixos}/../lib").lib.systems.examples.aarch64-multiplatform'';
-      description = lib.mdDoc ''
+      description = ''
         Systems with a recently generated `hardware-configuration.nix`
         do not need to specify this option, unless cross-compiling, in which case
         you should set *only* {option}`nixpkgs.buildPlatform`.
@@ -266,8 +265,8 @@ in
     crossSystem = mkOption {
       type = types.nullOr types.attrs; # TODO utilize lib.systems.parsedPlatform
       default = null;
-      example = { system = "aarch64-linux"; config = "aarch64-unknown-linux-gnu"; };
-      description = lib.mdDoc ''
+      example = { system = "aarch64-linux"; };
+      description = ''
         Systems with a recently generated `hardware-configuration.nix`
         may instead specify *only* {option}`nixpkgs.buildPlatform`,
         or fall back to removing the {option}`nixpkgs.hostPlatform` line from the generated config.
@@ -306,7 +305,7 @@ in
       defaultText = lib.literalMD ''
         Traditionally `builtins.currentSystem`, but unset when invoking NixOS through `lib.nixosSystem`.
       '';
-      description = lib.mdDoc ''
+      description = ''
         This option does not need to be specified for NixOS configurations
         with a recently generated `hardware-configuration.nix`.
 
@@ -381,6 +380,16 @@ in
           ${concatMapStrings showOptionWithDefLocs legacyOptionsDefined}
           For a future proof system configuration, we recommend to remove
           the legacy definitions.
+        '';
+      }
+      {
+        assertion = opt.pkgs.isDefined -> cfg.config == {};
+        message = ''
+          Your system configures nixpkgs with an externally created instance.
+          `nixpkgs.config` options should be passed when creating the instance instead.
+
+          Current value:
+          ${lib.generators.toPretty { multiline = true; } opt.config}
         '';
       }
     ];

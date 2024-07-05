@@ -1,14 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, numpy
-, matplotlib
-, pytest
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  numpy,
+  matplotlib,
+  pytest,
 }:
 
 buildPythonPackage rec {
   pname = "showit";
   version = "1.1.4";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "freeman-lab";
@@ -22,9 +24,7 @@ buildPythonPackage rec {
     matplotlib
   ];
 
-  nativeCheckInputs = [
-    pytest
-  ];
+  nativeCheckInputs = [ pytest ];
 
   checkPhase = ''
     pytest test
@@ -34,6 +34,6 @@ buildPythonPackage rec {
     description = "simple and sensible display of images";
     homepage = "https://github.com/freeman-lab/showit";
     license = licenses.mit;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [ ];
   };
 }

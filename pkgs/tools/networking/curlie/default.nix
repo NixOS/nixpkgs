@@ -2,20 +2,20 @@
 
 buildGoModule rec {
   pname = "curlie";
-  version = "1.7.1";
+  version = "1.7.2";
 
   src = fetchFromGitHub {
     owner = "rs";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-EHSFr05VXJuOjUnweEJngdnfSUZUF1HsO28ZBSLGlvE=";
+    hash = "sha256-YOsq3cB+Pn2eC1Dky3fobBRR7GMxcf/tvWr6i3Vq/BE=";
   };
 
   patches = [
     ./bump-golang-x-sys.patch
   ];
 
-  vendorSha256 = "sha256-VsPdMUfS4UVem6uJgFISfFHQEKtIumDQktHQFPC1muc=";
+  vendorHash = "sha256-VsPdMUfS4UVem6uJgFISfFHQEKtIumDQktHQFPC1muc=";
 
   ldflags = [ "-s" "-w" "-X main.version=${version}" ];
 
@@ -29,5 +29,6 @@ buildGoModule rec {
     homepage = "https://curlie.io/";
     maintainers = with maintainers; [ ma27 ];
     license = licenses.mit;
+    mainProgram = "curlie";
   };
 }

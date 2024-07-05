@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   name = "facetimehd-${version}-${kernel.version}";
-  version = "0.5.18";
+  version = "0.6.8.1";
 
   # Note: When updating this revision:
   # 1. Also update pkgs/os-specific/linux/firmware/facetimehd-firmware/
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     owner = "patjak";
     repo = "facetimehd";
     rev = version;
-    sha256 = "sha256-UO8t2zrfdJlu4uzhhyWOuHIjJNVezIq3nUPGZeW/KJU=";
+    sha256 = "sha256-h5Erga2hlDIWdDKQbkmkLY1aNCibFM7SVSnxVcoToaM=";
   };
 
   preConfigure = ''
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/patjak/bcwc_pcie";
     description = "Linux driver for the Facetime HD (Broadcom 1570) PCIe webcam";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     maintainers = with maintainers; [ womfoo grahamc kraem ];
     platforms = [ "i686-linux" "x86_64-linux" ];
   };

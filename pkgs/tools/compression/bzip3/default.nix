@@ -8,7 +8,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bzip3";
-  version = "1.3.1";
+  version = "1.4.0";
 
   outputs = [ "bin" "dev" "out" ];
 
@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "kspalaiologos";
     repo = "bzip3";
     rev = finalAttrs.version;
-    hash = "sha256-9yUd6FnobJEH/L5X4WMJFb9yLkJH9b8MAyhU2Wdtfig=";
+    hash = "sha256-UVCZWcjlueKSGYqdm7oiJ5i7/irkWv7IOyeCWT2r4sk=";
   };
 
   postPatch = ''
@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
   meta = {
-    description = "A better and stronger spiritual successor to BZip2";
+    description = "Better and stronger spiritual successor to BZip2";
     homepage = "https://github.com/kspalaiologos/bzip3";
     changelog = "https://github.com/kspalaiologos/bzip3/blob/${finalAttrs.src.rev}/NEWS";
     license = lib.licenses.lgpl3Plus;

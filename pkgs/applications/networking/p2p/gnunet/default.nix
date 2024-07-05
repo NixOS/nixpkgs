@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnunet";
-  version = "0.17.6";
+  version = "0.21.2";
 
   src = fetchurl {
-    url = "mirror://gnu/gnunet/${pname}-${version}.tar.gz";
-    sha256 = "sha256-JJNY7zsQzpmBB4H+2uxSam6rlDwSDku6CWrt+Rwa/EA=";
+    url = "mirror://gnu/gnunet/gnunet-${version}.tar.gz";
+    hash = "sha256-jCNRJo6bi6KtKIuLM3zjmfecGOP/2WCAP07V3n3an6E=";
   };
 
   enableParallelBuilding = true;
@@ -34,10 +34,6 @@ stdenv.mkDerivation rec {
     # builds.
     find . \( -iname \*test\*.c -or -name \*.conf \) | \
       xargs sed -ie "s|/tmp|$TMPDIR|g"
-
-    sed -ie 's|@LDFLAGS@|@LDFLAGS@ $(Z_LIBS)|g' \
-      src/regex/Makefile.in \
-      src/fs/Makefile.in
   '';
 
   # unfortunately, there's still a few failures with impure tests
@@ -69,7 +65,7 @@ stdenv.mkDerivation rec {
     homepage = "https://gnunet.org/";
     license = licenses.agpl3Plus;
     maintainers = with maintainers; [ pstn vrthra ];
-    platforms = platforms.gnu ++ platforms.linux;
+    platforms = platforms.unix;
     changelog = "https://git.gnunet.org/gnunet.git/tree/ChangeLog?h=v${version}";
   };
 }

@@ -11,7 +11,7 @@
 
 stdenv.mkDerivation rec {
   pname = "spicy";
-  version = "1.7.0";
+  version = "1.10.1";
 
   strictDeps = true;
 
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     owner = "zeek";
     repo = "spicy";
     rev = "v${version}";
-    hash = "sha256-axeBD1wjMc5HZy+0Oi5wltr7M6zrQI/NzU6717vUpg0=";
+    hash = "sha256-D7DWZDZH3/PFggMxsr+x5S1B6SV5E8xpJoXfGcDelKs=";
     fetchSubmodules = true;
   };
 
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/zeek/spicy";
-    description = "A C++ parser generator for dissecting protocols & files";
+    description = "C++ parser generator for dissecting protocols & files";
     longDescription = ''
       Spicy is a parser generator that makes it easy to create robust C++
       parsers for network protocols, file formats, and more. Spicy is a bit

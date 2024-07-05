@@ -10,20 +10,20 @@
 , stdenv
 , tcl
 , tk
-, wrapGAppsHook
+, wrapGAppsHook3
 , xz
 }:
 
 stdenv.mkDerivation rec {
   pname = "gtkwave";
-  version = "3.3.115";
+  version = "3.3.120";
 
   src = fetchurl {
     url = "mirror://sourceforge/gtkwave/${pname}-gtk3-${version}.tar.gz";
-    sha256 = "sha256-rbenwCsYygg1oGS2cvbNxR+HXEVLAYmnQ/LOi5HmSqU=";
+    sha256 = "sha256-XalIY/suXYjMAZ4r/cZ2AiOYETiUtYXYZOEcqDQbJNg=";
   };
 
-  nativeBuildInputs = [ pkg-config wrapGAppsHook ];
+  nativeBuildInputs = [ pkg-config wrapGAppsHook3 ];
   buildInputs = [ bzip2 glib gperf gtk3 judy tcl tk xz ]
     ++ lib.optional stdenv.isDarwin gtk-mac-integration;
 
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     description = "VCD/Waveform viewer for Unix and Win32";
     homepage = "https://gtkwave.sourceforge.net";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ thoughtpolice jiegec ];
+    maintainers = with lib.maintainers; [ thoughtpolice jiegec jleightcap ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }

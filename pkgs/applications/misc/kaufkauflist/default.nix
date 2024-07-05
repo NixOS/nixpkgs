@@ -1,33 +1,39 @@
-{ lib, buildPackages, buildGoModule, fetchFromGitHub, esbuild, buildNpmPackage, fetchFromGitea }:
+{ lib
+, buildPackages
+, fetchFromGitHub
+, buildNpmPackage
+, fetchFromGitea
+, nix-update-script
+}:
 
 let
   esbuild' = buildPackages.esbuild.override {
     buildGoModule = args: buildPackages.buildGoModule (args // rec {
-      version = "0.17.19";
+      version = "0.19.11";
       src = fetchFromGitHub {
         owner = "evanw";
         repo = "esbuild";
         rev = "v${version}";
-        hash = "sha256-PLC7OJLSOiDq4OjvrdfCawZPfbfuZix4Waopzrj8qsU=";
+        hash = "sha256-NUwjzOpHA0Ijuh0E69KXx8YVS5GTnKmob9HepqugbIU=";
       };
       vendorHash = "sha256-+BfxCyg0KkDQpHt/wycy/8CTG6YBA/VJvJFhhzUnSiQ=";
     });
   };
 in buildNpmPackage rec {
   pname = "kaufkauflist";
-  version = "2.2.0";
+  version = "4.0.0";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "annaaurora";
     repo = "kaufkauflist";
     rev = "v${version}";
-    hash = "sha256-a7C4yHTHPhL5/p1/XsrMA0PnbIzer6FShDiwUMOg69Y=";
+    hash = "sha256-x30K2dYxawfebdq//9OmCCG48w0V04tDTXpvRW7lfJI=";
   };
 
-  npmDepsHash = "sha256-uQ4XoaR3JjvPm8EQ2pnDM+x4zjVn4PEHq7BRqVbvFyw=";
+  npmDepsHash = "sha256-E3AXFwiRvrE2Swt7BfSfAoU5mQplSaSJ4q56pVfoEkQ=";
 
-  ESBUILD_BINARY_PATH = "${lib.getExe esbuild'}";
+  ESBUILD_BINARY_PATH = lib.getExe esbuild';
 
   postInstall = ''
     mkdir -p $out/share/kaufkauflist $out/share/pocketbase
@@ -35,13 +41,13 @@ in buildNpmPackage rec {
     cp -v pb_schema.json $out/share/pocketbase/
   '';
 
-  # Uncomment this when nix-update-script supports Gitea.
-  #passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     homepage = "https://codeberg.org/annaaurora/kaufkauflist";
-    description = "A to-do list for shopping or other use cases";
+    description = "To-do list for shopping or other use cases";
     license = licenses.mit;
     maintainers = with maintainers; [ annaaurora ];
+    mainProgram = "kaufdbclean";
   };
 }

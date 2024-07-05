@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "1qc58l3rkr37cj6vhf8c7bnwbz93nscyraz7jxqwjq6k4gj0cjw3";
   };
 
-  sourceRoot = "./howl-${version}/src";
+  sourceRoot = "howl-${version}/src";
 
   # The Makefile uses "/usr/local" if not explicitly overridden
   installFlags = [ "PREFIX=$(out)" ];
@@ -27,9 +27,10 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://howl.io/";
-    description = "A general purpose, fast and lightweight editor with a keyboard-centric minimalistic user interface";
+    description = "General purpose, fast and lightweight editor with a keyboard-centric minimalistic user interface";
     license = licenses.mit;
     maintainers = with maintainers; [ pacien ];
+    mainProgram = "howl";
 
     # LuaJIT and Howl builds fail for x86_64-darwin and aarch64-linux respectively
     platforms = [ "i686-linux" "x86_64-linux" ];

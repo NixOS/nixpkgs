@@ -13,7 +13,7 @@ buildGoModule rec {
     rev = "v${version}";
     sha256 = "sha256-V+lHnOmIWjI1qmoJ7+pp+cGmJAtSeY+r2I9zykswQzM=";
   };
-  vendorSha256 = null;
+  vendorHash = null;
 
   patchPhase = ''
     substituteInPlace main.go --replace 0.0.0 ${version}
@@ -21,6 +21,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Docker build wrapper";
+    mainProgram = "dapper";
     homepage = "https://github.com/rancher/dapper";
     license = licenses.asl20;
     platforms = platforms.linux;

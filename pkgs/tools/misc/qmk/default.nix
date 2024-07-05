@@ -5,6 +5,7 @@
 , avrdude
 , dfu-programmer
 , dfu-util
+, wb32-dfu-updater
 , gcc-arm-embedded
 , gnumake
 , teensy-loader-cli
@@ -12,12 +13,12 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "qmk";
-  version = "1.1.2";
+  version = "1.1.5";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-+HH4jxoMoxujGgCdcWQX5GvFOKT4347eaoAckHbCKZg=";
+    hash = "sha256-Lv48dSIwxrokuHGcO26FpWRL+PfQ3SN3V+2pt7fmCxE=";
   };
 
   nativeBuildInputs = with python3.pkgs; [
@@ -38,6 +39,7 @@ python3.pkgs.buildPythonApplication rec {
     avrdude
     dfu-programmer
     dfu-util
+    wb32-dfu-updater
     teensy-loader-cli
     gcc-arm-embedded
     gnumake
@@ -52,7 +54,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     homepage = "https://github.com/qmk/qmk_cli";
-    description = "A program to help users work with QMK Firmware";
+    description = "Program to help users work with QMK Firmware";
     longDescription = ''
       qmk_cli is a companion tool to QMK firmware. With it, you can:
 
@@ -68,6 +70,7 @@ python3.pkgs.buildPythonApplication rec {
       - ... and many more!
     '';
     license = licenses.mit;
-    maintainers = with maintainers; [ bhipple babariviere ekleog ];
+    maintainers = with maintainers; [ bhipple ekleog ];
+    mainProgram = "qmk";
   };
 }

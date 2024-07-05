@@ -1,4 +1,5 @@
 { lib
+, coreutils
 , fetchFromGitHub
 , rustPlatform
 , pkg-config
@@ -27,6 +28,7 @@
 , QTKit
 , AVKit
 , WebKit
+, System
 , waylandSupport ? false
 , x11Support ? stdenv.isLinux
 , testers
@@ -38,13 +40,13 @@ assert stdenv.isDarwin -> !x11Support;
 assert stdenv.isDarwin -> !waylandSupport;
 rustPlatform.buildRustPackage rec {
   pname = "espanso";
-  version = "2.1.8";
+  version = "2.2-unstable-2024-05-14";
 
   src = fetchFromGitHub {
     owner = "espanso";
     repo = "espanso";
-    rev = "v${version}";
-    hash = "sha256-5TUo5B1UZZARgTHbK2+520e3mGZkZ5tTez1qvZvMnxs=";
+    rev = "8daadcc949c35a7b7aa20b7f544fdcff83e2c5f7";
+    hash = "sha256-4MArENBmX6tDVLZE1O8cuJe7A0R+sLZoxBkDvIwIVZ4=";
   };
 
   cargoLock = {
@@ -53,10 +55,6 @@ rustPlatform.buildRustPackage rec {
       "yaml-rust-0.4.6" = "sha256-wXFy0/s4y6wB3UO19jsLwBdzMy7CGX4JoUt5V6cU7LU=";
     };
   };
-
-  cargoPatches = lib.optionals stdenv.isDarwin [
-    ./inject-wx-on-darwin.patch
-  ];
 
   nativeBuildInputs = [
     extra-cmake-modules
@@ -69,7 +67,7 @@ rustPlatform.buildRustPackage rec {
   buildNoDefaultFeatures = true;
   buildFeatures = [
     "modulo"
-  ] ++ lib.optionals waylandSupport[
+  ] ++ lib.optionals waylandSupport [
     "wayland"
   ] ++ lib.optionals stdenv.isLinux [
     "vendored-tls"
@@ -95,6 +93,7 @@ rustPlatform.buildRustPackage rec {
     QTKit
     AVKit
     WebKit
+    System
   ] ++ lib.optionals waylandSupport [
     wl-clipboard
   ] ++ lib.optionals x11Support [
@@ -106,46 +105,56 @@ rustPlatform.buildRustPackage rec {
   ];
 
   postPatch = lib.optionalString stdenv.isDarwin ''
-    substituteInPlace scripts/create_bundle.sh --replace target/mac/ $out/Applications/
+    substituteInPlace scripts/create_bundle.sh \
+      --replace-fail target/mac/ $out/Applications/ \
+      --replace-fail /bin/echo ${coreutils}/bin/echo
     patchShebangs scripts/create_bundle.sh
     substituteInPlace espanso/src/res/macos/Info.plist \
-      --replace "<string>espanso</string>" "<string>${placeholder "out"}/Applications/Espanso.app/Contents/MacOS/espanso</string>"
-    substituteInPlace espanso/src/res/macos/com.federicoterzi.espanso.plist \
-      --replace "<string>/Applications/Espanso.app/Contents/MacOS/espanso</string>" "<string>${placeholder "out"}/Applications/Espanso.app/Contents/MacOS/espanso</string>" \
-      --replace "<string>/usr/bin" "<string>${placeholder "out"}/bin:/usr/bin"
+      --replace-fail "<string>espanso</string>" "<string>${placeholder "out"}/Applications/Espanso.app/Contents/MacOS/espanso</string>"
     substituteInPlace espanso/src/path/macos.rs  espanso/src/path/linux.rs \
-      --replace '"/usr/local/bin/espanso"' '"${placeholder "out"}/bin/espanso"'
+      --replace-fail '"/usr/local/bin/espanso"' '"${placeholder "out"}/bin/espanso"'
   '';
 
   # Some tests require networking
   doCheck = false;
 
-  postInstall = if stdenv.isDarwin then ''
-    EXEC_PATH=$out/bin/espanso BUILD_ARCH=current ${stdenv.shell} ./scripts/create_bundle.sh
-  '' else ''
-    wrapProgram $out/bin/espanso \
-      --prefix PATH : ${lib.makeBinPath (
-        lib.optionals stdenv.isLinux [
-          libnotify
-          setxkbmap
-        ] ++ lib.optionals waylandSupport [
-          wl-clipboard
-        ] ++ lib.optionals x11Support [
-          xclip
-        ]
-      )}
-  '';
+  postInstall =
+    if stdenv.isDarwin then ''
+      EXEC_PATH=$out/bin/espanso BUILD_ARCH=current ${stdenv.shell} ./scripts/create_bundle.sh
+    '' else ''
+      wrapProgram $out/bin/espanso \
+        --prefix PATH : ${lib.makeBinPath (
+          lib.optionals stdenv.isLinux [
+            libnotify
+            setxkbmap
+          ] ++ lib.optionals waylandSupport [
+            wl-clipboard
+          ] ++ lib.optionals x11Support [
+            xclip
+          ]
+        )}
+    '';
 
   passthru.tests.version = testers.testVersion {
     package = espanso;
+    # remove when updating to a release version
+    version = "2.2.1";
   };
 
   meta = with lib; {
     description = "Cross-platform Text Expander written in Rust";
+    mainProgram = "espanso";
     homepage = "https://espanso.org";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ kimat thehedgeh0g ];
+    maintainers = with maintainers; [ kimat pyrox0 n8henrie ];
     platforms = platforms.unix;
+    # With apple_sdk_10_12,
+    # kCFURLVolumeAvailableCapacityForImportantUsageKey
+    # is undefined.
+    # With apple_sdk_11_0, there is an issue with
+    # kColorSyncGenericGrayProfile.
+    broken = stdenv.hostPlatform.system == "x86_64-darwin";
+
 
     longDescription = ''
       Espanso detects when you type a keyword and replaces it while you're typing.

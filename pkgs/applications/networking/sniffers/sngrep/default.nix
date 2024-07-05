@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "sngrep";
-  version = "1.7.0";
+  version = "1.8.1";
 
   src = fetchFromGitHub {
     owner = "irontec";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-gFba2wOU4GwpOZTo5A2QpBgnC6OgDJEeyaPGHbA+7tA=";
+    sha256 = "sha256-EbB5Ok/8RUoNzkgoWIhHTRvlq9Vv2KVx6Hu8ejrLkMc=";
   };
 
   nativeBuildInputs = [
@@ -44,8 +44,11 @@ stdenv.mkDerivation rec {
     ./bootstrap.sh
   '';
 
+  doCheck = true;
+
   meta = with lib; {
-    description = "A tool for displaying SIP calls message flows from terminal";
+    description = "Tool for displaying SIP calls message flows from terminal";
+    mainProgram = "sngrep";
     homepage = "https://github.com/irontec/sngrep";
     license = licenses.gpl3Plus;
     platforms = platforms.unix;

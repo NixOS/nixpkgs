@@ -1,22 +1,23 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, case
-, psutil
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
+  case,
+  psutil,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "billiard";
-  version = "4.1.0";
+  version = "4.2.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-GtLuro4oBT1ym6M3PTTZ1uIQ9uTYvwqcZPkr0FPx7fU=";
+    hash = "sha256-mjwxhMsnWqF6cy+T9lsgxSXT2fJTci0mqCGUgDreWiw=";
   };
 
   nativeCheckInputs = [
@@ -30,9 +31,7 @@ buildPythonPackage rec {
     "test_set_pdeathsig"
   ];
 
-  pythonImportsCheck = [
-    "billiard"
-  ];
+  pythonImportsCheck = [ "billiard" ];
 
   meta = with lib; {
     description = "Python multiprocessing fork with improvements and bugfixes";

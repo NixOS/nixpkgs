@@ -8,14 +8,14 @@
 , removeReferencesTo
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "volk";
   version = "3.0.0";
 
   src = fetchFromGitHub {
     owner = "gnuradio";
-    repo = pname;
-    rev = "v${version}";
+    repo = "volk";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-kI4IuO6TLplo5lLAGIPWQWtePcjIEWB9XaJDA6WlqSg=";
     fetchSubmodules = true;
   };
@@ -50,9 +50,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "http://libvolk.org/";
-    description = "The Vector Optimized Library of Kernels";
+    description = "Vector Optimized Library of Kernels";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ doronbehar ];
     platforms = platforms.all;
   };
-}
+})

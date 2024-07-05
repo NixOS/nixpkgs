@@ -23,5 +23,6 @@ buildNpmPackage rec {
     homepage = "https://tyrasd.github.io/osmtogeojson/";
     maintainers = with maintainers; [ thibautmarty ];
     license = licenses.mit;
+    mainProgram = "osmtogeojson";
   };
 }

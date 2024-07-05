@@ -1,26 +1,29 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, hypothesis
-, lark
-, libcst
-, parso
-, pytestCheckHook
-, pytest-xdist
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  hypothesis,
+  lark,
+  libcst,
+  parso,
+  pytestCheckHook,
+  pytest-xdist,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "hypothesmith";
-  version = "0.2.3";
+  version = "0.3.3";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-vc6EXsmE5uP+0h5l0ugrjrxt5cpeuTZJ39dgNMWQakY=";
+    hash = "sha256-lsFIAtbI6F2JdSZBdoeNtUso0u2SH9v+3C5rjOPIFxY=";
   };
 
-  patches = [
-    ./remove-black.patch
-  ];
+  patches = [ ./remove-black.patch ];
 
   postPatch = ''
     substituteInPlace setup.py \
@@ -33,13 +36,19 @@ buildPythonPackage rec {
       --replace "--cov-fail-under=100" ""
   '';
 
-  propagatedBuildInputs = [ hypothesis lark libcst ];
-
-  nativeCheckInputs = [ parso pytestCheckHook pytest-xdist ];
-
-  pytestFlagsArray = [
-    "-v"
+  propagatedBuildInputs = [
+    hypothesis
+    lark
+    libcst
   ];
+
+  nativeCheckInputs = [
+    parso
+    pytestCheckHook
+    pytest-xdist
+  ];
+
+  pytestFlagsArray = [ "-v" ];
 
   disabledTests = [
     # https://github.com/Zac-HD/hypothesmith/issues/21
@@ -56,7 +65,8 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Hypothesis strategies for generating Python programs, something like CSmith";
     homepage = "https://github.com/Zac-HD/hypothesmith";
+    changelog = "https://github.com/Zac-HD/hypothesmith/blob/master/CHANGELOG.md";
     license = licenses.mpl20;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

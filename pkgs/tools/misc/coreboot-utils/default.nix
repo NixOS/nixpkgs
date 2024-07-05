@@ -1,23 +1,23 @@
 { lib, stdenv, fetchgit, pkg-config, zlib, pciutils, openssl, coreutils, acpica-tools, makeWrapper, gnugrep, gnused, file, buildEnv }:
 
 let
-  version = "4.20";
+  version = "24.05";
 
   commonMeta = with lib; {
     description = "Various coreboot-related tools";
     homepage = "https://www.coreboot.org";
     license = with licenses; [ gpl2Only gpl2Plus ];
-    maintainers = with maintainers; [ felixsinger yuka ];
+    maintainers = with maintainers; [ felixsinger jmbaur ];
     platforms = platforms.linux;
   };
 
-  generic = { pname, path ? "util/${pname}", ... }@args: stdenv.mkDerivation (rec {
+  generic = { pname, path ? "util/${pname}", ... }@args: stdenv.mkDerivation ({
     inherit pname version;
 
     src = fetchgit {
       url = "https://review.coreboot.org/coreboot";
-      rev = "465fbbe93ee01b4576689a90b7ddbeec23cdace2";
-      sha256 = "sha256-DPaudCeK9SKu2eN1fad6a52ICs5d/GXCUFMdqAl65BE=";
+      rev = version;
+      hash = "sha256-Fq3tZje6QoMskxqWd61OstgI9Sj25yijf8S3LiTJuYc=";
     };
 
     enableParallelBuilding = true;
@@ -65,6 +65,7 @@ let
     nvramtool = generic {
       pname = "nvramtool";
       meta.description = "Read and write coreboot parameters and display information from the coreboot table in CMOS/NVRAM";
+      meta.mainProgram = "nvramtool";
     };
     superiotool = generic {
       pname = "superiotool";

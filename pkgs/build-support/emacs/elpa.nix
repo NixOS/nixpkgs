@@ -2,7 +2,11 @@
 
 { lib, stdenv, emacs, texinfo, writeText, gcc }:
 
-with lib;
+let
+  handledArgs = [ "files" "fileSpecs" "meta" ];
+  genericBuild = import ./generic.nix { inherit lib stdenv emacs texinfo writeText gcc; };
+
+in
 
 { pname
 , version
@@ -11,15 +15,7 @@ with lib;
 , ...
 }@args:
 
-let
-
-  defaultMeta = {
-    homepage = args.src.meta.homepage or "https://elpa.gnu.org/packages/${pname}.html";
-  };
-
-in
-
-import ./generic.nix { inherit lib stdenv emacs texinfo writeText gcc; } ({
+genericBuild ({
 
   dontUnpack = true;
 
@@ -33,9 +29,9 @@ import ./generic.nix { inherit lib stdenv emacs texinfo writeText gcc; } ({
     runHook postInstall
   '';
 
-  meta = defaultMeta // meta;
+  meta = {
+    homepage = args.src.meta.homepage or "https://elpa.gnu.org/packages/${pname}.html";
+  } // meta;
 }
 
-// removeAttrs args [ "files" "fileSpecs"
-                      "meta"
-                    ])
+// removeAttrs args handledArgs)

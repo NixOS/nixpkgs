@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , fetchurl
-, wrapGAppsHook
+, wrapGAppsHook3
 , makeDesktopItem
 , atk
 , cairo
@@ -30,7 +30,7 @@
 , libXrender
 , libXt
 , libnotify
-, gnome
+, adwaita-icon-theme
 , libGLU
 , libGL
 , nspr
@@ -41,17 +41,17 @@
 
 stdenv.mkDerivation rec {
   pname = "zotero";
-  version = "6.0.26";
+  version = "6.0.35";
 
   src = fetchurl {
     url =
       "https://download.zotero.org/client/release/${version}/Zotero-${version}_linux-x86_64.tar.bz2";
-    hash = "sha256-Btrzv9trUFjCrQ+OEc7MUOzq7x3XW7jtgUJMitmPK0A=";
+    hash = "sha256-HAVLmamEPuFf0548/iEXes+f4XnQ7kU1u9hyOYhVyZ0=";
   };
 
-  nativeBuildInputs = [ wrapGAppsHook ];
+  nativeBuildInputs = [ wrapGAppsHook3 ];
   buildInputs =
-    [ gsettings-desktop-schemas glib gtk3 gnome.adwaita-icon-theme dconf ];
+    [ gsettings-desktop-schemas glib gtk3 adwaita-icon-theme dconf ];
 
   dontConfigure = true;
   dontBuild = true;
@@ -151,7 +151,8 @@ stdenv.mkDerivation rec {
     description = "Collect, organize, cite, and share your research sources";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.agpl3Only;
-    platforms = platforms.linux;
+    platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ i077 ];
+    mainProgram = "zotero";
   };
 }

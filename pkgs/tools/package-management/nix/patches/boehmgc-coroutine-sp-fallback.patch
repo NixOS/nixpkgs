@@ -1,8 +1,8 @@
 diff --git a/pthread_stop_world.c b/pthread_stop_world.c
-index b5d71e62..aed7b0bf 100644
+index 2b45489..0e6d8ef 100644
 --- a/pthread_stop_world.c
 +++ b/pthread_stop_world.c
-@@ -768,6 +768,8 @@ STATIC void GC_restart_handler(int sig)
+@@ -776,6 +776,8 @@ STATIC void GC_restart_handler(int sig)
  /* world is stopped.  Should not fail if it isn't.                      */
  GC_INNER void GC_push_all_stacks(void)
  {
@@ -11,14 +11,23 @@ index b5d71e62..aed7b0bf 100644
      GC_bool found_me = FALSE;
      size_t nthreads = 0;
      int i;
-@@ -851,6 +853,31 @@ GC_INNER void GC_push_all_stacks(void)
-           hi = p->altstack + p->altstack_size;
+@@ -868,6 +870,40 @@ GC_INNER void GC_push_all_stacks(void)
+             hi = p->altstack + p->altstack_size;
+ #         endif
            /* FIXME: Need to scan the normal stack too, but how ? */
-           /* FIXME: Assume stack grows down */
 +        } else {
++          #ifdef HAVE_PTHREAD_ATTR_GET_NP
++          if (pthread_attr_init(&pattr) != 0) {
++            ABORT("GC_push_all_stacks: pthread_attr_init failed!");
++          }
++          if (pthread_attr_get_np(p->id, &pattr) != 0) {
++            ABORT("GC_push_all_stacks: pthread_attr_get_np failed!");
++          }
++          #else
 +          if (pthread_getattr_np(p->id, &pattr)) {
 +            ABORT("GC_push_all_stacks: pthread_getattr_np failed!");
 +          }
++          #endif
 +          if (pthread_attr_getstacksize(&pattr, &stack_limit)) {
 +            ABORT("GC_push_all_stacks: pthread_attr_getstacksize failed!");
 +          }
@@ -41,5 +50,5 @@ index b5d71e62..aed7b0bf 100644
 +          #error "STACK_GROWS_UP not supported in boost_coroutine2 (as of june 2021), so we don't support it in Nix."
 +          #endif
          }
-         GC_push_all_stack_sections(lo, hi, traced_stack_sect);
- #       ifdef STACK_GROWS_UP
+ #       ifdef STACKPTR_CORRECTOR_AVAILABLE
+           if (GC_sp_corrector != 0)

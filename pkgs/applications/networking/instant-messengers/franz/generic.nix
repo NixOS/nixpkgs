@@ -1,7 +1,7 @@
 { stdenv
 , lib
 , makeWrapper
-, wrapGAppsHook
+, wrapGAppsHook3
 , autoPatchelfHook
 , dpkg
 , xorg
@@ -23,6 +23,7 @@
 , libnotify
 , xdg-utils
 , mesa
+, libglvnd
 , libappindicator-gtk3
 }:
 
@@ -37,7 +38,7 @@ in stdenv.mkDerivation (rec {
   # Don't remove runtime deps.
   dontPatchELF = true;
 
-  nativeBuildInputs = [ autoPatchelfHook makeWrapper wrapGAppsHook dpkg ];
+  nativeBuildInputs = [ autoPatchelfHook makeWrapper wrapGAppsHook3 dpkg ];
   buildInputs = extraBuildInputs ++ (with xorg; [
     libXi
     libXcursor
@@ -68,7 +69,7 @@ in stdenv.mkDerivation (rec {
     expat
     stdenv.cc.cc
   ];
-  runtimeDependencies = [ stdenv.cc.cc.lib (lib.getLib udev) libnotify libappindicator-gtk3 ];
+  runtimeDependencies = [ libglvnd stdenv.cc.cc.lib (lib.getLib udev) libnotify libappindicator-gtk3 ];
 
   unpackPhase = "dpkg-deb -x $src .";
 
@@ -86,10 +87,11 @@ in stdenv.mkDerivation (rec {
   dontWrapGApps = true;
 
   postFixup = ''
-    # make xdg-open overrideable at runtime
-    wrapProgram $out/opt/${name}/${pname} \
+    # make xdg-open overridable at runtime
+    wrapProgramShell $out/opt/${name}/${pname} \
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath runtimeDependencies}" \
       --suffix PATH : ${xdg-utils}/bin \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
       "''${gappsWrapperArgs[@]}"
   '';
 } // cleanedArgs)

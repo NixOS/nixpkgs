@@ -1,6 +1,18 @@
 { stdenv, lib, buildPackages, fetchurl, attr, runtimeShell
 , usePam ? !isStatic, pam ? null
 , isStatic ? stdenv.hostPlatform.isStatic
+
+# passthru.tests
+, bind
+, chrony
+, htop
+, libgcrypt
+, libvirt
+, ntp
+, qemu
+, squid
+, tor
+, uwsgi
 }:
 
 assert usePam -> pam != null;
@@ -29,7 +41,7 @@ stdenv.mkDerivation rec {
     "BUILD_CC=$(CC_FOR_BUILD)"
     "CC:=$(CC)"
     "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
-  ] ++ lib.optional isStatic "SHARED=no";
+  ] ++ lib.optionals isStatic [ "SHARED=no" "LIBCSTATIC=yes" ];
 
   postPatch = ''
     patchShebangs ./progs/mkcapshdoc.sh
@@ -56,6 +68,20 @@ stdenv.mkDerivation rec {
     mkdir -p "$pam/lib/security"
     mv "$lib"/lib/security "$pam/lib"
   '';
+
+  passthru.tests = {
+    inherit
+      bind
+      chrony
+      htop
+      libgcrypt
+      libvirt
+      ntp
+      qemu
+      squid
+      tor
+      uwsgi;
+  };
 
   meta = {
     description = "Library for working with POSIX capabilities";

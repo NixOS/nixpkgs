@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with lib; {
-    description = "A C++ library of designs, containing flexible implementations of common design patterns and idioms";
+    description = "C++ library of designs, containing flexible implementations of common design patterns and idioms";
     homepage = "https://loki-lib.sourceforge.net";
     license = licenses.mit;
     platforms = platforms.all;

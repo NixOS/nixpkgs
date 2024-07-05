@@ -1,6 +1,7 @@
 { lib, stdenv
 , buildPackages
 , fetchurl
+, fetchpatch
 , wafHook
 , pkg-config
 , bison
@@ -27,12 +28,14 @@
 , tdb
 , tevent
 , libxcrypt
+, libxcrypt-legacy
 , cmocka
 , rpcsvc-proto
 , bash
 , python3Packages
 , nixosTests
 , libiconv
+, testers
 
 , enableLDAP ? false, openldap
 , enablePrinting ? false, cups
@@ -49,13 +52,22 @@
 
 with lib;
 
-stdenv.mkDerivation rec {
+let
+  # samba-tool requires libxcrypt-legacy algorithms
+  python = python3Packages.python.override {
+    libxcrypt = libxcrypt-legacy;
+  };
+  wrapPython = python3Packages.wrapPython.override {
+    inherit python;
+  };
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "samba";
-  version = "4.17.7";
+  version = "4.20.1";
 
   src = fetchurl {
-    url = "mirror://samba/pub/samba/stable/${pname}-${version}.tar.gz";
-    hash = "sha256-lcnBa2VKiM+u/ZWAUt1XPi+F7N8RTk7Owxh1N6CU2Rk=";
+    url = "mirror://samba/pub/samba/stable/${finalAttrs.pname}-${finalAttrs.version}.tar.gz";
+    hash = "sha256-+Tw69SlTQNCBBsfA3PuF5PhQV9/RRYeqiBe+sxr/iPc=";
   };
 
   outputs = [ "out" "dev" "man" ];
@@ -66,6 +78,12 @@ stdenv.mkDerivation rec {
     ./4.x-no-persistent-install-dynconfig.patch
     ./4.x-fix-makeflags-parsing.patch
     ./build-find-pre-built-heimdal-build-tools-in-case-of-.patch
+    (fetchpatch {
+      # workaround for https://github.com/NixOS/nixpkgs/issues/303436
+      name = "samba-reproducible-builds.patch";
+      url = "https://gitlab.com/raboof/samba/-/commit/9995c5c234ece6888544cdbe6578d47e83dea0b5.patch";
+      hash = "sha256-TVKK/7wGsfP1pVf8o1NwazobiR8jVJCCMj/FWji3f2A=";
+    })
   ];
 
   nativeBuildInputs = [
@@ -93,8 +111,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     bash
-    python3Packages.wrapPython
-    python3Packages.python
+    wrapPython
+    python
     readline
     popt
     dbus
@@ -155,8 +173,16 @@ stdenv.mkDerivation rec {
     ++ optional (!enablePam) "--without-pam"
     ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "--bundled-libraries=!asn1_compile,!compile_et"
-  ] ++ optionals stdenv.isAarch32 [
-    # https://bugs.gentoo.org/683148
+    "--cross-compile"
+    "--cross-execute=${stdenv.hostPlatform.emulator buildPackages}"
+  ] ++ optionals stdenv.buildPlatform.is32bit [
+    # By default `waf configure` spawns as many as available CPUs. On
+    # 32-bit systems with many CPUs (like `i686` chroot on `x86_64`
+    # kernel) it can easily exhaust 32-bit address space and hang up:
+    #   https://github.com/NixOS/nixpkgs/issues/287339#issuecomment-1949462057
+    #   https://bugs.gentoo.org/683148
+    # Limit the job count down to the minimal on system with limited address
+    # space.
     "--jobs 1"
   ];
 
@@ -165,7 +191,7 @@ stdenv.mkDerivation rec {
   # module, which works correctly in all cases.
   PYTHON_CONFIG = "/invalid";
 
-  pythonPath = [ python3Packages.dnspython tdb ];
+  pythonPath = [ python3Packages.dnspython python3Packages.markdown tdb ];
 
   preBuild = ''
     export MAKEFLAGS="-j $NIX_BUILD_CORES"
@@ -208,7 +234,7 @@ stdenv.mkDerivation rec {
     # Samba does its own shebang patching, but uses build Python
     find $out/bin -type f -executable | while read file; do
       isScript "$file" || continue
-      sed -i 's^${lib.getBin buildPackages.python3Packages.python}/bin^${lib.getBin python3Packages.python}/bin^' "$file"
+      sed -i 's^${lib.getBin buildPackages.python3Packages.python}^${lib.getBin python}^' "$file"
     done
   '';
 
@@ -216,16 +242,38 @@ stdenv.mkDerivation rec {
     lib.optionals (buildPackages.python3Packages.python != python3Packages.python)
       [ buildPackages.python3Packages.python ];
 
-  passthru = {
-    tests.samba = nixosTests.samba;
+  passthru.tests = {
+    samba = nixosTests.samba;
+    pkg-config = testers.hasPkgConfigModules {
+      package = finalAttrs.finalPackage;
+    };
+    version = testers.testVersion {
+      command = "${finalAttrs.finalPackage}/bin/smbd -V";
+      package = finalAttrs.finalPackage;
+    };
   };
 
   meta = with lib; {
     homepage = "https://www.samba.org";
-    description = "The standard Windows interoperability suite of programs for Linux and Unix";
+    description = "Standard Windows interoperability suite of programs for Linux and Unix";
     license = licenses.gpl3;
     platforms = platforms.unix;
     broken = enableGlusterFS;
     maintainers = with maintainers; [ aneeshusa ];
+    pkgConfigModules = [
+      "dcerpc_samr"
+      "dcerpc"
+      "ndr_krb5pac"
+      "ndr_nbt"
+      "ndr_standard"
+      "ndr"
+      "netapi"
+      "samba-credentials"
+      "samba-hostconfig"
+      "samba-util"
+      "samdb"
+      "smbclient"
+      "wbclient"
+    ];
   };
-}
+})

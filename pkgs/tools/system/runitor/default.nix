@@ -2,14 +2,14 @@
 
 buildGoModule rec {
   pname = "runitor";
-  version = "1.2.0";
-  vendorSha256 = null;
+  version = "1.3.0";
+  vendorHash = null;
 
   src = fetchFromGitHub {
     owner = "bdd";
     repo = "runitor";
     rev = "v${version}";
-    sha256 = "sha256-lL9yfiqPIIfEvjiWcG6e1NrURHJFdk4x/od/w7/i2DE=";
+    sha256 = "sha256-9sg+ku3Qh/X/EZ2VCrvIc0pq5iyn4O8RZrO4KpkciAI=";
   };
 
   ldflags = [
@@ -27,7 +27,7 @@ buildGoModule rec {
 
   meta = with lib; {
     homepage = "https://bdd.fi/x/runitor";
-    description = "A command runner with healthchecks.io integration";
+    description = "Command runner with healthchecks.io integration";
     longDescription = ''
       Runitor runs the supplied command, captures its output, and based on its exit
       code reports successful or failed execution to https://healthchecks.io or your
@@ -39,5 +39,6 @@ buildGoModule rec {
     '';
     license = licenses.bsd0;
     maintainers = with maintainers; [ bdd ];
+    mainProgram = "runitor";
   };
 }

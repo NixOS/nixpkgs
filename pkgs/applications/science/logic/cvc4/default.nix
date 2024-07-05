@@ -35,12 +35,12 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     patchShebangs ./src/
   '';
-  cmakeFlags = [
-    "-DCMAKE_BUILD_TYPE=Production"
-  ];
+
+  cmakeBuildType = "Production";
 
   meta = with lib; {
-    description = "A high-performance theorem prover and SMT solver";
+    description = "High-performance theorem prover and SMT solver";
+    mainProgram = "cvc4";
     homepage    = "http://cvc4.cs.stanford.edu/web/";
     license     = licenses.gpl3;
     platforms   = platforms.unix;

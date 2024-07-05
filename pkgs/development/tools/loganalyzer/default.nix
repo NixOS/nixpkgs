@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     wrapQtAppsHook
   ];
 
-  sourceRoot = "source/src";
+  sourceRoot = "${src.name}/src";
 
   buildPhase = ''
     runHook preBuild

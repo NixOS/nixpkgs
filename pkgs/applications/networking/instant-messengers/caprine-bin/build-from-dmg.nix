@@ -30,6 +30,5 @@ stdenvNoCC.mkDerivation {
 
   meta = metaCommon // {
     platforms = with lib.platforms; darwin;
-    mainProgram = "caprine";
   };
 }

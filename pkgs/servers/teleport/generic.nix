@@ -6,15 +6,20 @@
 , makeWrapper
 , CoreFoundation
 , AppKit
+, binaryen
+, cargo
 , libfido2
 , nodejs
 , openssl
 , pkg-config
+, rustc
 , Security
 , stdenv
 , xdg-utils
 , yarn
-, yarn2nix-moretea
+, wasm-bindgen-cli
+, wasm-pack
+, fixup-yarn-lock
 , nixosTests
 
 , withRdpClient ? true
@@ -22,6 +27,7 @@
 , version
 , hash
 , vendorHash
+, extPatches ? null
 , cargoHash ? null
 , cargoLock ? null
 , yarnHash
@@ -68,11 +74,18 @@ let
     pname = "teleport-webassets";
     inherit src version;
 
-    nativeBuildInputs = [
-      nodejs
-      yarn
-      yarn2nix-moretea.fixup_yarn_lock
-    ];
+    cargoDeps = rustPlatform.importCargoLock cargoLock;
+
+    nativeBuildInputs = [ nodejs yarn fixup-yarn-lock ] ++
+      lib.optional (lib.versionAtLeast version "15") [
+        binaryen
+        cargo
+        rustc
+        rustc.llvmPackages.lld
+        rustPlatform.cargoSetupHook
+        wasm-bindgen-cli
+        wasm-pack
+      ];
 
     configurePhase = ''
       export HOME=$(mktemp -d)
@@ -80,14 +93,23 @@ let
 
     buildPhase = ''
       yarn config --offline set yarn-offline-mirror ${yarnOfflineCache}
-      fixup_yarn_lock yarn.lock
+      fixup-yarn-lock yarn.lock
 
       yarn install --offline \
         --frozen-lockfile \
         --ignore-engines --ignore-scripts
       patchShebangs .
 
-      yarn build-ui-oss
+      ${if lib.versionAtLeast version "15"
+      then ''
+        PATH=$PATH:$PWD/node_modules/.bin
+        pushd web/packages/teleport
+        # https://github.com/gravitational/teleport/blob/6b91fe5bbb9e87db4c63d19f94ed4f7d0f9eba43/web/packages/teleport/README.md?plain=1#L18-L20
+        RUST_MIN_STACK=16777216 wasm-pack build ./src/ironrdp --target web --mode no-install
+        vite build
+        popd
+      ''
+      else "yarn build-ui-oss"}
     '';
 
     installPhase = ''
@@ -111,11 +133,7 @@ buildGoModule rec {
     ++ lib.optionals (stdenv.isDarwin && withRdpClient) [ CoreFoundation Security AppKit ];
   nativeBuildInputs = [ makeWrapper pkg-config ];
 
-  patches = [
-    # https://github.com/NixOS/nixpkgs/issues/120738
-    ./tsh.patch
-    # https://github.com/NixOS/nixpkgs/issues/132652
-    ./test.patch
+  patches = extPatches ++ [
     ./0001-fix-add-nix-path-to-exec-env.patch
     ./rdpclient.patch
   ];
@@ -157,11 +175,17 @@ buildGoModule rec {
   meta = with lib; {
     description = "Certificate authority and access plane for SSH, Kubernetes, web applications, and databases";
     homepage = "https://goteleport.com/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ arianvp justinas sigma tomberek freezeboy ];
+    license = if lib.versionAtLeast version "15" then licenses.agpl3Plus else licenses.asl20;
+    maintainers = with maintainers; [ arianvp justinas sigma tomberek freezeboy techknowlogick ];
     platforms = platforms.unix;
     # go-libfido2 is broken on platforms with less than 64-bit because it defines an array
     # which occupies more than 31 bits of address space.
-    broken = stdenv.hostPlatform.parsed.cpu.bits < 64;
+    broken = stdenv.hostPlatform.parsed.cpu.bits < 64 ||
+      # See comment about wasm32-unknown-unknown in rustc.nix.
+      # version 15 is the first that starts to use wasm
+      (lib.versionAtLeast version "15") && (
+        lib.any (a: lib.hasAttr a stdenv.hostPlatform.gcc) [ "cpu" "float-abi" "fpu" ] ||
+        !stdenv.hostPlatform.gcc.thumb or true
+      );
   };
 }

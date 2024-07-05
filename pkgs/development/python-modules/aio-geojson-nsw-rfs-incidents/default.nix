@@ -1,28 +1,32 @@
-{ lib
-, aio-geojson-client
-, aiohttp
-, aresponses
-, buildPythonPackage
-, fetchFromGitHub
-, pytest-asyncio
-, pytestCheckHook
-, pytz
-, pythonOlder
+{
+  lib,
+  aio-geojson-client,
+  aiohttp,
+  aioresponses,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  pytz,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "aio-geojson-nsw-rfs-incidents";
-  version = "0.6";
-  format = "setuptools";
+  version = "0.7";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "exxamalte";
     repo = "python-aio-geojson-nsw-rfs-incidents";
     rev = "refs/tags/v${version}";
-    hash = "sha256-pn0r5iLpNnK3xmAhq/oX90hdiHgFDuwDQqfAzkp5jmw=";
+    hash = "sha256-HksiKfXhLASAgU81x7YiOXFmBLIkqJ9ldWLLY1ZbZlk=";
   };
+
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     aio-geojson-client
@@ -30,15 +34,15 @@ buildPythonPackage rec {
     pytz
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   nativeCheckInputs = [
-    aresponses
+    aioresponses
     pytest-asyncio
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "aio_geojson_nsw_rfs_incidents"
-  ];
+  pythonImportsCheck = [ "aio_geojson_nsw_rfs_incidents" ];
 
   meta = with lib; {
     description = "Python module for accessing the NSW Rural Fire Service incidents feeds";

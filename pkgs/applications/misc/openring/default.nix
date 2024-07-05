@@ -11,15 +11,16 @@ buildGoModule rec {
     sha256 = "sha256-BY2AtgZXzPLqHk3hd6D+XXbrwvWS9DNTKwLqsua/3uw=";
   };
 
-  vendorSha256 = "sha256-BbBTmkGyLrIWphXC+dBaHaVzHuXRZ+4N/Jt2k3nF7Z4=";
+  vendorHash = "sha256-BbBTmkGyLrIWphXC+dBaHaVzHuXRZ+4N/Jt2k3nF7Z4=";
 
   # The package has no tests.
   doCheck = false;
 
   meta = with lib; {
-    description = "A webring for static site generators";
+    description = "Webring for static site generators";
     homepage = "https://sr.ht/~sircmpwn/openring";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ sumnerevans ];
+    mainProgram = "openring";
   };
 }

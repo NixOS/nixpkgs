@@ -28,6 +28,7 @@
 , libxmlb
 , malcontent
 , json-glib
+, glib-networking
 , libsecret
 , valgrind-light
 , docbook-xsl-nons
@@ -43,13 +44,13 @@ let
   withFwupd = stdenv.hostPlatform.isx86;
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-software";
-  version = "44.3";
+  version = "46.2";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-software/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "Mlq7ciyrILaqZ/FY6i/y6omYMMoKiD4kWU2d74X9FiI=";
+    url = "mirror://gnome/sources/gnome-software/${lib.versions.major finalAttrs.version}/gnome-software-${finalAttrs.version}.tar.xz";
+    hash = "sha256-5wDLood2T14iVVFOMS4WBVD9v3pdP+FjWLtve2cyuXQ=";
   };
 
   patches = [
@@ -78,6 +79,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     gtk4
     glib
+    glib-networking
     packagekit
     appstream
     libsoup_3
@@ -110,16 +112,17 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = "gnome-software";
       attrPath = "gnome.gnome-software";
     };
   };
 
   meta = with lib; {
     description = "Software store that lets you install and update applications and system extensions";
-    homepage = "https://wiki.gnome.org/Apps/Software";
+    mainProgram = "gnome-software";
+    homepage = "https://apps.gnome.org/Software/";
     license = licenses.gpl2Plus;
     maintainers = teams.gnome.members;
     platforms = platforms.linux;
   };
-}
+})

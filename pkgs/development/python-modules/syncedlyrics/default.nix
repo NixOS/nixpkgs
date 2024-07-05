@@ -1,38 +1,37 @@
-{ lib
-, beautifulsoup4
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pythonOlder
-, pythonRelaxDepsHook
-, rapidfuzz
-, requests
+{
+  lib,
+  beautifulsoup4,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  pythonOlder,
+  pythonRelaxDepsHook,
+  rapidfuzz,
+  requests,
 }:
 
 buildPythonPackage rec {
   pname = "syncedlyrics";
-  version = "0.5.0";
-  format = "pyproject";
+  version = "1.0.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "rtcq";
-    repo = pname;
+    repo = "syncedlyrics";
     rev = "refs/tags/v${version}";
-    hash = "sha256-79dy1f5Pd/JGIpH/71E6IBg+AtR4zgHL4b/GRH1AFp0=";
+    hash = "sha256-W3cg/+nU0Zp5pDhkoHqUemYImlDKlZDVbB7jZ3dScnk=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     poetry-core
     pythonRelaxDepsHook
   ];
 
-  pythonRelaxDeps = [
-    "rapidfuzz"
-  ];
+  pythonRelaxDeps = [ "rapidfuzz" ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     requests
     rapidfuzz
     beautifulsoup4
@@ -41,9 +40,7 @@ buildPythonPackage rec {
   # Tests require network access
   doCheck = false;
 
-  pythonImportsCheck = [
-    "syncedlyrics"
-  ];
+  pythonImportsCheck = [ "syncedlyrics" ];
 
   meta = with lib; {
     description = "Module to get LRC format (synchronized) lyrics";
@@ -51,5 +48,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/rtcq/syncedlyrics/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "syncedlyrics";
   };
 }

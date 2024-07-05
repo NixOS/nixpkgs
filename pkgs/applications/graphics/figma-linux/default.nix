@@ -4,19 +4,26 @@
 , fetchurl
 , autoPatchelfHook
 , dpkg
+, makeWrapper
+, wrapGAppsHook3
 , ...
 }:
 with lib;
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "figma-linux";
-  version = "0.10.0";
+  version = "0.11.4";
 
   src = fetchurl {
-    url = "https://github.com/Figma-Linux/figma-linux/releases/download/v${version}/figma-linux_${version}_linux_amd64.deb";
-    sha256 = "sha256-+xiXEwSSxpt1/Eu9g57/L+Il/Av+a/mgGBQl/4LKR74=";
+    url = "https://github.com/Figma-Linux/figma-linux/releases/download/v${finalAttrs.version}/figma-linux_${finalAttrs.version}_linux_amd64.deb";
+    hash = "sha256-ukUsNgWOtIRe54vsmRdI62syjIPwSsgNV7kITCw0YUQ=";
   };
 
-  nativeBuildInputs = [ autoPatchelfHook dpkg ];
+  nativeBuildInputs = [
+    autoPatchelfHook
+    dpkg
+    makeWrapper
+    wrapGAppsHook3
+  ];
 
   buildInputs = with pkgs;[
     alsa-lib
@@ -51,6 +58,10 @@ stdenv.mkDerivation rec {
 
   sourceRoot = ".";
 
+  # Instead of double wrapping the binary, simply pass the `gappsWrapperArgs`
+  # to `makeWrapper` directly
+  dontWrapGApps = true;
+
   installPhase = ''
     runHook preInstall
 
@@ -59,19 +70,24 @@ stdenv.mkDerivation rec {
 
     cp -r usr/* $out
 
+    wrapProgramShell $out/bin/figma-linux \
+      "''${gappsWrapperArgs[@]}" \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--enable-features=UseOzonePlatform --ozone-platform=wayland}}"
+
     runHook postInstall
   '';
 
   postFixup = ''
     substituteInPlace $out/share/applications/figma-linux.desktop \
-          --replace "Exec=/opt/figma-linux/figma-linux" "Exec=$out/bin/${pname}"
+          --replace "Exec=/opt/figma-linux/figma-linux" "Exec=$out/bin/${finalAttrs.pname}"
   '';
 
   meta = {
-    description = "unofficial Electron-based Figma desktop app for Linux";
+    description = "Unofficial Electron-based Figma desktop app for Linux";
     homepage = "https://github.com/Figma-Linux/figma-linux";
     platforms = [ "x86_64-linux" ];
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ ercao ];
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ ercao kashw2 ];
+    mainProgram = "figma-linux";
   };
-}
+})

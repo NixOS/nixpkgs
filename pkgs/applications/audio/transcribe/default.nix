@@ -1,7 +1,7 @@
 { stdenv
 , fetchzip
 , lib
-, wrapGAppsHook
+, wrapGAppsHook3
 , xdg-utils
 , which
 , alsa-lib
@@ -22,21 +22,21 @@
 
 stdenv.mkDerivation rec {
   pname = "transcribe";
-  version = "9.21";
+  version = "9.40.0";
 
   src =
     if stdenv.hostPlatform.system == "x86_64-linux" then
       fetchzip
         {
-          url = "https://www.seventhstring.com/xscribe/downlo/xscsetup-9.21.0.tar.gz";
-          sha256 = "sha256-M0hOJOsTTRxPef8rTO+/KpiP4lr8mtplS9KITaFOFPA=";
+          url = "https://www.seventhstring.com/xscribe/downlo/xscsetup-${version}.tar.gz";
+          sha256 = "sha256-GHTr1rk7Kh5M0UYnryUlCk/G6pW3p80GJ6Ai0zXdfNs=";
         }
     else throw "Platform not supported";
 
   nativeBuildInputs = [
     which
     xdg-utils
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = with gst_all_1; [
@@ -110,5 +110,6 @@ stdenv.mkDerivation rec {
     license = licenses.unfree;
     maintainers = with maintainers; [ iwanb ];
     platforms = platforms.linux;
+    mainProgram = "transcribe";
   };
 }

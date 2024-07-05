@@ -24,6 +24,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://community.kde.org/Phonon";
     description = "Multimedia API for Qt";
+    mainProgram = "phononsettings";
     license = lib.licenses.lgpl2;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ ttuegel ];
@@ -50,11 +51,13 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  env.NIX_CFLAGS_COMPILE = "-fPIC";
+  env.NIX_CFLAGS_COMPILE = toString ([
+    "-fPIC"
+  ] ++ lib.optionals stdenv.cc.isClang [
+    "-Wno-error=enum-constexpr-conversion"
+  ]);
 
-  cmakeFlags = [
-    "-DCMAKE_BUILD_TYPE=${if debug then "Debug" else "Release"}"
-  ];
+  cmakeBuildType = if debug then "Debug" else "Release";
 
   dontWrapQtApps = true;
 

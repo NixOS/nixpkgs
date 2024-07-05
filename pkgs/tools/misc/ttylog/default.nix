@@ -20,7 +20,8 @@ stdenv.mkDerivation rec {
       A serial port logger which can be used to print everything to stdout
       that comes from a serial device.
     '';
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.linux;
+    mainProgram = "ttylog";
   };
 }

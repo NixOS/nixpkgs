@@ -1,49 +1,52 @@
 { lib
 , rustPlatform
 , fetchFromGitLab
-, e2fsprogs
 , systemd
 , coreutils
+, gnugrep
 , pkg-config
-, cmake
 , fontconfig
-, gtk3
-, libappindicator
+, libGL
+, libinput
+, libxkbcommon
+, mesa
+, seatd
+, wayland
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "asusctl";
-  version = "4.6.2";
+  version = "6.0.9";
 
   src = fetchFromGitLab {
     owner = "asus-linux";
     repo = "asusctl";
     rev = version;
-    hash = "sha256-qfl8MUSHjqlSnsaudoRD9fY5TM9zgy7L7DA+pctn/nc=";
+    hash = "sha256-mml+nj+Z6267QtejTkWiR3SdNAdZCNz4M8r6LzvhALw=";
   };
 
-  cargoHash = "";
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "ecolor-0.21.0" = "sha256-m7eHX6flwO21umtx3dnIuVUnNsEs3ZCyOk5Vvp/lVfI=";
-      "notify-rust-4.6.0" = "sha256-jhCgisA9f6AI9e9JQUYRtEt47gQnDv5WsdRKFoKvHJs=";
-      "supergfxctl-5.1.1" = "sha256-AThaZ9dp5T/DtLPE6gZ9qgkw0xksiq+VCL9Y4G41voE=";
+      "const-field-offset-0.1.5" = "sha256-0MaNu6cUXislY+wDFuxZptXeJRkOuXGRJwZWm6AvcZ8=";
+      "notify-rust-4.7.0" = "sha256-A7edUorty5GpGXCUQPszZuXtLdEmbmrDSU9JcoDaiaI=";
+      "supergfxctl-5.2.3" = "sha256-wKcHoMukdUXZrdbE1xsylq7ySJpxny3+0dGUQ40BVH8=";
     };
   };
 
   postPatch = ''
     files="
-      daemon-user/src/daemon.rs
-      daemon-user/src/config.rs
-      rog-control-center/src/main.rs
+      asusd-user/src/config.rs
+      asusd-user/src/daemon.rs
+      asusd/src/ctrl_anime/config.rs
       rog-aura/src/aura_detection.rs
+      rog-control-center/src/lib.rs
+      rog-control-center/src/main.rs
+      rog-control-center/src/tray.rs
     "
     for file in $files; do
       substituteInPlace $file --replace /usr/share $out/share
     done
-
-    substituteInPlace daemon/src/ctrl_platform.rs --replace /usr/bin/chattr ${e2fsprogs}/bin/chattr
 
     substituteInPlace data/asusd.rules --replace systemctl ${systemd}/bin/systemctl
     substituteInPlace data/asusd.service \
@@ -52,11 +55,32 @@ rustPlatform.buildRustPackage rec {
     substituteInPlace data/asusd-user.service \
       --replace /usr/bin/asusd-user $out/bin/asusd-user \
       --replace /usr/bin/sleep ${coreutils}/bin/sleep
+
+    substituteInPlace Makefile \
+      --replace /usr/bin/grep ${lib.getExe gnugrep}
   '';
 
-  nativeBuildInputs = [ pkg-config cmake rustPlatform.bindgenHook ];
+  nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ systemd fontconfig gtk3 ];
+  buildInputs = [
+    fontconfig
+    libGL
+    libinput
+    libxkbcommon
+    mesa
+    seatd
+    systemd
+    wayland
+  ];
+
+  # force linking to all the dlopen()ed dependencies
+  RUSTFLAGS = map (a: "-C link-arg=${a}") [
+    "-Wl,--push-state,--no-as-needed"
+    "-lEGL"
+    "-lfontconfig"
+    "-lwayland-client"
+    "-Wl,--pop-state"
+  ];
 
   # upstream has minimal tests, so don't rebuild twice
   doCheck = false;
@@ -65,12 +89,8 @@ rustPlatform.buildRustPackage rec {
     make prefix=$out install-data
   '';
 
-  postFixup = ''
-    patchelf --add-rpath "${libappindicator}/lib" "$out/bin/rog-control-center"
-  '';
-
   meta = with lib; {
-    description = "A control daemon, CLI tools, and a collection of crates for interacting with ASUS ROG laptops";
+    description = "Control daemon, CLI tools, and a collection of crates for interacting with ASUS ROG laptops";
     homepage = "https://gitlab.com/asus-linux/asusctl";
     license = licenses.mpl20;
     platforms = [ "x86_64-linux" ];

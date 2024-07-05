@@ -1,8 +1,8 @@
-diff --git a/jupyter_core/tests/test_command.py b/jupyter_core/tests/test_command.py
-index 4ef38cd..08fba22 100644
---- a/jupyter_core/tests/test_command.py
-+++ b/jupyter_core/tests/test_command.py
-@@ -174,7 +174,7 @@ def test_not_on_path(tmpdir):
+diff --git a/tests/test_command.py b/tests/test_command.py
+index a0833c1..67c2110 100644
+--- a/tests/test_command.py
++++ b/tests/test_command.py
+@@ -191,7 +191,7 @@ def test_not_on_path(tmpdir):
      witness_src = "#!{}\n{}\n".format(sys.executable, 'print("WITNESS ME")')
      write_executable(witness, witness_src)
  
@@ -11,7 +11,7 @@ index 4ef38cd..08fba22 100644
      if "SYSTEMROOT" in os.environ:  # Windows http://bugs.python.org/issue20614
          env["SYSTEMROOT"] = os.environ["SYSTEMROOT"]
      if sys.platform == "win32":
-@@ -198,7 +198,7 @@ def test_path_priority(tmpdir):
+@@ -216,7 +216,7 @@ def test_path_priority(tmpdir):
      witness_b_src = "#!{}\n{}\n".format(sys.executable, 'print("WITNESS B")')
      write_executable(witness_b, witness_b_src)
  

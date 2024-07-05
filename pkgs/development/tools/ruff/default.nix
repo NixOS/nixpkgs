@@ -4,27 +4,28 @@
 , installShellFiles
 , stdenv
 , darwin
-  # tests
+, rust-jemalloc-sys
 , ruff-lsp
+, testers
+, ruff
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "ruff";
-  version = "0.0.278";
+  version = "0.4.10";
 
   src = fetchFromGitHub {
     owner = "astral-sh";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-CM5oV9q9XYhaUV173VoFZl6dDALan4Lkl5PrvZN81c4=";
+    repo = "ruff";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-FRBuvXtnbxRWoI0f8SM0U0Z5TRyX5Tbgq3d34Oh2bG4=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "libcst-0.1.0" = "sha256-FgQE8ofRXQs/zHh7AKscXu0deN3IG+Nk/h+a09Co5R8=";
-      "ruff_text_size-0.0.0" = "sha256-N4IzMeU8vqkfPBbC3o2bqkecCUcbgmX35QVdsTCtFfc=";
-      "unicode_names2-0.6.0" = "sha256-eWg9+ISm/vztB0KIdjhq5il2ZnwGJQCleCYfznCI3Wg=";
+      "lsp-types-0.95.1" = "sha256-8Oh299exWXVi6A39pALOISNfp8XBya8z+KT/Z7suRxQ=";
+      "salsa-2022-0.1.0" = "sha256-mt+X1hO+5ZrCAgy6N4aArnixJ9GjY/KwM0uIMUSrDsg=";
     };
   };
 
@@ -32,18 +33,36 @@ rustPlatform.buildRustPackage rec {
     installShellFiles
   ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [
+  buildInputs = [
+    rust-jemalloc-sys
+  ] ++ lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.CoreServices
   ];
 
-  cargoBuildFlags = [ "--package=ruff_cli" ];
-  cargoTestFlags = cargoBuildFlags;
-
-  preBuild = lib.optionalString (stdenv.isDarwin && stdenv.isx86_64) ''
-    # See https://github.com/jemalloc/jemalloc/issues/1997
-    # Using a value of 48 should work on both emulated and native x86_64-darwin.
-    export JEMALLOC_SYS_WITH_LG_VADDR=48
+  # tests expect no colors
+  preCheck = ''
+    export NO_COLOR=1
   '';
+
+  # Failing for an unclear reason.
+  # According to the maintainers, those tests are from an experimental crate that isn't actually
+  # used by ruff currently and can thus be safely skipped.
+  checkFlags = [
+    "--skip=semantic::tests::expression_scope"
+    "--skip=semantic::tests::reachability_trivial"
+    "--skip=semantic::types::infer::tests::follow_import_to_class"
+    "--skip=semantic::types::infer::tests::if_elif"
+    "--skip=semantic::types::infer::tests::if_elif_else"
+    "--skip=semantic::types::infer::tests::ifexpr_walrus"
+    "--skip=semantic::types::infer::tests::ifexpr_walrus_2"
+    "--skip=semantic::types::infer::tests::join_paths"
+    "--skip=semantic::types::infer::tests::literal_int_arithmetic"
+    "--skip=semantic::types::infer::tests::maybe_unbound"
+    "--skip=semantic::types::infer::tests::narrow_none"
+    "--skip=semantic::types::infer::tests::resolve_base_class_by_name"
+    "--skip=semantic::types::infer::tests::resolve_module_member"
+    "--skip=semantic::types::infer::tests::resolve_visible_def"
+  ];
 
   postInstall = ''
     installShellCompletion --cmd ruff \
@@ -54,13 +73,18 @@ rustPlatform.buildRustPackage rec {
 
   passthru.tests = {
     inherit ruff-lsp;
+    version = testers.testVersion { package = ruff; };
   };
 
-  meta = with lib; {
-    description = "An extremely fast Python linter";
+  meta = {
+    description = "Extremely fast Python linter";
     homepage = "https://github.com/astral-sh/ruff";
     changelog = "https://github.com/astral-sh/ruff/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.mit;
+    mainProgram = "ruff";
+    maintainers = with lib.maintainers; [
+      figsoda
+      GaetanLepage
+    ];
   };
 }

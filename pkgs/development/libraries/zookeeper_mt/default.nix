@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://apache/zookeeper/${zookeeper.pname}-${version}/apache-${zookeeper.pname}-${version}.tar.gz";
-    sha512 = "sha512-ttYbATvfe+uRYhQWfeG1WGXl5GOztcrITfl/4EQierAzSaDvTmVxSb582hYQOdBpxw2QrVbIdnTm3/Xt4ifecg==";
+    hash = "sha512-G6Yw9HBF43QCw8FTLnJ7boCjUYwaQVQAT4wXqUowSlzox1cUPH5+8ZYMBxToJCbr0ppmz22t0uKsHRUI/IDAPQ==";
   };
 
   sourceRoot = "apache-${zookeeper.pname}-${version}/zookeeper-client/zookeeper-client-c";

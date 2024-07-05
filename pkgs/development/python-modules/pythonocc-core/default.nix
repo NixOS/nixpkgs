@@ -1,18 +1,21 @@
-{ lib, stdenv, python, fetchFromGitHub
-, cmake
-, Cocoa
-, fontconfig
-, freetype
-, libGL
-, libGLU
-, libX11
-, libXext
-, libXi
-, libXmu
-, opencascade-occt
-, rapidjson
-, smesh
-, swig4
+{
+  lib,
+  stdenv,
+  python,
+  fetchFromGitHub,
+  cmake,
+  Cocoa,
+  fontconfig,
+  freetype,
+  libGL,
+  libGLU,
+  libX11,
+  libXext,
+  libXi,
+  libXmu,
+  opencascade-occt,
+  rapidjson,
+  swig4,
 }:
 
 stdenv.mkDerivation rec {
@@ -32,20 +35,27 @@ stdenv.mkDerivation rec {
     --replace "/usr/X11R6/lib/libGLU.dylib" "${libGLU}/lib/libGLU.dylib"
   '';
 
-  nativeBuildInputs = [ cmake swig4 ];
+  nativeBuildInputs = [
+    cmake
+    swig4
+  ];
   buildInputs = [
-    python opencascade-occt smesh
-    freetype libGL libGLU libX11 libXext libXmu libXi
-    fontconfig rapidjson
+    python
+    opencascade-occt
+    freetype
+    libGL
+    libGLU
+    libX11
+    libXext
+    libXmu
+    libXi
+    fontconfig
+    rapidjson
   ] ++ lib.optionals stdenv.isDarwin [ Cocoa ];
 
   cmakeFlags = [
     "-Wno-dev"
     "-DPYTHONOCC_INSTALL_DIRECTORY=${placeholder "out"}/${python.sitePackages}/OCC"
-
-    "-DSMESH_INCLUDE_PATH=${smesh}/include/smesh"
-    "-DSMESH_LIB_PATH=${smesh}/lib"
-    "-DPYTHONOCC_WRAP_SMESH=TRUE"
   ];
 
   passthru = {
@@ -57,6 +67,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Python wrapper for the OpenCASCADE 3D modeling kernel";
     homepage = "https://github.com/tpaviot/pythonocc-core";
+    changelog = "https://github.com/tpaviot/pythonocc-core/releases/tag/${version}";
     license = licenses.lgpl3;
     platforms = platforms.unix;
     maintainers = with maintainers; [ gebner ];

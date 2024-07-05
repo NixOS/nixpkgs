@@ -17,7 +17,7 @@
 , libev
 , libgcrypt
 , libinjection
-, libmicrohttpd_0_9_69
+, libmicrohttpd
 , libuuid
 , lz4
 , nlohmann_json
@@ -26,20 +26,19 @@
 , perl
 , python3
 , prometheus-cpp
-, re2
 , zlib
 , texinfo
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "proxysql";
-  version = "2.5.3";
+  version = "2.6.0";
 
   src = fetchFromGitHub {
     owner = "sysown";
-    repo = pname;
-    rev = version;
-    hash = "sha256-D/AUjndpu4QJmlgLBXRqMj9gsHYitEYhHVMQzoab1ik=";
+    repo = "proxysql";
+    rev = finalAttrs.version;
+    hash = "sha256-vFPTBSp5DPNRuhtSD34ah2074almS+jiYxBE1L9Pz6g=";
   };
 
   patches = [
@@ -69,7 +68,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  GIT_VERSION = version;
+  GIT_VERSION = finalAttrs.version;
 
   dontConfigure = true;
 
@@ -112,12 +111,11 @@ stdenv.mkDerivation rec {
           { f = "libdaemon"; p = libdaemon; }
           { f = "libev"; p = libev; }
           { f = "libinjection"; p = libinjection; }
-          { f = "libmicrohttpd"; p = libmicrohttpd_0_9_69; }
+          { f = "libmicrohttpd"; p = libmicrohttpd; }
           { f = "libssl"; p = openssl; }
           { f = "lz4"; p = lz4; }
           { f = "pcre"; p = pcre; }
           { f = "prometheus-cpp"; p = prometheus-cpp; }
-          { f = "re2"; p = re2; }
         ]
       )}
 
@@ -166,11 +164,12 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = "https://proxysql.com/";
     broken = stdenv.isDarwin;
     description = "High-performance MySQL proxy";
+    mainProgram = "proxysql";
+    homepage = "https://proxysql.com/";
     license = with licenses; [ gpl3Only ];
-    maintainers = with maintainers; [ ajs124 ];
+    maintainers = teams.helsinki-systems.members;
     platforms = platforms.unix;
   };
-}
+})

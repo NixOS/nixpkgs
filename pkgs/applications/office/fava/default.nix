@@ -2,12 +2,12 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "fava";
-  version = "1.24.4";
+  version = "1.27.3";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-klRPe6NQMn3HVayfCGc05mB0afi3x4Wlj3EI0XdSkMc=";
+    hash = "sha256-GsnXZaazEiOhyjbIinHRD1fdoqlAp3d5csrmtydxmGM=";
   };
 
   nativeBuildInputs = with python3.pkgs; [ setuptools-scm ];
@@ -19,7 +19,7 @@ python3.pkgs.buildPythonApplication rec {
     click
     flask
     flask-babel
-    jaraco_functools
+    jaraco-functools
     jinja2
     markdown2
     ply
@@ -30,6 +30,11 @@ python3.pkgs.buildPythonApplication rec {
   nativeCheckInputs = with python3.pkgs; [
     pytestCheckHook
   ];
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'setuptools_scm>=8.0' 'setuptools_scm'
+  '';
 
   preCheck = ''
     export HOME=$TEMPDIR
@@ -42,6 +47,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Web interface for beancount";
+    mainProgram = "fava";
     homepage = "https://beancount.github.io/fava";
     changelog = "https://beancount.github.io/fava/changelog.html";
     license = licenses.mit;

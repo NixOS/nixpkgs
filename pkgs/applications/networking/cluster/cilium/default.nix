@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "cilium-cli";
-  version = "0.14.3";
+  version = "0.16.11";
 
   src = fetchFromGitHub {
     owner = "cilium";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-vH+wQ3pPz70jc3QzD/0vbKMqQtYak8UGoQmEgeYbFbk=";
+    hash = "sha256-muIVjT6ssNejp5O8ju06h9e7ZVcfwXyHgQIa0IEP4Xg=";
   };
 
   vendorHash = null;
@@ -17,7 +17,7 @@ buildGoModule rec {
 
   ldflags = [
     "-s" "-w"
-    "-X github.com/cilium/cilium-cli/internal/cli/cmd.Version=${version}"
+    "-X github.com/cilium/cilium-cli/defaults.CLIVersion=${version}"
   ];
 
   # Required to workaround install check error:
@@ -26,7 +26,7 @@ buildGoModule rec {
 
   doInstallCheck = true;
   installCheckPhase = ''
-    $out/bin/cilium version | grep ${version} > /dev/null
+    $out/bin/cilium version --client | grep ${version} > /dev/null
   '';
 
   nativeBuildInputs = [ installShellFiles ];
@@ -37,11 +37,12 @@ buildGoModule rec {
       --zsh <($out/bin/cilium completion zsh)
   '';
 
-  meta = with lib; {
+  meta = {
+    changelog = "https://github.com/cilium/cilium-cli/releases/tag/v${version}";
     description = "CLI to install, manage & troubleshoot Kubernetes clusters running Cilium";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     homepage = "https://www.cilium.io/";
-    maintainers = with maintainers; [ humancalico bryanasdev000 ];
+    maintainers = with lib.maintainers; [ bryanasdev000 humancalico qjoly superherointj ];
     mainProgram = "cilium";
   };
 }

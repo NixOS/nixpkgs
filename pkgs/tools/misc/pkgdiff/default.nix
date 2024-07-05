@@ -23,10 +23,11 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A tool for visualizing changes in Linux software packages";
+    description = "Tool for visualizing changes in Linux software packages";
     homepage = "https://lvc.github.io/pkgdiff/";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     maintainers = with maintainers; [ sweber ];
     platforms = platforms.unix;
+    mainProgram = "pkgdiff";
   };
 }

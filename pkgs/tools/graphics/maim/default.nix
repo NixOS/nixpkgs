@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "maim";
-  version = "5.7.4";
+  version = "5.8.0";
 
   src = fetchFromGitHub {
     owner = "naelstrof";
     repo = "maim";
     rev = "v${version}";
-    sha256 = "sha256-uFtiwaM3H09vfvz3wVvumbqkoZhLNJxONkMqqqrJBs4=";
+    sha256 = "sha256-/tZqSJnKe8GiffSz9VIFKuxMktRld+hA4ZWP4TZQrlg=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
@@ -21,8 +21,9 @@ stdenv.mkDerivation rec {
   doCheck = false;
 
   meta = with lib; {
+    mainProgram = "maim";
     inherit (src.meta) homepage;
-    description = "A command-line screenshot utility";
+    description = "Command-line screenshot utility";
     longDescription = ''
       maim (make image) takes screenshots of your desktop. It has options to
       take only a region, and relies on slop to query for regions. maim is

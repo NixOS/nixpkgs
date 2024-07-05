@@ -4,7 +4,6 @@
 , zlib
 , pkg-config
 , autoreconfHook
-, xz
 , libintl
 , python
 , gettext
@@ -17,24 +16,15 @@
     (stdenv.hostPlatform == stdenv.buildPlatform || stdenv.hostPlatform.isCygwin || stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isWasi)
 , icuSupport ? false
 , icu
-, enableShared ? stdenv.hostPlatform.libc != "msvcrt" && !stdenv.hostPlatform.isStatic
+, enableShared ? !stdenv.hostPlatform.isMinGW && !stdenv.hostPlatform.isStatic
 , enableStatic ? !enableShared
 , gnome
+, testers
 }:
 
-let
-  # Newer versions fail with minimal python, probably because
-  # https://gitlab.gnome.org/GNOME/libxml2/-/commit/b706824b612adb2c8255819c9a55e78b52774a3c
-  # This case is encountered "temporarily" during stdenv bootstrapping on darwin.
-  # Beware that the old version has known security issues, so the final set shouldn't use it.
-  oldVer = python.pname == "python3-minimal";
-in
-  assert oldVer -> stdenv.isDarwin; # reduce likelihood of using old libxml2 unintentionally
-
-let
-libxml = stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: rec {
   pname = "libxml2";
-  version = "2.10.4";
+  version = "2.12.7";
 
   outputs = [ "bin" "dev" "out" "doc" ]
     ++ lib.optional pythonSupport "py"
@@ -43,23 +33,13 @@ libxml = stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/libxml2/${lib.versions.majorMinor version}/libxml2-${version}.tar.xz";
-    sha256 = "7QyRxYRQCPGTZznk7uIDVTHByUdCxlQfRO5m2IWUjUU=";
+    hash = "sha256-JK54/xNjqXPm2L66lBp5RdoqwFbhm1OVautpJ/1s+1Y=";
   };
 
-  patches = [
-    # Upstream bugs:
-    #   https://bugzilla.gnome.org/show_bug.cgi?id=789714
-    #   https://gitlab.gnome.org/GNOME/libxml2/issues/64
-    # Patch from https://bugzilla.opensuse.org/show_bug.cgi?id=1065270 ,
-    # but only the UTF-8 part.
-    # Can also be mitigated by fixing malformed XML inputs, such as in
-    # https://gitlab.gnome.org/GNOME/gnumeric/merge_requests/3 .
-    # Other discussion:
-    #   https://github.com/itstool/itstool/issues/22
-    #   https://github.com/NixOS/nixpkgs/pull/63174
-    #   https://github.com/NixOS/nixpkgs/pull/72342
-    ./utf8-xmlErrorFuncHandler.patch
-  ];
+  # https://gitlab.gnome.org/GNOME/libxml2/-/issues/725
+  postPatch = if stdenv.hostPlatform.isFreeBSD then ''
+    substituteInPlace ./configure.ac --replace-fail pthread_join pthread_create
+  '' else null;
 
   strictDeps = true;
 
@@ -76,11 +56,6 @@ libxml = stdenv.mkDerivation rec {
     ncurses
   ] ++ lib.optionals (stdenv.isDarwin && pythonSupport && python?isPy2 && python.isPy2) [
     libintl
-  ] ++ lib.optionals stdenv.isFreeBSD [
-    # Libxml2 has an optional dependency on liblzma.  However, on impure
-    # platforms, it may end up using that from /usr/lib, and thus lack a
-    # RUNPATH for that, leading to undefined references for its users.
-    xz
   ];
 
   propagatedBuildInputs = [
@@ -98,7 +73,7 @@ libxml = stdenv.mkDerivation rec {
     (lib.enableFeature enableShared "shared")
     (lib.withFeature icuSupport "icu")
     (lib.withFeature pythonSupport "python")
-    (lib.optionalString pythonSupport "PYTHON=${python.pythonForBuild.interpreter}")
+    (lib.optionalString pythonSupport "PYTHON=${python.pythonOnBuildForHost.interpreter}")
   ];
 
   installFlags = lib.optionals pythonSupport [
@@ -138,6 +113,11 @@ libxml = stdenv.mkDerivation rec {
       packageName = pname;
       versionPolicy = "none";
     };
+    tests = {
+      pkg-config = testers.hasPkgConfigModules {
+        package = finalAttrs.finalPackage;
+      };
+    };
   };
 
   meta = with lib; {
@@ -146,16 +126,6 @@ libxml = stdenv.mkDerivation rec {
     license = licenses.mit;
     platforms = platforms.all;
     maintainers = with maintainers; [ eelco jtojnar ];
+    pkgConfigModules = [ "libxml-2.0" ];
   };
-};
-in
-if oldVer then
-  libxml.overrideAttrs (attrs: rec {
-    version = "2.10.1";
-    src = fetchurl {
-      url = "mirror://gnome/sources/libxml2/${lib.versions.majorMinor version}/libxml2-${version}.tar.xz";
-      sha256 = "21a9e13cc7c4717a6c36268d0924f92c3f67a1ece6b7ff9d588958a6db9fb9d8";
-    };
-  })
-else
-  libxml
+})

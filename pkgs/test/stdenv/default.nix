@@ -99,6 +99,9 @@ let
 in
 
 {
+  # Disable on Darwin due to assumptions with __bootPackages
+  __attrsFailEvaluation = stdenv.isDarwin;
+
   # tests for hooks in `stdenv.defaultNativeBuildInputs`
   hooks = lib.recurseIntoAttrs (import ./hooks.nix { stdenv = bootStdenv; pkgs = earlyPkgs; inherit lib; });
 
@@ -142,10 +145,41 @@ in
     '';
   };
 
+  # Check that mkDerivation rejects MD5 hashes
+  rejectedHashes = lib.recurseIntoAttrs {
+    md5 =
+      let drv = runCommand "md5 outputHash rejected" {
+        outputHash = "md5-fPt7dxVVP7ffY3MxkQdwVw==";
+      } "true";
+      in assert !(builtins.tryEval drv).success; {};
+  };
+
   test-inputDerivation = let
     inherit (stdenv.mkDerivation {
       dep1 = derivation { name = "dep1"; builder = "/bin/sh"; args = [ "-c" ": > $out" ]; system = builtins.currentSystem; };
       dep2 = derivation { name = "dep2"; builder = "/bin/sh"; args = [ "-c" ": > $out" ]; system = builtins.currentSystem; };
+      passAsFile = [ "dep2" ];
+    }) inputDerivation;
+  in
+    runCommand "test-inputDerivation" {
+      exportReferencesGraph = [ "graph" inputDerivation ];
+    } ''
+      grep ${inputDerivation.dep1} graph
+      grep ${inputDerivation.dep2} graph
+      touch $out
+    '';
+
+  test-inputDerivation-fixed-output = let
+    inherit (stdenv.mkDerivation {
+      dep1 = derivation { name = "dep1"; builder = "/bin/sh"; args = [ "-c" ": > $out" ]; system = builtins.currentSystem; };
+      dep2 = derivation { name = "dep2"; builder = "/bin/sh"; args = [ "-c" ": > $out" ]; system = builtins.currentSystem; };
+      name = "meow";
+      outputHash = "sha256-47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=";
+      outputHashMode = "flat";
+      outputHashAlgo = "sha256";
+      buildCommand = ''
+        touch $out
+      '';
       passAsFile = [ "dep2" ];
     }) inputDerivation;
   in

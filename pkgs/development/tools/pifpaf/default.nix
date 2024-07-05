@@ -29,12 +29,14 @@ python3.pkgs.buildPythonApplication rec {
 
   nativeCheckInputs = with python3.pkgs; [
     requests
+    testtools
   ];
 
   pythonImportsCheck = [ "pifpaf" ];
 
   meta = with lib; {
     description = "Suite of tools and fixtures to manage daemons for testing";
+    mainProgram = "pifpaf";
     homepage = "https://github.com/jd/pifpaf";
     license = licenses.asl20;
     maintainers = with maintainers; [ ];

@@ -1,17 +1,18 @@
 { lib
 , stdenvNoCC
 , fetchFromGitHub
+, unstableGitUpdater
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation {
   pname = "retroarch-assets";
-  version = "unstable-2022-10-24";
+  version = "1.19.0-unstable-2024-05-30";
 
   src = fetchFromGitHub {
     owner = "libretro";
     repo = "retroarch-assets";
-    rev = "4ec80faf1b5439d1654f407805bb66141b880826";
-    hash = "sha256-j1npVKEknq7hpFr/XfST2GNHI5KnEYjZAM0dw4tMsYk=";
+    rev = "771e60b1eacd4edc57c19b61ab2c713200af0a3f";
+    hash = "sha256-304xYXY5cESjSxepb5xpfMeJBnG+EJBiaVnhSUE3icQ=";
   };
 
   makeFlags = [
@@ -22,6 +23,10 @@ stdenvNoCC.mkDerivation rec {
   ];
 
   dontBuild = true;
+
+  passthru.updateScript = unstableGitUpdater {
+    tagPrefix = "v";
+  };
 
   meta = with lib; {
     description = "Assets needed for RetroArch";

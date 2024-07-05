@@ -1,46 +1,39 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pefile
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pefile,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "dnfile";
-  version = "0.13.0";
-  format = "setuptools";
+  version = "0.15.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "malwarefrank";
-    repo = pname;
+    repo = "dnfile";
     rev = "refs/tags/v${version}";
-    hash = "sha256-TH30gEoxXkaDac6hJsGQFWzwDeqzdZ19HK8i/3Dlh8k=";
+    hash = "sha256-HzlMJ4utBHyLLhO+u0uiTfqtk8jX80pEyO75QvpJ3yg=";
     fetchSubmodules = true;
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "pytest-runner" ""
-  '';
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
-    pefile
-  ];
+  dependencies = [ pefile ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "dnfile"
-  ];
+  pythonImportsCheck = [ "dnfile" ];
 
   meta = with lib; {
     description = "Module to parse .NET executable files";
-    homepage = "hhttps://github.com/malwarefrank/dnfile";
+    homepage = "https://github.com/malwarefrank/dnfile";
     changelog = "https://github.com/malwarefrank/dnfile/blob/v${version}/HISTORY.rst";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];

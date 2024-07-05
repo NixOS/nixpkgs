@@ -5,22 +5,28 @@
 
 buildGoModule rec {
   pname = "asnmap";
-  version = "1.0.4";
+  version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "projectdiscovery";
-    repo = pname;
+    repo = "asnmap";
     rev = "refs/tags/v${version}";
-    hash = "sha256-J5Dn5eDzwj+ApwQ3ibTsMbwCobRAb1Cli+hbf74I9VQ=";
+    hash = "sha256-dGSWUuM4Zcz9QYjYaHur3RYryxe1wJycx/wUL5yqCpM=";
   };
 
-  vendorHash = "sha256-0vU7YWZKiqi3WsjSTNvtUiskIczADgfRRC7rwCx8ho4=";
+  vendorHash = "sha256-bSpMYQvrlR9T06dYF8gaTZmMAp6Gnb2cfsYCUes7i2s=";
+
+  ldflags = [
+    "-w"
+    "-s"
+  ];
 
   # Tests require network access
   doCheck = false;
 
   meta = with lib; {
     description = "Tool to gather network ranges using ASN information";
+    mainProgram = "asnmap";
     homepage = "https://github.com/projectdiscovery/asnmap";
     changelog = "https://github.com/projectdiscovery/asnmap/releases/tag/v${version}";
     license = licenses.mit;

@@ -1,50 +1,93 @@
-{ lib, stdenv, fetchurl, meson, ninja, wrapGAppsHook, pkg-config
-, appstream-glib, desktop-file-utils, python3
-, gtk, girara, gettext, libxml2, check
-, sqlite, glib, texlive, libintl, libseccomp
-, file, librsvg
-, gtk-mac-integration
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  wrapGAppsHook3,
+  pkg-config,
+  gitUpdater,
+  appstream-glib,
+  json-glib,
+  desktop-file-utils,
+  python3,
+  gtk,
+  girara,
+  gettext,
+  libxml2,
+  check,
+  sqlite,
+  glib,
+  texlive,
+  libintl,
+  libseccomp,
+  file,
+  librsvg,
+  gtk-mac-integration,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zathura";
-  version = "0.5.2";
+  version = "0.5.6";
 
-  src = fetchurl {
-    url = "https://pwmt.org/projects/zathura/download/zathura-${finalAttrs.version}.tar.xz";
-    sha256 = "15314m9chmh5jkrd9vk2h2gwcwkcffv2kjcxkd4v3wmckz5sfjy6";
+  src = fetchFromGitHub {
+    owner = "pwmt";
+    repo = "zathura";
+    rev = finalAttrs.version;
+    hash = "sha256-lTEBIZ3lkzjJ+L1qecrcL8iseo8AvSIo3Wh65/ikwac=";
   };
 
-  outputs = [ "bin" "man" "dev" "out" ];
+  outputs = [
+    "bin"
+    "man"
+    "dev"
+    "out"
+  ];
 
   # Flag list:
   # https://github.com/pwmt/zathura/blob/master/meson_options.txt
   mesonFlags = [
-    "-Dsqlite=enabled"
     "-Dmanpages=enabled"
     "-Dconvert-icon=enabled"
     "-Dsynctex=enabled"
+    "-Dtests=disabled"
     # Make sure tests are enabled for doCheck
-    (lib.mesonEnable "tests" finalAttrs.finalPackage.doCheck)
+    # (lib.mesonEnable "tests" finalAttrs.finalPackage.doCheck)
     (lib.mesonEnable "seccomp" stdenv.hostPlatform.isLinux)
   ];
 
   nativeBuildInputs = [
-    meson ninja pkg-config desktop-file-utils python3.pythonForBuild.pkgs.sphinx
-    gettext wrapGAppsHook libxml2 appstream-glib
+    meson
+    ninja
+    pkg-config
+    desktop-file-utils
+    python3.pythonOnBuildForHost.pkgs.sphinx
+    gettext
+    wrapGAppsHook3
+    libxml2
+    appstream-glib
   ];
 
   buildInputs = [
-    gtk girara libintl sqlite glib file librsvg check
+    gtk
+    girara
+    libintl
+    sqlite
+    glib
+    file
+    librsvg
+    check
+    json-glib
     texlive.bin.core
-  ] ++ lib.optional stdenv.isLinux libseccomp
-    ++ lib.optional stdenv.isDarwin gtk-mac-integration;
+  ] ++ lib.optional stdenv.isLinux libseccomp ++ lib.optional stdenv.isDarwin gtk-mac-integration;
 
   doCheck = !stdenv.isDarwin;
 
+  passthru.updateScript = gitUpdater { };
+
   meta = with lib; {
-    homepage = "https://git.pwmt.org/pwmt/zathura";
-    description = "A core component for zathura PDF viewer";
+    homepage = "https://pwmt.org/projects/zathura";
+    description = "Core component for zathura PDF viewer";
     license = licenses.zlib;
     platforms = platforms.unix;
     maintainers = with maintainers; [ globin ];

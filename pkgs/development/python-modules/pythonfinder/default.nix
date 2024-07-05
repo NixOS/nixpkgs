@@ -1,65 +1,55 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, pytestCheckHook
-, attrs
-, cached-property
-, click
-, packaging
-, pytest-cov
-, pytest-timeout
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  cached-property,
+  click,
+  fetchFromGitHub,
+  packaging,
+  pytest-timeout,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pythonfinder";
-  version = "1.3.2";
-  format = "pyproject";
+  version = "2.1.0";
+  pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "sarugaku";
-    repo = pname;
+    repo = "pythonfinder";
     rev = "refs/tags/${version}";
-    hash = "sha256-sfoAS3QpD78we8HcXpxjSyEIN1xLRVLExaM3oXe6tLU=";
+    hash = "sha256-CbaKXD7Sde8euRqvc/IHoXoSMF+dNd7vT9LkLWq4/IU=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace " --cov" ""
+  '';
 
-  propagatedBuildInputs = [
-    attrs
-    cached-property
-    click
-    packaging
-  ];
+  nativeBuildInputs = [ setuptools ];
+
+  propagatedBuildInputs = [ packaging ] ++ lib.optionals (pythonOlder "3.8") [ cached-property ];
+
+  passthru.optional-dependencies = {
+    cli = [ click ];
+  };
 
   nativeCheckInputs = [
-    pytestCheckHook
-    pytest-cov
     pytest-timeout
-  ];
+    pytestCheckHook
+  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
-  pythonImportsCheck = [
-    "pythonfinder"
-  ];
-
-  pytestFlagsArray = [
-    "--no-cov"
-  ];
-
-  # these tests invoke git in a subprocess and
-  # for some reason git can't be found even if included in nativeCheckInputs
-  disabledTests = [
-    "test_shims_are_kept"
-    "test_shims_are_removed"
-  ];
+  pythonImportsCheck = [ "pythonfinder" ];
 
   meta = with lib; {
+    description = "Cross platform search tool for finding Python";
+    mainProgram = "pyfinder";
     homepage = "https://github.com/sarugaku/pythonfinder";
     changelog = "https://github.com/sarugaku/pythonfinder/blob/v${version}/CHANGELOG.rst";
-    description = "Cross Platform Search Tool for Finding Pythons";
     license = licenses.mit;
     maintainers = with maintainers; [ cpcloud ];
   };

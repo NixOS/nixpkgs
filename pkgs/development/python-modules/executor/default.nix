@@ -1,15 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, isPy27
-, coloredlogs
-, humanfriendly
-, property-manager
-, fasteners
-, six
-, pytestCheckHook
-, mock
-, virtualenv
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  isPy27,
+  coloredlogs,
+  humanfriendly,
+  property-manager,
+  fasteners,
+  six,
+  pytestCheckHook,
+  mock,
+  virtualenv,
 }:
 
 buildPythonPackage rec {
@@ -47,12 +48,13 @@ buildPythonPackage rec {
     "ssh"
     "foreach"
     "local_context"
-    "release"  # meant to be ran on ubuntu to succeed
+    "release" # meant to be ran on ubuntu to succeed
   ];
 
   meta = with lib; {
     changelog = "https://github.com/xolox/python-executor/blob/${version}/CHANGELOG.rst";
     description = "Programmer friendly subprocess wrapper";
+    mainProgram = "executor";
     homepage = "https://github.com/xolox/python-executor";
     license = licenses.mit;
     maintainers = with maintainers; [ eyjhb ];

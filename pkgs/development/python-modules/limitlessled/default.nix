@@ -1,8 +1,13 @@
-{ lib, buildPythonPackage, fetchPypi }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+}:
 
 buildPythonPackage rec {
   pname = "limitlessled";
   version = "1.1.3";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

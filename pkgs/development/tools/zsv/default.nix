@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "zsv";
-  version = "0.3.6-alpha";
+  version = "0.3.8-alpha";
 
   src = fetchFromGitHub {
     owner = "liquidaty";
     repo = "zsv";
     rev = "v${version}";
-    hash = "sha256-P4xgWmNPBmuB87jsQvoyuRFCYkD4n/mTd04ZPfaf5ZE=";
+    hash = "sha256-+6oZvMlfLVTDLRlqOpgdZP2YxT6Zlt13wBMFlryBrXY=";
   };
 
   nativeBuildInputs = [ perl ];
@@ -21,9 +21,11 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "World's fastest (simd) CSV parser, with an extensible CLI";
+    mainProgram = "zsv";
     homepage = "https://github.com/liquidaty/zsv";
+    changelog = "https://github.com/liquidaty/zsv/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ marsam ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.all;
   };
 }

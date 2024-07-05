@@ -1,13 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, nose
-, six
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  nose,
+  six,
 }:
 
 buildPythonPackage rec {
   pname = "pyutilib";
   version = "6.0.0";
+  format = "setuptools";
 
   src = fetchPypi {
     pname = "PyUtilib";
@@ -27,6 +29,6 @@ buildPythonPackage rec {
     description = "PyUtilib: A collection of Python utilities";
     homepage = "https://github.com/PyUtilib/pyutilib";
     license = licenses.bsd3;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [ ];
   };
 }

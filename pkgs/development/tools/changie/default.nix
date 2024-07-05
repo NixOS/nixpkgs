@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "changie";
-  version = "1.12.0";
+  version = "1.19.1";
 
   src = fetchFromGitHub {
-    rev = "v${version}";
     owner = "miniscruff";
-    repo = pname;
-    sha256 = "sha256-lc9G5qZHjO2TxBKYP3fVr8Ui+hskhVon3xG7RznGhaw=";
+    repo = "changie";
+    rev = "v${version}";
+    hash = "sha256-FZR3KWBCulTbE1Rn6T1neJsjbps0HBPSzzZ57lngB/8=";
   };
 
-  vendorSha256 = "sha256-sak9MMqMXBO3j5uMouuiVnT8aCw04pyikgqzvdygB7U=";
+  vendorHash = "sha256-2SkHId5BDAv525PISLjlrP862Z2fJDN4L839rz8rWaw=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -32,6 +32,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Automated changelog tool for preparing releases with lots of customization options";
+    mainProgram = "changie";
     homepage = "https://changie.dev";
     changelog = "https://github.com/miniscruff/changie/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;

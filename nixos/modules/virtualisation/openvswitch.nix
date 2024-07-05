@@ -13,7 +13,7 @@ in {
     enable = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         Whether to enable Open vSwitch. A configuration daemon (ovs-server)
         will be started.
         '';
@@ -22,20 +22,13 @@ in {
     resetOnStart = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         Whether to reset the Open vSwitch configuration database to a default
         configuration on every start of the systemd `ovsdb.service`.
         '';
     };
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.openvswitch;
-      defaultText = literalExpression "pkgs.openvswitch";
-      description = lib.mdDoc ''
-        Open vSwitch package to use.
-      '';
-    };
+    package = mkPackageOption pkgs "openvswitch" { };
   };
 
   config = mkIf cfg.enable (let

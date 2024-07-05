@@ -1,17 +1,19 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-# build inputs
-, torch
-, numpy
-, ninja
-# check inputs
-, pytestCheckHook
-, parameterized
-, pytest-cov
-, pytest-timeout
-, remote-pdb
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  setuptools,
+  # build inputs
+  torch,
+  numpy,
+  ninja,
+  # check inputs
+  pytestCheckHook,
+  parameterized,
+  pytest-cov,
+  pytest-timeout,
+  remote-pdb,
 }:
 let
   pname = "fairscale";
@@ -19,7 +21,7 @@ let
 in
 buildPythonPackage {
   inherit pname version;
-  format = "setuptools";
+  format = "pyproject";
 
   disabled = pythonOlder "3.10";
 
@@ -30,10 +32,16 @@ buildPythonPackage {
     hash = "sha256-L2Rl/qL6l0OLAofygzJBGQdp/2ZrgDFarwZRjyAR3dw=";
   };
 
-  nativeBuildInputs = [ ninja ];
-  dontUseNinjaBuild = true;
-  dontUseNinjaInstall = true;
-  dontUseNinjaCheck = true;
+  # setup.py depends on ninja python dependency, but we have the binary in nixpkgs
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace 'setup_requires=["ninja"]' 'setup_requires=[]'
+  '';
+
+  nativeBuildInputs = [
+    ninja
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     torch
@@ -51,15 +59,18 @@ buildPythonPackage {
   # Some tests try to build distributed models, which doesn't work in the sandbox.
   doCheck = false;
 
-  pythonImportsCheck = [
-    "fairscale"
-  ];
+  pythonImportsCheck = [ "fairscale" ];
 
   meta = with lib; {
     description = "PyTorch extensions for high performance and large scale training";
+    mainProgram = "wgit";
     homepage = "https://github.com/facebookresearch/fairscale";
     changelog = "https://github.com/facebookresearch/fairscale/releases/tag/v${version}";
-    license = with licenses; [ mit asl20 bsd3 ];
+    license = with licenses; [
+      mit
+      asl20
+      bsd3
+    ];
     maintainers = with maintainers; [ happysalada ];
   };
 }

@@ -86,7 +86,8 @@ rustPlatform.buildRustPackage rec {
     '';
     homepage = "https://gitlab.com/timvisee/ffsend";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ lilyball equirosa marsam ];
+    maintainers = with maintainers; [ equirosa ];
     platforms = platforms.unix;
+    mainProgram = "ffsend";
   };
 }

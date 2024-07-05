@@ -18,6 +18,7 @@ let
           ExecStart = "${pkgs.liquidsoap}/bin/liquidsoap ${stream}";
           User = "liquidsoap";
           LogsDirectory = "liquidsoap";
+          Restart = "always";
         };
       };
     };
@@ -30,8 +31,7 @@ in
 
     services.liquidsoap.streams = mkOption {
 
-      description =
-        lib.mdDoc ''
+      description = ''
           Set of Liquidsoap streams to start,
           one systemd service per stream.
         '';

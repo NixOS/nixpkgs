@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation rec {
   pname = "hexchat";
-  version = "2.16.1";
+  version = "2.16.2";
 
   src = fetchFromGitHub {
     owner = "hexchat";
     repo = "hexchat";
     rev = "v${version}";
-    sha256 = "sha256-2IUlNUTL3TOJnDNMds2EWwkfn5NUOQ1ids96Ddo196E=";
+    sha256 = "sha256-rgaXqXbBWlfSyz+CT0jRLyfGOR1cYYnRhEAu7AsaWus=";
   };
 
   nativeBuildInputs = [ meson ninja pkg-config makeWrapper ];
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A popular and easy to use graphical IRC (chat) client";
+    description = "Popular and easy to use graphical IRC (chat) client";
     homepage = "https://hexchat.github.io/";
     license = licenses.gpl2;
     platforms = platforms.linux;

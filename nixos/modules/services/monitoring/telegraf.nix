@@ -11,20 +11,15 @@ in {
   ###### interface
   options = {
     services.telegraf = {
-      enable = mkEnableOption (lib.mdDoc "telegraf server");
+      enable = mkEnableOption "telegraf server";
 
-      package = mkOption {
-        default = pkgs.telegraf;
-        defaultText = literalExpression "pkgs.telegraf";
-        description = lib.mdDoc "Which telegraf derivation to use";
-        type = types.package;
-      };
+      package = mkPackageOption pkgs "telegraf" { };
 
       environmentFiles = mkOption {
         type = types.listOf types.path;
         default = [];
         example = [ "/run/keys/telegraf.env" ];
-        description = lib.mdDoc ''
+        description = ''
           File to load as environment file. Environment variables from this file
           will be interpolated into the config file using envsubst with this
           syntax: `$ENVIRONMENT` or `''${VARIABLE}`.
@@ -34,7 +29,7 @@ in {
 
       extraConfig = mkOption {
         default = {};
-        description = lib.mdDoc "Extra configuration options for telegraf";
+        description = "Extra configuration options for telegraf";
         type = settingsFormat.type;
         example = {
           outputs.influxdb = {
@@ -53,6 +48,10 @@ in {
 
   ###### implementation
   config = mkIf config.services.telegraf.enable {
+    services.telegraf.extraConfig = {
+      inputs = {};
+      outputs = {};
+    };
     systemd.services.telegraf = let
       finalConfigFile = if config.services.telegraf.environmentFiles == []
                         then configFile
@@ -60,7 +59,9 @@ in {
     in {
       description = "Telegraf Agent";
       wantedBy = [ "multi-user.target" ];
+      wants = [ "network-online.target" ];
       after = [ "network-online.target" ];
+      path = lib.optional (config.services.telegraf.extraConfig.inputs ? procstat) pkgs.procps;
       serviceConfig = {
         EnvironmentFile = config.services.telegraf.environmentFiles;
         ExecStartPre = lib.optional (config.services.telegraf.environmentFiles != [])

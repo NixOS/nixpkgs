@@ -5,13 +5,13 @@ mkDiscoursePlugin {
   src = fetchFromGitHub {
     owner = "discourse";
     repo = "discourse-bbcode-color";
-    rev = "f9ebbf016c8c5c763473ff36cc30fdcdf8fcf480";
-    sha256 = "sha256-7iCKhMdVlFdHMXxU8mQMU1vFiAbr1qKvG29VdAki+14=";
+    rev = "3336efe231e6c02e1dbe11ada71296af258cff58";
+    sha256 = "sha256-C2PPF8kJm0agcYcRSUUBmmxZJliPatPM1vRtjufEd4M=";
   };
   meta = with lib; {
     homepage = "https://github.com/discourse/discourse-bbcode-color";
     maintainers = with maintainers; [ ryantm ];
     license = licenses.mit;
-    description = "Support BBCode color tags.";
+    description = "Support BBCode color tags";
   };
 }

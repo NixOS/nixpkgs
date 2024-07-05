@@ -49,7 +49,6 @@ stdenv.mkDerivation rec {
   '' ;
 
   cmakeFlags = [
-    "-DCMAKE_BUILD_TYPE=Release"
     "-DENABLE_DEPLOY_DEPENDENCIES=OFF"
     "-DUSE_SYSTEM_FLATBUFFERS_LIBS=ON"
     "-DUSE_SYSTEM_PROTO_LIBS=ON"
@@ -64,7 +63,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "An opensource Bias or Ambient Lighting implementation";
+    description = "Opensource Bias or Ambient Lighting implementation";
     homepage = "https://github.com/hyperion-project/hyperion.ng";
     license = licenses.mit;
     maintainers = with maintainers; [ algram kazenyuk ];

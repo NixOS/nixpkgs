@@ -1,70 +1,72 @@
 { lib
 , buildPythonApplication
 , fetchFromGitHub
-, wrapGAppsHook
-, atk
-, gdk-pixbuf
-, gobject-introspection
-, gtk3
-, gst-plugins-good
-, libhandy
-, librsvg
-, networkmanager
-, pango
+, brotlicffi
 , gst-python
 , kiss-headers
 , logbook
 , pillow
-, poetry-core
 , pygobject3
-, python
 , python-zbar
 , requests
 , single-version
-, pytestCheckHook }:
+, gobject-introspection
+, gst-plugins-good
+, gtk3
+, libhandy
+, librsvg
+, networkmanager
+, setuptools
+, python
+, pytestCheckHook
+, wrapGAppsHook3
+}:
 
 buildPythonApplication rec {
   pname = "cobang";
-  version = "0.9.6";
-  format = "pyproject";
+  version = "0.14.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "hongquan";
     repo = "CoBang";
-    rev = "v${version}";
-    sha256 = "sha256-YcXQ2wAgFSsJEqcaDQotpX1put4pQaF511kwq/c2yHw=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-/8JtDoXFQGlM7tlwKd+WRIKpnKCD6OnMmbvElg7LbzU=";
   };
 
-  patches = [
-    ./0001-Poetry-core-and-pillow-9.patch
-  ];
+  postPatch = ''
+    # Fixes "Multiple top-level packages discovered in a flat-layout"
+    sed -i '$ a\[tool.setuptools]' pyproject.toml
+    sed -i '$ a\packages = ["cobang"]' pyproject.toml
+  '';
 
   nativeBuildInputs = [
+    # Needed to recognize gobject namespaces
     gobject-introspection
-    wrapGAppsHook
-  ];
-
-  propagatedBuildInputs = [
-    gst-python
-    kiss-headers
-    logbook
-    pillow
-    poetry-core
-    pygobject3
-    python-zbar
-    requests
-    single-version
+    wrapGAppsHook3
+    setuptools
   ];
 
   buildInputs = [
-    atk
-    gdk-pixbuf
-    # Needed to detect namespaces
-    gobject-introspection
+    # Requires v4l2src
     gst-plugins-good
+    # For gobject namespaces
     libhandy
     networkmanager
-    pango
+  ];
+
+  propagatedBuildInputs = [
+    brotlicffi
+    kiss-headers
+    logbook
+    pillow
+    requests
+    single-version
+    # Unlisted dependencies
+    pygobject3
+    python-zbar
+    # Needed as a gobject namespace and to fix 'Caps' object is not subscriptable
+    gst-python
   ];
 
   nativeCheckInputs = [
@@ -80,9 +82,8 @@ buildPythonApplication rec {
 
     # Icons and applications
     install -Dm 644 $out/${python.sitePackages}/data/vn.hoabinh.quan.CoBang.svg -t $out/share/pixmaps/
-    install -Dm 644 $out/${python.sitePackages}/data/vn.hoabinh.quan.CoBang.desktop -t $out/share/applications/
-    substituteInPlace $out/share/applications/vn.hoabinh.quan.CoBang.desktop \
-      --replace "Exec=" "Exec=$out/bin/"
+    install -Dm 644 $out/${python.sitePackages}/data/vn.hoabinh.quan.CoBang.desktop.in -t $out/share/applications/
+    mv $out/${python.sitePackages}/data/vn.hoabinh.quan.CoBang.desktop{.in,}
   '';
 
   preFixup = ''
@@ -93,10 +94,11 @@ buildPythonApplication rec {
   '';
 
   meta = with lib; {
-    description = "A QR code scanner desktop app for Linux";
+    description = "QR code scanner desktop app for Linux";
     homepage = "https://github.com/hongquan/CoBang";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ wolfangaukang ];
+    maintainers = [ ];
+    mainProgram = "cobang";
     platforms = [ "x86_64-linux" ];
   };
 }

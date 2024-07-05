@@ -1,5 +1,5 @@
 { stdenv, lib, fetchFromGitHub, writeText, gradle_7, pkg-config, perl, cmake
-, gperf, gtk2, gtk3, libXtst, libXxf86vm, glib, alsa-lib, ffmpeg_4-headless, python3, ruby, icu68
+, gperf, gtk2, gtk3, libXtst, libXxf86vm, glib, alsa-lib, ffmpeg_4-headless, python3, ruby, fetchurl, runCommand
 , openjdk11-bootstrap
 , withMedia ? true
 , withWebKit ? false
@@ -7,12 +7,22 @@
 
 let
   major = "11";
-  update = ".0.18";
+  update = ".0.20";
   build = "1";
   repover = "${major}${update}+${build}";
   gradle_ = (gradle_7.override {
     java = openjdk11-bootstrap;
   });
+
+  icuVersionWithSep = s: "71${s}1";
+  icuPath = "download/release-${icuVersionWithSep "-"}/icu4c-${icuVersionWithSep "_"}-data-bin-l.zip";
+  icuData = fetchurl {
+    url = "https://github.com/unicode-org/icu/releases/${icuPath}";
+    hash = "sha256-pVWIy0BkICsthA5mxhR9SJQHleMNnaEcGl/AaLi5qZM=";
+  };
+  icuFakeRepository = runCommand "icu-data-repository" {} ''
+    install -Dm644 ${icuData} $out/${icuPath}
+  '';
 
   makePackage = args: stdenv.mkDerivation ({
     version = "${major}${update}-${build}";
@@ -21,10 +31,10 @@ let
       owner = "openjdk";
       repo = "jfx${major}u";
       rev = repover;
-      sha256 = "sha256-46DjIzcBHkmp5vnhYnLu78CG72bIBRM4A6mgk2OLOko=";
+      sha256 = "sha256-BbBP2DiPZTSn1SBYMCgyiNdF9GD+NqR6YjeVNOQHHn4=";
     };
 
-    buildInputs = [ gtk2 gtk3 libXtst libXxf86vm glib alsa-lib ffmpeg_4-headless icu68 ];
+    buildInputs = [ gtk2 gtk3 libXtst libXxf86vm glib alsa-lib ffmpeg_4-headless ];
     nativeBuildInputs = [ gradle_ perl pkg-config cmake gperf python3 ruby ];
 
     dontUseCmakeConfigure = true;
@@ -32,6 +42,11 @@ let
     postPatch = ''
       substituteInPlace buildSrc/linux.gradle \
         --replace ', "-Werror=implicit-function-declaration"' ""
+
+      # Add missing includes for gcc-13 for webkit build:
+      sed -e '1i #include <cstdio>' \
+        -i modules/javafx.web/src/main/native/Source/bmalloc/bmalloc/Heap.cpp \
+           modules/javafx.web/src/main/native/Source/bmalloc/bmalloc/IsoSharedPageInlines.h
     '';
 
     config = writeText "gradle.properties" (''
@@ -42,10 +57,11 @@ let
     buildPhase = ''
       runHook preBuild
 
+      export NUMBER_OF_PROCESSORS=$NIX_BUILD_CORES
       export GRADLE_USER_HOME=$(mktemp -d)
       ln -s $config gradle.properties
       export NIX_CFLAGS_COMPILE="$(pkg-config --cflags glib-2.0) $NIX_CFLAGS_COMPILE"
-      gradle --no-daemon $gradleFlags sdk
+      gradle --no-daemon --console=plain $gradleFlags sdk
 
       runHook postBuild
     '';
@@ -76,6 +92,7 @@ in makePackage {
   gradleProperties = ''
     COMPILE_MEDIA = ${lib.boolToString withMedia}
     COMPILE_WEBKIT = ${lib.boolToString withWebKit}
+    ${lib.optionalString withWebKit "icuRepositoryURL = file://${icuFakeRepository}"}
   '';
 
   preBuild = ''
@@ -112,7 +129,7 @@ in makePackage {
   meta = with lib; {
     homepage = "http://openjdk.java.net/projects/openjfx/";
     license = licenses.gpl2;
-    description = "The next-generation Java client toolkit";
+    description = "Next-generation Java client toolkit";
     maintainers = with maintainers; [ abbradar ];
     platforms = [ "x86_64-linux" ];
   };

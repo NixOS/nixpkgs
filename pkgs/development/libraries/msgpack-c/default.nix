@@ -6,15 +6,15 @@
 , zlib
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "msgpack-c";
-  version = "6.0.0";
+  version = "6.0.1";
 
   src = fetchFromGitHub {
     owner = "msgpack";
     repo = "msgpack-c";
-    rev = "refs/tags/c-${version}";
-    hash = "sha256-TfC37QKwqvHxsLPgsEqJYkb7mpRQekbntbBPV4v4FO8=";
+    rev = "refs/tags/c-${finalAttrs.version}";
+    hash = "sha256-BXnK7xNRdZvbSz7tERf/PDJkmxbqAC6trH+h36O/v6k=";
   };
 
   strictDeps = true;
@@ -24,8 +24,9 @@ stdenv.mkDerivation rec {
   ];
 
   cmakeFlags = [
-    "-DMSGPACK_BUILD_EXAMPLES=OFF" # examples are not installed even if built
-  ] ++ lib.optional (!doCheck) "-DMSGPACK_BUILD_TESTS=OFF";
+    (lib.cmakeBool "MSGPACK_BUILD_EXAMPLES" false) # examples are not installed even if built
+    (lib.cmakeBool "MSGPACK_BUILD_TESTS" finalAttrs.finalPackage.doCheck)
+  ];
 
   checkInputs = [
     gtest
@@ -37,8 +38,8 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "MessagePack implementation for C";
     homepage = "https://github.com/msgpack/msgpack-c";
-    changelog = "https://github.com/msgpack/msgpack-c/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/msgpack/msgpack-c/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = licenses.boost;
     maintainers = with maintainers; [ nickcao ];
   };
-}
+})

@@ -1,15 +1,29 @@
-{ stdenv, lib, fetchgit, makeWrapper, pkg-config, cudatoolkit, glew, libX11
-, libXcomposite, glfw, libpulseaudio, ffmpeg }:
+{ stdenv
+, lib
+, fetchurl
+, makeWrapper
+, pkg-config
+, libXcomposite
+, libpulseaudio
+, ffmpeg
+, wayland
+, libdrm
+, libva
+, libglvnd
+, libXrandr
+, libXfixes
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "gpu-screen-recorder";
-  version = "1.0.0";
+  version = "unstable-2024-05-21";
 
-  src = fetchgit {
-    url = "https://repo.dec05eba.com/gpu-screen-recorder";
-    rev = "36fd4516db06bcb192e49055319d1778bbed0322";
-    sha256 = "sha256-hYEHM4FOYcPmQ5Yxh520PKy8HiD+G0xv9hrn8SmA07w=";
+  # printf "r%s.%s\n" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
+  src = fetchurl {
+    url = "https://dec05eba.com/snapshot/gpu-screen-recorder.git.r594.e572073.tar.gz";
+    hash = "sha256-MTBxhvkoyotmRUx1sRN/7ruXBYwIbOFQNdJHhZ3DdDk=";
   };
+  sourceRoot = ".";
 
   nativeBuildInputs = [
     pkg-config
@@ -17,34 +31,34 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    glew
-    libX11
     libXcomposite
-    glfw
     libpulseaudio
     ffmpeg
+    wayland
+    libdrm
+    libva
+    libXrandr
+    libXfixes
   ];
-
-  postPatch = ''
-    substituteInPlace ./build.sh \
-      --replace '/opt/cuda/targets/x86_64-linux/include' '${cudatoolkit}/targets/x86_64-linux/include' \
-      --replace '/usr/lib64/libcuda.so' '${cudatoolkit}/targets/x86_64-linux/lib/stubs/libcuda.so'
-  '';
 
   buildPhase = ''
     ./build.sh
   '';
 
-  installPhase = ''
-    install -Dt $out/bin/ gpu-screen-recorder
-    wrapProgram $out/bin/gpu-screen-recorder --prefix LD_LIBRARY_PATH : /run/opengl-driver/lib
+  postInstall = ''
+    install -Dt $out/bin gpu-screen-recorder gsr-kms-server
+    mkdir $out/bin/.wrapped
+    mv $out/bin/gpu-screen-recorder $out/bin/.wrapped/
+    makeWrapper "$out/bin/.wrapped/gpu-screen-recorder" "$out/bin/gpu-screen-recorder" \
+    --prefix LD_LIBRARY_PATH : ${libglvnd}/lib \
+    --suffix PATH : $out/bin
   '';
 
-  meta = with lib; {
-    description = "A screen recorder that has minimal impact on system performance by recording a window using the GPU only";
+  meta = {
+    description = "Screen recorder that has minimal impact on system performance by recording a window using the GPU only";
     homepage = "https://git.dec05eba.com/gpu-screen-recorder/about/";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ babbaj ];
+    license = lib.licenses.gpl3Only;
+    maintainers = [ lib.maintainers.babbaj ];
     platforms = [ "x86_64-linux" ];
   };
 }

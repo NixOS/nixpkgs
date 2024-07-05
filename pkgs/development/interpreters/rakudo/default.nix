@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "rakudo";
-  version = "2023.06";
+  version = "2024.06";
 
   src = fetchFromGitHub {
     owner = "rakudo";
     repo = "rakudo";
     rev = version;
-    hash = "sha256-t+zZEokjcDXp8uuHaOHp1R9LuS0Q3CSDOWhbSFXlNaU=";
+    hash = "sha256-6XWfM7KJB+lMf/YFLaQ71DMa8owZtjjuMEyWY++CJnM=";
     fetchSubmodules = true;
   };
 

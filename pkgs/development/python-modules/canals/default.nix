@@ -1,67 +1,66 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, pythonAtLeast
-, fetchFromGitHub
-# native build inputs
-, hatchling
-# build input
-, networkx
-# check inputs
-, pytestCheckHook
-# optional dependencies
-, pygraphviz
-, requests
-, mkdocs-material
-, mkdocs-mermaid2-plugin
-, mkdocstrings
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  hatchling,
+  mkdocs-material,
+  mkdocs-mermaid2-plugin,
+  mkdocstrings,
+  networkx,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  typing-extensions,
 }:
-let
-  pname = "canals";
-  version = "0.2.2";
-  optional-dependencies = {
-    graphviz = [ pygraphviz ];
-    mermaid = [ requests ];
-    docs = [ mkdocs-material mkdocs-mermaid2-plugin mkdocstrings ];
-  };
-in
-buildPythonPackage {
-  inherit version pname;
-  format = "pyproject";
 
-  # Pypi source package doesn't contain tests
-  src = fetchFromGitHub {
-    owner = "deepset-ai";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-dF0bkY4DFJIovaseNiOLgF8lmha+njTTTzr2/4LzZEc=";
-  };
+buildPythonPackage rec {
+  pname = "canals";
+  version = "0.11.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
-  nativeBuildInputs = [
-    hatchling
-  ];
+  src = fetchFromGitHub {
+    owner = "deepset-ai";
+    repo = "canals";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-xoJqj/zPBPPCheBxA+8EFRJqUnlP+4aWLEh42q1X1mM=";
+  };
+
+  nativeBuildInputs = [ hatchling ];
 
   propagatedBuildInputs = [
     networkx
+    requests
+    typing-extensions
   ];
 
-  passthru = { inherit optional-dependencies; };
+  passthru.optional-dependencies = {
+    docs = [
+      mkdocs-material
+      mkdocs-mermaid2-plugin
+      mkdocstrings
+    ];
+  };
 
   nativeCheckInputs = [
     pytestCheckHook
-  ] ++ optional-dependencies.mermaid;
+  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
   disabledTestPaths = [
-    # requires internet connection to mermaid.ink
-    "test/pipelines/integration"
+    # Test requires internet connection to mermaid.ink
+    "test/pipeline/integration"
+  ];
+
+  disabledTests = [
+    # Path issue
+    "test_draw_pygraphviz"
   ];
 
   pythonImportsCheck = [ "canals" ];
 
   meta = with lib; {
-    description = "A component orchestration engine";
+    description = "Component orchestration engine";
     homepage = "https://github.com/deepset-ai/canals";
     changelog = "https://github.com/deepset-ai/canals/releases/tag/v${version}";
     license = licenses.asl20;

@@ -18,8 +18,9 @@
 , glib
 , gobject-introspection
 , gst_all_1
-, wrapGAppsHook
-, withDoc ? true
+, wrapGAppsHook3
+  # needs pkg_resources
+, withDoc ? false
 , sphinx
 , graphviz
 , withAravis ? true
@@ -32,20 +33,14 @@
 
 stdenv.mkDerivation rec {
   pname = "tiscamera";
-  version = "1.0.0";
+  version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "TheImagingSource";
-    repo = pname;
-    rev = "v-${pname}-${version}";
-    sha256 = "0msz33wvqrji11kszdswcvljqnjflmjpk0aqzmsv6i855y8xn6cd";
+    repo = "tiscamera";
+    rev = "v-tiscamera-${version}";
+    hash = "sha256-33U/8CbqNWIRwfDHXCZSN466WEQj9fip+Z5EJ7kIwRM=";
   };
-
-  patches = [
-    ./0001-tcamconvert-tcamsrc-add-missing-include-lib-dirs.patch
-    ./0001-udev-rules-fix-install-location.patch
-    ./0001-cmake-find-aravis-fix-pkg-cfg-include-dirs.patch
-  ];
 
   postPatch = ''
     cp ${catch2}/include/catch2/catch.hpp external/catch/catch.hpp
@@ -59,7 +54,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
+    gobject-introspection
   ] ++ lib.optionals withDoc [
     sphinx
     graphviz
@@ -81,7 +77,6 @@ stdenv.mkDerivation rec {
     pcre
     zstd
     glib
-    gobject-introspection
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-base
     gst_all_1.gst-plugins-good
@@ -110,12 +105,14 @@ stdenv.mkDerivation rec {
     "-DTCAM_INSTALL_FORCE_PREFIX=ON"
   ];
 
+  env.CXXFLAGS = "-include cstdint";
+
   doCheck = true;
 
   # gstreamer tests requires, besides gst-plugins-bad, plugins installed by this expression.
   checkPhase = "ctest --force-new-ctest-process -E gstreamer";
 
-  # wrapGAppsHook: make sure we add ourselves to the introspection
+  # wrapGAppsHook3: make sure we add ourselves to the introspection
   # and gstreamer paths.
   GI_TYPELIB_PATH = "${placeholder "out"}/lib/girepository-1.0";
   GST_PLUGIN_SYSTEM_PATH_1_0 = "${placeholder "out"}/lib/gstreamer-1.0";
@@ -129,7 +126,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "The Linux sources and UVC firmwares for The Imaging Source cameras";
+    description = "Linux sources and UVC firmwares for The Imaging Source cameras";
     homepage = "https://github.com/TheImagingSource/tiscamera";
     license = with licenses; [ asl20 ];
     platforms = platforms.linux;

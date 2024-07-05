@@ -1,12 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy27
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPy27,
 }:
 
 buildPythonPackage rec {
   pname = "sphinxcontrib-jsmath";
   version = "1.0.1";
+  format = "setuptools";
   disabled = isPy27;
 
   src = fetchPypi {
@@ -17,8 +19,10 @@ buildPythonPackage rec {
   # Check is disabled due to circular dependency of sphinx
   doCheck = false;
 
+  pythonNamespaces = [ "sphinxcontrib" ];
+
   meta = with lib; {
-    description = "sphinxcontrib-jsmath is a sphinx extension which renders display math in HTML via JavaScript.";
+    description = "sphinxcontrib-jsmath is a sphinx extension which renders display math in HTML via JavaScript";
     homepage = "https://github.com/sphinx-doc/sphinxcontrib-jsmath";
     license = licenses.bsd0;
     maintainers = teams.sphinx.members;

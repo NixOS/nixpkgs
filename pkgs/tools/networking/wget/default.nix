@@ -1,17 +1,17 @@
 { lib, stdenv, fetchurl, gettext, pkg-config, perlPackages
 , libidn2, zlib, pcre, libuuid, libiconv, libintl
-, python3, lzip
+, python3, lzip, darwin
 , withLibpsl ? false, libpsl
 , withOpenssl ? true, openssl
 }:
 
 stdenv.mkDerivation rec {
   pname = "wget";
-  version = "1.21.4";
+  version = "1.24.5";
 
   src = fetchurl {
-    url = "mirror://gnu/wget/${pname}-${version}.tar.lz";
-    hash = "sha256-NoNhml9Q7cvMsXIKeQBvo3v5uaJVqMW0gEi8PHqHS9k=";
+    url = "mirror://gnu/wget/wget-${version}.tar.lz";
+    hash = "sha256-V6EHFR5O+U/flK/+z6xZiWPzcvEyk+2cdAMhBTkLNu4=";
   };
 
   patches = [
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     ++ lib.optionals doCheck [ perlPackages.IOSocketSSL perlPackages.LWP python3 ]
     ++ lib.optional withOpenssl openssl
     ++ lib.optional withLibpsl libpsl
-    ++ lib.optional stdenv.isDarwin perlPackages.perl;
+    ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.CoreServices perlPackages.perl ];
 
   configureFlags = [
     (lib.withFeatureAs withOpenssl "ssl" "openssl")
@@ -47,14 +47,15 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Tool for retrieving files using HTTP, HTTPS, and FTP";
+    homepage = "https://www.gnu.org/software/wget/";
+    license = licenses.gpl3Plus;
     longDescription =
       '' GNU Wget is a free software package for retrieving files using HTTP,
          HTTPS and FTP, the most widely-used Internet protocols.  It is a
          non-interactive commandline tool, so it may easily be called from
          scripts, cron jobs, terminals without X-Windows support, etc.
       '';
-    license = licenses.gpl3Plus;
-    homepage = "https://www.gnu.org/software/wget/";
+    mainProgram = "wget";
     maintainers = with maintainers; [ fpletz ];
     platforms = platforms.all;
   };

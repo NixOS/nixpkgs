@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "calcurse";
-  version = "4.8.0";
+  version = "4.8.1";
 
   src = fetchurl {
     url = "https://calcurse.org/files/${pname}-${version}.tar.gz";
-    sha256 = "sha256-SKc2ZmzEtrUwEtc7OqcBUsGLQebHtIB/qw8WjWRa4yw=";
+    hash = "sha256-2GuzcBT9abjYPMuQSsl5xrjd9Z7j28gPWidFJeTVgwo=";
   };
 
   buildInputs = [ ncurses gettext python3 python3Packages.wrapPython ];
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A calendar and scheduling application for the command line";
+    description = "Calendar and scheduling application for the command line";
     longDescription = ''
       calcurse is a calendar and scheduling application for the command line. It helps
       keep track of events, appointments and everyday tasks. A configurable notification
@@ -31,5 +31,6 @@ stdenv.mkDerivation rec {
     changelog = "https://git.calcurse.org/calcurse.git/plain/CHANGES.md?h=v${version}";
     license = licenses.bsd2;
     platforms = platforms.unix;
+    maintainers = [ maintainers.matthiasbeyer ];
   };
 }

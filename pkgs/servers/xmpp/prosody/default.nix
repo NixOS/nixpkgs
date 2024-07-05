@@ -1,8 +1,7 @@
-{ stdenv, fetchurl, lib, libidn, openssl, makeWrapper, fetchhg
+{ stdenv, fetchurl, lib, libidn, openssl, makeWrapper, fetchhg, buildPackages
 , icu
 , lua
 , nixosTests
-, withLibevent ? true
 , withDBI ? true
 # use withExtraLibs to add additional dependencies of community modules
 , withExtraLibs ? [ ]
@@ -16,13 +15,12 @@ let
   luaEnv = lua.withPackages(p: with p; [
       luasocket luasec luaexpat luafilesystem luabitop luadbi-sqlite3 luaunbound
     ]
-    ++ lib.optional withLibevent p.luaevent
     ++ lib.optional withDBI p.luadbi
     ++ withExtraLuaPackages p
   );
 in
 stdenv.mkDerivation rec {
-  version = "0.12.3"; # also update communityModules
+  version = "0.12.4"; # also update communityModules
   pname = "prosody";
   # The following community modules are necessary for the nixos module
   # prosody module to comply with XEP-0423 and provide a working
@@ -34,7 +32,7 @@ stdenv.mkDerivation rec {
   ];
   src = fetchurl {
     url = "https://prosody.im/downloads/source/${pname}-${version}.tar.gz";
-    sha256 = "sha256-NdoNAx/0YECi1jjgBNQlXiSbYyP+YhLbnd12tAHbIQE=";
+    sha256 = "R9cSJzwvKVWMQS9s2uwHMmC7wmt92iQ9tYAzAYPWWFY=";
   };
 
   # A note to all those merging automated updates: Please also update this
@@ -42,8 +40,8 @@ stdenv.mkDerivation rec {
   # version.
   communityModules = fetchhg {
     url = "https://hg.prosody.im/prosody-modules";
-    rev = "3e30799deec2";
-    sha256 = "sha256-oaWs2D5z1LtvhtZMlaZPLNoNNL/1TIZLZwFfC3vtRUo=";
+    rev = "d3a72777f149";
+    hash = "sha256-qLuhEdvtOMfu78oxLUZKWZDb/AME1+IRnk0jkQNxTU8=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -54,21 +52,29 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--ostype=linux"
+    "--with-lua-bin=${lib.getBin buildPackages.lua}/bin"
     "--with-lua-include=${luaEnv}/include"
     "--with-lua=${luaEnv}"
+    "--c-compiler=${stdenv.cc.targetPrefix}cc"
+    "--linker=${stdenv.cc.targetPrefix}cc"
   ];
+  configurePlatforms = [];
 
   postBuild = ''
     make -C tools/migration
   '';
+
+  buildFlags = [
+    # don't search for configs in the nix store when running prosodyctl
+    "INSTALLEDCONFIG=/etc/prosody"
+    "INSTALLEDDATA=/var/lib/prosody"
+  ];
 
   # the wrapping should go away once lua hook is fixed
   postInstall = ''
       ${concatMapStringsSep "\n" (module: ''
         cp -r $communityModules/mod_${module} $out/lib/prosody/modules/
       '') (lib.lists.unique(nixosModuleDeps ++ withCommunityModules ++ withOnlyInstalledCommunityModules))}
-      wrapProgram $out/bin/prosodyctl \
-        --add-flags '--config "/etc/prosody/prosody.cfg.lua"'
       make -C tools/migration install
     '';
 
@@ -82,6 +88,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     homepage = "https://prosody.im";
     platforms = platforms.linux;
-    maintainers = with maintainers; [ globin ];
+    maintainers = with maintainers; [ toastal ];
   };
 }

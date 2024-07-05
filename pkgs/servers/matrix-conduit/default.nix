@@ -1,14 +1,24 @@
-{ lib, rustPlatform, fetchFromGitLab, pkg-config, sqlite, stdenv, darwin, nixosTests, rocksdb_6_23 }:
+{ lib
+, rustPlatform
+, fetchFromGitLab
+, pkg-config
+, sqlite
+, stdenv
+, darwin
+, nixosTests
+, rocksdb
+, rust-jemalloc-sys
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "matrix-conduit";
-  version = "0.5.0";
+  version = "0.8.0";
 
   src = fetchFromGitLab {
     owner = "famedly";
     repo = "conduit";
     rev = "v${version}";
-    sha256 = "sha256-GSCpmn6XRbmnfH31R9c6QW3/pez9KHPjI99dR+ln0P4=";
+    hash = "sha256-/qKPeE2Ptweaf+rHOvdW0TUDLwN9D93MMgDoU4fTzEA=";
   };
 
   # We have to use importCargoLock here because `cargo vendor` currently doesn't support workspace
@@ -16,9 +26,7 @@ rustPlatform.buildRustPackage rec {
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "heed-0.10.6" = "sha256-rm02pJ6wGYN4SsAbp85jBVHDQ5ITjZZd+79EC2ubRsY=";
-      "reqwest-0.11.9" = "sha256-wH/q7REnkz30ENBIK5Rlxnc1F6vOyuEANMHFmiVPaGw=";
-      "ruma-0.7.4" = "sha256-ztobLdOXSGyK1YcPMMIycO3ZmnjxG5mLkHltf0Fbs8s=";
+      "ruma-0.10.1" = "sha256-I1mTeJLo+pgIqFkn1D2De/oACQPkUELjGdyGf3MVuLQ=";
     };
   };
 
@@ -33,12 +41,18 @@ rustPlatform.buildRustPackage rec {
     pkg-config
   ];
 
-  buildInputs = [ sqlite ] ++ lib.optionals stdenv.isDarwin [
+  buildInputs = [
+    sqlite
+    rust-jemalloc-sys
+  ] ++ lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.Security
+    darwin.apple_sdk.frameworks.SystemConfiguration
   ];
 
-  ROCKSDB_INCLUDE_DIR = "${rocksdb_6_23}/include";
-  ROCKSDB_LIB_DIR = "${rocksdb_6_23}/lib";
+  env = {
+    ROCKSDB_INCLUDE_DIR = "${rocksdb}/include";
+    ROCKSDB_LIB_DIR = "${rocksdb}/lib";
+  };
 
   # tests failed on x86_64-darwin with SIGILL: illegal instruction
   doCheck = !(stdenv.isx86_64 && stdenv.isDarwin);
@@ -48,10 +62,10 @@ rustPlatform.buildRustPackage rec {
   };
 
   meta = with lib; {
-    description = "A Matrix homeserver written in Rust";
+    description = "Matrix homeserver written in Rust";
     homepage = "https://conduit.rs/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ pstn piegames pimeys ];
+    maintainers = with maintainers; [ pstn pimeys ];
     mainProgram = "conduit";
   };
 }

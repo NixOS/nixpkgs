@@ -24,7 +24,8 @@ mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://psi-im.org";
-    description = "An XMPP (Jabber) client";
+    description = "XMPP (Jabber) client";
+    mainProgram = "psi";
     maintainers = [ maintainers.raskin ];
     license = licenses.gpl2;
     platforms = platforms.linux;

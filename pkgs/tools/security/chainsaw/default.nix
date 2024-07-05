@@ -1,30 +1,29 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, stdenv
-, darwin
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  stdenv,
+  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "chainsaw";
-  version = "2.6.2";
+  version = "2.9.1-2";
 
   src = fetchFromGitHub {
     owner = "WithSecureLabs";
     repo = "chainsaw";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Et90CW1fHt6GuHgQP2nRvcS7in4zw2UgBiQhblQGM+8=";
+    hash = "sha256-daedJZnWq9UnMDY9P9npngfFbGsv5MSDP4Ep/Pr++ek=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "notatin-0.1.0" = "sha256-YHC/NavKf0FoYtd5NM8ovUfSd4ODhKaA82mAT+HcefA=";
-    };
-  };
+  cargoHash = "sha256-eSpyh8wnZWU5rY6qhKtxQUFkhkZXzIB2ycPab9LC+OA=";
 
-  buildInputs = lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.CoreFoundation
+  buildInputs = lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.CoreFoundation ];
+
+  ldflags = [
+    "-w"
+    "-s"
   ];
 
   meta = with lib; {
@@ -33,5 +32,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/WithSecureLabs/chainsaw/releases/tag/v${version}";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "chainsaw";
   };
 }

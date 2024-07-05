@@ -1,36 +1,42 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, azure-core
-, cryptography
-, isodate
-, msrest
-, typing-extensions
+{
+  lib,
+  azure-core,
+  buildPythonPackage,
+  cryptography,
+  fetchPypi,
+  isodate,
+  msrest,
+  pythonOlder,
+  setuptools,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "azure-storage-file-share";
-  version = "12.13.0";
-  format = "setuptools";
+  version = "12.16.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    extension = "zip";
-    hash = "sha256-ozqVIWPvAl0doaqK77P+VBhx9q+6Ljk/q7WrAP2ZPm8=";
+    hash = "sha256-QS+35sPCj29yKvmBlapZQHqqMjI6+hOkoB9i0Lh3TrM=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     azure-core
     cryptography
     isodate
-    msrest
     typing-extensions
   ];
 
-  # requires checkout from monorepo
+  passthru.optional-dependencies = {
+    aio = [ azure-core ] ++ azure-core.optional-dependencies.aio;
+  };
+
+  # Tests require checkout from monorepo
   doCheck = false;
 
   pythonImportsCheck = [
@@ -40,7 +46,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Microsoft Azure File Share Storage Client Library for Python";
-    homepage = "https://github.com/Azure/azure-sdk-for-python";
+    homepage = "https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/storage/azure-storage-file-share";
+    changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-storage-file-share_${version}/sdk/storage/azure-storage-file-share/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ kamadorueda ];
   };

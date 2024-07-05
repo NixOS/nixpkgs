@@ -63,9 +63,6 @@ self: let
       cl-print = null; # builtin
       tle = null; # builtin
       advice = null; # builtin
-      seq = if lib.versionAtLeast self.emacs.version "27"
-            then null
-            else super.seq;
       # Compilation instructions for the Ada executables:
       # https://www.nongnu.org/ada-mode/
       ada-mode = super.ada-mode.overrideAttrs (old: {
@@ -88,7 +85,7 @@ self: let
         ];
 
         buildInputs = [
-          pkgs.gnatcoll-xref
+          pkgs.gnatPackages.gnatcoll-xref
         ];
 
         buildPhase = ''
@@ -98,7 +95,7 @@ self: let
         '';
 
         postInstall = (old.postInstall or "") + "\n" + ''
-          ./install.sh --prefix=$out
+          ./install.sh "$out"
         '';
 
         meta = old.meta // {
@@ -106,8 +103,19 @@ self: let
         };
       });
 
+      eglot = super.eglot.overrideAttrs (old: {
+        postInstall = (old.postInstall or "") + ''
+          local info_file=eglot.info
+          pushd $out/share/emacs/site-lisp/elpa/eglot-*
+          # specify output info file to override the one defined in eglot.texi
+          makeinfo --output=$info_file eglot.texi
+          install-info $info_file dir
+          popd
+        '';
+      });
+
       jinx = super.jinx.overrideAttrs (old: let
-        libExt = pkgs.stdenv.targetPlatform.extensions.sharedLibrary;
+        libExt = pkgs.stdenv.hostPlatform.extensions.sharedLibrary;
       in {
         dontUnpack = false;
 
@@ -133,6 +141,26 @@ self: let
         };
       });
 
+      org = super.org.overrideAttrs (old: {
+        dontUnpack = false;
+        patches = old.patches or [ ] ++ lib.optionals (lib.versionOlder old.version "9.7.5") [
+          # security fix backported from 9.7.5
+          (pkgs.fetchpatch {
+            url = "https://git.savannah.gnu.org/cgit/emacs/org-mode.git/patch/?id=f4cc61636947b5c2f0afc67174dd369fe3277aa8";
+            hash = "sha256-bGgsnTSn6SMu1J8P2BfJjrKx2845FCsUB2okcIrEjDg=";
+            stripLen = 1;
+          })
+        ];
+        postPatch = old.postPatch or "" + "\n" + ''
+          pushd ..
+          local content_directory=${old.ename}-${old.version}
+          src=$PWD/$content_directory.tar
+          tar --create --verbose --file=$src $content_directory
+          popd
+        '';
+        dontBuild = true;
+      });
+
       plz = super.plz.overrideAttrs (
         old: {
           dontUnpack = false;
@@ -147,10 +175,39 @@ self: let
         }
       );
 
+      xeft = super.xeft.overrideAttrs (old: let
+        libExt = pkgs.stdenv.hostPlatform.extensions.sharedLibrary;
+      in {
+        dontUnpack = false;
+
+        buildInputs = (old.buildInputs or [ ]) ++ [ pkgs.xapian ];
+        buildPhase = (old.buildPhase or "") + ''
+          $CXX -shared -o xapian-lite${libExt} xapian-lite.cc $NIX_CFLAGS_COMPILE -lxapian
+        '';
+        postInstall = (old.postInstall or "") + "\n" + ''
+          outd=$out/share/emacs/site-lisp/elpa/xeft-*
+          install -m444 -t $outd xapian-lite${libExt}
+          rm $outd/xapian-lite.cc $outd/emacs-module.h $outd/emacs-module-prelude.h $outd/demo.gif $outd/Makefile
+        '';
+      });
+
+      # native compilation for tests/seq-tests.el never ends
+      # delete tests/seq-tests.el to workaround this
+      seq = super.seq.overrideAttrs (old: {
+        dontUnpack = false;
+        postUnpack = (old.postUnpack or "") + "\n" + ''
+          local content_directory=$(echo seq-*)
+          rm --verbose $content_directory/tests/seq-tests.el
+          src=$PWD/$content_directory.tar
+          tar --create --verbose --file=$src $content_directory
+        '';
+      });
+
+
     };
 
     elpaPackages = super // overrides;
 
   in elpaPackages // { inherit elpaBuild; });
 
-in generateElpa { }
+in (generateElpa { }) // { __attrsFailEvaluation = true; }

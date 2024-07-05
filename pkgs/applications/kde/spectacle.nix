@@ -5,12 +5,13 @@
 , knotifications, kscreen, kwidgetsaddons, kwindowsystem, kxmlgui, libkipi
 , qtx11extras, knewstuff, kwayland, qttools, kcolorpicker, kimageannotator
 , qcoro, qtquickcontrols2, wayland, plasma-wayland-protocols, kpurpose, kpipewire
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 mkDerivation {
   pname = "spectacle";
-  nativeBuildInputs = [ extra-cmake-modules kdoctools wrapGAppsHook ];
+
+  nativeBuildInputs = [ extra-cmake-modules kdoctools wrapGAppsHook3 ];
   buildInputs = [
     kconfig kcoreaddons kdbusaddons kdeclarative ki18n kio knotifications
     kscreen kwidgetsaddons kwindowsystem kxmlgui libkipi qtx11extras xcb-util-cursor
@@ -32,6 +33,7 @@ mkDerivation {
   meta = with lib; {
     homepage = "https://apps.kde.org/spectacle/";
     description = "Screenshot capture utility";
+    mainProgram = "spectacle";
     maintainers = with maintainers; [ ttuegel ];
   };
 }

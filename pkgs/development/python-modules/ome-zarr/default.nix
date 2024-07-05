@@ -1,60 +1,71 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, fetchpatch
-, pytestCheckHook
-, aiohttp
-, dask
-, fsspec
-, numpy
-, requests
-, scikit-image
-, s3fs
-, toolz
-, zarr
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  pytestCheckHook,
+  aiohttp,
+  dask,
+  distributed,
+  fsspec,
+  numpy,
+  requests,
+  scikit-image,
+  toolz,
+  zarr,
 }:
 
 buildPythonPackage rec {
   pname = "ome-zarr";
-  version = "0.6.1";
+  version = "0.9.0";
+  format = "setuptools";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "ome";
     repo = "ome-zarr-py";
     rev = "refs/tags/v${version}";
-    hash = "sha256-dpweOuqruh7mAqmSaNbehLCr8OCLe1IZNWV4bpHpTl0=";
+    hash = "sha256-YOG9+ONf2OnkSZBL/Vb8Inebx4XDSGJb2fqypaWebhY=";
   };
-
-  patches = [
-    # remove after next release:
-    (fetchpatch {
-      name = "fix-writer-bug";
-      url = "https://github.com/ome/ome-zarr-py/commit/c1302e05998dfe2faf94b0f958c92888681f5ffa.patch";
-      hash = "sha256-1WANObABUXkjqeGdnmg0qJ48RcZcuAwgitZyMwiRYUw=";
-    })
-  ];
 
   propagatedBuildInputs = [
     numpy
     dask
+    distributed
     zarr
     fsspec
     aiohttp
     requests
-    s3fs
     scikit-image
     toolz
-  ];
+  ] ++ fsspec.passthru.optional-dependencies.s3;
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTests = [
     # attempts to access network
     "test_s3_info"
+  ];
+
+  pytestFlagsArray = [
+    # Fail with RecursionError
+    # https://github.com/ome/ome-zarr-py/issues/352
+    "--deselect=tests/test_cli.py::TestCli::test_astronaut_download"
+    "--deselect=tests/test_cli.py::TestCli::test_astronaut_info"
+    "--deselect=tests/test_cli.py::TestCli::test_coins_info"
+    "--deselect=tests/test_emitter.py::test_close"
+    "--deselect=tests/test_emitter.py::test_create_wrong_encoding"
+    "--deselect=tests/test_node.py::TestNode::test_image"
+    "--deselect=tests/test_node.py::TestNode::test_label"
+    "--deselect=tests/test_node.py::TestNode::test_labels"
+    "--deselect=tests/test_ome_zarr.py::TestOmeZarr::test_download"
+    "--deselect=tests/test_ome_zarr.py::TestOmeZarr::test_info"
+    "--deselect=tests/test_reader.py::TestReader::test_image"
+    "--deselect=tests/test_reader.py::TestReader::test_label"
+    "--deselect=tests/test_reader.py::TestReader::test_labels"
+    "--deselect=tests/test_starting_points.py::TestStartingPoints::test_label"
+    "--deselect=tests/test_starting_points.py::TestStartingPoints::test_labels"
+    "--deselect=tests/test_starting_points.py::TestStartingPoints::test_top_level"
   ];
 
   pythonImportsCheck = [
@@ -71,7 +82,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "Implementation of next-generation file format (NGFF) specifications for storing bioimaging data in the cloud.";
+    description = "Implementation of next-generation file format (NGFF) specifications for storing bioimaging data in the cloud";
     homepage = "https://pypi.org/project/ome-zarr";
     changelog = "https://github.com/ome/ome-zarr-py/blob/v${version}/CHANGELOG.md";
     license = licenses.bsd2;

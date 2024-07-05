@@ -1,31 +1,40 @@
-{ lib, stdenv, rustPlatform, fetchFromGitHub, pkg-config
-, openssl, libiconv, CoreServices, Security }:
+{ lib,
+stdenv,
+rustPlatform,
+fetchFromGitHub,
+pkg-config,
+openssl,
+jq,
+moreutils,
+CoreServices,
+SystemConfiguration
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "trunk";
-  version = "0.17.1";
+  version = "0.20.2";
 
   src = fetchFromGitHub {
-    owner = "thedodd";
+    owner = "trunk-rs";
     repo = "trunk";
     rev = "v${version}";
-    sha256 = "sha256-z6/CogY7X3u4BvvP8gRjBeKw0Cci9d6TKZYrKLwoTqs=";
+    hash = "sha256-hyjv3UJWIfJjdGtju4T6ufhz97F76uib/B9kyBHsC64=";
   };
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = if stdenv.isDarwin
-    then [ libiconv CoreServices Security ]
+    then [ CoreServices SystemConfiguration ]
     else [ openssl ];
-
   # requires network
   checkFlags = [ "--skip=tools::tests::download_and_install_binaries" ];
 
-  cargoHash = "sha256-7j4SNBMNtu4vFkZic4I6Wjlt+oHQ1o8gOxweIq8t7ro=";
+  cargoHash = "sha256-BI/jA5/7/QP62EtOXXRkbsJILsHbVacZY/bKZGcXk34=";
 
   meta = with lib; {
-    homepage = "https://github.com/thedodd/trunk";
+    homepage = "https://github.com/trunk-rs/trunk";
     description = "Build, bundle & ship your Rust WASM application to the web";
-    maintainers = with maintainers; [ freezeboy ];
+    mainProgram = "trunk";
+    maintainers = with maintainers; [ freezeboy ctron ];
     license = with licenses; [ asl20 ];
   };
 }

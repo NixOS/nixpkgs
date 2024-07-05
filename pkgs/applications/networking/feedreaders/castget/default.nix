@@ -10,12 +10,12 @@
 , glibcLocales
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "castget";
   version = "2.0.1";
 
   src = fetchurl {
-    url = "http://savannah.nongnu.org/download/castget/castget-${version}.tar.bz2";
+    url = "http://savannah.nongnu.org/download/castget/castget-${finalAttrs.version}.tar.bz2";
     hash = "sha256-Q4tffsfjGkXtN1ZjD+RH9CAVrNpT7AkgL0hihya16HU=";
   };
 
@@ -41,7 +41,8 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A simple, command-line based RSS enclosure downloader";
+    description = "Simple, command-line based RSS enclosure downloader";
+    mainProgram = "castget";
     longDescription = ''
       castget is a simple, command-line based RSS enclosure downloader. It is
       primarily intended for automatic, unattended downloading of podcasts.
@@ -51,4 +52,4 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     platforms = platforms.linux;
   };
-}
+})

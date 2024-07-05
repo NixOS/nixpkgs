@@ -11,10 +11,10 @@ in {
 
   options = {
     services.prosody-filer = {
-      enable = mkEnableOption (lib.mdDoc "Prosody Filer XMPP upload file server");
+      enable = mkEnableOption "Prosody Filer XMPP upload file server";
 
       settings = mkOption {
-        description = lib.mdDoc ''
+        description = ''
           Configuration for Prosody Filer.
           Refer to <https://github.com/ThomasLeister/prosody-filer#configure-prosody-filer> for details on supported values.
         '';

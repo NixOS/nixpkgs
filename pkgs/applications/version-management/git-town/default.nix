@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "git-town";
-  version = "9.0.0";
+  version = "14.2.2";
 
   src = fetchFromGitHub {
     owner = "git-town";
     repo = "git-town";
     rev = "v${version}";
-    hash = "sha256-huo0PRqc2iBBYXGBVdgtPJhbPoIqqjN2loXQ3CqVaOA=";
+    hash = "sha256-bYCE3Ik0UbbjlZV8EY6pVRZzrTBp2uiZLJjO4UxfGE8=";
   };
 
   vendorHash = null;
@@ -19,7 +19,8 @@ buildGoModule rec {
 
   ldflags =
     let
-      modulePath = "github.com/git-town/git-town/v${lib.versions.major version}"; in
+      modulePath = "github.com/git-town/git-town/v${lib.versions.major version}";
+    in
     [
       "-s"
       "-w"
@@ -28,41 +29,43 @@ buildGoModule rec {
     ];
 
   nativeCheckInputs = [ git ];
-  preCheck =
+
+  preCheck = ''
+    HOME=$(mktemp -d)
+  '';
+
+  checkFlags =
     let
+      # Disable tests requiring local operations
       skippedTests = [
         "TestGodog"
-        "TestRunner_CreateChildFeatureBranch"
-        "TestShellRunner_RunStringWith_Dir"
-        "TestMockingShell_MockCommand"
-        "TestShellRunner_RunStringWith_Input"
+        "TestMockingRunner/MockCommand"
+        "TestMockingRunner/QueryWith"
+        "TestTestCommands/CreateChildFeatureBranch"
       ];
     in
-    ''
-      HOME=$(mktemp -d)
-      # Disable tests requiring local operations
-      buildFlagsArray+=("-run" "[^(${builtins.concatStringsSep "|" skippedTests})]")
-    '';
+    [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
 
   postInstall = ''
     installShellCompletion --cmd git-town \
-      --bash <($out/bin/git-town completion bash) \
-      --fish <($out/bin/git-town completion fish) \
-      --zsh <($out/bin/git-town completion zsh)
+      --bash <($out/bin/git-town completions bash) \
+      --fish <($out/bin/git-town completions fish) \
+      --zsh <($out/bin/git-town completions zsh)
 
     wrapProgram $out/bin/git-town --prefix PATH : ${lib.makeBinPath [ git ]}
   '';
 
   passthru.tests.version = testers.testVersion {
     package = git-town;
-    command = "git-town version";
-    version = "v${version}";
+    command = "git-town --version";
+    inherit version;
   };
 
   meta = with lib; {
     description = "Generic, high-level git support for git-flow workflows";
     homepage = "https://www.git-town.com/";
     license = licenses.mit;
-    maintainers = with maintainers; [ allonsy blaggacao ];
+    maintainers = with maintainers; [ allonsy blaggacao gabyx ];
+    mainProgram = "git-town";
   };
 }

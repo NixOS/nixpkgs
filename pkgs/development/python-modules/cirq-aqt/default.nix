@@ -1,14 +1,16 @@
-{ buildPythonPackage
-, cirq-core
-, requests
-, pytestCheckHook
+{
+  buildPythonPackage,
+  cirq-core,
+  requests,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "cirq-aqt";
+  format = "setuptools";
   inherit (cirq-core) version src meta;
 
-  sourceRoot = "source/${pname}";
+  sourceRoot = "${src.name}/${pname}";
 
   postPatch = ''
     substituteInPlace requirements.txt \
@@ -20,9 +22,7 @@ buildPythonPackage rec {
     requests
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   # cirq's importlib hook doesn't work here
   #pythonImportsCheck = [ "cirq_aqt" ];

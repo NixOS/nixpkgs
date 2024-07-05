@@ -1,45 +1,80 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, cmake
-, boost
-, eigen
-, python
-, catch
-, numpy
-, pytestCheckHook
-, libxcrypt
-, makeSetupHook
-}: let
+{
+  stdenv,
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  cmake,
+  ninja,
+  setuptools,
+  boost,
+  eigen,
+  python,
+  catch,
+  numpy,
+  pytestCheckHook,
+  libxcrypt,
+  makeSetupHook,
+}:
+let
   setupHook = makeSetupHook {
     name = "pybind11-setup-hook";
     substitutions = {
       out = placeholder "out";
-      pythonInterpreter = python.pythonForBuild.interpreter;
+      pythonInterpreter = python.pythonOnBuildForHost.interpreter;
       pythonIncludeDir = "${python}/include/python${python.pythonVersion}";
       pythonSitePackages = "${python}/${python.sitePackages}";
     };
   } ./setup-hook.sh;
-in buildPythonPackage rec {
+
+  # clang 16 defaults to C++17, which results in the use of aligned allocations by pybind11.
+  # libc++ supports aligned allocations via `posix_memalign`, which is available since 10.6,
+  # but clang has a check hard-coded requiring 10.13 because that’s when Apple first shipped a
+  # support for C++17 aligned allocations on macOS.
+  # Tell clang we’re targeting 10.13 on x86_64-darwin while continuing to use the default SDK.
+  stdenv' =
+    if stdenv.isDarwin && stdenv.isx86_64 then
+      python.stdenv.override (oldStdenv: {
+        buildPlatform = oldStdenv.buildPlatform // {
+          darwinMinVersion = "10.13";
+        };
+        targetPlatform = oldStdenv.targetPlatform // {
+          darwinMinVersion = "10.13";
+        };
+        hostPlatform = oldStdenv.hostPlatform // {
+          darwinMinVersion = "10.13";
+        };
+      })
+    else
+      python.stdenv;
+in
+buildPythonPackage rec {
   pname = "pybind11";
-  version = "2.10.4";
+  version = "2.12.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pybind";
-    repo = pname;
+    repo = "pybind11";
     rev = "v${version}";
-    hash = "sha256-n7nLEG2+sSR9wnxM+C8FWc2B+Mx74Pan1+IQf+h2bGU=";
+    hash = "sha256-DVkI5NxM5uME9m3PFYVpJOOa2j+yjL6AJn76fCTv2nE=";
   };
 
   postPatch = ''
-    sed -i "/^timeout/d" pyproject.toml
+    substituteInPlace pyproject.toml \
+      --replace-fail "timeout=300" ""
   '';
 
-  nativeBuildInputs = [ cmake ];
+  build-system = [
+    cmake
+    ninja
+    setuptools
+  ];
+
   buildInputs = lib.optionals (pythonOlder "3.9") [ libxcrypt ];
-  propagatedBuildInputs = [ setupHook ];
+  propagatedNativeBuildInputs = [ setupHook ];
+
+  stdenv = stdenv';
 
   dontUseCmakeBuildDir = true;
 
@@ -53,9 +88,7 @@ in buildPythonPackage rec {
   cmakeFlags = [
     "-DBoost_INCLUDE_DIR=${lib.getDev boost}/include"
     "-DEIGEN3_INCLUDE_DIR=${lib.getDev eigen}/include/eigen3"
-  ] ++ lib.optionals (python.isPy3k && !stdenv.cc.isClang) [
-    "-DPYBIND11_CXX_STANDARD=-std=c++17"
-  ];
+  ] ++ lib.optionals (python.isPy3k && !stdenv.cc.isClang) [ "-DPYBIND11_CXX_STANDARD=-std=c++17" ];
 
   postBuild = ''
     # build tests
@@ -87,22 +120,28 @@ in buildPythonPackage rec {
     "tests/extra_setuptools/test_setuphelper.py"
   ];
 
-  disabledTests = lib.optionals (stdenv.isDarwin) [
+  disabledTests = lib.optionals stdenv.isDarwin [
     # expects KeyError, gets RuntimeError
     # https://github.com/pybind/pybind11/issues/4243
     "test_cross_module_exception_translator"
   ];
 
+  hardeningDisable = lib.optional stdenv.hostPlatform.isMusl "fortify";
+
   meta = with lib; {
     homepage = "https://github.com/pybind/pybind11";
     changelog = "https://github.com/pybind/pybind11/blob/${src.rev}/docs/changelog.rst";
     description = "Seamless operability between C++11 and Python";
+    mainProgram = "pybind11-config";
     longDescription = ''
       Pybind11 is a lightweight header-only library that exposes
       C++ types in Python and vice versa, mainly to create Python
       bindings of existing C++ code.
     '';
     license = licenses.bsd3;
-    maintainers = with maintainers; [ yuriaisaka dotlambda ];
+    maintainers = with maintainers; [
+      yuriaisaka
+      dotlambda
+    ];
   };
 }

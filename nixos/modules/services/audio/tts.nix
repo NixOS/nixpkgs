@@ -10,18 +10,18 @@ in
 
 {
   options.services.tts = let
-    inherit (lib) literalExpression mkOption mdDoc mkEnableOption types;
+    inherit (lib) literalExpression mkOption mkEnableOption types;
   in  {
     servers = mkOption {
       type = types.attrsOf (types.submodule (
         { ... }: {
           options = {
-            enable = mkEnableOption (mdDoc "Coqui TTS server");
+            enable = mkEnableOption "Coqui TTS server";
 
             port = mkOption {
               type = types.port;
               example = 5000;
-              description = mdDoc ''
+              description = ''
                 Port to bind the TTS server to.
               '';
             };
@@ -30,7 +30,7 @@ in
               type = types.nullOr types.str;
               default = "tts_models/en/ljspeech/tacotron2-DDC";
               example = null;
-              description = mdDoc ''
+              description = ''
                 Name of the model to download and use for speech synthesis.
 
                 Check `tts-server --list_models` for possible values.
@@ -43,7 +43,7 @@ in
               type = types.bool;
               default = false;
               example = true;
-              description = mdDoc ''
+              description = ''
                 Whether to offload computation onto a CUDA compatible GPU.
               '';
             };
@@ -51,7 +51,7 @@ in
             extraArgs = mkOption {
               type = types.listOf types.str;
               default = [];
-              description = mdDoc ''
+              description = ''
                 Extra arguments to pass to the server commandline.
               '';
             };
@@ -75,7 +75,7 @@ in
           };
         }
       '';
-      description = mdDoc ''
+      description = ''
         TTS server instances.
       '';
     };
@@ -134,6 +134,7 @@ in
           ProtectProc = "invisible";
           ProcSubset = "pid";
           RestrictAddressFamilies = [
+            "AF_UNIX"
             "AF_INET"
             "AF_INET6"
           ];

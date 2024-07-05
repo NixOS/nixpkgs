@@ -1,6 +1,5 @@
 { lib
 , fetchFromGitHub
-, fetchpatch
 , python3Packages
 , runtimeShell
 , bcftools
@@ -16,37 +15,28 @@ let
   };
 in python3Packages.buildPythonApplication rec {
   pname = "truvari";
-  version = "4.0.0";
+  version = "4.1.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ACEnglish";
     repo = "truvari";
     rev = "v${version}";
-    hash = "sha256-UJNMKEV5m2jFqnWvkVAtymkcE2TjPIXp7JqRZpMSqsE=";
+    hash = "sha256-HFVAv1TTL/nMjr62tQKhMdwh25P/y4nBGzSbxoJxMmo=";
   };
 
-  patches = [
-    (fetchpatch {
-      name = "fix-anno-trf-on-darwin.patch";
-      url = "https://github.com/ACEnglish/truvari/commit/f9f36305e8eaa88f951562210e3672a4d4f71265.patch";
-      hash = "sha256-7O9jTQDCC2b8hUBm0qJQCYMzTC9NFtn/E0dTHSfJALU=";
-    })
-    (fetchpatch {
-      name = "fix-anno-grm-on-darwin.patch";
-      url = "https://github.com/ACEnglish/truvari/commit/31416552008a506204ed4e2add55474f10392357.patch";
-      hash = "sha256-42u0ewZU38GCoSfff+XQFv9hEFeO3WlJufTHcl6vkN4=";
-    })
-  ];
-
   postPatch = ''
-    substituteInPlace setup.py \
-      --replace "rich==" "rich>="
     substituteInPlace truvari/utils.py \
       --replace "/bin/bash" "${runtimeShell}"
     patchShebangs repo_utils/test_files
   '';
 
+  nativeBuildInputs = [
+    python3Packages.setuptools
+  ];
+
   propagatedBuildInputs = with python3Packages; [
+    pywfa
     rich
     edlib
     pysam
@@ -83,6 +73,7 @@ in python3Packages.buildPythonApplication rec {
   meta = with lib; {
     description = "Structural variant comparison tool for VCFs";
     homepage = "https://github.com/ACEnglish/truvari";
+    changelog = "https://github.com/ACEnglish/truvari/releases/tag/${src.rev}";
     license = licenses.mit;
     maintainers = with maintainers; [ natsukium scalavision ];
     longDescription = ''

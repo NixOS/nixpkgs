@@ -11,7 +11,7 @@ buildGoModule rec {
     sha256 = "sha256-vhxIm20ZUi+RusrAsSY54tv/D570/oMO5qLz9dNqgqo=";
   };
 
-  vendorSha256 = "sha256-xY9xNuJhkWPgtqA/FBVIp7GuWOv+3nrz6l3vaZVLlIE=";
+  vendorHash = "sha256-xY9xNuJhkWPgtqA/FBVIp7GuWOv+3nrz6l3vaZVLlIE=";
 
   postInstall = ''
     mkdir -p $out/share/
@@ -22,7 +22,8 @@ buildGoModule rec {
   passthru.tests = { inherit (nixosTests) podgrab; };
 
   meta = with lib; {
-    description = "A self-hosted podcast manager to download episodes as soon as they become live";
+    description = "Self-hosted podcast manager to download episodes as soon as they become live";
+    mainProgram = "podgrab";
     homepage = "https://github.com/akhilrex/podgrab";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ ambroisie ];

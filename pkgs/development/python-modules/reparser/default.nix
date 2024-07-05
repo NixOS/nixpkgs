@@ -1,12 +1,14 @@
-{ lib
-, buildPythonPackage
-, isPy27
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  isPy27,
+  fetchFromGitHub,
 }:
 
 buildPythonPackage rec {
   pname = "reparser";
   version = "1.4.3";
+  format = "setuptools";
 
   disabled = isPy27;
 

@@ -6,22 +6,15 @@ let
 in
 {
   options.services.karma = {
-    enable = mkEnableOption (mdDoc "the Karma dashboard service");
+    enable = mkEnableOption "the Karma dashboard service";
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.karma;
-      defaultText = literalExpression "pkgs.karma";
-      description = mdDoc ''
-        The Karma package that should be used.
-      '';
-    };
+    package = mkPackageOption pkgs "karma" { };
 
     configFile = mkOption {
       type = types.path;
       default = yaml.generate "karma.yaml" cfg.settings;
       defaultText = "A configuration file generated from the provided nix attributes settings option.";
-      description = mdDoc ''
+      description = ''
         A YAML config file which can be used to configure karma instead of the nix-generated file.
       '';
       example = "/etc/karma/karma.conf";
@@ -30,7 +23,7 @@ in
     environment = mkOption {
       type = with types; attrsOf str;
       default = {};
-      description = mdDoc ''
+      description = ''
         Additional environment variables to provide to karma.
       '';
       example = {
@@ -42,7 +35,7 @@ in
     openFirewall = mkOption {
       type = types.bool;
       default = false;
-      description = mdDoc ''
+      description = ''
         Whether to open ports in the firewall needed for karma to function.
       '';
     };
@@ -50,7 +43,7 @@ in
     extraOptions = mkOption {
       type = with types; listOf str;
       default = [];
-      description = mdDoc ''
+      description = ''
         Extra command line options.
       '';
       example = [
@@ -66,7 +59,7 @@ in
           address = mkOption {
             type = types.str;
             default = "127.0.0.1";
-            description = mdDoc ''
+            description = ''
               Hostname or IP to listen on.
             '';
             example = "[::]";
@@ -75,7 +68,7 @@ in
           port = mkOption {
             type = types.port;
             default = 8080;
-            description = mdDoc ''
+            description = ''
               HTTP port to listen on.
             '';
             example = 8182;
@@ -87,7 +80,7 @@ in
           address = "127.0.0.1";
         };
       };
-      description = mdDoc ''
+      description = ''
         Karma dashboard configuration as nix attributes.
 
         Reference: <https://github.com/prymitive/karma/blob/main/docs/CONFIGURATION.md>

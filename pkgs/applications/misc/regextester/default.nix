@@ -13,7 +13,7 @@
 , gsettings-desktop-schemas
 , desktop-file-utils
 , pantheon
-, wrapGAppsHook }:
+, wrapGAppsHook3 }:
 
 stdenv.mkDerivation rec {
   pname = "regextester";
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
     desktop-file-utils
   ];
 
@@ -51,7 +51,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A desktop application to test regular expressions interactively";
+    description = "Desktop application to test regular expressions interactively";
+    mainProgram = "com.github.artemanufrij.regextester";
     homepage = "https://github.com/artemanufrij/regextester";
     maintainers = with maintainers; [ samdroid-apps ];
     platforms = platforms.linux;

@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "sumo";
-  version = "1.17.0";
+  version = "1.20.0";
 
   src = fetchFromGitHub {
     owner = "eclipse";
     repo = "sumo";
     rev = "v${lib.replaceStrings ["."] ["_"] version}";
-    sha256 = "sha256-Br5ugEyGu3zLeylCvoVE92zOCpB5cuXLv1dGLpM3FwI=";
+    sha256 = "sha256-y/bkdDWrb1KB0EOVSJPfPVYHGp/zQ2+Shb6eLsFQRNQ=";
     fetchSubmodules = true;
   };
 
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
   ]);
 
   meta = with lib; {
-    description = "The SUMO traffic simulator";
+    description = "SUMO traffic simulator";
     longDescription = ''
       Eclipse SUMO is an open source, highly
       portable, microscopic and continuous traffic simulation package

@@ -1,13 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, django-guardian
-, djangorestframework
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  django,
+  django-guardian,
+  djangorestframework,
 }:
 
 buildPythonPackage rec {
   pname = "djangorestframework-guardian";
   version = "0.3.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "rpkilby";
@@ -36,6 +39,8 @@ buildPythonPackage rec {
     description = "Django-guardian support for Django REST Framework";
     homepage = "https://github.com/rpkilby/django-rest-framework-guardian";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
+    # unmaintained, last compatible version is 3.x, use djangorestframework-guardian2 instead
+    broken = lib.versionAtLeast django.version "4";
   };
 }

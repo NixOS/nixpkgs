@@ -26,7 +26,7 @@
 }:
 
 let
-  version = "1.14.0";
+  version = "1.17.2";
 
   # build stimuli file for PGO build and the script to generate it
   # independently of the foot's build, so we can cache the result
@@ -39,7 +39,7 @@ let
 
     src = fetchurl {
       url = "https://codeberg.org/dnkl/foot/raw/tag/${version}/scripts/generate-alt-random-writes.py";
-      sha256 = "0w4d0rxi54p8lvbynypcywqqwbbzmyyzc0svjab27ngmdj1034ii";
+      hash = "sha256-/KykHPqM0WQ1HO83bOrxJ88mvEAf0Ah3S8gSvKb3AJM=";
     };
 
     dontUnpack = true;
@@ -89,17 +89,19 @@ let
 
   terminfoDir = "${placeholder "terminfo"}/share/terminfo";
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "foot";
   inherit version;
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "dnkl";
-    repo = pname;
+    repo = "foot";
     rev = version;
-    sha256 = "1187805pxygyl547w75i4cl37kaw8y8ng11r5qqldv6fm74k31mk";
+    hash = "sha256-p+qaWHBrUn6YpNyAmQf6XoQyO3degHP5oMN53/9gIr4=";
   };
+
+  separateDebugInfo = true;
 
   depsBuildBuild = [
     pkg-config
@@ -132,7 +134,7 @@ stdenv.mkDerivation rec {
   # https://codeberg.org/dnkl/foot/src/branch/master/INSTALL.md#release-build
   CFLAGS =
     if !doPgo
-    then "-O3 -fno-plt"
+    then "-O3"
     else pgoCflags;
 
   # ar with gcc plugins for lto objects
@@ -162,10 +164,10 @@ stdenv.mkDerivation rec {
     meson configure -Db_pgo=generate
     ninja
     # make sure there is _some_ profiling data on all binaries
+    meson test
     ./footclient --version
     ./foot --version
     ./utils/xtgettcap
-    ./tests/test-config
     # generate pgo data of wayland independent code
     ./pgo ${stimuliFile} ${stimuliFile} ${stimuliFile}
     meson configure -Db_pgo=use
@@ -178,6 +180,10 @@ stdenv.mkDerivation rec {
   postInstall = ''
     moveToOutput share/foot/themes "$themes"
   '';
+
+  doCheck = true;
+
+  strictDeps = true;
 
   outputs = [ "out" "terminfo" "themes" ];
 
@@ -201,22 +207,10 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://codeberg.org/dnkl/foot/";
     changelog = "https://codeberg.org/dnkl/foot/releases/tag/${version}";
-    description = "A fast, lightweight and minimalistic Wayland terminal emulator";
+    description = "Fast, lightweight and minimalistic Wayland terminal emulator";
     license = licenses.mit;
-    maintainers = [ maintainers.sternenseemann ];
+    maintainers = [ maintainers.sternenseemann maintainers.abbe ];
     platforms = platforms.linux;
-    # From (presumably) ncurses version 6.3, it will ship a foot
-    # terminfo file. This however won't include some non-standard
-    # capabilities foot's bundled terminfo file contains. Unless we
-    # want to have some features in e. g. vim or tmux stop working,
-    # we need to make sure that the foot terminfo overwrites ncurses'
-    # one. Due to <nixpkgs/nixos/modules/config/system-path.nix>
-    # ncurses is always added to environment.systemPackages on
-    # NixOS with its priority increased by 3, so we need to go
-    # one bigger.
-    # This doesn't matter a lot for local use since foot sets
-    # TERMINFO to a store path, but allows installing foot.terminfo
-    # on remote systems for proper foot terminfo support.
-    priority = (ncurses.meta.priority or 5) + 3 + 1;
+    mainProgram = "foot";
   };
 }

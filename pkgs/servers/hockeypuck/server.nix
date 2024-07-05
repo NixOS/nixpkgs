@@ -7,7 +7,7 @@ buildGoModule {
   inherit (sources) pname version src;
 
   modRoot = "src/hockeypuck/";
-  vendorSha256 = null;
+  vendorHash = null;
   doCheck = false; # Uses networking for tests
 
   passthru.tests = nixosTests.hockeypuck;

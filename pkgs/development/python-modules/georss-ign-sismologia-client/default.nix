@@ -1,36 +1,38 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, georss-client
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  dateparser,
+  fetchFromGitHub,
+  georss-client,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "georss-ign-sismologia-client";
-  version = "0.6";
-  format = "setuptools";
+  version = "0.8";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "exxamalte";
     repo = "python-georss-ign-sismologia-client";
     rev = "refs/tags/v${version}";
-    hash = "sha256-OLX6Megl5l8KDnd/G16QJ/wQn5AQc2cZ+LCbjuHFbwo=";
+    hash = "sha256-geIxF4GumxRoetJ6mIZCzI3pAvWjJJoY66aQYd2Mzik=";
   };
 
+  nativeBuildInputs = [ setuptools ];
+
   propagatedBuildInputs = [
+    dateparser
     georss-client
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "georss_ign_sismologia_client"
-  ];
+  pythonImportsCheck = [ "georss_ign_sismologia_client" ];
 
   meta = with lib; {
     description = "Python library for accessing the IGN Sismologia GeoRSS feed";

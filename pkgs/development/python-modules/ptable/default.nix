@@ -1,8 +1,14 @@
-{ lib, buildPythonPackage, fetchFromGitHub, nose }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  nose,
+}:
 
 buildPythonPackage {
   pname = "ptable";
   version = "unstable-2019-06-14";
+  format = "setuptools";
 
   # https://github.com/kxxoling/PTable/issues/27
   src = fetchFromGitHub {
@@ -20,7 +26,8 @@ buildPythonPackage {
 
   meta = with lib; {
     homepage = "https://github.com/kxxoling/PTable";
-    description = "A simple Python library designed to make it quick and easy to represent tabular data in visually appealing ASCII tables";
+    description = "Simple Python library designed to make it quick and easy to represent tabular data in visually appealing ASCII tables";
+    mainProgram = "ptable";
     license = licenses.bsd3;
     maintainers = [ maintainers.mmahut ];
   };

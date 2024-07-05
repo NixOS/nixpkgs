@@ -1,14 +1,13 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , nix-update-script
 , meson
 , ninja
 , pkg-config
 , python3
 , vala
-, wrapGAppsHook
+, wrapGAppsHook3
 , clutter-gtk
 , evolution-data-server
 , granite
@@ -19,27 +18,19 @@
 , libgee
 , libhandy
 , libical
+, libportal-gtk3
 }:
 
 stdenv.mkDerivation rec {
   pname = "elementary-tasks";
-  version = "6.3.1";
+  version = "6.3.2";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "tasks";
     rev = version;
-    sha256 = "sha256-b8KUlfpZxRFDiBjgrV/4XicCcEw2fWaN78NaOq6jQBk=";
+    sha256 = "sha256-6Vwx+NRVGDqZzN5IVk4cQxGjSkYwrrNhUVoB8TRo28U=";
   };
-
-  patches = [
-    # Port to libsoup 3
-    # https://github.com/elementary/tasks/pull/345
-    (fetchpatch {
-      url = "https://github.com/elementary/tasks/commit/22e0d18693932e9eea3d2a22329f845575ce26e6.patch";
-      sha256 = "sha256-nLJlKf4L7G12ZnCo4wezyMRyeAf+Tf0OGHyT8I1ZuDA=";
-    })
-  ];
 
   nativeBuildInputs = [
     meson
@@ -47,7 +38,7 @@ stdenv.mkDerivation rec {
     pkg-config
     python3
     vala
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -61,6 +52,7 @@ stdenv.mkDerivation rec {
     libgee
     libhandy
     libical
+    libportal-gtk3
   ];
 
   postPatch = ''

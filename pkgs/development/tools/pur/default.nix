@@ -5,29 +5,38 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "pur";
-  version = "7.0.0";
+  version = "7.3.2";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "alanhamlett";
     repo = "pip-update-requirements";
     rev = "refs/tags/${version}";
-    hash = "sha256-JAjz9A9r1H6MJX7MSq7UvQKfULhB9UuPP3tI6Cggx9I=";
+    hash = "sha256-XLI9U9ej3+tS0zzmCDGwZ0pAb3mKnrqBtm90f5N6rMw=";
   };
 
-  propagatedBuildInputs = [
-    python3.pkgs.click
+  build-system = with python3.pkgs; [
+    setuptools
   ];
 
-  nativeCheckInputs = [
-    python3.pkgs.pytestCheckHook
+  dependencies = with python3.pkgs; [
+    click
   ];
 
-  pythonImportsCheck = [ "pur" ];
+  nativeCheckInputs = with python3.pkgs; [
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "pur"
+  ];
 
   meta = with lib; {
     description = "Python library for update and track the requirements";
     homepage = "https://github.com/alanhamlett/pip-update-requirements";
-    license = with licenses; [ bsd2 ];
+    changelog = "https://github.com/alanhamlett/pip-update-requirements/blob/${version}/HISTORY.rst";
+    license = licenses.bsd2;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "pur";
   };
 }

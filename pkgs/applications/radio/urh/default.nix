@@ -6,13 +6,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "urh";
-  version = "2.9.4";
+  version = "2.9.6";
 
   src = fetchFromGitHub {
     owner = "jopohl";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-Hi0VqBtGeaXMsibxbHk+2FN8mzfpmkuDr37JRW4Fp+s=";
+    sha256 = "sha256-4Fe2+BUdnVdNQHqZeftXLabn/vTzgyynOtqy0rAb0Rk=";
   };
 
   nativeBuildInputs = [ qt5.wrapQtAppsHook ];
@@ -33,7 +33,7 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://github.com/jopohl/urh";
     description = "Universal Radio Hacker: investigate wireless protocols like a boss";
     license = licenses.gpl3;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ fpletz ];
   };
 }

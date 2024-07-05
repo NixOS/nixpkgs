@@ -1,12 +1,14 @@
-{ lib
-, asn1crypto
-, buildPythonPackage
-, fetchFromGitHub
-, importlib-metadata
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
-, setuptools
+{
+  lib,
+  asn1crypto,
+  buildPythonPackage,
+  fetchFromGitHub,
+  importlib-metadata,
+  pytest-mock,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  wheel,
 }:
 
 buildPythonPackage rec {
@@ -25,13 +27,10 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     setuptools
+    wheel
   ];
 
-  propagatedBuildInputs = [
-    asn1crypto
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    importlib-metadata
-  ];
+  propagatedBuildInputs = [ asn1crypto ] ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
 
   nativeCheckInputs = [
     pytest-mock
@@ -40,22 +39,19 @@ buildPythonPackage rec {
 
   postPatch = ''
     # Upstream uses versioningit to set the version
+    sed -i "/versioningit >=/d" pyproject.toml
     sed -i '/^name =.*/a version = "${version}"' pyproject.toml
     sed -i "/dynamic =/d" pyproject.toml
   '';
 
-  pythonImportsCheck = [
-    "scramp"
-  ];
+  pythonImportsCheck = [ "scramp" ];
 
-  disabledTests = [
-    "test_readme"
-  ];
+  disabledTests = [ "test_readme" ];
 
   meta = with lib; {
     description = "Implementation of the SCRAM authentication protocol";
     homepage = "https://github.com/tlocke/scramp";
     license = licenses.mit;
-    maintainers = with maintainers; [ jonringer ];
+    maintainers = with maintainers; [ ];
   };
 }

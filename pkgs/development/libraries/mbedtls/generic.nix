@@ -2,6 +2,7 @@
 , stdenv
 , version
 , hash
+, patches ? []
 , fetchFromGitHub
 
 , cmake
@@ -21,7 +22,11 @@ stdenv.mkDerivation rec {
     repo = "mbedtls";
     rev = "${pname}-${version}";
     inherit hash;
+    # mbedtls >= 3.6.0 uses git submodules
+    fetchSubmodules = true;
   };
+
+  inherit patches;
 
   nativeBuildInputs = [ cmake ninja perl python3 ];
 
@@ -42,11 +47,17 @@ stdenv.mkDerivation rec {
     "-DGEN_FILES=off"
   ];
 
+  doCheck = true;
+
+  # Parallel checking causes test failures
+  # https://github.com/Mbed-TLS/mbedtls/issues/4980
+  enableParallelChecking = false;
+
   meta = with lib; {
     homepage = "https://www.trustedfirmware.org/projects/mbed-tls/";
     changelog = "https://github.com/Mbed-TLS/mbedtls/blob/${pname}-${version}/ChangeLog";
     description = "Portable cryptographic and TLS library, formerly known as PolarSSL";
-    license = licenses.asl20;
+    license = [ licenses.asl20 /* or */ licenses.gpl2Plus ];
     platforms = platforms.all;
     maintainers = with maintainers; [ raphaelr ];
   };

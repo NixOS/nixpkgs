@@ -1,4 +1,4 @@
-{ lib, buildPythonApplication, fetchFromGitHub, wrapGAppsHook
+{ lib, buildPythonApplication, fetchFromGitHub, wrapGAppsHook3
 , pytestCheckHook
 , gtk3, gobject-introspection, libappindicator-gtk3, librsvg
 , evdev, pygobject3, pylibacl, bluez, vdf
@@ -8,16 +8,16 @@
 
 buildPythonApplication rec {
   pname = "sc-controller";
-  version = "0.4.8.11";
+  version = "0.4.8.17";
 
   src = fetchFromGitHub {
-    owner  = "Ryochan7";
+    owner  = "C0rn3j";
     repo   = pname;
     rev    = "v${version}";
-    sha256 = "xu9QqddJf0cXkhNPrOnE+L8CV5AfgcCyk9DSh+G94c0=";
+    sha256 = "sha256-arBdPrFtdllWMn1KuZ+PlENiJ0oRPVbgVjbef+pv+IE=";
   };
 
-  nativeBuildInputs = [ wrapGAppsHook gobject-introspection ];
+  nativeBuildInputs = [ wrapGAppsHook3 gobject-introspection ];
 
   buildInputs = [ gtk3 libappindicator-gtk3 librsvg ];
 
@@ -50,7 +50,7 @@ buildPythonApplication rec {
     homepage    = "https://github.com/Ryochan7/sc-controller";
     # donations: https://www.patreon.com/kozec
     description = "User-mode driver and GUI for Steam Controller and other controllers";
-    license     = licenses.gpl2;
+    license     = licenses.gpl2Only;
     platforms   = platforms.linux;
     maintainers = with maintainers; [ orivej rnhmjoj ];
   };

@@ -1,21 +1,33 @@
-{ fetchFromGitHub, buildGoModule, lib, stdenv }:
-
-buildGoModule rec {
+{
+  fetchFromGitHub,
+  buildGoModule,
+  lib,
+  stdenv
+}:
+let
   pname = "kratos";
-  version = "0.10.1";
+  version = "1.2.0";
+in
+buildGoModule {
+  inherit pname version;
 
   src = fetchFromGitHub {
     owner = "ory";
     repo = "kratos";
     rev = "v${version}";
-    hash = "sha256-Ld2N7w9jQLkzCww1Sex5nEBZf6e9XIUnbfPOjcFAYQA=";
+    hash = "sha256-KqF6DYrEsmPj2PtI2+5ztE0m9uBO1gpNlvdo+Aw6REA=";
   };
 
-  vendorSha256 = "sha256-9zXoJ+c1aPWDqasechC4ModWE0+sfMqZzp/Pph/mYcs=";
+  vendorHash = "sha256-6gJf+8AKjV83MTF0rC8OxDwkwGx4CJg7SdfNgcja8QY=";
 
   subPackages = [ "." ];
 
   tags = [ "sqlite" ];
+
+  # Pass versioning information via ldflags
+  ldflags = [
+    "-X github.com/ory/kratos/driver/config.Version=${version}"
+  ];
 
   doCheck = false;
 
@@ -30,13 +42,14 @@ buildGoModule rec {
     patchShebangs "''${files[@]}"
 
     # patchShebangs doesn't work for this Makefile, do it manually
-    substituteInPlace Makefile --replace '/bin/bash' '${stdenv.shell}'
+    substituteInPlace Makefile --replace-fail '/usr/bin/env bash' '${stdenv.shell}'
   '';
 
-  meta = with lib; {
-    maintainers = with maintainers; [ mrmebelman ];
+  meta = {
+    mainProgram = "kratos";
+    description = "API-first Identity and User Management system that is built according to cloud architecture best practices";
     homepage = "https://www.ory.sh/kratos/";
-    license = licenses.asl20;
-    description = "An API-first Identity and User Management system that is built according to cloud architecture best practices";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ mrmebelman ];
   };
 }

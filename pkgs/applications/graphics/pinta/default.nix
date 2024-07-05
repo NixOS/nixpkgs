@@ -5,7 +5,7 @@
 , glibcLocales
 , gtk3
 , intltool
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 buildDotnetModule rec {
@@ -14,7 +14,7 @@ buildDotnetModule rec {
 
   nativeBuildInputs = [
     intltool
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   dotnet-sdk = dotnetCorePackages.sdk_7_0;

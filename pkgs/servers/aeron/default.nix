@@ -1,138 +1,98 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
+  fetchMavenArtifact,
   jdk11,
-  gradle,
-  makeWrapper,
-  perl,
-  writeText
+  makeWrapper
 }:
 
 let
   pname = "aeron";
-  version = "1.40.0";
+  version = "1.44.1";
+  groupId = "io.aeron";
 
-  src = fetchFromGitHub {
-    owner = "real-logic";
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-4C5YofA/wxwa7bfc6IqsDrw8CLQWKoVBCIe8Ec7ifAg=";
+  aeronAll_1_40_0 = fetchMavenArtifact {
+    inherit groupId;
+    version = "1.40.0";
+    artifactId = "aeron-all";
+    hash = "sha512-NyhYaQqOWcSBwzwpje6DMAp36CEgGSNXBSdaRrDyP+Fn2Z0nvh5o2czog6GKKtbjH9inYfyyF/21gehfgLF6qA==";
   };
 
-  deps = stdenv.mkDerivation {
-    name = "${pname}-deps";
-    inherit src;
-
-    nativeBuildInputs = [
-      gradle
-      jdk11
-      perl
-    ];
-
-    buildPhase = ''
-      export GRADLE_USER_HOME=$(mktemp -d);
-      gradle \
-          --console plain \
-          --no-daemon \
-          --system-prop org.gradle.java.home="${jdk11.home}" \
-          --exclude-task javadoc \
-        build
-    '';
-
-    # Mavenize dependency paths
-    # e.g. org.codehaus.groovy/groovy/2.4.0/{hash}/groovy-2.4.0.jar -> org/codehaus/groovy/groovy/2.4.0/groovy-2.4.0.jar
-    installPhase = ''
-      find "$GRADLE_USER_HOME/caches/modules-2" -type f -regex '.*\.\(jar\|pom\)' \
-        | perl -pe 's#(.*/([^/]+)/([^/]+)/([^/]+)/[0-9a-f]{30,40}/([^/\s]+))$# ($x = $2) =~ tr|\.|/|; "install -Dm444 $1 \$out/$x/$3/$4/$5" #e' \
-        | sh
-      ln -s "$out/com/squareup/okio/okio/2.10.0/okio-jvm-2.10.0.jar" "$out/com/squareup/okio/okio/2.10.0/okio-2.10.0.jar"
-    '';
-
-    outputHashAlgo = "sha256";
-    outputHashMode = "recursive";
-    outputHash = "sha256-1hvQyEiCMfIw6wv9GOEehX0wrtBnAilVuTGUWAGoH6k=";
+  aeronSamples_1_40_0 = fetchMavenArtifact {
+    inherit groupId;
+    version = "1.40.0";
+    artifactId = "aeron-samples";
+    hash = "sha512-vyAq4mfLDDyaVk7wcIpPvPcxSt92Ek8mxfuuZwaX+0Wu9oJCpwbnjvS9+bvzcE4qSGxzY6eJIIX6nMdw0LkACg==";
   };
 
-  # Point to our local deps repo
-  gradleInit = writeText "init.gradle" ''
-    settingsEvaluated { settings ->
-      settings.pluginManagement {
-        repositories {
-          clear()
-          maven { url '${deps}' }
-        }
-      }
-    }
-    gradle.projectsLoaded {
-      rootProject.allprojects {
-        repositories {
-          clear()
-          maven { url '${deps}' }
-        }
-      }
-    }
-  '';
+  aeronAll_1_42_1 = fetchMavenArtifact {
+    inherit groupId;
+    artifactId = "aeron-all";
+    version = "1.42.1";
+    hash = "sha512-pjX+JopK6onDwElMIroj+ZXrKwdPj5H2uPg08XgNlrK1rAkHo9MUT8weBGbuFVFDLeqOZrHj0bt1wJ9XgYY5aA==";
+  };
 
-  # replace buildSrc
-  buildSrc = writeText "build.gradle" ''
-    repositories {
-      clear()
-      maven { url '${deps}' }
-    }
+  aeronSamples_1_42_1 = fetchMavenArtifact {
+    inherit groupId;
+    version = "1.42.1";
+    artifactId = "aeron-samples";
+    hash = "sha512-4JnHn22vJf2lmOg6ev5PD+/YiaL3KgfuyWAK92djX3KBVXO7ERMY2kH79dveVCJG1rbekvE1j1pnjaAIxwJcqg==";
+  };
 
-    dependencies {
-      implementation 'org.asciidoctor:asciidoctorj:2.5.5'
-      implementation 'org.eclipse.jgit:org.eclipse.jgit:5.13.1.202206130422-r'
-    }
-  '';
+  aeronAll_1_43_0 = fetchMavenArtifact {
+    inherit groupId;
+    artifactId = "aeron-all";
+    version = "1.43.0";
+    hash = "sha512-ZKjUA1Kp++RLnCNUOi2K/iGc4zIIR4pC4j8qPfO+rcgp7ghZfgsXO8sB+JD307kzeikUXnPFX7ef28DlzI8s8Q==";
+  };
 
-in stdenv.mkDerivation rec {
+  aeronSamples_1_43_0 = fetchMavenArtifact {
+    inherit groupId;
+    version = "1.43.0";
+    artifactId = "aeron-samples";
+    hash = "sha512-a/ti4Kd8WwzOzDGMgdYk0pxsu8vRA4kRD9cm4D3S+r6xc/rL8ECHVoogOMDeabDd1EYSIbx/sKE01BJOW7BVsg==";
+  };
 
-  inherit pname src version;
+  aeronAll_1_44_1 = fetchMavenArtifact {
+    inherit groupId;
+    artifactId = "aeron-all";
+    version = "1.44.1";
+    hash = "sha256-O80bWp7F6mRh3me1znzpfFfFEpvvMVjL4PrAt7+3Fq0=";
+  };
+
+  aeronSamples_1_44_1 = fetchMavenArtifact {
+    inherit groupId;
+    version = "1.44.1";
+    artifactId = "aeron-samples";
+    hash = "sha256-ZSuTed45BRzr4JJuGeXghUgEifv/FpnCzTNJWa+nwjo=";
+  };
+
+  aeronAll = aeronAll_1_44_1;
+  aeronSamples = aeronSamples_1_44_1;
+
+in stdenv.mkDerivation {
+
+  inherit pname version;
 
   buildInputs = [
-    jdk11
+    aeronAll
+    aeronSamples
   ];
 
   nativeBuildInputs = [
-    gradle
     makeWrapper
   ];
 
-  buildPhase = ''
-    runHook preBuild
-
-    export GRADLE_USER_HOME=$(mktemp -d)
-    cp ${buildSrc} ./buildSrc/build.gradle
-
-    gradle \
-        --console plain \
-        --exclude-task checkstyleMain \
-        --exclude-task checkstyleGenerated \
-        --exclude-task checkstyleGeneratedTest \
-        --exclude-task checkstyleMain \
-        --exclude-task checkstyleTest \
-        --exclude-task javadoc \
-        --exclude-task test \
-        --init-script "${gradleInit}" \
-        --no-daemon \
-        --offline \
-        --project-prop VERSION=${version} \
-        --system-prop org.gradle.java.home="${jdk11.home}" \
-      assemble
-
-    runHook postBuild
-  '';
+  dontUnpack = true;
+  dontConfigure = true;
+  dontBuild = true;
 
   installPhase = ''
     runHook preInstall
 
-    install -D --mode=0444 --target-directory="$out/share/java" \
-      "./aeron-all/build/libs/aeron-all-${version}.jar" \
-      "./aeron-agent/build/libs/aeron-agent-${version}.jar" \
-      "./aeron-archive/build/libs/aeron-archive-${version}.jar" \
-      "./aeron-client/build/libs/aeron-client-${version}.jar"
+    mkdir --parents "$out/share/java"
+    ln --symbolic "${aeronAll.jar}" "$out/share/java/${pname}-all.jar"
+    ln --symbolic "${aeronSamples.jar}" "$out/share/java/${pname}-samples.jar"
 
     runHook postInstall
   '';
@@ -141,7 +101,7 @@ in stdenv.mkDerivation rec {
     function wrap {
       makeWrapper "${jdk11}/bin/java" "$out/bin/$1" \
         --add-flags "--add-opens java.base/sun.nio.ch=ALL-UNNAMED" \
-        --add-flags "--class-path $out/share/java/aeron-all-${version}.jar" \
+        --add-flags "--class-path ${aeronAll.jar}" \
         --add-flags "$2"
     }
 
@@ -150,30 +110,22 @@ in stdenv.mkDerivation rec {
     wrap "${pname}-archiving-media-driver" io.aeron.archive.ArchivingMediaDriver
     wrap "${pname}-archive-tool" io.aeron.archive.ArchiveTool
     wrap "${pname}-logging-agent" io.aeron.agent.DynamicLoggingAgent
+    wrap "${pname}-clustered-media-driver" io.aeron.cluster.ClusteredMediaDriver
     wrap "${pname}-cluster-tool" io.aeron.cluster.ClusterTool
   '';
 
-  doCheck = true;
-
-  checkPhase = ''
-    runHook preCheck
-
-    gradle \
-        --console plain \
-        --init-script "${gradleInit}" \
-        --no-daemon \
-        --offline \
-        --project-prop VERSION=${version} \
-        --system-prop org.gradle.java.home="${jdk11.home}" \
-      test
-
-    runHook postCheck
-  '';
+  passthru = {
+    jar = aeronAll.jar;
+  };
 
   meta = with lib; {
     description = "Low-latency messaging library";
     homepage = "https://aeron.io/";
     license = licenses.asl20;
+    mainProgram = "${pname}-media-driver";
     maintainers = [ maintainers.vaci ];
+    sourceProvenance = [
+      sourceTypes.binaryBytecode
+    ];
   };
 }

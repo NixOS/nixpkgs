@@ -1,26 +1,42 @@
-{lib, fetchgit, rustPlatform}:
-
+{ lib
+, fetchFromGitea
+, rustPlatform
+, nix-update-script
+, imagemagick
+, makeWrapper
+}:
 let
-  repoUrl = "https://codeberg.org/explosion-mental/wallust";
-in rustPlatform.buildRustPackage rec {
+  version = "2.10.0";
+in
+rustPlatform.buildRustPackage {
   pname = "wallust";
-  version = "2.4.1";
+  inherit version;
 
-  src = fetchgit {
-    url = "${repoUrl}.git";
+  src = fetchFromGitea {
+    domain = "codeberg.org";
+    owner = "explosion-mental";
+    repo = "wallust";
     rev = version;
-    sha256 = "sha256-7zSUyj8Zzk8rsDe7ukPaV02HH7VQ+yjh+wM5TZzJxSA=";
+    hash = "sha256-0kPmr7/2uVncpCGVOeIkYlm2M0n9+ypVl7bQ9HnqLb4=";
   };
 
-  cargoSha256 = "sha256-toqt5vqEsflhqFargEcCXrb6ab748mn6k6/RH5d/3RA=";
+  cargoHash = "sha256-p1NKEppBYLdCsTY7FHPzaGladLv5HqIVNJxSoFJOx50=";
 
-  meta = with lib; {
-    description = "A better pywall";
-    homepage = repoUrl;
-    license = licenses.mit;
-    maintainers = with maintainers; [onemoresuza];
-    downloadPage = "${repoUrl}/releases/tag/${version}";
-    platforms = platforms.unix;
+  nativeBuildInputs = [ makeWrapper ];
+
+  postFixup = ''
+    wrapProgram $out/bin/wallust \
+      --prefix PATH : "${lib.makeBinPath [ imagemagick ]}"
+  '';
+
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
+    description = "Better pywal";
+    homepage = "https://codeberg.org/explosion-mental/wallust";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ onemoresuza iynaix ];
+    downloadPage = "https://codeberg.org/explosion-mental/wallust/releases/tag/${version}";
     mainProgram = "wallust";
   };
 }

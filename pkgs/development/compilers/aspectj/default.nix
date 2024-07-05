@@ -1,25 +1,56 @@
-{lib, stdenv, fetchurl, jre}:
+{
+  lib,
+  stdenvNoCC,
+  fetchurl,
+  jre,
+}:
 
-stdenv.mkDerivation rec {
+let
+  version = "1.9.22.1";
+  versionSnakeCase = builtins.replaceStrings [ "." ] [ "_" ] version;
+in
+stdenvNoCC.mkDerivation {
   pname = "aspectj";
-  version = "1.9.19";
-  builder = ./builder.sh;
+  inherit version;
 
-  src = let
-    versionSnakeCase = builtins.replaceStrings ["."] ["_"] version;
-  in fetchurl {
+  __structuredAttrs = true;
+
+  src = fetchurl {
     url = "https://github.com/eclipse/org.aspectj/releases/download/V${versionSnakeCase}/aspectj-${version}.jar";
-    sha256 = "sha256-Oujyg05yvtcyfLmqonc++GX9AyFKwfIzITOHDz0px0M=";
+    hash = "sha256-NIyYVhJIGXz+vNVoAQzYsDfmOYc4QrRzJGWeQjS4X0U=";
   };
 
-  inherit jre;
-  buildInputs = [jre];
+  dontUnpack = true;
+
+  nativeBuildInputs = [ jre ];
+
+  installPhase = ''
+    runHook preInstall
+
+    cat >> props <<EOF
+    output.dir=$out
+    context.javaPath=${jre}
+    EOF
+
+    mkdir -p $out
+    java -jar $src -text props
+
+    cat >> $out/bin/aj-runtime-env <<EOF
+    #! ${stdenvNoCC.shell}
+
+    export CLASSPATH=$CLASSPATH:.:$out/lib/aspectjrt.jar
+    EOF
+
+    chmod u+x $out/bin/aj-runtime-env
+
+    runHook postInstall
+  '';
 
   meta = {
     homepage = "https://www.eclipse.org/aspectj/";
-    description = "A seamless aspect-oriented extension to the Java programming language";
-    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
-    platforms = lib.platforms.unix;
+    description = "Seamless aspect-oriented extension to the Java programming language";
     license = lib.licenses.epl10;
+    platforms = lib.platforms.unix;
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
   };
 }

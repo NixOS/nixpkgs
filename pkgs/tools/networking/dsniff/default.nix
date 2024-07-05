@@ -1,9 +1,6 @@
-{ gcc9Stdenv, lib, fetchFromGitLab, autoreconfHook, libpcap, db, glib, libnet, libnids, symlinkJoin, openssl
+{ stdenv, lib, fetchFromGitLab, autoreconfHook, libpcap, db, glib, libnet, libnids, symlinkJoin, openssl
 , rpcsvc-proto, libtirpc, libnsl, libnl
 }:
-
-# We compile with GCC 9 since GCC 10 segfaults on the code
-# (see https://bugzilla.redhat.com/show_bug.cgi?id=1862809).
 
 let
   /*
@@ -13,14 +10,14 @@ let
   */
   staticdb = symlinkJoin {
     inherit (db) name;
-    paths = with db.overrideAttrs(old: { dontDisableStatic = true; }); [ out dev ];
+    paths = with db.overrideAttrs { dontDisableStatic = true; }; [ out dev ];
     postBuild = ''
       rm $out/lib/*.so*
     '';
   };
   pcap = symlinkJoin {
     inherit (libpcap) name;
-    paths = [ (libpcap.overrideAttrs(old: { dontDisableStatic = true; })) ];
+    paths = [ (libpcap.overrideAttrs { dontDisableStatic = true; }) ];
     postBuild = ''
       cp -rs $out/include/pcap $out/include/net
       # prevent references to libpcap
@@ -29,20 +26,20 @@ let
   };
   net = symlinkJoin {
     inherit (libnet) name;
-    paths = [ (libnet.overrideAttrs(old: { dontDisableStatic = true; })) ];
+    paths = [ (libnet.overrideAttrs { dontDisableStatic = true; }) ];
     postBuild = ''
       # prevent dynamic linking, now that we have a static library
       rm $out/lib/*.so*
     '';
   };
-  nids = libnids.overrideAttrs(old: {
+  nids = libnids.overrideAttrs {
     dontDisableStatic = true;
-  });
+  };
   ssl = symlinkJoin {
     inherit (openssl) name;
     paths = with openssl.override { static = true; }; [ out dev ];
   };
-in gcc9Stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "dsniff";
   version = "2.4b1";
   # upstream is so old that nearly every distribution packages the beta version.

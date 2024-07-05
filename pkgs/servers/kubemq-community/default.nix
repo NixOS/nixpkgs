@@ -16,11 +16,12 @@ buildGoModule rec {
 
   doCheck = false;  # grpc tests are flaky
 
-  vendorSha256 = "sha256-L1BxxSI2t0qWXizge+X3BrpGPaSy5Dk81vKuI0N5Ywg=";
+  vendorHash = "sha256-L1BxxSI2t0qWXizge+X3BrpGPaSy5Dk81vKuI0N5Ywg=";
 
   meta = {
     homepage = "https://github.com/kubemq-io/kubemq-community";
-    description = "KubeMQ Community is the open-source version of KubeMQ, the Kubernetes native message broker.";
+    description = "KubeMQ Community is the open-source version of KubeMQ, the Kubernetes native message broker";
+    mainProgram = "kubemq-community";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ brianmcgee ];
   };

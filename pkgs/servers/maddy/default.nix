@@ -1,17 +1,26 @@
-{ lib, buildGoModule, fetchFromGitHub, pam, coreutils, installShellFiles, scdoc, nixosTests }:
+{ lib
+, stdenv
+, buildGoModule
+, fetchFromGitHub
+, pam
+, coreutils
+, installShellFiles
+, scdoc
+, nixosTests
+}:
 
 buildGoModule rec {
   pname = "maddy";
-  version = "0.7.0";
+  version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "foxcpp";
     repo = "maddy";
     rev = "v${version}";
-    sha256 = "sha256-EMw07yTFP0aBSuGDWivB8amuxWLFHhYV6J9faTEW5z4=";
+    sha256 = "sha256-jVlIjeBvxc82GQn8vW2RqcAErxZqftGj32d+IbBxQxY=";
   };
 
-  vendorSha256 = "sha256-LyfkETZPkhJKN8CEivNp7Se4IBpzyAtmCM1xil4n2po=";
+  vendorHash = "sha256-bSBk68w6T/Wy5klj5oC/ZW5TqDESG3mW9cIQ3auNmCk=";
 
   tags = [ "libpam" ];
 
@@ -42,6 +51,8 @@ buildGoModule rec {
       --replace "/usr/local/bin/maddy" "$out/bin/maddy" \
       --replace "/bin/kill" "${coreutils}/bin/kill"
   '';
+
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-error=strict-prototypes";
 
   passthru.tests.nixos = nixosTests.maddy;
 

@@ -1,4 +1,4 @@
-# Nixpkgs/NixOS option handling.
+/* Nixpkgs/NixOS option handling. */
 { lib }:
 
 let
@@ -109,7 +109,13 @@ rec {
 
      The package is specified in the third argument under `default` as a list of strings
      representing its attribute path in nixpkgs (or another package set).
-     Because of this, you need to pass nixpkgs itself (or a subset) as the first argument.
+     Because of this, you need to pass nixpkgs itself (usually `pkgs` in a module;
+     alternatively to nixpkgs itself, another package set) as the first argument.
+
+     If you pass another package set you should set the `pkgsText` option.
+     This option is used to display the expression for the package set. It is `"pkgs"` by default.
+     If your expression is complex you should parenthesize it, as the `pkgsText` argument
+     is usually immediately followed by an attribute lookup (`.`).
 
      The second argument may be either a string or a list of strings.
      It provides the display name of the package in the description of the generated option
@@ -118,74 +124,106 @@ rec {
 
      To include extra information in the description, pass `extraDescription` to
      append arbitrary text to the generated description.
+
      You can also pass an `example` value, either a literal string or an attribute path.
 
-     The default argument can be omitted if the provided name is
-     an attribute of pkgs (if name is a string) or a
-     valid attribute path in pkgs (if name is a list).
+     The `default` argument can be omitted if the provided name is
+     an attribute of pkgs (if `name` is a string) or a valid attribute path in pkgs (if `name` is a list).
+     You can also set `default` to just a string in which case it is interpreted as an attribute name
+     (a singleton attribute path, if you will).
 
      If you wish to explicitly provide no default, pass `null` as `default`.
 
-     Type: mkPackageOption :: pkgs -> (string|[string]) -> { default? :: [string], example? :: null|string|[string], extraDescription? :: string } -> option
+     If you want users to be able to set no package, pass `nullable = true`.
+     In this mode a `default = null` will not be interpreted as no default and is interpreted literally.
+
+     Type: mkPackageOption :: pkgs -> (string|[string]) -> { nullable? :: bool, default? :: string|[string], example? :: null|string|[string], extraDescription? :: string, pkgsText? :: string } -> option
 
      Example:
        mkPackageOption pkgs "hello" { }
-       => { _type = "option"; default = «derivation /nix/store/3r2vg51hlxj3cx5vscp0vkv60bqxkaq0-hello-2.10.drv»; defaultText = { ... }; description = "The hello package to use."; type = { ... }; }
+       => { ...; default = pkgs.hello; defaultText = literalExpression "pkgs.hello"; description = "The hello package to use."; type = package; }
 
      Example:
        mkPackageOption pkgs "GHC" {
          default = [ "ghc" ];
          example = "pkgs.haskell.packages.ghc92.ghc.withPackages (hkgs: [ hkgs.primes ])";
        }
-       => { _type = "option"; default = «derivation /nix/store/jxx55cxsjrf8kyh3fp2ya17q99w7541r-ghc-8.10.7.drv»; defaultText = { ... }; description = "The GHC package to use."; example = { ... }; type = { ... }; }
+       => { ...; default = pkgs.ghc; defaultText = literalExpression "pkgs.ghc"; description = "The GHC package to use."; example = literalExpression "pkgs.haskell.packages.ghc92.ghc.withPackages (hkgs: [ hkgs.primes ])"; type = package; }
 
      Example:
-       mkPackageOption pkgs [ "python39Packages" "pytorch" ] {
+       mkPackageOption pkgs [ "python3Packages" "pytorch" ] {
          extraDescription = "This is an example and doesn't actually do anything.";
        }
-       => { _type = "option"; default = «derivation /nix/store/gvqgsnc4fif9whvwd9ppa568yxbkmvk8-python3.9-pytorch-1.10.2.drv»; defaultText = { ... }; description = "The pytorch package to use. This is an example and doesn't actually do anything."; type = { ... }; }
+       => { ...; default = pkgs.python3Packages.pytorch; defaultText = literalExpression "pkgs.python3Packages.pytorch"; description = "The pytorch package to use. This is an example and doesn't actually do anything."; type = package; }
 
+     Example:
+       mkPackageOption pkgs "nushell" {
+         nullable = true;
+       }
+       => { ...; default = pkgs.nushell; defaultText = literalExpression "pkgs.nushell"; description = "The nushell package to use."; type = nullOr package; }
+
+     Example:
+       mkPackageOption pkgs "coreutils" {
+         default = null;
+       }
+       => { ...; description = "The coreutils package to use."; type = package; }
+
+     Example:
+       mkPackageOption pkgs "dbus" {
+         nullable = true;
+         default = null;
+       }
+       => { ...; default = null; description = "The dbus package to use."; type = nullOr package; }
+
+     Example:
+       mkPackageOption pkgs.javaPackages "OpenJFX" {
+         default = "openjfx20";
+         pkgsText = "pkgs.javaPackages";
+       }
+       => { ...; default = pkgs.javaPackages.openjfx20; defaultText = literalExpression "pkgs.javaPackages.openjfx20"; description = "The OpenJFX package to use."; type = package; }
   */
   mkPackageOption =
-    # Package set (a specific version of nixpkgs or a subset)
+    # Package set (an instantiation of nixpkgs such as pkgs in modules or another package set)
     pkgs:
       # Name for the package, shown in option description
       name:
       {
-        # Whether the package can be null, for example to disable installing a package altogether.
+        # Whether the package can be null, for example to disable installing a package altogether (defaults to false)
         nullable ? false,
-        # The attribute path where the default package is located (may be omitted)
+        # The attribute path where the default package is located (may be omitted, in which case it is copied from `name`)
         default ? name,
         # A string or an attribute path to use as an example (may be omitted)
         example ? null,
         # Additional text to include in the option description (may be omitted)
         extraDescription ? "",
+        # Representation of the package set passed as pkgs (defaults to `"pkgs"`)
+        pkgsText ? "pkgs"
       }:
       let
         name' = if isList name then last name else name;
-      in mkOption ({
-        type = with lib.types; (if nullable then nullOr else lib.id) package;
+        default' = if isList default then default else [ default ];
+        defaultText = concatStringsSep "." default';
+        defaultValue = attrByPath default'
+          (throw "${defaultText} cannot be found in ${pkgsText}") pkgs;
+        defaults = if default != null then {
+          default = defaultValue;
+          defaultText = literalExpression ("${pkgsText}." + defaultText);
+        } else optionalAttrs nullable {
+          default = null;
+        };
+      in mkOption (defaults // {
         description = "The ${name'} package to use."
           + (if extraDescription == "" then "" else " ") + extraDescription;
-      } // (if default != null then let
-        default' = if isList default then default else [ default ];
-        defaultPath = concatStringsSep "." default';
-        defaultValue = attrByPath default'
-          (throw "${defaultPath} cannot be found in pkgs") pkgs;
-      in {
-        default = defaultValue;
-        defaultText = literalExpression ("pkgs." + defaultPath);
-      } else if nullable then {
-        default = null;
-      } else { }) // lib.optionalAttrs (example != null) {
+        type = with lib.types; (if nullable then nullOr else lib.id) package;
+      } // optionalAttrs (example != null) {
         example = literalExpression
-          (if isList example then "pkgs." + concatStringsSep "." example else example);
+          (if isList example then "${pkgsText}." + concatStringsSep "." example else example);
       });
 
-  /* Alias of mkPackageOption. Previously used to create options with markdown
-     documentation, which is no longer required.
+  /* Deprecated alias of mkPackageOption, to be removed in 25.05.
+     Previously used to create options with markdown documentation, which is no longer required.
   */
-  mkPackageOptionMD = mkPackageOption;
+  mkPackageOptionMD = lib.warn "mkPackageOptionMD is deprecated and will be removed in 25.05; please use mkPackageOption." mkPackageOption;
 
   /* This option accepts anything, but it does not produce any result.
 
@@ -216,13 +254,31 @@ rec {
     else if all isInt list && all (x: x == head list) list then head list
     else throw "Cannot merge definitions of `${showOption loc}'. Definition values:${showDefs defs}";
 
+  /*
+    Require a single definition.
+
+    WARNING: Does not perform nested checks, as this does not run the merge function!
+    */
   mergeOneOption = mergeUniqueOption { message = ""; };
 
-  mergeUniqueOption = { message }: loc: defs:
-    if length defs == 1
-    then (head defs).value
-    else assert length defs > 1;
-      throw "The option `${showOption loc}' is defined multiple times while it's expected to be unique.\n${message}\nDefinition values:${showDefs defs}\n${prioritySuggestion}";
+  /*
+    Require a single definition.
+
+    NOTE: When the type is not checked completely by check, pass a merge function for further checking (of sub-attributes, etc).
+   */
+  mergeUniqueOption = args@{
+      message,
+      # WARNING: the default merge function assumes that the definition is a valid (option) value. You MUST pass a merge function if the return value needs to be
+      #   - type checked beyond what .check does (which should be very litte; only on the value head; not attribute values, etc)
+      #   - if you want attribute values to be checked, or list items
+      #   - if you want coercedTo-like behavior to work
+      merge ? loc: defs: (head defs).value }:
+    loc: defs:
+      if length defs == 1
+      then merge loc defs
+      else
+        assert length defs > 1;
+        throw "The option `${showOption loc}' is defined multiple times while it's expected to be unique.\n${message}\nDefinition values:${showDefs defs}\n${prioritySuggestion}";
 
   /* "Merge" option definitions by checking that they all have the same value. */
   mergeEqualOption = loc: defs:
@@ -341,12 +397,14 @@ rec {
     if ! isString text then throw "literalExpression expects a string."
     else { _type = "literalExpression"; inherit text; };
 
-  literalExample = lib.warn "literalExample is deprecated, use literalExpression instead, or use literalMD for a non-Nix description." literalExpression;
+  literalExample = lib.warn "lib.literalExample is deprecated, use lib.literalExpression instead, or use lib.literalMD for a non-Nix description." literalExpression;
 
   /* Transition marker for documentation that's already migrated to markdown
-     syntax. This is a no-op and no longer needed.
+     syntax. Has been a no-op for some while and been removed from nixpkgs.
+     Kept here to alert downstream users who may not be aware of the migration's
+     completion that it should be removed from modules.
   */
-  mdDoc = lib.id;
+  mdDoc = lib.warn "lib.mdDoc will be removed from nixpkgs in 24.11. Option descriptions are now in Markdown by default; you can remove any remaining uses of lib.mdDoc.";
 
   /* For use in the `defaultText` and `example` option attributes. Causes the
      given MD text to be inserted verbatim in the documentation, for when

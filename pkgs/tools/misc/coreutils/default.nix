@@ -32,12 +32,23 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "coreutils" + (optionalString (!minimal) "-full");
-  version = "9.3";
+  version = "9.5";
 
   src = fetchurl {
     url = "mirror://gnu/coreutils/coreutils-${version}.tar.xz";
-    hash = "sha256-rbz8/omSNbceh2jc8HzVMlILf1T5qAZIQ/jRmakEu6o=";
+    hash = "sha256-zTKO3qyS9qZl3p8yPJO3Eq8YWLwuDYjz9xAEaUcKG4o=";
   };
+
+  patches = [
+    # https://lists.gnu.org/archive/html/bug-coreutils/2024-05/msg00037.html
+    # This is not precisely the patch provided - this is a diff of the Makefile.in
+    # after the patch was applied and autoreconf was run, since adding autoreconf
+    # here causes infinite recursion.
+    ./fix-mix-flags-deps-libintl.patch
+  ] ++ lib.optionals stdenv.hostPlatform.isMusl [
+    # https://lists.gnu.org/archive/html/bug-coreutils/2024-03/msg00089.html
+    ./fix-test-failure-musl.patch
+  ];
 
   postPatch = ''
     # The test tends to fail on btrfs, f2fs and maybe other unusual filesystems.
@@ -45,12 +56,16 @@ stdenv.mkDerivation rec {
     sed '2i echo Skipping du threshold test && exit 77' -i ./tests/du/threshold.sh
     sed '2i echo Skipping cp reflink-auto test && exit 77' -i ./tests/cp/reflink-auto.sh
     sed '2i echo Skipping cp sparse test && exit 77' -i ./tests/cp/sparse.sh
+    sed '2i echo Skipping env test && exit 77' -i ./tests/env/env.sh
     sed '2i echo Skipping rm deep-2 test && exit 77' -i ./tests/rm/deep-2.sh
     sed '2i echo Skipping du long-from-unreadable test && exit 77' -i ./tests/du/long-from-unreadable.sh
 
+    # The test tends to fail on cephfs
+    sed '2i echo Skipping df total-verify test && exit 77' -i ./tests/df/total-verify.sh
+
     # Some target platforms, especially when building inside a container have
     # issues with the inotify test.
-    sed '2i echo Skipping tail inotify dir recreate test && exit 77' -i ./tests/tail-2/inotify-dir-recreate.sh
+    sed '2i echo Skipping tail inotify dir recreate test && exit 77' -i ./tests/tail/inotify-dir-recreate.sh
 
     # sandbox does not allow setgid
     sed '2i echo Skipping chmod setgid test && exit 77' -i ./tests/chmod/setgid.sh
@@ -69,6 +84,11 @@ stdenv.mkDerivation rec {
       echo "int main() { return 77; }" > "$f"
     done
 
+    # We don't have localtime in the sandbox
+    for f in gnulib-tests/{test-localtime_r.c,test-localtime_r-mt.c}; do
+      echo "int main() { return 77; }" > "$f"
+    done
+
     # intermittent failures on builders, unknown reason
     sed '2i echo Skipping du basic test && exit 77' -i ./tests/du/basic.sh
   '' + (optionalString (stdenv.hostPlatform.libc == "musl") (concatStringsSep "\n" [
@@ -77,23 +97,20 @@ stdenv.mkDerivation rec {
       echo "int main() { return 77; }" > gnulib-tests/test-getlogin.c
     ''
   ])) + (optionalString stdenv.isAarch64 ''
-    sed '2i print "Skipping tail assert test"; exit 77' -i ./tests/tail-2/assert.sh
-
     # Sometimes fails: https://github.com/NixOS/nixpkgs/pull/143097#issuecomment-954462584
-    sed '2i echo Skipping cut huge range test && exit 77' -i ./tests/misc/cut-huge-range.sh
+    sed '2i echo Skipping cut huge range test && exit 77' -i ./tests/cut/cut-huge-range.sh
   '');
 
   outputs = [ "out" "info" ];
   separateDebugInfo = true;
 
   nativeBuildInputs = [
-    # autoreconfHook is due to patch, normally only needed for cygwin
-    autoreconfHook
     perl
     xz.bin
   ]
   ++ optionals stdenv.hostPlatform.isCygwin [
     # due to patch
+    autoreconfHook
     texinfo
   ];
 
@@ -105,6 +122,8 @@ stdenv.mkDerivation rec {
     ++ optionals selinuxSupport [ libselinux libsepol ]
     # TODO(@Ericson2314): Investigate whether Darwin could benefit too
     ++ optional (isCross && stdenv.hostPlatform.libc != "glibc") libiconv;
+
+  hardeningDisable = [ "trivialautovarinit" ];
 
   configureFlags = [ "--with-packager=https://nixos.org" ]
     ++ optional (singleBinary != false)
@@ -131,10 +150,8 @@ stdenv.mkDerivation rec {
   # Darwin (http://article.gmane.org/gmane.comp.gnu.core-utils.bugs/19351),
   # and {Open,Free}BSD.
   # With non-standard storeDir: https://github.com/NixOS/nix/issues/512
-  # On aarch64+musl, test-init.sh fails due to a segfault in diff.
   doCheck = (!isCross)
     && (stdenv.hostPlatform.libc == "glibc" || stdenv.hostPlatform.libc == "musl")
-    && !(stdenv.hostPlatform.libc == "musl" && stdenv.hostPlatform.isAarch64)
     && !stdenv.isAarch32;
 
   # Prevents attempts of running 'help2man' on cross-built binaries.
@@ -166,7 +183,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://www.gnu.org/software/coreutils/";
-    description = "The GNU Core Utilities";
+    description = "GNU Core Utilities";
     longDescription = ''
       The GNU Core Utilities are the basic file, shell and text manipulation
       utilities of the GNU operating system. These are the core utilities which

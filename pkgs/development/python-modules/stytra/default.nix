@@ -1,40 +1,40 @@
-{ lib
-, anytree
-, arrayqueues
-, av
-, buildPythonPackage
-, colorspacious
-, fetchPypi
-, flammkuchen
-, git
-, gitpython
-, imageio
-, imageio-ffmpeg
-, lightparam
-, matplotlib
-, nose
-, numba
-, numpy
-, opencv3
-, pandas
-, pims
-, pyqt5
-, pyqtgraph
-, pyserial
-, pytestCheckHook
-, pythonOlder
-, qdarkstyle
-, qimage2ndarray
-, scikit-image
-, scipy
-, tables
+{
+  lib,
+  anytree,
+  arrayqueues,
+  av,
+  buildPythonPackage,
+  colorspacious,
+  fetchPypi,
+  flammkuchen,
+  git,
+  gitpython,
+  imageio,
+  imageio-ffmpeg,
+  lightparam,
+  matplotlib,
+  nose,
+  numba,
+  numpy,
+  opencv4,
+  pandas,
+  pims,
+  pyqt5,
+  pyqtgraph,
+  pyserial,
+  pytestCheckHook,
+  pythonOlder,
+  qdarkstyle,
+  qimage2ndarray,
+  scikit-image,
+  scipy,
+  tables,
 }:
 
 buildPythonPackage rec {
   pname = "stytra";
   version = "0.8.34";
-  format = "setuptools";
-
+  pyproject = true;
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
@@ -42,13 +42,13 @@ buildPythonPackage rec {
     sha256 = "aab9d07575ef599a9c0ae505656e3c03ec753462df3c15742f1f768f2b578f0a";
   };
 
-  # crashes python
-  preCheck = ''
-    rm stytra/tests/test_z_experiments.py
-  '';
+  patches = [
+    # https://github.com/portugueslab/stytra/issues/87
+    ./0000-workaround-pyqtgraph.patch
+  ];
 
   propagatedBuildInputs = [
-    opencv3
+    opencv4
     pyqt5
     pyqtgraph
     numpy
@@ -79,10 +79,16 @@ buildPythonPackage rec {
     pyserial
   ];
 
+  disabledTestPaths = [
+    # Crashes python
+    "stytra/tests/test_z_experiments.py"
+  ];
+
   meta = with lib; {
-    description = "A modular package to control stimulation and track behaviour";
+    description = "Modular package to control stimulation and track behaviour";
     homepage = "https://github.com/portugueslab/stytra";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ tbenst ];
+    broken = true; # incompatible with pyqtgraph>0.13.0: https://github.com/portugueslab/stytra/issues/87
   };
 }

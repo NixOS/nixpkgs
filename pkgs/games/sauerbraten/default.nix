@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     zlib
   ];
 
-  sourceRoot = "source/src";
+  sourceRoot = "${src.name}/src";
 
   enableParallelBuilding = true;
 
@@ -65,7 +65,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A free multiplayer & singleplayer first person shooter, the successor of the Cube FPS";
+    description = "Free multiplayer & singleplayer first person shooter, the successor of the Cube FPS";
+    homepage = "http://sauerbraten.org";
     maintainers = with maintainers; [ raskin ajs124 ];
     mainProgram = "sauerbraten_client";
     hydraPlatforms =

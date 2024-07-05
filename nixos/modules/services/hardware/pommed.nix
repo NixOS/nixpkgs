@@ -13,7 +13,7 @@ in {
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether to use the pommed tool to handle Apple laptop
           keyboard hotkeys.
         '';
@@ -22,7 +22,7 @@ in {
       configFile = mkOption {
         type = types.nullOr types.path;
         default = null;
-        description = lib.mdDoc ''
+        description = ''
           The path to the {file}`pommed.conf` file. Leave
           to null to use the default config file
           ({file}`/etc/pommed.conf.mactel`). See the

@@ -21,5 +21,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ julienmalka ];
+    mainProgram = "htpdate";
   };
 }

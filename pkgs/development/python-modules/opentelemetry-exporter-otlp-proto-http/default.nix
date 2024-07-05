@@ -1,40 +1,38 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, backoff
-, googleapis-common-protos
-, hatchling
-, opentelemetry-exporter-otlp-proto-common
-, opentelemetry-test-utils
-, requests
-, responses
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  deprecated,
+  googleapis-common-protos,
+  hatchling,
+  opentelemetry-api,
+  opentelemetry-exporter-otlp-proto-common,
+  opentelemetry-proto,
+  opentelemetry-sdk,
+  opentelemetry-test-utils,
+  requests,
+  responses,
+  pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
+  inherit (opentelemetry-api) version src;
   pname = "opentelemetry-exporter-otlp-proto-http";
-  version = "1.18.0";
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
-  src = fetchFromGitHub {
-    owner = "open-telemetry";
-    repo = "opentelemetry-python";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-r4jvIhRM9E4CuZyS/XvvYO+F9cPxip8ab57CUfip47Q=";
-    sparseCheckout = [ "/exporter/${pname}" ];
-  } + "/exporter/${pname}";
+  disabled = pythonOlder "3.8";
 
-  format = "pyproject";
+  sourceRoot = "${opentelemetry-api.src.name}/exporter/opentelemetry-exporter-otlp-proto-http";
 
-  nativeBuildInputs = [
-    hatchling
-  ];
+  build-system = [ hatchling ];
 
-  propagatedBuildInputs = [
-    backoff
+  dependencies = [
+    deprecated
     googleapis-common-protos
+    opentelemetry-api
     opentelemetry-exporter-otlp-proto-common
+    opentelemetry-proto
+    opentelemetry-sdk
     requests
   ];
 
@@ -46,10 +44,8 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "opentelemetry.exporter.otlp.proto.http" ];
 
-  meta = with lib; {
+  meta = opentelemetry-api.meta // {
     homepage = "https://github.com/open-telemetry/opentelemetry-python/tree/main/exporter/opentelemetry-exporter-otlp-proto-http";
     description = "OpenTelemetry Collector Protobuf over HTTP Exporter";
-    license = licenses.asl20;
-    maintainers = teams.deshaw.members;
   };
 }

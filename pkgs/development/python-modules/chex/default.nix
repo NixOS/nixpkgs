@@ -1,60 +1,57 @@
-{ absl-py
-, buildPythonPackage
-, cloudpickle
-, dm-tree
-, fetchFromGitHub
-, jax
-, jaxlib
-, lib
-, numpy
-, pytestCheckHook
-, toolz
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  setuptools,
+  absl-py,
+  cloudpickle,
+  dm-tree,
+  jax,
+  jaxlib,
+  numpy,
+  pytestCheckHook,
+  toolz,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "chex";
-  version = "0.1.6";
-  format = "setuptools";
+  version = "0.1.86";
+  pyproject = true;
+
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "deepmind";
-    repo = pname;
+    repo = "chex";
     rev = "refs/tags/v${version}";
-    hash = "sha256-VolRlLLgKga9S17ByVrYya9VPtu9yiOnvt/WmlE1DOc=";
+    hash = "sha256-Z5Ns4fG5pC99I4xdGjDMKX6YZpTtd1y0TWcIOtr7dug=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     absl-py
-    cloudpickle
-    dm-tree
+    jaxlib
     jax
     numpy
     toolz
+    typing-extensions
   ];
 
-  pythonImportsCheck = [
-    "chex"
-  ];
+  pythonImportsCheck = [ "chex" ];
 
   nativeCheckInputs = [
-    jaxlib
+    cloudpickle
+    dm-tree
     pytestCheckHook
   ];
 
-  disabledTests = [
-    # See https://github.com/deepmind/chex/issues/204.
-    "test_uninspected_checks"
-
-    # These tests started failing at some point after upgrading to 0.1.5
-    "test_useful_failure"
-    "TreeAssertionsTest"
-    "PmapFakeTest"
-    "WithDeviceTest"
-  ];
-
   meta = with lib; {
-    description = "Chex is a library of utilities for helping to write reliable JAX code.";
+    description = "Chex is a library of utilities for helping to write reliable JAX code";
     homepage = "https://github.com/deepmind/chex";
+    changelog = "https://github.com/google-deepmind/chex/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ ndl ];
   };

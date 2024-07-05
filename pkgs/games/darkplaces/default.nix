@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://www.icculus.org/twilight/darkplaces/";
-    description = "A quake 1 engine implementation by LadyHavoc";
+    description = "Quake 1 engine implementation by LadyHavoc";
     longDescription = ''
       A game engine based on the Quake 1 engine by id Software.
       It improves and builds upon the original 1996 engine by adding modern

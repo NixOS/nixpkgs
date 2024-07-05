@@ -1,18 +1,37 @@
-{ lib, stdenv, nixosTests, fetchFromGitHub, rustPlatform, libiconv, Security }:
+{
+  lib,
+  stdenv,
+  nixosTests,
+  fetchFromGitHub,
+  rustPlatform,
+  libiconv,
+  Security,
+  openssl,
+  pkg-config,
+  nix-update-script,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "agate";
-  version = "3.3.0";
+  version = "3.3.7";
 
   src = fetchFromGitHub {
     owner = "mbrubeck";
     repo = "agate";
     rev = "v${version}";
-    hash = "sha256-B0hbXar/RulfBJUR1Jtczf3p1H6Zj5OVCXVCaj5zf/U=";
+    hash = "sha256-pNfTgkl59NTRDH+w23P49MUWzIXh5ElnJitMEYfsBnc=";
   };
-  cargoHash = "sha256-6Z+mcQAJwW7tm4SBbrHwHIwiqlFV+PIa5I2onU2rPts=";
 
-  buildInputs = lib.optionals stdenv.isDarwin [ libiconv Security ];
+  cargoHash = "sha256-RuSvweZhPWS2C2lwncxWAW2XLQN6+bAslv3p4IwQ2BA=";
+
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs =
+    [ openssl ]
+    ++ lib.optionals stdenv.isDarwin [
+      libiconv
+      Security
+    ];
 
   doInstallCheck = true;
   installCheckPhase = ''
@@ -22,19 +41,30 @@ rustPlatform.buildRustPackage rec {
     runHook postInstallCheck
   '';
 
-  passthru.tests = { inherit (nixosTests) agate; };
+  __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  passthru = {
+    tests = {
+      inherit (nixosTests) agate;
+    };
+    updateScript = nix-update-script { };
+  };
+
+  meta = {
     homepage = "https://github.com/mbrubeck/agate";
-    changelog = "https://github.com/mbrubeck/agate/blob/master/CHANGELOG.md";
+    changelog = "https://github.com/mbrubeck/agate/releases/tag/v${version}";
     description = "Very simple server for the Gemini hypertext protocol";
+    mainProgram = "agate";
     longDescription = ''
       Agate is a server for the Gemini network protocol, built with the Rust
       programming language. Agate has very few features, and can only serve
       static files. It uses async I/O, and should be quite efficient even when
       running on low-end hardware and serving many concurrent requests.
     '';
-    license = with licenses; [ asl20 /* or */ mit ];
-    maintainers = with maintainers; [ jk ];
+    license = with lib.licenses; [
+      asl20
+      mit
+    ];
+    maintainers = with lib.maintainers; [ jk ];
   };
 }

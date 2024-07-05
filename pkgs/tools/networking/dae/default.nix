@@ -1,47 +1,56 @@
-{ lib
-, clang
-, fetchFromGitHub
-, buildGoModule
+{
+  lib,
+  clang,
+  fetchFromGitHub,
+  buildGoModule,
 }:
 buildGoModule rec {
   pname = "dae";
-  version = "0.2.0";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "daeuniverse";
-    repo = pname;
+    repo = "dae";
     rev = "v${version}";
-    sha256 = "sha256-J2FFD6/+Of1UcBmgzlAfmX5QvEgJY4P1EttlNaqW4P0=";
+    hash = "sha256-RO0XsGyIgf2PQekiC71HirEPp2SQDJpiAbjg7TyaGVQ=";
     fetchSubmodules = true;
   };
 
-  vendorHash = "sha256-2KKlbhJtoHUa02juXuS1QgvDD5LA5Tg/f0hNFscLJIQ=";
+  vendorHash = "sha256-KFe0hGAXn4mrWCsU91cfUZc21SgJes6XXFhAKrqmULE=";
 
   proxyVendor = true;
 
   nativeBuildInputs = [ clang ];
 
-  ldflags = [
-    "-s"
-    "-w"
-    "-X github.com/daeuniverse/dae/cmd.Version=${version}"
-    "-X github.com/daeuniverse/dae/common/consts.MaxMatchSetLen_=64"
-  ];
+  buildPhase = ''
+    runHook preBuild
 
-  preBuild = ''
-    make CFLAGS="-D__REMOVE_BPF_PRINTK -fno-stack-protector" \
+    make CFLAGS="-D__REMOVE_BPF_PRINTK -fno-stack-protector -Wno-unused-command-line-argument" \
     NOSTRIP=y \
-    ebpf
+    VERSION=${version} \
+    OUTPUT=$out/bin/dae
+
+    runHook postBuild
   '';
 
   # network required
   doCheck = false;
 
+  postInstall = ''
+    install -Dm444 install/dae.service $out/lib/systemd/system/dae.service
+    substituteInPlace $out/lib/systemd/system/dae.service \
+      --replace /usr/bin/dae $out/bin/dae
+  '';
+
   meta = with lib; {
-    description = "A Linux high-performance transparent proxy solution based on eBPF";
+    description = "Linux high-performance transparent proxy solution based on eBPF";
     homepage = "https://github.com/daeuniverse/dae";
     license = licenses.agpl3Only;
-    maintainers = with maintainers; [ oluceps ];
+    maintainers = with maintainers; [
+      oluceps
+      pokon548
+    ];
     platforms = platforms.linux;
+    mainProgram = "dae";
   };
 }

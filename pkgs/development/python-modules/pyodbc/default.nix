@@ -1,37 +1,34 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPyPy
-, pythonOlder
-, unixODBC
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPyPy,
+  pythonOlder,
+  unixODBC,
 }:
 
 buildPythonPackage rec {
   pname = "pyodbc";
-  version = "4.0.35";
+  version = "5.1.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7" || isPyPy; # use pypypdbc instead
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-krmvSOi5KEVbyLlL89oFdR+uwJMqEe7iN8GJxtQ55cg=";
+    hash = "sha256-OX/u5EVhplgL4IztvphkNoWVY/S7N49IIkZVyOmH6mA=";
   };
 
   nativeBuildInputs = [
-    unixODBC  # for odbc_config
+    unixODBC # for odbc_config
   ];
 
-  buildInputs = [
-    unixODBC
-  ];
+  buildInputs = [ unixODBC ];
 
   # Tests require a database server
   doCheck = false;
 
-  pythonImportsCheck = [
-    "pyodbc"
-  ];
+  pythonImportsCheck = [ "pyodbc" ];
 
   meta = with lib; {
     description = "Python ODBC module to connect to almost any database";

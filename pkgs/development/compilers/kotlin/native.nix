@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation rec {
   pname = "kotlin-native";
-  version = "1.9.0";
+  version = "1.9.23";
 
   src = let
     getArch = {
@@ -20,9 +20,9 @@ stdenv.mkDerivation rec {
       "https://github.com/JetBrains/kotlin/releases/download/v${version}/kotlin-native-${arch}-${version}.tar.gz";
 
     getHash = arch: {
-      "macos-aarch64" = "0728zm72ywyl6yhrfkad3whg2xly9bx7whp8alfi980qf468b1jh";
-      "macos-x86_64" = "09j2i06qypw7ag2wrfkci9gnvprj96n3362p5vynr65jrzm5b8ww";
-      "linux-x86_64" = "1v58n8ap5kifhawz30lk6rb2sp0qyiiy8gihw2ngbbhvakkigg8q";
+      "macos-aarch64" = "1v1ld4nxa77vjxiz4jw5h29s8i4ghfbmq0d01r15i75pr46md8r7";
+      "macos-x86_64" = "05ywdhagj3qzjaw5sd94sgjk89dysky7d7lfqpwvc8s35v77rv8f";
+      "linux-x86_64" = "1j2lpl1r7r30dgard6ia29n3qrsr98wb3qwpc80z4jh6k42qn6id";
     }.${arch};
   in
     fetchurl {
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://kotlinlang.org/";
-    description = "A modern programming language that makes developers happier";
+    description = "Modern programming language that makes developers happier";
     longDescription = ''
       Kotlin/Native is a technology for compiling Kotlin code to native
       binaries, which can run without a virtual machine. It is an LLVM based

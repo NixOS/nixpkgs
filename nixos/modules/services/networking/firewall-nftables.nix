@@ -26,7 +26,7 @@ in
         type = types.lines;
         default = "";
         example = "ip6 saddr { fc00::/7, fe80::/10 } tcp dport 24800 accept";
-        description = lib.mdDoc ''
+        description = ''
           Additional nftables rules to be appended to the input-allow
           chain.
 
@@ -38,8 +38,20 @@ in
         type = types.lines;
         default = "";
         example = "iifname wg0 accept";
-        description = lib.mdDoc ''
+        description = ''
           Additional nftables rules to be appended to the forward-allow
+          chain.
+
+          This option only works with the nftables based firewall.
+        '';
+      };
+
+      extraReversePathFilterRules = mkOption {
+        type = types.lines;
+        default = "";
+        example = "fib daddr . mark . iif type local accept";
+        description = ''
+          Additional nftables rules to be appended to the rpfilter-allow
           chain.
 
           This option only works with the nftables based firewall.
@@ -70,10 +82,8 @@ in
       }
     ];
 
-    networking.nftables.ruleset = ''
-
-      table inet nixos-fw {
-
+    networking.nftables.tables."nixos-fw".family = "inet";
+    networking.nftables.tables."nixos-fw".content = ''
         ${optionalString (cfg.checkReversePath != false) ''
           chain rpfilter {
             type filter hook prerouting priority mangle + 10; policy drop;
@@ -81,12 +91,18 @@ in
             meta nfproto ipv4 udp sport . udp dport { 67 . 68, 68 . 67 } accept comment "DHCPv4 client/server"
             fib saddr . mark ${optionalString (cfg.checkReversePath != "loose") ". iif"} oif exists accept
 
+            jump rpfilter-allow
+
             ${optionalString cfg.logReversePathDrops ''
               log level info prefix "rpfilter drop: "
             ''}
 
           }
         ''}
+
+        chain rpfilter-allow {
+          ${cfg.extraReversePathFilterRules}
+        }
 
         chain input {
           type filter hook input priority filter; policy drop;
@@ -169,9 +185,6 @@ in
 
           }
         ''}
-
-      }
-
     '';
 
   };

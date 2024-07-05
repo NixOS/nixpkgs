@@ -1,32 +1,36 @@
 { lib
-, mkDerivation
+, stdenv
 , fetchFromGitHub
 , cmake
-, qtbase
 , libqtxdg
 , lxqt-build-tools
+, qtbase
+, qtsvg
+, wrapQtAppsHook
 , gitUpdater
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "qtxdg-tools";
-  version = "3.11.0";
+  version = "4.0.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "sha256-iUvjLZbTDBsQw7PIA0LUAvhoq6FrdbLhjbMwKdE01Hc=";
+    hash = "sha256-w9pFHG+q2oT33Lfg88MUzfWSyvHUgC0Fi2V8XcueJ/Q=";
   };
 
   nativeBuildInputs = [
     cmake
     lxqt-build-tools
+    wrapQtAppsHook
   ];
 
   buildInputs = [
-    qtbase
     libqtxdg
+    qtbase
+    qtsvg
   ];
 
   passthru.updateScript = gitUpdater { };
@@ -34,6 +38,7 @@ mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/lxqt/qtxdg-tools";
     description = "libqtxdg user tools";
+    mainProgram = "qtxdg-mat";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
     maintainers = teams.lxqt.members;

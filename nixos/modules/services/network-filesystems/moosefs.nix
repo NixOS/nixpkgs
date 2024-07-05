@@ -75,22 +75,22 @@ in {
       masterHost = mkOption {
         type = types.str;
         default = null;
-        description = lib.mdDoc "IP or DNS name of master host.";
+        description = "IP or DNS name of master host.";
       };
 
       runAsUser = mkOption {
         type = types.bool;
         default = true;
         example = true;
-        description = lib.mdDoc "Run daemons as user moosefs instead of root.";
+        description = "Run daemons as user moosefs instead of root.";
       };
 
-      client.enable = mkEnableOption (lib.mdDoc "Moosefs client");
+      client.enable = mkEnableOption "Moosefs client";
 
       master = {
         enable = mkOption {
           type = types.bool;
-          description = lib.mdDoc ''
+          description = ''
             Enable Moosefs master daemon.
 
             You need to run `mfsmaster-init` on a freshly installed master server to
@@ -102,7 +102,7 @@ in {
         exports = mkOption {
           type = with types; listOf str;
           default = null;
-          description = lib.mdDoc "Paths to export (see mfsexports.cfg).";
+          description = "Paths to export (see mfsexports.cfg).";
           example = [
             "* / rw,alldirs,admin,maproot=0:0"
             "* . rw"
@@ -111,7 +111,7 @@ in {
 
         openFirewall = mkOption {
           type = types.bool;
-          description = lib.mdDoc "Whether to automatically open the necessary ports in the firewall.";
+          description = "Whether to automatically open the necessary ports in the firewall.";
           default = false;
         };
 
@@ -122,16 +122,16 @@ in {
             options.DATA_PATH = mkOption {
               type = types.str;
               default = "/var/lib/mfs";
-              description = lib.mdDoc "Data storage directory.";
+              description = "Data storage directory.";
             };
           };
 
-          description = lib.mdDoc "Contents of config file (mfsmaster.cfg).";
+          description = "Contents of config file (mfsmaster.cfg).";
         };
       };
 
       metalogger = {
-        enable = mkEnableOption (lib.mdDoc "Moosefs metalogger daemon");
+        enable = mkEnableOption "Moosefs metalogger daemon";
 
         settings = mkOption {
           type = types.submodule {
@@ -140,27 +140,27 @@ in {
             options.DATA_PATH = mkOption {
               type = types.str;
               default = "/var/lib/mfs";
-              description = lib.mdDoc "Data storage directory";
+              description = "Data storage directory";
             };
           };
 
-          description = lib.mdDoc "Contents of metalogger config file (mfsmetalogger.cfg).";
+          description = "Contents of metalogger config file (mfsmetalogger.cfg).";
         };
       };
 
       chunkserver = {
-        enable = mkEnableOption (lib.mdDoc "Moosefs chunkserver daemon");
+        enable = mkEnableOption "Moosefs chunkserver daemon";
 
         openFirewall = mkOption {
           type = types.bool;
-          description = lib.mdDoc "Whether to automatically open the necessary ports in the firewall.";
+          description = "Whether to automatically open the necessary ports in the firewall.";
           default = false;
         };
 
         hdds = mkOption {
           type = with types; listOf str;
           default =  null;
-          description = lib.mdDoc "Mount points to be used by chunkserver for storage (see mfshdd.cfg).";
+          description = "Mount points to be used by chunkserver for storage (see mfshdd.cfg).";
           example = [ "/mnt/hdd1" ];
         };
 
@@ -171,11 +171,11 @@ in {
             options.DATA_PATH = mkOption {
               type = types.str;
               default = "/var/lib/mfs";
-              description = lib.mdDoc "Directory for lock file.";
+              description = "Directory for lock file.";
             };
           };
 
-          description = lib.mdDoc "Contents of chunkserver config file (mfschunkserver.cfg).";
+          description = "Contents of chunkserver config file (mfschunkserver.cfg).";
         };
       };
     };

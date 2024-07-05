@@ -1,17 +1,32 @@
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
   cfg = config.programs.rust-motd;
   format = pkgs.formats.toml { };
+
+  # Order the sections in the TOML according to the order of sections
+  # in `cfg.order`.
+  motdConf = pkgs.runCommand "motd.conf"
+    {
+      __structuredAttrs = true;
+      inherit (cfg) order settings;
+      nativeBuildInputs = [ pkgs.remarshal pkgs.jq ];
+    }
+    ''
+      cat "$NIX_ATTRS_JSON_FILE" \
+        | jq '.settings as $settings
+              | .order
+              | map({ key: ., value: $settings."\(.)" })
+              | from_entries' -r \
+        | json2toml /dev/stdin "$out"
+    '';
 in {
   options.programs.rust-motd = {
-    enable = mkEnableOption (lib.mdDoc "rust-motd");
-    enableMotdInSSHD = mkOption {
+    enable = lib.mkEnableOption "rust-motd, a Message Of The Day (MOTD) generator";
+    enableMotdInSSHD = lib.mkOption {
       default = true;
-      type = types.bool;
-      description = mdDoc ''
+      type = lib.types.bool;
+      description = ''
         Whether to let `openssh` print the
         result when entering a new `ssh`-session.
         By default either nothing or a static file defined via
@@ -19,30 +34,69 @@ in {
         the latter option is incompatible with this module.
       '';
     };
-    refreshInterval = mkOption {
+    refreshInterval = lib.mkOption {
       default = "*:0/5";
-      type = types.str;
-      description = mdDoc ''
+      type = lib.types.str;
+      description = ''
         Interval in which the {manpage}`motd(5)` file is refreshed.
         For possible formats, please refer to {manpage}`systemd.time(7)`.
       '';
     };
-    settings = mkOption {
-      type = types.submodule {
-        freeformType = format.type;
-      };
-      description = mdDoc ''
+    order = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
+      default = builtins.attrNames cfg.settings;
+      defaultText = lib.literalExpression "attrNames cfg.settings";
+      description = ''
+        The order of the sections in [](#opt-programs.rust-motd.settings).
+        By default they are ordered alphabetically.
+
+        Context: since attribute sets in Nix are always
+        ordered alphabetically internally this means that
+
+        ```nix
+        {
+          uptime = { /* ... */ };
+          banner = { /* ... */ };
+        }
+        ```
+
+        will still have `banner` displayed before `uptime`.
+
+        To work around that, this option can be used to define the order of all keys,
+        i.e.
+
+        ```nix
+        {
+          order = [
+            "uptime"
+            "banner"
+          ];
+        }
+        ```
+
+        makes sure that `uptime` is placed before `banner` in the motd.
+      '';
+    };
+    settings = lib.mkOption {
+      type = lib.types.attrsOf format.type;
+      description = ''
         Settings on what to generate. Please read the
         [upstream documentation](https://github.com/rust-motd/rust-motd/blob/main/README.md#configuration)
         for further information.
       '';
     };
   };
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     assertions = [
       { assertion = config.users.motd == null;
         message = ''
           `programs.rust-motd` is incompatible with `users.motd`!
+        '';
+      }
+      { assertion = builtins.sort (a: b: a < b) cfg.order == builtins.attrNames cfg.settings;
+        message = ''
+          Please ensure that every section from `programs.rust-motd.settings` is present in
+          `programs.rust-motd.order`.
         '';
       }
     ];
@@ -50,9 +104,10 @@ in {
       path = with pkgs; [ bash ];
       documentation = [ "https://github.com/rust-motd/rust-motd/blob/v${pkgs.rust-motd.version}/README.md" ];
       description = "motd generator";
+      wantedBy = [ "multi-user.target" ];
       serviceConfig = {
         ExecStart = "${pkgs.writeShellScript "update-motd" ''
-          ${pkgs.rust-motd}/bin/rust-motd ${format.generate "motd.conf" cfg.settings} > motd
+          ${pkgs.rust-motd}/bin/rust-motd ${motdConf} > motd
         ''}";
         CapabilityBoundingSet = [ "" ];
         LockPersonality = true;
@@ -81,12 +136,12 @@ in {
       wantedBy = [ "timers.target" ];
       timerConfig.OnCalendar = cfg.refreshInterval;
     };
-    security.pam.services.sshd.text = mkIf cfg.enableMotdInSSHD (mkDefault (mkAfter ''
+    security.pam.services.sshd.text = lib.mkIf cfg.enableMotdInSSHD (lib.mkDefault (lib.mkAfter ''
       session optional ${pkgs.pam}/lib/security/pam_motd.so motd=/var/lib/rust-motd/motd
     ''));
-    services.openssh.extraConfig = mkIf (cfg.settings ? last_login && cfg.settings.last_login != {}) ''
+    services.openssh.extraConfig = lib.mkIf (cfg.settings ? last_login && cfg.settings.last_login != {}) ''
       PrintLastLog no
     '';
   };
-  meta.maintainers = with maintainers; [ ma27 ];
+  meta.maintainers = with lib.maintainers; [ ma27 ];
 }

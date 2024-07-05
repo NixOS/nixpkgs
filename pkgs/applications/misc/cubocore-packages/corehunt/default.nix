@@ -2,13 +2,13 @@
 
 mkDerivation rec {
   pname = "corehunt";
-  version = "4.4.0";
+  version = "4.5.0";
 
   src = fetchFromGitLab {
     owner = "cubocore/coreapps";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-txQ/uoSwseo0i4/CqdQm3wN9/3p3gioRG9IuJTsgSF4=";
+    hash = "sha256-Xir1RQG7AlO166lZq1TJssiWoSixY6EfLEjxek+9ifo=";
   };
 
   nativeBuildInputs = [
@@ -23,7 +23,8 @@ mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A file finder utility from the C Suite";
+    description = "File finder utility from the C Suite";
+    mainProgram = "corehunt";
     homepage = "https://gitlab.com/cubocore/coreapps/corehunt";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ dan4ik605743 ];

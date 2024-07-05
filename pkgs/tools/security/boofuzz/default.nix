@@ -6,15 +6,19 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "boofuzz";
-  version = "0.4.1";
-  format = "setuptools";
+  version = "0.4.2";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jtpereyda";
-    repo = pname;
+    repo = "boofuzz";
     rev = "refs/tags/v${version}";
-    hash = "sha256-mbxImm5RfYWq1JCCSvvG58Sxv2ad4BOh+RLvtNjQCKE=";
+    hash = "sha256-ffZVFmfDAJ+Qn3hbeHY/CvYgpDLxB+jaYOiYyZqZ7mo=";
   };
+
+  nativeBuildInputs = with python3.pkgs; [
+    poetry-core
+  ];
 
   propagatedBuildInputs = with python3.pkgs; [
     attrs
@@ -42,8 +46,6 @@ python3.pkgs.buildPythonApplication rec {
     "TestNoResponseFailure"
     "TestProcessMonitor"
     "TestSocketConnection"
-    # SyntaxError: invalid syntax, https://github.com/jtpereyda/boofuzz/issues/663
-    "test_msg_60_bytes"
   ] ++ lib.optionals stdenv.isDarwin [
     "test_time_repeater"
   ];
@@ -54,6 +56,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Network protocol fuzzing tool";
+    mainProgram = "boo";
     homepage = "https://github.com/jtpereyda/boofuzz";
     changelog = "https://github.com/jtpereyda/boofuzz/blob/v${version}/CHANGELOG.rst";
     license = with licenses; [ gpl2Plus ];

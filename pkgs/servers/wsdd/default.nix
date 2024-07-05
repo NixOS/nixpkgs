@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "wsdd";
-  version = "0.7.1";
+  version = "0.8";
 
   src = fetchFromGitHub {
     owner = "christgau";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-xfZVGi3OxuRI+Zh6L3Ru4J4j5BB1EAN3fllRCVA/c5o=";
+    hash = "sha256-T8/XlQpx4CtNy8LuLwOQBG9muFe9pp5583tDaCT4ReI=";
   };
 
   outputs = [ "out" "man" ];
@@ -16,12 +16,6 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ installShellFiles makeWrapper ];
 
   buildInputs = [ python3 ];
-
-  patches = [
-    # Increase timeout to socket urlopen
-    # See https://github.com/christgau/wsdd/issues/80#issuecomment-76848906
-    ./increase_timeout.patch
-  ];
 
   installPhase = ''
     install -Dm0555 src/wsdd.py $out/bin/wsdd
@@ -35,9 +29,10 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/christgau/wsdd";
-    description = "A Web Service Discovery (WSD) host daemon for SMB/Samba";
+    description = "Web Service Discovery (WSD) host daemon for SMB/Samba";
     maintainers = with maintainers; [ izorkin ];
     license = licenses.mit;
     platforms = platforms.all;
+    mainProgram = "wsdd";
   };
 }

@@ -1,7 +1,13 @@
-{ lib, stdenv, fetchzip, pkg-config, libusb1, systemdMinimal }:
-let
-  binDirPrefix = if stdenv.isDarwin then "osx_" else "linux_";
-in
+{ lib
+, stdenv
+, fetchzip
+, pkg-config
+, fixDarwinDylibNames
+, libusb1
+, systemdMinimal
+, darwin
+}:
+
 stdenv.mkDerivation rec {
   pname = "libusbsio";
   version = "2.1.11";
@@ -15,15 +21,30 @@ stdenv.mkDerivation rec {
     rm -r bin/*
   '';
 
-  nativeBuildInputs = [ pkg-config ];
+  makeFlags = [
+    "CC=${stdenv.cc.targetPrefix}cc"
+    "BINDIR="
+  ];
+
+  nativeBuildInputs = [
+    pkg-config
+  ] ++ lib.optionals stdenv.isDarwin [
+    fixDarwinDylibNames
+  ];
+
   buildInputs = [
     libusb1
+  ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+    AppKit
+    CoreFoundation
+    IOKit
+  ]) ++ lib.optionals stdenv.isLinux [
     systemdMinimal # libudev
   ];
 
   installPhase = ''
     runHook preInstall
-    install -D bin/${binDirPrefix}${stdenv.hostPlatform.parsed.cpu.name}/libusbsio${stdenv.hostPlatform.extensions.sharedLibrary} $out/lib/libusbsio${stdenv.hostPlatform.extensions.sharedLibrary}
+    install -D bin/libusbsio${stdenv.hostPlatform.extensions.sharedLibrary} $out/lib/libusbsio${stdenv.hostPlatform.extensions.sharedLibrary}
     runHook postInstall
   '';
 

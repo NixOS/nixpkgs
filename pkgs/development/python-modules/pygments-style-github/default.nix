@@ -1,8 +1,14 @@
-{ lib, buildPythonPackage, fetchPypi, pygments }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pygments,
+}:
 
 buildPythonPackage rec {
   pname = "pygments-style-github";
   version = "0.4";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -17,7 +23,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "pygments_style_github" ];
 
   meta = with lib; {
-    description = "A port of the github color scheme for pygments";
+    description = "Port of the github color scheme for pygments";
     homepage = "https://github.com/hugomaiavieira/pygments-style-github";
     license = licenses.bsd3;
     maintainers = with maintainers; [ drupol ];

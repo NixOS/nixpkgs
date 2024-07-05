@@ -7,13 +7,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cotton";
-  version = "unstable-2023-07-04";
+  version = "unstable-2023-09-13";
 
   src = fetchFromGitHub {
     owner = "danielhuang";
     repo = pname;
-    rev = "940564f64fb6cc6a4bf1e59bc2498ca19a62e1c3";
-    sha256 = "sha256-SwbF+CRjcjCDMt4tCq8dWbTsnIP5tZZw4e2cThQJIdY=";
+    rev = "df9d79a4b0bc4b140e87ddd7795924a93775a864";
+    sha256 = "sha256-ZMQaVMH8cuOb4PQ19g0pAFAMwP8bR60+eWFhiXk1bYE=";
   };
 
   cargoLock = {
@@ -27,7 +27,8 @@ rustPlatform.buildRustPackage rec {
   buildInputs = lib.optionals stdenv.isDarwin [ CoreServices ];
 
   meta = with lib; {
-    description = "A package manager for JavaScript projects";
+    description = "Package manager for JavaScript projects";
+    mainProgram = "cotton";
     homepage = "https://github.com/danielhuang/cotton";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ dit7ya figsoda ];

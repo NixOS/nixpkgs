@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitLab
-, fetchpatch
 , rustPlatform
 , cargo
 , desktop-file-utils
@@ -11,7 +10,7 @@
 , ninja
 , pkg-config
 , rustc
-, wrapGAppsHook
+, wrapGAppsHook4
 , python3
 , git
 , glib
@@ -22,20 +21,20 @@
 
 stdenv.mkDerivation rec {
   pname = "solanum";
-  version = "4.0.0";
+  version = "5.0.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "Solanum";
     rev = version;
-    hash = "sha256-ohUwxwhPxZlKoP5Nq/daD9z5Nj37C7MnFzyvQKp7R8E=";
+    hash = "sha256-Xf/b/9o6zHF1hjHSyAXb90ySoBj+DMMe31e6RfF8C4Y=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-eDwMBxMmj246tplZfREJkViCDbKmuWSUZyM+tChNQDA=";
+    hash = "sha256-POvKpwzi+bkEkfSDhi/vjs/ey+A2vNN5ta4Q7Ma/RBQ=";
   };
 
   postPatch = ''
@@ -46,7 +45,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook4
     python3
     git
     desktop-file-utils
@@ -68,9 +67,10 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://gitlab.gnome.org/World/Solanum";
-    description = "A pomodoro timer for the GNOME desktop";
+    description = "Pomodoro timer for the GNOME desktop";
     maintainers = with maintainers; [ linsui ];
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
+    mainProgram = "solanum";
   };
 }

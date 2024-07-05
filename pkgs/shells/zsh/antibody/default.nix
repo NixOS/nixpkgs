@@ -8,17 +8,18 @@ buildGoModule rec {
     owner = "getantibody";
     repo = "antibody";
     rev = "v${version}";
-    sha256 = "0icag53svzdm7yvzp855fp0f7q0g0jkfmjaa1sj6mmb01c1xgzi1";
+    hash = "sha256-If7XAwtg1WqkDkrJ6qYED+DjwHWloPu3P7X9rUd5ikU=";
   };
 
-  vendorSha256 = "0z8fma3v2dph8nv3q4lmv43s6p5sc338xb7kcmnpwcc0iw7b4vyj";
+  vendorHash = "sha256-0m+yDo+AMX5tZfOsjsZgulyjB9mVEjy2RfA2sYeqDn0=";
 
   doCheck = false;
 
   ldflags = [ "-s" "-w" "-X main.version=${version}" ];
 
   meta = with lib; {
-    description = "The fastest shell plugin manager";
+    description = "Fastest shell plugin manager";
+    mainProgram = "antibody";
     homepage = "https://github.com/getantibody/antibody";
     license = licenses.mit;
     maintainers = with maintainers; [ Br1ght0ne ];

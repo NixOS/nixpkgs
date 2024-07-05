@@ -1,6 +1,5 @@
 { stdenv
 , arrow-cpp
-, fetchurl
 , glib
 , gobject-introspection
 , lib
@@ -18,12 +17,12 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
+    gobject-introspection
   ];
 
   buildInputs = [
     arrow-cpp
     glib
-    gobject-introspection
   ];
 
   meta = with lib; {

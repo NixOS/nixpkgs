@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "zipstream-ng";
-  version = "1.6.0";
+  version = "1.7.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -16,19 +17,16 @@ buildPythonPackage rec {
     owner = "pR0Ps";
     repo = "zipstream-ng";
     rev = "refs/tags/v${version}";
-    hash = "sha256-mY0dbHho/K1nTmhlv8i8KPa4HW7epBhfEksX3E2df2M=";
+    hash = "sha256-BYQse+DlyLUH9CofRfGrPUZjP7E8AP/wpirvJmSRfow=";
   };
 
-  pythonImportsCheck = [
-    "zipstream"
-  ];
+  pythonImportsCheck = [ "zipstream" ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     description = "Library to generate streamable zip files";
+    mainProgram = "zipserver";
     longDescription = ''
       A modern and easy to use streamable zip file generator. It can package and stream many files
       and folders on the fly without needing temporary files or excessive memory

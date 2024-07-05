@@ -1,28 +1,32 @@
-{ lib
-, aio-geojson-client
-, aiohttp
-, aresponses
-, buildPythonPackage
-, fetchFromGitHub
-, pytest-asyncio
-, pytestCheckHook
-, pytz
-, pythonOlder
+{
+  lib,
+  aio-geojson-client,
+  aiohttp,
+  aioresponses,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytest-asyncio,
+  pytestCheckHook,
+  pytz,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "aio-geojson-geonetnz-quakes";
-  version = "0.15";
-  format = "setuptools";
+  version = "0.16";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "exxamalte";
     repo = "python-aio-geojson-geonetnz-quakes";
     rev = "refs/tags/v${version}";
-    hash = "sha256-/EPPEGLtiZBorZMnVg0NqwnHCbCXyZzz4449MzAYQx8=";
+    hash = "sha256-8OpmA3yHjUY+N5Obri4RWeuJiW916xGSWUYUgdpmjkw=";
   };
+
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     aio-geojson-client
@@ -30,15 +34,15 @@ buildPythonPackage rec {
     pytz
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   nativeCheckInputs = [
-    aresponses
+    aioresponses
     pytest-asyncio
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "aio_geojson_geonetnz_quakes"
-  ];
+  pythonImportsCheck = [ "aio_geojson_geonetnz_quakes" ];
 
   meta = with lib; {
     description = "Python module for accessing the GeoNet NZ Quakes GeoJSON feeds";

@@ -2,31 +2,34 @@
 
 buildGoModule rec {
   pname = "otel-cli";
-  version = "0.3.0";
+  version = "0.4.5";
 
   src = fetchFromGitHub {
     owner = "equinix-labs";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-edxDPxUamZiBezMj2SII/zq8atnyZVWtboUJsShDAyw=";
+    hash = "sha256-JYi9CbP4mUhX0zNjhi6QlBzLKcj2zdPwlyBSIYKp6vk=";
   };
 
-  vendorHash = "sha256-MlLFTi+O925NA73zDRrk0AgJzwtdNBhCxDjmniNPwio=";
+  vendorHash = "sha256-fWQz7ZrU8gulhpOHSN8Prn4EMC0KXy942FZD/PMsLxc=";
 
   preCheck = ''
     ln -s $GOPATH/bin/otel-cli .
   '' + lib.optionalString (!stdenv.isDarwin) ''
     substituteInPlace main_test.go \
-      --replace 'const minimumPath = `/bin:/usr/bin`' 'const minimumPath = `${lib.makeBinPath [ getent coreutils ]}`'
+      --replace-fail 'const minimumPath = `/bin:/usr/bin`' 'const minimumPath = `${lib.makeBinPath [ getent coreutils ]}`'
   '';
+
+  patches = [ ./patches/bin-echo-patch.patch ];
 
   passthru.updateScript = nix-update-script {};
 
   meta = with lib; {
     homepage = "https://github.com/equinix-labs/otel-cli";
-    description = "A command-line tool for sending OpenTelemetry traces";
+    description = "Command-line tool for sending OpenTelemetry traces";
     changelog = "https://github.com/equinix-labs/otel-cli/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with lib.maintainers; [ emattiza urandom ];
+    mainProgram = "otel-cli";
   };
 }

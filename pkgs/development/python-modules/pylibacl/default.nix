@@ -1,12 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pkgs
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pkgs,
 }:
 
 buildPythonPackage rec {
   pname = "pylibacl";
   version = "0.7.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -20,7 +22,7 @@ buildPythonPackage rec {
   buildInputs = with pkgs; [ acl ];
 
   meta = {
-    description = "A Python extension module for POSIX ACLs, it can be used to query, list, add, and remove ACLs from files and directories under operating systems that support them";
+    description = "Python extension module for POSIX ACLs, it can be used to query, list, add, and remove ACLs from files and directories under operating systems that support them";
     license = lib.licenses.lgpl21Plus;
   };
 }

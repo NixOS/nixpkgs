@@ -55,7 +55,8 @@ buildGoModule rec {
 
     # This path is used by our firefox wrapper for finding native messaging hosts
     mkdir -p $out/lib/mozilla/native-messaging-hosts
-    ln -s $out/lib/browserpass/hosts/firefox/*.json $out/lib/mozilla/native-messaging-hosts
+    # Copy ff manifests rather than linking to allow link-farming to work recursively in dependants
+    cp $out/lib/browserpass/hosts/firefox/*.json $out/lib/mozilla/native-messaging-hosts/
   '';
 
   passthru.tests.version = testers.testVersion {
@@ -65,8 +66,9 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Browserpass native client app";
+    mainProgram = "browserpass";
     homepage = "https://github.com/browserpass/browserpass-native";
     license = licenses.isc;
-    maintainers = with maintainers; [ rvolosatovs infinisil ];
+    maintainers = with maintainers; [ rvolosatovs ];
   };
 }

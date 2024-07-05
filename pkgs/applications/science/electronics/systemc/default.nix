@@ -1,18 +1,31 @@
-{ lib, stdenv, fetchurl }:
+{ lib, stdenv, fetchFromGitHub, cmake }:
 
 stdenv.mkDerivation rec {
   pname = "systemc";
-  version = "2.3.3";
+  version = "3.0.0";
 
-  src = fetchurl {
-    url = "https://www.accellera.org/images/downloads/standards/systemc/${pname}-${version}.tar.gz";
-    sha256 = "5781b9a351e5afedabc37d145e5f7edec08f3fd5de00ffeb8fa1f3086b1f7b3f";
+  src = fetchFromGitHub {
+    owner = "accellera-official";
+    repo = pname;
+    rev = version;
+    sha256 = "sha256-qeQUrPhD+Gb1lResM7NZzO/vEgJd3NE6lbnM380VVa0=";
   };
 
+  nativeBuildInputs = [ cmake ];
+
+  cmakeFlags = [
+    # Undefined reference to the sc_core::sc_api_version_2_3_4_XXX
+    # https://github.com/accellera-official/systemc/issues/21
+    "-DCMAKE_CXX_STANDARD=17"
+  ];
+
+  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+
   meta = with lib; {
-    description = "The language for System-level design, modeling and verification";
+    description = "Language for System-level design, modeling and verification";
     homepage    = "https://systemc.org/";
     license     = licenses.asl20;
-    maintainers = with maintainers; [ victormignot ];
+    platforms   = platforms.unix;
+    maintainers = with maintainers; [ victormignot amiloradovsky ];
   };
 }

@@ -28,7 +28,7 @@ let
     pname = "tsc";
     commit = version;
 
-    sourceRoot = "source/core";
+    sourceRoot = "${src.name}/core";
 
     recipe = writeText "recipe" ''
       (tsc
@@ -44,7 +44,7 @@ let
     pname = "tsc-dyn";
 
     nativeBuildInputs = [ rustPlatform.bindgenHook ];
-    sourceRoot = "source/core";
+    sourceRoot = "${src.name}/core";
 
     postInstall = ''
       LIB=($out/lib/libtsc_dyn.*)
@@ -55,7 +55,7 @@ let
       rm -r $out/lib
     '';
 
-    inherit (srcMeta) cargoSha256;
+    inherit (srcMeta) cargoHash;
   };
 
 in symlinkJoin {
@@ -78,7 +78,7 @@ in symlinkJoin {
   };
 
   meta = {
-    description = "The core APIs of the Emacs binding for tree-sitter.";
+    description = "Core APIs of the Emacs binding for tree-sitter";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ pimeys ];
   };

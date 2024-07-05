@@ -1,11 +1,13 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
 }:
 
 buildPythonPackage rec {
   pname = "dpkt";
   version = "1.9.8";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

@@ -9,11 +9,11 @@
 
 stdenv.mkDerivation rec {
   pname = "guile-ncurses";
-  version = "1.7";
+  version = "3.1";
 
   src = fetchurl {
     url = "mirror://gnu/${pname}/${pname}-${version}.tar.gz";
-    hash = "sha256-JZPNoQuIl5XayUpm0RdWNg8TT2LZGDOuFoae9crZe5Q=";
+    hash = "sha256-7onozq/Kud0O8/wazJsQ9NIbpLJW0ynYQtYYPmP41zM=";
   };
 
   nativeBuildInputs = [
@@ -25,14 +25,18 @@ stdenv.mkDerivation rec {
     ncurses
   ];
 
-  preConfigure = ''
-    configureFlags="$configureFlags --with-guilesitedir=$out/share/guile/site"
-  '';
+  configureFlags = [
+    "--with-gnu-filesystem-hierarchy"
+  ];
+
+  env = lib.optionalAttrs stdenv.cc.isClang {
+    NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
+  };
 
   postFixup = ''
-    for f in $out/share/guile/site/ncurses/**.scm; do \
+    for f in $out/${guile.siteDir}/ncurses/**.scm; do \
       substituteInPlace $f \
-        --replace "libguile-ncurses" "$out/lib/libguile-ncurses"; \
+        --replace "libguile-ncurses" "$out/lib/guile/${guile.effectiveVersion}/libguile-ncurses"; \
     done
   '';
 
@@ -42,6 +46,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://www.gnu.org/software/guile-ncurses/";
     description = "Scheme interface to the NCurses libraries";
+    mainProgram = "guile-ncurses-shell";
     longDescription = ''
       GNU Guile-Ncurses is a library for the Guile Scheme interpreter that
       provides functions for creating text user interfaces.  The text user
@@ -50,6 +55,6 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.lgpl3Plus;
     maintainers = with maintainers; [ vyp ];
-    platforms = platforms.gnu ++ platforms.linux;
+    platforms = guile.meta.platforms;
   };
 }

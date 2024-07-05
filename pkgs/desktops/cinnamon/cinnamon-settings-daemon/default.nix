@@ -10,7 +10,7 @@
 , libgnomekbd
 , libnotify
 , libxklavier
-, wrapGAppsHook
+, wrapGAppsHook3
 , pkg-config
 , lib
 , stdenv
@@ -32,13 +32,13 @@
 
 stdenv.mkDerivation rec {
   pname = "cinnamon-settings-daemon";
-  version = "5.8.1";
+  version = "6.2.0";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    hash = "sha256-2ObfUdrCuvyhtpoxNzoH8tsFQLxNkMLQPFfJajXEsXU=";
+    hash = "sha256-OAG5Tes+0bi+vKqm77Y7OykTpUkMdRaXIJYLuomIDMo=";
   };
 
   patches = [
@@ -75,7 +75,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     meson
     ninja
-    wrapGAppsHook
+    wrapGAppsHook3
     pkg-config
   ];
 
@@ -98,7 +98,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/linuxmint/cinnamon-settings-daemon";
-    description = "The settings daemon for the Cinnamon desktop";
+    description = "Settings daemon for the Cinnamon desktop";
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = teams.cinnamon.members;

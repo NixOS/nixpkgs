@@ -4,7 +4,6 @@
 , extra-cmake-modules
 , qtbase
 , qtmultimedia
-, qtquick1
 , qttools
 , libGL
 , libX11
@@ -25,7 +24,6 @@ mkDerivation rec {
   buildInputs = [
     qtbase
     qtmultimedia
-    qtquick1
     libGL
     libX11
     libass
@@ -63,7 +61,7 @@ mkDerivation rec {
   stripDebugList = [ "lib" "libexec" "bin" "qml" ];
 
   meta =  with lib; {
-    description = "A multimedia playback framework based on Qt + FFmpeg";
+    description = "Multimedia playback framework based on Qt + FFmpeg";
     #license = licenses.lgpl21; # For the libraries / headers only.
     license = licenses.gpl3; # With the examples (under bin) and most likely some of the optional dependencies used.
     homepage = "http://www.qtav.org/";

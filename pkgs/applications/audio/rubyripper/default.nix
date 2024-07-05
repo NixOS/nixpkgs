@@ -24,6 +24,10 @@ stdenv.mkDerivation rec {
     ruby
   ];
 
+  postInstall = ''
+    cp -r share $out/
+  '';
+
   postFixup = ''
     wrapProgram $out/bin/rrip_cli \
       --prefix PATH : ${lib.makeBinPath [ cddiscid cdparanoia ruby ]}
@@ -31,6 +35,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "High quality CD audio ripper";
+    mainProgram = "rrip_cli";
     platforms = platforms.linux;
     license = licenses.gpl3Plus;
     homepage = "https://github.com/bleskodev/rubyripper";

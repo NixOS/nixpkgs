@@ -1,49 +1,51 @@
-{ lib
-, anyascii
-, beautifulsoup4
-, buildPythonPackage
-, callPackage
-, django
-, django-filter
-, django-modelcluster
-, django-taggit
-, django_treebeard
-, djangorestframework
-, draftjs-exporter
-, fetchPypi
-, html5lib
-, l18n
-, openpyxl
-, permissionedforms
-, pillow
-, pythonOlder
-, requests
-, telepath
-, willow
+{
+  lib,
+  anyascii,
+  beautifulsoup4,
+  buildPythonPackage,
+  callPackage,
+  django,
+  django-filter,
+  django-modelcluster,
+  django-taggit,
+  django-treebeard,
+  djangorestframework,
+  draftjs-exporter,
+  fetchPypi,
+  html5lib,
+  l18n,
+  laces,
+  openpyxl,
+  permissionedforms,
+  pillow,
+  pythonOlder,
+  requests,
+  telepath,
+  willow,
 }:
 
 buildPythonPackage rec {
   pname = "wagtail";
-  version = "4.2.2";
+  version = "6.0.2";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-s89gs3H//Dc3k6BLZUC4APyDgiWY9LetWAkI+kXQTf8=";
+    hash = "sha256-58/DwPU/swLxeY8OAqesYHirAusOhwPA9xzL0/GOOG8=";
   };
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "beautifulsoup4>=4.8,<4.12" "beautifulsoup4>=4.8"
+      --replace "django-filter>=23.3,<24" "django-filter>=23.3,<24.3"
   '';
 
   propagatedBuildInputs = [
     anyascii
     beautifulsoup4
     django
-    django_treebeard
+    django-treebeard
     django-filter
     django-modelcluster
     django-taggit
@@ -51,22 +53,26 @@ buildPythonPackage rec {
     draftjs-exporter
     html5lib
     l18n
+    laces
     openpyxl
     permissionedforms
     pillow
     requests
     telepath
     willow
-  ];
+  ] ++ willow.optional-dependencies.heif;
 
   # Tests are in separate derivation because they require a package that depends
   # on wagtail (wagtail-factories)
   doCheck = false;
 
-  passthru.tests.wagtail = callPackage ./tests.nix {};
+  passthru.tests.wagtail = callPackage ./tests.nix { };
+
+  pythonImportsCheck = [ "wagtail" ];
 
   meta = with lib; {
-    description = "A Django content management system focused on flexibility and user experience";
+    description = "Django content management system focused on flexibility and user experience";
+    mainProgram = "wagtail";
     homepage = "https://github.com/wagtail/wagtail";
     changelog = "https://github.com/wagtail/wagtail/blob/v${version}/CHANGELOG.txt";
     license = licenses.bsd3;

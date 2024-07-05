@@ -10,18 +10,18 @@
 , python3
 , which
 , zopfli
-, noto-fonts-emoji
+, noto-fonts-color-emoji
 }:
 
 let
-  version = "14.1.2";
+  version = "15.0.2";
 
   twemojiSrc = fetchFromGitHub {
     name = "twemoji";
     owner = "jdecked";
     repo = "twemoji";
     rev = "v${version}";
-    sha256 = "sha256-UQ4PwO4D1kw7JOMf6xSaRBfT822KwrvWBPDmaQjkRVQ=";
+    hash = "sha256-FLOqXDpSFyClBlG5u3IRL0EKeu1mckCfRizJh++IWxo=";
   };
 
   pythonEnv =
@@ -33,15 +33,15 @@ stdenv.mkDerivation rec {
   inherit version;
 
   srcs = [
-    noto-fonts-emoji.src
+    noto-fonts-color-emoji.src
     twemojiSrc
   ];
 
-  sourceRoot = noto-fonts-emoji.src.name;
+  sourceRoot = noto-fonts-color-emoji.src.name;
 
   postUnpack = ''
     chmod -R +w ${twemojiSrc.name}
-    mv ${twemojiSrc.name} ${noto-fonts-emoji.src.name}
+    mv ${twemojiSrc.name} ${noto-fonts-color-emoji.src.name}
   '';
 
   nativeBuildInputs = [
@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
       "s#http://scripts.sil.org/OFL#http://creativecommons.org/licenses/by/4.0/#"
     ];
   in ''
-    ${noto-fonts-emoji.postPatch}
+    ${noto-fonts-color-emoji.postPatch}
 
     sed '${templateSubstitutions}' NotoColorEmoji.tmpl.ttx.tmpl > TwitterColorEmoji.tmpl.ttx.tmpl
     pushd ${twemojiSrc.name}/assets/72x72/

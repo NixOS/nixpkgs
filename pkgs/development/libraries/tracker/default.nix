@@ -1,15 +1,15 @@
 { stdenv
 , lib
 , fetchurl
-, fetchpatch
 , gettext
 , meson
+, mesonEmulatorHook
 , ninja
 , pkg-config
 , asciidoc
 , gobject-introspection
 , buildPackages
-, withIntrospection ? stdenv.hostPlatform.emulatorAvailable buildPackages
+, withIntrospection ? lib.meta.availableOn stdenv.hostPlatform gobject-introspection && stdenv.hostPlatform.emulatorAvailable buildPackages
 , vala
 , python3
 , gi-docgen
@@ -25,31 +25,23 @@
 , libsoup
 , libsoup_3
 , json-glib
+, avahi
 , systemd
 , dbus
 , writeText
+, testers
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tracker";
-  version = "3.5.1";
+  version = "3.7.3";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "+XLVCse6/czxE7HrmdyuNUBGhameVb/vFvOsg7Tel00=";
+    url = with finalAttrs; "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    hash = "sha256-qz1KUJN+BMXteEb227mZ4pCYGUAvOJylku5rd90o0fk=";
   };
-
-  patches = [
-    # Backport sqlite-3.42.0 compatibility:
-    #   https://gitlab.gnome.org/GNOME/tracker/-/merge_requests/600
-    (fetchpatch {
-      name = "sqlite-3.42.0.patch";
-      url = "https://gitlab.gnome.org/GNOME/tracker/-/commit/4cbbd1773a7367492fa3b3e3804839654e18a12a.patch";
-      hash = "sha256-w5D9I0P1DdyILhpjslh6ifojmlUiBoeFnxHPIr0rO3s=";
-    })
-  ];
 
   strictDeps = true;
 
@@ -67,10 +59,12 @@ stdenv.mkDerivation rec {
     wrapGAppsNoGuiHook
     gi-docgen
     graphviz
-    (python3.pythonForBuild.withPackages (p: [ p.pygobject3 ]))
+    (python3.pythonOnBuildForHost.withPackages (p: [ p.pygobject3 ]))
   ] ++ lib.optionals withIntrospection [
     gobject-introspection
     vala
+  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    mesonEmulatorHook
   ];
 
   buildInputs = [
@@ -82,6 +76,7 @@ stdenv.mkDerivation rec {
     libsoup_3
     libuuid
     json-glib
+    avahi
     libstemmer
     dbus
   ] ++ lib.optionals stdenv.isLinux [
@@ -170,15 +165,20 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = finalAttrs.pname;
+    };
+    tests.pkg-config = testers.hasPkgConfigModules {
+      package = finalAttrs.finalPackage;
     };
   };
 
   meta = with lib; {
-    homepage = "https://wiki.gnome.org/Projects/Tracker";
+    homepage = "https://tracker.gnome.org/";
     description = "Desktop-neutral user information store, search tool and indexer";
+    mainProgram = "tracker3";
     maintainers = teams.gnome.members;
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
+    pkgConfigModules = [ "tracker-sparql-3.0" "tracker-testutils-3.0" ];
   };
-}
+})

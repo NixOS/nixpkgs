@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, mfcj6510dwlpr, makeWrapper}:
+{ lib, stdenv, fetchurl, mfcj6510dwlpr, makeWrapper, bash }:
 
 stdenv.mkDerivation rec {
   pname = "mfcj6510dw-cupswrapper";
@@ -10,15 +10,15 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ mfcj6510dwlpr ];
+  buildInputs = [
+    bash # shebang
+  ];
 
-  buildPhase = ''
-    cd brcupsconfig
-    make all
-    cd ..
-    '';
+  makeFlags = [ "-C" "brcupsconfig" "all" ];
 
   installPhase = ''
+    runHook preInstall
+
     TARGETFOLDER=$out/opt/brother/Printers/mfcj6510dw/cupswrapper
     mkdir -p $TARGETFOLDER
     cp PPD/brother_mfcj6510dw_printer_en.ppd $TARGETFOLDER
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     cp scripts/cupswrappermfcj6510dw $TARGETFOLDER
     sed -i -e '26,304d' $TARGETFOLDER/cupswrappermfcj6510dw
     substituteInPlace $TARGETFOLDER/cupswrappermfcj6510dw \
-      --replace "\$ppd_file_name" "$TARGETFOLDER/brother_mfcj6510dw_printer_en.ppd"
+      --replace-fail "\$ppd_file_name" "$TARGETFOLDER/brother_mfcj6510dw_printer_en.ppd"
 
     CPUSFILTERFOLDER=$out/lib/cups/filter
     mkdir -p $TARGETFOLDER $CPUSFILTERFOLDER
@@ -37,27 +37,24 @@ stdenv.mkDerivation rec {
     #sed -i -e '33,40d' $CPUSFILTERFOLDER/brother_lpdwrapper_mfcj6510dw
     #sed -i -e '34,35d' $CPUSFILTERFOLDER/brother_lpdwrapper_mfcj6510dw
     #substituteInPlace $CPUSFILTERFOLDER/brother_lpdwrapper_mfcj6510dw \
-    #  --replace "/opt/brother/$``{device_model``}/$``{printer_model``}/lpd/filter$``{printer_model``}" \
+    #  --replace-fail "/opt/brother/$``{device_model``}/$``{printer_model``}/lpd/filter$``{printer_model``}" \
     #    "${mfcj6510dwlpr}/opt/brother/Printers/mfcj6510dw/lpd/filtermfcj6510dw" \
-    #  --replace "/opt/brother/Printers/$``{printer_model``}/inf/br$``{printer_model``}rc" \
+    #  --replace-fail "/opt/brother/Printers/$``{printer_model``}/inf/br$``{printer_model``}rc" \
     #    "${mfcj6510dwlpr}/opt/brother/Printers/mfcj6510dw/inf/brmfcj6510dwrc" \
-    #  --replace "/opt/brother/$``{device_model``}/$``{printer_model``}/cupswrapper/brcupsconfpt1" \
+    #  --replace-fail "/opt/brother/$``{device_model``}/$``{printer_model``}/cupswrapper/brcupsconfpt1" \
     #    "$out/opt/brother/Printers/mfcj6510dw/cupswrapper/brcupsconfpt1" \
-    #  --replace "/usr/share/cups/model/Brother/brother_" "$out/opt/brother/Printers/mfcj6510dw/cupswrapper/brother_"
+    #  --replace-fail "/usr/share/cups/model/Brother/brother_" "$out/opt/brother/Printers/mfcj6510dw/cupswrapper/brother_"
     #substituteInPlace $CPUSFILTERFOLDER/brother_lpdwrapper_mfcj6510dw \
-    #  --replace "$``{printer_model``}" "mfcj6510dw" \
-    #  --replace "$``{printer_name``}" "MFCJ6510DW"
-    '';
+    #  --replace-fail "$``{printer_model``}" "mfcj6510dw" \
+    #  --replace-fail "$``{printer_name``}" "MFCJ6510DW"
 
-  cleanPhase = ''
-    cd brcupsconfpt1
-    make clean
-    '';
+    runHook postInstall
+  '';
 
   meta = with lib; {
     homepage = "http://www.brother.com/";
     description = "Brother MFC-J6510DW CUPS wrapper driver";
-    license = with licenses; gpl2;
+    license = with licenses; gpl2Plus;
     platforms = with platforms; linux;
     downloadPage = "http://support.brother.com/g/b/downloadlist.aspx?c=us&lang=en&prod=mfcj6510dw_all&os=128";
     maintainers = with maintainers; [ ramkromberg ];

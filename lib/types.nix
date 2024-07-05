@@ -15,6 +15,7 @@ let
     isList
     isString
     isStorePath
+    throwIf
     toDerivation
     toList
     ;
@@ -65,6 +66,11 @@ let
     fixupOptionType
     mergeOptionDecls
     ;
+
+  inAttrPosSuffix = v: name:
+    let pos = builtins.unsafeGetAttrPos name v; in
+    if pos == null then "" else " at ${pos.file}:${toString pos.line}:${toString pos.column}";
+
   outer_types =
 rec {
   isType = type: x: (x._type or "") == type;
@@ -112,9 +118,14 @@ rec {
     , # Description of the type, defined recursively by embedding the wrapped type if any.
       description ? null
       # A hint for whether or not this description needs parentheses. Possible values:
-      #  - "noun": a simple noun phrase such as "positive integer"
-      #  - "conjunction": a phrase with a potentially ambiguous "or" connective.
+      #  - "noun": a noun phrase
+      #    Example description: "positive integer",
+      #  - "conjunction": a phrase with a potentially ambiguous "or" connective
+      #    Example description: "int or string"
       #  - "composite": a phrase with an "of" connective
+      #    Example description: "list of string"
+      #  - "nonRestrictiveClause": a noun followed by a comma and a clause
+      #    Example description: "positive integer, meaning >0"
       # See the `optionDescriptionPhrase` function.
     , descriptionClass ? null
     , # DO NOT USE WITHOUT KNOWING WHAT YOU ARE DOING!
@@ -146,7 +157,7 @@ rec {
       # If it doesn't, this should be {}
       # This may be used when a value is required for `mkIf false`. This allows the extra laziness in e.g. `lazyAttrsOf`.
       emptyValue ? {}
-    , # Return a flat list of sub-options.  Used to generate
+    , # Return a flat attrset of sub-options.  Used to generate
       # documentation.
       getSubOptions ? prefix: {}
     , # List of modules if any, or null if none.
@@ -275,6 +286,22 @@ rec {
       merge = mergeEqualOption;
     };
 
+    boolByOr = mkOptionType {
+      name = "boolByOr";
+      description = "boolean (merged using or)";
+      descriptionClass = "noun";
+      check = isBool;
+      merge = loc: defs:
+        foldl'
+          (result: def:
+            # Under the assumption that .check always runs before merge, we can assume that all defs.*.value
+            # have been forced, and therefore we assume we don't introduce order-dependent strictness here
+            result || def.value
+          )
+          false
+          defs;
+    };
+
     int = mkOptionType {
       name = "int";
       description = "signed integer";
@@ -306,25 +333,36 @@ rec {
           "signedInt${toString bit}" "${toString bit} bit signed integer";
 
       in {
-        /* An int with a fixed range.
-        *
-        * Example:
-        *   (ints.between 0 100).check (-1)
-        *   => false
-        *   (ints.between 0 100).check (101)
-        *   => false
-        *   (ints.between 0 0).check 0
-        *   => true
+        # TODO: Deduplicate with docs in nixos/doc/manual/development/option-types.section.md
+        /**
+          An int with a fixed range.
+
+          # Example
+          :::{.example}
+          ## `lib.types.ints.between` usage example
+
+          ```nix
+          (ints.between 0 100).check (-1)
+          => false
+          (ints.between 0 100).check (101)
+          => false
+          (ints.between 0 0).check 0
+          => true
+          ```
+
+          :::
         */
         inherit between;
 
         unsigned = addCheck types.int (x: x >= 0) // {
           name = "unsignedInt";
           description = "unsigned integer, meaning >=0";
+          descriptionClass = "nonRestrictiveClause";
         };
         positive = addCheck types.int (x: x > 0) // {
           name = "positiveInt";
           description = "positive integer, meaning >0";
+          descriptionClass = "nonRestrictiveClause";
         };
         u8 = unsign 8 256;
         u16 = unsign 16 65536;
@@ -366,10 +404,12 @@ rec {
       nonnegative = addCheck number (x: x >= 0) // {
         name = "numberNonnegative";
         description = "nonnegative integer or floating point number, meaning >=0";
+        descriptionClass = "nonRestrictiveClause";
       };
       positive = addCheck number (x: x > 0) // {
         name = "numberPositive";
         description = "positive integer or floating point number, meaning >0";
+        descriptionClass = "nonRestrictiveClause";
       };
     };
 
@@ -436,14 +476,17 @@ rec {
 
     # Deprecated; should not be used because it quietly concatenates
     # strings, which is usually not what you want.
-    string = separatedString "" // {
-      name = "string";
-      deprecationMessage = "See https://github.com/NixOS/nixpkgs/pull/66346 for better alternative types.";
-    };
+    # We use a lib.warn because `deprecationMessage` doesn't trigger in nested types such as `attrsOf string`
+    string = lib.warn
+      "The type `types.string` is deprecated. See https://github.com/NixOS/nixpkgs/pull/66346 for better alternative types."
+      (separatedString "" // {
+        name = "string";
+      });
 
     passwdEntry = entryType: addCheck entryType (str: !(hasInfix ":" str || hasInfix "\n" str)) // {
       name = "passwdEntry ${entryType.name}";
       description = "${optionDescriptionPhrase (class: class == "noun") entryType}, not containing newlines or colons";
+      descriptionClass = "nonRestrictiveClause";
     };
 
     attrs = mkOptionType {
@@ -528,6 +571,7 @@ rec {
       in list // {
         description = "non-empty ${optionDescriptionPhrase (class: class == "noun") list}";
         emptyValue = { }; # no .value attr, meaning unset
+        substSubModules = m: nonEmptyListOf (elemType.substSubModules m);
       };
 
     attrsOf = elemType: mkOptionType rec {
@@ -584,23 +628,106 @@ rec {
       nestedTypes.elemType = elemType;
     };
 
-    # Value of given type but with no merging (i.e. `uniq list`s are not concatenated).
-    uniq = elemType: mkOptionType rec {
-      name = "uniq";
-      inherit (elemType) description descriptionClass check;
-      merge = mergeOneOption;
-      emptyValue = elemType.emptyValue;
-      getSubOptions = elemType.getSubOptions;
-      getSubModules = elemType.getSubModules;
-      substSubModules = m: uniq (elemType.substSubModules m);
-      functor = (defaultFunctor name) // { wrapped = elemType; };
-      nestedTypes.elemType = elemType;
-    };
+    attrTag = tags:
+      let tags_ = tags; in
+      let
+        tags =
+          mapAttrs
+            (n: opt:
+              builtins.addErrorContext "while checking that attrTag tag ${lib.strings.escapeNixIdentifier n} is an option with a type${inAttrPosSuffix tags_ n}" (
+                throwIf (opt._type or null != "option")
+                  "In attrTag, each tag value must be an option, but tag ${lib.strings.escapeNixIdentifier n} ${
+                    if opt?_type then
+                      if opt._type == "option-type"
+                      then "was a bare type, not wrapped in mkOption."
+                      else "was of type ${lib.strings.escapeNixString opt._type}."
+                    else "was not."}"
+                opt // {
+                  declarations = opt.declarations or (
+                    let pos = builtins.unsafeGetAttrPos n tags_;
+                    in if pos == null then [] else [ pos.file ]
+                  );
+                  declarationPositions = opt.declarationPositions or (
+                    let pos = builtins.unsafeGetAttrPos n tags_;
+                    in if pos == null then [] else [ pos ]
+                  );
+                }
+              ))
+            tags_;
+        choicesStr = concatMapStringsSep ", " lib.strings.escapeNixIdentifier (attrNames tags);
+      in
+      mkOptionType {
+        name = "attrTag";
+        description = "attribute-tagged union";
+        descriptionClass = "noun";
+        getSubOptions = prefix:
+          mapAttrs
+            (tagName: tagOption: {
+              "${lib.showOption prefix}" =
+                tagOption // {
+                  loc = prefix ++ [ tagName ];
+                };
+            })
+            tags;
+        check = v: isAttrs v && length (attrNames v) == 1 && tags?${head (attrNames v)};
+        merge = loc: defs:
+          let
+            choice = head (attrNames (head defs).value);
+            checkedValueDefs = map
+              (def:
+                assert (length (attrNames def.value)) == 1;
+                if (head (attrNames def.value)) != choice
+                then throw "The option `${showOption loc}` is defined both as `${choice}` and `${head (attrNames def.value)}`, in ${showFiles (getFiles defs)}."
+                else { inherit (def) file; value = def.value.${choice}; })
+              defs;
+          in
+            if tags?${choice}
+            then
+              { ${choice} =
+                  (lib.modules.evalOptionValue
+                    (loc ++ [choice])
+                    tags.${choice}
+                    checkedValueDefs
+                  ).value;
+              }
+            else throw "The option `${showOption loc}` is defined as ${lib.strings.escapeNixIdentifier choice}, but ${lib.strings.escapeNixIdentifier choice} is not among the valid choices (${choicesStr}). Value ${choice} was defined in ${showFiles (getFiles defs)}.";
+        nestedTypes = tags;
+        functor = defaultFunctor "attrTag" // {
+          type = { tags, ... }: types.attrTag tags;
+          payload = { inherit tags; };
+          binOp =
+            let
+              # Add metadata in the format that submodules work with
+              wrapOptionDecl =
+                option: { options = option; _file = "<attrTag {...}>"; pos = null; };
+            in
+            a: b: {
+              tags = a.tags // b.tags //
+                mapAttrs
+                  (tagName: bOpt:
+                    lib.mergeOptionDecls
+                      # FIXME: loc is not accurate; should include prefix
+                      #        Fortunately, it's only used for error messages, where a "relative" location is kinda ok.
+                      #        It is also returned though, but use of the attribute seems rare?
+                      [tagName]
+                      [ (wrapOptionDecl a.tags.${tagName}) (wrapOptionDecl bOpt) ]
+                    // {
+                      # mergeOptionDecls is not idempotent in these attrs:
+                      declarations = a.tags.${tagName}.declarations ++ bOpt.declarations;
+                      declarationPositions = a.tags.${tagName}.declarationPositions ++ bOpt.declarationPositions;
+                    }
+                  )
+                  (builtins.intersectAttrs a.tags b.tags);
+          };
+        };
+      };
+
+    uniq = unique { message = ""; };
 
     unique = { message }: type: mkOptionType rec {
       name = "unique";
       inherit (type) description descriptionClass check;
-      merge = mergeUniqueOption { inherit message; };
+      merge = mergeUniqueOption { inherit message; inherit (type) merge; };
       emptyValue = type.emptyValue;
       getSubOptions = type.getSubOptions;
       getSubModules = type.getSubModules;
@@ -851,7 +978,13 @@ rec {
     # Either value of type `t1` or `t2`.
     either = t1: t2: mkOptionType rec {
       name = "either";
-      description = "${optionDescriptionPhrase (class: class == "noun" || class == "conjunction") t1} or ${optionDescriptionPhrase (class: class == "noun" || class == "conjunction" || class == "composite") t2}";
+      description =
+        if t1.descriptionClass or null == "nonRestrictiveClause"
+        then
+          # Plain, but add comma
+          "${t1.description}, or ${optionDescriptionPhrase (class: class == "noun" || class == "conjunction") t2}"
+        else
+          "${optionDescriptionPhrase (class: class == "noun" || class == "conjunction") t1} or ${optionDescriptionPhrase (class: class == "noun" || class == "conjunction" || class == "composite") t2}";
       descriptionClass = "conjunction";
       check = x: t1.check x || t2.check x;
       merge = loc: defs:

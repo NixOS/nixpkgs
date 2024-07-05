@@ -30,31 +30,24 @@
     enable = true;
   };
 
-  # Theme calamares with GNOME theme
-  qt = {
-    enable = true;
-    platformTheme = "gnome";
-  };
-
   # Fix scaling for calamares on wayland
   environment.variables = {
     QT_QPA_PLATFORM = "$([[ $XDG_SESSION_TYPE = \"wayland\" ]] && echo \"wayland\")";
   };
 
-  services.xserver.displayManager = {
-    gdm = {
-      enable = true;
-      # autoSuspend makes the machine automatically suspend after inactivity.
-      # It's possible someone could/try to ssh'd into the machine and obviously
-      # have issues because it's inactive.
-      # See:
-      # * https://github.com/NixOS/nixpkgs/pull/63790
-      # * https://gitlab.gnome.org/GNOME/gnome-control-center/issues/22
-      autoSuspend = false;
-    };
-    autoLogin = {
-      enable = true;
-      user = "nixos";
-    };
+  services.xserver.displayManager.gdm = {
+    enable = true;
+    # autoSuspend makes the machine automatically suspend after inactivity.
+    # It's possible someone could/try to ssh'd into the machine and obviously
+    # have issues because it's inactive.
+    # See:
+    # * https://github.com/NixOS/nixpkgs/pull/63790
+    # * https://gitlab.gnome.org/GNOME/gnome-control-center/issues/22
+    autoSuspend = false;
+  };
+
+  services.displayManager.autoLogin = {
+    enable = true;
+    user = "nixos";
   };
 }

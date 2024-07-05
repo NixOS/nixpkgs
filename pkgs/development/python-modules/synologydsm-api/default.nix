@@ -1,19 +1,21 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, fetchpatch
-, poetry-core
-, requests
-, urllib3
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  fetchpatch,
+  poetry-core,
+  pythonRelaxDepsHook,
+  requests,
+  urllib3,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "synologydsm-api";
   version = "1.0.2";
 
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -21,7 +23,7 @@ buildPythonPackage rec {
     owner = "hacf-fr";
     repo = "synologydsm-api";
     rev = "v${version}";
-    sha256 = "0gyahf1x6i6j9pslh1y3pyh3si5jvxb06r1w761b9gsxyk14y1si";
+    hash = "sha256-UQdPwvRdv7SCOTxkA1bfskQ9oL/DB0j1TdJE04ODyj8=";
   };
 
   patches = [
@@ -29,27 +31,29 @@ buildPythonPackage rec {
     (fetchpatch {
       name = "switch-to-poetry-core.patch";
       url = "https://github.com/hacf-fr/synologydsm-api/commit/f1ea2be927388bdff6d43d09027b82a854635e34.patch";
-      sha256 = "120pdgp2i4ds6y3rf9j372f9zdcf4y8rsgl1xjbkgdhkp76bkkgr";
+      hash = "sha256-+c25zLkTtjeX7IE+nZEnjrWfnDhDJpeHN7qRKO5rF4g=";
     })
   ];
 
   nativeBuildInputs = [
     poetry-core
+    pythonRelaxDepsHook
   ];
+
+  pythonRelaxDeps = [ "urllib3" ];
 
   propagatedBuildInputs = [
     requests
     urllib3
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "synology_dsm" ];
 
   meta = with lib; {
     description = "Python API for communication with Synology DSM";
+    mainProgram = "synologydsm-api";
     homepage = "https://github.com/hacf-fr/synologydsm-api";
     license = licenses.mit;
     maintainers = with maintainers; [ dotlambda ];

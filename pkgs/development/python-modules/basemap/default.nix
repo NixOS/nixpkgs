@@ -1,32 +1,34 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonAtLeast
-, basemap-data
-, cython
-, geos
-, numpy
-, matplotlib
-, pillow
-, pyproj
-, pyshp
-, python
-, pythonRelaxDepsHook
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonAtLeast,
+  basemap-data,
+  cython,
+  geos,
+  numpy,
+  matplotlib,
+  pillow,
+  pyproj,
+  pyshp,
+  python,
+  pythonRelaxDepsHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "basemap";
-  version = "1.3.7";
+  version = "1.4.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "matplotlib";
     repo = "basemap";
     rev = "refs/tags/v${version}";
-    hash = "sha256-oWKCUARTMCiXDp4SCOOrOUQLUDU4DIzwsmUXCXoDvx0=";
+    hash = "sha256-0rTGsphwLy2yGvhO7bcmFqdgysIXXkDBmURwRVw3ZHY=";
   };
 
-  sourceRoot = "source/packages/basemap";
+  sourceRoot = "${src.name}/packages/basemap";
 
   nativeBuildInputs = [
     cython
@@ -69,6 +71,9 @@ buildPythonPackage rec {
       http://matplotlib.github.com/basemap/users/examples.html for examples of what it can do.
     '';
     maintainers = with maintainers; [ ];
-    license = with licenses; [ mit lgpl21 ];
+    license = with licenses; [
+      mit
+      lgpl21
+    ];
   };
 }

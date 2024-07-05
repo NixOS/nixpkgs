@@ -26,5 +26,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     license = licenses.gpl3;
     maintainers = with maintainers; [ bendlas ];
+    mainProgram = "atinout";
   };
 }

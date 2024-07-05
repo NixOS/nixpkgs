@@ -18,13 +18,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "tree";
-  version = "2.1.1";
+  version = "2.1.2";
 
   src = fetchFromGitLab {
     owner = "OldManProgrammer";
     repo = "unix-tree";
     rev = version;
-    sha256 = "sha256-aPz1ROUeAKDmMjEtAaL2AguF54/CbIYWpL4Qovv2ftQ=";
+    sha256 = "sha256-1iBGbzNwjUX7kqkk6XzKISO2e6b05MBH08XgIwR+nyI=";
   };
 
   preConfigure = ''
@@ -37,15 +37,16 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    homepage = "http://mama.indstate.edu/users/ice/tree/";
+    homepage = "https://oldmanprogrammer.net/source.php?dir=projects/tree";
     description = "Command to produce a depth indented directory listing";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     longDescription = ''
       Tree is a recursive directory listing command that produces a
       depth indented listing of files, which is colorized ala dircolors if
       the LS_COLORS environment variable is set and output is to tty.
     '';
     platforms = platforms.all;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ nickcao ];
+    mainProgram = "tree";
   };
 }

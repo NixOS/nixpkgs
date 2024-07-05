@@ -9,7 +9,6 @@ buildDunePackage {
   pname = "conduit-mirage";
 
   inherit (conduit-lwt) version src;
-  duneVersion = "3";
 
   nativeBuildInputs = [ ppx_sexp_conv ];
 
@@ -21,6 +20,6 @@ buildDunePackage {
   ];
 
   meta = conduit-lwt.meta // {
-    description = "A network connection establishment library for MirageOS";
+    description = "Network connection establishment library for MirageOS";
   };
 }

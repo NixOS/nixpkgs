@@ -1,19 +1,29 @@
 { stdenv, fetchzip, jam, unzip, libX11, libXxf86vm, libXrandr, libXinerama
 , libXrender, libXext, libtiff, libjpeg, libpng, libXScrnSaver, writeText
-, libXdmcp, libXau, lib, openssl }:
+, libXdmcp, libXau, lib, openssl
+, buildPackages, substituteAll, writeScript
+}:
 
 stdenv.mkDerivation rec {
   pname = "argyllcms";
-  version = "2.3.1";
+  version = "3.2.0";
 
   src = fetchzip {
     # Kind of flacky URL, it was reaturning 406 and inconsistent binaries for a
     # while on me. It might be good to find a mirror
     url = "https://www.argyllcms.com/Argyll_V${version}_src.zip";
-    sha256 = "sha256-XWsubjdD1tg0o7x/aoAalemAChehWkwh4fkP2WRvhAw=";
+    hash = "sha256-t2dvbYFHEz9IUYpcM5HqDju4ugHrD7seG3QxumspxDg=";
   };
 
   nativeBuildInputs = [ jam unzip ];
+
+  patches = lib.optional (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) (
+    # Build process generates files by compiling and then invoking an executable.
+    substituteAll {
+      src = ./jam-cross.patch;
+      emulator = stdenv.hostPlatform.emulator buildPackages;
+    }
+  );
 
   postPatch = lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
     substituteInPlace Jambase \
@@ -120,8 +130,22 @@ stdenv.mkDerivation rec {
 
   '';
 
+  passthru = {
+    updateScript = writeScript "update-argyllcms" ''
+      #!/usr/bin/env nix-shell
+      #!nix-shell -i bash -p curl pcre common-updater-scripts
+
+      set -eu -o pipefail
+
+      # Expect the text in format of 'Current Version 3.0.1 (19th October 2023)'
+      new_version="$(curl -s https://www.argyllcms.com/ |
+          pcregrep -o1 '>Current Version ([0-9.]+) ')"
+      update-source-version ${pname} "$new_version"
+    '';
+  };
+
   meta = with lib; {
-    homepage = "http://www.argyllcms.com";
+    homepage = "https://www.argyllcms.com/";
     description = "Color management system (compatible with ICC)";
     license = licenses.gpl3;
     maintainers = [];

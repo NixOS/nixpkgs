@@ -5,11 +5,11 @@
 
 let
   pname = "mockoon";
-  version = "3.0.0";
+  version = "6.1.0";
 
   src = fetchurl {
     url = "https://github.com/mockoon/mockoon/releases/download/v${version}/mockoon-${version}.AppImage";
-    hash = "sha256-YGcD/8h21fUoBEAcBVI5jo0UMCKdVRdC1zxDIrHjU+8=";
+    hash = "sha256-harZU3TTIzfJoY/jAQI0dm7YSOr24Y9xk9L5ZaBLdD8=";
   };
 
   appimageContents = appimageTools.extractType2 {
@@ -21,8 +21,6 @@ appimageTools.wrapType2 {
   inherit pname version src;
 
   extraInstallCommands = ''
-    mv $out/bin/${pname}-${version} $out/bin/${pname}
-
     install -Dm 444 ${appimageContents}/${pname}.desktop -t $out/share/applications
     cp -r ${appimageContents}/usr/share/icons $out/share
 
@@ -31,10 +29,11 @@ appimageTools.wrapType2 {
   '';
 
   meta = with lib; {
-    description = "The easiest and quickest way to run mock APIs locally";
+    description = "Easiest and quickest way to run mock APIs locally";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     homepage = "https://mockoon.com";
     license = licenses.mit;
     maintainers = with maintainers; [ dit7ya ];
+    mainProgram = "mockoon";
   };
 }

@@ -1,5 +1,6 @@
-{ lib, stdenv, fetchurl, fetchpatch, buildPackages, pcre, pkg-config, libsepol
-, enablePython ? !stdenv.hostPlatform.isStatic, swig ? null, python3 ? null
+{ lib, stdenv, fetchurl, buildPackages, pcre2, pkg-config, libsepol
+, enablePython ? !stdenv.hostPlatform.isStatic
+, swig ? null, python3 ? null, python3Packages
 , fts
 }:
 
@@ -9,14 +10,14 @@ with lib;
 
 stdenv.mkDerivation rec {
   pname = "libselinux";
-  version = "3.3";
+  version = "3.6";
   inherit (libsepol) se_url;
 
   outputs = [ "bin" "out" "dev" "man" ] ++ optional enablePython "py";
 
   src = fetchurl {
     url = "${se_url}/${version}/libselinux-${version}.tar.gz";
-    sha256 = "0mvh793g7fg6wb6zqhkdyrv80x6k84ypqwi8ii89c91xcckyxzdc";
+    hash = "sha256-uk4O80snDnZypeXxtSP+K+qzpAuzPZOJ9K06hyjyG1I=";
   };
 
   patches = [
@@ -38,16 +39,26 @@ stdenv.mkDerivation rec {
             -i 'a/libselinux/*' --strip 1 <$TMPDIR/patch >"$out"
       '';
     })
+
+    (fetchurl {
+      url = "https://git.yoctoproject.org/meta-selinux/plain/recipes-security/selinux/libselinux/0003-libselinux-restore-drop-the-obsolete-LSF-transitiona.patch?id=62b9c816a5000dc01b28e78213bde26b58cbca9d";
+      sha256 = "sha256-RiEUibLVzfiRU6N/J187Cs1iPAih87gCZrlyRVI2abU=";
+    })
   ];
 
-  nativeBuildInputs = [ pkg-config python3 ] ++ optionals enablePython [ swig ];
-  buildInputs = [ libsepol pcre fts ] ++ optionals enablePython [ python3 ];
+  nativeBuildInputs = [ pkg-config python3 ] ++ optionals enablePython [
+    python3Packages.pip
+    python3Packages.setuptools
+    python3Packages.wheel
+    swig
+  ];
+  buildInputs = [ libsepol pcre2 fts ] ++ optionals enablePython [ python3 ];
 
   # drop fortify here since package uses it by default, leading to compile error:
   # command-line>:0:0: error: "_FORTIFY_SOURCE" redefined [-Werror]
   hardeningDisable = [ "fortify" ];
 
-  env.NIX_CFLAGS_COMPILE = "-Wno-error";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error -D_FILE_OFFSET_BITS=64";
 
   makeFlags = [
     "PREFIX=$(out)"
@@ -61,11 +72,14 @@ stdenv.mkDerivation rec {
 
     "LIBSEPOLA=${lib.getLib libsepol}/lib/libsepol.a"
     "ARCH=${stdenv.hostPlatform.linuxArch}"
+  ] ++ optionals (fts != null) [
+    "FTS_LDLIBS=-lfts"
   ] ++ optionals stdenv.hostPlatform.isStatic [
     "DISABLE_SHARED=y"
   ] ++ optionals enablePython [
-    "PYTHON=${python3.pythonForBuild.interpreter}"
+    "PYTHON=${python3.pythonOnBuildForHost.interpreter}"
     "PYTHONLIBDIR=$(py)/${python3.sitePackages}"
+    "PYTHON_SETUP_ARGS=--no-build-isolation"
   ];
 
   postPatch = lib.optionalString stdenv.hostPlatform.isMusl ''

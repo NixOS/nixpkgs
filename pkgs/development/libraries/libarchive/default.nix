@@ -1,12 +1,12 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , acl
 , attr
 , autoreconfHook
 , bzip2
 , e2fsprogs
+, glibcLocalesUtf8
 , lzo
 , openssl
 , pkg-config
@@ -23,22 +23,18 @@
 , cmake
 , nix
 , samba
-, buildPackages
 }:
 
-let
-  autoreconfHook = buildPackages.autoreconfHook269;
-in
 assert xarSupport -> libxml2 != null;
-(stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libarchive";
-  version = "3.6.2";
+  version = "3.7.4";
 
   src = fetchFromGitHub {
     owner = "libarchive";
     repo = "libarchive";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-wQbA6vlXH8pnpY7LJLkjrRFEBpcaPR1SqxnK71UVwxg=";
+    hash = "sha256-czNKXHoEn1x4deNErnqp/NZfCglF1CxNoLtZ8tcl394=";
   };
 
   outputs = [ "out" "lib" "dev" ];
@@ -54,19 +50,24 @@ assert xarSupport -> libxml2 != null;
       # access-time-related tests flakey on some systems
       "cpio/test/test_option_a.c"
       "cpio/test/test_option_t.c"
+    ] ++ lib.optionals (stdenv.isAarch64 && stdenv.isLinux) [
+      # only on some aarch64-linux systems?
+      "cpio/test/test_basic.c"
+      "cpio/test/test_format_newc.c"
     ];
     removeTest = testPath: ''
-      substituteInPlace Makefile.am --replace "${testPath}" ""
+      substituteInPlace Makefile.am --replace-fail "${testPath}" ""
       rm "${testPath}"
     '';
   in ''
-    substituteInPlace Makefile.am --replace '/bin/pwd' "$(type -P pwd)"
+    substituteInPlace Makefile.am --replace-fail '/bin/pwd' "$(type -P pwd)"
 
     ${lib.concatStringsSep "\n" (map removeTest skipTestPaths)}
   '';
 
   nativeBuildInputs = [
     autoreconfHook
+    glibcLocalesUtf8 # test_I test requires an UTF-8 locale
     pkg-config
   ];
 
@@ -92,6 +93,11 @@ assert xarSupport -> libxml2 != null;
 
   # https://github.com/libarchive/libarchive/issues/1475
   doCheck = !stdenv.hostPlatform.isMusl;
+
+  preCheck = ''
+    # Need an UTF-8 locale for test_I test.
+    export LANG=en_US.UTF-8
+  '';
 
   preFixup = ''
     sed -i $lib/lib/libarchive.la \
@@ -119,16 +125,4 @@ assert xarSupport -> libxml2 != null;
   passthru.tests = {
     inherit cmake nix samba;
   };
-})).overrideAttrs(previousAttrs:
-  assert previousAttrs.version == "3.6.2";
-  lib.optionalAttrs stdenv.hostPlatform.isStatic {
-    patches = [
-      # fixes static linking; upstream in releases after 3.6.2
-      # https://github.com/libarchive/libarchive/pull/1825 merged upstream
-      (fetchpatch {
-        name = "001-only-add-iconv-to-pc-file-if-needed.patch";
-        url = "https://github.com/libarchive/libarchive/commit/1f35c466aaa9444335a1b854b0b7223b0d2346c2.patch";
-        hash = "sha256-lb+zwWSH6/MLUIROvu9I/hUjSbb2jOWO755WC/r+lbY=";
-      })
-    ];
-  })
+})

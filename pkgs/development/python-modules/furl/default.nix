@@ -1,15 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, flake8
-, orderedmultidict
-, pytestCheckHook
-, six
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  flake8,
+  orderedmultidict,
+  pytestCheckHook,
+  six,
 }:
 
 buildPythonPackage rec {
   pname = "furl";
   version = "2.1.3";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

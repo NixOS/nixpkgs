@@ -1,5 +1,5 @@
 { lib, fetchFromGitHub, cmake, curl, xorg, avahi, qtbase, mkDerivation,
-  openssl, wrapGAppsHook,
+  openssl, wrapGAppsHook3,
   avahiWithLibdnssdCompat ? avahi.override { withLibdnssdCompat = true; },
   fetchpatch
 }:
@@ -26,8 +26,13 @@ mkDerivation rec {
     })
   ];
 
+  CXXFLAGS = [
+    # error: 'uint8_t' is not a member of 'std'; did you mean 'wint_t'?
+    "-include cstdint"
+  ];
+
   buildInputs = [ curl xorg.libX11 xorg.libXext xorg.libXtst avahiWithLibdnssdCompat qtbase ];
-  nativeBuildInputs = [ cmake wrapGAppsHook ];
+  nativeBuildInputs = [ cmake wrapGAppsHook3 ];
 
   postFixup = ''
     substituteInPlace "$out/share/applications/barrier.desktop" --replace "Exec=barrier" "Exec=$out/bin/barrier"
@@ -49,5 +54,6 @@ mkDerivation rec {
     license = lib.licenses.gpl2;
     maintainers = [ lib.maintainers.phryneas ];
     platforms = lib.platforms.linux;
+    mainProgram = "barrier";
   };
 }

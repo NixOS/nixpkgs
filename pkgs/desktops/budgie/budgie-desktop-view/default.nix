@@ -9,18 +9,18 @@
 , ninja
 , pkg-config
 , vala
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "budgie-desktop-view";
-  version = "1.2.1";
+  version = "1.3";
 
   src = fetchFromGitHub {
     owner = "BuddiesOfBudgie";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-USsySJuDov2oe9UXyzACBAyYIRLKSXOMXdia8Ix/8TE=";
+    repo = "budgie-desktop-view";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-k6VfAGWvUarhBFnREasOvWH3M9uuT5SFUpMFmKo1fmE=";
   };
 
   nativeBuildInputs = [
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     vala
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -38,16 +38,14 @@ stdenv.mkDerivation rec {
     gtk3
   ];
 
-  preInstall = ''
-    substituteInPlace ../scripts/mesonPostInstall.sh --replace "update-desktop-database -q" "update-desktop-database $out/share/applications"
-  '';
+  mesonFlags = [ (lib.mesonBool "werror" false) ];
 
-  meta = with lib; {
-    description = "The official Budgie desktop icons application/implementation";
+  meta = {
+    description = "Official Budgie desktop icons application/implementation";
     homepage = "https://github.com/BuddiesOfBudgie/budgie-desktop-view";
     mainProgram = "org.buddiesofbudgie.budgie-desktop-view";
-    platforms = platforms.linux;
-    maintainers = [ maintainers.federicoschonborn ];
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.linux;
+    maintainers = lib.teams.budgie.members;
   };
-}
+})

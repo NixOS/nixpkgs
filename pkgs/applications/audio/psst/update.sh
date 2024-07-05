@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p nix wget nix-prefetch-github jq coreutils
+#!nix-shell -i bash -p wget nix-prefetch-github jq coreutils
 
 # shellcheck shell=bash
 
@@ -24,21 +24,20 @@ if [ -z "$rev" ]; then
     rev="$(wget -O- "${TOKEN_ARGS[@]}" "https://api.github.com/repos/jpochyla/psst/commits?per_page=1" | jq -r '.[0].sha')"
 fi
 
-version="unstable-$(date +%F)"
+date="$(wget -O- "${TOKEN_ARGS[@]}" "https://api.github.com/repos/jpochyla/psst/commits/$rev" | jq -r '.commit.author.date' | cut -dT -f1)"
+
+version="unstable-$date"
 
 # Sources
-src_hash=$(nix-prefetch-github jpochyla psst --rev "$rev" | jq -r .sha256)
+src_hash=$(nix-prefetch-github jpochyla psst --rev "$rev" | jq -r .hash)
 
 # Cargo.lock
 src="https://raw.githubusercontent.com/jpochyla/psst/$rev"
 wget "${TOKEN_ARGS[@]}" "$src/Cargo.lock" -O Cargo.lock
-
-# Use friendlier hashes
-src_hash=$(nix hash to-sri --type sha256 "$src_hash")
 
 sed -i -E -e "s#version = \".*\"#version = \"$version\"#" default.nix
 sed -i -E -e "s#rev = \".*\"#rev = \"$rev\"#" default.nix
 sed -i -E -e "s#hash = \".*\"#hash = \"$src_hash\"#" default.nix
 
 # Also update the git hash shown in the UI
-sed -i -E -e "s#GIT_VERSION = \".*\"#GIT_VERSION = \"$rev\"#" make-build-reproducible.patch
+sed -i -E -e "s#GIT_VERSION: \&str = \".*\"#GIT_VERSION: \&str = \"$rev\"#" make-build-reproducible.patch

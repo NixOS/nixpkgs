@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , cmake
 , gtest
 , pkg-config
@@ -19,6 +20,18 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [ gtest ];
+
+  # error: unsafe buffer access
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-unsafe-buffer-usage";
+
+  patches = [
+    # nvcc doesn't recognize the "gsl" attribute namespace (microsoft/onnxruntime#13573)
+    # only affects nvcc
+    (fetchpatch {
+      url = "https://raw.githubusercontent.com/microsoft/onnxruntime/4bfa69def85476b33ccfaf68cf070f3fb65d39f7/cmake/patches/gsl/1064.patch";
+      hash = "sha256-0jESA+VENWQms9HGE0jRiZZuWLJehBlbArxSaQbYOrM=";
+    })
+  ];
 
   doCheck = true;
 

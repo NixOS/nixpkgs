@@ -1,14 +1,124 @@
-# to run these tests:
-# nix-instantiate --eval --strict nixpkgs/lib/tests/misc.nix
-# if the resulting list is empty, all tests passed
-with import ../default.nix;
+/**
+  Nix evaluation tests for various lib functions.
+
+  Since these tests are implemented with Nix evaluation,
+  error checking is limited to what `builtins.tryEval` can detect,
+  which is `throw`'s and `abort`'s, without error messages.
+
+  If you need to test error messages or more complex evaluations, see
+  `lib/tests/modules.sh`, `lib/tests/sources.sh` or `lib/tests/filesystem.sh` as examples.
+
+  To run these tests:
+
+    [nixpkgs]$ nix-instantiate --eval --strict lib/tests/misc.nix
+
+  If the resulting list is empty, all tests passed.
+  Alternatively, to run all `lib` tests:
+
+    [nixpkgs]$ nix-build lib/tests/release.nix
+*/
 
 let
+  lib = import ../default.nix;
+
+  inherit (lib)
+    allUnique
+    and
+    attrNames
+    attrsets
+    attrsToList
+    bitAnd
+    bitOr
+    bitXor
+    boolToString
+    callPackagesWith
+    callPackageWith
+    cartesianProduct
+    cli
+    composeExtensions
+    composeManyExtensions
+    concatLines
+    concatMapAttrs
+    concatMapStrings
+    concatStrings
+    concatStringsSep
+    const
+    escapeXML
+    evalModules
+    filter
+    fix
+    fold
+    foldAttrs
+    foldl
+    foldl'
+    foldlAttrs
+    foldr
+    functionArgs
+    generators
+    genList
+    getExe
+    getExe'
+    groupBy
+    groupBy'
+    hasAttrByPath
+    hasInfix
+    id
+    ifilter0
+    isStorePath
+    lazyDerivation
+    length
+    lists
+    listToAttrs
+    makeExtensible
+    makeIncludePath
+    makeOverridable
+    mapAttrs
+    mapCartesianProduct
+    matchAttrs
+    mergeAttrs
+    meta
+    mod
+    nameValuePair
+    optionalDrvAttr
+    optionAttrSetToDocList
+    overrideExisting
+    packagesFromDirectoryRecursive
+    pipe
+    range
+    recursiveUpdateUntil
+    removePrefix
+    replicate
+    runTests
+    setFunctionArgs
+    showAttrPath
+    sort
+    sortOn
+    stringLength
+    strings
+    stringToCharacters
+    systems
+    tail
+    take
+    testAllTrue
+    toBaseDigits
+    toHexString
+    toInt
+    toIntBase10
+    toShellVars
+    types
+    updateManyAttrsByPath
+    versions
+    xor
+    ;
+
   testingThrow = expr: {
     expr = (builtins.tryEval (builtins.seq expr "didn't throw"));
     expected = { success = false; value = false; };
   };
-  testingDeepThrow = expr: testingThrow (builtins.deepSeq expr expr);
+  testingEval = expr: {
+    expr = (builtins.tryEval expr).success;
+    expected = true;
+  };
 
   testSanitizeDerivationName = { name, expected }:
   let
@@ -26,6 +136,36 @@ let
 in
 
 runTests {
+
+# CUSTOMIZATION
+
+  testFunctionArgsMakeOverridable = {
+    expr = functionArgs (makeOverridable ({ a, b, c ? null}: {}));
+    expected = { a = false; b = false; c = true; };
+  };
+
+  testFunctionArgsMakeOverridableOverride = {
+    expr = functionArgs (makeOverridable ({ a, b, c ? null }: {}) { a = 1; b = 2; }).override;
+    expected = { a = false; b = false; c = true; };
+  };
+
+  testCallPackageWithOverridePreservesArguments =
+    let
+      f = { a ? 0, b }: {};
+      f' = callPackageWith { a = 1; b = 2; } f {};
+    in {
+      expr = functionArgs f'.override;
+      expected = functionArgs f;
+    };
+
+  testCallPackagesWithOverridePreservesArguments =
+    let
+      f = { a ? 0, b }: { nested = {}; };
+      f' = callPackagesWith { a = 1; b = 2; } f {};
+    in {
+      expr = functionArgs f'.nested.override;
+      expected = functionArgs f;
+    };
 
 # TRIVIAL
 
@@ -65,15 +205,30 @@ runTests {
   };
 
   /*
-  testOr = {
-    expr = or true false;
-    expected = true;
-  };
+    testOr = {
+      expr = or true false;
+      expected = true;
+    };
   */
 
   testAnd = {
     expr = and true false;
     expected = false;
+  };
+
+  testXor = {
+    expr = [
+      (xor true false)
+      (xor true true)
+      (xor false false)
+      (xor false true)
+    ];
+    expected = [
+      true
+      false
+      false
+      true
+    ];
   };
 
   testFix = {
@@ -161,6 +316,40 @@ runTests {
   testConcatLines = {
     expr = concatLines ["a" "b" "c"];
     expected = "a\nb\nc\n";
+  };
+
+  testMakeIncludePathWithPkgs = {
+    expr = (makeIncludePath [
+      # makeIncludePath preferably selects the "dev" output
+      { dev.outPath = "/dev"; out.outPath = "/out"; outPath = "/default"; }
+      # "out" is used if "dev" is not found
+      { out.outPath = "/out"; outPath = "/default"; }
+      # And it returns the derivation directly if there's no "out" either
+      { outPath = "/default"; }
+      # Same if the output is specified explicitly, even if there's a "dev"
+      { dev.outPath = "/dev"; outPath = "/default"; outputSpecified = true; }
+    ]);
+    expected = "/dev/include:/out/include:/default/include:/default/include";
+  };
+
+  testMakeIncludePathWithEmptyList = {
+    expr = (makeIncludePath [ ]);
+    expected = "";
+  };
+
+  testMakeIncludePathWithOneString = {
+    expr = (makeIncludePath [ "/usr" ]);
+    expected = "/usr/include";
+  };
+
+  testMakeIncludePathWithManyString = {
+    expr = (makeIncludePath [ "/usr" "/usr/local" ]);
+    expected = "/usr/include:/usr/local/include";
+  };
+
+  testReplicateString = {
+    expr = strings.replicate 5 "hello";
+    expected = "hellohellohellohellohello";
   };
 
   testSplitStringsSimple = {
@@ -337,6 +526,27 @@ runTests {
     expected = true;
   };
 
+  testRemovePrefixExample1 = {
+    expr = removePrefix "foo." "foo.bar.baz";
+    expected = "bar.baz";
+  };
+  testRemovePrefixExample2 = {
+    expr = removePrefix "xxx" "foo.bar.baz";
+    expected = "foo.bar.baz";
+  };
+  testRemovePrefixEmptyPrefix = {
+    expr = removePrefix "" "foo";
+    expected = "foo";
+  };
+  testRemovePrefixEmptyString = {
+    expr = removePrefix "foo" "";
+    expected = "";
+  };
+  testRemovePrefixEmptyBoth = {
+    expr = removePrefix "" "";
+    expected = "";
+  };
+
   testNormalizePath = {
     expr = strings.normalizePath "//a/b//c////d/";
     expected = "/a/b/c/d/";
@@ -443,6 +653,31 @@ runTests {
     expected = ["b" "c"];
   };
 
+  testIfilter0Example = {
+    expr = ifilter0 (i: v: i == 0 || v > 2) [ 1 2 3 ];
+    expected = [ 1 3 ];
+  };
+  testIfilter0Empty = {
+    expr = ifilter0 (i: v: abort "shouldn't be evaluated!") [ ];
+    expected = [ ];
+  };
+  testIfilter0IndexOnly = {
+    expr = length (ifilter0 (i: v: mod i 2 == 0) [ (throw "0") (throw "1") (throw "2") (throw "3")]);
+    expected = 2;
+  };
+  testIfilter0All = {
+    expr = ifilter0 (i: v: true) [ 10 11 12 13 14 15 ];
+    expected = [ 10 11 12 13 14 15 ];
+  };
+  testIfilter0First = {
+    expr = ifilter0 (i: v: i == 0) [ 10 11 12 13 14 15 ];
+    expected = [ 10 ];
+  };
+  testIfilter0Last = {
+    expr = ifilter0 (i: v: i == 5) [ 10 11 12 13 14 15 ];
+    expected = [ 15 ];
+  };
+
   testFold =
     let
       f = op: fold: fold op 0 (range 0 100);
@@ -472,6 +707,38 @@ runTests {
       };
     };
 
+  testFoldl'Empty = {
+    expr = foldl' (acc: el: abort "operation not called") 0 [ ];
+    expected = 0;
+  };
+
+  testFoldl'IntegerAdding = {
+    expr = foldl' (acc: el: acc + el) 0 [ 1 2 3 ];
+    expected = 6;
+  };
+
+  # The accumulator isn't forced deeply
+  testFoldl'NonDeep = {
+    expr = take 3 (foldl'
+      (acc: el: [ el ] ++ acc)
+      [ (abort "unevaluated list entry") ]
+      [ 1 2 3 ]);
+    expected = [ 3 2 1 ];
+  };
+
+  # Compared to builtins.foldl', lib.foldl' evaluates the first accumulator strictly too
+  testFoldl'StrictInitial = {
+    expr = (builtins.tryEval (foldl' (acc: el: el) (throw "hello") [])).success;
+    expected = false;
+  };
+
+  # Make sure we don't get a stack overflow for large lists
+  # This number of elements would notably cause a stack overflow if it was implemented without the `foldl'` builtin
+  testFoldl'Large = {
+    expr = foldl' (acc: el: acc + el) 0 (range 0 100000);
+    expected = 5000050000;
+  };
+
   testTake = testAllTrue [
     ([] == (take 0 [  1 2 3 ]))
     ([1] == (take 1 [  1 2 3 ]))
@@ -479,6 +746,44 @@ runTests {
     ([ 1 2 3 ] == (take 3 [  1 2 3 ]))
     ([ 1 2 3 ] == (take 4 [  1 2 3 ]))
   ];
+
+  testListHasPrefixExample1 = {
+    expr = lists.hasPrefix [ 1 2 ] [ 1 2 3 4 ];
+    expected = true;
+  };
+  testListHasPrefixExample2 = {
+    expr = lists.hasPrefix [ 0 1 ] [ 1 2 3 4 ];
+    expected = false;
+  };
+  testListHasPrefixLazy = {
+    expr = lists.hasPrefix [ 1 ] [ 1 (abort "lib.lists.hasPrefix is not lazy") ];
+    expected = true;
+  };
+  testListHasPrefixEmptyPrefix = {
+    expr = lists.hasPrefix [ ] [ 1 2 ];
+    expected = true;
+  };
+  testListHasPrefixEmptyList = {
+    expr = lists.hasPrefix [ 1 2 ] [ ];
+    expected = false;
+  };
+
+  testListRemovePrefixExample1 = {
+    expr = lists.removePrefix [ 1 2 ] [ 1 2 3 4 ];
+    expected = [ 3 4 ];
+  };
+  testListRemovePrefixExample2 = {
+    expr = (builtins.tryEval (lists.removePrefix [ 0 1 ] [ 1 2 3 4 ])).success;
+    expected = false;
+  };
+  testListRemovePrefixEmptyPrefix = {
+    expr = lists.removePrefix [ ] [ 1 2 ];
+    expected = [ 1 2 ];
+  };
+  testListRemovePrefixEmptyList = {
+    expr = (builtins.tryEval (lists.removePrefix [ 1 2 ] [ ])).success;
+    expected = false;
+  };
 
   testFoldAttrs = {
     expr = foldAttrs (n: a: [n] ++ a) [] [
@@ -488,9 +793,64 @@ runTests {
     expected = { a = [ 2 3 ]; b = [7]; c = [8];};
   };
 
+  testListCommonPrefixExample1 = {
+    expr = lists.commonPrefix [ 1 2 3 4 5 6 ] [ 1 2 4 8 ];
+    expected = [ 1 2 ];
+  };
+  testListCommonPrefixExample2 = {
+    expr = lists.commonPrefix [ 1 2 3 ] [ 1 2 3 4 5 ];
+    expected = [ 1 2 3 ];
+  };
+  testListCommonPrefixExample3 = {
+    expr = lists.commonPrefix [ 1 2 3 ] [ 4 5 6 ];
+    expected = [ ];
+  };
+  testListCommonPrefixEmpty = {
+    expr = lists.commonPrefix [ ] [ 1 2 3 ];
+    expected = [ ];
+  };
+  testListCommonPrefixSame = {
+    expr = lists.commonPrefix [ 1 2 3 ] [ 1 2 3 ];
+    expected = [ 1 2 3 ];
+  };
+  testListCommonPrefixLazy = {
+    expr = lists.commonPrefix [ 1 ] [ 1 (abort "lib.lists.commonPrefix shouldn't evaluate this")];
+    expected = [ 1 ];
+  };
+  # This would stack overflow if `commonPrefix` were implemented using recursion
+  testListCommonPrefixLong =
+    let
+      longList = genList (n: n) 100000;
+    in {
+      expr = lists.commonPrefix longList longList;
+      expected = longList;
+    };
+
   testSort = {
     expr = sort builtins.lessThan [ 40 2 30 42 ];
     expected = [2 30 40 42];
+  };
+
+  testSortOn = {
+    expr = sortOn stringLength [ "aa" "b" "cccc" ];
+    expected = [ "b" "aa" "cccc" ];
+  };
+
+  testSortOnEmpty = {
+    expr = sortOn (throw "nope") [ ];
+    expected = [ ];
+  };
+
+  testSortOnIncomparable = {
+    expr =
+      map
+        (x: x.f x.ok)
+        (sortOn (x: x.ok) [
+          { ok = 1; f = x: x; }
+          { ok = 3; f = x: x + 3; }
+          { ok = 2; f = x: x; }
+        ]);
+    expected = [ 1 2 6 ];
   };
 
   testReplicate = {
@@ -518,45 +878,109 @@ runTests {
     expected = false;
   };
 
-  testFindFirstExample1 = {
-    expr = findFirst (x: x > 3) 7 [ 1 6 4 ];
-    expected = 6;
+  testHasAttrByPathNonStrict = {
+    expr = hasAttrByPath [] (throw "do not use");
+    expected = true;
   };
 
-  testFindFirstExample2 = {
-    expr = findFirst (x: x > 9) 7 [ 1 6 4 ];
-    expected = 7;
+  testLongestValidPathPrefix_empty_empty = {
+    expr = attrsets.longestValidPathPrefix [ ] { };
+    expected = [ ];
   };
 
-  testFindFirstEmpty = {
-    expr = findFirst (abort "when the list is empty, the predicate is not needed") null [];
+  testLongestValidPathPrefix_empty_nonStrict = {
+    expr = attrsets.longestValidPathPrefix [ ] (throw "do not use");
+    expected = [ ];
+  };
+
+  testLongestValidPathPrefix_zero = {
+    expr = attrsets.longestValidPathPrefix [ "a" (throw "do not use") ] { d = null; };
+    expected = [ ];
+  };
+
+  testLongestValidPathPrefix_zero_b = {
+    expr = attrsets.longestValidPathPrefix [ "z" "z" ] "remarkably harmonious";
+    expected = [ ];
+  };
+
+  testLongestValidPathPrefix_one = {
+    expr = attrsets.longestValidPathPrefix [ "a" "b" "c" ] { a = null; };
+    expected = [ "a" ];
+  };
+
+  testLongestValidPathPrefix_two = {
+    expr = attrsets.longestValidPathPrefix [ "a" "b" "c" ] { a.b = null; };
+    expected = [ "a" "b" ];
+  };
+
+  testLongestValidPathPrefix_three = {
+    expr = attrsets.longestValidPathPrefix [ "a" "b" "c" ] { a.b.c = null; };
+    expected = [ "a" "b" "c" ];
+  };
+
+  testLongestValidPathPrefix_three_extra = {
+    expr = attrsets.longestValidPathPrefix [ "a" "b" "c" ] { a.b.c.d = throw "nope"; };
+    expected = [ "a" "b" "c" ];
+  };
+
+  testFindFirstIndexExample1 = {
+    expr = lists.findFirstIndex (x: x > 3) (abort "index found, so a default must not be evaluated") [ 1 6 4 ];
+    expected = 1;
+  };
+
+  testFindFirstIndexExample2 = {
+    expr = lists.findFirstIndex (x: x > 9) "a very specific default" [ 1 6 4 ];
+    expected = "a very specific default";
+  };
+
+  testFindFirstIndexEmpty = {
+    expr = lists.findFirstIndex (abort "when the list is empty, the predicate is not needed") null [];
     expected = null;
   };
 
-  testFindFirstSingleMatch = {
-    expr = findFirst (x: x == 5) null [ 5 ];
-    expected = 5;
+  testFindFirstIndexSingleMatch = {
+    expr = lists.findFirstIndex (x: x == 5) null [ 5 ];
+    expected = 0;
   };
 
-  testFindFirstSingleDefault = {
-    expr = findFirst (x: false) null [ (abort "if the predicate doesn't access the value, it must not be evaluated") ];
+  testFindFirstIndexSingleDefault = {
+    expr = lists.findFirstIndex (x: false) null [ (abort "if the predicate doesn't access the value, it must not be evaluated") ];
     expected = null;
   };
 
-  testFindFirstNone = {
-    expr = builtins.tryEval (findFirst (x: x == 2) null [ 1 (throw "the last element must be evaluated when there's no match") ]);
+  testFindFirstIndexNone = {
+    expr = builtins.tryEval (lists.findFirstIndex (x: x == 2) null [ 1 (throw "the last element must be evaluated when there's no match") ]);
     expected = { success = false; value = false; };
   };
 
   # Makes sure that the implementation doesn't cause a stack overflow
-  testFindFirstBig = {
-    expr = findFirst (x: x == 1000000) null (range 0 1000000);
+  testFindFirstIndexBig = {
+    expr = lists.findFirstIndex (x: x == 1000000) null (range 0 1000000);
     expected = 1000000;
   };
 
-  testFindFirstLazy = {
-    expr = findFirst (x: x == 1) 7 [ 1 (abort "list elements after the match must not be evaluated") ];
-    expected = 1;
+  testFindFirstIndexLazy = {
+    expr = lists.findFirstIndex (x: x == 1) null [ 1 (abort "list elements after the match must not be evaluated") ];
+    expected = 0;
+  };
+
+  testFindFirstExample1 = {
+    expr = lists.findFirst (x: x > 3) 7 [ 1 6 4 ];
+    expected = 6;
+  };
+
+  testFindFirstExample2 = {
+    expr = lists.findFirst (x: x > 9) 7 [ 1 6 4 ];
+    expected = 7;
+  };
+
+  testAllUnique_true = {
+    expr = allUnique [ 3 2 4 1 ];
+    expected = true;
+  };
+  testAllUnique_false = {
+    expr = allUnique [ 3 2 3 4 ];
+    expected = false;
   };
 
 # ATTRSETS
@@ -594,7 +1018,7 @@ runTests {
       # should just return the initial value
       emptySet = foldlAttrs (throw "function not needed") 123 { };
       # should just evaluate to the last value
-      accNotNeeded = foldlAttrs (_acc: _name: v: v) (throw "accumulator not needed") { z = 3; a = 2; };
+      valuesNotNeeded = foldlAttrs (acc: _name: _v: acc) 3 { z = throw "value z not needed"; a = throw "value a not needed"; };
       # the accumulator doesnt have to be an attrset it can be as trivial as being just a number or string
       trivialAcc = foldlAttrs (acc: _name: v: acc * 10 + v) 1 { z = 1; a = 2; };
     };
@@ -604,10 +1028,35 @@ runTests {
         names = [ "bar" "foo" ];
       };
       emptySet = 123;
-      accNotNeeded = 3;
+      valuesNotNeeded = 3;
       trivialAcc = 121;
     };
   };
+
+
+  testMergeAttrsListExample1 = {
+    expr = attrsets.mergeAttrsList [ { a = 0; b = 1; } { c = 2; d = 3; } ];
+    expected = { a = 0; b = 1; c = 2; d = 3; };
+  };
+  testMergeAttrsListExample2 = {
+    expr = attrsets.mergeAttrsList [ { a = 0; } { a = 1; } ];
+    expected = { a = 1; };
+  };
+  testMergeAttrsListExampleMany =
+    let
+      list = genList (n:
+        listToAttrs (genList (m:
+          let
+            # Integer divide n by two to create duplicate attributes
+            str = "halfn${toString (n / 2)}m${toString m}";
+          in
+          nameValuePair str str
+        ) 100)
+      ) 100;
+    in {
+      expr = attrsets.mergeAttrsList list;
+      expected = foldl' mergeAttrs { } list;
+    };
 
   # code from the example
   testRecursiveUpdateUntil = {
@@ -630,6 +1079,26 @@ runTests {
     };
   };
 
+  testMatchAttrsMatchingExact = {
+    expr = matchAttrs { cpu = { bits = 64; }; } { cpu = { bits = 64; }; };
+    expected = true;
+  };
+
+  testMatchAttrsMismatch = {
+    expr = matchAttrs { cpu = { bits = 128; }; } { cpu = { bits = 64; }; };
+    expected = false;
+  };
+
+  testMatchAttrsMatchingImplicit = {
+    expr = matchAttrs { cpu = { }; } { cpu = { bits = 64; }; };
+    expected = true;
+  };
+
+  testMatchAttrsMissingAttrs = {
+    expr = matchAttrs { cpu = {}; } { };
+    expected = false;
+  };
+
   testOverrideExistingEmpty = {
     expr = overrideExisting {} { a = 1; };
     expected = {};
@@ -644,6 +1113,26 @@ runTests {
     expr = overrideExisting { a = 3; b = 2; } { a = 1; };
     expected = { a = 1; b = 2; };
   };
+
+  testListAttrsReverse = let
+    exampleAttrs = {foo=1; bar="asdf"; baz = [1 3 3 7]; fnord=null;};
+    exampleSingletonList = [{name="foo"; value=1;}];
+  in {
+    expr = {
+      isReverseToListToAttrs = builtins.listToAttrs (attrsToList exampleAttrs) == exampleAttrs;
+      isReverseToAttrsToList = attrsToList (builtins.listToAttrs exampleSingletonList) == exampleSingletonList;
+      testDuplicatePruningBehaviour = attrsToList (builtins.listToAttrs [{name="a"; value=2;} {name="a"; value=1;}]);
+    };
+    expected = {
+      isReverseToAttrsToList = true;
+      isReverseToListToAttrs = true;
+      testDuplicatePruningBehaviour = [{name="a"; value=2;}];
+    };
+  };
+
+  testAttrsToListsCanDealWithFunctions = testingEval (
+    attrsToList { someFunc= a: a + 1;}
+  );
 
 # GENERATORS
 # these tests assume attributes are converted to lists
@@ -809,7 +1298,52 @@ runTests {
     '';
   };
 
-  /* right now only invocation check */
+  testToGitINI = {
+    expr = generators.toGitINI {
+      user = {
+        email = "user@example.org";
+        name = "John Doe";
+        signingKey = "00112233445566778899AABBCCDDEEFF";
+      };
+      gpg.program = "path-to-gpg";
+      tag.gpgSign = true;
+      include.path = "~/path/to/config.inc";
+      includeIf."gitdif:~/src/dir".path = "~/path/to/conditional.inc";
+      extra = {
+        boolean = true;
+        integer = 38;
+        name = "value";
+        subsection.value = "test";
+      };};
+    expected = ''
+      [extra]
+      ${"\t"}boolean = true
+      ${"\t"}integer = 38
+      ${"\t"}name = "value"
+
+      [extra "subsection"]
+      ${"\t"}value = "test"
+
+      [gpg]
+      ${"\t"}program = "path-to-gpg"
+
+      [include]
+      ${"\t"}path = "~/path/to/config.inc"
+
+      [includeIf "gitdif:~/src/dir"]
+      ${"\t"}path = "~/path/to/conditional.inc"
+
+      [tag]
+      ${"\t"}gpgSign = true
+
+      [user]
+      ${"\t"}email = "user@example.org"
+      ${"\t"}name = "John Doe"
+      ${"\t"}signingKey = "00112233445566778899AABBCCDDEEFF"
+    '';
+  };
+
+  # right now only invocation check
   testToJSONSimple =
     let val = {
       foobar = [ "baz" 1 2 3 ];
@@ -820,7 +1354,7 @@ runTests {
       expected = builtins.toJSON val;
   };
 
-  /* right now only invocation check */
+  # right now only invocation check
   testToYAMLSimple =
     let val = {
       list = [ { one = 1; } { two = 2; } ];
@@ -907,7 +1441,7 @@ runTests {
     };
 
   testToPrettyMultiline = {
-    expr = mapAttrs (const (generators.toPretty { })) rec {
+    expr = mapAttrs (const (generators.toPretty { })) {
       list = [ 3 4 [ false ] ];
       attrs = { foo = null; bar.foo = "baz"; };
       newlinestring = "\n";
@@ -921,7 +1455,7 @@ runTests {
         there
         test'';
     };
-    expected = rec {
+    expected = {
       list = ''
         [
           3
@@ -959,13 +1493,10 @@ runTests {
     expected  = "«foo»";
   };
 
-  testToPlist =
-    let
-      deriv = derivation { name = "test"; builder = "/bin/sh"; system = "aarch64-linux"; };
-    in {
+  testToPlist = {
     expr = mapAttrs (const (generators.toPlist { })) {
       value = {
-        nested.values = rec {
+        nested.values = {
           int = 42;
           float = 0.1337;
           bool = true;
@@ -1108,6 +1639,27 @@ runTests {
     ];
   };
 
+  testToGNUCommandLineSeparator = {
+    expr = cli.toGNUCommandLine { optionValueSeparator = "="; } {
+      data = builtins.toJSON { id = 0; };
+      X = "PUT";
+      retry = 3;
+      retry-delay = null;
+      url = [ "https://example.com/foo" "https://example.com/bar" ];
+      silent = false;
+      verbose = true;
+    };
+
+    expected = [
+      "-X=PUT"
+      "--data={\"id\":0}"
+      "--retry=3"
+      "--url=https://example.com/foo"
+      "--url=https://example.com/bar"
+      "--verbose"
+    ];
+  };
+
   testToGNUCommandLineShell = {
     expr = cli.toGNUCommandLineShell {} {
       data = builtins.toJSON { id = 0; };
@@ -1178,17 +1730,17 @@ runTests {
   };
 
   testCartesianProductOfEmptySet = {
-    expr = cartesianProductOfSets {};
+    expr = cartesianProduct {};
     expected = [ {} ];
   };
 
   testCartesianProductOfOneSet = {
-    expr = cartesianProductOfSets { a = [ 1 2 3 ]; };
+    expr = cartesianProduct { a = [ 1 2 3 ]; };
     expected = [ { a = 1; } { a = 2; } { a = 3; } ];
   };
 
   testCartesianProductOfTwoSets = {
-    expr = cartesianProductOfSets { a = [ 1 ]; b = [ 10 20 ]; };
+    expr = cartesianProduct { a = [ 1 ]; b = [ 10 20 ]; };
     expected = [
       { a = 1; b = 10; }
       { a = 1; b = 20; }
@@ -1196,12 +1748,12 @@ runTests {
   };
 
   testCartesianProductOfTwoSetsWithOneEmpty = {
-    expr = cartesianProductOfSets { a = [ ]; b = [ 10 20 ]; };
+    expr = cartesianProduct { a = [ ]; b = [ 10 20 ]; };
     expected = [ ];
   };
 
   testCartesianProductOfThreeSets = {
-    expr = cartesianProductOfSets {
+    expr = cartesianProduct {
       a = [   1   2   3 ];
       b = [  10  20  30 ];
       c = [ 100 200 300 ];
@@ -1243,6 +1795,30 @@ runTests {
       { a = 3; b = 30; c = 200; }
       { a = 3; b = 30; c = 300; }
     ];
+  };
+
+  testMapCartesianProductOfOneSet = {
+    expr = mapCartesianProduct ({a}: a * 2) { a = [ 1 2 3 ]; };
+    expected = [ 2 4 6 ];
+  };
+
+  testMapCartesianProductOfTwoSets = {
+    expr = mapCartesianProduct ({a,b}: a + b) { a = [ 1 ]; b = [ 10 20 ]; };
+    expected = [ 11 21 ];
+  };
+
+  testMapCartesianProcutOfTwoSetsWithOneEmpty = {
+    expr = mapCartesianProduct (x: x.a + x.b) { a = [ ]; b = [ 10 20 ]; };
+    expected = [ ];
+  };
+
+  testMapCartesianProductOfThreeSets = {
+    expr = mapCartesianProduct ({a,b,c}: a + b + c) {
+      a = [ 1 2 3 ];
+      b = [ 10 20 30 ];
+      c = [ 100 200 300 ];
+    };
+    expected = [ 111 211 311 121 221 321 131 231 331 112 212 312 122 222 322 132 232 332 113 213 313 123 223 323 133 233 333 ];
   };
 
   # The example from the showAttrPath documentation
@@ -1549,7 +2125,7 @@ runTests {
     expected = true;
   };
 
-  # lazyDerivation
+  # DERIVATIONS
 
   testLazyDerivationIsLazyInDerivationForAttrNames = {
     expr = attrNames (lazyDerivation {
@@ -1602,9 +2178,57 @@ runTests {
     expected = derivation;
   };
 
+  testOptionalDrvAttr = let
+    mkDerivation = args: derivation (args // {
+      builder = "builder";
+      system = "system";
+      __ignoreNulls = true;
+    });
+  in {
+    expr = (mkDerivation {
+      name = "foo";
+      x = optionalDrvAttr true 1;
+      y = optionalDrvAttr false 1;
+    }).drvPath;
+    expected = (mkDerivation {
+      name = "foo";
+      x = 1;
+    }).drvPath;
+  };
+
+  testLazyDerivationMultiOutputReturnsDerivationAttrs = let
+    derivation = {
+      type = "derivation";
+      outputs = ["out" "dev"];
+      dev = "test dev";
+      out = "test out";
+      outPath = "test outPath";
+      outputName = "out";
+      drvPath = "test drvPath";
+      name = "test name";
+      system = "test system";
+      meta.position = "/hi:23";
+    };
+  in {
+    expr = lazyDerivation { inherit derivation; outputs = ["out" "dev"]; passthru.meta.position = "/hi:23"; };
+    expected = derivation;
+  };
+
   testTypeDescriptionInt = {
     expr = (with types; int).description;
     expected = "signed integer";
+  };
+  testTypeDescriptionIntsPositive = {
+    expr = (with types; ints.positive).description;
+    expected = "positive integer, meaning >0";
+  };
+  testTypeDescriptionIntsPositiveOrEnumAuto = {
+    expr = (with types; either ints.positive (enum ["auto"])).description;
+    expected = ''positive integer, meaning >0, or value "auto" (singular enum)'';
+  };
+  testTypeDescriptionListOfPositive = {
+    expr = (with types; listOf ints.positive).description;
+    expected = "list of (positive integer, meaning >0)";
   };
   testTypeDescriptionListOfInt = {
     expr = (with types; listOf int).description;
@@ -1653,5 +2277,86 @@ runTests {
   testTypeDescriptionEitherIntOrListOrEitherBoolOrStr = {
     expr = (with types; either int (listOf (either bool str))).description;
     expected = "signed integer or list of (boolean or string)";
+  };
+
+# Meta
+  testGetExe'Output = {
+    expr = getExe' {
+      type = "derivation";
+      out = "somelonghash";
+      bin = "somelonghash";
+    } "executable";
+    expected = "somelonghash/bin/executable";
+  };
+
+  testGetExeOutput = {
+    expr = getExe {
+      type = "derivation";
+      out = "somelonghash";
+      bin = "somelonghash";
+      meta.mainProgram = "mainProgram";
+    };
+    expected = "somelonghash/bin/mainProgram";
+  };
+
+  testGetExe'FailureFirstArg = testingThrow (
+    getExe' "not a derivation" "executable"
+  );
+
+  testGetExe'FailureSecondArg = testingThrow (
+    getExe' { type = "derivation"; } "dir/executable"
+  );
+
+  testPlatformMatch = {
+    expr = meta.platformMatch { system = "x86_64-linux"; } "x86_64-linux";
+    expected = true;
+  };
+
+  testPlatformMatchAttrs = {
+    expr = meta.platformMatch (systems.elaborate "x86_64-linux") (systems.elaborate "x86_64-linux").parsed;
+    expected = true;
+  };
+
+  testPlatformMatchNoMatch = {
+    expr = meta.platformMatch { system = "x86_64-darwin"; } "x86_64-linux";
+    expected = false;
+  };
+
+  testPlatformMatchMissingSystem = {
+    expr = meta.platformMatch { } "x86_64-linux";
+    expected = false;
+  };
+
+  testPackagesFromDirectoryRecursive = {
+    expr = packagesFromDirectoryRecursive {
+      callPackage = path: overrides: import path overrides;
+      directory = ./packages-from-directory;
+    };
+    expected = {
+      a = "a";
+      b = "b";
+      # Note: Other files/directories in `./test-data/c/` are ignored and can be
+      # used by `package.nix`.
+      c = "c";
+      my-namespace = {
+        d = "d";
+        e = "e";
+        f = "f";
+        my-sub-namespace = {
+          g = "g";
+          h = "h";
+        };
+      };
+    };
+  };
+
+  # Check that `packagesFromDirectoryRecursive` can process a directory with a
+  # top-level `package.nix` file into a single package.
+  testPackagesFromDirectoryRecursiveTopLevelPackageNix = {
+    expr = packagesFromDirectoryRecursive {
+      callPackage = path: overrides: import path overrides;
+      directory = ./packages-from-directory/c;
+    };
+    expected = "c";
   };
 }

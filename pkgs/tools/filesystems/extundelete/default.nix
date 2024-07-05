@@ -22,8 +22,9 @@ stdenv.mkDerivation {
   meta = with lib; {
     description = "Utility that can recover deleted files from an ext3 or ext4 partition";
     homepage = "https://extundelete.sourceforge.net/";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     platforms = platforms.linux;
     maintainers = [ maintainers.domenkozar ];
+    mainProgram = "extundelete";
   };
 }

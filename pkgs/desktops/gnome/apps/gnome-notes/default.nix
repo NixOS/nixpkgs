@@ -6,7 +6,7 @@
 , fetchurl
 , fetchpatch
 , pkg-config
-, wrapGAppsHook
+, wrapGAppsHook3
 , itstool
 , desktop-file-utils
 , python3
@@ -20,6 +20,7 @@
 , libhandy
 , webkitgtk
 , gnome
+, adwaita-icon-theme
 , libxml2
 , gsettings-desktop-schemas
 , tracker
@@ -59,7 +60,7 @@ stdenv.mkDerivation rec {
     libxml2
     desktop-file-utils
     python3
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -74,7 +75,7 @@ stdenv.mkDerivation rec {
     gnome-online-accounts
     gsettings-desktop-schemas
     evolution-data-server
-    gnome.adwaita-icon-theme
+    adwaita-icon-theme
   ];
 
   mesonFlags = [
@@ -90,7 +91,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Note editor designed to remain simple to use";
-    homepage = "https://wiki.gnome.org/Apps/Notes";
+    mainProgram = "bijiben";
+    homepage = "https://gitlab.gnome.org/GNOME/gnome-notes";
     license = licenses.gpl3;
     maintainers = teams.gnome.members;
     platforms = platforms.linux;

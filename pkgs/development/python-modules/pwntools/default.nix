@@ -1,27 +1,28 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, debugger
-, fetchPypi
-, mako
-, packaging
-, pysocks
-, pygments
-, ropgadget
-, capstone
-, colored-traceback
-, paramiko
-, pip
-, psutil
-, pyelftools
-, pyserial
-, python-dateutil
-, requests
-, rpyc
-, tox
-, unicorn
-, intervaltree
-, installShellFiles
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  debugger,
+  fetchPypi,
+  mako,
+  packaging,
+  pysocks,
+  pygments,
+  ropgadget,
+  capstone,
+  colored-traceback,
+  paramiko,
+  pip,
+  psutil,
+  pyelftools,
+  pyserial,
+  python-dateutil,
+  requests,
+  rpyc,
+  tox,
+  unicorn,
+  intervaltree,
+  installShellFiles,
 }:
 
 let
@@ -29,11 +30,12 @@ let
 in
 buildPythonPackage rec {
   pname = "pwntools";
-  version = "4.10.0";
+  version = "4.12.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-WI6J6meFJ8C1tsru7n524xNS544vHPPdp7yaz1JuRG0=";
+    hash = "sha256-MgKFvZJmFS/bo7gd46MeYaJQdmRVB6ONhfNOGxWZjrE=";
   };
 
   postPatch = ''
@@ -42,9 +44,7 @@ buildPythonPackage rec {
     sed -i 's/gdb-multiarch/${debuggerName}/' pwnlib/gdb.py
   '';
 
-  nativeBuildInputs = [
-    installShellFiles
-  ];
+  nativeBuildInputs = [ installShellFiles ];
 
   propagatedBuildInputs = [
     mako
@@ -83,6 +83,10 @@ buildPythonPackage rec {
     homepage = "https://pwntools.com";
     changelog = "https://github.com/Gallopsled/pwntools/releases/tag/${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ bennofs kristoff3r pamplemousse ];
+    maintainers = with maintainers; [
+      bennofs
+      kristoff3r
+      pamplemousse
+    ];
   };
 }

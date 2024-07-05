@@ -2,13 +2,14 @@
 , stdenv
 , fetchFromGitHub
 , buildNpmPackage
-, makeWrapper
+, nodejs_18
 , coreutils
 , ffmpeg-headless
 , imagemagick_light
 , procps
 , python3
 , xorg
+, nix-update-script
 
 # chromedriver is more efficient than geckodriver, but is available on less platforms.
 
@@ -23,14 +24,16 @@
 assert (!withFirefox && !withChromium) -> throw "Either `withFirefox` or `withChromium` must be enabled.";
 buildNpmPackage rec {
   pname = "sitespeed-io";
-  version = "27.3.1";
+  version = "34.0.1";
 
   src = fetchFromGitHub {
     owner = "sitespeedio";
     repo = "sitespeed.io";
     rev = "v${version}";
-    hash = "sha256-Z4U4ZIw5Du/VSHIsGKdgu7wRv/6XVh/nMFDs8aYwkOQ=";
+    hash = "sha256-yC/TlAJa71hbPYYuqPV+k3syGuo/VhnNjXmmxh47ySQ=";
   };
+
+  nodejs = nodejs_18;
 
   postPatch = ''
     ln -s npm-shrinkwrap.json package-lock.json
@@ -41,11 +44,9 @@ buildNpmPackage rec {
   GECKODRIVER_SKIP_DOWNLOAD = true;
   EDGEDRIVER_SKIP_DOWNLOAD = true;
 
-  nativeBuildInputs = [ python3 makeWrapper ];
-
   dontNpmBuild = true;
   npmInstallFlags = [ "--omit=dev" ];
-  npmDepsHash = "sha256-RfZlXE8hnAJKiiWdOGFsAFGcxwgnLNvLrXeIinABFb0=";
+  npmDepsHash = "sha256-Q0cWxV5OOaG8Z3aM2j0HtD1e9yPFVDSRcMKBf/yscv4=";
 
   postInstall = ''
     mv $out/bin/sitespeed{.,-}io
@@ -81,11 +82,16 @@ buildNpmPackage rec {
         ${lib.optionalString (withFirefox && !withChromium) "--add-flags '-b firefox'"}
     '';
 
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
   meta = with lib; {
-    description = "An open source tool that helps you monitor, analyze and optimize your website speed and performance";
+    description = "Open source tool that helps you monitor, analyze and optimize your website speed and performance";
     homepage = "https://sitespeed.io";
     license = licenses.mit;
     maintainers = with maintainers; [ misterio77 ];
     platforms = lib.unique (geckodriver.meta.platforms ++ chromedriver.meta.platforms);
+    mainProgram = "sitespeed-io";
   };
 }

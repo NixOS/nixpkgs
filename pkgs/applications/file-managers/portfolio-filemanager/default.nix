@@ -7,18 +7,18 @@
 , glib
 , gobject-introspection
 , gtk3
-, libhandy
-, librsvg
+, gtk4
+, libadwaita
 , meson
 , ninja
 , pkg-config
-, wrapGAppsHook
+, wrapGAppsHook4
 , nix-update-script
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "portfolio";
-  version = "0.9.15";
+  version = "1.0.1";
 
   format = "other";
 
@@ -26,7 +26,7 @@ python3.pkgs.buildPythonApplication rec {
     owner = "tchx84";
     repo = "Portfolio";
     rev = "v${version}";
-    hash = "sha256-/OwHeeUjpjm35O7mySoAfKt7Rsp1EK2WE+tfiV3oiQg=";
+    hash = "sha256-IbzAkHlD6duXkPJRSyD9HJ/JHP8+IR7vIGFp2ESbBug=";
   };
 
   postPatch = ''
@@ -37,21 +37,17 @@ python3.pkgs.buildPythonApplication rec {
     appstream-glib
     desktop-file-utils
     gettext
-    glib
     gobject-introspection
-    gtk3
+    gtk3 # For gtk-update-icon-cache
     meson
     ninja
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook4
   ];
 
   buildInputs = [
-    glib
-    gtk3
-    gobject-introspection
-    libhandy
-    librsvg
+    gtk4
+    libadwaita
   ];
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -66,18 +62,23 @@ python3.pkgs.buildPythonApplication rec {
     ln -s dev.tchx84.Portfolio "$out/bin/portfolio"
   '';
 
+  # Prevent double wrapping
+  dontWrapGApps = true;
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
+
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = "portfolio-filemanager";
-    };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {
-    description = "A minimalist file manager for those who want to use Linux mobile devices";
+    description = "Minimalist file manager for those who want to use Linux mobile devices";
     homepage = "https://github.com/tchx84/Portfolio";
     changelog = "https://github.com/tchx84/Portfolio/blob/v${version}/CHANGELOG.md";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
+    mainProgram = "dev.tchx84.Portfolio";
     maintainers = with maintainers; [ dotlambda chuangzhu ];
   };
 }

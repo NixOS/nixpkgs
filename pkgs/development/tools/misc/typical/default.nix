@@ -7,16 +7,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "typical";
-  version = "0.9.6";
+  version = "0.12.1";
 
   src = fetchFromGitHub {
     owner = "stepchowfun";
     repo = "typical";
     rev = "v${version}";
-    hash = "sha256-pXLOtCzdI6KspNzg1R7Zc97Dd7dX7ZzxvlvKprkLF2I=";
+    hash = "sha256-y7PWTzD9+rkC4wZYhecmDTa3AoWl4Tgh7QXbSK4Qq5Q=";
   };
 
-  cargoHash = "sha256-ckW2Hc5BRqtvzZRUAlf7Vy06cgSTY6nv2ompSDNzpi4=";
+  cargoHash = "sha256-U6dRk8fqhxxMbu283jvkjGMjbIOYqy9jN64M2VmdZ/g=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -35,6 +35,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Data interchange with algebraic data types";
+    mainProgram = "typical";
     homepage = "https://github.com/stepchowfun/typical";
     changelog = "https://github.com/stepchowfun/typical/blob/${src.rev}/CHANGELOG.md";
     license = licenses.mit;

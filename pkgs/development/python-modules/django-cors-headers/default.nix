@@ -1,14 +1,16 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, django
-, pytest-django
-, pytestCheckHook
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  django,
+  pytest-django,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "django-cors-headers";
   version = "3.13.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "adamchainz";
@@ -17,9 +19,7 @@ buildPythonPackage rec {
     hash = "sha256-pIyf4poW8/slxj4PVvmXpuYp//v5w00yU0Vz6Jiy2yM=";
   };
 
-  propagatedBuildInputs = [
-    django
-  ];
+  propagatedBuildInputs = [ django ];
 
   nativeCheckInputs = [
     pytest-django

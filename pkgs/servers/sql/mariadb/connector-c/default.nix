@@ -1,18 +1,23 @@
-{ lib, stdenv, fetchurl, cmake
-, curl, openssl, zlib
+{ lib, stdenv, fetchFromGitHub, cmake
+, curl, openssl, zlib, zstd
 , libiconv
-, version, sha256, ...
+, version, hash, ...
 }:
 
 with lib;
 
-stdenv.mkDerivation {
+let
+  isVer33 = versionAtLeast version "3.3";
+
+in stdenv.mkDerivation {
   pname = "mariadb-connector-c";
   inherit version;
 
-  src = fetchurl {
-    url = "https://downloads.mariadb.com/Connectors/c/connector-c-${version}/mariadb-connector-c-${version}-src.tar.gz";
-    inherit sha256;
+  src = fetchFromGitHub {
+    owner = "mariadb-corporation";
+    repo = "mariadb-connector-c";
+    rev = "v${version}";
+    inherit hash;
   };
 
   outputs = [ "out" "dev" ];
@@ -26,8 +31,11 @@ stdenv.mkDerivation {
 
   postPatch = ''
     substituteInPlace mariadb_config/mariadb_config.c.in \
-      --replace '-I%s/@INSTALL_INCLUDEDIR@' "-I$dev/include" \
-      --replace '-L%s/@INSTALL_LIBDIR@' "-L$out/lib/mariadb"
+      --replace '#define INCLUDE "-I%s/@INSTALL_INCLUDEDIR@ -I%s/@INSTALL_INCLUDEDIR@/mysql"' "#define INCLUDE \"-I$dev/include -I$dev/include/mysql\"" \
+      --replace '#define LIBS    "-L%s/@INSTALL_LIBDIR@/ -lmariadb"' "#define LIBS    \"-L$out/lib/mariadb -lmariadb\"" \
+      --replace '#define PKG_LIBDIR "%s/@INSTALL_LIBDIR@"' "#define PKG_LIBDIR \"$out/lib/mariadb\"" \
+      --replace '#define PLUGIN_DIR "%s/@INSTALL_PLUGINDIR@"' "#define PLUGIN_DIR \"$out/lib/mariadb/plugin\"" \
+      --replace '#define PKG_PLUGINDIR "%s/@INSTALL_PLUGINDIR@"' "#define PKG_PLUGINDIR \"$out/lib/mariadb/plugin\""
   '' + lib.optionalString stdenv.hostPlatform.isStatic ''
     # Disables all dynamic plugins
     substituteInPlace cmake/plugins.cmake \
@@ -43,7 +51,7 @@ stdenv.mkDerivation {
   '';
 
   nativeBuildInputs = [ cmake ];
-  propagatedBuildInputs = [ curl openssl zlib ];
+  propagatedBuildInputs = [ curl openssl zlib ] ++ optional isVer33 zstd;
   buildInputs = [ libiconv ];
 
   postInstall = ''

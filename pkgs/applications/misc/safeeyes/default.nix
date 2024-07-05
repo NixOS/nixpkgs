@@ -7,24 +7,30 @@
 , libnotify
 , wlrctl
 , gtk3
+, safeeyes
+, testers
 , xprintidle
 , xprop
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 with python3.pkgs;
 
 buildPythonApplication rec {
   pname = "safeeyes";
-  version = "2.1.5";
+  version = "2.1.9";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-IjFDhkqtMitdcQORerRqwty3ZMP8jamPtb9oMHdre4I=";
+    hash = "sha256-Z1c1DVwCwPiOPvCYNsoXJBMfVzIQA+/6wStV8BShahc=";
   };
 
+  postPatch = ''
+    substituteInPlace setup.py --replace "root_dir = sys.prefix" "root_dir = '/'"
+  '';
+
   nativeBuildInputs = [
-    wrapGAppsHook
+    wrapGAppsHook3
     gobject-introspection
   ];
 
@@ -47,9 +53,7 @@ buildPythonApplication rec {
   dontWrapGApps = true;
 
   postInstall = ''
-    mkdir -p $out/share/applications
-    cp -r safeeyes/platform/icons $out/share/icons/
-    cp safeeyes/platform/safeeyes.desktop $out/share/applications/safeeyes.desktop
+    mv $out/lib/python*/site-packages/share $out/share
   '';
 
   preFixup = ''
@@ -61,11 +65,14 @@ buildPythonApplication rec {
 
   doCheck = false; # no tests
 
+  passthru.tests.version = testers.testVersion { package = safeeyes; };
+
   meta = with lib; {
     homepage = "http://slgobinath.github.io/SafeEyes";
     description = "Protect your eyes from eye strain using this simple and beautiful, yet extensible break reminder. A Free and Open Source Linux alternative to EyeLeo";
     license = licenses.gpl3;
     maintainers = with maintainers; [ srghma ];
     platforms = platforms.linux;
+    mainProgram = "safeeyes";
   };
 }

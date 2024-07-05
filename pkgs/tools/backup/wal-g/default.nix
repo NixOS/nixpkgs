@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "wal-g";
-  version = "2.0.1";
+  version = "3.0.0";
 
   src = fetchFromGitHub {
     owner = "wal-g";
     repo = "wal-g";
     rev = "v${version}";
-    sha256 = "sha256-5mwA55aAHwEFabGZ6c3pi8NLcYofvoe4bb/cFj7NWok=";
+    sha256 = "sha256-k+GaOb+o5b+Rmggk+Wq3NscDS+fIvyK0e/EhX6UMlqM=";
   };
 
-  vendorSha256 = "sha256-BbQuY6r30AkxlCZjY8JizaOrqEBdv7rIQet9KQwYB/g=";
+  vendorHash = "sha256-ZsVqR02D4YmZP/tVz2UWpXa6fM7HU7Hi2CSnvuVx9UU=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -21,7 +21,7 @@ buildGoModule rec {
 
   tags = [ "brotli" "libsodium" ];
 
-  ldflags = [ "-s" "-w" "-X github.com/wal-g/wal-g/cmd/pg.WalgVersion=${version}" "-X github.com/wal-g/wal-g/cmd/pg.GitRevision=${src.rev}" ];
+  ldflags = [ "-s" "-w" "-X github.com/wal-g/wal-g/cmd/pg.walgVersion=${version}" "-X github.com/wal-g/wal-g/cmd/pg.gitRevision=${src.rev}" ];
 
   postInstall = ''
     mv $out/bin/pg $out/bin/wal-g
@@ -33,7 +33,8 @@ buildGoModule rec {
   meta = with lib; {
     homepage = "https://github.com/wal-g/wal-g";
     license = licenses.asl20;
-    description = "An archival restoration tool for PostgreSQL";
-    maintainers = with maintainers; [ marsam ];
+    description = "Archival restoration tool for PostgreSQL";
+    mainProgram = "wal-g";
+    maintainers = with maintainers; [ ];
   };
 }

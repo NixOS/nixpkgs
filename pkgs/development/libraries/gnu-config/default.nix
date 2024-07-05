@@ -6,27 +6,46 @@
 # files.
 
 let
-  rev = "63acb96f92473ceb5e21d873d7c0aee266b3d6d3";
+  rev = "948ae97ca5703224bd3eada06b7a69f40dd15a02";
 
   # Don't use fetchgit as this is needed during Aarch64 bootstrapping
   configGuess = fetchurl {
+    name = "config.guess-${builtins.substring 0 7 rev}";
     url = "https://git.savannah.gnu.org/cgit/config.git/plain/config.guess?id=${rev}";
-    sha256 = "049qgfh4xjd4fxd7ygm1phd5faqphfvhfcv8dsdldprsp86lf55v";
+    hash = "sha256-ZByuPAx0xJNU0+3gCfP+vYD+vhUBp3wdn6yNQsxFtss=";
   };
   configSub = fetchurl {
+    name = "config.sub-${builtins.substring 0 7 rev}";
     url = "https://git.savannah.gnu.org/cgit/config.git/plain/config.sub?id=${rev}";
-    sha256 = "1rk30y27mzls49wyfdb5jhzjr08hkxl7xqhnxmhcmkvqlmpsjnxl";
+    hash = "sha256-/jovMvuv9XhIcyVJ9I2YP9ZSYCTsLw9ancdcL0NZo6Y=";
   };
 in stdenv.mkDerivation {
   pname = "gnu-config";
-  version = "2023-01-21";
+  version = "2024-01-01";
 
-  buildCommand = ''
-    mkdir -p $out
-    cp ${configGuess} $out/config.guess
-    cp ${configSub} $out/config.sub
+  unpackPhase = ''
+    runHook preUnpack
+    cp ${configGuess} ./config.guess
+    cp ${configSub} ./config.sub
+    chmod +w ./config.sub ./config.guess
+    runHook postUnpack
+  '';
 
-    chmod +x $out/config.*
+  # If this isn't set, `pkgs.gnu-config.overrideAttrs( _: { patches
+  # = ...; })` will behave very counterintuitively: the (unpatched)
+  # gnu-config from the updateAutotoolsGnuConfigScriptsHook stdenv's
+  # defaultNativeBuildInputs will "update" the patched gnu-config by
+  # reverting the patch!
+  dontUpdateAutotoolsGnuConfigScripts = true;
+
+  dontConfigure = true;
+  dontBuild = true;
+
+  installPhase = ''
+    runHook preInstall
+    install -Dm755 ./config.guess $out/config.guess
+    install -Dm755 ./config.sub $out/config.sub
+    runHook postInstall
   '';
 
   meta = with lib; {

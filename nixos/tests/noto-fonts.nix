@@ -6,12 +6,12 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
     imports = [ ./common/x11.nix ];
     environment.systemPackages = [ pkgs.gedit ];
     fonts = {
-      enableDefaultFonts = false;
+      enableDefaultPackages = false;
       fonts = with pkgs;[
         noto-fonts
         noto-fonts-cjk-sans
         noto-fonts-cjk-serif
-        noto-fonts-emoji
+        noto-fonts-color-emoji
       ];
       fontconfig.defaultFonts = {
         serif = [ "Noto Serif" "Noto Serif CJK SC" ];

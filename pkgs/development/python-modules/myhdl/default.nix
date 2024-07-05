@@ -1,16 +1,18 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, verilog
-, ghdl
-, pytest
-, pytest-xdist
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  verilog,
+  ghdl,
+  pytest,
+  pytest-xdist,
 }:
 
 buildPythonPackage rec {
   pname = "myhdl";
   # The stable version is from 2019 and it doesn't pass tests
   version = "unstable-2022-04-26";
+  format = "setuptools";
   # The pypi src doesn't contain the ci script used in checkPhase
   src = fetchFromGitHub {
     owner = "myhdl";
@@ -41,7 +43,7 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    description = "A free, open-source package for using Python as a hardware description and verification language.";
+    description = "Free, open-source package for using Python as a hardware description and verification language";
     homepage = "https://www.myhdl.org/";
     license = licenses.lgpl21;
     maintainers = with maintainers; [ doronbehar ];

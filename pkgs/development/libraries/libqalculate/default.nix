@@ -1,28 +1,55 @@
-{ lib, stdenv, fetchFromGitHub
-, mpfr, gnuplot
+{ lib
+, stdenv
+, fetchFromGitHub
+, intltool
+, pkg-config
+, doxygen
+, autoreconfHook
+, buildPackages
+, curl
+, gettext
+, libiconv
 , readline
-, libxml2, curl
-, intltool, libiconv, icu, gettext
-, pkg-config, doxygen, autoreconfHook, buildPackages
+, libxml2
+, mpfr
+, icu
+, gnuplot
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libqalculate";
-  version = "4.7.0";
+  version = "5.2.0";
 
   src = fetchFromGitHub {
     owner = "qalculate";
     repo = "libqalculate";
-    rev = "v${version}";
-    sha256 = "sha256-Wgy1vsr0FXRJz9BCfw2PyFkesIJ/eg2dYDY/I2TESnU=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-puNzw/3oWph76um4eNuEftvWPmjC1cZIXKU9pWB++jE=";
   };
 
   outputs = [ "out" "dev" "doc" ];
 
-  nativeBuildInputs = [ intltool pkg-config autoreconfHook doxygen ];
-  buildInputs = [ curl gettext libiconv readline ];
-  depsBuildBuild = [ buildPackages.stdenv.cc ];
-  propagatedBuildInputs = [ libxml2 mpfr icu ];
+  nativeBuildInputs = [
+    intltool
+    pkg-config
+    autoreconfHook
+    doxygen
+  ];
+  depsBuildBuild = [
+    buildPackages.stdenv.cc
+  ];
+
+  buildInputs = [
+    curl
+    gettext
+    libiconv
+    readline
+  ];
+  propagatedBuildInputs = [
+    libxml2
+    mpfr
+    icu
+  ];
   enableParallelBuilding = true;
 
   preConfigure = ''
@@ -45,11 +72,11 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "An advanced calculator library";
+    description = "Advanced calculator library";
     homepage = "http://qalculate.github.io";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ gebner doronbehar alyaeanyx ];
     mainProgram = "qalc";
     platforms = platforms.all;
   };
-}
+})

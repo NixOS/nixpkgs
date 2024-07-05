@@ -1,23 +1,24 @@
-{ lib
-, aiohttp
-, amqtt
-, buildPythonPackage
-, certifi
-, docopt
-, fetchFromGitHub
-, fetchpatch
-, geopy
-, mock
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, websockets
+{
+  lib,
+  aiohttp,
+  amqtt,
+  buildPythonPackage,
+  certifi,
+  docopt,
+  fetchFromGitHub,
+  fetchpatch,
+  geopy,
+  mock,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  websockets,
 }:
 
 buildPythonPackage rec {
   pname = "volvooncall";
-  version = "0.10.3";
+  version = "0.10.4";
   format = "setuptools";
 
   disabled = pythonOlder "3.10";
@@ -26,7 +27,7 @@ buildPythonPackage rec {
     owner = "molobrakos";
     repo = "volvooncall";
     rev = "refs/tags/v${version}";
-    hash = "sha256-FLrsU3u/0+T09cu2zU2fLjuAy9PWAikgbaW8xBALjwU=";
+    hash = "sha256-xr3g93rt3jvxVZrZY7cFh5eBP3k0arsejsgvx8p5EV4=";
   };
 
   patches = [
@@ -38,9 +39,7 @@ buildPythonPackage rec {
     })
   ];
 
-  propagatedBuildInputs = [
-    aiohttp
-  ];
+  propagatedBuildInputs = [ aiohttp ];
 
   passthru.optional-dependencies = {
     console = [
@@ -60,15 +59,14 @@ buildPythonPackage rec {
     pytestCheckHook
   ] ++ passthru.optional-dependencies.mqtt;
 
-  pythonImportsCheck = [
-    "volvooncall"
-  ];
+  pythonImportsCheck = [ "volvooncall" ];
 
   meta = with lib; {
     description = "Retrieve information from the Volvo On Call web service";
     homepage = "https://github.com/molobrakos/volvooncall";
     changelog = "https://github.com/molobrakos/volvooncall/releases/tag/v${version}";
     license = licenses.unlicense;
+    mainProgram = "voc";
     maintainers = with maintainers; [ dotlambda ];
   };
 }

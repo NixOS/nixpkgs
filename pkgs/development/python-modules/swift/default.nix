@@ -1,34 +1,36 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, boto3
-, cryptography
-, eventlet
-, greenlet
-, iana-etc
-, installShellFiles
-, libredirect
-, lxml
-, mock
-, netifaces
-, pastedeploy
-, pbr
-, pyeclib
-, requests
-, setuptools
-, six
-, stestr
-, swiftclient
-, xattr
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  boto3,
+  cryptography,
+  eventlet,
+  greenlet,
+  iana-etc,
+  installShellFiles,
+  libredirect,
+  lxml,
+  mock,
+  netifaces,
+  pastedeploy,
+  pbr,
+  pyeclib,
+  requests,
+  setuptools,
+  six,
+  stestr,
+  swiftclient,
+  xattr,
 }:
 
 buildPythonPackage rec {
   pname = "swift";
-  version = "2.31.1";
+  version = "2.33.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-6CRSIv2m2pqZdzRAEJ/6Qo90PZ7LRNg1zQg50Ecq2RQ=";
+    hash = "sha256-4TlJcquK8MC9zQfLKmb88B5xHje1kbPD2jSLiR+N8hs=";
   };
 
   postPatch = ''

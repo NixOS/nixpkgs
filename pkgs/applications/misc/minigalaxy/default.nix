@@ -11,7 +11,7 @@
 , steam-run
 , unzip
 , webkitgtk
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -33,7 +33,7 @@ python3Packages.buildPythonApplication rec {
 
   nativeBuildInputs = [
     gettext
-    wrapGAppsHook
+    wrapGAppsHook3
     gobject-introspection
   ];
 
@@ -69,9 +69,9 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://sharkwouter.github.io/minigalaxy/";
     changelog = "https://github.com/sharkwouter/minigalaxy/blob/${version}/CHANGELOG.md";
     downloadPage = "https://github.com/sharkwouter/minigalaxy/releases";
-    description = "A simple GOG client for Linux";
+    description = "Simple GOG client for Linux";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ srapenne ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.linux;
   };
 }

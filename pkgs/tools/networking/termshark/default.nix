@@ -14,7 +14,7 @@ buildGoModule rec {
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ wireshark-cli ];
 
-  vendorSha256 = "sha256-C9XOiNjo+TZ+erdnypRhhfpbuBhB3yEqNpbtwjEv14g=";
+  vendorHash = "sha256-C9XOiNjo+TZ+erdnypRhhfpbuBhB3yEqNpbtwjEv14g=";
 
   doCheck = false;
 
@@ -28,7 +28,8 @@ buildGoModule rec {
 
   meta = with lib; {
     homepage = "https://termshark.io/";
-    description = "A terminal UI for wireshark-cli, inspired by Wireshark";
+    description = "Terminal UI for wireshark-cli, inspired by Wireshark";
+    mainProgram = "termshark";
     license = licenses.mit;
     maintainers = with maintainers; [ winpat ];
   };

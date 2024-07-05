@@ -1,10 +1,15 @@
-{ lib, buildPythonPackage, fetchFromGitHub
-, python-lsp-server, isort
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  python-lsp-server,
+  isort,
 }:
 
 buildPythonPackage rec {
   pname = "pyls-isort";
   version = "0.2.2";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "paradoxxxzero";
@@ -19,7 +24,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "pyls_isort" ];
 
   propagatedBuildInputs = [
-    isort python-lsp-server
+    isort
+    python-lsp-server
   ];
 
   meta = with lib; {

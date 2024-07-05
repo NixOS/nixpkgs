@@ -2,28 +2,27 @@
 , python3, gettext, flex, perl, bison, pkg-config, autoreconfHook, dblatex
 , fontconfig, freetype, pango, fontforge, help2man, zip, netpbm, groff
 , freefont_ttf, makeFontsConf
-, makeWrapper, t1utils, boehmgc, rsync
-, texlive, tex ? texlive.combine {
-    inherit (texlive) scheme-small lh metafont epsf fontinst;
-  }
+, makeWrapper, t1utils, boehmgc, rsync, coreutils
+, texliveSmall, tex ? texliveSmall.withPackages (ps: with ps; [ lh metafont epsf fontinst ])
 }:
 
 stdenv.mkDerivation rec {
   pname = "lilypond";
-  version = "2.24.1";
+  version = "2.24.3";
 
   src = fetchurl {
     url = "http://lilypond.org/download/sources/v${lib.versions.majorMinor version}/lilypond-${version}.tar.gz";
-    sha256 = "sha256-1cWQh1ZKXNbwilK6gOfWUJuRxYXkQ4XcwPo5Jl0YFQk=";
+    sha256 = "sha256-3wBfdu969aTNdKEPjnEVJ4t/p58UAYk3tlwQlJjsRL4=";
   };
 
   postInstall = ''
     for f in "$out/bin/"*; do
         # Override default argv[0] setting so LilyPond can find
         # its Scheme libraries.
-        wrapProgram "$f" --set GUILE_AUTO_COMPILE 0 \
-                         --set PATH "${ghostscript}/bin" \
-                         --argv0 "$f"
+        wrapProgram "$f" \
+          --set GUILE_AUTO_COMPILE 0 \
+          --set PATH "${lib.makeBinPath [ ghostscript coreutils (placeholder "out") ]}" \
+          --argv0 "$f"
     done
   '';
 

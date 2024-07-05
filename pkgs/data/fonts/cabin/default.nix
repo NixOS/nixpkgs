@@ -21,7 +21,7 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A humanist sans with 4 weights and true italics";
+    description = "Humanist sans with 4 weights and true italics";
     longDescription = ''
       The Cabin font family is a humanist sans with 4 weights and true italics,
       inspired by Edward Johnston’s and Eric Gill’s typefaces, with a touch of

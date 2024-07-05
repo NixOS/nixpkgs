@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "OttoMatic";
-  version = "4.0.1";
+  version = "unstable-2023-11-13";
 
   src = fetchFromGitHub {
     owner = "jorio";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-0mqOAdAmJGxKa6yXktrbmdXkoQIliimq37iy9bCBZYg=";
+    rev = "8a5411779762684066d3748fbf4d33747ca871a4";
+    hash = "sha256-cZ2gHNXmjMocfTgbA+0T2nwKs55ZMDoB+JTf0Qdqe8U=";
     fetchSubmodules = true;
   };
 
@@ -20,8 +20,6 @@ stdenv.mkDerivation rec {
   buildInputs = [
     SDL2
   ];
-
-  cmakeFlags = [ "-DCMAKE_BUILD_TYPE=Release" ];
 
   installPhase = ''
     runHook preInstall
@@ -37,10 +35,11 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A port of Otto Matic, a 2001 Macintosh game by Pangea Software, for modern operating systems";
+    description = "Port of Otto Matic, a 2001 Macintosh game by Pangea Software, for modern operating systems";
     homepage = "https://github.com/jorio/OttoMatic";
     license = licenses.cc-by-sa-40;
     maintainers = with maintainers; [ lux ];
     platforms = platforms.linux;
+    mainProgram = "OttoMatic";
   };
 }

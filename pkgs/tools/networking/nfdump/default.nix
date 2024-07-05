@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "nfdump";
-  version = "1.7.2";
+  version = "1.7.4";
 
   src = fetchFromGitHub {
     owner = "phaag";
     repo = "nfdump";
     rev =  "refs/tags/v${version}";
-    hash = "sha256-ns/RG0kyu2b0UjcJKArcAjY+dI397ljhrUO8euS5Snk=";
+    hash = "sha256-3V6n0cAD3EG91gkbB/9kNcJhwpZBY4ovUamyaVWAAcY=";
   };
 
   nativeBuildInputs = [

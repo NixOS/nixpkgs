@@ -1,41 +1,36 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, backoff
-, googleapis-common-protos
-, grpcio
-, hatchling
-, opentelemetry-test-utils
-, opentelemetry-exporter-otlp-proto-common
-, pytest-grpc
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  deprecated,
+  googleapis-common-protos,
+  grpcio,
+  hatchling,
+  opentelemetry-api,
+  opentelemetry-exporter-otlp-proto-common,
+  opentelemetry-proto,
+  opentelemetry-test-utils,
+  pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
+  inherit (opentelemetry-api) version src;
   pname = "opentelemetry-exporter-otlp-proto-grpc";
-  version = "1.18.0";
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
-  src = fetchFromGitHub {
-    owner = "open-telemetry";
-    repo = "opentelemetry-python";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-feAmPL/G3ABIY5tBODlMJIBzxqg6Bl7imJB2EYtEp2o=";
-    sparseCheckout = [ "/exporter/${pname}" ];
-  } + "/exporter/${pname}";
+  disabled = pythonOlder "3.8";
 
-  format = "pyproject";
+  sourceRoot = "${opentelemetry-api.src.name}/exporter/opentelemetry-exporter-otlp-proto-grpc";
 
-  nativeBuildInputs = [
-    hatchling
-  ];
+  build-system = [ hatchling ];
 
-  propagatedBuildInputs = [
-    backoff
+  dependencies = [
+    deprecated
     googleapis-common-protos
     grpcio
+    opentelemetry-api
     opentelemetry-exporter-otlp-proto-common
+    opentelemetry-proto
   ];
 
   nativeCheckInputs = [
@@ -43,16 +38,14 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  disabledTestPaths = [
-    "tests/performance/benchmarks/"
-  ];
+  disabledTestPaths = [ "tests/performance/benchmarks/" ];
 
   pythonImportsCheck = [ "opentelemetry.exporter.otlp.proto.grpc" ];
 
-  meta = with lib; {
+  __darwinAllowLocalNetworking = true;
+
+  meta = opentelemetry-api.meta // {
     homepage = "https://github.com/open-telemetry/opentelemetry-python/tree/main/exporter/opentelemetry-exporter-otlp-proto-grpc";
     description = "OpenTelemetry Collector Protobuf over gRPC Exporter";
-    license = licenses.asl20;
-    maintainers = teams.deshaw.members;
   };
 }

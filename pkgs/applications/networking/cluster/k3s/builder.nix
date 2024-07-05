@@ -5,7 +5,7 @@ lib:
   # commit hash
   k3sCommit,
   k3sRepoSha256 ? lib.fakeHash,
-  k3sVendorSha256 ? lib.fakeHash,
+  k3sVendorHash ? lib.fakeHash,
   # taken from ./scripts/version.sh VERSION_ROOT https://github.com/k3s-io/k3s/blob/v1.23.3%2Bk3s1/scripts/version.sh#L47
   k3sRootVersion,
   k3sRootSha256 ? lib.fakeHash,
@@ -29,32 +29,42 @@ lib:
 # currently.
 # It is likely we will have to split out additional builders for additional
 # versions in the future, or customize this one further.
-{ lib
-, makeWrapper
-, socat
-, iptables
-, iproute2
-, ipset
-, bridge-utils
-, btrfs-progs
-, conntrack-tools
-, buildGoModule
-, runc
-, rsync
-, kmod
-, libseccomp
-, pkg-config
-, ethtool
-, util-linux
-, fetchFromGitHub
-, fetchurl
-, fetchzip
-, fetchgit
-, zstd
-, yq-go
-, sqlite
-, nixosTests
-, pkgsBuildBuild
+{
+  lib,
+  makeWrapper,
+  socat,
+  iptables,
+  iproute2,
+  ipset,
+  bridge-utils,
+  btrfs-progs,
+  conntrack-tools,
+  buildGoModule,
+  runc,
+  rsync,
+  kmod,
+  libseccomp,
+  pkg-config,
+  ethtool,
+  util-linux,
+  fetchFromGitHub,
+  fetchurl,
+  fetchzip,
+  fetchgit,
+  zstd,
+  yq-go,
+  sqlite,
+  nixosTests,
+  pkgsBuildBuild,
+  go,
+  runCommand,
+  bash,
+  procps,
+  coreutils,
+  gnugrep,
+  findutils,
+  gnused,
+  systemd,
 }:
 
 # k3s is a kinda weird derivation. One of the main points of k3s is the
@@ -79,10 +89,16 @@ lib:
 let
 
   baseMeta = with lib; {
-    description = "A lightweight Kubernetes distribution";
+    description = "Lightweight Kubernetes distribution";
     license = licenses.asl20;
     homepage = "https://k3s.io";
-    maintainers = with maintainers; [ euank mic92 yajo ];
+    maintainers = with maintainers; [
+      euank
+      mic92
+      superherointj
+      wrmilling
+      yajo
+    ];
     platforms = platforms.linux;
 
     # resolves collisions with other installations of kubectl, crictl, ctr
@@ -92,8 +108,9 @@ let
 
   # https://github.com/k3s-io/k3s/blob/5fb370e53e0014dc96183b8ecb2c25a61e891e76/scripts/build#L19-L40
   versionldflags = [
-    "-X github.com/rancher/k3s/pkg/version.Version=v${k3sVersion}"
-    "-X github.com/rancher/k3s/pkg/version.GitCommit=${lib.substring 0 8 k3sCommit}"
+    "-X github.com/k3s-io/k3s/pkg/version.Version=v${k3sVersion}"
+    "-X github.com/k3s-io/k3s/pkg/version.GitCommit=${lib.substring 0 8 k3sCommit}"
+    "-X github.com/k3s-io/k3s/pkg/version.UpstreamGolang=go${go.version}"
     "-X k8s.io/client-go/pkg/version.gitVersion=v${k3sVersion}"
     "-X k8s.io/client-go/pkg/version.gitCommit=${k3sCommit}"
     "-X k8s.io/client-go/pkg/version.gitTreeState=clean"
@@ -129,7 +146,7 @@ let
   k3sCNIPlugins = buildGoModule rec {
     pname = "k3s-cni-plugins";
     version = k3sCNIVersion;
-    vendorSha256 = null;
+    vendorHash = null;
 
     subPackages = [ "." ];
 
@@ -155,6 +172,42 @@ let
     rev = "v${k3sVersion}";
     sha256 = k3sRepoSha256;
   };
+
+  # Modify the k3s installer script so that we can let it install only
+  # killall.sh
+  k3sKillallSh = runCommand "k3s-killall.sh" { } ''
+    # Copy the upstream k3s install script except for the last lines that
+    # actually run the install process
+    sed --quiet '/# --- run the install process --/q;p' ${k3sRepo}/install.sh > install.sh
+
+    # Let killall expect "containerd-shim" in the Nix store
+    to_replace="k3s/data/\[\^/\]\*/bin/containerd-shim"
+    replacement="/nix/store/.*k3s-containerd.*/bin/containerd-shim"
+    changes=$(sed -i "s|$to_replace|$replacement| w /dev/stdout" install.sh)
+    if [ -z "$changes" ]; then
+      echo "failed to replace \"$to_replace\" in k3s installer script (install.sh)"
+      exit 1
+    fi
+
+    remove_matching_line() {
+      line_to_delete=$(grep -n "$1" install.sh | cut -d : -f 1 || true)
+      if [ -z $line_to_delete ]; then
+        echo "failed to find expression \"$1\" in k3s installer script (install.sh)"
+        exit 1
+      fi
+      sed -i "''${line_to_delete}d" install.sh
+    }
+
+    # Don't change mode and owner of killall
+    remove_matching_line "chmod.*KILLALL_K3S_SH"
+    remove_matching_line "chown.*KILLALL_K3S_SH"
+
+    # Execute only the "create_killall" function of the installer script
+    sed -i '$acreate_killall' install.sh
+
+    KILLALL_K3S_SH=$out bash install.sh
+  '';
+
   # Stage 1 of the k3s build:
   # Let's talk about how k3s is structured.
   # One of the ideas of k3s is that there's the single "k3s" binary which can
@@ -182,15 +235,22 @@ let
     version = k3sVersion;
 
     src = k3sRepo;
-    vendorSha256 = k3sVendorSha256;
+    vendorHash = k3sVendorHash;
 
     nativeBuildInputs = [ pkg-config ];
-    buildInputs = [ libseccomp sqlite.dev ];
+    buildInputs = [
+      libseccomp
+      sqlite.dev
+    ];
 
     subPackages = [ "cmd/server" ];
     ldflags = versionldflags;
 
-    tags = [ "ctrd" "libsqlite3" "linux" ];
+    tags = [
+      "ctrd"
+      "libsqlite3"
+      "linux"
+    ];
 
     # create the multicall symlinks for k3s
     postInstall = ''
@@ -212,7 +272,7 @@ let
     '';
 
     meta = baseMeta // {
-      description = "The various binaries that get packaged into the final k3s binary";
+      description = "Various binaries that get packaged into the final k3s binary";
     };
   };
   # Only used for the shim since
@@ -226,7 +286,7 @@ let
       rev = "v${containerdVersion}";
       sha256 = containerdSha256;
     };
-    vendorSha256 = null;
+    vendorHash = null;
     buildInputs = [ btrfs-progs ];
     subPackages = [ "cmd/containerd-shim-runc-v2" ];
     ldflags = versionldflags;
@@ -236,9 +296,13 @@ buildGoModule rec {
   pname = "k3s";
   version = k3sVersion;
 
-  tags = [ "libsqlite3" "linux" "ctrd" ];
+  tags = [
+    "libsqlite3"
+    "linux"
+    "ctrd"
+  ];
   src = k3sRepo;
-  vendorSha256 = k3sVendorSha256;
+  vendorHash = k3sVendorHash;
 
   postPatch = ''
     # Nix prefers dynamically linked binaries over static binary.
@@ -274,6 +338,17 @@ buildGoModule rec {
     util-linux # kubelet wants 'nsenter' from util-linux: https://github.com/kubernetes/kubernetes/issues/26093#issuecomment-705994388
     conntrack-tools
     runc
+    bash
+  ];
+
+  k3sKillallDeps = [
+    bash
+    systemd
+    procps
+    coreutils
+    gnugrep
+    findutils
+    gnused
   ];
 
   buildInputs = k3sRuntimeDeps;
@@ -296,7 +371,7 @@ buildGoModule rec {
   # Specifically, it has a 'go generate' which runs part of the package. See
   # this comment:
   # https://github.com/NixOS/nixpkgs/pull/158089#discussion_r799965694
-  # So, why do we use buildGoModule at all? For the `vendorSha256` / `go mod download` stuff primarily.
+  # So, why do we use buildGoModule at all? For the `vendorHash` / `go mod download` stuff primarily.
   buildPhase = ''
     patchShebangs ./scripts/package-cli ./scripts/download ./scripts/build-upload
 
@@ -332,6 +407,9 @@ buildGoModule rec {
     ln -s $out/bin/k3s $out/bin/kubectl
     ln -s $out/bin/k3s $out/bin/crictl
     ln -s $out/bin/k3s $out/bin/ctr
+    install -m 0755 ${k3sKillallSh} -D $out/bin/k3s-killall.sh
+    wrapProgram $out/bin/k3s-killall.sh \
+      --prefix PATH : ${lib.makeBinPath (k3sRuntimeDeps ++ k3sKillallDeps)}
   '';
 
   doInstallCheck = true;
@@ -341,14 +419,17 @@ buildGoModule rec {
 
   passthru.updateScript = updateScript;
 
-  passthru.mkTests = version:
-    let k3s_version = "k3s_" + lib.replaceStrings ["."] ["_"] (lib.versions.majorMinor version);
-    in {
+  passthru.mkTests =
+    version:
+    let
+      k3s_version = "k3s_" + lib.replaceStrings [ "." ] [ "_" ] (lib.versions.majorMinor version);
+    in
+    {
+      etcd = nixosTests.k3s.etcd.${k3s_version};
       single-node = nixosTests.k3s.single-node.${k3s_version};
       multi-node = nixosTests.k3s.multi-node.${k3s_version};
     };
   passthru.tests = passthru.mkTests k3sVersion;
-
 
   meta = baseMeta;
 }

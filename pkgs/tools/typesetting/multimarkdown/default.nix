@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://fletcher.github.io/MultiMarkdown-6/introduction.html";
-    description = "A derivative of Markdown that adds new syntax features";
+    description = "Derivative of Markdown that adds new syntax features";
     longDescription = ''
       MultiMarkdown is a lightweight markup language created by
       Fletcher T. Penney and based on Markdown, which supports

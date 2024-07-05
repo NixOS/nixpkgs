@@ -34,6 +34,7 @@ in stdenv.mkDerivation {
   meta = with lib; {
     homepage = "https://github.com/z3ntu/RazerGenie";
     description = "Qt application for configuring your Razer devices under GNU/Linux";
+    mainProgram = "razergenie";
     license = licenses.gpl3;
     maintainers = with maintainers; [ f4814n Mogria ];
     platforms = platforms.linux;

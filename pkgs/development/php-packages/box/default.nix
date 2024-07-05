@@ -1,35 +1,28 @@
-{ mkDerivation, fetchurl, makeWrapper, lib, php }:
+{
+  lib,
+  php82,
+  fetchFromGitHub,
+}:
 
-let
+php82.buildComposerProject (finalAttrs: {
   pname = "box";
-  version = "4.3.8";
-in
-mkDerivation {
-  inherit pname version;
+  version = "4.6.2";
 
-  src = fetchurl {
-    url = "https://github.com/box-project/box/releases/download/${version}/box.phar";
-    sha256 = "sha256-g9Y92yTsyXU4NWuQwyB3PRrKJxLRSBO9J77jumXPOxg=";
+  src = fetchFromGitHub {
+    owner = "box-project";
+    repo = "box";
+    rev = finalAttrs.version;
+    hash = "sha256-gYIAP9pTjahNkpNNXx0c8sQm+9Kaq6/IAo/xI5bNy7Y=";
   };
 
-  dontUnpack = true;
+  vendorHash = "sha256-HCbjW4HdyQNWDEHXj9U1t3S3EKcrPV1z/9I1ClFsMsc=";
 
-  nativeBuildInputs = [ makeWrapper ];
-
-  installPhase = ''
-    runHook preInstall
-    mkdir -p $out/bin
-    install -D $src $out/libexec/box/box.phar
-    makeWrapper ${php}/bin/php $out/bin/box \
-      --add-flags "-d phar.readonly=0 $out/libexec/box/box.phar"
-    runHook postInstall
-  '';
-
-  meta = with lib; {
-    changelog = "https://github.com/box-project/box/releases/tag/${version}";
-    description = "An application for building and managing Phars";
-    license = licenses.mit;
+  meta = {
+    changelog = "https://github.com/box-project/box/releases/tag/${finalAttrs.version}";
+    description = "Application for building and managing Phars";
     homepage = "https://github.com/box-project/box";
-    maintainers = with maintainers; [ ] ++ teams.php.members;
+    license = lib.licenses.mit;
+    mainProgram = "box";
+    maintainers = lib.teams.php.members;
   };
-}
+})

@@ -10,13 +10,22 @@
 , fetchCrate
 , pkgsBuildBuild
 , rustc
-, rust
 , cargo
 , jq
 , libiconv
 }:
 
 let
+  # Returns a true if the builder's rustc was built with support for the target.
+  targetAlreadyIncluded = lib.elem stdenv.hostPlatform.rust.rustcTarget
+    (lib.splitString "," (lib.removePrefix "--target=" (
+      lib.elemAt (lib.filter (f: lib.hasPrefix "--target=" f) pkgsBuildBuild.rustc.unwrapped.configureFlags) 0)
+    ));
+
+  # If the build's rustc was built with support for the target then reuse it. (Avoids uneeded compilation for targets like `wasm32-unknown-unknown`)
+  rustc' = if targetAlreadyIncluded then pkgsBuildBuild.rustc else rustc;
+  cargo' = if targetAlreadyIncluded then pkgsBuildBuild.cargo else cargo;
+
   # Create rustc arguments to link against the given list of dependencies
   # and renames.
   #
@@ -50,7 +59,9 @@ let
           filename =
             if lib.any (x: x == "lib" || x == "rlib") dep.crateType
             then "${dep.metadata}.rlib"
-            else "${dep.metadata}${stdenv.hostPlatform.extensions.sharedLibrary}";
+            # Adjust lib filename for crates of type proc-macro. Proc macros are compiled/run on the build platform architecture.
+            else if (lib.attrByPath [ "procMacro" ] false dep) then "${dep.metadata}${stdenv.buildPlatform.extensions.library}"
+            else "${dep.metadata}${stdenv.hostPlatform.extensions.library}";
         in
         " --extern ${opts}${name}=${dep.lib}/lib/lib${extern}-${filename}"
       )
@@ -71,18 +82,15 @@ let
   inherit (import ./log.nix { inherit lib; }) noisily echo_colored;
 
   configureCrate = import ./configure-crate.nix {
-    inherit lib stdenv rust echo_colored noisily mkRustcDepArgs mkRustcFeatureArgs;
+    inherit lib stdenv echo_colored noisily mkRustcDepArgs mkRustcFeatureArgs;
   };
 
   buildCrate = import ./build-crate.nix {
-    inherit lib stdenv mkRustcDepArgs mkRustcFeatureArgs needUnstableCLI rust;
+    inherit lib stdenv mkRustcDepArgs mkRustcFeatureArgs needUnstableCLI;
+    rustc = rustc';
   };
 
   installCrate = import ./install-crate.nix { inherit stdenv; };
-
-  # Allow access to the rust attribute set from inside buildRustCrate, which
-  # has a parameter that shadows the name.
-  rustAttrs = rust;
 in
 
   /* The overridable pkgs.buildRustCrate function.
@@ -240,6 +248,7 @@ crate_: lib.makeOverridable
         "edition"
         "buildTests"
         "codegenUnits"
+        "links"
       ];
       extraDerivationAttrs = builtins.removeAttrs crate processedAttrs;
       nativeBuildInputs_ = nativeBuildInputs;
@@ -276,7 +285,8 @@ crate_: lib.makeOverridable
       name = "rust_${crate.crateName}-${crate.version}${lib.optionalString buildTests_ "-test"}";
       version = crate.version;
       depsBuildBuild = [ pkgsBuildBuild.stdenv.cc ];
-      nativeBuildInputs = [ rust stdenv.cc cargo jq ]
+      nativeBuildInputs = [ rustc' cargo' jq ]
+        ++ lib.optionals stdenv.hasCC [ stdenv.cc ]
         ++ lib.optionals stdenv.buildPlatform.isDarwin [ libiconv ]
         ++ (crate.nativeBuildInputs or [ ]) ++ nativeBuildInputs_;
       buildInputs = lib.optionals stdenv.isDarwin [ libiconv ] ++ (crate.buildInputs or [ ]) ++ buildInputs_;
@@ -310,7 +320,7 @@ crate_: lib.makeOverridable
           depsMetadata = lib.foldl' (str: dep: str + dep.metadata) "" (dependencies ++ buildDependencies);
           hashedMetadata = builtins.hashString "sha256"
             (crateName + "-" + crateVersion + "___" + toString (mkRustcFeatureArgs crateFeatures) +
-              "___" + depsMetadata + "___" + rustAttrs.toRustTarget stdenv.hostPlatform);
+              "___" + depsMetadata + "___" + stdenv.hostPlatform.rust.rustcTarget);
         in
         lib.substring 0 10 hashedMetadata;
 
@@ -318,10 +328,16 @@ crate_: lib.makeOverridable
       # Either set to a concrete sub path to the crate root
       # or use `null` for auto-detect.
       workspace_member = crate.workspace_member or ".";
-      crateVersion = crate.version;
-      crateDescription = crate.description or "";
       crateAuthors = if crate ? authors && lib.isList crate.authors then crate.authors else [ ];
+      crateDescription = crate.description or "";
       crateHomepage = crate.homepage or "";
+      crateLicense = crate.license or "";
+      crateLicenseFile = crate.license-file or "";
+      crateLinks = crate.links or "";
+      crateReadme = crate.readme or "";
+      crateRepository = crate.repository or "";
+      crateRustVersion = crate.rust-version or "";
+      crateVersion = crate.version;
       crateType =
         if lib.attrByPath [ "procMacro" ] false crate then [ "proc-macro" ] else
         if lib.attrByPath [ "plugin" ] false crate then [ "dylib" ] else
@@ -341,9 +357,10 @@ crate_: lib.makeOverridable
 
 
       configurePhase = configureCrate {
-        inherit crateName buildDependencies completeDeps completeBuildDeps crateDescription
-          crateFeatures crateRenames libName build workspace_member release libPath crateVersion
+        inherit crateName crateType buildDependencies completeDeps completeBuildDeps crateDescription
+          crateFeatures crateRenames libName build workspace_member release libPath crateVersion crateLinks
           extraLinkFlags extraRustcOptsForBuildRs
+          crateLicense crateLicenseFile crateReadme crateRepository crateRustVersion
           crateAuthors crateHomepage verbose colors codegenUnits;
       };
       buildPhase = buildCrate {
@@ -353,6 +370,10 @@ crate_: lib.makeOverridable
           extraRustcOpts buildTests codegenUnits;
       };
       dontStrip = !release;
+
+      # We need to preserve metadata in .rlib, which might get stripped on macOS. See https://github.com/NixOS/nixpkgs/issues/218712
+      stripExclude = [ "*.rlib" ];
+
       installPhase = installCrate crateName metadata buildTests;
 
       # depending on the test setting we are either producing something with bins
@@ -362,12 +383,16 @@ crate_: lib.makeOverridable
 
       meta = {
         mainProgram = crateName;
+        badPlatforms = [
+          # Rust is currently unable to target the n32 ABI
+          lib.systems.inspect.patterns.isMips64n32
+        ];
       };
     } // extraDerivationAttrs
     )
   )
 {
-  rust = rustc;
+  rust = rustc';
   release = crate_.release or true;
   verbose = crate_.verbose or true;
   extraRustcOpts = [ ];

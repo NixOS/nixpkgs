@@ -1,10 +1,11 @@
-{ buildPythonPackage
-, setuptools-scm
-, pytestCheckHook
-, git
-, mercurial
-, pip
-, virtualenv
+{
+  buildPythonPackage,
+  setuptools-scm,
+  pytestCheckHook,
+  git,
+  mercurial,
+  pip,
+  virtualenv,
 }:
 
 buildPythonPackage {

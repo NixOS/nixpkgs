@@ -1,32 +1,48 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, autobahn
-, mock
-, twisted
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  autobahn,
+  mock,
+  twisted,
+  pythonOlder,
+  pythonAtLeast,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "magic-wormhole-transit-relay";
   version = "0.2.1";
+  pyproject = true;
+
+  disabled = pythonOlder "3.7" || pythonAtLeast "3.12";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0ppsx2s1ysikns1h053x67z2zmficbn3y3kf52bzzslhd2s02j6b";
+    hash = "sha256-y0gBtGiQ6v+XKG4OP+xi0dUv/jF9FACDtjNqH7To+l4=";
   };
 
-  propagatedBuildInputs = [ autobahn twisted ];
+  nativeBuildInputs = [ setuptools ];
 
-  nativeCheckInputs = [ mock twisted ];
+  propagatedBuildInputs = [
+    autobahn
+    twisted
+  ];
 
-  checkPhase = ''
-    trial -j$NIX_BUILD_CORES wormhole_transit_relay
-  '';
+  pythonImportsCheck = [ "wormhole_transit_relay" ];
 
-  meta = with lib; {
+  nativeCheckInputs = [
+    pytestCheckHook
+    mock
+    twisted
+  ];
+
+  meta = {
     description = "Transit Relay server for Magic-Wormhole";
     homepage = "https://github.com/magic-wormhole/magic-wormhole-transit-relay";
-    license = licenses.mit;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    changelog = "https://github.com/magic-wormhole/magic-wormhole-transit-relay/blob/${version}/NEWS.md";
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.mjoerg ];
   };
 }

@@ -18,7 +18,7 @@ in
 
   options = with types; {
     services.yggdrasil = {
-      enable = mkEnableOption (lib.mdDoc "the yggdrasil system service");
+      enable = mkEnableOption "the yggdrasil system service";
 
       settings = mkOption {
         type = format.type;
@@ -32,7 +32,7 @@ in
             "tcp://0.0.0.0:xxxxx"
           ];
         };
-        description = lib.mdDoc ''
+        description = ''
           Configuration for yggdrasil, as a Nix attribute set.
 
           Warning: this is stored in the WORLD-READABLE Nix store!
@@ -61,7 +61,7 @@ in
         type = nullOr path;
         default = null;
         example = "/run/keys/yggdrasil.conf";
-        description = lib.mdDoc ''
+        description = ''
           A file which contains JSON or HJSON configuration for yggdrasil. See
           the {option}`settings` option for more information.
 
@@ -76,13 +76,13 @@ in
         type = types.nullOr types.str;
         default = null;
         example = "wheel";
-        description = lib.mdDoc "Group to grant access to the Yggdrasil control socket. If `null`, only root can access the socket.";
+        description = "Group to grant access to the Yggdrasil control socket. If `null`, only root can access the socket.";
       };
 
       openMulticastPort = mkOption {
         type = bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether to open the UDP port used for multicast peer discovery. The
           NixOS firewall blocks link-local communication, so in order to make
           incoming local peering work you will also need to configure
@@ -98,7 +98,7 @@ in
         type = listOf str;
         default = [ ];
         example = [ "tap*" ];
-        description = lib.mdDoc ''
+        description = ''
           Disable the DHCP client for any interface whose name matches
           any of the shell glob patterns in this list.  Use this
           option to prevent the DHCP client from broadcasting requests
@@ -108,18 +108,20 @@ in
         '';
       };
 
-      package = mkOption {
-        type = package;
-        default = pkgs.yggdrasil;
-        defaultText = literalExpression "pkgs.yggdrasil";
-        description = lib.mdDoc "Yggdrasil package to use.";
-      };
+      package = mkPackageOption pkgs "yggdrasil" { };
 
-      persistentKeys = mkEnableOption (lib.mdDoc ''
-        If enabled then keys will be generated once and Yggdrasil
+      persistentKeys = mkEnableOption ''
+        persistent keys. If enabled then keys will be generated once and Yggdrasil
         will retain the same IPv6 address when the service is
-        restarted. Keys are stored at ${keysPath}.
-      '');
+        restarted. Keys are stored at ${keysPath}
+      '';
+
+      extraArgs = mkOption {
+        type = listOf str;
+        default = [ ];
+        example = [ "-loglevel" "info" ];
+        description = "Extra command line arguments.";
+      };
 
     };
   };
@@ -135,16 +137,24 @@ in
         message = "networking.enableIPv6 must be true for yggdrasil to work";
       }];
 
-      system.activationScripts.yggdrasil = mkIf cfg.persistentKeys ''
-        if [ ! -e ${keysPath} ]
-        then
-          mkdir --mode=700 -p ${builtins.dirOf keysPath}
-          ${binYggdrasil} -genconf -json \
-            | ${pkgs.jq}/bin/jq \
-                'to_entries|map(select(.key|endswith("Key")))|from_entries' \
-            > ${keysPath}
-        fi
-      '';
+      # This needs to be a separate service. The yggdrasil service fails if
+      # this is put into its preStart.
+      systemd.services.yggdrasil-persistent-keys = lib.mkIf cfg.persistentKeys {
+        wantedBy = [ "multi-user.target" ];
+        before = [ "yggdrasil.service" ];
+        serviceConfig.Type = "oneshot";
+        serviceConfig.RemainAfterExit = true;
+        script = ''
+          if [ ! -e ${keysPath} ]
+          then
+            mkdir --mode=700 -p ${builtins.dirOf keysPath}
+            ${binYggdrasil} -genconf -json \
+              | ${pkgs.jq}/bin/jq \
+                  'to_entries|map(select(.key|endswith("Key")))|from_entries' \
+              > ${keysPath}
+          fi
+        '';
+      };
 
       systemd.services.yggdrasil = {
         description = "Yggdrasil Network Service";
@@ -181,7 +191,7 @@ in
             "${binYggdrasil} -genconf") + " > /run/yggdrasil/yggdrasil.conf"}
 
           # start yggdrasil
-          ${binYggdrasil} -useconffile /run/yggdrasil/yggdrasil.conf
+          ${binYggdrasil} -useconffile /run/yggdrasil/yggdrasil.conf ${lib.strings.escapeShellArgs cfg.extraArgs}
         '';
 
         serviceConfig = {

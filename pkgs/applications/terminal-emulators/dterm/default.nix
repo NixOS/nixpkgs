@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "http://www.knossos.net.nz/resources/free-software/dterm/";
-    description = "A simple terminal program";
+    description = "Simple terminal program";
     longDescription = ''
       dterm is a simple terminal emulator, which doesn’t actually emulate any
       particular terminal. Mainly, it is designed for use with xterm and
@@ -38,5 +38,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ auchter ];
     platforms = platforms.unix;
+    mainProgram = "dterm";
   };
 }

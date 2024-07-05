@@ -22,14 +22,14 @@ let
     keywords = [ "tracker" "music" ];
   };
 
-in stdenv.mkDerivation rec {
+in stdenv.mkDerivation (finalAttrs: {
   inherit pname;
   version = if isStereo
     then "2.77"  # stereo
     else "2.76"; # normal
 
   src = fetchurl {
-    url = "mirror://sourceforge/goattracker2/GoatTracker_${version}${lib.optionalString isStereo "_Stereo"}.zip";
+    url = "mirror://sourceforge/goattracker2/GoatTracker_${finalAttrs.version}${lib.optionalString isStereo "_Stereo"}.zip";
     sha256 = if isStereo
       then "1hiig2d152sv9kazwz33i56x1c54h5sh21ipkqnp6qlnwj8x1ksy"  # stereo
       else "0d7a3han4jw4bwiba3j87racswaajgl3pj4sb5lawdqdxicv3dn1"; # normal
@@ -43,10 +43,14 @@ in stdenv.mkDerivation rec {
   makeFlags = [ "PREFIX=$(out)/bin/" ];
 
   # The zip contains some build artifacts.
-  prePatch = "make clean";
+  prePatch = ''
+    make clean
+  '';
 
   # The destination does not get created automatically.
-  preBuild = "mkdir -p $out/bin";
+  preBuild = ''
+    mkdir -p $out/bin
+  '';
 
   # Other files get installed during the build phase.
   installPhase = ''
@@ -54,6 +58,7 @@ in stdenv.mkDerivation rec {
 
     convert goattrk2.bmp goattracker.png
     install -Dm644 goattracker.png $out/share/icons/hicolor/32x32/apps/goattracker.png
+    ${lib.optionalString (!isStereo) "install -Dm644 ../linux/goattracker.1 $out/share/man/man1/goattracker.1"}
 
     runHook postInstall
   '';
@@ -61,12 +66,13 @@ in stdenv.mkDerivation rec {
   desktopItems = [ desktopItem ];
 
   meta = {
-    description = "A crossplatform music editor for creating Commodore 64 music. Uses reSID library by Dag Lem and supports alternatively HardSID & CatWeasel devices"
+    description = "Crossplatform music editor for creating Commodore 64 music. Uses reSID library by Dag Lem and supports alternatively HardSID & CatWeasel devices"
       + lib.optionalString isStereo " - Stereo version";
     homepage = "https://cadaver.github.io/tools.html";
     downloadPage = "https://sourceforge.net/projects/goattracker2/";
     license = lib.licenses.gpl2Plus;
+    mainProgram = if isStereo then "gt2stereo" else "goattrk2";
     maintainers = with lib.maintainers; [ fgaz ];
     platforms = lib.platforms.all;
   };
-}
+})

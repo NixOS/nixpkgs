@@ -5,7 +5,6 @@
 , meson
 , ninja
 , pkg-config
-, vala
 , wrapGAppsHook4
 , evolution-data-server-gtk4
 , glib
@@ -14,7 +13,7 @@
 , gst_all_1
 , json-glib
 , libadwaita
-, libpeas
+, libpeas2
 , libportal-gtk4
 , pulseaudio
 , sqlite
@@ -22,14 +21,14 @@
 
 stdenv.mkDerivation rec {
   pname = "valent";
-  version = "unstable-2023-06-11";
+  version = "0-unstable-2024-02-12";
 
   src = fetchFromGitHub {
     owner = "andyholmes";
     repo = "valent";
-    rev = "e6a121efa7eb7b432517d610de4deea6dfa876b0";
+    rev = "70ef1aa42eb2df5e9c3aa4faa014c8d539450018";
     fetchSubmodules = true;
-    hash = "sha256-8X4Yu8VY5ehptJN1KtsCuoECtEZNLZMzOvU91j8UmDk=";
+    hash = "sha256-JdrkAtn21NoX+SI6PNWMdE8HLKhLc3HKFhwKydENkvg=";
   };
 
   nativeBuildInputs = [
@@ -37,7 +36,6 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
-    vala
     wrapGAppsHook4
   ];
 
@@ -50,7 +48,7 @@ stdenv.mkDerivation rec {
     gst_all_1.gst-plugins-base
     json-glib
     libadwaita
-    libpeas
+    libpeas2
     libportal-gtk4
     pulseaudio
     sqlite
@@ -58,14 +56,34 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [
     "-Dplugin_bluez=true"
+    # FIXME: libpeas2 (and libpeas) not compiled with -Dvapi=true
+    "-Dvapi=false"
   ];
 
-  meta = with lib; {
-    description = "An implementation of the KDE Connect protocol, built on GNOME platform libraries";
-    homepage = "https://github.com/andyholmes/valent/";
+  meta = {
+    description = "Implementation of the KDE Connect protocol, built on GNOME platform libraries";
+    mainProgram = "valent";
+    longDescription = ''
+      Note that you have to open firewall ports for other devices
+      to connect to it. Use either:
+      ```nix
+      programs.kdeconnect = {
+        enable = true;
+        package = pkgs.valent;
+      }
+      ```
+      or open corresponding firewall ports directly:
+      ```nix
+      networking.firewall = rec {
+        allowedTCPPortRanges = [ { from = 1714; to = 1764; } ];
+        allowedUDPPortRanges = allowedTCPPortRanges;
+      }
+      ```
+    '';
+    homepage = "https://valent.andyholmes.ca";
     changelog = "https://github.com/andyholmes/valent/blob/${src.rev}/CHANGELOG.md";
-    license = with licenses; [ gpl3Plus cc0 ];
-    maintainers = with maintainers; [ federicoschonborn aleksana ];
-    platforms = platforms.linux;
+    license = with lib.licenses; [ gpl3Plus cc0 cc-by-sa-30 ];
+    maintainers = with lib.maintainers; [ aleksana ];
+    platforms = lib.platforms.linux;
   };
 }

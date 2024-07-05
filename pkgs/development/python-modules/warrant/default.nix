@@ -1,16 +1,25 @@
-{ lib, buildPythonPackage, fetchFromGitHub, fetchpatch
-, mock
-, boto3, envs, python-jose, requests }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  mock,
+  boto3,
+  envs,
+  python-jose,
+  requests,
+}:
 
 buildPythonPackage {
   pname = "warrant";
   version = "0.6.1";
+  format = "setuptools";
 
   # move to fetchPyPi when https://github.com/capless/warrant/issues/97 is fixed
   src = fetchFromGitHub {
-    owner  = "capless";
-    repo   = "warrant";
-    rev    = "ff2e4793d8479e770f2461ef7cbc0c15ee784395";
+    owner = "capless";
+    repo = "warrant";
+    rev = "ff2e4793d8479e770f2461ef7cbc0c15ee784395";
     sha256 = "0gw3crg64p1zx3k5js0wh0x5bldgs7viy4g8hld9xbka8q0374hi";
   };
 
@@ -30,7 +39,12 @@ buildPythonPackage {
 
   nativeCheckInputs = [ mock ];
 
-  propagatedBuildInputs = [ boto3 envs python-jose requests ];
+  propagatedBuildInputs = [
+    boto3
+    envs
+    python-jose
+    requests
+  ];
 
   # all the checks are failing
   doCheck = false;

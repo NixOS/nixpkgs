@@ -1,14 +1,16 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, calmjs-types
-, calmjs-parse
-, pytestCheckHook
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  calmjs-types,
+  calmjs-parse,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "calmjs";
   version = "3.4.4";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -21,9 +23,7 @@ buildPythonPackage rec {
     calmjs-types
   ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
   # ModuleNotFoundError: No module named 'calmjs.types'
   # Not yet clear how to run these tests correctly
@@ -47,6 +47,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Framework for building toolchains and utilities for working with the Node.js ecosystem";
+    mainProgram = "calmjs";
     homepage = "https://github.com/calmjs/calmjs";
     license = licenses.gpl2;
     maintainers = with maintainers; [ onny ];

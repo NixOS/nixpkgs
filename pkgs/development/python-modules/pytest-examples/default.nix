@@ -1,18 +1,20 @@
-{ lib
-, black
-, buildPythonPackage
-, fetchFromGitHub
-, hatchling
-, pytest
-, pytestCheckHook
-, pythonOlder
-, pythonRelaxDepsHook
-, ruff
+{
+  lib,
+  black,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  hatchling,
+  pytest,
+  pytestCheckHook,
+  pythonOlder,
+  pythonRelaxDepsHook,
+  ruff,
 }:
 
 buildPythonPackage rec {
   pname = "pytest-examples";
-  version = "0.0.9";
+  version = "0.0.10";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -21,8 +23,19 @@ buildPythonPackage rec {
     owner = "pydantic";
     repo = "pytest-examples";
     rev = "refs/tags/v${version}";
-    hash = "sha256-ecxSLbPnHdL60vlc7EjKmw5rATTePqJCa5QIdyxevv0=";
+    hash = "sha256-jCxOGDJlFkMH9VtaaPsE5zt+p3Z/mrVzhdNSI51/nVM=";
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/pydantic/pytest-examples/commit/551ba911713c2859caabc91b664723dd6bc800c5.patch";
+      hash = "sha256-Y3OU4fNyLADhBQGwX2jY0gagVV2q2dcn3kJRLUyCtZI=";
+    })
+    (fetchpatch {
+      url = "https://github.com/pydantic/pytest-examples/commit/3bef5d644fe3fdb076270833768e4c6df9148530.patch";
+      hash = "sha256-pf+WKzZNqgjbJiblMMLHWk23kjg4W9nm+KBmC8rG8Lw=";
+    })
+  ];
 
   postPatch = ''
     # ruff binary is used directly, the ruff Python package is not needed
@@ -30,30 +43,25 @@ buildPythonPackage rec {
       --replace "'ruff'" "'${ruff}/bin/ruff'"
   '';
 
-  pythonRemoveDeps = [
-    "ruff"
-  ];
+  pythonRemoveDeps = [ "ruff" ];
 
   nativeBuildInputs = [
     hatchling
     pythonRelaxDepsHook
   ];
 
-  buildInputs = [
-    pytest
-  ];
+  buildInputs = [ pytest ];
 
-  propagatedBuildInputs = [
-    black
-    ruff
-  ];
+  propagatedBuildInputs = [ black ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "pytest_examples"
+  pythonImportsCheck = [ "pytest_examples" ];
+
+  disabledTests = [
+    # Test fails with latest ruff v0.1.2
+    # See https://github.com/pydantic/pytest-examples/issues/26
+    "test_ruff_error"
   ];
 
   meta = with lib; {

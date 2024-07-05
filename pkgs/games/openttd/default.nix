@@ -1,8 +1,11 @@
-{ lib, stdenv, fetchurl, fetchzip, cmake, SDL2, libpng, zlib, xz, freetype, fontconfig
+{ lib, stdenv, fetchzip, cmake, pkg-config
+, SDL2, libpng, zlib, xz, freetype, fontconfig
+, nlohmann_json, curl, icu, harfbuzz, expat, glib, pcre2
 , withOpenGFX ? true, withOpenSFX ? true, withOpenMSX ? true
-, withFluidSynth ? true, audioDriver ? "alsa", fluidsynth, soundfont-fluid, procps
-, writeScriptBin, makeWrapper, runtimeShell
-}:
+, withFluidSynth ? true, audioDriver ? "alsa"
+, fluidsynth, soundfont-fluid, libsndfile
+, flac, libogg, libvorbis, libopus, libmpg123, pulseaudio, alsa-lib, libjack2
+, procps, writeScriptBin, makeWrapper, runtimeShell }:
 
 let
   opengfx = fetchzip {
@@ -29,16 +32,21 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "openttd";
-  version = "13.3";
+  version = "14.1";
 
-  src = fetchurl {
+  src = fetchzip {
     url = "https://cdn.openttd.org/openttd-releases/${version}/${pname}-${version}-source.tar.xz";
-    hash = "sha256-qvoW0vtnFlE0xzqIj3n3pe19oXoEz26ez2csnLiecZI=";
+    hash = "sha256-YT4IE/rJ9pnpeMWKbOra6AbSUwW19RwOKlXkxwoMeKY=";
   };
 
-  nativeBuildInputs = [ cmake makeWrapper ];
-  buildInputs = [ SDL2 libpng xz zlib freetype fontconfig ]
-    ++ lib.optionals withFluidSynth [ fluidsynth soundfont-fluid ];
+  nativeBuildInputs = [ cmake pkg-config makeWrapper ];
+  buildInputs = [
+    SDL2 libpng xz zlib freetype fontconfig
+    nlohmann_json curl icu harfbuzz expat glib pcre2
+  ] ++ lib.optionals withFluidSynth [
+    fluidsynth soundfont-fluid libsndfile
+    flac libogg libvorbis libopus libmpg123 pulseaudio alsa-lib libjack2
+  ];
 
   prefixKey = "--prefix-dir=";
 
@@ -72,6 +80,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = ''Open source clone of the Microprose game "Transport Tycoon Deluxe"'';
+    mainProgram = "openttd";
     longDescription = ''
       OpenTTD is a transportation economics simulator. In single player mode,
       players control a transportation business, and use rail, road, sea, and air
@@ -84,7 +93,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://www.openttd.org/";
     changelog = "https://cdn.openttd.org/openttd-releases/${version}/changelog.txt";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     platforms = platforms.linux;
     maintainers = with maintainers; [ jcumming fpletz ];
   };

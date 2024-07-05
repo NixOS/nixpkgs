@@ -1,26 +1,28 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, cargo
-, cffi
-, fetchPypi
-, glean-parser
-, iso8601
-, lmdb
-, pkg-config
-, pytest-localserver
-, pytestCheckHook
-, python
-, pythonOlder
-, rustc
-, rustPlatform
-, semver
-, setuptools-rust
+{
+  stdenv,
+  lib,
+  buildPythonPackage,
+  cargo,
+  cffi,
+  fetchPypi,
+  glean-parser,
+  iso8601,
+  lmdb,
+  pkg-config,
+  pytest-localserver,
+  pytestCheckHook,
+  python,
+  pythonOlder,
+  rustc,
+  rustPlatform,
+  semver,
+  setuptools-rust,
 }:
 
 buildPythonPackage rec {
   pname = "glean-sdk";
   version = "52.7.0";
+  format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
@@ -43,9 +45,7 @@ buildPythonPackage rec {
     setuptools-rust
   ];
 
-  buildInputs = [
-    lmdb
-  ];
+  buildInputs = [ lmdb ];
 
   propagatedBuildInputs = [
     cffi
@@ -65,13 +65,11 @@ buildPythonPackage rec {
     "test_flipping_upload_enabled_respects_order_of_events"
   ];
 
-  postInstallCheck = lib.optionalString (stdenv.hostPlatform.parsed.kernel.execFormat == lib.systems.parse.execFormats.elf) ''
+  postInstallCheck = lib.optionalString stdenv.hostPlatform.isElf ''
     readelf -a $out/${python.sitePackages}/glean/libglean_ffi.so | grep -F 'Shared library: [liblmdb.so'
   '';
 
-  pythonImportsCheck = [
-    "glean"
-  ];
+  pythonImportsCheck = [ "glean" ];
 
   meta = with lib; {
     broken = stdenv.isDarwin;

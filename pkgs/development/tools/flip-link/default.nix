@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "flip-link";
-  version = "0.1.6";
+  version = "0.1.8";
 
   src = fetchFromGitHub {
     owner = "knurling-rs";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-Sf2HlAfPlg8Er2g17AnRmUkvRhTw5AVPuL2B92hFvpA=";
+    hash = "sha256-12eVZqW4+ZCDS0oszJI5rTREJY77km/y57LNDFJAwkk=";
   };
 
-  cargoSha256 = "sha256-2VgsO2hUIvSPNQhR13+bGTxXa6xZXcK0amfiWv2EIxk=";
+  cargoHash = "sha256-75D38+QjEzj7J4CC30iMeuDXwcW4QT9YWgYyCILSv+g=";
 
   buildInputs = lib.optional stdenv.isDarwin libiconv;
 
@@ -24,6 +24,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Adds zero-cost stack overflow protection to your embedded programs";
+    mainProgram = "flip-link";
     homepage = "https://github.com/knurling-rs/flip-link";
     changelog = "https://github.com/knurling-rs/flip-link/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ asl20 /* or */ mit ];

@@ -1,32 +1,29 @@
 { lib
-, buildGoModule
 , fetchFromGitHub
+, buildGoModule
+, buildNpmPackage
 , makeWrapper
-, fetchzip
-, fetchpatch
-, pathDeps ? [ ]
+, go-swag
 , nixosTests
+, testers
+, pufferpanel
 }:
 
 buildGoModule rec {
   pname = "pufferpanel";
-  version = "2.6.6";
+  version = "2.6.9";
+
+  src = fetchFromGitHub {
+    owner = "PufferPanel";
+    repo = "PufferPanel";
+    rev = "v${version}";
+    hash = "sha256-+ZZUoqCiSbrkaeYrm9X8SuX0INsGFegQNwa3WjBvgHQ=";
+  };
 
   patches = [
-    # Bump go-sqlite3 version to avoid a GNU C compiler error.
-    (fetchpatch {
-      url = "https://github.com/PufferPanel/PufferPanel/commit/dd7fc80c33c7618c98311af09c78c25b77658aef.patch";
-      hash = "sha256-ygMrhJoba8swoRBBii7BEiLihqOebLUtSH7os7W3s+k=";
-    })
-
-    # Fix errors in tests.
-    (fetchpatch {
-      url = "https://github.com/PufferPanel/PufferPanel/commit/ad6ab4b4368e1111292fadfb3d9f058fa399fa21.patch";
-      hash = "sha256-BzGfcWhzRrCHKkAhWf0uvXiiiutWqthn/ed7bN2hR8U=";
-    })
-
     # Bump sha1cd package, otherwise i686-linux fails to build.
-    ./bump-sha1cd.patch
+    # Also bump github.com/swaggo/swag for PR 257790.
+    ./deps.patch
 
     # Seems to be an anti-feature. Startup is the only place where user/group is
     # hardcoded and checked.
@@ -46,60 +43,65 @@ buildGoModule rec {
     "-X=github.com/pufferpanel/pufferpanel/v2.Version=${version}-nixpkgs"
   ];
 
-  src = fetchFromGitHub {
-    owner = "pufferpanel";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-0Vyi47Rkpe3oODHfsl/7tCerENpiEa3EWBHhfTO/uu4=";
+  frontend = buildNpmPackage {
+    pname = "pufferpanel-frontend";
+    inherit version;
+
+    src = "${src}/client";
+
+    npmDepsHash = "sha256-oWFXtV/dxzHv3sfIi01l1lHE5tcJgpVq87XgS6Iy62g=";
+
+    NODE_OPTIONS = "--openssl-legacy-provider";
+    npmBuildFlags = [ "--" "--dest=${placeholder "out"}" ];
+    dontNpmInstall = true;
   };
 
-  # PufferPanel is split into two parts: the backend daemon and the
-  # frontend.
-  # Getting the frontend to build in the Nix environment fails even
-  # with all the proper node_modules populated. To work around this,
-  # we just download the built frontend and package that.
-  frontend = fetchzip {
-    url = "https://github.com/PufferPanel/PufferPanel/releases/download/v${version}/pufferpanel_${version}_linux_arm64.zip";
-    hash = "sha256-z7HWhiEBma37OMGEkTGaEbnF++Nat8wAZE2UeOoaO/U=";
-    stripRoot = false;
-    postFetch = ''
-      mv $out $TMPDIR/subdir
-      mv $TMPDIR/subdir/www $out
-    '';
-  };
+  nativeBuildInputs = [ makeWrapper go-swag ];
 
-  nativeBuildInputs = [ makeWrapper ];
-
-  vendorHash = "sha256-Esfk7SvqiWeiobXSI+4wYVEH9yVkB+rO7bxUQ5TzvG4=";
+  vendorHash = "sha256-1U7l7YW1fu5M0/pPHTLamLsTQdEltesRODUn21SuP8w=";
   proxyVendor = true;
 
-  postFixup = ''
-    mkdir -p $out/share/pufferpanel
-    cp -r ${src}/assets/email $out/share/pufferpanel/templates
-    cp -r ${frontend} $out/share/pufferpanel/www
+  # Generate code for Swagger documentation endpoints (see web/swagger/docs.go).
+  # Note that GOROOT embedded in go-swag is empty by default since it is built
+  # with -trimpath (see https://go.dev/cl/399214). It looks like go-swag skips
+  # file paths that start with $GOROOT, thus all files when it is empty.
+  preBuild = ''
+    GOROOT=''${GOROOT-$(go env GOROOT)} swag init --output web/swagger --generalInfo web/loader.go
+  '';
 
-    # Rename cmd to pufferpanel and remove other binaries.
-    mv $out/bin $TMPDIR/bin
-    mkdir $out/bin
-    mv $TMPDIR/bin/cmd $out/bin/pufferpanel
+  installPhase = ''
+    runHook preInstall
+
+    # Set up directory structure similar to the official PufferPanel releases.
+    mkdir -p $out/share/pufferpanel
+    cp "$GOPATH"/bin/cmd $out/share/pufferpanel/pufferpanel
+    cp -r $frontend $out/share/pufferpanel/www
+    cp -r $src/assets/email $out/share/pufferpanel/email
+    cp web/swagger/swagger.{json,yaml} $out/share/pufferpanel
 
     # Wrap the binary with the path to the external files, but allow setting
     # custom paths if needed.
-    wrapProgram $out/bin/pufferpanel \
+    makeWrapper $out/share/pufferpanel/pufferpanel $out/bin/pufferpanel \
       --set-default GIN_MODE release \
-      --set-default PUFFER_PANEL_EMAIL_TEMPLATES $out/share/pufferpanel/templates/emails.json \
-      --set-default PUFFER_PANEL_WEB_FILES $out/share/pufferpanel/www \
-      --prefix PATH : ${lib.escapeShellArg (lib.makeBinPath pathDeps)}
+      --set-default PUFFER_PANEL_EMAIL_TEMPLATES $out/share/pufferpanel/email/emails.json \
+      --set-default PUFFER_PANEL_WEB_FILES $out/share/pufferpanel/www
+
+    runHook postInstall
   '';
 
   passthru.tests = {
     inherit (nixosTests) pufferpanel;
+    version = testers.testVersion {
+      package = pufferpanel;
+      command = "${pname} version";
+    };
   };
 
   meta = with lib; {
-    description = "A free, open source game management panel";
+    description = "Free, open source game management panel";
     homepage = "https://www.pufferpanel.com/";
     license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ ckie tie ];
+    maintainers = with maintainers; [ tie ];
+    mainProgram = "pufferpanel";
   };
 }

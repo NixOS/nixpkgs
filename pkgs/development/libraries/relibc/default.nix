@@ -63,8 +63,7 @@ redoxRustPlatform.buildRustPackage rec {
     DESTDIR=$out make install
   '';
 
-  # TODO: should be hostPlatform
-  TARGET = buildPackages.rust.toRustTargetSpec stdenvNoCC.targetPlatform;
+  TARGET = stdenvNoCC.hostPlatform.rust.rustcTargetSpec;
 
   cargoLock = {
     lockFile = ./Cargo.lock;

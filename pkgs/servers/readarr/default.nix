@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, libmediainfo, sqlite, curl, makeWrapper, icu, dotnet-runtime, openssl, nixosTests }:
+{ lib, stdenv, fetchurl, libmediainfo, sqlite, curl, makeWrapper, icu, dotnet-runtime, openssl, nixosTests, zlib }:
 
 let
   os = if stdenv.isDarwin then "osx" else "linux";
@@ -8,13 +8,13 @@ let
     x86_64-darwin = "x64";
   }."${stdenv.hostPlatform.system}" or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   hash = {
-    x64-linux_hash = "sha256-TKK0009ZEFWpzR9jYRanG3sMVp8hQcTd9G/FvUu00tQ=";
-    arm64-linux_hash = "sha256-u1vjSYu751VoOYsCPyPzcNnmG0rrKk7VgbXMG8X96jU=";
-    x64-osx_hash = "sha256-IHJ6hZP4DVTotoGxfLLbOveA8TD+6DHXkC+8QqmgTeg=";
+    x64-linux_hash = "sha256-jnsIftFHc2UpmW3WBWCff+cUqN40u/xKfQRMS1iMu4M=";
+    arm64-linux_hash = "sha256-ATdE9wXpew1D0wd/j2ntXBVYj/dMm/rWZLfOBKdrmnY=";
+    x64-osx_hash = "sha256-2/cUd45vhqdXAsrVPKlRTwOMd+kamW1OIOaB9G7xnjc=";
   }."${arch}-${os}_hash";
 in stdenv.mkDerivation rec {
   pname = "readarr";
-  version = "0.1.9.1905";
+  version = "0.3.29.2565";
 
   src = fetchurl {
     url = "https://github.com/Readarr/Readarr/releases/download/v${version}/Readarr.develop.${version}.${os}-core-${arch}.tar.gz";
@@ -30,7 +30,7 @@ in stdenv.mkDerivation rec {
     cp -r * $out/share/${pname}-${version}/.
     makeWrapper "${dotnet-runtime}/bin/dotnet" $out/bin/Readarr \
       --add-flags "$out/share/${pname}-${version}/Readarr.dll" \
-      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ curl sqlite libmediainfo icu openssl ]}
+      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ curl sqlite libmediainfo icu openssl zlib ]}
 
     runHook postInstall
   '';
@@ -42,10 +42,11 @@ in stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "A Usenet/BitTorrent ebook downloader";
+    description = "Usenet/BitTorrent ebook downloader";
     homepage = "https://readarr.com";
     license = licenses.gpl3;
     maintainers = [ maintainers.jocelynthode ];
+    mainProgram = "Readarr";
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" ];
   };

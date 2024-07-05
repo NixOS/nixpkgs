@@ -18,7 +18,7 @@ buildGoModule rec {
       --replace '/usr/lib/holo/holo-build' '${placeholder "out"}/lib/holo/holo-build'
   '';
 
-  vendorSha256 = null;
+  vendorHash = null;
 
   nativeBuildInputs = [ installShellFiles perl ];
 
@@ -54,6 +54,7 @@ buildGoModule rec {
     description = "Cross-distribution system package compiler";
     homepage = "https://holocm.org/";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
+    mainProgram = "holo-build";
   };
 }

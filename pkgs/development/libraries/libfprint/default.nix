@@ -19,7 +19,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libfprint";
-  version = "1.94.5";
+  version = "1.94.6";
   outputs = [ "out" "devdoc" ];
 
   src = fetchFromGitLab {
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     owner = "libfprint";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-+eSvzbXxjemVKMeD8tp/0/tGBjw2EOlmyxb8KfyZKtA=";
+    hash = "sha256-lDnAXWukBZSo8X6UEVR2nOMeVUi/ahnJgx2cP+vykZ8=";
   };
 
   postPatch = ''
@@ -85,7 +85,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://fprint.freedesktop.org/";
-    description = "A library designed to make it easy to add support for consumer fingerprint readers";
+    description = "Library designed to make it easy to add support for consumer fingerprint readers";
     license = licenses.lgpl21Only;
     platforms = platforms.linux;
     maintainers = with maintainers; [ abbradar ];

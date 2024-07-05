@@ -23,7 +23,7 @@
 , pkg-config
 , sword
 , webkitgtk
-, wrapGAppsHook
+, wrapGAppsHook3
 , yelp-tools
 , zip
 }:
@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
     itstool
     libxslt
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
     yelp-tools # for yelp-build
     zip # for building help epubs
   ];
@@ -97,7 +97,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A GTK Bible study tool";
+    description = "GTK Bible study tool";
     longDescription = ''
       Xiphos (formerly known as GnomeSword) is a Bible study tool
       written for Linux, UNIX, and Windows using GTK, offering a rich

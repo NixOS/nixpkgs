@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "doomretro";
-  version = "4.9.2";
+  version = "5.4";
 
   src = fetchFromGitHub {
     owner = "bradharding";
     repo = "doomretro";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-thH18+Og5kSiMdzgPdGyUwBchpjpd9xfFfUlUQMAl1A=";
+    hash = "sha256-IOv58BmJvJtO7MMbrvf52MPYI0zjmPuRK7mcTwmBEY0=";
   };
 
   nativeBuildInputs = [
@@ -35,7 +35,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://www.doomretro.com/";
-    description = "A classic, refined DOOM source port";
+    description = "Classic, refined DOOM source port";
+    mainProgram = "doomretro";
     longDescription = ''
       DOOM Retro is the classic, refined DOOM source port for Windows PC. It
       represents how I like my DOOM to be today, in all its dark and gritty,

@@ -23,11 +23,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pdns";
-  version = "4.8.1";
+  version = "4.9.1";
 
   src = fetchurl {
     url = "https://downloads.powerdns.com/releases/pdns-${finalAttrs.version}.tar.bz2";
-    hash = "sha256-Zt0+4mVPQrTrgCYPlOy0jjE6gYF/WBJc5IwUwtJuMJ4=";
+    hash = "sha256-MNlnG48IR3Tby6IPWlOjE00IIqsu3D75aNoDDmMN0Jo=";
   };
   # redact configure flags from version output to reduce closure size
   patches = [ ./version.patch ];
@@ -97,7 +97,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.powerdns.com";
     platforms = platforms.unix;
     broken = stdenv.isDarwin;
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     maintainers = with maintainers; [ mic92 disassembler nickcao ];
   };
 })

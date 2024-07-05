@@ -1054,9 +1054,9 @@ dependencies = [
 
 [[package]]
 name = "gtk4"
-version = "0.6.2"
+version = "0.6.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e47dca53cb1a8ae3006e869b5711ae7370180db537f6d98e3bcaf23fabfd911f"
+checksum = "b28a32a04cd75cef14a0983f8b0c669e0fe152a0a7725accdeb594e2c764c88b"
 dependencies = [
  "bitflags",
  "cairo-rs",
@@ -1106,6 +1106,24 @@ dependencies = [
  "libc",
  "pango-sys",
  "system-deps",
+]
+
+[[package]]
+name = "gvdb"
+version = "0.4.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "d6fc5915836ff1779eb9455810dad729811334b1026d4316eaf89c3a415e32ea"
+dependencies = [
+ "byteorder",
+ "flate2",
+ "lazy_static",
+ "memmap2",
+ "quick-xml",
+ "safe-transmute",
+ "serde",
+ "serde_json",
+ "walkdir",
+ "zvariant",
 ]
 
 [[package]]
@@ -1472,6 +1490,15 @@ name = "memchr"
 version = "2.5.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "2dffe52ecf27772e601905b7522cb4ef790d2cc203488bbd0e2fe85fcb74566d"
+
+[[package]]
+name = "memmap2"
+version = "0.5.10"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "83faa42c0a078c393f6b29d5db232d8be22776a891f8f56e5284faee4a20b327"
+dependencies = [
+ "libc",
+]
 
 [[package]]
 name = "memoffset"
@@ -1843,6 +1870,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "quick-xml"
+version = "0.27.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "ffc053f057dd768a56f62cd7e434c42c831d296968997e9ac1f76ea7c2d14c41"
+dependencies = [
+ "memchr",
+ "serde",
+]
+
+[[package]]
 name = "quote"
 version = "1.0.26"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1920,9 +1957,9 @@ checksum = "456c603be3e8d448b072f410900c09faf164fbce2d480456f50eea6e25f9c848"
 
 [[package]]
 name = "relm4"
-version = "0.6.0-alpha.2"
+version = "0.6.0-beta.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7acc5e3ddd682eeb0ca33da36b821fc907017c6d7758b09ce280247b0b0ea8cd"
+checksum = "f169f698ce2e487eed2306898fcf262224a287d0e81480db4190e74cfec412cf"
 dependencies = [
  "async-trait",
  "flume",
@@ -1938,9 +1975,9 @@ dependencies = [
 
 [[package]]
 name = "relm4-components"
-version = "0.6.0-alpha.2"
+version = "0.6.0-beta.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "26bc1784d641cd5d97ac4d26c56f68699aaa4518b7c827c295c1515ddafa96e4"
+checksum = "734838f188ee58954351c75175cb5ba6e9e67f90576b7fb90b928b2cb6043e1d"
 dependencies = [
  "once_cell",
  "relm4",
@@ -1948,10 +1985,20 @@ dependencies = [
 ]
 
 [[package]]
-name = "relm4-macros"
-version = "0.6.0-alpha.2"
+name = "relm4-icons"
+version = "0.6.0-beta.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c8525ce12dcd7d2a9e9070d84b8b885600eccd0a143df6712ce34a87d001a8b7"
+checksum = "b7123701f31271a2e33a53270a6e73010356d99cff1b97c89276299609af3303"
+dependencies = [
+ "gtk4",
+ "gvdb",
+]
+
+[[package]]
+name = "relm4-macros"
+version = "0.6.0-beta.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "7fa06febb3685960e7c1c44e21e44a3829325940b31d1e91391a43c32020c201"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -2029,6 +2076,21 @@ name = "ryu"
 version = "1.0.13"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f91339c0467de62360649f8d3e185ca8de4224ff281f66000de5eb2a77a79041"
+
+[[package]]
+name = "safe-transmute"
+version = "0.11.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "98a01dab6acf992653be49205bdd549f32f17cb2803e8eacf1560bf97259aae8"
+
+[[package]]
+name = "same-file"
+version = "1.0.6"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "93fc1dc3aaa9bfed95e02e6eadabb4baf7e3078b0bd1b4d7b6b0b68378900502"
+dependencies = [
+ "winapi-util",
+]
 
 [[package]]
 name = "schannel"
@@ -2603,6 +2665,16 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "9d5b2c62b4012a3e1eca5a7e077d13b3bf498c4073e33ccd58626607748ceeca"
 
 [[package]]
+name = "walkdir"
+version = "2.3.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "36df944cda56c7d8d8b7496af378e6b16de9284591917d307c9b4d313c44e698"
+dependencies = [
+ "same-file",
+ "winapi-util",
+]
+
+[[package]]
 name = "want"
 version = "0.3.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2701,6 +2773,7 @@ dependencies = [
  "log",
  "relm4",
  "relm4-components",
+ "relm4-icons",
  "version-compare",
 ]
 

@@ -1,17 +1,17 @@
-{ config, lib, pkgs, buildEnv, ... }:
+{ config, lib, options, pkgs, buildEnv, ... }:
 
 with lib;
 
 let
   defaultUser = "healthchecks";
   cfg = config.services.healthchecks;
+  opt = options.services.healthchecks;
   pkg = cfg.package;
   boolToPython = b: if b then "True" else "False";
   environment = {
     PYTHONPATH = pkg.pythonPath;
     STATIC_ROOT = cfg.dataDir + "/static";
-    DB_NAME = "${cfg.dataDir}/healthchecks.sqlite";
-  } // cfg.settings;
+  } // lib.filterAttrs (_: v: !builtins.isNull v) cfg.settings;
 
   environmentFile = pkgs.writeText "healthchecks-environment" (lib.generators.toKeyValue { } environment);
 
@@ -21,29 +21,25 @@ let
       sudo='exec /run/wrappers/bin/sudo -u ${cfg.user} --preserve-env --preserve-env=PYTHONPATH'
     fi
     export $(cat ${environmentFile} | xargs)
+    ${lib.optionalString (cfg.settingsFile != null) "export $(cat ${cfg.settingsFile} | xargs)"}
     $sudo ${pkg}/opt/healthchecks/manage.py "$@"
   '';
 in
 {
   options.services.healthchecks = {
-    enable = mkEnableOption (lib.mdDoc "healthchecks") // {
-      description = lib.mdDoc ''
+    enable = mkEnableOption "healthchecks" // {
+      description = ''
         Enable healthchecks.
         It is expected to be run behind a HTTP reverse proxy.
       '';
     };
 
-    package = mkOption {
-      default = pkgs.healthchecks;
-      defaultText = literalExpression "pkgs.healthchecks";
-      type = types.package;
-      description = lib.mdDoc "healthchecks package to use.";
-    };
+    package = mkPackageOption pkgs "healthchecks" { };
 
     user = mkOption {
       default = defaultUser;
       type = types.str;
-      description = lib.mdDoc ''
+      description = ''
         User account under which healthchecks runs.
 
         ::: {.note}
@@ -57,7 +53,7 @@ in
     group = mkOption {
       default = defaultUser;
       type = types.str;
-      description = lib.mdDoc ''
+      description = ''
         Group account under which healthchecks runs.
 
         ::: {.note}
@@ -71,19 +67,19 @@ in
     listenAddress = mkOption {
       type = types.str;
       default = "localhost";
-      description = lib.mdDoc "Address the server will listen on.";
+      description = "Address the server will listen on.";
     };
 
     port = mkOption {
       type = types.port;
       default = 8000;
-      description = lib.mdDoc "Port the server will listen on.";
+      description = "Port the server will listen on.";
     };
 
     dataDir = mkOption {
       type = types.str;
       default = "/var/lib/healthchecks";
-      description = lib.mdDoc ''
+      description = ''
         The directory used to store all data for healthchecks.
 
         ::: {.note}
@@ -94,46 +90,62 @@ in
       '';
     };
 
+    settingsFile = lib.mkOption {
+      type = lib.types.nullOr lib.types.path;
+      default = null;
+      description = opt.settings.description;
+    };
+
     settings = lib.mkOption {
-      description = lib.mdDoc ''
+      description = ''
         Environment variables which are read by healthchecks `(local)_settings.py`.
 
-        Settings which are explicitly covered in options bewlow, are type-checked and/or transformed
+        Settings which are explicitly covered in options below, are type-checked and/or transformed
         before added to the environment, everything else is passed as a string.
 
         See <https://healthchecks.io/docs/self_hosted_configuration/>
         for a full documentation of settings.
 
-        We add two variables to this list inside the packages `local_settings.py.`
-        - STATIC_ROOT to set a state directory for dynamically generated static files.
-        - SECRET_KEY_FILE to read SECRET_KEY from a file at runtime and keep it out of /nix/store.
+        We add additional variables to this list inside the packages `local_settings.py.`
+        - `STATIC_ROOT` to set a state directory for dynamically generated static files.
+        - `SECRET_KEY_FILE` to read `SECRET_KEY` from a file at runtime and keep it out of
+          /nix/store.
+        - `_FILE` variants for several values that hold sensitive information in
+          [Healthchecks configuration](https://healthchecks.io/docs/self_hosted_configuration/) so
+          that they also can be read from a file and kept out of /nix/store. To see which values
+          have support for a `_FILE` variant, run:
+          - `nix-instantiate --eval --expr '(import <nixpkgs> {}).healthchecks.secrets'`
+          - or `nix eval 'nixpkgs#healthchecks.secrets'` if the flake support has been enabled.
+
+        If the same variable is set in both `settings` and `settingsFile` the value from `settingsFile` has priority.
       '';
-      type = types.submodule {
+      type = types.submodule (settings: {
         freeformType = types.attrsOf types.str;
         options = {
           ALLOWED_HOSTS = lib.mkOption {
             type = types.listOf types.str;
             default = [ "*" ];
-            description = lib.mdDoc "The host/domain names that this site can serve.";
+            description = "The host/domain names that this site can serve.";
             apply = lib.concatStringsSep ",";
           };
 
           SECRET_KEY_FILE = mkOption {
-            type = types.path;
-            description = lib.mdDoc "Path to a file containing the secret key.";
+            type = types.nullOr types.path;
+            description = "Path to a file containing the secret key.";
+            default = null;
           };
 
           DEBUG = mkOption {
             type = types.bool;
             default = false;
-            description = lib.mdDoc "Enable debug mode.";
+            description = "Enable debug mode.";
             apply = boolToPython;
           };
 
           REGISTRATION_OPEN = mkOption {
             type = types.bool;
             default = false;
-            description = lib.mdDoc ''
+            description = ''
               A boolean that controls whether site visitors can create new accounts.
               Set it to false if you are setting up a private Healthchecks instance,
               but it needs to be publicly accessible (so, for example, your cloud
@@ -143,8 +155,28 @@ in
             '';
             apply = boolToPython;
           };
+
+          DB = mkOption {
+            type = types.enum [ "sqlite" "postgres" "mysql" ];
+            default = "sqlite";
+            description = "Database engine to use.";
+          };
+
+          DB_NAME = mkOption {
+            type = types.str;
+            default =
+              if settings.config.DB == "sqlite"
+              then "${cfg.dataDir}/healthchecks.sqlite"
+              else "hc";
+            defaultText = lib.literalExpression ''
+              if config.${settings.options.DB} == "sqlite"
+              then "''${config.${opt.dataDir}}/healthchecks.sqlite"
+              else "hc"
+            '';
+            description = "Database name.";
+          };
         };
-      };
+      });
     };
   };
 
@@ -154,6 +186,7 @@ in
     systemd.targets.healthchecks = {
       description = "Target for all Healthchecks services";
       wantedBy = [ "multi-user.target" ];
+      wants = [ "network-online.target" ];
       after = [ "network.target" "network-online.target" ];
     };
 
@@ -163,12 +196,14 @@ in
           WorkingDirectory = cfg.dataDir;
           User = cfg.user;
           Group = cfg.group;
-          EnvironmentFile = [ environmentFile ];
+          EnvironmentFile = [
+            environmentFile
+          ] ++ lib.optional (cfg.settingsFile != null) cfg.settingsFile;
           StateDirectory = mkIf (cfg.dataDir == "/var/lib/healthchecks") "healthchecks";
           StateDirectoryMode = mkIf (cfg.dataDir == "/var/lib/healthchecks") "0750";
         };
       in
-        {
+      {
         healthchecks-migration = {
           description = "Healthchecks migrations";
           wantedBy = [ "healthchecks.target" ];
@@ -190,8 +225,7 @@ in
           preStart = ''
             ${pkg}/opt/healthchecks/manage.py collectstatic --no-input
             ${pkg}/opt/healthchecks/manage.py remove_stale_contenttypes --no-input
-            ${pkg}/opt/healthchecks/manage.py compress
-          '';
+          '' + lib.optionalString (cfg.settings.DEBUG != "True") "${pkg}/opt/healthchecks/manage.py compress";
 
           serviceConfig = commonConfig // {
             Restart = "always";

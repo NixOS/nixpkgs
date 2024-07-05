@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl
-, cmake, pkg-config, perl, go, python3
+, cmake, ninja, pkg-config, perl, go, python3
 , protobuf, zlib, gtest, brotli, lz4, zstd, libusb1, pcre2
 }:
 
@@ -9,19 +9,16 @@ in
 
 stdenv.mkDerivation rec {
   pname = "android-tools";
-  version = "34.0.1";
+  version = "35.0.1";
 
   src = fetchurl {
     url = "https://github.com/nmeum/android-tools/releases/download/${version}/android-tools-${version}.tar.xz";
-    hash = "sha256-YCNOy8oZoXp+L0akWBlg1kW3xVuHDZJKIUlMdqb1SOw=";
+    hash = "sha256-ZUAwx/ltJdciTNaGH6wUoEPPHTmA9AKIzfviGflP+vk=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config perl go ];
+  nativeBuildInputs = [ cmake ninja pkg-config perl go ];
   buildInputs = [ protobuf zlib gtest brotli lz4 zstd libusb1 pcre2 ];
   propagatedBuildInputs = [ pythonEnv ];
-
-  # Don't try to fetch any Go modules via the network:
-  GOFLAGS = [ "-mod=vendor" ];
 
   preConfigure = ''
     export GOCACHE=$TMPDIR/go-cache

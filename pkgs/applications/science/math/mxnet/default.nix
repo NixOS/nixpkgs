@@ -1,11 +1,11 @@
 { config, stdenv, lib, fetchurl, fetchpatch, bash, cmake
-, opencv3, gtest, blas, gomp, llvmPackages, perl
-, cudaSupport ? config.cudaSupport or false, cudaPackages ? {}, nvidia_x11
+, opencv4, gtest, blas, gomp, llvmPackages, perl
+, cudaSupport ? config.cudaSupport, cudaPackages ? { }, nvidia_x11
 , cudnnSupport ? cudaSupport
 }:
 
 let
-  inherit (cudaPackages) cudatoolkit cudaFlags cudnn;
+  inherit (cudaPackages) backendStdenv cudatoolkit cudaFlags cudnn;
 in
 
 assert cudnnSupport -> cudaSupport;
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake perl ];
 
-  buildInputs = [ opencv3 gtest blas.provider ]
+  buildInputs = [ opencv4 gtest blas.provider ]
     ++ lib.optional stdenv.cc.isGNU gomp
     ++ lib.optional stdenv.cc.isClang llvmPackages.openmp
     # FIXME: when cuda build is fixed, remove nvidia_x11, and use /run/opengl-driver/lib
@@ -49,14 +49,13 @@ stdenv.mkDerivation rec {
     ++ (if cudaSupport then [
       "-DUSE_OLDCMAKECUDA=ON"  # see https://github.com/apache/incubator-mxnet/issues/10743
       "-DCUDA_ARCH_NAME=All"
-      "-DCUDA_HOST_COMPILER=${cudatoolkit.cc}/bin/cc"
+      "-DCUDA_HOST_COMPILER=${backendStdenv.cc}/bin/cc"
       "-DMXNET_CUDA_ARCH=${builtins.concatStringsSep ";" cudaFlags.realArches}"
     ] else [ "-DUSE_CUDA=OFF" ])
     ++ lib.optional (!cudnnSupport) "-DUSE_CUDNN=OFF";
 
   env.NIX_CFLAGS_COMPILE = toString [
     # Needed with GCC 12
-    "-Wno-error=maybe-uninitialized"
     "-Wno-error=uninitialized"
   ];
 

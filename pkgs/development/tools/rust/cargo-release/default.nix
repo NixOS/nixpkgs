@@ -12,13 +12,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-release";
-  version = "0.24.11";
+  version = "0.25.0";
 
   src = fetchFromGitHub {
     owner = "crate-ci";
     repo = "cargo-release";
     rev = "refs/tags/v${version}";
-    hash = "sha256-VF0jVk94DncSNB1EnYHGUolVYvykEwluHJiHQShcqQo=";
+    hash = "sha256-UJdGbuQfvlZHjCKyHCXPDJ5AdUWJCRUS/vNeTKAwyYI=";
   };
 
   cargoLock = {
@@ -37,7 +37,7 @@ rustPlatform.buildRustPackage rec {
     openssl
   ] ++ lib.optionals stdenv.isDarwin [
     curl
-    darwin.apple_sdk.frameworks.Security
+    darwin.apple_sdk.frameworks.SystemConfiguration
   ];
 
   nativeCheckInputs = [
@@ -49,6 +49,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = ''Cargo subcommand "release": everything about releasing a rust crate'';
+    mainProgram = "cargo-release";
     homepage = "https://github.com/crate-ci/cargo-release";
     changelog = "https://github.com/crate-ci/cargo-release/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ asl20 /* or */ mit ];

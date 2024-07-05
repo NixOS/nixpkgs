@@ -1,8 +1,13 @@
-{ lib, buildPythonPackage, fetchPypi }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+}:
 
 buildPythonPackage rec {
   pname = "smdebug-rulesconfig";
   version = "1.0.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit version;

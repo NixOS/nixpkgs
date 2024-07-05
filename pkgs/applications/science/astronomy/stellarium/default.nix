@@ -1,34 +1,45 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , cmake
 , perl
-, wrapGAppsHook
+, wrapGAppsHook3
 , wrapQtAppsHook
 , qtbase
 , qtcharts
 , qtpositioning
 , qtmultimedia
 , qtserialport
-, qttranslations
 , qtwayland
 , qtwebengine
 , calcmysky
 , qxlsx
 , indilib
 , libnova
+, qttools
+, exiv2
+, nlopt
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "stellarium";
-  version = "23.2";
+  version = "24.2";
 
   src = fetchFromGitHub {
     owner = "Stellarium";
     repo = "stellarium";
-    rev = "v${version}";
-    hash = "sha256-8Iheb/9wjf0u10ZQRkLMLNN2s7P++Fqcr26iatiKcTo=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-tqyLwlf8hugixZSsFCZPTtchO3VXk3m/nX1kuDoLOAY=";
   };
+
+  patches = [
+    # Compatibility with INDI 2.0 series from https://github.com/Stellarium/stellarium/pull/3269
+    (fetchpatch {
+      url = "https://github.com/Stellarium/stellarium/commit/31fd7bebf33fa710ce53ac8375238a24758312bc.patch";
+      hash = "sha256-eJEqqitZgtV6noeCi8pDBYMVTFIVWXZU1fiEvoilX8o=";
+    })
+  ];
 
   postPatch = lib.optionalString stdenv.isDarwin ''
     substituteInPlace CMakeLists.txt \
@@ -41,8 +52,9 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     perl
-    wrapGAppsHook
+    wrapGAppsHook3
     wrapQtAppsHook
+    qttools
   ];
 
   buildInputs = [
@@ -51,17 +63,20 @@ stdenv.mkDerivation rec {
     qtpositioning
     qtmultimedia
     qtserialport
-    qttranslations
     qtwebengine
     calcmysky
     qxlsx
     indilib
     libnova
+    exiv2
+    nlopt
   ] ++ lib.optionals stdenv.isLinux [
     qtwayland
   ];
 
-  preConfigure = lib.optionalString stdenv.isDarwin ''
+  preConfigure = ''
+    export SOURCE_DATE_EPOCH=$(date -d 20${lib.versions.major finalAttrs.version}0101 +%s)
+  '' + lib.optionalString stdenv.isDarwin ''
     export LC_ALL=en_US.UTF-8
   '';
 
@@ -78,11 +93,12 @@ stdenv.mkDerivation rec {
     qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
-  meta = with lib; {
+  meta =  {
     description = "Free open-source planetarium";
+    mainProgram = "stellarium";
     homepage = "https://stellarium.org/";
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ kilianar ];
   };
-}
+})

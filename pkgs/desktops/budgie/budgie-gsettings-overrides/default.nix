@@ -3,9 +3,8 @@
 , budgie-desktop
 , budgie-desktop-view
 , glib
-, gnome
 , gsettings-desktop-schemas
-, mate
+, gnome
 , nixos-artwork
 , nixos-background-light ? nixos-artwork.wallpapers.nineish
 , nixos-background-dark ? nixos-artwork.wallpapers.nineish-dark-gray
@@ -35,6 +34,9 @@ let
     [org.gnome.desktop.wm.preferences:Budgie]
     titlebar-font="Noto Sans Bold 10"
 
+    [org.gnome.mutter:Budgie]
+    edge-tiling=true
+
     [com.solus-project.budgie-menu:Budgie]
     use-default-menu-icon=true
 
@@ -48,7 +50,6 @@ let
     [org.buddiesofbudgie.budgie-desktop-view:Budgie]
     show=true
     show-active-mounts=true
-    terminal="${mate.mate-terminal}/bin/mate-terminal"
 
     ${extraGSettingsOverrides}
   '';

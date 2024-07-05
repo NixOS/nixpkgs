@@ -24,5 +24,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ nico202 ];
     platforms = platforms.unix;
     license = lib.licenses.bsd3;
+    mainProgram = "hhpc";
   };
 }

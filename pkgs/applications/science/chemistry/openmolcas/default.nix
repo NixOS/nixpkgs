@@ -1,47 +1,85 @@
-{ lib, stdenv, fetchFromGitLab, cmake, gfortran, perl
-, blas-ilp64, hdf5-cpp, python3, texlive
-, armadillo, libxc, makeWrapper
-# Note that the CASPT2 module is broken with MPI
-# See https://gitlab.com/Molcas/OpenMolcas/-/issues/169
+{ lib
+, stdenv
+, fetchFromGitLab
+, fetchFromGitHub
+, cmake
+, gfortran
+, perl
+, blas-ilp64
+, hdf5-cpp
+, python3
+, texliveMinimal
+, armadillo
+, libxc
+, makeWrapper
+, gsl
+, boost180
+, autoPatchelfHook
+  # Note that the CASPT2 module is broken with MPI
+  # See https://gitlab.com/Molcas/OpenMolcas/-/issues/169
 , enableMpi ? false
-, mpi, globalarrays
-} :
+, mpi
+, globalarrays
+}:
 
 assert blas-ilp64.isILP64;
 assert lib.elem blas-ilp64.passthru.implementation [ "openblas" "mkl" ];
 
 let
-  python = python3.withPackages (ps : with ps; [ six pyparsing numpy h5py ]);
+  python = python3.withPackages (ps: with ps; [ six pyparsing numpy h5py ]);
+  qcmaquisSrc = fetchFromGitHub {
+    owner = "qcscine";
+    repo = "qcmaquis";
+    rev = "release-3.1.1"; # Must match tag in cmake/custom/qcmaquis.cmake
+    hash = "sha256-diLDWj/Om6EHrVp+Hd24jsN6R9vV2vRl0y9gqyRWhkI=";
+  };
+  nevtp2Src = fetchFromGitHub {
+    owner = "qcscine";
+    repo = "nevpt2";
+    rev = "e1484fd"; # Must match tag in cmake/custom/nevpt2.cmake
+    hash = "sha256-Vl+FhwhJBbD/7U2CwsYE9BClSQYLJ8DKXV9EXxQUmz0=";
+  };
 
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation rec {
   pname = "openmolcas";
-  version = "23.06";
+  version = "24.06";
 
   src = fetchFromGitLab {
     owner = "Molcas";
     repo = "OpenMolcas";
-    # The tag keeps moving, fix a hash instead
-    rev = "1cda3772686cbf99a4af695929a12d563c795ca2"; # 2023-06-12
-    sha256 = "sha256-DLRQsRy2jt8V8q2sKmv2hLuKCuMihp/+zcMY/3sg1Fk=";
+    rev = "v${version}";
+    hash = "sha256-/y6vEvA1Zf+p7Z0WpcN4P5voLN8MmfbKz1FuthgVQp0=";
   };
 
   patches = [
     # Required to handle openblas multiple outputs
     ./openblasPath.patch
+
+    # Required for a local QCMaquis build
+    ./qcmaquis.patch
   ];
 
   postPatch = ''
     # Using env fails in the sandbox
     substituteInPlace Tools/pymolcas/export.py --replace \
       "/usr/bin/env','python3" "python3"
+
+    # Pointing CMake to local QCMaquis and NEVPT2 archives
+    substituteInPlace cmake/custom/qcmaquis.cmake \
+      --subst-var-by "qcmaquis_src_url" "file://${qcmaquisSrc}"
+
+    substituteInPlace cmake/custom/nevpt2.cmake \
+      --subst-var-by "nevpt2_src_url" "file://${nevtp2Src}"
   '';
 
   nativeBuildInputs = [
     perl
     gfortran
     cmake
-    texlive.combined.scheme-minimal
+    texliveMinimal
     makeWrapper
+    autoPatchelfHook
   ];
 
   buildInputs = [
@@ -50,6 +88,8 @@ in stdenv.mkDerivation {
     python
     armadillo
     libxc
+    gsl.dev
+    boost180
   ] ++ lib.optionals enableMpi [
     mpi
     globalarrays
@@ -63,11 +103,16 @@ in stdenv.mkDerivation {
     "-DTOOLS=ON"
     "-DHDF5=ON"
     "-DFDE=ON"
-    "-DEXTERNAL_LIBXC=${libxc}"
+    "-DEXTERNAL_LIBXC=${lib.getDev libxc}"
+    "-DDMRG=ON"
+    "-DNEVPT2=ON"
+    "-DCMAKE_SKIP_BUILD_RPATH=ON"
   ] ++ lib.optionals (blas-ilp64.passthru.implementation == "openblas") [
-    "-DOPENBLASROOT=${blas-ilp64.passthru.provider.dev}" "-DLINALG=OpenBLAS"
+    "-DOPENBLASROOT=${blas-ilp64.passthru.provider.dev}"
+    "-DLINALG=OpenBLAS"
   ] ++ lib.optionals (blas-ilp64.passthru.implementation == "mkl") [
-    "-DMKLROOT=${blas-ilp64.passthru.provider}" "-DLINALG=MKL"
+    "-DMKLROOT=${blas-ilp64.passthru.provider}"
+    "-DLINALG=MKL"
   ] ++ lib.optionals enableMpi [
     "-DGA=ON"
     "-DMPI=ON"
@@ -89,6 +134,10 @@ in stdenv.mkDerivation {
     rm -r $out/Tools
   '';
 
+  # DMRG executables contain references to /build, however, they are properly
+  # removed by autopatchelf
+  noAuditTmpdir = true;
+
   postFixup = ''
     # Wrong store path in shebang (no Python pkgs), force re-patching
     sed -i "1s:/.*:/usr/bin/env python:" $out/bin/pymolcas
@@ -101,8 +150,8 @@ in stdenv.mkDerivation {
     description = "Advanced quantum chemistry software package";
     homepage = "https://gitlab.com/Molcas/OpenMolcas";
     maintainers = [ maintainers.markuskowa ];
-    license = licenses.lgpl21Only;
-    platforms = [ "x86_64-linux" ];
+    license = with licenses; [ lgpl21Only bsd3 ];
+    platforms = [ "aarch64-linux" "x86_64-linux" ];
     mainProgram = "pymolcas";
   };
 }

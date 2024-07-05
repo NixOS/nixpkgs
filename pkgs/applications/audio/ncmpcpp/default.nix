@@ -42,11 +42,12 @@ stdenv.mkDerivation rec {
     ++ lib.optional taglibSupport taglib;
 
   meta = with lib; {
-    description = "A featureful ncurses based MPD client inspired by ncmpc";
+    description = "Featureful ncurses based MPD client inspired by ncmpc";
     homepage    = "https://rybczak.net/ncmpcpp/";
     changelog   = "https://github.com/ncmpcpp/ncmpcpp/blob/${version}/CHANGELOG.md";
     license     = licenses.gpl2Plus;
-    maintainers = with maintainers; [ jfrankenau koral lovek323 ];
+    maintainers = with maintainers; [ koral lovek323 ];
     platforms   = platforms.all;
+    mainProgram = "ncmpcpp";
   };
 }

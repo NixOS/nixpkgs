@@ -17,14 +17,14 @@
 
 stdenv.mkDerivation rec {
   pname = "gspell";
-  version = "1.12.1";
+  version = "1.12.2";
 
   outputs = [ "out" "dev" ];
   outputBin = "dev";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "jsRPMgUuiW/N1JJuuBSjJuOaUEfiUe7HuQVvvZREsPE=";
+    sha256 = "tOmTvYJ+TOtqdwsbXolQ/OO+nIsrDL6yL9+ZKAjdITk=";
   };
 
   patches = [
@@ -46,6 +46,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     gtk3
     icu
+    vala # for share/vala/Makefile.vapigen (PKG_CONFIG_VAPIGEN_VAPIGEN)
   ];
 
   propagatedBuildInputs = [
@@ -56,6 +57,9 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "GLIB_COMPILE_RESOURCES=${lib.getDev buildPackages.glib}/bin/glib-compile-resources"
     "GLIB_MKENUMS=${lib.getDev buildPackages.glib}/bin/glib-mkenums"
+    "PKG_CONFIG_VAPIGEN_VAPIGEN=${lib.getBin buildPackages.vala}/bin/vapigen"
+    "--enable-introspection=yes"
+    "--enable-vala=yes"
   ];
 
   passthru = {
@@ -66,8 +70,9 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "A spell-checking library for GTK applications";
-    homepage = "https://wiki.gnome.org/Projects/gspell";
+    description = "Spell-checking library for GTK applications";
+    mainProgram = "gspell-app1";
+    homepage = "https://gitlab.gnome.org/GNOME/gspell";
     license = licenses.lgpl21Plus;
     maintainers = teams.gnome.members;
     platforms = platforms.unix;

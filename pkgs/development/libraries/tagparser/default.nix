@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "tagparser";
-  version = "11.6.0";
+  version = "12.2.0";
 
   src = fetchFromGitHub {
     owner = "Martchus";
     repo = "tagparser";
     rev = "v${version}";
-    hash = "sha256-zi1n5Mdto8DmUq5DWxcr4f+DX6Sq/JsK8uzRzj5f0/E=";
+    hash = "sha256-Plq6iimXStrveSw+SfzuXUuLlQ06ugO21e97fXivqYk=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -33,6 +33,7 @@ stdenv.mkDerivation rec {
     description = "C++ library for reading and writing MP4/M4A/AAC (iTunes), ID3, Vorbis, Opus, FLAC and Matroska tags";
     license = licenses.gpl2;
     maintainers = [ maintainers.matthiasbeyer ];
+    platforms = platforms.all;
   };
 }
 

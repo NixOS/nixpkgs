@@ -1,77 +1,72 @@
-{ lib
-, fetchFromGitHub
-, fetchNpmDeps
-, buildPythonPackage
+{
+  lib,
+  fetchFromGitHub,
+  fetchNpmDeps,
+  buildPythonPackage,
+  nix-update-script,
 
-# build-system
-, gettext
-, nodejs
-, npmHooks
-, setuptools-scm
+  # build-system
+  flit-gettext,
+  flit-scm,
+  nodejs,
+  npmHooks,
 
-# dependencies
-, django
-, django_compat
+  # dependencies
+  django,
 
-# tests
-, pytest-django
-, pytestCheckHook
+  # tests
+  pytest-django,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "django-hijack";
-  version = "3.3.0";
-  format = "setuptools";
+  version = "3.5.4";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "django-hijack";
     repo = "django-hijack";
     rev = "refs/tags/${version}";
-    hash = "sha256-ytQ4xxkBAC3amQbenD8RO5asrbfNAjOspWUY3c2hkig=";
+    hash = "sha256-d8rKn4Hab7y/e/VLhVfr3A3TUhoDtjP7RhCj+o6IbyE=";
   };
 
   postPatch = ''
-    substituteInPlace setup.py \
-      --replace 'cmd = ["npm", "ci"]' 'cmd = ["true"]' \
-      --replace 'f"{self.build_lib}/{name}.mo"' 'f"{name}.mo"'
+    sed -i "/addopts/d" pyproject.toml
 
-    sed -i "/addopts/d" setup.cfg
+  # missing integrity hashes for yocto-queue, yargs-parser
+    cp ${./package-lock.json} package-lock.json
   '';
 
   npmDeps = fetchNpmDeps {
-    inherit src;
-    hash = "sha256-FLfMCn2jsLlTTsC+LRMX0dmVCCbNAr2pQUsSQRKgo6E=";
+    inherit src postPatch;
+    hash = "sha256-npAFpdqGdttE4facBimS/y2SqwnCvOHJhd60SPR/IaA=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
-  nativeBuildInputs = [
-    gettext
+  build-system = [
+    flit-gettext
+    flit-scm
     nodejs
     npmHooks.npmConfigHook
-    setuptools-scm
   ];
 
-  propagatedBuildInputs = [
-    django
-    django_compat
-  ];
+  dependencies = [ django ];
 
   nativeCheckInputs = [
     pytestCheckHook
     pytest-django
   ];
 
-  env.DJANGO_SETTINGS_MODULE = "hijack.tests.test_app.settings";
+  preCheck = ''
+    export DJANGO_SETTINGS_MODULE=hijack.tests.test_app.settings
+  '';
 
-  pytestFlagsArray = [
-    "--pyargs" "hijack"
-    "-W" "ignore::DeprecationWarning"
-  ];
+  # needed for npmDeps update
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Allows superusers to hijack (=login as) and work on behalf of another user";
-    homepage = "https://github.com/arteria/django-hijack";
+    homepage = "https://github.com/django-hijack/django-hijack";
     changelog = "https://github.com/django-hijack/django-hijack/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ ris ];

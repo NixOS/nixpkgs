@@ -1,33 +1,35 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-, deprecated
-, humanize
-, matplotlib
-, nibabel
-, numpy
-, parameterized
-, scipy
-, simpleitk
-, torch
-, tqdm
-, typer
+{
+  stdenv,
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
+  deprecated,
+  humanize,
+  matplotlib,
+  nibabel,
+  numpy,
+  parameterized,
+  scipy,
+  simpleitk,
+  torch,
+  tqdm,
+  typer,
 }:
 
 buildPythonPackage rec {
   pname = "torchio";
-  version = "0.18.90";
-  format = "pyproject";
-  disabled = pythonOlder "3.7";
+  version = "0.19.6";
+  pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "fepegar";
-    repo = pname;
+    repo = "torchio";
     rev = "refs/tags/v${version}";
-    hash = "sha256-h8cvNhOkjMMbQ6Nry8FKtwnK+yhRYRGjXi/xp0i5yyY=";
+    hash = "sha256-FlsjDgthXDGVjj4L0Yw+8UzBROw9jiM4Z+qi67D5ygU=";
   };
 
   propagatedBuildInputs = [
@@ -42,14 +44,20 @@ buildPythonPackage rec {
     typer
   ] ++ typer.passthru.optional-dependencies.all;
 
-  nativeCheckInputs = [ pytestCheckHook matplotlib parameterized ];
-  disabledTests = [
-    # tries to download models:
-    "test_load_all"
-  ] ++ lib.optionals stdenv.isAarch64 [
-    # RuntimeError: DataLoader worker (pid(s) <...>) exited unexpectedly
-    "test_queue_multiprocessing"
+  nativeCheckInputs = [
+    pytestCheckHook
+    matplotlib
+    parameterized
   ];
+  disabledTests =
+    [
+      # tries to download models:
+      "test_load_all"
+    ]
+    ++ lib.optionals stdenv.isAarch64 [
+      # RuntimeError: DataLoader worker (pid(s) <...>) exited unexpectedly
+      "test_queue_multiprocessing"
+    ];
   pythonImportsCheck = [
     "torchio"
     "torchio.data"
@@ -57,7 +65,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Medical imaging toolkit for deep learning";
-    homepage = "http://www.torchio.org/";
+    homepage = "https://torchio.readthedocs.io";
     license = licenses.asl20;
     maintainers = [ maintainers.bcdarwin ];
   };

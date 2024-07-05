@@ -1,27 +1,31 @@
-{ stdenv
-, lib
-, rustPlatform
-, rustc
-, callPackage
-, fetchFromGitHub
-, buildPythonPackage
-, libiconv
-, libffi
-, libxml2
-, ncurses
-, zlib
+{
+  stdenv,
+  lib,
+  rustPlatform,
+  callPackage,
+  fetchFromGitHub,
+  buildPythonPackage,
+  pythonAtLeast,
+  libiconv,
+  libffi,
+  libxml2,
+  llvm_14,
+  ncurses,
+  zlib,
 }:
 
 let
   common =
-    { pname
-    , buildAndTestSubdir
-    , cargoHash
-    , extraNativeBuildInputs ? [ ]
-    , extraBuildInputs ? [ ]
-    }: buildPythonPackage rec {
+    {
+      pname,
+      buildAndTestSubdir,
+      cargoHash,
+      extraNativeBuildInputs ? [ ],
+      extraBuildInputs ? [ ],
+    }:
+    buildPythonPackage rec {
       inherit pname;
-      version = "1.1.0";
+      version = "1.1.1";
       format = "pyproject";
 
       outputs = [ "out" ] ++ lib.optional (pname == "wasmer") "testsout";
@@ -30,7 +34,7 @@ let
         owner = "wasmerio";
         repo = "wasmer-python";
         rev = version;
-        hash = "sha256-nOeOhQ1XY+9qmLGURrI5xbgBUgWe5XRpV38f73kKX2s=";
+        hash = "sha256-Iu28LMDNmtL2r7gJV5Vbb8HZj18dlkHe+mw/Y1L8YKE=";
       };
 
       cargoDeps = rustPlatform.fetchCargoTarball {
@@ -39,7 +43,11 @@ let
         sha256 = cargoHash;
       };
 
-      nativeBuildInputs = (with rustPlatform; [ cargoSetupHook maturinBuildHook ])
+      nativeBuildInputs =
+        (with rustPlatform; [
+          cargoSetupHook
+          maturinBuildHook
+        ])
         ++ extraNativeBuildInputs;
 
       postPatch = ''
@@ -48,8 +56,7 @@ let
           --replace "package.metadata.maturin" "broken"
       '';
 
-      buildInputs = lib.optionals stdenv.isDarwin [ libiconv ]
-        ++ extraBuildInputs;
+      buildInputs = lib.optionals stdenv.isDarwin [ libiconv ] ++ extraBuildInputs;
 
       inherit buildAndTestSubdir;
 
@@ -61,46 +68,50 @@ let
       # check in passthru.tests.pytest because all packages are required to run the tests
       doCheck = false;
 
-      passthru.tests = lib.optionalAttrs (pname == "wasmer") {
-        pytest = callPackage ./tests.nix { };
-      };
+      passthru.tests = lib.optionalAttrs (pname == "wasmer") { pytest = callPackage ./tests.nix { }; };
 
-      pythonImportsCheck = [ "${lib.replaceStrings ["-"] ["_"] pname}" ];
+      pythonImportsCheck = [ "${lib.replaceStrings [ "-" ] [ "_" ] pname}" ];
 
       meta = with lib; {
-        broken = stdenv.isDarwin;
+        # https://github.com/wasmerio/wasmer-python/issues/778
+        broken = pythonAtLeast "3.12";
         description = "Python extension to run WebAssembly binaries";
         homepage = "https://github.com/wasmerio/wasmer-python";
         license = licenses.mit;
         platforms = platforms.unix;
-        maintainers = with maintainers; [ SuperSandro2000 ];
+        maintainers = [ ];
       };
     };
 in
-rec {
+{
   wasmer = common {
     pname = "wasmer";
     buildAndTestSubdir = "packages/api";
-    cargoHash = "sha256-twoog8LjQtoli+TlDipSuB7yLFkXQJha9BqobqgZW3Y=";
+    cargoHash = "sha256-vpbwU1HrIQmQkce9SK8UOHrX5tOLv/XKsfJHteqOteA=";
   };
 
   wasmer-compiler-cranelift = common {
     pname = "wasmer-compiler-cranelift";
     buildAndTestSubdir = "packages/compiler-cranelift";
-    cargoHash = "sha256-IqeMOY6emhIC7ekH8kIOZCr3JVkjxUg/lQli+ZZpdq4=";
+    cargoHash = "sha256-nv4cr52mUIuR3LWRT3eXU5b2LORwuN4iMbLX1efzovI=";
   };
 
   wasmer-compiler-llvm = common {
     pname = "wasmer-compiler-llvm";
     buildAndTestSubdir = "packages/compiler-llvm";
-    cargoHash = "sha256-xawbf5gXXV+7I2F2fDSaMvjtFvGDBtqX7wL3c28TSbA=";
-    extraNativeBuildInputs = [ rustc.llvm ];
-    extraBuildInputs = [ libffi libxml2.out ncurses zlib ];
+    cargoHash = "sha256-FA/xXlPaK8NxZIw7MCm9Fyesgu72Dsxhmb5xzOIINhE=";
+    extraNativeBuildInputs = [ llvm_14 ];
+    extraBuildInputs = [
+      libffi
+      libxml2.out
+      ncurses
+      zlib
+    ];
   };
 
   wasmer-compiler-singlepass = common {
     pname = "wasmer-compiler-singlepass";
     buildAndTestSubdir = "packages/compiler-singlepass";
-    cargoHash = "sha256-4nZHMCNumNhdGPOmHXlJ5POYP7K+VPjwhEUMgzGb/Rk=";
+    cargoHash = "sha256-yew7cB/7RLjW55jZmHFfIvaErgZ6XVxL1ucGGX2Cx18=";
   };
 }

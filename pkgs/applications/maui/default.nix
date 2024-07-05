@@ -15,7 +15,7 @@ See also `pkgs/applications/kde` as this is what this is based on.
 # Updates
 
 1. Update the URL in `./fetch.sh`.
-2. Run `callPackage ./maintainers/scripts/fetch-kde-qt.sh pkgs/applications/maui`
+2. Run `./maintainers/scripts/fetch-kde-qt.sh pkgs/applications/maui`
    from the top of the Nixpkgs tree.
 3. Use `nixpkgs-review wip` to check that everything builds.
 4. Commit the changes and open a pull request.
@@ -61,6 +61,7 @@ let
       mauikit = callPackage ./mauikit.nix { };
       mauikit-accounts = callPackage ./mauikit-accounts.nix { };
       mauikit-calendar = callPackage ./mauikit-calendar { };
+      mauikit-documents = callPackage ./mauikit-documents.nix { };
       mauikit-filebrowsing = callPackage ./mauikit-filebrowsing.nix { };
       mauikit-imagetools = callPackage ./mauikit-imagetools.nix { };
       mauikit-terminal = callPackage ./mauikit-terminal.nix { };

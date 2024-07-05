@@ -1,16 +1,15 @@
 { lib, stdenv, fetchurl, bison, cmake, pkg-config
 , boost, icu, libedit, libevent, lz4, ncurses, openssl, protobuf, re2, readline, zlib, zstd, libfido2
-, numactl, perl, cctools, CoreServices, developer_cmds, libtirpc, rpcsvc-proto, curl, DarwinTools, nixosTests
+, numactl, cctools, CoreServices, developer_cmds, libtirpc, rpcsvc-proto, curl, DarwinTools, nixosTests
 }:
 
-let
-self = stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mysql";
-  version = "8.0.33";
+  version = "8.0.37";
 
   src = fetchurl {
-    url = "https://dev.mysql.com/get/Downloads/MySQL-${self.mysqlVersion}/${pname}-${version}.tar.gz";
-    hash = "sha256-liAC9dkG9C9AsnejnS25OTEkjB8H/49DEsKI5jgD3RI=";
+    url = "https://dev.mysql.com/get/Downloads/MySQL-${lib.versions.majorMinor finalAttrs.version}/mysql-${finalAttrs.version}.tar.gz";
+    hash = "sha256-4GOgkazZ7EC7BfLATfZPiZan5OJuiDu2UChJ1fa0pho=";
   };
 
   nativeBuildInputs = [ bison cmake pkg-config ]
@@ -63,18 +62,18 @@ self = stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    client = self;
-    connector-c = self;
-    server = self;
-    mysqlVersion = "8.0";
+    client = finalAttrs.finalPackage;
+    connector-c = finalAttrs.finalPackage;
+    server = finalAttrs.finalPackage;
+    mysqlVersion = lib.versions.majorMinor finalAttrs.version;
     tests = nixosTests.mysql.mysql80;
   };
 
   meta = with lib; {
     homepage = "https://www.mysql.com/";
-    description = "The world's most popular open source database";
-    license = licenses.gpl2;
+    description = "World's most popular open source database";
+    license = licenses.gpl2Only;
     maintainers = with maintainers; [ orivej ];
     platforms = platforms.unix;
   };
-}; in self
+})

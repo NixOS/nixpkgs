@@ -1,58 +1,62 @@
-{ apache-beam
-, attrs
-, beautifulsoup4
-, buildPythonPackage
-, click
-, datasets
-, dill
-, dm-tree
-, fetchFromGitHub
-, ffmpeg
-, future
-, imagemagick
-, importlib-resources
-, jax
-, jaxlib
-, jinja2
-, langdetect
-, lib
-, lxml
-, matplotlib
-, mwparserfromhell
-, networkx
-, nltk
-, numpy
-, opencv4
-, pandas
-, pillow
-, promise
-, protobuf
-, psutil
-, pycocotools
-, pydub
-, pytest-xdist
-, pytestCheckHook
-, requests
-, scikit-image
-, scipy
-, six
-, tensorflow
-, tensorflow-metadata
-, termcolor
-, tifffile
-, tqdm
-, zarr
+{
+  apache-beam,
+  array-record,
+  attrs,
+  beautifulsoup4,
+  buildPythonPackage,
+  click,
+  datasets,
+  dill,
+  dm-tree,
+  fetchFromGitHub,
+  ffmpeg,
+  future,
+  imagemagick,
+  importlib-resources,
+  jax,
+  jaxlib,
+  jinja2,
+  langdetect,
+  lib,
+  lxml,
+  matplotlib,
+  mwparserfromhell,
+  mwxml,
+  networkx,
+  nltk,
+  numpy,
+  opencv4,
+  pandas,
+  pillow,
+  promise,
+  protobuf,
+  psutil,
+  pycocotools,
+  pydub,
+  pytest-xdist,
+  pytestCheckHook,
+  requests,
+  scikit-image,
+  scipy,
+  six,
+  tensorflow,
+  tensorflow-metadata,
+  termcolor,
+  tifffile,
+  tqdm,
+  zarr,
 }:
 
 buildPythonPackage rec {
   pname = "tensorflow-datasets";
-  version = "4.8.2";
+  version = "4.9.4";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "tensorflow";
     repo = "datasets";
     rev = "refs/tags/v${version}";
-    hash = "sha256-FYFk53WKNQTSrnGGiA6cn9LffbMJkZtjlGuOF52Og7c=";
+    hash = "sha256-HY/atBEWeEJgBNxEapq9jPFoZbFof2AHEDAiJa/lYAE=";
   };
 
   patches = [
@@ -61,6 +65,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
+    array-record
     attrs
     dill
     dm-tree
@@ -77,9 +82,7 @@ buildPythonPackage rec {
     tqdm
   ];
 
-  pythonImportsCheck = [
-    "tensorflow_datasets"
-  ];
+  pythonImportsCheck = [ "tensorflow_datasets" ];
 
   nativeCheckInputs = [
     apache-beam
@@ -95,6 +98,7 @@ buildPythonPackage rec {
     lxml
     matplotlib
     mwparserfromhell
+    mwxml
     networkx
     nltk
     opencv4
@@ -120,6 +124,7 @@ buildPythonPackage rec {
     "tensorflow_datasets/core/registered_test.py"
     "tensorflow_datasets/core/utils/gcs_utils_test.py"
     "tensorflow_datasets/import_without_tf_test.py"
+    "tensorflow_datasets/proto/build_tf_proto_test.py"
     "tensorflow_datasets/scripts/cli/build_test.py"
 
     # Requires `pretty_midi` which is not packaged in `nixpkgs`.

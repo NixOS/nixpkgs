@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation {
   pname = "avrdudess";
-  version = "2.14";
+  version = "2.17";
 
   src = fetchurl {
-    url = "https://github.com/ZakKemble/AVRDUDESS/releases/download/v2.14/AVRDUDESS-2.14-portable.zip";
-    sha256 = "sha256-x3xcsJLBJVO8XdV4OUveZ4KLqN5z/z0FsNLbGHSNoHs=";
+    url = "https://github.com/ZakKemble/AVRDUDESS/releases/download/v2.17/AVRDUDESS-2.17-portable.zip";
+    sha256 = "sha256-TcXXGDs75Q2ew+m2B/p00Y24O5aJQlp+3FcAn7GSVyI=";
   };
 
   nativeBuildInputs = [ unzip ];
@@ -41,5 +41,6 @@ stdenv.mkDerivation {
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = [ maintainers.bjornfor ];
+    mainProgram = "avrdudess";
   };
 }

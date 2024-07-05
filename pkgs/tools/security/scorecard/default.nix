@@ -8,13 +8,13 @@
 
 buildGoModule rec {
   pname = "scorecard";
-  version = "4.10.5";
+  version = "4.13.1";
 
   src = fetchFromGitHub {
     owner = "ossf";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-ysdgdU/Et87NxpdSTZuTtLJOv5uaYGVHDGyCj6kKuUQ=";
+    hash = "sha256-xf6HyiZlkU9ifgXr+/O8UeElqwF8c1h/9IRWDVHx2+g=";
     # populate values otherwise taken care of by goreleaser,
     # unfortunately these require us to use git. By doing
     # this in postFetch we can delete .git afterwards and
@@ -28,7 +28,7 @@ buildGoModule rec {
       find "$out" -name .git -print0 | xargs -0 rm -rf
     '';
   };
-  vendorHash = "sha256-6wIzg9gbH+nAE4sZg+C3NZZbVzbEcovhGwajBZ7ZjdY=";
+  vendorHash = "sha256-ohZcz7fn/YAglLI3YOi0J4FWkCJa2/nsM7T03+BOWkw=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -58,6 +58,11 @@ buildGoModule rec {
     export SKIP_GINKGO=1
   '';
 
+  checkFlags = [
+    # https://github.com/ossf/scorecard/pull/4134
+    "-skip TestRunScorecard/empty_commits_repos_should_return_repo_details_but_no_checks"
+  ];
+
   postInstall = ''
     installShellCompletion --cmd scorecard \
       --bash <($out/bin/scorecard completion bash) \
@@ -69,7 +74,7 @@ buildGoModule rec {
   installCheckPhase = ''
     runHook preInstallCheck
     $out/bin/scorecard --help
-    # $out/bin/scorecard version 2>&1 | grep "v${version}"
+    $out/bin/scorecard version 2>&1 | grep "v${version}"
     runHook postInstallCheck
   '';
 
@@ -83,6 +88,7 @@ buildGoModule rec {
     homepage = "https://github.com/ossf/scorecard";
     changelog = "https://github.com/ossf/scorecard/releases/tag/v${version}";
     description = "Security health metrics for Open Source";
+    mainProgram = "scorecard";
     license = licenses.asl20;
     maintainers = with maintainers; [ jk developer-guy ];
   };

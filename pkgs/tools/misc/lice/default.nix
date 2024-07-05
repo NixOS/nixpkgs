@@ -18,6 +18,7 @@ buildPythonPackage rec {
     license = licenses.bsd3;
     maintainers = with maintainers; [ swflint ];
     platforms = platforms.unix;
+    mainProgram = "lice";
   };
 
 }

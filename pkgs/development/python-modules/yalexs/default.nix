@@ -1,35 +1,45 @@
-{ lib
-, aiofiles
-, aiohttp
-, aioresponses
-, aiounittest
-, buildPythonPackage
-, ciso8601
-, fetchFromGitHub
-, pubnub
-, pyjwt
-, pytestCheckHook
-, python-dateutil
-, pythonOlder
-, requests
-, requests-mock
+{
+  lib,
+  aiofiles,
+  aiohttp,
+  aioresponses,
+  aiounittest,
+  buildPythonPackage,
+  ciso8601,
+  fetchFromGitHub,
+  pubnub,
+  pyjwt,
+  pytestCheckHook,
+  python-dateutil,
+  pythonOlder,
+  requests,
+  requests-mock,
+  poetry-core,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "yalexs";
-  version = "1.5.1";
-  format = "setuptools";
+  version = "6.4.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "bdraco";
-    repo = pname;
+    repo = "yalexs";
     rev = "refs/tags/v${version}";
-    hash = "sha256-8aOLDjWZOqAsnldxUtUBcuT7pBbZHPnPSmQCF/oqNYw=";
+    hash = "sha256-lCRil1SeYXZeXT0SJielJg2Ma8voBXPgij+RK/oT1iU=";
   };
 
-  propagatedBuildInputs = [
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "-v -Wdefault --cov=yalexs --cov-report=term-missing:skip-covered" ""
+  '';
+
+  build-system = [ poetry-core ];
+
+  dependencies = [
     aiofiles
     aiohttp
     ciso8601
@@ -37,7 +47,11 @@ buildPythonPackage rec {
     pyjwt
     python-dateutil
     requests
+    typing-extensions
   ];
+
+  # aiounittest is not supported on 3.12
+  doCheck = pythonOlder "3.12";
 
   nativeCheckInputs = [
     aioresponses
@@ -46,15 +60,7 @@ buildPythonPackage rec {
     requests-mock
   ];
 
-  postPatch = ''
-    # Not used requirement
-    substituteInPlace setup.py \
-      --replace '"vol",' ""
-  '';
-
-  pythonImportsCheck = [
-    "yalexs"
-  ];
+  pythonImportsCheck = [ "yalexs" ];
 
   meta = with lib; {
     description = "Python API for Yale Access (formerly August) Smart Lock and Doorbell";

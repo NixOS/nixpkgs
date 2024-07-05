@@ -99,8 +99,10 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "http://www.info-zip.org";
-    description = "An extraction utility for archives compressed in .zip format";
-    license = lib.licenses.free; # http://www.info-zip.org/license.html
+    description = "Extraction utility for archives compressed in .zip format";
+    license = lib.licenses.info-zip;
     platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ RossComputerGuy ];
+    mainProgram = "unzip";
   };
 }

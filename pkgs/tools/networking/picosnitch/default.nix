@@ -6,11 +6,11 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "picosnitch";
-  version = "0.12.0";
+  version = "1.0.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b87654b4b92e28cf5418388ba1d3165b9fa9b17ba91af2a1a942f059128f68bc";
+    sha256 = "78285e91b5c4d8e07529a34a7c3fe606acb6f950ee3cc78bb6c346bc2195b68a";
   };
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -22,14 +22,18 @@ python3.pkgs.buildPythonApplication rec {
     pandas
     plotly
     dash
+    geoip2
   ];
 
-  patches = [ ./picosnitch.patch ];
+  postInstall = ''
+    substituteInPlace $out/${python3.sitePackages}/picosnitch.py --replace '/run/picosnitch.pid' '/run/picosnitch/picosnitch.pid'
+  '';
 
   pythonImportsCheck = [ "picosnitch" ];
 
   meta = with lib; {
     description = "Monitor network traffic per executable with hashing";
+    mainProgram = "picosnitch";
     homepage = "https://github.com/elesiuta/picosnitch";
     changelog = "https://github.com/elesiuta/picosnitch/releases";
     license = licenses.gpl3Plus;

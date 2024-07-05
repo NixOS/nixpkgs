@@ -7,12 +7,18 @@
   nixpkgsArgs ? { config = { allowUnfree = false; inHydra = true; }; }
 }:
 
-with import ./release-lib.nix { inherit supportedSystems nixpkgsArgs; };
+let
+  release-lib = import ./release-lib.nix {
+    inherit supportedSystems nixpkgsArgs;
+  };
+
+  inherit (release-lib) all linux darwin mapTestOn unix;
+in
 
 {
 
   tarball = import ./make-tarball.nix {
-    inherit nixpkgs supportedSystems;
+    inherit nixpkgs;
     officialRelease = false;
   };
 
@@ -36,7 +42,6 @@ with import ./release-lib.nix { inherit supportedSystems nixpkgsArgs; };
   cron = linux;
   cups = linux;
   dbus = linux;
-  dhcp = linux;
   diffutils = all;
   e2fsprogs = linux;
   emacs = linux;
@@ -55,7 +60,6 @@ with import ./release-lib.nix { inherit supportedSystems nixpkgsArgs; };
   gnused = all;
   gnutar = all;
   gnutls = linux;
-  grub = linux;
   grub2 = linux;
   guile = linux;  # tests fail on Cygwin
   gzip = all;
@@ -68,7 +72,6 @@ with import ./release-lib.nix { inherit supportedSystems nixpkgsArgs; };
   idutils = all;
   inetutils = linux;
   iputils = linux;
-  kvm = linux;
   qemu = linux;
   qemu_kvm = linux;
   lapack-reference = linux;
@@ -108,7 +111,6 @@ with import ./release-lib.nix { inherit supportedSystems nixpkgsArgs; };
   openssl = all;
   pan = linux;
   pciutils = linux;
-  pdf2xml = all;
   perl = all;
   pkg-config = all;
   pmccabe = linux;

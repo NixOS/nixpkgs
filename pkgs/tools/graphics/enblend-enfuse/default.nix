@@ -13,7 +13,7 @@
 , help2man
 , pkg-config
 , perl
-, texlive
+, texliveSmall
 }:
 
 stdenv.mkDerivation rec {
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ boost freeglut glew gsl lcms2 libpng libtiff libGLU libGL vigra ];
 
-  nativeBuildInputs = [ autoreconfHook help2man perl pkg-config texlive.combined.scheme-small ];
+  nativeBuildInputs = [ autoreconfHook help2man perl pkg-config texliveSmall ];
 
   preConfigure = ''
     patchShebangs src/embrace
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://enblend.sourceforge.net/";
     description = "Blends away the seams in a panoramic image mosaic using a multiresolution spline";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = with platforms; linux;
   };
 }

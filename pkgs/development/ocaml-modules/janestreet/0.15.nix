@@ -3,6 +3,7 @@
 , fetchpatch
 , fzf
 , lib
+, ocaml
 , openssl
 , zstd
 }:
@@ -143,7 +144,7 @@ with self;
     hash = "1b7f7p3xj4jr2n2dxy2lp7a9k7944w6x2nrg6524clvcsd1ax4hn";
     meta.description = "Async wrappers for SSL";
     buildInputs = [ dune-configurator ];
-    propagatedBuildInputs = [ async ctypes openssl ];
+    propagatedBuildInputs = [ async ctypes ctypes-foreign openssl ];
     # in ctypes.foreign 0.18.0 threaded and unthreaded have been merged
     postPatch = ''
       substituteInPlace bindings/dune \
@@ -264,6 +265,7 @@ with self;
     buildInputs = [ jst-config ];
     propagatedBuildInputs = [ base base_bigstring base_quickcheck ppx_jane time_now ];
     doCheck = false; # circular dependency with core_kernel
+    meta.broken = lib.versionAtLeast ocaml.version "5.1";
   };
 
   core_bench = janePackage {
@@ -548,7 +550,8 @@ with self;
 
   ppx_bench = janePackage {
     pname = "ppx_bench";
-    hash = "0bc0gbm922417wqisafxh35jslcp7xy1s0h0a1q32rhx0ivxx3g6";
+    version = "0.15.1";
+    hash = "sha256-2uk3NfpAODScoQtqiU+ZaOE8zOqkayn/jpfn3GQ4vQg=";
     minimalOCamlVersion = "4.04.2";
     meta.description = "Syntax extension for writing in-line benchmarks in ocaml code";
     propagatedBuildInputs = [ ppx_inline_test ];
@@ -579,6 +582,13 @@ with self;
     propagatedBuildInputs = [ ppxlib base ];
   };
 
+  ppx_conv_func = janePackage {
+    pname = "ppx_conv_func";
+    hash = "sha256-61jX8yHZYOnMx1Jlqaq9zSOz25HLOa0Wv/iG6Hu82zI=";
+    meta.description = "Part of the Jane Street's PPX rewriters collection";
+    propagatedBuildInputs = [ ppxlib base ];
+  };
+
   ppx_custom_printf = janePackage {
     pname = "ppx_custom_printf";
     hash = "1k8nmq6kwqz2wpkm9ymq749dz1vd8lxrjc711knp1wyz5935hnsv";
@@ -592,6 +602,13 @@ with self;
     hash = "09dpmj3f3m3z1ji9hq775iqr3cfmv5gh7q9zlblizj4wx4y0ibyi";
     meta.description = "A ppx that takes in css strings and produces a module for accessing the unique names defined within";
     propagatedBuildInputs = [ core_kernel ppxlib js_of_ocaml js_of_ocaml-ppx sedlex ];
+  };
+
+  ppx_csv_conv = janePackage {
+    pname = "ppx_csv_conv";
+    hash = "sha256-ctwgUs1buBZiNqac4760LhWd2/PMZRuxx8SE5T7yZ+g=";
+    meta.description = "Generate functions to read/write records in csv format";
+    propagatedBuildInputs = [ csvfields ppx_conv_func ];
   };
 
   ppx_disable_unused_warnings = janePackage {
@@ -663,7 +680,8 @@ with self;
 
   ppx_inline_test = janePackage {
     pname = "ppx_inline_test";
-    hash = "1a0gaj9p6gbn5j7c258mnzr7yjlq0hqi3aqqgyj1g2dbk1sxdbjz";
+    version = "0.15.1";
+    hash = "sha256-9Up4/VK4gayuwbPc3r6gVRj78ILO2G3opL5UDOTKOgk=";
     minimalOCamlVersion = "4.04.2";
     meta.description = "Syntax extension for writing in-line tests in ocaml code";
     propagatedBuildInputs = [ ppxlib time_now ];

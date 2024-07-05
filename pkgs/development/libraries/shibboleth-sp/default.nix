@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchgit, autoreconfHook, boost, fcgi, openssl, opensaml-cpp, log4shib, pkg-config, xercesc, xml-security-c, xml-tooling-c }:
+{ lib, stdenv, fetchgit, autoreconfHook, boost, fcgi, openssl, opensaml-cpp, log4shib, pkg-config, xercesc, xml-security-c, xml-tooling-c, darwin }:
 
 stdenv.mkDerivation rec {
   pname = "shibboleth-sp";
@@ -11,16 +11,19 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
-  buildInputs = [ boost fcgi openssl opensaml-cpp log4shib xercesc xml-security-c xml-tooling-c ];
+  buildInputs = [ boost fcgi openssl opensaml-cpp log4shib xercesc xml-security-c xml-tooling-c ]
+    ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+      CoreServices
+      SystemConfiguration
+    ]);
 
   configureFlags = [
     "--without-apxs"
     "--with-xmltooling=${xml-tooling-c}"
     "--with-saml=${opensaml-cpp}"
     "--with-fastcgi"
+    "CXXFLAGS=-std=c++14"
   ];
-
-  env.NIX_CFLAGS_COMPILE = lib.optionalString (!stdenv.isDarwin) "-std=c++14";
 
   enableParallelBuilding = true;
 
@@ -29,6 +32,6 @@ stdenv.mkDerivation rec {
     description = "Enables SSO and Federation web applications written with any programming language or framework";
     platforms   = platforms.unix;
     license     = licenses.asl20;
-    maintainers = [ maintainers.jammerful ];
+    maintainers = [ ];
   };
 }

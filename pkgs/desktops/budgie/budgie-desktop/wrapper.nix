@@ -2,9 +2,9 @@
 , stdenv
 , glib
 , xorg
-, wrapGAppsHook
+, wrapGAppsHook3
 , budgie-desktop
-, plugins ? []
+, plugins ? [ ]
 }:
 
 stdenv.mkDerivation {
@@ -21,7 +21,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [
     glib
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = lib.forEach plugins (plugin: plugin.buildInputs) ++ plugins;

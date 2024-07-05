@@ -1,13 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, python
-, pyyaml
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  python,
+  pyyaml,
 }:
 
 buildPythonPackage rec {
   pname = "yacs";
   version = "0.1.8";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "rbgirshick";

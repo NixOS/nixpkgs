@@ -27,9 +27,10 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "http://kr.github.io/beanstalkd/";
-    description = "A simple, fast work queue";
+    description = "Simple, fast work queue";
     license = licenses.mit;
     maintainers = [ maintainers.zimbatm ];
     platforms = platforms.all;
+    mainProgram = "beanstalkd";
   };
 }

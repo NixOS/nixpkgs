@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "iqtree";
-  version = "2.2.2.6";
+  version = "2.3.5";
 
   src = fetchFromGitHub {
     owner = "iqtree";
     repo = "iqtree2";
     rev = "v${version}";
-    hash = "sha256-dce7JOPZaosRP99/xRfz88EwXR9nYXK6Z4t2i5Uje1w=";
+    hash = "sha256-ld+9vPJRVHMEe5/igqRr6RkISY2ipfGkJFHDOSZuAmg=";
     fetchSubmodules = true;
   };
 
@@ -33,6 +33,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "http://www.iqtree.org/";
     description = "Efficient and versatile phylogenomic software by maximum likelihood";
+    mainProgram = "iqtree2";
     license = licenses.lgpl2;
     maintainers = with maintainers; [ bzizou ];
     platforms = [ "x86_64-linux" "x86_64-darwin" ];

@@ -1,34 +1,35 @@
-{ config, pkgs, lib, utils, ... }:
+{ config, lib, pkgs, utils, ... }:
 
 let
   cfg = config.systemd.repart;
   initrdCfg = config.boot.initrd.systemd.repart;
 
-  writeDefinition = name: partitionConfig: pkgs.writeText
-    "${name}.conf"
-    (lib.generators.toINI { } { Partition = partitionConfig; });
+  format = pkgs.formats.ini { };
 
-  listOfDefinitions = lib.mapAttrsToList
-    writeDefinition
-    (lib.filterAttrs (k: _: !(lib.hasPrefix "_" k)) cfg.partitions);
+  definitionsDirectory = utils.systemdUtils.lib.definitions
+    "repart.d"
+    format
+    (lib.mapAttrs (_n: v: { Partition = v; }) cfg.partitions);
 
-  # Create a directory in the store that contains a copy of all definition
-  # files. This is then passed to systemd-repart in the initrd so it can access
-  # the definition files after the sysroot has been mounted but before
-  # activation. This needs a hard copy of the files and not just symlinks
-  # because otherwise the files do not show up in the sysroot.
-  definitionsDirectory = pkgs.runCommand "systemd-repart-definitions" { } ''
-    mkdir -p $out
-    ${(lib.concatStringsSep "\n"
-      (map (pkg: "cp ${pkg} $out/${pkg.name}") listOfDefinitions)
-    )}
-  '';
+  partitionAssertions = lib.mapAttrsToList (fileName: definition:
+    let
+      inherit (utils.systemdUtils.lib) GPTMaxLabelLength;
+      labelLength = builtins.stringLength definition.Label;
+    in
+    {
+      assertion = definition ? Label -> GPTMaxLabelLength >= labelLength;
+      message = ''
+        The partition label '${definition.Label}' defined for '${fileName}' is ${toString labelLength}
+        characters long, but the maximum label length supported by systemd is ${toString GPTMaxLabelLength}.
+      '';
+    }
+  ) cfg.partitions;
 in
 {
   options = {
     boot.initrd.systemd.repart = {
-      enable = lib.mkEnableOption (lib.mdDoc "systemd-repart") // {
-        description = lib.mdDoc ''
+      enable = lib.mkEnableOption "systemd-repart" // {
+        description = ''
           Grow and add partitions to a partition table at boot time in the initrd.
           systemd-repart only works with GPT partition tables.
 
@@ -39,7 +40,7 @@ in
 
       device = lib.mkOption {
         type = with lib.types; nullOr str;
-        description = lib.mdDoc ''
+        description = ''
           The device to operate on.
 
           If `device == null`, systemd-repart will operate on the device
@@ -52,8 +53,8 @@ in
     };
 
     systemd.repart = {
-      enable = lib.mkEnableOption (lib.mdDoc "systemd-repart") // {
-        description = lib.mdDoc ''
+      enable = lib.mkEnableOption "systemd-repart" // {
+        description = ''
           Grow and add partitions to a partition table.
           systemd-repart only works with GPT partition tables.
 
@@ -75,7 +76,7 @@ in
             SizeMaxBytes = "2G";
           };
         };
-        description = lib.mdDoc ''
+        description = ''
           Specify partitions as a set of the names of the definition files as the
           key and the partition configuration as its value. The partition
           configuration can use all upstream options. See <link
@@ -87,6 +88,18 @@ in
   };
 
   config = lib.mkIf (cfg.enable || initrdCfg.enable) {
+    assertions = [
+      {
+        assertion = initrdCfg.enable -> config.boot.initrd.systemd.enable;
+        message = ''
+          'boot.initrd.systemd.repart.enable' requires 'boot.initrd.systemd.enable' to be enabled.
+        '';
+      }
+    ] ++ partitionAssertions;
+
+    # systemd-repart uses loopback devices for partition creation
+    boot.initrd.availableKernelModules = lib.optional initrdCfg.enable "loop";
+
     boot.initrd.systemd = lib.mkIf initrdCfg.enable {
       additionalUpstreamUnits = [
         "systemd-repart.service"

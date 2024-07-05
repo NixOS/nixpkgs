@@ -5,7 +5,7 @@
 { nixpkgs ? { outPath = (import ../lib).cleanSource ./..; revCount = 56789; shortRev = "gfedcba"; }
 , stableBranch ? false
 , supportedSystems ? [ "aarch64-linux" "x86_64-linux" ]
-, limitedSupportedSystems ? [ "i686-linux" ]
+, limitedSupportedSystems ? [ ]
 }:
 
 let
@@ -43,14 +43,14 @@ in rec {
       name = "nixos-${nixos.channel.version}";
       meta = {
         description = "Release-critical builds for the NixOS channel";
-        maintainers = with pkgs.lib.maintainers; [ eelco ];
+        maintainers = with pkgs.lib.maintainers; [ ];
       };
       constituents = pkgs.lib.concatLists [
         [ "nixos.channel" ]
         (onFullSupported "nixos.dummy")
         (onAllSupported "nixos.iso_minimal")
         (onSystems ["x86_64-linux" "aarch64-linux"] "nixos.amazonImage")
-        (onFullSupported "nixos.iso_plasma5")
+        (onFullSupported "nixos.iso_plasma6")
         (onFullSupported "nixos.iso_gnome")
         (onFullSupported "nixos.manual")
         (onSystems ["x86_64-linux"] "nixos.ova")
@@ -67,13 +67,24 @@ in rec {
         (onSystems ["x86_64-linux"] "nixos.tests.docker")
         (onFullSupported "nixos.tests.ecryptfs")
         (onFullSupported "nixos.tests.env")
-        (onFullSupported "nixos.tests.firefox-esr")
-        (onFullSupported "nixos.tests.firefox")
+
+        # Way too many manual retries required on Hydra.
+        #  Apparently it's hard to track down the cause.
+        #  So let's depend just on the packages for now.
+        #(onFullSupported "nixos.tests.firefox-esr")
+        #(onFullSupported "nixos.tests.firefox")
+        # Note: only -unwrapped variants have a Hydra job.
+        (onFullSupported "nixpkgs.firefox-esr-unwrapped")
+        (onFullSupported "nixpkgs.firefox-unwrapped")
+
         (onFullSupported "nixos.tests.firewall")
         (onFullSupported "nixos.tests.fontconfig-default-fonts")
+        (onFullSupported "nixos.tests.gitlab")
         (onFullSupported "nixos.tests.gnome")
         (onFullSupported "nixos.tests.gnome-xorg")
-        (onSystems ["x86_64-linux"] "nixos.tests.hibernate")
+        # FIXME: broken by QEMU 8.2.3 upgrade, reenable when fixed
+        # Upstream issue: https://gitlab.com/qemu-project/qemu/-/issues/2321
+        # (onSystems ["x86_64-linux"] "nixos.tests.hibernate")
         (onFullSupported "nixos.tests.i3wm")
         (onSystems ["x86_64-linux"] "nixos.tests.installer.btrfsSimple")
         (onSystems ["x86_64-linux"] "nixos.tests.installer.btrfsSubvolDefault")
@@ -81,6 +92,7 @@ in rec {
         (onSystems ["x86_64-linux"] "nixos.tests.installer.btrfsSubvols")
         (onSystems ["x86_64-linux"] "nixos.tests.installer.luksroot")
         (onSystems ["x86_64-linux"] "nixos.tests.installer.lvm")
+        (onSystems ["x86_64-linux"] "nixos.tests.installer.separateBootZfs")
         (onSystems ["x86_64-linux"] "nixos.tests.installer.separateBootFat")
         (onSystems ["x86_64-linux"] "nixos.tests.installer.separateBoot")
         (onSystems ["x86_64-linux"] "nixos.tests.installer.simpleLabels")
@@ -88,6 +100,9 @@ in rec {
         (onSystems ["x86_64-linux"] "nixos.tests.installer.simpleUefiSystemdBoot")
         (onSystems ["x86_64-linux"] "nixos.tests.installer.simple")
         (onSystems ["x86_64-linux"] "nixos.tests.installer.swraid")
+        (onSystems ["x86_64-linux"] "nixos.tests.installer.zfsroot")
+        (onSystems ["x86_64-linux"] "nixos.tests.nixos-rebuild-specialisations")
+        (onFullSupported "nixos.tests.nix-misc.default")
         (onFullSupported "nixos.tests.ipv6")
         (onFullSupported "nixos.tests.keymap.azerty")
         (onFullSupported "nixos.tests.keymap.colemak")
@@ -130,7 +145,6 @@ in rec {
         (onFullSupported "nixos.tests.networking.networkd.virtual")
         (onFullSupported "nixos.tests.networking.networkd.vlan")
         (onFullSupported "nixos.tests.systemd-networkd-ipv6-prefix-delegation")
-        (onFullSupported "nixos.tests.nfs3.simple")
         (onFullSupported "nixos.tests.nfs4.simple")
         (onSystems ["x86_64-linux"] "nixos.tests.oci-containers.podman")
         (onFullSupported "nixos.tests.openssh")
@@ -154,10 +168,13 @@ in rec {
         (onFullSupported "nixos.tests.switchTest")
         (onFullSupported "nixos.tests.udisks2")
         (onFullSupported "nixos.tests.xfce")
-        (onSystems ["i686-linux"] "nixos.tests.zfs.installer")
         (onFullSupported "nixpkgs.emacs")
         (onFullSupported "nixpkgs.jdk")
-        ["nixpkgs.tarball"]
+        (onSystems ["x86_64-linux"] "nixpkgs.mesa_i686") # i686 sanity check + useful
+        [
+          "nixpkgs.tarball"
+          "nixpkgs.release-checks"
+        ]
       ];
     };
 }

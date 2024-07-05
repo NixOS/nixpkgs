@@ -1,11 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, importlib-metadata
-, sphinx
-, pyenchant
-, pbr
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  importlib-metadata,
+  sphinx,
+  pyenchant,
+  setuptools,
+  setuptools-scm,
+  wheel,
 }:
 
 buildPythonPackage rec {
@@ -21,22 +24,22 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
-    pbr
+    setuptools
+    setuptools-scm
+    wheel
   ];
 
   propagatedBuildInputs = [
     sphinx
     pyenchant
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    importlib-metadata
-  ];
+  ] ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
 
   # No tests included
   doCheck = false;
 
-  pythonImportsCheck = [
-    "sphinxcontrib.spelling"
-  ];
+  pythonImportsCheck = [ "sphinxcontrib.spelling" ];
+
+  pythonNamespaces = [ "sphinxcontrib" ];
 
   meta = with lib; {
     description = "Sphinx spelling extension";

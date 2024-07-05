@@ -1,15 +1,17 @@
-{ lib, stdenv, fetchFromGitHub, cmake }:
+{ lib, stdenv, fetchFromGitHub, cmake, testers, python3 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "llhttp";
-  version = "8.1.1";
+  version = "9.2.1";
 
   src = fetchFromGitHub {
     owner = "nodejs";
     repo = "llhttp";
-    rev = "release/v${version}";
-    hash = "sha256-srAHKyYvdEGtjV7BwcKQArwAChRoZqTCfa/RefI/8wQ=";
+    rev = "release/v${finalAttrs.version}";
+    hash = "sha256-cnEp7Ds32bqu3jeUU/rqJOr/VW3KNmJU4pmNNaTpXRs=";
   };
+
+  outputs = [ "out" "dev" ];
 
   nativeBuildInputs = [
     cmake
@@ -19,11 +21,21 @@ stdenv.mkDerivation rec {
     "-DBUILD_STATIC_LIBS=ON"
   ];
 
+  passthru.tests = {
+    inherit (python3.pkgs) aiohttp;
+
+    pkg-config = testers.hasPkgConfigModules {
+      package = finalAttrs.finalPackage;
+      moduleNames = [ "libllhttp" ];
+    };
+  };
+
   meta = with lib; {
     description = "Port of http_parser to llparse";
     homepage = "https://llhttp.org/";
+    changelog = "https://github.com/nodejs/llhttp/releases/tag/release/v${finalAttrs.version}";
     license = licenses.mit;
-    maintainers = [ maintainers.marsam ];
+    maintainers = [ ];
     platforms = platforms.all;
   };
-}
+})

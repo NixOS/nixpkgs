@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   pname = "micronucleus";
   version = "2.04";
 
-  sourceRoot = "source/commandline";
+  sourceRoot = "${src.name}/commandline";
 
   src = fetchFromGitHub {
     owner = "micronucleus";
@@ -28,6 +28,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Upload tool for micronucleus";
+    mainProgram = "micronucleus";
     homepage = "https://github.com/micronucleus/micronucleus";
     license = licenses.gpl3;
     maintainers = [ maintainers.cab404 ];

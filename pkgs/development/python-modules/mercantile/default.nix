@@ -1,12 +1,16 @@
-{ lib, buildPythonPackage, fetchFromGitHub
-, click
-, pytestCheckHook
-, hypothesis
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  click,
+  pytestCheckHook,
+  hypothesis,
 }:
 
 buildPythonPackage rec {
   pname = "mercantile";
   version = "1.2.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "mapbox";
@@ -17,10 +21,14 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ click ];
 
-  nativeCheckInputs = [ pytestCheckHook hypothesis ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    hypothesis
+  ];
 
   meta = with lib; {
     description = "Spherical mercator tile and coordinate utilities";
+    mainProgram = "mercantile";
     homepage = "https://github.com/mapbox/mercantile";
     license = licenses.bsd3;
     maintainers = with maintainers; [ sikmir ];

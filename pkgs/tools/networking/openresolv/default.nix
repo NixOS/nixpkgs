@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "openresolv";
-  version = "3.12.0";
+  version = "3.13.2";
 
   src = fetchFromGitHub {
     owner = "NetworkConfiguration";
     repo = "openresolv";
     rev = "v${version}";
-    sha256 = "sha256-lEyqOf2NGWnH44pDVNVSWZeuhXx7z0ru4KuXu2RuyIg=";
+    sha256 = "sha256-rpfzAIzuiO+QTFhN+tHND+OQOyX/GUPvLLX3CSSwqA4=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -33,10 +33,11 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "A program to manage /etc/resolv.conf";
+    description = "Program to manage /etc/resolv.conf";
+    mainProgram = "resolvconf";
     homepage = "https://roy.marples.name/projects/openresolv";
     license = lib.licenses.bsd2;
     maintainers = [ lib.maintainers.eelco ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.freebsd;
   };
 }

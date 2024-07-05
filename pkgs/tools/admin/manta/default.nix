@@ -1,41 +1,34 @@
 { lib
 , buildNpmPackage
-, fetchurl
-, nodejs
+, fetchFromGitHub
 , installShellFiles
 , testers
 , node-manta
 }:
 
-let
-  source = lib.importJSON ./source.json;
-in
 buildNpmPackage rec {
   pname = "manta";
-  inherit (source) version;
+  version = "5.4.2";
 
-  src = fetchurl {
-    url = "https://registry.npmjs.org/${pname}/-/${source.filename}";
-    hash = source.integrity;
+  src = fetchFromGitHub {
+    owner = "TritonDataCenter";
+    repo = "node-manta";
+    rev = "v${version}";
+    hash = "sha256-Uj3fNzeERiO++sW2uyAbtfN/1Ed6uRVBBvCecncq/QY=";
   };
 
-  npmDepsHash = source.deps;
+  npmDepsHash = "sha256-Xk/K90K+X73ZTV6u2GJij8815GdBn6igXmpWLaCfKF4=";
 
   dontBuild = true;
 
-  nativeBuildInputs = [ nodejs installShellFiles ];
-
-  postPatch = ''
-    # Use generated package-lock.json as upstream does not provide one
-    ln -s ${./package-lock.json} package-lock.json
-  '';
+  nativeBuildInputs = [ installShellFiles ];
 
   postInstall = ''
     ln -s ./lib/node_modules/manta/bin $out/bin
   '';
 
   postFixup = ''
-    # create completions, following upstream procedure https://github.com/joyent/node-manta/blob/v5.3.2/Makefile#L85-L91
+    # create completions, following upstream procedure https://github.com/joyent/node-manta/blob/v5.4.1/Makefile#L85-L91
     cmds=$(find ./bin/ -type f -printf "%f\n")
 
     node $out/lib/node_modules/manta/lib/create_client.js
@@ -52,12 +45,12 @@ buildNpmPackage rec {
     tests.version = testers.testVersion {
       package = node-manta;
     };
-    updateScript = ./update.sh;
   };
 
   meta = with lib; {
     description = "Manta Object-Storage Client CLIs and Node.js SDK";
     homepage = "https://github.com/TritonDataCenter/node-manta";
+    changelog = "https://github.com/TritonDataCenter/node-manta/blob/v${version}/CHANGES.md";
     license = licenses.mit;
     maintainers = with maintainers; [ teutat3s ];
     mainProgram = "mls";

@@ -1,17 +1,20 @@
-{ lib
-, buildPythonPackage
-, fetchpatch
-, fetchPypi
-, nose
-, parameterized
-, python
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchpatch,
+  fetchPypi,
+  parameterized,
+  pytestCheckHook,
+  pynose,
+  python,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pprintpp";
   version = "0.4.0";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -34,24 +37,31 @@ buildPythonPackage rec {
     })
   ];
 
+  build-system = [ setuptools ];
+
   nativeCheckInputs = [
-    nose
     parameterized
+    pynose
+    pytestCheckHook
   ];
 
-  checkPhase = ''
-    ${python.interpreter} test.py
-  '';
+  pythonImportsCheck = [ "pprintpp" ];
 
-  pythonImportsCheck = [
-    "pprintpp"
+  pytestFlagsArray = [ "test.py" ];
+
+  disabledTests = [
+    # AttributeError: 'EncodedFile' object has no attribute 'getvalue'
+    "test_pp"
+    "test_pp_pprint"
+    "test_fmt"
   ];
 
   meta = with lib; {
-    description = "A drop-in replacement for pprint that's actually pretty";
+    description = "Drop-in replacement for pprint that's actually pretty";
     homepage = "https://github.com/wolever/pprintpp";
     changelog = "https://github.com/wolever/pprintpp/blob/${version}/CHANGELOG.txt";
     license = licenses.bsd2;
     maintainers = with maintainers; [ jakewaksbaum ];
+    mainProgram = "pypprint";
   };
 }

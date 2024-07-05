@@ -1,29 +1,27 @@
 { stdenv, lib, fetchFromGitHub, writeText, openjdk17_headless, gradle_7
 , pkg-config, perl, cmake, gperf, gtk2, gtk3, libXtst, libXxf86vm, glib, alsa-lib
-, ffmpeg_4-headless, python3, ruby, icu71, fetchurl, runCommand
+, ffmpeg_4-headless, python3, ruby, fetchurl, runCommand
 , withMedia ? true
 , withWebKit ? false
 }:
 
 let
   major = "17";
-  update = ".0.6";
-  build = "+3";
+  update = ".0.11";
+  build = "-ga";
   repover = "${major}${update}${build}";
   gradle_ = (gradle_7.override {
     java = openjdk17_headless;
   });
 
-  dashed-icu-version = lib.concatStringsSep "-" (lib.splitString "." (lib.getVersion icu71));
-  underscored-icu-version = lib.concatStringsSep "_" (lib.splitString "." (lib.getVersion icu71));
-  icu-data = fetchurl {
-    url = "https://github.com/unicode-org/icu/releases/download/release-${dashed-icu-version}/icu4c-${underscored-icu-version}-data-bin-l.zip";
+  icuVersionWithSep = s: "71${s}1";
+  icuPath = "download/release-${icuVersionWithSep "-"}/icu4c-${icuVersionWithSep "_"}-data-bin-l.zip";
+  icuData = fetchurl {
+    url = "https://github.com/unicode-org/icu/releases/${icuPath}";
     hash = "sha256-pVWIy0BkICsthA5mxhR9SJQHleMNnaEcGl/AaLi5qZM=";
   };
-
-  fakeRepository = runCommand "icu-data-repository" {} ''
-    mkdir -p $out/download/release-${dashed-icu-version}
-    cp ${icu-data} $out/download/release-${dashed-icu-version}/icu4c-${underscored-icu-version}-data-bin-l.zip
+  icuFakeRepository = runCommand "icu-data-repository" {} ''
+    install -Dm644 ${icuData} $out/${icuPath}
   '';
 
   makePackage = args: stdenv.mkDerivation ({
@@ -33,13 +31,20 @@ let
       owner = "openjdk";
       repo = "jfx${major}u";
       rev = repover;
-      sha256 = "sha256-9VfXk2EfMebMyVKPohPRP2QXRFf8XemUtfY0JtBCHyw=";
+      sha256 = "sha256-WV8NHlYlt7buGbirLSorLnS2TnyBD17zUquFfwSL3xE=";
     };
 
-    buildInputs = [ gtk2 gtk3 libXtst libXxf86vm glib alsa-lib ffmpeg_4-headless icu71 ];
+    buildInputs = [ gtk2 gtk3 libXtst libXxf86vm glib alsa-lib ffmpeg_4-headless ];
     nativeBuildInputs = [ gradle_ perl pkg-config cmake gperf python3 ruby ];
 
     dontUseCmakeConfigure = true;
+
+    postPatch = ''
+      # Add missing includes for gcc-13 for webkit build:
+      sed -e '1i #include <cstdio>' \
+        -i modules/javafx.web/src/main/native/Source/bmalloc/bmalloc/Heap.cpp \
+           modules/javafx.web/src/main/native/Source/bmalloc/bmalloc/IsoSharedPageInlines.h
+    '';
 
     config = writeText "gradle.properties" (''
       CONF = Release
@@ -49,10 +54,11 @@ let
     buildPhase = ''
       runHook preBuild
 
+      export NUMBER_OF_PROCESSORS=$NIX_BUILD_CORES
       export GRADLE_USER_HOME=$(mktemp -d)
       ln -s $config gradle.properties
       export NIX_CFLAGS_COMPILE="$(pkg-config --cflags glib-2.0) $NIX_CFLAGS_COMPILE"
-      gradle --no-daemon $gradleFlags sdk
+      gradle --no-daemon --console=plain $gradleFlags sdk
 
       runHook postBuild
     '';
@@ -83,7 +89,7 @@ in makePackage {
   gradleProperties = ''
     COMPILE_MEDIA = ${lib.boolToString withMedia}
     COMPILE_WEBKIT = ${lib.boolToString withWebKit}
-    ${lib.optionalString withWebKit "icuRepositoryURL = file://${fakeRepository}"}
+    ${lib.optionalString withWebKit "icuRepositoryURL = file://${icuFakeRepository}"}
   '';
 
   preBuild = ''
@@ -115,7 +121,7 @@ in makePackage {
   meta = with lib; {
     homepage = "http://openjdk.java.net/projects/openjfx/";
     license = licenses.gpl2;
-    description = "The next-generation Java client toolkit";
+    description = "Next-generation Java client toolkit";
     maintainers = with maintainers; [ abbradar ];
     platforms = platforms.unix;
   };

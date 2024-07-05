@@ -11,8 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-cCpckORtogs6Nt7c5q2+z0acXAnALdLV6uzxa5ng3s4=";
   };
 
-  nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [ ronn ];
+  nativeBuildInputs = [ autoreconfHook ronn ];
 
   patches = [
     (fetchpatch {
@@ -24,7 +23,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Cross-platform version of flock(1)";
-    maintainers = with maintainers; [ matthewbauer msfjarvis ];
+    maintainers = with maintainers; [ matthewbauer ];
+    mainProgram = "flock";
     platforms = platforms.all;
     license = licenses.isc;
   };

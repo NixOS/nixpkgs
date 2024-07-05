@@ -12,14 +12,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "probe-run";
-  version = "0.3.9";
+  version = "0.3.11";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-VNFLX+aPkanX573YpRok2JUWf74O7gtlgmuHkI30y2g=";
+    hash = "sha256-RlmN2PV5Z/+NTYia7LhrAW437bsg6oUxlQ1qcbZuq0o=";
   };
 
-  cargoHash = "sha256-cjr7lNwzqcIfjXn1CVHKgeRZlsJ0QG+0x9h6q5e3D0o=";
+  cargoHash = "sha256-MG3xHArNEqXs0vC5sSyaBM3421yJ25nazvBNQVcs4v0=";
 
   nativeBuildInputs = [
     pkg-config
@@ -37,6 +37,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Run embedded programs just like native ones";
+    mainProgram = "probe-run";
     homepage = "https://github.com/knurling-rs/probe-run";
     changelog = "https://github.com/knurling-rs/probe-run/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ asl20 /* or */ mit ];

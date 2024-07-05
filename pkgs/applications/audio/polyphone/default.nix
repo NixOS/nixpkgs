@@ -29,8 +29,13 @@ mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
     install -d $out/bin
     install -m755 bin/polyphone $out/bin/
+
+    install -Dm444 ./contrib/com.polyphone_soundfonts.polyphone.desktop -t $out/share/applications/
+    install -Dm444 ./contrib/polyphone.svg -t $out/share/icons/hicolor/scalable/apps/
+    runHook postInstall
   '';
 
   qmakeFlags = [
@@ -40,7 +45,8 @@ mkDerivation rec {
 
   meta = with lib; {
     broken = (stdenv.isLinux && stdenv.isAarch64);
-    description = "A soundfont editor for creating musical instruments";
+    description = "Soundfont editor for creating musical instruments";
+    mainProgram = "polyphone";
     homepage = "https://www.polyphone-soundfonts.com/";
     license = licenses.gpl3;
     maintainers = [ maintainers.maxdamantus ];

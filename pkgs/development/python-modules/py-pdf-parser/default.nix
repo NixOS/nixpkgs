@@ -1,24 +1,25 @@
-{ lib
-, buildPythonPackage
-, docopt
-, fetchPypi
-, pdfminer-six
-, pythonOlder
-, pythonRelaxDepsHook
-, setuptools
-, wand
+{
+  lib,
+  buildPythonPackage,
+  docopt,
+  fetchPypi,
+  pdfminer-six,
+  pythonOlder,
+  pythonRelaxDepsHook,
+  setuptools,
+  wand,
 }:
 
 buildPythonPackage rec {
   pname = "py-pdf-parser";
-  version = "0.10.2";
+  version = "0.12.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-F12uDAjG9P3eVyaXqVSHNFrEGnOzLlJERDwOiWSq1ZY=";
+    hash = "sha256-nMEmzQVz1LR4omHyxhvrjBXDQQE23S62T0wxZeMnXhg=";
   };
 
   nativeBuildInputs = [
@@ -47,10 +48,10 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "A tool to help extracting information from structured PDFs";
+    description = "Tool to help extracting information from structured PDFs";
     homepage = "https://github.com/jstockwin/py-pdf-parser";
     changelog = "https://github.com/jstockwin/py-pdf-parser/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = [ maintainers.marsam ];
+    maintainers = [ ];
   };
 }

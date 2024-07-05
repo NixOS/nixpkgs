@@ -1,82 +1,126 @@
 { lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, pkg-config
-, cmake
-, zlib
-, dbus
-, networkmanager
-, enableJavaScript ? stdenv.isDarwin || lib.meta.availableOn stdenv.hostPlatform duktape
+, _experimental-update-script-combinators
+, curl
+, darwin
 , duktape
-, pcre
-, gsettings-desktop-schemas
+, fetchFromGitHub
+, gi-docgen
+, gitUpdater
 , glib
-, makeWrapper
-, python3
-, SystemConfiguration
-, CoreFoundation
-, JavaScriptCore
+, gobject-introspection
+, gsettings-desktop-schemas
+, makeHardcodeGsettingsPatch
+, meson
+, ninja
+, pkg-config
+, stdenv
+, substituteAll
+, vala
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libproxy";
-  version = "0.4.18";
+  version = "0.5.6";
+
+  outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchFromGitHub {
     owner = "libproxy";
     repo = "libproxy";
-    rev = version;
-    hash = "sha256-pqj1LwRdOK2CUu3hYIsogQIXxWzShDuKEbDTbtWkgnQ=";
+    rev = finalAttrs.version;
+    hash = "sha256-2uDlKjxzrKlyZKV0BSUDzmLSo2voJKDerbZZkamgNYk=";
   };
 
-  patches = lib.optionals stdenv.isDarwin [
-    # https://github.com/libproxy/libproxy/pull/189
-    (fetchpatch {
-      url = "https://github.com/libproxy/libproxy/commit/4331b9db427ce2c25ff5eeb597bec4bc35ed1a0b.patch";
-      sha256 = "sha256-uTh3rYVvEke1iWVHsT3Zj2H1F+gyLrffcmyt0JEKaCA=";
+  patches = [
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    # Disable schema presence detection, it would fail because it cannot be autopatched,
+    # and it will be hardcoded by the next patch anyway.
+    ./skip-gsettings-detection.patch
+
+    # Hardcode path to Settings schemas for GNOME & related desktops.
+    # Otherwise every app using libproxy would need to be wrapped individually.
+    (substituteAll {
+      src = ./hardcode-gsettings.patch;
+      gds = glib.getSchemaPath gsettings-desktop-schemas;
     })
   ];
 
-  outputs = [ "out" "dev" "py3" ];
+  postPatch = ''
+    # Fix running script that will try to install git hooks.
+    # Though it will not do anything since we do not keep .git/ directory.
+    # https://github.com/libproxy/libproxy/issues/262
+    chmod +x data/install-git-hook.sh
+    patchShebangs data/install-git-hook.sh
+
+    # Fix include-path propagation in non-static builds.
+    # https://github.com/libproxy/libproxy/pull/239#issuecomment-2056620246
+    substituteInPlace src/libproxy/meson.build \
+      --replace-fail "requires_private: 'gobject-2.0'" "requires: 'gobject-2.0'"
+  '';
 
   nativeBuildInputs = [
+    gi-docgen
+    gobject-introspection
+    meson
+    ninja
     pkg-config
-    cmake
-    makeWrapper
+    vala
   ];
 
   buildInputs = [
-    pcre
-    python3
-    zlib
-  ] ++ lib.optionals enableJavaScript [
-    (if stdenv.hostPlatform.isDarwin then JavaScriptCore else duktape)
-  ] ++ (if stdenv.hostPlatform.isDarwin then [
-    SystemConfiguration
-    CoreFoundation
-  ] else [
+    curl
+    duktape
+  ] ++ (if stdenv.hostPlatform.isDarwin then (with darwin.apple_sdk.frameworks; [
+    Foundation
+  ]) else [
     glib
-    dbus
-    networkmanager
+    gsettings-desktop-schemas
   ]);
 
-  cmakeFlags = [
-    "-DWITH_PYTHON2=OFF"
-    "-DPYTHON3_SITEPKG_DIR=${placeholder "py3"}/${python3.sitePackages}"
-  ] ++ lib.optional (enableJavaScript && !stdenv.hostPlatform.isDarwin) "-DWITH_MOZJS=ON";
+  mesonFlags = [
+    # Prevent installing commit hook.
+    "-Drelease=true"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "-Dconfig-gnome=false"
+  ];
 
-  postFixup = lib.optionalString stdenv.isLinux ''
-    # config_gnome3 uses the helper to find GNOME proxy settings
-    wrapProgram $out/libexec/pxgsettings --prefix XDG_DATA_DIRS : "${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}"
+  doCheck = !stdenv.hostPlatform.isDarwin;
+
+  postFixup = ''
+    # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
+    moveToOutput "share/doc" "$devdoc"
   '';
 
-  doCheck = false; # fails 1 out of 10 tests
+  passthru = {
+    hardcodeGsettingsPatch = makeHardcodeGsettingsPatch {
+      schemaIdToVariableMapping = {
+        "org.gnome.system.proxy" = "gds";
+        "org.gnome.system.proxy.http" = "gds";
+        "org.gnome.system.proxy.https" = "gds";
+        "org.gnome.system.proxy.ftp" = "gds";
+        "org.gnome.system.proxy.socks" = "gds";
+      };
+      inherit (finalAttrs) src;
+    };
+
+    updateScript =
+      let
+        updateSource = gitUpdater { };
+        updatePatch = _experimental-update-script-combinators.copyAttrOutputToFile "libproxy.hardcodeGsettingsPatch" ./hardcode-gsettings.patch;
+      in
+      _experimental-update-script-combinators.sequence [
+        updateSource
+        updatePatch
+      ];
+  };
 
   meta = with lib; {
+    description = "Library that provides automatic proxy configuration management";
+    homepage = "https://libproxy.github.io/libproxy/";
+    license = licenses.lgpl21Plus;
     platforms = platforms.linux ++ platforms.darwin;
-    license = licenses.lgpl21;
-    homepage = "http://libproxy.github.io/libproxy/";
-    description = "A library that provides automatic proxy configuration management";
+    mainProgram = "proxy";
   };
-}
+})

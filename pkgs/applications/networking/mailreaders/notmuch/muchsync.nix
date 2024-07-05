@@ -13,8 +13,10 @@ stdenv.mkDerivation rec {
   };
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ notmuch openssl sqlite xapian zlib ];
+  XAPIAN_CONFIG = "${xapian}/bin/xapian-config";
   meta = {
     description = "Synchronize maildirs and notmuch databases";
+    mainProgram = "muchsync";
     homepage = "http://www.muchsync.org/";
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [];

@@ -17,8 +17,9 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "CLI tool to generate terraform files from existing infrastructure (reverse Terraform). Infrastructure to Code";
+    mainProgram = "terraformer";
     homepage = "https://github.com/GoogleCloudPlatform/terraformer";
     license = licenses.asl20;
-    maintainers = [ maintainers.marsam ];
+    maintainers = [ ];
   };
 }

@@ -1,12 +1,12 @@
-{ appimageTools, lib, fetchurl, stdenv }:
+{ appimageTools, lib, fetchurl, nix-update-script, stdenv }:
 let
 
   pname = "golden-cheetah";
-  version = "3.6-RC4";
+  version = "3.6";
 
   src = fetchurl {
-    url = "https://github.com/GoldenCheetah/GoldenCheetah/releases/download/v${version}/GoldenCheetah_v3.6-DEV_x64.AppImage";
-    hash = "sha256-I5GafK/W1djSx67xrjcMyPqMSqGW9AfrcPYcGcf0Pag=";
+    url = "https://github.com/GoldenCheetah/GoldenCheetah/releases/download/v${version}/GoldenCheetah_v${version}_x64.AppImage";
+    hash = "sha256-PMRUDQSQxbECbF9SPOo03t4Xxj1OtYJAPXEMyyy6EVY=";
   };
 
   appimageContents = appimageTools.extract { inherit pname src version; };
@@ -14,22 +14,25 @@ in
 appimageTools.wrapType2 {
   inherit pname src version;
 
-  extraPkgs = pkgs: with pkgs; [ R zlib libusb-compat-0_1 ];
+  extraPkgs = pkgs: [ pkgs.R pkgs.zlib pkgs.libusb-compat-0_1 ];
 
   extraInstallCommands = ''
-    mv $out/bin/${pname}-${version} $out/bin/GoldenCheetah
+    mv $out/bin/${pname} $out/bin/GoldenCheetah
     mkdir -p $out/share/applications
     mkdir -p $out/share/pixmaps
     cp ${appimageContents}/GoldenCheetah.desktop $out/share/applications/
     cp ${appimageContents}/gc.png $out/share/pixmaps/
   '';
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "Performance software for cyclists, runners and triathletes. This version includes the API Tokens for e.g. Strava";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     broken = !stdenv.isx86_64;
-    maintainers = with maintainers; [ gador ];
-    license = licenses.gpl2Plus;
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    maintainers = with lib.maintainers; [ gador adamcstephens ];
+    license = lib.licenses.gpl2Plus;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    knownVulnerabilities = [ "Vendors libwebp vulnerable to CVE-2023-4863" ];
   };
 }

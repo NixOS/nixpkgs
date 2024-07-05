@@ -35,66 +35,65 @@ let
       "app.notify_emails" = mkOption {
         type = listOf str;
         default = [ ];
-        description = lib.mdDoc "Administrator emails for system notifications";
+        description = "Administrator emails for system notifications";
       };
 
       "privacy.exportable" = mkOption {
         type = listOf str;
         default = [ "profile" "subscriptions" "campaign_views" "link_clicks" ];
-        description = lib.mdDoc
+        description =
           "List of fields which can be exported through an automatic export request";
       };
 
       "privacy.domain_blocklist" = mkOption {
         type = listOf str;
         default = [ ];
-        description = lib.mdDoc
+        description =
           "E-mail addresses with these domains are disallowed from subscribing.";
       };
 
       smtp = mkOption {
         type = listOf (submodule {
-          freeformType = with types; attrsOf (oneOf [ str int bool ]);
+          freeformType = with types; attrsOf anything;
 
           options = {
-            enabled = mkEnableOption (lib.mdDoc "this SMTP server for listmonk");
+            enabled = mkEnableOption "this SMTP server for listmonk";
             host = mkOption {
               type = types.str;
-              description = lib.mdDoc "Hostname for the SMTP server";
+              description = "Hostname for the SMTP server";
             };
             port = mkOption {
               type = types.port;
-              description = lib.mdDoc "Port for the SMTP server";
+              description = "Port for the SMTP server";
             };
             max_conns = mkOption {
               type = types.int;
-              description = lib.mdDoc
+              description =
                 "Maximum number of simultaneous connections, defaults to 1";
               default = 1;
             };
             tls_type = mkOption {
               type = types.enum [ "none" "STARTTLS" "TLS" ];
-              description =
-                lib.mdDoc "Type of TLS authentication with the SMTP server";
+              description = "Type of TLS authentication with the SMTP server";
             };
           };
         });
 
-        description = lib.mdDoc "List of outgoing SMTP servers";
+        description = "List of outgoing SMTP servers";
       };
 
       # TODO: refine this type based on the smtp one.
       "bounce.mailboxes" = mkOption {
         type = listOf
-          (submodule { freeformType = with types; oneOf [ str int bool ]; });
+          (submodule { freeformType = with types; listOf (attrsOf anything); });
         default = [ ];
-        description = lib.mdDoc "List of bounce mailboxes";
+        description = "List of bounce mailboxes";
       };
 
       messengers = mkOption {
         type = listOf str;
         default = [ ];
-        description = lib.mdDoc
+        description =
           "List of messengers, see: <https://github.com/knadh/listmonk/blob/master/models/settings.go#L64-L74> for options.";
       };
     };
@@ -103,35 +102,34 @@ in {
   ###### interface
   options = {
     services.listmonk = {
-      enable = mkEnableOption
-        (lib.mdDoc "Listmonk, this module assumes a reverse proxy to be set");
+      enable = mkEnableOption "Listmonk, this module assumes a reverse proxy to be set";
       database = {
         createLocally = mkOption {
           type = types.bool;
           default = false;
-          description = lib.mdDoc
+          description =
             "Create the PostgreSQL database and database user locally.";
         };
 
         settings = mkOption {
           default = null;
           type = with types; nullOr (submodule databaseSettingsOpts);
-          description = lib.mdDoc
+          description =
             "Dynamic settings in the PostgreSQL database, set by a SQL script, see <https://github.com/knadh/listmonk/blob/master/schema.sql#L177-L230> for details.";
         };
         mutableSettings = mkOption {
           type = types.bool;
           default = true;
-          description = lib.mdDoc ''
+          description = ''
             Database settings will be reset to the value set in this module if this is not enabled.
             Enable this if you want to persist changes you have done in the application.
           '';
         };
       };
-      package = mkPackageOptionMD pkgs "listmonk" {};
+      package = mkPackageOption pkgs "listmonk" {};
       settings = mkOption {
         type = types.submodule { freeformType = tomlFormat.type; };
-        description = lib.mdDoc ''
+        description = ''
           Static settings set in the config.toml, see <https://github.com/knadh/listmonk/blob/master/config.toml.sample> for details.
           You can set secrets using the secretFile option with environment variables following <https://listmonk.app/docs/configuration/#environment-variables>.
         '';
@@ -139,7 +137,7 @@ in {
       secretFile = mkOption {
         type = types.nullOr types.str;
         default = null;
-        description = lib.mdDoc
+        description =
           "A file containing secrets as environment variables. See <https://listmonk.app/docs/configuration/#environment-variables> for details on supported values.";
       };
     };
@@ -168,7 +166,7 @@ in {
 
       ensureUsers = [{
         name = "listmonk";
-        ensurePermissions = { "DATABASE listmonk" = "ALL PRIVILEGES"; };
+        ensureDBOwnership = true;
       }];
 
       ensureDatabases = [ "listmonk" ];
@@ -187,7 +185,11 @@ in {
           # Indeed, it will try to create all the folders and realize one of them already exist.
           # Therefore, we have to create it ourselves.
           ''${pkgs.coreutils}/bin/mkdir -p "''${STATE_DIRECTORY}/listmonk/uploads"''
-          "${cfg.package}/bin/listmonk --config ${cfgFile} --idempotent --install --upgrade --yes"
+          # setup database if not already done
+          "${cfg.package}/bin/listmonk --config ${cfgFile} --idempotent --install --yes"
+          # apply db migrations (setup and migrations can not be done in one step
+          # with "--install --upgrade" listmonk ignores the upgrade)
+          "${cfg.package}/bin/listmonk --config ${cfgFile} --upgrade --yes"
           "${updateDatabaseConfigScript}/bin/update-database-config.sh"
         ];
         ExecStart = "${cfg.package}/bin/listmonk --config ${cfgFile}";
@@ -201,13 +203,12 @@ in {
         DynamicUser = true;
         NoNewPrivileges = true;
         CapabilityBoundingSet = "";
-        SystemCallArchitecture = "native";
+        SystemCallArchitectures = "native";
         SystemCallFilter = [ "@system-service" "~@privileged" ];
-        ProtectDevices = true;
+        PrivateDevices = true;
         ProtectControlGroups = true;
         ProtectKernelTunables = true;
         ProtectHome = true;
-        DeviceAllow = false;
         RestrictNamespaces = true;
         RestrictRealtime = true;
         UMask = "0027";

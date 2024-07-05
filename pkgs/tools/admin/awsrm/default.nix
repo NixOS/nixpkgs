@@ -11,7 +11,7 @@ buildGoModule rec {
     sha256 = "sha256-KAujqYDtZbCBRO5WK9b9mxqe84ZllbBoO2tLnDH/bdo=";
   };
 
-  vendorSha256 = "sha256-CldEAeiFH7gdFNLbIe/oTzs8Pdnde7EqLr7vP7SMDGU=";
+  vendorHash = "sha256-CldEAeiFH7gdFNLbIe/oTzs8Pdnde7EqLr7vP7SMDGU=";
 
   ldflags =
     let t = "github.com/jckuester/awsrm/internal";
@@ -20,9 +20,10 @@ buildGoModule rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "A remove command for AWS resources";
+    description = "Remove command for AWS resources";
     homepage = "https://github.com/jckuester/awsrm";
     license = licenses.mit;
     maintainers = [ maintainers.markus1189 ];
+    mainProgram = "awsrm";
   };
 }

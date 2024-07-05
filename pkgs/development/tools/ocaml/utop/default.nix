@@ -6,14 +6,14 @@
 buildDunePackage rec {
   pname = "utop";
 
-  version = "2.13.0";
+  version = "2.14.0";
   propagatedBuildInputs = [ findlib lambda-term xdg zed logs ];
 
   minimalOCamlVersion = "4.11";
 
   src = fetchurl {
     url = "https://github.com/ocaml-community/utop/releases/download/${version}/utop-${version}.tbz";
-    sha256 = "sha256-iEUPIABsLRB4Gr6YQbrSpX5ymLXs8b4zu/Hq3r0Shtg=";
+    sha256 = "sha256-D9WpvFtFhSSnFGOh/gzRb5t74TZzrjAxGLchbg0nO6k=";
   };
 
   nativeBuildInputs = [ makeWrapper cppo ];

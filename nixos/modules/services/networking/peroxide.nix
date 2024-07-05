@@ -9,9 +9,9 @@ let
 in
 {
   options.services.peroxide = {
-    enable = mkEnableOption (lib.mdDoc "peroxide");
+    enable = mkEnableOption "peroxide";
 
-    package = mkPackageOptionMD pkgs "peroxide" {
+    package = mkPackageOption pkgs "peroxide" {
       default = [ "peroxide" ];
     };
 
@@ -20,7 +20,7 @@ in
       type = types.enum [ "Panic" "Fatal" "Error" "Warning" "Info" "Debug" "Trace" ];
       default = "Warning";
       example = "Info";
-      description = lib.mdDoc "Only log messages of this priority or higher.";
+      description = "Only log messages of this priority or higher.";
     };
 
     settings = mkOption {
@@ -31,25 +31,25 @@ in
           UserPortImap = mkOption {
             type = types.port;
             default = 1143;
-            description = lib.mdDoc "The port on which to listen for IMAP connections.";
+            description = "The port on which to listen for IMAP connections.";
           };
 
           UserPortSmtp = mkOption {
             type = types.port;
             default = 1025;
-            description = lib.mdDoc "The port on which to listen for SMTP connections.";
+            description = "The port on which to listen for SMTP connections.";
           };
 
           ServerAddress = mkOption {
             type = types.str;
             default = "[::0]";
             example = "localhost";
-            description = lib.mdDoc "The address on which to listen for connections.";
+            description = "The address on which to listen for connections.";
           };
         };
       };
       default = { };
-      description = lib.mdDoc ''
+      description = ''
         Configuration for peroxide.  See
         [config.example.yaml](https://github.com/ljanyst/peroxide/blob/master/config.example.yaml)
         for an example configuration.

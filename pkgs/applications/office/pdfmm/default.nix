@@ -2,12 +2,11 @@
 , coreutils
 , fetchFromGitHub
 , ghostscript
-, glibc
-, gnome
+, locale
+, zenity
 , gnused
 , lib
 , resholve
-, xorg
 }:
 
 resholve.mkDerivation rec {
@@ -35,15 +34,16 @@ resholve.mkDerivation rec {
     inputs = [
       coreutils
       ghostscript
-      glibc
-      gnome.zenity
+      locale
+      zenity
       gnused
-      xorg.xmessage
     ];
+    fake = {
+      # only need xmessage if zenity is unavailable
+      external = [ "xmessage" ];
+    };
     execer = [
-      "cannot:${glibc.bin}/bin/locale"
-      "cannot:${gnome.zenity}/bin/zenity"
-      "cannot:${xorg.xmessage}/bin/xmessage"
+      "cannot:${zenity}/bin/zenity"
     ];
     keep."$toutLu" = true;
   };
@@ -53,5 +53,7 @@ resholve.mkDerivation rec {
     homepage = "https://github.com/jpfleury/pdfmm";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ urandom ];
+    mainProgram = "pdfmm";
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }

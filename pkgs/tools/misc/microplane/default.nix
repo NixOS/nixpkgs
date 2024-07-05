@@ -11,7 +11,7 @@ buildGoModule rec {
     sha256 = "sha256-ZrBkVXRGZp8yGFIBo7sLGvJ8pMQq7Cq0xJiko57z164=";
   };
 
-  vendorSha256 = "sha256-PqSjSFTVrIsQ065blIxZ9H/ARku6BEcnjboH+0K0G14=";
+  vendorHash = "sha256-PqSjSFTVrIsQ065blIxZ9H/ARku6BEcnjboH+0K0G14=";
 
   ldflags = [
     "-s" "-w" "-X main.version=${version}"
@@ -22,7 +22,7 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    description = "A CLI tool to make git changes across many repos";
+    description = "CLI tool to make git changes across many repos";
     homepage = "https://github.com/Clever/microplane";
     license = licenses.asl20;
     maintainers = with maintainers; [ dbirks ];

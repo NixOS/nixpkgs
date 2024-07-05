@@ -2,18 +2,18 @@
 , python3Packages
 , gtk3
 , cairo
-, gnome
+, adwaita-icon-theme
 , librsvg
 , xvfb-run
 , dbus
 , libnotify
-, wrapGAppsHook
+, wrapGAppsHook3
 , fetchFromGitLab
 , which
 , gettext
 , gobject-introspection
 , gdk-pixbuf
-, texlive
+, texliveSmall
 , imagemagick
 , perlPackages
 , writeScript
@@ -21,9 +21,7 @@
 
 let
   documentation_deps = [
-    (texlive.combine {
-      inherit (texlive) scheme-small wrapfig gensymb;
-    })
+    (texliveSmall.withPackages (ps: with ps; [ wrapfig gensymb ]))
     xvfb-run
     imagemagick
     perlPackages.Po4a
@@ -34,6 +32,7 @@ in
 python3Packages.buildPythonApplication rec {
   inherit src version;
   pname = "paperwork";
+  format = "pyproject";
 
   sample_docs = sample_documents // {
     # a trick for the update script
@@ -41,23 +40,13 @@ python3Packages.buildPythonApplication rec {
     src = sample_documents;
   };
 
-  sourceRoot = "source/paperwork-gtk";
+  sourceRoot = "${src.name}/paperwork-gtk";
 
-  # Patch out a few paths that assume that we're using the FHS:
   postPatch = ''
-    substituteInPlace setup.py \
-      --replace python-Levenshtein Levenshtein
-
     chmod a+w -R ..
     patchShebangs ../tools
 
     export HOME=$(mktemp -d)
-
-    cat - ../AUTHORS.py > src/paperwork_gtk/_version.py <<EOF
-    # -*- coding: utf-8 -*-
-    version = "${version}"
-    authors_code=""
-    EOF
   '';
 
   preBuild = ''
@@ -75,12 +64,12 @@ python3Packages.buildPythonApplication rec {
     # fixes [WARNING] [openpaperwork_core.resources.setuptools] Failed to find
     # resource file paperwork_gtk.icon.out/paperwork_128.png, tried at path
     # /nix/store/3n5lz6y8k9yks76f0nar3smc8djan3xr-paperwork-2.0.2/lib/python3.8/site-packages/paperwork_gtk/icon/out/paperwork_128.png.
-    site=$out/lib/${python3Packages.python.libPrefix}/site-packages/paperwork_gtk
+    site=$out/${python3Packages.python.sitePackages}/paperwork_gtk
     for i in $site/data/paperwork_*.png; do
       ln -s $i $site/icon/out;
     done
 
-    export XDG_DATA_DIRS=$XDG_DATA_DIRS:${gnome.adwaita-icon-theme}/share
+    export XDG_DATA_DIRS=$XDG_DATA_DIRS:${adwaita-icon-theme}/share
     # build the user manual
     PATH=$out/bin:$PATH PAPERWORK_TEST_DOCUMENTS=${sample_docs} make data
     for i in src/paperwork_gtk/model/help/out/*.pdf; do
@@ -91,15 +80,16 @@ python3Packages.buildPythonApplication rec {
   nativeCheckInputs = [ dbus ];
 
   nativeBuildInputs = [
-    wrapGAppsHook
+    wrapGAppsHook3
     gobject-introspection
+    python3Packages.setuptools-scm
     (lib.getBin gettext)
     which
     gdk-pixbuf # for the setup hook
   ] ++ documentation_deps;
 
   buildInputs = [
-    gnome.adwaita-icon-theme
+    adwaita-icon-theme
     libnotify
     librsvg
     gtk3
@@ -153,7 +143,7 @@ python3Packages.buildPythonApplication rec {
   '';
 
   meta = {
-    description = "A personal document manager for scanned documents";
+    description = "Personal document manager for scanned documents";
     homepage = "https://openpaper.work/";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ aszlig symphorien ];

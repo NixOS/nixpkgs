@@ -1,25 +1,27 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "types-deprecated";
-  version = "1.2.9.2";
-  format = "setuptools";
+  version = "1.2.9.20240311";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "types-Deprecated";
     inherit version;
-    hash = "sha256-kWFv1nRfi/LUV/u779FM3kODjp8AoEtaDq5Pwfe7xpc=";
+    hash = "sha256-BoDomYmoFCcH3oED8V0YJEWlM8EEf9m36MVFkQHpuQo=";
   };
+
+  nativeBuildInputs = [ setuptools ];
 
   # Modules has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "deprecated-stubs"
-  ];
+  pythonImportsCheck = [ "deprecated-stubs" ];
 
   meta = with lib; {
     description = "Typing stubs for Deprecated";

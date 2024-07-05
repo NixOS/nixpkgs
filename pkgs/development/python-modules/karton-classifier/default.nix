@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, chardet
-, fetchFromGitHub
-, karton-core
-, pytestCheckHook
-, python-magic
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  chardet,
+  fetchFromGitHub,
+  karton-core,
+  pytestCheckHook,
+  python-magic,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -28,9 +29,7 @@ buildPythonPackage rec {
     python-magic
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   postPatch = ''
     substituteInPlace requirements.txt \
@@ -38,18 +37,18 @@ buildPythonPackage rec {
       --replace "python-magic==0.4.18" "python-magic"
   '';
 
-  pythonImportsCheck = [
-    "karton.classifier"
-  ];
+  pythonImportsCheck = [ "karton.classifier" ];
 
   disabledTests = [
     # Tests expecting results from a different version of libmagic
     "test_process_archive_ace"
     "test_process_runnable_win32_lnk"
+    "test_process_misc_csv"
   ];
 
   meta = with lib; {
     description = "File type classifier for the Karton framework";
+    mainProgram = "karton-classifier";
     homepage = "https://github.com/CERT-Polska/karton-classifier";
     changelog = "https://github.com/CERT-Polska/karton-classifier/releases/tag/v${version}";
     license = with licenses; [ bsd3 ];

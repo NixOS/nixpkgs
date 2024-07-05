@@ -1,35 +1,38 @@
-{ lib
-, asyauth
-, asysocks
-, buildPythonPackage
-, colorama
-, fetchPypi
-, minikerberos
-, prompt-toolkit
-, pycryptodomex
-, pythonOlder
-, six
-, tqdm
-, winacl
-, winsspi
+{
+  lib,
+  asyauth,
+  asysocks,
+  buildPythonPackage,
+  colorama,
+  cryptography,
+  fetchPypi,
+  minikerberos,
+  prompt-toolkit,
+  pycryptodomex,
+  pythonOlder,
+  six,
+  tqdm,
+  winacl,
+  winsspi,
 }:
 
 buildPythonPackage rec {
   pname = "aiosmb";
-  version = "0.4.6";
+  version = "0.4.10";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Y0Z76YP1cWcfMKZOn2L6z4B+hAdibxJOYBzT3WV6FcY=";
+    hash = "sha256-uN5lbhuPt9axp2ZTTxDgHuDRwlQjXANEkGPgQJL1o90=";
   };
 
   propagatedBuildInputs = [
     asyauth
     asysocks
     colorama
+    cryptography
     minikerberos
     prompt-toolkit
     pycryptodomex
@@ -42,9 +45,7 @@ buildPythonPackage rec {
   # Project doesn't have tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "aiosmb"
-  ];
+  pythonImportsCheck = [ "aiosmb" ];
 
   meta = with lib; {
     description = "Python SMB library";

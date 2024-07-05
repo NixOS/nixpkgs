@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , cmake
 , example-robot-data
 , pinocchio
@@ -9,25 +8,16 @@
 , python3Packages
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "crocoddyl";
-  version = "2.0.0";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "loco-3d";
-    repo = pname;
-    rev = "v${version}";
-    fetchSubmodules = true;
-    hash = "sha256-wDHCHTJXmJjU7mhQ2huUVdEc9ap7PMeqlHPrKm//jBQ=";
+    repo = finalAttrs.pname;
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-SVV9sleDXLm2QJmNgL25XLHC3y5bfKab4GSlE8jbT8w=";
   };
-
-  patches = [
-    # error: no matching function for call to 'max(double&, int)'
-    (fetchpatch {
-      url = "https://github.com/loco-3d/crocoddyl/commit/d2e4116257595317740975e745739bb76b92e5c0.patch";
-      hash = "sha256-M79jNdIxzx9PfW3TStRny76dVo/HDf/Rp08ZPx+ymBg";
-    })
-  ];
 
   strictDeps = true;
 
@@ -48,11 +38,26 @@ stdenv.mkDerivation rec {
     "-DBUILD_PYTHON_INTERFACE=OFF"
   ];
 
+  prePatch = ''
+    substituteInPlace \
+      examples/CMakeLists.txt \
+      examples/log/check_logfiles.sh \
+      --replace /bin/bash ${stdenv.shell}
+  '';
+
+  doCheck = true;
+  pythonImportsCheck = [
+    "crocoddyl"
+  ];
+  checkInputs = lib.optionals pythonSupport [
+    python3Packages.scipy
+  ];
+
   meta = with lib; {
     description = "Crocoddyl optimal control library";
     homepage = "https://github.com/loco-3d/crocoddyl";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ wegank ];
+    maintainers = with maintainers; [ nim65s wegank ];
     platforms = platforms.unix;
   };
-}
+})

@@ -15,7 +15,8 @@ stdenv.mkDerivation rec {
     homepage = "http://micans.org/apparix";
     description = "Add directory bookmarks, distant listing, and distant editing to the command line";
     maintainers = with maintainers; [ ];
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.all;
+    mainProgram = "apparix";
   };
 }

@@ -15,7 +15,7 @@ mkCoqDerivation rec {
 
   inherit version;
   defaultVersion = with lib.versions; lib.switch coq.coq-version [
-    { case = range "8.10" "8.17"; out = "8.14.0"; }
+    { case = range "8.10" "8.18"; out = "8.14.0"; }
     { case = "8.9"; out = "8.9.0"; }
     { case = "8.8"; out = "8.8.0"; }
     { case = "8.7"; out = "8.7.0"; }
@@ -34,7 +34,7 @@ mkCoqDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A survey of programming language semantics styles in Coq";
+    description = "Survey of programming language semantics styles in Coq";
     longDescription = ''
       A survey of semantics styles in Coq, from natural semantics through
       structural operational, axiomatic, and denotational semantics, to

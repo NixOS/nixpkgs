@@ -1,24 +1,25 @@
-Don't remove sys.path entries that come from PYTHONPATH, or else the app cannot
-be used in Nixpkgs.
-
-Author: Bjørn Forsman <bjorn.forsman@gmail.com>
-diff -uNr spyder-5.4.0.orig/spyder/app/start.py spyder-5.4.0/spyder/app/start.py
---- spyder-5.4.0.orig/spyder/app/start.py	2022-08-30 02:02:28.000000000 +0200
-+++ spyder-5.4.0/spyder/app/start.py	2023-01-02 11:38:28.138744879 +0100
-@@ -6,16 +6,8 @@
+diff --git a/spyder/app/start.py b/spyder/app/start.py
+index 97b08a600..66486e510 100644
+--- a/spyder/app/start.py
++++ b/spyder/app/start.py
+@@ -6,20 +6,8 @@
  # (see spyder/__init__.py for details)
  # -----------------------------------------------------------------------------
- 
+
 -# Remove PYTHONPATH paths from sys.path before other imports to protect against
 -# shadowed standard libraries.
  import os
  import sys
 -if os.environ.get('PYTHONPATH'):
 -    for path in os.environ['PYTHONPATH'].split(os.pathsep):
--        try:
--            sys.path.remove(path.rstrip(os.sep))
--        except ValueError:
--            pass
- 
+-        if os.name == 'nt' and 'pkgs' in path:
+-            # Don't remove pynsist installer entry for 'pkgs' directory
+-            continue
+-        else:
+-            try:
+-                sys.path.remove(path.rstrip(os.sep))
+-            except ValueError:
+-                pass
+
  # Standard library imports
  import ctypes

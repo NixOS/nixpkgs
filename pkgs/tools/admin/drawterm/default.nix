@@ -1,6 +1,7 @@
 { stdenv
 , lib
-, fetchgit
+, fetchFrom9Front
+, unstableGitUpdater
 , installShellFiles
 , makeWrapper
 , xorg
@@ -13,16 +14,18 @@
 , wlr-protocols
 , pulseaudio
 , config
+, nixosTests
 }:
 
 stdenv.mkDerivation {
   pname = "drawterm";
-  version = "unstable-2023-06-27";
+  version = "0-unstable-2024-06-10";
 
-  src = fetchgit {
-    url = "git://git.9front.org/plan9front/drawterm";
-    rev = "36debf46ac184a22c6936345d22e4cfad995948c";
-    sha256 = "ebqw1jqeRC0FWeUIO/HaEovuwzU6+B48TjZbVJXByvA=";
+  src = fetchFrom9Front {
+    owner = "plan9front";
+    repo = "drawterm";
+    rev = "19f4185f3967a5c00053236015da22c0da2af41d";
+    hash = "sha256-aIoWhjzVmfXv5fcwIBwjUFVjdx316JivKMS+odnEB/I=";
   };
 
   enableParallelBuilding = true;
@@ -54,11 +57,17 @@ stdenv.mkDerivation {
     installManPage drawterm.1
   '';
 
+  passthru = {
+    updateScript = unstableGitUpdater { shallowClone = false; };
+    tests = nixosTests.drawterm;
+  };
+
   meta = with lib; {
-    description = "Connect to Plan 9 CPU servers from other operating systems.";
+    description = "Connect to Plan 9 CPU servers from other operating systems";
     homepage = "https://drawterm.9front.org/";
     license = licenses.mit;
     maintainers = with maintainers; [ luc65r moody ];
     platforms = platforms.linux;
+    mainProgram = "drawterm";
   };
 }

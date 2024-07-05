@@ -1,30 +1,63 @@
-{ mkXfceDerivation, lib, python3, intltool, gettext,
- gtk3, libxfce4ui, libxfce4util, pango, harfbuzz, gdk-pixbuf, atk }:
+{ stdenv
+, lib
+, fetchFromGitLab
+, gettext
+, gobject-introspection
+, intltool
+, wrapGAppsHook3
+, glib
+, gtk3
+, libxfce4ui
+, python3
+, gitUpdater
+}:
 
 let
-  pythonEnv = python3.withPackages(ps: [ ps.pygobject3 ps.psutil ]);
-  makeTypelibPath = lib.makeSearchPathOutput "lib/girepository-1.0" "lib/girepository-1.0";
-in mkXfceDerivation {
-  category = "apps";
+  pythonEnv = python3.withPackages (ps: [
+    ps.pygobject3
+    ps.psutil
+  ]);
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "xfce4-panel-profiles";
   version = "1.0.14";
 
-  sha256 = "sha256-mGA70t2U4mqEbcrj/DDsPl++EKWyZ8YXzKzzVOrH5h8=";
+  src = fetchFromGitLab {
+    domain = "gitlab.xfce.org";
+    owner = "apps";
+    repo = "xfce4-panel-profiles";
+    rev = "xfce4-panel-profiles-${finalAttrs.version}";
+    sha256 = "sha256-mGA70t2U4mqEbcrj/DDsPl++EKWyZ8YXzKzzVOrH5h8=";
+  };
 
-  nativeBuildInputs = [ intltool gettext ];
-  propagatedBuildInputs = [ pythonEnv ];
+  nativeBuildInputs = [
+    gettext
+    gobject-introspection
+    intltool
+    wrapGAppsHook3
+  ];
+
+  buildInputs = [
+    glib
+    gtk3
+    libxfce4ui
+    pythonEnv
+  ];
 
   configurePhase = ''
+    runHook preConfigure
+    # This is just a handcrafted script and does not accept additional arguments.
     ./configure --prefix=$out
+    runHook postConfigure
   '';
 
-  postFixup = ''
-    wrapProgram $out/bin/xfce4-panel-profiles \
-      --set GI_TYPELIB_PATH ${makeTypelibPath [ gtk3 libxfce4ui libxfce4util pango harfbuzz gdk-pixbuf atk ]}
-  '';
+  passthru.updateScript = gitUpdater { rev-prefix = "xfce4-panel-profiles-"; };
 
   meta = with lib; {
+    homepage = "https://docs.xfce.org/apps/xfce4-panel-profiles/start";
     description = "Simple application to manage Xfce panel layouts";
+    mainProgram = "xfce4-panel-profiles";
     maintainers = with maintainers; [ ] ++ teams.xfce.members;
+    platforms = platforms.linux;
   };
-}
+})

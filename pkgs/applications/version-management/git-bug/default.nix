@@ -11,7 +11,7 @@ buildGoModule rec {
     sha256 = "12byf6nsamwz0ssigan1z299s01cyh8bhgj86bibl90agd4zs9n8";
   };
 
-  vendorSha256 = "sha256-32kNDoBE50Jx1Ef9YwhDk7nd3CaTSnHPlu7PgWPUGfE=";
+  vendorHash = "sha256-32kNDoBE50Jx1Ef9YwhDk7nd3CaTSnHPlu7PgWPUGfE=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -39,5 +39,6 @@ buildGoModule rec {
     homepage = "https://github.com/MichaelMure/git-bug";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ royneary DeeUnderscore ];
+    mainProgram = "git-bug";
   };
 }

@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "lttng-modules-${kernel.version}";
-  version = "2.13.8";
+  version = "2.13.13";
 
   src = fetchFromGitHub {
     owner = "lttng";
     repo = "lttng-modules";
     rev = "v${version}";
-    hash = "sha256-6ohWsGUGFz7QlHkKWyW5edpSsBTE9DFS3v6EsH9wNZo=";
+    hash = "sha256-iA3B838EUU5rFWCL8BAubkTrTO1itDFp5d1653OPnS0=";
   };
 
   nativeBuildInputs = kernel.moduleBuildDependencies;

@@ -1,5 +1,5 @@
-{ lib, buildPythonApplication, fetchFromGitHub, python, mpv, requests, python-mpv-jsonipc, pystray, tkinter
-, wrapGAppsHook, gobject-introspection, mpv-shim-default-shaders }:
+{ lib, buildPythonApplication, fetchFromGitHub, fetchpatch, python, mpv, requests, python-mpv-jsonipc, pystray, tkinter
+, wrapGAppsHook3, gobject-introspection, mpv-shim-default-shaders }:
 
 buildPythonApplication rec {
   pname = "plex-mpv-shim";
@@ -12,8 +12,16 @@ buildPythonApplication rec {
     sha256 = "sha256-hUGKOJEDZMK5uhHoevFt1ay6QQEcoN4F8cPxln5uMRo=";
   };
 
+  patches = [
+    # pull in upstream commit to fix python-mpv dependency name -- remove when version > 1.11.0
+    (fetchpatch {
+      url = "https://github.com/iwalton3/plex-mpv-shim/commit/d8643123a8ec79216e02850b08f63b06e4e0a2ea.diff";
+      hash = "sha256-nc+vwYnAtMjVzL2fIQeTAqhf3HBseL+2pFEtv8zNUXo=";
+    })
+  ];
+
   nativeBuildInputs = [
-    wrapGAppsHook
+    wrapGAppsHook3
     gobject-introspection
   ];
 
@@ -39,5 +47,6 @@ buildPythonApplication rec {
     maintainers = with maintainers; [ devusb ];
     license = licenses.mit;
     platforms = platforms.linux;
+    mainProgram = "plex-mpv-shim";
   };
 }

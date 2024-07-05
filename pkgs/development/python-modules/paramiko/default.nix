@@ -1,27 +1,28 @@
-{ lib
-, bcrypt
-, buildPythonPackage
-, cryptography
-, fetchpatch
-, fetchPypi
-, gssapi
-, invoke
-, mock
-, pyasn1
-, pynacl
-, pytest-relaxed
-, pytestCheckHook
-, six
+{
+  lib,
+  bcrypt,
+  buildPythonPackage,
+  cryptography,
+  fetchpatch,
+  fetchPypi,
+  gssapi,
+  icecream,
+  invoke,
+  mock,
+  pyasn1,
+  pynacl,
+  pytestCheckHook,
+  six,
 }:
 
 buildPythonPackage rec {
   pname = "paramiko";
-  version = "2.11.0";
+  version = "3.4.0";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-AD5r7nwDTCH7sFG/g9wKnuQQYgTdPFMFTHFFLMTsOTg=";
+    hash = "sha256-qsCPJqMdxN/9koIVJ9FoLZnVL572hRloEUqHKPPCdNM=";
   };
 
   patches = [
@@ -32,9 +33,9 @@ buildPythonPackage rec {
       hash = "sha256-bPDghPeLo3NiOg+JwD5CJRRLv2VEqmSx1rOF2Tf8ZDA=";
     })
     (fetchpatch {
-      name = "fix-sftp-tests.patch";
-      url = "https://github.com/paramiko/paramiko/commit/47cfed55575c21ac558e6d00a4ab1814406be651.patch";
-      hash = "sha256-H3nKT8+4CTEDoiqnlhFfuKnc/65GGfwwAm9H2lwrlK8=";
+      name = "paramiko-pytest8-compat.patch";
+      url = "https://github.com/paramiko/paramiko/commit/d71046151d9904df467ff72709585cde39cdd4ca.patch";
+      hash = "sha256-4CTIZ9BmzRdh+HOwxSzfM9wkUGJOnndctK5swqqsIvU=";
     })
   ];
 
@@ -46,12 +47,19 @@ buildPythonPackage rec {
   ] ++ passthru.optional-dependencies.ed25519; # remove on 3.0 update
 
   passthru.optional-dependencies = {
-    gssapi = [ pyasn1 gssapi ];
-    ed25519 = [ pynacl bcrypt ];
+    gssapi = [
+      pyasn1
+      gssapi
+    ];
+    ed25519 = [
+      pynacl
+      bcrypt
+    ];
     invoke = [ invoke ];
   };
 
   nativeCheckInputs = [
+    icecream
     mock
     pytestCheckHook
   ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
@@ -62,14 +70,13 @@ buildPythonPackage rec {
     "tests/test_ssh_gss.py"
   ];
 
-  pythonImportsCheck = [
-    "paramiko"
-  ];
+  pythonImportsCheck = [ "paramiko" ];
 
   __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
     homepage = "https://github.com/paramiko/paramiko/";
+    changelog = "https://github.com/paramiko/paramiko/blob/${version}/sites/www/changelog.rst";
     description = "Native Python SSHv2 protocol library";
     license = licenses.lgpl21Plus;
     longDescription = ''
@@ -78,6 +85,6 @@ buildPythonPackage rec {
       between python scripts. All major ciphers and hash methods are
       supported. SFTP client and server mode are both supported too.
     '';
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

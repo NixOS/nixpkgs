@@ -1,6 +1,6 @@
 { config, stdenv, lib, fetchurl, intltool, pkg-config, python3Packages, bluez, gtk3
-, obex_data_server, xdg-utils, dnsmasq, dhcp, libappindicator, iproute2
-, gnome, librsvg, wrapGAppsHook, gobject-introspection
+, obex_data_server, xdg-utils, dnsmasq, dhcpcd, iproute2
+, adwaita-icon-theme, librsvg, wrapGAppsHook3, gobject-introspection
 , networkmanager, withPulseAudio ? config.pulseaudio or stdenv.isLinux, libpulseaudio }:
 
 let
@@ -8,20 +8,20 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "blueman";
-  version = "2.3.5";
+  version = "2.4.2";
 
   src = fetchurl {
     url = "https://github.com/blueman-project/blueman/releases/download/${version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-stIa/fd6Bs2G2vVAJAb30qU0WYF+KeC+vEkR1PDc/aE=";
+    sha256 = "sha256-B6COCPNtzXxAT9Ve70N5WvWR2VFLKviWPfIg76BLIa0=";
   };
 
   nativeBuildInputs = [
     gobject-introspection intltool pkg-config pythonPackages.cython
-    pythonPackages.wrapPython wrapGAppsHook
+    pythonPackages.wrapPython wrapGAppsHook3
   ];
 
   buildInputs = [ bluez gtk3 pythonPackages.python librsvg
-                  gnome.adwaita-icon-theme iproute2 networkmanager ]
+                  adwaita-icon-theme networkmanager ]
                 ++ pythonPath
                 ++ lib.optional withPulseAudio libpulseaudio;
 
@@ -36,11 +36,13 @@ in stdenv.mkDerivation rec {
   configureFlags = [
     "--with-systemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
     "--with-systemduserunitdir=${placeholder "out"}/lib/systemd/user"
+    # Don't check for runtime dependency `ip` during the configure
+    "--disable-runtime-deps-check"
     (lib.enableFeature withPulseAudio "pulseaudio")
   ];
 
   makeWrapperArgs = [
-    "--prefix PATH ':' ${lib.makeBinPath [ dnsmasq dhcp iproute2 ]}"
+    "--prefix PATH ':' ${lib.makeBinPath [ dnsmasq dhcpcd iproute2 ]}"
     "--suffix PATH ':' ${lib.makeBinPath [ xdg-utils ]}"
   ];
 

@@ -1,6 +1,23 @@
 { lib
 , stdenv
+, callPackage
 , fetchFromGitHub
+, fetchpatch
+
+, useMinimalFeatures ? false
+, useTiledb ? (!useMinimalFeatures) && !(stdenv.isDarwin && stdenv.isx86_64)
+, useLibHEIF ? (!useMinimalFeatures)
+, useLibJXL ? (!useMinimalFeatures)
+, useMysql ? (!useMinimalFeatures)
+, usePostgres ? (!useMinimalFeatures)
+, usePoppler ? (!useMinimalFeatures)
+, useArrow ? (!useMinimalFeatures)
+, useHDF ? (!useMinimalFeatures)
+, useNetCDF ? (!useMinimalFeatures)
+, useArmadillo ? (!useMinimalFeatures)
+, useJava ? (!useMinimalFeatures)
+
+, ant
 , bison
 , cmake
 , gtest
@@ -22,6 +39,7 @@
 , libgeotiff
 , geos
 , giflib
+, jdk
 , libheif
 , dav1d
 , libaom
@@ -53,7 +71,6 @@
 , libspatialite
 , sqlite
 , libtiff
-, useTiledb ? !(stdenv.isDarwin && stdenv.isx86_64)
 , tiledb
 , libwebp
 , xercesc
@@ -61,16 +78,24 @@
 , zstd
 }:
 
-stdenv.mkDerivation rec {
-  pname = "gdal";
-  version = "3.7.0";
+stdenv.mkDerivation (finalAttrs: {
+  pname = "gdal" + lib.optionalString useMinimalFeatures "-minimal";
+  version = "3.9.0";
 
   src = fetchFromGitHub {
     owner = "OSGeo";
     repo = "gdal";
-    rev = "v${version}";
-    hash = "sha256-hAuhftIuF9W0bQx73Mz8bAEegrX9g40ippqwv9mdstg=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-xEekgF9GzsPYkwk7Nny9b1DMLTxBqTSdudYxaz4jl/c=";
   };
+
+  patches = [
+    # HDF5: add support for libhdf5 >= 1.14.4.2 when built with Float16
+    (fetchpatch {
+      url = "https://github.com/OSGeo/gdal/commit/16ade8253f26200246abb5ab24d17e18216e7a11.patch";
+      sha256 = "sha256-N6YqfcOUWeaJXVE9RUo1dzulxqIY5Q/UygPnZHau3Lc=";
+    })
+  ];
 
   nativeBuildInputs = [
     bison
@@ -81,7 +106,7 @@ stdenv.mkDerivation rec {
     python3.pkgs.setuptools
     python3.pkgs.wrapPython
     swig
-  ];
+  ] ++ lib.optionals useJava [ ant jdk ];
 
   cmakeFlags = [
     "-DGDAL_USE_INTERNAL_LIBS=OFF"
@@ -89,7 +114,7 @@ stdenv.mkDerivation rec {
     "-DGEOTIFF_LIBRARY_RELEASE=${lib.getLib libgeotiff}/lib/libgeotiff${stdenv.hostPlatform.extensions.sharedLibrary}"
     "-DMYSQL_INCLUDE_DIR=${lib.getDev libmysqlclient}/include/mysql"
     "-DMYSQL_LIBRARY=${lib.getLib libmysqlclient}/lib/${lib.optionalString (libmysqlclient.pname != "mysql") "mysql/"}libmysqlclient${stdenv.hostPlatform.extensions.sharedLibrary}"
-  ] ++ lib.optionals doInstallCheck [
+  ] ++ lib.optionals finalAttrs.doInstallCheck [
     "-DBUILD_TESTING=ON"
   ] ++ lib.optionals (!stdenv.isDarwin) [
     "-DCMAKE_SKIP_BUILD_RPATH=ON" # without, libgdal.so can't find libmariadb.so
@@ -97,68 +122,98 @@ stdenv.mkDerivation rec {
     "-DCMAKE_BUILD_WITH_INSTALL_NAME_DIR=ON"
   ] ++ lib.optionals (!useTiledb) [
     "-DGDAL_USE_TILEDB=OFF"
+  ] ++ lib.optionals (!useJava) [
+    # This is not strictly needed as the Java bindings wouldn't build anyway if
+    # ant/jdk were not available.
+    "-DBUILD_JAVA_BINDINGS=OFF"
   ];
 
-  buildInputs = [
-    armadillo
-    c-blosc
-    brunsli
-    cfitsio
-    crunch
-    curl
-    cryptopp
-    libdeflate
-    expat
-    libgeotiff
-    geos
-    giflib
-    libheif
-    dav1d  # required by libheif
-    libaom  # required by libheif
-    libde265  # required by libheif
-    rav1e  # required by libheif
-    x265  # required by libheif
-    hdf4
-    hdf5-cpp
-    libjpeg
-    json_c
-    libjxl
-    libhwy  # required by libjxl
-    lerc
-    xz
-    libxml2
-    lz4
-    libmysqlclient
-    netcdf
-    openjpeg
-    openssl
-    pcre2
-    libpng
-    poppler
-    postgresql
-    proj
-    qhull
-    libspatialite
-    sqlite
-    libtiff
-    gtest
-  ] ++ lib.optionals useTiledb [
-    tiledb
-  ] ++ [
-    libwebp
-    zlib
-    zstd
-    python3
-    python3.pkgs.numpy
-  ] ++ lib.optionals (!stdenv.isDarwin) [
-    # tests for formats enabled by these packages fail on macos
-    arrow-cpp
-    openexr
-    xercesc
-  ] ++ lib.optional stdenv.isDarwin libiconv;
+  buildInputs =
+    let
+      tileDbDeps = lib.optionals useTiledb [ tiledb ];
+      libHeifDeps = lib.optionals useLibHEIF [
+        libheif
+        dav1d
+        libaom
+        libde265
+        rav1e
+        x265
+      ];
+      libJxlDeps = lib.optionals useLibJXL [
+        libjxl
+        libhwy
+      ];
+      mysqlDeps = lib.optionals useMysql [ libmysqlclient ];
+      postgresDeps = lib.optionals usePostgres [ postgresql ];
+      popplerDeps = lib.optionals usePoppler [ poppler ];
+      arrowDeps = lib.optionals useArrow [ arrow-cpp ];
+      hdfDeps = lib.optionals useHDF [
+        hdf4
+        hdf5-cpp
+      ];
+      netCdfDeps = lib.optionals useNetCDF [ netcdf ];
+      armadilloDeps = lib.optionals useArmadillo [ armadillo ];
 
+      darwinDeps = lib.optionals stdenv.isDarwin [ libiconv ];
+      nonDarwinDeps = lib.optionals (!stdenv.isDarwin) ([
+        # tests for formats enabled by these packages fail on macos
+        openexr
+        xercesc
+      ] ++ arrowDeps);
+    in
+    [
+      c-blosc
+      brunsli
+      cfitsio
+      crunch
+      curl
+      cryptopp
+      libdeflate
+      expat
+      libgeotiff
+      geos
+      giflib
+      libjpeg
+      json_c
+      lerc
+      xz
+      libxml2
+      lz4
+      openjpeg
+      openssl
+      pcre2
+      libpng
+      proj
+      qhull
+      libspatialite
+      sqlite
+      libtiff
+      gtest
+      libwebp
+      zlib
+      zstd
+      python3
+      python3.pkgs.numpy
+    ] ++ tileDbDeps
+    ++ libHeifDeps
+    ++ libJxlDeps
+    ++ mysqlDeps
+    ++ postgresDeps
+    ++ popplerDeps
+    ++ arrowDeps
+    ++ hdfDeps
+    ++ netCdfDeps
+    ++ armadilloDeps
+    ++ darwinDeps
+    ++ nonDarwinDeps;
+
+  pythonPath = [ python3.pkgs.numpy ];
   postInstall = ''
-    wrapPythonPrograms
+    wrapPythonProgramsIn "$out/bin" "$out $pythonPath"
+  '' + lib.optionalString useJava ''
+    cd $out/lib
+    ln -s ./jni/libgdalalljni${stdenv.hostPlatform.extensions.sharedLibrary}
+    cd -
   '';
 
   enableParallelBuilding = true;
@@ -174,14 +229,18 @@ stdenv.mkDerivation rec {
     export GDAL_DOWNLOAD_TEST_DATA=OFF
     # allows to skip tests that fail because of file handle leak
     # the issue was not investigated
-    # https://github.com/OSGeo/gdal/blob/v3.7.0/autotest/gdrivers/bag.py#L61
-    export BUILD_NAME=fedora
+    # https://github.com/OSGeo/gdal/blob/v3.9.0/autotest/gdrivers/bag.py#L54
+    export CI=1
   '';
   nativeInstallCheckInputs = with python3.pkgs; [
     pytestCheckHook
+    pytest-benchmark
     pytest-env
     filelock
     lxml
+  ];
+  pytestFlagsArray = [
+    "--benchmark-disable"
   ];
   disabledTestPaths = [
     # tests that attempt to make network requests
@@ -200,6 +259,12 @@ stdenv.mkDerivation rec {
     "test_sentinel2_zipped"
     # tries to call unwrapped executable
     "test_SetPROJAuxDbPaths"
+    # fixed and renamed in 3.8.0RC1
+    # https://github.com/OSGeo/gdal/commit/c8b471ca1e6318866ff668d2b57bb6f076e3ae29
+    "test_visoss_6"
+    # failing with PROJ 9.3.1
+    # https://github.com/OSGeo/gdal/issues/8908
+    "test_osr_esri_28"
   ] ++ lib.optionals (!stdenv.isx86_64) [
     # likely precision-related expecting x87 behaviour
     "test_jp2openjpeg_22"
@@ -208,19 +273,23 @@ stdenv.mkDerivation rec {
     "test_rda_download_queue"
   ] ++ lib.optionals (lib.versionOlder proj.version "8") [
     "test_ogr_parquet_write_crs_without_id_in_datum_ensemble_members"
+  ] ++ lib.optionals (!usePoppler) [
+    "test_pdf_jpx_compression"
   ];
   postCheck = ''
     popd # autotest
   '';
 
+  passthru.tests = callPackage ./tests.nix { gdal = finalAttrs.finalPackage; };
+
   __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
-    changelog = "https://github.com/OSGeo/gdal/blob/${src.rev}/NEWS.md";
+    changelog = "https://github.com/OSGeo/gdal/blob/v${finalAttrs.version}/NEWS.md";
     description = "Translator library for raster geospatial data formats";
     homepage = "https://www.gdal.org/";
     license = licenses.mit;
     maintainers = with maintainers; teams.geospatial.members ++ [ marcweber dotlambda ];
     platforms = platforms.unix;
   };
-}
+})

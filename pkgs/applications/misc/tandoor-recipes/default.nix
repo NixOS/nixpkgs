@@ -2,28 +2,31 @@
 , nixosTests
 , python3
 , fetchFromGitHub
-, fetchpatch
 }:
 let
   python = python3.override {
     packageOverrides = self: super: {
-      django = super.django_4;
-
-      django-crispy-forms = super.django-crispy-forms.overridePythonAttrs (_: rec {
-        version = "1.14.0";
-        format = "setuptools";
-
+      validators = super.validators.overridePythonAttrs (_: rec {
+        version = "0.20.0";
         src = fetchFromGitHub {
-          owner = "django-crispy-forms";
-          repo = "django-crispy-forms";
-          rev = "refs/tags/${version}";
-          hash = "sha256-NZ2lWxsQHc7Qc4HDoWgjJTZ/bJHmjpBf3q1LVLtzA+8=";
+          owner = "python-validators";
+          repo = "validators";
+          rev = version;
+          hash = "sha256-ZnLyTHlsrXthGnaPzlV2ga/UTm5SSEHLTwC/tobiPak=";
         };
+        propagatedBuildInputs = [ super.decorator super.six ];
       });
 
-      # Tests are incompatible with Django 4
-      django-js-reverse = super.django-js-reverse.overridePythonAttrs (_: {
-        doCheck = false;
+      djangorestframework = super.djangorestframework.overridePythonAttrs (oldAttrs: rec {
+        version = "3.14.0";
+        src = oldAttrs.src.override {
+          rev = version;
+          hash = "sha256-Fnj0n3NS3SetOlwSmGkLE979vNJnYE6i6xwVBslpNz4=";
+        };
+        nativeCheckInputs = with super; [
+          pytest7CheckHook
+          pytest-django
+        ];
       });
     };
   };
@@ -40,11 +43,15 @@ python.pkgs.pythonPackages.buildPythonPackage rec {
   format = "other";
 
   patches = [
-    # Allow setting MEDIA_ROOT through environment variable
-    ./media-root.patch
+    ./pytest-xdist.patch # adapt pytest.ini the use $NIX_BUILD_CORES
   ];
 
+  postPatch = ''
+    substituteInPlace pytest.ini --subst-var NIX_BUILD_CORES
+  '';
+
   propagatedBuildInputs = with python.pkgs; [
+    aiohttp
     beautifulsoup4
     bleach
     bleach-allowlist
@@ -54,10 +61,10 @@ python.pkgs.pythonPackages.buildPythonPackage rec {
     django-allauth
     django-annoying
     django-auth-ldap
-    django-autocomplete-light
     django-cleanup
     django-cors-headers
     django-crispy-forms
+    django-crispy-bootstrap4
     django-hcaptcha
     django-js-reverse
     django-oauth-toolkit
@@ -66,7 +73,7 @@ python.pkgs.pythonPackages.buildPythonPackage rec {
     django-storages
     django-tables2
     django-webpack-loader
-    django_treebeard
+    django-treebeard
     djangorestframework
     drf-writable-nested
     gunicorn
@@ -113,8 +120,8 @@ python.pkgs.pythonPackages.buildPythonPackage rec {
     touch cookbook/static/themes/bootstrap.min.css.map
     touch cookbook/static/css/bootstrap-vue.min.css.map
 
-    ${python.pythonForBuild.interpreter} manage.py collectstatic_js_reverse
-    ${python.pythonForBuild.interpreter} manage.py collectstatic
+    ${python.pythonOnBuildForHost.interpreter} manage.py collectstatic_js_reverse
+    ${python.pythonOnBuildForHost.interpreter} manage.py collectstatic
 
     runHook postBuild
   '';
@@ -135,9 +142,21 @@ python.pkgs.pythonPackages.buildPythonPackage rec {
   '';
 
   nativeCheckInputs = with python.pkgs; [
+    mock
     pytestCheckHook
+    pytest-asyncio
+    pytest-cov
     pytest-django
     pytest-factoryboy
+    pytest-html
+    pytest-xdist
+  ];
+
+  # flaky
+  disabledTests = [
+    "test_search_count"
+    "test_url_import_regex_replace"
+    "test_delete"
   ];
 
   passthru = {
@@ -146,7 +165,7 @@ python.pkgs.pythonPackages.buildPythonPackage rec {
     updateScript = ./update.sh;
 
     tests = {
-      inherit (nixosTests) tandoor-recipes;
+      inherit (nixosTests) tandoor-recipes tandoor-recipes-script-name;
     };
   };
 
@@ -155,5 +174,6 @@ python.pkgs.pythonPackages.buildPythonPackage rec {
       Application for managing recipes, planning meals, building shopping lists
       and much much more!
     '';
+    mainProgram = "tandoor-recipes";
   };
 }

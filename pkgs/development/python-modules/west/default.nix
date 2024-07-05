@@ -1,24 +1,25 @@
-{ lib
-, buildPythonPackage
-, colorama
-, configobj
-, fetchPypi
-, packaging
-, pykwalify
-, pythonOlder
-, pyyaml
+{
+  lib,
+  buildPythonPackage,
+  colorama,
+  configobj,
+  fetchPypi,
+  packaging,
+  pykwalify,
+  pythonOlder,
+  pyyaml,
 }:
 
 buildPythonPackage rec {
   pname = "west";
-  version = "1.1.0";
+  version = "1.2.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-40h/VLa9kEWASJtgPvGm4JnG8uZWAUwrg8SzwhdfpN8=";
+    hash = "sha256-tB5RrJA5OUT5wB974nAA1LMpYVt+0HT7DvaTtGRoEpc=";
   };
 
   propagatedBuildInputs = [
@@ -33,12 +34,11 @@ buildPythonPackage rec {
   # tests run under 'tox' and have west try to git clone repos (not sandboxable)
   doCheck = false;
 
-  pythonImportsCheck = [
-    "west"
-  ];
+  pythonImportsCheck = [ "west" ];
 
   meta = with lib; {
     description = "Zephyr RTOS meta tool";
+    mainProgram = "west";
     longDescription = ''
       West lets you manage multiple Git repositories under a single directory using a single file,
       called the west manifest file, or manifest for short.

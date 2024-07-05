@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "enet";
-  version = "1.3.17";
+  version = "1.3.18";
 
   src = fetchurl {
     url = "http://enet.bespin.org/download/${pname}-${version}.tar.gz";
-    sha256 = "1p6f9mby86af6cs7pv6h48032ip9g32c05cb7d9mimam8lchz3x3";
+    sha256 = "sha256-KooMU2DWi7T80R8uTEfGmXbo0shbEJ3X1gsRgaT4XTY=";
   };
 
   meta = {

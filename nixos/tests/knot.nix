@@ -60,44 +60,47 @@ in {
       services.knot.enable = true;
       services.knot.extraArgs = [ "-v" ];
       services.knot.keyFiles = [ tsigFile ];
-      services.knot.extraConfig = ''
-        server:
-            listen: 0.0.0.0@53
-            listen: ::@53
-            automatic-acl: true
+      services.knot.settings = {
+        server = {
+          listen = [
+            "0.0.0.0@53"
+            "::@53"
+           ];
+          listen-quic = [
+            "0.0.0.0@853"
+            "::@853"
+           ];
+          automatic-acl = true;
+        };
 
-        remote:
-          - id: secondary
-            address: 192.168.0.2@53
-            key: xfr_key
+        acl.secondary_acl = {
+          address = "192.168.0.2";
+          key = "xfr_key";
+          action = "transfer";
+        };
 
-        template:
-          - id: default
-            storage: ${knotZonesEnv}
-            notify: [secondary]
-            dnssec-signing: on
-            # Input-only zone files
-            # https://www.knot-dns.cz/docs/2.8/html/operation.html#example-3
-            # prevents modification of the zonefiles, since the zonefiles are immutable
-            zonefile-sync: -1
-            zonefile-load: difference
-            journal-content: changes
-            # move databases below the state directory, because they need to be writable
-            journal-db: /var/lib/knot/journal
-            kasp-db: /var/lib/knot/kasp
-            timer-db: /var/lib/knot/timer
+        remote.secondary.address = "192.168.0.2@53";
 
-        zone:
-          - domain: example.com
-            file: example.com.zone
+        template.default = {
+          storage = knotZonesEnv;
+          notify = [ "secondary" ];
+          acl = [ "secondary_acl" ];
+          dnssec-signing = true;
+          # Input-only zone files
+          # https://www.knot-dns.cz/docs/2.8/html/operation.html#example-3
+          # prevents modification of the zonefiles, since the zonefiles are immutable
+          zonefile-sync = -1;
+          zonefile-load = "difference";
+          journal-content = "changes";
+        };
 
-          - domain: sub.example.com
-            file: sub.example.com.zone
+        zone = {
+          "example.com".file = "example.com.zone";
+          "sub.example.com".file = "sub.example.com.zone";
+        };
 
-        log:
-          - target: syslog
-            any: info
-      '';
+        log.syslog.any = "info";
+      };
     };
 
     secondary = { lib, ... }: {
@@ -113,41 +116,50 @@ in {
       services.knot.enable = true;
       services.knot.keyFiles = [ tsigFile ];
       services.knot.extraArgs = [ "-v" ];
-      services.knot.extraConfig = ''
-        server:
-            listen: 0.0.0.0@53
-            listen: ::@53
-            automatic-acl: true
+      services.knot.settings = {
+        server = {
+          automatic-acl = true;
+        };
 
-        remote:
-          - id: primary
-            address: 192.168.0.1@53
-            key: xfr_key
+        xdp = {
+          listen = [
+            "eth1"
+          ];
+          tcp = true;
+        };
 
-        template:
-          - id: default
-            master: primary
-            # zonefileless setup
-            # https://www.knot-dns.cz/docs/2.8/html/operation.html#example-2
-            zonefile-sync: -1
-            zonefile-load: none
-            journal-content: all
-            # move databases below the state directory, because they need to be writable
-            journal-db: /var/lib/knot/journal
-            kasp-db: /var/lib/knot/kasp
-            timer-db: /var/lib/knot/timer
+        remote.primary = {
+          address = "192.168.0.1@53";
+          key = "xfr_key";
+        };
 
-        zone:
-          - domain: example.com
-            file: example.com.zone
+        remote.primary-quic = {
+          address = "192.168.0.1@853";
+          key = "xfr_key";
+          quic = true;
+        };
 
-          - domain: sub.example.com
-            file: sub.example.com.zone
+        template.default = {
+          # zonefileless setup
+          # https://www.knot-dns.cz/docs/2.8/html/operation.html#example-2
+          zonefile-sync = "-1";
+          zonefile-load = "none";
+          journal-content = "all";
+        };
 
-        log:
-          - target: syslog
-            any: info
-      '';
+        zone = {
+          "example.com" = {
+            master = "primary";
+            file = "example.com.zone";
+          };
+          "sub.example.com" = {
+            master = "primary-quic";
+            file = "sub.example.com.zone";
+          };
+        };
+
+        log.syslog.any = "debug";
+      };
     };
     client = { lib, nodes, ... }: {
       imports = [ common ];
@@ -178,6 +190,10 @@ in {
     primary.wait_for_unit("knot.service")
     secondary.wait_for_unit("knot.service")
 
+    for zone in ("example.com.", "sub.example.com."):
+        secondary.wait_until_succeeds(
+          f"knotc zone-status {zone} | grep -q 'serial: 2019031302'"
+        )
 
     def test(host, query_type, query, pattern):
         out = client.succeed(f"khost -t {query_type} {query} {host}").strip()

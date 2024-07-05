@@ -12,19 +12,17 @@
 
 buildGoModule rec {
   pname = "aerc";
-  version = "0.15.2";
+  version = "0.17.0";
 
   src = fetchFromSourcehut {
     owner = "~rjarry";
     repo = "aerc";
     rev = version;
-    hash = "sha256-OQDA4AHDcAdDzpwNSi8rW1FKjfYaFktOwiM0FEHPd70=";
+    hash = "sha256-XpVUUAtm6o4DXIouTKRX/8mLERb/4nA+VUGeB21mfjE=";
   };
 
   proxyVendor = true;
-  vendorHash = "sha256-NWOySC0czNgNOakpxFguZLtmEI7AvjJQKXDE2vFWeZg=";
-
-  doCheck = false;
+  vendorHash = "sha256-AHEhIWa6PP8f+hhIdY+0brLF2HYhvTal7qXfCwG9iyo=";
 
   nativeBuildInputs = [
     scdoc
@@ -71,9 +69,10 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    description = "An email client for your terminal";
+    description = "Email client for your terminal";
     homepage = "https://aerc-mail.org/";
-    maintainers = with maintainers; [ tadeokondrak ];
+    maintainers = with maintainers; [ ];
+    mainProgram = "aerc";
     license = licenses.mit;
     platforms = platforms.unix;
   };

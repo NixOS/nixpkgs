@@ -49,7 +49,7 @@ buildPythonApplication rec {
 
   meta = with lib; {
     homepage = "https://github.com/PackeTsar/meraki-cli";
-    description = "A simple CLI tool to automate and control your Cisco Meraki Dashboard";
+    description = "Simple CLI tool to automate and control your Cisco Meraki Dashboard";
     license = licenses.mit;
     maintainers = with maintainers; [ dylanmtaylor ];
     platforms = platforms.unix;

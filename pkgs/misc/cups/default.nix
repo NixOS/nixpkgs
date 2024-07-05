@@ -23,11 +23,11 @@
 
 stdenv.mkDerivation rec {
   pname = "cups";
-  version = "2.4.6";
+  version = "2.4.8";
 
   src = fetchurl {
     url = "https://github.com/OpenPrinting/cups/releases/download/v${version}/cups-${version}-source.tar.gz";
-    sha256 = "sha256-WOlwzxlV4cyH0IR8MlJtnCzO4zXl8OOIKygxOLoOcmI=";
+    sha256 = "sha256-dcMmtLpzl178yaJQeMSwTNtO4zPKqtDQgj29UixkeaA=";
   };
 
   outputs = [ "out" "lib" "dev" "man" ];
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
       # service would stop the socket and break subsequent socket activations.
       # See https://github.com/apple/cups/issues/6005
       sed -i '/PartOf=cups.service/d' scheduler/cups.socket.in
-  '' + lib.optionalString (stdenv.isDarwin && lib.versionOlder stdenv.targetPlatform.darwinSdkVersion "12") ''
+  '' + lib.optionalString (stdenv.hostPlatform.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinSdkVersion "12") ''
     substituteInPlace backend/usb-darwin.c \
       --replace "kIOMainPortDefault" "kIOMasterPortDefault"
   '';
@@ -145,7 +145,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://openprinting.github.io/cups/";
-    description = "A standards-based printing system for UNIX";
+    description = "Standards-based printing system for UNIX";
     license = licenses.asl20;
     maintainers = with maintainers; [ matthewbauer ];
     platforms = platforms.unix;

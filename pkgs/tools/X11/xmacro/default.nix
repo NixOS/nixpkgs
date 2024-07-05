@@ -15,6 +15,6 @@ stdenv.mkDerivation rec {
 
   meta = {
     platforms = lib.platforms.linux;
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Plus;
   };
 }

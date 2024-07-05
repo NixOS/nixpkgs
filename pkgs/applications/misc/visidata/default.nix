@@ -45,13 +45,13 @@
 }:
 buildPythonApplication rec {
   pname = "visidata";
-  version = "2.11";
+  version = "3.0.2";
 
   src = fetchFromGitHub {
     owner = "saulpw";
     repo = "visidata";
     rev = "v${version}";
-    hash = "sha256-G/9paJFJsRfIxMJ2hbuVS7pxCfSUCK69DNV2DHi60qA=";
+    hash = "sha256-gplrkrFTIP6TLvk1YazD5roDzsPvDtOXLlTOmTio52s=";
   };
 
   propagatedBuildInputs = [
@@ -70,6 +70,7 @@ buildPythonApplication rec {
     pyshp
     #mapbox-vector-tile
     pypng
+    #pyconll
     fonttools
     #sas7bdat
     #xport
@@ -114,10 +115,15 @@ buildPythonApplication rec {
 
   checkPhase = ''
     runHook preCheck
+
     # disable some tests which require access to the network
     rm -f tests/load-http.vd            # http
     rm -f tests/graph-cursor-nosave.vd  # http
     rm -f tests/messenger-nosave.vd     # dns
+
+    # tests to disable because we don't have a package to load such files
+    rm -f tests/load-conllu.vdj         # no 'pyconll'
+    rm -f tests/load-sav.vd             # no 'savReaderWriter'
 
     # tests use git to compare outputs to references
     git init -b "test-reference"

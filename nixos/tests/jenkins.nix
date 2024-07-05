@@ -7,7 +7,7 @@
 import ./make-test-python.nix ({ pkgs, ...} : {
   name = "jenkins";
   meta = with pkgs.lib.maintainers; {
-    maintainers = [ bjornfor coconnor domenkozar eelco ];
+    maintainers = [ bjornfor coconnor domenkozar ];
   };
 
   nodes = {
@@ -73,8 +73,8 @@ import ./make-test-python.nix ({ pkgs, ...} : {
 
   testScript = { nodes, ... }:
     let
-      configWithoutJobs = "${nodes.master.config.system.build.toplevel}/specialisation/noJenkinsJobs";
-      jenkinsPort = nodes.master.config.services.jenkins.port;
+      configWithoutJobs = "${nodes.master.system.build.toplevel}/specialisation/noJenkinsJobs";
+      jenkinsPort = nodes.master.services.jenkins.port;
       jenkinsUrl = "http://localhost:${toString jenkinsPort}";
     in ''
     start_all()

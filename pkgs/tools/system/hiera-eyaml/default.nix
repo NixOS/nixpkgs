@@ -13,5 +13,6 @@ bundlerEnv {
     license = licenses.mit;
     maintainers = with maintainers; [ benley nicknovitski ];
     platforms = platforms.unix;
+    mainProgram = "eyaml";
   };
 }

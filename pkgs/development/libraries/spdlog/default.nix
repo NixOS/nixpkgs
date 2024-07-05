@@ -1,34 +1,30 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake, fmt
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, fmt
+, catch2_3
 , staticBuild ? stdenv.hostPlatform.isStatic
 
 # tests
-, bear, tiledb
+, bear
+, tiledb
 }:
 
 stdenv.mkDerivation rec {
   pname = "spdlog";
-  version = "1.11.0";
+  version = "1.13.0";
 
   src = fetchFromGitHub {
     owner = "gabime";
     repo  = "spdlog";
     rev   = "v${version}";
-    hash  = "sha256-kA2MAb4/EygjwiLEjF9EA7k8Tk//nwcKB1+HlzELakQ=";
+    hash  = "sha256-3n8BnjZ7uMH8quoiT60yTU7poyOtoEmzNMOLa1+r7X0=";
   };
 
-  patches = [
-    # Fix compatiblity with fmt 10.0. Remove with the next release
-    (fetchpatch {
-      url = "https://github.com/gabime/spdlog/commit/0ca574ae168820da0268b3ec7607ca7b33024d05.patch";
-      hash = "sha256-cRsQilkyUQW47PFpDwKgU/pm+tOeLvwPx32gNOPAO1U=";
-    })
-    (fetchpatch {
-      url = "https://github.com/gabime/spdlog/commit/af1785b897c9d1098d4aa7213fad232be63c19b4.patch";
-      hash = "sha256-zpfLiBeDAOsvk4vrIyXC0kvFe2WkhAhersd+fhA8DFY=";
-    })
-  ];
-
   nativeBuildInputs = [ cmake ];
+  # Required to build tests, even if they aren't executed
+  buildInputs = [ catch2_3 ];
   propagatedBuildInputs = [ fmt ];
 
   cmakeFlags = [

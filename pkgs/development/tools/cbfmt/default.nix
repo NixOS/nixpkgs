@@ -1,4 +1,4 @@
-{ lib, rustPlatform, fetchFromGitHub, testers, cbfmt }:
+{ lib, rustPlatform, fetchFromGitHub, stdenv, testers, cbfmt }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cbfmt";
@@ -18,7 +18,8 @@ rustPlatform.buildRustPackage rec {
   };
 
   meta = with lib; {
-    description = "A tool to format codeblocks inside markdown and org documents";
+    description = "Tool to format codeblocks inside markdown and org documents";
+    mainProgram = "cbfmt";
     homepage = "https://github.com/lukas-reineke/cbfmt";
     license = licenses.mit;
     maintainers = [ maintainers.stehessel ];

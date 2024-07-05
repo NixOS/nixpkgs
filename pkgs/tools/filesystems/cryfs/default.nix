@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "cryfs";
-  version = "0.11.3";
+  version = "0.11.4";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    hash = "sha256-7luTCDjrquG8aBZ841VPwV9/ea8faHGLQtmRahqGTss=";
+    hash = "sha256-OkJhLg+YzS3kDhlpUQe9A+OiVBPG/iKs6OU7aKFJ5wY=";
   };
 
   postPatch = ''

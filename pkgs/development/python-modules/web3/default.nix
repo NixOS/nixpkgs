@@ -1,22 +1,21 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, aiohttp
-, eth-abi
-, eth-account
-, eth-hash
-, eth-typing
-, eth-utils
-, eth-rlp
-, hexbytes
-, ipfshttpclient
-, jsonschema
-, lru-dict
-, protobuf
-, requests
-, typing-extensions
-, websockets
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  aiohttp,
+  eth-abi,
+  eth-account,
+  eth-hash,
+  eth-typing,
+  eth-utils,
+  hexbytes,
+  ipfshttpclient,
+  jsonschema,
+  lru-dict,
+  protobuf,
+  requests,
+  websockets,
 }:
 
 buildPythonPackage rec {
@@ -33,24 +32,29 @@ buildPythonPackage rec {
     hash = "sha256-RNWCZQjcse415SSNkHhMWckDcBJGFZnjisckF7gbYY8=";
   };
 
-  propagatedBuildInputs = [
-    aiohttp
-    eth-abi
-    eth-account
-    eth-hash
-    eth-rlp
-    eth-typing
-    eth-utils
-    hexbytes
-    ipfshttpclient
-    jsonschema
-    lru-dict
-    protobuf
-    requests
-    websockets
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    typing-extensions
-  ] ++ eth-hash.optional-dependencies.pycryptodome;
+  # Note: to reflect the extra_requires in main/setup.py.
+  passthru.optional-dependencies = {
+    ipfs = [ ipfshttpclient ];
+  };
+
+  propagatedBuildInputs =
+    [
+      aiohttp
+      eth-abi
+      eth-account
+      eth-hash
+    ]
+    ++ eth-hash.optional-dependencies.pycryptodome
+    ++ [
+      eth-typing
+      eth-utils
+      hexbytes
+      jsonschema
+      lru-dict
+      protobuf
+      requests
+      websockets
+    ];
 
   # TODO: package eth-tester required for tests
   doCheck = false;
@@ -59,14 +63,12 @@ buildPythonPackage rec {
     substituteInPlace setup.py --replace "types-protobuf==3.19.13" "types-protobuf"
   '';
 
-  pythonImportsCheck = [
-    "web3"
-  ];
+  pythonImportsCheck = [ "web3" ];
 
   meta = with lib; {
-    description = "Web3 library for interactions";
-    homepage = "https://github.com/ethereum/web3";
+    description = "Python interface for interacting with the Ethereum blockchain and ecosystem";
+    homepage = "https://web3py.readthedocs.io/";
     license = licenses.mit;
-    maintainers = with maintainers; [ raitobezarius ];
+    maintainers = with maintainers; [ hellwolf ];
   };
 }

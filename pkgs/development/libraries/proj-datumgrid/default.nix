@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "132wp77fszx33wann0fjkmi1isxvsb0v9iw0gd9sxapa9h6hf3am";
   };
 
-  sourceRoot = "source/scripts";
+  sourceRoot = "${src.name}/scripts";
 
   buildPhase = ''
     $CC nad2bin.c -o nad2bin

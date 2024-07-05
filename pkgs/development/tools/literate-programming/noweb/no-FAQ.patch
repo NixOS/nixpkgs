@@ -1,11 +1,13 @@
---- a/Makefile	2006-06-12 22:14:20.000000000 +0200
-+++ b/Makefile	2010-06-17 11:30:11.804018145 +0200
-@@ -198,7 +198,7 @@
- 	(cd elisp; ci -l $(CINAME) $(CIMSG) *.el)
- 	ci -l $(CINAME) $(CIMSG) Makefile.nw INSTALL INSTALL.DOS README FAQ COPYRIGHT nwmake *.nw
+diff --git a/Makefile b/Makefile
+index 1897c09..770e108 100644
+--- a/Makefile
++++ b/Makefile
+@@ -195,7 +195,7 @@ install-elisp:
  
+ uninstall-elisp:
+ 	rm -f $(ELISP)/noweb-mode.el
 -source: FAQ
 +source:
- 	for i in c shell lib xdoc icon awk tex; do (cd $$i; make CPIF=">" source); done
+ 	for i in c shell lib xdoc icon awk tex; do (cd $$i && $(MAKE) CPIF=">" $@); done
  	sleep 1
- 	for i in c shell lib xdoc icon awk tex; do (cd $$i; make touch); done
+ 	for i in c shell lib xdoc icon awk tex; do (cd $$i && $(MAKE) touch); done

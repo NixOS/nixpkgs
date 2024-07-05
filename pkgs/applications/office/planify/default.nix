@@ -7,15 +7,20 @@
 , pkg-config
 , vala
 , wrapGAppsHook4
-, evolution-data-server
+, evolution-data-server-gtk4
 , glib
 , glib-networking
+, gst_all_1
 , gtk4
+, gtksourceview5
+, gxml
 , json-glib
 , libadwaita
 , libgee
 , libical
 , libportal-gtk4
+, libsecret
+, libsoup_3
 , pantheon
 , sqlite
 , webkitgtk_6_0
@@ -23,13 +28,13 @@
 
 stdenv.mkDerivation rec {
   pname = "planify";
-  version = "4.1";
+  version = "4.8.4";
 
   src = fetchFromGitHub {
     owner = "alainm23";
     repo = "planify";
     rev = version;
-    sha256 = "sha256-H8TPuqKRwbcB+2NTC5ZIK7y6uiYbTT4svtx21FbTzME=";
+    hash = "sha256-iQo7ETz5j/Uy5a96XFRkZ0U67dTHWEYLsr/qUi79Y4E=";
   };
 
   nativeBuildInputs = [
@@ -42,18 +47,29 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    evolution-data-server
+    evolution-data-server-gtk4
     glib
     glib-networking
+    # Needed for GtkMediaStream creation with success.ogg, see #311295.
+    gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-good
     gtk4
+    gtksourceview5
+    gxml
     json-glib
     libadwaita
     libgee
     libical
     libportal-gtk4
+    libsecret
+    libsoup_3
     pantheon.granite7
     sqlite
     webkitgtk_6_0
+  ];
+
+  mesonFlags = [
+    "-Dprofile=default"
   ];
 
   meta = with lib; {

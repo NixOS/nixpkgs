@@ -1,14 +1,14 @@
 { lib, stdenv, fetchFromGitHub, pkg-config, xorg }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "spectrwm";
-  version = "3.4.1";
+  version = "3.5.1";
 
   src = fetchFromGitHub {
     owner = "conformal";
     repo = "spectrwm";
-    rev = "SPECTRWM_3_4_1";
-    sha256 = "0bf0d25yr0craksamczn2mdy6cjp27l88smihlw9bw4p6a2qhi41";
+    rev = "SPECTRWM_${lib.replaceStrings ["."] ["_"] finalAttrs.version}";
+    hash = "sha256-Nlzo35OsNqFbR6nl3nnGXDWmwc8JlP4tyDuIGtKTnIY=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -29,9 +29,9 @@ stdenv.mkDerivation {
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
   meta = with lib; {
-    description = "A tiling window manager";
+    description = "Tiling window manager";
     homepage    = "https://github.com/conformal/spectrwm";
-    maintainers = with maintainers; [ christianharke ];
+    maintainers = with maintainers; [ rake5k ];
     license     = licenses.isc;
     platforms   = platforms.all;
 
@@ -45,4 +45,4 @@ stdenv.mkDerivation {
     '';
   };
 
-}
+})

@@ -1,9 +1,17 @@
-{ buildPythonPackage, fetchFromGitHub, isPy27, lib, mock, numpy, pytestCheckHook
+{
+  buildPythonPackage,
+  fetchFromGitHub,
+  isPy27,
+  lib,
+  mock,
+  numpy,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "mnist";
   version = "0.2.2";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "datapythonista";
@@ -33,4 +41,3 @@ buildPythonPackage rec {
     maintainers = with maintainers; [ dmrauh ];
   };
 }
-

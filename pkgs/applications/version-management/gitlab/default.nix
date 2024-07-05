@@ -1,7 +1,37 @@
-{ stdenv, lib, fetchurl, fetchpatch, fetchFromGitLab, bundlerEnv
-, ruby_3_0, tzdata, git, nettools, nixosTests, nodejs, openssl
-, gitlabEnterprise ? false, callPackage, yarn
-, fixup_yarn_lock, replace, file, cacert, fetchYarnDeps, makeWrapper, pkg-config
+{ bundlerEnv
+, cacert
+, defaultGemConfig
+, fetchFromGitLab
+, fetchYarnDeps
+, fixup-yarn-lock
+, git
+, gitlabEnterprise ? false
+, lib
+, makeWrapper
+, nettools
+, nixosTests
+, nodejs
+, replace
+, ruby_3_2
+, stdenv
+, tzdata
+, yarn
+
+# gem dependencies:
+# gitlab-glfm-markdown
+, buildRubyGem, cargo, rustc, rustPlatform
+
+# gpgme
+, pkg-config
+
+# openssl
+, openssl
+
+# ruby-magic
+, file
+
+# static-holmes
+, icu, which, zlib
 }:
 
 let
@@ -17,40 +47,78 @@ let
 
   rubyEnv = bundlerEnv rec {
     name = "gitlab-env-${version}";
-    ruby = ruby_3_0;
+    ruby = ruby_3_2;
     gemdir = ./rubyEnv;
-    gemset =
-      let x = import (gemdir + "/gemset.nix") src;
-      in x // {
-        gpgme = x.gpgme // {
+    gemset = import (gemdir + "/gemset.nix") src;
+    gemConfig = defaultGemConfig // {
+        gpgme = attrs: {
           nativeBuildInputs = [ pkg-config ];
         };
         # the openssl needs the openssl include files
-        openssl = x.openssl // {
+        openssl = attrs: {
           buildInputs = [ openssl ];
         };
-        ruby-magic = x.ruby-magic // {
+        ruby-magic = attrs: {
           buildInputs = [ file ];
           buildFlags = [ "--enable-system-libraries" ];
         };
-        # the included yarn rake task attaches the yarn:install task
-        # to assets:precompile, which is both unnecessary (since we
-        # run `yarn install` ourselves) and undoes the shebang patches
-        # in node_modules
-        railties = x.railties // {
+        gitlab-glfm-markdown = attrs: {
+          cargoDeps = rustPlatform.fetchCargoTarball {
+            src = stdenv.mkDerivation {
+              inherit (buildRubyGem { inherit (attrs) gemName version source; })
+                name
+                src
+                unpackPhase
+                nativeBuildInputs
+              ;
+              dontBuilt = true;
+              installPhase = ''
+                cp -R ext/glfm_markdown $out
+                cp Cargo.lock $out
+              '';
+            };
+            hash = "sha256-VYjCYUikORuXx27OYWyumBxeHw9aj/S1wcr9vLIsXeo=";
+          };
+
           dontBuild = false;
-          patches = [ ./railties-remove-yarn-install-enhancement.patch ];
-          patchFlags = [ "-p2" ];
+
+          nativeBuildInputs = [
+            cargo
+            rustc
+            rustPlatform.cargoSetupHook
+            rustPlatform.bindgenHook
+          ];
+
+          disallowedReferences = [
+            rustc.unwrapped
+          ];
+
+          preInstall = ''
+            export CARGO_HOME="$PWD/../.cargo/"
+          '';
+
+          postInstall = ''
+            mv -v $GEM_HOME/gems/${attrs.gemName}-${attrs.version}/lib/{glfm_markdown/glfm_markdown.so,}
+            find $out -type f -name .rustc_info.json -delete
+          '';
+        };
+
+        static_holmes = attrs: {
+          nativeBuildInputs = [
+            icu
+            which
+            zlib.dev
+          ];
         };
       };
     groups = [
-      "default" "unicorn" "ed25519" "metrics" "development" "puma" "test" "kerberos"
+      "default" "unicorn" "ed25519" "metrics" "development" "puma" "test" "kerberos" "opentelemetry"
     ];
     # N.B. omniauth_oauth2_generic and apollo_upload_server both provide a
     # `console` executable.
     ignoreCollisions = true;
 
-    extraConfigPaths = [ "${src}/vendor" ];
+    extraConfigPaths = [ "${src}/vendor" "${src}/gems" ];
   };
 
   assets = stdenv.mkDerivation {
@@ -62,7 +130,7 @@ let
       sha256 = data.yarn_hash;
     };
 
-    nativeBuildInputs = [ rubyEnv.wrappedRuby rubyEnv.bundler nodejs yarn git cacert ];
+    nativeBuildInputs = [ rubyEnv.wrappedRuby rubyEnv.bundler nodejs yarn git cacert fixup-yarn-lock ];
 
     patches = [
       # Since version 12.6.0, the rake tasks need the location of git,
@@ -79,6 +147,8 @@ let
     # of rake tasks fails.
     GITLAB_LOG_PATH = "log";
     FOSS_ONLY = !gitlabEnterprise;
+
+    SKIP_YARN_INSTALL = 1;
 
     configurePhase = ''
       runHook preConfigure
@@ -97,7 +167,7 @@ let
       yarn config --offline set yarn-offline-mirror $yarnOfflineCache
 
       # Fixup "resolved"-entries in yarn.lock to match our offline cache
-      ${fixup_yarn_lock}/bin/fixup_yarn_lock yarn.lock
+      fixup-yarn-lock yarn.lock
 
       yarn install --offline --frozen-lockfile --ignore-scripts --no-progress --non-interactive
 
@@ -110,11 +180,7 @@ let
     buildPhase = ''
       runHook preBuild
 
-      bundle exec rake gettext:po_to_json RAILS_ENV=production NODE_ENV=production
-      bundle exec rake rake:assets:precompile RAILS_ENV=production NODE_ENV=production
-      bundle exec rake gitlab:assets:compile RAILS_ENV=production NODE_ENV=production
-      bundle exec rake gitlab:assets:fix_urls RAILS_ENV=production NODE_ENV=production
-      bundle exec rake gitlab:assets:check_page_bundle_mixins_css_for_sideeffects RAILS_ENV=production NODE_ENV=production
+      bundle exec rake gitlab:assets:compile RAILS_ENV=production NODE_ENV=production SKIP_YARN_INSTALL=true
 
       runHook postBuild
     '';
@@ -169,6 +235,7 @@ stdenv.mkDerivation {
     ${replace}/bin/replace-literal -f -r -e '../../lib' "$out/share/gitlab/lib" config
     ${replace}/bin/replace-literal -f -r -e '../lib' "$out/share/gitlab/lib" config
     ${replace}/bin/replace-literal -f -r -e "require_relative 'application'" "require_relative '$out/share/gitlab/config/application'" config
+    ${replace}/bin/replace-literal -f -r -e 'require_relative "/home/git/gitlab/lib/gitlab/puma/error_handler"' "require_relative '$out/share/gitlab/lib/gitlab/puma/error_handler'" config
   '';
 
   buildPhase = ''

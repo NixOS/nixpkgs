@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, fetchpatch
 , substituteAll
 , openssl
 , gsound
@@ -9,7 +8,7 @@
 , ninja
 , pkg-config
 , gobject-introspection
-, wrapGAppsHook
+, wrapGAppsHook3
 , glib
 , glib-networking
 , gtk3
@@ -23,7 +22,7 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-shell-extension-gsconnect";
-  version = "55";
+  version = "57";
 
   outputs = [ "out" "installedTests" ];
 
@@ -31,7 +30,7 @@ stdenv.mkDerivation rec {
     owner = "GSConnect";
     repo = "gnome-shell-extension-gsconnect";
     rev = "v${version}";
-    hash = "sha256-n6NbNgl+2FOhly/BeR7I6BvPOYe7leAdeAegaqhcGJU=";
+    hash = "sha256-0o5CEkdFPL7bZkHIA/zFWB8sY1OYROl4P3rl24+lze0=";
   };
 
   patches = [
@@ -50,7 +49,7 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     gobject-introspection # for locating typelibs
-    wrapGAppsHook # for wrapping daemons
+    wrapGAppsHook3 # for wrapping daemons
     desktop-file-utils # update-desktop-database
   ];
 

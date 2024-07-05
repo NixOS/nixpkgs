@@ -22,13 +22,13 @@ let inherit (lib) optional optionals;
 in
 stdenv.mkDerivation rec {
   pname = "bozohttpd";
-  version = "20220517";
+  version = "20240126";
 
   # bozohttpd is developed in-tree in pkgsrc, canonical hashes can be found at:
   # http://cvsweb.netbsd.org/bsdweb.cgi/pkgsrc/www/bozohttpd/distinfo
   src = fetchurl {
-    url = "http://www.eterna.com.au/${pname}/${pname}-${version}.tar.bz2";
-    sha512 = "275b8fab3cf2e6c59721682cae952db95da5bd3b1f20680240c6cf1029463693f6feca047fbef5e3a3e7528b40b7b2e87b2a56fd800b612e679a16f24890e5b6";
+    url = "http://eterna23.net/${pname}/${pname}-${version}.tar.bz2";
+    hash = "sha512-fr1PnyYAS3wkpmj/npRC3A87UL9LIXw4thlM4GfrtlJbuX5EkWGVJnHJW/EmYp7z+N91dcdRJgdO79l6WJsKpg==";
   };
 
   buildInputs = [ openssl libxcrypt ] ++ optional (luaSupport) lua;

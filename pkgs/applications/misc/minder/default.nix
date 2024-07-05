@@ -8,7 +8,7 @@
 , python3
 , shared-mime-info
 , vala
-, wrapGAppsHook
+, wrapGAppsHook3
 , cairo
 , discount
 , glib
@@ -25,13 +25,13 @@
 
 stdenv.mkDerivation rec {
   pname = "minder";
-  version = "1.15.2";
+  version = "1.16.4";
 
   src = fetchFromGitHub {
     owner = "phase1geo";
     repo = pname;
     rev = version;
-    sha256 = "sha256-aMKu59IWHjK6NlaIZgbpKPISsvGub2tQxEdvogx2XCY=";
+    sha256 = "sha256-1r2PbBYw4mmiScKbX9BGqe4i+emSvismJfPm3opLlOg=";
   };
 
   nativeBuildInputs = [
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     python3
     shared-mime-info
     vala
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

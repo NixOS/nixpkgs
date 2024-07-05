@@ -10,11 +10,11 @@ let
 in {
   options = {
     services.sssd = {
-      enable = mkEnableOption (lib.mdDoc "the System Security Services Daemon");
+      enable = mkEnableOption "the System Security Services Daemon";
 
       config = mkOption {
         type = types.lines;
-        description = lib.mdDoc "Contents of {file}`sssd.conf`.";
+        description = "Contents of {file}`sssd.conf`.";
         default = ''
           [sssd]
           config_file_version = 2
@@ -37,7 +37,7 @@ in {
       sshAuthorizedKeysIntegration = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether to make sshd look up authorized keys from SSS.
           For this to work, the `ssh` SSS service must be enabled in the sssd configuration.
         '';
@@ -46,7 +46,7 @@ in {
       kcm = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether to use SSS as a Kerberos Cache Manager (KCM).
           Kerberos will be configured to cache credentials in SSS.
         '';
@@ -54,7 +54,7 @@ in {
       environmentFile = mkOption {
         type = types.nullOr types.path;
         default = null;
-        description = lib.mdDoc ''
+        description = ''
           Environment file as defined in {manpage}`systemd.exec(5)`.
 
           Secrets may be passed to the service without adding them to the world-readable
@@ -135,7 +135,7 @@ in {
           ExecStart = "${pkgs.sssd}/libexec/sssd/sssd_kcm --uid 0 --gid 0";
         };
         restartTriggers = [
-          config.environment.etc."sssd/sssd.conf".source
+          settingsFileUnsubstituted
         ];
       };
       systemd.sockets.sssd-kcm = {

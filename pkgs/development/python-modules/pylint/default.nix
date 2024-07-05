@@ -1,55 +1,53 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, astroid
-, dill
-, isort
-, mccabe
-, platformdirs
-, requests
-, setuptools
-, tomli
-, tomlkit
-, typing-extensions
-, gitpython
-, py
-, pytest-timeout
-, pytest-xdist
-, pytestCheckHook
+{
+  lib,
+  stdenv,
+  astroid,
+  buildPythonPackage,
+  dill,
+  fetchFromGitHub,
+  gitpython,
+  isort,
+  mccabe,
+  platformdirs,
+  py,
+  pytest-timeout,
+  pytest-xdist,
+  pytest7CheckHook,
+  pythonOlder,
+  requests,
+  setuptools,
+  tomli,
+  tomlkit,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "pylint";
-  version = "2.16.2";
-  format = "pyproject";
+  version = "3.1.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7.2";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
-    owner = "PyCQA";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-xNCGf4CsxEKScIn6dl2Ka31P6bhMo5fTs9TIQz+vPiM=";
+    owner = "pylint-dev";
+    repo = "pylint";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-LmpLt2GCzYU73BUpORHaFbGqkxyYqoPoKZpUJSChqKQ=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
-    astroid
-    dill
-    isort
-    mccabe
-    platformdirs
-    tomlkit
-  ] ++ lib.optionals (pythonOlder "3.11") [
-    tomli
-  ] ++ lib.optionals (pythonOlder "3.9") [
-    typing-extensions
-  ];
+  dependencies =
+    [
+      astroid
+      dill
+      isort
+      mccabe
+      platformdirs
+      tomlkit
+    ]
+    ++ lib.optionals (pythonOlder "3.11") [ tomli ]
+    ++ lib.optionals (pythonOlder "3.10") [ typing-extensions ];
 
   nativeCheckInputs = [
     gitpython
@@ -57,7 +55,7 @@ buildPythonPackage rec {
     py
     pytest-timeout
     pytest-xdist
-    pytestCheckHook
+    pytest7CheckHook
     requests
     typing-extensions
   ];
@@ -67,7 +65,9 @@ buildPythonPackage rec {
     # displaying implemented interfaces in pylint 3.0. The
     # implementation relies on the '__implements__'  attribute proposed
     # in PEP 245, which was rejected in 2006.
-    "-W" "ignore::DeprecationWarning"
+    "-W"
+    "ignore::DeprecationWarning"
+    "-v"
   ];
 
   dontUseSetuptoolsCheck = true;
@@ -83,28 +83,33 @@ buildPythonPackage rec {
     "tests/pyreverse/test_writer.py"
   ];
 
-  disabledTests = [
-    # AssertionError when self executing and checking output
-    # expected output looks like it should match though
-    "test_invocation_of_pylint_config"
-    "test_generate_rcfile"
-    "test_generate_toml_config"
-    "test_help_msg"
-    "test_output_of_callback_options"
-    # Failed: DID NOT WARN. No warnings of type (<class 'UserWarning'>,) were emitted. The list of emitted warnings is: [].
-    "test_save_and_load_not_a_linter_stats"
-    # Truncated string expectation mismatch
-    "test_truncated_compare"
-    # AssertionError: assert [('specializa..., 'Ancestor')] == [('aggregatio..., 'Ancestor')]
-    "test_functional_relation_extraction"
-  ] ++ lib.optionals stdenv.isDarwin [
-    "test_parallel_execution"
-    "test_py3k_jobs_option"
-  ];
+  disabledTests =
+    [
+      # AssertionError when self executing and checking output
+      # expected output looks like it should match though
+      "test_invocation_of_pylint_config"
+      "test_generate_rcfile"
+      "test_generate_toml_config"
+      "test_help_msg"
+      "test_output_of_callback_options"
+      # Failed: DID NOT WARN. No warnings of type (<class 'UserWarning'>,) were emitted. The list of emitted warnings is: [].
+      "test_save_and_load_not_a_linter_stats"
+      # Truncated string expectation mismatch
+      "test_truncated_compare"
+      # Probably related to pytest versions, see pylint-dev/pylint#9477 and pylint-dev/pylint#9483
+      "test_functional"
+      # AssertionError: assert [('specializa..., 'Ancestor')] == [('aggregatio..., 'Ancestor')]
+      "test_functional_relation_extraction"
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      "test_parallel_execution"
+      "test_py3k_jobs_option"
+    ];
 
   meta = with lib; {
-    homepage = "https://pylint.pycqa.org/";
-    description = "A bug and style checker for Python";
+    description = "Bug and style checker for Python";
+    homepage = "https://pylint.readthedocs.io/en/stable/";
+    changelog = "https://github.com/pylint-dev/pylint/releases/tag/v${version}";
     longDescription = ''
       Pylint is a Python static code analysis tool which looks for programming errors,
       helps enforcing a coding standard, sniffs for code smells and offers simple
@@ -114,7 +119,7 @@ buildPythonPackage rec {
       - symilar: an independent similarities checker
       - epylint: Emacs and Flymake compatible Pylint
     '';
-    license = licenses.gpl1Plus;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ ];
   };
 }

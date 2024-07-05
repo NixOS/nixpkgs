@@ -1,16 +1,18 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, setuptools-scm
-, aiohttp
-, pytz
-, voluptuous
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  setuptools-scm,
+  aiohttp,
+  pytz,
+  voluptuous,
 }:
 
 buildPythonPackage rec {
   pname = "pygti";
   version = "0.9.4";
+  format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
@@ -21,11 +23,7 @@ buildPythonPackage rec {
     hash = "sha256-2T4Yw4XEOkv+IWyB4Xa2dPu929VH0tLeUjQ5S8EVXz0=";
   };
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
-
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+  nativeBuildInputs = [ setuptools-scm ];
 
   propagatedBuildInputs = [
     aiohttp

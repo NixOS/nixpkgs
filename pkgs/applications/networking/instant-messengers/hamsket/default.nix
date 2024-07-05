@@ -21,7 +21,7 @@ let
     categories = [ "Network" ];
   });
 
-  appimageContents = appimageTools.extractType2 {
+  appimageContents = appimageTools.extract {
     inherit pname version src;
   };
 
@@ -31,13 +31,12 @@ appimageTools.wrapType2 {
 
   extraInstallCommands = ''
     mkdir -p $out/share/applications $out/share/icons/hicolor/256x256/apps
-    ln -sf hamsket-${version} $out/bin/${pname}
     install -Dm644 ${appimageContents}/usr/share/icons/hicolor/256x256/apps/hamsket*.png $out/share/icons/hicolor/256x256/apps/${pname}.png
     install -Dm644 ${desktopItem}/share/applications/* $out/share/applications
   '';
 
   meta = {
-    description = "A free and open source messaging and emailing app that combines common web applications into one";
+    description = "Free and open source messaging and emailing app that combines common web applications into one";
     homepage = "https://github.com/TheGoddessInari/hamsket";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ nova-madeline ];

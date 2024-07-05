@@ -2,23 +2,24 @@
 
 buildGoModule rec {
   pname = "timescaledb-tune";
-  version = "0.14.3";
+  version = "0.16.0";
 
   src = fetchFromGitHub {
     owner = "timescale";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-MQi8A7eWOShP/VhxuX4Uhz1ueLtKvOi1x4E7aFXEsQo=";
+    sha256 = "sha256-rOAXCru3m31lVFUyxywkuyKWUOJneA7ECMPyvAfw4mg=";
   };
 
-  vendorSha256 = "sha256-yXWeINubvfZ2S+3gVFsrzeVO3XXIiZ14qfK+9Bj3SV4=";
+  vendorHash = "sha256-8Q+KMYu1yiHEYS035NmCvxSgIS/+oRhhcZa6SwmvGgk=";
 
   ldflags = [ "-s" "-w" ];
 
   meta = with lib; {
-    description = "A tool for tuning your TimescaleDB for better performance";
+    description = "Tool for tuning your TimescaleDB for better performance";
+    mainProgram = "timescaledb-tune";
     homepage = "https://github.com/timescale/timescaledb-tune";
     license = licenses.asl20;
-    maintainers = with maintainers; [ marsam ];
+    maintainers = with maintainers; [ ];
   };
 }

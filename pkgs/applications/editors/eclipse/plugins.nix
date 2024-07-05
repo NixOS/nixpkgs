@@ -152,7 +152,7 @@ rec {
     '';
 
     meta = with lib; {
-      description = "A powerful parser generator for processing structured text or binary files";
+      description = "Powerful parser generator for processing structured text or binary files";
       homepage = "https://www.antlr.org/";
       sourceProvenance = with sourceTypes; [ binaryBytecode ];
       license = licenses.bsd3;
@@ -175,7 +175,7 @@ rec {
     '';
 
     meta = with lib; {
-      description = "A powerful parser generator for processing structured text or binary files";
+      description = "Powerful parser generator for processing structured text or binary files";
       homepage = "https://www.antlr.org/";
       sourceProvenance = with sourceTypes; [ binaryBytecode ];
       license = licenses.bsd3;
@@ -255,12 +255,12 @@ rec {
   cdt = buildEclipseUpdateSite rec {
     name = "cdt-${version}";
     # find current version at https://github.com/eclipse-cdt/cdt/releases
-    version = "11.1.1";
+    version = "11.4.0";
 
     src = fetchzip {
       stripRoot = false;
       url = "https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/tools/cdt/releases/${lib.versions.majorMinor version}/${name}/${name}.zip";
-      hash = "sha256-k78QKPIb3Lr0Wcg2tTlX1abdpcvxspjaxJiP2Hrgb4A=";
+      hash = "sha256-39AoB5cKRQMFpRaOlrTEsyEKZYVqdTp1tMtlaDjjZ84=";
     };
 
     meta = with lib; {
@@ -355,7 +355,7 @@ rec {
 
     src = fetchzip {
       url = "https://download.jboss.org/drools/release/${version}/droolsjbpm-tools-distribution-${version}.zip";
-      sha512 = "2qzc1iszqfrfnw8xip78n3kp6hlwrvrr708vlmdk7nv525xhs0ssjaxriqdhcr0s6jripmmazxivv3763rnk2bfkh31hmbnckpx4r3m";
+      hash = "sha512-dWTS72R2VRgGnG6JafMwZ+wd+1e13pil0SAz2HDMXUmtgYa9iLLtma3SjcDJeWdOoblzWHRu7Ihblx3+Ogb2sQ==";
       postFetch = ''
         # update site is a couple levels deep, alongside some other irrelevant stuff
         cd $out;
@@ -552,7 +552,7 @@ rec {
 
     meta = with lib; {
       homepage = "http://scala-ide.org/";
-      description = "The Scala IDE for Eclipse";
+      description = "Scala IDE for Eclipse";
       sourceProvenance = with sourceTypes; [ binaryBytecode ];
       license = licenses.bsd3;
       platforms = platforms.all;
@@ -616,7 +616,7 @@ rec {
 
     meta = with lib; {
       homepage = "https://github.com/vrapper/vrapper";
-      description = "A wrapper to provide a Vim-like input scheme for moving around and editing text";
+      description = "Wrapper to provide a Vim-like input scheme for moving around and editing text";
       sourceProvenance = with sourceTypes; [ binaryBytecode ];
       license = licenses.gpl3;
       platforms = platforms.all;
@@ -640,7 +640,7 @@ rec {
 
     meta = with lib; {
       homepage = "https://github.com/oyse/yedit";
-      description = "A YAML editor plugin for Eclipse";
+      description = "YAML editor plugin for Eclipse";
       sourceProvenance = with sourceTypes; [ binaryBytecode ];
       license = licenses.epl10;
       platforms = platforms.all;
@@ -658,7 +658,7 @@ rec {
 
     meta = with lib; {
       homepage = "https://www.eclipse.org/gef/zest/";
-      description = "The Eclipse Visualization Toolkit";
+      description = "Eclipse Visualization Toolkit";
       sourceProvenance = with sourceTypes; [ binaryBytecode ];
       platforms = platforms.all;
       maintainers = [ maintainers.romildo ];
@@ -671,17 +671,17 @@ rec {
 
     srcFeature = fetchurl {
       url = "https://downloads.apache.org/ant/ivyde/updatesite/ivyde-${version}/features/org.apache.ivyde.feature_${version}.jar";
-      sha1 = "c8fb6c4aab32db13db0bd81c1a148032667fff31";
+      hash = "sha256-iKe7oOPjy6th0HmKt6NXexOHN60EDpQe1r+n6K+uoyw=";
     };
 
     srcPlugin = fetchurl {
       url = "https://downloads.apache.org/ant/ivyde/updatesite/ivyde-${version}/plugins/org.apache.ivyde.eclipse_${version}.jar";
-      sha1 = "0c80c2e228a07f18efab1c56ea026448eda70c06";
+      hash = "sha256-lhwFwdMDwCIUrQjdWfe5ZSutCIsKtZSBT6FWthUipdk=";
     };
 
     meta = with lib; {
       homepage = "https://ant.apache.org/ivy/ivyde/index.html";
-      description = "A plugin which integrates Apache Ivy's dependency management";
+      description = "Plugin which integrates Apache Ivy's dependency management";
       sourceProvenance = with sourceTypes; [ binaryBytecode ];
       license = licenses.asl20;
       platforms = platforms.all;
@@ -695,17 +695,17 @@ rec {
 
     srcFeature = fetchurl {
       url = "https://downloads.apache.org/ant/ivyde/updatesite/ivyde-${version}/features/org.apache.ivyde.eclipse.resolvevisualizer.feature_${version}.jar";
-      sha1 = "fb1941eaa2c0de54259de01b0da6d5a6b4a2cab1";
+      hash = "sha256-PSH5NtE7hN2hHoHUhVK1CLkHN7YSDdTTqBP7711X4rU=";
     };
 
     srcPlugin = fetchurl {
       url = "https://downloads.apache.org/ant/ivyde/updatesite/ivyde-${version}/plugins/org.apache.ivyde.eclipse.resolvevisualizer_${version}.jar";
-      sha1 = "225e0c8ccb010d622c159560638578c2fc51a67e";
+      hash = "sha256-qjTvn1j7viSfzLkWnYjyS9Pj2ExqsiFGLzot3+oB0Tw=";
     };
 
     meta = with lib; {
       homepage = "https://ant.apache.org/ivy/ivyde/index.html";
-      description = "A graph viewer of the resolved dependencies.";
+      description = "Graph viewer of the resolved dependencies";
       longDescription = ''
         Apache IvyDE Resolve Visualizer is an optional dependency of Apache IvyDE since
         it requires additional plugins to be installed (Zest).
@@ -733,7 +733,7 @@ rec {
 
     meta = with lib; {
       homepage = "https://ant.apache.org/ivy/index.html";
-      description = "A popular dependency manager focusing on flexibility and simplicity";
+      description = "Popular dependency manager focusing on flexibility and simplicity";
       sourceProvenance = with sourceTypes; [ binaryBytecode ];
       license = licenses.asl20;
       platforms = platforms.all;

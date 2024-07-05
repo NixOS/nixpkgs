@@ -62,6 +62,8 @@ stdenv.mkDerivation rec {
 
     # Misc
     CONFIG_RADIUS_SERVER=y
+    CONFIG_MACSEC=y
+    CONFIG_DRIVER_MACSEC_LINUX=y
     CONFIG_FULL_DYNAMIC_VLAN=y
     CONFIG_VLAN_NETLINK=y
     CONFIG_GETRANDOM=y
@@ -101,9 +103,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://w1.fi/hostapd/";
-    description = "A user space daemon for access point and authentication servers";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ ninjatrappeur hexa ];
+    description = "User space daemon for access point and authentication servers";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ ];
     platforms = platforms.linux;
   };
 }

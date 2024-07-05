@@ -1,16 +1,18 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, fetchFromGitHub
-, pygobject3
-, pytestCheckHook
-, gtk3
-, gobject-introspection
+{
+  stdenv,
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pygobject3,
+  pytestCheckHook,
+  gtk3,
+  gobject-introspection,
 }:
 
 buildPythonPackage rec {
   pname = "gbulb";
   version = "0.6.4";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "beeware";

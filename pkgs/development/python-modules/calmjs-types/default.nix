@@ -1,12 +1,14 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, pytestCheckHook
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "calmjs-types";
   version = "1.0.1";
+  format = "setuptools";
 
   src = fetchPypi {
     pname = "calmjs.types";

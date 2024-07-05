@@ -11,20 +11,23 @@
 , qtimageformats
 , lxqt
 , librsvg
-, freeimage
-, libraw
 }:
 
 stdenv.mkDerivation rec {
   pname = "dtkgui";
-  version = "5.6.10";
+  version = "5.6.29";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "sha256-4NHt/hLtt99LhWvBX9e5ueB5G86SXx553G6fyHZBXcE=";
+    hash = "sha256-TSU6sqdwBa86k7HcyNSJeJ6gj+n6EfIMjE8skSG5o0c=";
   };
+
+  patches = [
+    ./fix-pkgconfig-path.patch
+    ./fix-pri-path.patch
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -38,8 +41,6 @@ stdenv.mkDerivation rec {
     qtbase
     lxqt.libqtxdg
     librsvg
-    freeimage
-    libraw
   ];
 
   propagatedBuildInputs = [
@@ -48,18 +49,24 @@ stdenv.mkDerivation rec {
   ];
 
   cmakeFlags = [
-    "-DDVERSION=${version}"
+    "-DDTK_VERSION=${version}"
     "-DBUILD_DOCS=ON"
-    "-DQCH_INSTALL_DESTINATION=${qtbase.qtDocPrefix}"
     "-DMKSPECS_INSTALL_DIR=${placeholder "out"}/mkspecs/modules"
-    "-DCMAKE_INSTALL_LIBDIR=lib"
-    "-DCMAKE_INSTALL_INCLUDEDIR=include"
+    "-DQCH_INSTALL_DESTINATION=${placeholder "doc"}/${qtbase.qtDocPrefix}"
   ];
 
   preConfigure = ''
     # qt.qpa.plugin: Could not find the Qt platform plugin "minimal"
     # A workaround is to set QT_PLUGIN_PATH explicitly
     export QT_PLUGIN_PATH=${qtbase.bin}/${qtbase.qtPluginPrefix}
+  '';
+
+  outputs = [ "out" "dev" "doc" ];
+
+  postFixup = ''
+    for binary in $out/libexec/dtk5/DGui/bin/*; do
+      wrapQtApp $binary
+    done
   '';
 
   meta = with lib; {

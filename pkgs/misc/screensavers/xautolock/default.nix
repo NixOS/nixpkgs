@@ -2,7 +2,7 @@
 , imake, gccmakedep, libX11, libXext, libXScrnSaver, xorgproto
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xautolock";
   version = "2.2-7-ga23dd5c";
 
@@ -11,8 +11,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "peti";
     repo = "xautolock";
-    rev = "v${version}";
-    sha256 = "10j61rl0sx9sh84rjyfyddl73xb5i2cpb17fyrli8kwj39nw0v2g";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-T2zAbRqSTxRp9u6EdZmIZfVxaGveeZkJgjp1DWgORoI=";
   };
 
   nativeBuildInputs = [ imake gccmakedep ];
@@ -30,6 +30,7 @@ stdenv.mkDerivation rec {
     homepage = "http://www.ibiblio.org/pub/linux/X11/screensavers";
     maintainers = with maintainers; [ peti ];
     platforms = platforms.linux;
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
+    mainProgram = "xautolock";
   };
-}
+})

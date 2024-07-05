@@ -1,30 +1,23 @@
-{ stdenv, lib, fetchurl, fetchpatch, pkg-config, flex, bison, libxslt, autoconf, autoreconfHook
-, gnome, graphviz, glib, libiconv, libintl, libtool, expat, substituteAll, vala
+{ stdenv, lib, fetchurl, pkg-config, flex, bison, libxslt, autoconf, autoreconfHook
+, gnome, graphviz, glib, libiconv, libintl, libtool, expat, substituteAll, vala, gobject-introspection
 }:
 
 let
   generic = lib.makeOverridable ({
-    version, sha256,
+    version, hash,
     extraNativeBuildInputs ? [],
     extraBuildInputs ? [],
     withGraphviz ? false
   }:
   let
-    # Patches from the openembedded-core project to build vala without graphviz
-    # support. We need to apply an additional patch to allow building when the
-    # header file isn't available at all, but that patch (./gvc-compat.patch)
-    # can be shared between all versions of Vala so far.
+    # Build vala (valadoc) without graphviz support. Inspired from the openembedded-core project.
+    # https://github.com/openembedded/openembedded-core/blob/a5440d4288e09d3e/meta/recipes-devtools/vala/vala/disable-graphviz.patch
     graphvizPatch =
       {
-        "0.48" = ./disable-graphviz-0.46.1.patch;
-
-        "0.54" = ./disable-graphviz-0.46.1.patch;
-
-        "0.56" = ./disable-graphviz-0.46.1.patch;
-
+        "0.56" = ./disable-graphviz-0.56.8.patch;
       }.${lib.versions.majorMinor version} or (throw "no graphviz patch for this version of vala");
 
-    disableGraphviz = lib.versionAtLeast version "0.38" && !withGraphviz;
+    disableGraphviz = !withGraphviz;
 
   in stdenv.mkDerivation rec {
     pname = "vala";
@@ -37,7 +30,7 @@ let
 
     src = fetchurl {
       url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-      inherit sha256;
+      inherit hash;
     };
 
     postPatch = ''
@@ -47,7 +40,7 @@ let
     # If we're disabling graphviz, apply the patches and corresponding
     # configure flag. We also need to override the path to the valac compiler
     # so that it can be used to regenerate documentation.
-    patches        = lib.optionals disableGraphviz [ graphvizPatch ./gvc-compat.patch ];
+    patches        = lib.optionals disableGraphviz [ graphvizPatch ];
     configureFlags = lib.optional  disableGraphviz "--disable-graphviz";
     # when cross-compiling ./compiler/valac is valac for host
     # so add the build vala in nativeBuildInputs
@@ -56,15 +49,15 @@ let
     outputs = [ "out" "devdoc" ];
 
     nativeBuildInputs = [
-      pkg-config flex bison libxslt
-    ] ++ lib.optional (stdenv.isDarwin && (lib.versionAtLeast version "0.38")) expat
+      pkg-config flex bison libxslt gobject-introspection
+    ] ++ lib.optional (stdenv.isDarwin) expat
       ++ lib.optional disableGraphviz autoreconfHook # if we changed our ./configure script, need to reconfigure
       ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [ vala ]
       ++ extraNativeBuildInputs;
 
     buildInputs = [
       glib libiconv libintl
-    ] ++ lib.optional (lib.versionAtLeast version "0.38" && withGraphviz) graphviz
+    ] ++ lib.optional (withGraphviz) graphviz
       ++ extraBuildInputs;
 
     enableParallelBuilding = true;
@@ -84,27 +77,17 @@ let
 
     meta = with lib; {
       description = "Compiler for GObject type system";
-      homepage = "https://wiki.gnome.org/Projects/Vala";
+      homepage = "https://vala.dev";
       license = licenses.lgpl21Plus;
       platforms = platforms.unix;
-      maintainers = with maintainers; [ antono jtojnar maxeaubrey ] ++ teams.pantheon.members;
+      maintainers = with maintainers; [ antono jtojnar ] ++ teams.pantheon.members;
     };
   });
 
 in rec {
-  vala_0_48 = generic {
-    version = "0.48.25";
-    sha256 = "UMs8Xszdx/1DaL+pZBSlVgReedKxWmiRjHJ7jIOxiiQ=";
-  };
-
-  vala_0_54 = generic {
-    version = "0.54.9";
-    sha256 = "hXLA6Nd9eMFZfVFgCPBUDH50leA10ou0wlzJk+U85LQ=";
-  };
-
   vala_0_56 = generic {
-    version = "0.56.7";
-    sha256 = "PTnHWW1fqa6L/q5HZmn4EfcFe397kwhHiie2hEPYsAM=";
+    version = "0.56.17";
+    hash = "sha256-JhAMTk7wBJxhknXxQNl89WWIPQDHVDyCvM5aQmk07Wo=";
   };
 
   vala = vala_0_56;

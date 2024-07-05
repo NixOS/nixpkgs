@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "transifex-cli";
-  version = "1.6.7";
+  version = "1.6.14";
 
   src = fetchFromGitHub {
     owner = "transifex";
     repo = "cli";
     rev = "v${version}";
-    sha256 = "sha256-5166P44HSRKQ0pCh1BCPd1ZUryh/IBDumcnLYA+CSBY=";
+    sha256 = "sha256-yKkRoeq0hPYMjZcoL9h3l8FimnCjjVSlk9whliEnkzE=";
   };
 
-  vendorSha256 = "sha256-rcimaHr3fFeHSjZXw1w23cKISCT+9t8SgtPnY/uYGAU=";
+  vendorHash = "sha256-rcimaHr3fFeHSjZXw1w23cKISCT+9t8SgtPnY/uYGAU=";
 
   ldflags = [
     "-s" "-w" "-X 'github.com/transifex/cli/internal/txlib.Version=${version}'"
@@ -28,9 +28,10 @@ buildGoModule rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "The Transifex command-line client";
+    description = "Transifex command-line client";
     homepage = "https://github.com/transifex/transifex-cli";
     license = licenses.asl20;
     maintainers = with maintainers; [ thornycrackers ];
+    mainProgram = "tx";
   };
 }

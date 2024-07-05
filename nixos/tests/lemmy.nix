@@ -26,17 +26,11 @@ in
             admin_email = "mightyiam@example.com";
           };
         };
-        secretFile = /etc/lemmy-config.hjson;
+        adminPasswordFile = /etc/lemmy-admin-password.txt;
         caddy.enable = true;
       };
 
-      environment.etc."lemmy-config.hjson".text = ''
-        {
-          "setup": {
-            "admin_password": "ThisIsWhatIUseEverywhereTryIt"
-          }
-        }
-      '';
+      environment.etc."lemmy-admin-password.txt".text = "ThisIsWhatIUseEverywhereTryIt";
 
       networking.firewall.allowedTCPPorts = [ 80 ];
 
@@ -57,7 +51,8 @@ in
 
     with subtest("the backend starts and responds"):
         server.wait_for_open_port(${toString backendPort})
-        server.succeed("curl --fail localhost:${toString backendPort}/api/v3/site")
+        # wait until succeeds, it just needs few seconds for migrations, but lets give it 10s max
+        server.wait_until_succeeds("curl --fail localhost:${toString backendPort}/api/v3/site", 10)
 
     with subtest("the UI starts and responds"):
         server.wait_for_unit("lemmy-ui.service")
@@ -65,6 +60,7 @@ in
         server.succeed("curl --fail localhost:${toString uiPort}")
 
     with subtest("Lemmy-UI responds through the caddy reverse proxy"):
+        server.systemctl("start network-online.target")
         server.wait_for_unit("network-online.target")
         server.wait_for_unit("caddy.service")
         server.wait_for_open_port(80)
@@ -72,6 +68,7 @@ in
         assert "Lemmy" in body, f"String Lemmy not found in response for ${lemmyNodeName}: \n{body}"
 
     with subtest("the server is exposed externally"):
+        client.systemctl("start network-online.target")
         client.wait_for_unit("network-online.target")
         client.succeed("curl -v --fail ${lemmyNodeName}")
 

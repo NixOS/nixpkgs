@@ -1,11 +1,12 @@
 { spellChecking ? true
 , lib
 , stdenv
-, fetchurl
+, fetchFromGitLab
+, autoreconfHook
 , pkg-config
 , gtk3
 , gtkspell3
-, gmime2
+, gmime3
 , gettext
 , intltool
 , itstool
@@ -21,21 +22,19 @@
 
 stdenv.mkDerivation rec {
   pname = "pan";
-  version = "0.146";
+  version = "0.158";
 
-  src = fetchurl {
-    url = "https://pan.rebelbase.com/download/releases/${version}/source/pan-${version}.tar.bz2";
-    sha256 = "17agd27sn4a7nahvkpg0w39kv74njgdrrygs74bbvpaj8rk2hb55";
+  src = fetchFromGitLab {
+    domain = "gitlab.gnome.org";
+    owner = "GNOME";
+    repo = pname;
+    rev = "v${version}";
+    hash = "sha256-gcs3TsUzZAW8PhNPMzyOfwu+2SNynjRgfxdGIfAHrpA=";
   };
 
-  patches = [
-    # Take <glib.h>, <gmime.h>, "gtk-compat.h" out of extern "C"
-    ./move-out-of-extern-c.diff
-  ];
+  nativeBuildInputs = [ autoreconfHook pkg-config gettext intltool itstool libxml2 makeWrapper ];
 
-  nativeBuildInputs = [ pkg-config gettext intltool itstool libxml2 makeWrapper ];
-
-  buildInputs = [ gtk3 gmime2 libnotify gnutls ]
+  buildInputs = [ gtk3 gmime3 libnotify gnutls ]
     ++ lib.optional spellChecking gtkspell3
     ++ lib.optionals gnomeSupport [ libsecret gcr ];
 
@@ -54,7 +53,8 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with lib; {
-    description = "A GTK-based Usenet newsreader good at both text and binaries";
+    description = "GTK-based Usenet newsreader good at both text and binaries";
+    mainProgram = "pan";
     homepage = "http://pan.rebelbase.com/";
     maintainers = [ maintainers.eelco ];
     platforms = platforms.linux;

@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "wander";
-  version = "0.10.1";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "robinovitch61";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-jg83GHNlzPPzzhrLWw686vrmLlDL5L0+OUYqMoYUiJw=";
+    sha256 = "sha256-1+bKdIAWdg/+5FBDbtvjDV0xpZ5jot3y6F+KuLO9WVk=";
   };
 
-  vendorHash = "sha256-SqDGXV8MpvEQFAkcE1NWvWjdzYsvbO5vA6k+hpY0js0=";
+  vendorHash = "sha256-0S8tzP5yNUrH6fp+v7nbUPTMWzYXyGw+ZNcXkSN+tWY=";
 
   ldflags = [ "-s" "-w" ];
 
@@ -29,5 +29,6 @@ buildGoModule rec {
     license = licenses.mit;
     homepage = "https://github.com/robinovitch61/wander";
     maintainers = teams.c3d2.members;
+    mainProgram = "wander";
   };
 }

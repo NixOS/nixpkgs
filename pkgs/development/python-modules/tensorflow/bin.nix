@@ -1,37 +1,42 @@
-{ stdenv
-, lib
-, fetchurl
-, buildPythonPackage
-, isPy3k, pythonOlder, pythonAtLeast, astor
-, gast
-, google-pasta
-, wrapt
-, numpy
-, six
-, termcolor
-, packaging
-, protobuf
-, absl-py
-, grpcio
-, mock
-, scipy
-, wheel
-, jax
-, opt-einsum
-, backports_weakref
-, tensorflow-estimator-bin
-, tensorboard
-, cudaSupport ? false
-, cudaPackages ? {}
-, zlib
-, python
-, keras-applications
-, keras-preprocessing
-, addOpenGLRunpath
-, astunparse
-, flatbuffers
-, h5py
-, typing-extensions
+{
+  stdenv,
+  lib,
+  fetchurl,
+  buildPythonPackage,
+  isPy3k,
+  pythonOlder,
+  pythonAtLeast,
+  astor,
+  gast,
+  google-pasta,
+  wrapt,
+  numpy,
+  six,
+  termcolor,
+  packaging,
+  protobuf,
+  absl-py,
+  grpcio,
+  mock,
+  scipy,
+  wheel,
+  jax,
+  opt-einsum,
+  tensorflow-estimator-bin,
+  tensorboard,
+  config,
+  cudaSupport ? config.cudaSupport,
+  cudaPackages,
+  zlib,
+  python,
+  keras-applications,
+  keras-preprocessing,
+  addOpenGLRunpath,
+  astunparse,
+  flatbuffers,
+  h5py,
+  llvmPackages,
+  typing-extensions,
 }:
 
 # We keep this binary build for two reasons:
@@ -39,27 +44,29 @@
 # - the source build is currently brittle and not easy to maintain
 
 # unsupported combination
-assert ! (stdenv.isDarwin && cudaSupport);
+assert !(stdenv.isDarwin && cudaSupport);
 
 let
   packages = import ./binary-hashes.nix;
   inherit (cudaPackages) cudatoolkit cudnn;
-in buildPythonPackage {
+in
+buildPythonPackage {
   pname = "tensorflow" + lib.optionalString cudaSupport "-gpu";
   inherit (packages) version;
   format = "wheel";
 
-  # Python 3.11 still unsupported
-  disabled = pythonAtLeast "3.11";
+  src =
+    let
+      pyVerNoDot = lib.strings.stringAsChars (x: lib.optionalString (x != ".") x) python.pythonVersion;
+      platform = stdenv.system;
+      cuda = lib.optionalString cudaSupport "_gpu";
+      key = "${platform}_${pyVerNoDot}${cuda}";
+    in
+    fetchurl (packages.${key} or (throw "tensoflow-bin: unsupported system: ${stdenv.system}"));
 
-  src = let
-    pyVerNoDot = lib.strings.stringAsChars (x: if x == "." then "" else x) python.pythonVersion;
-    platform = if stdenv.isDarwin then "mac" else "linux";
-    unit = if cudaSupport then "gpu" else "cpu";
-    key = "${platform}_py_${pyVerNoDot}_${unit}";
-  in fetchurl (packages.${key} or {});
+  buildInputs = [ llvmPackages.openmp ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     astunparse
     flatbuffers
     typing-extensions
@@ -82,10 +89,9 @@ in buildPythonPackage {
     keras-applications
     keras-preprocessing
     h5py
-  ] ++ lib.optional (!isPy3k) mock
-    ++ lib.optionals (pythonOlder "3.4") [ backports_weakref ];
+  ] ++ lib.optional (!isPy3k) mock;
 
-  nativeBuildInputs = [ wheel ] ++ lib.optionals cudaSupport [ addOpenGLRunpath ];
+  build-system = [ wheel ] ++ lib.optionals cudaSupport [ addOpenGLRunpath ];
 
   preConfigure = ''
     unset SOURCE_DATE_EPOCH
@@ -95,7 +101,6 @@ in buildPythonPackage {
 
     pushd dist
 
-    orig_name="$(echo ./*.whl)"
     wheel unpack --dest unpacked ./*.whl
     rm ./*.whl
     (
@@ -117,7 +122,6 @@ in buildPythonPackage {
         -e "s/Requires-Dist: numpy (.*)/Requires-Dist: numpy/"
     )
     wheel pack ./unpacked/tensorflow*
-    mv *.whl $orig_name # avoid changes to the _os_arch.whl suffix
 
     popd
   '';
@@ -150,17 +154,29 @@ in buildPythonPackage {
       rrPathArr=(
         "$out/${python.sitePackages}/tensorflow/"
         "$out/${python.sitePackages}/tensorflow/core/kernels"
+        "$out/${python.sitePackages}/tensorflow/compiler/mlir/stablehlo/"
         "$out/${python.sitePackages}/tensorflow/compiler/tf2tensorrt/"
         "$out/${python.sitePackages}/tensorflow/compiler/tf2xla/ops/"
+        "$out/${python.sitePackages}/tensorflow/include/external/ml_dtypes/"
         "$out/${python.sitePackages}/tensorflow/lite/experimental/microfrontend/python/ops/"
+        "$out/${python.sitePackages}/tensorflow/lite/python/analyzer_wrapper/"
         "$out/${python.sitePackages}/tensorflow/lite/python/interpreter_wrapper/"
+        "$out/${python.sitePackages}/tensorflow/lite/python/metrics/"
         "$out/${python.sitePackages}/tensorflow/lite/python/optimize/"
         "$out/${python.sitePackages}/tensorflow/python/"
-        "$out/${python.sitePackages}/tensorflow/python/framework/"
         "$out/${python.sitePackages}/tensorflow/python/autograph/impl/testing"
+        "$out/${python.sitePackages}/tensorflow/python/client"
         "$out/${python.sitePackages}/tensorflow/python/data/experimental/service"
         "$out/${python.sitePackages}/tensorflow/python/framework"
+        "$out/${python.sitePackages}/tensorflow/python/grappler"
+        "$out/${python.sitePackages}/tensorflow/python/lib/core"
+        "$out/${python.sitePackages}/tensorflow/python/lib/io"
+        "$out/${python.sitePackages}/tensorflow/python/platform"
         "$out/${python.sitePackages}/tensorflow/python/profiler/internal"
+        "$out/${python.sitePackages}/tensorflow/python/saved_model"
+        "$out/${python.sitePackages}/tensorflow/python/util"
+        "$out/${python.sitePackages}/tensorflow/tsl/python/lib/core"
+        "$out/${python.sitePackages}/tensorflow.libs/"
         "${rpath}"
       )
 
@@ -192,16 +208,19 @@ in buildPythonPackage {
     "tensorflow.python.framework"
   ];
 
-  passthru = {
-    inherit cudaPackages;
-  };
-
   meta = with lib; {
     description = "Computation using data flow graphs for scalable machine learning";
     homepage = "http://tensorflow.org";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.asl20;
-    maintainers = with maintainers; [ jyp abbradar ];
-    platforms = [ "x86_64-linux" "x86_64-darwin" ];
+    maintainers = with maintainers; [
+      jyp
+      abbradar
+    ];
+    platforms = platforms.all;
+    # Cannot import tensortfow on python 3.12 as it still dependends on distutils:
+    # ModuleNotFoundError: No module named 'distutils'
+    # https://github.com/tensorflow/tensorflow/issues/58073
+    broken = pythonAtLeast "3.12";
   };
 }

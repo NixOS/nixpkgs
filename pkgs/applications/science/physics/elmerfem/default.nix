@@ -1,14 +1,32 @@
-{ lib, stdenv, fetchFromGitHub, cmake, git, gfortran, mpi, blas, liblapack, pkg-config, libGL, libGLU, opencascade, libsForQt5, tbb, vtkWithQt5 }:
-
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, git
+, gfortran
+, mpi
+, blas
+, liblapack
+, pkg-config
+, libGL
+, libGLU
+, opencascade-occt_7_6
+, libsForQt5
+, tbb
+, vtkWithQt5
+}:
+let
+  opencascade-occt = opencascade-occt_7_6;
+in
 stdenv.mkDerivation rec {
   pname = "elmerfem";
-  version = "unstable-2023-02-03";
+  version = "unstable-2023-09-18";
 
   src = fetchFromGitHub {
     owner = "elmercsc";
     repo = pname;
-    rev = "39c8784b6e4543a6bf560b5d597e0eec1eb06343";
-    hash = "sha256-yyxgFvlS+I4PouDL6eD4ZrXuONTDejCSYKq2AwQ0Iug=";
+    rev = "0fcced06f91c93f44557efd6a5f10b2da5c7066c";
+    hash = "sha256-UuARDYW7D3a4dB6I86s2Ed5ecQxc+Y/es3YIeF2VyTc=";
   };
 
   hardeningDisable = [ "format" ];
@@ -19,6 +37,7 @@ stdenv.mkDerivation rec {
     pkg-config
     libsForQt5.wrapQtAppsHook
   ];
+
   buildInputs = [
     mpi
     blas
@@ -28,7 +47,7 @@ stdenv.mkDerivation rec {
     libsForQt5.qwt
     libGL
     libGLU
-    opencascade
+    opencascade-occt
     tbb
     vtkWithQt5
   ];
@@ -54,7 +73,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://elmerfem.org";
-    description = "A finite element software for multiphysical problems";
+    description = "Finite element software for multiphysical problems";
     platforms = platforms.unix;
     maintainers = with maintainers; [ wulfsta broke ];
     license = licenses.lgpl21;

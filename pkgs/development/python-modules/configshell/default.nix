@@ -1,14 +1,16 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, pyparsing
-, six
-, urwid
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  pyparsing,
+  six,
+  urwid,
 }:
 
 buildPythonPackage rec {
   pname = "configshell";
   version = "1.1.30";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "open-iscsi";
@@ -26,9 +28,7 @@ buildPythonPackage rec {
   # Module has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "configshell"
-  ];
+  pythonImportsCheck = [ "configshell" ];
 
   meta = with lib; {
     description = "Python library for building configuration shells";

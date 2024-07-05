@@ -1,51 +1,58 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, django
-, factory_boy
-, mock
-, pygments
-, pytest-django
-, pytestCheckHook
-, shortuuid
-, vobject
-, werkzeug
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonAtLeast,
+
+  # build-system
+  setuptools,
+
+  # dependencies
+  django,
+
+  # tests
+  factory-boy,
+  mock,
+  pip,
+  pygments,
+  pytestCheckHook,
+  pytest-django,
+  shortuuid,
+  vobject,
+  werkzeug,
 }:
 
 buildPythonPackage rec {
   pname = "django-extensions";
-  version = "3.2.1";
+  version = "3.2.3";
+  pyproject = true;
+
+  # https://github.com/django-extensions/django-extensions/issues/1831
+  # Requires asyncore, which was dropped in 3.12
+  disabled = pythonAtLeast "3.12";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-i8A/FMba1Lc3IEBzefP3Uu23iGcDGYqo5bNv+u6hKQI=";
+    hash = "sha256-A2+5FBv0IhTJPkwgd7je+B9Ac64UHJEa3HRBbWr2FxM=";
   };
-
-  patches = [
-    (fetchpatch {
-      # pygments 2.14 compat for tests
-      url = "https://github.com/django-extensions/django-extensions/commit/61ebfe38f8fca9225b41bec5418e006e6a8815e1.patch";
-      hash = "sha256-+sxaQMmKi/S4IlfHqARPGhaqc+F1CXUHVFyeU/ArW2U=";
-    })
-  ];
 
   postPatch = ''
     substituteInPlace setup.cfg \
       --replace "--cov=django_extensions --cov-report html --cov-report term" ""
   '';
 
-  propagatedBuildInputs = [
-    django
-  ];
+  build-system = [ setuptools ];
+
+  dependencies = [ django ];
 
   __darwinAllowLocalNetworking = true;
 
   nativeCheckInputs = [
-    factory_boy
+    factory-boy
     mock
+    pip
     pygments # not explicitly declared in setup.py, but some tests require it
     pytest-django
     pytestCheckHook
@@ -57,10 +64,12 @@ buildPythonPackage rec {
   disabledTestPaths = [
     # requires network access
     "tests/management/commands/test_pipchecker.py"
+    # django.db.utils.OperationalError: no such table: django_extensions_permmodel
+    "tests/test_dumpscript.py"
   ];
 
   meta = with lib; {
-    description = "A collection of custom extensions for the Django Framework";
+    description = "Collection of custom extensions for the Django Framework";
     homepage = "https://github.com/django-extensions/django-extensions";
     license = licenses.mit;
   };

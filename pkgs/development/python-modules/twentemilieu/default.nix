@@ -1,27 +1,28 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, aiohttp
-, yarl
-, aresponses
-, poetry-core
-, pytest-asyncio
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  aiohttp,
+  yarl,
+  aresponses,
+  poetry-core,
+  pytest-asyncio,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "twentemilieu";
-  version = "1.0.0";
+  version = "2.0.1";
   format = "pyproject";
 
-  disabled = pythonOlder "3.10";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "frenck";
     repo = "python-twentemilieu";
-    rev = "v${version}";
-    hash = "sha256-MTAVa5gP5e8TIE/i1DjfmwKm1zDVC/WEcYKxZSV/+Ug=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-0rs+nBJfyXRj/3n/G2JzUDXaiIYZmWsoIcgLoWKhlV4=";
   };
 
   postPatch = ''
@@ -30,9 +31,7 @@ buildPythonPackage rec {
       --replace '"0.0.0"' '"${version}"'
   '';
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     aiohttp

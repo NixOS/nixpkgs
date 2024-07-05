@@ -9,17 +9,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "orogene";
-  version = "0.3.27";
+  version = "0.3.34";
 
   src = fetchFromGitHub {
     owner = "orogene";
     repo = "orogene";
     rev = "v${version}";
-    hash = "sha256-y58S8oou1GBR1Cx77IzLvLmZ/MN88P9k1RGCFOVbHHc=";
+    hash = "sha256-GMWrlvZZ2xlcvcRG3u8jS8KiewHpyX0brNe4pmCpHbM=";
     fetchSubmodules = true;
   };
 
-  cargoHash = "sha256-hZQxzhq61h83geLazhEkoaB1oRz/xSXuwW7BuBWxfHs=";
+  cargoHash = "sha256-I9uh8jV1hH5R/UHM3mz2/ZA7QY4O9gW5qXlVSfao0ZM=";
 
   nativeBuildInputs = [
     pkg-config
@@ -28,7 +28,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [
     openssl
   ] ++ lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.Security
+    darwin.apple_sdk.frameworks.SystemConfiguration
   ];
 
   preCheck = ''
@@ -37,7 +37,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "A package manager for tools that use node_modules";
+    description = "Package manager for tools that use node_modules";
     homepage = "https://github.com/orogene/orogene";
     changelog = "https://github.com/orogene/orogene/blob/${src.rev}/CHANGELOG.md";
     license = with licenses; [ asl20 isc ];

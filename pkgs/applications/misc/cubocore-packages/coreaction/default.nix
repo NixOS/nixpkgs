@@ -2,13 +2,13 @@
 
 mkDerivation rec {
   pname = "coreaction";
-  version = "4.4.0";
+  version = "4.5.0";
 
   src = fetchFromGitLab {
     owner = "cubocore/coreapps";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-rJ4EFKk/zlvQqptbL81WdqqZQUR9hYADFkXuw11SzRc=";
+    hash = "sha256-qhYuLqWXCpOJCqg+JJ8VQQokNEQVwxpHAtYGITxHZ3Y=";
   };
 
   nativeBuildInputs = [
@@ -24,7 +24,8 @@ mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A side bar for showing widgets from the C Suite";
+    description = "Side bar for showing widgets from the C Suite";
+    mainProgram = "coreaction";
     homepage = "https://gitlab.com/cubocore/coreapps/coreaction";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ dan4ik605743 ];

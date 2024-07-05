@@ -14,7 +14,7 @@
 , fcitx5-gtk
 , ibus
 , uim #IME
-, wrapGAppsHook #color picker in mlconfig
+, wrapGAppsHook3 #color picker in mlconfig
 , gdk-pixbuf
 , gtk3
 , gtk ? gtk3
@@ -96,14 +96,14 @@ let
   in
     lib.withFeatureAs (commaSepList != "") featureName commaSepList
   ;
-in stdenv.mkDerivation rec {
+in stdenv.mkDerivation (finalAttrs: {
   pname = "mlterm";
   version = "3.9.3";
 
   src = fetchFromGitHub {
     owner = "arakiken";
-    repo = pname;
-    rev = version;
+    repo = "mlterm";
+    rev = finalAttrs.version;
     sha256 = "sha256-gfs5cdwUUwSBWwJJSaxrQGWJvLkI27RMlk5QvDALEDg=";
   };
 
@@ -111,7 +111,7 @@ in stdenv.mkDerivation rec {
     pkg-config
     autoconf
   ] ++ lib.optionals enableTools.mlconfig [
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
   buildInputs = [
     gtk
@@ -165,6 +165,10 @@ in stdenv.mkDerivation rec {
       --replace "-m 4755 -o root" " "
   '';
 
+  env = lib.optionalAttrs stdenv.cc.isClang {
+    NIX_CFLAGS_COMPILE = "-Wno-error=int-conversion -Wno-error=incompatible-function-pointer-types";
+  };
+
   configureFlags = [
     (withFeaturesList "type-engines" enableTypeEngines)
     (withFeaturesList "tools" enableTools)
@@ -217,4 +221,4 @@ in stdenv.mkDerivation rec {
     platforms = platforms.all;
     mainProgram = desktopBinary;
   };
-}
+})

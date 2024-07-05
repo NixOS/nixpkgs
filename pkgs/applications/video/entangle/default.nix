@@ -9,7 +9,7 @@
 , perl
 , python3
 , pkgconf
-, wrapGAppsHook
+, wrapGAppsHook3
 , at-spi2-core
 , dbus
 , elfutils
@@ -69,7 +69,8 @@ stdenv.mkDerivation rec {
     perl # for pod2man and build scripts
     python3 # for build scripts
     pkgconf
-    wrapGAppsHook
+    wrapGAppsHook3
+    gobject-introspection
   ];
 
   buildInputs = [
@@ -79,7 +80,6 @@ stdenv.mkDerivation rec {
     elfutils
     gexiv2
     glib
-    gobject-introspection
     gst-plugins-base
     gstreamer
     gtk3
@@ -133,5 +133,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     platforms = platforms.all;
     maintainers = with maintainers; [ ShamrockLee ];
+    mainProgram = "entangle";
   };
 }

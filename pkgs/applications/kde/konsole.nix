@@ -13,7 +13,8 @@ mkDerivation {
     homepage = "https://apps.kde.org/konsole/";
     description = "KDE terminal emulator";
     license = with lib.licenses; [ gpl2Plus lgpl21Plus fdl12Plus ];
-    maintainers = with lib.maintainers; [ ttuegel turion ];
+    maintainers = with lib.maintainers; [ ttuegel ];
+    mainProgram = "konsole";
   };
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [

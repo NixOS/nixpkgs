@@ -1,33 +1,33 @@
-{ stdenv
-, lib
-, fetchPypi
-, buildPythonPackage
-, cmake
-, python
-, zlib
-, ncurses
-, docutils
-, pygments
-, numpy
-, scipy
-, scikit-learn
-, spdlog
-, fmt
-, rapidjson
+{
+  stdenv,
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  cmake,
+  python,
+  zlib,
+  ncurses,
+  docutils,
+  pygments,
+  numpy,
+  scipy,
+  scikit-learn,
+  spdlog,
+  fmt,
+  rapidjson,
 }:
 
 buildPythonPackage rec {
   pname = "vowpalwabbit";
-  version = "9.8.0";
+  version = "9.9.0";
+  format = "setuptools";
 
-  src = fetchPypi{
+  src = fetchPypi {
     inherit pname version;
-    hash = "sha256-s2q9K2tuILQATSjUKXe/hYdQW84bSIHwh/gfWM0/NTM=";
+    hash = "sha256-YCg2EI4rhEMwcVEzx9ES8Z3CoCddeUFVk4lZ0nuQJUc=";
   };
 
-  nativeBuildInputs = [
-    cmake
-  ];
+  nativeBuildInputs = [ cmake ];
 
   buildInputs = [
     docutils
@@ -66,10 +66,11 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    description = "Vowpal Wabbit is a fast machine learning library for online learning, and this is the python wrapper for the project.";
-    homepage    = "https://github.com/JohnLangford/vowpal_wabbit";
-    license     = licenses.bsd3;
-    broken      = stdenv.isAarch64;
+    description = "Vowpal Wabbit is a fast machine learning library for online learning, and this is the python wrapper for the project";
+    homepage = "https://github.com/JohnLangford/vowpal_wabbit";
+    license = licenses.bsd3;
     maintainers = with maintainers; [ teh ];
+    # Test again when new version is released
+    broken = stdenv.isLinux;
   };
 }

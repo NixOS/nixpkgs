@@ -1,20 +1,21 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 
-, pythonOlder
+  pythonOlder,
 
-# build
-, poetry-core
+  # build
+  poetry-core,
 
-# runtime
-, graphql-core
-, typing-extensions
+  # runtime
+  graphql-core,
+  typing-extensions,
 
-# tests
-, pytest-asyncio
-, pytest-describe
-, pytestCheckHook
+  # tests
+  pytest-asyncio,
+  pytest-describe,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -27,15 +28,19 @@ buildPythonPackage rec {
     hash = "sha256-H/HFEpg1bkgaC+AJzN/ySYMs5T8wVZwTOPIqDg0XJQw=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  # This project doesn't seem to actually need setuptools. To find out why it
+  # specifies it, follow up in:
+  #
+  #   https://github.com/graphql-python/graphql-relay-py/issues/49
+  #
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace ', "setuptools>=59,<70"' ""
+  '';
 
-  propagatedBuildInputs = [
-    graphql-core
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    typing-extensions
-  ];
+  nativeBuildInputs = [ poetry-core ];
+
+  propagatedBuildInputs = [ graphql-core ] ++ lib.optionals (pythonOlder "3.8") [ typing-extensions ];
 
   nativeCheckInputs = [
     pytest-asyncio
@@ -46,9 +51,9 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "graphql_relay" ];
 
   meta = with lib; {
-    description = "A library to help construct a graphql-py server supporting react-relay";
+    description = "Library to help construct a graphql-py server supporting react-relay";
     homepage = "https://github.com/graphql-python/graphql-relay-py/";
     license = licenses.mit;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

@@ -1,6 +1,7 @@
 { lib, stdenv, fetchurl
 , enableStatic ? stdenv.hostPlatform.isStatic
 , writeScript
+, testers
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus
@@ -8,13 +9,16 @@
 # cgit) that are needed here should be included directly in Nixpkgs as
 # files.
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xz";
-  version = "5.4.3";
+  version = "5.4.6"; # Beware of CVE-2024-3094 and related risks!!!
 
   src = fetchurl {
-    url = "https://tukaani.org/xz/xz-${version}.tar.bz2";
-    sha256 = "sha256-kkOgRZjXpwwfVnoBQ6JVWBrFxksUD9Vf1cvB4AsOb5A=";
+    url = with finalAttrs;
+      # The original URL has been taken down.
+      # "https://github.com/tukaani-project/xz/releases/download/v${version}/xz-${version}.tar.bz2";
+      "mirror://sourceforge/lzmautils/xz-${version}.tar.bz2";
+    sha256 = "sha256-kThRsnTo4dMXgeyUnxwj6NvPDs9uc6JDbcIXad0+b0k=";
   };
 
   strictDeps = true;
@@ -24,6 +28,12 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
   doCheck = true;
+
+  # this could be accomplished by updateAutotoolsGnuConfigScriptsHook, but that causes infinite recursion
+  # necessary for FreeBSD code path in configure
+  postPatch = ''
+    substituteInPlace ./build-aux/config.guess --replace-fail /usr/bin/uname uname
+  '';
 
   preCheck = ''
     # Tests have a /bin/sh dependency...
@@ -47,13 +57,16 @@ stdenv.mkDerivation rec {
       new_version="$(curl -s https://tukaani.org/xz/ |
           pcregrep -o1 '>xz-([0-9.]+)[.]tar[.]bz2</a>' |
           head -n1)"
-      update-source-version ${pname} "$new_version"
+      update-source-version ${finalAttrs.pname} "$new_version"
     '';
+    tests.pkg-config = testers.hasPkgConfigModules {
+      package = finalAttrs.finalPackage;
+    };
   };
 
   meta = with lib; {
     homepage = "https://tukaani.org/xz/";
-    description = "A general-purpose data compression software, successor of LZMA";
+    description = "General-purpose data compression software, successor of LZMA";
 
     longDescription =
       '' XZ Utils is free general-purpose data compression software with high
@@ -72,5 +85,6 @@ stdenv.mkDerivation rec {
     license = with licenses; [ gpl2Plus lgpl21Plus ];
     maintainers = with maintainers; [ sander ];
     platforms = platforms.all;
+    pkgConfigModules = [ "liblzma" ];
   };
-}
+})

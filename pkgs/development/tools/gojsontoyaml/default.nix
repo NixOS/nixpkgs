@@ -11,10 +11,11 @@ buildGoModule rec {
     sha256 = "sha256-ebxz2uTH7XwD3j6JnsfET6aCGYjvsCjow/sU9pagg50=";
   };
 
-  vendorSha256 = null;
+  vendorHash = null;
 
   meta = with lib; {
     description = "Simply tool to convert json to yaml written in Go";
+    mainProgram = "gojsontoyaml";
     homepage = "https://github.com/brancz/gojsontoyaml";
     license = licenses.mit;
     maintainers = [ maintainers.bryanasdev000 ];

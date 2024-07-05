@@ -1,22 +1,31 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , libXScrnSaver
 , makeWrapper
 , fetchurl
-, wrapGAppsHook
+, wrapGAppsHook3
 , glib
 , gtk3
 , unzip
-, atomEnv
-, libuuid
 , at-spi2-atk
-, at-spi2-core
 , libdrm
 , mesa
 , libxkbcommon
-, libappindicator-gtk3
 , libxshmfence
-, libglvnd
-, wayland
+, libGL
+, vulkan-loader
+, alsa-lib
+, cairo
+, cups
+, dbus
+, expat
+, gdk-pixbuf
+, nss
+, nspr
+, xorg
+, pango
+, systemd
+, pciutils
 }:
 
 version: hashes:
@@ -27,12 +36,13 @@ let
     description = "Cross platform desktop application shell";
     homepage = "https://github.com/electron/electron";
     license = licenses.mit;
-    maintainers = with maintainers; [ travisbhartwell manveru prusnak ];
+    mainProgram = "electron";
+    maintainers = with maintainers; [ travisbhartwell manveru ];
     platforms = [ "x86_64-darwin" "x86_64-linux" "armv7l-linux" "aarch64-linux" ]
       ++ optionals (versionAtLeast version "11.0.0") [ "aarch64-darwin" ]
       ++ optionals (versionOlder version "19.0.0") [ "i686-linux" ];
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    knownVulnerabilities = optional (versionOlder version "22.0.0") "Electron version ${version} is EOL";
+    knownVulnerabilities = optional (versionOlder version "29.0.0") "Electron version ${version} is EOL";
   };
 
   fetcher = vers: tag: hash: fetchurl {
@@ -64,13 +74,36 @@ let
     passthru.headers = headersFetcher version hashes.headers;
   };
 
-  electronLibPath = with lib; makeLibraryPath (
-    [ libuuid at-spi2-atk at-spi2-core libappindicator-gtk3 wayland ]
-    ++ optionals (versionAtLeast version "9.0.0") [ libdrm mesa ]
-    ++ optionals (versionOlder version "10.0.0") [ libXScrnSaver ]
-    ++ optionals (versionAtLeast version "11.0.0") [ libxkbcommon ]
-    ++ optionals (versionAtLeast version "12.0.0") [ libxshmfence ]
-    ++ optionals (versionAtLeast version "17.0.0") [ libglvnd ]
+  electronLibPath = lib.makeLibraryPath ([
+    alsa-lib
+    at-spi2-atk
+    cairo
+    cups
+    dbus
+    expat
+    gdk-pixbuf
+    glib
+    gtk3
+    nss
+    nspr
+    xorg.libX11
+    xorg.libxcb
+    xorg.libXcomposite
+    xorg.libXdamage
+    xorg.libXext
+    xorg.libXfixes
+    xorg.libXrandr
+    xorg.libxkbfile
+    pango
+    pciutils
+    stdenv.cc.cc.lib
+    systemd
+  ]
+    ++ lib.optionals (lib.versionAtLeast version "9.0.0") [ libdrm mesa ]
+    ++ lib.optionals (lib.versionOlder version "10.0.0") [ libXScrnSaver ]
+    ++ lib.optionals (lib.versionAtLeast version "11.0.0") [ libxkbcommon ]
+    ++ lib.optionals (lib.versionAtLeast version "12.0.0") [ libxshmfence ]
+    ++ lib.optionals (lib.versionAtLeast version "17.0.0") [ libGL vulkan-loader ]
   );
 
   linux = {
@@ -79,28 +112,34 @@ let
     nativeBuildInputs = [
       unzip
       makeWrapper
-      wrapGAppsHook
+      wrapGAppsHook3
     ];
-
-    dontWrapGApps = true; # electron is in lib, we need to wrap it manually
 
     dontUnpack = true;
     dontBuild = true;
 
     installPhase = ''
-      mkdir -p $out/lib/electron $out/bin
-      unzip -d $out/lib/electron $src
-      ln -s $out/lib/electron/electron $out/bin
+      mkdir -p $out/libexec/electron $out/bin
+      unzip -d $out/libexec/electron $src
+      ln -s $out/libexec/electron/electron $out/bin
+      chmod u-x $out/libexec/electron/*.so*
     '';
 
     postFixup = ''
       patchelf \
         --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-        --set-rpath "${atomEnv.libPath}:${electronLibPath}:$out/lib/electron" \
-        $out/lib/electron/electron \
-        ${lib.optionalString (lib.versionAtLeast version "15.0.0") "$out/lib/electron/chrome_crashpad_handler" }
+        --set-rpath "${electronLibPath}:$out/libexec/electron" \
+        $out/libexec/electron/.electron-wrapped \
+        ${lib.optionalString (lib.versionAtLeast version "15.0.0") "$out/libexec/electron/.chrome_crashpad_handler-wrapped" }
 
-      wrapProgram $out/lib/electron/electron "''${gappsWrapperArgs[@]}"
+      # patch libANGLE
+      patchelf \
+        --set-rpath "${lib.makeLibraryPath [ libGL pciutils vulkan-loader ]}" \
+        $out/libexec/electron/lib*GL*
+
+      # replace bundled vulkan-loader
+      rm "$out/libexec/electron/libvulkan.so.1"
+      ln -s -t "$out/libexec/electron" "${lib.getLib vulkan-loader}/lib/libvulkan.so.1"
     '';
   };
 

@@ -14,12 +14,19 @@ stdenv.mkDerivation rec {
   buildInputs = [ libuuid ] ++ lib.optionals stdenv.isDarwin [ Foundation readline ];
 
   patches = [ ./no-curl-ca.patch ];
-  patchPhase = ''
+  postPatch = ''
     substituteInPlace contrib/curl/premake5.lua \
       --replace "ca = nil" "ca = '${cacert}/etc/ssl/certs/ca-bundle.crt'"
   '' + lib.optionalString stdenv.isDarwin ''
     substituteInPlace premake5.lua \
-      --replace -mmacosx-version-min=10.4 -mmacosx-version-min=10.5
+      --replace -mmacosx-version-min=10.4 -mmacosx-version-min=10.5 \
+      --replace-fail '"-arch arm64"' '""' \
+      --replace-fail '"-arch x86_64"' '""'
+  '' + lib.optionalString stdenv.hostPlatform.isStatic ''
+    substituteInPlace \
+      binmodules/example/premake5.lua \
+      binmodules/luasocket/premake5.lua \
+      --replace SharedLib StaticLib
   '';
 
   buildPhase =
@@ -28,6 +35,10 @@ stdenv.mkDerivation rec {
     '' else ''
        make -f Bootstrap.mak linux
     '';
+
+  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.cc.isClang [
+    "-Wno-error=implicit-function-declaration"
+  ]);
 
   installPhase = ''
     install -Dm755 bin/release/premake5 $out/bin/premake5
@@ -38,9 +49,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://premake.github.io";
-    description = "A simple build configuration and project generation tool using lua";
+    description = "Simple build configuration and project generation tool using lua";
+    mainProgram = "premake5";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.darwin ++ lib.platforms.linux;
-    broken = stdenv.isDarwin && stdenv.isAarch64;
   };
 }

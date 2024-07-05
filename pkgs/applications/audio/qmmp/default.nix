@@ -26,11 +26,11 @@
 
 stdenv.mkDerivation rec {
   pname = "qmmp";
-  version = "2.1.4";
+  version = "2.1.8";
 
   src = fetchurl {
     url = "https://qmmp.ylsoftware.com/files/qmmp/2.1/${pname}-${version}.tar.bz2";
-    hash = "sha256-gbQkDZgyo22VTWpEixuS2WaiwwXgKDsnXbB6Q0U0OeM=";
+    hash = "sha256-hGphQ8epqym47C9doiSOQd3yc28XwV2UsNc7ivhaae4=";
   };
 
   nativeBuildInputs = [ cmake pkg-config wrapQtAppsHook ];
@@ -52,6 +52,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Qt-based audio player that looks like Winamp";
+    mainProgram = "qmmp";
     homepage = "https://qmmp.ylsoftware.com/";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;

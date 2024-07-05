@@ -1,9 +1,10 @@
-{ lib
-, backoff
-, buildPythonPackage
-, fetchFromGitHub
-, requests
-, pythonOlder
+{
+  lib,
+  backoff,
+  buildPythonPackage,
+  fetchFromGitHub,
+  requests,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -28,9 +29,7 @@ buildPythonPackage rec {
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "yalesmartalarmclient"
-  ];
+  pythonImportsCheck = [ "yalesmartalarmclient" ];
 
   meta = with lib; {
     description = "Python module to interface with Yale Smart Alarm Systems";

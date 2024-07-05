@@ -18,6 +18,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Verification script generator for Spin";
+    mainProgram = "swarm";
     homepage = "http://spinroot.com/";
     license = licenses.free;
     platforms = platforms.unix;

@@ -1,23 +1,33 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, cython
-, zfs
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch2,
+  cython_0,
+  zfs,
 }:
 
 buildPythonPackage rec {
   pname = "py-libzfs";
-  version = "22.02.4";
+  version = "24.04.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "truenas";
     repo = pname;
     rev = "TS-${version}";
-    hash = "sha256-BJG+cw07Qu4aL99pVKNd7JAgr+w/6Uv2eI46EB615/I=";
+    hash = "sha256-Uiu0RNE06++iNWUNcKpbZvreT2D7/EqHlFZJXKe3F4A=";
   };
 
-  nativeBuildInputs = [ cython ];
+  patches = [
+    (fetchpatch2 {
+      url = "https://github.com/truenas/py-libzfs/commit/b5ffe1f1d6097df6e2f5cc6dd3c968872ec60804.patch";
+      hash = "sha256-6r5hQ/o7c4vq4Tfh0l1WbeK3AuPvi+1wzkwkIn1qEes=";
+    })
+  ];
+
+  nativeBuildInputs = [ cython_0 ];
   buildInputs = [ zfs ];
 
   # Passing CFLAGS in configureFlags does not work, see https://github.com/truenas/py-libzfs/issues/107
@@ -41,4 +51,3 @@ buildPythonPackage rec {
     platforms = platforms.linux;
   };
 }
-

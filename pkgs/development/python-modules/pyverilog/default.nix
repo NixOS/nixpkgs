@@ -1,16 +1,18 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, jinja2
-, ply
-, verilog
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  jinja2,
+  ply,
+  verilog,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pyverilog";
   version = "1.3.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -36,9 +38,7 @@ buildPythonPackage rec {
       --replace "python_paths" "pythonpath"
   '';
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     homepage = "https://github.com/PyHDI/Pyverilog";

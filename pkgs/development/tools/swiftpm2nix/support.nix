@@ -1,6 +1,6 @@
 { lib, fetchgit, formats }:
-with lib;
 let
+  inherit (lib) concatStrings listToAttrs makeOverridable mapAttrsToList nameValuePair;
   json = formats.json { };
 in rec {
 
@@ -29,6 +29,7 @@ in rec {
         url = dep.packageRef.location;
         rev = dep.state.checkoutState.revision;
         sha256 = hashes.${dep.subpath};
+        fetchSubmodules = true;
       })) workspaceState.object.dependencies
     );
 

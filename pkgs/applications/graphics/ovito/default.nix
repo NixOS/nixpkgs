@@ -54,6 +54,7 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "Scientific visualization and analysis software for atomistic and particle simulation data";
+    mainProgram = "ovito";
     homepage = "https://ovito.org";
     license = with licenses;  [ gpl3Only mit ];
     maintainers = with maintainers; [ twhitehead ];

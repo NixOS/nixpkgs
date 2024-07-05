@@ -47,9 +47,8 @@ without having to know its implementation details.
 ```nix
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
+  inherit (lib) mkIf mkOption types;
   cfg = config.programs.man;
 in
 

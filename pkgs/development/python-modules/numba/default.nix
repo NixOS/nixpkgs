@@ -1,90 +1,95 @@
-{ lib
-, stdenv
-, pythonAtLeast
-, pythonOlder
-, fetchPypi
-, python
-, buildPythonPackage
-, setuptools
-, numpy
-, llvmlite
-, libcxx
-, importlib-metadata
-, substituteAll
-, runCommand
-, fetchpatch
+{
+  lib,
+  stdenv,
+  pythonAtLeast,
+  pythonOlder,
+  fetchFromGitHub,
+  python,
+  buildPythonPackage,
+  setuptools,
+  numpy,
+  llvmlite,
+  libcxx,
+  importlib-metadata,
+  substituteAll,
+  runCommand,
+  symlinkJoin,
+  writers,
+  numba,
 
-# CUDA-only dependencies:
-, addOpenGLRunpath ? null
-, cudaPackages ? {}
+  config,
 
-# CUDA flags:
-, cudaSupport ? false
+  # CUDA-only dependencies:
+  addDriverRunpath,
+  autoAddDriverRunpath,
+  cudaPackages,
+
+  # CUDA flags:
+  cudaSupport ? config.cudaSupport,
 }:
 
 let
-  inherit (cudaPackages) cudatoolkit;
-in buildPythonPackage rec {
-  version = "0.56.4";
+  cudatoolkit = cudaPackages.cuda_nvcc;
+in
+buildPythonPackage rec {
+  # Using an untagged version, with numpy 1.25 support, when it's released
+  # also drop the versioneer patch in postPatch
+  version = "0.59.1";
   pname = "numba";
-  format = "setuptools";
-  disabled = pythonOlder "3.6" || pythonAtLeast "3.11";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-Mtn+9BLIFIPX7+DOts9NMxD96LYkqc7MoA95BXOslu4=";
+  disabled = pythonOlder "3.8" || pythonAtLeast "3.13";
+
+  src = fetchFromGitHub {
+    owner = "numba";
+    repo = "numba";
+    rev = "refs/tags/${version}";
+    # Upstream uses .gitattributes to inject information about the revision
+    # hash and the refname into `numba/_version.py`, see:
+    #
+    # - https://git-scm.com/docs/gitattributes#_export_subst and
+    # - https://github.com/numba/numba/blame/5ef7c86f76a6e8cc90e9486487294e0c34024797/numba/_version.py#L25-L31
+    #
+    # Hence this hash may change if GitHub / Git will change it's behavior.
+    # Hopefully this will not happen until the next release. We are fairly sure
+    # that upstream relies on those strings to be valid, that's why we don't
+    # use `forceFetchGit = true;`.` If in the future we'll observe the hash
+    # changes too often, we can always use forceFetchGit, and inject the
+    # relevant strings ourselves, using `sed` commands, in extraPostFetch.
+    hash = "sha256-4udpgLLHbHNtxPiYVkj+gxAjTWV3ClZOv98Y313/qbc=";
   };
 
   postPatch = ''
-    substituteInPlace setup.py \
-      --replace 'max_numpy_run_version = "1.24"' 'max_numpy_run_version = "1.25"'
-    substituteInPlace numba/__init__.py \
-      --replace "elif numpy_version > (1, 23):" "elif numpy_version > (1, 24):"
+    substituteInPlace numba/cuda/cudadrv/driver.py \
+      --replace-fail \
+        "dldir = [" \
+        "dldir = [ '${addDriverRunpath.driverLink}/lib', "
   '';
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-I${lib.getDev libcxx}/include/c++/v1";
 
-  nativeBuildInputs = [
-    numpy
-  ] ++ lib.optionals cudaSupport [
-    addOpenGLRunpath
-  ];
+  nativeBuildInputs =
+    [ numpy ]
+    ++ lib.optionals cudaSupport [
+      autoAddDriverRunpath
+      cudaPackages.cuda_nvcc
+    ];
+
+  buildInputs = lib.optionals cudaSupport [ cudaPackages.cuda_cudart ];
 
   propagatedBuildInputs = [
     numpy
     llvmlite
     setuptools
-  ] ++ lib.optionals (pythonOlder "3.9") [
-    importlib-metadata
-  ] ++ lib.optionals cudaSupport [
-    cudatoolkit
-    cudatoolkit.lib
-  ];
+  ] ++ lib.optionals (pythonOlder "3.9") [ importlib-metadata ];
 
-  patches = [
-    # fix failure in test_cache_invalidate (numba.tests.test_caching.TestCache)
-    # remove when upgrading past version 0.56
-    (fetchpatch {
-      name = "fix-test-cache-invalidate-readonly.patch";
-      url = "https://github.com/numba/numba/commit/993e8c424055a7677b2755b184fc9e07549713b9.patch";
-      hash = "sha256-IhIqRLmP8gazx+KWIyCxZrNLMT4jZT8CWD3KcH4KjOo=";
-    })
-    # Backport numpy 1.24 support from https://github.com/numba/numba/pull/8691
-    ./numpy-1.24.patch
-  ] ++ lib.optionals cudaSupport [
+  patches = lib.optionals cudaSupport [
     (substituteAll {
       src = ./cuda_path.patch;
       cuda_toolkit_path = cudatoolkit;
-      cuda_toolkit_lib_path = cudatoolkit.lib;
+      cuda_toolkit_lib_path = lib.getLib cudatoolkit;
     })
   ];
-
-  postFixup = lib.optionalString cudaSupport ''
-    find $out -type f \( -name '*.so' -or -name '*.so.*' \) | while read lib; do
-      addOpenGLRunpath "$lib"
-      patchelf --set-rpath "${cudatoolkit}/lib:${cudatoolkit.lib}/lib:$(patchelf --print-rpath "$lib")" "$lib"
-    done
-  '';
 
   # run a smoke test in a temporary directory so that
   # a) Python picks up the installed library in $out instead of the build files
@@ -100,30 +105,40 @@ in buildPythonPackage rec {
     runHook postCheck
   '';
 
-  pythonImportsCheck = [
-    "numba"
-  ];
+  pythonImportsCheck = [ "numba" ];
 
+  passthru.testers.cuda-detect =
+    writers.writePython3Bin "numba-cuda-detect"
+      { libraries = [ (numba.override { cudaSupport = true; }) ]; }
+      ''
+        from numba import cuda
+        cuda.detect()
+      '';
   passthru.tests = {
     # CONTRIBUTOR NOTE: numba also contains CUDA tests, though these cannot be run in
     # this sandbox environment. Consider running similar commands to those below outside the
     # sandbox manually if you have the appropriate hardware; support will be detected
     # and the corresponding tests enabled automatically.
     # Also, the full suite currently does not complete on anything but x86_64-linux.
-    fullSuite = runCommand "${pname}-test" {} ''
+    fullSuite = runCommand "${pname}-test" { } ''
       pushd $(mktemp -d)
       # pip and python in $PATH is needed for the test suite to pass fully
-      PATH=${python.withPackages (p: [ p.numba p.pip ])}/bin:$PATH
+      PATH=${
+        python.withPackages (p: [
+          p.numba
+          p.pip
+        ])
+      }/bin:$PATH
       HOME=$PWD python -m numba.runtests -m $NIX_BUILD_CORES
       popd
       touch $out # stop Nix from complaining no output was generated and failing the build
     '';
   };
 
-  meta =  with lib; {
+  meta = with lib; {
     description = "Compiling Python code using LLVM";
     homepage = "https://numba.pydata.org/";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ fridh ];
+    mainProgram = "numba";
   };
 }

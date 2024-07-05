@@ -1,26 +1,50 @@
-{ lib, fetchFromGitHub, buildGoModule }:
+{ lib, fetchFromGitHub, buildGoModule, testers, oneshot }:
 
 buildGoModule rec {
   pname = "oneshot";
-  version = "1.5.1";
+  version = "2.1.1";
 
   src = fetchFromGitHub {
-    owner = "raphaelreyna";
+    owner = "forestnode-io";
     repo = "oneshot";
     rev = "v${version}";
-    sha256 = "sha256-5NCGKgmioTOHGJEWMIEsZlA+072XXL9L8KbEH6+caHc=";
+    hash = "sha256-eEVjdFHZyk2bSVqrMJIsgZvvLoDOira8zTzX9oDNtHM=";
   };
 
-  vendorSha256 = "sha256-rL/NWIIggvngTrdTDm1g1uH3vC55JF3cWllPc6Yb5jc=";
+  vendorHash = "sha256-TktSQMIHYXF9eyY6jyfE31WLXEq7VZU3qnVIMGjMMcA=";
 
-  doCheck = false;
+  subPackages = [ "cmd" ];
 
-  subPackages = [ "." ];
+  env.GOWORK = "off";
+
+  modRoot = "v2";
+
+  ldflags = [
+    "-s"
+    "-w"
+    "-extldflags=-static"
+    "-X github.com/forestnode-io/oneshot/v2/pkg/version.Version=${version}"
+    "-X github.com/forestnode-io/oneshot/v2/pkg/version.APIVersion=v1.0.0"
+  ];
+
+  installPhase = ''
+    runHook preInstall
+
+    install -D -m 555 -T $GOPATH/bin/cmd $out/bin/oneshot
+
+    runHook postInstall
+  '';
+
+  passthru.tests.version = testers.testVersion {
+    package = oneshot;
+    command = "oneshot version";
+  };
 
   meta = with lib; {
-    description = "A first-come-first-serve single-fire HTTP server";
-    homepage = "https://github.com/raphaelreyna/oneshot";
+    description = "First-come first-served single-fire HTTP server";
+    homepage = "https://www.oneshot.uno/";
     license = licenses.mit;
     maintainers = with maintainers; [ milibopp ];
+    mainProgram = "oneshot";
   };
 }

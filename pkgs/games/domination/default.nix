@@ -4,6 +4,7 @@
 , jdk8
 , jre
 , ant
+, stripJavaArchivesHook
 , makeWrapper
 , makeDesktopItem
 , copyDesktopItems
@@ -26,7 +27,7 @@ let
 
 in stdenv.mkDerivation {
   pname = "domination";
-  version = "1.2.7";
+  version = "1.3.1";
 
   # The .zip releases do not contain the build.xml file
   src = fetchsvn {
@@ -34,13 +35,14 @@ in stdenv.mkDerivation {
     # There are no tags in the repository.
     # Look for commits like "new version x.y.z info on website"
     # or "website update for x.y.z".
-    rev = "2261";
-    sha256 = "sha256-xvlPC7M6DaF3g2O3vQDmcdp7914qOaiikY02RTgAVkM=";
+    rev = "2538";
+    hash = "sha256-wsLBHkQc1SW+PToyCXIek6qRrRga2nLLkM+5msrnsBo=";
   };
 
   nativeBuildInputs = [
     jdk8
     ant
+    stripJavaArchivesHook
     makeWrapper
     copyDesktopItems
   ];
@@ -71,7 +73,6 @@ in stdenv.mkDerivation {
     cp -r build/game/* $out/share/domination/
 
     # Reimplement the two launchers mentioned in Unix_shortcutSpec.xml with makeWrapper
-    mkdir -p $out/bin
     makeWrapper ${jre}/bin/java $out/bin/domination \
       --chdir "$out/share/domination" \
       --add-flags "-jar $out/share/domination/Domination.jar"
@@ -83,6 +84,11 @@ in stdenv.mkDerivation {
     runHook postInstall
   '';
 
+  preFixup = ''
+    # remove extra metadata files for jar files which break stripJavaArchivesHook
+    find $out/share/domination/lib -type f -name '._*.jar' -delete
+  '';
+
   passthru.tests = {
     domination-starts = nixosTests.domination;
   };
@@ -90,7 +96,7 @@ in stdenv.mkDerivation {
   meta = with lib; {
     homepage = "https://domination.sourceforge.net/";
     downloadPage = "https://domination.sourceforge.net/download.shtml";
-    description = "A game that is a bit like the board game Risk or RisiKo";
+    description = "Game that is a bit like the board game Risk or RisiKo";
     longDescription = ''
       Domination is a game that is a bit like the well known board game of Risk
       or RisiKo. It has many game options and includes many maps.
@@ -101,7 +107,8 @@ in stdenv.mkDerivation {
       fromSource
       binaryBytecode  # source bundles dependencies as jars
     ];
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
+    mainProgram = "domination";
     maintainers = with maintainers; [ fgaz ];
     platforms = platforms.all;
   };

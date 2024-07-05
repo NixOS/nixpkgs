@@ -25,12 +25,16 @@
 , libwebpSupport ? !stdenv.hostPlatform.isMinGW, libwebp
 , libheifSupport ? true, libheif
 , potrace
+, coreutils
 , curl
 , ApplicationServices
 , Foundation
 , testers
 , imagemagick
+, nixos-icons
+, perlPackages
 , python3
+, fetchpatch
 }:
 
 assert libXtSupport -> libX11Support;
@@ -47,13 +51,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "imagemagick";
-  version = "7.1.1-12";
+  version = "7.1.1-34";
 
   src = fetchFromGitHub {
     owner = "ImageMagick";
     repo = "ImageMagick";
     rev = finalAttrs.version;
-    hash = "sha256-URwSufiTcLGWRFNOJidJyEcIPxWUSdN7yHaCiFh7GEI=";
+    hash = "sha256-rECU/dp8HQKFs1PW6QeTZIMxCIzzh1w7CckapnxdzxU=";
   };
 
   outputs = [ "out" "dev" "doc" ]; # bin/ isn't really big
@@ -62,6 +66,10 @@ stdenv.mkDerivation (finalAttrs: {
   enableParallelBuilding = true;
 
   configureFlags = [
+    # specify delegates explicitly otherwise `convert` will invoke the build
+    # coreutils for filetypes it doesn't natively support.
+    "MVDelegate=${lib.getExe' coreutils "mv"}"
+    "RMDelegate=${lib.getExe' coreutils "rm"}"
     "--with-frozenpaths"
     (lib.withFeatureAs (arch != null) "gcc-arch" arch)
     (lib.withFeature librsvgSupport "rsvg")
@@ -124,14 +132,20 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru.tests = {
-    version = testers.testVersion { package = imagemagick; };
+    version = testers.testVersion { package = finalAttrs.finalPackage; };
+    inherit nixos-icons;
+    inherit (perlPackages) ImageMagick;
     inherit (python3.pkgs) img2pdf;
-    pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+    pkg-config = testers.hasPkgConfigModules {
+      package = finalAttrs.finalPackage;
+      version = lib.head (lib.splitString "-" finalAttrs.version);
+    };
   };
 
   meta = with lib; {
     homepage = "http://www.imagemagick.org/";
-    description = "A software suite to create, edit, compose, or convert bitmap images";
+    changelog = "https://github.com/ImageMagick/Website/blob/main/ChangeLog.md";
+    description = "Software suite to create, edit, compose, or convert bitmap images";
     pkgConfigModules = [ "ImageMagick" "MagickWand" ];
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ erictapen dotlambda rhendric ];

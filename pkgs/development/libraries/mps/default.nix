@@ -1,28 +1,34 @@
-{ lib, stdenv, fetchurl, autoreconfHook, sqlite }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, sqlite
+}:
 
 stdenv.mkDerivation rec {
   pname = "mps";
-  version = "1.117.0";
+  version = "1.118.0";
 
-  src = fetchurl {
-    url    = "https://www.ravenbrook.com/project/mps/release/${version}/mps-kit-${version}.tar.gz";
-    sha256 = "04ix4l7lk6nxxk9sawpnxbybvqb82lks5606ym10bc1qbc2kqdcz";
+  src = fetchFromGitHub {
+    owner = "Ravenbrook";
+    repo = "mps";
+    rev = "refs/tags/release-${version}";
+    hash = "sha256-3ql3jWLccgnQHKf23B1en+nJ9rxqmHcWd7aBr93YER0=";
   };
+
+  postPatch = ''
+    # Disable -Werror to avoid biuld failure on fresh toolchains like
+    # gcc-13.
+    substituteInPlace code/gc.gmk --replace-fail '-Werror ' ' '
+    substituteInPlace code/gp.gmk --replace-fail '-Werror ' ' '
+    substituteInPlace code/ll.gmk --replace-fail '-Werror ' ' '
+  '';
 
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [ sqlite ];
 
-  # needed for 1.116.0 to build with gcc7
-  env.NIX_CFLAGS_COMPILE = toString [
-    "-Wno-implicit-fallthrough"
-    "-Wno-error=clobbered"
-    "-Wno-error=cast-function-type"
-  ];
-
-
   meta = {
-    broken      = true;
-    description = "A flexible memory management and garbage collection library";
+    description = "Flexible memory management and garbage collection library";
     homepage    = "https://www.ravenbrook.com/project/mps";
     license     = lib.licenses.sleepycat;
     platforms   = lib.platforms.linux;

@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, fetchpatch, texlive, bison, flex, lapack, blas
+{ stdenv, lib, fetchurl, fetchpatch, texliveSmall, bison, flex, lapack, blas
 , autoreconfHook, gmp, mpfr, pari, ntl, gsl, mpfi, ecm, glpk, nauty
 , buildPackages, readline, gettext, libpng, libao, gfortran, perl
 , enableGUI ? false, libGL, libGLU, xorg, fltk
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   patches = [
     (fetchpatch {
       name = "pari_2_11.patch";
-      url = "https://git.sagemath.org/sage.git/plain/build/pkgs/giac/patches/pari_2_11.patch?id=21ba7540d385a9864b44850d6987893dfa16bfc0";
+      url = "https://raw.githubusercontent.com/sagemath/sage/21ba7540d385a9864b44850d6987893dfa16bfc0/build/pkgs/giac/patches/pari_2_11.patch";
       sha256 = "sha256-vEo/5MNzMdYRPWgLFPsDcMT1W80Qzj4EPBjx/B8j68k=";
     })
 
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     # means some outputs differ in the make check. Patch around this:
     (fetchpatch {
       name = "nofltk-check.patch";
-      url = "https://git.sagemath.org/sage.git/plain/build/pkgs/giac/patches/nofltk-check.patch?id=7553a3c8dfa7bcec07241a07e6a4e7dcf5bb4f26";
+      url = "https://raw.githubusercontent.com/sagemath/sage/7553a3c8dfa7bcec07241a07e6a4e7dcf5bb4f26/build/pkgs/giac/patches/nofltk-check.patch";
       sha256 = "sha256-nAl5q3ufLjK3X9s0qMlGNowdRRf3EaC24eVtJABzdXY=";
     })
   ];
@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [
-    autoreconfHook texlive.combined.scheme-small bison flex
+    autoreconfHook texliveSmall bison flex
   ];
 
   # perl is only needed for patchShebangs fixup.
@@ -125,7 +125,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A free computer algebra system (CAS)";
+    description = "Free computer algebra system (CAS)";
     homepage = "https://www-fourier.ujf-grenoble.fr/~parisse/giac.html";
     license = licenses.gpl3Plus;
     platforms = platforms.linux ++ (optionals (!enableGUI) platforms.darwin);

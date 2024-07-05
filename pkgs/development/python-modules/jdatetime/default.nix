@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, six
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  six,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -17,13 +18,9 @@ buildPythonPackage rec {
     hash = "sha256-HdDuIQFgx70wACgDxEPmJgrGAuplsGVlKh1WfTv9yno=";
   };
 
-  propagatedBuildInputs = [
-    six
-  ];
+  propagatedBuildInputs = [ six ];
 
-  pythonImportsCheck = [
-    "jdatetime"
-  ];
+  pythonImportsCheck = [ "jdatetime" ];
 
   meta = with lib; {
     description = "Jalali datetime binding";

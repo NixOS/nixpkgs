@@ -1,35 +1,33 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, fetchpatch
-, h5py
-, pytestCheckHook
-, netcdf4
-, pythonOlder
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  h5py,
+  pytestCheckHook,
+  netcdf4,
+  pythonOlder,
+  setuptools,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "h5netcdf";
-  version = "1.1.0";
-  format = "setuptools";
+  version = "1.3.0";
+  format = "pyproject";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-kyw7Vzvtc3Dr/J6ALNYPGk2lI277EbNu7/iXMk12v1Y=";
+    hash = "sha256-oXHAJ9rrNLJMJKO2MEGVuOq7tvEMdIJW7Tz+GYBjg88=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   nativeBuildInputs = [
+    setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
-    h5py
-  ];
+  propagatedBuildInputs = [ h5py ];
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -38,9 +36,7 @@ buildPythonPackage rec {
 
   dontUseSetuptoolsCheck = true;
 
-  pythonImportsCheck = [
-    "h5netcdf"
-  ];
+  pythonImportsCheck = [ "h5netcdf" ];
 
   meta = with lib; {
     description = "netCDF4 via h5py";

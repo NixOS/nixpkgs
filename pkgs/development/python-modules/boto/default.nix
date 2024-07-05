@@ -1,17 +1,19 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonAtLeast
-, python
-, nose
-, mock
-, requests
-, httpretty
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonAtLeast,
+  python,
+  nose,
+  mock,
+  requests,
+  httpretty,
 }:
 
 buildPythonPackage rec {
   pname = "boto";
   version = "2.49.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -39,8 +41,14 @@ buildPythonPackage rec {
     ${python.interpreter} tests/test.py default
   '';
 
-  nativeCheckInputs = [ nose mock ];
-  propagatedBuildInputs = [ requests httpretty ];
+  nativeCheckInputs = [
+    nose
+    mock
+  ];
+  propagatedBuildInputs = [
+    requests
+    httpretty
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/boto/boto";
@@ -51,6 +59,6 @@ buildPythonPackage rec {
       future infrastructural services offered by Amazon Web
       Services.  This includes S3, SQS, EC2, among others.
     '';
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [ ];
   };
 }

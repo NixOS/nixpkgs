@@ -33,11 +33,13 @@ let
     passthru.tests.version = testers.testVersion { inherit package; };
 
     meta = with lib; {
-      description = "An interface to send PartiQL statements to Amazon Quantum Ledger Database (QLDB)";
+      description = "Interface to send PartiQL statements to Amazon Quantum Ledger Database (QLDB)";
       homepage = "https://github.com/awslabs/amazon-qldb-shell";
       license = licenses.asl20;
       maintainers = [ maintainers.terlar ];
       mainProgram = "qldb";
+      # See https://hydra.nixos.org/build/255146098/log.
+      broken = true; # Added 2024-04-06
     };
   };
 in

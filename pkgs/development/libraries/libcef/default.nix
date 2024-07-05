@@ -30,6 +30,10 @@
 }:
 
 let
+  gl_rpath = lib.makeLibraryPath [
+    stdenv.cc.cc.lib
+  ];
+
   rpath = lib.makeLibraryPath [
     glib
     nss
@@ -66,16 +70,16 @@ let
       projectArch = "x86_64";
     };
   };
-  platforms."aarch64-linux".sha256 = "1lymwdc0199nx46ah617hig85nghjwp4m97rcagfjb490rsn4kpg";
-  platforms."x86_64-linux".sha256 = "0nh3rknnirm59ppcndifpzmay16018ahp2vxmfbkyx54pl10n3d9";
+  platforms."aarch64-linux".sha256 = "16sbfk599h96wcsmpbxlwsvq0n1pssmm8dpwmjsqfrn1464dvs68";
+  platforms."x86_64-linux".sha256 = "1wa4nv28saz96kar9svdarfz6c4rnbcqz0rqxzl9zclnhfzhqdiw";
 
-  platformInfo = builtins.getAttr stdenv.targetPlatform.system platforms;
+  platformInfo = platforms.${stdenv.hostPlatform.system} or (throw "unsupported system ${stdenv.hostPlatform.system}");
 in
 stdenv.mkDerivation rec {
   pname = "cef-binary";
-  version = "114.2.12";
-  gitRevision = "7c09f21";
-  chromiumVersion = "114.0.5735.199";
+  version = "121.3.13";
+  gitRevision = "5c4a81b";
+  chromiumVersion = "121.0.6167.184";
 
   src = fetchurl {
     url = "https://cef-builds.spotifycdn.com/cef_binary_${version}+g${gitRevision}+chromium-${chromiumVersion}_${platformInfo.platformStr}_minimal.tar.bz2";
@@ -92,7 +96,11 @@ stdenv.mkDerivation rec {
     mkdir -p $out/lib/ $out/share/cef/
     cp libcef_dll_wrapper/libcef_dll_wrapper.a $out/lib/
     cp ../Release/libcef.so $out/lib/
+    cp ../Release/libEGL.so $out/lib/
+    cp ../Release/libGLESv2.so $out/lib/
     patchelf --set-rpath "${rpath}" $out/lib/libcef.so
+    patchelf --set-rpath "${gl_rpath}" $out/lib/libEGL.so
+    patchelf --set-rpath "${gl_rpath}" $out/lib/libGLESv2.so
     cp ../Release/*.bin $out/share/cef/
     cp -r ../Resources/* $out/share/cef/
     cp -r ../include $out/
