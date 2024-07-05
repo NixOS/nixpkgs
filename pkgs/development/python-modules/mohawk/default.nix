@@ -2,33 +2,36 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
   mock,
-  nose,
-  pytest,
+  pynose,
+  pytestCheckHook,
   six,
 }:
 
 buildPythonPackage rec {
   pname = "mohawk";
   version = "1.1.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "08wppsv65yd0gdxy5zwq37yp6jmxakfz4a2yx5wwq2d222my786j";
+    hash = "sha256-0qDjqxCiCcx56V4o8t1UvUpz/RmY/+J7e6D5Yra+lyM=";
   };
 
-  propagatedBuildInputs = [ six ];
+  build-system = [ setuptools ];
+
+  dependencies = [ six ];
+
+  pythonImportsCheck = [ "mohawk" ];
 
   nativeCheckInputs = [
     mock
-    nose
-    pytest
+    pynose
+    pytestCheckHook
   ];
 
-  checkPhase = ''
-    pytest mohawk/tests.py
-  '';
+  pytestFlagsArray = [ "mohawk/tests.py" ];
 
   meta = {
     description = "Python library for Hawk HTTP authorization";
