@@ -2886,6 +2886,78 @@ final: prev:
     meta.homepage = "https://github.com/nvimdev/dashboard-nvim/";
   };
 
+  ddc-filter-matcher_head = buildVimPlugin {
+    pname = "ddc-filter-matcher_head";
+    version = "2023-12-25";
+    src = fetchFromGitHub {
+      owner = "Shougo";
+      repo = "ddc-filter-matcher_head";
+      rev = "17b656e38221743290bd0cd26f5b177efe318d77";
+      sha256 = "0532x2zglfr341as2r160p673yxvch801ywxcka91fm0cb4j6gsl";
+    };
+    meta.homepage = "https://github.com/Shougo/ddc-filter-matcher_head/";
+  };
+
+  ddc-filter-sorter_rank = buildVimPlugin {
+    pname = "ddc-filter-sorter_rank";
+    version = "2024-03-01";
+    src = fetchFromGitHub {
+      owner = "Shougo";
+      repo = "ddc-filter-sorter_rank";
+      rev = "8b51a0690d030bc22777549c3944012d42fa02a3";
+      sha256 = "0ng4zjhvc1ill9bzd152kzl75rvisiayw8ihrnfjn9db27csvjmy";
+    };
+    meta.homepage = "https://github.com/Shougo/ddc-filter-sorter_rank/";
+  };
+
+  ddc-source-lsp = buildVimPlugin {
+    pname = "ddc-source-lsp";
+    version = "2024-02-25";
+    src = fetchFromGitHub {
+      owner = "Shougo";
+      repo = "ddc-source-lsp";
+      rev = "682d8551fc2b3c30412ff6f26fa57a7c8c712057";
+      sha256 = "0si2y3f4clhsxfxazhpq02cg20c0vg78fid3n2fb6qg6vgs1lhvy";
+    };
+    meta.homepage = "https://github.com/Shougo/ddc-source-lsp/";
+  };
+
+  ddc-ui-native = buildVimPlugin {
+    pname = "ddc-ui-native";
+    version = "2024-01-10";
+    src = fetchFromGitHub {
+      owner = "Shougo";
+      repo = "ddc-ui-native";
+      rev = "3f370d0da93bd47bb3a937a0c8f8193582eee8c8";
+      sha256 = "1knfvwcd7wfiy1vh2m9gwr5wh1crn60mmvpjwdqa739m8nrdfw79";
+    };
+    meta.homepage = "https://github.com/Shougo/ddc-ui-native/";
+  };
+
+  ddc-ui-pum = buildVimPlugin {
+    pname = "ddc-ui-pum";
+    version = "2023-10-07";
+    src = fetchFromGitHub {
+      owner = "Shougo";
+      repo = "ddc-ui-pum";
+      rev = "6fd98ba227889883bbf75405506c451feaae6ef8";
+      sha256 = "1yy572i672ha5zlxkda6lv5mp2y5yq0sd1ffpa6my59rzv86ixr7";
+    };
+    meta.homepage = "https://github.com/Shougo/ddc-ui-pum/";
+  };
+
+  ddc-vim = buildVimPlugin {
+    pname = "ddc.vim";
+    version = "2024-03-04";
+    src = fetchFromGitHub {
+      owner = "Shougo";
+      repo = "ddc.vim";
+      rev = "b35e779277126c124339a68a34d1a3e9277b057f";
+      sha256 = "0a6a425kqrrmhl8w4vizjchy4a69wy1b8ljgkkxh40bbiy5896dc";
+    };
+    meta.homepage = "https://github.com/Shougo/ddc.vim/";
+  };
+
   debugprint-nvim = buildVimPlugin {
     pname = "debugprint.nvim";
     version = "2024-06-14";
