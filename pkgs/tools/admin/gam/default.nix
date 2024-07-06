@@ -5,14 +5,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "gam";
-  version = "6.58";
+  version = "20221101.195551";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "GAM-team";
     repo = "GAM";
-    rev = "refs/tags/v${version}";
-    sha256 = "sha256-AIaPzYavbBlJyi9arZN8HTmUXM7Tef0SIfE07PmV9Oo=";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-aSFbwjLqSRAxbOWPW3FUCGYbGrF1zxUbug6uBCcXUn4=";
   };
 
   sourceRoot = "${src.name}/src";
