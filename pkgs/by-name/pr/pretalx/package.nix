@@ -1,7 +1,7 @@
 { lib
 , buildNpmPackage
 , gettext
-, python311
+, python3
 , fetchFromGitHub
 , fetchpatch2
 , plugins ? [ ]
@@ -9,7 +9,7 @@
 }:
 
 let
-  python = python311.override {
+  python = python3.override {
     packageOverrides = final: prev: {
       django-bootstrap4 = prev.django-bootstrap4.overridePythonAttrs (oldAttrs: rec {
         version = "3.0.0";
