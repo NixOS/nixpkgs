@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/kira64xyz/yafetch";
     description = "Yet another fetch clone written in C++";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ ivar ashley ];
+    maintainers = with maintainers; [ ashley ];
     platforms = platforms.linux;
     mainProgram = "yafetch";
   };

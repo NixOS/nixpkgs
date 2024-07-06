@@ -200,7 +200,6 @@ with lib.maintainers; {
 
   dotnet = {
     members = [
-      ivar
       mdarocha
       corngood
       ggg

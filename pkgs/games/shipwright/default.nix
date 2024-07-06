@@ -122,7 +122,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "A PC port of Ocarina of Time with modern controls, widescreen, high-resolution, and more";
     mainProgram = "soh";
     platforms = [ "x86_64-linux" ];
-    maintainers = with lib.maintainers; [ ivar j0lol ];
+    maintainers = with lib.maintainers; [ j0lol ];
     license = with lib.licenses; [
       # OTRExporter, OTRGui, ZAPDTR, libultraship
       mit

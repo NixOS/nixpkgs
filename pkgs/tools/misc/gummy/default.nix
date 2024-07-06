@@ -61,6 +61,6 @@ stdenv.mkDerivation rec {
       via backlight (currently only for embedded displays) and gamma. Multiple monitors are supported.
     '';
     license = licenses.gpl3Only;
-    maintainers = [ maintainers.ivar ];
+    maintainers = with maintainers; [ ];
   };
 }
