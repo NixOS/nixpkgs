@@ -1,20 +1,22 @@
-{ stdenv
-, lib
-, fetchFromGitLab
-, cairo
-, cargo
-, desktop-file-utils
-, gettext
-, glib
-, gtk4
-, libadwaita
-, meson
-, ninja
-, pango
-, pkg-config
-, rustPlatform
-, rustc
-, wrapGAppsHook4
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  cairo,
+  cargo,
+  desktop-file-utils,
+  gettext,
+  glib,
+  gtk4,
+  libadwaita,
+  meson,
+  ninja,
+  nix-update-script,
+  pango,
+  pkg-config,
+  rustPlatform,
+  rustc,
+  wrapGAppsHook4,
 }:
 
 stdenv.mkDerivation rec {
@@ -56,14 +58,16 @@ stdenv.mkDerivation rec {
     pango
   ];
 
-  meta = with lib; {
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
+  meta = {
     description = "Checks whether the contrast between two colors meet the WCAG requirements";
     homepage = "https://gitlab.gnome.org/World/design/contrast";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ ];
-    platforms = platforms.unix;
-    # never built on aarch64-darwin, x86_64-darwin since first introduction in nixpkgs
-    broken = stdenv.isDarwin;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ getchoo ];
     mainProgram = "contrast";
+    platforms = lib.platforms.linux;
   };
 }
