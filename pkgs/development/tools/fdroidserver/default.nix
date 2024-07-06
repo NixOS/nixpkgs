@@ -1,27 +1,28 @@
-{ lib
-, fetchFromGitLab
-, fetchPypi
-, apksigner
-, buildPythonApplication
-, python3
-, installShellFiles
-, androguard
-, babel
-, clint
-, defusedxml
-, gitpython
-, libcloud
-, mwclient
-, paramiko
-, pillow
-, pyasn1
-, pyasn1-modules
-, python-vagrant
-, pyyaml
-, qrcode
-, requests
-, ruamel-yaml
-, yamllint
+{
+  lib,
+  fetchFromGitLab,
+  fetchPypi,
+  apksigner,
+  buildPythonApplication,
+  python3,
+  installShellFiles,
+  androguard,
+  babel,
+  clint,
+  defusedxml,
+  gitpython,
+  libcloud,
+  mwclient,
+  paramiko,
+  pillow,
+  pyasn1,
+  pyasn1-modules,
+  python-vagrant,
+  pyyaml,
+  qrcode,
+  requests,
+  ruamel-yaml,
+  yamllint,
 }:
 
 buildPythonApplication rec {
@@ -57,13 +58,9 @@ buildPythonApplication rec {
       --bash completion/bash-completion
   '';
 
-  nativeBuildInputs = [
-    installShellFiles
-  ];
+  nativeBuildInputs = [ installShellFiles ];
 
-  buildInputs = [
-    babel
-  ];
+  buildInputs = [ babel ];
 
   propagatedBuildInputs = [
     androguard
@@ -100,16 +97,17 @@ buildPythonApplication rec {
   # no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "fdroidserver"
-  ];
+  pythonImportsCheck = [ "fdroidserver" ];
 
   meta = with lib; {
     homepage = "https://gitlab.com/fdroid/fdroidserver";
     changelog = "https://gitlab.com/fdroid/fdroidserver/-/blob/${version}/CHANGELOG.md";
     description = "Server and tools for F-Droid, the Free Software repository system for Android";
     license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ linsui jugendhacker ];
+    maintainers = with maintainers; [
+      linsui
+      jugendhacker
+    ];
     mainProgram = "fdroid";
   };
 }
