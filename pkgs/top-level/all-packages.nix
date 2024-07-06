@@ -2078,6 +2078,8 @@ with pkgs;
 
   vitess = callPackage ../development/tools/database/vitess { };
 
+ voicevox = callPackage ../tools/audio/voicevox { };
+
   voms = callPackage ../tools/networking/voms { };
 
   vopono = callPackage ../tools/networking/vopono { };
