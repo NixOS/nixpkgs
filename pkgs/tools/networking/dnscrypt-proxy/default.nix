@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, testers, dnscrypt-proxy }:
 
 buildGoModule rec {
   pname = "dnscrypt-proxy";
@@ -13,6 +13,10 @@ buildGoModule rec {
     repo = "dnscrypt-proxy";
     rev = version;
     sha256 = "sha256-A9Cu4wcJxrptd9CpgXw4eyMX2nmNAogYBRDeeAjpEZY=";
+  };
+
+  passthru.tests.version = testers.testVersion {
+    package = dnscrypt-proxy;
   };
 
   meta = with lib; {

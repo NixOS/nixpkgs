@@ -896,7 +896,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+  passthru.tests = {
+    pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+    version = testers.testVersion {
+      package = finalAttrs.finalPackage;
+      parameter = "-version";
+    };
+  };
 
   meta = with lib; {
     description = "Complete, cross-platform solution to record, convert and stream audio and video";
