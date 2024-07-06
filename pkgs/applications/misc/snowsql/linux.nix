@@ -1,6 +1,6 @@
 {
   lib,
-  stdevnNoCC,
+  stdenv,
   fetchurl,
   rpmextract,
   makeWrapper,
@@ -11,7 +11,7 @@
   pname,
   meta,
 }:
-stdevnNoCC.mkDerivation (finalAttrs: {
+stdenv.mkDerivation (finalAttrs: {
   inherit pname version meta;
   src = fetchurl {
     url = "https://sfc-repo.snowflakecomputing.com/snowsql/bootstrap/${lib.versions.majorMinor finalAttrs.version}/linux_x86_64/snowflake-snowsql-${finalAttrs.version}-1.x86_64.rpm";
@@ -46,6 +46,6 @@ stdevnNoCC.mkDerivation (finalAttrs: {
 
   postFixup = ''
     makeWrapper $out/lib/snowsql $out/bin/snowsql \
-      --set LD_LIBRARY_PATH "${libPath}":"$out/lib"
+      --set LD_LIBRARY_PATH "${finalAttrs.libPath}":"$out/lib"
   '';
 })
