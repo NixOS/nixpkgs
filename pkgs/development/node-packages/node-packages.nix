@@ -65675,6 +65675,24 @@ in
     bypassCache = true;
     reconstructLock = true;
   };
+  coc-dictionary = nodeEnv.buildNodePackage {
+    name = "coc-dictionary";
+    packageName = "coc-dictionary";
+    version = "1.2.2";
+    src = fetchurl {
+      url = "https://registry.npmjs.org/coc-dictionary/-/coc-dictionary-1.2.2.tgz";
+      sha512 = "FbcxcfBy+9ZJeNGJsS0c6RJf0Dyl3l5w+Nl4czcnVwXOYaNa350sqClZ7T3KP2oaLHeLVLHbbms8CDjZ3GNg0w==";
+    };
+    buildInputs = globalBuildInputs;
+    meta = {
+      description = "dictionary source for coc.nvim";
+      homepage = "https://github.com/neoclide/coc-sources#readme";
+      license = "MIT";
+    };
+    production = true;
+    bypassCache = true;
+    reconstructLock = true;
+  };
   coc-docker = nodeEnv.buildNodePackage {
     name = "coc-docker";
     packageName = "coc-docker";
@@ -65726,6 +65744,24 @@ in
     buildInputs = globalBuildInputs;
     meta = {
       description = "emmet extension for coc";
+      license = "MIT";
+    };
+    production = true;
+    bypassCache = true;
+    reconstructLock = true;
+  };
+  coc-emoji = nodeEnv.buildNodePackage {
+    name = "coc-emoji";
+    packageName = "coc-emoji";
+    version = "1.3.1";
+    src = fetchurl {
+      url = "https://registry.npmjs.org/coc-emoji/-/coc-emoji-1.3.1.tgz";
+      sha512 = "icW6VKp22YywILmJOVmKLexWhxvT1wexBM4SIyR2wT0lrlwXzojJ5vQ9zxzS+rpmzdIK8Wx47LzXdpso1bVlyA==";
+    };
+    buildInputs = globalBuildInputs;
+    meta = {
+      description = "emoji source for coc.nvim";
+      homepage = "https://github.com/neoclide/coc-sources#readme";
       license = "MIT";
     };
     production = true;
@@ -65886,6 +65922,28 @@ in
     meta = {
       description = "gopls extension for coc";
       homepage = "https://github.com/josa42/coc-go#readme";
+      license = "MIT";
+    };
+    production = true;
+    bypassCache = true;
+    reconstructLock = true;
+  };
+  coc-gocode = nodeEnv.buildNodePackage {
+    name = "coc-gocode";
+    packageName = "coc-gocode";
+    version = "1.2.4";
+    src = fetchurl {
+      url = "https://registry.npmjs.org/coc-gocode/-/coc-gocode-1.2.4.tgz";
+      sha512 = "aj5CGtUiDERlESkD4Q/nSfpusdHCdhkAeS+jVnmd82YsQaVALLj9eS6PQk+YOnhOMRXs4tFb8vRR6JLloPVopg==";
+    };
+    dependencies = [
+      sources."isexe-2.0.0"
+      sources."which-1.3.1"
+    ];
+    buildInputs = globalBuildInputs;
+    meta = {
+      description = "gocode source for coc.nvim";
+      homepage = "https://github.com/neoclide/coc-sources#readme";
       license = "MIT";
     };
     production = true;
@@ -66310,6 +66368,42 @@ in
     meta = {
       description = "coc.nvim extension for Metals, the Scala language server";
       license = "Apache-2.0";
+    };
+    production = true;
+    bypassCache = true;
+    reconstructLock = true;
+  };
+  coc-neosnippet = nodeEnv.buildNodePackage {
+    name = "coc-neosnippet";
+    packageName = "coc-neosnippet";
+    version = "1.2.2";
+    src = fetchurl {
+      url = "https://registry.npmjs.org/coc-neosnippet/-/coc-neosnippet-1.2.2.tgz";
+      sha512 = "zsK3F4xewxGupHHtn25HsYN1Zu00a4nSfXr3mjoKinbFJAFrL4nVcQWZQueRiuq5GO4mwDC+aAwFrbw8wW0F5g==";
+    };
+    buildInputs = globalBuildInputs;
+    meta = {
+      description = "neosnippet source for coc.nvim";
+      homepage = "https://github.com/neoclide/coc-sources#readme";
+      license = "MIT";
+    };
+    production = true;
+    bypassCache = true;
+    reconstructLock = true;
+  };
+  coc-omni = nodeEnv.buildNodePackage {
+    name = "coc-omni";
+    packageName = "coc-omni";
+    version = "1.2.4";
+    src = fetchurl {
+      url = "https://registry.npmjs.org/coc-omni/-/coc-omni-1.2.4.tgz";
+      sha512 = "MZXSCv9Z3BoWJfy7Wjv8f2x33ryOEIqCB7zg2E+etRWKRrSRRDSNaRP5Y3oWIChISO/yItmnBfHSKeyaRrA28g==";
+    };
+    buildInputs = globalBuildInputs;
+    meta = {
+      description = "omni source for coc.nvim";
+      homepage = "https://github.com/neoclide/coc-sources#readme";
+      license = "MIT";
     };
     production = true;
     bypassCache = true;
@@ -67096,6 +67190,24 @@ in
     bypassCache = true;
     reconstructLock = true;
   };
+  coc-syntax = nodeEnv.buildNodePackage {
+    name = "coc-syntax";
+    packageName = "coc-syntax";
+    version = "1.2.4";
+    src = fetchurl {
+      url = "https://registry.npmjs.org/coc-syntax/-/coc-syntax-1.2.4.tgz";
+      sha512 = "XRCvFL8yjPvTID0XY0Y7JjzGk9Gl2g6NOEVezWIuoIE2Dk68upjOyldoCrm2rKBQC9ebTTK7xX9ZcWyKj7+Zcg==";
+    };
+    buildInputs = globalBuildInputs;
+    meta = {
+      description = "Syntax words completion source for coc.nvim";
+      homepage = "https://github.com/neoclide/coc-sources#readme";
+      license = "MIT";
+    };
+    production = true;
+    bypassCache = true;
+    reconstructLock = true;
+  };
   coc-tabnine = nodeEnv.buildNodePackage {
     name = "coc-tabnine";
     packageName = "coc-tabnine";
@@ -67107,6 +67219,24 @@ in
     buildInputs = globalBuildInputs;
     meta = {
       description = "tabnine extension for coc.nvim";
+      license = "MIT";
+    };
+    production = true;
+    bypassCache = true;
+    reconstructLock = true;
+  };
+  coc-tag = nodeEnv.buildNodePackage {
+    name = "coc-tag";
+    packageName = "coc-tag";
+    version = "1.2.5";
+    src = fetchurl {
+      url = "https://registry.npmjs.org/coc-tag/-/coc-tag-1.2.5.tgz";
+      sha512 = "1YNb1C1h3iI5trkBn3L6fzm0yDmlt9BTOySHl651wgEyyCueZqZysIa+DHLUklZ2xgDy5szpWwUc598zKT/zlw==";
+    };
+    buildInputs = globalBuildInputs;
+    meta = {
+      description = "tag source for coc.nvim";
+      homepage = "https://github.com/neoclide/coc-sources#readme";
       license = "MIT";
     };
     production = true;
@@ -67530,6 +67660,24 @@ in
     meta = {
       description = "vimtex integration for coc.nvim";
       homepage = "https://github.com/neoclide/coc-vimtex#readme";
+      license = "MIT";
+    };
+    production = true;
+    bypassCache = true;
+    reconstructLock = true;
+  };
+  coc-word = nodeEnv.buildNodePackage {
+    name = "coc-word";
+    packageName = "coc-word";
+    version = "1.2.2";
+    src = fetchurl {
+      url = "https://registry.npmjs.org/coc-word/-/coc-word-1.2.2.tgz";
+      sha512 = "+qSB6KVXTRPeC6UDZHt8CyEO2OPVEjVda2eXqNuR8VJ7gdSCsUOkL1dorbIvQUuOVWBlN4Pdlad7UZoHSqRJvw==";
+    };
+    buildInputs = globalBuildInputs;
+    meta = {
+      description = "word source for coc.nvim";
+      homepage = "https://github.com/neoclide/coc-sources#readme";
       license = "MIT";
     };
     production = true;
