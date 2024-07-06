@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     }
     detectOcamlConflicts () {
       local conflict
-      conflict="$(ocamlfind list |& grep "has multiple definitions" || true)"
+      conflict="$(ocamlfind list |& grep "has multiple definitions" | grep -vE "bigarray|unix|str|stdlib|compiler-libs|threads|bytes|dynlink|findlib" || true)"
       if [[ -n "$conflict" ]]; then
         echo "Conflicting ocaml packages detected";
         echo "$conflict"
