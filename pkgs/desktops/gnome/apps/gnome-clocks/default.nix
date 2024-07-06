@@ -13,7 +13,6 @@
   libxml2,
   gtk4,
   glib,
-  sound-theme-freedesktop,
   gsettings-desktop-schemas,
   gnome-desktop,
   geocode-glib_2,
@@ -64,13 +63,6 @@ stdenv.mkDerivation (finalAttrs: {
       gst-plugins-base
       gst-plugins-good
     ]);
-
-  preFixup = ''
-    gappsWrapperArgs+=(
-      # Fallback sound theme
-      --prefix XDG_DATA_DIRS : "${sound-theme-freedesktop}/share"
-    )
-  '';
 
   doCheck = true;
 
