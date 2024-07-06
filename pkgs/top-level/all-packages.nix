@@ -2037,6 +2037,8 @@ with pkgs;
 
   tauon = callPackage ../applications/audio/tauon { };
 
+  teamd = callPackage ../tools/networking/teamd { };
+
   tere = callPackage ../tools/misc/tere { };
 
   termusic = darwin.apple_sdk_11_0.callPackage ../applications/audio/termusic {
