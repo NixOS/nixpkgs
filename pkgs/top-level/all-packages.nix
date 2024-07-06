@@ -4717,8 +4717,6 @@ with pkgs;
 
   clockify = callPackage ../applications/office/clockify { };
 
-  contrast = callPackage ../applications/accessibility/contrast { };
-
   cplex = callPackage ../applications/science/math/cplex (config.cplex or {});
 
   cpulimit = callPackage ../tools/misc/cpulimit { };
@@ -23368,16 +23366,10 @@ with pkgs;
   nuspell = callPackage ../development/libraries/nuspell { };
   nuspellWithDicts = dicts: callPackage ../development/libraries/nuspell/wrapper.nix { inherit dicts; };
 
-  # splicing magic
-  nv-codec-headers-versions = callPackages ../development/libraries/nv-codec-headers { };
-  inherit (nv-codec-headers-versions)
-    nv-codec-headers-9
-    nv-codec-headers-10
-    nv-codec-headers-11
-    nv-codec-headers-12
-  ;
-  # A default nv-codec-headers to make people happy
-  nv-codec-headers = nv-codec-headers-versions.nv-codec-headers-9;
+  nv-codec-headers-9 = nv-codec-headers.override { majorVersion = "9"; };
+  nv-codec-headers-10 = nv-codec-headers.override { majorVersion = "10"; };
+  nv-codec-headers-11 = nv-codec-headers.override { majorVersion = "11"; };
+  nv-codec-headers-12 = nv-codec-headers.override { majorVersion = "12"; };
 
   nvidiaCtkPackages =
     callPackage ../by-name/nv/nvidia-container-toolkit/packages.nix
@@ -31587,8 +31579,6 @@ with pkgs;
   icon-library = callPackage ../applications/graphics/icon-library { };
 
   id3v2 = callPackage ../applications/audio/id3v2 { };
-
-  identity = callPackage ../applications/graphics/identity { };
 
   ifenslave = callPackage ../os-specific/linux/ifenslave { };
 

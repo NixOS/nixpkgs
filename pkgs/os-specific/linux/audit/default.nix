@@ -8,6 +8,7 @@
 , linuxHeaders
 , python3
 , swig
+, pkgsCross
 
 # Enabling python support while cross compiling would be possible, but the
 # configure script tries executing python to gather info instead of relying on
@@ -73,6 +74,10 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   enableParallelBuilding = true;
+
+  passthru.tests = {
+    musl = pkgsCross.musl64.audit;
+  };
 
   meta = {
     homepage = "https://people.redhat.com/sgrubb/audit/";
