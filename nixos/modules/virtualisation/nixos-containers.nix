@@ -260,7 +260,10 @@ let
 
     SyslogIdentifier = "container %i";
 
-    EnvironmentFile = "-${configurationDirectory}/%i.conf";
+    EnvironmentFile = [
+      "-${configurationDirectory}/%i.conf"
+      "-${configurationDirectory}/%i.system"
+    ];
 
     Type = "notify";
 
@@ -661,6 +664,9 @@ in
               description = ''
                 Whether the container should be restarted during a NixOS
                 configuration switch if its definition has changed.
+
+                If only the container {option}`path` is changed, the container
+                is reloaded instead, to activate the new configuration.
               '';
             };
 
@@ -844,9 +850,13 @@ in
                 wantedBy = [ "machines.target" ];
                 wants = [ "network.target" ];
                 after = [ "network.target" ];
+                # restart container if any of the host side settings change
                 restartTriggers = [
-                  containerConfig.path
                   config.environment.etc."${configurationDirectoryName}/${name}.conf".source
+                ];
+                # perform a reload when only the container content changes
+                reloadTriggers = [
+                  config.environment.etc."${configurationDirectoryName}/${name}.system".source
                 ];
                 restartIfChanged = containerConfig.restartIfChanged;
               }
@@ -857,12 +867,12 @@ in
       # Generate a configuration file in /etc/nixos-containers for each
       # container so that container@.target can get the container
       # configuration.
-      environment.etc =
-        let mkPortStr = p: p.protocol + ":" + (toString p.hostPort) + ":" + (if p.containerPort == null then toString p.hostPort else toString p.containerPort);
+      environment.etc = mkMerge [
+        # file containing settings which influence the container setup or host configuration.
+        (let mkPortStr = p: p.protocol + ":" + (toString p.hostPort) + ":" + (if p.containerPort == null then toString p.hostPort else toString p.containerPort);
         in mapAttrs' (name: cfg: nameValuePair "${configurationDirectoryName}/${name}.conf"
         { text =
             ''
-              SYSTEM_PATH=${cfg.path}
               ${optionalString cfg.privateNetwork ''
                 PRIVATE_NETWORK=1
                 ${optionalString (cfg.hostBridge != null) ''
@@ -893,7 +903,14 @@ in
                 optionalString (cfg.extraFlags != [])
                   (" " + concatStringsSep " " cfg.extraFlags)}"
             '';
-        }) config.containers;
+        }) config.containers)
+        # file containing settings which influence container interal state (they dont affect the host).
+        (mapAttrs' (name: cfg: nameValuePair "${configurationDirectoryName}/${name}.system"
+        { text = ''
+            SYSTEM_PATH=${cfg.path}
+          '';
+        }) config.containers)
+      ];
 
       # Generate /etc/hosts entries for the containers.
       networking.extraHosts = concatStrings (mapAttrsToList (name: cfg: optionalString (cfg.localAddress != null)
