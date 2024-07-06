@@ -9819,6 +9819,8 @@ with pkgs;
 
   minipro = callPackage ../tools/misc/minipro { };
 
+  minipro-updater = libsForQt5.callPackage ../tools/misc/minipro-updater { };
+
   minisign = callPackage ../tools/security/minisign { };
 
   ministat = callPackage ../tools/misc/ministat { };
