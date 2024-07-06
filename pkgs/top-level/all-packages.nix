@@ -28149,6 +28149,8 @@ with pkgs;
 
   creep = callPackage ../data/fonts/creep { };
 
+  creep2 = callPackage ../data/fonts/creep2 { };
+
   crimson = callPackage ../data/fonts/crimson { };
 
   crimson-pro = callPackage ../data/fonts/crimson-pro { };
