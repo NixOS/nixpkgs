@@ -13,6 +13,7 @@
   addOpenGLRunpath,
   pythonOlder,
   symlinkJoin,
+  nix-update-script,
 }:
 
 let
@@ -101,6 +102,8 @@ buildPythonPackage rec {
   '';
 
   enableParallelBuilding = true;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "NumPy-compatible matrix library accelerated by CUDA";
