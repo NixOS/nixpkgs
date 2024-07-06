@@ -17,7 +17,8 @@ stdenv.mkDerivation rec {
     libtool
     pkg-config
   ];
-  buildInputs = [ re2 texinfo ];
+  buildInputs = [ texinfo ];
+  propagatedBuildInputs = [ re2 ];
 
   NIX_LDFLAGS="-lre2 -lpthread";
 
