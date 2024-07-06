@@ -12145,6 +12145,12 @@
     githubId = 109141;
     name = "Georges Dubus";
   };
+  MadnessASAP = {
+    email = "michael@a5ap.net";
+    github = "MadnessASAP";
+    githubId = 1624253;
+    name = "Michael 'ASAP' Weinrich";
+  };
   madonius = {
     email = "nixos@madoni.us";
     github = "madonius";
