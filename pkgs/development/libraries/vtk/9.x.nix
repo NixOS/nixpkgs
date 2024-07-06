@@ -1,5 +1,5 @@
 import ./generic.nix {
-  majorVersion = "9.2";
-  minorVersion = "6";
-  sourceSha256 = "sha256-BvyNScTlb0mMQPyzilY+2NTsMTWNAQHomI8LtNU53RI=";
+  majorVersion = "9.3";
+  minorVersion = "0";
+  sourceSha256 = "sha256-/ce5KVIls05P3dxJzQbmbpQmDLAO/uRW4PZlaMloG+k=";
 }
