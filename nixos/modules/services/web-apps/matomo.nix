@@ -237,10 +237,10 @@ in {
     in {
       ${pool} = {
         inherit user;
-        phpOptions = ''
-          error_log = 'stderr'
-          log_errors = on
-        '';
+        phpOptions = {
+          error_log = "stderr";
+          log_errors = "on";
+        };
         settings = mapAttrs (name: mkDefault) {
           "listen.owner" = socketOwner;
           "listen.group" = "root";

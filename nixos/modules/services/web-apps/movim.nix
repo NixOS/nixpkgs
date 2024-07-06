@@ -604,10 +604,10 @@ in
           user = cfg.user;
           group = cfg.group;
 
-          phpOptions = ''
-            error_log = 'stderr'
-            log_errors = on
-          '';
+          phpOptions = {
+            error_log = "stderr";
+            log_errors = "on";
+          };
 
           settings = {
             "listen.owner" = socketOwner;

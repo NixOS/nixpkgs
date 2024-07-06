@@ -288,11 +288,11 @@ in {
       inherit user group;
       inherit phpPackage;
 
-      phpOptions = ''
-        post_max_size = ${toString cfg.maxUploadSize}
-        upload_max_filesize = ${toString cfg.maxUploadSize}
+      phpOptions = {
+        post_max_size = cfg.maxUploadSize;
+        upload_max_filesize = cfg.maxUploadSize;
         max_execution_time = 600;
-      '';
+      };
 
       settings = {
         "listen.owner" = user;

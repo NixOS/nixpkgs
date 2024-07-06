@@ -133,10 +133,10 @@ in {
         "pm.min_spare_servers" = mkDefault 1;
         "pm.max_spare_servers" = mkDefault 3;
       };
-      phpOptions = ''
-        error_log = syslog
-        log_errors = on
-      '';
+      phpOptions = {
+        error_log = "syslog";
+        log_errors = "on";
+      };
     };
 
     services.nginx = {

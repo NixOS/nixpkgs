@@ -324,11 +324,11 @@ in {
     services.phpfpm.pools.bookstack = {
       inherit user;
       inherit group;
-      phpOptions = ''
-        log_errors = on
-        post_max_size = ${cfg.maxUploadSize}
-        upload_max_filesize = ${cfg.maxUploadSize}
-      '';
+      phpOptions = {
+        log_errors = "on";
+        post_max_size = cfg.maxUploadSize;
+        upload_max_filesize = cfg.maxUploadSize;
+      };
       settings = {
         "listen.mode" = "0660";
         "listen.owner" = user;
