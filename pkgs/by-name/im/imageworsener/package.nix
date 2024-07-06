@@ -1,20 +1,24 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
+  autoreconfHook,
   zlib,
   libpng,
   libjpeg,
   libwebp,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "imageworsener";
   version = "1.3.5";
 
-  src = fetchurl {
-    url = "https://entropymine.com/${finalAttrs.pname}/${finalAttrs.pname}-${finalAttrs.version}.tar.gz";
-    sha256 = "sha256-p/u2XFreZ9nrwy5SxYmIpPmGuswAjJAh/ja1mEZtXI0=";
+  src = fetchFromGitHub {
+    owner = "jsummers";
+    repo = finalAttrs.pname;
+    rev = finalAttrs.version;
+    hash = "sha256-1f5x8Ph994Kkjo38NudXL+UF0fpR8BmZfaGPxc8RENU=";
   };
 
   postPatch = ''
@@ -25,6 +29,8 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/share/doc/imageworsener
     cp readme.txt technical.txt $out/share/doc/imageworsener
   '';
+
+  nativeBuildInputs = [ autoreconfHook ];
 
   buildInputs = [
     zlib
@@ -41,6 +47,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   __structuredAttrs = true;
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "Raster image scaling and processing utility";
     longDescription = ''
@@ -51,7 +59,8 @@ stdenv.mkDerivation (finalAttrs: {
       fast or memory-efficient as some utilities, but it’s very accurate.
     '';
     homepage = "https://entropymine.com/imageworsener/";
-    changelog = "https://github.com/jsummers/${finalAttrs.pname}/blob/${finalAttrs.version}/changelog.txt";
+    changelog = "${finalAttrs.src.meta.homepage}/blob/${finalAttrs.src.rev}/changelog.txt";
+    sourceProvenance = [ lib.sourceTypes.fromSource ];
     license = lib.licenses.mit;
     maintainers = [
       lib.maintainers.emily
