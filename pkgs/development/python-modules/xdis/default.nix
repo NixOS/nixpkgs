@@ -22,6 +22,8 @@ buildPythonPackage rec {
     hash = "sha256-KgKTO99T2/be1sBs5rY3Oy7/Yl9WGgdG3hqqkZ7D7ZY=";
   };
 
+  patches = [ ./update-magics.patch ];
+
   propagatedBuildInputs = [
     click
     six
