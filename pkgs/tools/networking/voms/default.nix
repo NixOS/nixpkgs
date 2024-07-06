@@ -70,17 +70,6 @@ stdenv.mkDerivation (finalAttrs: {
     "--sysconfdir=${placeholder "out"}/etc"
   ];
 
-  # include/voms/voms_api.h surprisingly expects config.h
-  # presented in the same directory, which does't get installed
-  # automatically. Here we manually install it to workaround that.
-  # See https://github.com/italiangrid/voms/issues/123
-  postInstall = ''
-    mkdir -p "''${!outputDev}/include/voms"
-    if [[ ! -e "''${!outputDev}/include/voms/config.h" ]]; then
-      install -m 644 src/autogen/config.h "''${!outputDev}/include/voms"
-    fi
-  '';
-
   postFixup = lib.optionalString (externalEtc != null) ''
     moveToOutput etc "$etc"
     ln -s ${lib.escapeShellArg externalEtc} "$out/etc"
