@@ -3,6 +3,7 @@
   fetchFromGitLab,
   fetchPypi,
   apksigner,
+  appdirs,
   buildPythonApplication,
   python3,
   installShellFiles,
@@ -13,6 +14,7 @@
   gitpython,
   libcloud,
   mwclient,
+  oscrypto,
   paramiko,
   pillow,
   pyasn1,
@@ -22,26 +24,28 @@
   qrcode,
   requests,
   ruamel-yaml,
+  sdkmanager,
   yamllint,
 }:
 
 let
-  version = "unstable-2023-10-23";
+  version = "2.3a1";
 in
 buildPythonApplication {
   pname = "fdroidserver";
   inherit version;
 
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitLab {
     owner = "fdroid";
     repo = "fdroidserver";
-    rev = "f4b10cf83935432d19948dac669964384bef0728";
-    hash = "sha256-GmR6Td5pScwEKK9W6m26xQV4XxBdZ7frN2UvwUGY4Dw=";
+    rev = "2.3a1";
+    hash = "sha256-K6P5yGx2ZXHJZ/VyHTbQAObsvcfnOatrpwiW+ixLTuA=";
   };
 
   pythonRelaxDeps = [
+    "androguard"
     "pyasn1"
     "pyasn1-modules"
   ];
@@ -68,11 +72,13 @@ buildPythonApplication {
 
   propagatedBuildInputs = [
     androguard
+    appdirs
     clint
     defusedxml
     gitpython
     libcloud
     mwclient
+    oscrypto
     paramiko
     pillow
     pyasn1
@@ -88,6 +94,7 @@ buildPythonApplication {
         hash = "sha256-i3zml6LyEnUqNcGsQURx3BbEJMlXO+SSa1b/P10jt68=";
       };
     }))
+    sdkmanager
     yamllint
   ];
 
