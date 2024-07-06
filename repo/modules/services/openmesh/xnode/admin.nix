@@ -53,10 +53,10 @@ in
       wants = [ "network-online.target" ];
 
       serviceConfig = {
-        ExecStart = ''${lib.getExe cfg.package} -p ${cfg.stateDir} ${cfg.remoteDir} ${toString cfg.searchInterval}''; 
-        ExecStartPre = ''-${lib.getExe pkgs.git} clone --branch dev https://github.com/openmesh-network/xnodeos ${cfg.stateDir}/xnodeos'';
-        ExecCondition = ''-${lib.getExe pkgs.git} pull --branch dev https://github.com/openmesh-network/xnodeos ${cfg.stateDir}/xnodeos'';
+        ExecStartPre = ''/bin/sh -c 'test -d ${cfg.stateDir}/xnodeos/.git || ${lib.getExe pkgs.git} clone --branch feature/xnode-admin-service https://github.com/openmesh-network/xnodeos ${cfg.stateDir}/xnodeos' '';
+        ExecStart = ''${lib.getExe cfg.package} --remote ${cfg.remoteDir} ${cfg.stateDir}''; 
         Restart = "always";
+        RestartSec = 5;
         WorkingDirectory = cfg.stateDir;
         StateDirectory = "openmesh-xnode-admin";
         StateDirectoryMode = "0775";
