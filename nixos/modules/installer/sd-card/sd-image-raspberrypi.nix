@@ -26,6 +26,9 @@
 
         [pi1]
         kernel=u-boot-rpi1.bin
+
+        [all]
+        ${config.sdImage.extraRpiFirmwareConfig}
       '';
       in ''
         (cd ${pkgs.raspberrypifw}/share/raspberrypi/boot && cp bootcode.bin fixup*.dat start*.elf $NIX_BUILD_TOP/firmware/)
