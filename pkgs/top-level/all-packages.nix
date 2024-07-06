@@ -25178,6 +25178,8 @@ with pkgs;
     ];
     # Override this attribute to register additional libraries.
     packages = [];
+    rprofileSite = "";
+    renvironSite = "";
   };
 
   radianWrapper = callPackage ../development/r-modules/wrapper-radian.nix {
