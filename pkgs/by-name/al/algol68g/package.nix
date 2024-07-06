@@ -17,7 +17,9 @@ stdenv.mkDerivation (finalAttrs: {
   version = "3.4.2";
 
   src = fetchurl {
-    url = "https://jmvdveer.home.xs4all.nl/algol68g-${finalAttrs.version}.tar.gz";
+    # Note: the original source (https://jmvdveer.home.xs4all.nl/algol68g-VERSION.tar.gz)
+    # doesn't keep outdated versions of the source code
+    url = "https://archive.org/download/algol68g-${finalAttrs.version}/algol68g-${finalAttrs.version}.tar.gz";
     hash = "sha256-hKiRMU98sZhGgHhjgtwUNSIv2iPgb4T+dgYw58IGK8Q=";
   };
 
@@ -41,7 +43,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   postInstall = let
     pdfdoc = fetchurl {
-      url = "https://jmvdveer.home.xs4all.nl/learning-algol-68-genie.pdf";
+      # Note: the original source (https://jmvdveer.home.xs4all.nl/learning-algol-68-genie.pdf)
+      # doesn't have a stable link to documentation
+      url = "https://archive.org/download/algol68g-${finalAttrs.version}/learning-algol-68-genie.pdf";
       hash = "sha256-QCwn1e/lVfTYTeolCFErvfMhvwCgsBnASqq2K+NYmlU=";
     };
   in lib.optionalString withPDFDoc
