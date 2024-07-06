@@ -43,6 +43,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Raster image scaling and processing utility";
+    longDescription = ''
+      ImageWorsener is a cross-platform command-line utility and library for
+      image scaling and other image processing. It has full support for PNG,
+      JPEG, BMP formats, experimental support for WebP, read-only support for
+      GIF, and limited support for some other image formats. It’s not as
+      fast or memory-efficient as some utilities, but it’s very accurate.
+    '';
     homepage = "https://entropymine.com/imageworsener/";
     changelog = "https://github.com/jsummers/${finalAttrs.pname}/blob/${finalAttrs.version}/changelog.txt";
     license = lib.licenses.mit;
