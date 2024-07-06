@@ -4,6 +4,7 @@
 , nix-update-script
 , imagemagick
 , makeWrapper
+, installShellFiles
 }:
 let
   version = "3.0.0-beta";
@@ -22,7 +23,15 @@ rustPlatform.buildRustPackage {
 
   cargoHash = "sha256-dkHS8EOzmn5VLiKP3SMT0ZGAsk2wzvQeioG7NuGGUzA=";
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper installShellFiles ];
+
+  postInstall = ''
+    installManPage man/wallust*
+    installShellCompletion --cmd wallust \
+      --bash completions/wallust.bash \
+      --zsh completions/_wallust \
+      --fish completions/wallust.fish
+  '';
 
   postFixup = ''
     wrapProgram $out/bin/wallust \
