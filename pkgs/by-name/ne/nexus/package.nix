@@ -1,12 +1,19 @@
-{ lib, stdenv, fetchurl, makeWrapper, jre_headless, gawk }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  makeWrapper,
+  jre_headless,
+  gawk,
+}:
 
 stdenv.mkDerivation rec {
   pname = "nexus";
-  version = "3.68.1-02";
+  version = "3.69.0-02";
 
   src = fetchurl {
     url = "https://download.sonatype.com/nexus/3/nexus-${version}-unix.tar.gz";
-    hash = "sha256-VHS4KDFgU3djteDzDAe43TZIwRG/8bb7u3usoOCJS5M=";
+    hash = "sha256-7sgLPuM93mFEPlTd3qJY+FGVHErvgcTGJWwSBcqBgWI=";
   };
 
   preferLocalBuild = true;
@@ -15,13 +22,16 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ makeWrapper ];
 
-  patches = [ ./nexus-bin.patch ./nexus-vm-opts.patch ];
+  patches = [
+    ./nexus-bin.patch
+    ./nexus-vm-opts.patch
+  ];
 
   postPatch = ''
     substituteInPlace bin/nexus.vmoptions \
-      --replace ../sonatype-work /var/lib/sonatype-work \
-      --replace etc/karaf $out/etc/karaf \
-      --replace =. =$out
+      --replace-fail ../sonatype-work /var/lib/sonatype-work \
+      --replace-fail etc/karaf $out/etc/karaf \
+      --replace-fail =. =$out
   '';
 
   installPhase = ''
@@ -39,12 +49,17 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Repository manager for binary software components";
     homepage = "https://www.sonatype.com/products/sonatype-nexus-oss";
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    license = licenses.epl10;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ aespinosa ironpinguin zaninime ];
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    license = lib.licenses.epl10;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [
+      aespinosa
+      ironpinguin
+      luftmensch-luftmensch
+      zaninime
+    ];
   };
 }

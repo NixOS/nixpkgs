@@ -13160,8 +13160,6 @@ with pkgs;
 
   staticjinja = with python3.pkgs; toPythonApplication staticjinja;
 
-  stevenblack-blocklist  = callPackage ../tools/networking/stevenblack-blocklist { };
-
   stress = callPackage ../tools/system/stress { };
 
   stress-ng = callPackage ../tools/system/stress-ng { };
@@ -18995,10 +18993,6 @@ with pkgs;
   nix-bisect = callPackage ../development/tools/misc/nix-bisect { };
 
   nix-build-uncached = callPackage ../development/tools/misc/nix-build-uncached { };
-
-  nexus = callPackage ../development/tools/repository-managers/nexus {
-    jre_headless = jre8_headless;
-  };
 
   nexusmods-app-unfree = callPackage ../by-name/ne/nexusmods-app/package.nix {
     enableUnfree = true;

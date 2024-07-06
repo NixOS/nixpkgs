@@ -5,6 +5,7 @@
   buildPythonPackage,
   docstring-parser,
   fetchFromGitHub,
+  jiter,
   openai,
   poetry-core,
   pydantic,
@@ -37,14 +38,15 @@ buildPythonPackage rec {
   pythonRelaxDeps = [
     "docstring-parser"
     "pydantic"
+    "jiter"
   ];
 
   build-system = [ poetry-core ];
 
-
   dependencies = [
     aiohttp
     docstring-parser
+    jiter
     openai
     pydantic
     rich
@@ -73,7 +75,6 @@ buildPythonPackage rec {
   disabledTestPaths = [
     # Tests require OpenAI API key
     "tests/test_distil.py"
-    "tests/test_new_client.py"
     "tests/llm/"
   ];
 
