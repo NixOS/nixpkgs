@@ -233,11 +233,6 @@ runTests {
     ];
   };
 
-  testFix = {
-    expr = fix (x: {a = if x ? a then "a" else "b";});
-    expected = {a = "a";};
-  };
-
   testComposeExtensions = {
     expr = let obj = makeExtensible (self: { foo = self.bar; });
                f = self: super: { bar = false; baz = true; };
@@ -1236,6 +1231,13 @@ runTests {
   testAttrsToListsCanDealWithFunctions = testingEval (
     attrsToList { someFunc= a: a + 1;}
   );
+
+# FIXED-POINTS
+
+  testFix = {
+    expr = fix (x: {a = if x ? a then "a" else "b";});
+    expected = {a = "a";};
+  };
 
 # GENERATORS
 # these tests assume attributes are converted to lists
