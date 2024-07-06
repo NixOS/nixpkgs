@@ -5,6 +5,7 @@ with lib;
 let
   cfg = config.services.gogs;
   opt = options.services.gogs;
+  sslMode = if cfg.database.type == "postgres" then "SSL_MODE = disable" else "";
   configFile = pkgs.writeText "app.ini" ''
     BRAND_NAME = ${cfg.appName}
     RUN_USER = ${cfg.user}
@@ -17,6 +18,7 @@ let
     USER = ${cfg.database.user}
     PASSWORD = #dbpass#
     PATH = ${cfg.database.path}
+    ${sslMode}
 
     [repository]
     ROOT = ${cfg.repositoryRoot}
