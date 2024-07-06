@@ -1,52 +1,47 @@
-{ stdenv, lib, fetchFromGitHub, runCommandLocal, mbrola-voices }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  mbrola-voices,
+  runCommandLocal,
+}:
 
-let
+stdenv.mkDerivation (finalAttrs: {
   pname = "mbrola";
   version = "3.3";
 
+  src = fetchFromGitHub {
+    owner = "numediart";
+    repo = "MBROLA";
+    rev = finalAttrs.version;
+    hash = "sha256-/iOKBnQM17RwFNt/CBZ6gPduNvqJ2DAOyIsJ/c1+BvE=";
+  };
+
+  makeFlags = [
+    # required for cross compilation
+    "CC=${stdenv.cc.targetPrefix}cc"
+  ];
+
+  installPhase = ''
+    runHook preInstall
+    install -D Bin/mbrola $out/bin/mbrola
+    runHook postInstall
+  '';
+
+  passthru = {
+    combined = runCommandLocal "mbrola-combined-${finalAttrs.version}" { inherit (finalAttrs) meta; } ''
+      mkdir -p "$out/"
+      ln -s '${mbrola-voices}/share' "$out/"
+      ln -s '${finalAttrs.finalPackage}/bin' "$out/"
+    '';
+  };
+
   meta = with lib; {
-    license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ davidak ];
-    platforms = platforms.all;
     description = "Speech synthesizer based on the concatenation of diphones";
     homepage = "https://github.com/numediart/MBROLA";
+    license = licenses.agpl3Plus;
+    maintainers = with maintainers; [ davidak ];
+    mainProgram = "mbrola";
+    platforms = platforms.all;
   };
-
-  bin = stdenv.mkDerivation {
-    pname = "${pname}-bin";
-    inherit version;
-
-    src = fetchFromGitHub {
-      owner = "numediart";
-      repo = "MBROLA";
-      rev = version;
-      sha256 = "1w86gv6zs2cbr0731n49z8v6xxw0g8b0hzyv2iqb9mqcfh38l8zy";
-    };
-
-    # required for cross compilation
-    makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
-
-    installPhase = ''
-      runHook preInstall
-      install -D Bin/mbrola $out/bin/mbrola
-      rm -rf $out/share/mbrola/voices/*
-      runHook postInstall
-    '';
-
-    meta = meta // {
-      description = "Speech synthesizer based on the concatenation of diphones (binary only)";
-    };
-  };
-
-in
-  runCommandLocal
-    "${pname}-${version}"
-    {
-      inherit pname version meta;
-    }
-    ''
-      mkdir -p "$out/share/mbrola"
-      ln -s '${mbrola-voices}/share' "$out/share"
-      ln -s '${bin}/bin' "$out/"
-    ''
-
+})

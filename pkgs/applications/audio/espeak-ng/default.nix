@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     # Hardcode correct mbrola paths.
     (substituteAll {
       src = ./mbrola.patch;
-      inherit mbrola;
+      mbrola = mbrola.combined;
     })
   ];
 
