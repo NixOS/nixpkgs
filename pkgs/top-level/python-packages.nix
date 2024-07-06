@@ -6392,6 +6392,8 @@ self: super: with self; {
 
   jupytext = callPackage ../development/python-modules/jupytext { };
 
+  jupyterthemes = callPackage ../development/python-modules/jupyterthemes { };
+
   justbackoff = callPackage ../development/python-modules/justbackoff { };
 
   justbases = callPackage ../development/python-modules/justbases { };
