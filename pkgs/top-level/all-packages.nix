@@ -35964,6 +35964,8 @@ with pkgs;
 
   freenukum = callPackage ../games/freenukum { };
 
+  fs2-knossos = python3Packages.callPackage ../games/fs2-knossos { };
+
   inherit (callPackages ../games/fteqw {})
     fteqw
     fteqw-dedicated
