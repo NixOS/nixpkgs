@@ -366,3 +366,19 @@ systemd-tmpfiles --create
 # Note: Do this for all certs that share the same account email address
 systemctl start acme-example.com.service
 ```
+
+
+## Delay renewing certificates until time synchronization is finished {#module-security-acme-timesync}
+
+If your machine doesn't have a correct date set at boot, the certificate renewal
+might fail.
+You can fix this issue by configuring the acme services to wait until systemd-timesyncd
+finishes synchronizing the time.
+
+```
+# install and enable systemd-time-wait-sync.service
+systemd.additionalUpstreamSystemUnits = ["systemd-time-wait-sync.service"];
+systemd.services.systemd-time-wait-sync.wantedBy = ["multi-user.target"];
+# configure the acme services to wait for systemd-time-wait-sync.service
+security.acme.defaults.after = ["time-sync.target"]
+```
