@@ -11,8 +11,10 @@
 , common-updater-scripts
 }:
 
+{ sources, version, baseline ? null }:
+
 stdenvNoCC.mkDerivation rec {
-  version = "1.1.17";
+  inherit version;
   pname = "bun";
 
   src = passthru.sources.${stdenvNoCC.hostPlatform.system} or (throw "Unsupported system: ${stdenvNoCC.hostPlatform.system}");
@@ -48,24 +50,8 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   passthru = {
-    sources = {
-      "aarch64-darwin" = fetchurl {
-        url = "https://github.com/oven-sh/bun/releases/download/bun-v${version}/bun-darwin-aarch64.zip";
-        hash = "sha256-aULgRZ9evcGUhKJ6slLJOg3IEzUeNfIkJF8RDP3YUlo=";
-      };
-      "aarch64-linux" = fetchurl {
-        url = "https://github.com/oven-sh/bun/releases/download/bun-v${version}/bun-linux-aarch64.zip";
-        hash = "sha256-eytY45LcgeI9m9amHd8hfE7Lz7ET7p19h37Bi4yUHBM=";
-      };
-      "x86_64-darwin" = fetchurl {
-        url = "https://github.com/oven-sh/bun/releases/download/bun-v${version}/bun-darwin-x64.zip";
-        hash = "sha256-bF/yg7C2tsdPjotC4DKISZRWEUUmUha22tWJynearEM=";
-      };
-      "x86_64-linux" = fetchurl {
-        url = "https://github.com/oven-sh/bun/releases/download/bun-v${version}/bun-linux-x64.zip";
-        hash = "sha256-pRggu/l0HgCk73kX7W43qKFVE13/7pP4P9bTiqyK2Yk=";
-      };
-    };
+    inherit sources;
+    inherit baseline;
     updateScript = writeShellScript "update-bun" ''
       set -o errexit
       export PATH="${lib.makeBinPath [ curl jq common-updater-scripts ]}"
