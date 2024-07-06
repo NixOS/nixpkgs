@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "tuf";
-  version = "3.1.1";
+  version = "5.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -21,17 +21,12 @@ buildPythonPackage rec {
     owner = "theupdateframework";
     repo = "python-tuf";
     rev = "refs/tags/v${version}";
-    hash = "sha256-HiF/b6aOhDhhQqYx/bjMXHABxmAJY4vkLlTheiL8zEo=";
+    hash = "sha256-dzFnPfZ5uT+o7efDTpDpXZI+jWg/pvXCReuLQH/oOxQ=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "hatchling==" "hatchling>="
-  '';
+  build-system = [ hatchling ];
 
-  nativeBuildInputs = [ hatchling ];
-
-  propagatedBuildInputs = [
+  dependencies = [
     requests
     securesystemslib
   ] ++ securesystemslib.optional-dependencies.pynacl ++ securesystemslib.optional-dependencies.crypto;
