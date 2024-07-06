@@ -8695,6 +8695,8 @@ with pkgs;
 
   mac-fdisk = callPackage ../tools/system/mac-fdisk { };
 
+  mac-telnet = callPackage ../tools/networking/mac-telnet { };
+
   partclone = callPackage ../tools/backup/partclone { };
 
   partimage = callPackage ../tools/backup/partimage { };
