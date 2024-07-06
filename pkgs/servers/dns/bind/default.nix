@@ -22,7 +22,7 @@
 , gitUpdater
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: rec {
   pname = "bind";
   version = "9.18.27";
 
@@ -102,6 +102,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     tests = {
+      withCheck = finalAttrs.finalPackage.overrideAttrs { doCheck = true; };
       inherit (nixosTests) bind;
       prometheus-exporter = nixosTests.prometheus-exporters.bind;
       kubernetes-dns-single-node = nixosTests.kubernetes.dns-single-node;
@@ -127,4 +128,4 @@ stdenv.mkDerivation rec {
 
     outputsToInstall = [ "out" "dnsutils" "host" ];
   };
-}
+})
