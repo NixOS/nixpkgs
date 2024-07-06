@@ -10822,6 +10822,8 @@ self: super: with self; {
 
   pyaussiebb = callPackage ../development/python-modules/pyaussiebb { };
 
+  pyautocorpus = callPackage ../development/python-modules/pyautocorpus { };
+
   pyautogui = callPackage ../development/python-modules/pyautogui { };
 
   pyavm = callPackage ../development/python-modules/pyavm { };
