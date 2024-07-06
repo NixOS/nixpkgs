@@ -7,6 +7,7 @@
   chardet,
   cssselect,
   lxml,
+  lxml-html-clean,
   timeout-decorator,
 }:
 
@@ -26,6 +27,7 @@ buildPythonPackage rec {
     chardet
     cssselect
     lxml
+    lxml-html-clean
   ];
 
   postPatch = ''

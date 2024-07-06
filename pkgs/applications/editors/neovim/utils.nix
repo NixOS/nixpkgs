@@ -245,12 +245,36 @@ let
         fi
       '');
 
+  /*
+    Fork of vimUtils.packDir that additionnally generates a propagated-build-inputs-file that
+    can be used by the lua hooks to generate a proper LUA_PATH
+
+    Generates a packpath folder as expected by vim
+       Example:
+       packDir ( {myVimPackage = { start = [ vimPlugins.vim-fugitive ]; opt = []; }; })
+       => "/nix/store/xxxxx-pack-dir"
+  */
+  packDir = packages:
+  let
+    rawPackDir = vimUtils.packDir packages;
+
+  in
+    rawPackDir.override ({
+    postBuild = ''
+      mkdir $out/nix-support
+      for i in $(find -L $out -name propagated-build-inputs ); do
+        cat "$i" >> $out/nix-support/propagated-build-inputs
+      done
+      '';});
+
+
 in
 {
   inherit makeNeovimConfig;
   inherit generateProviderRc;
   inherit legacyWrapper;
   inherit grammarToPlugin;
+  inherit packDir;
 
   inherit buildNeovimPlugin;
   buildNeovimPluginFrom2Nix = lib.warn "buildNeovimPluginFrom2Nix was renamed to buildNeovimPlugin" buildNeovimPlugin;

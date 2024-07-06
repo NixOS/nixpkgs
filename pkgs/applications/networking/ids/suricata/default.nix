@@ -125,7 +125,8 @@ stdenv.mkDerivation rec {
     sed -i 's|${builtins.storeDir}/\(.\{8\}\)[^-]*-|${builtins.storeDir}/\1...-|g' ./src/build-info.h
   '';
 
-  hardeningDisable = [ "stackprotector" ];
+  # zerocallusedregs interferes during BPF compilation; TODO: perhaps improve
+  hardeningDisable = [ "stackprotector" "zerocallusedregs" ];
 
   installFlags = [
     "e_datadir=\${TMPDIR}"

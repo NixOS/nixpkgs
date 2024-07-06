@@ -5,7 +5,6 @@
   fetchPypi,
   pdfminer-six,
   pythonOlder,
-  pythonRelaxDepsHook,
   setuptools,
   wand,
 }:
@@ -24,7 +23,6 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     setuptools
-    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [

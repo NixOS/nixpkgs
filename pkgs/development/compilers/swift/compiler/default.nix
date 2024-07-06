@@ -10,7 +10,7 @@
 , pkg-config
 , clang
 , bintools
-, python3
+, python3Packages
 , git
 , fetchpatch
 , makeWrapper
@@ -42,6 +42,7 @@
 }:
 
 let
+  python3 = python3Packages.python.withPackages (p: [ p.setuptools ]); # python 3.12 compat.
 
   inherit (stdenv) hostPlatform targetPlatform;
 

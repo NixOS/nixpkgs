@@ -417,6 +417,9 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
     (enableFeature enableGIL "gil")
   ] ++ optionals enableOptimizations [
     "--enable-optimizations"
+  ] ++ optionals (stdenv.isDarwin && configd == null) [
+    # Make conditional on Darwin for now to avoid causing Linux rebuilds.
+    "py_cv_module__scproxy=n/a"
   ] ++ optionals (sqlite != null) [
     "--enable-loadable-sqlite-extensions"
   ] ++ optionals (libxcrypt != null) [

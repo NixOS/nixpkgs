@@ -1,8 +1,9 @@
 { stdenv
 , fetchurl
+, fetchpatch2
 , lib
 , pam
-, python3
+, python311
 , libxslt
 , perl
 , perlPackages
@@ -244,6 +245,11 @@ in stdenv.mkDerivation (finalAttrs: {
     # - the remaining tests have notes in the patch
     # FIXME: get rid of this ASAP
     ./skip-broken-tests.patch
+    (fetchpatch2 {
+      name = "icu74-compat.patch";
+      url = "https://gitlab.archlinux.org/archlinux/packaging/packages/libreoffice-fresh/-/raw/main/libreoffice-7.5.8.2-icu-74-compatibility.patch?ref_type=heads.patch";
+      hash = "sha256-OGBPIVQj8JTYlkKywt4QpH7ULAzKmet5jTLztGpIS0Y=";
+    })
   ] ++ lib.optionals (variant == "still") [
     # Remove build config to reduce the amount of `-dev` outputs in the
     # runtime closure. This behavior was introduced by upstream in commit
@@ -268,6 +274,9 @@ in stdenv.mkDerivation (finalAttrs: {
     substituteInPlace configure.ac --replace-fail \
       'GPGMEPP_CFLAGS=-I/usr/include/gpgme++' \
       'GPGMEPP_CFLAGS=-I${gpgme.dev}/include/gpgme++'
+
+    # Fix for Python 3.12
+    substituteInPlace configure.ac --replace-fail distutils.sysconfig sysconfig
   '';
 
   nativeBuildInputs = [
@@ -372,7 +381,7 @@ in stdenv.mkDerivation (finalAttrs: {
     perl
     poppler
     postgresql
-    python3
+    python311
     sane-backends
     unixODBC
     unzip

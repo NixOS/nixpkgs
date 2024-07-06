@@ -17,6 +17,7 @@
 , pythonImportsCheckHook
 , pythonNamespacesHook
 , pythonOutputDistHook
+, pythonRelaxDepsHook
 , pythonRemoveBinBytecodeHook
 , pythonRemoveTestsDirHook
 , pythonRuntimeDepsCheckHook
@@ -252,6 +253,8 @@ let
       #    because the hook that checks for conflicts uses setuptools.
       #
       pythonCatchConflictsHook
+    ] ++ optionals (attrs ? pythonRelaxDeps || attrs ? pythonRemoveDeps) [
+      pythonRelaxDepsHook
     ] ++ optionals removeBinBytecode [
       pythonRemoveBinBytecodeHook
     ] ++ optionals (hasSuffix "zip" (attrs.src.name or "")) [

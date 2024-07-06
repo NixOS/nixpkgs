@@ -13,7 +13,6 @@
   pydantic,
   pytestCheckHook,
   pythonOlder,
-  pythonRelaxDepsHook,
   torch,
   torchvision,
   typing-extensions,
@@ -21,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "albumentations";
-  version = "1.4.4";
+  version = "1.4.9";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -30,10 +29,9 @@ buildPythonPackage rec {
     owner = "albumentations-team";
     repo = "albumentations";
     rev = "refs/tags/${version}";
-    hash = "sha256-7t1+22zzFtkZaAyOo6xjk+MXT9N44PmQ/NRRfvLeRVk=";
+    hash = "sha256-tzalxhn61hYI6lN1wXwOd1EhTPx/9Fk8pTn/+zx188Y=";
   };
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   pythonRemoveDeps = [
     "opencv-python"

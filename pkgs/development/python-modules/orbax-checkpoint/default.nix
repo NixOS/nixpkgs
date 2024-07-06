@@ -23,7 +23,7 @@
 
 buildPythonPackage rec {
   pname = "orbax-checkpoint";
-  version = "0.5.9";
+  version = "0.5.17";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -31,7 +31,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "orbax_checkpoint";
     inherit version;
-    hash = "sha256-H96IkUM3IxV79uddNBCU0dq+0dvPx8/Ps4HeCItGi2A=";
+    hash = "sha256-cFV0oLQdk1sXMS/jaYjnLaHzPVfZdzKTeneoTAJ5P5Q=";
   };
 
   build-system = [ flit-core ];

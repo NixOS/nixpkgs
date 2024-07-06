@@ -176,7 +176,7 @@ lib.optionalAttrs (buildScript != null) { builder = buildScript; }
 
   # https://bugs.winehq.org/show_bug.cgi?id=43530
   # https://github.com/NixOS/nixpkgs/issues/31989
-  hardeningDisable = [ "bindnow" ]
+  hardeningDisable = [ "bindnow" "stackclashprotection" ]
     ++ lib.optional (stdenv.hostPlatform.isDarwin) "fortify"
     ++ lib.optional (supportFlags.mingwSupport) "format";
 

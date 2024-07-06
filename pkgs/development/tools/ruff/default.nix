@@ -64,7 +64,7 @@ rustPlatform.buildRustPackage rec {
     "--skip=semantic::types::infer::tests::resolve_visible_def"
   ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd ruff \
       --bash <($out/bin/ruff generate-shell-completion bash) \
       --fish <($out/bin/ruff generate-shell-completion fish) \

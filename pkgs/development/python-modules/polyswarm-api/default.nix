@@ -7,7 +7,6 @@
   pytestCheckHook,
   python-dateutil,
   pythonOlder,
-  pythonRelaxDepsHook,
   requests,
   responses,
   setuptools,
@@ -30,7 +29,6 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [ "future" ];
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   build-system = [ setuptools ];
 

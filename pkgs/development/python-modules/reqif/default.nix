@@ -9,7 +9,6 @@
   pytestCheckHook,
   python,
   pythonOlder,
-  pythonRelaxDepsHook,
   xmlschema,
 }:
 
@@ -35,7 +34,6 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     hatchling
-    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [

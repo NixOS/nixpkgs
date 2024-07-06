@@ -8,7 +8,6 @@
 , buildbot
 , pythonOlder
 , python
-, pythonRelaxDepsHook
 , twisted
 , jinja2
 , msgpack
@@ -85,7 +84,6 @@ buildPythonApplication rec {
   };
 
   build-system = [
-    pythonRelaxDepsHook
   ];
 
   pythonRelaxDeps = [

@@ -7,7 +7,6 @@
   pytest,
   pytestCheckHook,
   pythonOlder,
-  pythonRelaxDepsHook,
   ruff,
 }:
 
@@ -32,10 +31,6 @@ buildPythonPackage rec {
   '';
 
   pythonRemoveDeps = [ "ruff" ];
-
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
-  ];
 
   build-system = [
     hatchling

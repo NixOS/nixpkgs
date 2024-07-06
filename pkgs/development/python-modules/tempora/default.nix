@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "tempora";
-  version = "5.5.1";
+  version = "5.6.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ortR4hIZdtkxNHs+QzkXw2S4P91fZO8nM2yGW/H7D3U=";
+    hash = "sha256-O/zBLL27uv7KrMuQl/w3VENbnQY9zkMzjk+ofTkQSu0=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];

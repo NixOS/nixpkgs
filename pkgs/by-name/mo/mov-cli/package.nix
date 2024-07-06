@@ -35,10 +35,6 @@ python3.pkgs.buildPythonPackage {
     tldextract
   ];
 
-  nativeBuildInputs = [
-    python3.pkgs.pythonRelaxDepsHook
-  ];
-
   pythonRelaxDeps = [
     "httpx"
     "tldextract"

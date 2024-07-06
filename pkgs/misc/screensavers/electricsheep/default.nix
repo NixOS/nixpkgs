@@ -13,7 +13,7 @@
 , libgtop
 , boost179
 , tinyxml
-, freeglut
+, libglut
 , libGLU
 , libGL
 , glee
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     libgtop
     boost179
     tinyxml
-    freeglut
+    libglut
     libGLU
     libGL
     glee

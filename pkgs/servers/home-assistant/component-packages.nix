@@ -2,13 +2,12 @@
 # Do not edit!
 
 {
-  version = "2024.6.4";
+  version = "2024.7.1";
   components = {
     "3_day_blinds" = ps: with ps; [
     ];
     "abode" = ps: with ps; [
       jaraco-abode
-      jaraco-functools
     ];
     "accuweather" = ps: with ps; [
       accuweather
@@ -111,10 +110,6 @@
       aioairzone-cloud
     ];
     "aladdin_connect" = ps: with ps; [
-      fnv-hash-fast
-      genie-partner-sdk
-      psutil-home-assistant
-      sqlalchemy
     ];
     "alarm_control_panel" = ps: with ps; [
     ];
@@ -220,6 +215,12 @@
     ];
     "apsystems" = ps: with ps; [
     ]; # missing inputs: apsystems-ez1
+    "aquacell" = ps: with ps; [
+      fnv-hash-fast
+      ifaddr
+      psutil-home-assistant
+      sqlalchemy
+    ]; # missing inputs: aioaquacell
     "aqualogic" = ps: with ps; [
       aqualogic
     ];
@@ -627,9 +628,6 @@
     "channels" = ps: with ps; [
       pychannels
     ];
-    "circuit" = ps: with ps; [
-      circuit-webhook
-    ];
     "cisco_ios" = ps: with ps; [
       pexpect
     ];
@@ -689,7 +687,7 @@
     "command_line" = ps: with ps; [
     ];
     "compensation" = ps: with ps; [
-      numpy
+      numpy_1
     ];
     "concord232" = ps: with ps; [
     ]; # missing inputs: concord232
@@ -786,7 +784,7 @@
       home-assistant-intents
       ifaddr
       mutagen
-      numpy
+      numpy_1
       pillow
       psutil-home-assistant
       pynacl
@@ -808,12 +806,8 @@
       deluge-client
     ];
     "demo" = ps: with ps; [
-      fnv-hash-fast
       hassil
       home-assistant-intents
-      pillow
-      psutil-home-assistant
-      sqlalchemy
     ];
     "denon" = ps: with ps; [
     ];
@@ -833,10 +827,7 @@
     "device_automation" = ps: with ps; [
     ];
     "device_sun_light_trigger" = ps: with ps; [
-      fnv-hash-fast
       pillow
-      psutil-home-assistant
-      sqlalchemy
     ];
     "device_tracker" = ps: with ps; [
     ];
@@ -1072,7 +1063,7 @@
       pyemby
     ];
     "emoncms" = ps: with ps; [
-    ];
+    ]; # missing inputs: pyemoncms
     "emoncms_history" = ps: with ps; [
     ];
     "emonitor" = ps: with ps; [
@@ -1578,7 +1569,6 @@
       hassil
       home-assistant-intents
       mutagen
-      voluptuous-openapi
       webrtc-noise-gain
     ];
     "google_mail" = ps: with ps; [
@@ -1667,10 +1657,6 @@
     "greenwave" = ps: with ps; [
     ]; # missing inputs: greenwavereality
     "group" = ps: with ps; [
-      fnv-hash-fast
-      pillow
-      psutil-home-assistant
-      sqlalchemy
     ];
     "growatt_server" = ps: with ps; [
       growattserver
@@ -2147,7 +2133,7 @@
       pyipp
     ];
     "iqvia" = ps: with ps; [
-      numpy
+      numpy_1
       pyiqvia
     ];
     "irish_rail_transport" = ps: with ps; [
@@ -2161,6 +2147,8 @@
     ];
     "iss" = ps: with ps; [
     ]; # missing inputs: pyiss
+    "ista_ecotrend" = ps: with ps; [
+    ]; # missing inputs: pyecotrend-ista
     "isy994" = ps: with ps; [
       pyisy
     ];
@@ -2280,6 +2268,8 @@
     "kmtronic" = ps: with ps; [
       pykmtronic
     ];
+    "knocki" = ps: with ps; [
+    ]; # missing inputs: knocki
     "knx" = ps: with ps; [
       fnv-hash-fast
       home-assistant-frontend
@@ -2636,6 +2626,9 @@
       maxcube-api
     ];
     "mazda" = ps: with ps; [
+    ];
+    "mealie" = ps: with ps; [
+      aiomealie
     ];
     "meater" = ps: with ps; [
       meater-python
@@ -3162,8 +3155,7 @@
       pyownet
     ];
     "onkyo" = ps: with ps; [
-      onkyo-eiscp
-    ];
+    ]; # missing inputs: pyeiscp
     "onvif" = ps: with ps; [
       ha-ffmpeg
       onvif-zeep-async
@@ -3178,7 +3170,6 @@
       home-assistant-intents
       mutagen
       openai
-      voluptuous-openapi
       webrtc-noise-gain
     ];
     "openalpr_cloud" = ps: with ps; [
@@ -3512,12 +3503,14 @@
       aiopvpc
     ];
     "pyload" = ps: with ps; [
+      pyloadapi
     ];
     "python_script" = ps: with ps; [
       restrictedpython
     ];
     "qbittorrent" = ps: with ps; [
-    ]; # missing inputs: python-qbittorrent
+      qbittorrent-api
+    ];
     "qingping" = ps: with ps; [
       aioesphomeapi
       aioruuvigateway
@@ -3893,7 +3886,6 @@
     ]; # missing inputs: scsgate
     "search" = ps: with ps; [
       fnv-hash-fast
-      pillow
       psutil-home-assistant
       sqlalchemy
     ];
@@ -4189,8 +4181,7 @@
     "solaredge_local" = ps: with ps; [
     ]; # missing inputs: solaredge-local
     "solarlog" = ps: with ps; [
-      sunwatcher
-    ];
+    ]; # missing inputs: solarlog_cli
     "solax" = ps: with ps; [
       solax
     ];
@@ -4303,7 +4294,7 @@
     ]; # missing inputs: stookwijzer
     "stream" = ps: with ps; [
       ha-av
-      numpy
+      numpy_1
       pyturbojpeg
     ];
     "streamlabswater" = ps: with ps; [
@@ -4472,13 +4463,9 @@
       temperusb
     ];
     "template" = ps: with ps; [
-      fnv-hash-fast
-      pillow
-      psutil-home-assistant
-      sqlalchemy
     ];
     "tensorflow" = ps: with ps; [
-      numpy
+      numpy_1
       pillow
       pycocotools
       tensorflow
@@ -4490,6 +4477,7 @@
       tesla-fleet-api
     ];
     "tessie" = ps: with ps; [
+      tesla-fleet-api
     ]; # missing inputs: tessie-api
     "text" = ps: with ps; [
     ];
@@ -4709,7 +4697,7 @@
     "travisci" = ps: with ps; [
     ]; # missing inputs: TravisPy
     "trend" = ps: with ps; [
-      numpy
+      numpy_1
     ];
     "tts" = ps: with ps; [
       ha-ffmpeg
@@ -5550,6 +5538,7 @@
     "image_processing"
     "image_upload"
     "imap"
+    "incomfort"
     "influxdb"
     "inkbird"
     "input_boolean"
@@ -5634,6 +5623,7 @@
     "matter"
     "maxcube"
     "mazda"
+    "mealie"
     "meater"
     "media_extractor"
     "media_player"
@@ -5667,6 +5657,7 @@
     "motionblinds_ble"
     "motioneye"
     "motionmount"
+    "mpd"
     "mqtt"
     "mqtt_eventstream"
     "mqtt_json"
@@ -5736,6 +5727,7 @@
     "opower"
     "oralb"
     "otbr"
+    "otp"
     "overkiz"
     "ovo_energy"
     "owntracks"
@@ -5771,7 +5763,9 @@
     "pushover"
     "pvoutput"
     "pvpc_hourly_pricing"
+    "pyload"
     "python_script"
+    "qbittorrent"
     "qingping"
     "qld_bushfire"
     "qnap"
@@ -5872,7 +5866,6 @@
     "snips"
     "snmp"
     "snooz"
-    "solarlog"
     "solax"
     "soma"
     "somfy_mylink"

@@ -5,7 +5,7 @@
 , swig
 , gd
 , ncurses
-, python3
+, python311
 , libxml2
 , tcl
 , libusb-compat-0_1
@@ -17,7 +17,9 @@
 , tclBindings ? true
 , perlBindings ? true
 }:
-
+let
+  python3 = python311; # needs distutils and imp
+in
 stdenv.mkDerivation rec {
   pname = "hamlib";
   version = "4.5.5";

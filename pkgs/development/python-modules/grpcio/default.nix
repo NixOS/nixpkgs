@@ -19,11 +19,11 @@
 buildPythonPackage rec {
   pname = "grpcio";
   format = "setuptools";
-  version = "1.62.2";
+  version = "1.64.1";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-x3YYBx2Wt6i+LBBwGphTeCO5xluiVsC5Bn4FlM29lU0=";
+    hash = "sha256-jVHdHFnV+g80JmuAo4BewpofJkJcKlRzYTP22H/Eloo=";
   };
 
   outputs = [

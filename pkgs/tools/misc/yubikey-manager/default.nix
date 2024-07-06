@@ -25,7 +25,6 @@ python3Packages.buildPythonPackage rec {
 
   nativeBuildInputs = with python3Packages; [
     poetry-core
-    pythonRelaxDepsHook
     installShellFiles
   ];
 
