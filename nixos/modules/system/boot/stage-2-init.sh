@@ -137,7 +137,7 @@ ln -sfn "$systemConfig" /run/booted-system
 # especially no need to start systemd
 if [ "${IN_NIXOS_SYSTEMD_STAGE1:-}" != true ]; then
     # Reset the logging file descriptors.
-    exec 1>&$logOutFd 2>&$logErrFd
+    exec 1>&"$logOutFd" 2>&"$logErrFd"
     exec {logOutFd}>&- {logErrFd}>&-
 
 
