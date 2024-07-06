@@ -17,19 +17,18 @@
   pango,
   libdrm,
   mesa,
-  nix-update-script,
+  hyprutils,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hyprlock";
-  version = "0.3.0-unstable-2024-04-24";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "hyprlock";
-    # FIXME: Change to a stable release once available
-    rev = "415262065fff0a04b229cd00165f346a86a0a73a";
-    hash = "sha256-jla5Wo0Qt3NEnD0OjNj85BGw0pR4Zlz5uy8AqHH7tuE=";
+    rev = "6e0921140efb8895eb98efa99438fff23df2a726";
+    hash = "sha256-Dd/DK6FKiwVhr6PygCieEjzn7AFf6xijw6mdhquLnkw=";
   };
 
   strictDeps = true;
@@ -43,6 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     cairo
     file
     hyprlang
+    hyprutils
     libdrm
     libGL
     libjpeg
@@ -54,8 +54,6 @@ stdenv.mkDerivation (finalAttrs: {
     wayland
     wayland-protocols
   ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Hyprland's GPU-accelerated screen locking utility";
