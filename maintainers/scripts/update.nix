@@ -88,7 +88,7 @@ let
   /* Recursively find all packages in `pkgs` with updateScript matching given predicate.
    */
   packagesWithUpdateScriptMatchingPredicate = cond:
-    packagesWith (path: pkg: builtins.hasAttr "updateScript" pkg && cond path pkg);
+    packagesWith (path: pkg: !(builtins.hasAttr "updateScript" pkg && pkg.updateScript == null) && cond path pkg);
 
   /* Recursively find all packages in `pkgs` with updateScript by given maintainer.
    */
@@ -120,7 +120,7 @@ let
       if pathContent == null then
         builtins.throw "Attribute path `${path}` does not exist."
       else
-        packagesWithPath prefix (path: pkg: builtins.hasAttr "updateScript" pkg)
+        packagesWithPath prefix (path: pkg: !(builtins.hasAttr "updateScript" pkg && pkg.updateScript == null))
                        pathContent;
 
   /* Find a package under `path` in `pkgs` and require that it has an updateScript.
@@ -131,8 +131,8 @@ let
     in
       if package == null then
         builtins.throw "Package with an attribute name `${path}` does not exist."
-      else if ! builtins.hasAttr "updateScript" package then
-        builtins.throw "Package with an attribute name `${path}` does not have a `passthru.updateScript` attribute defined."
+      else if builtins.hasAttr "updateScript" package && package.updateScript == null then
+        builtins.throw "Package with an attribute name `${path}` has `passthru.updateScript` set to null."
       else
         { attrPath = path; inherit package; };
 
@@ -188,13 +188,15 @@ let
 
   /* Transform a matched package into an object for update.py.
    */
-  packageData = { package, attrPath }: {
+  packageData = { package, attrPath }: let
+    packageUpdateScript = package.updateScript or (pkgs.nix-update-script { });
+  in {
     name = package.name;
     pname = lib.getName package;
     oldVersion = lib.getVersion package;
-    updateScript = map builtins.toString (lib.toList (package.updateScript.command or package.updateScript));
-    supportedFeatures = package.updateScript.supportedFeatures or [];
-    attrPath = package.updateScript.attrPath or attrPath;
+    updateScript = map builtins.toString (lib.toList (packageUpdateScript.command or packageUpdateScript));
+    supportedFeatures = packageUpdateScript.supportedFeatures or [];
+    attrPath = packageUpdateScript.attrPath or attrPath;
   };
 
   /* JSON file with data for update.py.
