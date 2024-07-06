@@ -2,8 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  mbrola-voices,
-  runCommandLocal,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -27,14 +25,6 @@ stdenv.mkDerivation (finalAttrs: {
     install -D Bin/mbrola $out/bin/mbrola
     runHook postInstall
   '';
-
-  passthru = {
-    combined = runCommandLocal "mbrola-combined-${finalAttrs.version}" { inherit (finalAttrs) meta; } ''
-      mkdir -p "$out/"
-      ln -s '${mbrola-voices}/share' "$out/"
-      ln -s '${finalAttrs.finalPackage}/bin' "$out/"
-    '';
-  };
 
   meta = with lib; {
     description = "Speech synthesizer based on the concatenation of diphones";
