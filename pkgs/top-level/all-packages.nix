@@ -31582,8 +31582,6 @@ with pkgs;
 
   id3v2 = callPackage ../applications/audio/id3v2 { };
 
-  identity = callPackage ../applications/graphics/identity { };
-
   ifenslave = callPackage ../os-specific/linux/ifenslave { };
 
   ii = callPackage ../applications/networking/irc/ii {
