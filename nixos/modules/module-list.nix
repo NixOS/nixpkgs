@@ -1469,6 +1469,7 @@
   ./services/web-servers/bluemap.nix
   ./services/web-servers/caddy/default.nix
   ./services/web-servers/darkhttpd.nix
+  ./services/web-servers/devpi-server.nix
   ./services/web-servers/fcgiwrap.nix
   ./services/web-servers/garage.nix
   ./services/web-servers/hitch/default.nix
