@@ -3850,8 +3850,6 @@ with pkgs;
 
   imagelol = callPackage ../tools/compression/imagelol { };
 
-  imageworsener = callPackage ../tools/graphics/imageworsener { };
-
   imgpatchtools = callPackage ../development/mobile/imgpatchtools { };
 
   imgcrypt = callPackage ../applications/virtualization/imgcrypt { };
