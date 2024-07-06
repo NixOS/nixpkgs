@@ -32,7 +32,6 @@ rustPlatform.buildRustPackage rec {
     };
     tests = {
       inherit (nixosTests.nextcloud)
-        with-postgresql-and-redis27
         with-postgresql-and-redis28
         with-postgresql-and-redis29;
       inherit test_client;
