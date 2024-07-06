@@ -225,6 +225,7 @@
   ./programs/liboping.nix
   ./programs/light.nix
   ./programs/mdevctl.nix
+  ./programs/mbrola-voices.nix
   ./programs/mepo.nix
   ./programs/mininet.nix
   ./programs/minipro.nix
