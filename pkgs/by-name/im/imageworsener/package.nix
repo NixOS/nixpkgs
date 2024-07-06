@@ -8,12 +8,12 @@
   libwebp,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "imageworsener";
   version = "1.3.5";
 
   src = fetchurl {
-    url = "https://entropymine.com/${pname}/${pname}-${version}.tar.gz";
+    url = "https://entropymine.com/${finalAttrs.pname}/${finalAttrs.pname}-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-p/u2XFreZ9nrwy5SxYmIpPmGuswAjJAh/ja1mEZtXI0=";
   };
 
@@ -33,20 +33,24 @@ stdenv.mkDerivation rec {
     libwebp
   ];
 
+  strictDeps = true;
+
   doCheck = true;
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  __structuredAttrs = true;
+
+  meta = {
     description = "Raster image scaling and processing utility";
     homepage = "https://entropymine.com/imageworsener/";
-    changelog = "https://github.com/jsummers/${pname}/blob/${version}/changelog.txt";
-    license = licenses.mit;
-    maintainers = with maintainers; [
-      emily
-      smitop
+    changelog = "https://github.com/jsummers/${finalAttrs.pname}/blob/${finalAttrs.version}/changelog.txt";
+    license = lib.licenses.mit;
+    maintainers = [
+      lib.maintainers.emily
+      lib.maintainers.smitop
     ];
     mainProgram = "imagew";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
-}
+})
