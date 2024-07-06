@@ -10,13 +10,13 @@
 assert testQR -> zbar != false;
 stdenvNoCC.mkDerivation {
   pname = "asc-key-to-qr-code-gif";
-  version = "0-unstable-2018-06-13";
+  version = "0-unstable-2019-01-27";
 
   src = fetchFromGitHub {
     owner = "yishilin14";
     repo = "asc-key-to-qr-code-gif";
-    rev = "5b7b239a0089a5269444cbe8a651c99dd43dce3f";
-    sha256 = "0yrc302a2fhbzryb10718ky4fymfcps3lk67ivis1qab5kbp6z8r";
+    rev = "5d36a1bada8646ae0f61b04356e62ba5ef10a1aa";
+    sha256 = "sha256-DwxYgBsioL86WM6KBFJ+DuSJo3/1pwD1Fl156XD98RY=";
   };
 
   dontBuild = true;
