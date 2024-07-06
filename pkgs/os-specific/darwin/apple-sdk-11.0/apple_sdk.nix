@@ -41,9 +41,11 @@ let
       nativeBuildInputs = [ buildPackages.darwin.rewrite-tbd ];
 
       installPhase = ''
-        mkdir -p $out/Library/Frameworks
-
-        cp -r ${MacOSX-SDK}${standardFrameworkPath name private} $out/Library/Frameworks
+        frameworkPath='${MacOSX-SDK}${standardFrameworkPath name private}'
+        if [[ -d "$frameworkPath" ]]; then
+          mkdir -p $out/Library/Frameworks
+          cp -r "$frameworkPath" $out/Library/Frameworks
+        fi
 
         if [[ -d ${MacOSX-SDK}/usr/lib/swift/${name}.swiftmodule ]]; then
           mkdir -p $out/lib/swift
@@ -244,6 +246,14 @@ in rec {
           # Thus, it is easier to replace the file than to fix the symlink.
           cp --remove-destination ${MacOSX-SDK}/usr/lib/libSystem.B.tbd \
             $out/Library/Frameworks/System.framework/Versions/B/System.tbd
+        '';
+      });
+
+      Compression = lib.overrideDerivation super.Compression (drv: {
+        installPhase = drv.installPhase + ''
+          # Our libSystem derivation contains headers for this, but no tbds.
+          # To prevent a larger rebuild, package it here for now.
+          cp ${MacOSX-SDK}/usr/lib/libcompression.tbd $out/lib/
         '';
       });
     };
