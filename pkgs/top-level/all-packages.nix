@@ -18876,6 +18876,8 @@ with pkgs;
 
   ls-lint = callPackage ../development/tools/ls-lint { };
 
+  lm4tools = callPackage ../development/embedded/lm4tools { };
+
   lsof = callPackage ../development/tools/misc/lsof { };
 
   ltrace = callPackage ../development/tools/misc/ltrace { };
