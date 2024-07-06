@@ -2994,10 +2994,14 @@ let
         mktplcRef = {
           name = "rainbow-csv";
           publisher = "mechatroner";
-          version = "3.6.0";
-          hash = "sha256-bvxMnT6oSjflAwWQZkNnEoEsVlVg86T0TMYi8tNsbdQ=";
+          version = "3.12.0";
+          hash = "sha256-pnHaszLa4a4ptAubDUY+FQX3F6sQQUQ/sHAxyZsbhcQ=";
         };
         meta = {
+          changelog = "https://marketplace.visualstudio.com/items/mechatroner.rainbow-csv/changelog";
+          description = "Rainbow syntax higlighting for CSV and TSV files in Visual Studio Code";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemname=mechatroner.rainbow-csv";
+          homepage = "https://github.com/mechatroner/vscode_rainbow_csv";
           license = lib.licenses.mit;
         };
       };
