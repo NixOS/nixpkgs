@@ -248,10 +248,34 @@ in
         '';
       };
 
+      defaultInterfaces = mkOption {
+        type = types.listOf types.str;
+        default = [ ];
+        example = [ "eno1" ];
+        description = ''
+          If set, networking.firewall.allowed* options are exclusively applied
+          to these interfaces.  Otherwise, networking.firewall.allowed* options
+          apply to all interfaces.
+        '';
+      };
+
       allInterfaces = mkOption {
         internal = true;
         visible = false;
-        default = { default = mapAttrs (name: value: cfg.${name}) commonOptions; } // cfg.interfaces;
+        default =
+          let
+            defaultInterface = optionalAttrs (cfg.defaultInterfaces == [ ])
+              { default = mapAttrs (name: _: cfg.${name}) commonOptions; };
+
+            defaultInterfaces = genAttrs cfg.defaultInterfaces
+              (interface: mapAttrs
+                (name: _: cfg.${name}
+                  # Merge will override cfg.interfaces options so concat lists
+                  ++ optional (elem interface (attrNames cfg.interfaces))
+                  cfg.interfaces.${interface}.${name})
+                commonOptions);
+          in
+          defaultInterface // cfg.interfaces // defaultInterfaces;
         type = with types; attrsOf (submodule [{ options = commonOptions; }]);
         description = ''
           All open ports.
