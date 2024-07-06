@@ -60,18 +60,18 @@ let
 
 in
 stdenv.mkDerivation rec {
-  version = "1.23.6";
+  version = "1.24.5";
   pname = "mupdf";
 
   src = fetchurl {
     url = "https://mupdf.com/downloads/archive/${pname}-${version}-source.tar.gz";
-    sha256 = "sha256-rBHrhZ3UBEiOUVPNyWUbtDQeW6r007Pyfir8gvmq3Ck=";
+    sha256 = "sha256-NNRXos6T6U77kgucTcGkD9ileOLXQSTVUQpZzv6dO6M=";
   };
 
-  patches = [ ./0001-Use-command-v-in-favor-of-which.patch
-              ./0002-Add-Darwin-deps.patch
-              ./0003-Fix-cpp-build.patch
-            ];
+  patches = [
+    ./0002-Add-Darwin-deps.patch
+    ./0003-Fix-cpp-build.patch
+  ];
 
   postPatch = ''
     substituteInPlace Makerules --replace "(shell pkg-config" "(shell $PKG_CONFIG"
@@ -165,14 +165,17 @@ stdenv.mkDerivation rec {
     Cflags: -I\''${includedir}
     EOF
 
+    ln -s $out/lib/libmupdf.so.24.5 $out/lib/libmupdf.so
     moveToOutput "bin" "$bin"
   '' + (lib.optionalString (stdenv.isDarwin) ''
     for exe in $bin/bin/*; do
       install_name_tool -change build/shared-release/libmupdf.dylib $out/lib/libmupdf.dylib "$exe"
     done
   '') + (lib.optionalString (enableX11 || enableGL) ''
-    mkdir -p $bin/share/icons/hicolor/48x48/apps
-    cp docs/logo/mupdf.png $bin/share/icons/hicolor/48x48/apps
+    for i in 16 24 32 48 72 128 256 512; do
+      install -D docs/logo/mupdf-icon-''${i}.png $bin/share/icons/hicolor/''${i}x''${i}/apps/mupdf.png
+    done
+    install -D docs/logo/mupdf-icon.svg $bin/share/icons/hicolor/scalable/apps/mupdf.svg
   '') + (if enableGL then ''
     ln -s "$bin/bin/mupdf-gl" "$bin/bin/mupdf"
   '' else lib.optionalString (enableX11) ''
