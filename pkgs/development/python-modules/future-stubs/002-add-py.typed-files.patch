@@ -1,0 +1,16 @@
+diff --git a/MANIFEST.in b/MANIFEST.in
+index 46551ba..cc5b512 100644
+--- a/MANIFEST.in
++++ b/MANIFEST.in
+@@ -3,3 +3,5 @@ prune tests
+ prune stubs
+ recursive-exclude src *.py
+ recursive-include src *.pyi
++include src/future/py.typed
++include src/past/py.typed
+diff --git a/src/future/py.typed b/src/future/py.typed
+new file mode 100644
+index 0000000..e69de29
+diff --git a/src/past/py.typed b/src/past/py.typed
+new file mode 100644
+index 0000000..e69de29
