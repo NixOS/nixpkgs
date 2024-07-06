@@ -9355,14 +9355,7 @@ with pkgs;
   jupp = callPackage ../applications/editors/jupp { };
 
   jupyter = callPackage ../applications/editors/jupyter { };
-
-  jupyter-all = jupyter.override {
-    definitions = {
-      clojure = clojupyter.definition;
-      octave = octave-kernel.definition;
-      # wolfram = wolfram-for-jupyter-kernel.definition; # unfree
-    };
-  };
+  jupyterLib = callPackage ../applications/editors/jupyter/lib.nix { };
 
   jupyter-console = callPackage ../applications/editors/jupyter/console.nix { };
 
