@@ -1302,6 +1302,8 @@ self: super: with self; {
 
   azure-nspkg = callPackage ../development/python-modules/azure-nspkg { };
 
+  azure-search-documents = callPackage ../development/python-modules/azure-search-documents { };
+
   azure-servicebus = callPackage ../development/python-modules/azure-servicebus { };
 
   azure-servicefabric = callPackage ../development/python-modules/azure-servicefabric { };
