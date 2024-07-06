@@ -149,7 +149,7 @@
   - any:
     - changed-files:
       - any-glob-to-any-file:
-        - pkgs/development/compilers/llvm/*
+        - pkgs/development/compilers/llvm/**/*
 
 "6.topic: lua":
   - any:
