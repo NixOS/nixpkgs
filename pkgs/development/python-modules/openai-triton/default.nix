@@ -7,7 +7,6 @@
   fetchpatch,
   setuptools,
   pytestCheckHook,
-  pythonRelaxDepsHook,
   cmake,
   ninja,
   pybind11,
@@ -105,7 +104,6 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     setuptools
-    pythonRelaxDepsHook
     # pytestCheckHook # Requires torch (circular dependency) and probably needs GPUs:
     cmake
     ninja

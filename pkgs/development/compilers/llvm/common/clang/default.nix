@@ -136,16 +136,26 @@ let
     passthru = {
       inherit libllvm;
       isClang = true;
-    } // (lib.optionalAttrs (lib.versionAtLeast release_version "15") {
-      hardeningUnsupportedFlags = [
-        "fortify3"
-      ];
       hardeningUnsupportedFlagsByTargetPlatform = targetPlatform:
-        lib.optional (!(targetPlatform.isx86_64 || targetPlatform.isAarch64)) "zerocallusedregs"
+        [ "fortify3" ]
+        ++ lib.optional (
+          (lib.versionOlder release_version "11")
+          || (targetPlatform.isAarch64 && (lib.versionOlder release_version "18.1"))
+          || (targetPlatform.isFreeBSD && (lib.versionOlder release_version "15"))
+          || !(targetPlatform.isLinux || targetPlatform.isFreeBSD)
+          || !(
+            targetPlatform.isx86
+            || targetPlatform.isPower64
+            || targetPlatform.isS390x
+            || targetPlatform.isAarch64
+          )
+        ) "stackclashprotection"
+        ++ lib.optional (
+          (lib.versionOlder release_version "15")
+          || !(targetPlatform.isx86_64 || targetPlatform.isAarch64)
+        ) "zerocallusedregs"
         ++ (finalAttrs.passthru.hardeningUnsupportedFlags or []);
-    }) // (lib.optionalAttrs (lib.versionOlder release_version "15") {
-      hardeningUnsupportedFlags = [ "fortify3" "zerocallusedregs" ];
-    });
+    };
 
     meta = llvm_meta // {
       homepage = "https://clang.llvm.org/";

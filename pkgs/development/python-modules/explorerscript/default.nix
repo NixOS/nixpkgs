@@ -7,7 +7,6 @@
   igraph,
   pygments,
   pytestCheckHook,
-  pythonRelaxDepsHook,
   setuptools,
 }:
 
@@ -25,7 +24,6 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     antlr4
-    pythonRelaxDepsHook
     setuptools
   ];
 

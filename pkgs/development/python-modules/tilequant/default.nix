@@ -6,7 +6,6 @@
   ordered-set,
   pillow,
   pythonOlder,
-  pythonRelaxDepsHook,
   setuptools,
   setuptools-dso,
   sortedcollections,
@@ -27,7 +26,6 @@ buildPythonPackage rec {
   pythonRelaxDeps = [ "pillow" ];
 
   build-system = [
-    pythonRelaxDepsHook
     setuptools
   ];
 

@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "pixel-font-builder";
-  version = "0.0.25";
+  version = "0.0.26";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "pixel_font_builder";
     inherit version;
-    hash = "sha256-66mGZ7q64z+tTJSSveD7UCkTq7YXgsHTM25MqUSLfvM=";
+    hash = "sha256-bgs2FbOA5tcUXe5+KuVztWGAv5yFxQNBaiZMeZ+ic+8=";
   };
 
   build-system = [ hatchling ];

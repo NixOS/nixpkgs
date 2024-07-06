@@ -60,6 +60,9 @@ stdenv.mkDerivation (finalAttrs: {
     "--enable-armasm=inline"
   ] ++ extraConfigureFlags;
 
+  # Breaks tls13 tests on aarch64-darwin.
+  hardeningDisable = lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [ "zerocallusedregs" ];
+
   # LTO should help with the C implementations.
   env.NIX_CFLAGS_COMPILE = lib.optionalString enableLto "-flto";
   env.NIX_LDFLAGS_COMPILE = lib.optionalString enableLto "-flto";

@@ -6,13 +6,14 @@
   arrow,
   six,
   hypothesis,
+  num2words,
   pytestCheckHook,
   pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "inform";
-  version = "1.29";
+  version = "1.30";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -21,7 +22,7 @@ buildPythonPackage rec {
     owner = "KenKundert";
     repo = "inform";
     rev = "refs/tags/v${version}";
-    hash = "sha256-quJGgXMvVZGqZA6M/AjU/cjYeL0R2nuPDoL0Ji0Ow6I=";
+    hash = "sha256-6Yx9ZdmrFApJ6zBiC8Q++hlATVqjriJLS2KsqC0IBCk=";
   };
 
   nativeBuildInputs = [ flit-core ];
@@ -32,6 +33,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    num2words
     pytestCheckHook
     hypothesis
   ];

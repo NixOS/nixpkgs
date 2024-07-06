@@ -30,6 +30,8 @@ buildPythonPackage rec {
     hash = "sha256-CcnGfiJuv3hzez/G/Nu4OyruPL+bbSAtMAfGruqyPUU=";
   };
 
+  pythonRelaxDeps = [ "requests-oauthlib" ];
+
   build-system = [ poetry-core ];
 
   dependencies = [

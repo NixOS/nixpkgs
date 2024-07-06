@@ -25,7 +25,6 @@ python3.pkgs.buildPythonApplication rec {
 
   build-system = with python3.pkgs; [ setuptools ];
 
-  nativeBuildInputs = with python3.pkgs; [ pythonRelaxDepsHook ];
 
   dependencies = with python3.pkgs; [
     aioconsole

@@ -4,7 +4,6 @@
   fetchPypi,
   pynose,
   pythonOlder,
-  pythonRelaxDepsHook,
   setuptools,
   six,
 }:
@@ -23,7 +22,6 @@ buildPythonPackage rec {
 
   build-system = [
     setuptools
-    pythonRelaxDepsHook
   ];
 
   pythonRemoveDeps = [

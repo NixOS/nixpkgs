@@ -26,6 +26,8 @@ buildPythonPackage rec {
 
   build-system = [ poetry-core ];
 
+  pythonRelaxDeps = [ "defusedxml" ];
+
   dependencies = [ defusedxml ];
 
   nativeCheckInputs = [

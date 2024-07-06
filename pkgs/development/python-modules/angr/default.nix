@@ -23,7 +23,6 @@
   pycparser,
   pyformlang,
   pythonOlder,
-  pythonRelaxDepsHook,
   pyvex,
   rich,
   rpyc,
@@ -52,7 +51,6 @@ buildPythonPackage rec {
   pythonRelaxDeps = [ "capstone" ];
 
   build-system = [
-    pythonRelaxDepsHook
     setuptools
   ];
 

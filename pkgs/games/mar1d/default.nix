@@ -8,15 +8,16 @@
 , ninja
 , pkg-config
 , fetchFromGitHub
+, fetchpatch
 }:
 
 stdenv.mkDerivation rec {
   pname = "MAR1D";
-  version = "0.3.1";
+  version = "unstable-2023-02-02";
 
   src = fetchFromGitHub {
-    sha256 = "sha256-c48azBGdnzhEQGUeRJWlNLJhtrYjnpiORuWvowcQK5Y=";
-    rev = "v${version}";
+    hash = "sha256-kZERhwnTpBhjx6MLdf1bYCWMjtTiId/5a69kRt+/6oY=";
+    rev = "fa5dc36e1819a15539ced339ad01672e5a498c5c";
     repo = "MAR1D";
     owner = "Radvendii";
   };
@@ -28,6 +29,15 @@ stdenv.mkDerivation rec {
     SDL2_mixer
     libconfig
     libGLU
+  ];
+
+  patches = [
+    # Fix the build on Darwin.
+    # https://github.com/Radvendii/MAR1D/pull/4
+    (fetchpatch {
+      url = "https://github.com/Radvendii/MAR1D/commit/baf3269e90eca69f154a43c4c1ef14677a6300fd.patch";
+      hash = "sha256-ybdLA2sO8e0J7w4roSdMWn72OkttD3y+cJ3ScuGiHCI=";
+    })
   ];
 
   meta = with lib; {

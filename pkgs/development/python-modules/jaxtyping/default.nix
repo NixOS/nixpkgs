@@ -4,7 +4,6 @@
   pythonOlder,
   fetchFromGitHub,
   hatchling,
-  pythonRelaxDepsHook,
   typeguard,
   cloudpickle,
   equinox,
@@ -33,7 +32,6 @@ let
 
     build-system = [
       hatchling
-      pythonRelaxDepsHook
     ];
 
     dependencies = [

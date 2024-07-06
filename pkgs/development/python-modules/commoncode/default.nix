@@ -5,7 +5,7 @@
   beautifulsoup4,
   buildPythonPackage,
   click,
-  fetchPypi,
+  fetchFromGitHub,
   pytest-xdist,
   pytestCheckHook,
   pythonAtLeast,
@@ -18,14 +18,16 @@
 
 buildPythonPackage rec {
   pname = "commoncode";
-  version = "31.0.3";
+  version = "31.2.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-ura55/m/iesqN6kSYmdHB1sbthSHXaFWiQ76wVmyl0E=";
+  src = fetchFromGitHub {
+    owner = "nexB";
+    repo = "commoncode";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-4ZgyNlMj1i1fRru4wgDOyP3qzbne8D2eH/tFI60kgrE=";
   };
 
   dontConfigure = true;
@@ -45,6 +47,11 @@ buildPythonPackage rec {
     pytestCheckHook
     pytest-xdist
   ];
+
+  preCheck = ''
+    # prevent readout of /etc/os-release during tests
+    sed -i "s/is_on_ubuntu_22()/lambda _: False/" src/commoncode/system.py
+  '';
 
   disabledTests =
     [

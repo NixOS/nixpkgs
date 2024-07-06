@@ -10,7 +10,6 @@
   poetry-core,
   pytestCheckHook,
   pythonOlder,
-  pythonRelaxDepsHook,
   scipy,
   setuptools,
   spacy,
@@ -34,7 +33,6 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
-    pythonRelaxDepsHook
     cython
     poetry-core
     setuptools

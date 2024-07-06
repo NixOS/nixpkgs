@@ -14,7 +14,7 @@
 let
   self = buildPythonPackage rec {
     pname = "pydantic-settings";
-    version = "2.2.1";
+    version = "2.3.2";
     pyproject = true;
 
     disabled = pythonOlder "3.8";
@@ -23,7 +23,7 @@ let
       owner = "pydantic";
       repo = "pydantic-settings";
       rev = "refs/tags/v${version}";
-      hash = "sha256-4o8LlIFVizoxb484lVT67e24jhtUl49otr1lX/2zZ4M=";
+      hash = "sha256-1wnTAoF9xi1xLgSWl0FhtIddWPpHgDJPxJlsctJvFQo=";
     };
 
     nativeBuildInputs = [ hatchling ];

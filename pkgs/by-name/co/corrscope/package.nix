@@ -26,7 +26,6 @@ python3Packages.buildPythonApplication rec {
     wrapQtAppsHook
   ]) ++ (with python3Packages; [
     poetry-core
-    pythonRelaxDepsHook
   ]);
 
   buildInputs = [

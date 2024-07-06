@@ -19,7 +19,6 @@
   pytest-xdist,
   pytestCheckHook,
   pythonOlder,
-  pythonRelaxDepsHook,
   scipy,
   sympy,
 }:
@@ -47,7 +46,6 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = true;
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   dependencies = [
     anytree

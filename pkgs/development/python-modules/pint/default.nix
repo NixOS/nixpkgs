@@ -8,11 +8,11 @@
   setuptools,
   setuptools-scm,
 
-  # propagates
-  typing-extensions,
+  # dependencies
   appdirs,
   flexcache,
   flexparser,
+  typing-extensions,
 
   # tests
   pytestCheckHook,
@@ -47,6 +47,7 @@ buildPythonPackage rec {
     flexcache
     flexparser
     typing-extensions
+
     # Both uncertainties and numpy are not necessarily needed for every
     # function of pint, but needed for the pint-convert executable which we
     # necessarily distribute with this package as it is.

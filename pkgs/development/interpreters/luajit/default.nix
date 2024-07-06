@@ -114,7 +114,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   setupHook = builtins.toFile "lua-setup-hook" ''
       source @out@/nix-support/utils.sh
-      addEnvHooks "$hostOffset" addToLuaPath
+      addEnvHooks "$hostOffset" luaEnvHook
       '';
 
   # copied from python

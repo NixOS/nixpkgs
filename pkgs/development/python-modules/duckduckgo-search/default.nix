@@ -32,7 +32,7 @@ buildPythonPackage rec {
     pyreqwest-impersonate
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     lxml = [ lxml ];
   };
 
