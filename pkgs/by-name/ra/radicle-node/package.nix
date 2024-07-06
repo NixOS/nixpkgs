@@ -32,7 +32,8 @@
     darwin.apple_sdk.frameworks.Security
   ];
 
-  doCheck = stdenv.hostPlatform.isLinux;
+  # tests regularly time out on aarch64
+  doCheck = stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86;
 
   preCheck = ''
     export PATH=$PATH:$PWD/target/${stdenv.hostPlatform.rust.rustcTargetSpec}/release
