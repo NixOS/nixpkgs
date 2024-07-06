@@ -171,6 +171,7 @@ mapAliases {
   inherit (pkgs) titanium; # added 2023-08-17
   triton = pkgs.triton; # Added 2023-05-06
   typescript = pkgs.typescript; # Added 2023-06-21
+  inherit (pkgs) typescript-language-server; # added 2024-02-27
   inherit (pkgs) uglify-js; # added 2024-06-15
   inherit (pkgs) undollar; # added 2024-06-29
   inherit (pkgs) ungit; # added 2023-08-20

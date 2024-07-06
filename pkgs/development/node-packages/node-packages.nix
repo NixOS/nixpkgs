@@ -90157,23 +90157,6 @@ in
     bypassCache = true;
     reconstructLock = true;
   };
-  typescript-language-server = nodeEnv.buildNodePackage {
-    name = "typescript-language-server";
-    packageName = "typescript-language-server";
-    version = "4.3.3";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/typescript-language-server/-/typescript-language-server-4.3.3.tgz";
-      sha512 = "3QLj57Ru9S6zv10sa4z1pA3TIR1Rdkd04Ke0EszbO4fx5PLdlYhlC/PMxwlyxls9wrZs7wPCME1Ru0s1Gabz4Q==";
-    };
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "Language Server Protocol (LSP) implementation for TypeScript using tsserver";
-      license = "Apache-2.0";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
   unified-language-server = nodeEnv.buildNodePackage {
     name = "unified-language-server";
     packageName = "unified-language-server";
