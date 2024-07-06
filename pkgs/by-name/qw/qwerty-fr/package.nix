@@ -1,32 +1,30 @@
-{ stdenv
-, fetchurl
-, lib
-, unzip
-,
+{
+  stdenvNoCC,
+  fetchFromGitHub,
+  lib,
 }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "qwerty-fr";
   version = "0.7.3";
 
-  src = fetchurl {
-    url = "https://github.com/qwerty-fr/qwerty-fr/releases/download/v${version}/qwerty-fr_${version}_linux.zip";
-    sha256 = "0csxzs2gk8l4y5ii1pgad8zxr9m9mfrl9nblywymg01qw74gpvnm";
+  src = fetchFromGitHub {
+    owner = "qwerty-fr";
+    repo = "qwerty-fr";
+    rev = "refs/tags/v${finalAttrs.version}";
+    sha256 = "sha256-TD67wKdaPaXzJzjKFCfRZl3WflUfdnUSQl/fnjr9TF8=";
   };
 
-  nativeBuildInputs = [ unzip ];
-
-  unpackPhase = "unzip $src";
-
   installPhase = ''
-    mkdir -p $out/bin
-    cp -r * $out/bin
+    mkdir -p $out/share/X11/xkb/symbols
+    cp $src/linux/us_qwerty-fr $out/share/X11/xkb/symbols
   '';
 
   meta = with lib; {
     description = "Qwerty keyboard layout with French accents";
+    changelog = "https://github.com/qwerty-fr/qwerty-fr/blob/v${finalAttrs.version}/linux/debian/changelog";
     homepage = "https://github.com/qwerty-fr/qwerty-fr";
     license = licenses.mit;
     maintainers = with maintainers; [ potb ];
   };
-}
+})
