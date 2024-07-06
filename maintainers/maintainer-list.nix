@@ -8071,6 +8071,12 @@
     githubId = 1162118;
     name = "Harald Gliebe";
   };
+  hakan-demirli = {
+    email = "ehdemirli@proton.me";
+    github = "hakan-demirli";
+    githubId = 78746991;
+    name = "Emre Hakan Demirli";
+  };
   hakuch = {
     email = "hakuch@gmail.com";
     github = "hakuch";
