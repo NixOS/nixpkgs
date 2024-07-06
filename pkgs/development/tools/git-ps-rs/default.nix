@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "git-ps-rs";
-  version = "7.1.1";
+  version = "7.2.0";
 
   src = fetchFromGitHub {
     owner = "uptech";
     repo = "git-ps-rs";
     rev = version;
-    hash = "sha256-HkiCc/5Xx+1IKMz/vXPXwUp3c8qSjobhQaIJCzq8dqQ=";
+    hash = "sha256-OkQLuTZ4CFxA8Ezpo7ChVDR3BzLzlF/EOkZjTIbjJl4=";
   };
 
-  cargoHash = "sha256-r4cmnLkW8ocTcTECAbCk3S94T09lOUzHLQIGHv97W54=";
+  cargoHash = "sha256-9SmUGSHPhByBkSyuyNSBCsYsWxF7e13i00Jbf4COOj4=";
 
   nativeBuildInputs = [ pkg-config ];
 
