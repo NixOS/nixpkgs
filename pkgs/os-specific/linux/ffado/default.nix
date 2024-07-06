@@ -55,7 +55,10 @@ mkDerivation rec {
 
   nativeBuildInputs =
     [
-      (scons.override { python3Packages = python311.pkgs; })
+      (scons.override {
+        # SConstruct script depends on distutils removed in Python 3.12
+        python3Packages = python311.pkgs;
+      })
       pkg-config
       which
     ]
