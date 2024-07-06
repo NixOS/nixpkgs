@@ -6,13 +6,13 @@
 }:
 stdenv.mkDerivation {
   pname = "ceptre";
-  version = "unstable-2016-11-27";
+  version = "0-unstable-2023-12-12";
 
   src = fetchFromGitHub {
     owner = "chrisamaphone";
     repo = "interactive-lp";
-    rev = "e436fda2ccd44e9c9d226feced9d204311deacf5";
-    hash = "sha256-COYrE9O/Y1/ZBNHNakBwrUVklCuk144RF9bjwa3rl5w=";
+    rev = "1251d0773fff633708c8612e2077d6f7a5b633ba";
+    hash = "sha256-EbhuAh2P4M94lNgqJr66bM/Kzf1LClPdGB+K1X85rLQ=";
     fetchSubmodules = true;
   };
 
