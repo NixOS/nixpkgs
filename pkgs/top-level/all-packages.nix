@@ -1640,6 +1640,8 @@ with pkgs;
 
   aixlog = callPackage ../development/libraries/aixlog { };
 
+  airwindows = callPackage ../applications/audio/airwindows { };
+
   aj-snapshot  = callPackage ../applications/audio/aj-snapshot { };
 
   ajour = callPackage ../tools/games/ajour {
