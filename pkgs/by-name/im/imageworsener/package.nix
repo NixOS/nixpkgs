@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch2,
   autoreconfHook,
   zlib,
   libpng,
@@ -16,13 +17,26 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "jsummers";
-    repo = finalAttrs.pname;
+    repo = "imageworsener";
     rev = finalAttrs.version;
     hash = "sha256-1f5x8Ph994Kkjo38NudXL+UF0fpR8BmZfaGPxc8RENU=";
   };
 
+  patches = [
+    # Fix tests not failing even when they should.
+    # https://github.com/jsummers/imageworsener/pull/46
+    (fetchpatch2 {
+      url = "https://github.com/jsummers/imageworsener/commit/91c7c79d86f55920193d17a7b87631b14ac7779f.patch?full_index=1";
+      hash = "sha256-8vxht0FiQFOdglwaO0ZQpg5BNYXXHROkznZ+Caxm/v0=";
+    })
+  ];
+
   postPatch = ''
     patchShebangs tests/runtest
+
+    # JPEG tests fail due to libjpeg-turbo differences.
+    sed -i '/\.jpg/d' tests/runtest
+    rm tests/expected/*.jpg
   '';
 
   postInstall = ''
