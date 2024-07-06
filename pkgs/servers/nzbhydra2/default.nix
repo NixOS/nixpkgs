@@ -41,7 +41,10 @@ stdenv.mkDerivation rec {
     description = "Usenet meta search";
     homepage = "https://github.com/theotherp/nzbhydra2";
     license = licenses.asl20;
-    maintainers = with maintainers; [ jamiemagee ];
+    maintainers = with maintainers; [
+      jamiemagee
+      matteopacini
+    ];
     platforms = with platforms; linux;
     mainProgram = "nzbhydra2";
   };
