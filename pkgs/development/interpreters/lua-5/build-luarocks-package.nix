@@ -178,6 +178,11 @@ let
         LUAROCKS_EXTRA_ARGS=" --verbose"
     fi
 
+    # deps-mode=all tells luarocks to use every configured rocks_trees
+    luarocks $LUAROCKS_EXTRA_ARGS make --deps-mode=all --tree=. ''${rockspecFilename}
+    ls -l
+    # TODO move
+
     runHook postBuild
   '';
 
@@ -190,6 +195,7 @@ let
 
     # work around failing luarocks test for Write access
     mkdir -p $out
+    mv * $out/
 
     # luarocks make assumes sources are available in cwd
     # After the build is complete, it also installs the rock.
@@ -200,7 +206,6 @@ let
     # maybe we could reestablish dependency checking via passing --rock-trees
 
     nix_debug "ROCKSPEC $rockspecFilename"
-    luarocks $LUAROCKS_EXTRA_ARGS make --deps-mode=all --tree=$out ''${rockspecFilename}
 
     runHook postInstall
   '';
