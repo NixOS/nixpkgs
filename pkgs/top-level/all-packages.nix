@@ -38084,6 +38084,8 @@ with pkgs;
 
   acgtk = callPackage ../applications/science/logic/acgtk { };
 
+  anylogic-ple = callPackage ../applications/science/logic/anylogic { };
+
   alt-ergo = callPackage ../applications/science/logic/alt-ergo { };
 
   aspino = callPackage ../applications/science/logic/aspino { };
