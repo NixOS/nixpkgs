@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   poetry-core,
   pytestCheckHook,
   pythonOlder,
@@ -14,13 +14,16 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.8";
 
-   # no tests on pypi, no tags on github
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-FDDLc7oAOgSpaxmuS6Wzej+vEOuSx3WT2ntpfoET3LI=";
+  src = fetchFromGitHub {
+    owner = "ChrisBuilds";
+    repo = "terminaltexteffects";
+    rev = "refs/tags/release-${version}";
+    hash = "sha256-4stpAFCNgE5gWBkL4Unpai2Lq7hnQPZSshy5vo7AU1E=";
   };
 
   build-system = [ poetry-core ];
+
+  doCheck = false;
 
   pythonImportsCheck = [ "terminaltexteffects" ];
 
