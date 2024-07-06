@@ -25,9 +25,13 @@
   yamllint,
 }:
 
-buildPythonApplication rec {
-  pname = "fdroidserver";
+let
   version = "unstable-2023-10-23";
+in
+buildPythonApplication {
+  pname = "fdroidserver";
+  inherit version;
+
   format = "setuptools";
 
   src = fetchFromGitLab {
@@ -99,12 +103,12 @@ buildPythonApplication rec {
 
   pythonImportsCheck = [ "fdroidserver" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.com/fdroid/fdroidserver";
     changelog = "https://gitlab.com/fdroid/fdroidserver/-/blob/${version}/CHANGELOG.md";
     description = "Server and tools for F-Droid, the Free Software repository system for Android";
-    license = licenses.agpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.agpl3Plus;
+    maintainers = with lib.maintainers; [
       linsui
       jugendhacker
     ];
