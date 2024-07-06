@@ -1,32 +1,33 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, libqalculate
-, muparser
-, libarchive
-, python3Packages
-, qtbase
-, qtscxml
-, qtsvg
-, qtdeclarative
-, qtwayland
-, qt5compat
-, qttools
-, wrapQtAppsHook
-, nix-update-script
-, pkg-config
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  libqalculate,
+  muparser,
+  libarchive,
+  python3Packages,
+  qtbase,
+  qtscxml,
+  qtsvg,
+  qtdeclarative,
+  qtwayland,
+  qt5compat,
+  qttools,
+  wrapQtAppsHook,
+  nix-update-script,
+  pkg-config,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "albert";
-  version = "0.23.0";
+  version = "0.24.1";
 
   src = fetchFromGitHub {
     owner = "albertlauncher";
     repo = "albert";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-L6qHaksArgwySk6J7N5zamUDWh5qa6zTtPFdpxU2NTM=";
+    sha256 = "sha256-vlap8gTZYoQS70Co99bZ16Fv9eq1N3rH7skjwrLDWiM=";
     fetchSubmodules = true;
   };
 
@@ -36,24 +37,31 @@ stdenv.mkDerivation (finalAttrs: {
     wrapQtAppsHook
   ];
 
-  buildInputs = [
-    libqalculate
-    libarchive
-    muparser
-    qtbase
-    qtscxml
-    qtsvg
-    qtdeclarative
-    qtwayland
-    qt5compat
-    qttools
-  ] ++ (with python3Packages; [ python pybind11 ]);
+  buildInputs =
+    [
+      libqalculate
+      libarchive
+      muparser
+      qtbase
+      qtscxml
+      qtsvg
+      qtdeclarative
+      qtwayland
+      qt5compat
+      qttools
+    ]
+    ++ (with python3Packages; [
+      python
+      pybind11
+    ]);
 
   postPatch = ''
     find -type f -name CMakeLists.txt -exec sed -i {} -e '/INSTALL_RPATH/d' \;
 
-    sed -i src/qtpluginprovider.cpp \
-      -e "/QStringList dirs = {/a    QFileInfo(\"$out/lib\").canonicalFilePath(),"
+    # WARN: This is necessary for albert to detect the package libraries.
+    # Please check if the file below has changed upstream before updating.
+    sed -i src/app/qtpluginprovider.cpp \
+      -e "/QStringList install_paths;/a    install_paths << QFileInfo(\"$out/lib\").canonicalFilePath();"
   '';
 
   postFixup = ''
@@ -77,7 +85,11 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/albertlauncher/albert/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     # See: https://github.com/NixOS/nixpkgs/issues/279226
     license = licenses.unfree;
-    maintainers = with maintainers; [ ericsagnes synthetica ];
+    maintainers = with maintainers; [
+      ericsagnes
+      synthetica
+      eljamm
+    ];
     mainProgram = "albert";
     platforms = platforms.linux;
   };
