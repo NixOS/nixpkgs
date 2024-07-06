@@ -1,32 +1,32 @@
-{ lib, stdenv, pkg-config, fetchFromGitHub, libbsd }:
+{ lib, stdenv, pkg-config, fetchFromGitHub, libbsd, bmake, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "kcgi";
-  version = "0.10.8";
+  version = "0.13.0";
   underscoreVersion = lib.replaceStrings ["."] ["_"] version;
 
   src = fetchFromGitHub {
     owner = "kristapsdz";
     repo = pname;
     rev = "VERSION_${underscoreVersion}";
-    sha256 = "0ha6r7bcgf6pcn5gbd2sl7835givhda1jql49c232f1iair1yqyp";
+    sha256 = "sha256-3/2oL5n4j/4Iwxam6SaPmThSoIY7c2l3EnYlnwjNifk=";
   };
   patchPhase = ''substituteInPlace configure \
     --replace /usr/local /
   '';
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ ] ++ lib.optionals stdenv.isLinux [ libbsd ] ;
+  nativeBuildInputs = [ pkg-config bmake ];
+  buildInputs = [ zlib ] ++ lib.optionals stdenv.isLinux [ libbsd ] ;
 
   dontAddPrefix = true;
 
   installFlags = [ "DESTDIR=$(out)" ];
 
   meta = with lib; {
-    broken = (stdenv.isLinux && stdenv.isAarch64);
     homepage = "https://kristaps.bsd.lv/kcgi";
     description = "Minimal CGI and FastCGI library for C/C++";
     license = licenses.isc;
+    changelog = "https://kristaps.bsd.lv/kcgi/archive.html";
     platforms = platforms.all;
     maintainers = [ maintainers.leenaars ];
     mainProgram = "kfcgi";
