@@ -15,12 +15,13 @@ let
   versionPatch = lib.versions.patch botocoreVersion;
   self = python3.pkgs.buildPythonApplication rec {
     pname = "awscli";
-    version = "1.${versionMinor}.${versionPatch}"; # N.B: if you change this, change botocore and boto3 to a matching version too
+    # version = ${versionMinor}.${versionPatch}"; # N.B: if you change this, change botocore and boto3 to a matching version too
+    version = "1.33.21"; # Currently awscli version is not in sync with botocore version
     pyproject = true;
 
     src = fetchPypi {
       inherit pname version;
-      hash = "sha256-96hFvXs3Fcvad+PBEpS9RFMJkcD1qHqfQ+8gtVfEbnc=";
+      hash = "sha256-0KcgnjI8hbKNhc/6lHD/9mTV+GG7O1vahDMp4INvV2A=";
     };
 
     nativeBuildInputs = [
@@ -28,8 +29,7 @@ let
     ];
 
     pythonRelaxDeps = [
-      # botocore must not be relaxed
-      "colorama"
+    #  # botocore must not be relaxed
       "docutils"
       "rsa"
     ];
@@ -38,7 +38,7 @@ let
       python3.pkgs.setuptools
     ];
 
-    propagatedBuildInputs = with python3.pkgs; [
+    dependencies = with python3.pkgs; [
       botocore
       s3transfer
       colorama
@@ -82,13 +82,13 @@ let
       };
     };
 
-    meta = with lib; {
+    meta = {
       homepage = "https://aws.amazon.com/cli/";
       changelog = "https://github.com/aws/aws-cli/blob/${version}/CHANGELOG.rst";
       description = "Unified tool to manage your AWS services";
-      license = licenses.asl20;
+      license = lib.licenses.asl20;
       mainProgram = "aws";
-      maintainers = with maintainers; [ anthonyroussel ];
+      maintainers = [ lib.maintainers.anthonyroussel ];
     };
   };
 in

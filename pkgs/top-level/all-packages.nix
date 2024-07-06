@@ -3272,8 +3272,6 @@ with pkgs;
 
   aws-iam-authenticator = callPackage ../tools/security/aws-iam-authenticator { };
 
-  awscli = callPackage ../tools/admin/awscli { };
-
   awscli2 = callPackage ../tools/admin/awscli2 { };
 
   okta-aws-cli = callPackage ../tools/admin/okta-aws-cli { };
@@ -25305,8 +25303,6 @@ with pkgs;
   asterisk-module-sccp = callPackage ../servers/asterisk/sccp { };
 
   asterisk-ldap = lowPrio (asterisk.override { ldapSupport = true; });
-
-  baserow = callPackage ../servers/baserow { };
 
   bftpd = callPackage ../servers/ftp/bftpd { };
 

@@ -44,28 +44,28 @@
 
 buildPythonPackage rec {
   pname = "moto";
-  version = "5.0.5";
+  version = "5.0.10";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Lqyi33dY9oaN9CC/ByXNC5PZhwlgbx+4sjQ7W9yCLZE=";
+    hash = "sha256-7/NzYyIck+pE+Vchrg3bVvl3/nBDegQbbMZB7pAmYnk=";
   };
 
   build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     boto3
     botocore
     cryptography
-    requests
-    xmltodict
-    werkzeug
-    python-dateutil
-    responses
     jinja2
+    python-dateutil
+    requests
+    responses
+    werkzeug
+    xmltodict
   ];
 
   passthru.optional-dependencies = {
@@ -158,11 +158,11 @@ buildPythonPackage rec {
     "tests/test_s3/test_s3_bucket_policy.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Allows your tests to easily mock out AWS Services";
     homepage = "https://github.com/getmoto/moto";
     changelog = "https://github.com/getmoto/moto/blob/${version}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = [ ];
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.onny ];
   };
 }
