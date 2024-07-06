@@ -22486,6 +22486,8 @@ with pkgs;
 
   libopenaptx = callPackage ../development/libraries/libopenaptx { };
 
+  libopencm3 = callPackage ../development/embedded/libopencm3 { };
+
   libopenglrecorder = callPackage ../development/libraries/libopenglrecorder { };
 
   libopusenc = callPackage ../development/libraries/libopusenc { };
