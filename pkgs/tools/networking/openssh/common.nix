@@ -29,12 +29,16 @@
 , libxcrypt
 , hostname
 , nixosTests
-, withFIDO ? stdenv.hostPlatform.isUnix && !stdenv.hostPlatform.isMusl
+, enableSecurityKey ? !stdenv.hostPlatform.isStatic
+, withFIDO ? stdenv.hostPlatform.isUnix && !stdenv.hostPlatform.isMusl && enableSecurityKey
 , withPAM ? stdenv.hostPlatform.isLinux
 , dsaKeysSupport ? false
 , linkOpenssl ? true
 , isNixos ? stdenv.hostPlatform.isLinux
 }:
+
+# FIDO support requires SK support
+assert withFIDO -> enableSecurityKey;
 
 stdenv.mkDerivation {
   inherit pname version src;
@@ -96,6 +100,7 @@ stdenv.mkDerivation {
     (lib.withFeature withPAM "pam")
     (lib.enableFeature dsaKeysSupport "dsa-keys")
   ] ++ lib.optional (etcDir != null) "--sysconfdir=${etcDir}"
+    ++ lib.optional (!enableSecurityKey) "--disable-security-key"
     ++ lib.optional withFIDO "--with-security-key-builtin=yes"
     ++ lib.optional withKerberos (assert libkrb5 != null; "--with-kerberos5=${libkrb5}")
     ++ lib.optional stdenv.isDarwin "--disable-libutil"
@@ -103,7 +108,9 @@ stdenv.mkDerivation {
     ++ lib.optional withLdns "--with-ldns"
     ++ extraConfigureFlags;
 
-  ${if stdenv.hostPlatform.isStatic then "NIX_LDFLAGS" else null}= [ "-laudit" ] ++ lib.optionals withKerberos [ "-lkeyutils" ];
+  ${if stdenv.hostPlatform.isStatic then "NIX_LDFLAGS" else null} = [ "-laudit" ]
+    ++ lib.optional withKerberos "-lkeyutils"
+    ++ lib.optional withLdns "-lcrypto";
 
   buildFlags = [ "SSH_KEYSIGN=ssh-keysign" ];
 
