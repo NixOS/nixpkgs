@@ -31,12 +31,7 @@ If in doubt, check `git blame` for whoever last touched something.
 
 ### Metadata
 
-Please run `nix-shell -p nix-info --run "nix-info -m"` and paste the result.
-
-```console
-[user@system:~]$ nix-shell -p nix-info --run "nix-info -m"
-output here
-```
+Please replace this paragraph with the output of running `nix-shell -p nix-info --run "nix-info -m"`.
 
 ---
 
