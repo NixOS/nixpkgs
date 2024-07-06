@@ -22556,5 +22556,12 @@
     githubId = 59917878;
     name = "Mathias Zhang";
   };
+
+  rrix = {
+    email = "nixpkgs@whatthefuck.computer";
+    name = "Ryan Rix";
+    github = "rrix";
+    githubId = 138102;
+  };
 }
 # Keep the list alphabetically sorted.
