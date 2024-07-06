@@ -13,14 +13,14 @@ let
     after = ["network.target"];
     wants = ["network.target"];
     preStart = ''
-      ${pkgs.freeradius}/bin/radiusd -C -d ${cfg.configDir} -l stdout
+      ${cfg.package}/bin/radiusd -C -d ${cfg.configDir} -l stdout
     '';
 
     serviceConfig = {
-        ExecStart = "${pkgs.freeradius}/bin/radiusd -f -d ${cfg.configDir} -l stdout" +
+        ExecStart = "${cfg.package}/bin/radiusd -f -d ${cfg.configDir} -l stdout" +
                     optionalString cfg.debug " -xx";
         ExecReload = [
-          "${pkgs.freeradius}/bin/radiusd -C -d ${cfg.configDir} -l stdout"
+          "${cfg.package}/bin/radiusd -C -d ${cfg.configDir} -l stdout"
           "${pkgs.coreutils}/bin/kill -HUP $MAINPID"
         ];
         User = "radius";
@@ -34,6 +34,8 @@ let
 
   freeradiusConfig = {
     enable = mkEnableOption "the freeradius server";
+
+    package = mkPackageOptionMD pkgs "freeradius" { };
 
     configDir = mkOption {
       type = types.path;
@@ -75,7 +77,9 @@ in
         /*uid = config.ids.uids.radius;*/
         description = "Radius daemon user";
         isSystemUser = true;
+        groups = "radius";
       };
+      groups.radius = {};
     };
 
     systemd.services.freeradius = freeradiusService cfg;
