@@ -20,7 +20,7 @@ let
     powerpc64le-linux = "ppc64le";
   }.${stdenv.system} or (throw "Unsupported platform ${stdenv.system}");
 
-  update = "362";
+  update = "412";
   build = "ga";
 
   # when building a headless jdk, also bootstrap it with a headless jdk
@@ -34,7 +34,7 @@ let
       owner = "openjdk";
       repo = "jdk8u";
       rev = "jdk${version}";
-      sha256 = "sha256-C5dQwfIIpIrLeO3JWERyFCQHUSgG8gARuc3qXAeLkJ4=";
+      sha256 = "sha256-o+H5n5p6JG1giJj9OADgMbQPaoKMzLMFquKH536SHhM=";
     };
     outputs = [ "out" "jre" ];
 
