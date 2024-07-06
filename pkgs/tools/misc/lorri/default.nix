@@ -15,7 +15,6 @@ let
   # It will copy some required files if necessary.
   # Also don’t forget to run `nix-build -A lorri.tests`
   version = "1.7.0";
-  gitRev = version;
   sha256 = "sha256-pGNhhEBHyWhTaW24dHrxAvpb/qr5RPbHXRwDZx6Rf74=";
   cargoSha256 = "sha256-ENZATiBhoO+N6NpSknOWpvsatkaYb4mS/E63XNRXfMU=";
 
@@ -26,7 +25,7 @@ in (rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = pname;
-    rev = gitRev;
+    rev = version;
     inherit sha256;
   };
 
