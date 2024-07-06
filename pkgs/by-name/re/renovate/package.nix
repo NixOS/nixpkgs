@@ -11,6 +11,7 @@
   testers,
   xcbuild,
   nixosTests,
+  nix-update-script,
 }:
 
 let
@@ -88,9 +89,12 @@ stdenv'.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.tests = {
-    version = testers.testVersion { package = renovate; };
-    vm-test = nixosTests.renovate;
+  passthru = {
+    tests = {
+      version = testers.testVersion { package = renovate; };
+      vm-test = nixosTests.renovate;
+    };
+    updateScript = nix-update-script { };
   };
 
   meta = {
