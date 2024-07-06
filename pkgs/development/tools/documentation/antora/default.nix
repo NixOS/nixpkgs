@@ -2,16 +2,16 @@
 
 buildNpmPackage rec {
   pname = "antora";
-  version = "3.1.7";
+  version = "3.1.8";
 
   src = fetchFromGitLab {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-uGXXp6boS5yYsInSmkI9S0Tn85QGVp/5Fsh1u3G4oPk=";
+    hash = "sha256-d3PkMiOY4fRuwK5UYULY7qY0dnBDWchy1L6fpXaRans=";
   };
 
-  npmDepsHash = "sha256-oWLRAuvWDk7w18qlDH14EE4elX5nhLKHSQANa/kXKvw=";
+  npmDepsHash = "sha256-sZMMIHVMY9usBDyGNFXpUcL7owEk6DvvIGk6U+E9jL4=";
 
   # This is to stop tests from being ran, as some of them fail due to trying to query remote repositories
   postPatch = ''
