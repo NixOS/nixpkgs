@@ -21,12 +21,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "0.4.2";
+  version = "0.4.3";
   pname = "zathura-pdf-mupdf";
 
   src = fetchurl {
     url = "https://pwmt.org/projects/${pname}/download/${pname}-${version}.tar.xz";
-    hash = "sha256-fFC+z9mJX9ccExsV336Ut+zJJa8UdfUz/qVp9YgcnhM=";
+    hash = "sha256-jM+E7gh+pyqOiLsvJanAELrqJhzrUsw/cyq60l93Z3Y=";
   };
 
   nativeBuildInputs = [
