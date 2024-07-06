@@ -2,9 +2,10 @@
   stdenv,
   lib,
   fetchFromGitHub,
+  fetchpatch,
   darwin,
   overrideSDK,
-  libsForQt5,
+  qt6,
   pkg-config,
   vulkan-headers,
   SDL2,
@@ -27,6 +28,7 @@ let
     AVFoundation
     AppKit
     AudioUnit
+    Cocoa
     VideoToolbox
     ;
   stdenv' = if stdenv.isDarwin then overrideSDK stdenv "11.0" else stdenv;
@@ -44,9 +46,17 @@ stdenv'.mkDerivation rec {
     fetchSubmodules = true;
   };
 
+  patches = [
+    # Don't precompile QML files with disable-prebuilts, fix build on darwin
+    (fetchpatch {
+      url = "https://github.com/moonlight-stream/moonlight-qt/commit/d73df12367749425b86b72c250bb0fba13ddfd29.patch";
+      hash = "sha256-RIrQpZWbwUHs1Iwz/pXfXgshJeHYrzGxuaR5mRG85QY=";
+    })
+  ];
+
   nativeBuildInputs = [
-    libsForQt5.qmake
-    libsForQt5.wrapQtAppsHook
+    qt6.qmake
+    qt6.wrapQtAppsHook
     pkg-config
     vulkan-headers
   ];
@@ -58,7 +68,8 @@ stdenv'.mkDerivation rec {
       ffmpeg
       libopus
       libplacebo
-      libsForQt5.qtquickcontrols2
+      qt6.qtdeclarative
+      qt6.qtsvg
       openssl
     ]
     ++ lib.optionals stdenv.isLinux [
@@ -67,12 +78,14 @@ stdenv'.mkDerivation rec {
       libva
       libvdpau
       libxkbcommon
+      qt6.qtwayland
       wayland
     ]
     ++ lib.optionals stdenv.isDarwin [
       AVFoundation
       AppKit
       AudioUnit
+      Cocoa
       VideoToolbox
     ];
 

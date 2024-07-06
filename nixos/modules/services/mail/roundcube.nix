@@ -93,13 +93,17 @@ in
     maxAttachmentSize = mkOption {
       type = types.int;
       default = 18;
+      apply = configuredMaxAttachmentSize: "${toString (configuredMaxAttachmentSize * 1.37)}M";
       description = ''
         The maximum attachment size in MB.
-
-        Note: Since roundcube only uses 70% of max upload values configured in php
-        30% is added automatically to [](#opt-services.roundcube.maxAttachmentSize).
+        [upstream issue comment]: https://github.com/roundcube/roundcubemail/issues/7979#issuecomment-808879209
+        ::: {.note}
+        Since there is some overhead in base64 encoding applied to attachments, + 37% will be added
+        to the value set in this option in order to offset the overhead. For example, setting
+        `maxAttachmentSize` to `100` would result in `137M` being the real value in the configuration.
+        See [upstream issue comment] for more details on the motivations behind this.
+        :::
       '';
-      apply = configuredMaxAttachmentSize: "${toString (configuredMaxAttachmentSize * 1.3)}M";
     };
 
     configureNginx = lib.mkOption {

@@ -59,6 +59,7 @@ let
       license
       homepage
       description
+      mainProgram
       longDescription
       ;
     platforms = [
