@@ -7,12 +7,12 @@
 }:
 
 let
-  version = "3.1.8";
+  version = "3.1.9";
   src = fetchFromGitHub {
     owner = "jaseg";
     repo = "gerbolyze";
     rev = "v${version}";
-    hash = "sha256-uF06aU9zT7LjYHreQ8aFQKn/wAesS31LvzHBgD50LfQ=";
+    hash = "sha256-bisLln3Y239HuJt0MkrCU+6vLLbEDxfTjEJMkcbE/wE=";
     fetchSubmodules = true;
   };
 
