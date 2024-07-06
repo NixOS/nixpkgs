@@ -28,6 +28,7 @@ buildGoModule rec {
     "cmd/loki-canary"
     "clients/cmd/promtail"
     "cmd/logcli"
+    "cmd/lokitool"
   ];
 
   tags = ["promtail_journal_enabled"];
