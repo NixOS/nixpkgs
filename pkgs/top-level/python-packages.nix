@@ -8982,6 +8982,8 @@ self: super: with self; {
 
   nmapthon2 = callPackage ../development/python-modules/nmapthon2 { };
 
+  nmslib = callPackage ../development/python-modules/nmslib { };
+
   amaranth-boards = callPackage ../development/python-modules/amaranth-boards { };
 
   amaranth = callPackage ../development/python-modules/amaranth { };
@@ -11978,6 +11980,8 @@ self: super: with self; {
   pyserial-asyncio-fast = callPackage ../development/python-modules/pyserial-asyncio-fast { };
 
   pyserial = callPackage ../development/python-modules/pyserial { };
+
+  pyserini = callPackage ../development/python-modules/pyserini { };
 
   pysftp = callPackage ../development/python-modules/pysftp { };
 
