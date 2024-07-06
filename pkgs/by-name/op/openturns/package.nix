@@ -75,7 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "USE_SPHINX" enablePython)
     (lib.cmakeFeature "CMAKE_UNITY_BUILD_BATCH_SIZE" "32")
     (lib.cmakeFeature "SWIG_COMPILE_FLAGS" "-O1")
-    (lib.cmakeOptionType "PATH" "OPENTURNS_SYSCONFIG_PATH" "$out/etc")
+    (lib.cmakeOptionType "PATH" "OPENTURNS_SYSCONFIG_PATH" "${placeholder "out"}/etc")
   ];
 
   checkTarget = lib.concatStringsSep " " [
