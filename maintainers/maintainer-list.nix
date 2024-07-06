@@ -10013,13 +10013,6 @@
     github = "jonochang";
     githubId = 13179;
   };
-  jonringer = {
-    email = "jonringer117@gmail.com";
-    matrix = "@jonringer:matrix.org";
-    github = "jonringer";
-    githubId = 7673602;
-    name = "Jonathan Ringer";
-  };
   jopejoe1 = {
     email = "johannes@joens.email";
     matrix = "@jopejoe1:matrix.org";

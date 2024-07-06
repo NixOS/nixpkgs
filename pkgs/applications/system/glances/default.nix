@@ -51,6 +51,6 @@ buildPythonApplication rec {
     mainProgram = "glances";
     changelog = "https://github.com/nicolargo/glances/blob/v${version}/NEWS.rst";
     license = licenses.lgpl3Only;
-    maintainers = with maintainers; [ jonringer primeos koral ];
+    maintainers = with maintainers; [ primeos koral ];
   };
 }

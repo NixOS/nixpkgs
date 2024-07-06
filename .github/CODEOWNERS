@@ -124,7 +124,7 @@ nixos/modules/installer/tools/nix-fallback-paths.nix  @raitobezarius @ma27
 
 # Python-related code and docs
 /doc/languages-frameworks/python.section.md                 @mweinelt
-/pkgs/development/interpreters/python/hooks                 @jonringer
+/pkgs/development/interpreters/python/hooks
 
 # Haskell
 /doc/languages-frameworks/haskell.section.md  @sternenseemann @maralorn @ncfavier
@@ -258,13 +258,13 @@ nixos/modules/services/networking/networkmanager.nix @Janik-Haag
 /pkgs/top-level/emacs-packages.nix              @adisbladis
 
 # Neovim
-/pkgs/applications/editors/neovim      @figsoda @jonringer @teto
+/pkgs/applications/editors/neovim      @figsoda @teto
 
 # VimPlugins
-/pkgs/applications/editors/vim/plugins         @figsoda @jonringer
+/pkgs/applications/editors/vim/plugins         @figsoda
 
 # VsCode Extensions
-/pkgs/applications/editors/vscode/extensions   @jonringer
+/pkgs/applications/editors/vscode/extensions
 
 # PHP interpreter, packages, extensions, tests and documentation
 /doc/languages-frameworks/php.section.md          @aanderse @drupol @globin @ma27 @talyz
@@ -361,4 +361,3 @@ pkgs/by-name/in/incus/                  @adamcstephens
 pkgs/by-name/lx/lxc*                    @adamcstephens
 pkgs/by-name/lx/lxd*                    @adamcstephens
 pkgs/os-specific/linux/lxc/             @adamcstephens
-
