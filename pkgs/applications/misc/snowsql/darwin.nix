@@ -6,7 +6,6 @@
   cpio,
   gzip,
   unar,
-  darwin,
   zlib,
   version,
   meta,
@@ -19,10 +18,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://sfc-repo.snowflakecomputing.com/snowsql/bootstrap/${lib.versions.majorMinor finalAttrs.version}/darwin_${stdenvNoCC.hostPlatform.darwinArch}/snowsql-${finalAttrs.version}-darwin_${stdenvNoCC.hostPlatform.darwinArch}.pkg";
     sha256 =
-      if stdenvNoCC.isAarch64 then
-        "acb2096b87466f0fdbff544d9f64feafc23cbee1bdf963e84b9658511ade9536"
-      else
-        "9727c07fc11b1d8adf4a4eb0b5b996d82cd3d9da191a86f4c7b772726f8e5e92";
+      if stdenvNoCC.isAarch64
+      then "acb2096b87466f0fdbff544d9f64feafc23cbee1bdf963e84b9658511ade9536"
+      else "9727c07fc11b1d8adf4a4eb0b5b996d82cd3d9da191a86f4c7b772726f8e5e92";
   };
 
   nativeBuildInputs = [
@@ -46,10 +44,5 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   installPhase = ''
     mkdir -p $out/bin
     cp -r zipped-content/* $out/bin/
-  '';
-
-  postFixup = lib.optionalString stdenvNoCC.isAarch64 ''
-    install_name_tool -change /usr/lib/libSystem.B.dylib ${darwin.Libsystem}/lib/libSystem.B.dylib $out/bin/snowsql
-    install_name_tool -change /usr/lib/libz.1.dylib ${zlib}/lib/libz.1.dylib $out/bin/snowsql
   '';
 })
