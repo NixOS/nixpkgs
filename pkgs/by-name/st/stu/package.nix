@@ -8,7 +8,7 @@
   testers,
 }:
 let
-  version = "0.4.2";
+  version = "0.5.0";
 in
 rustPlatform.buildRustPackage {
   pname = "stu";
@@ -18,10 +18,10 @@ rustPlatform.buildRustPackage {
     owner = "lusingander";
     repo = "stu";
     rev = "v${version}";
-    hash = "sha256-T5b3aCepUj8COrKReEaK4JeUbR7Sv7022xSCW8k8Iow=";
+    hash = "sha256-VETEcRuJk0cCWB5y8IRdycKcKb3uiAWOyjeZWCJykG4=";
   };
 
-  cargoHash = "sha256-DFG/9bnckqLezbitceLtM3CSnKAcQcZlv39VfbkyM/w=";
+  cargoHash = "sha256-s2QvRberSz4egVO8A2h3cx8oUlZM1bV5qZ0U4EiuPRs=";
 
   buildInputs = lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.AppKit
