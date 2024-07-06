@@ -30,6 +30,9 @@ let
       cp -r ${monorepoSrc}/clang-tools-extra "$out"
     '' else src;
 
+  # Note: useLLVM is likely false for Darwin but true under pkgsLLVM
+  useLLVM = stdenv.hostPlatform.useLLVM or false;
+
   self = stdenv.mkDerivation (finalAttrs: rec {
     inherit pname version patches;
 
@@ -69,7 +72,9 @@ let
       # `clang-pseudo-gen`: https://github.com/llvm/llvm-project/commit/cd2292ef824591cc34cc299910a3098545c840c7
       "-DCLANG_TIDY_CONFUSABLE_CHARS_GEN=${buildLlvmTools.libclang.dev}/bin/clang-tidy-confusable-chars-gen"
       "-DCLANG_PSEUDO_GEN=${buildLlvmTools.libclang.dev}/bin/clang-pseudo-gen"
-    ]);
+    ]) ++ lib.optionals (useLLVM && lib.versionAtLeast release_version "18") [
+      "-DLLVM_ENABLE_MODULES=ON"
+    ];
 
     postPatch = ''
       # Make sure clang passes the correct location of libLTO to ld64
