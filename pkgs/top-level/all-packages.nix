@@ -28037,6 +28037,8 @@ with pkgs;
 
   dracula-theme = callPackage ../data/themes/dracula-theme { };
 
+  dracula-qt5-theme = callPackage ../data/themes/dracula-qt5-theme { };
+
   ant-nebula-theme = callPackage ../data/themes/ant-theme/ant-nebula.nix { };
 
   arc-icon-theme = callPackage ../data/icons/arc-icon-theme { };
