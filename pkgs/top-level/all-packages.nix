@@ -27437,6 +27437,8 @@ with pkgs;
 
   impl = callPackage ../development/tools/impl { };
 
+  memreserver = callPackage ../misc/memreserver { };
+
   moq = callPackage ../development/tools/moq { };
 
   quicktemplate = callPackage ../development/tools/quicktemplate { };
