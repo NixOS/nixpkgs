@@ -44,7 +44,7 @@ buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace fdroidserver/common.py \
-      --replace "FDROID_PATH = os.path.realpath(os.path.join(os.path.dirname(__file__), '..'))" "FDROID_PATH = '$out/bin'"
+      --replace-fail "FDROID_PATH = os.path.realpath(os.path.join(os.path.dirname(__file__), '..'))" "FDROID_PATH = '$out/bin'"
   '';
 
   preConfigure = ''
