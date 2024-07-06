@@ -1,6 +1,6 @@
 {
   lib,
-  stdenv,
+  stdevnNoCC,
   fetchurl,
   rpmextract,
   makeWrapper,
@@ -11,26 +11,32 @@
   pname,
   meta,
 }:
-stdenv.mkDerivation rec {
+stdevnNoCC.mkDerivation (finalAttrs: {
   inherit pname version meta;
   src = fetchurl {
-    url = "https://sfc-repo.snowflakecomputing.com/snowsql/bootstrap/${lib.versions.majorMinor version}/linux_x86_64/snowflake-snowsql-${version}-1.x86_64.rpm";
+    url = "https://sfc-repo.snowflakecomputing.com/snowsql/bootstrap/${lib.versions.majorMinor finalAttrs.version}/linux_x86_64/snowflake-snowsql-${finalAttrs.version}-1.x86_64.rpm";
     sha256 = "28a0828fea48c1686eccebb196343c635d660300ff18e36ca5b5ee3c03017611";
   };
 
-  nativeBuildInputs = [rpmextract makeWrapper];
+  nativeBuildInputs = [
+    rpmextract
+    makeWrapper
+  ];
 
   unpackPhase = ''
     rpmextract $src
   '';
 
   installPhase = ''
-    mkdir -p $out/bin/
-    mkdir -p $out/lib/
+    mkdir -p $out/{bin,lib}
     mv usr/lib64/snowflake/snowsql/* $out/lib/
   '';
 
-  libPath = lib.makeLibraryPath [openssl libxcrypt-legacy zlib];
+  libPath = lib.makeLibraryPath [
+    openssl
+    libxcrypt-legacy
+    zlib
+  ];
 
   preFixup = ''
     patchelf \
@@ -42,4 +48,4 @@ stdenv.mkDerivation rec {
     makeWrapper $out/lib/snowsql $out/bin/snowsql \
       --set LD_LIBRARY_PATH "${libPath}":"$out/lib"
   '';
-}
+})
