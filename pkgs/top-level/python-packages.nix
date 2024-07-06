@@ -2865,7 +2865,11 @@ self: super: with self; {
 
   dbglib = callPackage ../development/python-modules/dbglib { };
 
+  dbt-adapters = callPackage ../development/python-modules/dbt-adapters { };
+
   dbt-bigquery = callPackage ../development/python-modules/dbt-bigquery { };
+
+  dbt-common = callPackage ../development/python-modules/dbt-common { };
 
   dbt-core = callPackage ../development/python-modules/dbt-core { };
 
@@ -6183,6 +6187,8 @@ self: super: with self; {
   jira = callPackage ../development/python-modules/jira { };
 
   jishaku = callPackage ../development/python-modules/jishaku { };
+
+  jiter = callPackage ../development/python-modules/jiter { };
 
   jiwer = callPackage ../development/python-modules/jiwer { };
 

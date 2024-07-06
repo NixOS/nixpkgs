@@ -9,6 +9,7 @@
   hatch-fancy-pypi-readme,
   hatchling,
   httpx,
+  jiter,
   pydantic,
   pytest-asyncio,
   pytestCheckHook,
@@ -42,6 +43,7 @@ buildPythonPackage rec {
     anyio
     distro
     httpx
+    jiter
     sniffio
     pydantic
     tokenizers
