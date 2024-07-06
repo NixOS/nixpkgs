@@ -11597,8 +11597,6 @@ with pkgs;
 
   pdf-quench = callPackage ../applications/misc/pdf-quench { };
 
-  pdfarranger = callPackage ../applications/misc/pdfarranger { };
-
   briss = callPackage ../tools/graphics/briss { };
 
   brickd = callPackage ../servers/brickd { };
