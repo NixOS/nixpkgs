@@ -57,7 +57,7 @@ let
         NotifyAccess = "all"; #may not do anything...
         Slice = "system-samba.slice";
       };
-      unitConfig.RequiresMountsFor = "/var/lib/samba";
+      unitConfig.RequiresMountsFor = [ "/var/lib/samba" ];
 
       restartTriggers = [ configFile ];
     };
