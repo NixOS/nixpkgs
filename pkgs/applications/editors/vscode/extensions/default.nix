@@ -664,10 +664,14 @@ let
         mktplcRef = {
           name = "markdown-mermaid";
           publisher = "bierner";
-          version = "1.17.7";
-          hash = "sha256-WKe7XxBeYyzmjf/gnPH+5xNOHNhMPAKjtLorYyvT76U=";
+          version = "1.23.1";
+          hash = "sha256-hYWSeBXhqMcMxs+Logl5zRs4MlzBeHgCC07Eghmp0OM=";
         };
         meta = {
+          changelog = "https://marketplace.visualstudio.com/items/bierner.markdown-mermaid/changelog";
+          description = "Adds Mermaid diagram and flowchart support to VS Code's builtin markdown preview";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=bierner.markdown-mermaid";
+          homepage = "https://github.com/mjbvz/vscode-markdown-mermaid";
           license = lib.licenses.mit;
         };
       };
