@@ -11099,6 +11099,8 @@ with pkgs;
     apple_sdk = darwin.apple_sdk_11_0;
   };
 
+  openswitcher = callPackage ../applications/video/openswitcher { };
+
   obexfs = callPackage ../tools/bluetooth/obexfs { };
 
   obexftp = callPackage ../tools/bluetooth/obexftp { };
