@@ -12,7 +12,7 @@
   makeDesktopItem,
   webkitgtk,
   wrapGAppsHook3,
-  writeScript,
+  gitUpdater,
 }:
 let
   desktopItem = makeDesktopItem {
@@ -65,12 +65,7 @@ stdenv.mkDerivation rec {
     ln -s $out/portfolio/icon.xpm $out/share/pixmaps/portfolio.xpm
   '';
 
-  passthru.updateScript = writeScript "update.sh" ''
-    #!/usr/bin/env nix-shell
-    #!nix-shell -i bash -p curl jq common-updater-scripts
-    version="$(curl -sL "https://api.github.com/repos/buchen/portfolio/tags" | jq '.[0].name' --raw-output)"
-    update-source-version portfolio "$version"
-  '';
+  passthru.updateScript = gitUpdater { url = "https://github.com/buchen/portfolio.git"; };
 
   meta = with lib; {
     description = "Simple tool to calculate the overall performance of an investment portfolio";
