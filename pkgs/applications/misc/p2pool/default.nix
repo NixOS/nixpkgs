@@ -35,6 +35,10 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = ["-DWITH_LTO=OFF"];
 
+  env.NIX_CFLAGS_COMPILE = toString (lib.optionals (stdenv.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinMinVersion "10.13") [
+    "-faligned-allocation"
+  ]);
+
   installPhase = ''
     runHook preInstall
 
@@ -53,5 +57,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ ratsclub ];
     mainProgram = "p2pool";
+    platforms = platforms.all;
   };
 }
