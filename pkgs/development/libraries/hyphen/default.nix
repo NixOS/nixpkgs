@@ -23,7 +23,7 @@ in stdenv.mkDerivation rec {
     make install-libLTLIBRARIES
     make install-binSCRIPTS
     make install-includeHEADERS
-    
+
     # license
     install -D -m644 COPYING "$out/share/licenses/${pname}/LICENSE"
     runHook postInstall
