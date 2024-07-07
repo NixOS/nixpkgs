@@ -1,4 +1,4 @@
-{ lib, fetchFromGitea, buildGoModule }:
+{ lib, fetchFromGitea, buildGoModule, nix-update-script }:
 
 buildGoModule rec {
   pname = "codeberg-pages";
@@ -22,6 +22,8 @@ buildGoModule rec {
   ldflags = [ "-s" "-w" ];
 
   tags = [ "sqlite" "sqlite_unlock_notify" "netgo" ];
+
+  passthru.updateScript = nix-update-script {};
 
   meta = with lib; {
     mainProgram = "codeberg-pages";
