@@ -8951,6 +8951,8 @@ with pkgs;
 
   hyphen = callPackage ../development/libraries/hyphen { };
 
+  hyphenDicts = recurseIntoAttrs (callPackages ../development/libraries/hyphen/dictionaries.nix {});
+
   i2c-tools = callPackage ../os-specific/linux/i2c-tools { };
 
   i2pd = callPackage ../tools/networking/i2pd { };
