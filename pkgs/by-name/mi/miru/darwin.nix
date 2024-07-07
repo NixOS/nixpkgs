@@ -7,9 +7,15 @@
   pname,
   version,
   meta,
+  passthru,
 }:
 stdenvNoCC.mkDerivation rec {
-  inherit pname version meta;
+  inherit
+    pname
+    version
+    meta
+    passthru
+    ;
 
   src = fetchurl {
     url = "https://github.com/ThaUnknown/miru/releases/download/v${version}/mac-Miru-${version}-mac.zip";
