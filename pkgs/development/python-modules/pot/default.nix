@@ -3,9 +3,10 @@
   autograd,
   buildPythonPackage,
   fetchFromGitHub,
-  cupy,
   cvxopt,
   cython,
+  jax,
+  jaxlib,
   matplotlib,
   numpy,
   pymanopt,
@@ -14,8 +15,8 @@
   scikit-learn,
   scipy,
   setuptools,
-  enableDimensionalityReduction ? false,
-  enableGPU ? false,
+  tensorflow,
+  torch,
 }:
 
 buildPythonPackage rec {
@@ -38,24 +39,47 @@ buildPythonPackage rec {
     numpy
   ];
 
-  dependencies =
-    [
-      numpy
-      scipy
-    ]
-    ++ lib.optionals enableGPU [ cupy ]
-    ++ lib.optionals enableDimensionalityReduction [
-      autograd
-      pymanopt
-    ];
-
-  nativeCheckInputs = [
-    cvxopt
-    matplotlib
+  dependencies = [
     numpy
-    scikit-learn
-    pytestCheckHook
+    scipy
   ];
+
+  optional-dependencies = {
+    backend-numpy = [ ];
+    backend-jax = [
+      jax
+      jaxlib
+    ];
+    backend-cupy = [ ];
+    backend-tf = [ tensorflow ];
+    backend-torch = [ torch ];
+    cvxopt = [ cvxopt ];
+    dr = [
+      scikit-learn
+      pymanopt
+      autograd
+    ];
+    gnn = [
+      torch
+      # torch-geometric
+    ];
+    plot = [ matplotlib ];
+    all =
+      with optional-dependencies;
+      (
+        backend-numpy
+        ++ backend-jax
+        ++ backend-cupy
+        ++ backend-tf
+        ++ backend-torch
+        ++ optional-dependencies.cvxopt
+        ++ dr
+        ++ gnn
+        ++ plot
+      );
+  };
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   postPatch = ''
     substituteInPlace setup.cfg \
@@ -107,8 +131,6 @@ buildPythonPackage rec {
     # TypeError: Only integers, slices...
     "test_emd1d_device_tf"
   ];
-
-  disabledTestPaths = lib.optionals (!enableDimensionalityReduction) [ "test/test_dr.py" ];
 
   pythonImportsCheck = [
     "ot"
