@@ -3536,6 +3536,8 @@ with pkgs;
 
   cconv = callPackage ../tools/text/cconv { };
 
+  cfchecker = python3Packages.callPackage ../tools/misc/cfchecker { };
+
   go-check = callPackage ../development/tools/check { };
 
   go-cve-search = callPackage ../tools/security/go-cve-search { };

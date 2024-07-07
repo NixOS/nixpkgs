@@ -2093,6 +2093,8 @@ self: super: with self; {
 
   cftime = callPackage ../development/python-modules/cftime { };
 
+  cfunits = callPackage ../development/python-modules/cfunits { };
+
   cgen = callPackage ../development/python-modules/cgen { };
 
   cgroup-utils = callPackage ../development/python-modules/cgroup-utils { };
