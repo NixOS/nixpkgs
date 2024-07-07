@@ -62,7 +62,7 @@ self: super: builtins.intersectAttrs super {
     # This prevents linking issues when running TH splices.
     postInstall = ''
       mv "$out/bin/haskell-language-server" "$out/bin/.haskell-language-server-${self.ghc.version}-unwrapped"
-      BOOT_PKGS=`ghc-pkg-${self.ghc.version} --global list --simple-output`
+      BOOT_PKGS="ghc-${self.ghc.version} template-haskell-$(ghc-pkg-${self.ghc.version} --global --simple-output field template-haskell version)"
       ${pkgs.buildPackages.gnused}/bin/sed \
         -e "s!@@EXE_DIR@@!$out/bin!" \
         -e "s/@@EXE_NAME@@/.haskell-language-server-${self.ghc.version}-unwrapped/" \
