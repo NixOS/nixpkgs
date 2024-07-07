@@ -1,6 +1,6 @@
 { lib
 , buildPythonApplication
-, python3Packages
+, python311Packages
 , fetchPypi
 , pynput
 , xdg-base-dirs
@@ -17,7 +17,7 @@ buildPythonApplication rec {
     hash = "sha256-tuIolWvQ/vKSJr6oUTL7ZLPgdkYsIZods5yQNNfWbWY=";
   };
 
-  nativeBuildInputs = with python3Packages; [
+  nativeBuildInputs = with python311Packages; [
     hatch-vcs
     hatchling
   ];
