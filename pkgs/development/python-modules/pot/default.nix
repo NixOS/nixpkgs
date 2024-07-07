@@ -6,22 +6,21 @@
   cupy,
   cvxopt,
   cython,
-  oldest-supported-numpy,
   matplotlib,
   numpy,
-  tensorflow,
   pymanopt,
   pytestCheckHook,
   pythonOlder,
   scikit-learn,
   scipy,
+  setuptools,
   enableDimensionalityReduction ? false,
   enableGPU ? false,
 }:
 
 buildPythonPackage rec {
   pname = "pot";
-  version = "0.9.3";
+  version = "0.9.4";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
@@ -30,15 +29,16 @@ buildPythonPackage rec {
     owner = "PythonOT";
     repo = "POT";
     rev = "refs/tags/${version}";
-    hash = "sha256-fdqDM0V6zTFe1lcqi53ZZNHAfmuR2I7fdX4SN9qeNn8=";
+    hash = "sha256-Yx9hjniXebn7ZZeqou0JEsn2Yf9hyJSu/acDlM4kCCI=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
+    setuptools
     cython
-    oldest-supported-numpy
+    numpy
   ];
 
-  propagatedBuildInputs =
+  dependencies =
     [
       numpy
       scipy
@@ -53,7 +53,6 @@ buildPythonPackage rec {
     cvxopt
     matplotlib
     numpy
-    tensorflow
     scikit-learn
     pytestCheckHook
   ];
@@ -63,6 +62,9 @@ buildPythonPackage rec {
       --replace " --cov-report= --cov=ot" "" \
       --replace " --durations=20" "" \
       --replace " --junit-xml=junit-results.xml" ""
+
+    substituteInPlace pyproject.toml \
+      --replace-fail "numpy>=2.0.0" "numpy"
 
     # we don't need setup.py to find the macos sdk for us
     sed -i '/sdk_path/d' setup.py
