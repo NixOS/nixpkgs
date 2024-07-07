@@ -3276,7 +3276,10 @@ with pkgs;
 
   awscli = callPackage ../tools/admin/awscli { };
 
-  awscli2 = callPackage ../tools/admin/awscli2 { };
+  awscli2 = callPackage ../tools/admin/awscli2 {
+    # change when https://github.com/aws/aws-cli/issues/8342 resolved
+    python3 = python311;
+  };
 
   okta-aws-cli = callPackage ../tools/admin/okta-aws-cli { };
 
