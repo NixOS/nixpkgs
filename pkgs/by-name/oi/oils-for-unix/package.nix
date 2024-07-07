@@ -61,6 +61,7 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ mkg20001 melkor333 ];
     changelog = "https://www.oilshell.org/release/${version}/changelog.html";
+    mainProgram = "osh";
   };
 
   passthru = {
