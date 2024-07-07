@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage rec {
   version = "0.4.2";
 
   src = fetchFromGitHub {
-    owner = "trimental";
+    owner = "Inlyne-Project";
     repo = pname;
     rev = "v${version}";
     hash = "sha256-Kae8WnahA/6k6QT5htYU2+diAFkmxVsbVaxRUlhf39o=";
@@ -53,9 +53,9 @@ rustPlatform.buildRustPackage rec {
 
   postInstall = ''
     installShellCompletion --cmd inlyne \
-      --bash <($out/bin/inlyne --gen-completions bash) \
-      --fish <($out/bin/inlyne --gen-completions fish) \
-      --zsh <($out/bin/inlyne --gen-completions zsh)
+      --bash $out/completions/inlyne.bash \
+      --fish $out/completions/inlyne.fish \
+      --zsh $out/completions/_inlyne
   '';
 
   postFixup = lib.optionalString stdenv.isLinux ''
