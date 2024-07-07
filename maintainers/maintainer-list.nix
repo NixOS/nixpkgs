@@ -10968,6 +10968,12 @@
     githubId = 2943605;
     name = "Evgeny Kurnevsky";
   };
+  kurtkilpela = {
+    name = "Kurt Kilpela";
+    email = "dev@kurtkilpela.com";
+    github = "kurtkilpela";
+    githubId = 823814;
+  };
   kuwii = {
     name = "kuwii";
     email = "kuwii.someone@gmail.com";
