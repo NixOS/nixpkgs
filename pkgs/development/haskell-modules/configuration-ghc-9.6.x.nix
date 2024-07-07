@@ -165,6 +165,8 @@ self: super: {
     lambdabot
     lambdabot-haskell-plugins
     ;
+
+  singletons-base = dontCheck super.singletons-base;
 }
 # super.ghc is required to break infinite recursion as Nix is strict in the attrNames
 // lib.optionalAttrs (pkgs.stdenv.hostPlatform.isAarch64 && lib.versionOlder super.ghc.version "9.6.4") {
