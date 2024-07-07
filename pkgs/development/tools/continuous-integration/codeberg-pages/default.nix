@@ -27,7 +27,7 @@ buildGoModule rec {
 
   meta = with lib; {
     mainProgram = "pages";
-    maintainers = with maintainers; [ laurent-f1z1 ];
+    maintainers = with maintainers; [ laurent-f1z1 christoph-heiss ];
     license = licenses.eupl12;
     homepage = "https://codeberg.org/Codeberg/pages-server";
     description = "Static websites hosting from Gitea repositories";
