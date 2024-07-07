@@ -41,8 +41,8 @@ stdenv.mkDerivation (finalAttrs: {
   version = "8.0";
 
   src = fetchFromGitHub {
-    owner = "PollyMC";
-    repo = "fn2006";
+    owner = "fn2006";
+    repo = "PollyMC";
     url = "https://github.com/fn2006/PollyMC/";
     rev = finalAttrs.version;
     hash = "sha256-LwUDOniK8zSywg3ZZmq6xAMceFH/lk1rPAjEGPoCGEk=";
