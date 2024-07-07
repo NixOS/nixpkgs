@@ -1,12 +1,14 @@
 {
   config,
-  pkgs,
   lib,
+  stdenv,
+  newScope,
+  gtk3,
   # zathura_pdf_mupdf fails to load _opj_create_decompress at runtime on Darwin (https://github.com/NixOS/nixpkgs/pull/61295#issue-277982980)
-  useMupdf ? config.zathura.useMupdf or (!pkgs.stdenv.isDarwin),
+  useMupdf ? config.zathura.useMupdf or (!stdenv.isDarwin),
 }:
 
-lib.makeScope pkgs.newScope (
+lib.makeScope newScope (
   self:
   let
     callPackage = self.callPackage;
@@ -14,7 +16,7 @@ lib.makeScope pkgs.newScope (
   {
     inherit useMupdf;
 
-    gtk = pkgs.gtk3;
+    gtk = gtk3;
 
     zathura_core = callPackage ./core { };
 
