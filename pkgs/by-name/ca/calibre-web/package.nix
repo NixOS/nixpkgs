@@ -1,6 +1,7 @@
 { lib
 , fetchFromGitHub
 , nixosTests
+, nix-update-script
 , python3
 }:
 
@@ -83,7 +84,10 @@ python.pkgs.buildPythonApplication rec {
   # Upstream repo doesn't provide any tests.
   doCheck = false;
 
-  passthru.tests.calibre-web = nixosTests.calibre-web;
+  passthru = {
+    tests.calibre-web = nixosTests.calibre-web;
+    updateScript = nix-update-script { };
+  };
 
   meta = with lib; {
     description = "Web app for browsing, reading and downloading eBooks stored in a Calibre database";
