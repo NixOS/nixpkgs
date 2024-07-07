@@ -4398,8 +4398,6 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Cocoa;
   };
 
-  cue2pops = callPackage ../tools/cd-dvd/cue2pops { };
-
   cabal2nix-unwrapped = haskell.lib.compose.justStaticExecutables
     (haskellPackages.generateOptparseApplicativeCompletions [ "cabal2nix" ] haskellPackages.cabal2nix);
 
