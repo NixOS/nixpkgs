@@ -7,11 +7,11 @@
 
 buildPythonApplication rec {
   pname = "rshell";
-  version = "0.0.32";
+  version = "0.0.33";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-frIwZ21JzVgxRS+KouBjDShHCP1lCoUwwySy2oFGcJ8=";
+    hash = "sha256-yD4F4xZpHaID5aXZ5tbCZB24a/+FtyobmAOV5GOJMMU=";
   };
 
   propagatedBuildInputs = [
