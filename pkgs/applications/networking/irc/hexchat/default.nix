@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, gtk2, lua, perl, python3Packages
+{ lib, stdenv, fetchFromGitHub, pkg-config, gtk2, lua, perl, python311Packages
 , pciutils, dbus-glib, libcanberra-gtk2, libproxy
 , enchant2, libnotify, openssl, isocodes
 , desktop-file-utils
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ meson ninja pkg-config makeWrapper ];
 
   buildInputs = [
-    gtk2 lua perl python3Packages.python python3Packages.cffi pciutils dbus-glib libcanberra-gtk2 libproxy
+    gtk2 lua perl python311Packages.python python311Packages.cffi pciutils dbus-glib libcanberra-gtk2 libproxy
     libnotify openssl desktop-file-utils
     isocodes
   ];
