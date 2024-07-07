@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "rubicon-objc";
-  version = "0.4.8";
+  version = "0.4.9";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -20,12 +20,12 @@ buildPythonPackage rec {
     owner = "beeware";
     repo = "rubicon-objc";
     rev = "refs/tags/v${version}";
-    hash = "sha256-aFKzLeVYn5u8hTEgXCum3XpZxI7C/Wql41jkWkCF0HQ=";
+    hash = "sha256-jQ/q2yIXJp+X4ajcbEqxXuYtYeyZJ1xTBjSlzqLuRpg=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "setuptools==69.2.0" "setuptools" \
+      --replace-fail "setuptools==69.5.1" "setuptools" \
       --replace-fail "setuptools_scm==8.0.4" "setuptools_scm"
   '';
 

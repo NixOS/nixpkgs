@@ -13,7 +13,6 @@
   pytestCheckHook,
   python-slugify,
   pythonOlder,
-  pythonRelaxDepsHook,
   setuptools,
   universal-silabs-flasher,
   wheel,
@@ -53,7 +52,6 @@ buildPythonPackage rec {
     "zigpy"
   ];
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   build-system = [
     setuptools

@@ -1,11 +1,11 @@
 { lib
 , stdenv
-, buildGo122Module
+, buildGoModule
 , fetchFromGitHub
 , fetchNpmDeps
 , cacert
-, go_1_22
 , git
+, go
 , enumer
 , mockgen
 , nodejs
@@ -14,27 +14,22 @@
 , nixosTests
 }:
 
-let
-  buildGoModule = buildGo122Module;
-  go = go_1_22;
-in
-
 buildGoModule rec {
   pname = "evcc";
-  version = "0.127.2";
+  version = "0.128.1";
 
   src = fetchFromGitHub {
     owner = "evcc-io";
     repo = "evcc";
     rev = version;
-    hash = "sha256-85AhiqAvjr63tfXovH2bt1b583ak1N09EtbLLtW7qeA=";
+    hash = "sha256-xoLQcCbqzeNUyVPkcrPhmNi8PUzzeGshFVvmMCudQU8=";
   };
 
-  vendorHash = "sha256-MdfLJpPEi6Cr34W6eJSraKJwBPtR66HM2tJIbPE9mZs=";
+  vendorHash = "sha256-O8chNEtNEbzNiFzDD1j16V6eS3GKpUWB4PMuBiRNsyU=";
 
   npmDeps = fetchNpmDeps {
     inherit src;
-    hash = "sha256-6Dxf32myqRbKIlYFcQhkuqZVz+lVvmeJ5lqiWPCQAzA=";
+    hash = "sha256-XG9nefBefF2gdDWA9IYBI2dv6Lig2LqGgOnTjyni0fM=";
   };
 
   nativeBuildInputs = [
@@ -78,6 +73,7 @@ buildGoModule rec {
     skippedTests = [
       # network access
       "TestOctopusConfigParse"
+      "TestTemplates/ac-elwa-2"
       "TestTemplates/allinpower"
       "TestTemplates/electricitymaps"
       "TestTemplates/elering"

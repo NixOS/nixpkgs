@@ -18,15 +18,15 @@
 , externalEtc ? "/etc"
 }:
 
-stdenv.mkDerivation rec{
-  pname = "voms-unstable";
-  version = "2022-06-14";
+stdenv.mkDerivation (finalAttrs: {
+  pname = "voms";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "italiangrid";
     repo = "voms";
-    rev = "8e99bb96baaf197f0f557836e2829084bb1bb00e"; # develop branch
-    hash = "sha256-FG4fHO2lsQ3t/ZaKT9xY+xqdQHfdtzi5ULtxLhdPnss=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-Xz9+NYaSZsVuoIbyuejVWmwEmsPmMVtBAD94/SXP8ag=";
   };
 
   passthru = {
@@ -83,4 +83,4 @@ stdenv.mkDerivation rec{
     platforms = platforms.linux; # gsoap is currently Linux-only in Nixpkgs
     maintainers = with maintainers; [ ShamrockLee ];
   };
-}
+})

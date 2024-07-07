@@ -6,7 +6,6 @@
   fetchFromGitHub,
   iterfzf,
   poetry-core,
-  pythonRelaxDepsHook,
   pythonOlder,
   pyyaml,
   rich,
@@ -34,7 +33,6 @@ buildPythonPackage rec {
 
   build-system = [ poetry-core ];
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   dependencies = [
     click

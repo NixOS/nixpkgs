@@ -12,6 +12,7 @@ let
           CoreImage
           VideoToolbox
           ;
+        inherit (darwin) xcode;
       }
       // (initArgs // { inherit ffmpegVariant; })
     );

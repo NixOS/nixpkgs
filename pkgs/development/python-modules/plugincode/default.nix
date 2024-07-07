@@ -38,7 +38,8 @@ buildPythonPackage rec {
     pytest-xdist
   ];
 
-  pythonImportsCheck = [ "plugincode" ];
+  # wants to read /etc/os-release and crashes because that is not available in the sandbox
+  # pythonImportsCheck = [ "plugincode" ];
 
   disabledTests = [
     # We don't want black as an input

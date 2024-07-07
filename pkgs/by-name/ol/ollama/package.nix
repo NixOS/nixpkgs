@@ -142,6 +142,8 @@ in
 goBuild ((lib.optionalAttrs enableRocm {
   ROCM_PATH = rocmPath;
   CLBlast_DIR = "${clblast}/lib/cmake/CLBlast";
+}) // (lib.optionalAttrs enableCuda {
+  CUDA_LIB_DIR = "${cudaToolkit}/lib";
 }) // {
   inherit pname version src vendorHash;
 
@@ -161,6 +163,7 @@ goBuild ((lib.optionalAttrs enableRocm {
     (rocmLibs ++ [ libdrm ])
   ++ lib.optionals enableCuda [
     cudaPackages.cuda_cudart
+    cudaPackages.cuda_cccl
     cudaPackages.libcublas
   ] ++ lib.optionals stdenv.isDarwin
     metalFrameworks;

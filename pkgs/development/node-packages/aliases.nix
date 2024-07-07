@@ -56,6 +56,7 @@ mapAliases {
   "@zwave-js/server" = pkgs.zwave-js-server; # Added 2023-09-09
   alloy = pkgs.titanium-alloy; # added 2023-08-17
   antennas = pkgs.antennas; # added 2023-07-30
+  inherit (pkgs) autoprefixer; # added 2024-06-25
   inherit (pkgs) asar; # added 2023-08-26
   inherit (pkgs) auto-changelog; # added 2024-06-25
   inherit (pkgs) aws-azure-login; # added 2023-09-30
@@ -112,6 +113,7 @@ mapAliases {
   inherit (pkgs) javascript-typescript-langserver; # added 2023-08-19
   karma = pkgs.karma-runner; # added 2023-07-29
   leetcode-cli = vsc-leetcode-cli; # added 2023-08-31
+  inherit (pkgs) lv_font_conv; # added 2024-06-28
   manta = pkgs.node-manta; # Added 2023-05-06
   inherit (pkgs) markdown-link-check; # added 2024-06-28
   markdownlint-cli = pkgs.markdownlint-cli; # added 2023-07-29
@@ -170,7 +172,9 @@ mapAliases {
   inherit (pkgs) titanium; # added 2023-08-17
   triton = pkgs.triton; # Added 2023-05-06
   typescript = pkgs.typescript; # Added 2023-06-21
+  inherit (pkgs) typescript-language-server; # added 2024-02-27
   inherit (pkgs) uglify-js; # added 2024-06-15
+  inherit (pkgs) undollar; # added 2024-06-29
   inherit (pkgs) ungit; # added 2023-08-20
   inherit (pkgs) vim-language-server; # added 2024-06-25
   inherit (pkgs) vsc-leetcode-cli; # Added 2023-08-30

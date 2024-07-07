@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pythonOlder,
-  pythonRelaxDepsHook,
 
   # build-system
   pdm-backend,
@@ -61,7 +60,6 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     pdm-backend
-    pythonRelaxDepsHook
   ];
 
   pythonRelaxDeps = [ "unidecode" ];
@@ -105,6 +103,7 @@ buildPythonPackage rec {
     "test_basic_generation_works"
     "test_custom_generation_works"
     "test_custom_locale_generation_works"
+    "test_deprecated_attribute"
   ];
 
   env.LC_ALL = "en_US.UTF-8";

@@ -25,10 +25,6 @@ buildPythonPackage rec {
     poetry-core
   ];
 
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
-  ];
-
   dependencies = [
     colorama
     openai

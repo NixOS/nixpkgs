@@ -7,17 +7,17 @@
 }:
 
 let
-  rev = "99067dba625db3ac54ca4d3a3c811c41de207309";
+  rev = "a6c849619abcdd80dc82ec5417195414ad438fa3";
 in
 melpaBuild {
   pname = "edraw";
-  version = "20240612.1012";
+  version = "20240701.444";
 
   src = fetchFromGitHub {
     owner = "misohena";
     repo = "el-easydraw";
     inherit rev;
-    hash = "sha256-32N8kXGFCvB6IHKwUsBGpdtAAf/p3nlq8mAdZrxLt0c=";
+    hash = "sha256-CbcI1mmghc3HObg80bjScVDcJ1DHx9aX1WP2HlhAshs=";
   };
 
   commit = rev;

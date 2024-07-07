@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "qcelemental";
-  version = "0.27.1";
+  version = "0.28.0";
 
   pyproject = true;
 
@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-dlcfIUKAg6yc4S3RXVJ1sKM29E1ZvHY82kjx1CM8/08=";
+    hash = "sha256-2pb924jBcB+BKyU2mmoWnTXy1URsN8YuhgSMsPGxaKI=";
   };
 
   nativeBuildInputs = [ poetry-core ];

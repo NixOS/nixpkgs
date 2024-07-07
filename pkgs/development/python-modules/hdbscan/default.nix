@@ -9,7 +9,6 @@
   fetchPypi,
   joblib,
   six,
-  pythonRelaxDepsHook,
 }:
 
 buildPythonPackage rec {
@@ -24,7 +23,6 @@ buildPythonPackage rec {
 
   pythonRemoveDeps = [ "cython" ];
   nativeBuildInputs = [
-    pythonRelaxDepsHook
     cython
   ];
   propagatedBuildInputs = [

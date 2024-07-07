@@ -10,7 +10,7 @@
 , pkg-config
 , clang
 , bintools
-, python3
+, python3Packages
 , git
 , fetchpatch
 , makeWrapper
@@ -42,6 +42,7 @@
 }:
 
 let
+  python3 = python3Packages.python.withPackages (p: [ p.setuptools ]); # python 3.12 compat.
 
   inherit (stdenv) hostPlatform targetPlatform;
 
@@ -701,6 +702,7 @@ in stdenv.mkDerivation {
     maintainers = with lib.maintainers; [ dtzWill trepetti dduan trundle stephank ];
     license = lib.licenses.asl20;
     platforms = with lib.platforms; linux ++ darwin;
+    broken = stdenv.isDarwin;
     # Swift doesn't support 32-bit Linux, unknown on other platforms.
     badPlatforms = lib.platforms.i686;
     timeout = 86400; # 24 hours.

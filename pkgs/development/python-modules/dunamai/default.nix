@@ -12,8 +12,8 @@
 
 buildPythonPackage rec {
   pname = "dunamai";
-  version = "1.20.0";
-  format = "pyproject";
+  version = "1.21.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "mtkennerly";
     repo = "dunamai";
     rev = "refs/tags/v${version}";
-    hash = "sha256-K7G5BiUm8QTRbw0W3ebTld7CAZI8sYSnRsD7vQhCptE=";
+    hash = "sha256-dsL1MhlL1Yjj06D0z2FzZ53Frfp4U+5dXA9vPjU+pvY=";
   };
 
   nativeBuildInputs = [ poetry-core ];

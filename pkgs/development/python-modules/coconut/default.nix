@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "coconut";
-  version = "3.1.0";
+  version = "3.1.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "evhub";
     repo = "coconut";
     rev = "refs/tags/v${version}";
-    hash = "sha256-xlA/yryUXZCU56gJ0y7M9JHgWkvXiB09ywyf0sP1o+4=";
+    hash = "sha256-AqKLSghuyha4wSaC/91bfNna7v8xyw8NLRWBjwu5Rjo=";
   };
 
   nativeBuildInputs = [ setuptools ];

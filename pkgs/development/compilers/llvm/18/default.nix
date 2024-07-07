@@ -1,6 +1,6 @@
 { lowPrio, newScope, pkgs, lib, stdenv
 , preLibcCrossHeaders
-, substitute, substituteAll, fetchFromGitHub
+, substitute, substituteAll, fetchFromGitHub, fetchpatch
 , overrideCC, wrapCCWith, wrapBintoolsWith
 , buildLlvmTools # tools, but from the previous stage, for cross
 , targetLlvmLibraries # libraries, but from the next stage, for cross
@@ -26,7 +26,7 @@
   #   rev-version = /* human readable version; i.e. "unstable-2022-26-07" */;
   #   sha256 = /* checksum for this release, can omit if specifying your own `monorepoSrc` */;
   # }
-, officialRelease ? { version = "18.1.7"; sha256 = "sha256-qBL/1zh2YFabiPAyHehvzDSDfnwnCvyH6nY/pzG757A="; }
+, officialRelease ? { version = "18.1.8"; sha256 = "sha256-iiZKMRo/WxJaBXct9GdAcAT3cz9d9pnAcO1mmR6oPNE="; }
   # i.e.:
   # {
   #   version = /* i.e. "15.0.0" */;
@@ -156,6 +156,14 @@ in let
           src = ../common/clang/clang-at-least-16-LLVMgold-path.patch;
           libllvmLibdir = "${tools.libllvm.lib}/lib";
         })
+        (fetchpatch {
+          name = "tweak-tryCaptureVariable-for-unevaluated-lambdas.patch";
+          url = "https://github.com/llvm/llvm-project/commit/3d361b225fe89ce1d8c93639f27d689082bd8dad.patch";
+          # TreeTransform.h is not affected in LLVM 18.
+          excludes = ["docs/ReleaseNotes.rst" "lib/Sema/TreeTransform.h"];
+          stripLen = 1;
+          hash = "sha256-1NKej08R9SPlbDY/5b0OKUsHjX07i9brR84yXiPwi7E=";
+        })
       ];
     };
 
@@ -263,7 +271,7 @@ in let
       bintools = bintools';
       extraPackages = [
         targetLlvmLibraries.compiler-rt
-      ] ++ lib.optionals (!stdenv.targetPlatform.isWasm) [
+      ] ++ lib.optionals (!stdenv.targetPlatform.isWasm && !stdenv.targetPlatform.isFreeBSD) [
         targetLlvmLibraries.libunwind
       ];
       extraBuildCommands = mkExtraBuildCommands cc;
@@ -272,12 +280,12 @@ in let
           "-Wno-unused-command-line-argument"
           "-B${targetLlvmLibraries.compiler-rt}/lib"
         ]
-        ++ lib.optional (!stdenv.targetPlatform.isWasm) "--unwindlib=libunwind"
+        ++ lib.optional (!stdenv.targetPlatform.isWasm && !stdenv.targetPlatform.isFreeBSD) "--unwindlib=libunwind"
         ++ lib.optional
-          (!stdenv.targetPlatform.isWasm && stdenv.targetPlatform.useLLVM or false)
+          (!stdenv.targetPlatform.isWasm && !stdenv.targetPlatform.isFreeBSD && stdenv.targetPlatform.useLLVM or false)
           "-lunwind"
         ++ lib.optional stdenv.targetPlatform.isWasm "-fno-exceptions";
-      nixSupport.cc-ldflags = lib.optionals (!stdenv.targetPlatform.isWasm) [ "-L${targetLlvmLibraries.libunwind}/lib" ];
+      nixSupport.cc-ldflags = lib.optionals (!stdenv.targetPlatform.isWasm && !stdenv.targetPlatform.isFreeBSD) [ "-L${targetLlvmLibraries.libunwind}/lib" ];
     };
 
     clangNoLibcxx = wrapCCWith rec {

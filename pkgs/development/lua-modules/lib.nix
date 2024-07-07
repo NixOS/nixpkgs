@@ -124,7 +124,6 @@ rec {
         (lib.filter (lib.isDerivation) externalDeps);
 
       generatedConfig = ({
-        local_cache = "";
 
         # To prevent collisions when creating environments, we install the rock
         # files into per-package subdirectories

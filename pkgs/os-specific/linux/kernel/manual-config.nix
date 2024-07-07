@@ -1,5 +1,5 @@
 { lib, stdenv, buildPackages, runCommand, nettools, bc, bison, flex, perl, rsync, gmp, libmpc, mpfr, openssl
-, cpio, elfutils, zstd, python3Minimal, zlib, pahole, kmod, ubootTools
+, cpio, elfutils, hexdump, zstd, python3Minimal, zlib, pahole, kmod, ubootTools
 , fetchpatch
 , rustc, rust-bindgen, rustPlatform
 }:
@@ -121,6 +121,7 @@ let
         pahole
         perl
         elfutils
+        hexdump
         # module makefiles often run uname commands to find out the kernel version
         (buildPackages.deterministic-uname.override { inherit modDirVersion; })
       ]
@@ -312,7 +313,7 @@ let
       installTargets = [
         (kernelConf.installTarget or (
           /**/ if kernelConf.target == "uImage" && stdenv.hostPlatform.linuxArch == "arm" then "uinstall"
-          else if kernelConf.target == "zImage" || kernelConf.target == "Image.gz" then "zinstall"
+          else if kernelConf.target == "zImage" || kernelConf.target == "Image.gz" || kernelConf.target == "vmlinuz.efi" then "zinstall"
           else "install"))
       ];
 

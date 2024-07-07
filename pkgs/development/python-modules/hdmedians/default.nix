@@ -2,39 +2,52 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  nose,
   cython,
   numpy,
+  oldest-supported-numpy,
+  pynose,
+  pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   version = "0.14.2";
-  format = "setuptools";
   pname = "hdmedians";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b47aecb16771e1ba0736557255d80ae0240b09156bff434321de559b359ac2d6";
+    hash = "sha256-tHrssWdx4boHNlVyVdgK4CQLCRVr/0NDId5VmzWawtY=";
   };
 
-  # nose was specified in setup.py as a build dependency...
-  buildInputs = [
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace-fail "'nose>=1.0'," ""
+  '';
+
+  build-system = [
     cython
-    nose
+    oldest-supported-numpy
+    setuptools
   ];
-  propagatedBuildInputs = [ numpy ];
 
-  # cannot resolve path for packages in tests
-  doCheck = false;
+  dependencies = [ numpy ];
 
-  checkPhase = ''
-    nosetests
+  pythonImportsCheck = [ "hdmedians" ];
+
+  nativeCheckInputs = [
+    pynose
+    pytestCheckHook
+  ];
+
+  preCheck = ''
+    cd $out
   '';
 
   meta = with lib; {
     homepage = "https://github.com/daleroberts/hdmedians";
     description = "High-dimensional medians";
-    license = licenses.gpl3;
+    license = licenses.asl20;
     maintainers = [ ];
   };
 }

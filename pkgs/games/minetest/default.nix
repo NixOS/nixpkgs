@@ -34,6 +34,7 @@
 , libX11
 , ninja
 , prometheus-cpp
+, mesa
 , OpenGL
 , OpenAL ? openal
 , Carbon
@@ -95,7 +96,8 @@ stdenv.mkDerivation (finalAttrs: {
     gmp
     libspatialindex
   ] ++ lib.optional (lib.meta.availableOn stdenv.hostPlatform luajit) luajit
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    mesa # for <KHR/khrplatform.h>
     libiconv
     OpenGL
     OpenAL
@@ -108,6 +110,7 @@ stdenv.mkDerivation (finalAttrs: {
     openal
     libogg
     libvorbis
+  ] ++ lib.optionals (buildClient && !stdenv.hostPlatform.isDarwin) [
     xorg.libX11
   ] ++ lib.optionals buildServer [
     leveldb

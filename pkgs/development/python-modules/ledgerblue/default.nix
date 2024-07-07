@@ -16,7 +16,6 @@
   python-gnupg,
   python-u2flib-host,
   pythonOlder,
-  pythonRelaxDepsHook,
   setuptools,
   setuptools-scm,
   websocket-client,
@@ -37,7 +36,6 @@ buildPythonPackage rec {
   build-system = [
     setuptools
     setuptools-scm
-    pythonRelaxDepsHook
   ];
 
   pythonRelaxDeps = [ "protobuf" ];
