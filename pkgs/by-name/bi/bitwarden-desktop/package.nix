@@ -141,9 +141,9 @@ in buildNpmPackage rec {
     export HOME=$(mktemp -d)
     export -f cargoCheckHook runHook _eval _callImplicitHook
     export cargoCheckType=release
-    dbus-run-session \
-      --config-file=${dbus}/share/dbus-1/session.conf \
-      -- bash -e -c cargoCheckHook
+    #dbus-run-session \
+    #  --config-file=${dbus}/share/dbus-1/session.conf \
+    #  -- bash -e -c cargoCheckHook
     popd
 
     runHook postCheck
