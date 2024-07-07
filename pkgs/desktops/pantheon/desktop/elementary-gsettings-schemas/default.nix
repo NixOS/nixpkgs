@@ -4,7 +4,6 @@
 , elementary-default-settings
 , glib
 , gala
-, epiphany
 , gnome-settings-daemon
 , gtk3
 , elementary-plank
@@ -20,7 +19,6 @@ let
   gsettingsOverridePackages = [
     elementary-plank
     gnome-settings-daemon
-    epiphany
     gala
     gsettings-desktop-schemas
     gtk3
