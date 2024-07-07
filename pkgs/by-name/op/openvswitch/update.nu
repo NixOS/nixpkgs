@@ -11,7 +11,7 @@ def main [--lts = false, --regex: string] {
     if $lts {
       update-source-version openvswitch-lts $latest_tag $"--file=(pwd)/pkgs/by-name/op/openvswitch/lts.nix"
     } else {
-      update-source-version openvswitch $latest_tag $"--file=(pwd)/pkgs/by-name/op/openvswitch/default.nix"
+      update-source-version openvswitch $latest_tag $"--file=(pwd)/pkgs/by-name/op/openvswitch/package.nix"
     }
   }
 
