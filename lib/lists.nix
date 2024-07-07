@@ -406,6 +406,10 @@ rec {
   /**
     Map, removing null values.
 
+    `filterMap` is a convenience function. Use it when `null` is never a
+    valid return item; otherwise, use the more flexible `concatMap`,
+    especially in generic code.
+
     # Type
 
     ```
