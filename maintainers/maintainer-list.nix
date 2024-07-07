@@ -14,6 +14,36 @@
      keys = [{
        fingerprint = "AAAA BBBB CCCC DDDD EEEE  FFFF 0000 1111 2222 3333";
      }];
+
+     # Default null; should be a free-form string explaining why the maintainer
+     # became inactive.
+     #
+     # The most immediate use of this attribute is to mark maintainers that are
+     # not contributing to Nixpkgs from a long amount of time.
+     # Nonetheless it can be used to mark any *long term inactivity*, including
+     # but not limited to:
+     #
+     # - Sabbatical leave
+     # - Retirement
+     # - Personal or force majeure isues
+     #
+     # In principle, a third person can set this attribute. For the sake of a
+     # good etiquette, in such case at least one contact attempt should be
+     # issued and carried out before effectively committing it to the codebase.
+     #
+     # This attribute can be employed to many useful activities, including but
+     # not limited to:
+     #
+     # - Treewide automation
+     #   - Removal of inactive maintainers from packages
+     #   - Orphaning alerts
+     # - Filter automatic notifications
+     #
+     inactivityReason = ''
+       Real life issues: I want to take the Hunter Exam this year.
+
+       Registered at 2024-06-19 by Theresia.
+     '';
    };
    ```
 
@@ -26,6 +56,7 @@
    - `github` is your GitHub handle (as it appears in the URL of your profile page, `https://github.com/<userhandle>`),
    - `githubId` is your GitHub user ID, which can be found at `https://api.github.com/users/<userhandle>`,
    - `keys` is a list of your PGP/GPG key fingerprints.
+   - `inactivityReason` is an optional string attribute, explained above.
 
    Specifying a GitHub account ensures that you automatically:
    - get invited to the @NixOS/nixpkgs-maintainers team ;
