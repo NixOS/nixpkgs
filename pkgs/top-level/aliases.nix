@@ -1372,6 +1372,7 @@ mapAliases ({
   trustedGrub-for-HP = throw "trustedGrub-for-HP has been removed, because it is not maintained upstream anymore"; # Added 2023-05-10
   tvbrowser-bin = tvbrowser; # Added 2023-03-02
   typst-fmt = typstfmt; # Added 2023-07-15
+  typst-preview = throw "The features of this program have been consolidated to 'tinymist', an all-in-one language server for typst"; # Added 2024-07-07
 
   ### U ###
 
