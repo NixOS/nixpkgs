@@ -2,13 +2,13 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pdm-backend
+, rich
 , typer
 , fastapi
 , uvicorn
 
 # checks
 , pytestCheckHook
-, rich
 }:
 
 let self = buildPythonPackage rec {
@@ -25,7 +25,10 @@ let self = buildPythonPackage rec {
 
   build-system = [ pdm-backend ];
 
-  dependencies = [ typer ];
+  dependencies = [
+    rich
+    typer
+  ];
 
   optional-dependencies = {
     standard = [
@@ -40,7 +43,6 @@ let self = buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-    rich
   ] ++ optional-dependencies.standard;
 
   # coverage
@@ -51,6 +53,8 @@ let self = buildPythonPackage rec {
   meta = with lib; {
     description = "Run and manage FastAPI apps from the command line with FastAPI CLI";
     homepage = "https://github.com/tiangolo/fastapi-cli";
+    changelog = "https://github.com/tiangolo/fastapi-cli/releases/tag/${version}";
+    mainProgram = "fastapi";
     license = licenses.mit;
     maintainers = with maintainers; [ ];
   };
