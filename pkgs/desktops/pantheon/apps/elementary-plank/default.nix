@@ -26,7 +26,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "elementary-dock";
+  pname = "elementary-plank";
   version = "unstable-2021-05-07";
 
   outputs = [ "out" "dev" ];

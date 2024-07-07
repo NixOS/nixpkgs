@@ -59,8 +59,6 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   elementary-code = callPackage ./apps/elementary-code { };
 
-  elementary-dock = callPackage ./apps/elementary-dock { };
-
   elementary-files = callPackage ./apps/elementary-files { };
 
   elementary-feedback = callPackage ./apps/elementary-feedback { };
@@ -72,6 +70,8 @@ lib.makeScope pkgs.newScope (self: with self; {
   elementary-music = callPackage ./apps/elementary-music { };
 
   elementary-photos = callPackage ./apps/elementary-photos { };
+
+  elementary-plank = callPackage ./apps/elementary-plank { };
 
   elementary-screenshot = callPackage ./apps/elementary-screenshot { };
 

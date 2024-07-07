@@ -222,7 +222,7 @@ in
 
         # Desktop
         elementary-default-settings
-        elementary-dock
+        elementary-plank
         elementary-shortcut-overlay
 
         # Services
