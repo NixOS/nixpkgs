@@ -1,0 +1,15 @@
+diff -ru a/absl/base/config.h b/absl/base/config.h
+--- a/absl/base/config.h
++++ b/absl/base/config.h
+@@ -558,9 +558,9 @@
+         __ENVIRONMENT_WATCH_OS_VERSION_MIN_REQUIRED__ < 50000) ||   \
+        (defined(__ENVIRONMENT_TV_OS_VERSION_MIN_REQUIRED__) &&      \
+         __ENVIRONMENT_TV_OS_VERSION_MIN_REQUIRED__ < 120000))))
+-#define ABSL_INTERNAL_APPLE_CXX17_TYPES_UNAVAILABLE 1
++// #define ABSL_INTERNAL_APPLE_CXX17_TYPES_UNAVAILABLE 1
+ #else
+-#define ABSL_INTERNAL_APPLE_CXX17_TYPES_UNAVAILABLE 0
++// #define ABSL_INTERNAL_APPLE_CXX17_TYPES_UNAVAILABLE 0
+ #endif
+ 
+ // ABSL_HAVE_STD_ANY
