@@ -8,11 +8,11 @@ fetchFromGitHub {
   owner = "numediart";
   repo = "MBROLA-voices";
   rev = "fe05a0ccef6a941207fd6aaad0b31294a1f93a51";
-  hash = "sha256-vtPHGC/CoyZeWkKcCydY3GDaccOx3jDGposJodhiL3Y=";
+  hash = "sha256-oB5evHdC+0hUbZ1Vw5tB/42MsFcF3RujITeiVKIFStI=";
 
   postFetch = ''
-    mkdir -p "$out/share/"{mbrola,doc/mbrola-voices}
-    mv "$out/data" "$out/share/mbrola/voices"
+    mkdir -p "$out/share/doc/mbrola-voices"
+    mv "$out/data" "$out/share/mbrola"
     mv "$out/"{LICENSE.md,README.md} "$out/share/doc/mbrola-voices"
   '';
 
