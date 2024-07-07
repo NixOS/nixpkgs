@@ -35,6 +35,7 @@ stdenv.mkDerivation rec {
     description = "Completion input method for faster typing";
     mainProgram = "emoji-picker";
     maintainers = with maintainers; [ ncfavier ];
+    platforms = platforms.linux;
     isIbusEngine = true;
   };
 }
