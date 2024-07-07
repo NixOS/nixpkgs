@@ -11869,8 +11869,6 @@ with pkgs;
 
   pretender = callPackage ../tools/security/pretender { };
 
-  prettierd = callPackage ../development/tools/prettierd { };
-
   pretty-simple = callPackage ../development/tools/pretty-simple { };
 
   prettyping = callPackage ../tools/networking/prettyping { };
@@ -26737,7 +26735,7 @@ with pkgs;
   criu = callPackage ../os-specific/linux/criu { };
 
   cryptomator = callPackage ../tools/security/cryptomator {
-    jdk = jdk21.override { enableJavaFX = true; };
+    jdk = jdk22.override { enableJavaFX = true; };
   };
 
   cryptsetup = callPackage ../os-specific/linux/cryptsetup { };
