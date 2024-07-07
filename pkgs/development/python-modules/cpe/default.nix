@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, buildPythonPackage, sphinx, setuptools }:
+{ lib, fetchFromGitHub, buildPythonPackage, setuptools, sphinx }:
 
 buildPythonPackage rec {
   pname = "cpe";
