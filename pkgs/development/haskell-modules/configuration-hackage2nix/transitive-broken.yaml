@@ -1239,8 +1239,6 @@ dont-distribute-packages:
  - elasticsearch-interchange
  - electrs-client
  - elerea-examples
- - eliminators
- - eliminators_0_9_5
  - elliptic-curve
  - elsa
  - ema-extra
@@ -1310,11 +1308,6 @@ dont-distribute-packages:
  - eventuo11y-prometheus
  - every-bit-counts
  - exference
- - exinst-aeson
- - exinst-base
- - exinst-bytes
- - exinst-cereal
- - exinst-serialise
  - exist
  - exist-instances
  - expand
@@ -1419,8 +1412,6 @@ dont-distribute-packages:
  - forms-data-format
  - forsyde-deep
  - forth-hll
- - fortran-src
- - fortran-src-extras
  - foscam-directory
  - foscam-sort
  - fpco-api
@@ -2302,7 +2293,6 @@ dont-distribute-packages:
  - igrf
  - ihaskell-inline-r
  - ihaskell-rlangqq
- - ihaskell-widgets
  - ihttp
  - imap
  - imgurder
@@ -3001,7 +2991,6 @@ dont-distribute-packages:
  - optimal-blocks
  - optimusprime
  - optparse-enum
- - orbits
  - orchid
  - orchid-demo
  - order-maintenance
@@ -3662,8 +3651,6 @@ dont-distribute-packages:
  - simple-postgresql-orm
  - simpleirc-lens
  - simseq
- - singleton-nats
- - singletons-presburger
  - siphon
  - siren-json
  - sirkel
@@ -4072,8 +4059,6 @@ dont-distribute-packages:
  - uniqueness-periods-vector-filters
  - uniqueness-periods-vector-general
  - uniqueness-periods-vector-properties
- - units
- - units-defs
  - unitym-servant
  - unitym-yesod
  - universal
