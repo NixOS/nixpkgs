@@ -469,4 +469,35 @@ in
         machine.wait_for_unit("multi-user.target")
       '';
     };
+
+  efiBootOptionDescription =
+  let
+    description = "NixOS Test Boot Manager";
+  in
+  makeTest  {
+      name = "systemd-boot-efi-boot-option-description";
+      meta.maintainers = with pkgs.lib.maintainers; [ kurtkilpela ];
+
+      nodes.machine = {
+        imports = [ common ];
+        boot.loader.systemd-boot.efiBootOptionDescription = description;
+      };
+
+      testScript = ''
+        machine.start()
+        machine.wait_for_unit("multi-user.target")
+
+        machine.succeed("test -e /boot/loader/entries/nixos-generation-1.conf")
+        machine.succeed("grep 'sort-key nixos' /boot/loader/entries/nixos-generation-1.conf")
+
+        # Ensure we actually booted using systemd-boot
+        # Magic number is the vendor UUID used by systemd-boot.
+        machine.succeed(
+          "test -e /sys/firmware/efi/efivars/LoaderEntrySelected-4a67b082-0a4c-41cf-b6c7-440b29bb8c4f"
+        )
+
+        # "bootctl install" should have created an EFI entry with the manually defined name
+        machine.succeed('efibootmgr | grep "${description}"')
+     '';
+   };
 }

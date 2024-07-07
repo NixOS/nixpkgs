@@ -38,7 +38,9 @@ let
 
     configurationLimit = if cfg.configurationLimit == null then 0 else cfg.configurationLimit;
 
-    inherit (cfg) consoleMode graceful editor;
+    inherit (cfg) consoleMode graceful editor efiBootOptionDescription;
+
+    setEfiBootOptionDescription = cfg.efiBootOptionDescription != null;
 
     inherit (efi) efiSysMountPoint canTouchEfiVariables;
 
@@ -314,6 +316,21 @@ in {
 
         Only enable this option if `systemd-boot` otherwise fails to install, as the
         scope or implication of the `--graceful` option may change in the future.
+      '';
+    };
+
+    efiBootOptionDescription = mkOption {
+      default = null;
+      type = types.nullOr types.str;
+      description = ''
+        Invoke `bootctl` with the `--efi-boot-option-description` option,
+        which specifies the boot entry name.
+
+        This option allows a user to distinguish between separate bootloaders
+        on multi-boot systems.
+
+        The UEFI standard defines the use of UCS-2 strings. Using invalid UCS-2
+        codepoints is a bad idea.
       '';
     };
 

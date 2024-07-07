@@ -32,6 +32,8 @@ CAN_TOUCH_EFI_VARIABLES = "@canTouchEfiVariables@"
 GRACEFUL = "@graceful@"
 COPY_EXTRA_FILES = "@copyExtraFiles@"
 CHECK_MOUNTPOINTS = "@checkMountpoints@"
+EFI_BOOT_OPTION_DESCRIPTION = "@efiBootOptionDescription@"
+SET_EFI_BOOT_OPTION_DESCRIPTION = "@setEfiBootOptionDescription@" == "1"
 
 @dataclass
 class BootSpec:
@@ -282,6 +284,9 @@ def install_bootloader(args: argparse.Namespace) -> None:
 
     if GRACEFUL == "1":
         bootctl_flags.append("--graceful")
+
+    if SET_EFI_BOOT_OPTION_DESCRIPTION:
+        bootctl_flags.append(f"--efi-boot-option-description={EFI_BOOT_OPTION_DESCRIPTION}")
 
     if os.getenv("NIXOS_INSTALL_BOOTLOADER") == "1":
         # bootctl uses fopen() with modes "wxe" and fails if the file exists.
