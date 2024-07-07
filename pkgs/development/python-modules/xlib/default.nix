@@ -4,6 +4,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   six,
+  setuptools,
   setuptools-scm,
   xorg,
   python,
@@ -16,7 +17,9 @@
 buildPythonPackage rec {
   pname = "xlib";
   version = "0.33";
-  format = "setuptools";
+  pyproject = true;
+
+  build-system = [ setuptools ];
 
   src = fetchFromGitHub {
     owner = "python-xlib";
