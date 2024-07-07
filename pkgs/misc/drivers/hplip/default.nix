@@ -14,16 +14,16 @@
 let
 
   pname = "hplip";
-  version = "3.23.8";
+  version = "3.24.4";
 
   src = fetchurl {
     url = "mirror://sourceforge/hplip/${pname}-${version}.tar.gz";
-    hash = "sha256-98wF9ijAz9dQ5UrkFDHB390p6XaC8YtcW6XLLFtLG0Y=";
+    hash = "sha256-XXZDgxiTpeKt351C1YGl2/5arwI2Johrh2LFZF2g8fs=";
   };
 
   plugin = fetchurl {
     url = "https://developers.hp.com/sites/default/files/${pname}-${version}-plugin.run";
-    hash = "sha256-frsgye3f0M3HE2trKRlfFvMnDEwe+z74IumCdVPrcSY=";
+    hash = "sha256-Hzxr3SVmGoouGBU2VdbwbwKMHZwwjWnI7P13Z6LQxao=";
   };
 
   hplipState = substituteAll {
@@ -106,9 +106,6 @@ python311Packages.buildPythonApplication {
       url = "https://web.archive.org/web/20230226174550/https://sources.debian.org/data/main/h/hplip/3.22.10+dfsg0-1/debian/patches/0028-Remove-ImageProcessor-binary-installs.patch";
       sha256 = "sha256:18njrq5wrf3fi4lnpd1jqmaqr7ph5d7jxm7f15b1wwrbxir1rmml";
     })
-
-    # Revert changes that break compilation under -Werror=format-security
-    ./revert-snprintf-change.patch
   ];
 
   postPatch = ''
