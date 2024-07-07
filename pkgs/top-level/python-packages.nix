@@ -6325,6 +6325,8 @@ self: super: with self; {
 
   jupysql-plugin = callPackage ../development/python-modules/jupysql-plugin { };
 
+  jupysql = callPackage ../development/python-modules/jupysql { };
+
   jupyter = callPackage ../development/python-modules/jupyter { };
 
   jupyter-book = callPackage ../development/python-modules/jupyter-book { };
