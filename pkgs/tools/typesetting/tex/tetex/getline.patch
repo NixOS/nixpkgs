@@ -1,0 +1,96 @@
+Glibc 2.10 has a `getline' symbol that clashes with teTeX's.
+Taken from http://lists.ibiblio.org/pipermail/sm-commit/2009-July/024831.html
+
+diff -rc -x '*~' tetex-src-3.0-orig/texk/dvipsk/afm2tfm.c tetex-src-3.0/texk/dvipsk/afm2tfm.c
+*** tetex-src-3.0-orig/texk/dvipsk/afm2tfm.c	2005-01-30 14:17:09.000000000 +0100
+--- tetex-src-3.0/texk/dvipsk/afm2tfm.c	2010-02-03 13:50:21.000000000 +0100
+***************
+*** 257,263 ****
+  }
+  
+  int
+! getline P1H(void) {
+     register char *p ;
+     register int c ;
+  
+--- 257,263 ----
+  }
+  
+  int
+! tetex_getline P1H(void) {
+     register char *p ;
+     register int c ;
+  
+***************
+*** 606,612 ****
+     ai = newchar() ;
+     ai->adobenum = -1 ;
+     ai->adobename = "||" ; /* boundary character name */
+!    while (getline()) {
+        switch(interest(paramstring())) {
+  case FontName:
+           fontname = paramnewstring() ;
+--- 606,612 ----
+     ai = newchar() ;
+     ai->adobenum = -1 ;
+     ai->adobename = "||" ; /* boundary character name */
+!    while (tetex_getline()) {
+        switch(interest(paramstring())) {
+  case FontName:
+           fontname = paramnewstring() ;
+***************
+*** 1882,1888 ****
+  
+     while (1) {
+        while (param == 0 || *param == 0) {
+!          if (getline() == 0)
+              error("! premature end in encoding file") ;
+           for (p=buffer; *p; p++)
+              if (*p == '%') {
+--- 1882,1888 ----
+  
+     while (1) {
+        while (param == 0 || *param == 0) {
+!          if (tetex_getline() == 0)
+              error("! premature end in encoding file") ;
+           for (p=buffer; *p; p++)
+              if (*p == '%') {
+***************
+*** 1973,1979 ****
+        p = gettoken() ;
+        if (strcmp(p, "]"))
+           error("! token 258 in encoding must be make-array (])") ;
+!       while (getline()) {
+           for (p=buffer; *p; p++)
+              if (*p == '%') {
+                 if (ignoreligkern == 0)
+--- 1973,1979 ----
+        p = gettoken() ;
+        if (strcmp(p, "]"))
+           error("! token 258 in encoding must be make-array (])") ;
+!       while (tetex_getline()) {
+           for (p=buffer; *p; p++)
+              if (*p == '%') {
+                 if (ignoreligkern == 0)
+diff -rc -x '*~' tetex-src-3.0-orig/texk/web2c/cpascal.h tetex-src-3.0/texk/web2c/cpascal.h
+*** tetex-src-3.0-orig/texk/web2c/cpascal.h	2004-08-28 22:49:59.000000000 +0200
+--- tetex-src-3.0/texk/web2c/cpascal.h	2010-02-03 13:51:04.000000000 +0100
+***************
+*** 240,245 ****
+--- 240,255 ----
+  #undef getname
+  #define getname vms_getname
+  #endif
++ 
++ /* Apparently POSIX 2008 has getline and glibc 2.9.90 exports it.
++  *    tangle, weave, et al. use that symbol; try to define it away so
++  *       something that a standard won't usurp.
++  * From http://tutimura.ath.cx/ptetex/?%C6%B0%BA%EE%CA%F3%B9%F0%2F134 */
++ #ifdef getline
++ #undef getline
++ #endif
++ #define getline web2c_getline
++ 
+  
+  /* Declarations for the routines we provide ourselves in lib/.  */
+  
