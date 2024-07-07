@@ -10825,6 +10825,8 @@ self: super: with self; {
 
   pyaml = callPackage ../development/python-modules/pyaml { };
 
+  pyaml-env = callPackage ../development/python-modules/pyaml-env { };
+
   pyannotate = callPackage ../development/python-modules/pyannotate { };
 
   pyannote-audio = callPackage ../development/python-modules/pyannote-audio { };
