@@ -32,6 +32,7 @@ buildGoModule rec{
 
   meta = with lib; {
     homepage = "https://github.com/mzz2017/gg";
+    changelog = "https://github.com/mzz2017/gg/releases/tag/${src.rev}";
     description = "Command-line tool for one-click proxy in your research and development";
     license = licenses.agpl3Only;
     mainProgram = "gg";

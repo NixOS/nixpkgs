@@ -17,6 +17,7 @@ buildGoModule rec {
     description = "Linter and language server for Rego";
     mainProgram = "regal";
     homepage = "https://github.com/StyraInc/regal";
+    changelog = "https://github.com/StyraInc/regal/releases/tag/${src.rev}";
     license = licenses.asl20;
     maintainers = with maintainers; [ rinx ];
   };
