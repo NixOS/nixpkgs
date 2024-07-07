@@ -4,6 +4,9 @@
 , cmake
 , help2man
 , gzip
+# There is a f3d overriden with EGL enabled vtk in top-level/all-packages.nix
+# compiling with EGL enabled vtk will result in f3d running in headless mode
+# See https://github.com/NixOS/nixpkgs/pull/324022. This may change later.
 , vtk_9
 , autoPatchelfHook
 , Cocoa

@@ -5126,6 +5126,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Cocoa OpenGL;
   };
 
+  f3d_egl = f3d.override { vtk_9 = vtk_9_egl; };
+
   facedetect = callPackage ../tools/graphics/facedetect { };
 
   faketty = callPackage ../tools/misc/faketty { };
