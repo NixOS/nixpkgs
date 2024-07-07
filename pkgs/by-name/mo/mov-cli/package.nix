@@ -43,10 +43,6 @@ python3.pkgs.buildPythonPackage {
     (callPackage ./mov-cli-test.nix {})
   ];
 
-  nativeBuildInputs = [
-    python3.pkgs.pythonRelaxDepsHook
-  ];
-
   pythonRelaxDeps = [
     "httpx"
     "tldextract"
