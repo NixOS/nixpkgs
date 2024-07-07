@@ -1,8 +1,8 @@
-{ lib, stdenv, fetchgit, unstableGitUpdater }:
+{ lib, stdenv, fetchgit, unstableGitUpdater, writeShellScript }:
 
 stdenv.mkDerivation {
   pname = "numad";
-  version = "0-unstable-2023-09-06";
+  version = "0.5-unstable-2023-09-06";
 
   src = fetchgit {
     url = "https://pagure.io/numad.git";
@@ -16,7 +16,13 @@ stdenv.mkDerivation {
 
   makeFlags = [ "prefix=$(out)" ];
 
-  passthru.updateScript = unstableGitUpdater { };
+  passthru.updateScript = unstableGitUpdater {
+    tagConverter = writeShellScript "tagConverter" ''
+      read tag
+      test "$tag" = "0" \
+        && tag=0.5; echo "$tag"
+    '';
+  };
 
   meta = with lib; {
     description = "A user-level daemon that monitors NUMA topology and processes resource consumption to facilitate good NUMA resource access";
