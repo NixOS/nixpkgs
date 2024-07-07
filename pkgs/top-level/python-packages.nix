@@ -887,8 +887,6 @@ self: super: with self; {
 
   asyncio-dgram = callPackage ../development/python-modules/asyncio-dgram { };
 
-  asyncio-mqtt = callPackage ../development/python-modules/asyncio-mqtt { };
-
   asyncio-rlock = callPackage ../development/python-modules/asyncio-rlock { };
 
   asyncmy = callPackage ../development/python-modules/asyncmy { };

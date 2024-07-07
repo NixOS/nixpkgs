@@ -54,6 +54,7 @@ mapAliases ({
   APScheduler = apscheduler; # added 2023-02-19
   async_generator = async-generator; # added 2023-08-08
   async_stagger = async-stagger; # added 2023-08-08
+  asyncio-mqtt = throw "asyncio-mqtt has been replaced by aiomqtt, which is not API compatible."; # added 2024-07-07
   asyncio-nats-client = nats-py; # added 2022-02-08
   atsim_potentials = atsim-potentials; # added 2023-10-08
   awkward0 = throw "awkward0 has been removed, use awkward instead"; # added 2022-12-13
