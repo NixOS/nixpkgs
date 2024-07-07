@@ -100,6 +100,7 @@ stdenv'.mkDerivation (finalAttrs: {
   meta = {
     description = "Cross-platform Dependency Automation by Mend.io";
     homepage = "https://github.com/renovatebot/renovate";
+    changelog = "https://github.com/renovatebot/renovate/releases/tag/${finalAttrs.version}";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [
       marie
