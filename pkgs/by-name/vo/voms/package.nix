@@ -1,32 +1,33 @@
-{ lib
-, stdenv
-, fetchFromGitHub
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
   # Native build inputs
-, autoreconfHook
-, bison
-, flex
-, pkg-config
+  autoreconfHook,
+  bison,
+  flex,
+  pkg-config,
   # Build inputs
-, expat
-, gsoap
-, openssl
-, zlib
+  expat,
+  gsoap,
+  openssl,
+  zlib,
   # Configuration overridable with .override
   # If not null, the builder will
   # create a new output "etc", move "$out/etc" to "$etc/etc"
   # and symlink "$out/etc" to externalEtc.
-, externalEtc ? "/etc"
+  externalEtc ? "/etc",
 }:
 
-stdenv.mkDerivation rec{
-  pname = "voms-unstable";
-  version = "2022-06-14";
+stdenv.mkDerivation (finalAttrs: {
+  pname = "voms";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "italiangrid";
     repo = "voms";
-    rev = "8e99bb96baaf197f0f557836e2829084bb1bb00e"; # develop branch
-    hash = "sha256-FG4fHO2lsQ3t/ZaKT9xY+xqdQHfdtzi5ULtxLhdPnss=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-Xz9+NYaSZsVuoIbyuejVWmwEmsPmMVtBAD94/SXP8ag=";
   };
 
   passthru = {
@@ -47,7 +48,15 @@ stdenv.mkDerivation rec{
     zlib
   ];
 
-  outputs = [ "bin" "out" "dev" "man" ]
+  outputs =
+    [
+      "bin"
+      "out"
+      "dev"
+      "man"
+    ]
+    # `etc` output for default configurations that can optionally be
+    # installed to /etc (system-wide) or profile-path>/etc.
     ++ lib.optional (externalEtc != null) "etc";
 
   preAutoreconf = ''
@@ -83,4 +92,4 @@ stdenv.mkDerivation rec{
     platforms = platforms.linux; # gsoap is currently Linux-only in Nixpkgs
     maintainers = with maintainers; [ ShamrockLee ];
   };
-}
+})
