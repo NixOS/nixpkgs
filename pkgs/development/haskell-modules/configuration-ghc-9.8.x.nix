@@ -67,7 +67,7 @@ self: super: {
   fourmolu = self.fourmolu_0_15_0_0;
   stylish-haskell = self.stylish-haskell_0_14_6_0;
   hlint = self.hlint_3_8;
-  ghc-syntax-highlighter = self.ghc-syntax-highlighter_0_0_11_0;
+  ghc-syntax-highlighter = self.ghc-syntax-highlighter_0_0_12_0;
   websockets = self.websockets_0_13_0_0;
   th-desugar = doJailbreak self.th-desugar_1_16; # th-abstraction >=0.6 && <0.7
   singletons-th = self.singletons-th_3_3;
