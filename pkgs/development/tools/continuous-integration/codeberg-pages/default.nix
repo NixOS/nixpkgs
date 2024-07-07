@@ -26,7 +26,7 @@ buildGoModule rec {
   passthru.updateScript = nix-update-script {};
 
   meta = with lib; {
-    mainProgram = "codeberg-pages";
+    mainProgram = "pages";
     maintainers = with maintainers; [ laurent-f1z1 ];
     license = licenses.eupl12;
     homepage = "https://codeberg.org/Codeberg/pages-server";
