@@ -11,7 +11,9 @@ lib.makeScope pkgs.newScope (
   let
     callPackage = self.callPackage;
   in
-  rec {
+  {
+    inherit useMupdf;
+
     gtk = pkgs.gtk3;
 
     zathura_core = callPackage ./core { };
@@ -26,13 +28,6 @@ lib.makeScope pkgs.newScope (
 
     zathura_cb = callPackage ./cb { };
 
-    zathuraWrapper = callPackage ./wrapper.nix {
-      plugins = [
-        zathura_djvu
-        zathura_ps
-        zathura_cb
-        (if useMupdf then zathura_pdf_mupdf else zathura_pdf_poppler)
-      ];
-    };
+    zathuraWrapper = callPackage ./wrapper.nix { };
   }
 )
