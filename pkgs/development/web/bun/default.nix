@@ -58,8 +58,8 @@ stdenvNoCC.mkDerivation rec {
         hash = "sha256-eytY45LcgeI9m9amHd8hfE7Lz7ET7p19h37Bi4yUHBM=";
       };
       "x86_64-darwin" = fetchurl {
-        url = "https://github.com/oven-sh/bun/releases/download/bun-v${version}/bun-darwin-x64.zip";
-        hash = "sha256-bF/yg7C2tsdPjotC4DKISZRWEUUmUha22tWJynearEM=";
+        url = "https://github.com/oven-sh/bun/releases/download/bun-v${version}/bun-darwin-x64-baseline.zip";
+        hash = "sha256-SKD/nJSDCPEQPekbkHkEew0mw2E55/L2hPjlz3fu3J8=";
       };
       "x86_64-linux" = fetchurl {
         url = "https://github.com/oven-sh/bun/releases/download/bun-v${version}/bun-linux-x64.zip";

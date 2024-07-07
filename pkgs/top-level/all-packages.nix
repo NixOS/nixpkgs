@@ -2078,8 +2078,6 @@ with pkgs;
 
   vitess = callPackage ../development/tools/database/vitess { };
 
-  voms = callPackage ../tools/networking/voms { };
-
   vopono = callPackage ../tools/networking/vopono { };
 
   vprof = with python3Packages; toPythonApplication vprof;
@@ -8617,8 +8615,6 @@ with pkgs;
   gx-go = callPackage ../tools/package-management/gx/go { };
 
   efitools = callPackage ../tools/security/efitools { };
-
-  sbctl = callPackage ../tools/security/sbctl { };
 
   sbsigntool = callPackage ../tools/security/sbsigntool { };
 
@@ -20454,8 +20450,6 @@ with pkgs;
 
   fb303 = darwin.apple_sdk_11_0.callPackage ../development/libraries/fb303 { };
 
-  fcgi = callPackage ../development/libraries/fcgi { };
-
   fcl = callPackage ../development/libraries/fcl { };
 
   febio = callPackage ../development/libraries/febio { };
@@ -28888,8 +28882,6 @@ with pkgs;
   sjasmplus = callPackage ../development/compilers/sjasmplus { };
 
   skeu = callPackage ../data/themes/skeu { };
-
-  sweet = callPackage ../data/themes/sweet { };
 
   sweet-nova = callPackage ../data/themes/sweet-nova { };
 
