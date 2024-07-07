@@ -1,8 +1,8 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, pkg-config, zlib }:
+{ lib, stdenv, fetchFromGitHub, pkg-config, zlib }:
 
 stdenv.mkDerivation rec {
-  version = "2.4.0";
   pname = "gpac";
+  version = "2.4.0";
 
   src = fetchFromGitHub {
     owner = "gpac";
