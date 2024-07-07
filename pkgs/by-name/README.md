@@ -76,6 +76,17 @@ and override its value in [`pkgs/top-level/all-packages.nix`](../top-level/all-p
 }
 ```
 
+### Toplevel argument restrictions
+The list of toplevel arguments should be restricted to packages defined in the
+common nixpkgs package set, and simple `enable*` boolean flags.
+
+As the expression is being `callPackage`'ed, both newly-defined packages, as
+well as those added through the use of overlays will cause defaults to be
+overwritten in a unexpected and hard-to-debug fashion.
+
+In case you're intending to write more flexible package expressions, consider
+defining them outside `by-name`.
+
 ## Manual migration guidelines
 
 Most packages are still defined in `all-packages.nix` and the [category hierarchy](../README.md#category-hierarchy).
