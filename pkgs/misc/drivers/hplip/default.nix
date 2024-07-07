@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, substituteAll
-, pkg-config, autoreconfHook
+, pkg-config, autoreconfHook, gobject-introspection, wrapGAppsHook3
 , cups, zlib, libjpeg, libusb1, python311Packages, sane-backends
 , dbus, file, ghostscript, usbutils
 , net-snmp, openssl, perl, nettools, avahi
@@ -74,6 +74,8 @@ python311Packages.buildPythonApplication {
     pkg-config
     removeReferencesTo
     autoreconfHook
+    gobject-introspection
+    wrapGAppsHook3
   ] ++ lib.optional withQt5 qt5.wrapQtAppsHook;
 
   pythonPath = with python311Packages; [
@@ -82,7 +84,6 @@ python311Packages.buildPythonApplication {
     pygobject3
     reportlab
     usbutils
-    sip4
     dbus-python
     distro
   ] ++ lib.optionals withQt5 [
@@ -239,7 +240,8 @@ python311Packages.buildPythonApplication {
   # 1. Calling patchPythonProgram on the original script in $out/share/hplip
   # 2. Making our own wrapper pointing directly to the original script.
   dontWrapPythonPrograms = true;
-  # We also avoid double wrapping in case we add qt5 support
+  # We also avoid double (or triple in case qt5 support is added) wrapping
+  dontWrapGApps = true;
   dontWrapQtApps = true;
   preFixup = ''
     buildPythonPath "$out $pythonPath"
@@ -253,7 +255,7 @@ python311Packages.buildPythonApplication {
       ${if withQt5 then "makeQtWrapper" else "makeWrapper"} "$py" "$bin" \
           --prefix PATH ':' "$program_PATH" \
           --set PYTHONNOUSERSITE "true" \
-          $makeWrapperArgs
+          $makeWrapperArgs "''${gappsWrapperArgs[@]}"
     done
   '';
 
