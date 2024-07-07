@@ -1288,7 +1288,10 @@ with pkgs;
 
   mpsolve = libsForQt5.callPackage ../applications/science/math/mpsolve { };
 
-  nixBufferBuilders = import ../build-support/emacs/buffer.nix { inherit lib writeText; inherit (emacs.pkgs) inherit-local; };
+  nixBufferBuilders = import ../applications/editors/emacs/build-support/buffer.nix {
+    inherit lib writeText;
+    inherit (emacs.pkgs) inherit-local;
+  };
 
   nix-gitignore = callPackage ../build-support/nix-gitignore { };
 
@@ -1546,8 +1549,6 @@ with pkgs;
     luajit = luajit.override { enable52Compat = true; };
     wxGTK = wxGTK32;
   } // (config.aegisub or {}));
-
-  aerc = callPackage ../applications/networking/mailreaders/aerc { };
 
   aerospike = callPackage ../servers/nosql/aerospike { };
 
@@ -11596,8 +11597,6 @@ with pkgs;
 
   pdf-quench = callPackage ../applications/misc/pdf-quench { };
 
-  pdfarranger = callPackage ../applications/misc/pdfarranger { };
-
   briss = callPackage ../tools/graphics/briss { };
 
   brickd = callPackage ../servers/brickd { };
@@ -11869,8 +11868,6 @@ with pkgs;
   pre-commit-hook-ensure-sops = callPackage ../tools/misc/pre-commit-hook-ensure-sops { };
 
   pretender = callPackage ../tools/security/pretender { };
-
-  prettierd = callPackage ../development/tools/prettierd { };
 
   pretty-simple = callPackage ../development/tools/pretty-simple { };
 
@@ -26738,7 +26735,7 @@ with pkgs;
   criu = callPackage ../os-specific/linux/criu { };
 
   cryptomator = callPackage ../tools/security/cryptomator {
-    jdk = jdk21.override { enableJavaFX = true; };
+    jdk = jdk22.override { enableJavaFX = true; };
   };
 
   cryptsetup = callPackage ../os-specific/linux/cryptsetup { };
@@ -28038,6 +28035,8 @@ with pkgs;
   ant-bloody-theme = callPackage ../data/themes/ant-theme/ant-bloody.nix { };
 
   dracula-theme = callPackage ../data/themes/dracula-theme { };
+
+  dracula-qt5-theme = callPackage ../data/themes/dracula-qt5-theme { };
 
   ant-nebula-theme = callPackage ../data/themes/ant-theme/ant-nebula.nix { };
 

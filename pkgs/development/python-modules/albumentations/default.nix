@@ -1,26 +1,34 @@
 {
   lib,
   buildPythonPackage,
+  pythonOlder,
   fetchFromGitHub,
+
+  # build-system
   setuptools,
-  deepdiff,
+
+  # dependencies
+  albucore,
+  eval-type-backport,
   numpy,
   opencv4,
+  pydantic,
   pyyaml,
   scikit-image,
   scikit-learn,
   scipy,
-  pydantic,
+  typing-extensions,
+
+  deepdiff,
   pytestCheckHook,
-  pythonOlder,
+  pytest-mock,
   torch,
   torchvision,
-  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "albumentations";
-  version = "1.4.9";
+  version = "1.4.11";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -29,31 +37,28 @@ buildPythonPackage rec {
     owner = "albumentations-team";
     repo = "albumentations";
     rev = "refs/tags/${version}";
-    hash = "sha256-tzalxhn61hYI6lN1wXwOd1EhTPx/9Fk8pTn/+zx188Y=";
+    hash = "sha256-1070V9+EZ4qrhxmbMyvTbu89pLoonrn0Peb8nwp2lwA=";
   };
 
-
-  pythonRemoveDeps = [
-    "opencv-python"
-    "pydantic"
-  ];
+  pythonRemoveDeps = [ "opencv-python" ];
 
   build-system = [ setuptools ];
 
   dependencies = [
+    albucore
+    eval-type-backport
     numpy
     opencv4
     pydantic
     pyyaml
     scikit-image
     scikit-learn
-    scipy
-    typing-extensions
   ];
 
   nativeCheckInputs = [
     deepdiff
     pytestCheckHook
+    pytest-mock
     torch
     torchvision
   ];
@@ -65,11 +70,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "albumentations" ];
 
-  meta = with lib; {
+  meta = {
     description = "Fast image augmentation library and easy to use wrapper around other libraries";
     homepage = "https://github.com/albumentations-team/albumentations";
     changelog = "https://github.com/albumentations-team/albumentations/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ natsukium ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ natsukium ];
   };
 }

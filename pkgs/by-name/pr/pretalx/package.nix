@@ -105,6 +105,7 @@ python.pkgs.buildPythonApplication rec {
     "djangorestframework"
     "markdown"
     "pillow"
+    "publicsuffixlist"
     "python-dateutil"
     "reportlab"
     "requests"

@@ -1,10 +1,10 @@
-{ lib
-, mkYarnPackage
-, fetchFromGitHub
-, makeWrapper
-, nodejs
-, fetchYarnDeps
-,
+{
+  lib,
+  mkYarnPackage,
+  fetchFromGitHub,
+  makeWrapper,
+  nodejs,
+  fetchYarnDeps,
 }:
 mkYarnPackage rec {
   pname = "prettierd";
@@ -40,13 +40,16 @@ mkYarnPackage rec {
 
   doDist = false;
 
-  meta = with lib; {
+  meta = {
     mainProgram = "prettierd";
     description = "Prettier, as a daemon, for improved formatting speed";
     homepage = "https://github.com/fsouza/prettierd";
-    license = licenses.isc;
+    license = lib.licenses.isc;
     changelog = "https://github.com/fsouza/prettierd/blob/${src.rev}/CHANGELOG.md";
-    platforms = with platforms; linux ++ darwin;
-    maintainers = with maintainers; [ NotAShelf n3oney ];
+    platforms = with lib.platforms; linux ++ darwin;
+    maintainers = with lib.maintainers; [
+      NotAShelf
+      n3oney
+    ];
   };
 }
