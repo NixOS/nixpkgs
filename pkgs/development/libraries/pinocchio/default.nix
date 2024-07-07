@@ -16,24 +16,17 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pinocchio";
-  version = "3.0.0";
+  version = "3.1.0";
 
   src = fetchFromGitHub {
     owner = "stack-of-tasks";
     repo = "pinocchio";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-h4NzfS27+jWyHbegxF+pgN6JzJdVAoM16J6G/9uNJc4=";
+    hash = "sha256-WgMqb+NHnaxW9/qSZ0UGI4zGxGjh12a5DwtdX9byBiw=";
   };
 
-  prePatch = ''
-    # test failure, ref https://github.com/stack-of-tasks/pinocchio/issues/2304
-    substituteInPlace unittest/CMakeLists.txt \
-      --replace-fail "add_pinocchio_unit_test(contact-cholesky)" ""
-  '' + lib.optionalString (stdenv.isLinux && stdenv.isAarch64) ''
-    # test failure, ref https://github.com/stack-of-tasks/pinocchio/issues/2304
-    substituteInPlace unittest/CMakeLists.txt \
-      --replace-fail "add_pinocchio_unit_test(contact-models)" ""
-    # test failure, ref https://github.com/stack-of-tasks/pinocchio/issues/2277
+  # test failure, ref https://github.com/stack-of-tasks/pinocchio/issues/2277
+  prePatch = lib.optionalString (stdenv.isLinux && stdenv.isAarch64) ''
     substituteInPlace unittest/algorithm/utils/CMakeLists.txt \
       --replace-fail "add_pinocchio_unit_test(force)" ""
   '';
@@ -43,6 +36,13 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     rmdir models/example-robot-data
     ln -s ${example-robot-data.src} models/example-robot-data
+  '';
+
+  # CMAKE_BUILD_TYPE defaults to Release in this package,
+  # which enable -O3, which break some tests
+  # ref. https://github.com/stack-of-tasks/pinocchio/issues/2304#issuecomment-2231018300
+  postConfigure = ''
+    substituteInPlace CMakeCache.txt --replace-fail '-O3' '-O2'
   '';
 
   strictDeps = true;
