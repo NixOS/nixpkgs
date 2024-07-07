@@ -34716,7 +34716,7 @@ with pkgs;
 
   typioca = callPackage ../applications/misc/typioca { };
 
-  ueberzug = with python3Packages; toPythonApplication ueberzug;
+  ueberzug = with python311Packages; toPythonApplication ueberzug;
 
   ueberzugpp = callPackage ../by-name/ue/ueberzugpp/package.nix {
     stdenv = if stdenv.isDarwin then overrideSDK stdenv "11.0" else stdenv;
