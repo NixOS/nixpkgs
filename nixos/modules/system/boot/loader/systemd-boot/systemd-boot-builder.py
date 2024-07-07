@@ -214,8 +214,8 @@ def get_generations(profile: str | None = None) -> list[SystemIdentifier]:
 
 
 def remove_old_entries(gens: list[SystemIdentifier]) -> None:
-    rex_profile = re.compile(r"^" + re.escape(BOOT_MOUNT_POINT) + "/loader/entries/nixos-(.*)-generation-.*\.conf$")
-    rex_generation = re.compile(r"^" + re.escape(BOOT_MOUNT_POINT) + "/loader/entries/nixos.*-generation-([0-9]+)(-specialisation-.*)?\.conf$")
+    rex_profile = re.compile(r"^" + re.escape(BOOT_MOUNT_POINT) + r"/loader/entries/nixos-(.*)-generation-.*\.conf$")
+    rex_generation = re.compile(r"^" + re.escape(BOOT_MOUNT_POINT) + r"/loader/entries/nixos.*-generation-([0-9]+)(-specialisation-.*)?\.conf$")
     known_paths = []
     for gen in gens:
         bootspec = get_bootspec(gen.profile, gen.generation)
