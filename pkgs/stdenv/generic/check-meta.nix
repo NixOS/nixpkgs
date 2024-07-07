@@ -320,6 +320,7 @@ let
     ];
     sourceProvenance = listOf attrs;
     maintainers = listOf (attrsOf any); # TODO use the maintainer type from lib/tests/maintainer-module.nix
+    categories = listOf lib.types.attrs;
     priority = int;
     pkgConfigModules = listOf str;
     inherit platforms;
