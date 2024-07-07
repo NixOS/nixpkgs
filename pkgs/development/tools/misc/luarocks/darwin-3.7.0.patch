@@ -1,0 +1,24 @@
+diff --git a/src/luarocks/core/cfg.lua b/src/luarocks/core/cfg.lua
+index 535bd69..b017161 100644
+--- a/src/luarocks/core/cfg.lua
++++ b/src/luarocks/core/cfg.lua
+@@ -436,7 +436,7 @@ local function make_defaults(lua_version, target_cpu, platforms, home)
+       defaults.external_lib_extension = "dylib"
+       defaults.arch = "macosx-"..target_cpu
+       defaults.variables.LIBFLAG = "-bundle -undefined dynamic_lookup -all_load"
+-      local version = util.popen_read("sw_vers -productVersion")
++      local version = os.getenv("MACOSX_DEPLOYMENT_TARGET") or "@darwinMinVersion@"
+       if not (version:match("^%d+%.%d+%.%d+$") or version:match("^%d+%.%d+$")) then
+          version = "10.3"
+       end
+@@ -448,8 +448,8 @@ local function make_defaults(lua_version, target_cpu, platforms, home)
+       else
+          defaults.gcc_rpath = false
+       end
+-      defaults.variables.CC = "env MACOSX_DEPLOYMENT_TARGET="..tostring(version).." gcc"
+-      defaults.variables.LD = "env MACOSX_DEPLOYMENT_TARGET="..tostring(version).." gcc"
++      defaults.variables.CC = "env MACOSX_DEPLOYMENT_TARGET="..tostring(version).." clang"
++      defaults.variables.LD = "env MACOSX_DEPLOYMENT_TARGET="..tostring(version).." clang"
+       defaults.web_browser = "open"
+    end
+ 

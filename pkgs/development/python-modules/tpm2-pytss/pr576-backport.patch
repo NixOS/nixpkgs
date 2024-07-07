@@ -1,0 +1,117 @@
+Backport for https://github.com/tpm2-software/tpm2-pytss/pull/576 on 2.2.1
+
+diff --git a/scripts/prepare_headers.py b/scripts/prepare_headers.py
+index 6ca9b64..a7529b3 100644
+--- a/scripts/prepare_headers.py
++++ b/scripts/prepare_headers.py
+@@ -32,6 +32,7 @@ def remove_common_guards(s):
+ 
+     # Restructure #defines with ...
+     s = re.sub("(#define [A-Za-z0-9_]+) +\(\(.*?\) \(.*?\)\)", "\g<1>...", s)
++    s = re.sub("(#define [A-Za-z0-9_]+) +\(\(\(.*?\) .*\)", "\g<1>...", s)
+     s = re.sub("(#define [A-Za-z0-9_]+) +\(\(.*?\).*?\) ", "\g<1>...", s)
+     s = re.sub(
+         "(#define [A-Za-z0-9_]+) .*\n.*?.*\)\)", "\g<1>...", s, flags=re.MULTILINE
+diff --git a/src/tpm2_pytss/internal/crypto.py b/src/tpm2_pytss/internal/crypto.py
+index 42030c5..f9d8c34 100644
+--- a/src/tpm2_pytss/internal/crypto.py
++++ b/src/tpm2_pytss/internal/crypto.py
+@@ -25,6 +25,7 @@ from cryptography.hazmat.backends import default_backend
+ from cryptography.exceptions import UnsupportedAlgorithm, InvalidSignature
+ from typing import Tuple, Type, Any
+ import secrets
++import inspect
+ import sys
+ 
+ _curvetable = (
+diff --git a/test/test_encoding.py b/test/test_encoding.py
+index 1f58562..8cf4b51 100644
+--- a/test/test_encoding.py
++++ b/test/test_encoding.py
+@@ -1406,7 +1406,7 @@ class ToolsTest(TSS2_BaseTest):
+     def test_tools_decode_tpm2b_name(self):
+         if not self.has_tools:
+             self.skipTest("tools not in path")
+-        key = ec.generate_private_key(ec.SECP256R1).public_key()
++        key = ec.generate_private_key(ec.SECP256R1()).public_key()
+         kb = key.public_bytes(
+             serialization.Encoding.PEM, serialization.PublicFormat.SubjectPublicKeyInfo
+         )
+diff --git a/test/test_fapi.py b/test/test_fapi.py
+index f702fc9..6b77c66 100644
+--- a/test/test_fapi.py
++++ b/test/test_fapi.py
+@@ -13,7 +13,7 @@ from cryptography.hazmat.primitives.asymmetric.padding import PSS
+ 
+ from tpm2_pytss import *
+ 
+-from tpm2_pytss.internal.utils import is_bug_fixed, _lib_version_atleast
++from tpm2_pytss.internal.utils import is_bug_fixed
+ 
+ from .TSS2_BaseTest import TpmSimulator
+ from tpm2_pytss.TSS2_Exception import TSS2_Exception
+@@ -614,8 +614,7 @@ class Common:
+         self.fapi.sign(key_path, b"\x22" * 32)
+ 
+     @pytest.mark.skipif(
+-        _lib_version_atleast("tss2-fapi", "4.0.1-170")
+-        or not is_bug_fixed(fixed_in="3.2", backports=["2.4.7", "3.0.5", "3.1.1"]),
++        not is_bug_fixed(fixed_in="3.2", backports=["2.4.7", "3.0.5", "3.1.1"]),
+         reason="tpm2-tss bug, see #2084",
+     )
+     def test_write_authorize_nv(self, esys):
+@@ -662,8 +661,7 @@ class Common:
+             self.fapi.quote(path=key_path, pcrs=[7, 9])
+ 
+     @pytest.mark.skipif(
+-        _lib_version_atleast("tss2-fapi", "4.0.1-170")
+-        or not is_bug_fixed(fixed_in="3.2", backports=["2.4.7", "3.0.5", "3.1.1"]),
++        not is_bug_fixed(fixed_in="3.2", backports=["2.4.7", "3.0.5", "3.1.1"]),
+         reason="tpm2-tss bug, see #2084",
+     )
+     def test_authorize_policy(self, sign_key):
+@@ -728,9 +726,7 @@ class Common:
+             self.fapi.quote(path=key_path, pcrs=[7, 9])
+ 
+     @pytest.mark.skipif(
+-        _lib_version_atleast("tss2-fapi", "4.0.1-170")
+-        or not is_bug_fixed(fixed_in="3.2"),
+-        reason="tpm2-tss bug, see #2080",
++        not is_bug_fixed(fixed_in="3.2"), reason="tpm2-tss bug, see #2080"
+     )
+     def test_policy_signed(self, cryptography_key):
+         # create external signing key used by the signing authority external to the TPM
+@@ -792,10 +788,6 @@ class Common:
+         with pytest.raises(TSS2_Exception):
+             self.fapi.sign(path=key_path, digest=b"\x11" * 32)
+ 
+-    @pytest.mark.skipif(
+-        _lib_version_atleast("tss2-fapi", "4.0.1-170"),
+-        reason="issue on master branch.",
+-    )
+     def test_policy_branched(self):
+         pcr_index = 15
+         pcr_data = b"ABCDEF"
+@@ -913,8 +905,7 @@ class Common:
+         self.fapi.delete(path=nv_path)
+ 
+     @pytest.mark.skipif(
+-        _lib_version_atleast("tss2-fapi", "4.0.1-170")
+-        or not is_bug_fixed(fixed_in="3.2", backports=["2.4.7", "3.0.5", "3.1.1"]),
++        not is_bug_fixed(fixed_in="3.2", backports=["2.4.7", "3.0.5", "3.1.1"]),
+         reason="tpm2-tss bug, see #2089",
+     )
+     def test_policy_action(self):
+diff --git a/test/test_policy.py b/test/test_policy.py
+index f18aa8a..5f56e21 100644
+--- a/test/test_policy.py
++++ b/test/test_policy.py
+@@ -47,7 +47,7 @@ class TestPolicy(TSS2_EsapiTest):
+         super().setUp()
+         self._has_secp192r1 = True
+         try:
+-            ec.generate_private_key(ec.SECP192R1)
++            ec.generate_private_key(ec.SECP192R1())
+         except Exception:
+             self._has_secp192r1 = False
+ 
