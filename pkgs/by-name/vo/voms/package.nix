@@ -1,21 +1,22 @@
-{ lib
-, stdenv
-, fetchFromGitHub
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
   # Native build inputs
-, autoreconfHook
-, bison
-, flex
-, pkg-config
+  autoreconfHook,
+  bison,
+  flex,
+  pkg-config,
   # Build inputs
-, expat
-, gsoap
-, openssl
-, zlib
+  expat,
+  gsoap,
+  openssl,
+  zlib,
   # Configuration overridable with .override
   # If not null, the builder will
   # create a new output "etc", move "$out/etc" to "$etc/etc"
   # and symlink "$out/etc" to externalEtc.
-, externalEtc ? "/etc"
+  externalEtc ? "/etc",
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -47,7 +48,15 @@ stdenv.mkDerivation (finalAttrs: {
     zlib
   ];
 
-  outputs = [ "bin" "out" "dev" "man" ]
+  outputs =
+    [
+      "bin"
+      "out"
+      "dev"
+      "man"
+    ]
+    # `etc` output for default configurations that can optionally be
+    # installed to /etc (system-wide) or profile-path>/etc.
     ++ lib.optional (externalEtc != null) "etc";
 
   preAutoreconf = ''
