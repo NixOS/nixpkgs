@@ -27,6 +27,7 @@ let
   plugins = lib.mergeAttrsList [
     { hy3 = import ./hy3.nix; }
     { hyprfocus = import ./hyprfocus.nix; }
+    { hyprspace = import ./hyprspace.nix; }
     (import ./hyprland-plugins.nix)
   ];
 in
