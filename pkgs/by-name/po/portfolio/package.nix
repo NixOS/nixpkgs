@@ -7,7 +7,7 @@
   glibc,
   gcc-unwrapped,
   gtk3,
-  jre,
+  openjdk17,
   libsecret,
   makeDesktopItem,
   webkitgtk,
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
 
     makeWrapper $out/portfolio/PortfolioPerformance $out/bin/portfolio \
       --prefix LD_LIBRARY_PATH : "${runtimeLibs}" \
-      --prefix PATH : ${jre}/bin
+      --prefix PATH : ${openjdk17}/bin
 
     # Create desktop item
     mkdir -p $out/share/applications
