@@ -1,6 +1,6 @@
 { lib
 , callPackage
-, python3
+, python311
 , fetchFromGitHub
 , fetchurl
 , fetchpatch2
@@ -23,7 +23,7 @@ let
     inherit version src;
   };
 
-  python = python3.override {
+  python = python311.override {
     packageOverrides = self: super: {
       pydantic = super.pydantic_1;
 
@@ -71,6 +71,14 @@ python.pkgs.buildPythonApplication rec {
       url = "https://github.com/blakeblackshear/frigate/commit/b65656fa8733c1c2f3d944f716d2e9493ae7c99f.patch";
       hash = "sha256-taPWFV4PldBGUKAwFMKag4W/3TLMSGdKLYG8bj1Y5mU=";
     })
+    (fetchpatch2 {
+      # https://github.com/blakeblackshear/frigate/pull/10097
+      name = "frigate-secrets-permissionerror.patch";
+      url = "https://github.com/blakeblackshear/frigate/commit/a1424bad6c0163e790129ade7a9784514d0bf89d.patch";
+      hash = "sha256-/kIy4aW9o5AKHJQfCDVY46si+DKaUb+CsZsCGIbXvUQ=";
+    })
+    # https://github.com/blakeblackshear/frigate/pull/12324
+    ./mpl-3.9.0.patch
   ];
 
   postPatch = ''
