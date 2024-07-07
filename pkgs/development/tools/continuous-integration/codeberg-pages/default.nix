@@ -31,5 +31,6 @@ buildGoModule rec {
     license = licenses.eupl12;
     homepage = "https://codeberg.org/Codeberg/pages-server";
     description = "Static websites hosting from Gitea repositories";
+    changelog = "https://codeberg.org/Codeberg/pages-server/releases/tag/v${version}";
   };
 }
