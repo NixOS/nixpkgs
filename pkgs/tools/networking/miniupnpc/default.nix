@@ -1,7 +1,8 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
 }:
 
 stdenv.mkDerivation rec {
@@ -19,20 +20,17 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
+  cmakeFlags = [
+    (lib.cmakeBool "UPNPC_BUILD_SHARED" (!stdenv.hostPlatform.isStatic))
+    (lib.cmakeBool "UPNPC_BUILD_STATIC" stdenv.hostPlatform.isStatic)
+  ];
+
   doCheck = !stdenv.isFreeBSD;
 
-  makeFlags = [ "PREFIX=$(out)" ];
-
   postInstall = ''
-    chmod +x $out/lib/libminiupnpc${stdenv.hostPlatform.extensions.sharedLibrary}
-
-    # for some reason cmake does not install binaries and manpages
-    # https://github.com/miniupnp/miniupnp/issues/637
-    mkdir -p $out/bin
-    cp -a upnpc-static $out/bin/upnpc
-    cp -a ../external-ip.sh $out/bin/external-ip
-    mkdir -p $out/share/man
-    cp -a ../man3 $out/share/man
+    mv $out/bin/upnpc-* $out/bin/upnpc
+    mv $out/bin/upnp-listdevices-* $out/bin/upnp-listdevices
+    mv $out/bin/external-ip.sh $out/bin/external-ip
   '';
 
   meta = with lib; {
