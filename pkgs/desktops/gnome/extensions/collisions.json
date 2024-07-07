@@ -1,7 +1,7 @@
 {
   "applications-menu": [
-    "Applications_Menu@rmy.pobox.com",
-    "apps-menu@gnome-shell-extensions.gcampax.github.com"
+    "apps-menu@gnome-shell-extensions.gcampax.github.com",
+    "Applications_Menu@rmy.pobox.com"
   ],
   "workspace-indicator": [
     "horizontal-workspace-indicator@tty2.io",
@@ -28,23 +28,24 @@
     "vbox-applet@buba98"
   ],
   "panel-date-format": [
-    "panel-date-format@atareao.es",
-    "panel-date-format@keiii.github.com"
+    "panel-date-format@keiii.github.com",
+    "panel-date-format@atareao.es"
   ],
   "battery-time": [
-    "batterytime@typeof.pw",
-    "batime@martin.zurowietz.de"
+    "batime@martin.zurowietz.de",
+    "batterytime@typeof.pw"
   ],
   "kernel-indicator": [
     "kernel-indicator@elboulangero.gitlab.com",
     "kernel-indicator@pvizc.gitlab.com"
   ],
   "fuzzy-clock": [
+    "FuzzyClock@fire-man-x",
     "fuzzy-clock@keepawayfromfire.co.uk",
     "FuzzyClock@johngoetz"
   ],
   "power-profile-indicator": [
-    "power-profile-indicator@laux.wtf",
-    "power-profile@fthx"
+    "power-profile@fthx",
+    "power-profile-indicator@laux.wtf"
   ]
 }
