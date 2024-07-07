@@ -5854,8 +5854,6 @@ with pkgs;
 
   mrkd = callPackage ../tools/text/mrkd { };
 
-  naproche = callPackage ../applications/science/logic/naproche { };
-
   nautilus-open-any-terminal = callPackage ../tools/misc/nautilus-open-any-terminal { };
 
   n2n = callPackage ../tools/networking/n2n { };
@@ -38172,23 +38170,23 @@ with pkgs;
 
   ifstat-legacy = callPackage ../tools/networking/ifstat-legacy { };
 
-  isabelle = callPackage ../applications/science/logic/isabelle {
+  isabelle = callPackage ../by-name/is/isabelle/package.nix {
     polyml = polyml.overrideAttrs {
       pname = "polyml-for-isabelle";
-      version = "2023";
+      version = "2024";
       configureFlags = [ "--enable-intinf-as-int" "--with-gmp" "--disable-shared" ];
       buildFlags = [ "compiler" ];
       src = fetchFromGitHub {
         owner = "polyml";
         repo = "polyml";
-        rev = "219e0a248f705b770d45699755d00f05b82a9391";
-        hash = "sha256-HtT3MGtHrqVhynmx73L7NC12AW9N7gkkOi7MKbF4k6Y=";
+        rev = "v5.9.1";
+        hash = "sha256-72wm8dt+Id59A5058mVE5P9TkXW5/LZRthZoxUustVA=";
       };
     };
 
-    java = openjdk17;
+    java = openjdk21;
   };
-  isabelle-components = recurseIntoAttrs (callPackage ../applications/science/logic/isabelle/components { });
+  isabelle-components = recurseIntoAttrs (callPackage ../by-name/is/isabelle/components { });
 
   iprover = callPackage ../applications/science/logic/iprover { };
 
