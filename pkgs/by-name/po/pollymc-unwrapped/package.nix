@@ -110,7 +110,9 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/fn2006/PollyMC";
     changelog = "https://github.com/fn2006/PollyMC/releases/tag/${finalAttrs.src.rev}";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ fn2006 ];
+    maintainers = with lib.maintainers; [
+      fn2006
+    ];
     mainProgram = "pollymc";
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
