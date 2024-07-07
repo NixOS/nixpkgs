@@ -53,9 +53,9 @@ rustPlatform.buildRustPackage rec {
 
   postInstall = ''
     installShellCompletion --cmd inlyne \
-      --bash $out/completions/inlyne.bash \
-      --fish $out/completions/inlyne.fish \
-      --zsh $out/completions/_inlyne
+      --bash ./completions/inlyne.bash \
+      --fish ./completions/inlyne.fish \
+      --zsh ./completions/_inlyne
   '';
 
   postFixup = lib.optionalString stdenv.isLinux ''
