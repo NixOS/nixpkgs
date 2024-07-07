@@ -3,18 +3,14 @@
   buildPythonPackage,
   fetchPypi,
   setuptools,
-  nose,
+  pynose,
   pytestCheckHook,
-  pythonAtLeast,
 }:
 
 buildPythonPackage rec {
   pname = "ipython-genutils";
   version = "0.2.0";
   pyproject = true;
-
-  # uses the imp module, upstream says "DO NOT USE"
-  disabled = pythonAtLeast "3.12";
 
   src = fetchPypi {
     pname = "ipython_genutils";
@@ -25,14 +21,16 @@ buildPythonPackage rec {
   nativeBuildInputs = [ setuptools ];
 
   nativeCheckInputs = [
-    nose
+    pynose
     pytestCheckHook
   ];
 
   preCheck = ''
     substituteInPlace ipython_genutils/tests/test_path.py \
-      --replace "setUp" "setup_method" \
-      --replace "tearDown" "teardown_method"
+      --replace-fail "setUp" "setup_method" \
+      --replace-fail "tearDown" "teardown_method" \
+      --replace-fail "assert_equals" "assert_equal" \
+      --replace-fail "assert_not_equals" "assert_not_equal"
   '';
 
   pythonImportsCheck = [ "ipython_genutils" ];
