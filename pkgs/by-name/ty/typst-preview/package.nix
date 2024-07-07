@@ -14,13 +14,13 @@
 let
   # Keep the vscode "mgt19937.typst-preview" extension in sync when updating
   # this package at pkgs/applications/editors/vscode/extensions/default.nix
-  version = "0.11.7";
+  version = "0.11.14";
 
   src = fetchFromGitHub {
     owner = "Enter-tainer";
     repo = "typst-preview";
     rev = "v${version}";
-    hash = "sha256-N4PK9RucuOwminikayXq9aqK9l6T6v9a6tcksMllKdM=";
+    hash = "sha256-xW76DggkxgGnm41JGYTUszKkY28kZCTbiuibNVJbEY0=";
     fetchSubmodules = true;
 
     postFetch = ''
@@ -92,7 +92,7 @@ rustPlatform.buildRustPackage {
   pname = "typst-preview";
   inherit version src;
 
-  cargoHash = "sha256-JDUHESH0aFIlXX61IxOXNSaTlFCgo3hFRbfoQWWq6e0=";
+  cargoHash = "sha256-c0ahUSd4dIpM4qqVaBroTk3xoOq8UtJBqBumgFBBTrU=";
 
   nativeBuildInputs = [
     pkg-config
