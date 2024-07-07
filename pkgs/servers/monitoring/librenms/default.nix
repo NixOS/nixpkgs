@@ -1,5 +1,6 @@
 { lib
 , fetchFromGitHub
+, fetchpatch
 , unixtools
 , php82
 , python3
@@ -32,6 +33,24 @@ in phpPackage.buildComposerProject rec {
     rev = "${version}";
     sha256 = "sha256-glcD9AhxkvMmGo/7/RhQFeOtvHJ4pSiEFxaAjeVrTaI=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "CVE-2024-32461.patch";
+      url = "https://github.com/librenms/librenms/commit/d29201fce134347f891102699fbde7070debee33.patch";
+      hash = "sha256-uKhMcKUsE0E1OvE4AlfX+mkHyLu7Xqq7oS86hj0H0fo=";
+    })
+    (fetchpatch {
+      name = "CVE-2024-32479.patch";
+      url = "https://github.com/librenms/librenms/commit/19344f0584d4d6d4526fdf331adc60530e3f685b.patch";
+      hash = "sha256-O6w/YIq1jrc3YJ65e4R6fw3PUgbaYZV/8sdAo5yf7Iw=";
+    })
+    (fetchpatch {
+      name = "CVE-2024-32480.patch";
+      url = "https://github.com/librenms/librenms/commit/83fe4b10c440d69a47fe2f8616e290ba2bd3a27c.patch";
+      hash = "sha256-8Fzh4EV35VyJG6aGzDQ/DVgWHnIxigirQ9dX5QIe3lg=";
+    })
+  ];
 
   vendorHash = "sha256-s6vdGfM7Ehy1bbkB44EQaHBBvTkpVw9yxhVsc/O8dHc=";
 
