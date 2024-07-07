@@ -41,6 +41,7 @@ qt.section.md
 r.section.md
 ruby.section.md
 rust.section.md
+scheme.section.md
 swift.section.md
 texlive.section.md
 titanium.section.md
