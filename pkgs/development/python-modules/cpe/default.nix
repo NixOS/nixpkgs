@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, buildPythonPackage, pytest, sphinx, setuptools }:
+{ lib, fetchFromGitHub, buildPythonPackage, sphinx, setuptools }:
 
 buildPythonPackage rec {
   pname = "cpe";
@@ -8,25 +8,23 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "nilp0inter";
     repo = "cpe";
-    rev = "v${version}";
+    rev = "refs/tags/v${version}";
     hash = "sha256-1hTOMbsL1089/yPZbAIs5OgjtEzCBlFv2hGi+u4hV/k=";
   };
 
   build-system = [ setuptools ];
 
-  dependencies = [ sphinx pytest ];
+  dependencies = [ sphinx ];
 
   pythonImportsCheck = [ "cpe" ];
 
-  # no test
   doCheck = false;
 
   meta = {
     description = "Common platform enumeration for python";
     homepage = "https://github.com/nilp0inter/cpe";
-    license = lib.licenses.gpl3;
+    license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ tochiaha ];
-    platforms = lib.platforms.all;
   };
 }
 
