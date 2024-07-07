@@ -12,7 +12,8 @@ let
     ''}
   '';
   packages = epkgs: cfg.extraPackages epkgs ++ [ epkgs.exwm ];
-  exwm-emacs = pkgs.emacsWithPackages packages;
+  emacs = pkgs.emacs.override { imagemagick = pkgs.imagemagickBig; };
+  exwm-emacs = (pkgs.emacsPackagesNgGen emacs).emacsWithPackages packages;
 in
 
 {
