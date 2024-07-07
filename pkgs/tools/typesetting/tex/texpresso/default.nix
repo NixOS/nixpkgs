@@ -19,6 +19,12 @@ stdenv.mkDerivation rec {
   pname = "texpresso";
   version = "0-unstable-2024-06-22";
 
+  postPatch = ''
+    substituteInPlace Makefile \
+      --replace-fail "CC=gcc" "CC=${stdenv.cc.targetPrefix}cc" \
+      --replace-fail "LDCC=g++" "LDCC=${stdenv.cc.targetPrefix}c++"
+  '';
+
   nativeBuildInputs = [
     makeWrapper
     mupdf
@@ -40,6 +46,10 @@ stdenv.mkDerivation rec {
   };
 
   buildFlags = [ "texpresso" ];
+
+  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.isDarwin [
+    "-Wno-error=implicit-function-declaration"
+  ]);
 
   installPhase = ''
     runHook preInstall
@@ -70,5 +80,6 @@ stdenv.mkDerivation rec {
     description = "Live rendering and error reporting for LaTeX";
     maintainers = with lib.maintainers; [ nickhu ];
     license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
   };
 }
