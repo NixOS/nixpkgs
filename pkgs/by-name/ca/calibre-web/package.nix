@@ -14,28 +14,33 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "calibre-web";
-  version = "0.6.21";
+  version = "0.6.22";
 
   src = fetchFromGitHub {
     owner = "janeczku";
     repo = "calibre-web";
     rev = version;
-    hash = "sha256-tRrOquetn3P2NmrXq7DQHRGP1sWnLR7bV2Lw0W/lUPQ=";
+    hash = "sha256-nWZmDasBH+DW/+Cvw510mOv11CXorRnoBwNFpoKPErY=";
   };
 
   propagatedBuildInputs = with python.pkgs; [
-    apscheduler
     advocate
+    apscheduler
+    babel
+    bleach
     chardet
+    flask
     flask-babel
+    flask-limiter
     flask-login
     flask-principal
     flask-wtf
-    flask-limiter
     iso-639
-    jsonschema
     lxml
     pypdf
+    python-magic
+    pytz
+    regex
     requests
     sqlalchemy
     tornado
@@ -55,30 +60,14 @@ python.pkgs.buildPythonApplication rec {
     ./db-migrations.patch
   ];
 
-  # calibre-web doesn't follow setuptools directory structure. The following is taken from the script
-  # that calibre-web's maintainer is using to package it:
-  # https://github.com/OzzieIsaacs/calibre-web-test/blob/master/build/make_release.py
+  # calibre-web doesn't follow setuptools directory structure.
   postPatch = ''
     mkdir -p src/calibreweb
     mv cps.py src/calibreweb/__init__.py
     mv cps src/calibreweb
 
-    sed -i "/backports_abc/d" setup.cfg
-
     substituteInPlace setup.cfg \
-      --replace "cps = calibreweb:main" "calibre-web = calibreweb:main" \
-      --replace "APScheduler>=3.6.3,<3.10.0" "APScheduler>=3.6.3" \
-      --replace "chardet>=3.0.0,<4.1.0" "chardet>=3.0.0,<6" \
-      --replace "Flask>=1.0.2,<2.1.0" "Flask>=1.0.2" \
-      --replace "Flask-Babel>=0.11.1,<3.1.0" "Flask-Babel>=0.11.1" \
-      --replace "Flask-Login>=0.3.2,<0.6.2" "Flask-Login>=0.3.2" \
-      --replace "flask-wtf>=0.14.2,<1.1.0" "flask-wtf>=0.14.2" \
-      --replace "lxml>=3.8.0,<4.9.0" "lxml>=3.8.0" \
-      --replace "tornado>=4.1,<6.2" "tornado>=4.1,<7" \
-      --replace "PyPDF>=3.0.0,<3.6.0" "PyPDF>=3.0.0" \
-      --replace "requests>=2.11.1,<2.29.0" "requests" \
-      --replace "unidecode>=0.04.19,<1.4.0" "unidecode>=0.04.19" \
-      --replace "werkzeug<2.1.0" ""
+      --replace-fail "cps = calibreweb:main" "calibre-web = calibreweb:main"
   '';
 
   # Upstream repo doesn't provide any tests.
