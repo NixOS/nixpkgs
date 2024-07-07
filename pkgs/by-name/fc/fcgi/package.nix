@@ -21,5 +21,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = "FastCGI, see LICENSE.TERMS";
     mainProgram = "cgi-fcgi";
     platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ jtbx ];
   };
 })
