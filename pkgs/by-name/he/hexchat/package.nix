@@ -1,24 +1,8 @@
-{
-  dbus-glib,
-  desktop-file-utils,
-  enchant2,
-  fetchFromGitHub,
-  gtk2,
-  isocodes,
-  lib,
-  libcanberra-gtk2,
-  libnotify,
-  libproxy,
-  lua,
-  makeWrapper,
-  meson,
-  ninja,
-  openssl,
-  pciutils,
-  perl,
-  pkg-config,
-  python3Packages,
-  stdenv,
+{ lib, stdenv, fetchFromGitHub, pkg-config, gtk2, lua, perl, python311Packages
+, pciutils, dbus-glib, libcanberra-gtk2, libproxy
+, enchant2, libnotify, openssl, isocodes
+, desktop-file-utils
+, meson, ninja, makeWrapper
 }:
 
 stdenv.mkDerivation rec {
@@ -32,6 +16,17 @@ stdenv.mkDerivation rec {
     hash = "sha256-rgaXqXbBWlfSyz+CT0jRLyfGOR1cYYnRhEAu7AsaWus=";
   };
 
+<<<<<<< HEAD:pkgs/by-name/he/hexchat/package.nix
+=======
+  nativeBuildInputs = [ meson ninja pkg-config makeWrapper ];
+
+  buildInputs = [
+    gtk2 lua perl python311Packages.python python311Packages.cffi pciutils dbus-glib libcanberra-gtk2 libproxy
+    libnotify openssl desktop-file-utils
+    isocodes
+  ];
+
+>>>>>>> acd4dd853eb3 (311):pkgs/applications/networking/irc/hexchat/default.nix
   #hexchat and hexchat-text loads enchant spell checking library at run time and so it needs to have route to the path
   postPatch = ''
     sed -i "s,libenchant-2.so.2,${enchant2}/lib/libenchant-2.so.2,g" src/fe-gtk/sexy-spell-entry.c
