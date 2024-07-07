@@ -51,7 +51,9 @@ edk2 = stdenv.mkDerivation {
     repo = "edk2";
     rev = "edk2-stable${edk2.version}";
     fetchSubmodules = true;
-    hash = "sha256-7vNodHocwqQiO0ZXtqo8lEOFyt8JkFHcAathEhrKWE0=";
+    # Note: Hash changes whenever OpenSSL package is upgraded,
+    #       whenever upgrading edk2 check for concurrent OpenSSL upgrades
+    hash = "sha256-4JDeA4QBa/FYqgHi5l6FT9EdcTtFvIbKzO+ywT1BsC8=";
 
     # We don't want EDK2 to keep track of OpenSSL,
     # they're frankly bad at it.
