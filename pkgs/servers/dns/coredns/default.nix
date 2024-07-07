@@ -3,6 +3,7 @@
 , buildGoModule
 , fetchFromGitHub
 , installShellFiles
+, nixosTests
 , externalPlugins ? []
 , vendorHash ? "sha256-mp+0/DQTNsgAZTnLqcQq1HVLAfKr5vUGYSZlIvM7KpE="
 }:
@@ -73,6 +74,11 @@ in buildGoModule rec {
   postInstall = ''
     installManPage man/*
   '';
+
+  passthru.tests = {
+    kubernetes-single-node = nixosTests.kubernetes.dns-single-node;
+    kubernetes-multi-node = nixosTests.kubernetes.dns-multi-node;
+  };
 
   meta = with lib; {
     homepage = "https://coredns.io";
