@@ -100,8 +100,9 @@ in
 
         For variables to use see [Prometheus Configuration](https://github.com/prometheus/snmp_exporter#prometheus-configuration).
 
-        Besides setting the filepath for this option, you also need to add
-        flag `--config.expand-environment-variables` to `extraFlags`.
+        If the file path is set to this option, the parameter
+        `--config.expand-environment-variables` is implicitly added to
+        `ExecStart`.
 
         Note that this file needs to be available on the host on which
         this exporter is running.
@@ -122,6 +123,8 @@ in
       ExecStart = ''
         ${pkgs.prometheus-snmp-exporter}/bin/snmp_exporter \
           --config.file=${escapeShellArg configFile} \
+          ${lib.optionalString (cfg.environmentFile != null)
+            "--config.expand-environment-variables"} \
           --log.format=${escapeShellArg cfg.logFormat} \
           --log.level=${cfg.logLevel} \
           --web.listen-address=${cfg.listenAddress}:${toString cfg.port} \
