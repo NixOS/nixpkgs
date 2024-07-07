@@ -2539,6 +2539,8 @@ self: super: with self; {
 
   coveralls = callPackage ../development/python-modules/coveralls { };
 
+  cpe = callPackage ../development/python-modules/cpe { };
+
   cppe = callPackage ../development/python-modules/cppe {
     inherit (pkgs) cppe;
   };
