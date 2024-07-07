@@ -90,5 +90,7 @@ import ../make-test-python.nix ({ lib, pkgs, ... }:
       "curl -sf 'http://127.0.0.1:9090/api/v1/query?query=absent(some_metric)' | "
       + "jq '.data.result[0].value[1]' | grep '\"1\"'"
     )
+
+    pushgateway.log(pushgateway.succeed("systemd-analyze security pushgateway.service | grep -v '✓'"))
   '';
 })
