@@ -49,7 +49,9 @@ in {
     users.users.fusion-inventory = {
       description = "FusionInventory user";
       isSystemUser = true;
+      group = "fusion-inventory";
     };
+    users.groups.fusion-inventory = {};
 
     systemd.services.fusion-inventory = {
       description = "Fusion Inventory Agent";
