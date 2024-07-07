@@ -20,7 +20,7 @@ buildPythonPackage rec {
   disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
-    owner = "lukapecnik";
+    owner = "firefly-cpp";
     repo = "NiaAML";
     rev = "refs/tags/${version}";
     hash = "sha256-VMZLEirE01Q9eyQIhV18PepGWmBcxLIwNeuVf7EuSWE=";
@@ -52,8 +52,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python automated machine learning framework";
-    homepage = "https://github.com/lukapecnik/NiaAML";
-    changelog = "https://github.com/lukapecnik/NiaAML/releases/tag/${version}";
+    homepage = "https://github.com/firefly-cpp/NiaAML";
+    changelog = "https://github.com/firefly-cpp/NiaAML/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ firefly-cpp ];
   };

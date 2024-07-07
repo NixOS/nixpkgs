@@ -4765,6 +4765,11 @@ self: super: with self; {
 
   gemfileparser2 = callPackage ../development/python-modules/gemfileparser2 { };
 
+  gemmi = toPythonModule (pkgs.gemmi.override {
+    enablePython = true;
+    python3Packages = self;
+  });
+
   genanki = callPackage ../development/python-modules/genanki { };
 
   generic = callPackage ../development/python-modules/generic { };
@@ -13681,6 +13686,8 @@ self: super: with self; {
   rx = callPackage ../development/python-modules/rx { };
 
   rxv = callPackage ../development/python-modules/rxv { };
+
+  ryd-client = callPackage ../development/python-modules/ryd-client { };
 
   rzpipe = callPackage ../development/python-modules/rzpipe { };
 
