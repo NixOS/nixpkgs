@@ -56,7 +56,7 @@ in
 
   # this was taken from a previous script which was generated somehow
   wranglerScript = pkgs.writeText "wrangler" ''
-        #!/bin/sh
+        #!${pkgs.bash}/bin/sh
         basedir=$(dirname "$(echo "$0" | sed -e 's,\\,/,g')")
 
         case `uname` in
@@ -95,7 +95,6 @@ in
     cp -r packages/workers-tsconfig $out/lib/packages
     cp $wranglerScript $out/bin/wrangler
     chmod a+x $out/bin/wrangler
-    substituteInPlace $out/bin/wrangler --replace-warn /bin/sh ${pkgs.bash}/bin/sh
     substituteInPlace $out/bin/wrangler --replace-warn WRANGLER_PATH $out
   '';
   passthru.updateScript = ./update.sh;
