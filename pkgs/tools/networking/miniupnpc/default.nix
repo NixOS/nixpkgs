@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "miniupnpc";
-  version = "2.2.7";
+  version = "2.2.8";
 
   src = fetchFromGitHub {
     owner = "miniupnp";
     repo = "miniupnp";
-    rev = "miniupnpc_${lib.replaceStrings ["."] ["_"] version}";
-    hash = "sha256-cIijY1NcdF169tibfB13845UT9ZoJ/CZ+XLES9ctWTY=";
+    rev = "miniupnpc_${lib.replaceStrings [ "." ] [ "_" ] version}";
+    hash = "sha256-kPH5nr+rIcF3mxl+L0kN5dn+9xvQccVa8EduwhuYboY=";
   };
 
   sourceRoot = "${src.name}/miniupnpc";
