@@ -39447,10 +39447,6 @@ with pkgs;
 
   disnixos = callPackage ../tools/package-management/disnix/disnixos { };
 
-  DisnixWebService = callPackage ../tools/package-management/disnix/DisnixWebService {
-    jdk = jdk8;
-  };
-
   i3a = callPackage ../misc/i3a { };
 
   lice = python3Packages.callPackage ../tools/misc/lice { };
