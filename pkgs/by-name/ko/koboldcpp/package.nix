@@ -4,7 +4,7 @@
   stdenv,
   makeWrapper,
   gitUpdater,
-  python311Packages,
+  python3Packages,
   tk,
 
   darwin,
@@ -56,10 +56,10 @@ effectiveStdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     makeWrapper
-    python311Packages.wrapPython
+    python3Packages.wrapPython
   ];
 
-  pythonInputs = builtins.attrValues { inherit (python311Packages) tkinter customtkinter packaging; };
+  pythonInputs = builtins.attrValues { inherit (python3Packages) tkinter customtkinter packaging; };
 
   buildInputs =
     [ tk ]
