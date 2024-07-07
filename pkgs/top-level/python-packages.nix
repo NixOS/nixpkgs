@@ -6576,6 +6576,8 @@ self: super: with self; {
 
   lakeside = callPackage ../development/python-modules/lakeside { };
 
+  lancedb = callPackage ../development/python-modules/lancedb { };
+
   langchain = callPackage ../development/python-modules/langchain { };
 
   langchain-chroma = callPackage ../development/python-modules/langchain-chroma { };
