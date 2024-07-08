@@ -227,6 +227,12 @@
     githubId = 12578560;
     name = "Quinn Bohner";
   };
+  _71zenith = {
+    email = "71zenith@proton.me";
+    github = "71zenith";
+    githubId = 92977828;
+    name = "Mori Zen";
+  };
   _8aed = {
     email = "8aed@riseup.net";
     github = "8aed";
