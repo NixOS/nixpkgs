@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "aioapns";
-  version = "3.3";
+  version = "3.3.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-lLlfrv9yHBHKqmSrs4y9NKMgGSGQQe+zVFWMht+MvGk=";
+    hash = "sha256-bfQpcp/oEBpFu9ywog8CFGGHR8Z5kL6l2O2nzZXaN90=";
   };
 
   nativeBuildInputs = [ setuptools ];

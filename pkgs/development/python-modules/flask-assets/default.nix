@@ -6,7 +6,7 @@
   flask,
   webassets,
   flask-script,
-  nose,
+  pynose,
 }:
 
 buildPythonPackage rec {
@@ -32,7 +32,7 @@ buildPythonPackage rec {
     flask
     webassets
     flask-script
-    nose
+    pynose
   ];
 
   meta = with lib; {
