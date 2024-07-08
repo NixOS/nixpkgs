@@ -29429,12 +29429,11 @@ with pkgs;
 
   aucatctl = callPackage ../applications/audio/aucatctl { };
 
-  audacious = libsForQt5.callPackage ../applications/audio/audacious { };
-  audacious-plugins = libsForQt5.callPackage ../applications/audio/audacious/plugins.nix {
+  audacious = qt6Packages.callPackage ../applications/audio/audacious { };
+  audacious-plugins = qt6Packages.callPackage ../applications/audio/audacious/plugins.nix {
     # Avoid circular dependency
     audacious = audacious.override { audacious-plugins = null; };
   };
-  audaciousQt5 = audacious;
 
   audacity = callPackage ../applications/audio/audacity {
     inherit (darwin.apple_sdk.frameworks) AppKit CoreAudioKit;
