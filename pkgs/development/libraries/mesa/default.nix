@@ -40,6 +40,7 @@
 , zstd
 , enablePatentEncumberedCodecs ? true
 
+, enableGalliumNine ? true
 , galliumDrivers ? [
     "d3d12" # WSL emulated GPU (aka Dozen)
     "iris" # new Intel (Broadwell+)
@@ -97,6 +98,9 @@
 # nix build .#mesa .#pkgsi686Linux.mesa .#pkgsCross.aarch64-multiplatform.mesa .#pkgsMusl.mesa
 
 let
+  haveZink = lib.elem "zink" galliumDrivers;
+  haveDozen = (lib.elem "d3d12" galliumDrivers) || (lib.elem "microsoft-experimental" vulkanDrivers);
+
   rustDeps = [
     {
       pname = "paste";
@@ -158,6 +162,7 @@ in stdenv.mkDerivation {
 
   outputs = [
     "out" "dev" "drivers" "driversdev" "opencl" "teflon" "osmesa"
+  ] ++ lib.optionals haveDozen [
     # the Dozen drivers depend on libspirv2dxil, but link it statically, and
     # libspirv2dxil itself is pretty chonky, so relocate it to its own output in
     # case anything wants to use it at some point
@@ -197,7 +202,7 @@ in stdenv.mkDerivation {
     # Enable glvnd for dynamic libGL dispatch
     (lib.mesonEnable "glvnd" true)
 
-    (lib.mesonBool "gallium-nine" true) # Direct3D in Wine
+    (lib.mesonBool "gallium-nine" enableGalliumNine) # Direct3D in Wine
     (lib.mesonBool "osmesa" true) # used by wine
     (lib.mesonBool "teflon" true) # TensorFlow frontend
 
@@ -225,7 +230,6 @@ in stdenv.mkDerivation {
   strictDeps = true;
 
   buildInputs = with xorg; [
-    directx-headers
     elfutils
     expat
     glslang
@@ -250,12 +254,15 @@ in stdenv.mkDerivation {
     spirv-llvm-translator
     udev
     valgrind-light
-    vulkan-loader
     wayland
     wayland-protocols
     xcbutilkeysyms
     xorgproto
     zstd
+  ] ++ lib.optionals haveZink [
+    vulkan-loader
+  ] ++ lib.optionals haveDozen [
+    directx-headers
   ];
 
   depsBuildBuild = [
@@ -327,9 +334,10 @@ in stdenv.mkDerivation {
     moveToOutput lib/gallium-pipe $opencl
     moveToOutput "lib/lib*OpenCL*" $opencl
     moveToOutput "lib/libOSMesa*" $osmesa
+    moveToOutput lib/libteflon.so $teflon
+  '' + lib.optionalString haveDozen ''
     moveToOutput bin/spirv2dxil $spirv2dxil
     moveToOutput "lib/libspirv_to_dxil*" $spirv2dxil
-    moveToOutput lib/libteflon.so $teflon
   '';
 
   postFixup = ''
@@ -365,7 +373,7 @@ in stdenv.mkDerivation {
         patchelf --set-rpath "$(patchelf --print-rpath $lib):$drivers/lib" "$lib"
       fi
     done
-
+  '' + lib.optionalString haveZink ''
     # add RPATH here so Zink can find libvulkan.so
     patchelf --add-rpath ${vulkan-loader}/lib $drivers/lib/dri/zink_dri.so
   '';
