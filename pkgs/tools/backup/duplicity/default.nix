@@ -84,7 +84,7 @@ let self = python3.pkgs.buildPythonApplication rec {
     pycrypto
     pydrive2
     future
-  ];
+  ] ++ paramiko.optional-dependencies.invoke;
 
   nativeCheckInputs = [
     gnupg # Add 'gpg' to PATH.
