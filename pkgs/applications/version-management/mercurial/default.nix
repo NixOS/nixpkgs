@@ -1,8 +1,6 @@
 { lib, stdenv, fetchurl, python3Packages, makeWrapper, gettext, installShellFiles
 , re2Support ? true
-# depends on rust-cpython which won't support python312
-# https://github.com/dgrunwald/rust-cpython/commit/e815555629e557be084813045ca1ddebc2f76ef9
-, rustSupport ? (stdenv.hostPlatform.isLinux && python3Packages.pythonOlder "3.12"), cargo, rustPlatform, rustc
+, rustSupport ? stdenv.hostPlatform.isLinux, cargo, rustPlatform, rustc
 , fullBuild ? false
 , gitSupport ? fullBuild
 , guiSupport ? fullBuild, tk
@@ -23,11 +21,11 @@ let
 
   self = python3Packages.buildPythonApplication rec {
     pname = "mercurial${lib.optionalString fullBuild "-full"}";
-    version = "6.7.4";
+    version = "6.8";
 
     src = fetchurl {
       url = "https://mercurial-scm.org/release/mercurial-${version}.tar.gz";
-      hash = "sha256-dHCPhzQFwSJy/sEWxt1Shi6O0RwQARx+V19eqBJj6l4=";
+      hash = "sha256-COTQ5dqK8RMrUea8M1AYCtV63Nk18Je20LwRmiwsChA=";
     };
 
     format = "other";
@@ -37,7 +35,7 @@ let
     cargoDeps = if rustSupport then rustPlatform.fetchCargoTarball {
       inherit src;
       name = "mercurial-${version}";
-      hash = "sha256-FRa7frX2z9jQGFBXS2TpOUANs0+xwegNETUAQIU0S4o=";
+      hash = "sha256-mP82UtASD0Fh8ilDDCB6ubY7/MGPoRP6hg6/xRwzwAw=";
       sourceRoot = "mercurial-${version}/rust";
     } else null;
     cargoRoot = if rustSupport then "rust" else null;
