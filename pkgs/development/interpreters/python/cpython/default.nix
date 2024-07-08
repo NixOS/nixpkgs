@@ -367,7 +367,18 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
     };
   in [
     "${mingw-patch}/*.patch"
-  ]);
+  ]) ++ optionals (pythonAtLeast "3.12" && (stdenv.hostPlatform != stdenv.buildPlatform) && (
+    stdenv.hostPlatform.isAarch32 || stdenv.hostPlatform.isAarch64 || stdenv.hostPlatform.isRiscV
+  )) [
+    # backport fix for various platforms; armv7l, riscv64
+    # https://github.com/python/cpython/pull/121178
+    (
+      if (pythonAtLeast "3.13") then
+        ./3.13/0001-Fix-build-with-_PY_SHORT_FLOAT_REPR-0.patch
+      else
+        ./3.12/0001-Fix-build-with-_PY_SHORT_FLOAT_REPR-0.patch
+    )
+  ];
 
   postPatch = optionalString (!stdenv.hostPlatform.isWindows) ''
     substituteInPlace Lib/subprocess.py \

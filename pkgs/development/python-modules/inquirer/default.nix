@@ -23,7 +23,7 @@ buildPythonPackage rec {
   version = "3.2.5";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub rec {
     owner = "magmax";

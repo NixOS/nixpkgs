@@ -73,6 +73,9 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Audio/MIDI multi-track sequencer";
     homepage = "https://qtractor.sourceforge.io";
+    changelog = let
+      version' = builtins.replaceStrings ["."] ["_"] version;
+    in "https://github.com/rncbc/qtractor/blob/qtractor_${version'}/ChangeLog";
     license = licenses.gpl2Plus;
     mainProgram = "qtractor";
     maintainers = with maintainers; [ goibhniu ];

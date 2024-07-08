@@ -30,13 +30,13 @@ rustPlatform.buildRustPackage rec {
         mainProgram = "test_client";
       };
     };
-    tests = {
-      inherit (nixosTests.nextcloud)
-        with-postgresql-and-redis27
-        with-postgresql-and-redis28
-        with-postgresql-and-redis29;
-      inherit test_client;
-    };
+    tests =
+      lib.filterAttrs
+        (key: lib.const (lib.hasPrefix "with-postgresql-and-redis" key))
+        nixosTests.nextcloud
+      // {
+        inherit test_client;
+      };
   };
 
   meta = with lib; {

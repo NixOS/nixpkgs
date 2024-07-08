@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "tenv";
-  version = "2.2.1";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "tofuutils";
     repo = "tenv";
     rev = "v${version}";
-    hash = "sha256-je+T+Kbin0O7CuTRSsv3u+3IWLahTRn8io7yasubLM8=";
+    hash = "sha256-AQzxrUEq6Bp6784uoUiinR7Rb18pjJrFxkmWAcPNyb0=";
   };
 
   vendorHash = "sha256-v1NWlZhfypoS+bZCtr+P2s1t4qYVncbjx9IyRhi2sa4=";

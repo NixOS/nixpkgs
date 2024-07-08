@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   poetry-core,
-  pythonRelaxDepsHook,
   llama-index-agent-openai,
   llama-index-cli,
   llama-index-core,
@@ -25,10 +24,6 @@ buildPythonPackage {
   pyproject = true;
 
   build-system = [ poetry-core ];
-
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
-  ];
 
   pythonRelaxDeps = [
     "llama-index-core"

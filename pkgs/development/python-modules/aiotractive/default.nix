@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "aiotractive";
-  version = "0.5.7";
+  version = "0.6.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "zhulik";
     repo = "aiotractive";
     rev = "refs/tags/v${version}";
-    hash = "sha256-fIdIFG1OpAN1R2L2RryTzYZyqGLo3tqAAkRC8UUFM4k=";
+    hash = "sha256-QwwW/UxRgd4rco80SqQUGt0ArDNT9MXa/U/W2/dHZT0=";
   };
 
   nativeBuildInputs = [ setuptools ];

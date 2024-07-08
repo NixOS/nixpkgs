@@ -11,13 +11,13 @@
 
 buildGoModule rec {
   pname = "kubescape";
-  version = "3.0.12";
+  version = "3.0.13";
 
   src = fetchFromGitHub {
     owner = "kubescape";
     repo = "kubescape";
     rev = "refs/tags/v${version}";
-    hash = "sha256-K9I3vazeAk6hqswgQ+wRurwXvXBs7oFDBeNk7q7lXLo=";
+    hash = "sha256-s0BaPIGMP8PbVv14e0U+tWKUFUVohAndaI5pLoMdALM=";
     fetchSubmodules = true;
   };
 

@@ -12,7 +12,7 @@ import subprocess
 import sys
 import warnings
 import json
-from typing import NamedTuple, Dict, List
+from typing import NamedTuple, Any
 from dataclasses import dataclass
 
 # These values will be replaced with actual values during the package build
@@ -21,7 +21,7 @@ BOOT_MOUNT_POINT = "@bootMountPoint@"
 LOADER_CONF = f"{EFI_SYS_MOUNT_POINT}/loader/loader.conf"  # Always stored on the ESP
 NIXOS_DIR = "@nixosDir@"
 TIMEOUT = "@timeout@"
-EDITOR = "@editor@" == "1"
+EDITOR = "@editor@" == "1" # noqa: PLR0133
 CONSOLE_MODE = "@consoleMode@"
 BOOTSPEC_TOOLS = "@bootspecTools@"
 DISTRO_NAME = "@distroName@"
@@ -38,16 +38,21 @@ class BootSpec:
     init: str
     initrd: str
     kernel: str
-    kernelParams: List[str]
+    kernelParams: list[str]  # noqa: N815
     label: str
     system: str
     toplevel: str
-    specialisations: Dict[str, "BootSpec"]
-    sortKey: str
-    initrdSecrets: str | None = None
+    specialisations: dict[str, "BootSpec"]
+    sortKey: str  # noqa: N815
+    initrdSecrets: str | None = None  # noqa: N815
 
 
 libc = ctypes.CDLL("libc.so.6")
+
+FILE = None | int
+
+def run(cmd: list[str], stdout: FILE = None) -> subprocess.CompletedProcess[str]:
+    return subprocess.run(cmd, check=True, text=True, stdout=stdout)
 
 class SystemIdentifier(NamedTuple):
     profile: str | None
@@ -112,17 +117,20 @@ def get_bootspec(profile: str | None, generation: int) -> BootSpec:
         boot_json_f = open(boot_json_path, 'r')
         bootspec_json = json.load(boot_json_f)
     else:
-        boot_json_str = subprocess.check_output([
-        f"{BOOTSPEC_TOOLS}/bin/synthesize",
-        "--version",
-        "1",
-        system_directory,
-        "/dev/stdout"],
-        universal_newlines=True)
+        boot_json_str = run(
+            [
+                f"{BOOTSPEC_TOOLS}/bin/synthesize",
+                "--version",
+                "1",
+                system_directory,
+                "/dev/stdout",
+            ],
+            stdout=subprocess.PIPE,
+        ).stdout
         bootspec_json = json.loads(boot_json_str)
     return bootspec_from_json(bootspec_json)
 
-def bootspec_from_json(bootspec_json: Dict) -> BootSpec:
+def bootspec_from_json(bootspec_json: dict[str, Any]) -> BootSpec:
     specialisations = bootspec_json['org.nixos.specialisation.v1']
     specialisations = {k: bootspec_from_json(v) for k, v in specialisations.items()}
     systemdBootExtension = bootspec_json.get('org.nixos.systemd-boot', {})
@@ -157,7 +165,7 @@ def write_entry(profile: str | None, generation: int, specialisation: str | None
 
     try:
         if bootspec.initrdSecrets is not None:
-            subprocess.check_call([bootspec.initrdSecrets, f"{BOOT_MOUNT_POINT}%s" % (initrd)])
+            run([bootspec.initrdSecrets, f"{BOOT_MOUNT_POINT}%s" % (initrd)])
     except subprocess.CalledProcessError:
         if current:
             print("failed to create initrd secrets!", file=sys.stderr)
@@ -192,13 +200,17 @@ def write_entry(profile: str | None, generation: int, specialisation: str | None
 
 
 def get_generations(profile: str | None = None) -> list[SystemIdentifier]:
-    gen_list = subprocess.check_output([
-        f"{NIX}/bin/nix-env",
-        "--list-generations",
-        "-p",
-        "/nix/var/nix/profiles/%s" % ("system-profiles/" + profile if profile else "system")],
-        universal_newlines=True)
-    gen_lines = gen_list.split('\n')
+    gen_list = run(
+        [
+            f"{NIX}/bin/nix-env",
+            "--list-generations",
+            "-p",
+            "/nix/var/nix/profiles/%s"
+            % ("system-profiles/" + profile if profile else "system"),
+        ],
+        stdout=subprocess.PIPE,
+    ).stdout
+    gen_lines = gen_list.split("\n")
     gen_lines.pop()
 
     configurationLimit = CONFIGURATION_LIMIT
@@ -214,8 +226,8 @@ def get_generations(profile: str | None = None) -> list[SystemIdentifier]:
 
 
 def remove_old_entries(gens: list[SystemIdentifier]) -> None:
-    rex_profile = re.compile(r"^" + re.escape(BOOT_MOUNT_POINT) + "/loader/entries/nixos-(.*)-generation-.*\.conf$")
-    rex_generation = re.compile(r"^" + re.escape(BOOT_MOUNT_POINT) + "/loader/entries/nixos.*-generation-([0-9]+)(-specialisation-.*)?\.conf$")
+    rex_profile = re.compile(r"^" + re.escape(BOOT_MOUNT_POINT) + r"/loader/entries/nixos-(.*)-generation-.*\.conf$")
+    rex_generation = re.compile(r"^" + re.escape(BOOT_MOUNT_POINT) + r"/loader/entries/nixos.*-generation-([0-9]+)(-specialisation-.*)?\.conf$")
     known_paths = []
     for gen in gens:
         bootspec = get_bootspec(gen.profile, gen.generation)
@@ -230,10 +242,10 @@ def remove_old_entries(gens: list[SystemIdentifier]) -> None:
             gen_number = int(rex_generation.sub(r"\1", path))
         except ValueError:
             continue
-        if not (prof, gen_number, None) in gens:
+        if (prof, gen_number, None) not in gens:
             os.unlink(path)
     for path in glob.iglob(f"{BOOT_MOUNT_POINT}/{NIXOS_DIR}/*"):
-        if not path in known_paths and not os.path.isdir(path):
+        if path not in known_paths and not os.path.isdir(path):
             os.unlink(path)
 
 
@@ -263,9 +275,7 @@ def install_bootloader(args: argparse.Namespace) -> None:
         # be there on newly installed systems, so let's generate one so that
         # bootctl can find it and we can also pass it to write_entry() later.
         cmd = [f"{SYSTEMD}/bin/systemd-machine-id-setup", "--print"]
-        machine_id = subprocess.run(
-          cmd, text=True, check=True, stdout=subprocess.PIPE
-        ).stdout.rstrip()
+        machine_id = run(cmd, stdout=subprocess.PIPE).stdout.rstrip()
 
     if os.getenv("NIXOS_INSTALL_GRUB") == "1":
         warnings.warn("NIXOS_INSTALL_GRUB env var deprecated, use NIXOS_INSTALL_BOOTLOADER", DeprecationWarning)
@@ -288,11 +298,20 @@ def install_bootloader(args: argparse.Namespace) -> None:
         if os.path.exists(LOADER_CONF):
             os.unlink(LOADER_CONF)
 
-        subprocess.check_call([f"{SYSTEMD}/bin/bootctl", f"--esp-path={EFI_SYS_MOUNT_POINT}"] + bootctl_flags + ["install"])
+        run(
+            [f"{SYSTEMD}/bin/bootctl", f"--esp-path={EFI_SYS_MOUNT_POINT}"]
+            + bootctl_flags
+            + ["install"]
+        )
     else:
         # Update bootloader to latest if needed
-        available_out = subprocess.check_output([f"{SYSTEMD}/bin/bootctl", "--version"], universal_newlines=True).split()[2]
-        installed_out = subprocess.check_output([f"{SYSTEMD}/bin/bootctl", f"--esp-path={EFI_SYS_MOUNT_POINT}", "status"], universal_newlines=True)
+        available_out = run(
+            [f"{SYSTEMD}/bin/bootctl", "--version"], stdout=subprocess.PIPE
+        ).stdout.split()[2]
+        installed_out = run(
+            [f"{SYSTEMD}/bin/bootctl", f"--esp-path={EFI_SYS_MOUNT_POINT}", "status"],
+            stdout=subprocess.PIPE,
+        ).stdout
 
         # See status_binaries() in systemd bootctl.c for code which generates this
         installed_match = re.search(r"^\W+File:.*/EFI/(?:BOOT|systemd)/.*\.efi \(systemd-boot ([\d.]+[^)]*)\)$",
@@ -311,7 +330,11 @@ def install_bootloader(args: argparse.Namespace) -> None:
 
         if installed_version < available_version:
             print("updating systemd-boot from %s to %s" % (installed_version, available_version))
-            subprocess.check_call([f"{SYSTEMD}/bin/bootctl", f"--esp-path={EFI_SYS_MOUNT_POINT}"] + bootctl_flags + ["update"])
+            run(
+                [f"{SYSTEMD}/bin/bootctl", f"--esp-path={EFI_SYS_MOUNT_POINT}"]
+                + bootctl_flags
+                + ["update"]
+            )
 
     os.makedirs(f"{BOOT_MOUNT_POINT}/{NIXOS_DIR}", exist_ok=True)
     os.makedirs(f"{BOOT_MOUNT_POINT}/loader/entries", exist_ok=True)
@@ -362,7 +385,7 @@ def install_bootloader(args: argparse.Namespace) -> None:
 
     os.makedirs(f"{BOOT_MOUNT_POINT}/{NIXOS_DIR}/.extra-files", exist_ok=True)
 
-    subprocess.check_call(COPY_EXTRA_FILES)
+    run([COPY_EXTRA_FILES])
 
 
 def main() -> None:
@@ -370,7 +393,7 @@ def main() -> None:
     parser.add_argument('default_config', metavar='DEFAULT-CONFIG', help=f"The default {DISTRO_NAME} config to boot")
     args = parser.parse_args()
 
-    subprocess.check_call(CHECK_MOUNTPOINTS)
+    run([CHECK_MOUNTPOINTS])
 
     try:
         install_bootloader(args)

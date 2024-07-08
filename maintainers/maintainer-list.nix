@@ -2604,6 +2604,11 @@
     githubId = 30630233;
     name = "Timo Triebensky";
   };
+  birdee = {
+    name = "birdee";
+    github = "BirdeeHub";
+    githubId = 85372418;
+  };
   birkb = {
     email = "birk@batchworks.de";
     github = "birkb";
@@ -15379,7 +15384,7 @@
     githubId = 53442728;
   };
   paveloom = {
-    email = "paveloom@riseup.net";
+    email = "contact@paveloom.dev";
     github = "paveloom";
     githubId = 49961859;
     name = "Pavel Sobolev";
@@ -21033,13 +21038,6 @@
     github = "victormeriqui";
     githubId = 1396008;
   };
-  victormignot = {
-    email = "root@victormignot.fr";
-    github = "victormignot";
-    githubId = 58660971;
-    name = "Victor Mignot";
-    keys = [ { fingerprint = "CA5D F91A D672 683A 1F65  BBC9 0317 096D 20E0 067B"; } ];
-  };
   vidbina = {
     email = "vid@bina.me";
     github = "vidbina";
@@ -22319,6 +22317,12 @@
     github = "elmarx";
     githubId = 250877;
     name = "Elmar Athmer";
+  };
+  zazedd = {
+    name = "Leonardo Santos";
+    email = "leomendesantos@gmail.com";
+    github = "zazedd";
+    githubId = 93401987;
   };
   zbioe = {
     name = "Iury Fukuda";
