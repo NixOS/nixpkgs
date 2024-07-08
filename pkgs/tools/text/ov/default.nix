@@ -40,9 +40,9 @@ buildGoModule rec {
 
   postInstall = ''
     installShellCompletion --cmd ov \
-      --bash <($out/bin/ov completion bash) \
-      --fish <($out/bin/ov completion fish) \
-      --zsh <($out/bin/ov completion zsh)
+      --bash <($out/bin/ov --completion bash) \
+      --fish <($out/bin/ov --completion fish) \
+      --zsh <($out/bin/ov --completion zsh)
 
     mkdir -p $out/share/$name
     cp $src/ov-less.yaml $out/share/$name/less-config.yaml
