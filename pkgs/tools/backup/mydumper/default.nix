@@ -1,19 +1,28 @@
-{ lib, stdenv, fetchFromGitHub
-, cmake, pkg-config, sphinx
-, glib , pcre
-, libmysqlclient, libressl
-, zlib, zstd
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, sphinx
+, glib
+, pcre
+, libmysqlclient
+, libressl
+, zlib
+, zstd
 }:
 
 stdenv.mkDerivation rec {
   pname = "mydumper";
-  version = "0.14.3-1";
+  version = "0.16.3-6";
 
   src = fetchFromGitHub {
-    owner  = "mydumper";
-    repo = "mydumper";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-qyJGnrBOElQ3s2VoOWfW1luacd33haanmzKidMBgCpc=";
+    owner = "
+    mydumper ";
+    repo = "
+    mydumper ";
+    rev = "refs/tags/v${version} ";
+    hash = "sha256-iMhrwKRAorufmkkNU4h0BvLV6c3/cwYPdsGm41jTkZ4=";
   };
 
   outputs = [ "out" "doc" "man" ];
@@ -21,9 +30,12 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkg-config sphinx ];
 
   buildInputs = [
-    glib pcre
-    libmysqlclient libressl
-    zlib zstd
+    glib
+    pcre
+    libmysqlclient
+    libressl
+    zlib
+    zstd
   ];
 
   cmakeFlags = [
@@ -31,6 +43,16 @@ stdenv.mkDerivation rec {
     "-DMYSQL_INCLUDE_DIR=${lib.getDev libmysqlclient}/include/mysql"
     "-DWITH_ZSTD=ON"
   ];
+
+
+  env.NIX_CFLAGS_COMPILE = "-Wno-unused-result";
+
+  postPatch = ''
+    substituteInPlace CMakeLists.txt\
+      --replace-fail "/etc" "$out/etc" \
+
+  '';
+
 
   meta = with lib; {
     description = "High-performance MySQL backup tool";
