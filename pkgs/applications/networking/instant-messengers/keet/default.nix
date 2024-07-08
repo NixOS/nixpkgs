@@ -10,7 +10,6 @@ let
   };
 
   appimageContents = appimageTools.extract {
-    name = "${pname}-${version}";
     inherit pname version;
     src = "${src}/Keet.AppImage";
   };
