@@ -12,7 +12,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   src = fetchurl rec {
       name = "VNC-Viewer-${finalAttrs.version}-MacOSX-universal.dmg";
       url = "https://downloads.realvnc.com/download/file/viewer.files/${name}";
-      sha256 = "0k72fdnx1zmyi9z5n3lazc7s70gcddxq0s73akp0al0y9hzq9prh";
+      hash = "sha256-haD2QsBF9Dps1V/2tkkALAc7+kUY3PSNj7BjTIqnNcU=";
   };
   sourceRoot = ".";
 
