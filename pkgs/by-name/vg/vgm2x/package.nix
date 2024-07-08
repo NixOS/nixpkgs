@@ -1,10 +1,11 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, unstableGitUpdater
-, libarchive
-, libzip
-, pkg-config
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  unstableGitUpdater,
+  libarchive,
+  libzip,
+  pkg-config,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -28,18 +29,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
     libarchive
     libzip
   ];
 
-  buildFlags = [
-    "CC=${stdenv.cc.targetPrefix}cc"
-  ];
+  buildFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
 
   installPhase = ''
     runHook preInstall
@@ -53,12 +50,12 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = unstableGitUpdater { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "VGM file extraction tools";
     homepage = "https://github.com/vampirefrog/vgm2x";
-    license = licenses.gpl3Only;
+    license = lib.licenses.gpl3Only;
     mainProgram = "vgm2x";
-    maintainers = with maintainers; [ OPNA2608 ];
-    platforms = platforms.all;
+    maintainers = with lib.maintainers; [ OPNA2608 ];
+    platforms = lib.platforms.all;
   };
 })
