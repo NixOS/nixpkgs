@@ -5,18 +5,16 @@
 
 stdenv.mkDerivation {
   pname = "cue2pops";
-  version = "unstable-2018-01-04";
+  version = "0-unstable-2023-01-15";
 
   src = fetchFromGitHub {
     owner = "makefu";
     repo = "cue2pops-linux";
-    rev = "541863adf23fdecde92eba5899f8d58586ca4551";
-    sha256 = "05w84726g3k33rz0wwb9v77g7xh4cnhy9sxlpilf775nli9bynrk";
+    rev = "3f2be6126bd50dfe6b998bc8926f88ce9139c19a";
+    hash = "sha256-7rgYvqeH8ZDI8Vc5vnjIhe3Ke0TE1q/iFHEqucanhUM=";
   };
 
   dontConfigure = true;
-
-  makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
 
   installPhase = ''
     runHook preInstall
