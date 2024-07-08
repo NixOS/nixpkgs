@@ -25,9 +25,6 @@ python3.pkgs.buildPythonApplication rec {
     ];
 
   preConfigure = ''
-    patchShebangs fail2ban-2to3
-    ./fail2ban-2to3
-
     for i in config/action.d/sendmail*.conf; do
       substituteInPlace $i \
         --replace /usr/sbin/sendmail sendmail
