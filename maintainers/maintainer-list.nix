@@ -8200,6 +8200,12 @@
     githubId = 25618740;
     name = "Vincent Cui";
   };
+  hornwall = {
+    email = "hannes@hornwall.me";
+    github = "hornwall";
+    githubId = 1064477;
+    name = "Hannes Hornwall";
+  };
   hoverbear = {
     email = "operator+nix@hoverbear.org";
     matrix = "@hoverbear:matrix.org";
