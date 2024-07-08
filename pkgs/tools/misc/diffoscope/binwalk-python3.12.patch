@@ -1,0 +1,41 @@
+From e27965ac94a74d908213e37b6d529827cc1ee902 Mon Sep 17 00:00:00 2001
+From: Philip Taron <philip.taron@gmail.com>
+Date: Mon, 8 Jul 2024 11:58:15 -0700
+Subject: [PATCH] tests/comparators/test_binwalk.py: binwalk on Python 3.12
+ produces more output
+
+In particular, here is the difference array:
+
+```
+[
+  <Difference .cpio file embedded at offset 0 -- .cpio file embedded at offset 0 [<Difference file list -- file list []>, <Difference dir/link -- dir/link []>, <Difference dir/text -- dir/text []>]>,
+  <Difference .cpio file embedded at offset 600 -- .cpio file embedded at offset 600 [<Difference file list -- file list []>, <Difference dir/link -- dir/link []>, <Difference dir/text -- dir/text []>]>,
+  <Difference .cpio file embedded at offset 670 -- .cpio file embedded at offset 670 [<Difference file list -- file list []>, <Difference dir/link -- dir/link []>, <Difference dir/text -- dir/text []>]>,
+  <Difference .cpio file embedded at offset 6E4 -- .cpio file embedded at offset 6E4 [<Difference file list -- file list []>, <Difference dir/link -- dir/link []>, <Difference dir/text -- dir/text []>]>,
+  <Difference .cpio file embedded at offset 70 -- .cpio file embedded at offset 70 [<Difference file list -- file list []>, <Difference dir/link -- dir/link []>, <Difference dir/text -- dir/text []>]>,
+  <Difference .cpio file embedded at offset E4 -- .cpio file embedded at offset E4 [<Difference file list -- file list []>, <Difference dir/link -- dir/link []>, <Difference dir/text -- dir/text []>]>,
+  <Difference .cpio file embedded at offset 164 -- .cpio file embedded at offset 16C [<Difference file list -- file list []>, <Difference dir/text -- dir/text []>]>,
+  <Difference .cpio file embedded at offset 39C -- .cpio file embedded at offset 484 []>,
+  <Difference .cpio file embedded at offset 76C -- .cpio file embedded at offset 764 [<Difference file list -- file list []>, <Difference dir/text -- dir/text []>]>
+]
+```
+---
+ tests/comparators/test_binwalk.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tests/comparators/test_binwalk.py b/tests/comparators/test_binwalk.py
+index ba0b1bd4..c85b5934 100644
+--- a/tests/comparators/test_binwalk.py
++++ b/tests/comparators/test_binwalk.py
+@@ -57,7 +57,7 @@ def comparison(binwalk1, binwalk2):
+ @skip_unless_module_exists("binwalk")
+ def test_listing(comparison):
+     differences = comparison.details
+-    assert comparison.comments == ["comprises of 2 embedded members"]
++    assert comparison.comments == ["comprises of 10 embedded members"]
+     assert differences[0].source1 == ".cpio file embedded at offset 0"
+     assert differences[1].source2 == ".cpio file embedded at offset 600"
+ 
+-- 
+2.45.1
+

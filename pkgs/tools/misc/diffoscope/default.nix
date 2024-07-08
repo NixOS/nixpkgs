@@ -111,6 +111,9 @@ python.pkgs.buildPythonApplication rec {
   patches = [
     ./ignore_links.patch
     ./openssh-no-dsa.patch # https://salsa.debian.org/reproducible-builds/diffoscope/-/merge_requests/139
+  ] ++ lib.optionals (python.pythonAtLeast "3.12") [
+    # `binwalk` with Python 3.12 produces more output
+    ./binwalk-python3.12.patch
   ];
 
   postPatch = ''
