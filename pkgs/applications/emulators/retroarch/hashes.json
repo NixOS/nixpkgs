@@ -784,10 +784,10 @@
         "src": {
             "owner": "libretro",
             "repo": "snes9x2010",
-            "rev": "d8b10c4cd7606ed58f9c562864c986bc960faaaf",
-            "hash": "sha256-7FmteYrAYr+pGNXGg9CBC4NFlijGRf7GdtJfiNjmonU="
+            "rev": "84b963a2f627bbc41198e357430619f34bbebc8a",
+            "hash": "sha256-s358pyMH4vIQt1f0Mgw1U5gwUW0aSqVtwyeyoL/4Ok8="
         },
-        "version": "unstable-2023-02-20"
+        "version": "unstable-2024-06-28"
     },
     "stella": {
         "fetcher": "fetchFromGitHub",
