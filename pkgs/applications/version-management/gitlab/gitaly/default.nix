@@ -1,4 +1,5 @@
 { lib
+, callPackage
 , fetchFromGitLab
 , buildGoModule
 , pkg-config
@@ -8,6 +9,8 @@ let
   version = "17.2.0";
   package_version = "v${lib.versions.major version}";
   gitaly_package = "gitlab.com/gitlab-org/gitaly/${package_version}";
+
+  git = callPackage ./git.nix { };
 
   commonOpts = {
     inherit version;
@@ -25,8 +28,6 @@ let
     ldflags = [ "-X ${gitaly_package}/internal/version.version=${version}" "-X ${gitaly_package}/internal/version.moduleVersion=${version}" ];
 
     tags = [ "static" ];
-
-    nativeBuildInputs = [ pkg-config ];
 
     doCheck = false;
   };
@@ -48,6 +49,10 @@ buildGoModule ({
   '';
 
   outputs = [ "out" ];
+
+  passthru = {
+    inherit git;
+  };
 
   meta = with lib; {
     homepage = "https://gitlab.com/gitlab-org/gitaly";
