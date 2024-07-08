@@ -12,8 +12,8 @@ let
 in
 buildNodejs {
   inherit enableNpm;
-  version = "22.4.0";
-  sha256 = "sha256-KStDAITy8ykT3H2k6y+8iWklJ3Kp0b/ormxLSpjKOtM=";
+  version = "22.4.1";
+  sha256 = "sha256-ZfyFf1qoJWqvyQCzRMARXJrq4loCVB/Vzg29Tf0cX7k=";
   patches = [
     ./disable-darwin-v8-system-instrumentation-node19.patch
     ./bypass-darwin-xcrun-node16.patch
