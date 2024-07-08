@@ -9,7 +9,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "marwaita-ubuntu";
+  pname = "marwaita-orange";
   version = "17.0";
 
   src = fetchFromGitHub {
