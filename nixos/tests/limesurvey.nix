@@ -6,8 +6,7 @@ import ./make-test-python.nix ({ lib, pkgs, ... }: {
     services.limesurvey = {
       enable = true;
       virtualHost = {
-        hostName = "example.local";
-        adminAddr = "root@example.local";
+        serverName = "example.local";
       };
       encryptionKeyFile = pkgs.writeText "key" (lib.strings.replicate 32 "0");
       encryptionNonceFile = pkgs.writeText "nonce" (lib.strings.replicate 24 "0");
