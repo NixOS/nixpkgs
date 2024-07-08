@@ -241,7 +241,7 @@ in
               ProtectKernelModules = true;
               ProtectKernelTunables = true;
               ProtectProc = "invisible";
-              ProtectSystem = "strict";
+              ProtectSystem = true;
               RestrictNamespaces = true;
               RestrictSUIDSGID = true;
               User = networkId;
