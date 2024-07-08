@@ -5,7 +5,9 @@
 , bc
 , lib
 , buildPackages
-, nix-update-script
+, nixosTests
+, runCommand
+, writeScript
 }:
 
 let
@@ -29,9 +31,9 @@ buildType = if stdenv.isDarwin then
   else
     "GCC5";
 
-edk2 = stdenv.mkDerivation {
+edk2 = stdenv.mkDerivation rec {
   pname = "edk2";
-  version = "202405";
+  version = "202402";
 
   patches = [
     # pass targetPrefix as an env var
@@ -46,26 +48,28 @@ edk2 = stdenv.mkDerivation {
     })
   ];
 
-  src = fetchFromGitHub {
+  srcWithVendoring = fetchFromGitHub {
     owner = "tianocore";
     repo = "edk2";
     rev = "edk2-stable${edk2.version}";
     fetchSubmodules = true;
-    hash = "sha256-7vNodHocwqQiO0ZXtqo8lEOFyt8JkFHcAathEhrKWE0=";
-
-    # We don't want EDK2 to keep track of OpenSSL,
-    # they're frankly bad at it.
-    postFetch = ''
-      rm -rf $out/CryptoPkg/Library/OpensslLib/openssl
-      mkdir -p $out/CryptoPkg/Library/OpensslLib/openssl
-      tar --strip-components=1 -xf ${buildPackages.openssl.src} -C $out/CryptoPkg/Library/OpensslLib/openssl
-
-      # Fix missing INT64_MAX include that edk2 explicitly does not provide
-      # via it's own <stdint.h>. Let's pull in openssl's definition instead:
-      sed -i $out/CryptoPkg/Library/OpensslLib/openssl/crypto/property/property_parse.c \
-          -e '1i #include "internal/numbers.h"'
-    '';
+    hash = "sha256-Nurm6QNKCyV6wvbj0ELdYAL7mbZ0yg/tTwnEJ+N18ng=";
   };
+
+  # We don't want EDK2 to keep track of OpenSSL,
+  # they're frankly bad at it.
+  src = runCommand "edk2-unvendored-src" { } ''
+    cp --no-preserve=mode -r ${srcWithVendoring} $out
+    rm -rf $out/CryptoPkg/Library/OpensslLib/openssl
+    mkdir -p $out/CryptoPkg/Library/OpensslLib/openssl
+    tar --strip-components=1 -xf ${buildPackages.openssl.src} -C $out/CryptoPkg/Library/OpensslLib/openssl
+    chmod -R +w $out/
+
+    # Fix missing INT64_MAX include that edk2 explicitly does not provide
+    # via it's own <stdint.h>. Let's pull in openssl's definition instead:
+    sed -i $out/CryptoPkg/Library/OpensslLib/openssl/crypto/property/property_parse.c \
+        -e '1i #include "internal/numbers.h"'
+  '';
 
   nativeBuildInputs = [ pythonEnv ];
   depsBuildBuild = [ buildPackages.stdenv.cc buildPackages.bash ];
@@ -105,7 +109,22 @@ edk2 = stdenv.mkDerivation {
   };
 
   passthru = {
-    updateScript = nix-update-script { };
+    # exercise a channel blocker
+    tests.uefiUsb = nixosTests.boot.uefiCdrom;
+
+    updateScript = writeScript "update-edk2" ''
+      #!/usr/bin/env nix-shell
+      #!nix-shell -i bash -p common-updater-scripts coreutils gnused
+      set -eu -o pipefail
+      version="$(list-git-tags --url="${edk2.srcWithVendoring.url}" |
+                 sed -E --quiet 's/^edk2-stable([0-9]{6})$/\1/p' |
+                 sort --reverse --numeric-sort |
+                 head -n 1)"
+      if [[ "x$UPDATE_NIX_OLD_VERSION" != "x$version" ]]; then
+          update-source-version --source-key=srcWithVendoring \
+              "$UPDATE_NIX_ATTR_PATH" "$version"
+      fi
+    '';
 
     mkDerivation = projectDscPath: attrsOrFun: stdenv.mkDerivation (finalAttrs:
     let
