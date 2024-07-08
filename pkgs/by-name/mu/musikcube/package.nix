@@ -34,14 +34,14 @@
 let
   ffmpeg = ffmpeg_7-headless;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "musikcube";
   version = "3.0.3";
 
   src = fetchFromGitHub {
     owner = "clangen";
-    repo = pname;
-    rev = version;
+    repo = "musikcube";
+    rev = finalAttrs.version;
     hash = "sha512-Yqh35hyGzGZlh4UoHK0MGYBa+zugYJg3F+8F223saTdDChiX4cSncroSTexRyJVGm7EE8INNJoXg3HU6bZ08lA==";
   };
 
@@ -90,8 +90,8 @@ stdenv.mkDerivation rec {
   cmakeFlags = [ "-DDISABLE_STRIP=true" ];
 
   postFixup = lib.optionalString stdenv.isDarwin ''
-    install_name_tool -add_rpath $out/share/${pname} $out/share/${pname}/${pname}
-    install_name_tool -add_rpath $out/share/${pname} $out/share/${pname}/${pname}d
+    install_name_tool -add_rpath $out/share/musikcube $out/share/musikcube/musikcube
+    install_name_tool -add_rpath $out/share/musikcube $out/share/musikcube/musikcubed
   '';
 
   meta = {
@@ -101,7 +101,8 @@ stdenv.mkDerivation rec {
       aanderse
       afh
     ];
+    mainProgram = "musikcube";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.all;
   };
-}
+})
