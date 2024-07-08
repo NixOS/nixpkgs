@@ -2,7 +2,7 @@
 , cmake
 , curl
 , fetchFromGitHub
-, ffmpeg
+, ffmpeg_7-headless
 , gnutls
 , lame
 , lib
@@ -29,15 +29,18 @@
 , coreaudioSupport ? stdenv.hostPlatform.isDarwin, CoreAudio
 }:
 
+let
+  ffmpeg = ffmpeg_7-headless;
+in
 stdenv.mkDerivation rec {
   pname = "musikcube";
-  version = "3.0.2";
+  version = "3.0.3";
 
   src = fetchFromGitHub {
     owner = "clangen";
     repo = pname;
     rev = version;
-    hash = "sha512-IakZy6XsAE39awjzQI+R11JCPeQSaibx6+uX8Iea5WdlCundeovnPwSAi6RzzZl9dr2UftzzEiF4Aun8VMtqVA==";
+    hash = "sha512-Yqh35hyGzGZlh4UoHK0MGYBa+zugYJg3F+8F223saTdDChiX4cSncroSTexRyJVGm7EE8INNJoXg3HU6bZ08lA==";
   };
 
   outputs = [ "out" "dev" ];
