@@ -529,11 +529,11 @@
         "src": {
             "owner": "Javanaise",
             "repo": "mrboom-libretro",
-            "rev": "a7af125dc9ef65c9a1b43136a75374bbac5458ee",
-            "hash": "sha256-hPJ8MpJOPGkckB0rj1uQ9BmY+0//Lj9jfNA9hfpdu3o=",
+            "rev": "22765ce7176d236d846f504318a51c448d2b469b",
+            "hash": "sha256-hzdc4PM/EARNEtpeATo4VohXtkeBra6rCz3tdIgBfVw=",
             "fetchSubmodules": true
         },
-        "version": "unstable-2024-05-19"
+        "version": "unstable-2024-07-01"
     },
     "mupen64plus": {
         "fetcher": "fetchFromGitHub",
