@@ -597,13 +597,13 @@
     "vendorHash": null
   },
   "ibm": {
-    "hash": "sha256-5esd44JgaarCJK38QyYv+fxMz0+zzivMZD8rqyqrdbo=",
+    "hash": "sha256-91EXK/8Kovq2yqyF5lFgWV/AJMvU6eHCnIBnLpzsQws=",
     "homepage": "https://registry.terraform.io/providers/IBM-Cloud/ibm",
     "owner": "IBM-Cloud",
     "repo": "terraform-provider-ibm",
-    "rev": "v1.64.0",
+    "rev": "v1.67.1",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-YFxD7hvKTXdaQ/+/Oiws/i6TipbFaAQ0Ah1arGK7JUo="
+    "vendorHash": "sha256-ioyfsNgXoQOtzU1eBJkjMw4hgIo5ryFPIFKqOdn4fuk="
   },
   "icinga2": {
     "hash": "sha256-Y/Oq0aTzP+oSKPhHiHY9Leal4HJJm7TNDpcdqkUsCmk=",
