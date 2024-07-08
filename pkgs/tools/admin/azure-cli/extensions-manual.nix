@@ -6,6 +6,7 @@
 , mkAzExtension
 , mycli
 , python3Packages
+, python3
 }:
 
 {
@@ -31,7 +32,7 @@
       pymysql
       setproctitle
     ]) ++ [
-      mycli
+      (mycli.override { inherit python3; })
     ];
     meta.maintainers = with lib.maintainers; [ obreitwi ];
   };
