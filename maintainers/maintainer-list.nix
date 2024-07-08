@@ -2331,7 +2331,7 @@
     matrix = "@bb010g:matrix.org";
     github = "bb010g";
     githubId = 340132;
-    name = "Brayden Banks";
+    name = "Dusk Banks";
   };
   bb2020 = {
     github = "bb2020";
