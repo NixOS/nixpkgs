@@ -1,25 +1,29 @@
 { lib }:
+let
+  inherit (lib) optionalAttrs;
 
-lib.mapAttrs (lname: lset: let
-  defaultLicense = {
-    shortName = lname;
-    free = true; # Most of our licenses are Free, explicitly declare unfree additions as such!
-    deprecated = false;
+  mkLicense = lname: {
+    shortName ? lname,
+    # Most of our licenses are Free, explicitly declare unfree additions as such!
+    free ? true,
+    deprecated ? false,
+    spdxId ? null,
+    url ? null,
+    fullName ? null,
+    redistributable ? free
+  }@attrs: {
+    inherit shortName free deprecated redistributable;
+  } // optionalAttrs (attrs ? spdxId) {
+    inherit spdxId;
+    url = "https://spdx.org/licenses/${spdxId}.html";
+  } // optionalAttrs (attrs ? url) {
+    inherit url;
+  } // optionalAttrs (attrs ? fullName) {
+    inherit fullName;
   };
 
-  mkLicense = licenseDeclaration: let
-    applyDefaults = license: defaultLicense // license;
-    applySpdx = license:
-      if license ? spdxId
-      then license // { url = "https://spdx.org/licenses/${license.spdxId}.html"; }
-      else license;
-    applyRedistributable = license: { redistributable = license.free; } // license;
-  in lib.pipe licenseDeclaration [
-    applyDefaults
-    applySpdx
-    applyRedistributable
-  ];
-in mkLicense lset) ({
+in
+lib.mapAttrs mkLicense ({
   /* License identifiers from spdx.org where possible.
    * If you cannot find your license here, then look for a similar license or
    * add it to this list. The URL mentioned above is a good source for inspiration.
