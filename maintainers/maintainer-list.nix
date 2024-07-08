@@ -18488,6 +18488,14 @@
     githubId = 53050011;
     name = "Yohann Boniface";
   };
+  sigmasquadron = {
+    name = "Fernando Rodrigues";
+    email = "alpha@sigmasquadron.net";
+    matrix = "@sigmasquadron:matrix.org";
+    github = "SigmaSquadron";
+    githubId = 174749595;
+    keys = [ { fingerprint = "E3CD E225 47C6 2DB6 6CCD  BC06 CC3A E2EA 0000 0000"; } ];
+  };
   sikmir = {
     email = "sikmir@disroot.org";
     matrix = "@sikmir:matrix.org";
