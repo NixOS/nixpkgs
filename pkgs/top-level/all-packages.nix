@@ -3273,7 +3273,7 @@ with pkgs;
 
   awscli = callPackage ../tools/admin/awscli { };
 
-  awscli2 = callPackage ../tools/admin/awscli2 {
+  awscli2 = callPackage ../by-name/aw/awscli2/package.nix {
     # change when https://github.com/aws/aws-cli/issues/8342 resolved
     python3 = python311;
   };
