@@ -46,5 +46,11 @@ with lib;
     done
   '';
 
+  environment.defaultPackages = with pkgs; [
+    rsync
+  ];
+
+  programs.git.enable = lib.mkDefault true;
+
   system.stateVersion = lib.mkDefault lib.trivial.release;
 }
