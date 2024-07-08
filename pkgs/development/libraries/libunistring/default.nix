@@ -30,9 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
   propagatedBuildInputs = lib.optional (!stdenv.isLinux) libiconv;
-  buildInputs = lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk_11_0.frameworks.CoreServices
-  ];
+  buildInputs = lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.CoreServices ];
   nativeBuildInputs = [ updateAutotoolsGnuConfigScriptsHook ];
 
   configureFlags = [ "--with-libiconv-prefix=${libiconv}" ];
