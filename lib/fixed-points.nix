@@ -313,6 +313,10 @@ rec {
   /**
     Compose two [`overlays`](#chap-overlays) and returns the resulting attribute set.
 
+    :::{.note}
+    The result is produced by using the update operator `//`.
+    This means nested values of previous overlays are not merged recursively.
+    :::
 
     # Inputs
 
@@ -349,7 +353,7 @@ rec {
       in fApplied // g final prev';
 
   /**
-    Compose several [`overlays`](#chap-overlays) and returns the resulting attribute set.
+    Composes a list of [`overlays`](#chap-overlays) and returns the resulting attribute set.
 
     # Inputs
 
