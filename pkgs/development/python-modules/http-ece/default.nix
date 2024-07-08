@@ -4,7 +4,8 @@
   cryptography,
   fetchPypi,
   mock,
-  pynose,
+  nose,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -25,9 +26,11 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ cryptography ];
 
+  doCheck = pythonOlder "3.12";
+
   nativeCheckInputs = [
     mock
-    pynose
+    nose
   ];
 
   meta = with lib; {
