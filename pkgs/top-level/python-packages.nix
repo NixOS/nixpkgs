@@ -4560,8 +4560,6 @@ self: super: with self; {
 
   foolscap = callPackage ../development/python-modules/foolscap { };
 
-  forbiddenfruit = callPackage ../development/python-modules/forbiddenfruit { };
-
   fordpass = callPackage ../development/python-modules/fordpass { };
 
   forecast-solar = callPackage ../development/python-modules/forecast-solar { };
