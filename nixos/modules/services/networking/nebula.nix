@@ -269,4 +269,6 @@ in
       ${nameToId netName} = {};
     }) enabledNetworks);
   };
+
+  meta.maintainers = [ numinit ];
 }
