@@ -55,7 +55,6 @@ buildPythonPackage rec {
     poetry-core
   ];
 
-
   dependencies = [
     async-timeout
     cloudevents
@@ -84,6 +83,7 @@ buildPythonPackage rec {
     "protobuf"
     "ray"
     "uvicorn"
+    "psutil"
   ];
 
   pythonImportsCheck = [ "kserve" ];
