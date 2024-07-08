@@ -1,12 +1,13 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, unstableGitUpdater
-, alsa-lib
-, cmake
-, libjack2
-, pkg-config
-, zlib
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  unstableGitUpdater,
+  alsa-lib,
+  cmake,
+  libjack2,
+  pkg-config,
+  zlib,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -60,12 +61,12 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = unstableGitUpdater { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "FM synthesiser based on emulated Yamaha YM chips (OPL, OPM and OPN series)";
     homepage = "https://github.com/vampirefrog/fmtoy";
-    license = licenses.gpl3Only;
+    license = lib.licenses.gpl3Only;
     mainProgram = "fmtoy_jack";
-    maintainers = with maintainers; [ OPNA2608 ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ OPNA2608 ];
+    platforms = lib.platforms.linux;
   };
 })
