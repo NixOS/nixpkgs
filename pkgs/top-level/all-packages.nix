@@ -23265,16 +23265,10 @@ with pkgs;
   nuspell = callPackage ../development/libraries/nuspell { };
   nuspellWithDicts = dicts: callPackage ../development/libraries/nuspell/wrapper.nix { inherit dicts; };
 
-  # splicing magic
-  nv-codec-headers-versions = callPackages ../development/libraries/nv-codec-headers { };
-  inherit (nv-codec-headers-versions)
-    nv-codec-headers-9
-    nv-codec-headers-10
-    nv-codec-headers-11
-    nv-codec-headers-12
-  ;
-  # A default nv-codec-headers to make people happy
-  nv-codec-headers = nv-codec-headers-versions.nv-codec-headers-9;
+  nv-codec-headers-9 = nv-codec-headers.override { majorVersion = "9"; };
+  nv-codec-headers-10 = nv-codec-headers.override { majorVersion = "10"; };
+  nv-codec-headers-11 = nv-codec-headers.override { majorVersion = "11"; };
+  nv-codec-headers-12 = nv-codec-headers.override { majorVersion = "12"; };
 
   nvidiaCtkPackages =
     callPackage ../by-name/nv/nvidia-container-toolkit/packages.nix
