@@ -98,11 +98,11 @@ in {
               copy_bin_and_libs ${pkgs.vdo}/bin/$BIN
             done
             substituteInPlace $out/bin/vdorecover --replace "${pkgs.bash}/bin/bash" "/bin/sh"
-            substituteInPlace $out/bin/adaptLVMVDO.sh --replace "${pkgs.bash}/bin/bash" "/bin/sh"
+            substituteInPlace $out/bin/adaptlvm --replace "${pkgs.bash}/bin/bash" "/bin/sh"
           '';
 
           extraUtilsCommandsTest = mkIf (!config.boot.initrd.systemd.enable)''
-            ls ${pkgs.vdo}/bin/ | grep -vE '(adaptLVMVDO|vdorecover)' | while read BIN; do
+            ls ${pkgs.vdo}/bin/ | grep -vE '(adaptlvm|vdorecover)' | while read BIN; do
               $out/bin/$(basename $BIN) --help > /dev/null
             done
           '';
