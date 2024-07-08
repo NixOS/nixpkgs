@@ -7861,6 +7861,12 @@
     githubId = 62279738;
     name = "Håkon Arvidsen";
   };
+  haskie = {
+    name = "Fabian Schneider";
+    email = "faebl.taylor@pm.me";
+    github = "haskie-lambda";
+    githubId = 23012490;
+  };
   haslersn = {
     email = "haslersn@fius.informatik.uni-stuttgart.de";
     github = "haslersn";
