@@ -750,6 +750,16 @@ let
             '';
           })
           else super.osx-dictionary;
+
+        org-xlatex = super.org-xlatex.overrideAttrs (attrs: {
+          patches = (attrs.patches or []) ++ [
+            (pkgs.fetchpatch {
+              name = "drop-usage-known-bad-actor-cdn.patch";
+              url = "https://github.com/ksqsf/org-xlatex/commit/8f25ba5e4784b3f12f5ac5c69b1a1d0695c53b8e.patch";
+              hash = "sha256-N8VDjMMqvIy0pYzyW/oSm3CIVUbxvWEHW1V01sHs6jA=";
+            })
+          ];
+        });
       };
 
     in lib.mapAttrs (n: v: if lib.hasAttr n overrides then overrides.${n} else v) super);
