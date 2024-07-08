@@ -1,37 +1,48 @@
-{ lib
-, stdenv
-, fetchurl
-, autoconf269
-, automake
-, libtool
-# libs
-, cjson
-, db
-, gmp
-, libxml2
-, ncurses
-# docs
-, help2man
-, texinfo
-, texliveBasic
-# test
-, writeText
+{
+  lib,
+  stdenv,
+  fetchurl,
+  # Using autoconf 2.69 as that's the targeted version by upstream
+  autoconf269,
+  automake,
+  libtool,
+  # libs
+  cjson,
+  db,
+  gmp,
+  libxml2,
+  ncurses,
+  # docs
+  help2man,
+  texinfo,
+  texliveBasic,
+  # test
+  perl,
 }:
 
-stdenv.mkDerivation rec {
-  pname = "gnu-cobol";
-  version = "3.1.2";
+let
+  nistTestSuite = fetchurl {
+    # Used to check GnuCOBOL with the NIST test suite
+    url = "mirror://sourceforge/gnucobol/newcob.val.tar.gz";
+    hash = "sha256-5FE/JqmziRH3v4gv49MzmoC0XKvCyvheswVbD1zofuA=";
+  };
+in
+
+stdenv.mkDerivation (finalAttrs: {
+  pname = "gnucobol";
+  version = "3.2";
 
   src = fetchurl {
-    url = "mirror://sourceforge/gnucobol/${lib.versions.majorMinor version}/gnucobol-${version}.tar.xz";
-    sha256 = "0x15ybfm63g7c9340fc6712h9v59spnbyaz4rf85pmnp3zbhaw2r";
+    url = "mirror://gnu/gnucobol/gnucobol-${finalAttrs.version}.tar.xz";
+    hash = "sha256-O7SK9GztR3n6z0H9wu5g5My4bqqZ0BCzZoUxXfOcLuI=";
   };
 
   nativeBuildInputs = [
     autoconf269
     automake
-    libtool
     help2man
+    libtool
+    perl
     texinfo
     texliveBasic
   ];
@@ -44,13 +55,18 @@ stdenv.mkDerivation rec {
     ncurses
   ];
 
-  outputs = [ "bin" "dev" "lib" "out" ];
+  outputs = [
+    "bin"
+    "dev"
+    "lib"
+    "out"
+  ];
   # XXX: Without this, we get a cycle between bin and dev
-  propagatedBuildOutputs = [];
+  propagatedBuildOutputs = [ ];
 
-  # Skips a broken test
-  postPatch = ''
-    sed -i '/^AT_CHECK.*crud\.cob/i AT_SKIP_IF([true])' tests/testsuite.src/listings.at
+  postPatch = lib.optionalString stdenv.hostPlatform.isAarch64 ''
+    # Skip test 843 (runtime check: write to internal storage (1)) on aarch64
+    sed -i "/^843;/d" tests/testsuite
   '';
 
   preConfigure = ''
@@ -61,7 +77,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  installFlags = [ "install-pdf" "install-html" "localedir=$out/share/locale" ];
+  installFlags = [
+    "install-pdf"
+    "install-html"
+    "localedir=$out/share/locale"
+  ];
 
   # Tests must run after install.
   doCheck = false;
@@ -72,6 +92,10 @@ stdenv.mkDerivation rec {
 
     # Run tests
     make -j$NIX_BUILD_CORES check
+
+    # Run NIST tests
+    cp -v ${nistTestSuite} ./tests/cobol85/newcob.val.tar.gz
+    make -j$NIX_BUILD_CORES test
 
     # Sanity check
     message="Hello, COBOL!"
@@ -93,10 +117,17 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Open-source COBOL compiler";
-    homepage = "https://sourceforge.net/projects/gnucobol/";
-    license = with licenses; [ gpl3Only lgpl3Only ];
-    maintainers = with maintainers; [ ericsagnes lovesegfault ];
+    description = "Free/libre COBOL compiler";
+    homepage = "https://gnu.org/software/gnucobol/";
+    license = with licenses; [
+      gpl3Only
+      lgpl3Only
+    ];
+    maintainers = with maintainers; [
+      kiike
+      ericsagnes
+      lovesegfault
+    ];
     platforms = platforms.all;
   };
-}
+})
