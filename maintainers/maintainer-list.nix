@@ -3113,6 +3113,12 @@
     githubId = 1516457;
     name = "Christian Albrecht";
   };
+  calebstewart = {
+    email = "caleb.stewart94@gmail.com";
+    github = "calebstewart";
+    githubId = 7529189;
+    name = "Caleb Stewart";
+  };
   callahad = {
     email = "dan.callahan@gmail.com";
     github = "callahad";
