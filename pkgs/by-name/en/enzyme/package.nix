@@ -8,13 +8,13 @@
 }:
 stdenv.mkDerivation rec {
   pname = "enzyme";
-  version = "0.0.121";
+  version = "0.0.131";
 
   src = fetchFromGitHub {
     owner = "EnzymeAD";
     repo = "Enzyme";
     rev = "v${version}";
-    hash = "sha256-hCgrPMxclnLHlOiGFeZ6MAAEUqU8nzxYwT1wbuPPXCw=";
+    hash = "sha256-5muxo3rqmoJswyAO8jo8Ux2bZ8qw1+y+BpVdKpThsJE=";
   };
 
   postPatch = ''
