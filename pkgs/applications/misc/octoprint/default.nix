@@ -38,6 +38,17 @@ let
                 inherit version;
                 hash = "sha256-7e6bCn/yZiG9WowQ/0hK4oc3okENmbC7mmhQx/uXeqA=";
               };
+              doCheck = false;
+            });
+            flask-login = super.flask-login.overridePythonAttrs (oldAttrs: rec {
+              version = "0.6.3";
+              src = fetchPypi {
+                pname = "Flask-Login";
+                inherit version;
+                hash = "sha256-XiPRSmB+8SgGxplZC4nQ8ODWe67sWZ11lHv5wUczAzM=";
+              };
+              build-system = [ self.setuptools ];
+              doCheck = false; # DeprecationWarnings
             });
 
             netaddr = super.netaddr.overridePythonAttrs (oldAttrs: rec {
@@ -243,6 +254,9 @@ let
                 "test_check_setup" # Why should it be able to call pip?
               ] ++ lib.optionals stdenv.isDarwin [
                 "test_set_external_modification"
+              ];
+              disabledTestPaths = [
+                "tests/test_octoprint_setuptools.py" # fails due to distutils and python3.12
               ];
 
               passthru = {
