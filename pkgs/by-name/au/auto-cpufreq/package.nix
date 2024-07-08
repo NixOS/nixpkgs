@@ -37,6 +37,7 @@ python3Packages.buildPythonPackage rec {
     poetry-dynamic-versioning
     setuptools
     pyinotify
+    pyasyncore
   ];
 
   doCheck = false;
