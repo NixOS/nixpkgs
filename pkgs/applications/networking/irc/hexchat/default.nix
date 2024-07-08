@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     owner = "hexchat";
     repo = "hexchat";
     rev = "v${version}";
-    sha256 = "sha256-rgaXqXbBWlfSyz+CT0jRLyfGOR1cYYnRhEAu7AsaWus=";
+    hash = "sha256-rgaXqXbBWlfSyz+CT0jRLyfGOR1cYYnRhEAu7AsaWus=";
   };
 
   nativeBuildInputs = [ meson ninja pkg-config makeWrapper ];
