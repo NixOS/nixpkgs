@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , fetchFromGitHub
 , rustPlatform
 , cmake
@@ -22,7 +23,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ cmake installShellFiles ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd yr \
       --bash <($out/bin/yr completion bash) \
       --fish <($out/bin/yr completion fish) \
