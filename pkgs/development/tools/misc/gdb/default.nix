@@ -30,11 +30,11 @@ assert pythonSupport -> python3 != null;
 
 stdenv.mkDerivation rec {
   pname = targetPrefix + basename + lib.optionalString hostCpuOnly "-host-cpu-only";
-  version = "14.2";
+  version = "15.1";
 
   src = fetchurl {
     url = "mirror://gnu/gdb/${basename}-${version}.tar.xz";
-    hash = "sha256-LU3YBh2N7RK2xj9V5FNEiB6CJhBfTSqbI0BA76XOd3I=";
+    hash = "sha256-OCVOrNRXITS8qcWlqk1MpWTLvTDDadiB9zP7a5AzVPI=";
   };
 
   postPatch = lib.optionalString stdenv.isDarwin ''
