@@ -1,0 +1,88 @@
+diff --git a/distro/systemd/meson.build b/distro/systemd/meson.build
+index 36d556c..9c636b6 100644
+--- a/distro/systemd/meson.build
++++ b/distro/systemd/meson.build
+@@ -15,12 +15,17 @@ systemd_cfg = configuration_data({
+ 
+ systemd_service_cfg = dependency('systemd')
+ 
++systemd_system_unit_dir = get_option('systemd_system_unit_dir')
++if systemd_system_unit_dir == ''
++  systemd_system_unit_dir = systemd_service_cfg.get_variable('systemdsystemunitdir')
++endif
++
+ configure_file(
+     input: 'openvpn3-autoload.service.in',
+     output: 'openvpn3-autoload.service',
+     configuration: systemd_cfg,
+     install: true,
+-    install_dir: systemd_service_cfg.get_variable('systemdsystemunitdir'),
++    install_dir: systemd_system_unit_dir,
+ )
+ 
+ configure_file(
+@@ -28,7 +33,7 @@ configure_file(
+     output: 'openvpn3-session@.service',
+     configuration: systemd_cfg,
+     install: true,
+-    install_dir: systemd_service_cfg.get_variable('systemdsystemunitdir'),
++    install_dir: systemd_system_unit_dir,
+ )
+ 
+ custom_target('openvpn3-systemd',
+diff --git a/meson.build b/meson.build
+index 092b4ce..e1ec8c1 100644
+--- a/meson.build
++++ b/meson.build
+@@ -180,8 +180,16 @@ message('OpenVPN 3 Linux service binary directory: ' + get_option('prefix') / li
+ 
+ #
+ #  D-Bus configuration
+-dbus_policy_dir = dep_dbus.get_variable('datadir') / 'dbus-1' / 'system.d'
+-dbus_service_dir = dep_dbus.get_variable('system_bus_services_dir')
++dbus_policy_dir = get_option('dbus_policy_dir')
++if dbus_policy_dir == ''
++    dbus_policy_dir = dep_dbus.get_variable('datadir') / 'dbus-1' / 'system.d'
++endif
++
++dbus_service_dir = get_option('dbus_system_service_dir')
++if dbus_service_dir == ''
++    dbus_service_dir = dep_dbus.get_variable('system_bus_services_dir')
++endif
++
+ dbus_config = {
+     'OPENVPN_USERNAME': get_option('openvpn_username'),
+     'LIBEXEC_PATH': get_option('prefix') / libexec_dir,
+diff --git a/meson_options.txt b/meson_options.txt
+index e9e759e..68fec37 100644
+--- a/meson_options.txt
++++ b/meson_options.txt
+@@ -81,6 +81,16 @@ option('use-legacy-polkit-pkla', type: 'feature', value: 'disabled',
+ option('polkit_pkla_rulesdir', type: 'string', value: '',
+        description: 'Override PolicyKit PKLA rules directory')
+ 
++#
++# Installation paths
++#
++option('dbus_policy_dir', type: 'string',
++       description: 'D-Bus policy directory')
++option('dbus_system_service_dir', type: 'string',
++       description: 'D-Bus system service directory')
++option('systemd_system_unit_dir', type: 'string',
++       description: 'Path to systemd system unit directory')
++
+ #
+ #  Testing tools
+ #
+diff --git a/src/configmgr/meson.build b/src/configmgr/meson.build
+index 5d0a649..b949394 100644
+--- a/src/configmgr/meson.build
++++ b/src/configmgr/meson.build
+@@ -52,7 +52,3 @@ configure_file(
+     install_dir: dbus_service_dir,
+ )
+ 
+-# Create the configs directory for persistent configuration profiles
+-# NOTE: Can be replaced with install_emptydir() when Meson 0.60 or newer
+-#       is available on all supported distros
+-meson.add_install_script('sh','-c', 'mkdir -p $DESTDIR@0@'.format(openvpn3_statedir / 'configs'))
