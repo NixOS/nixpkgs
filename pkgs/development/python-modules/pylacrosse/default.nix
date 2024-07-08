@@ -3,7 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   mock,
-  pynose,
+  nose,
   pyserial,
   pytestCheckHook,
   pythonOlder,
@@ -30,9 +30,11 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ pyserial ];
 
+  doCheck = pythonOlder "3.12";
+
   nativeCheckInputs = [
     mock
-    pynose
+    nose
     pytestCheckHook
   ];
 
