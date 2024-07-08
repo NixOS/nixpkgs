@@ -45,12 +45,19 @@ stdenv.mkDerivation rec {
   ];
 
 
-  env.NIX_CFLAGS_COMPILE = "-Wno-unused-result";
+  env.NIX_CFLAGS_COMPILE =
+    (if stdenv.isDarwin then
+      toString [
+        "-Wno-error=deprecated-non-prototype"
+        "-Wno-error=format"
+      ] else
+      "-Wno-unused-result"
+    );
+
 
   postPatch = ''
     substituteInPlace CMakeLists.txt\
       --replace-fail "/etc" "$out/etc" \
-
   '';
 
 
@@ -59,7 +66,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/maxbube/mydumper";
     changelog = "https://github.com/mydumper/mydumper/releases/tag/v${version}";
     license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    platforms = lib.platforms.unix;
     maintainers = with maintainers; [ izorkin ];
   };
 }
