@@ -23,8 +23,8 @@
 
 # Other overridable arguments
 , extraLibs ? []
-, precompile ? true
 , setDefaultDepot ? true
+, precompile ? !setDefaultDepot # There's no point precompiling if a separate depot is used
 , makeWrapperArgs ? ""
 , packageOverrides ? {}
 , makeTransitiveDependenciesImportable ? false # Used to support symbol indexing
