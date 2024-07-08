@@ -5380,6 +5380,8 @@ self: super: with self; {
 
   handout = callPackage ../development/python-modules/handout { };
 
+  hankel = callPackage ../development/python-modules/hankel { };
+
   hap-python = callPackage ../development/python-modules/hap-python { };
 
   hass-nabucasa = callPackage ../development/python-modules/hass-nabucasa { };
