@@ -23,6 +23,7 @@ in {
         lomiri
         lomiri-download-manager
         lomiri-filemanager-app
+        lomiri-polkit-agent
         lomiri-schemas # exposes some required dbus interfaces
         lomiri-session # wrappers to properly launch the session
         lomiri-sounds
@@ -143,6 +144,18 @@ in {
         serviceConfig = {
           Type = "oneshot";
           ExecStart = "${pkgs.lomiri.lomiri-url-dispatcher}/libexec/lomiri-url-dispatcher/lomiri-update-directory /run/current-system/sw/share/lomiri-url-dispatcher/urls/";
+        };
+      };
+
+      "lomiri-polkit-agent" = rec {
+        description = "Lomiri Polkit agent";
+        wantedBy = [ "lomiri.service" "lomiri-full-greeter.service" "lomiri-full-shell.service" "lomiri-greeter.service" "lomiri-shell.service" ];
+        after = [ "graphical-session.target" ];
+        partOf = wantedBy;
+        serviceConfig = {
+          Type = "simple";
+          Restart = "always";
+          ExecStart = "${pkgs.lomiri.lomiri-polkit-agent}/libexec/lomiri-polkit-agent/policykit-agent";
         };
       };
     };
