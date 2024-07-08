@@ -65,13 +65,13 @@ stdenv.mkDerivation {
   postPatch = ''
     # Make sure the version is reported correctly in the compiled binary.
     substituteInPlace ./CMakeLists.txt \
-      --replace "determine_version(MULTIPASS_VERSION)" "" \
-      --replace 'set(MULTIPASS_VERSION ''${MULTIPASS_VERSION})' 'set(MULTIPASS_VERSION "v${version}")'
+      --replace-fail "determine_version(MULTIPASS_VERSION)" "" \
+      --replace-fail 'set(MULTIPASS_VERSION ''${MULTIPASS_VERSION})' 'set(MULTIPASS_VERSION "v${version}")'
 
     # Patch the patch of the OVMF binaries to use paths from the nix store.
     substituteInPlace ./src/platform/backends/qemu/linux/qemu_platform_detail_linux.cpp \
-      --replace "OVMF.fd" "${OVMF.fd}/FV/OVMF.fd" \
-      --replace "QEMU_EFI.fd" "${OVMF.fd}/FV/QEMU_EFI.fd"
+      --replace-fail "OVMF.fd" "${OVMF.fd}/FV/OVMF.fd" \
+      --replace-fail "QEMU_EFI.fd" "${OVMF.fd}/FV/QEMU_EFI.fd"
 
     # Copy the grpc submodule we fetched into the source code.
     cp -r --no-preserve=mode ${grpc_src} 3rd-party/grpc
