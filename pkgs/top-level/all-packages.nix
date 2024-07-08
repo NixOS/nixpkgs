@@ -1646,7 +1646,8 @@ with pkgs;
     inherit (plasma5Packages) kdialog;
   };
 
-  akku = callPackage ../tools/package-management/akku { };
+  inherit (recurseIntoAttrs (callPackage ../tools/package-management/akku { }))
+    akku akkuPackages;
 
   albert = qt6Packages.callPackage ../applications/misc/albert { };
 
