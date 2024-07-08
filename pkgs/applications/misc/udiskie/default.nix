@@ -7,14 +7,14 @@
 , libappindicator-gtk3
 , libnotify
 , librsvg
-, python3
+, python3Packages
 , udisks2
 , wrapGAppsHook3
 , testers
 , udiskie
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "udiskie";
   version = "2.5.3";
 
@@ -42,7 +42,7 @@ python3.pkgs.buildPythonApplication rec {
     wrapGAppsHook3
   ];
 
-  build-system = with python3.pkgs; [
+  build-system = with python3Packages; [
     setuptools
   ];
 
@@ -56,7 +56,7 @@ python3.pkgs.buildPythonApplication rec {
     udisks2
   ];
 
-  dependencies = with python3.pkgs; [
+  dependencies = with python3Packages; [
     docopt
     keyutils
     pygobject3
@@ -79,7 +79,7 @@ python3.pkgs.buildPythonApplication rec {
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
-  nativeCheckInputs = with python3.pkgs; [
+  nativeCheckInputs = with python3Packages; [
     pytestCheckHook
   ];
 
