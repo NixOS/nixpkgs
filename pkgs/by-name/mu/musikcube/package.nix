@@ -24,9 +24,8 @@
 , systemd
 , systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd
 # Darwin Dependencies
-, Cocoa
-, SystemConfiguration
-, coreaudioSupport ? stdenv.hostPlatform.isDarwin, CoreAudio
+, darwin
+, coreaudioSupport ? stdenv.hostPlatform.isDarwin
 }:
 
 let
@@ -68,11 +67,11 @@ stdenv.mkDerivation rec {
     systemd
   ] ++ lib.optionals stdenv.isLinux [
     alsa-lib pulseaudio
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
     Cocoa SystemConfiguration
-  ] ++ lib.optionals coreaudioSupport [
+  ]) ++ lib.optionals coreaudioSupport (with darwin.apple_sdk.frameworks; [
     CoreAudio
-  ] ++ lib.optionals sndioSupport [
+  ]) ++ lib.optionals sndioSupport [
     sndio
   ] ++ lib.optionals pipewireSupport [
     pipewire

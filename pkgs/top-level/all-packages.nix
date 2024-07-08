@@ -31365,10 +31365,6 @@ with pkgs;
 
   meerk40t-camera = callPackage ../applications/misc/meerk40t/camera.nix { };
 
-  musikcube = callPackage ../applications/audio/musikcube {
-    inherit (darwin.apple_sdk.frameworks) Cocoa CoreAudio SystemConfiguration;
-  };
-
   libmt32emu = callPackage ../applications/audio/munt/libmt32emu.nix { };
 
   mt32emu-qt = libsForQt5.callPackage ../applications/audio/munt/mt32emu-qt.nix { };
