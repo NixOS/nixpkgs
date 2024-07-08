@@ -111,7 +111,7 @@ in
   };
 
   config = mkIf cfg.enable {
-    environment.systemPackages = [ pkgs.torsocks (wrapTorsocks "torsocks-faster" cfg.fasterServer) ];
+    environment.systemPackages = [ (wrapTorsocks "torsocks" cfg.server) (wrapTorsocks "torsocks-faster" cfg.fasterServer) ];
 
     environment.etc."tor/torsocks.conf" =
       {
