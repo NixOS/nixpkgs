@@ -5,7 +5,7 @@
 , fetchFromGitHub
 , flutter316
 , gst_all_1
-, fuse
+, fuse3
 , libXtst
 , libaom
 , libopus
@@ -127,7 +127,7 @@ in flutter316.buildFlutterApplication rec {
   ];
 
   buildInputs = [
-    fuse
+    fuse3
     gst_all_1.gst-plugins-base
     gst_all_1.gstreamer
     libXtst
