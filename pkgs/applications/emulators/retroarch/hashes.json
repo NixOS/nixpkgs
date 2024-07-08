@@ -338,10 +338,10 @@
         "src": {
             "owner": "libretro",
             "repo": "fuse-libretro",
-            "rev": "9fc41a5f153e1f2fa2dbcfdd215c7ec97d98a29c",
-            "hash": "sha256-eEgPnSIpKC7s+4JoEHDGPlwYPa5Y8EpoxmNhyOIIcU8="
+            "rev": "4d511d7fc3faa7714fa5de2e824793d35d5f4da8",
+            "hash": "sha256-mfCv7PvroPqzJ/nXCa74h0c7lHlbTVnJM3rNIj3UvQI="
         },
-        "version": "unstable-2024-06-16"
+        "version": "unstable-2024-06-28"
     },
     "gambatte": {
         "fetcher": "fetchFromGitHub",
