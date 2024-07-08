@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , buildGoModule
 , fetchFromGitHub
 , installShellFiles
@@ -38,12 +39,12 @@ buildGoModule rec {
 
   outputs = [ "out" "doc" ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd ov \
       --bash <($out/bin/ov --completion bash) \
       --fish <($out/bin/ov --completion fish) \
       --zsh <($out/bin/ov --completion zsh)
-
+    '' + ''
     mkdir -p $out/share/$name
     cp $src/ov-less.yaml $out/share/$name/less-config.yaml
     makeWrapper $out/bin/ov $out/bin/ov-less --add-flags "--config $out/share/$name/less-config.yaml"
