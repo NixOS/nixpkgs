@@ -82,7 +82,7 @@ python3Packages.buildPythonPackage rec {
   ];
 
   nativeCheckInputs = with python3Packages; [
-    nose
+    pynose
     mock
     httmock
   ];
