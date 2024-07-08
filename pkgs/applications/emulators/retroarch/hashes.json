@@ -704,10 +704,10 @@
         "src": {
             "owner": "libretro",
             "repo": "QuickNES_Core",
-            "rev": "cd73f021be7dd5b1a21b71155a320364c02de4ac",
-            "hash": "sha256-fmTAK32ASA8M5nxUUUilm/yMNkmqSAG/gauB7fy1Kbc="
+            "rev": "89d649a544e7d37a5cdbc77c811e88753fa23131",
+            "hash": "sha256-OPZVYQVbtIfmmKmuLQ5eVqZf+41ovyoa17YHvjKgd6w="
         },
-        "version": "unstable-2024-02-01"
+        "version": "unstable-2024-06-28"
     },
     "same_cdi": {
         "fetcher": "fetchFromGitHub",
