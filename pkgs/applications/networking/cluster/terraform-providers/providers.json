@@ -381,13 +381,13 @@
     "vendorHash": "sha256-oVTanZpCWs05HwyIKW2ajiBPz1HXOFzBAt5Us+EtTRw="
   },
   "equinix": {
-    "hash": "sha256-jnV8dg9CJ38YKdEmc0hxDDbl/YUQgPTM6D5YYVjjWFc=",
+    "hash": "sha256-Ipl+POTZRKe9xKR08x/TPm2S7kv6w54im16pp56rWDE=",
     "homepage": "https://registry.terraform.io/providers/equinix/equinix",
     "owner": "equinix",
     "repo": "terraform-provider-equinix",
-    "rev": "v1.38.1",
+    "rev": "v2.0.1",
     "spdx": "MIT",
-    "vendorHash": "sha256-25kuUGbBCHOL3RzQcLDzzdfQ1j+XvqJSEyIowV0Od8A="
+    "vendorHash": "sha256-oxtFq1tejyqsY2uEkMjiub1CwdkFpuSVRb1Z2u3CebQ="
   },
   "exoscale": {
     "hash": "sha256-d6vdYtEBD34SPHDAlkpTb/T8D7TaLbVwMYjSefuNdr0=",
