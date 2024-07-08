@@ -6,6 +6,7 @@
   gitUpdater,
   python3Packages,
   tk,
+  addDriverRunpath,
 
   darwin,
 
@@ -28,6 +29,10 @@
 
   metalSupport ? stdenv.isDarwin && stdenv.isAarch64,
 
+  # You can find a full list here: https://arnon.dk/matching-sm-architectures-arch-and-gencode-for-various-nvidia-cards/
+  # For example if you're on an GTX 1080 that means you're using "Pascal" and you need to pass "sm_60"
+  arches ? cudaPackages.cudaFlags.arches or [ ],
+
   # You can find list of x86_64 options here: https://gcc.gnu.org/onlinedocs/gcc/x86-Options.html
   # For ARM here: https://gcc.gnu.org/onlinedocs/gcc/ARM-Options.html
   # If you set "march" to "native", specify "mtune" as well; otherwise, it will be set to "generic". (credit to: https://lemire.me/blog/2018/07/25/it-is-more-complicated-than-i-thought-mtune-march-in-gcc/)
@@ -38,6 +43,10 @@
 
 let
   makeBool = option: bool: (if bool then "${option}=1" else "");
+
+  makeWrapperArgs = lib.optionalString config.cudaSupport ''
+    --prefix LD_LIBRARY_PATH: "${lib.makeLibraryPath [ addDriverRunpath.driverLink ]}"
+  '';
 
   effectiveStdenv = if cublasSupport then cudaPackages.backendStdenv else stdenv;
 in
@@ -114,6 +123,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     (makeBool "LLAMA_CLBLAST" clblastSupport)
     (makeBool "LLAMA_VULKAN" vulkanSupport)
     (makeBool "LLAMA_METAL" metalSupport)
+    (lib.optionalString cublasSupport "CUDA_DOCKER_ARCH=sm_${builtins.head arches}")
   ];
 
   installPhase = ''
@@ -136,7 +146,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   postFixup = ''
     wrapPythonProgramsIn "$out/bin" "$pythonPath"
     makeWrapper "$out/bin/koboldcpp.unwrapped" "$out/bin/koboldcpp" \
-    --prefix PATH ${lib.makeBinPath [ tk ]}
+      --prefix PATH ${lib.makeBinPath [ tk ]} ${makeWrapperArgs}
   '';
 
   passthru.updateScript = gitUpdater { rev-prefix = "v"; };
