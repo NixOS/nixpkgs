@@ -80,11 +80,11 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/hexchat --prefix PYTHONPATH : "$PYTHONPATH"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Popular and easy to use graphical IRC (chat) client";
     homepage = "https://hexchat.github.io/";
-    license = licenses.gpl2;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ romildo ];
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ romildo ];
   };
 }
