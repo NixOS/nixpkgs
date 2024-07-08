@@ -16,6 +16,7 @@
 , blueprint-compiler
 , libxml2
 , libshumate
+, gst_all_1
 , darwin
 }:
 
@@ -96,6 +97,10 @@ stdenv.mkDerivation {
     libadwaita-paperplane
     tdlib-paperplane
     rlottie-paperplane
+    gst_all_1.gstreamer
+    gst_all_1.gst-libav
+    gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-good
   ] ++ lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.Foundation
   ];
