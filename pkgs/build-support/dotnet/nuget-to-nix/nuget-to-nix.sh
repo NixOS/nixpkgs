@@ -42,7 +42,8 @@ for index in "${sources[@]}"; do
     base_addresses[$index]="$base_address"
 done
 
-echo "{ fetchNuGet }: ["
+echo "{ fetchNuGet }:"
+echo "["
 
 cd "$pkgs"
 for package in *; do
@@ -90,11 +91,14 @@ for package in *; do
       exit 1
     fi
 
+    echo "  (fetchNuGet {"
+    echo "    pname = \"$id\";"
+    echo "    version = \"$version\";"
+    echo "    hash = \"$hash\";"
     if [[ "$source" != https://api.nuget.org/v3/index.json ]]; then
-      echo "  (fetchNuGet { pname = \"$id\"; version = \"$version\"; hash = \"$hash\"; url = \"$url\"; })"
-    else
-      echo "  (fetchNuGet { pname = \"$id\"; version = \"$version\"; hash = \"$hash\"; })"
+      echo "    url = \"$url\";"
     fi
+    echo "  })"
   done
   cd ..
 done
