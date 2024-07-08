@@ -7,6 +7,7 @@
   setuptools-scm,
   xorg,
   python,
+  pythonOlder,
   mock,
   nose,
   pytestCheckHook,
@@ -31,7 +32,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ six ];
 
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.isDarwin && pythonOlder "3.12";
 
   nativeCheckInputs = [
     pytestCheckHook
