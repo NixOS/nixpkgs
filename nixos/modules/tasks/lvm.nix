@@ -89,7 +89,7 @@ in {
     (mkIf cfg.boot.vdo.enable {
       boot = {
         initrd = {
-          kernelModules = [ "kvdo" ];
+          kernelModules = [ "dm-vdo" ];
 
           systemd.initrdBin = lib.mkIf config.boot.initrd.services.lvm.enable [ pkgs.vdo ];
 
@@ -107,7 +107,6 @@ in {
             done
           '';
         };
-        extraModulePackages = [ config.boot.kernelPackages.kvdo ];
       };
 
       services.lvm.package = mkOverride 999 pkgs.lvm2_vdo;  # this overrides mkDefault
