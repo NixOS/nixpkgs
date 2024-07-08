@@ -1,19 +1,28 @@
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index 546fdbc6..c7feb979 100644
+index 20cbd403..61a8c23b 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -78,60 +78,6 @@ ExternalProject_Get_Property(GTest SOURCE_DIR BINARY_DIR)
- set(GTEST_INCLUDE_DIRS "${SOURCE_DIR}/googletest/include")
- set(GTEST_LIBRARIES "${BINARY_DIR}/lib/${CMAKE_CFG_INTDIR}/${CMAKE_STATIC_LIBRARY_PREFIX}gtest${CMAKE_STATIC_LIBRARY_SUFFIX}")
+@@ -3,7 +3,6 @@ if(POLICY CMP0135)
+     cmake_policy(SET CMP0135 NEW)
+ endif()
+ project(libloot)
+-include(ExternalProject)
+ include(FetchContent)
+ include(CMakePackageConfigHelpers)
+ include(GNUInstallDirs)
+@@ -75,73 +74,16 @@ if(NOT DEFINED ESPLUGIN_URL)
+     set(ESPLUGIN_HASH "SHA256=4feb855e1f90046357497b5f0fdebe3e126f84d8dc9bc468e153bcbcb1aa9171")
+ endif()
  
 -ExternalProject_Add(esplugin
 -    PREFIX "external"
--    URL "https://github.com/Ortham/esplugin/archive/4.1.0.tar.gz"
--    URL_HASH "SHA256=c0958051f99b1a3a1ea2db1d68f2521567563238b9d624dde1c5c075baddfa41"
+-    URL ${ESPLUGIN_URL}
+-    URL_HASH ${ESPLUGIN_HASH}
 -    CONFIGURE_COMMAND ""
 -    BUILD_IN_SOURCE 1
 -    BUILD_COMMAND cargo build --release --manifest-path ffi/Cargo.toml --target ${RUST_TARGET} &&
 -        cbindgen ffi/ -o ffi/include/esplugin.hpp
+-    COMMAND ${CMAKE_COMMAND} -E rm -r "target/${RUST_TARGET}/release/deps" "target/release"
 -    INSTALL_COMMAND "")
 -ExternalProject_Get_Property(esplugin SOURCE_DIR)
 -set(ESPLUGIN_INCLUDE_DIRS "${SOURCE_DIR}/ffi/include")
@@ -24,32 +33,44 @@ index 546fdbc6..c7feb979 100644
 -    set(ESPLUGIN_LIBRARIES ${ESPLUGIN_LIBRARIES} dl)
 -endif()
 -
+ if(NOT DEFINED LIBLOADORDER_URL)
+     set(LIBLOADORDER_URL "https://github.com/Ortham/libloadorder/archive/16.0.0.tar.gz")
+     set(LIBLOADORDER_HASH "SHA256=920d1f1f52b204ef70d726d50c6c7d03ce206b5f28f642aceeb7bad578d0635c")
+ endif()
+ 
 -ExternalProject_Add(libloadorder
 -    PREFIX "external"
--    URL "https://github.com/Ortham/libloadorder/archive/15.0.1.tar.gz"
--    URL_HASH "SHA256=ffa359b71f1716566236609a8ee970542185fa5b990b7fb6c8800408b9f1b020"
+-    URL ${LIBLOADORDER_URL}
+-    URL_HASH ${LIBLOADORDER_HASH}
 -    CONFIGURE_COMMAND ""
 -    BUILD_IN_SOURCE 1
 -    BUILD_COMMAND cargo build --release --manifest-path ffi/Cargo.toml --target ${RUST_TARGET} &&
 -        cbindgen ffi/ -l c++ -o ffi/include/libloadorder.hpp
+-    COMMAND ${CMAKE_COMMAND} -E rm -r "target/${RUST_TARGET}/release/deps" "target/release"
 -    INSTALL_COMMAND "")
 -ExternalProject_Get_Property(libloadorder SOURCE_DIR)
 -set(LIBLOADORDER_INCLUDE_DIRS "${SOURCE_DIR}/ffi/include")
 -set(LIBLOADORDER_LIBRARIES "${SOURCE_DIR}/target/${RUST_TARGET}/release/${CMAKE_STATIC_LIBRARY_PREFIX}loadorder_ffi${CMAKE_STATIC_LIBRARY_SUFFIX}")
 -if(CMAKE_SYSTEM_NAME STREQUAL "Windows")
--    set(LIBLOADORDER_LIBRARIES ${LIBLOADORDER_LIBRARIES} userenv)
+-    set(LIBLOADORDER_LIBRARIES ${LIBLOADORDER_LIBRARIES} ntdll propsys userenv windowsapp)
 -else()
 -    set(LIBLOADORDER_LIBRARIES ${LIBLOADORDER_LIBRARIES} dl)
 -endif()
 -
+ if(NOT DEFINED LOOT_CONDITION_INTERPRETER_URL)
+     set(LOOT_CONDITION_INTERPRETER_URL "https://github.com/loot/loot-condition-interpreter/archive/4.0.0.tar.gz")
+     set(LOOT_CONDITION_INTERPRETER_HASH "SHA256=8ed76a1393bd4a909a39d560444ac9186b795a56929d8b07ff77e4aef1e54adc")
+ endif()
+ 
 -ExternalProject_Add(loot-condition-interpreter
 -    PREFIX "external"
--    URL "https://github.com/loot/loot-condition-interpreter/archive/3.1.0.tar.gz"
--    URL_HASH "SHA256=a2dcadff0e6f9fd4fdc12785d296bf5ee24cc556f4b20a357233e2a2e79d025c"
+-    URL ${LOOT_CONDITION_INTERPRETER_URL}
+-    URL_HASH ${LOOT_CONDITION_INTERPRETER_HASH}
 -    CONFIGURE_COMMAND ""
 -    BUILD_IN_SOURCE 1
 -    BUILD_COMMAND cargo build --release --manifest-path ffi/Cargo.toml --target ${RUST_TARGET} &&
 -        cbindgen ffi/ -o ffi/include/loot_condition_interpreter.h
+-    COMMAND ${CMAKE_COMMAND} -E rm -r "target/${RUST_TARGET}/release/deps" "target/release"
 -    INSTALL_COMMAND "")
 -ExternalProject_Get_Property(loot-condition-interpreter SOURCE_DIR)
 -set(LCI_INCLUDE_DIRS "${SOURCE_DIR}/ffi/include")
@@ -60,26 +81,32 @@ index 546fdbc6..c7feb979 100644
 -    set(LCI_LIBRARIES ${LCI_LIBRARIES} dl)
 -endif()
 -
- ExternalProject_Add(testing-plugins
-     PREFIX "external"
-     URL "https://github.com/Ortham/testing-plugins/archive/1.5.0.tar.gz"
-@@ -361,9 +307,6 @@ set(LIBLOOT_INTERFACE_TESTS_ALL_SOURCES
- # Build tests.
- add_executable(libloot_internals_tests ${LIBLOOT_INTERNALS_TESTS_ALL_SOURCES})
- add_dependencies(libloot_internals_tests
--    esplugin
--    libloadorder
--    loot-condition-interpreter
+ FetchContent_Declare(
      spdlog
-     yaml-cpp
-     GTest
-@@ -378,9 +321,6 @@ target_link_libraries(libloot_internals_tests PRIVATE
+     URL "https://github.com/gabime/spdlog/archive/v1.14.1.tar.gz"
+@@ -280,10 +222,6 @@ set(LIBLOOT_ALL_SOURCES
+ 
  # Build API.
  add_library(loot ${LIBLOOT_ALL_SOURCES})
- add_dependencies(loot
+-add_dependencies(loot
 -    esplugin
 -    libloadorder
--    loot-condition-interpreter
-     spdlog
-     yaml-cpp)
+-    loot-condition-interpreter)
  target_link_libraries(loot PRIVATE
+     Boost::headers
+     ${ESPLUGIN_LIBRARIES}
+diff --git a/cmake/tests.cmake b/cmake/tests.cmake
+index 5241d78b..97ba4872 100644
+--- a/cmake/tests.cmake
++++ b/cmake/tests.cmake
+@@ -107,10 +107,6 @@ set(LIBLOOT_INTERFACE_TESTS_ALL_SOURCES
+ 
+ # Build tests.
+ add_executable(libloot_internals_tests ${LIBLOOT_INTERNALS_TESTS_ALL_SOURCES})
+-add_dependencies(libloot_internals_tests
+-    esplugin
+-    libloadorder
+-    loot-condition-interpreter)
+ target_link_libraries(libloot_internals_tests PRIVATE
+     Boost::headers
+     ${ESPLUGIN_LIBRARIES}

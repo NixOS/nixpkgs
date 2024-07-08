@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchurl
 , callPackage
 , boost
 , cmake
@@ -24,23 +23,29 @@ let
   # and the static libraries are later passed through cmakeFlags, see esplugin,
   # libloadorder, and loot-condition-interpreter.
 
-  GTest = fetchurl {
-    url = "https://github.com/google/googletest/archive/v1.14.0.tar.gz";
-    hash = "sha256-itWYxzrXluDYKAsILOvYKmMNc+c808cAV5OKZQG7pdc=";
+  GTest = fetchFromGitHub {
+    owner = "google";
+    repo = "googletest";
+    rev = "v1.14.0";
+    hash = "sha256-t0RchAHTJbuI5YW4uyBPykTvcjy90JW9AOPNjIhwh6U=";
   };
 
   testing-plugins = callPackage ./testing-plugins.nix { };
 
   # TODO use pkgs.spdlog
   # It currently fails because ${pkgs.spdlog.dev}/include/spdlog/fmt/bundled/* is missing.
-  spdlog = fetchurl {
-    url = "https://github.com/gabime/spdlog/archive/v1.12.0.tar.gz";
-    hash = "sha256-Tczy0Q9BDB4v6v+Jlmv8SaGrsp728IJGM1sRDgAeCak=";
+  spdlog = fetchFromGitHub {
+    owner = "gabime";
+    repo = "spdlog";
+    rev = "v1.14.1";
+    hash = "sha256-F7khXbMilbh5b+eKnzcB0fPPWQqUHqAYPWJb83OnUKQ=";
   };
 
-  yaml-cpp = fetchurl {
-    url = "https://github.com/loot/yaml-cpp/archive/0.8.0+merge-key-support.1.tar.gz";
-    hash = "sha256-B+vpNSrsVfGy2FXIdRvvy5gbQtRgIzZSftz9G/rpofw=";
+  yaml-cpp = fetchFromGitHub {
+    owner = "loot";
+    repo = "yaml-cpp";
+    rev = "0.8.0+merge-key-support.2";
+    hash = "sha256-whYorebrLiDeO75LC2SMUX/8OD528BR0+DEgnJxxpoQ=";
   };
 
   esplugin = callPackage ./esplugin { };
@@ -53,28 +58,16 @@ in
 
 stdenv.mkDerivation rec {
   pname = "libloot";
-  version = "0.22.1";
+  version = "0.22.4";
 
   src = fetchFromGitHub {
     owner = "loot";
     repo = pname;
     rev = version;
-    hash = "sha256-z+lakQLJF2cBdYjAwtlcth8Z/2Y0KM4gynuBuI2yGOI=";
+    hash = "sha256-ZpF4DKNXmIULD9cXPTfTIGjFuFobpo51blvl9bAxIJg=";
   };
 
   patches = [ ./remove-external-projects.patch ];
-
-  # prefetch remaining ExternalProjects
-  postPatch = ''
-    mkdir -p build/external/src
-  '' + lib.concatMapStrings (tarball: ''
-    ln -s ${tarball} build/external/src/${baseNameOf tarball.url}
-  '') [
-    GTest
-    testing-plugins
-    spdlog
-    yaml-cpp
-  ];
 
   nativeBuildInputs = [
     cmake
@@ -100,14 +93,17 @@ stdenv.mkDerivation rec {
     "-DESPLUGIN_LIBRARIES=${esplugin}/lib/libesplugin_ffi.a"
     "-DLIBLOADORDER_LIBRARIES=${libloadorder}/lib/libloadorder_ffi.a"
     "-DLCI_LIBRARIES=${loot-condition-interpreter}/lib/libloot_condition_interpreter_ffi.a"
+    "-DFETCHCONTENT_SOURCE_DIR_GTEST=${GTest}"
+    "-DFETCHCONTENT_SOURCE_DIR_SPDLOG=${spdlog}"
+    # testing-plugins must be writable so we copy and add it to cmakeFlags in preConfigure
+    "-DFETCHCONTENT_SOURCE_DIR_YAML-CPP=${yaml-cpp}"
   ];
 
-  # The location of libyaml-cpp.a seems to be wrong:
-  #   expected: external/src/yaml-cpp-build/Release/libyaml-cpp.a
-  #        got: external/src/yaml-cpp-build/libyaml-cpp.a
-  # TODO patch CMakeLists.txt
-  preBuild = ''
-    ln -s . external/src/yaml-cpp-build/Release
+  preConfigure = ''
+    tmp=$(mktemp -d)
+    cp -r ${testing-plugins} "$tmp/testing-plugins"
+    chmod -R u+w "$tmp/testing-plugins"
+    cmakeFlags="$cmakeFlags -DFETCHCONTENT_SOURCE_DIR_TESTING-PLUGINS=$tmp/testing-plugins"
   '';
 
   postBuild = ''
@@ -137,17 +133,6 @@ stdenv.mkDerivation rec {
   '';
 
   outputs = [ "out" "dev" "doc" ];
-
-  postInstall = ''
-    mkdir "$out/lib"
-    mv "$out/libloot.so" "$out/lib"
-
-    mkdir "$dev"
-    mv "$out/include" "$dev/include"
-
-    mkdir -p "$doc/share/doc"
-    mv "$out/docs" "$doc/share/doc/libloot"
-  '';
 
   passthru = { inherit esplugin libloadorder loot-condition-interpreter; };
 

@@ -5,6 +5,7 @@
 , callPackage
 , p7zip
 , rustPlatform
+, rust-cbindgen
 }:
 
 let
@@ -15,29 +16,35 @@ in
 
 rustPlatform.buildRustPackage rec {
   pname = "loot-condition-interpreter";
-  version = "3.1.0";
+  version = "4.0.0";
 
   src = fetchFromGitHub {
     owner = "loot";
     repo = pname;
     rev = version;
-    hash = "sha256-hPDIx/Tc1JsiF0dcsQlrQJRfzLSFQbbUls0Q/dkwVwg=";
+    hash = "sha256-LmWrRiFDaDk+eRm6yanyogsEmhVqlUbnE51HSbcSfcc=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-  };
+  cargoHash = "sha256-ynqtjfmfHQbHhUJLnYYdC7EeL/oXZ7jEnjHUKba5Oxs=";
 
-  postPatch = ''
-    ln -s ${cargoLock.lockFile} Cargo.lock
+  nativeBuildInputs = [
+    rust-cbindgen
+  ];
+
+  preConfigure = ''
+    cd ffi
   '';
 
-  cargoBuildFlags = [ "--package" "loot-condition-interpreter-ffi" "--all-features" ];
+  postBuild = ''
+    # manually since 4.0.0
+    cbindgen . -o include/loot_condition_interpreter.h
+    cd ..
+  '';
 
   preCheck = ''
-    tmp=$(mktemp -dp .)
-    tar -C "$tmp" -xzf ${testing-plugins}
-    (cd tests && ln -rs "../$tmp"/* testing-plugins)
+    # tests/testing-plugins must be writable
+    cp -r ${testing-plugins} tests/testing-plugins
+    chmod -R u+w tests/testing-plugins
 
     tmp=$(mktemp -dp .)
     ${p7zip}/bin/7z x -o"$tmp" ${fetchurl {

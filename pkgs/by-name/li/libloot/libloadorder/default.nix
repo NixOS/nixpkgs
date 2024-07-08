@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , callPackage
 , rustPlatform
+, rust-cbindgen
 }:
 
 let
@@ -13,29 +14,35 @@ in
 
 rustPlatform.buildRustPackage rec {
   pname = "libloadorder";
-  version = "15.0.1";
+  version = "16.0.0";
 
   src = fetchFromGitHub {
     owner = "Ortham";
     repo = pname;
     rev = version;
-    hash = "sha256-Cp29h48z0iE3zrcRktDwbIZwx4tVfUzmpkR1pjEmM+w=";
+    hash = "sha256-aqBmcAQodvVpF6lumow5wGqdsaF4ICE0KLU059EjGSQ=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-  };
+  cargoHash = "sha256-JBhJLFyKiv6H2+gIGNMw9/ATMkX9bNJ8AdkItuuk2P4=";
 
-  postPatch = ''
-    ln -s ${cargoLock.lockFile} Cargo.lock
+  nativeBuildInputs = [
+    rust-cbindgen
+  ];
+
+  preConfigure = ''
+    cd ffi
   '';
 
-  cargoBuildFlags = [ "--all" "--all-features" ];
+  postBuild = ''
+    # manually since 16.0.0
+    cbindgen . -o include/libloadorder.h
+    cd ..
+  '';
 
   preCheck = ''
-    tmp=$(mktemp -dp .)
-    tar -C "$tmp" -xzf ${testing-plugins}
-    ln -s "$tmp"/* testing-plugins
+    # testing-plugins needs to be writable
+    cp -r ${testing-plugins} testing-plugins
+    chmod -R u+w testing-plugins
   '';
 
   # libloot expects libloadorder.hpp not libloadorder.h
