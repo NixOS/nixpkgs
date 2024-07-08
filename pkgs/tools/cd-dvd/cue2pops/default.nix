@@ -19,15 +19,20 @@ stdenv.mkDerivation {
   makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
 
   installPhase = ''
+    runHook preInstall
     install --directory --mode=755 $out/bin
     install --mode=755 cue2pops $out/bin
+    runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Convert CUE to ISO suitable to POPStarter";
     homepage = "https://github.com/makefu/cue2pops-linux";
-    maintainers = with maintainers; [ AndersonTorres ];
-    platforms = platforms.all;
+    # Upstream license is unclear.
+    # <https://github.com/ErikAndren/cue2pops-mac/issues/2#issuecomment-673983298>
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [ AndersonTorres ];
+    platforms = lib.platforms.all;
     mainProgram = "cue2pops";
   };
 }
