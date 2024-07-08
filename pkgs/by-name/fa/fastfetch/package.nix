@@ -139,6 +139,10 @@ stdenv'.mkDerivation (finalAttrs: {
     (lib.cmakeOptionType "filepath" "CUSTOM_AMDGPU_IDS_PATH" "${libdrm}/share/libdrm/amdgpu.ids")
   ];
 
+  postPatch = ''
+    substituteInPlace completions/fastfetch.fish --replace-fail python3 '${python3.interpreter}'
+  '';
+
   postInstall = ''
     wrapProgram $out/bin/fastfetch \
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath finalAttrs.buildInputs}"
