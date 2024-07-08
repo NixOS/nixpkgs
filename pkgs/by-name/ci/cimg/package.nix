@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cimg";
-  version = "3.3.6";
+  version = "3.4.0";
 
   src = fetchFromGitHub {
     owner = "GreycLab";
     repo = "CImg";
-    rev = "v.${finalAttrs.version}";
-    hash = "sha256-yNIHCEiLvoNNsYisAKo/jj6Q2mLrLMttZyj2XzrWFU4=";
+    rev = "refs/tags/v.${finalAttrs.version}";
+    hash = "sha256-BnDS1n1aIQh9HJZeZv0hR7vo2l6Kf9B/11fYFbb/cpQ=";
   };
 
   outputs = [ "out" "doc" ];
@@ -47,7 +47,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.cecill-c;
     maintainers = [
       lib.maintainers.AndersonTorres
-      lib.maintainers.lilyinstarlight
     ];
     platforms = lib.platforms.unix;
   };

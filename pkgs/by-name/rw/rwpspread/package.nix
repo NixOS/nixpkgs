@@ -28,7 +28,7 @@ rustPlatform.buildRustPackage rec {
     description = "Multi-Monitor Wallpaper Utility";
     homepage = "https://github.com/0xk1f0/rwpspread";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ nu-nu-ko ];
+    maintainers = with lib.maintainers; [ fsnkty ];
     platforms = lib.platforms.linux;
     mainProgram = "rwpspread";
   };

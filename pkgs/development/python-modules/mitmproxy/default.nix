@@ -4,7 +4,6 @@
   fetchFromGitHub,
   buildPythonPackage,
   pythonOlder,
-  pythonRelaxDepsHook,
   # Mitmproxy requirements
   aioquic,
   asgiref,
@@ -46,7 +45,7 @@
 
 buildPythonPackage rec {
   pname = "mitmproxy";
-  version = "10.3.0";
+  version = "10.3.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -54,15 +53,16 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mitmproxy";
     repo = "mitmproxy";
-    rev = "refs/tags/${version}";
-    hash = "sha256-YjvGsnpQQ8GWLyKmnd3lOxesnr+F2xCNXyahZh0JQnc=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-rIyRY1FolbdoaI4OgFG7D2/mot8NiRHalgittPzledw=";
   };
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   pythonRelaxDeps = [
     "aioquic"
     "cryptography"
+    "pyperclip"
+    "tornado"
   ];
 
   propagatedBuildInputs = [

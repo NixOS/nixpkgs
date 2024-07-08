@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "mkdocs-drawio-exporter";
-  version = "0.8.0";
+  version = "0.9.1";
   format = "setuptools";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-9cvA186FS6bHmpOrv4OfPZ5kRfgfafBfaWxgWJIlwwA=";
+    hash = "sha256-x8X8hvN/tL8C6VhgMCEHDh2hILjBoyLgQfsFD1+qXgo=";
   };
 
   propagatedBuildInputs = [

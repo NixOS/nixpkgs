@@ -38,6 +38,8 @@ let
       coq-bits = callPackage ../development/coq-modules/coq-bits {};
       coq-elpi = callPackage ../development/coq-modules/coq-elpi {};
       coq-ext-lib = callPackage ../development/coq-modules/coq-ext-lib {};
+      coq-hammer = callPackage ../development/coq-modules/coq-hammer { };
+      coq-hammer-tactics = callPackage ../development/coq-modules/coq-hammer/tactics.nix { };
       coq-haskell = callPackage ../development/coq-modules/coq-haskell { };
       coq-lsp = callPackage ../development/coq-modules/coq-lsp {};
       coq-record-update = callPackage ../development/coq-modules/coq-record-update { };
@@ -198,6 +200,7 @@ in rec {
   coq_8_17 = mkCoq "8.17";
   coq_8_18 = mkCoq "8.18";
   coq_8_19 = mkCoq "8.19";
+  coq_8_20 = mkCoq "8.20";
 
   coqPackages_8_5 = mkCoqPackages coq_8_5 // { __attrsFailEvaluation = true; };
   coqPackages_8_6 = mkCoqPackages coq_8_6 // { __attrsFailEvaluation = true; };
@@ -214,6 +217,7 @@ in rec {
   coqPackages_8_17 = mkCoqPackages coq_8_17 // { __attrsFailEvaluation = true; };
   coqPackages_8_18 = mkCoqPackages coq_8_18 // { __attrsFailEvaluation = true; };
   coqPackages_8_19 = mkCoqPackages coq_8_19 // { __attrsFailEvaluation = true; };
+  coqPackages_8_20 = mkCoqPackages coq_8_20 // { __attrsFailEvaluation = true; };
   coqPackages =
     let cp = recurseIntoAttrs coqPackages_8_19;
     in cp // { coqPackages = cp.coqPackages // { __attrsFailEvaluation = true; }; } // { __recurseIntoDerivationForReleaseJobs = true; };

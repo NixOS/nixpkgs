@@ -78,7 +78,8 @@ in {
           packages.ghc865Binary
         else
           packages.ghc8107Binary;
-      inherit (buildPackages.python3Packages) sphinx;
+      inherit (buildPackages.python311Packages) sphinx; # a distutils issue with 3.12
+      python3 = buildPackages.python311; # so that we don't have two of them
       # Need to use apple's patched xattr until
       # https://github.com/xattr/xattr/issues/44 and
       # https://github.com/xattr/xattr/issues/55 are solved.
@@ -94,7 +95,8 @@ in {
           packages.ghc810
         else
           packages.ghc8107Binary;
-      inherit (buildPackages.python3Packages) sphinx;
+      inherit (buildPackages.python311Packages) sphinx; # a distutils issue with 3.12
+      python3 = buildPackages.python311; # so that we don't have two of them
       inherit (buildPackages.darwin) autoSignDarwinBinariesHook xattr;
       buildTargetLlvmPackages = pkgsBuildTarget.llvmPackages_12;
       llvmPackages = pkgs.llvmPackages_12;
@@ -106,7 +108,8 @@ in {
           packages.ghc810
         else
           packages.ghc8107Binary;
-      inherit (buildPackages.python3Packages) sphinx;
+      inherit (buildPackages.python311Packages) sphinx; # a distutils issue with 3.12
+      python3 = buildPackages.python311; # so that we don't have two of them
       # Need to use apple's patched xattr until
       # https://github.com/xattr/xattr/issues/44 and
       # https://github.com/xattr/xattr/issues/55 are solved.
@@ -120,7 +123,8 @@ in {
           packages.ghc810
         else
           packages.ghc8107Binary;
-      inherit (buildPackages.python3Packages) sphinx;
+      inherit (buildPackages.python311Packages) sphinx; # a distutils issue with 3.12
+      python3 = buildPackages.python311; # so that we don't have two of them
       # Need to use apple's patched xattr until
       # https://github.com/xattr/xattr/issues/44 and
       # https://github.com/xattr/xattr/issues/55 are solved.
@@ -134,7 +138,8 @@ in {
           packages.ghc810
         else
           packages.ghc8107Binary;
-      inherit (buildPackages.python3Packages) sphinx;
+      inherit (buildPackages.python311Packages) sphinx; # a distutils issue with 3.12
+      python3 = buildPackages.python311; # so that we don't have two of them
       # Need to use apple's patched xattr until
       # https://github.com/xattr/xattr/issues/44 and
       # https://github.com/xattr/xattr/issues/55 are solved.
@@ -148,7 +153,8 @@ in {
           packages.ghc810
         else
           packages.ghc8107Binary;
-      inherit (buildPackages.python3Packages) sphinx;
+      inherit (buildPackages.python311Packages) sphinx; # a distutils issue with 3.12
+      python3 = buildPackages.python311; # so that we don't have two of them
       # Need to use apple's patched xattr until
       # https://github.com/xattr/xattr/issues/44 and
       # https://github.com/xattr/xattr/issues/55 are solved.
@@ -172,7 +178,8 @@ in {
           packages.ghc902
         else
           packages.ghc8107Binary;
-      inherit (buildPackages.python3Packages) sphinx;
+      inherit (buildPackages.python311Packages) sphinx; # a distutils issue with 3.12
+      python3 = buildPackages.python311; # so that we don't have two of them
       # Need to use apple's patched xattr until
       # https://github.com/xattr/xattr/issues/44 and
       # https://github.com/xattr/xattr/issues/55 are solved.
@@ -196,7 +203,8 @@ in {
           packages.ghc902
         else
           packages.ghc8107Binary;
-      inherit (buildPackages.python3Packages) sphinx;
+      inherit (buildPackages.python311Packages) sphinx; # a distutils issue with 3.12
+      python3 = buildPackages.python311; # so that we don't have two of them
       # Need to use apple's patched xattr until
       # https://github.com/xattr/xattr/issues/44 and
       # https://github.com/xattr/xattr/issues/55 are solved.
@@ -229,7 +237,7 @@ in {
       buildTargetLlvmPackages = pkgsBuildTarget.llvmPackages_12;
       llvmPackages = pkgs.llvmPackages_12;
     };
-    ghc948 = callPackage ../development/compilers/ghc/9.4.8.fixme.nix {
+    ghc948 = callPackage ../development/compilers/ghc/9.4.8.nix {
       bootPkgs =
         # Building with 9.2 is broken due to
         # https://gitlab.haskell.org/ghc/ghc/-/issues/21914
@@ -568,7 +576,7 @@ in {
       buildHaskellPackages = ghc.bootPkgs;
       ghc = bh.compiler.ghcjs810;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.10.x.nix { };
-      packageSetConfig = callPackage ../development/haskell-modules/configuration-ghcjs.nix { };
+      packageSetConfig = callPackage ../development/haskell-modules/configuration-ghcjs-8.x.nix { };
     };
 
     # The integer-simple attribute set contains package sets for all the GHC compilers

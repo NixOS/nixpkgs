@@ -124,7 +124,7 @@ let
 in {
   options = {
     services.mqtt2influxdb = {
-      enable = mkEnableOption "BigClown MQTT to InfluxDB bridge.";
+      enable = mkEnableOption "BigClown MQTT to InfluxDB bridge";
       package = mkPackageOption pkgs ["python3Packages" "mqtt2influxdb"] {};
       environmentFiles = mkOption {
         type = types.listOf types.path;

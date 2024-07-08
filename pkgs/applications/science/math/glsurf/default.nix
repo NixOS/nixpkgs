@@ -5,7 +5,7 @@
 , makeWrapper
 , libGLU
 , libGL
-, freeglut
+, libglut
 , mpfr
 , gmp
 , pkgsHostTarget
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   ]);
 
   buildInputs = [
-    freeglut
+    libglut
     libGL
     libGLU
     mpfr

@@ -5,14 +5,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "ldeep";
-  version = "1.0.57";
+  version = "1.0.58";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "franc-pentest";
     repo = "ldeep";
     rev = "refs/tags/${version}";
-    hash = "sha256-RjPpxKbZ9QK+dPe3Vj2IG2gr5ROtLLnVaHI3CdNwJpE=";
+    hash = "sha256-u8qcihjGZmOAjjVBa6nLruD74zGozHnahShqUUXILcY=";
   };
 
   pythonRelaxDeps = [
@@ -25,7 +25,6 @@ python3.pkgs.buildPythonApplication rec {
 
   nativeBuildInputs = with python3.pkgs; [
     cython
-    pythonRelaxDepsHook
   ];
 
   dependencies = with python3.pkgs; [

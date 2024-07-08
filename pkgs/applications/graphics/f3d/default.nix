@@ -6,11 +6,11 @@
 , gzip
 , vtk_9
 , autoPatchelfHook
-, libX11
-, libGL
 , Cocoa
 , OpenGL
+, python3Packages
 , withManual ? !stdenv.isDarwin
+, withPythonBinding ? false
 }:
 
 stdenv.mkDerivation rec {
@@ -37,7 +37,16 @@ stdenv.mkDerivation rec {
     autoPatchelfHook
   ];
 
-  buildInputs = [ vtk_9 ] ++ lib.optionals stdenv.isDarwin [ Cocoa OpenGL ];
+  buildInputs = [
+    vtk_9
+  ] ++ lib.optionals stdenv.isDarwin [
+    Cocoa
+    OpenGL
+  ] ++ lib.optionals withPythonBinding [
+    python3Packages.python
+    # Using C++ header files, not Python import
+    python3Packages.pybind11
+  ];
 
   cmakeFlags = [
     # conflict between VTK and Nixpkgs;
@@ -45,8 +54,11 @@ stdenv.mkDerivation rec {
     "-DCMAKE_INSTALL_LIBDIR=lib"
     "-DCMAKE_INSTALL_INCLUDEDIR=include"
     "-DCMAKE_INSTALL_BINDIR=bin"
+    "-DF3D_MODULE_EXTERNAL_RENDERING=ON"
   ] ++ lib.optionals withManual [
     "-DF3D_LINUX_GENERATE_MAN=ON"
+  ] ++ lib.optionals withPythonBinding [
+    "-DF3D_BINDINGS_PYTHON=ON"
   ];
 
   meta = with lib; {

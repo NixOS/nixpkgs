@@ -44,14 +44,14 @@
 
 buildPythonPackage rec {
   pname = "spyder";
-  version = "5.5.4";
+  version = "5.5.5";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-UiIyoFREfd3gV0uhSgZ8TVFQiP3yprrBZDOm3+8Dge0=";
+    hash = "sha256-Y+JZO/LfWi1QzoSSV1uDI4zxLcte0HwVMNmBK0aXgd4=";
   };
 
   patches = [ ./dont-clear-pythonpath.patch ];
@@ -103,15 +103,6 @@ buildPythonPackage rec {
   # There is no test for spyder
   doCheck = false;
 
-  postPatch = ''
-    # Remove dependency on pyqtwebengine
-    # This is still part of the pyqt 5.11 version we have in nixpkgs
-    sed -i /pyqtwebengine/d setup.py
-    substituteInPlace setup.py \
-      --replace "qdarkstyle>=3.0.2,<3.1.0" "qdarkstyle" \
-      --replace "ipython>=7.31.1,<8.0.0" "ipython"
-  '';
-
   postInstall = ''
     # Add Python libs to env so Spyder subprocesses
     # created to run compute kernels don't fail with ImportErrors
@@ -124,7 +115,7 @@ buildPythonPackage rec {
     makeWrapperArgs+=("''${qtWrapperArgs[@]}")
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Scientific python development environment";
     mainProgram = "spyder";
     longDescription = ''
@@ -135,8 +126,8 @@ buildPythonPackage rec {
     homepage = "https://www.spyder-ide.org/";
     downloadPage = "https://github.com/spyder-ide/spyder/releases";
     changelog = "https://github.com/spyder-ide/spyder/blob/master/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ gebner ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ gebner ];
+    platforms = lib.platforms.linux;
   };
 }

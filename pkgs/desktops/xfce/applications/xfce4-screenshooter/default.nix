@@ -16,7 +16,7 @@
 , xfce4-panel
 , xfconf
 , curl
-, gnome
+, zenity
 , jq
 , xclip
 }:
@@ -54,7 +54,7 @@ mkXfceDerivation {
     # For Imgur upload action
     # https://gitlab.xfce.org/apps/xfce4-screenshooter/-/merge_requests/51
     gappsWrapperArgs+=(
-      --prefix PATH : ${lib.makeBinPath [ curl gnome.zenity jq xclip ]}
+      --prefix PATH : ${lib.makeBinPath [ curl zenity jq xclip ]}
     )
   '';
 

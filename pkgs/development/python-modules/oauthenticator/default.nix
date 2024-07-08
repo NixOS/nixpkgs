@@ -5,25 +5,30 @@
   fetchPypi,
   google-api-python-client,
   google-auth-oauthlib,
+  jsonschema,
   jupyterhub,
   mwoauth,
   pyjwt,
   pytest-asyncio,
   pytestCheckHook,
+  requests,
   requests-mock,
+  ruamel-yaml,
   setuptools,
+  tornado,
+  traitlets,
 }:
 
 buildPythonPackage rec {
   pname = "oauthenticator";
-  version = "16.3.0";
+  version = "16.3.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-QMddGJUfafXoBxMCjlx1lH45a4Bab3AP4j8Px7JxYaQ=";
+    hash = "sha256-gFhhOCcmorkrLxrup9fICh5ueCrc64fxfuZXTQG1tMk=";
   };
 
   postPatch = ''
@@ -34,8 +39,13 @@ buildPythonPackage rec {
   build-system = [ setuptools ];
 
   dependencies = [
+    jsonschema
     jupyterhub
     pyjwt
+    requests
+    ruamel-yaml
+    tornado
+    traitlets
   ];
 
   passthru.optional-dependencies = {

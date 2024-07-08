@@ -155,7 +155,7 @@ stdenv.mkDerivation rec {
     homepage = "http://sourceware.org/lvm2/";
     description = "Tools to support Logical Volume Management (LVM) on Linux";
     platforms = platforms.linux;
-    license = with licenses; [ gpl2 bsd2 lgpl21 ];
+    license = with licenses; [ gpl2Only bsd2 lgpl21 ];
     maintainers = with maintainers; [ raskin ajs124 ] ++ teams.helsinki-systems.members;
   };
 }

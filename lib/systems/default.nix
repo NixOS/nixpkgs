@@ -81,23 +81,24 @@ let
         && final.parsed.kernel == platform.parsed.kernel;
       isCompatible = _: throw "2022-05-23: isCompatible has been removed in favor of canExecute, refer to the 22.11 changelog for details";
       # Derived meta-data
-      useLLVM = final.isFreeBSD;
+      useLLVM = final.isFreeBSD || final.isOpenBSD;
 
       libc =
-        /**/ if final.isDarwin              then "libSystem"
-        else if final.isMinGW               then "msvcrt"
-        else if final.isWasi                then "wasilibc"
-        else if final.isRedox               then "relibc"
-        else if final.isMusl                then "musl"
-        else if final.isUClibc              then "uclibc"
-        else if final.isAndroid             then "bionic"
-        else if final.isLinux /* default */ then "glibc"
-        else if final.isFreeBSD             then "fblibc"
-        else if final.isOpenBSD             then "oblibc"
-        else if final.isNetBSD              then "nblibc"
-        else if final.isAvr                 then "avrlibc"
-        else if final.isGhcjs               then null
-        else if final.isNone                then "newlib"
+        /**/ if final.isDarwin                then "libSystem"
+        else if final.isMinGW                 then "msvcrt"
+        else if final.isWasi                  then "wasilibc"
+        else if final.isWasm && !final.isWasi then null
+        else if final.isRedox                 then "relibc"
+        else if final.isMusl                  then "musl"
+        else if final.isUClibc                then "uclibc"
+        else if final.isAndroid               then "bionic"
+        else if final.isLinux  /* default */  then "glibc"
+        else if final.isFreeBSD               then "fblibc"
+        else if final.isOpenBSD               then "oblibc"
+        else if final.isNetBSD                then "nblibc"
+        else if final.isAvr                   then "avrlibc"
+        else if final.isGhcjs                 then null
+        else if final.isNone                  then "newlib"
         # TODO(@Ericson2314) think more about other operating systems
         else                                     "native/impure";
       # Choose what linker we wish to use by default. Someday we might also
@@ -179,6 +180,7 @@ let
         (isAndroid || isGnu || isMusl                                  # Linux (allows multiple libcs)
          || isDarwin || isSunOS || isOpenBSD || isFreeBSD || isNetBSD  # BSDs
          || isCygwin || isMinGW                                        # Windows
+         || isWasm                                                     # WASM
         ) && !isStatic;
 
       # The difference between `isStatic` and `hasSharedLibraries` is mainly the
@@ -187,7 +189,7 @@ let
       # don't support dynamic linking, but don't get the `staticMarker`.
       # `pkgsStatic` sets `isStatic=true`, so `pkgsStatic.hostPlatform` always
       # has the `staticMarker`.
-      isStatic = final.isWasm || final.isRedox;
+      isStatic = final.isWasi || final.isRedox;
 
       # Just a guess, based on `system`
       inherit
@@ -337,7 +339,8 @@ let
                     if isList f then f else [ f ]
                 )
               else optional final.isUnix "unix"
-                   ++ optional final.isWindows "windows";
+                   ++ optional final.isWindows "windows"
+                   ++ optional final.isWasm "wasm";
 
             # https://doc.rust-lang.org/reference/conditional-compilation.html#target_vendor
             vendor = let

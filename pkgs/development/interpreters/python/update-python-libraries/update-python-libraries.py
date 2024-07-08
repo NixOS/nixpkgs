@@ -284,7 +284,7 @@ def _get_latest_version_github(attr_path, package, extension, current_version, t
     if _get_attr_value(f"{attr_path}.src.leaveDotGit"):
         git_fetcher_args.append("--leave-dotGit")
 
-    if git_fetcher_args:
+    if git_fetcher_args or _get_attr_value(f"{attr_path}.src.fetcher").endswith("nix-prefetch-git"):
         algorithm = "sha256"
         cmd = [
             "nix-prefetch-git",
@@ -319,14 +319,17 @@ def _get_latest_version_github(attr_path, package, extension, current_version, t
             tag_url = str(release["tarball_url"]).replace(
                 "tarball", "tarball/refs/tags"
             )
-            hash = (
-                subprocess.check_output(
-                    ["nix-prefetch-url", "--type", "sha256", "--unpack", tag_url],
-                    stderr=subprocess.DEVNULL,
+            try:
+                hash = (
+                    subprocess.check_output(
+                        ["nix-prefetch-url", "--type", "sha256", "--unpack", tag_url],
+                        stderr=subprocess.DEVNULL,
+                    )
+                    .decode("utf-8")
+                    .strip()
                 )
-                .decode("utf-8")
-                .strip()
-            )
+            except subprocess.CalledProcessError:
+                raise ValueError("nix-prefetch-url failed")
 
     return version, hash, prefix
 

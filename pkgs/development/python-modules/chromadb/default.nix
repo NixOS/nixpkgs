@@ -10,6 +10,7 @@
   fastapi,
   fetchFromGitHub,
   grpcio,
+  httpx,
   hypothesis,
   importlib-resources,
   kubernetes,
@@ -32,7 +33,6 @@
   pytest-asyncio,
   pytestCheckHook,
   pythonOlder,
-  pythonRelaxDepsHook,
   pyyaml,
   requests,
   rustc,
@@ -50,7 +50,7 @@
 
 buildPythonPackage rec {
   pname = "chromadb";
-  version = "0.5.0";
+  version = "0.5.3";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -59,13 +59,13 @@ buildPythonPackage rec {
     owner = "chroma-core";
     repo = "chroma";
     rev = "refs/tags/${version}";
-    hash = "sha256-gM+fexjwifF3evR8jZvMbIDz655RFKPUizrsB2q5tbw=";
+    hash = "sha256-czDL2b+Jj7mrYZCTfnaZArkOHBaWyTV0BTE2wvykHps=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-zyiFv/gswGupm7Y8BhviklqJzM914v0QyUsRwbGKZ48=";
+    hash = "sha256-eTVT1yowuDsajjceWojdUdX466FKneUt1i5QipBFdp4=";
   };
 
   pythonRelaxDeps = [ "orjson" ];
@@ -74,7 +74,6 @@ buildPythonPackage rec {
     cargo
     pkg-config
     protobuf
-    pythonRelaxDepsHook
     rustc
     rustPlatform.cargoSetupHook
     setuptools
@@ -92,6 +91,7 @@ buildPythonPackage rec {
     chroma-hnswlib
     fastapi
     grpcio
+    httpx
     importlib-resources
     kubernetes
     mmh3
@@ -143,12 +143,13 @@ buildPythonPackage rec {
 
   disabledTestPaths = [
     # Tests require network access
-    "chromadb/test/property/test_cross_version_persist.py"
     "chromadb/test/auth/test_simple_rbac_authz.py"
+    "chromadb/test/db/test_system.py"
     "chromadb/test/ef/test_default_ef.py"
-    "chromadb/test/test_api.py"
     "chromadb/test/property/"
+    "chromadb/test/property/test_cross_version_persist.py"
     "chromadb/test/stress/"
+    "chromadb/test/test_api.py"
   ];
 
   __darwinAllowLocalNetworking = true;

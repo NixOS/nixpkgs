@@ -1,4 +1,5 @@
 { alsa-lib
+, libuuid
 , cups
 , dpkg
 , fetchurl
@@ -86,7 +87,7 @@ stdenv.mkDerivation {
     makeShellWrapper $out/opt/QQ/qq $out/bin/qq \
       --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH" \
       --prefix LD_PRELOAD : "${lib.makeLibraryPath [ libssh2 ]}/libssh2.so.1" \
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libGL ]}" \
+      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libGL libuuid]}" \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
       --add-flags ${lib.escapeShellArg commandLineArgs} \
       "''${gappsWrapperArgs[@]}"
@@ -115,6 +116,6 @@ stdenv.mkDerivation {
     platforms = [ "x86_64-linux" "aarch64-linux" ];
     license = licenses.unfree;
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    maintainers = with lib.maintainers; [ fee1-dead ];
+    maintainers = with lib.maintainers; [ fee1-dead bot-wxt1221 ];
   };
 }

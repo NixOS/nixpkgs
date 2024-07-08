@@ -349,7 +349,7 @@ checksum = "06ea2b9bc92be3c2baa9334a323ebca2d6f074ff852cd1d7b11064035cd3868f"
 
 [[package]]
 name = "crunchy-cli"
-version = "3.6.6"
+version = "3.6.7"
 dependencies = [
  "chrono",
  "clap",
@@ -362,7 +362,7 @@ dependencies = [
 
 [[package]]
 name = "crunchy-cli-core"
-version = "3.6.6"
+version = "3.6.7"
 dependencies = [
  "anyhow",
  "async-speed-limit",
@@ -400,9 +400,9 @@ dependencies = [
 
 [[package]]
 name = "crunchyroll-rs"
-version = "0.11.3"
+version = "0.11.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1d33b8d77c80dea79e66993cb67963b2171dcf0b8fbc87591c58f2dadfea8da2"
+checksum = "d6e38c223aecf65c9c9bec50764beea5dc70b6c97cd7f767bf6860f2fc8e0a07"
 dependencies = [
  "async-trait",
  "chrono",
@@ -426,9 +426,9 @@ dependencies = [
 
 [[package]]
 name = "crunchyroll-rs-internal"
-version = "0.11.3"
+version = "0.11.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "fa51945265f25c45f7d53bd70e5263dd023c0be45e38eaba886a971cb645d797"
+checksum = "144a38040a21aaa456741a9f6749354527bb68ad3bb14210e0bbc40fbd95186c"
 dependencies = [
  "darling",
  "quote",
@@ -1125,8 +1125,8 @@ dependencies = [
 
 [[package]]
 name = "native-tls"
-version = "0.2.11"
-source = "git+https://github.com/crunchy-labs/rust-not-so-native-tls.git?rev=b7969a8#b7969a88210096e0570e29d42fb13533baf62aa6"
+version = "0.2.12"
+source = "git+https://github.com/crunchy-labs/rust-not-so-native-tls.git?rev=c7ac566#c7ac566559d441bbc3e5e5bd04fb7162c38d88b0"
 dependencies = [
  "libc",
  "log",
@@ -1519,9 +1519,9 @@ checksum = "b833d8d034ea094b1ea68aa6d5c740e0d04bad9d16568d08ba6f76823a114316"
 
 [[package]]
 name = "rsubs-lib"
-version = "0.3.1"
+version = "0.3.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d01f7609f0b1bc4fe24b352e8d1792c7d71cc43aea797e14b87974cd009ab402"
+checksum = "8c9f50e3fbcbf1f0bd109954e2dd813d1715c7b4a92a7bf159a85dea49e9d863"
 dependencies = [
  "regex",
  "serde",
@@ -1967,9 +1967,9 @@ checksum = "1f3ccbac311fea05f86f61904b462b55fb3df8837a366dfc601a0161d0532f20"
 
 [[package]]
 name = "tokio"
-version = "1.37.0"
+version = "1.38.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1adbebffeca75fcfd058afa480fb6c0b81e165a0323f9c9d39c9697e37c46787"
+checksum = "ba4f4a02a7a80d6f274636f0aa95c7e383b912d41fe721a31f29e29698585a4a"
 dependencies = [
  "backtrace",
  "bytes",
@@ -1984,9 +1984,9 @@ dependencies = [
 
 [[package]]
 name = "tokio-macros"
-version = "2.2.0"
+version = "2.3.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "5b8a1e28f2deaa14e508979454cb3a223b10b938b45af148bc0986de36f1923b"
+checksum = "5f5ae998a069d4b5aba8ee9dad856af7d520c3699e6159b185c2acd48155d39a"
 dependencies = [
  "proc-macro2",
  "quote",

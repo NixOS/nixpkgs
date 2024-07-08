@@ -2,6 +2,7 @@
 , brotli
 , buildGoModule
 , forgejo
+, fetchpatch
 , git
 , gzip
 , lib
@@ -39,23 +40,27 @@ let
 in
 buildGoModule rec {
   pname = "forgejo";
-  version = "7.0.3";
+  version = "7.0.5";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "forgejo";
     repo = "forgejo";
     rev = "v${version}";
-    hash = "sha256-P+HVZmfNA1ao+fQ253tK8A2DNGNPxvdyzCvByQJ0FGA=";
+    hash = "sha256-Y/Ita5dr3COACffAIAjcqHHcdKiUWWEb/f/MPzMG200=";
   };
 
-  vendorHash = "sha256-8qMpnGL5GXJuxOpxh9a1Bcxd7tVweUKwbun8UBxCfQA=";
+  vendorHash = "sha256-hfbNyCQMQzDzJxFc2MPAR4+v/qNcnORiQNbwbbIA4Nw=";
 
   subPackages = [ "." "contrib/environment-to-ini" ];
 
   outputs = [ "out" "data" ];
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [
+    makeWrapper
+    git # checkPhase
+    openssh # checkPhase
+  ];
   buildInputs = lib.optional pamSupport pam;
 
   patches = [
@@ -79,6 +84,33 @@ buildGoModule rec {
   preConfigure = ''
     export ldflags+=" -X main.ForgejoVersion=$(GITEA_VERSION=${version} make show-version-api)"
   '';
+
+  preCheck = ''
+    # $HOME is required for ~/.ssh/authorized_keys and such
+    export HOME="$TMPDIR/home"
+
+    # expose and use the GO_TEST_PACKAGES var from the Makefile
+    # instead of manually copying over the entire list:
+    # https://codeberg.org/forgejo/forgejo/src/tag/v7.0.4/Makefile#L124
+    echo -e 'show-backend-tests:\n\t@echo ''${GO_TEST_PACKAGES}' >> Makefile
+    getGoDirs() {
+      make show-backend-tests
+    }
+  '';
+
+  checkFlags =
+    let
+      skippedTests = [
+        "Test_SSHParsePublicKey/dsa-1024/SSHKeygen" # dsa-1024 is deprecated in openssh and requires opting-in at compile time
+        "Test_calcFingerprint/dsa-1024/SSHKeygen" # dsa-1024 is deprecated in openssh and requires opting-in at compile time
+        "TestPamAuth" # we don't have PAM set up in the build sandbox
+        "TestPassword" # requires network: api.pwnedpasswords.com
+        "TestCaptcha" # requires network: hcaptcha.com
+        "TestDNSUpdate" # requires network: release.forgejo.org
+        "TestMigrateWhiteBlocklist" # requires network: gitlab.com (DNS)
+      ];
+    in
+    [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
 
   postInstall = ''
     mkdir $data

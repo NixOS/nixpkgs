@@ -83,7 +83,7 @@ in buildFHSEnv rec {
   targetPkgs = pkgs: with pkgs; [
     steam
     # License agreement
-    gnome.zenity
+    zenity
   ] ++ commonTargetPkgs pkgs;
 
   multiPkgs = pkgs: with pkgs; [
@@ -162,7 +162,7 @@ in buildFHSEnv rec {
     gtk2
     bzip2
     flac
-    freeglut
+    libglut
     libjpeg
     libpng
     libpng12
@@ -280,7 +280,7 @@ in buildFHSEnv rec {
     WARNING: Steam is not set up. Add the following options to /etc/nixos/configuration.nix
     and then run \`sudo nixos-rebuild switch\`:
     {
-      hardware.opengl.driSupport32Bit = true;
+      hardware.graphics.enable32Bit = true;
       hardware.pulseaudio.support32Bit = true;
     }
     **

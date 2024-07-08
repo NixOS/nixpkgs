@@ -19,7 +19,9 @@ buildPythonPackage rec {
     owner = "amaranth-lang";
     repo = "amaranth-boards";
     rev = "aba2300dc83216523e1c98fdb22471cb4bac5027";
-    hash = "sha256-IMhNMkOf6dg4Djyi39TDTpU0S3TQM1+e6TBoyiITaos=";
+    # these files change depending on git branch status
+    postFetch = "rm -f $out/.git_archival.txt $out/.gitattributes";
+    hash = "sha256-jldXyMJtuSGcZKmtwpZBYrR/UBe4ufblPYRYpBmReM8=";
   };
 
   nativeBuildInputs = [
@@ -45,7 +47,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/amaranth-lang/amaranth-boards";
     license = licenses.bsd2;
     maintainers = with maintainers; [
-      emily
       thoughtpolice
       pbsds
     ];

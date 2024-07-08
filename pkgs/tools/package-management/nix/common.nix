@@ -19,6 +19,7 @@ let
   atLeast219 = lib.versionAtLeast version "2.19pre";
   atLeast220 = lib.versionAtLeast version "2.20pre";
   atLeast221 = lib.versionAtLeast version "2.21pre";
+  atLeast224 = lib.versionAtLeast version "2.24pre";
   # Major.minor versions unaffected by CVE-2024-27297
   unaffectedByFodSandboxEscape = [
     "2.3"
@@ -58,6 +59,7 @@ in
 , libxml2
 , libxslt
 , lowdown
+, toml11
 , man
 , mdbook
 , mdbook-linkcheck
@@ -83,6 +85,7 @@ in
 
   # passthru tests
 , pkgsi686Linux
+, runCommand
 }: let
 self = stdenv.mkDerivation {
   pname = "nix";
@@ -136,6 +139,8 @@ self = stdenv.mkDerivation {
     lowdown
   ] ++ lib.optionals atLeast220 [
     libgit2
+  ] ++ lib.optionals (atLeast224 || lib.versionAtLeast version "pre20240626") [
+    toml11
   ] ++ lib.optionals stdenv.isDarwin [
     Security
   ] ++ lib.optionals (stdenv.isx86_64) [
@@ -255,6 +260,21 @@ self = stdenv.mkDerivation {
       # Basic smoke test that needs to pass when upgrading nix.
       # Note that this test does only test the nixVersions.stable attribute.
       misc = nixosTests.nix-misc.default;
+
+      srcVersion = runCommand "nix-src-version" {
+        inherit version;
+      } ''
+        # This file is an implementation detail, but it's a good sanity check
+        # If upstream changes that, we'll have to adapt.
+        srcVersion=$(cat ${src}/.version)
+        echo "Version in nix nix expression: $version"
+        echo "Version in nix.src: $srcVersion"
+        if [ "$version" != "$srcVersion" ]; then
+          echo "Version mismatch!"
+          exit 1
+        fi
+        touch $out
+      '';
     };
   };
 

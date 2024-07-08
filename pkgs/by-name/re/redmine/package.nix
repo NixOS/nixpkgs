@@ -46,6 +46,7 @@ in
 
     meta = with lib; {
       homepage = "https://www.redmine.org/";
+      changelog = "https://www.redmine.org/projects/redmine/wiki/changelog";
       platforms = platforms.linux;
       maintainers = with maintainers; [ aanderse felixsinger megheaiulian ];
       license = licenses.gpl2;

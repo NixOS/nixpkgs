@@ -39,7 +39,7 @@ buildPythonPackage rec {
     nose
     util-linux
     xorg.xauth
-    xorg.xorgserver
+    xorg.xvfb
   ];
 
   disabledTestPaths = [

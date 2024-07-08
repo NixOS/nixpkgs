@@ -4,7 +4,6 @@
 , fetchFromGitHub
 , installShellFiles
 , libiconv
-, openssl
 , pkg-config
 , python3Packages
 , rustPlatform
@@ -16,21 +15,22 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "uv";
-  version = "0.2.10";
+  version = "0.2.21";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "astral-sh";
     repo = "uv";
     rev = "refs/tags/${version}";
-    hash = "sha256-xVddhsCGJcESZhkZnu6tcwwifT9+MQz53qV00B9oHA0=";
+    hash = "sha256-TgE8JWXXVQxp0aK/vQ6TaSWxHge3X+RpKXjtc2ZkWpM=";
   };
 
   cargoDeps = rustPlatform.importCargoLock {
     lockFile = ./Cargo.lock;
     outputHashes = {
       "async_zip-0.0.17" = "sha256-Q5fMDJrQtob54CTII3+SXHeozy5S5s3iLOzntevdGOs=";
-      "pubgrub-0.2.1" = "sha256-i1Eaip4J5VXb66p1w0sRjP655AngBLEym70ChbAFFIc=";
+      "pubgrub-0.2.1" = "sha256-6tr+HATYSn1A1uVJwmz40S4yLDOJlX8vEokOOtdFG0M=";
+      "reqwest-middleware-0.3.2" = "sha256-OiC8Kg+F2eKy7YNuLtgYPi95DrbxLvsIKrKEeyuzQTo=";
     };
   };
 
@@ -44,7 +44,6 @@ python3Packages.buildPythonApplication rec {
 
   buildInputs = [
     libiconv
-    openssl
   ] ++ lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.SystemConfiguration
   ];
@@ -52,10 +51,6 @@ python3Packages.buildPythonApplication rec {
   dontUseCmakeConfigure = true;
 
   cargoBuildFlags = [ "--package" "uv" ];
-
-  env = {
-    OPENSSL_NO_VENDOR = true;
-  };
 
   postInstall = ''
     export HOME=$TMPDIR

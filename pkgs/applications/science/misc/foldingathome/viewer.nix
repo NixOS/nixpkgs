@@ -2,7 +2,7 @@
 , autoPatchelfHook
 , dpkg
 , fetchurl
-, freeglut
+, libglut
 , gcc-unwrapped
 , libGL
 , libGLU
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    freeglut
+    libglut
     gcc-unwrapped.lib
     libGL
     libGLU

@@ -6,17 +6,14 @@
 
 stdenv.mkDerivation rec {
   pname = "iproute2";
-  version = "6.8.0";
+  version = "6.9.0";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/net/${pname}/${pname}-${version}.tar.xz";
-    hash = "sha256-A6bMo9cakI0fFfe0lb4rj+hR+UFFjcRmSQDX9F/PaM4=";
+    hash = "sha256-L2Q9CeoRpKKgQ8kuK0abX3MijL8kGugGdgKW7Q7EE9A=";
   };
 
   postPatch = ''
-    # Don't try to create /var/lib/arpd:
-    sed -e '/ARPDDIR/d' -i Makefile
-
     substituteInPlace Makefile \
       --replace "CC := gcc" "CC ?= $CC"
   '';
@@ -66,7 +63,7 @@ stdenv.mkDerivation rec {
     homepage = "https://wiki.linuxfoundation.org/networking/iproute2";
     description = "Collection of utilities for controlling TCP/IP networking and traffic control in Linux";
     platforms = platforms.linux;
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     maintainers = with maintainers; [ primeos eelco fpletz globin ];
   };
 }

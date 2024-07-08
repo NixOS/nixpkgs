@@ -1,32 +1,39 @@
 {
   lib,
   buildPythonPackage,
-  cloudpickle,
-  einops,
+  pythonOlder,
   fetchFromGitHub,
-  jax,
+
+  # build-system
   jaxlib,
-  keras,
-  matplotlib,
+  setuptools-scm,
+
+  # dependencies
+  jax,
   msgpack,
   numpy,
   optax,
   orbax-checkpoint,
-  pytest-xdist,
-  pytestCheckHook,
-  pythonOlder,
-  pythonRelaxDepsHook,
   pyyaml,
   rich,
-  setuptools-scm,
-  tensorflow,
   tensorstore,
   typing-extensions,
+
+  # checks
+  cloudpickle,
+  einops,
+  keras,
+  pytest-xdist,
+  pytestCheckHook,
+  tensorflow,
+
+  # optional-dependencies
+  matplotlib,
 }:
 
 buildPythonPackage rec {
   pname = "flax";
-  version = "0.8.4";
+  version = "0.8.5";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -35,12 +42,11 @@ buildPythonPackage rec {
     owner = "google";
     repo = "flax";
     rev = "refs/tags/v${version}";
-    hash = "sha256-ZwqKZdJ9LOfWTav5nE9xMsMw/DbryqQUuu5fqeugBzY=";
+    hash = "sha256-6WOFq0758gtNdrlWqSQBlKmWVIGe5e4PAaGrvHoGjr0=";
   };
 
   build-system = [
     jaxlib
-    pythonRelaxDepsHook
     setuptools-scm
   ];
 

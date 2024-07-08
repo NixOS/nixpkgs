@@ -9,6 +9,7 @@ let
   in {
     #### Core Apps
     lomiri = callPackage ./applications/lomiri { };
+    lomiri-calculator-app = callPackage ./applications/lomiri-calculator-app { };
     lomiri-filemanager-app = callPackage ./applications/lomiri-filemanager-app { };
     lomiri-system-settings-unwrapped = callPackage ./applications/lomiri-system-settings { };
     lomiri-system-settings-security-privacy = callPackage ./applications/lomiri-system-settings/plugins/lomiri-system-settings-security-privacy.nix { };
@@ -51,6 +52,7 @@ let
     history-service = callPackage ./services/history-service { };
     lomiri-download-manager = callPackage ./services/lomiri-download-manager { };
     lomiri-indicator-network = callPackage ./services/lomiri-indicator-network { };
+    lomiri-polkit-agent = callPackage ./services/lomiri-polkit-agent { };
     lomiri-thumbnailer = callPackage ./services/lomiri-thumbnailer { };
     lomiri-url-dispatcher = callPackage ./services/lomiri-url-dispatcher { };
     mediascanner2 = callPackage ./services/mediascanner2 { };

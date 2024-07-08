@@ -14,18 +14,23 @@
 
 buildPythonPackage rec {
   pname = "pyfume";
-  version = "0.3.1";
+  version = "0.3.4";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    pname = "pyFUME";
-    inherit version;
-    hash = "sha256-8J9qhSaTlb/KiCjegmc8iaGaZOXJ0Pk1EquOTEUUtW0=";
+    inherit pname version;
+    hash = "sha256-UwW5OwFfu01lDKwz72iB2egbOoxb+t8UnEFIUjZmffU=";
   };
 
   nativeBuildInputs = [ setuptools ];
+
+  pythonRelaxDeps = [
+    "numpy"
+    "pandas"
+    "scipy"
+  ];
 
   propagatedBuildInputs = [
     fst-pso

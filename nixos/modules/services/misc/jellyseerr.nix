@@ -9,6 +9,7 @@ in
 
   options.services.jellyseerr = {
     enable = mkEnableOption ''Jellyseerr, a requests manager for Jellyfin'';
+    package = mkPackageOption pkgs "jellyseerr" { };
 
     openFirewall = mkOption {
       type = types.bool;
@@ -32,10 +33,10 @@ in
       serviceConfig = {
         Type = "exec";
         StateDirectory = "jellyseerr";
-        WorkingDirectory = "${pkgs.jellyseerr}/libexec/jellyseerr/deps/jellyseerr";
+        WorkingDirectory = "${cfg.package}/libexec/jellyseerr/deps/jellyseerr";
         DynamicUser = true;
-        ExecStart = "${pkgs.jellyseerr}/bin/jellyseerr";
-        BindPaths = [ "/var/lib/jellyseerr/:${pkgs.jellyseerr}/libexec/jellyseerr/deps/jellyseerr/config/" ];
+        ExecStart = lib.getExe cfg.package;
+        BindPaths = [ "/var/lib/jellyseerr/:${cfg.package}/libexec/jellyseerr/deps/jellyseerr/config/" ];
         Restart = "on-failure";
         ProtectHome = true;
         ProtectSystem = "strict";

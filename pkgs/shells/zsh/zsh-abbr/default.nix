@@ -18,6 +18,9 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     install -D zsh-abbr.zsh $out/share/zsh/${pname}/abbr.plugin.zsh
+    # Needed so that `man` can find the manpage, since it looks via PATH
+    mkdir -p $out/bin
+    mv man $out/share/man
   '';
 
   meta = with lib; {

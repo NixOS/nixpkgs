@@ -312,9 +312,9 @@ in
     };
 
     faxqclean.enable.spoolInit = mkEnableOption ''
-      Purge old files from the spooling area with
+      purging old files from the spooling area with
       {file}`faxqclean`
-      each time the spooling area is initialized.
+      each time the spooling area is initialized
     '';
     faxqclean.enable.frequency = mkOption {
       type = nullOr nonEmptyStr;

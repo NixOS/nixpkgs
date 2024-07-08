@@ -47,11 +47,13 @@ let
     };
 in
 lib.makeExtensible (self: ({
+  buildLix = common;
+
   lix_2_90 = (
     common {
-      version = "2.90-beta.1";
-      hash = "sha256-REWlo2RYHfJkxnmZTEJu3Cd/2VM+wjjpPy7Xi4BdDTQ=";
-      docCargoHash = "sha256-oH248kR4Of0MhcY2DYxNX0A+/XJ3L+UuIpBKn3sJt54=";
+      version = "2.90.0-rc1";
+      hash = "sha256-WY7BGnu5PnbK4O8cKKv9kvxwzZIGbIQUQLGPHFXitI0=";
+      docCargoHash = "sha256-V/MEC2aRlVrt/IKozyYZvZTXENrtDS/wsV08/ao4TCw=";
     }
   );
 

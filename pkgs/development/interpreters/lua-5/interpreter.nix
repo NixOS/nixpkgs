@@ -54,7 +54,7 @@ stdenv.mkDerivation (finalAttrs:
   LuaCPathSearchPaths = luaPackages.luaLib.luaCPathList;
   setupHook = builtins.toFile "lua-setup-hook" ''
       source @out@/nix-support/utils.sh
-      addEnvHooks "$hostOffset" addToLuaPath
+      addEnvHooks "$hostOffset" luaEnvHook
       '';
 
   nativeBuildInputs = [ makeWrapper ];

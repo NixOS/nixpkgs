@@ -32,13 +32,14 @@ stdenv.mkDerivation (finalAttrs: {
     libpng
     libjpeg
     libGL
+  ] ++ (if stdenv.hostPlatform.isDarwin then [
+    Cocoa
+    Kernel
+  ] else [
     libX11
     libXi
     libXext
-  ] ++ lib.optionals stdenv.isDarwin [
-    Cocoa
-    Kernel
-  ];
+  ]);
 
   outputs = [ "out" "dev" ];
 

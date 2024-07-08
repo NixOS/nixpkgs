@@ -280,7 +280,7 @@ pipe ((callFile ./common/builder.nix {}) ({
 
   libc_dev = stdenv.cc.libc_dev;
 
-  hardeningDisable = [ "format" "pie" ]
+  hardeningDisable = [ "format" "pie" "stackclashprotection" ]
   ++ optionals (is11 && langAda) [ "fortify3" ];
 
   postPatch = optionalString atLeast7 ''
@@ -425,6 +425,9 @@ pipe ((callFile ./common/builder.nix {}) ({
     inherit langC langCC langObjC langObjCpp langAda langFortran langGo langD langJava version;
     isGNU = true;
     hardeningUnsupportedFlags = optional is48 "stackprotector"
+      ++ optional (
+        (targetPlatform.isAarch64 && !atLeast9) || !atLeast8
+      ) "stackclashprotection"
       ++ optional (!atLeast11) "zerocallusedregs"
       ++ optionals (!atLeast12) [ "fortify3" "trivialautovarinit" ]
       ++ optionals (langFortran) [ "fortify" "format" ];

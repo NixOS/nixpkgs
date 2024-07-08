@@ -11,12 +11,12 @@
 
 buildPythonPackage rec {
   pname = "gfsubsets";
-  version = "2024.2.5";
+  version = "2024.5.9";
   gitTag = "v2024.02.05";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-g9QxLa3B1MMTs+jmj4CyJySZRU0zoFNYdbOZwHjKPaQ=";
+    hash = "sha256-OgpdcOJWX0o0Hy6LjRsxsZMAVWgKziM+bqe/FfJniZY=";
   };
 
   pyproject = true;

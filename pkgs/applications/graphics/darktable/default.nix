@@ -38,7 +38,7 @@
 , colord-gtk
 , libwebp
 , libsecret
-, gnome
+, adwaita-icon-theme
 , SDL2
 , ocl-icd
 , pcre
@@ -56,18 +56,13 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "4.6.1";
+  version = "4.8.0";
   pname = "darktable";
 
   src = fetchurl {
     url = "https://github.com/darktable-org/darktable/releases/download/release-${version}/darktable-${version}.tar.xz";
-    sha256 = "sha256-Fu3AoHApPi082k6hDkm9qb3pMuI/nmLi+i56x0rPev0=";
+    sha256 = "sha256-QZhJ6QFScOQHXyNBxrVTLT0czMz6jxlZLLLqOtF/klU=";
   };
-
-  patches = [
-    ./fix_darwin_x86_compile.patch
-  ];
-
 
   nativeBuildInputs = [ cmake ninja llvmPackages.llvm pkg-config intltool perl desktop-file-utils wrapGAppsHook3 ];
 
@@ -99,7 +94,7 @@ stdenv.mkDerivation rec {
     libwebp
     libsecret
     SDL2
-    gnome.adwaita-icon-theme
+    adwaita-icon-theme
     osm-gps-map
     pcre
     isocodes

@@ -5,14 +5,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "rabbit";
-  version = "1.0.2";
+  version = "1.0.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "natarajan-chidambaram";
     repo = "RABBIT";
     rev = "refs/tags/${version}";
-    hash = "sha256-5ItoWjPpAbQFM6+B+1CvZe5r5rZXQ8pWj7gRIKGX8ZA=";
+    hash = "sha256-ykvI5qW4toNYKAnrk3ADwat1gAUazbDGGKZEZAvKngQ=";
   };
 
   pythonRelaxDeps = true;
@@ -20,17 +20,18 @@ python3.pkgs.buildPythonApplication rec {
   build-system = [
     python3.pkgs.setuptools
     python3.pkgs.wheel
-    python3.pkgs.pythonRelaxDepsHook
   ];
 
   dependencies = with python3.pkgs; [
     numpy
     pandas
     pip
+    python-dateutil
     requests
     scikit-learn
     scipy
     tqdm
+    urllib3
     xgboost
   ];
 

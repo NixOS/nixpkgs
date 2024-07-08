@@ -11,26 +11,31 @@
 , windows
 , enableJemalloc ? false
 , jemalloc
+, enableLiburing ? true
+, liburing
 , enableShared ? !stdenv.hostPlatform.isStatic
 , sse42Support ? stdenv.hostPlatform.sse4_2Support
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocksdb";
-  version = "9.2.1";
+  version = "9.3.1";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = finalAttrs.pname;
     rev = "v${finalAttrs.version}";
-    hash = "sha256-Zifn5Gu/4h6TaEqSaWQ2mFdryeAarqbHWW3fKUGGFac=";
+    hash = "sha256-bTUzh7ch14TDcm6GkfhA5I/qUVmUm+RE5d2HMZ3zaNc=";
   };
+
+  patches = [ ./fix-findliburing.patch ];
 
   nativeBuildInputs = [ cmake ninja ];
 
   propagatedBuildInputs = [ bzip2 lz4 snappy zlib zstd ];
 
   buildInputs = lib.optional enableJemalloc jemalloc
+    ++ lib.optional enableLiburing liburing
     ++ lib.optional stdenv.hostPlatform.isMinGW windows.mingw_w64_pthreads;
 
   outputs = [
@@ -45,6 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     "-DPORTABLE=1"
     "-DWITH_JEMALLOC=${if enableJemalloc then "1" else "0"}"
+    "-DWITH_LIBURING=${if enableLiburing then "1" else "0"}"
     "-DWITH_JNI=0"
     "-DWITH_BENCHMARK_TOOLS=0"
     "-DWITH_TESTS=1"

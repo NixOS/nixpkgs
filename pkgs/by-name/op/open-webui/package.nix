@@ -7,19 +7,19 @@
 }:
 let
   pname = "open-webui";
-  version = "0.3.2";
+  version = "0.3.7";
 
   src = fetchFromGitHub {
     owner = "open-webui";
     repo = "open-webui";
     rev = "v${version}";
-    hash = "sha256-hUm4UUQUFoDRrAg+RqIo735iQs8304OUJlT91vILmXo=";
+    hash = "sha256-tsJILQ+CuVy8LYSixYNJAwSIZtRegrXXvGzvyf7Knd0=";
   };
 
   frontend = buildNpmPackage {
     inherit pname version src;
 
-    npmDepsHash = "sha256-VdGneemYLMuMczjQB6I35Ry2kyIuAe2IaeDus/NvzK8=";
+    npmDepsHash = "sha256-fB5gvC2sLfH2dJJi+CYyF7PRg+GhZDavhKgeRStaR7I=";
 
     # Disabling `pyodide:fetch` as it downloads packages during `buildPhase`
     # Until this is solved, running python packages from the browser will not work.
@@ -44,13 +44,13 @@ python3.pkgs.buildPythonApplication rec {
   inherit pname version src;
   pyproject = true;
 
-  # The custom hook tries to run `npm install` in `buildPhase`.
-  # We don't have to worry, as node dependencies are managed by `frontend` drv.
+  # Not force-including the frontend build directory as frontend is managed by the `frontend` derivation above.
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail '[tool.hatch.build.hooks.custom]' "" \
       --replace-fail ', build = "open_webui/frontend"' ""
   '';
+
+  env.HATCH_BUILD_NO_HOOKS = true;
 
   pythonRelaxDeps = true;
 
@@ -59,20 +59,21 @@ python3.pkgs.buildPythonApplication rec {
     "opencv-python-headless"
     # using `psycopg2` instead
     "psycopg2-binary"
-    # package request: https://github.com/NixOS/nixpkgs/issues/317065
-    "rapidocr-onnxruntime"
   ];
 
   dependencies = with python3.pkgs; [
     aiohttp
+    anthropic
     apscheduler
     argon2-cffi
+    authlib
     bcrypt
     beautifulsoup4
     black
     boto3
     chromadb
     docx2txt
+    duckduckgo-search
     extract-msg
     fake-useragent
     fastapi
@@ -85,8 +86,8 @@ python3.pkgs.buildPythonApplication rec {
     langchain-chroma
     langchain-community
     langfuse
-    litellm
     markdown
+    openai
     opencv4
     openpyxl
     pandas
@@ -96,6 +97,7 @@ python3.pkgs.buildPythonApplication rec {
     psycopg2
     pydub
     pyjwt
+    pymongo
     pymysql
     pypandoc
     pypdf
@@ -106,8 +108,11 @@ python3.pkgs.buildPythonApplication rec {
     pytube
     pyxlsb
     rank-bm25
+    rapidocr-onnxruntime
+    redis
     requests
     sentence-transformers
+    sqlalchemy
     unstructured
     uvicorn
     validators
@@ -115,17 +120,12 @@ python3.pkgs.buildPythonApplication rec {
     youtube-transcript-api
   ];
 
-  build-system = with python3.pkgs; [
-    hatchling
-    pythonRelaxDepsHook
-  ];
+  build-system = with python3.pkgs; [ hatchling ];
+
 
   pythonImportsCheck = [ "open_webui" ];
 
-  postInstall = ''
-    wrapProgram $out/bin/open-webui \
-      --set FRONTEND_BUILD_DIR "${frontend}/share/open-webui"
-  '';
+  makeWrapperArgs = [ "--set FRONTEND_BUILD_DIR ${frontend}/share/open-webui" ];
 
   passthru.tests = {
     inherit (nixosTests) open-webui;

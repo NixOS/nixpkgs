@@ -8,7 +8,6 @@
   # build-system
   setuptools,
   setuptools-scm,
-  pythonRelaxDepsHook,
 
   # dependencies
   packaging,
@@ -49,7 +48,6 @@ buildPythonPackage rec {
   build-system = [
     setuptools
     setuptools-scm
-    pythonRelaxDepsHook
   ];
 
   pythonRelaxDeps = [ "packaging" ];

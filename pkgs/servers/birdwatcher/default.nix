@@ -23,7 +23,7 @@ buildGoModule rec {
     description = "Small HTTP server meant to provide an API defined by Barry O'Donovan's birds-eye to the BIRD internet routing daemon";
     changelog = "https://github.com/alice-lg/birdwatcher/blob/master/CHANGELOG";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ janik ];
+    maintainers = with maintainers; [ ];
     mainProgram = "birdwatcher";
   };
 }

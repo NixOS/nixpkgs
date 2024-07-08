@@ -21,8 +21,7 @@
 , libjpeg8
 , curl
 , vulkan-loader
-, gnome
-, zenity ? gnome.zenity
+, zenity
 }:
 
 stdenvNoCC.mkDerivation {

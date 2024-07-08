@@ -1,8 +1,8 @@
-{ stdenv, mingw_w64 }:
+{ stdenv, mingw_w64_headers }:
 
 stdenv.mkDerivation {
-  name = "${mingw_w64.name}-pthreads";
-  inherit (mingw_w64) src meta;
+  pname = "mingw_w64-pthreads";
+  inherit (mingw_w64_headers) version src meta;
 
   configureFlags = [
     # Rustc require 'libpthread.a' when targeting 'x86_64-pc-windows-gnu'.

@@ -149,7 +149,7 @@ in
 
         Users in the "incus-admin" group can interact with
         the daemon (e.g. to start or stop containers) using the
-        {command}`incus` command line tool, among others.
+        {command}`incus` command line tool, among others
       '';
 
       package = lib.mkPackageOption pkgs "incus-lts" { };

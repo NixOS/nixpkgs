@@ -8,14 +8,15 @@
 
 buildPythonPackage rec {
   pname = "django-admin-sortable2";
-  version = "2.1.10";
+  version = "2.2.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit version pname;
-    hash = "sha256-N1awLH0JxbN+/mV3GNWq4rdfRv0Bu/4cOdTmBlEBnXk=";
+    pname = "django_admin_sortable2";
+    inherit version;
+    hash = "sha256-MKlSf5P8YbeixZVNtX2EKJMeN/Riw7RssQEFPcX1F1E=";
   };
 
   propagatedBuildInputs = [ django_4 ];

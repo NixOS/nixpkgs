@@ -12,7 +12,6 @@
   pygments,
   pytestCheckHook,
   pythonOlder,
-  pythonRelaxDepsHook,
   pytz,
   pyyaml,
   requests,
@@ -36,7 +35,6 @@ buildPythonPackage rec {
 
   build-system = [ poetry-core ];
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   dependencies = [
     click

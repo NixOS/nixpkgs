@@ -50,13 +50,18 @@ mapAliases {
   "@nerdwallet/shepherd" = pkgs.shepherd; # added 2023-09-30
   "@nestjs/cli" = pkgs.nest-cli; # Added 2023-05-06
   "@tailwindcss/language-server" = pkgs.tailwindcss-language-server; # added 2024-01-22
+  "@volar/vue-language-server" = pkgs.vue-language-server; # added 2024-06-15
+  "@vue/language-server" = pkgs.vue-language-server; # added 2024-06-15
   "@withgraphite/graphite-cli" = pkgs.graphite-cli; # added 2024-01-25
   "@zwave-js/server" = pkgs.zwave-js-server; # Added 2023-09-09
   alloy = pkgs.titanium-alloy; # added 2023-08-17
   antennas = pkgs.antennas; # added 2023-07-30
+  inherit (pkgs) autoprefixer; # added 2024-06-25
   inherit (pkgs) asar; # added 2023-08-26
+  inherit (pkgs) auto-changelog; # added 2024-06-25
   inherit (pkgs) aws-azure-login; # added 2023-09-30
   balanceofsatoshis = pkgs.balanceofsatoshis; # added 2023-07-31
+  inherit (pkgs) bash-language-server; # added 2024-06-07
   bibtex-tidy = pkgs.bibtex-tidy; # added 2023-07-30
   bitwarden-cli = pkgs.bitwarden-cli; # added 2023-07-25
   inherit (pkgs) btc-rpc-explorer; # added 2023-08-17
@@ -73,17 +78,24 @@ mapAliases {
   inherit (pkgs) create-react-app; # added 2023-09-25
   dat = throw "dat was removed because it was broken"; # added 2023-08-21
   inherit (pkgs) degit; # added 2023-08-18
+  inherit (pkgs) diagnostic-languageserver; # added 2024-06-25
   inherit (pkgs) dockerfile-language-server-nodejs; # added 2023-08-18
+  inherit (pkgs) dotenv-cli; # added 2024-06-26
   eask = pkgs.eask; # added 2023-08-17
   inherit (pkgs.elmPackages) elm-test;
   eslint_d = pkgs.eslint_d; # Added 2023-05-26
   inherit (pkgs) firebase-tools; # added 2023-08-18
+  inherit (pkgs) fixjson; # added 2024-06-26
   flood = pkgs.flood; # Added 2023-07-25
   generator-code = throw "generator-code was removed because it provides no executable"; # added 2023-09-24
+  inherit (pkgs) git-run; # added 2024-06-26
   git-ssb = throw "git-ssb was removed because it was broken"; # added 2023-08-21
+  inherit (pkgs) git-standup; # added 2024-06-26
   inherit (pkgs) gitmoji-cli; # added 2023-09-23
   glob = pkgs.node-glob; # added 2023-08-18
+  inherit (pkgs) get-graphql-schema; # added 2024-06-26
   inherit (pkgs) gqlint; # added 2023-08-19
+  inherit (pkgs) gramma; # added 2024-06-26
   inherit (pkgs) graphite-cli; # added 2024-01-25
   inherit (pkgs) graphqurl; # added 2023-08-19
   gtop = pkgs.gtop; # added 2023-07-31
@@ -101,7 +113,9 @@ mapAliases {
   inherit (pkgs) javascript-typescript-langserver; # added 2023-08-19
   karma = pkgs.karma-runner; # added 2023-07-29
   leetcode-cli = vsc-leetcode-cli; # added 2023-08-31
+  inherit (pkgs) lv_font_conv; # added 2024-06-28
   manta = pkgs.node-manta; # Added 2023-05-06
+  inherit (pkgs) markdown-link-check; # added 2024-06-28
   markdownlint-cli = pkgs.markdownlint-cli; # added 2023-07-29
   inherit (pkgs) markdownlint-cli2; # added 2023-08-22
   inherit (pkgs) mathjax-node-cli; # added 2023-11-02
@@ -110,11 +124,13 @@ mapAliases {
   musescore-downloader = pkgs.dl-librescore; # added 2023-08-19
   inherit (pkgs) near-cli; # added 2023-09-09
   node-inspector = throw "node-inspector was removed because it was broken"; # added 2023-08-21
+  inherit (pkgs) nodemon; # added 2024-06-28
   inherit (pkgs) npm-check-updates; # added 2023-08-22
   ocaml-language-server = throw "ocaml-language-server was removed because it was abandoned upstream"; # added 2023-09-04
   parcel-bundler = parcel; # added 2023-09-04
   pkg = pkgs.vercel-pkg; # added 2023-10-04
   inherit (pkgs) pm2; # added 2024-01-22
+  inherit (pkgs) pnpm; # added 2024-06-26
   prettier_d_slim = pkgs.prettier-d-slim; # added 2023-09-14
   inherit (pkgs) pxder; # added 2023-09-26
   inherit (pkgs) quicktype; # added 2023-09-09
@@ -156,8 +172,15 @@ mapAliases {
   inherit (pkgs) titanium; # added 2023-08-17
   triton = pkgs.triton; # Added 2023-05-06
   typescript = pkgs.typescript; # Added 2023-06-21
+  inherit (pkgs) typescript-language-server; # added 2024-02-27
+  inherit (pkgs) uglify-js; # added 2024-06-15
+  inherit (pkgs) undollar; # added 2024-06-29
   inherit (pkgs) ungit; # added 2023-08-20
+  inherit (pkgs) vim-language-server; # added 2024-06-25
   inherit (pkgs) vsc-leetcode-cli; # Added 2023-08-30
+  vscode-css-languageserver-bin = throw "vscode-css-languageserver-bin has been removed since the upstream repository is archived; consider using vscode-langservers-extracted instead."; # added 2024-06-26
+  vscode-html-languageserver-bin = throw "vscode-html-languageserver-bin has been removed since the upstream repository is archived; consider using vscode-langservers-extracted instead."; # added 2024-06-26
+  vscode-json-languageserver-bin = throw "vscode-json-languageserver-bin has been removed since the upstream repository is archived; consider using vscode-langservers-extracted instead."; # added 2024-06-26
   vscode-langservers-extracted = pkgs.vscode-langservers-extracted; # Added 2023-05-27
   vue-cli = self."@vue/cli"; # added 2023-08-18
   vue-language-server = self.vls; # added 2023-08-20

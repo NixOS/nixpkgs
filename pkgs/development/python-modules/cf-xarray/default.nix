@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "cf-xarray";
-  version = "0.9.1";
+  version = "0.9.3";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -29,17 +29,17 @@ buildPythonPackage rec {
     owner = "xarray-contrib";
     repo = "cf-xarray";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Og84lB99576G3IZz8LNafF86TyYP+ooe2tL8wb60RPw=";
+    hash = "sha256-7eL8z2r1+X80QqiL/5XzfA+Jlx+WuKvuxIWG4YLCwfg=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
     wheel
     xarray
   ];
 
-  propagatedBuildInputs = [ xarray ];
+  dependencies = [ xarray ];
 
   passthru.optional-dependencies = {
     all = [
@@ -66,11 +66,11 @@ buildPythonPackage rec {
     "cf_xarray/tests/test_helpers.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Accessor for xarray objects that interprets CF attributes";
     homepage = "https://github.com/xarray-contrib/cf-xarray";
     changelog = "https://github.com/xarray-contrib/cf-xarray/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

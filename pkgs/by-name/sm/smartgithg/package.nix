@@ -5,7 +5,7 @@
 , openjdk21
 , gtk3
 , glib
-, gnome
+, adwaita-icon-theme
 , wrapGAppsHook3
 , libXtst
 , which
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ wrapGAppsHook3 ];
 
-  buildInputs = [ jre gnome.adwaita-icon-theme gtk3 ];
+  buildInputs = [ jre adwaita-icon-theme gtk3 ];
 
   preFixup = with lib; ''
     gappsWrapperArgs+=( \

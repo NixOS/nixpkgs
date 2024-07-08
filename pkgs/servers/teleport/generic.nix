@@ -27,7 +27,7 @@
 , version
 , hash
 , vendorHash
-, extPatches ? null
+, extPatches ? []
 , cargoHash ? null
 , cargoLock ? null
 , yarnHash
@@ -75,10 +75,6 @@ let
     inherit src version;
 
     cargoDeps = rustPlatform.importCargoLock cargoLock;
-
-    RUSTFLAGS = builtins.concatStringsSep " " [
-      "-C linker=lld"
-    ];
 
     nativeBuildInputs = [ nodejs yarn fixup-yarn-lock ] ++
       lib.optional (lib.versionAtLeast version "15") [
@@ -140,6 +136,7 @@ buildGoModule rec {
   patches = extPatches ++ [
     ./0001-fix-add-nix-path-to-exec-env.patch
     ./rdpclient.patch
+    ./tsh.patch
   ];
 
   # Reduce closure size for client machines
@@ -184,6 +181,12 @@ buildGoModule rec {
     platforms = platforms.unix;
     # go-libfido2 is broken on platforms with less than 64-bit because it defines an array
     # which occupies more than 31 bits of address space.
-    broken = stdenv.hostPlatform.parsed.cpu.bits < 64;
+    broken = stdenv.hostPlatform.parsed.cpu.bits < 64 ||
+      # See comment about wasm32-unknown-unknown in rustc.nix.
+      # version 15 is the first that starts to use wasm
+      (lib.versionAtLeast version "15") && (
+        lib.any (a: lib.hasAttr a stdenv.hostPlatform.gcc) [ "cpu" "float-abi" "fpu" ] ||
+        !stdenv.hostPlatform.gcc.thumb or true
+      );
   };
 }

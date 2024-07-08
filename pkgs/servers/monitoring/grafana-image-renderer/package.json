@@ -25,7 +25,7 @@
     "test-diff": "cross-env SAVE_DIFF=true jest"
   },
   "dependencies": {
-    "@grpc/grpc-js": "^1.7.0",
+    "@grpc/grpc-js": "^1.8.22",
     "@grpc/proto-loader": "^0.7.2",
     "@hapi/boom": "^10.0.0",
     "@puppeteer/browsers": "^1.6.0",

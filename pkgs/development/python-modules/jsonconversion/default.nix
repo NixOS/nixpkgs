@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonRelaxDepsHook,
   pytestCheckHook,
   pdm-backend,
   numpy,
@@ -23,7 +22,6 @@ buildPythonPackage rec {
 
   build-system = [
     pdm-backend
-    pythonRelaxDepsHook
   ];
 
   pythonRemoveDeps = [

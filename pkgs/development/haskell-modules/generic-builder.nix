@@ -7,6 +7,13 @@
 let
   isCross = stdenv.buildPlatform != stdenv.hostPlatform;
 
+  # Note that ghc.isGhcjs != stdenv.hostPlatform.isGhcjs.
+  # ghc.isGhcjs implies that we are using ghcjs, a project separate from GHC.
+  # (mere) stdenv.hostPlatform.isGhcjs means that we are using GHC's JavaScript
+  # backend. The latter is a normal cross compilation backend and needs little
+  # special accommodation.
+  outputsJS = ghc.isGhcjs or false || stdenv.hostPlatform.isGhcjs;
+
   # Pass the "wrong" C compiler rather than none at all so packages that just
   # use the C preproccessor still work, see
   # https://github.com/haskell/cabal/issues/6466 for details.
@@ -19,15 +26,11 @@ let
     fetchurl removeReferencesTo
     pkg-config coreutils gnugrep glibcLocales
     emscripten;
+
 in
 
 { pname
-# Note that ghc.isGhcjs != stdenv.hostPlatform.isGhcjs.
-# ghc.isGhcjs implies that we are using ghcjs, a project separate from GHC.
-# (mere) stdenv.hostPlatform.isGhcjs means that we are using GHC's JavaScript
-# backend. The latter is a normal cross compilation backend and needs little
-# special accommodation.
-, dontStrip ? (ghc.isGhcjs or false || stdenv.hostPlatform.isGhcjs)
+, dontStrip ? outputsJS
 , version, revision ? null
 , sha256 ? null
 , src ? fetchurl { url = "mirror://hackage/${pname}-${version}.tar.gz"; inherit sha256; }
@@ -44,7 +47,7 @@ in
 , doHaddockQuickjump ? doHoogle
 , doInstallIntermediates ? false
 , editedCabalFile ? null
-, enableLibraryProfiling ? !(ghc.isGhcjs or false)
+, enableLibraryProfiling ? !outputsJS
 , enableExecutableProfiling ? false
 , profilingDetail ? "exported-functions"
 # TODO enable shared libs for cross-compiling
@@ -117,20 +120,8 @@ in
   # This is used by `haskell.lib.justStaticExecutables` to help prevent static
   # Haskell binaries from having erroneous dependencies on GHC.
   #
-  # Generated `Paths_*` modules include paths for the runtime library
-  # directory (and similar) of the package being built. If the `Paths_*`
-  # module is imported, this creates a dependency from the static binary
-  # being built to the _library_ being built (which is dynamically linked
-  # and depends on the GHC used to build it).
-  #
-  # To avoid this:
-  # 1. Build the impacted derivation.
-  # 2. Run `strings` on the built binary of the impacted derivation to
-  #    locate the store paths it depends on.
-  # 3. Add `remove-references-to -t ${bad-store-path-in-binary}` to the
-  #    impacted derivation's `postInstall`.
-  #
-  # See: https://github.com/NixOS/nixpkgs/issues/164630
+  # See https://nixos.org/manual/nixpkgs/unstable/#haskell-packaging-helpers
+  # or its source doc/languages-frameworks/haskell.section.md
 , disallowGhcReference ? false
 , # Cabal 3.8 which is shipped by default for GHC >= 9.3 always calls
   # `pkg-config --libs --static` as part of the configure step. This requires
@@ -235,7 +226,7 @@ let
   ] ++ optional (allPkgconfigDepends != [])
     "--with-pkg-config=${pkg-config.targetPrefix}pkg-config";
 
-  parallelBuildingFlags = "-j$NIX_BUILD_CORES" + optionalString stdenv.isLinux " +RTS -A64M -RTS";
+  makeGhcOptions = opts: lib.concatStringsSep " " (map (opt: "--ghc-option=${opt}") opts);
 
   buildFlagsString = optionalString (buildFlags != []) (" " + concatStringsSep " " buildFlags);
 
@@ -253,8 +244,8 @@ let
     "--package-db=$packageConfDir"
     (optionalString (enableSharedExecutables && stdenv.isLinux) "--ghc-option=-optl=-Wl,-rpath=$out/${ghcLibdir}/${pname}-${version}")
     (optionalString (enableSharedExecutables && stdenv.isDarwin) "--ghc-option=-optl=-Wl,-headerpad_max_install_names")
-    (optionalString enableParallelBuilding "--ghc-options=${parallelBuildingFlags}")
-    (optionalString useCpphs "--with-cpphs=${cpphs}/bin/cpphs --ghc-options=-cpp --ghc-options=-pgmP${cpphs}/bin/cpphs --ghc-options=-optP--cpp")
+    (optionalString enableParallelBuilding (makeGhcOptions [ "-j$NIX_BUILD_CORES" "+RTS" "-A64M" "-RTS" ]))
+    (optionalString useCpphs ("--with-cpphs=${cpphs}/bin/cpphs " + (makeGhcOptions [ "-cpp"  "-pgmP${cpphs}/bin/cpphs" "-optP--cpp" ])))
     (enableFeature enableLibraryProfiling "library-profiling")
     (optionalString (enableExecutableProfiling || enableLibraryProfiling) "--profiling-detail=${profilingDetail}")
     (enableFeature enableExecutableProfiling "profiling")
@@ -277,16 +268,14 @@ let
   ) ++ optionals enableSeparateBinOutput [
     "--bindir=${binDir}"
   ] ++ optionals (doHaddockInterfaces && isLibrary) [
-    "--ghc-options=-haddock"
+    "--ghc-option=-haddock"
   ];
 
   postPhases = optional doInstallIntermediates "installIntermediatesPhase";
 
   setupCompileFlags = [
     (optionalString (!coreSetup) "-package-db=$setupPackageConfDir")
-    (optionalString enableParallelBuilding parallelBuildingFlags)
     "-threaded"       # https://github.com/haskell/cabal/issues/2398
-    "-rtsopts"        # allow us to pass RTS flags to the generated Setup executable
   ];
 
   isHaskellPkg = x: x ? isHaskellLibrary;

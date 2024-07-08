@@ -1,46 +1,48 @@
 { lib
 , stdenv
-, atk
-, pkg-config
-, curl
-, darwin
-, libgit2
-, gtk3
-, libssh2
-, openssl
-, sqlite
-, zlib
-, dbus
-, dbus-glib
-, gdk-pixbuf
-, cairo
-, python3
-, libsodium
-, postgresql
-, gmp
-, gobject-introspection
-, foundationdb
-, capnproto
-, nettle
-, gtk4
-, clang
-, llvmPackages
-, linux-pam
-, pango
-, cmake
-, glib
-, freetype
-, fontconfig
-, rdkafka
-, udev
-, libevdev
 , alsa-lib
-, graphene
-, protobuf
+, atk
 , autoconf
 , automake
+, cairo
+, capnproto
+, clang
+, cmake
+, curl
+, darwin
+, dbus
+, dbus-glib
+, fontconfig
+, foundationdb
+, freetype
+, gdk-pixbuf
+, glib
+, gmp
+, gobject-introspection
+, graphene
+, gtk3
+, gtk4
+, libevdev
+, libgit2
+, libsodium
+, libsoup_3
+, libssh2
 , libtool
+, linux-pam
+, llvmPackages
+, nettle
+, openssl
+, pango
+, pkg-config
+, postgresql
+, protobuf
+, python3
+, rdkafka
 , seatd # =libseat
+, sqlite
+, udev
+, webkitgtk_4_1
+, zlib
 , ...
 }:
 
@@ -93,7 +95,10 @@ in
     nativeBuildInputs = [
       pkg-config
     ] ++ lib.optionals (stdenv.buildPlatform.config != stdenv.hostPlatform.config) [
-      python3 autoconf automake libtool
+      python3
+      autoconf
+      automake
+      libtool
     ];
     buildInputs = [ libevdev ];
 
@@ -132,19 +137,32 @@ in
   };
 
   gobject-sys = attrs: {
+    nativeBuildInputs = [ pkg-config ];
     buildInputs = [ dbus-glib ];
   };
 
   gio-sys = attrs: {
-    buildInputs = [ dbus-glib ];
-  };
-
-  gdk-pixbuf-sys = attrs: {
+    nativeBuildInputs = [ pkg-config ];
     buildInputs = [ dbus-glib ];
   };
 
   gdk-pixbuf = attrs: {
+    buildInputs = [ dbus-glib gdk-pixbuf ];
+  };
+
+  gdk-pixbuf-sys = attrs: {
+    nativeBuildInputs = [ pkg-config ];
     buildInputs = [ gdk-pixbuf ];
+  };
+
+  gdk-sys = attrs: {
+    nativeBuildInputs = [ pkg-config ];
+    buildInputs = [ gtk3 ]; # libgdk-3
+  };
+
+  gdkx11-sys = attrs: {
+    nativeBuildInputs = [ pkg-config ];
+    buildInputs = [ gtk3 ];
   };
 
   gtk-sys = attrs: {
@@ -203,6 +221,11 @@ in
     buildInputs = [ graphene ];
   };
 
+  javascriptcore-rs-sys = attrs: {
+    nativeBuildInputs = [ pkg-config ];
+    buildInputs = [ webkitgtk_4_1 ];
+  };
+
   nettle-sys = attrs: {
     nativeBuildInputs = [ pkg-config ];
     buildInputs = [ nettle clang ];
@@ -216,6 +239,10 @@ in
   openssl-sys = attrs: {
     nativeBuildInputs = [ pkg-config ];
     buildInputs = [ openssl ];
+  };
+
+  opentelemetry-proto = attrs: {
+    nativeBuildInputs = [ protobuf ];
   };
 
   pam-sys = attr: {
@@ -233,6 +260,10 @@ in
   };
 
   prost-build = attr: {
+    nativeBuildInputs = [ protobuf ];
+  };
+
+  prost-wkt-types = attr: {
     nativeBuildInputs = [ protobuf ];
   };
 
@@ -294,9 +325,23 @@ in
     buildInputs = [ freetype fontconfig ];
   };
 
+  soup3-sys = attrs: {
+    nativeBuildInputs = [ pkg-config ];
+    buildInputs = [ libsoup_3 ];
+  };
+
   thrussh-libsodium = attrs: {
     nativeBuildInputs = [ pkg-config ];
     buildInputs = [ libsodium ];
+  };
+
+  tonic-reflection = attrs: {
+    nativeBuildInputs = [ protobuf ];
+  };
+
+  webkit2gtk-sys = attrs: {
+    nativeBuildInputs = [ pkg-config ];
+    buildInputs = [ webkitgtk_4_1 ];
   };
 
   xcb = attrs: {

@@ -21,6 +21,7 @@
   makeWrapper,
   nix-update-script,
   python3,
+  fetchpatch,
   fuseSupport ? false,
 }:
 
@@ -71,6 +72,11 @@ stdenv.mkDerivation (finalAttrs: {
     "INITRAMFS_DIR=${placeholder "out"}/etc/initramfs-tools"
   ] ++ lib.optional fuseSupport "BCACHEFS_FUSE=1";
 
+  env = {
+    CARGO_BUILD_TARGET = stdenv.hostPlatform.rust.rustcTargetSpec;
+    "CARGO_TARGET_${stdenv.hostPlatform.rust.cargoEnvVarTarget}_LINKER" = "${stdenv.cc.targetPrefix}cc";
+  };
+
   # FIXME: Try enabling this once the default linux kernel is at least 6.7
   doCheck = false; # needs bcachefs module loaded on builder
 
@@ -78,7 +84,18 @@ stdenv.mkDerivation (finalAttrs: {
     # code refactoring of bcachefs-tools broke reading passphrases from stdin (vs. terminal)
     # upstream issue https://github.com/koverstreet/bcachefs-tools/issues/261
     ./fix-encrypted-boot.patch
+    # https://github.com/koverstreet/bcachefs-tools/pull/305
+    (fetchpatch {
+      name = "use-ar-var-in-makefile.patch";
+      url = "https://github.com/koverstreet/bcachefs-tools/commit/91e67ab2bd48fa135a1f5109b23899a4f1019a03.patch";
+      sha256 = "sha256-nB4Tgcwa8eeasIDQ4rrYORie/X8LMuCSRi+WJNw+R/U=";
+    })
   ];
+
+  postPatch = ''
+    substituteInPlace Makefile \
+      --replace-fail "target/release/bcachefs" "target/${stdenv.hostPlatform.rust.rustcTargetSpec}/release/bcachefs"
+  '';
 
   preCheck = lib.optionalString (!fuseSupport) ''
     rm tests/test_fuse.py

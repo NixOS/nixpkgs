@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "leb128";
-  version = "1.0.5";
+  version = "1.0.7";
   format = "setuptools";
 
   # fetchPypi doesn't include files required for tests
@@ -15,7 +15,7 @@ buildPythonPackage rec {
     owner = "mohanson";
     repo = "leb128";
     rev = "refs/tags/v${version}";
-    hash = "sha256-zK14LPziBkvXAMzuPbcg/47caO/5GEYA9txAzCGfpS8=";
+    hash = "sha256-17C0Eic8T2PFkuIGExcrfb3b1HldaSBAPSh5TtRBUuU=";
   };
 
   nativeCheckInputs = [ pytestCheckHook ];

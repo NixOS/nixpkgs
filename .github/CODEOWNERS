@@ -11,11 +11,14 @@
 # This also holds true for GitHub teams. Since almost none of our teams have write
 # permissions, you need to list all members of the team with commit access individually.
 
-# GitHub actions
+# CI
 /.github/workflows @NixOS/Security @Mic92 @zowoq
+/.github/workflows/check-nix-format.yml @infinisil
+/ci @infinisil
 
-# EditorConfig
+# Develompent support
 /.editorconfig @Mic92 @zowoq
+/shell.nix @infinisil @NixOS/Security
 
 # Libraries
 /lib                        @infinisil
@@ -50,7 +53,7 @@
 /pkgs/build-support/setup-hooks/auto-patchelf.py @layus
 /pkgs/pkgs-lib                                   @infinisil
 ## Format generators/serializers
-/pkgs/pkgs-lib/formats/libconfig                 @ckiee @h7x4
+/pkgs/pkgs-lib/formats/libconfig                 @h7x4
 /pkgs/pkgs-lib/formats/hocon                     @h7x4
 
 # pkgs/by-name
@@ -67,6 +70,9 @@
 /nixos/lib/make-disk-image.nix                 @raitobezarius
 
 # Nix, the package manager
+# @raitobezarius is not "code owner", but is listed here to be notified of changes
+# pertaining to the Nix package manager.
+# i.e. no authority over those files.
 pkgs/tools/package-management/nix/                    @raitobezarius
 nixos/modules/installer/tools/nix-fallback-paths.nix  @raitobezarius
 
@@ -93,7 +99,6 @@ nixos/modules/installer/tools/nix-fallback-paths.nix  @raitobezarius
 /nixos/default.nix                                    @infinisil
 /nixos/lib/from-env.nix                               @infinisil
 /nixos/lib/eval-config.nix                            @infinisil
-/nixos/modules/system                                 @dasJ
 /nixos/modules/system/activation/bootspec.nix         @grahamc @cole-h @raitobezarius
 /nixos/modules/system/activation/bootspec.cue         @grahamc @cole-h @raitobezarius
 
@@ -102,6 +107,9 @@ nixos/modules/installer/tools/nix-fallback-paths.nix  @raitobezarius
 
 # NixOS QEMU virtualisation
 /nixos/virtualisation/qemu-vm.nix           @raitobezarius
+
+# ACME
+/nixos/modules/security/acme                @arianvp @flokli @aanderse # no merge permission: @m1cr0man @emilazy
 
 # Systemd
 /nixos/modules/system/boot/systemd.nix      @NixOS/systemd
@@ -113,8 +121,8 @@ nixos/modules/installer/tools/nix-fallback-paths.nix  @raitobezarius
 /nixos/modules/system/boot/loader/systemd-boot      @JulienMalka
 
 # Images and installer media
-/nixos/modules/installer/cd-dvd/            @samueldr
-/nixos/modules/installer/sd-card/           @samueldr
+/nixos/modules/installer/cd-dvd/
+/nixos/modules/installer/sd-card/
 
 # Updaters
 ## update.nix
@@ -124,8 +132,11 @@ nixos/modules/installer/tools/nix-fallback-paths.nix  @raitobezarius
 /pkgs/common-updater/scripts/update-source-version    @jtojnar
 
 # Python-related code and docs
-/doc/languages-frameworks/python.section.md                 @mweinelt
-/pkgs/development/interpreters/python/hooks                 @jonringer
+/doc/languages-frameworks/python.section.md   @mweinelt @natsukium
+/maintainers/scripts/update-python-libraries            @natsukium
+/pkgs/development/interpreters/python                   @natsukium
+/pkgs/top-level/python-packages.nix                     @natsukium
+/pkgs/top-level/release-python.nix                      @natsukium
 
 # Haskell
 /doc/languages-frameworks/haskell.section.md  @sternenseemann @maralorn @ncfavier
@@ -137,9 +148,9 @@ nixos/modules/installer/tools/nix-fallback-paths.nix  @raitobezarius
 /pkgs/top-level/haskell-packages.nix          @sternenseemann @maralorn @ncfavier
 
 # Perl
-/pkgs/development/interpreters/perl @stigtsp @zakame @dasJ @marcusramberg
-/pkgs/top-level/perl-packages.nix   @stigtsp @zakame @dasJ @marcusramberg
-/pkgs/development/perl-modules      @stigtsp @zakame @dasJ @marcusramberg
+/pkgs/development/interpreters/perl @stigtsp @zakame @marcusramberg
+/pkgs/top-level/perl-packages.nix   @stigtsp @zakame @marcusramberg
+/pkgs/development/perl-modules      @stigtsp @zakame @marcusramberg
 
 # R
 /pkgs/applications/science/math/R   @jbedo
@@ -152,6 +163,7 @@ nixos/modules/installer/tools/nix-fallback-paths.nix  @raitobezarius
 
 # C compilers
 /pkgs/development/compilers/gcc
+/pkgs/development/compilers/llvm @RossComputerGuy
 /pkgs/development/compilers/emscripten @raitobezarius
 /doc/languages-frameworks/emscripten.section.md @raitobezarius
 
@@ -219,18 +231,15 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 /nixos/modules/services/networking/ntp @thoughtpolice
 
 # Network
-/pkgs/tools/networking/octodns @Janik-Haag
 /pkgs/tools/networking/kea/default.nix @mweinelt
 /pkgs/tools/networking/babeld/default.nix @mweinelt
 /nixos/modules/services/networking/babeld.nix @mweinelt
 /nixos/modules/services/networking/kea.nix @mweinelt
 /nixos/modules/services/networking/knot.nix @mweinelt
-nixos/modules/services/networking/networkmanager.nix @Janik-Haag
 /nixos/modules/services/monitoring/prometheus/exporters/kea.nix @mweinelt
 /nixos/tests/babeld.nix @mweinelt
 /nixos/tests/kea.nix @mweinelt
 /nixos/tests/knot.nix @mweinelt
-/nixos/tests/networking/* @Janik-Haag
 
 # Web servers
 /doc/packages/nginx.section.md @raitobezarius
@@ -259,13 +268,13 @@ nixos/modules/services/networking/networkmanager.nix @Janik-Haag
 /pkgs/top-level/emacs-packages.nix              @adisbladis
 
 # Neovim
-/pkgs/applications/editors/neovim      @figsoda @jonringer @teto
+/pkgs/applications/editors/neovim      @figsoda @teto
 
 # VimPlugins
-/pkgs/applications/editors/vim/plugins         @figsoda @jonringer
+/pkgs/applications/editors/vim/plugins         @figsoda
 
 # VsCode Extensions
-/pkgs/applications/editors/vscode/extensions   @jonringer
+/pkgs/applications/editors/vscode/extensions
 
 # PHP interpreter, packages, extensions, tests and documentation
 /doc/languages-frameworks/php.section.md          @aanderse @drupol @globin @ma27 @talyz
@@ -285,9 +294,9 @@ nixos/modules/services/networking/networkmanager.nix @Janik-Haag
 /pkgs/applications/blockchains  @mmahut @RaghavSood
 
 # Go
-/doc/languages-frameworks/go.section.md @kalbasit @Mic92 @zowoq
-/pkgs/build-support/go @kalbasit @Mic92 @zowoq
-/pkgs/development/compilers/go @kalbasit @Mic92 @zowoq
+/doc/languages-frameworks/go.section.md @kalbasit @katexochen @Mic92 @zowoq
+/pkgs/build-support/go @kalbasit @katexochen @Mic92 @zowoq
+/pkgs/development/compilers/go @kalbasit @katexochen @Mic92 @zowoq
 
 # GNOME
 /pkgs/desktops/gnome                              @jtojnar
@@ -310,15 +319,15 @@ nixos/modules/services/misc/forgejo.nix @adamcstephens @bendlas @emilylange
 pkgs/by-name/fo/forgejo/package.nix     @adamcstephens @bendlas @emilylange
 
 # Dotnet
-/pkgs/build-support/dotnet                  @IvarWithoutBones
-/pkgs/development/compilers/dotnet          @IvarWithoutBones
-/pkgs/test/dotnet                           @IvarWithoutBones
-/doc/languages-frameworks/dotnet.section.md @IvarWithoutBones
+/pkgs/build-support/dotnet                  @corngood
+/pkgs/development/compilers/dotnet          @corngood
+/pkgs/test/dotnet                           @corngood
+/doc/languages-frameworks/dotnet.section.md @corngood
 
 # Node.js
-/pkgs/build-support/node/build-npm-package      @lilyinstarlight @winterqt
-/pkgs/build-support/node/fetch-npm-deps         @lilyinstarlight @winterqt
-/doc/languages-frameworks/javascript.section.md @lilyinstarlight @winterqt
+/pkgs/build-support/node/build-npm-package      @winterqt
+/pkgs/build-support/node/fetch-npm-deps         @winterqt
+/doc/languages-frameworks/javascript.section.md @winterqt
 
 # environment.noXlibs option aka NoX
 /nixos/modules/config/no-x-libs.nix  @SuperSandro2000
@@ -363,3 +372,15 @@ pkgs/by-name/lx/lxc*                    @adamcstephens
 pkgs/by-name/lx/lxd*                    @adamcstephens
 pkgs/os-specific/linux/lxc/             @adamcstephens
 
+# ExpidusOS, Flutter
+/pkgs/development/compilers/flutter @RossComputerGuy
+/pkgs/desktops/expidus              @RossComputerGuy
+
+# GNU Tar & Zip
+/pkgs/tools/archivers/gnutar        @RossComputerGuy
+/pkgs/tools/archivers/zip           @RossComputerGuy
+
+# SELinux
+/pkgs/os-specific/linux/checkpolicy @RossComputerGuy
+/pkgs/os-specific/linux/libselinux  @RossComputerGuy
+/pkgs/os-specific/linux/libsepol    @RossComputerGuy

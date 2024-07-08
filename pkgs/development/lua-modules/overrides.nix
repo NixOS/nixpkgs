@@ -326,11 +326,15 @@ in
     '';
   });
 
+  lua-resty-jwt = prev.lua-resty-jwt.overrideAttrs(oa: {
+    meta = oa.meta // { broken = true; };
+  });
+
   lua-zlib = prev.lua-zlib.overrideAttrs (oa: {
     buildInputs = oa.buildInputs ++ [
       zlib.dev
     ];
-    meta.broken = luaOlder "5.1" || luaAtLeast "5.4";
+    meta = oa.meta // { broken = luaOlder "5.1" || luaAtLeast "5.4"; };
   });
 
   luadbi-mysql = prev.luadbi-mysql.overrideAttrs (oa: {
@@ -528,6 +532,17 @@ in
       broken = luaOlder "5.1" || (luaAtLeast "5.4");
       platforms = lib.platforms.linux;
     };
+  });
+
+  lz-n  = prev.lz-n.overrideAttrs(oa: {
+    doCheck = lua.luaversion == "5.1";
+    nativeCheckInputs = [ final.nlua final.busted ];
+    checkPhase = ''
+      runHook preCheck
+      export HOME=$(mktemp -d)
+      busted --lua=nlua
+      runHook postCheck
+      '';
   });
 
   neotest  = prev.neotest.overrideAttrs(oa: {
@@ -774,19 +789,6 @@ in
       hash = "sha256-YApsOGfAw34zp069lyGR6FGjxty1bE23+Tic07f8zI4=";
     };
     nativeBuildInputs = oa.nativeBuildInputs ++ [ cargo rustPlatform.cargoSetupHook ];
-  });
-
-  toml = prev.toml.overrideAttrs (oa: {
-    patches = [ ./toml.patch ];
-
-    nativeBuildInputs = oa.nativeBuildInputs ++ [ tomlplusplus ];
-    propagatedBuildInputs = oa.propagatedBuildInputs ++ [ sol2 ];
-
-    postPatch = ''
-      substituteInPlace CMakeLists.txt \
-        --replace-fail "TOML_PLUS_PLUS_SRC" "${tomlplusplus.src}/include/toml++" \
-        --replace-fail "MAGIC_ENUM_SRC" "${magic-enum.src}/include/magic_enum"
-    '';
   });
 
   toml-edit = prev.toml-edit.overrideAttrs (oa: {

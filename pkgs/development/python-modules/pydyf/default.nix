@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "pydyf";
-  version = "0.9.0";
+  version = "0.10.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-1bJE6PwkEZznvV1R6i1nc8D/iKqBWX21VrxEDGuIBhA=";
+    hash = "sha256-NXGUWT769h17SKuXw9WXIhFJNJZ8PfPXh4ym3SWwTDA=";
   };
 
   postPatch = ''

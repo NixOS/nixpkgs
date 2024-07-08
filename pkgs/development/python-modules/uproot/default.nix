@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "uproot";
-  version = "5.3.7";
+  version = "5.3.9";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     owner = "scikit-hep";
     repo = "uproot5";
     rev = "refs/tags/v${version}";
-    hash = "sha256-ptfT31eUNSpVaZfXAyRcIc2T2p82rXmzUyySSVbI9lI=";
+    hash = "sha256-iwT7P1KNQVrLzgKgoVO4G5wwg3f86D6/0I0FP8xD0rk=";
   };
 
   build-system = [
@@ -101,11 +101,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "uproot" ];
 
-  meta = with lib; {
+  meta = {
     description = "ROOT I/O in pure Python and Numpy";
     homepage = "https://github.com/scikit-hep/uproot5";
     changelog = "https://github.com/scikit-hep/uproot5/releases/tag/v${version}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ veprbl ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ veprbl ];
   };
 }

@@ -61,7 +61,7 @@ in
     # access for example elixir built with different version of Erlang, use
     # `beam.packages.erlang_24.elixir`.
     inherit (self.packages.erlang)
-      elixir elixir_1_16 elixir_1_15 elixir_1_14 elixir_1_13 elixir_1_12 elixir_1_11 elixir_1_10 elixir-ls lfe lfe_2_1;
+      elixir elixir_1_17 elixir_1_16 elixir_1_15 elixir_1_14 elixir_1_13 elixir_1_12 elixir_1_11 elixir_1_10 elixir-ls lfe lfe_2_1;
   };
 
   # Helper function to generate package set with a specific Erlang version.

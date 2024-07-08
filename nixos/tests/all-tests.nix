@@ -130,6 +130,7 @@ in {
   appliance-repart-image = runTest ./appliance-repart-image.nix;
   apparmor = handleTest ./apparmor.nix {};
   archi = handleTest ./archi.nix {};
+  aria2 = handleTest ./aria2.nix {};
   armagetronad = handleTest ./armagetronad.nix {};
   artalk = handleTest ./artalk.nix {};
   atd = handleTest ./atd.nix {};
@@ -279,6 +280,7 @@ in {
   ecryptfs = handleTest ./ecryptfs.nix {};
   fscrypt = handleTest ./fscrypt.nix {};
   fastnetmon-advanced = runTest ./fastnetmon-advanced.nix;
+  eintopf = handleTest ./eintopf.nix {};
   ejabberd = handleTest ./xmpp/ejabberd.nix {};
   elk = handleTestOn ["x86_64-linux"] ./elk.nix {};
   emacs-daemon = handleTest ./emacs-daemon.nix {};
@@ -327,6 +329,7 @@ in {
   firewall-nftables = handleTest ./firewall.nix { nftables = true; };
   fish = handleTest ./fish.nix {};
   flannel = handleTestOn ["x86_64-linux"] ./flannel.nix {};
+  flood = handleTest ./flood.nix {};
   floorp = handleTest ./firefox.nix { firefoxPackage = pkgs.floorp; };
   fluentd = handleTest ./fluentd.nix {};
   fluidd = handleTest ./fluidd.nix {};
@@ -335,6 +338,7 @@ in {
   freenet = handleTest ./freenet.nix {};
   freeswitch = handleTest ./freeswitch.nix {};
   freetube = discoverTests (import ./freetube.nix);
+  freshrss-extensions = handleTest ./freshrss-extensions.nix {};
   freshrss-sqlite = handleTest ./freshrss-sqlite.nix {};
   freshrss-pgsql = handleTest ./freshrss-pgsql.nix {};
   freshrss-http-auth = handleTest ./freshrss-http-auth.nix {};
@@ -412,6 +416,7 @@ in {
   pyload = handleTest ./pyload.nix {};
   oci-containers = handleTestOn ["aarch64-linux" "x86_64-linux"] ./oci-containers.nix {};
   odoo = handleTest ./odoo.nix {};
+  odoo16 = handleTest ./odoo.nix { package = pkgs.odoo16; };
   odoo15 = handleTest ./odoo.nix { package = pkgs.odoo15; };
   # 9pnet_virtio used to mount /nix partition doesn't support
   # hibernation. This test happens to work on x86_64-linux but
@@ -497,7 +502,8 @@ in {
   libreddit = handleTest ./libreddit.nix {};
   librenms = handleTest ./librenms.nix {};
   libresprite = handleTest ./libresprite.nix {};
-  libreswan = handleTest ./libreswan.nix {};
+  libreswan = runTest ./libreswan.nix;
+  libreswan-nat = runTest ./libreswan-nat.nix;
   librewolf = handleTest ./firefox.nix { firefoxPackage = pkgs.librewolf; };
   libuiohook = handleTest ./libuiohook.nix {};
   libvirtd = handleTest ./libvirtd.nix {};
@@ -518,6 +524,7 @@ in {
   lxd-image-server = handleTest ./lxd-image-server.nix {};
   #logstash = handleTest ./logstash.nix {};
   lomiri = handleTest ./lomiri.nix {};
+  lomiri-calculator-app = runTest ./lomiri-calculator-app.nix;
   lomiri-filemanager-app = runTest ./lomiri-filemanager-app.nix;
   lomiri-system-settings = handleTest ./lomiri-system-settings.nix {};
   lorri = handleTest ./lorri/default.nix {};
@@ -530,7 +537,7 @@ in {
   mailman = handleTest ./mailman.nix {};
   man = handleTest ./man.nix {};
   mariadb-galera = handleTest ./mysql/mariadb-galera.nix {};
-  mastodon = discoverTests (import ./web-apps/mastodon { inherit handleTestOn; });
+  mastodon = pkgs.recurseIntoAttrs (handleTest ./web-apps/mastodon { inherit handleTestOn; });
   pixelfed = discoverTests (import ./web-apps/pixelfed { inherit handleTestOn; });
   mate = handleTest ./mate.nix {};
   mate-wayland = handleTest ./mate-wayland.nix {};
@@ -647,6 +654,7 @@ in {
   nix-config = handleTest ./nix-config.nix {};
   nix-ld = handleTest ./nix-ld.nix {};
   nix-misc = handleTest ./nix/misc.nix {};
+  nix-required-mounts = runTest ./nix-required-mounts;
   nix-serve = handleTest ./nix-serve.nix {};
   nix-serve-ssh = handleTest ./nix-serve-ssh.nix {};
   nixops = handleTest ./nixops/default.nix {};
@@ -771,7 +779,7 @@ in {
   printing-service = handleTest ./printing.nix { socket = false; };
   private-gpt = handleTest ./private-gpt.nix {};
   privoxy = handleTest ./privoxy.nix {};
-  prometheus = handleTest ./prometheus.nix {};
+  prometheus = handleTest ./prometheus {};
   prometheus-exporters = handleTest ./prometheus-exporters.nix {};
   prosody = handleTest ./xmpp/prosody.nix {};
   prosody-mysql = handleTest ./xmpp/prosody-mysql.nix {};
@@ -803,6 +811,7 @@ in {
   redis = handleTest ./redis.nix {};
   redlib = handleTest ./redlib.nix {};
   redmine = handleTest ./redmine.nix {};
+  renovate = handleTest ./renovate.nix {};
   restartByActivationScript = handleTest ./restart-by-activation-script.nix {};
   restic-rest-server = handleTest ./restic-rest-server.nix {};
   restic = handleTest ./restic.nix {};
@@ -819,6 +828,7 @@ in {
   rstudio-server = handleTest ./rstudio-server.nix {};
   rsyncd = handleTest ./rsyncd.nix {};
   rsyslogd = handleTest ./rsyslogd.nix {};
+  rtorrent = handleTest ./rtorrent.nix {};
   rxe = handleTest ./rxe.nix {};
   sabnzbd = handleTest ./sabnzbd.nix {};
   samba = handleTest ./samba.nix {};
@@ -831,7 +841,7 @@ in {
   scrutiny = handleTest ./scrutiny.nix {};
   sddm = handleTest ./sddm.nix {};
   seafile = handleTest ./seafile.nix {};
-  searx = handleTest ./searx.nix {};
+  searx = runTest ./searx.nix;
   seatd = handleTest ./seatd.nix {};
   service-runner = handleTest ./service-runner.nix {};
   sftpgo = runTest ./sftpgo.nix;
@@ -953,6 +963,7 @@ in {
   systemd-homed = handleTest ./systemd-homed.nix {};
   systemtap = handleTest ./systemtap.nix {};
   tandoor-recipes = handleTest ./tandoor-recipes.nix {};
+  tandoor-recipes-script-name = handleTest ./tandoor-recipes-script-name.nix {};
   tang = handleTest ./tang.nix {};
   taskserver = handleTest ./taskserver.nix {};
   tayga = handleTest ./tayga.nix {};
@@ -962,6 +973,7 @@ in {
   teleport = handleTest ./teleport.nix {};
   thelounge = handleTest ./thelounge.nix {};
   terminal-emulators = handleTest ./terminal-emulators.nix {};
+  thanos = handleTest ./thanos.nix {};
   tiddlywiki = handleTest ./tiddlywiki.nix {};
   tigervnc = handleTest ./tigervnc.nix {};
   timescaledb = handleTest ./timescaledb.nix {};
@@ -976,7 +988,7 @@ in {
   traefik = handleTestOn ["aarch64-linux" "x86_64-linux"] ./traefik.nix {};
   trafficserver = handleTest ./trafficserver.nix {};
   transfer-sh = handleTest ./transfer-sh.nix {};
-  transmission = handleTest ./transmission.nix { transmission = pkgs.transmission; };
+  transmission_3 = handleTest ./transmission.nix { transmission = pkgs.transmission_3; };
   transmission_4 = handleTest ./transmission.nix { transmission = pkgs.transmission_4; };
   # tracee requires bpf
   tracee = handleTestOn ["x86_64-linux"] ./tracee.nix {};
@@ -1017,7 +1029,7 @@ in {
   vault-agent = handleTest ./vault-agent.nix {};
   vault-dev = handleTest ./vault-dev.nix {};
   vault-postgresql = handleTest ./vault-postgresql.nix {};
-  vaultwarden = handleTest ./vaultwarden.nix {};
+  vaultwarden = discoverTests (import ./vaultwarden.nix);
   vector = handleTest ./vector {};
   vengi-tools = handleTest ./vengi-tools.nix {};
   victoriametrics = handleTest ./victoriametrics.nix {};
@@ -1034,6 +1046,7 @@ in {
   wiki-js = handleTest ./wiki-js.nix {};
   wine = handleTest ./wine.nix {};
   wireguard = handleTest ./wireguard {};
+  wg-access-server = handleTest ./wg-access-server.nix {};
   without-nix = handleTest ./without-nix.nix {};
   wmderland = handleTest ./wmderland.nix {};
   workout-tracker = handleTest ./workout-tracker.nix {};
@@ -1041,6 +1054,7 @@ in {
   wordpress = handleTest ./wordpress.nix {};
   wrappers = handleTest ./wrappers.nix {};
   writefreely = handleTest ./web-apps/writefreely.nix {};
+  wstunnel = runTest ./wstunnel.nix;
   xandikos = handleTest ./xandikos.nix {};
   xautolock = handleTest ./xautolock.nix {};
   xfce = handleTest ./xfce.nix {};

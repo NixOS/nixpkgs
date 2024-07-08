@@ -1,55 +1,70 @@
 {
   lib,
-  broadbean,
   buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+
+  # build-system
+  setuptools,
+  versioningit,
+  wheel,
+
+  # dependencies
+  broadbean,
   cf-xarray,
   dask,
-  deepdiff,
-  fetchFromGitHub,
   h5netcdf,
   h5py,
-  hypothesis,
-  importlib-metadata,
   ipykernel,
   ipython,
   ipywidgets,
   jsonschema,
-  lxml,
+  libcst,
   matplotlib,
   numpy,
-  opencensus,
-  opencensus-ext-azure,
   opentelemetry-api,
   packaging,
   pandas,
   pillow,
+  pyarrow,
+  pyvisa,
+  ruamel-yaml,
+  tabulate,
+  tqdm,
+  typing-extensions,
+  uncertainties,
+  websockets,
+  wrapt,
+  xarray,
+  importlib-metadata,
+
+  # optional-dependencies
+  jinja2,
+  nbsphinx,
+  pyvisa-sim,
+  scipy,
+  sphinx,
+  sphinx-issues,
+  sphinx-rtd-theme,
+  towncrier,
+  opencensus,
+  opencensus-ext-azure,
+
+  # checks
+  deepdiff,
+  hypothesis,
+  lxml,
   pip,
   pytest-asyncio,
   pytest-mock,
   pytest-rerunfailures,
   pytest-xdist,
   pytestCheckHook,
-  pythonOlder,
-  pyvisa,
-  pyvisa-sim,
-  rsa,
-  ruamel-yaml,
-  setuptools,
-  sphinx,
-  tabulate,
-  tqdm,
-  typing-extensions,
-  uncertainties,
-  versioningit,
-  websockets,
-  wheel,
-  wrapt,
-  xarray,
 }:
 
 buildPythonPackage rec {
   pname = "qcodes";
-  version = "0.44.1";
+  version = "0.46.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -58,16 +73,16 @@ buildPythonPackage rec {
     owner = "microsoft";
     repo = "Qcodes";
     rev = "refs/tags/v${version}";
-    hash = "sha256-AggAVq/yfJUZRwoQb29QoIbVIAdV3solKCjivqucLZk=";
+    hash = "sha256-CeAX3sBE21v68KnCe8z28WTc7zMPA7usRRGh+dNijjo=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     versioningit
     wheel
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     broadbean
     cf-xarray
     dask
@@ -79,14 +94,12 @@ buildPythonPackage rec {
     jsonschema
     matplotlib
     numpy
-    opencensus
-    opencensus-ext-azure
     opentelemetry-api
     packaging
     pandas
     pillow
+    pyarrow
     pyvisa
-    rsa
     ruamel-yaml
     tabulate
     tqdm
@@ -97,9 +110,41 @@ buildPythonPackage rec {
     xarray
   ] ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
 
+  optional-dependencies = {
+    docs = [
+      # autodocsumm
+      jinja2
+      nbsphinx
+      pyvisa-sim
+      # qcodes-loop
+      scipy
+      sphinx
+      # sphinx-favicon
+      sphinx-issues
+      # sphinx-jsonschema
+      sphinx-rtd-theme
+      # sphinxcontrib-towncrier
+      towncrier
+    ];
+    loop = [
+      # qcodes-loop
+    ];
+    opencensus = [
+      opencensus
+      opencensus-ext-azure
+    ];
+    refactor = [
+      libcst
+    ];
+    zurichinstruments = [
+      # zhinst-qcodes
+    ];
+  };
+
   nativeCheckInputs = [
     deepdiff
     hypothesis
+    libcst
     lxml
     pip
     pytest-asyncio
@@ -160,12 +205,12 @@ buildPythonPackage rec {
     export HOME="$TMPDIR"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Python-based data acquisition framework";
     changelog = "https://github.com/QCoDeS/Qcodes/releases/tag/v${version}";
     downloadPage = "https://github.com/QCoDeS/Qcodes";
     homepage = "https://qcodes.github.io/Qcodes/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ evilmav ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ evilmav ];
   };
 }

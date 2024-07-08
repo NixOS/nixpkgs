@@ -23,11 +23,6 @@ rustPlatform.buildRustPackage rec {
 
   outputs = [ "out" "lib" ];
 
-  # Cargo.lock is outdated
-  preConfigure = ''
-    cargo metadata --offline
-  '';
-
   postInstall = ''
     moveToOutput "lib" "$lib"
   '';

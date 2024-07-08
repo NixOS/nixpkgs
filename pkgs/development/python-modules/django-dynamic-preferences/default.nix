@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonOlder,
 
   # dependencies
   django,
@@ -38,6 +39,11 @@ buildPythonPackage rec {
     pytestCheckHook
     pytest-django
   ];
+
+  pythonImportsCheck = [ "dynamic_preferences" ];
+
+  # Remove once https://github.com/agateblue/django-dynamic-preferences/issues/309 is fixed
+  doCheck = pythonOlder "3.12";
 
   env.DJANGO_SETTINGS = "tests.settings";
 

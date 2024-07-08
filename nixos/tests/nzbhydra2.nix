@@ -1,7 +1,7 @@
 import ./make-test-python.nix ({ lib, ... }:
   {
     name = "nzbhydra2";
-    meta.maintainers = with lib.maintainers; [ jamiemagee ];
+    meta.maintainers = with lib.maintainers; [ matteopacini ];
 
     nodes.machine = { pkgs, ... }: { services.nzbhydra2.enable = true; };
 

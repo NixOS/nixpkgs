@@ -51,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
     ant install
-    runHook postIntall
+    runHook postInstall
   '';
 
   meta = {

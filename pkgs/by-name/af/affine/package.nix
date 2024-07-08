@@ -18,10 +18,10 @@ stdenvNoCC.mkDerivation (finalAttrs: let
   };
 in {
   pname = "affine";
-  version = "0.14.3";
+  version = "0.15.2";
   src = fetchurl {
     url = "https://github.com/toeverything/AFFiNE/releases/download/v${finalAttrs.version}/affine-${finalAttrs.version}-stable-linux-x64.zip";
-    hash = "sha256-/dKvRr0cH9mLF1y6FGFRDlsFXaymEmb55AZ37Ti0PU4=";
+    hash = "sha256-Nu5s/0sP4exRtfjd058tD5jzDezPHnHjm5CJxOLJvVE=";
   };
   nativeBuildInputs = [
     copyDesktopItems

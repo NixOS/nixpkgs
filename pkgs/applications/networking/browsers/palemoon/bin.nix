@@ -20,7 +20,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "palemoon-bin";
-  version = "33.1.1";
+  version = "33.2.0";
 
   src = finalAttrs.passthru.sources."gtk${if withGTK3 then "3" else "2"}";
 
@@ -158,11 +158,11 @@ stdenv.mkDerivation (finalAttrs: {
     in {
       gtk3 = fetchzip {
         urls = urlRegionVariants "gtk3";
-        hash = "sha256-0i0hXC6mC1SY2V6ANMXHS4LZ/HZk8FUsSDQfQUE14IM=";
+        hash = "sha256-h6ohLm9I6esvVa9bek/j2s/jiIcEOwjd8/dCyUvqyLw=";
       };
       gtk2 = fetchzip {
         urls = urlRegionVariants "gtk2";
-        hash = "sha256-RnBlCxIsWxm6BbtAS0YKHtix93N6t9jihFItqhtLhRU=";
+        hash = "sha256-To/41og5hxFL6efJhNfRNJw/fOXZA5Le16DZsSJrXfc=";
       };
     };
 
@@ -184,10 +184,7 @@ stdenv.mkDerivation (finalAttrs: {
       )"
 
       for variant in gtk3 gtk2; do
-        # The script will not perform an update when the version attribute is up to date from previous platform run
-        # We need to clear it before each run
-        update-source-version palemoon-bin 0 "${lib.fakeHash}" --source-key="sources.$variant"
-        update-source-version palemoon-bin "$version" --source-key="sources.$variant"
+        update-source-version palemoon-bin "$version" --ignore-same-version --source-key="sources.$variant"
       done
     '';
   };

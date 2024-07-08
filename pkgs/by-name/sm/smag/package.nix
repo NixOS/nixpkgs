@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "smag";
-  version = "0.7.0";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "aantn";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-PdrK4kblXju23suMe3nYFT1KEbyQu4fwP/XTb2kV1fs=";
+    hash = "sha256-Vyd35wYDNI4T7DdqihwpmJOAZGxjnCeWS609o3L+gHM=";
   };
 
-  cargoHash = "sha256-SX6tOodmB0usM0laOt8mjIINPYbzHI4gyUhsR21Oqrw=";
+  cargoHash = "sha256-ujQAT36qzlfliEC7rFYiWUb3DuwkqCvpUS5Q3v+6378=";
 
   meta = with lib; {
     description = "Easily create graphs from cli commands and view them in the terminal";

@@ -9,8 +9,6 @@
 
 mkDerivation {
   path = "lib/libedit";
-  version = "9.2";
-  sha256 = "1wqhngraxwqk4jgrf5f18jy195yrp7c06n1gf31pbplq79mg1bcj";
   buildInputs = [
     libterminfo
     libcurses

@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   flet-client-flutter,
-  pythonRelaxDepsHook,
 
   # build-system
   poetry-core,
@@ -33,7 +32,10 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     poetry-core
-    pythonRelaxDepsHook
+  ];
+
+  makeWrapperArgs = [
+    "--prefix" "PYTHONPATH" ":" "$PYTHONPATH"
   ];
 
   pythonRelaxDeps = [

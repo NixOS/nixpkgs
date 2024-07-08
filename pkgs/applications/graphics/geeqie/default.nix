@@ -2,7 +2,7 @@
 , gtk3, lcms2, exiv2, libchamplain, clutter-gtk, ffmpegthumbnailer, fbida
 , libarchive, djvulibre, libheif, openjpeg, libjxl, libraw, lua5_3, poppler
 , gspell, libtiff, libwebp
-, gphoto2, imagemagick, yad, exiftool, gnome, libnotify
+, gphoto2, imagemagick, yad, exiftool, zenity, libnotify
 , wrapGAppsHook3, fetchpatch, doxygen
 , nix-update-script
 }:
@@ -56,18 +56,18 @@ stdenv.mkDerivation rec {
     # Allow to crop image.
     # Requires imagemagick, exiv2 and exiftool.
     sed -i $out/lib/geeqie/geeqie-image-crop \
-        -e '1 a export PATH=${lib.makeBinPath [ imagemagick exiv2 exiftool gnome.zenity ]}:$PATH'
+        -e '1 a export PATH=${lib.makeBinPath [ imagemagick exiv2 exiftool zenity ]}:$PATH'
     # Requires gphoto2 and libnotify
     sed -i $out/lib/geeqie/geeqie-tethered-photography \
-        -e '1 a export PATH=${lib.makeBinPath [ gphoto2 gnome.zenity libnotify ]}:$PATH'
+        -e '1 a export PATH=${lib.makeBinPath [ gphoto2 zenity libnotify ]}:$PATH'
     # Import images from camera.
     # Requires gphoto2.
     sed -i $out/lib/geeqie/geeqie-camera-import \
-        -e '1 a export PATH=${lib.makeBinPath [ gphoto2 gnome.zenity ]}:$PATH'
+        -e '1 a export PATH=${lib.makeBinPath [ gphoto2 zenity ]}:$PATH'
     # Export jpeg from raw file.
     # Requires exiv2, exiftool and lcms2.
     sed -i $out/lib/geeqie/geeqie-export-jpeg \
-        -e '1 a export PATH=${lib.makeBinPath [ gnome.zenity exiv2 exiftool lcms2 ]}:$PATH'
+        -e '1 a export PATH=${lib.makeBinPath [ zenity exiv2 exiftool lcms2 ]}:$PATH'
   '';
 
   enableParallelBuilding = true;

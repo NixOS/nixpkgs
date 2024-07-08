@@ -4,7 +4,6 @@
   fetchFromGitHub,
   pytestCheckHook,
   pythonOlder,
-  pythonRelaxDepsHook,
   pytest-runner,
   aiohttp,
   attrs,
@@ -37,7 +36,6 @@ buildPythonPackage rec {
     '';
   };
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   propagatedBuildInputs = [
     aiohttp
@@ -61,7 +59,7 @@ buildPythonPackage rec {
     mock
   ];
 
-  pythonImportChecks = [ "hikari" ];
+  pythonImportsCheck = [ "hikari" ];
 
   disabled = pythonOlder "3.7";
 

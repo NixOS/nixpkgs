@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation rec {
   pname = "pgbackrest";
-  version = "2.52";
+  version = "2.52.1";
 
   src = fetchFromGitHub {
     owner = "pgbackrest";
     repo = "pgbackrest";
     rev = "release/${version}";
-    sha256 = "sha256-S2KmKPqjZ64RQMJ+vt827AIzaWlnEUoP3Npr2/FIZM8=";
+    sha256 = "sha256-/HRn/QLpo70FUxx+5h9Os3TTqtVlJ7C4fyraGPvoato=";
   };
 
   strictDeps = true;

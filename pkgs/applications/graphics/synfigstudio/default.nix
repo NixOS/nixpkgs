@@ -19,7 +19,7 @@
 , pango
 , imagemagick
 , intltool
-, gnome
+, adwaita-icon-theme
 , harfbuzz
 , freetype
 , fribidi
@@ -131,7 +131,7 @@ stdenv.mkDerivation {
     libsigcxx
     libxmlxx
     mlt
-    gnome.adwaita-icon-theme
+    adwaita-icon-theme
     openexr
     fftw
   ];

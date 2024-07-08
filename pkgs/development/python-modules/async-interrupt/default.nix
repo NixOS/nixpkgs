@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "async-interrupt";
-  version = "1.1.1";
+  version = "1.1.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "bdraco";
     repo = "async_interrupt";
     rev = "refs/tags/v${version}";
-    hash = "sha256-mbvOj1ybCkDNr3je3PtFwmddkh2k/nHOerpC6hGSUYI=";
+    hash = "sha256-CFCWlIx4iAG6gW2ORRYfZpFWRvjukqdcR2yg6NjVqps=";
   };
 
   postPatch = ''

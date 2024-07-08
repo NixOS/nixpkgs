@@ -27,7 +27,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Generic programming (Multiple dispatch) library for Python";
-    maintainers = with maintainers; [ wolfangaukang ];
+    maintainers = [ ];
     homepage = "https://github.com/gaphor/generic";
     changelog = "https://github.com/gaphor/generic/releases/tag/${version}";
     license = licenses.bsd3;

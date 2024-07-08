@@ -2,6 +2,7 @@
 let
   inherit (pkgs) lib;
   inherit (lib) hasPrefix removePrefix;
+  fs = lib.fileset;
 
   common = import ./common.nix;
 
@@ -22,6 +23,7 @@ let
       { name = "fileset"; description = "file set functions"; }
       { name = "sources"; description = "source filtering functions"; }
       { name = "cli"; description = "command-line serialization functions"; }
+      { name = "generators"; description = "functions that create file formats from nix data structures"; }
       { name = "gvariant"; description = "GVariant formatted string serialization functions"; }
       { name = "customisation"; description = "Functions to customise (derivation-related) functions, derivatons, or attribute sets"; }
       { name = "meta"; description = "functions for derivation metadata"; }
@@ -99,20 +101,30 @@ in pkgs.stdenv.mkDerivation {
     nixos-render-docs
   ];
 
-  src = ./.;
+  src = fs.toSource {
+    root = ./.;
+    fileset = fs.unions [
+      (fs.fileFilter (file:
+        file.hasExt "md"
+        || file.hasExt "md.in"
+      ) ./.)
+      ./style.css
+      ./anchor-use.js
+      ./anchor.min.js
+      ./manpage-urls.json
+    ];
+  };
 
   postPatch = ''
     ln -s ${optionsDoc.optionsJSON}/share/doc/nixos/options.json ./config-options.json
   '';
 
-  buildPhase = let
-    pythonInterpreterTable = pkgs.callPackage ./doc-support/python-interpreter-table.nix {};
-    pythonSection = with lib.strings; replaceStrings
-      [ "@python-interpreter-table@" ]
-      [ pythonInterpreterTable ]
-      (readFile ./languages-frameworks/python.section.md);
-  in ''
-    cp ${builtins.toFile "python.section.md" pythonSection} ./languages-frameworks/python.section.md
+  pythonInterpreterTable = pkgs.callPackage ./doc-support/python-interpreter-table.nix {};
+
+  passAsFile = [ "pythonInterpreterTable" ];
+
+  buildPhase = ''
+    substituteInPlace ./languages-frameworks/python.section.md --subst-var-by python-interpreter-table "$(<"$pythonInterpreterTablePath")"
 
     cat \
       ./functions/library.md.in \

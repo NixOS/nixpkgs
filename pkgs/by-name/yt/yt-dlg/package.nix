@@ -40,6 +40,11 @@ python3Packages.buildPythonApplication rec {
     wxpython
   ];
 
+  postInstall = ''
+    install -Dm444 yt-dlg.desktop -t $out/share/applications
+    cp -r youtube_dl_gui/data/* $out/share
+  '';
+
   meta = {
     description = "Cross platform front-end GUI of the popular youtube-dl written in wxPython";
     homepage = "https://oleksis.github.io/youtube-dl-gui";

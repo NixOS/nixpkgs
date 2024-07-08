@@ -50,6 +50,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/florisla/stm32loader";
     changelog = "https://github.com/florisla/stm32loader/blob/v${version}/CHANGELOG.md";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ emily ];
+    maintainers = with maintainers; [ ];
   };
 }

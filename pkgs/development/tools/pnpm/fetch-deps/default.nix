@@ -1,17 +1,17 @@
 {
+  lib,
   stdenvNoCC,
-  fetchurl,
   callPackage,
   jq,
   moreutils,
   cacert,
   makeSetupHook,
   pnpm,
+  yq,
 }:
 {
   fetchDeps =
     {
-      src,
       hash ? "",
       pname,
       ...
@@ -36,14 +36,21 @@
         name = "${pname}-pnpm-deps";
 
         nativeBuildInputs = [
+          cacert
           jq
           moreutils
           pnpm
-          cacert
+          yq
         ];
 
         installPhase = ''
           runHook preInstall
+
+          lockfileVersion="$(yq -r .lockfileVersion pnpm-lock.yaml)"
+          if [[ ''${lockfileVersion:0:1} -gt ${lib.versions.major pnpm.version} ]]; then
+            echo "ERROR: lockfileVersion $lockfileVersion in pnpm-lock.yaml is too new for the provided pnpm version ${lib.versions.major pnpm.version}!"
+            exit 1
+          fi
 
           export HOME=$(mktemp -d)
           pnpm config set store-dir $out

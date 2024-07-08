@@ -3,7 +3,6 @@
   buildPythonPackage,
   pythonOlder,
   fetchPypi,
-  pythonRelaxDepsHook,
   setuptools,
   wheel,
   numpy,
@@ -25,7 +24,6 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
-    pythonRelaxDepsHook
   ];
 
   pythonRelaxDeps = [

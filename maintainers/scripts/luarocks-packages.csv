@@ -1,5 +1,6 @@
 name,rockspec,ref,server,version,luaversion,maintainers
 alt-getopt,,,,,,arobyn
+ansicolors,,,,,,Freed-Wu
 bit32,,,,5.3.0-1,5.1,lblasc
 argparse,,,,,,
 basexx,,,,,,
@@ -96,9 +97,10 @@ lua-utils.nvim,,,,,,mrcjkb
 lua-yajl,,,,,,pstn
 lua-iconv,,,,7.0.0,,
 luuid,,,,20120509-2,,
-luv,,,,1.44.2-1,,
+luv,,,,1.48.0-2,,
 lush.nvim,,,https://luarocks.org/dev,,,teto
 lyaml,,,,,,lblasc
+lz.n,,,,,,mrcjkb
 magick,,,,,5.1,donovanglover
 markdown,,,,,,
 mediator_lua,,,,,,
@@ -134,7 +136,6 @@ telescope.nvim,,,,,5.1,
 telescope-manix,,,,,,
 tiktoken_core,,,,,,natsukium
 tl,,,,,,mephistophiles
-toml,,,,,,mrcjkb
 toml-edit,,,,,5.1,mrcjkb
 tree-sitter-norg,,,,,5.1,mrcjkb
 vstruct,,,,,,

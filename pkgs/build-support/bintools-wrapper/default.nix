@@ -45,6 +45,7 @@
     "relro"
     "stackprotector"
     "strictoverflow"
+    "zerocallusedregs"
   ] ++ lib.optional (with stdenvNoCC;
     # Musl-based platforms will keep "pie", other platforms will not.
     # If you change this, make sure to update section `{#sec-hardening-in-nixpkgs}`

@@ -40,7 +40,7 @@ python3.pkgs.buildPythonApplication rec {
 
   disabledTests = [ "test_datafile_download" ];
 
-  pythonImportCheck = [
+  pythonImportsCheck = [
     "castero"
   ];
 

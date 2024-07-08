@@ -36,7 +36,7 @@
 
 let
   pname = "vector";
-  version = "0.38.0";
+  version = "0.39.0";
 in
 rustPlatform.buildRustPackage {
   inherit pname version;
@@ -45,14 +45,8 @@ rustPlatform.buildRustPackage {
     owner = "vectordotdev";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-sJgryN6/XaM1qXxv76/5RGanUpBYxIsGYGToOCXDvwA=";
+    hash = "sha256-S6yzh8ISIh6xzw5DwQaoZdpfmDHE9gfjlEtxIZerSak=";
   };
-
-  patches = [
-    # Enable LTO to bring down binary size
-    # Adapted from https://github.com/vectordotdev/vector/pull/20034
-    ./vector-lto.patch
-  ];
 
   cargoLock = {
     lockFile = ./Cargo.lock;
@@ -82,6 +76,9 @@ rustPlatform.buildRustPackage {
 
   # needed to dynamically link rdkafka
   CARGO_FEATURE_DYNAMIC_LINKING=1;
+
+  CARGO_PROFILE_RELEASE_LTO = "fat";
+  CARGO_PROFILE_RELEASE_CODEGEN_UNITS = "1";
 
   buildNoDefaultFeatures = true;
   buildFeatures = features;

@@ -15,13 +15,13 @@
 
 crystal.buildCrystalPackage rec {
   pname = "tijolo";
-  version = "0.8.1";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "hugopl";
     repo = "tijolo";
     rev = "v${version}";
-    hash = "sha256-+sRcS5bVH6WLmSDLiPw608OB6OjBVwLqWxGT5Y6caBc=";
+    hash = "sha256-RVdZce9csnhJx5p+jBANDCsz2eB/l3EHExwKMbKL9y0=";
   };
 
   postPatch = ''

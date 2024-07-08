@@ -7,13 +7,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "fennel-ls";
-  version = "0.1.2";
+  version = "0.1.3";
 
   src = fetchFromSourcehut {
     owner = "~xerool";
     repo = "fennel-ls";
     rev = finalAttrs.version;
-    hash = "sha256-8TDJ03x9dkfievbovzMN3JRfIKba3CfzbcRAZOuPbKs=";
+    hash = "sha256-7NifEbOH8TDzon3f6w4I/7uryE1e9M5iYvqEb0hLv5s=";
   };
   buildInputs = [
     lua
@@ -22,12 +22,12 @@ stdenv.mkDerivation (finalAttrs: {
   makeFlags = [ "PREFIX=$(out)" ];
   installFlags = [ "PREFIX=$(out)" ];
 
-  meta = with lib; {
+  meta = {
     description = "Language server for intelligent editing of the Fennel Programming Language";
     homepage = "https://git.sr.ht/~xerool/fennel-ls/";
-    license = licenses.mit;
-    changelog = "https://git.sr.ht/~xerool/fennel-ls/refs/${version}";
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    changelog = "https://git.sr.ht/~xerool/fennel-ls/refs/${finalAttrs.version}";
+    maintainers = with lib.maintainers; [
       luftmensch-luftmensch
       yisraeldov
     ];

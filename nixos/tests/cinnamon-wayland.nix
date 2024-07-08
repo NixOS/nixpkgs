@@ -14,7 +14,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
     };
 
     # For the sessionPath subtest.
-    services.xserver.desktopManager.cinnamon.sessionPath = [ pkgs.gnome.gpaste ];
+    services.xserver.desktopManager.cinnamon.sessionPath = [ pkgs.gpaste ];
   };
 
   enableOCR = true;

@@ -23,6 +23,6 @@ stdenv.mkDerivation {
     mainProgram = "encled";
     homepage = "https://github.com/amarao/sdled";
     license = lib.licenses.gpl2Plus;
-    maintainers = [ lib.maintainers.lheckemann ];
+    maintainers = [ ];
   };
 }

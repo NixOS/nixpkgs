@@ -2,11 +2,11 @@
 
 tcl.mkTclDerivation {
   pname = "wapp";
-  version = "unstable-2023-05-05";
+  version = "0-unstable-2024-05-23";
 
   src = fetchurl {
-    url = "https://wapp.tcl-lang.org/home/raw/72d0d081e3e6a4aea91ddf429a85cbdf40f9a32d46cccfe81bb75ee50e6cf9cf?at=wapp.tcldir?ci=9d3368116c59ef16";
-    hash = "sha256-poG7dvaiOXMi4oWMQ5t3v7SYEqZLUY/TsWXrTL62xd0=";
+    url = "https://wapp.tcl-lang.org/home/raw/98f23b2160bafc41f34be8e5d8ec414c53d33412eb2f724a07f2476eaf04ac6f?at=wapp.tcl";
+    hash = "sha256-A+Ml5h5C+OMoDQtAoB9lHgYEK1A7qHExT3p46PHRTYg=";
   };
 
   dontUnpack = true;

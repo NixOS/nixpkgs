@@ -8,7 +8,6 @@
   olefile,
   pytestCheckHook,
   pythonOlder,
-  pythonRelaxDepsHook,
   red-black-tree-mod,
   rtfde,
   setuptools,
@@ -35,7 +34,6 @@ buildPythonPackage rec {
   ];
 
   build-system = [
-    pythonRelaxDepsHook
     setuptools
   ];
 

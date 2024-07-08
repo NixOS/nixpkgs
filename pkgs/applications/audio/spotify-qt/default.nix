@@ -1,4 +1,5 @@
-{ fetchFromGitHub
+{ stdenvNoCC
+, fetchFromGitHub
 , lib
 , cmake
 , mkDerivation
@@ -26,12 +27,18 @@ mkDerivation rec {
 
    installFlags = [ "DESTDIR=$(out)" ];
 
+   postInstall = lib.optionalString stdenvNoCC.isDarwin ''
+     mkdir -p $out/Applications
+     mv $out/bin/spotify-qt.app $out/Applications
+     ln $out/Applications/spotify-qt.app/Contents/MacOS/spotify-qt $out/bin/spotify-qt
+   '';
+
    meta = with lib; {
     description = "Lightweight unofficial Spotify client using Qt";
     mainProgram = "spotify-qt";
     homepage = "https://github.com/kraxarn/spotify-qt";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ iivusly ];
     platforms = platforms.unix;
    };
 }

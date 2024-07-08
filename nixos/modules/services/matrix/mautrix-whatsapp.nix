@@ -47,7 +47,7 @@
 
 in {
   options.services.mautrix-whatsapp = {
-    enable = lib.mkEnableOption "mautrix-whatsapp, a puppeting/relaybot bridge between Matrix and WhatsApp.";
+    enable = lib.mkEnableOption "mautrix-whatsapp, a puppeting/relaybot bridge between Matrix and WhatsApp";
 
     settings = lib.mkOption {
       type = settingsFormat.type;

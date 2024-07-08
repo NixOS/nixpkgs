@@ -79,5 +79,7 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl21;
     homepage = "https://wiki.qt.io/Qt_for_Python";
     maintainers = with maintainers; [ gebner ];
+    platforms = platforms.all;
+    broken = stdenv.isDarwin;
   };
 }

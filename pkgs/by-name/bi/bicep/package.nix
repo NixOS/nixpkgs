@@ -9,14 +9,18 @@
 
 buildDotnetModule rec {
   pname = "bicep";
-  version = "0.27.1";
+  version = "0.28.1";
 
   src = fetchFromGitHub {
     owner = "Azure";
     repo = "bicep";
     rev = "v${version}";
-    hash = "sha256-7yEsxKUG2jhki1u5CObdjN4JMnEcAYR+SoGPaNJ+9Fs=";
+    hash = "sha256-9yWfzYrs7LxVmb+AZUI+G0TQQteJP7gpISJGdY0qKAg=";
   };
+
+  postPatch = ''
+    substituteInPlace src/Directory.Build.props --replace-fail "<TreatWarningsAsErrors>true</TreatWarningsAsErrors>" ""
+  '';
 
   projectFile = "src/Bicep.Cli/Bicep.Cli.csproj";
 

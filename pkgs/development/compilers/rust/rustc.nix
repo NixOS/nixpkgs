@@ -58,8 +58,11 @@ in stdenv.mkDerivation (finalAttrs: {
 
   NIX_LDFLAGS = toString (
        # when linking stage1 libstd: cc: undefined reference to `__cxa_begin_catch'
-       optional (stdenv.isLinux && !withBundledLLVM) "--push-state --as-needed -lstdc++ --pop-state"
+       # This doesn't apply to cross-building for FreeBSD because the host
+       # uses libstdc++, but the target (used for building std) uses libc++
+       optional (stdenv.isLinux && !withBundledLLVM && !stdenv.targetPlatform.isFreeBSD) "--push-state --as-needed -lstdc++ --pop-state"
     ++ optional (stdenv.isDarwin && !withBundledLLVM) "-lc++ -lc++abi"
+    ++ optional stdenv.isFreeBSD "-rpath ${llvmPackages.libunwind}/lib"
     ++ optional stdenv.isDarwin "-rpath ${llvmSharedForHost}/lib");
 
   # Increase codegen units to introduce parallelism within the compiler.
@@ -139,6 +142,10 @@ in stdenv.mkDerivation (finalAttrs: {
     "${setBuild}.llvm-config=${llvmSharedForBuild.dev}/bin/llvm-config"
     "${setHost}.llvm-config=${llvmSharedForHost.dev}/bin/llvm-config"
     "${setTarget}.llvm-config=${llvmSharedForTarget.dev}/bin/llvm-config"
+  ] ++ optionals fastCross [
+    # Since fastCross only builds std, it doesn't make sense (and
+    # doesn't work) to build a linker.
+    "--disable-llvm-bitcode-linker"
   ] ++ optionals (stdenv.isLinux && !stdenv.targetPlatform.isRedox) [
     "--enable-profiler" # build libprofiler_builtins
   ] ++ optionals stdenv.buildPlatform.isMusl [
@@ -192,6 +199,12 @@ in stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     patchShebangs src/etc
 
+    # rust-lld is the name rustup uses for its bundled lld, so that it
+    # doesn't conflict with any system lld.  This is not an
+    # appropriate default for Nixpkgs, where there is no rust-lld.
+    substituteInPlace compiler/rustc_target/src/spec/*/*.rs \
+      --replace-quiet '"rust-lld"' '"lld"'
+
     ${optionalString (!withBundledLLVM) "rm -rf src/llvm"}
 
     # Useful debugging parameter
@@ -208,6 +221,11 @@ in stdenv.mkDerivation (finalAttrs: {
     [source.vendored-sources]
     directory = "vendor"
     EOF
+  '' + lib.optionalString (stdenv.isFreeBSD) ''
+    # lzma-sys bundles an old version of xz that doesn't build
+    # on modern FreeBSD, use the system one instead
+    substituteInPlace src/bootstrap/src/core/build_steps/tool.rs \
+        --replace 'cargo.env("LZMA_API_STATIC", "1");' ' '
   '';
 
   # rustc unfortunately needs cmake to compile llvm-rt but doesn't
@@ -285,4 +303,10 @@ in stdenv.mkDerivation (finalAttrs: {
       "i686-windows" "x86_64-windows"
     ];
   };
+} // lib.optionalAttrs stdenv.cc.isClang { # FIXME: move inside again when rebuilds are OK
+  hardeningDisable = optionals stdenv.cc.isClang [
+    # remove once https://github.com/NixOS/nixpkgs/issues/318674 is
+    # addressed properly
+    "zerocallusedregs"
+  ];
 })

@@ -1,42 +1,63 @@
-{ lib
-, stdenvNoCC
-, fetchFromGitHub
-, gnome-themes-extra
-, gtk-engine-murrine
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  gnome,
+  sassc,
+  gnome-themes-extra,
+  gtk-engine-murrine,
+  colorVariants ? [] # default: install all icons
 }:
-stdenvNoCC.mkDerivation {
+
+let
   pname = "gruvbox-gtk-theme";
-  version = "unstable-2023-05-28";
+  colorVariantList = [
+    "dark"
+    "light"
+  ];
+
+in
+lib.checkListOfEnum "${pname}: colorVariants" colorVariantList colorVariants
+
+stdenvNoCC.mkDerivation {
+  inherit pname;
+  version = "0-unstable-2024-06-27";
 
   src = fetchFromGitHub {
     owner = "Fausto-Korpsvart";
     repo = "Gruvbox-GTK-Theme";
-    rev = "c0b7fb501938241a3b6b5734f8cb1f0982edc6b4";
-    hash = "sha256-Y+6HuWaVkNqlYc+w5wLkS2LpKcDtpeOpdHnqBmShm5Q=";
+    rev = "f568ccd7bf7570d8a27feb62e318b07b88e24b94";
+    hash = "sha256-4vGwPggHdNjtQ03UFgN4OH5+ZEkdIlivCdYuZ0Dsd5Q=";
   };
 
-  propagatedUserEnvPkgs = [
-    gtk-engine-murrine
-  ];
+  propagatedUserEnvPkgs = [ gtk-engine-murrine ];
 
-  buildInputs = [
-    gnome-themes-extra
-  ];
+  nativeBuildInputs = [ gnome.gnome-shell sassc ];
+  buildInputs = [ gnome-themes-extra ];
 
   dontBuild = true;
+
+  postPatch = ''
+    patchShebangs themes/install.sh
+  '';
 
   installPhase = ''
     runHook preInstall
     mkdir -p $out/share/themes
-    cp -a themes/* $out/share/themes
+    cd themes
+    ./install.sh -n Gruvbox -c ${lib.concatStringsSep " " (if colorVariants != [] then colorVariants else colorVariantList)} --tweaks macos -d "$out/share/themes"
     runHook postInstall
   '';
 
-  meta = with lib; {
-    description = "Gtk theme based on the Gruvbox colour pallete";
-    homepage = "https://www.pling.com/p/1681313/";
-    license = licenses.gpl3Only;
-    platforms = platforms.unix;
-    maintainers = [ maintainers.math-42 ];
+  meta = {
+    description = "GTK theme based on the Gruvbox colour palette";
+    homepage = "https://github.com/Fausto-Korpsvart/Gruvbox-GTK-Theme";
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
+      luftmensch-luftmensch
+      math-42
+      d3vil0p3r
+    ];
   };
 }

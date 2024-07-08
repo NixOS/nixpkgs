@@ -14,7 +14,6 @@
 , nixosTests
 , testers
 , amazon-ssm-agent
-, overrideEtc ? true
 }:
 
 let
@@ -42,13 +41,13 @@ let
 in
 buildGoModule rec {
   pname = "amazon-ssm-agent";
-  version = "3.3.484.0";
+  version = "3.3.551.0";
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "amazon-ssm-agent";
     rev = "refs/tags/${version}";
-    hash = "sha256-zWjV56xw4eVHKx3J2DDq6b+RYjU0EL9ShQmb72SVBVk=";
+    hash = "sha256-ncdLaHsQAdK1vtFzo55yWicKVfQHxpFpXYpODeG5/9I=";
   };
 
   vendorHash = null;
@@ -96,9 +95,6 @@ buildGoModule rec {
       --replace "/sbin/shutdown" "shutdown"
 
     echo "${version}" > VERSION
-  '' + lib.optionalString overrideEtc ''
-    substituteInPlace agent/appconfig/constants_unix.go \
-      --replace '"/etc/amazon/ssm/"' '"${placeholder "out"}/etc/amazon/ssm/"'
   '' + lib.optionalString stdenv.isLinux ''
     substituteInPlace agent/managedInstances/fingerprint/hardwareInfo_unix.go \
       --replace /usr/sbin/dmidecode ${dmidecode}/bin/dmidecode

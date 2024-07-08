@@ -47,7 +47,7 @@ let
     inherit lib pkgs;
   };
 
-  emacsWithPackages = { pkgs, lib }: pkgs.callPackage ../build-support/emacs/wrapper.nix {
+  emacsWithPackages = { pkgs, lib }: pkgs.callPackage ../applications/editors/emacs/build-support/wrapper.nix {
     inherit (pkgs.xorg) lndir;
     inherit lib;
   };
@@ -77,11 +77,11 @@ in makeScope pkgs'.newScope (self: makeOverridable ({
       };
     });
 
-    trivialBuild = pkgs.callPackage ../build-support/emacs/trivial.nix {
+    trivialBuild = pkgs.callPackage ../applications/editors/emacs/build-support/trivial.nix {
       inherit (self) emacs;
     };
 
-    melpaBuild = pkgs.callPackage ../build-support/emacs/melpa.nix {
+    melpaBuild = pkgs.callPackage ../applications/editors/emacs/build-support/melpa.nix {
       inherit (self) emacs;
     };
 

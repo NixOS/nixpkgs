@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "influxdb3-python";
-  version = "0.5.0";
+  version = "0.6.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "InfluxCommunity";
     repo = "influxdb3-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-vumKOvCLpcu0z1W/zmf3qsSo3a8FEbI+20/IMt6nCX4=";
+    hash = "sha256-xu1uWVhZCFIjyOjE144X0JFtYY/nIoBHp/eHtysARYc=";
   };
 
   build-system = [ setuptools ];

@@ -9,11 +9,11 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "apache-maven";
-  version = "3.9.6";
+  version = "3.9.8";
 
   src = fetchurl {
     url = "mirror://apache/maven/maven-3/${finalAttrs.version}/binaries/apache-maven-${finalAttrs.version}-bin.tar.gz";
-    hash = "sha256-bu3SyuNibWrTpcnuMkvSZYU9ZCl/B/AzQwdVvQ4MOks=";
+    hash = "sha256-BnZyYpB1t0Dj0Kko4hAh3WFaUyh6821MzKROh+CB0QI=";
   };
 
   sourceRoot = ".";
@@ -54,7 +54,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     '';
     license = lib.licenses.asl20;
     mainProgram = "mvn";
-    maintainers = with lib.maintainers; [ cko ];
+    maintainers = with lib.maintainers; [ ];
     inherit (jdk.meta) platforms;
   };
 })

@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "graspologic";
-  version = "3.3.0";
+  version = "3.4.1";
   pyproject = true;
 
   disabled = isPy27;
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "microsoft";
     repo = "graspologic";
     rev = "refs/tags/v${version}";
-    hash = "sha256-hd3OyV95N8vhc4s50HbKkrcUOeSegn66Dkw7dixim00=";
+    hash = "sha256-taX/4/uCQXW7yFykVHY78hJIGThEIycHwrEOZ3h1LPY=";
   };
 
   nativeBuildInputs = [ setuptools ];

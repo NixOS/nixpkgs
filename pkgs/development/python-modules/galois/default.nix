@@ -3,7 +3,6 @@
   buildPythonPackage,
   setuptools-scm,
   pythonOlder,
-  pythonRelaxDepsHook,
   fetchFromGitHub,
   pytestCheckHook,
   pytest-xdist,
@@ -14,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "galois";
-  version = "0.3.8";
+  version = "0.3.10";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -23,12 +22,11 @@ buildPythonPackage rec {
     owner = "mhostetter";
     repo = "galois";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Nfr9gD2FLZ+KvHh1mcpReUWnzFr/NxpvperzZPoFeT4=";
+    hash = "sha256-GHvLE6xTY37MCDlGOmvyqi42ORRk1W8UcQXqH3Ty/c4=";
   };
 
   nativeBuildInputs = [
     setuptools-scm
-    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [

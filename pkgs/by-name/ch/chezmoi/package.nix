@@ -8,16 +8,16 @@
 let
   argset = {
     pname = "chezmoi";
-    version = "2.48.2";
+    version = "2.50.0";
 
     src = fetchFromGitHub {
       owner = "twpayne";
       repo = "chezmoi";
       rev = "v${argset.version}";
-      hash = "sha256-Ikxp8PJ72UCRYmaoloruVdIpi46nF41bi7RK0rPvs1E=";
+      hash = "sha256-l1c55vItMIfPbcwVWnpx3mlzT75KRlbd8V8DzQoQB2w=";
     };
 
-    vendorHash = "sha256-151l+yen1QI5DiYJgBvWV/OlbnE72ecmMtHUBRhxQM4=";
+    vendorHash = "sha256-5jc7i+vX6aGq//Zl924FIdjAVyqlusZfWRbc8aj3iLw=";
 
     nativeBuildInputs = [
       installShellFiles

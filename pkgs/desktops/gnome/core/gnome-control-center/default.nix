@@ -68,16 +68,16 @@
 , gnome-user-share
 , gnome-remote-desktop
 , wrapGAppsHook4
-, xvfb-run
+, xorgserver
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-control-center";
-  version = "46.2";
+  version = "46.3";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-control-center/${lib.versions.major finalAttrs.version}/gnome-control-center-${finalAttrs.version}.tar.xz";
-    hash = "sha256-YzXGy4Fk5XTbUh//Yc+j36pV8dtmrjvKAnUKGT4cTz0=";
+    hash = "sha256-l9xsfR3uGVkU88vIRbaBZLdhFIDYk760EQBsFerkbLk=";
   };
 
   patches = [
@@ -155,9 +155,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeCheckInputs = [
     dbus
+    python3.pkgs.pygobject3 # for test-networkmanager-service.py
     python3.pkgs.python-dbusmock
     setxkbmap
-    xvfb-run
+    xorgserver # for Xvfb
   ];
 
   doCheck = true;
@@ -167,19 +168,10 @@ stdenv.mkDerivation (finalAttrs: {
     addToSearchPath "XDG_DATA_DIRS" "${polkit.out}/share"
   '';
 
-  checkPhase = ''
-    runHook preCheck
-
-    testEnvironment=(
-      # Basically same as https://github.com/NixOS/nixpkgs/pull/141299
-      "ADW_DISABLE_PORTAL=1"
-      "XDG_DATA_DIRS=${glib.getSchemaDataDirPath gsettings-desktop-schemas}"
-    )
-
-    env "''${testEnvironment[@]}" xvfb-run \
-      meson test --print-errorlogs
-
-    runHook postCheck
+  preCheck = ''
+    # Basically same as https://github.com/NixOS/nixpkgs/pull/141299
+    export ADW_DISABLE_PORTAL=1
+    export XDG_DATA_DIRS=${glib.getSchemaDataDirPath gsettings-desktop-schemas}
   '';
 
   postInstall = ''

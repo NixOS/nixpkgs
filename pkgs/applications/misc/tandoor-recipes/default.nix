@@ -16,6 +16,18 @@ let
         };
         propagatedBuildInputs = [ super.decorator super.six ];
       });
+
+      djangorestframework = super.djangorestframework.overridePythonAttrs (oldAttrs: rec {
+        version = "3.14.0";
+        src = oldAttrs.src.override {
+          rev = version;
+          hash = "sha256-Fnj0n3NS3SetOlwSmGkLE979vNJnYE6i6xwVBslpNz4=";
+        };
+        nativeCheckInputs = with super; [
+          pytest7CheckHook
+          pytest-django
+        ];
+      });
     };
   };
 
@@ -153,7 +165,7 @@ python.pkgs.pythonPackages.buildPythonPackage rec {
     updateScript = ./update.sh;
 
     tests = {
-      inherit (nixosTests) tandoor-recipes;
+      inherit (nixosTests) tandoor-recipes tandoor-recipes-script-name;
     };
   };
 

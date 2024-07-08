@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     mainProgram = "osmo-sip-connector";
     homepage = "https://osmocom.org/projects/osmo-sip-conector";
     license = lib.licenses.agpl3Plus;
-    maintainers = with lib.maintainers; [ janik ];
+    maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.linux;
   };
 }

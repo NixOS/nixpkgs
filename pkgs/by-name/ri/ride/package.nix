@@ -3,6 +3,7 @@
   stdenv,
   buildNpmPackage,
   fetchFromGitHub,
+  fetchpatch,
   substituteAll,
   jq,
   moreutils,
@@ -10,7 +11,8 @@
   makeWrapper,
   copyDesktopItems,
   makeDesktopItem,
-  electron_27,
+  electron,
+  darwin,
 }:
 
 let
@@ -31,8 +33,7 @@ let
 
   platformInfo = platformInfos.${stdenv.system};
 
-  # Electron 27 is the latest version that works as of RIDE version 4.5.4097
-  electron = electron_27;
+  electronDist = electron + (if stdenv.isDarwin then "/Applications" else "/libexec/electron");
 in
 buildNpmPackage rec {
   pname = "ride";
@@ -45,9 +46,15 @@ buildNpmPackage rec {
     hash = "sha256-xR+HVC1JVrPkgPhIJZxdTVG52+QbanmD1c/uO5l84oc=";
   };
 
-  npmDepsHash = "sha256-EG3pZkjDGBI2dDaQZ6351+oU4xfHd6HNB8eD7ErpYIg=";
+  npmDepsHash = "sha256-h+48/9h7/cD8woyA0UCLtzKuE9jCrfpDk6IeoDWnYik=";
 
   patches = [
+    # Adds support for electron versions >=28
+    (fetchpatch {
+      name = "bump-electron-version.patch";
+      url = "https://github.com/Dyalog/ride/commit/de42ebbd5036cfe0c7e6604296e87cc57ac9d365.patch";
+      hash = "sha256-5iKSNcxOOo2fKNvy3Rv+AlH3psYhLWLWUY0l8M6mAD4=";
+    })
     # Fix info in the "about" page, set electron version, set local-cache as zipdir
     (substituteAll {
       src = ./mk.patch;
@@ -79,13 +86,20 @@ buildNpmPackage rec {
     popd
   '';
 
-  nativeBuildInputs = [
-    zip
-    makeWrapper
-    copyDesktopItems
-  ];
+  nativeBuildInputs =
+    [
+      zip
+      makeWrapper
+    ]
+    ++ lib.optionals (!stdenv.isDarwin) [ copyDesktopItems ]
+    ++ lib.optionals stdenv.isDarwin [ darwin.cctools ];
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
+
+  # Fix error: no member named 'aligned_alloc' in the global namespace
+  env.NIX_CFLAGS_COMPILE = lib.optionalString (
+    stdenv.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinSdkVersion "11.0"
+  ) "-D_LIBCPP_HAS_NO_LIBRARY_ALIGNED_ALLOCATION=1";
 
   npmBuildFlags = platformInfo.buildCmd;
 
@@ -93,8 +107,12 @@ buildNpmPackage rec {
   # Here, we create a local cache of electron zip-files, so electron-packager can copy from it
   postConfigure = ''
     mkdir local-cache
-    cp -r --no-preserve=all ${electron}/libexec/electron electron
-    pushd electron
+
+    # electron files need to be writable on Darwin
+    cp -r ${electronDist} electron-dist
+    chmod -R u+w electron-dist
+
+    pushd electron-dist
     zip -qr ../local-cache/electron-v${electron.version}-${platformInfo.zipSuffix}.zip *
     popd
   '';
@@ -102,19 +120,27 @@ buildNpmPackage rec {
   installPhase = ''
     runHook preInstall
 
-    install -Dm644 D.png $out/share/icons/hicolor/64x64/apps/ride.png
-    install -Dm644 D.svg $out/share/icons/hicolor/scalable/apps/ride.svg
-
     pushd _/ride*/*
 
     install -Dm644 ThirdPartyNotices.txt -t $out/share/doc/ride
 
-    mkdir -p $out/share/ride
-    cp -r locales resources{,.pak} $out/share/ride
-    makeWrapper ${lib.getExe electron} $out/bin/ride \
-      --add-flags $out/share/ride/resources/app.asar \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
-      --inherit-argv0
+    ${lib.optionalString (!stdenv.isDarwin) ''
+      install -Dm644 $src/D.png $out/share/icons/hicolor/64x64/apps/ride.png
+      install -Dm644 $src/D.svg $out/share/icons/hicolor/scalable/apps/ride.svg
+
+      mkdir -p $out/share/ride
+      cp -r locales resources{,.pak} $out/share/ride
+      makeWrapper ${lib.getExe electron} $out/bin/ride \
+          --add-flags $out/share/ride/resources/app.asar \
+          --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
+          --inherit-argv0
+    ''}
+
+    ${lib.optionalString stdenv.isDarwin ''
+      mkdir -p $out/Applications
+      cp -r Ride-*.app $out/Applications
+      makeWrapper $out/Applications/Ride-*.app/Contents/MacOS/Ride-* $out/bin/ride
+    ''}
 
     popd
 
@@ -137,7 +163,6 @@ buildNpmPackage rec {
   ];
 
   meta = {
-    broken = stdenv.isDarwin;
     changelog = "https://github.com/Dyalog/ride/releases/tag/${src.rev}";
     description = "Remote IDE for Dyalog APL";
     homepage = "https://github.com/Dyalog/ride";

@@ -22,7 +22,6 @@ python3.pkgs.buildPythonApplication rec {
     "sqlalchemy"
   ];
 
-  nativeBuildInputs = with python3.pkgs; [ pythonRelaxDepsHook ];
 
   build-system = with python3.pkgs; [
     poetry-core

@@ -34,19 +34,19 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "pwvucontrol";
-  version = "0.4.1";
+  version = "0.4.2";
 
   src = fetchFromGitHub {
     owner = "saivert";
     repo = "pwvucontrol";
     rev = version;
-    hash = "sha256-soxB8pbbyYe1EXtopq1OjoklEDJrwK6od4nFLDwb8LY=";
+    hash = "sha256-cWNWdCMk9hF8Nzq2UFBEKSx1zS8JlplMG7B5gv7BaZA=";
   };
 
   cargoDeps = rustPlatform.importCargoLock {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "wireplumber-0.1.0" = "sha256-+LZ8xKok2AOegW8WvfrfZGXuQB4xHrLNshcTOHab+xQ=";
+      "wireplumber-0.1.0" = "sha256-r3p4OpmMgiFgjn1Fj4LeMOhx6R2UWollIdJRy/0kiNM=";
     };
   };
 
@@ -77,7 +77,7 @@ stdenv.mkDerivation rec {
     description = "Pipewire Volume Control";
     homepage = "https://github.com/saivert/pwvucontrol";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = with maintainers; [ figsoda Guanran928 ];
     mainProgram = "pwvucontrol";
     platforms = platforms.linux;
   };

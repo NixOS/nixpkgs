@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonRelaxDepsHook,
   asn1crypto,
   astunparse,
   bincopy,
@@ -51,7 +50,6 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
-    pythonRelaxDepsHook
     setuptools
   ];
 
@@ -59,6 +57,7 @@ buildPythonPackage rec {
     "click"
     "cryptography"
     "platformdirs"
+    "requests"
     "typing-extensions"
   ];
 

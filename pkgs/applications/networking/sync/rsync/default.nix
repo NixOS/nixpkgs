@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchurl
+, updateAutotoolsGnuConfigScriptsHook
 , perl
 , libiconv
 , zlib
@@ -28,7 +29,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-c5nppnCMMtZ4pypjIZ6W8jvgviM25Q/RNISY0HBB35A=";
   };
 
-  nativeBuildInputs = [ perl ];
+  nativeBuildInputs = [ updateAutotoolsGnuConfigScriptsHook perl ];
 
   buildInputs = [ libiconv zlib popt ]
     ++ lib.optional enableACLs acl

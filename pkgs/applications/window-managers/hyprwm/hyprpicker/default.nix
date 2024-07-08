@@ -24,13 +24,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "hyprpicker" + lib.optionalString debug "-debug";
-  version = "0.2.0";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = finalAttrs.pname;
     rev = "v${finalAttrs.version}";
-    hash = "sha256-bys8S7wuY9FJRLD5WriktWED5Hi7nCKSiNbs1Rvfk4s=";
+    hash = "sha256-BYQF1zM6bJ44ag9FJ0aTSkhOTY9U7uRdp3SmRCs5fJM=";
   };
 
   cmakeBuildType = if debug then "Debug" else "Release";
@@ -60,31 +60,9 @@ stdenv.mkDerivation (finalAttrs: {
     util-linux
   ];
 
-  configurePhase = ''
-    runHook preConfigure
-
-    make protocols
-
-    runHook postConfigure
-  '';
-
-  buildPhase = ''
-    runHook preBuild
-
-    make release
-
-    runHook postBuild
-  '';
-
-  installPhase = ''
-    runHook preInstall
-
-    mkdir -p $out/{bin,share/licenses}
-
-    install -Dm755 build/hyprpicker -t $out/bin
-    install -Dm644 LICENSE -t $out/share/licenses/hyprpicker
-
-    runHook postInstall
+  postInstall = ''
+    mkdir -p $out/share/licenses
+    install -Dm644 $src/LICENSE -t $out/share/licenses/hyprpicker
   '';
 
   meta = with lib; {

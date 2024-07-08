@@ -1,0 +1,53 @@
+From 62acd447e36d5009d3008e025df72c08690905d5 Mon Sep 17 00:00:00 2001
+From: John Ericson <John.Ericson@Obsidian.Systems>
+Date: Thu, 20 Jun 2024 15:48:54 -0400
+Subject: [PATCH] Allow building libc without generating tags
+
+When bootstrapping from scratch, it is nice to avoid dependencies (like
+`ctags`/`genassym`/etc.) that are not strictly needed.
+
+This makefile change introduces a new `MK_LIBC_TAGS` variable, defaulted
+to `yes`, to control whether `make all` / `make install` should
+build/install (respectively) the tags.
+
+The underlying rules for tags can still be run regardless of the choice
+of variable.
+---
+ lib/libc/Makefile | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/lib/libc/Makefile b/lib/libc/Makefile
+index f2dab2a090e7..c6aa5e45f959 100644
+--- a/lib/libc/Makefile
++++ b/lib/libc/Makefile
+@@ -132,7 +132,12 @@ MKREPRO_SED=   -e 's;${NETBSDSRCDIR:C/${REGEX_SPECIALS}/\\\\&/g};/usr/src;'
+ .endif
+ 
+ .if !defined(MLIBDIR) && ${RUMPRUN} != "yes"
++realall: ${SRCS}
++
++.if ${MK_LIBC_TAGS:Uyes} == "yes"
+ realall: tags
++.endif
++
+ tags: ${SRCS}
+ 	${_MKTARGET_CREATE}
+ 	-${TOOL_CTAGS} -f ${.TARGET}.tmp -w ${.ALLSRC:M*.c}
+@@ -146,11 +151,14 @@ tags: ${SRCS}
+ .endif
+ 	rm -f ${.TARGET}.tmp
+ 
++.if ${MK_LIBC_TAGS:Uyes} == "yes"
+ FILES=		tags
+ FILESNAME=	libc.tags
+ FILESDIR=	/var/db
+ .endif
+ 
++.endif
++
+ 
+ # workaround for I18N stuffs: build singlebyte setlocale() for libc.a,
+ # multibyte for libc.so.  the quirk should be removed when we support
+-- 
+2.42.0
+

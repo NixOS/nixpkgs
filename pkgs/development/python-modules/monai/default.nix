@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
   pythonOlder,
   pythonAtLeast,
   ninja,
@@ -16,8 +17,7 @@ buildPythonPackage rec {
   pname = "monai";
   version = "1.3.1";
   pyproject = true;
-  # upper bound due to use of `distutils`; remove after next release:
-  disabled = pythonOlder "3.8" || pythonAtLeast "3.12";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "Project-MONAI";
@@ -25,6 +25,14 @@ buildPythonPackage rec {
     rev = "refs/tags/${version}";
     hash = "sha256-YjEJbDM9+PiC3Kse8NA/b/yJBsReaK6yIyEB9uktiEc=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "remove-distutils";
+      url = "https://github.com/Project-MONAI/MONAI/commit/87862f0d5730d42d282e779fc1450f18b4869863.patch";
+      hash = "sha256-wApYfugDPWcuxwmd91peNqc0+l+SoMlT8hhx99oI2Co=";
+    })
+  ];
 
   preBuild = ''
     export MAX_JOBS=$NIX_BUILD_CORES;

@@ -32,7 +32,7 @@
 
 buildPythonPackage rec {
   pname = "requests-cache";
-  version = "1.2.0";
+  version = "1.2.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -41,7 +41,7 @@ buildPythonPackage rec {
     owner = "requests-cache";
     repo = "requests-cache";
     rev = "refs/tags/v${version}";
-    hash = "sha256-w1ptKi/MH3kGZxLMUNq/Gs6btGx+n2fG4nfQUXCXmiY=";
+    hash = "sha256-juRCcBUr+Ko6kVPpUapwRbUGqWLKaRiCqppOc3S5FMU=";
   };
 
   nativeBuildInputs = [ poetry-core ];

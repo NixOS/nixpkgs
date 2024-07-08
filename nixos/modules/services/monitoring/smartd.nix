@@ -10,6 +10,7 @@ let
   opt = options.services.smartd;
 
   nm = cfg.notifications.mail;
+  ns = cfg.notifications.systembus-notify;
   nw = cfg.notifications.wall;
   nx = cfg.notifications.x11;
 
@@ -27,6 +28,12 @@ let
 
       ${pkgs.smartmontools}/sbin/smartctl -a -d "$SMARTD_DEVICETYPE" "$SMARTD_DEVICE"
       } | ${nm.mailer} -i "${nm.recipient}"
+    ''}
+    ${optionalString ns.enable ''
+      ${pkgs.dbus}/bin/dbus-send --system \
+        / net.nuetzlich.SystemNotifications.Notify \
+        "string:Problem detected with disk: $SMARTD_DEVICESTRING" \
+        "string:Warning message from smartd is: $SMARTD_MESSAGE"
     ''}
     ${optionalString nw.enable ''
       {
@@ -159,6 +166,24 @@ in
           };
         };
 
+        systembus-notify = {
+          enable = mkOption {
+            default = false;
+            type = types.bool;
+            description = ''
+              Whenever to send systembus-notify notifications.
+
+              WARNING: enabling this option (while convenient) should *not* be done on a
+              machine where you do not trust the other users as it allows any other
+              local user to DoS your session by spamming notifications.
+
+              To actually see the notifications in your GUI session, you need to have
+              `systembus-notify` running as your user, which this
+              option handles by enabling {option}`services.systembus-notify`.
+            '';
+          };
+        };
+
         wall = {
           enable = mkOption {
             default = true;
@@ -246,6 +271,8 @@ in
       wantedBy = [ "multi-user.target" ];
       serviceConfig.ExecStart = "${pkgs.smartmontools}/sbin/smartd ${lib.concatStringsSep " " cfg.extraOptions} --no-fork --configfile=${smartdConf}";
     };
+
+    services.systembus-notify.enable = mkDefault ns.enable;
 
   };
 

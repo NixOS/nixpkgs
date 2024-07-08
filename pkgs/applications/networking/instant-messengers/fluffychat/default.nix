@@ -7,7 +7,7 @@
 , flutter319
 , pulseaudio
 , makeDesktopItem
-, gnome
+, zenity
 
 , targetFlutterPlatform ? "linux"
 }:
@@ -50,7 +50,7 @@ flutter319.buildFlutterApplication (rec {
 
   runtimeDependencies = [ pulseaudio ];
 
-  extraWrapProgramArgs = "--prefix PATH : ${gnome.zenity}/bin";
+  extraWrapProgramArgs = "--prefix PATH : ${zenity}/bin";
 
   env.NIX_LDFLAGS = "-rpath-link ${libwebrtcRpath}";
 

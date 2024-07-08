@@ -1287,33 +1287,33 @@ dependencies = [
 
 [[package]]
 name = "lalrpop"
-version = "0.19.12"
+version = "0.20.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0a1cbf952127589f2851ab2046af368fd20645491bb4b376f04b7f94d7a9837b"
+checksum = "55cb077ad656299f160924eb2912aa147d7339ea7d69e1b5517326fdcec3c1ca"
 dependencies = [
  "ascii-canvas",
  "bit-set",
- "diff",
  "ena",
- "is-terminal",
- "itertools 0.10.5",
+ "itertools 0.11.0",
  "lalrpop-util",
  "petgraph",
+ "pico-args",
  "regex",
- "regex-syntax 0.6.29",
+ "regex-syntax 0.8.2",
  "string_cache",
  "term",
  "tiny-keccak",
  "unicode-xid 0.2.4",
+ "walkdir",
 ]
 
 [[package]]
 name = "lalrpop-util"
-version = "0.19.12"
+version = "0.20.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d3c48237b9604c5a4702de6b824e02006c3214327564636aef27c1028a8fa0ed"
+checksum = "507460a910eb7b32ee961886ff48539633b788a36b65692b95f225b844c82553"
 dependencies = [
- "regex",
+ "regex-automata",
 ]
 
 [[package]]
@@ -1649,7 +1649,7 @@ dependencies = [
 
 [[package]]
 name = "nickel-lang-cli"
-version = "1.6.0"
+version = "1.7.0"
 dependencies = [
  "clap 4.5.2",
  "clap_complete",
@@ -1667,7 +1667,7 @@ dependencies = [
 
 [[package]]
 name = "nickel-lang-core"
-version = "0.7.0"
+version = "0.8.0"
 dependencies = [
  "ansi_term",
  "assert_matches",
@@ -1722,7 +1722,7 @@ dependencies = [
 
 [[package]]
 name = "nickel-lang-lsp"
-version = "1.6.0"
+version = "1.7.0"
 dependencies = [
  "anyhow",
  "assert_cmd",
@@ -1736,6 +1736,7 @@ dependencies = [
  "csv",
  "derive_more",
  "env_logger",
+ "git-version",
  "glob",
  "insta",
  "lalrpop",
@@ -1769,7 +1770,7 @@ dependencies = [
 
 [[package]]
 name = "nickel-wasm-repl"
-version = "0.7.0"
+version = "0.8.0"
 dependencies = [
  "nickel-lang-core",
 ]
@@ -1934,6 +1935,12 @@ checksum = "b6796ad771acdc0123d2a88dc428b5e38ef24456743ddb1744ed628f9815c096"
 dependencies = [
  "siphasher",
 ]
+
+[[package]]
+name = "pico-args"
+version = "0.5.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "5be167a7af36ee22fe3115051bc51f6e6c7054c9348e28deb4f49bd6f705a315"
 
 [[package]]
 name = "pin-project-lite"
@@ -2114,7 +2121,7 @@ dependencies = [
 
 [[package]]
 name = "pyckel"
-version = "1.6.0"
+version = "1.7.0"
 dependencies = [
  "codespan-reporting",
  "nickel-lang-core",
@@ -3010,8 +3017,9 @@ dependencies = [
 
 [[package]]
 name = "topiary-core"
-version = "0.3.0"
-source = "git+https://github.com/tweag/topiary.git?rev=82a94a9f57104b89d4316afaeeab271cc51f7698#82a94a9f57104b89d4316afaeeab271cc51f7698"
+version = "0.4.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "b26541394bdbcd5a039deb917b2096a69c6604f733f0d41f534fc6975987040d"
 dependencies = [
  "futures",
  "itertools 0.11.0",
@@ -3028,13 +3036,15 @@ dependencies = [
 
 [[package]]
 name = "topiary-queries"
-version = "0.3.0"
-source = "git+https://github.com/tweag/topiary.git?rev=82a94a9f57104b89d4316afaeeab271cc51f7698#82a94a9f57104b89d4316afaeeab271cc51f7698"
+version = "0.4.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "89106b9c504a9e3247b8e40f879a73a922f0d516e1051a6ef739b4cf7d54c8d9"
 
 [[package]]
 name = "topiary-tree-sitter-facade"
-version = "0.3.0"
-source = "git+https://github.com/tweag/topiary.git?rev=82a94a9f57104b89d4316afaeeab271cc51f7698#82a94a9f57104b89d4316afaeeab271cc51f7698"
+version = "0.4.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "ea7c870d9a844bbba0f55be40eaa89624a9f627c155cd22eea70dd808bd71b3d"
 dependencies = [
  "js-sys",
  "topiary-web-tree-sitter-sys",
@@ -3045,8 +3055,9 @@ dependencies = [
 
 [[package]]
 name = "topiary-web-tree-sitter-sys"
-version = "0.3.0"
-source = "git+https://github.com/tweag/topiary.git?rev=82a94a9f57104b89d4316afaeeab271cc51f7698#82a94a9f57104b89d4316afaeeab271cc51f7698"
+version = "0.4.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "cc9e35caeeb7f07e97b71ee7ea204c89516e7cc490d1c2ae318eca3ff3c08d46"
 dependencies = [
  "js-sys",
  "wasm-bindgen",
@@ -3066,8 +3077,9 @@ dependencies = [
 
 [[package]]
 name = "tree-sitter-nickel"
-version = "0.1.0"
-source = "git+https://github.com/nickel-lang/tree-sitter-nickel?rev=58baf89db8fdae54a84bcf22c80ff10ee3f929ed#58baf89db8fdae54a84bcf22c80ff10ee3f929ed"
+version = "0.2.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "449daa9ac0e2a18d7243eaf21d7299d6683ce6750ca225ebd557412d22d106cf"
 dependencies = [
  "cc",
  "tree-sitter",

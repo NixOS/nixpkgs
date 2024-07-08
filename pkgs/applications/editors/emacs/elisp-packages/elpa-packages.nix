@@ -32,7 +32,7 @@ self: let
     });
   };
 
-  elpaBuild = import ../../../../build-support/emacs/elpa.nix {
+  elpaBuild = import ../build-support/elpa.nix {
     inherit lib stdenv texinfo writeText gcc;
     inherit (self) emacs;
   };
@@ -139,6 +139,26 @@ self: let
         meta = old.meta // {
           maintainers = [ lib.maintainers.DamienCassou ];
         };
+      });
+
+      org = super.org.overrideAttrs (old: {
+        dontUnpack = false;
+        patches = old.patches or [ ] ++ lib.optionals (lib.versionOlder old.version "9.7.5") [
+          # security fix backported from 9.7.5
+          (pkgs.fetchpatch {
+            url = "https://git.savannah.gnu.org/cgit/emacs/org-mode.git/patch/?id=f4cc61636947b5c2f0afc67174dd369fe3277aa8";
+            hash = "sha256-bGgsnTSn6SMu1J8P2BfJjrKx2845FCsUB2okcIrEjDg=";
+            stripLen = 1;
+          })
+        ];
+        postPatch = old.postPatch or "" + "\n" + ''
+          pushd ..
+          local content_directory=${old.ename}-${old.version}
+          src=$PWD/$content_directory.tar
+          tar --create --verbose --file=$src $content_directory
+          popd
+        '';
+        dontBuild = true;
       });
 
       plz = super.plz.overrideAttrs (

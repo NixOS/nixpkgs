@@ -1,6 +1,8 @@
 { lib
+, stdenv
 , rustPlatform
 , fetchFromGitHub
+, installShellFiles
 , cmake
 , pkg-config
 , makeWrapper
@@ -15,25 +17,26 @@
 , libxkbcommon
 , vulkan-loader
 , wayland
-, gnome
+, zenity
 , libsForQt5
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "ludusavi";
-  version = "0.23.0";
+  version = "0.24.1";
 
   src = fetchFromGitHub {
     owner = "mtkennerly";
     repo = "ludusavi";
     rev = "v${version}";
-    hash = "sha256-3Z/v3+3mrmPV2Rb/5tM+h6UN+MEIF/aK07B93Zn38AA=";
+    hash = "sha256-nRNXVJJcpZmAfZwDEBaEFlry1gbITWEw0khtsXnMdm0=";
   };
 
-  cargoHash = "sha256-bAap8eSXAPLrs5MEX1Pp6gKdp0iLxci4aX+2+ve6Wk0=";
+  cargoHash = "sha256-E5TaE4TlRA0wmRUiwFqivs18X6oiBCmeXrPI1GxKFBI=";
 
   nativeBuildInputs = [
     cmake
+    installShellFiles
     pkg-config
     makeWrapper
   ];
@@ -57,6 +60,11 @@ rustPlatform.buildRustPackage rec {
     install -Dm644 "assets/ludusavi.desktop" -t "$out/share/applications/"
     install -Dm644 assets/MaterialIcons-Regular.ttf -t "$out/share/fonts/TTF/"
     install -Dm644 LICENSE -t "$out/share/licenses/ludusavi/"
+  '' + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd ludusavi \
+      --bash <($out/bin/ludusavi complete bash) \
+      --fish <($out/bin/ludusavi complete fish) \
+      --zsh <($out/bin/ludusavi complete zsh)
   '';
 
   postFixup =
@@ -77,7 +85,7 @@ rustPlatform.buildRustPackage rec {
     in
     ''
       patchelf --set-rpath "${libPath}" "$out/bin/ludusavi"
-      wrapProgram $out/bin/ludusavi --prefix PATH : ${lib.makeBinPath [ gnome.zenity libsForQt5.kdialog ]}
+      wrapProgram $out/bin/ludusavi --prefix PATH : ${lib.makeBinPath [ zenity libsForQt5.kdialog ]}
     '';
 
 

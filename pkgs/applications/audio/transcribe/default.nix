@@ -22,14 +22,14 @@
 
 stdenv.mkDerivation rec {
   pname = "transcribe";
-  version = "9.40.0";
+  version = "9.41.0";
 
   src =
     if stdenv.hostPlatform.system == "x86_64-linux" then
       fetchzip
         {
           url = "https://www.seventhstring.com/xscribe/downlo/xscsetup-${version}.tar.gz";
-          sha256 = "sha256-GHTr1rk7Kh5M0UYnryUlCk/G6pW3p80GJ6Ai0zXdfNs=";
+          sha256 = "sha256-qf5zfnl1Dhof08vJ9FNFr6qAz5Tk6z7lO1PuVcmRua0=";
         }
     else throw "Platform not supported";
 
@@ -106,6 +106,7 @@ stdenv.mkDerivation rec {
       conventional music players.
     '';
     homepage = "https://www.seventhstring.com/xscribe/";
+    changelog = "https://www.seventhstring.com/xscribe/history.html";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     maintainers = with maintainers; [ iwanb ];

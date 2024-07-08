@@ -6,13 +6,13 @@
 
 stdenvNoCC.mkDerivation (self: {
   pname = "alacritty-theme";
-  version = "0-unstable-2024-05-03";
+  version = "0-unstable-2024-07-03";
 
   src = fetchFromGitHub {
     owner = "alacritty";
     repo = "alacritty-theme";
-    rev = "94e1dc0b9511969a426208fbba24bd7448493785";
-    hash = "sha256-bPup3AKFGVuUC8CzVhWJPKphHdx0GAc62GxWsUWQ7Xk=";
+    rev = "b5a35e2f6e186f70560a3123c4fbc14b2c99af2f";
+    hash = "sha256-60/XiJHeCP06DFjEosTgWJlzV4lfS/Bs24nfRCSQU70=";
   };
 
   dontConfigure = true;

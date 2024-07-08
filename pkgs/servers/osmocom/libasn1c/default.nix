@@ -37,6 +37,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/osmocom/libasn1c/";
     license = licenses.bsd2;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ janik ];
+    maintainers = with maintainers; [ ];
   };
 }

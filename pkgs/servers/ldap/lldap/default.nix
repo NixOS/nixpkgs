@@ -48,7 +48,7 @@ let
     ];
 
     buildPhase = ''
-      HOME=`pwd` RUSTFLAGS="-C linker=lld" ./app/build.sh
+      HOME=`pwd` ./app/build.sh
     '';
 
     installPhase = ''

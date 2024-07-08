@@ -48,7 +48,7 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/smacke/ffsubsync";
     description = "Automagically synchronize subtitles with video";
     license = licenses.mit;
-    maintainers = with maintainers; [ Benjamin-L ];
+    maintainers = with maintainers; [ ];
     mainProgram = "ffsubsync";
   };
 }

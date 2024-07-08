@@ -24,7 +24,6 @@ python3Packages.buildPythonApplication rec {
   nativeBuildInputs = [
     python3Packages.setuptools
     python3Packages.setuptools-scm
-    python3Packages.pythonRelaxDepsHook
     installShellFiles
     scdoc
   ];

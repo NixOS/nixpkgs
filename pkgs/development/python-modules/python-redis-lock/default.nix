@@ -2,8 +2,10 @@
   lib,
   stdenv,
   buildPythonPackage,
+  setuptools,
   eventlet,
   fetchPypi,
+  fetchpatch,
   gevent,
   pkgs,
   process-tests,
@@ -17,7 +19,9 @@
 buildPythonPackage rec {
   pname = "python-redis-lock";
   version = "4.0.0";
-  format = "setuptools";
+
+  pyproject = true;
+  build-system = [ setuptools ];
 
   disabled = pythonOlder "3.7";
 
@@ -26,7 +30,16 @@ buildPythonPackage rec {
     hash = "sha256-Sr0Lz0kTasrWZye/VIbdJJQHjKVeSe+mk/eUB3MZCRo=";
   };
 
-  propagatedBuildInputs = [ redis ] ++ lib.optionals withDjango [ django-redis ];
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/ionelmc/python-redis-lock/pull/119.diff";
+      hash = "sha256-Fo43+pCtnrEMxMdEEdo0YfJGkBlhhH0GjYNgpZeHF3U=";
+    })
+
+    ./test_signal_expiration_increase_sleep.patch
+  ];
+
+  dependencies = [ redis ] ++ lib.optionals withDjango [ django-redis ];
 
   nativeCheckInputs = [
     eventlet

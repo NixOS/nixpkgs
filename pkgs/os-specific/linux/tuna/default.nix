@@ -57,6 +57,5 @@ buildPythonApplication rec {
     homepage = "https://git.kernel.org/pub/scm/utils/tuna/tuna.git";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ elohmeier ];
   };
 }

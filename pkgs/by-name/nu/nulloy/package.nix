@@ -56,6 +56,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Music player with a waveform progress bar";
     homepage = "https://nulloy.com";
+    changelog = "https://github.com/nulloy/nulloy/blob/${src.rev}/ChangeLog";
     license = licenses.gpl3Only;
     mainProgram = "nulloy";
     maintainers = with maintainers; [ aleksana ];

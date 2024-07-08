@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "snappy";
-  version = "1.2.0";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "snappy";
     rev = version;
-    hash = "sha256-mpEeUoJs+lGlqh1m6Mmr8UnbtQDn/8kfkeQdFwo2rQ0=";
+    hash = "sha256-IzKzrMDjh+Weor+OrKdX62cAKYTdDXgldxCgNE2/8vk=";
   };
 
   patches = [

@@ -7,16 +7,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "sad";
-  version = "0.4.29";
+  version = "0.4.31";
 
   src = fetchFromGitHub {
     owner = "ms-jpq";
     repo = "sad";
     rev = "refs/tags/v${version}";
-    hash = "sha256-TLVUvz/phAy+ljIsdv4GVSFHTAZ5ywQs32WHsu9g9Fc=";
+    hash = "sha256-frsOfv98VdetlwgNA6O0KEhcCSY9tQeEwkl2am226ko=";
   };
 
-  cargoHash = "sha256-4XmTxeKbdC4HRownFlEc4GrSVimKkQg/yNI0us7gzQI=";
+  cargoHash = "sha256-2oZf2wim2h/krGZMg7Psxx0VLFE/Xf1d1vWqkVtjSmo=";
 
   nativeBuildInputs = [ python3 ];
 

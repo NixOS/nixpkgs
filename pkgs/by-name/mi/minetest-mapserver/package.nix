@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "minetest-mapserver";
-  version = "4.8.0";
+  version = "4.9.1";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = "mapserver";
     rev = "v${version}";
-    hash = "sha256-MKWC8m+7QN1gq+jmUqsadX+OKRF3/jVdoYTuaODCOtM=";
+    hash = "sha256-3bL23hwJgYMPV2nSSfq9plttcx7UYvhUa6OCbKfBACY=";
   };
 
-  vendorHash = "sha256-q8l0wFXsR32dznB0oYiG9K/2+YQx6kOGtSSnznXLr5E=";
+  vendorHash = "sha256-P3+M1ciRmFbOFnjy1+oWPhngPYFe/5o6Cs8pRlYNx2Q=";
 
   meta = with lib; {
     description = "Realtime mapserver for minetest";

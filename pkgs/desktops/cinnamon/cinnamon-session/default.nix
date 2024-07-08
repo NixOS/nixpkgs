@@ -32,18 +32,17 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "cinnamon-session";
-  version = "6.0.4";
+  version = "6.2.0";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    hash = "sha256-GtaoqzcnpKbiP4OqhnLkNWzZTUqX/KgVE6JImNMkdGo=";
+    hash = "sha256-2KQJNUc/uvbXnqqV0Yt3cltTHNbCo+wK67NXlid02Sk=";
   };
 
   patches = [
     ./0001-Use-dbus_glib-instead-of-elogind.patch
-    ./0002-Use-login-shell-for-wayland-session.patch
   ];
 
   buildInputs = [

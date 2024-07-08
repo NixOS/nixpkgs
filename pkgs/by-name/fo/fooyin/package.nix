@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fooyin";
-  version = "0.4.4";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "ludouzi";
     repo = "fooyin";
     rev = "v" + finalAttrs.version;
-    hash = "sha256-PlfZbgGzOma2r+opvxDbTdjUORpqh8fgBUSBusn6Kbw=";
+    hash = "sha256-X546vdHSfED2LBztPj+3eK86pjD97I8H+PfhzXV2R3E=";
   };
 
   buildInputs = [

@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl}:
+{ lib, stdenv, fetchurl, updateAutotoolsGnuConfigScriptsHook }:
 
 stdenv.mkDerivation rec {
   pname = "lzo";
@@ -8,6 +8,8 @@ stdenv.mkDerivation rec {
     url = "https://www.oberhumer.com/opensource/lzo/download/${pname}-${version}.tar.gz";
     sha256 = "0wm04519pd3g8hqpjqhfr72q8qmbiwqaxcs3cndny9h86aa95y60";
   };
+
+  nativeBuildInputs = [ updateAutotoolsGnuConfigScriptsHook ];
 
   configureFlags = lib.optional (!stdenv.hostPlatform.isStatic) "--enable-shared" ;
 

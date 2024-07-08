@@ -19,6 +19,19 @@ i18nmoduledir = prefix_libdir / 'i18n'
 esdbdir = prefix_datadir / 'i18n/esdb'
 csmapperdir = prefix_datadir / 'i18n/csmapper'
 
+is_static = get_option('default_library') == 'static'
+static_suffix = is_static ? '_static' : ''
+
+# Generators
+if is_static
+    gperf_bin = find_program('gperf', required : true)
+    gperf = generator(
+        gperf_bin,
+        arguments : ['@INPUT@', '--output-file=@OUTPUT@'],
+        output : '@BASENAME@.h'
+    )
+endif
+
 
 # Libraries
 libcharset = library(
@@ -37,15 +50,16 @@ install_headers(
 )
 
 libiconv = library(
-    'iconv',
+    'iconv' + static_suffix,
     build_rpath : fs.parent(libcharset.full_path()),
     c_args : [
         f'-D_PATH_I18NMODULE="@i18nmoduledir@"',
         f'-D_PATH_ESDB="@esdbdir@"',
-        f'-D_PATH_CSMAPPER="@csmapperdir@"'
+        f'-D_PATH_CSMAPPER="@csmapperdir@"',
+        is_static ? '-DENABLE_STATIC=1' : [ ]
     ],
     darwin_versions : '7',
-    install : true,
+    install : not is_static,
     include_directories : ['citrus', 'libcharset'],
     link_args : ['-Wl,-reexport_library', fs.name(libcharset.full_path())],
     link_depends : [libcharset],
@@ -84,6 +98,7 @@ libiconv = library(
         'citrus/iconvctl.c',
         'citrus/iconvlist.c',
         'citrus/iconv.c',
+        is_static ? gperf.process('static-modules.gperf') : [ ]
     ],
     soversion : '2'
 )
@@ -97,19 +112,6 @@ install_man(
     'citrus/iconvctl.3',
     'citrus/iconvlist.3',
 )
-
-
-# Binaries
-executable(
-    'iconv',
-    install : true,
-    include_directories : ['citrus', 'libcharset'],
-    link_with : [libiconv],
-    sources : [
-        'iconv/iconv.c'
-    ]
-)
-install_man('iconv/iconv.1')
 
 
 # Data
@@ -216,6 +218,7 @@ libiconv_modules = [
     'mapper_zone'
 ]
 
+modules = [ ]
 foreach module : libiconv_modules
     module_source = module.to_lower()
     module_path = 'libiconv_modules' / module
@@ -230,14 +233,19 @@ foreach module : libiconv_modules
     # See: https://github.com/apple-oss-distributions/libiconv/blob/81be60a93521c931a01aab9c747dd2b078bc0679/libiconv.xcodeproj/project.pbxproj#L2549-L2556
     # See also: https://cgit.freebsd.org/src/tree/lib/libiconv_modules/mapper_parallel/Makefile?id=9241ebc796c11cf133c550f188f324bd2c12d89a
     if module == 'mapper_parallel'
+        # Skip including mapper_parallel since it’s the same as mapper_serial, which would result in duplicate symbols.
+        if is_static
+            continue
+        endif
+
         module_source = 'mapper_serial'
         module_path = 'libiconv_modules/mapper_serial'
     endif
 
-    library(
+    modules += library(
         module,
         darwin_versions : '1',
-        install : true,
+        install : not is_static,
         install_dir : i18nmoduledir,
         include_directories : [module_path, 'citrus', 'libcharset'] + extra_headers,
         link_with : [libiconv],
@@ -247,6 +255,38 @@ foreach module : libiconv_modules
         ]
     )
 endforeach
+
+
+# Bundle the modules into libiconv.a
+if is_static
+    objects = [libiconv.extract_all_objects(recursive : true)]
+    foreach module : modules
+        objects += module.extract_all_objects(recursive : true)
+    endforeach
+
+    libiconv = static_library(
+        'iconv',
+        install : true,
+        objects : objects
+    )
+endif
+
+
+# Binaries
+executable(
+    'iconv',
+    install : true,
+    include_directories : ['citrus', 'libcharset'],
+    link_with : [
+        libiconv,
+        # Darwin’s system `iconv` relies on the reexported symbols from libiconv
+        is_static ? libcharset : [ ]
+    ],
+    sources : [
+        'iconv/iconv.c'
+    ]
+)
+install_man('iconv/iconv.1')
 
 
 # Tests
@@ -259,7 +299,11 @@ if get_option('tests') == true
             suite,
             dependencies : [atf],
             include_directories : ['citrus', 'libcharset'],
-            link_with : [libiconv],
+            link_with : [
+                libiconv,
+                # Make sure the libcharset reexport is working by relying on libiconv to provide its symbols.
+                is_static ? libcharset : [ ]
+            ],
             sources : [test_src]
         )
 

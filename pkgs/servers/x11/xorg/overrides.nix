@@ -3,7 +3,7 @@
   automake, autoconf, libiconv, libtool, intltool, gettext, python3, perl,
   freetype, tradcpp, fontconfig, meson, ninja, ed, fontforge,
   libGL, spice-protocol, zlib, libGLU, dbus, libunwind, libdrm, netbsd,
-  ncompress,
+  ncompress, updateAutotoolsGnuConfigScriptsHook,
   mesa, udev, bootstrap_cmds, bison, flex, clangStdenv, autoreconfHook,
   mcpp, libepoxy, openssl, pkg-config, llvm, libxslt, libxcrypt, hwdata,
   ApplicationServices, Carbon, Cocoa, Xplugin,
@@ -397,6 +397,7 @@ self: super:
 
   libXpresent = super.libXpresent.overrideAttrs (attrs: {
     buildInputs = with xorg; attrs.buildInputs ++ [ libXext libXfixes libXrandr ];
+    propagatedBuildInputs = attrs.propagatedBuildInputs or [] ++ [ xorg.libXfixes ];
   });
 
   libxkbfile = super.libxkbfile.overrideAttrs (attrs: {
@@ -636,7 +637,7 @@ self: super:
 
   xkeyboardconfig = super.xkeyboardconfig.overrideAttrs (attrs: {
     prePatch = ''
-      patchShebangs rules/merge.py rules/compat/map-variants.py rules/xml2lst.pl
+      patchShebangs rules/merge.py rules/compat/map-variants.py rules/generate-options-symbols.py rules/xml2lst.pl
     '';
     nativeBuildInputs = attrs.nativeBuildInputs ++ [
       meson
@@ -835,6 +836,7 @@ self: super:
         buildInputs = commonBuildInputs ++ [
           bootstrap_cmds automake autoconf
           Xplugin Carbon Cocoa
+          mesa
         ];
         propagatedBuildInputs = commonPropagatedBuildInputs ++ [
           libAppleWM xorgproto
@@ -904,8 +906,38 @@ self: super:
         };
       }));
 
+  # xvfb is used by a bunch of things to run tests
+  # and doesn't support hardware accelerated rendering
+  # so remove it from the rebuild heavy path for mesa
+  xvfb = super.xorgserver.overrideAttrs(old: {
+    configureFlags = [
+      "--enable-xvfb"
+      "--disable-xorg"
+      "--disable-xquartz"
+      "--disable-xwayland"
+      "--disable-glamor"
+      "--disable-glx"
+      "--disable-dri"
+      "--disable-dri2"
+      "--disable-dri3"
+      "--with-xkb-bin-directory=${xorg.xkbcomp}/bin"
+      "--with-xkb-path=${xorg.xkeyboardconfig}/share/X11/xkb"
+      "--with-xkb-output=$out/share/X11/xkb/compiled"
+    ] ++ lib.optional stdenv.isDarwin [
+      "--without-dtrace"
+    ];
+
+    buildInputs = old.buildInputs ++ (with xorg; [
+      pixman
+      libXfont2
+      xtrans
+      libxcvt
+    ]) ++ lib.optional stdenv.isDarwin [ Xplugin ];
+  });
+
   lndir = super.lndir.overrideAttrs (attrs: {
     buildInputs = [];
+    nativeBuildInputs = [ updateAutotoolsGnuConfigScriptsHook ];
     preConfigure = ''
       export XPROTO_CFLAGS=" "
       export XPROTO_LIBS=" "

@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "dtkcommon";
-  version = "5.6.21";
+  version = "5.6.29";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    hash = "sha256-wRTzgvtmbGJJaIwi1f5m98K2o6g7yZdnKYR1nsDDwk8=";
+    hash = "sha256-1u+GhPI5F3t2h14VlRKpyPNArGoGgWOk2zA8D6vR6nU=";
   };
 
   nativeBuildInputs = [

@@ -69,6 +69,6 @@ mkDerivation rec {
     mainProgram = "maliit-keyboard";
     homepage = "http://maliit.github.io/";
     license = with licenses; [ lgpl3Only bsd3 cc-by-30 ];
-    maintainers = with maintainers; [ samueldr ];
+    maintainers = with maintainers; [ ];
   };
 }

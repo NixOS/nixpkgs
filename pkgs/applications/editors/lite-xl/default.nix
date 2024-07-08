@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "lite-xl";
-  version = "2.1.4";
+  version = "2.1.5";
 
   src = fetchFromGitHub {
     owner = "lite-xl";
     repo = "lite-xl";
     rev = "v${version}";
-    hash = "sha256-TqrFI5TFb2hnnlHYUjLDUTDK3/Wgg1gOxIP8owLi/yo=";
+    hash = "sha256-awXcmYAvQUdFUr2vFlnBt8WTLrACREfB7J8HoSyVPTs=";
   };
 
   nativeBuildInputs = [ meson ninja pkg-config ];

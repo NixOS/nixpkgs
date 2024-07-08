@@ -19,6 +19,7 @@
   nose,
   pycrypto,
   pyqtgraph,
+  pyqt5,
   visualizationSupport ? false,
 }:
 
@@ -61,6 +62,7 @@ buildPythonPackage rec {
     ++ lib.optionals visualizationSupport [
       matplotlib
       pyqtgraph
+      pyqt5
     ]
     ++ lib.optionals (!stdenv.isDarwin) [
       cramfsprogs

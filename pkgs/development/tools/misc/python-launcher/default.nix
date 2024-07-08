@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "python-launcher";
-  version = "1.0.0";
+  version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "brettcannon";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1r2pmli4jsdjag9zsgd9q1qlj3hxxjj2bni6yybjh1a10fcqxzzv";
+    sha256 = "sha256-wRKTBvLLo0Vvvh1GtF9hOnUHNpOeX950y1U+8JYBGoE=";
   };
 
-  cargoSha256 = "sha256-2lgWybEPi6HEUMYuGDRWMjWoc94CrFHPP5IeKUjj0q4=";
+  cargoHash = "sha256-+FtfL5jAGJrpnZaJDnDMvWC0D3Af0L466v9nqJkb+uA=";
 
   nativeCheckInputs = [ python3 ];
 

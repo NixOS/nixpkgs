@@ -37,7 +37,6 @@
   python,
   pythonAtLeast,
   pythonOlder,
-  pythonRelaxDepsHook,
   pyyaml,
   requests,
   scikit-image,
@@ -53,13 +52,13 @@
 
 let
   pname = "ray";
-  version = "2.24.0";
+  version = "2.31.0";
 in
 buildPythonPackage rec {
   inherit pname version;
   format = "wheel";
 
-  disabled = pythonOlder "3.10" || pythonAtLeast "3.12";
+  disabled = pythonOlder "3.10" || pythonAtLeast "3.13";
 
   src =
     let
@@ -112,7 +111,6 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     autoPatchelfHook
-    pythonRelaxDepsHook
   ];
 
   pythonRelaxDeps = [

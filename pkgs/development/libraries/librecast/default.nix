@@ -6,7 +6,7 @@
   libsodium,
 }:
 stdenv.mkDerivation (finalAttrs: {
-  name = "librecast";
+  pname = "librecast";
   version = "0.8.0";
 
   src = fetchFromGitea {

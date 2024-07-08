@@ -1,4 +1,4 @@
-{ fetchurl, lib, stdenv, libGLU, libGL, freeglut, libX11, plib, openal, freealut, libXrandr, xorgproto,
+{ fetchurl, lib, stdenv, libGLU, libGL, libglut, libX11, plib, openal, freealut, libXrandr, xorgproto,
 libXext, libSM, libICE, libXi, libXt, libXrender, libXxf86vm, openscenegraph, expat,
 libpng, zlib, bash, SDL2, SDL2_mixer, enet, libjpeg, cmake, pkg-config, libvorbis, runtimeShell, curl, copyDesktopItems, makeDesktopItem }:
 
@@ -75,7 +75,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config cmake copyDesktopItems ];
 
-  buildInputs = [ libpng libGLU libGL freeglut libX11 plib openal freealut libXrandr xorgproto
+  buildInputs = [ libpng libGLU libGL libglut libX11 plib openal freealut libXrandr xorgproto
     libXext libSM libICE libXi libXt libXrender libXxf86vm zlib bash expat
     SDL2 SDL2_mixer enet libjpeg openscenegraph libvorbis curl ];
 

@@ -4,16 +4,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "tiny-dfr";
-  version = "0.2.0";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "WhatAmISupposedToPutHere";
     repo = "tiny-dfr";
     rev = "v${version}";
-    hash = "sha256-oawKYrfXAQ5RFMdUCG7F12wHcnFif++44s2KsX9ns6U=";
+    hash = "sha256-LH6r0HeUJ69Q98WlWjsl5ASHjcxGfD9bYjSy6fw/UJM=";
   };
 
-  cargoHash = "sha256-QOkztErJLFXPxCb8MvaXi7jGXeI5A0q8LwZtYddzUZE=";
+  cargoHash = "sha256-3bFtfDSm27gDAmIkvxYyJoPtcuKYkPH3vK9V5rJ4O0c=";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ cairo gdk-pixbuf glib libinput libxml2 pango udev ];

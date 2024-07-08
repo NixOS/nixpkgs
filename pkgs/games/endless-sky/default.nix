@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "endless-sky";
-  version = "0.10.6";
+  version = "0.10.8";
 
   src = fetchFromGitHub {
     owner = "endless-sky";
     repo = "endless-sky";
     rev = "v${version}";
-    sha256 = "sha256-3mprmW6K8pYs7J2q71fohsh9fZEP2RZjN1rSWUAwbhg=";
+    sha256 = "sha256-bqhltxkoqDdmddOBZ1f3I29AxGm5buUXpjjFwefemEM=";
   };
 
   patches = [
@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
       cc-by-sa-40
       publicDomain
     ];
-    maintainers = with maintainers; [ lheckemann _360ied ];
+    maintainers = with maintainers; [ _360ied ];
     platforms = platforms.linux; # Maybe other non-darwin Unix
   };
 }

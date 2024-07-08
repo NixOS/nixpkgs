@@ -1,8 +1,9 @@
 { qtModule
 , qtdeclarative, qtquickcontrols, qtlocation, qtwebchannel
+, fetchpatch
 
-, bison, flex, git, gperf, ninja, pkg-config, python, which, python3
-, nodejs, qtbase, perl
+, bison, flex, git, gperf, ninja, pkg-config, python, which
+, nodejs, perl
 , buildPackages
 , pkgsBuildTarget
 , pkgsBuildBuild
@@ -22,7 +23,7 @@
 , ApplicationServices, AVFoundation, Foundation, ForceFeedback, GameController, AppKit
 , ImageCaptureCore, CoreBluetooth, IOBluetooth, CoreWLAN, Quartz, Cocoa, LocalAuthentication
 , MediaPlayer, MediaAccessibility, SecurityInterface, Vision, CoreML, OpenDirectory, Accelerate
-, cups, openbsm, runCommand, xcbuild, writeScriptBin
+, cups, openbsm, xcbuild, writeScriptBin
 , ffmpeg_4 ? null
 , lib, stdenv
 , version ? null
@@ -32,7 +33,6 @@
 , postPatch ? ""
 , nspr
 , lndir
-, dbusSupport ? !stdenv.isDarwin, expat
 }:
 
 let
@@ -52,17 +52,12 @@ let
     '';
   };
 
-  qtPlatformCross = plat: with plat;
-    if isLinux
-    then "linux-generic-g++"
-    else throw "Please add a qtPlatformCross entry for ${plat.config}";
-
 in
 
 qtModule ({
   pname = "qtwebengine";
   nativeBuildInputs = [
-    bison flex git gperf ninja pkg-config python which gn nodejs
+    bison flex git gperf ninja pkg-config (python.withPackages(ps: [ ps.html5lib ])) which gn nodejs
   ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
     perl
     lndir (lib.getDev pkgsBuildTarget.targetPackages.qt5.qtbase)
@@ -87,18 +82,27 @@ qtModule ({
     (
       cd src/3rdparty/chromium;
 
+      patch -p2 < ${
+        (fetchpatch { # support for building with python 3.12
+          name = "python312-imp.patch";
+          url = "https://codereview.qt-project.org/gitweb?p=qt/qtwebengine-chromium.git;a=patch;h=3664134f749f4851a14ab1953a9ee460a1fe0b68";
+          hash = "sha256-XY0dEdeuOTRMR7onmuNg1Axld8+pquKAzOfDAGSIzI4=";
+        })
+      }
+      patch -p1 < ${
+        (fetchpatch { # support for building with python 3.12
+          name = "python312-six.patch";
+          url = "https://gitlab.archlinux.org/archlinux/packaging/packages/qt5-webengine/-/raw/6b0c0e76e0934db2f84be40cb5978cee47266e78/python3.12-six.patch";
+          hash = "sha256-YgP9Sq5+zTC+U7+0hQjZokwb+fytk0UEIJztUXFhTkI=";
+        })
+      }
+
       # Manually fix unsupported shebangs
       substituteInPlace third_party/harfbuzz-ng/src/src/update-unicode-tables.make \
         --replace "/usr/bin/env -S make -f" "/usr/bin/make -f" || true
 
       # TODO: be more precise
       patchShebangs .
-
-      # Fix compatibility with python3.11
-      substituteInPlace tools/metrics/ukm/ukm_model.py \
-        --replace "r'^(?i)(|true|false)$'" "r'(?i)^(|true|false)$'"
-      substituteInPlace tools/grit/grit/util.py \
-        --replace "mode = 'rU'" "mode = 'r'"
     )
   ''
   # Prevent Chromium build script from making the path to `clang` relative to

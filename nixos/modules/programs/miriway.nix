@@ -65,7 +65,7 @@ in {
       };
     };
 
-    hardware.opengl.enable = lib.mkDefault true;
+    hardware.graphics.enable = lib.mkDefault true;
     fonts.enableDefaultPackages = lib.mkDefault true;
     programs.dconf.enable = lib.mkDefault true;
     programs.xwayland.enable = lib.mkDefault true;

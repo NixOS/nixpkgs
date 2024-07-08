@@ -586,10 +586,10 @@ with self; {
 
   AnyEventI3 = buildPerlPackage {
     pname = "AnyEvent-I3";
-    version = "0.17";
+    version = "0.19";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/M/MS/MSTPLBG/AnyEvent-I3-0.17.tar.gz";
-      hash = "sha256-U4LJhMnxODlfKfDACvgaoMj0t2VYIFXHPt5LE/BKbWM=";
+      url = "mirror://cpan/authors/id/M/MS/MSTPLBG/AnyEvent-I3-0.19.tar.gz";
+      hash = "sha256-G807YNs9VWAUjeeRNT6K8RciZPWoXncZe5/8BB2sSDo=";
     };
     propagatedBuildInputs = [ AnyEvent JSONXS ];
     meta = {
@@ -6966,6 +6966,22 @@ with self; {
     };
   };
 
+  DevelCover = buildPerlPackage {
+    pname = "Devel-Cover";
+    version = "1.44";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/P/PJ/PJCJ/Devel-Cover-1.44.tar.gz";
+      hash = "sha256-9AwVQ5kuXWWm94AD1GLVms15rm0w04BHscadmZ0rH9g=";
+    };
+    propagatedBuildInputs = [ HTMLParser ];
+    doCheck = false;
+    meta = {
+      description = "Code coverage metrics for Perl";
+      homepage = "http://www.pjcj.net/perl.html";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   DevelDeprecationsEnvironmental = buildPerlPackage {
     pname = "Devel-Deprecations-Environmental";
     version = "1.101";
@@ -10900,68 +10916,6 @@ with self; {
     };
   };
 
-  Gnome2 = buildPerlPackage {
-    pname = "Gnome2";
-    version = "1.048";
-    src = fetchurl {
-      url = "mirror://cpan/authors/id/X/XA/XAOC/Gnome2-1.048.tar.gz";
-      hash = "sha256-ZPzDgnFKvY1XaSrDdjKMOiDGy8i81zKwB9FMv5ooLd0=";
-    };
-    buildInputs = [ ExtUtilsDepends ExtUtilsPkgConfig Glib Gnome2Canvas Gnome2VFS Gtk2 ];
-    propagatedBuildInputs = [ pkgs.gnome2.libgnomeui ];
-    meta = {
-      description = "(DEPRECATED) Perl interface to the 2.x series of the GNOME libraries";
-      homepage = "https://gtk2-perl.sourceforge.net";
-      license = with lib.licenses; [ lgpl21Plus ];
-      broken = stdenv.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/staging-next/perl534Packages.Gnome2Canvas.x86_64-darwin
-    };
-  };
-
-  Gnome2Canvas = buildPerlPackage {
-    pname = "Gnome2-Canvas";
-    version = "1.006";
-    src = fetchurl {
-      url = "mirror://cpan/authors/id/X/XA/XAOC/Gnome2-Canvas-1.006.tar.gz";
-      hash = "sha256-aQZnxziSHeLWUWtOtjlVOlceSoMQ2AMfFYZYU23lq0I=";
-    };
-    buildInputs = [ pkgs.gnome2.libgnomecanvas ];
-    propagatedBuildInputs = [ Gtk2 ];
-    doCheck = !stdenv.isDarwin;
-    meta = {
-      description = "(DEPRECATED) A structured graphics canvas";
-      license = with lib.licenses; [ lgpl2Plus ];
-    };
-  };
-
-  Gnome2VFS = buildPerlPackage {
-    pname = "Gnome2-VFS";
-    version = "1.084";
-    src = fetchurl {
-      url = "mirror://cpan/authors/id/X/XA/XAOC/Gnome2-VFS-1.084.tar.gz";
-      hash = "sha256-PI2Mlca2XCN9ueiJx57bK7gIvzfAhKvfu9mFn+93h8w=";
-    };
-    propagatedBuildInputs = [ pkgs.gnome2.gnome_vfs Glib ];
-    meta = {
-      description = "(DEPRECATED) Perl interface to the 2.x series of the GNOME VFS";
-      license = with lib.licenses; [ lgpl21Plus ];
-    };
-  };
-
-  Gnome2Wnck = buildPerlPackage {
-    pname = "Gnome2-Wnck";
-    version = "0.18";
-    src = fetchurl {
-      url = "mirror://cpan/authors/id/X/XA/XAOC/Gnome2-Wnck-0.18.tar.gz";
-      hash = "sha256-RL7OyLLX9B8ngKc7CSJp/bec1JJluuDI/zkQN8RWSjU=";
-    };
-    buildInputs = [ pkgs.libwnck2 pkgs.glib pkgs.gtk2 ];
-    propagatedBuildInputs = [ Gtk2 ];
-    meta = {
-      description = "(DEPRECATED) Perl interface to the Window Navigator";
-      license = with lib.licenses; [ lgpl21Plus ];
-    };
-  };
-
   GnuPG = buildPerlPackage {
     pname = "GnuPG";
     version = "0.19";
@@ -13002,6 +12956,19 @@ with self; {
       description = "Nearly transparent SSL encapsulation for IO::Socket::INET";
       homepage = "https://github.com/noxxi/p5-io-socket-ssl";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  IOSocketSocks = buildPerlPackage {
+    pname = "IO-Socket-Socks";
+    version = "0.74";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/O/OL/OLEG/IO-Socket-Socks-0.74.tar.gz";
+      hash = "sha256-N/Bxos9LqPCQoil8ZIK3osUJ61Lc1s5dgDXU7ixoJLE=";
+    };
+    meta = {
+      description = "Provides a way to create socks client or server both 4 and 5 version";
+      license = lib.licenses.free;
     };
   };
 
@@ -15650,6 +15617,36 @@ with self; {
     };
   };
 
+  MemoryProcess = buildPerlPackage {
+    pname = "Memory-Process";
+    version = "0.06";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/S/SK/SKIM/Memory-Process-0.06.tar.gz";
+      hash = "sha256-NYFEiP/SnJdiFiXqOz1wCvv6YO0FW9dZ1OWNnI/UTk4=";
+    };
+    buildInputs = [ CaptureTiny TestNoWarnings ];
+    propagatedBuildInputs = [ MemoryUsage Readonly ];
+    meta = {
+      description = "Memory process reporting";
+      homepage = "https://github.com/michal-josef-spacek/Memory-Process";
+      license = lib.licenses.bsd3;
+      platforms = lib.platforms.linux;
+    };
+  };
+
+  MemoryUsage = buildPerlPackage {
+    pname = "Memory-Usage";
+    version = "0.201";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/D/DO/DONEILL/Memory-Usage-0.201.tar.gz";
+      hash = "sha256-jyr60h5Ap0joHIwPPkDKcYwU3bn7LYgL+9KK6RPOU0k=";
+    };
+    meta = {
+      description = "Tools to determine actual memory usage";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   Menlo = buildPerlPackage {
     pname = "Menlo";
     version = "1.9019";
@@ -15873,10 +15870,10 @@ with self; {
 
   Minion = buildPerlPackage {
     pname = "Minion";
-    version = "10.25";
+    version = "10.30";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SR/SRI/Minion-10.25.tar.gz";
-      hash = "sha256-C+CoN1N2iJ2gRgRpY4TAz5iyYh0mUNnrAwf25LlAra0=";
+      url = "mirror://cpan/authors/id/S/SR/SRI/Minion-10.30.tar.gz";
+      hash = "sha256-twS9ZuxK8cAzlGifAsCsBIDr0GzpzKFykVAbkgLG7Rw=";
     };
     propagatedBuildInputs = [ Mojolicious YAMLLibYAML ];
     meta = {
@@ -19594,7 +19591,7 @@ with self; {
     };
 
     # FIXME: try with libGL + libGLU instead of libGLU libGL
-    buildInputs = [ pkgs.libGLU pkgs.libGL pkgs.libGLU pkgs.freeglut pkgs.xorg.libX11 pkgs.xorg.libXi pkgs.xorg.libXmu pkgs.xorg.libXext pkgs.xdummy ];
+    buildInputs = [ pkgs.libGLU pkgs.libGL pkgs.libGLU pkgs.libglut pkgs.xorg.libX11 pkgs.xorg.libXi pkgs.xorg.libXmu pkgs.xorg.libXext pkgs.xdummy ];
 
     patches = [ ../development/perl-modules/perl-opengl.patch ];
 
@@ -20298,10 +20295,11 @@ with self; {
         --replace 'WITH_PROJ => undef' 'WITH_PROJ => 0'
     '';
 
-    nativeBuildInputs = with pkgs; [ autoPatchelfHook libGL.dev glibc.dev mesa_glu.dev ];
+    # FIXME: Why are these libraries in `nativeBuildInputs`?
+    nativeBuildInputs = with pkgs; [ autoPatchelfHook (lib.getDev libGL) (lib.getDev glibc) (lib.getDev mesa_glu) ];
 
     buildInputs = [ DevelChecklib TestDeep TestException TestWarn ] ++
-                  (with pkgs; [ gsl freeglut xorg.libXmu xorg.libXi ]);
+                  (with pkgs; [ gsl libglut xorg.libXmu xorg.libXi ]);
 
     propagatedBuildInputs = [
       AstroFITSHeader
@@ -20322,7 +20320,7 @@ with self; {
       homepage = "https://pdl.perl.org";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
       mainProgram = "pdl2";
-      platforms = lib.platforms.linux;
+      platforms = lib.platforms.unix;
     };
   };
 
@@ -23924,12 +23922,12 @@ with self; {
 
   SysVirt = buildPerlModule rec {
     pname = "Sys-Virt";
-    version = "10.0.0";
+    version = "10.2.0";
     src = fetchFromGitLab {
       owner = "libvirt";
       repo = "libvirt-perl";
       rev = "v${version}";
-      hash = "sha256-FK2SaerA/GB0ZAg/QXG9Ig1Cvpg6v9lh1sKPjYU52M8=";
+      hash = "sha256-xpgZeXk9QefqbBMsvcMh/Cg/XFGEiVi3FbU/jBbSIr0=";
     };
     nativeBuildInputs = [ pkgs.pkg-config ];
     buildInputs = [ pkgs.libvirt CPANChanges TestPod TestPodCoverage XMLXPath ];
@@ -29076,10 +29074,10 @@ with self; {
 
   YAMLPP = buildPerlPackage {
     pname = "YAML-PP";
-    version = "0.036";
+    version = "0.38.0";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/T/TI/TINITA/YAML-PP-0.036.tar.gz";
-      hash = "sha256-yLTlBYSt+S73Vz9rsB1u1Y5iF2MsV0J7cnTPp8pG/Bs=";
+      url = "mirror://cpan/authors/id/T/TI/TINITA/YAML-PP-v0.38.0.tar.gz";
+      hash = "sha256-qBlGXFL2o0EEmjlCdCwI4E8olLKmZILkOn9AfOELTqA=";
     };
     buildInputs = [ TestDeep TestWarn ];
     meta = {

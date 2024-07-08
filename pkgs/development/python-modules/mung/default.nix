@@ -9,7 +9,7 @@
   scikit-image,
 }:
 let
-  version = "1.2";
+  version = "1.2.1";
 in
 buildPythonPackage {
   pname = "mung";
@@ -20,7 +20,7 @@ buildPythonPackage {
     owner = "OMR-Research";
     repo = "mung";
     rev = "refs/tags/${version}";
-    hash = "sha256-NSKaJkJRevTy5gh6/ik8Qe46bOPdznsmXPgh7Xz7vXQ=";
+    hash = "sha256-QljGoZdUJRClQ/QzUsCKD0/ooWaFrKXI+93WFPvmIjE=";
   };
 
   nativeBuildInputs = [ setuptools ];

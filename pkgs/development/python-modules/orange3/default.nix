@@ -6,7 +6,6 @@
   buildPythonPackage,
   chardet,
   copyDesktopItems,
-  pythonRelaxDepsHook,
   cython,
   catboost,
   xgboost,
@@ -29,6 +28,7 @@
   pytestCheckHook,
   pytest-qt,
   pyqtgraph,
+  pyqt5,
   pyqtwebengine,
   python,
   python-louvain,
@@ -52,7 +52,7 @@
 let
   self = buildPythonPackage rec {
     pname = "orange3";
-    version = "3.36.2";
+    version = "3.37.0";
     pyproject = true;
 
     disabled = pythonOlder "3.7";
@@ -61,7 +61,7 @@ let
       owner = "biolab";
       repo = "orange3";
       rev = "refs/tags/${version}";
-      hash = "sha256-v9lk5vGhBaR2PHZ+Jq0hy1WaCsbeLe+vZlTaHBkfacU=";
+      hash = "sha256-3PybiHXH6oIYJb78/a7LnQA6cYUicDx4Mf65QhIhT4w=";
     };
 
     postPatch = ''
@@ -74,7 +74,6 @@ let
 
     nativeBuildInputs = [
       copyDesktopItems
-      pythonRelaxDepsHook
       oldest-supported-numpy
       cython
       qt5.wrapQtAppsHook
@@ -113,6 +112,7 @@ let
       xlsxwriter
       httpx
       pyqtgraph
+      pyqt5
       orange-widget-base
       keyrings-alt
       pyyaml

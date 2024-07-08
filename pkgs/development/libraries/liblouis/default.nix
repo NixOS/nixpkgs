@@ -32,6 +32,10 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     gettext
     python3
+    python3.pkgs.build
+    python3.pkgs.installer
+    python3.pkgs.setuptools
+    python3.pkgs.wheel
     # Docs, man, info
     texinfo
     help2man
@@ -58,7 +62,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   postInstall = ''
     pushd python
-    python setup.py install --prefix="$out" --optimize=1
+    python -m build --no-isolation --outdir dist/ --wheel
+    python -m installer --prefix $out dist/*.whl
     popd
   '';
 

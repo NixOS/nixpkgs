@@ -25,6 +25,6 @@ stdenv.mkDerivation rec {
     description = "Collection of video game music file emulators";
     license = licenses.lgpl21Plus;
     platforms = platforms.all;
-    maintainers = with maintainers; [ luc65r lheckemann ];
+    maintainers = with maintainers; [ luc65r ];
   };
 }

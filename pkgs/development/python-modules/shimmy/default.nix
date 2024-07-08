@@ -53,6 +53,9 @@ buildPythonPackage rec {
   ];
 
   disabledTestPaths = [
+    # Requires unpackaged labmaze
+    "tests/test_dm_control_multi_agent.py"
+
     # Requires unpackaged pyspiel
     "tests/test_openspiel.py"
 

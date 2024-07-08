@@ -3,7 +3,6 @@
   buildPythonPackage,
   pythonOlder,
   fetchFromGitHub,
-  pythonRelaxDepsHook,
   # propagated build input
   faiss,
   torch,
@@ -50,6 +49,8 @@
   xmltodict,
   # native check inputs
   unittestCheckHook,
+
+  pythonAtLeast,
 }:
 let
   version = "7.2.0";
@@ -157,7 +158,6 @@ buildPythonPackage {
     hash = "sha256-2d31wzUz0/FcrejDIog2EI4BXgjd7XXpN4tRXpLk5DI=";
   };
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   pythonRemoveDeps = [
     # We call it faiss, not faiss-cpu.
@@ -195,11 +195,13 @@ buildPythonPackage {
     "-v"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Semantic search and workflows powered by language models";
     changelog = "https://github.com/neuml/txtai/releases/tag/v${version}";
     homepage = "https://github.com/neuml/txtai";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ happysalada ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ happysalada ];
+    # This should be addressed in a newer version, but we first need to wait for python311Packages.faiss to be updated
+    broken = pythonAtLeast "3.12";
   };
 }

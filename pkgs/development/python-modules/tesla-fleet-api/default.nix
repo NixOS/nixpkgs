@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "tesla-fleet-api";
-  version = "0.6.1";
+  version = "0.6.2";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "Teslemetry";
     repo = "python-tesla-fleet-api";
     rev = "refs/tags/v${version}";
-    hash = "sha256-dCkk0ikg8KvB7us4mEcUQ1q3JIRoNbSE6STVZXRBErE=";
+    hash = "sha256-kkyRQ2cYldx4vK5hAo6LOr+k3YqJihKreE+DTNVHYdM=";
   };
 
   build-system = [ setuptools ];

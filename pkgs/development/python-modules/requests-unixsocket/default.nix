@@ -26,6 +26,12 @@ buildPythonPackage rec {
       url = "https://github.com/msabramo/requests-unixsocket/commit/39b9c64847a52ddc8c6d14ff414a6a7a3f6358d9.patch";
       hash = "sha256-DFtjhk33JLCu7FW6XI7uf2klNmwzvh2QNwxUb4W223Q=";
     })
+    # https://github.com/msabramo/requests-unixsocket/pull/72
+    (fetchpatch {
+      name = "requests-2.32-compatibility.patch";
+      url = "https://github.com/msabramo/requests-unixsocket/commit/8b02ed531d8def03b4cf767e8a925be09db43dff.patch";
+      hash = "sha256-rCmdCPGB2gf+aY/AikSCPuzGCYf1GFWcUKraqgS26vc=";
+    })
   ];
 
   nativeBuildInputs = [ pbr ];

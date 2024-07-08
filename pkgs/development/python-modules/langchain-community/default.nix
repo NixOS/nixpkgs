@@ -29,7 +29,7 @@
 
 buildPythonPackage rec {
   pname = "langchain-community";
-  version = "0.2.4";
+  version = "0.2.9";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -37,8 +37,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
-    rev = "langchain-community==${version}";
-    hash = "sha256-rqlYaSfDZIQHCndsnydeR1oeVZNIOH6NAgXeOSdBF5A=";
+    rev = "refs/tags/langchain-core==${version}";
+    hash = "sha256-/BUn/NxaE9l3VY6dPshr1JJaHTGzn9NMQhSQ2De65Jg=";
   };
 
   sourceRoot = "${src.name}/libs/community";
@@ -84,6 +84,11 @@ buildPythonPackage rec {
   };
 
   __darwinAllowLocalNetworking = true;
+
+  disabledTests = [
+    # Test require network access
+    "test_ovhcloud_embed_documents"
+  ];
 
   meta = {
     description = "Community contributed LangChain integrations";

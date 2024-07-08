@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "httpx";
-  version = "1.6.3";
+  version = "1.6.5";
 
   src = fetchFromGitHub {
     owner = "projectdiscovery";
     repo = "httpx";
     rev = "refs/tags/v${version}";
-    hash = "sha256-N2Fym3OwTHjdaJ1fzGWL+BoUYsQ5216d3Ohz5Yrf558=";
+    hash = "sha256-c+o+T2CWIqibjTn5zuTKCvdYVvmgzSQoQVOLiqdRHHU=";
   };
 
-  vendorHash = "sha256-jD5LQ9HZbWpoXgnyA7RacaDdyBPMbK02PhKQT+1il4Q=";
+  vendorHash = "sha256-ia8sxoldJiMbnerodUz+SEuUWRqSzJfO737TmfO8aL4=";
 
   subPackages = [ "cmd/httpx" ];
 

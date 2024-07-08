@@ -7,7 +7,8 @@
   openpyxl,
   pandas,
   poetry-core,
-  pytestCheckHook,
+  pytest7CheckHook,
+  pytest-xdist,
   pythonOlder,
 }:
 
@@ -34,7 +35,7 @@ buildPythonPackage rec {
     pandas
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytest7CheckHook pytest-xdist ];
 
   pythonImportsCheck = [ "niapy" ];
 

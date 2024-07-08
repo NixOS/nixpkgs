@@ -139,7 +139,7 @@ in lib.makeExtensible (self: ({
       patch-monitorfdhup
     ];
     self_attribute_name = "nix_2_3";
-    maintainers = with lib.maintainers; [ flokli raitobezarius ];
+    maintainers = with lib.maintainers; [ flokli ];
   }).override { boehmgc = boehmgc-nix_2_3; }).overrideAttrs {
     # https://github.com/NixOS/nix/issues/10222
     # spurious test/add.sh failures
@@ -147,48 +147,62 @@ in lib.makeExtensible (self: ({
   };
 
   nix_2_18 = common {
-    version = "2.18.2";
-    hash = "sha256-8gNJlBlv2bnffRg0CejiBXc6U/S6YeCLAdHrYvTPyoY=";
+    version = "2.18.4";
+    hash = "sha256-tebjp83ABKrBW3d/6n/Irr1+xhtw8qIkqHZHJOoJaLk=";
     self_attribute_name = "nix_2_18";
   };
 
   nix_2_19 = common {
-    version = "2.19.4";
-    hash = "sha256-qXjyVmDm1SFWk1az3GWIsJ0fVG0nWet2FdldFOnUydI=";
+    version = "2.19.5";
+    hash = "sha256-n4efeDi8KtLgkAKl5kBQ4svmdxfnRp8KrSZGrlFsr/E=";
     self_attribute_name = "nix_2_19";
   };
 
   nix_2_20 = common {
-    version = "2.20.6";
-    hash = "sha256-BSl8Jijq1A4n1ToQy0t0jDJCXhJK+w1prL8QMHS5t54=";
+    version = "2.20.7";
+    hash = "sha256-hWElUtAHYbL/LjyW0Vovz9zJLhv5zC6/tDu8uPkbQqY=";
     self_attribute_name = "nix_2_20";
   };
 
   nix_2_21 = common {
-    version = "2.21.2";
-    hash = "sha256-ObaVDDPtnOeIE0t7m4OVk5G+OS6d9qYh+ktK67Fe/zE=";
+    version = "2.21.3";
+    hash = "sha256-oaRT9rGrYKxebZ6aiBFTx2OwcIDQthkzRdeez3EARH4=";
     self_attribute_name = "nix_2_21";
   };
 
   nix_2_22 = common {
-    version = "2.22.1";
-    hash = "sha256-5Q1WkpTWH7fkVfYhHDc5r0A+Vc+K5xB1UhzrLzBCrB8=";
+    version = "2.22.2";
+    hash = "sha256-/ABtOUnfN6od/MtLxO5cJX90Ags/vOBQav6MyhKy4r4=";
     self_attribute_name = "nix_2_22";
   };
 
+  nix_2_23 = common {
+    version = "2.23.2";
+    hash = "sha256-NH1G4GGHXU4pnQWI9X/gs7r97GO0i4tJFjoaIxl0FaQ=";
+    self_attribute_name = "nix_2_23";
+    patches = [
+     # fixes regression in nix-prefetch-url
+     # https://github.com/NixOS/nix/pull/11052
+     (fetchpatch {
+       url = "https://github.com/NixOS/nix/commit/73f3179954ef8db5c8774c79272dd1215fe6f5c2.patch";
+       sha256 = "sha256-d/rBOONZGxOFRUPltH7z0OSYRqKbS/ZwZl/DaIXygC0=";
+     })
+    ];
+  };
+
   git = common rec {
-    version = "2.23.0";
-    suffix = "pre20240526_${lib.substring 0 8 src.rev}";
+    version = "2.24.0";
+    suffix = "pre20240627_${lib.substring 0 8 src.rev}";
     src = fetchFromGitHub {
       owner = "NixOS";
       repo = "nix";
-      rev = "7de033d63fbcf97aad164e131ae3a85e5dcebce7";
-      hash = "sha256-LtsyUsVpr9sM0n1L7MeTw8/6wGtGeXFvKAbPR5lqN8Q=";
+      rev = "b44909ac2244bda4c387b9a17748e8a94ada9e78";
+      hash = "sha256-tS8i/fyi2DO5GM103b+G7K/XwFWhWvb2VDjqpLH5Kxc=";
     };
     self_attribute_name = "git";
   };
 
-  latest = self.nix_2_22;
+  latest = self.nix_2_23;
 
   # The minimum Nix version supported by Nixpkgs
   # Note that some functionality *might* have been backported into this Nix version,

@@ -1,6 +1,6 @@
 {
   lib,
-  stdenv,
+  buildPythonPackage,
   fetchgit,
   cmake,
   pkgconfig,
@@ -19,9 +19,10 @@ let
   onOffBool = b: if b then "ON" else "OFF";
   withMPI = (mpi != null);
 in
-stdenv.mkDerivation rec {
+buildPythonPackage rec {
   version = "2.3.4";
   pname = "hoomd-blue";
+  pyproject = false; # Built with cmake
 
   src = fetchgit {
     url = "https://bitbucket.org/glotzer/hoomd-blue";

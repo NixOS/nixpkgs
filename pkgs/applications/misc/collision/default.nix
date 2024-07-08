@@ -5,7 +5,7 @@
 , wrapGAppsHook4
 , desktopToDarwinBundle
 , gobject-introspection
-, gnome
+, nautilus-python
 , python3
 , libadwaita
 , openssl
@@ -20,13 +20,13 @@
 
 crystal.buildCrystalPackage rec {
   pname = "Collision";
-  version = "3.8.0";
+  version = "3.8.1";
 
   src = fetchFromGitHub {
     owner = "GeopJr";
     repo = "Collision";
     rev = "v${version}";
-    hash = "sha256-Bo/u0UYM/N7tLqdCs2OU5pdj2s9LXPooSR1PCGk9dSc=";
+    hash = "sha256-55qCHc+snMAUFAT31Z8EPtJ/HLrnv1BveCEzjkn7N5g=";
   };
 
   postPatch = ''
@@ -54,7 +54,7 @@ crystal.buildCrystalPackage rec {
     libadwaita
     openssl
     libxml2
-    gnome.nautilus-python
+    nautilus-python
     python3.pkgs.pygobject3
   ];
 

@@ -18,14 +18,14 @@
 }:
 
 let
-  version = "3.0";
+  version = "3.1";
 
   src = fetchFromGitLab {
     owner = "World";
     repo = "apostrophe";
     domain = "gitlab.gnome.org";
     rev = "v${version}";
-    sha256 = "sha256-wKxRCU00nSk7F8IZNWoLRtGs3m6ol3UBnArtppUOz/g=";
+    sha256 = "sha256-rXaz0EtLuKOBJLF81K/4qoTZtG6B8Wn+KwSiqYvxAVc=";
   };
 
   # Patches are required by upstream. Without the patches

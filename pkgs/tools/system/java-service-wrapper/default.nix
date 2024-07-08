@@ -9,11 +9,11 @@
 
 stdenv.mkDerivation rec {
   pname = "java-service-wrapper";
-  version = "3.5.57";
+  version = "3.5.58";
 
   src = fetchurl {
     url = "https://wrapper.tanukisoftware.com/download/${version}/wrapper_${version}_src.tar.gz";
-    hash = "sha256-86YusgyLUveMrXepAtnABgdZCGlQDQjVFnG9GqFnCIg=";
+    hash = "sha256-mwfLCZfjAtKNfp9Cc8hkLAOKo6VfKD3l+IDiXDP2LV8=";
   };
 
   strictDeps = true;

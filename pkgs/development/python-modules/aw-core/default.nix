@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pythonOlder,
-  pythonRelaxDepsHook,
   poetry-core,
   jsonschema,
   peewee,
@@ -36,7 +35,6 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     poetry-core
-    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [

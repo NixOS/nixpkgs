@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchPypi,
   pythonOlder,
-  pythonRelaxDepsHook,
   writeShellScriptBin,
   gradio,
 
@@ -63,7 +62,7 @@
 
 buildPythonPackage rec {
   pname = "gradio";
-  version = "4.36.0";
+  version = "4.36.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -71,7 +70,7 @@ buildPythonPackage rec {
   # We use the Pypi release, since it provides prebuilt webui assets
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-gcHwR9eiou6HKBI4ab06+5CtOa3OtfdvB/sPL35dt2w=";
+    hash = "sha256-crLSEVbTRnEjuubzD0Y/AC7wbicnZidDCPXtPKw3Vjs=";
   };
 
   # fix packaging.ParserSyntaxError, which can't handle comments
@@ -91,7 +90,6 @@ buildPythonPackage rec {
   ];
 
   nativeBuildInputs = [
-    pythonRelaxDepsHook
     hatchling
     hatch-requirements-txt
     hatch-fancy-pypi-readme

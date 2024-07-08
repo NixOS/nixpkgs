@@ -58,6 +58,6 @@ in stdenv.mkDerivation {
     homepage = "https://github.com/cfenollosa/bashblog";
     license = licenses.gpl3Only;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ wolfangaukang ];
+    maintainers = [ ];
   };
 }

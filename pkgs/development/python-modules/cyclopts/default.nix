@@ -11,6 +11,7 @@
   pytest-mock,
   pytestCheckHook,
   pythonOlder,
+  pyyaml,
   rich,
   rich-rst,
   typing-extensions,
@@ -18,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "cyclopts";
-  version = "2.6.2";
+  version = "2.9.3";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -27,7 +28,7 @@ buildPythonPackage rec {
     owner = "BrianPugh";
     repo = "cyclopts";
     rev = "refs/tags/v${version}";
-    hash = "sha256-GWUD9Qu2EKrT7nwlmSpJ31LWSvv6mASxsXGznumusdw=";
+    hash = "sha256-8D9HBWotn15fkHlwpXcpsC0VmaD7JuD0XVRJGRj1Ijg=";
   };
 
   build-system = [
@@ -48,6 +49,7 @@ buildPythonPackage rec {
     pydantic
     pytest-mock
     pytestCheckHook
+    pyyaml
   ];
 
   pythonImportsCheck = [ "cyclopts" ];

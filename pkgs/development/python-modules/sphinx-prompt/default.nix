@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonRelaxDepsHook,
 
   # build-system
   poetry-core,
@@ -37,7 +36,6 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     poetry-core
     poetry-dynamic-versioning
-    pythonRelaxDepsHook
   ];
 
   pythonRelaxDeps = [

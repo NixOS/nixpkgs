@@ -31,6 +31,6 @@ buildPythonPackage rec {
     description = "Twisted bindings for ZeroMQ";
     homepage = "https://github.com/smira/txZMQ";
     license = licenses.mpl20;
-    maintainers = with maintainers; [ wolfangaukang ];
+    maintainers = [ ];
   };
 }

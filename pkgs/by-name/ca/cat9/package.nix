@@ -1,17 +1,18 @@
-{ lib
-, stdenvNoCC
-, fetchFromGitHub
+{
+  lib,
+  fetchFromGitHub,
+  stdenvNoCC,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "cat9";
-  version = "unstable-2023-11-06";
+  version = "0-unstable-2024-06-17";
 
   src = fetchFromGitHub {
     owner = "letoram";
     repo = "cat9";
-    rev = "a807776a85237ab0bdd0a712fb33c176fc295e30";
-    hash = "sha256-OlH8FgVBk76Qw+5mnsrryXOL9GbPJWlwUGtYlLuAPxQ=";
+    rev = "f00e8791c1826065d4a93ace12e55ab5732d17a7";
+    hash = "sha256-xFw6r7SQK0T5j7hVK3U39U2Q/qZow6Ad/R0Cl6nqUQw=";
   };
 
   dontConfigure = true;

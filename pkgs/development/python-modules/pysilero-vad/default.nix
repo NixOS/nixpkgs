@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   stdenv,
-  pythonRelaxDepsHook,
 
   # build-system
   setuptools,
@@ -30,7 +29,6 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     setuptools
-    pythonRelaxDepsHook
   ];
 
   pythonRelaxDeps = [ "numpy" ];

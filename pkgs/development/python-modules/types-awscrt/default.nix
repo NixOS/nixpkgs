@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "types-awscrt";
-  version = "0.20.11";
+  version = "0.21.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "types_awscrt";
     inherit version;
-    hash = "sha256-rVzp+1EUFEMDJvGaUT4j07xxQ8EM2+HNrrIiKtVnaY8=";
+    hash = "sha256-Bqokf+XM8LhkKOUomuq/Z/ln4Qhh8hHBbBnn0lQqcKk=";
   };
 
   build-system = [ poetry-core ];

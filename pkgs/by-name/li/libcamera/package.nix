@@ -9,7 +9,6 @@
 , libdrm
 , libevent
 , libyaml
-, lttng-ust
 , gst_all_1
 , gtest
 , graphviz
@@ -17,6 +16,8 @@
 , python3
 , python3Packages
 , systemd # for libudev
+, withTracing ? lib.meta.availableOn stdenv.hostPlatform lttng-ust
+, lttng-ust # withTracing
 , withQcam ? false
 , qt5 # withQcam
 , libtiff # withQcam
@@ -24,18 +25,18 @@
 
 stdenv.mkDerivation rec {
   pname = "libcamera";
-  version = "0.2.0";
+  version = "0.3.0";
 
   src = fetchgit {
     url = "https://git.libcamera.org/libcamera/libcamera.git";
     rev = "v${version}";
-    hash = "sha256-x0Im9m9MoACJhQKorMI34YQ+/bd62NdAPc2nWwaJAvM=";
+    hash = "sha256-eCtOtdjpwn0S56ZyRVdG1QCBk1KGPh8YTXD50xev7Bc=";
   };
 
   outputs = [ "out" "dev" ];
 
   postPatch = ''
-    patchShebangs utils/
+    patchShebangs src/py/ utils/
   '';
 
   # libcamera signs the IPA module libraries at install time, but they are then
@@ -67,14 +68,12 @@ stdenv.mkDerivation rec {
     # hotplugging
     systemd
 
-    # lttng tracing
-    lttng-ust
-
     # yamlparser
     libyaml
 
     gtest
-  ] ++ lib.optionals withQcam [ libtiff qt5.qtbase qt5.qttools ];
+  ] ++ lib.optionals withTracing [ lttng-ust ]
+    ++ lib.optionals withQcam [ libtiff qt5.qtbase qt5.qttools ];
 
   nativeBuildInputs = [
     meson
@@ -82,6 +81,7 @@ stdenv.mkDerivation rec {
     pkg-config
     python3
     python3Packages.jinja2
+    python3Packages.pybind11
     python3Packages.pyyaml
     python3Packages.ply
     python3Packages.sphinx
@@ -92,7 +92,8 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [
     "-Dv4l2=true"
-    "-Dqcam=${if withQcam then "enabled" else "disabled"}"
+    (lib.mesonEnable "tracing" withTracing)
+    (lib.mesonEnable "qcam" withQcam)
     "-Dlc-compliance=disabled" # tries unconditionally to download gtest when enabled
     # Avoid blanket -Werror to evade build failures on less
     # tested compilers.
@@ -112,6 +113,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Open source camera stack and framework for Linux, Android, and ChromeOS";
     homepage = "https://libcamera.org";
+    changelog = "https://git.libcamera.org/libcamera/libcamera.git/tag/?h=${src.rev}";
     license = licenses.lgpl2Plus;
     maintainers = with maintainers; [ citadelcore ];
     badPlatforms = [

@@ -34,6 +34,7 @@
 , nixos-icons
 , perlPackages
 , python3
+, fetchpatch
 }:
 
 assert libXtSupport -> libX11Support;
@@ -50,13 +51,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "imagemagick";
-  version = "7.1.1-32";
+  version = "7.1.1-34";
 
   src = fetchFromGitHub {
     owner = "ImageMagick";
     repo = "ImageMagick";
     rev = finalAttrs.version;
-    hash = "sha256-9pDxnUNMmrwnP4rrR41OSZOJZjQnlVvedpLvMZJJnJo=";
+    hash = "sha256-rECU/dp8HQKFs1PW6QeTZIMxCIzzh1w7CckapnxdzxU=";
   };
 
   outputs = [ "out" "dev" "doc" ]; # bin/ isn't really big
@@ -75,7 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.withFeature librsvgSupport "pango")
     (lib.withFeature liblqr1Support "lqr")
     (lib.withFeature libjxlSupport "jxl")
-    (lib.withFeatureAs ghostscriptSupport "gs-font-dir" "${ghostscript}/share/ghostscript/fonts")
+    (lib.withFeatureAs ghostscriptSupport "gs-font-dir" "${ghostscript.fonts}/share/fonts")
     (lib.withFeature ghostscriptSupport "gslib")
   ] ++ lib.optionals stdenv.hostPlatform.isMinGW [
     # due to libxml2 being without DLLs ATM

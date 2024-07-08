@@ -10,7 +10,7 @@
 , nix-output-monitor
 }:
 let
-  version = "3.5.16";
+  version = "3.5.18";
   runtimeDeps = [ nvd nix-output-monitor ];
 in
 rustPlatform.buildRustPackage {
@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage {
     owner = "viperML";
     repo = "nh";
     rev = "refs/tags/v${version}";
-    hash = "sha256-uAoD6tW1lSMt5X6hzouZ1qWzImmg4VAMy663BLcOALs=";
+    hash = "sha256-G5iteuo2gobI0Y5jHNEBc6UN9ixjwj6zopPKi7bJBE4=";
   };
 
   strictDeps = true;
@@ -47,7 +47,7 @@ rustPlatform.buildRustPackage {
       --prefix PATH : ${lib.makeBinPath runtimeDeps}
   '';
 
-  cargoHash = "sha256-610gS1T7i5rBEWeWzolRz/mUTGw5EJf1B68CWc4gkm4=";
+  cargoHash = "sha256-jd8GOuI5E+l3u8klAKdwUdEP9N0Nao6MfTdHkSjym0M=";
 
   passthru.updateScript = nix-update-script { };
 

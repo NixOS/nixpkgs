@@ -14,7 +14,6 @@
 , networkmanager
 , gi-docgen
 , at-spi2-core
-, libstartup_notification
 , unzip
 , shared-mime-info
 , libgweather
@@ -43,7 +42,6 @@
 , gjs
 , mutter
 , evolution-data-server-gtk4
-, gtk3
 , gtk4
 , libadwaita
 , sassc
@@ -59,6 +57,10 @@
 , asciidoc
 , bash-completion
 , mesa
+, libGL
+, libXi
+, libX11
+, libxml2
 }:
 
 let
@@ -66,13 +68,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-shell";
-  version = "46.2";
+  version = "46.3.1";
 
   outputs = [ "out" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-shell/${lib.versions.major finalAttrs.version}/gnome-shell-${finalAttrs.version}.tar.xz";
-    hash = "sha256-a1hxAcBL+zZKsJzTi12T6+60JUdUyAfPcS+8juP94jg=";
+    hash = "sha256-575fxu4sxSitJh3HpVyN5aMkEtPWhAoKB14PwSoH/4s=";
   };
 
   patches = [
@@ -131,13 +133,11 @@ stdenv.mkDerivation (finalAttrs: {
     gdk-pixbuf
     librsvg
     networkmanager
-    libstartup_notification
     gjs
     mutter
     libpulseaudio
     evolution-data-server-gtk4
     libical
-    gtk3
     gtk4
     libadwaita
     gdm
@@ -151,6 +151,10 @@ stdenv.mkDerivation (finalAttrs: {
     gnome-desktop
     gnome-settings-daemon
     mesa
+    libGL # for egl, required by mutter-clutter
+    libXi # required by libmutter
+    libX11
+    libxml2
 
     # recording
     pipewire

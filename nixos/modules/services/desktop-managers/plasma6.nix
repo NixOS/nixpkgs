@@ -8,7 +8,7 @@
   cfg = config.services.desktopManager.plasma6;
 
   inherit (pkgs) kdePackages;
-  inherit (lib) literalExpression mkDefault mkIf mkOption mkPackageOptionMD types;
+  inherit (lib) literalExpression mkDefault mkIf mkOption mkPackageOption types;
 
   activationScript = ''
     # will be rebuilt automatically
@@ -29,7 +29,7 @@ in {
         description = "Enable Qt 5 integration (theming, etc). Disable for a pure Qt 6 system.";
       };
 
-      notoPackage = mkPackageOptionMD pkgs "Noto fonts - used for UI by default" {
+      notoPackage = mkPackageOption pkgs "Noto fonts - used for UI by default" {
         default = ["noto-fonts"];
         example = "noto-fonts-lgc-plus";
       };
@@ -146,6 +146,7 @@ in {
         dolphin-plugins
         spectacle
         ffmpegthumbs
+        krdp
       ];
     in
       requiredPackages
@@ -263,9 +264,12 @@ in {
         enable = true;
         package = kdePackages.kwallet-pam;
       };
-      kde.kwallet = {
-        enable = true;
-        package = kdePackages.kwallet-pam;
+      kde = {
+        allowNullPassword = true;
+        kwallet = {
+          enable = true;
+          package = kdePackages.kwallet-pam;
+        };
       };
       kde-fingerprint = lib.mkIf config.services.fprintd.enable { fprintAuth = true; };
       kde-smartcard = lib.mkIf config.security.pam.p11.enable { p11Auth = true; };
