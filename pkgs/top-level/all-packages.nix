@@ -3274,7 +3274,10 @@ with pkgs;
 
   awscli = callPackage ../tools/admin/awscli { };
 
-  awscli2 = callPackage ../tools/admin/awscli2 { };
+  awscli2 = callPackage ../tools/admin/awscli2 {
+    # change when https://github.com/aws/aws-cli/issues/8342 resolved
+    python3 = python311;
+  };
 
   okta-aws-cli = callPackage ../tools/admin/okta-aws-cli { };
 
@@ -11047,10 +11050,8 @@ with pkgs;
   nzbget = callPackage ../tools/networking/nzbget { };
 
   nzbhydra2 = callPackage ../servers/nzbhydra2 {
-    # You need Java (at least 8, at most 15)
-    # https://github.com/theotherp/nzbhydra2/issues/697
-    # https://github.com/theotherp/nzbhydra2/#how-to-run
-    jre = openjdk11;
+    # Requires Java 17, not lower, not higher
+    jre = openjdk17;
   };
 
   oapi-codegen = callPackage ../tools/networking/oapi-codegen { };

@@ -24,8 +24,6 @@ python3.pkgs.buildPythonApplication rec {
     setuptools
   ];
 
-  nativeBuildInputs = with python3.pkgs; [ pythonRelaxDepsHook ];
-
   dependencies = with python3.pkgs; [
     jinja2
     openai
