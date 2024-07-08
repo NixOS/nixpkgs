@@ -32,6 +32,26 @@ stdenv.mkDerivation rec {
     hash = "sha256-rgaXqXbBWlfSyz+CT0jRLyfGOR1cYYnRhEAu7AsaWus=";
   };
 
+  #hexchat and hexchat-text loads enchant spell checking library at run time and so it needs to have route to the path
+  postPatch = ''
+    sed -i "s,libenchant-2.so.2,${enchant2}/lib/libenchant-2.so.2,g" src/fe-gtk/sexy-spell-entry.c
+    sed -i "/flag.startswith('-I')/i if flag.contains('no-such-path')\ncontinue\nendif" plugins/perl/meson.build
+    chmod +x meson_post_install.py
+    for f in meson_post_install.py \
+             plugins/perl/generate_header.py \
+             plugins/python/generate_plugin.py \
+             po/validate-textevent-translations \
+             src/common/make-te.py
+    do
+      patchShebangs $f
+    done
+  '';
+
+  mesonFlags = [
+    "-Dwith-lua=lua"
+    "-Dtext-frontend=true"
+  ];
+
   nativeBuildInputs = [
     makeWrapper
     meson
@@ -54,26 +74,6 @@ stdenv.mkDerivation rec {
     python3Packages.cffi
     python3Packages.python
     python3Packages.setuptools
-  ];
-
-  #hexchat and hexchat-text loads enchant spell checking library at run time and so it needs to have route to the path
-  postPatch = ''
-    sed -i "s,libenchant-2.so.2,${enchant2}/lib/libenchant-2.so.2,g" src/fe-gtk/sexy-spell-entry.c
-    sed -i "/flag.startswith('-I')/i if flag.contains('no-such-path')\ncontinue\nendif" plugins/perl/meson.build
-    chmod +x meson_post_install.py
-    for f in meson_post_install.py \
-             plugins/perl/generate_header.py \
-             plugins/python/generate_plugin.py \
-             po/validate-textevent-translations \
-             src/common/make-te.py
-    do
-      patchShebangs $f
-    done
-  '';
-
-  mesonFlags = [
-    "-Dwith-lua=lua"
-    "-Dtext-frontend=true"
   ];
 
   postInstall = ''
