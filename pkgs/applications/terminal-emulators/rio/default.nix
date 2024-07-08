@@ -32,6 +32,7 @@ let
     darwin.libobjc
     darwin.apple_sdk_11_0.frameworks.AppKit
     darwin.apple_sdk_11_0.frameworks.AVFoundation
+    darwin.apple_sdk_11_0.frameworks.MetalKit
     darwin.apple_sdk_11_0.frameworks.Vision
   ] else [
     (lib.getLib gcc-unwrapped)
@@ -118,5 +119,11 @@ rustPlatform.buildRustPackage rec {
     platforms = lib.platforms.unix;
     changelog = "https://github.com/raphamorim/rio/blob/v${version}/CHANGELOG.md";
     mainProgram = "rio";
+    # ---- corcovado/src/sys/unix/eventedfd.rs - sys::unix::eventedfd::EventedFd (line 31) stdout ----
+    # Test executable failed (exit status: 101).
+    # stderr:
+    # thread 'main' panicked at corcovado/src/sys/unix/eventedfd.rs:24:16:
+    # called `Result::unwrap()` on an `Err` value: Os { code: 1, kind: PermissionDenied, message: "Operation not permitted" }
+    broken = stdenv.isDarwin;
   };
 }
