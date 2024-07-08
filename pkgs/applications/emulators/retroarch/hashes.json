@@ -328,10 +328,10 @@
         "src": {
             "owner": "libretro",
             "repo": "freeintv",
-            "rev": "85bf25a39a34bbc39fe36677175d87c2b597dbe7",
-            "hash": "sha256-4cU/YRZZb7EWNBJX8M91Lb+bCCIlks6xX2Cf6Iq/g9g="
+            "rev": "6bd91d0d83d896e66b9fd7e5e239f93f00e4ad87",
+            "hash": "sha256-P3devj/aAa0e/QpV68kQkLAvhrVGO8O8ijkUAobgUb0="
         },
-        "version": "unstable-2023-04-17"
+        "version": "unstable-2024-06-28"
     },
     "fuse": {
         "fetcher": "fetchFromGitHub",
