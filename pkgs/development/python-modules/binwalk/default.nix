@@ -44,6 +44,12 @@ buildPythonPackage rec {
       includes = [ "testing/tests/test_firmware_zip.py" ];
       revert = true;
     })
+    # binwalk incompatible with Python 3.12
+    # https://github.com/ReFirmLabs/binwalk/pull/668
+    (fetchpatch {
+      url = "https://github.com/ReFirmLabs/binwalk/commit/3e5c6887e840643fdbe7358de4bb31d726d0ce1b.patch";
+      sha256 = "sha256-QhPIC2BKYeeCn2dNm9NeWpyUcIL1S+C/B3F55/nxrjw=";
+    })
     ./use-pytest.patch
   ];
 
