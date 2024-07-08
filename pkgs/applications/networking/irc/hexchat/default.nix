@@ -22,6 +22,7 @@ stdenv.mkDerivation rec {
     gtk2 lua perl python3Packages.python python3Packages.cffi pciutils dbus-glib libcanberra-gtk2 libproxy
     libnotify openssl desktop-file-utils
     isocodes
+    python3Packages.setuptools
   ];
 
   #hexchat and hexchat-text loads enchant spell checking library at run time and so it needs to have route to the path
