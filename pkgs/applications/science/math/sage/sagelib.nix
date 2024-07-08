@@ -6,6 +6,7 @@
 , perl
 , pkg-config
 , sage-setup
+, setuptools
 , gd
 , iml
 , libpng
@@ -62,6 +63,7 @@
 , lrcalc-python
 , matplotlib
 , memory-allocator
+, meson-python
 , mpmath
 , networkx
 , numpy
@@ -78,7 +80,6 @@
 , sphinx
 , sympy
 , typing-extensions
-, nbclassic
 }:
 
 assert (!blas.isILP64) && (!lapack.isILP64);
@@ -102,6 +103,7 @@ buildPythonPackage rec {
     pip # needed to query installed packages
     pkg-config
     sage-setup
+    setuptools
   ];
 
   pythonRelaxDeps = [
@@ -171,6 +173,7 @@ buildPythonPackage rec {
     lrcalc-python
     matplotlib
     memory-allocator
+    meson-python
     mpmath
     networkx
     numpy
@@ -187,8 +190,6 @@ buildPythonPackage rec {
     sphinx
     sympy
     typing-extensions
-
-    nbclassic
   ];
 
   preBuild = ''
