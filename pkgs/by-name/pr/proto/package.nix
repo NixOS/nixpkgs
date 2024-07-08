@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "proto";
-  version = "0.37.2";
+  version = "0.38.0";
 
   src = fetchFromGitHub {
     owner = "moonrepo";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-tzDh8LMxIRYJszgUvAMEWWiSjasSnyz2cOrmNnmaLOg=";
+    hash = "sha256-60PLC/5aouvUy33Qw/orEv+3/3j//3frUxZdh4chlMc=";
   };
 
-  cargoHash = "sha256-JxJlOcTqjQP5MA4em+8jArr0ewCbVibQvLjr+kzn7EM=";
+  cargoHash = "sha256-l6BzvJI+DimykVKYl7Gow+7f3uwfDFajmHcXKoUwcUk=";
 
   buildInputs = lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.SystemConfiguration
