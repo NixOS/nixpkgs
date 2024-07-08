@@ -9,7 +9,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "marwaita-darkcyan";
+  pname = "marwaita-teal";
   version = "20.2-unstable-2024-07-01";
 
   src = fetchFromGitHub {
