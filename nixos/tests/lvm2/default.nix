@@ -10,7 +10,7 @@ let
   tests = let callTest = p: lib.flip (import p) { inherit system pkgs; }; in {
     thinpool = { test = callTest ./thinpool.nix; kernelFilter = lib.id; };
     # we would like to test all versions, but the kernel module currently does not compile against the other versions
-    vdo = { test = callTest ./vdo.nix; kernelFilter = lib.filter (v: v == "6.1"); };
+    vdo = { test = callTest ./vdo.nix; kernelFilter = lib.filter (v: v == "latest"); };
 
 
     # systemd in stage 1
@@ -26,7 +26,7 @@ let
     };
     vdo-sd-stage-1 = {
       test = callTest ./systemd-stage-1.nix;
-      kernelFilter = lib.filter (v: v == "6.1");
+      kernelFilter = lib.filter (v: v == "latest");
       flavour = "vdo";
     };
   };
