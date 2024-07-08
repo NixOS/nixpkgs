@@ -2,6 +2,8 @@
 , fetchFromGitHub
 , lib
 , nix-update-script
+, gitlab-ci-local
+, testers
 }:
 
 buildNpmPackage rec {
@@ -23,7 +25,12 @@ buildNpmPackage rec {
       --replace-fail "npm run cleanup" "true"
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    updateScript = nix-update-script { };
+    tests.version = testers.testVersion {
+      package = gitlab-ci-local;
+    };
+  };
 
   meta = with lib;{
     description = "Run gitlab pipelines locally as shell executor or docker executor";
