@@ -119,7 +119,7 @@ dependencies = [
  "proc-macro2",
  "quote",
  "rustc_version",
- "syn 2.0.68",
+ "syn 2.0.69",
 ]
 
 [[package]]
@@ -130,9 +130,9 @@ checksum = "60b1af1c220855b6ceac025d3f6ecdd2b7c4894bfe9cd9bda4fbb4bc7c0d4cf0"
 
 [[package]]
 name = "els"
-version = "0.1.52-nightly.0"
+version = "0.1.52-nightly.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1bd0a3c0bfdf681ff58dde3d15efc100f712df1ae1d7d9388cbd8107cb7e3c79"
+checksum = "9f71553ed89956daa260ebefee8b4724308e8af507b713297aefa9535252048c"
 dependencies = [
  "erg_common",
  "erg_compiler",
@@ -144,9 +144,9 @@ dependencies = [
 
 [[package]]
 name = "erg_common"
-version = "0.6.40-nightly.0"
+version = "0.6.40-nightly.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4c80f1574b5268d421f2067bdde5776f9363512706d011587432d2a0886eba56"
+checksum = "891d4800e5dea9c2a52a56ad8af9654c292ad98afbcc3cec0480fea55cc468b0"
 dependencies = [
  "backtrace-on-stack-overflow",
  "erg_proc_macros",
@@ -156,9 +156,9 @@ dependencies = [
 
 [[package]]
 name = "erg_compiler"
-version = "0.6.40-nightly.0"
+version = "0.6.40-nightly.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1efdec52061fad5d2238053cb15105d125e55cf116863e1b5337b8d286941ae3"
+checksum = "a90c044a992d23a39eaf65b83485953935496aa1ae0d589b45c1611277d8cb54"
 dependencies = [
  "erg_common",
  "erg_parser",
@@ -166,9 +166,9 @@ dependencies = [
 
 [[package]]
 name = "erg_parser"
-version = "0.6.40-nightly.0"
+version = "0.6.40-nightly.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "926d6768a062c5851b20eda7f77aed41e7f326b8589ae4b8703b13c49364eab5"
+checksum = "fb53c38fdc23f6e643267882c795040fda38da52309296106dba2e9dc544a31e"
 dependencies = [
  "erg_common",
  "erg_proc_macros",
@@ -177,9 +177,9 @@ dependencies = [
 
 [[package]]
 name = "erg_proc_macros"
-version = "0.6.40-nightly.0"
+version = "0.6.40-nightly.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "da422e93bd4346cf04fadf410bc6b63881cda0842c1d976ee5a7f2b8ae29927e"
+checksum = "93643cbe997e214daa35b54d4c948e4f4b1088866ba87004dc787f2e965f0f16"
 dependencies = [
  "quote",
  "syn 1.0.109",
@@ -248,7 +248,7 @@ dependencies = [
  "Inflector",
  "proc-macro2",
  "quote",
- "syn 2.0.68",
+ "syn 2.0.69",
 ]
 
 [[package]]
@@ -542,7 +542,7 @@ dependencies = [
 
 [[package]]
 name = "py2erg"
-version = "0.0.55"
+version = "0.0.56"
 dependencies = [
  "erg_common",
  "erg_compiler",
@@ -552,7 +552,7 @@ dependencies = [
 
 [[package]]
 name = "pylyzer"
-version = "0.0.55"
+version = "0.0.56"
 dependencies = [
  "els",
  "erg_common",
@@ -704,22 +704,22 @@ checksum = "61697e0a1c7e512e84a621326239844a24d8207b4669b41bc18b32ea5cbf988b"
 
 [[package]]
 name = "serde"
-version = "1.0.203"
+version = "1.0.204"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7253ab4de971e72fb7be983802300c30b5a7f0c2e56fab8abfc6a214307c0094"
+checksum = "bc76f558e0cbb2a839d37354c575f1dc3fdc6546b5be373ba43d95f231bf7c12"
 dependencies = [
  "serde_derive",
 ]
 
 [[package]]
 name = "serde_derive"
-version = "1.0.203"
+version = "1.0.204"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "500cbc0ebeb6f46627f50f3f5811ccf6bf00643be300b4c3eabc0ef55dc5b5ba"
+checksum = "e0cd7e117be63d3c3678776753929474f3b04a43a080c744d6b0ae2a8c28e222"
 dependencies = [
  "proc-macro2",
  "quote",
- "syn 2.0.68",
+ "syn 2.0.69",
 ]
 
 [[package]]
@@ -741,7 +741,7 @@ checksum = "6c64451ba24fc7a6a2d60fc75dd9c83c90903b19028d4eff35e88fc1e86564e9"
 dependencies = [
  "proc-macro2",
  "quote",
- "syn 2.0.68",
+ "syn 2.0.69",
 ]
 
 [[package]]
@@ -775,9 +775,9 @@ dependencies = [
 
 [[package]]
 name = "syn"
-version = "2.0.68"
+version = "2.0.69"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "901fa70d88b9d6c98022e23b4136f9f3e54e4662c3bc1bd1d84a42a9a0f0c1e9"
+checksum = "201fcda3845c23e8212cd466bfebf0bd20694490fc0356ae8e428e0824a915a6"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -805,9 +805,9 @@ dependencies = [
 
 [[package]]
 name = "tinyvec"
-version = "1.6.1"
+version = "1.7.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c55115c6fbe2d2bef26eb09ad74bde02d8255476fc0c7b515ef09fbb35742d82"
+checksum = "ce6b6a2fb3a985e99cebfaefa9faa3024743da73304ca1c683a36429613d3d22"
 dependencies = [
  "tinyvec_macros",
 ]
@@ -1030,5 +1030,5 @@ checksum = "fa4f8080344d4671fb4e831a13ad1e68092748387dfc4f55e356242fae12ce3e"
 dependencies = [
  "proc-macro2",
  "quote",
- "syn 2.0.68",
+ "syn 2.0.69",
 ]

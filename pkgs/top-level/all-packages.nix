@@ -2078,8 +2078,6 @@ with pkgs;
 
   vitess = callPackage ../development/tools/database/vitess { };
 
-  voms = callPackage ../tools/networking/voms { };
-
   vopono = callPackage ../tools/networking/vopono { };
 
   vprof = with python3Packages; toPythonApplication vprof;
@@ -3276,7 +3274,10 @@ with pkgs;
 
   awscli = callPackage ../tools/admin/awscli { };
 
-  awscli2 = callPackage ../tools/admin/awscli2 { };
+  awscli2 = callPackage ../tools/admin/awscli2 {
+    # change when https://github.com/aws/aws-cli/issues/8342 resolved
+    python3 = python311;
+  };
 
   okta-aws-cli = callPackage ../tools/admin/okta-aws-cli { };
 
@@ -3920,8 +3921,6 @@ with pkgs;
   };
 
   xjadeo = callPackage ../tools/video/xjadeo { };
-
-  asc-key-to-qr-code-gif = callPackage ../tools/security/asc-key-to-qr-code-gif { };
 
   go-audit = callPackage ../tools/system/go-audit { };
 
@@ -5858,8 +5857,6 @@ with pkgs;
 
   mrkd = callPackage ../tools/text/mrkd { };
 
-  naproche = callPackage ../applications/science/logic/naproche { };
-
   nautilus-open-any-terminal = callPackage ../tools/misc/nautilus-open-any-terminal { };
 
   n2n = callPackage ../tools/networking/n2n { };
@@ -7439,8 +7436,6 @@ with pkgs;
 
   edit = callPackage ../applications/editors/edit { };
 
-  edk2 = callPackage ../development/compilers/edk2 { };
-
   edk2-uefi-shell = callPackage ../tools/misc/edk2-uefi-shell { };
 
   edl = callPackage ../development/embedded/edl { };
@@ -8617,8 +8612,6 @@ with pkgs;
   gx-go = callPackage ../tools/package-management/gx/go { };
 
   efitools = callPackage ../tools/security/efitools { };
-
-  sbctl = callPackage ../tools/security/sbctl { };
 
   sbsigntool = callPackage ../tools/security/sbsigntool { };
 
@@ -11057,10 +11050,8 @@ with pkgs;
   nzbget = callPackage ../tools/networking/nzbget { };
 
   nzbhydra2 = callPackage ../servers/nzbhydra2 {
-    # You need Java (at least 8, at most 15)
-    # https://github.com/theotherp/nzbhydra2/issues/697
-    # https://github.com/theotherp/nzbhydra2/#how-to-run
-    jre = openjdk11;
+    # Requires Java 17, not lower, not higher
+    jre = openjdk17;
   };
 
   oapi-codegen = callPackage ../tools/networking/oapi-codegen { };
@@ -11244,6 +11235,8 @@ with pkgs;
   openssh = opensshPackages.openssh.override {
     etcDir = "/etc/ssh";
   };
+
+  opensshTest = openssh.tests.openssh;
 
   opensshWithKerberos = openssh.override {
     withKerberos = true;
@@ -20454,8 +20447,6 @@ with pkgs;
 
   fb303 = darwin.apple_sdk_11_0.callPackage ../development/libraries/fb303 { };
 
-  fcgi = callPackage ../development/libraries/fcgi { };
-
   fcl = callPackage ../development/libraries/fcl { };
 
   febio = callPackage ../development/libraries/febio { };
@@ -23363,10 +23354,16 @@ with pkgs;
   nuspell = callPackage ../development/libraries/nuspell { };
   nuspellWithDicts = dicts: callPackage ../development/libraries/nuspell/wrapper.nix { inherit dicts; };
 
-  nv-codec-headers-9 = nv-codec-headers.override { majorVersion = "9"; };
-  nv-codec-headers-10 = nv-codec-headers.override { majorVersion = "10"; };
-  nv-codec-headers-11 = nv-codec-headers.override { majorVersion = "11"; };
-  nv-codec-headers-12 = nv-codec-headers.override { majorVersion = "12"; };
+  # splicing magic
+  nv-codec-headers-versions = callPackages ../development/libraries/nv-codec-headers { };
+  inherit (nv-codec-headers-versions)
+    nv-codec-headers-9
+    nv-codec-headers-10
+    nv-codec-headers-11
+    nv-codec-headers-12
+  ;
+  # A default nv-codec-headers to make people happy
+  nv-codec-headers = nv-codec-headers-versions.nv-codec-headers-9;
 
   nvidiaCtkPackages =
     callPackage ../by-name/nv/nvidia-container-toolkit/packages.nix
@@ -28888,8 +28885,6 @@ with pkgs;
   sjasmplus = callPackage ../development/compilers/sjasmplus { };
 
   skeu = callPackage ../data/themes/skeu { };
-
-  sweet = callPackage ../data/themes/sweet { };
 
   sweet-nova = callPackage ../data/themes/sweet-nova { };
 
@@ -38184,23 +38179,23 @@ with pkgs;
 
   ifstat-legacy = callPackage ../tools/networking/ifstat-legacy { };
 
-  isabelle = callPackage ../applications/science/logic/isabelle {
+  isabelle = callPackage ../by-name/is/isabelle/package.nix {
     polyml = polyml.overrideAttrs {
       pname = "polyml-for-isabelle";
-      version = "2023";
+      version = "2024";
       configureFlags = [ "--enable-intinf-as-int" "--with-gmp" "--disable-shared" ];
       buildFlags = [ "compiler" ];
       src = fetchFromGitHub {
         owner = "polyml";
         repo = "polyml";
-        rev = "219e0a248f705b770d45699755d00f05b82a9391";
-        hash = "sha256-HtT3MGtHrqVhynmx73L7NC12AW9N7gkkOi7MKbF4k6Y=";
+        rev = "v5.9.1";
+        hash = "sha256-72wm8dt+Id59A5058mVE5P9TkXW5/LZRthZoxUustVA=";
       };
     };
 
-    java = openjdk17;
+    java = openjdk21;
   };
-  isabelle-components = recurseIntoAttrs (callPackage ../applications/science/logic/isabelle/components { });
+  isabelle-components = recurseIntoAttrs (callPackage ../by-name/is/isabelle/components { });
 
   iprover = callPackage ../applications/science/logic/iprover { };
 

@@ -23,6 +23,7 @@ rustPlatform.buildRustPackage {
     mainProgram = "loco";
     description = "Loco CLI is a powerful command-line tool designed to streamline the process of generating Loco websites";
     homepage = "https://loco.rs";
+    changelog = "https://github.com/loco-rs/loco/blob/master/CHANGELOG.md";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ sebrut ];
   };

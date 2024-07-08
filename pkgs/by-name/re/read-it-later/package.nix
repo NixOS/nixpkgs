@@ -58,6 +58,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Simple Wallabag client with basic features to manage articles";
     homepage = "https://gitlab.gnome.org/World/read-it-later";
+    changelog = "https://gitlab.gnome.org/World/read-it-later/-/releases/${src.rev}";
     license = licenses.gpl3Plus;
     mainProgram = "read-it-later";
     maintainers = with maintainers; [ aleksana ];
