@@ -413,7 +413,7 @@ rec {
   mkSkeletonFromList = l: {
     "1" = if elemAt l 0 == "avr"
       then { cpu = elemAt l 0; kernel = "none"; abi = "unknown"; }
-      else throw "system string '${lib.concatStringsSep "-" l}' with 1 components is ambiguous";
+      else throw "system string '${lib.concatStringsSep "-" l}' with 1 component is ambiguous";
     "2" = # We only do 2-part hacks for things Nix already supports
       if elemAt l 1 == "cygwin"
         then { cpu = elemAt l 0;                      kernel = "windows";  abi = "cygnus";   }
