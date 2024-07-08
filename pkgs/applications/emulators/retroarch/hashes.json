@@ -155,10 +155,10 @@
         "src": {
             "owner": "libretro",
             "repo": "bluemsx-libretro",
-            "rev": "df29d437204af0a5158b6ecb2d6b68296f8d979a",
-            "hash": "sha256-ULDnLHbEQ1+VR3axfbVaH4Kkuq/UDBA9JGuW9beraZ4="
+            "rev": "1f6b5b393df17e746bec118902b1d1f6ed3e4109",
+            "hash": "sha256-yndOlTf4OKUP98L1EN+LW4mwtl6LWQ95ILYo8Y+2Geg="
         },
-        "version": "unstable-2024-05-20"
+        "version": "unstable-2024-06-28"
     },
     "bsnes": {
         "fetcher": "fetchFromGitHub",
