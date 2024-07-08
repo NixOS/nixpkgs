@@ -311,28 +311,36 @@ rec {
     );
 
   /**
-    Compose two extending functions of the type expected by 'extends'
-    into one where changes made in the first are available in the
-    'super' of the second
+    Compose two [`overlays`](#chap-overlays) and returns the resulting attribute set.
 
 
     # Inputs
 
     `f`
 
-    : 1\. Function argument
+    : The first `overlay` to apply
 
     `g`
 
-    : 2\. Function argument
+    : The second `overlay` to apply
 
     `final`
 
-    : 3\. Function argument
+    : The initial value for the fixpoint iteration.
 
     `prev`
 
-    : 4\. Function argument
+    : The initial value for the second argument of `f`
+
+    # Type
+
+    ```
+    # Pseudo code
+    let
+      OverlayFn :: ( { ... } -> { ... } -> { ... } );
+    in
+      composeExtensions :: OverlayFn -> OverlayFn -> { ... } -> { ... } -> { ... }
+    ```
   */
   composeExtensions =
     f: g: final: prev:
@@ -341,13 +349,34 @@ rec {
       in fApplied // g final prev';
 
   /**
-    Compose several extending functions of the type expected by 'extends' into
-    one where changes made in preceding functions are made available to
-    subsequent ones.
+    Compose several [`overlays`](#chap-overlays) and returns the resulting attribute set.
+
+    # Inputs
+
+    `extensions`
+
+    : A list of overlay functions.
+
+    : Each overlay function takes two arguments, `final` and `prev`, and returns an attribute set.
+      - `final` is the result of the fixed-point function, with all overlays applied.
+      - `prev` is the result of the previous overlay function.
+
+    `final`
+
+    : The initial value for the fixpoint iteration.
+
+    `prev`
+
+    : The initial value for the second argument of the overlay
+
+    # Type
 
     ```
-    composeManyExtensions : [packageSet -> packageSet -> packageSet] -> packageSet -> packageSet -> packageSet
-                              ^final        ^prev         ^overrides     ^final        ^prev         ^overrides
+    # Pseudo code
+    let
+      OverlayFn :: ( { ... } -> { ... } -> { ... } );
+    in
+      composeManyExtensions :: [ OverlayFn ] -> { ... } -> { ... } -> { ... }
     ```
   */
   composeManyExtensions =
