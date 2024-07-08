@@ -34,8 +34,15 @@ stdenv.mkDerivation rec {
     "-DWITH_ZSTD=ON"
   ];
 
-
-  env.NIX_CFLAGS_COMPILE = "-Wno-unused-result";
+  env.NIX_CFLAGS_COMPILE = (
+    if stdenv.isDarwin then
+      toString [
+        "-Wno-error=deprecated-non-prototype"
+        "-Wno-error=format"
+      ]
+    else
+      "-Wno-unused-result"
+  );
 
   postPatch = ''
     # as of mydumper v0.14.5-1, mydumper tries to install its config to /etc
@@ -54,7 +61,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/mydumper/mydumper";
     changelog = "https://github.com/mydumper/mydumper/releases/tag/v${version}";
     license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    platforms = lib.platforms.unix;
     maintainers = with maintainers; [ izorkin ];
   };
 }
