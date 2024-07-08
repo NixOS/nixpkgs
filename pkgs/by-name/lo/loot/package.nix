@@ -17,52 +17,61 @@
 
 let
 
-  GTest = fetchurl {
-    url = "https://github.com/google/googletest/archive/v1.14.0.tar.gz";
-    hash = "sha256-itWYxzrXluDYKAsILOvYKmMNc+c808cAV5OKZQG7pdc=";
+  GTest = fetchFromGitHub {
+    owner = "google";
+    repo = "googletest";
+    rev = "v1.14.0";
+    hash = "sha256-t0RchAHTJbuI5YW4uyBPykTvcjy90JW9AOPNjIhwh6U=";
   };
 
   # TODO use pkgs.minizip-ng (cmakeFlags = [ "-DMINIZIP_NG_LIBRARIES=${minizip-ng}/lib/libminizip-ng.so" ])
   # /build/source/src/gui/backup.cpp:28:10: fatal error: mz.h: No such file or directory
-  minizip-ng = fetchurl {
-    url = "https://github.com/zlib-ng/minizip-ng/archive/refs/tags/4.0.1.tar.gz";
-    hash = "sha256-Y+R6K026wNpQH0P02nTxGN+z7w3uD/u+iUKCcQAiYPg=";
-  };
-
-  testing-plugins = fetchurl {
-    url = "https://github.com/Ortham/testing-plugins/archive/1.4.1.tar.gz";
-    hash = "sha256-V/gklac3ATwbgo1D++h+3LV3aPhcZBbo0X8nPWkmkc8=";
+  minizip-ng = fetchFromGitHub {
+    owner = "zlib-ng";
+    repo = "minizip-ng";
+    rev = "4.0.5";
+    hash = "sha256-f37IcSeMXS1Yp6Q6vxYCRjStdCSMVLJGR7ZPr4gm/VE=";
   };
 
   # TODO use pkgs.spdlog
-  spdlog = fetchurl {
-    url = "https://github.com/gabime/spdlog/archive/v1.12.0.tar.gz";
-    hash = "sha256-Tczy0Q9BDB4v6v+Jlmv8SaGrsp728IJGM1sRDgAeCak=";
+  spdlog = fetchFromGitHub {
+    owner = "gabime";
+    repo = "spdlog";
+    rev = "v1.14.1";
+    hash = "sha256-F7khXbMilbh5b+eKnzcB0fPPWQqUHqAYPWJb83OnUKQ=";
   };
 
+  testing-plugins = fetchFromGitHub {
+    owner = "Ortham";
+    repo = "testing-plugins";
+    rev = "1.4.1";
+    hash = "sha256-R36jKArrslbGKOSnDyIeckSEgF1hIQmBloSH+Z8ZS9k=";
+  };
+
+  # ExternalProject tries to re-download tarballs if their hashes do not match.
+
   ValveFileVDF = fetchurl {
-    url = "https://github.com/TinyTinni/ValveFileVDF/archive/3ed733cac6d0306e39d228d4a00311adfcc682f6.tar.gz";
-    hash = "sha256-P5OvndpqXuvVM5jlcrd+ucpIjn1CJUPdVxvuCOMdtIE=";
+    url = "https://github.com/TinyTinni/ValveFileVDF/archive/c8adfc29e62cc980b595e965bedfb239087647ff.tar.gz";
+    hash = "sha256-SKB4/x42DZwiF8m9LrdmkooCNLc7sr1FjQTGRkRmlVA=";
   };
 
 in
 
 stdenv.mkDerivation rec {
   pname = "loot";
-  version = "0.22.1";
+  version = "0.22.4";
 
   src = fetchFromGitHub {
     owner = "loot";
     repo = pname;
     rev = version;
-    hash = "sha256-82KgpLN7KOgxR2qpU4U1z+xg/Ww2nvio63eB3X7evU4=";
+    hash = "sha256-qtbqYLxpjXYBs5xx0th5fUbrCixztO0ZhhP5u59GEkg=";
     # CMakeLists.txt gets the version string from HEAD
     leaveDotGit = true;
   };
 
   patches = [
     ./boost-shared.patch
-    ./remove-external-projects.patch
     ./do-not-copy-test-resources.patch
   ];
 
@@ -74,10 +83,6 @@ stdenv.mkDerivation rec {
   '' + lib.concatMapStrings (tarball: ''
     ln -s ${tarball} build/external/src/${baseNameOf tarball.url}
   '') [
-    GTest
-    minizip-ng
-    testing-plugins
-    spdlog
     ValveFileVDF
   ];
 
@@ -103,7 +108,18 @@ stdenv.mkDerivation rec {
     "-DLIBLOOT_SHARED_LIBRARY=${libloot}/lib/libloot.so"
     "-DZLIB_ROOT=${zlib}"
     "-DZLIB_LIBRARY=${zlib}/lib/libz.so"
+    "-DFETCHCONTENT_SOURCE_DIR_GTEST=${GTest}"
+    "-DFETCHCONTENT_SOURCE_DIR_MINIZIP=${minizip-ng}"
+    "-DFETCHCONTENT_SOURCE_DIR_SPDLOG=${spdlog}"
+    # testing-plugins must be writable so we copy it and add it to cmakeFlags in preConfigure
   ];
+
+  preConfigure = ''
+    tmp=$(mktemp -d)
+    cp -r ${testing-plugins} "$tmp/testing-plugins"
+    chmod -R u+w "$tmp/testing-plugins"
+    cmakeFlags="$cmakeFlags -DFETCHCONTENT_SOURCE_DIR_TESTING-PLUGINS=$tmp/testing-plugins"
+  '';
 
   doCheck = true;
 
