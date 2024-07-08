@@ -5,7 +5,6 @@
   six,
   eventlet,
   gevent,
-  pynose,
   mock,
   coverage,
   pkgs,
@@ -25,7 +24,6 @@ buildPythonPackage rec {
   buildInputs = [
     eventlet
     gevent
-    pynose
     mock
     coverage
     pkgs.openjdk8
