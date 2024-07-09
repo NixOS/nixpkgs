@@ -1119,6 +1119,13 @@
     name = "alyaeanyx";
     keys = [ { fingerprint = "1F73 8879 5E5A 3DFC E2B3 FA32 87D1 AADC D25B 8DEE"; } ];
   };
+  amackillop = {
+    email = "github.roundworm216@passmail.net";
+    github = "amackillop";
+    githubId = 33668612;
+    name = "Austin Mackillop";
+    keys = [ { fingerprint = "1CF4 BDBC D914 15CD EFB6  F62F 726E A395 A07F DE17"; } ];
+  };
   amadejkastelic = {
     email = "amadejkastelic7@gmail.com";
     github = "amadejkastelic";
