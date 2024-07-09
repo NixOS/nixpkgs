@@ -2,11 +2,11 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch2,
   beautifulsoup4,
   enum-compat,
   pyserial,
-  nose,
-  pythonOlder,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -21,24 +21,21 @@ buildPythonPackage rec {
     sha256 = "0cbcvvy3qaqv8925z608qmkc1l914crzw79krwrz2vpm2fyribab";
   };
 
+  patches = [
+    (fetchpatch2 {
+      name = "replace-nose-with-pytest.patch";
+      url = "https://github.com/kipe/enocean/commit/e5ca3b70f0920f129219c980ad549d7f3a4576de.patch";
+      hash = "sha256-cDBvI0I4W5YkGTpg+rKy08TUAmKlhKa/5+Muou9iArs=";
+    })
+  ];
+
   propagatedBuildInputs = [
     beautifulsoup4
     enum-compat
     pyserial
   ];
 
-  # tests rely on nose
-  doCheck = pythonOlder "3.12";
-
-  nativeCheckInputs = [ nose ];
-
-  checkPhase = ''
-    runHook preCheck
-
-    nosetests
-
-    runHook postCheck
-  '';
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [
     "enocean.communicators"
