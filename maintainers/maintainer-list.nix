@@ -17699,7 +17699,7 @@
   s0me1newithhand7s = {
     name = "hand7s";
     email = "s0me1newithhand7s@gmail.com";
-    matrix = "@s0me1newithhand7s:matrix.org"
+    matrix = "@s0me1newithhand7s:matrix.org";
     github = "s0me1newithhand7s";
     githubId = "117505144";
   };
