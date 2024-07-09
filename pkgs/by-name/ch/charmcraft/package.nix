@@ -22,6 +22,9 @@ python3Packages.buildPythonApplication rec {
   postPatch = ''
     substituteInPlace setup.py \
       --replace-fail 'version=determine_version()' 'version="${version}"'
+
+    substituteInPlace charmcraft/env.py \
+      --replace-fail "distutils.util" "setuptools.dist"
   '';
 
   propagatedBuildInputs = with python3Packages; [
@@ -59,6 +62,7 @@ python3Packages.buildPythonApplication rec {
     pytest-subprocess
     pytestCheckHook
     responses
+    setuptools
   ] ++ [ git ];
 
   preCheck = ''
