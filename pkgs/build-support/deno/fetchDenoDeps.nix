@@ -26,8 +26,10 @@ stdenvNoCC.mkDerivation (
   (
     args
     // {
-      denoJsonFlag = if denoJson then "-c ${denoJson}" else "";
-      denoLockFlag = if denoLock then "-c ${denoLock}" else "";
+      denoJsonFile = denoJson;
+      denoLockFile = denoLock;
+      denoJsonFlag = if denoJson != null then "-c ${denoJson}" else "";
+      denoLockFlag = if denoLock != null then "--lock ${denoLock}" else "";
       nativeBuildInputs = [
         deno
         jq
@@ -35,7 +37,6 @@ stdenvNoCC.mkDerivation (
         coreutils
       ];
 
-      # run the same build as our main derivation to ensure we capture the correct set of dependencies
       buildPhase = ''
         ERROR_OCCURRED=false
 
@@ -56,30 +57,46 @@ stdenvNoCC.mkDerivation (
           ERROR_OCCURRED=true
         fi
 
-        if ! test -f "${denoJson}" ; then
-          if test "${denoJson}" = "deno.json" ; then
-            echo "error: There is no deno config file in your project. For now we need every project to have a config file."
-            echo "fix: Run 'deno init' to create it."
+        ${
+          if finalAttrs.denoJsonFile == null then
+            ""
           else
-            echo "error: The deno config file at '${denoJson}' you specified does not exist."
-            echo "fix: Create '${denoJson}'."
-          fi
-          ERROR_OCCURRED=true
-        fi
+            ''
+              if ! test -f "${denoJson}" ; then
+                if test "${denoJson}" = "deno.json" ; then
+                  echo "error: There is no deno config file in your project. For now we need every project to have a config file."
+                  echo "fix: Run 'deno init' to create it."
+                else
+                  echo "error: The deno config file at '${denoJson}' you specified does not exist."
+                  echo "fix: Create '${denoJson}'."
+                fi
+                ERROR_OCCURRED=true
+              fi
+            ''
+        }
+        ${
+          if finalAttrs.denoLockFile == null then
+            ''
+              LOCKFILE="deno.lock"
+            ''
+          else
+            ''
+              LOCKFILE="$((jq -r '.lock' '${denoJson}' || true) | sed -E 's/^(null)?$/deno.lock/')"
+              if test -z "$LOCKFILE" ; then
+                LOCKFILE="deno.lock"
+              fi
 
-        LOCKFILE="$((jq -r '.lock' '${denoJson}' || true) | sed -E 's/^(null)?$/deno.lock/')"
-        if test -z "$LOCKFILE" ; then
-          LOCKFILE="deno.lock"
-        fi
+              if ! test -f "$LOCKFILE" ; then
+                echo "error: Your lockfile '$LOCKFILE' does not seem to exist."
+                echo "fix: Run 'deno run --reload ${script}' to create it."
+                ERROR_OCCURRED=true
+              fi
+            ''
+        }
+
         mkdir node_modules
         mkdir vendor
         mkdir deno
-
-        if ! test -f "$LOCKFILE" ; then
-          echo "error: Your lockfile '$LOCKFILE' does not seem to exist."
-          echo "fix: Run 'deno run --reload ${script}' to create it."
-          ERROR_OCCURRED=true
-        fi
 
         if test "$ERROR_OCCURRED" = "true" ; then
           exit 1
@@ -88,23 +105,28 @@ stdenvNoCC.mkDerivation (
         export LOCKFILE_HASH=$(sha256sum "$LOCKFILE" | cut -d' ' -f1)
 
         # This fun dance, makes the cache command run twice, because the DENO_DIR is not reproducible otherwise
-        deno cache ${finalAttrs.denoJsonFlag} --lock deno.lock --vendor=true --node-modules-dir=true ${script}
+        deno cache ${finalAttrs.denoJsonFlag} ${finalAttrs.denoLockFlag} --vendor=true --node-modules-dir=true ${script}
         rm -rf deno
         mkdir deno
-        deno cache -c ${denoJson} --lock deno.lock --vendor=true --node-modules-dir=true ${script}
+        deno cache ${finalAttrs.denoJsonFlag} ${finalAttrs.denoLockFlag} --vendor=true --node-modules-dir=true ${script}
 
         # These two files are not always reproducible and also not required
-        rm node_modules/.deno/.deno.lock.poll
-        rm node_modules/.deno/.deno.lock
+        rm node_modules/.deno/.deno.lock.poll || true
+        rm node_modules/.deno/.deno.lock || true
 
         # This one is different on every build. There is a open PR to fix this
         # https://github.com/denoland/deno/issues/24479
-        # rm node_modules/.deno/.setup-cache.bin
+        # rm node_modules/.deno/.setup-cache.bin || true
 
         # Make the symlinks in node_modules relative
         for link in $(find node_modules -type l | sort) ; do
           ln --force --symbolic --no-dereference --relative "$(readlink --canonicalize "$link")" "$link"
         done
+
+        if test -f vendor/manifest.json ; then
+          jq -S '.' "vendor/manifest.json" > "vendor/manifest.json.tmp"
+          mv "vendor/manifest.json.tmp" "vendor/manifest.json"
+        fi
 
         # Filter the files in DENO_DIR that we actually need
         OLD_DENO_DIR="$DENO_DIR"
@@ -115,7 +137,7 @@ stdenvNoCC.mkDerivation (
           mkdir -p "$(dirname "$target_file")"
           # There should only be registry.json files here
           # echo '###############################################################################'
-          echo $file
+          # echo $file
           # cat $file
 
           jq -Sc '.' "$OLD_DENO_DIR/$file" > "$target_file"
@@ -134,9 +156,12 @@ stdenvNoCC.mkDerivation (
         if test -f vendor/manifest.json ; then
           for import in $(cat vendor/manifest.json | jq -r '.modules | keys[]') ; do
             warning="$(cat vendor/manifest.json | jq -r '.modules["'"$import"'"].headers["x-deno-warning"]' || true)"
+            if test -z "$warning" || test "$warning" = "null" ; then
+              continue
+            fi
             echo "error: Import of '$import' produced a warning. This usually means, that your import is not locked. While this does not always affect reproducibility, it significantly increases the chance of weird errors if we allowed this. You don't like weird bugs, do you? For this reason I am now aborting your build and forcing you to fix it." >&2
             echo "reference: $warning" >&2
-            echo "fix: Add the import to your '"'${denoJson}'"' file and lock it by running 'deno add \"$import\"'" >&2
+            echo "fix: Add the import to your deno config file and lock it by running 'deno add \"$import\"'" >&2
             ERROR_OCCURRED=true
           done
         fi
