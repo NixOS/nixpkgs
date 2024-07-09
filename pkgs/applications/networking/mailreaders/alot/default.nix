@@ -1,5 +1,5 @@
 { lib
-, python3
+, python311
 , fetchFromGitHub
 , file
 , gnupg
@@ -9,7 +9,7 @@
 , withManpage ? false
 }:
 
-with python3.pkgs; buildPythonApplication rec {
+with python311.pkgs; buildPythonApplication rec {
   pname = "alot";
   version = "0.10";
 

@@ -3,7 +3,6 @@
 , bazel-gazelle
 , buildBazelPackage
 , fetchFromGitHub
-, fetchpatch
 , stdenv
 , cmake
 , gn
@@ -25,15 +24,15 @@ let
     # However, the version string is more useful for end-users.
     # These are contained in a attrset of their own to make it obvious that
     # people should update both.
-    version = "1.30.1";
-    rev = "816188b86a0a52095b116b107f576324082c7c02";
-    hash = "sha256-G0rT+OfMk2nitTXcxMr04jwUMYTfb4VBEV1zftalgFU=";
+    version = "1.30.4";
+    rev = "32113313a357829ba3a5dce0795b6780bf8cbf4d";
+    hash = "sha256-u9lTVe40pwXTt0YRwJXRuZonS5KJL2JQUQ3L9ymuA74=";
   };
 
   # these need to be updated for any changes to fetchAttrs
   depsHash = {
-    x86_64-linux = "sha256-S2qfgaKyBSgCU6CkhLwezbgVqqqaFYAHQMCbYjwYRxY=";
-    aarch64-linux = "sha256-Ge6qfzjwdh9078LE5k9hqFMKx7yc2buoYOpB9IIBS/s=";
+    x86_64-linux = "sha256-m7dMr/dCmjpKLPT+8FXBHGkTlNoN9x1oQ7D6uO0sHtQ=";
+    aarch64-linux = "sha256-9GqVpWkMHP9nb5EZHjGKixkWazi//oLlIUum45xTvoM=";
   }.${stdenv.system} or (throw "unsupported system ${stdenv.system}");
 in
 buildBazelPackage {
@@ -56,8 +55,6 @@ buildBazelPackage {
     sed -i 's,#!/usr/bin/env python3,#!${python3}/bin/python,' bazel/foreign_cc/luajit.patch
     sed -i '/javabase=/d' .bazelrc
     sed -i '/"-Werror"/d' bazel/envoy_internal.bzl
-
-    cp ${./dd_trace_cpp.patch} bazel/dd_trace_cpp.patch
   '';
 
   patches = [
@@ -69,11 +66,6 @@ buildBazelPackage {
 
     # use system C/C++ tools
     ./0003-nixpkgs-use-system-C-C-toolchains.patch
-
-    # apply patch to dd-trace-cpp
-    # remove once a version of dd-trace-cpp is released and adopted by envoy
-    # that contains https://github.com/DataDog/dd-trace-cpp/commit/3a8e1e9a3cf4e87ef053e954a39dc7a967ac6965
-    ./0004-nixpkgs-add-cstdint-in-dd-trace-cpp.patch
   ];
 
   nativeBuildInputs = [
@@ -191,6 +183,8 @@ buildBazelPackage {
     "--repo_env=GOPROXY=https://proxy.golang.org,direct"
     "--repo_env=GOSUMDB=sum.golang.org"
   ];
+
+  requiredSystemFeatures = [ "big-parallel" ];
 
   passthru.tests = {
     envoy = nixosTests.envoy;

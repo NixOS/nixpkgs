@@ -6,11 +6,11 @@
 
 stdenv.mkDerivation rec {
   pname = "boron";
-  version = "2.0.8";
+  version = "2.1.0";
 
   src = fetchurl {
     url = "https://sourceforge.net/projects/urlan/files/Boron/boron-${version}.tar.gz";
-    sha256 = "sha256-Ni/LJgOABC2wXDMsg1ZAuZWSQdFT9/Fa4lH4+V0gy8M=";
+    sha256 = "sha256-50HKcK2hQpe9k9RIoVa/N5krTRKlW9AsGYTmHITx7Nc=";
   };
 
   # this is not a standard Autotools-like `configure` script

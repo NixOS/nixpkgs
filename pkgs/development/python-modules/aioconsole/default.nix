@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 # This package provides a binary "apython" which sometimes invokes
@@ -17,7 +18,7 @@
 # wrapped to be able to find aioconsole and any other packages.
 buildPythonPackage rec {
   pname = "aioconsole";
-  version = "0.7.0";
+  version = "0.7.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -26,12 +27,10 @@ buildPythonPackage rec {
     owner = "vxgmichel";
     repo = "aioconsole";
     rev = "refs/tags/v${version}";
-    hash = "sha256-SKJLc1Tauwpmh2xtFFyHqKRaaQAK99SpbbGLFmAbKcQ=";
+    hash = "sha256-c8zeKebS04bZS9pMIKAauaLPvRrWaGoDKbnF906tFzQ=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   nativeCheckInputs = [
     pytest-asyncio
@@ -51,9 +50,7 @@ buildPythonPackage rec {
     "test_interact_multiple_indented_lines"
   ];
 
-  pythonImportsCheck = [
-    "aioconsole"
-  ];
+  pythonImportsCheck = [ "aioconsole" ];
 
   meta = with lib; {
     changelog = "https://github.com/vxgmichel/aioconsole/releases/tag/v${version}";

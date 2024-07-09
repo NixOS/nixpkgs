@@ -26,7 +26,7 @@ python3Packages.buildPythonApplication rec {
   '';
 
   meta = with lib; {
-    description = "An interactive command-line HTTP client featuring autocomplete and syntax highlighting";
+    description = "Interactive command-line HTTP client featuring autocomplete and syntax highlighting";
     mainProgram = "http-prompt";
     homepage = "https://github.com/eliangcs/http-prompt";
     license = licenses.mit;

@@ -4,7 +4,7 @@
 , cmake
 , libGLU
 , libGL
-, freeglut
+, libglut
 , libX11
 , libXcursor
 , libXinerama
@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     libGLU
     libGL
-    freeglut
+    libglut
     libX11
     libXcursor
     libXinerama

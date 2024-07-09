@@ -1,13 +1,42 @@
-{ fetchFromGitHub, lib, buildPythonPackage, pythonOlder
-, afdko, appdirs, attrs, booleanoperations, brotlipy, click
-, defcon, fontmath, fontparts, fontpens, fonttools, lxml
-, mutatormath, pathspec, psautohint, pyclipper, pytz, regex, scour
-, toml, typed-ast, ufonormalizer, ufoprocessor, unicodedata2, zopfli
-, pillow, six, bash, setuptools-scm }:
+{
+  fetchFromGitHub,
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  afdko,
+  appdirs,
+  attrs,
+  booleanoperations,
+  brotlipy,
+  click,
+  defcon,
+  fontmath,
+  fontparts,
+  fontpens,
+  fonttools,
+  lxml,
+  mutatormath,
+  pathspec,
+  psautohint,
+  pyclipper,
+  pytz,
+  regex,
+  scour,
+  toml,
+  typed-ast,
+  ufonormalizer,
+  ufoprocessor,
+  unicodedata2,
+  zopfli,
+  pillow,
+  six,
+  bash,
+  setuptools-scm,
+}:
 
 buildPythonPackage rec {
   pname = "nototools";
-  version = "0.2.19";
+  version = "0.2.20";
 
   disabled = pythonOlder "3.6";
 
@@ -15,7 +44,7 @@ buildPythonPackage rec {
     owner = "googlefonts";
     repo = "nototools";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-anAz+5PIhGhpFunjV2EVk2CrbXq2U0e+LINYUnS0IKU=";
+    sha256 = "sha256-id4UhyWOFHrtmBZHhnaY2jHDIK0s7rcGBpg4QsBTLKs=";
   };
 
   postPatch = ''

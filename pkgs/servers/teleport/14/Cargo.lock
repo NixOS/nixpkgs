@@ -96,9 +96,9 @@ checksum = "b645a089122eccb6111b4f81cbc1a49f5900ac4666bb93ac027feaecf15607bf"
 
 [[package]]
 name = "bindgen"
-version = "0.66.1"
+version = "0.68.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f2b84e06fc203107bfbad243f4aba2af864eb7db3b1cf46ea0a023b0b433d2a7"
+checksum = "726e4313eb6ec35d2730258ad4e15b547ee75d6afaa1361a922e78e59b7d8078"
 dependencies = [
  "bitflags 2.4.0",
  "cexpr",
@@ -149,9 +149,9 @@ dependencies = [
 
 [[package]]
 name = "boring"
-version = "3.1.0"
+version = "4.3.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7ae1aba472e42d3cf45ac6d0a6c8fc3ddf743871209e1b40229aed9fbdf48ece"
+checksum = "92667e5967bf826198f88dd3e43616973f8902769a6151616a65be1289a3c531"
 dependencies = [
  "bitflags 2.4.0",
  "boring-sys",
@@ -162,9 +162,9 @@ dependencies = [
 
 [[package]]
 name = "boring-sys"
-version = "3.1.0"
+version = "4.3.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ceced5be0047c7c48d77599535fd7f0a81c1b0f0a1e97e7eece24c45022bb481"
+checksum = "f04f5e0e2dc8315f68251391a4ac6da54793525c01d0206b10732b71139768cd"
 dependencies = [
  "bindgen",
  "cmake",
@@ -1233,7 +1233,7 @@ dependencies = [
 [[package]]
 name = "rdp-rs"
 version = "0.1.0"
-source = "git+https://github.com/gravitational/rdp-rs?rev=0ddb504e10051aaa8f0de57580a973d2853a5b7d#0ddb504e10051aaa8f0de57580a973d2853a5b7d"
+source = "git+https://github.com/gravitational/rdp-rs?rev=edfb5330a11d11eaf36d65e4300555368b4c6b02#edfb5330a11d11eaf36d65e4300555368b4c6b02"
 dependencies = [
  "boring",
  "bufstream",
@@ -1462,9 +1462,9 @@ dependencies = [
 
 [[package]]
 name = "shlex"
-version = "1.1.0"
+version = "1.3.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "43b2853a4d09f215c24cc5489c992ce46052d359b5109343cbafbf26bc62f8a3"
+checksum = "0fda2ff0d084019ba4d7c6f371c95d8fd75ce3524c3cb8fb653a3023f6323e64"
 
 [[package]]
 name = "signature"

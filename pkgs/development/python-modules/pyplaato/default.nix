@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, aiohttp
-, python-dateutil
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  aiohttp,
+  python-dateutil,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -26,9 +27,7 @@ buildPythonPackage rec {
   # Module has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "pyplaato"
-  ];
+  pythonImportsCheck = [ "pyplaato" ];
 
   meta = with lib; {
     description = "Python API client for fetching Plaato data";

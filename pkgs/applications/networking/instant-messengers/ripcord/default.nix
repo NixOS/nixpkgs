@@ -14,7 +14,7 @@ mkDerivation rec {
       name = "${pname}-${version}.AppImage";
     };
   in appimageTools.extract {
-    name = "${pname}-${version}";
+    inherit pname version;
     src = appimage;
   };
 

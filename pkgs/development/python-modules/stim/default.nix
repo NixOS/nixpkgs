@@ -1,18 +1,19 @@
-{ lib
-, buildPythonPackage
-, cirq-core
-, fetchFromGitHub
-, matplotlib
-, networkx
-, numpy
-, pandas
-, pybind11
-, pytest-xdist
-, pytestCheckHook
-, pythonOlder
-, scipy
-, setuptools
-, wheel
+{
+  lib,
+  buildPythonPackage,
+  cirq-core,
+  fetchFromGitHub,
+  matplotlib,
+  networkx,
+  numpy,
+  pandas,
+  pybind11,
+  pytest-xdist,
+  pytestCheckHook,
+  pythonOlder,
+  scipy,
+  setuptools,
+  wheel,
 }:
 
 buildPythonPackage rec {
@@ -32,7 +33,7 @@ buildPythonPackage rec {
   postPatch = ''
     # asked to relax this in https://github.com/quantumlib/Stim/issues/623
     substituteInPlace pyproject.toml \
-      --replace "pybind11==" "pybind11>="
+      --replace-quiet "pybind11~=" "pybind11>="
   '';
 
   nativeBuildInputs = [
@@ -41,9 +42,7 @@ buildPythonPackage rec {
     wheel
   ];
 
-  propagatedBuildInputs = [
-    numpy
-  ];
+  propagatedBuildInputs = [ numpy ];
 
   nativeCheckInputs = [
     cirq-core
@@ -55,9 +54,7 @@ buildPythonPackage rec {
     scipy
   ];
 
-  pythonImportsCheck = [
-    "stim"
-  ];
+  pythonImportsCheck = [ "stim" ];
 
   enableParallelBuilding = true;
 
@@ -67,7 +64,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "A tool for high performance simulation and analysis of quantum stabilizer circuits, especially quantum error correction (QEC) circuits";
+    description = "Tool for high performance simulation and analysis of quantum stabilizer circuits, especially quantum error correction (QEC) circuits";
     mainProgram = "stim";
     homepage = "https://github.com/quantumlib/stim";
     changelog = "https://github.com/quantumlib/Stim/releases/tag/v${version}";

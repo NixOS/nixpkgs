@@ -1,18 +1,18 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, stdenv
-, pythonRelaxDepsHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  stdenv,
 
-# build-system
-, setuptools
+  # build-system
+  setuptools,
 
-# dependencies
-, numpy
-, onnxruntime
+  # dependencies
+  numpy,
+  onnxruntime,
 
-# tests
-, pytestCheckHook
+  # tests
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -29,25 +29,18 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     setuptools
-    pythonRelaxDepsHook
   ];
 
-  pythonRelaxDeps = [
-    "numpy"
-  ];
+  pythonRelaxDeps = [ "numpy" ];
 
   propagatedBuildInputs = [
     numpy
     onnxruntime
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "pysilero_vad"
-  ];
+  pythonImportsCheck = [ "pysilero_vad" ];
 
   meta = with lib; {
     # what():  /build/source/include/onnxruntime/core/common/logging/logging.h:294 static const onnxruntime::logging::Logger& onnxruntime::logging::LoggingManager::DefaultLogger() Attempt to use DefaultLogger but none has been registered.

@@ -249,12 +249,11 @@ let
       with subtest("Check whether nixos-rebuild works"):
           target.succeed("nixos-rebuild switch >&2")
 
-      # FIXME: Nix 2.4 broke nixos-option, someone has to fix it.
-      # with subtest("Test nixos-option"):
-      #     kernel_modules = target.succeed("nixos-option boot.initrd.kernelModules")
-      #     assert "virtio_console" in kernel_modules
-      #     assert "List of modules" in kernel_modules
-      #     assert "qemu-guest.nix" in kernel_modules
+      with subtest("Test nixos-option"):
+          kernel_modules = target.succeed("nixos-option boot.initrd.kernelModules")
+          assert "virtio_console" in kernel_modules
+          assert "List of modules" in kernel_modules
+          assert "qemu-guest.nix" in kernel_modules
 
       target.shutdown()
 
@@ -715,7 +714,7 @@ let
     '';
   };
 
-  mkClevisZfsTest = { fallback ? false }: makeInstallerTest "clevis-zfs${optionalString fallback "-fallback"}" {
+  mkClevisZfsTest = { fallback ? false, parentDataset ? false }: makeInstallerTest "clevis-zfs${optionalString parentDataset "-parent-dataset"}${optionalString fallback "-fallback"}" {
     clevisTest = true;
     clevisFallbackTest = fallback;
     enableOCR = fallback;
@@ -732,17 +731,27 @@ let
         "udevadm settle",
         "mkswap /dev/vda2 -L swap",
         "swapon -L swap",
+    '' + optionalString (!parentDataset) ''
         "zpool create -O mountpoint=legacy rpool /dev/vda3",
         "echo -n password | zfs create"
         + " -o encryption=aes-256-gcm -o keyformat=passphrase rpool/root",
+    '' + optionalString (parentDataset) ''
+        "echo -n password | zpool create -O mountpoint=none -O encryption=on -O keyformat=passphrase rpool /dev/vda3",
+        "zfs create -o mountpoint=legacy rpool/root",
+    '' +
+    ''
         "mount -t zfs rpool/root /mnt",
         "mkfs.ext3 -L boot /dev/vda1",
         "mkdir -p /mnt/boot",
         "mount LABEL=boot /mnt/boot",
         "udevadm settle")
     '';
-    extraConfig = ''
+    extraConfig = optionalString (!parentDataset) ''
       boot.initrd.clevis.devices."rpool/root".secretFile = "/etc/nixos/clevis-secret.jwe";
+    '' + optionalString (parentDataset) ''
+      boot.initrd.clevis.devices."rpool".secretFile = "/etc/nixos/clevis-secret.jwe";
+    '' +
+    ''
       boot.zfs.requestEncryptionCredentials = true;
 
 
@@ -974,6 +983,9 @@ in {
           "mkfs.xfs -L nixos /dev/MyVolGroup/nixos",
           "mount LABEL=nixos /mnt",
       )
+    '';
+    extraConfig = optionalString systemdStage1 ''
+      boot.initrd.services.lvm.enable = true;
     '';
   };
 
@@ -1357,6 +1369,8 @@ in {
   clevisLuksFallback = mkClevisLuksTest { fallback = true; };
   clevisZfs = mkClevisZfsTest { };
   clevisZfsFallback = mkClevisZfsTest { fallback = true; };
+  clevisZfsParentDataset = mkClevisZfsTest { parentDataset = true; };
+  clevisZfsParentDatasetFallback = mkClevisZfsTest { parentDataset = true; fallback = true; };
 } // optionalAttrs systemdStage1 {
   stratisRoot = makeInstallerTest "stratisRoot" {
     createPartitions = ''

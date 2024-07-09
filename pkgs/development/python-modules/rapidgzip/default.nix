@@ -1,25 +1,30 @@
-{ lib
-, buildPythonPackage
-, cython
-, fetchPypi
-, pythonOlder
-, setuptools
-, nasm
+{
+  lib,
+  buildPythonPackage,
+  cython,
+  fetchPypi,
+  pythonOlder,
+  setuptools,
+  nasm,
 }:
 
 buildPythonPackage rec {
   pname = "rapidgzip";
-  version = "0.13.2";
+  version = "0.14.2";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-W1Wi9byhwYRyF6VhZ+BkPLsxCzaHFHoYFs/LggXo5tQ=";
+    hash = "sha256-84NiaaOBw6kqBwVfVTcnaebRaQH5bg9JvxohwQkYZAk=";
   };
 
-  nativeBuildInputs = [ cython nasm setuptools ];
+  nativeBuildInputs = [
+    cython
+    nasm
+    setuptools
+  ];
 
   # has no tests
   doCheck = false;

@@ -83,7 +83,7 @@ stdenvNoCC.mkDerivation rec {
   outputsToInstall = [];
 
   meta = with lib; {
-    description = "The Comix Cursors mouse themes";
+    description = "Comix Cursors mouse themes";
     longDescription = ''
       There are many (${toString ((length outputs) - 1)}) variants of color,
       opacity, edge thickness, and right- or left-handedness, for this cursor

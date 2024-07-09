@@ -22,7 +22,7 @@ in
     '';
 
     meta = with lib; {
-      description = "The Most Complete All-In-One Mod Library for Minecraft with 100+ Mods, FPS Improvements, and more";
+      description = "Most Complete All-In-One Mod Library for Minecraft with 100+ Mods, FPS Improvements, and more";
       homepage = "https://client.badlion.net";
       license = with licenses; [ unfree ];
       maintainers = with maintainers; [];

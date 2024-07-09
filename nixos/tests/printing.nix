@@ -9,7 +9,7 @@ import ./make-test-python.nix (
 {
   name = "printing";
   meta = with pkgs.lib.maintainers; {
-    maintainers = [ domenkozar eelco matthewbauer ];
+    maintainers = [ domenkozar matthewbauer ];
   };
 
   nodes.server = { ... }: {

@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "ailment";
-  version = "9.2.100";
+  version = "9.2.109";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "angr";
     repo = "ailment";
     rev = "refs/tags/v${version}";
-    hash = "sha256-qjEQ+pk/5Zp1HRrT/MlpmExB86JCF4kW3UHn3/anND4=";
+    hash = "sha256-1/17bSpvhripv0wYEQnhW2Z52fFThPjl8mNPTu2DP5s=";
   };
 
   build-system = [ setuptools ];
@@ -31,7 +31,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "ailment" ];
 
   meta = with lib; {
-    description = "The angr Intermediate Language";
+    description = "Angr Intermediate Language";
     homepage = "https://github.com/angr/ailment";
     license = with licenses; [ bsd2 ];
     maintainers = with maintainers; [ fab ];

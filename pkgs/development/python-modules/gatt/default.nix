@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, dbus-python
-, pygobject3
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  dbus-python,
+  pygobject3,
 }:
 
 buildPythonPackage rec {

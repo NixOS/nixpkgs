@@ -9,20 +9,20 @@ let
     callPackage
       (import ./generic.nix rec {
         pname = "apptainer";
-        version = "1.3.1";
+        version = "1.3.3";
         projectName = "apptainer";
 
         src = fetchFromGitHub {
           owner = "apptainer";
           repo = "apptainer";
           rev = "refs/tags/v${version}";
-          hash = "sha256-XhJecINx8jC6pRzIoM4nC6Aunj40xL8EmYIA4UizfAY=";
+          hash = "sha256-xQZCQa9z1aJ2tVtxMlwcNhlm0EV/nn8OnbfaVZRm4JI=";
         };
 
         # Update by running
         # nix-prefetch -E "{ sha256 }: ((import ./. { }).apptainer.override { vendorHash = sha256; }).goModules"
         # at the root directory of the Nixpkgs repository
-        vendorHash = "sha256-MXW1U13uDRAx4tqZvqsuJvoD22nEL2gcxiGaa/6zwU0=";
+        vendorHash = "sha256-W853++SSvkAYYUczbl8vnoBQZnimUdsAEXp4MCkLPBU=";
 
         extraDescription = " (previously known as Singularity)";
         extraMeta.homepage = "https://apptainer.org";
@@ -35,26 +35,32 @@ let
         # when building on a system with disabled unprivileged namespace.
         # See https://github.com/NixOS/nixpkgs/pull/215690#issuecomment-1426954601
         defaultToSuid = null;
+
+        sourceFilesWithDefaultPaths = {
+          "cmd/internal/cli/actions.go" = [ "/bin:/usr/bin:/sbin:/usr/sbin:/usr/local/bin:/usr/local/sbin" ];
+          "e2e/env/env.go" = [ "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin" ];
+          "internal/pkg/util/env/env.go" = [ "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin" ];
+        };
       };
 
   singularity =
     callPackage
       (import ./generic.nix rec {
         pname = "singularity-ce";
-        version = "4.1.2";
+        version = "4.1.4";
         projectName = "singularity";
 
         src = fetchFromGitHub {
           owner = "sylabs";
           repo = "singularity";
           rev = "refs/tags/v${version}";
-          hash = "sha256-/KTDdkCMkZ5hO+VYHzw9vB8FDWxg7PS1yb2waRJQngY=";
+          hash = "sha256-+qwPzgwfF6A1c/rmSM/5T2N9/wVeWhMoAthj3eSQmh8=";
         };
 
         # Update by running
         # nix-prefetch -E "{ sha256 }: ((import ./. { }).singularity.override { vendorHash = sha256; }).goModules"
         # at the root directory of the Nixpkgs repository
-        vendorHash = "sha256-4Nxj2PzZmFdvouWKyXLFDk8iuRhFuvyPW/+VRTw75Zw=";
+        vendorHash = "sha256-dTqOSk8APLOsqwEiZ/IL8Zu1SR48MyEYPgRe6PC2nd8=";
 
         # Do not build conmon and squashfuse from the Git submodule sources,
         # Use Nixpkgs provided version
@@ -71,6 +77,14 @@ let
         # on UNIX-like platforms,
         # and only have --without-suid but not --with-suid.
         defaultToSuid = true;
+
+        sourceFilesWithDefaultPaths = {
+          "cmd/internal/cli/actions.go" = [ "/bin:/usr/bin:/sbin:/usr/sbin:/usr/local/bin:/usr/local/sbin" ];
+          "e2e/env/env.go" = [ "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin" ];
+          "internal/pkg/util/env/clean.go" = [
+            "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+          ];
+        };
       };
 
   genOverridenNixos =

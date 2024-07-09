@@ -1,17 +1,18 @@
-{ lib
-, buildPythonPackage
-, cacert
-, fetchFromGitHub
-, fetchpatch
-, git-annex
-, gitMinimal
-, pygit2
-, pytestCheckHook
-, python
-, pythonOlder
-, setuptools
-, substituteAll
-, util-linux
+{
+  lib,
+  buildPythonPackage,
+  cacert,
+  fetchFromGitHub,
+  fetchpatch,
+  git-annex,
+  gitMinimal,
+  pygit2,
+  pytestCheckHook,
+  python,
+  pythonOlder,
+  setuptools,
+  substituteAll,
+  util-linux,
 }:
 
 buildPythonPackage rec {
@@ -48,9 +49,7 @@ buildPythonPackage rec {
     })
   ];
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     pygit2
@@ -63,9 +62,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "git_annex_adapter"
-  ];
+  pythonImportsCheck = [ "git_annex_adapter" ];
 
   disabledTests = [
     # KeyError and AssertionError

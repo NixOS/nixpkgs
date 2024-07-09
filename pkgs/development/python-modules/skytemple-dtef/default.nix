@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pillow
-, pytestCheckHook
-, pythonOlder
-, skytemple-files
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pillow,
+  pytestCheckHook,
+  pythonOlder,
+  skytemple-files,
 }:
 
 buildPythonPackage rec {
@@ -26,16 +27,12 @@ buildPythonPackage rec {
     skytemple-files
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "skytemple_dtef"
-  ];
+  pythonImportsCheck = [ "skytemple_dtef" ];
 
   meta = with lib; {
-    description = "A format for standardized rule-based tilesets with 256 adjacency combinations";
+    description = "Format for standardized rule-based tilesets with 256 adjacency combinations";
     homepage = "https://github.com/SkyTemple/skytemple-dtef";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ marius851000 ];

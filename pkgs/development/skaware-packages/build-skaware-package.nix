@@ -26,7 +26,8 @@
 , maintainers ? [ ]
   # : passthru arguments (e.g. tests)
 , passthru ? { }
-
+  # : attributes to be merged into meta
+, broken ? false
 }:
 
 let
@@ -125,7 +126,7 @@ stdenv.mkDerivation {
 
   meta = {
     homepage = "https://skarnet.org/software/${pname}/";
-    inherit description platforms;
+    inherit broken description platforms;
     license = lib.licenses.isc;
     maintainers = with lib.maintainers;
       [ pmahoney Profpatsch qyliss ] ++ maintainers;

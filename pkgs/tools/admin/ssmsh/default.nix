@@ -25,7 +25,7 @@ buildGoModule rec {
 
   meta = with lib; {
     homepage = "https://github.com/bwhaley/ssmsh";
-    description = "An interactive shell for AWS Parameter Store";
+    description = "Interactive shell for AWS Parameter Store";
     license = licenses.mit;
     maintainers = with maintainers; [ dbirks ];
     mainProgram = "ssmsh";

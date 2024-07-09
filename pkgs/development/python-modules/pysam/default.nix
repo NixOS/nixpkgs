@@ -1,21 +1,22 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, bzip2
-, bcftools
-, curl
-, cython
-, htslib
-, libdeflate
-, xz
-, pytestCheckHook
-, setuptools
-, samtools
-, zlib
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  bzip2,
+  bcftools,
+  curl,
+  cython,
+  htslib,
+  libdeflate,
+  xz,
+  pytestCheckHook,
+  setuptools,
+  samtools,
+  zlib,
 }:
 
 buildPythonPackage rec {
-  pname   = "pysam";
+  pname = "pysam";
   version = "0.22.1";
   pyproject = true;
 
@@ -75,7 +76,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "A python module for reading, manipulating and writing genome data sets";
+    description = "Python module for reading, manipulating and writing genome data sets";
     downloadPage = "https://github.com/pysam-developers/pysam";
     homepage = "https://pysam.readthedocs.io/";
     maintainers = with maintainers; [ unode ];

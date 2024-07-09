@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, mock
-, pynose
-, pexpect
-, pyserial
-, pytestCheckHook
-, pythonOlder
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  mock,
+  pynose,
+  pexpect,
+  pyserial,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -34,17 +35,11 @@ buildPythonPackage rec {
        --replace-fail "assertEquals" "assertEqual"
   '';
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  dependencies = [
-    pyserial
-  ];
+  dependencies = [ pyserial ];
 
-  passthru.optional-dependencies.GATTTOOL = [
-    pexpect
-  ];
+  passthru.optional-dependencies.GATTTOOL = [ pexpect ];
 
   nativeBuildInputs = [
     # For cross compilation the doCheck is false and therefor the
@@ -58,15 +53,16 @@ buildPythonPackage rec {
     pytestCheckHook
   ] ++ passthru.optional-dependencies.GATTTOOL;
 
-  pythonImportsCheck = [
-    "pygatt"
-  ];
+  pythonImportsCheck = [ "pygatt" ];
 
   meta = with lib; {
     description = "Python wrapper the BGAPI for accessing Bluetooth LE Devices";
     homepage = "https://github.com/peplin/pygatt";
     changelog = "https://github.com/peplin/pygatt/blob/v${version}/CHANGELOG.rst";
-    license = with licenses; [ asl20 mit ];
+    license = with licenses; [
+      asl20
+      mit
+    ];
     maintainers = with maintainers; [ fab ];
   };
 }

@@ -1,22 +1,24 @@
 { lib
 , buildNpmPackage
 , fetchFromGitHub
+, pkg-config
+, vips
 }:
 
 let
   pname = "psitransfer";
-  version = "2.1.2";
+  version = "2.2.0";
   src = fetchFromGitHub {
     owner = "psi-4ward";
     repo = "psitransfer";
     rev = "v${version}";
-    hash = "sha256-dBAieXIwCEstR9m+6+2/OLPKo2qHynZ1t372Il0mkXk=";
+    hash = "sha256-5o4QliAXgSZekIy0CNWfEuOxNl0uetL8C8RKUJ8HsNA=";
   };
   app = buildNpmPackage {
     pname = "${pname}-app";
     inherit version src;
 
-    npmDepsHash = "sha256-iCd+I/aTMwQqAMRHan3T191XNz4S3Cy6CDxSLIYY7IA=";
+    npmDepsHash = "sha256-q7E+osWIf6VZ3JvxCXoZYeF28aMgmKP6EzQkksUUjeY=";
 
     postPatch = ''
       # https://github.com/psi-4ward/psitransfer/pull/284
@@ -31,7 +33,12 @@ let
 in buildNpmPackage {
   inherit pname version src;
 
-  npmDepsHash = "sha256-H22T5IU8bjbsWhwhchDqppvYfcatbXSWqp6gdoek1Z8=";
+  npmDepsHash = "sha256-EW/Fej58LE/nbJomPtWvEjDveAUdo0jIWwC+ziN0gy0=";
+
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [
+    vips  # for 'sharp' dependency
+  ];
 
   postPatch = ''
     rm -r public/app

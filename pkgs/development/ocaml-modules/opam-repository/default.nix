@@ -3,7 +3,7 @@
 buildDunePackage rec {
   pname = "opam-repository";
 
-  minimumOCamlVersion = "4.02";
+  minimalOCamlVersion = "4.02";
 
   useDune2 = true;
 

@@ -17,13 +17,13 @@
 , capnproto
 }:
 rustPlatform.buildRustPackage rec{
-  pname = "turbo";
-  version = "1.11.3";
+  pname = "turbo-unwrapped";
+  version = "1.13.2";
   src = fetchFromGitHub {
     owner = "vercel";
     repo = "turbo";
     rev = "v${version}";
-    hash = "sha256-hjJXbGct9ZmriKdVjB7gwfmFsV1Tv57V7DfUMFZ8Xv0=";
+    hash = "sha256-q1BxBAjfHyGDaH/IywPw9qnZJjzeU4tu2CyUWbnd6y8=";
   };
   cargoBuildFlags = [
     "--package"
@@ -31,7 +31,10 @@ rustPlatform.buildRustPackage rec{
   ];
   RELEASE_TURBO_CLI = "true";
 
-  cargoHash = "sha256-bAXO4Lqv4ibo+fz3679MjNgP2MMY8TbxhG0+DRy0xcA=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes."tui-term-0.1.8" = "sha256-MNeVnF141uNWbjqXEbHwXnMTkCnvIteb5v40HpEK6D4=";
+  };
 
   RUSTC_BOOTSTRAP = 1;
   nativeBuildInputs = [

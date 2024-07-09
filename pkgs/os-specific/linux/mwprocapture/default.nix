@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
     homepage = "https://www.magewell.com/";
     description = "Linux driver for the Magewell Pro Capture family";
     license = licenses.unfreeRedistributable;
-    maintainers = with maintainers; [ flexiondotorg MP2E ];
+    maintainers = with maintainers; [ flexiondotorg ];
     platforms = platforms.linux;
   };
 }

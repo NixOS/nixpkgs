@@ -1,5 +1,10 @@
 import ../make-test-python.nix (
-  { pkgs, lib, ... }:
+  {
+    pkgs,
+    lib,
+    incus ? pkgs.incus-lts,
+    ...
+  }:
 
   {
     name = "incus-storage";
@@ -19,7 +24,10 @@ import ../make-test-python.nix (
 
         virtualisation = {
           emptyDiskImages = [ 2048 ];
-          incus.enable = true;
+          incus = {
+            enable = true;
+            package = incus;
+          };
         };
       };
 

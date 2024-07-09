@@ -14,16 +14,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "wasmer";
-  version = "4.2.7";
+  version = "4.3.3";
 
   src = fetchFromGitHub {
     owner = "wasmerio";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-jyA1DUouODq9giAWeGOw7VMGwA+FbyqpEU77jtCb5v4=";
+    hash = "sha256-k0XyVdSbb0sP4CwU6q0yiY+Ki6don742hCmL0zaj1tQ=";
   };
 
-  cargoHash = "sha256-EpHM8YaT2Ty9IBX/gXEa9n8006A9Y5/fq/ueODxHlnc=";
+  cargoHash = "sha256-5OxBrYCNBBr7d+wdnJma/RJ3P9vc+nRVrzFGu8UmPWc=";
 
   nativeBuildInputs = [
     rustPlatform.bindgenHook
@@ -58,7 +58,7 @@ rustPlatform.buildRustPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "The Universal WebAssembly Runtime";
+    description = "Universal WebAssembly Runtime";
     mainProgram = "wasmer";
     longDescription = ''
       Wasmer is a standalone WebAssembly runtime for running WebAssembly outside

@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, libnotify
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  libnotify,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -25,13 +26,9 @@ buildPythonPackage rec {
         '"${lib.getExe' libnotify "notify-send"}"'
   '';
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "pynotifier" ];
 

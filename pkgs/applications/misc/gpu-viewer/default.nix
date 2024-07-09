@@ -19,7 +19,7 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "gpu-viewer";
-  version = "3.02";
+  version = "3.04";
 
   format = "other";
 
@@ -27,7 +27,7 @@ python3.pkgs.buildPythonApplication rec {
     owner = "arunsivaramanneo";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-/m8kXCICvWDqKIC6DbhUAXsjT+RNLMTsvlVTx85AJhE=";
+    hash = "sha256-+FDBHSVBTUHnhu2n7i9W1zIZe2wjY+OuFwQOJZojuzs=";
   };
 
   nativeBuildInputs = [
@@ -66,7 +66,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     homepage = "https://github.com/arunsivaramanneo/GPU-Viewer";
-    description = "A front-end to glxinfo, vulkaninfo, clinfo and es2_info";
+    description = "Front-end to glxinfo, vulkaninfo, clinfo and es2_info";
     changelog = "https://github.com/arunsivaramanneo/GPU-Viewer/releases/tag/v${version}";
     maintainers = with maintainers; [ GaetanLepage ];
     license = licenses.gpl3;

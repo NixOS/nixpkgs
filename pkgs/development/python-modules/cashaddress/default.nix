@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, pythonOlder
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  pythonOlder,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -20,17 +21,11 @@ buildPythonPackage rec {
     hash = "sha256-4izWD2KZqy1F7CAgdbe1fpjMlMZC0clrkHKS9IIQuoc=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "cashaddress"
-  ];
+  pythonImportsCheck = [ "cashaddress" ];
 
   meta = with lib; {
     description = "Python tool for convert bitcoin cash legacy addresses";

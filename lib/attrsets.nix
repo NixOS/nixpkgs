@@ -11,7 +11,7 @@ let
 in
 
 rec {
-  inherit (builtins) attrNames listToAttrs hasAttr isAttrs getAttr removeAttrs;
+  inherit (builtins) attrNames listToAttrs hasAttr isAttrs getAttr removeAttrs intersectAttrs;
 
 
   /**

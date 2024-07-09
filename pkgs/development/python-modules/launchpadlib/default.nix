@@ -1,16 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy3k
-, httplib2
-, keyring
-, lazr-restfulclient
-, lazr-uri
-, setuptools
-, six
-, testresources
-, wadllib
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPy3k,
+  httplib2,
+  keyring,
+  lazr-restfulclient,
+  lazr-uri,
+  setuptools,
+  six,
+  testresources,
+  wadllib,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -34,9 +35,7 @@ buildPythonPackage rec {
     wadllib
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   preCheck = ''
     export HOME=$TMPDIR

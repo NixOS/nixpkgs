@@ -1,9 +1,10 @@
-{ fetchFromGitHub
-, buildPythonPackage
-, pillow
-, numpy
-, libdmtx
-, lib
+{
+  fetchFromGitHub,
+  buildPythonPackage,
+  pillow,
+  numpy,
+  libdmtx,
+  lib,
 }:
 
 buildPythonPackage rec {
@@ -35,7 +36,10 @@ buildPythonPackage rec {
     rm pylibdmtx/tests/test_dmtx_library.py
   '';
 
-  propagatedBuildInputs = [ pillow numpy ];
+  propagatedBuildInputs = [
+    pillow
+    numpy
+  ];
 
   pythonImportsCheck = [ "pylibdmtx" ];
 

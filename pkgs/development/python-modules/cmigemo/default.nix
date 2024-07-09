@@ -1,4 +1,12 @@
-{ stdenv, lib, buildPythonPackage, fetchPypi, six, cmigemo, pytestCheckHook }:
+{
+  stdenv,
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  six,
+  cmigemo,
+  pytestCheckHook,
+}:
 
 buildPythonPackage rec {
   pname = "cmigemo";
@@ -31,7 +39,7 @@ buildPythonPackage rec {
   meta = with lib; {
     broken = stdenv.isDarwin;
     homepage = "https://github.com/mooz/python-cmigemo";
-    description = "A pure python binding for C/Migemo";
+    description = "Pure python binding for C/Migemo";
     license = licenses.mit;
     maintainers = with maintainers; [ illustris ];
   };

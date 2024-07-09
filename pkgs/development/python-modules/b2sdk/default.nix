@@ -6,6 +6,7 @@
   glibcLocales,
   importlib-metadata,
   logfury,
+  annotated-types,
   packaging,
   pdm-backend,
   pyfakefs,
@@ -13,7 +14,6 @@
   pytest-mock,
   pytestCheckHook,
   pythonOlder,
-  pythonRelaxDepsHook,
   requests,
   tqdm,
   typing-extensions,
@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "b2sdk";
-  version = "2.0.0";
+  version = "2.4.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -30,17 +30,17 @@ buildPythonPackage rec {
     owner = "Backblaze";
     repo = "b2-sdk-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-0/UC4O19oO8SpboiPIhvkWBA8XHpc279fl377MooK54=";
+    hash = "sha256-SaoQzP7vtzVWmkUTw0vCeneeSMTmBTIr5kiMXGcgm9g=";
   };
 
   build-system = [ pdm-backend ];
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   pythonRemoveDeps = [ "setuptools" ];
 
   dependencies =
     [
+      annotated-types
       packaging
       logfury
       requests
@@ -60,6 +60,9 @@ buildPythonPackage rec {
     # requires aws s3 auth
     "test/integration/test_download.py"
     "test/integration/test_upload.py"
+
+    # Requires backblaze auth
+    "test/integration/test_bucket.py"
   ];
 
   disabledTests = [

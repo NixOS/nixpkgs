@@ -1,29 +1,28 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, hatchling
-, django
-, freezegun
-, qrcode
-, pytest
-, python
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  hatchling,
+  django,
+  freezegun,
+  qrcode,
+  pytest,
+  python,
 }:
 
 buildPythonPackage rec {
   pname = "django-otp";
-  version = "1.3.0post1";
+  version = "1.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "django-otp";
     repo = "django-otp";
     rev = "v${version}";
-    hash = "sha256-Q8YTCYERyoAXenSiDabxuxaWiD6ZeJKKKgaR/Rg3y20=";
+    hash = "sha256-c0Yr41S1LFBzcDIK2etOP3rYcCPaThDs+XGiw4WP/ks=";
   };
 
-  build-system = [
-    hatchling
-  ];
+  build-system = [ hatchling ];
 
   dependencies = [
     django
@@ -47,13 +46,9 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
-  pytestFlagsArray = [
-    "src/django_otp/test.py"
-  ];
+  pytestFlagsArray = [ "src/django_otp/test.py" ];
 
-  pythonImportsCheck = [
-    "django_otp"
-  ];
+  pythonImportsCheck = [ "django_otp" ];
 
   meta = with lib; {
     homepage = "https://github.com/django-otp/django-otp";

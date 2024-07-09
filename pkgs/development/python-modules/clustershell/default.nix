@@ -1,13 +1,14 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, fetchPypi
-, pyyaml
-, openssh
-, nose
-, bc
-, hostname
-, bash
+{
+  stdenv,
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pyyaml,
+  openssh,
+  nose,
+  bc,
+  hostname,
+  bash,
 }:
 
 buildPythonPackage rec {
@@ -56,6 +57,8 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ClusterShell" ];
 
+  doCheck = false; # tests often get stuck
+
   # Many tests want to open network connections
   # https://github.com/cea-hpc/clustershell#test-suite
   #
@@ -68,10 +71,9 @@ buildPythonPackage rec {
     rm tests/TaskDistantPdshMixin.py
     rm tests/TaskDistantPdshTest.py
     rm tests/TaskRLimitsTest.py
+    rm tests/TreeGatewayTest.py
 
     nosetests -v \
-      -e test_channel_ctl_shell_remote1 \
-      -e test_channel_ctl_shell_remote2 \
       -e test_fromall_grouplist \
       -e test_rank_placeholder \
       -e test_engine_on_the_fly_launch \
@@ -91,9 +93,6 @@ buildPythonPackage rec {
       -e testClushConfigSetRlimit  \
       -e testTimerInvalidateInHandler \
       -e testTimerSetNextFireInHandler \
-      -e test_channel_ctl_shell_mlocal1 \
-      -e test_channel_ctl_shell_mlocal2 \
-      -e test_channel_ctl_shell_mlocal3 \
       -e test_node_placeholder \
     tests/*.py
   '';

@@ -40,20 +40,6 @@ Use `programs.steam.enable = true;` if you want to add steam to `systemPackages`
 
     have a look at [this pull request](https://github.com/NixOS/nixpkgs/pull/20269).
 
-- **Java**
-
-  1. There is no java in steam chrootenv by default. If you get a message like:
-
-    ```
-    /home/foo/.local/share/Steam/SteamApps/common/towns/towns.sh: line 1: java: command not found
-    ```
-
-    you need to add:
-
-    ```nix
-    steam.override { withJava = true; }
-    ```
-
 ## steam-run {#sec-steam-run}
 
 The FHS-compatible chroot used for Steam can also be used to run other Linux games that expect a FHS environment. To use it, install the `steam-run` package and run the game with:

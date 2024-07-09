@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-laOM7LpmsCpLcm4kPRsJiXHoKR58RCuQxVO5Z78beWI=";
 
   meta = with lib; {
-    description = "A very small CLI for converting TOML to JSON";
+    description = "Very small CLI for converting TOML to JSON";
     mainProgram = "toml2json";
     homepage = "https://github.com/woodruffw/toml2json";
     license = with licenses; [ mit ];

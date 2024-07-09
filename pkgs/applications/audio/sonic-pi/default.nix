@@ -41,13 +41,13 @@
 
 stdenv.mkDerivation rec {
   pname = "sonic-pi";
-  version = "4.5.0";
+  version = "4.5.1";
 
   src = fetchFromGitHub {
     owner = "sonic-pi-net";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-s9B3OBwiUdCJyxbeQXeidv38pzmvC442Byl+llabqp0=";
+    hash = "sha256-JMextQY0jLShWmqRQoVAbqIzDhA1mOzI7vfsG7+jjX0=";
   };
 
   mixFodDeps = beamPackages.fetchMixDeps {
@@ -224,7 +224,7 @@ stdenv.mkDerivation rec {
     homepage = "https://sonic-pi.net/";
     description = "Free live coding synth for everyone originally designed to support computing and music lessons within schools";
     license = licenses.mit;
-    maintainers = with maintainers; [ Phlogistique kamilchm c0deaddict sohalt lilyinstarlight ];
+    maintainers = with maintainers; [ Phlogistique kamilchm c0deaddict sohalt ];
     platforms = platforms.linux;
   };
 }

@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, django-environ
-, mock
-, django
-, pytestCheckHook
-, pytest-django
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  django-environ,
+  mock,
+  django,
+  pytestCheckHook,
+  pytest-django,
 }:
 
 buildPythonPackage rec {
@@ -32,7 +33,10 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Per object permissions for Django";
     homepage = "https://github.com/django-guardian/django-guardian";
-    license = with licenses; [ mit bsd2 ];
+    license = with licenses; [
+      mit
+      bsd2
+    ];
     maintainers = with maintainers; [ ];
   };
 }

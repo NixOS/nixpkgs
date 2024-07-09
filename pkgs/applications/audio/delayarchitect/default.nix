@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/jpcima/DelayArchitect";
-    description = "A visual, musical editor for delay effects";
+    description = "Visual, musical editor for delay effects";
     maintainers = [ maintainers.magnetophon ];
     platforms = platforms.all;
     license = licenses.gpl3Plus;

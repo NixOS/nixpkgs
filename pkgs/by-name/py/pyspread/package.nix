@@ -64,7 +64,7 @@ python3.pkgs.buildPythonApplication {
 
   meta = {
     homepage = "https://pyspread.gitlab.io/";
-    description = "A Python-oriented spreadsheet application";
+    description = "Python-oriented spreadsheet application";
     longDescription = ''
       pyspread is a non-traditional spreadsheet application that is based on and
       written in the programming language Python. The goal of pyspread is to be

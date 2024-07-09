@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, cryptography
-, fetchPypi
-, protobuf
-, pytestCheckHook
-, pythonOlder
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  cryptography,
+  fetchPypi,
+  protobuf,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -20,22 +21,16 @@ buildPythonPackage rec {
     hash = "sha256-KoqMdyMdc5Sb3TdSeNTVomElK9ruUstiQayyUcIC02E=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     cryptography
     protobuf
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "omemo_dr"
-  ];
+  pythonImportsCheck = [ "omemo_dr" ];
 
   meta = with lib; {
     description = "OMEMO Double Ratchet";

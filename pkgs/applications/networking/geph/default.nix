@@ -4,7 +4,8 @@
 , fetchFromGitHub
 , buildGoModule
 , makeWrapper
-, nodePackages
+, nodejs
+, pnpm
 , cacert
 , esbuild
 , jq
@@ -21,7 +22,7 @@
 let
   version = "4.11.0";
   geph-meta = with lib; {
-    description = "A modular Internet censorship circumvention system designed specifically to deal with national filtering.";
+    description = "Modular Internet censorship circumvention system designed specifically to deal with national filtering";
     homepage = "https://geph.io";
     platforms = platforms.linux;
     maintainers = with maintainers; [ penalty1083 ];
@@ -48,7 +49,7 @@ in
     };
   };
 
-  gui = stdenvNoCC.mkDerivation rec {
+  gui = stdenvNoCC.mkDerivation (finalAttrs: {
     pname = "geph-gui";
     inherit version;
 
@@ -60,42 +61,11 @@ in
       fetchSubmodules = true;
     };
 
-    pnpm-deps = stdenvNoCC.mkDerivation {
-      pname = "${pname}-pnpm-deps";
-      inherit src version;
-
-      sourceRoot = "${src.name}/gephgui-wry/gephgui";
-
-      nativeBuildInputs = [
-        jq
-        moreutils
-        nodePackages.pnpm
-        cacert
-      ];
-
-      installPhase = ''
-        export HOME=$(mktemp -d)
-        pnpm config set store-dir $out
-        pnpm install --ignore-scripts
-
-        # Remove timestamp and sort the json files
-        rm -rf $out/v3/tmp
-        for f in $(find $out -name "*.json"); do
-          sed -i -E -e 's/"checkedAt":[0-9]+,//g' $f
-          jq --sort-keys . $f | sponge $f
-        done
-      '';
-
-      dontFixup = true;
-      outputHashMode = "recursive";
-      outputHash = "sha256-OKPx5xRI7DWd6m31nYx1biP0k6pcZ7fq7dfVlHda4O0=";
-    };
-
     gephgui-wry = rustPlatform.buildRustPackage {
       pname = "gephgui-wry";
-      inherit version src;
+      inherit (finalAttrs) version src;
 
-      sourceRoot = "${src.name}/gephgui-wry";
+      sourceRoot = "${finalAttrs.src.name}/gephgui-wry";
 
       cargoLock = {
         lockFile = ./Cargo.lock;
@@ -105,10 +75,17 @@ in
         };
       };
 
+      pnpmDeps = pnpm.fetchDeps {
+        inherit (finalAttrs) pname version src;
+        sourceRoot = "${finalAttrs.src.name}/gephgui-wry/gephgui";
+        hash = "sha256-0MGlsLEgugQ1wEz07ROIwkanTa8PSKwIaxNahyS1014=";
+      };
+
       nativeBuildInputs = [
         pkg-config
-        nodePackages.pnpm
+        pnpm.configHook
         makeWrapper
+        nodejs
       ];
 
       buildInputs = [
@@ -132,22 +109,19 @@ in
         });
       })}";
 
+      pnpmRoot = "gephgui";
+
       preBuild = ''
-        cd gephgui
-        export HOME=$(mktemp -d)
-        pnpm config set store-dir ${pnpm-deps}
-        pnpm install --ignore-scripts --offline
-        chmod -R +w node_modules
-        pnpm rebuild
+        pushd gephgui
         pnpm build
-        cd ..
+        popd
       '';
     };
 
     dontBuild = true;
 
     installPhase = ''
-      install -Dt $out/bin ${gephgui-wry}/bin/gephgui-wry
+      install -Dt $out/bin ${finalAttrs.gephgui-wry}/bin/gephgui-wry
       install -d $out/share/icons/hicolor
       for i in '16' '32' '64' '128' '256'
       do
@@ -163,5 +137,5 @@ in
     meta = geph-meta // {
       license = with lib.licenses; [ unfree ];
     };
-  };
+  });
 }

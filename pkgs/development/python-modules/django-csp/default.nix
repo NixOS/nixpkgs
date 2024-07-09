@@ -1,17 +1,18 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
 
-# build-system
-, setuptools
+  # build-system
+  setuptools,
 
-# dependencies
-, django
+  # dependencies
+  django,
 
-# tests
-, jinja2
-, pytest-django
-, pytestCheckHook
+  # tests
+  jinja2,
+  pytest-django,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -29,13 +30,9 @@ buildPythonPackage rec {
     sed -i "/addopts =/d" pyproject.toml
   '';
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  dependencies = [
-    django
-  ];
+  dependencies = [ django ];
 
   nativeCheckInputs = [
     jinja2

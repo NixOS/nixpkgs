@@ -62,7 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
   ] ++ lib.optional stdenv.isLinux alsa-lib;
 
   meta = with lib; {
-    description = "A music tracking tool similar in design to the DOS program FastTracker and the Amiga legend ProTracker";
+    description = "Music tracking tool similar in design to the DOS program FastTracker and the Amiga legend ProTracker";
     longDescription = ''
       SoundTracker is a pattern-oriented music editor (similar to the DOS
       program 'FastTracker'). Samples are lined up on tracks and patterns

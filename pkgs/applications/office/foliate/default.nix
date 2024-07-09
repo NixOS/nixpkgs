@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A simple and modern GTK eBook reader";
+    description = "Simple and modern GTK eBook reader";
     homepage = "https://johnfactotum.github.io/foliate";
     changelog = "https://github.com/johnfactotum/foliate/releases/tag/${version}";
     license = licenses.gpl3Only;

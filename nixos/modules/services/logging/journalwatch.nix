@@ -56,6 +56,8 @@ in {
         '';
       };
 
+      package = mkPackageOption pkgs "journalwatch" { };
+
       priority = mkOption {
         type = types.int;
         default = 6;
@@ -240,7 +242,7 @@ in {
         # requires a relative directory name to create beneath /var/lib
         StateDirectory = user;
         StateDirectoryMode = "0750";
-        ExecStart = "${pkgs.python3Packages.journalwatch}/bin/journalwatch mail";
+        ExecStart = "${getExe cfg.package} mail";
         # lowest CPU and IO priority, but both still in best-effort class to prevent starvation
         Nice=19;
         IOSchedulingPriority=7;

@@ -18,7 +18,7 @@
 , openssl_1_1
 , pango
 , SDL2
-, wrapGAppsHook
+, wrapGAppsHook3
 , xdg-utils
 , xorg
 , xorg_sys_opengl
@@ -40,7 +40,7 @@ let
     nativeBuildInputs = [
       autoPatchelfHook
       dpkg
-      wrapGAppsHook
+      wrapGAppsHook3
     ];
 
     buildInputs = [

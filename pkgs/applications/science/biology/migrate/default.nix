@@ -1,18 +1,31 @@
-{ stdenv, lib, gccStdenv, fetchurl, zlib, mpi }:
+{
+  stdenv,
+  lib,
+  fetchurl,
+  zlib,
+  mpi,
+}:
 
-gccStdenv.mkDerivation rec {
-  version = "3.7.2";
+stdenv.mkDerivation (finalAttrs: {
+  version = "5.0.6";
   pname = "migrate";
 
   src = fetchurl {
-    url = "https://peterbeerli.com/migrate-html5/download_version3/${pname}-${version}.src.tar.gz";
-    sha256 = "1p2364ffjc56i82snzvjpy6pkf6wvqwvlvlqxliscx2c303fxs8v";
+    url = "https://peterbeerli.com/migrate-html5/download_version4/${finalAttrs.pname}-${finalAttrs.version}.src.tar.gz";
+    hash = "sha256-twkoR9L6VPUye12OC0B5w0PxcxyKain6RkhCswLEdwg=";
   };
 
-  buildInputs = [ zlib mpi ];
-  setSourceRoot = "sourceRoot=$(echo */src)";
-  buildFlags = [ "thread" "mpis" ];
-  preInstall = "mkdir -p $out/man/man1";
+  sourceRoot = "migrate-${finalAttrs.version}/src";
+
+  buildInputs = [
+    zlib
+    mpi
+  ];
+
+  buildFlags = [
+    "thread"
+    "mpis"
+  ];
 
   meta = with lib; {
     broken = stdenv.isDarwin;
@@ -21,5 +34,6 @@ gccStdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = [ maintainers.bzizou ];
     platforms = platforms.unix;
+    mainProgram = "migrate-n";
   };
-}
+})

@@ -1,26 +1,28 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, substituteAll
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  buildPythonPackage,
+  substituteAll,
 
-# build-system
-, setuptools
+  # build-system
+  setuptools,
 
-# runtime
-, ffmpeg-headless
+  # runtime
+  ffmpeg-headless,
 
-# propagates
-, more-itertools
-, numba
-, numpy
-, openai-triton
-, tiktoken
-, torch
-, tqdm
+  # propagates
+  more-itertools,
+  numba,
+  numpy,
+  openai-triton,
+  tiktoken,
+  torch,
+  tqdm,
 
-# tests
-, pytestCheckHook
-, scipy
+  # tests
+  pytestCheckHook,
+  scipy,
 }:
 
 buildPythonPackage rec {
@@ -42,20 +44,16 @@ buildPythonPackage rec {
     })
   ];
 
-  nativeBuildInputs = [
-    setuptools
-    scipy
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     more-itertools
     numba
     numpy
-    openai-triton
     tiktoken
     torch
     tqdm
-  ];
+  ] ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform openai-triton) [ openai-triton ];
 
   preCheck = ''
     export HOME=$TMPDIR
@@ -63,6 +61,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+    scipy
   ];
 
   disabledTests = [
@@ -79,6 +78,9 @@ buildPythonPackage rec {
     mainProgram = "whisper";
     homepage = "https://github.com/openai/whisper";
     license = licenses.mit;
-    maintainers = with maintainers; [ hexa MayNiklas ];
+    maintainers = with maintainers; [
+      hexa
+      MayNiklas
+    ];
   };
 }

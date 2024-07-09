@@ -98,7 +98,6 @@ let
     cfg = (import ../lib/eval-config.nix {
       system = if use64bitGuest then "x86_64-linux" else "i686-linux";
       modules = [
-        ../modules/profiles/minimal.nix
         (testVMConfig vmName vmScript)
       ];
     }).config;

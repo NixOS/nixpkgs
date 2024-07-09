@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, django
-, fetchFromGitHub
-, flit-core
-, python3
+{
+  lib,
+  buildPythonPackage,
+  django,
+  fetchFromGitHub,
+  flit-core,
+  python3,
 }:
 
 buildPythonPackage rec {
@@ -18,13 +19,9 @@ buildPythonPackage rec {
     hash = "sha256-N3UUJomlihdM+6w9jmn9t10Q2meIqEOjW/rf3ZLrD78=";
   };
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  nativeBuildInputs = [ flit-core ];
 
-  propagatedBuildInputs = [
-    django
-  ];
+  propagatedBuildInputs = [ django ];
 
   pythonImportsCheck = [ "laces" ];
 

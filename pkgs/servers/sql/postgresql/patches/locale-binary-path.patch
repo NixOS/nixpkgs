@@ -1,5 +1,3 @@
-diff --git a/src/backend/commands/collationcmds.c b/src/backend/commands/collationcmds.c
-index fcfc02d..d011394 100644
 --- a/src/backend/commands/collationcmds.c
 +++ b/src/backend/commands/collationcmds.c
 @@ -611,7 +611,7 @@ pg_import_system_collations(PG_FUNCTION_ARGS)

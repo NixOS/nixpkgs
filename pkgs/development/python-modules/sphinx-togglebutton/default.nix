@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools
-, wheel
-, docutils
-, sphinx
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  wheel,
+  docutils,
+  sphinx,
 }:
 
 buildPythonPackage rec {
@@ -27,9 +28,7 @@ buildPythonPackage rec {
     sphinx
   ];
 
-  pythonImportsCheck = [
-    "sphinx_togglebutton"
-  ];
+  pythonImportsCheck = [ "sphinx_togglebutton" ];
 
   meta = with lib; {
     description = "Toggle page content and collapse admonitions in Sphinx";

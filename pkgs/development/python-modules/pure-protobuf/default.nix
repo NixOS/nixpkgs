@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, poetry-core
-, poetry-dynamic-versioning
-, typing-extensions
-, pytestCheckHook
-, pytest-benchmark
-, pytest-cov
-, pydantic
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  poetry-core,
+  poetry-dynamic-versioning,
+  typing-extensions,
+  pytestCheckHook,
+  pytest-benchmark,
+  pytest-cov,
+  pydantic,
 }:
 
 buildPythonPackage rec {
@@ -32,9 +33,7 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  dependencies = [
-    typing-extensions
-  ];
+  dependencies = [ typing-extensions ];
 
   nativeCheckInputs = [
     pydantic
@@ -43,13 +42,9 @@ buildPythonPackage rec {
     pytest-cov
   ];
 
-  pytestFlagsArray = [
-    "--benchmark-disable"
-  ];
+  pytestFlagsArray = [ "--benchmark-disable" ];
 
-  pythonImportsCheck = [
-    "pure_protobuf"
-  ];
+  pythonImportsCheck = [ "pure_protobuf" ];
 
   meta = with lib; {
     description = "Python implementation of Protocol Buffers with dataclass-based schemas";

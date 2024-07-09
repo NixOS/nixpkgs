@@ -23,7 +23,7 @@ rustPlatform.buildRustPackage rec {
   ];
 
   meta = with lib; {
-    description = "A preprocessor for mdbook to add mermaid.js support";
+    description = "Preprocessor for mdbook to add mermaid.js support";
     mainProgram = "mdbook-mermaid";
     homepage = "https://github.com/badboy/mdbook-mermaid";
     changelog = "https://github.com/badboy/mdbook-mermaid/blob/v${version}/CHANGELOG.md";

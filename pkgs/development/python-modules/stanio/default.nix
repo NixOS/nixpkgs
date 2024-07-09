@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, setuptools
-, numpy
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
+  setuptools,
+  numpy,
 }:
 
 buildPythonPackage rec {
@@ -18,13 +19,9 @@ buildPythonPackage rec {
     hash = "sha256-3uQpMU2WXzkBga+o/3/4FERG7rWMwlR8zBCLpz5nROI=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  propagatedBuildInputs = [
-    numpy
-  ];
+  propagatedBuildInputs = [ numpy ];
 
   pythonImportsCheck = [ "stanio" ];
 

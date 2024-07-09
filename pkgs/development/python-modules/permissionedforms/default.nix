@@ -1,9 +1,10 @@
-{ buildPythonPackage
-, django
-, django-modelcluster
-, fetchFromGitHub
-, lib
-, python
+{
+  buildPythonPackage,
+  django,
+  django-modelcluster,
+  fetchFromGitHub,
+  lib,
+  python,
 }:
 
 buildPythonPackage rec {
@@ -18,9 +19,7 @@ buildPythonPackage rec {
     sha256 = "sha256-DQzPGmh5UEVpGWnW3IrEVPkZZ8mdiW9J851Ej4agTDc=";
   };
 
-  propagatedBuildInputs = [
-    django
-  ];
+  propagatedBuildInputs = [ django ];
 
   checkInputs = [ django-modelcluster ];
 
@@ -31,7 +30,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "permissionedforms" ];
 
   meta = with lib; {
-    description = "A Django extension for creating forms that vary according to user permissions";
+    description = "Django extension for creating forms that vary according to user permissions";
     homepage = "https://github.com/wagtail/permissionedforms";
     changelog = "https://github.com/wagtail/permissionedforms/blob/v${version}/CHANGELOG.md";
     license = licenses.bsd3;

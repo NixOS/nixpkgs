@@ -9,7 +9,7 @@
 , libxml2
 , libxslt
 , pkg-config
-, wrapGAppsHook
+, wrapGAppsHook3
 , gtk2-x11
 , libX11
 , polkit
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     libxml2
     libxslt
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

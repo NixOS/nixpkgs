@@ -14,10 +14,10 @@ let
   name = "${pname}-${version}";
 
   executable = fetchurl (if (wine.meta.mainProgram == "wine64") then {
-    url = "https://download.mikrotik.com/winbox/${version}/winbox64.exe";
+    url = "https://download.mikrotik.com/routeros/winbox/${version}/winbox64.exe";
     sha256 = "1dxny1qmq4pmdn40j9zk461p3qwwjin5d18ajhczrnqrcr2v1xwi";
   } else {
-    url = "https://download.mikrotik.com/winbox/${version}/winbox.exe";
+    url = "https://download.mikrotik.com/routeros/winbox/${version}/winbox.exe";
     sha256 = "11vmdkwi38y7wkdkgsqpfs4l2bdaj9yg6c8wlgfzp91227gjn5li";
   });
 

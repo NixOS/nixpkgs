@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://github.com/ii8/havoc";
-    description = "A minimal terminal emulator for Wayland";
+    description = "Minimal terminal emulator for Wayland";
     license = with lib.licenses; [ mit publicDomain ];
     mainProgram = "havoc";
     maintainers = with lib.maintainers; [ AndersonTorres ];

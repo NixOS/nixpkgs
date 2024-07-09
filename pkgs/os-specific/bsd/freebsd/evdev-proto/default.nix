@@ -1,4 +1,11 @@
-{ lib, stdenv, linuxHeaders, freebsd, runCommandCC, buildPackages }:
+{
+  lib,
+  stdenv,
+  linuxHeaders,
+  freebsd,
+  runCommandCC,
+  buildPackages,
+}:
 
 stdenv.mkDerivation {
   pname = "evdev-proto";
@@ -28,7 +35,7 @@ stdenv.mkDerivation {
   TOUCH = "touch";
   XARGS = "xargs";
 
-  ABI_FILE = runCommandCC "abifile" {} "$CC -shared -o $out";
+  ABI_FILE = runCommandCC "abifile" { } "$CC -shared -o $out";
   CLEAN_FETCH_ENV = true;
   INSTALL_AS_USER = true;
   NO_CHECKSUM = true;

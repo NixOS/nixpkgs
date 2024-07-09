@@ -1,15 +1,19 @@
-{ stdenv
-, fetchFromSourcehut
-, hare
-, haredo
-, lib
-, scdoc
+{
+  stdenv,
+  fetchFromSourcehut,
+  hareHook,
+  haredo,
+  lib,
+  scdoc,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "treecat";
   version = "1.0.2-unstable-2023-11-28";
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
   src = fetchFromSourcehut {
     owner = "~autumnull";
@@ -19,18 +23,14 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [
-    hare
+    hareHook
     haredo
     scdoc
   ];
 
-  dontConfigure = true;
+  env.PREFIX = builtins.placeholder "out";
 
-  preBuild = ''
-    HARECACHE="$(mktemp -d)"
-    export HARECACHE
-    export PREFIX="${builtins.placeholder "out"}"
-  '';
+  dontConfigure = true;
 
   meta = {
     description = "Serialize a directory to a tree diagram, and vice versa";
@@ -42,6 +42,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.wtfpl;
     maintainers = with lib.maintainers; [ onemoresuza ];
     mainProgram = "treecat";
-    inherit (hare.meta) platforms badPlatforms;
+    inherit (hareHook.meta) platforms badPlatforms;
   };
 })

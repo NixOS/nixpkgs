@@ -56,8 +56,8 @@ in
       };
 
       devRootTokenID = mkOption {
-        type = types.str;
-        default = false;
+        type = types.nullOr types.str;
+        default = null;
         description = ''
           Initial root token. This only applies when {option}`services.vault.dev` is true
         '';

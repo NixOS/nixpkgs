@@ -11,7 +11,7 @@
 
 let
   pname = "edge-runtime";
-  version = "1.14.0";
+  version = "1.53.4";
 in
 rustPlatform.buildRustPackage {
   inherit pname version;
@@ -20,11 +20,16 @@ rustPlatform.buildRustPackage {
     owner = "supabase";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-63XStzO4Jt6ObWuzcBf2QwCIWsStXvhQ0XaJabELhWg=";
+    hash = "sha256-sDgGfQiAUuI+JaF0BRB5lwvjbWWIoTV/k/tbQsBBc4E=";
     fetchSubmodules = true;
   };
 
-  cargoHash = "sha256-JwwdvvpqgSbl0Xyb5pQ5hzZRrrCnDSjwV+ikdO2pXCk=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "ort-2.0.0-rc.0" = "sha256-j3g9ES2ZLmAAcPYgszBGDG16HiFJTnohwxSvXypFGTw=";
+    };
+  };
 
   nativeBuildInputs = [ pkg-config rustPlatform.bindgenHook ];
 
@@ -35,36 +40,22 @@ rustPlatform.buildRustPackage {
   # To avoid this we pre-download the file and export it via RUSTY_V8_ARCHIVE
   RUSTY_V8_ARCHIVE = callPackage ./librusty_v8.nix { };
 
+  # For version tag
+  GIT_V_TAG = version;
+
   passthru.updateScript = nix-update-script { };
 
-  preCheck = ''
-    export HOME=$(mktemp -d)
+  doInstallCheck = true;
+  installCheckPhase = ''
+    runHook preInstallCheck
+    $out/bin/edge-runtime --help
+    runHook postInstallCheck
   '';
 
-  checkFlags = [
-    # tries to make a network access
-    "--skip=deno_runtime::test::test_main_rt_fs"
-    "--skip=deno_runtime::test::test_main_runtime_creation"
-    "--skip=deno_runtime::test::test_os_env_vars"
-    "--skip=deno_runtime::test::test_os_ops"
-    "--skip=deno_runtime::test::test_user_runtime_creation"
-    "--skip=test_custom_readable_stream_response"
-    "--skip=test_import_map_file_path"
-    "--skip=test_import_map_inline"
-    "--skip=test_main_worker_options_request"
-    "--skip=test_main_worker_post_request"
-    "--skip=test_null_body_with_204_status"
-    "--skip=test_null_body_with_204_status_post"
-    "--skip=test_file_upload"
-    "--skip=test_oak_server"
-    "--skip=test_tls_throw_invalid_data"
-    "--skip=test_user_worker_json_imports"
-    "--skip=node::analyze::tests::test_esm_code_with_node_globals"
-    "--skip=node::analyze::tests::test_esm_code_with_node_globals_with_shebang"
-  ];
+  doCheck = false;
 
   meta = with lib; {
-    description = "A server based on Deno runtime, capable of running JavaScript, TypeScript, and WASM services";
+    description = "Server based on Deno runtime, capable of running JavaScript, TypeScript, and WASM services";
     mainProgram = "edge-runtime";
     homepage = "https://github.com/supabase/edge-runtime";
     license = licenses.mit;

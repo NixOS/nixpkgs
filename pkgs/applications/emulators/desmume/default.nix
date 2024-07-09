@@ -6,7 +6,7 @@
 , agg
 , alsa-lib
 , desktop-file-utils
-, wrapGAppsHook
+, wrapGAppsHook3
 , gtk3
 , intltool
 , libGLU
@@ -43,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeBuildInputs = [
-    wrapGAppsHook
+    wrapGAppsHook3
     desktop-file-utils
     intltool
     libtool
@@ -81,7 +81,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     homepage = "https://www.github.com/TASVideos/desmume/";
-    description = "An open-source Nintendo DS emulator";
+    description = "Open-source Nintendo DS emulator";
     longDescription = ''
       DeSmuME is a freeware emulator for the NDS roms & Nintendo DS Lite games
       created by YopYop156 and now maintained by the TASvideos team. It supports

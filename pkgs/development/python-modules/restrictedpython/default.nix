@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytest-mock
-, pytestCheckHook
-, pythonAtLeast
-, pythonOlder
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytest-mock,
+  pytestCheckHook,
+  pythonAtLeast,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -21,22 +22,16 @@ buildPythonPackage rec {
     hash = "sha256-h1rrUcE51440zvhgXcZTCbRJFoBg3QhVGh/p7bR8uaU=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   nativeCheckInputs = [
     pytestCheckHook
     pytest-mock
   ];
 
-  disabledTests = lib.optionals (pythonAtLeast "3.11") [
-    "test_compile__compile_restricted_exec__5"
-  ];
+  disabledTests = lib.optionals (pythonAtLeast "3.11") [ "test_compile__compile_restricted_exec__5" ];
 
-  pythonImportsCheck = [
-    "RestrictedPython"
-  ];
+  pythonImportsCheck = [ "RestrictedPython" ];
 
   meta = with lib; {
     description = "Restricted execution environment for Python to run untrusted code";

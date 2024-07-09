@@ -32,7 +32,7 @@
 
 buildPythonPackage rec {
   pname = "pymatgen";
-  version = "2024.4.13";
+  version = "2024.6.10";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -41,7 +41,7 @@ buildPythonPackage rec {
     owner = "materialsproject";
     repo = "pymatgen";
     rev = "refs/tags/v${version}";
-    hash = "sha256-vjasWQgwjtoM/6Y1HwK1otMFejRWEj+YBxaIYDDSeeo=";
+    hash = "sha256-BV3zwb74ZnwTWUgKt5K6lZLASdO6/UQ8Ke3gBsLhy2M=";
   };
 
   build-system = [ setuptools ];
@@ -107,7 +107,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "pymatgen" ];
 
   meta = with lib; {
-    description = "A robust materials analysis code that defines core object representations for structures and molecules";
+    description = "Robust materials analysis code that defines core object representations for structures and molecules";
     homepage = "https://pymatgen.org/";
     changelog = "https://github.com/materialsproject/pymatgen/releases/tag/v${version}";
     license = licenses.mit;

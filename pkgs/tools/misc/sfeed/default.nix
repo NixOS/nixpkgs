@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://codemadness.org/sfeed-simple-feed-parser.html";
-    description = "A RSS and Atom parser (and some format programs)";
+    description = "RSS and Atom parser (and some format programs)";
     longDescription = ''
       It converts RSS or Atom feeds from XML to a TAB-separated file. There are
       formatting programs included to convert this TAB-separated format to

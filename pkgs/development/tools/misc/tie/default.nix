@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   buildPhase = ''
-    ${stdenv.cc.targetPrefix}cc tie.c -o tie
+    ${stdenv.cc.targetPrefix}cc -std=c89 tie.c -o tie
   '';
 
   installPhase = ''

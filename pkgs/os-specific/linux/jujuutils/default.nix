@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://github.com/cladisch/linux-firewire-utils";
     description = "Utilities around FireWire devices connected to a Linux computer";
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Only;
     platforms = lib.platforms.linux;
   };
 }

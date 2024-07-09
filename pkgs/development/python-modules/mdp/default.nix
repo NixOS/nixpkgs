@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, future
-, joblib
-, numpy
-, pytest
-, pythonOlder
-, scikit-learn
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  future,
+  joblib,
+  numpy,
+  pytest,
+  pythonOlder,
+  scikit-learn,
 }:
 
 buildPythonPackage rec {

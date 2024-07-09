@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, flit-core
-, pygments
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  flit-core,
+  pygments,
 }:
 
 buildPythonPackage rec {
@@ -24,7 +25,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/bitprophet/alabaster";
-    description = "A Sphinx theme";
+    description = "Sphinx theme";
     license = licenses.bsd3;
   };
 }

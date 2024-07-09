@@ -1,19 +1,21 @@
-{ lib
-, buildNpmPackage
-, fetchFromGitHub
-, nodejs
-, python3
+{
+  lib,
+  buildNpmPackage,
+  fetchFromGitHub,
+  nodejs,
+  python3,
+  nix-update-script,
 }:
 
 buildNpmPackage rec {
   pname = "jitsi-excalidraw-backend";
-  version = "17";
+  version = "21";
 
   src = fetchFromGitHub {
     owner = "jitsi";
     repo = "excalidraw-backend";
     rev = "x${version}";
-    hash = "sha256-aQePkVA8KRL06VewiD0ePRpj88pAItcV7B2SBnRRtCs=";
+    hash = "sha256-52LU5I2pNjSb9+nJjiczp/dLWRTwQDC+thyGXBvkBBA=";
   };
 
   npmDepsHash = "sha256-BJqjaqTeg5i+ECGMuiBYVToK2i2XCOVP9yeDFz6nP4k=";
@@ -30,6 +32,8 @@ buildNpmPackage rec {
       --add-flags dist/index.js \
       --chdir $out/share
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Excalidraw collaboration backend for Jitsi";

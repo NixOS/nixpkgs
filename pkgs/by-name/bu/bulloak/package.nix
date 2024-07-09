@@ -51,7 +51,7 @@ rustPlatform.buildRustPackage rec {
   SVM_RELEASES_LIST_JSON = solc-versions.${stdenv.hostPlatform.system};
 
   meta = with lib; {
-    description = "A Solidity test generator based on the Branching Tree Technique";
+    description = "Solidity test generator based on the Branching Tree Technique";
     homepage = "https://github.com/alexfertel/bulloak";
     license = with licenses; [ mit asl20 ];
     mainProgram = "bulloak";

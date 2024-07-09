@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "home-assistant-intents";
-  version = "2024.4.3";
+  version = "2024.7.3";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -30,15 +30,9 @@ buildPythonPackage rec {
     owner = "home-assistant";
     repo = "intents-package";
     rev = "refs/tags/${version}";
-    hash = "sha256-hcstD1qkngZAl/jKLez+4qDs/ZIandkVkY2jrvZqph8=";
+    hash = "sha256-3JnBmSNa9Yrh+5QFQ6KIKZProxMuX+CyTZzqRUAlBcQ=";
     fetchSubmodules = true;
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "setuptools~=62.3" "setuptools" \
-      --replace-fail "wheel~=0.37.1" "wheel"
-  '';
 
   build-system = [
     setuptools

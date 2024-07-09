@@ -60,6 +60,10 @@ stdenv.mkDerivation rec {
   '';
   enableParallelChecking = false;
 
+  # None of our currently packaged versions of swig are C++17-friendly
+  # Use a workaround from https://github.com/swig/swig/issues/1538
+  env.CXXFLAGS="-D_LIBCPP_ENABLE_CXX17_REMOVED_FEATURES";
+
   meta = with lib; {
     homepage = "http://fastnlo.hepforge.org";
     description = "Fast pQCD calculations for hadron-induced processes";

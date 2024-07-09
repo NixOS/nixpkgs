@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, contexttimer
-, setuptools
-, versioneer
-, cython_0
-, numpy
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  contexttimer,
+  setuptools,
+  versioneer,
+  cython_0,
+  numpy,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -40,17 +41,13 @@ buildPythonPackage rec {
     numpy
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   preCheck = ''
     rm -rf pyrevolve
   '';
 
-  pythonImportsCheck = [
-    "pyrevolve"
-  ];
+  pythonImportsCheck = [ "pyrevolve" ];
 
   meta = with lib; {
     homepage = "https://github.com/devitocodes/pyrevolve";

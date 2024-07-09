@@ -26,7 +26,7 @@ buildGoModule rec {
   ldflags = [ "-s" "-w" ];
 
   meta = with lib; {
-    description = "A distributed service for announcement and discovery of services";
+    description = "Distributed service for announcement and discovery of services";
     homepage = "https://github.com/skynetservices/skydns";
     license = lib.licenses.mit;
     maintainers = with maintainers; [ ];

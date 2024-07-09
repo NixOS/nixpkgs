@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-60JXCBXsXei0INP0rozWqFU8dKZovJ9mn5ns87ziUac=";
 
   meta = with lib; {
-    description = "A Rust implementation of the Starlark language";
+    description = "Rust implementation of the Starlark language";
     homepage = "https://github.com/facebook/starlark-rust";
     changelog = "https://github.com/facebook/starlark-rust/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;

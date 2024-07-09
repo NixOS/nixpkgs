@@ -1,15 +1,16 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, matplotlib
-, numpy
-, pytestCheckHook
-, pythonOlder
-, requests
-, scipy
-, seaborn
-, setuptools
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  matplotlib,
+  numpy,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  scipy,
+  seaborn,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -26,9 +27,7 @@ buildPythonPackage rec {
     hash = "sha256-NtTw7sF1WfVebUk1wHrM8FHAe3/FXDcMApPkDbw0WXo=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     numpy
@@ -47,9 +46,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
-  pythonImportsCheck = [
-    "simpful"
-  ];
+  pythonImportsCheck = [ "simpful" ];
 
   meta = with lib; {
     description = "Library for fuzzy logic";

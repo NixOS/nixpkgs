@@ -1,28 +1,34 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, google-api-python-client
-, google-auth-oauthlib
-, jupyterhub
-, mwoauth
-, pyjwt
-, pytest-asyncio
-, pytestCheckHook
-, requests-mock
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
+  google-api-python-client,
+  google-auth-oauthlib,
+  jsonschema,
+  jupyterhub,
+  mwoauth,
+  pyjwt,
+  pytest-asyncio,
+  pytestCheckHook,
+  requests,
+  requests-mock,
+  ruamel-yaml,
+  setuptools,
+  tornado,
+  traitlets,
 }:
 
 buildPythonPackage rec {
   pname = "oauthenticator";
-  version = "16.3.0";
+  version = "16.3.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-QMddGJUfafXoBxMCjlx1lH45a4Bab3AP4j8Px7JxYaQ=";
+    hash = "sha256-gFhhOCcmorkrLxrup9fICh5ueCrc64fxfuZXTQG1tMk=";
   };
 
   postPatch = ''
@@ -30,13 +36,16 @@ buildPythonPackage rec {
       --replace-fail " --cov=oauthenticator" ""
   '';
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
+    jsonschema
     jupyterhub
     pyjwt
+    requests
+    ruamel-yaml
+    tornado
+    traitlets
   ];
 
   passthru.optional-dependencies = {
@@ -44,9 +53,7 @@ buildPythonPackage rec {
       google-api-python-client
       google-auth-oauthlib
     ];
-    mediawiki = [
-      mwoauth
-    ];
+    mediawiki = [ mwoauth ];
   };
 
   nativeCheckInputs = [
@@ -71,13 +78,11 @@ buildPythonPackage rec {
     "test_openshift"
   ];
 
-  pythonImportsCheck = [
-    "oauthenticator"
-  ];
+  pythonImportsCheck = [ "oauthenticator" ];
 
   meta = with lib; {
     description = "Authenticate JupyterHub users with common OAuth providers";
-    homepage =  "https://github.com/jupyterhub/oauthenticator";
+    homepage = "https://github.com/jupyterhub/oauthenticator";
     changelog = "https://github.com/jupyterhub/oauthenticator/blob/${version}/docs/source/reference/changelog.md";
     license = licenses.bsd3;
     maintainers = with maintainers; [ ];

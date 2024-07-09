@@ -1,22 +1,27 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, eventlet
-, fetchPypi
-, gevent
-, pkgs
-, process-tests
-, pytestCheckHook
-, pythonOlder
-, redis
-, withDjango ? false
-, django-redis
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  setuptools,
+  eventlet,
+  fetchPypi,
+  fetchpatch,
+  gevent,
+  pkgs,
+  process-tests,
+  pytestCheckHook,
+  pythonOlder,
+  redis,
+  withDjango ? false,
+  django-redis,
 }:
 
 buildPythonPackage rec {
   pname = "python-redis-lock";
   version = "4.0.0";
-  format = "setuptools";
+
+  pyproject = true;
+  build-system = [ setuptools ];
 
   disabled = pythonOlder "3.7";
 
@@ -25,11 +30,16 @@ buildPythonPackage rec {
     hash = "sha256-Sr0Lz0kTasrWZye/VIbdJJQHjKVeSe+mk/eUB3MZCRo=";
   };
 
-  propagatedBuildInputs = [
-    redis
-  ] ++ lib.optionals withDjango [
-    django-redis
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/ionelmc/python-redis-lock/pull/119.diff";
+      hash = "sha256-Fo43+pCtnrEMxMdEEdo0YfJGkBlhhH0GjYNgpZeHF3U=";
+    })
+
+    ./test_signal_expiration_increase_sleep.patch
   ];
+
+  dependencies = [ redis ] ++ lib.optionals withDjango [ django-redis ];
 
   nativeCheckInputs = [
     eventlet
@@ -39,18 +49,18 @@ buildPythonPackage rec {
     pkgs.redis
   ];
 
-  disabledTests = [
-    # https://github.com/ionelmc/python-redis-lock/issues/86
-    "test_no_overlap2"
-  ] ++ lib.optionals stdenv.isDarwin [
-    # fail on Darwin because it defaults to multiprocessing `spawn`
-    "test_reset_signalizes"
-    "test_reset_all_signalizes"
-  ];
+  disabledTests =
+    [
+      # https://github.com/ionelmc/python-redis-lock/issues/86
+      "test_no_overlap2"
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      # fail on Darwin because it defaults to multiprocessing `spawn`
+      "test_reset_signalizes"
+      "test_reset_all_signalizes"
+    ];
 
-  pythonImportsCheck = [
-    "redis_lock"
-  ];
+  pythonImportsCheck = [ "redis_lock" ];
 
   meta = with lib; {
     changelog = "https://github.com/ionelmc/python-redis-lock/blob/v${version}/CHANGELOG.rst";

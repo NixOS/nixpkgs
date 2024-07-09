@@ -44,7 +44,7 @@ let
 
     meta = with lib; {
       homepage    = "https://labs.consol.de/";
-      license     = licenses.gpl2;
+      license     = licenses.gpl2Only;
       maintainers = with maintainers; [ peterhoeg ];
       inherit description;
     };

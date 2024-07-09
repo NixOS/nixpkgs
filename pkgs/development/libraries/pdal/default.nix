@@ -10,7 +10,7 @@
 , curl
 , gdal
 , hdf5-cpp
-, LASzip
+, laszip
 , libe57format
 , libgeotiff
 , libtiff
@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
     curl
     gdal
     hdf5-cpp
-    LASzip
+    laszip
     libgeotiff
     libtiff
     libxml2
@@ -87,6 +87,12 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = true;
 
   disabledTests = [
+    # Failing due to GDAL 3.9 change in coordinates precision.
+    # See: https://github.com/PDAL/PDAL/issues/4403
+    # This test should be re-enabled once https://github.com/PDAL/PDAL/pull/4411
+    # is merged !
+    "pdal_io_ogr_writer_test"
+
     # Tests failing due to TileDB library implementation, disabled also
     # by upstream CI.
     # See: https://github.com/PDAL/PDAL/blob/bc46bc77f595add4a6d568a1ff923d7fe20f7e74/.github/workflows/linux.yml#L81

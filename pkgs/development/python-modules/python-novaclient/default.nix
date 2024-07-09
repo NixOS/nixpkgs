@@ -1,18 +1,19 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, ddt
-, iso8601
-, keystoneauth1
-, openssl
-, oslo-i18n
-, oslo-serialization
-, pbr
-, prettytable
-, pythonOlder
-, requests-mock
-, stestr
-, testscenarios
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  ddt,
+  iso8601,
+  keystoneauth1,
+  openssl,
+  oslo-i18n,
+  oslo-serialization,
+  pbr,
+  prettytable,
+  pythonOlder,
+  requests-mock,
+  stestr,
+  testscenarios,
 }:
 
 buildPythonPackage rec {

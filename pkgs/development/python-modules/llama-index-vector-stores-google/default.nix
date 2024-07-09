@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, google-generativeai
-, llama-index-core
-, poetry-core
-, pythonOlder
-, pythonRelaxDepsHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  google-generativeai,
+  llama-index-core,
+  poetry-core,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -21,13 +21,10 @@ buildPythonPackage rec {
     hash = "sha256-E6RNf2DzktoZW89P0VKfmeZ5SEslGkyFLRxVtnsQOYc=";
   };
 
-  pythonRelaxDeps = [
-    "google-generativeai"
-  ];
+  pythonRelaxDeps = [ "google-generativeai" ];
 
   build-system = [
     poetry-core
-    pythonRelaxDepsHook
   ];
 
   dependencies = [
@@ -35,9 +32,7 @@ buildPythonPackage rec {
     llama-index-core
   ];
 
-  pythonImportsCheck = [
-    "llama_index.vector_stores.google"
-  ];
+  pythonImportsCheck = [ "llama_index.vector_stores.google" ];
 
   meta = with lib; {
     description = "LlamaIndex Vector Store Integration for Google";

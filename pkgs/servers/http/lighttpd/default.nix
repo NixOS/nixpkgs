@@ -1,5 +1,4 @@
 { lib, stdenv, buildPackages, fetchurl, pkg-config, pcre2, libxml2, zlib, bzip2, which, file
-, fetchpatch
 , openssl
 , enableDbi ? false, libdbi
 , enableMagnet ? false, lua5_1
@@ -8,7 +7,7 @@
 , enablePam ? false, linux-pam
 , enableSasl ? false, cyrus_sasl
 , enableWebDAV ? false, sqlite, libuuid
-, enableExtendedAttrs ? false, attr
+, enableExtendedAttrs ? false
 , perl
 , nixosTests
 }:

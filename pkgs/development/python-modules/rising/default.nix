@@ -1,16 +1,16 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, pytestCheckHook
-, pythonRelaxDepsHook
-, dill
-, lightning-utilities
-, numpy
-, torch
-, threadpoolctl
-, tqdm
+{
+  stdenv,
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  pytestCheckHook,
+  dill,
+  lightning-utilities,
+  numpy,
+  torch,
+  threadpoolctl,
+  tqdm,
 }:
 
 buildPythonPackage rec {
@@ -26,14 +26,20 @@ buildPythonPackage rec {
     hash = "sha256-sBzVTst5Tp2oZZ+Xsg3M7uAMbucL6idlpYwHvib3EaY=";
   };
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   pythonRelaxDeps = [ "lightning-utilities" ];
 
   propagatedBuildInputs = [
-    lightning-utilities numpy torch threadpoolctl tqdm
+    lightning-utilities
+    numpy
+    torch
+    threadpoolctl
+    tqdm
   ];
-  nativeCheckInputs = [ dill pytestCheckHook ];
+  nativeCheckInputs = [
+    dill
+    pytestCheckHook
+  ];
   disabledTests = lib.optionals (stdenv.isLinux && stdenv.isAarch64) [
     # RuntimeError: DataLoader worker (pid(s) <...>) exited unexpectedly:
     "test_progressive_resize_integration"

@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, fetchpatch2
-, setuptools
-, hkdf
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  fetchpatch2,
+  setuptools,
+  hkdf,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -26,19 +27,13 @@ buildPythonPackage rec {
     })
   ];
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  propagatedBuildInputs = [
-    hkdf
-  ];
+  propagatedBuildInputs = [ hkdf ];
 
   pythonImportsCheck = [ "spake2" ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     changelog = "https://github.com/warner/python-spake2/blob/v${version}/NEWS";

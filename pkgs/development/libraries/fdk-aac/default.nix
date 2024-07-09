@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   configureFlags = lib.optional exampleSupport "--enable-example";
 
   meta = with lib; {
-    description = "A high-quality implementation of the AAC codec from Android";
+    description = "High-quality implementation of the AAC codec from Android";
     homepage = "https://sourceforge.net/projects/opencore-amr/";
     license = licenses.fraunhofer-fdk;
     maintainers = with maintainers; [ codyopel ];

@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, blessings
-, fetchFromGitHub
-, invoke
-, pythonOlder
-, releases
-, semantic-version
-, tabulate
-, tqdm
-, twine
+{
+  lib,
+  buildPythonPackage,
+  blessings,
+  fetchFromGitHub,
+  invoke,
+  pythonOlder,
+  releases,
+  semantic-version,
+  tabulate,
+  tqdm,
+  twine,
 }:
 
 buildPythonPackage rec {
@@ -43,9 +44,7 @@ buildPythonPackage rec {
   # There's an error loading the test suite. See https://github.com/pyinvoke/invocations/issues/29.
   doCheck = false;
 
-  pythonImportsCheck = [
-    "invocations"
-  ];
+  pythonImportsCheck = [ "invocations" ];
 
   meta = with lib; {
     description = "Common/best-practice Invoke tasks and collections";

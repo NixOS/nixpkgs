@@ -1,14 +1,15 @@
-{ stdenv
-, buildPythonPackage
-, lib
-, python
-, fetchPypi
-, systemd
-, lxml
-, psutil
-, pytest
-, mock
-, pkg-config }:
+{
+  stdenv,
+  buildPythonPackage,
+  lib,
+  fetchPypi,
+  systemd,
+  lxml,
+  psutil,
+  pytest,
+  mock,
+  pkg-config,
+}:
 
 buildPythonPackage rec {
   pname = "pystemd";
@@ -19,13 +20,19 @@ buildPythonPackage rec {
     hash = "sha256-Tc+ksTpVaFxJ09F8EGMeyhjDN3D2Yxb47yM3uJUcwUQ=";
   };
 
-  disabled = python.pythonOlder "3.4";
-
   buildInputs = [ systemd ];
 
   nativeBuildInputs = [ pkg-config ];
 
-  nativeCheckInputs = [ lxml mock psutil pytest ];
+  propagatedBuildInputs = [
+    lxml
+    psutil
+  ];
+
+  nativeCheckInputs = [
+    mock
+    pytest
+  ];
 
   checkPhase = "pytest tests";
 

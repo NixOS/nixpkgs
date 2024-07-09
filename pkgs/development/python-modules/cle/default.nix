@@ -2,6 +2,7 @@
   lib,
   archinfo,
   buildPythonPackage,
+  cart,
   cffi,
   fetchFromGitHub,
   minidump,
@@ -18,14 +19,14 @@
 
 let
   # The binaries are following the argr projects release cycle
-  version = "9.2.100";
+  version = "9.2.109";
 
   # Binary files from https://github.com/angr/binaries (only used for testing and only here)
   binaries = fetchFromGitHub {
     owner = "angr";
     repo = "binaries";
     rev = "refs/tags/v${version}";
-    hash = "sha256-U6RX+7kkb7+eYLYrE6SdJfYyDnBdGm+P3Xa3EfQv6Fk=";
+    hash = "sha256-zuEDi4+qd5Inrd0t8StgnvrDnrYGvEPk/I5yxfEErYk=";
   };
 in
 buildPythonPackage rec {
@@ -39,13 +40,16 @@ buildPythonPackage rec {
     owner = "angr";
     repo = "cle";
     rev = "refs/tags/v${version}";
-    hash = "sha256-++4GakniGH6JrRfOZsrSb+JpEKa6q7MXCSe9nIoae2g=";
+    hash = "sha256-+4VJ1fqnYPvgiCmU/+aKM+7YZkvDbCMxbWO3YqnELA8=";
   };
 
   build-system = [ setuptools ];
 
+  pythonRelaxDeps = [ "pyvex" ];
+
   dependencies = [
     archinfo
+    cart
     cffi
     minidump
     pefile

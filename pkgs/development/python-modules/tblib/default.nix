@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 
-# build-system
-, setuptools
+  # build-system
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -16,12 +17,10 @@ buildPythonPackage rec {
     hash = "sha256-k2InkKCingTwNGRY+s4eFE3E0y9JNxTGw9/4Kkrbd+Y=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   meta = with lib; {
-    description = "Traceback fiddling library. Allows you to pickle tracebacks.";
+    description = "Traceback fiddling library. Allows you to pickle tracebacks";
     homepage = "https://github.com/ionelmc/python-tblib";
     license = licenses.bsd2;
     maintainers = with maintainers; [ teh ];

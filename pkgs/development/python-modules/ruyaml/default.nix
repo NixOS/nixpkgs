@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, distro
-, fetchFromGitHub
-, fetchpatch
-, pytestCheckHook
-, pythonOlder
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  distro,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
@@ -29,25 +29,18 @@ buildPythonPackage rec {
       --replace '"setuptools_scm_git_archive >= 1.1",' ""
   '';
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
 
-  propagatedBuildInputs = [
-    distro
-  ];
+  propagatedBuildInputs = [ distro ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pytestFlagsArray = [
-    "-W" "ignore::DeprecationWarning"
+    "-W"
+    "ignore::DeprecationWarning"
   ];
 
-  pythonImportsCheck = [
-    "ruyaml"
-  ];
+  pythonImportsCheck = [ "ruyaml" ];
 
   disabledTests = [
     # Assertion error

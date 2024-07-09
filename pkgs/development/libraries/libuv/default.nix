@@ -11,7 +11,7 @@
 , bind
 , cmake
 , knot-resolver
-, lispPackages
+, sbclPackages
 , luajitPackages
 , mosquitto
 , neovim
@@ -105,7 +105,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests = {
     inherit bind cmake knot-resolver mosquitto neovim nodejs;
-    inherit (lispPackages) cl-libuv;
+    inherit (sbclPackages) cl-libuv;
     luajit-libluv = luajitPackages.libluv;
     luajit-luv = luajitPackages.luv;
     ocaml-luv = ocamlPackages.luv;
@@ -116,7 +116,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = with lib; {
-    description = "A multi-platform support library with a focus on asynchronous I/O";
+    description = "Multi-platform support library with a focus on asynchronous I/O";
     homepage    = "https://libuv.org/";
     changelog   = "https://github.com/libuv/libuv/blob/v${finalAttrs.version}/ChangeLog";
     pkgConfigModules = [ "libuv" ];

@@ -1,6 +1,6 @@
 { stdenv, lib, fetchFromGitHub, cmake
 , libGL, libXrandr, libXinerama, libXcursor, libX11, libXi, libXext
-, Carbon, Cocoa, Kernel, OpenGL, fixDarwinDylibNames
+, Carbon, Cocoa, Kernel, fixDarwinDylibNames
 , extra-cmake-modules, wayland
 , wayland-scanner, wayland-protocols, libxkbcommon
 }:
@@ -19,9 +19,7 @@ stdenv.mkDerivation rec {
   # Fix linkage issues on X11 (https://github.com/NixOS/nixpkgs/issues/142583)
   patches = ./x11.patch;
 
-  propagatedBuildInputs =
-    lib.optionals stdenv.isDarwin [ OpenGL ]
-    ++ lib.optionals stdenv.isLinux [ libGL ];
+  propagatedBuildInputs = [ libGL ];
 
   nativeBuildInputs = [ cmake extra-cmake-modules ]
     ++ lib.optional stdenv.isDarwin fixDarwinDylibNames
@@ -51,6 +49,11 @@ stdenv.mkDerivation rec {
   postPatch = lib.optionalString stdenv.isLinux ''
     substituteInPlace src/wl_init.c \
       --replace "libxkbcommon.so.0" "${lib.getLib libxkbcommon}/lib/libxkbcommon.so.0"
+  '';
+
+  # glfw may dlopen libwayland-client.so:
+  postFixup = lib.optionalString stdenv.isLinux ''
+    patchelf ''${!outputLib}/lib/libglfw.so --add-rpath ${lib.getLib wayland}/lib
   '';
 
   meta = with lib; {

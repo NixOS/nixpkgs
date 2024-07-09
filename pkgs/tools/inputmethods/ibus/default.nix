@@ -7,7 +7,7 @@
 , makeWrapper
 , pkg-config
 , vala
-, wrapGAppsHook
+, wrapGAppsHook3
 , dbus
 , systemd
 , dconf ? null
@@ -58,13 +58,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "ibus";
-  version = "1.5.29";
+  version = "1.5.30";
 
   src = fetchFromGitHub {
     owner = "ibus";
     repo = "ibus";
     rev = version;
-    sha256 = "sha256-d4EUIg0v8rfHdvzG5USc6GLY6QHtQpIJp1PrPaaBxxE=";
+    sha256 = "sha256-VgSjeKF9DCkDfE9lHEaWpgZb6ibdgoDf/I6qeJf8Ah4=";
   };
 
   patches = [
@@ -125,7 +125,7 @@ stdenv.mkDerivation rec {
     pkg-config
     python3BuildEnv
     vala
-    wrapGAppsHook
+    wrapGAppsHook3
     dbus-launch
     gobject-introspection
   ];

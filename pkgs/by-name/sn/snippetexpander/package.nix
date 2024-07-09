@@ -1,6 +1,5 @@
 { lib
 , buildGoModule
-, fetchFromSourcehut
 , makeWrapper
 , scdoc
 , installShellFiles

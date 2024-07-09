@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -19,17 +20,11 @@ buildPythonPackage rec {
     hash = "sha256-9az7kD7nKqMF2b3/eFgF+pOKKIYLvTy2sf4TSJfHRnA=";
   };
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [
-    "tests/unit-tests/"
-  ];
+  pytestFlagsArray = [ "tests/unit-tests/" ];
 
-  pythonImportsCheck = [
-    "teamcity"
-  ];
+  pythonImportsCheck = [ "teamcity" ];
 
   meta = with lib; {
     description = "Python unit test reporting to TeamCity";

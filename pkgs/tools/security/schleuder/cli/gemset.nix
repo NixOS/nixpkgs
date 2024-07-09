@@ -5,21 +5,21 @@
     platforms = [];
     source = {
       fetchSubmodules = false;
-      rev = "1de2548695d9a74f47b7868954561b48cbc966f9";
-      sha256 = "0k4i33w9a0bscw4wbs301vxca367g7pa89y6cr24i0014pbmhs9z";
+      rev = "fd010d28b1503504056e714e03abf043b64794ea";
+      sha256 = "1r8ayi0d00c14q40247rwjf5s5n3dsy9d9blhf5jzm3kddzpwnbx";
       type = "git";
       url = "https://0xacab.org/schleuder/schleuder-cli";
     };
-    version = "0.1.0";
+    version = "0.2.0";
   };
   thor = {
     groups = ["default"];
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1yhrnp9x8qcy5vc7g438amd5j9sw83ih7c30dr6g6slgw9zj3g29";
+      sha256 = "1vq1fjp45az9hfp6fxljhdrkv75cvbab1jfrwcw738pnsiqk8zps";
       type = "gem";
     };
-    version = "0.20.3";
+    version = "1.3.1";
   };
 }

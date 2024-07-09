@@ -16,7 +16,7 @@ let
 in appimageTools.wrapType2 {
   inherit pname src version;
 
-  extraPkgs = pkgs: (appimageTools.defaultFhsEnvArgs.multiPkgs pkgs) ++ [ pkgs.libthai ];
+  extraPkgs = pkgs: [ pkgs.libthai ];
 
   extraInstallCommands = ''
     install -m 444 -D ${appimageContents}/caido.desktop -t $out/share/applications
@@ -28,7 +28,7 @@ in appimageTools.wrapType2 {
   '';
 
   meta = with lib; {
-    description = "A lightweight web security auditing toolkit";
+    description = "Lightweight web security auditing toolkit";
     homepage = "https://caido.io/";
     changelog = "https://github.com/caido/caido/releases/tag/v${version}";
     license = licenses.unfree;

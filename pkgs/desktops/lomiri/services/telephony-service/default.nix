@@ -2,7 +2,6 @@
 , lib
 , fetchFromGitLab
 , fetchpatch
-, fetchpatch2
 , gitUpdater
 , nixosTests
 , ayatana-indicator-messages
@@ -14,13 +13,12 @@
 , dconf
 , gettext
 , glib
-, gnome
+, gnome-keyring
 , history-service
 , libnotify
 , libphonenumber
 , libpulseaudio
 , libusermetrics
-, lomiri-ui-toolkit
 , lomiri-url-dispatcher
 , makeWrapper
 , pkg-config
@@ -116,7 +114,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeCheckInputs = [
     dbus-test-runner
     dconf
-    gnome.gnome-keyring
+    gnome-keyring
     telepathy-mission-control
     xvfb-run
   ];
@@ -197,5 +195,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.gpl3Only;
     maintainers = teams.lomiri.members;
     platforms = platforms.linux;
+    # Completely broken until https://github.com/NixOS/nixpkgs/pull/314043 is merged
+    broken = true;
   };
 })

@@ -17,7 +17,7 @@ buildGoModule rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "An open source templating and deployment tool for HashiCorp Nomad jobs";
+    description = "Open source templating and deployment tool for HashiCorp Nomad jobs";
     mainProgram = "levant";
     homepage = "https://github.com/hashicorp/levant";
     license = licenses.mpl20;

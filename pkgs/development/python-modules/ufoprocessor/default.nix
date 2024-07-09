@@ -1,7 +1,15 @@
-{ lib, buildPythonPackage, fetchPypi
-, defcon, fonttools, lxml, fs
-, mutatormath, fontmath, fontparts
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  defcon,
+  fonttools,
+  lxml,
+  fs,
+  mutatormath,
+  fontmath,
+  fontparts,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {

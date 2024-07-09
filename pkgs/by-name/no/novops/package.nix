@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "novops";
-  version = "0.13.0";
+  version = "0.15.0";
 
   src = fetchFromGitHub {
     owner = "PierreBeucher";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-LrEPdEVWgbZ6WyEqdfAhUjKXPuk8Xx7kmLA2ZsPFf1U=";
+    hash = "sha256-b6CM7dDjEzFuL6SZQsFMBOq8p66Jnd7BdXFspWYlTps=";
   };
 
-  cargoHash = "sha256-kI836Z0fgpmPPoX0HtWkZG731xaVWgWkXF0eCaQfM28=";
+  cargoHash = "sha256-mhNEeczbqXVsHoErwEIPUuJqNcyR6dTKBDeHCVH+KsE=";
 
   buildInputs = [
     openssl # required for openssl-sys

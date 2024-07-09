@@ -11,6 +11,7 @@
 , hwdata
 , imagemagick_light
 , libXrandr
+, libdrm
 , libglvnd
 , libpulseaudio
 , libselinux
@@ -46,13 +47,13 @@ let
 in
 stdenv'.mkDerivation (finalAttrs: {
   pname = "fastfetch";
-  version = "2.9.2";
+  version = "2.17.2";
 
   src = fetchFromGitHub {
     owner = "fastfetch-cli";
     repo = "fastfetch";
     rev = finalAttrs.version;
-    hash = "sha256-SEt/qw8ixlgRY2+fqyCmhqzLVoAw/BMl//JqQxbuB0s=";
+    hash = "sha256-XQ0A1eeajiExrD440FVj5STjyMTYdIK0SyysFo/tF3o=";
   };
 
   outputs = [ "out" "man" ];
@@ -77,6 +78,7 @@ stdenv'.mkDerivation (finalAttrs: {
     ddcutil
     glib
     hwdata
+    libdrm
     libpulseaudio
     libselinux
     libsepol
@@ -132,7 +134,14 @@ stdenv'.mkDerivation (finalAttrs: {
     (lib.cmakeBool "ENABLE_XCB_RANDR" x11Support)
     (lib.cmakeBool "ENABLE_XFCONF" (x11Support && (!stdenv.isDarwin)))
     (lib.cmakeBool "ENABLE_XRANDR" x11Support)
+  ] ++ lib.optionals stdenv.isLinux [
+    (lib.cmakeOptionType "filepath" "CUSTOM_PCI_IDS_PATH" "${hwdata}/share/hwdata/pci.ids")
+    (lib.cmakeOptionType "filepath" "CUSTOM_AMDGPU_IDS_PATH" "${libdrm}/share/libdrm/amdgpu.ids")
   ];
+
+  postPatch = ''
+    substituteInPlace completions/fastfetch.fish --replace-fail python3 '${python3.interpreter}'
+  '';
 
   postInstall = ''
     wrapProgram $out/bin/fastfetch \
@@ -154,7 +163,7 @@ stdenv'.mkDerivation (finalAttrs: {
     description = "Like neofetch, but much faster because written in C";
     homepage = "https://github.com/fastfetch-cli/fastfetch";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ gerg-l khaneliman ];
+    maintainers = with lib.maintainers; [ khaneliman ];
     platforms = lib.platforms.all;
     mainProgram = "fastfetch";
   };

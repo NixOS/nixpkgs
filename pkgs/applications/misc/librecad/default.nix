@@ -72,7 +72,7 @@ mkDerivation rec {
     description = "2D CAD package based on Qt";
     homepage = "https://librecad.org";
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ kiwi viric ];
+    maintainers = with maintainers; [ viric ];
     platforms = platforms.linux;
   };
 }

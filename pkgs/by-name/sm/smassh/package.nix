@@ -19,7 +19,6 @@ python3.pkgs.buildPythonApplication rec {
 
   nativeBuildInputs = with python3.pkgs; [
     poetry-core
-    pythonRelaxDepsHook
   ];
 
   pythonRelaxDeps = [
@@ -42,7 +41,7 @@ python3.pkgs.buildPythonApplication rec {
   };
 
   meta = with lib; {
-    description = "A TUI based typing test application inspired by MonkeyType";
+    description = "TUI based typing test application inspired by MonkeyType";
     homepage = "https://github.com/kraanzu/smassh";
     changelog = "https://github.com/kraanzu/smassh/blob/main/CHANGELOG.md";
     license = licenses.gpl3Plus;

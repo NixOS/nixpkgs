@@ -42,7 +42,7 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     homepage = "https://github.com/edolstra/nix-serve";
-    description = "A utility for sharing a Nix store as a binary cache";
+    description = "Utility for sharing a Nix store as a binary cache";
     maintainers = [ maintainers.eelco ];
     license = licenses.lgpl21;
     platforms = nix.meta.platforms;

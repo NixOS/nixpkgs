@@ -1,6 +1,7 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
 
 buildPythonPackage rec {
@@ -13,9 +14,7 @@ buildPythonPackage rec {
     sha256 = "sha256-SmYYRzo6wClQBMc2oRgO0CQEHOxWe8GFL24TPa6A4NQ=";
   };
 
-  pythonImportsCheck = [
-    "mixins"
-  ];
+  pythonImportsCheck = [ "mixins" ];
 
   meta = with lib; {
     homepage = "https://github.com/nickderobertis/py-mixins";

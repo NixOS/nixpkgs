@@ -40,7 +40,7 @@
 , lomiri-notifications
 , lomiri-thumbnailer
 , maliit-keyboard
-, mir
+, mir_2_15
 , nixos-icons
 , pam
 , pkg-config
@@ -54,7 +54,7 @@
 , qtmultimedia
 , qtsvg
 , telephony-service
-, wrapGAppsHook
+, wrapGAppsHook3
 , wrapQtAppsHook
 , xwayland
 }:
@@ -117,6 +117,7 @@ stdenv.mkDerivation (finalAttrs: {
     })
 
     ./9901-lomiri-Disable-Wizard.patch
+    ./9902-lomiri-Check-NIXOS_XKB_LAYOUTS.patch
   ];
 
   postPatch = ''
@@ -160,7 +161,7 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     glib # populates GSETTINGS_SCHEMAS_PATH
     pkg-config
-    wrapGAppsHook # XDG_DATA_DIRS wrapper flags for schemas
+    wrapGAppsHook3 # XDG_DATA_DIRS wrapper flags for schemas
     wrapQtAppsHook
   ];
 
@@ -190,7 +191,7 @@ stdenv.mkDerivation (finalAttrs: {
     lomiri-system-settings-unwrapped
     lomiri-ui-toolkit
     maliit-keyboard
-    mir
+    mir_2_15
     pam
     properties-cpp
     protobuf
@@ -207,7 +208,7 @@ stdenv.mkDerivation (finalAttrs: {
     lomiri-settings-components
     lomiri-thumbnailer
     qtmultimedia
-    telephony-service
+    # telephony-service # currently broken: https://github.com/NixOS/nixpkgs/pull/314043
   ];
 
   nativeCheckInputs = [

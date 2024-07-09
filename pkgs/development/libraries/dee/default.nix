@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with lib; {
-    description = "A library that uses DBus to provide objects allowing you to create Model-View-Controller type programs across DBus";
+    description = "Library that uses DBus to provide objects allowing you to create Model-View-Controller type programs across DBus";
     mainProgram = "dee-tool";
     homepage = "https://launchpad.net/dee";
     license = licenses.lgpl3;

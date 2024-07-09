@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchpatch, fetchFromGitHub, autoreconfHook
+{ lib, stdenv, fetchFromGitHub, autoreconfHook
 , blas, gfortran, openssh, mpi
 } :
 

@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation rec {
   pname = "eigenmath";
-  version = "unstable-2024-04-19";
+  version = "3.27-unstable-2024-06-20";
 
   src = fetchFromGitHub {
     owner = "georgeweigt";
     repo = pname;
-    rev = "5d5a538e7c378e9e2d9fabdf88fa2c6dd6d13e2c";
-    hash = "sha256-vPj3YKNJAZgdhw/VVrJIo2P7IyHrt7hVpnUQCUCZmR8=";
+    rev = "c3e3da104dbef888c3e52659134d5e9bdc12764d";
+    hash = "sha256-fqCphnRQw79v7ZTCZU9ucm/R7BKY7yCZYDSnxD7uRS8=";
   };
 
   checkPhase = let emulator = stdenv.hostPlatform.emulator buildPackages; in ''

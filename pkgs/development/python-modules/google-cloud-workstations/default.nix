@@ -1,16 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, google-api-core
-, google-auth
-, grpc-google-iam-v1
-, mock
-, proto-plus
-, protobuf
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  google-api-core,
+  google-auth,
+  grpc-google-iam-v1,
+  mock,
+  proto-plus,
+  protobuf,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -25,9 +26,7 @@ buildPythonPackage rec {
     hash = "sha256-K6Qq243bX3waymyGcirLAANqmP0UAUgFS3kidwCFYBE=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     google-api-core

@@ -9,7 +9,7 @@
 , gnome
 , gnome-desktop
 , glib
-, wrapGAppsHook
+, wrapGAppsHook3
 , gsettings-desktop-schemas
 , buildPortalsInGnome ? true
 }:
@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
     meson
     ninja
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

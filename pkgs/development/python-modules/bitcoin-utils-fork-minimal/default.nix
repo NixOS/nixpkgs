@@ -1,9 +1,10 @@
-{ lib
-, base58
-, buildPythonPackage
-, ecdsa
-, fetchPypi
-, sympy
+{
+  lib,
+  base58,
+  buildPythonPackage,
+  ecdsa,
+  fetchPypi,
+  sympy,
 }:
 
 buildPythonPackage rec {
@@ -32,9 +33,7 @@ buildPythonPackage rec {
   # Project doesn't ship tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "bitcoinutils"
-  ];
+  pythonImportsCheck = [ "bitcoinutils" ];
 
   meta = with lib; {
     description = "Bitcoin utility functions";

@@ -19,8 +19,8 @@ test_driver = ["py.typed"]
 [tool.ruff]
 line-length = 88
 
-select = ["E", "F", "I", "U", "N"]
-ignore = ["E501"]
+lint.select = ["E", "F", "I", "U", "N"]
+lint.ignore = ["E501"]
 
 # xxx: we can import https://pypi.org/project/types-colorama/ here
 [[tool.mypy.overrides]]
@@ -29,6 +29,10 @@ ignore_missing_imports = true
 
 [[tool.mypy.overrides]]
 module = "ptpython.*"
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = "junit_xml.*"
 ignore_missing_imports = true
 
 [tool.black]

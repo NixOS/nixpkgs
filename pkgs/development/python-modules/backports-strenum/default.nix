@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -20,17 +21,11 @@ buildPythonPackage rec {
     hash = "sha256-jbMR9VAGsMAJTP2VQyRr+RPYwWwk8hGAYs4KoZEWa7U=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "backports.strenum"
-  ];
+  pythonImportsCheck = [ "backports.strenum" ];
 
   meta = with lib; {
     description = "Base class for creating enumerated constants that are also subclasses of str";

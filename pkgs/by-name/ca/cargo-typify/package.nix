@@ -1,4 +1,4 @@
-{ lib, rustfmt, rustPlatform, fetchFromGitHub }:
+{ lib, rustfmt, rustPlatform, fetchFromGitHub, gitUpdater }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-typify";
@@ -22,11 +22,14 @@ rustPlatform.buildRustPackage rec {
     export RUSTFMT="${lib.getExe rustfmt}"
   '';
 
+  passthru.updateScript = gitUpdater { rev-prefix = "v"; };
+
   meta = with lib; {
     description = "JSON Schema to Rust type converter";
     mainProgram = "cargo-typify";
     homepage = "https://github.com/oxidecomputer/typify";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ david-r-cox ];
+    broken = true;
   };
 }

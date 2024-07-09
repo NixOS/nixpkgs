@@ -1,16 +1,17 @@
 {
   lib,
+  aiohttp,
+  aiohttp-socks,
   beautifulsoup4,
   buildPythonPackage,
   dateparser,
   fetchFromGitHub,
-  playwright,
   playwright-stealth,
+  playwright,
   poetry-core,
   puremagic,
   pydub,
   pythonOlder,
-  pythonRelaxDepsHook,
   pytz,
   requests,
   setuptools,
@@ -21,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "playwrightcapture";
-  version = "1.24.6";
+  version = "1.25.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -30,7 +31,7 @@ buildPythonPackage rec {
     owner = "Lookyloo";
     repo = "PlaywrightCapture";
     rev = "refs/tags/v${version}";
-    hash = "sha256-DFMnlFN9CooQ7HBiw6Ur6KMTMrEw6JxkT6IxlVU+PdY=";
+    hash = "sha256-Sm6FfwUxW3t7gLwWd+ZJPyp0VSMPgGpuT3lrMurWOa0=";
   };
 
   pythonRelaxDeps = [
@@ -42,9 +43,10 @@ buildPythonPackage rec {
 
   build-system = [ poetry-core ];
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   dependencies = [
+    aiohttp
+    aiohttp-socks
     beautifulsoup4
     dateparser
     playwright

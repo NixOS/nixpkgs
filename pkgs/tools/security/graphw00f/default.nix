@@ -5,14 +5,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "graphw00f";
-  version = "1.1.15";
+  version = "1.1.17";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "dolevf";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-wAymwT2PRyX7m/yh6BAa8YNkH7pE69bKHKZ15phuUJo=";
+    hash = "sha256-VeTFwn4PANGoW2Cb/IJ1KJb4YkjjDpaU7DLv0YwRwDU=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [

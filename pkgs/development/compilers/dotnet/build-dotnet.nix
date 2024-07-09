@@ -26,6 +26,7 @@ assert if type == "sdk" then packages != null else true;
 , mkNugetDeps
 , callPackage
 , dotnetCorePackages
+, xmlstarlet
 }:
 
 let
@@ -47,6 +48,9 @@ let
 
   targetRid = dotnetCorePackages.systemToDotnetRid stdenv.targetPlatform.system;
 
+  sigtool = callPackage ./sigtool.nix {};
+  signAppHost = callPackage ./sign-apphost.nix {};
+
 in
 mkCommon type rec {
   inherit pname version;
@@ -54,7 +58,11 @@ mkCommon type rec {
   # Some of these dependencies are `dlopen()`ed.
   nativeBuildInputs = [
     makeWrapper
-  ] ++ lib.optional stdenv.isLinux autoPatchelfHook;
+  ] ++ lib.optional stdenv.isLinux autoPatchelfHook
+  ++ lib.optionals (type == "sdk" && stdenv.isDarwin) [
+    xmlstarlet
+    sigtool
+  ];
 
   buildInputs = [
     stdenv.cc.cc
@@ -70,6 +78,16 @@ mkCommon type rec {
   );
 
   sourceRoot = ".";
+
+  postPatch = if type == "sdk" && stdenv.isDarwin then ''
+    xmlstarlet ed \
+      --inplace \
+      -s //_:Project -t elem -n Import \
+      -i \$prev -t attr -n Project -v "${signAppHost}" \
+      sdk/*/Sdks/Microsoft.NET.Sdk/targets/Microsoft.NET.Sdk.targets
+
+    codesign --remove-signature packs/Microsoft.NETCore.App.Host.osx-*/*/runtimes/osx-*/native/{apphost,singlefilehost}
+  '' else null;
 
   dontPatchELF = true;
   noDumpEnvVars = true;
@@ -106,6 +124,14 @@ mkCommon type rec {
       --add-needed libssl.so \
       $out/shared/Microsoft.NETCore.App/*/*System.Security.Cryptography.Native.OpenSsl.so \
       $out/packs/Microsoft.NETCore.App.Host.${targetRid}/*/runtimes/${targetRid}/native/*host
+  '';
+
+  # fixes: Could not load ICU data. UErrorCode: 2
+  propagatedSandboxProfile = lib.optionalString stdenv.isDarwin ''
+    (allow file-read* (subpath "/usr/share/icu"))
+    (allow file-read* (subpath "/private/var/db/mds/system"))
+    (allow mach-lookup (global-name "com.apple.SecurityServer")
+                       (global-name "com.apple.system.opendirectoryd.membership"))
   '';
 
   passthru = {

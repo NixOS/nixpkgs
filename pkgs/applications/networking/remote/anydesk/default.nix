@@ -5,14 +5,14 @@
 
 let
   description = "Desktop sharing application, providing remote support and online meetings";
-in stdenv.mkDerivation rec {
+in stdenv.mkDerivation (finalAttrs: {
   pname = "anydesk";
   version = "6.3.2";
 
   src = fetchurl {
     urls = [
-      "https://download.anydesk.com/linux/anydesk-${version}-amd64.tar.gz"
-      "https://download.anydesk.com/linux/generic-linux/anydesk-${version}-amd64.tar.gz"
+      "https://download.anydesk.com/linux/anydesk-${finalAttrs.version}-amd64.tar.gz"
+      "https://download.anydesk.com/linux/generic-linux/anydesk-${finalAttrs.version}-amd64.tar.gz"
     ];
     hash = "sha256-nSY4qHRsEvQk4M3JDHalAk3C6Y21WlfDQ2Gpp6/jjMs=";
   };
@@ -54,7 +54,7 @@ in stdenv.mkDerivation rec {
   postFixup = ''
     patchelf \
       --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
-      --set-rpath "${lib.makeLibraryPath buildInputs}" \
+      --set-rpath "${lib.makeLibraryPath finalAttrs.buildInputs}" \
       $out/bin/anydesk
 
     # pangox is not actually necessary (it was only added as a part of gtkglext)
@@ -77,12 +77,12 @@ in stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     inherit description;
     homepage = "https://www.anydesk.com";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ shyim cheriimoya ];
+    maintainers = with lib.maintainers; [ shyim cheriimoya ];
   };
-}
+})

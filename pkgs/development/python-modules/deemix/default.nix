@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, spotipy
-, click
-, pycryptodomex
-, mutagen
-, requests
-, deezer-py
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  spotipy,
+  click,
+  pycryptodomex,
+  mutagen,
+  requests,
+  deezer-py,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -34,9 +35,7 @@ buildPythonPackage rec {
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "deezer"
-  ];
+  pythonImportsCheck = [ "deezer" ];
 
   meta = with lib; {
     description = "Deezer downloader built from the ashes of Deezloader Remix";

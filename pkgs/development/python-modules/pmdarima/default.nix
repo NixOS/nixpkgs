@@ -1,18 +1,19 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, cython
-, joblib
-, matplotlib
-, numpy
-, pandas
-, scikit-learn
-, scipy
-, statsmodels
-, urllib3
-, pythonOlder
-, python
-, pytest7CheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  cython,
+  joblib,
+  matplotlib,
+  numpy,
+  pandas,
+  scikit-learn,
+  scipy,
+  statsmodels,
+  urllib3,
+  pythonOlder,
+  python,
+  pytest7CheckHook,
 }:
 
 buildPythonPackage rec {
@@ -52,7 +53,7 @@ buildPythonPackage rec {
     pytest7CheckHook
   ];
 
-  disabledTests= [
+  disabledTests = [
     # touches internet
     "test_load_from_web"
   ];
@@ -60,7 +61,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "pmdarima" ];
 
   meta = with lib; {
-    description = "A statistical library designed to fill the void in Python's time series analysis capabilities, including the equivalent of R's auto.arima function";
+    description = "Statistical library designed to fill the void in Python's time series analysis capabilities, including the equivalent of R's auto.arima function";
     homepage = "https://github.com/alkaline-ml/pmdarima";
     changelog = "https://github.com/alkaline-ml/pmdarima/releases/tag/v${version}";
     license = licenses.mit;

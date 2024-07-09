@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, numpy
-, pythonOlder
-, sqlitedict
-, websockets
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  numpy,
+  pythonOlder,
+  sqlitedict,
+  websockets,
 }:
 
 buildPythonPackage rec {

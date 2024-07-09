@@ -21,6 +21,6 @@ stdenv.mkDerivation rec {
     description = "Wireless tools for Linux";
     homepage = "https://hewlettpackard.github.io/wireless-tools/Tools.html";
     platforms = lib.platforms.linux;
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Only;
   };
 }

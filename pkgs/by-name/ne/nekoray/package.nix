@@ -84,20 +84,23 @@ stdenv.mkDerivation (finalAttrs: {
     fetchSubmodules = true;
   };
 
+  strictDeps = true;
+
   nativeBuildInputs = [
     libsForQt5.wrapQtAppsHook
     cmake
     ninja
-    protobuf
     copyDesktopItems
   ];
 
   buildInputs = [
     libsForQt5.qtbase
     libsForQt5.qttools
+    libsForQt5.qtwayland
     libsForQt5.qtx11extras
-    zxing-cpp
+    protobuf
     yaml-cpp
+    zxing-cpp
   ];
 
   # NKR_PACKAGE makes sure the app uses the user's config directory to store it's non-static content

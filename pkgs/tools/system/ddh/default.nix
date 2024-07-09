@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
   cargoSha256 = "6yPDkbag81TZ4k72rbmGT6HWKdGK4yfKxjGNFKEWXPI=";
 
   meta = with lib; {
-    description = "A fast duplicate file finder";
+    description = "Fast duplicate file finder";
     longDescription = ''
       DDH traverses input directories and their subdirectories.
       It also hashes files as needed and reports findings.

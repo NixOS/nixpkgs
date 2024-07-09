@@ -1,16 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, flit-core
-, tomli
-, pythonOlder
-, importlib-metadata
-, zipp
-, pytestCheckHook
-, setuptools
-, testpath
-, mock
-, pip
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  flit-core,
+  tomli,
+  pythonOlder,
+  importlib-metadata,
+  zipp,
+  pytestCheckHook,
+  setuptools,
+  testpath,
+  mock,
+  pip,
 }:
 
 buildPythonPackage rec {
@@ -23,15 +24,14 @@ buildPythonPackage rec {
     hash = "sha256-Gy+i/9OTi7S+/+XWFGy8sr2plqWk2p8xq//Ysk4Hsxc=";
   };
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  nativeBuildInputs = [ flit-core ];
 
-  propagatedBuildInputs = [
-    tomli
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    importlib-metadata zipp
-  ];
+  propagatedBuildInputs =
+    [ tomli ]
+    ++ lib.optionals (pythonOlder "3.8") [
+      importlib-metadata
+      zipp
+    ];
 
   nativeCheckInputs = [
     pytestCheckHook

@@ -73,7 +73,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/blacksphere/blackmagic";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ pjones emily sorki ];
+    maintainers = with maintainers; [ pjones sorki ];
     platforms = platforms.unix;
   };
 }

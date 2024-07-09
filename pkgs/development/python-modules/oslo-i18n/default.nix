@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, oslotest
-, pbr
-, setuptools
-, testscenarios
-, stestr
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  oslotest,
+  pbr,
+  setuptools,
+  testscenarios,
+  stestr,
 }:
 
 buildPythonPackage rec {

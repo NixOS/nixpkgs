@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/marlonrichert/zsh-edit";
-    description = "A set of powerful extensions to the Zsh command line editor";
+    description = "Set of powerful extensions to the Zsh command line editor";
     license = licenses.mit;
     maintainers = with maintainers; [ deejayem ];
     platforms = platforms.all;

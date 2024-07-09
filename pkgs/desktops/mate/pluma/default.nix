@@ -12,7 +12,7 @@
 , gtksourceview4
 , libpeas
 , mate-desktop
-, wrapGAppsHook
+, wrapGAppsHook3
 , mateUpdateScript
 }:
 
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     perl
     pkg-config
     python3.pkgs.wrapPython
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

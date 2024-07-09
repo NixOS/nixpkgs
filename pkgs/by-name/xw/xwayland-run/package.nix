@@ -49,7 +49,8 @@ python3.pkgs.buildPythonApplication rec {
   '';
 
   meta = with lib; {
-    description = "A set of small utilities revolving around running Xwayland and various Wayland compositor headless";
+    changelog = "https://gitlab.freedesktop.org/ofourdan/xwayland-run/-/releases/${src.rev}";
+    description = "Set of small utilities revolving around running Xwayland and various Wayland compositor headless";
     homepage = "https://gitlab.freedesktop.org/ofourdan/xwayland-run";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ arthsmn ];

@@ -1,20 +1,25 @@
-{ lib, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, six
-, setuptools-scm
-, xorg
-, python
-, mock
-, nose
-, pytestCheckHook
-, util-linux
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  six,
+  setuptools,
+  setuptools-scm,
+  xorg,
+  python,
+  mock,
+  pynose,
+  pytestCheckHook,
+  util-linux,
 }:
 
 buildPythonPackage rec {
   pname = "xlib";
   version = "0.33";
-  format = "setuptools";
+  pyproject = true;
+
+  build-system = [ setuptools ];
 
   src = fetchFromGitHub {
     owner = "python-xlib";
@@ -23,27 +28,21 @@ buildPythonPackage rec {
     hash = "sha256-u06OWlMIOUzHOVS4hvm72jGgTSXWUqMvEQd8bTpFog0=";
   };
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
 
-  buildInputs = [
-    xorg.libX11
-  ];
+  buildInputs = [ xorg.libX11 ];
 
-  propagatedBuildInputs = [
-    six
-  ];
+  propagatedBuildInputs = [ six ];
 
   doCheck = !stdenv.isDarwin;
 
   nativeCheckInputs = [
     pytestCheckHook
     mock
-    nose
+    pynose
     util-linux
     xorg.xauth
-    xorg.xorgserver
+    xorg.xvfb
   ];
 
   disabledTestPaths = [
@@ -58,5 +57,4 @@ buildPythonPackage rec {
     license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ ];
   };
-
 }

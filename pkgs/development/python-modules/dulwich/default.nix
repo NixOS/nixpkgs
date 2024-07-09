@@ -2,9 +2,9 @@
   lib,
   stdenv,
   buildPythonPackage,
-  certifi,
   fastimport,
   fetchFromGitHub,
+  fetchpatch2,
   gevent,
   geventhttpclient,
   git,
@@ -12,8 +12,7 @@
   gnupg,
   gpgme,
   paramiko,
-  pytest-xdist,
-  pytestCheckHook,
+  unittestCheckHook,
   pythonOlder,
   setuptools,
   setuptools-rust,
@@ -21,31 +20,39 @@
 }:
 
 buildPythonPackage rec {
-  pname = "dulwich";
   version = "0.22.1";
-  pyproject = true;
+  pname = "dulwich";
+  format = "setuptools";
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "jelmer";
     repo = "dulwich";
-    rev = "refs/tags/${version}";
+    rev = "refs/tags/dulwich-${version}";
     hash = "sha256-bf3ZUMX4afpdTBpFnx0HMyzCNG6V/p4eOl36djxGbtk=";
   };
+
+  patches = [
+    (fetchpatch2 {
+      name = "dulwich-geventhttpclient-api-breakage.patch";
+      url = "https://github.com/jelmer/dulwich/commit/5f0497de9c37ac4f4e8f27bed8decce13765d3df.patch";
+      hash = "sha256-0GgDgmYuLCsMc9nRRLNL2W6WYrkZ/1ZnZBQusEAzLKI=";
+    })
+  ];
 
   build-system = [
     setuptools
     setuptools-rust
   ];
 
-  dependencies = [
-    certifi
+  propagatedBuildInputs = [
     urllib3
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     fastimport = [ fastimport ];
+    https = [ urllib3 ];
     pgp = [
       gpgme
       gnupg
@@ -53,23 +60,25 @@ buildPythonPackage rec {
     paramiko = [ paramiko ];
   };
 
-  nativeCheckInputs = [
-    gevent
-    geventhttpclient
-    git
-    glibcLocales
-    pytest-xdist
-    pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  nativeCheckInputs =
+    [
+      gevent
+      geventhttpclient
+      git
+      glibcLocales
+      unittestCheckHook
+    ]
+    ++ lib.flatten (lib.attrValues optional-dependencies);
+
+  preCheck = ''
+    # requires swift config file
+    rm tests/contrib/test_swift_smoke.py
+
+    # ImportError: attempted relative import beyond top-level package
+    rm tests/test_greenthreads.py
+  '';
 
   doCheck = !stdenv.isDarwin;
-
-  disabledTestPaths = [
-    # Missing test inputs
-    "tests/contrib/test_swift_smoke.py"
-    # Import issue
-    "tests/test_greenthreads.py"
-  ];
 
   pythonImportsCheck = [ "dulwich" ];
 

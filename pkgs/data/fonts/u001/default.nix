@@ -34,7 +34,7 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A Univers-like typeface that comes with GhostPDL made by URW++";
+    description = "Univers-like typeface that comes with GhostPDL made by URW++";
     homepage = "https://fontlibrary.org/en/font/u001";
     license = licenses.aladdin;
     platforms = platforms.all;

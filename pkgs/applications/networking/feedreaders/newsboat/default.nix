@@ -3,16 +3,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "newsboat";
-  version = "2.35";
+  version = "2.36";
 
   src = fetchFromGitHub {
     owner = "newsboat";
     repo = "newsboat";
     rev = "r${version}";
-    hash = "sha256-WbicKP46N8MVjUeerYUdcHJO5Qf7rQFyYCpxexd2wDY=";
+    hash = "sha256-RnDnyRAZ71aE5st5wUcUKjFFGY288oFpiyDXAno15MQ=";
   };
 
-  cargoHash = "sha256-B6U+DxIRm9Sn4x+dZCfNKENNDsTUVZFT6i0Yz47gjTs=";
+  cargoHash = "sha256-0z3G8j0Qk0HEDUKA7fmjFfNW956rRtzKO+0ltNQR4es=";
 
   # TODO: Check if that's still needed
   postPatch = lib.optionalString stdenv.isDarwin ''
@@ -62,7 +62,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     homepage    = "https://newsboat.org/";
     changelog   = "https://github.com/newsboat/newsboat/blob/${src.rev}/CHANGELOG.md";
-    description = "A fork of Newsbeuter, an RSS/Atom feed reader for the text console";
+    description = "Fork of Newsbeuter, an RSS/Atom feed reader for the text console";
     maintainers = with lib.maintainers; [ dotlambda nicknovitski ];
     license     = lib.licenses.mit;
     platforms   = lib.platforms.unix;

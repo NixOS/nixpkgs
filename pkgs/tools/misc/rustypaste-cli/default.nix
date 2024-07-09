@@ -23,7 +23,7 @@ rustPlatform.buildRustPackage rec {
   ];
 
   meta = with lib; {
-    description = "A CLI tool for rustypaste";
+    description = "CLI tool for rustypaste";
     homepage = "https://github.com/orhun/rustypaste-cli";
     changelog = "https://github.com/orhun/rustypaste-cli/blob/${src.rev}/CHANGELOG.md";
     license = licenses.mit;

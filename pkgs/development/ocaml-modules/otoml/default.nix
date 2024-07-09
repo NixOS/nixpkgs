@@ -24,7 +24,7 @@ buildDunePackage rec {
   propagatedBuildInputs = [ menhirLib uutf ];
 
   meta = {
-    description = "A TOML parsing and manipulation library for OCaml";
+    description = "TOML parsing and manipulation library for OCaml";
     changelog = "https://github.com/dmbaturin/otoml/raw/${version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.vbgl ];

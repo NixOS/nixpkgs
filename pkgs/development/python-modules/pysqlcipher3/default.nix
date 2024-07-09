@@ -1,11 +1,14 @@
-{ lib, buildPythonPackage, fetchPypi, pythonOlder, sqlcipher }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  sqlcipher,
+}:
 
 buildPythonPackage rec {
   pname = "pysqlcipher3";
   version = "1.2.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.3";
 
   src = fetchPypi {
     inherit pname version;

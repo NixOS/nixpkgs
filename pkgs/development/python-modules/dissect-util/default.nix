@@ -1,15 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, setuptools-scm
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  setuptools-scm,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "dissect-util";
-  version = "3.15";
+  version = "3.16";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -18,7 +19,7 @@ buildPythonPackage rec {
     owner = "fox-it";
     repo = "dissect.util";
     rev = "refs/tags/${version}";
-    hash = "sha256-JIrk6YRuW5B30d9fNaRFesO01ajcSy8ErkpFtM1Coaw=";
+    hash = "sha256-OHlWOWB476KERerEo2ZYLMIIO+eIpKlNLOHMCiE5jdE=";
   };
 
   nativeBuildInputs = [
@@ -26,13 +27,9 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "dissect.util"
-  ];
+  pythonImportsCheck = [ "dissect.util" ];
 
   meta = with lib; {
     description = "Dissect module implementing various utility functions for the other Dissect modules";

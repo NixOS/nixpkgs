@@ -35,7 +35,7 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    description = "A shell extension that manages your environment";
+    description = "Shell extension that manages your environment";
     longDescription = ''
       Once hooked into your shell direnv is looking for an .envrc file in your
       current directory before every prompt.

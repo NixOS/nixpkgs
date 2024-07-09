@@ -6,7 +6,7 @@
 , libusb1
 , libGL
 , qmake
-, wrapGAppsHook
+, wrapGAppsHook3
 , wrapQtAppsHook
 , mkDerivation
 
@@ -45,7 +45,7 @@ mkDerivation {
     pkg-config
     qmake
     qttools
-    wrapGAppsHook
+    wrapGAppsHook3
     wrapQtAppsHook
   ];
 

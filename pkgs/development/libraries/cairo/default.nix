@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch, gtk-doc, meson, ninja, pkg-config, python3
+{ lib, stdenv, fetchurl, gtk-doc, meson, ninja, pkg-config, python3
 , docbook_xsl, fontconfig, freetype, libpng, pixman, zlib
 , x11Support? !stdenv.isDarwin || true, libXext, libXrender
 , gobjectSupport ? true, glib
@@ -92,7 +92,7 @@ in {
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
   meta = with lib; {
-    description = "A 2D graphics library with support for multiple output devices";
+    description = "2D graphics library with support for multiple output devices";
     mainProgram = "cairo-trace";
     longDescription = ''
       Cairo is a 2D graphics library with support for multiple output

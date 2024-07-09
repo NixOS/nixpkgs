@@ -4,7 +4,7 @@
 , cmake
 , qtwebengine
 , qttools
-, wrapGAppsHook
+, wrapGAppsHook3
 , wrapQtAppsHook
 }:
 
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs =  [ qtwebengine qttools ];
-  nativeBuildInputs = [ cmake wrapGAppsHook wrapQtAppsHook ];
+  nativeBuildInputs = [ cmake wrapGAppsHook3 wrapQtAppsHook ];
   qmakeFlags = [ "CONFIG+=release" ];
 
   meta = with lib; {

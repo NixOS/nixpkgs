@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, importlib-metadata
-, setuptools
-, sqlparse
-, tabulate
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  importlib-metadata,
+  setuptools,
+  sqlparse,
+  tabulate,
 }:
 
 buildPythonPackage rec {

@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "cloud-custodian";
-  version = "0.9.35.0";
+  version = "0.9.38.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cloud-custodian";
     repo = "cloud-custodian";
     rev = "refs/tags/${version}";
-    hash = "sha256-iiyYtAtAQKTGrXdIPXGs11QWuPWn+IWmXpjmYO5S6Pg=";
+    hash = "sha256-jGWPwHiETS4+hk9euLLxs0PBb7mxz2PHCbYYlFfLQUw=";
   };
 
   pythonRelaxDeps = [
@@ -25,7 +25,6 @@ python3.pkgs.buildPythonApplication rec {
 
   build-system = with python3.pkgs; [ poetry-core ];
 
-  nativeBuildInputs = with python3.pkgs; [ pythonRelaxDepsHook ];
 
   dependencies = with python3.pkgs; [
     argcomplete

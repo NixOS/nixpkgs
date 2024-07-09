@@ -41,7 +41,7 @@ python3Packages.buildPythonApplication rec {
   doCheck = false;
 
   meta = {
-    description = "A open-source tool for writers";
+    description = "Open-source tool for writers";
     homepage = "https://www.theologeek.ch/manuskript";
     longDescription = ''
     Manuskript is a tool for those writer who like to organize and

@@ -1,12 +1,13 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, setuptools
-, pythonOlder
-# Python deps
-, uplc
-, graphlib-backport
-, ordered-set
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  setuptools,
+  pythonOlder,
+  # Python deps
+  uplc,
+  graphlib-backport,
+  ordered-set,
 }:
 
 buildPythonPackage rec {

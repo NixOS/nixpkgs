@@ -17,10 +17,13 @@ python3.pkgs.buildPythonApplication rec {
   };
 
   pythonRelaxDeps = [
+    "azure-identity"
     "azure-keyvault-keys"
     "azure-mgmt-compute"
+    "azure-mgmt-containerservice"
     "azure-mgmt-network"
     "azure-mgmt-security"
+    "azure-mgmt-storage"
     "azure-storage-blob"
     "boto3"
     "botocore"
@@ -29,10 +32,6 @@ python3.pkgs.buildPythonApplication rec {
     "pydantic"
     "pydantic"
     "slack-sdk"
-  ];
-
-  nativeBuildInputs = with python3.pkgs; [
-    pythonRelaxDepsHook
   ];
 
   build-system = with python3.pkgs; [

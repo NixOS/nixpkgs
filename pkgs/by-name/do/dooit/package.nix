@@ -20,7 +20,6 @@ python3.pkgs.buildPythonApplication rec {
 
   nativeBuildInputs = with python3.pkgs; [
     poetry-core
-    pythonRelaxDepsHook
   ];
 
   pythonRelaxDeps = [
@@ -50,7 +49,7 @@ python3.pkgs.buildPythonApplication rec {
   };
 
   meta = with lib; {
-    description = "A TUI todo manager";
+    description = "TUI todo manager";
     homepage = "https://github.com/kraanzu/dooit";
     changelog = "https://github.com/kraanzu/dooit/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;

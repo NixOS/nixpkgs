@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "An emoji selector plugin for Rofi";
+    description = "Emoji selector plugin for Rofi";
     homepage = "https://github.com/Mange/rofi-emoji";
     license = licenses.mit;
     maintainers = with maintainers; [ cole-h ];

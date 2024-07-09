@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitLab
-, fetchpatch
-, pytestCheckHook
-, pythonOlder
-, setuptools-scm
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitLab,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
@@ -21,33 +22,25 @@ buildPythonPackage rec {
     hash = "sha256-TxWKV2nrnCxZmj6+wBDMSdJRvKV+MsPFbOyIlUJYJ3Q=";
   };
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  build-system = [ setuptools-scm ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   preCheck = ''
     export PATH="$PATH:$out/bin";
   '';
 
-  disabledTests = [
-    # Test requires network access
-    "test_discovery"
-  ];
+  pythonImportsCheck = [ "tololib" ];
 
-  pythonImportsCheck = [
-    "tololib"
-  ];
+  # Network discovery doesn't work in the sandbox for darwin
+  doCheck = !stdenv.isDarwin;
 
   meta = with lib; {
     description = "Python Library for Controlling TOLO Sauna/Steam Bath Devices";
-    mainProgram = "tolo-cli";
     homepage = "https://gitlab.com/MatthiasLohr/tololib";
     changelog = "https://gitlab.com/MatthiasLohr/tololib/-/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
+    mainProgram = "tolo-cli";
   };
 }

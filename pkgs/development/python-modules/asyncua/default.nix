@@ -1,20 +1,21 @@
-{ lib
-, stdenv
-, aiofiles
-, aiosqlite
-, buildPythonPackage
-, cryptography
-, fetchFromGitHub
-, pyopenssl
-, pytest-asyncio_0_21
-, pytest-mock
-, pytestCheckHook
-, python-dateutil
-, pythonOlder
-, pytz
-, setuptools
-, sortedcontainers
-, typing-extensions
+{
+  lib,
+  stdenv,
+  aiofiles,
+  aiosqlite,
+  buildPythonPackage,
+  cryptography,
+  fetchFromGitHub,
+  pyopenssl,
+  pytest-asyncio_0_21,
+  pytest-mock,
+  pytestCheckHook,
+  python-dateutil,
+  pythonOlder,
+  pytz,
+  setuptools,
+  sortedcontainers,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
@@ -43,9 +44,7 @@ buildPythonPackage rec {
       --replace "tools/" "$out/bin/"
   '';
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     aiofiles
@@ -64,9 +63,7 @@ buildPythonPackage rec {
     pytest-mock
   ];
 
-  pythonImportsCheck = [
-    "asyncua"
-  ];
+  pythonImportsCheck = [ "asyncua" ];
 
   disabledTests = lib.optionals stdenv.isDarwin [
     # Failed: DID NOT RAISE <class 'asyncio.exceptions.TimeoutError'>

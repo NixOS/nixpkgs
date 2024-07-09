@@ -13,19 +13,19 @@
 , systemd
 , xkeyboard_config
 , xorg
-, wrapGAppsHook
+, wrapGAppsHook3
 , glib
 }:
 
 stdenv.mkDerivation rec {
   pname = "cinnamon-desktop";
-  version = "6.0.0";
+  version = "6.2.0";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    hash = "sha256-Ay9JyPBsE345dBwQHChkaGuoXiB2nPyvCNhWWphL8kY=";
+    hash = "sha256-9uewZh0GHQAenTcZpLchgFXSt3vOhxLbaepsJIkjTdI=";
   };
 
   outputs = [ "out" "dev" ];
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     python3
-    wrapGAppsHook
+    wrapGAppsHook3
     intltool
     pkg-config
     gobject-introspection

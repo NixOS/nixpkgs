@@ -146,6 +146,27 @@ have a predefined type and string generator already declared under
     :   Outputs the given attribute set as an Elixir map, instead of the
         default Elixir keyword list
 
+`pkgs.formats.php { finalVariable }` []{#pkgs-formats-php}
+
+:   A function taking an attribute set with values
+
+    `finalVariable`
+
+    :   The variable that will store generated expression (usually `config`). If set to `null`, generated expression will contain `return`.
+
+    It returns a set with PHP-Config-specific attributes `type`, `lib`, and
+    `generate` as specified [below](#pkgs-formats-result).
+
+    The `lib` attribute contains functions to be used in settings, for
+    generating special PHP values:
+
+    `mkRaw phpCode`
+
+    :   Outputs the given string as raw PHP code
+
+    `mkMixedArray list set`
+
+    :   Creates PHP array that contains both indexed and associative values. For example, `lib.mkMixedArray [ "hello" "world" ] { "nix" = "is-great"; }` returns `['hello', 'world', 'nix' => 'is-great']`
 
 []{#pkgs-formats-result}
 These functions all return an attribute set with these values:

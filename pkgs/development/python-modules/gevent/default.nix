@@ -1,26 +1,27 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, isPyPy
-, python
-, libev
-, cffi
-, cython
-, greenlet
-, importlib-metadata
-, setuptools
-, wheel
-, zope-event
-, zope-interface
-, pythonOlder
-, c-ares
-, libuv
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  isPyPy,
+  python,
+  libev,
+  cffi,
+  cython,
+  greenlet,
+  importlib-metadata,
+  setuptools,
+  wheel,
+  zope-event,
+  zope-interface,
+  pythonOlder,
+  c-ares,
+  libuv,
 
-# for passthru.tests
-, dulwich
-, gunicorn
-, opentracing
-, pika
+  # for passthru.tests
+  dulwich,
+  gunicorn,
+  opentracing,
+  pika,
 }:
 
 buildPythonPackage rec {
@@ -39,9 +40,7 @@ buildPythonPackage rec {
     cython
     setuptools
     wheel
-  ] ++ lib.optionals (!isPyPy) [
-    cffi
-  ];
+  ] ++ lib.optionals (!isPyPy) [ cffi ];
 
   buildInputs = [
     libev
@@ -53,9 +52,7 @@ buildPythonPackage rec {
     importlib-metadata
     zope-event
     zope-interface
-  ] ++ lib.optionals (!isPyPy) [
-    greenlet
-  ];
+  ] ++ lib.optionals (!isPyPy) [ greenlet ];
 
   # Bunch of failures.
   doCheck = false;
@@ -70,7 +67,8 @@ buildPythonPackage rec {
       dulwich
       gunicorn
       opentracing
-      pika;
+      pika
+      ;
   } // lib.filterAttrs (k: v: lib.hasInfix "gevent" k) python.pkgs;
 
   GEVENTSETUP_EMBED = "0";

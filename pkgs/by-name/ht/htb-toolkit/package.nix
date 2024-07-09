@@ -6,7 +6,7 @@
 , stdenv
 , darwin
 , coreutils
-, gnome
+, gnome-keyring
 , libsecret
 , bash
 , openvpn
@@ -41,7 +41,7 @@ rustPlatform.buildRustPackage {
   buildInputs = [
     openssl
   ] ++ lib.optionals stdenv.isLinux [
-    gnome.gnome-keyring
+    gnome-keyring
   ] ++ lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.Security
     darwin.apple_sdk.frameworks.SystemConfiguration

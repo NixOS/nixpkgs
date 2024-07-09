@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, flit-core
-, click
-, pyyaml
-, sphinx
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
+  flit-core,
+  click,
+  pyyaml,
+  sphinx,
 }:
 
 buildPythonPackage rec {
@@ -33,7 +34,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "sphinx_external_toc" ];
 
   meta = with lib; {
-    description = "A sphinx extension that allows the site-map to be defined in a single YAML file";
+    description = "Sphinx extension that allows the site-map to be defined in a single YAML file";
     mainProgram = "sphinx-etoc";
     homepage = "https://github.com/executablebooks/sphinx-external-toc";
     changelog = "https://github.com/executablebooks/sphinx-external-toc/raw/v${version}/CHANGELOG.md";

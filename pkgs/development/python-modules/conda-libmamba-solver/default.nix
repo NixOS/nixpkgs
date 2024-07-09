@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonRelaxDepsHook,
   fetchFromGitHub,
   libmambapy,
   hatchling,
@@ -21,7 +20,6 @@ buildPythonPackage rec {
     hash = "sha256-vsUYrDVNMKHd3mlaAFYCP4uPQ9HxeKsose5O8InaMcE=";
   };
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   build-system = [
     hatchling
@@ -39,7 +37,7 @@ buildPythonPackage rec {
   pythonRemoveDeps = [ "conda" ];
 
   meta = {
-    description = "The libmamba based solver for conda.";
+    description = "Libmamba based solver for conda";
     homepage = "https://github.com/conda/conda-libmamba-solver";
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.ericthemagician ];

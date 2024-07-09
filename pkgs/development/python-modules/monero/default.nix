@@ -1,15 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pycryptodomex
-, pysocks
-, pynacl
-, requests
-, six
-, varint
-, pytestCheckHook
-, pytest-cov
-, responses
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pycryptodomex,
+  pysocks,
+  pynacl,
+  requests,
+  six,
+  varint,
+  pytestCheckHook,
+  pytest-cov,
+  responses,
 }:
 
 buildPythonPackage rec {
@@ -41,7 +42,11 @@ buildPythonPackage rec {
     varint
   ];
 
-  nativeCheckInputs = [ pytestCheckHook pytest-cov responses ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-cov
+    responses
+  ];
 
   meta = with lib; {
     description = "Comprehensive Python module for handling Monero";

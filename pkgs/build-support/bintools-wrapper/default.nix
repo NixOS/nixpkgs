@@ -45,6 +45,7 @@
     "relro"
     "stackprotector"
     "strictoverflow"
+    "zerocallusedregs"
   ] ++ lib.optional (with stdenvNoCC;
     # Musl-based platforms will keep "pie", other platforms will not.
     # If you change this, make sure to update section `{#sec-hardening-in-nixpkgs}`
@@ -60,6 +61,7 @@
 , postLinkSignHook ? null, signingUtils ? null
 }:
 
+assert propagateDoc -> bintools ? man;
 assert nativeTools -> !propagateDoc && nativePrefix != "";
 assert !nativeTools -> bintools != null && coreutils != null && gnugrep != null;
 assert !(nativeLibc && noLibc);
@@ -128,7 +130,7 @@ let
     else if targetPlatform.isRiscV                    then "${sharedLibraryLoader}/lib/ld-linux-riscv*.so.1"
     else if targetPlatform.isLoongArch64              then "${sharedLibraryLoader}/lib/ld-linux-loongarch*.so.1"
     else if targetPlatform.isDarwin                   then "/usr/lib/dyld"
-    else if targetPlatform.isFreeBSD                  then "/libexec/ld-elf.so.1"
+    else if targetPlatform.isFreeBSD                  then "${sharedLibraryLoader}/libexec/ld-elf.so.1"
     else if hasSuffix "pc-gnu" targetPlatform.config then "ld.so.1"
     else "";
 

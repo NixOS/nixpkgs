@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitLab
-, fetchpatch2
 , docbook-xsl-nons
 , docutils
 , gi-docgen
@@ -12,7 +11,7 @@
 , ninja
 , pkg-config
 , vala
-, wrapGAppsHook
+, wrapGAppsHook3
 , glib
 , gsound
 , json-glib
@@ -59,7 +58,7 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     vala
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -98,10 +97,10 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A daemon to provide haptic (and later more) feedback on events";
+    description = "Daemon to provide haptic (and later more) feedback on events";
     homepage = "https://source.puri.sm/Librem5/feedbackd";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ pacman99 tomfitzhenry ];
+    maintainers = with maintainers; [ pacman99 ];
     platforms = platforms.linux;
   };
 }

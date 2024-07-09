@@ -15,7 +15,7 @@
 
 stdenv.mkDerivation rec {
   pname = "mmlgui";
-  version = "unstable-2024-04-15";
+  version = "210420-preview-unstable-2024-04-15";
 
   src = fetchFromGitHub {
     owner = "superctr";

@@ -5,7 +5,7 @@
 , gtk3
 , libhandy
 , modemmanager
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -25,7 +25,7 @@ python3.pkgs.buildPythonApplication rec {
   nativeBuildInputs = [
     gobject-introspection
     python3.pkgs.setuptools
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -43,7 +43,7 @@ python3.pkgs.buildPythonApplication rec {
   strictDeps = true;
 
   meta = with lib; {
-    description = "A program for showing navigation satellite data";
+    description = "Program for showing navigation satellite data";
     longDescription = ''
       Satellite is an adaptive GTK3 / libhandy application which displays global navigation satellite system (GNSS: GPS et al.) data obtained from ModemManager or gnss-share.
       It can also save your position to a GPX-file.

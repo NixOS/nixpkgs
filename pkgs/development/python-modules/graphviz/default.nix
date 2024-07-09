@@ -1,23 +1,24 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, substituteAll
-, graphviz-nox
-, xdg-utils
-, makeFontsConf
-, freefont_ttf
-, setuptools
-, mock
-, pytest_7
-, pytest-mock
-, python
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  substituteAll,
+  graphviz-nox,
+  xdg-utils,
+  makeFontsConf,
+  freefont_ttf,
+  setuptools,
+  mock,
+  pytest_7,
+  pytest-mock,
+  python,
 }:
 
 buildPythonPackage rec {
   pname = "graphviz";
-  version = "0.20.2";
+  version = "0.20.3";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -26,8 +27,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "xflr6";
     repo = "graphviz";
-    rev = version;
-    hash = "sha256-q5y4QPBCtA1kMhxbOECodSeubj2bULnnNDrZZfxiry4=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-IqjqcBEL4BK/VfRjdxJ9t/DkG8OMAoXJxbW5JXpALuw=";
   };
 
   patches = [
@@ -43,13 +44,9 @@ buildPythonPackage rec {
   '';
 
   # Fontconfig error: Cannot load default config file
-  FONTCONFIG_FILE = makeFontsConf {
-    fontDirectories = [ freefont_ttf ];
-  };
+  FONTCONFIG_FILE = makeFontsConf { fontDirectories = [ freefont_ttf ]; };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [
     mock
@@ -75,5 +72,4 @@ buildPythonPackage rec {
     license = licenses.mit;
     maintainers = with maintainers; [ dotlambda ];
   };
-
 }

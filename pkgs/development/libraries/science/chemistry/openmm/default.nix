@@ -42,6 +42,10 @@ stdenv.mkDerivation rec {
     swig
     doxygen
     python3Packages.python
+  ] ++ lib.optionals enablePython [
+    python3Packages.build
+    python3Packages.installer
+    python3Packages.wheel
   ] ++ lib.optional enableCuda addOpenGLRunpath;
 
   buildInputs = [ fftwSinglePrec ]
@@ -84,9 +88,8 @@ stdenv.mkDerivation rec {
       export OPENMM_LIB_PATH=$out/lib
       export OPENMM_INCLUDE_PATH=$out/include
       cd python
-      ${python3Packages.python.pythonOnBuildForHost.interpreter} setup.py build
-      ${python3Packages.python.pythonOnBuildForHost.interpreter} setup.py install --prefix=$out
-      mv $out/lib/python*/site-packages/OpenMM*.egg/{openmm,simtk} $out/lib/python*/site-packages/.
+      ${python3Packages.python.pythonOnBuildForHost.interpreter} -m build --no-isolation --outdir dist/ --wheel
+      ${python3Packages.python.pythonOnBuildForHost.interpreter} -m installer --prefix $out dist/*.whl
     '';
 
   postFixup = ''

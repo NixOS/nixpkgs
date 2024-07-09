@@ -33,7 +33,7 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A library for large linear classification";
+    description = "Library for large linear classification";
     homepage = "https://www.csie.ntu.edu.tw/~cjlin/liblinear/";
     license = licenses.bsd3;
     maintainers = [ ];

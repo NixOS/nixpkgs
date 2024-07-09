@@ -48,9 +48,11 @@ in
 
     # Nvidia support
     (lib.mkIf cfg.nvidiaSupport {
-      systemd.services.coolercontrold.path = with config.boot.kernelPackages; [
-        nvidia_x11 # nvidia-smi
-        nvidia_x11.settings # nvidia-settings
+      systemd.services.coolercontrold.path = let
+        nvidiaPkg = config.hardware.nvidia.package;
+      in [
+        nvidiaPkg # nvidia-smi
+        nvidiaPkg.settings # nvidia-settings
       ];
     })
   ]);

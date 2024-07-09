@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     description = "Streaming relay for v4l2loopback using GStreamer";
     mainProgram = "v4l2-relayd";
     homepage = "https://git.launchpad.net/v4l2-relayd";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     maintainers = with maintainers; [ betaboon ];
     platforms = [ "x86_64-linux" ];
   };

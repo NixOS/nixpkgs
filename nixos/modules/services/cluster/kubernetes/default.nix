@@ -261,7 +261,7 @@ in {
           name = "service-account";
           CN = "system:service-account-signer";
           action = ''
-            systemctl reload \
+            systemctl restart \
               kube-apiserver.service \
               kube-controller-manager.service
           '';

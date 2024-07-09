@@ -1,20 +1,23 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, cmake
-, ninja
-, setuptools
-, boost
-, eigen
-, python
-, catch
-, numpy
-, pytestCheckHook
-, libxcrypt
-, makeSetupHook
-}: let
+{
+  stdenv,
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  fetchpatch2,
+  cmake,
+  ninja,
+  setuptools,
+  boost,
+  eigen,
+  python,
+  catch,
+  numpy,
+  pytestCheckHook,
+  libxcrypt,
+  makeSetupHook,
+}:
+let
   setupHook = makeSetupHook {
     name = "pybind11-setup-hook";
     substitutions = {
@@ -30,14 +33,23 @@
   # but clang has a check hard-coded requiring 10.13 because that’s when Apple first shipped a
   # support for C++17 aligned allocations on macOS.
   # Tell clang we’re targeting 10.13 on x86_64-darwin while continuing to use the default SDK.
-  stdenv' = if stdenv.isDarwin && stdenv.isx86_64
-    then python.stdenv.override (oldStdenv: {
-      buildPlatform = oldStdenv.buildPlatform // { darwinMinVersion = "10.13"; };
-      targetPlatform = oldStdenv.targetPlatform // { darwinMinVersion = "10.13"; };
-      hostPlatform = oldStdenv.hostPlatform // { darwinMinVersion = "10.13"; };
-    })
-    else python.stdenv;
-in buildPythonPackage rec {
+  stdenv' =
+    if stdenv.isDarwin && stdenv.isx86_64 then
+      python.stdenv.override (oldStdenv: {
+        buildPlatform = oldStdenv.buildPlatform // {
+          darwinMinVersion = "10.13";
+        };
+        targetPlatform = oldStdenv.targetPlatform // {
+          darwinMinVersion = "10.13";
+        };
+        hostPlatform = oldStdenv.hostPlatform // {
+          darwinMinVersion = "10.13";
+        };
+      })
+    else
+      python.stdenv;
+in
+buildPythonPackage rec {
   pname = "pybind11";
   version = "2.12.0";
   pyproject = true;
@@ -48,6 +60,14 @@ in buildPythonPackage rec {
     rev = "v${version}";
     hash = "sha256-DVkI5NxM5uME9m3PFYVpJOOa2j+yjL6AJn76fCTv2nE=";
   };
+
+  patches = [
+    (fetchpatch2 {
+      # https://github.com/pybind/pybind11/pull/5127
+      url = "https://github.com/pybind/pybind11/commit/540bef2d2c9fb54fa7c1474ee1af959ce90f2b32.patch";
+      hash = "sha256-0ZWlH/5kQ3An/tu6ulOXO2k32asATrr1mlI4nGjIqaI=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace pyproject.toml \
@@ -77,9 +97,7 @@ in buildPythonPackage rec {
   cmakeFlags = [
     "-DBoost_INCLUDE_DIR=${lib.getDev boost}/include"
     "-DEIGEN3_INCLUDE_DIR=${lib.getDev eigen}/include/eigen3"
-  ] ++ lib.optionals (python.isPy3k && !stdenv.cc.isClang) [
-    "-DPYBIND11_CXX_STANDARD=-std=c++17"
-  ];
+  ] ++ lib.optionals (python.isPy3k && !stdenv.cc.isClang) [ "-DPYBIND11_CXX_STANDARD=-std=c++17" ];
 
   postBuild = ''
     # build tests
@@ -130,6 +148,9 @@ in buildPythonPackage rec {
       bindings of existing C++ code.
     '';
     license = licenses.bsd3;
-    maintainers = with maintainers; [ yuriaisaka dotlambda ];
+    maintainers = with maintainers; [
+      yuriaisaka
+      dotlambda
+    ];
   };
 }

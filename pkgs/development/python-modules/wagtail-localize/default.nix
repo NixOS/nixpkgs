@@ -1,18 +1,19 @@
-{ lib
-, buildPythonPackage
-, dj-database-url
-, django
-, django-rq
-, fetchFromGitHub
-, flit-core
-, freezegun
-, google-cloud-translate
-, polib
-, python
-, pythonOlder
-, typing-extensions
-, wagtail
-, wagtail-modeladmin
+{
+  lib,
+  buildPythonPackage,
+  dj-database-url,
+  django,
+  django-rq,
+  fetchFromGitHub,
+  flit-core,
+  freezegun,
+  google-cloud-translate,
+  polib,
+  python,
+  pythonOlder,
+  typing-extensions,
+  wagtail,
+  wagtail-modeladmin,
 }:
 
 buildPythonPackage rec {
@@ -29,9 +30,7 @@ buildPythonPackage rec {
     hash = "sha256-ENdUXfvQOfd9cgHr6fd5Hf+8AJXFix3YbsYJQfpu4ZE=";
   };
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  nativeBuildInputs = [ flit-core ];
 
   propagatedBuildInputs = [
     django
@@ -49,9 +48,7 @@ buildPythonPackage rec {
   ];
 
   passthru.optional-dependencies = {
-    google = [
-      google-cloud-translate
-    ];
+    google = [ google-cloud-translate ];
   };
 
   checkPhase = ''

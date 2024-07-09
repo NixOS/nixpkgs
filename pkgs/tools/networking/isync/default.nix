@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   postInstall = lib.optionalString withCyrusSaslXoauth2 ''
     wrapProgram "$out/bin/mbsync" \
-        --prefix SASL_PATH : "${lib.makeSearchPath "lib/sasl2" [ cyrus-sasl-xoauth2 ]}"
+        --prefix SASL_PATH : "${lib.makeSearchPath "lib/sasl2" [ cyrus-sasl-xoauth2 cyrus_sasl.out ]}"
   '';
 
   meta = with lib; {
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ primeos lheckemann ];
+    maintainers = with maintainers; [ primeos ];
     mainProgram = "mbsync";
   };
 }

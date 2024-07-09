@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, autoreconfHook, pkg-config, fetchpatch
+{ stdenv, lib, fetchFromGitHub, autoreconfHook, pkg-config
 , ncurses, libpcap, libnet
 # alpha version of GTK interface
 , withGtk ? false, gtk2
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   makeFlags = [ "LDFLAGS=-lncurses" ];
 
   meta = with lib; {
-    description = "A framework for layer 2 attacks";
+    description = "Framework for layer 2 attacks";
     mainProgram = "yersinia";
     homepage = "https://github.com/tomac/yersinia";
     license = licenses.gpl2Plus;

@@ -1,14 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pytest7CheckHook
-, pythonRelaxDepsHook
-, setuptools
-, jsonschema
-, pyyaml
-, jinja2
-, termcolor
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  pytest7CheckHook,
+  setuptools,
+  jsonschema,
+  pyyaml,
+  jinja2,
+  termcolor,
 }:
 
 buildPythonPackage rec {
@@ -25,7 +25,6 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     poetry-core
-    pythonRelaxDepsHook
   ];
 
   pythonRelaxDeps = [
@@ -42,13 +41,9 @@ buildPythonPackage rec {
     termcolor
   ];
 
-  pythonImportsCheck = [
-    "barectf"
-  ];
+  pythonImportsCheck = [ "barectf" ];
 
-  nativeCheckInputs = [
-    pytest7CheckHook
-  ];
+  nativeCheckInputs = [ pytest7CheckHook ];
 
   meta = with lib; {
     description = "Generator of ANSI C tracers which output CTF data streams ";

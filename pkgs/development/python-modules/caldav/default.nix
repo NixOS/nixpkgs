@@ -1,19 +1,20 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, icalendar
-, lxml
-, pytestCheckHook
-, pythonOlder
-, python
-, pytz
-, recurring-ical-events
-, requests
-, setuptools
-, toPythonModule
-, tzlocal
-, vobject
-, xandikos
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  icalendar,
+  lxml,
+  pytestCheckHook,
+  pythonOlder,
+  python,
+  pytz,
+  recurring-ical-events,
+  requests,
+  setuptools,
+  toPythonModule,
+  tzlocal,
+  vobject,
+  xandikos,
 }:
 
 buildPythonPackage rec {
@@ -30,9 +31,7 @@ buildPythonPackage rec {
     hash = "sha256-R9zXwD0sZE4bg6MTHWWCWWlZ5wH0H6g650zA7AboAo8=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     vobject
@@ -56,6 +55,9 @@ buildPythonPackage rec {
     homepage = "https://github.com/python-caldav/caldav";
     changelog = "https://github.com/python-caldav/caldav/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ marenz dotlambda ];
+    maintainers = with maintainers; [
+      marenz
+      dotlambda
+    ];
   };
 }

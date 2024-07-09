@@ -22,7 +22,7 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     homepage = "https://github.com/kmatheussen/das_watchdog";
-    description = "A general watchdog for the linux operating system";
+    description = "General watchdog for the linux operating system";
     longDescription = ''
       It should run in the background at all times to ensure a realtime process
       won't hang the machine.";

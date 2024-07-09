@@ -1,6 +1,5 @@
-{ lib
-, fetchFromGitHub
-}: rec {
+{ lib, fetchFromGitHub }:
+rec {
   version = "3.8.0";
   pyproject = true;
 

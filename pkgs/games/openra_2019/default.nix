@@ -24,9 +24,6 @@ let
     fArgs = lib.functionArgs f;
   in f (builtins.intersectAttrs fArgs pkgs // {
     lua = pkgs.lua5_1;
-    # It is not necessary to run the game, but it is nicer to be given an error dialog in the case of failure,
-    # rather than having to look to the logs why it is not starting.
-    inherit (pkgs.gnome) zenity;
   });
 
   /*  Building a set of engines or mods requires some dependencies as well,

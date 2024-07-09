@@ -2,7 +2,7 @@
 , rustPlatform
 , fetchFromGitHub
 , pkg-config
-, wrapGAppsHook
+, wrapGAppsHook3
 , atk
 , cairo
 , gdk-pixbuf
@@ -35,7 +35,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -65,7 +65,7 @@ rustPlatform.buildRustPackage rec {
   passthru.updateScript = unstableGitUpdater { };
 
   meta = {
-    description = "A wayland-native, highly customizable runner";
+    description = "Wayland-native, highly customizable runner";
     homepage = "https://github.com/kirottu/anyrun";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ eclairevoyant NotAShelf ];

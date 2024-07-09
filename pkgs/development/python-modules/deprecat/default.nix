@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-, setuptools-scm
-, wrapt
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools-scm,
+  wrapt,
 }:
 
 buildPythonPackage rec {
@@ -21,21 +22,13 @@ buildPythonPackage rec {
     hash = "sha256-uAabZAtZDhcX6TfiM0LnrAzxxS64ys+vdodmxO//0x8=";
   };
 
-  build-system = [
-    setuptools-scm
-  ];
+  build-system = [ setuptools-scm ];
 
-  dependencies = [
-    wrapt
-  ];
+  dependencies = [ wrapt ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "deprecat"
-  ];
+  pythonImportsCheck = [ "deprecat" ];
 
   disabledTestPaths = [
     # https://github.com/mjhajharia/deprecat/issues/13

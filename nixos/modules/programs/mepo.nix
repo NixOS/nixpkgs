@@ -1,15 +1,14 @@
 { pkgs, config, lib, ...}:
-with lib;
 let
   cfg = config.programs.mepo;
 in
 {
   options.programs.mepo = {
-    enable = mkEnableOption "Mepo, a fast, simple and hackable OSM map viewer";
+    enable = lib.mkEnableOption "Mepo, a fast, simple and hackable OSM map viewer";
 
     locationBackends = {
-      gpsd = mkOption {
-        type = types.bool;
+      gpsd = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Whether to enable location detection via gpsd.
@@ -17,21 +16,21 @@ in
         '';
       };
 
-      geoclue = mkOption {
-        type = types.bool;
+      geoclue = lib.mkOption {
+        type = lib.types.bool;
         default = true;
         description = "Whether to enable location detection via geoclue";
       };
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     environment.systemPackages = with pkgs; [
       mepo
     ] ++ lib.optional cfg.locationBackends.geoclue geoclue2-with-demo-agent
     ++ lib.optional cfg.locationBackends.gpsd gpsd;
 
-    services.geoclue2 = mkIf cfg.locationBackends.geoclue {
+    services.geoclue2 = lib.mkIf cfg.locationBackends.geoclue {
       enable = true;
       appConfig.where-am-i = {
         isAllowed = true;
@@ -42,5 +41,5 @@ in
     services.gpsd.enable = cfg.locationBackends.gpsd;
   };
 
-  meta.maintainers = with maintainers; [ laalsaas ];
+  meta.maintainers = with lib.maintainers; [ laalsaas ];
 }

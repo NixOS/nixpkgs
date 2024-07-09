@@ -2,13 +2,14 @@
 , buildPythonApplication
 , fetchFromGitHub
 , fetchpatch
+, setuptools
 , boto3
 }:
 
 buildPythonApplication rec {
   pname = "aws-mfa";
   version = "0.0.12";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "broamski";
@@ -26,7 +27,11 @@ buildPythonApplication rec {
     })
   ];
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     boto3
   ];
 

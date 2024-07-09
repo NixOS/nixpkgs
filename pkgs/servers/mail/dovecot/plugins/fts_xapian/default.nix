@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "dovecot-fts-xapian";
-  version = "1.7.11";
+  version = "1.7.14";
 
   src = fetchFromGitHub {
     owner = "grosjo";
     repo = "fts-xapian";
     rev = version;
-    hash = "sha256-7G+2RezvaBZ/0h7uky20lvGXibCMAF+kOL3h96tythY=";
+    hash = "sha256-cLOkXA4kQ15M5TheXy9qZq2je05iY9jwf3tHw20l1Pw=";
   };
 
   buildInputs = [ xapian icu sqlite ];

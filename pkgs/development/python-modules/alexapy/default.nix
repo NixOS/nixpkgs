@@ -1,20 +1,20 @@
-{ lib
-, aiofiles
-, aiohttp
-, authcaptureproxy
-, backoff
-, beautifulsoup4
-, buildPythonPackage
-, certifi
-, cryptography
-, fetchFromGitLab
-, poetry-core
-, pyotp
-, pythonOlder
-, pythonRelaxDepsHook
-, requests
-, simplejson
-, yarl
+{
+  lib,
+  aiofiles,
+  aiohttp,
+  authcaptureproxy,
+  backoff,
+  beautifulsoup4,
+  buildPythonPackage,
+  certifi,
+  cryptography,
+  fetchFromGitLab,
+  poetry-core,
+  pyotp,
+  pythonOlder,
+  requests,
+  simplejson,
+  yarl,
 }:
 
 buildPythonPackage rec {
@@ -31,13 +31,10 @@ buildPythonPackage rec {
     hash = "sha256-eoL7q+p0m3YZd7Ub7U8nE3tQGNA2oQXelvN+H01b0BM=";
   };
 
-  pythonRelaxDeps = [
-    "aiofiles"
-  ];
+  pythonRelaxDeps = [ "aiofiles" ];
 
   nativeBuildInputs = [
     poetry-core
-    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [
@@ -54,9 +51,7 @@ buildPythonPackage rec {
     yarl
   ];
 
-  pythonImportsCheck = [
-    "alexapy"
-  ];
+  pythonImportsCheck = [ "alexapy" ];
 
   # Module has no tests (only a websocket test which seems unrelated to the module)
   doCheck = false;

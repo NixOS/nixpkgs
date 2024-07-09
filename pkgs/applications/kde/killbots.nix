@@ -4,7 +4,7 @@ mkDerivation {
   pname = "killbots";
   meta = with lib; {
     homepage = "https://kde.org/applications/en/games/org.kde.killbots";
-    description = "A game where you avoid robots";
+    description = "Game where you avoid robots";
     mainProgram = "killbots";
     maintainers = with maintainers; [ freezeboy ];
     license = licenses.gpl2Plus;

@@ -2,16 +2,16 @@
 
 stdenv.mkDerivation rec {
   pname = "onestepback";
-  version = "0.994";
+  version = "0.997";
 
   srcs = [
     (fetchurl {
-      url = "http://www.vide.memoire.free.fr/perso/OneStepBack/OneStepBack-v${version}.zip";
-      hash = "sha256-kjGiGo4bF1mWJPnaPv2lf7rGG/uAntHK61mH6lcJ6e4=";
+      url = "http://www.vide.memoire.free.fr/pages/onestepback/OneStepBack-v${version}.zip";
+      hash = "sha256-uB6pfnTkMKeP71rAvn1olJJeCL84222UT5uxG72sywE=";
     })
     (fetchurl {
-      url = "http://www.vide.memoire.free.fr/perso/OneStepBack/OneStepBack-darker-v${version}.zip";
-      hash = "sha256-AuurSa45uF5GbPqaMXKblWkv3YGkYL1z0VjWrbnsB/I=";
+      url = "http://www.vide.memoire.free.fr/pages/onestepback/OneStepBack-wm2-v${version}.zip";
+      hash = "sha256-Zdv4ZrQPficbCxPBKF3RFNavlSn/VV/efiZVUT86zRc=";
     })
   ];
 
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Gtk theme inspired by the NextStep look";
-    homepage = "http://www.vide.memoire.free.fr/perso/OneStepBack";
+    homepage = "http://www.vide.memoire.free.fr/pages/onestepback";
     license = licenses.gpl3Plus;
     platforms = platforms.all;
     maintainers = [ maintainers.romildo ];

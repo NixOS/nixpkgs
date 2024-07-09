@@ -19,11 +19,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "poke";
-  version = "4.0";
+  version = "4.2";
 
   src = fetchurl {
     url = "mirror://gnu/poke/poke-${finalAttrs.version}.tar.gz";
-    hash = "sha256-ArqyLLH6YVOhtqknyLs81Y1QhUPBRIQqbX7nTxmXOnc=";
+    hash = "sha256-iq825h42elMUDqQOJVnp7FEud5xCvuNOesJLNLoRm94=";
   };
 
   outputs = [ "out" "dev" "info" "lib" ]

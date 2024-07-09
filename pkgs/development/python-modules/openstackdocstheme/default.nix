@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, dulwich
-, pbr
-, sphinx
-, pythonAtLeast
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  dulwich,
+  pbr,
+  sphinx,
+  pythonAtLeast,
 }:
 
 buildPythonPackage rec {
@@ -26,7 +27,11 @@ buildPythonPackage rec {
     rm test-requirements.txt
   '';
 
-  propagatedBuildInputs = [ dulwich pbr sphinx ];
+  propagatedBuildInputs = [
+    dulwich
+    pbr
+    sphinx
+  ];
 
   # no tests
   doCheck = false;

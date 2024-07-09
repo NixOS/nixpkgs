@@ -103,6 +103,7 @@ stdenv.mkDerivation {
       of the tasks.
     '';
     homepage = "https://tana.inc";
+    changelog = "https://tana.inc/releases";
     license = licenses.unfree;
     maintainers = [ maintainers.massimogengarelli ];
     platforms = platforms.linux;

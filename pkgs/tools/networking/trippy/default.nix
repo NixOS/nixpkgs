@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-OCbrg1uSot0uNFx7uSlN5Bh6bl34ng9xO6lo9wks6nY=";
 
   meta = with lib; {
-    description = "A network diagnostic tool";
+    description = "Network diagnostic tool";
     homepage = "https://trippy.cli.rs";
     changelog = "https://github.com/fujiapple852/trippy/blob/${src.rev}/CHANGELOG.md";
     license = licenses.asl20;

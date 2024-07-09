@@ -1,4 +1,9 @@
-{ lib, buildPythonPackage, fetchFromGitHub, flask }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  flask,
+}:
 
 buildPythonPackage rec {
   pname = "flask-versioned";

@@ -224,7 +224,7 @@ in
           and users are replaced by dummy users), so tests are complemented by a
           logrotate-checkconf service that is enabled by default.
           This extra check can be disabled by disabling it at the systemd level with the
-          {option}`services.systemd.services.logrotate-checkconf.enable` option.
+          {option}`systemd.services.logrotate-checkconf.enable` option.
 
           Conversely there are still things that might make this check fail incorrectly
           (e.g. a file path where we don't have access to intermediate directories):

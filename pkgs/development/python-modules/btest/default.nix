@@ -1,7 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -22,7 +23,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "A Generic Driver for Powerful System Tests";
+    description = "Generic Driver for Powerful System Tests";
     homepage = "https://github.com/zeek/btest";
     changelog = "https://github.com/zeek/btest/blob/${version}/CHANGES";
     license = licenses.bsd3;

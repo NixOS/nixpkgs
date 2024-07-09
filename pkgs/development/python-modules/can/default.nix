@@ -1,25 +1,26 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, future
-, hypothesis
-, packaging
-, parameterized
-, msgpack
-, pyserial
-, pytest-timeout
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, typing-extensions
-, wrapt
-, uptime
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  future,
+  hypothesis,
+  packaging,
+  parameterized,
+  msgpack,
+  pyserial,
+  pytest-timeout,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  typing-extensions,
+  wrapt,
+  uptime,
 }:
 
 buildPythonPackage rec {
   pname = "can";
-  version = "4.3.1";
+  version = "4.4.2";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -28,7 +29,7 @@ buildPythonPackage rec {
     owner = "hardbyte";
     repo = "python-can";
     rev = "refs/tags/v${version}";
-    hash = "sha256-t2zt54nPOYcEE0RPb4fbW7sN4HzFXlDIHvHudstBwrM=";
+    hash = "sha256-p3B1LWSygDX0UhIx4XhXv15H7Hwn9UB20jFIPDZnuNs=";
   };
 
   postPatch = ''
@@ -36,9 +37,7 @@ buildPythonPackage rec {
       --replace " --cov=can --cov-config=tox.ini --cov-report=lcov --cov-report=term" ""
   '';
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     msgpack
@@ -48,15 +47,9 @@ buildPythonPackage rec {
   ];
 
   passthru.optional-dependencies = {
-    serial = [
-      pyserial
-    ];
-    seeedstudio = [
-      pyserial
-    ];
-    pcan = [
-      uptime
-    ];
+    serial = [ pyserial ];
+    seeedstudio = [ pyserial ];
+    pcan = [ uptime ];
   };
 
   nativeCheckInputs = [
@@ -72,18 +65,20 @@ buildPythonPackage rec {
     "test/test_interface_canalystii.py"
   ];
 
-  disabledTests = [
-    # Tests require access socket
-    "BasicTestUdpMulticastBusIPv4"
-    "BasicTestUdpMulticastBusIPv6"
-    # pytest.approx is not supported in a boolean context (since pytest7)
-    "test_pack_unpack"
-    "test_receive"
-  ] ++ lib.optionals stdenv.isDarwin [
-    # timing sensitive
-    "test_general"
-    "test_gap"
-  ];
+  disabledTests =
+    [
+      # Tests require access socket
+      "BasicTestUdpMulticastBusIPv4"
+      "BasicTestUdpMulticastBusIPv6"
+      # pytest.approx is not supported in a boolean context (since pytest7)
+      "test_pack_unpack"
+      "test_receive"
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      # timing sensitive
+      "test_general"
+      "test_gap"
+    ];
 
   preCheck = ''
     export PATH="$PATH:$out/bin";
@@ -91,15 +86,16 @@ buildPythonPackage rec {
     export CI=1
   '';
 
-  pythonImportsCheck = [
-    "can"
-  ];
+  pythonImportsCheck = [ "can" ];
 
   meta = with lib; {
     description = "CAN support for Python";
     homepage = "https://python-can.readthedocs.io";
     changelog = "https://github.com/hardbyte/python-can/releases/tag/v${version}";
     license = licenses.lgpl3Only;
-    maintainers = with maintainers; [ fab sorki ];
+    maintainers = with maintainers; [
+      fab
+      sorki
+    ];
   };
 }

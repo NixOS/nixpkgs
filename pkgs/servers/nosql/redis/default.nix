@@ -12,11 +12,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "redis";
-  version = "7.2.4";
+  version = "7.2.5";
 
   src = fetchurl {
     url = "https://download.redis.io/releases/redis-${finalAttrs.version}.tar.gz";
-    hash = "sha256-jRBMJqFUsp/WfWVotPN1ISISrUHgwsqj1mSA5429O1k=";
+    hash = "sha256-WYEXlwb4OR8DvpHZUayvrtqRr3+sVr7/snAZYxA+Qj0=";
   };
 
   patches = [
@@ -89,7 +89,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     homepage = "https://redis.io";
-    description = "An open source, advanced key-value store";
+    description = "Open source, advanced key-value store";
     license = licenses.bsd3;
     platforms = platforms.all;
     changelog = "https://github.com/redis/redis/raw/${finalAttrs.version}/00-RELEASENOTES";

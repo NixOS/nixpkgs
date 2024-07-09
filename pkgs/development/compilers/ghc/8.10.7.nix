@@ -131,23 +131,44 @@ let
 
   targetCC = builtins.head toolsForTarget;
 
-  # Sometimes we have to dispatch between the bintools wrapper and the unwrapped
-  # derivation for certain tools depending on the platform.
-  bintoolsFor = {
-    # GHC needs install_name_tool on all darwin platforms. On aarch64-darwin it is
-    # part of the bintools wrapper (due to codesigning requirements), but not on
-    # x86_64-darwin.
-    install_name_tool =
-      if stdenv.targetPlatform.isAarch64
-      then targetCC.bintools
-      else targetCC.bintools.bintools;
-    # Same goes for strip.
-    strip =
-      # TODO(@sternenseemann): also use wrapper if linker == "bfd" or "gold"
-      if stdenv.targetPlatform.isAarch64 && stdenv.targetPlatform.isDarwin
-      then targetCC.bintools
-      else targetCC.bintools.bintools;
-  };
+  # toolPath calculates the absolute path to the name tool associated with a
+  # given `stdenv.cc` derivation, i.e. it picks the correct derivation to take
+  # the tool from (cc, cc.bintools, cc.bintools.bintools) and adds the correct
+  # subpath of the tool.
+  toolPath = name: cc:
+    let
+      tools = {
+        "cc" = cc;
+        "c++" = cc;
+        as = cc.bintools.bintools;
+
+        ar = cc.bintools.bintools;
+        ranlib = cc.bintools.bintools;
+        nm = cc.bintools.bintools;
+        readelf = cc.bintools.bintools;
+
+        ld = cc.bintools;
+        "ld.gold" = cc.bintools;
+
+        otool = cc.bintools.bintools;
+
+        # GHC needs install_name_tool on all darwin platforms. On aarch64-darwin it is
+        # part of the bintools wrapper (due to codesigning requirements), but not on
+        # x86_64-darwin. We decide based on target platform to have consistent tools
+        # across all GHC stages.
+        install_name_tool =
+          if stdenv.targetPlatform.isAarch64
+          then cc.bintools
+          else cc.bintools.bintools;
+        # Same goes for strip.
+        strip =
+          # TODO(@sternenseemann): also use wrapper if linker == "bfd" or "gold"
+          if stdenv.targetPlatform.isAarch64 && stdenv.targetPlatform.isDarwin
+          then cc.bintools
+          else cc.bintools.bintools;
+      }.${name};
+    in
+    "${tools}/bin/${tools.targetPrefix}${name}";
 
   # Use gold either following the default, or to avoid the BFD linker due to some bugs / perf issues.
   # But we cannot avoid BFD when using musl libc due to https://sourceware.org/bugzilla/show_bug.cgi?id=23856
@@ -255,19 +276,19 @@ stdenv.mkDerivation (rec {
     done
     # GHC is a bit confused on its cross terminology, as these would normally be
     # the *host* tools.
-    export CC="${targetCC}/bin/${targetCC.targetPrefix}cc"
-    export CXX="${targetCC}/bin/${targetCC.targetPrefix}c++"
+    export CC="${toolPath "cc" targetCC}"
+    export CXX="${toolPath "c++" targetCC}"
     # Use gold to work around https://sourceware.org/bugzilla/show_bug.cgi?id=16177
-    export LD="${targetCC.bintools}/bin/${targetCC.bintools.targetPrefix}ld${lib.optionalString useLdGold ".gold"}"
-    export AS="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}as"
-    export AR="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}ar"
-    export NM="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}nm"
-    export RANLIB="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}ranlib"
-    export READELF="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}readelf"
-    export STRIP="${bintoolsFor.strip}/bin/${bintoolsFor.strip.targetPrefix}strip"
+    export LD="${toolPath "ld${lib.optionalString useLdGold ".gold"}" targetCC}"
+    export AS="${toolPath "as" targetCC}"
+    export AR="${toolPath "ar" targetCC}"
+    export NM="${toolPath "nm" targetCC}"
+    export RANLIB="${toolPath "ranlib" targetCC}"
+    export READELF="${toolPath "readelf" targetCC}"
+    export STRIP="${toolPath "strip" targetCC}"
   '' + lib.optionalString (stdenv.targetPlatform.linker == "cctools") ''
-    export OTOOL="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}otool"
-    export INSTALL_NAME_TOOL="${bintoolsFor.install_name_tool}/bin/${bintoolsFor.install_name_tool.targetPrefix}install_name_tool"
+    export OTOOL="${toolPath "otool" targetCC}"
+    export INSTALL_NAME_TOOL="${toolPath "install_name_tool" targetCC}"
   '' + lib.optionalString useLLVM ''
     export LLC="${lib.getBin buildTargetLlvmPackages.llvm}/bin/llc"
     export OPT="${lib.getBin buildTargetLlvmPackages.llvm}/bin/opt"
@@ -398,7 +419,7 @@ stdenv.mkDerivation (rec {
 
   meta = {
     homepage = "http://haskell.org/ghc";
-    description = "The Glasgow Haskell Compiler";
+    description = "Glasgow Haskell Compiler";
     maintainers = with lib.maintainers; [
       guibou
     ] ++ lib.teams.haskell.members;

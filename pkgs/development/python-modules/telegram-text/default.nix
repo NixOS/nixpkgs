@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, poetry-core
-, pytestCheckHook
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  poetry-core,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -20,13 +21,9 @@ buildPythonPackage rec {
     hash = "sha256-eUy4kyCmM/5Ag/0s9hYW2IIg+OTX2L7EsoOYivhd0pU=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     description = "Python markup module for Telegram messenger";

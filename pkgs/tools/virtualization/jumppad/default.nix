@@ -2,18 +2,21 @@
 
 buildGoModule rec {
   pname = "jumppad";
-  version = "0.5.59";
+  version = "0.12.1";
 
   src = fetchFromGitHub {
     owner = "jumppad-labs";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-ObDbZ3g+BtH8JCqLIa+gR69GowZA8T9HMPuKNDgW3uA=";
+    repo = "jumppad";
+    rev = version;
+    hash = "sha256-jG/XTMkedgDSncCW7YbII3g3ieB1i0Z9cOEVfZiczHI=";
   };
-  vendorHash = "sha256-9DLDc6zI0BYd2AK9xwqFNJTFdKXagkdPwczLhCvud94=";
+  vendorHash = "sha256-FPM0q1ZVDfo00Z6QEXqtqfx77qkq5HhB+3vF9z9zrM0=";
+
+  subPackages = [ "." ];
 
   ldflags = [
-    "-s" "-w" "-X main.version=${version}"
+    "-s"
+    "-X main.version=${version}"
   ];
 
   # Tests require a large variety of tools and resources to run including
@@ -21,7 +24,7 @@ buildGoModule rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "A tool for building modern cloud native development environments";
+    description = "Tool for building modern cloud native development environments";
     homepage = "https://jumppad.dev";
     license = licenses.mpl20;
     maintainers = with maintainers; [ cpcloud ];

@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, cryptography
-, fetchPypi
-, mock
-, pynose
+{
+  lib,
+  buildPythonPackage,
+  cryptography,
+  fetchPypi,
+  mock,
+  pynose,
 }:
 
 buildPythonPackage rec {
@@ -24,7 +25,10 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ cryptography ];
 
-  nativeCheckInputs = [ mock pynose ];
+  nativeCheckInputs = [
+    mock
+    pynose
+  ];
 
   meta = with lib; {
     description = "Encipher HTTP Messages";

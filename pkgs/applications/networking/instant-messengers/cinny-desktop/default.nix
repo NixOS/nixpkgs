@@ -7,7 +7,7 @@
 , cargo-tauri
 , cinny
 , copyDesktopItems
-, wrapGAppsHook
+, wrapGAppsHook3
 , pkg-config
 , openssl
 , dbus
@@ -21,13 +21,13 @@
 rustPlatform.buildRustPackage rec {
   pname = "cinny-desktop";
   # We have to be using the same version as cinny-web or this isn't going to work.
-  version = "3.1.0";
+  version = "3.2.0";
 
   src = fetchFromGitHub {
     owner = "cinnyapp";
     repo = "cinny-desktop";
     rev = "v${version}";
-    hash = "sha256-v5D0/EHVQ2xo7TGo+jZoRDBVFczkaZu2ka6QpwV4dpw=";
+    hash = "sha256-uHGqvulH7/9JpUjkpcbCh1pPvX4/ndVIKcBXzWmDo+s=";
   };
 
   sourceRoot = "${src.name}/src-tauri";
@@ -65,7 +65,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [
     copyDesktopItems
-    wrapGAppsHook
+    wrapGAppsHook3
     pkg-config
     cargo-tauri
   ];

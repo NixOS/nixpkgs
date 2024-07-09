@@ -5,8 +5,6 @@
 , gobject-introspection
 , pkg-config
 , ninja
-, wayland
-, wayland-protocols
 , desktop-file-utils
 , makeWrapper
 , shared-mime-info
@@ -24,13 +22,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "clapper";
-  version = "0.6.0";
+  version = "0.6.1";
 
   src = fetchFromGitHub {
     owner  = "Rafostar";
     repo   = "clapper";
     rev    = finalAttrs.version;
-    hash = "sha256-5fD1OnVcY3ZC+QfoFqe2jV43/J36r85SpLUYF2ti7dY=";
+    hash = "sha256-IQJTnLB6FzYYPONOqBkvi89iF0U6fx/aWYvNOOJpBvc=";
   };
 
   nativeBuildInputs = [
@@ -56,8 +54,6 @@ stdenv.mkDerivation (finalAttrs: {
     libGL
     libadwaita
     libsoup_3
-    wayland
-    wayland-protocols
     libmicrodns
   ];
 
@@ -65,15 +61,22 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs --build build-aux/meson/postinstall.py
   '';
 
+  # The package uses "clappersink" provided by itself
+  preFixup = ''
+    gappsWrapperArgs+=(
+      --prefix GST_PLUGIN_SYSTEM_PATH_1_0 : $out/lib/gstreamer-1.0
+    )
+  '';
+
   meta = with lib; {
-    description = "A GNOME media player built using GTK4 toolkit and powered by GStreamer with OpenGL rendering";
+    description = "GNOME media player built using GTK4 toolkit and powered by GStreamer with OpenGL rendering";
     longDescription = ''
       Clapper is a GNOME media player built using the GTK4 toolkit.
       The media player is using GStreamer as a media backend.
     '';
     homepage = "https://github.com/Rafostar/clapper";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ aleksana ];
     platforms = platforms.linux;
   };
 })

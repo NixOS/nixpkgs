@@ -5,16 +5,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "wayidle";
-  version = "0.1.1";
+  version = "0.2.0";
 
   src = fetchFromSourcehut {
     owner = "~whynothugo";
     repo = "wayidle";
     rev = "v${version}";
-    hash = "sha256-6wULrwGnXLdrX/THanJThbykKjNKpGukw9dj0jX0/dM=";
+    hash = "sha256-7hFk/YGOQ5+gQy6pT5DRgMLThQ1vFAvUvdHekTyzIRU=";
   };
 
-  cargoHash = "sha256-zF2s3XSXnN7jVtv/0axzHiIJd/cb6wMYAOQILXp1U5U=";
+  cargoHash = "sha256-PohfLmUoK+2a7Glnje4Rbym2rvzydUJAYW+edOj7qeo=";
 
   meta = with lib; {
     description = "Execute a program when a Wayland compositor reports being N seconds idle";

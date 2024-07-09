@@ -101,7 +101,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "A general purpose programming language";
+    description = "General purpose programming language";
     longDescription = ''
       Scala is a general purpose programming language designed to express
       common programming patterns in a concise, elegant, and type-safe way.

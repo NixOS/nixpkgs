@@ -20,15 +20,6 @@ let
     patches = (drv.patches or [ ]) ++ [
       # Part of the GC solution in https://github.com/NixOS/nix/pull/4944
       ./patches/boehmgc-coroutine-sp-fallback.patch
-
-      # Required since 2.20, and has always been a valid change
-      # Awaiting 8.2 patch release of https://github.com/ivmai/bdwgc/commit/d1d4194c010bff2dc9237223319792cae834501c
-      # or master release of https://github.com/ivmai/bdwgc/commit/86b3bf0c95b66f718c3cb3d35fd7387736c2a4d7
-      (fetchpatch {
-        name = "boehmgc-traceable_allocator-public.diff";
-        url = "https://github.com/NixOS/nix/raw/2.20.0/dep-patches/boehmgc-traceable_allocator-public.diff";
-        hash = "sha256-FLsHY/JS46neiSyyQkVpbHZEFvWSCzWrFQu1CC71sh4=";
-      })
     ];
   });
 
@@ -142,13 +133,13 @@ let
 
 in lib.makeExtensible (self: ({
   nix_2_3 = ((common {
-    version = "2.3.17";
-    hash = "sha256-EK0pgHDekJFqr0oMj+8ANIjq96WPjICe2s0m4xkUdH4=";
+    version = "2.3.18";
+    hash = "sha256-jBz2Ub65eFYG+aWgSI3AJYvLSghio77fWQiIW1svA9U=";
     patches = [
       patch-monitorfdhup
-      ./patches/2_3/CVE-2024-27297.patch
     ];
-    maintainers = with lib.maintainers; [ flokli raitobezarius ];
+    self_attribute_name = "nix_2_3";
+    maintainers = with lib.maintainers; [ flokli ];
   }).override { boehmgc = boehmgc-nix_2_3; }).overrideAttrs {
     # https://github.com/NixOS/nix/issues/10222
     # spurious test/add.sh failures
@@ -156,29 +147,62 @@ in lib.makeExtensible (self: ({
   };
 
   nix_2_18 = common {
-    version = "2.18.2";
-    hash = "sha256-8gNJlBlv2bnffRg0CejiBXc6U/S6YeCLAdHrYvTPyoY=";
+    version = "2.18.4";
+    hash = "sha256-tebjp83ABKrBW3d/6n/Irr1+xhtw8qIkqHZHJOoJaLk=";
+    self_attribute_name = "nix_2_18";
   };
 
   nix_2_19 = common {
-    version = "2.19.4";
-    hash = "sha256-qXjyVmDm1SFWk1az3GWIsJ0fVG0nWet2FdldFOnUydI=";
+    version = "2.19.5";
+    hash = "sha256-n4efeDi8KtLgkAKl5kBQ4svmdxfnRp8KrSZGrlFsr/E=";
+    self_attribute_name = "nix_2_19";
   };
 
   nix_2_20 = common {
-    version = "2.20.5";
-    hash = "sha256-bfFe38BkoQws7om4gBtBWoNTLkt9piMXdLLoHYl+vBQ=";
+    version = "2.20.7";
+    hash = "sha256-hWElUtAHYbL/LjyW0Vovz9zJLhv5zC6/tDu8uPkbQqY=";
+    self_attribute_name = "nix_2_20";
   };
 
   nix_2_21 = common {
-    version = "2.21.2";
-    hash = "sha256-ObaVDDPtnOeIE0t7m4OVk5G+OS6d9qYh+ktK67Fe/zE=";
+    version = "2.21.3";
+    hash = "sha256-oaRT9rGrYKxebZ6aiBFTx2OwcIDQthkzRdeez3EARH4=";
+    self_attribute_name = "nix_2_21";
   };
 
   nix_2_22 = common {
-    version = "2.22.0";
-    hash = "sha256-Ugcc+lSq8nJP+mddMlGFnoG4Ix1lRFHWOal3299bqR8=";
+    version = "2.22.2";
+    hash = "sha256-/ABtOUnfN6od/MtLxO5cJX90Ags/vOBQav6MyhKy4r4=";
+    self_attribute_name = "nix_2_22";
   };
+
+  nix_2_23 = common {
+    version = "2.23.2";
+    hash = "sha256-NH1G4GGHXU4pnQWI9X/gs7r97GO0i4tJFjoaIxl0FaQ=";
+    self_attribute_name = "nix_2_23";
+    patches = [
+     # fixes regression in nix-prefetch-url
+     # https://github.com/NixOS/nix/pull/11052
+     (fetchpatch {
+       url = "https://github.com/NixOS/nix/commit/73f3179954ef8db5c8774c79272dd1215fe6f5c2.patch";
+       sha256 = "sha256-d/rBOONZGxOFRUPltH7z0OSYRqKbS/ZwZl/DaIXygC0=";
+     })
+    ];
+  };
+
+  git = common rec {
+    version = "2.24.0";
+    suffix = "pre20240627_${lib.substring 0 8 src.rev}";
+    src = fetchFromGitHub {
+      owner = "NixOS";
+      repo = "nix";
+      rev = "b44909ac2244bda4c387b9a17748e8a94ada9e78";
+      hash = "sha256-tS8i/fyi2DO5GM103b+G7K/XwFWhWvb2VDjqpLH5Kxc=";
+    };
+    self_attribute_name = "git";
+  };
+
+  latest = self.nix_2_23;
 
   # The minimum Nix version supported by Nixpkgs
   # Note that some functionality *might* have been backported into this Nix version,
@@ -198,8 +222,6 @@ in lib.makeExtensible (self: ({
       nix;
 
   stable = addFallbackPathsCheck self.nix_2_18;
-
-  unstable = self.nix_2_22;
 } // lib.optionalAttrs config.allowAliases (
   lib.listToAttrs (map (
     minor:
@@ -208,4 +230,7 @@ in lib.makeExtensible (self: ({
     in
     lib.nameValuePair attr (throw "${attr} has been removed")
   ) (lib.range 4 17))
+  // {
+    unstable = throw "nixVersions.unstable has been removed. For bleeding edge (Nix master, roughly weekly updated) use nixVersions.git, otherwise use nixVersions.latest.";
+  }
 )))

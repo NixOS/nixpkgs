@@ -4,7 +4,7 @@ let
 in
 # https://github.com/ConnorBaker/cuda-redist-find-features/blob/603407bea2fab47f2dfcd88431122a505af95b42/cuda_redist_find_features/manifest/feature/package/package.py
 options.mkOption {
-  description = "A set of outputs that a package can provide.";
+  description = "Set of outputs that a package can provide";
   example = {
     bin = true;
     dev = true;
@@ -16,7 +16,7 @@ options.mkOption {
   type = types.submodule {
     options = {
       bin = options.mkOption {
-        description = "A `bin` output requires that we have a non-empty `bin` directory containing at least one file with the executable bit set.";
+        description = "`bin` output requires that we have a non-empty `bin` directory containing at least one file with the executable bit set";
         type = types.bool;
       };
       dev = options.mkOption {
@@ -44,15 +44,15 @@ options.mkOption {
         type = types.bool;
       };
       lib = options.mkOption {
-        description = "A `lib` output requires that we have a non-empty lib directory containing at least one shared library.";
+        description = "`lib` output requires that we have a non-empty lib directory containing at least one shared library";
         type = types.bool;
       };
       sample = options.mkOption {
-        description = "A `sample` output requires that we have a non-empty `samples` directory.";
+        description = "`sample` output requires that we have a non-empty `samples` directory";
         type = types.bool;
       };
       static = options.mkOption {
-        description = "A `static` output requires that we have a non-empty lib directory containing at least one static library.";
+        description = "`static` output requires that we have a non-empty lib directory containing at least one static library";
         type = types.bool;
       };
     };

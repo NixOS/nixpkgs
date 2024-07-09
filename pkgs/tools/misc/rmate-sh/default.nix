@@ -22,12 +22,12 @@ stdenv.mkDerivation rec {
     runHook preBuild
 
     substituteInPlace rmate \
-      --replace \
+      --replace-fail \
         'echo "hostname"' \
         'echo "${hostname}/bin/hostname"'
     patsh -f rmate -s ${builtins.storeDir}
 
-    runHook preBuild
+    runHook postBuild
   '';
 
   installPhase = ''

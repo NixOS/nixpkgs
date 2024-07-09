@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, pyopenssl
-, tldextract
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  pyopenssl,
+  tldextract,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -28,22 +29,16 @@ buildPythonPackage rec {
       --replace-fail "--cov certauth " ""
   '';
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     pyopenssl
     tldextract
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "certauth"
-  ];
+  pythonImportsCheck = [ "certauth" ];
 
   disabledTests = [
     # https://github.com/ikreymer/certauth/issues/23

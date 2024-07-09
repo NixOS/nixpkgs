@@ -10,11 +10,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "libgourou";
+  pname = "libgourou";
   version = "0.8.2";
 
   src = fetchzip {
-    url = "https://indefero.soutade.fr/p/${name}/source/download/v${version}/";
+    url = "https://indefero.soutade.fr/p/libgourou/source/download/v${version}/";
     sha256 = "sha256-adkrvBCgN07Ir+J3JFCy+X9p9609lj1w8nElrlHXTxc";
     extension = "zip";
   };

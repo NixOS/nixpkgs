@@ -60,7 +60,7 @@ python3.pkgs.buildPythonApplication rec {
   pythonImportsCheck = [ "iredis" ];
 
   meta = with lib; {
-    description = "A Terminal Client for Redis with AutoCompletion and Syntax Highlighting";
+    description = "Terminal Client for Redis with AutoCompletion and Syntax Highlighting";
     changelog = "https://github.com/laixintao/iredis/blob/${src.rev}/CHANGELOG.md";
     homepage = "https://iredis.xbin.io/";
     license = licenses.bsd3;

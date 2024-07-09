@@ -51,7 +51,7 @@ stdenv.mkDerivation {
     license = licenses.gpl3;
     maintainers = with lib.maintainers; [ sents ];
     homepage = "https://github.com/MarianArlt/sddm-chili";
-    description = "The chili login theme for SDDM";
+    description = "Chili login theme for SDDM";
     longDescription = ''
       Chili is hot, just like a real chili!
       Spice up the login experience for your users, your family and yourself.

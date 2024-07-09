@@ -33,6 +33,6 @@ buildBazelPackage rec {
     platforms = platforms.linux ++ platforms.darwin;
     license = with licenses; [ asl20 bsd3 ];
     sourceProvenance = [ sourceTypes.fromSource ];
-    maintainers = with maintainers; [ Sorixelle ];
+    maintainers = [ ];
   };
 }

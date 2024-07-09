@@ -1,7 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -15,13 +16,9 @@ buildPythonPackage rec {
     hash = "sha256-3p+4SGC1W2R7FwyldolfzKYbk0puzcZcMZMsZ5W0QLg=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  pythonImportsCheck = [
-    "markdown-stubs"
-  ];
+  pythonImportsCheck = [ "markdown-stubs" ];
 
   meta = with lib; {
     description = "Typing stubs for Markdown";

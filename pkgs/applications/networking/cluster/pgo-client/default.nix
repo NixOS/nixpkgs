@@ -16,7 +16,7 @@ buildGoModule rec {
   subPackages = [ "cmd/pgo" ];
 
   meta = with lib; {
-    description = "A CLI client for Crunchy PostgreSQL Kubernetes Operator";
+    description = "CLI client for Crunchy PostgreSQL Kubernetes Operator";
     homepage = "https://github.com/CrunchyData/postgres-operator";
     changelog = "https://github.com/CrunchyData/postgres-operator/releases/tag/v${version}";
     license = licenses.asl20;

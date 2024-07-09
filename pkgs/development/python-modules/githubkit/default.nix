@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "githubkit";
-  version = "0.11.4";
+  version = "0.11.6";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "yanyongyu";
     repo = "githubkit";
     rev = "refs/tags/v${version}";
-    hash = "sha256-uxXRDavp5c3e1MOZR2B4wUxEHh6K81avTeaIVsOdup8=";
+    hash = "sha256-bcQUms4nZ4BUowcF3YxTQPc6Ts6VoRumEA0DuCPQpfg=";
   };
 
   postPatch = ''
@@ -33,7 +33,10 @@ buildPythonPackage rec {
       --replace-fail "--cov=githubkit --cov-append --cov-report=term-missing" ""
   '';
 
+  pythonRelaxDeps = [ "hishel" ];
+
   build-system = [ poetry-core ];
+
 
   dependencies = [
     hishel

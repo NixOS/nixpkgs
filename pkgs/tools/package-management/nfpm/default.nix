@@ -8,16 +8,16 @@
 
 buildGoModule rec {
   pname = "nfpm";
-  version = "2.36.1";
+  version = "2.38.0";
 
   src = fetchFromGitHub {
     owner = "goreleaser";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-arGTZ7GFM1kQdryPrwklY7S0B9i31eQ/MaR24mRaFAo=";
+    hash = "sha256-enDzYXhqtQ3lNn8OFkffHpdxan0GsQvfE7ghGBTsQXo=";
   };
 
-  vendorHash = "sha256-g57tLk2+WWcdG0COqkQD7eLYG0TdC0RnlhLF6Qt4woY=";
+  vendorHash = "sha256-LJM9F9NTAMvDwsaRvjnZyjKSI0AjZvVM4srOYuGLA7w=";
 
   ldflags = [ "-s" "-w" "-X main.version=${version}" ];
 
@@ -35,7 +35,7 @@ buildGoModule rec {
     '';
 
   meta = with lib; {
-    description = "A simple deb and rpm packager written in Go";
+    description = "Simple deb and rpm packager written in Go";
     homepage = "https://github.com/goreleaser/nfpm";
     changelog = "https://github.com/goreleaser/nfpm/releases/tag/v${version}";
     maintainers = with maintainers; [ techknowlogick caarlos0 ];

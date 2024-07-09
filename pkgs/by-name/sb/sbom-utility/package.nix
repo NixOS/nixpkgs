@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "sbom-utility";
-  version = "0.15.0";
+  version = "0.16.0";
 
   src = fetchFromGitHub {
     owner = "CycloneDX";
     repo = "sbom-utility";
     rev = "refs/tags/v${version}";
-    hash = "sha256-tNLMrtJj1eeJ4sVhDRR24/KVI1HzZSRquiImuDTNZFI=";
+    hash = "sha256-EqK2TGlv2RGfvR95lzYz3EHJkfq4q4Ty5H2zFdd9cME=";
   };
 
-  vendorHash = "sha256-EdzI5ypwZRksQVmcfGDUgEMa4CeAPcm237ZaKqmWQDY=";
+  vendorHash = "sha256-qh8kIwgrlmHkocM5ZoGnOY7ISJlct/TV7dAxvXlPw68=";
 
   preCheck = ''
     cd test

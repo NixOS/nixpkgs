@@ -92,7 +92,6 @@ in {
         SystemCallFilter = [
           "@system-service"
           "~@privileged"
-          "~@resources"
         ];
         SystemCallErrorNumber = "EPERM";
         ProtectProc = "invisible";

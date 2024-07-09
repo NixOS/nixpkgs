@@ -1,43 +1,42 @@
-{ ansicolors
-, attrs
-, autobahn
-, buildPythonPackage
-, fetchFromGitHub
-, jinja2
-, lib
-, mock
-, openssh
-, packaging
-, pexpect
-, psutil
-, pyserial
-, pytestCheckHook
-, pytest-dependency
-, pytest-mock
-, pythonRelaxDepsHook
-, pyudev
-, pyusb
-, pyyaml
-, requests
-, setuptools
-, setuptools-scm
-, wheel
-, xmodem
+{
+  ansicolors,
+  attrs,
+  autobahn,
+  buildPythonPackage,
+  fetchFromGitHub,
+  jinja2,
+  lib,
+  mock,
+  openssh,
+  packaging,
+  pexpect,
+  psutil,
+  pyserial,
+  pytestCheckHook,
+  pytest-dependency,
+  pytest-mock,
+  pyudev,
+  pyusb,
+  pyyaml,
+  requests,
+  setuptools,
+  setuptools-scm,
+  wheel,
+  xmodem,
 }:
 
 buildPythonPackage rec {
   pname = "labgrid";
-  version = "23.0.5";
+  version = "23.0.6";
 
   src = fetchFromGitHub {
     owner = "labgrid-project";
     repo = "labgrid";
     rev = "refs/tags/v${version}";
-    hash = "sha256-jrapbSrybuLT3V11rvV342tOr7/sRwBMgAdNWDG5obA=";
+    hash = "sha256-UAfBzQZeFNs2UJSFb5fH5wHXQoVU/dOTFciR0/UB7vc=";
   };
 
   nativeBuildInputs = [
-    pythonRelaxDepsHook
     setuptools
     setuptools-scm
     wheel
@@ -72,9 +71,7 @@ buildPythonPackage rec {
     "xmodem"
   ];
 
-  pythonRemoveDeps = [
-    "pyserial-labgrid"
-  ];
+  pythonRemoveDeps = [ "pyserial-labgrid" ];
 
   nativeCheckInputs = [
     mock

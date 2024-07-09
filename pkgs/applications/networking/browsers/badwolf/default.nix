@@ -4,7 +4,7 @@
 , ninja
 , pkg-config
 , ed
-, wrapGAppsHook
+, wrapGAppsHook3
 , webkitgtk
 , libxml2
 , glib-networking
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     ed
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

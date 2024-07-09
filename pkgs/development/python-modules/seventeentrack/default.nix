@@ -1,15 +1,16 @@
-{ lib
-, aiohttp
-, aresponses
-, attrs
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, poetry-core
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, pytz
+{
+  lib,
+  aiohttp,
+  aresponses,
+  attrs,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  poetry-core,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  pytz,
 }:
 
 buildPythonPackage rec {
@@ -40,9 +41,7 @@ buildPythonPackage rec {
     })
   ];
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     aiohttp
@@ -63,9 +62,7 @@ buildPythonPackage rec {
     "examples/"
   ];
 
-  pythonImportsCheck = [
-    "seventeentrack"
-  ];
+  pythonImportsCheck = [ "seventeentrack" ];
 
   meta = with lib; {
     description = "Python library to track package info from 17track.com";

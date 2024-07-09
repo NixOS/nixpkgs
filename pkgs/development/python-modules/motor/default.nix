@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, mockupdb
-, pymongo
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  mockupdb,
+  pymongo,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -20,20 +21,14 @@ buildPythonPackage rec {
     hash = "sha256-Rj8eYZxmw/cn/vkhLunmHgxMMHIQe80Zhc2p0q3b/AY=";
   };
 
-  propagatedBuildInputs = [
-    pymongo
-  ];
+  propagatedBuildInputs = [ pymongo ];
 
-  nativeCheckInputs = [
-    mockupdb
-  ];
+  nativeCheckInputs = [ mockupdb ];
 
   # network connections
   doCheck = false;
 
-  pythonImportsCheck = [
-    "motor"
-  ];
+  pythonImportsCheck = [ "motor" ];
 
   meta = with lib; {
     description = "Non-blocking MongoDB driver for Tornado or asyncio";

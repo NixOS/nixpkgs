@@ -1,17 +1,15 @@
 { config, lib, pkgs, ... }:
 
-with lib;
-let
-  cfg = config.services.shiori;
+let cfg = config.services.shiori;
 in {
   options = {
     services.shiori = {
-      enable = mkEnableOption "Shiori simple bookmarks manager";
+      enable = lib.mkEnableOption "Shiori simple bookmarks manager";
 
-      package = mkPackageOption pkgs "shiori" { };
+      package = lib.mkPackageOption pkgs "shiori" { };
 
-      address = mkOption {
-        type = types.str;
+      address = lib.mkOption {
+        type = lib.types.str;
         default = "";
         description = ''
           The IP address on which Shiori will listen.
@@ -19,30 +17,55 @@ in {
         '';
       };
 
-      port = mkOption {
-        type = types.port;
+      port = lib.mkOption {
+        type = lib.types.port;
         default = 8080;
         description = "The port of the Shiori web application";
       };
 
-      webRoot = mkOption {
-        type = types.str;
+      webRoot = lib.mkOption {
+        type = lib.types.str;
         default = "/";
         example = "/shiori";
         description = "The root of the Shiori web application";
       };
+
+      environmentFile = lib.mkOption {
+        type = lib.types.nullOr lib.types.path;
+        default = null;
+        example = "/path/to/environmentFile";
+        description = ''
+          Path to file containing environment variables.
+          Useful for passing down secrets.
+          <https://github.com/go-shiori/shiori/blob/master/docs/Configuration.md#overall-configuration>
+        '';
+      };
+
+      databaseUrl = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
+        default = null;
+        example = "postgres:///shiori?host=/run/postgresql";
+        description = "The connection URL to connect to MySQL or PostgreSQL";
+      };
     };
   };
 
-  config = mkIf cfg.enable {
-    systemd.services.shiori = with cfg; {
+  config = lib.mkIf cfg.enable {
+    systemd.services.shiori = {
       description = "Shiori simple bookmarks manager";
       wantedBy = [ "multi-user.target" ];
-
-      environment.SHIORI_DIR = "/var/lib/shiori";
+      after = [ "postgresql.service" "mysql.service" ];
+      environment = {
+        SHIORI_DIR = "/var/lib/shiori";
+      } // lib.optionalAttrs (cfg.databaseUrl != null) {
+        SHIORI_DATABASE_URL = cfg.databaseUrl;
+      };
 
       serviceConfig = {
-        ExecStart = "${package}/bin/shiori serve --address '${address}' --port '${toString port}' --webroot '${webRoot}'";
+        ExecStart =
+          "${cfg.package}/bin/shiori server --address '${cfg.address}' --port '${
+            toString cfg.port
+          }' --webroot '${cfg.webRoot}'";
 
         DynamicUser = true;
         StateDirectory = "shiori";
@@ -50,15 +73,24 @@ in {
         RuntimeDirectory = "shiori";
 
         # Security options
-
+        EnvironmentFile =
+          lib.optional (cfg.environmentFile != null) cfg.environmentFile;
         BindReadOnlyPaths = [
           "/nix/store"
 
           # For SSL certificates, and the resolv.conf
           "/etc"
-        ];
+        ] ++ lib.optional (config.services.postgresql.enable &&
+                           cfg.databaseUrl != null &&
+                           lib.strings.hasPrefix "postgres://" cfg.databaseUrl)
+            "/run/postgresql"
+          ++ lib.optional (config.services.mysql.enable &&
+                           cfg.databaseUrl != null &&
+                           lib.strings.hasPrefix "mysql://" cfg.databaseUrl)
+            "/var/run/mysqld";
 
         CapabilityBoundingSet = "";
+        AmbientCapabilities = "CAP_NET_BIND_SERVICE";
 
         DeviceAllow = "";
 
@@ -78,7 +110,7 @@ in {
         ProtectKernelTunables = true;
 
         RestrictNamespaces = true;
-        RestrictAddressFamilies = [ "AF_INET" "AF_INET6" ];
+        RestrictAddressFamilies = [ "AF_INET" "AF_INET6" "AF_UNIX" ];
         RestrictRealtime = true;
         RestrictSUIDSGID = true;
 
@@ -88,11 +120,17 @@ in {
         SystemCallErrorNumber = "EPERM";
         SystemCallFilter = [
           "@system-service"
-          "~@cpu-emulation" "~@debug" "~@keyring" "~@memlock" "~@obsolete" "~@privileged" "~@setuid"
+          "~@cpu-emulation"
+          "~@debug"
+          "~@keyring"
+          "~@memlock"
+          "~@obsolete"
+          "~@privileged"
+          "~@setuid"
         ];
       };
     };
   };
 
-  meta.maintainers = with maintainers; [ minijackson ];
+  meta.maintainers = with lib.maintainers; [ minijackson CaptainJawZ ];
 }

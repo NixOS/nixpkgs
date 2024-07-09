@@ -22,7 +22,7 @@ in
 
     meta = {
       homepage = "https://gitlab.com/gaincoder/invidious-router";
-      description = "A Go application that routes requests to different Invidious instances based on their health status and (optional) response time";
+      description = "Go application that routes requests to different Invidious instances based on their health status and (optional) response time";
       license = with lib.licenses; [mit];
       maintainers = with lib.maintainers; [sils];
       mainProgram = "invidious-router";

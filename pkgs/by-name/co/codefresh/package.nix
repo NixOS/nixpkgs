@@ -27,7 +27,7 @@ mkYarnPackage rec {
 
   meta = {
     changelog = "https://github.com/codefresh-io/cli/releases/tag/v${version}";
-    description = "Codefresh CLI tool to interact with Codefresh services.";
+    description = "Codefresh CLI tool to interact with Codefresh services";
     homepage = "https://github.com/codefresh-io/cli";
     license = lib.licenses.mit;
     mainProgram = "codefresh";

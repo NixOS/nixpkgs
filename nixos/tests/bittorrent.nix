@@ -36,7 +36,7 @@ in
 {
   name = "bittorrent";
   meta = with pkgs.lib.maintainers; {
-    maintainers = [ domenkozar eelco rob bobvanderlinden ];
+    maintainers = [ domenkozar rob bobvanderlinden ];
   };
 
   nodes = {

@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://cadsondemak.github.io/chonburi/";
-    description = "A Didonic Thai and Latin display typeface";
+    description = "Didonic Thai and Latin display typeface";
     longDescription = ''
       The objective of this project is to create a Thai and Latin Display
       typeface. Chonburi is a display typeface with high contrast in a Didone

@@ -1,36 +1,37 @@
-{ lib
-, aiohttp
-, aioitertools
-, asgiref
-, buildPythonPackage
-, django
-, falcon
-, fastapi
-, fetchFromGitHub
-, flask
-, httpx
-, isodate
-, jsonschema
-, jsonschema-spec
-, more-itertools
-, multidict
-, openapi-schema-validator
-, openapi-spec-validator
-, parse
-, poetry-core
-, pytest-aiohttp
-, pytest7CheckHook
-, pythonOlder
-, responses
-, requests
-, starlette
-, webob
-, werkzeug
+{
+  lib,
+  aiohttp,
+  aioitertools,
+  asgiref,
+  buildPythonPackage,
+  django,
+  falcon,
+  fastapi,
+  fetchFromGitHub,
+  flask,
+  httpx,
+  isodate,
+  jsonschema,
+  jsonschema-spec,
+  more-itertools,
+  multidict,
+  openapi-schema-validator,
+  openapi-spec-validator,
+  parse,
+  poetry-core,
+  pytest-aiohttp,
+  pytestCheckHook,
+  pythonOlder,
+  responses,
+  requests,
+  starlette,
+  webob,
+  werkzeug,
 }:
 
 buildPythonPackage rec {
   pname = "openapi-core";
-  version = "0.19.0";
+  version = "0.19.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -39,16 +40,14 @@ buildPythonPackage rec {
     owner = "p1c2u";
     repo = "openapi-core";
     rev = "refs/tags/${version}";
-    hash = "sha256-+YYcSNX717JjVHMk4Seb145iq9/rQZEVQn27Ulk1A3E=";
+    hash = "sha256-6FFJsXObIA9tchTJJmoSu9u+/ZuKuw29AYsLEmvHXrY=";
   };
 
   postPatch = ''
     sed -i "/--cov/d" pyproject.toml
   '';
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     isodate
@@ -67,21 +66,11 @@ buildPythonPackage rec {
       aiohttp
       multidict
     ];
-    django = [
-      django
-    ];
-    falcon = [
-      falcon
-    ];
-    fastapi = [
-      fastapi
-    ];
-    flask = [
-      flask
-    ];
-    requests = [
-      requests
-    ];
+    django = [ django ];
+    falcon = [ falcon ];
+    fastapi = [ fastapi ];
+    flask = [ flask ];
+    requests = [ requests ];
     starlette = [
       aioitertools
       starlette
@@ -93,13 +82,14 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     httpx
     pytest-aiohttp
-    pytest7CheckHook
+    pytestCheckHook
     responses
     webob
   ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
 
   pytestFlagsArray = [
-    "-W" "ignore::DeprecationWarning"
+    "-W"
+    "ignore::DeprecationWarning"
   ];
 
   disabledTestPaths = [

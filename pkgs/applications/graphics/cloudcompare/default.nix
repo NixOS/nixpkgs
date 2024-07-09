@@ -11,7 +11,7 @@
 , flann
 , gdal
 , gmp
-, LASzip
+, laszip
 , mpfr
 , pdal
 , pcl
@@ -20,7 +20,7 @@
 , qttools
 , tbb
 , xercesc
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 mkDerivation rec {
@@ -38,7 +38,7 @@ mkDerivation rec {
   nativeBuildInputs = [
     cmake
     eigen # header-only
-    wrapGAppsHook
+    wrapGAppsHook3
     copyDesktopItems
   ];
 
@@ -48,7 +48,7 @@ mkDerivation rec {
     flann
     gdal
     gmp
-    LASzip
+    laszip
     mpfr
     pdal
     pcl

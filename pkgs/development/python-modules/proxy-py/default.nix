@@ -1,10 +1,8 @@
 {
   lib,
-  stdenv,
   bash,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
   gnumake,
   h2,
   hpack,
@@ -24,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "proxy-py";
-  version = "2.4.4rc5";
+  version = "2.4.4";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -33,7 +31,7 @@ buildPythonPackage rec {
     owner = "abhinavsingh";
     repo = "proxy.py";
     rev = "refs/tags/v${version}";
-    hash = "sha256-ngIskWzN6699C0WjSX/ZbHxV3Eb8ikQPNYZFzfzt7xU=";
+    hash = "sha256-QWwIbNt2MtRfQaX7uZJzYmS++2MH+gTjWO0aEKYSETI=";
   };
 
   postPatch = ''
@@ -90,6 +88,5 @@ buildPythonPackage rec {
     changelog = "https://github.com/abhinavsingh/proxy.py/releases/tag/v${version}";
     license = with licenses; [ bsd3 ];
     maintainers = with maintainers; [ fab ];
-    broken = (stdenv.isLinux && stdenv.isAarch64) || stdenv.isDarwin;
   };
 }

@@ -39,7 +39,7 @@ in
 
     package = mkPackageOption pkgs "netbird-dashboard" { };
 
-    enableNginx = mkEnableOption "Nginx reverse-proxy to serve the dashboard.";
+    enableNginx = mkEnableOption "Nginx reverse-proxy to serve the dashboard";
 
     domain = mkOption {
       type = str;

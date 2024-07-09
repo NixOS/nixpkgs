@@ -1,32 +1,33 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools
-, zope-interface
-, zope-schema
-, zope-cachedescriptors
-, pytz
-, webtest
-, beautifulsoup4
-, soupsieve
-, wsgiproxy2
-, six
-, mock
-, zope-testing
-, zope-testrunner
-, python
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  zope-interface,
+  zope-schema,
+  zope-cachedescriptors,
+  pytz,
+  webtest,
+  beautifulsoup4,
+  soupsieve,
+  wsgiproxy2,
+  six,
+  mock,
+  zope-testing,
+  zope-testrunner,
+  python,
 }:
 
 buildPythonPackage rec {
   pname = "zope-testbrowser";
-  version = "6.0";
+  version = "7.0";
 
   format = "setuptools";
 
   src = fetchPypi {
     pname = "zope.testbrowser";
     inherit version;
-    sha256 = "sha256-RLd6XpA3q+3DZHai6j3H6XTWE85Sk913zAL4iO4x+ho=";
+    sha256 = "sha256-WTbSoNd9h4HQATWP0LEUYShbAtxuOzJLhMHtkyax/z8=";
   };
 
   postPatch = ''

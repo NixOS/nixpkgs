@@ -1,22 +1,32 @@
 { stdenv
 , lib
-, fetchurl
-, dpkg
 , autoPatchelfHook
-, makeWrapper
 , copyDesktopItems
-, makeDesktopItem
 , dbus
+, dpkg
+, fetchurl
+, gtk3
+, libpcap
+, makeDesktopItem
+, makeWrapper
 , nftables
 }:
 
 stdenv.mkDerivation rec {
   pname = "cloudflare-warp";
-  version = "2023.3.470";
+  version = "2024.4.133";
+
+  suffix = {
+    aarch64-linux = "arm64";
+    x86_64-linux = "amd64";
+  }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
   src = fetchurl {
-    url = "https://pkg.cloudflareclient.com/pool/jammy/main/c/cloudflare-warp/cloudflare-warp_2023.3.470-1_amd64.deb";
-    hash = "sha256-AYnmisEQKFiEB2iRJifEqRbdzAyBcfrU0ITeUokKLag=";
+    url = "https://pkg.cloudflareclient.com/pool/jammy/main/c/cloudflare-warp/cloudflare-warp_${version}-1_${suffix}.deb";
+    hash = {
+      aarch64-linux = "sha256-qua+aL4+yvpTBGCVUS1rzJX1KZ3DeaW9Bce9lYWvWOM=";
+      x86_64-linux = "sha256-xZhyYDMjcv8SLfYwclvWBqPDETbeaxiA6jFCg3Nv5gc=";
+    }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   };
 
   nativeBuildInputs = [
@@ -28,6 +38,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     dbus
+    gtk3
+    libpcap
     stdenv.cc.cc.lib
   ];
 
@@ -44,17 +56,28 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  autoPatchelfIgnoreMissingDeps = [
+    "libpcap.so.0.8"
+  ];
+
   installPhase = ''
     runHook preInstall
 
     mv usr $out
     mv bin $out
     mv etc $out
+    patchelf --replace-needed libpcap.so.0.8 ${libpcap}/lib/libpcap.so $out/bin/warp-dex
     mv lib/systemd/system $out/lib/systemd/
     substituteInPlace $out/lib/systemd/system/warp-svc.service \
       --replace "ExecStart=" "ExecStart=$out"
     substituteInPlace $out/lib/systemd/user/warp-taskbar.service \
       --replace "ExecStart=" "ExecStart=$out"
+
+    cat >>$out/lib/systemd/user/warp-taskbar.service <<EOF
+
+    [Service]
+    BindReadOnlyPaths=$out:/usr:
+    EOF
 
     runHook postInstall
   '';
@@ -68,10 +91,11 @@ stdenv.mkDerivation rec {
     homepage = "https://pkg.cloudflareclient.com/packages/cloudflare-warp";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
+    mainProgram = "warp-cli";
     maintainers = with maintainers; [
-      wolfangaukang
       devpikachu
+      marcusramberg
     ];
-    platforms = [ "x86_64-linux" ];
+    platforms = [ "x86_64-linux" "aarch64-linux" ];
   };
 }

@@ -12,7 +12,7 @@ pkgs.runCommand "nixpkgs-release-checks"
     export NIX_STORE_DIR=$TMPDIR/store
     export NIX_STATE_DIR=$TMPDIR/state
     export NIX_PATH=nixpkgs=$TMPDIR/barf.nix
-    opts=(--option build-users-group "")
+    opts=()
     nix-store --init
 
     echo 'abort "Illegal use of <nixpkgs> in Nixpkgs."' > $TMPDIR/barf.nix

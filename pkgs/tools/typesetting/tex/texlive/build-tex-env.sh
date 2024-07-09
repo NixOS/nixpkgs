@@ -143,7 +143,10 @@ installtl_do_postinst_stuff () {
     # in principle, we could use writeText and share them across different
     # environments, but the eval & build overhead is not worth the savings
     tlutils_create_fmtutil
-    tlutils_create_updmap
+    # can be skipped if generating formats only
+    if [[ -z $__formatsOf ]] ; then
+        tlutils_create_updmap
+    fi
     tlutils_create_language_dat
     tlutils_create_language_def
     tlutils_create_language_lua
@@ -152,21 +155,24 @@ installtl_do_postinst_stuff () {
     tlutils_info "running mktexlsr $TEXMFSYSVAR $TEXMFSYSCONFIG"
     mktexlsr "$TEXMFSYSVAR" "$TEXMFSYSCONFIG"
 
-    # update font maps
-    tlutils_info "generating font maps"
-    updmap-sys --quiet --force --nohash 2>&1
-    # configure the paper size
-    # tlmgr --no-execute-actions paper letter
-    # install-tl: "rerun mktexlsr for updmap-sys and tlmgr paper updates"
-    tlutils_info "re-running mktexlsr $TEXMFSYSVAR $TEXMFSYSCONFIG"
-    mktexlsr "$TEXMFSYSVAR" "$TEXMFSYSCONFIG"
+    # can be skipped if generating formats only
+    if [[ -z $__formatsOf ]] ; then
+        # update font maps
+        tlutils_info "generating font maps"
+        updmap-sys --quiet --force --nohash 2>&1
+        # configure the paper size
+        # tlmgr --no-execute-actions paper letter
+        # install-tl: "rerun mktexlsr for updmap-sys and tlmgr paper updates"
+        tlutils_info "re-running mktexlsr $TEXMFSYSVAR $TEXMFSYSCONFIG"
+        mktexlsr "$TEXMFSYSVAR" "$TEXMFSYSCONFIG"
 
-    tlutils_update_context_cache
+        tlutils_update_context_cache
+    fi
 
     # generate formats
     # install-tl would run fmtutil-sys $common_fmtutil_args --no-strict --all
     # instead, we want fmtutil to exit with error on failure
-    if [[ -n $fmtutilCnf ]] ; then
+    if [[ -n $fmtutilCnf && -n $__combine$__formatsOf ]] ; then
         tlutils_info "pre-generating all format files, be patient..."
         # many formats still ignore SOURCE_DATE_EPOCH even when FORCE_SOURCE_DATE=1
         # libfaketime fixes non-determinism related to timestamps ignoring FORCE_SOURCE_DATE
@@ -177,6 +183,24 @@ installtl_do_postinst_stuff () {
         substitute "$texmfdist"/scripts/texlive/fmtutil.pl fmtutil \
             --replace-fail "my \$cmdline = \"\$eng -ini " "my \$cmdline = \"faketime -f '\@$(date +'%F %T' --date=@"$SOURCE_DATE_EPOCH") x0.001' \$eng -ini "
         FORCE_SOURCE_DATE=1 perl fmtutil --quiet --strict --sys --all 2>&1 | grep '^fmtutil' # too verbose
+
+        # if generating formats only, delete everything else and exit
+        if [[ -n $__formatsOf ]] ; then
+            # see fmtutil.pl::compute_format_destination for file extensions
+            find "$out" \( -type f -or -type l \) \
+                -not -path "$TEXMFSYSVAR/*.mem" \
+                -not -path "$TEXMFSYSVAR/*.base" \
+                -not -path "$TEXMFSYSVAR/*.fmt" \
+                -delete
+            find "$out" -type d -empty -delete
+            exit
+        fi
+    elif [[ -z $__combine ]] ; then
+        # double check that all formats are present
+        if fmtutil --quiet --strict --sys --missing --dry-run 2>&1 | grep running ; then
+            tlutils_info 'formats not found, aborting'
+            exit 1
+        fi
     fi
 
     installtl_do_path_adjustments
@@ -190,7 +214,7 @@ installtl_do_postinst_stuff () {
 ### TeXLive::TLUtils
 
 tlutils_info () {
-    printf '%s\n' "texlive: $*"
+    printf "texlive${__formatsOf:+($__formatsOf-fmt)}: %s\n" "$*"
 }
 
 tlutils_create_fmtutil () {

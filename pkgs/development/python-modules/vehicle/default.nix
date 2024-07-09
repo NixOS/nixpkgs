@@ -1,16 +1,17 @@
-{ lib
-, aiohttp
-, aresponses
-, buildPythonPackage
-, fetchFromGitHub
-, mashumaro
-, orjson
-, poetry-core
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, syrupy
-, yarl
+{
+  lib,
+  aiohttp,
+  aresponses,
+  buildPythonPackage,
+  fetchFromGitHub,
+  mashumaro,
+  orjson,
+  poetry-core,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  syrupy,
+  yarl,
 }:
 
 buildPythonPackage rec {
@@ -34,9 +35,7 @@ buildPythonPackage rec {
       --replace "--cov" ""
   '';
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     aiohttp
@@ -52,9 +51,7 @@ buildPythonPackage rec {
     syrupy
   ];
 
-  pythonImportsCheck = [
-    "vehicle"
-  ];
+  pythonImportsCheck = [ "vehicle" ];
 
   meta = with lib; {
     description = "Python client providing RDW vehicle information";

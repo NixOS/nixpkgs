@@ -13,8 +13,8 @@ version=$(jq -r '.tag_name' <<<"$latest_release")
 
 echo "got version $version"
 
-schema_version=$(curl --silent "https://raw.githubusercontent.com/AdguardTeam/AdGuardHome/${version}/internal/home/upgrade.go" \
-    | grep -Po '(?<=const currentSchemaVersion = )[[:digit:]]+$')
+schema_version=$(curl --silent "https://raw.githubusercontent.com/AdguardTeam/AdGuardHome/${version}/internal/configmigrate/configmigrate.go" \
+    | grep -Po '(?<=const LastSchemaVersion uint = )[[:digit:]]+$')
 
 echo "got schema_version $schema_version"
 

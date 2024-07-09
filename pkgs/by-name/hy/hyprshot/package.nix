@@ -12,13 +12,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "hyprshot";
-  version = "1.2.3";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "Gustash";
     repo = "hyprshot";
     rev = finalAttrs.version;
-    hash = "sha256-sew47VR5ZZaLf1kh0d8Xc5GVYbJ1yWhlug+Wvf+k7iY=";
+    hash = "sha256-9taTmV357cWglMGuN3NLq3bfNneFthwV6y+Ml4qEeHA=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -37,7 +37,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     homepage = "https://github.com/Gustash/hyprshot";
-    description = "Hyprshot is an utility to easily take screenshots in Hyprland using your mouse.";
+    description = "Hyprshot is an utility to easily take screenshots in Hyprland using your mouse";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ Cryolitia ];
     mainProgram = "hyprshot";

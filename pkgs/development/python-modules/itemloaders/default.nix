@@ -1,18 +1,19 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, setuptools
-, w3lib
-, parsel
-, jmespath
-, itemadapter
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  setuptools,
+  w3lib,
+  parsel,
+  jmespath,
+  itemadapter,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "itemloaders";
-  version = "1.2.0";
+  version = "1.3.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -21,12 +22,10 @@ buildPythonPackage rec {
     owner = "scrapy";
     repo = "itemloaders";
     rev = "refs/tags/v${version}";
-    hash = "sha256-DatHJnAIomVoN/GrDzM2fNnFHcXqo6zs3ucKCOCf9DU=";
+    hash = "sha256-u0/WsvLn2YlYd/FuH26T9qEGRGscipnOQbV9uPv4F+M=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     w3lib
@@ -35,13 +34,9 @@ buildPythonPackage rec {
     itemadapter
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "itemloaders"
-  ];
+  pythonImportsCheck = [ "itemloaders" ];
 
   meta = with lib; {
     description = "Library to populate items using XPath and CSS with a convenient API";

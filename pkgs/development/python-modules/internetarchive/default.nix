@@ -1,22 +1,23 @@
-{ lib
-, buildPythonPackage
-, docopt
-, fetchFromGitHub
-, pytestCheckHook
-, requests
-, jsonpatch
-, schema
-, responses
-, setuptools
-, tqdm
-, urllib3
-, pythonOlder
-, importlib-metadata
+{
+  lib,
+  buildPythonPackage,
+  docopt,
+  fetchFromGitHub,
+  pytestCheckHook,
+  requests,
+  jsonpatch,
+  schema,
+  responses,
+  setuptools,
+  tqdm,
+  urllib3,
+  pythonOlder,
+  importlib-metadata,
 }:
 
 buildPythonPackage rec {
   pname = "internetarchive";
-  version = "4.0.1";
+  version = "4.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -25,12 +26,10 @@ buildPythonPackage rec {
     owner = "jjjake";
     repo = "internetarchive";
     rev = "refs/tags/v${version}";
-    hash = "sha256-U6idxc5U2Bt581c/vnGgIou5+hoEJJZSPCo97MEDaW4=";
+    hash = "sha256-CqfwAKhrq4VEBU258x19JT8+ay2vOYIzVoFWjAzh3wY=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     tqdm
@@ -39,9 +38,7 @@ buildPythonPackage rec {
     jsonpatch
     schema
     urllib3
-  ] ++ lib.optionals (pythonOlder "3.10") [
-    importlib-metadata
-  ];
+  ] ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
 
   nativeCheckInputs = [
     responses
@@ -64,12 +61,10 @@ buildPythonPackage rec {
     "tests/cli/test_ia_download.py"
   ];
 
-  pythonImportsCheck = [
-    "internetarchive"
-  ];
+  pythonImportsCheck = [ "internetarchive" ];
 
   meta = with lib; {
-    description = "A Python and Command-Line Interface to Archive.org";
+    description = "Python and Command-Line Interface to Archive.org";
     homepage = "https://github.com/jjjake/internetarchive";
     changelog = "https://github.com/jjjake/internetarchive/blob/v${version}/HISTORY.rst";
     license = licenses.agpl3Plus;

@@ -1,7 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -14,13 +15,9 @@ buildPythonPackage rec {
     hash = "sha256-Bdslb0pFn7IaQmuOf8oGVsNTkQX/Agjq9r2vQGo4cIc=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  pythonImportsCheck = [
-    "psycopg2-stubs"
-  ];
+  pythonImportsCheck = [ "psycopg2-stubs" ];
 
   doCheck = false;
 

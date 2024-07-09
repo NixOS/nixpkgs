@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pynose
-, pythonOlder
-, pythonRelaxDepsHook
-, setuptools
-, six
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pynose,
+  pythonOlder,
+  setuptools,
+  six,
 }:
 
 buildPythonPackage rec {
@@ -22,7 +22,6 @@ buildPythonPackage rec {
 
   build-system = [
     setuptools
-    pythonRelaxDepsHook
   ];
 
   pythonRemoveDeps = [
@@ -38,9 +37,7 @@ buildPythonPackage rec {
   # No real unittests, only coverage
   doCheck = false;
 
-  pythonImportsCheck = [
-    "case"
-  ];
+  pythonImportsCheck = [ "case" ];
 
   meta = with lib; {
     homepage = "https://github.com/celery/case";

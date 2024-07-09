@@ -48,17 +48,19 @@ buildGoModule rec {
 
   ldflags = [ "-s" "-w" ];
 
-  preCheck =
-    let skippedTests = [
-      "TestClosest" # Requiring Wayland or X
-      "TestEveryMinute" # Blocking
-      "TestNewSimpleEvent" # Blocking
-    ]; in
-    ''
-      export XDG_RUNTIME_DIR=`mktemp -d`
+  preCheck = ''
+    export XDG_RUNTIME_DIR=$(mktemp -d)
+  '';
 
-      buildFlagsArray+=("-run" "[^(${builtins.concatStringsSep "|" skippedTests})]")
-    '';
+  checkFlags =
+    let
+      skippedTests = [
+        "TestClosest" # Requiring Wayland or X
+        "TestEveryMinute" # Blocking
+        "TestNewSimpleEvent" # Blocking
+      ];
+    in
+    [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
 
   meta = {
     description = "Utilities for handling monitors, resolutions, and (timed) wallpapers";

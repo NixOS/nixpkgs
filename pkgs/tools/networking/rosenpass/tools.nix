@@ -24,7 +24,7 @@ stdenv.mkDerivation {
   '';
 
   meta = rosenpass.meta // {
-    description = "The Rosenpass tool `rp`, which is a script that wraps the `rosenpass` binary";
+    description = "Rosenpass tool `rp`, which is a script that wraps the `rosenpass` binary";
     mainProgram = "rp";
   };
 }

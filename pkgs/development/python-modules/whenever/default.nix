@@ -1,19 +1,20 @@
-{ lib
-, fetchFromGitHub
-, pythonOlder
-, buildPythonPackage
-, poetry-core
-, backports-zoneinfo
-, tzdata
-, pytestCheckHook
-, pytest-mypy-plugins
-, hypothesis
-, freezegun
+{
+  lib,
+  fetchFromGitHub,
+  pythonOlder,
+  buildPythonPackage,
+  poetry-core,
+  backports-zoneinfo,
+  tzdata,
+  pytestCheckHook,
+  pytest-mypy-plugins,
+  hypothesis,
+  freezegun,
 }:
 
 buildPythonPackage rec {
   pname = "whenever";
-  version = "0.5.1";
+  version = "0.5.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -22,7 +23,7 @@ buildPythonPackage rec {
     owner = "ariebovenberg";
     repo = "whenever";
     rev = "refs/tags/${version}";
-    hash = "sha256-RH2614M91zYULNTQsr6JoKfxlnGyAJsCkB7oeiz7urs=";
+    hash = "sha256-bG8LV+r5MjA1JwBHWy9/Io4daldAlyEGYNLW+5ITuOw=";
   };
 
   postPatch = ''
@@ -31,15 +32,9 @@ buildPythonPackage rec {
       --replace-fail '--benchmark-disable' '#--benchmark-disable'
   '';
 
-  build-system = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
-  dependencies = [
-    tzdata
-  ] ++ lib.optionals (pythonOlder "3.9") [
-    backports-zoneinfo
-  ];
+  dependencies = [ tzdata ] ++ lib.optionals (pythonOlder "3.9") [ backports-zoneinfo ];
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -48,9 +43,7 @@ buildPythonPackage rec {
     freezegun
   ];
 
-  pythonImportsCheck = [
-    "whenever"
-  ];
+  pythonImportsCheck = [ "whenever" ];
 
   # early TDD, many tests are failing
   # TODO: try enabling on bump

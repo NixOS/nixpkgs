@@ -362,6 +362,12 @@ in mkLicense lset) ({
     fullName = "Creative Commons Attribution Share Alike 4.0";
   };
 
+  cc-sa-10 = {
+    shortName = "CC-SA-1.0";
+    fullName = "Creative Commons Share Alike 1.0";
+    url = "https://creativecommons.org/licenses/sa/1.0";
+  };
+
   cddl = {
     spdxId = "CDDL-1.0";
     fullName = "Common Development and Distribution License 1.0";
@@ -524,6 +530,13 @@ in mkLicense lset) ({
     fullName = "Unspecified free software license";
   };
 
+  fsl11Mit = {
+    fullName = "Functional Source License, Version 1.1, MIT Future License";
+    url = "https://fsl.software/FSL-1.1-MIT.template.md";
+    free = false;
+    redistributable = true;
+  };
+
   ftl = {
     spdxId = "FTL";
     fullName = "Freetype Project License";
@@ -630,6 +643,11 @@ in mkLicense lset) ({
     spdxId = "Intel-ACPI";
     fullName = "iASL";
     url = "https://old.calculate-linux.org/packages/licenses/iASL";
+  };
+
+  icu = {
+    spdxId = "ICU";
+    fullName = "ICU";
   };
 
   ijg = {
@@ -897,6 +915,17 @@ in mkLicense lset) ({
     free = false;
   };
 
+  ncbiPd = {
+    spdxId = "NCBI-PD";
+    fullName = "NCBI Public Domain Notice";
+    # Due to United States copyright law, anything with this "license" does not have a copyright in the
+    # jurisdiction of the United States. However, other jurisdictions may assign the United States
+    # government copyright to the work, and the license explicitly states that in such a case, no license
+    # is granted. This is nonfree and nonredistributable in most jurisdictions other than the United States.
+    free = false;
+    redistributable = false;
+  };
+
   ncsa = {
     spdxId = "NCSA";
     fullName = "University of Illinois/NCSA Open Source License";
@@ -1132,7 +1161,7 @@ in mkLicense lset) ({
     shortName = "TSL";
     fullName = "Timescale License Agreegment";
     url = "https://github.com/timescale/timescaledb/blob/main/tsl/LICENSE-TIMESCALE";
-    unfree = true;
+    free = false;
   };
 
   tcltk = {
@@ -1166,6 +1195,11 @@ in mkLicense lset) ({
     redistributable = true;
     # Note: we currently consider these "free" for inclusion in the
     # channel and NixOS images.
+  };
+
+  unicode-30 = {
+    spdxId = "Unicode-3.0";
+    fullName = "Unicode License v3";
   };
 
   unicode-dfs-2015 = {
@@ -1251,9 +1285,19 @@ in mkLicense lset) ({
     fullName = "xinetd License";
   };
 
+  xskat = {
+    spdxId = "XSkat";
+    fullName = "XSkat License";
+  };
+
   zlib = {
     spdxId = "Zlib";
     fullName = "zlib License";
+  };
+
+  zsh = {
+    url = "https://github.com/zsh-users/zsh/blob/master/LICENCE";
+    fullName = "Zsh License";
   };
 
   zpl20 = {
@@ -1266,10 +1310,6 @@ in mkLicense lset) ({
     fullName = "Zope Public License 2.1";
   };
 
-  xskat = {
-    spdxId = "XSkat";
-    fullName = "XSkat License";
-  };
 } // {
   # TODO: remove legacy aliases
   apsl10 = {

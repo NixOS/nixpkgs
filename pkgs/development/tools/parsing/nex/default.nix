@@ -1,12 +1,12 @@
-{ buildGoPackage
+{ buildGoModule
 , fetchFromGitHub
 , lib
 }:
 # upstream is pretty stale, but it still works, so until they merge module
 # support we have to use gopath: see blynn/nex#57
-buildGoPackage rec {
+buildGoModule rec {
   pname = "nex";
-  version = "unstable-2021-03-30";
+  version = "0-unstable-2021-03-30";
 
   src = fetchFromGitHub {
     owner = "blynn";
@@ -15,8 +15,17 @@ buildGoPackage rec {
     hash = "sha256-DtJkV380T2B5j0+u7lYZfbC0ej0udF4GW2lbRmmbjAM=";
   };
 
-  goPackagePath = "github.com/blynn/nex";
+  vendorHash = null;
+
+  postPatch = ''
+    go mod init github.com/blynn/nex
+  '';
+
   subPackages = [ "." ];
+
+  # Fails with 'nex_test.go:23: got: 7a3661f13445ca7b51de2987bea127d9 wanted: 13f760d2f0dc1743dd7165781f2a318d'
+  # Checks failed on master before, but buildGoPackage had checks disabled.
+  doCheck = false;
 
   meta = with lib; {
     description = "Lexer for Go";

@@ -27,7 +27,7 @@ buildDunePackage rec {
   ];
 
   meta = {
-    description = "A library for constructing and printing compiler diagnostics";
+    description = "Library for constructing and printing compiler diagnostics";
     homepage = "https://redprl.org/asai/asai/";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.vbgl ];

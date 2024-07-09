@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, llama-index-core
-, poetry-core
-, pyowm
-, pythonOlder
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  llama-index-core,
+  poetry-core,
+  pyowm,
+  pythonOlder,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -21,25 +22,19 @@ buildPythonPackage rec {
     hash = "sha256-LJy2nU9f+yZZQm9stNn9mIqOkT5lOHaMIIm1Ezf2D0Q=";
   };
 
-  build-system = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
   dependencies = [
     llama-index-core
     pyowm
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   # Tests are only available in the mono repo
   doCheck = false;
 
-  pythonImportsCheck = [
-    "llama_index.readers.weather"
-  ];
+  pythonImportsCheck = [ "llama_index.readers.weather" ];
 
   meta = with lib; {
     description = "LlamaIndex Readers Integration for Weather";

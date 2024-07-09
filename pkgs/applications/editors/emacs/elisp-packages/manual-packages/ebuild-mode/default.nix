@@ -7,11 +7,11 @@
 
 melpaBuild rec {
   pname = "ebuild-mode";
-  version = "1.70";
+  version = "1.72";
 
   src = fetchzip {
     url = "https://gitweb.gentoo.org/proj/ebuild-mode.git/snapshot/ebuild-mode-${version}.tar.bz2";
-    hash = "sha256-dOm3xJMFLelwcImIwckeQHx1GqV9PB+I45QA9UT1nCM=";
+    hash = "sha256-GFEDWT88Boz/DxEcmFgf7u2NOoMjAN05yRiYwoYtvXc=";
   };
 
   # not used but needs to be set; why?

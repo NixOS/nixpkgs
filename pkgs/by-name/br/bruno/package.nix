@@ -8,6 +8,7 @@
 , writeShellScriptBin
 , makeWrapper
 , copyDesktopItems
+, giflib
 , makeDesktopItem
 , pkg-config
 , pixman
@@ -27,20 +28,20 @@ let
 in
 buildNpmPackage' rec {
   pname = "bruno";
-  version = "1.14.0";
+  version = "1.20.1";
 
   src = fetchFromGitHub {
     owner = "usebruno";
     repo = "bruno";
     rev = "v${version}";
-    hash = "sha256-kUvDtqv3Tdnntr4Ny5pM406KA5++AHsCoAiPg4x4Rsw=";
+    hash = "sha256-WUGdXPG/v8vmgI3a/X+J1EQUlbJdNaNAUx5whezMcAs=";
 
     postFetch = ''
       ${lib.getExe npm-lockfile-fix} $out/package-lock.json
     '';
   };
 
-  npmDepsHash = "sha256-VvUpAdF4ouy695om3qpsyrmiMf69OFgfpQyeZArQEDs=";
+  npmDepsHash = "sha256-aw4jOvlfZHCRrgoXT69XrMYe40YXULrfbVG1pQAFGr4=";
   npmFlags = [ "--legacy-peer-deps" ];
 
   nativeBuildInputs = [
@@ -57,6 +58,7 @@ buildNpmPackage' rec {
     pango
   ] ++ lib.optionals stdenv.isDarwin [
     darwin.apple_sdk_11_0.frameworks.CoreText
+    giflib
   ];
 
   desktopItems = [
@@ -147,7 +149,7 @@ buildNpmPackage' rec {
   passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
-    description = "Open-source IDE For exploring and testing APIs.";
+    description = "Open-source IDE For exploring and testing APIs";
     homepage = "https://www.usebruno.com";
     inherit (electron.meta) platforms;
     license = licenses.mit;

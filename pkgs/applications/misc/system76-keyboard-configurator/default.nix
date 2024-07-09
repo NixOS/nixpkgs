@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, gtk3, glib, wrapGAppsHook, libusb1, hidapi, udev, pkg-config }:
+{ lib, stdenv, fetchFromGitHub, rustPlatform, gtk3, glib, wrapGAppsHook3, libusb1, hidapi, udev, pkg-config }:
 
 # system76-keyboard-configurator tries to spawn a daemon as root via pkexec, so
 # your system needs a PolicyKit authentication agent running for the
@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [
     pkg-config
     glib # for glib-compile-resources
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

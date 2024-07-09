@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, parameterized
-, unittestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  parameterized,
+  unittestCheckHook,
 }:
 buildPythonPackage rec {
   pname = "pypika";
@@ -16,7 +17,7 @@ buildPythonPackage rec {
     hash = "sha256-9HKT1xRu23F5ptiKhIgIR8srLIcpDzpowBNuYOhqMU0=";
   };
 
-  pythonImportsCheck = ["pypika"];
+  pythonImportsCheck = [ "pypika" ];
 
   nativeCheckInputs = [
     parameterized
@@ -24,10 +25,9 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "A python SQL query builder";
+    description = "Python SQL query builder";
     homepage = "https://github.com/kayak/pypika";
     license = licenses.asl20;
     maintainers = with maintainers; [ blaggacao ];
   };
 }
-

@@ -1,22 +1,23 @@
-{ lib
-, asyncssh
-, buildPythonPackage
-, cryptography
-, fetchFromGitHub
-, gssapi
-, httpcore
-, httpx
-, krb5
-, psrpcore
-, psutil
-, pyspnego
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
-, pyyaml
-, requests
-, requests-credssp
-, xmldiff
+{
+  lib,
+  asyncssh,
+  buildPythonPackage,
+  cryptography,
+  fetchFromGitHub,
+  gssapi,
+  httpcore,
+  httpx,
+  krb5,
+  psrpcore,
+  psutil,
+  pyspnego,
+  pytest-mock,
+  pytestCheckHook,
+  pythonOlder,
+  pyyaml,
+  requests,
+  requests-credssp,
+  xmldiff,
 }:
 
 buildPythonPackage rec {
@@ -50,25 +51,17 @@ buildPythonPackage rec {
   ];
 
   passthru.optional-dependencies = {
-    credssp = [
-      requests-credssp
-    ];
+    credssp = [ requests-credssp ];
     kerberos = [
       # pyspnego[kerberos] will have those two dependencies
       gssapi
       krb5
     ];
-    named_pipe = [
-      psutil
-    ];
-    ssh = [
-      asyncssh
-    ];
+    named_pipe = [ psutil ];
+    ssh = [ asyncssh ];
   };
 
-  pythonImportsCheck = [
-    "pypsrp"
-  ];
+  pythonImportsCheck = [ "pypsrp" ];
 
   disabledTests = [
     # TypeError: Backend.load_rsa_private_numbers() missing 1 required...

@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     broken = stdenv.isDarwin;
-    description = "A Qt implementation of the DBusMenu protocol";
+    description = "Qt implementation of the DBusMenu protocol";
     homepage = "https://github.com/lxqt/libdbusmenu-lxqt";
     license = licenses.lgpl21Plus;
     platforms = with platforms; unix;

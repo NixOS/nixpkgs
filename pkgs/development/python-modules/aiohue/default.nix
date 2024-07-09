@@ -1,14 +1,15 @@
-{ lib
-, aiohttp
-, asyncio-throttle
-, awesomeversion
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pytest-aiohttp
-, pytest-asyncio
-, pythonOlder
-, setuptools
+{
+  lib,
+  aiohttp,
+  asyncio-throttle,
+  awesomeversion,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pytest-aiohttp,
+  pytest-asyncio,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -30,9 +31,7 @@ buildPythonPackage rec {
       --replace 'version = "0.0.0"' 'version = "${version}"'
   '';
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     awesomeversion

@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools
-, flask
-, webassets
-, flask-script
-, nose
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  flask,
+  webassets,
+  flask-script,
+  pynose,
 }:
 
 buildPythonPackage rec {
@@ -25,15 +26,13 @@ buildPythonPackage rec {
     substituteInPlace tests/test_integration.py --replace "'/foo'" "'/x/foo'"
   '';
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     flask
     webassets
     flask-script
-    nose
+    pynose
   ];
 
   meta = with lib; {

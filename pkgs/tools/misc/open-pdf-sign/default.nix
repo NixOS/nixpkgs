@@ -7,12 +7,12 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "0.2.0";
+  version = "0.2.1";
   pname = "open-pdf-sign";
 
   src = fetchurl {
     url = "https://github.com/open-pdf-sign/open-pdf-sign/releases/download/v${finalAttrs.version}/open-pdf-sign.jar";
-    hash = "sha256-W4WymhjLrHtNK5XY8aahpZOIIh/Qp9scE3zybXF6/9o=";
+    hash = "sha256-jtaEystCiZUK93HkVPuWzAUISO4RMMxjMmFbooWZJGU=";
   };
 
   nativeBuildInputs = [

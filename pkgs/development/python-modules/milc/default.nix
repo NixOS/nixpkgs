@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, appdirs
-, argcomplete
-, colorama
-, halo
-, spinners
-, types-colorama
-, nose2
-, semver
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  appdirs,
+  argcomplete,
+  colorama,
+  halo,
+  spinners,
+  types-colorama,
+  nose2,
+  semver,
 }:
 
 buildPythonPackage rec {
@@ -40,7 +41,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "milc" ];
 
   meta = with lib; {
-    description = "An Opinionated Batteries-Included Python 3 CLI Framework";
+    description = "Opinionated Batteries-Included Python 3 CLI Framework";
     mainProgram = "milc-color";
     homepage = "https://milc.clueboard.co";
     license = licenses.mit;

@@ -20,13 +20,13 @@
 
 stdenv.mkDerivation rec {
   pname = "lximage-qt";
-  version = "2.0.0";
+  version = "2.0.1";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    hash = "sha256-yjsdXVV/EOgpNI5kY12lNH9Wpru8A6eWxayslFdioiQ=";
+    hash = "sha256-I0DyC8i+OnHxHcpp/xPsKjr3UgvUHlVO8h9Tjhg7Pg8=";
   };
 
   nativeBuildInputs = [
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/lxqt/lximage-qt";
-    description = "The image viewer and screenshot tool for lxqt";
+    description = "Image viewer and screenshot tool for lxqt";
     mainProgram = "lximage-qt";
     license = licenses.gpl2Plus;
     platforms = with platforms; unix;

@@ -4,7 +4,7 @@ mkDerivation {
   pname = "kturtle";
   meta = with lib; {
     homepage = "https://invent.kde.org/education/kturtle";
-    description = "An educational programming environment for learning how to program";
+    description = "Educational programming environment for learning how to program";
     mainProgram = "kturtle";
     maintainers = with maintainers; [ freezeboy ];
     license = licenses.gpl2Plus;

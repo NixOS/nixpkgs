@@ -485,7 +485,7 @@ rec {
   # returns an executable
   #
   # Example:
-  #   writeJS "example" { libraries = [ pkgs.nodePackages.uglify-js ]; } ''
+  #   writeJS "example" { libraries = [ pkgs.uglify-js ]; } ''
   #     var UglifyJS = require("uglify-js");
   #     var code = "function add(first, second) { return first + second; }";
   #     var result = UglifyJS.minify(code);
@@ -635,7 +635,7 @@ rec {
 
     nuget-source = mkNugetSource {
       name = "${fname}-nuget-source";
-      description = "A Nuget source with the dependencies for ${fname}";
+      description = "Nuget source with the dependencies for ${fname}";
       deps = [ _nugetDeps ];
     };
 

@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "An aquarium/sea animation in ASCII art (with option of transparent background)";
+    description = "Aquarium/sea animation in ASCII art (with option of transparent background)";
     homepage = "https://github.com/nothub/asciiquarium";
     license = lib.licenses.gpl2Only;
     mainProgram = "asciiquarium";

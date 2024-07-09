@@ -1,11 +1,12 @@
 { name-prefix ? "temurin"
 , brand-name ? "Eclipse Temurin"
 , sourcePerArch
-, knownVulnerabilities ? []
+, knownVulnerabilities ? [ ]
 }:
 
 { swingSupport ? true # not used for now
-, lib, stdenv
+, lib
+, stdenv
 , fetchurl
 , setJavaClassPath
 }:
@@ -17,7 +18,8 @@ let
     (arch: builtins.elem arch validCpuTypes)
     (builtins.attrNames sourcePerArch);
   result = stdenv.mkDerivation {
-    pname = if sourcePerArch.packageType == "jdk"
+    pname =
+      if sourcePerArch.packageType == "jdk"
       then "${name-prefix}-bin"
       else "${name-prefix}-${sourcePerArch.packageType}-bin";
     version =
@@ -66,10 +68,11 @@ let
       license = licenses.gpl2Classpath;
       sourceProvenance = with sourceTypes; [ binaryNativeCode binaryBytecode ];
       description = "${brand-name}, prebuilt OpenJDK binary";
-      platforms = builtins.map (arch: arch + "-darwin") providedCpuTypes;  # some inherit jre.meta.platforms
+      platforms = builtins.map (arch: arch + "-darwin") providedCpuTypes; # some inherit jre.meta.platforms
       maintainers = with maintainers; [ taku0 ];
       inherit knownVulnerabilities;
       mainProgram = "java";
     };
   };
-in result
+in
+result

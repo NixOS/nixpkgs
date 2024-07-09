@@ -22,9 +22,7 @@ buildPythonPackage rec {
 
   build-system = [ setuptools-scm ];
 
-  dependencies = [
-    crc
-  ];
+  dependencies = [ crc ];
 
   # Tests require a physical FPGA
   doCheck = false;

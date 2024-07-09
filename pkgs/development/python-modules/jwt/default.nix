@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, cryptography
-, freezegun
-, pytestCheckHook
-, pytest-cov
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  cryptography,
+  freezegun,
+  pytestCheckHook,
+  pytest-cov,
 }:
 
 buildPythonPackage rec {
@@ -27,9 +28,7 @@ buildPythonPackage rec {
     substituteInPlace setup.cfg --replace "--flake8" ""
   '';
 
-  propagatedBuildInputs = [
-    cryptography
-  ];
+  propagatedBuildInputs = [ cryptography ];
 
   nativeCheckInputs = [
     pytestCheckHook

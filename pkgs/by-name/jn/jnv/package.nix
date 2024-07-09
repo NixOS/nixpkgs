@@ -1,29 +1,19 @@
 { lib
 , rustPlatform
 , fetchFromGitHub
-, autoconf
-, automake
-, libtool
 }:
 rustPlatform.buildRustPackage rec {
   pname = "jnv";
-  version = "0.2.2";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "ynqa";
     repo = "jnv";
     rev = "v${version}";
-    hash = "sha256-IvpbVcTGGD7cn59SPlcqMuu9YXB3ur3AFaoWDVADoqI=";
+    hash = "sha256-5Atop86g/gGgf4MEK/Q2vqpQ+KIS72FB2gXCH8U+L3g=";
   };
 
-  cargoHash = "sha256-dqWQi0DYl2P1qPzmtYOcarnfu2bfSnLk/SVQq5d+Z8Y=";
-
-  nativeBuildInputs = [
-    autoconf
-    automake
-    libtool
-    rustPlatform.bindgenHook
-  ];
+  cargoHash = "sha256-qpVRq6RbrDZDSJkLQ5Au9j2mWXp3gn7QBe3nRmIVK8c=";
 
   meta = with lib; {
     description = "Interactive JSON filter using jq";

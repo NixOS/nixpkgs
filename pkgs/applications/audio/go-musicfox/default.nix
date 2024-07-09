@@ -2,25 +2,26 @@
 , buildGoModule
 , fetchFromGitHub
 , pkg-config
-, alsa-lib
 , flac
+, stdenv
+, alsa-lib
 , nix-update-script
 }:
 
 buildGoModule rec {
   pname = "go-musicfox";
-  version = "4.3.3";
+  version = "4.5.3";
 
   src = fetchFromGitHub {
     owner = "go-musicfox";
     repo = "go-musicfox";
     rev = "v${version}";
-    hash = "sha256-J6R3T92cHFUkKwc+GKm612tVjglP2Tc/kDUmzUMhvio=";
+    hash = "sha256-qf4XAAfWWlHAnNGhXaYpnjj+2z+/lWOHaTyv8R4UDgQ=";
   };
 
   deleteVendor = true;
 
-  vendorHash = "sha256-KSIdBEEvYaYcDIDmzfRO857I8FSN4Ajw6phAPQLYEqg=";
+  vendorHash = "sha256-oz/kVp/Jj2Lmo19UFOn2VPD/iWbSRCbmKy8fK8RdkYs=";
 
   subPackages = [ "cmd/musicfox.go" ];
 
@@ -35,8 +36,9 @@ buildGoModule rec {
   ];
 
   buildInputs = [
-    alsa-lib
     flac
+  ] ++ lib.optionals stdenv.isLinux [
+    alsa-lib
   ];
 
   passthru.updateScript = nix-update-script { };

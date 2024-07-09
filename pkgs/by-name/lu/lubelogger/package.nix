@@ -28,7 +28,7 @@ buildDotnetModule rec {
   executables = [ "CarCareTracker" ]; # This wraps "$out/lib/$pname/foo" to `$out/bin/foo`.
 
   meta = with lib; {
-    description = "A vehicle service records and maintainence tracker";
+    description = "Vehicle service records and maintainence tracker";
     longDescription = ''
       A self-hosted, open-source, unconventionally-named vehicle maintenance records and fuel mileage tracker.
 

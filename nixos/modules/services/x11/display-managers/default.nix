@@ -9,9 +9,8 @@
 
 { config, lib, options, pkgs, ... }:
 
-with lib;
-
 let
+  inherit (lib) mkOption types literalExpression optionalString;
 
   cfg = config.services.xserver;
   xorg = pkgs.xorg;
@@ -91,7 +90,7 @@ let
       # Import environment variables into the systemd user environment.
       ${optionalString (cfg.displayManager.importedVariables != []) (
         "/run/current-system/systemd/bin/systemctl --user import-environment "
-          + toString (unique cfg.displayManager.importedVariables)
+          + toString (lib.unique cfg.displayManager.importedVariables)
       )}
 
       # Speed up application start by 50-150ms according to
@@ -222,13 +221,6 @@ in
   };
 
   config = {
-    assertions = [
-      {
-        assertion = cfg.desktopManager.default != null || cfg.windowManager.default != null -> cfg.displayManager.defaultSession == defaultSessionFromLegacyOptions;
-        message = "You cannot use both services.displayManager.defaultSession option and legacy options (services.xserver.desktopManager.default and services.xserver.windowManager.default).";
-      }
-    ];
-
     services.displayManager.sessionData.wrapper = xsessionWrapper;
 
     services.xserver.displayManager.xserverBin = "${xorg.xorgserver.out}/bin/X";
@@ -254,8 +246,8 @@ in
     # that do not have upstream session files (those defined using services.{display,desktop,window}Manager.session options).
     services.displayManager.sessionPackages =
       let
-        dms = filter (s: s.manage == "desktop") cfg.displayManager.session;
-        wms = filter (s: s.manage == "window") cfg.displayManager.session;
+        dms = lib.filter (s: s.manage == "desktop") cfg.displayManager.session;
+        wms = lib.filter (s: s.manage == "window") cfg.displayManager.session;
 
         # Script responsible for starting the window manager and the desktop manager.
         xsession = dm: wm: pkgs.writeScript "xsession" ''
@@ -283,16 +275,16 @@ in
         '';
       in
         # We will generate every possible pair of WM and DM.
-        concatLists (
+        lib.concatLists (
             lib.mapCartesianProduct
             ({dm, wm}: let
               sessionName = "${dm.name}${optionalString (wm.name != "none") ("+" + wm.name)}";
               script = xsession dm wm;
               desktopNames = if dm ? desktopNames
-                             then concatStringsSep ";" dm.desktopNames
+                             then lib.concatStringsSep ";" dm.desktopNames
                              else sessionName;
             in
-              optional (dm.name != "none" || wm.name != "none")
+              lib.optional (dm.name != "none" || wm.name != "none")
                 (pkgs.writeTextFile {
                   name = "${sessionName}-xsession";
                   destination = "/share/xsessions/${sessionName}.desktop";
@@ -317,11 +309,11 @@ in
   };
 
   imports = [
-    (mkRemovedOptionModule [ "services" "xserver" "displayManager" "desktopManagerHandlesLidAndPower" ]
+    (lib.mkRemovedOptionModule [ "services" "xserver" "displayManager" "desktopManagerHandlesLidAndPower" ]
      "The option is no longer necessary because all display managers have already delegated lid management to systemd.")
-    (mkRenamedOptionModule [ "services" "xserver" "displayManager" "job" "logsXsession" ] [ "services" "displayManager" "logToFile" ])
-    (mkRenamedOptionModule [ "services" "xserver" "displayManager" "logToJournal" ] [ "services" "displayManager" "logToJournal" ])
-    (mkRenamedOptionModule [ "services" "xserver" "displayManager" "extraSessionFilesPackages" ] [ "services" "displayManager" "sessionPackages" ])
+    (lib.mkRenamedOptionModule [ "services" "xserver" "displayManager" "job" "logsXsession" ] [ "services" "displayManager" "logToFile" ])
+    (lib.mkRenamedOptionModule [ "services" "xserver" "displayManager" "logToJournal" ] [ "services" "displayManager" "logToJournal" ])
+    (lib.mkRenamedOptionModule [ "services" "xserver" "displayManager" "extraSessionFilesPackages" ] [ "services" "displayManager" "sessionPackages" ])
   ];
 
 }

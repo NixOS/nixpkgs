@@ -15,7 +15,7 @@ buildGoModule rec {
   ldflags = [ "-s" "-w" ];
 
   meta = {
-    description = "A HTTP nix store that proxies requests to Google Storage";
+    description = "HTTP nix store that proxies requests to Google Storage";
     mainProgram = "nix-store-gcs-proxy";
     homepage = "https://github.com/tweag/nix-store-gcs-proxy";
     license = lib.licenses.asl20;

@@ -1,4 +1,11 @@
-{ stdenv, lib, buildPythonPackage, isPy3k, fetchFromGitHub, openssl }:
+{
+  stdenv,
+  lib,
+  buildPythonPackage,
+  isPy3k,
+  fetchFromGitHub,
+  openssl,
+}:
 
 buildPythonPackage rec {
   pname = "bitcoinlib";
@@ -20,7 +27,10 @@ buildPythonPackage rec {
       "'${lib.getLib openssl}/lib/libssl${stdenv.hostPlatform.extensions.sharedLibrary}'"
   '';
 
-  pythonImportsCheck = [ "bitcoin" "bitcoin.core.key" ];
+  pythonImportsCheck = [
+    "bitcoin"
+    "bitcoin.core.key"
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/petertodd/python-bitcoinlib";

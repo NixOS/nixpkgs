@@ -22,7 +22,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    description = "A no bullshit screen capture tool";
+    description = "No bullshit screen capture tool";
     homepage = "https://github.com/buhman/capture";
     maintainers = [ maintainers.ar1a ];
     license = licenses.gpl3Plus;

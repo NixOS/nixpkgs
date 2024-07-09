@@ -19,11 +19,10 @@
 , symlinkJoin
 , substituteAll
 , extraPackages ? [ ]
-, runc
 , crun
-, gvisor
-, youki
+, runc
 , conmon
+, extraRuntimes ? lib.optionals stdenv.isLinux [ runc ]  # e.g.: runc, gvisor, youki
 , slirp4netns
 , fuse-overlayfs
 , util-linux
@@ -59,28 +58,30 @@ let
       netavark
       slirp4netns
       passt
-    ];
+      conmon
+      crun
+    ] ++ extraRuntimes;
   };
 in
 buildGoModule rec {
   pname = "podman";
-  version = "5.0.2";
+  version = "5.1.1";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "podman";
     rev = "v${version}";
-    hash = "sha256-8Swqwyzu/WI9mG21bLF81Kk4kS2Ltg0GV9G3EcG/FnU=";
+    hash = "sha256-3u4QOX7K0bMcbvwkXVoCpq7p5rKkvmOlOIRSUEbjFOY=";
   };
 
   patches = [
-    # we intentionally don't build and install the helper so we shouldn't display messages to users about it
-    ./rm-podman-mac-helper-msg.patch
-  ] ++ lib.optionals stdenv.isLinux [
     (substituteAll {
       src = ./hardcode-paths.patch;
-      inherit crun runc gvisor youki conmon;
+      bin_path = helpersBin;
     })
+
+    # we intentionally don't build and install the helper so we shouldn't display messages to users about it
+    ./rm-podman-mac-helper-msg.patch
   ];
 
   vendorHash = null;
@@ -153,7 +154,7 @@ buildGoModule rec {
 
   meta = with lib; {
     homepage = "https://podman.io/";
-    description = "A program for managing pods, containers and container images";
+    description = "Program for managing pods, containers and container images";
     longDescription = ''
       Podman (the POD MANager) is a tool for managing containers and images, volumes mounted into those containers, and pods made from groups of containers. Podman runs containers on Linux, but can also be used on Mac and Windows systems using a Podman-managed virtual machine. Podman is based on libpod, a library for container lifecycle management that is also contained in this repository. The libpod library provides APIs for managing containers, pods, container images, and volumes.
 

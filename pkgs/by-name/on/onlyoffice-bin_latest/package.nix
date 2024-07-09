@@ -31,7 +31,7 @@
 , nss
 , pulseaudio
 , qt5
-, wrapGAppsHook
+, wrapGAppsHook3
 , xkeyboard_config
 , xorg
 }:
@@ -65,18 +65,18 @@ let
 
   derivation = stdenv.mkDerivation rec {
     pname = "onlyoffice-desktopeditors";
-    version = "8.0.0";
+    version = "8.1.0";
     minor = null;
     src = fetchurl {
       url = "https://github.com/ONLYOFFICE/DesktopEditors/releases/download/v${version}/onlyoffice-desktopeditors_amd64.deb";
-      sha256 = "sha256-YtR2fiARMKw8dOgAPXYM+WFwmhKZRsIIBQYTxppu3F0=";
+      sha256 = "sha256-hS1+gLN17sP3EFud3fQXRWeFiQbrumBONLjqXEl89Js=";
     };
 
     nativeBuildInputs = [
       autoPatchelfHook
       dpkg
       makeWrapper
-      wrapGAppsHook
+      wrapGAppsHook3
     ];
 
     buildInputs = [

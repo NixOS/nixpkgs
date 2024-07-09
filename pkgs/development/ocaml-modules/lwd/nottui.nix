@@ -1,4 +1,4 @@
-{ lib, fetchurl, buildDunePackage, lwd, notty }:
+{ lib, buildDunePackage, lwd, notty }:
 
 buildDunePackage {
   pname = "nottui";

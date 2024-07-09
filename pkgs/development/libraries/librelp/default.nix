@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ gnutls zlib openssl ];
 
   meta = with lib; {
-    description = "A reliable logging library";
+    description = "Reliable logging library";
     homepage = "https://www.librelp.com/";
     license = licenses.gpl2;
     platforms = platforms.linux;

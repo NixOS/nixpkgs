@@ -9,7 +9,6 @@
 , dde-polkit-agent
 , qt5integration
 , libsecret
-, libgnome-keyring
 }:
 
 stdenv.mkDerivation rec {
@@ -39,7 +38,6 @@ stdenv.mkDerivation rec {
     dtkwidget
     dde-polkit-agent
     qt5integration
-    libgnome-keyring
     libsecret
   ];
 

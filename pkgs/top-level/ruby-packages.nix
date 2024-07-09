@@ -2872,10 +2872,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "185zq5r9g56sfks852992bm0xf2vm9569jyiz5jyww3vx1jply1d";
+      sha256 = "sha256-On/KnfdO5kHcHom4MCrG0D8iiD3nceeGoOnzCU5apq0=";
       type = "gem";
     };
-    version = "7.1.3.2";
+    version = "7.1.3.4";
   };
   rails-dom-testing = {
     dependencies = ["activesupport" "minitest" "nokogiri"];
@@ -3127,10 +3127,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "05i8518ay14kjbma550mv0jm8a6di8yp5phzrd8rj44z9qnrlrp0";
+      sha256 = "0428ady49qssmnmwnafzrjvyba8mzbridsgblv7c7kmd0vqgfn99";
       type = "gem";
     };
-    version = "3.2.6";
+    version = "3.3.0";
   };
   rmagick = {
     dependencies = ["observer" "pkg-config"];

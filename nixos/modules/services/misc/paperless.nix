@@ -225,7 +225,7 @@ in
       effectively never complete due to running into timeouts.
 
       This sets `OMP_NUM_THREADS` to `1` in order to mitigate the issue. See
-      https://github.com/NixOS/nixpkgs/issues/240591 for more information.
+      https://github.com/NixOS/nixpkgs/issues/240591 for more information
     '' // mkOption { default = true; };
   };
 

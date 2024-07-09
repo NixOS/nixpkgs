@@ -1,21 +1,22 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools
-, setuptools-scm
-, jaraco-classes
-, jaraco-text
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  setuptools-scm,
+  jaraco-classes,
+  jaraco-text,
 }:
 
 buildPythonPackage rec {
   pname = "jaraco-collections";
-  version = "5.0.0";
+  version = "5.0.1";
   format = "pyproject";
 
   src = fetchPypi {
     pname = "jaraco.collections";
     inherit version;
-    hash = "sha256-FoDo0J8pX2Jce6kmiAF1om/b5wkrTHbRmOMEdrIc/mg=";
+    hash = "sha256-gIYxsXS4Sk4qWSSQ1i9i38FdgEeg9xVyYJjcQ7gabPo=";
   };
 
   postPatch = ''

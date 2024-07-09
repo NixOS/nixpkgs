@@ -2,20 +2,22 @@
 , buildGoModule
 , fetchFromGitHub
 , installShellFiles
+, testers
+, k0sctl
 }:
 
 buildGoModule rec {
   pname = "k0sctl";
-  version = "0.17.5";
+  version = "0.18.1";
 
   src = fetchFromGitHub {
     owner = "k0sproject";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-NHfS1iJtpt0t2iIqXBETiD4rpA2XzA8eOg5mP4N8El4=";
+    hash = "sha256-lZCD8hBe6SKKjTvEKNg/lr7NXrAPqFQoh9iQg0O6jhc=";
   };
 
-  vendorHash = "sha256-MPTdOcNoveBnHMJ2YHqHuvOHHe6IdisZLc05qViA1YQ=";
+  vendorHash = "sha256-FobBn7rbRVfnW8Zd982vkSuKpPj4gGK4b41o9OK/CCY=";
 
   ldflags = [
     "-s"
@@ -34,8 +36,15 @@ buildGoModule rec {
     done
   '';
 
+  passthru.tests.version = testers.testVersion {
+    package = k0sctl;
+    command = "k0sctl version";
+    # See https://github.com/carlmjohnson/versioninfo/discussions/12
+    version = "version: (devel)\ncommit: v${version}\n";
+  };
+
   meta = with lib; {
-    description = "A bootstrapping and management tool for k0s clusters.";
+    description = "Bootstrapping and management tool for k0s clusters";
     homepage = "https://k0sproject.io/";
     license = licenses.asl20;
     mainProgram = "k0sctl";

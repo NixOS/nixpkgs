@@ -6,7 +6,7 @@ buildDunePackage rec {
 
   useDune2 = true;
 
-  minimumOCamlVersion = "4.02";
+  minimalOCamlVersion = "4.02";
 
   src = fetchurl {
     url = "https://github.com/flowtype/ocaml-${pname}/releases/download/v${version}/${pname}-v${version}.tbz";
@@ -15,7 +15,7 @@ buildDunePackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/flowtype/ocaml-wtf8";
-    description = "WTF-8 is a superset of UTF-8 that allows unpaired surrogates.";
+    description = "WTF-8 is a superset of UTF-8 that allows unpaired surrogates";
     license = licenses.mit;
     maintainers = [ maintainers.eqyiel ];
   };

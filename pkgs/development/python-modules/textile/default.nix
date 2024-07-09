@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, html5lib
-, pytestCheckHook
-, pythonOlder
-, regex
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  html5lib,
+  pytestCheckHook,
+  pythonOlder,
+  regex,
 }:
 
 buildPythonPackage rec {
@@ -26,18 +27,14 @@ buildPythonPackage rec {
     regex
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   postPatch = ''
     substituteInPlace pytest.ini \
       --replace " --cov=textile --cov-report=html --cov-append --cov-report=term-missing" ""
   '';
 
-  pythonImportsCheck = [
-    "textile"
-  ];
+  pythonImportsCheck = [ "textile" ];
 
   meta = with lib; {
     description = "MOdule for generating web text";

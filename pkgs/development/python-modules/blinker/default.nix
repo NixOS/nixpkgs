@@ -1,32 +1,29 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 
-# build-system
-, flit-core
+  # build-system
+  flit-core,
 
-# tests
-, pytestCheckHook
-, pytest-asyncio
+  # tests
+  pytestCheckHook,
+  pytest-asyncio,
 }:
 
 buildPythonPackage rec {
   pname = "blinker";
-  version = "1.7.0";
+  version = "1.8.2";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-5oIP9vpOTR2OJ0fCKDdJw/VH5P7hErmFVc3NrjKZYYI=";
+    hash = "sha256-j3ewnTv3x5XpaelIbznCxenDnU7gdCS+K8WU7OlkLYM=";
   };
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  nativeBuildInputs = [ flit-core ];
 
-  pythonImportsCheck = [
-    "blinker"
-  ];
+  pythonImportsCheck = [ "blinker" ];
 
   nativeCheckInputs = [
     pytest-asyncio

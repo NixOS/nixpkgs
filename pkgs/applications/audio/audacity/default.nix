@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , cmake
 , makeWrapper
-, wrapGAppsHook
+, wrapGAppsHook3
 , pkg-config
 , python3
 , gettext
@@ -88,7 +88,7 @@ stdenv.mkDerivation rec {
     pkg-config
     python3
     makeWrapper
-    wrapGAppsHook
+    wrapGAppsHook3
   ] ++ lib.optionals stdenv.isLinux [
     linuxHeaders
   ];
@@ -202,7 +202,7 @@ stdenv.mkDerivation rec {
       # Documentation.
       cc-by-30
     ];
-    maintainers = with maintainers; [ lheckemann veprbl wegank ];
+    maintainers = with maintainers; [ veprbl wegank ];
     platforms = platforms.unix;
   };
 }

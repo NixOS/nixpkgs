@@ -4,7 +4,7 @@
 , _7zz
 , dpkg
 , autoPatchelfHook
-, wrapGAppsHook
+, wrapGAppsHook3
 , makeWrapper
 , alsa-lib
 , at-spi2-atk
@@ -66,7 +66,7 @@ let
   ];
 
   meta = with lib; {
-    description = "A good-looking third-party netease cloud music player";
+    description = "Good-looking third-party netease cloud music player";
     mainProgram = "yesplaymusic";
     homepage = "https://github.com/qier222/YesPlayMusic/";
     license = licenses.mit;
@@ -98,7 +98,7 @@ else stdenv.mkDerivation {
 
   nativeBuildInputs = [
     autoPatchelfHook
-    wrapGAppsHook
+    wrapGAppsHook3
     makeWrapper
   ];
 

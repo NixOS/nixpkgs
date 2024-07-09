@@ -3,7 +3,9 @@
 , fetchFromGitHub
 , substituteAll
 , accountsservice
+, adwaita-icon-theme
 , budgie-desktop
+, cheese
 , clutter
 , clutter-gtk
 , colord
@@ -19,6 +21,7 @@
 , glibc
 , gnome
 , gnome-desktop
+, gnome-user-share
 , gsettings-desktop-schemas
 , gsound
 , gtk3
@@ -52,7 +55,7 @@
 , udisks2
 , upower
 , webp-pixbuf-loader
-, wrapGAppsHook
+, wrapGAppsHook3
 , enableSshSocket ? false
 }:
 
@@ -86,7 +89,7 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     pkg-config
     shared-mime-info
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -101,12 +104,12 @@ stdenv.mkDerivation (finalAttrs: {
     glib
     glib-networking
     gnome-desktop
-    gnome.adwaita-icon-theme
-    gnome.cheese
+    adwaita-icon-theme
+    cheese
     gnome.gnome-bluetooth_1_0
     gnome.gnome-remote-desktop
     gnome.gnome-settings-daemon
-    gnome.gnome-user-share
+    gnome-user-share
     gnome.mutter
     gsettings-desktop-schemas
     gsound
@@ -168,7 +171,7 @@ stdenv.mkDerivation (finalAttrs: {
   separateDebugInfo = true;
 
   meta = {
-    description = "A fork of GNOME Control Center for the Budgie 10 Series";
+    description = "Fork of GNOME Control Center for the Budgie 10 Series";
     homepage = "https://github.com/BuddiesOfBudgie/budgie-control-center";
     mainProgram = "budgie-control-center";
     platforms = lib.platforms.linux;

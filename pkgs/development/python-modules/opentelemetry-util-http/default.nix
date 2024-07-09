@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, hatchling
-, opentelemetry-instrumentation
-, opentelemetry-test-utils
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  hatchling,
+  opentelemetry-instrumentation,
+  opentelemetry-test-utils,
+  pytestCheckHook,
 }:
 
 buildPythonPackage {
@@ -16,9 +17,7 @@ buildPythonPackage {
 
   sourceRoot = "${opentelemetry-instrumentation.src.name}/util/opentelemetry-util-http";
 
-  build-system = [
-    hatchling
-  ];
+  build-system = [ hatchling ];
 
   nativeCheckInputs = [
     opentelemetry-instrumentation

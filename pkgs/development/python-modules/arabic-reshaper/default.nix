@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fonttools
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fonttools,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -21,18 +22,12 @@ buildPythonPackage rec {
   };
 
   passthru.optional-dependencies = {
-    with-fonttools = [
-      fonttools
-    ];
+    with-fonttools = [ fonttools ];
   };
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "arabic_reshaper"
-  ];
+  pythonImportsCheck = [ "arabic_reshaper" ];
 
   meta = with lib; {
     description = "Reconstruct Arabic sentences to be used in applications that don't support Arabic";

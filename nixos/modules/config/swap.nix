@@ -275,7 +275,6 @@ in
                     chattr +C "$DEVICE" 2>/dev/null || true
 
                     dd if=/dev/zero of="$DEVICE" bs=1M count=${toString sw.size}
-                    chmod 0600 ${sw.device}
                     ${optionalString (!sw.randomEncryption.enable) "mkswap ${sw.realDevice}"}
                   fi
                 ''}
@@ -292,9 +291,12 @@ in
 
             unitConfig.RequiresMountsFor = [ "${dirOf sw.device}" ];
             unitConfig.DefaultDependencies = false; # needed to prevent a cycle
-            serviceConfig.Type = "oneshot";
-            serviceConfig.RemainAfterExit = sw.randomEncryption.enable;
-            serviceConfig.ExecStop = optionalString sw.randomEncryption.enable "${pkgs.cryptsetup}/bin/cryptsetup luksClose ${sw.deviceName}";
+            serviceConfig = {
+              Type = "oneshot";
+              RemainAfterExit = sw.randomEncryption.enable;
+              UMask = "0177";
+              ExecStop = optionalString sw.randomEncryption.enable "${pkgs.cryptsetup}/bin/cryptsetup luksClose ${sw.deviceName}";
+            };
             restartIfChanged = false;
           };
 

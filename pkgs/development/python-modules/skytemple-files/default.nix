@@ -1,31 +1,32 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, fetchFromGitHub
-, appdirs
-, dungeon-eos
-, explorerscript
-, ndspy
-, pillow
-, setuptools
-, skytemple-rust
-, tilequant
-, pyyaml
-, pmdsky-debug-py
-, range-typed-integers
-, importlib-resources
-, typing-extensions
-, pythonOlder
-, # optional dependancies for SpriteCollab
-  aiohttp
-, lru-dict
-, graphql-core
-, gql
-, armips
+{
+  stdenv,
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  appdirs,
+  dungeon-eos,
+  explorerscript,
+  ndspy,
+  pillow,
+  setuptools,
+  skytemple-rust,
+  tilequant,
+  pyyaml,
+  pmdsky-debug-py,
+  range-typed-integers,
+  importlib-resources,
+  typing-extensions,
+  pythonOlder,
+  # optional dependancies for SpriteCollab
+  aiohttp,
+  lru-dict,
+  graphql-core,
+  gql,
+  armips,
   # tests
-, pytestCheckHook
-, parameterized
-, xmldiff
+  pytestCheckHook,
+  parameterized,
+  xmldiff,
 }:
 
 buildPythonPackage rec {
@@ -49,22 +50,24 @@ buildPythonPackage rec {
 
   buildInputs = [ armips ];
 
-  propagatedBuildInputs = [
-    appdirs
-    dungeon-eos
-    explorerscript
-    ndspy
-    pillow
-    setuptools
-    skytemple-rust
-    tilequant
-    pyyaml
-    pmdsky-debug-py
-    range-typed-integers
-  ] ++ lib.optionals (pythonOlder "3.9") [
-    importlib-resources
-    typing-extensions
-  ];
+  propagatedBuildInputs =
+    [
+      appdirs
+      dungeon-eos
+      explorerscript
+      ndspy
+      pillow
+      setuptools
+      skytemple-rust
+      tilequant
+      pyyaml
+      pmdsky-debug-py
+      range-typed-integers
+    ]
+    ++ lib.optionals (pythonOlder "3.9") [
+      importlib-resources
+      typing-extensions
+    ];
 
   passthru.optional-dependencies = {
     spritecollab = [
@@ -75,7 +78,11 @@ buildPythonPackage rec {
     ] ++ gql.optional-dependencies.aiohttp;
   };
 
-  checkInputs = [ pytestCheckHook parameterized xmldiff ] ++ passthru.optional-dependencies.spritecollab;
+  checkInputs = [
+    pytestCheckHook
+    parameterized
+    xmldiff
+  ] ++ passthru.optional-dependencies.spritecollab;
   pytestFlagsArray = [ "test/" ];
   disabledTestPaths = [
     "test/skytemple_files_test/common/spritecollab/sc_online_test.py"

@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
 
   meta = with lib; {
-    description = "The aucatctl utility sends MIDI messages to control sndiod and/or aucat volumes";
+    description = "Utility that allows to send MIDI messages to control sndiod and/or aucat volumes";
     homepage = "http://www.sndio.org";
     license = licenses.isc;
     maintainers = with maintainers; [ sna ];

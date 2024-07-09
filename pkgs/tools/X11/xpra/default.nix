@@ -4,7 +4,7 @@
 , pkg-config
 , runCommand
 , writeText
-, wrapGAppsHook
+, wrapGAppsHook3
 , withNvenc ? false
 , atk
 , cairo
@@ -29,11 +29,13 @@
 , pango
 , pulseaudio
 , python3
+, stdenv
 , util-linux
 , which
 , x264
 , x265
 , xauth
+, xdg-utils
 , xorg
 , xorgserver
 }:
@@ -84,12 +86,18 @@ in buildPythonApplication rec {
     ./fix-122159.patch # https://github.com/NixOS/nixpkgs/issues/122159
   ];
 
+  # Note: xposix is renamed to posix in v5.
+  postPatch = lib.optionalString stdenv.isLinux ''
+    substituteInPlace xpra/platform/xposix/features.py \
+      --replace-fail "/usr/bin/xdg-open" "${xdg-utils}/bin/xdg-open"
+  '';
+
   INCLUDE_DIRS = "${pam}/include";
 
   nativeBuildInputs = [
     gobject-introspection
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
     pandoc
   ] ++ lib.optional withNvenc cudatoolkit;
 
@@ -213,7 +221,7 @@ in buildPythonApplication rec {
     description = "Persistent remote applications for X";
     changelog = "https://github.com/Xpra-org/xpra/releases/tag/v${version}";
     platforms = platforms.linux;
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     maintainers = with maintainers; [ offline numinit mvnetbiz ];
   };
 }

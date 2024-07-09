@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "plotnine";
-  version = "0.13.4";
+  version = "0.13.6";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "has2k1";
     repo = "plotnine";
     rev = "refs/tags/v${version}";
-    hash = "sha256-ylsaV5yWVbxvD74spAI5tDwIjjue7MOMaGgp4Dc8Nhk=";
+    hash = "sha256-/yxRYK3ZTrYj+l3TQhFllyICnJjCZPd4ebNurCLZAYg=";
   };
 
   postPatch = ''
@@ -56,6 +56,12 @@ buildPythonPackage rec {
   '';
 
   pythonImportsCheck = [ "plotnine" ];
+
+  disabledTests = [
+    # Tries to change locale. The issued warning causes this test to fail.
+    # UserWarning: Could not set locale to English/United States. Some date-related tests may fail
+    "test_no_after_scale_warning"
+  ];
 
   disabledTestPaths = [
     # Assertion Errors:

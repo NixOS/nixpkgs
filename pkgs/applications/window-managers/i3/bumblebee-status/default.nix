@@ -57,7 +57,7 @@ python.pkgs.buildPythonPackage {
   '';
 
   meta = with lib; {
-    description = "A modular, theme-able status line generator for the i3 window manager";
+    description = "Modular, theme-able status line generator for the i3 window manager";
     homepage = "https://github.com/tobi-wan-kenobi/bumblebee-status";
     mainProgram = "bumblebee-status";
     license = licenses.mit;

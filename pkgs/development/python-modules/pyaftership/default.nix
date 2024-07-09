@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, aiohttp
-, aresponses
-, pytest-asyncio
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  aiohttp,
+  aresponses,
+  pytest-asyncio,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -22,9 +23,7 @@ buildPythonPackage rec {
     hash = "sha256-njlDScmxIYWxB4EL9lOSGCXqZDzP999gI9EkpcZyFlE=";
   };
 
-  propagatedBuildInputs = [
-    aiohttp
-  ];
+  propagatedBuildInputs = [ aiohttp ];
 
   nativeCheckInputs = [
     aresponses
@@ -39,9 +38,7 @@ buildPythonPackage rec {
       --replace 'version="main",' 'version="${version}",'
   '';
 
-  pythonImportsCheck = [
-    "pyaftership"
-  ];
+  pythonImportsCheck = [ "pyaftership" ];
 
   meta = with lib; {
     description = "Python wrapper package for the AfterShip API";

@@ -1,7 +1,8 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, pytestCheckHook
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -19,7 +20,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "mergedict" ];
 
   meta = with lib; {
-    description = "A Python dict with a merge() method";
+    description = "Python dict with a merge() method";
     homepage = "https://github.com/schettino72/mergedict";
     license = licenses.mit;
     maintainers = with maintainers; [ onny ];

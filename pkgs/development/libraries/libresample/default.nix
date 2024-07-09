@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
 
   meta = {
-    description = "A real-time library for sampling rate conversion library";
+    description = "Real-time library for sampling rate conversion library";
     license = lib.licenses.lgpl2Plus;
     homepage = "https://ccrma.stanford.edu/~jos/resample/Free_Resampling_Software.html";
     maintainers = [ lib.maintainers.sander ];

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, wrapGAppsHook, makeWrapper
+{ lib, stdenv, fetchurl, wrapGAppsHook3, makeWrapper
 , alsa-lib
 , at-spi2-atk
 , at-spi2-core
@@ -12,7 +12,7 @@
 , freetype
 , gdk-pixbuf
 , glib
-, gnome
+, adwaita-icon-theme
 , gsettings-desktop-schemas
 , gtk3
 , gtk4
@@ -112,7 +112,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [
     dpkg
-    (wrapGAppsHook.override { inherit makeWrapper; })
+    (wrapGAppsHook3.override { inherit makeWrapper; })
   ];
 
   buildInputs = [
@@ -120,7 +120,7 @@ stdenv.mkDerivation {
     glib gsettings-desktop-schemas gtk3 gtk4
 
     # needed for XDG_ICON_DIRS
-    gnome.adwaita-icon-theme
+    adwaita-icon-theme
   ];
 
   unpackPhase = "dpkg-deb --fsys-tarfile $src | tar -x --no-same-permissions --no-same-owner";

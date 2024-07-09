@@ -6,7 +6,7 @@
 
 trivialBuild {
   pname = "isearch-plus";
-  version = "3434+unstable=2021-08-23";
+  version = "3434-unstable-2021-08-23";
 
   src = fetchFromGitHub {
     owner = "emacsmirror";

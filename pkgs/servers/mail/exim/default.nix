@@ -158,7 +158,7 @@ in stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://exim.org/";
-    description = "A mail transfer agent (MTA)";
+    description = "Mail transfer agent (MTA)";
     license = with licenses; [ gpl2Plus bsd3 ];
     mainProgram = "exim";
     platforms = platforms.linux;

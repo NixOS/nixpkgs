@@ -8,7 +8,7 @@
   fetchFromGitHub,
   cmake,
   pkg-config,
-  wrapGAppsHook,
+  wrapGAppsHook3,
   boost179,
   cereal,
   cgal_5,
@@ -34,26 +34,25 @@
   mesa,
   mpfr,
   nlopt,
-  opencascade-occt,
+  opencascade-occt_7_6,
   openvdb,
   pcre,
-  qhull,
   systemd,
   tbb_2021_11,
   webkitgtk,
   wxGTK31,
   xorg,
-  fetchpatch,
   withSystemd ? stdenv.isLinux,
 }:
 let
+  opencascade-occt = opencascade-occt_7_6;
   wxGTK31' = wxGTK31.overrideAttrs (old: {
     configureFlags = old.configureFlags ++ [
       # Disable noisy debug dialogs
       "--enable-debug=no"
     ];
   });
-  openvdb_tbb_2021_8 = openvdb.overrideAttrs (old: rec {
+  openvdb_tbb_2021_8 = openvdb.overrideAttrs (old: {
     buildInputs = [
       openexr
       boost179
@@ -78,7 +77,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

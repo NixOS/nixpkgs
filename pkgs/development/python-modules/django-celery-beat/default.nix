@@ -1,18 +1,19 @@
-{ lib
-, buildPythonPackage
-, case
-, celery
-, cron-descriptor
-, django-timezone-field
-, ephem
-, fetchPypi
-, pytest-django
-, pytest-timeout
-, pytestCheckHook
-, python-crontab
-, pythonOlder
-, setuptools
-, tzdata
+{
+  lib,
+  buildPythonPackage,
+  case,
+  celery,
+  cron-descriptor,
+  django-timezone-field,
+  ephem,
+  fetchPypi,
+  pytest-django,
+  pytest-timeout,
+  pytestCheckHook,
+  python-crontab,
+  pythonOlder,
+  setuptools,
+  tzdata,
 }:
 
 buildPythonPackage rec {
@@ -27,9 +28,7 @@ buildPythonPackage rec {
     hash = "sha256-91stEpcx8SFL6Dg+GPrmv+rNtV3/shFs6EkiLAEG+a0=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     cron-descriptor
@@ -52,9 +51,7 @@ buildPythonPackage rec {
     "t/unit/test_schedulers.py"
   ];
 
-  pythonImportsCheck = [
-    "django_celery_beat"
-  ];
+  pythonImportsCheck = [ "django_celery_beat" ];
 
   meta = with lib; {
     description = "Celery Periodic Tasks backed by the Django ORM";

@@ -2,9 +2,9 @@
 , lib
 , fetchurl
 , autoPatchelfHook
-, wrapGAppsHook
+, wrapGAppsHook3
 , makeWrapper
-, gnome
+, gnome-keyring
 , libsecret
 , git
 , curl
@@ -17,6 +17,7 @@
 , mesa
 , systemd
 , openssl
+, libglvnd
 }:
 
 let
@@ -43,11 +44,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     autoPatchelfHook
-    (wrapGAppsHook.override { inherit makeWrapper; })
+    (wrapGAppsHook3.override { inherit makeWrapper; })
   ];
 
   buildInputs = [
-    gnome.gnome-keyring
+    gnome-keyring
     xorg.libXdamage
     xorg.libX11
     libsecret
@@ -82,6 +83,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   preFixup = ''
     gappsWrapperArgs+=(
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform=wayland}}"
+      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libglvnd ]}
     )
   '';
 
@@ -90,7 +92,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   ];
 
   meta = {
-    description = "GUI for managing Git and GitHub.";
+    description = "GUI for managing Git and GitHub";
     homepage = "https://desktop.github.com/";
     license = lib.licenses.mit;
     mainProgram = "github-desktop";

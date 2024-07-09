@@ -26,11 +26,11 @@ rustPlatform.buildRustPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "A bittorrent client in Rust";
+    description = "Bittorrent client in Rust";
     homepage = "https://github.com/ikatson/rqbit";
     changelog = "https://github.com/ikatson/rqbit/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ cafkafk ];
     mainProgram = "rqbit";
   };
 }

@@ -77,6 +77,8 @@ let
     saxpy = final.callPackage ../development/cuda-modules/saxpy { };
     nccl = final.callPackage ../development/cuda-modules/nccl { };
     nccl-tests = final.callPackage ../development/cuda-modules/nccl-tests { };
+
+    writeGpuTestPython = final.callPackage ../development/cuda-modules/write-gpu-python-test.nix { };
   });
 
   mkVersionedPackageName =

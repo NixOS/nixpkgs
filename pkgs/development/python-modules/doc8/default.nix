@@ -1,17 +1,18 @@
-{ lib
-, buildPythonPackage
-, chardet
-, docutils
-, fetchpatch
-, fetchPypi
-, pbr
-, pygments
-, pytestCheckHook
-, pythonOlder
-, restructuredtext-lint
-, setuptools-scm
-, stevedore
-, wheel
+{
+  lib,
+  buildPythonPackage,
+  chardet,
+  docutils,
+  fetchpatch,
+  fetchPypi,
+  pbr,
+  pygments,
+  pytestCheckHook,
+  pythonOlder,
+  restructuredtext-lint,
+  setuptools-scm,
+  stevedore,
+  wheel,
 }:
 
 buildPythonPackage rec {
@@ -40,9 +41,7 @@ buildPythonPackage rec {
     wheel
   ];
 
-  buildInputs = [
-    pbr
-  ];
+  buildInputs = [ pbr ];
 
   propagatedBuildInputs = [
     docutils
@@ -52,13 +51,9 @@ buildPythonPackage rec {
     pygments
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "doc8"
-  ];
+  pythonImportsCheck = [ "doc8" ];
 
   meta = with lib; {
     description = "Style checker for Sphinx (or other) RST documentation";

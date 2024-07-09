@@ -16,10 +16,6 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-UdqzBrlcb9NkuVo8ChADJmaKevadoGLyZUrckStb5ko=";
   };
 
-  nativeBuildInputs = with python3.pkgs; [
-    pythonRelaxDepsHook
-  ];
-
   pythonRelaxDeps = true;
 
   propagatedBuildInputs = with python3.pkgs; [

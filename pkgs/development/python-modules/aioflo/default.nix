@@ -1,14 +1,15 @@
-{ lib
-, aiohttp
-, aresponses
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, poetry-core
-, pytest-aiohttp
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  aresponses,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  poetry-core,
+  pytest-aiohttp,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -39,13 +40,9 @@ buildPythonPackage rec {
     })
   ];
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
-  propagatedBuildInputs = [
-    aiohttp
-  ];
+  propagatedBuildInputs = [ aiohttp ];
 
   __darwinAllowLocalNetworking = true;
 
@@ -56,9 +53,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "aioflo"
-  ];
+  pythonImportsCheck = [ "aioflo" ];
 
   meta = with lib; {
     description = "Python library for Flo by Moen Smart Water Detectors";

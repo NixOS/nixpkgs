@@ -13,15 +13,15 @@
   src = fetchFromGitHub {
     owner = "bluskript";
     repo = "nix-inspect";
-    rev = "74007c580b8282bd336130ddf354e71502b421a6";
-    hash = "sha256-JichXRSfTLfy+7fhbTvA89rQLkqsY2eHgEAeAHWbA9s=";
+    rev = "86f636b1e01579b3a63b2c778c21a818b00c3d1e";
+    hash = "sha256-G5Md4ghux4LBRkPE8vzLTUWxzlQ7s1xKxZ8i3ICWZU8=";
   };
 
   workerPackage = stdenv.mkDerivation {
     inherit src;
 
     pname = "nix-inspect-worker";
-    version = "0.1.1";
+    version = "0.1.2";
     sourceRoot = "source/worker";
 
     nativeBuildInputs = [meson ninja pkg-config];
@@ -38,9 +38,9 @@ in
   rustPlatform.buildRustPackage {
     inherit src;
     pname = "nix-inspect";
-    version = "0.1.1";
+    version = "0.1.2";
 
-    cargoHash = "sha256-l+R7BLgJvK9mQ89GVAdTyQX81VMoV11h5KFlMUqAH30=";
+    cargoHash = "sha256-/0CrHqOL4B0Rx0ZbUpW54FiisfpW6UU4uk6wctfCX5c=";
 
     buildInputs = [workerPackage];
 

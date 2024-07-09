@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A free backup client that securely stores encrypted, incremental, compressed backups on cloud storage services and remote file servers";
+    description = "Free backup client that securely stores encrypted, incremental, compressed backups on cloud storage services and remote file servers";
     homepage = "https://www.duplicati.com/";
     license = licenses.lgpl21;
     maintainers = with maintainers; [ nyanloutre ];

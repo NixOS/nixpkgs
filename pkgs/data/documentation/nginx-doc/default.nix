@@ -30,7 +30,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    description = "A reverse proxy and lightweight webserver (documentation)";
+    description = "Reverse proxy and lightweight webserver (documentation)";
     homepage    = "https://nginx.org/";
     license     = licenses.bsd2;
     platforms   = platforms.all;

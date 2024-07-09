@@ -120,7 +120,6 @@ stdenv.mkDerivation rec {
   + lib.optionalString dbusSupport ''
     mkdir -p $out/share/dbus-1/system.d $out/share/dbus-1/system-services $out/etc/systemd/system
     cp -v "dbus/"*service $out/share/dbus-1/system-services
-    sed -e "s@/sbin/wpa_supplicant@$out&@" -i "$out/share/dbus-1/system-services/"*
     cp -v dbus/dbus-wpa_supplicant.conf $out/share/dbus-1/system.d
     cp -v "systemd/"*.service $out/etc/systemd/system
   ''
@@ -136,7 +135,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://w1.fi/wpa_supplicant/";
-    description = "A tool for connecting to WPA and WPA2-protected wireless networks";
+    description = "Tool for connecting to WPA and WPA2-protected wireless networks";
     license = licenses.bsd3;
     maintainers = with maintainers; [ marcweber ma27 ];
     platforms = platforms.linux;

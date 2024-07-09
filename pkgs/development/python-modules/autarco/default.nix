@@ -1,17 +1,17 @@
-{ lib
-, aiohttp
-, aresponses
-, buildPythonPackage
-, fetchFromGitHub
-, mashumaro
-, orjson
-, poetry-core
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, pythonRelaxDepsHook
-, syrupy
-, yarl
+{
+  lib,
+  aiohttp,
+  aresponses,
+  buildPythonPackage,
+  fetchFromGitHub,
+  mashumaro,
+  orjson,
+  poetry-core,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  syrupy,
+  yarl,
 }:
 
 buildPythonPackage rec {
@@ -28,9 +28,7 @@ buildPythonPackage rec {
     hash = "sha256-IBf6Dw2Yf7m+5bQ72K0kPxGdtpl8JowQ9IO3gWS3Vso=";
   };
 
-  pythonRelaxDeps = [
-    "orjson"
-  ];
+  pythonRelaxDeps = [ "orjson" ];
 
   postPatch = ''
     # Upstream doesn't set a version for the pyproject.toml
@@ -41,7 +39,6 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     poetry-core
-    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [
@@ -60,9 +57,7 @@ buildPythonPackage rec {
     syrupy
   ];
 
-  pythonImportsCheck = [
-    "autarco"
-  ];
+  pythonImportsCheck = [ "autarco" ];
 
   meta = with lib; {
     description = "Module for the Autarco Inverter";

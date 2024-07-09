@@ -19,7 +19,7 @@
 , ApplicationServices
 , Carbon
 , AppKit
-, wrapGAppsHook
+, wrapGAppsHook3
 , wayland
 , gobject-introspection
 , xorg
@@ -82,7 +82,7 @@ rustPlatform.buildRustPackage rec {
     pkg-config
     perl
     python3
-    wrapGAppsHook # FIX: No GSettings schemas are installed on the system
+    wrapGAppsHook3 # FIX: No GSettings schemas are installed on the system
     gobject-introspection
   ];
 

@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     mainProgram = "fff";
     homepage = "https://github.com/dylanaraps/fff";
     license = licenses.mit;
-    maintainers = [ maintainers.tadeokondrak ];
+    maintainers = [ ];
     platforms = platforms.all;
   };
 }

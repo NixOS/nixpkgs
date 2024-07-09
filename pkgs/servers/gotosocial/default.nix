@@ -9,11 +9,11 @@ let
   owner = "superseriousbusiness";
   repo = "gotosocial";
 
-  version = "0.15.0";
+  version = "0.16.0";
 
   web-assets = fetchurl {
     url = "https://github.com/${owner}/${repo}/releases/download/v${version}/${repo}_${version}_web-assets.tar.gz";
-    hash = "sha256-vrSdFIdBcfj6+sxtvv1s/Mu85I1mKxjyUYS902oLKk4=";
+    hash = "sha256-aZQpd5KvoZvXEMVzGbWrtGsc+P1JStjZ6U5mX6q7Vb0=";
   };
 in
 buildGoModule rec {
@@ -23,7 +23,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     inherit owner repo;
     rev = "refs/tags/v${version}";
-    hash = "sha256-z0iETddkw4C2R6ig9ZO8MTvhuWnmQ37/6q3oZ4WAzd4=";
+    hash = "sha256-QoG09+jmq5e5vxDVtkhY35098W/9B1HsYTuUnz43LV4=";
   };
 
   vendorHash = null;

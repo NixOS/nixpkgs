@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, six
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  six,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -17,16 +18,14 @@ buildPythonPackage rec {
     hash = "sha256-FIdJWpkOmUVZb+IkYocu1nn+oSPROrkcHeiw9wZupgM=";
   };
 
-  propagatedBuildInputs = [
-    six
-  ];
+  propagatedBuildInputs = [ six ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "treelib" ];
 
   meta = with lib; {
-    description = "An efficient implementation of tree data structure in python 2/3";
+    description = "Efficient implementation of tree data structure in python 2/3";
     homepage = "https://github.com/caesar0301/treelib";
     changelog = "https://github.com/caesar0301/treelib/releases/tag/${src.rev}";
     license = licenses.asl20;

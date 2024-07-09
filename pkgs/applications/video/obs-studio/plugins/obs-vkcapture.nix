@@ -61,10 +61,17 @@ stdenv.mkDerivation (finalAttrs: {
       --replace "libvulkan.so.1" "${lib.getLib vulkan-loader}/lib/libvulkan.so.1"
   '';
 
-  # Support 32bit Vulkan applications by linking in the 32bit Vulkan layer
+  # Support 32bit Vulkan applications by linking in the 32bit Vulkan layer and
+  # the wrapper executables. Note that vkcapture and glcapture are themselves
+  # wrapper scripts that simply exec gamecapture and print a warning but because
+  # they take gamecapture from PATH, we must link them to the 32 bit gamecapture
+  # directly.
   postInstall = lib.optionalString (stdenv.hostPlatform.system == "x86_64-linux") ''
     ln -s ${obs-vkcapture32}/share/vulkan/implicit_layer.d/obs_vkcapture_32.json \
       "$out/share/vulkan/implicit_layer.d/"
+    for bin in ${obs-vkcapture32}/bin/* ; do
+      ln -s ${obs-vkcapture32}/bin/obs-gamecapture "$out/bin/$(basename "$bin")32"
+    done
   '';
 
   meta = with lib; {

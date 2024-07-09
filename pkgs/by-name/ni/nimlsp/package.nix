@@ -1,10 +1,8 @@
-{ lib, buildNimPackage, fetchFromGitHub, srcOnly, nim-unwrapped-1 }:
+{ lib, buildNimPackage, fetchFromGitHub, srcOnly, nim-unwrapped-2 }:
 
 buildNimPackage (finalAttrs: {
   pname = "nimlsp";
   version = "0.4.6";
-
-  requiredNimVersion = 1;
 
   src = fetchFromGitHub {
     owner = "PMunch";
@@ -29,7 +27,7 @@ buildNimPackage (finalAttrs: {
 
   nimFlags = [
     "--threads:on"
-    "-d:explicitSourcePath=${srcOnly nim-unwrapped-1}"
+    "-d:explicitSourcePath=${srcOnly nim-unwrapped-2}"
     "-d:tempDir=/tmp"
   ];
 
@@ -41,6 +39,6 @@ buildNimPackage (finalAttrs: {
     description = "Language Server Protocol implementation for Nim";
     homepage = "https://github.com/PMunch/nimlsp";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ xtrayambak ];
   };
 })

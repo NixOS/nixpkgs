@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchurl
-, importlib-resources
-, pytestCheckHook
-, python
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchurl,
+  importlib-resources,
+  pytestCheckHook,
+  python,
+  pythonOlder,
 }:
 let
   table = fetchurl {
@@ -28,13 +29,9 @@ buildPythonPackage rec {
     hash = "sha256-zJYtEIrsuHKPwnSoRjyZC/0rgAZoNMZ0Oh8gQcIb20Q=";
   };
 
-  propagatedBuildInputs = lib.optionals (pythonOlder "3.9") [
-    importlib-resources
-  ];
+  propagatedBuildInputs = lib.optionals (pythonOlder "3.9") [ importlib-resources ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   preBuild = ''
     # The table is already downloaded
@@ -48,13 +45,9 @@ buildPythonPackage rec {
     cp -r ${table} $out/${python.sitePackages}/$pname/table.xml
   '';
 
-  pytestFlagsArray = [
-    "$pname/test.py"
-  ];
+  pytestFlagsArray = [ "$pname/test.py" ];
 
-  pythonImportsCheck = [
-    "iso4217"
-  ];
+  pythonImportsCheck = [ "iso4217" ];
 
   meta = with lib; {
     description = "ISO 4217 currency data package for Python";
