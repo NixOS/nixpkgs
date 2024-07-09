@@ -36,6 +36,6 @@ stdenv.mkDerivation {
   '';
 
   meta = meta // {
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ matteopacini ];
   };
 }
