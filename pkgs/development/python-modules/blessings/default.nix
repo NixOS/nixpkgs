@@ -3,33 +3,33 @@
   buildPythonPackage,
   fetchPypi,
   six,
-  nose,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "blessings";
   version = "1.7";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "98e5854d805f50a5b58ac2333411b0482516a8210f23f43308baeb58d77c157d";
+    hash = "sha256-mOWFTYBfUKW1isIzNBGwSCUWqCEPI/QzCLrrWNd8FX0=";
   };
 
-  # 4 failing tests, 2to3
+  build-system = [ setuptools ];
+
+  dependencies = [ six ];
+
+  # Running tests produces a failure that's not able to be patched easily.
+  # See PR #165 in the repo for the package for more information.
   doCheck = false;
 
-  propagatedBuildInputs = [ six ];
-  nativeCheckInputs = [ nose ];
+  pythonImportsCheck = [ "blessings" ];
 
-  checkPhase = ''
-    nosetests
-  '';
-
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/erikrose/blessings";
     description = "Thin, practical wrapper around terminal coloring, styling, and positioning";
-    license = licenses.mit;
-    maintainers = with maintainers; [ domenkozar ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ domenkozar ];
   };
 }
