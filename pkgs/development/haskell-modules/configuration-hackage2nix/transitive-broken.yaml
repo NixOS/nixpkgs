@@ -199,7 +199,6 @@ dont-distribute-packages:
  - HStringTemplateHelpers
  - HTab
  - HXMPP
- - HaMinitel
  - HaRe
  - HaTeX-meta
  - HaTeX-qq
@@ -287,7 +286,6 @@ dont-distribute-packages:
  - MutationOrder
  - NGLess
  - NTRU
- - NXT
  - NaCl
  - NaperianNetCDF
  - NearContextAlgebra
@@ -635,7 +633,6 @@ dont-distribute-packages:
  - bein
  - belka
  - bff
- - bglib
  - bifunctor
  - billboard-parser
  - billeksah-forms
@@ -688,7 +685,6 @@ dont-distribute-packages:
  - blink1
  - blip
  - blogination
- - bloohm
  - bloxorz
  - blubber
  - bluetile
@@ -726,7 +722,6 @@ dont-distribute-packages:
  - bulletproofs
  - bulmex
  - burnt-explorer
- - bus-pirate
  - buster-gtk
  - buster-network
  - butterflies
@@ -1460,7 +1455,6 @@ dont-distribute-packages:
  - funnyprint
  - funsat
  - fwgl-glfw
- - fxpak
  - g2
  - g2q
  - g3p-hash
@@ -1812,7 +1806,6 @@ dont-distribute-packages:
  - guarded-rewriting
  - guess-combinator
  - h3spec
- - hArduino
  - hOff-display
  - hPDB
  - hPDB-examples
@@ -1854,7 +1847,6 @@ dont-distribute-packages:
  - hall-symbols
  - halma-gui
  - halma-telegram-bot
- - ham
  - hamilton
  - hamusic
  - hans-pcap
@@ -2947,7 +2939,6 @@ dont-distribute-packages:
  - nyx-game
  - oath
  - oauth2-jwt-bearer
- - obd
  - obdd
  - oberon0
  - obj
@@ -3816,7 +3807,6 @@ dont-distribute-packages:
  - sugar-json
  - sugar-scheme
  - summoner-tui
- - sump
  - sunroof-examples
  - sunroof-server
  - supercollider-ht
@@ -3920,7 +3910,6 @@ dont-distribute-packages:
  - thumbnail-polish
  - tic-tac-toe
  - tickle
- - tidal-serial
  - tighttp
  - timberc
  - time-exts
@@ -3931,7 +3920,6 @@ dont-distribute-packages:
  - timezone-unix
  - tinkoff-invest-sdk
  - tintin
- - tinyMesh
  - tinytools
  - tinytools-vty
  - tip-haskell-frontend
