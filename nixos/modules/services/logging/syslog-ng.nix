@@ -1,8 +1,8 @@
 { config, pkgs, lib, ... }:
 
-with lib;
-
 let
+
+  inherit (lib) concatStringsSep mkRemovedOptionModule mkOption types mkPackageOption mkIf;
 
   cfg = config.services.syslog-ng;
 
