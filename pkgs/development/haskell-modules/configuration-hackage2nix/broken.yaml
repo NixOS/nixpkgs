@@ -1895,6 +1895,7 @@ broken-packages:
   - fuzzy-timings # failure in job https://hydra.nixos.org/build/233235765 at 2023-09-02
   - fvars # failure in job https://hydra.nixos.org/build/234461649 at 2023-09-13
   - fwgl # failure in job https://hydra.nixos.org/build/233246210 at 2023-09-02
+  - fwgl-javascript # broken by fwgl, manually entered here, because it does not appear in transitive-broken.yaml at 2024-07-09
   - g4ip # failure in job https://hydra.nixos.org/build/233248315 at 2023-09-02
   - gambler # failure in job https://hydra.nixos.org/build/252732701 at 2024-03-16
   - gameclock # failure in job https://hydra.nixos.org/build/233234964 at 2023-09-02
