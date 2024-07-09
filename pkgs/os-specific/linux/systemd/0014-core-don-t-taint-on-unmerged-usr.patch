@@ -1,0 +1,32 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: oxalica <oxalicc@pm.me>
+Date: Tue, 4 Oct 2022 09:18:07 +0800
+Subject: [PATCH] core: don't taint on unmerged /usr
+
+NixOS has very different approach towards /bin and /sbin - they don't
+really exist (except for /bin/sh and /usr/bin/env, because these are used
+heavily in shebangs around the world). The concept of merged or unmerged
+usr doesn't really apply here at all, it's neither of the two.
+Users don't execute things from /bin or /sbin, there's nothing else in
+there. In all cases, systemd doesn't look things up from /usr/bin or /bin,
+so showing the taint isn't really helpful.
+
+See also: https://github.com/systemd/systemd/issues/24191
+---
+ src/core/manager.c | 3 ---
+ 1 file changed, 3 deletions(-)
+
+diff --git a/src/core/manager.c b/src/core/manager.c
+index 5dc7d4504f..6208c9aa31 100644
+--- a/src/core/manager.c
++++ b/src/core/manager.c
+@@ -4800,9 +4800,6 @@ char* manager_taint_string(const Manager *m) {
+         const char* stage[12] = {};
+         size_t n = 0;
+ 
+-        _cleanup_free_ char *usrbin = NULL;
+-        if (readlink_malloc("/bin", &usrbin) < 0 || !PATH_IN_SET(usrbin, "usr/bin", "/usr/bin"))
+-                stage[n++] = "unmerged-usr";
+ 
+         if (access("/proc/cgroups", F_OK) < 0)
+                 stage[n++] = "cgroups-missing";

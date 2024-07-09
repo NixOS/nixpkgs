@@ -1,0 +1,71 @@
+From 4bf0aef4003f7494103a93ae1c2957b2cd32bb59 Mon Sep 17 00:00:00 2001
+From: Maximilian Bosch <maximilian@mbosch.me>
+Date: Sat, 26 Feb 2022 12:36:15 +0100
+Subject: [PATCH 2/2] buildconfig/local deps fixes
+
+---
+ build.gradle | 26 ++++++++++++++++++--------
+ 1 file changed, 18 insertions(+), 8 deletions(-)
+
+diff --git a/build.gradle b/build.gradle
+index ea3fea1..24415d8 100644
+--- a/build.gradle
++++ b/build.gradle
+@@ -10,11 +10,21 @@ import org.gradle.nativeplatform.platform.internal.ArchitectureInternal
+ import org.gradle.nativeplatform.platform.internal.DefaultNativePlatform
+ import org.gradle.nativeplatform.platform.internal.OperatingSystemInternal
+ 
++buildscript {
++  repositories {
++    maven {
++      url(uri("@deps@"))
++    }
++  }
++  dependencies {
++    classpath "com.github.gmazzo:gradle-buildconfig-plugin:3.0.3"
++  }
++}
++
+ plugins {
+-   id 'com.github.gmazzo.buildconfig' version '3.0.3'
+-   id 'org.beryx.runtime' version '1.12.7'
+    id 'application'
+ }
++apply plugin: "com.github.gmazzo.buildconfig"
+ 
+ compileJava.options.encoding = 'UTF-8'
+ 
+@@ -82,7 +92,10 @@ static String getVersion() {
+ 
+ repositories {
+     maven {url "https://gitlab.com/api/v4/groups/6853927/-/packages/maven"} // https://gitlab.com/groups/signald/-/packages
+-    mavenCentral()
++    mavenLocal()
++    maven {
++      url uri("@deps@")
++    }
+ }
+ 
+ dependencies {
+@@ -101,6 +114,8 @@ dependencies {
+     implementation 'io.prometheus:simpleclient:0.16.0'
+     implementation 'io.prometheus:simpleclient_hotspot:0.16.0'
+     implementation 'io.prometheus:simpleclient_httpserver:0.16.0'
++    implementation 'com.github.gmazzo.buildconfig:com.github.gmazzo.buildconfig.gradle.plugin:3.0.3'
++    implementation 'org.jetbrains.kotlin:kotlin-scripting-jvm:1.7.10'
+     implementation 'com.squareup.okhttp3:logging-interceptor:4.10.0'
+     implementation 'io.sentry:sentry:6.11.0'
+     testImplementation 'org.junit.jupiter:junit-jupiter:5.9.0'
+@@ -166,8 +181,3 @@ allprojects {
+         }
+     }
+ }
+-
+-runtime {
+-    options = ['--strip-java-debug-attributes', '--compress', '2', '--no-header-files', '--no-man-pages']
+-    modules = ['java.base', 'java.management', 'java.naming', 'java.sql', 'java.xml', 'jdk.crypto.ec', 'jdk.httpserver', 'java.desktop', 'jdk.unsupported']
+-}
+\ No newline at end of file
+-- 
+2.38.3
+

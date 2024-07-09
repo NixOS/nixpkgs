@@ -1,0 +1,77 @@
+From 9dd8048e28b65da0b904dfbace482f70ae768fd8 Mon Sep 17 00:00:00 2001
+From: Jeff Muizelaar <jmuizelaar@mozilla.com>
+Date: Tue, 5 Mar 2024 04:12:28 +0100
+Subject: [PATCH] Bug 1882291. Switch to stdarch_arm_neon_intrinsics feature on
+ rust >=1.78. r=glandium
+
+We only need this on ARM32 because the ARM64 intrinsics are stable.
+
+stdarch_arm_neon_intrinsics was split out from stdsimd here:
+https://github.com/rust-lang/stdarch/pull/1486
+
+Differential Revision: https://phabricator.services.mozilla.com/D203039
+---
+ Cargo.lock          | 1 +
+ gfx/qcms/Cargo.toml | 3 +++
+ gfx/qcms/build.rs   | 7 +++++++
+ gfx/qcms/src/lib.rs | 6 ++++--
+ 4 files changed, 15 insertions(+), 2 deletions(-)
+ create mode 100644 gfx/qcms/build.rs
+
+diff --git a/Cargo.lock b/Cargo.lock
+index aba397832e..8f0a879a87 100644
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -4276,6 +4276,7 @@ name = "qcms"
+ version = "0.2.0"
+ dependencies = [
+  "libc",
++ "version_check",
+ ]
+ 
+ [[package]]
+diff --git a/gfx/qcms/Cargo.toml b/gfx/qcms/Cargo.toml
+index e976054a7b..f50d6623a1 100644
+--- a/gfx/qcms/Cargo.toml
++++ b/gfx/qcms/Cargo.toml
+@@ -20,3 +20,6 @@ cmyk = []
+ 
+ [dependencies]
+ libc = {version = "0.2", optional = true }
++
++[build-dependencies]
++version_check = "0.9"
+diff --git a/gfx/qcms/build.rs b/gfx/qcms/build.rs
+new file mode 100644
+index 0000000000..6810a8828e
+--- /dev/null
++++ b/gfx/qcms/build.rs
+@@ -0,0 +1,7 @@
++extern crate version_check as rustc;
++
++fn main() {
++    if rustc::is_min_version("1.78.0").unwrap_or(false) {
++        println!("cargo:rustc-cfg=stdsimd_split");
++    }
++}
+diff --git a/gfx/qcms/src/lib.rs b/gfx/qcms/src/lib.rs
+index c311964ee3..fc496816a8 100644
+--- a/gfx/qcms/src/lib.rs
++++ b/gfx/qcms/src/lib.rs
+@@ -7,9 +7,11 @@
+ #![allow(non_upper_case_globals)]
+ // These are needed for the neon SIMD code and can be removed once the MSRV supports the
+ // instrinsics we use
+-#![cfg_attr(feature = "neon", feature(stdsimd))]
++#![cfg_attr(all(stdsimd_split, target_arch = "arm", feature = "neon"), feature(stdarch_arm_neon_intrinsics))]
++#![cfg_attr(all(stdsimd_split, target_arch = "arm", feature = "neon"), feature(stdarch_arm_feature_detection))]
++#![cfg_attr(all(not(stdsimd_split), target_arch = "arm", feature = "neon"), feature(stdsimd))]
+ #![cfg_attr(
+-    feature = "neon",
++    all(target_arch = "arm", feature = "neon"),
+     feature(arm_target_feature, raw_ref_op)
+ 
+ )]
+-- 
+2.44.0
+

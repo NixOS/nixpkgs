@@ -1,0 +1,42 @@
+From fba8cff13186bd80ceaa06806392957598139deb Mon Sep 17 00:00:00 2001
+From: Martin Weinelt <hexa@darmstadt.ccc.de>
+Date: Sun, 7 Jul 2024 14:23:29 +0200
+Subject: [PATCH] Fix colormap usage with matplotlib 3.9.0
+
+The mpl.cm toplevel registration has been removed.
+
+https://matplotlib.org/stable/api/prev_api_changes/api_changes_3.9.0.html#top-level-cmap-registration-and-access-functions-in-mpl-cm
+---
+ frigate/config.py                    | 2 +-
+ frigate/detectors/detector_config.py | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/frigate/config.py b/frigate/config.py
+index 2e8b2570..af4f3263 100644
+--- a/frigate/config.py
++++ b/frigate/config.py
+@@ -807,7 +807,7 @@ class CameraConfig(FrigateBaseModel):
+     def __init__(self, **config):
+         # Set zone colors
+         if "zones" in config:
+-            colors = plt.cm.get_cmap("tab10", len(config["zones"]))
++            colors = plt.colormaps["tab10"].resampled(len(config["zones"]))
+             config["zones"] = {
+                 name: {**z, "color": tuple(round(255 * c) for c in colors(idx)[:3])}
+                 for idx, (name, z) in enumerate(config["zones"].items())
+diff --git a/frigate/detectors/detector_config.py b/frigate/detectors/detector_config.py
+index 7fc958a3..b65631eb 100644
+--- a/frigate/detectors/detector_config.py
++++ b/frigate/detectors/detector_config.py
+@@ -125,7 +125,7 @@ class ModelConfig(BaseModel):
+ 
+     def create_colormap(self, enabled_labels: set[str]) -> None:
+         """Get a list of colors for enabled labels."""
+-        cmap = plt.cm.get_cmap("tab10", len(enabled_labels))
++        cmap = plt.colormaps["tab10"].resampled(len(enabled_labels))
+ 
+         for key, val in enumerate(enabled_labels):
+             self._colormap[val] = tuple(int(round(255 * c)) for c in cmap(key)[:3])
+-- 
+2.45.1
+
