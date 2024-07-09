@@ -7,20 +7,19 @@
   libxkbcommon,
   sqlite,
   vulkan-loader,
-  stdenv,
   wayland,
   nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "oboete";
-  version = "0.1.3";
+  version = "0.1.4";
 
   src = fetchFromGitHub {
     owner = "mariinkys";
     repo = "oboete";
     rev = "refs/tags/${version}";
-    hash = "sha256-6JwIwWcei4hbHZsfTNHMKQVTj5CcPRIS+QR0PY3yhvg=";
+    hash = "sha256-fEnjjxuAoEkJFHyB9mtMEQW0K/Bt3nSpcFTZTZy2UYY=";
   };
 
   cargoLock = {
