@@ -1,7 +1,7 @@
 { config, lib, pkgs, ... }:
 
-with lib;
 let cfg = config.services.vector;
+inherit (lib) mkEnableOption mkPackageOption mkOption types mkIf getExe;
 
 in
 {
