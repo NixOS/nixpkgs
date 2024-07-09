@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-vpc-access";
-  version = "1.10.3";
+  version = "1.10.4";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-mkDYB4HFJEu1ZRKo58s5a9lZjQ0pUs6nOBMnm27ajeM=";
+    hash = "sha256-FmCNw0esH7WbH0v4YzHyvc0lyRhJp3ywJNe+gMePdTU=";
   };
 
   nativeBuildInputs = [ setuptools ];
