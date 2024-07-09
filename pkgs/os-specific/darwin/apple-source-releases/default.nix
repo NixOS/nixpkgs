@@ -1,6 +1,10 @@
 { lib, stdenv, fetchurl, fetchFromGitHub, pkgs }:
 
 let
+
+  isSdk10_12 = stdenv.hostPlatform.darwinSdkVersion == "10.12";
+
+
   # This attrset can in theory be computed automatically, but for that to work nicely we need
   # import-from-derivation to work properly. Currently it's rather ugly when we try to bootstrap
   # a stdenv out of something like this. With some care we can probably get rid of this, but for
@@ -271,10 +275,10 @@ developerToolsPackages_11_3_1 // macosPackages_11_0_1 // {
     Libinfo         = applePackage "Libinfo"           "osx-10.11.6"     "sha256-6F7wiwerv4nz/xXHtp1qCHSaFzZgzcRN+jbmXA5oWOQ=" {};
     Libm            = applePackage "Libm"              "osx-10.7.4"      "sha256-KjMETfT4qJm0m0Ux/F6Rq8bI4Q4UVnFx6IKbKxXd+Es=" {};
     Libnotify       = applePackage "Libnotify"         "osx-10.12.6"     "sha256-6wvMBxAUfiYcQtmlfYCj1d3kFmFM/jdboTd7hRvi3e4=" {};
-    libmalloc       = if stdenv.isx86_64 then
+    libmalloc       = if isSdk10_12 then
       applePackage "libmalloc" "osx-10.12.6" "sha256-brfG4GEF2yZipKdhlPq6DhT2z5hKYSb2MAmffaikdO4=" {}
     else macosPackages_11_0_1.libmalloc;
-    libplatform     = if stdenv.isx86_64 then
+    libplatform     = if isSdk10_12 then
       applePackage "libplatform"       "osx-10.12.6"     "sha256-6McMTjw55xtnCsFI3AB1osRagnuB5pSTqeMKD3gpGtM=" {}
     else macosPackages_11_0_1.libplatform;
     libpthread      = applePackage "libpthread"        "osx-10.12.6"     "sha256-QvJ9PERmrCWBiDmOWrLvQUKZ4JxHuh8gS5nlZKDLqE8=" {};
@@ -286,7 +290,7 @@ developerToolsPackages_11_3_1 // macosPackages_11_0_1 // {
     objc4           = applePackage "objc4"             "osx-10.12.6"     "sha256-ZsxRpdsfv3Dxs7yBBCkjbKXKR6aXwkEpxc1XYXz7ueM=" {};
     ppp             = applePackage "ppp"               "osx-10.12.6"     "sha256-M1zoEjjeKIDUEP6ACbpUJk3OXjobw4g/qzUmxGdX1J0=" {};
     removefile      = applePackage "removefile"        "osx-10.12.6"     "sha256-UpNk27kGXnZss1ZXWVJU9jLz/NW63ZAZEDLhyCYoi9M=" {};
-    xnu             = if stdenv.isx86_64 then
+    xnu             = if isSdk10_12 then
       applePackage "xnu" "osx-10.12.6" "sha256-C8TPQlUT3RbzAy8YnZPNtr70hpaVG9Llv0h42s3NENI=" {}
     else macosPackages_11_0_1.xnu;
     hfs             = applePackage "hfs"               "osx-10.12.6"     "sha256-eGi18HQFJrU5UHoBOE0LqO5gQ0xOf8+OJuAWQljfKE4=" {};
@@ -297,7 +301,7 @@ developerToolsPackages_11_3_1 // macosPackages_11_0_1 // {
     diskdev_cmds    = applePackage "diskdev_cmds"      "osx-10.11.6"     "sha256-VX+hcZ7JhOA8EhwLloPlM3Yx79RXp9OYHV9Mi10uw3Q=" {
       macosPackages_11_0_1 = macosPackages_11_0_1;
     };
-    network_cmds    = if stdenv.isx86_64 then
+    network_cmds    = if isSdk10_12 then
       applePackage "network_cmds" "osx-10.11.6" "sha256-I89CLIswGheewOjiNZwQTgWvWbhm0qtB5+KUqzxnQ5M=" {}
     else macosPackages_11_0_1.network_cmds;
     file_cmds       = applePackage "file_cmds"         "osx-10.11.6"     "sha256-JYy6HwmultKeZtLfaysbsyLoWg+OaTh7eJu54JkJC0Q=" {};

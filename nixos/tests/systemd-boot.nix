@@ -239,7 +239,7 @@ in
 
   memtest86 = makeTest {
     name = "systemd-boot-memtest86";
-    meta.maintainers = with pkgs.lib.maintainers; [ Enzime julienmalka ];
+    meta.maintainers = with pkgs.lib.maintainers; [ julienmalka ];
 
     nodes.machine = { pkgs, lib, ... }: {
       imports = [ common ];
@@ -254,7 +254,7 @@ in
 
   netbootxyz = makeTest {
     name = "systemd-boot-netbootxyz";
-    meta.maintainers = with pkgs.lib.maintainers; [ Enzime julienmalka ];
+    meta.maintainers = with pkgs.lib.maintainers; [ julienmalka ];
 
     nodes.machine = { pkgs, lib, ... }: {
       imports = [ common ];
@@ -269,7 +269,7 @@ in
 
   memtestSortKey = makeTest {
     name = "systemd-boot-memtest-sortkey";
-    meta.maintainers = with pkgs.lib.maintainers; [ Enzime julienmalka ];
+    meta.maintainers = with pkgs.lib.maintainers; [ julienmalka ];
 
     nodes.machine = { pkgs, lib, ... }: {
       imports = [ common ];
@@ -307,7 +307,7 @@ in
 
   extraEntries = makeTest {
     name = "systemd-boot-extra-entries";
-    meta.maintainers = with pkgs.lib.maintainers; [ Enzime julienmalka ];
+    meta.maintainers = with pkgs.lib.maintainers; [ julienmalka ];
 
     nodes.machine = { pkgs, lib, ... }: {
       imports = [ common ];
@@ -326,7 +326,7 @@ in
 
   extraFiles = makeTest {
     name = "systemd-boot-extra-files";
-    meta.maintainers = with pkgs.lib.maintainers; [ Enzime julienmalka ];
+    meta.maintainers = with pkgs.lib.maintainers; [ julienmalka ];
 
     nodes.machine = { pkgs, lib, ... }: {
       imports = [ common ];
@@ -343,7 +343,7 @@ in
 
   switch-test = makeTest {
     name = "systemd-boot-switch-test";
-    meta.maintainers = with pkgs.lib.maintainers; [ Enzime julienmalka ];
+    meta.maintainers = with pkgs.lib.maintainers; [ julienmalka ];
 
     nodes = {
       inherit common;

@@ -5,7 +5,7 @@
 , fetchurl
 , fetchFromGitHub
 , installShellFiles
-, python3
+, python311
 
   # Whether to include patches that enable placing certain behavior-defining
   # configuration files in the Nix store.
@@ -28,8 +28,13 @@ let
     hash = "sha256-RmCZigDenbX8OoIZeY087ga2AP8yRckyG0qZnN9gg44=";
   };
 
+  # Pin Python version to 3.11.
+  # See https://discourse.nixos.org/t/breaking-changes-announcement-for-unstable/17574/53
+  # and https://github.com/Azure/azure-cli/issues/27673
+  python3 = python311;
+
   # put packages that needs to be overridden in the py package scope
-  py = callPackage ./python-packages.nix { inherit src version; };
+  py = callPackage ./python-packages.nix { inherit src version python3; };
 
   # Builder for Azure CLI extensions. Extensions are Python wheels that
   # outside of nix would be fetched by the CLI itself from various sources.
@@ -55,7 +60,7 @@ let
 
   extensions =
     callPackages ./extensions-generated.nix { inherit mkAzExtension; }
-    // callPackages ./extensions-manual.nix { inherit mkAzExtension; };
+    // callPackages ./extensions-manual.nix { inherit mkAzExtension python3; python3Packages = python3.pkgs; };
 
   extensionDir = stdenvNoCC.mkDerivation {
     name = "azure-cli-extensions";
