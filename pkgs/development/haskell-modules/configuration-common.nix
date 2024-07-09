@@ -3074,11 +3074,6 @@ self: super: {
   # https://github.com/isovector/cornelis/issues/150
   cornelis = dontCheck super.cornelis;
 
-  cabal-gild = super.cabal-gild.overrideScope (self: super: {
-    tasty = super.tasty_1_5_1;
-    tasty-quickcheck = super.tasty-quickcheck_0_11;
-  });
-
   lzma = doJailbreak (super.lzma.overrideScope (self: super: {
     tasty = super.tasty_1_5_1;
   }));
