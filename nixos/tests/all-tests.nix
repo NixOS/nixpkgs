@@ -365,6 +365,7 @@ in {
   gitolite = handleTest ./gitolite.nix {};
   gitolite-fcgiwrap = handleTest ./gitolite-fcgiwrap.nix {};
   glance = runTest ./glance.nix;
+  glitchtip = handleTest ./glitchtip.nix {};
   glusterfs = handleTest ./glusterfs.nix {};
   gnome = handleTest ./gnome.nix {};
   gnome-extensions = handleTest ./gnome-extensions.nix {};

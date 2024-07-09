@@ -4,6 +4,7 @@
 , callPackage
 , stdenv
 , makeWrapper
+, nixosTests
 }:
 let
   pythonPackages = with python311.pkgs; [
@@ -66,6 +67,10 @@ stdenv.mkDerivation rec {
 
   passthru = {
     inherit frontend;
+
+    tests = {
+      inherit (nixosTests) glitchtip;
+    };
   };
 
   buildPhase = ''
