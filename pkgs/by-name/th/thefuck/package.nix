@@ -1,9 +1,6 @@
-{ lib, stdenv, fetchFromGitHub, buildPythonApplication
-, colorama, decorator, psutil, pyte, six
-, go, mock, pytest7CheckHook, pytest-mock
-}:
+{ lib, stdenv, fetchFromGitHub, python3Packages, go }:
 
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "thefuck";
   version = "3.32";
 
@@ -14,9 +11,9 @@ buildPythonApplication rec {
     sha256 = "sha256-bRCy95owBJaxoyCNQF6gEENoxCkmorhyKzZgU1dQN6I=";
   };
 
-  propagatedBuildInputs = [ colorama decorator psutil pyte six ];
+  propagatedBuildInputs = with python3Packages; [ colorama decorator psutil pyte six ];
 
-  nativeCheckInputs = [ go mock pytest7CheckHook pytest-mock ];
+  nativeCheckInputs = [ go ] ++ (with python3Packages; [ mock pytest7CheckHook pytest-mock ]);
 
   disabledTests = lib.optionals stdenv.isDarwin [
     "test_settings_defaults"
