@@ -37,7 +37,7 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  propagatedBuildInputs =
+  dependencies =
     [
       zlib
       xz
@@ -75,11 +75,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "binwalk" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/OSPG/binwalk";
     description = "Tool for searching a given binary image for embedded files";
     mainProgram = "binwalk";
-    maintainers = [ maintainers.koral ];
-    license = licenses.mit;
+    maintainers = with lib.maintainers; [ koral ];
+    license = lib.licenses.mit;
   };
 }
