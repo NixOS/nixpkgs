@@ -49,5 +49,5 @@ in
     };
   };
 
-  meta.maintainers = pkgs.qgroundcontrol.meta.maintainers ++ (with lib.maintainers; [ pandapip1 ]);
+  meta.maintainers = pkgs.qgroundcontrol.meta.maintainers;
 }
