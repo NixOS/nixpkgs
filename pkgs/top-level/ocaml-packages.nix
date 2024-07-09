@@ -840,13 +840,6 @@ let
         cfstream = self.cfstream.override { inherit core_kernel; };
       };
 
-      phylogenetics = let
-        angstrom = self.angstrom.override { inherit ppx_let; };
-      in callPackage ../development/ocaml-modules/phylogenetics {
-        ppx_deriving = self.ppx_deriving.override { inherit (jsDeps) ppxlib; };
-        angstrom-unix = self.angstrom-unix.override { inherit angstrom; };
-      };
-
       ppx_bap = callPackage ../development/ocaml-modules/ppx_bap { };
     })).overrideScope liftJaneStreet;
 
@@ -1457,7 +1450,7 @@ let
 
     pgsolver = callPackage ../development/ocaml-modules/pgsolver { };
 
-    phylogenetics = janeStreet_0_15.phylogenetics;
+    phylogenetics = callPackage ../development/ocaml-modules/phylogenetics { };
 
     piaf = callPackage ../development/ocaml-modules/piaf { };
 
