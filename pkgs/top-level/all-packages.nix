@@ -16525,6 +16525,8 @@ with pkgs;
 
   bean-add = callPackage ../applications/office/beancount/bean-add.nix { };
 
+  beanquery = with python3.pkgs; toPythonApplication beanquery;
+
   bench =
     # TODO: Erroneous references to GHC on aarch64-darwin: https://github.com/NixOS/nixpkgs/issues/318013
     (if stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64 then lib.id else haskell.lib.compose.justStaticExecutables)
