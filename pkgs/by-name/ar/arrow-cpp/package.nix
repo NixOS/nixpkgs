@@ -19,7 +19,6 @@
   boost,
   brotli,
   bzip2,
-  c-ares,
   cmake,
   crc32c,
   curl,
