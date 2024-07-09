@@ -84,6 +84,8 @@ in
       ensureDatabases = [ "miniflux" ];
     };
 
+    systemd.packages = [ cfg.package ];
+
     systemd.services.miniflux-dbsetup = lib.mkIf cfg.createDatabaseLocally {
       description = "Miniflux database setup";
       requires = [ "postgresql.service" ];
@@ -103,45 +105,27 @@ in
         ++ lib.optionals cfg.createDatabaseLocally [ "postgresql.service" "miniflux-dbsetup.service" ];
 
       serviceConfig = {
-        Type = "notify";
-        ExecStart = lib.getExe cfg.package;
+        ExecStart = [ "" (lib.getExe cfg.package) ];
+        EnvironmentFile = lib.optional (cfg.adminCredentialsFile != null) [ "" cfg.adminCredentialsFile ];
         User = "miniflux";
         DynamicUser = true;
-        RuntimeDirectory = "miniflux";
         RuntimeDirectoryMode = "0750";
-        EnvironmentFile = lib.mkIf (cfg.adminCredentialsFile != null) cfg.adminCredentialsFile;
-        WatchdogSec = 60;
-        WatchdogSignal = "SIGKILL";
-        Restart = "always";
-        RestartSec = 5;
-
         # Hardening
+        AmbientCapabilities = [ "" ];
         CapabilityBoundingSet = [ "" ];
         DeviceAllow = [ "" ];
-        LockPersonality = true;
-        MemoryDenyWriteExecute = true;
-        PrivateDevices = true;
         PrivateUsers = true;
         ProcSubset = "pid";
-        ProtectClock = true;
-        ProtectControlGroups = true;
-        ProtectHome = true;
-        ProtectHostname = true;
-        ProtectKernelLogs = true;
-        ProtectKernelModules = true;
-        ProtectKernelTunables = true;
         ProtectProc = "invisible";
         RestrictAddressFamilies = [ "AF_INET" "AF_INET6" "AF_UNIX" ];
-        RestrictNamespaces = true;
-        RestrictRealtime = true;
         RestrictSUIDSGID = true;
-        SystemCallArchitectures = "native";
         SystemCallFilter = [ "@system-service" "~@privileged" ];
         UMask = "0077";
       };
 
       environment = lib.mapAttrs (_: toString) cfg.config;
     };
+
     environment.systemPackages = [ cfg.package ];
 
     security.apparmor.policies."bin.miniflux".profile = ''
