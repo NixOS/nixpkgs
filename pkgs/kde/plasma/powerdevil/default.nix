@@ -2,10 +2,11 @@
   mkKdeDerivation,
   pkg-config,
   libcap,
+  ddcutil,
 }:
 mkKdeDerivation {
   pname = "powerdevil";
 
   extraNativeBuildInputs = [pkg-config];
-  extraBuildInputs = [libcap];
+  extraBuildInputs = [libcap ddcutil];
 }
