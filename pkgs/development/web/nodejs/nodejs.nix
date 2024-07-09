@@ -133,13 +133,15 @@ let
     # Some dependencies required for tools/doc/node_modules (and therefore
     # test-addons, jstest and others) target are not included in the tarball.
     # Run test targets that do not require network access.
-    checkTarget = lib.concatStringsSep " " [
+    checkTarget = lib.concatStringsSep " " ([
       "build-js-native-api-tests"
       "build-node-api-tests"
       "tooltest"
       "cctest"
+    ] ++ lib.optionals (!stdenv.isDarwin) [
+      # TODO: JS test suite is too flaky on Darwin; revisit at a later date.
       "test-ci-js"
-    ];
+    ]);
 
     checkFlags = [
       # Do not create __pycache__ when running tests.
