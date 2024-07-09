@@ -14,14 +14,14 @@
 
 python3Packages.buildPythonPackage rec {
   pname = "hydrus";
-  version = "580";
+  version = "581";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "hydrusnetwork";
     repo = "hydrus";
     rev = "refs/tags/v${version}";
-    hash = "sha256-QdRItwbgVYgA6PU9Ybimk+/sBe1CHV79ssTrIturVpg=";
+    hash = "sha256-Q/EdqwIMCjeDtFAPlYd04NMpEgC6xUDGK5LwxDCiI9Y=";
   };
 
   nativeBuildInputs = [
@@ -82,7 +82,7 @@ python3Packages.buildPythonPackage rec {
   ];
 
   nativeCheckInputs = with python3Packages; [
-    nose
+    pynose
     mock
     httmock
   ];
