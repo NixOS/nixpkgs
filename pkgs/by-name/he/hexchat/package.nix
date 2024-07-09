@@ -1,8 +1,24 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, gtk2, lua, perl, python3Packages
-, pciutils, dbus-glib, libcanberra-gtk2, libproxy
-, enchant2, libnotify, openssl, isocodes
-, desktop-file-utils
-, meson, ninja, makeWrapper
+{
+  dbus-glib,
+  desktop-file-utils,
+  enchant2,
+  fetchFromGitHub,
+  gtk2,
+  isocodes,
+  lib,
+  libcanberra-gtk2,
+  libnotify,
+  libproxy,
+  lua,
+  makeWrapper,
+  meson,
+  ninja,
+  openssl,
+  pciutils,
+  perl,
+  pkg-config,
+  python3Packages,
+  stdenv,
 }:
 
 stdenv.mkDerivation rec {
@@ -13,16 +29,8 @@ stdenv.mkDerivation rec {
     owner = "hexchat";
     repo = "hexchat";
     rev = "v${version}";
-    sha256 = "sha256-rgaXqXbBWlfSyz+CT0jRLyfGOR1cYYnRhEAu7AsaWus=";
+    hash = "sha256-rgaXqXbBWlfSyz+CT0jRLyfGOR1cYYnRhEAu7AsaWus=";
   };
-
-  nativeBuildInputs = [ meson ninja pkg-config makeWrapper ];
-
-  buildInputs = [
-    gtk2 lua perl python3Packages.python python3Packages.cffi pciutils dbus-glib libcanberra-gtk2 libproxy
-    libnotify openssl desktop-file-utils
-    isocodes
-  ];
 
   #hexchat and hexchat-text loads enchant spell checking library at run time and so it needs to have route to the path
   postPatch = ''
@@ -39,17 +47,44 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  mesonFlags = [ "-Dwith-lua=lua" "-Dtext-frontend=true" ];
+  mesonFlags = [
+    "-Dwith-lua=lua"
+    "-Dtext-frontend=true"
+  ];
+
+  nativeBuildInputs = [
+    makeWrapper
+    meson
+    ninja
+    pkg-config
+  ];
+
+  buildInputs = [
+    dbus-glib
+    desktop-file-utils
+    gtk2
+    isocodes
+    libcanberra-gtk2
+    libnotify
+    libproxy
+    lua
+    openssl
+    pciutils
+    perl
+    python3Packages.cffi
+    python3Packages.python
+    python3Packages.setuptools
+  ];
 
   postInstall = ''
     wrapProgram $out/bin/hexchat --prefix PYTHONPATH : "$PYTHONPATH"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Popular and easy to use graphical IRC (chat) client";
     homepage = "https://hexchat.github.io/";
-    license = licenses.gpl2;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ romildo ];
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ romildo ];
   };
 }
