@@ -2,13 +2,16 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  makeBinaryWrapper,
   replaceVars,
   cmake,
   openjpeg,
+  pigz,
   yaml-cpp,
   batchVersion ? false,
   withJpegLs ? true,
   withOpenJpeg ? true,
+  withPigz ? true,
   withCloudflareZlib ? true,
 }:
 
@@ -39,7 +42,11 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [
+    cmake
+    makeBinaryWrapper
+  ];
+
   buildInputs =
     lib.optionals batchVersion [ yaml-cpp ]
     ++ lib.optionals withOpenJpeg [
@@ -62,6 +69,10 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals withCloudflareZlib [
       "-DZLIB_IMPLEMENTATION=Cloudflare"
     ];
+
+  postInstall = lib.optionalString withPigz ''
+    wrapProgram $out/bin/dcm2niix --prefix PATH : "${lib.makeBinPath [ pigz ]}"
+  '';
 
   meta = {
     description = "DICOM to NIfTI converter";
