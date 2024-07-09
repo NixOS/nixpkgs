@@ -4,7 +4,6 @@
   django,
   fetchFromGitHub,
   flit-core,
-  python3,
 }:
 
 buildPythonPackage rec {
