@@ -10,7 +10,7 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "maestral-qt";
-  version = "1.9.3";
+  version = "1.9.4";
   pyproject = true;
 
   disabled = python3.pythonOlder "3.7";
@@ -19,7 +19,7 @@ python3.pkgs.buildPythonApplication rec {
     owner = "SamSchott";
     repo = "maestral-qt";
     rev = "refs/tags/v${version}";
-    hash = "sha256-7Lt0Neobtofd1JDoz8BhGn+nFKaMLbM/6z0QQmtEKpA=";
+    hash = "sha256-VkJOKKYnoXux3WjD1JwINGWwv1SMIXfidyV2ITE7dJc=";
   };
 
   build-system = with python3.pkgs; [
