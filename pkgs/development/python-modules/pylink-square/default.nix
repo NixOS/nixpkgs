@@ -23,7 +23,7 @@ buildPythonPackage rec {
     hash = "sha256-rcM7gvUUfXN5pL9uIihzmOCXA7NKjiMt2GaQaGJxD9M=";
   };
 
-  propagatedBuildInputs = [
+  dependencies = [
     psutil
     six
   ];
@@ -40,6 +40,10 @@ buildPythonPackage rec {
     "test_cp15_register_write_success"
     "test_jlink_restarted"
     "test_set_log_file_success"
+    # AttributeError: 'TestLibrary' object has no attribute 'assertEquals'
+    "test_linux_glibc_unavailable"
+    "test_linux_dl_oserror"
+    "test_linux_dl_unavailable"
   ];
 
   meta = with lib; {
