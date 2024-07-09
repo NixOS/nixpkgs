@@ -7,7 +7,9 @@ in
 {
   options = {
     programs.git = {
-      enable = lib.mkEnableOption "git, a distributed version control system";
+      enable = lib.mkEnableOption "git, a distributed version control system" // {
+        default = true;
+      };
 
       package = lib.mkPackageOption pkgs "git" {
         example = "gitFull";
