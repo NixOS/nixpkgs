@@ -1,8 +1,7 @@
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let cfg = config.services.SystemdJournal2Gelf;
+inherit (lib) mkOption mkPackageOption mkIf types;
 in
 
 { options = {
