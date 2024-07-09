@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, python311Packages, go }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  python311Packages,
+  go,
+}:
 
 python311Packages.buildPythonApplication rec {
   pname = "thefuck";
@@ -11,9 +17,21 @@ python311Packages.buildPythonApplication rec {
     hash = "sha256-bRCy95owBJaxoyCNQF6gEENoxCkmorhyKzZgU1dQN6I=";
   };
 
-  dependencies = with python311Packages; [ colorama decorator psutil pyte six ];
+  dependencies = with python311Packages; [
+    colorama
+    decorator
+    psutil
+    pyte
+    six
+  ];
 
-  nativeCheckInputs = [ go ] ++ (with python311Packages; [ mock pytest7CheckHook pytest-mock ]);
+  nativeCheckInputs =
+    [ go ]
+    ++ (with python311Packages; [
+      mock
+      pytest7CheckHook
+      pytest-mock
+    ]);
 
   disabledTests = lib.optionals stdenv.isDarwin [
     "test_settings_defaults"
