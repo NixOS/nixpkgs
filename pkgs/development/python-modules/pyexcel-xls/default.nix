@@ -5,20 +5,23 @@
   pyexcel-io,
   xlrd,
   xlwt,
-  nose,
+  pynose,
   pyexcel,
   mock,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pyexcel-xls";
   version = "0.7.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     sha256 = "5ec606ef8667aafbb0c3fbd8242a7c23bf175ee7c10b08f70799b84fb2db84cb";
   };
+
+  build-system = [ setuptools ];
 
   propagatedBuildInputs = [
     pyexcel-io
@@ -27,7 +30,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    nose
+    pynose
     pyexcel
     mock
   ];
@@ -36,7 +39,11 @@ buildPythonPackage rec {
     substituteInPlace setup.py --replace "xlrd<2" "xlrd<3"
   '';
 
-  checkPhase = "nosetests --exclude test_issue_151";
+  checkPhase = ''
+    runHook preCheck
+    nosetests --exclude test_issue_151
+    runHook postCheck
+  '';
 
   meta = {
     description = "Wrapper library to read, manipulate and write data in xls using xlrd and xlwt";
