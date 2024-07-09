@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchurl, cups, rpm, cpio }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cups,
+  rpm,
+  cpio,
+}:
 
 stdenv.mkDerivation rec {
   pname = "epson-inkjet-printer-escpr2";
@@ -26,7 +33,10 @@ stdenv.mkDerivation rec {
   patches = [ ./cups-filter-ppd-dirs.patch ];
 
   buildInputs = [ cups ];
-  nativeBuildInputs = [ rpm cpio ];
+  nativeBuildInputs = [
+    rpm
+    cpio
+  ];
 
   meta = with lib; {
     homepage = "http://download.ebz.epson.net/dsc/search/01/search/";
@@ -38,7 +48,11 @@ stdenv.mkDerivation rec {
       Refer to the description of epson-escpr for usage.
     '';
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ ma9e ma27 shawn8901 ];
+    maintainers = with maintainers; [
+      ma9e
+      ma27
+      shawn8901
+    ];
     platforms = platforms.linux;
   };
 }
