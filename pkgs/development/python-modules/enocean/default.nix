@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   fetchpatch2,
+  setuptools,
   beautifulsoup4,
   enum-compat,
   pyserial,
@@ -12,13 +13,13 @@
 buildPythonPackage rec {
   pname = "enocean";
   version = "0.60.1";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kipe";
     repo = "enocean";
-    rev = version;
-    sha256 = "0cbcvvy3qaqv8925z608qmkc1l914crzw79krwrz2vpm2fyribab";
+    rev = "refs/tags/${version}";
+    hash = "sha256-S62YvRP1bvEzzzMd/jMjIdHAZsUImF9EQhsrPPzebDE=";
   };
 
   patches = [
@@ -29,7 +30,9 @@ buildPythonPackage rec {
     })
   ];
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     beautifulsoup4
     enum-compat
     pyserial
@@ -44,6 +47,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
+    changelog = "https://github.com/kipe/enocean/releases/tag/${version}";
     description = "EnOcean serial protocol implementation";
     mainProgram = "enocean_example.py";
     homepage = "https://github.com/kipe/enocean";
