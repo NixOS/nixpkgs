@@ -146,7 +146,7 @@ let
       "build-node-api-tests"
       "tooltest"
       "cctest"
-    ] ++ lib.optionals (!stdenv.buildPlatform.isDarwin || lib.versionAtLeast version "20") [
+    ] ++ lib.optionals (!stdenv.buildPlatform.isDarwin) [
       # There are some test failures on macOS before v20 that are not worth the
       # time to debug for a version that would be eventually removed in less
       # than a year (Node.js 18 will be EOL at 2025-04-30). Note that these
@@ -158,7 +158,7 @@ let
     checkFlags = [
       # Do not create __pycache__ when running tests.
       "PYTHONDONTWRITEBYTECODE=1"
-    ] ++ lib.optionals (!stdenv.buildPlatform.isDarwin || lib.versionAtLeast version "20") [
+    ] ++ lib.optionals (!stdenv.buildPlatform.isDarwin) [
       "FLAKY_TESTS=skip"
       # Skip some tests that are not passing in this context
       "CI_SKIP_TESTS=${lib.concatStringsSep "," ([
