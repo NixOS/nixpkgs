@@ -1,12 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  python3,
 }:
 
-with python3.pkgs;
-
-buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "nrfutil";
   version = "6.1.7";
 
@@ -17,7 +15,7 @@ buildPythonApplication rec {
     sha256 = "sha256-WiXqeQObhXszDcLxJN8ABd2ZkxsOUvtZQSVP8cYlT2M=";
   };
 
-  propagatedBuildInputs = [
+  propagatedBuildInputs = with python3.pkgs; [
     click
     crcmod
     ecdsa
@@ -32,7 +30,7 @@ buildPythonApplication rec {
     tqdm
   ];
 
-  nativeCheckInputs = [
+  nativeCheckInputs = with python3.pkgs; [
     behave
     pytestCheckHook
   ];
@@ -47,11 +45,11 @@ buildPythonApplication rec {
       --replace "self.assertEqual(expected_vk_pem, vk_pem)" ""
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Device Firmware Update tool for nRF chips";
     homepage = "https://github.com/NordicSemiconductor/pc-nrfutil";
-    license = licenses.unfreeRedistributable;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ gebner ];
+    license = lib.licenses.unfreeRedistributable;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ gebner ];
   };
 }
