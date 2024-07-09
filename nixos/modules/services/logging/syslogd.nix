@@ -1,8 +1,7 @@
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
+  inherit (lib) optionalString mkOption types mkIf optional;
 
   cfg = config.services.syslogd;
 
