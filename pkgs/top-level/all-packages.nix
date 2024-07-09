@@ -39429,6 +39429,7 @@ with pkgs;
     };
     mysql = mysql;
     pcre = pcre-cpp;
+    python3 = python311;
   });
 
   r128gain = callPackage ../applications/audio/r128gain { };

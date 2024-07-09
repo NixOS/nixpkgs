@@ -148,6 +148,8 @@ stdenv.mkDerivation (finalAttrs: {
   env.NIX_CFLAGS_COMPILE = toString ([
     # error: 'OGRErr OGRSpatialReference::importFromWkt(char**)' is deprecated
     "-Wno-error=deprecated-declarations"
+    # error: missing initializer for member '_typeobject::tp_watched'
+    "-Wno-error=missing-field-initializers"
   ] ++ lib.optionals stdenv.isAarch64 [
     # error: narrowing conversion of '-1' from 'int' to 'char'
     "-Wno-error=narrowing"
