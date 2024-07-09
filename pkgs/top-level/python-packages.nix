@@ -8867,6 +8867,8 @@ self: super: with self; {
 
   netapp-ontap = callPackage ../development/python-modules/netapp-ontap { };
 
+  netbox-plugin-prometheus-sd = callPackage ../development/python-modules/netbox-plugin-prometheus-sd { };
+
   netcdf4 = callPackage ../development/python-modules/netcdf4 { };
 
   netdata = callPackage ../development/python-modules/netdata { };
