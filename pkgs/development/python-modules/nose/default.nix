@@ -7,12 +7,13 @@
   python,
   pythonAtLeast,
   coverage,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   version = "1.3.7";
-  format = "setuptools";
   pname = "nose";
+  pyproject = true;
 
   # unmaintained, relies on the imp module
   disabled = pythonAtLeast "3.12";
@@ -21,6 +22,8 @@ buildPythonPackage rec {
     inherit pname version;
     sha256 = "f1bffef9cbc82628f6e7d7b40d7e255aefaa1adb6a1b1d26c69a8b79e6208a98";
   };
+
+  build-system = [ setuptools ];
 
   # 2to3 was removed in setuptools 58
   postPatch = ''
