@@ -1,6 +1,11 @@
-{ lib, fetchPypi, fetchFromGitHub, buildPythonPackage, setuptools,
-#pip-chill,
-lxml, requests, }:
+{ lib,
+  fetchPypi,
+  fetchFromGitHub,
+  buildPythonPackage,
+  setuptools,
+  lxml,
+  requests,
+}:
 
 buildPythonPackage rec {
   pname = "free-proxy";
