@@ -1,22 +1,15 @@
 # TODO format with nixpkgs (comma position ?)
 { lib
 , stdenv
-, testers
 , buildPythonPackage
 , fetchFromGitHub
 , python3
 , ifcopenshell
 # python deps
 , python3Packages
-# , setuptools
-# , build
-# , mathutils
-# , shapely
-# , numpy
-# , isodate
-# , python-dateutil
-# , lark
-# , wheel
+, setuptools
+, build
+, wheel
 }:
 buildPythonPackage rec {
   pname = "ifcopenshell";
@@ -31,44 +24,20 @@ buildPythonPackage rec {
     sha256 = "sha256-DtA8KeWipPfOnztKG/lrgLZeOCUG3nWR9oW7OST7koc=";
   };
 
-  nativeBuildInputs = [ python3 ];
-  propagatedBuildInputs = with python3Packages; [ wheel build setuptools ];
-  # build-system = [
-  #   setuptools
-  # ];
+  nativeBuildInputs = [ python3 wheel build setuptools];
 
   pythonImportsCheck = [ "ifcopenshell" ];
 
   buildInputs = [
-    # ifcopenshell needs stdc++
-    # stdenv.cc.cc.lib
-    # boost179
-    # cgal
-    # gmp
-    # icu
-    # mpfr
-    # pcre
-    # libxml2
-    # hdf5
-    # opencascade-occt
-    # libaec
     ifcopenshell
     python3
   ];
-
-  # dependencies = [
-  #   mathutils
-  #   shapely
-  #   numpy
-  #   isodate
-  #   python-dateutil
-  #   lark
-  # ];
 
   preConfigure = ''
     cd src/ifcopenshell-python
     # The build process is here: https://github.com/IfcOpenShell/IfcOpenShell/blob/v0.8.0/src/ifcopenshell-python/Makefile#L131
     # but we'd have to patch the copied pyproject.toml anyway, as the version is incorrect (even after their `make dist` btw), and the `where = ["dist"]` does not apply to us.
+    # so let's just create it from scratch
     cat << EOF > pyproject.toml
 [build-system]
 requires = ["setuptools>=61.0"]
@@ -99,14 +68,13 @@ ifcopenshell = ["*.pyd", "*.so", "*.json"]
 "ifcopenshell.util" = ["*.json", "schema/*.ifc"]
 EOF
     # NOTE: the following is directly inspired by https://github.com/IfcOpenShell/IfcOpenShell/blob/v0.8.0/src/ifcopenshell-python/Makefile#L131
-    # TODO find a better way to find it or suggest upstream improvement ;-)
+    # these 2 files are wrapper over a C api. They are put in the python3.11 in the ifcopenshell cmake build process folder
+    # because the default python3 is 3.11 at the time of writing this, but AFAIK there is nothing specific to 3.11 here.
     cp -v ${ifcopenshell.out}/lib/python3.11/site-packages/ifcopenshell/ifcopenshell_wrapper.py ./ifcopenshell/
     cp -v ${ifcopenshell.out}/lib/python3.11/site-packages/ifcopenshell/_ifcopenshell_wrapper.so ./ifcopenshell/
 	# distutils cannot access anything outside the cwd, so hackishly swap out the README.md
 	cp README.md ../README.bak
 	cp ../../README.md README.md
-	# sed "s/999999//" pyproject.toml
-	# python -m build
   '';
 
   meta = with lib; {
@@ -116,10 +84,4 @@ EOF
     license = licenses.lgpl3;
     maintainers = with maintainers; [ fehnomenal ];
   };
-
-  # passthru.tests.version = testers.testVersion {
-  #   package = ifcopenshell;
-  #   command = "IfcConvert --version";
-  #   version = version;
-  # };
 }
