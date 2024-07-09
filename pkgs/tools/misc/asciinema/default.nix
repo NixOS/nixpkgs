@@ -25,14 +25,7 @@ python3Packages.buildPythonApplication rec {
       --replace "python3" "${python3Packages.python}/bin/python"
   '';
 
-  nativeCheckInputs = [
-    glibcLocales
-    python3Packages.nose
-  ];
-
-  checkPhase = ''
-    LC_ALL=en_US.UTF-8 nosetests -v tests/config_test.py
-  '';
+  nativeCheckInputs = [ python3Packages.pytestCheckHook ];
 
   meta = {
     description = "Terminal session recorder and the best companion of asciinema.org";
