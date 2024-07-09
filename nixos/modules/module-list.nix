@@ -567,6 +567,7 @@
   ./services/development/lorri.nix
   ./services/development/nixseparatedebuginfod.nix
   ./services/development/rstudio-server/default.nix
+  ./services/development/vsmartcard-vpcd.nix
   ./services/development/zammad.nix
   ./services/display-managers/default.nix
   ./services/display-managers/greetd.nix
