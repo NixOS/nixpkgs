@@ -24,6 +24,11 @@ buildGoModule rec {
   postInstall = ''
     mv $out/bin/miniflux.app $out/bin/miniflux
     installManPage miniflux.1
+
+    # Upstream provides a Systemd service.
+    # Ship it with the package, for usage
+    # in `systemd.packages`
+    install -Dm444 packaging/systemd/miniflux.service -t $out/lib/systemd/system
   '';
 
   passthru = {
