@@ -29,7 +29,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     homepage = "https://rogueamoeba.com/soundsource";
     license = licenses.unfree;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    maintainers = with maintainers; [ emilytrau Enzime ];
+    maintainers = with maintainers; [ emilytrau ];
     platforms = platforms.darwin;
   };
 })
