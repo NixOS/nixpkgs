@@ -12044,8 +12044,6 @@ with pkgs;
 
   qlog = qt6Packages.callPackage ../applications/radio/qlog { };
 
-  qnial = callPackage ../development/interpreters/qnial { };
-
   quickbms = pkgsi686Linux.callPackage ../tools/archivers/quickbms { };
 
   q-text-as-data = callPackage ../tools/misc/q-text-as-data { };
