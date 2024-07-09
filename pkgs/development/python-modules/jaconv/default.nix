@@ -2,31 +2,30 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  nose,
   pythonOlder,
+  setuptools,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "jaconv";
   version = "0.3.4";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "ikegami-yukino";
-    repo = pname;
+    repo = "jaconv";
     rev = "refs/tags/v${version}";
     hash = "sha256-9ruhOLaYNESeKOwJs3IN6ct66fSq7My9DOyA7/cH3d0=";
   };
 
-  doCheck = pythonOlder "3.12";
+  patches = [ ./use-pytest.patch ];
 
-  nativeCheckInputs = [
-    nose
-    pytestCheckHook
-  ];
+  build-system = [ setuptools ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "jaconv" ];
 
