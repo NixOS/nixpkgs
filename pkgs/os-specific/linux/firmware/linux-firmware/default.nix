@@ -7,11 +7,11 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "linux-firmware";
-  version = "20240610";
+  version = "20240709";
 
   src = fetchzip {
     url = "https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git/snapshot/linux-firmware-${version}.tar.gz";
-    hash = "sha256-tjDqviOMvrBoEG8+Yn+XqdBlIDfQUX0KK2kpW6/jed8=";
+    hash = "sha256-BopPZDVQMmhLo9qTpozIea2amaZNQvwhgEIcpKMPAKs=";
   };
 
   nativeBuildInputs = [
