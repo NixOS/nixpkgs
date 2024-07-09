@@ -4,11 +4,12 @@
   buildPythonPackage,
   fetchFromGitHub,
   six,
+  setuptools,
   setuptools-scm,
   xorg,
   python,
   mock,
-  nose,
+  pynose,
   pytestCheckHook,
   util-linux,
 }:
@@ -16,7 +17,9 @@
 buildPythonPackage rec {
   pname = "xlib";
   version = "0.33";
-  format = "setuptools";
+  pyproject = true;
+
+  build-system = [ setuptools ];
 
   src = fetchFromGitHub {
     owner = "python-xlib";
@@ -36,7 +39,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     mock
-    nose
+    pynose
     util-linux
     xorg.xauth
     xorg.xvfb

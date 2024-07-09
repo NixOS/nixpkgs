@@ -6035,6 +6035,18 @@ final: prev:
     meta.homepage = "https://github.com/chentoast/marks.nvim/";
   };
 
+  markview-nvim = buildVimPlugin {
+    pname = "markview.nvim";
+    version = "2024-06-28";
+    src = fetchFromGitHub {
+      owner = "OXY2DEV";
+      repo = "markview.nvim";
+      rev = "f60219dce7283192d549f21847fcf8537bf6d260";
+      sha256 = "E1lHSjbnOOIeieaFJ+INvxJHCbfVS3mwbQ6wrlKeGSQ=";
+    };
+    meta.homepage = "https://github.com/OXY2DEV/markview.nvim";
+  };
+
   mason-lspconfig-nvim = buildVimPlugin {
     pname = "mason-lspconfig.nvim";
     version = "2024-06-12";
@@ -9278,6 +9290,18 @@ final: prev:
       sha256 = "093r3cy02gfp7sphrag59n3fjhns7xdsam1ngiwhwlig3bzv7mbl";
     };
     meta.homepage = "https://github.com/nvim-lua/popup.nvim/";
+  };
+
+  precognition-nvim = buildVimPlugin {
+    pname = "precognition.nvim";
+    version = "2024-06-25";
+    src = fetchFromGitHub {
+      owner = "tris203";
+      repo = "precognition.nvim";
+      rev = "2a566f03eb06859298eff837f3a6686dfa5304a5";
+      sha256 = "XLcyRB4ow5nPoQ0S29bx0utV9Z/wogg7c3rozYSqlWE=";
+    };
+    meta.homepage = "https://github.com/tris203/precognition.nvim";
   };
 
   presence-nvim = buildVimPlugin {

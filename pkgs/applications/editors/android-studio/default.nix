@@ -17,8 +17,8 @@ let
     sha256Hash = "sha256-84CpZfoAvJHUCO3ZBJqDbuz9xuGE/5xJfXoetJDXju8=";
   };
   latestVersion = {
-    version = "2024.1.2.7"; # "Android Studio Koala Feature Drop | 2024.1.2 Canary 7"
-    sha256Hash = "sha256-opoAKslh8DqS/iS5gw8AxX6x89t2BNX7yaU88XNd2kM=";
+    version = "2024.1.2.8"; # "Android Studio Koala Feature Drop | 2024.1.2 Canary 8"
+    sha256Hash = "sha256-2wqZV0UqZHprfUFvhWh0IdA9TQcwlZtWECZVwZ47ICc=";
   };
 in {
   # Attributes are named by their corresponding release channels

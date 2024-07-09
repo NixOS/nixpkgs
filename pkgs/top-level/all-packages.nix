@@ -1646,7 +1646,8 @@ with pkgs;
     inherit (plasma5Packages) kdialog;
   };
 
-  akku = callPackage ../tools/package-management/akku { };
+  inherit (recurseIntoAttrs (callPackage ../tools/package-management/akku { }))
+    akku akkuPackages;
 
   albert = qt6Packages.callPackage ../applications/misc/albert { };
 
@@ -2771,8 +2772,6 @@ with pkgs;
 
   xcpc = callPackage ../applications/emulators/xcpc { };
 
-  yapesdl = callPackage ../applications/emulators/yapesdl { };
-
   zsnes = pkgsi686Linux.callPackage ../applications/emulators/zsnes { };
   zsnes2 = pkgsi686Linux.callPackage ../applications/emulators/zsnes/2.x.nix { };
 
@@ -3274,7 +3273,7 @@ with pkgs;
 
   awscli = callPackage ../tools/admin/awscli { };
 
-  awscli2 = callPackage ../tools/admin/awscli2 {
+  awscli2 = callPackage ../by-name/aw/awscli2/package.nix {
     # change when https://github.com/aws/aws-cli/issues/8342 resolved
     python3 = python311;
   };
@@ -12258,8 +12257,6 @@ with pkgs;
   rtptools = callPackage ../tools/networking/rtptools { };
 
   rtss = callPackage ../development/tools/misc/rtss { };
-
-  realvnc-vnc-viewer = callPackage ../tools/admin/realvnc-vnc-viewer { };
 
   re-isearch = callPackage ../applications/search/re-isearch { };
 
@@ -24583,8 +24580,6 @@ with pkgs;
 
   vencord-web-extension = callPackage ../by-name/ve/vencord/package.nix { buildWebExtension = true; };
 
-  vesktop = callPackage ../by-name/ve/vesktop/package.nix { pnpm = pnpm_8; };
-
   vid-stab = callPackage ../development/libraries/vid-stab {
     inherit (llvmPackages) openmp;
   };
@@ -29431,12 +29426,11 @@ with pkgs;
 
   aucatctl = callPackage ../applications/audio/aucatctl { };
 
-  audacious = libsForQt5.callPackage ../applications/audio/audacious { };
-  audacious-plugins = libsForQt5.callPackage ../applications/audio/audacious/plugins.nix {
+  audacious = qt6Packages.callPackage ../applications/audio/audacious { };
+  audacious-plugins = qt6Packages.callPackage ../applications/audio/audacious/plugins.nix {
     # Avoid circular dependency
     audacious = audacious.override { audacious-plugins = null; };
   };
-  audaciousQt5 = audacious;
 
   audacity = callPackage ../applications/audio/audacity {
     inherit (darwin.apple_sdk.frameworks) AppKit CoreAudioKit;
@@ -30770,6 +30764,7 @@ with pkgs;
   firefox-beta-unwrapped = firefoxPackages.firefox-beta;
   firefox-devedition-unwrapped = firefoxPackages.firefox-devedition;
   firefox-esr-115-unwrapped = firefoxPackages.firefox-esr-115;
+  firefox-esr-128-unwrapped = firefoxPackages.firefox-esr-128;
   firefox-esr-unwrapped = firefoxPackages.firefox-esr-115;
 
   firefox = wrapFirefox firefox-unwrapped { };
@@ -30788,13 +30783,19 @@ with pkgs;
 
   firefox-mobile = callPackage ../applications/networking/browsers/firefox/mobile-config.nix { };
 
-  firefox-esr = firefox-esr-115;
+  firefox-esr-128 = wrapFirefox firefox-esr-128-unwrapped {
+    nameSuffix = "-esr";
+    desktopName = "Firefox ESR";
+    wmClass = "firefox-esr";
+    icon = "firefox-esr";
+  };
   firefox-esr-115 = wrapFirefox firefox-esr-115-unwrapped {
     nameSuffix = "-esr";
     desktopName = "Firefox ESR";
     wmClass = "firefox-esr";
     icon = "firefox-esr";
   };
+  firefox-esr = firefox-esr-115;
 
   firefox-bin-unwrapped = callPackage ../applications/networking/browsers/firefox-bin {
     channel = "release";
@@ -38766,8 +38767,6 @@ with pkgs;
   brgenml1cupswrapper = callPackage ../misc/cups/drivers/brgenml1cupswrapper { };
 
   brightnessctl = callPackage ../misc/brightnessctl { };
-
-  cached-nix-shell = callPackage ../tools/nix/cached-nix-shell { };
 
   calaos_installer = libsForQt5.callPackage ../misc/calaos/installer { };
 

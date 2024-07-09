@@ -1,4 +1,4 @@
-{ fetchurl, lib, stdenv, buildPackages
+{ fetchurl, fetchpatch, lib, stdenv, buildPackages
 , curl, openssl, zlib, expat, perlPackages, python3, gettext, cpio
 , gnugrep, gnused, gawk, coreutils # needed at runtime by git-filter-branch etc
 , openssh, pcre2, bash
@@ -59,6 +59,15 @@ stdenv.mkDerivation (finalAttrs: {
     ./installCheck-path.patch
   ] ++ lib.optionals withSsh [
     ./ssh-path.patch
+  ] ++ lib.optionals (guiSupport && stdenv.isDarwin) [
+    # Needed to workaround an issue in macOS where gitk shows a empty window
+    # https://github.com/Homebrew/homebrew-core/issues/68798
+    # https://github.com/git/git/pull/944
+    (fetchpatch {
+      name = "gitk_check_main_window_visibility_before_waiting_for_it_to_show.patch";
+      url = "https://github.com/git/git/commit/1db62e44b7ec93b6654271ef34065b31496cd02e.patch";
+      hash = "sha256-ntvnrYFFsJ1Ebzc6vM9/AMFLHMS1THts73PIOG5DkQo=";
+    })
   ];
 
   postPatch = ''
