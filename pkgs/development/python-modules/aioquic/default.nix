@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "aioquic";
-  version = "1.1.0";
+  version = "1.2.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-p5HFeYuutCoS+ij9Mn2gTQjxh5XpOIkXi0svSf6Lv0M=";
+    hash = "sha256-+RJjuz9xlIxciRW01Q7jcABPIKQW9n+rPcyQVWx+cZk=";
   };
 
   build-system = [ setuptools ];
