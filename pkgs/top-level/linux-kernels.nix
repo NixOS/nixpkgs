@@ -343,7 +343,7 @@ in {
 
     dddvb = callPackage ../os-specific/linux/dddvb { };
 
-    decklink = throw "The decklink kernel module has been removed due to being unmaintained"; # Module removed on 2024-07-02
+    decklink = callPackage ../os-specific/linux/decklink { };
 
     digimend = callPackage ../os-specific/linux/digimend { };
 

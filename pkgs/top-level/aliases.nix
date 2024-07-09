@@ -134,7 +134,6 @@ mapAliases ({
   bitwarden = bitwarden-desktop; # Added 2024-02-25
   bitwig-studio1 = throw "bitwig-studio1 has been removed, you can upgrade to 'bitwig-studio'"; # Added 2023-01-03
   bitwig-studio2 = throw "bitwig-studio2 has been removed, you can upgrade to 'bitwig-studio'"; # Added 2023-01-03
-  blackmagic-desktop-video = throw "blackmagic-desktop-video has been due to being unmaintained"; # Added 2024-07-02
   blender-with-packages = args:
     lib.warn "blender-with-packages is deprecated in favor of blender.withPackages, e.g. `blender.withPackages(ps: [ ps.foobar ])`"
       (blender.withPackages (_: args.packages)).overrideAttrs
