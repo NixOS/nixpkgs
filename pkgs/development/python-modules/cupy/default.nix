@@ -18,9 +18,7 @@
 
 let
   inherit (cudaPackages) cudnn cutensor nccl;
-  cudatoolkit-joined = symlinkJoin {
-    name = "cudatoolkit-joined-${cudaPackages.cudaVersion}";
-    paths = with cudaPackages; [
+  outpaths = with cudaPackages; [
       cuda_cccl # <nv/target>
       cuda_cudart
       cuda_nvcc # <crt/host_defines.h>
@@ -36,7 +34,10 @@ let
 
       # Missing:
       # cusparselt
-    ];
+  ];
+  cudatoolkit-joined = symlinkJoin {
+    name = "cudatoolkit-joined-${cudaPackages.cudaVersion}";
+    paths = outpaths ++ lib.concatMap (f: lib.map f outpaths) [lib.getLib lib.getDev (lib.getOutput "static") (lib.getOutput "stubs")];
   };
 in
 buildPythonPackage rec {
