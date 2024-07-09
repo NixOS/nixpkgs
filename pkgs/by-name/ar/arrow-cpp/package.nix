@@ -65,8 +65,8 @@ let
     name = "arrow-testing";
     owner = "apache";
     repo = "arrow-testing";
-    rev = "25d16511e8d42c2744a1d94d90169e3a36e92631";
-    hash = "sha256-fXeWM/8jBfJY7KL6PVfRbzB8i4sp6PHsnMSHCX5kzfI=";
+    rev = "735ae7128d571398dd798d7ff004adebeb342883";
+    hash = "sha256-67KwnSt+EeEDvk+9kxR51tErL2wJqEPRITKb/dN+HMQ=";
   };
 
   parquet-testing = fetchFromGitHub {
@@ -80,14 +80,16 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "arrow-cpp";
-  version = "16.0.0";
+  version = "17.0.0";
 
-  src = fetchurl {
-    url = "mirror://apache/arrow/arrow-${finalAttrs.version}/apache-arrow-${finalAttrs.version}.tar.gz";
-    hash = "sha256-n0BRrpRzyXmR2a+AHi+UrjRVBncZyn+QuBN/nppwC40=";
+  src = fetchFromGitHub {
+    owner = "apache";
+    repo = "arrow";
+    rev = "apache-arrow-17.0.0";
+    hash = "sha256-ZQqi1RFb4Ey0A0UVCThuIxM7DoFfkLwaeRAc2z8u9so=";
   };
 
-  sourceRoot = "apache-arrow-${finalAttrs.version}/cpp";
+  sourceRoot = "source/cpp";
 
   # versions are all taken from
   # https://github.com/apache/arrow/blob/apache-arrow-${version}/cpp/thirdparty/versions.txt
@@ -110,8 +112,8 @@ stdenv.mkDerivation (finalAttrs: {
   ARROW_XSIMD_URL = fetchFromGitHub {
     owner = "xtensor-stack";
     repo = "xsimd";
-    rev = "9.0.1";
-    hash = "sha256-onALN6agtrHWigtFlCeefD9CiRZI4Y690XTzy2UDnrk=";
+    rev = "13.0.0";
+    hash = "sha256-qElJYW5QDj3s59L3NgZj5zkhnUMzIP2mBa1sPks3/CE=";
   };
 
   ARROW_SUBSTRAIT_URL = fetchFromGitHub {
