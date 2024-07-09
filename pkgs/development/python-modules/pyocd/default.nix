@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchPypi,
   fetchpatch,
-  capstone_4,
   cmsis-pack-manager,
   colorama,
   importlib-metadata,
@@ -17,7 +16,6 @@
   pylink-square,
   pyusb,
   pyyaml,
-  setuptools,
   setuptools-scm,
   typing-extensions,
   stdenv,
@@ -44,18 +42,16 @@ buildPythonPackage rec {
     })
   ];
 
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "libusb-package>=1.0,<2.0" ""
-  '';
+  pythonRemoveDeps = [
+    "libusb-package"
+    "capstone"
+  ];
 
-  nativeBuildInputs = [
-    setuptools
+  build-system = [
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
-    capstone_4
+  dependencies = [
     cmsis-pack-manager
     colorama
     importlib-metadata
@@ -73,6 +69,11 @@ buildPythonPackage rec {
   ] ++ lib.optionals (!stdenv.isLinux) [ hidapi ];
 
   pythonImportsCheck = [ "pyocd" ];
+
+  disabledTests = [
+    # AttributeError: 'not_called' is not a valid assertion
+    "test_transfer_err_not_flushed"
+  ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
