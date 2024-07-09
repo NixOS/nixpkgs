@@ -50,7 +50,7 @@ rec {
     pname = "hyphen-dict-en-us";
     src =  hyphen.src;
     meta = {
-      inherit (hyphen.meta) homepage platforms license mainatiners;
+      inherit (hyphen.meta) homepage platforms license maintainers;
       description = "Hyphen dictionary for English (United States)";
     };
     installPhase = ''
