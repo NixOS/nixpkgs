@@ -13392,8 +13392,6 @@ with pkgs;
     themes = recurseIntoAttrs (getPackagesWithPrefix "theme");
   };
 
-  thefuck = python3Packages.callPackage ../tools/misc/thefuck { };
-
   theme-sh = callPackage ../tools/misc/theme-sh { };
 
   thiefmd = callPackage ../applications/editors/thiefmd { };
