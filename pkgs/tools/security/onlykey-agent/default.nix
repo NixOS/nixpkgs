@@ -26,6 +26,7 @@ let
     propagatedBuildInputs = oa.propagatedBuildInputs or [ ] ++ [
       bech32
       cryptography
+      cython
       docutils
       pycryptodome
       pynacl

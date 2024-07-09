@@ -39,6 +39,9 @@ jobs:
             pkgs/development/cuda-modules
             pkgs/test/cuda
             pkgs/top-level/cuda-packages.nix
+          NIX_FMT_PATHS_MAINTAINERS: |
+            maintainers/maintainer-list.nix
+            maintainers/team-list.nix
           NIX_FMT_PATHS_K3S: |
             nixos/modules/services/cluster/k3s
             nixos/tests/k3s

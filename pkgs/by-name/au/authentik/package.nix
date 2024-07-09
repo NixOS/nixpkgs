@@ -11,13 +11,13 @@
 , makeWrapper }:
 
 let
-  version = "2024.2.2";
+  version = "2024.2.4";
 
   src = fetchFromGitHub {
     owner = "goauthentik";
     repo = "authentik";
     rev = "version/${version}";
-    hash = "sha256-2B1RgKY5tpDBdzguEyWqzg15w5x/dLS2ffjbnxbpINs=";
+    hash = "sha256-9iQDhELa5dmwSUGLSVawgOpPUXHqaGBxZu/MKbfc4dk=";
   };
 
   meta = with lib; {
