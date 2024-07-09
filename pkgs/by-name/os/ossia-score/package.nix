@@ -1,5 +1,4 @@
-{ stdenv
-, lib
+{ lib
 , fetchFromGitHub
 , cmake
 , ninja
@@ -42,15 +41,15 @@
 # TODO: figure out LLVM jit
 # assert lib.versionAtLeast llvm.version "15";
 
-stdenv.mkDerivation (finalAttrs: {
+clangStdenv.mkDerivation (finalAttrs: {
   pname = "ossia-score";
-  version = "3.2.3-3";
+  version = "3.2.4";
 
   src = fetchFromGitHub {
     owner = "ossia";
     repo = "score";
-    rev = "v3.2.3-3";
-    hash = "sha256-xRqsMKwuejbl+5ljYMFhQv/j1MfnFH5MGIn9rCQG/ro=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-O9v7hhBHVi4OuuCebG3bvjp/MOYu1iPv+lji/wS4O7o=";
     fetchSubmodules = true;
   };
 
@@ -152,7 +151,7 @@ stdenv.mkDerivation (finalAttrs: {
       the creation of interactive shows, museum installations, intermedia
       digital artworks, interactive music and more in an intuitive user interface.
     '';
-    platforms = [ "x86_64-linux" ];
+    platforms = platforms.linux;
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ jcelerier minijackson ];
   };
