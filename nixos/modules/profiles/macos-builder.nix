@@ -203,6 +203,23 @@ in
         has a dependency on stateVersion.
 
           nix-instantiate --attr darwin.linux-builder --show-trace
+
+        To solve the problem, if you encounter this error as a NixOS maintainer:
+
+        1. Make sure the stateVersion-dependent behavior can also be controlled
+           directly with one (or perhaps a few) options.
+        2. Add a definition to nixos/modules/profiles/macos-builder.nix with
+           a higher priority than the option default.
+            - `mkDefault` if it's ok for users to override the _option default_.
+            - a normal definition if users should think twice to override it.
+
+        To solve the problem as a user:
+
+        Assuming a change didn't slip through Nixpkgs CI, you've probably enabled
+        an extra module in your configuration that depends on stateVersion. You
+        can either disable the module or set the stateVersion to the latest or
+        upcoming release. If you do so, your configuration may lag behind the
+        latest Nixpkgs changes and best practices.
       '');
     };
 
