@@ -15,6 +15,8 @@
   OVMF,
   pkg-config,
   qemu,
+  poco,
+  protobuf,
   qemu-utils,
   qtbase,
   qtwayland,
@@ -26,7 +28,7 @@
 
 let
   pname = "multipass";
-  version = "1.13.1";
+  version = "1.14.0";
 
   # This is done here because a CMakeLists.txt from one of it's submodules tries
   # to modify a file, so we grab the source for the submodule here, copy it into
@@ -46,7 +48,7 @@ stdenv.mkDerivation {
     owner = "canonical";
     repo = "multipass";
     rev = "refs/tags/v${version}";
-    hash = "sha256-QttgWSuhxcuOyMNF9Ve1w0ftT41+hNz3WW5Vag/88X4=";
+    hash = "sha256-1g5Og4LkNujjT4KCXHmXaiTK58Bgb2KyYLKwTFFVEHE=";
     fetchSubmodules = true;
     leaveDotGit = true;
     postFetch = ''
@@ -60,6 +62,8 @@ stdenv.mkDerivation {
     ./lxd_socket_path.patch
     ./cmake_no_fetch.patch
     ./cmake_warning.patch
+    ./vcpkg_no_install.patch
+    ./test_unreachable_call.patch
   ];
 
   postPatch = ''
@@ -67,6 +71,9 @@ stdenv.mkDerivation {
     substituteInPlace ./CMakeLists.txt \
       --replace-fail "determine_version(MULTIPASS_VERSION)" "" \
       --replace-fail 'set(MULTIPASS_VERSION ''${MULTIPASS_VERSION})' 'set(MULTIPASS_VERSION "v${version}")'
+
+    # Don't build/use vcpkg
+    rm -rf 3rd-party/vcpkg
 
     # Patch the patch of the OVMF binaries to use paths from the nix store.
     substituteInPlace ./src/platform/backends/qemu/linux/qemu_platform_detail_linux.cpp \
@@ -97,6 +104,9 @@ stdenv.mkDerivation {
     EOF
   '';
 
+  # We'll build the flutter application seperately using buildFlutterApplication
+  cmakeFlags = [ "-DMULTIPASS_ENABLE_FLUTTER_GUI=false" ];
+
   buildInputs = [
     gtest
     libapparmor
@@ -105,6 +115,8 @@ stdenv.mkDerivation {
     openssl
     qtbase
     qtwayland
+    poco.dev
+    protobuf
   ];
 
   nativeBuildInputs = [
