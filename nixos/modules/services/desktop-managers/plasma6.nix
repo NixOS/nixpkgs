@@ -202,6 +202,9 @@ in {
     # works for SOME people.
     environment.sessionVariables.KPACKAGE_DEP_RESOLVERS_PATH = "${kdePackages.frameworkintegration.out}/libexec/kf6/kpackagehandlers";
 
+    # Enable I2C for ddcutil support in powerdevil
+    hardware.i2c = mkIf config.powerManagement.enable { enable = true; };
+
     # Enable GTK applications to load SVG icons
     programs.gdk-pixbuf.modulePackages = [pkgs.librsvg];
 
