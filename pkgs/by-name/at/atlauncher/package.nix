@@ -48,6 +48,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
           libglvnd
           libpulseaudio
           udev
+          xorg.libX11
+          xorg.libXcursor
           xorg.libXxf86vm
         ]
         ++ lib.optional gamemodeSupport gamemode.lib
