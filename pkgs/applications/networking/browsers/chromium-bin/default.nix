@@ -7,18 +7,18 @@ let
   specs = {
     aarch64-darwin = {
       arch = "Mac_Arm";
-      sha256 = "sha256-8FeYbXzMDoTVxeAaKe3F4SYRKDz2pirRj3BAF7gtCR8=";
+      hash = "sha256-8FeYbXzMDoTVxeAaKe3F4SYRKDz2pirRj3BAF7gtCR8=";
       version = "1169958";
     };
     x86_64-darwin = {
       arch = "Mac";
-      sha256 = "sha256-YVUPCu7+lpKksITsBncif2fqoo08iJ/+dCwnoftHpm8=";
+      hash = "sha256-YVUPCu7+lpKksITsBncif2fqoo08iJ/+dCwnoftHpm8=";
       version = "1171203";
     };
   };
   spec = specs.${stdenv.hostPlatform.system} or {
     arch = "";
-    sha25 = "";
+    hash = "";
     version = "";
   };
 in
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   version = spec.version;
   src = fetchzip {
     url = "https://commondatastorage.googleapis.com/chromium-browser-snapshots/${spec.arch}/${spec.version}/chrome-mac.zip";
-    sha256 = spec.sha256;
+    hash = spec.hash;
   };
 
   nativeBuildInputs = [ makeWrapper ];
