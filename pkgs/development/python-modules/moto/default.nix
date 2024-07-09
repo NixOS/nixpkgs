@@ -20,7 +20,7 @@
 
   # optional-dependencies
   antlr4-python3-runtime,
-  aws-xray-sdk,
+  #aws-xray-sdk,
   cfn-lint,
   flask,
   flask-cors,
@@ -72,7 +72,7 @@ buildPythonPackage rec {
     # non-exhaustive list of extras, that was cobbled together for testing
     all = [
       antlr4-python3-runtime
-      aws-xray-sdk
+      #aws-xray-sdk
       cfn-lint
       docker
       flask
