@@ -11,7 +11,7 @@
 }:
 python3Packages.buildPythonApplication rec {
   pname = "snapcraft";
-  version = "8.2.5";
+  version = "8.2.12";
 
   pyproject = true;
 
@@ -24,7 +24,7 @@ python3Packages.buildPythonApplication rec {
     owner = "canonical";
     repo = "snapcraft";
     rev = "refs/tags/${version}";
-    hash = "sha256-+1Gzseuq402m5FvlRAGXl7Lsy2VnRmd1cXNXhkMDDDE=";
+    hash = "sha256-1PwIbMweeYGi+jLfhFB3LYThqaN2VW7zdyzjD1m57ow=";
   };
 
   patches = [
@@ -67,6 +67,9 @@ python3Packages.buildPythonApplication rec {
     substituteInPlace snapcraft/elf/elf_utils.py \
       --replace-fail 'arch_linker_path = Path(arch_config.dynamic_linker)' \
       'return str(Path("${glibc}/lib/ld-linux-x86-64.so.2"))'
+    
+    substituteInPlace snapcraft_legacy/internal/xattrs.py \
+      --replace-fail 'distutils.util' 'setuptools.dist'
   '';
 
   buildInputs = [ makeWrapper ];
@@ -126,6 +129,7 @@ python3Packages.buildPythonApplication rec {
     pytest-subprocess
     pytestCheckHook
     responses
+    setuptools
   ] ++ [
     git
     squashfsTools
