@@ -5,22 +5,33 @@
   isPy3k,
   isPyPy,
   python,
-  pythonAtLeast,
   coverage,
+  setuptools,
+  fetchpatch2,
 }:
 
 buildPythonPackage rec {
   version = "1.3.7";
-  format = "setuptools";
   pname = "nose";
-
-  # unmaintained, relies on the imp module
-  disabled = pythonAtLeast "3.12";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     sha256 = "f1bffef9cbc82628f6e7d7b40d7e255aefaa1adb6a1b1d26c69a8b79e6208a98";
   };
+
+  build-system = [ setuptools ];
+
+  patches = [
+    (fetchpatch2 {
+      url = "https://gitlab.alpinelinux.org/alpine/aports/-/raw/71a773b0618ce60d276a3df74ed69e6bd6d13237/community/py3-nose/python-nose-py311.patch";
+      hash = "sha256-CwY1pxzFFD0AYgmbERQyb6dD3bSInTqteUM85nfYkq8=";
+    })
+    (fetchpatch2 {
+      url = "https://gitlab.alpinelinux.org/alpine/aports/-/raw/71a773b0618ce60d276a3df74ed69e6bd6d13237/community/py3-nose/python-nose-py312.patch";
+      hash = "sha256-/mJHbal8XXOWvLtebrYmoK23rCNp+VWIFYDPUckEEGg=";
+    })
+  ];
 
   # 2to3 was removed in setuptools 58
   postPatch = ''
