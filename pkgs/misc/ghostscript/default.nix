@@ -2,6 +2,7 @@
 , stdenv
 , lib
 , fetchurl
+, fetchpatch
 , pkg-config
 , zlib
 , expat
@@ -71,6 +72,26 @@ stdenv.mkDerivation rec {
   patches = [
     ./urw-font-files.patch
     ./doc-no-ref.diff
+    (fetchpatch {
+      name = "CVE-2024-33870.patch";
+      url = "https://cgit.ghostscript.com/cgi-bin/cgit.cgi/ghostpdl.git/patch/?id=79aef19c685984dc3da2dc090450407d9fbcff80";
+      hash = "sha256-EZOtKbAkNujqAPoD1yWTggXYTdLPPR9uC898JByQwVs=";
+    })
+    (fetchpatch {
+      name = "CVE-2024-33869.part-1.patch";
+      url = "https://cgit.ghostscript.com/cgi-bin/cgit.cgi/ghostpdl.git/patch/?id=5ae2e320d69a7d0973011796bd388cd5befa1a43";
+      hash = "sha256-ob2c4aawUxJcsLdhHX9/7CDNnnxO8k1LTqfar5Bgdo8=";
+    })
+    (fetchpatch {
+      name = "CVE-2024-33869.part-2.patch";
+      url = "https://cgit.ghostscript.com/cgi-bin/cgit.cgi/ghostpdl.git/patch/?id=f5336e5b4154f515ac83bc5b9eba94302e6618d4";
+      hash = "sha256-2Kx57WJvALpEjR8+uTbF3CBvO/9Ujl652L4Kf+mNRWo=";
+    })
+    (fetchpatch {
+      name = "CVE-2024-33871.patch";
+      url = "https://cgit.ghostscript.com/cgi-bin/cgit.cgi/ghostpdl.git/patch/?id=7145885041bb52cc23964f0aa2aec1b1c82b5908";
+      hash = "sha256-a5+WY63lmu++cc8BGREWlIY4S1LEvWqeqTTfBnEY+YM=";
+    })
   ];
 
   outputs = [ "out" "man" "doc" ];

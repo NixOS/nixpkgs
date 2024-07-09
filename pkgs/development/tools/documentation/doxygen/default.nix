@@ -2,6 +2,7 @@
 , stdenv
 , cmake
 , fetchFromGitHub
+, fetchpatch
 , python3
 , flex
 , bison
@@ -21,6 +22,14 @@ stdenv.mkDerivation rec {
     rev = "Release_${lib.replaceStrings [ "." ] [ "_" ] version}";
     sha256 = "sha256-ezeMQk+Vyi9qNsYwbaRRruaIYGY8stFf71W7GonXqco=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "drop-usage-bad-actor-polyfill.io.patch";
+      url = "https://github.com/doxygen/doxygen/commit/41e3eeed6d7c34d14f072cbfea5fe418fc65a760.patch";
+      hash = "sha256-vtuVO6v2Hccm2W+Ilv3a2kmBMrRyYLCYVWLyZKx0s7s=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake

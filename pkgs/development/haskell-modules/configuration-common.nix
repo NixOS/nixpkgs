@@ -1894,7 +1894,13 @@ self: super: {
         install -Dm 555 '${self.pandoc}'/share/man/man1/* -t "$out"/share/man/man1/
       '' + (old.postInstall or "");
     }) (super.pandoc-cli.overrideScope pandoc-cli-overlay);
-    pandoc_3_1_9 = doDistribute (super.pandoc_3_1_9.overrideScope pandoc-cli-overlay);
+    pandoc_3_1_9 = appendPatches [
+      (fetchpatch {
+        name = "drop-usage-known-bad-actor-cdn.patch";
+        url = "https://github.com/jgm/pandoc/commit/5877ec546df29115163b36de32837f5e08506092.patch";
+        hash = "sha256-2ffdL2dS/hHWBjJcIHbae5OdL/VKlHNKUMDHRy3hqvc=";
+      })
+    ] (doDistribute (super.pandoc_3_1_9.overrideScope pandoc-cli-overlay));
     pandoc-lua-engine = super.pandoc-lua-engine.overrideScope pandoc-cli-overlay;
   })
     pandoc-cli
