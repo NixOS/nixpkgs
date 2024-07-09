@@ -5,7 +5,8 @@ with lib;
 let
   cfg = config.services.nginx.sso;
   pkg = getBin cfg.package;
-  configYml = pkgs.writeText "nginx-sso.yml" (builtins.toJSON cfg.configuration);
+  format = pkgs.formats.yaml { };
+  configYml = format.generate "nginx-sso.yml" cfg.configuration;
 in {
   options.services.nginx.sso = {
     enable = mkEnableOption "nginx-sso service";
@@ -13,7 +14,7 @@ in {
     package = mkPackageOption pkgs "nginx-sso" { };
 
     configuration = mkOption {
-      type = types.attrsOf types.unspecified;
+      type = format.type;
       default = {};
       example = literalExpression ''
         {
