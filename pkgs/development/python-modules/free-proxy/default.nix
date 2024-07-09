@@ -22,7 +22,6 @@ buildPythonPackage rec {
   build-system = [ setuptools ];
 
   dependencies = [
-    #pip-chill
     lxml
     requests
   ];
