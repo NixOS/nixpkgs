@@ -353,6 +353,14 @@ in
             ln -s ${config.system.build.initialRamdiskSecretAppender}/bin/append-initrd-secrets $out
 
             ln -s ${config.hardware.firmware}/lib/firmware $out/firmware
+
+            ${lib.optionalString (
+              config.hardware.deviceTree.enable
+              && config.hardware.deviceTree.package != null
+              && config.hardware.deviceTree.name != null)
+             # "ln -s ${config.boot.kernelPackages.package}/dtbs/${config.hardware.deviceTree.name} $out/dtb"
+             "ln -s ${config.hardware.deviceTree.package}/${config.hardware.deviceTree.name} $out/dtb"
+            }
           '';
 
         # Implement consoleLogLevel both in early boot and using sysctl
