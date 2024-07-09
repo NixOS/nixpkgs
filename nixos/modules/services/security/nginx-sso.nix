@@ -4,7 +4,6 @@ with lib;
 
 let
   cfg = config.services.nginx.sso;
-  pkg = getBin cfg.package;
   format = pkgs.formats.yaml { };
   configYml = format.generate "nginx-sso.yml" cfg.configuration;
 in {
@@ -49,9 +48,9 @@ in {
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
         ExecStart = ''
-          ${pkg}/bin/nginx-sso \
+          ${lib.getExe cfg.package} \
             --config ${configYml} \
-            --frontend-dir ${pkg}/share/frontend
+            --frontend-dir ${lib.getBin cfg.package}/share/frontend
         '';
         Restart = "always";
         DynamicUser = true;
