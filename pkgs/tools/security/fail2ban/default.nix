@@ -22,6 +22,9 @@ python3.pkgs.buildPythonApplication rec {
     lib.optionals stdenv.isLinux [
       systemd
       pyinotify
+
+      # https://github.com/fail2ban/fail2ban/issues/3787, remove it in the next release
+      setuptools
     ];
 
   preConfigure = ''
