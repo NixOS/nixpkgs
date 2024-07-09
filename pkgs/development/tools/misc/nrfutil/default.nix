@@ -34,7 +34,7 @@ buildPythonApplication rec {
 
   nativeCheckInputs = [
     behave
-    nose
+    pytestCheckHook
   ];
 
   # Workaround: pythonRelaxDepsHook doesn't work for this.
