@@ -10,7 +10,7 @@ let
       # setuid shadow
       ++ [ "/run/wrappers" ]
       ++ lib.optional (config.boot.supportedFilesystems.zfs or false) config.boot.zfs.package;
-    extraRuntimes = [ pkgs.runc ] 
+    extraRuntimes = [ pkgs.runc ]
       ++ lib.optionals (config.virtualisation.containers.containersConf.settings.network.default_rootless_network_cmd or "" == "slirp4netns") (with pkgs; [
       slirp4netns
     ]);
