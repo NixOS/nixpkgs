@@ -197,8 +197,19 @@ in
       nixos.revision = null;
 
       stateVersion = lib.mkDefault (throw ''
-        The macOS linux builder should not need a stateVersion to be set, but a module
-        has accessed stateVersion nonetheless.
+        The macOS linux builder is designed to have a stateless NixOS
+        configuration internally, i.e. without a stateVersion to be set, but a
+        module has accessed stateVersion nonetheless.
+
+        By avoiding stateVersion, the builder can be updated without needing to
+        update the stateVersion in the configuration. This is important because
+        the linux builder is meant to be very easy to use and update.
+        The error message you're seeing is a safeguard that gives us an
+        opportunity to fix the problem and make the right decision for all its
+        users.
+
+        Troubleshooting & resolution
+
         Please inspect the trace of the following command to figure out which module
         has a dependency on stateVersion.
 
