@@ -1,6 +1,5 @@
 { lib, stdenv
 , fetchgit
-, fetchpatch
 , autoreconfHook
 , pkg-config
 , dbus
@@ -10,26 +9,15 @@
 
 stdenv.mkDerivation rec {
   pname = "ell";
-  version = "0.66";
+  version = "0.67";
 
   outputs = [ "out" "dev" ];
 
   src = fetchgit {
     url = "https://git.kernel.org/pub/scm/libs/ell/ell.git";
     rev = version;
-    hash = "sha256-FqJbAE2P6rKKUMwcDShCKNDQu4RRifEGrbE7F4gSpm0=";
+    hash = "sha256-PIxPhKqsxybkLQerkQ15kTRh0oW812lWbCGEig11KQk=";
   };
-
-  patches = [
-    # Without the revert TCP dbus tests fail to bind the port and fail.
-    # Seemingly a known dbus bug: https://gitlab.freedesktop.org/dbus/dbus/-/issues/28
-    (fetchpatch {
-      name = "revert-tcp-tests.patch";
-      url = "https://git.kernel.org/pub/scm/libs/ell/ell.git/patch/?id=7863e06b18b9cce56392b65928e927297108337d";
-      hash = "sha256-8+M1k0hGE64CHmK1T5/zW8+Q76pIjl5SMaYktRqpudg=";
-      revert = true;
-    })
-  ];
 
   nativeBuildInputs = [
     pkg-config
@@ -43,6 +31,9 @@ stdenv.mkDerivation rec {
   ];
 
   enableParallelBuilding = true;
+
+  # Runs multiple dbus instances on the same port failing the bind.
+  enableParallelChecking = false;
 
   # tests sporadically fail on musl
   doCheck = !stdenv.hostPlatform.isMusl;
