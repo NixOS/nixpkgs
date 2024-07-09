@@ -33428,7 +33428,10 @@ with pkgs;
 
   plex-media-player = libsForQt5.callPackage ../applications/video/plex-media-player { };
 
-  plex-mpv-shim = python3Packages.callPackage ../applications/video/plex-mpv-shim { };
+  plex-mpv-shim = callPackage ../applications/video/plex-mpv-shim {
+    python3Packages = python311Packages;
+    python = python311;
+  };
 
   plover = recurseIntoAttrs (libsForQt5.callPackage ../applications/misc/plover { });
 
