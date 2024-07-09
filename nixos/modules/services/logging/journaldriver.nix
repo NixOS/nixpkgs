@@ -11,7 +11,9 @@
 
 { config, lib, pkgs, ...}:
 
-with lib; let cfg = config.services.journaldriver;
+let
+  inherit (lib) mkOption types mkIf;
+  cfg = config.services.journaldriver;
 in {
   options.services.journaldriver = {
     enable = mkOption {
