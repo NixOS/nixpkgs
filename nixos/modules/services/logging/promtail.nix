@@ -1,5 +1,8 @@
-{ config, lib, pkgs, ... }: with lib;
+{ config, lib, pkgs, ... }:
 let
+
+  inherit (lib) types mkOption mkEnableOption mkIf mkDefault escapeShellArgs optionalAttrs;
+
   cfg = config.services.promtail;
 
   prettyJSON = conf: pkgs.runCommandLocal "promtail-config.json" {} ''
@@ -11,7 +14,7 @@ let
   allowPositionsFile = !lib.hasPrefix "/var/cache/promtail" positionsFile;
   positionsFile = cfg.configuration.positions.filename;
 in {
-  options.services.promtail = with types; {
+  options.services.promtail = {
     enable = mkEnableOption "the Promtail ingresser";
 
 
@@ -23,7 +26,7 @@ in {
     };
 
     extraFlags = mkOption {
-      type = listOf str;
+      type = types.listOf types.str;
       default = [];
       example = [ "--server.http-listen-port=3101" ];
       description = ''
