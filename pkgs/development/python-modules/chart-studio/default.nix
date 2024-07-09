@@ -3,9 +3,8 @@
   buildPythonPackage,
   fetchFromGitHub,
   mock,
-  nose,
   plotly,
-  pytest,
+  pytestCheckHook,
   requests,
   retrying,
   setuptools,
@@ -38,18 +37,23 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     mock
-    nose
-    pytest
+    pytestCheckHook
   ];
-  # most tests talk to a service
-  checkPhase = ''
-    HOME=$TMPDIR pytest chart_studio/tests/test_core chart_studio/tests/test_plot_ly/test_api
+
+  preCheck = ''
+    export HOME=$TMPDIR
   '';
 
-  meta = with lib; {
+  # most tests talk to a service
+  pytestFlagsArray = [
+    "chart_studio/tests/test_core"
+    "chart_studio/tests/test_plot_ly/test_api"
+  ];
+
+  meta = {
     description = "Utilities for interfacing with Plotly's Chart Studio service";
     homepage = "https://github.com/plotly/plotly.py/tree/master/packages/python/chart-studio";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ ];
   };
 }
