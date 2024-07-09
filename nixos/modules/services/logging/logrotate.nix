@@ -1,8 +1,7 @@
 { config, lib, pkgs, utils, ... }:
 
-with lib;
-
 let
+  inherit (lib) mkRemovedOptionModule mkOption optionalString types literalExpression attrValues foldr mkIf;
   cfg = config.services.logrotate;
 
   generateLine = n: v:
@@ -10,24 +9,24 @@ let
     else if builtins.elem n [ "frequency" ] then "${v}\n"
     else if builtins.elem n [ "firstaction" "lastaction" "prerotate" "postrotate" "preremove" ]
          then "${n}\n    ${v}\n  endscript\n"
-    else if isInt v then "${n} ${toString v}\n"
+    else if lib.isInt v then "${n} ${toString v}\n"
     else if v == true then "${n}\n"
     else if v == false then "no${n}\n"
     else "${n} ${v}\n";
-  generateSection = indent: settings: concatStringsSep (fixedWidthString indent " " "") (
-    filter (x: x != null) (mapAttrsToList generateLine settings)
+  generateSection = indent: settings: lib.concatStringsSep (lib.fixedWidthString indent " " "") (
+    lib.filter (x: x != null) (lib.mapAttrsToList generateLine settings)
   );
 
   # generateSection includes a final newline hence weird closing brace
   mkConf = settings:
     if settings.global or false then generateSection 0 settings
     else ''
-      ${concatMapStringsSep "\n" (files: ''"${files}"'') (toList settings.files)} {
+      ${lib.concatMapStringsSep "\n" (files: ''"${files}"'') (lib.toList settings.files)} {
         ${generateSection 2 settings}}
     '';
 
-  settings = sortProperties (attrValues (filterAttrs (_: settings: settings.enable) (
-    foldAttrs recursiveUpdate { } [
+  settings = lib.sortProperties (attrValues (lib.filterAttrs (_: settings: settings.enable) (
+    lib.foldAttrs lib.recursiveUpdate { } [
       {
         header = {
           enable = true;
@@ -43,7 +42,7 @@ let
   )));
   configFile = pkgs.writeTextFile {
     name = "logrotate.conf";
-    text = concatStringsSep "\n" (
+    text = lib.concatStringsSep "\n" (
       map mkConf settings
     );
     checkPhase = optionalString cfg.checkConfig ''
@@ -95,7 +94,7 @@ in
 
   options = {
     services.logrotate = {
-      enable = mkEnableOption "the logrotate systemd service" // {
+      enable = lib.mkEnableOption "the logrotate systemd service" // {
         default = foldr (n: a: a || n.enable) false (attrValues cfg.settings);
         defaultText = literalExpression "cfg.settings != {}";
       };
@@ -142,7 +141,7 @@ in
           freeformType = with types; attrsOf (nullOr (oneOf [ int bool str ]));
 
           options = {
-            enable = mkEnableOption "setting individual kill switch" // {
+            enable = lib.mkEnableOption "setting individual kill switch" // {
               default = true;
             };
 
