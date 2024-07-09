@@ -4,7 +4,7 @@ with lib;
 
 let
   cfg = config.services.pcscd;
-  cfgFile = pkgs.writeText "reader.conf" config.services.pcscd.readerConfig;
+  cfgFile = pkgs.writeText "reader.conf" (builtins.concatStringsSep "\n\n" config.services.pcscd.readerConfigs);
 
   package = if config.security.polkit.enable
               then pkgs.pcscliteWithPolkit
@@ -17,6 +17,15 @@ let
 
 in
 {
+  imports = [
+    (lib.mkChangedOptionModule [ "services" "pcscd" "readerConfig" ] [ "services" "pcscd" "readerConfigs" ]
+     (config:
+        let readerConfig = getAttrFromPath [ "services" "pcscd" "readerConfig" ] config;
+        in [ readerConfig ]
+      )
+    )
+  ];
+
   options.services.pcscd = {
     enable = mkEnableOption "PCSC-Lite daemon, to access smart cards using SCard API (PC/SC)";
 
@@ -27,15 +36,16 @@ in
       description = "Plugin packages to be used for PCSC-Lite.";
     };
 
-    readerConfig = mkOption {
-      type = types.lines;
-      default = "";
-      example = ''
+    readerConfigs = mkOption {
+      type = types.listOf types.lines;
+      default = [ ];
+      example = [ ''
         FRIENDLYNAME      "Some serial reader"
         DEVICENAME        /dev/ttyS0
         LIBPATH           /path/to/serial_reader.so
         CHANNELID         1
-      '';
+        ''
+      ];
       description = ''
         Configuration for devices that aren't hotpluggable.
 
