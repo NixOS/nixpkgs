@@ -4,6 +4,7 @@
 , stdenvNoCC
 , fetchurl
 , fetchFromGitHub
+, runCommand
 , installShellFiles
 , python311
 
@@ -352,6 +353,42 @@ py.pkgs.toPythonApplication (py.pkgs.buildAzureCliPackage rec {
   passthru = {
     inherit extensions;
     withExtensions = extensions: azure-cli.override { withExtensions = extensions; };
+    tests = {
+      # Test the package builds with some extensions configured, and the
+      # wanted extensions are recognized by the CLI and listed in the output.
+      azWithExtensions =
+        let
+          extensions = with azure-cli.extensions; [
+            aks-preview
+            azure-devops
+            rdbms-connect
+          ];
+          extensionNames = map (ext: ext.pname) extensions;
+          az = (azure-cli.withExtensions extensions);
+        in
+        runCommand "test-az-with-extensions" { } ''
+          export HOME=$TMPDIR
+          ${lib.getExe az} extension list > $out
+          for ext in ${lib.concatStringsSep " " extensionNames}; do
+            if ! grep -q $ext $out; then
+              echo "Extension $ext not found in list"
+              exit 1
+            fi
+          done
+        '';
+      # Test the package builds with mutable config.
+      # TODO: Maybe we can install an extension from local python wheel to
+      #       check mutable extension install still works.
+      azWithMutableConfig =
+        let
+          az = azure-cli.override { withImmutableConfig = false; };
+        in
+        runCommand "test-az-with-immutable-config" { } ''
+          export HOME=$TMPDIR
+          ${lib.getExe az} --version || exit 1
+          touch $out
+        '';
+    };
   };
 
   meta = with lib; {
