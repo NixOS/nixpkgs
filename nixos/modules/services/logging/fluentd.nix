@@ -1,8 +1,7 @@
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
+  inherit (lib) mkEnableOption types mkOption mkPackageOption mkIf concatStringsSep;
   cfg = config.services.fluentd;
 
   pluginArgs = concatStringsSep " " (map (x: "-p ${x}") cfg.plugins);
@@ -37,7 +36,7 @@ in {
   ###### implementation
 
   config = mkIf cfg.enable {
-    systemd.services.fluentd = with pkgs; {
+    systemd.services.fluentd = {
       description = "Fluentd Daemon";
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
