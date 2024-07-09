@@ -53,6 +53,7 @@ in {
     };
   };
   serviceOpts.serviceConfig = {
+    DynamicUser = false;
     ExecStart = ''
       ${pkgs.prometheus-openldap-exporter}/bin/openldap_exporter \
         --promAddr ${cfg.listenAddress}:${toString cfg.port} \
