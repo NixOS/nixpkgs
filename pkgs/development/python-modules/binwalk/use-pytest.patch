@@ -1,0 +1,248 @@
+diff --git a/testing/test_generator.py b/testing/test_generator.py
+index 972237a..51b7482 100755
+--- a/testing/test_generator.py
++++ b/testing/test_generator.py
+@@ -10,7 +10,6 @@ import binwalk
+ test_script_template = """
+ import os
+ import binwalk
+-from nose.tools import eq_, ok_
+ 
+ def test_%s():
+     '''
+@@ -30,15 +29,15 @@ def test_%s():
+                                quiet=True)
+ 
+     # Test number of modules used
+-    eq_(len(scan_result), 1)
++    assert len(scan_result) == 1
+ 
+     # Test number of results for that module
+-    eq_(len(scan_result[0].results), len(expected_results))
++    assert len(scan_result[0].results) == len(expected_results)
+ 
+     # Test result-description
+     for i in range(0, len(scan_result[0].results)):
+-        eq_(scan_result[0].results[i].offset, expected_results[i][0])
+-        eq_(scan_result[0].results[i].description, expected_results[i][1])
++        assert scan_result[0].results[i].offset == expected_results[i][0]
++        assert scan_result[0].results[i].description == expected_results[i][1]
+ """
+ 
+ try:
+diff --git a/testing/tests/test_dirtraversal.py b/testing/tests/test_dirtraversal.py
+index 66ef003..888353f 100644
+--- a/testing/tests/test_dirtraversal.py
++++ b/testing/tests/test_dirtraversal.py
+@@ -1,6 +1,5 @@
+ import os
+ import binwalk
+-from nose.tools import eq_, ok_, assert_equal, assert_not_equal
+ 
+ def test_dirtraversal():
+     '''
+@@ -27,7 +26,7 @@ def test_dirtraversal():
+     # good symlinks have not been sanitized.
+     for symlink in bad_symlink_file_list:
+         linktarget = os.path.realpath(os.path.join(output_directory, symlink))
+-        assert_equal(linktarget, os.devnull)
++        assert linktarget == os.devnull
+     for symlink in good_symlink_file_list:
+         linktarget = os.path.realpath(os.path.join(output_directory, symlink))
+-        assert_not_equal(linktarget, os.devnull)
++        assert linktarget != os.devnull
+diff --git a/testing/tests/test_firmware_cpio.py b/testing/tests/test_firmware_cpio.py
+index ad8f38a..677ddb7 100644
+--- a/testing/tests/test_firmware_cpio.py
++++ b/testing/tests/test_firmware_cpio.py
+@@ -1,7 +1,6 @@
+ 
+ import os
+ import binwalk
+-from nose.tools import eq_, ok_
+ 
+ def test_firmware_cpio():
+     '''
+@@ -18,14 +17,14 @@ def test_firmware_cpio():
+                                quiet=True)
+ 
+     # Test number of modules used
+-    eq_(len(scan_result), 1)
++    assert len(scan_result) == 1
+ 
+     # Make sure we got some results
+-    ok_(len(scan_result[0].results) > 0)
++    assert len(scan_result[0].results) > 0
+ 
+     # First result should be at offset 0
+-    eq_(scan_result[0].results[0].offset, 0)
++    assert scan_result[0].results[0].offset == 0
+ 
+     # Make sure the only thing found were cpio archive entries
+     for result in scan_result[0].results:
+-        ok_(result.description.startswith("ASCII cpio archive"))
++        assert result.description.startswith("ASCII cpio archive")
+diff --git a/testing/tests/test_firmware_gzip.py b/testing/tests/test_firmware_gzip.py
+index 1d3a826..34cb659 100644
+--- a/testing/tests/test_firmware_gzip.py
++++ b/testing/tests/test_firmware_gzip.py
+@@ -1,7 +1,6 @@
+ 
+ import os
+ import binwalk
+-from nose.tools import eq_, ok_
+ 
+ def test_firmware_gzip():
+     '''
+@@ -17,13 +16,13 @@ def test_firmware_gzip():
+                                quiet=True)
+ 
+     # Test number of modules used
+-    eq_(len(scan_result), 1)
++    assert len(scan_result) == 1
+ 
+     # There should be only one result
+-    eq_(len(scan_result[0].results), 1)
++    assert len(scan_result[0].results) == 1
+ 
+     # That result should be at offset 0
+-    eq_(scan_result[0].results[0].offset, 0)
++    assert scan_result[0].results[0].offset == 0
+ 
+     # That result should be a gzip file
+-    ok_(scan_result[0].results[0].description.startswith("gzip compressed data"))
++    assert scan_result[0].results[0].description.startswith("gzip compressed data")
+diff --git a/testing/tests/test_firmware_jffs2.py b/testing/tests/test_firmware_jffs2.py
+index 09c1de2..d483474 100644
+--- a/testing/tests/test_firmware_jffs2.py
++++ b/testing/tests/test_firmware_jffs2.py
+@@ -1,7 +1,6 @@
+ 
+ import os
+ import binwalk
+-from nose.tools import eq_, ok_
+ 
+ def test_firmware_jffs2():
+     '''
+@@ -18,25 +17,25 @@ def test_firmware_jffs2():
+                                quiet=True)
+ 
+     # Test number of modules used
+-    eq_(len(scan_result), 1)
++    assert len(scan_result) == 1
+ 
+     # Test number of results for that module, should be more than one
+-    ok_(len(scan_result[0].results) > 1)
++    assert len(scan_result[0].results) > 1
+ 
+     first_result = scan_result[0].results[0]
+ 
+     # Check the offset of the first result
+-    eq_(first_result.offset, 0)
++    assert first_result.offset == 0
+ 
+     # Make sure we found the jffs file system
+-    ok_(first_result.description.startswith("JFFS2 filesystem"))
++    assert first_result.description.startswith("JFFS2 filesystem")
+ 
+     # Check to make sure the first result was displayed
+-    ok_(first_result.display == True)
++    assert first_result.display == True
+ 
+     # Make sure we only found jffs2 file system entries
+     # and that nothing but the first entry was displayed
+     for result in scan_result[0].results[1:]:
+-        ok_(result.description.startswith("JFFS2 filesystem"))
+-        ok_(result.display == False)
++        assert result.description.startswith("JFFS2 filesystem")
++        assert result.display == False
+ 
+diff --git a/testing/tests/test_firmware_squashfs.py b/testing/tests/test_firmware_squashfs.py
+index f496103..fd877ac 100644
+--- a/testing/tests/test_firmware_squashfs.py
++++ b/testing/tests/test_firmware_squashfs.py
+@@ -1,7 +1,6 @@
+ 
+ import os
+ import binwalk
+-from nose.tools import eq_, ok_
+ 
+ def test_firmware_squashfs():
+     '''
+@@ -18,13 +17,13 @@ def test_firmware_squashfs():
+                                quiet=True)
+ 
+     # Test number of modules used
+-    eq_(len(scan_result), 1)
++    assert len(scan_result) == 1
+ 
+     # There should be only one result
+-    eq_(len(scan_result[0].results), 1)
++    assert len(scan_result[0].results) == 1
+ 
+     # That result should be at offset zero
+-    eq_(scan_result[0].results[0].offset, 0)
++    assert scan_result[0].results[0].offset == 0
+ 
+     # That result should be a squashfs file system
+-    ok_(scan_result[0].results[0].description.startswith("Squashfs filesystem"))
++    assert scan_result[0].results[0].description.startswith("Squashfs filesystem")
+diff --git a/testing/tests/test_firmware_zip.py b/testing/tests/test_firmware_zip.py
+index 58b486c..ebcd7e4 100644
+--- a/testing/tests/test_firmware_zip.py
++++ b/testing/tests/test_firmware_zip.py
+@@ -1,7 +1,6 @@
+ 
+ import os
+ import binwalk
+-from nose.tools import eq_, ok_
+ 
+ def test_firmware_zip():
+     '''
+@@ -23,12 +22,12 @@ def test_firmware_zip():
+                                quiet=True)
+ 
+     # Test number of modules used
+-    eq_(len(scan_result), 1)
++    assert len(scan_result) == 1
+ 
+     # Test number of results for that module
+-    eq_(len(scan_result[0].results), len(expected_results))
++    assert len(scan_result[0].results) == len(expected_results)
+ 
+     # Test result-description
+     for i in range(0, len(scan_result[0].results)):
+-        eq_(scan_result[0].results[i].offset, expected_results[i][0])
+-        eq_(scan_result[0].results[i].description, expected_results[i][1])
++        assert scan_result[0].results[i].offset == expected_results[i][0]
++        assert scan_result[0].results[i].description == expected_results[i][1]
+diff --git a/testing/tests/test_lzma.py b/testing/tests/test_lzma.py
+index e9f4f1c..a7c34d0 100644
+--- a/testing/tests/test_lzma.py
++++ b/testing/tests/test_lzma.py
+@@ -1,7 +1,6 @@
+ 
+ import os
+ import binwalk
+-from nose.tools import eq_, ok_
+ 
+ def test_lzma():
+     '''
+@@ -19,13 +18,13 @@ def test_lzma():
+                                quiet=True)
+ 
+     # Test number of modules used
+-    eq_(len(scan_result), 1)
++    assert len(scan_result) == 1
+ 
+     # There should be only one result
+-    eq_(len(scan_result[0].results), 1)
++    assert len(scan_result[0].results) == 1
+ 
+     # That result should be at offset 0
+-    eq_(scan_result[0].results[0].offset, 0)
++    assert scan_result[0].results[0].offset == 0
+ 
+     # That result should be an LZMA file
+-    ok_(scan_result[0].results[0].description == expected_result)
++    assert scan_result[0].results[0].description == expected_result

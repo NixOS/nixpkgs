@@ -16,10 +16,10 @@
   sasquatch,
   squashfsTools,
   matplotlib,
-  nose,
   pycrypto,
   pyqtgraph,
   pyqt5,
+  pytestCheckHook,
   visualizationSupport ? false,
 }:
 
@@ -44,6 +44,7 @@ buildPythonPackage rec {
       includes = [ "testing/tests/test_firmware_zip.py" ];
       revert = true;
     })
+    ./use-pytest.patch
   ];
 
   propagatedBuildInputs =
@@ -80,7 +81,9 @@ buildPythonPackage rec {
     HOME=$(mktemp -d)
   '';
 
-  nativeCheckInputs = [ nose ];
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  disabledTestPaths = [ "testing/test_generator.py" ];
 
   pythonImportsCheck = [ "binwalk" ];
 
