@@ -27,9 +27,22 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [ ./fix-aarch64.patch ];
 
+  postPatch = ''
+    substituteInPlace \
+      pjsip-apps/src/py_pjsua/setup.py \
+      pjsip-apps/src/swig/python/setup.py \
+      pjsip-apps/src/python/setup.py \
+      pjsip-apps/src/python/setup-vc.py \
+      --replace-fail "distutils.core" "setuptools"
+  '';
+
   nativeBuildInputs = lib.optionals pythonSupport [
     swig
     python3
+    python3.pkgs.build
+    python3.pkgs.installer
+    python3.pkgs.setuptools
+    python3.pkgs.wheel
   ];
 
   buildInputs =
@@ -69,7 +82,8 @@ stdenv.mkDerivation (finalAttrs: {
     ''
     + lib.optionalString pythonSupport ''
       (cd pjsip-apps/src/swig/python && \
-        python setup.py install --prefix=$py
+          python -m build --no-isolation --outdir dist/ --wheel
+          python -m installer --prefix $py dist/*.whl
       )
     ''
     + lib.optionalString stdenv.isDarwin ''
