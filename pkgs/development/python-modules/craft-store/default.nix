@@ -51,6 +51,8 @@ buildPythonPackage rec {
     requests-toolbelt
   ];
 
+  pythonRelaxDeps = [ "macaroonbakery" ];
+
   pythonImportsCheck = [ "craft_store" ];
 
   nativeCheckInputs = [
