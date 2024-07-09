@@ -14,6 +14,8 @@ buildPythonPackage rec {
     sha256 = "1x3i9wmzw33fpkis203alygfnrkcmq9w1aydcm887jh6frfqm6cw";
   };
 
+  patches = [ ./skip-asyncore-python-3.12.patch ];
+
   # No tests distributed
   doCheck = false;
 
