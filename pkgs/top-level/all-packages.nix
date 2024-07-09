@@ -13392,8 +13392,6 @@ with pkgs;
     themes = recurseIntoAttrs (getPackagesWithPrefix "theme");
   };
 
-  thefuck = python3Packages.callPackage ../tools/misc/thefuck { };
-
   theme-sh = callPackage ../tools/misc/theme-sh { };
 
   thiefmd = callPackage ../applications/editors/thiefmd { };
@@ -29531,8 +29529,6 @@ with pkgs;
 
   bashSnippets = callPackage ../applications/misc/bashSnippets { };
 
-  batik = callPackage ../applications/graphics/batik { };
-
   batsignal = callPackage ../applications/misc/batsignal { };
 
   baudline = callPackage ../applications/audio/baudline { };
@@ -29694,8 +29690,6 @@ with pkgs;
   calibre = qt6Packages.callPackage ../applications/misc/calibre {
     podofo = podofo010;
   };
-
-  calibre-web = callPackage ../servers/calibre-web { };
 
   # calico-felix and calico-node have not been packaged due to libbpf, linking issues
   inherit (callPackage ../applications/networking/cluster/calico {})
@@ -31337,10 +31331,6 @@ with pkgs;
   meerk40t = callPackage ../applications/misc/meerk40t { };
 
   meerk40t-camera = callPackage ../applications/misc/meerk40t/camera.nix { };
-
-  musikcube = callPackage ../applications/audio/musikcube {
-    inherit (darwin.apple_sdk.frameworks) Cocoa CoreAudio SystemConfiguration;
-  };
 
   libmt32emu = callPackage ../applications/audio/munt/libmt32emu.nix { };
 
@@ -34528,10 +34518,6 @@ with pkgs;
   todoman = callPackage ../applications/office/todoman { };
 
   tofi = callPackage ../applications/misc/tofi { };
-
-  tokyonight-gtk-theme = tokyonight-gtk-theme-variants.full;
-
-  tokyonight-gtk-theme-variants = recurseIntoAttrs (callPackage ../data/themes/tokyonight-gtk-theme { });
 
   topydo = callPackage ../applications/misc/topydo { };
 

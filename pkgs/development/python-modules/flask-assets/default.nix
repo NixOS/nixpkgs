@@ -5,8 +5,7 @@
   setuptools,
   flask,
   webassets,
-  flask-script,
-  pynose,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -31,9 +30,13 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     flask
     webassets
-    flask-script
-    pynose
   ];
+
+  doCheck = false; # tests are broken with webassets 2.0
+
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  pythonImportsCheck = [ "flask_assets" ];
 
   meta = with lib; {
     homepage = "https://github.com/miracle2k/flask-assets";

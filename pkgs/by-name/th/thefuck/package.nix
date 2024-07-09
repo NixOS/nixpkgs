@@ -1,22 +1,37 @@
-{ lib, stdenv, fetchFromGitHub, buildPythonApplication
-, colorama, decorator, psutil, pyte, six
-, go, mock, pytest7CheckHook, pytest-mock
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  python311Packages,
+  go,
 }:
 
-buildPythonApplication rec {
+python311Packages.buildPythonApplication rec {
   pname = "thefuck";
   version = "3.32";
 
   src = fetchFromGitHub {
     owner = "nvbn";
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-bRCy95owBJaxoyCNQF6gEENoxCkmorhyKzZgU1dQN6I=";
+    repo = "thefuck";
+    rev = "refs/tags/${version}";
+    hash = "sha256-bRCy95owBJaxoyCNQF6gEENoxCkmorhyKzZgU1dQN6I=";
   };
 
-  propagatedBuildInputs = [ colorama decorator psutil pyte six ];
+  dependencies = with python311Packages; [
+    colorama
+    decorator
+    psutil
+    pyte
+    six
+  ];
 
-  nativeCheckInputs = [ go mock pytest7CheckHook pytest-mock ];
+  nativeCheckInputs =
+    [ go ]
+    ++ (with python311Packages; [
+      mock
+      pytest7CheckHook
+      pytest-mock
+    ]);
 
   disabledTests = lib.optionals stdenv.isDarwin [
     "test_settings_defaults"
@@ -35,10 +50,10 @@ buildPythonApplication rec {
     "test_when_successfully_configured"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/nvbn/thefuck";
     description = "Magnificent app which corrects your previous console command";
-    license = licenses.mit;
-    maintainers = with maintainers; [ marcusramberg ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ marcusramberg ];
   };
 }
