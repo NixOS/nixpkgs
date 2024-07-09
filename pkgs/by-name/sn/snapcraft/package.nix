@@ -67,7 +67,7 @@ python3Packages.buildPythonApplication rec {
     substituteInPlace snapcraft/elf/elf_utils.py \
       --replace-fail 'arch_linker_path = Path(arch_config.dynamic_linker)' \
       'return str(Path("${glibc}/lib/ld-linux-x86-64.so.2"))'
-    
+
     substituteInPlace snapcraft_legacy/internal/xattrs.py \
       --replace-fail 'distutils.util' 'setuptools.dist'
   '';
@@ -107,9 +107,7 @@ python3Packages.buildPythonApplication rec {
     tinydb
   ];
 
-  nativeBuildInputs = with python3Packages; [
-    setuptools
-  ];
+  nativeBuildInputs = with python3Packages; [ setuptools ];
 
   pythonRelaxDeps = [
     "docutils"
@@ -122,18 +120,21 @@ python3Packages.buildPythonApplication rec {
     wrapProgram $out/bin/snapcraft --prefix PATH : ${squashfsTools}/bin
   '';
 
-  nativeCheckInputs = with python3Packages; [
-    pytest-check
-    pytest-cov
-    pytest-mock
-    pytest-subprocess
-    pytestCheckHook
-    responses
-    setuptools
-  ] ++ [
-    git
-    squashfsTools
-  ];
+  nativeCheckInputs =
+    with python3Packages;
+    [
+      pytest-check
+      pytest-cov
+      pytest-mock
+      pytest-subprocess
+      pytestCheckHook
+      responses
+      setuptools
+    ]
+    ++ [
+      git
+      squashfsTools
+    ];
 
   preCheck = ''
     mkdir -p check-phase
@@ -164,9 +165,7 @@ python3Packages.buildPythonApplication rec {
     "test_snap_command_fallback"
     "test_validate_architectures_supported"
     "test_validate_architectures_unsupported"
-  ] ++ lib.optionals stdenv.isAarch64 [
-    "test_load_project"
-  ];
+  ] ++ lib.optionals stdenv.isAarch64 [ "test_load_project" ];
 
   disabledTestPaths = [
     "tests/unit/commands/test_remote.py"
