@@ -12,12 +12,12 @@
 
 buildPythonPackage rec {
   pname = "libknot";
-  version = "3.3.6";
+  version = "3.3.7";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-N96gdO5sezMyKt0QdX7ORg5DnEVSqb1j+WohvOHdYYU=";
+    hash = "sha256-3t/YYP7Hnua3fZ4PPN59BcPKHWukygUlcBGfNPOjJAE=";
   };
 
   postPatch = ''

@@ -24,9 +24,9 @@ let
     # However, the version string is more useful for end-users.
     # These are contained in a attrset of their own to make it obvious that
     # people should update both.
-    version = "1.30.3";
-    rev = "12a6a79966203969a23aa2f0d705f39b679744c2";
-    hash = "sha256-S18bnAVha4CnYKHTzytKY6PHWSbOzmObbyZEhzIHsf8=";
+    version = "1.30.4";
+    rev = "32113313a357829ba3a5dce0795b6780bf8cbf4d";
+    hash = "sha256-u9lTVe40pwXTt0YRwJXRuZonS5KJL2JQUQ3L9ymuA74=";
   };
 
   # these need to be updated for any changes to fetchAttrs
@@ -183,6 +183,8 @@ buildBazelPackage {
     "--repo_env=GOPROXY=https://proxy.golang.org,direct"
     "--repo_env=GOSUMDB=sum.golang.org"
   ];
+
+  requiredSystemFeatures = [ "big-parallel" ];
 
   passthru.tests = {
     envoy = nixosTests.envoy;

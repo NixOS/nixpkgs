@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonRelaxDepsHook,
 
   # build-system
   setuptools,
@@ -20,19 +19,18 @@
 
 buildPythonPackage rec {
   pname = "faster-whisper";
-  version = "1.0.2";
+  version = "1.0.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "SYSTRAN";
     repo = "faster-whisper";
     rev = "refs/tags/v${version}";
-    hash = "sha256-O2RRwb+omgSpfckHh3oPu454g2ULT4gyolrg5olHcRc=";
+    hash = "sha256-C/O+wt3dykQJmH+VsVkpQwEAdyW8goMUMKR0Z3Y7jdo=";
   };
 
   build-system = [
     setuptools
-    pythonRelaxDepsHook
   ];
 
   pythonRelaxDeps = [ "tokenizers" ];

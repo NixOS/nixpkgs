@@ -1,7 +1,7 @@
 { fetchFromGitHub
 , lib
 , stdenvNoCC
-, gnome
+, adwaita-icon-theme
 , gnome-icon-theme
 , hicolor-icon-theme
 , gtk3
@@ -19,7 +19,7 @@ stdenvNoCC.mkDerivation rec {
   };
 
   propagatedBuildInputs = [
-    gnome.adwaita-icon-theme
+    adwaita-icon-theme
     gnome-icon-theme
     hicolor-icon-theme
   ];

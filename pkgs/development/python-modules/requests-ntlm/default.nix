@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "requests-ntlm";
-  version = "1.2.0";
+  version = "1.3.0";
 
   format = "pyproject";
 
   src = fetchPypi {
     pname = "requests_ntlm";
     inherit version;
-    hash = "sha256-M8KF9QdOMXy90zjRma+kanwBEy5cER02vUFVNOm5Fqg=";
+    hash = "sha256-spzCRiYj3/35uIxD4YDMtzW0AHIopUIiDogsWK5Wxmg=";
   };
 
   nativeBuildInputs = [ setuptools ];

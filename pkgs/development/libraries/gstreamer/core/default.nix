@@ -123,6 +123,6 @@ stdenv.mkDerivation (finalAttrs: {
       "gstreamer-controller-1.0"
     ];
     platforms = platforms.unix;
-    maintainers = with maintainers; [ ttuegel matthewbauer lilyinstarlight ];
+    maintainers = with maintainers; [ ttuegel matthewbauer ];
   };
 })

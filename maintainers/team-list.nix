@@ -715,10 +715,7 @@ with lib.maintainers;
   };
 
   node = {
-    members = [
-      lilyinstarlight
-      winter
-    ];
+    members = [ winter ];
     scope = "Maintain Node.js runtimes and build tooling.";
     shortName = "Node.js";
     enableFeatureFreezePing = true;
@@ -772,7 +769,7 @@ with lib.maintainers;
       aanderse
       drupol
       ma27
-      patka
+      piotrkwiecinski
       talyz
     ];
     githubTeams = [ "php" ];

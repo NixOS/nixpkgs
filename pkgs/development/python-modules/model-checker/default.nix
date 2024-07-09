@@ -5,7 +5,6 @@
   setuptools,
   pythonOlder,
   z3-solver,
-  pythonRelaxDepsHook,
 }:
 
 buildPythonPackage rec {
@@ -26,7 +25,6 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   dependencies = [ z3-solver ];
 

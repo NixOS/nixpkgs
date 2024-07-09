@@ -91,7 +91,6 @@ python.pkgs.buildPythonApplication rec {
   nativeBuildInputs = [
     gettext
   ] ++ (with python.pkgs; [
-    pythonRelaxDepsHook
     setuptools
   ]);
 
@@ -99,12 +98,14 @@ python.pkgs.buildPythonApplication rec {
     "celery"
     "css-inline"
     "cssutils"
+    "django-compressor"
     "django-csp"
     "django-filter"
     "django-hierarkey"
     "djangorestframework"
     "markdown"
     "pillow"
+    "publicsuffixlist"
     "python-dateutil"
     "reportlab"
     "requests"

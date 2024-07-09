@@ -17,13 +17,13 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "polkadot";
-  version = "1.13.0";
+  version = "1.14.0";
 
   src = fetchFromGitHub {
     owner = "paritytech";
     repo = "polkadot-sdk";
     rev = "polkadot-v${version}";
-    hash = "sha256-9ZjiKv+05//Kf6q3mL1P5kOCOm1KCGmQIZkrD54pyeI=";
+    hash = "sha256-IKKhGjWHyHUrDVGJo1d1JXzagkydgdfd/u6jk76qxHU=";
 
     # the build process of polkadot requires a .git folder in order to determine
     # the git commit hash that is being built and add it to the version string.
@@ -92,8 +92,5 @@ rustPlatform.buildRustPackage rec {
     maintainers = with maintainers; [ akru andresilva FlorianFranzen RaghavSood ];
     # See Iso::from_arch in src/isa/mod.rs in cranelift-codegen-meta.
     platforms = intersectLists platforms.unix (platforms.aarch64 ++ platforms.s390x ++ platforms.riscv64 ++ platforms.x86);
-    # See comment about wasm32-unknown-unknown in rustc.nix.
-    broken = lib.any (a: lib.hasAttr a stdenv.hostPlatform.gcc) [ "cpu" "float-abi" "fpu" ] ||
-      !stdenv.hostPlatform.gcc.thumb or true;
   };
 }

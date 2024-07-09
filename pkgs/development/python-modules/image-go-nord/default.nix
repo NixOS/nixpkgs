@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "image-go-nord";
-  version = "0.1.7";
+  version = "1.1.0";
   format = "setuptools";
   disabled = pythonOlder "3.7";
 
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "Schrodinger-Hat";
     repo = "ImageGoNord-pip";
     rev = "refs/tags/v${version}";
-    hash = "sha256-vXABG3aJ6bwT37hfo909oF8qfAY3ZW18xvr1V8vSy5w=";
+    hash = "sha256-2Dnl0dcdMo4PnhHTb/5cJ7C0CvW84av4CCbrTLPqopg=";
   };
 
   propagatedBuildInputs = [ pillow ];

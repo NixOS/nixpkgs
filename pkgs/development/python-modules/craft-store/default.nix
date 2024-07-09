@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "craft-store";
-  version = "2.6.0";
+  version = "2.6.2";
 
   pyproject = true;
 
@@ -28,12 +28,12 @@ buildPythonPackage rec {
     owner = "canonical";
     repo = "craft-store";
     rev = "refs/tags/${version}";
-    hash = "sha256-VtKOe3IrvGcNWfp1/tg1cO94xtfkP7AbIHh0WTdlfbQ=";
+    hash = "sha256-QKfXOgAWMV1mVm32ZP3HQTJmWKm82dEDmy3fo5d67TU=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "setuptools==67.7.2" "setuptools"
+      --replace-fail "setuptools==" "setuptools>="
   '';
 
   nativeBuildInputs = [

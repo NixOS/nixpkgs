@@ -12,20 +12,20 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "ruff";
-  version = "0.4.10";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "astral-sh";
     repo = "ruff";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-FRBuvXtnbxRWoI0f8SM0U0Z5TRyX5Tbgq3d34Oh2bG4=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-OjMoa247om4DLPZ6u0XPMd5L+LYlVzHL39plCCr/fYE=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
       "lsp-types-0.95.1" = "sha256-8Oh299exWXVi6A39pALOISNfp8XBya8z+KT/Z7suRxQ=";
-      "salsa-2022-0.1.0" = "sha256-mt+X1hO+5ZrCAgy6N4aArnixJ9GjY/KwM0uIMUSrDsg=";
+      "salsa-0.18.0" = "sha256-keVEmSwV1Su1RlOTaIu253FZidk279qA+rXcCeuOggc=";
     };
   };
 
@@ -64,7 +64,7 @@ rustPlatform.buildRustPackage rec {
     "--skip=semantic::types::infer::tests::resolve_visible_def"
   ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd ruff \
       --bash <($out/bin/ruff generate-shell-completion bash) \
       --fish <($out/bin/ruff generate-shell-completion fish) \
@@ -79,7 +79,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Extremely fast Python linter";
     homepage = "https://github.com/astral-sh/ruff";
-    changelog = "https://github.com/astral-sh/ruff/releases/tag/v${version}";
+    changelog = "https://github.com/astral-sh/ruff/releases/tag/${version}";
     license = lib.licenses.mit;
     mainProgram = "ruff";
     maintainers = with lib.maintainers; [

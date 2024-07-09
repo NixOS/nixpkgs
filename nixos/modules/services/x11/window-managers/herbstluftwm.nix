@@ -33,7 +33,10 @@ in
             (cfg.configFile != null)
             ''-c "${cfg.configFile}"''
             ;
-        in "${cfg.package}/bin/herbstluftwm ${configFileClause} &";
+        in ''
+          ${cfg.package}/bin/herbstluftwm ${configFileClause} &
+          waitPID=$!
+        '';
     };
     environment.systemPackages = [ cfg.package ];
   };

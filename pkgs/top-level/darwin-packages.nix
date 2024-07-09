@@ -48,11 +48,15 @@ makeScopeWithSplicing' {
   };
 
   # Pick an SDK
-  apple_sdk = if stdenv.hostPlatform.isAarch64 then apple_sdk_11_0 else apple_sdk_10_12;
+  apple_sdk = {
+    "10.12" = apple_sdk_10_12;
+    "11.0" = apple_sdk_11_0;
+  }.${stdenv.hostPlatform.darwinSdkVersion}
+  or (throw "Unsupported sdk: ${stdenv.hostPlatform.darwinSdkVersion}");
 
   # Pick the source of libraries: either Apple's open source releases, or the
   # SDK.
-  useAppleSDKLibs = stdenv.hostPlatform.isAarch64;
+  useAppleSDKLibs = lib.versionAtLeast stdenv.hostPlatform.darwinSdkVersion "11";
 
   selectAttrs = attrs: names:
     lib.listToAttrs (lib.concatMap (n: lib.optionals (attrs ? "${n}") [(lib.nameValuePair n attrs."${n}")]) names);
@@ -83,8 +87,8 @@ impure-cmds // appleSourcePackages // chooseLibs // {
   };
 
   binutils-unwrapped = callPackage ../os-specific/darwin/binutils {
-    inherit (pkgs) binutils-unwrapped;
-    inherit (pkgs.llvmPackages) llvm clang-unwrapped;
+    inherit (self) cctools;
+    inherit (pkgs.llvmPackages) clang-unwrapped llvm llvm-manpages;
   };
 
   binutils = pkgs.wrapBintoolsWith {
@@ -95,17 +99,29 @@ impure-cmds // appleSourcePackages // chooseLibs // {
     bintools = self.binutils-unwrapped;
   };
 
-  binutilsDualAs-unwrapped = callPackage ../os-specific/darwin/binutils {
-    inherit (pkgs) binutils-unwrapped;
-    inherit (pkgs.llvmPackages) llvm clang-unwrapped;
-    dualAs = true;
+  # x86-64 Darwin gnat-bootstrap emits assembly
+  # with MOVQ as the mnemonic for quadword interunit moves
+  # such as `movq %rbp, %xmm0`.
+  # The clang integrated assembler recognises this as valid,
+  # but unfortunately the cctools.gas GNU assembler does not;
+  # it instead uses MOVD as the mnemonic.
+  # The assembly that a GCC build emits is determined at build time
+  # and cannot be changed afterwards.
+  #
+  # To build GNAT on x86-64 Darwin, therefore,
+  # we need both the clang _and_ the cctools.gas assemblers to be available:
+  # the former to build at least the stage1 compiler,
+  # and the latter at least to be detectable
+  # as the target for the final compiler.
+  binutilsDualAs-unwrapped = pkgs.buildEnv {
+    name = "${lib.getName self.binutils-unwrapped}-dualas-${lib.getVersion self.binutils-unwrapped}";
+    paths = [
+      self.binutils-unwrapped
+      (lib.getOutput "gas" self.cctools)
+    ];
   };
 
-  binutilsDualAs = pkgs.wrapBintoolsWith {
-    libc =
-      if stdenv.targetPlatform != stdenv.hostPlatform
-      then pkgs.libcCross
-      else pkgs.stdenv.cc.libc;
+  binutilsDualAs = self.binutils.override {
     bintools = self.binutilsDualAs-unwrapped;
   };
 
@@ -114,7 +130,7 @@ impure-cmds // appleSourcePackages // chooseLibs // {
     bintools = self.binutils-unwrapped;
   };
 
-  cctools = self.cctools-llvm;
+  cctools = self.cctools-port;
 
   cctools-apple = callPackage ../os-specific/darwin/cctools/apple.nix {
     stdenv = if stdenv.isDarwin then stdenv else pkgs.libcxxStdenv;

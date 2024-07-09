@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bemenu";
-  version = "0.6.21";
+  version = "0.6.22";
 
   src = fetchFromGitHub {
     owner = "Cloudef";
     repo = finalAttrs.pname;
     rev = finalAttrs.version;
-    hash = "sha256-E/5wN7HpdBt//jFe9yAB8fuHKiFJ7D1UAJEvG8KBJ6k=";
+    hash = "sha256-wdOrVX4AgGXySlwmqFRp9OWoSkEYBIZumBGTrFfyNpg=";
   };
 
   strictDeps = true;
@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/Cloudef/bemenu";
     description = "Dynamic menu library and client program inspired by dmenu";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ crertel ];
     mainProgram = "bemenu";
     platforms = with platforms; linux;
   };

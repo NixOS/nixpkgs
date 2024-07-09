@@ -18,9 +18,10 @@ python3.pkgs.buildPythonApplication rec {
 
   build-system = with python3.pkgs; [ poetry-core ];
 
-  nativeBuildInputs = with python3.pkgs; [ pythonRelaxDepsHook ];
-
   pythonRelaxDeps = true;
+
+  # Remove when https://github.com/spotDL/spotify-downloader/issues/2119 is fixed
+  patches = [ ./is_lrc_valid-failure.patch ];
 
   dependencies = with python3.pkgs; [
     bandcamp-api

@@ -37,6 +37,8 @@ stdenvNoCC.mkDerivation {
     hash = "sha256-q5/VcFsm3vNEw55zq/vcM11eo456SYE5TQA3g2VQjGc=";
   };
 
+  patches = [ ./fix-inconsistent-theme-name.patch ];
+
   nativeBuildInputs = [
     gtk3
     sassc

@@ -3,7 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   nix-update-script,
-  protobuf3,
+  protobuf,
   pymacaroons,
   pynacl,
   pyrfc3339,
@@ -31,7 +31,7 @@ buildPythonPackage rec {
   nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
-    protobuf3
+    protobuf
     pymacaroons
     pynacl
     pyrfc3339

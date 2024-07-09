@@ -12,7 +12,6 @@
   pytestCheckHook,
   python3,
   pythonOlder,
-  pythonRelaxDepsHook,
   requests,
   setuptools,
   setuptools-scm,
@@ -47,7 +46,6 @@ buildPythonPackage rec {
     "urllib3"
   ];
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   build-system = [ setuptools ];
 

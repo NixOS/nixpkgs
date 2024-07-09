@@ -8,7 +8,6 @@
   pytestCheckHook,
   python-gnupg,
   pythonOlder,
-  pythonRelaxDepsHook,
   sentry-sdk,
   tomli,
 }:
@@ -29,12 +28,12 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [
     "packaging"
+    "psutil"
     "python-gnupg"
   ];
 
   build-system = [ poetry-core ];
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   propagatedBuildInputs = [
     paho-mqtt

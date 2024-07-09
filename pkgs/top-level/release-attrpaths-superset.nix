@@ -52,6 +52,7 @@ let
     pkgsMusl = true;
     pkgsStatic = true;
     pkgsCross = true;
+    pkgsx86_64Darwin = true;
     pkgsi686Linux = true;
     pkgsLinux = true;
     pkgsExtraHardening = true;
@@ -70,9 +71,11 @@ let
     override = true;
     __functor = true;
     __functionArgs = true;
+    __splicedPackages = true;
     newScope = true;
     scope = true;
     pkgs = true;
+    test-pkgs = true;
 
     buildHaskellPackages = true;
     buildPackages = true;

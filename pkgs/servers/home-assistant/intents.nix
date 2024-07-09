@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "home-assistant-intents";
-  version = "2024.6.21";
+  version = "2024.7.3";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     owner = "home-assistant";
     repo = "intents-package";
     rev = "refs/tags/${version}";
-    hash = "sha256-tgbZqcxv/uFoNCGq7TySffhqQXzupZodQfQHBqkSHrE=";
+    hash = "sha256-3JnBmSNa9Yrh+5QFQ6KIKZProxMuX+CyTZzqRUAlBcQ=";
     fetchSubmodules = true;
   };
 

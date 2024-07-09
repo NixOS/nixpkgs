@@ -1,7 +1,7 @@
 { copyDesktopItems
 , fetchurl
 , glib
-, gnome
+, adwaita-icon-theme
 , gtk3
 , jre
 , lib
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    gnome.adwaita-icon-theme
+    adwaita-icon-theme
     gtk3
     jre
   ];

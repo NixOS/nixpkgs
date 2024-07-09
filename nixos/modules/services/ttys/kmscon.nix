@@ -98,11 +98,11 @@ in {
     services.kmscon.extraConfig =
       let
         xkb = optionals cfg.useXkbConfig
-          lib.mapAttrsToList (n: v: "xkb-${n}=${v}") (
+          (lib.mapAttrsToList (n: v: "xkb-${n}=${v}") (
             lib.filterAttrs
               (n: v: builtins.elem n ["layout" "model" "options" "variant"] && v != "")
               config.services.xserver.xkb
-          );
+          ));
         render = optionals cfg.hwRender [ "drm" "hwaccel" ];
         fonts = optional (cfg.fonts != null) "font-name=${lib.concatMapStringsSep ", " (f: f.name) cfg.fonts}";
       in lib.concatStringsSep "\n" (xkb ++ render ++ fonts);

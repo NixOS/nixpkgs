@@ -75,40 +75,17 @@ The Nixpkgs systems for continuous integration [Hydra](https://hydra.nixos.org/)
 #### Package tests {#var-passthru-tests-packages}
 []{#var-meta-tests-packages} <!-- legacy anchor -->
 
-Tests that are part of the source package, if they run quickly, are typically executed in the [`installCheckPhase`](#var-stdenv-phases).
-This phase is also suitable for performing a `--version` test for packages that support such flag.
-Most programs distributed by Nixpkgs support such a `--version` flag, and successfully calling the program with that flag indicates that the package at least got compiled properly.
+Besides tests provided by upstream, that you run in the [`checkPhase`](#ssec-check-phase), you may want to define tests derivations in the `passthru.tests` attribute, which won't change the build. `passthru.tests` have several advantages over running tests during any of the [standard phases](#sec-stdenv-phases):
 
-:::{.example #ex-checking-build-installCheckPhase}
+- They access the package as consumers would, independently from the environment in which it was built
+- They can be run and debugged without rebuilding the package, which is useful if that takes a long time
+- They don't add overhead to each build, as opposed checks added to the [`distPhase`](#ssec-distribution-phase), such as [`versionCheckHook`](#versioncheckhook).
 
-## Checking builds with `installCheckPhase`
+It is also possible to use `passthru.tests` to test the version with [`testVersion`](#tester-testVersion), but since that is pretty trivial and recommended thing to do, we recommend using [`versionCheckHook`](#versioncheckhook) for that, which has the following advantages over `passthru.tests`:
 
-When building `git`, a rudimentary test for successful compilation would be running `git --version`:
-
-```nix
-stdenv.mkDerivation (finalAttrs: {
-  pname = "git";
-  version = "1.2.3";
-  # ...
-  doInstallCheck = true;
-  installCheckPhase = ''
-    runHook preInstallCheck
-    echo checking if 'git --version' mentions ${finalAttrs.version}
-    $out/bin/git --version | grep ${finalAttrs.version}
-    runHook postInstallCheck
-  '';
-  # ...
-})
-```
-:::
-
-However, tests that are non-trivial will better fit into `passthru.tests` because they:
-
-- Access the package as consumers would, independently from the environment in which it was built
-- Can be run and debugged without rebuilding the package, which is useful if that takes a long time
-- Don't add overhad to each build, as opposed to `installCheckPhase`
-
-It is also possible to use `passthru.tests` to test the version with [`testVersion`](#tester-testVersion).
+- If the `versionCheckPhase` (the phase defined by [`versionCheckHook`](#versioncheckhook)) fails, it triggers a failure which can't be ignored if you use the package, or if you find out about it in a [`nixpkgs-review`](https://github.com/Mic92/nixpkgs-review) report.
+- Sometimes packages become silently broken - meaning they fail to launch but their build passes because they don't perform any tests in the `checkPhase`. If you use this tool infrequently, such a silent breakage may rot in your system / profile configuration, and you will not notice the failure until you will want to use this package. Testing such basic functionality ensures you have to deal with the failure when you update your system / profile.
+- When you open a PR, [ofborg](https://github.com/NixOS/ofborg)'s CI _will_ run `passthru.tests` of [packages that are directly changed by your PR (according to your commits' messages)](https://github.com/NixOS/ofborg?tab=readme-ov-file#automatic-building), but if you'd want to use the [`@ofborg build`](https://github.com/NixOS/ofborg?tab=readme-ov-file#build) command for dependent packages, you won't have to specify in addition the `.tests` attribute of the packages you want to build, and no body will be able to avoid these tests.
 
 <!-- NOTE(@fricklerhandwerk): one may argue whether that testing guide should rather be in the user's manual -->
 For more on how to write and run package tests for Nixpkgs, see the [testing section in the package contributor guide](https://github.com/NixOS/nixpkgs/blob/master/pkgs/README.md#package-tests).

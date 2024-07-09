@@ -1,3 +1,10 @@
+let
+  # `ides.json` is handwritten and contains information that doesn't change across updates, like maintainers and other metadata
+  # `versions.json` contains everything generated/needed by the update script version numbers, build numbers and tarball hashes
+  ideInfo = builtins.fromJSON (builtins.readFile ./bin/ides.json);
+  versions = builtins.fromJSON (builtins.readFile ./bin/versions.json);
+in
+
 { lib
 , stdenv
 , callPackage
@@ -30,10 +37,6 @@
 let
   inherit (stdenv.hostPlatform) system;
 
-  # `ides.json` is handwritten and contains information that doesn't change across updates, like maintainers and other metadata
-  # `versions.json` contains everything generated/needed by the update script version numbers, build numbers and tarball hashes
-  ideInfo = lib.importJSON ./bin/ides.json;
-  versions = lib.importJSON ./bin/versions.json;
   products = versions.${system} or (throw "Unsupported system: ${system}");
 
   package = if stdenv.isDarwin then ./bin/darwin.nix else ./bin/linux.nix;

@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     description = "Qt-based remote canvas application for FlightGear";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ nayala ];
+    maintainers = with maintainers; [];
     mainProgram = "fgqcanvas";
   };
 }

@@ -7,7 +7,7 @@
   inherit version;
 
   defaultVersion = with lib.versions; lib.switch [ coq.version mathcomp-analysis.version] [
-    { cases = [ (isGe "8.17") (isGe "1.0") ];                    out = "0.7.1"; }
+    { cases = [ (range "8.17" "8.19") (isGe "1.0") ];                    out = "0.7.1"; }
     { cases = [ (isGe "8.17") (range "0.6.6" "0.7.0") ];         out = "0.6.1"; }
     { cases = [ (range "8.17" "8.18") (range "0.6.0" "0.6.7") ]; out = "0.5.2"; }
     { cases = [ (range "8.15" "8.16") (range "0.5.4" "0.6.5") ]; out = "0.5.1"; }

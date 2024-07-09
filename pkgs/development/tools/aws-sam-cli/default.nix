@@ -26,10 +26,6 @@ python3.pkgs.buildPythonApplication rec {
     setuptools
   ];
 
-  nativeBuildInputs = with python3.pkgs; [
-    pythonRelaxDepsHook
-  ];
-
   pythonRelaxDeps = [
     "aws-lambda-builders"
     "aws-sam-translator"

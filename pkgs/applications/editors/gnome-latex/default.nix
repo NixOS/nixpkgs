@@ -12,6 +12,7 @@
 , libgedit-gtksourceview
 , libgedit-tepl
 , libgee
+, adwaita-icon-theme
 , gnome
 , glib
 , pkg-config
@@ -49,7 +50,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    gnome.adwaita-icon-theme
+    adwaita-icon-theme
     glib
     gsettings-desktop-schemas
     gspell

@@ -2,8 +2,12 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+
+  # build-system
   cython,
   versioneer,
+
+  # dependencies
   cons,
   etuples,
   filelock,
@@ -12,6 +16,8 @@
   numpy,
   scipy,
   typing-extensions,
+
+  # checks
   jax,
   jaxlib,
   numba,
@@ -23,7 +29,7 @@
 
 buildPythonPackage rec {
   pname = "pytensor";
-  version = "2.22.1";
+  version = "2.23.0";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -32,7 +38,7 @@ buildPythonPackage rec {
     owner = "pymc-devs";
     repo = "pytensor";
     rev = "refs/tags/rel-${version}";
-    hash = "sha256-FG95+3g+DcqQkyJX3PavfyUWTINFLrgAPTaHYN/jk90=";
+    hash = "sha256-r7ooPwZSEsypYAf+oWu7leuoIK39gFfHZACrxsbcIV0=";
   };
 
   postPatch = ''

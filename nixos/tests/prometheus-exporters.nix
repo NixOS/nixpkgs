@@ -209,6 +209,34 @@ let
         '';
     };
 
+    deluge = {
+      exporterConfig = {
+        enable = true;
+        port = 1234;
+        listenAddress = "127.0.0.1";
+
+        delugeUser = "user";
+        delugePort = 2345;
+        delugePasswordFile = pkgs.writeText "password" "weak_password";
+      };
+      metricProvider = {
+        services.deluge.enable = true;
+        services.deluge.declarative = true;
+        services.deluge.config.daemon_port = 2345;
+        services.deluge.authFile = pkgs.writeText "authFile" ''
+        localclient:abcdef:10
+        user:weak_password:10
+        '';
+      };
+      exporterTest = ''
+        wait_for_unit("deluged.service")
+        wait_for_open_port(2345)
+        wait_for_unit("prometheus-deluge-exporter.service")
+        wait_for_open_port(1234)
+        succeed("curl -sSf http://localhost:1234 | grep 'deluge_torrents'")
+      '';
+    };
+
     dnsmasq = {
       exporterConfig = {
         enable = true;
@@ -314,10 +342,9 @@ let
         tokenPath = pkgs.writeText "token" "abc123";
       };
 
-      # noop: fastly's exporter can't start without first talking to fastly
-      # see: https://github.com/peterbourgon/fastly-exporter/issues/87
       exporterTest = ''
-        succeed("true");
+        wait_for_unit("prometheus-fastly-exporter.service")
+        wait_for_open_port(9118)
       '';
     };
 

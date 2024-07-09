@@ -5,7 +5,6 @@
   ipykernel,
   jupyter-core,
   jupyter-client,
-  ipython-genutils,
   pygments,
   pyqt5,
   pytestCheckHook,
@@ -32,7 +31,6 @@ buildPythonPackage rec {
 
   dependencies = [
     ipykernel
-    ipython-genutils
     jupyter-core
     jupyter-client
     pygments

@@ -8,7 +8,6 @@
   pyaml,
   pydantic,
   pythonOlder,
-  pythonRelaxDepsHook,
   thelogrus,
 }:
 
@@ -30,7 +29,6 @@ buildPythonPackage rec {
 
   build-system = [ poetry-core ];
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   dependencies = [
     gitlike-commands

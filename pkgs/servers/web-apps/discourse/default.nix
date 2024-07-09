@@ -41,18 +41,19 @@
 , jq
 , moreutils
 , terser
+, uglify-js
 
 , plugins ? []
 }@args:
 
 let
-  version = "3.2.2";
+  version = "3.2.3";
 
   src = fetchFromGitHub {
     owner = "discourse";
     repo = "discourse";
     rev = "v${version}";
-    sha256 = "sha256-JUCFtB5BvBytO3flq9o6iI3HPmvLU358HEmE6wbBsSk=";
+    sha256 = "sha256-ehv81trN8eG7QRAD5ERiSql6ZRCJK9cz6VOT9OzjZhg=";
   };
 
   ruby = ruby_3_2;
@@ -214,7 +215,7 @@ let
     nativeBuildInputs = runtimeDeps ++ [
       postgresql
       redis
-      nodePackages.uglify-js
+      uglify-js
       terser
       yarn
       jq

@@ -1,7 +1,10 @@
+let
+  allKernels = builtins.fromJSON (builtins.readFile ./kernels-org.json);
+in
+
 { branch, lib, fetchurl, fetchzip, buildLinux, ... } @ args:
 
 let
-  allKernels = builtins.fromJSON (builtins.readFile ./kernels-org.json);
   thisKernel = allKernels.${branch};
   inherit (thisKernel) version;
 

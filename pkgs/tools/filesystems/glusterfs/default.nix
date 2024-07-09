@@ -79,11 +79,14 @@ in stdenv.mkDerivation rec {
   postPatch = ''
     sed -e '/chmod u+s/d' -i contrib/fuse-util/Makefile.am
     substituteInPlace libglusterfs/src/glusterfs/lvm-defaults.h \
-      --replace '/sbin/' '${lvm2}/bin/'
+      --replace-fail '/sbin/' '${lvm2}/bin/'
     substituteInPlace libglusterfs/src/glusterfs/compat.h \
-      --replace '/bin/umount' '${util-linux}/bin/umount'
+      --replace-fail '/bin/umount' '${util-linux}/bin/umount'
     substituteInPlace contrib/fuse-lib/mount-gluster-compat.h \
-      --replace '/bin/mount' '${util-linux}/bin/mount'
+      --replace-fail '/bin/mount' '${util-linux}/bin/mount'
+    # use local up to date m4 files to ensure the correct python version is detected
+    substituteInPlace autogen.sh \
+      --replace-fail '$ACLOCAL -I ./contrib/aclocal' '$ACLOCAL'
   '';
 
   # Note that the VERSION file is something that is present in release tarballs

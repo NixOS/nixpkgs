@@ -67,6 +67,7 @@ let
       (fetchNuGet { pname = "Microsoft.NETCore.App.Crossgen2.linux-x64"; version = "9.0.0-preview.5.24306.7"; sha256 = "0hxf3xk6yn8n04fwj9j7c6a70y9apf31aafn2nhd3yykvvf7618d"; })
       (fetchNuGet { pname = "Microsoft.NETCore.App.Crossgen2.osx-x64"; version = "9.0.0-preview.5.24306.7"; sha256 = "1pw27c0czrrgp0vqnlcz6zhyrhbjbqh14wbcknrcn1smlm6fl77x"; })
       (fetchNuGet { pname = "Microsoft.NETCore.App.Crossgen2.osx-arm64"; version = "9.0.0-preview.5.24306.7"; sha256 = "14k0sd0b6rpngw8s1gz833kq89qghnhszgvk9v2rabncb1qlhanv"; })
+      (fetchNuGet { pname = "Microsoft.DotNet.ILCompiler"; version = "9.0.0-preview.5.24306.7"; sha256 = "1qmshjgd3wpal5gbsq5ajanissr237bjgfpxg7sp5bqjb20yg4hp"; })
       (fetchNuGet { pname = "runtime.linux-arm64.Microsoft.DotNet.ILCompiler"; version = "9.0.0-preview.5.24306.7"; sha256 = "0c2spsh6m236cmpf6c2hafcrr4w2ks433g024cmpa93a3s6dfvcp"; })
       (fetchNuGet { pname = "runtime.linux-musl-arm64.Microsoft.DotNet.ILCompiler"; version = "9.0.0-preview.5.24306.7"; sha256 = "0wla1jr95b7hm6wa2yx080wgy8iaqr7r3q83jp3qdnp3k2y0rgpk"; })
       (fetchNuGet { pname = "runtime.linux-musl-x64.Microsoft.DotNet.ILCompiler"; version = "9.0.0-preview.5.24306.7"; sha256 = "00mkrwlx48dis7fg73gxj1c99zs1na4k6y11q1908a674hni8qlx"; })
@@ -75,6 +76,7 @@ let
       (fetchNuGet { pname = "runtime.win-arm64.Microsoft.DotNet.ILCompiler"; version = "9.0.0-preview.5.24306.7"; sha256 = "1s8m140xbwc2pmyhrrmgfd4r2lppld26m6x3k1kz9gfn7kk4ayjx"; })
       (fetchNuGet { pname = "runtime.win-x64.Microsoft.DotNet.ILCompiler"; version = "9.0.0-preview.5.24306.7"; sha256 = "1f9hn43fs25fbzzhrawfjgz56mknsnmhmdgf1f1pqlpfzwb2bvvn"; })
       (fetchNuGet { pname = "Microsoft.NET.ILLink.Tasks"; version = "9.0.0-preview.5.24306.7"; sha256 = "0ck2agia8lmhvwvzh73yh2ydkqfz4g21404cv4qxjj28l618cjl5"; })
+      (fetchNuGet { pname = "runtime.osx-arm64.Microsoft.DotNet.ILCompiler"; version = "9.0.0-preview.5.24306.7"; sha256 = "1xdnyrbxdm9acnldinb4xcdk0jy32jx6rgrqwcsqh4a6xzdz7y05"; })
   ];
 in rec {
   release_9_0 = "9.0.0-preview.5";

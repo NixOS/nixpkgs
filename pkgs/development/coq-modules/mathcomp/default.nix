@@ -23,7 +23,7 @@ let
       { case = range "8.19" "8.20"; out = "1.19.0"; }
       { case = range "8.17" "8.18"; out = "1.18.0"; }
       { case = range "8.15" "8.18"; out = "1.17.0"; }
-      { case = range "8.16" "8.19"; out = "2.2.0"; }
+      { case = range "8.16" "8.20"; out = "2.2.0"; }
       { case = range "8.16" "8.18"; out = "2.1.0"; }
       { case = range "8.16" "8.18"; out = "2.0.0"; }
       { case = range "8.13" "8.18"; out = "1.16.0"; }

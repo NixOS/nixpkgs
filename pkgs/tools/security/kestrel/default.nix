@@ -6,16 +6,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "kestrel";
-  version = "1.0.1";
+  version = "1.0.2";
 
   src = fetchFromGitHub {
     owner = "finfet";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-aj8c4Hagdqoi7Q/AM0drjyrGOvqrT35sEjc2TC0ei6M=";
+    hash = "sha256-bKQBOk9yUqgnufRyyqXatsRHpesbM49rAkz0dD5XE80=";
   };
 
-  cargoHash = "sha256-D3yGIZr6/jaySacdz0yOPQUpKsuYlgBGx0V/4lXuVuw=";
+  cargoHash = "sha256-R5TRF4yvjQalsj1UA2kiLBuTOhqIbbHW6lvf1ixvJG4=";
 
   nativeBuildInputs = [
     installShellFiles

@@ -17,7 +17,6 @@ python3Packages.buildPythonPackage rec {
 
   nativeBuildInputs = with python3Packages; [
     rich
-    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [

@@ -4,7 +4,6 @@
   fetchPypi,
   pythonOlder,
   pytestCheckHook,
-  pythonRelaxDepsHook,
   matplotlib,
   nibabel,
   numpy,
@@ -36,7 +35,6 @@ buildPythonPackage rec {
     substituteInPlace setup.cfg --replace "pytest-runner" ""
   '';
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
   pythonRelaxDeps = [ "nibabel" ];
 
   propagatedBuildInputs = [

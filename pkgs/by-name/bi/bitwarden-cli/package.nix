@@ -6,27 +6,29 @@
 , python3
 , darwin
 , nixosTests
+, xcbuild
 }:
 
 buildNpmPackage rec {
   pname = "bitwarden-cli";
-  version = "2024.6.0";
+  version = "2024.6.1";
 
   src = fetchFromGitHub {
     owner = "bitwarden";
     repo = "clients";
     rev = "cli-v${version}";
-    hash = "sha256-qiUUrs23WHE3+KFsWDknuDSA6M3Zwjz9Jdjq6mn5XkE=";
+    hash = "sha256-LKeJKA4/Vd80y48RdZTUh10bY38AoQ5G5oK6S77fSJI=";
   };
 
   nodejs = nodejs_20;
 
-  npmDepsHash = "sha256-Mgd15eFJtWoBqFFCsjmsnlNbcg5NDs1U7DlMkE0hIb8=";
+  npmDepsHash = "sha256-rwzyKaCW3LAOqw6BEu8DLS0Ad5hB6cH1OnjWzbSEgVI=";
 
   nativeBuildInputs = [
     python3
   ] ++ lib.optionals stdenv.isDarwin [
     darwin.cctools
+    xcbuild.xcrun
   ];
 
   makeCacheWritable = true;

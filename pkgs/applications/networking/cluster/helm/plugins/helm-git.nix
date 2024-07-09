@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "helm-git";
-  version = "0.16.0";
+  version = "0.17.0";
 
   src = fetchFromGitHub {
     owner = "aslafy-z";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-/kUKi2BI6LMMUiy6AaYhpPIXU428Or352xYoDYdym8A=";
+    sha256 = "sha256-vzDSuWaq3ShKz1ckv3BxQtu8tR3QKl0xhcO5IZDbgps=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

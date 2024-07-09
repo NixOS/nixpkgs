@@ -7,6 +7,7 @@
 , overrideCC
 , makeWrapper
 , stdenv
+, addDriverRunpath
 
 , cmake
 , gcc12
@@ -14,8 +15,8 @@
 , libdrm
 , rocmPackages
 , cudaPackages
-, linuxPackages
 , darwin
+, autoAddDriverRunpath
 
 , nixosTests
 , testers
@@ -31,13 +32,13 @@
 let
   pname = "ollama";
   # don't forget to invalidate all hashes each update
-  version = "0.1.47";
+  version = "0.1.48";
 
   src = fetchFromGitHub {
     owner = "ollama";
     repo = "ollama";
     rev = "v${version}";
-    hash = "sha256-gxai2ORHABchnmdzjr9oYzk9p21qQjSIxrKt5k356i4=";
+    hash = "sha256-rMStHUFC88TXIH/1c9bCOU0csnEZHOhWKBlLKarmCmE=";
     fetchSubmodules = true;
   };
 
@@ -101,12 +102,12 @@ let
   };
 
   cudaToolkit = buildEnv {
-    name = "cuda-toolkit";
-    ignoreCollisions = true; # FIXME: find a cleaner way to do this without ignoring collisions
+    name = "cuda-merged";
     paths = [
-      cudaPackages.cudatoolkit
-      cudaPackages.cuda_cudart
-      cudaPackages.cuda_cudart.static
+      (lib.getBin (cudaPackages.cuda_nvcc.__spliced.buildHost or cudaPackages.cuda_nvcc))
+      (lib.getLib cudaPackages.cuda_cudart)
+      (lib.getOutput "static" cudaPackages.cuda_cudart)
+      (lib.getLib cudaPackages.libcublas)
     ];
   };
 
@@ -118,16 +119,17 @@ let
     appleFrameworks.MetalPerformanceShaders
   ];
 
-  runtimeLibs = lib.optionals enableRocm [
-    rocmPath
-  ] ++ lib.optionals enableCuda [
-    linuxPackages.nvidia_x11
-  ];
-  wrapperOptions = builtins.concatStringsSep " " ([
-    "--suffix LD_LIBRARY_PATH : '/run/opengl-driver/lib:${lib.makeLibraryPath runtimeLibs}'"
+  wrapperOptions = [
+    # ollama embeds llama-cpp binaries which actually run the ai models
+    # these llama-cpp binaries are unaffected by the ollama binary's DT_RUNPATH
+    # LD_LIBRARY_PATH is temporarily required to use the gpu
+    # until these llama-cpp binaries can have their runpath patched
+    "--suffix LD_LIBRARY_PATH : '${addDriverRunpath.driverLink}/lib'"
   ] ++ lib.optionals enableRocm [
+    "--suffix LD_LIBRARY_PATH : '${rocmPath}/lib'"
     "--set-default HIP_PATH '${rocmPath}'"
-  ]);
+  ];
+  wrapperArgs = builtins.concatStringsSep " " wrapperOptions;
 
 
   goBuild =
@@ -142,8 +144,6 @@ goBuild ((lib.optionalAttrs enableRocm {
   CLBlast_DIR = "${clblast}/lib/cmake/CLBlast";
 }) // (lib.optionalAttrs enableCuda {
   CUDA_LIB_DIR = "${cudaToolkit}/lib";
-  CUDACXX = "${cudaToolkit}/bin/nvcc";
-  CUDAToolkit_ROOT = cudaToolkit;
 }) // {
   inherit pname version src vendorHash;
 
@@ -151,8 +151,11 @@ goBuild ((lib.optionalAttrs enableRocm {
     cmake
   ] ++ lib.optionals enableRocm [
     rocmPackages.llvm.bintools
+  ] ++ lib.optionals enableCuda [
+    cudaPackages.cuda_nvcc
   ] ++ lib.optionals (enableRocm || enableCuda) [
     makeWrapper
+    autoAddDriverRunpath
   ] ++ lib.optionals stdenv.isDarwin
     metalFrameworks;
 
@@ -160,6 +163,8 @@ goBuild ((lib.optionalAttrs enableRocm {
     (rocmLibs ++ [ libdrm ])
   ++ lib.optionals enableCuda [
     cudaPackages.cuda_cudart
+    cudaPackages.cuda_cccl
+    cudaPackages.libcublas
   ] ++ lib.optionals stdenv.isDarwin
     metalFrameworks;
 
@@ -188,8 +193,7 @@ goBuild ((lib.optionalAttrs enableRocm {
     mv "$out/bin/app" "$out/bin/.ollama-app"
   '' + lib.optionalString (enableRocm || enableCuda) ''
     # expose runtime libraries necessary to use the gpu
-    mv "$out/bin/ollama" "$out/bin/.ollama-unwrapped"
-    makeWrapper "$out/bin/.ollama-unwrapped" "$out/bin/ollama" ${wrapperOptions}
+    wrapProgram "$out/bin/ollama" ${wrapperArgs}
   '';
 
   ldflags = [

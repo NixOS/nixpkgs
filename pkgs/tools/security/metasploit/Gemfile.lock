@@ -1,9 +1,9 @@
 GIT
   remote: https://github.com/rapid7/metasploit-framework
-  revision: b4a408704631fd0a0a4587f1f1a0017bcec9fb45
-  ref: refs/tags/6.4.15
+  revision: d21ca8b456e74278a0149a34ced9292692b5c52d
+  ref: refs/tags/6.4.16
   specs:
-    metasploit-framework (6.4.15)
+    metasploit-framework (6.4.16)
       aarch64
       abbrev
       actionpack (~> 7.0.0)
@@ -51,6 +51,7 @@ GIT
       nessus_rest
       net-imap
       net-ldap
+      net-sftp
       net-smtp
       net-ssh
       network_interface
@@ -297,6 +298,8 @@ GEM
     net-ldap (0.19.0)
     net-protocol (0.2.2)
       timeout
+    net-sftp (4.0.0)
+      net-ssh (>= 5.0.0, < 8.0.0)
     net-smtp (0.5.0)
       net-protocol
     net-ssh (7.2.3)
@@ -481,4 +484,4 @@ DEPENDENCIES
   metasploit-framework!
 
 BUNDLED WITH
-   2.5.9
+   2.5.11

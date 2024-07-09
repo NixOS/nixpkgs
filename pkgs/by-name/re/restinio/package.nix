@@ -70,6 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     description = "Cross-platform, efficient, customizable, and robust asynchronous HTTP(S)/WebSocket server C++ library";
     homepage = "https://github.com/Stiffstream/restinio";
+    changelog = "https://github.com/Stiffstream/restinio/releases/tag/${finalAttrs.src.rev}";
     license = licenses.bsd3;
     platforms = platforms.all;
     maintainers = with maintainers; [ tobim ];

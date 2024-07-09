@@ -25,7 +25,6 @@
 , fzf
 , gawk
 , git
-, gnome
 , himalaya
 , htop
 , jq
@@ -58,6 +57,7 @@
 , xorg
 , xxd
 , zathura
+, zenity
 , zsh
 , # codeium-nvim dependencies
   codeium
@@ -79,6 +79,8 @@
 , CoreServices
 , # nvim-treesitter dependencies
   callPackage
+, # Preview-nvim dependencies
+  md-tui
 , # sg.nvim dependencies
   darwin
 , # sved dependencies
@@ -406,12 +408,12 @@
 
   codesnap-nvim =
     let
-      version = "1.3.1";
+      version = "1.5.1";
       src = fetchFromGitHub {
         owner = "mistricky";
         repo = "codesnap.nvim";
         rev = "refs/tags/v${version}";
-        hash = "sha256-nS/bAWsBQ1L4M9437Yp6FdmHoogzalKlLIAXnRZyMp0=";
+        hash = "sha256-eDFUoTzrQH7hn8ZSnqi6SxQvmc0CjpSmBuY2kzt/XbA=";
       };
       codesnap-lib = rustPlatform.buildRustPackage {
         pname = "codesnap-lib";
@@ -419,7 +421,7 @@
 
         sourceRoot = "${src.name}/generator";
 
-        cargoHash = "sha256-FTQl5WIGEf+RQKYJ4BbIE3cCeN+NYUp7VXIrpxB05tU=";
+        cargoHash = "sha256-Si5L0gcGfcYMN/caXpLhHHhJLcqyv2BQgYSMkU5oiDo=";
 
         nativeBuildInputs = [
           pkg-config
@@ -451,7 +453,10 @@
       doInstallCheck = true;
       nvimRequireCheck = "codesnap";
 
-      meta.homepage = "https://github.com/mistricky/codesnap.nvim/";
+      meta = {
+        homepage = "https://github.com/mistricky/codesnap.nvim/";
+        changelog = "https://github.com/mistricky/codesnap.nvim/releases/tag/v${version}";
+      };
     };
 
   command-t = super.command-t.overrideAttrs {
@@ -1162,11 +1167,16 @@
         inherit (old) version src;
         sourceRoot = "${old.src.name}/spectre_oxi";
 
-        cargoHash = "sha256-ZBlxJjkHb2buvXK6VGP6FMnSFk8RUX7IgHjNofnGDAs=";
+        cargoHash = "sha256-SqbU9YwZ5pvdFUr7XBAkkfoqiLHI0JwJRwH7Wj1JDNg=";
 
         preCheck = ''
           mkdir tests/tmp/
         '';
+
+        checkFlags = [
+          # Flaky test (https://github.com/nvim-pack/nvim-spectre/issues/244)
+          "--skip=tests::test_replace_simple"
+        ];
       };
     in
     {
@@ -1273,6 +1283,15 @@
 
     doInstallCheck = true;
     nvimRequireCheck = "plenary";
+  };
+
+  Preview-nvim = super.Preview-nvim.overrideAttrs {
+    patches = [
+      (substituteAll {
+        src = ./patches/preview-nvim/hardcode-mdt-binary-path.patch;
+        mdt = lib.getExe md-tui;
+      })
+    ];
   };
 
   range-highlight-nvim = super.range-highlight-nvim.overrideAttrs {
@@ -1603,7 +1622,7 @@
 
   vCoolor-vim = super.vCoolor-vim.overrideAttrs {
     # on linux can use either Zenity or Yad.
-    propagatedBuildInputs = [ gnome.zenity ];
+    propagatedBuildInputs = [ zenity ];
     meta = {
       description = "Simple color selector/picker plugin";
       license = lib.licenses.publicDomain;

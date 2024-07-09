@@ -3,7 +3,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonRelaxDepsHook,
   ninja,
   which,
   # build inputs
@@ -72,7 +71,6 @@ buildPythonPackage {
   '';
 
   nativeBuildInputs = [
-    pythonRelaxDepsHook
     ninja
     which
   ];

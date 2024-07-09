@@ -3,7 +3,7 @@
 , easyeffects
 , gjs
 , glib
-, gnome
+, nautilus
 , gobject-introspection
 , gsound
 , hddtemp
@@ -107,7 +107,7 @@ super: lib.trivial.pipe super [
         util_linux = util-linux;
         xdg_utils = xdg-utils;
         src = ./extensionOverridesPatches/gtk4-ding_at_smedius.gitlab.com.patch;
-        nautilus_gsettings_path = "${glib.getSchemaPath gnome.nautilus}";
+        nautilus_gsettings_path = "${glib.getSchemaPath nautilus}";
       })
     ];
   }))

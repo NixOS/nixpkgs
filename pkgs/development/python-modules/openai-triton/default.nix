@@ -7,7 +7,6 @@
   fetchpatch,
   setuptools,
   pytestCheckHook,
-  pythonRelaxDepsHook,
   cmake,
   ninja,
   pybind11,
@@ -91,8 +90,7 @@ buildPythonPackage rec {
         --replace "include (\''${CMAKE_CURRENT_SOURCE_DIR}/googletest.cmake)" ""\
         --replace "include(GoogleTest)" "find_package(GTest REQUIRED)"
 
-      cat << \EOF > python/triton/common/build.py
-
+      cat << \EOF >> python/triton/common/build.py
       def libcuda_dirs():
           return [ "${addDriverRunpath.driverLink}/lib" ]
       EOF
@@ -105,7 +103,6 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     setuptools
-    pythonRelaxDepsHook
     # pytestCheckHook # Requires torch (circular dependency) and probably needs GPUs:
     cmake
     ninja

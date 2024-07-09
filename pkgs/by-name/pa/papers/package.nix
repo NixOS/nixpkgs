@@ -13,7 +13,7 @@
 , shared-mime-info
 , itstool
 , poppler
-, gnome
+, nautilus
 , darwin
 , djvulibre
 , libspectre
@@ -96,7 +96,7 @@ stdenv.mkDerivation (finalAttrs: {
   ] ++ lib.optionals supportXPS [
     libgxps
   ] ++ lib.optionals supportNautilus [
-    gnome.nautilus
+    nautilus
   ] ++ lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.Foundation
   ];

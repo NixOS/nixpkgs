@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkg-config, gtk2, freeglut, SDL, SDL_mixer, libGLU, libGL, libXi, libXmu }:
+{ lib, stdenv, fetchurl, pkg-config, gtk2, libglut, SDL, SDL_mixer, libGLU, libGL, libXi, libXmu }:
 
 stdenv.mkDerivation rec {
   pname = "crack-attack";
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ gtk2 freeglut SDL SDL_mixer libGLU libGL libXi libXmu ];
+  buildInputs = [ gtk2 libglut SDL SDL_mixer libGLU libGL libXi libXmu ];
 
   hardeningDisable = [ "format" ];
   enableParallelBuilding = true;
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     description = "Fast-paced puzzle game inspired by the classic Super NES title Tetris Attack!";
     mainProgram = "crack-attack";
     homepage = "https://www.nongnu.org/crack-attack/";
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
     maintainers = [ ];
   };

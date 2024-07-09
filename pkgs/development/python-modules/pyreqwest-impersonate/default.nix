@@ -22,20 +22,20 @@ let
 in
 buildPythonPackage rec {
   pname = "pyreqwest-impersonate";
-  version = "0.4.7";
+  version = "0.4.9";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "deedy5";
     repo = "pyreqwest_impersonate";
     rev = "v${version}";
-    hash = "sha256-ck5RqSUgnLAjZ+1A1wQRyRMahJRq3nzYvE+WBpu6wk0=";
+    hash = "sha256-U22NNYN8p3IQIAVb6dOrErFvuJ5m5yXi2ELbyuaNlFc=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-eGmx4ftS1D7qb2pPZxp4XE44teXcRwKs3tcKm8otsaM=";
+    hash = "sha256-rj9tfOzhzfWBoxBGlTXHAmiH5qxyoLnHhlEijy/q+Ws=";
   };
 
   nativeBuildInputs = [

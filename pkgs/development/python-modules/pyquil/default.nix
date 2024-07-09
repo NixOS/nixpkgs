@@ -15,7 +15,6 @@
   pytest-mock,
   pytestCheckHook,
   pythonOlder,
-  pythonRelaxDepsHook,
   qcs-sdk-python,
   respx,
   rpcq,
@@ -30,7 +29,7 @@
 
 buildPythonPackage rec {
   pname = "pyquil";
-  version = "4.9.2";
+  version = "4.10.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -39,7 +38,7 @@ buildPythonPackage rec {
     owner = "rigetti";
     repo = "pyquil";
     rev = "refs/tags/v${version}";
-    hash = "sha256-TxmQ9QXTTr4Xv37WmgArfK8Q5H1zAu8qx8wRsvK+vVM=";
+    hash = "sha256-mXcuvZauldoKmTZzFJ6TGgETxpqhXsXYBTCZpwc1I7Q=";
   };
 
   pythonRelaxDeps = [
@@ -51,7 +50,6 @@ buildPythonPackage rec {
 
   build-system = [ poetry-core ];
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   dependencies = [
     deprecated

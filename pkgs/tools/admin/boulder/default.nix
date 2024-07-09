@@ -8,7 +8,7 @@
 
 buildGoModule rec {
   pname = "boulder";
-  version = "2024-06-17a";
+  version = "2024-07-02";
 
   src = fetchFromGitHub {
     owner = "letsencrypt";
@@ -21,7 +21,7 @@ buildGoModule rec {
       find $out -name .git -print0 | xargs -0 rm -rf
       popd
     '';
-    hash = "sha256-kObCD9diy1ryyeLQNyfWNMJPfvtjAWVp8OVUO0MLV6A=";
+    hash = "sha256-SWOWx1K+m+VWGPqBEyn/m5/9qspEd2JiLLskXJLH5AM=";
   };
 
   vendorHash = null;
@@ -42,48 +42,259 @@ buildGoModule rec {
   preCheck = ''
     # Test all targets.
     unset subPackages
-
-    # Disable tests that fail or require additional services.
-    rm -f \
-      cmd/admin-revoker/main_test.go \
-      cmd/admin/cert_test.go \
-      cmd/admin/key_test.go \
-      cmd/bad-key-revoker/main_test.go \
-      cmd/cert-checker/main_test.go \
-      cmd/config_test.go \
-      cmd/contact-auditor/main_test.go \
-      cmd/expiration-mailer/main_test.go \
-      cmd/expiration-mailer/send_test.go \
-      cmd/id-exporter/main_test.go \
-      cmd/rocsp-tool/client_test.go \
-      cmd/shell_test.go \
-      core/util_test.go \
-      db/map_test.go \
-      db/multi_test.go \
-      db/rollback_test.go \
-      grpc/creds/creds_test.go \
-      log/log_test.go \
-      ocsp/updater/updater_test.go \
-      ra/ra_test.go \
-      ratelimits/limiter_test.go \
-      ratelimits/source_redis_test.go \
-      ratelimits/source_test.go \
-      redis/lookup_test.go \
-      rocsp/rocsp_test.go \
-      sa/database_test.go \
-      sa/model_test.go \
-      sa/precertificates_test.go \
-      sa/rate_limits_test.go \
-      sa/sa_test.go \
-      test/load-generator/acme/directory_test.go \
-      va/caa_test.go \
-      va/dns_test.go \
-      va/http_test.go \
-      va/tlsalpn_test.go \
-      va/va_test.go \
-      wfe2/verify_test.go \
-      wfe2/wfe_test.go
   '';
+
+  # Tests that fail or require additional services.
+  disabledTests = [
+    "TestARI"
+    "TestAccount"
+    "TestAddBlockedKeyUnknownSource"
+    "TestAddCertificate"
+    "TestAddCertificateDuplicate"
+    "TestAddCertificateRenewalBit"
+    "TestAddPreCertificateDuplicate"
+    "TestAddPrecertificate"
+    "TestAddPrecertificateIncomplete"
+    "TestAddPrecertificateKeyHash"
+    "TestAddPrecertificateNoOCSP"
+    "TestAddRegistration"
+    "TestAddSerial"
+    "TestAdministrativelyRevokeCertificate"
+    "TestAuthorization500"
+    "TestAuthorizationChallengeNamespace"
+    "TestAuthzFailedRateLimitingNewOrder"
+    "TestAutoIncrementSchema"
+    "TestBadNonce"
+    "TestBlockedKey"
+    "TestBlockedKeyRevokedBy"
+    "TestBuildID"
+    "TestCTPolicyMeasurements"
+    "TestCertIsRenewed"
+    "TestCertificateAbsent"
+    "TestCertificateKeyNotEqualAccountKey"
+    "TestCertificatesTableContainsDuplicateSerials"
+    "TestCertsPerNameRateLimitTable"
+    "TestChallenge"
+    "TestCheckCert"
+    "TestCheckCert"
+    "TestCheckCertReturnsDNSNames"
+    "TestCheckCertReturnsDNSNames"
+    "TestCheckExactCertificateLimit"
+    "TestCheckFQDNSetRateLimitOverride"
+    "TestCheckWildcardCert"
+    "TestCheckWildcardCert"
+    "TestClientTransportCredentials"
+    "TestContactAuditor"
+    "TestCountCertificatesByNamesParallel"
+    "TestCountCertificatesByNamesTimeRange"
+    "TestCountCertificatesRenewalBit"
+    "TestCountInvalidAuthorizations2"
+    "TestCountNewOrderWithReplaces"
+    "TestCountOrders"
+    "TestCountPendingAuthorizations2"
+    "TestCountRegistrationsByIP"
+    "TestCountRegistrationsByIPRange"
+    "TestDbSettings"
+    "TestDeactivateAccount"
+    "TestDeactivateAuthorization"
+    "TestDeactivateRegistration"
+    "TestDedupOnRegistration"
+    "TestDirectory"
+    "TestDontFindRevokedCert"
+    "TestEarlyOrderRateLimiting"
+    "TestEmptyAccount"
+    "TestEnforceJWSAuthType"
+    "TestExactPublicSuffixCertLimit"
+    "TestExtractJWK"
+    "TestFQDNSetTimestampsForWindow"
+    "TestFQDNSets"
+    "TestFQDNSetsExists"
+    "TestFailExit"
+    "TestFasterGetOrderForNames"
+    "TestFinalizeAuthorization2"
+    "TestFinalizeOrder"
+    "TestFinalizeOrderWildcard"
+    "TestFinalizeOrderWithMixedSANAndCN"
+    "TestFinalizeSCTError"
+    "TestFindCertsAtCapacity"
+    "TestFindExpiringCertificates"
+    "TestFindIDs"
+    "TestFindIDsForHostnames"
+    "TestFindIDsWithExampleHostnames"
+    "TestFindUnrevoked"
+    "TestFindUnrevokedNoRows"
+    "TestGETAPIAuthz"
+    "TestGETAPIChallenge"
+    "TestGenerateOCSP"
+    "TestGenerateOCSPLongExpiredSerial"
+    "TestGenerateOCSPUnknownSerial"
+    "TestGetAndProcessCerts"
+    "TestGetAndProcessCerts"
+    "TestGetAuthorization"
+    "TestGetAuthorization2NoRows"
+    "TestGetAuthorizations2"
+    "TestGetCertificate"
+    "TestGetCertificateHEADHasCorrectBodyLength"
+    "TestGetCertificateNew"
+    "TestGetCertificateServerError"
+    "TestGetCertsEmptyResults"
+    "TestGetCertsEmptyResults"
+    "TestGetChallenge"
+    "TestGetChallengeUpRel"
+    "TestGetMaxExpiration"
+    "TestGetOrder"
+    "TestGetOrderExpired"
+    "TestGetOrderForNames"
+    "TestGetPendingAuthorization2"
+    "TestGetRevokedCerts"
+    "TestGetSerialMetadata"
+    "TestGetSerialsByAccount"
+    "TestGetSerialsByKey"
+    "TestGetStartingID"
+    "TestGetValidAuthorizations2"
+    "TestGetValidOrderAuthorizations2"
+    "TestHTTPDialTimeout"
+    "TestHTTPMethods"
+    "TestHandleFunc"
+    "TestHeaderBoulderRequester"
+    "TestIgnoredLint"
+    "TestIgnoredLint"
+    "TestIncidentARI"
+    "TestIncidentSerialModel"
+    "TestIncidentsForSerial"
+    "TestIndex"
+    "TestIndexGet404"
+    "TestInvoke"
+    "TestInvokeRevokerHasNoExtantCerts"
+    "TestIssueCertificateAuditLog"
+    "TestIssueCertificateCAACheckLog"
+    "TestIssueCertificateInnerErrs"
+    "TestIssueCertificateInnerWithProfile"
+    "TestIssueCertificateOuter"
+    "TestKeyRollover"
+    "TestKeyRolloverMismatchedJWSURLs"
+    "TestLeaseOldestCRLShard"
+    "TestLeaseSpecificCRLShard"
+    "TestLifetimeOfACert"
+    "TestLimiter_CheckWithLimitOverrides"
+    "TestLimiter_DefaultLimits"
+    "TestLimiter_InitializationViaCheckAndSpend"
+    "TestLimiter_RefundAndReset"
+    "TestLoadFromDB"
+    "TestLookupJWK"
+    "TestMatchJWSURLs"
+    "TestNewAccount"
+    "TestNewAccountNoID"
+    "TestNewAccountWhenAccountHasBeenDeactivated"
+    "TestNewAccountWhenGetRegByKeyFails"
+    "TestNewAccountWhenGetRegByKeyNotFound"
+    "TestNewECDSAAccount"
+    "TestNewLookup"
+    "TestNewLookupWithAllFailingSRV"
+    "TestNewLookupWithOneFailingSRV"
+    "TestNewOrder"
+    "TestNewOrderAuthzReuseSafety"
+    "TestNewOrderCheckFailedAuthorizationsFirst"
+    "TestNewOrderExpiry"
+    "TestNewOrderFailedAuthzRateLimitingExempt"
+    "TestNewOrderMaxNames"
+    "TestNewOrderRateLimiting"
+    "TestNewOrderRateLimitingExempt"
+    "TestNewOrderReplacesSerialCarriesThroughToSA"
+    "TestNewOrderReuse"
+    "TestNewOrderReuseInvalidAuthz"
+    "TestNewOrderWildcard"
+    "TestNewRegistration"
+    "TestNewRegistrationBadKey"
+    "TestNewRegistrationContactsPresent"
+    "TestNewRegistrationNoFieldOverwrite"
+    "TestNewRegistrationRateLimit"
+    "TestNewRegistrationSAFailure"
+    "TestNoContactCertIsNotRenewed"
+    "TestNoContactCertIsRenewed"
+    "TestNoSuchRegistrationErrors"
+    "TestNonceEndpoint"
+    "TestOldTLSInbound"
+    "TestOrderMatchesReplacement"
+    "TestOrderToOrderJSONV2Authorizations"
+    "TestOrderWithOrderModelv1"
+    "TestPOST404"
+    "TestPanicStackTrace"
+    "TestParseJWSRequest"
+    "TestPendingAuthorizationsUnlimited"
+    "TestPerformValidationAlreadyValid"
+    "TestPerformValidationBadChallengeType"
+    "TestPerformValidationExpired"
+    "TestPerformValidationSuccess"
+    "TestPerformValidationVAError"
+    "TestPrepAuthzForDisplay"
+    "TestPreresolvedDialerTimeout"
+    "TestProcessCerts"
+    "TestProcessCertsConnectError"
+    "TestProcessCertsParallel"
+    "TestRecheckCAADates"
+    "TestRecheckCAAEmpty"
+    "TestRecheckCAAFail"
+    "TestRecheckCAAInternalServerError"
+    "TestRecheckCAASuccess"
+    "TestRedisSource_BatchSetAndGet"
+    "TestRedisSource_Ping"
+    "TestRegistrationsPerIPOverrideUsage"
+    "TestRehydrateHostPort"
+    "TestRelativeDirectory"
+    "TestReplicationLagRetries"
+    "TestResolveContacts"
+    "TestRevokeCertByApplicant_Controller"
+    "TestRevokeCertByApplicant_Subscriber"
+    "TestRevokeCertByKey"
+    "TestRevokeCertificate"
+    "TestRevokeCerts"
+    "TestRollback"
+    "TestSPKIHashFromPrivateKey"
+    "TestSPKIHashesFromFile"
+    "TestSelectRegistration"
+    "TestSelectUncheckedRows"
+    "TestSendEarliestCertInfo"
+    "TestSerialsForIncident"
+    "TestSerialsFromFile"
+    "TestSerialsFromPrivateKey"
+    "TestSetAndGet"
+    "TestSetOrderProcessing"
+    "TestSingleton"
+    "TestStart"
+    "TestStatusForOrder"
+    "TestStoreResponse"
+    "TestStrictness"
+    "TestTLSALPN01DialTimeout"
+    "TestTLSConfigLoad"
+    "TestTimeouts"
+    "TestUpdateCRLShard"
+    "TestUpdateChallengeFinalizedAuthz"
+    "TestUpdateChallengeRAError"
+    "TestUpdateChallengesDeleteUnused"
+    "TestUpdateMissingAuthorization"
+    "TestUpdateNowWithAllFailingSRV"
+    "TestUpdateNowWithOneFailingSRV"
+    "TestUpdateRegistrationSame"
+    "TestUpdateRevokedCertificate"
+    "TestValidJWSForKey"
+    "TestValidNonce"
+    "TestValidNonce_NoMatchingBackendFound"
+    "TestValidPOSTAsGETForAccount"
+    "TestValidPOSTForAccount"
+    "TestValidPOSTForAccountSwappedKey"
+    "TestValidPOSTRequest"
+    "TestValidPOSTURL"
+    "TestValidSelfAuthenticatedPOST"
+    "TestValidSelfAuthenticatedPOSTGoodKeyErrors"
+    "TestValidateContacts"
+    "TestWrappedMap"
+    "Test_sendError"
+  ];
+
+  checkFlags = [
+    "-skip ${lib.strings.concatStringsSep "|" disabledTests}"
+  ];
 
   postInstall = ''
     for i in $($out/bin/boulder --list); do

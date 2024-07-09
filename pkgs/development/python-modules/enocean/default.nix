@@ -5,7 +5,8 @@
   beautifulsoup4,
   enum-compat,
   pyserial,
-  pynose,
+  nose,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -26,7 +27,10 @@ buildPythonPackage rec {
     pyserial
   ];
 
-  nativeCheckInputs = [ pynose ];
+  # tests rely on nose
+  doCheck = pythonOlder "3.12";
+
+  nativeCheckInputs = [ nose ];
 
   checkPhase = ''
     runHook preCheck

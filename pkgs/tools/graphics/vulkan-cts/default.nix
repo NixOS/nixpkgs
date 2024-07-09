@@ -118,9 +118,9 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru.updateScript = ./update.sh;
-  passthru.tests.lavapipe = runCommand "vulkan-cts-tests-lavapipe" { nativeBuildInputs = [ finalAttrs.finalPackage ]; } ''
-    # Expand the wildcard to pick the existing architecture
-    export VK_ICD_FILENAMES=$(echo ${mesa.drivers}/share/vulkan/icd.d/lvp_icd.*.json)
+  passthru.tests.lavapipe = runCommand "vulkan-cts-tests-lavapipe" {
+    nativeBuildInputs = [ finalAttrs.finalPackage mesa.llvmpipeHook ];
+  } ''
     deqp-vk -n dEQP-VK.api.smoke.triangle
     touch $out
   '';

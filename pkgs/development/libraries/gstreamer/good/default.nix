@@ -68,6 +68,8 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
+    # Reenable dynamic loading of libsoup on Darwin and use a different approach to do it.
+    ./souploader-darwin.diff
     # dlopen libsoup_3 with an absolute path
     (substituteAll {
       src = ./souploader.diff;
@@ -215,6 +217,6 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.lgpl2Plus;
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ matthewbauer lilyinstarlight ];
+    maintainers = with maintainers; [ matthewbauer ];
   };
 }

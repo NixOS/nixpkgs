@@ -10,9 +10,11 @@
 , darwin
 , cmake
 , ninja
+, pkg-config
 , libxcrypt
 , python3
 , qt6Packages
+, woff2
 , nixosTests
 , AppKit
 , Cocoa
@@ -50,18 +52,14 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ladybird";
-  version = "0-unstable-2024-06-04";
+  version = "0-unstable-2024-06-08";
 
   src = fetchFromGitHub {
     owner = "LadybirdWebBrowser";
     repo = "ladybird";
-    rev = "c6e9f0e7b5b050ddbb5d735ca9c65458add9b4a5";
-    hash = "sha256-+NDrd0kO9bqXFcCEJFmNwNu5jmf+wT+uUVlmbmCYLw4=";
+    rev = "2f68e361370040d8cdc75a8ed8af4239134ae481";
+    hash = "sha256-EQZTsui4lGThSi+8a6KSyL5lJnO0A8fJ8HWY4jgkpUA=";
   };
-
-  patches = [
-    ./nixos-font-path.patch
-  ];
 
   postPatch = ''
     sed -i '/iconutil/d' Ladybird/CMakeLists.txt
@@ -112,6 +110,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = with qt6Packages; [
     cmake
     ninja
+    pkg-config
     python3
     wrapQtAppsHook
   ];
@@ -120,6 +119,9 @@ stdenv.mkDerivation (finalAttrs: {
     libxcrypt
     qtbase
     qtmultimedia
+    woff2
+  ] ++ lib.optional stdenv.isLinux [
+    qtwayland
   ] ++ lib.optionals stdenv.isDarwin [
     AppKit
     Cocoa
@@ -163,5 +165,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with maintainers; [ fgaz ];
     platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
     mainProgram = "Ladybird";
+    # use of undeclared identifier 'NSBezelStyleAccessoryBarAction'
+    broken = stdenv.isDarwin;
   };
 })

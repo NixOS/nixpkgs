@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage rec {
     description = "Very fast link checker for CI";
     homepage = "https://github.com/untitaker/hyperlink";
     license = licenses.mit;
-    maintainers = [ maintainers.rossabaker ];
+    maintainers = [ ];
     mainProgram = "hyperlink";
   };
 }

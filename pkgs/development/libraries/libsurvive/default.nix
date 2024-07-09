@@ -2,7 +2,7 @@
 , fetchFromGitHub
 , cmake
 , pkg-config
-, freeglut
+, libglut
 , lapack
 , libusb1
 , blas
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkg-config ];
 
   buildInputs = [
-    freeglut
+    libglut
     lapack
     libusb1
     blas

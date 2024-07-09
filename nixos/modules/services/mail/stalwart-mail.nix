@@ -9,11 +9,27 @@ let
   dataDir = "/var/lib/stalwart-mail";
   useLegacyStorage = versionOlder config.system.stateVersion "24.11";
 
+  parsePorts = listeners: let
+    parseAddresses = listeners: lib.flatten(lib.mapAttrsToList (name: value: value.bind) listeners);
+    splitAddress = addr: strings.splitString ":" addr;
+    extractPort = addr: strings.toInt(builtins.foldl' (a: b: b) "" (splitAddress addr));
+  in
+    builtins.map(address: extractPort address) (parseAddresses listeners);
+
 in {
   options.services.stalwart-mail = {
     enable = mkEnableOption "the Stalwart all-in-one email server";
 
     package = mkPackageOption pkgs "stalwart-mail" { };
+
+    openFirewall = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Whether to open TCP firewall ports, which are specified in
+        {option}`services.stalwart-mail.settings.listener` on all interfaces.
+      '';
+    };
 
     settings = mkOption {
       inherit (configFormat) type;
@@ -138,6 +154,11 @@ in {
 
     # Make admin commands available in the shell
     environment.systemPackages = [ cfg.package ];
+
+    networking.firewall = mkIf (cfg.openFirewall
+      && (builtins.hasAttr "listener" cfg.settings.server)) {
+      allowedTCPPorts = parsePorts cfg.settings.server.listener;
+    };
   };
 
   meta = {

@@ -1,4 +1,5 @@
 { lib, stdenv, fetchurl, gettext, coreutils, gnused, gnome
+, adwaita-icon-theme
 , gnugrep, parted, glib, libuuid, pkg-config, gtkmm3, libxml2
 , gpart, hdparm, procps, util-linux, polkit, wrapGAppsHook3, substituteAll
 , mtools, dosfstools
@@ -27,7 +28,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--disable-doc" ];
 
-  buildInputs = [ parted glib libuuid gtkmm3 libxml2 polkit.bin gnome.adwaita-icon-theme  ];
+  buildInputs = [ parted glib libuuid gtkmm3 libxml2 polkit.bin adwaita-icon-theme  ];
   nativeBuildInputs = [ gettext pkg-config wrapGAppsHook3 ];
 
   preConfigure = ''

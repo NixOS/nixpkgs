@@ -2,7 +2,7 @@
 , stdenv
 , buildBazelPackage
 , fetchFromGitHub
-, bazel_5
+, bazel_6
 , jdk
 , bison
 , flex
@@ -18,8 +18,8 @@ buildBazelPackage rec {
   # These environment variables are read in bazel/build-version.py to create
   # a build string shown in the tools --version output.
   # If env variables not set, it would attempt to extract it from .git/.
-  GIT_DATE = "2024-02-01";
-  GIT_VERSION = "v0.0-3515-g2d841599";
+  GIT_DATE = "2024-07-07";
+  GIT_VERSION = "v0.0-3722-g3b927214";
 
   # Derive nix package version from GIT_VERSION: "v1.2-345-abcde" -> "1.2.345"
   version = builtins.concatStringsSep "." (lib.take 3 (lib.drop 1 (builtins.splitVersion GIT_VERSION)));
@@ -28,18 +28,16 @@ buildBazelPackage rec {
     owner = "chipsalliance";
     repo  = "verible";
     rev   = "${GIT_VERSION}";
-    hash  = "sha256-D/blcex/St1nLKvjzuKnmAJE8HVlGy8ampmXIxKK11M=";
+    hash  = "sha256-/YQRC8Y8ucufqfgvCzvYYEQMksUMIw3ly37P090nm4s=";
   };
 
-  bazel = bazel_5;
+  bazel = bazel_6;
   bazelFlags = [
     "--//bazel:use_local_flex_bison"
-    "--java_runtime_version=local_jdk"
-    "--tool_java_runtime_version=local_jdk"
   ];
 
   fetchAttrs = {
-    sha256 = "sha256-2YruKvU7OZQ7mKNrqYITat+cmf/DEytDElYw7CvkxJk=";
+    sha256 = "sha256-bKASgc5KftCWtMvJkGA4nweBAtgdnyC9uXIJxPjKYS0=";
   };
 
   nativeBuildInputs = [

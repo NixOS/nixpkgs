@@ -83,7 +83,7 @@ in buildFHSEnv rec {
   targetPkgs = pkgs: with pkgs; [
     steam
     # License agreement
-    gnome.zenity
+    zenity
   ] ++ commonTargetPkgs pkgs;
 
   multiPkgs = pkgs: with pkgs; [
@@ -162,7 +162,7 @@ in buildFHSEnv rec {
     gtk2
     bzip2
     flac
-    freeglut
+    libglut
     libjpeg
     libpng
     libpng12

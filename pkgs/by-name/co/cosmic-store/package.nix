@@ -86,7 +86,6 @@ rustPlatform.buildRustPackage rec {
           xorg.libXrandr
           libxkbcommon
           vulkan-loader
-          mesa.drivers
         ]
       }
   '';

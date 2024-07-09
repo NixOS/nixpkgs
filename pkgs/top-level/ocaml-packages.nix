@@ -92,7 +92,7 @@ let
 
     biocaml = janeStreet_0_15.biocaml;
 
-    biotk = janeStreet_0_15.biotk;
+    biotk = callPackage ../development/ocaml-modules/biotk { };
 
     bisect_ppx = callPackage ../development/ocaml-modules/bisect_ppx { };
 
@@ -610,6 +610,10 @@ let
     github-jsoo = callPackage ../development/ocaml-modules/github/jsoo.nix {  };
     github-unix = callPackage ../development/ocaml-modules/github/unix.nix {  };
 
+    gitlab = callPackage ../development/ocaml-modules/gitlab {  };
+    gitlab-jsoo = callPackage ../development/ocaml-modules/gitlab/jsoo.nix {  };
+    gitlab-unix = callPackage ../development/ocaml-modules/gitlab/unix.nix {  };
+
     gluon = callPackage ../development/ocaml-modules/gluon { };
 
     gluten = callPackage ../development/ocaml-modules/gluten { };
@@ -834,22 +838,6 @@ let
       in callPackage ../development/ocaml-modules/biocaml {
         uri = self.uri.override { inherit angstrom; };
         cfstream = self.cfstream.override { inherit core_kernel; };
-      };
-
-      biotk = let
-        angstrom = self.angstrom.override { inherit ppx_let; };
-      in callPackage ../development/ocaml-modules/biotk {
-        angstrom-unix = self.angstrom-unix.override { inherit angstrom; };
-        ppx_deriving = self.ppx_deriving.override { inherit (jsDeps) ppxlib; };
-        uri = self.uri.override { inherit angstrom; };
-        vg = self.vg.override { htmlcBackend = false; };
-      };
-
-      phylogenetics = let
-        angstrom = self.angstrom.override { inherit ppx_let; };
-      in callPackage ../development/ocaml-modules/phylogenetics {
-        ppx_deriving = self.ppx_deriving.override { inherit (jsDeps) ppxlib; };
-        angstrom-unix = self.angstrom-unix.override { inherit angstrom; };
       };
 
       ppx_bap = callPackage ../development/ocaml-modules/ppx_bap { };
@@ -1462,7 +1450,7 @@ let
 
     pgsolver = callPackage ../development/ocaml-modules/pgsolver { };
 
-    phylogenetics = janeStreet_0_15.phylogenetics;
+    phylogenetics = callPackage ../development/ocaml-modules/phylogenetics { };
 
     piaf = callPackage ../development/ocaml-modules/piaf { };
 
@@ -2035,13 +2023,6 @@ in let inherit (pkgs) callPackage; in rec
   ocamlPackages_latest = ocamlPackages_5_2;
 
   ocamlPackages = ocamlPackages_5_1;
-
-  # This is a nasty way to replace toplevel janestreet attributes in the scope,
-  # so that modules outside of ocamlPackages that depend on JS OCaml libraries
-  # *and* non-JS OCaml libraries can pull in the same version of JS transitive
-  # dependencies. Remove this once ligo and stanc can be compiled against
-  # janestreet 0.16 libraries.
-  ocamlPackages_4_14_janeStreet_0_15 = ocamlPackages_4_14.overrideScope (self: super: super // super.janeStreet_0_15);
 
   # We still have packages that rely on unsafe-string, which is deprecated in OCaml 4.06.0.
   # Below are aliases for porting them to the latest versions of the OCaml 4 series.

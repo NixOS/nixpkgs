@@ -144,6 +144,14 @@ stdenv.mkDerivation rec {
     genericName = "Web Browser";
     comment = meta.description;
     categories = [ "Network" "WebBrowser" "Security" ];
+    mimeTypes = [
+      "text/html"
+      "text/xml"
+      "application/xhtml+xml"
+      "application/vnd.mozilla.xul+xml"
+      "x-scheme-handler/http"
+      "x-scheme-handler/https"
+    ];
   })];
 
   buildPhase = ''

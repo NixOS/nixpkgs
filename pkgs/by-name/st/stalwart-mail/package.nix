@@ -23,7 +23,7 @@ let
   # See upstream issue for rocksdb 9.X support
   # https://github.com/stalwartlabs/mail-server/issues/407
   rocksdb = rocksdb_8_11;
-  version = "0.8.2";
+  version = "0.8.5";
 in
 rustPlatform.buildRustPackage {
   pname = "stalwart-mail";
@@ -33,11 +33,11 @@ rustPlatform.buildRustPackage {
     owner = "stalwartlabs";
     repo = "mail-server";
     rev = "v${version}";
-    hash = "sha256-JzbfQ/WZrHGdG9vv9ngfTxqwBxS+ZezIIp8yUJ2VplE=";
+    hash = "sha256-Y28o4BIoGcakEY3ig4wNR0sI6YBoR6BQUhXWK7fA3qo=";
     fetchSubmodules = true;
   };
 
-  cargoHash = "sha256-w40mksUVMBXSr/LBXj0uyZ/VbvJFMFJaQN5Kx6sLm5I=";
+  cargoHash = "sha256-axLg7igmupGHU6xohDN+UIwaZB+vt02p9WIK+P9YkY8=";
 
   patches = [
     # Remove "PermissionsStartOnly" from systemd service files,

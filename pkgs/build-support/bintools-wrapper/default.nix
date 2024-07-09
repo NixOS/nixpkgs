@@ -45,6 +45,7 @@
     "relro"
     "stackprotector"
     "strictoverflow"
+    "zerocallusedregs"
   ] ++ lib.optional (with stdenvNoCC; lib.any (x: x) [
     # OpenBSD static linking requires PIE
     (with targetPlatform; isOpenBSD && isStatic)

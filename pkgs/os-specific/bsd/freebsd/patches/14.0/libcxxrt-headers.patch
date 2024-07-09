@@ -4,7 +4,7 @@
  SRCS+=		terminate.cc
  SRCS+=		typeinfo.cc
  
-+INCS+=cxxabi.h unwind.h unwind-arm.h unwind-itanium.h
++INCS+=cxxabi.h
 +
  WARNS?=		0
  CFLAGS+=	-isystem ${SRCDIR} -nostdinc++

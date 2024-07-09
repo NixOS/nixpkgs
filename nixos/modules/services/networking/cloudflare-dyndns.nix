@@ -28,6 +28,16 @@ in
         '';
       };
 
+      frequency = mkOption {
+        type = types.nullOr types.str;
+        default = "*:0/5";
+        description = ''
+          Run cloudflare-dyndns with the given frequency (see
+          {manpage}`systemd.time(7)` for the format).
+          If null, do not run automatically.
+        '';
+      };
+
       proxied = mkOption {
         type = types.bool;
         default = false;
@@ -67,7 +77,6 @@ in
       description = "CloudFlare Dynamic DNS Client";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
-      startAt = "*:0/5";
 
       environment = {
         CLOUDFLARE_DOMAINS = toString cfg.domains;
@@ -88,6 +97,8 @@ in
           in
           "${pkgs.cloudflare-dyndns}/bin/cloudflare-dyndns ${toString args}";
       };
+    } // optionalAttrs (cfg.frequency != null) {
+      startAt = cfg.frequency;
     };
   };
 }

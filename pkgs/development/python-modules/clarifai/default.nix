@@ -13,7 +13,6 @@
   pypdf,
   pytestCheckHook,
   pythonOlder,
-  pythonRelaxDepsHook,
   pyyaml,
   rich,
   schema,
@@ -37,23 +36,18 @@ buildPythonPackage rec {
     hash = "sha256-zAjGVICrYgai6GFpcJyigKxn7kNEZKclggR5ktzrCQ0=";
   };
 
-  pythonRelaxDeps = [ "clarifai-grpc" ];
-
-  pythonRemoveDeps = [ "opencv-python" ];
+  pythonRelaxDeps = [
+    "clarifai-grpc"
+    "schema"
+  ];
 
   build-system = [ setuptools ];
-
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   dependencies = [
     clarifai-grpc
     inquirerpy
-    llama-index-core
     numpy
-    opencv4
-    pandas
     pillow
-    pypdf
     pyyaml
     rich
     schema
@@ -75,6 +69,8 @@ buildPythonPackage rec {
   disabledTests = [
     # Test requires network access and API key
     "test_export_workflow_general"
+    "test_validate_invalid_id"
+    "test_validate_invalid_hex_id"
   ];
 
   disabledTestPaths = [

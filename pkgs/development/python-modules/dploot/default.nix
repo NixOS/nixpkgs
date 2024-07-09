@@ -8,7 +8,6 @@
   poetry-core,
   pyasn1,
   pythonOlder,
-  pythonRelaxDepsHook,
 }:
 
 buildPythonPackage rec {
@@ -29,7 +28,6 @@ buildPythonPackage rec {
     "pyasn1"
   ];
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   build-system = [ poetry-core ];
 

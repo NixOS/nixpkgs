@@ -5,11 +5,11 @@
   setuptools,
   looseversion,
   mmtf-python,
+  nose,
   numpy,
   pandas,
-  pynose,
   pytestCheckHook,
-  pythonRelaxDepsHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -24,8 +24,6 @@ buildPythonPackage rec {
     hash = "sha256-1c78baBBsDyvAWrNx5mZI/Q75wyXv0DAwAdWm3EwX/I=";
   };
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
-
   pythonRelaxDeps = [ "looseversion" ];
 
   build-system = [ setuptools ];
@@ -37,8 +35,12 @@ buildPythonPackage rec {
     looseversion
   ];
 
+  # tests rely on nose
+  # resolved in 0.5.1: https://github.com/BioPandas/biopandas/commit/67aa2f237c70c826cd9ab59d6ae114582da2112f
+  doCheck = pythonOlder "3.12";
+
   nativeCheckInputs = [
-    pynose
+    nose
     pytestCheckHook
   ];
 

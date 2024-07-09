@@ -22,13 +22,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "clapper";
-  version = "0.6.0";
+  version = "0.6.1";
 
   src = fetchFromGitHub {
     owner  = "Rafostar";
     repo   = "clapper";
     rev    = finalAttrs.version;
-    hash = "sha256-5fD1OnVcY3ZC+QfoFqe2jV43/J36r85SpLUYF2ti7dY=";
+    hash = "sha256-IQJTnLB6FzYYPONOqBkvi89iF0U6fx/aWYvNOOJpBvc=";
   };
 
   nativeBuildInputs = [

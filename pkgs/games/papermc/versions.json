@@ -52,11 +52,11 @@
         "version": "1.20.5-22"
     },
     "1.20.6": {
-        "hash": "sha256-JMWN40FTFg87RmxwyUr87Js9KyCmaBhj6Dnfe3vblZQ=",
-        "version": "1.20.6-147"
+        "hash": "sha256-u9adg4SOJb3w7LBAzJiiJj2V7WbjvVEoqMhVL3v5lL0=",
+        "version": "1.20.6-148"
     },
     "1.21": {
-        "hash": "sha256-Anh09jDs+peSU79+jtETFMADt5N3K82QNwru7U0nyHU=",
-        "version": "1.21-37"
+        "hash": "sha256-7gHWhy/nlRc1I5LGN1grIAPaVxT8xJST2+I86xSGSc8=",
+        "version": "1.21-40"
     }
 }

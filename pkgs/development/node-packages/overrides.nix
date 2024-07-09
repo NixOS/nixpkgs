@@ -29,17 +29,6 @@ final: prev: {
     buildInputs = [ final.node-gyp-build ];
   };
 
-  autoprefixer = prev.autoprefixer.override {
-    nativeBuildInputs = [ pkgs.buildPackages.makeWrapper ];
-    postInstall = ''
-      wrapProgram "$out/bin/autoprefixer" \
-        --prefix NODE_PATH : ${final.postcss}/lib/node_modules
-    '';
-    passthru.tests = {
-      simple-execution = callPackage ./package-tests/autoprefixer.nix { inherit (final) autoprefixer; };
-    };
-  };
-
   bower2nix = prev.bower2nix.override {
     nativeBuildInputs = [ pkgs.buildPackages.makeWrapper ];
     postInstall = ''
@@ -225,7 +214,7 @@ final: prev: {
       version = esbuild-version;
       src = fetchurl {
         url = "https://registry.npmjs.org/@esbuild/linux-x64/-/linux-x64-${esbuild-version}.tgz";
-        sha512 = "sha512-1MdwI6OOTsfQfek8sLwgyjOXAu+wKhLEoaOLTjbijk6E2WONYpH9ZU2mNtR+lZ2B4uwr+usqGuVfFT9tMtGvGw==";
+        sha512 = "sha512-1rYdTpyv03iycF1+BhzrzQJCdOuAOtaqHTWJZCWvijKD2N5Xu0TtVC8/+1faWqcP9iBCWOmjmhoH94dH82BxPQ==";
       };
     };
     esbuild-linux-arm64 = {
@@ -265,7 +254,7 @@ final: prev: {
     postInstall = ''
       wrapProgram "$out/bin/postcss" \
         --prefix NODE_PATH : ${final.postcss}/lib/node_modules \
-        --prefix NODE_PATH : ${final.autoprefixer}/lib/node_modules
+        --prefix NODE_PATH : ${pkgs.autoprefixer}/node_modules
       ln -s '${final.postcss}/lib/node_modules/postcss' "$out/lib/node_modules/postcss"
     '';
     passthru.tests = {
@@ -289,7 +278,7 @@ final: prev: {
 
     src = fetchurl {
       url = "https://registry.npmjs.org/prisma/-/prisma-${version}.tgz";
-      hash = "sha256-136nEfCJjLLUMO3TZhVrltfqv8nU2fA14+L0JLe6Zfk=";
+      hash = "sha256-TlwKCuDQRFM6+Hhx9eFCfXbtLZq6RwBTIFCWzE4D8N8=";
     };
     postInstall = with pkgs; ''
       wrapProgram "$out/bin/prisma" \
@@ -386,13 +375,6 @@ final: prev: {
     postInstall = ''
       wrapProgram "$out/bin/tsun" \
       --prefix NODE_PATH : ${pkgs.typescript}/lib/node_modules
-    '';
-  };
-
-  typescript-language-server = prev.typescript-language-server.override {
-    nativeBuildInputs = [ pkgs.buildPackages.makeWrapper ];
-    postInstall = ''
-      ${pkgs.xorg.lndir}/bin/lndir ${pkgs.typescript} $out
     '';
   };
 

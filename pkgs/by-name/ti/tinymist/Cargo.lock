@@ -175,26 +175,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "96d30a06541fbafbc7f82ed10c06164cfbd2c401138f6addd8404629c4b16711"
 
 [[package]]
-name = "async-lsp"
-version = "0.2.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "855d6246a5d31e6e469eeef718d9a098f2d99207985a00dfdd3f4b5c5003c09a"
-dependencies = [
- "futures",
- "lsp-types",
- "pin-project-lite",
- "rustix",
- "serde",
- "serde_json",
- "thiserror",
- "tokio",
- "tower-layer",
- "tower-service",
- "tracing",
- "waitpid-any",
-]
-
-[[package]]
 name = "async-trait"
 version = "0.1.80"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -3716,6 +3696,26 @@ dependencies = [
 ]
 
 [[package]]
+name = "sync-lsp"
+version = "0.11.14"
+dependencies = [
+ "anyhow",
+ "clap",
+ "crossbeam-channel",
+ "futures",
+ "log",
+ "lsp-server",
+ "lsp-types",
+ "parking_lot",
+ "reflexo",
+ "serde",
+ "serde_json",
+ "tinymist-query",
+ "tokio",
+ "tokio-util",
+]
+
+[[package]]
 name = "sync_wrapper"
 version = "0.1.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -3836,7 +3836,7 @@ dependencies = [
 
 [[package]]
 name = "tests"
-version = "0.11.12"
+version = "0.11.14"
 dependencies = [
  "insta",
  "lsp-server",
@@ -3933,10 +3933,9 @@ dependencies = [
 
 [[package]]
 name = "tinymist"
-version = "0.11.12"
+version = "0.11.14"
 dependencies = [
  "anyhow",
- "async-lsp",
  "async-trait",
  "await-tree",
  "base64 0.22.1",
@@ -3967,7 +3966,8 @@ dependencies = [
  "reflexo",
  "serde",
  "serde_json",
- "tinymist-assets 0.11.12 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sync-lsp",
+ "tinymist-assets 0.11.14 (registry+https://github.com/rust-lang/crates.io-index)",
  "tinymist-query",
  "tinymist-render",
  "tokio",
@@ -3994,17 +3994,17 @@ dependencies = [
 
 [[package]]
 name = "tinymist-assets"
-version = "0.11.12"
+version = "0.11.14"
 
 [[package]]
 name = "tinymist-assets"
-version = "0.11.12"
+version = "0.11.14"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e51823bcf79f6ae1d0a1eb75c26cd9139cc062b7e2ae4f12077e5fb30b6aafa5"
+checksum = "e4e5159484d14f149de53df7cf5f04d9cff4a4d414688cc0cc81910162d74892"
 
 [[package]]
 name = "tinymist-query"
-version = "0.11.12"
+version = "0.11.14"
 dependencies = [
  "anyhow",
  "biblatex",
@@ -4050,7 +4050,7 @@ dependencies = [
 
 [[package]]
 name = "tinymist-render"
-version = "0.11.12"
+version = "0.11.14"
 dependencies = [
  "base64 0.22.1",
  "log",
@@ -4428,7 +4428,7 @@ dependencies = [
 
 [[package]]
 name = "typst-preview"
-version = "0.11.12"
+version = "0.11.14"
 dependencies = [
  "await-tree",
  "clap",
@@ -4440,7 +4440,7 @@ dependencies = [
  "once_cell",
  "serde",
  "serde_json",
- "tinymist-assets 0.11.12 (registry+https://github.com/rust-lang/crates.io-index)",
+ "tinymist-assets 0.11.14 (registry+https://github.com/rust-lang/crates.io-index)",
  "tokio",
  "tokio-tungstenite",
  "typst",
@@ -4889,16 +4889,6 @@ name = "version_check"
 version = "0.9.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "49874b5167b65d7193b8aba1567f5c7d93d001cafc34600cee003eda787e483f"
-
-[[package]]
-name = "waitpid-any"
-version = "0.2.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0189157c93c54d86e5c61ddf0c1223baa25e5bfb2f6f9983c678985b028d7c12"
-dependencies = [
- "rustix",
- "windows-sys 0.52.0",
-]
 
 [[package]]
 name = "walkdir"

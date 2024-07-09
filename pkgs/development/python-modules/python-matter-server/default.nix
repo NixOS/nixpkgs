@@ -8,7 +8,6 @@
 
   # build
   setuptools,
-  pythonRelaxDepsHook,
 
   # propagates
   aiohttp,
@@ -56,7 +55,7 @@ in
 
 buildPythonPackage rec {
   pname = "python-matter-server";
-  version = "6.1.0";
+  version = "6.2.2";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -65,7 +64,7 @@ buildPythonPackage rec {
     owner = "home-assistant-libs";
     repo = "python-matter-server";
     rev = "refs/tags/${version}";
-    hash = "sha256-sY/FaMZ3p/AC63t1ku1Khgqi71G7u2O+ZPTuMPHFkuk=";
+    hash = "sha256-20heZrdSuKfiRuKKnDyguSC5bbV/9qBcu6E/5vcV1iU=";
   };
 
   patches = [
@@ -83,7 +82,6 @@ buildPythonPackage rec {
 
   build-system = [
     setuptools
-    pythonRelaxDepsHook
   ];
 
   pythonRelaxDeps = [ "home-assistant-chip-clusters" ];

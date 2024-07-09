@@ -4,7 +4,7 @@
 , autoPatchelfHook
 , wrapGAppsHook3
 , makeWrapper
-, gnome
+, gnome-keyring
 , libsecret
 , git
 , curl
@@ -48,7 +48,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    gnome.gnome-keyring
+    gnome-keyring
     xorg.libXdamage
     xorg.libX11
     libsecret
