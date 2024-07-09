@@ -1,10 +1,10 @@
 { config, lib, pkgs, ... }:
 
-with lib;
 let
   cfg = config.services.ulogd;
   settingsFormat = pkgs.formats.ini { listsAsDuplicateKeys = true; };
   settingsFile = settingsFormat.generate "ulogd.conf" cfg.settings;
+  inherit (lib) mkEnableOption mkOption mkIf types;
 in {
   options = {
     services.ulogd = {
