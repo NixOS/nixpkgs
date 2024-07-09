@@ -23,7 +23,7 @@
         postPatch
         ;
       name = denoDepsName;
-      hash = denoDepsHash;
+      outputHash = denoDepsHash;
     }
   ),
   # Hash of the vendored dependencies. Leave empty if you dont know it yet
