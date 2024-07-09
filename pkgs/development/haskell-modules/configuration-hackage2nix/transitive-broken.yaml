@@ -3417,8 +3417,6 @@ dont-distribute-packages:
  - rfc-redis
  - rfc-servant
  - rhine-bayes
- - rhine-gloss
- - rhine-terminal
  - rhythm-game-tutorial
  - rib
  - ribosome

@@ -5065,7 +5065,6 @@ broken-packages:
   - rfc-prelude # failure in job https://hydra.nixos.org/build/233227572 at 2023-09-02
   - r-glpk-phonetic-languages-ukrainian-durations # failure in job https://hydra.nixos.org/build/253703155 at 2024-03-31
   - rhbzquery # failure in job https://hydra.nixos.org/build/233259706 at 2023-09-02
-  - rhine # failure in job https://hydra.nixos.org/build/233245503 at 2023-09-02
   - riak # failure in job https://hydra.nixos.org/build/233192622 at 2023-09-02
   - riak-protobuf-lens # failure in job https://hydra.nixos.org/build/233203142 at 2023-09-02
   - ribbit # failure in job https://hydra.nixos.org/build/233191000 at 2023-09-02
