@@ -17701,7 +17701,7 @@
     email = "s0me1newithhand7s@gmail.com";
     matrix = "@s0me1newithhand7s:matrix.org";
     github = "s0me1newithhand7s";
-    githubId = "117505144";
+    githubId = 117505144;
   };
   s1341 = {
     email = "s1341@shmarya.net";
