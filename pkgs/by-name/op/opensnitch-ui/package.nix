@@ -1,5 +1,6 @@
 { python3Packages
 , fetchFromGitHub
+, nix-update-script
 , qt5
 , lib
 }:
@@ -64,6 +65,8 @@ python3Packages.buildPythonApplication rec {
 
   # All tests are sandbox-incompatible and disabled for now
   doCheck = false;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Application firewall";
