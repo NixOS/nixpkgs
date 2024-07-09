@@ -23,7 +23,7 @@ in
       };
 
       package = lib.mkPackageOption pkgs "xonsh" {
-        example = "xonsh.wrapper.override { extraPackages = ps: [ ps.requests ]; }";
+        example = "pkgs.xonsh.override { extraPackages = ps: [ ps.requests ]; }";
       };
 
       config = lib.mkOption {
