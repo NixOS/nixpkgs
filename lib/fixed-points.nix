@@ -313,6 +313,35 @@ rec {
   /**
     Compose two [`overlays`](#chap-overlays) and returns the resulting attribute set.
 
+    ```nix
+    let
+      original =
+        final: { r = final.a + final.b; a = 1; b = 2; };
+      f =
+        final: prev: { b = final.c * prev.b; c = 3; };
+      g =
+        final: prev: { c = 10; cPrev = prev.c; r = toString prev.r; };
+
+      # Compute the fixed point.
+      # As we only call our functions once, `final` above only takes on the value of `fixedpoint`.
+      fixedpoint =
+        lib.fix
+          (lib.extends
+            (lib.composeExtensions f g)
+            original
+          );
+    in fixedpoint
+    => {
+      a = 1;
+      b = 20;
+      c = 10;
+      cPrev = 3;
+      r = "21";
+    }
+    ```
+    
+    See also [`fix`](#function-library-lib.fixedPoints.fix), [`extends`](#function-library-lib.fixedPoints.extends).
+
     :::{.note}
     The result is produced by using the update operator `//`.
     This means nested values of previous overlays are not merged recursively.
@@ -322,19 +351,20 @@ rec {
 
     `f`
 
-    : The first `overlay` to apply
+    : The first `overlay` to apply. Its first argument is `final` and its second argument is `prev`.
 
     `g`
 
-    : The second `overlay` to apply
+    : The second `overlay` to apply. Its first argument is `final` and its second argument is `prev` with the result of `f` `//`-merged into it.
 
     `final`
 
-    : The initial value for the fixpoint iteration.
+    : The fixpoint when the overlays are evaluated with [`fix`](#function-library-lib.fixedPoints.fix).
 
     `prev`
 
-    : The initial value for the second argument of `f`
+    : The return value of the original function that is extended by the overlays `f` and `g`.
+      If `composeExtensions f g` is itself used in a composition of overlays, then any overlays that precede it can be considered to be part of "the original function".
 
     # Type
 
@@ -367,11 +397,12 @@ rec {
 
     `final`
 
-    : The initial value for the fixpoint iteration.
+    : The return value of the original function that is extended by the overlays `f` and `g`.
+      If `composeManyExtensions extensions` is itself used in a composition of overlays, then any overlays that precede it can be considered to be part of "the original function".
 
     `prev`
 
-    : The initial value for the second argument of the overlay
+    : The intermediate result of applying preceding overlays.
 
     # Type
 
@@ -380,7 +411,7 @@ rec {
     let
       OverlayFn :: ( { ... } -> { ... } -> { ... } );
     in
-      composeManyExtensions :: [ OverlayFn ] -> { ... } -> { ... } -> { ... }
+      composeManyExtensions :: [ OverlayFn ] -> OverlayFn
     ```
   */
   composeManyExtensions =
