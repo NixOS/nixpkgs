@@ -18,14 +18,14 @@
 }:
 
 let
-  version = "2.61.0";
+  version = "2.62.0";
 
   src = fetchFromGitHub {
     name = "azure-cli-${version}-src";
     owner = "Azure";
     repo = "azure-cli";
     rev = "azure-cli-${version}";
-    hash = "sha256-RmCZigDenbX8OoIZeY087ga2AP8yRckyG0qZnN9gg44=";
+    hash = "sha256-Rb27KRAb50YzTZzMs6n8g04x14ni3rIYAL3c5j/ieRw=";
   };
 
   # Pin Python version to 3.11.
