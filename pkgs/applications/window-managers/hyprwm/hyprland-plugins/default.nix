@@ -28,6 +28,7 @@ let
     { hy3 = import ./hy3.nix; }
     { hypr-dynamic-cursors = import ./hypr-dynamic-cursors.nix; }
     { hyprfocus = import ./hyprfocus.nix; }
+    { hyprspace = import ./hyprspace.nix; }
     (import ./hyprland-plugins.nix)
   ];
 in
