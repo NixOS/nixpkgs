@@ -144,7 +144,7 @@ stdenv.mkDerivation rec {
     "--enable-user=frr"
     "--enable-vty-group=frrvty"
     "--localstatedir=/run/frr"
-    "--sbindir=$(out)/libexec/frr"
+    "--sbindir=${placeholder "out"}/libexec/frr"
     "--sysconfdir=/etc/frr"
     "--with-clippy=${clippy-helper}/bin/clippy"
     # general options
@@ -190,7 +190,8 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace tools/frr-reload \
-      --replace /usr/lib/frr/ $out/libexec/frr/
+      --replace-quiet /usr/lib/frr/ $out/libexec/frr/
+    sed -i '/^PATH=/ d' tools/frr.in tools/frrcommon.sh.in
   '';
 
   doCheck = true;
