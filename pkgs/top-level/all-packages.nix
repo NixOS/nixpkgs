@@ -33640,6 +33640,7 @@ with pkgs;
     libappindicator-gtk3 = null;
     libmodplug = null;
     libsoup = libsoup_3;
+    python3 = python311;
   };
 
   quodlibet-without-gst-plugins = quodlibet.override {
