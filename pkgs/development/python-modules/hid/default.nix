@@ -16,10 +16,6 @@ buildPythonPackage rec {
     hash = "sha256-SNdk166XRroSO5bb9FeJPKgCaLd5HEsdLgUTEO64OGA=";
   };
 
-  propagatedBuildInputs = [ hidapi ];
-
-  nativeCheckInputs = [ nose ];
-
  postPatch = ''
     hidapi=${hidapi}/lib
     test -d $hidapi || { echo "ERROR: $hidapi doesn't exist, please update/fix this build expression."; exit 1; }
