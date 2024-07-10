@@ -15666,13 +15666,11 @@ with pkgs;
     meta.broken = stdenv.hostPlatform.isDarwin;
   });
 
-  ghdl = ghdl-mcode;
+  ghdl-mcode = callPackage ../by-name/gh/ghdl/package.nix { backend = "mcode"; };
 
-  ghdl-mcode = callPackage ../development/compilers/ghdl {
-    backend = "mcode";
-  };
+  ghdl-gcc = callPackage ../by-name/gh/ghdl/package.nix { backend = "gcc"; };
 
-  ghdl-llvm = callPackage ../development/compilers/ghdl {
+  ghdl-llvm = callPackage ../by-name/gh/ghdl/package.nix {
     backend = "llvm";
     inherit (llvmPackages_15) llvm;
   };
