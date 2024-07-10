@@ -15322,6 +15322,12 @@
     githubId = 14935550;
     name = "Brad Pfannmuller";
   };
+  parranoh = {
+    email = "minerva.schlau+nixpkgs@hotmail.com";
+    github = "Parranoh";
+    githubId = 6516678;
+    name = "Parranoh";
+  };
   parras = {
     email = "c@philipp-arras.de";
     github = "phiadaarr";
