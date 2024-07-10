@@ -14,7 +14,7 @@ in
     hostname = mkOption {
       type = types.str;
       default = "localhost";
-      description = "FQDN for the onlyoffice instance.";
+      description = "FQDN for the OnlyOffice instance.";
     };
 
     jwtSecretFile = mkOption {
@@ -31,13 +31,13 @@ in
     port = mkOption {
       type = types.port;
       default = 8000;
-      description = "Port the OnlyOffice DocumentServer should listens on.";
+      description = "Port the OnlyOffice document server should listen on.";
     };
 
     examplePort = mkOption {
       type = types.port;
       default = null;
-      description = "Port the OnlyOffice Example server should listens on.";
+      description = "Port the OnlyOffice example server should listen on.";
     };
 
     postgresHost = mkOption {
@@ -49,7 +49,7 @@ in
     postgresName = mkOption {
       type = types.str;
       default = "onlyoffice";
-      description = "The name of database OnlyOffice should user.";
+      description = "The name of database OnlyOffice should use.";
     };
 
     postgresPasswordFile = mkOption {
