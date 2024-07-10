@@ -1,39 +1,40 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, accountsservice
-, alsa-lib
-, budgie-screensaver
-, docbook-xsl-nons
-, glib
-, gnome
-, gnome-desktop
-, graphene
-, gst_all_1
-, gtk-doc
-, gtk3
-, ibus
-, intltool
-, libcanberra-gtk3
-, libgee
-, libGL
-, libnotify
-, libpeas
-, libpulseaudio
-, libuuid
-, libwnck
-, magpie
-, mesa
-, meson
-, ninja
-, pkg-config
-, polkit
-, sassc
-, upower
-, vala
-, xfce
-, wrapGAppsHook3
-, zenity
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  accountsservice,
+  alsa-lib,
+  budgie-screensaver,
+  docbook-xsl-nons,
+  glib,
+  gnome,
+  gnome-desktop,
+  graphene,
+  gst_all_1,
+  gtk-doc,
+  gtk3,
+  ibus,
+  intltool,
+  libcanberra-gtk3,
+  libgee,
+  libGL,
+  libnotify,
+  libpeas,
+  libpulseaudio,
+  libuuid,
+  libwnck,
+  magpie,
+  mesa,
+  meson,
+  ninja,
+  pkg-config,
+  polkit,
+  sassc,
+  upower,
+  vala,
+  xfce,
+  wrapGAppsHook3,
+  zenity,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -48,9 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-lDsQlUAa79gnM8wC5pwyquvFyEiayH4W4gD/uyC5Koo=";
   };
 
-  patches = [
-    ./plugins.patch
-  ];
+  patches = [ ./plugins.patch ];
 
   nativeBuildInputs = [
     docbook-xsl-nons
@@ -97,14 +96,16 @@ stdenv.mkDerivation (finalAttrs: {
     libpeas
   ];
 
-  passthru.providedSessions = [
-    "budgie-desktop"
-  ];
+  passthru.providedSessions = [ "budgie-desktop" ];
 
   meta = {
     description = "Feature-rich, modern desktop designed to keep out the way of the user";
     homepage = "https://github.com/BuddiesOfBudgie/budgie-desktop";
-    license = with lib.licenses; [ gpl2Plus lgpl21Plus cc-by-sa-30 ];
+    license = with lib.licenses; [
+      gpl2Plus
+      lgpl21Plus
+      cc-by-sa-30
+    ];
     platforms = lib.platforms.linux;
     maintainers = lib.teams.budgie.members;
   };

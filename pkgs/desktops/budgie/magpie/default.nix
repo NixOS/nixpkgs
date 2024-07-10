@@ -1,54 +1,59 @@
-{ fetchFromGitHub
-, runCommand
-, lib
-, fetchpatch
-, stdenv
-, pkg-config
-, gnome
-, gettext
-, gobject-introspection
-, cairo
-, colord
-, lcms2
-, pango
-, json-glib
-, libstartup_notification
-, libcanberra
-, ninja
-, xvfb-run
-, xkeyboard_config
-, libxcvt
-, libxkbfile
-, libXdamage
-, libxkbcommon
-, libXtst
-, libinput
-, libdrm
-, gsettings-desktop-schemas
-, glib
-, gtk3
-, gnome-desktop
-, pipewire
-, libgudev
-, libwacom
-, mesa
-, meson
-, xorgserver
-, python3
-, wrapGAppsHook3
-, gi-docgen
-, sysprof
-, libsysprof-capture
-, desktop-file-utils
-, libcap_ng
-, graphene
+{
+  fetchFromGitHub,
+  runCommand,
+  lib,
+  fetchpatch,
+  stdenv,
+  pkg-config,
+  gnome,
+  gettext,
+  gobject-introspection,
+  cairo,
+  colord,
+  lcms2,
+  pango,
+  json-glib,
+  libstartup_notification,
+  libcanberra,
+  ninja,
+  xvfb-run,
+  xkeyboard_config,
+  libxcvt,
+  libxkbfile,
+  libXdamage,
+  libxkbcommon,
+  libXtst,
+  libinput,
+  libdrm,
+  gsettings-desktop-schemas,
+  glib,
+  gtk3,
+  gnome-desktop,
+  pipewire,
+  libgudev,
+  libwacom,
+  mesa,
+  meson,
+  xorgserver,
+  python3,
+  wrapGAppsHook3,
+  gi-docgen,
+  sysprof,
+  libsysprof-capture,
+  desktop-file-utils,
+  libcap_ng,
+  graphene,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "magpie";
   version = "0.9.3";
 
-  outputs = [ "out" "dev" "devdoc" ];
+  outputs = [
+    "out"
+    "dev"
+    "devdoc"
+  ];
 
   src = fetchFromGitHub {
     owner = "BuddiesOfBudgie";
@@ -146,7 +151,7 @@ stdenv.mkDerivation (finalAttrs: {
     libdir = "${finalAttrs.finalPackage}/lib/magpie-0";
 
     tests = {
-      libdirExists = runCommand "magpie-libdir-exists" {} ''
+      libdirExists = runCommand "magpie-libdir-exists" { } ''
         if [[ ! -d ${finalAttrs.finalPackage.libdir} ]]; then
           echo "passthru.libdir should contain a directory, “${finalAttrs.finalPackage.libdir}” is not one."
           exit 1
