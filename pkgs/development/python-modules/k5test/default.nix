@@ -27,6 +27,7 @@ buildPythonPackage rec {
       inherit findutils krb5;
       # krb5-config is in dev output
       krb5Dev = krb5.dev;
+      krb5Lib = krb5.lib;
     })
   ];
 
