@@ -5024,6 +5024,12 @@
     github = "dietmarw";
     githubId = 9332;
   };
+  different = {
+    name = "Harvey Brett";
+    email = "nixos@different-name.com";
+    github = "Different-Name";
+    githubId = 49257026;
+  };
   diffumist = {
     email = "git@diffumist.me";
     github = "Diffumist";
