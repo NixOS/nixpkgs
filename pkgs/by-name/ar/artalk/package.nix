@@ -15,7 +15,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "ArtalkJS";
     repo = "artalk";
-    rev = "v${version}";
+    rev = "refs/tags/v${version}";
     hash = "sha256-fOuZiFomXGvRUXkpEM3BpJyMOtSm6/RHd0a7dPOsoT4=";
   };
   web = fetchurl {
