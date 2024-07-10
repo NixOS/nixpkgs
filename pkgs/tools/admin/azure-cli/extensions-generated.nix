@@ -771,9 +771,9 @@
   };
   providerhub = mkAzExtension rec {
     pname = "providerhub";
-    version = "0.2.0";
+    version = "1.0.0b1";
     url = "https://azcliprod.blob.core.windows.net/cli-extensions/providerhub-${version}-py3-none-any.whl";
-    sha256 = "9cda8fed546254987e5c5f872b4119105796c89de8d65d385638dac155bdf01e";
+    sha256 = "7b93cb7ecb1fa3a520909d45e6e6597c8ba7daac4fbc1a26c3de66043678dd0d";
     description = "Microsoft Azure Command-Line Tools ProviderHub Extension";
   };
   purview = mkAzExtension rec {
