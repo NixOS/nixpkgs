@@ -11,7 +11,7 @@ let
 
   # The configuration to install.
   makeConfig = { bootLoader, grubDevice, grubIdentifier, grubUseEfi
-               , extraConfig, forceGrubReinstallCount ? 0, flake ? false
+               , extraConfig, forceGrubReinstallCount ? 0, withTestInstrumentation ? true
                , clevisTest
                }:
     pkgs.writeText "configuration.nix" ''
@@ -19,7 +19,7 @@ let
 
       { imports =
           [ ./hardware-configuration.nix
-            ${if flake
+            ${if !withTestInstrumentation
               then "" # Still included, but via installer/flake.nix
               else "<nixpkgs/nixos/modules/testing/test-instrumentation.nix>"}
           ];
@@ -330,7 +330,7 @@ let
           "${makeConfig {
                inherit bootLoader grubDevice grubIdentifier grubUseEfi extraConfig clevisTest;
                forceGrubReinstallCount = 1;
-               flake = true;
+               withTestInstrumentation = false;
             }}",
           "/root/my-config/configuration.nix",
         )
