@@ -14,11 +14,11 @@
 
   # Configuration for finding the main script and the config file 
   # The main script. Used with `deno cache` to fetch dependencies.
-  script,
+  mainScript ? "",
   # The deno.json config file. Leave unset to use denos default behavior (search for deno.json and deno.jsonc next to the script)
-  denoJson ? null,
+  denoJson ? "",
   # Customize the deno lockfile location.  Leave unset to use denos default behavior (search for deno.lock next to the script)
-  denoLock ? null,
+  denoLock ? "",
   ...
 }@args:
 stdenvNoCC.mkDerivation (
@@ -26,10 +26,17 @@ stdenvNoCC.mkDerivation (
   (
     args
     // {
-      denoJsonFile = denoJson;
-      denoLockFile = denoLock;
-      denoJsonFlag = if denoJson != null then "-c ${denoJson}" else "";
-      denoLockFlag = if denoLock != null then "--lock ${denoLock}" else "";
+      pname = if args ? pname && args.pname != null then "${args.pname}-deno-deps" else "deno-deps";
+      name =
+        if args ? name && args.name != null then
+          "${args.name}-deno-deps"
+        else
+          "${finalAttrs.pname}-${finalAttrs.version}";
+
+      denoJson = denoJson;
+      denoLock = denoLock;
+      mainScript = mainScript;
+
       nativeBuildInputs = [
         deno
         jq
@@ -40,59 +47,93 @@ stdenvNoCC.mkDerivation (
       buildPhase = ''
         ERROR_OCCURRED=false
 
+        if test -z "$mainScript" ; then
+          echo "error: You need to specify a deno main script. It is probably something like 'main.ts'" >&2
+          echo "fix: Adjust you nix code to pass a main script as script." >&2
+          exit 1
+        fi
+        if ! test -f "$mainScript" ; then
+          echo "error: The script '$mainScript' for your application does not exist." >&2
+          echo "fix: Run 'echo \"console.log(\\\"Hello world!\\\")\" > $mainScript' to create it." >&2
+          exit 1
+        fi
+
+        SCRIPT_DIR="$(dirname "$mainScript")"
+
+        # Resolve the deno json file. We need it to resolve the lockfile
+        if test -n "$denoJson" ; then
+          if ! test -f "$denoJson" ; then
+            if test "$denoJson" = "deno.json" ; then
+              echo "error: There is no deno config file in your project, but you explicitly specified '$denoJson'." >&2
+              echo "fix: Run 'deno init' to create it." >&2
+              echo "fix: Or remove the denoJson attribute from your nix code to use the default or none." >&2
+            else
+              echo "error: The deno config file at '$denoJson' you specified does not exist." >&2
+              echo "fix: Create '$denoJson'." >&2
+              echo "fix: Or remove the denoJson attribute from your nix code to use the default or none." >&2
+            fi
+            exit 1
+          fi
+        fi
+        # If the deno json file is not set, we try the default locations
+        implicitDenoJson="$denoJson"
+        if test -z "$implicitDenoJson" ; then
+          if test -f "$SCRIPT_DIR/$deno.json" ; then
+            implicitDenoJson="$(realpath -s --relative-to . "$SCRIPT_DIR/deno.json")"
+          elif test -f "$SCRIPT_DIR/deno.jsonc" ; then
+            implicitDenoJson="$(realpath -s --relative-to . "$SCRIPT_DIR/deno.jsonc")"
+          fi
+        fi
+
+        # If a deno json is to be used, implicitDenoJson is set at this point
+        # If it is set, the file is guaranteed to exist
+
+
+        if test -n "$denoLock" ; then
+          if ! test -f "$denoLock" ; then
+            echo "error: The deno lock file at '$denoLock' you explicitly requested does not exist." >&2
+            echo "fix: Create '$denoLock'." >&2
+            echo "fix: Or remove the denoLock attribute from your nix code to use the default one." >&2
+            exit 1
+          fi
+        fi
+        implicitDenoLock="$denoLock"
+        # If the lockfile is not set, try to read its path from the deno json file
+        if test -z "$implicitDenoLock" ; then
+          if test -n "$implicitDenoJson" ; then
+            implicitDenoLock="$(jq -r '.lock' "$implicitDenoJson" | sed 's/^null//')"
+            if ! test -f "$implicitDenoLock" ; then
+              echo "error: The deno lock file at '$implicitDenoLock' that was specified in '$implicitDenoJson' does not exist." >&2
+              echo "fix: Run 'deno cache -c \"$implicitDenoJson\" $mainScript' to create it." >&2
+              exit 1
+            fi
+          fi
+        fi
+        # If the lockfile is still not set, try the default location
+        if test -z "$implicitDenoLock" ; then
+          if test -f "$SCRIPT_DIR/deno.lock" ; then
+            implicitDenoLock="$(realpath -s --relative-to . "$SCRIPT_DIR/deno.lock")"
+          fi
+        fi
+        if test -z "$implicitDenoLock" ; then
+          echo "error: There is no deno lock file in your project." >&2
+          echo "fix: Run 'deno cache $mainScript' to create it." >&2
+          exit 1
+        fi
+
+        # implicitDenoJson is always set to an existing file at this point, or to an empty string if it is not used
+        # implicitDenoLock is always set to an existing file at this point
+
+        DENO_FLAGS=""
+        if test -n "$implicitDenoJson" ; then
+          DENO_FLAGS+="-c $implicitDenoJson "
+        fi
+        DENO_FLAGS+="--lock $implicitDenoLock "
+
         export DENO_DIR="$(mktemp -d)"
         export DENO_NO_UPDATE_CHECK=true
         export DENO_NO_PACKAGE_JSON=true
         export DENO_JOBS=1
-
-        if test -z '${script}' ; then
-          echo "error: You need to specify a script. It is probably something like 'main.ts'"
-          echo "fix: Adjust you nix code to pass a main file."
-          exit 1
-        fi
-
-        if ! test -f '${script}' ; then
-          echo "error: The script '${script}' for your application does not exist."
-          echo "fix: Run 'echo \"console.log(\\\"Hello world!\\\")\" > ${script}' to create it."
-          ERROR_OCCURRED=true
-        fi
-
-        ${
-          if finalAttrs.denoJsonFile == null then
-            ""
-          else
-            ''
-              if ! test -f "${denoJson}" ; then
-                if test "${denoJson}" = "deno.json" ; then
-                  echo "error: There is no deno config file in your project. For now we need every project to have a config file."
-                  echo "fix: Run 'deno init' to create it."
-                else
-                  echo "error: The deno config file at '${denoJson}' you specified does not exist."
-                  echo "fix: Create '${denoJson}'."
-                fi
-                ERROR_OCCURRED=true
-              fi
-            ''
-        }
-        ${
-          if finalAttrs.denoLockFile == null then
-            ''
-              LOCKFILE="deno.lock"
-            ''
-          else
-            ''
-              LOCKFILE="$((jq -r '.lock' '${denoJson}' || true) | sed -E 's/^(null)?$/deno.lock/')"
-              if test -z "$LOCKFILE" ; then
-                LOCKFILE="deno.lock"
-              fi
-
-              if ! test -f "$LOCKFILE" ; then
-                echo "error: Your lockfile '$LOCKFILE' does not seem to exist."
-                echo "fix: Run 'deno run --reload ${script}' to create it."
-                ERROR_OCCURRED=true
-              fi
-            ''
-        }
 
         mkdir node_modules
         mkdir vendor
@@ -102,13 +143,21 @@ stdenvNoCC.mkDerivation (
           exit 1
         fi
 
-        export LOCKFILE_HASH=$(sha256sum "$LOCKFILE" | cut -d' ' -f1)
+        export LOCKFILE_HASH=$(sha256sum "$implicitDenoLock" | cut -d' ' -f1)
 
         # This fun dance, makes the cache command run twice, because the DENO_DIR is not reproducible otherwise
-        deno cache ${finalAttrs.denoJsonFlag} ${finalAttrs.denoLockFlag} --vendor=true --node-modules-dir=true ${script}
+        deno cache $DENO_FLAGS --vendor --node-modules-dir "$mainScript"
         rm -rf deno
         mkdir deno
-        deno cache ${finalAttrs.denoJsonFlag} ${finalAttrs.denoLockFlag} --vendor=true --node-modules-dir=true ${script}
+        deno cache $DENO_FLAGS --vendor --node-modules-dir "$mainScript"
+
+        LOCKFILE_HASH_AFTER=$(sha256sum "$implicitDenoLock" | cut -d' ' -f1)
+
+        if test "$LOCKFILE_HASH" != "$LOCKFILE_HASH_AFTER" ; then
+          echo "error: Your lockfile changed while running 'deno cache $mainScript'. We cant do reproducible builds this way. You probably have unlocked imports somewhere in your code. To fix this run 'deno cache $mainScript' and commit the changed lockfile." >&2
+          echo "fix: Run 'deno cache $mainScript' and commit the changed lockfile." >&2
+          ERROR_OCCURRED=true
+        fi
 
         # These two files are not always reproducible and also not required
         rm node_modules/.deno/.deno.lock.poll || true
@@ -119,10 +168,12 @@ stdenvNoCC.mkDerivation (
         # rm node_modules/.deno/.setup-cache.bin || true
 
         # Make the symlinks in node_modules relative
-        for link in $(find node_modules -type l | sort) ; do
+        for link in $(find . -type l | sort) ; do
           ln --force --symbolic --no-dereference --relative "$(readlink --canonicalize "$link")" "$link"
         done
 
+        # Sort the keys in the manifest file
+        # TODO: Fix upstream
         if test -f vendor/manifest.json ; then
           jq -S '.' "vendor/manifest.json" > "vendor/manifest.json.tmp"
           mv "vendor/manifest.json.tmp" "vendor/manifest.json"
@@ -135,23 +186,10 @@ stdenvNoCC.mkDerivation (
         for file in $(find $OLD_DENO_DIR/npm -type f -name 'registry.json' | sed "s|^$OLD_DENO_DIR||g" | sort) ; do
           target_file="$DENO_DIR/$file"
           mkdir -p "$(dirname "$target_file")"
-          # There should only be registry.json files here
-          # echo '###############################################################################'
-          # echo $file
-          # cat $file
 
           jq -Sc '.' "$OLD_DENO_DIR/$file" > "$target_file"
           # jq -S '.versions = ( .versions | with_entries( select(.key == ("5.1.0", "other")) ) )'
         done
-
-
-        LOCKFILE_HASH_AFTER=$(sha256sum "$LOCKFILE" | cut -d' ' -f1)
-
-        if test "$LOCKFILE_HASH" != "$LOCKFILE_HASH_AFTER" ; then
-          echo "error: Your lockfile changed while running 'deno cache ${script}'. We cant do reproducible builds this way. You probably have unlocked imports somewhere in your code. To fix this run 'deno cache ${script}' and commit the changed lockfile." >&2
-          echo "fix: Run 'deno cache ${script}' and commit the changed lockfile." >&2
-          ERROR_OCCURRED=true
-        fi
 
         if test -f vendor/manifest.json ; then
           for import in $(cat vendor/manifest.json | jq -r '.modules | keys[]') ; do
@@ -183,8 +221,9 @@ stdenvNoCC.mkDerivation (
         # Place lockfile hash in out
         echo "$LOCKFILE_HASH" | cut -d' ' -f1 > $out/lockfile.hash
 
-        # Place the deno version in out
-        echo "${deno.version}" > $out/deno.version
+        # Place some infos about the build in out
+        deno -v > $out/deno.info
+        echo ${stdenvNoCC.targetPlatform.system} > $out/system.info
 
         # Place the denodir in out 
         mv $DENO_DIR $out/deno_dir
