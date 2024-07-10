@@ -23480,11 +23480,12 @@ with pkgs;
 
   openslp = callPackage ../development/libraries/openslp { };
 
-  openstackclient = with python3Packages; toPythonApplication python-openstackclient;
-  glanceclient = with python3Packages; toPythonApplication python-glanceclient;
-  heatclient = with python3Packages; toPythonApplication python-heatclient;
-  ironicclient = with python3Packages; toPythonApplication python-ironicclient;
-  manilaclient = with python3Packages; toPythonApplication python-manilaclient;
+  openstackclient = with python311Packages; toPythonApplication python-openstackclient;
+  glanceclient = with python311Packages; toPythonApplication python-glanceclient;
+  heatclient = with python311Packages; toPythonApplication python-heatclient;
+  ironicclient = with python311Packages; toPythonApplication python-ironicclient;
+  manilaclient = with python311Packages; toPythonApplication python-manilaclient;
+  swiftclient = with python311Packages; toPythonApplication python-swiftclient;
 
   openvdb = callPackage ../development/libraries/openvdb { };
 
@@ -24341,8 +24342,6 @@ with pkgs;
   svrcore = callPackage ../development/libraries/svrcore { };
 
   svxlink = libsForQt5.callPackage ../applications/radio/svxlink { };
-
-  swiftclient = with python3Packages; toPythonApplication python-swiftclient;
 
   biblesync = callPackage ../development/libraries/biblesync { };
 
