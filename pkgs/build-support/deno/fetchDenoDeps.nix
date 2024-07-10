@@ -145,11 +145,12 @@ stdenvNoCC.mkDerivation (
 
         export LOCKFILE_HASH=$(sha256sum "$implicitDenoLock" | cut -d' ' -f1)
 
-        # This fun dance, makes the cache command run twice, because the DENO_DIR is not reproducible otherwise
         deno cache $DENO_FLAGS --vendor --node-modules-dir "$mainScript"
-        rm -rf deno
-        mkdir deno
-        deno cache $DENO_FLAGS --vendor --node-modules-dir "$mainScript"
+        # # This fun dance, makes the cache command run a second time, because the DENO_DIR is not reproducible otherwise.
+        # # We dont need it for now, because we only take the relevant files from the DENO_DIR
+        # rm -rf deno
+        # mkdir deno
+        # deno cache $DENO_FLAGS --vendor --node-modules-dir "$mainScript"
 
         LOCKFILE_HASH_AFTER=$(sha256sum "$implicitDenoLock" | cut -d' ' -f1)
 
