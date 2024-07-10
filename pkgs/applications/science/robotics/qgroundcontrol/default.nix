@@ -76,7 +76,7 @@ stdenv.mkDerivation rec {
     homepage = "http://qgroundcontrol.com/";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ lopsided98 ];
+    maintainers = with maintainers; [ lopsided98 pandapip1 ];
     mainProgram = "QGroundControl";
   };
 }
