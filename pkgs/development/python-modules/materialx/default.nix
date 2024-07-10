@@ -1,19 +1,20 @@
 {
   lib,
   stdenv,
+  buildPythonPackage,
   fetchFromGitHub,
   cmake,
+  setuptools,
   darwin,
   libX11,
   libXt,
   libGL,
   openimageio,
   imath,
-  python3Packages,
-  python3
+  python,
 }:
 
-python3Packages.buildPythonPackage rec {
+buildPythonPackage rec {
   pname = "materialx";
   version = "1.38.10";
 
@@ -28,7 +29,7 @@ python3Packages.buildPythonPackage rec {
 
   nativeBuildInputs = [
     cmake
-    python3Packages.setuptools
+    setuptools
   ];
 
   buildInputs =
@@ -60,7 +61,7 @@ python3Packages.buildPythonPackage rec {
 
   postInstall = ''
     # Make python lib properly accessible
-    target_dir=$out/${python3.sitePackages}
+    target_dir=$out/${python.sitePackages}
     mkdir -p $(dirname $target_dir)
     # required for cmake to find the bindings, when included in other projects
     ln -s $out/python $target_dir
