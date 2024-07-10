@@ -465,6 +465,8 @@ self: super: with self; {
 
   aiozoneinfo = callPackage ../development/python-modules/aiozoneinfo { };
 
+  airgradient = callPackage ../development/python-modules/airgradient { };
+
   airium = callPackage ../development/python-modules/airium { };
 
   airly = callPackage ../development/python-modules/airly { };
