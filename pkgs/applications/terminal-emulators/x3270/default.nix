@@ -1,39 +1,76 @@
-{ lib, stdenv, fetchurl, m4, expat
-, libX11, libXt, libXaw, libXmu, bdftopcf, mkfontdir
-, fontadobe100dpi, fontadobeutopia100dpi, fontbh100dpi
-, fontbhlucidatypewriter100dpi, fontbitstream100dpi
+{ stdenv
+, darwin
+, lib
+, libiconv
+, fetchurl
+, m4
+, expat
+, libX11
+, libXt
+, libXaw
+, libXmu
+, bdftopcf
+, mkfontdir
+, fontadobe100dpi
+, fontadobeutopia100dpi
+, fontbh100dpi
+, fontbhlucidatypewriter100dpi
+, fontbitstream100dpi
 , tcl
-, ncurses }:
-
+, ncurses
+, openssl
+, readline
+}:
 let
   majorVersion = "4";
-  minorVersion = "0";
-  versionSuffix = "ga9";
-in stdenv.mkDerivation rec {
+  minorVersion = "3";
+  versionSuffix = "ga8";
+in
+stdenv.mkDerivation rec {
   pname = "x3270";
   version = "${majorVersion}.${minorVersion}${versionSuffix}";
 
   src = fetchurl {
-    url = "http://x3270.bgp.nu/download/0${majorVersion}.0${minorVersion}/suite3270-${version}-src.tgz";
-    sha256 = "0km24rgll0s4ji6iz8lvy5ra76ds162s95y33w5px6697cwqkp9j";
+    url =
+      "http://x3270.bgp.nu/download/0${majorVersion}.0${minorVersion}/suite3270-${version}-src.tgz";
+    sha256 = "sha256-gcC6REfZentIPEDhGznUSYu8mvVfpPeMz/Bks+N43Fk=";
   };
 
-  buildFlags = [ "unix" ];
+  buildFlags = lib.optional stdenv.isLinux "unix";
 
-  postConfigure = ''
-    pushd c3270 ; ./configure ; popd
+  configureFlags = lib.optionals stdenv.isDarwin [
+    "--enable-c3270"
+    "--enable-pr3270"
+    "--enable-s3270"
+    "--enable-tcl3270"
+  ];
+
+  postBuild = ''
+    make install.man
   '';
+
+  pathsToLink = [ "/share/man" ];
 
   nativeBuildInputs = [ m4 ];
   buildInputs = [
     expat
-    libX11 libXt libXaw libXmu bdftopcf mkfontdir
-    fontadobe100dpi fontadobeutopia100dpi fontbh100dpi
-    fontbhlucidatypewriter100dpi fontbitstream100dpi
+    libX11
+    libXt
+    libXaw
+    libXmu
+    bdftopcf
+    mkfontdir
+    fontadobe100dpi
+    fontadobeutopia100dpi
+    fontbh100dpi
+    fontbhlucidatypewriter100dpi
+    fontbitstream100dpi
     tcl
     ncurses
     expat
-  ];
+    openssl
+    readline
+  ] ++ lib.optionals stdenv.isDarwin [ libiconv darwin.apple_sdk.frameworks.Security ];
 
   meta = with lib; {
     description = "IBM 3270 terminal emulator for the X Window System";

@@ -34,9 +34,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Runtime library of Lev Walkin's asn1c split out as separate library";
-    homepage = "github.com/osmocom/libasn1c/";
+    homepage = "https://github.com/osmocom/libasn1c/";
     license = licenses.bsd2;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ janik ];
+    maintainers = with maintainers; [ ];
   };
 }

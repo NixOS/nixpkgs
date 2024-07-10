@@ -1,22 +1,25 @@
-{ lib
-, stdenv
-, linkFarm
-, buildPythonPackage
-, cargo
-, datasets
-, fetchFromGitHub
-, fetchurl
-, libiconv
-, numpy
-, openssl
-, pkg-config
-, pytestCheckHook
-, pythonOlder
-, requests
-, rustPlatform
-, rustc
-, Security
-, setuptools-rust
+{
+  lib,
+  stdenv,
+  linkFarm,
+  buildPythonPackage,
+  cargo,
+  datasets,
+  huggingface-hub,
+  fetchFromGitHub,
+  fetchurl,
+  libiconv,
+  numpy,
+  openssl,
+  pkg-config,
+  pytestCheckHook,
+  python,
+  pythonOlder,
+  requests,
+  rustPlatform,
+  rustc,
+  Security,
+  setuptools-rust,
 }:
 
 let
@@ -63,23 +66,22 @@ let
 in
 buildPythonPackage rec {
   pname = "tokenizers";
-  version = "0.15.0";
-  format = "pyproject";
+  version = "0.19.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "huggingface";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-+yfX12eKtgZV1OQvPOlMVTONbpFuigHcl4SjoCIZkSk=";
+    repo = "tokenizers";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-sKEAt46cdme821tzz9WSKnQb3hPmFJ4zvHgBNRxjEuk=";
   };
 
-  cargoDeps = rustPlatform.importCargoLock {
-    lockFile = ./Cargo.lock;
-  };
+  cargoDeps = rustPlatform.importCargoLock { lockFile = ./Cargo.lock; };
 
   sourceRoot = "${src.name}/bindings/python";
+  maturinBuildFlags = [ "--interpreter ${python.executable}" ];
 
   nativeBuildInputs = [
     pkg-config
@@ -90,15 +92,16 @@ buildPythonPackage rec {
     rustc
   ];
 
-  buildInputs = [
-    openssl
-  ] ++ lib.optionals stdenv.isDarwin [
-    libiconv
-    Security
-  ];
+  buildInputs =
+    [ openssl ]
+    ++ lib.optionals stdenv.isDarwin [
+      libiconv
+      Security
+    ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     numpy
+    huggingface-hub
   ];
 
   nativeCheckInputs = [
@@ -117,12 +120,12 @@ buildPythonPackage rec {
     export HOME=$(mktemp -d);
   '';
 
-  pythonImportsCheck = [
-    "tokenizers"
-  ];
+  pythonImportsCheck = [ "tokenizers" ];
 
   disabledTests = [
     # Downloads data using the datasets module
+    "test_encode_special_tokens"
+    "test_splitting"
     "TestTrainFromIterators"
     # Those tests require more data
     "test_from_pretrained"

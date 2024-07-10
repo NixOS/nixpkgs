@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -19,15 +20,11 @@ buildPythonPackage rec {
     hash = "sha256-J4TBR3ZvBjiM6nhAhLFL7JP9uqeTgw8ZgxVaozCipuQ=";
   };
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   doCheck = !stdenv.isDarwin;
 
-  pythonImportsCheck = [
-    "pebble"
-  ];
+  pythonImportsCheck = [ "pebble" ];
 
   meta = with lib; {
     description = "API to manage threads and processes within an application";

@@ -1,33 +1,32 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, google-api-core
-, grpc-google-iam-v1
-, mock
-, libcst
-, proto-plus
-, protobuf
-, pytestCheckHook
-, pytest-asyncio
-, pythonOlder
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  google-api-core,
+  grpc-google-iam-v1,
+  mock,
+  libcst,
+  proto-plus,
+  protobuf,
+  pytestCheckHook,
+  pytest-asyncio,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-dataproc";
-  version = "5.9.3";
+  version = "5.10.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-l9ZHiR5/TNJfa4Oa5XzTVYCd8so5ZlPtJK9itO8C9BI=";
+    hash = "sha256-HjIv6DujcvnUPYgdr9z97VDaqpoZe6ReOA1vI7pQSWA=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     google-api-core

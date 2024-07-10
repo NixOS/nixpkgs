@@ -37,7 +37,7 @@ mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Look at your windows and desktops from above.";
+    description = "Look at your windows and desktops from above";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ ];
     inherit (src.meta) homepage;

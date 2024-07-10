@@ -102,15 +102,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     homepage = "https://polybar.github.io/";
-    changelog = "https://github.com/polybar/polybar/releases/tag/${version}";
-    description = "A fast and easy-to-use tool for creating status bars";
+    changelog = "https://github.com/polybar/polybar/releases/tag/${finalAttrs.version}";
+    description = "Fast and easy-to-use tool for creating status bars";
     longDescription = ''
       Polybar aims to help users build beautiful and highly customizable
       status bars for their desktop environment, without the need of
       having a black belt in shell scripting.
     '';
     license = licenses.mit;
-    maintainers = with maintainers; [ afldcr Br1ght0ne moni ckie ];
+    maintainers = with maintainers; [ afldcr Br1ght0ne moni ];
+    mainProgram = "polybar";
     platforms = platforms.linux;
   };
 })

@@ -1,19 +1,20 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, substituteAll
-, ruff
-, click
-, click-default-group
-, docformatter
-, jinja2
-, toposort
-, typing-extensions
-, lxml
-, requests
-, pytestCheckHook
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  substituteAll,
+  ruff,
+  click,
+  click-default-group,
+  docformatter,
+  jinja2,
+  toposort,
+  typing-extensions,
+  lxml,
+  requests,
+  pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -42,13 +43,9 @@ buildPythonPackage rec {
       --replace "--benchmark-skip" ""
   '';
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  propagatedBuildInputs = [
-    typing-extensions
-  ];
+  propagatedBuildInputs = [ typing-extensions ];
 
   passthru.optional-dependencies = {
     cli = [
@@ -58,23 +55,17 @@ buildPythonPackage rec {
       jinja2
       toposort
     ];
-    lxml = [
-      lxml
-    ];
-    soap = [
-      requests
-    ];
+    lxml = [ lxml ];
+    soap = [ requests ];
   };
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ] ++ passthru.optional-dependencies.cli
+  nativeCheckInputs =
+    [ pytestCheckHook ]
+    ++ passthru.optional-dependencies.cli
     ++ passthru.optional-dependencies.lxml
     ++ passthru.optional-dependencies.soap;
 
-  disabledTestPaths = [
-    "tests/integration/benchmarks"
-  ];
+  disabledTestPaths = [ "tests/integration/benchmarks" ];
 
   pythonImportsCheck = [
     "xsdata.formats.dataclass.context"

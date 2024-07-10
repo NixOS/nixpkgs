@@ -1,14 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonRelaxDepsHook
-, setuptools-scm
-# install requirements
-, fido2
-, keyring
-, cryptography
-# test requirements
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools-scm,
+  # install requirements
+  fido2,
+  keyring,
+  cryptography,
+  # test requirements
+  pytestCheckHook,
 }:
 
 let
@@ -39,7 +39,6 @@ buildPythonPackage rec {
   '';
 
   nativeBuildInputs = [
-    pythonRelaxDepsHook
     setuptools-scm
   ];
 

@@ -52,6 +52,6 @@ buildGoModule rec {
     '';
     homepage = "https://wiki.hyperledger.org/display/fabric";
     license = licenses.asl20;
-    maintainers = with maintainers; [ marsam ];
+    maintainers = with maintainers; [ ];
   };
 }

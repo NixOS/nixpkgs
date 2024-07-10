@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.tests.basic = nixosTests.seatd;
 
   meta = {
-    description = "A minimal seat management daemon, and a universal seat management library";
+    description = "Minimal seat management daemon, and a universal seat management library";
     changelog = "https://git.sr.ht/~kennylevinsen/seatd/refs/${finalAttrs.version}";
     homepage = "https://sr.ht/~kennylevinsen/seatd/";
     license = lib.licenses.mit;

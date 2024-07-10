@@ -1,38 +1,34 @@
-{ lib
-, stdenv
-, buildGoModule
-, fetchFromGitHub
-, git
-, installShellFiles
-, kubescape
-, testers
+{
+  lib,
+  stdenv,
+  buildGoModule,
+  fetchFromGitHub,
+  git,
+  installShellFiles,
+  kubescape,
+  testers,
 }:
 
 buildGoModule rec {
   pname = "kubescape";
-  version = "3.0.8";
+  version = "3.0.13";
 
   src = fetchFromGitHub {
     owner = "kubescape";
     repo = "kubescape";
     rev = "refs/tags/v${version}";
-    hash = "sha256-ZGDE9go8BmaXE1YFT/z5Nob90MhsKZ6oKrodDMu2npY=";
+    hash = "sha256-s0BaPIGMP8PbVv14e0U+tWKUFUVohAndaI5pLoMdALM=";
     fetchSubmodules = true;
   };
 
-  vendorHash = "sha256-qFJVoWzU9rqpYbb8gzdK33rq///zizxVkWhsNV8OXOM=";
+  proxyVendor = true;
+  vendorHash = "sha256-1IpgtFm7P6IKoXWLkZ4RQMbk93lSfo1jayIGVChjtjA=";
 
-  subPackages = [
-    "."
-  ];
+  subPackages = [ "." ];
 
-  nativeBuildInputs = [
-    installShellFiles
-  ];
+  nativeBuildInputs = [ installShellFiles ];
 
-  nativeCheckInputs = [
-    git
-  ];
+  nativeCheckInputs = [ git ];
 
   ldflags = [
     "-s"
@@ -49,7 +45,6 @@ buildGoModule rec {
     rm core/cautils/getter/downloadreleasedpolicy_test.go
     rm core/core/initutils_test.go
     rm core/core/list_test.go
-    rm core/pkg/resourcehandler/remotegitutils_test.go
 
     # Remove tests that use networking
     substituteInPlace core/pkg/resourcehandler/repositoryscanner_test.go \
@@ -90,8 +85,10 @@ buildGoModule rec {
       Jenkins, CircleCI and Github workflows.
     '';
     license = licenses.asl20;
-    maintainers = with maintainers; [ fab jk ];
+    maintainers = with maintainers; [
+      fab
+      jk
+    ];
     mainProgram = "kubescape";
-    broken = stdenv.isDarwin;
   };
 }

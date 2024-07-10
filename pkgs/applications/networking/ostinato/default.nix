@@ -65,7 +65,7 @@ mkDerivation rec {
   enableParallelBuilding = false;
 
   meta = with lib; {
-    description = "A packet traffic generator and analyzer";
+    description = "Packet traffic generator and analyzer";
     homepage    = "https://ostinato.org/";
     license     = licenses.gpl3Plus;
     maintainers = with maintainers; [ rick68 ];

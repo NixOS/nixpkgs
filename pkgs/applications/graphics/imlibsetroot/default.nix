@@ -27,7 +27,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    description = "A Xinerama Aware Background Changer";
+    description = "Xinerama Aware Background Changer";
     homepage = "http://robotmonkeys.net/2010/03/30/imlibsetroot/";
     license = licenses.mitAdvertising;
     platforms = platforms.linux;

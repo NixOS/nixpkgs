@@ -1,10 +1,15 @@
 { config, lib, pkgs, options, ... }:
 
-with lib;
-
 let
   logPrefix = "services.prometheus.exporters.snmp";
   cfg = config.services.prometheus.exporters.snmp;
+  inherit (lib)
+    mkOption
+    types
+    literalExpression
+    escapeShellArg
+    concatStringsSep
+    ;
 
   # This ensures that we can deal with string paths, path types and
   # store-path strings with context.

@@ -1,4 +1,8 @@
-{ buildPythonPackage, fetchPypi, lib }:
+{
+  buildPythonPackage,
+  fetchPypi,
+  lib,
+}:
 
 buildPythonPackage rec {
   version = "0.1.2";
@@ -16,7 +20,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = {
-    description = "Generic API for dispatch to Pyro backends.";
+    description = "Generic API for dispatch to Pyro backends";
     homepage = "http://pyro.ai";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ georgewhewell ];

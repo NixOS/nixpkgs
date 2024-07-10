@@ -18,21 +18,24 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "vcpkg-tool";
-  version = "2024-03-14";
+  version = "2024-06-10";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "vcpkg-tool";
     rev = finalAttrs.version;
-    hash = "sha256-xe5a1cK56KvO4DFFz/K1omBCebzTRUOpXDpkOGek10M=";
+    hash = "sha256-TGRTzUd1FtErD+h/ksUsUm1Rhank9/yVy06JbAgEEw0=";
   };
 
   nativeBuildInputs = [
     cmake
-    cmakerc
-    fmt
     ninja
     makeWrapper
+  ];
+
+  buildInputs = [
+    cmakerc
+    fmt
   ];
 
   patches = [

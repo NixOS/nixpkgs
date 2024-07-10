@@ -24,11 +24,11 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A typeface made for developers";
+    description = "Typeface made for developers";
     homepage = "https://jetbrains.com/mono/";
     changelog = "https://github.com/JetBrains/JetBrainsMono/blob/v${version}/Changelog.md";
     license = licenses.ofl;
-    maintainers = [ maintainers.marsam ];
+    maintainers = with maintainers; [ vinnymeller ];
     platforms = platforms.all;
   };
 }

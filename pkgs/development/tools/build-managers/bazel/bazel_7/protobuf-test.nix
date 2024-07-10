@@ -5,7 +5,6 @@
 , darwin
 , distDir
 , extraBazelArgs ? ""
-, fetchFromGitHub
 , fetchurl
 , jdk11_headless
 , lib

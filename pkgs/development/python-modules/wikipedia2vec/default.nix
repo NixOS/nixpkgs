@@ -1,18 +1,19 @@
-{ lib
-, buildPythonPackage
-, click
-, cython_3
-, fetchFromGitHub
-, jieba
-, joblib
-, lmdb
-, marisa-trie
-, mwparserfromhell
-, numpy
-, pythonOlder
-, scipy
-, setuptools
-, tqdm
+{
+  lib,
+  buildPythonPackage,
+  click,
+  cython,
+  fetchFromGitHub,
+  jieba,
+  joblib,
+  lmdb,
+  marisa-trie,
+  mwparserfromhell,
+  numpy,
+  pythonOlder,
+  scipy,
+  setuptools,
+  tqdm,
 }:
 
 buildPythonPackage rec {
@@ -30,13 +31,13 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
-    cython_3
+    cython
     setuptools
   ];
 
   propagatedBuildInputs = [
     click
-    cython_3
+    cython
     jieba
     joblib
     lmdb
@@ -51,9 +52,7 @@ buildPythonPackage rec {
     bash cythonize.sh
   '';
 
-  pythonImportsCheck = [
-    "wikipedia2vec"
-  ];
+  pythonImportsCheck = [ "wikipedia2vec" ];
 
   meta = with lib; {
     description = "Tool for learning vector representations of words and entities from Wikipedia";

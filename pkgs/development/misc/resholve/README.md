@@ -52,13 +52,13 @@ Here's a simple example of how `resholve.mkDerivation` is already used in nixpkg
 
 resholve.mkDerivation rec {
   pname = "dgoss";
-  version = "0.4.1";
+  version = "0.4.2";
 
   src = fetchFromGitHub {
     owner = "goss-org";
     repo = "goss";
     rev = "refs/tags/v${version}";
-    hash = "sha256-dpMTUBMEG5tDi7E6ZRg1KHqIj5qDlvwfwJEgq/5z7RE=";
+    hash = "sha256-FDn1OETkYIpMenk8QAAHvfNZcSzqGl5xrD0fAZPVmRM=";
   };
 
   dontConfigure = true;
@@ -87,6 +87,7 @@ resholve.mkDerivation rec {
     license = licenses.asl20;
     platforms = platforms.linux;
     maintainers = with maintainers; [ hyzual anthonyroussel ];
+    mainProgram = "dgoss";
   };
 }
 ```
@@ -101,19 +102,19 @@ trivial, so I'll also link to some real-world examples:
 ```nix
 {
   resholvedScript = resholve.writeScript "name" {
-      inputs = [ file ];
-      interpreter = "${bash}/bin/bash";
-    } ''
-      echo "Hello"
-      file .
-    '';
+    inputs = [ file ];
+    interpreter = "${bash}/bin/bash";
+  } ''
+    echo "Hello"
+    file .
+  '';
   resholvedScriptBin = resholve.writeScriptBin "name" {
-      inputs = [ file ];
-      interpreter = "${bash}/bin/bash";
-    } ''
-      echo "Hello"
-      file .
-    '';
+    inputs = [ file ];
+    interpreter = "${bash}/bin/bash";
+  } ''
+    echo "Hello"
+    file .
+  '';
 }
 ```
 
@@ -229,7 +230,7 @@ from the manpage, and the Nix equivalents:
     # all single-word directives use `true` as value
     aliases = true;
     "$GIT" = [ "gix" ];
-    interpreter = "/bin/bash";
+    "/bin/bash" = true;
   };
 
   # --keep 'source:$HOME /etc/bashrc ~/.bashrc'

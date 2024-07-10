@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, python-dateutil
-, pythonOlder
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  python-dateutil,
+  pythonOlder,
+  requests,
 }:
 
 buildPythonPackage rec {
@@ -28,9 +29,7 @@ buildPythonPackage rec {
   # Module has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "kiwiki"
-  ];
+  pythonImportsCheck = [ "kiwiki" ];
 
   meta = with lib; {
     description = "Module to interact with the KIWI.KI API";

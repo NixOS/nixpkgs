@@ -1,33 +1,33 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, geojson
-, google-api-core
-, imagesize
-, nbconvert
-, nbformat
-, numpy
-, opencv4
-, packaging
-, pillow
-, pydantic
-, pyproj
-, pytestCheckHook
-, python-dateutil
-, pythonOlder
-, pythonRelaxDepsHook
-, requests
-, setuptools
-, shapely
-, strenum
-, tqdm
-, typeguard
-, typing-extensions
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  geojson,
+  google-api-core,
+  imagesize,
+  nbconvert,
+  nbformat,
+  numpy,
+  opencv4,
+  packaging,
+  pillow,
+  pydantic,
+  pyproj,
+  pytestCheckHook,
+  python-dateutil,
+  pythonOlder,
+  requests,
+  setuptools,
+  shapely,
+  strenum,
+  tqdm,
+  typeguard,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "labelbox";
-  version = "3.67.0";
+  version = "3.72.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -36,7 +36,7 @@ buildPythonPackage rec {
     owner = "Labelbox";
     repo = "labelbox-python";
     rev = "refs/tags/v.${version}";
-    hash = "sha256-JQTjmYxPBS8JC4HQTtbQ7hb80LPLYE4OEj1lFA6cZ1Y=";
+    hash = "sha256-gor1LFT/XrWxWPwGn8lOkF46p/yrRILZp6fpeV+xvto=";
   };
 
   postPatch = ''
@@ -48,17 +48,10 @@ buildPythonPackage rec {
       --replace-fail "pytest_plugins" "_pytest_plugins"
   '';
 
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
-  ];
 
-  pythonRelaxDeps = [
-    "python-dateutil"
-  ];
+  pythonRelaxDeps = [ "python-dateutil" ];
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     google-api-core
@@ -98,9 +91,7 @@ buildPythonPackage rec {
     "tests/data"
   ];
 
-  pythonImportsCheck = [
-    "labelbox"
-  ];
+  pythonImportsCheck = [ "labelbox" ];
 
   meta = with lib; {
     description = "Platform API for LabelBox";

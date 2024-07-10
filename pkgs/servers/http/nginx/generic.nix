@@ -4,6 +4,8 @@ outer@{ lib, stdenv, fetchurl, fetchpatch, openssl, zlib, pcre, libxml2, libxslt
 , nixosTests
 , installShellFiles, substituteAll, removeReferencesTo, gd, geoip, perl
 , withDebug ? false
+, withGeoIP ? false
+, withImageFilter ? false
 , withKTLS ? true
 , withStream ? true
 , withMail ? false
@@ -64,9 +66,11 @@ stdenv.mkDerivation {
     removeReferencesTo
   ] ++ nativeBuildInputs;
 
-  buildInputs = [ openssl zlib pcre libxml2 libxslt gd geoip perl ]
+  buildInputs = [ openssl zlib pcre libxml2 libxslt perl ]
     ++ buildInputs
-    ++ mapModules "inputs";
+    ++ mapModules "inputs"
+    ++ lib.optional withGeoIP geoip
+    ++ lib.optional withImageFilter gd;
 
   configureFlags = [
     "--sbin-path=bin/nginx"
@@ -112,10 +116,9 @@ stdenv.mkDerivation {
     "--with-http_perl_module"
     "--with-perl=${perl}/bin/perl"
     "--with-perl_modules_path=lib/perl5"
-  ] ++ lib.optional withSlice "--with-http_slice_module"
-    ++ lib.optional (gd != null) "--with-http_image_filter_module"
-    ++ lib.optional (geoip != null) "--with-http_geoip_module"
-    ++ lib.optional (withStream && geoip != null) "--with-stream_geoip_module"
+  ] ++ lib.optional withImageFilter "--with-http_image_filter_module"
+    ++ lib.optional withSlice "--with-http_slice_module"
+    ++ lib.optionals withGeoIP ([ "--with-http_geoip_module" ] ++ lib.optional withStream "--with-stream_geoip_module")
     ++ lib.optional (with stdenv.hostPlatform; isLinux || isFreeBSD) "--with-file-aio"
     ++ configureFlags
     ++ map (mod: "--add-module=${mod.src}") modules;
@@ -130,6 +133,9 @@ stdenv.mkDerivation {
     "-Wno-error=deprecated-declarations"
     "-Wno-error=gnu-folding-constant"
     "-Wno-error=unused-but-set-variable"
+  ] ++ lib.optionals stdenv.hostPlatform.isMusl [
+    # fix sys/cdefs.h is deprecated
+    "-Wno-error=cpp"
   ]);
 
   configurePlatforms = [];
@@ -199,7 +205,7 @@ stdenv.mkDerivation {
   };
 
   meta = if meta != null then meta else with lib; {
-    description = "A reverse proxy and lightweight webserver";
+    description = "Reverse proxy and lightweight webserver";
     mainProgram = "nginx";
     homepage    = "http://nginx.org";
     license     = [ licenses.bsd2 ]

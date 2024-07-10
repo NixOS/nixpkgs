@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "bdf" ];
 
   meta = with lib; {
-    description = "The /efont/ Unicode bitmap font";
+    description = "/efont/ Unicode bitmap font";
     homepage = "http://openlab.ring.gr.jp/efont/unicode/";
     license = licenses.bsd3;
     platforms = platforms.all;

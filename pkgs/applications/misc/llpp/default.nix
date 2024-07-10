@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/criticic/llpp";
-    description = "A MuPDF based PDF pager written in OCaml";
+    description = "MuPDF based PDF pager written in OCaml";
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ pSub ];
     license = [ licenses.publicDomain licenses.bsd3 ];

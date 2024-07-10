@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     mainProgram = "vera++";
-    description = "A fork of vera using python3.10";
+    description = "Fork of vera using python3.10";
     homepage = "https://github.com/Epitech/banana-vera";
     license = lib.licenses.boost;
     maintainers = with lib.maintainers; [ sigmanificient ];

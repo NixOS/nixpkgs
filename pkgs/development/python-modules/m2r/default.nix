@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchpatch
-, fetchPypi
-, docutils
-, mistune
-, pygments
+{
+  lib,
+  buildPythonPackage,
+  fetchpatch,
+  fetchPypi,
+  docutils,
+  mistune,
+  pygments,
 }:
 
 buildPythonPackage rec {
@@ -31,7 +32,10 @@ buildPythonPackage rec {
       --replace "optional" "positional"
   '';
 
-  propagatedBuildInputs = [ mistune docutils ];
+  propagatedBuildInputs = [
+    mistune
+    docutils
+  ];
 
   nativeCheckInputs = [ pygments ];
 

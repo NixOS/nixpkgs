@@ -7,7 +7,7 @@
 , cmake
 , ninja
 , vala
-, wrapGAppsHook }:
+, wrapGAppsHook3 }:
 
 stdenv.mkDerivation rec {
   pname = "plotinus";
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
     vala
     cmake
     ninja
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A searchable command palette in every modern GTK application";
+    description = "Searchable command palette in every modern GTK application";
     homepage = "https://github.com/p-e-w/plotinus";
     maintainers = with maintainers; [ samdroid-apps ];
     platforms = platforms.linux;

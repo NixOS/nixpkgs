@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytest
-, pytest_7
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytest,
+  pytest7CheckHook,
 }:
 
 buildPythonPackage rec {
@@ -18,18 +18,14 @@ buildPythonPackage rec {
     hash = "sha256-51UJjnGBO7qBvQlY8F0B29n8+EO2aa3DF3WOwcjZzSo=";
   };
 
-  buildInputs = [
-    pytest
-  ];
+  buildInputs = [ pytest ];
 
   nativeCheckInputs = [
     # https://github.com/utapyngo/pytest-unordered/issues/15
-    (pytestCheckHook.override { pytest = pytest_7; })
+    pytest7CheckHook
   ];
 
-  pythonImportsCheck = [
-    "pytest_unordered"
-  ];
+  pythonImportsCheck = [ "pytest_unordered" ];
 
   meta = with lib; {
     changelog = "https://github.com/utapyngo/pytest-unordered/blob/v${version}/CHANGELOG.md";

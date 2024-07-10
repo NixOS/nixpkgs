@@ -1,0 +1,140 @@
+{
+  "dependencies": {
+    "bindbc-loader": {
+      "version": "1.0.3",
+      "sha256": "0d688cwb2hjhfxc7l00cfh22prybsndk6j1hvlrf9nlzb46i4i1j"
+    },
+    "bindbc-lua": {
+      "version": "0.5.1",
+      "sha256": "116lcplxxl39x6m2sr9zkszdbrm1pa285sjqijnqxqy99jajnhc7"
+    },
+    "bindbc-sdl": {
+      "version": "1.1.3",
+      "sha256": "0yi472nv7pg1q1kk749w3mv1l2l6ch20k8kcc4l9jy3m2vwlpd88"
+    },
+    "bindbc-spout2": {
+      "version": "0.1.1",
+      "sha256": "03r4xsjpwys4nlfhas4hjqygzs764dzsr789b091iczp56pp9w9z"
+    },
+    "ddbus": {
+      "version": "3.0.0-beta.2",
+      "sha256": "01dgvlvwbhwz7822gp6z5xn6w3k51q09i6qzns2i4ixmjh45wscs"
+    },
+    "diet-ng": {
+      "version": "1.8.1",
+      "sha256": "0kh8haw712xkd3f07s5x5g12nmmkv0y1lk2cqh66298fc5mgj4sv"
+    },
+    "dportals": {
+      "version": "0.1.0",
+      "sha256": "11wxlp2y7s2mc98bxya7fmg0gc4yqlyg0bjsd1yxzr8fmsvf2zzh"
+    },
+    "dunit": {
+      "version": "1.0.16",
+      "sha256": "0p9g4h5qanbg6281x1068mdl5p7zvqig4zmmi72a2cay6dxnbvxb"
+    },
+    "eventcore": {
+      "version": "0.9.30",
+      "sha256": "1n8wdcjhas0y99pf9fvwwsydkmy9g7gvfjhlwpjh158c7pfjwlaq"
+    },
+    "facetrack-d": {
+      "version": "0.7.8",
+      "sha256": "1414wvh0kn1rps5r16ir92sqfj8a7na1gd71ds81jkq8arkm17j0"
+    },
+    "fghj": {
+      "version": "1.0.2",
+      "sha256": "0c102pfbcb3kpr8hpq3qzlxfw460v202vg6hrfdzw5a8pygy4cxj"
+    },
+    "i18n-d": {
+      "version": "1.0.2",
+      "sha256": "1p33w5wh09ha132fsk0b37rjgzw6z3l0v64dixmkvnhhm1xy3b1g"
+    },
+    "i2d-imgui": {
+      "version": "0.8.0",
+      "sha256": "1xikjz5b9r4gml0j7z5k8x1n8h9qcixzsg8gpjlzr3dwis7m0cfw"
+    },
+    "i2d-opengl": {
+      "version": "1.0.0",
+      "sha256": "0137ifda4z6h7sa7ls9n3rpcd6344qsfpbcc0dl7wzyk0xa73912"
+    },
+    "imagefmt": {
+      "version": "2.1.2",
+      "sha256": "0dl7n4myxp1s3b32v2s975k76gs90wr2nw6ac5jq9hsgzhp1ix0h"
+    },
+    "inmath": {
+      "version": "1.0.6",
+      "sha256": "0kzk55ilbnl6qypjk60zwd5ibys5n47128hbbr0mbc7bpj9ppfg4"
+    },
+    "inochi2d": {
+      "version": "0.8.4",
+      "sha256": "1bj0c6i9kcw1vfm6lf8lyxpf1lhhslg3f182jycdmzms15i3jb3y"
+    },
+    "inui": {
+      "version": "1.2.1",
+      "sha256": "0pygf8jxnbvib5f23qxf6k24wz8mh6fc0zhrkp83gq33k02ab5cx"
+    },
+    "libasync": {
+      "version": "0.8.6",
+      "sha256": "0hhk5asfdccby8ky77a25qn7dfmfdmwyzkrg3zk064bicmgdwlnj"
+    },
+    "lumars": {
+      "version": "1.6.1",
+      "sha256": "1vzdghqwv2gb41rp75456g43yfsndbl0dy6bnn4x6azwwny22br9"
+    },
+    "memutils": {
+      "version": "1.0.10",
+      "sha256": "0hm31birbw59sw1bi9syjhbcdgwwwyyx6r9jg7ar9i6a74cjr52c"
+    },
+    "mir-algorithm": {
+      "version": "3.22.1",
+      "sha256": "1bvvf3dm26x1h10pg1s4kyhxiyrmd96kk2lmchyady39crpjj5cf"
+    },
+    "mir-core": {
+      "version": "1.7.1",
+      "sha256": "15m1n48fcmh5pw3w4ww5qfzwkdglflpzc3xmxmrlvd30swyyr85j"
+    },
+    "mir-linux-kernel": {
+      "version": "1.0.1",
+      "sha256": "0adyjpcgd65z44iydnrrrpjwbvmrm08a3pkcriqi7npqylfysqn6"
+    },
+    "openssl": {
+      "version": "3.3.3",
+      "sha256": "1fwhd5fkvgbqf3y8gwmrnd42kzi4k3mibpxijw5j82jxgfp1rzsf"
+    },
+    "openssl-static": {
+      "version": "1.0.5+3.0.8",
+      "sha256": "0wpqz29yrbbh39g3cwlgd6h6hh1msws7w5baw1kywdkgj761gx2k"
+    },
+    "silly": {
+      "version": "1.1.1",
+      "sha256": "1l0mpnbz8h3ihjxvk5qwn6p6lwb75g259k7fjqasw0zp0c27bkjb"
+    },
+    "stdx-allocator": {
+      "version": "2.77.5",
+      "sha256": "1g8382wr49sjyar0jay8j7y2if7h1i87dhapkgxphnizp24d7kaj"
+    },
+    "taggedalgebraic": {
+      "version": "0.11.23",
+      "sha256": "1bialmbdwjpqhgs95inkwzin7xbhx7sngjf7viq90vzma497l59k"
+    },
+    "tinyfiledialogs": {
+      "version": "0.10.1",
+      "sha256": "1k3gq9y7912x5b30h60nvlfdr61as1f187b8rsilkxliizcmbhfi"
+    },
+    "vibe-container": {
+      "version": "1.3.1",
+      "sha256": "12mfm49bjnh2pvm51dzna625kzgwznm9kcv6qhazc4il9j0224wd"
+    },
+    "vibe-core": {
+      "version": "2.8.4",
+      "sha256": "1pik6vympgwxpyxb75g1f8409cd6hw952gbflqvwaj18shz6dwjm"
+    },
+    "vibe-d": {
+      "version": "0.9.8",
+      "sha256": "1gficgfzwswaxj9qlnca28c65gl7xq6q8y47qlf4m1gvkxj4ij2k"
+    },
+    "vmc-d": {
+      "version": "1.1.3",
+      "sha256": "0kkqihhzxdq0n46jk55g4yhhwrnw6b9d931yb5pblxcc342gckvm"
+    }
+  }
+}

@@ -24,7 +24,7 @@ stdenvNoCC.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/joehillen/sysz";
-    description = "A fzf terminal UI for systemctl";
+    description = "Fzf terminal UI for systemctl";
     license = licenses.unlicense;
     maintainers = with maintainers; [ hleboulanger ];
     platforms = platforms.unix;

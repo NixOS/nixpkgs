@@ -6,7 +6,7 @@ let
   cfg = config.services.pixiecore;
 in
 {
-  meta.maintainers = with maintainers; [ bbigras danderson ];
+  meta.maintainers = with maintainers; [ bbigras ];
 
   options = {
     services.pixiecore = {
@@ -82,8 +82,8 @@ in
 
       apiServer = mkOption {
         type = types.str;
-        example = "localhost:8080";
-        description = "host:port to connect to the API. Ignored unless mode is set to 'api'";
+        example = "http://localhost:8080";
+        description = "URI to connect to the API. Ignored unless mode is set to 'api'";
       };
 
       extraArguments = mkOption {

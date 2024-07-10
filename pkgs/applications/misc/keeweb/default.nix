@@ -4,7 +4,7 @@
 , undmg
 , dpkg
 , autoPatchelfHook
-, wrapGAppsHook
+, wrapGAppsHook3
 , makeWrapper
 , alsa-lib
 , at-spi2-atk
@@ -13,7 +13,7 @@
 , nss
 , udev
 , xorg
-, gnome
+, gnome-keyring
 , mesa
 , gtk3
 , libusb1
@@ -54,7 +54,7 @@ let
     xorg.libXScrnSaver
     xorg.libXtst
     xorg.libxshmfence
-    gnome.gnome-keyring
+    gnome-keyring
     mesa
     gtk3
     libusb1
@@ -92,7 +92,7 @@ else stdenv.mkDerivation {
 
   nativeBuildInputs = [
     autoPatchelfHook
-    wrapGAppsHook
+    wrapGAppsHook3
     makeWrapper
   ];
 

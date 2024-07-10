@@ -1,17 +1,18 @@
-{ lib
-, aiohttp
-, aioresponses
-, buildPythonPackage
-, dateparser
-, fetchFromGitHub
-, haversine
-, mock
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, requests
-, setuptools
-, xmltodict
+{
+  lib,
+  aiohttp,
+  aioresponses,
+  buildPythonPackage,
+  dateparser,
+  fetchFromGitHub,
+  haversine,
+  mock,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  setuptools,
+  xmltodict,
 }:
 
 buildPythonPackage rec {
@@ -30,9 +31,7 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     aiohttp
@@ -49,9 +48,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "aio_georss_client"
-  ];
+  pythonImportsCheck = [ "aio_georss_client" ];
 
   meta = with lib; {
     description = "Python library for accessing GeoRSS feeds";

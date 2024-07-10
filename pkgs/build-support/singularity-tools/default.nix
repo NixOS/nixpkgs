@@ -45,7 +45,7 @@ rec {
     , diskSize ? 1024
     , runScript ? "#!${stdenv.shell}\nexec /bin/sh"
     , runAsRoot ? null
-    , memSize ? 512
+    , memSize ? 1024
     , singularity ? defaultSingularity
     }:
     let

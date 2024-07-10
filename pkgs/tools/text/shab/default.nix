@@ -40,7 +40,7 @@ let
     };
 
     meta = with lib; {
-      description = "The bash templating language";
+      description = "Bash templating language";
       mainProgram = "shab";
       homepage = "https://github.com/zimbatm/shab";
       license = licenses.unlicense;

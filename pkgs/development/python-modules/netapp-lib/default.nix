@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, lxml
-, six
-, xmltodict
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  lxml,
+  six,
+  xmltodict,
 }:
 
 buildPythonPackage rec {

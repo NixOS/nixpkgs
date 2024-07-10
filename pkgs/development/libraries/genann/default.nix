@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/codeplea/genann";
     description = "Simple neural network library in ANSI C";
     license = licenses.zlib;
-    maintainers = [ maintainers.ivar ];
+    maintainers = [ ];
     platforms = platforms.all;
   };
 }

@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     description = "Intel® 64 and IA-32 processor microcode tool";
     mainProgram = "iucode_tool";
     homepage = "https://gitlab.com/iucode-tool/iucode-tool";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ peterhoeg ];
     platforms = [ "x86_64-linux" "i686-linux" ];
   };

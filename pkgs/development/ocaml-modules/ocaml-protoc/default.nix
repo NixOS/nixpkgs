@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, buildDunePackage
+{ lib, buildDunePackage
 , pbrt
 , stdlib-shims
 }:
@@ -14,6 +14,6 @@ buildDunePackage rec {
   doCheck = true;
 
   meta = pbrt.meta // {
-    description = "A Protobuf Compiler for OCaml";
+    description = "Protobuf Compiler for OCaml";
   };
 }

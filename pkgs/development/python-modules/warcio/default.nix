@@ -1,15 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, httpbin
-, multidict
-, pytestCheckHook
-, pythonOlder
-, requests
-, setuptools
-, six
-, wsgiprox
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  httpbin,
+  multidict,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  setuptools,
+  six,
+  wsgiprox,
 }:
 
 buildPythonPackage rec {
@@ -48,18 +49,14 @@ buildPythonPackage rec {
     wsgiprox
   ];
 
-  pytestFlagsArray = [
-    "--offline"
-  ];
+  pytestFlagsArray = [ "--offline" ];
 
   disabledTests = [
     # Tests require network access, see above
     "test_get_cache_to_file"
   ];
 
-  pythonImportsCheck = [
-    "warcio"
-  ];
+  pythonImportsCheck = [ "warcio" ];
 
   meta = with lib; {
     description = "Streaming WARC/ARC library for fast web archive IO";

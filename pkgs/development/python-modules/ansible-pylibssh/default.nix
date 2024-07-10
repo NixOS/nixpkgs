@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  cython_3,
+  cython,
   expandvars,
   fetchPypi,
   libssh,
@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "ansible-pylibssh";
-  version = "1.1.0";
+  version = "1.2.0.post4";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-spaGux6dYvtUtpOdU6oN7SEn8IgBof2NpQSPvr+Zplg=";
+    hash = "sha256-brnSrzSnumK32/mEON0l0iSPdoYrFwYmBc4MT7WcrX8=";
   };
 
   # Remove after https://github.com/ansible/pylibssh/pull/502 is merged
@@ -30,7 +30,7 @@ buildPythonPackage rec {
   '';
 
   build-system = [
-    cython_3
+    cython
     expandvars
     setuptools
     setuptools-scm

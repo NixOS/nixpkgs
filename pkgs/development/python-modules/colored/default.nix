@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitLab
-, flit-core
-, unittestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitLab,
+  flit-core,
+  unittestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -17,21 +18,13 @@ buildPythonPackage rec {
     hash = "sha256-4APFAIN+cmPPd6qbqVC9iU4YntNEjoPbJXZywG1hsBY=";
   };
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  nativeBuildInputs = [ flit-core ];
 
-  nativeCheckInputs = [
-    unittestCheckHook
-  ];
+  nativeCheckInputs = [ unittestCheckHook ];
 
-  unittestFlagsArray = [
-    "unittests"
-  ];
+  unittestFlagsArray = [ "unittests" ];
 
-  pythonImportsCheck = [
-    "colored"
-  ];
+  pythonImportsCheck = [ "colored" ];
 
   meta = with lib; {
     description = "Simple library for color and formatting to terminal";

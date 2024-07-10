@@ -61,7 +61,7 @@ in {
         '';
         type = types.listOf types.package;
         default = [];
-        example = literalExpression "[ pkgs.gnome.gpaste ]";
+        example = literalExpression "[ pkgs.gpaste ]";
       };
 
       extraGSettingsOverrides = mkOption {
@@ -132,7 +132,7 @@ in {
         gnome-menus
 
         # Required by Budgie Control Center.
-        gnome.zenity
+        zenity
 
         # Provides `gsettings`.
         glib
@@ -162,7 +162,7 @@ in {
       ++ cfg.sessionPath;
 
     # Both budgie-desktop-view and nemo defaults to this emulator.
-    programs.gnome-terminal.enable = mkDefault (notExcluded pkgs.gnome.gnome-terminal);
+    programs.gnome-terminal.enable = mkDefault (notExcluded pkgs.gnome-terminal);
 
     # Fonts.
     fonts.packages = [
@@ -214,7 +214,7 @@ in {
 
     services.geoclue2.enable = mkDefault true; # for BCC's Privacy > Location Services panel.
     services.upower.enable = config.powerManagement.enable; # for Budgie's Status Indicator and BCC's Power panel.
-    services.xserver.libinput.enable = mkDefault true; # for BCC's Mouse panel.
+    services.libinput.enable = mkDefault true; # for BCC's Mouse panel.
     services.colord.enable = mkDefault true; # for BCC's Color panel.
     services.gnome.at-spi2-core.enable = mkDefault true; # for BCC's A11y panel.
     services.accounts-daemon.enable = mkDefault true; # for BCC's Users panel.

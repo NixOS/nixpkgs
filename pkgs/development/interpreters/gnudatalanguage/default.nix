@@ -2,7 +2,7 @@
 , lib
 , fetchFromGitHub
 , cmake
-, wrapGAppsHook
+, wrapGAppsHook3
 , readline
 , ncurses
 , zlib
@@ -157,7 +157,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
-  ] ++ lib.optional enableWX wrapGAppsHook;
+  ] ++ lib.optional enableWX wrapGAppsHook3;
 
   cmakeFlags = lib.optional (!enableHDF4) "-DHDF=OFF"
     ++ [ (if enableHDF5 then "-DHDF5DIR=${hdf5-custom}" else "-DHDF5=OFF") ]

@@ -1,25 +1,26 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, huggingface-hub
-, nltk
-, numpy
-, pytestCheckHook
-, pythonOlder
-, scikit-learn
-, scipy
-, sentencepiece
-, setuptools
-, tokenizers
-, torch
-, torchvision
-, tqdm
-, transformers
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  huggingface-hub,
+  nltk,
+  numpy,
+  pytestCheckHook,
+  pythonOlder,
+  scikit-learn,
+  scipy,
+  sentencepiece,
+  setuptools,
+  tokenizers,
+  torch,
+  torchvision,
+  tqdm,
+  transformers,
 }:
 
 buildPythonPackage rec {
   pname = "sentence-transformers";
-  version = "2.6.1";
+  version = "2.7.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -28,12 +29,10 @@ buildPythonPackage rec {
     owner = "UKPLab";
     repo = "sentence-transformers";
     rev = "refs/tags/v${version}";
-    hash = "sha256-09AAuv/yXTbBvjA4gu5ueZrQkVja0BTIGNLZ2tLSyh8=";
+    hash = "sha256-xER+WHprW83KWJ0bom+lTn0HNU7PgGROnp/QLG1uUcw=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     huggingface-hub
@@ -49,13 +48,9 @@ buildPythonPackage rec {
     transformers
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "sentence_transformers"
-  ];
+  pythonImportsCheck = [ "sentence_transformers" ];
 
   disabledTests = [
     # Tests require network access

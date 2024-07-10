@@ -29,7 +29,7 @@ rustPlatform.buildRustPackage rec {
   ];
 
   meta = with lib; {
-    description = "A migration manager written in Rust, that attempts to be smart yet minimal";
+    description = "Migration manager written in Rust, that attempts to be smart yet minimal";
     mainProgram = "movine";
     homepage = "https://github.com/byronwasti/movine";
     license = licenses.mit;

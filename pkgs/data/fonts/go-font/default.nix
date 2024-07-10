@@ -23,7 +23,7 @@ stdenvNoCC.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://blog.golang.org/go-fonts";
-    description = "The Go font family";
+    description = "Go font family";
     changelog = "https://go.googlesource.com/image/+log/refs/heads/master/font/gofont";
     license = licenses.bsd3;
     maintainers = with maintainers; [ sternenseemann ];

@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sidplayfp";
-  version = "2.7.0";
+  version = "2.8.0";
 
   src = fetchFromGitHub {
     owner = "libsidplayfp";
     repo = "sidplayfp";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-bIX9BByUdScbS0NCrUjF5PTHG9T6hrPGjD5XM0eQgfA=";
+    hash = "sha256-2OgU2J/tot5HK4FV1pvZzI9u/e8p65Ymnqj7IdCcfIs=";
   };
 
   strictDeps = true;
@@ -54,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = with lib; {
-    description = "A SID player using libsidplayfp";
+    description = "SID player using libsidplayfp";
     homepage = "https://github.com/libsidplayfp/sidplayfp";
     license = with licenses; [ gpl2Plus ];
     mainProgram = "sidplayfp";

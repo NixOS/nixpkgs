@@ -278,7 +278,7 @@ in
       }
       {
         assertion = (cfg.enableVirtualUsers -> cfg.userDbPath != null)
-                 && (cfg.enableVirtualUsers -> cfg.localUsers != null);
+                 && (cfg.enableVirtualUsers -> cfg.localUsers);
         message = "vsftpd: If enableVirtualUsers is true, you need to setup both the userDbPath and localUsers options.";
       }];
 

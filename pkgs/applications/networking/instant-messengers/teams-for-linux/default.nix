@@ -9,9 +9,6 @@
 , fetchYarnDeps
 , fixup-yarn-lock
 , electron
-, libnotify
-, libpulseaudio
-, pipewire
 , alsa-utils
 , which
 , testers
@@ -72,11 +69,10 @@ stdenv.mkDerivation (finalAttrs: {
     done
     popd
 
-    # Linux needs 'aplay' for notification sounds, 'libpulse' for meeting sound, 'libpipewire' for screen sharing and 'libnotify' for notifications
+    # Linux needs 'aplay' for notification sounds
     makeWrapper '${electron}/bin/electron' "$out/bin/teams-for-linux" \
       ${lib.optionalString stdenv.isLinux ''
         --prefix PATH : ${lib.makeBinPath [ alsa-utils which ]} \
-        --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libpulseaudio pipewire libnotify ]} \
       ''} \
       --add-flags "$out/share/teams-for-linux/app.asar" \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
@@ -104,7 +100,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "teams-for-linux";
     homepage = "https://github.com/IsmaelMartinez/teams-for-linux";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ muscaln lilyinstarlight qjoly chvp ];
+    maintainers = with lib.maintainers; [ muscaln qjoly chvp ];
     platforms = lib.platforms.unix;
     broken = stdenv.isDarwin;
   };

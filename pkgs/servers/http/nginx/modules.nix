@@ -3,7 +3,6 @@
 , fetchFromGitHub
 , fetchFromGitLab
 , fetchhg
-, fetchpatch
 , runCommand
 
 , arpa2common

@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   configureFlags = [ "vi_cv_path_preserve=/tmp" ];
 
   meta = with lib; {
-    description = "The Berkeley Vi Editor";
+    description = "Berkeley Vi Editor";
     license = licenses.free;
     platforms = platforms.unix;
     broken = stdenv.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/trunk/nvi.x86_64-darwin

@@ -31,7 +31,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "A post-modern modal text editor";
+    description = "Post-modern modal text editor";
     homepage = "https://helix-editor.com";
     license = licenses.mpl20;
     mainProgram = "hx";

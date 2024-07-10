@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://www.ntp.org/";
-    description = "An implementation of the Network Time Protocol";
+    description = "Implementation of the Network Time Protocol";
     license = {
       # very close to isc and bsd2
       url = "https://www.eecis.udel.edu/~mills/ntp/html/copyright.html";

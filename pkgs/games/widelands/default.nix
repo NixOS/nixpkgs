@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , pkg-config # needed to find minizip
 , SDL2
 , SDL2_image

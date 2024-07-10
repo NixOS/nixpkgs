@@ -6,10 +6,12 @@
 , makeDesktopItem
 , makeWrapper
 , pkg-config
+, alsa-lib
 , curl
 , gtkmm3
 , libhandy
 , libopus
+, libpulseaudio
 , libsecret
 , libsodium
 , nlohmann_json
@@ -58,6 +60,7 @@ stdenv.mkDerivation rec {
     mkdir $out/bin
     cp abaddon $out/bin
     wrapProgram $out/bin/abaddon \
+      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ alsa-lib libpulseaudio ]}" \
       --chdir $out/share/abaddon
 
     runHook postInstall

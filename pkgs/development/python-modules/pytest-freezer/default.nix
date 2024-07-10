@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, flit-core
-, freezegun
-, pytest
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  flit-core,
+  freezegun,
+  pytest,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -22,25 +23,15 @@ buildPythonPackage rec {
     hash = "sha256-Eak6LNoyu2wvZbPaBBUO0UkyB9vni8YbsADGK0as7Cg=";
   };
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  nativeBuildInputs = [ flit-core ];
 
-  buildInputs = [
-    pytest
-  ];
+  buildInputs = [ pytest ];
 
-  propagatedBuildInputs = [
-    freezegun
-  ];
+  propagatedBuildInputs = [ freezegun ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "pytest_freezer"
-  ];
+  pythonImportsCheck = [ "pytest_freezer" ];
 
   meta = with lib; {
     description = "Pytest plugin providing a fixture interface for spulec/freezegun";

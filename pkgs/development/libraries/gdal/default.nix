@@ -2,7 +2,6 @@
 , stdenv
 , callPackage
 , fetchFromGitHub
-, fetchpatch
 
 , useMinimalFeatures ? false
 , useTiledb ? (!useMinimalFeatures) && !(stdenv.isDarwin && stdenv.isx86_64)
@@ -79,23 +78,15 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "gdal";
-  version = "3.8.5";
+  pname = "gdal" + lib.optionalString useMinimalFeatures "-minimal";
+  version = "3.9.1";
 
   src = fetchFromGitHub {
     owner = "OSGeo";
     repo = "gdal";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-Z+mYlyOX9vJ772qwZMQfCbD/V7RL6+9JLHTzoZ55ot0=";
+    hash = "sha256-WCTQHUU2WYYiliwCJ4PsbvJIOar9LmvXn/i5jJzTCtM=";
   };
-
-  patches = [
-    # bump java source option to fix build with JDK 21
-    (fetchpatch {
-      url = "https://github.com/OSGeo/gdal/commit/ca2eb4130750b0e6365f738a5f8ff77081f5c5bb.patch";
-      sha256 = "sha256-wShYm9yA7twJR72co+Tvf/IuYXqbI0OrjWl0uqC3bwo=";
-    })
-  ];
 
   nativeBuildInputs = [
     bison
@@ -229,8 +220,8 @@ stdenv.mkDerivation (finalAttrs: {
     export GDAL_DOWNLOAD_TEST_DATA=OFF
     # allows to skip tests that fail because of file handle leak
     # the issue was not investigated
-    # https://github.com/OSGeo/gdal/blob/v3.7.0/autotest/gdrivers/bag.py#L61
-    export BUILD_NAME=fedora
+    # https://github.com/OSGeo/gdal/blob/v3.9.0/autotest/gdrivers/bag.py#L54
+    export CI=1
   '';
   nativeInstallCheckInputs = with python3.pkgs; [
     pytestCheckHook

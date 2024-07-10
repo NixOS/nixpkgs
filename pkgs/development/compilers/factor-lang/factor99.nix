@@ -202,7 +202,7 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     homepage = "https://factorcode.org/";
-    description = "A concatenative, stack-based programming language";
+    description = "Concatenative, stack-based programming language";
     longDescription = ''
       The Factor programming language is a concatenative, stack-based
       programming language with high-level features including dynamic types,

@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "nvc";
-  version = "1.12.0";
+  version = "1.12.2";
 
   src = fetchFromGitHub {
     owner = "nickg";
     repo = "nvc";
     rev = "r${version}";
-    hash = "sha256-7g4Ki5lhmX/13XCv0on1PgvEthCTfe9wh8EFjMcP1+c=";
+    hash = "sha256-9nqho+iDqy8oQLSxBppXoafzEuS6AkcUuqEY3xxfFs4=";
   };
 
   nativeBuildInputs = [
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     llvm
     zlib
     zstd
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform elfutils) [
     elfutils
   ];
 

@@ -66,6 +66,21 @@ in
       touch $out
     '');
 
+  # checks that lua's setup-hook adds dependencies to LUA_PATH
+  # Prevents the following regressions
+  # $ env NIX_PATH=nixpkgs=. nix-shell --pure -Q -p luajitPackages.lua luajitPackages.http
+  # nix-shell$ luajit
+  # > require('http.request')
+  # stdin:1: module 'http.request' not found:
+  checkSetupHook = pkgs.runCommandLocal "test-${lua.name}-setup-hook" ({
+      nativeBuildInputs = [lua];
+      buildInputs = [ lua.pkgs.http ];
+      meta.platforms = lua.meta.platforms;
+    }) (''
+      ${lua}/bin/lua -e "require'http.request'"
+      touch $out
+    '');
+
   checkRelativeImports = pkgs.runCommandLocal "test-${lua.name}-relative-imports" ({
     }) (''
       source ${./assert.sh}
@@ -81,4 +96,17 @@ in
 
       touch $out
     '');
+
+
+    /*
+    Check that a lua package's propagatedBuildInputs end up in LUA_PATH
+    */
+    checkPropagatedBuildInputs = pkgs.runCommandLocal "test-${lua.name}-setup-hook" ({
+      # lua-curl is a propagatedBuildInput of rest-nvim has
+      buildInputs = [ lua.pkgs.rest-nvim ];
+    }) (''
+      ${lua}/bin/lua -e "require'cURL'"
+      touch $out
+    '');
+
 })

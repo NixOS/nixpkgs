@@ -5,6 +5,7 @@
 , makeDesktopItem
 , jdk
 , ant
+, stripJavaArchivesHook
 , gtk3
 , gsettings-desktop-schemas
 , sweethome3dApp
@@ -33,7 +34,7 @@ let
       categories = [ "Graphics" "2DGraphics" "3DGraphics" ];
     };
 
-    nativeBuildInputs = [ makeWrapper ];
+    nativeBuildInputs = [ makeWrapper stripJavaArchivesHook ];
     buildInputs = [ ant jdk gtk3 gsettings-desktop-schemas ];
 
     # upstream targets Java 7 by default

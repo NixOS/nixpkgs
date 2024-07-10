@@ -17,7 +17,9 @@ let
       Type = "exec";
       ExecStart = "@out@/bin/systembus-notify";
       PrivateTmp = true;
-      ProtectHome = true;
+      # NB. We cannot `ProtectHome`, or it would block session dbus access.
+      InaccessiblePaths = "/home";
+      ReadOnlyPaths = "/run/user";
       ProtectSystem = "strict";
       Restart = "on-failure";
       Slice = "background.slice";

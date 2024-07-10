@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 
 # build time
 , autoreconfHook
@@ -86,23 +85,14 @@ lib.warnIf (!(stdenv.buildPlatform.canExecute stdenv.hostPlatform))
 
 stdenv.mkDerivation rec {
   pname = "frr";
-  version = "9.1";
+  version = "10.0.1";
 
   src = fetchFromGitHub {
     owner = "FRRouting";
     repo = pname;
     rev = "${pname}-${version}";
-    hash = "sha256-oDPr51vI+tlT1IiUPufmZh/UE0TNKWrn4RqpnGoGxNo=";
+    hash = "sha256-bY5SSF/fmKQc8ECPik0v/ZlUiFsbZhwG2C5pbmoMzwQ=";
   };
-
-  patches = [
-    # fixes crash in OSPF TE parsing
-    (fetchpatch {
-      name = "CVE-2024-27913.patch";
-      url = "https://github.com/FRRouting/frr/commit/541503eecd302d2cc8456167d130014cd2cf1134.patch";
-      hash = "sha256-7NxPlQK/6lbLs/NqNi4OZ2uBWfXw99SiXDR6okNvJlg=";
-    })
-  ];
 
   nativeBuildInputs = [
     autoreconfHook

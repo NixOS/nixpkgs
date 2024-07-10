@@ -19,7 +19,7 @@ self: pkgs.haskell.packages.ghc96.override {
                 --prefix PATH ':' ${lib.makeBinPath [ nodejs ]}
             '';
 
-            description = "A delightful language for reliable webapps";
+            description = "Delightful language for reliable webapps";
             homepage = "https://elm-lang.org/";
             license = licenses.bsd3;
             maintainers = with maintainers; [ domenkozar turbomack ];

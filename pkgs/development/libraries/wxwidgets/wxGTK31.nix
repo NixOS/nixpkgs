@@ -131,7 +131,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://www.wxwidgets.org/";
-    description = "A Cross-Platform C++ GUI Library";
+    description = "Cross-Platform C++ GUI Library";
     longDescription = ''
       wxWidgets gives you a single, easy-to-use API for writing GUI applications
       on multiple platforms that still utilize the native platform's controls

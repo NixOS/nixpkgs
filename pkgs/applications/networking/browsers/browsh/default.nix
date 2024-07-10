@@ -37,7 +37,7 @@ buildGoModule rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "A fully-modern text-based browser, rendering to TTY and browsers";
+    description = "Fully-modern text-based browser, rendering to TTY and browsers";
     mainProgram = "browsh";
     homepage = "https://www.brow.sh/";
     maintainers = with maintainers; [ kalbasit siraben ];

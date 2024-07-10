@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, case
-, fetchPypi
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -19,18 +19,15 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [
-    case
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [
-    # pytest.PytestRemovedIn8Warning: Support for nose tests is deprecated and will be removed in a future release.
-    "-W" "ignore::pytest.PytestRemovedIn8Warning"
+  disabledTestPaths = [
+    # https://github.com/celery/vine/issues/106
+    "t/unit/test_synchronization.py"
   ];
 
-  pythonImportsCheck = [
-    "vine"
-  ];
+  pythonImportsCheck = [ "vine" ];
 
   meta = with lib; {
     description = "Python promises";

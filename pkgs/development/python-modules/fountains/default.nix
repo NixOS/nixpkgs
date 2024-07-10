@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools
-, wheel
-, bitlist
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  wheel,
+  bitlist,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -24,16 +25,12 @@ buildPythonPackage rec {
     wheel
   ];
 
-  propagatedBuildInputs = [
-    bitlist
-  ];
+  propagatedBuildInputs = [ bitlist ];
 
   # Module has no test
   doCheck = false;
 
-  pythonImportsCheck = [
-    "fountains"
-  ];
+  pythonImportsCheck = [ "fountains" ];
 
   meta = with lib; {
     description = "Python library for generating and embedding data for unit testing";

@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, bleak
-, pyyaml
-, voluptuous
-, pytestCheckHook
-, pytest-asyncio
-, poetry-core
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  bleak,
+  pyyaml,
+  voluptuous,
+  pytestCheckHook,
+  pytest-asyncio,
+  poetry-core,
 }:
 
 buildPythonPackage rec {
@@ -24,9 +25,7 @@ buildPythonPackage rec {
     hash = "sha256-TQ+DBFpG+IeZ4/dN+YKMw3AM4Dl1rpqA1kRcb3Tb3jA=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     bleak
@@ -39,9 +38,7 @@ buildPythonPackage rec {
     pytest-asyncio
   ];
 
-  pythonImportsCheck = [
-    "idasen"
-  ];
+  pythonImportsCheck = [ "idasen" ];
 
   meta = with lib; {
     description = "Python API and CLI for the ikea IDÅSEN desk";

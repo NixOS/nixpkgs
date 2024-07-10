@@ -63,6 +63,7 @@ in
         DynamicUser = true;
         LockPersonality = true;
         MemoryDenyWriteExecute = true;
+        Restart = "on-failure";
         RestrictAddressFamilies = [
           "AF_INET"
           "AF_INET6"

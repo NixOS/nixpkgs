@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "pgbouncer";
-  version = "1.22.1";
+  version = "1.23.0";
 
   src = fetchurl {
     url = "https://www.pgbouncer.org/downloads/files/${version}/${pname}-${version}.tar.gz";
-    hash = "sha256-KwGKps5/WSyYkrueD9kCYkhOtzk3/Sr5KXcKRTc7ohU=";
+    hash = "sha256-GAQhnDAe8DXn9B6pr/HlGAtLr4hF1hBh6aEIWTYyMiY=";
   };
 
   nativeBuildInputs = [ pkg-config ];

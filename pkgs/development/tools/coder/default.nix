@@ -1,4 +1,5 @@
 { lib
+, channel ? "stable"
 , fetchurl
 , installShellFiles
 , makeBinaryWrapper
@@ -9,18 +10,33 @@
 
 let
   inherit (stdenvNoCC.hostPlatform) system;
+
+  channels = {
+    stable = {
+      version = "2.11.4";
+      hash = {
+        x86_64-linux = "sha256-um7bwlHzPh6dF2KspGLQfzSVywWdImUc0U/HTkWT2jA=";
+        x86_64-darwin = "sha256-AiT63c47obiGnf9Vo0C2F3YoVLWdbH/+pkgFT0Tvzew=";
+        aarch64-linux = "sha256-7tl58GmO5pBsjSkiF/Oy1r3a+Giko/+2Ir7r4V6vy4c=";
+        aarch64-darwin = "sha256-e86dqZptcQeGlCclLRfNW3Ku9UucW0vXHBGC7r/0Apc=";
+      };
+    };
+    mainline = {
+      version = "2.12.3";
+      hash = {
+        x86_64-linux = "sha256-cg2Xr4yZXVFl081fGYztDa35TnaQYmS/uMqc1z5UAmc=";
+        x86_64-darwin = "sha256-zK/I/D5N5hcFMrBxebaA5WSRml0RaKrSX1FI/+YSXxI=";
+        aarch64-linux = "sha256-KRIdyQFTBmhEm0hkdoilYNlQhcpagilc5fZ6k18Riu4=";
+        aarch64-darwin = "sha256-4q6Sz+ZguMxznPuwf0Ip+KWTDKPPZ/ICdvltVLmQinE=";
+      };
+    };
+  };
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "coder";
-  version = "2.9.1";
-
+  version = channels.${channel}.version;
   src = fetchurl {
-    hash = {
-      x86_64-linux = "sha256-r4+u/s/dOn2GhyhEROu8i03QY3VA/bIyO/Yj7KSqicY=";
-      x86_64-darwin = "sha256-uShCmMvb5OcinqP0CmrlP9QAJkjfG3g1QuHE4JRDOjE=";
-      aarch64-linux = "sha256-tvpzfJ95YYfCY5V4iayjAmY5PDw+1uHUhY5F3pv/2Uk=";
-      aarch64-darwin = "sha256-sP9HnB2DzAU9IvL3+QPmIFLvRkGkoxSoa68uXGQrNkw=";
-    }.${system};
+    hash = (channels.${channel}.hash).${system};
 
     url =
       let
@@ -84,7 +100,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     homepage = "https://coder.com";
     license = lib.licenses.agpl3Only;
     mainProgram = "coder";
-    maintainers = with lib.maintainers; [ ghuntley urandom ];
+    maintainers = with lib.maintainers; [ ghuntley kylecarbs urandom ];
   };
 
   passthru = {

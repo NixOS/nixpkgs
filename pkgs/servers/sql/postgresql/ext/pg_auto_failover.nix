@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     mainProgram = "pg_autoctl";
     homepage = "https://github.com/citusdata/pg_auto_failover";
     changelog = "https://github.com/citusdata/pg_auto_failover/blob/v${version}/CHANGELOG.md";
-    maintainers = [ maintainers.marsam ];
+    maintainers = [ ];
     platforms = postgresql.meta.platforms;
     license = licenses.postgresql;
   };

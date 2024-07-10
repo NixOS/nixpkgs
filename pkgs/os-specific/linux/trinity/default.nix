@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   installFlags = [ "DESTDIR=$(out)" ];
 
   meta = with lib; {
-    description = "A Linux System call fuzz tester";
+    description = "Linux System call fuzz tester";
     mainProgram = "trinity";
     homepage = "https://github.com/kernelslacker/trinity";
     license = licenses.gpl2Only;

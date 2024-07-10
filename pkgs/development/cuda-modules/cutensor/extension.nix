@@ -15,9 +15,9 @@
 {
   cudaVersion,
   flags,
-  hostPlatform,
   lib,
   mkVersionedPackageName,
+  stdenv,
 }:
 let
   inherit (lib)
@@ -28,6 +28,8 @@ let
     strings
     trivial
     ;
+
+  inherit (stdenv) hostPlatform;
 
   redistName = "cutensor";
   pname = "libcutensor";
@@ -138,7 +140,7 @@ let
           maintainers = prevAttrs.meta.maintainers ++ [ lib.maintainers.obsidian-systems-maintenance ];
           license = lib.licenses.unfreeRedistributable // {
             shortName = "cuTENSOR EULA";
-            name = "cuTENSOR SUPPLEMENT TO SOFTWARE LICENSE AGREEMENT FOR NVIDIA SOFTWARE DEVELOPMENT KITS";
+            fullName = "cuTENSOR SUPPLEMENT TO SOFTWARE LICENSE AGREEMENT FOR NVIDIA SOFTWARE DEVELOPMENT KITS";
             url = "https://docs.nvidia.com/cuda/cutensor/license.html";
           };
         };

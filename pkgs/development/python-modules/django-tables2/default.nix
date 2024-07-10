@@ -1,23 +1,24 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
 
-# build-system
-, setuptools
+  # build-system
+  setuptools,
 
-# dependencies
-, django
-, tablib
+  # dependencies
+  django,
+  tablib,
 
-# tests
-, lxml
-, openpyxl
-, psycopg2
-, pytz
-, pyyaml
-, pytest-django
-, pytestCheckHook
+  # tests
+  lxml,
+  openpyxl,
+  psycopg2,
+  pytz,
+  pyyaml,
+  pytest-django,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -34,20 +35,12 @@ buildPythonPackage rec {
     hash = "sha256-VB7xmcBncTUYllzKS4o7G7u+KoivMiiEQGZ4x+Rnces=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  propagatedBuildInputs = [
-    django
-  ];
+  propagatedBuildInputs = [ django ];
 
   passthru.optional-dependencies = {
-    tablib = [
-      tablib
-    ]
-    ++ tablib.optional-dependencies.xls
-    ++ tablib.optional-dependencies.yaml;
+    tablib = [ tablib ] ++ tablib.optional-dependencies.xls ++ tablib.optional-dependencies.yaml;
   };
 
   env.DJANGO_SETTINGS_MODULE = "tests.app.settings";

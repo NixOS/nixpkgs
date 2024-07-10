@@ -16,14 +16,14 @@
   passthruFun = import ./passthrufun.nix args;
 
   sources = {
-    python311 = {
+    python312 = {
       sourceVersion = {
         major = "3";
-        minor = "11";
-        patch = "8";
+        minor = "12";
+        patch = "4";
         suffix = "";
       };
-      hash = "sha256-ngYAjIkBkkOVvB2jA+rFZ6cprgErqhgqs5Jp9lA4O7M=";
+      hash = "sha256-9tQZpth0OrJnAIAbSQjSbZfouYbhT5XeMbMt4rDnlVQ=";
     };
   };
 
@@ -68,24 +68,24 @@ in {
     inherit passthruFun;
   };
 
-  python311 = callPackage ./cpython ({
+  python311 = callPackage ./cpython {
     self = __splicedPackages.python311;
-    inherit (darwin) configd;
-    inherit passthruFun;
-  } // sources.python311);
-
-  python312 = callPackage ./cpython {
-    self = __splicedPackages.python312;
     sourceVersion = {
       major = "3";
-      minor = "12";
-      patch = "2";
+      minor = "11";
+      patch = "9";
       suffix = "";
     };
-    hash = "sha256-vigRLayBPSBTVFwUvxOhZAGiGHfxpp626l2ExKDz2HA=";
+    hash = "sha256-mx6JZSP8UQaREmyGRAbZNgo9Hphqy9pZzaV7Wr2kW4c=";
     inherit (darwin) configd;
     inherit passthruFun;
   };
+
+  python312 = callPackage ./cpython ({
+    self = __splicedPackages.python312;
+    inherit (darwin) configd;
+    inherit passthruFun;
+  } // sources.python312);
 
   python313 = callPackage ./cpython {
     self = __splicedPackages.python313;
@@ -93,9 +93,9 @@ in {
       major = "3";
       minor = "13";
       patch = "0";
-      suffix = "a6";
+      suffix = "b3";
     };
-    hash = "sha256-S+85PXKygaz4HTnXRV8AA26GYZPfohpO05cP0PTLoEg=";
+    hash = "sha256-O+CUrQixHcKgZUY1JCOceNyfKzQrAdzU4eYG27xceKU=";
     inherit (darwin) configd;
     inherit passthruFun;
   };
@@ -123,7 +123,7 @@ in {
     enableOptimizations = false;
     enableLTO = false;
     mimetypesSupport = false;
-  } // sources.python311)).overrideAttrs(old: {
+  } // sources.python312)).overrideAttrs(old: {
     # TODO(@Artturin): Add this to the main cpython expr
     strictDeps = true;
     pname = "python3-minimal";

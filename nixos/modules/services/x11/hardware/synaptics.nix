@@ -30,7 +30,7 @@ in {
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = "Whether to enable touchpad support. Deprecated: Consider services.xserver.libinput.enable.";
+        description = "Whether to enable touchpad support. Deprecated: Consider services.libinput.enable.";
       };
 
       dev = mkOption {
@@ -207,8 +207,8 @@ in {
 
     assertions = [
       {
-        assertion = !config.services.xserver.libinput.enable;
-        message = "Synaptics and libinput are incompatible, you cannot enable both (in services.xserver).";
+        assertion = !config.services.libinput.enable;
+        message = "Synaptics and libinput are incompatible, you cannot enable both.";
       }
     ];
 

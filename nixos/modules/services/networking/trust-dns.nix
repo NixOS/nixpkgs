@@ -51,7 +51,7 @@ in
       package = mkPackageOption pkgs "trust-dns" {
         extraDescription = ''
           ::: {.note}
-          The package must provide `meta.mainProgram` which names the server binayr; any other utilities (client, resolver) are not needed.
+          The package must provide `meta.mainProgram` which names the server binary; any other utilities (client, resolver) are not needed.
           :::
         '';
       };
@@ -86,7 +86,7 @@ in
               type = types.listOf types.str;
               default = [ "0.0.0.0" ];
               description = ''
-              List of ipv4 addresses on which to listen for DNS queries.
+                List of ipv4 addresses on which to listen for DNS queries.
               '';
             };
             listen_addrs_ipv6 = mkOption {
@@ -114,7 +114,7 @@ in
             };
             zones = mkOption {
               description = "List of zones to serve.";
-              default = {};
+              default = [];
               type = types.listOf (types.coercedTo types.str (zone: { inherit zone; }) zoneType);
             };
           };

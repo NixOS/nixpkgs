@@ -1,15 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, cython
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  cython,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "cymem";
   version = "2.0.8";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -20,33 +22,26 @@ buildPythonPackage rec {
     hash = "sha256-e4lgV39lwC2Goqmd8Jjra+znuCpxsv2IsRXfFbQkGN8=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
     cython
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   preCheck = ''
-    TEMPDIR=$(mktemp -d)
-    cp -R cymem/tests $TEMPDIR/
-    pushd $TEMPDIR
+    # remove src module, so tests use the installed module instead
+    mv ./cymem/tests ./tests
+    rm -r ./cymem
   '';
 
-  postCheck = ''
-    popd
-  '';
-
-  pythonImportsCheck = [
-    "cymem"
-  ];
+  pythonImportsCheck = [ "cymem" ];
 
   meta = with lib; {
     description = "Cython memory pool for RAII-style memory management";
     homepage = "https://github.com/explosion/cymem";
     changelog = "https://github.com/explosion/cymem/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ nickcao ];
   };
 }

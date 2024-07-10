@@ -1,7 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, azure-nspkg
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  azure-nspkg,
 }:
 
 buildPythonPackage rec {
@@ -14,9 +15,7 @@ buildPythonPackage rec {
     sha256 = "acf691e692818d9a65c653c7a3485eb8e35c0bdc496bba652e5ea3905ba09cd8";
   };
 
-  propagatedBuildInputs = [
-    azure-nspkg
-  ];
+  propagatedBuildInputs = [ azure-nspkg ];
 
   # has no tests
   doCheck = false;

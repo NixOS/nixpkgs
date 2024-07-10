@@ -1,9 +1,14 @@
 { config, lib, pkgs, options, ... }:
 
-with lib;
-
 let
   cfg = config.services.prometheus.exporters.buildkite-agent;
+  inherit (lib)
+    mkOption
+    types
+    concatStringsSep
+    optionalString
+    literalExpression
+    ;
 in
 {
   port = 9876;

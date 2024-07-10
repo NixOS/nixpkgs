@@ -9,14 +9,14 @@
 
 stdenv.mkDerivation {
   pname = "fw-ectool";
-  version = "0-unstable-2023-12-15";
+  version = "0-unstable-2024-04-23";
 
   src = fetchFromGitLab {
     domain = "gitlab.howett.net";
     owner = "DHowett";
     repo = "ectool";
-    rev = "3ebe7b8b713b2ebfe2ce92d48fd8d044276b2879";
-    hash = "sha256-s6PrFPAL+XJAENqLw5oJqFmAf11tHOJ8h3F5l3pOlZ4=";
+    rev = "abdd574ebe3640047988cb928bb6789a15dd1390";
+    hash = "sha256-j0Z2Uo1LBXlHZVHPm4Xjx3LZaI6Qq0nSdViyC/CjWC8=";
   };
 
   nativeBuildInputs = [

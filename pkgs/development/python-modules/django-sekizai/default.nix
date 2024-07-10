@@ -1,9 +1,10 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, django-classy-tags
-, pytestCheckHook
-, pytest-django
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  django-classy-tags,
+  pytestCheckHook,
+  pytest-django,
 }:
 
 buildPythonPackage rec {
@@ -16,9 +17,7 @@ buildPythonPackage rec {
     sha256 = "sha256-Kso2y64LXAzv7ZVlQW7EQjNXZ/sxRb/xHlhiL8ZTza0=";
   };
 
-  propagatedBuildInputs = [
-    django-classy-tags
-  ];
+  propagatedBuildInputs = [ django-classy-tags ];
 
   checkInputs = [
     pytestCheckHook

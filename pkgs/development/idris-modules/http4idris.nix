@@ -17,7 +17,7 @@ build-idris-package  {
   };
 
   meta = {
-    description = "An experimental HTTP framework for Idris";
+    description = "Experimental HTTP framework for Idris";
     homepage = "https://github.com/A1kmm/http4idris";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.brainrape ];

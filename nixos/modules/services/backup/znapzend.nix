@@ -315,6 +315,14 @@ in
         '';
       };
 
+      mailErrorSummaryTo = mkOption {
+        type = singleLineStr;
+        default = "";
+        description = ''
+          Email address to send a summary to if "send task(s) failed".
+        '';
+      };
+
       noDestroy = mkOption {
         type = bool;
         default = false;
@@ -455,6 +463,8 @@ in
               "--loglevel=${cfg.logLevel}"
               (optionalString cfg.noDestroy "--nodestroy")
               (optionalString cfg.autoCreation "--autoCreation")
+              (optionalString (cfg.mailErrorSummaryTo != "")
+                "--mailErrorSummaryTo=${cfg.mailErrorSummaryTo}")
               (optionalString (enabledFeatures != [])
                 "--features=${concatStringsSep "," enabledFeatures}")
             ]; in "${pkgs.znapzend}/bin/znapzend ${args}";

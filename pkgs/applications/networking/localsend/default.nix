@@ -90,7 +90,7 @@ let
   };
 
   metaCommon = with lib; {
-    description = "An open source cross-platform alternative to AirDrop";
+    description = "Open source cross-platform alternative to AirDrop";
     homepage = "https://localsend.org/";
     license = licenses.mit;
     mainProgram = "localsend";

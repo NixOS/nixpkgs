@@ -5,7 +5,6 @@
 , meson
 , ninja
 , gettext
-, python3
 , desktop-file-utils
 , cargo
 , rustPlatform
@@ -19,23 +18,25 @@
 , alsa-lib
 , libpulseaudio
 , wrapGAppsHook4
+, blueprint-compiler
+, gst_all_1
 }:
 
 stdenv.mkDerivation rec {
   pname = "spot";
-  version = "0.4.0";
+  version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "xou816";
     repo = "spot";
     rev = version;
-    hash = "sha256-K6wGWhAUUGsbE4O+z0TmJcJyGarvHgZteY527jfAa90=";
+    hash = "sha256-F875e/VZyN8mTfe9lgjtILNxMqn+66XoPCdaEUagHyU=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-eM2XLumn4dr2YtyUzBZJADlqdexc1iOaNJUudMlfSUc=";
+    hash = "sha256-45Rqs2/tSWoyZVjFuygR5SxldjoqpprtOKEnMqJK+p8=";
   };
 
   nativeBuildInputs = [
@@ -43,7 +44,6 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
-    python3 # for meson postinstall script
     gtk4 # for gtk-update-icon-cache
     glib # for glib-compile-schemas
     desktop-file-utils
@@ -51,6 +51,7 @@ stdenv.mkDerivation rec {
     rustPlatform.cargoSetupHook
     rustc
     wrapGAppsHook4
+    blueprint-compiler
   ];
 
   buildInputs = [
@@ -61,17 +62,12 @@ stdenv.mkDerivation rec {
     openssl
     alsa-lib
     libpulseaudio
+    gst_all_1.gst-plugins-base
+    gst_all_1.gstreamer
   ];
 
   # https://github.com/xou816/spot/issues/313
   mesonBuildType = "release";
-
-  postPatch = ''
-    chmod +x build-aux/cargo.sh
-    patchShebangs build-aux/cargo.sh build-aux/meson/postinstall.py
-    substituteInPlace build-aux/meson/postinstall.py \
-      --replace gtk-update-icon-cache gtk4-update-icon-cache
-  '';
 
   passthru = {
     updateScript = nix-update-script { };

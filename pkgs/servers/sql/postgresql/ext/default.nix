@@ -74,6 +74,8 @@ self: super: {
 
     smlar = super.callPackage ./smlar.nix { };
 
+    system_stats = super.callPackage ./system_stats.nix { };
+
     temporal_tables = super.callPackage ./temporal_tables.nix { };
 
     timescaledb = super.callPackage ./timescaledb.nix { };
@@ -98,8 +100,6 @@ self: super: {
     pg_squeeze = super.callPackage ./pg_squeeze.nix { };
 
     pg_uuidv7 = super.callPackage ./pg_uuidv7.nix { };
-
-    promscale_extension = super.callPackage ./promscale_extension.nix { };
 
     repmgr = super.callPackage ./repmgr.nix { };
 

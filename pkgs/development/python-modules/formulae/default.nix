@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, setuptools
-, setuptools-scm
-, pytestCheckHook
-, numpy
-, pandas
-, scipy
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  setuptools,
+  setuptools-scm,
+  pytestCheckHook,
+  numpy,
+  pandas,
+  scipy,
 }:
 
 buildPythonPackage rec {
@@ -37,7 +38,10 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
   # use assertions of form `assert pytest.approx(...)`, which is now disallowed:
-  disabledTests = [ "test_basic" "test_degree" ];
+  disabledTests = [
+    "test_basic"
+    "test_degree"
+  ];
   pythonImportsCheck = [
     "formulae"
     "formulae.matrices"

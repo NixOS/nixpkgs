@@ -1,7 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools-scm,
 }:
 buildPythonPackage rec {
   pname = "rpmfile";
@@ -16,13 +17,9 @@ buildPythonPackage rec {
   # Tests access the internet
   doCheck = false;
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
 
-  pythonImportsCheck = [
-    "rpmfile"
-  ];
+  pythonImportsCheck = [ "rpmfile" ];
 
   meta = with lib; {
     description = "Read rpm archive files";

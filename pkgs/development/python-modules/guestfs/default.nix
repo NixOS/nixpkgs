@@ -1,4 +1,10 @@
-{ lib, buildPythonPackage, fetchurl, libguestfs, qemu }:
+{
+  lib,
+  buildPythonPackage,
+  fetchurl,
+  libguestfs,
+  qemu,
+}:
 
 buildPythonPackage rec {
   pname = "guestfs";
@@ -10,7 +16,10 @@ buildPythonPackage rec {
     sha256 = "06a4b5xf1rkhnzfvck91n0z9mlkrgy90s9na5a8da2g4p776lhkf";
   };
 
-  propagatedBuildInputs = [ libguestfs qemu ];
+  propagatedBuildInputs = [
+    libguestfs
+    qemu
+  ];
 
   # no tests
   doCheck = false;

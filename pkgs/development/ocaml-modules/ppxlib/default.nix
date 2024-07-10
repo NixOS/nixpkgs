@@ -3,7 +3,7 @@
   if lib.versionAtLeast ocaml.version "4.07"
   then if lib.versionAtLeast ocaml.version "4.08"
   then if lib.versionAtLeast ocaml.version "4.11"
-  then "0.32.0" else "0.24.0" else "0.15.0" else "0.13.0"
+  then "0.32.1" else "0.24.0" else "0.15.0" else "0.13.0"
 , ocaml-compiler-libs, ocaml-migrate-parsetree, ppx_derivers, stdio
 , stdlib-shims, ocaml-migrate-parsetree-2
 }:
@@ -63,8 +63,8 @@ let param = {
     sha256 = "sha256-3UpjvenSm0mBDgTXZTk3yTLxd6lByg4ZgratU6xEIRA=";
     min_version = "4.07";
   };
-  "0.32.0" = {
-    sha256 = "sha256-UHzHPM+JXyLutSV6IkODjBijigkQX8/1Xu75FIVVQis=";
+  "0.32.1" = {
+    sha256 = "sha256-nbrYvLHItPPfP1i8pgpe0j2GUx8No0tBlshr1YXAnX8=";
     min_version = "4.07";
   };
 }."${version}"; in

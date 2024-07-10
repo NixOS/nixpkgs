@@ -1,53 +1,54 @@
-{ lib
-, stdenv
-, blis
-, buildPythonPackage
-, callPackage
-, catalogue
-, cymem
-, fetchPypi
-, hypothesis
-, jinja2
-, jsonschema
-, langcodes
-, mock
-, murmurhash
-, numpy
-, packaging
-, pathy
-, preshed
-, pydantic
-, pytestCheckHook
-, python
-, pythonOlder
-, pythonRelaxDepsHook
-, requests
-, setuptools
-, spacy-legacy
-, spacy-loggers
-, srsly
-, thinc
-, tqdm
-, typer
-, typing-extensions
-, wasabi
-, weasel
-, writeScript
-, nix
-, git
-, nix-update
+{
+  lib,
+  stdenv,
+  blis,
+  buildPythonPackage,
+  callPackage,
+  catalogue,
+  cymem,
+  cython_0,
+  fetchPypi,
+  hypothesis,
+  jinja2,
+  jsonschema,
+  langcodes,
+  mock,
+  murmurhash,
+  numpy,
+  packaging,
+  pathy,
+  preshed,
+  pydantic,
+  pytestCheckHook,
+  python,
+  pythonOlder,
+  requests,
+  setuptools,
+  spacy-legacy,
+  spacy-loggers,
+  srsly,
+  thinc,
+  tqdm,
+  typer,
+  typing-extensions,
+  wasabi,
+  weasel,
+  writeScript,
+  nix,
+  git,
+  nix-update,
 }:
 
 buildPythonPackage rec {
   pname = "spacy";
-  version = "3.7.4";
+  version = "3.7.5";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Ul8s7S5AdhViyMrOk+9qHm6MSD8nvVZLwbFfYI776Fs=";
+    hash = "sha256-pkjGy/Ksx6Vaae6ef6TyK99pqoKKWHobxc//CM88LdM=";
   };
 
   pythonRelaxDeps = [
@@ -56,7 +57,7 @@ buildPythonPackage rec {
   ];
 
   nativeBuildInputs = [
-    pythonRelaxDepsHook
+    cython_0
   ];
 
   propagatedBuildInputs = [
@@ -82,9 +83,7 @@ buildPythonPackage rec {
     typer
     wasabi
     weasel
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    typing-extensions
-  ];
+  ] ++ lib.optionals (pythonOlder "3.8") [ typing-extensions ];
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -99,9 +98,7 @@ buildPythonPackage rec {
     cd $out
   '';
 
-  pytestFlagsArray = [
-    "-m 'slow'"
-  ];
+  pytestFlagsArray = [ "-m 'slow'" ];
 
   disabledTests = [
     # touches network
@@ -110,20 +107,24 @@ buildPythonPackage rec {
     "test_project_assets"
   ];
 
-  pythonImportsCheck = [
-    "spacy"
-  ];
+  pythonImportsCheck = [ "spacy" ];
 
   passthru = {
     updateScript = writeScript "update-spacy" ''
       #!${stdenv.shell}
       set -eou pipefail
-      PATH=${lib.makeBinPath [ nix git nix-update ]}
+      PATH=${
+        lib.makeBinPath [
+          nix
+          git
+          nix-update
+        ]
+      }
 
       nix-update python3Packages.spacy
 
       # update spacy models as well
-      echo | nix-shell maintainers/scripts/update.nix --argstr package python3Packages.spacy_models.en_core_web_sm
+      echo | nix-shell maintainers/scripts/update.nix --argstr package python3Packages.spacy-models.en_core_web_sm
     '';
     tests.annotation = callPackage ./annotation-test { };
   };

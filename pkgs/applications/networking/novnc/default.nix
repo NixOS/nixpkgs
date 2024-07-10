@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "novnc";
-  version = "1.4.0";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "novnc";
     repo = "noVNC";
     rev = "v${version}";
-    sha256 = "sha256-G7Rtv7pQFR9UrzhYXDyBf+FRqtjo5NAXU7m/HeXhI1k=";
+    sha256 = "sha256-3Q87bYsC824/8A85Kxdqlm+InuuR/D/HjVrYTJZfE9Y=";
   };
 
   patches = with python3.pkgs; [

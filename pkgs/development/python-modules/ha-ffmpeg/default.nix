@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, async-timeout
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  async-timeout,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -18,13 +19,9 @@ buildPythonPackage rec {
     hash = "sha256-FW8WlrhVL+ryupHAKii8fKBku/6uxdw1uLCKUszkP50=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  propagatedBuildInputs = [
-    async-timeout
-  ];
+  propagatedBuildInputs = [ async-timeout ];
 
   # only manual tests
   doCheck = false;

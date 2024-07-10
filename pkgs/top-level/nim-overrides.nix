@@ -11,22 +11,21 @@
 , xorg
 }:
 
-# The following is list of overrides that take three arguments each:
+# The following is list of overrides that take two arguments each:
 # - lockAttrs: - an attrset from a Nim lockfile, use this for making constraints on the locked library
-# - finalAttrs: - final arguments to the depender package
 # - prevAttrs: - preceding arguments to the depender package
 {
-  jester = lockAttrs: finalAttrs:
+  jester = lockAttrs:
     { buildInputs ? [ ], ... }: {
       buildInputs = buildInputs ++ [ openssl ];
     };
 
-  hts = lockAttrs: finalAttrs:
+  hts = lockAttrs:
     { buildInputs ? [ ], ... }: {
       buildInputs = buildInputs ++ [ htslib ];
     };
 
-  getdns = lockAttrs: finalAttrs:
+  getdns = lockAttrs:
     { nativeBuildInputs ? [ ], buildInputs ? [ ], ... }: {
       nativeBuildInputs = nativeBuildInputs ++ [ pkg-config ];
       buildInputs = buildInputs ++ [ getdns ];
@@ -38,35 +37,35 @@
       "the selected version of the hashlib Nim library is hardware specific"
       # https://github.com/khchen/hashlib/pull/4
       # remove when fixed upstream
-      (_: _: { });
+      (_: { });
 
-  nimraylib_now = lockAttrs: finalAttrs:
+  nimraylib_now = lockAttrs:
     { buildInputs ? [ ], ... }: {
       buildInputs = buildInputs ++ [ raylib ];
     };
 
-  sass = lockAttrs: finalAttrs:
+  sass = lockAttrs:
     { buildInputs ? [ ], ... }: {
       buildInputs = buildInputs ++ [ libsass ];
     };
 
-  sdl2 = lockAttrs: finalAttrs:
+  sdl2 = lockAttrs:
     { buildInputs ? [ ], ... }: {
       buildInputs = buildInputs ++ [ SDL2 ];
     };
 
-  tkrzw = lockAttrs: finalAttrs:
+  tkrzw = lockAttrs:
     { nativeBuildInputs ? [ ], buildInputs ? [ ], ... }: {
       nativeBuildInputs = nativeBuildInputs ++ [ pkg-config ];
       buildInputs = buildInputs ++ [ tkrzw ];
     };
 
-  x11 = lockAttrs: finalAttrs:
+  x11 = lockAttrs:
     { buildInputs ? [ ], ... }: {
       buildInputs = buildInputs ++ (with xorg; [ libX11 libXft libXinerama ]);
     };
 
-  zippy = lockAttrs: finalAttrs:
+  zippy = lockAttrs:
     { nimFlags ? [ ], ... }: {
       nimFlags = nimFlags ++ lib.optionals stdenv.hostPlatform.isx86_64 [
         "--passC:-msse4.1"

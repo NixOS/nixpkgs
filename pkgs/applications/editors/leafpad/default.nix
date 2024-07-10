@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A notepad clone for GTK 2.0";
+    description = "Notepad clone for GTK 2.0";
     homepage = "http://tarot.freeshell.org/leafpad";
     platforms = platforms.linux;
     maintainers = [ maintainers.flosse ];

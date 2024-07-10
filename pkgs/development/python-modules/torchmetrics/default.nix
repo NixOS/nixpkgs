@@ -1,26 +1,28 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, numpy
-, lightning-utilities
-, cloudpickle
-, scikit-learn
-, scikit-image
-, packaging
-, psutil
-, py-deprecate
-, torch
-, pytestCheckHook
-, torchmetrics
-, pytorch-lightning
-, pytest-doctestplus
-, pytest-xdist
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  numpy,
+  lightning-utilities,
+  cloudpickle,
+  scikit-learn,
+  scikit-image,
+  packaging,
+  pretty-errors,
+  psutil,
+  py-deprecate,
+  torch,
+  pytestCheckHook,
+  torchmetrics,
+  pytorch-lightning,
+  pytest-doctestplus,
+  pytest-xdist,
 }:
 
 let
   pname = "torchmetrics";
-  version = "1.3.2";
+  version = "1.4.0.post0";
 in
 buildPythonPackage {
   inherit pname version;
@@ -32,20 +34,19 @@ buildPythonPackage {
     owner = "Lightning-AI";
     repo = "torchmetrics";
     rev = "refs/tags/v${version}";
-    hash = "sha256-0lverGF8HVlnwWmnCjScWoSfWPLZlMF2cHDG+uxNCCQ=";
+    hash = "sha256-tQqlLfdk8rSJqwR3rC7kqnM+pLFYZSPHfI7RmIi2Iq4=";
   };
 
-  propagatedBuildInputs = [
+  dependencies = [
     numpy
     lightning-utilities
     packaging
+    pretty-errors
     py-deprecate
   ];
 
   # Let the user bring their own instance
-  buildInputs = [
-    torch
-  ];
+  buildInputs = [ torch ];
 
   nativeCheckInputs = [
     pytorch-lightning
@@ -83,17 +84,13 @@ buildPythonPackage {
     "src/torchmetrics"
   ];
 
-  pythonImportsCheck = [
-    "torchmetrics"
-  ];
+  pythonImportsCheck = [ "torchmetrics" ];
 
   meta = with lib; {
     description = "Machine learning metrics for distributed, scalable PyTorch applications (used in pytorch-lightning)";
     homepage = "https://lightning.ai/docs/torchmetrics/";
     changelog = "https://github.com/Lightning-AI/torchmetrics/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [
-      SomeoneSerge
-    ];
+    maintainers = with maintainers; [ SomeoneSerge ];
   };
 }

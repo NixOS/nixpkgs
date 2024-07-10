@@ -96,7 +96,7 @@ in
 
     services.udisks2.enable = true;
     services.upower.enable = config.powerManagement.enable;
-    services.xserver.libinput.enable = mkDefault true;
+    services.libinput.enable = mkDefault true;
 
     services.dbus.packages = [ e.efl ];
 

@@ -11,7 +11,7 @@
 , copyDesktopItems
 , makeDesktopItem
 , nixosTests
-, wrapGAppsHook
+, wrapGAppsHook3
 , jq
 , coreutils
 }:
@@ -40,7 +40,7 @@ buildDotnetModule rec {
 
   nativeBuildInputs = [
     copyDesktopItems
-    wrapGAppsHook
+    wrapGAppsHook3
     # Dependency of generate-rules.sh
     jq
   ];

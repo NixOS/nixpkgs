@@ -1,10 +1,11 @@
-{ lib
-, aiohttp
-, async-timeout
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, pytz
+{
+  lib,
+  aiohttp,
+  async-timeout,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  pytz,
 }:
 
 buildPythonPackage rec {
@@ -37,9 +38,7 @@ buildPythonPackage rec {
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "pydelijn"
-  ];
+  pythonImportsCheck = [ "pydelijn" ];
 
   meta = with lib; {
     description = "Python package to retrieve realtime data of passages at stops of De Lijn";

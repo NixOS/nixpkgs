@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pillow
-, isPy27
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pillow,
+  isPy27,
 }:
 
 buildPythonPackage rec {
@@ -19,9 +20,8 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ pillow ];
 
   meta = with lib; {
-    description = "A library for building interactive maps";
+    description = "Library for building interactive maps";
     homepage = "http://modestmaps.com";
     license = licenses.bsd3;
   };
-
 }

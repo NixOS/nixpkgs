@@ -1,8 +1,9 @@
- { lib
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -19,16 +20,12 @@ buildPythonPackage rec {
     hash = "sha256-dsVEHJawsTNKVCVmeOa61wOU5GPeyzAU/eUDFrK9PPg=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   # Module has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "pylint_venv"
-  ];
+  pythonImportsCheck = [ "pylint_venv" ];
 
   meta = with lib; {
     description = "Module to make pylint respect virtual environments";

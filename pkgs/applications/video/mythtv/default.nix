@@ -1,4 +1,4 @@
-{ lib, mkDerivation, fetchFromGitHub, fetchpatch, which, qtbase, qtwebkit, qtscript
+{ lib, mkDerivation, fetchFromGitHub, which, qtbase, qtwebkit, qtscript
 , libpulseaudio, fftwSinglePrec , lame, zlib, libGLU, libGL, alsa-lib, freetype
 , perl, pkg-config , libsamplerate, libbluray, lzo, libX11, libXv, libXrandr, libXvMC, libXinerama, libXxf86vm
 , libXmu , yasm, libuuid, taglib, libtool, autoconf, automake, file, exiv2, linuxHeaders
@@ -42,6 +42,6 @@ mkDerivation rec {
     description = "Open Source DVR";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = [ maintainers.titanous ];
+    maintainers = [ ];
   };
 }

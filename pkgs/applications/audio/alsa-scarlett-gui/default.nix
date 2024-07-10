@@ -16,22 +16,28 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "geoffreybennett";
-    repo = pname;
+    repo = "alsa-scarlett-gui";
     rev = version;
-    sha256 = "sha256-+74JRQn2xwgPHZSrp5b+uny0+aLnsFvx/cOKIdj4J40=";
+    hash = "sha256-+74JRQn2xwgPHZSrp5b+uny0+aLnsFvx/cOKIdj4J40=";
   };
 
   NIX_CFLAGS_COMPILE = [ "-Wno-error=deprecated-declarations" ];
 
   makeFlags = [ "DESTDIR=\${out}" "PREFIX=''" ];
   sourceRoot = "${src.name}/src";
+
+  postPatch = ''
+    substituteInPlace file.c \
+      --replace-fail "/usr/sbin/alsactl" "${alsa-utils}/bin/alsactl"
+  '';
+
   nativeBuildInputs = [ pkg-config wrapGAppsHook4 makeWrapper ];
   buildInputs = [ gtk4 alsa-lib openssl ];
   postInstall = ''
     wrapProgram $out/bin/alsa-scarlett-gui --prefix PATH : ${lib.makeBinPath [ alsa-utils ]}
 
     substituteInPlace $out/share/applications/vu.b4.alsa-scarlett-gui.desktop \
-      --replace "Exec=/bin/alsa-scarlett-gui" "Exec=$out/bin/alsa-scarlett-gui"
+      --replace-fail "Exec=/bin/alsa-scarlett-gui" "Exec=$out/bin/alsa-scarlett-gui"
   '';
 
   # causes redefinition of _FORTIFY_SOURCE

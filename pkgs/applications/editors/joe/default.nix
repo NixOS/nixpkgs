@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "A full featured terminal-based screen editor";
+    description = "Full featured terminal-based screen editor";
     longDescription = ''
       JOE (Joe's Own Editor) is a full featured terminal-based screen editor
       which is distributed under the GNU General Public License (GPL). JOE has

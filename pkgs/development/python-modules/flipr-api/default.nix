@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, requests-mock
-, pythonOlder
-, pytest-asyncio
-, pytestCheckHook
-, python-dateutil
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  requests-mock,
+  pythonOlder,
+  pytest-asyncio,
+  pytestCheckHook,
+  python-dateutil,
+  requests,
 }:
 
 buildPythonPackage rec {
@@ -24,9 +25,7 @@ buildPythonPackage rec {
     hash = "sha256-xgLi2lH+EPPNlMixqOzdBGVLuoJh5dhZ2tHZ0UH+lOk=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     python-dateutil
@@ -39,9 +38,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "flipr_api"
-  ];
+  pythonImportsCheck = [ "flipr_api" ];
 
   meta = with lib; {
     description = "Python client for Flipr API";

@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchurl
-, fetchpatch
 , makeDesktopItem
 , SDL2
 , SDL2_image
@@ -52,8 +51,8 @@ stdenv.mkDerivation rec {
     description = "Scrolling tile-based arcade style puzzle game";
     mainProgram = "rocksndiamonds";
     homepage = "https://www.artsoft.org/rocksndiamonds/";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ orivej xfix ];
+    maintainers = with maintainers; [ orivej ];
   };
 }

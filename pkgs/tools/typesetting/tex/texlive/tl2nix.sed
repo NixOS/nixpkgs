@@ -23,6 +23,12 @@ $a}
   # extract revision
   s/^revision ([0-9]*)$/  revision = \1;/p
 
+  # extract short description
+  /^shortdesc (.+)$/{
+    s/"/\\"/g # escape quotes
+    s/^shortdesc (.+)/  shortdesc = "\1";/p
+  }
+
   # extract hashes of *.tar.xz
   s/^containerchecksum (.*)/  sha512.run = "\1";/p
   s/^doccontainerchecksum (.*)/  sha512.doc = "\1";/p
@@ -47,7 +53,8 @@ $a}
     s/"bsd4"/"bsdOriginal"/g
     s/"collection"/"free"/g   # used for collections of individual packages with distinct licenses. As TeXlive only contains free software, we can use "free" as a catchall
     s/"fdl"/"fdl13Only"/g
-    s/"gpl1?"/"gpl1Only"/g
+    s/"gpl"/"gpl1Only"/g
+    s/"gpl([1-3])"/"gpl\1Only"/g
     s/"gpl2\+"/"gpl2Plus"/g
     s/"gpl3\+"/"gpl3Plus"/g
     s/"lgpl"/"lgpl2"/g

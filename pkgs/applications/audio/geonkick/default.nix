@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://gitlab.com/iurie-sw/geonkick";
-    description = "A free software percussion synthesizer";
+    description = "Free software percussion synthesizer";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = [ maintainers.magnetophon ];

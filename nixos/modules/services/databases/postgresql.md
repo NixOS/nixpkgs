@@ -244,6 +244,27 @@ The upgrade process is:
      $ ./delete_old_cluster.sh
      ```
 
+## Versioning and End-of-Life {#module-services-postgres-versioning}
+
+PostgreSQL's versioning policy is described [here](https://www.postgresql.org/support/versioning/). TLDR:
+
+- Each major version is supported for 5 years.
+- Every three months there will be a new minor release, containing bug and security fixes.
+- For criticial/security fixes there could be more minor releases inbetween. This happens *very* infrequently.
+- After five years, a final minor version is released. This usually happens in early November.
+- After that a version is considered end-of-life (EOL).
+- Around February each year is the first time an EOL-release will not have received regular updates anymore.
+
+Technically, we'd not want to have EOL'ed packages in a stable NixOS release, which is to be supported until one month after the previous release. Thus, with NixOS' release schedule in May and November, the oldest PostgreSQL version in nixpkgs would have to be supported until December. It could be argued that a soon-to-be-EOL-ed version should thus be removed in May for the .05 release already. But since new security vulnerabilities are first disclosed in Februrary of the following year, we agreed on keeping the oldest PostgreSQL major version around one more cycle in [#310580](https://github.com/NixOS/nixpkgs/pull/310580#discussion_r1597284693).
+
+Thus:
+- In September/October the new major version will be released and added to nixos-unstable.
+- In November the last minor version for the oldest major will be released.
+- Both the current stable .05 release and nixos-unstable should be updated to the latest minor.
+- In November, before branch-off for the .11 release, the EOL-ed major will be removed from nixos-unstable.
+
+This leaves a small gap of a couple of weeks after the latest minor release and the end of our support window for the .05 release, in which there could be an emergency release to other major versions of PostgreSQL - but not the oldest major we have in that branch. In that case: If we can't trivially patch the issue, we will mark the package/version as insecure **immediately**.
+
 ## Options {#module-services-postgres-options}
 
 A complete list of options for the PostgreSQL module may be found [here](#opt-services.postgresql.enable).

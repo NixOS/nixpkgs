@@ -1,10 +1,15 @@
 { config, lib, pkgs, options, ... }:
 
-with lib;
-
 let
   logPrefix = "services.prometheus.exporter.ipmi";
   cfg = config.services.prometheus.exporters.ipmi;
+  inherit (lib)
+    mkOption
+    types
+    concatStringsSep
+    optionals
+    escapeShellArg
+    ;
 in {
   port = 9290;
 

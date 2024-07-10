@@ -16,7 +16,7 @@ stdenv.mkDerivation {
   makeFlags = [ "PREFIX=$(out)" ];
 
   meta = with lib; {
-    description = "A simple AIS tuner and generic dual-frequency FM demodulator";
+    description = "Simple AIS tuner and generic dual-frequency FM demodulator";
     homepage = "https://github.com/dgiardini/rtl-ais";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ mgdm ];

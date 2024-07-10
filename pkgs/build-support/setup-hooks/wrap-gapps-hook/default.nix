@@ -3,12 +3,12 @@
 , makeSetupHook
 , makeWrapper
 , gobject-introspection
-, isGraphical ? true
+, isGraphical ? false
 , gtk3
 , librsvg
 , dconf
 , callPackage
-, wrapGAppsHook
+, wrapGAppsHook3
 , targetPackages
 }:
 
@@ -24,9 +24,9 @@ makeSetupHook {
     librsvg
   ];
 
-  # depsTargetTargetPropagated will essentially be buildInputs when wrapGAppsHook is placed into nativeBuildInputs
+  # depsTargetTargetPropagated will essentially be buildInputs when wrapGAppsHook3 is placed into nativeBuildInputs
   # the librsvg and gtk3 above should be removed but kept to not break anything that implicitly depended on its binaries
-  depsTargetTargetPropagated = assert (lib.assertMsg (!targetPackages ? raw) "wrapGAppsHook must be in nativeBuildInputs"); lib.optionals isGraphical [
+  depsTargetTargetPropagated = assert (lib.assertMsg (!targetPackages ? raw) "wrapGAppsHook3 must be in nativeBuildInputs"); lib.optionals isGraphical [
     # librsvg provides a module for gdk-pixbuf to allow rendering
     # SVG icons. Most icon themes are SVG-based and so are some
     # graphics in GTK (e.g. cross for closing window in window title bar)
@@ -59,7 +59,7 @@ makeSetupHook {
         src = sample-project;
 
         strictDeps = true;
-        nativeBuildInputs = [ wrapGAppsHook ];
+        nativeBuildInputs = [ wrapGAppsHook3 ];
 
         installFlags = [ "bin-foo" "libexec-bar" ];
       };
@@ -103,7 +103,7 @@ makeSetupHook {
         strictDeps = true;
         nativeBuildInputs = [
           gobject-introspection
-          wrapGAppsHook
+          wrapGAppsHook3
         ];
 
         buildInputs = [
@@ -150,7 +150,7 @@ makeSetupHook {
         strictDeps = true;
         nativeBuildInputs = [
           gobject-introspection
-          wrapGAppsHook
+          wrapGAppsHook3
         ];
 
         buildInputs = [
@@ -181,7 +181,7 @@ makeSetupHook {
         strictDeps = true;
         nativeBuildInputs = [
           gobject-introspection
-          wrapGAppsHook
+          wrapGAppsHook3
         ];
 
         installFlags = [ "typelib-Cow" "bin-foo" "libexec-bar" ];

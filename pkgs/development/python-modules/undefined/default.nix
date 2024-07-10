@@ -1,7 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, flit
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  flit,
 }:
 
 buildPythonPackage rec {
@@ -14,13 +15,9 @@ buildPythonPackage rec {
     hash = "sha256-xvI3wOPX51GWlLIb1HHcJe48M3nZwjt06/Aqo0nFz/c=";
   };
 
-  nativeBuildInputs = [
-    flit
-  ];
+  nativeBuildInputs = [ flit ];
 
-  pythonImportsCheck = [
-    "undefined"
-  ];
+  pythonImportsCheck = [ "undefined" ];
 
   meta = with lib; {
     description = "Ever needed a global object that act as None but not quite?";

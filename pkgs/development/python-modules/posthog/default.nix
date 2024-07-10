@@ -1,16 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-# build inputs
-, requests
-, six
-, monotonic
-, backoff
-, python-dateutil
-# check inputs
-, pytestCheckHook
-, mock
-, freezegun
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  # build inputs
+  requests,
+  six,
+  monotonic,
+  backoff,
+  python-dateutil,
+  # check inputs
+  pytestCheckHook,
+  mock,
+  freezegun,
 }:
 let
   pname = "posthog";
@@ -41,9 +42,7 @@ buildPythonPackage {
     freezegun
   ];
 
-  pythonImportsCheck = [
-    "posthog"
-  ];
+  pythonImportsCheck = [ "posthog" ];
 
   disabledTests = [
     "test_load_feature_flags_wrong_key"

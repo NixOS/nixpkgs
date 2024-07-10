@@ -1,5 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch
-, autoreconfHook
+{ lib, stdenv, fetchurl
 
 , doCheck ? true # test suite depends on dejagnu which cannot be used during bootstrapping
 , dejagnu
@@ -44,7 +43,7 @@ stdenv.mkDerivation rec {
   nativeCheckInputs = [ dejagnu ];
 
   meta = with lib; {
-    description = "A foreign function call interface library";
+    description = "Foreign function call interface library";
     longDescription = ''
       The libffi library provides a portable, high level programming
       interface to various calling conventions.  This allows a

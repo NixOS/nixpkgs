@@ -1,4 +1,11 @@
-{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder, pynose, mock }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  nose,
+  mock,
+}:
 
 buildPythonPackage rec {
   pname = "uvcclient";
@@ -17,8 +24,11 @@ buildPythonPackage rec {
       --replace-fail "assertEquals" "assertEqual"
   '';
 
+  # tests rely on nose
+  doCheck = pythonOlder "3.12";
+
   nativeCheckInputs = [
-    pynose
+    nose
     mock
   ];
 

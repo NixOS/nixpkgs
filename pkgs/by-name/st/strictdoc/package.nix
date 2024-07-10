@@ -5,19 +5,18 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "strictdoc";
-  version = "0.0.51";
+  version = "0.0.57";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "strictdoc-project";
     repo = "strictdoc";
     rev = "refs/tags/${version}";
-    hash = "sha256-OFKWeFtVwZKh9KLeA3wiyqAkbPYEQy5/IeHLINkF1C0=";
+    hash = "sha256-1zURXE3y6um1wYu4Di7G4mrU5sl9QIY1HKEQlni+aEg=";
   };
 
   nativeBuildInputs = [
     python3.pkgs.hatchling
-    python3.pkgs.pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = with python3.pkgs; [

@@ -135,7 +135,7 @@ let rizin = stdenv.mkDerivation rec {
   };
 
   meta = {
-    description = "UNIX-like reverse engineering framework and command-line toolset.";
+    description = "UNIX-like reverse engineering framework and command-line toolset";
     homepage = "https://rizin.re/";
     license = lib.licenses.gpl3Plus;
     mainProgram = "rizin";

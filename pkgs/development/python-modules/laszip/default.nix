@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, scikit-build-core
-, pybind11
-, cmake
-, LASzip
-, ninja
-, pythonOlder
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  scikit-build-core,
+  pybind11,
+  cmake,
+  laszip,
+  ninja,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -47,9 +48,7 @@ buildPythonPackage rec {
 
   dontUseCmakeConfigure = true;
 
-  buildInputs = [
-    LASzip
-  ];
+  buildInputs = [ laszip ];
 
   # There are no tests
   doCheck = false;
@@ -64,4 +63,3 @@ buildPythonPackage rec {
     maintainers = with maintainers; [ matthewcroughan ];
   };
 }
-

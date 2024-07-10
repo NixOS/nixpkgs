@@ -1,22 +1,24 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, ipykernel
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  ipykernel,
 }:
 
 buildPythonPackage rec {
   pname = "ipynbname";
-  version = "2023.2.0.0";
-  format = "setuptools";
+  version = "2024.1.0.0";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Riu915VmJIdtxOqB+nkoRas4cOREyh9res2uo32Mnr8=";
+    hash = "sha256-HTxpze6Kl4FPRWpyBOnMGVtLu0ueRcvnV3lrFiST9gY=";
   };
 
-  propagatedBuildInputs = [
-    ipykernel
-  ];
+  build-system = [ setuptools ];
+
+  dependencies = [ ipykernel ];
 
   pythonImportsCheck = [ "ipynbname" ];
 

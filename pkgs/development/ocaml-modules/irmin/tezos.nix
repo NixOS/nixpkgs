@@ -6,7 +6,7 @@
 buildDunePackage rec {
   pname = "irmin-tezos";
 
-  inherit (irmin) version src strictDeps;
+  inherit (irmin) version src;
 
   propagatedBuildInputs = [
     irmin

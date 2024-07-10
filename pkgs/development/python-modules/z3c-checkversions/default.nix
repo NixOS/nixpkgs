@@ -1,16 +1,20 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, fetchPypi
-, python
-, zc-buildout
-, zope-testrunner
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  python,
+  pythonAtLeast,
+  zc-buildout,
+  zope-testrunner,
 }:
 
 buildPythonPackage rec {
   pname = "z3c-checkversions";
   version = "2.1";
   format = "setuptools";
+
+  # distutils usage
+  disabled = pythonAtLeast "3.12";
 
   src = fetchPypi {
     inherit version;

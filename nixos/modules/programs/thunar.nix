@@ -1,29 +1,27 @@
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let cfg = config.programs.thunar;
 
 in {
   meta = {
-    maintainers = teams.xfce.members;
+    maintainers = lib.teams.xfce.members;
   };
 
   options = {
     programs.thunar = {
-      enable = mkEnableOption "Thunar, the Xfce file manager";
+      enable = lib.mkEnableOption "Thunar, the Xfce file manager";
 
-      plugins = mkOption {
+      plugins = lib.mkOption {
         default = [];
-        type = types.listOf types.package;
+        type = lib.types.listOf lib.types.package;
         description = "List of thunar plugins to install.";
-        example = literalExpression "with pkgs.xfce; [ thunar-archive-plugin thunar-volman ]";
+        example = lib.literalExpression "with pkgs.xfce; [ thunar-archive-plugin thunar-volman ]";
       };
 
     };
   };
 
-  config = mkIf cfg.enable (
+  config = lib.mkIf cfg.enable (
     let package = pkgs.xfce.thunar.override { thunarPlugins = cfg.plugins; };
 
     in {

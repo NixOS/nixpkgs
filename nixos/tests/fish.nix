@@ -10,6 +10,8 @@ import ./make-test-python.nix ({ pkgs, ... }: {
         coreutils
         procps # kill collides with coreutils' to test https://github.com/NixOS/nixpkgs/issues/56432
       ];
+      # TODO: remove if/when #267880 is merged and this is a default
+      services.logrotate.enable = false;
     };
 
   testScript =

@@ -30,7 +30,6 @@ python.pkgs.buildPythonApplication rec {
 
   build-system = with python.pkgs; [ setuptools ];
 
-  nativeBuildInputs = with python.pkgs; [ pythonRelaxDepsHook ];
 
   propagatedBuildInputs =
     with python.pkgs;

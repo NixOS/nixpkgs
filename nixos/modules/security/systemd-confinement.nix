@@ -79,12 +79,19 @@ in {
         description = ''
           The value `full-apivfs` (the default) sets up
           private {file}`/dev`, {file}`/proc`,
-          {file}`/sys` and {file}`/tmp` file systems in a separate user
-          name space.
+          {file}`/sys`, {file}`/tmp` and {file}`/var/tmp` file systems
+          in a separate user name space.
 
           If this is set to `chroot-only`, only the file
           system name space is set up along with the call to
           {manpage}`chroot(2)`.
+
+          In all cases, unless `serviceConfig.PrivateTmp=true` is set,
+          both {file}`/tmp` and {file}`/var/tmp` paths are added to `InaccessiblePaths=`.
+          This is to overcome options like `DynamicUser=true`
+          implying `PrivateTmp=true` without letting it being turned off.
+          Beware however that giving processes the `CAP_SYS_ADMIN` and `@mount` privileges
+          can let them undo the effects of `InaccessiblePaths=`.
 
           ::: {.note}
           This doesn't cover network namespaces and is solely for
@@ -98,8 +105,12 @@ in {
         wantsAPIVFS = lib.mkDefault (config.confinement.mode == "full-apivfs");
       in lib.mkIf config.confinement.enable {
         serviceConfig = {
-          RootDirectory = "/var/empty";
-          TemporaryFileSystem = "/";
+          ReadOnlyPaths = [ "+/" ];
+          RuntimeDirectory = [ "confinement/${mkPathSafeName name}" ];
+          RootDirectory = "/run/confinement/${mkPathSafeName name}";
+          InaccessiblePaths = [
+            "-+/run/confinement/${mkPathSafeName name}"
+          ];
           PrivateMounts = lib.mkDefault true;
 
           # https://github.com/NixOS/nixpkgs/issues/14645 is a future attempt
@@ -148,16 +159,6 @@ in {
               + " Please either define a separate service or find a way to run"
               + " commands other than ExecStart within the chroot.";
     }
-    { assertion = !cfg.serviceConfig.DynamicUser or false;
-      message = "${whatOpt "DynamicUser"}. Please create a dedicated user via"
-              + " the 'users.users' option instead as this combination is"
-              + " currently not supported.";
-    }
-    { assertion = cfg.serviceConfig ? ProtectSystem -> cfg.serviceConfig.ProtectSystem == false;
-      message = "${whatOpt "ProtectSystem"}. ProtectSystem is not compatible"
-              + " with service confinement as it fails to remount /usr within"
-              + " our chroot. Please disable the option.";
-    }
   ]) config.systemd.services);
 
   config.systemd.packages = lib.concatLists (lib.mapAttrsToList (name: cfg: let
@@ -181,6 +182,13 @@ in {
         binsh=${lib.escapeShellArg cfg.confinement.binSh}
         realprog="$(readlink -e "$binsh")"
         echo "BindReadOnlyPaths=$realprog:/bin/sh" >> "$serviceFile"
+      ''}
+
+      # If DynamicUser= is enabled, PrivateTmp=true is implied (and cannot be turned off).
+      # so disable them unless PrivateTmp=true is explicitely set.
+      ${lib.optionalString (!cfg.serviceConfig.PrivateTmp) ''
+        echo "InaccessiblePaths=-+/tmp" >> "$serviceFile"
+        echo "InaccessiblePaths=-+/var/tmp" >> "$serviceFile"
       ''}
 
       while read storePath; do

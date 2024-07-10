@@ -1,15 +1,16 @@
-{ lib
-, attrdict
-, buildPythonPackage
-, cairosvg
-, fetchPypi
-, pillow
-, pytestCheckHook
-, pyyaml
-, setuptools-scm
-, six
-, svgwrite
-, xmldiff
+{
+  lib,
+  attrdict,
+  buildPythonPackage,
+  cairosvg,
+  fetchPypi,
+  pillow,
+  pytestCheckHook,
+  pyyaml,
+  setuptools-scm,
+  six,
+  svgwrite,
+  xmldiff,
 }:
 
 buildPythonPackage rec {
@@ -22,9 +23,7 @@ buildPythonPackage rec {
     hash = "sha256-MntNXcpZPIElfCAv6lFvepCHR/sRUnw1nwNPW3r39Hs=";
   };
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
 
   propagatedBuildInputs = [
     attrdict
@@ -45,9 +44,7 @@ buildPythonPackage rec {
     "test_upstream"
   ];
 
-  pythonImportsCheck = [
-    "wavedrom"
-  ];
+  pythonImportsCheck = [ "wavedrom" ];
 
   meta = with lib; {
     description = "WaveDrom compatible Python command line";

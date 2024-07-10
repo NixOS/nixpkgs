@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     description = "Zoned block device manipulation library and tools";
     mainProgram = "zbd";
     homepage = "https://github.com/westerndigitalcorporation/libzbd";
-    maintainers = [ maintainers.fogti ];
+    maintainers = [ ];
     license = with licenses; [ lgpl3Plus gpl3Plus ];
     platforms = platforms.linux;
   };

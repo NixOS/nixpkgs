@@ -278,6 +278,9 @@ in
         "https://kea.readthedocs.io/en/kea-${package.version}/arm/agent.html"
       ];
 
+      wants = [
+        "network-online.target"
+      ];
       after = [
         "network-online.target"
         "time-sync.target"

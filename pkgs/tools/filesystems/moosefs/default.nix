@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     homepage = "https://moosefs.com";
     description = "Open Source, Petabyte, Fault-Tolerant, Highly Performing, Scalable Network Distributed File System";
     platforms = platforms.unix;
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     maintainers = [ maintainers.mfossen ];
   };
 }

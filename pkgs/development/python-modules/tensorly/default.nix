@@ -1,15 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, numpy
-, pytestCheckHook
-, pythonOlder
-, scipy
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  numpy,
+  pytestCheckHook,
+  pythonOlder,
+  scipy,
 }:
 
 buildPythonPackage rec {
   pname = "tensorly";
-  version = "0.8.1";
+  version = "0.8.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -18,7 +19,7 @@ buildPythonPackage rec {
     owner = pname;
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-hwpdExW/ESOavFkL3old1Efo5WC+PYmcgJp5/oLelaA=";
+    hash = "sha256-kYKyLY2V6M53co+26ZTZP4U6bHkFebKI5Uhh1x1/N58=";
   };
 
   propagatedBuildInputs = [
@@ -26,9 +27,7 @@ buildPythonPackage rec {
     scipy
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [
     "tensorly"
@@ -48,9 +47,7 @@ buildPythonPackage rec {
     "tensorly.contrib"
   ];
 
-  pytestFlagsArray = [
-    "tensorly"
-  ];
+  pytestFlagsArray = [ "tensorly" ];
 
   disabledTests = [
     # this can fail on hydra and other peoples machines, check with others before re-enabling

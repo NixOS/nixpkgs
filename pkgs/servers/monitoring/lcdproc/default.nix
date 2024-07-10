@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Client/server suite for controlling a wide variety of LCD devices";
     homepage = "https://lcdproc.org/";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ peterhoeg ];
     platforms = platforms.unix;
     # never built on aarch64-darwin since first introduction in nixpkgs

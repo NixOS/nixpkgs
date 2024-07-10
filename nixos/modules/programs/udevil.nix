@@ -1,14 +1,12 @@
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
   cfg = config.programs.udevil;
 
 in {
-  options.programs.udevil.enable = mkEnableOption "udevil, to mount filesystems without password";
+  options.programs.udevil.enable = lib.mkEnableOption "udevil, to mount filesystems without password";
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     security.wrappers.udevil =
       { setuid = true;
         owner = "root";

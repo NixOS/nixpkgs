@@ -1,12 +1,12 @@
 { lib, appimageTools, fetchurl }:
 
 let
-  version = "0.9.9.11";
+  version = "0.9.9.13";
   pname = "hifile";
 
   src = fetchurl {
     url = "https://www.hifile.app/files/HiFile-${version}.AppImage";
-    hash = "sha256-T/ig5Tfo58+yMp+kOEa96+QvABg6gTaIbdy53jWucvM=";
+    hash = "sha256-nZlPdl7D0UWtm8mFz4IDqmvGeBVc7mbeUpzyHrdDQtk=";
   };
 
   appimageContents = appimageTools.extractType2 {
@@ -17,8 +17,6 @@ in appimageTools.wrapType2 rec {
   inherit pname version src;
 
   extraInstallCommands = ''
-    mv $out/bin/${pname}-${version} $out/bin/${pname}
-
     install -m 444 -D ${appimageContents}/HiFile.desktop $out/share/applications/HiFile.desktop
     install -m 444 -D ${appimageContents}/HiFile.png $out/share/icons/hicolor/512x512/apps/HiFile.png
     substituteInPlace $out/share/applications/HiFile.desktop \

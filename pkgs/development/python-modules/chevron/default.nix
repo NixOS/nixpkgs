@@ -1,7 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, python
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  python,
 }:
 
 buildPythonPackage {
@@ -23,7 +24,7 @@ buildPythonPackage {
 
   meta = with lib; {
     homepage = "https://github.com/noahmorrison/chevron";
-    description = "A python implementation of the mustache templating language";
+    description = "Python implementation of the mustache templating language";
     mainProgram = "chevron";
     license = licenses.mit;
     maintainers = with maintainers; [ dhkl ];

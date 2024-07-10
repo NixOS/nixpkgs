@@ -1,17 +1,18 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
 
-# build-system
-, cython_3
+  # build-system
+  cython,
 
-# optional
-, numpy
+  # optional
+  numpy,
 
-# tests
-, hypothesis
-, pytest-cov
-, pytestCheckHook
+  # tests
+  hypothesis,
+  pytest-cov,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -26,33 +27,22 @@ buildPythonPackage rec {
     hash = "sha256-F52ly3NkrZ0H9XoomMqmWfLl+8X0z26Yx67DB8DUqyU=";
   };
 
-  nativeBuildInputs = [
-    cython_3
-  ];
+  nativeBuildInputs = [ cython ];
 
   postPatch = ''
     substituteInPlace pytest.ini \
       --replace "--cov=ndindex/ --cov-report=term-missing --flakes" ""
   '';
 
-  passthru.optional-dependencies.arrays = [
-    numpy
-  ];
+  passthru.optional-dependencies.arrays = [ numpy ];
 
-  pythonImportsCheck = [
-    "ndindex"
-  ];
+  pythonImportsCheck = [ "ndindex" ];
 
   nativeCheckInputs = [
     hypothesis
     pytest-cov # uses cov markers
     pytestCheckHook
   ] ++ passthru.optional-dependencies.arrays;
-
-  pytestFlagsArray = [
-    # pytest.PytestRemovedIn8Warning: Passing None has been deprecated.
-    "--deselect=ndindex/tests/test_ndindex.py::test_ndindex_invalid"
-  ];
 
   meta = with lib; {
     description = "";

@@ -1,17 +1,17 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, furl
-, hatchling
-, jsonschema
-, pytest-asyncio
-, pytest-httpbin
-, pytestCheckHook
-, pytest_7
-, pythonOlder
-, requests
-, xmltodict
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchFromGitHub,
+  furl,
+  hatchling,
+  jsonschema,
+  pytest-asyncio,
+  pytest-httpbin,
+  pytest7CheckHook,
+  pythonOlder,
+  requests,
+  xmltodict,
 }:
 
 buildPythonPackage rec {
@@ -28,9 +28,7 @@ buildPythonPackage rec {
     hash = "sha256-sdfkMvPSlVK7EoDUEuJbiuocOjGJygqiCiftrsjnDhU=";
   };
 
-  nativeBuildInputs = [
-    hatchling
-  ];
+  nativeBuildInputs = [ hatchling ];
 
   propagatedBuildInputs = [
     aiohttp
@@ -43,12 +41,10 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytest-asyncio
     pytest-httpbin
-    (pytestCheckHook.override { pytest = pytest_7; })
+    pytest7CheckHook
   ];
 
-  pythonImportsCheck = [
-    "pook"
-  ];
+  pythonImportsCheck = [ "pook" ];
 
   disabledTestPaths = [
     # Don't test integrations

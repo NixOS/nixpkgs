@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation rec {
   pname = "aws-c-sdkutils";
-  version = "0.1.12";
+  version = "0.1.16";
 
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = "aws-c-sdkutils";
     rev = "v${version}";
-    sha256 = "sha256-4YuOC90FBcuNYGBsqw3wKYNGkg3MssezvR8bu6BNGeM=";
+    hash = "sha256-ih7U2uP5FrBx6or1Rp/k+HWDE6evEZyNM//wsPxH9Qo=";
   };
 
   nativeBuildInputs = [

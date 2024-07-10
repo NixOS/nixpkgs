@@ -1,36 +1,37 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, substituteAll
-, fetchPypi
-, cython_3
-, fontconfig
-, freetype-py
-, hsluv
-, kiwisolver
-, libGL
-, numpy
-, oldest-supported-numpy
-, packaging
-, pythonOlder
-, setuptools
-, setuptools-scm
-, wheel
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  substituteAll,
+  fetchPypi,
+  cython,
+  fontconfig,
+  freetype-py,
+  hsluv,
+  kiwisolver,
+  libGL,
+  numpy,
+  oldest-supported-numpy,
+  packaging,
+  pythonOlder,
+  setuptools,
+  setuptools-scm,
+  wheel,
 }:
 
 buildPythonPackage rec {
   pname = "vispy";
-  version = "0.14.2";
+  version = "0.14.3";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-7ti0TW9ch70pWySqmi4OTm3GqQXM7gGy1ByPvwp2ez0=";
+    hash = "sha256-77u4R6kIuvfnFpq5vylhOKOTZPNn5ssKjsA61xaZ0x0=";
   };
 
-  patches = [
+  patches = lib.optionals (!stdenv.hostPlatform.isDarwin) [
     (substituteAll {
       src = ./library-paths.patch;
       fontconfig = "${fontconfig.lib}/lib/libfontconfig${stdenv.hostPlatform.extensions.sharedLibrary}";
@@ -39,16 +40,14 @@ buildPythonPackage rec {
   ];
 
   nativeBuildInputs = [
-    cython_3
+    cython
     oldest-supported-numpy
     setuptools
     setuptools-scm
     wheel
   ];
 
-  buildInputs = [
-    libGL
-  ];
+  buildInputs = [ libGL ];
 
   propagatedBuildInputs = [
     freetype-py
@@ -58,7 +57,7 @@ buildPythonPackage rec {
     packaging
   ];
 
-  doCheck = false;  # otherwise runs OSX code on linux.
+  doCheck = false; # otherwise runs OSX code on linux.
 
   pythonImportsCheck = [
     "vispy"

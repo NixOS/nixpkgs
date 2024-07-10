@@ -47,7 +47,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/asg017/sqlite-vss";
     changelog = "https://github.com/asg017/sqlite-vss/releases/tag/v${finalAttrs.version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ elohmeier ];
     platforms = platforms.unix;
   };
 })

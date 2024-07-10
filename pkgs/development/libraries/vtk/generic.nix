@@ -79,8 +79,10 @@ in stdenv.mkDerivation {
     "-DCMAKE_CXX_FLAGS=-fPIC"
     "-DVTK_MODULE_USE_EXTERNAL_vtkpng=ON"
     "-DVTK_MODULE_USE_EXTERNAL_vtktiff=1"
+    "-DVTK_MODULE_ENABLE_VTK_RenderingExternal=YES"
   ] ++ lib.optionals (!stdenv.isDarwin) [
     "-DOPENGL_INCLUDE_DIR=${libGL}/include"
+    "-DVTK_OPENGL_HAS_EGL=ON"
   ] ++ [
     "-DCMAKE_INSTALL_LIBDIR=lib"
     "-DCMAKE_INSTALL_INCLUDEDIR=include"
@@ -110,7 +112,7 @@ in stdenv.mkDerivation {
     description = "Open source libraries for 3D computer graphics, image processing and visualization";
     homepage = "https://www.vtk.org/";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ knedlsepp tfmoraes lheckemann ];
+    maintainers = with maintainers; [ knedlsepp tfmoraes ];
     platforms = with platforms; unix;
   };
 }

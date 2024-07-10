@@ -10,16 +10,16 @@
 
 buildGoModule rec {
   pname = "hugo";
-  version = "0.125.0";
+  version = "0.128.1";
 
   src = fetchFromGitHub {
     owner = "gohugoio";
     repo = "hugo";
     rev = "refs/tags/v${version}";
-    hash = "sha256-aPBS/8m57Dn8Uvem58KzaCZJ1Hn8doL1BsDdF7w5nJc=";
+    hash = "sha256-vSszDPyRvaWpf7m27R4rbS1R7z4vk3hHzn3I0siijTE=";
   };
 
-  vendorHash = "sha256-jGCHlAE5mSDKpZVWgjCEN51sL+3GR/C5ROI9065OhRU=";
+  vendorHash = "sha256-iNI/5uAYMG+bfndpD17dp1v3rGbFdHnG9oQv/grb/XY=";
 
   doCheck = false;
 
@@ -50,7 +50,7 @@ buildGoModule rec {
 
   meta = {
     changelog = "https://github.com/gohugoio/hugo/releases/tag/v${version}";
-    description = "A fast and modern static website engine";
+    description = "Fast and modern static website engine";
     homepage = "https://gohugo.io";
     license = lib.licenses.asl20;
     mainProgram = "hugo";

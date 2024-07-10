@@ -6,7 +6,7 @@
 , perlPackages
 , substituteAll
 , xorg
-, wrapGAppsHook
+, wrapGAppsHook3
 , gitUpdater
 }:
 
@@ -33,7 +33,7 @@ perlPackages.buildPerlPackage rec {
 
   nativeBuildInputs = [
     makeWrapper
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

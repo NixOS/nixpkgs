@@ -12,16 +12,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "gitu";
-  version = "0.16.0";
+  version = "0.22.1";
 
   src = fetchFromGitHub {
     owner = "altsem";
     repo = "gitu";
     rev = "v${version}";
-    hash = "sha256-ePyMyKCI8fHKfoNCMYyYeCPkyYF5KyMYaPrB1NtovCs=";
+    hash = "sha256-bvIks6MpKkTr5CdfzstNu+8yPaiWd6zhUdIZWrn1V78=";
   };
 
-  cargoHash = "sha256-1komuFSucXYdgeAFWeeuMmZYxb6Mzku7hdltDwKAa7A=";
+  cargoHash = "sha256-+B/omGci09CjrQkeKav5SVGTF5gIiBQIO/8VbSjsaj0=";
 
   nativeBuildInputs = [
     pkg-config
@@ -41,7 +41,7 @@ rustPlatform.buildRustPackage rec {
   ];
 
   meta = with lib; {
-    description = "A TUI Git client inspired by Magit";
+    description = "TUI Git client inspired by Magit";
     homepage = "https://github.com/altsem/gitu";
     changelog = "https://github.com/altsem/gitu/blob/${src.rev}/CHANGELOG.md";
     license = licenses.mit;

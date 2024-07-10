@@ -1,18 +1,19 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, numpy
-, pandas
-, pyarrow
-, pythonOlder
-, pytz
-, setuptools
-, tomlkit
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  numpy,
+  pandas,
+  pyarrow,
+  pythonOlder,
+  pytz,
+  setuptools,
+  tomlkit,
 }:
 
 buildPythonPackage rec {
   pname = "neo4j";
-  version = "5.19.0";
+  version = "5.22.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -21,7 +22,7 @@ buildPythonPackage rec {
     owner = "neo4j";
     repo = "neo4j-python-driver";
     rev = "refs/tags/${version}";
-    hash = "sha256-bI6LIzh2+Kf6IIWEt1vT0E821lAPy/Nj2hkeAnRfV4M=";
+    hash = "sha256-/yilbKui0D49zviNM9MI5ElGAYPB3MlbMgpDyI1kVX8=";
   };
 
   postPatch = ''
@@ -32,9 +33,7 @@ buildPythonPackage rec {
       --replace-fail '#readme = "README.rst"' 'version = "${version}"'
   '';
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     pytz
@@ -42,24 +41,18 @@ buildPythonPackage rec {
   ];
 
   passthru.optional-dependencies = {
-    numpy = [
-      numpy
-    ];
+    numpy = [ numpy ];
     pandas = [
       numpy
       pandas
     ];
-    pyarrow = [
-      pyarrow
-    ];
+    pyarrow = [ pyarrow ];
   };
 
   # Missing dependencies
   doCheck = false;
 
-  pythonImportsCheck = [
-    "neo4j"
-  ];
+  pythonImportsCheck = [ "neo4j" ];
 
   meta = with lib; {
     description = "Neo4j Bolt Driver for Python";

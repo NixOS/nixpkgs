@@ -1,7 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytest7CheckHook,
 }:
 
 buildPythonPackage rec {
@@ -14,7 +15,7 @@ buildPythonPackage rec {
     hash = "sha256-QzTA/f401OiIzw7YVJaMnfFPClR9+Qmnf0Y0+f/mJuY=";
   };
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytest7CheckHook ];
   pytestFlagsArray = [ "razdel" ];
   pythonImportsCheck = [ "razdel" ];
 

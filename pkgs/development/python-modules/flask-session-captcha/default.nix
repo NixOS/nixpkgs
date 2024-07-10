@@ -43,7 +43,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "flask_session_captcha" ];
 
   meta = with lib; {
-    description = "A captcha implemention for flask";
+    description = "Captcha implemention for flask";
     homepage = "https://github.com/Tethik/flask-session-captcha";
     changelog = "https://github.com/Tethik/flask-session-captcha/releases/tag/v${version}";
     license = licenses.mit;

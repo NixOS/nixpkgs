@@ -4,7 +4,7 @@
 , glib
 , meson
 , ninja
-, wrapGAppsHook
+, wrapGAppsHook3
 , desktop-file-utils
 , gobject-introspection
 , gtk3
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     glib
     meson
     ninja
-    wrapGAppsHook
+    wrapGAppsHook3
     python3.pkgs.wrapPython
     python3
     desktop-file-utils

@@ -1,5 +1,9 @@
 # Patched lldb for Rust language support.
-{ fetchFromGitHub, runCommand, llvmPackages }:
+{
+  fetchFromGitHub,
+  runCommand,
+  llvmPackages,
+}:
 let
   llvmSrc = fetchFromGitHub {
     owner = "vadimcn";
@@ -8,8 +12,9 @@ let
     rev = "4c267c83cbb55fedf2e0b89644dc1db320fdfde7";
     hash = "sha256-jM//ej6AxnRYj+8BAn4QrxHPT6HiDzK5RqHPSg3dCcw=";
   };
-in (llvmPackages.lldb.overrideAttrs (oldAttrs: rec {
-  passthru = (oldAttrs.passthru or {}) // {
+in
+(llvmPackages.lldb.overrideAttrs (oldAttrs: rec {
+  passthru = (oldAttrs.passthru or { }) // {
     inherit llvmSrc;
   };
 
@@ -23,7 +28,8 @@ in (llvmPackages.lldb.overrideAttrs (oldAttrs: rec {
     echo "'lldb --version' returns: $versionOutput"
     echo "$versionOutput" | grep -q 'rust-enabled'
   '';
-})).override({
-  monorepoSrc = llvmSrc;
-  libllvm = llvmPackages.libllvm.override({ monorepoSrc = llvmSrc; });
-})
+})).override
+  ({
+    monorepoSrc = llvmSrc;
+    libllvm = llvmPackages.libllvm.override ({ monorepoSrc = llvmSrc; });
+  })

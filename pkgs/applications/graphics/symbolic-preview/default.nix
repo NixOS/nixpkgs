@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   pname = "symbolic-preview";
-  version = "0.0.3";
+  version = "0.0.9";
 
   src = fetchurl {
-    url = "https://gitlab.gnome.org/World/design/symbolic-preview/uploads/df71a2eee9ea0c90b3d146e7286fec42/symbolic-preview-${version}.tar.xz";
-    sha256 = "08g2sbdb1x5z26mi68nmciq6xwv0chvxw6anj1qdfh7npsg0dm4c";
+    url = "https://gitlab.gnome.org/World/design/symbolic-preview/uploads/e2fed158fc0d267f2051302bcf14848b/symbolic-preview-${version}.tar.xz";
+    hash = "sha256-kx+70LCQzzWAw2Xd3fKGq941540IM3Y1+r4Em4MNWbw=";
   };
 
   nativeBuildInputs = [

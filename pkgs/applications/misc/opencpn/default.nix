@@ -108,12 +108,13 @@ stdenv.mkDerivation (finalAttrs: {
     wxGTK32
   ] ++ lib.optionals stdenv.isLinux [
     alsa-utils
-    elfutils
     libselinux
     libsepol
     util-linux
     xorg.libXdmcp
     xorg.libXtst
+  ] ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform elfutils) [
+    elfutils
   ] ++ lib.optionals stdenv.isDarwin [
     lame
   ];
@@ -133,7 +134,7 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = true;
 
   meta = with lib; {
-    description = "A concise ChartPlotter/Navigator";
+    description = "Concise ChartPlotter/Navigator";
     maintainers = with maintainers; [ kragniz lovesegfault ];
     platforms = platforms.unix;
     license = licenses.gpl2Plus;

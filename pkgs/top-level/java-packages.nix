@@ -99,6 +99,7 @@ in {
     corretto11 = callPackage ../development/compilers/corretto/11.nix { };
     corretto17 = callPackage ../development/compilers/corretto/17.nix { };
     corretto19 = callPackage ../development/compilers/corretto/19.nix { };
+    corretto21 = callPackage ../development/compilers/corretto/21.nix { };
 
     openjdk8-bootstrap = mkBootstrap adoptopenjdk-8
       ../development/compilers/openjdk/bootstrap.nix
@@ -226,7 +227,7 @@ in {
       ../development/compilers/openjdk/22.nix
       ../development/compilers/zulu/22.nix
       {
-        openjdk22-bootstrap = temurin-bin.jdk-21;
+        openjdk22-bootstrap = temurin-bin.jdk-22;
         openjfx = openjfx22;
       };
 

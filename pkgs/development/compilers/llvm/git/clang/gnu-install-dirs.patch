@@ -1,5 +1,5 @@
 diff --git a/cmake/modules/AddClang.cmake b/cmake/modules/AddClang.cmake
-index 75b0080f6715..c895b884cd27 100644
+index 75b0080f6..c895b884c 100644
 --- a/cmake/modules/AddClang.cmake
 +++ b/cmake/modules/AddClang.cmake
 @@ -119,8 +119,8 @@ macro(add_clang_library name)
@@ -14,22 +14,22 @@ index 75b0080f6715..c895b884cd27 100644
  
          if (NOT LLVM_ENABLE_IDE)
 diff --git a/lib/Headers/CMakeLists.txt b/lib/Headers/CMakeLists.txt
-index f2b0c5cddcbb..52f37fc368ce 100644
+index e6ae4e19e..5ef01aea2 100644
 --- a/lib/Headers/CMakeLists.txt
 +++ b/lib/Headers/CMakeLists.txt
-@@ -473,6 +473,7 @@ add_header_target("windows-resource-headers" ${windows_only_files})
- add_header_target("utility-resource-headers" ${utility_files})
+@@ -337,6 +337,7 @@ set(llvm_libc_wrapper_files
  
- get_clang_resource_dir(header_install_dir SUBDIR include)
+ include(GetClangResourceDir)
+ get_clang_resource_dir(output_dir PREFIX ${LLVM_LIBRARY_OUTPUT_INTDIR}/.. SUBDIR include)
 +set(header_install_dir ${CMAKE_INSTALL_LIBDIR}${LLVM_LIBDIR_SUFFIX}/clang/${CLANG_VERSION_MAJOR}/include)
+ set(out_files)
+ set(generated_files)
  
- #############################################################
- # Install rules for the catch-all clang-resource-headers target
 diff --git a/tools/libclang/CMakeLists.txt b/tools/libclang/CMakeLists.txt
-index 4f23065a2472..6a0f55991e24 100644
+index b5b6d2807..6b592d255 100644
 --- a/tools/libclang/CMakeLists.txt
 +++ b/tools/libclang/CMakeLists.txt
-@@ -234,7 +234,7 @@ foreach(PythonVersion ${CLANG_PYTHON_BINDINGS_VERSIONS})
+@@ -246,7 +246,7 @@ foreach(PythonVersion ${CLANG_PYTHON_BINDINGS_VERSIONS})
            COMPONENT
              libclang-python-bindings
            DESTINATION
@@ -39,7 +39,7 @@ index 4f23065a2472..6a0f55991e24 100644
  if(NOT LLVM_ENABLE_IDE)
    add_custom_target(libclang-python-bindings)
 diff --git a/tools/scan-build-py/CMakeLists.txt b/tools/scan-build-py/CMakeLists.txt
-index 3aca22c0b0a8..3115353e3fe3 100644
+index 3aca22c0b..3115353e3 100644
 --- a/tools/scan-build-py/CMakeLists.txt
 +++ b/tools/scan-build-py/CMakeLists.txt
 @@ -88,7 +88,7 @@ foreach(lib ${LibScanbuild})

@@ -13,7 +13,10 @@
 , unzip
 , pkgs
 , pkgsBuildHost
-
+, pipewire
+, libsecret
+, libpulseaudio
+, speechd
 , info
 }:
 
@@ -46,7 +49,7 @@ in (chromium.override { upstream-info = info.chromium; }).mkDerivation (base: {
 
   src = null;
 
-  patches = base.patches ++ lib.optional (lib.versionAtLeast info.version "29")
+  patches = base.patches ++ lib.optional (lib.versionOlder info.version "30")
     (substituteAll {
       # disable a component that requires CIPD blobs
       name = "disable-screen-ai.patch";
@@ -169,10 +172,8 @@ in (chromium.override { upstream-info = info.chromium; }).mkDerivation (base: {
     use_perfetto_client_library = false;
     v8_builtins_profiling_log_file = "";
     enable_dangling_raw_ptr_checks = false;
-  } // lib.optionalAttrs (lib.versionAtLeast info.version "28") {
     dawn_use_built_dxc = false;
     v8_enable_private_mapping_fork_optimization = true;
-  } // lib.optionalAttrs (lib.versionAtLeast info.version "29") {
     v8_expose_public_symbols = true;
   } // {
 
@@ -188,6 +189,23 @@ in (chromium.override { upstream-info = info.chromium; }).mkDerivation (base: {
     unzip -d $libExecPath out/Release/dist.zip
 
     runHook postInstall
+  '';
+
+  postFixup =
+    let
+      libPath = lib.makeLibraryPath [
+        libnotify
+        pipewire
+        stdenv.cc.cc.lib
+        libsecret
+        libpulseaudio
+        speechd
+      ];
+    in
+  base.postFixup + ''
+    patchelf \
+      --add-rpath "${libPath}" \
+      $out/libexec/electron/electron
   '';
 
   requiredSystemFeatures = [ "big-parallel" ];
@@ -216,7 +234,7 @@ in (chromium.override { upstream-info = info.chromium; }).mkDerivation (base: {
     homepage = "https://github.com/electron/electron";
     platforms = lib.platforms.linux;
     license = licenses.mit;
-    maintainers = with maintainers; [ yayayayaka yuka ];
+    maintainers = with maintainers; [ yayayayaka teutat3s ];
     mainProgram = "electron";
     hydraPlatforms = lib.optionals (!(hasInfix "alpha" info.version) && !(hasInfix "beta" info.version)) ["aarch64-linux" "x86_64-linux"];
     timeout = 172800; # 48 hours (increased from the Hydra default of 10h)

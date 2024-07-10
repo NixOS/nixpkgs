@@ -1,10 +1,8 @@
 { stdenv
 , lib
 , fetchurl
-, fetchpatch
 , fixDarwinDylibNames
 , pkgsStatic
-, imagemagick_light
 }:
 
 stdenv.mkDerivation rec {
@@ -21,17 +19,15 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals stdenv.hostPlatform.isMinGW [
     # Build dll libraries.
     (fetchurl {
-      url = "https://aur.archlinux.org/cgit/aur.git/plain/001-mingw-build.patch?h=mingw-w64-giflib&id=4cf1e519bcf51338dc607d23388fca47d71790c0";
-      sha256 = "KyJi3eqH/Ae+guEK6znraZI5+IPImaoYoW5NTkCvjsg=";
+      url = "https://aur.archlinux.org/cgit/aur.git/plain/001-mingw-build.patch?h=mingw-w64-giflib&id=b7311edf54824ac797c7916cd3ddc3a4b2368a19";
+      hash = "sha256-bBx7lw7FWtxZJ+E9AAbKIpCGcJnS5lrGpjYcv/zBtKk=";
     })
 
     # Install executables.
     ./mingw-install-exes.patch
   ];
 
-  nativeBuildInputs = [
-    imagemagick_light
-  ] ++ lib.optionals stdenv.isDarwin [
+  nativeBuildInputs = lib.optionals stdenv.isDarwin [
     fixDarwinDylibNames
   ];
 
@@ -39,7 +35,11 @@ stdenv.mkDerivation rec {
     "PREFIX=${builtins.placeholder "out"}"
   ];
 
-  postPatch = lib.optionalString stdenv.hostPlatform.isStatic ''
+  postPatch = ''
+    # we don't want to build HTML documentation
+    substituteInPlace doc/Makefile \
+      --replace-fail "all: allhtml manpages" "all: manpages"
+  '' + lib.optionalString stdenv.hostPlatform.isStatic ''
     # Upstream build system does not support NOT building shared libraries.
     sed -i '/all:/ s/$(LIBGIFSO)//' Makefile
     sed -i '/all:/ s/$(LIBUTILSO)//' Makefile
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = {
-    description = "A library for reading and writing gif images";
+    description = "Library for reading and writing gif images";
     homepage = "https://giflib.sourceforge.net/";
     platforms = lib.platforms.unix ++ lib.platforms.windows;
     license = lib.licenses.mit;

@@ -1,5 +1,16 @@
-{ lib, stdenv, cmake, rocksdb, rapidjson, pkg-config, fetchFromGitHub, zlib }:
+{ lib
+, stdenv
+, cmake
+, rocksdb_8_3
+, rapidjson
+, pkg-config
+, fetchFromGitHub
+, zlib
+}:
 
+let
+  rocksdb = rocksdb_8_3;
+in
 stdenv.mkDerivation rec {
   pname = "sortmerna";
   version = "4.2.0";

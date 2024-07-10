@@ -1,16 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, cliff
-, fixtures
-, future
-, pbr
-, setuptools
-, subunit
-, testtools
-, tomlkit
-, voluptuous
-, callPackage
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  cliff,
+  fixtures,
+  future,
+  pbr,
+  setuptools,
+  subunit,
+  testtools,
+  tomlkit,
+  voluptuous,
+  callPackage,
 }:
 
 buildPythonPackage rec {
@@ -55,7 +56,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "stestr" ];
 
   meta = with lib; {
-    description = "A parallel Python test runner built around subunit";
+    description = "Parallel Python test runner built around subunit";
     mainProgram = "stestr";
     homepage = "https://github.com/mtreinish/stestr";
     license = licenses.asl20;

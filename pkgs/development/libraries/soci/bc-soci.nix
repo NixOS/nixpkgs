@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "Database access library for C++. Belledonne Communications' fork for Linphone.";
+    description = "Database access library for C++. Belledonne Communications' fork for Linphone";
     homepage = "https://gitlab.linphone.org/BC/public/external/soci";
     license = licenses.boost;
     platforms = platforms.all;

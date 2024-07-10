@@ -27,7 +27,7 @@ in
       sessionPath = mkOption {
         default = [];
         type = types.listOf types.package;
-        example = literalExpression "[ pkgs.gnome.gpaste ]";
+        example = literalExpression "[ pkgs.gpaste ]";
         description = ''
           Additional list of packages to be added to the session search path.
           Useful for GSettings-conditional autostart.
@@ -116,7 +116,7 @@ in
       services.touchegg.enable = mkDefault true;
       services.udisks2.enable = true;
       services.upower.enable = mkDefault config.powerManagement.enable;
-      services.xserver.libinput.enable = mkDefault true;
+      services.libinput.enable = mkDefault true;
       services.xserver.updateDbusEnvironment = true;
       networking.networkmanager.enable = mkDefault true;
 
@@ -157,13 +157,14 @@ in
 
         # packages
         nemo-with-extensions
+        gnome-online-accounts-gtk
         cinnamon-control-center
         cinnamon-settings-daemon
         libgnomekbd
 
         # theme
-        gnome.adwaita-icon-theme
-        gnome.gnome-themes-extra
+        adwaita-icon-theme
+        gnome-themes-extra
         gtk3.out
 
         # other
@@ -228,12 +229,11 @@ in
     })
 
     (mkIf serviceCfg.apps.enable {
-      programs.geary.enable = mkDefault (notExcluded pkgs.gnome.geary);
-      programs.gnome-disks.enable = mkDefault (notExcluded pkgs.gnome.gnome-disk-utility);
-      programs.gnome-terminal.enable = mkDefault (notExcluded pkgs.gnome.gnome-terminal);
-      programs.file-roller.enable = mkDefault (notExcluded pkgs.gnome.file-roller);
+      programs.gnome-disks.enable = mkDefault (notExcluded pkgs.gnome-disk-utility);
+      programs.gnome-terminal.enable = mkDefault (notExcluded pkgs.gnome-terminal);
+      programs.file-roller.enable = mkDefault (notExcluded pkgs.file-roller);
 
-      environment.systemPackages = with pkgs // pkgs.gnome // pkgs.cinnamon; utils.removePackagesByName [
+      environment.systemPackages = with pkgs // pkgs.cinnamon; utils.removePackagesByName [
         # cinnamon team apps
         bulky
         warpinator
@@ -246,7 +246,6 @@ in
         pix
 
         # external apps shipped with linux-mint
-        hexchat
         gnome-calculator
         gnome-calendar
         gnome-screenshot

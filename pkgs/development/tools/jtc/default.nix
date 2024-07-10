@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     mainProgram = "jtc";
     homepage = "https://github.com/ldn-softdev/jtc";
     license = licenses.mit;
-    maintainers = [ maintainers.marsam ];
+    maintainers = [ ];
     platforms = platforms.all;
   };
 }

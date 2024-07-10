@@ -1,7 +1,10 @@
-{ lib, stdenv, mkDerivation
-, bsdSetupHook, freebsdSetupHook
-, makeMinimal, install, mandoc, groff
-, compatIfNeeded, libelf, libdwarf, zlib, libspl
+{
+  lib,
+  mkDerivation,
+  compatIfNeeded,
+  libdwarf,
+  zlib,
+  libspl,
 }:
 
 mkDerivation {
@@ -15,14 +18,18 @@ mkDerivation {
   ];
   OPENSOLARIS_USR_DISTDIR = "$(SRCTOP)/cddl/contrib/opensolaris";
   OPENSOLARIS_SYS_DISTDIR = "$(SRCTOP)/sys/cddl/contrib/opensolaris";
-  nativeBuildInputs = [
-    bsdSetupHook freebsdSetupHook
-    makeMinimal install mandoc groff
 
-    # flex byacc file2c
+  makeFlags = [
+    "STRIP=-s"
+    "MK_WERROR=no"
+    "MK_TESTS=no"
   ];
+
   buildInputs = compatIfNeeded ++ [
-    libelf libdwarf zlib libspl
+    libdwarf
+    zlib
+    libspl
   ];
+
   meta.license = lib.licenses.cddl;
 }

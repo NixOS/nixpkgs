@@ -48,7 +48,7 @@ python3Packages.buildPythonApplication rec {
   '';
 
   meta = with lib; {
-    description = "A real-time audio analyzer";
+    description = "Real-time audio analyzer";
     mainProgram = "friture";
     homepage = "https://friture.org/";
     license = licenses.gpl3;

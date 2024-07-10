@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl }:
+{ lib, stdenv, fetchurl, updateAutotoolsGnuConfigScriptsHook }:
 
 stdenv.mkDerivation rec {
   pname = "mpdecimal";
@@ -9,6 +9,8 @@ stdenv.mkDerivation rec {
     url = "https://www.bytereef.org/software/mpdecimal/releases/mpdecimal-${version}.tar.gz";
     hash = "sha256-lCRFwyRbInMP1Bpnp8XCMdEcsbmTa5wPdjNPt9C0Row=";
   };
+
+  nativeBuildInputs = [ updateAutotoolsGnuConfigScriptsHook ];
 
   configureFlags = [ "LD=${stdenv.cc.targetPrefix}cc" ];
 

@@ -1,8 +1,10 @@
-{ lib, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, pytestCheckHook
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -17,9 +19,7 @@ buildPythonPackage rec {
     hash = "sha256-p0Pd9g+nLoT+oruthwjBn2E9rznvcx35VmzOAce2iTY=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   doCheck = !stdenv.isDarwin;
 
@@ -27,9 +27,7 @@ buildPythonPackage rec {
     export HOME=$TMPDIR
   '';
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     description = "Send file to trash natively under macOS, Windows and Linux";

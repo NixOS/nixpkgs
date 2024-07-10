@@ -1,5 +1,5 @@
 {
-  mkDerivation, fetchpatch,
+  mkDerivation,
   extra-cmake-modules,
   attica, karchive, kcompletion, kconfig, kcoreaddons, ki18n, kiconthemes,
   kio, kitemviews, kpackage, kservice, ktextwidgets, kwidgetsaddons, kxmlgui, qtbase,

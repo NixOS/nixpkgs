@@ -115,8 +115,7 @@ in rec {
   };
 
   rocgdb = callPackage ./rocgdb {
-    inherit rocmUpdateScript;
-    elfutils = elfutils.override { enableDebuginfod = true; };
+    inherit rocmUpdateScript rocdbgapi;
     stdenv = llvm.rocmClangStdenv;
   };
 
@@ -194,7 +193,7 @@ in rec {
   };
 
   rocblas = callPackage ./rocblas {
-    inherit rocblas rocmUpdateScript rocm-cmake clr tensile;
+    inherit rocmUpdateScript rocm-cmake clr tensile;
     inherit (llvm) openmp;
     stdenv = llvm.rocmClangStdenv;
   };

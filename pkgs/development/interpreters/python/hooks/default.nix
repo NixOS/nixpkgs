@@ -191,10 +191,12 @@ in {
 
   setuptoolsBuildHook = callPackage ({ makePythonHook, setuptools, wheel }:
     makePythonHook {
-      name = "setuptools-setup-hook";
+      name = "setuptools-build-hook";
       propagatedBuildInputs = [ setuptools wheel ];
       substitutions = {
-        inherit pythonInterpreter pythonSitePackages setuppy;
+        inherit pythonInterpreter setuppy;
+        # python2.pkgs.setuptools does not support parallelism
+        setuptools_has_parallel = setuptools != null && lib.versionAtLeast setuptools.version "69";
       };
     } ./setuptools-build-hook.sh) {};
 

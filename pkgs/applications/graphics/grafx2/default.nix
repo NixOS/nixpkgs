@@ -57,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "http://grafx2.eu/";
-    description = "The ultimate 256-color painting program";
+    description = "Ultimate 256-color painting program";
     longDescription = ''
       GrafX2 is a bitmap paint program inspired by the Amiga programs ​Deluxe
       Paint and Brilliance. Specialized in 256-color drawing, it includes a very

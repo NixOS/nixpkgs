@@ -52,7 +52,7 @@ following options:
 
 ```nix
 {
-  services.anki-sync-server.host = "0.0.0.0";
+  services.anki-sync-server.address = "0.0.0.0";
   services.anki-sync-server.openFirewall = true;
 }
 ```

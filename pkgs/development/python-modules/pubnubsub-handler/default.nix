@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pubnub
-, pycryptodomex
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pubnub,
+  pycryptodomex,
+  requests,
 }:
 
 buildPythonPackage rec {

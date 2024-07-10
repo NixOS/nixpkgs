@@ -1,17 +1,18 @@
-{ lib
-, buildPythonPackage
-, cheroot
-, colorama
-, fetchFromGitHub
-, fsspec
-, hatch-vcs
-, hatchling
-, httpx
-, pytest-xdist
-, pytestCheckHook
-, python-dateutil
-, pythonOlder
-, wsgidav
+{
+  lib,
+  buildPythonPackage,
+  cheroot,
+  colorama,
+  fetchFromGitHub,
+  fsspec,
+  hatch-vcs,
+  hatchling,
+  httpx,
+  pytest-xdist,
+  pytestCheckHook,
+  python-dateutil,
+  pythonOlder,
+  wsgidav,
 }:
 
 buildPythonPackage rec {
@@ -52,21 +53,15 @@ buildPythonPackage rec {
   ] ++ passthru.optional-dependencies.fsspec;
 
   passthru.optional-dependencies = {
-    fsspec = [
-      fsspec
-    ];
-    http2 = [
-      httpx.optional-dependencies.http2
-    ];
+    fsspec = [ fsspec ];
+    http2 = [ httpx.optional-dependencies.http2 ];
     all = [
       fsspec
       httpx.optional-dependencies.http2
     ];
   };
 
-  pythonImportsCheck = [
-    "webdav4"
-  ];
+  pythonImportsCheck = [ "webdav4" ];
 
   disabledTests = [
     # ValueError: Invalid dir_browser htdocs_path
@@ -78,7 +73,6 @@ buildPythonPackage rec {
     "test_cp_cli"
     "test_mv_cli"
     "test_sync_remote_to_local"
-
   ];
 
   disabledTestPaths = [

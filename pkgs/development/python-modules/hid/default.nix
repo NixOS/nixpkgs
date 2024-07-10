@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, hidapi
-, nose
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  hidapi,
 }:
 
 buildPythonPackage rec {
   pname = "hid";
   version = "1.0.6";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -25,6 +26,14 @@ buildPythonPackage rec {
     substituteInPlace hid/__init__.py \
       --replace-fail libhidapi $hidapi/libhidapi
   '';
+
+  build-system = [ setuptools ];
+
+  dependencies = [ hidapi ];
+
+  doCheck = false; # no tests
+
+  pythonImportsCheck = [ "hid" ];
 
   meta = with lib; {
     description = "hidapi bindings in ctypes";

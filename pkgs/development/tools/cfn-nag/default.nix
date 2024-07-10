@@ -13,7 +13,7 @@ bundlerEnv {
     description = "Linting tool for CloudFormation templates";
     homepage = "https://github.com/stelligent/cfn_nag";
     license = licenses.mit;
-    maintainers = with maintainers; [ wolfangaukang ];
+    maintainers = [ ];
     platforms = platforms.unix;
   };
 }

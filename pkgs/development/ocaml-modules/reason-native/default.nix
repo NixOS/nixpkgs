@@ -1,43 +1,47 @@
-{ newScope, lib, fetchFromGitHub, callPackage, buildDunePackage, atdgen, junit, qcheck-core, re, reason, reason-native, fetchpatch }:
+{
+  lib,
+  newScope,
+  fetchFromGitHub,
+  atdgen,
+  buildDunePackage,
+  junit,
+  ppxlib,
+  qcheck-core,
+  re,
+  reason,
+}:
 
-let
-  generic = (somePath:
-    let
-      prepkg = import somePath {
-        inherit callPackage cli buildDunePackage atdgen junit qcheck-core re reason fetchpatch;
-        inherit (reason-native) console file-context-printer fp pastel rely;
-      };
-    in
-      buildDunePackage
-        ({
-          version = "2022-08-31-a0ddab6";
-          src = fetchFromGitHub {
-            owner = "reasonml";
-            repo = "reason-native";
-            rev = "a0ddab6ab25237961e32d8732b0a222ec2372d4a";
-            hash = "sha256-s2N5OFTwIbKXcv05gQRaBMCHO1Mj563yhryPeo8jMh8=";
-          };
-          duneVersion = "3";
-          meta = with lib; {
-            description = "Libraries for building and testing native Reason programs";
-            downloadPage = "https://github.com/reasonml/reason-native";
-            homepage = "https://reason-native.com/";
-            license = licenses.mit;
-            maintainers = with maintainers; [ ];
-          } // (prepkg.meta or {});
-        } // prepkg)
-  );
-  cli = generic ./cli.nix; # Used only by Rely.
-in
-  lib.makeScope newScope (self: with self; {
-    console = generic ./console.nix;
-    dir = generic ./dir.nix;
-    file-context-printer = generic ./file-context-printer.nix;
-    fp = generic ./fp.nix;
-    pastel = generic ./pastel.nix;
-    pastel-console = generic ./pastel-console.nix;
-    qcheck-rely = generic ./qcheck-rely.nix;
-    refmterr = generic ./refmterr.nix;
-    rely = generic ./rely.nix;
-    rely-junit-reporter = generic ./rely-junit-reporter.nix;
-  })
+lib.makeScope newScope (self: {
+  inherit lib buildDunePackage re reason ppxlib;
+
+  # Upstream doesn't use tags, releases, or branches.
+  src = fetchFromGitHub {
+    owner = "reasonml";
+    repo = "reason-native";
+    rev = "20b1997b6451d9715dfdbeec86a9d274c7430ed8";
+    hash = "sha256-96Ucq70eSy6pqh5ne9xoODWe/nPuriZnFAdx0OkLVCs=";
+  };
+
+  cli = self.callPackage ./cli.nix { };
+  console = self.callPackage ./console.nix { };
+  dir = self.callPackage ./dir.nix { };
+  file-context-printer = self.callPackage ./file-context-printer.nix { };
+  frame = self.callPackage ./frame.nix { };
+  fp = self.callPackage ./fp.nix { };
+  fs = self.callPackage ./fs.nix { };
+  pastel = self.callPackage ./pastel.nix { };
+  pastel-console = self.callPackage ./pastel-console.nix { };
+  qcheck-rely = self.callPackage ./qcheck-rely.nix {
+    inherit qcheck-core;
+  };
+  refmterr = self.callPackage ./refmterr.nix {
+    inherit atdgen;
+  };
+  rely = self.callPackage ./rely.nix { };
+  rely-junit-reporter = self.callPackage ./rely-junit-reporter.nix {
+    inherit atdgen junit;
+  };
+  unicode-config = self.callPackage ./unicode-config.nix { };
+  unicode = self.callPackage ./unicode.nix { };
+  utf8 = self.callPackage ./utf8.nix { };
+})

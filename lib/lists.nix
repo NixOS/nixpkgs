@@ -4,7 +4,7 @@
 { lib }:
 let
   inherit (lib.strings) toInt;
-  inherit (lib.trivial) compare min id warn;
+  inherit (lib.trivial) compare min id warn pipe;
   inherit (lib.attrsets) mapAttrs;
 in
 rec {
@@ -332,6 +332,54 @@ rec {
     :::
   */
   imap1 = f: list: genList (n: f (n + 1) (elemAt list n)) (length list);
+
+  /**
+    Filter a list for elements that satisfy a predicate function.
+    The predicate function is called with both the index and value for each element.
+    It must return `true`/`false` to include/exclude a given element in the result.
+    This function is strict in the result of the predicate function for each element.
+    This function has O(n) complexity.
+
+    Also see [`builtins.filter`](https://nixos.org/manual/nix/stable/language/builtins.html#builtins-filter) (available as `lib.lists.filter`),
+    which can be used instead when the index isn't needed.
+
+    # Inputs
+
+    `ipred`
+
+    : The predicate function, it takes two arguments:
+      - 1. (int): the index of the element.
+      - 2. (a): the value of the element.
+
+      It must return `true`/`false` to include/exclude a given element from the result.
+
+    `list`
+
+    : The list to filter using the predicate.
+
+    # Type
+    ```
+    ifilter0 :: (int -> a -> bool) -> [a] -> [a]
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.lists.ifilter0` usage example
+
+    ```nix
+    ifilter0 (i: v: i == 0 || v > 2) [ 1 2 3 ]
+    => [ 1 3 ]
+    ```
+    :::
+  */
+  ifilter0 =
+    ipred:
+    input:
+    map (idx: elemAt input idx) (
+      filter (idx: ipred idx (elemAt input idx)) (
+        genList (x: x) (length input)
+      )
+    );
 
   /**
     Map and concatenate the result.
@@ -1688,16 +1736,32 @@ rec {
     ## `lib.lists.crossLists` usage example
 
     ```nix
-    crossLists (x:y: "${toString x}${toString y}") [[1 2] [3 4]]
+    crossLists (x: y: "${toString x}${toString y}") [[1 2] [3 4]]
     => [ "13" "14" "23" "24" ]
     ```
 
+    The following function call is equivalent to the one deprecated above:
+
+    ```nix
+    mapCartesianProduct (x: "${toString x.a}${toString x.b}") { a = [1 2]; b = [3 4]; }
+    => [ "13" "14" "23" "24" ]
+    ```
     :::
   */
   crossLists = warn
-    "lib.crossLists is deprecated, use lib.cartesianProductOfSets instead."
-    (f: foldl (fs: args: concatMap (f: map f args) fs) [f]);
+    ''lib.crossLists is deprecated, use lib.mapCartesianProduct instead.
 
+    For example, the following function call:
+
+    nix-repl> lib.crossLists (x: y: x+y) [[1 2] [3 4]]
+    [ 4 5 5 6 ]
+
+    Can now be replaced by the following one:
+
+    nix-repl> lib.mapCartesianProduct ({x,y}: x+y) { x = [1 2]; y = [3 4]; }
+    [ 4 5 5 6 ]
+    ''
+    (f: foldl (fs: args: concatMap (f: map f args) fs) [f]);
 
   /**
     Remove duplicate elements from the `list`. O(n^2) complexity.

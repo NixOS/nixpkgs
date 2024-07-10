@@ -5,8 +5,13 @@ let
     automountConfig
     makeUnit
     mountConfig
+    pathConfig
+    sliceConfig
+    socketConfig
     stage1ServiceConfig
     stage2ServiceConfig
+    targetConfig
+    timerConfig
     unitConfig
     ;
 
@@ -48,29 +53,32 @@ let
     ;
 in
 
-rec {
+{
   units = attrsOf (submodule ({ name, config, ... }: {
     options = concreteUnitOptions;
-    config = { unit = mkDefault (makeUnit name config); };
+    config = {
+      name = mkDefault name;
+      unit = mkDefault (makeUnit name config);
+    };
   }));
 
   services = attrsOf (submodule [ stage2ServiceOptions unitConfig stage2ServiceConfig ]);
   initrdServices = attrsOf (submodule [ stage1ServiceOptions unitConfig stage1ServiceConfig ]);
 
-  targets = attrsOf (submodule [ stage2CommonUnitOptions unitConfig ]);
-  initrdTargets = attrsOf (submodule [ stage1CommonUnitOptions unitConfig ]);
+  targets = attrsOf (submodule [ stage2CommonUnitOptions unitConfig targetConfig ]);
+  initrdTargets = attrsOf (submodule [ stage1CommonUnitOptions unitConfig targetConfig ]);
 
-  sockets = attrsOf (submodule [ stage2SocketOptions unitConfig ]);
-  initrdSockets = attrsOf (submodule [ stage1SocketOptions unitConfig ]);
+  sockets = attrsOf (submodule [ stage2SocketOptions unitConfig socketConfig]);
+  initrdSockets = attrsOf (submodule [ stage1SocketOptions unitConfig socketConfig ]);
 
-  timers = attrsOf (submodule [ stage2TimerOptions unitConfig ]);
-  initrdTimers = attrsOf (submodule [ stage1TimerOptions unitConfig ]);
+  timers = attrsOf (submodule [ stage2TimerOptions unitConfig timerConfig ]);
+  initrdTimers = attrsOf (submodule [ stage1TimerOptions unitConfig timerConfig ]);
 
-  paths = attrsOf (submodule [ stage2PathOptions unitConfig ]);
-  initrdPaths = attrsOf (submodule [ stage1PathOptions unitConfig ]);
+  paths = attrsOf (submodule [ stage2PathOptions unitConfig pathConfig ]);
+  initrdPaths = attrsOf (submodule [ stage1PathOptions unitConfig pathConfig ]);
 
-  slices = attrsOf (submodule [ stage2SliceOptions unitConfig ]);
-  initrdSlices = attrsOf (submodule [ stage1SliceOptions unitConfig ]);
+  slices = attrsOf (submodule [ stage2SliceOptions unitConfig sliceConfig ]);
+  initrdSlices = attrsOf (submodule [ stage1SliceOptions unitConfig sliceConfig ]);
 
   mounts = listOf (submodule [ stage2MountOptions unitConfig mountConfig ]);
   initrdMounts = listOf (submodule [ stage1MountOptions unitConfig mountConfig ]);

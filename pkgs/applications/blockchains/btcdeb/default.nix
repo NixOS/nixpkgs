@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation {
   pname = "btcdeb";
-  version = "0.3.20-unstable-2024-03-26";
+  version = "0.3.20-unstable-2024-04-09";
 
   src = fetchFromGitHub {
     owner = "bitcoin-core";
     repo = "btcdeb";
-    rev = "675b7820f0eec8a76f68ade7ea35974a561d49dd";
-    hash = "sha256-J9E0edRbFONMut1/ZFaUqgWAtEUifc+pmGypeUQ0m4c=";
+    rev = "e2c2e7b9fe2ecc0884129b53813a733f93a6e2c7";
+    hash = "sha256-heV5VByNZ/2doGVtYhGEei4fV4847UPVgOyU0PDDHc8=";
   };
 
   nativeBuildInputs = [ pkg-config autoreconfHook ];

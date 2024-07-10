@@ -1,7 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, mypy
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  mypy,
 }:
 
 buildPythonPackage rec {
@@ -14,13 +15,9 @@ buildPythonPackage rec {
     hash = "sha256-cPscCIJC8g4RAjJStWSM13+DH2ks2RDI+XE8wTXPjMg=";
   };
 
-  nativeBuildInputs = [
-    mypy
-  ];
+  nativeBuildInputs = [ mypy ];
 
-  pythonImportsCheck = [
-    "voluptuous-stubs"
-  ];
+  pythonImportsCheck = [ "voluptuous-stubs" ];
 
   doCheck = false;
 

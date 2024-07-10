@@ -32,7 +32,7 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "The full set of Faba monochrome panel icons";
+    description = "Full set of Faba monochrome panel icons";
     homepage = "https://snwh.org/moka";
     license = licenses.gpl3;
     # moka-icon-theme dependency is restricted to linux

@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "teensy-loader-cli";
-  version = "2.2";
+  version = "2.3";
 
   src = fetchFromGitHub {
     owner = "PaulStoffregen";
     repo = "teensy_loader_cli";
     rev = finalAttrs.version;
-    sha256 = "sha256-C9Qhd6LhAES7X0sh4rofjAM+gxwuosahVQHeR76LyIo=";
+    sha256 = "sha256-NYqCNWO/nHEuNc9eOzsUqJEHJtZ3XaNz1VYNbeuqEk8=";
   };
 
   nativeBuildInputs = [

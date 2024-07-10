@@ -49,7 +49,7 @@
 
   meta = with lib; {
     homepage = "http://tytel.org/helm";
-    description = "A free, cross-platform, polyphonic synthesizer";
+    description = "Free, cross-platform, polyphonic synthesizer";
     longDescription = ''
       A free, cross-platform, polyphonic synthesizer.
       Features:

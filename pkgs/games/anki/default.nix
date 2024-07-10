@@ -28,21 +28,20 @@
 
 let
   pname = "anki";
-  version = "23.12.1";
-  rev = "1a1d4d5419c6b57ef3baf99c9d2d9cf85d36ae0a";
+  version = "24.04";
+  rev = "429bc9e14cefb597646a0e1beac6ef140f226b6f";
 
   src = fetchFromGitHub {
     owner = "ankitects";
     repo = "anki";
     rev = version;
-    hash = "sha256-K38bhfU1076PxdKJFvnFb2w6Q9Q2MUmL+j8be3RZQYk=";
+    hash = "sha256-H/Y6ZEJ7meprk4SWIPkoABs6AV1CzbK2l22jEnMSvyk=";
     fetchSubmodules = true;
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "fsrs-0.1.0" = "sha256-KJgT01OmMbqgYFE5Fu8nblZl9rL5QVVMa2DNFsw6cdk=";
       "linkcheck-0.4.1" = "sha256-S93J1cDzMlzDjcvz/WABmv8CEC6x78E+f7nzhsN7NkE=";
       "percent-encoding-iri-2.2.0" = "sha256-kCBeS1PNExyJd4jWfDfctxq6iTdAq69jtxFQgCCQ8kQ=";
     };
@@ -51,7 +50,7 @@ let
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = "${src}/yarn.lock";
-    hash = "sha256-tOl+gLBE6SNPQvVWT/N7RKFaaP9SnpCBJf5dq2wCPuM=";
+    hash = "sha256-7yBN6si1Q+xvyosP7YnOw9ZfGcLZdy5ukXXFvvI20Js=";
   };
 
   anki-build-python = python3.withPackages (ps: with ps; [
@@ -155,22 +154,25 @@ python3.pkgs.buildPythonApplication {
 
   propagatedBuildInputs = with python3.pkgs; [
     # This rather long list came from running:
-    #    grep --no-filename -oE "^[^ =]*" python/{requirements.base.txt,requirements.bundle.txt,requirements.qt6_4.txt} | \
+    #    grep --no-filename -oE "^[^ =]*" python/{requirements.base.txt,requirements.bundle.txt,requirements.qt6_lin.txt} | \
     #      sort | uniq | grep -v "^#$"
     # in their repo at the git tag for this version
     # There's probably a more elegant way, but the above extracted all the
     # names, without version numbers, of their python dependencies. The hope is
     # that nixpkgs versions are "close enough"
     # I then removed the ones the check phase failed on (pythonCatchConflictsPhase)
+    attrs
     beautifulsoup4
+    blinker
+    build
     certifi
     charset-normalizer
     click
     colorama
     decorator
-    distro
     flask
     flask-cors
+    google-api-python-client
     idna
     importlib-metadata
     itsdangerous
@@ -179,21 +181,27 @@ python3.pkgs.buildPythonApplication {
     markdown
     markupsafe
     orjson
-    pep517
-    pyparsing
+    packaging
+    pip
+    pip-system-certs
+    pip-tools
+    protobuf
+    pyproject-hooks
     pyqt6
     pyqt6-sip
     pyqt6-webengine
     pyrsistent
     pysocks
-    python3.pkgs.protobuf
     requests
     send2trash
-    six
+    setuptools
     soupsieve
+    tomli
     urllib3
     waitress
     werkzeug
+    wheel
+    wrapt
     zipp
   ] ++ lib.optionals stdenv.isDarwin [
     AVKit

@@ -14,13 +14,13 @@
 
 buildGoModule rec {
   pname = "runc";
-  version = "1.1.12";
+  version = "1.1.13";
 
   src = fetchFromGitHub {
     owner = "opencontainers";
     repo = "runc";
     rev = "v${version}";
-    hash = "sha256-N77CU5XiGYIdwQNPFyluXjseTeaYuNJ//OsEUS0g/v0=";
+    hash = "sha256-RQsM8Q7HogDVGbNpen3wxXNGR9lfqmNhkXTRoC+LBk8=";
   };
 
   vendorHash = null;
@@ -52,7 +52,7 @@ buildGoModule rec {
 
   meta = with lib; {
     homepage = "https://github.com/opencontainers/runc";
-    description = "A CLI tool for spawning and running containers according to the OCI specification";
+    description = "CLI tool for spawning and running containers according to the OCI specification";
     license = licenses.asl20;
     maintainers = with maintainers; [ offline ] ++ teams.podman.members;
     platforms = platforms.linux;

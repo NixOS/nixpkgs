@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchpatch
-, fetchPypi
-, arrow
-, freezegun
-, jinja2
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchpatch,
+  fetchPypi,
+  arrow,
+  freezegun,
+  jinja2,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -26,9 +27,15 @@ buildPythonPackage rec {
     })
   ];
 
-  propagatedBuildInputs = [ arrow jinja2 ];
+  propagatedBuildInputs = [
+    arrow
+    jinja2
+  ];
 
-  nativeCheckInputs = [ freezegun pytestCheckHook ];
+  nativeCheckInputs = [
+    freezegun
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [ "jinja2_time" ];
 

@@ -1,15 +1,15 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, lsprotocol
-, poetry-core
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, pythonRelaxDepsHook
-, typeguard
-, websockets
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  lsprotocol,
+  poetry-core,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  typeguard,
+  websockets,
 }:
 
 buildPythonPackage rec {
@@ -33,7 +33,6 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     poetry-core
-    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [
@@ -42,9 +41,7 @@ buildPythonPackage rec {
   ];
 
   passthru.optional-dependencies = {
-    ws = [
-      websockets
-    ];
+    ws = [ websockets ];
   };
 
   nativeCheckInputs = [
@@ -60,9 +57,7 @@ buildPythonPackage rec {
     ulimit -n 1024
   '';
 
-  pythonImportsCheck = [
-    "pygls"
-  ];
+  pythonImportsCheck = [ "pygls" ];
 
   meta = with lib; {
     description = "Pythonic generic implementation of the Language Server Protocol";

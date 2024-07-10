@@ -79,7 +79,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with lib; {
-    description = "The Linux kernel as a library";
+    description = "Linux kernel as a library";
     longDescription = ''
       LKL (Linux Kernel Library) aims to allow reusing the Linux kernel code as
       extensively as possible with minimal effort and reduced maintenance

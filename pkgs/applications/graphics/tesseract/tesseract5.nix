@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config
-, curl, leptonica, libarchive, libpng, libtiff, icu, pango, opencl-headers, fetchpatch
+, curl, leptonica, libarchive, libpng, libtiff, icu, pango, opencl-headers
 , Accelerate, CoreGraphics, CoreVideo
 }:
 

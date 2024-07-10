@@ -1,16 +1,17 @@
-{ lib
-, buildPythonPackage
-, pytestCheckHook
-, fetchFromGitHub
-, fetchpatch
-, pythonOlder
-, setuptools-scm
-, setuptools
-, fast-histogram
-, matplotlib
-, numpy
-, wheel
-, pytest-mpl
+{
+  lib,
+  buildPythonPackage,
+  pytestCheckHook,
+  fetchFromGitHub,
+  fetchpatch,
+  pythonOlder,
+  setuptools-scm,
+  setuptools,
+  fast-histogram,
+  matplotlib,
+  numpy,
+  wheel,
+  pytest-mpl,
 }:
 
 buildPythonPackage rec {
@@ -42,7 +43,11 @@ buildPythonPackage rec {
     wheel
   ];
 
-  propagatedBuildInputs = [ matplotlib numpy fast-histogram ];
+  propagatedBuildInputs = [
+    matplotlib
+    numpy
+    fast-histogram
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook

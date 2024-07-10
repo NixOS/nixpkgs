@@ -25,7 +25,7 @@ buildPythonPackage rec {
   };
 
   meta = {
-    description = "A pdf converter for the ReportLab Toolkit";
+    description = "Pdf converter for the ReportLab Toolkit";
     homepage = "https://github.com/xhtml2pdf/xhtml2pdf";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ rprospero ];

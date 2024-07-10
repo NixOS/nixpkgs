@@ -1,9 +1,8 @@
 { config, lib, pkgs, options, ... }:
 
-with lib;
-
 let
   cfg = config.services.prometheus.exporters.dmarc;
+  inherit (lib) mkOption types optionalString;
 
   json = builtins.toJSON {
     inherit (cfg) folders port;

@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "lxcfs";
-  version = "6.0.0";
+  version = "6.0.1";
 
   src = fetchFromGitHub {
     owner = "lxc";
     repo = "lxcfs";
     rev = "v${version}";
-    sha256 = "sha256-Mx2ZTul3hUEL9SloYSOh+MGoc2QmZg88MTsfIOvaIZU=";
+    sha256 = "sha256-kJ9QaNI8v03E0//UyU6fsav1YGOlKGMxsbE8Pr1Dtic=";
   };
 
   patches = [

@@ -4,7 +4,7 @@
 , autoreconfHook
 , gettext
 , pkg-config
-, wrapGAppsHook
+, wrapGAppsHook3
 , sqlite
 , libpinyin
 , db
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     autoreconfHook
     gettext
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   configureFlags = [

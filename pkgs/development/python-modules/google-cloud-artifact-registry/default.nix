@@ -1,14 +1,15 @@
-{ buildPythonPackage
-, fetchPypi
-, google-api-core
-, google-auth
-, grpc-google-iam-v1
-, lib
-, proto-plus
-, protobuf
-, pytestCheckHook
-, pythonOlder
-, setuptools
+{
+  buildPythonPackage,
+  fetchPypi,
+  google-api-core,
+  google-auth,
+  grpc-google-iam-v1,
+  lib,
+  proto-plus,
+  protobuf,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -23,9 +24,7 @@ buildPythonPackage rec {
     hash = "sha256-wsSeFbtZHWXeoiyC2lUUjFE09xkZuu+OtNNb4dHLIM0=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     google-api-core
@@ -35,9 +34,7 @@ buildPythonPackage rec {
     protobuf
   ] ++ google-api-core.optional-dependencies.grpc;
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [
     "google.cloud.artifactregistry"

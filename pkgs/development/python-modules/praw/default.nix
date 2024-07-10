@@ -1,16 +1,17 @@
-{ lib
-, betamax
-, betamax-matchers
-, betamax-serializers
-, buildPythonPackage
-, fetchFromGitHub
-, mock
-, prawcore
-, pytestCheckHook
-, pythonOlder
-, requests-toolbelt
-, update-checker
-, websocket-client
+{
+  lib,
+  betamax,
+  betamax-matchers,
+  betamax-serializers,
+  buildPythonPackage,
+  fetchFromGitHub,
+  mock,
+  prawcore,
+  pytestCheckHook,
+  pythonOlder,
+  requests-toolbelt,
+  update-checker,
+  websocket-client,
 }:
 
 buildPythonPackage rec {
@@ -47,9 +48,7 @@ buildPythonPackage rec {
     "tests/integration"
   ];
 
-  pythonImportsCheck = [
-    "praw"
-  ];
+  pythonImportsCheck = [ "praw" ];
 
   meta = with lib; {
     description = "Python Reddit API wrapper";

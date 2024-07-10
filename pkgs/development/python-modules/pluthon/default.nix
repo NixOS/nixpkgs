@@ -1,12 +1,13 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, setuptools
-, pythonOlder
-# Python deps
-, uplc
-, graphlib-backport
-, ordered-set
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  setuptools,
+  pythonOlder,
+  # Python deps
+  uplc,
+  graphlib-backport,
+  ordered-set,
 }:
 
 buildPythonPackage rec {
@@ -26,7 +27,7 @@ buildPythonPackage rec {
     setuptools
     uplc
     ordered-set
-  ] ++ lib.optionals (pythonOlder "3.9") graphlib-backport;
+  ] ++ lib.optional (pythonOlder "3.9") graphlib-backport;
 
   pythonImportsCheck = [ "pluthon" ];
 

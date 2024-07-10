@@ -83,6 +83,8 @@ with pkgs;
     inherit gccTests;
   };
 
+  devShellTools = callPackage ../build-support/dev-shell-tools/tests { };
+
   stdenv-inputs = callPackage ./stdenv-inputs { };
   stdenv = callPackage ./stdenv { };
 

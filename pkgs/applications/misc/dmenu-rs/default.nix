@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "A pixel perfect port of dmenu, rewritten in Rust with extensive plugin support";
+    description = "Pixel perfect port of dmenu, rewritten in Rust with extensive plugin support";
     homepage = "https://github.com/Shizcow/dmenu-rs";
     license = with licenses; [ gpl3Only ];
     maintainers = with maintainers; [ benjaminedwardwebb ];

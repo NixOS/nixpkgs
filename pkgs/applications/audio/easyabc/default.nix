@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, fetchPypi, substituteAll, python39, fluidsynth, soundfont-fluid, wrapGAppsHook, abcmidi, abcm2ps, ghostscript }:
+{ lib, fetchFromGitHub, fetchPypi, substituteAll, python39, fluidsynth, soundfont-fluid, wrapGAppsHook3, abcmidi, abcm2ps, ghostscript }:
 
 let
   # requires python39 due to https://stackoverflow.com/a/71902541 https://github.com/jwdj/EasyABC/issues/52
@@ -28,7 +28,7 @@ in python.pkgs.buildPythonApplication {
     hash = "sha256-leC3A4HQMeJNeZXArb3YAYr2mddGPcws618NrRh2Q1Y=";
   };
 
-  nativeBuildInputs = [ wrapGAppsHook ];
+  nativeBuildInputs = [ wrapGAppsHook3 ];
 
   propagatedBuildInputs = with python.pkgs; [
     cx-freeze

@@ -45,7 +45,7 @@ python3Packages.buildPythonApplication rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "A tool for monitoring webpages for updates";
+    description = "Tool for monitoring webpages for updates";
     mainProgram = "urlwatch";
     homepage = "https://thp.io/2008/urlwatch/";
     license = licenses.bsd3;

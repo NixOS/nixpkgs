@@ -143,4 +143,46 @@ in {
     };
   in
     expectFailure toplevel "Found duplicated packages in closure for dependency 'leaf'";
+
+  /*
+    Transitive conflict with multiple dependency chains leading to the
+    conflicting package.
+
+    Test sets up this dependency tree:
+
+      toplevel
+      ├── dep1
+      │   └── leaf
+      ├── dep2
+      │   └── leaf
+      └── dep3
+          └── leaf (customized version -> conflicting)
+  */
+  catches-conflict-multiple-chains = let
+    # package depending on dependency1, dependency2 and dependency3
+    toplevel = generatePythonPackage {
+      pname = "catches-conflict-multiple-chains";
+      propagatedBuildInputs = [ dep1 dep2 dep3 ];
+    };
+    # dep1 package depending on leaf
+    dep1 = generatePythonPackage {
+      pname = "dependency1";
+      propagatedBuildInputs = [ leaf ];
+    };
+    # dep2 package depending on leaf
+    dep2 = generatePythonPackage {
+      pname = "dependency2";
+      propagatedBuildInputs = [ leaf ];
+    };
+    # dep3 package depending on conflicting version of leaf
+    dep3 = generatePythonPackage {
+      pname = "dependency3";
+      propagatedBuildInputs = [ (customize leaf) ];
+    };
+    # some leaf package
+    leaf = generatePythonPackage {
+      pname = "leaf";
+    };
+  in
+    expectFailure toplevel "Found duplicated packages in closure for dependency 'leaf'";
 }

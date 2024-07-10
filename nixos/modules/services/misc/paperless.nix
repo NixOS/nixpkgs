@@ -203,9 +203,12 @@ in
       apply = pkg: pkg.override {
         tesseract5 = pkg.tesseract5.override {
           # always enable detection modules
+          # tesseract fails to build when eng is not present
           enableLanguages = if cfg.settings ? PAPERLESS_OCR_LANGUAGE then
-            [ "equ" "osd" ]
+            lists.unique (
+              [ "equ" "osd" "eng" ]
               ++ lib.splitString "+" cfg.settings.PAPERLESS_OCR_LANGUAGE
+            )
           else null;
         };
       };
@@ -222,7 +225,7 @@ in
       effectively never complete due to running into timeouts.
 
       This sets `OMP_NUM_THREADS` to `1` in order to mitigate the issue. See
-      https://github.com/NixOS/nixpkgs/issues/240591 for more information.
+      https://github.com/NixOS/nixpkgs/issues/240591 for more information
     '' // mkOption { default = true; };
   };
 

@@ -28,7 +28,7 @@ kaem.runCommand "${pname}-${version}" {
   passthru.CFLAGS = "-DHAVE_CONFIG_H=1 -I${mes-libc}/include -I${mes-libc}/include/linux/x86";
 
   meta = with lib; {
-    description = "The Mes C Library";
+    description = "Mes C Library";
     homepage = "https://www.gnu.org/software/mes";
     license = licenses.gpl3Plus;
     maintainers = teams.minimal-bootstrap.members;

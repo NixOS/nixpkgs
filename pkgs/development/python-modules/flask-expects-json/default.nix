@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, flask
-, jsonschema
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  flask,
+  jsonschema,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -23,13 +24,9 @@ buildPythonPackage rec {
     jsonschema
   ] ++ flask.optional-dependencies.async;
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "flask_expects_json"
-  ];
+  pythonImportsCheck = [ "flask_expects_json" ];
 
   disabledTests = [
     # https://github.com/Fischerfredl/flask-expects-json/issues/26
@@ -46,8 +43,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/fischerfredl/flask-expects-json";
-    description = "Decorator for REST endpoints in flask. Validate JSON request data.";
+    description = "Decorator for REST endpoints in flask. Validate JSON request data";
     license = licenses.mit;
-    maintainers = [];
+    maintainers = [ ];
   };
 }

@@ -8,13 +8,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "bbin";
-  version = "0.2.1";
+  version = "0.2.3";
 
   src = fetchFromGitHub {
     owner = "babashka";
     repo = "bbin";
     rev = "v${version}";
-    sha256 = "sha256-mF8+Fm1vwLUw5l2PqV+vFFlr6y2JpKBwc+J3PdKQ6Fo=";
+    sha256 = "sha256-tWk5HzDKff+wwqRjLYbjfio3aQC6Xz5vsMf/NLm+Scc=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

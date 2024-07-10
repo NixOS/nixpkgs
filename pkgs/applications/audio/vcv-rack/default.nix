@@ -7,7 +7,7 @@
 , ghc_filesystem
 , glew
 , glfw
-, gnome
+, zenity
 , gtk3-x11
 , imagemagick
 , jansson
@@ -24,7 +24,7 @@
 , rtmidi
 , speexdsp
 , stdenv
-, wrapGAppsHook
+, wrapGAppsHook3
 , zstd
 }:
 
@@ -173,7 +173,7 @@ stdenv.mkDerivation rec {
 
     # Fix reference to zenity
     substituteInPlace dep/osdialog/osdialog_zenity.c \
-      --replace 'zenityBin[] = "zenity"' 'zenityBin[] = "${gnome.zenity}/bin/zenity"'
+      --replace 'zenityBin[] = "zenity"' 'zenityBin[] = "${zenity}/bin/zenity"'
   '';
 
   nativeBuildInputs = [
@@ -183,7 +183,7 @@ stdenv.mkDerivation rec {
     libicns
     makeWrapper
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
   buildInputs = [
     alsa-lib
@@ -191,7 +191,7 @@ stdenv.mkDerivation rec {
     ghc_filesystem
     glew
     glfw
-    gnome.zenity
+    zenity
     gtk3-x11
     jansson
     libarchive
@@ -250,6 +250,7 @@ stdenv.mkDerivation rec {
     # no-derivatives clause
     license = with licenses; [ gpl3Plus cc-by-nc-40 unfreeRedistributable ];
     maintainers = with maintainers; [ nathyong jpotier ddelabru ];
+    mainProgram = "Rack";
     platforms = platforms.linux;
   };
 }

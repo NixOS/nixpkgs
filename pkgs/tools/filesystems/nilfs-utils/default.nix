@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     description = "NILFS utilities";
     maintainers = [ maintainers.raskin ];
     platforms = platforms.linux;
-    license =  with licenses; [ gpl2 lgpl21 ];
+    license =  with licenses; [ gpl2Plus lgpl21 ];
     downloadPage = "http://nilfs.sourceforge.net/en/download.html";
   };
 }

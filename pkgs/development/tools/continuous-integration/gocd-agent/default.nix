@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-L2MOkbVHoQu99lKrbnsNkhuU0SZ8VANSK72GZrGLbiQ=";
   };
   meta = with lib; {
-    description = "A continuous delivery server specializing in advanced workflow modeling and visualization";
+    description = "Continuous delivery server specializing in advanced workflow modeling and visualization";
     homepage = "http://www.go.cd";
     license = licenses.asl20;
     platforms = platforms.all;

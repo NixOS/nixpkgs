@@ -80,7 +80,7 @@ for module in $(< ~-/closure); do
     # of its output.
     modinfo -b $kernel --set-version "$version" -F firmware $module | grep -v '^name:' | while read -r i; do
         echo "firmware for $module: $i"
-        for name in "$i" "$i.xz" ""; do
+        for name in "$i" "$i.xz" "$i.zst" ""; do
             [ -z "$name" ] && echo "WARNING: missing firmware $i for module $module"
             if cp -v --parents --no-preserve=mode lib/firmware/$name "$out" 2>/dev/null; then
                 break

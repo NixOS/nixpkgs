@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, libversion
-, pkg-config
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  libversion,
+  pkg-config,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -26,26 +27,18 @@ buildPythonPackage rec {
       --replace "'pkg-config'" "'$(command -v $PKG_CONFIG)'"
   '';
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [
-    libversion
-  ];
+  buildInputs = [ libversion ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   preCheck = ''
     # import from $out
     rm -r libversion
   '';
 
-  pythonImportsCheck = [
-    "libversion"
-  ];
+  pythonImportsCheck = [ "libversion" ];
 
   meta = with lib; {
     description = "Python bindings for libversion, which provides fast, powerful and correct generic version string comparison algorithm";

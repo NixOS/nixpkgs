@@ -22,7 +22,7 @@ let
     ${lib.toShellVars env}
     eval "$(${config.systemd.package}/bin/systemctl show -pUID,GID,MainPID tandoor-recipes.service)"
     exec ${pkgs.util-linux}/bin/nsenter \
-      -t $MainPID -m -S $UID -G $GID \
+      -t $MainPID -m -S $UID -G $GID --wdns=${env.MEDIA_ROOT} \
       ${pkg}/bin/tandoor-recipes "$@"
   '';
 in
@@ -88,7 +88,7 @@ in
         Group = "tandoor_recipes";
         DynamicUser = true;
         StateDirectory = "tandoor-recipes";
-        WorkingDirectory = "/var/lib/tandoor-recipes";
+        WorkingDirectory = env.MEDIA_ROOT;
         RuntimeDirectory = "tandoor-recipes";
 
         BindReadOnlyPaths = [

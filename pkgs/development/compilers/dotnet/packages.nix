@@ -37,6 +37,8 @@ in {
 
     passthru = {
       inherit (vmr) icu targetRid;
+      # ilcompiler is currently broken: https://github.com/dotnet/source-build/issues/1215
+      hasILCompiler = false;
     };
 
     meta = vmr.meta // {
@@ -71,7 +73,7 @@ in {
 
   aspnetcore = mkCommon "aspnetcore" rec {
     pname = "dotnet-aspnetcore-runtime";
-    version = releaseManifest.aspnetcoreRuntimeVersion or releaseManifest.runtimeVersion;
+    version = releaseManifest.aspNetCoreVersion or releaseManifest.runtimeVersion;
 
     src = vmr;
     dontUnpack = true;

@@ -10,16 +10,16 @@
 
 buildGoModule rec {
   pname = "kubevela";
-  version = "1.9.10";
+  version = "1.9.11";
 
   src = fetchFromGitHub {
     owner = "kubevela";
     repo = "kubevela";
     rev = "v${version}";
-    hash = "sha256-DWmkPzMg6AbyOKoO2vev48f/cKO9XQpyR85Jg0T20aI=";
+    hash = "sha256-u9UGV1UwZoj4eSqqMLf8BvsfTFIYagoslN5pflDKm8c=";
   };
 
-  vendorHash = "sha256-vRSlSEnqD/a6KBvCWnNTzIBKE9BYzMtFWUhAF+m3R54=";
+  vendorHash = "sha256-NnUZnlvVb2VmNx4HM8lkbTNcQA3/pctkg1UVpOY8Acs=";
 
   ldflags = [
     "-s" "-w"
@@ -54,7 +54,7 @@ buildGoModule rec {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "An application delivery platform to deploy and operate applications in hybrid, multi-cloud environments";
+    description = "Application delivery platform to deploy and operate applications in hybrid, multi-cloud environments";
     downloadPage = "https://github.com/kubevela/kubevela";
     homepage = "https://kubevela.io/";
     license = lib.licenses.asl20;

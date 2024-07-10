@@ -7,7 +7,7 @@ mkDerivation {
 
   meta = with lib; {
     homepage = "https://kde.org/applications/en/multimedia/org.kde.kwave";
-    description = "A simple media player";
+    description = "Simple media player";
     mainProgram = "kwave";
     maintainers = with maintainers; [ freezeboy ];
     license = licenses.gpl2Plus;

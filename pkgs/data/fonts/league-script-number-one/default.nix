@@ -20,7 +20,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "A modern, coquettish script font";
+    description = "Modern, coquettish script font";
     longDescription = ''
       This ain’t no Lucinda. League Script #1 is a modern, coquettish script
       font that sits somewhere between your high school girlfriend’s love notes

@@ -1,26 +1,27 @@
-{ lib
-, buildPythonPackage
-, chardet
-, docker
-, entrypoints
-, escapism
-, fetchFromGitHub
-, iso8601
-, jinja2
-, pkgs-docker
-, python-json-logger
-, pythonOlder
-, requests
-, ruamel-yaml
-, semver
-, setuptools
-, toml
-, traitlets
+{
+  lib,
+  buildPythonPackage,
+  chardet,
+  docker,
+  entrypoints,
+  escapism,
+  fetchFromGitHub,
+  iso8601,
+  jinja2,
+  pkgs-docker,
+  python-json-logger,
+  pythonOlder,
+  requests,
+  ruamel-yaml,
+  semver,
+  setuptools,
+  toml,
+  traitlets,
 }:
 
 buildPythonPackage rec {
   pname = "jupyter-repo2docker";
-  version = "2024.03.0";
+  version = "2024.07.0";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
@@ -29,12 +30,10 @@ buildPythonPackage rec {
     owner = "jupyterhub";
     repo = "repo2docker";
     rev = "refs/tags/${version}";
-    hash = "sha256-U22A1OX83F2OMdS3w0elQpGg1z+ZgOeZLv8XjOK26mg=";
+    hash = "sha256-ZzZBuJBPDG4to1fSYn2xysupXbPS9Q6wqWr3Iq/Vds8=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     chardet

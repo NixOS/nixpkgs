@@ -30,7 +30,7 @@
   passthru.tests.suite = callPackage ./test.nix {};
 
   meta =  with lib; {
-    description = "A reflexive SAT solver parameterised by a leaf tactic and Nelson-Oppen support";
+    description = "Reflexive SAT solver parameterised by a leaf tactic and Nelson-Oppen support";
     maintainers = with maintainers; [ siraben ];
     license = licenses.gpl3Plus;
   };

@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nawk";
-  version = "20240311";
+  version = "20240422";
 
   src = fetchFromGitHub {
     owner = "onetrueawk";
     repo = "awk";
     rev = finalAttrs.version;
-    hash = "sha256-4iAQR8djhhp5Yn4H1IdzotQLY0d/Gz/vNQPfAUNQV0A=";
+    hash = "sha256-wsRkSXCLtK2jk4gW/Lpg/14NiOUANfmCrYqeKZW6CLY=";
   };
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://awk.dev";
-    description = "The one, true implementation of AWK";
+    description = "One, true implementation of AWK";
     longDescription = ''
       This is the version of awk described in "The AWK Programming Language",
       Second Edition, by Al Aho, Brian Kernighan, and Peter Weinberger

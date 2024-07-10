@@ -1,13 +1,14 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, pytestCheckHook
-, dotnetCorePackages
-, setuptools
-, setuptools-scm
-, wheel
-, buildDotnetModule
-, cffi
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  pytestCheckHook,
+  dotnetCorePackages,
+  setuptools,
+  setuptools-scm,
+  wheel,
+  buildDotnetModule,
+  cffi,
 }:
 
 let
@@ -23,7 +24,10 @@ let
   # build is done in `buildPythonPackage` below.
   dotnet-build = buildDotnetModule {
     inherit pname version src;
-    projectFile = [ "netfx_loader/ClrLoader.csproj" "example/example.csproj" ];
+    projectFile = [
+      "netfx_loader/ClrLoader.csproj"
+      "example/example.csproj"
+    ];
     nugetDeps = ./deps.nix;
   };
 in
@@ -39,13 +43,9 @@ buildPythonPackage {
     dotnetCorePackages.sdk_6_0
   ];
 
-  propagatedBuildInputs = [
-    cffi
-  ];
+  propagatedBuildInputs = [ cffi ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTests = [
     # TODO: mono does not work due to https://github.com/NixOS/nixpkgs/issues/7307

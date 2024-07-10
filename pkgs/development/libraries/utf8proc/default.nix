@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "A clean C library for processing UTF-8 Unicode data";
+    description = "Clean C library for processing UTF-8 Unicode data";
     homepage = "https://juliastrings.github.io/utf8proc/";
     license = licenses.mit;
     platforms = platforms.all;

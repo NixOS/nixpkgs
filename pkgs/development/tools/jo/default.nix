@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook pandoc pkg-config ];
 
   meta = with lib; {
-    description = "A small utility to create JSON objects";
+    description = "Small utility to create JSON objects";
     homepage = "https://github.com/jpmens/jo";
     mainProgram = "jo";
     license = licenses.gpl2Plus;

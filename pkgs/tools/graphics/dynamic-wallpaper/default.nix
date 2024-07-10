@@ -57,7 +57,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = with lib; {
     description = "Dynamic wallpaper maker for Gnome";
     homepage = "https://github.com/dusansimic/dynamic-wallpaper";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.linux;
     mainProgram = "me.dusansimic.DynamicWallpaper";
     maintainers = with maintainers; [ zendo ];

@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     inherit version;
-    description = "A command-line tool to print idle time from libXss";
+    description = "Command-line tool to print idle time from libXss";
     homepage = "https://github.com/taktoa/xprintidle-ng";
     license = lib.licenses.gpl2Only;
     maintainers = [ lib.maintainers.raskin ];

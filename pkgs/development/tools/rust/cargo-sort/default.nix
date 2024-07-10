@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
   cargoSha256 = "sha256-JON6cE1ZHeI+0vU9AJp0e1TIbiH3AWjHyn0jd9PNqQU=";
 
   meta = with lib; {
-    description = "A tool to check that your Cargo.toml dependencies are sorted alphabetically";
+    description = "Tool to check that your Cargo.toml dependencies are sorted alphabetically";
     mainProgram = "cargo-sort";
     homepage = "https://github.com/devinr528/cargo-sort";
     changelog = "https://github.com/devinr528/cargo-sort/blob/v${version}/changelog.md";

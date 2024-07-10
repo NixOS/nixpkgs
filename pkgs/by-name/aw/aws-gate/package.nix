@@ -27,7 +27,6 @@ python3Packages.buildPythonApplication rec {
 
   nativeBuildInputs = [
     installShellFiles
-    python3Packages.pythonRelaxDepsHook
     python3Packages.setuptools
     python3Packages.wheel
   ];

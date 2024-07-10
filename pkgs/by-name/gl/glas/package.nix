@@ -23,7 +23,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = {
-    description = "A language server for the Gleam programming language.";
+    description = "Language server for the Gleam programming language";
     homepage = "https://github.com/maurobalbi/glas";
     changelog = "https://github.com/maurobalbi/glas/tag/v${version}";
     license = with lib.licenses; [

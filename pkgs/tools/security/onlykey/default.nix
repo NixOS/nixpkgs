@@ -5,7 +5,7 @@
 , makeDesktopItem
 , stdenv
 , writeShellScript
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 let
@@ -53,7 +53,7 @@ stdenv.mkDerivation {
   pname = "${onlykey.packageName}";
   inherit (onlykey) version;
   dontUnpack = true;
-  nativeBuildInputs = [ wrapGAppsHook copyDesktopItems ];
+  nativeBuildInputs = [ wrapGAppsHook3 copyDesktopItems ];
   desktopItems = [
     (makeDesktopItem {
       name = onlykey.packageName;

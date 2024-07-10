@@ -20,7 +20,7 @@ stdenv.mkDerivation {
   meta = with lib; {
     homepage = "https://github.com/Seb35/git-cache";
     license = licenses.wtfpl;
-    description = "A program to add and manage a system-wide or user-wide cache for remote git repositories";
+    description = "Program to add and manage a system-wide or user-wide cache for remote git repositories";
     mainProgram = "git-cache";
     platforms = platforms.unix;
     maintainers = with maintainers; [ maxhearnden ];

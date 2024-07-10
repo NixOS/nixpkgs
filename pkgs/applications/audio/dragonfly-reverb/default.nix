@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/michaelwillis/dragonfly-reverb";
-    description = "A hall-style reverb based on freeverb3 algorithms";
+    description = "Hall-style reverb based on freeverb3 algorithms";
     maintainers = [ maintainers.magnetophon ];
     license = licenses.gpl3Plus;
     platforms = ["x86_64-linux"];

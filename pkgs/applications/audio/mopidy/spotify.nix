@@ -2,7 +2,7 @@
 
 pythonPackages.buildPythonApplication rec {
   pname = "mopidy-spotify";
-  version = "unstable-2024-02-27";
+  version = "4.1.1-unstable-2024-02-27";
 
   src = fetchFromGitHub {
     owner = "mopidy";
@@ -22,12 +22,14 @@ pythonPackages.buildPythonApplication rec {
 
   pythonImportsCheck = [ "mopidy_spotify" ];
 
-  passthru.updateScript = unstableGitUpdater { };
+  passthru.updateScript = unstableGitUpdater {
+    tagPrefix = "v";
+  };
 
   meta = with lib; {
     homepage = "https://github.com/mopidy/mopidy-spotify";
     description = "Mopidy extension for playing music from Spotify";
     license = licenses.asl20;
-    maintainers = with maintainers; [ lilyinstarlight ];
+    maintainers = with maintainers; [ ];
   };
 }

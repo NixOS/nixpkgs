@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A simple SQLite database browser built with wxWidgets";
+    description = "Simple SQLite database browser built with wxWidgets";
     mainProgram = "wxsqliteplus";
     homepage = "https://github.com/guanlisheng/wxsqliteplus";
     license = licenses.gpl3Plus;

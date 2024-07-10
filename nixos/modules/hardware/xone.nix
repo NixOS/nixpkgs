@@ -6,7 +6,7 @@ let
 in
 {
   options.hardware.xone = {
-    enable = mkEnableOption "the xone driver for Xbox One and Xbobx Series X|S accessories";
+    enable = mkEnableOption "the xone driver for Xbox One and Xbox Series X|S accessories";
   };
 
   config = mkIf cfg.enable {

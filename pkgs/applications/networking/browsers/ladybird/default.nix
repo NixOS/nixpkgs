@@ -10,8 +10,11 @@
 , darwin
 , cmake
 , ninja
+, pkg-config
 , libxcrypt
+, python3
 , qt6Packages
+, woff2
 , nixosTests
 , AppKit
 , Cocoa
@@ -21,11 +24,11 @@
 
 let
   inherit (builtins) elemAt;
-  cldr_version = "44.1.0";
+  cldr_version = "45.0.0";
   cldr-json = fetchzip {
     url = "https://github.com/unicode-org/cldr-json/releases/download/${cldr_version}/cldr-${cldr_version}-json-modern.zip";
     stripRoot = false;
-    hash = "sha256-EbbzaaspKgRT/dsJV3Kf0Dfj8LN9zT+Pl4gk5kiOXWk=";
+    hash = "sha256-BPDvYjlvJMudX/YlS7HrwKEABYx+1KzjiFlLYA5+Oew=";
     postFetch = ''
       echo -n ${cldr_version} > $out/version.txt
     '';
@@ -49,22 +52,20 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ladybird";
-  version = "0-unstable-2024-03-16";
+  version = "0-unstable-2024-06-08";
 
   src = fetchFromGitHub {
-    owner = "SerenityOS";
-    repo = "serenity";
-    rev = "3a8bde9ef24dace600484b38992fdc7d17bf92c3";
-    hash = "sha256-r8HYcexrOjDYsXuCtROiNY7Rl60pVQBvVQf190gqNuY=";
+    owner = "LadybirdWebBrowser";
+    repo = "ladybird";
+    rev = "2f68e361370040d8cdc75a8ed8af4239134ae481";
+    hash = "sha256-EQZTsui4lGThSi+8a6KSyL5lJnO0A8fJ8HWY4jgkpUA=";
   };
 
-  sourceRoot = "${finalAttrs.src.name}/Ladybird";
-
   postPatch = ''
-    sed -i '/iconutil/d' CMakeLists.txt
+    sed -i '/iconutil/d' Ladybird/CMakeLists.txt
 
     # Don't set absolute paths in RPATH
-    substituteInPlace ../Meta/CMake/lagom_install_options.cmake \
+    substituteInPlace Meta/CMake/lagom_install_options.cmake \
       --replace-fail "\''${CMAKE_INSTALL_BINDIR}" "bin" \
       --replace-fail "\''${CMAKE_INSTALL_LIBDIR}" "lib"
   '';
@@ -73,6 +74,12 @@ stdenv.mkDerivation (finalAttrs: {
     # Setup caches for LibLocale, LibUnicode, LibTimezone, LibTLS and LibGfx
     # Note that the versions of the input data packages must match the
     # expected version in the package's CMake.
+
+    # Check that the versions match
+    grep -F 'set(CLDR_VERSION "${cldr_version}")' Meta/CMake/locale_data.cmake || (echo cldr_version mismatch && exit 1)
+    grep -F 'set(TZDB_VERSION "${tzdata.version}")' Meta/CMake/time_zone_data.cmake || (echo tzdata.version mismatch && exit 1)
+    grep -F 'set(CACERT_VERSION "${cacert_version}")' Meta/CMake/ca_certificates_data.cmake || (echo cacert_version mismatch && exit 1)
+
     mkdir -p build/Caches
 
     ln -s ${cldr-json} build/Caches/CLDR
@@ -103,6 +110,8 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = with qt6Packages; [
     cmake
     ninja
+    pkg-config
+    python3
     wrapQtAppsHook
   ];
 
@@ -110,6 +119,9 @@ stdenv.mkDerivation (finalAttrs: {
     libxcrypt
     qtbase
     qtmultimedia
+    woff2
+  ] ++ lib.optional stdenv.isLinux [
+    qtwayland
   ] ++ lib.optionals stdenv.isDarwin [
     AppKit
     Cocoa
@@ -147,11 +159,13 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = with lib; {
-    description = "A browser using the SerenityOS LibWeb engine with a Qt or Cocoa GUI";
+    description = "Browser using the SerenityOS LibWeb engine with a Qt or Cocoa GUI";
     homepage = "https://ladybird.dev";
     license = licenses.bsd2;
     maintainers = with maintainers; [ fgaz ];
     platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
     mainProgram = "Ladybird";
+    # use of undeclared identifier 'NSBezelStyleAccessoryBarAction'
+    broken = stdenv.isDarwin;
   };
 })

@@ -1,13 +1,13 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, fetchpatch
-, poetry-core
-, pythonRelaxDepsHook
-, requests
-, urllib3
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  fetchpatch,
+  poetry-core,
+  requests,
+  urllib3,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -36,21 +36,16 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     poetry-core
-    pythonRelaxDepsHook
   ];
 
-  pythonRelaxDeps = [
-    "urllib3"
-  ];
+  pythonRelaxDeps = [ "urllib3" ];
 
   propagatedBuildInputs = [
     requests
     urllib3
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "synology_dsm" ];
 

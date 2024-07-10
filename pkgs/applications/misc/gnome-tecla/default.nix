@@ -15,11 +15,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tecla";
-  version = "45.0";
+  version = "46.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/tecla/${lib.versions.major finalAttrs.version}/tecla-${finalAttrs.version}.tar.xz";
-    hash = "sha256-XAK7QBmxz/tWY9phB1A+/4U4Nqh4PdRwXdBKSfetwls=";
+    hash = "sha256-Sggeq4Z6WosJdYmRytdkWSDzI6q8qVRAgpD7b0RZGw8=";
   };
 
   nativeBuildInputs = [

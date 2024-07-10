@@ -9,6 +9,7 @@
    $ nix-build pkgs/top-level/release.nix -A coreutils.x86_64-linux
 */
 { nixpkgs ? { outPath = (import ../../lib).cleanSource ../..; revCount = 1234; shortRev = "abcdef"; revision = "0000000000000000000000000000000000000000"; }
+, system ? builtins.currentSystem
 , officialRelease ? false
   # The platform doubles for which we build Nixpkgs.
 , supportedSystems ? [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" "aarch64-darwin" ]
@@ -28,14 +29,6 @@
 , nixpkgsArgs ? { config = {
     allowUnfree = false;
     inHydra = true;
-    permittedInsecurePackages = [
-      # *Exceptionally*, those packages will be cached with their *secure* dependents
-      # because they will reach EOL in the middle of the 23.05 release
-      # and it will be too much painful for our users to recompile them
-      # for no real reason.
-      # Remove them for 23.11.
-      "openssl-1.1.1w"
-    ];
   }; }
 
   # This flag, if set to true, will inhibit the use of `mapTestOn`
@@ -54,7 +47,7 @@
 
 let
   release-lib = import ./release-lib.nix {
-    inherit supportedSystems scrubJobs nixpkgsArgs;
+    inherit supportedSystems scrubJobs nixpkgsArgs system;
   };
 
   inherit (release-lib) mapTestOn pkgs;
@@ -78,7 +71,9 @@ let
   ] (arch: elem "${arch}-darwin" supportedSystems);
 
   nonPackageJobs =
-    { tarball = import ./make-tarball.nix { inherit pkgs nixpkgs officialRelease supportedSystems; };
+    { tarball = import ./make-tarball.nix { inherit pkgs nixpkgs officialRelease; };
+
+      release-checks = import ./nixpkgs-basic-release-checks.nix { inherit pkgs nixpkgs supportedSystems; };
 
       metrics = import ./metrics.nix { inherit pkgs nixpkgs; };
 
@@ -91,6 +86,7 @@ let
           meta.description = "Release-critical builds for the Nixpkgs darwin channel";
           constituents =
             [ jobs.tarball
+              jobs.release-checks
               jobs.cabal2nix.x86_64-darwin
               jobs.ghc.x86_64-darwin
               jobs.git.x86_64-darwin
@@ -121,7 +117,8 @@ let
               jobs.gimp.x86_64-darwin
               jobs.emacs.x86_64-darwin
               jobs.wireshark.x86_64-darwin
-              jobs.transmission-gtk.x86_64-darwin
+              jobs.transmission_3-gtk.x86_64-darwin
+              jobs.transmission_4-gtk.x86_64-darwin
 
               # Tests
               /*
@@ -140,6 +137,7 @@ let
           meta.description = "Release-critical builds for the Nixpkgs unstable channel";
           constituents =
             [ jobs.tarball
+              jobs.release-checks
               jobs.metrics
               jobs.manual
               jobs.lib-tests

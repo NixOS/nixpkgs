@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://agroal.github.io/pgagroal/";
     changelog = "https://github.com/agroal/pgagroal/releases/tag/${finalAttrs.version}";
     license = licenses.bsd3;
-    maintainers = [ maintainers.marsam ];
+    maintainers = [ ];
     platforms = platforms.unix;
   };
 })

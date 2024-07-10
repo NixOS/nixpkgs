@@ -1,9 +1,10 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, aenum
-, pythonOlder
-, python
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  aenum,
+  pythonOlder,
+  python,
 }:
 
 buildPythonPackage rec {
@@ -18,17 +19,13 @@ buildPythonPackage rec {
     hash = "sha256-MFEi1U0RNvrfDtV4HpvPgKTCibAh76z7Gnmj32IubYw=";
   };
 
-  propagatedBuildInputs = [
-    aenum
-  ];
+  propagatedBuildInputs = [ aenum ];
 
   checkPhase = ''
     ${python.interpreter} -m dbf.test
   '';
 
-  pythonImportsCheck = [
-    "dbf"
-  ];
+  pythonImportsCheck = [ "dbf" ];
 
   meta = with lib; {
     description = "Module for reading/writing dBase, FoxPro, and Visual FoxPro .dbf files";

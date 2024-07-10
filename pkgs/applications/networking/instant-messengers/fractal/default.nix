@@ -25,20 +25,23 @@
 
 stdenv.mkDerivation rec {
   pname = "fractal";
-  version = "6";
+  version = "7";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
-    owner = "GNOME";
+    owner = "World";
     repo = "fractal";
-    rev = version;
-    hash = "sha256-J4Jb7G5Rfou3N7mytetIdLl0dGY5dSvTjnu8aj4kWXQ=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-IfcThpsGATMD3Uj9tvw/aK7IVbiVT8sdZ088gRUqnlg=";
   };
 
   cargoDeps = rustPlatform.importCargoLock {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "matrix-sdk-0.6.2" = "sha256-CY0Ylrd3NkP1IevyQa351IS/+evG2GgrjPnR/ZDFR9Q=";
+      "mas-http-0.8.0" = "sha256-IiYxF9qT/J/n8t/cVT/DRV3gl2MTA6/YfjshVIic/n4=";
+      "matrix-sdk-0.7.1" = "sha256-quwt9Dx0K6LDMwHBipc52Ek59zz5mlTAdOj+RXZBU3Q=";
+      "ruma-0.9.4" = "sha256-tp0EFS39UTXZJQPUDjeQixb8wzsMCzyFggVj6M8TRYg=";
+      "vodozemac-0.5.1" = "sha256-Hm0C696RmNX6n1Jx+hqkKMjpdbArliuzdiS4wCv3OIM=";
     };
   };
 

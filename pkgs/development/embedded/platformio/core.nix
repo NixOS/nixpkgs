@@ -46,11 +46,13 @@ with python3Packages; buildPythonApplication rec {
   postPatch = ''
     # Disable update checks at runtime
     substituteInPlace platformio/maintenance.py --replace-fail '    check_platformio_upgrade()' ""
+
+    # Remove filterwarnings which fails on new deprecations in Python 3.12 for 3.14
+    rm tox.ini
   '';
 
   nativeBuildInputs = [
     installShellFiles
-    pythonRelaxDepsHook
     setuptools
   ];
 
@@ -199,7 +201,7 @@ with python3Packages; buildPythonApplication rec {
 
   meta = with lib; {
     changelog = "https://github.com/platformio/platformio-core/releases/tag/v${version}";
-    description = "An open source ecosystem for IoT development";
+    description = "Open source ecosystem for IoT development";
     downloadPage = "https://github.com/platformio/platformio-core";
     homepage = "https://platformio.org";
     license = licenses.asl20;

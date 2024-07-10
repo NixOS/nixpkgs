@@ -44,7 +44,7 @@ python3.pkgs.buildPythonApplication rec {
   nativeCheckInputs = with python3.pkgs; [
     pytest-bdd
     pytest-xdist
-    pytestCheckHook
+    (pytestCheckHook.override { pytest = pytest_7; })
     toml
   ];
 

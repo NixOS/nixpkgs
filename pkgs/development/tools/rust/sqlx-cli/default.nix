@@ -27,12 +27,6 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-sMyK1v4pJmmlN47mvgUkpLBjcpmT346VSp984IpvVWY=";
 
-  # Prepare the Cargo.lock for offline use.
-  # See https://github.com/NixOS/nixpkgs/issues/261412
-  postConfigure = ''
-    cargo metadata --offline > /dev/null
-  '';
-
   buildNoDefaultFeatures = true;
   buildFeatures = [
     "native-tls"

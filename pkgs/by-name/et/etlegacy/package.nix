@@ -7,7 +7,7 @@
 
 symlinkJoin {
   name = "etlegacy";
-  version = "2.82.0";
+  version = "2.82.1";
   paths = [
     etlegacy-assets
     etlegacy-unwrapped

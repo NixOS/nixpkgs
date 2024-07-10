@@ -3,7 +3,7 @@ import ./make-test-python.nix ({ pkgs, ...}: let
 in {
   name = "phosh";
   meta = with pkgs.lib.maintainers; {
-    maintainers = [ tomfitzhenry zhaofengli ];
+    maintainers = [ zhaofengli ];
   };
 
   nodes = {
@@ -24,6 +24,10 @@ in {
           };
         };
       };
+
+      environment.systemPackages = [
+        pkgs.phosh-mobile-settings
+      ];
 
       systemd.services.phosh = {
         environment = {
@@ -63,8 +67,13 @@ in {
         phone.screenshot("03launcher")
 
     with subtest("Check the on-screen keyboard shows"):
-        phone.send_chars("setting", delay=0.2)
+        phone.send_chars("mobile setting", delay=0.2)
         phone.wait_for_text("123") # A button on the OSK
         phone.screenshot("04osk")
+
+    with subtest("Check mobile-phosh-settings starts"):
+       phone.send_chars("\n")
+       phone.wait_for_text("Tweak advanced mobile settings");
+       phone.screenshot("05settings")
   '';
 })

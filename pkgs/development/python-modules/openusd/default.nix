@@ -9,6 +9,7 @@
   draco,
   embree,
   fetchFromGitHub,
+  fetchpatch,
   flex,
   git,
   graphviz-nox,
@@ -17,6 +18,8 @@
   lib,
   libGL,
   libX11,
+  libXt,
+  materialx,
   ninja,
   numpy,
   opencolorio,
@@ -48,13 +51,13 @@ in
 
 buildPythonPackage rec {
   pname = "openusd";
-  version = "24.03";
+  version = "24.05";
 
   src = fetchFromGitHub {
     owner = "PixarAnimationStudios";
     repo = "OpenUSD";
     rev = "refs/tags/v${version}";
-    hash = "sha256-EYf8GhXhsAx0Wxz9ibDZEV4E5scL3GPiu3Nje7N5C/I=";
+    hash = "sha256-akwLIB5YUbnDiaQXX/K5YLXzWlTYWZG51dtxbSFxPt0=";
   };
 
   stdenv = if python.stdenv.isDarwin then darwin.apple_sdk_11_0.stdenv else python.stdenv;
@@ -62,6 +65,14 @@ buildPythonPackage rec {
   outputs = [ "out" ] ++ lib.optional withDocs "doc";
 
   format = "other";
+
+  patches = [
+    (fetchpatch {
+      name = "port-to-embree-4.patch";
+      url = "https://github.com/PixarAnimationStudios/OpenUSD/pull/2266/commits/4b6c23d459c602fdac5e0ebc9b7722cbd5475e86.patch";
+      hash = "sha256-yjqdGAVqfEsOX1W/tG6c+GgQLYya5U9xgUe/sNIuDbw=";
+    })
+  ];
 
   cmakeFlags = [
     "-DPXR_BUILD_ALEMBIC_PLUGIN=ON"
@@ -77,6 +88,7 @@ buildPythonPackage rec {
     (lib.cmakeBool "PXR_BUILD_PYTHON_DOCUMENTATION" withDocs)
     (lib.cmakeBool "PXR_BUILD_USDVIEW" withUsdView)
     (lib.cmakeBool "PXR_BUILD_USD_TOOLS" withTools)
+    (lib.cmakeBool "PXR_ENABLE_MATERIALX_SUPPORT" true)
     (lib.cmakeBool "PXR_ENABLE_OSL_SUPPORT" (!stdenv.isDarwin && withOsl))
   ];
 
@@ -102,6 +114,7 @@ buildPythonPackage rec {
       embree
       flex
       imath
+      materialx
       opencolorio
       openimageio
       opensubdiv
@@ -111,6 +124,7 @@ buildPythonPackage rec {
     ++ lib.optionals stdenv.isLinux [
       libGL
       libX11
+      libXt
     ]
     ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk_11_0.frameworks; [ Cocoa ])
     ++ lib.optionals withOsl [ osl ]

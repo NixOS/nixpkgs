@@ -16,7 +16,7 @@ buildDunePackage rec {
   doCheck = true;
 
   meta = with lib; {
-    description = "A module allowing to use the colors and cursor movements on ANSI terminals";
+    description = "Module allowing to use the colors and cursor movements on ANSI terminals";
     longDescription = ''
       ANSITerminal is a module allowing to use the colors and cursor
       movements on ANSI terminals. It also works on the windows shell (but

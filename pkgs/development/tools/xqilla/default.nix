@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch, xercesc }:
+{ lib, stdenv, fetchurl, fetchpatch, darwin, xercesc }:
 
 stdenv.mkDerivation rec {
   pname = "xqilla";
@@ -17,10 +17,21 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  configureFlags = [ "--with-xerces=${xercesc}" ];
+  configureFlags = [
+    "--with-xerces=${xercesc}"
+    # code uses register storage specifier
+    "CXXFLAGS=-std=c++14"
+  ];
+
+  buildInputs = [
+    xercesc
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin (with darwin.apple_sdk.frameworks; [
+    CoreServices
+    SystemConfiguration
+  ]);
 
   meta = with lib; {
-    description = "An XQuery and XPath 2 library and command line utility written in C++, implemented on top of the Xerces-C library";
+    description = "XQuery and XPath 2 library and command line utility written in C++, implemented on top of the Xerces-C library";
     mainProgram = "xqilla";
     license     = licenses.asl20 ;
     maintainers = with maintainers; [ obadz ];

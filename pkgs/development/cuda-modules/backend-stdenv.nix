@@ -1,11 +1,9 @@
 {
+  cudaVersion,
   lib,
   nvccCompatibilities,
-  cudaVersion,
   pkgs,
-  overrideCC,
   stdenv,
-  wrapCCWith,
   stdenvAdapters,
 }:
 

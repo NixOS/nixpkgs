@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "gitui";
-  version = "0.26.1";
+  version = "0.26.3";
 
   src = fetchFromGitHub {
     owner = "extrawurst";
     repo = "gitui";
     rev = "v${version}";
-    hash = "sha256-JqxZbxjZrrdsXWhpYu0E9F18gMldtOLrAYd+uiY8IcQ=";
+    hash = "sha256-j3y+KjC+o9p2omf4bN8+XevwU7WqiaQ0sfPqHySD2ik=";
   };
 
-  cargoHash = "sha256-zEoNyIiHQT6HBNSe+H7pz229K4eD0WMhp3I/6zJQHuU=";
+  cargoHash = "sha256-vVEo0kSghOQsH3T6ZTAzN7gIUku0n7rDbKwNmOM9GZc=";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -36,7 +36,7 @@ rustPlatform.buildRustPackage rec {
     # The cargo config overrides linkers for some targets, breaking the build
     # on e.g. `aarch64-linux`. These overrides are not required in the Nix
     # environment: delete them.
-    rm .cargo/config
+    rm .cargo/config.toml
 
     # build script tries to get version information from git
     rm build.rs

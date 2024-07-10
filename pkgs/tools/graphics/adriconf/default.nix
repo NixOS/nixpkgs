@@ -15,14 +15,14 @@
 
 stdenv.mkDerivation rec {
   pname = "adriconf";
-  version = "2.7.1";
+  version = "2.7.2";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "mesa";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-GRmra4P30EW9/WrG84HXYC3Rk4RD+BhuWtsSXvY/5Rk=";
+    sha256 = "sha256-0XTsYeS4tNAnGhuJ81fmjHhFS6fVq1lirui5b+ojxTQ=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://gitlab.freedesktop.org/mesa/adriconf/";
-    description = "A GUI tool used to configure open source graphics drivers";
+    description = "GUI tool used to configure open source graphics drivers";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ muscaln ];
     platforms = platforms.linux;

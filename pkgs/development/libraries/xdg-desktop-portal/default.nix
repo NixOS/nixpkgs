@@ -20,18 +20,20 @@
 , pipewire
 , gdk-pixbuf
 , librsvg
+, gobject-introspection
 , python3
 , pkg-config
 , stdenv
 , runCommand
-, wrapGAppsHook
+, wrapGAppsHook3
 , xmlto
 , enableGeoLocation ? true
+, enableSystemd ? true
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xdg-desktop-portal";
-  version = "1.18.3";
+  version = "1.18.4";
 
   outputs = [ "out" "installedTests" ];
 
@@ -39,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "flatpak";
     repo = "xdg-desktop-portal";
     rev = finalAttrs.version;
-    hash = "sha256-VqIQLUAf/n5m1tHCvnlxi0eaLOuG1R44tMFI/Hc992A=";
+    hash = "sha256-o+aO7uGewDPrtgOgmp/CE2uiqiBLyo07pVCFrtlORFQ=";
   };
 
   patches = [
@@ -69,7 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
     meson
     ninja
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
     xmlto
   ];
 
@@ -77,7 +79,6 @@ stdenv.mkDerivation (finalAttrs: {
     flatpak
     fuse3
     bubblewrap
-    systemdMinimal # libsystemd
     glib
     gsettings-desktop-schemas
     json-glib
@@ -94,9 +95,12 @@ stdenv.mkDerivation (finalAttrs: {
     ]))
   ] ++ lib.optionals enableGeoLocation [
     geoclue2
+  ] ++ lib.optionals enableSystemd [
+    systemdMinimal # libsystemd
   ];
 
   nativeCheckInputs = [
+    gobject-introspection
     python3.pkgs.pytest
     python3.pkgs.python-dbusmock
     python3.pkgs.pygobject3
@@ -107,6 +111,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--sysconfdir=/etc"
     "-Dinstalled-tests=true"
     "-Dinstalled_test_prefix=${placeholder "installedTests"}"
+    (lib.mesonEnable "systemd" enableSystemd)
   ] ++ lib.optionals (!enableGeoLocation) [
     "-Dgeoclue=disabled"
   ];

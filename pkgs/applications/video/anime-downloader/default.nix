@@ -46,7 +46,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     homepage = "https://github.com/anime-dl/anime-downloader";
-    description = "A simple but powerful anime downloader and streamer";
+    description = "Simple but powerful anime downloader and streamer";
     license = licenses.unlicense;
     platforms = platforms.linux;
     maintainers = with maintainers; [ ];

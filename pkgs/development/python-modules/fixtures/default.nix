@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pbr
-, setuptools
-, testtools
-, mock
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pbr,
+  setuptools,
+  testtools,
+  mock,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -23,14 +24,10 @@ buildPythonPackage rec {
     setuptools
   ];
 
-  propagatedBuildInputs = [
-    pbr
-  ];
+  propagatedBuildInputs = [ pbr ];
 
   passthru.optional-dependencies = {
-    streams = [
-      testtools
-    ];
+    streams = [ testtools ];
   };
 
   nativeCheckInputs = [

@@ -83,7 +83,7 @@ buildDotnetModule rec {
       # worldline resampler binary - no source is available (hence "unfree") but usage of the binary is MIT
       unfreeRedistributable
     ];
-    maintainers = with maintainers; [ lilyinstarlight ];
+    maintainers = with maintainers; [ ];
     platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
     mainProgram = "OpenUtau";
   };

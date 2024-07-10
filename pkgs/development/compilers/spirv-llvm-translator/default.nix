@@ -112,7 +112,7 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     homepage    = "https://github.com/KhronosGroup/SPIRV-LLVM-Translator";
-    description = "A tool and a library for bi-directional translation between SPIR-V and LLVM IR";
+    description = "Tool and a library for bi-directional translation between SPIR-V and LLVM IR";
     mainProgram = "llvm-spirv";
     license     = licenses.ncsa;
     platforms   = platforms.unix;

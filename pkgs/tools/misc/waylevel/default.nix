@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "A tool to print wayland toplevels and other compositor info";
+    description = "Tool to print wayland toplevels and other compositor info";
     homepage = "https://git.sr.ht/~shinyzenith/waylevel";
     license = licenses.bsd2;
     maintainers = with maintainers; [ dit7ya ];

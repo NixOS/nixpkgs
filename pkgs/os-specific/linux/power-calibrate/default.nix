@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     description = "Tool to calibrate power consumption";
     mainProgram = "power-calibrate";
     homepage = "https://github.com/ColinIanKing/power-calibrate";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ dtzWill ];
   };

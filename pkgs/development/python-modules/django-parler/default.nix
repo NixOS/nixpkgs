@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, django
-, fetchFromGitHub
-, pytest
-, pytest-django
-, pythonOlder
-, python
+{
+  lib,
+  buildPythonPackage,
+  django,
+  fetchFromGitHub,
+  pytest,
+  pytest-django,
+  pythonOlder,
+  python,
 }:
 
 buildPythonPackage rec {
@@ -22,9 +23,7 @@ buildPythonPackage rec {
     hash = "sha256-tRGifFPCXF3aa3PQWKw3tl1H1TY+lgcChUP1VdwG1cE=";
   };
 
-  propagatedBuildInputs = [
-    django
-  ];
+  propagatedBuildInputs = [ django ];
 
   checkPhase = ''
     runHook preCheck

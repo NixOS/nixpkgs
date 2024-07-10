@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
   meta = {
     broken = stdenv.isDarwin;
     branch = "1.6";
-    description = "A C++ based class library for building Graphical User Interfaces";
+    description = "C++ based class library for building Graphical User Interfaces";
     longDescription = ''
         FOX stands for Free Objects for X.
         It is a C++ based class library for building Graphical User Interfaces.

@@ -2549,6 +2549,16 @@
     };
     version = "1.0.1";
   };
+  os = {
+    groups = ["default"];
+    platforms = [];
+    source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "0gwd20smyhxbm687vdikfh1gpi96h8qb1x28s2pdcysf6dm6v0ap";
+      type = "gem";
+    };
+    version = "1.1.4";
+  };
   ovirt-engine-sdk = {
     dependencies = ["json"];
     groups = ["default"];
@@ -2862,10 +2872,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "185zq5r9g56sfks852992bm0xf2vm9569jyiz5jyww3vx1jply1d";
+      sha256 = "sha256-On/KnfdO5kHcHom4MCrG0D8iiD3nceeGoOnzCU5apq0=";
       type = "gem";
     };
-    version = "7.1.3.2";
+    version = "7.1.3.4";
   };
   rails-dom-testing = {
     dependencies = ["activesupport" "minitest" "nokogiri"];
@@ -3117,10 +3127,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "05i8518ay14kjbma550mv0jm8a6di8yp5phzrd8rj44z9qnrlrp0";
+      sha256 = "0428ady49qssmnmwnafzrjvyba8mzbridsgblv7c7kmd0vqgfn99";
       type = "gem";
     };
-    version = "3.2.6";
+    version = "3.3.0";
   };
   rmagick = {
     dependencies = ["observer" "pkg-config"];
@@ -3451,6 +3461,17 @@
       type = "gem";
     };
     version = "3.0.7";
+  };
+  seccomp-tools = {
+    dependencies = ["os"];
+    groups = ["default"];
+    platforms = [];
+    source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "0v5zyby5glih0prddxm8wp6gn2glrnvf7y4r64k4iqfpdazdpsa3";
+      type = "gem";
+    };
+    version = "1.6.1";
   };
   semian = {
     groups = ["default"];

@@ -1,16 +1,17 @@
-{ lib
-, aniso8601
-, blinker
-, buildPythonPackage
-, fetchPypi
-, flask
-, mock
-, nose
-, pytestCheckHook
-, pythonOlder
-, pytz
-, six
-, werkzeug
+{
+  lib,
+  aniso8601,
+  blinker,
+  buildPythonPackage,
+  fetchPypi,
+  flask,
+  mock,
+  nose,
+  pytestCheckHook,
+  pythonOlder,
+  pytz,
+  six,
+  werkzeug,
 }:
 
 buildPythonPackage rec {
@@ -27,11 +28,9 @@ buildPythonPackage rec {
   };
 
   # conditional so that overrides are easier for web applications
-  patches = lib.optionals (lib.versionAtLeast werkzeug.version "2.1.0") [
-    ./werkzeug-2.1.0-compat.patch
-  ] ++ lib.optionals (lib.versionAtLeast flask.version "3.0.0") [
-    ./flask-3.0-compat.patch
-  ];
+  patches =
+    lib.optionals (lib.versionAtLeast werkzeug.version "2.1.0") [ ./werkzeug-2.1.0-compat.patch ]
+    ++ lib.optionals (lib.versionAtLeast flask.version "3.0.0") [ ./flask-3.0-compat.patch ];
 
   propagatedBuildInputs = [
     aniso8601
@@ -55,9 +54,7 @@ buildPythonPackage rec {
     "test_media_types_q"
   ];
 
-  pythonImportsCheck = [
-    "flask_restful"
-  ];
+  pythonImportsCheck = [ "flask_restful" ];
 
   meta = with lib; {
     description = "Framework for creating REST APIs";

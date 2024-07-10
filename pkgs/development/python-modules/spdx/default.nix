@@ -1,7 +1,8 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, nix-update-script
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  nix-update-script,
 }:
 
 buildPythonPackage rec {
@@ -15,9 +16,7 @@ buildPythonPackage rec {
     hash = "sha256-lfTgAX4Wl01xrvLA12ZUqjah7ZiLafMAU+yNNdVkRk0=";
   };
 
-  pythonImportsCheck = [
-    "spdx"
-  ];
+  pythonImportsCheck = [ "spdx" ];
 
   passthru.updateScript = nix-update-script { };
 
@@ -29,4 +28,3 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ jnsgruk ];
   };
 }
-

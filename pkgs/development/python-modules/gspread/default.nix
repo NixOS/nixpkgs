@@ -1,18 +1,19 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, flit-core
-, google-auth
-, google-auth-oauthlib
-, pytest-vcr
-, pytestCheckHook
-, pythonOlder
-, strenum
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  flit-core,
+  google-auth,
+  google-auth-oauthlib,
+  pytest-vcr,
+  pytestCheckHook,
+  pythonOlder,
+  strenum,
 }:
 
 buildPythonPackage rec {
   pname = "gspread";
-  version = "6.1.0";
+  version = "6.1.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -21,12 +22,10 @@ buildPythonPackage rec {
     owner = "burnash";
     repo = "gspread";
     rev = "refs/tags/v${version}";
-    hash = "sha256-kuXPX+VY0qz4fldGYPbzZMFx+blzsmueews1W+AjQb0=";
+    hash = "sha256-hvT4e1l3MTT3WMDSfKvZ7BU8dzkzgPROHrnx5mKyCR4=";
   };
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  nativeBuildInputs = [ flit-core ];
 
   propagatedBuildInputs = [
     google-auth
@@ -39,9 +38,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "gspread"
-  ];
+  pythonImportsCheck = [ "gspread" ];
 
   meta = with lib; {
     description = "Google Spreadsheets client library";

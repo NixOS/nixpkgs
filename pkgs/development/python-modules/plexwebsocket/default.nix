@@ -1,8 +1,9 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -19,16 +20,12 @@ buildPythonPackage rec {
     hash = "sha256-gT9RWpaR33ROs6ttjH2joNPi99Ng94Tp/R9eZY1eGZk=";
   };
 
-  propagatedBuildInputs = [
-    aiohttp
-  ];
+  propagatedBuildInputs = [ aiohttp ];
 
   # Package does not include tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "plexwebsocket"
-  ];
+  pythonImportsCheck = [ "plexwebsocket" ];
 
   meta = with lib; {
     description = "Library to react to events issued over Plex websockets";

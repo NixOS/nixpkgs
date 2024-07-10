@@ -1,37 +1,34 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, numpy
-, laszip
-, setuptools
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  numpy,
+  laszip,
+  setuptools,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "laspy";
-  version = "2.5.3";
+  version = "2.5.4";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-StaYkUNY6loJbaUuabzszTINnd+zZ0gKXCteCG24Erc=";
+    hash = "sha256-7r2/M3mvvAsk5+SBL6xWe/+IDR6FH3AXXSI3Wq7N9+E=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     numpy
     laszip
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [
     "laspy"

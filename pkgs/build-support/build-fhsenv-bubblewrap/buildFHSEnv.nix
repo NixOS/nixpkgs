@@ -8,14 +8,14 @@
 , pkgsi686Linux
 }:
 
-{ name ? null
-, profile ? ""
+{ profile ? ""
 , targetPkgs ? pkgs: []
 , multiPkgs ? pkgs: []
 , multiArch ? false # Whether to include 32bit packages
 , extraBuildCommands ? ""
 , extraBuildCommandsMulti ? ""
 , extraOutputsToInstall ? []
+, ... # for name, or pname+version
 } @ args:
 
 # HOWTO:
@@ -35,6 +35,10 @@
 
 let
   inherit (stdenv) is64bit;
+
+  name = if (args ? pname && args ? version)
+    then "${args.pname}-${args.version}"
+    else args.name;
 
   # "use of glibc_multi is only supported on x86_64-linux"
   isMultiBuild = multiArch && stdenv.system == "x86_64-linux";
@@ -111,6 +115,10 @@ let
     export NIX_LDFLAGS='-L/usr/lib -L/usr/lib32'
     export PKG_CONFIG_PATH=/usr/lib/pkgconfig
     export ACLOCAL_PATH=/usr/share/aclocal
+
+    # GStreamer searches for plugins relative to its real binary's location
+    # https://gitlab.freedesktop.org/gstreamer/gstreamer/-/commit/bd97973ce0f2c5495bcda5cccd4f7ef7dcb7febc
+    export GST_PLUGIN_SYSTEM_PATH_1_0=/usr/lib/gstreamer-1.0:/usr/lib32/gstreamer-1.0
 
     ${profile}
   '';

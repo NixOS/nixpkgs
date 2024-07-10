@@ -1,53 +1,47 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, invoke
-, mock
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, sphinx-rtd-theme
-, typing-extensions
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  invoke,
+  mock,
+  pytest7CheckHook,
+  pythonOlder,
+  setuptools,
+  sphinx-rtd-theme,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "pydash";
-  version = "7.0.6";
+  version = "8.0.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "dgilland";
     repo = "pydash";
     rev = "refs/tags/v${version}";
-    hash = "sha256-zwtUdP2fFFE5X0SDkBDetAQbKnZ1v24DGdzN3fQLa0A=";
+    hash = "sha256-4zNljz0U/iQd2DMC43qkdOY/mwtPlizgLmoaB7BVmxw=";
   };
 
   postPatch = ''
-    sed -i "/--cov/d" setup.cfg
-    sed -i "/--no-cov/d" setup.cfg
+    sed -i "/--cov/d" pyproject.toml
+    sed -i "/--no-cov/d" pyproject.toml
   '';
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
-    typing-extensions
-  ];
+  dependencies = [ typing-extensions ];
 
   nativeCheckInputs = [
     invoke
     mock
-    pytestCheckHook
+    pytest7CheckHook
     sphinx-rtd-theme
   ];
 
-  pythonImportsCheck = [
-    "pydash"
-  ];
+  pythonImportsCheck = [ "pydash" ];
 
   disabledTestPaths = [
     # Disable mypy testing

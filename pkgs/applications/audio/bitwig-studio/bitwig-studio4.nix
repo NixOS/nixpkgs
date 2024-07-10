@@ -16,7 +16,7 @@
 , makeWrapper
 , pipewire
 , pulseaudio
-, wrapGAppsHook
+, wrapGAppsHook3
 , xdg-utils
 , xorg
 , zlib
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-gtQ1mhXk0AqGidZk5TCzSR58pD1JJoELMBmELtqyb4U=";
   };
 
-  nativeBuildInputs = [ dpkg makeWrapper wrapGAppsHook ];
+  nativeBuildInputs = [ dpkg makeWrapper wrapGAppsHook3 ];
 
   unpackCmd = ''
     mkdir -p root
@@ -106,7 +106,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A digital audio workstation";
+    description = "Digital audio workstation";
     longDescription = ''
       Bitwig Studio is a multi-platform music-creation system for
       production, performance and DJing, with a focus on flexible

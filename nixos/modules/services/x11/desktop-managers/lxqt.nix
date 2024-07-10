@@ -69,9 +69,9 @@ in
 
     services.upower.enable = config.powerManagement.enable;
 
-    services.xserver.libinput.enable = mkDefault true;
+    services.libinput.enable = mkDefault true;
 
-    xdg.portal.lxqt.enable = true;
+    xdg.portal.lxqt.enable = mkDefault true;
 
     # https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1050804
     xdg.portal.config.lxqt.default = mkDefault [ "lxqt" "gtk" ];

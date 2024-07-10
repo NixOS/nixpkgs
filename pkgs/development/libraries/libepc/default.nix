@@ -2,6 +2,7 @@
 , lib
 , fetchurl
 , autoreconfHook
+, gnome-common
 , pkg-config
 , intltool
 , gtk-doc
@@ -32,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     autoreconfHook
-    gnome.gnome-common
+    gnome-common
     pkg-config
     intltool
     gtk-doc
@@ -61,7 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "Easy Publish and Consume Library";
-    homepage = "https://wiki.gnome.org/Projects/libepc";
+    homepage = "https://gitlab.gnome.org/Archive/libepc";
     license = licenses.lgpl21Plus;
     maintainers = teams.gnome.members;
     platforms = platforms.linux;

@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, jupyter-console
-, jupyter-core
-, pygments
-, setuptools
-, termcolor
-, txzmq
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  jupyter-console,
+  jupyter-core,
+  pygments,
+  setuptools,
+  termcolor,
+  txzmq,
 }:
 
 buildPythonPackage rec {
@@ -19,9 +20,7 @@ buildPythonPackage rec {
     hash = "sha256-YxV6xC7GS5NXyMPRZN9YIJxamgP2etwrZUAZjk5PjtU=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     jupyter-console
@@ -41,6 +40,6 @@ buildPythonPackage rec {
     mainProgram = "ilua";
     homepage = "https://github.com/guysv/ilua";
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ wolfangaukang ];
+    maintainers = [ ];
   };
 }

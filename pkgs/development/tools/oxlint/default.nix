@@ -29,7 +29,7 @@ rustPlatform.buildRustPackage rec {
   cargoTestFlags = cargoBuildFlags;
 
   meta = with lib; {
-    description = "A suite of high-performance tools for JavaScript and TypeScript written in Rust";
+    description = "Suite of high-performance tools for JavaScript and TypeScript written in Rust";
     homepage = "https://github.com/web-infra-dev/oxc";
     changelog = "https://github.com/web-infra-dev/oxc/releases/tag/${src.rev}";
     license = licenses.mit;

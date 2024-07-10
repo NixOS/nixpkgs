@@ -1,24 +1,25 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, fetchpatch2
-, hatch-fancy-pypi-readme
-, hatch-vcs
-, hatchling
-, distro
-, packaging
-, setuptools
-, wheel
-, tomli
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
+  fetchpatch2,
+  hatch-fancy-pypi-readme,
+  hatch-vcs,
+  hatchling,
+  distro,
+  packaging,
+  setuptools,
+  wheel,
+  tomli,
   # Test Inputs
-, cmake
-, cython
-, git
-, pytestCheckHook
-, pytest-mock
-, requests
-, virtualenv
+  cmake,
+  cython,
+  git,
+  pytestCheckHook,
+  pytest-mock,
+  requests,
+  virtualenv,
 }:
 
 buildPythonPackage rec {
@@ -64,9 +65,7 @@ buildPythonPackage rec {
     packaging
     setuptools
     wheel
-  ] ++ lib.optionals (pythonOlder "3.11") [
-    tomli
-  ];
+  ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
   nativeCheckInputs = [
     cmake
@@ -92,6 +91,8 @@ buildPythonPackage rec {
     "test_dual_pep518" # pip exits with code 1
     "test_isolated_env_trigger_reconfigure" # Regex pattern 'exit skbuild saving cmake spec' does not match 'exit skbuild running make'.
     "test_hello_wheel" # [Errno 2] No such file or directory: '_skbuild/linux-x86_64-3.9/setuptools/bdist.linux-x86_64/wheel/helloModule.py'
+    "test_hello_cython_sdist" # [Errno 2] No such file or directory: 'dist/hello-cython-1.2.3.tar.gz'
+    "test_hello_pure_sdist" # [Errno 2] No such file or directory: 'dist/hello-pure-1.2.3.tar.gz'
     # sdist contents differ, contains additional setup.py
     "test_hello_sdist"
     "test_manifest_in_sdist"
@@ -102,7 +103,10 @@ buildPythonPackage rec {
     changelog = "https://github.com/scikit-build/scikit-build/blob/${version}/CHANGES.rst";
     description = "Improved build system generator for CPython C/C++/Fortran/Cython extensions";
     homepage = "https://github.com/scikit-build/scikit-build";
-    license = with licenses; [ mit bsd2 ]; # BSD due to reuses of PyNE code
+    license = with licenses; [
+      mit
+      bsd2
+    ]; # BSD due to reuses of PyNE code
     maintainers = with maintainers; [ FlorianFranzen ];
   };
 }

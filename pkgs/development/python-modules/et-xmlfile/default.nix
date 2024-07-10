@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitLab
-, lxml
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitLab,
+  lxml,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -26,12 +27,10 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "et_xmlfile"
-  ];
+  pythonImportsCheck = [ "et_xmlfile" ];
 
   meta = with lib; {
-    description = "An implementation of lxml.xmlfile for the standard library";
+    description = "Implementation of lxml.xmlfile for the standard library";
     longDescription = ''
       et_xmlfile is a low memory library for creating large XML files.
 

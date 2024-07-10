@@ -24,7 +24,7 @@ buildNpmPackage rec {
   };
 
   meta = {
-    description = "A command-line tool to extract data from HTML";
+    description = "Command-line tool to extract data from HTML";
     mainProgram = "hred";
     license = lib.licenses.mit;
     homepage = "https://github.com/danburzo/hred";

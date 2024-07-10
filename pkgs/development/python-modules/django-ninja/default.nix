@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, django
-, fetchFromGitHub
-, flit-core
-, psycopg2
-, pydantic
-, pytest-asyncio
-, pytest-django
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  django,
+  fetchFromGitHub,
+  flit-core,
+  psycopg2,
+  pydantic,
+  pytest-asyncio,
+  pytest-django,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -25,7 +26,10 @@ buildPythonPackage rec {
     hash = "sha256-pvpYDuUZi0Gr5RbBWc91LzgmRLhihrhsKaD/AWN5+Bo=";
   };
 
-  propagatedBuildInputs = [ django pydantic ];
+  propagatedBuildInputs = [
+    django
+    pydantic
+  ];
 
   nativeBuildInputs = [ flit-core ];
 

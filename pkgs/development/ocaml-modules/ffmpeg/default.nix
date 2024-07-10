@@ -1,4 +1,4 @@
-{ lib, buildDunePackage, fetchFromGitHub, callPackage
+{ lib, buildDunePackage, callPackage
 , ffmpeg-base ? callPackage ./base.nix { }
 , ffmpeg-avutil
 , ffmpeg-avcodec

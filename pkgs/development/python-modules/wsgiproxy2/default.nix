@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, webob
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  webob,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -19,16 +20,12 @@ buildPythonPackage rec {
     hash = "sha256-ouofw3cBQzBwSh3Pdtdl7KI2pg/T/z3qoh8zoeiKiSs=";
   };
 
-  propagatedBuildInputs = [
-    webob
-  ];
+  propagatedBuildInputs = [ webob ];
 
   # Circular dependency on webtest
   doCheck = false;
 
-  pythonImportsCheck = [
-    "wsgiproxy"
-  ];
+  pythonImportsCheck = [ "wsgiproxy" ];
 
   meta = with lib; {
     description = "HTTP proxying tools for WSGI apps";

@@ -1,11 +1,23 @@
-{ lib, buildPythonPackage, fetchFromGitHub, numpy, scipy, pillow, fetchpatch }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  numpy,
+  scipy,
+  pillow,
+  fetchpatch,
+}:
 
 buildPythonPackage rec {
   pname = "pyssim";
   version = "0.6";
   format = "setuptools";
 
-  propagatedBuildInputs = [ numpy scipy pillow ];
+  propagatedBuildInputs = [
+    numpy
+    scipy
+    pillow
+  ];
 
   # PyPI tarball doesn't contain test images so let's use GitHub
   src = fetchFromGitHub {

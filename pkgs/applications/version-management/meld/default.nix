@@ -5,7 +5,7 @@
 , python3
 , meson
 , ninja
-, wrapGAppsHook
+, wrapGAppsHook3
 , libxml2
 , pkg-config
 , desktop-file-utils
@@ -13,6 +13,7 @@
 , gtk3
 , gtksourceview4
 , gnome
+, adwaita-icon-theme
 , gsettings-desktop-schemas
 }:
 
@@ -36,7 +37,7 @@ python3.pkgs.buildPythonApplication rec {
     pkg-config
     desktop-file-utils
     gobject-introspection
-    wrapGAppsHook
+    wrapGAppsHook3
     gtk3 # for gtk-update-icon-cache
   ];
 
@@ -44,7 +45,7 @@ python3.pkgs.buildPythonApplication rec {
     gtk3
     gtksourceview4
     gsettings-desktop-schemas
-    gnome.adwaita-icon-theme
+    adwaita-icon-theme
   ];
 
   pythonPath = with python3.pkgs; [

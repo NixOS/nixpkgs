@@ -1,4 +1,4 @@
-{ fetchurl, lib, stdenv, buildPackages
+{ fetchurl, fetchpatch, lib, stdenv, buildPackages
 , curl, openssl, zlib, expat, perlPackages, python3, gettext, cpio
 , gnugrep, gnused, gawk, coreutils # needed at runtime by git-filter-branch etc
 , openssh, pcre2, bash
@@ -29,7 +29,7 @@ assert sendEmailSupport -> perlSupport;
 assert svnSupport -> perlSupport;
 
 let
-  version = "2.44.0";
+  version = "2.45.2";
   svn = subversionClient.override { perlBindings = perlSupport; };
   gitwebPerlLibs = with perlPackages; [ CGI HTMLParser CGIFast FCGI FCGIProcManager HTMLTagCloud ];
 in
@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://www.kernel.org/pub/software/scm/git/git-${version}.tar.xz";
-    hash = "sha256-41hzjctbXqNAzpAKABXAOuhugE5/9k5HqkYx3e5oHeM=";
+    hash = "sha256-Ub/ofrHAL+0UhAUYdTZe6rIpgx0w0M7F2JoU+eQOmts=";
   };
 
   outputs = [ "out" ] ++ lib.optional withManual "doc";
@@ -59,6 +59,15 @@ stdenv.mkDerivation (finalAttrs: {
     ./installCheck-path.patch
   ] ++ lib.optionals withSsh [
     ./ssh-path.patch
+  ] ++ lib.optionals (guiSupport && stdenv.isDarwin) [
+    # Needed to workaround an issue in macOS where gitk shows a empty window
+    # https://github.com/Homebrew/homebrew-core/issues/68798
+    # https://github.com/git/git/pull/944
+    (fetchpatch {
+      name = "gitk_check_main_window_visibility_before_waiting_for_it_to_show.patch";
+      url = "https://github.com/git/git/commit/1db62e44b7ec93b6654271ef34065b31496cd02e.patch";
+      hash = "sha256-ntvnrYFFsJ1Ebzc6vM9/AMFLHMS1THts73PIOG5DkQo=";
+    })
   ];
 
   postPatch = ''
@@ -121,7 +130,8 @@ stdenv.mkDerivation (finalAttrs: {
   # acceptable version.
   #
   # See https://github.com/Homebrew/homebrew-core/commit/dfa3ccf1e7d3901e371b5140b935839ba9d8b706
-  ++ lib.optional stdenv.isDarwin "TKFRAMEWORK=/nonexistent";
+  ++ lib.optional stdenv.isDarwin "TKFRAMEWORK=/nonexistent"
+  ++ lib.optional (stdenv.hostPlatform.isFreeBSD && stdenv.hostPlatform != stdenv.buildPlatform) "uname_S=FreeBSD";
 
   disallowedReferences = lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
     stdenv.shellPackage
@@ -374,6 +384,7 @@ stdenv.mkDerivation (finalAttrs: {
       });
       buildbot-integration = nixosTests.buildbot;
     } // tests.fetchgit;
+    updateScript = ./update.sh;
   };
 
   meta = {

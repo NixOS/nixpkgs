@@ -9,7 +9,6 @@
 , pytest-mock
 , responses
 , pytestCheckHook
-, pythonRelaxDepsHook
 }:
 
 buildPythonApplication rec {
@@ -33,7 +32,6 @@ buildPythonApplication rec {
   ];
 
   nativeBuildInputs = [
-    pythonRelaxDepsHook
   ];
 
   nativeCheckInputs = [
@@ -47,7 +45,7 @@ buildPythonApplication rec {
     "lxml"
   ];
   meta = with lib; {
-    description = "A command-line tool for fetching and formatting historical price data, with support for multiple data sources and output formats";
+    description = "Command-line tool for fetching and formatting historical price data, with support for multiple data sources and output formats";
     homepage = "https://gitlab.com/chrisberkhout/pricehist";
     license = licenses.mit;
     mainProgram = "pricehist";

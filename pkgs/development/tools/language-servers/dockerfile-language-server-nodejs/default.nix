@@ -22,7 +22,7 @@ buildNpmPackage rec {
 
   meta = {
     changelog = "https://github.com/rcjsuen/dockerfile-language-server-nodejs/blob/${src.rev}/CHANGELOG.md";
-    description = "A language server for Dockerfiles powered by Node.js, TypeScript, and VSCode technologies";
+    description = "Language server for Dockerfiles powered by Node.js, TypeScript, and VSCode technologies";
     homepage = "https://github.com/rcjsuen/dockerfile-language-server-nodejs";
     license = lib.licenses.mit;
     mainProgram = "docker-langserver";

@@ -1,8 +1,10 @@
 { alsa-lib
+, libuuid
 , cups
 , dpkg
 , fetchurl
 , glib
+, libssh2
 , gtk3
 , lib
 , libayatana-appindicator
@@ -11,6 +13,7 @@
 , libkrb5
 , libnotify
 , mesa # for libgbm
+, libpulseaudio
 , libGL
 , nss
 , xorg
@@ -20,7 +23,7 @@
 , at-spi2-core
 , autoPatchelfHook
 , makeShellWrapper
-, wrapGAppsHook
+, wrapGAppsHook3
 , commandLineArgs ? ""
 }:
 
@@ -28,11 +31,11 @@ let
   sources = import ./sources.nix;
   srcs = {
     x86_64-linux = fetchurl {
-      url = "https://dldir1.qq.com/qqfile/qq/QQNT/${sources.urlhash}/linuxqq_${sources.version}_amd64.deb";
+      url = sources.amd64_url;
       hash = sources.amd64_hash;
     };
     aarch64-linux = fetchurl {
-      url = "https://dldir1.qq.com/qqfile/qq/QQNT/${sources.urlhash}/linuxqq_${sources.version}_arm64.deb";
+      url = sources.arm64_url;
       hash = sources.arm64_hash;
     };
   };
@@ -46,7 +49,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [
     autoPatchelfHook
     makeShellWrapper
-    wrapGAppsHook
+    wrapGAppsHook3
     dpkg
   ];
 
@@ -57,6 +60,7 @@ stdenv.mkDerivation {
     glib
     gtk3
     libdrm
+    libpulseaudio
     libgcrypt
     libkrb5
     mesa
@@ -82,7 +86,8 @@ stdenv.mkDerivation {
       --replace "/usr/share" "$out/share"
     makeShellWrapper $out/opt/QQ/qq $out/bin/qq \
       --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH" \
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libGL ]}" \
+      --prefix LD_PRELOAD : "${lib.makeLibraryPath [ libssh2 ]}/libssh2.so.1" \
+      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libGL libuuid]}" \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
       --add-flags ${lib.escapeShellArg commandLineArgs} \
       "''${gappsWrapperArgs[@]}"
@@ -111,6 +116,6 @@ stdenv.mkDerivation {
     platforms = [ "x86_64-linux" "aarch64-linux" ];
     license = licenses.unfree;
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    maintainers = with lib.maintainers; [ fee1-dead ];
+    maintainers = with lib.maintainers; [ fee1-dead bot-wxt1221 ];
   };
 }

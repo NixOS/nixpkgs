@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "http://libjson.sourceforge.net/";
-    description = "A JSON reader and writer";
+    description = "JSON reader and writer";
     longDescription = ''
       A JSON reader and writer which is super-efficient and
       usually runs circles around other JSON libraries.

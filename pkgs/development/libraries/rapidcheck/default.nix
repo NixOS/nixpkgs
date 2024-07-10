@@ -8,7 +8,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rapidcheck";
-  version = "unstable-2023-12-14";
+  version = "0-unstable-2023-12-14";
 
   src = fetchFromGitHub {
     owner = "emil-e";
@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = with lib; {
-    description = "A C++ framework for property based testing inspired by QuickCheck";
+    description = "C++ framework for property based testing inspired by QuickCheck";
     inherit (finalAttrs.src.meta) homepage;
     maintainers = with maintainers; [ ];
     license = licenses.bsd2;

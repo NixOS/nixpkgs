@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     description = "Space-efficient incremental backups of large files or block devices";
     mainProgram = "chunksync";
     homepage = "http://chunksync.florz.de/";
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Plus;
     platforms = with lib.platforms; linux;
   };
 }

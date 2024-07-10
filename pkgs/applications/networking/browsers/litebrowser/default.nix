@@ -47,7 +47,7 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     broken = stdenv.cc.isClang;  # https://github.com/litehtml/litebrowser-linux/issues/19
-    description = "A simple browser based on the litehtml engine";
+    description = "Simple browser based on the litehtml engine";
     mainProgram = "litebrowser";
     homepage = "https://github.com/litehtml/litebrowser-linux";
     license = licenses.bsd3;

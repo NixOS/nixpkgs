@@ -1,20 +1,21 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 
-# build-system
-, setuptools
+  # build-system
+  setuptools,
 
-# dependencies
-, aiohttp
-, requests
-, pytz
+  # dependencies
+  aiohttp,
+  requests,
+  pytz,
 
-# tests
-, mock
-, pytest-aiohttp
-, pytest-asyncio
-, pytestCheckHook
+  # tests
+  mock,
+  pytest-aiohttp,
+  pytest-asyncio,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -28,9 +29,7 @@ buildPythonPackage rec {
     hash = "sha256-lRDi6qYMaPI8SiSNe0vzlKb92axujt44aei8opNPDug=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     aiohttp
@@ -52,9 +51,7 @@ buildPythonPackage rec {
     "test_update_battery"
   ];
 
-  pythonImportsCheck = [
-    "pyIndego"
-  ];
+  pythonImportsCheck = [ "pyIndego" ];
 
   meta = with lib; {
     description = "Python interface for Bosch API for lawnmowers";

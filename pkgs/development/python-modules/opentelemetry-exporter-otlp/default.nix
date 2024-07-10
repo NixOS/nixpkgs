@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, hatchling
-, opentelemetry-api
-, opentelemetry-exporter-otlp-proto-grpc
-, opentelemetry-exporter-otlp-proto-http
-, opentelemetry-test-utils
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  hatchling,
+  opentelemetry-api,
+  opentelemetry-exporter-otlp-proto-grpc,
+  opentelemetry-exporter-otlp-proto-http,
+  opentelemetry-test-utils,
+  pytestCheckHook,
 }:
 
 buildPythonPackage {
@@ -18,9 +19,7 @@ buildPythonPackage {
 
   sourceRoot = "${opentelemetry-api.src.name}/exporter/opentelemetry-exporter-otlp";
 
-  build-system = [
-    hatchling
-  ];
+  build-system = [ hatchling ];
 
   dependencies = [
     opentelemetry-exporter-otlp-proto-grpc

@@ -46,6 +46,8 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "prefix=${placeholder "out"}" ];
 
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-error=implicit-function-declaration";
+
   postInstall = ''
     wrapProgram "$out/bin/sc-im" --prefix PATH : "${lib.makeBinPath [ gnuplot ]}"
   '';
@@ -53,7 +55,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     changelog = "https://github.com/andmarti1424/sc-im/blob/${src.rev}/CHANGES";
     homepage = "https://github.com/andmarti1424/sc-im";
-    description = "An ncurses spreadsheet program for terminal";
+    description = "Ncurses spreadsheet program for terminal";
     license = licenses.bsdOriginal;
     maintainers = with maintainers; [ dotlambda ];
     platforms = platforms.unix;

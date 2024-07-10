@@ -13,7 +13,6 @@ python3Packages.buildPythonApplication rec {
   };
 
   nativeBuildInputs = with python3Packages; [
-    pythonRelaxDepsHook
     setuptools
   ] ++ [
     installShellFiles
@@ -55,7 +54,7 @@ python3Packages.buildPythonApplication rec {
   passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
-    description = "A command line interface for audible package. With the cli you can download your Audible books, cover, chapter files";
+    description = "Command line interface for audible package. With the cli you can download your Audible books, cover, chapter files";
     license = licenses.agpl3Only;
     homepage = "https://github.com/mkb79/audible-cli";
     changelog = "https://github.com/mkb79/audible-cli/blob/${src.rev}/CHANGELOG.md";

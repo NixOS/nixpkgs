@@ -7,21 +7,23 @@
 , symlinkJoin
 , writeTextDir
 , yt-dlp
+# the unwrapped mpv derivation
+, mpv
 }:
 
-# the unwrapped mpv derivation - 1st argument to `wrapMpv`
-mpv:
-
 let
-  # arguments to the function (exposed as `wrapMpv` in all-packages.nix)
+  # arguments to the function (exposed as `mpv-unwrapped.wrapper` in top-level)
   wrapper = {
+    mpv,
     extraMakeWrapperArgs ? [],
     youtubeSupport ? true,
-    # a set of derivations (probably from `mpvScripts`) where each is
-    # expected to have a `scriptName` passthru attribute that points to the
-    # name of the script that would reside in the script's derivation's
+    # a set of derivations (probably from `mpvScripts`) where each is expected
+    # to have a `scriptName` passthru attribute that points to the name of the
+    # script that would reside in the script's derivation's
     # `$out/share/mpv/scripts/`.
-    # A script can optionally also provide an `extraWrapperArgs` passthru attribute.
+    #
+    # A script can optionally also provide `passthru.extraWrapperArgs`
+    # attribute.
     scripts ? [],
     extraUmpvWrapperArgs ? []
   }:

@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, libarchive
-, glibcLocales
-, mock
-, pytestCheckHook
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  libarchive,
+  glibcLocales,
+  mock,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -20,16 +21,14 @@ buildPythonPackage rec {
     sha256 = "sha256-CO9llPIbVTuE74AeohrMAu5ICkuT/MorRlYEEFne6Uk=";
   };
 
-  LC_ALL="en_US.UTF-8";
+  LC_ALL = "en_US.UTF-8";
 
   postPatch = ''
     substituteInPlace libarchive/ffi.py --replace \
       "find_library('archive')" "'${libarchive.lib}/lib/libarchive${stdenv.hostPlatform.extensions.sharedLibrary}'"
   '';
 
-  pythonImportsCheck = [
-    "libarchive"
-  ];
+  pythonImportsCheck = [ "libarchive" ];
 
   nativeCheckInputs = [
     glibcLocales
@@ -42,5 +41,4 @@ buildPythonPackage rec {
     description = "Python interface to libarchive";
     license = licenses.cc0;
   };
-
 }

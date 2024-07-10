@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, setuptools-scm
-, setuptools
-, wcwidth
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  setuptools-scm,
+  setuptools,
+  wcwidth,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -38,6 +39,5 @@ buildPythonPackage rec {
     mainProgram = "tabulate";
     homepage = "https://github.com/astanin/python-tabulate";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ fridh ];
   };
 }

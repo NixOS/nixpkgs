@@ -5,14 +5,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "calcure";
-  version = "3.0.1";
+  version = "3.0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "anufrievroman";
     repo = "calcure";
     rev = "refs/tags/${version}";
-    hash = "sha256-rs3TCZjMndeh2N7e+U62baLs+XqWK1Mk7KVnypSnWPg=";
+    hash = "sha256-2yWg/9NQxFIwoSLj1e0y1+tgKer8GtOmjzwlTRX/Q+c=";
   };
 
   nativeBuildInputs = with python3.pkgs; [

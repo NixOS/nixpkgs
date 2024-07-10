@@ -54,7 +54,7 @@ buildGoModule rec {
   passthru.updateScript = (./. + "/update-${channel}.sh");
 
   meta = with lib; {
-    description = "A simple Kubernetes service mesh that improves security, observability and reliability";
+    description = "Simple Kubernetes service mesh that improves security, observability and reliability";
     mainProgram = "linkerd";
     downloadPage = "https://github.com/linkerd/linkerd2/";
     homepage = "https://linkerd.io/";

@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "A library to communicate using the JSON-RPC 2.0 specification";
+    description = "Library to communicate using the JSON-RPC 2.0 specification";
     homepage = "https://gitlab.gnome.org/GNOME/jsonrpc-glib";
     license = licenses.lgpl21Plus;
     maintainers = teams.gnome.members;

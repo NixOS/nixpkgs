@@ -13,6 +13,6 @@ in
     mkRenamed "autoAddDriverRunpath" "pkgs.autoAddDriverRunpath"
       final.pkgs.autoAddDriverRunpath; # Added 2024-03-30
   autoAddOpenGLRunpathHook =
-    mkRenamed "autoAddOpenGLRunpathHook" "pkgs.autoAddDriverRunpath"
+    mkRenamed "autoAddOpenGLRunpathHook" "pkgs.autoAddDriverRunpathHook"
       final.pkgs.autoAddDriverRunpath; # Added 2024-03-30
 }

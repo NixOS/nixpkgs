@@ -7,20 +7,19 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "twitch-dl";
-  version = "2.2.0";
+  version = "2.3.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ihabunek";
     repo = "twitch-dl";
     rev = "refs/tags/${version}";
-    hash = "sha256-H2SxZgEjVdj/GRguJ2v/WWUrh0VTrwFV9mZVn/EYyPg=";
+    hash = "sha256-ixkIDJbysa3TOJiNmAG2SuJwCv5MaX6nCtUnS4901rg=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail 'm3u8>=1.0.0,<4.0.0' 'm3u8>=1.0.0'
-  '';
+  pythonRelaxDeps = [
+    "m3u8"
+  ];
 
   nativeBuildInputs = [
     python3Packages.setuptools
@@ -42,10 +41,21 @@ python3Packages.buildPythonApplication rec {
   disabledTestPaths = [
     # Requires network access
     "tests/test_api.py"
+    "tests/test_cli.py"
   ];
 
   pythonImportsCheck = [
     "twitchdl"
+    "twitchdl.cli"
+    "twitchdl.download"
+    "twitchdl.entities"
+    "twitchdl.http"
+    "twitchdl.output"
+    "twitchdl.playlists"
+    "twitchdl.progress"
+    "twitchdl.twitch"
+    "twitchdl.utils"
+    "twitchdl.commands"
   ];
 
   postInstall = ''
@@ -58,7 +68,7 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://github.com/ihabunek/twitch-dl";
     changelog = "https://github.com/ihabunek/twitch-dl/blob/${src.rev}/CHANGELOG.md";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ marsam ];
+    maintainers = with maintainers; [ pbsds ];
     mainProgram = "twitch-dl";
   };
 }

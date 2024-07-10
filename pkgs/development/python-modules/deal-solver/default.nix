@@ -1,13 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, flit-core
-, z3-solver
-, astroid
-, pytestCheckHook
-, hypothesis
-, pythonRelaxDepsHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  flit-core,
+  z3-solver,
+  astroid,
+  pytestCheckHook,
+  hypothesis,
 }:
 
 buildPythonPackage rec {
@@ -26,7 +26,6 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     flit-core
-    pythonRelaxDepsHook
   ];
 
   # z3 does not provide a dist-info, so python-runtime-deps-check will fail

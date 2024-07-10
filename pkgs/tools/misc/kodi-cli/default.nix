@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, makeWrapper, curl, bash, jq, youtube-dl, gnome }:
+{ lib, stdenv, fetchFromGitHub, makeWrapper, curl, bash, jq, youtube-dl, zenity }:
 
 stdenv.mkDerivation rec {
   pname = "kodi-cli";
@@ -18,13 +18,13 @@ stdenv.mkDerivation rec {
     cp -a kodi-cli $out/bin
     wrapProgram $out/bin/kodi-cli --prefix PATH : ${lib.makeBinPath [ curl bash ]}
     cp -a playlist_to_kodi $out/bin
-    wrapProgram $out/bin/playlist_to_kodi --prefix PATH : ${lib.makeBinPath [ curl bash gnome.zenity jq youtube-dl ]}
+    wrapProgram $out/bin/playlist_to_kodi --prefix PATH : ${lib.makeBinPath [ curl bash zenity jq youtube-dl ]}
   '';
 
   meta = with lib; {
     homepage = "https://github.com/nawar/kodi-cli";
     description = "Kodi/XBMC bash script to send Kodi commands using JSON RPC. It also allows sending YouTube videos to Kodi";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     platforms = platforms.unix;
     maintainers = [ maintainers.pstn ];
  };

@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "http://sipp.sf.net";
-    description = "The SIPp testing tool";
+    description = "SIPp testing tool";
     mainProgram = "sipp";
     license = licenses.gpl3;
     platforms = platforms.unix;

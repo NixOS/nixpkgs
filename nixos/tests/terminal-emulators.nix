@@ -42,7 +42,7 @@ let tests = {
 
       germinal.pkg = p: p.germinal;
 
-      gnome-terminal.pkg = p: p.gnome.gnome-terminal;
+      gnome-terminal.pkg = p: p.gnome-terminal;
 
       guake.pkg = p: p.guake;
       guake.cmd = "SHELL=$command guake --show";

@@ -1,15 +1,16 @@
-{ lib
-, cython_3
-, async-timeout
-, buildPythonPackage
-, fetchFromGitHub
-, ifaddr
-, poetry-core
-, pytest-asyncio
-, pytest-timeout
-, pythonOlder
-, pytestCheckHook
-, setuptools
+{
+  lib,
+  cython,
+  async-timeout,
+  buildPythonPackage,
+  fetchFromGitHub,
+  ifaddr,
+  poetry-core,
+  pytest-asyncio,
+  pytest-timeout,
+  pythonOlder,
+  pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -32,16 +33,12 @@ buildPythonPackage rec {
   '';
 
   build-system = [
-    cython_3
+    cython
     poetry-core
     setuptools
   ];
 
-  dependencies = [
-    ifaddr
-  ] ++ lib.optionals (pythonOlder "3.11") [
-    async-timeout
-  ];
+  dependencies = [ ifaddr ] ++ lib.optionals (pythonOlder "3.11") [ async-timeout ];
 
   nativeCheckInputs = [
     pytest-asyncio

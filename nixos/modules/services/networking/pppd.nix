@@ -7,7 +7,7 @@ let
 in
 {
   meta = {
-    maintainers = with maintainers; [ danderson ];
+    maintainers = with maintainers; [ ];
   };
 
   options = {

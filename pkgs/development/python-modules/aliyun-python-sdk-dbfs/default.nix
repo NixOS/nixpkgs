@@ -1,8 +1,9 @@
-{ lib
-, aliyun-python-sdk-core
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
+{
+  lib,
+  aliyun-python-sdk-core,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -17,16 +18,12 @@ buildPythonPackage rec {
     hash = "sha256-Kj6DfnXZq5ilE+vnZrAoZEhPDoNrMIs5p2OcBc24qXM=";
   };
 
-  propagatedBuildInputs = [
-    aliyun-python-sdk-core
-  ];
+  propagatedBuildInputs = [ aliyun-python-sdk-core ];
 
   # All components are stored in a mono repo
   doCheck = false;
 
-  pythonImportsCheck = [
-    "aliyunsdkdbfs"
-  ];
+  pythonImportsCheck = [ "aliyunsdkdbfs" ];
 
   meta = with lib; {
     description = "DBFS module of Aliyun Python SDK";

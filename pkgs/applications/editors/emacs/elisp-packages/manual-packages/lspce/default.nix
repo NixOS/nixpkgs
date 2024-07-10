@@ -9,7 +9,7 @@
 }:
 
 let
-  version = "unstable-2024-02-03";
+  version = "1.0.0-unstable-2024-02-03";
 
   src = fetchFromGitHub {
     owner = "zbelial";
@@ -22,7 +22,7 @@ let
     homepage = "https://github.com/zbelial/lspce";
     description = "LSP Client for Emacs implemented as a module using rust";
     license = lib.licenses.gpl3Only;
-    maintainers = [ lib.maintainers.marsam ];
+    maintainers = [ ];
     inherit (emacs.meta) platforms;
   };
 

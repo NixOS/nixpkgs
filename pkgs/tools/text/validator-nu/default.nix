@@ -78,6 +78,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ andersk ivan ];
     mainProgram = "vnu";
+    platforms = lib.platforms.all;
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode fromSource ];
   };
 })

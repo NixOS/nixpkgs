@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "A set of scripts to serve the Nix store as a binary cache";
+    description = "Set of scripts to serve the Nix store as a binary cache";
     longDescription = ''
       This package installs a CGI script that serves Nix store path in the
       binary cache format. It also installs a launcher called

@@ -27,7 +27,7 @@ stdenvNoCC.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://colemakmods.github.io/mod-dh";
-    description = "A Colemak mod for more comfortable typing";
+    description = "Colemak mod for more comfortable typing";
     license = licenses.publicDomain;
     platforms = platforms.linux;
     maintainers = with maintainers; [ monaaraj ];

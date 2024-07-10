@@ -23,7 +23,7 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A fast, asynchronous Zsh prompt";
+    description = "Fast, asynchronous Zsh prompt";
     homepage = "https://github.com/agkozak/agkozak-zsh-prompt";
     license = licenses.mit;
     platforms = platforms.all;

@@ -55,7 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     changelog = "https://github.com/javacc/javacc/blob/${finalAttrs.src.rev}/docs/release-notes.md";
-    description = "A parser generator for building parsers from grammars";
+    description = "Parser generator for building parsers from grammars";
     homepage = "https://javacc.github.io/javacc";
     license = licenses.bsd2;
     mainProgram = "javacc";
