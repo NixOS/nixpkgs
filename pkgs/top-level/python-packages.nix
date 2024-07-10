@@ -5478,6 +5478,8 @@ self: super: with self; {
 
   hikari = callPackage ../development/python-modules/hikari { };
 
+  hikari-crescent = callPackage ../development/python-modules/hikari-crescent { };
+
   hikari-lightbulb = callPackage ../development/python-modules/hikari-lightbulb { };
 
   hikvision = callPackage ../development/python-modules/hikvision { };
@@ -14077,6 +14079,8 @@ self: super: with self; {
   signedjson = callPackage ../development/python-modules/signedjson { };
 
   signxml = callPackage ../development/python-modules/signxml { };
+
+  sigparse = callPackage ../development/python-modules/sigparse { };
 
   sigrok = callPackage ../development/python-modules/sigrok { };
 
