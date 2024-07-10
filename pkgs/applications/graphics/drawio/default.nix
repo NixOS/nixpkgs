@@ -63,14 +63,14 @@ stdenv.mkDerivation rec {
     runHook preBuild
 
   '' + lib.optionalString stdenv.isDarwin ''
-    cp -R ${electron}/Applications/Electron.app Electron.app
+    cp -R ${electron.dist}/Electron.app Electron.app
     chmod -R u+w Electron.app
     export CSC_IDENTITY_AUTO_DISCOVERY=false
     sed -i "/afterSign/d" electron-builder-linux-mac.json
   '' + ''
     yarn --offline run electron-builder --dir \
-      ${if stdenv.isDarwin then "--config electron-builder-linux-mac.json" else ""} \
-      -c.electronDist=${if stdenv.isDarwin then "." else "${electron}/libexec/electron"} \
+      ${lib.optionalString stdenv.isDarwin "--config electron-builder-linux-mac.json"} \
+      -c.electronDist=${if stdenv.isDarwin then "." else electron.dist} \
       -c.electronVersion=${electron.version}
 
     runHook postBuild

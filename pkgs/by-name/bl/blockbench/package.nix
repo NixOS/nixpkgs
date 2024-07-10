@@ -45,7 +45,7 @@ buildNpmPackage rec {
 
   postBuild = ''
     # electronDist needs to be modifiable on Darwin
-    cp -r ${electronDist} electron-dist
+    cp -r ${electron.dist} electron-dist
     chmod -R u+w electron-dist
 
     npm exec electron-builder -- \
