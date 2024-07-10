@@ -1,18 +1,18 @@
-{ lib, fetchFromGitea, buildGoModule }:
+{ lib, fetchFromGitea, buildGoModule, nix-update-script }:
 
 buildGoModule rec {
   pname = "codeberg-pages";
-  version = "5.0";
+  version = "5.1";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "Codeberg";
     repo = "pages-server";
-    rev = "ea68a82cd22a8a8c1f265260af22b9406f13e3a9";
-    hash = "sha256-TSXRB0oq1CtHC9ooO+Y3ICS5YE+q+ivZAcYBSd1oWi0=";
+    rev = "v${version}";
+    hash = "sha256-txWRYQnJCGVZ0/6pZdKkRFsdUe2B+A0Fy0/WJCiBVa0=";
   };
 
-  vendorHash = "sha256-vTYB3ka34VooN2Wh/Rcj+2S1qAsA2a/VtXlILn1W7oU=";
+  vendorHash = "sha256-0JPnBf4NA4t+63cNMZYnB56y93nOc8Wn7TstRiHgvhk=";
 
   postPatch = ''
     # disable httptest
@@ -23,11 +23,14 @@ buildGoModule rec {
 
   tags = [ "sqlite" "sqlite_unlock_notify" "netgo" ];
 
+  passthru.updateScript = nix-update-script {};
+
   meta = with lib; {
-    mainProgram = "codeberg-pages";
-    maintainers = with maintainers; [ laurent-f1z1 ];
+    mainProgram = "pages";
+    maintainers = with maintainers; [ laurent-f1z1 christoph-heiss ];
     license = licenses.eupl12;
     homepage = "https://codeberg.org/Codeberg/pages-server";
     description = "Static websites hosting from Gitea repositories";
+    changelog = "https://codeberg.org/Codeberg/pages-server/releases/tag/v${version}";
   };
 }

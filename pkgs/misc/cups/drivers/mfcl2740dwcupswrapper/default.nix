@@ -40,6 +40,6 @@ stdenv.mkDerivation rec {
     homepage = "http://www.brother.com/";
     license = lib.licenses.gpl2Plus;
     platforms = [ "x86_64-linux" "i686-linux" ];
-    maintainers = [ lib.maintainers.Enzime ];
+    maintainers = [ ];
   };
 }

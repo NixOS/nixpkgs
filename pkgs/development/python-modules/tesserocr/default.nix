@@ -3,13 +3,16 @@
   fetchPypi,
   lib,
 
-  # build dependencies
+  # build-system
   cython,
-  leptonica,
   pkg-config,
+  setuptools,
+
+  # native dependencies
+  leptonica,
   tesseract4,
 
-  # propagates
+  # dependencies
   pillow,
 
   # tests
@@ -28,12 +31,13 @@ buildPythonPackage rec {
 
   # https://github.com/sirfz/tesserocr/issues/314
   postPatch = ''
-    sed -i '/allheaders.h/a\    pass\n\ncdef extern from "leptonica/pix_internal.h" nogil:' tesseract.pxd
+    sed -i '/allheaders.h/a\    pass\n\ncdef extern from "leptonica/pix_internal.h" nogil:' tesserocr/tesseract.pxd
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     cython
     pkg-config
+    setuptools
   ];
 
   buildInputs = [
@@ -41,11 +45,15 @@ buildPythonPackage rec {
     tesseract4
   ];
 
-  propagatedBuildInputs = [ pillow ];
+  dependencies = [ pillow ];
 
   pythonImportsCheck = [ "tesserocr" ];
 
   nativeCheckInputs = [ unittestCheckHook ];
+
+  preCheck = ''
+    rm -rf tesserocr
+  '';
 
   meta = with lib; {
     changelog = "https://github.com/sirfz/tesserocr/releases/tag/v${version}";

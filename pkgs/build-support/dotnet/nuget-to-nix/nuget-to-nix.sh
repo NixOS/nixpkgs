@@ -70,6 +70,7 @@ for package in *; do
         break
       else
         if hash=$(nix-prefetch-url "$url" 2>"$tmp"/error); then
+          hash="$(nix-hash --to-sri --type sha256 "$hash")"
           # If multiple remote sources are enabled, nuget will try them all
           # concurrently and use the one that responds first. We always use the
           # first source that has the package.

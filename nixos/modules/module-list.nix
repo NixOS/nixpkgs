@@ -258,6 +258,7 @@
   ./programs/projecteur.nix
   ./programs/proxychains.nix
   ./programs/qdmr.nix
+  ./programs/qgroundcontrol.nix
   ./programs/qt5ct.nix
   ./programs/quark-goldleaf.nix
   ./programs/regreet.nix
@@ -1380,6 +1381,7 @@
   ./services/web-apps/freshrss.nix
   ./services/web-apps/galene.nix
   ./services/web-apps/gerrit.nix
+  ./services/web-apps/glance.nix
   ./services/web-apps/gotify-server.nix
   ./services/web-apps/gotosocial.nix
   ./services/web-apps/grocy.nix

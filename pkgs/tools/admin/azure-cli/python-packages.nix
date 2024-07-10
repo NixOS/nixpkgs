@@ -114,6 +114,7 @@ let
       azure-mgmt-cdn = overrideAzureMgmtPackage super.azure-mgmt-cdn "12.0.0" "zip" "sha256-t8PuIYkjS0r1Gs4pJJJ8X9cz8950imQtbVBABnyMnd0=";
       azure-mgmt-compute = overrideAzureMgmtPackage super.azure-mgmt-compute "31.0.0" "tar.gz" "sha256-WlscT8GhnssCKhLe0b6LGxVfaXnQP7nvwEZC9gZkS78=";
       azure-mgmt-core = overrideAzureMgmtPackage super.azure-mgmt-core "1.3.2" "zip" "sha256-B/Sv6COlXXBLBI1h7f3BMYwFHtWfJEAyEmNQvpXp1QE=";
+      azure-mgmt-cosmosdb = overrideAzureMgmtPackage super.azure-mgmt-cosmosdb "9.5.1" "tar.gz" "sha256-TlXTlz8RzwLPeoBVruhmFSM9fL47siegfBdrrIvH7wI=";
       azure-mgmt-datalake-store = overrideAzureMgmtPackage super.azure-mgmt-datalake-store "0.5.0" "zip" "sha256-k3bTVJVmHRn4rMVgT2ewvFlJOxg1u8SA+aGVL5ABekw=";
       azure-mgmt-devtestlabs = overrideAzureMgmtPackage super.azure-mgmt-devtestlabs "4.0.0" "zip" "sha256-WVScTEBo8mRmsQl7V0qOUJn7LNbIvgoAOVsG07KeJ40=";
       azure-mgmt-dns = overrideAzureMgmtPackage super.azure-mgmt-dns "8.0.0" "zip" "sha256-QHwtrLM1E/++nKS+Wt216dS64Mt++mE8P31THve/jeg=";
@@ -140,12 +141,11 @@ let
       azure-mgmt-servicefabric = overrideAzureMgmtPackage super.azure-mgmt-servicefabric "2.1.0" "tar.gz" "sha256-oIQzBJVUQ2yQhEvIqWgg6INplITm/8mQMv0lcfjF99Y=";
       azure-mgmt-servicelinker = overrideAzureMgmtPackage super.azure-mgmt-servicelinker "1.2.0b2" "tar.gz" "sha256-PpEFMM8ri9OgAa79dGhvPKy5YFfDZZustBUDieQrtZU=";
       azure-mgmt-signalr = overrideAzureMgmtPackage super.azure-mgmt-signalr "2.0.0b1" "tar.gz" "sha256-oK2ceBEoQ7gAeG6mye+x8HPzQU9bUNRPVJtRW2GL4xg=";
-      azure-mgmt-sql = overrideAzureMgmtPackage super.azure-mgmt-sql "4.0.0b16" "tar.gz" "sha256-+6QKEROlbXe0oCj4qtB+r4/yCPZD4N+71e5Z1Z/zXV0=";
+      azure-mgmt-sql = overrideAzureMgmtPackage super.azure-mgmt-sql "4.0.0b17" "tar.gz" "sha256-i9VNbYJ3TgzURbtYYrXw+ez4ubK7BH39/EIL5kqb9Xg=";
       azure-mgmt-sqlvirtualmachine = overrideAzureMgmtPackage super.azure-mgmt-sqlvirtualmachine "1.0.0b5" "zip" "sha256-ZFgJflgynRSxo+B+Vso4eX1JheWlDQjfJ9QmupXypMc=";
-      azure-mgmt-storage = overrideAzureMgmtPackage super.azure-mgmt-storage "21.1.0" "tar.gz" "sha256-1tPA6RfJiLye0Eckd9PvP5CIYAnrHZenEZRPg3VjAWI=";
+      azure-mgmt-storage = overrideAzureMgmtPackage super.azure-mgmt-storage "21.2.0" "tar.gz" "sha256-KHyYQLAb6TGBnUA9p+1SvWL9B3sFKd1HDm28T+3ksg0=";
       azure-mgmt-synapse = overrideAzureMgmtPackage super.azure-mgmt-synapse "2.1.0b5" "zip" "sha256-5E6Yf1GgNyNVjd+SeFDbhDxnOA6fOAG6oojxtCP4m+k=";
       azure-mgmt-trafficmanager = overrideAzureMgmtPackage super.azure-mgmt-trafficmanager "1.0.0" "zip" "sha256-R0F2HoA0bE7dTLPycTaOqYBj+ATQFeJFwv4EjtK1lqg=";
-
       azure-storage-common = overrideAzureMgmtPackage super.azure-storage-common "1.4.2" "tar.gz" "sha256-Tsh8dTfUV+yVJS4ORkd+LBzPM3dP/v0F2FRGgssK5AE=";
       azure-synapse-accesscontrol = overrideAzureMgmtPackage super.azure-synapse-accesscontrol "0.5.0" "zip" "sha256-g14ySiByqPgkJGRH8EnIRJO9Q6H2usS5FOeMCQiUuwQ=";
       azure-synapse-spark = overrideAzureMgmtPackage super.azure-synapse-spark "0.2.0" "zip" "sha256-OQ5brhweEIrtN2iP4I5NacdC9t3YUiGIVhhqSs3FMuI=";

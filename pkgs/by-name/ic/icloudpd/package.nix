@@ -75,6 +75,6 @@ python3Packages.buildPythonApplication rec {
     description = "iCloud Photos Downloader";
     license = licenses.mit;
     mainProgram = "icloudpd";
-    maintainers = with maintainers; [ anpin Enzime jnsgruk ];
+    maintainers = with maintainers; [ anpin jnsgruk ];
   };
 }

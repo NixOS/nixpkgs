@@ -1,10 +1,10 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   setuptools,
-  pynose,
   mock,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -12,21 +12,21 @@ buildPythonPackage rec {
   version = "4.0.1";
   format = "pyproject";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-mXY9qBv+qNr2s9ItEarMsBqND1LqUh2qs351ikyn0Sg=";
+  src = fetchFromGitHub {
+    owner = "jsocol";
+    repo = "pystatsd";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-g830TjFERKUguFKlZeaOhCTlaUs0wcDg4bMdRDr3smw=";
   };
 
   nativeBuildInputs = [ setuptools ];
 
   nativeCheckInputs = [
-    pynose
     mock
+    pytestCheckHook
   ];
 
-  checkPhase = ''
-    nosetests -sv
-  '';
+  pytestFlagsArray = [ "statsd/tests.py" ];
 
   meta = with lib; {
     maintainers = with maintainers; [ domenkozar ];

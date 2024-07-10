@@ -106,7 +106,7 @@ index d1f047820ec..aab400535dd 100644
  
  runex47: ex47.PETSc
  	-@H5OUT=`mktemp -t petsc.h5.XXXXXX`; ${MPIEXEC} -n 1 ${MPIEXEC_TAIL} ./ex47 -filename $${H5OUT} > ex47_1.tmp 2>&1; \
-+       sed -i '/hwloc\/linux/d ; /ERROR opendir(\/sys\/class\/net) failed/d' ex47_1.tmp; \
++       sed -i '/hwloc\/linux/d ; /ERROR scandir(\/sys\/class\/net) failed/d ; /ERROR opendir(\/sys\/class\/net) failed/d' ex47_1.tmp; \
  	   if (${DIFF} output/ex47_1.out ex47_1.tmp) then \
               echo "C/C++ example src/vec/vec/tests/ex47 run successfully with HDF5"; \
             else \

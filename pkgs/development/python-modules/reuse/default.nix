@@ -20,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "reuse";
-  version = "4.0.2";
+  version = "4.0.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fsfe";
     repo = "reuse-tool";
     rev = "refs/tags/v${version}";
-    hash = "sha256-ajvQbDHQDzmEAmODVEXKH+Nsbud6V3RX1DRQ6SDEtm8=";
+    hash = "sha256-oKtQBT8tuAk4S/Sygp4qxLk4ADWDTG0MbVaL5O2qsuA=";
   };
 
   build-system = [ poetry-core ];

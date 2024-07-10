@@ -4,8 +4,9 @@
 , stdenvNoCC
 , fetchurl
 , fetchFromGitHub
+, runCommand
 , installShellFiles
-, python3
+, python311
 
   # Whether to include patches that enable placing certain behavior-defining
   # configuration files in the Nix store.
@@ -18,18 +19,23 @@
 }:
 
 let
-  version = "2.61.0";
+  version = "2.62.0";
 
   src = fetchFromGitHub {
     name = "azure-cli-${version}-src";
     owner = "Azure";
     repo = "azure-cli";
     rev = "azure-cli-${version}";
-    hash = "sha256-RmCZigDenbX8OoIZeY087ga2AP8yRckyG0qZnN9gg44=";
+    hash = "sha256-Rb27KRAb50YzTZzMs6n8g04x14ni3rIYAL3c5j/ieRw=";
   };
 
+  # Pin Python version to 3.11.
+  # See https://discourse.nixos.org/t/breaking-changes-announcement-for-unstable/17574/53
+  # and https://github.com/Azure/azure-cli/issues/27673
+  python3 = python311;
+
   # put packages that needs to be overridden in the py package scope
-  py = callPackage ./python-packages.nix { inherit src version; };
+  py = callPackage ./python-packages.nix { inherit src version python3; };
 
   # Builder for Azure CLI extensions. Extensions are Python wheels that
   # outside of nix would be fetched by the CLI itself from various sources.
@@ -55,7 +61,7 @@ let
 
   extensions =
     callPackages ./extensions-generated.nix { inherit mkAzExtension; }
-    // callPackages ./extensions-manual.nix { inherit mkAzExtension; };
+    // callPackages ./extensions-manual.nix { inherit mkAzExtension python3; python3Packages = python3.pkgs; };
 
   extensionDir = stdenvNoCC.mkDerivation {
     name = "azure-cli-extensions";
@@ -347,6 +353,42 @@ py.pkgs.toPythonApplication (py.pkgs.buildAzureCliPackage rec {
   passthru = {
     inherit extensions;
     withExtensions = extensions: azure-cli.override { withExtensions = extensions; };
+    tests = {
+      # Test the package builds with some extensions configured, and the
+      # wanted extensions are recognized by the CLI and listed in the output.
+      azWithExtensions =
+        let
+          extensions = with azure-cli.extensions; [
+            aks-preview
+            azure-devops
+            rdbms-connect
+          ];
+          extensionNames = map (ext: ext.pname) extensions;
+          az = (azure-cli.withExtensions extensions);
+        in
+        runCommand "test-az-with-extensions" { } ''
+          export HOME=$TMPDIR
+          ${lib.getExe az} extension list > $out
+          for ext in ${lib.concatStringsSep " " extensionNames}; do
+            if ! grep -q $ext $out; then
+              echo "Extension $ext not found in list"
+              exit 1
+            fi
+          done
+        '';
+      # Test the package builds with mutable config.
+      # TODO: Maybe we can install an extension from local python wheel to
+      #       check mutable extension install still works.
+      azWithMutableConfig =
+        let
+          az = azure-cli.override { withImmutableConfig = false; };
+        in
+        runCommand "test-az-with-immutable-config" { } ''
+          export HOME=$TMPDIR
+          ${lib.getExe az} --version || exit 1
+          touch $out
+        '';
+    };
   };
 
   meta = with lib; {

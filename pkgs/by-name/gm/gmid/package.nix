@@ -22,6 +22,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Simple and secure Gemini server";
     homepage = "https://gmid.omarpolo.com/";
+    changelog = "https://gmid.omarpolo.com/changelog.html";
     license = licenses.isc;
     maintainers = with maintainers; [ sikmir ];
     platforms = platforms.linux;

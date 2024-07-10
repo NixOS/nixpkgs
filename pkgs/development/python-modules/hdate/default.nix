@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pdm-backend,
-  pythonRelaxDepsHook,
   pytestCheckHook,
   pythonOlder,
   pytz,
