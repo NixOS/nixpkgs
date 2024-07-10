@@ -26,6 +26,7 @@ let
 
   plugins = lib.mergeAttrsList [
     { hy3 = import ./hy3.nix; }
+    { hycov = import ./hycov.nix; }
     { hypr-dynamic-cursors = import ./hypr-dynamic-cursors.nix; }
     { hyprfocus = import ./hyprfocus.nix; }
     { hyprscroller = import ./hyprscroller.nix; }
