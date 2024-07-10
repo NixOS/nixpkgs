@@ -1,10 +1,10 @@
 { lib
-, buildGo122Module
+, buildGoModule
 , fetchFromGitHub
 , openssl
 }:
 
-buildGo122Module rec {
+buildGoModule rec {
   pname = "ssh-tpm-agent";
   version = "0.3.1";
 
