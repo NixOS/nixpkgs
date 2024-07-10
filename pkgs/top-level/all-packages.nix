@@ -6562,9 +6562,7 @@ with pkgs;
 
   cicero-tui = callPackage ../tools/misc/cicero-tui { };
 
-  cilium-cli = callPackage ../applications/networking/cluster/cilium {
-    buildGoModule = buildGo122Module;
-  };
+  cilium-cli = callPackage ../applications/networking/cluster/cilium { };
 
   cjdns = callPackage ../tools/networking/cjdns { };
   cjdns-tools = callPackage ../tools/admin/cjdns-tools { };
