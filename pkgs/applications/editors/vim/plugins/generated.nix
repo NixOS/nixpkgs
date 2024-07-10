@@ -9664,6 +9664,18 @@ final: prev:
     meta.homepage = "https://github.com/filipdutescu/renamer.nvim/";
   };
 
+  render-markdown = buildVimPlugin {
+    pname = "render-markdown";
+    version = "2024-07-07";
+    src = fetchFromGitHub {
+      owner = "MeanderingProgrammer";
+      repo = "markdown.nvim";
+      rev = "0dfd0203e0125f959f28f03932495d0d82443b65";
+      sha256 = "08fnyg1cnar5v9jw26xqq0k9qmyk2ir3snr74bps4scpjzb8cg6j";
+    };
+    meta.homepage = "https://github.com/MeanderingProgrammer/markdown.nvim/";
+  };
+
   replacer-nvim = buildVimPlugin {
     pname = "replacer.nvim";
     version = "2023-07-29";

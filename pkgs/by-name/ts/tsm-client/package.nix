@@ -11,7 +11,7 @@
 , acl  # EXT2/EXT3/XFS ACL support (optional)
 , gnugrep
 , procps
-, jdk8  # Java GUI (needed for `enableGui`)
+, jdk  # Java GUI (needed for `enableGui`)
 , buildEnv
 , makeWrapper
 , enableGui ? false  # enables Java GUI `dsmj`
@@ -45,7 +45,7 @@
 # point to this derivations `/dsmi_dir` directory symlink.
 # Other environment variables might be necessary,
 # depending on local configuration or usage; see:
-# https://www.ibm.com/docs/en/storage-protect/8.1.22?topic=solaris-set-api-environment-variables
+# https://www.ibm.com/docs/en/storage-protect/8.1.23?topic=solaris-set-api-environment-variables
 
 
 # The newest version of TSM client should be discoverable by
@@ -102,12 +102,12 @@ let
     in
       "https://public.dhe.ibm.com/storage/tivoli-storage-management/${if fixup=="0" then "maintenance" else "patches"}/client/v${major}r${minor}/Linux/LinuxX86/BA/v${major}${minor}${patch}/${version}-TIV-TSMBAC-LinuxX86.tar";
 
-  unwrapped = stdenv.mkDerivation rec {
-    name = "tsm-client-${version}-unwrapped";
-    version = "8.1.22.0";
+  unwrapped = stdenv.mkDerivation (finalAttrs: {
+    name = "tsm-client-${finalAttrs.version}-unwrapped";
+    version = "8.1.23.0";
     src = fetchurl {
-      url = mkSrcUrl version;
-      hash = "sha512-tsmrnZ0zoGCmpp9ey2K6ad8tMVBgB+lYMTx7YgVOSXNeiGT76fUYdr9DmO+PEsj+J/Pg/skd7ywqsBbjQT+eiw==";
+      url = mkSrcUrl finalAttrs.version;
+      hash = "sha512-LydzEvzcv7sizSQkVmkbJ/WhunP6oJm32M6nstIfSginCLwYoSb5WbnjeQq2PM2xncFN8W/SteUtCPYbOVKaKA==";
     };
     inherit meta passthru;
 
@@ -162,10 +162,10 @@ let
         ln --symbolic --force --no-target-directory "$out$(readlink "$link")" "$link"
       done
     '';
-  };
+  });
 
   binPath = lib.makeBinPath ([ acl gnugrep procps ]
-    ++ lib.optional enableGui jdk8);
+    ++ lib.optional enableGui jdk);
 
 in
 

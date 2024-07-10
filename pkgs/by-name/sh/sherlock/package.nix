@@ -3,19 +3,30 @@
 , makeWrapper
 , python3
 , unstableGitUpdater
+, poetry
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "sherlock";
-  version = "0-unstable-2024-06-04";
-  format = "other";
+  version = "0-unstable-2024-06-09";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "sherlock-project";
     repo = "sherlock";
-    rev = "ef124acf34e90626f4e59ab88bba1ed6141a4126";
-    hash = "sha256-haxUKdZuuJrSI4TH8jA1fT+4fhr6tlxnrEgWTuBuIC4=";
+    rev = "d678908c00f16c7f6c44efc0357cef713fa96739";
+    hash = "sha256-XAXDqbdHQta9OiupbPmmyp3TK1VLtDQ7CadsOei/6rs=";
   };
+
+  patches = [
+    # Avoid hardcoding sherlock
+    ./fix-sherlock-bin-test.patch
+  ];
+
+  postPatch = ''
+    substituteInPlace tests/sherlock_interactives.py \
+      --replace @sherlockBin@ "$out/bin/sherlock"
+  '';
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -41,24 +52,29 @@ python3.pkgs.buildPythonApplication rec {
 
   postFixup = ''
     makeWrapper ${python3.interpreter} $out/bin/sherlock \
-      --add-flags $out/share/sherlock/sherlock.py \
-      --prefix PYTHONPATH : "$PYTHONPATH"
+      --add-flags "-m" \
+      --add-flags "sherlock" \
+      --prefix PYTHONPATH : "$PYTHONPATH:$out/share"
   '';
 
-  checkInputs = with python3.pkgs; [
-    exrex
+  nativeCheckInputs = with python3.pkgs; [
+    pytestCheckHook
+    poetry
+    poetry-core
+    jsonschema
+    openpyxl
+    stem
+    pythonRelaxDepsHook
   ];
 
-  checkPhase = ''
-    runHook preCheck
+  pythonRelaxDeps = [
+    "stem"
+  ];
 
-    cd $out/share/sherlock
-    for tests in all test_multiple_usernames; do
-      ${python3.interpreter} -m unittest tests.$tests --verbose
-    done
-
-    runHook postCheck
-  '';
+  pytestFlagsArray = [
+    "-m"
+    "'not online'"
+  ];
 
   passthru.updateScript = unstableGitUpdater {
     hardcodeZeroVersion = true;

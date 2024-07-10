@@ -4,6 +4,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   isPy27,
+  config,
 
   # build-system
   setuptools,
@@ -19,7 +20,7 @@
   tensorboard,
 
   # tests
-  cudaSupport,
+  cudaSupport ? config.cudaSupport,
   pytestCheckHook,
   torchvision
 }:
