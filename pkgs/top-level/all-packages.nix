@@ -30649,8 +30649,6 @@ with pkgs;
 
   gjay = callPackage ../applications/audio/gjay { };
 
-  sherlock = callPackage ../tools/security/sherlock { };
-
   stratovirt = callPackage ../applications/virtualization/stratovirt { };
 
   rhythmbox = callPackage ../applications/audio/rhythmbox { };
