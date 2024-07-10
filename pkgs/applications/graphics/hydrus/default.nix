@@ -6,7 +6,6 @@
 , enableSwftools ? false
 , swftools
 , python3Packages
-, pythonOlder
 , qtbase
 , qtcharts
 , makeDesktopItem
@@ -81,9 +80,6 @@ python3Packages.buildPythonPackage rec {
     service-identity
     twisted
   ];
-
-  # tests rely on nose
-  doCheck = pythonOlder "3.12";
 
   nativeCheckInputs = with python3Packages; [
     nose
