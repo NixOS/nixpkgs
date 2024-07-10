@@ -28,14 +28,7 @@
 }:
 
 let
-  shaderc-patched = callPackage ./shaderc-patched.nix { };
-  # The pre-zipped files in releases don't have a versioned link, we need to zip them ourselves
-  pcsx2_patches = fetchFromGitHub {
-    owner = "PCSX2";
-    repo = "pcsx2_patches";
-    rev = "9e71956797332471010e563a4b75a5934bef9d4e";
-    hash = "sha256-jpaRpvJox78zRGyrVIGYVoSEo/ICBlBfw3dTMz9QGuU=";
-  };
+  sources = callPackage ./sources.nix { };
   inherit (qt6)
     qtbase
     qtsvg
@@ -45,18 +38,12 @@ let
     ;
 in
 llvmPackages_17.stdenv.mkDerivation (finalAttrs: {
-  pname = "pcsx2";
-  version = "1.7.5919";
+  inherit (sources.pcsx2) pname version src;
 
-  src = fetchFromGitHub {
-    owner = "PCSX2";
-    repo = "pcsx2";
-    rev = "v${finalAttrs.version}";
-    # NOTE: Don't forget to change the hash in shaderc-patched.nix as well.
-    hash = "sha256-cDugEbbz40uLPW64bcDGxfo1Y3ahYnEVaalfMp/J95s=";
-  };
-
-  patches = [ ./define-rev.patch ];
+  patches = [
+    # Remove PCSX2_GIT_REV
+    ./0000-define-rev.patch
+  ];
 
   cmakeFlags = [
     (lib.cmakeBool "DISABLE_ADVANCE_SIMD" true)
@@ -66,7 +53,6 @@ llvmPackages_17.stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
-    extra-cmake-modules
     pkg-config
     strip-nondeterminism
     wrapQtAppsHook
@@ -75,6 +61,7 @@ llvmPackages_17.stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     curl
+    extra-cmake-modules
     ffmpeg
     libaio
     libbacktrace
@@ -87,12 +74,14 @@ llvmPackages_17.stdenv.mkDerivation (finalAttrs: {
     qttools
     qtwayland
     SDL2
-    shaderc-patched
+    sources.shaderc-patched
     soundtouch
     vulkan-headers
     wayland
     zstd
   ] ++ cubeb.passthru.backendLibs;
+
+  strictDeps = true;
 
   installPhase = ''
     runHook preInstall
@@ -102,7 +91,7 @@ llvmPackages_17.stdenv.mkDerivation (finalAttrs: {
     install -Dm644 $src/pcsx2-qt/resources/icons/AppIcon64.png $out/share/pixmaps/PCSX2.png
     install -Dm644 $src/.github/workflows/scripts/linux/pcsx2-qt.desktop $out/share/applications/PCSX2.desktop
 
-    zip -jq $out/bin/resources/patches.zip ${pcsx2_patches}/patches/*
+    zip -jq $out/bin/resources/patches.zip ${sources.pcsx2_patches.src}/patches/*
     strip-nondeterminism $out/bin/resources/patches.zip
     runHook postInstall
   '';
@@ -112,7 +101,7 @@ llvmPackages_17.stdenv.mkDerivation (finalAttrs: {
       libs = lib.makeLibraryPath (
         [
           vulkan-loader
-          shaderc-patched
+          sources.shaderc-patched
         ]
         ++ cubeb.passthru.backendLibs
       );
@@ -137,12 +126,15 @@ llvmPackages_17.stdenv.mkDerivation (finalAttrs: {
       system memory. This allows you to play PS2 games on your PC, with many
       additional features and benefits.
     '';
+    changelog = "https://github.com/PCSX2/pcsx2/releases/tag/v${finalAttrs.version}";
+    downloadPage = "https://github.com/PCSX2/pcsx2";
     license = with lib.licenses; [
       gpl3Plus
       lgpl3Plus
     ];
     mainProgram = "pcsx2-qt";
     maintainers = with lib.maintainers; [
+      AndersonTorres
       hrdinka
       govanify
       matteopacini
