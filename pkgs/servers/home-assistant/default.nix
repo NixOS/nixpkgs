@@ -231,15 +231,6 @@ let
         };
       });
 
-      psutil = super.psutil.overridePythonAttrs (oldAttrs: rec {
-        version = "5.9.8";
-        src = fetchPypi {
-          inherit (oldAttrs) pname;
-          inherit version;
-          hash = "sha256-a+Em4yJUht/yhqj7mgYkalJT9MfFO0depfWsk05kGUw=";
-        };
-      });
-
       pyasn1 = super.pyasn1.overridePythonAttrs (oldAttrs: rec {
         version = "0.4.8";
         src = fetchPypi {
@@ -485,7 +476,7 @@ let
   extraBuildInputs = extraPackages python.pkgs;
 
   # Don't forget to run update-component-packages.py after updating
-  hassVersion = "2024.7.1";
+  hassVersion = "2024.7.2";
 
 in python.pkgs.buildPythonApplication rec {
   pname = "homeassistant";
@@ -503,13 +494,13 @@ in python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = "refs/tags/${version}";
-    hash = "sha256-y3VYxlPit9LuC+9F+fQoJs3WD9LsvrMZMiSCqbzkgmk=";
+    hash = "sha256-FML1JZFj2xebcQvXJmBu02Eczz3ejg4r7PfnpBiDc50=";
   };
 
   # Secondary source is pypi sdist for translations
   sdist = fetchPypi {
     inherit pname version;
-    hash = "sha256-pFsv0guypnRPeZOg2WrG2HL27W903iANHkvdQ8dCJHo=";
+    hash = "sha256-okukdAbBXJCaDpnOCDY91dsLQdm5pMJ1SKXV9A68eoQ=";
   };
 
   build-system = with python.pkgs; [
