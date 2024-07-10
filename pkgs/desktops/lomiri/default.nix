@@ -10,6 +10,7 @@ let
     #### Core Apps
     lomiri = callPackage ./applications/lomiri { };
     lomiri-calculator-app = callPackage ./applications/lomiri-calculator-app { };
+    lomiri-clock-app = callPackage ./applications/lomiri-clock-app { };
     lomiri-filemanager-app = callPackage ./applications/lomiri-filemanager-app { };
     lomiri-system-settings-unwrapped = callPackage ./applications/lomiri-system-settings { };
     lomiri-system-settings-security-privacy = callPackage ./applications/lomiri-system-settings/plugins/lomiri-system-settings-security-privacy.nix { };
