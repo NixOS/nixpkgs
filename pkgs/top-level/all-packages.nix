@@ -5735,6 +5735,8 @@ with pkgs;
 
   mat2 = with python3.pkgs; toPythonApplication mat2;
 
+  materialx = with python3Packages; toPythonApplication materialx;
+
   maxcso = callPackage ../tools/archivers/maxcso { };
 
   measureme = callPackage ../development/tools/rust/measureme { };

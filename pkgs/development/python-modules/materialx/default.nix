@@ -1,19 +1,20 @@
 {
   lib,
   stdenv,
+  buildPythonPackage,
   fetchFromGitHub,
   cmake,
+  setuptools,
   darwin,
   libX11,
   libXt,
   libGL,
   openimageio,
   imath,
-  python3Packages,
-  python3
+  python,
 }:
 
-python3Packages.buildPythonPackage rec {
+buildPythonPackage rec {
   pname = "materialx";
   version = "1.38.10";
 
@@ -21,14 +22,14 @@ python3Packages.buildPythonPackage rec {
     owner = "AcademySoftwareFoundation";
     repo = "MaterialX";
     rev = "v${version}";
-    sha256 = "sha256-/kMHmW2dptZNtjuhE5s+jvPRIdtY+FRiVtMU+tiBgQo=";
+    hash = "sha256-/kMHmW2dptZNtjuhE5s+jvPRIdtY+FRiVtMU+tiBgQo=";
   };
 
   format = "other";
 
   nativeBuildInputs = [
     cmake
-    python3Packages.setuptools
+    setuptools
   ];
 
   buildInputs =
@@ -60,13 +61,14 @@ python3Packages.buildPythonPackage rec {
 
   postInstall = ''
     # Make python lib properly accessible
-    target_dir=$out/${python3.sitePackages}
+    target_dir=$out/${python.sitePackages}
     mkdir -p $(dirname $target_dir)
     # required for cmake to find the bindings, when included in other projects
     ln -s $out/python $target_dir
   '';
 
   meta = {
+    changelog = "https://github.com/AcademySoftwareFoundation/MaterialX/blob/${src.rev}/CHANGELOG.md";
     description = "Open standard for representing rich material and look-development content in computer graphics";
     homepage = "https://materialx.org";
     maintainers = [ lib.maintainers.gador ];
