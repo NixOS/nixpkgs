@@ -1,7 +1,7 @@
 { fetchFromGitHub }:
 rec {
   pname = "authelia";
-  version = "4.37.5";
+  version = "4.38.9";
 
   src = fetchFromGitHub {
     owner = "authelia";
