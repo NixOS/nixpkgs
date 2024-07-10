@@ -12805,6 +12805,8 @@ self: super: with self; {
 
   python-mystrom = callPackage ../development/python-modules/python-mystrom { };
 
+  python-neutronclient = callPackage ../development/python-modules/python-neutronclient { };
+
   python-nest = callPackage ../development/python-modules/python-nest { };
 
   pythonnet = callPackage ../development/python-modules/pythonnet { };
