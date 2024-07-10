@@ -3,8 +3,10 @@
   buildGoModule,
   fetchFromGitHub,
   artalk,
-  testers,
   fetchurl,
+  installShellFiles,
+  stdenv,
+  testers,
 }:
 buildGoModule rec {
   pname = "artalk";
@@ -37,11 +39,20 @@ buildGoModule rec {
     cp -r ./artalk_ui/* ./public
   '';
 
-  postInstall = ''
-    # work around case insensitive file systems
-    mv $out/bin/Artalk $out/bin/artalk.tmp
-    mv $out/bin/artalk.tmp $out/bin/artalk
-  '';
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall =
+    ''
+      # work around case insensitive file systems
+      mv $out/bin/Artalk $out/bin/artalk.tmp
+      mv $out/bin/artalk.tmp $out/bin/artalk
+    ''
+    + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+      installShellCompletion --cmd artalk \
+        --bash <($out/bin/artalk completion bash) \
+        --fish <($out/bin/artalk completion fish) \
+        --zsh <($out/bin/artalk completion zsh)
+    '';
 
   passthru.tests = {
     version = testers.testVersion { package = artalk; };
