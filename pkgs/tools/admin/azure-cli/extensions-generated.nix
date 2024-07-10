@@ -722,9 +722,9 @@
   };
   nsp = mkAzExtension rec {
     pname = "nsp";
-    version = "0.3.0";
+    version = "1.0.0b2";
     url = "https://azcliprod.blob.core.windows.net/cli-extensions/nsp-${version}-py3-none-any.whl";
-    sha256 = "3e53051a70693a5da8c563118d0f695efc8465eab769ca64416fc8a16ba6e72a";
+    sha256 = "febfce38fc449daa67c7ad8410e7fa250f7f39afb5f870496ce045bb74935bcd";
     description = "Microsoft Azure Command-Line Tools Nsp Extension";
   };
   offazure = mkAzExtension rec {
