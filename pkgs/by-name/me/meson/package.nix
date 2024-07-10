@@ -21,13 +21,13 @@ let
 in
 python3.pkgs.buildPythonApplication rec {
   pname = "meson";
-  version = "1.4.1";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "mesonbuild";
     repo = "meson";
     rev = "refs/tags/${version}";
-    hash = "sha256-RBE4AUF5fymUA87JEDWtpUFXmVPFzdhZgDI7/kscTx4=";
+    hash = "sha256-Y//8fXBNdx+ikpvg+S5Bk2rN3UVS5qo2bnbTSVBb8b8=";
   };
 
   patches = [
@@ -72,14 +72,16 @@ python3.pkgs.buildPythonApplication rec {
     # This edge case is explicitly part of meson but is wrong for nix
     ./007-freebsd-pkgconfig-path.patch
 
-    # Find boost via pkg-config
-    # https://github.com/NixOS/nixpkgs/issues/86131
-    # Already merged upstream PR: https://github.com/mesonbuild/meson/pull/13272
-    # FIXME: Will be in meson 1.5.0
     (fetchpatch {
-      name = "find-boost-pkg-config.patch";
-      url = "https://github.com/mesonbuild/meson/commit/c21b886ba8a60cce7fa56e4be40bd7547129fb00.patch";
-      hash = "sha256-uSilNuSx9yd1cxs0XVLcLw4MOXEd2uIe2g+wk+SBqeU=";
+      name = "tests-skip-framework-recasting-if-CMake-unavailable.patch";
+      url = "https://github.com/mesonbuild/meson/commit/8a8a3a0578fd8d5a8720a7a706f6f3b99e857f9c.patch";
+      hash = "sha256-XkwNQ5eg/fVekhsFg/V2/S2LbIVGz3H0wsSFlUT3ZZE=";
+    })
+
+    (fetchpatch {
+      name = "cross.patch";
+      url = "https://github.com/mesonbuild/meson/pull/13411.patch";
+      hash = "sha256-IHSV0Dfse0lzDtxh/+APc/dzGr/BUbR/WIOqDsm7/8Y=";
     })
   ];
 
@@ -133,6 +135,9 @@ python3.pkgs.buildPythonApplication rec {
     ''test cases/linuxlike/14 static dynamic linkage''
     # Nixpkgs cctools does not have bitcode support.
     ''test cases/osx/7 bitcode''
+  ] ++ lib.optionals stdenv.isDarwin [
+    # requires llvmPackages.openmp, creating cyclic dependency
+    ''test cases/common/184 openmp''
   ] ++ lib.optionals stdenv.isFreeBSD [
     # pch doesn't work quite right on FreeBSD, I think
     ''test cases/common/13 pch''
