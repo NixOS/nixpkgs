@@ -58,12 +58,12 @@ buildGoModule rec {
     version = testers.testVersion { package = artalk; };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Self-hosted comment system";
     homepage = "https://github.com/ArtalkJS/Artalk";
     changelog = "https://github.com/ArtalkJS/Artalk/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ moraxyc ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ moraxyc ];
     mainProgram = "artalk";
   };
 }
