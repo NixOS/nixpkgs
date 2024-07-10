@@ -7352,6 +7352,8 @@ self: super: with self; {
 
   materialx = callPackage ../development/python-modules/materialx { };
 
+  materialyoucolor = callPackage ../development/python-modules/materialyoucolor { };
+
   matchpy = callPackage ../development/python-modules/matchpy { };
 
   mathlibtools = callPackage ../development/python-modules/mathlibtools { };
