@@ -2,10 +2,11 @@
 
 lib.makeOverridable (
 { owner, repo, rev, name ? "source"
-, ... # For hash agility
+, sha256, ... # For hash agility
 }@args: fetchzip ({
   inherit name;
   url = "https://bitbucket.org/${owner}/${repo}/get/${rev}.tar.gz";
   meta.homepage = "https://bitbucket.org/${owner}/${repo}/";
+  sha256 = lib.warn "sha256 attribute is deprecated in fetchFromBitBucket. Please use hash attribute instead" sha256;
 } // removeAttrs args [ "owner" "repo" "rev" ]) // { inherit rev; }
 )
