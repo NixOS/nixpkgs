@@ -16,6 +16,11 @@
 }:
 
 with python3Packages;
+let
+  virtualenv-with-setuptools = virtualenv.overrideAttrs (prev: {
+    propagatedBuildInputs = prev.propagatedBuildInputs ++ [setuptools];
+  });
+in
 buildPythonApplication rec {
   pname = "pre-commit";
   version = "3.7.1";
@@ -42,7 +47,7 @@ buildPythonApplication rec {
     nodeenv
     pyyaml
     toml
-    virtualenv
+    virtualenv-with-setuptools
   ];
 
   nativeCheckInputs = [
