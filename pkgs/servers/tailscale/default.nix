@@ -11,6 +11,7 @@
 , procps
 , nixosTests
 , installShellFiles
+, tailscale-nginx-auth
 }:
 
 let
@@ -76,6 +77,7 @@ buildGoModule {
 
   passthru.tests = {
     inherit (nixosTests) headscale;
+    inherit tailscale-nginx-auth;
   };
 
   meta = with lib; {

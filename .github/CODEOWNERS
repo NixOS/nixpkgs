@@ -19,6 +19,7 @@
 # Develompent support
 /.editorconfig @Mic92 @zowoq
 /shell.nix @infinisil @NixOS/Security
+/.envrc @infinisil @NixOS/Security
 
 # Libraries
 /lib                        @infinisil

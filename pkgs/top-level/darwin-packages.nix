@@ -48,11 +48,15 @@ makeScopeWithSplicing' {
   };
 
   # Pick an SDK
-  apple_sdk = if stdenv.hostPlatform.isAarch64 then apple_sdk_11_0 else apple_sdk_10_12;
+  apple_sdk = {
+    "10.12" = apple_sdk_10_12;
+    "11.0" = apple_sdk_11_0;
+  }.${stdenv.hostPlatform.darwinSdkVersion}
+  or (throw "Unsupported sdk: ${stdenv.hostPlatform.darwinSdkVersion}");
 
   # Pick the source of libraries: either Apple's open source releases, or the
   # SDK.
-  useAppleSDKLibs = stdenv.hostPlatform.isAarch64;
+  useAppleSDKLibs = lib.versionAtLeast stdenv.hostPlatform.darwinSdkVersion "11";
 
   selectAttrs = attrs: names:
     lib.listToAttrs (lib.concatMap (n: lib.optionals (attrs ? "${n}") [(lib.nameValuePair n attrs."${n}")]) names);

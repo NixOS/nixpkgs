@@ -152,6 +152,8 @@ let
       # than a year (Node.js 18 will be EOL at 2025-04-30). Note that these
       # failures are specific to Nix sandbox on macOS and should not affect
       # actual functionality.
+    ] ++ lib.optionals (!stdenv.isDarwin) [
+      # TODO: JS test suite is too flaky on Darwin; revisit at a later date.
       "test-ci-js"
     ]);
 

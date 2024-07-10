@@ -25,7 +25,7 @@ assert crossSystem == localSystem;
 let
   inherit (localSystem) system;
 
-  useAppleSDKLibs = localSystem.isAarch64;
+  useAppleSDKLibs = lib.versionAtLeast localSystem.darwinSdkVersion "11";
 
   commonImpureHostDeps = [
     "/bin/sh"

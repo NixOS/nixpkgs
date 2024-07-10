@@ -5,7 +5,7 @@
 }:
 let
   pname = "pcsx2";
-  version = "1.7.5779";
+  version = "1.7.5919";
   meta = with lib; {
     description = "Playstation 2 emulator";
     longDescription = ''

@@ -3,7 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   mock,
-  pynose,
+  nose,
   pexpect,
   pyserial,
   pytestCheckHook,
@@ -39,19 +39,16 @@ buildPythonPackage rec {
 
   dependencies = [ pyserial ];
 
-  passthru.optional-dependencies.GATTTOOL = [ pexpect ];
+  optional-dependencies.GATTTOOL = [ pexpect ];
 
-  nativeBuildInputs = [
-    # For cross compilation the doCheck is false and therefor the
-    # nativeCheckInputs not included. We have to include nose here, since
-    # setup.py requires nose unconditionally.
-    pynose
-  ];
+  # tests require nose
+  doCheck = pythonOlder "3.12";
 
   nativeCheckInputs = [
     mock
+    nose
     pytestCheckHook
-  ] ++ passthru.optional-dependencies.GATTTOOL;
+  ] ++ optional-dependencies.GATTTOOL;
 
   pythonImportsCheck = [ "pygatt" ];
 

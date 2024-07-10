@@ -3,7 +3,7 @@
   blockdiag,
   buildPythonPackage,
   fetchFromGitHub,
-  pynose,
+  nose,
   pytestCheckHook,
   pythonOlder,
   setuptools,
@@ -27,8 +27,11 @@ buildPythonPackage rec {
 
   dependencies = [ blockdiag ];
 
+  # tests rely on nose
+  doCheck = pythonOlder "3.12";
+
   nativeCheckInputs = [
-    pynose
+    nose
     pytestCheckHook
   ];
 

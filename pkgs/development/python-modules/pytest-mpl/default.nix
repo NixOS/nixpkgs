@@ -6,7 +6,6 @@
   pytest,
   jinja2,
   matplotlib,
-  pynose,
   pillow,
   pytest7CheckHook,
 }:
@@ -28,7 +27,6 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     jinja2
     matplotlib
-    pynose
     pillow
   ];
 

@@ -50,7 +50,9 @@ stdenv.mkDerivation (rec {
   src = src';
   inherit patches;
 
-  outputs = [ "out" "lib" "dev" ];
+  # LLDB expects to find the path to `bin` relative to `lib` on Darwin. It can’t be patched with the location of
+  # the `lib` output because that would create a cycle between it and the `out` output.
+  outputs = [ "out" "dev" ] ++ lib.optionals (!stdenv.isDarwin) [ "lib" ];
 
   sourceRoot = lib.optional (lib.versionAtLeast release_version "13") "${src.name}/${pname}";
 
@@ -101,7 +103,7 @@ stdenv.mkDerivation (rec {
   ++ lib.optional
     (
       stdenv.targetPlatform.isDarwin
-        && !stdenv.targetPlatform.isAarch64
+        && lib.versionOlder stdenv.targetPlatform.darwinSdkVersion "11.0"
         && (lib.versionAtLeast release_version "15")
     )
     (

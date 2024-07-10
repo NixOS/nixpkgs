@@ -22,6 +22,7 @@ in {
         libusermetrics
         lomiri
         lomiri-calculator-app
+        lomiri-clock-app
         lomiri-download-manager
         lomiri-filemanager-app
         lomiri-polkit-agent
@@ -37,7 +38,7 @@ in {
         morph-browser
         qtmir # not having its desktop file for Xwayland available causes any X11 application to crash the session
         suru-icon-theme
-        # telephony-service # currently broken: https://github.com/NixOS/nixpkgs/pull/314043
+        telephony-service
       ]);
       variables = {
         # To override the keyboard layouts in Lomiri
@@ -86,7 +87,7 @@ in {
       ] ++ lib.optionals (config.hardware.pulseaudio.enable || config.services.pipewire.pulse.enable) [
         ayatana-indicator-sound
       ]) ++ (with pkgs.lomiri; [
-        # telephony-service # currently broken: https://github.com/NixOS/nixpkgs/pull/314043
+        telephony-service
       ] ++ lib.optionals config.networking.networkmanager.enable [
         lomiri-indicator-network
       ]);

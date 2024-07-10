@@ -4,12 +4,13 @@
 , lib
 , libcxx
 , llvmPackages
+, config
 
 , addDriverRunpath
 , patchelf
 , fixDarwinDylibNames
 
-, cudaSupport
+, cudaSupport ? config.cudaSupport
 }:
 
 let
