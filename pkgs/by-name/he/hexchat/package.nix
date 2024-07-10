@@ -75,30 +75,6 @@ stdenv.mkDerivation rec {
     "-Dtext-frontend=true"
   ];
 
-  nativeBuildInputs = [
-    makeWrapper
-    meson
-    ninja
-    pkg-config
-  ];
-
-  buildInputs = [
-    dbus-glib
-    desktop-file-utils
-    gtk2
-    isocodes
-    libcanberra-gtk2
-    libnotify
-    libproxy
-    lua
-    openssl
-    pciutils
-    perl
-    python3Packages.cffi
-    python3Packages.python
-    python3Packages.setuptools
-  ];
-
   postInstall = ''
     wrapProgram $out/bin/hexchat --prefix PYTHONPATH : "$PYTHONPATH"
   '';
