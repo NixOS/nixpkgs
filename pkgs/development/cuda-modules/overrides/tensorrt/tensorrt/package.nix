@@ -8,7 +8,7 @@
   utils,
 }:
 let
-  inherit (lib.attrsets) attrByPath getLib;
+  inherit (lib.attrsets) attrByPath;
   inherit (lib.lists) optionals;
   inherit (lib.meta) getExe';
   inherit (lib.strings) concatStringsSep optionalString;
@@ -54,9 +54,9 @@ prevAttrs: {
 
   buildInputs =
     prevAttrs.buildInputs
-    ++ [ (getLib cudnn) ]
-    ++ optionals finalAttrs.passthru.useCudatoolkitRunfile [ (getLib cudaPackages.cudatoolkit) ]
-    ++ optionals (!finalAttrs.passthru.useCudatoolkitRunfile) [ (getLib cudaPackages.cuda_cudart) ];
+    ++ [ cudnn ]
+    ++ optionals finalAttrs.passthru.useCudatoolkitRunfile [ cudaPackages.cudatoolkit ]
+    ++ optionals (!finalAttrs.passthru.useCudatoolkitRunfile) [ cudaPackages.cuda_cudart ];
 
   preInstall =
     let

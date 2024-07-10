@@ -16,6 +16,7 @@
   which,
 }:
 let
+  inherit (lib.lists) optionals;
   inherit (cudaPackages)
     backendStdenv
     cuda_cccl
@@ -23,7 +24,6 @@ let
     cuda_nvcc
     cudatoolkit
     ;
-  inherit (lib.attrsets) getDev;
 in
 backendStdenv.mkDerivation (finalAttrs: {
   name = "cuda${cudaMajorMinorVersion}-${finalAttrs.pname}-${finalAttrs.version}";
@@ -39,29 +39,25 @@ backendStdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  nativeBuildInputs =
-    [ which ]
-    ++ lib.optionals (cudaOlder "11.4") [ cudatoolkit ]
-    ++ lib.optionals (cudaAtLeast "11.4") [ cuda_nvcc ];
+  nativeBuildInputs = [
+    which
+  ] ++ optionals (cudaOlder "11.4") [ cudatoolkit ] ++ optionals (cudaAtLeast "11.4") [ cuda_nvcc ];
 
   buildInputs =
     [ nccl ]
-    ++ lib.optionals (cudaOlder "11.4") [ cudatoolkit ]
-    ++ lib.optionals (cudaAtLeast "11.4") [
-      (getDev cuda_nvcc) # crt/host_config.h
-      cuda_cudart
+    ++ optionals (cudaOlder "11.4") [ cudatoolkit ]
+    ++ optionals (cudaAtLeast "11.4") [ cuda_cudart ]
+    ++ optionals (cudaAtLeast "12.0") [
+      cuda_cccl # <nv/target>
     ]
-    ++ lib.optionals (cudaAtLeast "12.0") [
-      (getDev cuda_cccl) # <nv/target>
-    ]
-    ++ lib.optionals mpiSupport [ mpi ];
+    ++ optionals mpiSupport [ mpi ];
 
   makeFlags =
     [ "NCCL_HOME=${nccl}" ]
-    ++ lib.optionals (cudaOlder "11.4") [ "CUDA_HOME=${cudatoolkit}" ]
+    ++ optionals (cudaOlder "11.4") [ "CUDA_HOME=${cudatoolkit}" ]
     # NOTE: CUDA_HOME is expected to have the bin directory
-    ++ lib.optionals (cudaAtLeast "11.4") [ "CUDA_HOME=${cuda_nvcc}" ]
-    ++ lib.optionals mpiSupport [ "MPI=1" ];
+    ++ optionals (cudaAtLeast "11.4") [ "CUDA_HOME=${cuda_nvcc}" ]
+    ++ optionals mpiSupport [ "MPI=1" ];
 
   enableParallelBuilding = true;
 

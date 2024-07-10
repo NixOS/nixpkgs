@@ -7,7 +7,7 @@
   utils,
 }:
 let
-  inherit (lib.attrsets) getLib optionalAttrs;
+  inherit (lib.attrsets) optionalAttrs;
   inherit (lib.lists) map optionals;
   inherit (lib.strings) versionAtLeast;
   inherit (lib.versions) majorMinor;
@@ -42,10 +42,10 @@ in
     );
   buildInputs =
     prevAttrs.buildInputs or [ ]
-    ++ (map getLib [
+    ++ [
       libcublas
       libcusolver
       libcutensor
-    ])
-    ++ optionals requiresLibCuSparse [ (getLib libcusparse) ];
+    ]
+    ++ optionals requiresLibCuSparse [ libcusparse ];
 }

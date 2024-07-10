@@ -17,7 +17,6 @@ let
     flags
     libcublas
     ;
-  inherit (lib.attrsets) getDev getLib;
   inherit (lib.lists) optionals;
   inherit (lib.strings) cmakeBool cmakeFeature;
   fs = lib.fileset;
@@ -47,10 +46,9 @@ backendStdenv.mkDerivation (finalAttrs: {
     optionals (cudaOlder "11.4") [ cudatoolkit ]
     ++ optionals (cudaAtLeast "11.4") [
       cuda_cudart
-      (getDev libcublas)
-      (getLib libcublas)
+      libcublas
     ]
-    ++ optionals (cudaAtLeast "12.0") [ (getDev cuda_cccl) ];
+    ++ optionals (cudaAtLeast "12.0") [ cuda_cccl ];
 
   cmakeFlags = [
     (cmakeBool "CMAKE_VERBOSE_MAKEFILE" true)

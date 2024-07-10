@@ -7,21 +7,13 @@
   libglvnd,
   mesa,
 }:
-let
-  inherit (lib.attrsets) getLib;
-  inherit (lib.lists) map;
-in
 prevAttrs: {
-  buildInputs =
-    prevAttrs.buildInputs
-    ++ (map getLib [
-      libcufft
-      libcurand
-    ])
-    ++ [
-      libGLU
-      libglut
-      libglvnd
-      mesa
-    ];
+  buildInputs = prevAttrs.buildInputs ++ [
+    libcufft
+    libcurand
+    libGLU
+    libglut
+    libglvnd
+    mesa
+  ];
 }

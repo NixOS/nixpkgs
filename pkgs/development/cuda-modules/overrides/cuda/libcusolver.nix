@@ -7,7 +7,7 @@
   utils,
 }:
 let
-  inherit (lib.attrsets) getLib optionalAttrs;
+  inherit (lib.attrsets) optionalAttrs;
 in
 prevAttrs: {
   badPlatformsConditions =
@@ -20,9 +20,9 @@ prevAttrs: {
   buildInputs =
     prevAttrs.buildInputs
     # Always depends on this
-    ++ [ (getLib libcublas) ]
+    ++ [ libcublas ]
     # Dependency from 12.0 and on
-    ++ lib.lists.optionals (cudaAtLeast "12.0") [ (getLib libnvjitlink) ]
+    ++ lib.lists.optionals (cudaAtLeast "12.0") [ libnvjitlink ]
     # Dependency from 12.1 and on
-    ++ lib.lists.optionals (cudaAtLeast "12.1") [ (getLib libcusparse) ];
+    ++ lib.lists.optionals (cudaAtLeast "12.1") [ libcusparse ];
 }
