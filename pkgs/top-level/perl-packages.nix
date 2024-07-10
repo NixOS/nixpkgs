@@ -1383,14 +1383,14 @@ with self; {
       hash = "sha256-XdScrNmD79YajD8aVlcbtzeF6xVZCLXXvsl+7XjfDFQ=";
     };
     propagatedBuildInputs = [ pkgs.krb5.dev AuthenKrb5 ];
-    # The following ENV variables are required by Makefile.PL to find
-    # programs in krb5.dev. It is not enough to just specify the
-    # path to krb5-config as this tool returns the prefix of krb5,
-    # which implies a working value for KRB5_LIBDIR, but not the others.
+    # The Makefile.PL for AuthenKrb5Admin only looks for krb5-config in FHS locations unless
+    # we tell it where to look. It also assumes everything lives inside "$(krb5-config --prefix)"
+    # so we override its assumptions with the following environment variables.
     perlPreHook = ''
       export KRB5_CONFTOOL=${pkgs.krb5.dev}/bin/krb5-config
       export KRB5_BINDIR=${pkgs.krb5.dev}/bin
       export KRB5_INCDIR=${pkgs.krb5.dev}/include
+      export KRB5_LIBDIR=${pkgs.krb5.lib}/lib
     '';
     # Tests require working Kerberos infrastructure so replace with a
     # simple attempt to exercise the module.
