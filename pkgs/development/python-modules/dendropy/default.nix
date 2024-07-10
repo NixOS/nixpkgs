@@ -1,45 +1,47 @@
 {
   lib,
+  stdenv,
+  checkMeta,
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
   pythonOlder,
+  nix-update-script,
+  setuptools,
+  paup,
+  paupIntegration ? (checkMeta.checkValidity paup).valid == "yes"
 }:
 
 buildPythonPackage rec {
   pname = "dendropy";
-  version = "4.5.1";
-  format = "setuptools";
+  version = "5.0.1";
 
-  disabled = pythonOlder "3.7";
+  pyproject = true;
+  build-system = [ setuptools ];
 
   src = fetchFromGitHub {
     owner = "jeetsukumaran";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-FP0+fJkkFtSysPxoHXjyMgF8pPin7aRyzmHe9bH8LlM=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-4VkFkY4/hDfb6elOSTDia6tRJm73c1YP9nBW2dJsxsI=";
   };
+
+  postPatch = ''
+    substituteInPlace setup.py --replace '["pytest-runner"],' '[],'
+  '';
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  disabledTests = [
-    # FileNotFoundError: [Errno 2] No such file or directory: 'paup'
-    "test_basic_split_count_with_incorrect_rootings_raises_error"
-    "test_basic_split_count_with_incorrect_weight_treatment_raises_error"
-    "test_basic_split_counting_under_different_rootings"
-    "test_group1"
-    # AssertionError: 6 != 5
-    "test_by_num_lineages"
-    # AttributeError: module 'collections' has no attribute 'Iterable'
-    "test_findall_multiple"
-  ];
-
   pythonImportsCheck = [ "dendropy" ];
 
-  meta = with lib; {
+  env.DENDROPY_PAUP_EXECUTABLE_PATH = if paupIntegration then lib.getExe paup else "NONE";
+
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "Python library for phylogenetic computing";
-    homepage = "https://dendropy.org/";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ unode ];
+    homepage = "https://jeetsukumaran.github.io/DendroPy/";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ unode pandapip1 ];
   };
 }
