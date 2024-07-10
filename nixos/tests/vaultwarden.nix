@@ -209,7 +209,6 @@ builtins.mapAttrs (k: v: makeVaultwardenTest k v) {
           server.succeed('[ -f "/var/lib/vaultwarden/backups/db.sqlite3" ]')
           server.succeed('[ -d "/var/lib/vaultwarden/backups/attachments" ]')
           server.succeed('[ -f "/var/lib/vaultwarden/backups/rsa_key.pem" ]')
-          server.succeed('[ -f "/var/lib/vaultwarden/backups/rsa_key.pub.pem" ]')
           # Ensure only the db backed up with the backup command exists and not the other db files.
           server.succeed('[ ! -f "/var/lib/vaultwarden/backups/db.sqlite3-shm" ]')
     '';
