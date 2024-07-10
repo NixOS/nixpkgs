@@ -48,7 +48,7 @@ in stdenv.mkDerivation {
     description = "C++ BitTorrent implementation focusing on efficiency and scalability";
     license = licenses.bsd3;
     maintainers = [ ];
-    broken = true; # ModuleNotFoundError: No module named 'distutils'
     platforms = platforms.unix;
+    broken = true; # At 2024-07-10. Errors as: ‘PyUnicode_AS_DATA’ was not declared in this scope
   };
 }
