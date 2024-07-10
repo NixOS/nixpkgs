@@ -9,6 +9,7 @@
   stdenv,
   fetchurl,
   deno,
+  jq,
 }@topLevelArgs:
 {
   # Name of the package
@@ -278,7 +279,10 @@ stdenvNoCC.mkDerivation (
     args
     // {
       nativeBuildInputs =
-        [ deno ]
+        [
+          deno
+          jq
+        ]
         ++ (
           if compile then
             [
