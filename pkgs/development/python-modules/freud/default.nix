@@ -11,7 +11,8 @@
 , numpy
 , rowan
 , scipy
-, pytest
+, pytestCheckHook
+, python
 , gsd
 , matplotlib
 , sympy
@@ -65,25 +66,22 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    # Encountering circular ImportError issues with pytestCheckHook, see also:
-    # https://github.com/NixOS/nixpkgs/issues/255262
-    pytest
+    pytestCheckHook
     gsd
     matplotlib
     sympy
   ];
-  checkPhase = ''
-    runHook preCheck
-
-    pytest
-
-    runHook postCheck
+  disabledTests = [
+  ] ++ lib.optionals stdenv.isAarch64 [
+    # https://github.com/glotzerlab/freud/issues/961
+    "test_docstring"
+  ];
+  # On top of cd $out due to https://github.com/NixOS/nixpkgs/issues/255262 ,
+  # we need to also copy the tests because otherwise pytest won't find them.
+  preCheck = ''
+    cp -R tests $out/${python.sitePackages}/freud/tests
+    cd $out
   '';
-  # Some tests fail on aarch64. If we could have used pytestCheckHook, we would
-  # have disabled only the tests that fail with the disabledTests attribute.
-  # But that is not possible unfortunately. See upstream report for the
-  # failure: https://github.com/glotzerlab/freud/issues/961
-  doCheck = !stdenv.isAarch64;
 
   pythonImportsCheck = [ "freud" ];
 
