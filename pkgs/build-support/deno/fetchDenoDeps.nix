@@ -180,15 +180,18 @@ stdenvNoCC.mkDerivation (
         fi
 
         # Filter the files in DENO_DIR that we actually need
+        # We actually only need the nodejs registry.json files and only the relevant entries in them
         OLD_DENO_DIR="$DENO_DIR"
         export DENO_DIR="$(mktemp -d)"
         # We do this weird dance with jq to make sure the content of the files is sorted, because by default they are not. 
-        for file in $(find $OLD_DENO_DIR/npm -type f -name 'registry.json' | sed "s|^$OLD_DENO_DIR||g" | sort) ; do
-          target_file="$DENO_DIR/$file"
-          mkdir -p "$(dirname "$target_file")"
+        for registry_file in $(find $OLD_DENO_DIR/npm -type f -name 'registry.json' | sed "s|^$OLD_DENO_DIR||g" | sort) ; do
+          target_file="$DENO_DIR/$registry_file"
+          package_name="$(jq -r '.name' "$OLD_DENO_DIR/$registry_file")"
+          package_folder_prefix="node_modules/.deno/$(echo "$package_name" | sed 's|/|+|g')@"
+          relevant_package_versions="$(echo ''${package_folder_prefix}* | sed "s|$package_folder_prefix\([^ ]*\)|\"\1\",|g")"
 
-          jq -Sc '.' "$OLD_DENO_DIR/$file" > "$target_file"
-          # jq -S '.versions = ( .versions | with_entries( select(.key == ("5.1.0", "other")) ) )'
+          mkdir -p "$(dirname "$target_file")"
+          jq -S '.versions = ( .versions | with_entries( select(.key == ('"$relevant_package_versions"' "other")) ) )' "$OLD_DENO_DIR/$registry_file" > "$target_file"
         done
 
         if test -f vendor/manifest.json ; then
