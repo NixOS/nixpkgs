@@ -8953,6 +8953,8 @@ with pkgs;
 
   hyphen = callPackage ../development/libraries/hyphen { };
 
+  hyphenDicts = recurseIntoAttrs (callPackages ../development/libraries/hyphen/dictionaries.nix {});
+
   i2c-tools = callPackage ../os-specific/linux/i2c-tools { };
 
   i2pd = callPackage ../tools/networking/i2pd { };
@@ -25887,11 +25889,6 @@ with pkgs;
   libpressureaudio = callPackage ../misc/apulse/pressureaudio.nix { };
 
   libcardiacarrest = callPackage ../misc/libcardiacarrest { };
-
-  easyeffects = callPackage ../applications/audio/easyeffects {
-    # Fix crashes with speexdsp effects
-    speexdsp = speexdsp.override { withFftw3 = false; };
-  };
 
   pulseeffects-legacy = callPackage ../applications/audio/pulseeffects-legacy { };
 
