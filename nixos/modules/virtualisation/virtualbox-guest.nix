@@ -31,8 +31,6 @@ let
   };
 in
 {
-  ###### interface
-
   options.virtualisation.virtualbox.guest = {
     enable = mkOption {
       default = false;
@@ -109,6 +107,11 @@ in
     (
       mkIf cfg.seamless {
         systemd.user.services.virtualboxClientSeamless = mkVirtualBoxUserService "--seamless";
+      }
+    )
+    (
+      mkIf cfg.draganddrop {
+        systemd.user.services.virtualboxClientDragAndDrop = mkVirtualBoxUserService "--draganddrop";
       }
     )
   ]);
