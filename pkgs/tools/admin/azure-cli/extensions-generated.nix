@@ -288,9 +288,9 @@
   };
   databricks = mkAzExtension rec {
     pname = "databricks";
-    version = "0.10.2";
+    version = "1.0.0";
     url = "https://azcliprod.blob.core.windows.net/cli-extensions/databricks-${version}-py3-none-any.whl";
-    sha256 = "7db0b97b497512671343c472fad2ca7a0987ac2cddc0ae0ceab227e3d017718f";
+    sha256 = "a23ded367e80240eea828a3234801d4d989539ae4a5ecf246bfc6acb054a2544";
     description = "Microsoft Azure Command-Line Tools DatabricksClient Extension";
   };
   datadog = mkAzExtension rec {
