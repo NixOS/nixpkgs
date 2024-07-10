@@ -41,7 +41,6 @@
   mongoengine,
   mongomock,
   peewee,
-  pony,
   pytestCheckHook,
   zxcvbn,
 }:
@@ -59,9 +58,11 @@ buildPythonPackage rec {
     hash = "sha256-YrGTl+jXGo1MuNwNRAnMehSXmCVJAwOWlgruUYdV5YM=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  pythonRelaxDeps = [ "flask-login" ];
+
+  dependencies = [
     email-validator
     flask
     flask-login
@@ -102,7 +103,6 @@ buildPythonPackage rec {
       mongoengine
       mongomock
       peewee
-      pony
       pytestCheckHook
       zxcvbn
       freezegun
