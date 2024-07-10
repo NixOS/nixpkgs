@@ -2515,6 +2515,8 @@ self: super: with self; {
 
   coreschema = callPackage ../development/python-modules/coreschema { };
 
+  corner = callPackage ../development/python-modules/corner { };
+
   cornice = callPackage ../development/python-modules/cornice { };
 
   corsair-scan = callPackage ../development/python-modules/corsair-scan { };
