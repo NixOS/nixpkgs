@@ -3309,8 +3309,6 @@ with pkgs;
 
   azeret-mono = callPackage ../data/fonts/azeret-mono { };
 
-  azure-cli = callPackage ../tools/admin/azure-cli { };
-
   azure-cli-extensions = recurseIntoAttrs azure-cli.extensions;
 
   azure-functions-core-tools = callPackage ../development/tools/azure-functions-core-tools { };
