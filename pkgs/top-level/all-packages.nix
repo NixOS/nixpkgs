@@ -37211,7 +37211,7 @@ with pkgs;
   };
 
   budgiePackages = callPackage ../desktops/budgie { };
-  budgiePlugins = recurseIntoAttrs (callPackage ../desktops/budgie/plugins { });
+  budgiePlugins = callPackage ../desktops/budgie/plugins { };
 
   cdesktopenv = callPackage ../desktops/cdesktopenv { };
 
