@@ -7,7 +7,7 @@
   imagemagick,
   copyDesktopItems,
   makeDesktopItem,
-  electron
+  electron,
 }:
 
 let
@@ -15,13 +15,13 @@ let
 in
 buildNpmPackage rec {
   pname = "blockbench";
-  version = "4.10.2";
+  version = "4.10.4";
 
   src = fetchFromGitHub {
     owner = "JannisX11";
     repo = "blockbench";
     rev = "v${version}";
-    hash = "sha256-Ch+vPSvdqfJF2gNgZN2x5KSY1S1CYfHCyMyUf4W+Vn8=";
+    hash = "sha256-TjT93nx52PxuHuW4NONTfI3G7+Dl0NFX2aKpZDEF8+8=";
   };
 
   nativeBuildInputs =
@@ -31,7 +31,7 @@ buildNpmPackage rec {
       copyDesktopItems
     ];
 
-  npmDepsHash = "sha256-au6GzBTxPcYcqrPEnQ+yEhVRdAbiUa/Ocq7UCPdiox4=";
+  npmDepsHash = "sha256-WkOn1bLJ9xmJdQcY6ak+hs/YW+crIXhTWA6tjMSVq9I=";
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = 1;
 
@@ -69,7 +69,7 @@ buildNpmPackage rec {
 
       for size in 16 32 48 64 128 256 512; do
         mkdir -p $out/share/icons/hicolor/"$size"x"$size"/apps
-        convert -resize "$size"x"$size" icon.png $out/share/icons/hicolor/"$size"x"$size"/apps/blockbench.png
+        magick convert -resize "$size"x"$size" icon.png $out/share/icons/hicolor/"$size"x"$size"/apps/blockbench.png
       done
 
       makeWrapper ${lib.getExe electron} $out/bin/blockbench \
@@ -101,8 +101,6 @@ buildNpmPackage rec {
     homepage = "https://blockbench.net/";
     license = lib.licenses.gpl3Only;
     mainProgram = "blockbench";
-    maintainers = with lib.maintainers; [
-      tomasajt
-    ];
+    maintainers = with lib.maintainers; [ tomasajt ];
   };
 }

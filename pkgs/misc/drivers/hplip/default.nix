@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, substituteAll
 , pkg-config, autoreconfHook
-, cups, zlib, libjpeg, libusb1, python3Packages, sane-backends
+, cups, zlib, libjpeg, libusb1, python311Packages, sane-backends
 , dbus, file, ghostscript, usbutils
 , net-snmp, openssl, perl, nettools, avahi
 , bash, util-linux
@@ -49,7 +49,7 @@ in
 assert withPlugin -> builtins.elem hplipArch pluginArches
   || throw "HPLIP plugin not supported on ${stdenv.hostPlatform.system}";
 
-python3Packages.buildPythonApplication {
+python311Packages.buildPythonApplication {
   inherit pname version src;
   format = "other";
 
@@ -76,7 +76,7 @@ python3Packages.buildPythonApplication {
     autoreconfHook
   ] ++ lib.optional withQt5 qt5.wrapQtAppsHook;
 
-  pythonPath = with python3Packages; [
+  pythonPath = with python311Packages; [
     dbus
     pillow
     pygobject3
@@ -272,7 +272,7 @@ python3Packages.buildPythonApplication {
 
   # There are some binaries there, which reference gcc-unwrapped otherwise.
   stripDebugList = [
-    "share/hplip" "lib/cups/backend" "lib/cups/filter" python3Packages.python.sitePackages "lib/sane"
+    "share/hplip" "lib/cups/backend" "lib/cups/filter" python311Packages.python.sitePackages "lib/sane"
   ];
 
   meta = with lib; {

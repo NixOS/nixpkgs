@@ -1,5 +1,22 @@
 # Azure CLI
 
+## Updating the CLI
+
+- Update `version` and `src.hash` in default.nix
+- Check out the changes made to the azure-cli [setup.py](https://github.com/Azure/azure-cli/blob/dev/src/azure-cli/setup.py) since the last release
+- Try build the CLI, will likely fail with `ModuleNotFoundError`, for example
+  ```
+   ModuleNotFoundError: No module named 'azure.mgmt.storage.v2023_05_01'
+  ```
+  Sometimes it will also fail with other import errors.
+- Check the referenced module (`azure-mgmt-storage`) in the setup.py
+- Find the actual version required, for example
+  ```
+    'azure-mgmt-storage==21.2.0',
+  ```
+- Update version and hash of this dependency in python-packages.nix
+- Repeat until it builds
+
 ## Extensions
 
 There are two sets of extensions: the one in `extensions-generated.nix` is generated with the script

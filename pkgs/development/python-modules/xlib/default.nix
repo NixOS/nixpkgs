@@ -9,7 +9,6 @@
   xorg,
   python,
   mock,
-  pynose,
   pytestCheckHook,
   util-linux,
 }:
@@ -39,7 +38,6 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     mock
-    pynose
     util-linux
     xorg.xauth
     xorg.xvfb

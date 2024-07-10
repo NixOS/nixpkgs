@@ -2,8 +2,8 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  fetchpatch,
   setuptools,
-  pynose,
   pytestCheckHook,
 }:
 
@@ -18,20 +18,17 @@ buildPythonPackage rec {
     hash = "sha256-6y4RbnXs751NIo/cZq9UJpr6JqtEYwQuM3hbiHxii6g=";
   };
 
-  nativeBuildInputs = [ setuptools ];
-
-  nativeCheckInputs = [
-    pynose
-    pytestCheckHook
+  patches = [
+    (fetchpatch {
+      name = "ipython_genutils-denose.patch";
+      url = "https://build.opensuse.org/public/source/devel:languages:python:jupyter/python-ipython_genutils/denose.patch?rev=9";
+      hash = "sha256-At0aq6rLw/L64Own069m0p/WQm7iDa24fm0SPLLRBdE=";
+    })
   ];
 
-  preCheck = ''
-    substituteInPlace ipython_genutils/tests/test_path.py \
-      --replace-fail "setUp" "setup_method" \
-      --replace-fail "tearDown" "teardown_method" \
-      --replace-fail "assert_equals" "assert_equal" \
-      --replace-fail "assert_not_equals" "assert_not_equal"
-  '';
+  nativeBuildInputs = [ setuptools ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "ipython_genutils" ];
 

@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
         # its Scheme libraries.
         wrapProgram "$f" \
           --set GUILE_AUTO_COMPILE 0 \
-          --set PATH "${lib.makeBinPath [ ghostscript coreutils (placeholder "out") ]}" \
+          --prefix PATH : "${lib.makeBinPath [ ghostscript coreutils (placeholder "out") ]}" \
           --argv0 "$f"
     done
   '';

@@ -318,6 +318,11 @@ in rec {
     pname = "ceph";
     inherit src version;
 
+    postPatch = ''
+      substituteInPlace cmake/modules/Finduring.cmake \
+        --replace-fail "liburing.a liburing" "uring"
+    '';
+
     nativeBuildInputs = [
       cmake
       fmt

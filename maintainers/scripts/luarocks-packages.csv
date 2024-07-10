@@ -6,6 +6,7 @@ argparse,,,,,,
 basexx,,,,,,
 binaryheap,,,,,,vcunat
 busted,,,,,,
+busted-htest,,,,,,mrcjkb
 cassowary,,,,,,alerque
 cldr,,,,,,alerque
 compat53,,,,,,vcunat

@@ -139,7 +139,7 @@ in buildNpmPackage rec {
 
     pushd ${cargoRoot}
     export HOME=$(mktemp -d)
-    export -f cargoCheckHook runHook _eval _callImplicitHook
+    export -f cargoCheckHook runHook _eval _callImplicitHook _logHook
     export cargoCheckType=release
     dbus-run-session \
       --config-file=${dbus}/share/dbus-1/session.conf \

@@ -35,8 +35,10 @@ python3Packages.buildPythonApplication rec {
     pexpect
   ];
 
+  doCheck = python3Packages.pythonOlder "3.12";
+
   nativeCheckInputs = with python3Packages; [
-    pynose
+    nose
   ];
 
   # Remove standard module argparse from requirements

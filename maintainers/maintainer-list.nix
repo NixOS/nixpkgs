@@ -71,6 +71,12 @@
     github = "0b11stan";
     githubId = 27831931;
   };
+  _0david0mp = {
+    email = "davidmrpr@proton.me";
+    github = "0david0mp";
+    githubId = 54892055;
+    name = "David mp";
+  };
   _0nyr = {
     email = "onyr.maintainer@gmail.com";
     github = "0nyr";
@@ -226,6 +232,12 @@
     github = "6AA4FD";
     githubId = 12578560;
     name = "Quinn Bohner";
+  };
+  _71zenith = {
+    email = "71zenith@proton.me";
+    github = "71zenith";
+    githubId = 92977828;
+    name = "Mori Zen";
   };
   _8aed = {
     email = "8aed@riseup.net";
@@ -5332,6 +5344,12 @@
     github = "drets";
     githubId = 6199462;
     name = "Dmytro Rets";
+  };
+  dretyuiop = {
+    email = "chewch03@gmail.com";
+    github = "dretyuiop";
+    githubId = 81854406;
+    name = "Chew Cheng Hong";
   };
   drewrisinger = {
     email = "drisinger+nixpkgs@gmail.com";
@@ -15470,6 +15488,12 @@
     githubId = 817039;
     name = "Paulo Casaretto";
   };
+  pcboy = {
+    email = "david@joynetiks.com";
+    github = "pcboy";
+    githubId = 943430;
+    name = "David Hagege";
+  };
   pedrohlc = {
     email = "root@pedrohlc.com";
     github = "PedroHLC";
@@ -18927,11 +18951,6 @@
     githubId = 10437171;
     keys = [ { fingerprint = "75F0 AB7C FE01 D077 AEE6  CAFD 353E 4A18 EE0F AB72"; } ];
   };
-  spacefault = {
-    github = "spacefault";
-    githubId = 74156492;
-    name = "spacefault";
-  };
   spacefrogg = {
     email = "spacefrogg-nixos@meterriblecrew.net";
     github = "spacefrogg";
@@ -19932,6 +19951,14 @@
     github = "TheBrainScrambler";
     githubId = 34945377;
     name = "John Smith";
+  };
+  theCapypara = {
+    name = "Marco Köpcke";
+    email = "hello@capypara.de";
+    matrix = "@capypara:matrix.org";
+    github = "theCapypara";
+    githubId = 3512122;
+    keys = [ { fingerprint = "5F29 132D EFA8 5DA0 B598  5BF2 5941 754C 1CDE 33BB"; } ];
   };
   thedavidmeister = {
     email = "thedavidmeister@gmail.com";

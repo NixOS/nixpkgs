@@ -8953,6 +8953,8 @@ with pkgs;
 
   hyphen = callPackage ../development/libraries/hyphen { };
 
+  hyphenDicts = recurseIntoAttrs (callPackages ../development/libraries/hyphen/dictionaries.nix {});
+
   i2c-tools = callPackage ../os-specific/linux/i2c-tools { };
 
   i2pd = callPackage ../tools/networking/i2pd { };
@@ -13392,8 +13394,6 @@ with pkgs;
     themes = recurseIntoAttrs (getPackagesWithPrefix "theme");
   };
 
-  thefuck = python3Packages.callPackage ../tools/misc/thefuck { };
-
   theme-sh = callPackage ../tools/misc/theme-sh { };
 
   thiefmd = callPackage ../applications/editors/thiefmd { };
@@ -16127,61 +16127,33 @@ with pkgs;
     targetLlvm = targetPackages.llvmPackages_12.llvm or llvmPackages_12.llvm;
   }));
 
-  llvmPackages_13 = recurseIntoAttrs (callPackage ../development/compilers/llvm/13 ({
-    inherit (stdenvAdapters) overrideCC;
-    buildLlvmTools = buildPackages.llvmPackages_13.tools;
-    targetLlvmLibraries = targetPackages.llvmPackages_13.libraries or llvmPackages_13.libraries;
-    targetLlvm = targetPackages.llvmPackages_13.llvm or llvmPackages_13.llvm;
-    stdenv = if stdenv.cc.cc.isGNU or false then gcc12Stdenv else stdenv; # does not build with gcc13
-  }));
+  inherit (rec {
+    llvmPackagesSet = recurseIntoAttrs (callPackages ../development/compilers/llvm { });
 
-  llvmPackages_14 = recurseIntoAttrs (callPackage ../development/compilers/llvm/14 ({
-    inherit (stdenvAdapters) overrideCC;
-    buildLlvmTools = buildPackages.llvmPackages_14.tools;
-    targetLlvmLibraries = targetPackages.llvmPackages_14.libraries or llvmPackages_14.libraries;
-    targetLlvm = targetPackages.llvmPackages_14.llvm or llvmPackages_14.llvm;
-  }));
+    llvmPackages_13 = llvmPackagesSet."13";
+    llvmPackages_14 = llvmPackagesSet."14";
+    llvmPackages_15 = llvmPackagesSet."15";
+    llvmPackages_16 = llvmPackagesSet."16";
+    llvmPackages_17 = llvmPackagesSet."17";
 
-  llvmPackages_15 = recurseIntoAttrs (callPackage ../development/compilers/llvm/15 ({
-    inherit (stdenvAdapters) overrideCC;
-    buildLlvmTools = buildPackages.llvmPackages_15.tools;
-    targetLlvmLibraries = targetPackages.llvmPackages_15.libraries or llvmPackages_15.libraries;
-    targetLlvm = targetPackages.llvmPackages_15.llvm or llvmPackages_15.llvm;
-  }));
+    llvmPackages_18 = llvmPackagesSet."18";
+    clang_18 = llvmPackages_18.clang;
+    lld_18 = llvmPackages_18.lld;
+    lldb_18 = llvmPackages_18.lldb;
+    llvm_18 = llvmPackages_18.llvm;
 
-  llvmPackages_16 = recurseIntoAttrs (callPackage ../development/compilers/llvm/16 ({
-    inherit (stdenvAdapters) overrideCC;
-    buildLlvmTools = buildPackages.llvmPackages_16.tools;
-    targetLlvmLibraries = targetPackages.llvmPackages_16.libraries or llvmPackages_16.libraries;
-    targetLlvm = targetPackages.llvmPackages_16.llvm or llvmPackages_16.llvm;
-  }));
-
-  llvmPackages_17 = recurseIntoAttrs (callPackage ../development/compilers/llvm/17 ({
-    inherit (stdenvAdapters) overrideCC;
-    buildLlvmTools = buildPackages.llvmPackages_17.tools;
-    targetLlvmLibraries = targetPackages.llvmPackages_17.libraries or llvmPackages_17.libraries;
-    targetLlvm = targetPackages.llvmPackages_17.llvm or llvmPackages_17.llvm;
-  }));
-
-  inherit
-    (rec {
-      llvmPackages_18 = recurseIntoAttrs (callPackage ../development/compilers/llvm/18 ({
-        inherit (stdenvAdapters) overrideCC;
-        buildLlvmTools = buildPackages.llvmPackages_18.tools;
-        targetLlvmLibraries = targetPackages.llvmPackages_18.libraries or llvmPackages_18.libraries;
-        targetLlvm = targetPackages.llvmPackages_18.llvm or llvmPackages_18.llvm;
-      }));
-
-      clang_18 = llvmPackages_18.clang;
-      lld_18 = llvmPackages_18.lld;
-      lldb_18 = llvmPackages_18.lldb;
-      llvm_18 = llvmPackages_18.llvm;
-    })
-      llvmPackages_18
-      clang_18
-      lld_18
-      lldb_18
-      llvm_18;
+    llvmPackages_git = llvmPackagesSet.git;
+  }) llvmPackages_13
+    llvmPackages_14
+    llvmPackages_15
+    llvmPackages_16
+    llvmPackages_17
+    llvmPackages_18
+    clang_18
+    lld_18
+    lldb_18
+    llvm_18
+    llvmPackages_git;
 
   lorri = callPackage ../tools/misc/lorri {
     inherit (darwin.apple_sdk.frameworks) CoreServices Security;
@@ -25918,11 +25890,6 @@ with pkgs;
 
   libcardiacarrest = callPackage ../misc/libcardiacarrest { };
 
-  easyeffects = callPackage ../applications/audio/easyeffects {
-    # Fix crashes with speexdsp effects
-    speexdsp = speexdsp.override { withFftw3 = false; };
-  };
-
   pulseeffects-legacy = callPackage ../applications/audio/pulseeffects-legacy { };
 
   tomcat-native = callPackage ../servers/http/tomcat/tomcat-native.nix { };
@@ -29559,8 +29526,6 @@ with pkgs;
 
   bashSnippets = callPackage ../applications/misc/bashSnippets { };
 
-  batik = callPackage ../applications/graphics/batik { };
-
   batsignal = callPackage ../applications/misc/batsignal { };
 
   baudline = callPackage ../applications/audio/baudline { };
@@ -29722,8 +29687,6 @@ with pkgs;
   calibre = qt6Packages.callPackage ../applications/misc/calibre {
     podofo = podofo010;
   };
-
-  calibre-web = callPackage ../servers/calibre-web { };
 
   # calico-felix and calico-node have not been packaged due to libbpf, linking issues
   inherit (callPackage ../applications/networking/cluster/calico {})
@@ -31249,8 +31212,6 @@ with pkgs;
 
   hex-a-hop = callPackage ../games/hex-a-hop { };
 
-  hexchat = callPackage ../applications/networking/irc/hexchat { };
-
   hexcurse = callPackage ../applications/editors/hexcurse { };
 
   hexdino = callPackage ../applications/editors/hexdino { };
@@ -31367,10 +31328,6 @@ with pkgs;
   meerk40t = callPackage ../applications/misc/meerk40t { };
 
   meerk40t-camera = callPackage ../applications/misc/meerk40t/camera.nix { };
-
-  musikcube = callPackage ../applications/audio/musikcube {
-    inherit (darwin.apple_sdk.frameworks) Cocoa CoreAudio SystemConfiguration;
-  };
 
   libmt32emu = callPackage ../applications/audio/munt/libmt32emu.nix { };
 
@@ -33980,8 +33937,6 @@ with pkgs;
     libjpeg_turbo = libjpeg8;
   };
 
-  skypeforlinux = callPackage ../applications/networking/instant-messengers/skypeforlinux { };
-
   slingshot = callPackage ../tools/misc/slingshot { };
 
   slop = callPackage ../tools/misc/slop { };
@@ -34560,10 +34515,6 @@ with pkgs;
   todoman = callPackage ../applications/office/todoman { };
 
   tofi = callPackage ../applications/misc/tofi { };
-
-  tokyonight-gtk-theme = tokyonight-gtk-theme-variants.full;
-
-  tokyonight-gtk-theme-variants = recurseIntoAttrs (callPackage ../data/themes/tokyonight-gtk-theme { });
 
   topydo = callPackage ../applications/misc/topydo { };
 

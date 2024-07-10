@@ -90,8 +90,7 @@ buildPythonPackage rec {
         --replace "include (\''${CMAKE_CURRENT_SOURCE_DIR}/googletest.cmake)" ""\
         --replace "include(GoogleTest)" "find_package(GTest REQUIRED)"
 
-      cat << \EOF > python/triton/common/build.py
-
+      cat << \EOF >> python/triton/common/build.py
       def libcuda_dirs():
           return [ "${addDriverRunpath.driverLink}/lib" ]
       EOF

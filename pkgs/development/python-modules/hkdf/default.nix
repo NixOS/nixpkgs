@@ -2,7 +2,8 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pynose,
+  pythonOlder,
+  nose,
   setuptools,
 }:
 
@@ -22,7 +23,10 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "hkdf" ];
 
-  nativeCheckInputs = [ pynose ];
+  # tests rely on nose
+  doCheck = pythonOlder "3.12";
+
+  nativeCheckInputs = [ nose ];
 
   checkPhase = ''
     runHook preCheck
