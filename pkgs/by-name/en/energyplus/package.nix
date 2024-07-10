@@ -8,6 +8,7 @@
   gfortran,
   libGL,
   xorg,
+  glibc,
 }:
 stdenv.mkDerivation rec {
   pname = "energyplus";
@@ -23,11 +24,12 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     python3
-    gfortran
   ];
 
   buildInputs = [
     libGL
+    glibc.static
+    gfortran
     xorg.libX11
     xorg.libXrandr
     xorg.libXinerama
