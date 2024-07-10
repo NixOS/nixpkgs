@@ -3,12 +3,14 @@ let
   inherit (lib) types;
 
   cfg = config.services.ollama;
-  ollamaPackage = cfg.package.override {
+
+  ollamaPackage = cfg.package.override (prevArgs: {
     inherit (cfg) acceleration;
+  } // lib.optionalAttrs (prevArgs ? linuxPackages) {
     linuxPackages = config.boot.kernelPackages // {
       nvidia_x11 = config.hardware.nvidia.package;
     };
-  };
+  });
 in
 {
   options = {
