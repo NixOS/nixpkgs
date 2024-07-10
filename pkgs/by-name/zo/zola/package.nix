@@ -36,7 +36,7 @@ rustPlatform.buildRustPackage rec {
 
   RUSTONIG_SYSTEM_LIBONIG = true;
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd zola \
       --bash <($out/bin/zola completion bash) \
       --fish <($out/bin/zola completion fish) \

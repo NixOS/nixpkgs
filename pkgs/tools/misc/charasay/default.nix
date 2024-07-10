@@ -2,6 +2,7 @@
 , rustPlatform
 , fetchFromGitHub
 , installShellFiles
+, stdenv
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -23,7 +24,7 @@ rustPlatform.buildRustPackage rec {
     rm .cargo/config.toml
   '';
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd chara \
       --bash <($out/bin/chara completions --shell bash) \
       --fish <($out/bin/chara completions --shell fish) \

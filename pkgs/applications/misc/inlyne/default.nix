@@ -51,7 +51,7 @@ rustPlatform.buildRustPackage rec {
     "--skip=watcher::tests::the_gauntlet"
   ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd inlyne \
       --bash completions/inlyne.bash \
       --fish completions/inlyne.fish \

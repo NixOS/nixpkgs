@@ -80,7 +80,7 @@ rustPlatform.buildRustPackage rec {
     "--skip=cli::shell_hook::tests::test_environment_json"
   ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd pixi \
       --bash <($out/bin/pixi completion --shell bash) \
       --fish <($out/bin/pixi completion --shell fish) \
