@@ -44,6 +44,10 @@
   denoJson ? "",
   # Customize the deno lockfile location
   denoLock ? "",
+  # Deno runtime flags that will be passed to deno during execution. Like `--allow-net` or `-A`
+  #
+  # Example: ["--allow-net", "--allow-read"] or ["-A"]
+  runtimeFlags ? [ ],
   # TODO: Allow projects with custom vendored dependencies
 
   # Configuration for how the application should be run
@@ -52,8 +56,6 @@
   writableDenoDirectory ? true,
   # Just produce a single binary, instead of a whole directory.
   compile ? false,
-  # Add some flags by default, when executing your application. Like `--allow-net` or `-A`
-  runtimeFlags ? [ ],
 
   # Idk if I actually need to specify these explitly
   # Both npm and rust explicity specify src, srcs, and sourceRoot
@@ -296,6 +298,7 @@ stdenvNoCC.mkDerivation (
       denoDeps = deps;
       denoRuntime = denoRuntime;
       executableName = executableName;
+      runtimeFlags = builtins.concatStringsSep " " runtimeFlags;
 
       buildPhase = ''
         if test -z "$mainScript" ; then
@@ -389,6 +392,8 @@ stdenvNoCC.mkDerivation (
           exit 1
         fi
 
+        # TODO: Verify that the lockfile hash, deno version and target platform match the dependencies derivation
+
         BUILD_DIR=$(mktemp -d)
         for file in $(find $src -maxdepth 1 -mindepth 1 -printf "%P\n") ; do
           ln -s $src/$file $BUILD_DIR/$file
@@ -414,7 +419,7 @@ stdenvNoCC.mkDerivation (
 
             echo $denoDeps
             cat deno.lock
-            deno compile --cached-only --vendor=true --node-modules-dir=true $DENO_FLAGS -o "$out/bin/$executableName" "$mainScript"
+            deno compile --cached-only --vendor=true --node-modules-dir=true $DENO_FLAGS $runtimeFlags -o "$out/bin/$executableName" "$mainScript"
           ''
         else
           ''
@@ -445,7 +450,7 @@ stdenvNoCC.mkDerivation (
             export DENO_NO_PACKAGE_JSON=true
             export DENO_JOBS=1
 
-            exec ${lib.getExe deno} run --cached-only --vendor=true --node-modules-dir=true $DENO_FLAGS $out/module/$mainScript "\$@"
+            exec ${lib.getExe deno} run --cached-only --vendor=true --node-modules-dir=true $DENO_FLAGS $runtimeFlags $out/module/$mainScript "\$@"
             EOF
             chmod a+x $out/bin/$executableName
           '';
