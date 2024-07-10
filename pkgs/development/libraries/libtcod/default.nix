@@ -9,7 +9,7 @@ stdenv.mkDerivation {
     owner = "libtcod";
     repo = "libtcod";
     rev = "1.5.1";
-    sha256 = "1ibsnmnim712npxkqklc5ibnd32hgsx2yzyfzzc5fis5mhinbl63";
+    hash = "sha256-w9BlI6xFR1fY/85/L7p+UIxmVyyMTjz7tSKcGm21esU=";
   };
 
   prePatch = ''

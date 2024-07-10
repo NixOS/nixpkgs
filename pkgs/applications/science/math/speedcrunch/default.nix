@@ -8,7 +8,7 @@ mkDerivation rec {
     owner = "heldercorreia";
     repo = pname;
     rev = "74756f3438149c01e9edc3259b0f411fa319a22f";
-    sha256 = "sha256-XxQv+A5SfYXFIRK7yacxGHHne1Q93pwCGeHhchIKizU=";
+    hash = "sha256-XxQv+A5SfYXFIRK7yacxGHHne1Q93pwCGeHhchIKizU=";
   };
 
   buildInputs = [ qtbase qttools ];

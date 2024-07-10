@@ -11,7 +11,7 @@ buildOctavePackage rec {
     owner = "jgpallero";
     repo = pname;
     rev = "OctCLIP-${version}";
-    sha256 = "sha256-gG2b8Ix6bzO6O7GRACE81JCVxfXW/+ZdfoniigAEq3g=";
+    hash = "sha256-gG2b8Ix6bzO6O7GRACE81JCVxfXW/+ZdfoniigAEq3g=";
   };
 
   # The only compilation problem is that no formatting specifier was provided

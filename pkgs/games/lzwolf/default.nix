@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     owner = "linuxwolf6";
     repo = "lzwolf";
     rev = "a24190604296e16941c601b57afe4350462fc659";
-    sha256 = "sha256-CtBdvk6LXb/ll92Fxig/M4t4QNj8dNFJYd8F99b47kQ=";
+    hash = "sha256-CtBdvk6LXb/ll92Fxig/M4t4QNj8dNFJYd8F99b47kQ=";
   };
 
   patches = [

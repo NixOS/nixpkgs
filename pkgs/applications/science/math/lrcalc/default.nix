@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     owner = "asbuch";
     repo = "lrcalc";
     rev = "lrcalc-${version}";
-    sha256 = "0s3amf3z75hnrjyszdndrvk4wp5p630dcgyj341i6l57h43d1p4k";
+    hash = "sha256-k9zQBoGnUBMDGdI/1sAwt1xO5s7Ntq+9zBaW84eramg=";
   };
 
   doCheck = true;

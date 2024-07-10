@@ -10,7 +10,7 @@ mkDerivation rec {
     owner = "blais";
     repo = pname;
     rev = "5e5f885dfc43559549a81c59e9e8c9525306356a";
-    sha256 = "0gbvxrkwkbvag3298j89smszghpr8ilxxfb0cvsknfqdf15b296w";
+    hash = "sha256-3CSxSnANOzv1ZmC53mlE+cL3ddUJSZTEeGqvyWfuez0=";
   };
 
   nativeBuildInputs = [ bison docutils flex qmake ];

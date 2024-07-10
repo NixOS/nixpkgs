@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     owner = "malb";
     repo = "m4ri";
     rev = "release-${version}";
-    sha256 = "1dxgbv6zdyki3h61qlv7003wzhy6x14zmcaz9x19md1i7ng07w1k";
+    hash = "sha256-M/ADnj0xtJpCT1+x+knoxsPPBwBnUxwMHHH69s1er7c=";
   };
 
   doCheck = true;

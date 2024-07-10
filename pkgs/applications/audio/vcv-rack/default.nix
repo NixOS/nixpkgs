@@ -37,13 +37,13 @@ let
     owner = "jpommier";
     repo = "pffft";
     rev = "38946c766c1afecfa4c5945af77913e38b3cec31";
-    sha256 = "1w6g9v9fy7bavqacb6qw1nxhcik2w36cvl2d7b0bh68w0pd70j5q";
+    hash = "sha256-uEhw2gUcGbjAOk3QzczgYkYGuw0cm8UU3mod79JOz/A=";
   };
   fuzzysearchdatabase-source = fetchFromBitbucket {
     owner = "j_norberg";
     repo = "fuzzysearchdatabase";
     rev = "23122d1ff60d936fd766361a30210c954e0c5449";
-    sha256 = "1s88blx1rn2racmb8n5g0kh1ym7v21573l5m42c4nz266vmrvrvz";
+    hash = "sha256-f+ed6zZGfEuYILXQcUoQ+1Qf4ASvWLQqU1nYHDpdCOk=";
   };
   nanovg-source = fetchFromGitHub {
     owner = "VCVRack";

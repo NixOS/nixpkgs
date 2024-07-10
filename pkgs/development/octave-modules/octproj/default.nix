@@ -12,7 +12,7 @@ buildOctavePackage rec {
     owner = "jgpallero";
     repo = pname;
     rev = "OctPROJ-${version}";
-    sha256 = "sha256-d/Zf172Etj+GA0cnGsQaKMjOmirE7Hwyj4UECpg7QFM=";
+    hash = "sha256-d/Zf172Etj+GA0cnGsQaKMjOmirE7Hwyj4UECpg7QFM=";
   };
 
   # The sed changes below allow for the package to be compiled.
