@@ -95,6 +95,7 @@ llvmPackages_17.stdenv.mkDerivation (finalAttrs: {
   ] ++ cubeb.passthru.backendLibs;
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/bin
     cp -a bin/pcsx2-qt bin/resources $out/bin/
 
@@ -103,6 +104,7 @@ llvmPackages_17.stdenv.mkDerivation (finalAttrs: {
 
     zip -jq $out/bin/resources/patches.zip ${pcsx2_patches}/patches/*
     strip-nondeterminism $out/bin/resources/patches.zip
+    runHook postInstall
   '';
 
   qtWrapperArgs =
@@ -125,27 +127,28 @@ llvmPackages_17.stdenv.mkDerivation (finalAttrs: {
       --run 'if [[ -z $I_WANT_A_BROKEN_WAYLAND_UI ]]; then export QT_QPA_PLATFORM=xcb; fi'
   '';
 
-  meta = with lib; {
+  meta = {
+    homepage = "https://pcsx2.net";
     description = "Playstation 2 emulator";
     longDescription = ''
-      PCSX2 is an open-source PlayStation 2 (AKA PS2) emulator. Its purpose
-      is to emulate the PS2 hardware, using a combination of MIPS CPU
-      Interpreters, Recompilers and a Virtual Machine which manages hardware
-      states and PS2 system memory. This allows you to play PS2 games on your
-      PC, with many additional features and benefits.
+      PCSX2 is an open-source PlayStation 2 (AKA PS2) emulator. Its purpose is
+      to emulate the PS2 hardware, using a combination of MIPS CPU Interpreters,
+      Recompilers and a Virtual Machine which manages hardware states and PS2
+      system memory. This allows you to play PS2 games on your PC, with many
+      additional features and benefits.
     '';
-    hydraPlatforms = platforms.linux;
-    homepage = "https://pcsx2.net";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl3Plus
       lgpl3Plus
     ];
     mainProgram = "pcsx2-qt";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       hrdinka
       govanify
       matteopacini
     ];
-    platforms = [ "x86_64-linux" "x86_64-darwin" ];
+    platforms = lib.systems.inspect.patternLogicalAnd
+      lib.systems.inspect.patterns.isLinux
+      lib.systems.inspect.patterns.isx86_64;
   };
 })
