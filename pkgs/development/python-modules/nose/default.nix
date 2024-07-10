@@ -5,6 +5,7 @@
   isPy3k,
   isPyPy,
   python,
+  python312,
   coverage,
   setuptools,
   fetchpatch2,
@@ -42,8 +43,9 @@ buildPythonPackage rec {
       --replace "from setuptools.command.build_py import Mixin2to3" "from distutils.util import Mixin2to3"
   '';
 
-  preBuild = lib.optionalString (isPy3k) ''
-    ${python.pythonOnBuildForHost}/bin/2to3 -wn nose functional_tests unit_tests
+  # Python 3.12 is the last version to ship 2to3.
+  preBuild = lib.optionalString isPy3k ''
+    ${python312.pythonOnBuildForHost}/bin/2to3 -wn nose functional_tests unit_tests
   '';
 
   propagatedBuildInputs = [ coverage ];
