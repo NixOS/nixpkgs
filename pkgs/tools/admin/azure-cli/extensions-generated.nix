@@ -652,9 +652,9 @@
   };
   mdp = mkAzExtension rec {
     pname = "mdp";
-    version = "1.0.0b1";
+    version = "1.0.0b2";
     url = "https://azcliprod.blob.core.windows.net/cli-extensions/mdp-${version}-py3-none-any.whl";
-    sha256 = "7875607d84eaf835afe73b9eee9280a5169c5b0b1dd1b66a6eff593fe292a4de";
+    sha256 = "062ad026d9eaf791b5928c4fb793148d40c6c297cee32f175cd3a155eb24d93f";
     description = "Microsoft Azure Command-Line Tools Mdp Extension";
   };
   mixed-reality = mkAzExtension rec {
