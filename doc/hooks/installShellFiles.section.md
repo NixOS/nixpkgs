@@ -17,11 +17,38 @@ The `installShellCompletion` function takes one or more paths to shell completio
     installShellCompletion --zsh --name _foobar share/completions.zsh
     # implicit behavior
     installShellCompletion share/completions/foobar.{bash,fish,zsh}
-    # using named fd
+  '';
+}
+```
+
+When generating completions requires the execution of programs,
+it's necessary to disable this process during cross-compilation.
+This is because the current build platform may not be able to run binaries of the host platform.
+
+```nix
+{
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    # Utilizing named file descriptor
     installShellCompletion --cmd foobar \
       --bash <($out/bin/foobar --bash-completion) \
       --fish <($out/bin/foobar --fish-completion) \
       --zsh <($out/bin/foobar --zsh-completion)
+  '';
+}
+```
+
+An alternative to disabling this postInstall step, is to use the emulator package if available:
+The emulator expects a binary executable as an argument,
+so you may have to prefix the script interpreter executable or
+run the unwrapped version of the program in case the program is wrapped with a shell wrapper.
+
+```
+{
+  preFixup = lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) ''
+    installShellCompletion --cmd rg \
+      --bash <(${stdenv.hostPlatform.emulator buildPackages} $out/bin/rg --generate complete-bash) \
+      --fish <(${stdenv.hostPlatform.emulator buildPackages} $out/bin/rg --generate complete-fish) \
+      --zsh <(${stdenv.hostPlatform.emulator buildPackages} $out/bin/rg --generate complete-zsh)
   '';
 }
 ```
