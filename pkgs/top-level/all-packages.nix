@@ -29582,6 +29582,7 @@ with pkgs;
 
   blender = callPackage  ../applications/misc/blender {
     openexr = openexr_3;
+    python3Packages = python311Packages;
     inherit (darwin.apple_sdk.frameworks) Cocoa CoreGraphics ForceFeedback OpenAL OpenGL;
   };
 
