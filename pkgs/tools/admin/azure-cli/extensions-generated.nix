@@ -246,9 +246,9 @@
   };
   cosmosdb-preview = mkAzExtension rec {
     pname = "cosmosdb-preview";
-    version = "1.0.0";
+    version = "1.0.1";
     url = "https://azcliprod.blob.core.windows.net/cli-extensions/cosmosdb_preview-${version}-py2.py3-none-any.whl";
-    sha256 = "3a5910873138adf747ba8baed7be180981a74569c86c927ea6f1ae39d3de53bf";
+    sha256 = "c540018bc5da1252ec3e3e564552650d6af08f349f3ff339be398a7983caf2a9";
     description = "Microsoft Azure Command-Line Tools Cosmosdb-preview Extension";
   };
   costmanagement = mkAzExtension rec {
