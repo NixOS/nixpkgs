@@ -16526,6 +16526,12 @@
     githubId = 39039420;
     name = "Quinn Dougherty";
   };
+  quodlibetor = {
+    email = "quodlibetor@gmail.com";
+    github = "quodlibetor";
+    githubId = 277161;
+    name = "Brandon W Maister";
+  };
   qusic = {
     email = "qusicx@gmail.com";
     github = "Qusic";
