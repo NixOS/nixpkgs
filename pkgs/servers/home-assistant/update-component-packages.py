@@ -43,6 +43,7 @@ PKG_PREFERENCES = {
     "HAP-python": "hap-python",
     "numpy": "numpy_1",
     "ollama-hass": "ollama",
+    "paho-mqtt": "paho-mqtt_1",
     "sentry-sdk": "sentry-sdk",
     "slackclient": "slack-sdk",
     "SQLAlchemy": "sqlalchemy",

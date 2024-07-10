@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2024.7.1";
+  version = "2024.7.2";
   components = {
     "3_day_blinds" = ps: with ps; [
     ];
@@ -269,7 +269,7 @@
     "arve" = ps: with ps; [
     ]; # missing inputs: asyncarve
     "arwn" = ps: with ps; [
-      paho-mqtt
+      paho-mqtt_1
     ];
     "aseko_pool_live" = ps: with ps; [
       aioaseko
@@ -335,7 +335,7 @@
     ];
     "axis" = ps: with ps; [
       axis
-      paho-mqtt
+      paho-mqtt_1
     ];
     "azure_data_explorer" = ps: with ps; [
     ]; # missing inputs: azure-kusto-data azure-kusto-ingest
@@ -947,13 +947,13 @@
     ];
     "drop_connect" = ps: with ps; [
       dropmqttapi
-      paho-mqtt
+      paho-mqtt_1
     ];
     "dsmr" = ps: with ps; [
       dsmr-parser
     ];
     "dsmr_reader" = ps: with ps; [
-      paho-mqtt
+      paho-mqtt_1
     ];
     "dte_energy_bridge" = ps: with ps; [
     ];
@@ -1431,7 +1431,7 @@
     "fujitsu_anywair" = ps: with ps; [
     ];
     "fully_kiosk" = ps: with ps; [
-      paho-mqtt
+      paho-mqtt_1
       python-fullykiosk
     ];
     "futurenow" = ps: with ps; [
@@ -2595,7 +2595,7 @@
     "manual" = ps: with ps; [
     ];
     "manual_mqtt" = ps: with ps; [
-      paho-mqtt
+      paho-mqtt_1
     ];
     "map" = ps: with ps; [
       fnv-hash-fast
@@ -2906,19 +2906,19 @@
       mpd2
     ];
     "mqtt" = ps: with ps; [
-      paho-mqtt
+      paho-mqtt_1
     ];
     "mqtt_eventstream" = ps: with ps; [
-      paho-mqtt
+      paho-mqtt_1
     ];
     "mqtt_json" = ps: with ps; [
-      paho-mqtt
+      paho-mqtt_1
     ];
     "mqtt_room" = ps: with ps; [
-      paho-mqtt
+      paho-mqtt_1
     ];
     "mqtt_statestream" = ps: with ps; [
-      paho-mqtt
+      paho-mqtt_1
     ];
     "msteams" = ps: with ps; [
       pymsteams
@@ -2942,7 +2942,7 @@
     "myq" = ps: with ps; [
     ];
     "mysensors" = ps: with ps; [
-      paho-mqtt
+      paho-mqtt_1
       pymysensors
     ];
     "mystrom" = ps: with ps; [
@@ -3295,7 +3295,7 @@
       hassil
       home-assistant-intents
       mutagen
-      paho-mqtt
+      paho-mqtt_1
       psutil-home-assistant
       pynacl
       python-matter-server
@@ -4144,7 +4144,7 @@
       snapcast
     ];
     "snips" = ps: with ps; [
-      paho-mqtt
+      paho-mqtt_1
     ];
     "snmp" = ps: with ps; [
       pysnmp-lextudio
@@ -4431,7 +4431,7 @@
     ]; # missing inputs: tapsaff
     "tasmota" = ps: with ps; [
       hatasmota
-      paho-mqtt
+      paho-mqtt_1
     ];
     "tautulli" = ps: with ps; [
       pytautulli
