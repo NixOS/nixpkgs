@@ -13786,6 +13786,11 @@ with pkgs;
 
   uftrace = callPackage ../development/tools/uftrace { };
 
+  uftraceFull = uftrace.override {
+    withLuaJIT = true;
+    withPython = true;
+  };
+
   uftpd = callPackage ../servers/ftp/uftpd {};
 
   uget = callPackage ../tools/networking/uget { };
