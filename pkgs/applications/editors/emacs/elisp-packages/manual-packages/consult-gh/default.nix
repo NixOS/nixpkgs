@@ -11,11 +11,11 @@
 }:
 
 let
-  commit = "1fe876d9552b6ec6af257a4299a34eca99b40539";
+  commit = "3a07139a1f7e38b959ce177a122c8f47c401d7fa";
 in
 melpaBuild {
   pname = "consult-gh";
-  version = "20230706.438";
+  version = "0.12-unstable-2024-04-23";
 
   inherit commit;
 
@@ -23,7 +23,7 @@ melpaBuild {
     owner = "armindarvish";
     repo = "consult-gh";
     rev = commit;
-    hash = "sha256-bi+qlNvNMXbS4cXbXt01txwD2NAyAqJGNKeOtdtj7tg=";
+    hash = "sha256-BZloG5RuQzC2RwCfvqPPhGcbsCabQWBnRHdU62rwNdo=";
   };
 
   packageRequires = [
