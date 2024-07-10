@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "mautrix-signal";
-  version = "0.6.1";
+  version = "0.6.2";
 
   src = fetchFromGitHub {
     owner = "mautrix";
     repo = "signal";
     rev = "v${version}";
-    hash = "sha256-JybQhVej82aWcsGLKS/tCBUuy9rARSe4d+ivYEZ0ve4=";
+    hash = "sha256-NNylBOtD06hUk8Hf4JojsVS9GHvuqxTKY59m3TgqVsk=";
   };
 
   buildInputs = [
@@ -18,7 +18,7 @@ buildGoModule rec {
     libsignal-ffi
   ];
 
-  vendorHash = "sha256-LHq/CH53/Jzh49qXdoqXURqTVbSitczw3yH3KU2BMpc=";
+  vendorHash = "sha256-hlr83xuT+9+rj1uJb6iksAjSeVxcHQGm+KUjLbrFZ2Q=";
 
   doCheck = false;
 
