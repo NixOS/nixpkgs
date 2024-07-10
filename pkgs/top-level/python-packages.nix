@@ -14688,6 +14688,8 @@ self: super: with self; {
 
   ssg = callPackage ../development/python-modules/ssg { };
 
+  ssort = callPackage ../development/python-modules/ssort { };
+
   stack-data = callPackage ../development/python-modules/stack-data { };
 
   stanio = callPackage ../development/python-modules/stanio { };
