@@ -2,6 +2,7 @@
 , stdenv
 , buildPythonPackage
 , fetchFromGitHub
+, fetchpatch
 , cmake
 , cython
 , oldest-supported-numpy
@@ -30,6 +31,15 @@ buildPythonPackage rec {
     hash = "sha256-jlscEHQ1q4oqxE06NhVWCOlPRcjDcJVrvy4h6iYrkz0=";
     fetchSubmodules = true;
   };
+
+  patches = [
+    # https://github.com/glotzerlab/freud/issues/1269
+    (fetchpatch {
+      url = "https://github.com/glotzerlab/freud/commit/8f636e3815737945e45da5b9996b5f69df07c9a5.patch";
+      hash = "sha256-PLorRrYj16oBWHYzXDq62kECzVTtyr+1Z20DJqTkXxg=";
+    })
+  ];
+
   # Because we prefer to not `leaveDotGit`, we need to fool upstream into
   # thinking we left the .git files in the submodules, so cmake won't think we
   # didn't initialize them. Upstream doesn't support using the system wide
