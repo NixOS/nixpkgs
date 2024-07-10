@@ -159,8 +159,8 @@ in lib.makeExtensible (self: ({
   };
 
   nix_2_20 = common {
-    version = "2.20.7";
-    hash = "sha256-hWElUtAHYbL/LjyW0Vovz9zJLhv5zC6/tDu8uPkbQqY=";
+    version = "2.20.8";
+    hash = "sha256-M2tkMtjKi8LDdNLsKi3IvD8oY/i3rtarjMpvhybS3WY=";
     self_attribute_name = "nix_2_20";
   };
 
