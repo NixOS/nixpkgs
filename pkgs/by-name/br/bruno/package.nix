@@ -73,6 +73,11 @@ buildNpmPackage' rec {
     })
   ];
 
+  patches = [
+    # Workaround to fix css issue in bruno due to electron difference between Nix and mainstream. https://github.com/NixOS/nixpkgs/issues/324176
+    ./scroll-width-fix.patch
+  ];
+
   postPatch = ''
     substituteInPlace scripts/build-electron.sh \
       --replace-fail 'if [ "$1" == "snap" ]; then' 'exit 0; if [ "$1" == "snap" ]; then'
