@@ -16,7 +16,6 @@
   config,
   cudaPackages,
   cudaSupport ? config.cudaSupport,
-  darwin,
   dbus,
   embree,
   fetchpatch,
@@ -55,7 +54,6 @@
   libxkbcommon,
   llvmPackages,
   makeWrapper,
-  materialx,
   mesa,
   ocl-icd,
   openal,
@@ -127,7 +125,7 @@ stdenv.mkDerivation (finalAttrs: {
           substituteInPlace source/creator/CMakeLists.txt \
             --replace-fail '${"$"}{LIBDIR}/python' \
                       '${python3}' \
-            --replace-fail '${"$"}{LIBDIR}/materialx/' '${materialx}/'
+            --replace-fail '${"$"}{LIBDIR}/materialx/' '${python3Packages.materialx}/'
           substituteInPlace build_files/cmake/platform/platform_apple.cmake \
             --replace-fail '${"$"}{LIBDIR}/brotli/lib/libbrotlicommon-static.a' \
                       '${lib.getLib brotli}/lib/libbrotlicommon.dylib' \
@@ -160,7 +158,7 @@ stdenv.mkDerivation (finalAttrs: {
       "-DWITH_FFTW3=ON"
       "-DWITH_IMAGE_OPENJPEG=ON"
       "-DWITH_INSTALL_PORTABLE=OFF"
-      "-DMaterialX_DIR=${materialx}/lib/cmake/MaterialX"
+      "-DMaterialX_DIR=${python3Packages.materialx}/lib/cmake/MaterialX"
       "-DWITH_MOD_OCEANSIM=ON"
       "-DWITH_OPENCOLLADA=${if colladaSupport then "ON" else "OFF"}"
       "-DWITH_OPENCOLORIO=ON"
@@ -233,7 +231,6 @@ stdenv.mkDerivation (finalAttrs: {
       libsndfile
       libtiff
       libwebp
-      materialx
       opencolorio
       openexr
       openimageio
@@ -244,6 +241,7 @@ stdenv.mkDerivation (finalAttrs: {
       potrace
       pugixml
       python3
+      python3Packages.materialx
       tbb
       zlib
       zstd
@@ -299,7 +297,7 @@ stdenv.mkDerivation (finalAttrs: {
       ps = python3Packages;
     in
     [
-      materialx
+      ps.materialx
       ps.numpy
       ps.requests
       ps.zstandard
