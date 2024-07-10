@@ -1,0 +1,19 @@
+diff --git a/src/python/CMakeLists.txt b/src/python/CMakeLists.txt
+index bc85d8b..b76f7f4 100644
+--- a/src/python/CMakeLists.txt
++++ b/src/python/CMakeLists.txt
+@@ -44,14 +44,6 @@ if(BUILD_WHEEL)
+ 
+   # Copy over any additional python files
+   file(COPY "${CMAKE_CURRENT_SOURCE_DIR}/py/" DESTINATION ${WHEEL_TARGET_NAME}/)
+-  file(COPY "${CMAKE_SOURCE_DIR}/ThirdPartyNotices.txt" DESTINATION ${WHEEL_TARGET_NAME}/)
+-
+-  add_custom_command(TARGET python POST_BUILD
+-    COMMAND ${CMAKE_COMMAND} -E copy
+-    ${onnxruntime_libs} $<TARGET_FILE:python>
+-    ${WHEEL_TARGET_NAME}
+-    COMMENT "Copying files to wheel directory: ${WHEEL_TARGET_NAME}"
+-  )
+   set(auditwheel_exclude_list
+     "libcublas.so.11"
+     "libcublas.so.12"
