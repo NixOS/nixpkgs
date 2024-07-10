@@ -408,12 +408,12 @@
 
   codesnap-nvim =
     let
-      version = "1.5.1";
+      version = "1.5.2";
       src = fetchFromGitHub {
         owner = "mistricky";
         repo = "codesnap.nvim";
         rev = "refs/tags/v${version}";
-        hash = "sha256-eDFUoTzrQH7hn8ZSnqi6SxQvmc0CjpSmBuY2kzt/XbA=";
+        hash = "sha256-r6/2pbojfzBdMoZHphE6BX5cEiCAmOWurPBptI6jjcw=";
       };
       codesnap-lib = rustPlatform.buildRustPackage {
         pname = "codesnap-lib";
@@ -421,7 +421,7 @@
 
         sourceRoot = "${src.name}/generator";
 
-        cargoHash = "sha256-Si5L0gcGfcYMN/caXpLhHHhJLcqyv2BQgYSMkU5oiDo=";
+        cargoHash = "sha256-E8EywpyRSoknXSebnvqP178ZgAIahJeD5siD46KM/Mc=";
 
         nativeBuildInputs = [
           pkg-config
