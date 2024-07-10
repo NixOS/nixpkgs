@@ -932,9 +932,9 @@
   };
   storage-mover = mkAzExtension rec {
     pname = "storage-mover";
-    version = "1.0.0b1";
+    version = "1.1.0";
     url = "https://azcliprod.blob.core.windows.net/cli-extensions/storage_mover-${version}-py3-none-any.whl";
-    sha256 = "2682859ea376194a6942713ad673fd426555ce2d4ebe9545e45d18da4fed98b1";
+    sha256 = "7d768aca50aa98978a0d929c46cffe60bf488a527665485da631b33444cae24c";
     description = "Microsoft Azure Command-Line Tools StorageMover Extension";
   };
   storagesync = mkAzExtension rec {
