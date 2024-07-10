@@ -9,14 +9,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "marwaita-ubuntu";
-  version = "17.0";
+  pname = "marwaita-orange";
+  version = "20.3";
 
   src = fetchFromGitHub {
     owner = "darkomarko42";
     repo = pname;
-    rev = "481aae16034e0321bcabd14270639b8bd8b9aa73";
-    hash = "sha256-Ze2nR+77qe0TfwcvXP9eheB7mXSSVdejk11GS0fx7LY=";
+    rev = version;
+    hash = "sha256-RT7+LmauSAavl4ZA9vuKNrh/x8cGUb9V4RecxI/fN+E=";
   };
 
   buildInputs = [

@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     owner = "nextcloud";
     repo = "desktop";
     rev = "v${version}";
-    hash = "sha256-z4yxWClbs05ZCT8CPJpPY2BWMSXxfJ09Lq3Oottx7dQ=";
+    hash = "sha256-hZjmAdh9QQ2bAIYL3K7scl59kz9Wxnv9f6rKMeuKb7U=";
   };
 
   patches = [

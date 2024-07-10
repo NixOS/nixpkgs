@@ -697,11 +697,6 @@ with pkgs;
     inherit (darwin) DarwinTools;
   };
 
-  probe-run = callPackage ../development/tools/rust/probe-run {
-    inherit (darwin.apple_sdk.frameworks) AppKit IOKit;
-    inherit (darwin) DarwinTools;
-  };
-
   mix2nix = callPackage ../development/tools/mix2nix { };
 
   n98-magerun = callPackage ../development/tools/misc/n98-magerun { };
@@ -3314,8 +3309,6 @@ with pkgs;
 
   azeret-mono = callPackage ../data/fonts/azeret-mono { };
 
-  azure-cli = callPackage ../tools/admin/azure-cli { };
-
   azure-cli-extensions = recurseIntoAttrs azure-cli.extensions;
 
   azure-functions-core-tools = callPackage ../development/tools/azure-functions-core-tools { };
@@ -5734,6 +5727,8 @@ with pkgs;
   massren = callPackage ../tools/misc/massren { };
 
   mat2 = with python3.pkgs; toPythonApplication mat2;
+
+  materialx = with python3Packages; toPythonApplication materialx;
 
   maxcso = callPackage ../tools/archivers/maxcso { };
 
@@ -23480,11 +23475,12 @@ with pkgs;
 
   openslp = callPackage ../development/libraries/openslp { };
 
-  openstackclient = with python3Packages; toPythonApplication python-openstackclient;
-  glanceclient = with python3Packages; toPythonApplication python-glanceclient;
-  heatclient = with python3Packages; toPythonApplication python-heatclient;
-  ironicclient = with python3Packages; toPythonApplication python-ironicclient;
-  manilaclient = with python3Packages; toPythonApplication python-manilaclient;
+  openstackclient = with python311Packages; toPythonApplication python-openstackclient;
+  glanceclient = with python311Packages; toPythonApplication python-glanceclient;
+  heatclient = with python311Packages; toPythonApplication python-heatclient;
+  ironicclient = with python311Packages; toPythonApplication python-ironicclient;
+  manilaclient = with python311Packages; toPythonApplication python-manilaclient;
+  swiftclient = with python311Packages; toPythonApplication python-swiftclient;
 
   openvdb = callPackage ../development/libraries/openvdb { };
 
@@ -24341,8 +24337,6 @@ with pkgs;
   svrcore = callPackage ../development/libraries/svrcore { };
 
   svxlink = libsForQt5.callPackage ../applications/radio/svxlink { };
-
-  swiftclient = with python3Packages; toPythonApplication python-swiftclient;
 
   biblesync = callPackage ../development/libraries/biblesync { };
 
@@ -28550,8 +28544,6 @@ with pkgs;
   };
 
   marwaita-pop_os = callPackage ../data/themes/marwaita-pop_os { };
-
-  marwaita-ubuntu = callPackage ../data/themes/marwaita-ubuntu { };
 
   matcha-gtk-theme = callPackage ../data/themes/matcha { };
 
