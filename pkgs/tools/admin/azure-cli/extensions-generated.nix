@@ -148,9 +148,9 @@
   };
   azurelargeinstance = mkAzExtension rec {
     pname = "azurelargeinstance";
-    version = "1.0.0b1";
+    version = "1.0.0b2";
     url = "https://azcliprod.blob.core.windows.net/cli-extensions/azurelargeinstance-${version}-py3-none-any.whl";
-    sha256 = "a6e38c623cf14a9528df9f28aa98d9642c1e73c0a815becdce842e3a2f0f49ac";
+    sha256 = "6948ac3306269ea6c8ff6d32d5673989dfd4dfa0a4e4c5d6d3991b364d5dc628";
     description = "Microsoft Azure Command-Line Tools Azurelargeinstance Extension";
   };
   azurestackhci = mkAzExtension rec {
