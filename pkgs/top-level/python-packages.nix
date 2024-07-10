@@ -6446,6 +6446,8 @@ self: super: with self; {
 
   kafka-python = callPackage ../development/python-modules/kafka-python { };
 
+  kafka-python-ng = callPackage ../development/python-modules/kafka-python-ng { };
+
   kaggle = callPackage ../development/python-modules/kaggle { };
 
   kaitaistruct = callPackage ../development/python-modules/kaitaistruct { };
