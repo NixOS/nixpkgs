@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchurl
+, callPackage
 , boost
 , cmake
 , git
@@ -29,8 +29,8 @@ let
   minizip-ng = fetchFromGitHub {
     owner = "zlib-ng";
     repo = "minizip-ng";
-    rev = "4.0.5";
-    hash = "sha256-f37IcSeMXS1Yp6Q6vxYCRjStdCSMVLJGR7ZPr4gm/VE=";
+    rev = "4.0.7";
+    hash = "sha256-scoEqymRMBTZZVr1fxtKOyBj4VLCgI8jQpanUKrJhiQ=";
   };
 
   # TODO use pkgs.spdlog
@@ -41,31 +41,26 @@ let
     hash = "sha256-F7khXbMilbh5b+eKnzcB0fPPWQqUHqAYPWJb83OnUKQ=";
   };
 
-  testing-plugins = fetchFromGitHub {
-    owner = "Ortham";
-    repo = "testing-plugins";
-    rev = "1.4.1";
-    hash = "sha256-R36jKArrslbGKOSnDyIeckSEgF1hIQmBloSH+Z8ZS9k=";
-  };
+  testing-plugins = callPackage ../../li/libloot/testing-plugins.nix { };
 
-  # ExternalProject tries to re-download tarballs if their hashes do not match.
-
-  ValveFileVDF = fetchurl {
-    url = "https://github.com/TinyTinni/ValveFileVDF/archive/c8adfc29e62cc980b595e965bedfb239087647ff.tar.gz";
-    hash = "sha256-SKB4/x42DZwiF8m9LrdmkooCNLc7sr1FjQTGRkRmlVA=";
+  ValveFileVDF = fetchFromGitHub {
+    owner = "TinyTinni";
+    repo = "ValveFileVDF";
+    rev = "1a132f3b0b3cf501bdec03a99cdf009d99fc951c";
+    hash = "sha256-H5mbqLO1fJ0oa8d1Vl0KqcHgVyqwPR/kWCSrlSrKxSE=";
   };
 
 in
 
 stdenv.mkDerivation rec {
   pname = "loot";
-  version = "0.22.4";
+  version = "0.23.0";
 
   src = fetchFromGitHub {
     owner = "loot";
     repo = pname;
     rev = version;
-    hash = "sha256-qtbqYLxpjXYBs5xx0th5fUbrCixztO0ZhhP5u59GEkg=";
+    hash = "sha256-/jyAKslJBShwHhREEAi6YVty+Rfq6TO19U5gN9V2ljA=";
     # CMakeLists.txt gets the version string from HEAD
     leaveDotGit = true;
   };
@@ -75,16 +70,9 @@ stdenv.mkDerivation rec {
     ./do-not-copy-test-resources.patch
   ];
 
-  # prefetch remaining ExternalProjects
   postPatch = ''
     substituteInPlace src/gui/qt/helpers.cpp --replace-fail /usr/bin/xdg-open ${xdg-utils}/bin/xdg-open
-
-    mkdir -p build/external/src
-  '' + lib.concatMapStrings (tarball: ''
-    ln -s ${tarball} build/external/src/${baseNameOf tarball.url}
-  '') [
-    ValveFileVDF
-  ];
+  '';
 
   nativeBuildInputs = [
     cmake
@@ -112,6 +100,7 @@ stdenv.mkDerivation rec {
     "-DFETCHCONTENT_SOURCE_DIR_MINIZIP=${minizip-ng}"
     "-DFETCHCONTENT_SOURCE_DIR_SPDLOG=${spdlog}"
     # testing-plugins must be writable so we copy it and add it to cmakeFlags in preConfigure
+    "-DFETCHCONTENT_SOURCE_DIR_VALVEFILEVDF=${ValveFileVDF}"
   ];
 
   preConfigure = ''

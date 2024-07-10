@@ -1,8 +1,8 @@
 diff --git a/cmake/tests.cmake b/cmake/tests.cmake
-index 8cecebd4..fced2cc5 100644
+index 4ab27eb9..a4c4650c 100644
 --- a/cmake/tests.cmake
 +++ b/cmake/tests.cmake
-@@ -219,37 +219,6 @@ if(CMAKE_SYSTEM_NAME STREQUAL "Windows")
+@@ -220,39 +220,6 @@ if(CMAKE_SYSTEM_NAME STREQUAL "Windows")
              COMMAND ${QT_DIR}/bin/windeployqt $<TARGET_FILE:loot_gui_tests>
              COMMENT "Running windeployqt...")
      endif()
@@ -14,22 +14,24 @@ index 8cecebd4..fced2cc5 100644
 -        libicui18n.so.73.2
 -        libicuuc.so.73
 -        libicuuc.so.73.2
+-        libQt6Concurrent.so.6
+-        libQt6Concurrent.so.6.7.2
 -        libQt6Core.so.6
--        libQt6Core.so.6.7.0
+-        libQt6Core.so.6.7.2
 -        libQt6DBus.so.6
--        libQt6DBus.so.6.7.0
+-        libQt6DBus.so.6.7.2
 -        libQt6Gui.so.6
--        libQt6Gui.so.6.7.0
+-        libQt6Gui.so.6.7.2
 -        libQt6Network.so.6
--        libQt6Network.so.6.7.0
+-        libQt6Network.so.6.7.2
 -        libQt6Test.so.6
--        libQt6Test.so.6.7.0
+-        libQt6Test.so.6.7.2
 -        libQt6Widgets.so.6
--        libQt6Widgets.so.6.7.0
+-        libQt6Widgets.so.6.7.2
 -        libQt6XcbQpa.so.6
--        libQt6XcbQpa.so.6.7.0
+-        libQt6XcbQpa.so.6.7.2
 -        libQt6OpenGL.so.6
--        libQt6OpenGL.so.6.7.0)
+-        libQt6OpenGL.so.6.7.2)
 -
 -    foreach(TEST_RESOURCE ${LOOT_QT_TEST_RESOURCES})
 -        add_custom_command(TARGET loot_gui_tests POST_BUILD
