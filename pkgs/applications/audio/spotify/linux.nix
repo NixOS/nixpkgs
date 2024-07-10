@@ -129,8 +129,6 @@ stdenv.mkDerivation {
       mkdir -p $libdir
       mv ./usr/* $out/
 
-      cp meta/snap.yaml $out
-
       # Work around Spotify referring to a specific minor version of
       # OpenSSL.
 
