@@ -1,22 +1,23 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, cmake
-, cython
-, oldest-supported-numpy
-, scikit-build
-, setuptools
-, tbb
-, numpy
-, rowan
-, scipy
-, pytestCheckHook
-, python
-, gsd
-, matplotlib
-, sympy
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  cython,
+  oldest-supported-numpy,
+  scikit-build,
+  setuptools,
+  tbb,
+  numpy,
+  rowan,
+  scipy,
+  pytestCheckHook,
+  python,
+  gsd,
+  matplotlib,
+  sympy,
 }:
 
 buildPythonPackage rec {
@@ -65,9 +66,7 @@ buildPythonPackage rec {
     setuptools
   ];
   dontUseCmakeConfigure = true;
-  buildInputs = [
-    tbb
-  ];
+  buildInputs = [ tbb ];
 
   propagatedBuildInputs = [
     numpy
@@ -81,8 +80,7 @@ buildPythonPackage rec {
     matplotlib
     sympy
   ];
-  disabledTests = [
-  ] ++ lib.optionals stdenv.isAarch64 [
+  disabledTests = lib.optionals stdenv.isAarch64 [
     # https://github.com/glotzerlab/freud/issues/961
     "test_docstring"
   ];
@@ -95,11 +93,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "freud" ];
 
-  meta = with lib; {
+  meta = {
     description = "Powerful, efficient particle trajectory analysis in scientific Python";
     homepage = "https://github.com/glotzerlab/freud";
     changelog = "https://github.com/glotzerlab/freud/blob/${src.rev}/ChangeLog.md";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ doronbehar ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ doronbehar ];
   };
 }
