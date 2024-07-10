@@ -15971,7 +15971,9 @@ with pkgs;
     graalvmDrv = graalvm-ce;
   }).override;
 
-  openshot-qt = libsForQt5.callPackage ../applications/video/openshot-qt { };
+  openshot-qt = libsForQt5.callPackage ../applications/video/openshot-qt {
+    python3 = python311;
+  };
 
   lingua-franca = callPackage ../development/compilers/lingua-franca { };
 
