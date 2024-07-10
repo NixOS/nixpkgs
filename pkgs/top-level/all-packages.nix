@@ -19465,9 +19465,7 @@ with pkgs;
   terracognita = callPackage ../development/tools/misc/terracognita { };
 
   terraform-lsp = callPackage ../development/tools/misc/terraform-lsp { };
-  terraform-ls = callPackage ../development/tools/misc/terraform-ls {
-    buildGoModule = buildGo122Module;
-  };
+  terraform-ls = callPackage ../development/tools/misc/terraform-ls { };
 
   terraformer = callPackage ../development/tools/misc/terraformer { };
 
