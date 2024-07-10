@@ -8,7 +8,6 @@
 }:
 let
   inherit (cudaPackages.utils) mkVersionedPackageName;
-  inherit (lib.attrsets) getDev getLib getOutput;
   inherit (lib.versions) major;
 in
 prevAttrs:
@@ -44,10 +43,7 @@ in
     cuda_nvcc
   ];
   buildInputs = prevAttrs.buildInputs or [ ] ++ [
-    (getDev cuda_cudart)
-    (getLib cuda_cudart)
-    (getOutput "static" cuda_cudart)
-    (getDev desiredCudnn)
-    (getLib desiredCudnn)
+    cuda_cudart
+    desiredCudnn
   ];
 }

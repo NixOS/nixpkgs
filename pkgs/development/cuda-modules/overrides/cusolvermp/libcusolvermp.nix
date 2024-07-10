@@ -6,10 +6,6 @@
   libcusolver ? null,
   utils,
 }:
-let
-  inherit (lib.attrsets) getLib;
-  inherit (lib.lists) map;
-in
 prevAttrs: {
   badPlatformsConditions =
     prevAttrs.badPlatformsConditions
@@ -21,12 +17,10 @@ prevAttrs: {
         libcusolver
         ;
     };
-  buildInputs =
-    prevAttrs.buildInputs or [ ]
-    ++ (map getLib [
-      libcal
-      libcublas
-      libcusolver
-      cuda_cudart
-    ]);
+  buildInputs = prevAttrs.buildInputs or [ ] ++ [
+    libcal
+    libcublas
+    libcusolver
+    cuda_cudart
+  ];
 }

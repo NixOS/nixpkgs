@@ -1,8 +1,5 @@
 { cuda_cupti, lib }:
-let
-  inherit (lib.attrsets) getLib;
-in
 prevAttrs: {
   allowFHSReferences = true;
-  buildInputs = prevAttrs.buildInputs ++ [ (getLib cuda_cupti) ];
+  buildInputs = prevAttrs.buildInputs ++ [ cuda_cupti ];
 }

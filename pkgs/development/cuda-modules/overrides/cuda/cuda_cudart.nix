@@ -6,10 +6,13 @@
   utils,
 }:
 let
-  inherit (lib.attrsets) getDev;
+  inherit (lib.attrsets) getOutput;
   inherit (lib.strings) optionalString;
 in
 finalAttrs: prevAttrs: {
+  # Include the static libraries as well since CMake needs them during the configure phase.
+  propagatedBuildOutputs = prevAttrs.propagatedBuildOutputs ++ [ "static" ];
+
   # The libcuda stub's pkg-config doesn't follow the general pattern:
   postPatch =
     prevAttrs.postPatch or ""
@@ -35,15 +38,15 @@ finalAttrs: prevAttrs: {
     # NOTE: Make sure to guard against the assert running when the package isn't available.
     + optionalString finalAttrs.finalPackage.meta.available (
       ''
-        mkdir -p "''${!outputDev}/nix-support"
+        mkdir -p "''${!outputInclude}/nix-support"
       ''
       # cuda_cudart.dev depends on crt/host_config.h, which is from cuda_nvcc.dev.
       + optionalString cuda_nvcc.meta.available (''
-        printWords "${getDev cuda_nvcc}" >> "''${!outputDev}/nix-support/propagated-build-inputs"
+        printWords "${getOutput "include" cuda_nvcc}" >> "''${!outputInclude}/nix-support/propagated-build-inputs"
       '')
       # cuda_cuadrt.dev has include/cuda_fp16.h which requires cuda_cccl.dev's include/nv/target
       + optionalString (cuda_cccl != null && cuda_cccl.meta.available) (''
-        printWords "${getDev cuda_cccl}" >> "''${!outputDev}/nix-support/propagated-build-inputs"
+        printWords "${getOutput "include" cuda_cccl}" >> "''${!outputInclude}/nix-support/propagated-build-inputs"
       '')
     );
 }

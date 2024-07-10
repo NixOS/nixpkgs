@@ -23,8 +23,8 @@ let
     cuda_nvcc
     cudatoolkit
     ;
-  inherit (lib.attrsets) attrValues getDev getLib;
-  inherit (lib.lists) any;
+  inherit (lib.attrsets) attrValues getBin getLib getOutput;
+  inherit (lib.lists) any optionals;
   inherit (lib.trivial) id;
 in
 backendStdenv.mkDerivation (finalAttrs: {
@@ -55,27 +55,23 @@ backendStdenv.mkDerivation (finalAttrs: {
     "CUDA versions prior to 11.4 cannot build this version of NCCL" = cudaOlder "11.4";
   };
 
-  nativeBuildInputs =
-    [
-      which
-      autoAddDriverRunpath
-      python3
-    ]
-    ++ lib.optionals (cudaOlder "11.4") [ cudatoolkit ]
-    ++ lib.optionals (cudaAtLeast "11.4") [ cuda_nvcc ];
+  nativeBuildInputs = [
+    which
+    autoAddDriverRunpath
+    python3
+  ] ++ optionals (cudaOlder "11.4") [ cudatoolkit ] ++ optionals (cudaAtLeast "11.4") [ cuda_nvcc ];
 
   buildInputs =
-    lib.optionals (cudaOlder "11.4") [ cudatoolkit ]
-    ++ lib.optionals (cudaAtLeast "11.4") [
+    optionals (cudaOlder "11.4") [ cudatoolkit ]
+    ++ optionals (cudaAtLeast "11.4") [
       cuda_nvcc # crt/host_config.h
-      (getDev cuda_cudart)
-      (getLib cuda_cudart)
+      cuda_cudart
     ]
     # NOTE: CUDA versions in Nixpkgs only use a major and minor version. When we do comparisons
     # against other version, like below, it's important that we use the same format. Otherwise,
     # we'll get incorrect results.
     # For example, lib.versionAtLeast "12.0" "12.0.0" == false.
-    ++ lib.optionals (cudaAtLeast "12.0") [ (getDev cuda_cccl) ];
+    ++ optionals (cudaAtLeast "12.0") [ cuda_cccl ];
 
   env.NIX_CFLAGS_COMPILE = toString [ "-Wno-unused-function" ];
 
@@ -88,15 +84,15 @@ backendStdenv.mkDerivation (finalAttrs: {
       "PREFIX=$(out)"
       "NVCC_GENCODE=${flags.gencodeString}"
     ]
-    ++ lib.optionals (cudaOlder "11.4") [
+    ++ optionals (cudaOlder "11.4") [
       "CUDA_HOME=${cudatoolkit}"
       "CUDA_LIB=${cudatoolkit}/lib"
       "CUDA_INC=${cudatoolkit}/include"
     ]
-    ++ lib.optionals (cudaAtLeast "11.4") [
-      "CUDA_HOME=${cuda_nvcc}"
+    ++ optionals (cudaAtLeast "11.4") [
+      "CUDA_HOME=${getBin cuda_nvcc}"
       "CUDA_LIB=${getLib cuda_cudart}/lib"
-      "CUDA_INC=${getDev cuda_cudart}/include"
+      "CUDA_INC=${getOutput "include" cuda_cudart}/include"
     ];
 
   enableParallelBuilding = true;
@@ -118,7 +114,7 @@ backendStdenv.mkDerivation (finalAttrs: {
     broken = any id (attrValues finalAttrs.brokenConditions);
     # NCCL is not supported on Jetson, because it does not use NVLink or PCI-e for inter-GPU communication.
     # https://forums.developer.nvidia.com/t/can-jetson-orin-support-nccl/232845/9
-    badPlatforms = lib.optionals flags.isJetsonBuild [ "aarch64-linux" ];
+    badPlatforms = optionals flags.isJetsonBuild [ "aarch64-linux" ];
     maintainers =
       with maintainers;
       [

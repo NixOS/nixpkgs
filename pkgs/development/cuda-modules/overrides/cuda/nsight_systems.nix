@@ -15,7 +15,7 @@
   xorg,
 }:
 let
-  inherit (lib.attrsets) getOutput optionalAttrs;
+  inherit (lib.attrsets) optionalAttrs;
   inherit (lib.strings) versionOlder versionAtLeast;
 in
 prevAttrs:
@@ -56,7 +56,7 @@ in
   buildInputs = prevAttrs.buildInputs ++ [
     (qt.qtdeclarative or qt.full)
     (qt.qtsvg or qt.full)
-    (getOutput "stubs" cuda_cudart)
+    cuda_cudart
     gst_all_1.gst-plugins-base
     gst_all_1.gstreamer
     nss

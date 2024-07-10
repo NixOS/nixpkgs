@@ -16,11 +16,14 @@ in
 
         A `dev` output requires that we have at least one of the following non-empty directories:
 
-        - `include`
         - `lib/pkgconfig`
         - `share/pkgconfig`
         - `lib/cmake`
         - `share/aclocal`
+
+        NOTE: Absent from this list is `include`, which is handled by the `include` output. This is because the `dev`
+        output in Nixpkgs is used for development files and is selected as the default output to install if present.
+        Since we want to be able to access only the header files, they are present in a separate output.
 
         A `doc` output requires that we have at least one of the following non-empty directories:
 
@@ -29,6 +32,8 @@ in
         - `share/gtk-doc`
         - `share/devhelp`
         - `share/man`
+
+        An `include` output requires that we have a non-empty `include` directory.
 
         A `lib` output requires that we have a non-empty lib directory containing at least one shared library.
 
@@ -46,6 +51,7 @@ in
         "bin"
         "dev"
         "doc"
+        "include"
         "lib"
         "python"
         "sample"

@@ -25,18 +25,29 @@
 }:
 let
   inherit (lib)
-    attrsets
     licenses
-    lists
     platforms
     sourceTypes
-    strings
     teams
-    trivial
     ;
+
+  inherit (lib.attrsets) attrValues genAttrs optionalAttrs;
+  inherit (lib.lists)
+    any
+    elem
+    findFirstIndex
+    intersectLists
+    optionals
+    subtractLists
+    unique
+    ;
+  inherit (lib.strings) concatMapStringsSep optionalString;
+  inherit (lib.trivial) id warn;
+
   # Order is important here so we use a list.
   possibleOutputs = [
     "bin"
+    "include"
     "lib"
     "static"
     "dev"
@@ -47,13 +58,14 @@ let
   ];
   # lists.intersectLists iterates over the second list, checking if the elements are in the first list.
   # As such, the order of the output is dictated by the order of the second list.
-  componentOutputs = lists.intersectLists packageInfo.feature.outputs possibleOutputs;
+  componentOutputs = intersectLists packageInfo.feature.outputs possibleOutputs;
 in
 backendStdenv.mkDerivation (
   finalAttrs:
   let
-    isBadPlatform = lists.any trivial.id (attrsets.attrValues finalAttrs.badPlatformsConditions);
-    isBroken = lists.any trivial.id (attrsets.attrValues finalAttrs.brokenConditions);
+    isBadPlatform = any id (attrValues finalAttrs.badPlatformsConditions);
+    isBroken = any id (attrValues finalAttrs.brokenConditions);
+    hasStubs = elem "stubs" finalAttrs.outputs;
   in
   {
     # NOTE: Even though there's no actual buildPhase going on here, the derivations of the
@@ -74,6 +86,22 @@ backendStdenv.mkDerivation (
 
     outputs = [ "out" ] ++ componentOutputs;
 
+    # NOTE: Because the `dev` output is special in Nixpkgs -- make-derivation.nix uses it as the default if
+    # it is present -- we must ensure that it brings in the expected dependencies. For us, this means that `dev`
+    # should include `bin`, `include`, and `lib` -- `static` is notably absent because it is quite large.
+    # Additionally, we include `stubs`, as it simplifies the use of packages.
+    propagatedBuildOutputs = intersectLists (
+      [
+        "bin"
+        "include"
+        "lib"
+      ]
+      ++ optionals hasStubs [ "stubs" ]
+    ) finalAttrs.outputs;
+
+    # We have a separate output for include files; don't use the dev output.
+    outputInclude = "include";
+
     # Traversed in the order of the outputs speficied in outputs;
     # entries are skipped if they don't exist in outputs.
     outputToPatterns = {
@@ -83,6 +111,7 @@ backendStdenv.mkDerivation (
         "**/*.pc"
         "**/*.cmake"
       ];
+      include = [ "include" ];
       lib = [
         "lib"
         "lib64"
@@ -107,13 +136,13 @@ backendStdenv.mkDerivation (
     # because attempts to access attributes on the package will cause evaluation errors.
     brokenConditions = {
       # Unclear how this is handled by Nix internals.
-      "Duplicate entries in outputs" = finalAttrs.outputs != lists.unique finalAttrs.outputs;
+      "Duplicate entries in outputs" = finalAttrs.outputs != unique finalAttrs.outputs;
       # Typically this results in the static output being empty, as all libraries are moved
       # back to the lib output.
       "lib output follows static output" =
         let
-          libIndex = lists.findFirstIndex (x: x == "lib") null finalAttrs.outputs;
-          staticIndex = lists.findFirstIndex (x: x == "static") null finalAttrs.outputs;
+          libIndex = findFirstIndex (x: x == "lib") null finalAttrs.outputs;
+          staticIndex = findFirstIndex (x: x == "static") null finalAttrs.outputs;
         in
         libIndex != null && staticIndex != null && libIndex > staticIndex;
     };
@@ -176,7 +205,7 @@ backendStdenv.mkDerivation (
       # autoAddCudaCompatRunpath depends on cuda_compat and would cause
       # infinite recursion if applied to `cuda_compat` itself (beside the fact
       # that it doesn't make sense in the first place)
-      ++ lists.optionals (finalAttrs.pname != "cuda_compat" && flags.isJetsonBuild) [
+      ++ optionals (finalAttrs.pname != "cuda_compat" && flags.isJetsonBuild) [
         # autoAddCudaCompatRunpath must appear AFTER autoAddDriverRunpath.
         # See its documentation in ./setup-hooks/extension.nix.
         autoAddCudaCompatRunpath
@@ -206,14 +235,14 @@ backendStdenv.mkDerivation (
             template = pattern: ''moveToOutput "${pattern}" "${"$" + output}"'';
             patterns = finalAttrs.outputToPatterns.${output} or [ ];
           in
-          strings.concatMapStringsSep "\n" template patterns;
+          concatMapStringsSep "\n" template patterns;
       in
       # Pre-install hook
       ''
         runHook preInstall
       ''
       # Handle the existence of libPath, which requires us to re-arrange the lib directory.
-      + strings.optionalString (libPath != null) ''
+      + optionalString (libPath != null) ''
         full_lib_path="lib/${libPath}"
         if [[ ! -d "$full_lib_path" ]]; then
           echo "${finalAttrs.pname}: '$full_lib_path' does not exist, only found:" >&2
@@ -233,7 +262,7 @@ backendStdenv.mkDerivation (
       ''
       # Move the outputs into their respective outputs.
       + ''
-        ${strings.concatMapStringsSep "\n" mkMoveToOutputCommand (builtins.tail finalAttrs.outputs)}
+        ${concatMapStringsSep "\n" mkMoveToOutputCommand (builtins.tail finalAttrs.outputs)}
       ''
       # If there's a `stubs` output, add the setupCudaStubsHook to it.
       # NOTE:
@@ -242,7 +271,7 @@ backendStdenv.mkDerivation (
       #   One way to get around that problem is to template the script inside a phase, like we do here, so the package
       #   itself maintains the store path of the `stubs` output, and we don't cross derivation boundaries, causing
       #   infinite recursion.
-      + strings.optionalString (lists.elem "stubs" finalAttrs.outputs) ''
+      + optionalString hasStubs ''
         mkdir -p "$stubs/nix-support"
         cat "${./setup-cuda-stubs-hook.sh}" >> "$stubs/nix-support/setup-hook"
         substituteInPlace "$stubs/nix-support/setup-hook" \
@@ -274,35 +303,30 @@ backendStdenv.mkDerivation (
       "libcuda.so.*"
     ];
 
-    # _multioutPropagateDev() currently expects a space-separated string rather than an array
+    # TODO(@connorbaker): https://github.com/NixOS/nixpkgs/issues/323126.
+    # _multioutPropagateDev() currently expects a space-separated string rather than an array.
+    # Because it is a postFixup hook, we correct it in preFixup.
     preFixup = ''
       export propagatedBuildOutputs="''${propagatedBuildOutputs[@]}"
     '';
 
-    # Propagate all outputs, including `static`
-    propagatedBuildOutputs = builtins.filter (x: x != "dev") finalAttrs.outputs;
-
-    # Kept in case overrides assume postPhases have already been defined
-    # postPhases = [ "postPatchelf" ];
-    # postPatchelf = ''
-    #   true
-    # '';
-
-    # The `out` output should largely be empty save for nix-support/propagated-build-inputs.
-    # In effect, this allows us to make `out` depend on all the other components.
-    # Add all outputs but out and dev to propagated-build-inputs in out.
-    # Dev should contain a reference to out, so we don't need to add it.
-    # NOTE: We must use printWords to ensure the output is a single line.
-    # See addPkg in ./pkgs/build-support/buildenv/builder.pl -- it splits on spaces.
-    # postFixup = ''
-    #   mkdir -p "$out/nix-support"
-    #   for output in $(getAllOutputNames); do
-    #     # Skip out output to avoid a cycle
-    #     [[ "$output" == out ]] && continue
-    #     echo "Adding $output to out's propagated-build-inputs"
-    #     printWords "''${!output}" >> "$out/nix-support/propagated-build-inputs"
-    #   done
-    # '';
+    postFixup =
+      # The `out` output should largely be empty save for nix-support/propagated-build-inputs.
+      # In effect, this allows us to make `out` depend on all the other components.
+      ''
+        mkdir -p "$out/nix-support"
+      ''
+      # NOTE: We must use printWords to ensure the output is a single line.
+      # See addPkg in ./pkgs/build-support/buildenv/builder.pl -- it splits on spaces.
+      + ''
+        for output in $(getAllOutputNames); do
+          # Skip out and dev outputs
+          [[ "$output" == "out" ]] && continue
+          # Propagate the other components to the out output
+          echo "Adding $output to out's propagated-build-inputs"
+          printWords "''${!output}" >> "$out/nix-support/propagated-build-inputs"
+        done
+      '';
 
     passthru =
       # Make the CUDA-patched stdenv available
@@ -313,12 +337,12 @@ backendStdenv.mkDerivation (
       # This way, if a consumer of a redist package attempts to access an output which doesn't exist on their platform
       # or configuration, they get an error message about the package being broken or unsupported *instead of* a missing
       # attribute error.
-      // attrsets.optionalAttrs (isBroken || isBadPlatform) (
+      // optionalAttrs (isBroken || isBadPlatform) (
         let
           # Subtract finalAttrs.outputs *from* possibleOutputs to get the outputs that are not in finalAttrs.outputs.
-          invalidOutputs = lists.subtractLists finalAttrs.outputs possibleOutputs;
+          invalidOutputs = subtractLists finalAttrs.outputs possibleOutputs;
         in
-        attrsets.genAttrs invalidOutputs (
+        genAttrs invalidOutputs (
           output:
           let
             # Create a variant of the package which is both marked as broken and unsupported.
@@ -331,30 +355,17 @@ backendStdenv.mkDerivation (
               };
             });
           in
-          trivial.warn "${finalAttrs.name}.${output} does not exist" packageMarkedAsBrokenAndUnsupported
+          warn "${finalAttrs.name}.${output} does not exist" packageMarkedAsBrokenAndUnsupported
         )
       );
-
-    # Setting propagatedBuildInputs to false will prevent outputs known to the multiple-outputs
-    # from depending on `out` by default.
-    # https://github.com/NixOS/nixpkgs/blob/2920b6fc16a9ed5d51429e94238b28306ceda79e/pkgs/build-support/setup-hooks/multiple-outputs.sh#L196
-    # Indeed, we want to do the opposite -- fat "out" outputs that contain all the other outputs.
-    # propagatedBuildOutputs = false;
-
-    # NOTE: This breaks getOutput and the like, but that isn't a bad thing because it means we don't have to
-    # worry about the `dev` component being used by default by make-derivation.nix.
-    # outputSpecified = true;
 
     meta = {
       description = "${releaseInfo.name}. By downloading and using the packages you accept the terms and conditions of the ${finalAttrs.meta.license.shortName}";
       sourceProvenance = [ sourceTypes.binaryNativeCode ];
       broken = isBroken;
-      badPlatforms = lists.optionals isBadPlatform platforms.all;
+      badPlatforms = optionals isBadPlatform platforms.all;
       license = licenses.unfree;
       maintainers = teams.cuda.members;
-      # NOTE: If we do not set the outputsToInstall attribute, the default output is "bin".
-      # https://github.com/NixOS/nixpkgs/blob/3b6f808dc92d20687c315f4d443098960301b2c0/pkgs/stdenv/generic/check-meta.nix#L446-L482
-      # outputsToInstall = [ "out" ];
     };
   }
 )

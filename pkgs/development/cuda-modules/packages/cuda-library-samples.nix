@@ -10,7 +10,7 @@
 }:
 
 let
-  inherit (lib.attrsets) getDev;
+  inherit (lib.attrsets) getOutput;
 
   rev = "5aab680905d853bce0dbad4c488e4f7e9f7b2302";
   src = fetchFromGitHub {
@@ -89,7 +89,7 @@ in
       # CUTENSOR_ROOT is double escaped
       postPatch = ''
         substituteInPlace CMakeLists.txt \
-          --replace-fail "\''${CUTENSOR_ROOT}/include" "${getDev libcutensor}/include"
+          --replace-fail "\''${CUTENSOR_ROOT}/include" "${getOutput "include" libcutensor}/include"
       '';
 
       CUTENSOR_ROOT = libcutensor;
