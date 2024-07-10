@@ -28550,8 +28550,6 @@ with pkgs;
 
   marwaita-pop_os = callPackage ../data/themes/marwaita-pop_os { };
 
-  marwaita-ubuntu = callPackage ../data/themes/marwaita-ubuntu { };
-
   matcha-gtk-theme = callPackage ../data/themes/matcha { };
 
   materia-theme = callPackage ../data/themes/materia-theme { };
