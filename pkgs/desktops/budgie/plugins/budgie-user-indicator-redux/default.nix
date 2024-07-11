@@ -10,6 +10,7 @@
   libpeas,
   meson,
   ninja,
+  nix-update-script,
   pkg-config,
   sassc,
   vala,
@@ -42,6 +43,10 @@ stdenv.mkDerivation (finalAttrs: {
     libpeas
     sassc
   ];
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Manage your user session from the Budgie panel";
