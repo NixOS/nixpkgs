@@ -45,6 +45,8 @@ rec {
 
   php = (import ./formats/php/default.nix { inherit lib pkgs; }).format;
 
+  edn = import ./formats/edn/default.nix {inherit lib pkgs;};
+
   json = {}: {
 
     type = with lib.types; let
