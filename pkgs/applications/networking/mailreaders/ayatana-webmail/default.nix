@@ -1,19 +1,20 @@
-{ lib
-, fetchFromGitHub
-, gettext
-, gtk3
-, python3Packages
-, gdk-pixbuf
-, libnotify
-, glib
-, gobject-introspection
-, wrapGAppsHook3
-# BTW libappindicator is also supported, but upstream recommends their
-# implementation, see:
-# https://github.com/AyatanaIndicators/ayatana-webmail/issues/24#issuecomment-1050352862
-, libayatana-appindicator
-, gsettings-desktop-schemas
-, libcanberra-gtk3
+{
+  lib,
+  fetchFromGitHub,
+  gettext,
+  gtk3,
+  python3Packages,
+  gdk-pixbuf,
+  libnotify,
+  glib,
+  gobject-introspection,
+  wrapGAppsHook3,
+  # BTW libappindicator is also supported, but upstream recommends their
+  # implementation, see:
+  # https://github.com/AyatanaIndicators/ayatana-webmail/issues/24#issuecomment-1050352862
+  libayatana-appindicator,
+  gsettings-desktop-schemas,
+  libcanberra-gtk3,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -23,7 +24,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "AyatanaIndicators";
     repo = "ayatana-webmail";
-    rev = version;
+    rev = "refs/tags/${version}";
     hash = "sha256-k557FWKGq2MXODVxVzOetC5kkwTNYOoLO8msCOabais=";
   };
   postConfigure = ''
@@ -80,11 +81,11 @@ python3Packages.buildPythonApplication rec {
     makeWrapperArgs+=(--prefix PATH : ${lib.makeBinPath [ libcanberra-gtk3 ]})
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Webmail notifications and actions for any desktop";
     homepage = "https://github.com/AyatanaIndicators/ayatana-webmail";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ doronbehar ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ doronbehar ];
   };
 }
