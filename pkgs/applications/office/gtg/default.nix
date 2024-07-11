@@ -55,7 +55,6 @@ python3Packages.buildPythonApplication rec {
   ];
 
   nativeCheckInputs = with python3Packages; [
-    nose
     mock
     xvfb-run
     pytest

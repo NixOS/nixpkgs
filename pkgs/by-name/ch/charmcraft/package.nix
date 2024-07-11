@@ -22,6 +22,9 @@ python3Packages.buildPythonApplication rec {
   postPatch = ''
     substituteInPlace setup.py \
       --replace-fail 'version=determine_version()' 'version="${version}"'
+
+    substituteInPlace charmcraft/env.py \
+      --replace-fail "distutils.util" "setuptools.dist"
   '';
 
   propagatedBuildInputs = with python3Packages; [
@@ -44,22 +47,22 @@ python3Packages.buildPythonApplication rec {
     urllib3
   ];
 
-  nativeBuildInputs = with python3Packages; [
-    setuptools
-  ];
+  nativeBuildInputs = with python3Packages; [ setuptools ];
 
-  pythonRelaxDeps = [
-    "urllib3"
-  ];
+  pythonRelaxDeps = [ "urllib3" ];
 
-  nativeCheckInputs = with python3Packages; [
-    pyfakefs
-    pytest-check
-    pytest-mock
-    pytest-subprocess
-    pytestCheckHook
-    responses
-  ] ++ [ git ];
+  nativeCheckInputs =
+    with python3Packages;
+    [
+      pyfakefs
+      pytest-check
+      pytest-mock
+      pytest-subprocess
+      pytestCheckHook
+      responses
+      setuptools
+    ]
+    ++ [ git ];
 
   preCheck = ''
     mkdir -p check-phase

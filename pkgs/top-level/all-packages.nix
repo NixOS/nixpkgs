@@ -22627,16 +22627,6 @@ with pkgs;
 
   libtomcrypt = callPackage ../development/libraries/libtomcrypt { };
 
-  libtorrent-rasterbar-2_0_x = callPackage ../development/libraries/libtorrent-rasterbar {
-    inherit (darwin.apple_sdk.frameworks) SystemConfiguration;
-    python = python3;
-  };
-
-  libtorrent-rasterbar-1_2_x = callPackage ../development/libraries/libtorrent-rasterbar/1.2.nix {
-    inherit (darwin.apple_sdk.frameworks) SystemConfiguration;
-    python = python3;
-  };
-
   libtorrent-rasterbar = libtorrent-rasterbar-2_0_x;
 
   libtpms = callPackage ../tools/security/libtpms { };
@@ -30877,8 +30867,8 @@ with pkgs;
 
   freerdpUnstable = freerdp;
 
-  friture = libsForQt5.callPackage ../applications/audio/friture {
-    python3Packages = python39Packages;
+  friture = callPackage ../by-name/fr/friture/package.nix {
+    python3Packages = python311Packages;
   };
 
   g933-utils = callPackage ../tools/misc/g933-utils { };

@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, pkg-config, automake, autoconf
-, zlib, boost, openssl, libtool, python, libiconv, ncurses, SystemConfiguration
+, zlib, boost, openssl, libtool, python311, libiconv, ncurses, darwin
 }:
 
 let
@@ -7,7 +7,7 @@ let
 
   # Make sure we override python, so the correct version is chosen
   # for the bindings, if overridden
-  boostPython = boost.override { enablePython = true; inherit python; };
+  boostPython = boost.override { enablePython = true; python = python311; };
 
 in stdenv.mkDerivation {
   pname = "libtorrent-rasterbar";
@@ -24,14 +24,14 @@ in stdenv.mkDerivation {
 
   nativeBuildInputs = [ automake autoconf libtool pkg-config ];
 
-  buildInputs = [ boostPython openssl zlib python libiconv ncurses ]
-    ++ lib.optionals stdenv.isDarwin [ SystemConfiguration ];
+  buildInputs = [ boostPython openssl zlib python311 libiconv ncurses ]
+    ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.SystemConfiguration ];
 
   preConfigure = "./autotool.sh";
 
   postInstall = ''
     moveToOutput "include" "$dev"
-    moveToOutput "lib/${python.libPrefix}" "$python"
+    moveToOutput "lib/${python311.libPrefix}" "$python"
   '';
 
   outputs = [ "out" "dev" "python" ];
@@ -48,7 +48,7 @@ in stdenv.mkDerivation {
     description = "C++ BitTorrent implementation focusing on efficiency and scalability";
     license = licenses.bsd3;
     maintainers = [ ];
-    broken = true; # ModuleNotFoundError: No module named 'distutils'
+    broken = stdenv.isDarwin;
     platforms = platforms.unix;
   };
 }

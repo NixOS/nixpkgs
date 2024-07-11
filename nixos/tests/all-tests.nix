@@ -811,6 +811,7 @@ in {
   ragnarwm = handleTest ./ragnarwm.nix {};
   rasdaemon = handleTest ./rasdaemon.nix {};
   readarr = handleTest ./readarr.nix {};
+  realm = handleTest ./realm.nix {};
   redis = handleTest ./redis.nix {};
   redlib = handleTest ./redlib.nix {};
   redmine = handleTest ./redmine.nix {};
