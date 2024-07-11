@@ -14022,6 +14022,7 @@ with pkgs;
 
   sssd = callPackage ../os-specific/linux/sssd {
     inherit (perlPackages) Po4a;
+    python3 = python311;
   };
 
   sentry-cli = callPackage ../development/tools/sentry-cli {
