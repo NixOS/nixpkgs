@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   nose,
   mock,
 }:
@@ -23,9 +22,6 @@ buildPythonPackage rec {
     substituteInPlace tests/test_camera.py \
       --replace-fail "assertEquals" "assertEqual"
   '';
-
-  # tests rely on nose
-  doCheck = pythonOlder "3.12";
 
   nativeCheckInputs = [
     nose

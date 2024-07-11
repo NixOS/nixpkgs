@@ -48,9 +48,6 @@ buildPythonPackage rec {
     webcolors
   ];
 
-  # tests rely on nose
-  doCheck = pythonOlder "3.12";
-
   nativeCheckInputs = [
     ephem
     nose
