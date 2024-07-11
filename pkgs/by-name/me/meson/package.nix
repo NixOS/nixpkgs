@@ -18,13 +18,13 @@ let
 in
 python3.pkgs.buildPythonApplication rec {
   pname = "meson";
-  version = "1.4.0";
+  version = "1.4.1";
 
   src = fetchFromGitHub {
     owner = "mesonbuild";
     repo = "meson";
     rev = "refs/tags/${version}";
-    hash = "sha256-hRTmKO2E6SIdvAhO7OJtV8dcsGm39c51H+2ZGEkdcFY=";
+    hash = "sha256-RBE4AUF5fymUA87JEDWtpUFXmVPFzdhZgDI7/kscTx4=";
   };
 
   patches = [
@@ -65,10 +65,6 @@ python3.pkgs.buildPythonApplication rec {
 
     # Nixpkgs cctools does not have bitcode support.
     ./006-disable-bitcode.patch
-
-    # Fix cross-compilation of proc-macro (and mesa)
-    # https://github.com/mesonbuild/meson/issues/12973
-    ./0001-Revert-rust-recursively-pull-proc-macro-dependencies.patch
   ];
 
   buildInputs = lib.optionals (python3.pythonOlder "3.9") [
