@@ -2,29 +2,28 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  autoconf,
-  automake,
+  autoreconfHook,
   ncurses,
   SDL,
   gpm,
   miniupnpc,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "qodem";
   version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "klamonte";
     repo = "qodem";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "NAdcTVmNrDa3rbsbxJxFoI7sz5NK5Uw+TbP+a1CdB+Q=";
   };
 
   nativeBuildInputs = [
-    autoconf
-    automake
+    autoreconfHook
   ];
+
   buildInputs = [
     ncurses
     SDL
@@ -32,7 +31,13 @@ stdenv.mkDerivation rec {
     miniupnpc
   ];
 
-  meta = with lib; {
+  strictDeps = true;
+
+  enableParallelBuilding = true;
+
+  __structuredAttrs = true;
+
+  meta = {
     homepage = "https://qodem.sourceforge.net/";
     description = "Re-implementation of the DOS-era Qmodem serial communications package";
     longDescription = ''
@@ -42,7 +47,8 @@ stdenv.mkDerivation rec {
       terminal screen features of Qmodem over both modem and Internet
       connections.
     '';
-    maintainers = with maintainers; [ embr ];
-    license = licenses.publicDomain;
+    maintainers = with lib.maintainers; [ embr ];
+    sourceProvenance = [ lib.sourceTypes.fromSource ];
+    license = lib.licenses.publicDomain;
   };
-}
+})
