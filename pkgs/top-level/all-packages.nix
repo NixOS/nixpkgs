@@ -35711,8 +35711,6 @@ with pkgs;
 
   monero-gui = libsForQt5.callPackage ../applications/blockchains/monero-gui { };
 
-  masari = callPackage ../applications/blockchains/masari { };
-
   napari = with python3Packages; toPythonApplication napari;
 
   nano-wallet = libsForQt5.callPackage ../applications/blockchains/nano-wallet { };
