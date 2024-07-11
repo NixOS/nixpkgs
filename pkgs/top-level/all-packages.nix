@@ -37210,7 +37210,7 @@ with pkgs;
     appls = [ prio ];
   };
 
-  budgie = callPackage ../desktops/budgie { };
+  budgiePackages = callPackage ../desktops/budgie { };
   budgiePlugins = recurseIntoAttrs (callPackage ../desktops/budgie/plugins { });
 
   cdesktopenv = callPackage ../desktops/cdesktopenv { };

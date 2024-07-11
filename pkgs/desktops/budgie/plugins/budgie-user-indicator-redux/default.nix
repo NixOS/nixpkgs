@@ -2,7 +2,7 @@
 , stdenv
 , fetchFromGitHub
 , accountsservice
-, budgie
+, budgiePackages
 , gtk3
 , intltool
 , libgee
@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     accountsservice
-    budgie.budgie-desktop
+    budgiePackages.budgie-desktop
     gtk3
     libgee
     libpeas

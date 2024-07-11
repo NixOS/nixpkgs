@@ -18,6 +18,6 @@ let
     };
 in
 makeScopeWithSplicing' {
-  otherSplices = generateSplicesForMkScope "budgie";
+  otherSplices = generateSplicesForMkScope "budgiePackages";
   f = budgiePackages;
 }

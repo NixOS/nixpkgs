@@ -8,7 +8,7 @@ let
   nixos-background-light = pkgs.nixos-artwork.wallpapers.nineish;
   nixos-background-dark = pkgs.nixos-artwork.wallpapers.nineish-dark-gray;
 
-  nixos-gsettings-overrides = pkgs.budgie.budgie-gsettings-overrides.override {
+  nixos-gsettings-overrides = pkgs.budgiePackages.budgie-gsettings-overrides.override {
     inherit (cfg) extraGSettingsOverrides extraGSettingsOverridePackages;
     inherit nixos-background-dark nixos-background-light;
   };
@@ -40,7 +40,7 @@ let
     destination = "/share/gnome-background-properties/nixos.xml";
   };
 
-  budgie-control-center = pkgs.budgie.budgie-control-center.override {
+  budgie-control-center = pkgs.budgiePackages.budgie-control-center.override {
     enableSshSocket = config.services.openssh.startWhenNeeded;
   };
 
@@ -94,7 +94,7 @@ in {
 
   config = mkIf cfg.enable {
     services.displayManager.sessionPackages = with pkgs; [
-      budgie.budgie-desktop
+      budgiePackages.budgie-desktop
     ];
 
     services.xserver.displayManager.lightdm.greeters.slick = {
@@ -104,7 +104,7 @@ in {
       cursorTheme = mkDefault { name = "Qogir"; package = pkgs.qogir-icon-theme; };
     };
 
-    services.xserver.desktopManager.budgie.sessionPath = [ pkgs.budgie.budgie-desktop-view ];
+    services.xserver.desktopManager.budgie.sessionPath = [ pkgs.budgiePackages.budgie-desktop-view ];
 
     environment.extraInit = ''
       ${concatMapStrings (p: ''
@@ -121,12 +121,12 @@ in {
     environment.systemPackages = with pkgs;
       [
         # Budgie Desktop.
-        budgie.budgie-backgrounds
-        budgie-control-center
-        (budgie.budgie-desktop-with-plugins.override { plugins = cfg.extraPlugins; })
-        budgie.budgie-desktop-view
-        budgie.budgie-screensaver
-        budgie.budgie-session
+        budgiePackages.budgie-backgrounds
+        budgiePackages.budgie-control-center
+        (budgiePackages.budgie-desktop-with-plugins.override { plugins = cfg.extraPlugins; })
+        budgiePackages.budgie-desktop-view
+        budgiePackages.budgie-screensaver
+        budgiePackages.budgie-session
 
         # Required by Budgie Menu.
         gnome-menus
@@ -210,7 +210,7 @@ in {
     xdg.portal.extraPortals = with pkgs; [
       xdg-desktop-portal-gtk # provides a XDG Portals implementation.
     ];
-    xdg.portal.configPackages = mkDefault [ pkgs.budgie.budgie-desktop ];
+    xdg.portal.configPackages = mkDefault [ pkgs.budgiePackages.budgie-desktop ];
 
     services.geoclue2.enable = mkDefault true; # for BCC's Privacy > Location Services panel.
     services.upower.enable = config.powerManagement.enable; # for Budgie's Status Indicator and BCC's Power panel.
@@ -248,7 +248,7 @@ in {
 
     # Register packages for udev.
     services.udev.packages = with pkgs; [
-      budgie.magpie
+      budgiePackages.magpie
     ];
 
     # Shell integration for MATE Terminal.

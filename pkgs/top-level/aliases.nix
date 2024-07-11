@@ -156,6 +156,7 @@ mapAliases ({
   bpftool = bpftools; # Added 2021-05-03
   bpytop = throw "bpytop has been deprecated by btop"; # Added 2023-02-16
   bro = throw "'bro' has been renamed to/replaced by 'zeek'"; # Converted to throw 2023-09-10
+  budgie = lib.mapAttrs (name: lib.warn "`budgie.${name}` has been renamed to `budgiePackages.${name}`") budgiePackages; # Added 2024-07-10
   inherit (libsForQt5.mauiPackages) buho; # added 2022-05-17
   bukut = throw "bukut has been removed since it has been archived by upstream"; # Added 2023-05-24
   butler = throw "butler was removed because it was broken and abandoned upstream"; # added 2024-06-18
