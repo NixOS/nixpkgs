@@ -23,6 +23,8 @@ in {
       externalUrl = lib.mkOption {
         type = lib.types.str;
         example = "https://piped.example.com";
+        default = "https://${cfg.frontend.domain}";
+        defaultText = "The {option}`domain`";
         description = ''
           The external URL of Piped Frontend.
         '';
@@ -104,6 +106,8 @@ in {
       externalUrl = lib.mkOption {
         type = lib.types.str;
         example = "https://pipedapi.example.com";
+        default = "https://${cfg.backend.nginx.domain}";
+        defaultText = "The {option}`domain`";
         description = ''
           The external URL of Piped Backend.
         '';
@@ -168,6 +172,8 @@ in {
       externalUrl = lib.mkOption {
         type = lib.types.str;
         example = "https://pipedproxy.example.com";
+        default = "https://${cfg.proxy.nginx.domain}";
+        defaultText = "The {option}`domain`";
         description = ''
           The external URL of Piped Proxy.
         '';
@@ -194,8 +200,6 @@ in {
 
   config = let
     frontendConfig = lib.mkIf cfg.frontend.enable {
-      services.piped.frontend.externalUrl = lib.mkDefault "https://${cfg.frontend.domain}";
-
       services.nginx = {
         enable = true;
         virtualHosts.${cfg.frontend.domain} = {
@@ -214,8 +218,6 @@ in {
 
     backendConfig = lib.mkIf cfg.backend.enable {
       services.piped.backend = {
-        externalUrl = lib.mkIf cfg.backend.nginx.enable (lib.mkDefault "https://${cfg.backend.nginx.domain}");
-
         # TODO should be freeform attr defaults
         settings = {
           PORT = toString cfg.backend.port;
@@ -318,8 +320,6 @@ in {
     };
 
     proxyConfig = lib.mkIf cfg.proxy.enable {
-      services.piped.proxy.externalUrl = lib.mkIf cfg.proxy.nginx.enable (lib.mkDefault "https://${cfg.proxy.nginx.domain}");
-
       systemd.services.piped-proxy = {
         wantedBy = ["multi-user.target"];
         serviceConfig = {
