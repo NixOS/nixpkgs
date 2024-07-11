@@ -1,0 +1,21 @@
+From cf8ba54d22f5ac839004c0d984fb402bde82b527 Mon Sep 17 00:00:00 2001
+From: OPNA2608 <opna2608@protonmail.com>
+Date: Mon, 8 Apr 2024 15:22:55 +0200
+Subject: [PATCH] Launch module-created systemd service
+
+---
+ data/com.lomiri.UserMetrics.service.in | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/data/com.lomiri.UserMetrics.service.in b/data/com.lomiri.UserMetrics.service.in
+index c2e6ae1..212e24f 100644
+--- a/data/com.lomiri.UserMetrics.service.in
++++ b/data/com.lomiri.UserMetrics.service.in
+@@ -3,3 +3,4 @@ Name=com.lomiri.UserMetrics
+ Exec=@CMAKE_INSTALL_FULL_LIBEXECDIR@/libusermetrics/usermetricsservice
+ User=usermetrics
+ StandardOutput=syslog
++SystemdService=dbus-com.lomiri.UserMetrics.service
+-- 
+2.42.0
+
