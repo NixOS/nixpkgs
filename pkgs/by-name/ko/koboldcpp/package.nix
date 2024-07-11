@@ -36,9 +36,11 @@
   # You can find list of x86_64 options here: https://gcc.gnu.org/onlinedocs/gcc/x86-Options.html
   # For ARM here: https://gcc.gnu.org/onlinedocs/gcc/ARM-Options.html
   # If you set "march" to "native", specify "mtune" as well; otherwise, it will be set to "generic". (credit to: https://lemire.me/blog/2018/07/25/it-is-more-complicated-than-i-thought-mtune-march-in-gcc/)
-  # For example, if you have an AMD Ryzen CPU, you will set "march" to "x86-64" and "mtune" to "znver2"
   march ? "",
+  # Apple Silicon Chips (M1, M2, M3 and so on DO NOT use mtune)
+  # For example, if you have an AMD Ryzen CPU, you will set "mtune" to "znver2"
   mtune ? "",
+  mcpu ? "",
 }:
 
 let
@@ -114,8 +116,11 @@ effectiveStdenv.mkDerivation (finalAttrs: {
 
   env.NIX_LDFLAGS = lib.concatStringsSep " " (finalAttrs.darwinLdFlags ++ finalAttrs.metalLdFlags);
 
-  env.NIX_CFLAGS_COMPILE =
-    lib.optionalString (march != "") "-march=${march}" + lib.optionalString (mtune != "") "-mtune=${mtune}";
+  env.NIX_CFLAGS_COMPILE = lib.concatStringsSep " " [
+    (lib.optionalString (march != "") "-march=${march}")
+    (lib.optionalString (mtune != "") "-mtune=${mtune}")
+    (lib.optionalString (mcpu != "") "-mcpu=${mcpu}")
+  ];
 
   makeFlags = [
     (makeBool "LLAMA_OPENBLAS" openblasSupport)
@@ -141,6 +146,12 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     ''}
 
     runHook postInstall
+  '';
+
+  # Remove an unused argument, mainly intended for Darwin to reduce warnings
+  postPatch = ''
+    substituteInPlace Makefile \
+      --replace-warn " -s " " "
   '';
 
   postFixup = ''
