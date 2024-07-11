@@ -3,9 +3,9 @@
   fetchFromGitHub,
   lib,
   callPackage,
-  gradle_7,
+  gradle,
   makeBinaryWrapper,
-  openjdk17,
+  openjdk21,
   unzip,
   makeDesktopItem,
   copyDesktopItems,
@@ -42,8 +42,6 @@ let
       find "$out" -name .git -print0 | xargs -0 rm -rf
     '';
   };
-
-  gradle = gradle_7;
 
   patches = [
     # Use our own protoc binary instead of the prebuilt one
@@ -128,7 +126,7 @@ stdenv.mkDerivation (finalAttrs: {
     data = ./deps.json;
   };
 
-  gradleFlags = [ "-Dorg.gradle.java.home=${openjdk17}" ];
+  gradleFlags = [ "-Dorg.gradle.java.home=${openjdk21}" ];
 
   preBuild = ''
     export JAVA_TOOL_OPTIONS="-Duser.home=$NIX_BUILD_TOP/home"
@@ -164,7 +162,7 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s "${pkg_path}/ghidraRun" "$out/bin/ghidra"
     wrapProgram "${pkg_path}/support/launch.sh" \
       --set-default NIX_GHIDRAHOME "${pkg_path}/Ghidra" \
-      --prefix PATH : ${lib.makeBinPath [ openjdk17 ]}
+      --prefix PATH : ${lib.makeBinPath [ openjdk21 ]}
   '';
 
   passthru = {
