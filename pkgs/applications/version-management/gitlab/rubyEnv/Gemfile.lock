@@ -1691,7 +1691,8 @@ GEM
     simplecov_json_formatter (0.1.4)
     singleton (0.1.1)
     sixarm_ruby_unaccent (1.2.0)
-    slack-messenger (2.3.4)
+    slack-messenger (2.3.5)
+      re2 (= 2.7.0)
     snaky_hash (2.0.0)
       hashie
       version_gem (~> 1.1)
