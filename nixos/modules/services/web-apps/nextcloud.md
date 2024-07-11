@@ -2,8 +2,7 @@
 
 [Nextcloud](https://nextcloud.com/) is an open-source,
 self-hostable cloud platform. The server setup can be automated using
-[services.nextcloud](#opt-services.nextcloud.enable). A
-desktop client is packaged at `pkgs.nextcloud-client`.
+[services.nextcloud](#opt-services.nextcloud.enable).
 
 The current default by NixOS is `nextcloud29` which is also the latest
 major version available.

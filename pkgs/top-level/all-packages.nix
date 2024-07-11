@@ -10794,9 +10794,6 @@ with pkgs;
     apps = lib.importJSON ../servers/nextcloud/packages/29.json;
   };
 
-
-  nextcloud-client = libsForQt5.callPackage ../applications/networking/nextcloud-client { };
-
   nextcloud-news-updater = callPackage ../servers/nextcloud/news-updater.nix { };
 
   nextcloud-notify_push = callPackage ../servers/nextcloud/notify_push.nix { };
