@@ -11,16 +11,18 @@
 , pdfmixtool
 , pdfslicer
 , python3
+, testers
+, versionCheckHook
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "qpdf";
   version = "11.9.1";
 
   src = fetchFromGitHub {
     owner = "qpdf";
     repo = "qpdf";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-DhrOKjUPgNo61db8av0OTfM8mCNebQocQWtTWdt002s=";
   };
 
@@ -36,6 +38,9 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ zlib libjpeg ];
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
   preConfigure = ''
     patchShebangs qtest/bin/qtest-driver
     patchShebangs run-qtest
@@ -46,6 +51,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   passthru.tests = {
+    pkg-config = testers.hasPkgConfigModules { package = finalAttrs.finalPackage; };
     inherit (python3.pkgs) pikepdf;
     inherit
       cups-filters
@@ -61,6 +67,7 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ abbradar ];
     mainProgram = "qpdf";
     platforms = platforms.all;
-    changelog = "https://github.com/qpdf/qpdf/blob/v${version}/ChangeLog";
+    changelog = "https://github.com/qpdf/qpdf/blob/v${finalAttrs.version}/ChangeLog";
+    pkgConfigModules = [ "libqpdf" ];
   };
-}
+})
