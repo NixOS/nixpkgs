@@ -38,17 +38,10 @@ let
       version ? null,
     }@args:
     let
-      args' = {
-        name = null;
-        officialRelease = null;
-        gitRelease = null;
-        monorepoSrc = null;
-        version = null;
-      } // args;
       inherit
         (import ./common/common-let.nix {
           inherit lib;
-          inherit (args') gitRelease officialRelease version;
+          inherit gitRelease officialRelease version;
         })
         releaseInfo
         ;
@@ -68,7 +61,7 @@ let
         else
           stdenv; # does not build with gcc13
       inherit bootBintoolsNoLibc bootBintools;
-      inherit (args')
+      inherit
         officialRelease
         gitRelease
         monorepoSrc
