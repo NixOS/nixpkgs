@@ -60,13 +60,13 @@ stdenv.mkDerivation (finalAttrs: {
     ;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://qpdf.sourceforge.io/";
     description = "C++ library and set of programs that inspect and manipulate the structure of PDF files";
-    license = licenses.asl20; # as of 7.0.0, people may stay at artistic2
-    maintainers = with maintainers; [ abbradar ];
+    license = lib.licenses.asl20; # as of 7.0.0, people may stay at artistic2
+    maintainers = with lib.maintainers; [ abbradar ];
     mainProgram = "qpdf";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
     changelog = "https://github.com/qpdf/qpdf/blob/v${finalAttrs.version}/ChangeLog";
     pkgConfigModules = [ "libqpdf" ];
   };
