@@ -1,6 +1,6 @@
 {
   "name": "rust-analyzer",
-  "version": "0.3.1850",
+  "version": "0.3.2029",
   "dependencies": {
     "@hpcc-js/wasm": "^2.13.0",
     "anser": "^2.1.1",
