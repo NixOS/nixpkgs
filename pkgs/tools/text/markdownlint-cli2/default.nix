@@ -47,7 +47,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    changelog = "https://github.com/DavidAnson/markdownlint-cli2/blob/${finalAttrs.src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/DavidAnson/markdownlint-cli2/blob/v${finalAttrs.version}/CHANGELOG.md";
     description = "Fast, flexible, configuration-based command-line interface for linting Markdown/CommonMark files with the markdownlint library";
     homepage = "https://github.com/DavidAnson/markdownlint-cli2";
     license = lib.licenses.mit;
