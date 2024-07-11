@@ -68,7 +68,6 @@ in {
         default = null;
         description = ''
           User to be set as owner of the UNIX socket.
-          Defaults to the process running user.
         '';
       };
 
@@ -77,7 +76,6 @@ in {
         default = null;
         description = ''
           Group to be set as owner of the UNIX socket.
-          Defaults to the process running group.
         '';
       };
 
@@ -97,6 +95,14 @@ in {
 
   config = {
     assertions = concatLists (mapAttrsToList (name: cfg: [
+      {
+        assertion = cfg.socket.type == "unix" -> cfg.socket.user != null;
+        message = "Socket owner is required for the UNIX socket type.";
+      }
+      {
+        assertion = cfg.socket.type == "unix" -> cfg.socket.group != null;
+        message = "Socket owner is required for the UNIX socket type.";
+      }
       {
         assertion = cfg.socket.user != null -> cfg.socket.type == "unix";
         message = "Socket owner can only be set for the UNIX socket type.";
