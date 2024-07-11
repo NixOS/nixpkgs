@@ -43,6 +43,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/NickMcConnell/NarSil/";
     description = "Unofficial rewrite of Sil, a roguelike influenced by Angband";
     mainProgram = "narsil";
+    changelog = "https://github.com/NickMcConnell/NarSil/releases/tag/${version}";
     longDescription = ''
       NarSil attempts to be an almost-faithful recreation of Sil 1.3.0,
       but based on the codebase of modern Angband.
