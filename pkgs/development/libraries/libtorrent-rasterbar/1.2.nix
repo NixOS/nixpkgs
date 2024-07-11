@@ -48,7 +48,7 @@ in stdenv.mkDerivation {
     description = "C++ BitTorrent implementation focusing on efficiency and scalability";
     license = licenses.bsd3;
     maintainers = [ ];
-    broken = stdenv.isDarwin;
+    broken = true; # ModuleNotFoundError: No module named 'distutils'
     platforms = platforms.unix;
   };
 }
