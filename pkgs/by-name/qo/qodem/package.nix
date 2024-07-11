@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
+  fetchFromGitLab,
   autoreconfHook,
   ncurses,
   SDL,
@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "qodem";
-  version = "1.0.1";
+  version = "1.0.1-unstable-2022-02-12";
 
-  src = fetchFromGitHub {
-    owner = "klamonte";
+  src = fetchFromGitLab {
+    owner = "AutumnMeowMeow";
     repo = "qodem";
-    rev = "v${finalAttrs.version}";
-    sha256 = "NAdcTVmNrDa3rbsbxJxFoI7sz5NK5Uw+TbP+a1CdB+Q=";
+    rev = "69cc7458ef23243f790348a4cc503a8173008e55";
+    hash = "sha256-Ocb2inuxeDOfqge+h7pHL9I9Kn72Mgi8Eq179/58alk=";
   };
 
   nativeBuildInputs = [
@@ -52,6 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
       terminal screen features of Qmodem over both modem and Internet
       connections.
     '';
+    changelog = "${finalAttrs.src.meta.homepage}-/blob/${finalAttrs.src.rev}/ChangeLog";
     maintainers = with lib.maintainers; [ embr ];
     sourceProvenance = [ lib.sourceTypes.fromSource ];
     license = lib.licenses.publicDomain;
