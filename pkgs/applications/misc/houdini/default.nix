@@ -108,6 +108,6 @@ buildFHSEnv rec {
     platforms = [ "x86_64-linux" ];
     mainProgram = "houdini";
     hydraPlatforms = [ ]; # requireFile src's should be excluded
-    maintainers = with lib.maintainers; [ canndrew kwohlfahrt ];
+    maintainers = with lib.maintainers; [ canndrew kwohlfahrt pedohorse ];
   };
 }

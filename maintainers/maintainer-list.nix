@@ -15500,6 +15500,11 @@
     githubId = 943430;
     name = "David Hagege";
   };
+  pedohorse = {
+    github = "pedohorse";
+    githubId = 13556996;
+    name = "pedohorse";
+  };
   pedrohlc = {
     email = "root@pedrohlc.com";
     github = "PedroHLC";
