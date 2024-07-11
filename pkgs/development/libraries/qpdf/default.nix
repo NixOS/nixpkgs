@@ -51,6 +51,7 @@ stdenv.mkDerivation rec {
     description = "C++ library and set of programs that inspect and manipulate the structure of PDF files";
     license = licenses.asl20; # as of 7.0.0, people may stay at artistic2
     maintainers = with maintainers; [ abbradar ];
+    mainProgram = "qpdf";
     platforms = platforms.all;
     changelog = "https://github.com/qpdf/qpdf/blob/v${version}/ChangeLog";
   };
