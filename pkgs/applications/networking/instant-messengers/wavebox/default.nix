@@ -1,31 +1,25 @@
 { lib, stdenv, patchelf, makeWrapper, fetchurl, writeScript
 
-# Linked dynamic libraries.
+# Libraries
 , glib, fontconfig, freetype, pango, cairo, libX11, libXi, atk, nss, nspr
 , libXcursor, libXext, libXfixes, libXrender, libXScrnSaver, libXcomposite, libxcb
 , alsa-lib, libXdamage, libXtst, libXrandr, libxshmfence, expat, cups
 , dbus, gtk3, gtk4, gdk-pixbuf, gcc-unwrapped, at-spi2-atk, at-spi2-core
 , libkrb5, libdrm, libglvnd, mesa
-, libxkbcommon, pipewire, wayland # ozone/wayland
+, libxkbcommon, pipewire, wayland
 
-# Command line programs
 , coreutils
 
 # command line arguments which are always set e.g "--disable-gpu"
 , commandLineArgs ? ""
 
-# Will crash without.
 , systemd
 
 # Loaded at runtime.
 , libexif, pciutils
 
-# Additional dependencies according to other distros.
-## Ubuntu
 , liberation_ttf, curl, util-linux, xdg-utils, wget
-## Arch Linux.
 , flac, harfbuzz, icu, libpng, libopus, snappy, speechd
-## Gentoo
 , bzip2, libcap
 
 # Necessary for USB audio devices.
@@ -72,8 +66,9 @@ in stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ patchelf makeWrapper ];
   buildInputs = [
-    # needed for GSETTINGS_SCHEMAS_PATH
-    gsettings-desktop-schemas glib gtk3
+    gsettings-desktop-schemas # needed for GSETTINGS_SCHEMAS_PATH
+    glib
+    gtk3
   ];
 
   unpackPhase = ''
@@ -82,14 +77,11 @@ in stdenv.mkDerivation (finalAttrs: {
   '';
 
   rpath = lib.makeLibraryPath deps + ":" + lib.makeSearchPathOutput "lib" "lib64" deps;
-  binpath = lib.makeBinPath deps;
 
   installPhase = ''
     runHook preInstall
 
-    appname=wavebox
-
-    exe=$out/bin/$appname
+    exe=$out/bin/wavebox
 
     mkdir -p $out/bin $out/share
 
@@ -98,12 +90,12 @@ in stdenv.mkDerivation (finalAttrs: {
 
 
     substituteInPlace $out/share/wavebox.io/$appname/$appname-launcher \
-      --replace 'CHROME_WRAPPER' 'WRAPPER'
+      --replace-fail 'CHROME_WRAPPER' 'WRAPPER'
     substituteInPlace $out/share/applications/$appname.desktop \
-      --replace /opt/wavebox.io/wavebox/wavebox-launcher $exe
+      --replace-fail /opt/wavebox.io/wavebox/wavebox-launcher $exe
     substituteInPlace $out/share/menu/$appname.menu \
-      --replace /opt $out/share \
-      --replace $out/share/wavebox.io/$appname/$appname $exe
+      --replace-fail /opt $out/share \
+      --replace-fail $out/share/wavebox.io/$appname/$appname $exe
 
     for icon_file in $out/share/wavebox.io/wavebox/product_logo_[0-9]*.png; do
       num_and_suffix="''${icon_file##*logo_}"
@@ -111,19 +103,19 @@ in stdenv.mkDerivation (finalAttrs: {
       logo_output_prefix="$out/share/icons/hicolor"
       logo_output_path="$logo_output_prefix/''${icon_size}x''${icon_size}/apps"
       mkdir -p "$logo_output_path"
-      mv "$icon_file" "$logo_output_path/$appname.png"
+      mv "$icon_file" "$logo_output_path/wavebox.png"
     done
 
-    makeWrapper "$out/share/wavebox.io/$appname/$appname" "$exe" \
+    makeWrapper "$out/share/wavebox.io/wavebox/wavebox" "$exe" \
       --prefix LD_LIBRARY_PATH : "$rpath" \
-      --prefix PATH            : "$binpath" \
+      --prefix PATH            : "${lib.makeBinPath deps}" \
       --suffix PATH            : "${lib.makeBinPath [ xdg-utils ]}" \
       --prefix XDG_DATA_DIRS   : "$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH:${addOpenGLRunpath.driverLink}/share" \
-      --set CHROME_WRAPPER  "$appname" \
+      --set CHROME_WRAPPER "wavebox" \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
       --add-flags ${lib.escapeShellArg commandLineArgs}
 
-    for elf in $out/share/wavebox.io/$appname/{wavebox,chrome-sandbox,chrome_crashpad_handler}; do
+    for elf in $out/share/wavebox.io/wavebox/{wavebox,chrome-sandbox,chrome_crashpad_handler}; do
       patchelf --set-rpath $rpath $elf
       patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" $elf
     done
