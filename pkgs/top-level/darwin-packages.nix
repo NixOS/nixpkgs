@@ -47,6 +47,9 @@ makeScopeWithSplicing' {
     fetchurl = fetchurlBoot;
   };
 
+  # macOS 12.3 SDK
+  apple_sdk_12_3 = pkgs.callPackage ../os-specific/darwin/apple-sdk-12.3 { };
+
   # Pick an SDK
   apple_sdk = {
     "10.12" = apple_sdk_10_12;
@@ -80,7 +83,7 @@ in
 
 impure-cmds // appleSourcePackages // chooseLibs // {
 
-  inherit apple_sdk apple_sdk_10_12 apple_sdk_11_0;
+  inherit apple_sdk apple_sdk_10_12 apple_sdk_11_0 apple_sdk_12_3;
 
   stdenvNoCF = stdenv.override {
     extraBuildInputs = [];
