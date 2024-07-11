@@ -56,6 +56,7 @@ let
       corn = callPackage ../development/coq-modules/corn {};
       deriving = callPackage ../development/coq-modules/deriving {};
       dpdgraph = callPackage ../development/coq-modules/dpdgraph {};
+      elm-extraction = callPackage ../development/coq-modules/elm-extraction {};
       equations = callPackage ../development/coq-modules/equations { };
       extructures = callPackage ../development/coq-modules/extructures { };
       fiat_HEAD = callPackage ../development/coq-modules/fiat/HEAD.nix {};
