@@ -6,13 +6,13 @@
 
 buildGoModule rec {
   pname = "pocketbase";
-  version = "0.22.15";
+  version = "0.22.17";
 
   src = fetchFromGitHub {
     owner = "pocketbase";
     repo = "pocketbase";
     rev = "v${version}";
-    hash = "sha256-HdsQ/l0TjvOegbX6YGI2ZZkZKofxJoXFIpUb2Vss1hc=";
+    hash = "sha256-BQmqd8h1wc0AKaKECBAyOMYfXio/+nJrDfYs8Qbq5PY=";
   };
 
   vendorHash = "sha256-KG1etP/wrjoDCTNYB9J5gmW2NMgBZQcdA1QfXKGipO8=";
