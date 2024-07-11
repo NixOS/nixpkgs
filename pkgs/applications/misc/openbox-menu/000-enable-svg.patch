@@ -1,0 +1,11 @@
+--- a/Makefile.old	2013-12-11 06:39:44.397358610 +0100
++++ b/Makefile	2013-12-11 06:39:51.082275037 +0100
+@@ -7,7 +7,7 @@
+ CFLAGS+=-DWITH_ICONS
+ # Uncomment this line if Openbox can display SVG icons 
+ # Check SVG support with '$ ldd /usr/bin/openbox | grep svg', librsvg must appear..
+-# CFLAGS+=-DWITH_SVG
++CFLAGS+=-DWITH_SVG
+ 
+ prefix= /usr/local
+ DESTDIR ?= $(prefix)

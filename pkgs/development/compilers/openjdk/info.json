@@ -1,0 +1,12 @@
+{
+  "22": {
+    "version": "22-ga",
+    "repo":    "jdk22u",
+    "hash":    "sha256-itjvIedPwJl/l3a2gIVpNMs1zkbrjioVqbCj1Z1nCJE="
+  },
+  "21": {
+    "version": "21.0.3-ga",
+    "repo":    "jdk21u",
+    "hash":    "sha256-zRN16lrc5gtDlTVIQJRRx103w/VbRkatCLeEc9AXWPE="
+  }
+}

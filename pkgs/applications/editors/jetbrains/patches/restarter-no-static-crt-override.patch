@@ -1,0 +1,9 @@
+--- a/.cargo/config.toml
++++ b/.cargo/config.toml
+@@ -3,6 +3,3 @@
+ 
+ [target.'cfg(all(target_os = "macos", target_arch = "x86_64"))']
+ rustflags = ["-C", "link-arg=-mmacosx-version-min=10.15"]
+-
+-[target.'cfg(all(target_os = "linux", target_arch = "x86_64"))']
+-rustflags = ["-C", "target-feature=+crt-static"]

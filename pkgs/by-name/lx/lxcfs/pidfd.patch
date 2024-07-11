@@ -1,0 +1,29 @@
+diff --git a/meson.build b/meson.build
+index a0289ad..211b01b 100644
+--- a/meson.build
++++ b/meson.build
+@@ -134,11 +134,13 @@ foreach ident: [
+      '''#include <stdlib.h>
+         #include <unistd.h>
+         #include <signal.h>
++        #include <sys/pidfd.h>
+         #include <sys/wait.h>'''],
+     ['pidfd_open',
+      '''#include <stdlib.h>
+         #include <unistd.h>
+         #include <signal.h>
++        #include <sys/pidfd.h>
+         #include <sys/wait.h>'''],
+ ]
+     have = cc.has_function(ident[0], prefix: ident[1], args: '-D_GNU_SOURCE')
+diff --git a/src/bindings.c b/src/bindings.c
+index 13259c1..e760330 100644
+--- a/src/bindings.c
++++ b/src/bindings.c
+@@ -1,5 +1,6 @@
+ /* SPDX-License-Identifier: LGPL-2.1+ */
+ 
++#include <sys/pidfd.h>
+ #include "config.h"
+ 
+ #include <dirent.h>

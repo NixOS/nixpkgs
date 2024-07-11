@@ -1,0 +1,13 @@
+diff --git a/utils/novnc_proxy b/utils/novnc_proxy
+index 0365c1e..7eba2db 100755
+--- a/utils/novnc_proxy
++++ b/utils/novnc_proxy
+@@ -167,7 +167,7 @@ if [[ -d ${HERE}/websockify ]]; then
+ 
+     echo "Using local websockify at $WEBSOCKIFY"
+ else
+-    WEBSOCKIFY_FROMSYSTEM=$(which websockify 2>/dev/null)
++    WEBSOCKIFY_FROMSYSTEM="@websockify@/bin/websockify"
+     WEBSOCKIFY_FROMSNAP=${HERE}/../usr/bin/python2-websockify
+     [ -f $WEBSOCKIFY_FROMSYSTEM ] && WEBSOCKIFY=$WEBSOCKIFY_FROMSYSTEM
+     [ -f $WEBSOCKIFY_FROMSNAP ] && WEBSOCKIFY=$WEBSOCKIFY_FROMSNAP
