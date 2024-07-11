@@ -4,12 +4,13 @@
 , lib
 , libcxx
 , llvmPackages
+, config
 
 , addOpenGLRunpath
 , patchelf
 , fixDarwinDylibNames
 
-, cudaSupport
+, cudaSupport ? config.cudaSupport
 }:
 
 let
