@@ -9788,6 +9788,8 @@ self: super: with self; {
 
   pendulum = callPackage ../development/python-modules/pendulum { };
 
+  penelope = callPackage ../development/python-modules/penelope { };
+
   pep440 = callPackage ../development/python-modules/pep440 { };
 
   pep517 = callPackage ../development/python-modules/pep517 { };
