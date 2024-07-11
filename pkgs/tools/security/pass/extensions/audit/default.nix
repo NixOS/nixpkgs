@@ -1,11 +1,24 @@
-{ lib, stdenv, pass, fetchFromGitHub, pythonPackages, makeWrapper, gnupg }:
+{
+  lib,
+  stdenv,
+  pass,
+  fetchFromGitHub,
+  pythonPackages,
+  gnupg,
+}:
 
 let
-  pythonEnv = pythonPackages.python.withPackages (p: [ p.requests p.setuptools p.zxcvbn ]);
+  pythonEnv = pythonPackages.python.withPackages (p: [
+    p.requests
+    p.setuptools
+    p.zxcvbn
+  ]);
 
-in stdenv.mkDerivation rec {
+in
+pythonPackages.buildPythonApplication rec {
   pname = "pass-audit";
   version = "1.2";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "roddhjav";
@@ -22,28 +35,39 @@ in stdenv.mkDerivation rec {
   postPatch = ''
     substituteInPlace audit.bash \
       --replace-fail 'python3' "${pythonEnv.interpreter}"
-    substituteInPlace Makefile \
-      --replace-fail "install --root" "install --prefix ''' --root"
+    rm Makefile
+    patchShebangs audit.bash
   '';
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
-  buildInputs = [ pythonEnv ];
-  nativeBuildInputs = [ makeWrapper ];
+  build-system = with pythonPackages; [ setuptools ];
+  dependencies = [ pythonEnv ];
 
   # Tests freeze on darwin with: pass-audit-1.1 (checkPhase): EOFError
   doCheck = !stdenv.isDarwin;
-  nativeCheckInputs = [ pythonPackages.green pass gnupg ];
+  nativeCheckInputs = [
+    pythonPackages.green
+    pass
+    gnupg
+  ];
   checkPhase = ''
     ${pythonEnv.interpreter} -m green -q
   '';
 
-  installFlags = [ "DESTDIR=${placeholder "out"}" "PREFIX=" ];
   postInstall = ''
+    mkdir -p $out/lib/password-store/extensions
+    install -m777 audit.bash $out/lib/password-store/extensions/audit.bash
+    cp -r share $out/
     wrapProgram $out/lib/password-store/extensions/audit.bash \
       --prefix PYTHONPATH : "$out/${pythonEnv.sitePackages}" \
       --run "export COMMAND"
   '';
+
+  pythonImportsCheck = [ "pass_audit" ];
 
   meta = with lib; {
     description = "Pass extension for auditing your password repository";
