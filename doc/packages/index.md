@@ -26,4 +26,5 @@ cataclysm-dda.section.md
 urxvt.section.md
 weechat.section.md
 xorg.section.md
+build-support.md
 ```
