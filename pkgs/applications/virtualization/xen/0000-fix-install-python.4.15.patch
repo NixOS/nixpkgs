@@ -1,0 +1,16 @@
+tools/python/install-wrap script brakes shebangs patching, disable
+
+diff --git a/tools/Rules.mk b/tools/Rules.mk
+index 444e5bacdd..c99ea959ff 100644
+--- a/tools/Rules.mk
++++ b/tools/Rules.mk
+@@ -135,8 +135,7 @@ CFLAGS += $(CFLAGS-y)
+ 
+ CFLAGS += $(EXTRA_CFLAGS_XEN_TOOLS)
+ 
+-INSTALL_PYTHON_PROG = \
+-	$(XEN_ROOT)/tools/python/install-wrap "$(PYTHON_PATH)" $(INSTALL_PROG)
++INSTALL_PYTHON_PROG = $(INSTALL_PROG)
+ 
+ %.opic: %.c
+ 	$(CC) $(CPPFLAGS) -DPIC $(CFLAGS) $(CFLAGS_$*.opic) -fPIC -c -o $@ $< $(APPEND_CFLAGS)
