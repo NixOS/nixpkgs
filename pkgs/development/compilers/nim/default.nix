@@ -303,7 +303,7 @@ in {
         meta = nim'.meta // {
           description = nim'.meta.description
             + " (${targetPlatformConfig} wrapper)";
-          platforms = with lib.platforms; unix ++ genode;
+          platforms = with lib.platforms; unix ++ genode ++ windows;
         };
       });
 in {

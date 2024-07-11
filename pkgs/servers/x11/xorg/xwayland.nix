@@ -2,7 +2,6 @@
 , bash
 , libepoxy
 , fetchurl
-, fetchpatch
 , fontutil
 , lib
 , libdecor
@@ -50,29 +49,12 @@
 
 stdenv.mkDerivation rec {
   pname = "xwayland";
-  version = "24.1.0";
+  version = "24.1.1";
 
   src = fetchurl {
     url = "mirror://xorg/individual/xserver/${pname}-${version}.tar.xz";
-    hash = "sha256-vvIcTxiAek7VccTi32CrY7VGa71QLszrJIW4kqt23MI=";
+    hash = "sha256-cSW+4LEDNYBdf1ulffqjWaeFCvGmhSTx2Xs2J0GlGDI=";
   };
-
-  patches = [
-    # Backport fix for pkg-config generation to make CMake happy
-    # FIXME: remove when merged
-    # Upstream PR: https://gitlab.freedesktop.org/xorg/xserver/-/merge_requests/1543
-    (fetchpatch {
-      url = "https://gitlab.freedesktop.org/xorg/xserver/-/commit/8cb1c21a4240a5b6bf4aeeef51819639b4e0ad24.patch";
-      hash = "sha256-MZPP9QgYO4RFJ/vcjkpu7SVSo5Dh09ZdZjOwTopjdYQ=";
-    })
-    # Backport fix for segfault when linux-dmabuf device is not accessible
-    # FIXME: remove when merged
-    # Upstream PR: https://gitlab.freedesktop.org/xorg/xserver/-/merge_requests/1565
-    (fetchpatch {
-      url = "https://gitlab.freedesktop.org/xorg/xserver/-/commit/7605833315c05488eca30ed0a70a2a1430e89bbc.patch";
-      hash = "sha256-4/A6aOiOGouPe2v4wIYDQY9rWkuNZJwk0h4gpfrl6hI=";
-    })
-  ];
 
   postPatch = ''
     substituteInPlace os/utils.c \

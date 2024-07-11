@@ -10,7 +10,7 @@
   pydantic_1,
   pyyaml,
   pytestCheckHook,
-  keyring,
+  keyring_24,
   macaroonbakery,
   overrides,
   pyxdg,
@@ -42,7 +42,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    keyring
+    keyring_24
     macaroonbakery
     overrides
     pydantic_1
@@ -50,6 +50,8 @@ buildPythonPackage rec {
     requests
     requests-toolbelt
   ];
+
+  pythonRelaxDeps = [ "macaroonbakery" ];
 
   pythonImportsCheck = [ "craft_store" ];
 
