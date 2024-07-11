@@ -32,6 +32,15 @@ let
         services.postgresql = {
           enable = true;
           package = postgresql-package;
+          enableTCPIP = true;
+          ensureDatabases = [ "pw-user" ];
+          ensureUsers = [
+            {
+              name = "pw-user";
+              passwordFile = pkgs.writeText "password" "password";
+              ensureDBOwnership = true;
+            }
+          ];
         };
 
         services.postgresqlBackup = {
@@ -70,6 +79,14 @@ let
       machine.succeed(check_count("SELECT * FROM sth;", 5))
       machine.fail(check_count("SELECT * FROM sth;", 4))
       machine.succeed(check_count("SELECT xpath('/test/text()', doc) FROM xmltest;", 1))
+
+      with subtest("Connection with user password works correctly"):
+          machine.succeed(
+              "sudo -u postgres PGPASSWORD=password psql -h localhost -U pw-user -tc '\c'"
+          )
+          machine.fail(
+              "sudo -u postgres PGPASSWORD=wrong-password psql -h localhost -U pw-user -tc '\c'"
+          )
 
       with subtest("Backup service works"):
           machine.succeed(
