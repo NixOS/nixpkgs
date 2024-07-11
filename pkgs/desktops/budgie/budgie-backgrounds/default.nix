@@ -6,6 +6,7 @@
   jhead,
   meson,
   ninja,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -26,9 +27,14 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
   ];
 
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
   meta = {
     description = "Default background set for the Budgie Desktop";
     homepage = "https://github.com/BuddiesOfBudgie/budgie-backgrounds";
+    changelog = "https://github.com/BuddiesOfBudgie/budgie-backgrounds/releases/tag/v${finalAttrs.version}";
     platforms = lib.platforms.linux;
     maintainers = lib.teams.budgie.members;
     license = lib.licenses.cc0;

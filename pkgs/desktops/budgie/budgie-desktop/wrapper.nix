@@ -48,5 +48,15 @@ stdenv.mkDerivation {
     )
   '';
 
-  inherit (budgie-desktop) meta;
+  meta = {
+    inherit (budgie-desktop.meta)
+      description
+      homepage
+      changelog
+      license
+      maintainers
+      platforms
+      pkgConfigModules
+      ;
+  };
 }

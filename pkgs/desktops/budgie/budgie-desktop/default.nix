@@ -27,11 +27,14 @@
   mesa,
   meson,
   ninja,
+  nix-update-script,
   pkg-config,
   polkit,
   sassc,
+  testers,
   upower,
   vala,
+  validatePkgConfig,
   xfce,
   wrapGAppsHook3,
   zenity,
@@ -51,6 +54,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [ ./plugins.patch ];
 
+  outputs = [
+    "out"
+    "dev"
+    "man"
+  ];
+
   nativeBuildInputs = [
     docbook-xsl-nons
     gtk-doc
@@ -59,6 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     pkg-config
     vala
+    validatePkgConfig
     wrapGAppsHook3
   ];
 
@@ -96,17 +106,27 @@ stdenv.mkDerivation (finalAttrs: {
     libpeas
   ];
 
-  passthru.providedSessions = [ "budgie-desktop" ];
+  passthru = {
+    providedSessions = [ "budgie-desktop" ];
+    tests.pkg-config = testers.hasPkgConfigModules { package = finalAttrs.finalPackage; };
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Feature-rich, modern desktop designed to keep out the way of the user";
     homepage = "https://github.com/BuddiesOfBudgie/budgie-desktop";
+    changelog = "https://github.com/BuddiesOfBudgie/budgie-desktop/releases/tag/v${finalAttrs.version}";
     license = with lib.licenses; [
       gpl2Plus
       lgpl21Plus
       cc-by-sa-30
     ];
-    platforms = lib.platforms.linux;
     maintainers = lib.teams.budgie.members;
+    platforms = lib.platforms.linux;
+    pkgConfigModules = [
+      "budgie-1.0"
+      "budgie-raven-plugin-1.0"
+      "budgie-theme-1.0"
+    ];
   };
 })

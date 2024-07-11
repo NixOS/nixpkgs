@@ -47,11 +47,13 @@
   networkmanager,
   networkmanagerapplet,
   ninja,
+  nix-update-script,
   pkg-config,
   polkit,
   samba,
   shadow,
   shared-mime-info,
+  testers,
   tzdata,
   udisks2,
   upower,
@@ -69,7 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
     repo = "budgie-control-center";
     rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    sha256 = "sha256-W5PF7BPdQdg/7xJ4J+fEnuDdpoG/lyhX56RDnX2DXoY=";
+    hash = "sha256-W5PF7BPdQdg/7xJ4J+fEnuDdpoG/lyhX56RDnX2DXoY=";
   };
 
   patches = [
@@ -176,9 +178,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   separateDebugInfo = true;
 
+  passthru = {
+    tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
+    updateScript = nix-update-script { };
+  };
+
   meta = {
     description = "Fork of GNOME Control Center for the Budgie 10 Series";
     homepage = "https://github.com/BuddiesOfBudgie/budgie-control-center";
+    changelog = "https://github.com/BuddiesOfBudgie/budgie-control-center/releases/tag/v${finalAttrs.version}";
     mainProgram = "budgie-control-center";
     platforms = lib.platforms.linux;
     maintainers = lib.teams.budgie.members;
