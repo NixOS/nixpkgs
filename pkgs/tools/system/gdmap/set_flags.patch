@@ -1,0 +1,25 @@
+From 9a5537d2b0aba18438dd77a45354ac2e73eae23d Mon Sep 17 00:00:00 2001
+From: Alexander Myltsev <avm@altlinux.ru>
+Date: Mon, 13 Dec 2010 23:24:30 +0300
+Subject: [PATCH] GTK_WIDGET_SET_FLAGS -> gtk_widget_set_can_focus
+
+---
+ gdmap/src/gui_support.c |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+diff --git a/src/gui_support.c b/src/gui_support.c
+index 45272d3..ca02d72 100644
+--- a/src/gui_support.c
++++ b/src/gui_support.c
+@@ -164,7 +164,7 @@ GtkWidget* ui_create_event_label(const char* text, GCallback callback,
+                         // GDK_FOCUS_CHANGE_MASK |
+                         GDK_ENTER_NOTIFY_MASK |
+                         GDK_LEAVE_NOTIFY_MASK);
+-  GTK_WIDGET_SET_FLAGS(ebox, GTK_CAN_FOCUS);
++  gtk_widget_set_can_focus(ebox, TRUE);
+ 
+   gtk_widget_show(ebox);
+ 
+-- 
+1.7.3.3
+

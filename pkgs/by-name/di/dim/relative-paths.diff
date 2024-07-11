@@ -1,0 +1,173 @@
+diff --git a/dim-core/src/routes/settings.rs b/dim-core/src/routes/settings.rs
+index f577eaf6..67da9448 100644
+--- a/dim-core/src/routes/settings.rs
++++ b/dim-core/src/routes/settings.rs
+@@ -1,5 +1,3 @@
+-use crate::utils::ffpath;
+-
+ use std::error::Error;
+ use std::fs::File;
+ use std::fs::OpenOptions;
+@@ -49,7 +47,7 @@ impl Default for GlobalSettings {
+                     }
+                 }
+             },
+-            metadata_dir: ffpath("config/metadata"),
++            metadata_dir: "config/metadata".into(),
+             quiet_boot: false,
+             disable_auth: false,
+             verbose: false,
+@@ -69,7 +67,7 @@ pub fn get_global_settings() -> GlobalSettings {
+ }
+ 
+ pub fn init_global_settings(path: Option<String>) -> Result<(), Box<dyn Error>> {
+-    let path = path.unwrap_or(ffpath("config/config.toml"));
++    let path = path.unwrap_or("config/config.toml".into());
+     let _ = SETTINGS_PATH.set(path.clone());
+     let mut content = String::new();
+ 
+@@ -94,7 +92,7 @@ pub fn set_global_settings(settings: GlobalSettings) -> Result<(), Box<dyn Error
+     let path = SETTINGS_PATH
+         .get()
+         .cloned()
+-        .unwrap_or(ffpath("config/config.toml"));
++        .unwrap_or("config/config.toml".into());
+ 
+     {
+         let mut lock = GLOBAL_SETTINGS.lock().unwrap();
+@@ -107,4 +105,4 @@ pub fn set_global_settings(settings: GlobalSettings) -> Result<(), Box<dyn Error
+         .unwrap();
+ 
+     Ok(())
+-}
+\ No newline at end of file
++}
+diff --git a/dim-core/src/streaming/mod.rs b/dim-core/src/streaming/mod.rs
+index a9312041..8ad12fe4 100644
+--- a/dim-core/src/streaming/mod.rs
++++ b/dim-core/src/streaming/mod.rs
+@@ -1,27 +1,13 @@
+ pub mod ffprobe;
+ 
+-use cfg_if::cfg_if;
+-
+ use std::collections::HashMap;
+ use std::sync::Arc;
+ use std::sync::RwLock;
+ 
+-use crate::utils::ffpath;
+-
+ lazy_static::lazy_static! {
+     pub static ref STREAMING_SESSION: Arc<RwLock<HashMap<String, HashMap<String, String>>>> = Arc::new(RwLock::new(HashMap::new()));
+-    pub static ref FFMPEG_BIN: &'static str = Box::leak(ffpath("utils/ffmpeg").into_boxed_str());
+-    pub static ref FFPROBE_BIN: &'static str = {
+-        cfg_if! {
+-            if #[cfg(test)] {
+-                "/usr/bin/ffprobe"
+-            } else if #[cfg(bench)] {
+-                "/usr/bin/ffprobe"
+-            } else {
+-                Box::leak(ffpath("utils/ffprobe").into_boxed_str())
+-            }
+-        }
+-    };
++    pub static ref FFMPEG_BIN: &'static str = "ffmpeg";
++    pub static ref FFPROBE_BIN: &'static str = "ffprobe";
+ }
+ 
+ use std::process::Command;
+diff --git a/dim-database/src/lib.rs b/dim-database/src/lib.rs
+index de99a5e4..ac9731be 100644
+--- a/dim-database/src/lib.rs
++++ b/dim-database/src/lib.rs
+@@ -1,8 +1,6 @@
+ // FIXME: We have a shim in dim/utils but we cant depend on dim because itd be a circular dep.
+ #![deny(warnings)]
+ 
+-use crate::utils::ffpath;
+-
+ use std::str::FromStr;
+ use std::sync::atomic::AtomicBool;
+ use std::sync::atomic::Ordering;
+@@ -157,13 +155,13 @@ pub async fn get_conn_logged() -> sqlx::Result<DbConnection> {
+ async fn internal_get_conn() -> sqlx::Result<DbConnection> {
+     let rw_only = sqlx::sqlite::SqliteConnectOptions::new()
+         .create_if_missing(true)
+-        .filename(ffpath("config/dim.db"))
++        .filename("config/dim.db")
+         .connect()
+         .await?;
+ 
+     let rd_only = sqlx::pool::PoolOptions::new()
+         .connect_with(
+-            sqlx::sqlite::SqliteConnectOptions::from_str(ffpath("config/dim.db"))?
++            sqlx::sqlite::SqliteConnectOptions::from_str("config/dim.db")?
+                 .read_only(true)
+                 .synchronous(sqlx::sqlite::SqliteSynchronous::Normal)
+                 .create_if_missing(true),
+diff --git a/dim-database/src/utils.rs b/dim-database/src/utils.rs
+index 35e25c6c..e1e56e01 100644
+--- a/dim-database/src/utils.rs
++++ b/dim-database/src/utils.rs
+@@ -16,17 +16,3 @@ macro_rules! opt_update {
+         }
+     }
+ }
+-
+-#[cfg(not(debug_assertions))]
+-pub fn ffpath(bin: impl AsRef<str>) -> &'static str {
+-    let mut path = std::env::current_exe().expect("Failed to grab path to the `dim` binary.");
+-    path.pop(); // remove the dim bin to get the dir of `dim`
+-    path.push(bin.as_ref());
+-
+-    Box::leak(path.to_string_lossy().to_string().into_boxed_str())
+-}
+-
+-#[cfg(debug_assertions)]
+-pub fn ffpath(bin: impl AsRef<str>) -> &'static str {
+-    Box::leak(bin.as_ref().to_string().into_boxed_str())
+-}
+diff --git a/dim-utils/src/lib.rs b/dim-utils/src/lib.rs
+index 816bfe82..6dddc9aa 100644
+--- a/dim-utils/src/lib.rs
++++ b/dim-utils/src/lib.rs
+@@ -400,20 +400,6 @@ pub fn secs_to_pretty(t: u64) -> String {
+     tag
+ }
+ 
+-#[cfg(not(debug_assertions))]
+-pub fn ffpath(bin: impl AsRef<str>) -> String {
+-    let mut path = std::env::current_exe().expect("Failed to grab path to the `dim` binary.");
+-    path.pop(); // remove the dim bin to get the dir of `dim`
+-    path.push(bin.as_ref());
+-
+-    path.to_string_lossy().to_string()
+-}
+-
+-#[cfg(debug_assertions)]
+-pub fn ffpath(bin: impl AsRef<str>) -> String {
+-    bin.as_ref().to_string()
+-}
+-
+ pub fn codec_pretty(codec: &str) -> String {
+     match codec {
+         "h264" => "H.264".into(),
+diff --git a/dim/src/main.rs b/dim/src/main.rs
+index 867d64de..e683b441 100644
+--- a/dim/src/main.rs
++++ b/dim/src/main.rs
+@@ -18,12 +18,12 @@ struct Args {
+ 
+ fn main() {
+     let args = Args::parse();
+-    let _ = std::fs::create_dir_all(dim::utils::ffpath("config"));
++    let _ = std::fs::create_dir_all("config");
+ 
+     let config_path = args
+         .config
+         .map(|x| x.to_string_lossy().to_string())
+-        .unwrap_or(dim::utils::ffpath("config/config.toml"));
++        .unwrap_or("config/config.toml".into());
+ 
+     // initialize global settings.
+     dim::init_global_settings(Some(config_path)).expect("Failed to initialize global settings.");
