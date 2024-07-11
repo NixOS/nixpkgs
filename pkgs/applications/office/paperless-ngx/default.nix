@@ -24,13 +24,13 @@
 }:
 
 let
-  version = "2.10.2";
+  version = "2.11.0";
 
   src = fetchFromGitHub {
     owner = "paperless-ngx";
     repo = "paperless-ngx";
     rev = "refs/tags/v${version}";
-    hash = "sha256-LwWdgoVlZjL5o+T8zzU9jkYaQbdiZokrCGn8ZTIQ4OQ=";
+    hash = "sha256-lKPjvWc6FcEOwDgIUW8Eki8h8C19G618o1rhXnrlw/E=";
   };
 
   # subpath installation is broken with uvicorn >= 0.26
@@ -49,18 +49,6 @@ let
           rev = "0.25.0";
           hash = "sha256-ng98DTw49zyFjrPnEwfnPfONyjKKZYuLl0qduxSppYk=";
         };
-      });
-
-      djangorestframework = prev.djangorestframework.overridePythonAttrs (oldAttrs: rec {
-        version = "3.14.0";
-        src = oldAttrs.src.override {
-          rev = version;
-          hash = "sha256-Fnj0n3NS3SetOlwSmGkLE979vNJnYE6i6xwVBslpNz4=";
-        };
-        nativeCheckInputs = with prev; [
-          pytest7CheckHook
-          pytest-django
-        ];
       });
     };
   };
@@ -86,7 +74,7 @@ let
       cd src-ui
     '';
 
-    npmDepsHash = "sha256-zmlYwlH2cnGbbKf6jt5zBLh0Iv3C9/xN0iA4xVetRNE=";
+    npmDepsHash = "sha256-gbHavMUmsZaRSfBkdrrNpTO0R8zacb8110U8n5Y09oU=";
 
     nativeBuildInputs = [
       pkg-config
@@ -231,6 +219,7 @@ python.pkgs.buildPythonApplication rec {
     pytest-django
     pytest-env
     pytest-httpx
+    pytest-mock
     pytest-rerunfailures
     pytest-xdist
     pytestCheckHook
