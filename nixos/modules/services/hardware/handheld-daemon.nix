@@ -25,6 +25,7 @@ in
   };
 
   config = mkIf cfg.enable {
+    services.handheld-daemon.ui.enable = mkDefault true;
     environment.systemPackages = [
       cfg.package
       (mkIf cfg.ui.enable cfg.ui.package)
