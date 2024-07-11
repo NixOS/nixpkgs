@@ -5,7 +5,6 @@ with lib;
 let
 
   cfg = config.services.geoserver;
-  dataDir = "/var/lib/geoserver";
 
 in
 {
@@ -14,6 +13,18 @@ in
       enable = mkEnableOption "Geoserver service";
 
       package = lib.mkPackageOption pkgs "geoserver" { };
+
+      dataDir = mkOption {
+        type = types.path;
+        default = "/var/lib/geoserver";
+        description = ''
+          The data directory of the server.
+
+          When a non-default location is used, the systemd unit will get a bind
+          mount to it. Furthermore, the directory must exist, be writeable for
+          the dynamic user and outside of protected directories (e.g. /home).
+        '';
+      };
 
       jvmOpts = mkOption {
         type = types.lines;
@@ -32,7 +43,7 @@ in
 
       environment = {
         GEOSERVER_HOME = "${cfg.package}/share/geoserver";
-        GEOSERVER_DATA_DIR = "${dataDir}";
+        GEOSERVER_DATA_DIR = "/var/lib/geoserver";
         JAVA_OPTS = "${cfg.jvmOpts}";
       };
 
@@ -43,6 +54,7 @@ in
         NoNewPrivileges = true;
         ProtectHome = true; # true=deny access to /home, /root, /run/user
         StateDirectory = "geoserver";
+        BindPaths = [ "${cfg.dataDir}:/var/lib/geoserver" ];
       };
     };
   };
