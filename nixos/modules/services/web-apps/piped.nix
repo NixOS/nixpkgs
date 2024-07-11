@@ -7,10 +7,11 @@
   cfg = config.services.piped;
 in {
   options.services.piped = {
+    # TODO split into 3 separate modules?
     frontend = {
       enable = lib.mkEnableOption "Piped Frontend";
 
-      package = lib.mkPackageOption pkgs "piped" {};
+      package = lib.mkPackageOption pkgs "piped-frontend" {};
 
       domain = lib.mkOption {
         type = lib.types.str;
@@ -34,14 +35,7 @@ in {
       package = lib.mkPackageOption pkgs "piped-backend" {};
 
       database = {
-        createLocally = lib.mkOption {
-          type = lib.types.bool;
-          default = true;
-          description = ''
-            Whether to create a local database with PostgreSQL.
-          '';
-        };
-
+        createLocally = lib.mkEnableOption "create a local database with PostgreSQL";
         host = lib.mkOption {
           type = lib.types.str;
           default = "127.0.0.1";
@@ -209,6 +203,7 @@ in {
             root = pkgs.runCommand "piped-frontend-patched" {} ''
               cp -r ${cfg.frontend.package} $out
               chmod -R +w $out
+              # This is terrible but it's the upstream-intended method for this
               ${pkgs.gnused}/bin/sed -i 's|https://pipedapi.kavin.rocks|${cfg.backend.externalUrl}|g' $out/{opensearch.xml,assets/*}
             '';
             tryFiles = "$uri /index.html";
@@ -221,6 +216,7 @@ in {
       services.piped.backend = {
         externalUrl = lib.mkIf cfg.backend.nginx.enable (lib.mkDefault "https://${cfg.backend.nginx.domain}");
 
+        # TODO should be freeform attr defaults
         settings = {
           PORT = toString cfg.backend.port;
           PROXY_PART = cfg.proxy.externalUrl;
@@ -342,6 +338,7 @@ in {
       services.nginx = lib.mkIf cfg.proxy.nginx.enable {
         enable = true;
         virtualHosts.${cfg.proxy.nginx.domain} = let
+          # Taken from https://github.com/TeamPiped/Piped-Docker/blob/main/template/ytproxy.conf
           ytproxy = ''
             proxy_buffering on;
             proxy_buffers 1024 16k;
