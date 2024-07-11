@@ -15,6 +15,7 @@ in {
 
       domain = lib.mkOption {
         type = lib.types.str;
+        default = "piped.localhost";
         description = ''
           The domain Piped Frontend is reachable on.
         '';
@@ -37,7 +38,9 @@ in {
       package = lib.mkPackageOption pkgs "piped-backend" {};
 
       database = {
-        createLocally = lib.mkEnableOption "create a local database with PostgreSQL";
+        createLocally = lib.mkEnableOption "create a local database with PostgreSQL" // lib.mkOption {
+          default = true;
+        };
         host = lib.mkOption {
           type = lib.types.str;
           default = "127.0.0.1";
@@ -59,7 +62,7 @@ in {
 
         database = lib.mkOption {
           type = lib.types.str;
-          default = "piped";
+          default = "piped-backend";
           description = ''
             The database Piped should use.
           '';
@@ -67,7 +70,7 @@ in {
 
         username = lib.mkOption {
           type = lib.types.str;
-          default = "piped";
+          default = "piped-backend";
           description = ''
             The database username Piped should use.
           '';
@@ -115,16 +118,11 @@ in {
       };
 
       nginx = {
-        enable = lib.mkOption {
-          type = lib.types.bool;
-          default = false;
-          description = ''
-            Whether to configure nginx as a reverse proxy for Piped Backend.
-          '';
-        };
+        enable = lib.mkEnableOption "nginx as a reverse proxy for Piped Backend";
 
         domain = lib.mkOption {
           type = lib.types.str;
+          default = "pipedapi.localhost";
           description = ''
             The domain Piped Backend is reachable on.
           '';
@@ -191,6 +189,7 @@ in {
 
         domain = lib.mkOption {
           type = lib.types.str;
+          default = "pipedproxy.localhost";
           description = ''
             The domain Piped Proxy is reachable on.
           '';
