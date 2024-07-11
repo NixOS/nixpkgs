@@ -1,16 +1,26 @@
-{lib, stdenv, pkgs, fetchurl, graphviz, fontconfig, liberation_ttf,
+{lib, stdenv, pkgs, fetchurl, graphviz, fontconfig, liberation_ttf, mlton,
  experimentalKernel ? true}:
 
 let
   pname = "hol4";
-  vnum = "14";
+  vnum = "1";
 in
 
 let
-  version = "k.${vnum}";
-  longVersion = "kananaskis-${vnum}";
+  version = "t.${vnum}";
+  longVersion = "trindemossen-${vnum}";
   holsubdir = "hol-${longVersion}";
   kernelFlag = if experimentalKernel then "--expk" else "--stdknl";
+  buildSys = stdenv.buildPlatform.system;
+  hostSys = stdenv.hostPlatform.system;
+  # the current version of mlton doesn't support i686-linux
+  # it also fails to build with musl
+  useMlton = buildSys != "i686-linux" && hostSys != "i686-linux"
+    && !stdenv.buildPlatform.isMusl
+    && !stdenv.hostPlatform.isMusl
+    && lib.elem buildSys mlton.meta.platforms
+    && lib.elem hostSys mlton.meta.platforms;
+
 in
 
 let
@@ -24,13 +34,16 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "mirror://sourceforge/hol/hol/${longVersion}/${holsubdir}.tar.gz";
-    sha256 = "6Mc/qsEjzxGqzt6yP6x/1Tmqpwc1UDGlwV1Gl+4pMsY=";
+    hash = "sha256-0y7Gduv4eX0Bc6a1xY3aKjiAQbnzwpKSwsnL7IdFuXQ=";
   };
 
-  buildInputs = [polymlEnableShared graphviz fontconfig liberation_ttf];
+  buildInputs = [
+    polymlEnableShared graphviz fontconfig liberation_ttf
+  ] ++ lib.optional useMlton mlton;
 
-  buildCommand = ''
+  enableParallelBuilding = true;
 
+  buildPhase = ''
     mkdir chroot-fontconfig
     cat ${fontconfig.out}/etc/fonts/fonts.conf > chroot-fontconfig/fonts.conf
     sed -e 's@</fontconfig>@@' -i chroot-fontconfig/fonts.conf
@@ -40,33 +53,23 @@ stdenv.mkDerivation {
     export FONTCONFIG_FILE=$(pwd)/chroot-fontconfig/fonts.conf
 
     mkdir -p "$out/src"
-    cd  "$out/src"
 
-    tar -xzf "$src"
-    cd ${holsubdir}
-
-    substituteInPlace tools/Holmake/Holmake_types.sml \
-      --replace "\"/bin/" "\"" \
-
-
-    for f in tools/buildutils.sml help/src-sml/DOT;
-    do
-      substituteInPlace $f --replace "\"/usr/bin/dot\"" "\"${graphviz}/bin/dot\""
-    done
-
-    #sed -ie "/compute/,999 d" tools/build-sequence # for testing
+    cp -a . "$out/src"
+    cd "$out/src"
 
     poly < tools/smart-configure.sml
 
-    bin/build ${kernelFlag}
+    jobs=''${enableParallelBuilding:+$NIX_BUILD_CORES}
 
+    bin/build ${kernelFlag} -j ''${jobs:-1}
+  '';
+
+  installPhase = ''
     mkdir -p "$out/bin"
-    ln -st $out/bin  $out/src/${holsubdir}/bin/*
-    # ln -s $out/src/hol4.${version}/bin $out/bin
+    ln -st "$out/bin" "$out"/src/bin/*
   '';
 
   meta = with lib; {
-    broken = (stdenv.isLinux && stdenv.isAarch64);
     description = "Interactive theorem prover based on Higher-Order Logic";
     longDescription = ''
       HOL4 is the latest version of the HOL interactive proof
@@ -80,7 +83,7 @@ stdenv.mkDerivation {
       implementing combinations of deduction, execution and property
       checking.
     '';
-    homepage = "http://hol.sourceforge.net/";
+    homepage = "https://hol-theorem-prover.org/";
     license = licenses.bsd3;
     platforms = platforms.unix;
     maintainers = with maintainers; [ mudri ];
