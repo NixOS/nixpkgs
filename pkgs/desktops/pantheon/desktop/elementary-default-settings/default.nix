@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , nix-update-script
 , meson
 , ninja
@@ -15,23 +14,14 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-default-settings";
-  version = "7.1.0";
+  version = "7.1.0-unstable-2024-07-11";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "default-settings";
-    rev = version;
-    sha256 = "sha256-j4K8qYwfu6/s4qnTSzwv6KRsk9f+Qr/l1bhLywKMHMU=";
+    rev = "008fafaa120e416e75b20d7c96776a1e4311cbb5";
+    sha256 = "sha256-ClkZ3YkTCpJ2qlVKoAL9cc0Ii3s4hVtGg7nHcZw6tTA=";
   };
-
-  patches = [
-    # Add pantheon-portals.conf
-    # https://github.com/elementary/default-settings/pull/293
-    (fetchpatch {
-      url = "https://github.com/elementary/default-settings/commit/8201eeb6a356e6059b505756ef7a556a6848ad3b.patch";
-      sha256 = "sha256-qhGj7WQTAWJTC1kouUZhBWKqyO4hQWJghEhLVl8QVUM=";
-    })
-  ];
 
   nativeBuildInputs = [
     accountsservice
