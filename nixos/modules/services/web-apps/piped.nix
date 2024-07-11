@@ -253,7 +253,7 @@ in {
           Group = "piped-backend";
           DynamicUser = true;
           RuntimeDirectory = "piped-backend";
-          WorkingDirectory = "%T"; # RuntimeDirectory
+          WorkingDirectory = "%t/piped-backend"; # %t is the RuntimeDirectory root
           LoadCredential = ["databasePassword:${cfg.backend.database.passwordFile}"];
         };
         environment = cfg.backend.settings; # TODO it reads env vars? That's news to me.
