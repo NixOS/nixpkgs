@@ -1,0 +1,27 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 1e7b71a..2ac2826 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -106,20 +106,13 @@ if(USE_SYSTEM_NCNN)
+         message(STATUS "Using glslang install located at ${GLSLANG_TARGET_DIR}")
+ 
+         find_package(Threads)
++        find_package(glslang REQUIRED)
++        find_package(SPIRV-Tools-opt REQUIRED)
+ 
+-        include("${GLSLANG_TARGET_DIR}/OSDependentTargets.cmake")
+-        include("${GLSLANG_TARGET_DIR}/OGLCompilerTargets.cmake")
+         if(EXISTS "${GLSLANG_TARGET_DIR}/HLSLTargets.cmake")
+             # hlsl support can be optional
+             include("${GLSLANG_TARGET_DIR}/HLSLTargets.cmake")
+         endif()
+-        include("${GLSLANG_TARGET_DIR}/glslangTargets.cmake")
+-        include("${GLSLANG_TARGET_DIR}/SPIRVTargets.cmake")
+-
+-        if (NOT TARGET glslang OR NOT TARGET SPIRV)
+-            message(WARNING "glslang or SPIRV target not found! USE_SYSTEM_NCNN will be turned off.")
+-            set(USE_SYSTEM_NCNN OFF)
+-        endif()
+     endif()
+ endif()
+ 

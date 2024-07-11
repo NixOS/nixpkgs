@@ -1,0 +1,26 @@
+diff -Naur a/bin/elasticsearch-env b/bin/elasticsearch-env
+--- a/bin/elasticsearch-env	2017-12-12 13:31:51.000000000 +0100
++++ b/bin/elasticsearch-env	2017-12-18 19:51:12.282809695 +0100
+@@ -19,18 +19,10 @@
+   fi
+ done
+ 
+-# determine Elasticsearch home; to do this, we strip from the path until we find
+-# bin, and then strip bin (there is an assumption here that there is no nested
+-# directory under bin also named bin)
+-ES_HOME=`dirname "$SCRIPT"`
+-
+-# now make ES_HOME absolute
+-ES_HOME=`cd "$ES_HOME"; pwd`
+-
+-while [ "`basename "$ES_HOME"`" != "bin" ]; do
+-  ES_HOME=`dirname "$ES_HOME"`
+-done
+-ES_HOME=`dirname "$ES_HOME"`
++if [ -z "$ES_HOME" ]; then
++    echo "You must set the ES_HOME var" >&2
++    exit 1
++fi
+ 
+ # now set the classpath
+ ES_CLASSPATH="$ES_HOME/lib/*"
