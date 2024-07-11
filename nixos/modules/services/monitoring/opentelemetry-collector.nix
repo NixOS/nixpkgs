@@ -7,6 +7,22 @@ let
   opentelemetry-collector = cfg.package;
 
   settingsFormat = pkgs.formats.yaml {};
+
+  # configFiles contains a list of all config files.
+  # If this list is empty, we know no config files have been set by the user.
+  configFiles =
+    if cfg.configFile == null
+    then cfg.configFiles
+    else [cfg.configFile];
+
+  # If the list above is empty, then generate a config.yaml from cfg.settings.
+  paths =
+    if builtins.length configFiles == 0
+    then [(settingsFormat.generate "config.yaml" cfg.settings)]
+    else configFiles;
+
+  # Map all paths to `--config=file:` syntax.
+  serviceArgs = builtins.concatMap (path: "--config=file:${path} ") paths;
 in {
   options.services.opentelemetry-collector = {
     enable = mkEnableOption "Opentelemetry Collector";
@@ -27,7 +43,15 @@ in {
       type = types.nullOr types.path;
       default = null;
       description = ''
-        Specify a path to a configuration file that Opentelemetry Collector should use.
+        Specify a single path to a configuration file that Opentelemetry Collector should use.
+      '';
+    };
+
+    configFiles = mkOption {
+      type = types.listOf types.path;
+      default = [];
+      description = ''
+        Specify one or more paths to configuration files that Opentelemetry Collector should use.
       '';
     };
   };
@@ -35,12 +59,12 @@ in {
   config = mkIf cfg.enable {
     assertions = [{
       assertion = (
-        (cfg.settings == {}) != (cfg.configFile == null)
+        (cfg.settings == {}) != (builtins.length configFiles == 0)
       );
-      message  = ''
+      message = ''
         Please specify a configuration for Opentelemetry Collector with either
-        'services.opentelemetry-collector.settings' or
-        'services.opentelemetry-collector.configFile'.
+        services.opentelemetry-collector.settings or
+        services.opentelemetry-collector.configFile(s).
       '';
     }];
 
@@ -48,13 +72,9 @@ in {
       description = "Opentelemetry Collector Service Daemon";
       wantedBy = [ "multi-user.target" ];
 
-      serviceConfig = let
-        conf = if cfg.configFile == null
-               then settingsFormat.generate "config.yaml" cfg.settings
-               else cfg.configFile;
-      in
+      serviceConfig =
       {
-        ExecStart = "${getExe opentelemetry-collector} --config=file:${conf}";
+        ExecStart = "${getExe opentelemetry-collector} ${serviceArgs}";
         DynamicUser = true;
         Restart = "always";
         ProtectSystem = "full";

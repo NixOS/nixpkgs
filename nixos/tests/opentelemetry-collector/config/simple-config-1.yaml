@@ -1,0 +1,9 @@
+exporters:
+  debug:
+    verbosity: detailed
+
+receivers:
+  otlp:
+    protocols:
+      http:
+        endpoint: 0.0.0.0:4318
