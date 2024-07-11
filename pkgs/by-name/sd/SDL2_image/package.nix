@@ -29,7 +29,10 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-j0hrv7z4Rk3VjJ5dkzlKsCVc5otRxalmqRgkSCCnbdw=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    SDL2
+    pkg-config
+  ];
 
   buildInputs = [
     SDL2
@@ -58,6 +61,8 @@ stdenv.mkDerivation (finalAttrs: {
     # outside Darwin - and ImageIO does not exist outisde Darwin
     (lib.enableFeature false "imageio")
   ];
+
+  strictDeps = true;
 
   enableParallelBuilding = true;
 
