@@ -9761,6 +9761,8 @@ self: super: with self; {
 
   ospd = callPackage ../development/python-modules/ospd { };
 
+  osprofiler = callPackage ../development/python-modules/osprofiler { };
+
   osqp = callPackage ../development/python-modules/osqp { };
 
   oss2 = callPackage ../development/python-modules/oss2 { };
