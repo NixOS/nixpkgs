@@ -57,6 +57,8 @@ stdenv.mkDerivation rec {
     webkitgtk_6_0
   ];
 
+  strictDeps = true;
+
   meta = {
     description = "GTK4/Adwaita application that allows you to use Yandex Music service on Linux operating systems";
     homepage = "https://github.com/Rirusha/Cassette";
