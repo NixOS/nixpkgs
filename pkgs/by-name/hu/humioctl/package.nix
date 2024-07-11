@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "humioctl";
-  version = "0.34.1";
+  version = "0.35.0";
 
   src = fetchFromGitHub {
     owner = "humio";
     repo = "cli";
     rev = "v${version}";
-    hash = "sha256-/oMsNAUCM1FdGDfn7pxkfT1hJlJJDbaxEXvGGJy0VgE=";
+    hash = "sha256-9VnF5R2O0OJ2nu+K+utHPxCTFEpjpd49RiXVh3H2PqA=";
   };
 
-  vendorHash = "sha256-ABXBzmRBByet6Jb/uvcvpdGHC5MSAKvZUnsyY2d2nGs=";
+  vendorHash = "sha256-vGX77+I/zdTBhVSywd7msjrJ0KtcdZRgvWZWQC9M9og=";
 
   ldflags = [ "-s" "-w" "-X main.version=${version}" ];
 

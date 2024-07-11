@@ -25,6 +25,10 @@ rustPlatform.buildRustPackage rec {
     inherit (nixosTests.lvm2) lvm-thinpool-linux-latest;
   };
 
+  # Uses O_DIRECT, which is not supported on all filesystems.
+  # https://github.com/jthornber/thin-provisioning-tools/issues/38
+  doCheck = false;
+
   # required for config compatibility with configs done pre 0.9.0
   # see https://github.com/NixOS/nixpkgs/issues/317018
   postInstall = ''

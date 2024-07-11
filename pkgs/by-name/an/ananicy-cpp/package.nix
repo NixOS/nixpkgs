@@ -55,7 +55,7 @@ clangStdenv.mkDerivation rec {
   ];
 
   # BPF A call to built-in function '__stack_chk_fail' is not supported.
-  hardeningDisable = [ "stackprotector" ];
+  hardeningDisable = [ "stackprotector" "zerocallusedregs" ];
 
   cmakeFlags = [
     "-DUSE_EXTERNAL_JSON=ON"
