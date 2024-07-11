@@ -74,8 +74,9 @@ in {
         };
 
         passwordFile = lib.mkOption {
-          type = lib.types.str;
+          type = lib.types.path;
           example = "/run/keys/db_password";
+          default = throw "You must specify a `passwordFile`.";
           description = ''
             Path to file containing the database password.
           '';
@@ -229,44 +230,19 @@ in {
 
       services.postgresql = lib.mkIf cfg.backend.database.createLocally {
         enable = true;
-        enableTCPIP = true;
-      };
-
-      systemd.services.pipedPostgreSQLInit = lib.mkIf cfg.backend.database.createLocally {
-        after = ["postgresql.service"];
-        before = ["piped-backend.service"];
-        bindsTo = ["postgresql.service"];
-        path = [config.services.postgresql.package];
-        serviceConfig = {
-          Type = "oneshot";
-          RemainAfterExit = true;
-          User = "postgres";
-          Group = "postgres";
-          LoadCredential = ["databasePassword:${cfg.backend.database.passwordFile}"];
-        };
-        script = ''
-          set -o errexit -o pipefail -o nounset -o errtrace
-          shopt -s inherit_errexit
-
-          create_role="$(mktemp)"
-          trap 'rm -f "$create_role"' EXIT
-
-          # Read the password from the credentials directory and
-          # escape any single quotes by adding additional single
-          # quotes after them, following the rules laid out here:
-          # https://www.postgresql.org/docs/current/sql-syntax-lexical.html#SQL-SYNTAX-CONSTANTS
-          db_password="$(<"$CREDENTIALS_DIRECTORY/databasePassword")"
-          db_password="''${db_password//\'/\'\'}"
-
-          echo "CREATE ROLE \"${cfg.backend.database.username}\" WITH LOGIN PASSWORD '$db_password' CREATEDB" > "$create_role"
-          psql -tAc "SELECT 1 FROM pg_roles WHERE rolname='${cfg.backend.database.username}'" | grep -q 1 || psql -tA --file="$create_role"
-          psql -tAc "SELECT 1 FROM pg_database WHERE datname = '${cfg.backend.database.database}'" | grep -q 1 || psql -tAc 'CREATE DATABASE "${cfg.backend.database.database}" OWNER "${cfg.backend.database.username}"'
-        '';
+        enableTCPIP = true; # Java can't talk postgres via UNIX sockets, wut?
+        ensureDatabases = [ "piped-backend" ];
+        ensureUsers = [
+          {
+            name = "piped-backend";
+            ensureDBOwnership = true;
+            inherit (cfg.backend.database) passwordFile;
+          }
+        ];
       };
 
       systemd.services.piped-backend = let
-        databaseServices = lib.optionals cfg.backend.database.createLocally [
-          "pipedPostgreSQLInit.service"
+        databaseServices = lib.mkIf cfg.backend.database.createLocally [
           "postgresql.service"
         ];
       in {
