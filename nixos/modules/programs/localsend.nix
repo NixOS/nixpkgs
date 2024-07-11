@@ -21,4 +21,6 @@ in
     environment.systemPackages = [ pkgs.localsend ];
     networking.firewall.allowedTCPPorts = lib.optionals cfg.openFirewall [ firewallPort ];
   };
+
+  meta.maintainers = with lib.maintainers; [ pandapip1 ];
 }
