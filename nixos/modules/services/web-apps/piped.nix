@@ -5,6 +5,7 @@
   ...
 }: let
   cfg = config.services.piped;
+  https = domain: if lib.hasSuffix ".localhost" domain then "http://${domain}" else "https://${domain}";
 in {
   options.services.piped = {
     # TODO split into 3 separate modules?
@@ -24,7 +25,7 @@ in {
       externalUrl = lib.mkOption {
         type = lib.types.str;
         example = "https://piped.example.com";
-        default = "https://${cfg.frontend.domain}";
+        default = https cfg.frontend.domain;
         defaultText = "The {option}`domain`";
         description = ''
           The external URL of Piped Frontend.
@@ -110,8 +111,8 @@ in {
       externalUrl = lib.mkOption {
         type = lib.types.str;
         example = "https://pipedapi.example.com";
-        default = "https://${cfg.backend.nginx.domain}";
-        defaultText = "The {option}`domain`";
+        default = https cfg.backend.nginx.domain;
+        defaultText = "The {option}`nginx.domain`";
         description = ''
           The external URL of Piped Backend.
         '';
@@ -171,8 +172,8 @@ in {
       externalUrl = lib.mkOption {
         type = lib.types.str;
         example = "https://pipedproxy.example.com";
-        default = "https://${cfg.proxy.nginx.domain}";
-        defaultText = "The {option}`domain`";
+        default = https cfg.proxy.nginx.domain;
+        defaultText = "The {option}`nginx.domain`";
         description = ''
           The external URL of Piped Proxy.
         '';
