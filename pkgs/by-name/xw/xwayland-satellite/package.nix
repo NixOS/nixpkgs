@@ -6,6 +6,7 @@
 , xcb-util-cursor
 , libxcb
 , nix-update-script
+, makeWrapper
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -24,10 +25,10 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [
     pkg-config
     rustPlatform.bindgenHook
+    makeWrapper
   ];
 
   buildInputs = [
-    xwayland
     libxcb
     xcb-util-cursor
   ];
@@ -42,6 +43,11 @@ rustPlatform.buildRustPackage rec {
     "--skip=reparent"
     "--skip=toplevel_flow"
   ];
+
+  postInstall = ''
+    wrapProgram $out/bin/xwayland-satellite \
+      --prefix PATH : "${lib.makeBinPath [xwayland]}"
+  '';
 
   passthru.updateScript = nix-update-script { };
 
