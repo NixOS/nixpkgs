@@ -54,6 +54,8 @@ in stdenv.mkDerivation rec {
       file differences. This is similar to diff and patch, but it is targeted
       for binary files and does not generate human readable output.
     '';
+    # The dedicated homepage pointed to a gambling website
+    homepage = "https://github.com/jmacd/xdelta";
     license = licenses.gpl2Plus;
     mainProgram = "xdelta3";
     platforms = platforms.unix;
