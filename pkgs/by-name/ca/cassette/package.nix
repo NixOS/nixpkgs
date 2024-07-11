@@ -1,23 +1,23 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, meson
-, ninja
-, vala
-, pkg-config
 , blueprint-compiler
 , desktop-file-utils
+, meson
+, ninja
+, pkg-config
+, vala
 , wrapGAppsHook4
-, gtk4
-, libadwaita
-, libsoup_3
-, json-glib
-, sqlite
-, libgee
-, libxml2
-, gst_all_1
-, webkitgtk_6_0
 , glib-networking
+, gst_all_1
+, gtk4
+, json-glib
+, libadwaita
+, libgee
+, libsoup_3
+, libxml2
+, sqlite
+, webkitgtk_6_0
 }:
 
 stdenv.mkDerivation rec {
@@ -32,37 +32,37 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    meson
-    ninja
-    vala
-    pkg-config
     blueprint-compiler
     desktop-file-utils
+    meson
+    ninja
+    pkg-config
+    vala
     wrapGAppsHook4
   ];
 
   buildInputs = [
-    gtk4
-    libadwaita
-    libsoup_3
-    json-glib
-    sqlite
-    libgee
-    libxml2
-    gst_all_1.gstreamer
+    glib-networking
+    gst_all_1.gst-plugins-bad
     gst_all_1.gst-plugins-base
     gst_all_1.gst-plugins-good
-    gst_all_1.gst-plugins-bad
+    gst_all_1.gstreamer
+    gtk4
+    json-glib
+    libadwaita
+    libgee
+    libsoup_3
+    libxml2
+    sqlite
     webkitgtk_6_0
-    glib-networking
   ];
 
-  meta = with lib; {
+  meta = {
     description = "GTK4/Adwaita application that allows you to use Yandex Music service on Linux operating systems";
     homepage = "https://github.com/Rirusha/Cassette";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ averyanalex ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ averyanalex ];
+    platforms = lib.platforms.linux;
     mainProgram = "cassette";
   };
 }
