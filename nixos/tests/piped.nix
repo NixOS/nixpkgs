@@ -2,14 +2,11 @@ import ./make-test-python.nix ({pkgs, ...}: {
   name = "piped";
 
   meta = {
-    maintainers = with pkgs.lib.maintainers; [defelo];
+    maintainers = with pkgs.lib.maintainers; [ defelo atemu ];
   };
 
   nodes = {
     machine = {
-      config,
-      lib,
-      pkgs,
       ...
     }: {
       services.piped = {
@@ -61,7 +58,7 @@ import ./make-test-python.nix ({pkgs, ...}: {
     machine.succeed("curl -s http://piped.example.com/ | grep '<title>Piped</title>'")
 
     asset = next(
-      x for x in Path("${pkgs.piped}/assets").iterdir()
+      x for x in Path("${pkgs.piped-frontend}/assets").iterdir()
       if re.match(r"index-[a-zA-Z0-9_]+\.js", x.name)
       and "pipedapi.kavin.rocks" in x.read_text()
     )
