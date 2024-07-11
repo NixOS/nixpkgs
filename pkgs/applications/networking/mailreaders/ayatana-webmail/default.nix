@@ -2,7 +2,7 @@
 , fetchFromGitHub
 , gettext
 , gtk3
-, python311Packages
+, python3Packages
 , gdk-pixbuf
 , libnotify
 , glib
@@ -16,19 +16,15 @@
 , libcanberra-gtk3
 }:
 
-let
-  # https://github.com/AyatanaIndicators/ayatana-webmail/issues/38
-  python3Packages = python311Packages;
-in
 python3Packages.buildPythonApplication rec {
   pname = "ayatana-webmail";
-  version = "22.12.15";
+  version = "24.5.17";
 
   src = fetchFromGitHub {
     owner = "AyatanaIndicators";
     repo = "ayatana-webmail";
     rev = version;
-    hash = "sha256-K2jqCWrY1i1wYdZVpjN/3TcVyWariOQQ4slZf6sEPRU=";
+    hash = "sha256-k557FWKGq2MXODVxVzOetC5kkwTNYOoLO8msCOabais=";
   };
   postConfigure = ''
     # Fix fhs paths
