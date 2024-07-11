@@ -2,10 +2,11 @@
 , lib
 , fetchFromGitHub
 , buildMozillaMach
+, python311
 , nixosTests
 }:
 
-((buildMozillaMach rec {
+(((buildMozillaMach rec {
   pname = "floorp";
   packageVersion = "11.14.1";
   applicationName = "Floorp";
@@ -61,7 +62,7 @@
   enableOfficialBranding = false;
   googleAPISupport = true;
   mlsAPISupport = true;
-}).overrideAttrs (prev: {
+}).override { python3 = python311; }).overrideAttrs (prev: {
   MOZ_DATA_REPORTING = "";
   MOZ_TELEMETRY_REPORTING = "";
 })
