@@ -14,7 +14,7 @@ let
     };
   };
 in
-python.pkgs.buildPythonPackage rec {
+python.pkgs.buildPythonApplication rec {
   pname = "etebase-server";
   version = "0.13.1";
 
