@@ -2,28 +2,31 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  autoreconfHook,
+  meson,
+  ninja,
   pkg-config,
   libevent,
   file,
   qrencode,
+  openssl,
   miniupnpc,
   nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pshs";
-  version = "0.3.4";
+  version = "0.4.3";
 
   src = fetchFromGitHub {
-    owner = "mgorny";
+    owner = "projg2";
     repo = "pshs";
     rev = "v${finalAttrs.version}";
-    sha256 = "1j8j4r0vsmp6226q6jdgf9bzhx3qk7vdliwaw7f8kcsrkndkg6p4";
+    hash = "sha256-sfhhxeQa0rmBerfAemuHou0N001Zq5Hh7s7utxLQHOI=";
   };
 
   nativeBuildInputs = [
-    autoreconfHook
+    meson
+    ninja
     pkg-config
   ];
 
@@ -31,13 +34,11 @@ stdenv.mkDerivation (finalAttrs: {
     libevent
     file
     qrencode
+    openssl
     miniupnpc
   ];
 
   strictDeps = true;
-
-  # SSL requires libevent at 2.1 with ssl support
-  configureFlags = [ "--disable-ssl" ];
 
   __structuredAttrs = true;
 
@@ -48,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "pshs";
     homepage = "https://github.com/mgorny/pshs";
     sourceProvenance = [ lib.sourceTypes.fromSource ];
-    license = lib.licenses.bsd3;
+    license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
   };
 })
