@@ -1,5 +1,6 @@
 { lib
 , fetchFromGitHub
+, fetchpatch2
 , stdenv
 , cmake
 , pkg-config
@@ -44,6 +45,15 @@ stdenv.mkDerivation rec {
     hash = "sha256-NiShxa49ZKmK/3q8+PHwy7edwjaqtkOqfhd2ncWK5UQ=";
     fetchSubmodules = true;
   };
+
+  patches = [
+    # Fix build with miniupnpc 2.2.8
+    # https://github.com/streetpea/chiaki4deck/pull/355
+    (fetchpatch2 {
+      url = "https://github.com/streetpea/chiaki4deck/commit/e5806ae39cc6e8632d0f8cccefb5b7ddd458951a.patch?full_index=1";
+      hash = "sha256-0oGhymCZkhckJkvP64WNc4aaEzXlXYI84S7Blq7WgVw=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake
