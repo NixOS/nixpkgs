@@ -1,18 +1,38 @@
-{ lib, fetchFromGitHub, python3Packages, wrapQtAppsHook }:
+{
+  lib,
+  fetchFromGitHub,
+  python3Packages,
+  qt5,
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "friture";
-  version = "0.49";
+  version = "0.49-unstable-2024-06-02";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tlecomte";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-xKgyBV/Qc+9PgXyxcT0xG1GXLC6KnjavJ/0SUE+9VSY=";
+    rev = "405bffa585ece0cb535c32d0f4f6ace932b40103";
+    hash = "sha256-4xvIlRuJ7WCFj1dEyvO9UOsye70nFlWjb9XU0owwgiM=";
   };
 
-  nativeBuildInputs = (with python3Packages; [ numpy cython scipy ]) ++
-    [ wrapQtAppsHook ];
+  pythonRelaxDeps = true;
+
+  postPatch = ''
+    sed -i -e '/packages=\[/a "friture.playback",' pyproject.toml
+  '';
+
+  nativeBuildInputs =
+    (with python3Packages; [
+      numpy
+      cython
+      scipy
+      setuptools
+    ])
+    ++ (with qt5; [ wrapQtAppsHook ]);
+
+  buildInputs = with qt5; [ qtquickcontrols2 ];
 
   propagatedBuildInputs = with python3Packages; [
     sounddevice
@@ -25,11 +45,6 @@ python3Packages.buildPythonApplication rec {
     pyrr
     rtmixer
   ];
-
-  postPatch = ''
-    # Remove version constraints from Python dependencies in setup.py
-    sed -i -E "s/\"([A-Za-z0-9]+)(=|>|<)=[0-9\.]+\"/\"\1\"/g" setup.py
-  '';
 
   preFixup = ''
     makeWrapperArgs+=("''${qtWrapperArgs[@]}")
@@ -53,6 +68,9 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://friture.org/";
     license = licenses.gpl3;
     platforms = platforms.linux; # fails on Darwin
-    maintainers = with maintainers; [ laikq alyaeanyx ];
+    maintainers = with maintainers; [
+      laikq
+      alyaeanyx
+    ];
   };
 }
