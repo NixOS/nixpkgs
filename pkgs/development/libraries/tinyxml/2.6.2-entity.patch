@@ -1,0 +1,64 @@
+? entity.patch
+Index: a/tinyxml.cpp
+===================================================================
+RCS file: b/tinyxml.cpp,v
+retrieving revision 1.105
+diff -u -r1.105 a/tinyxml.cpp
+--- tinyxml.cpp	5 Jun 2010 19:06:57 -0000	1.105
++++ tinyxml.cpp	19 Jul 2010 21:24:16 -0000
+@@ -57,30 +57,7 @@
+ 	{
+ 		unsigned char c = (unsigned char) str[i];
+ 
+-		if (    c == '&' 
+-		     && i < ( (int)str.length() - 2 )
+-			 && str[i+1] == '#'
+-			 && str[i+2] == 'x' )
+-		{
+-			// Hexadecimal character reference.
+-			// Pass through unchanged.
+-			// &#xA9;	-- copyright symbol, for example.
+-			//
+-			// The -1 is a bug fix from Rob Laveaux. It keeps
+-			// an overflow from happening if there is no ';'.
+-			// There are actually 2 ways to exit this loop -
+-			// while fails (error case) and break (semicolon found).
+-			// However, there is no mechanism (currently) for
+-			// this function to return an error.
+-			while ( i<(int)str.length()-1 )
+-			{
+-				outString->append( str.c_str() + i, 1 );
+-				++i;
+-				if ( str[i] == ';' )
+-					break;
+-			}
+-		}
+-		else if ( c == '&' )
++		if ( c == '&' )
+ 		{
+ 			outString->append( entity[0].str, entity[0].strLength );
+ 			++i;
+Index: a/xmltest.cpp
+===================================================================
+RCS file: b/xmltest.cpp,v
+retrieving revision 1.89
+diff -u -r1.89 a/xmltest.cpp
+--- xmltest.cpp	5 Jun 2010 17:41:52 -0000	1.89
++++ xmltest.cpp	19 Jul 2010 21:24:16 -0000
+@@ -1340,6 +1340,16 @@
+ 		}*/
+ 	}
+ 
++	#ifdef TIXML_USE_STL
++	{
++		TiXmlDocument xml;
++		xml.Parse("<foo>foo&amp;#xa+bar</foo>");
++		std::string str;
++		str << xml;
++		XmlTest( "Entity escaping", "<foo>foo&amp;#xa+bar</foo>", str.c_str() );
++	}
++	#endif
++
+ 	/*  1417717 experiment
+ 	{
+ 		TiXmlDocument xml;

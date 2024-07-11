@@ -1,0 +1,101 @@
+diff --git a/spuce/qt_fir/CMakeLists.txt b/spuce/qt_fir/CMakeLists.txt
+index fa2e580..e32113c 100644
+--- a/spuce/qt_fir/CMakeLists.txt
++++ b/spuce/qt_fir/CMakeLists.txt
+@@ -6,7 +6,7 @@ Message("Project spuce fir_plot")
+ set(CMAKE_INCLUDE_CURRENT_DIR ON)
+ set(CMAKE_AUTOMOC ON)
+ 
+-FIND_PACKAGE(Qt5 REQUIRED Gui Core Widgets)
++FIND_PACKAGE(Qt5 REQUIRED Gui Core Widgets PrintSupport)
+ 
+ set(SOURCES
+ 	make_filter.cpp 
+@@ -27,11 +27,7 @@ set_property(TARGET spuce_fir PROPERTY POSITION_INDEPENDENT_CODE TRUE)
+ set_property(TARGET spuce_fir_plot PROPERTY POSITION_INDEPENDENT_CODE TRUE)
+ set_property(TARGET spuce_fir_plot PROPERTY CXX_STANDARD 11)
+ 
+-TARGET_LINK_LIBRARIES(spuce_fir_plot spuce_fir ${QT_LIBRARIES} spuce)
+-QT5_USE_Modules(spuce_fir_plot Gui)
+-QT5_USE_Modules(spuce_fir_plot Core)
+-QT5_USE_Modules(spuce_fir_plot Widgets)
+-QT5_USE_Modules(spuce_fir_plot PrintSupport)
++TARGET_LINK_LIBRARIES(spuce_fir_plot spuce_fir ${QT_LIBRARIES} spuce Qt::Gui Qt::Core Qt::Widgets Qt::PrintSupport)
+ 
+ INSTALL(TARGETS spuce_fir_plot DESTINATION bin)
+ 
+diff --git a/spuce/qt_iir/CMakeLists.txt b/spuce/qt_iir/CMakeLists.txt
+index 4717226..debb5f9 100644
+--- a/spuce/qt_iir/CMakeLists.txt
++++ b/spuce/qt_iir/CMakeLists.txt
+@@ -6,7 +6,7 @@ Message("Project spuce iir_plot")
+ set(CMAKE_INCLUDE_CURRENT_DIR ON)
+ set(CMAKE_AUTOMOC ON)
+ 
+-FIND_PACKAGE(Qt5 REQUIRED Gui Core Widgets)
++FIND_PACKAGE(Qt5 REQUIRED Gui Core Widgets PrintSupport)
+ 
+ set(SOURCES
+ 	make_filter.cpp 	
+@@ -27,10 +27,6 @@ set_property(TARGET spuce_iir PROPERTY POSITION_INDEPENDENT_CODE TRUE)
+ set_property(TARGET spuce_iir_plot PROPERTY CXX_STANDARD 11)
+ set_property(TARGET spuce_iir_plot PROPERTY POSITION_INDEPENDENT_CODE TRUE)
+ 
+-TARGET_LINK_LIBRARIES(spuce_iir_plot spuce_iir ${QT_LIBRARIES} spuce)
+-QT5_USE_Modules(spuce_iir_plot Gui)
+-QT5_USE_Modules(spuce_iir_plot Core)
+-QT5_USE_Modules(spuce_iir_plot Widgets)
+-QT5_USE_Modules(spuce_iir_plot PrintSupport)
++TARGET_LINK_LIBRARIES(spuce_iir_plot spuce_iir ${QT_LIBRARIES} spuce Qt::Gui Qt::Core Qt::Widgets Qt::PrintSupport)
+ 
+ INSTALL(TARGETS spuce_iir_plot DESTINATION bin)
+diff --git a/spuce/qt_other/CMakeLists.txt b/spuce/qt_other/CMakeLists.txt
+index 29c270d..e1ed778 100644
+--- a/spuce/qt_other/CMakeLists.txt
++++ b/spuce/qt_other/CMakeLists.txt
+@@ -6,7 +6,7 @@ Message("Project spuce window_plot")
+ set(CMAKE_INCLUDE_CURRENT_DIR ON)
+ set(CMAKE_AUTOMOC ON)
+ 
+-FIND_PACKAGE(Qt5 REQUIRED Gui Core Widgets)
++FIND_PACKAGE(Qt5 REQUIRED Gui Core Widgets PrintSupport)
+ 
+ set(SOURCES	make_filter.cpp)
+ ADD_LIBRARY(spuce_other STATIC ${SOURCES})
+@@ -23,10 +23,6 @@ ADD_EXECUTABLE(spuce_other_plot ${other_plot_SOURCES} ${other_plot_HEADERS_MOC})
+ set_property(TARGET spuce_other_plot PROPERTY CXX_STANDARD 11)
+ set_property(TARGET spuce_other_plot PROPERTY POSITION_INDEPENDENT_CODE TRUE)
+ 
+-TARGET_LINK_LIBRARIES(spuce_other_plot spuce_other ${QT_LIBRARIES} spuce)
+-QT5_USE_Modules(spuce_other_plot Gui)
+-QT5_USE_Modules(spuce_other_plot Core)
+-QT5_USE_Modules(spuce_other_plot Widgets)
+-QT5_USE_Modules(spuce_other_plot PrintSupport)
++TARGET_LINK_LIBRARIES(spuce_other_plot spuce_other ${QT_LIBRARIES} spuce Qt::Gui Qt::Core Qt::Widgets Qt::PrintSupport)
+ 
+ INSTALL(TARGETS spuce_other_plot DESTINATION bin)
+diff --git a/spuce/qt_window/CMakeLists.txt b/spuce/qt_window/CMakeLists.txt
+index e95c85b..4a77ab8 100644
+--- a/spuce/qt_window/CMakeLists.txt
++++ b/spuce/qt_window/CMakeLists.txt
+@@ -6,7 +6,7 @@ Message("Project spuce window_plot")
+ set(CMAKE_INCLUDE_CURRENT_DIR ON)
+ set(CMAKE_AUTOMOC ON)
+ 
+-FIND_PACKAGE(Qt5 REQUIRED Gui Core Widgets)
++FIND_PACKAGE(Qt5 REQUIRED Gui Core Widgets PrintSupport)
+ 
+ set(SOURCES	make_filter.cpp)
+ 
+@@ -25,10 +25,6 @@ set_property(TARGET spuce_window_plot PROPERTY CXX_STANDARD 11)
+ set_property(TARGET spuce_win PROPERTY POSITION_INDEPENDENT_CODE TRUE)
+ set_property(TARGET spuce_window_plot PROPERTY POSITION_INDEPENDENT_CODE TRUE)
+ 
+-TARGET_LINK_LIBRARIES(spuce_window_plot spuce_win ${QT_LIBRARIES} spuce)
+-QT5_USE_Modules(spuce_window_plot Gui)
+-QT5_USE_Modules(spuce_window_plot Core)
+-QT5_USE_Modules(spuce_window_plot Widgets)
+-QT5_USE_Modules(spuce_window_plot PrintSupport)
++TARGET_LINK_LIBRARIES(spuce_window_plot spuce_win ${QT_LIBRARIES} spuce Qt::Gui Qt::Core Qt::Widgets Qt::PrintSupport)
+ 
+ INSTALL(TARGETS spuce_window_plot DESTINATION bin)
