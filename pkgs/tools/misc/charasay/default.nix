@@ -24,10 +24,10 @@ rustPlatform.buildRustPackage rec {
   '';
 
   postInstall = ''
-    installShellCompletion --cmd himalaya \
-      --bash <($out/bin/chara completion --shell bash) \
-      --fish <($out/bin/chara completion --shell fish) \
-      --zsh <($out/bin/chara completion --shell zsh)
+    installShellCompletion --cmd chara \
+      --bash <($out/bin/chara completions --shell bash) \
+      --fish <($out/bin/chara completions --shell fish) \
+      --zsh <($out/bin/chara completions --shell zsh)
   '';
 
   meta = with lib; {
