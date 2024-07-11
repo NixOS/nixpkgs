@@ -29,9 +29,6 @@ let
   };
 
   nixosRules = ''
-    # Miscellaneous devices.
-    KERNEL=="kvm",                  MODE="0666"
-
     # Needed for gpm.
     SUBSYSTEM=="input", KERNEL=="mice", TAG+="systemd"
   '';
