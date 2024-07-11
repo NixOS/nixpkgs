@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   autoreconfHook,
+  nix-update-script,
   ncurses,
   enableSdl2 ? true,
   SDL2,
@@ -21,6 +22,8 @@ stdenv.mkDerivation rec {
     rev = version;
     hash = "sha256-lVGG4mppsnDmjMFO8YWsLEJEhI3T+QO3z/pCebe0Ai8=";
   };
+
+  passthru.updateScript = nix-update-script { };
 
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs =
