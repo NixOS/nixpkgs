@@ -28,6 +28,7 @@
   meson,
   ninja,
   nix-update-script,
+  nixosTests,
   pkg-config,
   polkit,
   sassc,
@@ -108,7 +109,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     providedSessions = [ "budgie-desktop" ];
-    tests.pkg-config = testers.hasPkgConfigModules { package = finalAttrs.finalPackage; };
+
+    tests = {
+      inherit (nixosTests) budgie;
+      pkg-config = testers.hasPkgConfigModules { package = finalAttrs.finalPackage; };
+    };
+
     updateScript = nix-update-script { };
   };
 
