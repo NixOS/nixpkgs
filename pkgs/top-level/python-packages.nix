@@ -3541,6 +3541,8 @@ self: super: with self; {
 
   docutils = callPackage ../development/python-modules/docutils { };
 
+  docutils_0_20_x = callPackage ../development/python-modules/docutils/v0_20_x.nix { };
+
   docx2python = callPackage ../development/python-modules/docx2python { };
 
   docx2txt = callPackage ../development/python-modules/docx2txt { };

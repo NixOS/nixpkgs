@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   chardet,
-  docutils,
+  docutils_0_20_x,
   fetchpatch,
   fetchPypi,
   pbr,
@@ -44,7 +44,7 @@ buildPythonPackage rec {
   buildInputs = [ pbr ];
 
   propagatedBuildInputs = [
-    docutils
+    docutils_0_20_x
     chardet
     stevedore
     restructuredtext-lint
