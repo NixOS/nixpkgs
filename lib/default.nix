@@ -64,6 +64,9 @@ let
     # linux kernel configuration
     kernel = callLibs ./kernel.nix;
 
+    # network
+    network = callLibs ./network;
+
     # TODO: For consistency, all builtins should also be available from a sub-library;
     # these are the only ones that are currently not
     inherit (builtins) addErrorContext isPath trace typeOf unsafeGetAttrPos;
@@ -73,7 +76,7 @@ let
       info showWarnings nixpkgsVersion version isInOldestRelease
       mod compare splitByAndCompare seq deepSeq lessThan add sub
       functionArgs setFunctionArgs isFunction toFunction mirrorFunctionArgs
-      toHexString toBaseDigits inPureEvalMode isBool isInt pathExists
+      fromHexString toHexString toBaseDigits inPureEvalMode isBool isInt pathExists
       genericClosure readFile;
     inherit (self.fixedPoints) fix fix' converge extends composeExtensions
       composeManyExtensions makeExtensible makeExtensibleWithCustomName;
