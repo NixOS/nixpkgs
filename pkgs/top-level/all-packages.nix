@@ -28928,6 +28928,8 @@ with pkgs;
 
   inter = callPackage ../data/fonts/inter { };
 
+  inter-nerdfont = callPackage ../data/fonts/inter-nerdfont { };
+
   open-fonts = callPackage ../data/fonts/open-fonts { };
 
   scientifica = callPackage ../data/fonts/scientifica { };
