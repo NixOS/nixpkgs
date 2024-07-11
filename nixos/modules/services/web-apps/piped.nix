@@ -229,7 +229,7 @@ in {
 
       services.postgresql = lib.mkIf cfg.backend.database.createLocally {
         enable = true;
-        enableTCPIP = true; # Java can't talk postgres via UNIX sockets, wut?
+        enableTCPIP = true; # Java can't talk postgres via UNIX sockets...
         ensureDatabases = [ "piped-backend" ];
         ensureUsers = [
           {
@@ -256,9 +256,13 @@ in {
           WorkingDirectory = "%t/piped-backend"; # %t is the RuntimeDirectory root
           LoadCredential = ["databasePassword:${cfg.backend.database.passwordFile}"];
         };
-        environment = cfg.backend.settings; # TODO it reads env vars? That's news to me.
-        # TODO this should be in settings
-        # TODO we need to symlink the properties here
+        environment = cfg.backend.settings;
+        # We can't pass the DB connection password directly and must therefore
+        # put it into a transient config file instead. The WokringDirectory is
+        # under the RuntimeDirectory which itself is in RAM and dies with the
+        # service. This isn't optimal as credentials cann still be evicted into
+        # swap but the service itself does not make any effort to secure the
+        # password either.
         preStart = ''
           cat << EOF > config.properties
           hibernate.connection.url: jdbc:postgresql://${cfg.backend.database.host}:${toString cfg.backend.database.port}/${cfg.backend.database.database}
