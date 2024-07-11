@@ -1,0 +1,62 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    colored2 (3.1.2)
+    cri (2.15.11)
+    erubi (1.12.0)
+    faraday (2.9.0)
+      faraday-net_http (>= 2.0, < 3.2)
+    faraday-follow_redirects (0.3.0)
+      faraday (>= 1, < 3)
+    faraday-net_http (3.1.0)
+      net-http
+    fast_gettext (2.3.0)
+    forwardable (1.3.3)
+    gettext (3.4.9)
+      erubi
+      locale (>= 2.0.5)
+      prime
+      racc
+      text (>= 1.3.0)
+    gettext-setup (1.1.0)
+      fast_gettext (~> 2.1)
+      gettext (~> 3.4)
+      locale
+    jwt (2.7.1)
+    locale (2.1.4)
+    log4r (1.1.10)
+    minitar (0.9)
+    multi_json (1.15.0)
+    net-http (0.4.1)
+      uri
+    prime (0.1.2)
+      forwardable
+      singleton
+    puppet_forge (5.0.3)
+      faraday (~> 2.0)
+      faraday-follow_redirects (~> 0.3.0)
+      minitar
+      semantic_puppet (~> 1.0)
+    r10k (4.0.1)
+      colored2 (= 3.1.2)
+      cri (>= 2.15.10)
+      gettext-setup (>= 0.24, < 2.0)
+      jwt (>= 2.2.3, < 2.8.0)
+      log4r (= 1.1.10)
+      minitar (~> 0.9)
+      multi_json (~> 1.10)
+      puppet_forge (>= 4.1, < 6)
+    racc (1.7.3)
+    semantic_puppet (1.1.0)
+    singleton (0.2.0)
+    text (1.3.1)
+    uri (0.13.0)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  r10k
+
+BUNDLED WITH
+   2.5.6

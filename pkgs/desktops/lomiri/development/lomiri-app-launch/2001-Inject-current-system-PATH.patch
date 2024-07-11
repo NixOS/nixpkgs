@@ -1,0 +1,59 @@
+From e4fe87427f24aa9b506c15c0f73f298e8909aabe Mon Sep 17 00:00:00 2001
+From: OPNA2608 <opna2608@protonmail.com>
+Date: Fri, 31 May 2024 21:31:46 +0200
+Subject: [PATCH] Inject current-system PATH
+
+---
+ liblomiri-app-launch/jobs-systemd.cpp | 16 ++++++++++++++++
+ liblomiri-app-launch/jobs-systemd.h   |  1 +
+ 2 files changed, 17 insertions(+)
+
+diff --git a/liblomiri-app-launch/jobs-systemd.cpp b/liblomiri-app-launch/jobs-systemd.cpp
+index e9be801..246bea8 100644
+--- a/liblomiri-app-launch/jobs-systemd.cpp
++++ b/liblomiri-app-launch/jobs-systemd.cpp
+@@ -574,6 +574,20 @@ void SystemD::copyEnvByPrefix(const std::string& prefix, std::list<std::pair<std
+     }
+ }
+ 
++/* We don't have a normal PATH, so we need to inject our special one as a fallback & propagate it */
++void SystemD::setupNixosPath(std::list<std::pair<std::string, std::string>>& env)
++{
++        std::string newPath { "/run/current-system/sw/bin" };
++        char* oldPath = getenv("PATH");
++        if (oldPath != NULL && oldPath[0] != '\0')
++        {
++            newPath.insert(0, 1, ':');
++            newPath.insert(0, oldPath);
++        }
++        setenv("PATH", newPath.c_str(), true);
++        copyEnv("PATH", env);
++}
++
+ std::shared_ptr<Application::Instance> SystemD::launch(
+     const AppID& appId,
+     const std::string& job,
+@@ -625,6 +639,8 @@ std::shared_ptr<Application::Instance> SystemD::launch(
+ 
+         copyEnv("DISPLAY", env);
+ 
++        setupNixosPath(env);
++
+         for (const auto& prefix : {"DBUS_", "MIR_", "LOMIRI_APP_LAUNCH_"})
+         {
+             copyEnvByPrefix(prefix, env);
+diff --git a/liblomiri-app-launch/jobs-systemd.h b/liblomiri-app-launch/jobs-systemd.h
+index fe35932..19bf44e 100644
+--- a/liblomiri-app-launch/jobs-systemd.h
++++ b/liblomiri-app-launch/jobs-systemd.h
+@@ -136,6 +136,7 @@ private:
+     static void copyEnv(const std::string& envname, std::list<std::pair<std::string, std::string>>& env);
+     static void copyEnvByPrefix(const std::string& prefix, std::list<std::pair<std::string, std::string>>& env);
+     static int envSize(std::list<std::pair<std::string, std::string>>& env);
++    static void setupNixosPath(std::list<std::pair<std::string, std::string>>& env);
+ 
+     static std::vector<std::string> parseExec(std::list<std::pair<std::string, std::string>>& env);
+     static void application_start_cb(GObject* obj, GAsyncResult* res, gpointer user_data);
+-- 
+2.42.0
+
