@@ -1,0 +1,29 @@
+diff --git a/build/config/compiler/BUILD.gn b/build/config/compiler/BUILD.gn
+index 6efe967eb0a1c..590a2c274ac13 100644
+--- a/build/config/compiler/BUILD.gn
++++ b/build/config/compiler/BUILD.gn
+@@ -568,24 +568,6 @@ config("compiler") {
+       }
+     }
+ 
+-    # TODO(crbug.com/40283598): This causes binary size growth and potentially
+-    # other problems.
+-    # TODO(crbug.com/40284925): This isn't supported by Cronet's mainline llvm version.
+-    if (default_toolchain != "//build/toolchain/cros:target" &&
+-        !llvm_android_mainline) {
+-      cflags += [
+-        "-mllvm",
+-        "-split-threshold-for-reg-with-hint=0",
+-      ]
+-      if (use_thin_lto && is_a_target_toolchain) {
+-        if (is_win) {
+-          ldflags += [ "-mllvm:-split-threshold-for-reg-with-hint=0" ]
+-        } else {
+-          ldflags += [ "-Wl,-mllvm,-split-threshold-for-reg-with-hint=0" ]
+-        }
+-      }
+-    }
+-
+     # TODO(crbug.com/40192287): Investigate why/if this should be needed.
+     if (is_win) {
+       cflags += [ "/clang:-ffp-contract=off" ]

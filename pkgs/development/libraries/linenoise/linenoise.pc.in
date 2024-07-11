@@ -1,0 +1,10 @@
+prefix=@out@
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib
+includedir=${prefix}/include
+
+Name: linenoise
+Description: A minimal, zero-config, BSD licensed, readline replacement.
+Version: @version@
+Libs: -L${libdir} -llinenoise
+Cflags: -I${includedir}

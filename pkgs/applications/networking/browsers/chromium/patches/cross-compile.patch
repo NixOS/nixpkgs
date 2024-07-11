@@ -1,0 +1,31 @@
+diff --git a/build/toolchain/linux/unbundle/BUILD.gn b/build/toolchain/linux/unbundle/BUILD.gn
+index a091491236bb1..d36fd4e652fbf 100644
+--- a/build/toolchain/linux/unbundle/BUILD.gn
++++ b/build/toolchain/linux/unbundle/BUILD.gn
+@@ -9,6 +9,7 @@ gcc_toolchain("default") {
+   cxx = getenv("CXX")
+   ar = getenv("AR")
+   nm = getenv("NM")
++  readelf = getenv("READELF")
+   ld = cxx
+ 
+   extra_cflags = getenv("CFLAGS")
+@@ -27,6 +28,7 @@ gcc_toolchain("host") {
+   cxx = getenv("BUILD_CXX")
+   ar = getenv("BUILD_AR")
+   nm = getenv("BUILD_NM")
++  readelf = getenv("BUILD_READELF")
+   ld = cxx
+ 
+   extra_cflags = getenv("BUILD_CFLAGS")
+@@ -35,7 +37,8 @@ gcc_toolchain("host") {
+   extra_ldflags = getenv("BUILD_LDFLAGS")
+ 
+   toolchain_args = {
+-    current_cpu = current_cpu
+-    current_os = current_os
++    current_cpu = host_cpu
++    current_os = host_os
++    v8_current_cpu = target_cpu
+   }
+ }

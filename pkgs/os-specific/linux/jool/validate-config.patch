@@ -1,0 +1,193 @@
+From df0a1cf61188b5b7bb98675d746cb63d9300f148 Mon Sep 17 00:00:00 2001
+From: rnhmjoj <rnhmjoj@inventati.org>
+Date: Sat, 1 Jul 2023 18:47:05 +0200
+Subject: [PATCH] Add mode to validate the atomic configuration
+
+---
+ src/usr/argp/main.c       |  6 ++++++
+ src/usr/argp/wargp/file.c | 26 +++++++++++++++++++++++++-
+ src/usr/argp/wargp/file.h |  1 +
+ src/usr/nl/file.c         | 32 ++++++++++++++++++++++----------
+ src/usr/nl/file.h         |  3 ++-
+ 5 files changed, 56 insertions(+), 12 deletions(-)
+
+diff --git a/src/usr/argp/main.c b/src/usr/argp/main.c
+index 744a6df0..d04917da 100644
+--- a/src/usr/argp/main.c
++++ b/src/usr/argp/main.c
+@@ -238,6 +238,12 @@ static struct cmd_option file_ops[] = {
+ 			.handler = handle_file_update,
+ 			.handle_autocomplete = autocomplete_file_update,
+ 		},
++		{
++			.label = "check",
++			.xt = XT_ANY,
++			.handler = handle_file_check,
++			.handle_autocomplete = autocomplete_file_update,
++		},
+ 		{ 0 },
+ };
+ 
+diff --git a/src/usr/argp/wargp/file.c b/src/usr/argp/wargp/file.c
+index 0951b544..27ee3e64 100644
+--- a/src/usr/argp/wargp/file.c
++++ b/src/usr/argp/wargp/file.c
+@@ -26,6 +26,30 @@ static struct wargp_option update_opts[] = {
+ 	{ 0 },
+ };
+ 
++int handle_file_check(char *iname, int argc, char **argv, void const *arg)
++{
++	struct update_args uargs = { 0 };
++	struct joolnl_socket sk = { 0 };
++	struct jool_result result;
++
++	result.error = wargp_parse(update_opts, argc, argv, &uargs);
++	if (result.error)
++		return result.error;
++
++	if (!uargs.file_name.value) {
++		struct requirement reqs[] = {
++				{ false, "a file name" },
++				{ 0 }
++		};
++		return requirement_print(reqs);
++	}
++
++	result = joolnl_file_parse(&sk, xt_get(), iname, uargs.file_name.value,
++			uargs.force.value, true);
++
++	return pr_result(&result);
++}
++
+ int handle_file_update(char *iname, int argc, char **argv, void const *arg)
+ {
+ 	struct update_args uargs = { 0 };
+@@ -49,7 +73,7 @@ int handle_file_update(char *iname, int argc, char **argv, void const *arg)
+ 		return pr_result(&result);
+ 
+ 	result = joolnl_file_parse(&sk, xt_get(), iname, uargs.file_name.value,
+-			uargs.force.value);
++			uargs.force.value, false);
+ 
+ 	joolnl_teardown(&sk);
+ 	return pr_result(&result);
+diff --git a/src/usr/argp/wargp/file.h b/src/usr/argp/wargp/file.h
+index ce5de508..8ea4a4d2 100644
+--- a/src/usr/argp/wargp/file.h
++++ b/src/usr/argp/wargp/file.h
+@@ -2,6 +2,7 @@
+ #define SRC_USR_ARGP_WARGP_FILE_H_
+ 
+ int handle_file_update(char *iname, int argc, char **argv, void const *arg);
++int handle_file_check(char *iname, int argc, char **argv, void const *arg);
+ void autocomplete_file_update(void const *args);
+ 
+ #endif /* SRC_USR_ARGP_WARGP_FILE_H_ */
+diff --git a/src/usr/nl/file.c b/src/usr/nl/file.c
+index f9413236..51a668bd 100644
+--- a/src/usr/nl/file.c
++++ b/src/usr/nl/file.c
+@@ -29,6 +29,7 @@ static struct joolnl_socket sk;
+ static char const *iname;
+ static xlator_flags flags;
+ static __u8 force;
++static bool check;
+ 
+ struct json_meta {
+ 	char const *name; /* This being NULL signals the end of the array. */
+@@ -163,9 +164,11 @@ static struct jool_result handle_array(cJSON *json, int attrtype, char *name,
+ 				goto too_small;
+ 
+ 			nla_nest_end(msg, root);
+-			result = joolnl_request(&sk, msg, NULL, NULL);
+-			if (result.error)
+-				return result;
++			if (!check) {
++				result = joolnl_request(&sk, msg, NULL, NULL);
++				if (result.error)
++					return result;
++			}
+ 
+ 			msg = NULL;
+ 			json = json->prev;
+@@ -179,6 +182,8 @@ static struct jool_result handle_array(cJSON *json, int attrtype, char *name,
+ 		return result_success();
+ 
+ 	nla_nest_end(msg, root);
++	if (check)
++		return result_success();
+ 	return joolnl_request(&sk, msg, NULL, NULL);
+ 
+ too_small:
+@@ -244,6 +249,8 @@ static struct jool_result handle_global(cJSON *json)
+ 
+ 	nla_nest_end(msg, root);
+ 	free(meta);
++	if (check)
++		return result_success();
+ 	return joolnl_request(&sk, msg, NULL, NULL);
+ 
+ revert_meta:
+@@ -654,9 +661,11 @@ static struct jool_result send_ctrl_msg(bool init)
+ 	else
+ 		NLA_PUT(msg, JNLAR_ATOMIC_END, 0, NULL);
+ 
+-	result = joolnl_request(&sk, msg, NULL, NULL);
+-	if (result.error)
+-		return result;
++	if (!check) {
++		result = joolnl_request(&sk, msg, NULL, NULL);
++		if (result.error)
++			return result;
++	}
+ 
+ 	return result_success();
+ 
+@@ -683,9 +692,11 @@ static struct jool_result do_parsing(char const *iname, char *buffer)
+ 	if (result.error)
+ 		goto fail;
+ 
+-	result = send_ctrl_msg(true);
+-	if (result.error)
+-		goto fail;
++	if (!check) {
++		result = send_ctrl_msg(true);
++		if (result.error)
++			goto fail;
++	}
+ 
+ 	switch (xlator_flags2xt(flags)) {
+ 	case XT_SIIT:
+@@ -718,12 +729,13 @@ fail:
+ }
+ 
+ struct jool_result joolnl_file_parse(struct joolnl_socket *_sk, xlator_type xt,
+-		char const *iname, char const *file_name, bool _force)
++		char const *iname, char const *file_name, bool _force, bool _check)
+ {
+ 	char *buffer;
+ 	struct jool_result result;
+ 
+ 	sk = *_sk;
++	check = _check;
+ 	flags = xt;
+ 	force = _force ? JOOLNLHDR_FLAGS_FORCE : 0;
+ 
+diff --git a/src/usr/nl/file.h b/src/usr/nl/file.h
+index 51802aaf..8b4a66dd 100644
+--- a/src/usr/nl/file.h
++++ b/src/usr/nl/file.h
+@@ -9,7 +9,8 @@ struct jool_result joolnl_file_parse(
+ 	xlator_type xt,
+ 	char const *iname,
+ 	char const *file_name,
+-	bool force
++	bool force,
++	bool check
+ );
+ 
+ struct jool_result joolnl_file_get_iname(
+-- 
+2.40.1
+
