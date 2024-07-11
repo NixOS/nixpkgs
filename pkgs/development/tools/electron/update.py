@@ -1,5 +1,5 @@
 #! /usr/bin/env nix-shell
-#! nix-shell -i python -p python3.pkgs.joblib python3.pkgs.click python3.pkgs.click-log nix nix-prefetch-git nix-universal-prefetch prefetch-yarn-deps prefetch-npm-deps
+#! nix-shell -i python -p python3.pkgs.joblib python3.pkgs.click python3.pkgs.click-log nix nix-prefetch-git nurl prefetch-yarn-deps prefetch-npm-deps
 """
 electron updater
 
@@ -83,6 +83,7 @@ memory: Memory = Memory("cache", verbose=0)
 logger = logging.getLogger(__name__)
 click_log.basic_config(logger)
 
+nixpkgs_path = os.path.dirname(os.path.realpath(__file__)) + "/../../../.."
 
 class Repo:
     fetcher: str
@@ -304,11 +305,11 @@ def supported_version_range() -> range:
 
 @memory.cache
 def get_repo_hash(fetcher: str, args: dict) -> str:
-    cmd = ["nix-universal-prefetch", fetcher]
-    for arg_name, arg in args.items():
-        cmd.append(f"--{arg_name}")
-        cmd.append(arg)
-
+    expr = f'with import {nixpkgs_path} {{}};{fetcher}{{'
+    for key, val in args.items():
+        expr += f'{key}="{val}";'
+    expr += '}'
+    cmd = ["nurl", "-H", "--expr", expr]
     print(" ".join(cmd), file=sys.stderr)
     out = subprocess.check_output(cmd)
     return out.decode("utf-8").strip()
