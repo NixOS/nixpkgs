@@ -6948,6 +6948,10 @@ with pkgs;
 
   codevis = callPackage ../tools/misc/codevis { };
 
+  collada2gltf = callPackage ../tools/misc/collada2gltf {
+    stdenv = gcc10StdenvCompat;
+  };
+
   compass = callPackage ../development/tools/compass { };
 
   cone = callPackage ../development/compilers/cone {
