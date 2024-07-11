@@ -63,7 +63,7 @@ in
           ProtectSystem = "full";
           DevicePolicy = "closed";
           NoNewPrivileges = true;
-          WorkingDirectory = "/var/lib/opentelemetry-collector";
+          WorkingDirectory = "%S/opentelemetry-collector";
           StateDirectory = "opentelemetry-collector";
           SupplementaryGroups = [
             # allow to read the systemd journal for opentelemetry-collector
