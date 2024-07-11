@@ -206,6 +206,7 @@ in {
         process.prefork = cfg.cameras;
         process.user = user;
         process.group = group;
+        socket = { inherit (config.services.nginx) user group; };
       };
 
       mysql = lib.mkIf cfg.database.createLocally {
