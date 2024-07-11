@@ -6295,14 +6295,15 @@ src:
     version = "1.2.0";
   };
   slack-messenger = {
+    dependencies = ["re2"];
     groups = ["default"];
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1h89asinyyyq88v89fdc3nw0g74vq2f7p59s18jrq3svpv913ij9";
+      sha256 = "1kb3dhp38wllw8f54qcik05zw0w4v0a5171cqmgjqp6c63mb0q63";
       type = "gem";
     };
-    version = "2.3.4";
+    version = "2.3.5";
   };
   snaky_hash = {
     dependencies = ["hashie" "version_gem"];
