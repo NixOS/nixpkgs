@@ -22072,6 +22072,12 @@
     githubId = 364160;
     matrix = "@woobilicious:matrix.org";
   };
+  yelite = {
+    name = "Lite Ye";
+    email = "yelite958@gmail.com";
+    github = "yelite";
+    githubId = 3517225;
+  };
   yesbox = {
     email = "jesper.geertsen.jonsson@gmail.com";
     github = "yesbox";
