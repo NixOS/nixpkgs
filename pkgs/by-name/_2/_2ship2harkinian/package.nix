@@ -96,13 +96,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "2ship2harkinian";
-  version = "1.0.1";
+  version = "1.0.2";
 
   src = fetchFromGitHub {
     owner = "HarbourMasters";
     repo = "2ship2harkinian";
-    rev = finalAttrs.version;
-    hash = "sha256-czPAmqlXfhOjOYYssDuKt2YDlMlkruNx8EDXo1ksb14=";
+    rev = "refs/tags/${finalAttrs.version}";
+    hash = "sha256-1iSFzroKxwFpsIGNMetSlQKTKRWCy7QtgCTepFdSeY8=";
     fetchSubmodules = true;
   };
 
