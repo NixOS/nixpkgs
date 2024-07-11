@@ -420,6 +420,11 @@ stdenv.mkDerivation (finalAttrs: {
             --replace 'const AVInputFormat *const ' 'const AVInputFormat *'
         '';
       })
+      (fetchpatch2 {
+        name = "CVE-2023-51794.patch";
+        url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/50f0f8c53c818f73fe2d752708e2fa9d2a2d8a07";
+        hash = "sha256-5G9lmKjMEa0+vqbA8EEiNIr6QG+PeEoIL+uZP4Hlo28=";
+      })
     ]
     ++ optionals (lib.versionAtLeast version "5" && lib.versionOlder version "6") [
       (fetchpatch2 {
@@ -457,6 +462,11 @@ stdenv.mkDerivation (finalAttrs: {
         name = "CVE-2023-51796.patch";
         url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/e01a55c5283b82667dad347331816a5e20869ce9";
         hash = "sha256-m4rq+UFG3nXdgOJ3S6XcruMZ+CPw+twmy2HFv3cnvJc=";
+      })
+      (fetchpatch2 {
+        name = "CVE-2023-51794.patch";
+        url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/50f0f8c53c818f73fe2d752708e2fa9d2a2d8a07";
+        hash = "sha256-5G9lmKjMEa0+vqbA8EEiNIr6QG+PeEoIL+uZP4Hlo28=";
       })
     ]
     ++ optionals (lib.versionAtLeast version "6.1" && lib.versionOlder version "6.2") [
