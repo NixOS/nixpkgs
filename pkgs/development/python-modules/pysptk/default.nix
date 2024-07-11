@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "pysptk";
-  version = "0.2.2";
+  version = "1.0.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-QUgBA/bchWTaJ54u/ubcRfoVcDeV77wSnHOjkgfVauE=";
+    hash = "sha256-eLHJM4v3laQc3D/wP81GmcQBwyP1RjC7caGXEAeNCz8=";
   };
 
   PYSPTK_BUILD_VERSION = 0;
