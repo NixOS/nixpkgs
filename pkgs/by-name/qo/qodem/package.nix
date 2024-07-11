@@ -27,8 +27,13 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     ncurses
     SDL
-    gpm
     miniupnpc
+  ] ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform gpm) [
+    gpm
+  ];
+
+  configureFlags = lib.optionals (!(lib.meta.availableOn stdenv.hostPlatform gpm)) [
+    "--disable-gpm"
   ];
 
   strictDeps = true;
@@ -50,5 +55,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ embr ];
     sourceProvenance = [ lib.sourceTypes.fromSource ];
     license = lib.licenses.publicDomain;
+    platforms = lib.platforms.unix;
   };
 })
