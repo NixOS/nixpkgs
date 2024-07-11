@@ -21,6 +21,11 @@ stdenv.mkDerivation (finalAttrs: rec {
     ./data-dir.patch
   ];
 
+  postPatch = ''
+    # Allow forwarding options (JETTY_OPTS).
+    sed -i 's#-jar "''${GEOSERVER_HOME}/start.jar"#-jar "''${GEOSERVER_HOME}/start.jar" ''${JETTY_OPTS:-}#' bin/startup.sh
+  '';
+
   sourceRoot = ".";
   nativeBuildInputs = [ unzip makeWrapper ];
 
