@@ -115,6 +115,7 @@ let
     "format"
     "fortify"
     "fortify3"
+    "shadowstack"
     "pic"
     "pie"
     "relro"

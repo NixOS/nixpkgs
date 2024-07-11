@@ -416,6 +416,7 @@ in
                 isFromBootstrapFiles = true;
                 hardeningUnsupportedFlags = [
                   "fortify3"
+                  "shadowstack"
                   "stackclashprotection"
                   "zerocallusedregs"
                 ];

@@ -430,6 +430,12 @@ pipe ((callFile ./common/builder.nix {}) ({
       ) "stackclashprotection"
       ++ optional (!atLeast11) "zerocallusedregs"
       ++ optionals (!atLeast12) [ "fortify3" "trivialautovarinit" ]
+      ++ optional (!(
+        atLeast8
+        && targetPlatform.isLinux
+        && targetPlatform.isx86_64
+        && targetPlatform.libc == "glibc"
+      )) "shadowstack"
       ++ optionals (langFortran) [ "fortify" "format" ];
   };
 
