@@ -31,6 +31,13 @@ in
         default = "";
         description = "Any options passed to the JVM.";
       };
+
+      jettyOpts = mkOption {
+        type = types.lines;
+        default = "";
+        example = "jetty.http.port=1234";
+        description = "Any options passed to the Jetty web server.";
+      };
     };
   };
 
@@ -45,6 +52,7 @@ in
         GEOSERVER_HOME = "${cfg.package}/share/geoserver";
         GEOSERVER_DATA_DIR = "/var/lib/geoserver";
         JAVA_OPTS = "${cfg.jvmOpts}";
+        JETTY_OPTS = "${cfg.jettyOpts}";
       };
 
       serviceConfig = {
