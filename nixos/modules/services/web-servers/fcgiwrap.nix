@@ -54,7 +54,7 @@ in {
         default = null;
         description = ''
           User to be set as owner of the UNIX socket.
-          Defaults to the process running user.
+          Defaults to root.
         '';
       };
 
@@ -63,7 +63,7 @@ in {
         default = null;
         description = ''
           Group to be set as owner of the UNIX socket.
-          Defaults to the process running group.
+          Defaults to root.
         '';
       };
 
