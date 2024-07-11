@@ -66,6 +66,7 @@
       kirigami-addons = self.callPackage ./misc/kirigami-addons {};
       kio-extras-kf5 = self.callPackage ./misc/kio-extras-kf5 {};
       kio-fuse = self.callPackage ./misc/kio-fuse {};
+      kommit = self.callPackage ./misc/kommit {};
       ktextaddons = self.callPackage ./misc/ktextaddons {};
       kunifiedpush = self.callPackage ./misc/kunifiedpush {};
       kweathercore = self.callPackage ./misc/kweathercore {};
