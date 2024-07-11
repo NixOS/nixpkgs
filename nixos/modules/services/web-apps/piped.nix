@@ -90,6 +90,7 @@ in {
       port = lib.mkOption {
         type = lib.types.port;
         example = 8000;
+        default = 28769;
         description = ''
           The port Piped Backend should listen on.
 
@@ -160,6 +161,7 @@ in {
       port = lib.mkOption {
         type = lib.types.port;
         example = 8001;
+        default = 28784;
         description = ''
           The port Piped Proxy should listen on.
 
