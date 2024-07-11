@@ -14870,6 +14870,8 @@ self: super: with self; {
 
   sudachipy = callPackage ../development/python-modules/sudachipy { };
 
+  suds = callPackage ../development/python-modules/suds { };
+
   sumo = callPackage ../development/python-modules/sumo { };
 
   sumtypes = callPackage ../development/python-modules/sumtypes { };
