@@ -1,5 +1,6 @@
 { lib
 , config
+, stdenv
 , aws-sdk-cpp
 , boehmgc
 , callPackage
@@ -7,6 +8,7 @@
 , fetchpatch
 , fetchpatch2
 , runCommand
+, overrideSDK
 , Security
 
 , storeDir ? "/nix/store"
@@ -190,17 +192,26 @@ in lib.makeExtensible (self: ({
     ];
   };
 
-  git = common rec {
+  git = (common rec {
     version = "2.24.0";
-    suffix = "pre20240627_${lib.substring 0 8 src.rev}";
+    suffix = "pre20240709_${lib.substring 0 8 src.rev}";
     src = fetchFromGitHub {
       owner = "NixOS";
       repo = "nix";
-      rev = "b44909ac2244bda4c387b9a17748e8a94ada9e78";
-      hash = "sha256-tS8i/fyi2DO5GM103b+G7K/XwFWhWvb2VDjqpLH5Kxc=";
+      rev = "142e566adbce587a5ed97d1648a26352f0608ec5";
+      hash = "sha256-fYZGuB/4LOBoMSUNj/yRU1mWm9lhdTzXF0P+zmac0hw=";
     };
     self_attribute_name = "git";
-  };
+  }).override (lib.optionalAttrs (stdenv.isDarwin && stdenv.isx86_64) {
+    # Fix the following error with the default x86_64-darwin SDK:
+    #
+    #     error: aligned allocation function of type 'void *(std::size_t, std::align_val_t)' is only available on macOS 10.13 or newer
+    #
+    # Despite the use of the 10.13 deployment target here, the aligned
+    # allocation function Clang uses with this setting actually works
+    # all the way back to 10.6.
+    stdenv = overrideSDK stdenv { darwinMinVersion = "10.13"; };
+  });
 
   latest = self.nix_2_23;
 
