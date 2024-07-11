@@ -919,10 +919,7 @@ mapAliases ({
   mutt-with-sidebar = mutt; # Added 2022-09-17
   mysql-client = hiPrio mariadb.client;
   mysql = mariadb; # moved from top-level 2021-03-14
-
-  # floating point textures patents are expired,
-  # so package reduced to alias
-  mesa_drivers = mesa.drivers;
+  mesa_drivers = throw "'mesa_drivers' has been removed, use 'pkgs.mesa' or 'pkgs.mesa.drivers' depending on target use case."; # Converted to throw 2024-07-11
 
   ### N ###
 
