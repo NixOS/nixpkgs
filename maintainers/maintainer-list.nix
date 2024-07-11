@@ -14151,6 +14151,13 @@
     githubId = 2287221;
     name = "Andreas Zweili";
   };
+  nebula = {
+    name = "Dominic Frye";
+    email = "me@itsnebula.net";
+    matrix = "@nebula:itsnebula.net";
+    github = "itsnebulalol";
+    githubId = 18669106;
+  };
   Necior = {
     email = "adrian@sadlocha.eu";
     github = "Necior";
