@@ -3,13 +3,14 @@
   buildPythonPackage,
   fetchFromGitHub,
   fetchpatch,
+  setuptools,
   libuv,
 }:
 
 buildPythonPackage rec {
   pname = "pyuv";
   version = "1.4.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "saghul";
@@ -30,6 +31,8 @@ buildPythonPackage rec {
       hash = "sha256-CQZexd6EjadCB7KyxeZKM24zrD9rXuNv4oA+Tb2nsdw=";
     })
   ];
+
+  build-system = [ setuptools ];
 
   setupPyBuildFlags = [ "--use-system-libuv" ];
 
