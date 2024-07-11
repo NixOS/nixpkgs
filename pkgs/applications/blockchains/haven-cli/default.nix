@@ -4,6 +4,7 @@
 , randomx, rapidjson, easyloggingpp
 , CoreData, IOKit, PCSC
 , trezorSupport ? true, libusb1, protobuf, python3
+, monero-cli
 }:
 
 stdenv.mkDerivation rec {
@@ -18,9 +19,7 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  patches = [
-    ./use-system-libraries.patch
-  ];
+  inherit (monero-cli) patches;
 
   postPatch = ''
     # remove vendored libraries
