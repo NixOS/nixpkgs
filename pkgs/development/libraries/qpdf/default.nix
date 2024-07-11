@@ -24,6 +24,14 @@ stdenv.mkDerivation rec {
     hash = "sha256-DhrOKjUPgNo61db8av0OTfM8mCNebQocQWtTWdt002s=";
   };
 
+  outputs = [
+    "bin"
+    "doc"
+    "lib"
+    "man"
+    "out"
+  ];
+
   nativeBuildInputs = [ cmake perl ];
 
   buildInputs = [ zlib libjpeg ];
