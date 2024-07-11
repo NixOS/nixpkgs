@@ -123,6 +123,17 @@ in
         '';
       };
 
+      prime.igpuDeviceSection = lib.mkOption {
+        type = lib.types.str;
+        default = "";
+        example = ''
+          Option "PageFlip" "off"
+        '';
+        description = ''
+          Contents of the iGPU Device section of the X server configuration file.
+        '';
+      };
+
       prime.amdgpuBusId = lib.mkOption {
         type = busIDType;
         default = "";
@@ -398,6 +409,9 @@ in
                 ''
                 + lib.optionalString (syncCfg.enable && igpuDriver != "amdgpu") ''
                   Option "AccelMethod" "none"
+                ''
+                + ''
+                  ${pCfg.igpuDeviceSection}
                 '';
             }
             ++ lib.singleton {
