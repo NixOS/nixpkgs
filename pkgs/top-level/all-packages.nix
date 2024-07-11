@@ -16918,8 +16918,6 @@ with pkgs;
 
   chibi = callPackage ../development/interpreters/chibi { };
 
-  ceptre = callPackage ../development/interpreters/ceptre { };
-
   cg3 = callPackage ../development/interpreters/cg3 { };
 
   cling = callPackage ../development/interpreters/cling { };
