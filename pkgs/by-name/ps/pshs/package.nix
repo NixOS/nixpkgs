@@ -49,6 +49,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/mgorny/pshs";
     sourceProvenance = [ lib.sourceTypes.fromSource ];
     license = lib.licenses.bsd3;
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.unix;
   };
 })
