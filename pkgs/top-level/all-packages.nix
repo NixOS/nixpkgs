@@ -12091,8 +12091,6 @@ with pkgs;
 
   qmarkdowntextedit = libsForQt5.callPackage  ../development/libraries/qmarkdowntextedit { };
 
-  qodem = callPackage ../tools/networking/qodem { };
-
   qosmic = libsForQt5.callPackage ../applications/graphics/qosmic { };
 
   qovery-cli = callPackage ../tools/admin/qovery-cli { };
