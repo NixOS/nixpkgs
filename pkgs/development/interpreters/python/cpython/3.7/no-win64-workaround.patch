@@ -1,0 +1,37 @@
+From e6b247c8e524dbe5fc03b3492f628d0d5348bc49 Mon Sep 17 00:00:00 2001
+From: Victor Stinner <vstinner@redhat.com>
+Date: Tue, 18 Dec 2018 14:47:21 +0100
+Subject: [PATCH] bpo-35523: Remove ctypes callback workaround (GH-11211)
+
+Remove ctypes callback workaround: no longer create a callback at startup.
+Avoid SELinux alert on "import ctypes" and "import uuid".
+---
+ Lib/ctypes/__init__.py                                       | 5 -----
+ .../next/Library/2018-12-18-13-52-13.bpo-35523.SkoMno.rst    | 2 ++
+ 2 files changed, 2 insertions(+), 5 deletions(-)
+ create mode 100644 Misc/NEWS.d/next/Library/2018-12-18-13-52-13.bpo-35523.SkoMno.rst
+
+diff --git a/Lib/ctypes/__init__.py b/Lib/ctypes/__init__.py
+index 6146773988648..5f78beda5866e 100644
+--- a/Lib/ctypes/__init__.py
++++ b/Lib/ctypes/__init__.py
+@@ -266,11 +266,6 @@ def _reset_cache():
+     # _SimpleCData.c_char_p_from_param
+     POINTER(c_char).from_param = c_char_p.from_param
+     _pointer_type_cache[None] = c_void_p
+-    # XXX for whatever reasons, creating the first instance of a callback
+-    # function is needed for the unittests on Win64 to succeed.  This MAY
+-    # be a compiler bug, since the problem occurs only when _ctypes is
+-    # compiled with the MS SDK compiler.  Or an uninitialized variable?
+-    CFUNCTYPE(c_int)(lambda: None)
+ 
+ def create_unicode_buffer(init, size=None):
+     """create_unicode_buffer(aString) -> character array
+diff --git a/Misc/NEWS.d/next/Library/2018-12-18-13-52-13.bpo-35523.SkoMno.rst b/Misc/NEWS.d/next/Library/2018-12-18-13-52-13.bpo-35523.SkoMno.rst
+new file mode 100644
+index 0000000000000..94a9fd257383e
+--- /dev/null
++++ b/Misc/NEWS.d/next/Library/2018-12-18-13-52-13.bpo-35523.SkoMno.rst
+@@ -0,0 +1,2 @@
++Remove :mod:`ctypes` callback workaround: no longer create a callback at
++startup. Avoid SELinux alert on ``import ctypes`` and ``import uuid``.

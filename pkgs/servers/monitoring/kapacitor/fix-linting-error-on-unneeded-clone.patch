@@ -1,0 +1,13 @@
+diff --git a/flux-core/src/semantic/flatbuffers/types.rs b/flux-core/src/semantic/flatbuffers/types.rs
+index c3eecf06..9baf4070 100644
+--- a/flux-core/src/semantic/flatbuffers/types.rs
++++ b/flux-core/src/semantic/flatbuffers/types.rs
+@@ -715,7 +715,7 @@ mod tests {
+
+     fn test_serde(expr: &'static str) {
+         // let want = parser::parse(expr).unwrap();
+-        let mut p = parser::Parser::new(expr.clone());
++        let mut p = parser::Parser::new(expr);
+
+         let typ_expr = p.parse_type_expression();
+         if let Err(err) = ast::check::check(ast::walk::Node::TypeExpression(&typ_expr)) {
