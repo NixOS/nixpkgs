@@ -3,19 +3,11 @@
   stdenv,
   pass,
   fetchFromGitHub,
-  pythonPackages,
+  python3,
   gnupg,
 }:
 
-let
-  pythonEnv = pythonPackages.python.withPackages (p: [
-    p.requests
-    p.setuptools
-    p.zxcvbn
-  ]);
-
-in
-pythonPackages.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "pass-audit";
   version = "1.2";
   pyproject = true;
@@ -34,7 +26,7 @@ pythonPackages.buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace audit.bash \
-      --replace-fail 'python3' "${pythonEnv.interpreter}"
+      --replace-fail python3 "${lib.getExe python3}"
     rm Makefile
     patchShebangs audit.bash
   '';
@@ -44,26 +36,31 @@ pythonPackages.buildPythonApplication rec {
     "man"
   ];
 
-  build-system = with pythonPackages; [ setuptools ];
-  dependencies = [ pythonEnv ];
+  build-system = with python3.pkgs; [ setuptools ];
+  dependencies = with python3.pkgs; [
+    requests
+    setuptools
+    zxcvbn
+  ];
 
   # Tests freeze on darwin with: pass-audit-1.1 (checkPhase): EOFError
   doCheck = !stdenv.isDarwin;
   nativeCheckInputs = [
-    pythonPackages.green
+    python3.pkgs.green
     pass
     gnupg
   ];
   checkPhase = ''
-    ${pythonEnv.interpreter} -m green -q
+    python3 -m green -q
   '';
 
   postInstall = ''
     mkdir -p $out/lib/password-store/extensions
     install -m777 audit.bash $out/lib/password-store/extensions/audit.bash
     cp -r share $out/
+    buildPythonPath "$out $dependencies"
     wrapProgram $out/lib/password-store/extensions/audit.bash \
-      --prefix PYTHONPATH : "$out/${pythonEnv.sitePackages}" \
+      --prefix PYTHONPATH : "$PYTHONPATH" \
       --run "export COMMAND"
   '';
 
