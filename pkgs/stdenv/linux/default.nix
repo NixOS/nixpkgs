@@ -631,6 +631,19 @@ in
       extraAttrs = {
         inherit bootstrapTools;
         shellPackage = prevStage.bash;
+
+        # jobserver call program (jscall)
+        jscall = derivation {
+          inherit system;
+          name = "jscall";
+          src = ../generic/jscall.c;
+          builder = cc.shell;
+          args = [
+            "-e"
+            "-c"
+            "${cc}/bin/cc -Wall -o $out $src"
+          ];
+        };
       };
 
       disallowedRequisites = [ bootstrapTools.out ];
