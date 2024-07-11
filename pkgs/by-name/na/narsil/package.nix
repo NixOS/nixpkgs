@@ -1,16 +1,16 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, ncurses
-, enableSdl2 ? true
-, SDL2
-, SDL2_image
-, SDL2_sound
-, SDL2_mixer
-, SDL2_ttf
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  ncurses,
+  enableSdl2 ? true,
+  SDL2,
+  SDL2_image,
+  SDL2_sound,
+  SDL2_mixer,
+  SDL2_ttf,
 }:
-
 stdenv.mkDerivation rec {
   pname = "narsil";
   version = "1.3.0-49-gc042b573a";
@@ -23,14 +23,15 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [ ncurses ]
+  buildInputs =
+    [ ncurses ]
     ++ lib.optionals enableSdl2 [
-    SDL2
-    SDL2_image
-    SDL2_sound
-    SDL2_mixer
-    SDL2_ttf
-  ];
+      SDL2
+      SDL2_image
+      SDL2_sound
+      SDL2_mixer
+      SDL2_ttf
+    ];
 
   enableParallelBuilding = true;
 
@@ -38,7 +39,7 @@ stdenv.mkDerivation rec {
 
   installFlags = [ "bindir=$(out)/bin" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/NickMcConnell/NarSil/";
     description = "Unofficial rewrite of Sil, a roguelike influenced by Angband";
     mainProgram = "narsil";
@@ -46,7 +47,7 @@ stdenv.mkDerivation rec {
       NarSil attempts to be an almost-faithful recreation of Sil 1.3.0,
       but based on the codebase of modern Angband.
     '';
-    maintainers = [ maintainers.nanotwerp ];
-    license = licenses.gpl2;
+    maintainers = with lib.maintainers; [ nanotwerp ];
+    license = lib.licenses.gpl2;
   };
 }
