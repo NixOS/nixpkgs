@@ -112,5 +112,7 @@ melpaBuild {
     homepage = "https://github.com/manateelazycat/lsp-bridge";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ fxttr kira-bruneau ];
+    # Test loops indefinitly because tabnine is broken (probably because of the update to python 3.12)
+    broken = true;
   };
 }
