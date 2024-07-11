@@ -919,7 +919,9 @@ with pkgs;
 
   diswall = callPackage ../applications/networking/diswall { };
 
-  dupeguru = callPackage ../applications/misc/dupeguru { };
+  dupeguru = callPackage ../applications/misc/dupeguru {
+    python3Packages = python311Packages;
+  };
 
   dump1090 = callPackage ../applications/radio/dump1090 { };
 
