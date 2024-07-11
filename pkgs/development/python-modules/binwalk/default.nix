@@ -14,6 +14,7 @@
   cramfsprogs,
   cramfsswap,
   sasquatch,
+  setuptools,
   squashfsTools,
   matplotlib,
   nose,
@@ -26,7 +27,7 @@
 buildPythonPackage rec {
   pname = "binwalk${lib.optionalString visualizationSupport "-full"}";
   version = "2.3.4";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ReFirmLabs";
@@ -45,6 +46,8 @@ buildPythonPackage rec {
       revert = true;
     })
   ];
+
+  build-system = [ setuptools ];
 
   propagatedBuildInputs =
     [
