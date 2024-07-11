@@ -32,7 +32,7 @@ python3Packages.buildPythonApplication rec {
       ayatanawebmail/accounts.py \
       ayatanawebmail/actions.py \
       ayatanawebmail/dialog.py \
-      --replace /usr/share $out/share
+      --replace-fail /usr/share $out/share
   '';
 
   buildInputs = [
