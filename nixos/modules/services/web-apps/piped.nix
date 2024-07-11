@@ -278,10 +278,12 @@ in {
           Group = "piped-backend";
           DynamicUser = true;
           RuntimeDirectory = "piped-backend";
-          WorkingDirectory = "/run/piped-backend";
+          WorkingDirectory = "$RUNTIME_DIRECTORY";
           LoadCredential = ["databasePassword:${cfg.backend.database.passwordFile}"];
         };
-        environment = cfg.backend.settings;
+        environment = cfg.backend.settings; # TODO it reads env vars? That's news to me.
+        # TODO this should be in settings
+        # TODO we need to symlink the properties here
         preStart = ''
           cat << EOF > config.properties
           hibernate.connection.url: jdbc:postgresql://${cfg.backend.database.host}:${toString cfg.backend.database.port}/${cfg.backend.database.database}
