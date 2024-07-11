@@ -186,9 +186,13 @@ impure-cmds // appleSourcePackages // chooseLibs // {
 
   lsusb = callPackage ../os-specific/darwin/lsusb { };
 
-  moltenvk = pkgs.darwin.apple_sdk_11_0.callPackage ../os-specific/darwin/moltenvk {
-    inherit (apple_sdk_11_0.frameworks) AppKit Foundation Metal QuartzCore;
-    inherit (apple_sdk_11_0.libs) simd;
+  moltenvk = callPackage ../os-specific/darwin/moltenvk {
+    stdenv = pkgs.overrideSDK stdenv {
+      darwinMinVersion = "10.15";
+      darwinSdkVersion = "12.3";
+    };
+    inherit (apple_sdk.frameworks) AppKit Foundation Metal QuartzCore;
+    inherit (apple_sdk.libs) simd;
   };
 
   openwith = callPackage ../os-specific/darwin/openwith { };
