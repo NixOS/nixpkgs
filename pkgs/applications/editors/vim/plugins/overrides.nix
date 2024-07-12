@@ -77,6 +77,9 @@
 , # LanguageClient-neovim dependencies
   CoreFoundation
 , CoreServices
+, # nvim-dap-rr dependencies
+  rr
+, vscode-extensions
 , # nvim-treesitter dependencies
   callPackage
 , # Preview-nvim dependencies
@@ -1107,6 +1110,10 @@
 
     doInstallCheck = true;
     nvimRequireCheck = "dapui";
+  };
+
+  nvim-dap-rr = super.nvim-dap-rr.overrideAttrs {
+    dependencies = [ self.nvim-dap ];
   };
 
   nvim-genghis = super.nvim-genghis.overrideAttrs {
