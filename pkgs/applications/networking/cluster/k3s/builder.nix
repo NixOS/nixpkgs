@@ -419,6 +419,7 @@ buildGoModule rec {
       k3s_version = "k3s_" + lib.replaceStrings [ "." ] [ "_" ] (lib.versions.majorMinor version);
     in
     {
+      auto-deploy = nixosTests.k3s.auto-deploy.${k3s_version};
       etcd = nixosTests.k3s.etcd.${k3s_version};
       single-node = nixosTests.k3s.single-node.${k3s_version};
       multi-node = nixosTests.k3s.multi-node.${k3s_version};
