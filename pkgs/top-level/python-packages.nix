@@ -6589,6 +6589,8 @@ self: super: with self; {
 
   lakeside = callPackage ../development/python-modules/lakeside { };
 
+  lancedb = callPackage ../development/python-modules/lancedb { };
+
   langchain = callPackage ../development/python-modules/langchain { };
 
   langchain-chroma = callPackage ../development/python-modules/langchain-chroma { };
@@ -10155,6 +10157,8 @@ self: super: with self; {
   pyixapi = callPackage ../development/python-modules/pyixapi { };
 
   pykrakenapi = callPackage ../development/python-modules/pykrakenapi { };
+
+  pylance = callPackage ../development/python-modules/pylance { };
 
   pylddwrap = callPackage ../development/python-modules/pylddwrap { };
 
