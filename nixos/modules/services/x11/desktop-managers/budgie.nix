@@ -80,7 +80,7 @@ in {
         description = "Extra plugins for the Budgie desktop";
         type = types.listOf types.package;
         default = [];
-        example = literalExpression "[ pkgs.budgiePlugins.budgie-analogue-clock-applet ]";
+        example = literalExpression "[ pkgs.budgie-analogue-clock-applet ]";
       };
     };
 
