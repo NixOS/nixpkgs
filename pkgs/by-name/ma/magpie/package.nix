@@ -34,6 +34,7 @@
   libwacom,
   mesa,
   meson,
+  nix-update-script,
   validatePkgConfig,
   xorgserver,
   python3,
@@ -69,7 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
     # https://gitlab.gnome.org/GNOME/mutter/-/merge_requests/2572
     (fetchpatch {
       url = "https://gitlab.gnome.org/GNOME/mutter/-/commit/285a5a4d54ca83b136b787ce5ebf1d774f9499d5.patch";
-      sha256 = "/npUE3idMSTVlFptsDpZmGWjZ/d2gqruVlJKq4eF4xU=";
+      hash = "sha256-/npUE3idMSTVlFptsDpZmGWjZ/d2gqruVlJKq4eF4xU=";
     })
   ];
 
@@ -164,11 +165,14 @@ stdenv.mkDerivation (finalAttrs: {
 
       pkg-config = testers.hasPkgConfigModules { package = finalAttrs.finalPackage; };
     };
+
+    updateScript = nix-update-script { };
   };
 
   meta = {
     description = "Softish fork of Mutter 43.x";
     homepage = "https://github.com/BuddiesOfBudgie/magpie";
+    changelog = "https://github.com/BuddiesOfBudgie/magpie/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl2Plus;
     maintainers = lib.teams.budgie.members;
     platforms = lib.platforms.linux;
