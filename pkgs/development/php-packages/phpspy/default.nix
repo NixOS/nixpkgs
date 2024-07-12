@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "phpspy";
-  version = "0.6.0";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "adsr";
     repo = "phpspy";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-iQOeZLHRc5yUgXc6xz52t/6oc07eZfH5ZgzSdJBcaak=";
+    hash = "sha256-QphoDdnSFPVRvEro0WDUC/yRsOf4I5p5BpHq32olqJI=";
     fetchSubmodules = true;
   };
 
