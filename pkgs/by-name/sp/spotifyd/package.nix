@@ -62,6 +62,7 @@ rustPackages.rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [
       anderslundstedt
       Br1ght0ne
+      getchoo
     ];
     platforms = lib.platforms.unix;
     mainProgram = "spotifyd";
