@@ -31378,8 +31378,6 @@ with pkgs;
 
   spotify-cli-linux = callPackage ../applications/audio/spotify-cli-linux { };
 
-  spotifyd = callPackage ../applications/audio/spotifyd { };
-
   srain = callPackage ../applications/networking/irc/srain { };
 
   super-productivity = callPackage ../applications/office/super-productivity { };
