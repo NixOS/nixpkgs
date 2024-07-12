@@ -15,7 +15,7 @@
   withPortAudio ? stdenv.isDarwin,
   portaudio,
   withMpris ? stdenv.isLinux,
-  withKeyring ? false,
+  withKeyring ? true,
   dbus,
   nix-update-script,
   testers,
