@@ -12,7 +12,7 @@
 buildPythonPackage rec {
   pname = "trimesh";
   version = "4.4.3";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     hash = "sha256-pBEK1oMtI8z03zKHKjgE7uohZCE1KRPRUU7Z2tIAHV4=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
   dependencies = [ numpy ];
 
