@@ -5,6 +5,7 @@
   accountsservice,
   alsa-lib,
   budgie,
+  budgie-screensaver,
   docbook-xsl-nons,
   glib,
   gnome,
@@ -74,7 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     accountsservice
     alsa-lib
-    budgie.budgie-screensaver
+    budgie-screensaver
     glib
     gnome-desktop
     gnome.gnome-settings-daemon

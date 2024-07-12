@@ -125,7 +125,7 @@ in {
         budgie-control-center'
         (budgie-desktop-with-plugins.override { plugins = cfg.extraPlugins; })
         budgie-desktop-view
-        budgie.budgie-screensaver
+        budgie-screensaver
         budgie.budgie-session
 
         # Required by Budgie Menu.
