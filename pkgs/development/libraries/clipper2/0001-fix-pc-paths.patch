@@ -1,0 +1,14 @@
+diff --git a/Clipper2.pc.cmakein b/Clipper2.pc.cmakein
+index 5632c93..0a5d6ba 100644
+--- a/Clipper2.pc.cmakein
++++ b/Clipper2.pc.cmakein
+@@ -1,7 +1,7 @@
+ prefix=@CMAKE_INSTALL_PREFIX@
+ exec_prefix=${prefix}
+-libdir=${prefix}/@CMAKE_INSTALL_LIBDIR@
+-includedir=${prefix}/@CMAKE_INSTALL_INCLUDEDIR@
++libdir=@CMAKE_INSTALL_FULL_LIBDIR@
++includedir=@CMAKE_INSTALL_FULL_INCLUDEDIR@
+
+ Name: Clipper2@PCFILE_LIB_SUFFIX@
+ Description: A Polygon Clipping and Offsetting library in C++
