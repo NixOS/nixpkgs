@@ -1,12 +1,12 @@
 { callPackage
 , libsForQt5
-, python311
+, python311Packages
 }:
 
 let
   mkGui = args: callPackage (import ./gui.nix (args)) {
     inherit (libsForQt5) wrapQtAppsHook;
-    python3 = python311;
+    python3Packages = python311Packages;
   };
 
   mkServer = args: callPackage (import ./server.nix (args)) { };
@@ -14,14 +14,14 @@ in {
 
   guiStable = mkGui {
     channel = "stable";
-    version = "2.2.47";
-    hash = "sha256-6UXQTPkRHbtNX6RzWMakCsO9YpkFlWliNnm+mZ4wuZA=";
+    version = "2.2.49";
+    hash = "sha256-hvLJ4VilcgtpxHeboeSUuGAco9LEnUB8J6vy/ZPajbU=";
   };
 
   guiPreview = mkGui {
     channel = "stable";
-    version = "2.2.47";
-    hash = "sha256-6UXQTPkRHbtNX6RzWMakCsO9YpkFlWliNnm+mZ4wuZA=";
+    version = "2.2.49";
+    hash = "sha256-hvLJ4VilcgtpxHeboeSUuGAco9LEnUB8J6vy/ZPajbU=";
   };
 
   serverStable = mkServer {
