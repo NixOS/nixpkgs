@@ -32,6 +32,7 @@
   sassc,
   upower,
   vala,
+  validatePkgConfig,
   xfce,
   wrapGAppsHook3,
   zenity,
@@ -65,6 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     pkg-config
     vala
+    validatePkgConfig
     wrapGAppsHook3
   ];
 
