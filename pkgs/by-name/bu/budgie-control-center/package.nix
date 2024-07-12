@@ -47,6 +47,7 @@
   networkmanager,
   networkmanagerapplet,
   ninja,
+  nix-update-script,
   pkg-config,
   polkit,
   samba,
@@ -176,12 +177,17 @@ stdenv.mkDerivation (finalAttrs: {
 
   separateDebugInfo = true;
 
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
   meta = {
     description = "Fork of GNOME Control Center for the Budgie 10 Series";
     homepage = "https://github.com/BuddiesOfBudgie/budgie-control-center";
+    changelog = "https://github.com/BuddiesOfBudgie/budgie-control-center/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.gpl2Plus;
+    maintainers = lib.teams.budgie.members;
     mainProgram = "budgie-control-center";
     platforms = lib.platforms.linux;
-    maintainers = lib.teams.budgie.members;
-    license = lib.licenses.gpl2Plus;
   };
 })
