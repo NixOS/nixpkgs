@@ -8,7 +8,7 @@ let
   nixos-background-light = pkgs.nixos-artwork.wallpapers.nineish;
   nixos-background-dark = pkgs.nixos-artwork.wallpapers.nineish-dark-gray;
 
-  nixos-gsettings-overrides = pkgs.budgie.budgie-gsettings-overrides.override {
+  nixos-gsettings-overrides = pkgs.budgie-gsettings-overrides.override {
     inherit (cfg) extraGSettingsOverrides extraGSettingsOverridePackages;
     inherit nixos-background-dark nixos-background-light;
   };
