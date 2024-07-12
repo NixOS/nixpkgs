@@ -6175,8 +6175,9 @@ src:
     groups = ["default"];
     platforms = [];
     source = {
-      path = "${src}/vendor/gems/sidekiq-7.1.6";
-      type = "path";
+      remotes = ["https://rubygems.org"];
+      sha256 = "18j3g31ps6ga9nzza0z0d00qjrn810fhkhx2pqi3rvxwsmkdlnbq";
+      type = "gem";
     };
     version = "7.1.6";
   };
