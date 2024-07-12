@@ -15,6 +15,7 @@
   withMpris ? stdenv.isLinux,
   withKeyring ? false,
   dbus,
+  nix-update-script,
 }:
 
 rustPackages.rustPlatform.buildRustPackage rec {
@@ -49,16 +50,20 @@ rustPackages.rustPlatform.buildRustPackage rec {
 
   doCheck = false;
 
-  meta = with lib; {
+  passthru = {
+    updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
+  };
+
+  meta = {
     description = "Open source Spotify client running as a UNIX daemon";
     homepage = "https://spotifyd.rs/";
     changelog = "https://github.com/Spotifyd/spotifyd/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       anderslundstedt
       Br1ght0ne
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     mainProgram = "spotifyd";
   };
 }
