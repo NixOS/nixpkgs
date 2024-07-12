@@ -16,6 +16,8 @@
   withKeyring ? false,
   dbus,
   nix-update-script,
+  testers,
+  spotifyd,
 }:
 
 rustPackages.rustPlatform.buildRustPackage rec {
@@ -51,6 +53,10 @@ rustPackages.rustPlatform.buildRustPackage rec {
   doCheck = false;
 
   passthru = {
+    tests.version = testers.testVersion {
+      package = spotifyd;
+      version = builtins.head (lib.splitString "-" version);
+    };
     updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
   };
 
