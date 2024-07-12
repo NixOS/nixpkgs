@@ -8,7 +8,7 @@
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
-  pname = "apache-maven";
+  pname = "maven";
   version = "3.9.8";
 
   src = fetchurl {
