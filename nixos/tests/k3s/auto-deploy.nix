@@ -118,5 +118,7 @@ import ../make-test-python.nix (
 
       machine.shutdown()
     '';
+
+    meta.maintainers = lib.teams.k3s.members;
   }
 )

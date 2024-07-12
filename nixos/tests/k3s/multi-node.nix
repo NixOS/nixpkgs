@@ -189,8 +189,6 @@ import ../make-test-python.nix (
         };
     };
 
-    meta.maintainers = k3s.meta.maintainers;
-
     testScript = ''
       machines = [server, server2, agent]
       for m in machines:
@@ -239,5 +237,7 @@ import ../make-test-python.nix (
       for m in machines:
           m.shutdown()
     '';
+
+    meta.maintainers = lib.teams.k3s.members;
   }
 )

@@ -432,4 +432,6 @@ in
       };
     };
   };
+
+  meta.maintainers = lib.teams.k3s.members;
 }
