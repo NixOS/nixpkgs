@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "numpyro";
-  version = "0.15.0";
+  version = "0.15.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit version pname;
-    hash = "sha256-4WyfR8wx4qollYSgtslEMSCB0zypJAYCJjKtWEsOYA0=";
+    hash = "sha256-HnX6sYRdEpbCMDXHsk1l/h60630ZwmED3SUioLA3wrU=";
   };
 
   build-system = [ setuptools ];
