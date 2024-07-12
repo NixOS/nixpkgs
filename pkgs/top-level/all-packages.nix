@@ -29113,8 +29113,6 @@ with pkgs;
 
   skeu = callPackage ../data/themes/skeu { };
 
-  sweet = callPackage ../data/themes/sweet { };
-
   sweet-nova = callPackage ../data/themes/sweet-nova { };
 
   shared-mime-info = callPackage ../data/misc/shared-mime-info { };
