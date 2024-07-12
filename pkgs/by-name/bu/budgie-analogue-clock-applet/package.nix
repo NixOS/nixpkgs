@@ -9,6 +9,7 @@
   budgie-desktop,
   gtk3,
   libpeas,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -35,9 +36,14 @@ stdenv.mkDerivation (finalAttrs: {
     libpeas
   ];
 
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
   meta = {
     description = "Analogue Clock Applet for the Budgie desktop";
     homepage = "https://github.com/samlane-ma/analogue-clock-applet";
+    changelog = "https://github.com/samlane-ma/analogue-clock-applet/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;
     maintainers = lib.teams.budgie.members;
     platforms = lib.platforms.linux;
