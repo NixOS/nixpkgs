@@ -53,6 +53,7 @@
   samba,
   shadow,
   shared-mime-info,
+  testers,
   tzdata,
   udisks2,
   upower,
@@ -178,6 +179,7 @@ stdenv.mkDerivation (finalAttrs: {
   separateDebugInfo = true;
 
   passthru = {
+    tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
     updateScript = nix-update-script { };
   };
 
