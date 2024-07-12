@@ -87,6 +87,8 @@ stdenv.mkDerivation (builtins.removeAttrs args [ "mvnFetchExtraArgs" ] // {
     maven
   ];
 
+  JAVA_HOME = mvnJdk;
+
   buildPhase = ''
     runHook preBuild
 
