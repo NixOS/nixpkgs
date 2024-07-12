@@ -130,6 +130,7 @@ rec {
           '';
         };
       };
+      passthru.jdk = defaultJava;
 
       meta = with lib; {
         inherit platforms;
@@ -179,4 +180,44 @@ rec {
     hash = "sha256-PiQCKFON6fGHcqV06ZoLqVnoPW7zUQFDgazZYxeBOJo=";
     defaultJava = jdk11;
   };
+
+  wrapGradle = {
+      lib, callPackage, mitm-cache, substituteAll, symlinkJoin, concatTextFile, makeSetupHook
+    }:
+    gradle-unwrapped:
+    lib.makeOverridable (args:
+    let
+      gradle = gradle-unwrapped.override args;
+    in symlinkJoin {
+      name = "gradle-${gradle.version}";
+
+      paths = [
+        (makeSetupHook { name = "gradle-setup-hook"; } (concatTextFile {
+          name = "setup-hook.sh";
+          files = [
+            (mitm-cache.setupHook)
+            (substituteAll {
+              src = ./setup-hook.sh;
+              # jdk used for keytool
+              inherit (gradle) jdk;
+              init_script = ./init-build.gradle;
+            })
+          ];
+        }))
+        gradle
+        mitm-cache
+      ];
+
+      passthru = {
+        fetchDeps = import ./fetch-deps.nix { inherit lib mitm-cache; };
+        updateDeps = callPackage ./update-deps.nix { };
+        inherit (gradle) jdk;
+      };
+
+      meta = gradle.meta // {
+        # prefer normal gradle/mitm-cache over this wrapper, this wrapper only provides the setup hook
+        # and passthru
+        priority = (gradle.meta.priority or 0) + 1;
+      };
+    }) { };
 }
