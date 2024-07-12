@@ -88,12 +88,12 @@ lib:
 # make sure they're in the path if desired.
 let
 
-  baseMeta = with lib; {
+  baseMeta = {
     description = "Lightweight Kubernetes distribution";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     homepage = "https://k3s.io";
     maintainers = lib.teams.k3s.members;
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
 
     # resolves collisions with other installations of kubectl, crictl, ctr
     # prefer non-k3s versions
