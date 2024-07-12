@@ -69,6 +69,18 @@ import ./make-test-python.nix ({ pkgs, ... }: {
         StrictHostKeyChecking=no
       '';
 
+      sshConfigNoPass = builtins.toFile "ssh.conf" ''
+        UserKnownHostsFile=/dev/null
+        StrictHostKeyChecking=no
+        PasswordAuthentication=no
+        KbdInteractiveAuthentication=no
+      '';
+
+      sshOpts = toString [
+        "-i"
+        "/root/.ssh/id_ssh_opts"
+      ];
+
       targetConfigJSON = pkgs.writeText "target-configuration.json"
         (builtins.toJSON nodes.target.system.build.targetConfig);
 
@@ -103,6 +115,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
 
       deployer.wait_until_succeeds("ping -c1 target")
       deployer.succeed("install -Dm 600 ${nodes.deployer.system.build.privateKey} ~root/.ssh/id_ecdsa")
+      deployer.succeed("install -Dm 600 ${nodes.deployer.system.build.privateKey} /root/.ssh/id_ssh_opts")
       deployer.succeed("install ${sshConfig} ~root/.ssh/config")
 
       target.succeed("nixos-generate-config")
@@ -137,5 +150,13 @@ import ./make-test-python.nix ({ pkgs, ... }: {
         tmp_dir = "/var/folder/veryveryveryveryverylongpathnamethatdoesnotworkwithcontrolpath"
         deployer.succeed(f"mkdir -p {tmp_dir}")
         deployer.succeed(f"TMPDIR={tmp_dir} nixos-rebuild switch -I nixos-config=/root/configuration-1.nix --target-host root@target &>/dev/console")
+        target_hostname = deployer.succeed("ssh alice@target cat /etc/hostname").rstrip()
+        assert target_hostname == "config-1-deployed", f"{target_hostname=}"
+
+      # This removes the ssh private key and changes ssh_config
+      with subtest("Deploy with NIX_SSHOPTS variable"):
+        deployer.succeed("rm -f ~root/.ssh/id_ecdsa")
+        deployer.succeed("install ${sshConfigNoPass} ~root/.ssh/config")
+        deployer.succeed("NIX_SSHOPTS='${sshOpts}' nixos-rebuild switch -I nixos-config=/root/configuration-2.nix --target-host root@target &>/dev/console")
     '';
 })
