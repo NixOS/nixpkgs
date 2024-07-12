@@ -181,6 +181,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Components of microsoft/vcpkg's binary";
     mainProgram = "vcpkg";
     homepage = "https://github.com/microsoft/vcpkg-tool";
+    changelog = "https://github.com/microsoft/vcpkg-tool/releases/tag/${finalAttrs.src.rev}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ guekka gracicot ];
     platforms = lib.platforms.all;
