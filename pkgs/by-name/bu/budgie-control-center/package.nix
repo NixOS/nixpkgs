@@ -5,7 +5,7 @@
   substituteAll,
   accountsservice,
   adwaita-icon-theme,
-  budgie,
+  budgie-desktop,
   cheese,
   clutter,
   clutter-gtk,
@@ -77,7 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     (substituteAll {
       src = ./paths.patch;
-      budgie_desktop = budgie.budgie-desktop;
+      budgie_desktop = budgie-desktop;
       gcm = gnome.gnome-color-manager;
       inherit
         cups
@@ -167,7 +167,7 @@ stdenv.mkDerivation (finalAttrs: {
   preFixup = ''
     gappsWrapperArgs+=(
       # Sound theme
-      --prefix XDG_DATA_DIRS : "${budgie.budgie-desktop}/share"
+      --prefix XDG_DATA_DIRS : "${budgie-desktop}/share"
       # Thumbnailers (for setting user profile pictures)
       --prefix XDG_DATA_DIRS : "${gdk-pixbuf}/share"
       --prefix XDG_DATA_DIRS : "${librsvg}/share"

@@ -4,7 +4,7 @@
   fetchFromGitHub,
   accountsservice,
   alsa-lib,
-  budgie-screensaver,
+  budgie,
   docbook-xsl-nons,
   glib,
   gnome,
@@ -23,7 +23,6 @@
   libpulseaudio,
   libuuid,
   libwnck,
-  magpie,
   mesa,
   meson,
   ninja,
@@ -65,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     accountsservice
     alsa-lib
-    budgie-screensaver
+    budgie.budgie-screensaver
     glib
     gnome-desktop
     gnome.gnome-settings-daemon
@@ -83,7 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
     libpulseaudio
     libuuid
     libwnck
-    magpie
+    budgie.magpie
     mesa
     polkit
     sassc

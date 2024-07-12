@@ -94,7 +94,7 @@ in {
 
   config = mkIf cfg.enable {
     services.displayManager.sessionPackages = with pkgs; [
-      budgie.budgie-desktop
+      budgie-desktop
     ];
 
     services.xserver.displayManager.lightdm.greeters.slick = {
@@ -123,7 +123,7 @@ in {
         # Budgie Desktop.
         budgie-backgrounds
         budgie-control-center'
-        (budgie.budgie-desktop-with-plugins.override { plugins = cfg.extraPlugins; })
+        (budgie-desktop-with-plugins.override { plugins = cfg.extraPlugins; })
         budgie.budgie-desktop-view
         budgie.budgie-screensaver
         budgie.budgie-session
@@ -210,7 +210,7 @@ in {
     xdg.portal.extraPortals = with pkgs; [
       xdg-desktop-portal-gtk # provides a XDG Portals implementation.
     ];
-    xdg.portal.configPackages = mkDefault [ pkgs.budgie.budgie-desktop ];
+    xdg.portal.configPackages = mkDefault [ pkgs.budgie-desktop ];
 
     services.geoclue2.enable = mkDefault true; # for BCC's Privacy > Location Services panel.
     services.upower.enable = config.powerManagement.enable; # for Budgie's Status Indicator and BCC's Power panel.
