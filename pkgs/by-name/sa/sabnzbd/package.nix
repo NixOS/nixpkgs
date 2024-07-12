@@ -3,6 +3,7 @@
   stdenv,
   coreutils,
   fetchFromGitHub,
+  fetchPypi,
   python3,
   par2cmdline-turbo,
   unzip,
@@ -14,6 +15,9 @@
 }:
 
 let
+  sabctoolsVersion = "8.2.0";
+  sabctoolsHash = "sha256-dOMNZoKWQxHJt6yHiNKVtpnYvLJkK8nktOm+djsSTcM=";
+
   pythonEnv = python3.withPackages (
     ps: with ps; [
       apprise
@@ -42,7 +46,15 @@ let
       python-dateutil
       pytz
       rebulk
-      sabctools
+      # sabnzbd requires a specific version of sabctools
+      (sabctools.overridePythonAttrs (old: {
+        version = sabctoolsVersion;
+        src = fetchPypi {
+          pname = "sabctools";
+          version = sabctoolsVersion;
+          hash = sabctoolsHash;
+        };
+      }))
       sabyenc3
       sgmllib3k
       six
@@ -86,8 +98,9 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  passthru.tests = {
-    smoke-test = nixosTests.sabnzbd;
+  passthru = {
+    tests.smoke-test = nixosTests.sabnzbd;
+    updateScript = ./update.sh;
   };
 
   meta = with lib; {
