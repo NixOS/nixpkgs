@@ -90,7 +90,7 @@
 }:
 
 buildPythonPackage rec {
-  pname = "farm-haystack";
+  pname = "haystack-ai";
   version = "2.2.3";
   pyproject = true;
 
