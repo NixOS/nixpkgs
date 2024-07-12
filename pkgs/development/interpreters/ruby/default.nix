@@ -6,6 +6,7 @@
 , makeBinaryWrapper, buildRubyGem, defaultGemConfig, removeReferencesTo
 , openssl
 , linuxPackages, libsystemtap
+, gitUpdater
 } @ args:
 
 let
@@ -13,7 +14,7 @@ let
   ops = lib.optionals;
   opString = lib.optionalString;
   config = import ./config.nix { inherit fetchFromSavannah; };
-  rubygems = import ./rubygems { inherit stdenv lib fetchurl; };
+  rubygems = import ./rubygems { inherit stdenv lib fetchurl gitUpdater; };
 
   # Contains the ruby version heuristics
   rubyVersion = import ./ruby-version.nix { inherit lib; };
@@ -57,6 +58,7 @@ let
           rubygemsSupport = false;
         }
       , useBaseRuby ? stdenv.hostPlatform != stdenv.buildPlatform
+      , gitUpdater
       }:
       stdenv.mkDerivation ( finalAttrs: {
         pname = "ruby";

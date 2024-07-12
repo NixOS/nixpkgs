@@ -1,4 +1,9 @@
-{ stdenv, lib, fetchurl }:
+{
+  fetchurl,
+  gitUpdater,
+  lib,
+  stdenv,
+}:
 
 stdenv.mkDerivation rec {
   pname = "rubygems";
@@ -20,6 +25,12 @@ stdenv.mkDerivation rec {
     cp -r . $out
     runHook postInstall
   '';
+
+  passthru.updateScript = gitUpdater {
+    url = "https://github.com/rubygems/rubygems.git";
+    rev-prefix = "v";
+    ignoredVersions = "(pre|alpha|beta|rc|bundler).*";
+  };
 
   meta = with lib; {
     description = "Package management framework for Ruby";
