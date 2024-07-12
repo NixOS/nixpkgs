@@ -1,9 +1,10 @@
-{ lib, stdenv, fetchurl, cups }:
+{ lib, stdenv, fetchurl, cups, rpm, cpio }:
 
-let version = "1.7.20";
-in stdenv.mkDerivation {
+let
+  fullname = "epson-inkjet-printer-escpr";
+in stdenv.mkDerivation rec {
   pname = "epson-escpr";
-  inherit version;
+  version = "1.8.5";
 
   src = fetchurl {
     # To find new versions, visit
@@ -12,19 +13,28 @@ in stdenv.mkDerivation {
     # version.
     # NOTE: Don't forget to update the webarchive link too!
     urls = [
-      "https://download3.ebz.epson.net/dsc/f/03/00/13/76/45/5ac2ea8f9cf94a48abd64afd0f967f98c4fc24aa/epson-inkjet-printer-escpr-${version}-1lsb3.2.tar.gz"
-
-      "https://web.archive.org/web/https://download3.ebz.epson.net/dsc/f/03/00/13/76/45/5ac2ea8f9cf94a48abd64afd0f967f98c4fc24aa/epson-inkjet-printer-escpr-${version}-1lsb3.2.tar.gz"
+      "https://download3.ebz.epson.net/dsc/f/03/00/15/68/85/403b320df777490a52c42030397edd10363b2c56/${fullname}-1.8.5-1.src.rpm"
+      "https://web.archive.org/web/20241109053348/https://download3.ebz.epson.net/dsc/f/03/00/15/68/85/403b320df777490a52c42030397edd10363b2c56/${fullname}-1.8.5-1.src.rpm"
     ];
-    sha256 = "sha256:09rscpm557dgaflylr93wcwmyn6fnvr8nc77abwnq97r6hxwrkhk";
+    sha256 = "1m2061mqlsrgq5ykjg6m0s2708g727xckk0kxwh64dk15n8ki1lx";
   };
 
   patches = [ ./cups-filter-ppd-dirs.patch ];
 
   buildInputs = [ cups ];
 
+  unpackPhase = ''
+    runHook preUnpack
+
+    ${lib.getBin rpm}/bin/rpm2cpio $src | ${lib.getBin cpio}/bin/cpio -idmv
+    tar -xvf ${fullname}-${version}-1.tar.gz
+    cd ${fullname}-${version}
+
+    runHook postUnpack
+  '';
+
   meta = with lib; {
-    homepage = "http://download.ebz.epson.net/dsc/search/01/search/";
+    homepage = "https://download.ebz.epson.net/dsc/du/02/DriverDownloadInfo.do?LG2=EN&CN2=&DSCMI=156882&DSCCHK=031e5c220930be9458438571a1fdeedb7dfcb8a6";
     description = "ESC/P-R Driver (generic driver)";
     longDescription = ''
       Epson Inkjet Printer Driver (ESC/P-R) for Linux and the
