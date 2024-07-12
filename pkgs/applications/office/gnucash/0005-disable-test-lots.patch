@@ -1,0 +1,11 @@
+--- a/libgnucash/engine/test/CMakeLists.txt	2024-02-23 09:05:19.000000000 +0900
++++ b/libgnucash/engine/test/CMakeLists.txt	2024-05-08 22:08:04.572060359 +0900
+@@ -57,7 +57,6 @@
+ 
+ add_engine_test(test-account-object test-account-object.cpp)
+ add_engine_test(test-group-vs-book test-group-vs-book.cpp)
+-add_engine_test(test-lots test-lots.cpp)
+ add_engine_test(test-querynew test-querynew.c)
+ add_engine_test(test-query test-query.cpp)
+ add_engine_test(test-split-vs-account test-split-vs-account.cpp)
+

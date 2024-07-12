@@ -1,0 +1,72 @@
+diff --git a/src/services/log.js b/src/services/log.js
+index a141eae14..094b9381b 100644
+--- a/src/services/log.js
++++ b/src/services/log.js
+@@ -1,15 +1,7 @@
+ "use strict";
+ 
+-const fs = require('fs');
+-const dataDir = require('./data_dir.js');
+ const cls = require('./cls.js');
+ 
+-if (!fs.existsSync(dataDir.LOG_DIR)) {
+-    fs.mkdirSync(dataDir.LOG_DIR, 0o700);
+-}
+-
+-let logFile = null;
+-
+ const SECOND = 1000;
+ const MINUTE = 60 * SECOND;
+ const HOUR = 60 * MINUTE;
+@@ -17,38 +9,6 @@ const DAY = 24 * HOUR;
+ 
+ const NEW_LINE = process.platform === "win32" ? '\r\n' : '\n';
+ 
+-let todaysMidnight = null;
+-
+-initLogFile();
+-
+-function getTodaysMidnight() {
+-    const now = new Date();
+-
+-    return new Date(now.getFullYear(), now.getMonth(), now.getDate());
+-}
+-
+-function initLogFile() {
+-    todaysMidnight = getTodaysMidnight();
+-
+-    const path = `${dataDir.LOG_DIR}/trilium-${formatDate()}.log`;
+-
+-    if (logFile) {
+-        logFile.end();
+-    }
+-
+-    logFile = fs.createWriteStream(path, {flags: 'a'});
+-}
+-
+-function checkDate(millisSinceMidnight) {
+-    if (millisSinceMidnight >= DAY) {
+-        initLogFile();
+-
+-        millisSinceMidnight -= DAY;
+-    }
+-
+-    return millisSinceMidnight;
+-}
+-
+ function log(str) {
+     const bundleNoteId = cls.get("bundleNoteId");
+ 
+@@ -56,12 +16,6 @@ function log(str) {
+         str = `[Script ${bundleNoteId}] ${str}`;
+     }
+ 
+-    let millisSinceMidnight = Date.now() - todaysMidnight.getTime();
+-
+-    millisSinceMidnight = checkDate(millisSinceMidnight);
+-
+-    logFile.write(`${formatTime(millisSinceMidnight)} ${str}${NEW_LINE}`);
+-
+     console.log(str);
+ }
+ 
