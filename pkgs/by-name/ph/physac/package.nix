@@ -6,7 +6,7 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "physac";
-  version = "2.5-unstable-2023-12-11";
+  version = "1.1-unstable-2023-12-11";
 
   src = fetchFromGitHub {
     owner = "victorfisac";
