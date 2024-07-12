@@ -30,6 +30,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python module to interact with Microsoft Teams";
     homepage = "https://github.com/rveachkc/pymsteams";
+    changelog = "https://github.com/rveachkc/pymsteams/releases/tag/${version}";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];
   };
