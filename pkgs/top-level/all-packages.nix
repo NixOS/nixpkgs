@@ -13944,7 +13944,7 @@ with pkgs;
 
   viking = callPackage ../applications/misc/viking { };
 
-  vikunja = callPackage ../by-name/vi/vikunja/package.nix { pnpm = pnpm_8; };
+  vikunja = callPackage ../by-name/vi/vikunja/package.nix { pnpm = pnpm_9; };
 
   vim-vint = callPackage ../development/tools/vim-vint { };
 
