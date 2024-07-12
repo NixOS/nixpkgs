@@ -1,3 +1,4 @@
+# Tests whether container images are imported and auto deploying manifests work
 import ../make-test-python.nix (
   {
     pkgs,
