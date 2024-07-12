@@ -18,9 +18,11 @@ stdenv.mkDerivation rec {
   runtimeDependencies = [ wirelesstools ];
 
   installPhase = ''
+    runHook preInstall
     make -C osdep install
     mkdir -p $out/bin
     install -D -m 0755 mdk3 $out/bin/
+    runHook postInstall
   '';
 
   meta = with lib; {
