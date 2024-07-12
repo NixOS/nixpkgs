@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Modifications to MDK3 to reboot Access Points";
+    description = "MDK3 fork able to force reboot Access Points";
     homepage = "https://github.com/charlesxsh/mdk3-master";
     changelog = "https://github.com/charlesxsh/mdk3-master/blob/${src.rev}/CHANGELOG";
     license = licenses.gpl2Only;
