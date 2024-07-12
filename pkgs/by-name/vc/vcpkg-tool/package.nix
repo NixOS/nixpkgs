@@ -103,10 +103,21 @@ stdenv.mkDerivation (finalAttrs: {
   in ''
     #!${runtimeShell}
 
-    NIX_VCPKG_WRITABLE_PATH=''${NIX_VCPKG_WRITABLE_PATH:-''${XDG_CACHE_HOME+"$XDG_CACHE_HOME/vcpkg"}}
-    NIX_VCPKG_WRITABLE_PATH=''${NIX_VCPKG_WRITABLE_PATH:-''${HOME+"$HOME/.vcpkg/root"}}
-    NIX_VCPKG_WRITABLE_PATH=''${NIX_VCPKG_WRITABLE_PATH:-''${TMP}}
-    NIX_VCPKG_WRITABLE_PATH=''${NIX_VCPKG_WRITABLE_PATH:-'/tmp'}
+    get_vcpkg_path() {
+      if [[ -n $NIX_VCPKG_WRITABLE_PATH ]]; then
+          echo "$NIX_VCPKG_WRITABLE_PATH"
+      elif [[ -n $XDG_CACHE_HOME ]]; then
+          echo "$XDG_CACHE_HOME/vcpkg"
+      elif [[ -n $HOME ]]; then
+          echo "$HOME/.vcpkg/root"
+      elif [[ -n $TMP ]]; then
+          echo "$TMP"
+      else
+          echo "/tmp"
+      fi
+    }
+
+    NIX_VCPKG_WRITABLE_PATH=$(get_vcpkg_path)
 
     ${lib.concatMapStringsSep "\n" ({ env, default, ... }: ''${env}=''${${env}-"${default}"}'') argsWithDefault}
 
@@ -134,6 +145,11 @@ stdenv.mkDerivation (finalAttrs: {
           ;;
       esac
     done
+
+    if [ "''${NIX_VCPKG_DEBUG_PRINT_ENVVARS-'false'}" = 'true' ]; then
+      ${lib.concatMapStringsSep "\n" ({ env, ... }: "  " + ''echo "${env} = ''$${env}"'') argsWithDefault}
+      echo ""
+    fi
 
     exec -a "$0" "${placeholder "out"}/bin/.vcpkg-wrapped" \
     ${lib.concatMapStringsSep "\n" ({ arg, env, ... }: "  " + ''${arg}="''$${env}" \'') argsWithDefault}
