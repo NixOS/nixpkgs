@@ -6,7 +6,7 @@
 
 stdenv.mkDerivation rec {
   pname = "mdk3-master";
-  version = "unstable-2015-05-24";
+  version = "6-unstable-2015-05-24";
 
   src = fetchFromGitHub {
     owner = "charlesxsh";
