@@ -4153,8 +4153,6 @@ self: super: with self; {
 
   farama-notifications = callPackage ../development/python-modules/farama-notifications { };
 
-  farm-haystack = callPackage ../development/python-modules/farm-haystack { };
-
   fastai = callPackage ../development/python-modules/fastai { };
 
   fastapi = callPackage ../development/python-modules/fastapi { };
@@ -5410,6 +5408,8 @@ self: super: with self; {
 
   hawkauthlib = callPackage ../development/python-modules/hawkauthlib { };
 
+  haystack-ai = callPackage ../development/python-modules/haystack-ai { };
+
   hcloud = callPackage ../development/python-modules/hcloud { };
 
   hcs-utils = callPackage ../development/python-modules/hcs-utils { };
@@ -6326,6 +6326,10 @@ self: super: with self; {
   junit-xml = callPackage ../development/python-modules/junit-xml { };
 
   junos-eznc = callPackage ../development/python-modules/junos-eznc { };
+
+  jupysql-plugin = callPackage ../development/python-modules/jupysql-plugin { };
+
+  jupysql = callPackage ../development/python-modules/jupysql { };
 
   jupyter = callPackage ../development/python-modules/jupyter { };
 
@@ -10021,6 +10025,8 @@ self: super: with self; {
 
   pip-api = callPackage ../development/python-modules/pip-api { };
 
+  pip-chill = callPackage ../development/python-modules/pip-chill { };
+
   pip-tools = callPackage ../development/python-modules/pip-tools { };
 
   pip-requirements-parser = callPackage ../development/python-modules/pip-requirements-parser { };
@@ -10363,6 +10369,10 @@ self: super: with self; {
   });
 
   plone-testing = callPackage ../development/python-modules/plone-testing { };
+
+  ploomber-core = callPackage ../development/python-modules/ploomber-core { };
+
+  ploomber-extension = callPackage ../development/python-modules/ploomber-extension { };
 
   plotext = callPackage ../development/python-modules/plotext { };
 
