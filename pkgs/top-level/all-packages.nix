@@ -787,8 +787,6 @@ with pkgs;
 
   octosuite = callPackage ../tools/security/octosuite { };
 
-  octosql = callPackage ../tools/misc/octosql { };
-
   onesixtyone = callPackage ../tools/security/onesixtyone { };
 
   oletools = with python3.pkgs; toPythonApplication oletools;
@@ -8494,8 +8492,6 @@ with pkgs;
   gptfdisk = callPackage ../tools/system/gptfdisk { };
 
   gql = callPackage ../applications/version-management/gql { };
-
-  grafterm = callPackage ../tools/misc/grafterm { };
 
   gradience = callPackage ../applications/misc/gradience { };
 
@@ -17050,8 +17046,6 @@ with pkgs;
   kanif = callPackage ../applications/networking/cluster/kanif { };
 
   kona = callPackage ../development/interpreters/kona { };
-
-  konf = callPackage ../development/tools/konf { };
 
   lambda-lisp = callPackage ../development/interpreters/lambda-lisp { };
   lambda-lisp-blc = lambda-lisp;
@@ -26073,8 +26067,6 @@ with pkgs;
   redshift_jdbc = callPackage ../development/java-modules/redshift_jdbc { };
 
   liquibase_redshift_extension = callPackage ../development/java-modules/liquibase_redshift_extension { };
-
-  promql-cli = callPackage ../tools/misc/promql-cli { };
 
   prom2json = callPackage ../servers/monitoring/prometheus/prom2json.nix { };
   prometheus = callPackage ../servers/monitoring/prometheus { };
