@@ -152,7 +152,9 @@ let
       # than a year (Node.js 18 will be EOL at 2025-04-30). Note that these
       # failures are specific to Nix sandbox on macOS and should not affect
       # actual functionality.
-      "test-ci-js"
+
+      # For nixpkgs 24.05 we rather disable this problematic test.
+      #"test-ci-js"
     ]);
 
     checkFlags = [
