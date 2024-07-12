@@ -45,7 +45,7 @@ maven'.buildMavenPackage rec {
   mvnHash = if mvnDepsHash != null then mvnDepsHash else knownMvnDepsHash;
 
   mvnParameters = toString [
-    "-DskipTests=true" # skip tests (out of memory execptions)
+    "-DskipTests=true" # skip tests (out of memory exceptions)
     "-Dossindex.skip" # skip dependency with vulnerability (recommended by upstream)
   ];
 
