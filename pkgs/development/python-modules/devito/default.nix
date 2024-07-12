@@ -25,7 +25,7 @@
 
 buildPythonPackage rec {
   pname = "devito";
-  version = "4.8.9";
+  version = "4.8.10";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -34,7 +34,7 @@ buildPythonPackage rec {
     owner = "devitocodes";
     repo = "devito";
     rev = "refs/tags/v${version}";
-    hash = "sha256-uCZBCq1Lzc2IwjvqAY+wZzyEOeYraegt0242aI5CPUI=";
+    hash = "sha256-r3HsVZo+2WnjxIToGTOR/xp1l4G2a3+sHslBA8iEdSo=";
   };
 
   pythonRemoveDeps = [
@@ -45,7 +45,6 @@ buildPythonPackage rec {
   ];
 
   pythonRelaxDeps = true;
-
 
   dependencies = [
     anytree
