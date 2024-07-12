@@ -596,7 +596,6 @@ in {
   musescore = handleTestOn ["x86_64-linux"] ./musescore.nix {};
   munin = handleTest ./munin.nix {};
   mutableUsers = handleTest ./mutable-users.nix {};
-  mxisd = handleTest ./mxisd.nix {};
   mycelium = handleTest ./mycelium {};
   mympd = handleTest ./mympd.nix {};
   mysql = handleTest ./mysql/mysql.nix {};
