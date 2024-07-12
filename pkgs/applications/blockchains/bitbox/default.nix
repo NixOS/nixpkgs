@@ -10,14 +10,14 @@
 
 stdenv.mkDerivation rec {
   pname = "bitbox";
-  version = "4.42.1";
+  version = "4.43.0";
 
   src = fetchFromGitHub {
     owner = "BitBoxSwiss";
     repo = "bitbox-wallet-app";
     rev = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-00A4u2tJJ1nho8GFiCjcId27JVKkHf7ge9TfwJUdjaQ=";
+    hash = "sha256-TvX4p+5Qo85HaUHTrbbsVzrU8sEUXZzGulZzXQXQAPA=";
   };
 
   patches = [
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace frontends/qt/resources/linux/usr/share/applications/bitbox.desktop \
-        --replace 'Exec=BitBox %u' 'Exec=bitbox %u'
+        --replace-fail 'Exec=BitBox %u' 'Exec=bitbox %u'
   '';
 
   dontConfigure = true;
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     inherit version;
     inherit src;
     sourceRoot = "source/frontends/web";
-    npmDepsHash = "sha256-0bWf4fVPBo9ZBJv2okyRUW9g9sZDFEPYZmEJlfFZQRI=";
+    npmDepsHash = "sha256-aeSYJGZ+Nx9zlUaxqiXUDJXUqmdahReIoLzkJzm1LCE=";
     installPhase = "cp -r build $out";
   };
 
