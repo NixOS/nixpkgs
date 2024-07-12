@@ -83,7 +83,7 @@ python3.pkgs.buildPythonApplication {
     runHook preInstall
 
     make -f misc/Makefile \
-      PYTHON=${python3.pythonOnBuildForHost.interpreter} \
+      PYTHON=${(python3.pythonOnBuildForHost.withPackages (ps: with ps; [ setuptools ])).interpreter} \
       PREFIX=. \
       DESTDIR="$out" \
       DATAROOTDIR=/share \
