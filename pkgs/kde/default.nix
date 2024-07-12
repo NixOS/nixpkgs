@@ -68,6 +68,7 @@
       kio-fuse = self.callPackage ./misc/kio-fuse {};
       ktextaddons = self.callPackage ./misc/ktextaddons {};
       kunifiedpush = self.callPackage ./misc/kunifiedpush {};
+      kup = self.callPackage ./misc/kup {};
       kweathercore = self.callPackage ./misc/kweathercore {};
       marknote = self.callPackage ./misc/marknote {};
       mpvqt = self.callPackage ./misc/mpvqt {};
