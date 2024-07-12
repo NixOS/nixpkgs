@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation {
   pname = "wf-touch";
-  version = "0-unstable-2021-03-19";
+  version = "0-unstable-2024-04-24";
 
   src = fetchFromGitHub {
     owner = "WayfireWM";
     repo = "wf-touch";
-    rev = "8974eb0f6a65464b63dd03b842795cb441fb6403";
-    hash = "sha256-MjsYeKWL16vMKETtKM5xWXszlYUOEk3ghwYI85Lv4SE=";
+    rev = "caa156921c6be1dff9c2ccd851330c96de7928bf";
+    hash = "sha256-sPFvAtsZhnxFCod3WYzYcz5UqziojDWhWtQBrILLBbo=";
   };
 
   nativeBuildInputs = [
