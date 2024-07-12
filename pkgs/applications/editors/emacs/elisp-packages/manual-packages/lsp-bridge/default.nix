@@ -22,6 +22,7 @@ let
     orjson
     paramiko
     rapidfuzz
+    setuptools
     sexpdata
     six
   ]);

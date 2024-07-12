@@ -15,14 +15,14 @@ let
   };
 in python3Packages.buildPythonApplication rec {
   pname = "truvari";
-  version = "4.1.0";
+  version = "4.2.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ACEnglish";
     repo = "truvari";
     rev = "v${version}";
-    hash = "sha256-HFVAv1TTL/nMjr62tQKhMdwh25P/y4nBGzSbxoJxMmo=";
+    hash = "sha256-SFBVatcVavBfQtFbBcXifBX3YnKsxJS669vCcyjsBA4=";
   };
 
   postPatch = ''
@@ -31,11 +31,11 @@ in python3Packages.buildPythonApplication rec {
     patchShebangs repo_utils/test_files
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     python3Packages.setuptools
   ];
 
-  propagatedBuildInputs = with python3Packages; [
+  dependencies = with python3Packages; [
     pywfa
     rich
     edlib
@@ -46,6 +46,7 @@ in python3Packages.buildPythonApplication rec {
     pytabix
     bwapy
     pandas
+    pyabpoa
   ];
 
   makeWrapperArgs = [
