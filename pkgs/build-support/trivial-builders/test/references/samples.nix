@@ -18,8 +18,8 @@
   norefsDup = writeText "hi" "hello";
   helloRef = writeText "hi" "hello ${hello}";
   helloRefDup = writeText "hi" "hello ${hello}";
-  path = ./samples.nix;
-  pathLike.outPath = ./samples.nix;
+  path = ./apath.txt;
+  pathLike.outPath = ./apath.txt;
   helloFigletRef = writeText "hi" "hello ${hello} ${figlet}";
   selfRef = runCommand "self-ref-1" { } "echo $out >$out";
   selfRef2 = runCommand "self-ref-2" { } ''echo "${figlet}, $out" >$out'';
