@@ -1,9 +1,6 @@
 #!/usr/bin/env bash
 
-IFS="
-"
-
-for dll in $(find -iname \*.dll)
+while IFS= read -r -d '' dll
 do
     baseName="$(basename "$dll" | sed "s/.dll$//i")"
     if pkg-config "$baseName"
@@ -19,4 +16,4 @@ do
             echo "$dll and $candidateDll share the same name but have different contents, leaving alone."
         fi
     fi
-done
+done <   <(find . -iname '*.dll' -print0)

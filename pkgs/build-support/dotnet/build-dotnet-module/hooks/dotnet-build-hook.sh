@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 dotnetBuildHook() {
     echo "Executing dotnetBuildHook"
 

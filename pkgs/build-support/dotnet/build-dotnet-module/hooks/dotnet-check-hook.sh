@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 dotnetCheckHook() {
     echo "Executing dotnetCheckHook"
 
@@ -7,18 +8,24 @@ dotnetCheckHook() {
     local -r dotnetBuildType="${dotnetBuildType-Release}"
     local -r dotnetRuntimeId="${dotnetRuntimeId-$hostRuntimeId}"
 
+    local dotnetProjectFilesArray
+    local dotnetTestProjectFilesArray
+    local dotnetTestFlagsArray
+    local dotnetDisabledTestsArray
+    local dotnetRuntimeDepsArray
+
     if [[ -n $__structuredAttrs ]]; then
-        local dotnetProjectFilesArray=( "${dotnetProjectFiles[@]}" )
-        local dotnetTestProjectFilesArray=( "${dotnetTestProjectFiles[@]}" )
-        local dotnetTestFlagsArray=( "${dotnetTestFlags[@]}" )
-        local dotnetDisabledTestsArray=( "${dotnetDisabledTests[@]}" )
-        local dotnetRuntimeDepsArray=( "${dotnetRuntimeDeps[@]}" )
+        dotnetProjectFilesArray=( "${dotnetProjectFiles[@]}" )
+        dotnetTestProjectFilesArray=( "${dotnetTestProjectFiles[@]}" )
+        dotnetTestFlagsArray=( "${dotnetTestFlags[@]}" )
+        dotnetDisabledTestsArray=( "${dotnetDisabledTests[@]}" )
+        dotnetRuntimeDepsArray=( "${dotnetRuntimeDeps[@]}" )
     else
-        local dotnetProjectFilesArray=($dotnetProjectFiles)
-        local dotnetTestProjectFilesArray=($dotnetTestProjectFiles)
-        local dotnetTestFlagsArray=($dotnetTestFlags)
-        local dotnetDisabledTestsArray=($dotnetDisabledTests)
-        local dotnetRuntimeDepsArray=($dotnetRuntimeDeps)
+        mapfile -t dotnetProjectFilesArray <<< "$dotnetProjectFiles"
+        mapfile -t dotnetTestProjectFilesArray <<< "$dotnetTestProjectFiles"
+        mapfile -t dotnetTestFlagsArray <<< "$dotnetTestFlags"
+        mapfile -t dotnetDisabledTestsArray <<< "$dotnetDisabledTests"
+        mapfile -t dotnetRuntimeDepsArray <<< "$dotnetRuntimeDeps"
     fi
 
     if (( ${#dotnetDisabledTestsArray[@]} > 0 )); then

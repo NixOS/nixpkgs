@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 dotnetInstallHook() {
     echo "Executing dotnetInstallHook"
 
@@ -8,16 +9,20 @@ dotnetInstallHook() {
     local -r dotnetBuildType="${dotnetBuildType-Release}"
     local -r dotnetRuntimeId="${dotnetRuntimeId-$hostRuntimeId}"
 
+    local dotnetProjectFilesArray
+    local dotnetFlagsArray
+    local dotnetInstallFlagsArray
+    local dotnetPackFlagsArray
     if [[ -n $__structuredAttrs ]]; then
-        local dotnetProjectFilesArray=( "${dotnetProjectFiles[@]}" )
-        local dotnetFlagsArray=( "${dotnetFlags[@]}" )
-        local dotnetInstallFlagsArray=( "${dotnetInstallFlags[@]}" )
-        local dotnetPackFlagsArray=( "${dotnetPackFlags[@]}" )
+        dotnetProjectFilesArray=( "${dotnetProjectFiles[@]}" )
+        dotnetFlagsArray=( "${dotnetFlags[@]}" )
+        dotnetInstallFlagsArray=( "${dotnetInstallFlags[@]}" )
+        dotnetPackFlagsArray=( "${dotnetPackFlags[@]}" )
     else
-        local dotnetProjectFilesArray=($dotnetProjectFiles)
-        local dotnetFlagsArray=($dotnetFlags)
-        local dotnetInstallFlagsArray=($dotnetInstallFlags)
-        local dotnetPackFlagsArray=($dotnetPackFlags)
+        mapfile -t dotnetProjectFilesArray <<< "$dotnetProjectFiles"
+        mapfile -t dotnetFlagsArray <<< "$dotnetFlags"
+        mapfile -t dotnetInstallFlagsArray <<< "$dotnetInstallFlags"
+        mapfile -t dotnetPackFlagsArray <<< "$dotnetPackFlags"
     fi
 
     if [[ -n ${dotnetSelfContainedBuild-} ]]; then
