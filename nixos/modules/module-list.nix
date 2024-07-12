@@ -1035,6 +1035,7 @@
   ./services/networking/htpdate.nix
   ./services/networking/https-dns-proxy.nix
   ./services/networking/hylafax/default.nix
+  ./services/networking/hysteria.nix
   ./services/networking/i2p.nix
   ./services/networking/i2pd.nix
   ./services/networking/icecream/daemon.nix
