@@ -30,7 +30,9 @@ python3Packages.buildPythonApplication {
     cp ${pkgsStatic.busybox}/bin/busybox gns3server/compute/docker/resources/bin/busybox
   '';
 
-  propagatedBuildInputs = with python3Packages; [
+  build-system = with python3Packages; [ setuptools ];
+
+  dependencies = with python3Packages; [
     aiofiles
     aiohttp
     aiohttp-cors
@@ -44,7 +46,6 @@ python3Packages.buildPythonApplication {
     psutil
     py-cpuinfo
     sentry-sdk
-    setuptools
     truststore
     yarl
   ] ++ lib.optionals (pythonOlder "3.9") [
@@ -69,7 +70,7 @@ python3Packages.buildPythonApplication {
   checkInputs = with python3Packages; [
     pytest-aiohttp
     pytest-rerunfailures
-    (pytestCheckHook.override { pytest = pytest_7; })
+    pytestCheckHook
   ];
 
   pytestFlagsArray = [
