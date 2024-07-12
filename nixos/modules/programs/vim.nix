@@ -20,7 +20,7 @@ in
   # TODO: convert it into assert after 24.11 release
   config = lib.mkIf (cfg.enable || cfg.defaultEditor) {
     warnings = lib.mkIf (cfg.defaultEditor && !cfg.enable) [
-      "programs.vim.defaultEditor will only work if programs.vim.enable is enabled, will be encfored after the 24.11 release"
+      "programs.vim.defaultEditor will only work if programs.vim.enable is enabled, which will be enforced after the 24.11 release"
     ];
     environment = {
       systemPackages = [ cfg.package ];
