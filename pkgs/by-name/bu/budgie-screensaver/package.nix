@@ -15,6 +15,7 @@
   nix-update-script,
   pkg-config,
   systemd,
+  testers,
   wrapGAppsHook3,
   xorg,
 }:
@@ -58,6 +59,11 @@ stdenv.mkDerivation (finalAttrs: {
   env.NIX_CFLAGS_COMPILE = "-D_POSIX_C_SOURCE";
 
   passthru = {
+    tests.version = testers.testVersion {
+      package = finalAttrs.finalPackage;
+      command = "budgie-screensaver-command --version";
+    };
+
     updateScript = nix-update-script { };
   };
 
