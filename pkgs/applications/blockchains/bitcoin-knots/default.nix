@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchurl
+, fetchpatch2
 , autoreconfHook
 , pkg-config
 , util-linux
@@ -31,6 +32,14 @@ stdenv.mkDerivation rec {
     url = "https://bitcoinknots.org/files/26.x/${version}/bitcoin-${version}.tar.gz";
     hash = "sha256-PqpePDna2gpCzF2K43N4h6cV5Y9w/e5ZcUvaNEaFaIk=";
   };
+
+  patches = [
+    # upnp: add compatibility for miniupnpc 2.2.8
+    (fetchpatch2 {
+      url = "https://github.com/bitcoinknots/bitcoin/commit/643014424359a4783cf9c73bee3346ac2f04e713.patch?full_index=1";
+      hash = "sha256-FdLoNH3+ZZTbqrwRvhbAeJuGz4SgnIvoWUBzRxjfzs8=";
+    })
+  ];
 
   nativeBuildInputs =
     [ autoreconfHook pkg-config ]

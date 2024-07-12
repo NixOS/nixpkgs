@@ -26,6 +26,8 @@ stdenv.mkDerivation rec {
     # Fixes several issues with `osint.m4` that causes incorrect check failures when using newer
     # versions of clang: missing `stdint.h` for `uint8_t` and unused `sa_len_ptr`.
     ./clang-osint-m4.patch
+    # Fixes build with miniupnpc 2.2.8.
+    ./dante-1.4.3-miniupnpc-2.2.8.patch
   ] ++ lib.optionals remove_getaddrinfo_checks [
     (fetchpatch {
       name = "0002-osdep-m4-Remove-getaddrinfo-too-low-checks.patch";
