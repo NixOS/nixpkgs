@@ -44,7 +44,7 @@ cargoBuildHook() {
         ${cargoBuildNoDefaultFeaturesFlag} \
         ${cargoBuildFeaturesFlag} \
         ${cargoBuildFlags} \
-        ${cargoBuildFlagsArray[@]}
+        ${cargoBuildFlagsArray+"${cargoBuildFlagsArray[@]}"}
     )
 
     if [ ! -z "${buildAndTestSubdir-}" ]; then
