@@ -4,7 +4,6 @@
   fetchFromGitHub,
   accountsservice,
   alsa-lib,
-  budgie,
   budgie-screensaver,
   docbook-xsl-nons,
   glib,
@@ -24,6 +23,7 @@
   libpulseaudio,
   libuuid,
   libwnck,
+  magpie,
   mesa,
   meson,
   ninja,
@@ -93,7 +93,7 @@ stdenv.mkDerivation (finalAttrs: {
     libpulseaudio
     libuuid
     libwnck
-    budgie.magpie
+    magpie
     mesa
     polkit
     sassc

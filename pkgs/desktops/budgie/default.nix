@@ -5,7 +5,5 @@ lib.makeScope newScope (
   let
     inherit (self) callPackage;
   in
-  {
-    magpie = callPackage ./magpie { };
-  }
+  { }
 )

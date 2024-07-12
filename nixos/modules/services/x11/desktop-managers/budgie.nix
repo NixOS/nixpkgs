@@ -248,7 +248,7 @@ in {
 
     # Register packages for udev.
     services.udev.packages = with pkgs; [
-      budgie.magpie
+      magpie
     ];
 
     # Shell integration for MATE Terminal.
