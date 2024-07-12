@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
 
     homepage = "https://www.gnu.org/software/cflow/";
 
-    maintainers = [ maintainers.vrthra ];
+    maintainers = [ ];
 
     platforms = platforms.linux ++ platforms.darwin;
   };

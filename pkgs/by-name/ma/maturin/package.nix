@@ -1,10 +1,14 @@
-{ callPackage
-, lib
-, stdenv
-, fetchFromGitHub
-, rustPlatform
-, libiconv
-, Security
+{
+  callPackage,
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  darwin,
+  libiconv,
+  testers,
+  nix-update-script,
+  maturin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -20,16 +24,25 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-EuMPcJAGz564cC9UWrlihBxRUJCtqw4jvP/SQgx2L/0=";
 
-  buildInputs = lib.optionals stdenv.isDarwin [ Security libiconv ];
+  buildInputs = lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.Security
+    libiconv
+  ];
 
   # Requires network access, fails in sandbox.
   doCheck = false;
 
-  passthru.tests.pyo3 = callPackage ./pyo3-test {};
+  passthru = {
+    tests = {
+      version = testers.testVersion { package = maturin; };
+      pyo3 = callPackage ./pyo3-test { };
+    };
 
-  meta = with lib; {
+    updateScript = nix-update-script { };
+  };
+
+  meta = {
     description = "Build and publish Rust crates Python packages";
-    mainProgram = "maturin";
     longDescription = ''
       Build and publish Rust crates with PyO3, rust-cpython, and
       cffi bindings as well as Rust binaries as Python packages.
@@ -40,7 +53,11 @@ rustPlatform.buildRustPackage rec {
     '';
     homepage = "https://github.com/PyO3/maturin";
     changelog = "https://github.com/PyO3/maturin/blob/v${version}/Changelog.md";
-    license = with licenses; [ asl20 /* or */ mit ];
-    maintainers = [ ];
+    license = with lib.licenses; [
+      asl20 # or
+      mit
+    ];
+    maintainers = with lib.maintainers; [ getchoo ];
+    mainProgram = "maturin";
   };
 }
