@@ -39,6 +39,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-mz+Yh3NK2Tag+MWVofFFXYYXspxhmYBD6YCiuATpZSI=";
   };
 
+  outputs = [
+    "out"
+    "man"
+  ];
+
   patches = [
     (substituteAll {
       src = ./fix-paths.patch;
