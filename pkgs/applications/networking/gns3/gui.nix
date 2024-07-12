@@ -66,7 +66,7 @@ python3Packages.buildPythonApplication rec {
     command = "${lib.getExe gns3-gui} --version";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Graphical Network Simulator 3 GUI (${channel} release)";
     longDescription = ''
       Graphical user interface for controlling the GNS3 network simulator. This
@@ -75,9 +75,9 @@ python3Packages.buildPythonApplication rec {
     '';
     homepage = "https://www.gns3.com/";
     changelog = "https://github.com/GNS3/gns3-gui/releases/tag/v${version}";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ anthonyroussel ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ anthonyroussel ];
     mainProgram = "gns3";
   };
 }

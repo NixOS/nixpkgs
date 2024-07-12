@@ -90,7 +90,7 @@ python3Packages.buildPythonApplication {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Graphical Network Simulator 3 server (${channel} release)";
     longDescription = ''
       The GNS3 server manages emulators such as Dynamips, VirtualBox or
@@ -99,9 +99,9 @@ python3Packages.buildPythonApplication {
     '';
     homepage = "https://www.gns3.com/";
     changelog = "https://github.com/GNS3/gns3-server/releases/tag/v${version}";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ anthonyroussel ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ anthonyroussel ];
     mainProgram = "gns3server";
   };
 }
