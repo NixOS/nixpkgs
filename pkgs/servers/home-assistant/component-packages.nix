@@ -1140,6 +1140,7 @@
       bluetooth-auto-recovery
       bluetooth-data-tools
       dbus-fast
+      eq3btsmart
       esphome-dashboard-api
       fnv-hash-fast
       ha-ffmpeg
@@ -1154,7 +1155,7 @@
       sqlalchemy
       webrtc-noise-gain
       zeroconf
-    ]; # missing inputs: eq3btsmart
+    ];
     "escea" = ps: with ps; [
       pescea
     ];
@@ -5400,6 +5401,7 @@
     "environment_canada"
     "epion"
     "epson"
+    "eq3btsmart"
     "escea"
     "esphome"
     "eufylife_ble"

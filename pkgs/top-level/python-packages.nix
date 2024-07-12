@@ -2487,6 +2487,8 @@ self: super: with self; {
 
   construct-classes = callPackage ../development/python-modules/construct-classes { };
 
+  construct-typing = callPackage ../development/python-modules/construct-typing { };
+
   consul = callPackage ../development/python-modules/consul { };
 
   container-inspector = callPackage ../development/python-modules/container-inspector { };
@@ -3927,6 +3929,8 @@ self: super: with self; {
   epitran = callPackage ../development/python-modules/epitran { };
 
   epson-projector = callPackage ../development/python-modules/epson-projector { };
+
+  eq3btsmart = callPackage ../development/python-modules/eq3btsmart { };
 
   equinox = callPackage ../development/python-modules/equinox { };
 
