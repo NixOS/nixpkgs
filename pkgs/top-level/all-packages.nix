@@ -9626,10 +9626,6 @@ with pkgs;
 
   lcms = lcms2;
 
-  lib2geom = callPackage ../development/libraries/lib2geom {
-    stdenv = if stdenv.cc.isClang then llvmPackages_13.stdenv else stdenv;
-  };
-
   libacr38u = callPackage ../tools/security/libacr38u {
     inherit (darwin.apple_sdk.frameworks) IOKit;
   };
