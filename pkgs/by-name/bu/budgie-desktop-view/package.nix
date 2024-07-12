@@ -8,6 +8,7 @@
   intltool,
   meson,
   ninja,
+  nix-update-script,
   pkg-config,
   vala,
   wrapGAppsHook3,
@@ -21,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "BuddiesOfBudgie";
     repo = "budgie-desktop-view";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-k6VfAGWvUarhBFnREasOvWH3M9uuT5SFUpMFmKo1fmE=";
+    hash = "sha256-k6VfAGWvUarhBFnREasOvWH3M9uuT5SFUpMFmKo1fmE=";
   };
 
   nativeBuildInputs = [
@@ -41,12 +42,17 @@ stdenv.mkDerivation (finalAttrs: {
 
   mesonFlags = [ (lib.mesonBool "werror" false) ];
 
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
   meta = {
     description = "Official Budgie desktop icons application/implementation";
     homepage = "https://github.com/BuddiesOfBudgie/budgie-desktop-view";
-    mainProgram = "org.buddiesofbudgie.budgie-desktop-view";
+    changelog = "https://github.com/BuddiesOfBudgie/budgie-desktop-view/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
-    platforms = lib.platforms.linux;
     maintainers = lib.teams.budgie.members;
+    mainProgram = "org.buddiesofbudgie.budgie-desktop-view";
+    platforms = lib.platforms.linux;
   };
 })
