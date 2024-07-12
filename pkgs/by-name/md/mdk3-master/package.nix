@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/charlesxsh/mdk3-master/blob/${src.rev}/CHANGELOG";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ pinpox ];
-    mainProgram = "mdk3-master";
+    mainProgram = "mdk3";
     platforms = platforms.all;
   };
 }
