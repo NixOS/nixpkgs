@@ -104,7 +104,7 @@ in {
       cursorTheme = mkDefault { name = "Qogir"; package = pkgs.qogir-icon-theme; };
     };
 
-    services.xserver.desktopManager.budgie.sessionPath = [ pkgs.budgie.budgie-desktop-view ];
+    services.xserver.desktopManager.budgie.sessionPath = [ pkgs.budgie-desktop-view ];
 
     environment.extraInit = ''
       ${concatMapStrings (p: ''
@@ -124,7 +124,7 @@ in {
         budgie-backgrounds
         budgie-control-center'
         (budgie-desktop-with-plugins.override { plugins = cfg.extraPlugins; })
-        budgie.budgie-desktop-view
+        budgie-desktop-view
         budgie.budgie-screensaver
         budgie.budgie-session
 
