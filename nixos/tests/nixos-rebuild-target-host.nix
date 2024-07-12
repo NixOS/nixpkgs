@@ -69,6 +69,8 @@ import ./make-test-python.nix ({ pkgs, ... }: {
         StrictHostKeyChecking=no
       '';
 
+      sshOpts = "NIX_SSHOPTS='-o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no'";
+
       targetConfigJSON = pkgs.writeText "target-configuration.json"
         (builtins.toJSON nodes.target.system.build.targetConfig);
 
@@ -137,5 +139,12 @@ import ./make-test-python.nix ({ pkgs, ... }: {
         tmp_dir = "/var/folder/veryveryveryveryverylongpathnamethatdoesnotworkwithcontrolpath"
         deployer.succeed(f"mkdir -p {tmp_dir}")
         deployer.succeed(f"TMPDIR={tmp_dir} nixos-rebuild switch -I nixos-config=/root/configuration-1.nix --target-host root@target &>/dev/console")
+        target_hostname = deployer.succeed("ssh alice@target cat /etc/hostname").rstrip()
+        assert target_hostname == "config-1-deployed", f"{target_hostname=}"
+
+      # This removes the ssh config
+      with subtest("Deploy with NIX_SSHOPTS variable"):
+        deployer.succeed("rm -f ~root/.ssh/config")
+        deployer.succeed("${sshOpts} nixos-rebuild switch -I nixos-config=/root/configuration-2.nix --target-host root@target &>/dev/console")
     '';
 })

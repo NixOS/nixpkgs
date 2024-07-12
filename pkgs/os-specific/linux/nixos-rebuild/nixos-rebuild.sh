@@ -349,6 +349,25 @@ nixFlakeBuild() {
     fi
 }
 
+# See cleanup function below
+tmpDir=$(mktemp -t -d nixos-rebuild.XXXXXX)
+
+if [[ ${#tmpDir} -ge 60 ]]; then
+    # Very long tmp dirs lead to "too long for Unix domain socket"
+    # SSH ControlPath errors. Especially macOS sets long TMPDIR paths.
+    rmdir "$tmpDir"
+    tmpDir=$(TMPDIR= mktemp -t -d nixos-rebuild.XXXXXX)
+fi
+
+cleanup() {
+    for ctrl in "$tmpDir"/ssh-*; do
+        ssh -o ControlPath="$ctrl" -O exit dummyhost 2>/dev/null || true
+    done
+    rm -rf "$tmpDir"
+}
+trap cleanup EXIT
+
+SSHOPTS="$NIX_SSHOPTS -o ControlMaster=auto -o ControlPath=$tmpDir/ssh-%n -o ControlPersist=60"
 
 if [ -z "$action" ]; then showSyntax; fi
 
@@ -429,24 +448,6 @@ if [[ ! -z "$specialisation" && ! "$action" = switch && ! "$action" = test ]]; t
     exit 1
 fi
 
-tmpDir=$(mktemp -t -d nixos-rebuild.XXXXXX)
-
-if [[ ${#tmpDir} -ge 60 ]]; then
-    # Very long tmp dirs lead to "too long for Unix domain socket"
-    # SSH ControlPath errors. Especially macOS sets long TMPDIR paths.
-    rmdir "$tmpDir"
-    tmpDir=$(TMPDIR= mktemp -t -d nixos-rebuild.XXXXXX)
-fi
-
-cleanup() {
-    for ctrl in "$tmpDir"/ssh-*; do
-        ssh -o ControlPath="$ctrl" -O exit dummyhost 2>/dev/null || true
-    done
-    rm -rf "$tmpDir"
-}
-trap cleanup EXIT
-
-
 # Re-execute nixos-rebuild from the Nixpkgs tree.
 if [[ -z $_NIXOS_REBUILD_REEXEC && -n $canRun && -z $fast ]]; then
     if [[ -z $buildingAttribute ]]; then
@@ -488,8 +489,6 @@ if [ "$action" = edit ]; then
     fi
     exit 1
 fi
-
-SSHOPTS="$NIX_SSHOPTS -o ControlMaster=auto -o ControlPath=$tmpDir/ssh-%n -o ControlPersist=60"
 
 # First build Nix, since NixOS may require a newer version than the
 # current one.
