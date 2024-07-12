@@ -1557,6 +1557,11 @@ self: super: {
   # 2021-12-26: Too strict bounds on doctest
   polysemy-plugin = doJailbreak super.polysemy-plugin;
 
+  # Needs matching lsp-types
+  lsp_2_4_0_0 = super.lsp_2_4_0_0.override {
+    lsp-types = self.lsp-types_2_1_1_0;
+  };
+
   # 2024-02-28: The Hackage version dhall-lsp-server-1.1.3 requires
   # lsp-1.4.0.0 which is hard to build with this LTS. However, the latest
   # git version of dhall-lsp-server works with lsp-2.1.0.0, and only
