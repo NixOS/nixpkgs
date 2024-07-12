@@ -1,17 +1,18 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, accountsservice
-, budgie
-, gtk3
-, intltool
-, libgee
-, libpeas
-, meson
-, ninja
-, pkg-config
-, sassc
-, vala
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  accountsservice,
+  budgie,
+  gtk3,
+  intltool,
+  libgee,
+  libpeas,
+  meson,
+  ninja,
+  pkg-config,
+  sassc,
+  vala,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
