@@ -329,8 +329,18 @@ let
       ./r11178.patch
       # The fixed implementation of check_and_set_dir() still has a bug where it doesn't allow nonexistent directories.
       # We need this so that the overridden directories can be created on startup.
-      # That can be worked around with `mkdir` in the wrapper but it's better to fix at the srouce.
+      # That can be worked around with `mkdir` in the wrapper but it's better to fix at the source.
       ./r11204.patch
+      # This is a part of r11273, but not the full patch, since the same revision contains changes unrelated to UPNP.
+      # It's necessary because miniupnpc had breaking changes.
+      # See also:
+      # - https://github.com/NixOS/nixpkgs/pull/325273
+      # - https://github.com/miniupnp/miniupnp/issues/758
+      # - https://github.com/NixOS/nixpkgs/pull/326402
+      # Additionally, the patch does not apply cleanly as-is due to whitespace differences.
+      # So, this patch has first been applied `patch -p1 --ignore-whitespace < miniupnpc.patch`.
+      # Then, i took the `diff --unified` of the result and got a visually identical patch.
+      ./miniupnpc.patch
     ];
 
     nativeBuildInputs = [ pkg-config ];
