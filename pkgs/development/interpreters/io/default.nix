@@ -66,7 +66,6 @@ stdenv.mkDerivation {
     maintainers = with maintainers; [
       raskin
       maggesi
-      vrthra
     ];
     platforms = [ "x86_64-linux" ];
   };

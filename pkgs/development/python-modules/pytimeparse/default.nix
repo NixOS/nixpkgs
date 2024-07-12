@@ -33,6 +33,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/wroberts/pytimeparse";
     changelog = "https://github.com/wroberts/pytimeparse/releases/tag/${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ vrthra ];
+    maintainers = with maintainers; [ ];
   };
 }
