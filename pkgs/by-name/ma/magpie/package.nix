@@ -40,6 +40,7 @@
   wrapGAppsHook3,
   gi-docgen,
   sysprof,
+  testers,
   libsysprof-capture,
   desktop-file-utils,
   libcap_ng,
@@ -160,6 +161,8 @@ stdenv.mkDerivation (finalAttrs: {
         fi
         touch $out
       '';
+
+      pkg-config = testers.hasPkgConfigModules { package = finalAttrs.finalPackage; };
     };
   };
 
@@ -169,5 +172,11 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl2Plus;
     maintainers = lib.teams.budgie.members;
     platforms = lib.platforms.linux;
+    pkgConfigModules = [
+      "libmagpie-0"
+      "magpie-clutter-0"
+      "magpie-cogl-0"
+      "magpie-cogl-pango-0"
+    ];
   };
 })
