@@ -418,12 +418,8 @@ buildGoModule rec {
     let
       k3s_version = "k3s_" + lib.replaceStrings [ "." ] [ "_" ] (lib.versions.majorMinor version);
     in
-    {
-      auto-deploy = nixosTests.k3s.auto-deploy.${k3s_version};
-      etcd = nixosTests.k3s.etcd.${k3s_version};
-      single-node = nixosTests.k3s.single-node.${k3s_version};
-      multi-node = nixosTests.k3s.multi-node.${k3s_version};
-    };
+    lib.mapAttrs (name: value: nixosTests.k3s.${name}.${k3s_version}) nixosTests.k3s;
+
   passthru.tests = passthru.mkTests k3sVersion;
 
   meta = baseMeta;
