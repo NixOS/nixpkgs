@@ -850,9 +850,7 @@ with pkgs;
 
   docker-slim = callPackage ../applications/virtualization/docker-slim { };
 
-  doc2go = callPackage ../development/tools/doc2go {
-    buildGoModule = buildGo122Module;
-  };
+  doc2go = callPackage ../development/tools/doc2go { };
 
   docker-sync = callPackage ../tools/misc/docker-sync { };
 
@@ -2182,9 +2180,7 @@ with pkgs;
 
   commitlint = nodePackages."@commitlint/cli";
 
-  conform = callPackage ../applications/version-management/conform {
-    buildGoModule = buildGo122Module;
-  };
+  conform = callPackage ../applications/version-management/conform { };
 
   datalad = callPackage ../applications/version-management/datalad { };
 
@@ -6559,9 +6555,7 @@ with pkgs;
 
   cicero-tui = callPackage ../tools/misc/cicero-tui { };
 
-  cilium-cli = callPackage ../applications/networking/cluster/cilium {
-    buildGoModule = buildGo122Module;
-  };
+  cilium-cli = callPackage ../applications/networking/cluster/cilium { };
 
   cjdns = callPackage ../tools/networking/cjdns { };
   cjdns-tools = callPackage ../tools/admin/cjdns-tools { };
@@ -18602,9 +18596,7 @@ with pkgs;
 
   gtranslator = callPackage ../tools/text/gtranslator { };
 
-  gtree = callPackage ../tools/text/gtree {
-    buildGoModule = buildGo122Module;
-  };
+  gtree = callPackage ../tools/text/gtree { };
 
   guff = callPackage ../tools/graphics/guff { };
 
@@ -19464,9 +19456,7 @@ with pkgs;
   terracognita = callPackage ../development/tools/misc/terracognita { };
 
   terraform-lsp = callPackage ../development/tools/misc/terraform-lsp { };
-  terraform-ls = callPackage ../development/tools/misc/terraform-ls {
-    buildGoModule = buildGo122Module;
-  };
+  terraform-ls = callPackage ../development/tools/misc/terraform-ls { };
 
   terraformer = callPackage ../development/tools/misc/terraformer { };
 
@@ -25444,9 +25434,7 @@ with pkgs;
   grafana = callPackage ../servers/monitoring/grafana { };
   grafanaPlugins = callPackages ../servers/monitoring/grafana/plugins { };
 
-  grafana-agent = callPackage ../servers/monitoring/grafana-agent {
-    buildGoModule = buildGo122Module;
-  };
+  grafana-agent = callPackage ../servers/monitoring/grafana-agent { };
 
   grafana-loki = callPackage ../servers/monitoring/loki { };
   promtail = callPackage ../servers/monitoring/loki/promtail.nix { };
@@ -25953,9 +25941,7 @@ with pkgs;
 
   azuredatastudio = callPackage ../applications/misc/azuredatastudio { };
 
-  miniflux = callPackage ../servers/miniflux {
-    buildGoModule = buildGo122Module;
-  };
+  miniflux = callPackage ../servers/miniflux { };
 
   inherit (callPackage ../servers/mir { })
     mir
@@ -26347,9 +26333,7 @@ with pkgs;
 
   systemd-journal2gelf = callPackage ../tools/system/systemd-journal2gelf { };
 
-  tailscale = callPackage ../servers/tailscale {
-    buildGoModule = buildGo122Module;
-  };
+  tailscale = callPackage ../servers/tailscale { };
 
   tailscale-systray = callPackage ../applications/misc/tailscale-systray { };
 
@@ -27337,9 +27321,7 @@ with pkgs;
 
   goverview = callPackage ../tools/security/goverview { };
 
-  go-tools = callPackage ../development/tools/go-tools {
-    buildGoModule = buildGo122Module;
-  };
+  go-tools = callPackage ../development/tools/go-tools { };
 
   gotest = callPackage ../development/tools/gotest { };
 
@@ -28057,9 +28039,7 @@ with pkgs;
 
   clearlooks-phenix = callPackage ../data/themes/clearlooks-phenix { };
 
-  cnspec = callPackage ../tools/security/cnspec {
-    buildGoModule = buildGo122Module;
-  };
+  cnspec = callPackage ../tools/security/cnspec { };
 
   cnstrokeorder = callPackage ../data/fonts/cnstrokeorder { };
 
@@ -31746,10 +31726,7 @@ with pkgs;
     buildGoModule = buildGo121Module;
     go = go_1_21;
   }) k3s_1_28 k3s_1_29;
-  inherit (callPackage ../applications/networking/cluster/k3s {
-    buildGoModule = buildGo122Module;
-    go = go_1_22;
-  }) k3s_1_30;
+  inherit (callPackage ../applications/networking/cluster/k3s { }) k3s_1_30;
   k3s = k3s_1_30;
 
   k3sup = callPackage ../applications/networking/cluster/k3sup { };
@@ -33759,10 +33736,7 @@ with pkgs;
     buildGoModule = buildGo121Module;
     go = go_1_21;
   }) rke2_stable;
-  inherit (callPackage ../applications/networking/cluster/rke2 {
-    buildGoModule = buildGo122Module;
-    go = go_1_22;
-  }) rke2_latest rke2_testing;
+  inherit (callPackage ../applications/networking/cluster/rke2 { }) rke2_latest rke2_testing;
   rke2 = rke2_stable;
 
   rocketchat-desktop = callPackage ../applications/networking/instant-messengers/rocketchat-desktop { };
@@ -33908,9 +33882,7 @@ with pkgs;
 
   siproxd = callPackage ../applications/networking/siproxd { };
 
-  sish = callPackage ../tools/networking/sish {
-    buildGoModule = buildGo122Module;
-  };
+  sish = callPackage ../tools/networking/sish { };
 
   sky = libsForQt5.callPackage ../applications/networking/instant-messengers/sky {
     libjpeg_turbo = libjpeg8;
@@ -39757,9 +39729,7 @@ with pkgs;
 
   ib-controller = callPackage ../applications/office/ib/controller { jdk=oraclejdk8; };
 
-  vcluster = callPackage ../applications/networking/cluster/vcluster {
-    buildGoModule = buildGo122Module;
-  };
+  vcluster = callPackage ../applications/networking/cluster/vcluster { };
 
   sshportal = callPackage ../servers/sshportal { };
 
