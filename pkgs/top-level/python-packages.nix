@@ -11547,6 +11547,8 @@ self: super: with self; {
 
   pymedio = callPackage ../development/python-modules/pymedio { };
 
+  pymee = callPackage ../development/python-modules/pymee { };
+
   pymeeus = callPackage ../development/python-modules/pymeeus { };
 
   pymelcloud = callPackage ../development/python-modules/pymelcloud { };
