@@ -26753,8 +26753,8 @@ with pkgs;
 
   fatrace = callPackage ../os-specific/linux/fatrace { };
 
-  ffado = libsForQt5.callPackage ../os-specific/linux/ffado { };
-  ffado-mixer = libsForQt5.callPackage ../os-specific/linux/ffado { withMixer = true; };
+  ffado = callPackage ../os-specific/linux/ffado { };
+  ffado-mixer = callPackage ../os-specific/linux/ffado { withMixer = true; };
   libffado = ffado;
 
   fbterm = callPackage ../os-specific/linux/fbterm { };
