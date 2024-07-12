@@ -30,6 +30,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-N8x9hdbaMDisTbQPJedNO4UMLnCn+Q2hhm4udJZgQlc=";
   };
 
+  outputs = [
+    "out"
+    "man"
+  ];
+
   nativeBuildInputs = [
     intltool
     meson
