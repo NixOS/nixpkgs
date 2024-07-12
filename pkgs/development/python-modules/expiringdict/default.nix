@@ -2,11 +2,10 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch2,
   dill,
-  coverage,
-  coveralls,
   mock,
-  nose,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -23,19 +22,19 @@ buildPythonPackage rec {
     hash = "sha256-vRhJSHIqc51I+s/wndtfANM44CKW3QS1iajqyoSBf0I=";
   };
 
-  nativeCheckInputs = [
-    dill
-    coverage
-    coveralls
-    mock
-    nose
+  patches = [
+    # apply mailgun/expiringdict#49 to address NixOS/nixpkgs#326513
+    (fetchpatch2 {
+      url = "https://github.com/mailgun/expiringdict/commit/1c0f82232d20f8b3b31c9269a4d0e9510c1721a6.patch";
+      hash = "sha256-IeeJVb2tOwRhEPNGqM30fNZyz3jFcnZNWC3I6K1+hSY=";
+    })
   ];
 
-  checkPhase = ''
-    runHook preCheck
-    nosetests -v --with-coverage --cover-package=expiringdict
-    runHook postCheck
-  '';
+  nativeCheckInputs = [
+    dill
+    mock
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [ "expiringdict" ];
 
