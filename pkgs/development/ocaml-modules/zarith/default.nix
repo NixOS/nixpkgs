@@ -9,12 +9,12 @@ else
 
 stdenv.mkDerivation rec {
   pname = "ocaml${ocaml.version}-zarith";
-  version = "1.13";
+  version = "1.14";
   src = fetchFromGitHub {
     owner = "ocaml";
     repo = "Zarith";
     rev = "release-${version}";
-    sha256 = "sha256-CNVKoJeO3fsmWaV/dwnUA8lgI4ZlxR/LKCXpCXUrpSg=";
+    sha256 = "sha256-xUrBDr+M8uW2KOy7DZieO/vDgsSOnyBnpOzQDlXJ0oE=";
   };
 
   nativeBuildInputs = [ pkg-config ocaml findlib ];
