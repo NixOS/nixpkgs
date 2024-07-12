@@ -1,4 +1,5 @@
-{ targetPackages
+{ stdenv
+, targetPackages
 , lib
 , makeSetupHook
 , dieHook
@@ -14,6 +15,7 @@ makeSetupHook {
 
   substitutions = {
     cc = "${cc}/bin/${cc.targetPrefix}cc ${lib.escapeShellArgs (map (s: "-fsanitize=${s}") sanitizers)}";
+    maybeStaticFlag = lib.optionalString stdenv.hostPlatform.isStatic "-static";
   };
 
   passthru = {
