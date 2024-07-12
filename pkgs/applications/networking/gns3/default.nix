@@ -26,13 +26,13 @@ in {
 
   serverStable = mkServer {
     channel = "stable";
-    version = "2.2.47";
-    hash = "sha256-iZ/1qACPLe7r1cZMhJbFRjVt/FlVgadBgp9tJwvYSi0=";
+    version = "2.2.49";
+    hash = "sha256-fI49MxA6b2kPkUihLl32a6jo8oHcEwDEjmvSVDj8/So=";
   };
 
   serverPreview = mkServer {
     channel = "stable";
-    version = "2.2.47";
-    hash = "sha256-iZ/1qACPLe7r1cZMhJbFRjVt/FlVgadBgp9tJwvYSi0=";
+    version = "2.2.49";
+    hash = "sha256-fI49MxA6b2kPkUihLl32a6jo8oHcEwDEjmvSVDj8/So=";
   };
 }
