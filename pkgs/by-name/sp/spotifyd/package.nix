@@ -8,6 +8,8 @@
   openssl,
   withALSA ? stdenv.isLinux,
   alsa-lib,
+  withJack ? stdenv.isLinux,
+  libjack2,
   withPulseAudio ? config.pulseaudio or stdenv.isLinux,
   libpulseaudio,
   withPortAudio ? stdenv.isDarwin,
@@ -37,7 +39,8 @@ rustPackages.rustPlatform.buildRustPackage rec {
 
   buildInputs =
     lib.optionals stdenv.isLinux [ openssl ]
-    ++ lib.optional withALSA alsa-lib
+    ++ lib.optional (withALSA || withJack) alsa-lib
+    ++ lib.optional withJack libjack2
     ++ lib.optional withPulseAudio libpulseaudio
     ++ lib.optional withPortAudio portaudio
     ++ lib.optional (withMpris || withKeyring) dbus;
@@ -45,6 +48,7 @@ rustPackages.rustPlatform.buildRustPackage rec {
   buildNoDefaultFeatures = true;
   buildFeatures =
     lib.optional withALSA "alsa_backend"
+    ++ lib.optional withJack "rodiojack_backend"
     ++ lib.optional withPulseAudio "pulseaudio_backend"
     ++ lib.optional withPortAudio "portaudio_backend"
     ++ lib.optional withMpris "dbus_mpris"
