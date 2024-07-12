@@ -22,6 +22,7 @@
   libxslt,
   gettext,
   makeWrapper,
+  nix-update-script,
   systemd,
   xorg,
   libepoxy,
@@ -47,9 +48,9 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     (substituteAll {
       src = ./fix-paths.patch;
-      gsettings = "${glib.bin}/bin/gsettings";
-      dbusLaunch = "${dbus.lib}/bin/dbus-launch";
-      bash = "${bash}/bin/bash";
+      gsettings = lib.getExe' glib "gsettings";
+      dbusLaunch = lib.getExe' dbus "dbus-launch";
+      bash = lib.getExe bash;
     })
   ];
 
@@ -98,9 +99,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   separateDebugInfo = true;
 
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
   meta = {
     description = "Session manager for Budgie";
     homepage = "https://github.com/BuddiesOfBudgie/budgie-session";
+    changelog = "https://github.com/BuddiesOfBudgie/budgie-session/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl2Plus;
     maintainers = lib.teams.budgie.members;
     platforms = lib.platforms.linux;
