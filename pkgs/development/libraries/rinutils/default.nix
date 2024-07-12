@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation rec {
   pname = "rinutils";
-  version = "0.10.2";
+  version = "0.10.3";
 
   src = fetchurl {
     url = "https://github.com/shlomif/${pname}/releases/download/${version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-2H/hGZcit/qb1QjhNTg/8HiPvX1lXL75dXwjIS+MIXs=";
+    sha256 = "sha256-+eUn03psyMe4hwraY8qiTzKrDSn9ERbfPrtoZYMDCVU=";
   };
 
   nativeBuildInputs = [ cmake perl ];
