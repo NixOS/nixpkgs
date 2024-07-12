@@ -5,7 +5,6 @@
   dissect-btrfs,
   dissect-cim,
   dissect-clfs,
-  dissect-cobaltstrike,
   dissect-cstruct,
   dissect-esedb,
   dissect-etl,
@@ -55,13 +54,11 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-
   dependencies = [
     dissect-archive
     dissect-btrfs
     dissect-cim
     dissect-clfs
-    dissect-cobaltstrike
     dissect-cstruct
     dissect-esedb
     dissect-etl
