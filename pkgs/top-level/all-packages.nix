@@ -4666,7 +4666,7 @@ with pkgs;
   wl-mirror = callPackage ../tools/wayland/wl-mirror { };
 
   wl-screenrec = callPackage ../tools/wayland/wl-screenrec {
-    ffmpeg = ffmpeg_5;
+    ffmpeg = ffmpeg_6;
   };
 
   wleave = callPackage ../tools/wayland/wleave { };
