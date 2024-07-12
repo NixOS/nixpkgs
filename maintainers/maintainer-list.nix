@@ -4928,6 +4928,12 @@
     githubId = 579369;
     name = "Tuomas Tynkkynen";
   };
+  dezren39 = {
+    email = "drewrypope@gmail.com";
+    github = "dezren39";
+    githubId = 11225574;
+    name = "Drewry Pope";
+  };
   dfithian = {
     email = "daniel.m.fithian@gmail.com";
     name = "Daniel Fithian";
@@ -18071,6 +18077,12 @@
     github = "sdier";
     githubId = 11613056;
     name = "Scott Dier";
+  };
+  seanrmurphy = {
+    email = "sean@gopaddy.ch";
+    github = "seanrmurphy";
+    githubId = 540360;
+    name = "Sean Murphy";
   };
   SeanZicari = {
     email = "sean.zicari@gmail.com";
