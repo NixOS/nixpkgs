@@ -9525,7 +9525,9 @@ with pkgs;
   last-resort = callPackage ../data/fonts/last-resort { };
 
   ligo =
-    let ocaml_p = ocaml-ng.ocamlPackages_4_14; in
+    let ocaml_p = ocaml-ng.ocamlPackages_4_14.overrideScope (self: super: {
+      zarith = super.zarith.override { version = "1.13"; };
+    }); in
     callPackage ../development/compilers/ligo {
     coq = coq_8_13.override {
       customOCamlPackages = ocaml_p;
@@ -13776,6 +13778,11 @@ with pkgs;
 
   uftrace = callPackage ../development/tools/uftrace { };
 
+  uftraceFull = uftrace.override {
+    withLuaJIT = true;
+    withPython = true;
+  };
+
   uftpd = callPackage ../servers/ftp/uftpd {};
 
   uget = callPackage ../tools/networking/uget { };
@@ -16555,9 +16562,6 @@ with pkgs;
 
   leptosfmt = callPackage ../development/tools/rust/leptosfmt { };
 
-  maturin = callPackage ../development/tools/rust/maturin {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
   panamax = callPackage ../development/tools/rust/panamax { };
 
   ograc = callPackage ../development/tools/rust/ograc { };
@@ -26121,9 +26125,6 @@ with pkgs;
   prometheus-nextcloud-exporter = callPackage ../servers/monitoring/prometheus/nextcloud-exporter.nix { };
   prometheus-nginx-exporter = callPackage ../servers/monitoring/prometheus/nginx-exporter.nix { };
   prometheus-nginxlog-exporter = callPackage ../servers/monitoring/prometheus/nginxlog-exporter.nix { };
-  prometheus-node-exporter = callPackage ../servers/monitoring/prometheus/node-exporter.nix {
-    inherit (darwin.apple_sdk.frameworks) CoreFoundation IOKit;
-  };
   prometheus-nut-exporter = callPackage ../servers/monitoring/prometheus/nut-exporter.nix { };
   prometheus-openldap-exporter = callPackage ../servers/monitoring/prometheus/openldap-exporter.nix { } ;
   prometheus-pgbouncer-exporter = callPackage ../servers/monitoring/prometheus/pgbouncer-exporter.nix { };

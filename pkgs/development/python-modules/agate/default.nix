@@ -59,6 +59,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/wireservice/agate";
     changelog = "https://github.com/wireservice/agate/blob/${version}/CHANGELOG.rst";
     license = with licenses; [ mit ];
-    maintainers = with maintainers; [ vrthra ];
+    maintainers = with maintainers; [ ];
   };
 }

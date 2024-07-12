@@ -40,7 +40,6 @@ import ../make-test-python.nix (
   in
   {
     name = "${k3s.name}-single-node";
-    meta.maintainers = k3s.meta.maintainers;
 
     nodes.machine =
       { pkgs, ... }:
@@ -120,5 +119,7 @@ import ../make-test-python.nix (
 
         machine.shutdown()
       '';
+
+    meta.maintainers = lib.teams.k3s.members;
   }
 )

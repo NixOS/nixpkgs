@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     description = "Allow multiple web change files";
     mainProgram = "tie";
     platforms = platforms.all;
-    maintainers = with maintainers; [ vrthra ];
+    maintainers = with maintainers; [ ];
     license = licenses.abstyles;
   };
 }

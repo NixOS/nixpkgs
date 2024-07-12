@@ -34,7 +34,8 @@
 }:
 
 let
-  version = "9.1.21";
+  # minorVersion is even for stable, odd for unstable
+  version = "9.2.5";
   packInstall = swiplPath: pack:
     ''${swiplPath}/bin/swipl -g "pack_install(${pack}, [package_directory(\"${swiplPath}/lib/swipl/pack\"), silent(true), interactive(false)])." -t "halt."
     '';
@@ -43,11 +44,14 @@ stdenv.mkDerivation {
   pname = "swi-prolog";
   inherit version;
 
+  # SWI-Prolog has two repositories: swipl and swipl-devel.
+  # - `swipl`, which tracks stable releases and backports
+  # - `swipl-devel` which tracks continuous development
   src = fetchFromGitHub {
     owner = "SWI-Prolog";
-    repo = "swipl-devel";
+    repo = "swipl";
     rev = "V${version}";
-    hash = "sha256-c4OSntnwIzo6lGhpyNVtNM4el5FGrn8kcz8WkDRfQhU=";
+    hash = "sha256-WbpYu6b0WPfKoAOkBZduWK20vwOYuDUDpJuj19qzPtw=";
     fetchSubmodules = true;
   };
 

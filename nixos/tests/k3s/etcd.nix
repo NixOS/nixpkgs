@@ -125,6 +125,6 @@ import ../make-test-python.nix (
           etcd.shutdown()
     '';
 
-    meta.maintainers = etcd.meta.maintainers ++ k3s.meta.maintainers;
+    meta.maintainers = etcd.meta.maintainers ++ lib.teams.k3s.members;
   }
 )
