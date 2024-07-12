@@ -1,12 +1,12 @@
 {
   lib,
-  buildGo122Module,
+  buildGoModule,
   fetchFromGitHub,
   testers,
   wakatime-cli,
 }:
 
-buildGo122Module rec {
+buildGoModule rec {
   pname = "wakatime-cli";
   version = "1.93.0";
 

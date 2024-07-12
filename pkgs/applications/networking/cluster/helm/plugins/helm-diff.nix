@@ -1,6 +1,6 @@
-{ buildGo122Module, fetchFromGitHub, lib }:
+{ buildGoModule, fetchFromGitHub, lib }:
 
-buildGo122Module rec {
+buildGoModule rec {
   pname = "helm-diff";
   version = "3.9.8";
 

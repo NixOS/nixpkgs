@@ -60,5 +60,6 @@ in buildGoModule rec {
     description = "Official golang implementation of the Ethereum protocol";
     license = with licenses; [ lgpl3Plus gpl3Plus ];
     maintainers = with maintainers; [ RaghavSood ];
+    mainProgram = "geth";
   };
 }
