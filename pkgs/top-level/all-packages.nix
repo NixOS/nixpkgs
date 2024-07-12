@@ -226,6 +226,8 @@ with pkgs;
       }
     '');
 
+  checkMeta = callPackage ../stdenv/generic/check-meta.nix { };
+
   # addDriverRunpath is the preferred package name, as this enables
   # many more scenarios than just opengl now.
   addDriverRunpath = callPackage ../build-support/add-driver-runpath { };
