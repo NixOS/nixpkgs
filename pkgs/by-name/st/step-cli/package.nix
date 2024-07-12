@@ -3,7 +3,7 @@
   buildGoModule,
   fetchFromGitHub,
 }: let
-  version = "0.26.2";
+  version = "0.27.1";
 in
   buildGoModule {
     pname = "step-cli";
@@ -13,7 +13,7 @@ in
       owner = "smallstep";
       repo = "cli";
       rev = "refs/tags/v${version}";
-      hash = "sha256-CrV6kWgq2ldeOh5G0SgO8+q0HC1l8RuTELT3YXLxClU=";
+      hash = "sha256-+2++unFtLXQCDTem49DfO1ZjbaDWeBw0C7Z3CSGQkTk=";
     };
 
     ldflags = [
@@ -27,7 +27,7 @@ in
       rm command/certificate/remote_test.go
     '';
 
-    vendorHash = "sha256-pqwrjreysMLfVmzPE7Tj/hLdM1HO13UfmbMXvNgLd5Y=";
+    vendorHash = "sha256-1+WLdjShvprt2fqzRYsEWQj/ohn6HqLGTde+3GZq7x0=";
 
     meta = {
       description = "Zero trust swiss army knife for working with X509, OAuth, JWT, OATH OTP, etc";
