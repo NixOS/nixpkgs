@@ -207,7 +207,7 @@ async def start_updates(max_workers: int, keep_going: bool, commit: bool, packag
             eprint(e)
             sys.exit(1)
 
-def main(max_workers: int, keep_going: bool, commit: bool, packages_path: str) -> None:
+def main(max_workers: int, keep_going: bool, commit: bool, packages_path: str, skip_prompt: bool) -> None:
     with open(packages_path) as f:
         packages = json.load(f)
 
@@ -217,7 +217,8 @@ def main(max_workers: int, keep_going: bool, commit: bool, packages_path: str) -
         eprint(f" - {package['name']}")
     eprint()
 
-    confirm = input('Press Enter key to continue...')
+    confirm = '' if skip_prompt else input('Press Enter key to continue...')
+
     if confirm == '':
         eprint()
         eprint('Running update for:')
@@ -236,12 +237,13 @@ parser.add_argument('--max-workers', '-j', dest='max_workers', type=int, help='N
 parser.add_argument('--keep-going', '-k', dest='keep_going', action='store_true', help='Do not stop after first failure')
 parser.add_argument('--commit', '-c', dest='commit', action='store_true', help='Commit the changes')
 parser.add_argument('packages', help='JSON file containing the list of package names and their update scripts')
+parser.add_argument('--skip-prompt', '-s', dest='skip_prompt', action='store_true', help='Do not stop for prompts')
 
 if __name__ == '__main__':
     args = parser.parse_args()
 
     try:
-        main(args.max_workers, args.keep_going, args.commit, args.packages)
+        main(args.max_workers, args.keep_going, args.commit, args.packages, args.skip_prompt)
     except KeyboardInterrupt as e:
         # Let’s cancel outside of the main loop too.
         sys.exit(130)
