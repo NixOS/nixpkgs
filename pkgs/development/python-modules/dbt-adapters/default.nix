@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "dbt-adapters";
-  version = "1.3.2";
+  version = "1.3.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dbt-labs";
     repo = "dbt-adapters";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Erx/j1x+I4ypPqBFzJRZk3ILr3ZG97Hvk4vXe2p6cDc=";
+    hash = "sha256-M7n+WcHGBMNZ5k9GZRR05g8KzPDWjmB83iZSD16G774=";
   };
 
   build-system = [ hatchling ];
