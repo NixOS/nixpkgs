@@ -15,8 +15,6 @@ in
 
   agda2-mode = callPackage ./manual-packages/agda2-mode { };
 
-  beancount = callPackage ./manual-packages/beancount { };
-
   cask = callPackage ./manual-packages/cask { };
 
   codeium = callPackage ./manual-packages/codeium { };
