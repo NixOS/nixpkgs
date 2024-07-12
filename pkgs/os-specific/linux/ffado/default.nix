@@ -1,11 +1,9 @@
 {
   lib,
   stdenv,
-  mkDerivation,
   argp-standalone,
   dbus,
   dbus_cplusplus,
-  desktop-file-utils,
   fetchurl,
   glibmm,
   libavc1394,
@@ -18,7 +16,7 @@
   scons,
   which,
   withMixer ? false,
-  wrapQtAppsHook,
+  qt5,
 }:
 
 let
@@ -33,7 +31,7 @@ let
     else
       python311;
 in
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "ffado";
   version = "2.4.9";
 
@@ -65,7 +63,7 @@ mkDerivation rec {
     ++ lib.optionals withMixer [
       python
       python.pkgs.pyqt5
-      wrapQtAppsHook
+      qt5.wrapQtAppsHook
     ];
 
   prefixKey = "PREFIX=";
