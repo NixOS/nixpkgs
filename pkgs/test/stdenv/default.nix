@@ -96,6 +96,68 @@ let
         '';
       } // extraAttrs);
 
+  testAddFlagsTo = { name, stdenv', extraAttrs ? { } }:
+    stdenv'.mkDerivation
+      ({
+        inherit name;
+        env = {
+          string = "qux";
+        };
+
+        passAsFile = [ "buildCommand" ] ++ lib.optionals (extraAttrs ? extraTest) [ "extraTest" ];
+        buildCommand = ''
+          declare -p string
+          addFlagTo string hello
+          expected="qux hello"
+          [[ "$string" = "$expected" ]] || (echo "'\$string' was not '$expected', got '$string'" && false)
+          addFlagTo string foo
+          addFlagTo string hello
+          addFlagTo string bar
+          addFlagTo string "baz"
+          # Add the same flags again, to test that they don't get added twice
+          addFlagTo string foo
+          addFlagTo string hello
+          # Add a flag with quotes and containing some other flags as a substring
+          addFlagTo string --say=\"hello world\"
+          # And make sure it doesn't get added twice
+          addFlagTo string --say=\"hello world\"
+          expected="qux hello foo bar baz --say=\"hello world\""
+          [[ "$string" = "$expected" ]] \
+            || (echo "'\$string' was not '$expected', got '$string'" && false)
+          addFlagTo string "-bar baz"
+          addFlagTo string "-bar baz"
+          expected="qux hello foo bar baz --say=\"hello world\" -bar baz"
+          [[ "$string" = "$expected" ]] \
+            || (echo "'\$string' was not '$expected', got '$string'" && false)
+
+          # Check that we handle word boundaries correctly
+          string=""
+          addFlagTo string --foo-bar
+          addFlagTo string bar
+          expected=" --foo-bar bar"
+          [[ "$string" = "$expected" ]] \
+            || (echo "'\$string' was not '$expected', got '$string'" && false)
+
+          declare -A associativeArray=(["X"]="Y")
+          [[ $(addFlagTo associativeArray "fail" 2>&1) =~ "trying to use" ]] || (echo "addFlagTo did not catch prepending associativeArray" && false)
+
+          # test appending to a unset variable
+          addFlagTo nonExistent created hello
+          typeset -p nonExistent
+          if [[ -n $__structuredAttrs ]]; then
+            expected="created hello"
+            [[ "''${nonExistent[*]}" == "$expected" ]] || (echo "'\$nonExistent' was not '$expected', got '''''${nonExistent[*]}'" && false)
+          else
+            expected=" created hello"
+            [[ "$nonExistent" == "$expected" ]] || (echo "'\$nonExistent' was not '$expected', got '$nonExistent'" && false)
+          fi
+
+          eval "$extraTest"
+
+          touch $out
+        '';
+      } // extraAttrs);
+
 in
 
 {
@@ -196,6 +258,11 @@ in
     stdenv' = bootStdenv;
   };
 
+  test-add-flags-to = testAddFlagsTo {
+    name = "test-add-flags-to";
+    stdenv' = bootStdenv;
+  };
+
   test-structured-env-attrset = testEnvAttrset {
     name = "test-structured-env-attrset";
     stdenv' = bootStdenv;
@@ -251,6 +318,40 @@ in
           [[ "''${list[0]}" == "hello" ]] || (echo "first element of '\$list' was not 'hello'" && false)
           [[ "''${list[1]}" == "a" ]] || (echo "first element of '\$list' was not 'a'" && false)
           [[ "''${list[-1]}" == "world" ]] || (echo "last element of '\$list' was not 'world'" && false)
+        '';
+      };
+    };
+
+    test-add-flags-to = testAddFlagsTo {
+      name = "test-add-flags-to";
+      stdenv' = bootStdenvStructuredAttrsByDefault;
+      extraAttrs = {
+        # will be a bash indexed array in attrs.sh
+        # declare -a list=('a' 'b' )
+        # and a json array in attrs.json
+        # "list":["a","b"]
+        list = [ "a" "b" ];
+        extraTest = ''
+          declare -p list
+          addFlagTo list hello
+          declare -p list
+          addFlagTo list "\"--foo bar\""
+          addFlagTo list bar
+          # test that quoted strings work
+          addFlagTo list "world"
+          declare -p list
+
+          local -a expected=(
+            "a"
+            "b"
+            "hello"
+            "\"--foo bar\""
+            bar
+            "world"
+          )
+          for i in {-1..3}; do
+            [[ "''${list[$i]}" == "''${expected[$i]}" ]] || (echo "first element of '\$list' was not '''''${expected[$i]}, got '''''${list[$i]}'" && false)
+          done
         '';
       };
     };
