@@ -109,8 +109,8 @@ import ../make-test-python.nix (
       machine.succeed("ls /var/lib/rancher/k3s/server/manifests/hello.yaml")
 
       # check if container images got imported
-      machine.succeed("crictl img | grep 'test\.local/pause'")
-      machine.succeed("crictl img | grep 'test\.local/hello'")
+      machine.wait_until_succeeds("crictl img | grep 'test\.local/pause'")
+      machine.wait_until_succeeds("crictl img | grep 'test\.local/hello'")
 
       # check if resources of manifests got created
       machine.wait_until_succeeds("kubectl get ns foo")
