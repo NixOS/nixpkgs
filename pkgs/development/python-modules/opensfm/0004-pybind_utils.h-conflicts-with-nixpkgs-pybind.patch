@@ -1,0 +1,86 @@
+From c35b110a83286e7413d7309eb218eb43b52f7d48 Mon Sep 17 00:00:00 2001
+From: Someone Serge <sergei.kozlukov@aalto.fi>
+Date: Sat, 19 Feb 2022 14:36:12 +0200
+Subject: [PATCH 4/4] pybind_utils.h: conflicts with nixpkgs' pybind
+
+---
+ opensfm/src/map/pybind_utils.h | 45 +++-------------------------------
+ 1 file changed, 3 insertions(+), 42 deletions(-)
+
+diff --git a/opensfm/src/map/pybind_utils.h b/opensfm/src/map/pybind_utils.h
+index 817d1a16..3f98a2ab 100644
+--- a/opensfm/src/map/pybind_utils.h
++++ b/opensfm/src/map/pybind_utils.h
+@@ -52,38 +52,6 @@ struct sfm_iterator_state {
+ };
+ PYBIND11_NAMESPACE_END_(detail)
+ 
+-/// Makes an python iterator over the keys (`.first`) of a iterator over pairs
+-/// from a first and past-the-end InputIterator.
+-template <return_value_policy Policy = return_value_policy::reference_internal,
+-          typename Iterator, typename Sentinel,
+-          typename KeyType = decltype((*std::declval<Iterator>()).second),
+-          typename... Extra>
+-iterator make_value_iterator(Iterator first, Sentinel last, Extra &&... extra) {
+-  typedef detail::sfm_iterator_state<Iterator, Sentinel, detail::RefIterator,
+-                                     Policy>
+-      state;
+-
+-  if (!detail::get_type_info(typeid(state), false)) {
+-    class_<state>(handle(), "iterator", pybind11::module_local())
+-        .def("__iter__", [](state &s) -> state & { return s; })
+-        .def("__next__",
+-             [](state &s) -> KeyType {
+-               if (!s.first_or_done)
+-                 ++s.it;
+-               else
+-                 s.first_or_done = false;
+-               if (s.it == s.end) {
+-                 s.first_or_done = true;
+-                 throw stop_iteration();
+-               }
+-               return (*s.it).second;
+-             },
+-             std::forward<Extra>(extra)..., Policy);
+-  }
+-
+-  return cast(state{first, last, true});
+-}
+-
+ template <return_value_policy Policy = return_value_policy::reference_internal,
+           typename Iterator, typename Sentinel,
+           typename KeyType = decltype(&((*std::declval<Iterator>()).second)),
+@@ -148,12 +116,13 @@ iterator make_ref_iterator(Iterator first, Sentinel last, Extra &&... extra) {
+ }
+ 
+ /// Makes a python iterator from a first and past-the-end C++ InputIterator.
+-template <return_value_policy Policy = return_value_policy::reference_internal,
++template <typename Access,
++          return_value_policy Policy = return_value_policy::reference_internal,
+           typename Iterator, typename Sentinel,
+           typename ValueType = decltype(std::declval<Iterator>()),
+           typename... Extra>
+ iterator make_ptr_iterator(Iterator first, Sentinel last, Extra &&... extra) {
+-  typedef detail::iterator_state<Iterator, Sentinel, false, Policy> state;
++  typedef detail::iterator_state<Access, Policy, Iterator, Sentinel, ValueType, Extra...> state;
+ 
+   if (!detail::get_type_info(typeid(state), false)) {
+     class_<state>(handle(), "iterator", pybind11::module_local())
+@@ -176,14 +145,6 @@ iterator make_ptr_iterator(Iterator first, Sentinel last, Extra &&... extra) {
+   return cast(state{first, last, true});
+ }
+ 
+-/// Makes an iterator over the keys (`.first`) of a stl map-like container
+-/// supporting `std::begin()`/`std::end()`
+-template <return_value_policy Policy = return_value_policy::reference_internal,
+-          typename Type, typename... Extra>
+-iterator make_value_iterator(Type &value, Extra &&... extra) {
+-  return make_value_iterator<Policy>(std::begin(value), std::end(value),
+-                                     extra...);
+-}
+ template <return_value_policy Policy = return_value_policy::reference_internal,
+           typename Type, typename... Extra>
+ iterator make_unique_ptr_value_iterator(Type &value, Extra &&... extra) {
+-- 
+2.33.1
+

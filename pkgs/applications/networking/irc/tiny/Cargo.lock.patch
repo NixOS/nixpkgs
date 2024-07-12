@@ -1,0 +1,11 @@
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -1535,7 +1535,7 @@ checksum = "7300fbefb4dadc1af235a9cef3737cea692a9d97e1b9cbcd4ebdae6f8868e6fb"
+ 
+ [[package]]
+ name = "tiny"
+-version = "0.10.0"
++version = "0.11.0"
+ dependencies = [
+  "clap",
+  "dirs",

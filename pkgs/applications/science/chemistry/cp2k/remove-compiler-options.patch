@@ -1,0 +1,37 @@
+diff --git a/src/start/cp2k.F b/src/start/cp2k.F
+index f69146ea3..a195f0620 100644
+--- a/src/start/cp2k.F
++++ b/src/start/cp2k.F
+@@ -58,8 +58,7 @@ PROGRAM cp2k
+    USE input_cp2k,                      ONLY: create_cp2k_root_section
+    USE input_section_types,             ONLY: section_release,&
+                                               section_type
+-   USE iso_fortran_env,                 ONLY: compiler_options,&
+-                                              compiler_version
++   USE iso_fortran_env,                 ONLY: compiler_version
+    USE kinds,                           ONLY: default_path_length
+    USE machine,                         ONLY: default_output_unit
+ #include "../base/base_uses.f90"
+@@ -70,7 +69,6 @@ PROGRAM cp2k
+                                            arg_att, command
+    CHARACTER(LEN=default_path_length), &
+       DIMENSION(:, :), ALLOCATABLE      :: initial_variables, initial_variables_tmp
+-   CHARACTER(LEN=:), ALLOCATABLE        :: compiler_options_string
+    INTEGER                              :: output_unit, l, i, var_set_sep, inp_var_idx
+    INTEGER                              :: ierr, i_arg
+    LOGICAL                              :: check, usage, echo_input, command_line_error
+@@ -328,14 +326,6 @@ PROGRAM cp2k
+                WRITE (output_unit, "(T2,A)") cp2k_version, &
+                   "Source code revision "//TRIM(compile_revision), &
+                   TRIM(cp2k_flags())
+-               compiler_options_string = compiler_options()
+-               WRITE (output_unit, "(T2,A,A)") "compiler: ", compiler_version()
+-               WRITE (output_unit, "(T2,A)") "compiler options:"
+-               DO i = 0, (LEN(compiler_options_string) - 1)/68
+-                  WRITE (output_unit, "(T4,A)") &
+-                     compiler_options_string(i*68 + 1:MIN(LEN(compiler_options_string), (i + 1)*68))
+-               END DO
+-               DEALLOCATE (compiler_options_string)
+             END IF
+          END IF
+ 

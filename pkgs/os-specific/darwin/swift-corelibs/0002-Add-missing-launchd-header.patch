@@ -1,0 +1,11 @@
+--- a/CoreFoundation/RunLoop.subproj/CFMessagePort.c	1969-12-31 19:00:01.000000000 -0500
++++ b/CoreFoundation/RunLoop.subproj/CFMessagePort.c	2023-06-09 20:25:28.599209755 -0400
+@@ -28,6 +28,8 @@
+ #endif
+ #endif
+ 
++#include <bootstrap.h>
++
+ extern pid_t getpid(void);
+ 
+ #define __kCFMessagePortMaxNameLengthMax 255
