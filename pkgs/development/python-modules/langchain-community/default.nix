@@ -6,7 +6,6 @@
   pythonOlder,
   aiohttp,
   dataclasses-json,
-  duckdb-engine,
   langchain,
   langchain-core,
   langsmith,
@@ -65,7 +64,6 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "langchain_community" ];
 
   nativeCheckInputs = [
-    duckdb-engine
     lark
     pandas
     pytest-asyncio
@@ -88,6 +86,10 @@ buildPythonPackage rec {
   disabledTests = [
     # Test require network access
     "test_ovhcloud_embed_documents"
+    # duckdb-engine needs python-wasmer which is not yet available in Python 3.12
+    # See https://github.com/NixOS/nixpkgs/pull/326337 and https://github.com/wasmerio/wasmer-python/issues/778
+    "test_table_info"
+    "test_sql_database_run"
   ];
 
   meta = {
