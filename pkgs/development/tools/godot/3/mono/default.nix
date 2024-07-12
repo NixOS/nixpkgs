@@ -6,12 +6,12 @@
 , dotnet-sdk
 , writeText
 , scons
-, python311
+, python311Packages
 }:
 
 (godot3.override {
   scons = scons.override {
-    python3 = python311;
+    python3Packages = python311Packages;
   };
 }).overrideAttrs (self: base: {
   pname = "godot3-mono";
