@@ -95,6 +95,7 @@ let
     maintainers = with maintainers; [
       euank
       mic92
+      marcusramberg
       superherointj
       wrmilling
       yajo
