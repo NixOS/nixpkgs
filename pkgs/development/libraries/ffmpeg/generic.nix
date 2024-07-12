@@ -430,49 +430,6 @@ stdenv.mkDerivation (finalAttrs: {
         hash = "sha256-5G9lmKjMEa0+vqbA8EEiNIr6QG+PeEoIL+uZP4Hlo28=";
       })
     ]
-    ++ optionals (lib.versionAtLeast version "5" && lib.versionOlder version "6") [
-      (fetchpatch2 {
-        name = "fix_build_failure_due_to_libjxl_version_to_new";
-        url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/75b1a555a70c178a9166629e43ec2f6250219eb2";
-        hash = "sha256-+2kzfPJf5piim+DqEgDuVEEX5HLwRsxq0dWONJ4ACrU=";
-      })
-      (fetchpatch2 {
-        name = "5.x-CVE-2024-31585.patch";
-        url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/8711cea3841fc385cccb1e7255176479e865cd4d";
-        hash = "sha256-WT+ly/l04yM/tRVbhkESA3sDDjwvtd/Cg2y8tQo4ApI=";
-      })
-      (fetchpatch2 {
-        name = "CVE-2024-31582.patch";
-        url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/99debe5f823f45a482e1dc08de35879aa9c74bd2";
-        hash = "sha256-+CQ9FXR6Vr/AmsbXFiCUXZcxKj1s8nInEdke/Oc/kUA=";
-      })
-      (fetchpatch2 {
-        name = "CVE-2024-31578.patch";
-        url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/3bb00c0a420c3ce83c6fafee30270d69622ccad7";
-        hash = "sha256-oZMZysBA+/gwaGEM1yvI+8wCadXWE7qLRL6Emap3b8Q=";
-      })
-      ./5.1.4-CVE-2023-49502.patch
-      (fetchpatch2 {
-        name = "CVE-2023-50008.patch";
-        url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/5f87a68cf70dafeab2fb89b42e41a4c29053b89b";
-        hash = "sha256-sqUUSOPTPLwu2h8GbAw4SfEf+0oWioz52BcpW1n4v3Y=";
-      })
-      (fetchpatch2 {
-        name = "CVE-2023-51793.patch";
-        url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/8b8b4bdef311f88c0075a06a25320187aff00bf2";
-        hash = "sha256-e7oGyOfUXuA8XK3vfygNtFlHpHl92O2KSLAo50sNJ5o=";
-      })
-      (fetchpatch2 {
-        name = "CVE-2023-51796.patch";
-        url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/e01a55c5283b82667dad347331816a5e20869ce9";
-        hash = "sha256-m4rq+UFG3nXdgOJ3S6XcruMZ+CPw+twmy2HFv3cnvJc=";
-      })
-      (fetchpatch2 {
-        name = "CVE-2023-51794.patch";
-        url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/50f0f8c53c818f73fe2d752708e2fa9d2a2d8a07";
-        hash = "sha256-5G9lmKjMEa0+vqbA8EEiNIr6QG+PeEoIL+uZP4Hlo28=";
-      })
-    ]
     ++ optionals (lib.versionAtLeast version "6.1" && lib.versionOlder version "6.2") [
       (fetchpatch2 { # this can be removed post 6.1
         name = "fix_build_failure_due_to_PropertyKey_EncoderID";
