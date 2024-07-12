@@ -25,9 +25,6 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-7T+q3T8z8SCpAn3ayodZeETOsTwL+hhVWzY2JyBEoi4=";
   };
 
-  # TODO: remove this when #286814 hits master
-  mesonFlags = [ "-Dtiff_compression=jpeg" ];
-
   nativeBuildInputs = [
     appstream
     blueprint-compiler
