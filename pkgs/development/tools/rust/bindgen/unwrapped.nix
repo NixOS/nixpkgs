@@ -12,7 +12,7 @@ in rustPlatform.buildRustPackage rec {
   src = fetchCrate {
     pname = "bindgen-cli";
     inherit version;
-    sha256 = "sha256-5fwJq1WsL3IEcVUjsyqKdQU8VufbbPk6TglwJg3C1Gw=";
+    hash = "sha256-5fwJq1WsL3IEcVUjsyqKdQU8VufbbPk6TglwJg3C1Gw=";
   };
 
   cargoHash = "sha256-UROy/MyPBKJe+EaiUIDbOYKVbge0C9LsmfnsvOLEONE=";
