@@ -51,6 +51,10 @@ python3Packages.buildPythonApplication rec {
   dontWrapGApps = true;
   makeWrapperArgs = [ ''''${gappsWrapperArgs[@]}'' ];
 
+  postFixup = ''
+    wrapPythonProgramsIn $out/libexec $out $pythonPath
+  '';
+
   meta = {
     description = "GTK4 + Libadwaita game launcher";
     longDescription = ''
