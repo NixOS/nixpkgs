@@ -10,8 +10,8 @@ let
   };
 
   mkServer = args: callPackage (import ./server.nix (args)) { };
-in {
-
+in
+{
   guiStable = mkGui {
     channel = "stable";
     version = "2.2.49";

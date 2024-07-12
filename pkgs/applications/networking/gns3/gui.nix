@@ -1,15 +1,17 @@
-{ channel
-, version
-, hash
+{
+  channel,
+  version,
+  hash,
 }:
 
-{ lib
-, python3Packages
-, fetchFromGitHub
-, qt5
-, wrapQtAppsHook
-, testers
-, gns3-gui
+{
+  fetchFromGitHub,
+  gns3-gui,
+  lib,
+  python3Packages,
+  qt5,
+  testers,
+  wrapQtAppsHook,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -23,15 +25,11 @@ python3Packages.buildPythonApplication rec {
     rev = "refs/tags/v${version}";
   };
 
-  nativeBuildInputs = with python3Packages; [
-    wrapQtAppsHook
-  ];
+  nativeBuildInputs = with python3Packages; [ wrapQtAppsHook ];
 
   build-system = with python3Packages; [ setuptools ];
 
-  propagatedBuildInputs = [
-    qt5.qtwayland
-  ];
+  propagatedBuildInputs = [ qt5.qtwayland ];
 
   dependencies = with python3Packages; [
     distro
@@ -54,9 +52,7 @@ python3Packages.buildPythonApplication rec {
 
   doCheck = true;
 
-  checkInputs = with python3Packages; [
-    pytestCheckHook
-  ];
+  checkInputs = with python3Packages; [ pytestCheckHook ];
 
   preCheck = ''
     export HOME=$(mktemp -d)
