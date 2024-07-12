@@ -38,7 +38,7 @@
 , libvaSupport ? true, libva
 
 # For Vulkan support (--enable-features=Vulkan)
-, addOpenGLRunpath
+, addDriverRunpath
 }:
 
 let
@@ -129,7 +129,7 @@ in stdenv.mkDerivation (finalAttrs: {
       --prefix LD_LIBRARY_PATH : "$rpath" \
       --prefix PATH            : "$binpath" \
       --suffix PATH            : "${lib.makeBinPath [ xdg-utils ]}" \
-      --prefix XDG_DATA_DIRS   : "$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH:${addOpenGLRunpath.driverLink}/share" \
+      --prefix XDG_DATA_DIRS   : "$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH:${addDriverRunpath.driverLink}/share" \
       --set CHROME_WRAPPER  "google-chrome-$dist" \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
       --add-flags ${lib.escapeShellArg commandLineArgs}

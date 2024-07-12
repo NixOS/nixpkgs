@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "0rnm59zhpaa8nbbh6rh53svnlb484q1k6s4wc4w9516b18xhmkca";
   };
 
-  cargoSha256 = "sha256-aMx4xfWYiiz5TY/CVCogZ3WNR6md77jb8RKhhVwqeto=";
+  cargoHash = "sha256-aMx4xfWYiiz5TY/CVCogZ3WNR6md77jb8RKhhVwqeto=";
 
   meta = with lib; {
     description = "Npm scripts runner written in Rust";

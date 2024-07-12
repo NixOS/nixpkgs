@@ -2487,6 +2487,8 @@ self: super: with self; {
 
   construct-classes = callPackage ../development/python-modules/construct-classes { };
 
+  construct-typing = callPackage ../development/python-modules/construct-typing { };
+
   consul = callPackage ../development/python-modules/consul { };
 
   container-inspector = callPackage ../development/python-modules/container-inspector { };
@@ -3927,6 +3929,8 @@ self: super: with self; {
   epitran = callPackage ../development/python-modules/epitran { };
 
   epson-projector = callPackage ../development/python-modules/epson-projector { };
+
+  eq3btsmart = callPackage ../development/python-modules/eq3btsmart { };
 
   equinox = callPackage ../development/python-modules/equinox { };
 
@@ -6483,6 +6487,8 @@ self: super: with self; {
 
   keyring = callPackage ../development/python-modules/keyring { };
 
+  keyring_24 = callPackage ../development/python-modules/keyring_24 { };
+
   keyring-pass = callPackage ../development/python-modules/keyring-pass { };
 
   keyrings-cryptfile = callPackage ../development/python-modules/keyrings-cryptfile { };
@@ -6687,6 +6693,8 @@ self: super: with self; {
     inherit (pkgs.darwin.apple_sdk.frameworks) AppKit;
   };
 
+  legacy-cgi = callPackage ../development/python-modules/legacy-cgi { };
+
   leidenalg = callPackage ../development/python-modules/leidenalg {
     igraph-c = pkgs.igraph;
   };
@@ -6879,7 +6887,7 @@ self: super: with self; {
 
   libtmux = callPackage ../development/python-modules/libtmux { };
 
-  libtorrent-rasterbar = (toPythonModule (pkgs.libtorrent-rasterbar.override { inherit python; })).python;
+  libtorrent-rasterbar = (toPythonModule (pkgs.libtorrent-rasterbar.override { python3 = python; })).python;
 
   libusb1 = callPackage ../development/python-modules/libusb1 {
     inherit (pkgs) libusb1;
@@ -9288,7 +9296,6 @@ self: super: with self; {
 
   openai-triton = callPackage ../development/python-modules/openai-triton {
     llvm = pkgs.openai-triton-llvm;
-    cudaPackages = pkgs.cudaPackages_12_1;
   };
 
   openai-triton-cuda = self.openai-triton.override {

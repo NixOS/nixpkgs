@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-RPix9DM6E32PhObvV3xPGrnXrrVHn3auxLUhysP8GM0=";
   };
 
-  cargoSha256 = "sha256-L/ILHKWlcYTkbEi2qDu7tf/3NHfTl6GhW0s+fUlsW08=";
+  cargoHash = "sha256-L/ILHKWlcYTkbEi2qDu7tf/3NHfTl6GhW0s+fUlsW08=";
 
   meta = with lib; {
     description = "Cargo extension for running Criterion.rs benchmarks";

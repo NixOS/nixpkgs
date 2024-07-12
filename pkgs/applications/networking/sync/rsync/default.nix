@@ -39,6 +39,10 @@ stdenv.mkDerivation rec {
     ++ lib.optional enableXXHash xxHash;
 
   configureFlags = [
+    (lib.enableFeature enableLZ4 "lz4")
+    (lib.enableFeature enableOpenSSL "openssl")
+    (lib.enableFeature enableXXHash "xxhash")
+    (lib.enableFeature enableZstd "zstd")
     "--with-nobody-group=nogroup"
 
     # disable the included zlib explicitly as it otherwise still compiles and
@@ -47,14 +51,6 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals (stdenv.hostPlatform.isMusl && stdenv.hostPlatform.isx86_64) [
     # fix `multiversioning needs 'ifunc' which is not supported on this target` error
     "--disable-roll-simd"
-  ] ++ lib.optionals (!enableZstd) [
-    "--disable-zstd"
-  ] ++ lib.optionals (!enableXXHash) [
-    "--disable-xxhash"
-  ] ++ lib.optionals (!enableLZ4) [
-    "--disable-lz4"
-  ] ++ lib.optionals (!enableOpenSSL) [
-    "--disable-openssl"
   ];
 
   enableParallelBuilding = true;

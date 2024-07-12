@@ -217,7 +217,11 @@ with pkgs;
   } (writeScript "ensure-newer-sources-hook.sh" ''
       postUnpackHooks+=(_ensureNewerSources)
       _ensureNewerSources() {
-        '${findutils}/bin/find' "$sourceRoot" \
+        local r=$sourceRoot
+        # Avoid passing option-looking directory to find. The example is diffoscope-269:
+        #   https://salsa.debian.org/reproducible-builds/diffoscope/-/issues/378
+        [[ $r == -* ]] && r="./$r"
+        '${findutils}/bin/find' "$r" \
           '!' -newermt '${year}-01-01' -exec touch -h -d '${year}-01-02' '{}' '+'
       }
     '');
@@ -225,10 +229,6 @@ with pkgs;
   # addDriverRunpath is the preferred package name, as this enables
   # many more scenarios than just opengl now.
   addDriverRunpath = callPackage ../build-support/add-driver-runpath { };
-
-  # addOpenGLRunpath should be added to aliases.nix after the 24.05 branch-off.
-  # Post 24.11 branch-off, this should throw an error in aliases.nix.
-  addOpenGLRunpath = callPackage ../build-support/add-opengl-runpath { };
 
   quickgui = callPackage ../applications/virtualization/quickgui { };
 
@@ -11541,7 +11541,7 @@ with pkgs;
   otpauth = callPackage ../tools/security/otpauth { };
 
   pcsclite = callPackage ../tools/security/pcsclite {
-    inherit (darwin.apple_sdk.frameworks) IOKit;
+    inherit (darwin.apple_sdk.frameworks) Foundation IOKit;
   };
 
   pcscliteWithPolkit = pcsclite.override {
@@ -16097,7 +16097,7 @@ with pkgs;
       else if platform.isFreeBSD then 16
       else if platform.isOpenBSD then 18
       else if platform.isAndroid then 12
-      else if platform.isLinux then 17
+      else if platform.isLinux then 18
       else if platform.isWasm then 16
       # For unknown systems, assume the latest version is required.
       else 18;
@@ -16333,11 +16333,11 @@ with pkgs;
   wrapRustcWith = { rustc-unwrapped, ... } @ args: callPackage ../build-support/rust/rustc-wrapper args;
   wrapRustc = rustc-unwrapped: wrapRustcWith { inherit rustc-unwrapped; };
 
-  rust_1_78 = callPackage ../development/compilers/rust/1_78.nix {
+  rust_1_79 = callPackage ../development/compilers/rust/1_79.nix {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security SystemConfiguration;
     llvm_18 = llvmPackages_18.libllvm;
   };
-  rust = rust_1_78;
+  rust = rust_1_79;
 
   mrustc = callPackage ../development/compilers/mrustc { };
   mrustc-minicargo = callPackage ../development/compilers/mrustc/minicargo.nix { };
@@ -16345,8 +16345,8 @@ with pkgs;
     openssl = openssl_1_1;
   };
 
-  rustPackages_1_78 = rust_1_78.packages.stable;
-  rustPackages = rustPackages_1_78;
+  rustPackages_1_79 = rust_1_79.packages.stable;
+  rustPackages = rustPackages_1_79;
 
   inherit (rustPackages) cargo cargo-auditable cargo-auditable-cargo-wrapper clippy rustc rustPlatform;
 
@@ -19243,11 +19243,6 @@ with pkgs;
 
   sca2d = callPackage ../development/tools/sca2d {  };
 
-  scons = scons_4_5_2;
-  scons_3_1_2 = callPackage ../development/tools/build-managers/scons/3.1.2.nix { };
-  scons_4_1_0 = callPackage ../development/tools/build-managers/scons/4.1.0.nix { };
-  scons_4_5_2 = callPackage ../development/tools/build-managers/scons/4.5.2.nix { };
-
   mill = callPackage ../development/tools/build-managers/mill { };
 
   sbt = callPackage ../development/tools/build-managers/sbt { };
@@ -19475,13 +19470,16 @@ with pkgs;
 
   tesh = callPackage ../tools/text/tesh {};
 
-  texinfo413 = callPackage ../development/tools/misc/texinfo/4.13a.nix { };
-  texinfo4 = texinfo413;
-  texinfo5 = callPackage ../development/tools/misc/texinfo/5.2.nix { };
-  texinfo6_5 = callPackage ../development/tools/misc/texinfo/6.5.nix { }; # needed for allegro
-  texinfo6_7 = callPackage ../development/tools/misc/texinfo/6.7.nix { }; # needed for gpm, iksemel and fwknop
-  texinfo6 = callPackage ../development/tools/misc/texinfo/6.8.nix { };
-  texinfo7 = callPackage ../development/tools/misc/texinfo/7.0.nix { };
+  texinfoPackages = callPackages ../development/tools/misc/texinfo/packages.nix { };
+  inherit (texinfoPackages)
+    texinfo413
+    texinfo5 # needed for gcc48
+    texinfo6_5 # needed for allegro
+    texinfo6_7 # needed for gpm, iksemel and fwknop
+    texinfo6
+    texinfo7
+    ;
+  texinfo4= texinfo413; # needed for eukleides and singular
   texinfo = texinfo7;
   texinfoInteractive = texinfo.override { interactive = true; };
 
@@ -20921,7 +20919,10 @@ with pkgs;
     autoconf = buildPackages.autoconf269;
   };
 
-  gpac = callPackage ../applications/video/gpac { };
+  gpac = callPackage ../applications/video/gpac {
+    inherit (darwin) cctools;
+    inherit (darwin.apple_sdk.frameworks) Carbon;
+  };
 
   gpgme = callPackage ../development/libraries/gpgme { };
 
@@ -22624,16 +22625,6 @@ with pkgs;
   libtommath = callPackage ../development/libraries/libtommath { };
 
   libtomcrypt = callPackage ../development/libraries/libtomcrypt { };
-
-  libtorrent-rasterbar-2_0_x = callPackage ../development/libraries/libtorrent-rasterbar {
-    inherit (darwin.apple_sdk.frameworks) SystemConfiguration;
-    python = python3;
-  };
-
-  libtorrent-rasterbar-1_2_x = callPackage ../development/libraries/libtorrent-rasterbar/1.2.nix {
-    inherit (darwin.apple_sdk.frameworks) SystemConfiguration;
-    python = python3;
-  };
 
   libtorrent-rasterbar = libtorrent-rasterbar-2_0_x;
 
@@ -26776,6 +26767,7 @@ with pkgs;
   fatrace = callPackage ../os-specific/linux/fatrace { };
 
   ffado = libsForQt5.callPackage ../os-specific/linux/ffado { };
+  ffado-mixer = libsForQt5.callPackage ../os-specific/linux/ffado { withMixer = true; };
   libffado = ffado;
 
   fbterm = callPackage ../os-specific/linux/fbterm { };
@@ -27408,8 +27400,6 @@ with pkgs;
   okapi = callPackage ../development/libraries/okapi {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
-
-  openpam = callPackage ../development/libraries/openpam { };
 
   openbsm = callPackage ../development/libraries/openbsm { };
 
@@ -30476,7 +30466,7 @@ with pkgs;
   gnuradio = callPackage ../applications/radio/gnuradio/wrapper.nix {
     unwrapped = callPackage ../applications/radio/gnuradio {
       inherit (darwin.apple_sdk.frameworks) CoreAudio;
-      python = python3;
+      python = python311;
     };
   };
   gnuradioPackages = lib.recurseIntoAttrs gnuradio.pkgs;
@@ -30509,7 +30499,7 @@ with pkgs;
   gnuradio3_9 = callPackage ../applications/radio/gnuradio/wrapper.nix {
     unwrapped = callPackage ../applications/radio/gnuradio/3.9.nix {
       inherit (darwin.apple_sdk.frameworks) CoreAudio;
-      python = python3;
+      python = python311;
     };
   };
   gnuradio3_9Packages = lib.recurseIntoAttrs gnuradio3_9.pkgs;
@@ -30542,7 +30532,7 @@ with pkgs;
   gnuradio3_8 = callPackage ../applications/radio/gnuradio/wrapper.nix {
     unwrapped = callPackage ../applications/radio/gnuradio/3.8.nix ({
       inherit (darwin.apple_sdk.frameworks) CoreAudio;
-      python = python3;
+      python = python311;
     } // lib.optionalAttrs stdenv.isLinux {
       stdenv = pkgs.stdenvAdapters.useLibsFrom stdenv pkgs.gcc12Stdenv;
     });

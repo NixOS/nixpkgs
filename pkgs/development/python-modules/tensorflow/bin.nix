@@ -31,7 +31,7 @@
   python,
   keras-applications,
   keras-preprocessing,
-  addOpenGLRunpath,
+  addDriverRunpath,
   astunparse,
   flatbuffers,
   h5py,
@@ -91,7 +91,7 @@ buildPythonPackage {
     h5py
   ] ++ lib.optional (!isPy3k) mock;
 
-  build-system = [ wheel ] ++ lib.optionals cudaSupport [ addOpenGLRunpath ];
+  build-system = [ wheel ] ++ lib.optionals cudaSupport [ addDriverRunpath ];
 
   preConfigure = ''
     unset SOURCE_DATE_EPOCH
@@ -189,7 +189,7 @@ buildPythonPackage {
         chmod a+rx "$lib"
         patchelf --set-rpath "$rrPath" "$lib"
         ${lib.optionalString cudaSupport ''
-          addOpenGLRunpath "$lib"
+          addDriverRunpath "$lib"
         ''}
       done
     '';

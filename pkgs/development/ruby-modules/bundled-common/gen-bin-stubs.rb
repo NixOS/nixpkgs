@@ -1,3 +1,4 @@
+#!/usr/bin/env ruby
 require 'rbconfig'
 require 'rubygems'
 require 'rubygems/specification'

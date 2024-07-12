@@ -21,9 +21,6 @@ buildPythonPackage rec {
   version = "0.4.1";
   pyproject = true;
 
-  # python 3.12 support: https://github.com/magic-wormhole/magic-wormhole-mailbox-server/issues/41
-  disabled = pythonOlder "3.7" || pythonAtLeast "3.12";
-
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-GvEFkpCcqvUZwA5wbqyELF53+NQ1YhX+nGHHsiWKiPs=";
@@ -38,13 +35,14 @@ buildPythonPackage rec {
     })
   ];
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     attrs
+    autobahn
+    setuptools # pkg_resources is referenced at runtime
     six
     twisted
-    autobahn
   ] ++ autobahn.optional-dependencies.twisted ++ twisted.optional-dependencies.tls;
 
   pythonImportsCheck = [ "wormhole_mailbox_server" ];
@@ -66,5 +64,7 @@ buildPythonPackage rec {
     changelog = "https://github.com/magic-wormhole/magic-wormhole-mailbox-server/blob/${version}/NEWS.md";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.mjoerg ];
+    # Python 3.12 support: https://github.com/magic-wormhole/magic-wormhole-mailbox-server/issues/41
+    broken = pythonOlder "3.7" || pythonAtLeast "3.12";
   };
 }

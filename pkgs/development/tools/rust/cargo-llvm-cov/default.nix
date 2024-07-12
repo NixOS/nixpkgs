@@ -63,7 +63,7 @@ rustPlatform.buildRustPackage {
     cp ${cargoLock} source/Cargo.lock
   '';
 
-  cargoSha256 = "sha256-6VQEu38g5a8bfbs8P/nOa3Zg2bSYnEOClzoMF95LAHI=";
+  cargoHash = "sha256-6VQEu38g5a8bfbs8P/nOa3Zg2bSYnEOClzoMF95LAHI=";
 
   # `cargo-llvm-cov` reads these environment variables to find these binaries,
   # which are needed to run the tests

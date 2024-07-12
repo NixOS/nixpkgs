@@ -4,12 +4,10 @@
 #
 # Example usage in a derivation:
 #
-#   { …, pythonPackages, … }:
+#   { …, python3Packages, … }:
 #
-#   pythonPackages.buildPythonPackage {
+#   python3Packages.buildPythonPackage {
 #     …
-#     nativeBuildInputs = [ pythonPackages.pythonRelaxDepsHook ];
-#
 #     # This will relax the dependency restrictions
 #     # e.g.: abc>1,<=2 -> abc
 #     pythonRelaxDeps = [ "abc" ];

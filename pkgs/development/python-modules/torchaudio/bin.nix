@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  addOpenGLRunpath,
+  addDriverRunpath,
   autoPatchelfHook,
   buildPythonPackage,
   cudaPackages,
@@ -54,7 +54,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = lib.optionals stdenv.isLinux [
     autoPatchelfHook
-    addOpenGLRunpath
+    addDriverRunpath
   ];
 
   dependencies = [ torch-bin ];

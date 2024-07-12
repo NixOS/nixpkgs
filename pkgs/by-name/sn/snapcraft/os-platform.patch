@@ -1,16 +1,8 @@
 diff --git a/snapcraft/utils.py b/snapcraft/utils.py
-index 511effe2..4af5a029 100644
+index 999a64ec..4f38b4cd 100644
 --- a/snapcraft/utils.py
 +++ b/snapcraft/utils.py
-@@ -15,6 +15,7 @@
- # along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
- """Utilities for snapcraft."""
-+
- import multiprocessing
- import os
- import pathlib
-@@ -91,7 +92,7 @@ def get_os_platform(
+@@ -94,7 +94,7 @@ def get_os_platform(
      release = platform.release()
      machine = platform.machine()
  

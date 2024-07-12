@@ -22,9 +22,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   postInstall = ''
     install -Dm444 "$src/release/other/Freedesktop.org Resources/ProTracker 2 clone.desktop" \
-      -t $out/share/applications
+      $out/share/applications/pt2-clone.desktop
     install -Dm444 "$src/release/other/Freedesktop.org Resources/ProTracker 2 clone.png" \
-      -t $out/share/icons/hicolor/512x512/apps
+      $out/share/icons/hicolor/512x512/apps/pt2-clone.png
+    # gtk-update-icon-cache does not like whitespace. Note that removing this
+    # will not make the build fail, but it will make the NixOS test fail.
+    substituteInPlace $out/share/applications/pt2-clone.desktop \
+      --replace-fail "Icon=ProTracker 2 clone" Icon=pt2-clone
   '';
 
   passthru.tests = {

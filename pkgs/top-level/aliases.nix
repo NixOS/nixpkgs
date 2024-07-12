@@ -69,6 +69,8 @@ mapAliases ({
   adtool = throw "'adtool' has been removed, as it was broken and unmaintained";
   adom = throw "'adom' has been removed, as it was broken and unmaintained"; # added 2024-05-09
   advcpmv = throw "'advcpmv' has been removed, as it is not being actively maintained and break recent coreutils."; # Added 2024-03-29
+  # Post 24.11 branch-off, this should throw an error
+  addOpenGLRunpath = addDriverRunpath; # Added 2024-05-25
   aether = throw "aether has been removed from nixpkgs; upstream unmaintained, security issues"; # Added 2023-10-03
   afl = throw "afl has been removed as the upstream project was archived. Consider using 'aflplusplus'"; # Added 2024-04-21
   agda-pkg = throw "agda-pkg has been removed due to being unmaintained"; # Added 2024-09-10"
@@ -919,10 +921,7 @@ mapAliases ({
   mutt-with-sidebar = mutt; # Added 2022-09-17
   mysql-client = hiPrio mariadb.client;
   mysql = mariadb; # moved from top-level 2021-03-14
-
-  # floating point textures patents are expired,
-  # so package reduced to alias
-  mesa_drivers = mesa.drivers;
+  mesa_drivers = throw "'mesa_drivers' has been removed, use 'pkgs.mesa' or 'pkgs.mesa.drivers' depending on target use case."; # Converted to throw 2024-07-11
 
   ### N ###
 

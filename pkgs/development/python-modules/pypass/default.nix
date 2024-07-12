@@ -55,8 +55,6 @@ buildPythonPackage rec {
     pexpect
   ];
 
-  doCheck = pythonOlder "3.12";
-
   nativeCheckInputs = [ nose ];
 
   # Configuration so that the tests work

@@ -5,7 +5,7 @@
 , setJavaClassPath
 , headless ? false
 , enableJavaFX ? false, openjfx
-, enableGnome2 ? true, gtk3, gnome_vfs, glib, GConf
+, enableGtk ? true, gtk3, glib
 }:
 
 let
@@ -35,8 +35,8 @@ let
       cpio file which zip perl zlib cups freetype alsa-lib libjpeg giflib
       libpng zlib lcms2 libX11 libICE libXrender libXext libXtst libXt libXtst
       libXi libXinerama libXcursor libXrandr fontconfig openjdk-bootstrap
-    ] ++ lib.optionals (!headless && enableGnome2) [
-      gtk3 gnome_vfs GConf glib
+    ] ++ lib.optionals (!headless && enableGtk) [
+      gtk3 glib
     ];
 
     patches = [
@@ -53,7 +53,7 @@ let
         sha256 = "082lmc30x64x583vqq00c8y0wqih3y4r0mp1c4bqq36l22qv6b6r";
       })
       ./fix-glibc-2.34.patch
-    ] ++ lib.optionals (!headless && enableGnome2) [
+    ] ++ lib.optionals (!headless && enableGtk) [
       ./swing-use-gtk-jdk13.patch
     ];
 
@@ -90,8 +90,8 @@ let
 
     NIX_LDFLAGS = toString (lib.optionals (!headless) [
       "-lfontconfig" "-lcups" "-lXinerama" "-lXrandr" "-lmagic"
-    ] ++ lib.optionals (!headless && enableGnome2) [
-      "-lgtk-3" "-lgio-2.0" "-lgnomevfs-2" "-lgconf-2"
+    ] ++ lib.optionals (!headless && enableGtk) [
+      "-lgtk-3" "-lgio-2.0"
     ]);
 
     # -j flag is explicitly rejected by the build system:

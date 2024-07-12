@@ -22,7 +22,7 @@ in
 #     sha256 = "sha256-qHAO3h+TTCQQ7vdd4CoXVGfKZ1fIxTWKqbUNnRsJaok=";
 #   };
 
-#   cargoSha256 = "sha256-qDJKC6MXeKerPFwJsNND3WkziFtGkTvCgVEsdPbBGAo=";
+#   cargoHash = "sha256-qDJKC6MXeKerPFwJsNND3WkziFtGkTvCgVEsdPbBGAo=";
 
 #   buildAndTestSubdir = "roapi-http";
 

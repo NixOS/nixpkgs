@@ -16,7 +16,7 @@ let
   # Also don’t forget to run `nix-build -A lorri.tests`
   version = "1.7.0";
   sha256 = "sha256-pGNhhEBHyWhTaW24dHrxAvpb/qr5RPbHXRwDZx6Rf74=";
-  cargoSha256 = "sha256-ENZATiBhoO+N6NpSknOWpvsatkaYb4mS/E63XNRXfMU=";
+  cargoHash = "sha256-ENZATiBhoO+N6NpSknOWpvsatkaYb4mS/E63XNRXfMU=";
 
 in (rustPlatform.buildRustPackage rec {
   pname = "lorri";
@@ -31,7 +31,7 @@ in (rustPlatform.buildRustPackage rec {
 
   outputs = [ "out" "man" "doc" ];
 
-  inherit cargoSha256;
+  inherit cargoHash;
   doCheck = false;
 
   BUILD_REV_COUNT = src.revCount or 1;

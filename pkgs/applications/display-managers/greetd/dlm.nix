@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "1r3w7my0g3v2ya317qnvjx8wnagjahpj7yx72a65hf2pjbf5x42p";
   };
 
-  cargoSha256 = "01a8k60qnx2pgxb2adgw30c2hjb60w6230khm5hyqgmp7z4rm8k8";
+  cargoHash = "sha256-aKKayT+3PuxhqXCCIQwHZkkoGBj8NSVWf1d0i4GZSAU=";
 
   meta = with lib; {
     description = "Stupid simple graphical login manager";

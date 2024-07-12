@@ -47,7 +47,7 @@ let
     );
 
   driverPaths = [
-    pkgs.addOpenGLRunpath.driverLink
+    pkgs.addDriverRunpath.driverLink
 
     # mesa:
     config.hardware.opengl.package
@@ -84,7 +84,7 @@ in
           {
             opengl.paths = config.hardware.opengl.extraPackages ++ [
               config.hardware.opengl.package
-              pkgs.addOpenGLRunpath.driverLink
+              pkgs.addDriverRunpath.driverLink
               "/dev/dri"
             ];
           }

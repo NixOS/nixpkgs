@@ -5,7 +5,7 @@
 , openjdk8-bootstrap
 , setJavaClassPath
 , headless ? false
-, enableGnome2 ? true, gtk2, gnome_vfs, glib, GConf
+, enableGtk ? true, gtk2, glib
 }:
 
 let
@@ -43,8 +43,8 @@ let
       cpio file which zip perl zlib cups freetype alsa-lib
       libjpeg giflib libX11 libICE libXext libXrender libXtst libXt libXtst
       libXi libXinerama libXcursor libXrandr fontconfig openjdk-bootstrap
-    ] ++ lib.optionals (!headless && enableGnome2) [
-      gtk2 gnome_vfs GConf glib
+    ] ++ lib.optionals (!headless && enableGtk) [
+      gtk2 glib
     ];
 
     patches = [
@@ -52,7 +52,7 @@ let
       ./read-truststore-from-env-jdk8.patch
       ./currency-date-range-jdk8.patch
       ./fix-library-path-jdk8.patch
-    ] ++ lib.optionals (!headless && enableGnome2) [
+    ] ++ lib.optionals (!headless && enableGtk) [
       ./swing-use-gtk-jdk8.patch
     ];
 
@@ -96,8 +96,8 @@ let
 
     NIX_LDFLAGS= toString (lib.optionals (!headless) [
       "-lfontconfig" "-lcups" "-lXinerama" "-lXrandr" "-lmagic"
-    ] ++ lib.optionals (!headless && enableGnome2) [
-      "-lgtk-x11-2.0" "-lgio-2.0" "-lgnomevfs-2" "-lgconf-2"
+    ] ++ lib.optionals (!headless && enableGtk) [
+      "-lgtk-x11-2.0" "-lgio-2.0"
     ]);
 
     # -j flag is explicitly rejected by the build system:
