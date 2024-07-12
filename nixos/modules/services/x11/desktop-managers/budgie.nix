@@ -121,7 +121,7 @@ in {
     environment.systemPackages = with pkgs;
       [
         # Budgie Desktop.
-        budgie.budgie-backgrounds
+        budgie-backgrounds
         budgie-control-center
         (budgie.budgie-desktop-with-plugins.override { plugins = cfg.extraPlugins; })
         budgie.budgie-desktop-view

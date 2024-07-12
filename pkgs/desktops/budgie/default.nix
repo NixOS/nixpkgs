@@ -6,7 +6,6 @@ lib.makeScope newScope (
     inherit (self) callPackage;
   in
   {
-    budgie-backgrounds = callPackage ./budgie-backgrounds { };
     budgie-control-center = callPackage ./budgie-control-center { };
     budgie-desktop = callPackage ./budgie-desktop { };
     budgie-desktop-view = callPackage ./budgie-desktop-view { };
