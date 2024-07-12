@@ -58,7 +58,7 @@ in stdenv.mkDerivation {
     bpftools
   ] ++ lib.optionals (kernel != null) kernel.moduleBuildDependencies;
 
-  hardeningDisable = [ "pic" ];
+  hardeningDisable = [ "pic" "zerocallusedregs" ];
 
   postUnpack = ''
     cp -r ${
