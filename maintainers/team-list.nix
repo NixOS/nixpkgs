@@ -496,6 +496,20 @@ with lib.maintainers;
     shortName = "Jupyter";
   };
 
+  k3s = {
+    githubTeams = [ "k3s" ];
+    members = [
+      euank
+      marcusramberg
+      mic92
+      superherointj
+      wrmilling
+      yajo
+    ];
+    scope = "Maintain K3s package, NixOS module, NixOS tests, update script";
+    shortName = "K3s";
+  };
+
   kubernetes = {
     members = [
       johanot
