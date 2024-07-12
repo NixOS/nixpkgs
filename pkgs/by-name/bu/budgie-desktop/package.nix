@@ -48,6 +48,12 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-lDsQlUAa79gnM8wC5pwyquvFyEiayH4W4gD/uyC5Koo=";
   };
 
+  outputs = [
+    "out"
+    "dev"
+    "man"
+  ];
+
   patches = [ ./plugins.patch ];
 
   nativeBuildInputs = [
