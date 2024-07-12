@@ -40,7 +40,7 @@ let
     destination = "/share/gnome-background-properties/nixos.xml";
   };
 
-  budgie-control-center = pkgs.budgie.budgie-control-center.override {
+  budgie-control-center' = pkgs.budgie-control-center.override {
     enableSshSocket = config.services.openssh.startWhenNeeded;
   };
 
@@ -122,7 +122,7 @@ in {
       [
         # Budgie Desktop.
         budgie-backgrounds
-        budgie-control-center
+        budgie-control-center'
         (budgie.budgie-desktop-with-plugins.override { plugins = cfg.extraPlugins; })
         budgie.budgie-desktop-view
         budgie.budgie-screensaver
@@ -243,7 +243,7 @@ in {
 
     # Register packages for DBus.
     services.dbus.packages = [
-      budgie-control-center
+      budgie-control-center'
     ];
 
     # Register packages for udev.
