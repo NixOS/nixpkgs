@@ -16,6 +16,8 @@
 , unzip
 , zip
 , zstd
+, runCommand
+, writeText
 , extraRuntimeDeps ? []
 , doWrap ? true
 }:
@@ -160,6 +162,20 @@ stdenv.mkDerivation (finalAttrs: {
     mv "$out/bin/vcpkg" "$out/bin/.vcpkg-wrapped"
     install -Dm555 "$vcpkgWrapperPath" "$out/bin/vcpkg"
   '';
+
+  passthru.tests = {
+    testWrapper = runCommand "vcpkg-tool-test-wrapper" { buildInputs = [ finalAttrs.finalPackage ];  } ''
+      export NIX_VCPKG_DEBUG_PRINT_ENVVARS=true
+      vcpkg --x-packages-root="test" --x-install-root="test2" contact > "$out"
+
+      cat "$out" | head -n 4 | diff - ${writeText "vcpkg-tool-test-wrapper-expected" ''
+        NIX_VCPKG_DOWNLOADS_ROOT = /homeless-shelter/.vcpkg/root/downloads
+        NIX_VCPKG_BUILDTREES_ROOT = /homeless-shelter/.vcpkg/root/buildtrees
+        NIX_VCPKG_PACKAGES_ROOT = test
+        NIX_VCPKG_INSTALL_ROOT = test2
+      ''}
+    '';
+  };
 
   meta = {
     description = "Components of microsoft/vcpkg's binary";
