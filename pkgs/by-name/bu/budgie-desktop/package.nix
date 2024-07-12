@@ -30,6 +30,7 @@
   pkg-config,
   polkit,
   sassc,
+  testers,
   upower,
   vala,
   validatePkgConfig,
@@ -106,6 +107,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     providedSessions = [ "budgie-desktop" ];
+    tests.pkg-config = testers.hasPkgConfigModules { package = finalAttrs.finalPackage; };
     updateScript = nix-update-script { };
   };
 
@@ -120,5 +122,10 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     maintainers = lib.teams.budgie.members;
     platforms = lib.platforms.linux;
+    pkgConfigModules = [
+      "budgie-1.0"
+      "budgie-raven-plugin-1.0"
+      "budgie-theme-1.0"
+    ];
   };
 })
