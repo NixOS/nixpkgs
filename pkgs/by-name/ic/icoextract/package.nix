@@ -1,29 +1,24 @@
 {
   lib,
-  buildPythonPackage,
-  fetchPypi,
-  pefile,
-  pillow,
-  pythonOlder,
-  setuptools,
+  python3Packages,
+  fetchFromGitHub,
 }:
 
-buildPythonPackage rec {
+python3Packages.buildPythonApplication rec {
   pname = "icoextract";
   version = "0.1.5";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
-  src = fetchPypi {
-    inherit pname version;
-    extension = "tar.gz";
-    hash = "sha256-/UxnWNyRNtwI4Rxx97i5QyjeMrUr5Sq+TfLTmU0xWyc=";
+  src = fetchFromGitHub {
+    owner = "jlu5";
+    repo = "icoextract";
+    rev = version;
+    hash = "sha256-McVG8966NCEpzc9biawLvUgbQUtterkIud/9GwOeltI=";
   };
 
-  build-system = [ setuptools ];
+  build-system = with python3Packages; [ setuptools ];
 
-  dependencies = [
+  dependencies = with python3Packages; [
     pefile
     pillow
   ];
@@ -34,8 +29,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "icoextract" ];
 
   postInstall = ''
-    mkdir -p $out/share/thumbnailers
-    substituteAll ${./exe-thumbnailer.thumbnailer} $out/share/thumbnailers/exe-thumbnailer.thumbnailer
+    substituteInPlace exe-thumbnailer.thumbnailer \
+      --replace Exec=exe-thumbnailer Exec=$out/bin/exe-thumbnailer
+
+    install -Dm644 exe-thumbnailer.thumbnailer $out/share/thumbnailers
   '';
 
   meta = with lib; {
@@ -47,5 +44,6 @@ buildPythonPackage rec {
       bryanasdev000
       donovanglover
     ];
+    mainProgram = "icoextract";
   };
 }
