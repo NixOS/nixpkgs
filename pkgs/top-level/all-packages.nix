@@ -12085,8 +12085,6 @@ with pkgs;
 
   qmarkdowntextedit = libsForQt5.callPackage  ../development/libraries/qmarkdowntextedit { };
 
-  qodem = callPackage ../tools/networking/qodem { };
-
   qosmic = libsForQt5.callPackage ../applications/graphics/qosmic { };
 
   qovery-cli = callPackage ../tools/admin/qovery-cli { };
@@ -25824,8 +25822,6 @@ with pkgs;
 
   postgrey = callPackage ../servers/mail/postgrey { };
 
-  pshs = callPackage ../servers/http/pshs { };
-
   quark = callPackage ../servers/http/quark { };
 
   smtprelay = callPackage ../servers/mail/smtprelay { };
@@ -35695,8 +35691,6 @@ with pkgs;
   };
 
   monero-gui = libsForQt5.callPackage ../applications/blockchains/monero-gui { };
-
-  masari = callPackage ../applications/blockchains/masari { };
 
   napari = with python3Packages; toPythonApplication napari;
 
