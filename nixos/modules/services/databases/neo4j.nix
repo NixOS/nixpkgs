@@ -38,7 +38,7 @@ let
     server.default_listen_address=${cfg.defaultListenAddress}
     server.databases.default_to_read_only=${boolToString cfg.readOnly}
     ${optionalString (cfg.workerCount > 0) ''
-      dbms.threads.worker_count=${toString cfg.workerCount}
+      server.threads.worker_count=${toString cfg.workerCount}
     ''}
 
     # Directories (readonly)
