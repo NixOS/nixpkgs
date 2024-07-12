@@ -6,6 +6,7 @@
   fetchFromGitHub,
   makeWrapper,
   mvnDepsHash ? null,
+  nixosTests,
 }:
 
 let
@@ -66,6 +67,10 @@ maven'.buildMavenPackage rec {
 
     runHook postInstall
   '';
+
+  passthru.tests = {
+    inherit (nixosTests) tika;
+  };
 
   meta = {
     changelog = "https://github.com/apache/tika/blob/${src.rev}/CHANGES.txt";
