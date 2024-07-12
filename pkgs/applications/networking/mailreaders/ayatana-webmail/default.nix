@@ -2,7 +2,7 @@
 , fetchFromGitHub
 , gettext
 , gtk3
-, python3Packages
+, python311Packages
 , gdk-pixbuf
 , libnotify
 , glib
@@ -16,6 +16,10 @@
 , libcanberra-gtk3
 }:
 
+let
+  # https://github.com/AyatanaIndicators/ayatana-webmail/issues/38
+  python3Packages = python311Packages;
+in
 python3Packages.buildPythonApplication rec {
   pname = "ayatana-webmail";
   version = "22.12.15";

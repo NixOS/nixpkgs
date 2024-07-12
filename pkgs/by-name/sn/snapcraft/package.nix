@@ -11,7 +11,7 @@
 }:
 python3Packages.buildPythonApplication rec {
   pname = "snapcraft";
-  version = "8.2.5";
+  version = "8.2.12";
 
   pyproject = true;
 
@@ -24,7 +24,7 @@ python3Packages.buildPythonApplication rec {
     owner = "canonical";
     repo = "snapcraft";
     rev = "refs/tags/${version}";
-    hash = "sha256-+1Gzseuq402m5FvlRAGXl7Lsy2VnRmd1cXNXhkMDDDE=";
+    hash = "sha256-1PwIbMweeYGi+jLfhFB3LYThqaN2VW7zdyzjD1m57ow=";
   };
 
   patches = [
@@ -67,6 +67,9 @@ python3Packages.buildPythonApplication rec {
     substituteInPlace snapcraft/elf/elf_utils.py \
       --replace-fail 'arch_linker_path = Path(arch_config.dynamic_linker)' \
       'return str(Path("${glibc}/lib/ld-linux-x86-64.so.2"))'
+
+    substituteInPlace snapcraft_legacy/internal/xattrs.py \
+      --replace-fail 'distutils.util' 'setuptools.dist'
   '';
 
   buildInputs = [ makeWrapper ];
@@ -104,9 +107,7 @@ python3Packages.buildPythonApplication rec {
     tinydb
   ];
 
-  nativeBuildInputs = with python3Packages; [
-    setuptools
-  ];
+  nativeBuildInputs = with python3Packages; [ setuptools ];
 
   pythonRelaxDeps = [
     "docutils"
@@ -119,17 +120,21 @@ python3Packages.buildPythonApplication rec {
     wrapProgram $out/bin/snapcraft --prefix PATH : ${squashfsTools}/bin
   '';
 
-  nativeCheckInputs = with python3Packages; [
-    pytest-check
-    pytest-cov
-    pytest-mock
-    pytest-subprocess
-    pytestCheckHook
-    responses
-  ] ++ [
-    git
-    squashfsTools
-  ];
+  nativeCheckInputs =
+    with python3Packages;
+    [
+      pytest-check
+      pytest-cov
+      pytest-mock
+      pytest-subprocess
+      pytestCheckHook
+      responses
+      setuptools
+    ]
+    ++ [
+      git
+      squashfsTools
+    ];
 
   preCheck = ''
     mkdir -p check-phase
@@ -160,9 +165,7 @@ python3Packages.buildPythonApplication rec {
     "test_snap_command_fallback"
     "test_validate_architectures_supported"
     "test_validate_architectures_unsupported"
-  ] ++ lib.optionals stdenv.isAarch64 [
-    "test_load_project"
-  ];
+  ] ++ lib.optionals stdenv.isAarch64 [ "test_load_project" ];
 
   disabledTestPaths = [
     "tests/unit/commands/test_remote.py"
