@@ -1,10 +1,20 @@
-{ lib, stdenv, config, fetchFromGitHub, rustPackages, pkg-config, openssl
-, withALSA ? stdenv.isLinux, alsa-lib
-, withPulseAudio ? config.pulseaudio or stdenv.isLinux, libpulseaudio
-, withPortAudio ? stdenv.isDarwin, portaudio
-, withMpris ? stdenv.isLinux
-, withKeyring ? false
-, dbus
+{
+  lib,
+  stdenv,
+  config,
+  fetchFromGitHub,
+  rustPackages,
+  pkg-config,
+  openssl,
+  withALSA ? stdenv.isLinux,
+  alsa-lib,
+  withPulseAudio ? config.pulseaudio or stdenv.isLinux,
+  libpulseaudio,
+  withPortAudio ? stdenv.isDarwin,
+  portaudio,
+  withMpris ? stdenv.isLinux,
+  withKeyring ? false,
+  dbus,
 }:
 
 rustPackages.rustPlatform.buildRustPackage rec {
@@ -22,14 +32,16 @@ rustPackages.rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = lib.optionals stdenv.isLinux [ openssl ]
+  buildInputs =
+    lib.optionals stdenv.isLinux [ openssl ]
     ++ lib.optional withALSA alsa-lib
     ++ lib.optional withPulseAudio libpulseaudio
     ++ lib.optional withPortAudio portaudio
     ++ lib.optional (withMpris || withKeyring) dbus;
 
   buildNoDefaultFeatures = true;
-  buildFeatures = lib.optional withALSA "alsa_backend"
+  buildFeatures =
+    lib.optional withALSA "alsa_backend"
     ++ lib.optional withPulseAudio "pulseaudio_backend"
     ++ lib.optional withPortAudio "portaudio_backend"
     ++ lib.optional withMpris "dbus_mpris"
@@ -42,7 +54,10 @@ rustPackages.rustPlatform.buildRustPackage rec {
     homepage = "https://spotifyd.rs/";
     changelog = "https://github.com/Spotifyd/spotifyd/blob/${src.rev}/CHANGELOG.md";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ anderslundstedt Br1ght0ne ];
+    maintainers = with maintainers; [
+      anderslundstedt
+      Br1ght0ne
+    ];
     platforms = platforms.unix;
     mainProgram = "spotifyd";
   };
