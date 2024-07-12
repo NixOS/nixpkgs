@@ -6,7 +6,6 @@ lib.makeScope newScope (
     inherit (self) callPackage;
   in
   {
-    budgie-session = callPackage ./budgie-session { };
     magpie = callPackage ./magpie { };
   }
 )

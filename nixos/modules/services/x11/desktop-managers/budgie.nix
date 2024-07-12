@@ -126,7 +126,7 @@ in {
         (budgie-desktop-with-plugins.override { plugins = cfg.extraPlugins; })
         budgie-desktop-view
         budgie-screensaver
-        budgie.budgie-session
+        budgie-session
 
         # Required by Budgie Menu.
         gnome-menus
