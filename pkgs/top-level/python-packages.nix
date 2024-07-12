@@ -9606,6 +9606,8 @@ self: super: with self; {
 
   pandoc-attributes = callPackage ../development/python-modules/pandoc-attributes { };
 
+  pandoc-latex-environment = callPackage ../development/python-modules/pandoc-latex-environment { };
+
   pandoc-xnos = callPackage ../development/python-modules/pandoc-xnos { };
 
   pandocfilters = callPackage ../development/python-modules/pandocfilters { };
