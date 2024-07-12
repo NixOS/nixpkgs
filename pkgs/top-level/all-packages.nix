@@ -33656,12 +33656,10 @@ with pkgs;
 
   qutebrowser = callPackage ../applications/networking/browsers/qutebrowser {
     inherit (__splicedPackages.qt6Packages) qtbase qtwebengine wrapQtAppsHook qtwayland;
-    python3 = python311;
   };
 
   qutebrowser-qt5 = callPackage ../applications/networking/browsers/qutebrowser {
     inherit (__splicedPackages.libsForQt5) qtbase qtwebengine wrapQtAppsHook qtwayland;
-    python3 = python311;
   };
 
   qxw = callPackage ../applications/editors/qxw { };

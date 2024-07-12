@@ -73,6 +73,8 @@ python3.pkgs.buildPythonApplication {
 
   postPatch = ''
     substituteInPlace qutebrowser/misc/quitter.py --subst-var-by qutebrowser "$out/bin/qutebrowser"
+    substituteInPlace misc/Makefile \
+      --replace 'setup.py install --prefix="$(PREFIX)" --optimize=1 $(SETUPTOOLSOPTS)' "-m pip install . --no-deps --prefix=$out"
 
     sed -i "s,/usr,$out,g" qutebrowser/utils/standarddir.py
   '' + lib.optionalString withPdfReader ''
@@ -82,9 +84,9 @@ python3.pkgs.buildPythonApplication {
   installPhase = ''
     runHook preInstall
 
+    export PYTHONOPTIMIZE=1
     make -f misc/Makefile \
-      PYTHON=${python3.pythonOnBuildForHost.interpreter} \
-      PREFIX=. \
+      PYTHON=${(python3.pythonOnBuildForHost.withPackages (p: [p.pip])).interpreter} \
       DESTDIR="$out" \
       DATAROOTDIR=/share \
       install
