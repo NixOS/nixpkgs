@@ -34,6 +34,7 @@
   libwacom,
   mesa,
   meson,
+  validatePkgConfig,
   xorgserver,
   python3,
   wrapGAppsHook3,
@@ -95,6 +96,7 @@ stdenv.mkDerivation (finalAttrs: {
     xvfb-run
     pkg-config
     python3
+    validatePkgConfig
     wrapGAppsHook3
     gi-docgen
     xorgserver
