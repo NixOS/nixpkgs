@@ -44,12 +44,14 @@ let
         qemu-utils
         qemu_kvm
         rsync
+        skopeo
         squashfs-tools-ng
         squashfsTools
         sshfs
         swtpm
         systemd
         thin-provisioning-tools
+        umoci
         util-linux
         virtiofsd
         xdelta
