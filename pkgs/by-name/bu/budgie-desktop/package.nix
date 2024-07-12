@@ -26,6 +26,7 @@
   mesa,
   meson,
   ninja,
+  nix-update-script,
   pkg-config,
   polkit,
   sassc,
@@ -101,17 +102,21 @@ stdenv.mkDerivation (finalAttrs: {
     libpeas
   ];
 
-  passthru.providedSessions = [ "budgie-desktop" ];
+  passthru = {
+    providedSessions = [ "budgie-desktop" ];
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Feature-rich, modern desktop designed to keep out the way of the user";
     homepage = "https://github.com/BuddiesOfBudgie/budgie-desktop";
+    changelog = "https://github.com/BuddiesOfBudgie/budgie-desktop/releases/tag/v${finalAttrs.version}";
     license = with lib.licenses; [
       gpl2Plus
       lgpl21Plus
       cc-by-sa-30
     ];
-    platforms = lib.platforms.linux;
     maintainers = lib.teams.budgie.members;
+    platforms = lib.platforms.linux;
   };
 })
