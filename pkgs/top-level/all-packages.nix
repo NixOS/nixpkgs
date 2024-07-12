@@ -5101,6 +5101,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Cocoa OpenGL;
   };
 
+  f3d_egl = f3d.override { vtk_9 = vtk_9_egl; };
+
   facedetect = callPackage ../tools/graphics/facedetect { };
 
   faketty = callPackage ../tools/misc/faketty { };
@@ -24568,6 +24570,9 @@ with pkgs;
   vtk_9_withQt5 = vtk_9.override { enableQt = true; };
 
   vtk = vtk_9;
+
+  vtk_9_egl = vtk_9.override { enableEgl = true; };
+
   vtkWithQt5 = vtk_9_withQt5;
 
   vulkan-caps-viewer = libsForQt5.callPackage ../tools/graphics/vulkan-caps-viewer { };
