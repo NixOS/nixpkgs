@@ -1,6 +1,7 @@
 {
   lib,
   buildPythonPackage,
+  defusedxml,
   dissect-cstruct,
   dissect-util,
   fetchFromGitHub,
@@ -30,6 +31,7 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
+    defusedxml
     dissect-cstruct
     dissect-util
   ];
