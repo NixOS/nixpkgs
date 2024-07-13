@@ -1,4 +1,4 @@
-{ config, lib, stdenv, fetchurl, fetchsvn, pkg-config, freetype, yasm, ffmpeg_4
+{ config, lib, stdenv, fetchurl, fetchsvn, pkg-config, freetype, yasm, ffmpeg_6
 , aalibSupport ? true, aalib
 , fontconfigSupport ? true, fontconfig, freefont_ttf
 , fribidiSupport ? true, fribidi
@@ -70,12 +70,12 @@ in
 
 stdenv.mkDerivation rec {
   pname = "mplayer";
-  version = "unstable-2022-02-03";
+  version = "1.5-unstable-2024-07-03";
 
   src = fetchsvn {
     url = "svn://svn.mplayerhq.hu/mplayer/trunk";
-    rev = "38331";
-    sha256 = "1vpic8i6zvg0zsy50vhm45ysqag561bpn9jycfbvvwl9ji7l55zi";
+    rev = "38637";
+    hash = "sha256-9KQOB6QIs1VZhazJqW8dY4ASiMgoxV6davfpKgLPbmE=";
   };
 
   prePatch = ''
@@ -87,7 +87,7 @@ stdenv.mkDerivation rec {
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [ pkg-config yasm ];
   buildInputs = with lib;
-    [ freetype ffmpeg_4 ]
+    [ freetype ffmpeg_6 ]
     ++ optional aalibSupport aalib
     ++ optional fontconfigSupport fontconfig
     ++ optional fribidiSupport fribidi
