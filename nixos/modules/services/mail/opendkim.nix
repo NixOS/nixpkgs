@@ -10,12 +10,15 @@ let
 
   keyFile = "${cfg.keyPath}/${cfg.selector}.private";
 
+  cfgCts = optionalString (cfg.umask != null) "UMask ${cfg.umask}\n"
+         + optionalString (cfg.extraConfig != null) cfg.extraConfig;
+
   args = [ "-f" "-l"
            "-p" cfg.socket
            "-d" cfg.domains
            "-k" keyFile
            "-s" cfg.selector
-         ] ++ optionals (cfg.configFile != null) [ "-x" cfg.configFile ];
+         ] ++ optionals (cfgCts != "") [ "-x" (pkgs.writeText "opendkim.conf" cfgCts)];
 
 in {
   imports = [
@@ -38,6 +41,12 @@ in {
         type = types.str;
         default = defaultSock;
         description = "Socket which is used for communication with OpenDKIM.";
+      };
+
+      umask = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        description = "Umask for socket";
       };
 
       user = mkOption {
@@ -77,8 +86,8 @@ in {
         description = "Selector to use when signing.";
       };
 
-      configFile = mkOption {
-        type = types.nullOr types.path;
+      extraConfig = mkOption {
+        type = types.nullOr types.lines;
         default = null;
         description = "Additional opendkim configuration.";
       };
