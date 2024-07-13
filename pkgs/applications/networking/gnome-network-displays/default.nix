@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "0.92.2";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${finalAttrs.pname}/${lib.versions.majorMinor finalAttrs.version}/${finalAttrs.pname}-${finalAttrs.version}.tar.xz";
+    url = "mirror://gnome/sources/gnome-network-displays/${lib.versions.majorMinor finalAttrs.version}/gnome-network-displays-${finalAttrs.version}.tar.xz";
     sha256 = "sha256-df35UJnRolVSiYcArpnrglxNKbTKA3LAGsNwlDF7cj4=";
   };
 

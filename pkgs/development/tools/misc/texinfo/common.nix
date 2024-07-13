@@ -90,7 +90,7 @@ stdenv.mkDerivation {
     changelog = "https://git.savannah.gnu.org/cgit/texinfo.git/plain/NEWS";
     license = licenses.gpl3Plus;
     platforms = platforms.all;
-    maintainers = with maintainers; [ vrthra oxij ];
+    maintainers = with maintainers; [ oxij ];
     # see comment above in patches section
     broken = stdenv.hostPlatform.isPower64 && lib.strings.versionOlder version "6.0";
 

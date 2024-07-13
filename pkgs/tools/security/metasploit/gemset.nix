@@ -724,12 +724,12 @@
     platforms = [];
     source = {
       fetchSubmodules = false;
-      rev = "d21ca8b456e74278a0149a34ced9292692b5c52d";
-      sha256 = "1w2hwd75i3n1q8ryb8rp84pcq451bixy6l58dc2cn308295r49vl";
+      rev = "edac4a2e9e1ccf33e8b065fb64c289adf43f7a8b";
+      sha256 = "0fmqcvcxnj04js2zqi2bmf6dhzbw9qz7z0by12r56102fbl0d49s";
       type = "git";
       url = "https://github.com/rapid7/metasploit-framework";
     };
-    version = "6.4.16";
+    version = "6.4.17";
   };
   metasploit-model = {
     groups = ["default"];
@@ -766,10 +766,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0649y1zc2pncfalsa5nkszmbiz1gfg4q3bhh4p2q6vwaac5g6sfj";
+      sha256 = "0677lldp420sbq876j3qm7p8rp7hm1y9fdxgmsw0xdj97010ahbj";
       type = "gem";
     };
-    version = "1.0.28";
+    version = "1.0.29";
   };
   method_source = {
     groups = ["default"];

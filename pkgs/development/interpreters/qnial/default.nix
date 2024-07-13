@@ -34,7 +34,7 @@ stdenv.mkDerivation {
     mainProgram = "nial";
     homepage = "https://github.com/vrthra/qnial";
     license = lib.licenses.artistic1;
-    maintainers = [ lib.maintainers.vrthra ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 }

@@ -105,7 +105,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "4.1.1";
 
   src = fetchurl {
-    url = "https://download.blender.org/source/${finalAttrs.pname}-${finalAttrs.version}.tar.xz";
+    url = "https://download.blender.org/source/blender-${finalAttrs.version}.tar.xz";
     hash = "sha256-T7s69k0/hN9ccQN0hFQibBiFwawu1Tc9DOoegOgsCEg=";
   };
 
@@ -197,6 +197,17 @@ stdenv.mkDerivation (finalAttrs: {
       "-DWITH_CYCLES_CUDA_BINARIES=ON"
       "-DWITH_CYCLES_DEVICE_OPTIX=ON"
     ];
+
+  preConfigure = ''
+    (
+      expected_python_version=$(grep -E --only-matching 'set\(_PYTHON_VERSION_SUPPORTED [0-9.]+\)' build_files/cmake/Modules/FindPythonLibsUnix.cmake | grep -E --only-matching '[0-9.]+')
+      actual_python_version=$(python -c 'import sys; print(".".join(map(str, sys.version_info[0:2])))')
+      if ! [[ "$actual_python_version" = "$expected_python_version" ]]; then
+        echo "wrong Python version, expected '$expected_python_version', got '$actual_python_version'" >&2
+        exit 1
+      fi
+    )
+  '';
 
   nativeBuildInputs =
     [

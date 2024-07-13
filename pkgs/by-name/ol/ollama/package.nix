@@ -1,5 +1,5 @@
 { lib
-, buildGo122Module
+, buildGoModule
 , fetchFromGitHub
 , fetchpatch
 , buildEnv
@@ -134,9 +134,9 @@ let
 
   goBuild =
     if enableCuda then
-      buildGo122Module.override { stdenv = overrideCC stdenv gcc12; }
+      buildGoModule.override { stdenv = overrideCC stdenv gcc12; }
     else
-      buildGo122Module;
+      buildGoModule;
   inherit (lib) licenses platforms maintainers;
 in
 goBuild ((lib.optionalAttrs enableRocm {

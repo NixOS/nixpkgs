@@ -375,7 +375,73 @@ Assuming the following directory structure, we can define `sourceRoot` and `pnpm
   pnpmRoot = "frontend";
 ```
 
+### Yarn {#javascript-yarn}
+
+Yarn based projects use a `yarn.lock` file instead of a `package-lock.json` to pin dependencies. Nixpkgs provides the Nix function `fetchYarnDeps` which fetches an offline cache suitable for running `yarn install` before building the project. In addition, Nixpkgs provides the hooks:
+
+- `yarnConfigHook`: Fetches the dependencies from the offline cache and installs them into `node_modules`.
+- `yarnBuildHook`: Runs `yarn build` or a specified `yarn` command that builds the project.
+
+An example usage of the above attributes is:
+
+```nix
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchYarnDeps,
+  yarnConfigHook,
+  yarnBuildHook,
+  nodejs,
+  npmHooks,
+}:
+
+stdenv.mkDerivation (finalAttrs: {
+  pname = "...";
+  version = "...";
+
+  src = fetchFromGitHub {
+    owner = "...";
+    repo = "...";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+  };
+
+  yarnOfflineCache = fetchYarnDeps {
+    yarnLock = finalAttrs.src + "/yarn.lock";
+    hash = "sha256-mo8urQaWIHu33+r0Y7mL9mJ/aSe/5CihuIetTeDHEUQ=";
+  };
+
+  nativeBuildInputs = [
+    yarnConfigHook
+    yarnBuildHook
+    # Needed for executing package.json scripts
+    nodejs
+    npmHooks.npmInstallHook
+  ];
+
+  meta = {
+    # ...
+  };
+})
+```
+
+Note that there is no setup hook for installing yarn based packages - `npmHooks.npmInstallHook` should fit most cases, but sometimes you may need to override the `installPhase` completely.
+
+#### `yarnConfigHook` arguments {#javascript-yarnconfighook}
+
+By default, `yarnConfigHook` relies upon the attribute `${yarnOfflineCache}` (or `${offlineCache}` if the former is not set) to find the location of the offline cache produced by `fetchYarnDeps`. To disable this phase, you can set `dontYarnInstallDeps = true` or override the `configurePhase`.
+
+#### `yarnBuildHook` arguments {#javascript-yarnbuildhook}
+
+This script by default runs `yarn --offline build`, and it relies upon the project's dependencies installed at `node_modules`. Below is a list of additional `mkDerivation` arguments read by this hook:
+
+- `yarnBuildScript`: Sets a different `yarn --offline` subcommand (defaults to `build`).
+- `yarnBuildFlags`: Single string list of additional flags to pass the above command, or a Nix list of such additional flags.
+
 ### yarn2nix {#javascript-yarn2nix}
+
+WARNING: The `yarn2nix` functions have been deprecated in favor of the new `yarnConfigHook` and `yarnBuildHook`. Documentation for them still appears here for the sake of the packages that still use them. See also a tracking issue [#324246](https://github.com/NixOS/nixpkgs/issues/324246).
 
 #### Preparation {#javascript-yarn2nix-preparation}
 

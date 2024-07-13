@@ -15,7 +15,7 @@ let
   buildHashes = builtins.fromJSON (builtins.readFile ./hashes.json);
 
   # the version of infisical
-  version = "0.22.6";
+  version = "0.23.3";
 
   # the platform-specific, statically linked binary
   src =
@@ -76,7 +76,7 @@ stdenv.mkDerivation {
     changelog = "https://github.com/infisical/infisical/releases/tag/infisical-cli%2Fv${version}";
     license = licenses.mit;
     mainProgram = "infisical";
-    maintainers = teams.infisical.members;
+    maintainers = teams.infisical.members ++ (with maintainers; [ hausken ]);
     platforms = [
       "x86_64-linux"
       "aarch64-linux"

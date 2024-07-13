@@ -1,11 +1,11 @@
 {
   lib,
-  buildGo122Module,
+  buildGoModule,
   fetchFromGitHub,
   darwin,
   stdenv,
 }:
-buildGo122Module rec {
+buildGoModule rec {
   pname = "gptscript";
   version = "0.8.2";
 

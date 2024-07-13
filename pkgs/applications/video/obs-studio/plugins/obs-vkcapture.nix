@@ -24,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "nowrep";
-    repo = finalAttrs.pname;
+    repo = "obs-vkcapture";
     rev = "v${finalAttrs.version}";
     hash = "sha256-hYPQ1N4k4eb+bvGWZqaQJ/C8C5Lh8ooZ03raGF5ORgE=";
   };

@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "SIXEL library for console graphics, and converter programs";
     homepage = "https://github.com/libsixel/libsixel";
-    maintainers = with maintainers; [ vrthra ];
+    maintainers = with maintainers; [ ];
     license = licenses.mit;
     platforms = platforms.unix;
   };
