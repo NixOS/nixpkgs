@@ -1,27 +1,35 @@
 {
   lib,
+  aiohttp,
+  aioresponses,
   buildPythonPackage,
   fetchFromGitLab,
-  requests,
   pytestCheckHook,
+  pythonOlder,
   requests-mock,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "doorbirdpy";
-  version = "2.2.2";
-  format = "setuptools";
+  version = "3.0.2";
+  pyproject = true;
+
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitLab {
     owner = "klikini";
     repo = "doorbirdpy";
     rev = version;
-    hash = "sha256-pgL4JegD1gANefp7jLYb74N9wgpkDgQc/Fe+NyLBrkA=";
+    hash = "sha256-6B4EMK41vEpmLoQLD+XN9yStLdxyHHk/Mym9J0o7Qvc=";
   };
 
-  propagatedBuildInputs = [ requests ];
+  build-system = [ setuptools ];
+
+  dependencies = [ aiohttp ];
 
   nativeCheckInputs = [
+    aioresponses
     pytestCheckHook
     requests-mock
   ];
