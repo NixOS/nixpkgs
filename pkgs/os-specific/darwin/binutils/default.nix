@@ -17,6 +17,7 @@ let
     "addr2line"
     "ar"
     "c++filt"
+    "dwarfdump"
     "dsymutil"
     "nm"
     "objcopy"
@@ -90,7 +91,7 @@ stdenvNoCC.mkDerivation {
       ${linkManPages (lib.getMan cctools) "$tool" "$tool"}
     done
     ${
-      # These unprefixed because some tools expect to invoke them without it when cross-compiling to Darwin:
+      # These are unprefixed because some tools expect to invoke them without it when cross-compiling to Darwin:
       # - clang needs `dsymutil` when building with debug information;
       # - meson needs `lipo` when cross-compiling to Darwin; and
       # - meson also needs `install_name_tool` and `otool` when performing rpath cleanup on installation.
