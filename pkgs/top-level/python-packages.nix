@@ -1769,6 +1769,8 @@ self: super: with self; {
 
   bpycv = callPackage ../development/python-modules/bpycv {};
 
+  bpylist2 = callPackage ../development/python-modules/bpylist2 { };
+
   bpython = callPackage ../development/python-modules/bpython { };
 
   bqplot = callPackage ../development/python-modules/bqplot { };
