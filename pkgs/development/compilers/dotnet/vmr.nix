@@ -41,7 +41,7 @@ let
     isDarwin
     buildPlatform
     targetPlatform;
-  inherit (darwin) cctools;
+  inherit (darwin) cctools-llvm;
   inherit (swiftPackages) apple_sdk swift;
 
   releaseManifest = lib.importJSON releaseManifestFile;
@@ -59,7 +59,7 @@ let
     dontUnpack = true;
     installPhase = ''
       mkdir -p "$out/bin"
-      ln -s "${cctools}/bin/dwarfdump" "$out/bin"
+      ln -s "${cctools-llvm}/bin/dwarfdump" "$out/bin"
     '';
   };
 
