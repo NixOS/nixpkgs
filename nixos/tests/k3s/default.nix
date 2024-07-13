@@ -7,6 +7,8 @@ let
   allK3s = lib.filterAttrs (n: _: lib.strings.hasPrefix "k3s_" n) pkgs;
 in
 {
+  # Test whether container images are imported and auto deploying manifests work
+  auto-deploy = lib.mapAttrs (_: k3s: import ./auto-deploy.nix { inherit system pkgs k3s; }) allK3s;
   # Testing K3s with Etcd backend
   etcd = lib.mapAttrs (
     _: k3s:

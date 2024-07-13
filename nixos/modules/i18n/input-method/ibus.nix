@@ -5,8 +5,9 @@ with lib;
 let
   cfg = config.i18n.inputMethod.ibus;
   ibusPackage = pkgs.ibus-with-plugins.override { plugins = cfg.engines; };
-  ibusEngine = types.package // {
+  ibusEngine = lib.types.mkOptionType {
     name  = "ibus-engine";
+    inherit (lib.types.package) descriptionClass merge;
     check = x: (lib.types.package.check x) && (attrByPath ["meta" "isIbusEngine"] false x);
   };
 

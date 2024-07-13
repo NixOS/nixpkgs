@@ -1,4 +1,17 @@
-{lib, stdenv, fetchFromGitHub}:
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, pandoc
+, capstone
+, elfutils
+, libtraceevent
+, ncurses
+, withLuaJIT ? false
+, luajit
+, withPython ? false
+, python3
+}:
 
 stdenv.mkDerivation rec {
   pname = "uftrace";
@@ -11,8 +24,23 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-JuBwyE6JH3CpJH863LbnWELUIIEKVaAcz8h8beeABGQ=";
   };
 
+  nativeBuildInputs = [ pkg-config pandoc ];
+  buildInputs =
+    [ capstone elfutils libtraceevent ncurses ]
+    ++ lib.optional withLuaJIT luajit
+    ++ lib.optional withPython python3;
+
+  # libmcount.so dlopens python and luajit, make sure they're in the RUNPATH
+  preBuild =
+    let
+      libs = lib.optional withLuaJIT "luajit" ++ lib.optional withPython "python3-embed";
+    in
+    lib.optionalString (withLuaJIT || withPython) ''
+      makeFlagsArray+=(LDFLAGS_lib="$(pkg-config --libs ${lib.concatStringsSep " " libs})")
+    '';
+
   postUnpack = ''
-        patchShebangs .
+    patchShebangs .
   '';
 
   meta = {
@@ -21,6 +49,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/namhyung/uftrace";
     license = lib.licenses.gpl2;
     platforms = lib.platforms.linux;
-    maintainers = [lib.maintainers.nthorne];
+    maintainers = [ lib.maintainers.nthorne ];
   };
 }

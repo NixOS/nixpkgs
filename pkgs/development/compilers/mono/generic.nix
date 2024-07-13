@@ -98,7 +98,7 @@ stdenv.mkDerivation rec {
     homepage = "https://mono-project.com/";
     description = "Cross platform, open source .NET development framework";
     platforms = with platforms; darwin ++ linux;
-    maintainers = with maintainers; [ thoughtpolice obadz vrthra ];
+    maintainers = with maintainers; [ thoughtpolice obadz ];
     license = with licenses; [
       /* runtime, compilers, tools and most class libraries licensed */ mit
       /* runtime includes some code licensed */ bsd3

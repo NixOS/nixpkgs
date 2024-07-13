@@ -259,7 +259,6 @@
 , "webpack-dev-server"
 , "copy-webpack-plugin"
 , "webtorrent-cli"
-, "wrangler"
 , "wring"
 , "@yaegassy/coc-nginx"
 , "yalc"

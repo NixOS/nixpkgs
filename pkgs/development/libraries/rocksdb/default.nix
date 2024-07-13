@@ -11,7 +11,7 @@
 , windows
 , enableJemalloc ? false
 , jemalloc
-, enableLiburing ? true
+, enableLiburing ? stdenv.isLinux
 , liburing
 , enableShared ? !stdenv.hostPlatform.isStatic
 , sse42Support ? stdenv.hostPlatform.sse4_2Support
@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-bTUzh7ch14TDcm6GkfhA5I/qUVmUm+RE5d2HMZ3zaNc=";
   };
 
-  patches = [ ./fix-findliburing.patch ];
+  patches = lib.optional (lib.versionAtLeast finalAttrs.version "6.29.3" && enableLiburing) ./fix-findliburing.patch;
 
   nativeBuildInputs = [ cmake ninja ];
 

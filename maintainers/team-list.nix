@@ -496,6 +496,20 @@ with lib.maintainers;
     shortName = "Jupyter";
   };
 
+  k3s = {
+    githubTeams = [ "k3s" ];
+    members = [
+      euank
+      marcusramberg
+      mic92
+      superherointj
+      wrmilling
+      yajo
+    ];
+    scope = "Maintain K3s package, NixOS module, NixOS tests, update script";
+    shortName = "K3s";
+  };
+
   kubernetes = {
     members = [
       johanot
@@ -920,6 +934,16 @@ with lib.maintainers;
     ];
     scope = "Maintain steam module and packages";
     shortName = "Steam";
+  };
+
+  stridtech = {
+    # Verify additions by approval of an already existing member of the team
+    members = [
+      superherointj
+      ulrikstrid
+    ];
+    scope = "Group registration for Strid Tech AB team members who collectively maintain packages";
+    shortName = "StridTech";
   };
 
   systemd = {

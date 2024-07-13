@@ -585,6 +585,10 @@ let
 
     genspio = callPackage ../development/ocaml-modules/genspio { };
 
+    get-activity = callPackage ../development/ocaml-modules/get-activity { };
+
+    get-activity-lib = callPackage ../development/ocaml-modules/get-activity/lib.nix { };
+
     getopt = callPackage ../development/ocaml-modules/getopt { };
 
     gettext-camomile = callPackage ../development/ocaml-modules/ocaml-gettext/camomile.nix { };

@@ -1,12 +1,12 @@
 { lib
-, buildGo122Module
+, buildGoModule
 , fetchFromGitHub
 , installShellFiles
 , makeWrapper
 , pluginsDir ? null
 }:
 
-buildGo122Module rec {
+buildGoModule rec {
   pname = "helmfile";
   version = "0.165.0";
 

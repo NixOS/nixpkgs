@@ -3,7 +3,7 @@
   hwdata,
   pkg-config,
   lxc,
-  buildGo122Module,
+  buildGoModule,
   fetchFromGitHub,
   acl,
   libcap,
@@ -16,7 +16,7 @@
   nix-update-script,
 }:
 
-buildGo122Module rec {
+buildGoModule rec {
   pname = "lxd-unwrapped-lts";
   # major/minor are used in updateScript to pin to LTS
   version = "5.21.1";

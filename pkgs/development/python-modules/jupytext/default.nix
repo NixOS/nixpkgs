@@ -20,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "jupytext";
-  version = "1.16.2";
+  version = "1.16.3";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-hifdm+y769ecxKTtRyfYnXjmBrS0ZOq3I1ezsCkCOhQ=";
+    hash = "sha256-HrrJkEYd2fR3/3/uyeMAP6GsyJ88FroBtz95/XbwGpg=";
   };
 
   build-system = [

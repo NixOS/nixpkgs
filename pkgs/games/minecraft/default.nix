@@ -147,7 +147,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Official launcher for Minecraft, a sandbox-building game";
     homepage = "https://minecraft.net";
-    maintainers = with maintainers; [ cpages ryantm ];
+    maintainers = with maintainers; [ ryantm ];
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     platforms = [ "x86_64-linux" ];

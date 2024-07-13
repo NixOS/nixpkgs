@@ -68,7 +68,10 @@ buildPythonPackage rec {
     hash = "sha256-eTVT1yowuDsajjceWojdUdX466FKneUt1i5QipBFdp4=";
   };
 
-  pythonRelaxDeps = [ "orjson" ];
+  pythonRelaxDeps = [
+    "chroma-hnswlib"
+    "orjson"
+  ];
 
   nativeBuildInputs = [
     cargo

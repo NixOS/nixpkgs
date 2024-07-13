@@ -92,13 +92,7 @@ let
     description = "Lightweight Kubernetes distribution";
     license = licenses.asl20;
     homepage = "https://k3s.io";
-    maintainers = with maintainers; [
-      euank
-      mic92
-      superherointj
-      wrmilling
-      yajo
-    ];
+    maintainers = lib.teams.k3s.members;
     platforms = platforms.linux;
 
     # resolves collisions with other installations of kubectl, crictl, ctr
@@ -425,6 +419,7 @@ buildGoModule rec {
       k3s_version = "k3s_" + lib.replaceStrings [ "." ] [ "_" ] (lib.versions.majorMinor version);
     in
     {
+      auto-deploy = nixosTests.k3s.auto-deploy.${k3s_version};
       etcd = nixosTests.k3s.etcd.${k3s_version};
       single-node = nixosTests.k3s.single-node.${k3s_version};
       multi-node = nixosTests.k3s.multi-node.${k3s_version};

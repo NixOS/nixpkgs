@@ -1,5 +1,5 @@
 { lib
-, buildGo122Module
+, buildGoModule
 , copyDesktopItems
 , fetchFromGitHub
 , pkg-config
@@ -12,7 +12,7 @@
 , vte-gtk4
 }:
 
-buildGo122Module rec {
+buildGoModule rec {
   pname = "seabird";
   version = "0.3.2";
 

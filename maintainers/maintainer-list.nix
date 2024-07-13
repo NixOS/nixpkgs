@@ -4123,6 +4123,12 @@
     githubId = 34543609;
     name = "creator54";
   };
+  crem = {
+    email = "max@alstercaminer.com";
+    github = "MaxCaminer";
+    githubId = 16345077;
+    name = "crem";
+  };
   crertel = {
     email = "chris@kedagital.com";
     github = "crertel";
@@ -4927,6 +4933,12 @@
     github = "dezgeg";
     githubId = 579369;
     name = "Tuomas Tynkkynen";
+  };
+  dezren39 = {
+    email = "drewrypope@gmail.com";
+    github = "dezren39";
+    githubId = 11225574;
+    name = "Drewry Pope";
   };
   dfithian = {
     email = "daniel.m.fithian@gmail.com";
@@ -7884,6 +7896,13 @@
     github = "haslersn";
     githubId = 33969028;
     name = "Sebastian Hasler";
+  };
+  hausken = {
+    name = "Hausken";
+    email = "hauskens-git@disp.lease>";
+    github = "hauskens";
+    githubId = 79340822;
+    keys = [ { fingerprint = "3582 5B85 66C8 4F36 45C7  EC42 809F 7938 9CB1 8650"; } ];
   };
   havvy = {
     email = "ryan.havvy@gmail.com";
@@ -15500,6 +15519,11 @@
     githubId = 943430;
     name = "David Hagege";
   };
+  pedohorse = {
+    github = "pedohorse";
+    githubId = 13556996;
+    name = "pedohorse";
+  };
   pedrohlc = {
     email = "root@pedrohlc.com";
     github = "PedroHLC";
@@ -18071,6 +18095,12 @@
     github = "sdier";
     githubId = 11613056;
     name = "Scott Dier";
+  };
+  seanrmurphy = {
+    email = "sean@gopaddy.ch";
+    github = "seanrmurphy";
+    githubId = 540360;
+    name = "Sean Murphy";
   };
   SeanZicari = {
     email = "sean.zicari@gmail.com";

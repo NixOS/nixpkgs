@@ -13,6 +13,7 @@
 , libxml2
 , stoken
 , zlib
+, pcsclite
 , vpnc-scripts
 , PCSC
 , useDefaultExternalBrowser ? stdenv.isLinux && stdenv.buildPlatform == stdenv.hostPlatform # xdg-utils doesn't cross-compile
@@ -32,7 +33,7 @@ stdenv.mkDerivation rec {
     "--without-openssl-version-check"
   ];
 
-  buildInputs = [ gmp libxml2 stoken zlib (if useOpenSSL then openssl else gnutls) ]
+  buildInputs = [ gmp libxml2 stoken zlib pcsclite (if useOpenSSL then openssl else gnutls) ]
     ++ lib.optional stdenv.isDarwin PCSC
     ++ lib.optional stdenv.isLinux p11-kit
     ++ lib.optional useDefaultExternalBrowser xdg-utils;

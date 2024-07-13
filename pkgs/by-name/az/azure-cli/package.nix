@@ -441,7 +441,7 @@ py.pkgs.toPythonApplication (
       sourceProvenance = [ sourceTypes.fromSource ];
       license = licenses.mit;
       mainProgram = "az";
-      maintainers = with maintainers; [ katexochen ];
+      maintainers = with maintainers; [ katexochen ] ++ lib.teams.stridtech.members;
       platforms = platforms.all;
     };
   }

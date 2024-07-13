@@ -62,6 +62,12 @@ stdenv'.mkDerivation rec {
     fetchSubmodules = true;
   };
 
+  patches = [
+    # fix(upnp): support newer miniupnpc library (#2782)
+    # Manually cherry-picked on to 0.23.1.
+    ./0001-fix-upnp-support-newer-miniupnpc-library-2782.patch
+  ];
+
   # build webui
   ui = buildNpmPackage {
     inherit src version;
