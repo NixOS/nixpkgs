@@ -6,12 +6,13 @@
   dill,
   mock,
   pytestCheckHook,
+  setuptools
 }:
 
 buildPythonPackage rec {
   pname = "expiringdict";
   version = "1.2.2";
-  format = "setuptools";
+  pyproject = true;
 
   # use fetchFromGitHub instead of fetchPypi because the test suite of
   # the package is not included into the PyPI tarball
@@ -35,6 +36,8 @@ buildPythonPackage rec {
       hash = "sha256-FNdnU6iUMyED5j8oAjhmJTR7zQeEc/Z5s64pdeT4F8w=";
     })
   ];
+
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [
     dill
