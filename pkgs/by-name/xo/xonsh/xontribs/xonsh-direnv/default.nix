@@ -9,24 +9,14 @@
 
 buildPythonPackage rec {
   pname = "xonsh-direnv";
-  version = "1.7.0";
+  version = "1.6.2";
 
   src = fetchFromGitHub {
-    owner = "greg-hellings";
+    owner = "74th";
     repo = pname;
     rev = version;
-    hash = "sha256-LPSYUK07TQuTI+u0EmUuGL48znUfRDVGEIS/mmzcETU=";
+    hash = "sha256-bp1mK+YO9htEQcRSD5wJkAZtQKK2t3IOW7Kdc6b8Lb0=";
   };
-
-  prePatch = ''
-    substituteInPlace xontrib/direnv.xsh \
-      --replace '__direnv_post_rc()' \
-                '__direnv_post_rc(**kwargs)' \
-      --replace '__direnv_chdir(olddir: str, newdir: str)' \
-                '__direnv_chdir(olddir: str, newdir: str, **kwargs)' \
-      --replace '__direnv_postcommand(cmd: str, rtn: int, out: str or None, ts: list)' \
-                '__direnv_postcommand(cmd: str, rtn: int, out: str or None, ts: list, **kwargs)'
-  '';
 
   propagatedBuildInputs = [
     direnv
