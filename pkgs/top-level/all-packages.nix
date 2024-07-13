@@ -3997,8 +3997,6 @@ with pkgs;
 
   xc = callPackage ../development/tools/xc { };
 
-  ios-webkit-debug-proxy = callPackage ../development/mobile/ios-webkit-debug-proxy { };
-
   xcodeenv = callPackage ../development/mobile/xcodeenv { };
 
   xcodes = swiftPackages.callPackage ../development/tools/xcodes {
