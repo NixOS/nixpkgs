@@ -117,6 +117,7 @@ lib.optionalAttrs (buildScript != null) { builder = buildScript; }
     (substituteAll {
       src = ./gptk/0001-winemac.drv-changes-for-GPTK-compatibility.patch;
       usePre910API = if lib.versionOlder finalAttrs.version "9.10" then 1 else 0;
+      usePre912API = if lib.versionOlder finalAttrs.version "9.12" then 1 else 0;
     })
     (substituteAll {
       src =
