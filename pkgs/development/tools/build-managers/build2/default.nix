@@ -17,7 +17,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "build2";
-  version = "0.16.0";
+  version = "0.17.0";
 
   outputs = [ "out" "dev" "doc" "man" ];
 
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://pkg.cppget.org/1/alpha/build2/build2-${version}.tar.gz";
-    hash = "sha256-ZK4+UACsAs51bC1dE0sIxmCiHlH3pYGPWJNsl61oSOY=";
+    hash = "sha256-Kx5X/GV3GjFSbjo1mzteiHnnm4mr6+NAKIR/mEE+IdA=";
   };
 
   patches = [
