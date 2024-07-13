@@ -1,4 +1,4 @@
-{ 
+{
   stdenv, lib, pkg-config
 ,  fetchurl
 ,  cmake
@@ -8,7 +8,7 @@
 ,  liblo
 ,  lv2
 ,  qt6
-,  xorg 
+,  xorg
 }:
 
 stdenv.mkDerivation rec {
@@ -20,16 +20,16 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-vi//84boqaVxC/KCg+HF76vB4Opch02LU4RtbVaxaX4=";
   };
 
-  buildInputs = [ 
-    libjack2 
-    alsa-lib 
-    libsndfile 
-    liblo 
-    lv2 
-    qt6.full 
-    xorg.libX11 
-    qt6.qtbase 
-    qt6.qtwayland 
+  buildInputs = [
+    libjack2
+    alsa-lib
+    libsndfile
+    liblo
+    lv2
+    qt6.full
+    xorg.libX11
+    qt6.qtbase
+    qt6.qtwayland
   ];
 
   nativeBuildInputs = [ pkg-config cmake qt6.wrapQtAppsHook ];
