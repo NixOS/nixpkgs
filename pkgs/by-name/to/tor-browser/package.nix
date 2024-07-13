@@ -101,7 +101,7 @@ lib.warnIf (useHardenedMalloc != null)
       ++ lib.optionals mediaSupport [ ffmpeg ]
   );
 
-  version = "13.5";
+  version = "13.5.1";
 
   sources = {
     x86_64-linux = fetchurl {
@@ -111,7 +111,7 @@ lib.warnIf (useHardenedMalloc != null)
         "https://tor.eff.org/dist/torbrowser/${version}/tor-browser-linux-x86_64-${version}.tar.xz"
         "https://tor.calyxinstitute.org/dist/torbrowser/${version}/tor-browser-linux-x86_64-${version}.tar.xz"
       ];
-      hash = "sha256-npqrGyCwqMeZ8JssR/EpvDClkLQ3K0xEfE19fHn+GDs=";
+      hash = "sha256-1TxxLWjNd63UxiCqTWjqa5upreOrhX4MaMDwPEEIyoo=";
     };
 
     i686-linux = fetchurl {
@@ -121,7 +121,7 @@ lib.warnIf (useHardenedMalloc != null)
         "https://tor.eff.org/dist/torbrowser/${version}/tor-browser-linux-i686-${version}.tar.xz"
         "https://tor.calyxinstitute.org/dist/torbrowser/${version}/tor-browser-linux-i686-${version}.tar.xz"
       ];
-      hash = "sha256-qeXLBFhcCPDWRuCZiLL1wOY6BRWsk0h36jWe5U6eCJ8=";
+      hash = "sha256-x1Eo1fF/J79r5ZCq5JkVu38CZk5MTOiHh4Yhmji8oOc=";
     };
   };
 
