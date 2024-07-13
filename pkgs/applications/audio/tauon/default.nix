@@ -7,6 +7,7 @@
 , flac
 , libjxl
 , librsvg
+, game-music-emu
 , gobject-introspection
 , gtk3
 , kissfft
@@ -26,13 +27,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tauon";
-  version = "7.7.2";
+  version = "7.8.0";
 
   src = fetchFromGitHub {
     owner = "Taiko2k";
     repo = "TauonMusicBox";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-IVl7XL6nn42zaY4bDraF9os0dXfquUql4E96djfVdVg=";
+    hash = "sha256-8UnUcEvG206tPwyD+WqxcJgDvQlYvTJ6v+sm0u30Z3k=";
   };
 
   postUnpack = ''
@@ -75,6 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     flac
+    game-music-emu
     gtk3
     libappindicator
     libnotify
