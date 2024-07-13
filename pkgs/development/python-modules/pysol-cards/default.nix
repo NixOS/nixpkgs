@@ -2,31 +2,42 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  six,
   random2,
+  setuptools,
+  six,
 }:
 
-buildPythonPackage rec {
-  pname = "pysol-cards";
-  version = "0.16.0";
-  format = "setuptools";
+let
+  self = buildPythonPackage {
+    pname = "pysol-cards";
+    version = "0.16.0";
+    pyproject = true;
 
-  src = fetchPypi {
-    inherit version;
-    pname = "pysol_cards";
-    hash = "sha256-C4fKez+ZFVzM08/XOfc593RNb4GYIixtSToDSj1FcMM=";
+    src = fetchPypi {
+      pname = "pysol_cards";
+      inherit (self) version;
+      hash = "sha256-C4fKez+ZFVzM08/XOfc593RNb4GYIixtSToDSj1FcMM=";
+    };
+
+    build-system = [ setuptools ];
+
+    dependencies = [
+      random2
+      six
+    ];
+
+    meta = {
+      homepage = "https://github.com/shlomif/pysol_cards";
+      description = "Generates Solitaire deals";
+      longDescription = ''
+        The pysol-cards python modules allow the python developer to generate
+        the initial deals of some PySol FC games. It also supports PySol legacy
+        deals and Microsoft FreeCell / Freecell Pro deals.
+      '';
+      license = lib.licenses.mit;
+      mainProgram = "pysol_cards";
+      maintainers = with lib.maintainers; [ mwolfe AndersonTorres ];
+    };
   };
-
-  propagatedBuildInputs = [
-    six
-    random2
-  ];
-
-  meta = with lib; {
-    description = "Generates Solitaire deals";
-    mainProgram = "pysol_cards";
-    homepage = "https://github.com/shlomif/pysol_cards";
-    license = licenses.mit;
-    maintainers = with maintainers; [ mwolfe ];
-  };
-}
+in
+self
