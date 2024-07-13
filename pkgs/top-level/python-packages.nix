@@ -5218,6 +5218,8 @@ self: super: with self; {
 
   graphql-subscription-manager = callPackage ../development/python-modules/graphql-subscription-manager { };
 
+  graphrag = callPackage ../development/python-modules/graphrag { };
+
   graph-tool = callPackage ../development/python-modules/graph-tool { };
 
   graphtage = callPackage ../development/python-modules/graphtage { };
