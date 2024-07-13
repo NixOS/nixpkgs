@@ -1,22 +1,16 @@
 {
   lib,
-  buildPythonPackage,
-  pythonOlder,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # dependencies
   aiohttp,
-  incremental,
-
-  # tests
   aioresponses,
+  buildPythonPackage,
+  fetchFromGitHub,
+  incremental,
   pytest-aiohttp,
   pytest-asyncio,
   pytest-socket,
   pytestCheckHook,
+  pythonOlder,
+  setuptools,
   syrupy,
 }:
 
@@ -54,16 +48,15 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [
-    "aioazuredevops.client"
-    "aioazuredevops.core"
+    "aioazuredevops"
   ];
 
   meta = with lib; {
     changelog = "https://github.com/timmo001/aioazuredevops/releases/tag/${version}";
     description = "Get data from the Azure DevOps API";
-    mainProgram = "aioazuredevops";
     homepage = "https://github.com/timmo001/aioazuredevops";
     license = licenses.mit;
     maintainers = with maintainers; [ dotlambda ];
+    mainProgram = "aioazuredevops";
   };
 }
