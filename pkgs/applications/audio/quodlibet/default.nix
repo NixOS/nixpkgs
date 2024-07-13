@@ -1,47 +1,48 @@
-{ lib
-, fetchFromGitHub
-, tag ? ""
+{
+  lib,
+  fetchFromGitHub,
+  tag ? "",
 
   # build time
-, gettext
-, gobject-introspection
-, wrapGAppsHook3
+  gettext,
+  gobject-introspection,
+  wrapGAppsHook3,
 
   # runtime
-, adwaita-icon-theme
-, gdk-pixbuf
-, glib
-, glib-networking
-, gtk3
-, gtksourceview
-, kakasi
-, keybinder3
-, libappindicator-gtk3
-, libmodplug
-, librsvg
-, libsoup
-, webkitgtk
+  adwaita-icon-theme,
+  gdk-pixbuf,
+  glib,
+  glib-networking,
+  gtk3,
+  gtksourceview,
+  kakasi,
+  keybinder3,
+  libappindicator-gtk3,
+  libmodplug,
+  librsvg,
+  libsoup,
+  webkitgtk,
 
   # optional features
-, withDbusPython ? false
-, withMusicBrainzNgs ? false
-, withPahoMqtt ? false
-, withPypresence ? false
-, withSoco ? false
+  withDbusPython ? false,
+  withMusicBrainzNgs ? false,
+  withPahoMqtt ? false,
+  withPypresence ? false,
+  withSoco ? false,
 
   # backends
-, withGstPlugins ? withGstreamerBackend
-, withGstreamerBackend ? true
-, gst_all_1
-, withXineBackend ? true
-, xine-lib
+  withGstPlugins ? withGstreamerBackend,
+  withGstreamerBackend ? true,
+  gst_all_1,
+  withXineBackend ? true,
+  xine-lib,
 
   # tests
-, dbus
-, glibcLocales
-, hicolor-icon-theme
-, python3
-, xvfb-run
+  dbus,
+  glibcLocales,
+  hicolor-icon-theme,
+  python3,
+  xvfb-run,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -49,7 +50,10 @@ python3.pkgs.buildPythonApplication rec {
   version = "4.6.0";
   pyproject = true;
 
-  outputs = [ "out" "doc" ];
+  outputs = [
+    "out"
+    "doc"
+  ];
 
   src = fetchFromGitHub {
     owner = "quodlibet";
@@ -60,76 +64,89 @@ python3.pkgs.buildPythonApplication rec {
 
   build-system = [ python3.pkgs.setuptools ];
 
-  nativeBuildInputs = [
-    gettext
-    gobject-introspection
-    wrapGAppsHook3
-  ] ++ (with python3.pkgs; [
-    sphinx-rtd-theme
-    sphinxHook
-  ]);
+  nativeBuildInputs =
+    [
+      gettext
+      gobject-introspection
+      wrapGAppsHook3
+    ]
+    ++ (with python3.pkgs; [
+      sphinx-rtd-theme
+      sphinxHook
+    ]);
 
-  buildInputs = [
-    adwaita-icon-theme
-    gdk-pixbuf
-    glib
-    glib-networking
-    gtk3
-    gtksourceview
-    kakasi
-    keybinder3
-    libappindicator-gtk3
-    libmodplug
-    libsoup
-    webkitgtk
-  ] ++ lib.optionals (withXineBackend) [
-    xine-lib
-  ] ++ lib.optionals (withGstreamerBackend) (with gst_all_1; [
-    gst-plugins-base
-    gstreamer
-  ] ++ lib.optionals (withGstPlugins) [
-    gst-libav
-    gst-plugins-bad
-    gst-plugins-good
-    gst-plugins-ugly
-  ]);
+  buildInputs =
+    [
+      adwaita-icon-theme
+      gdk-pixbuf
+      glib
+      glib-networking
+      gtk3
+      gtksourceview
+      kakasi
+      keybinder3
+      libappindicator-gtk3
+      libmodplug
+      libsoup
+      webkitgtk
+    ]
+    ++ lib.optionals (withXineBackend) [ xine-lib ]
+    ++ lib.optionals (withGstreamerBackend) (
+      with gst_all_1;
+      [
+        gst-plugins-base
+        gstreamer
+      ]
+      ++ lib.optionals (withGstPlugins) [
+        gst-libav
+        gst-plugins-bad
+        gst-plugins-good
+        gst-plugins-ugly
+      ]
+    );
 
-  dependencies = with python3.pkgs; [
-    feedparser
-    gst-python
-    mutagen
-    pycairo
-    pygobject3
-  ]
-  ++ lib.optionals withDbusPython [ dbus-python ]
-  ++ lib.optionals withMusicBrainzNgs [ musicbrainzngs ]
-  ++ lib.optionals withPahoMqtt [ paho-mqtt ]
-  ++ lib.optionals withPypresence [ pypresence ]
-  ++ lib.optionals withSoco [ soco ];
+  dependencies =
+    with python3.pkgs;
+    [
+      feedparser
+      gst-python
+      mutagen
+      pycairo
+      pygobject3
+    ]
+    ++ lib.optionals withDbusPython [ dbus-python ]
+    ++ lib.optionals withMusicBrainzNgs [ musicbrainzngs ]
+    ++ lib.optionals withPahoMqtt [ paho-mqtt ]
+    ++ lib.optionals withPypresence [ pypresence ]
+    ++ lib.optionals withSoco [ soco ];
 
-  nativeCheckInputs = [
-    dbus
-    gdk-pixbuf
-    glibcLocales
-    hicolor-icon-theme
-    xvfb-run
-  ] ++ (with python3.pkgs; [
-    polib
-    pytest
-    pytest-xdist
-  ]);
+  nativeCheckInputs =
+    [
+      dbus
+      gdk-pixbuf
+      glibcLocales
+      hicolor-icon-theme
+      xvfb-run
+    ]
+    ++ (with python3.pkgs; [
+      polib
+      pytest
+      pytest-xdist
+    ]);
 
-  pytestFlags = [
-    # missing translation strings in potfiles
-    "--deselect=tests/test_po.py::TPOTFILESIN::test_missing"
-    # require networking
-    "--deselect=tests/plugin/test_covers.py::test_live_cover_download"
-    "--deselect=tests/test_browsers_iradio.py::TInternetRadio::test_click_add_station"
-    # upstream does actually not enforce source code linting
-    "--ignore=tests/quality"
-  ] ++ lib.optionals (withXineBackend || !withGstPlugins) [
-    "--ignore=tests/plugin/test_replaygain.py"
-  ];
+  pytestFlags =
+    [
+      # missing translation strings in potfiles
+      "--deselect=tests/test_po.py::TPOTFILESIN::test_missing"
+      # require networking
+      "--deselect=tests/plugin/test_covers.py::test_live_cover_download"
+      "--deselect=tests/test_browsers_iradio.py::TInternetRadio::test_click_add_station"
+      # upstream does actually not enforce source code linting
+      "--ignore=tests/quality"
+    ]
+    ++ lib.optionals (withXineBackend || !withGstPlugins) [
+      "--ignore=tests/plugin/test_replaygain.py"
+    ];
 
   env.LC_ALL = "en_US.UTF-8";
 
@@ -170,6 +187,9 @@ python3.pkgs.buildPythonApplication rec {
     '';
     homepage = "https://quodlibet.readthedocs.io/en/latest";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ coroa pbogdan ];
+    maintainers = with maintainers; [
+      coroa
+      pbogdan
+    ];
   };
 }
