@@ -501,10 +501,10 @@
     "rust-rover": {
       "update-channel": "RustRover RELEASE",
       "url-template": "https://download.jetbrains.com/rustrover/RustRover-{version}-aarch64.dmg",
-      "version": "2024.1.2",
-      "sha256": "af973b73e5ced9982703d7f5d163e3bd8bee8b095aac16b2151ec2c7f1d4d870",
-      "url": "https://download.jetbrains.com/rustrover/RustRover-2024.1.2-aarch64.dmg",
-      "build_number": "241.17011.169"
+      "version": "2024.1.4",
+      "sha256": "50f7b06e6797a935ce932834f115a13f4867d3a1c833041f61e5eb9e5cbff8c0",
+      "url": "https://download.jetbrains.com/rustrover/RustRover-2024.1.4-aarch64.dmg",
+      "build_number": "241.17890.34"
     },
     "webstorm": {
       "update-channel": "WebStorm RELEASE",
