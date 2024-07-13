@@ -40145,7 +40145,7 @@ with pkgs;
 
   linkchecker = callPackage ../tools/networking/linkchecker { };
 
-  tomb = callPackage ../os-specific/linux/tomb {
+  tomb = callPackage ../by-name/to/tomb/package.nix {
     pinentry = pinentry-curses;
   };
 
