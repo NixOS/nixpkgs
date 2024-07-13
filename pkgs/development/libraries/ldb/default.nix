@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "2.9.0";
 
   src = fetchurl {
-    url = "mirror://samba/ldb/${finalAttrs.pname}-${finalAttrs.version}.tar.gz";
+    url = "mirror://samba/ldb/ldb-${finalAttrs.version}.tar.gz";
     hash = "sha256-EFqv9xrYgaf661gv1BauKCIbb94zj/+CgoBlBiwlB6U=";
   };
 

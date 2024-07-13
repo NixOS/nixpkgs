@@ -8,7 +8,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "1.10.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/glew/${finalAttrs.pname}-${finalAttrs.version}.tgz";
+    url = "mirror://sourceforge/glew/glew-${finalAttrs.version}.tgz";
     sha256 = "01zki46dr5khzlyywr3cg615bcal32dazfazkf360s1znqh17i4r";
   };
 

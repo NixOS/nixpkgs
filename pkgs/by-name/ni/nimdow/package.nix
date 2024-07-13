@@ -7,7 +7,7 @@ buildNimPackage (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "avahe-kellenberger";
-    repo = finalAttrs.pname;
+    repo = "nimdow";
     rev = "v${finalAttrs.version}";
     hash = "sha256-GPu3Z63rFBgCCV7bdBg9cJh5thv2xrv/nSMa5Q/zp48=";
   };
