@@ -85,6 +85,7 @@ in
     '')
     (mkRemovedOptionModule [ "services" "quagga" ] "the corresponding package has been removed from nixpkgs")
     (mkRemovedOptionModule [ "services" "railcar" ] "the corresponding package has been removed from nixpkgs")
+    (mkRemovedOptionModule [ "services" "replay-sorcery" ] "the corresponding package has been removed from nixpkgs as it is unmaintained upstream. Consider using `gpu-screen-recorder` or `obs-studio` instead.")
     (mkRemovedOptionModule [ "services" "seeks" ] "")
     (mkRemovedOptionModule [ "services" "ssmtp" ] ''
       The ssmtp package and the corresponding module have been removed due to
