@@ -5,7 +5,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "1.6.5";
 
   src = fetchurl {
-    url = "https://s3-eu-west-1.amazonaws.com/softwaremill-public/${finalAttrs.pname}-${finalAttrs.version}.jar";
+    url = "https://s3-eu-west-1.amazonaws.com/softwaremill-public/elasticmq-server-${finalAttrs.version}.jar";
     sha256 = "sha256-7VpalDKa2Qr3HaIO5LcORvm5rAhgYQzStQkp7rs3pMQ=";
   };
 

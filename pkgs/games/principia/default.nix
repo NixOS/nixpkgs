@@ -21,13 +21,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "principia";
-  version = "2024.06.28";
+  version = "2024.07.12";
 
   src = fetchFromGitHub {
     owner = "Bithack";
     repo = "principia";
     rev = finalAttrs.version;
-    hash = "sha256-S7p/Jcpp42vsdKGFgxLb2IeePB0ktKuMQLJzvXyZilg=";
+    hash = "sha256-JZXarRXScn7/0uve3Ul9dxMz0TE3N8E1VR1nasl051Q=";
   };
 
   nativeBuildInputs = [

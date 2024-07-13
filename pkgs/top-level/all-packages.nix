@@ -38982,7 +38982,7 @@ with pkgs;
 
   jacktrip = callPackage ../applications/audio/jacktrip { };
 
-  j2cli = with python3Packages; toPythonApplication j2cli;
+  j2cli = with python311Packages; toPythonApplication j2cli;
 
   jq-lsp = callPackage ../development/tools/language-servers/jq-lsp { };
 

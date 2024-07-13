@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "falkTX";
-    repo = finalAttrs.pname;
+    repo = "carla";
     rev = "v${finalAttrs.version}";
     hash = "sha256-H15T/z/IRfgWdqToTzq2eJ7q3n9Kj44IZXsd4uaipuU=";
   };
