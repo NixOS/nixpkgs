@@ -1,6 +1,7 @@
 { qtModule
 , qtdeclarative, qtquickcontrols, qtlocation, qtwebchannel
 , fetchpatch
+, fetchpatch2
 
 , bison, flex, git, gperf, ninja, pkg-config, python, which
 , nodejs, perl
@@ -24,12 +25,12 @@
 , ImageCaptureCore, CoreBluetooth, IOBluetooth, CoreWLAN, Quartz, Cocoa, LocalAuthentication
 , MediaPlayer, MediaAccessibility, SecurityInterface, Vision, CoreML, OpenDirectory, Accelerate
 , cups, openbsm, xcbuild, writeScriptBin
-, ffmpeg_4 ? null
+, ffmpeg_7 ? null
 , lib, stdenv
 , version ? null
 , qtCompatVersion
 , pipewireSupport ? stdenv.isLinux
-, pipewire_0_2
+, pipewire
 , postPatch ? ""
 , nspr
 , lndir
@@ -76,6 +77,32 @@ qtModule ({
   # ninja builds some components with -Wno-format,
   # which cannot be set at the same time as -Wformat-security
   hardeningDisable = [ "format" ];
+
+  patches = [
+    # Support FFmpeg 5
+    (fetchpatch2 {
+      url = "https://gitlab.archlinux.org/archlinux/packaging/packages/qt5-webengine/-/raw/14074e4d789167bd776939037fe6df8d4d7dc0b3/qt5-webengine-ffmpeg5.patch";
+      hash = "sha256-jTbJFXBPwRMzr8IeTxrv9dtS+/xDS/zR4dysV/bRg3I=";
+      stripLen = 1;
+      extraPrefix = "src/3rdparty/";
+    })
+
+    # Support FFmpeg 7
+    (fetchpatch2 {
+      url = "https://gitlab.archlinux.org/archlinux/packaging/packages/qt5-webengine/-/raw/e8fb4f86104243b90966b69cdfaa967273d834b6/qt5-webengine-ffmpeg7.patch";
+      hash = "sha256-YNeHmOVp0M5HB+b91AOxxJxl+ktBtLYVdHlq13F7xtY=";
+      stripLen = 1;
+      extraPrefix = "src/3rdparty/chromium/";
+    })
+
+    # Support PipeWire ≥ 0.3
+    (fetchpatch2 {
+      url = "https://gitlab.archlinux.org/archlinux/packaging/packages/qt5-webengine/-/raw/c9db2cd9e144bd7a5e9246f5f7a01fe52fd089ba/qt5-webengine-pipewire-0.3.patch";
+      hash = "sha256-mGexRfVDF3yjNzSi9BjavhzPtsXI0BooSr/rZ1z/BDo=";
+      stripLen = 1;
+      extraPrefix = "src/3rdparty/";
+    })
+  ];
 
   postPatch = ''
     # Patch Chromium build tools
@@ -201,7 +228,7 @@ qtModule ({
     harfbuzz icu
 
     libevent
-    ffmpeg_4
+    ffmpeg_7
   ] ++ lib.optionals (!stdenv.isDarwin) [
     dbus zlib minizip snappy nss protobuf jsoncpp
 
@@ -221,7 +248,7 @@ qtModule ({
 
   ] ++ lib.optionals pipewireSupport [
     # Pipewire
-    pipewire_0_2
+    pipewire
   ]
 
   # FIXME These dependencies shouldn't be needed but can't find a way
