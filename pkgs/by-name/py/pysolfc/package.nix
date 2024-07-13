@@ -53,6 +53,21 @@ let
         --set-value ${placeholder "out"}/share/icons/pysol01.png data/pysol.desktop
     '';
 
+    preBuild = ''
+      export OLD_PYTHONPATH=$PYTHONPATH
+      export PYTHONPATH=$PYTHONPATH:''$(pwd)
+      pushd html-src
+      patchShebangs gen-html.py
+      chmod +x gen-html.py
+      ./gen-html.py
+      popd
+      cp -r html-src/images html-src/html
+      rm -rf data/html
+      mv html-src/html data
+      export PYTHONPATH=$OLD_PYTHONPATH
+      unset OLD_PYTHONPATH
+    '';
+
     postInstall = ''
       mkdir -p $out/share/PySolFC/cardsets
       cp -r ${sources.cardsets.src}/* $out/share/PySolFC/cardsets
