@@ -8,12 +8,12 @@
   pysolfc = let
     self = {
       pname = "pysolfc";
-      version = "2.21.0";
+      version = "3.0.0";
       src = fetchFromGitHub {
         owner = "shlomif";
         repo = "PysolFC";
         rev = "pysolfc-${self.version}";
-        hash = "sha256-2/a78Hbjn/okDyVs8f4rr7cS/nqwfcqDqdzvmggDv3g=";
+        hash = "sha256-i87sx4ir+XWk7RxF9B/R4DoOcZLVN3L1INF4hAnxWyQ=";
       };
     };
   in
@@ -22,10 +22,10 @@
   cardsets = let
     self = {
       pname = "pysolfc-cardsets";
-      version = "2.2";
+      version = "3.0";
       src = fetchzip {
         url = "mirror://sourceforge/pysolfc/PySolFC-Cardsets-${self.version}.tar.bz2";
-        hash = "sha256-mWJ0l9rvn9KeZ9rCWy7VjngJzJtSQSmG8zGcYFE4yM0=";
+        hash = "sha256-UP0dQjoZJg+iSKVOrWbkLj1KCzMWws8ZBVSBLly1a/Y=";
       };
     };
   in
