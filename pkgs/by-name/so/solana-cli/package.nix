@@ -31,8 +31,8 @@
   ]
 }:
 let
-  version = "1.17.31";
-  sha256 = "sha256-5qPW199o+CVJlqGwiAegsquBRWEb5uDKITxjN5dQYAQ=";
+  version = "1.18.17";
+  sha256 = "sha256-yrAMEPMR7GqGQbQnHLJbsl5engyr3uidc/UhqV9GY80=";
   rocksdb = rocksdb_8_3;
 
   inherit (darwin.apple_sdk_11_0) Libsystem;
@@ -51,9 +51,10 @@ rustPlatform.buildRustPackage rec {
 
   cargoLock = {
     lockFile = ./Cargo.lock;
-
     outputHashes = {
+      "aes-gcm-siv-0.10.3" = "sha256-N1ppxvew4B50JQWsC3xzP0X4jgyXZ5aOQ0oJMmArjW8=";
       "crossbeam-epoch-0.9.5" = "sha256-Jf0RarsgJiXiZ+ddy0vp4jQ59J9m0k3sgXhWhCdhgws=";
+      "curve25519-dalek-3.2.1" = "sha256-4MF/qaP+EhfYoRETqnwtaCKC1tnUJlBCxeOPCnKrTwQ=";
       "tokio-1.29.1" = "sha256-Z/kewMCqkPVTXdoBcSaFKG5GSQAdkdpj3mAzLLCjjGk=";
     };
   };
