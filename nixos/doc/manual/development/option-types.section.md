@@ -213,7 +213,7 @@ merging is handled.
 
 ## Network types {#sec-option-types-network}
 
-Types used in the network library.
+Types provided by the network library.
 
 `types.ipv6AddrStr`
 
