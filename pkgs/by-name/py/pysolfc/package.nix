@@ -1,67 +1,93 @@
-{ lib
-, fetchzip
-, python3Packages
-, desktop-file-utils
-, freecell-solver
+{
+  lib,
+  callPackage,
+  desktop-file-utils,
+  fetchzip,
+  freecell-solver,
+  python3Packages,
+  testers,
+  # Configurable options
+  withFreecellSolver ? true,
+  withPillow ? true,
+  withPygame ? true,
 }:
 
-python3Packages.buildPythonApplication rec {
-  pname = "pysolfc";
-  version = "2.21.0";
+let
+  sources = callPackage ./sources.nix { };
+  self = python3Packages.buildPythonApplication {
+    inherit (sources.pysolfc) pname version src;
+    pyproject = true;
 
-  src = fetchzip {
-    url = "mirror://sourceforge/pysolfc/PySolFC-${version}.tar.xz";
-    hash = "sha256-Deye7KML5G6RZkth2veVgPOWZI8gnusEvszlrPTAhag=";
+    patches = [
+      ./0000-pysolfc-datadir.patch
+    ];
+
+    dependencies = with python3Packages; ([
+      attrs
+      configobj
+      pycotap
+      pysol-cards
+      random2
+      six
+      tkinter
+    ] ++ lib.optionals withPillow [
+      pillow
+    ] ++ lib.optionals withPygame [
+      pygame
+    ]);
+
+    build-system = [ python3Packages.setuptools ];
+
+    nativeBuildInputs = [ desktop-file-utils ];
+
+    propagatedBuildInputs = lib.optionals withFreecellSolver [
+      freecell-solver
+    ];
+
+    # No tests in archive
+    doCheck = false;
+
+    postPatch = ''
+      desktop-file-edit \
+        --set-key Icon \
+        --set-value ${placeholder "out"}/share/icons/pysol01.png data/pysol.desktop
+    '';
+
+    postInstall = ''
+      mkdir -p $out/share/PySolFC/cardsets
+      cp -r ${sources.cardsets.src}/* $out/share/PySolFC/cardsets
+      cp -r ${sources.music.src}/data/music $out/share/PySolFC
+    '';
+
+    passthru = {
+      tests.version = testers.testVersion {
+        package = self;
+        command = "pysol.py --version";
+      };
+    };
+
+    meta = {
+      homepage = "https://pysolfc.sourceforge.io";
+      description = "Solitaire game collection writen in Python";
+      longDescription = ''
+        PySol Fan Club Edition (PySolFC) is a collection of more than 1200
+        solitaire card games. It is a fork of PySol Solitaire.
+
+        There are games that use the 52 card International Pattern deck, games
+        for the 78 card Tarock deck, eight and ten suit Ganjifa games, Hanafuda
+        games, Matrix games, Mahjongg games, and games for an original
+        hexadecimal-based deck.
+
+        Its features include a modern look and feel (uses the TTk widget set),
+        multiple card sets and tableau backgrounds, sound, unlimited undo,
+        player statistics, a hint system, demo games, a solitaire wizard,
+        support for user written plug-ins, an integrated HTML help browser, and
+        lots of documentation.
+      '';
+      license = lib.licenses.gpl3Plus;
+      mainProgram = "pysol.py";
+      maintainers = with lib.maintainers; [ kierdavis AndersonTorres ];
+    };
   };
-
-  cardsets = fetchzip {
-    url = "mirror://sourceforge/pysolfc/PySolFC-Cardsets-2.2.tar.bz2";
-    hash = "sha256-mWJ0l9rvn9KeZ9rCWy7VjngJzJtSQSmG8zGcYFE4yM0=";
-  };
-
-  music = fetchzip {
-    url = "mirror://sourceforge/pysolfc/pysol-music-4.50.tar.xz";
-    hash = "sha256-sOl5U98aIorrQHJRy34s0HHaSW8hMUE7q84FMQAj5Yg=";
-  };
-
-  propagatedBuildInputs = with python3Packages; [
-    tkinter
-    six
-    random2
-    configobj
-    pysol-cards
-    attrs
-    pycotap
-    # optional :
-    pygame
-    freecell-solver
-    pillow
-  ];
-
-  patches = [
-    ./pysolfc-datadir.patch
-  ];
-
-  nativeBuildInputs = [ desktop-file-utils ];
-  postPatch = ''
-    desktop-file-edit --set-key Icon --set-value ${placeholder "out"}/share/icons/pysol01.png data/pysol.desktop
-    desktop-file-edit --set-key Comment --set-value "${meta.description}" data/pysol.desktop
-  '';
-
-  postInstall = ''
-    mkdir $out/share/PySolFC/cardsets
-    cp -r $cardsets/* $out/share/PySolFC/cardsets
-    cp -r $music/data/music $out/share/PySolFC
-  '';
-
-  # No tests in archive
-  doCheck = false;
-
-  meta = with lib; {
-    description = "A collection of more than 1000 solitaire card games";
-    mainProgram = "pysol.py";
-    homepage = "https://pysolfc.sourceforge.io";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ kierdavis ];
-  };
-}
+in
+self
