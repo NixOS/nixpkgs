@@ -47,7 +47,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "quodlibet${tag}";
   version = "4.6.0";
-  format = "pyproject";
+  pyproject = true;
 
   outputs = [ "out" "doc" ];
 
@@ -58,6 +58,8 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-dkO/CFN7Dk72xhtmcSDcwUciOPMeEjQS2mch+jSfiII=";
   };
 
+  build-system = [ python3.pkgs.setuptools ];
+
   nativeBuildInputs = [
     gettext
     gobject-introspection
@@ -65,7 +67,6 @@ python3.pkgs.buildPythonApplication rec {
   ] ++ (with python3.pkgs; [
     sphinx-rtd-theme
     sphinxHook
-    setuptools
   ]);
 
   buildInputs = [
@@ -93,7 +94,7 @@ python3.pkgs.buildPythonApplication rec {
     gst-plugins-ugly
   ]);
 
-  propagatedBuildInputs = with python3.pkgs; [
+  dependencies = with python3.pkgs; [
     feedparser
     gst-python
     mutagen
