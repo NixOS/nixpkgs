@@ -10,6 +10,8 @@
   which,
   libsForQt5,
   makeWrapper,
+  makeDesktopItem,
+  copyDesktopItems,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -27,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [ ./assets-path.diff ];
 
   postPatch = ''
-    substituteInPlace src/poptracker.cpp --replace "@assets@" "$out/share/$pname/"
+    substituteInPlace src/poptracker.cpp --replace "@assets@" "$out/share/poptracker/"
   '';
 
   enableParallelBuilding = true;
@@ -35,6 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     util-linux
     makeWrapper
+    copyDesktopItems
   ];
 
   buildInputs = [
@@ -53,15 +56,32 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
     install -m555 -Dt $out/bin build/linux-x86_64/poptracker
-    install -m444 -Dt $out/share/${finalAttrs.pname} assets/*
+    install -m444 -Dt $out/share/poptracker assets/*
     wrapProgram $out/bin/poptracker --prefix PATH : ${
       lib.makeBinPath [
         which
         libsForQt5.kdialog
       ]
     }
+    mkdir -p $out/share/icons/hicolor/{64x64,512x512}/apps
+    ln -s $out/share/poptracker/icon.png  $out/share/icons/hicolor/64x64/apps/poptracker.png
+    ln -s $out/share/poptracker/icon512.png  $out/share/icons/hicolor/512x512/apps/poptracker.png
     runHook postInstall
   '';
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = "poptracker";
+      desktopName = "PopTracker";
+      exec = "poptracker";
+      comment = "Universal, scriptable randomizer tracking solution";
+      icon = "poptracker";
+      categories = [
+        "Game"
+        "Utility"
+      ];
+    })
+  ];
 
   meta = {
     description = "Scriptable tracker for randomized games";
