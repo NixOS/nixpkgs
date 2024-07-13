@@ -11,7 +11,9 @@
 , # GHC can be built with system libffi or a bundled one.
   # we explicitly use libffi-3.3 here because 3.4 removes a flag that causes
   # problems for ghc-8.10.7's RTS. See #324384.
-  libffi_3_3 ? null
+  # Save for aarch_darwin since libffi-3.3 is broken there but the issue isn't present anyway
+  libffi ? null
+, libffi_3_3 ? null
 
 , useLLVM ? !(stdenv.targetPlatform.isx86
               || stdenv.targetPlatform.isPower
@@ -58,7 +60,7 @@
 , # Whether to disable the large address space allocator
   # necessary fix for iOS: https://www.reddit.com/r/haskell/comments/4ttdz1/building_an_osxi386_to_iosarm64_cross_compiler/d5qvd67/
   disableLargeAddressSpace ? stdenv.targetPlatform.isiOS
-}:
+}@args:
 
 assert !enableIntegerSimple -> gmp != null;
 
@@ -67,6 +69,7 @@ assert !enableIntegerSimple -> gmp != null;
 assert (stdenv.targetPlatform != stdenv.hostPlatform) -> !enableHaddockProgram;
 
 let
+  libffi_name = if stdenv.isDarwin && stdenv.isAarch64 then "libffi" else "libffi_3_3";
   inherit (stdenv) buildPlatform hostPlatform targetPlatform;
 
   inherit (bootPkgs) ghc;
@@ -121,7 +124,7 @@ let
 
   # Splicer will pull out correct variations
   libDeps = platform: lib.optional enableTerminfo ncurses
-    ++ [libffi_3_3]
+    ++ [args.${libffi_name}]
     ++ lib.optional (!enableIntegerSimple) gmp
     ++ lib.optional (platform.libc != "glibc" && !targetPlatform.isWindows) libiconv;
 
@@ -336,10 +339,10 @@ stdenv.mkDerivation (rec {
   configureFlags = [
     "--datadir=$doc/share/doc/ghc"
     "--with-curses-includes=${ncurses.dev}/include" "--with-curses-libraries=${ncurses.out}/lib"
-  ] ++ lib.optionals (libffi_3_3 != null) [
+  ] ++ lib.optionals (args.${libffi_name} != null) [
     "--with-system-libffi"
-    "--with-ffi-includes=${targetPackages.libffi_3_3.dev}/include"
-    "--with-ffi-libraries=${targetPackages.libffi_3_3.out}/lib"
+    "--with-ffi-includes=${targetPackages.${libffi_name}.dev}/include"
+    "--with-ffi-libraries=${targetPackages.${libffi_name}.out}/lib"
   ] ++ lib.optionals (targetPlatform == hostPlatform && !enableIntegerSimple) [
     "--with-gmp-includes=${targetPackages.gmp.dev}/include"
     "--with-gmp-libraries=${targetPackages.gmp.out}/lib"
