@@ -17,8 +17,8 @@ let
 
   pkgs = import nixpkgs {
     inherit system;
-    config = {};
-    overlays = [];
+    config = { };
+    overlays = [ ];
   };
 in
 pkgs.mkShellNoCC {
