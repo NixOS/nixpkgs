@@ -5,13 +5,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "plasmusic-toolbar";
-  version = "1.2.2";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "ccatterina";
     repo = "plasmusic-toolbar";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-rThoh7NkpWlKUNOsAY9WEt1F1MFoKliNYCB9ySfKYy8=";
+    hash = "sha256-7c+7l9/xg112SVDUqNi12fg6unq6qE6xmMwIrEJk6PQ=";
   };
 
   installPhase = ''
@@ -24,6 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "KDE Plasma widget that shows currently playing song information and provide playback controls.";
     homepage = "https://github.com/ccatterina/plasmusic-toolbar";
+    changelog = "https://github.com/ccatterina/plasmusic-toolbar/releases/tag/${finalAttrs.src.rev}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ HeitorAugustoLN ];
     inherit (kdePackages.kwindowsystem.meta) platforms;
