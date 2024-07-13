@@ -1,16 +1,20 @@
 {
   lib,
+  beancount,
   buildPythonPackage,
   fetchPypi,
-  setuptools-scm,
-  beancount,
   pytestCheckHook,
+  pythonOlder,
+  regex,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
-  version = "1.0.1";
   pname = "beancount-docverif";
+  version = "1.0.1";
   pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "beancount_docverif";
@@ -18,15 +22,20 @@ buildPythonPackage rec {
     hash = "sha256-CFBv1FZP5JO+1MPnD86ttrO42zZlvE157zqig7s4HOg=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
+  build-system = [ setuptools-scm ];
 
-  propagatedBuildInputs = [ beancount ];
+  dependencies = [ beancount ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    regex
+  ];
+
+  pythonImportsCheck = [ "beancount_docverif" ];
 
   meta = with lib; {
-    homepage = "https://github.com/siriobalmelli/beancount_docverif";
     description = "Document verification plugin for Beancount";
+    homepage = "https://github.com/siriobalmelli/beancount_docverif";
     longDescription = ''
       Docverif is the "Document Verification" plugin for beancount, fulfilling the following functions:
 
