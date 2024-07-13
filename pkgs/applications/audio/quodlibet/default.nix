@@ -26,7 +26,6 @@
 , withDbusPython ? false
 , withMusicBrainzNgs ? false
 , withPahoMqtt ? false
-, withPyInotify ? false
 , withPypresence ? false
 , withSoco ? false
 
@@ -104,7 +103,6 @@ python3.pkgs.buildPythonApplication rec {
   ++ lib.optionals withDbusPython [ dbus-python ]
   ++ lib.optionals withMusicBrainzNgs [ musicbrainzngs ]
   ++ lib.optionals withPahoMqtt [ paho-mqtt ]
-  ++ lib.optionals withPyInotify [ pyinotify ]
   ++ lib.optionals withPypresence [ pypresence ]
   ++ lib.optionals withSoco [ soco ];
 
