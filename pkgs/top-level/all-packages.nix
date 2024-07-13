@@ -18778,8 +18778,6 @@ with pkgs;
 
   kythe = callPackage ../development/tools/kythe { };
 
-  lazygit = callPackage ../development/tools/lazygit { };
-
   laminar = callPackage ../development/tools/continuous-integration/laminar { };
 
   lcov = callPackage ../development/tools/analysis/lcov { };
