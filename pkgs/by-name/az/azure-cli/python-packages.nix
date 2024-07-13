@@ -86,6 +86,8 @@ let
           "azure.cli.telemetry"
           "azure.cli.core"
         ];
+
+        meta.downloadPage = "https://github.com/Azure/azure-cli/tree/azure-cli-${version}/src/azure-cli-core/";
       };
 
       azure-cli-telemetry = buildAzureCliPackage {
@@ -106,6 +108,8 @@ let
           cd azure
           HOME=$TMPDIR pytest -k 'not test_create_telemetry_note_file_from_scratch'
         '';
+
+        meta.downloadPage = "https://github.com/Azure/azure-cli/blob/azure-cli-${version}/src/azure-cli-telemetry/";
       };
 
       # AttributeError: type object 'WorkspacesOperations' has no attribute 'begin_delete'
