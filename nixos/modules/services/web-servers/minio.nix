@@ -89,6 +89,11 @@ in
   };
 
   config = mkIf cfg.enable {
+    imports = [(lib.mkRenamedOptionModuleWith {
+      sinceRelease = 2411;
+      from = ["services" "minio" "configDir"];
+      to = ["services" "minio" "certsDir" ];
+    })];
     warnings = optional ((cfg.accessKey != "") || (cfg.secretKey != "")) "services.minio.`accessKey` and services.minio.`secretKey` are deprecated, please use services.minio.`rootCredentialsFile` instead.";
 
     systemd = lib.mkMerge [{
