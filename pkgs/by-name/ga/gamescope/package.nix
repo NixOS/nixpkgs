@@ -57,6 +57,8 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     # Make it look for shaders in the right place
     ./shaders-path.patch
+    # patch relative gamescopereaper path with absolute
+    ./gamescopereaper.patch
   ];
 
   # We can't substitute the patch itself because substituteAll is itself a derivation,
@@ -65,6 +67,8 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace src/reshade_effect_manager.cpp --replace "@out@" "$out"
     # Patching shebangs in the main `libdisplay-info` build
     patchShebangs subprojects/libdisplay-info/tool/gen-search-table.py
+    # Replace gamescopereeaper with absolute path
+    substituteInPlace src/Utils/Process.cpp --subst-var-by "gamescopereaper" "$out/bin/gamescopereaper"
   '';
 
   mesonFlags = [
