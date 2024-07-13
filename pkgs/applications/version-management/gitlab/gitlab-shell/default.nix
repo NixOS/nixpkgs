@@ -9,7 +9,7 @@ buildGoModule rec {
     owner = "gitlab-org";
     repo = "gitlab-shell";
     rev = "v${version}";
-    sha256 = "sha256-SclRIIUZm1D5fYDrTH1L8opQpxxIoi+SrG2GO7wtScU=";
+    hash = "sha256-SclRIIUZm1D5fYDrTH1L8opQpxxIoi+SrG2GO7wtScU=";
   };
 
   buildInputs = [ ruby libkrb5 ];

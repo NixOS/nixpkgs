@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     owner = "eztrace";
     repo = "eztrace";
     rev = "eztrace-${version}";
-    sha256 = "sha256-A6HMr4ib5Ka1lTbbTQOdq3kIdCoN/CwAKRdXdv9wpfU=";
+    hash = "sha256-A6HMr4ib5Ka1lTbbTQOdq3kIdCoN/CwAKRdXdv9wpfU=";
   };
 
   nativeBuildInputs = [ gfortran autoreconfHook ];

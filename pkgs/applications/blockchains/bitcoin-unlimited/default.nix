@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     owner = "bitcoinunlimited";
     repo = "BCHUnlimited";
     rev = "BCHunlimited${version}";
-    sha256 = "sha256-d+giTXq/6HpysRAPT7yOl/B1x4zie9irs4O7cJsBqHg=";
+    hash = "sha256-d+giTXq/6HpysRAPT7yOl/B1x4zie9irs4O7cJsBqHg=";
   };
 
   nativeBuildInputs = [ pkg-config autoreconfHook python3 ]

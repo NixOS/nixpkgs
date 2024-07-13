@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     owner = "guile-git";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-7xKs5Biq9HHOJbNILLU1oX8oPuEbti0uLMiobKz//bU=";
+    hash = "sha256-7xKs5Biq9HHOJbNILLU1oX8oPuEbti0uLMiobKz//bU=";
   };
 
   strictDeps = true;
