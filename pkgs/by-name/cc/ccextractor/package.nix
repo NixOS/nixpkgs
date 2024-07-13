@@ -13,15 +13,15 @@
   ffmpeg_4,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ccextractor";
   version = "0.93";
 
   src = fetchFromGitHub {
     owner = "CCExtractor";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-usVAKBkdd8uz9cD5eLd0hnwGonOJLscRdc+iWDlNXVc=";
+    repo = "ccextractor";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-usVAKBkdd8uz9cD5eLd0hnwGonOJLscRdc+iWDlNXVc=";
   };
 
   postPatch =
@@ -74,15 +74,15 @@ stdenv.mkDerivation rec {
       closed captions data. CCExtractor is portable, small, and very fast.
       It works on Linux, Windows, and OSX.
     '';
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     # undefined reference to `png_do_expand_palette_rgba8_neon'
     # undefined reference to `png_riffle_palette_neon'
     # undefined reference to `png_do_expand_palette_rgb8_neon'
     # undefined reference to `png_init_filter_functions_neon'
     # during Linking C executable ccextractor
     broken = stdenv.isAarch64;
-    license = licenses.gpl2Only;
+    license = lib.licenses.gpl2Only;
     maintainers = [ ];
     mainProgram = "ccextractor";
   };
-}
+})
