@@ -1,23 +1,23 @@
-{ stdenvNoCC
-, lib
-, fetchFromGitHub
-, substituteAll
-, makeWrapper
-, zsh
-, coreutils
-, cryptsetup
-, e2fsprogs
-, file
-, gawk
-, getent
-, gettext
-, gnugrep
-, gnupg
-, libargon2
-, lsof
-, pinentry
-, util-linux
-, nix-update-script
+{
+  coreutils,
+  cryptsetup,
+  e2fsprogs,
+  fetchFromGitHub,
+  file,
+  gawk,
+  getent,
+  gettext,
+  gnugrep,
+  gnupg,
+  lib,
+  libargon2,
+  lsof,
+  makeWrapper,
+  nix-update-script,
+  pinentry,
+  stdenvNoCC,
+  util-linux,
+  zsh,
 }:
 
 stdenvNoCC.mkDerivation rec {
@@ -31,9 +31,12 @@ stdenvNoCC.mkDerivation rec {
     hash = "sha256-H9etbodTKxROJAITbViQQ6tkEr9rKNITTHfsGGQbyR0=";
   };
 
-  buildInputs = [ zsh pinentry ];
-
   nativeBuildInputs = [ makeWrapper ];
+
+  buildInputs = [
+    pinentry
+    zsh
+  ];
 
   postPatch = ''
     # if not, it shows .tomb-wrapped when running
@@ -46,7 +49,8 @@ stdenvNoCC.mkDerivation rec {
     install -Dm644 doc/tomb.1 $out/share/man/man1/tomb.1
 
     wrapProgram $out/bin/tomb \
-      --prefix PATH : $out/bin:${lib.makeBinPath [
+      --prefix PATH : $out/bin:${
+        lib.makeBinPath [
           coreutils
           cryptsetup
           e2fsprogs
@@ -60,20 +64,24 @@ stdenvNoCC.mkDerivation rec {
           lsof
           pinentry
           util-linux
-        ]}
+        ]
+      }
   '';
 
   passthru = {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "File encryption on GNU/Linux";
     homepage = "https://www.dyne.org/software/tomb/";
     changelog = "https://github.com/dyne/Tomb/blob/v${version}/ChangeLog.md";
-    license = licenses.gpl3Only;
+    license = lib.licenses.gpl3Only;
     mainProgram = "tomb";
-    maintainers = with maintainers; [ peterhoeg anthonyroussel ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [
+      peterhoeg
+      anthonyroussel
+    ];
+    platforms = lib.platforms.linux;
   };
 }
