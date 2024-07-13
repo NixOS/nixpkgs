@@ -65,7 +65,7 @@ in
     security.pam.services.greetd = {
       allowNullPassword = true;
       startSession = true;
-      enableGnomeKeyring = mkDefault config.services.gnome.gnome-keyring.enable;
+      enableGnomeKeyring = mkDefault config.services.gnome-keyring.enable;
     };
 
     # This prevents nixos-rebuild from killing greetd by activating getty again
