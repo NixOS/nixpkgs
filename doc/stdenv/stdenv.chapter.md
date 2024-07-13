@@ -1538,6 +1538,16 @@ Adds the `-fPIE` compiler and `-pie` linker options. Position Independent Execut
 Static libraries need to be compiled with `-fPIE` so that executables can link them in with the `-pie` linker option.
 If the libraries lack `-fPIE`, you will get the error `recompile with -fPIE`.
 
+#### `shadowstack` {#shadowstack}
+
+Adds the `-fcf-protection=return` compiler option. This enables the Shadow Stack feature supported by some newer processors, which maintains a user-inaccessible copy of the program's stack containing only return-addresses. When returning from a function, the processor compares the return-address value on the two stacks and throws an error if they do not match, considering it a sign of corruption and possible tampering. This should significantly increase the difficulty of ROP attacks.
+
+For the Shadow Stack to be enabled at runtime, all code linked into a process must be built with Shadow Stack enabled, so this is probably only useful to enable on a wide scale, so that all of a packages dependencies also have the feature enabled.
+
+This is currently only supported on some newer Intel and AMD processors as part of the Intel CET set of features. However, the generated code should continue to work on older processors which will simply omit any of this checking.
+
+This breaks some code that does advanced stack management or exception handling. If enabling this hardening flag it is important to test the result on a system that has known working and enabled CET support, so that any such breakage can be discovered.
+
 #### `trivialautovarinit` {#trivialautovarinit}
 
 Adds the `-ftrivial-auto-var-init=pattern` compiler option. This causes "trivially-initializable" uninitialized stack variables to be forcibly initialized with a nonzero value that is likely to cause a crash (and therefore be noticed). Uninitialized variables generally take on their values based on fragments of previous program state, and attackers can carefully manipulate that state to craft malicious initial values for these variables.
