@@ -17467,6 +17467,12 @@ with pkgs;
     x11Support = true;
   };
 
+  # https://py-free-threading.github.io
+  python313FreeThreading = python313.override {
+    pythonAttr = "python313FreeThreading";
+    enableGIL = false;
+  };
+
   pythonInterpreters = callPackage ./../development/interpreters/python { };
   inherit (pythonInterpreters) python27 python39 python310 python311 python312 python313 python3Minimal pypy27 pypy310 pypy39 rustpython;
 
