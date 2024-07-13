@@ -13,7 +13,7 @@ let
         version = "4.7.0.0";
         src = oldAttrs.src.override {
           inherit version;
-          sha256 = "sha256-4B+0gMqqfHlj3LMyikcA5jG+9gcNsOi2hYFtIg5oX2w=";
+          hash = "sha256-4B+0gMqqfHlj3LMyikcA5jG+9gcNsOi2hYFtIg5oX2w=";
         };
       });
     };
