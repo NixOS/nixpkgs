@@ -1,14 +1,14 @@
 { lib, fetchurl }:
 rec {
   pname = "mesa";
-  version = "24.1.2";
+  version = "24.1.3";
 
   src = fetchurl {
     urls = [
       "https://archive.mesa3d.org/mesa-${version}.tar.xz"
       "https://mesa.freedesktop.org/archive/mesa-${version}.tar.xz"
     ];
-    hash = "sha256-osWEyNV9O9i6EXkKbprjcT+IId+WwFm3ivsp3Zdcn0U=";
+    hash = "sha256-YyNkJrJadFumqi1tr4zXadXqAYh7B0WrcSTS7zOpAg0=";
   };
 
   meta = {
