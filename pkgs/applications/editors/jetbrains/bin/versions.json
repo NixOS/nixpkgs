@@ -370,10 +370,10 @@
     "rust-rover": {
       "update-channel": "RustRover RELEASE",
       "url-template": "https://download.jetbrains.com/rustrover/RustRover-{version}.dmg",
-      "version": "2024.1.2",
-      "sha256": "d937f1f8eb6a7d0ce35218a616d6e7e237b86c7fdb9562b2ff3213ad3c3730de",
-      "url": "https://download.jetbrains.com/rustrover/RustRover-2024.1.2.dmg",
-      "build_number": "241.17011.169"
+      "version": "2024.1.4",
+      "sha256": "5f34dcec04a3719209afdaaf605512b2c7943c5ab8d7587b7a6e507da0b8d17f",
+      "url": "https://download.jetbrains.com/rustrover/RustRover-2024.1.4.dmg",
+      "build_number": "241.17890.34"
     },
     "webstorm": {
       "update-channel": "WebStorm RELEASE",
