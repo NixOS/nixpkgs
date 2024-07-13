@@ -22,13 +22,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "tomb";
-  version = "2.10";
+  version = "2.11";
 
   src = fetchFromGitHub {
     owner = "dyne";
     repo = "Tomb";
     rev = "refs/tags/v${version}";
-    hash = "sha256-lLxQJX0P6b6lbXEcrq45EsX9iKiayZ9XkhqgMfpN3/w=";
+    hash = "sha256-H9etbodTKxROJAITbViQQ6tkEr9rKNITTHfsGGQbyR0=";
   };
 
   buildInputs = [ zsh pinentry ];
