@@ -13,6 +13,10 @@
   libplist,
   libusb1,
   openssl,
+
+  ios-webkit-debug-proxy,
+  nix-update-script,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -65,6 +69,11 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   enableParallelBuilding = true;
+
+  passthru = {
+    updateScript = nix-update-script { };
+    tests.version = testers.testVersion { package = ios-webkit-debug-proxy; };
+  };
 
   meta = with lib; {
     description = "DevTools proxy (Chrome Remote Debugging Protocol) for iOS devices (Safari Remote Web Inspector)";
