@@ -7498,6 +7498,8 @@ self: super: with self; {
 
   memory-profiler = callPackage ../development/python-modules/memory-profiler { };
 
+  memory-tempfile = callPackage ../development/python-modules/memory-tempfile { };
+
   meraki = callPackage ../development/python-modules/meraki { };
 
   mercadopago = callPackage ../development/python-modules/mercadopago { };
@@ -7962,6 +7964,10 @@ self: super: with self; {
   murmurhash = callPackage ../development/python-modules/murmurhash { };
 
   muscima = callPackage ../development/python-modules/muscima { };
+
+  music-assistant = callPackage ../development/python-modules/music-assistant { };
+
+  music-assistant-frontend = callPackage ../development/python-modules/music-assistant-frontend { };
 
   musicbrainzngs = callPackage ../development/python-modules/musicbrainzngs { };
 
