@@ -13,6 +13,10 @@ stdenv.mkDerivation rec {
     url = "mirror://gnu/gss/gss-${version}.tar.gz";
     hash = "sha256-7M6r3vTK4/znIYsuy4PrQifbpEtTthuMKy6IrgJBnHM=";
   };
+  # This test crashes now.  Most likely triggered by expiration on 20240711.
+  postPatch = ''
+    rm tests/krb5context.c
+  '';
 
   buildInputs = lib.optional withShishi shishi;
 
