@@ -844,7 +844,6 @@ dont-distribute-packages:
  - clash-verilog
  - clash-vhdl
  - clashilator
- - classify-frog
  - classy-effects
  - classy-effects-th
  - classy-miso
@@ -2457,8 +2456,6 @@ dont-distribute-packages:
  - kit
  - kmeans-par
  - kmeans-vector
- - knead
- - knead-arithmetic
  - knit-haskell
  - koji-install
  - koji-tool
@@ -2592,9 +2589,6 @@ dont-distribute-packages:
  - llvm-base-types
  - llvm-base-util
  - llvm-data-interop
- - llvm-dsl
- - llvm-extension
- - llvm-extra
  - llvm-general
  - llvm-general-quote
  - llvm-hs-pretty
@@ -3020,7 +3014,6 @@ dont-distribute-packages:
  - partage
  - partial-semigroup-test
  - passman-cli
- - patch-image
  - pathfindingcore
  - patterns
  - paypal-rest-client
@@ -3841,7 +3834,6 @@ dont-distribute-packages:
  - syntax-pretty
  - syntax-printer
  - syntaxnet-haskell
- - synthesizer-llvm
  - sys-process
  - syslog
  - systemd-api
