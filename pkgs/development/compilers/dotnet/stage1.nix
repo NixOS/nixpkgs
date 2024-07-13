@@ -24,4 +24,4 @@ let
     };
   });
 
-in mkPackages { inherit vmr; }
+in mkPackages { inherit vmr; } // { stage0 = lib.dontRecurseIntoAttrs stage0; }
