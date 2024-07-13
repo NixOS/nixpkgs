@@ -7,7 +7,7 @@
 , xz
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation {
   pname = "mfoc-hardnested";
   version = "unstable-2023-03-27";
 
@@ -37,4 +37,4 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with maintainers; [ azuwis ];
     platforms = platforms.unix;
   };
-})
+}

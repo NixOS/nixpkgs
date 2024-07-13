@@ -1,6 +1,6 @@
 { fetchFromGitHub, lib, stdenv, gtk2, pkg-config, qmake, qtbase, unstableGitUpdater }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation {
   pname = "qt6gtk2";
   version = "0.2-unstable-2024-06-22";
 
@@ -29,4 +29,4 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = [ lib.maintainers.misterio77 ];
     platforms = lib.platforms.linux;
   };
-})
+}

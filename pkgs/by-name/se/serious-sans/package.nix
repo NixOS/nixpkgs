@@ -3,7 +3,7 @@
 , fetchFromGitHub
 }:
 
-stdenvNoCC.mkDerivation (finalAttrs: {
+stdenvNoCC.mkDerivation {
   pname = "serious-sans";
   version = "unstable-2023-09-04";
 
@@ -30,4 +30,4 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ CobaltCause ];
     platforms = lib.platforms.all;
   };
-})
+}

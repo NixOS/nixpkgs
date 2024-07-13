@@ -7,7 +7,7 @@
 , gitUpdater
 }:
 
-stdenvNoCC.mkDerivation (finalAttrs: {
+stdenvNoCC.mkDerivation {
   pname = "whitesur-kde";
   version = "unstable-2023-10-06";
 
@@ -60,4 +60,4 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     platforms = platforms.all;
     maintainers = [ maintainers.romildo ];
   };
-})
+}

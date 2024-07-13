@@ -8,7 +8,7 @@
 , fmt_9
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation {
   pname = "jack-passthrough";
   version = "2021-9-25";
 
@@ -37,4 +37,4 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = [ "x86_64-linux" ];
     mainProgram = "jack-passthru";
   };
-})
+}

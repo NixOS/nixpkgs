@@ -4,7 +4,7 @@ let
   majorVersion = "1";
   minorVersion = "10";
 in
-stdenvNoCC.mkDerivation (finalAttrs: {
+stdenvNoCC.mkDerivation {
   pname = "route159";
   version = "${majorVersion}.${minorVersion}";
 
@@ -29,4 +29,4 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     maintainers = with maintainers; [ leenaars minijackson ];
     license = licenses.ofl;
   };
-})
+}

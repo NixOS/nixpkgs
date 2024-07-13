@@ -4,7 +4,7 @@ let
   majorVersion = "0";
   minorVersion = "100";
 in
-stdenvNoCC.mkDerivation (finalAttrs: {
+stdenvNoCC.mkDerivation {
   pname = "fa_1";
   version = "${majorVersion}.${minorVersion}";
 
@@ -29,4 +29,4 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     maintainers = with maintainers; [ minijackson ];
     license = licenses.ofl;
   };
-})
+}

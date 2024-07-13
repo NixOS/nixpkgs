@@ -5,7 +5,7 @@
 , bluez
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation {
   pname = "rofi-bluetooth";
   version = "unstable-2023-02-03";
 
@@ -38,4 +38,4 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "rofi-bluetooth";
     platforms = platforms.linux;
   };
-})
+}
