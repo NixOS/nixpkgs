@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ocis-bin";
-  version = "5.0.5";
+  version = "6.1.0";
   system =
     if stdenv.isLinux && stdenv.isx86_64 then
       "linux-amd64"
@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
       if stdenv.isLinux && stdenv.isAarch64 then
         "sha256-OdtT9NOhh0Fkk+8CDic0NWWbGflk3FcuKB60OycJU5E="
       else if stdenv.isLinux && stdenv.isx86_64 then
-        "sha256-YAIhtHv/cO4yFpkWoRNMf6t4+ifMtGPTcYu84ZMvfD4="
+        "sha256-O/08Kj4O/UFomY8cmpzn0AdaS1gl6QvToeHlE/W9lYw="
       else
         builtins.throw "Unsupported platform, please contact Nixpkgs maintainers for ocis package";
   };
