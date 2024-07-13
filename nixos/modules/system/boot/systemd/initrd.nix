@@ -103,7 +103,12 @@ let
     name = "initrd-bin-env";
     paths = map getBin cfg.initrdBin;
     pathsToLink = ["/bin" "/sbin"];
-    postBuild = concatStringsSep "\n" (mapAttrsToList (n: v: "ln -sf '${v}' $out/bin/'${n}'") cfg.extraBin);
+    # mount helpers must be in /sbin
+    postBuild = concatStringsSep "\n" (mapAttrsToList (n: v: "ln -sf '${v}' $out/bin/'${n}'") cfg.extraBin) + ''
+
+      mkdir -p $out/sbin
+      (yes no || true) | ln -si $out/bin/mount.* $out/sbin || true
+    '';
   };
 
   initialRamdisk = pkgs.makeInitrdNG {
