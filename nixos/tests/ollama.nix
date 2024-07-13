@@ -31,11 +31,6 @@ in
       services.ollama.acceleration = "rocm";
     };
 
-    cuda = { ... }: {
-      services.ollama.enable = true;
-      services.ollama.acceleration = "cuda";
-    };
-
     altAddress = { ... }: {
       services.ollama.enable = true;
       services.ollama.port = altPort;
