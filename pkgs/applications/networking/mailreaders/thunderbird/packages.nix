@@ -58,6 +58,17 @@ in rec {
       versionPrefix = "115";
     };
   };
+
+  thunderbird-128 = common {
+    version = "128.0esr";
+    sha512 = "8524fbdcc51eddf83fec439273319315c44e6d3be9e4dcf51e453ced7fd1676abdca44442dcb302c637a98b7873828168f2d2d2b635551e406645a134d09aee0";
+
+    updateScript = callPackage ./update.nix {
+      attrPath = "thunderbirdPackages.thunderbird-128";
+      versionPrefix = "128";
+      versionSuffix = "esr";
+    };
+  };
 }
  // lib.optionalAttrs config.allowAliases {
   thunderbird-102 = throw "Thunderbird 102 support ended in September 2023";
