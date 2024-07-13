@@ -4208,6 +4208,8 @@ self: super: with self; {
     inherit (self) python;
   });
 
+  fastkml = callPackage ../development/python-modules/fastkml { };
+
   fastnumbers = callPackage ../development/python-modules/fastnumbers { };
 
   fastparquet = callPackage ../development/python-modules/fastparquet { };
@@ -4626,6 +4628,8 @@ self: super: with self; {
   frozenlist2 = callPackage ../development/python-modules/frozenlist2 { };
 
   fs = callPackage ../development/python-modules/fs { };
+
+  fs_filepicker = callPackage ../development/python-modules/fs_filepicker { };
 
   fs-s3fs = callPackage ../development/python-modules/fs-s3fs { };
 
@@ -7555,6 +7559,8 @@ self: super: with self; {
 
   meteofrance-api = callPackage ../development/python-modules/meteofrance-api { };
 
+  metpy = callPackage ../development/python-modules/metpy { };
+
   mezzanine = callPackage ../development/python-modules/mezzanine { };
 
   mf2py = callPackage ../development/python-modules/mf2py { };
@@ -8850,6 +8856,8 @@ self: super: with self; {
   ncclient = callPackage ../development/python-modules/ncclient { };
 
   nclib = callPackage ../development/python-modules/nclib { };
+
+  pynco = callPackage ../development/python-modules/pynco { };
 
   ndeflib = callPackage ../development/python-modules/ndeflib { };
 
@@ -11257,6 +11265,8 @@ self: super: with self; {
   pygccxml = callPackage ../development/python-modules/pygccxml { };
 
   pygdbmi = callPackage ../development/python-modules/pygdbmi { };
+
+  pygeoif_0_7 = callPackage ../development/python-modules/pygeoif/0.7.nix { };
 
   pygeoip = callPackage ../development/python-modules/pygeoip { };
 
@@ -14226,6 +14236,8 @@ self: super: with self; {
   skybellpy = callPackage ../development/python-modules/skybellpy { };
 
   skyfield = callPackage ../development/python-modules/skyfield { };
+
+  skyfield-data = callPackage ../development/python-modules/skyfield-data { };
 
   skytemple-dtef = callPackage ../development/python-modules/skytemple-dtef { };
 
