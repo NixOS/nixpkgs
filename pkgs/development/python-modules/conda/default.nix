@@ -11,6 +11,7 @@
   conda-libmamba-solver,
   conda-package-handling,
   distro,
+  frozendict,
   jsonpatch,
   packaging,
   platformdirs,
@@ -48,6 +49,7 @@ buildPythonPackage rec {
     conda-libmamba-solver
     conda-package-handling
     distro
+    frozendict
     jsonpatch
     packaging
     platformdirs
