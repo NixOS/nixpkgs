@@ -18,19 +18,17 @@ in
 
   openssh_hpn = common rec {
     pname = "openssh-with-hpn";
-    version = "9.7p1";
+    version = "9.8p1";
     extraDesc = " with high performance networking patches";
 
     src = fetchurl {
       url = "mirror://openbsd/OpenSSH/portable/openssh-${version}.tar.gz";
-      hash = "sha256-SQQm92bYKidj/KzY2D6j1weYdQx70q/y5X3FZg93P/0=";
+      hash = "sha256-3YvQAqN5tdSZ37BQ3R+pr4Ap6ARh9LtsUjxJlz9aOfM=";
     };
 
-    extraPatches = let url = "https://raw.githubusercontent.com/freebsd/freebsd-ports/b3f86656fc67aa397f60747c85f7f7b967c3279d/security/openssh-portable/files/extra-patch-hpn"; in
+    extraPatches = let url = "https://raw.githubusercontent.com/freebsd/freebsd-ports/402562e2559e198c6660171dec58e7a25cc14ec2/security/openssh-portable/files/extra-patch-hpn"; in
     [
       ./ssh-keysign-8.5.patch
-      ./openssh-9.6_p1-CVE-2024-6387.patch
-      ./openssh-9.6_p1-chaff-logic.patch
 
       # HPN Patch from FreeBSD ports
       (fetchpatch {
@@ -38,7 +36,7 @@ in
         inherit url;
         stripLen = 1;
         excludes = [ "channels.c" ];
-        hash = "sha256-MydulQvz8sDVQ6Up9U1yrsiyI5EGmyKl/stUk7DvVOU=";
+        hash = "sha256-CZ35dQpanzt0Uoo/2sDET5J/hYRF8ofiAz60HlAsCV8=";
       })
 
       (fetchpatch {
