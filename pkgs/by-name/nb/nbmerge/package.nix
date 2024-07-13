@@ -1,38 +1,32 @@
 {
   lib,
-  buildPythonPackage,
   fetchFromGitHub,
-  setuptools,
-  nbformat,
-  nose,
+  python3Packages,
 }:
 
-buildPythonPackage rec {
+python3Packages.buildPythonApplication rec {
   pname = "nbmerge";
   version = "0.0.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jbn";
-    repo = pname;
+    repo = "nbmerge";
     rev = "refs/tags/v${version}";
     hash = "sha256-Uqs/SO/AculHCFYcbjW08kLQX5GSU/eAwkN2iy/vhLM=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  patches = [ ./pytest-compatibility.patch ];
 
-  propagatedBuildInputs = [ nbformat ];
+  build-system = [ python3Packages.setuptools ];
 
-  nativeCheckInputs = [ nose ];
+  dependencies = [ python3Packages.nbformat ];
 
-  checkPhase = ''
-    runHook preCheck
+  nativeCheckInputs = [ python3Packages.pytestCheckHook ];
 
+  postCheck = ''
     patchShebangs .
-    nosetests -v
     PATH=$PATH:$out/bin ./cli_tests.sh
-
-    runHook postCheck
   '';
 
   pythonImportsCheck = [ "nbmerge" ];
