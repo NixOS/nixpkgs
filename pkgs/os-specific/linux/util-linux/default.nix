@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--localstatedir=/var"
     "--disable-use-tty-group"
-    "--enable-fs-paths-default=/run/wrappers/bin:/run/current-system/sw/bin:/sbin"
+    "--enable-fs-paths-default=/run/wrappers/bin:/run/current-system/sw/bin:/sbin:/bin"
     "--disable-makeinstall-setuid" "--disable-makeinstall-chown"
     "--disable-su" # provided by shadow
     (lib.enableFeature writeSupport "write")
