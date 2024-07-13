@@ -1,6 +1,17 @@
-{ lib, stdenv, fetchFromGitHub, nix, rustPlatform, darwin, CoreServices ? darwin.apple_sdk.frameworks.CoreServices, installShellFiles }: let
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix,
+  rustPlatform,
+  darwin,
+  CoreServices ? darwin.apple_sdk.frameworks.CoreServices,
+  installShellFiles,
+}:
+let
   version = "0.4.40";
-in rustPlatform.buildRustPackage {
+in
+rustPlatform.buildRustPackage {
   inherit version;
   pname = "mdbook";
 
@@ -36,6 +47,10 @@ in rustPlatform.buildRustPackage {
     homepage = "https://github.com/rust-lang/mdBook";
     changelog = "https://github.com/rust-lang/mdBook/blob/v${version}/CHANGELOG.md";
     license = [ lib.licenses.mpl20 ];
-    maintainers = with lib.maintainers; [ havvy Frostman matthiasbeyer ];
+    maintainers = with lib.maintainers; [
+      havvy
+      Frostman
+      matthiasbeyer
+    ];
   };
 }
