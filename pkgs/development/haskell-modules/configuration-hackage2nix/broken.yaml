@@ -3550,7 +3550,6 @@ broken-packages:
   - llvm-ht # failure in job https://hydra.nixos.org/build/233203770 at 2023-09-02
   - llvm-party # failure in job https://hydra.nixos.org/build/233221113 at 2023-09-02
   - llvm-pretty # failure in job https://hydra.nixos.org/build/233206445 at 2023-09-02
-  - llvm-tf # failure in job https://hydra.nixos.org/build/233211770 at 2023-09-02
   - lmdb-high-level # failure in job https://hydra.nixos.org/build/233238988 at 2023-09-02
   - lmdb-simple # failure in job https://hydra.nixos.org/build/233206781 at 2023-09-02
   - lmonad # failure in job https://hydra.nixos.org/build/233246737 at 2023-09-02
