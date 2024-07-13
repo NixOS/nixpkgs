@@ -72,6 +72,7 @@
 , withJack ? withFullDeps && !stdenv.isDarwin # Jack audio
 , withJxl ? withFullDeps && lib.versionAtLeast version "5" # JPEG XL de/encoding
 , withLadspa ? withFullDeps # LADSPA audio filtering
+, withLcms2 ? withFullDeps # ICC profile support via lcms2
 , withLzma ? withHeadlessDeps # xz-utils
 , withMetal ? false # Unfree and requires manual downloading of files
 , withMfx ? withFullDeps && (with stdenv.hostPlatform; isLinux && !isAarch) # Hardware acceleration via intel-media-sdk/libmfx
@@ -236,6 +237,7 @@
 , intel-media-sdk
 , ladspaH
 , lame
+, lcms2
 , libaom
 , libaribcaption
 , libass
@@ -654,6 +656,9 @@ stdenv.mkDerivation (finalAttrs: {
     (enableFeature withJxl "libjxl")
   ] ++ [
     (enableFeature withLadspa "ladspa")
+  ] ++ optionals (versionAtLeast version "5.1") [
+    (enableFeature withLcms2 "lcms2")
+  ] ++ [
     (enableFeature withLzma "lzma")
   ] ++ optionals (versionAtLeast version "5.0") [
     (enableFeature withMetal "metal")
@@ -801,6 +806,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optionals withJack [ libjack2 ]
   ++ optionals withJxl [ libjxl ]
   ++ optionals withLadspa [ ladspaH ]
+  ++ optionals withLcms2 [ lcms2 ]
   ++ optionals withLzma [ xz ]
   ++ optionals withMfx [ intel-media-sdk ]
   ++ optionals withModplug [ libmodplug ]
