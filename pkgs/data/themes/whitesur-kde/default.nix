@@ -13,7 +13,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "vinceliuice";
-    repo = finalAttrs.pname;
+    repo = "whitesur-kde";
     rev = "2b4bcc76168bd8a4a7601188e177fa0ab485cdc8";
     hash = "sha256-+Iooj8a7zfLhEWnjLEVoe/ebD9Vew5HZdz0wpWVZxA8=";
   };

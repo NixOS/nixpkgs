@@ -6,7 +6,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "theleagueof";
-    repo = finalAttrs.pname;
+    repo = "ostrich-sans";
     rev = "a949d40d0576d12ba26e2a45e19c91fd0228c964";
     hash = "sha256-vvTNtl+fO2zWooH1EvCmO/dPYYgCkj8Ckg5xfg1gtnw=";
   };

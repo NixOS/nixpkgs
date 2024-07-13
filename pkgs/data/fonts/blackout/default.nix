@@ -6,7 +6,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "theleagueof";
-    repo = finalAttrs.pname;
+    repo = "blackout";
     rev = "4864cfc1749590e9f78549c6e57116fe98480c0f";
     hash = "sha256-UmJVmtuPQYW/w+mdnJw9Ql4R1xf/07l+/Ky1wX9WKqw=";
   };

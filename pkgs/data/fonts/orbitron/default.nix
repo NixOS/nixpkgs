@@ -6,7 +6,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "theleagueof";
-    repo = finalAttrs.pname;
+    repo = "orbitron";
     rev = "13e6a5222aa6818d81c9acd27edd701a2d744152";
     hash = "sha256-zjNPVrDUxcQbrsg1/8fFa6Wenu1yuG/XDfKA7NVZ0rA=";
   };

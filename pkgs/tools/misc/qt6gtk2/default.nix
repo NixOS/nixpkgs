@@ -6,7 +6,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "trialuser02";
-    repo = finalAttrs.pname;
+    repo = "qt6gtk2";
     rev = "2e8729481649d0a2fd4cc07051daf6134809d2c5";
     hash = "sha256-j1PFJEGCd2snQ6bAcsmFNrupoZg+ib/08Xs1oJyWyN0=";
   };

@@ -6,7 +6,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "theleagueof";
-    repo = finalAttrs.pname;
+    repo = "linden-hill";
     rev = "a3f7ae6c4cac1b7e5ce5269e1fcc6a2fbb9e31ee";
     hash = "sha256-EjXcLjzVQeOJgLxGua8t0oMc+APOsONGGpG6VJVCgFw=";
   };

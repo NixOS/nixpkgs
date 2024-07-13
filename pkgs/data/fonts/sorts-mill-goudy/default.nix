@@ -6,7 +6,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "theleagueof";
-    repo = finalAttrs.pname;
+    repo = "sorts-mill-goudy";
     rev = "06072890c7b05f274215a24f17449655ccb2c8af";
     hash = "sha256-NEfLBJatUmdUL5gJEimJHZfOd1OtI7pxTN97eWMODyM=";
   };

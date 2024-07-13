@@ -9,7 +9,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "kaBeech";
-    repo = finalAttrs.pname;
+    repo = "serious-sans";
     rev = "a23f2b303fa3b1ec8788c5abba67b44ca5a3cc0a";
     hash = "sha256-sPb9ZVDTBaZHT0Q/I9OfP7BMYJXPBiKkebzKgUHNuZM=";
   };

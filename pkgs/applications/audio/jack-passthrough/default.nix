@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
   # https://github.com/guysherman/jack-passthrough
   src = fetchFromGitHub {
     owner = "guysherman";
-    repo = finalAttrs.pname;
+    repo = "jack-passthrough";
     rev = "aad03b7c5ccc4a4dcb8fa38c49aa64cb9d628660";
     hash = "sha256-9IsNaLW5dYAqiwe+vX0+D3oIKFP2TIfy1q1YaqmS6wE=";
   };
