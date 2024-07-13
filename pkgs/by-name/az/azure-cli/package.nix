@@ -377,7 +377,7 @@ py.pkgs.toPythonApplication (
       };
     };
 
-    meta = with lib; {
+    meta = {
       homepage = "https://github.com/Azure/azure-cli";
       description = "Next generation multi-platform command line experience for Azure";
       downloadPage = "https://github.com/Azure/azure-cli/releases/tag/azure-cli-${version}";
@@ -400,11 +400,11 @@ py.pkgs.toPythonApplication (
         when building `azure-cli`.
       '';
       changelog = "https://github.com/MicrosoftDocs/azure-docs-cli/blob/main/docs-ref-conceptual/release-notes-azure-cli.md";
-      sourceProvenance = [ sourceTypes.fromSource ];
-      license = licenses.mit;
+      sourceProvenance = [ lib.sourceTypes.fromSource ];
+      license = lib.licenses.mit;
       mainProgram = "az";
-      maintainers = with maintainers; [ katexochen ] ++ lib.teams.stridtech.members;
-      platforms = platforms.all;
+      maintainers = with lib.maintainers; [ katexochen ] ++ lib.teams.stridtech.members;
+      platforms = lib.platforms.all;
     };
   }
 )
