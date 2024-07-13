@@ -1,18 +1,20 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, fetchpatch
-, pkg-config
-, protobuf
-, bzip2
-, openssl
-, sqlite
-, zstd
-, stdenv
-, darwin
-, nix-update-script
-, nixosTests
-, rocksdb_8_11
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  fetchpatch,
+  pkg-config,
+  protobuf,
+  bzip2,
+  openssl,
+  sqlite,
+  zstd,
+  stdenv,
+  darwin,
+  nix-update-script,
+  nixosTests,
+  rocksdb_8_11,
+  callPackage,
 }:
 
 let
@@ -84,8 +86,43 @@ rustPlatform.buildRustPackage {
       --replace "__PATH__" "$out"
   '';
 
-  # Tests require reading to /etc/resolv.conf
-  doCheck = false;
+  checkFlags = [
+    # Require running mysql, postgresql daemon
+    "--skip=directory::imap::imap_directory"
+    "--skip=directory::internal::internal_directory"
+    "--skip=directory::ldap::ldap_directory"
+    "--skip=directory::sql::sql_directory"
+    "--skip=store::blob::blob_tests"
+    "--skip=store::lookup::lookup_tests"
+    # thread 'directory::smtp::lmtp_directory' panicked at tests/src/store/mod.rs:122:44:
+    # called `Result::unwrap()` on an `Err` value: Os { code: 2, kind: NotFound, message: "No such file or directory" }
+    "--skip=directory::smtp::lmtp_directory"
+    # thread 'imap::imap_tests' panicked at tests/src/imap/mod.rs:436:14:
+    # Missing store type. Try running `STORE=<store_type> cargo test`: NotPresent
+    "--skip=imap::imap_tests"
+    # thread 'jmap::jmap_tests' panicked at tests/src/jmap/mod.rs:303:14:
+    # Missing store type. Try running `STORE=<store_type> cargo test`: NotPresent
+    "--skip=jmap::jmap_tests"
+    # Failed to read system DNS config: io error: No such file or directory (os error 2)
+    "--skip=smtp::inbound::data::data"
+    # Expected "X-My-Header: true" but got Received: from foobar.net (unknown [10.0.0.123])
+    "--skip=smtp::inbound::scripts::sieve_scripts"
+    # panicked at tests/src/smtp/outbound/smtp.rs:173:5:
+    "--skip=smtp::outbound::smtp::smtp_delivery"
+    # thread 'smtp::queue::retry::queue_retry' panicked at tests/src/smtp/queue/retry.rs:119:5:
+    # assertion `left == right` failed
+    #   left: [1, 2, 2]
+    #  right: [1, 2, 3]
+    "--skip=smtp::queue::retry::queue_retry"
+    # Missing store type. Try running `STORE=<store_type> cargo test`: NotPresent
+    "--skip=store::store_tests"
+    # thread 'config::parser::tests::toml_parse' panicked at crates/utils/src/config/parser.rs:463:58:
+    # called `Result::unwrap()` on an `Err` value: "Expected ['\\n'] but found '!' in value at line 70."
+    "--skip=config::parser::tests::toml_parse"
+    # error[E0432]: unresolved import `r2d2_sqlite`
+    # use of undeclared crate or module `r2d2_sqlite`
+    "--skip=backend::sqlite::pool::SqliteConnectionManager::with_init"
+  ];
 
   passthru = {
     update-script = nix-update-script { };
