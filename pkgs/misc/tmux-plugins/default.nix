@@ -496,12 +496,18 @@ in rec {
   power-theme = mkTmuxPlugin {
     pluginName = "power";
     rtpFilePath = "tmux-power.tmux";
-    version = "unstable-2020-11-18";
+    version = "unstable-2024-05-12";
     src = pkgs.fetchFromGitHub {
       owner = "wfxr";
       repo = "tmux-power";
-      rev = "aec44aa5e00cc39eb71c668b1d73823270058e7d";
-      sha256 = "11nm8cylx10d565g17acy0bj12n6dcbxp71zca2bmg0j1dq859cm";
+      rev = "16bbde801378a70512059541d104c5ae35be32b9";
+      hash = "sha256-IyYQyIONMnVBwhhcI3anOPxKpv2TfI2KZgJ5o5JtZ8I=";
+    };
+    meta = with lib; {
+      description = "Tmux powerline theme";
+      homepage = "https://github.com/wfxr/tmux-power";
+      license = licenses.mit;
+      platforms = platforms.unix;
     };
   };
 
