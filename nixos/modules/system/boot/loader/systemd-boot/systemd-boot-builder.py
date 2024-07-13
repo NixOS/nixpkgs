@@ -314,7 +314,16 @@ def install_bootloader(args: argparse.Namespace) -> None:
         ).stdout
 
         # See status_binaries() in systemd bootctl.c for code which generates this
-        installed_match = re.search(r"^\W+File:.*/EFI/(?:BOOT|systemd)/.*\.efi \(systemd-boot ([\d.]+[^)]*)\)$",
+        # Matches
+        # Available Boot Loaders on ESP:
+        #  ESP: /boot (/dev/disk/by-partuuid/9b39b4c4-c48b-4ebf-bfea-a56b2395b7e0)
+        # File: └─/EFI/systemd/systemd-bootx64.efi (systemd-boot 255.2)
+        # But also:
+        # Available Boot Loaders on ESP:
+        #  ESP: /boot (/dev/disk/by-partuuid/9b39b4c4-c48b-4ebf-bfea-a56b2395b7e0)
+        # File: ├─/EFI/systemd/HashTool.efi
+        #       └─/EFI/systemd/systemd-bootx64.efi (systemd-boot 255.2)
+        installed_match = re.search(r"^\W+.*/EFI/(?:BOOT|systemd)/.*\.efi \(systemd-boot ([\d.]+[^)]*)\)$",
                       installed_out, re.IGNORECASE | re.MULTILINE)
 
         available_match = re.search(r"^\((.*)\)$", available_out)
