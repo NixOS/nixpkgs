@@ -1,8 +1,7 @@
 { pkgs, lib, config, ... }:
 
-with lib;
-
 let
+  inherit (lib) mkEnableOption mkOption mkIf types;
   cfg = config.services.gotify;
 in {
   options = {
@@ -24,6 +23,72 @@ in {
           gotify stores its runtime data.
         '';
       };
+
+      database = {
+        type = mkOption {
+          type = types.enum [ "sqlite3" "mysql" "postgres" ];
+          default = "sqlite3";
+          description = ''
+            The type of database gotify should connect to.
+          '';
+        };
+
+        path = mkOption {
+          type = types.str;
+          default = "data/gotify.db";
+          description = ''
+            The path of the sqlite3 database.
+          '';
+        };
+
+        host = mkOption {
+          type = types.str;
+          default = "localhost";
+          description = ''
+            The hostname of the database to connect to.
+          '';
+        };
+
+        port = mkOption {
+          type = types.nullOr types.port;
+          default = null;
+          description = ''
+            The port of the database to connect to.
+          '';
+        };
+
+        user = mkOption {
+          type = types.str;
+          default = "gotify";
+          description = ''
+            The username of the database to connect to.
+          '';
+        };
+
+        name = mkOption {
+          type = types.str;
+          default = "gotifydb";
+          description = ''
+            The name of the database to connect to.
+          '';
+        };
+
+        useSSL = mkOption {
+          type = types.bool;
+          default = false;
+          description = ''
+            Whether the database connection should be secured by SSL / TLS.
+          '';
+        };
+
+        passwordFile = mkOption {
+          type = types.nullOr types.path;
+          default = null;
+          description = ''
+            The path to a file containing the database password.
+          '';
+        };
+      };
     };
   };
 
@@ -35,6 +100,11 @@ in {
 
       environment = {
         GOTIFY_SERVER_PORT = toString cfg.port;
+        GOTIFY_DATABASE_DIALECT = cfg.database.type;
+        GOTIFY_DATABASE_CONNECTION =
+          if cfg.database.type == "sqlite3" then cfg.database.path
+          else if cfg.database.type == "mysql" then "${cfg.database.user}:$DB_PASSWORD@tcp(${cfg.database.host}:${toString cfg.database.port})/${cfg.database.name}?charset=utf8&parseTime=True&loc=Local"
+          else ''sslmode=${if cfg.database.useSSL then "enable" else "disable"} host=${cfg.database.host} port=${toString cfg.database.port} user=${cfg.database.user} dbname=${cfg.database.name} password="$DB_PASSWORD"'';
       };
 
       serviceConfig = {
@@ -43,6 +113,7 @@ in {
         Restart = "always";
         DynamicUser = "yes";
         ExecStart = "${pkgs.gotify-server}/bin/server";
+        EnvironmentFile = [ cfg.database.passwordFile ];
       };
     };
   };
