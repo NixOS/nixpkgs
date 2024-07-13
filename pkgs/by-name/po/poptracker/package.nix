@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, util-linux
-, SDL2
-, SDL2_ttf
-, SDL2_image
-, openssl
-, which
-, libsForQt5
-, makeWrapper
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  util-linux,
+  SDL2,
+  SDL2_ttf,
+  SDL2_image,
+  openssl,
+  which,
+  libsForQt5,
+  makeWrapper,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -26,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [ ./assets-path.diff ];
 
   postPatch = ''
-     substituteInPlace src/poptracker.cpp --replace "@assets@" "$out/share/$pname/"
+    substituteInPlace src/poptracker.cpp --replace "@assets@" "$out/share/$pname/"
   '';
 
   enableParallelBuilding = true;
@@ -53,7 +54,12 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preInstall
     install -m555 -Dt $out/bin build/linux-x86_64/poptracker
     install -m444 -Dt $out/share/${finalAttrs.pname} assets/*
-    wrapProgram $out/bin/poptracker --prefix PATH : ${lib.makeBinPath [ which libsForQt5.kdialog ]}
+    wrapProgram $out/bin/poptracker --prefix PATH : ${
+      lib.makeBinPath [
+        which
+        libsForQt5.kdialog
+      ]
+    }
     runHook postInstall
   '';
 
@@ -67,7 +73,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/black-sliver/PopTracker";
     changelog = "https://github.com/black-sliver/PopTracker/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ freyacodes pyrox0 ];
+    maintainers = with lib.maintainers; [
+      freyacodes
+      pyrox0
+    ];
     mainProgram = "poptracker";
     platforms = [ "x86_64-linux" ];
   };
