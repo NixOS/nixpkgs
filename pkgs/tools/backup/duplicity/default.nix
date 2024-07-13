@@ -150,6 +150,7 @@ let self = python3.pkgs.buildPythonApplication rec {
     description = "Encrypted bandwidth-efficient backup using the rsync algorithm";
     homepage = "https://duplicity.gitlab.io/duplicity-web/";
     license = licenses.gpl2Plus;
+    mainProgram = "duplicity";
     maintainers = with maintainers; [ corngood ];
   };
 };

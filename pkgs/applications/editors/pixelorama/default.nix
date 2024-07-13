@@ -69,6 +69,7 @@ in stdenv.mkDerivation (finalAttrs: {
     install -D -m 755 -t $out/libexec ./build/pixelorama
     install -D -m 644 -t $out/libexec ./build/pixelorama.pck
     install -D -m 644 -t $out/share/applications ./Misc/Linux/com.orama_interactive.Pixelorama.desktop
+    install -D -m 644 -T ./assets/graphics/icons/icon.png $out/share/icons/hicolor/256x256/apps/pixelorama.png
     install -d -m 755 $out/bin
     ln -s $out/libexec/pixelorama $out/bin/pixelorama
 

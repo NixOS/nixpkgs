@@ -13,6 +13,10 @@
 , bison
 , autoPatchelfHook
 , testers
+, signify
+, withSsh ? true, openssh
+# Default editor to use when neither VISUAL nor EDITOR are defined
+, defaultEditor ? null
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -37,7 +41,18 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace configure --replace-fail 'xdarwin' 'xhomebrew'
   '';
 
-  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.isDarwin [
+  env.NIX_CFLAGS_COMPILE = toString (
+  lib.optionals (defaultEditor != null) [
+    ''-DGOT_DEFAULT_EDITOR="${lib.getExe defaultEditor}"''
+  ] ++ lib.optionals withSsh [
+    ''-DGOT_DIAL_PATH_SSH="${lib.getExe openssh}"''
+    ''-DGOT_TAG_PATH_SSH_KEYGEN="${lib.getExe' openssh "ssh-keygen"}"''
+  ] ++ lib.optionals stdenv.isLinux [
+    ''-DGOT_TAG_PATH_SIGNIFY="${lib.getExe signify}"''
+  ] ++ lib.optionals stdenv.cc.isClang [
+    "-Wno-error=implicit-function-declaration"
+    "-Wno-error=int-conversion"
+  ] ++ lib.optionals stdenv.isDarwin [
     # error: conflicting types for 'strmode'
     "-DHAVE_STRMODE=1"
     # Undefined symbols for architecture arm64: "_bsd_getopt"
