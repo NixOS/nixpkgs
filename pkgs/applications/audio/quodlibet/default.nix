@@ -1,6 +1,7 @@
 {
   lib,
   fetchFromGitHub,
+  fetchpatch,
   tag ? "",
 
   # build time
@@ -61,6 +62,21 @@ python3.pkgs.buildPythonApplication rec {
     rev = "refs/tags/release-${version}";
     hash = "sha256-dkO/CFN7Dk72xhtmcSDcwUciOPMeEjQS2mch+jSfiII=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "python-3.12-startup.patch";
+      url = "https://patch-diff.githubusercontent.com/raw/quodlibet/quodlibet/pull/4358.patch";
+      hash = "sha256-3IjtAX2mKO/Xi/iTwT5WBD5CMTRYFED7XMm/cx+29Zc=";
+    })
+    (fetchpatch {
+      name = "more-python-3.12-fixes.patch";
+      url = "https://patch-diff.githubusercontent.com/raw/quodlibet/quodlibet/pull/4364.patch";
+      hash = "sha256-VRIQ+4e+X0kjZYuxV2wEjrFr+x5biwBtIR50K6hSfCY=";
+      excludes = [ "poetry.lock" ];
+    })
+    ./fix-gdist-python-3.12.patch
+  ];
 
   build-system = [ python3.pkgs.setuptools ];
 
