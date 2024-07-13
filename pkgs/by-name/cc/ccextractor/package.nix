@@ -2,72 +2,146 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  writeTextFile,
+
   pkg-config,
   cmake,
-  libiconv,
+  ninja,
+  cargo,
+  rustc,
+  corrosion,
+  rustPlatform,
+
+  gpac,
+  protobufc,
+  libpng,
   zlib,
+  utf8proc,
+  freetype,
+  ffmpeg_7,
+  libarchive,
+  curl,
+  libiconv,
+
   enableOcr ? true,
-  makeWrapper,
-  tesseract4,
   leptonica,
-  ffmpeg_4,
+  tesseract,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ccextractor";
-  version = "0.93";
+  version = "0.94-unstable-2024-08-12";
 
   src = fetchFromGitHub {
     owner = "CCExtractor";
     repo = "ccextractor";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-usVAKBkdd8uz9cD5eLd0hnwGonOJLscRdc+iWDlNXVc=";
+    rev = "92f2ce0fa026b01fb07db6751210e6bd8c8944d3";
+    hash = "sha256-bp7T9uJK4bauR2Co4lKqqnM6oGa3WZ+1toEKmzOx4mI=";
   };
 
-  postPatch =
-    ''
-      # https://github.com/CCExtractor/ccextractor/issues/1467
-      sed -i '/allheaders.h/a#include <leptonica/pix_internal.h>' src/lib_ccx/ocr.c
-    ''
-    + lib.optionalString stdenv.isDarwin ''
-      substituteInPlace src/CMakeLists.txt \
-      --replace 'add_definitions(-DGPAC_CONFIG_LINUX)' 'add_definitions(-DGPAC_CONFIG_DARWIN)'
-    '';
+  patches = [
+    ./remove-default-commit-hash.patch
+    ./remove-vendored-libraries.patch
+  ] ++ finalAttrs.cargoDeps.patches;
 
   cmakeDir = "../src";
+
+  cargoRoot = "src/rust";
+
+  cargoDeps = rustPlatform.fetchCargoTarball {
+    inherit (finalAttrs) src;
+    sourceRoot = "${finalAttrs.src.name}/${finalAttrs.cargoRoot}";
+    patches = [ ./use-rsmpeg-0.15.patch ];
+    patchFlags = [ "-p3" ];
+    hash = "sha256-jh8hHKAad+tCJGwuGdoJp/TMm/IsMrZmz8aag9lj0BA=";
+  };
 
   nativeBuildInputs = [
     pkg-config
     cmake
-    makeWrapper
+    ninja
+    cargo
+    rustc
+    corrosion
+    rustPlatform.cargoSetupHook
+    rustPlatform.bindgenHook
   ];
 
   buildInputs =
-    [ zlib ]
-    ++ lib.optional (!stdenv.isLinux) libiconv
+    [
+      gpac
+      protobufc
+      libpng
+      zlib
+      utf8proc
+      freetype
+      ffmpeg_7
+      libarchive
+      curl
+      libiconv
+    ]
     ++ lib.optionals enableOcr [
       leptonica
-      tesseract4
-      ffmpeg_4
+      tesseract
     ];
 
   cmakeFlags =
     [
-      # file RPATH_CHANGE could not write new RPATH:
-      "-DCMAKE_SKIP_BUILD_RPATH=ON"
+      # The tests are all part of one `cargo test` invocation, so let’s
+      # get the output from it.
+      (lib.cmakeFeature "CMAKE_CTEST_ARGUMENTS" "--verbose")
+
+      # TODO: This (and the corresponding patch) should probably be
+      # removed for the next stable release.
+      (lib.cmakeFeature "GIT_COMMIT_HASH" finalAttrs.src.rev)
     ]
     ++ lib.optionals enableOcr [
-      "-DWITH_OCR=on"
-      "-DWITH_HARDSUBX=on"
+      (lib.cmakeBool "WITH_OCR" true)
+      (lib.cmakeBool "WITH_HARDSUBX" true)
     ];
 
-  postInstall = lib.optionalString enableOcr ''
-    wrapProgram "$out/bin/ccextractor" \
-      --set TESSDATA_PREFIX "${tesseract4}/share/"
+  env = {
+    FFMPEG_INCLUDE_DIR = "${lib.getDev ffmpeg_7}/include";
+
+    # Upstream’s FFmpeg binding crate needs an explicit path to a shared
+    # object to do dynamic linking. The key word is *an* explicit path;
+    # they don’t support passing more than one. This linker script hack
+    # pulls in all the FFmpeg libraries they bind to.
+    #
+    # See: <https://github.com/CCExtractor/rusty_ffmpeg/pull/69>
+    FFMPEG_DLL_PATH =
+      let
+        ffmpegLibNames = [
+          "avcodec"
+          "avdevice"
+          "avfilter"
+          "avformat"
+          "avutil"
+          "swresample"
+          "swscale"
+        ];
+        ffmpegLibDir = "${lib.getLib ffmpeg_7}/lib";
+        ffmpegLibExt = stdenv.hostPlatform.extensions.library;
+        ffmpegLibPath = ffmpegLibName: "${ffmpegLibDir}/lib${ffmpegLibName}.${ffmpegLibExt}";
+        ffmpegLinkerScript = writeTextFile {
+          name = "ccextractor-ffmpeg-linker-script";
+          destination = "/lib/ffmpeg.ld";
+          text = "INPUT(${lib.concatMapStringsSep " " ffmpegLibPath ffmpegLibNames})";
+        };
+      in
+      "${ffmpegLinkerScript}/lib/ffmpeg.ld";
+  };
+
+  doCheck = true;
+
+  postPatch = lib.optionalString enableOcr ''
+    substituteInPlace src/lib_ccx/ocr.c \
+      --replace-fail 'getenv("TESSDATA_PREFIX")' '"${tesseract}/share"'
   '';
 
-  meta = with lib; {
-    homepage = "https://www.ccextractor.org";
+  meta = {
+    homepage = "https://www.ccextractor.org/";
+    changelog = "${finalAttrs.src.meta.homepage}/blob/${finalAttrs.src.rev}/docs/CHANGES.TXT";
     description = "Tool that produces subtitles from closed caption data in videos";
     longDescription = ''
       A tool that analyzes video files and produces independent subtitle files from
@@ -75,12 +149,7 @@ stdenv.mkDerivation (finalAttrs: {
       It works on Linux, Windows, and OSX.
     '';
     platforms = lib.platforms.unix;
-    # undefined reference to `png_do_expand_palette_rgba8_neon'
-    # undefined reference to `png_riffle_palette_neon'
-    # undefined reference to `png_do_expand_palette_rgb8_neon'
-    # undefined reference to `png_init_filter_functions_neon'
-    # during Linking C executable ccextractor
-    broken = stdenv.isAarch64;
+    sourceProvenance = [ lib.sourceTypes.fromSource ];
     license = lib.licenses.gpl2Only;
     maintainers = [ lib.maintainers.emily ];
     mainProgram = "ccextractor";
