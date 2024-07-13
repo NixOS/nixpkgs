@@ -239,10 +239,10 @@
     "rust-rover": {
       "update-channel": "RustRover RELEASE",
       "url-template": "https://download.jetbrains.com/rustrover/RustRover-{version}-aarch64.tar.gz",
-      "version": "2024.1.2",
-      "sha256": "a6abde77ef84f10d342b57c3f6bff84d0b973d8265c2baeb2490fc36dbcca13f",
-      "url": "https://download.jetbrains.com/rustrover/RustRover-2024.1.2-aarch64.tar.gz",
-      "build_number": "241.17011.169"
+      "version": "2024.1.4",
+      "sha256": "3eaf2880e019bbcbc7250c4d4c3ef4bf14822f592d4b5db11dd93cb229fefb0b",
+      "url": "https://download.jetbrains.com/rustrover/RustRover-2024.1.4-aarch64.tar.gz",
+      "build_number": "241.17890.34"
     },
     "webstorm": {
       "update-channel": "WebStorm RELEASE",
