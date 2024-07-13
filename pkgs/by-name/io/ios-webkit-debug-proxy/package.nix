@@ -1,25 +1,33 @@
-{ stdenv
-, autoconf
-, automake
-, fetchFromGitHub
-, fetchpatch
-, lib
-, libimobiledevice
-, libusb1
-, libplist
-, libtool
-, openssl
-, pkg-config
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+
+  autoconf,
+  automake,
+  libtool,
+  pkg-config,
+
+  libimobiledevice,
+  libplist,
+  libusb1,
+  openssl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ios-webkit-debug-proxy";
   version = "1.9.0";
 
+  outputs = [
+    "out"
+    "dev"
+  ];
+
   src = fetchFromGitHub {
     owner = "google";
-    repo = pname;
-    rev = "v${version}";
+    repo = "ios-webkit-debug-proxy";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-cZ/p/aWET/BXKDrD+qgR+rfTISd+4jPNQFuV8klSLUo=";
   };
 
@@ -38,10 +46,19 @@ stdenv.mkDerivation rec {
     ./0001-Don-t-compile-examples.patch
   ];
 
-  outputs = [ "out" "dev" ];
+  nativeBuildInputs = [
+    autoconf
+    automake
+    libtool
+    pkg-config
+  ];
 
-  nativeBuildInputs = [ autoconf automake libtool pkg-config ];
-  buildInputs = [ libimobiledevice libusb1 libplist openssl ];
+  buildInputs = [
+    libimobiledevice
+    libplist
+    libusb1
+    openssl
+  ];
 
   preConfigure = ''
     NOCONFIGURE=1 ./autogen.sh
@@ -51,7 +68,6 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "DevTools proxy (Chrome Remote Debugging Protocol) for iOS devices (Safari Remote Web Inspector)";
-    mainProgram = "ios_webkit_debug_proxy";
     longDescription = ''
       The ios_webkit_debug_proxy (aka iwdp) proxies requests from usbmuxd
       daemon over a websocket connection, allowing developers to send commands
@@ -59,6 +75,10 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/google/ios-webkit-debug-proxy";
     license = licenses.bsd3;
-    maintainers = [ maintainers.abustany ];
+    mainProgram = "ios_webkit_debug_proxy";
+    maintainers = with maintainers; [
+      abustany
+      paveloom
+    ];
   };
-}
+})
