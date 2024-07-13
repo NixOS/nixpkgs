@@ -23,7 +23,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   meta = with lib; {
-    homepage = "http://dotcolon.net/font/${finalAttrs.pname}/";
+    homepage = "http://dotcolon.net/font/fa_1/";
     description = "Weighted decorative font";
     platforms = platforms.all;
     maintainers = with maintainers; [ minijackson ];

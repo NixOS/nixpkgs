@@ -23,7 +23,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   meta = with lib; {
-    homepage = "http://dotcolon.net/font/${finalAttrs.pname}/";
+    homepage = "http://dotcolon.net/font/ferrum/";
     description = "Decorative font";
     platforms = platforms.all;
     maintainers = with maintainers; [ leenaars minijackson ];

@@ -23,7 +23,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   meta = with lib; {
-    homepage = "http://dotcolon.net/font/${finalAttrs.pname}/";
+    homepage = "http://dotcolon.net/font/nacelle/";
     description = "Improved version of the Aileron font";
     platforms = platforms.all;
     maintainers = with maintainers; [ minijackson ];

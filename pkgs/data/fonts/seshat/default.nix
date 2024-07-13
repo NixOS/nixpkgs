@@ -23,7 +23,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   meta = with lib; {
-    homepage = "http://dotcolon.net/font/${finalAttrs.pname}/";
+    homepage = "http://dotcolon.net/font/seshat/";
     description = "Roman body font designed for main text by Sora Sagano";
     longDescription = ''
       Seshat is a Roman body font designed for the main text. By

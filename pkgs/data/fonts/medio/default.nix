@@ -23,7 +23,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   meta = with lib; {
-    homepage = "http://dotcolon.net/font/${finalAttrs.pname}/";
+    homepage = "http://dotcolon.net/font/medio/";
     description = "Serif font designed by Sora Sagano";
     longDescription = ''
       Medio is a serif font designed by Sora Sagano, based roughly

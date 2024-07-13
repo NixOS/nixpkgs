@@ -23,7 +23,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   meta = with lib; {
-    homepage = "http://dotcolon.net/font/${finalAttrs.pname}/";
+    homepage = "http://dotcolon.net/font/melete/";
     description = "Headline typeface that could be used as a movie title";
     platforms = platforms.all;
     maintainers = with maintainers; [ minijackson ];

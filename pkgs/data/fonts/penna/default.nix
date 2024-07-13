@@ -23,7 +23,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   meta = with lib; {
-    homepage = "http://dotcolon.net/font/${finalAttrs.pname}/";
+    homepage = "http://dotcolon.net/font/penna/";
     description = "Geometric sans serif designed by Sora Sagano";
     longDescription = ''
      Penna is a geometric sans serif designed by Sora Sagano,
