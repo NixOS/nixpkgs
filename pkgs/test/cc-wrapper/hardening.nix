@@ -44,8 +44,19 @@ let
 
   stdenvUnsupport = additionalUnsupported: stdenv.override {
     cc = stdenv.cc.override {
-      cc = (lib.extendDerivation true {
-        hardeningUnsupportedFlags = (stdenv.cc.cc.hardeningUnsupportedFlags or []) ++ additionalUnsupported;
+      cc = (lib.extendDerivation true rec {
+        # this is ugly - have to cross-reference from
+        # hardeningUnsupportedFlagsByTargetPlatform to hardeningUnsupportedFlags
+        # because the finalAttrs mechanism that hardeningUnsupportedFlagsByTargetPlatform
+        # implementations use to do this won't work with lib.extendDerivation.
+        # but it's simplified by the fact that targetPlatform is already fixed
+        # at this point.
+        hardeningUnsupportedFlagsByTargetPlatform = _: hardeningUnsupportedFlags;
+        hardeningUnsupportedFlags = (
+          if stdenv.cc.cc ? hardeningUnsupportedFlagsByTargetPlatform
+          then stdenv.cc.cc.hardeningUnsupportedFlagsByTargetPlatform stdenv.targetPlatform
+          else (stdenv.cc.cc.hardeningUnsupportedFlags or [])
+        ) ++ additionalUnsupported;
       } stdenv.cc.cc);
     };
     allowedRequisites = null;
@@ -258,7 +269,7 @@ in nameDrvAfterAttrName ({
   # mechanism, so can only test a couple of flags through altered
   # stdenv trickery
 
-  fortifyStdenvUnsupp = checkTestBin (f2exampleWithStdEnv (stdenvUnsupport ["fortify"]) {
+  fortifyStdenvUnsupp = checkTestBin (f2exampleWithStdEnv (stdenvUnsupport ["fortify" "fortify3"]) {
     hardeningEnable = [ "fortify" ];
   }) {
     ignoreFortify = false;
