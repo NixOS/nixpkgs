@@ -13654,8 +13654,6 @@ with pkgs;
 
   tor = callPackage ../tools/security/tor { };
 
-  tor-browser = callPackage ../applications/networking/browsers/tor-browser { };
-
   touchegg = callPackage ../tools/inputmethods/touchegg { };
 
   torrent7z = callPackage ../tools/archivers/torrent7z { };
@@ -25927,8 +25925,6 @@ with pkgs;
 
   mullvad-vpn = callPackage ../applications/networking/mullvad-vpn { };
 
-  mullvad-browser = callPackage ../applications/networking/browsers/mullvad-browser { };
-
   mullvad-closest = with python3Packages; toPythonApplication mullvad-closest;
 
   mycorrhiza = callPackage ../servers/mycorrhiza { };
@@ -29116,8 +29112,6 @@ with pkgs;
   sjasmplus = callPackage ../development/compilers/sjasmplus { };
 
   skeu = callPackage ../data/themes/skeu { };
-
-  sweet = callPackage ../data/themes/sweet { };
 
   sweet-nova = callPackage ../data/themes/sweet-nova { };
 

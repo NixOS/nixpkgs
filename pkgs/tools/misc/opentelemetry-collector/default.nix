@@ -1,6 +1,7 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
+, fetchpatch
 , installShellFiles
 , testers
 , opentelemetry-collector
@@ -17,8 +18,21 @@ buildGoModule rec {
     hash = "sha256-BRZxeTFw4v4LLXPPzIzcjtR/RTckpolGGcB6jyq+ZOA=";
   };
   # there is a nested go.mod
-  sourceRoot = "${src.name}/cmd/otelcorecol";
-  vendorHash = "sha256-dO0j26AlpibsmbOqozz9+xMAJS/ZZHT6Z857AblYFHA=";
+  modRoot = "cmd/otelcorecol";
+  vendorHash = "sha256-Bay8D+jEj5iXedsbWQPFY+n1/li75bWGEtanllS/APQ=";
+
+  patches = [
+    (fetchpatch {
+      name = "CVE-2024-36129_1.patch";
+      url = "https://github.com/open-telemetry/opentelemetry-collector/commit/7dbaebb48f33cf707a069c67eed5b2b614e9913b.patch";
+      hash = "sha256-0rzdxwl7ieS3QU+PBlmPV82aWoUE5ulpEnqvK/h070E=";
+    })
+    (fetchpatch {
+      name = "CVE-2024-36129_2.patch";
+      url = "https://github.com/open-telemetry/opentelemetry-collector/commit/760f773df042305bd2d92e908cedc17957f6c542.patch";
+      hash = "sha256-xFMPwFXJyD0JiRBzoz31DElhkW0VjtQa4whuDiefOM8=";
+    })
+  ];
 
   nativeBuildInputs = [ installShellFiles ];
 
