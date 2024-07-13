@@ -6,7 +6,7 @@
   alsa-lib,
   boost,
   curl,
-  ffmpeg_4,
+  ffmpeg_6,
   icoutils,
   libGLU,
   libmad,
@@ -67,7 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
     alsa-lib
     boost
     curl
-    ffmpeg_4
+    ffmpeg_6
     libGLU
     libmad
     libogg
